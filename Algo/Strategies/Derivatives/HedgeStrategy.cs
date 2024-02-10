@@ -96,7 +96,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 		protected virtual IEnumerable<IMarketRule> GetNotificationRules()
 		{
 #pragma warning disable CS0618 // Type or member is obsolete
-			yield return Security.WhenNewTrade(this);
+			yield return this.GetSecurity().WhenNewTrade(this);
 #pragma warning restore CS0618 // Type or member is obsolete
 		}
 
@@ -110,13 +110,15 @@ namespace StockSharp.Algo.Strategies.Derivatives
 
 			_strategies.Clear();
 
+			var security = this.GetSecurity();
+
 			if (_assetStrategy == null)
 			{
 				_assetStrategy = ChildStrategies.FirstOrDefault(s => s.Security == Security);
 				
 				if (_assetStrategy == null)
 				{
-					_assetStrategy = new AssetStrategy(Security);
+					_assetStrategy = new AssetStrategy(security);
 					ChildStrategies.Add(_assetStrategy);
 
 					this.AddInfoLog(LocalizedStrings.AssetStrategyCreated);
@@ -125,7 +127,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 					this.AddInfoLog(LocalizedStrings.AssetStrategyFound.Put(_assetStrategy));
 			}
 
-			_strategies.Add(Security, _assetStrategy);
+			_strategies.Add(security, _assetStrategy);
 
 			if (BlackScholes.UnderlyingAsset == null)
 			{
@@ -137,10 +139,12 @@ namespace StockSharp.Algo.Strategies.Derivatives
 
 			foreach (var strategy in ChildStrategies)
 			{
-				if (strategy.Security.Type == SecurityTypes.Option && strategy.Security.GetAsset(this) == Security)
+				var childSec = strategy.GetSecurity();
+
+				if (childSec.Type == SecurityTypes.Option && childSec.GetAsset(this) == security)
 				{
-					BlackScholes.InnerModels.Add(new BlackScholes(strategy.Security, this, this, BlackScholes.ExchangeInfoProvider));
-					_strategies.Add(strategy.Security, strategy);
+					BlackScholes.InnerModels.Add(new BlackScholes(childSec, this, this, BlackScholes.ExchangeInfoProvider));
+					_strategies.Add(childSec, strategy);
 
 					this.AddInfoLog(LocalizedStrings.StrikeStrategyFound.Put(strategy));
 				}

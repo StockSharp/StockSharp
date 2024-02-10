@@ -283,7 +283,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 		/// <returns>Rule list.</returns>
 		protected virtual IEnumerable<IMarketRule> GetNotificationRules()
 		{
-			yield return this.SubscribeFilteredMarketDepth(Security).WhenOrderBookReceived(this);
+			yield return this.SubscribeFilteredMarketDepth(this.GetSecurity()).WhenOrderBookReceived(this);
 		}
 
 		/// <inheritdoc />
@@ -306,14 +306,16 @@ namespace StockSharp.Algo.Strategies.Quoting
 
 			this.SuspendRules(() =>
 			{
+				var security = this.GetSecurity();
+
 				this
-					.SubscribeFilteredMarketDepth(Security)
+					.SubscribeFilteredMarketDepth(security)
 					.WhenOrderBookReceived(this)
 					.Do(book => _filteredBook = book)
 					.Apply(this);
 
 				this
-					.SubscribeTrades(Security)
+					.SubscribeTrades(security)
 					.WhenTickTradeReceived(this)
 					.Do(t => _lastTrade = t)
 					.Apply(this);
@@ -341,7 +343,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 					.WhenPositionChanged()
 					.Do(() =>
 					{
-						this.AddInfoLog(LocalizedStrings.PrevPosNewPos, Security, Position, LeftVolume);
+						this.AddInfoLog(LocalizedStrings.PrevPosNewPos, security, Position, LeftVolume);
 
 						if (NeedFinish())
 						{

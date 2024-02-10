@@ -223,9 +223,6 @@ namespace StockSharp.Algo
 			if (price == null)
 				throw new ArgumentNullException(nameof(price));
 
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
 			if (price.GetTypeValue == null)
 				price.SetSecurity(security);
 

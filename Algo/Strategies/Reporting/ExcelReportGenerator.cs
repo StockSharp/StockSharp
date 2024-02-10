@@ -77,10 +77,10 @@ public class ExcelReportGenerator : BaseReportGenerator
 			.SetCell(0, 0, LocalizedStrings.Info)
 
 			.SetCell(0, 1, LocalizedStrings.Security + ":")
-			.SetCell(1, 1, strategy.Security != null ? strategy.Security.Id : string.Empty)
+			.SetCell(1, 1, strategy.Security?.Id)
 
 			.SetCell(0, 2, LocalizedStrings.Portfolio + ":")
-			.SetCell(1, 2, strategy.Portfolio != null ? strategy.Portfolio.Name : string.Empty)
+			.SetCell(1, 2, strategy.Portfolio?.Name)
 
 			.SetCell(0, 3, LocalizedStrings.WorkingTime)
 			.SetCell(1, 3, strategy.TotalWorkingTime.Format())

@@ -183,7 +183,7 @@ namespace StockSharp.Algo.Strategies.Protective
 				yield return r;
 
 #pragma warning disable CS0618 // Type or member is obsolete
-			yield return Security.WhenNewTrade(this);
+			yield return this.GetSecurity().WhenNewTrade(this);
 #pragma warning restore CS0618 // Type or member is obsolete
 		}
 
@@ -195,7 +195,7 @@ namespace StockSharp.Algo.Strategies.Protective
 			this.AddInfoLog("Position protection {0}/{1} with volume {2}. Level={3}, Trailing={4}, Market orders={5}, Quoting={6}, Slippage={7}",
 				ProtectiveSide, ProtectivePrice, ProtectiveVolume, ProtectiveLevel, IsTrailing, UseMarketOrders, UseQuoting, PriceOffset);
 
-			this.SubscribeTrades(Security);
+			this.SubscribeTrades(this.GetSecurity());
 		}
 
 		/// <inheritdoc />

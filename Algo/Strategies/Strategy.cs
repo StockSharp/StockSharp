@@ -1439,12 +1439,6 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		protected virtual void OnStarted(DateTimeOffset time)
 		{
-			if (Security == null)
-				throw new InvalidOperationException(LocalizedStrings.SecurityNotSpecified);
-
-			if (Portfolio == null)
-				throw new InvalidOperationException(LocalizedStrings.PortfolioNotSpecified);
-
 			InitStartValues();
 
 			if (IsRootStrategy)
@@ -1475,7 +1469,7 @@ namespace StockSharp.Algo.Strategies
 			foreach (var parameter in Parameters.CachedValues)
 			{
 				if (parameter.Value is Unit unit && unit.GetTypeValue == null && (unit.Type == UnitTypes.Point || unit.Type == UnitTypes.Step))
-					unit.SetSecurity(Security);
+					unit.SetSecurity(this.GetSecurity());
 			}
 
 			ErrorState = LogLevels.Info;

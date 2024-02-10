@@ -107,15 +107,10 @@ namespace StockSharp.Algo.Strategies
 			if (strategy == null)
 				throw new ArgumentNullException(nameof(strategy));
 
-			var security = strategy.Security;
-
-			if (security == null)
-				throw new InvalidOperationException(LocalizedStrings.SecurityNotSpecified);
-
 			var order = new Order
 			{
-				Portfolio = strategy.Portfolio,
-				Security = strategy.Security,
+				Portfolio = strategy.GetPortfolio(),
+				Security = strategy.GetSecurity(),
 				Side = side,
 				Volume = volume ?? strategy.Volume,
 			};
@@ -876,5 +871,19 @@ namespace StockSharp.Algo.Strategies
 				_ => throw new ArgumentOutOfRangeException(nameof(required), required, LocalizedStrings.InvalidValue),
 			};
 		}
+
+		/// <summary>
+		/// Get <see cref="Security"/> or throw <see cref="InvalidOperationException"/> if not present.
+		/// </summary>
+		/// <returns><see cref="Security"/></returns>
+		public static Security GetSecurity(this Strategy strategy)
+			=> strategy.CheckOnNull(nameof(strategy)).Security ?? throw new InvalidOperationException(LocalizedStrings.SecurityNotSpecified);
+
+		/// <summary>
+		/// Get <see cref="Portfolio"/> or throw <see cref="InvalidOperationException"/> if not present.
+		/// </summary>
+		/// <returns><see cref="Portfolio"/></returns>
+		public static Portfolio GetPortfolio(this Strategy strategy)
+			=> strategy.CheckOnNull(nameof(strategy)).Portfolio ?? throw new InvalidOperationException(LocalizedStrings.PortfolioNotSpecified);
 	}
 }

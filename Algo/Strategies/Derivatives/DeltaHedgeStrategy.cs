@@ -61,8 +61,9 @@ namespace StockSharp.Algo.Strategies.Derivatives
 				return Enumerable.Empty<Order>();
 
 			var side = diff > 0 ? Sides.Sell : Sides.Buy;
+			var security = this.GetSecurity();
 
-			var price = Security.GetCurrentPrice(this, side);
+			var price = security.GetCurrentPrice(this, side);
 
 			if (price == null)
 				return Enumerable.Empty<Order>();
@@ -75,7 +76,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 					Volume = diff.Abs(),
 					Security = BlackScholes.UnderlyingAsset,
 					Portfolio = Portfolio,
-					Price = price.ApplyOffset(side, PriceOffset, Security)
+					Price = price.ApplyOffset(side, PriceOffset, security)
 				}
 			};
 		}

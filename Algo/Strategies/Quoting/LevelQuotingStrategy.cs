@@ -87,7 +87,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 			if (to == null)
 			{
 				toPrice = OwnLevel
-					? (decimal)(from.Price + (QuotingDirection == Sides.Sell ? 1 : -1) * Level.Length.Pips(Security))
+					? (decimal)(from.Price + (QuotingDirection == Sides.Sell ? 1 : -1) * Level.Length.Pips(this.GetSecurity()))
 					: quotes.Last().Price;
 			}
 			else

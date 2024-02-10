@@ -60,7 +60,7 @@ public class CsvReportGenerator : BaseReportGenerator
 
 		WriteValues(LocalizedStrings.Strategy, LocalizedStrings.Security, LocalizedStrings.Portfolio, LocalizedStrings.WorkingTime, LocalizedStrings.Position, LocalizedStrings.PnL, LocalizedStrings.Commission, LocalizedStrings.Slippage, LocalizedStrings.Latency);
 		WriteValues(
-			strategy.Name, strategy.Security != null ? strategy.Security.Id : string.Empty, strategy.Portfolio != null ? strategy.Portfolio.Name : string.Empty,
+			strategy.Name, strategy.Security?.Id, strategy.Portfolio?.Name,
 			strategy.TotalWorkingTime, strategy.Position, strategy.PnL, strategy.Commission, strategy.Slippage, strategy.Latency);
 
 		var parameters = strategy.Parameters.CachedValues;
