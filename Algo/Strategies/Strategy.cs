@@ -3144,16 +3144,23 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
+		/// All possible <see cref="IOrderBookMessage"/> sources that can be received via <see cref="OrderBookDrawing"/>.
+		/// </summary>
+		public virtual IEnumerable<IOrderBookSource> OrderBookSources
+			=> Enumerable.Empty<IOrderBookSource>();
+
+		/// <summary>
 		/// <see cref="Draw"/>.
 		/// </summary>
-		public event Action<Subscription, IOrderBookMessage> OrderBookDrawing;
+		public event Action<Subscription, IOrderBookMessage, IOrderBookSource> OrderBookDrawing;
 
 		/// <summary>
 		/// Draw <see cref="IOrderBookMessage"/>.
 		/// </summary>
 		/// <param name="subscription"><see cref="Subscription"/></param>
 		/// <param name="book"><see cref="IOrderBookMessage"/></param>
-		public void Draw(Subscription subscription, IOrderBookMessage book)
+		/// <param name="source"><see cref="IOrderBookSource"/>.</param>
+		public void Draw(Subscription subscription, IOrderBookMessage book, IOrderBookSource source)
 		{
 			if (subscription is null)
 				throw new ArgumentNullException(nameof(subscription));
@@ -3161,7 +3168,7 @@ namespace StockSharp.Algo.Strategies
 			if (book is null)
 				throw new ArgumentNullException(nameof(book));
 
-			OrderBookDrawing?.Invoke(subscription, book);
+			OrderBookDrawing?.Invoke(subscription, book, source);
 		}
 
 		/// <summary>
