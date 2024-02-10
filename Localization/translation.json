@@ -1,4 +1,8 @@
 {
+  "MT": {
+    "en": "MT",
+    "ru": "MT"
+  },
   "FaultDelay": {
     "en": "Fault delay",
     "ru": "Паузе ошибок"
