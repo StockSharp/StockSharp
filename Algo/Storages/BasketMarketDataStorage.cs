@@ -139,7 +139,10 @@ namespace StockSharp.Algo.Storages
 
 							// данных в хранилище нет больше последней даты
 							if (hasValues)
-								_enumerators.Enqueue(GetServerTime(enu).Ticks, (enu, storage, action.Value.transId));
+							{
+								lock (_enumerators)
+									_enumerators.Enqueue(GetServerTime(enu).Ticks, (enu, storage, action.Value.transId));
+							}
 							else
 								enu.DoDispose();
 
@@ -147,12 +150,16 @@ namespace StockSharp.Algo.Storages
 						}
 						case ActionTypes.Remove:
 						{
-							_enumerators.RemoveWhere(p => p.Item2.storage == storage);
+							lock (_enumerators)
+								_enumerators.RemoveWhere(p => p.Item2.storage == storage);
+
 							break;
 						}
 						case ActionTypes.Clear:
 						{
-							_enumerators.Clear();
+							lock (_enumerators)
+								_enumerators.Clear();
+
 							break;
 						}
 						default:
@@ -160,17 +167,29 @@ namespace StockSharp.Algo.Storages
 					}
 				}
 
-				if (_enumerators.Count == 0)
-					return false;
+				(long, (IEnumerator<Message> enu, IMarketDataStorage, long transId) element) item;
 
-				var (priority, element) = _enumerators.Dequeue();
+				lock (_enumerators)
+				{
+					if (_enumerators.Count == 0)
+						return false;
+
+					item = _enumerators.Dequeue();
+				}
+
+				var element = item.element;
 
 				var enumerator = element.enu;
 
 				Current = TrySetTransactionId(enumerator.Current, element.transId);
 
 				if (enumerator.MoveNext())
-					_enumerators.Enqueue(GetServerTime(enumerator).Ticks, element);
+				{
+					var serverTime = GetServerTime(enumerator).Ticks;
+
+					lock (_enumerators)
+						_enumerators.Enqueue(serverTime, element);
+				}
 				else
 					enumerator.DoDispose();
 
@@ -197,16 +216,22 @@ namespace StockSharp.Algo.Storages
 
 			void IEnumerator.Reset()
 			{
-				foreach (var enumerator in _enumerators)
-					enumerator.Item2.enu.Reset();
+				lock (_enumerators)
+				{
+					foreach (var enumerator in _enumerators)
+						enumerator.Item2.enu.Reset();
+				}
 			}
 
 			void IDisposable.Dispose()
 			{
-				foreach (var enumerator in _enumerators)
-					enumerator.Item2.enu.DoDispose();
+				lock (_enumerators)
+				{
+					foreach (var enumerator in _enumerators)
+						enumerator.Item2.enu.DoDispose();
 
-				_enumerators.Clear();
+					_enumerators.Clear();
+				}
 
 				_actions.Clear();
 
