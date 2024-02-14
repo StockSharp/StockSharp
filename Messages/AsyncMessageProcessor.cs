@@ -295,6 +295,11 @@ class AsyncMessageProcessor : Disposable
 							_childTasks.Remove(item);
 					}
 
+					if (vt.IsFaulted)
+						throw vt.AsTask().Exception;
+					else if (vt.IsCanceled)
+						throw new OperationCanceledException();
+
 					_adapter.AddVerboseLog("endprocess: {0}", msg.Type);
 
 					if (msg is ISubscriptionMessage subMsg && subMsg.IsSubscribe)
