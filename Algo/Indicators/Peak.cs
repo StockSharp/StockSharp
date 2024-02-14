@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// Peak.
@@ -39,7 +40,7 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		public Peak()
 		{
-			ByPrice = c => c.HighPrice;
+			PriceField = Level1Fields.HighPrice;
 		}
 
 		/// <inheritdoc />

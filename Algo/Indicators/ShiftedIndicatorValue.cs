@@ -18,6 +18,8 @@ namespace StockSharp.Algo.Indicators
 	using System;
 	using System.Collections.Generic;
 
+	using StockSharp.Messages;
+
 	/// <summary>
 	/// The shifted value of the indicator.
 	/// </summary>
@@ -53,7 +55,7 @@ namespace StockSharp.Algo.Indicators
 		public override bool IsSupport(Type valueType) => !IsEmpty && Value.IsSupport(valueType);
 
 		/// <inheritdoc />
-		public override T GetValue<T>() => base.GetValue<IIndicatorValue>().GetValue<T>();
+		public override T GetValue<T>(Level1Fields? field) => base.GetValue<IIndicatorValue>(default).GetValue<T>(field);
 
 		/// <inheritdoc />
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value) => new ShiftedIndicatorValue(indicator, Shift, Value);

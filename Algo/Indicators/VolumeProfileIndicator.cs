@@ -65,7 +65,7 @@ namespace StockSharp.Algo.Indicators
 			public override bool IsSupport(Type valueType) => valueType == typeof(decimal);
 
 			/// <inheritdoc />
-			public override T GetValue<T>() => throw new NotSupportedException();
+			public override T GetValue<T>(Level1Fields? field) => throw new NotSupportedException();
 
 			/// <inheritdoc />
 			public override IIndicatorValue SetValue<T>(IIndicator indicator, T value) => throw new NotSupportedException();

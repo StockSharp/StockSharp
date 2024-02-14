@@ -27,7 +27,7 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.SecurityKey,
+		Name = LocalizedStrings.Level1Key,
 		Description = LocalizedStrings.Level1IndicatorKey)]
 	[IndicatorIn(typeof(SingleIndicatorValue<Level1ChangeMessage>))]
 	public class Level1Indicator : BaseIndicator
@@ -40,19 +40,19 @@ namespace StockSharp.Algo.Indicators
 			Name = LocalizedStrings.FieldKey,
 			Description = LocalizedStrings.Level1FieldKey,
 			GroupName = LocalizedStrings.GeneralKey)]
-		public Level1Fields Field { get; set; }
+		public Level1Fields Field { get; set; } = Level1Fields.ClosePrice;
 
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var message = input.GetValue<Level1ChangeMessage>();
+			var value = input.GetValue<decimal?>(Field);
 
-			var retVal = message.TryGet(Field);
-
-			if (!IsFormed && retVal != null && input.IsFinal)
+			if (!IsFormed && value != null && input.IsFinal)
 				IsFormed = true;
 
-			return retVal == null ? new DecimalIndicatorValue(this) : new DecimalIndicatorValue(this, (decimal)retVal);
+			return value is decimal d
+				? new DecimalIndicatorValue(this, d)
+				: new DecimalIndicatorValue(this);
 		}
 
 		/// <inheritdoc />

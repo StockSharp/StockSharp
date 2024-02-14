@@ -21,7 +21,6 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.Common;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -61,8 +60,9 @@ namespace StockSharp.Algo.Indicators
 		/// To get the value by the data type.
 		/// </summary>
 		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
+		/// <param name="field">Field specified value source.</param>
 		/// <returns>Value.</returns>
-		T GetValue<T>();
+		T GetValue<T>(Level1Fields? field = default);
 
 		/// <summary>
 		/// To replace the indicator input value by new one (for example it is received from another indicator).
@@ -111,7 +111,7 @@ namespace StockSharp.Algo.Indicators
 		public abstract bool IsSupport(Type valueType);
 
 		/// <inheritdoc />
-		public abstract T GetValue<T>();
+		public abstract T GetValue<T>(Level1Fields? field);
 
 		/// <inheritdoc />
 		public abstract IIndicatorValue SetValue<T>(IIndicator indicator, T value);
@@ -177,7 +177,7 @@ namespace StockSharp.Algo.Indicators
 		public override bool IsSupport(Type valueType) => valueType.IsAssignableFrom(typeof(TValue));
 
 		/// <inheritdoc />
-		public override T GetValue<T>()
+		public override T GetValue<T>(Level1Fields? field)
 		{
 			ThrowIfEmpty();
 			return Value is T t ? t : throw new InvalidCastException($"Cannot convert {typeof(TValue).Name} to {typeof(T).Name}."); ;
@@ -263,31 +263,16 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	public class CandleIndicatorValue : SingleIndicatorValue<ICandleMessage>
 	{
-		private readonly Func<ICandleMessage, decimal> _getPart;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CandleIndicatorValue"/>.
 		/// </summary>
 		/// <param name="indicator">Indicator.</param>
 		/// <param name="value">Value.</param>
 		public CandleIndicatorValue(IIndicator indicator, ICandleMessage value)
-			: this(indicator, value, ByClose)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CandleIndicatorValue"/>.
-		/// </summary>
-		/// <param name="indicator">Indicator.</param>
-		/// <param name="value">Value.</param>
-		/// <param name="getPart">The candle converter, through which its parameter can be got. By default, the <see cref="ByClose"/> is used.</param>
-		public CandleIndicatorValue(IIndicator indicator, ICandleMessage value, Func<ICandleMessage, decimal> getPart)
 			: base(indicator, value)
 		{
 			if (value == null)
 				throw new ArgumentNullException(nameof(value));
-
-			_getPart = getPart ?? throw new ArgumentNullException(nameof(getPart));
 
 			IsFinal = value.State == CandleStates.Finished;
 		}
@@ -301,31 +286,31 @@ namespace StockSharp.Algo.Indicators
 		{
 		}
 
-		/// <summary>
-		/// The converter, taking from candle closing price <see cref="ICandleMessage.ClosePrice"/>.
-		/// </summary>
-		public static readonly Func<ICandleMessage, decimal> ByClose = c => c.ClosePrice;
-
-		/// <summary>
-		/// The converter, taking from candle opening price <see cref="ICandleMessage.OpenPrice"/>.
-		/// </summary>
-		public static readonly Func<ICandleMessage, decimal> ByOpen = c => c.OpenPrice;
-
-		/// <summary>
-		/// The converter, taking from candle middle of the body (<see cref="ICandleMessage.OpenPrice"/> + <see cref="ICandleMessage.ClosePrice"/>) / 2.
-		/// </summary>
-		public static readonly Func<ICandleMessage, decimal> ByMiddle = c => (c.ClosePrice + c.OpenPrice) / 2;
-
 		/// <inheritdoc />
 		public override bool IsSupport(Type valueType) => valueType == typeof(decimal) || valueType.Is<ICandleMessage>();
 
 		/// <inheritdoc />
-		public override T GetValue<T>()
+		public override T GetValue<T>(Level1Fields? field)
 		{
-			var candle = base.GetValue<ICandleMessage>();
+			var candle = base.GetValue<ICandleMessage>(default);
 
-			if (typeof(T) == typeof(decimal))
-				return _getPart(candle) is T t ? t : throw new InvalidCastException($"Cannot convert decimal to {typeof(T).Name}.");
+			if (typeof(T) == typeof(decimal) || typeof(T) == typeof(decimal?))
+			{
+				var candlePart = field switch
+				{
+					null or Level1Fields.LastTradePrice or Level1Fields.ClosePrice => candle.ClosePrice,
+					Level1Fields.OpenPrice => candle.OpenPrice,
+					Level1Fields.HighPrice => candle.HighPrice,
+					Level1Fields.LowPrice => candle.LowPrice,
+
+					Level1Fields.Volume => candle.TotalVolume,
+					Level1Fields.OpenInterest => candle.OpenInterest,
+
+					_ => throw new ArgumentOutOfRangeException(nameof(field), field, LocalizedStrings.InvalidValue),
+				};
+
+				return candlePart is T t ? t : throw new InvalidCastException($"Cannot convert decimal to {typeof(T).Name}.");
+			}
 			else
 				return candle is T t ? t : throw new InvalidCastException($"Cannot convert candle to {typeof(T).Name}.");
 		}
@@ -344,51 +329,17 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	public class MarketDepthIndicatorValue : SingleIndicatorValue<IOrderBookMessage>
 	{
-		private readonly Func<IOrderBookMessage, decimal?> _getPart;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketDepthIndicatorValue"/>.
 		/// </summary>
 		/// <param name="indicator">Indicator.</param>
 		/// <param name="depth">Market depth.</param>
 		public MarketDepthIndicatorValue(IIndicator indicator, IOrderBookMessage depth)
-			: this(indicator, depth, ByMiddle)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MarketDepthIndicatorValue"/>.
-		/// </summary>
-		/// <param name="indicator">Indicator.</param>
-		/// <param name="depth">Market depth.</param>
-		/// <param name="getPart">The order book converter, through which its parameter can be got. By default, the <see cref="ByMiddle"/> is used.</param>
-		public MarketDepthIndicatorValue(IIndicator indicator, IOrderBookMessage depth, Func<IOrderBookMessage, decimal?> getPart)
 			: base(indicator, depth)
 		{
-			if (depth == null)
+			if (depth is null)
 				throw new ArgumentNullException(nameof(depth));
-
-			_getPart = getPart ?? throw new ArgumentNullException(nameof(getPart));
 		}
-
-		/// <summary>
-		/// The converter, taking from the order book the best bid price.
-		/// </summary>
-		public static readonly Func<IOrderBookMessage, decimal?> ByBestBid = d => d.GetBestBid()?.Price;
-
-		/// <summary>
-		/// The converter, taking from the order book the best offer price.
-		/// </summary>
-		public static readonly Func<IOrderBookMessage, decimal?> ByBestAsk = d => d.GetBestAsk()?.Price;
-
-		/// <summary>
-		/// The converter, taking from the order book the middle of the spread <see cref="MarketDepthPair.GetMiddlePrice"/>.
-		/// </summary>
-		public static readonly Func<IOrderBookMessage, decimal?> ByMiddle = d =>
-		{
-			var (bid, ask) = d.GetBestPair();
-			return (bid?.Price).GetSpreadMiddle(ask?.Price, null);
-		};
 
 		/// <inheritdoc />
 		public override bool IsSupport(Type valueType)
@@ -397,16 +348,35 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override T GetValue<T>()
+		public override T GetValue<T>(Level1Fields? field)
 		{
-			var depth = base.GetValue<IOrderBookMessage>();
-			return typeof(T) == typeof(decimal) ? (_getPart(depth) ?? 0).To<T>() : depth.To<T>();
+			var depth = base.GetValue<IOrderBookMessage>(default);
+
+			if (typeof(T) == typeof(decimal) || typeof(T) == typeof(decimal?))
+			{
+				var value = field switch
+				{
+					null or Level1Fields.SpreadMiddle => depth.GetSpreadMiddle(null),
+					Level1Fields.BestBidPrice => depth.GetBestBid()?.Price,
+					Level1Fields.BestAskPrice => depth.GetBestAsk()?.Price,
+					Level1Fields.BestBidVolume => depth.GetBestBid()?.Volume,
+					Level1Fields.BestAskVolume => depth.GetBestAsk()?.Volume,
+					_ => throw new ArgumentOutOfRangeException(nameof(field), field, LocalizedStrings.InvalidValue),
+				};
+
+				if (value is null && typeof(T) == typeof(decimal))
+					return default;
+
+				return value.To<T>();
+			}
+			else
+				return depth.To<T>();
 		}
 
 		/// <inheritdoc />
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
-			return new MarketDepthIndicatorValue(indicator, base.GetValue<IOrderBookMessage>(), _getPart)
+			return new MarketDepthIndicatorValue(indicator, base.GetValue<IOrderBookMessage>(default))
 			{
 				IsFinal = IsFinal
 			};
@@ -441,7 +411,7 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
-			return new PairIndicatorValue<TValue>(indicator, GetValue<Tuple<TValue, TValue>>())
+			return new PairIndicatorValue<TValue>(indicator, GetValue<Tuple<TValue, TValue>>(default))
 			{
 				IsFinal = IsFinal
 			};
@@ -478,7 +448,7 @@ namespace StockSharp.Algo.Indicators
 		public override bool IsSupport(Type valueType) => InnerValues.Any(v => v.Value.IsSupport(valueType));
 
 		/// <inheritdoc />
-		public override T GetValue<T>() => throw new NotSupportedException();
+		public override T GetValue<T>(Level1Fields? field) => throw new NotSupportedException();
 
 		/// <inheritdoc />
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value) => throw new NotSupportedException();

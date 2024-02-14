@@ -85,18 +85,22 @@ namespace StockSharp.Algo.Indicators
 			}
 		}
 
-		private Func<ICandleMessage, decimal> _byPrice = candle => candle.ClosePrice;
+		private Level1Fields _priceField = Level1Fields.ClosePrice;
 
 		/// <summary>
 		/// The converter, returning from the candle a price for calculations.
 		/// </summary>
-		[Browsable(false)]
-		public Func<ICandleMessage, decimal> ByPrice
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ClosingPriceKey,
+			Description = LocalizedStrings.ClosingPriceKey,
+			GroupName = LocalizedStrings.GeneralKey)]
+		public Level1Fields PriceField
 		{
-			get => _byPrice;
+			get => _priceField;
 			set
 			{
-				_byPrice = value ?? throw new ArgumentNullException(nameof(value));
+				_priceField = value;
 				Reset();
 			}
 		}
@@ -120,7 +124,7 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var value = ByPrice(input.GetValue<ICandleMessage>());
+			var value = input.GetValue<decimal>(PriceField);
 			if (_needAdd)
 			{
 				_buffer.Add(value);

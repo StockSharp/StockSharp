@@ -41,13 +41,11 @@ namespace StockSharp.Algo.Indicators
 	[Doc("topics/IndicatorZigZag.html")]
 	public class ZigZag : BaseIndicator
 	{
-		private readonly IList<ICandleMessage> _buffer = new List<ICandleMessage>();
+		private readonly List<(decimal low, decimal high)> _buffer = new();
 		private readonly List<decimal> _lowBuffer = new();
 		private readonly List<decimal> _highBuffer = new();
 		private readonly List<decimal> _zigZagBuffer = new();
 
-		private int _depth;
-		private int _backStep;
 		private bool _needAdd = true;
 
 		/// <summary>
@@ -55,12 +53,12 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		public ZigZag()
 		{
-			BackStep = 3;
-			Depth = 12;
 		}
 
 		/// <inheritdoc />
 		public override int NumValuesToInitialize => 2;
+
+		private int _backStep = 3;
 
 		/// <summary>
 		/// Minimum number of candles between local maximums, minimums.
@@ -82,6 +80,8 @@ namespace StockSharp.Algo.Indicators
 				Reset();
 			}
 		}
+
+		private int _depth = 12;
 
 		/// <summary>
 		/// Candles minimum, on which Zigzag will not build a second maximum (or minimum), if it is smaller (or larger) by a deviation of the previous respectively.
@@ -130,47 +130,62 @@ namespace StockSharp.Algo.Indicators
 			}
 		}
 
-		private Func<ICandleMessage, decimal> _getHighValue = candle => candle.HighPrice;
+		private Level1Fields _highPriceField = Level1Fields.HighPrice;
+
 		/// <summary>
 		/// The converter, returning from the candle a price for search of maximum.
 		/// </summary>
-		[Browsable(false)]
-		public Func<ICandleMessage, decimal> GetHighValue
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.HighPriceKey,
+			Description = LocalizedStrings.HighPriceKey,
+			GroupName = LocalizedStrings.GeneralKey)]
+		public Level1Fields HighPriceField
 		{
-			get => _getHighValue;
+			get => _highPriceField;
 			set
 			{
-				_getHighValue = value ?? throw new ArgumentNullException(nameof(value));
+				_highPriceField = value;
 				Reset();
 			}
 		}
 
-		private Func<ICandleMessage, decimal> _getLowValue = candle => candle.LowPrice;
+		private Level1Fields _lowPriceField = Level1Fields.LowPrice;
+
 		/// <summary>
 		/// The converter, returning from the candle a price for search of minimum.
 		/// </summary>
-		[Browsable(false)]
-		public Func<ICandleMessage, decimal> GetLowValue
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.LowPriceKey,
+			Description = LocalizedStrings.LowPriceKey,
+			GroupName = LocalizedStrings.GeneralKey)]
+		public Level1Fields LowPriceField
 		{
-			get => _getLowValue;
+			get => _lowPriceField;
 			set
 			{
-				_getLowValue = value ?? throw new ArgumentNullException(nameof(value));
+				_lowPriceField = value;
 				Reset();
 			}
 		}
 
-		private Func<ICandleMessage, decimal> _getCurrentValue = candle => candle.ClosePrice;
+		private Level1Fields _closePriceField = Level1Fields.ClosePrice;
+
 		/// <summary>
-		/// The converter, returning from the candle a price for the current value.
+		/// The converter, returning from the candle a price for calculations.
 		/// </summary>
-		[Browsable(false)]
-		public Func<ICandleMessage, decimal> GetCurrentValue
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ClosingPriceKey,
+			Description = LocalizedStrings.ClosingPriceKey,
+			GroupName = LocalizedStrings.GeneralKey)]
+		public Level1Fields ClosePriceField
 		{
-			get => _getCurrentValue;
+			get => _closePriceField;
 			set
 			{
-				_getCurrentValue = value ?? throw new ArgumentNullException(nameof(value));
+				_closePriceField = value;
 				Reset();
 			}
 		}
@@ -203,18 +218,19 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var candle = input.GetValue<ICandleMessage>();
+			var lowPrice = input.GetValue<decimal>(LowPriceField);
+			var highPrice = input.GetValue<decimal>(HighPriceField);
 
 			if (_needAdd)
 			{
-				_buffer.Insert(0, candle);
+				_buffer.Insert(0, (lowPrice, highPrice));
 				_lowBuffer.Insert(0, 0);
 				_highBuffer.Insert(0, 0);
 				_zigZagBuffer.Insert(0, 0);
 			}
 			else
 			{
-				_buffer[0] = candle;
+				_buffer[0] = (lowPrice, highPrice);
 				_lowBuffer[0] = 0;
 				_highBuffer[0] = 0;
 				_zigZagBuffer[0] = 0;
@@ -244,13 +260,10 @@ namespace StockSharp.Algo.Indicators
 				limit = --i;
 			}
 
-			var getLowValue = GetLowValue;
-			var getHighValue = GetHighValue;
-
 			for (var shift = limit; shift >= 0; shift--)
 			{
 				//--- low
-				var val = _buffer.Skip(shift).Take(Depth).Min(getLowValue);
+				var val = _buffer.Skip(shift).Take(Depth).Min(t => t.low);
 				if (val == lastLow)
 				{
 					val = 0.0m;
@@ -258,7 +271,7 @@ namespace StockSharp.Algo.Indicators
 				else
 				{
 					lastLow = val;
-					if (getLowValue(_buffer[shift]) - val > 0.0m * val / 100)
+					if (_buffer[shift].low - val > 0.0m * val / 100)
 					{
 						val = 0.0m;
 					}
@@ -274,13 +287,13 @@ namespace StockSharp.Algo.Indicators
 						}
 					}
 				}
-				if (getLowValue(_buffer[shift]) == val)
+				if (_buffer[shift].low == val)
 					_lowBuffer[shift] = val;
 				else
 					_lowBuffer[shift] = 0m;
 
 				//--- high
-				val = _buffer.Skip(shift).Take(Depth).Max(getHighValue);
+				val = _buffer.Skip(shift).Take(Depth).Max(t => t.high);
 				if (val == lastHigh)
 				{
 					val = 0.0m;
@@ -288,7 +301,7 @@ namespace StockSharp.Algo.Indicators
 				else
 				{
 					lastHigh = val;
-					if (val - getHighValue(_buffer[shift]) > 0.0m * val / 100)
+					if (val - _buffer[shift].high > 0.0m * val / 100)
 					{
 						val = 0.0m;
 					}
@@ -304,7 +317,7 @@ namespace StockSharp.Algo.Indicators
 						}
 					}
 				}
-				if (getHighValue(_buffer[shift]) == val)
+				if (_buffer[shift].high == val)
 					_highBuffer[shift] = val;
 				else
 					_highBuffer[shift] = 0m;
@@ -409,7 +422,7 @@ namespace StockSharp.Algo.Indicators
 
 			LastValueShift = valueId - 1;
 
-			CurrentValue = GetCurrentValue(_buffer[0]);
+			CurrentValue = input.GetValue<decimal>(ClosePriceField);
 
 			return new DecimalIndicatorValue(this, _zigZagBuffer[LastValueShift]);
 		}

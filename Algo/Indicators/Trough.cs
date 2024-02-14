@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// Trough.
@@ -39,7 +40,7 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		public Trough()
 		{
-			ByPrice = c => c.LowPrice;
+			PriceField = Level1Fields.LowPrice;
 		}
 
 		/// <inheritdoc />

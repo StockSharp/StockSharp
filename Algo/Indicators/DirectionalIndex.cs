@@ -24,6 +24,7 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// Welles Wilder Directional Movement Index.
@@ -54,7 +55,7 @@ namespace StockSharp.Algo.Indicators
 				return new DecimalIndicatorValue(indicator, _value);
 			}
 
-			public override T GetValue<T>()
+			public override T GetValue<T>(Level1Fields? field)
 			{
 				return _value.To<T>();
 			}
