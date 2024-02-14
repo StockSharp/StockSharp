@@ -46,7 +46,6 @@ namespace StockSharp.Algo.Indicators
 		private readonly List<decimal> _highBuffer = new();
 		private readonly List<decimal> _zigZagBuffer = new();
 
-		private Func<ICandleMessage, decimal> _currentValue = candle => candle.ClosePrice;
 		private int _depth;
 		private int _backStep;
 		private bool _needAdd = true;
@@ -131,46 +130,47 @@ namespace StockSharp.Algo.Indicators
 			}
 		}
 
-		private Func<ICandleMessage, decimal> _highValue = candle => candle.HighPrice;
+		private Func<ICandleMessage, decimal> _getHighValue = candle => candle.HighPrice;
 		/// <summary>
 		/// The converter, returning from the candle a price for search of maximum.
 		/// </summary>
 		[Browsable(false)]
-		public Func<ICandleMessage, decimal> HighValueFunc
+		public Func<ICandleMessage, decimal> GetHighValue
 		{
-			get => _highValue;
+			get => _getHighValue;
 			set
 			{
-				_highValue = value;
+				_getHighValue = value ?? throw new ArgumentNullException(nameof(value));
 				Reset();
 			}
 		}
 
-		private Func<ICandleMessage, decimal> _lowValue = candle => candle.LowPrice;
+		private Func<ICandleMessage, decimal> _getLowValue = candle => candle.LowPrice;
 		/// <summary>
 		/// The converter, returning from the candle a price for search of minimum.
 		/// </summary>
 		[Browsable(false)]
-		public Func<ICandleMessage, decimal> LowValueFunc
+		public Func<ICandleMessage, decimal> GetLowValue
 		{
-			get => _lowValue;
+			get => _getLowValue;
 			set
 			{
-				_lowValue = value;
+				_getLowValue = value ?? throw new ArgumentNullException(nameof(value));
 				Reset();
 			}
 		}
 
+		private Func<ICandleMessage, decimal> _getCurrentValue = candle => candle.ClosePrice;
 		/// <summary>
 		/// The converter, returning from the candle a price for the current value.
 		/// </summary>
 		[Browsable(false)]
-		public Func<ICandleMessage, decimal> CurrentValueFunc
+		public Func<ICandleMessage, decimal> GetCurrentValue
 		{
-			get => _currentValue;
+			get => _getCurrentValue;
 			set
 			{
-				_currentValue = value;
+				_getCurrentValue = value ?? throw new ArgumentNullException(nameof(value));
 				Reset();
 			}
 		}
@@ -244,10 +244,13 @@ namespace StockSharp.Algo.Indicators
 				limit = --i;
 			}
 
+			var getLowValue = GetLowValue;
+			var getHighValue = GetHighValue;
+
 			for (var shift = limit; shift >= 0; shift--)
 			{
 				//--- low
-				var val = _buffer.Skip(shift).Take(Depth).Min(v => _lowValue(v));
+				var val = _buffer.Skip(shift).Take(Depth).Min(getLowValue);
 				if (val == lastLow)
 				{
 					val = 0.0m;
@@ -255,7 +258,7 @@ namespace StockSharp.Algo.Indicators
 				else
 				{
 					lastLow = val;
-					if (_lowValue(_buffer[shift]) - val > 0.0m * val / 100)
+					if (getLowValue(_buffer[shift]) - val > 0.0m * val / 100)
 					{
 						val = 0.0m;
 					}
@@ -271,13 +274,13 @@ namespace StockSharp.Algo.Indicators
 						}
 					}
 				}
-				if (_lowValue(_buffer[shift]) == val)
+				if (getLowValue(_buffer[shift]) == val)
 					_lowBuffer[shift] = val;
 				else
 					_lowBuffer[shift] = 0m;
 
 				//--- high
-				val = _buffer.Skip(shift).Take(Depth).Max(v => _highValue(v));
+				val = _buffer.Skip(shift).Take(Depth).Max(getHighValue);
 				if (val == lastHigh)
 				{
 					val = 0.0m;
@@ -285,7 +288,7 @@ namespace StockSharp.Algo.Indicators
 				else
 				{
 					lastHigh = val;
-					if (val - _highValue(_buffer[shift]) > 0.0m * val / 100)
+					if (val - getHighValue(_buffer[shift]) > 0.0m * val / 100)
 					{
 						val = 0.0m;
 					}
@@ -301,7 +304,7 @@ namespace StockSharp.Algo.Indicators
 						}
 					}
 				}
-				if (_highValue(_buffer[shift]) == val)
+				if (getHighValue(_buffer[shift]) == val)
 					_highBuffer[shift] = val;
 				else
 					_highBuffer[shift] = 0m;
@@ -406,7 +409,7 @@ namespace StockSharp.Algo.Indicators
 
 			LastValueShift = valueId - 1;
 
-			CurrentValue = _currentValue(_buffer[0]);
+			CurrentValue = GetCurrentValue(_buffer[0]);
 
 			return new DecimalIndicatorValue(this, _zigZagBuffer[LastValueShift]);
 		}

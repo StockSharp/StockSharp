@@ -96,7 +96,7 @@ namespace StockSharp.Algo.Indicators
 			get => _byPrice;
 			set
 			{
-				_byPrice = value;
+				_byPrice = value ?? throw new ArgumentNullException(nameof(value));
 				Reset();
 			}
 		}
@@ -120,7 +120,7 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var value = _byPrice(input.GetValue<ICandleMessage>());
+			var value = ByPrice(input.GetValue<ICandleMessage>());
 			if (_needAdd)
 			{
 				_buffer.Add(value);
