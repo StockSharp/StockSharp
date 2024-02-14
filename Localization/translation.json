@@ -1,4 +1,12 @@
 {
+  "Simple": {
+    "en": "Simple",
+    "ru": "Простое"
+  },
+  "Bracket": {
+    "en": "Bracket",
+    "ru": "Вилка"
+  },
   "MT": {
     "en": "MT",
     "ru": "MT"
@@ -14238,6 +14246,14 @@
   "OcoDesc": {
     "en": "One Cancels Other.",
     "ru": "Один отменяет другой."
+  },
+  "Oto": {
+    "en": "OTO",
+    "ru": "OTO"
+  },
+  "OtoDesc": {
+    "en": "One Triggers Other.",
+    "ru": "Один вызывает другой."
   },
   "SwissQuote": {
     "en": "SwissQuote",
