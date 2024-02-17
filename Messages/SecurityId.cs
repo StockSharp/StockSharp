@@ -236,7 +236,7 @@ namespace StockSharp.Messages
 					return 0;
 
 				_hashCode = (_nativeAsInt != 0 ? _nativeAsInt.GetHashCode() : _native?.GetHashCode())
-				            ?? (_securityCode + _boardCode).ToLowerInvariant().GetHashCode();
+				            ?? ((_securityCode ?? string.Empty).GetHashCode() ^ (_boardCode ?? string.Empty).GetHashCode());
 			}
 
 			return _hashCode;
