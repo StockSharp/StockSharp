@@ -183,7 +183,8 @@ namespace StockSharp.Algo
 
 		private IMarketRuleContainer _container;
 
-		IMarketRuleContainer IMarketRule.Container
+		/// <inheritdoc />
+		public IMarketRuleContainer Container
 		{
 			get => _container;
 			set
