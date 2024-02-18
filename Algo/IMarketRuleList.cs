@@ -133,9 +133,9 @@ namespace StockSharp.Algo
 		{
 			lock (SyncRoot)
 			{
-				var set = _rulesByToken.TryGetValue(token);
-
-				return set?.ToArray() ?? Enumerable.Empty<IMarketRule>();
+				return _rulesByToken.TryGetValue(token, out var set)
+					? set.ToArray()
+					: Enumerable.Empty<IMarketRule>();
 			}
 		}
 
@@ -145,10 +145,8 @@ namespace StockSharp.Algo
 			{
 				foreach (var rule in GetRulesByToken(token))
 				{
-					if (currentRule == rule)
-						continue;
-
-					Remove(rule);
+					if (currentRule != rule)
+						Remove(rule);
 				}
 			}
 		}

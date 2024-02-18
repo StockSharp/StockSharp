@@ -174,9 +174,7 @@ namespace StockSharp.Algo
 		}
 
 		private readonly TToken _token;
-
-		/// <inheritdoc />
-		public virtual object Token => _token;
+		object IMarketRule.Token => _token;
 
 		private readonly SynchronizedSet<IMarketRule> _exclusiveRules = new();
 
@@ -185,14 +183,13 @@ namespace StockSharp.Algo
 
 		private IMarketRuleContainer _container;
 
-		/// <inheritdoc />
-		public virtual IMarketRuleContainer Container
+		IMarketRuleContainer IMarketRule.Container
 		{
 			get => _container;
 			set
 			{
-				if (Container != null)
-					throw new ArgumentException(LocalizedStrings.RuleAlreadyExistInContainer.Put(this, Container));
+				if (_container != null)
+					throw new ArgumentException(LocalizedStrings.RuleAlreadyExistInContainer.Put(this, _container));
 
 				_container = value ?? throw new ArgumentNullException(nameof(value));
 			}
