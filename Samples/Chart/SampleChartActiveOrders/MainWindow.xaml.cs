@@ -278,8 +278,8 @@
 				Chart.LoadIfNotNull(settingsStorage);
 
 				_area = Chart.Areas.First();
-				_candleElement = Chart.Elements.OfType<IChartCandleElement>().First();
-				_activeOrdersElement = Chart.Elements.OfType<IChartActiveOrdersElement>().First();
+				_candleElement = Chart.GetElements<IChartCandleElement>().First();
+				_activeOrdersElement = Chart.GetElements<IChartActiveOrdersElement>().First();
 			}
 		}
 

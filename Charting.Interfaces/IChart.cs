@@ -3,8 +3,6 @@ namespace StockSharp.Charting
 	using System;
 	using System.Collections.Generic;
 
-	using Ecng.Collections;
-
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Indicators;
 
@@ -16,7 +14,17 @@ namespace StockSharp.Charting
 		/// <summary>
 		/// Chart areas.
 		/// </summary>
-		INotifyList<IChartArea> Areas { get; }
+		IEnumerable<IChartArea> Areas { get; }
+
+		/// <summary>
+		/// <see cref="Areas"/> added event.
+		/// </summary>
+		event Action<IChartArea> AreaAdded;
+
+		/// <summary>
+		/// <see cref="Areas"/> removed event.
+		/// </summary>
+		event Action<IChartArea> AreaRemoved;
 
 		/// <summary>
 		/// To scroll <see cref="Areas"/> areas automatically when new data occurred. The default is enabled.
@@ -94,11 +102,6 @@ namespace StockSharp.Charting
 		/// </summary>
 		/// <param name="area">Chart area.</param>
 		void RemoveArea(IChartArea area);
-
-		/// <summary>
-		/// To remove all areas from the chart.
-		/// </summary>
-		void ClearAreas();
 
 		/// <summary>
 		/// To add an element to the chart.

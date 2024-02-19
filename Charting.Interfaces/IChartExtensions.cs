@@ -267,5 +267,38 @@
 		/// <returns>Y axis this element currently attached to.</returns>
 		public static IChartAxis TryGetYAxis(this IChartElement elem)
 			=> elem.CheckOnNull(nameof(elem)).ChartArea?.YAxises.FirstOrDefault(xa => xa.Id == elem.YAxisId);
+
+		/// <summary>
+		/// Get all elements.
+		/// </summary>
+		/// <param name="chart"><see cref="IChart"/></param>
+		/// <returns>Chart elements.</returns>
+		public static IEnumerable<IChartElement> GetElements(this IChart chart)
+			=> chart.CheckOnNull(nameof(chart)).Areas.SelectMany(a => a.Elements);
+
+		/// <summary>
+		/// Get all elements.
+		/// </summary>
+		/// <typeparam name="T"><see cref="IChartElement"/> type.</typeparam>
+		/// <param name="chart"><see cref="IChart"/></param>
+		/// <returns>Chart elements.</returns>
+		public static IEnumerable<T> GetElements<T>(this IChart chart)
+			where T : IChartElement
+			=> chart.GetElements().OfType<T>();
+
+		/// <summary>
+		/// To remove all areas from the chart.
+		/// </summary>
+		/// <param name="chart"><see cref="IChart"/></param>
+		public static void ClearAreas(this IChart chart)
+		{
+			if (chart is null)
+				throw new ArgumentNullException(nameof(chart));
+
+			chart.Reset(chart.GetElements());
+
+			foreach (var area in chart.Areas.ToArray())
+				chart.RemoveArea(area);
+		}
 	}
 }
