@@ -14,6 +14,7 @@
 		/// <summary>
 		/// None.
 		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NoneKey)]
 		None,
 
 		/// <summary>

@@ -1,12 +1,12 @@
 namespace StockSharp.Charting
 {
+	using System;
 	using System.Collections.Generic;
 
 	using Ecng.Collections;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Indicators;
-	using StockSharp.BusinessEntities;
 
 	/// <summary>
 	/// The interface for work with the chart.
@@ -42,6 +42,46 @@ namespace StockSharp.Charting
 		/// Show FPS.
 		/// </summary>
 		bool ShowPerfStats { get; set; }
+
+		/// <summary>
+		/// To show the legend.
+		/// </summary>
+		bool ShowLegend { get; set; }
+
+		/// <summary>
+		/// To show the preview area.
+		/// </summary>
+		bool ShowOverview { get; set; }
+
+		/// <summary>
+		/// The interactive mode. The default is off.
+		/// </summary>
+		bool IsInteracted { get; set; }
+
+		/// <summary>
+		/// Crosshair.
+		/// </summary>
+		bool CrossHair { get; set; }
+
+		/// <summary>
+		/// To show the prompt message for the crosshair.
+		/// </summary>
+		bool CrossHairTooltip { get; set; }
+
+		/// <summary>
+		/// To show values on the axis for the crosshair.
+		/// </summary>
+		bool CrossHairAxisLabels { get; set; }
+
+		/// <summary>
+		/// The order creation mode. The default is off.
+		/// </summary>
+		bool OrderCreationMode { get; set; }
+
+		/// <summary>
+		/// Local time zone for all <see cref="DateTimeOffset"/> values conversion.
+		/// </summary>
+		TimeZoneInfo TimeZone { get; set; }
 
 		/// <summary>
 		/// To add an area to the chart.
@@ -85,41 +125,11 @@ namespace StockSharp.Charting
 		void AddElement(IChartArea area, IChartIndicatorElement element, CandleSeries candleSeries, IIndicator indicator);
 
 		/// <summary>
-		/// To add an element to the chart.
-		/// </summary>
-		/// <param name="area">Chart area.</param>
-		/// <param name="element">The chart element.</param>
-		/// <param name="security">Security.</param>
-		void AddElement(IChartArea area, IChartOrderElement element, Security security);
-
-		/// <summary>
-		/// To add an element to the chart.
-		/// </summary>
-		/// <param name="area">Chart area.</param>
-		/// <param name="element">The chart element.</param>
-		/// <param name="security">Security.</param>
-		void AddElement(IChartArea area, IChartTradeElement element, Security security);
-
-		/// <summary>
 		/// To remove the element from the chart.
 		/// </summary>
 		/// <param name="area">Chart area.</param>
 		/// <param name="element">The chart element.</param>
 		void RemoveElement(IChartArea area, IChartElement element);
-
-		/// <summary>
-		/// To get an indicator which is associated with <see cref="IChartIndicatorElement"/>.
-		/// </summary>
-		/// <param name="element">The chart element.</param>
-		/// <returns>Indicator.</returns>
-		IIndicator GetIndicator(IChartIndicatorElement element);
-
-		/// <summary>
-		/// To get the data source for <see cref="IChartElement"/>.
-		/// </summary>
-		/// <param name="element">The chart element.</param>
-		/// <returns>Market-data source.</returns>
-		object GetSource(IChartElement element);
 
 		/// <summary>
 		/// To reset the chart elements values drawn previously.
