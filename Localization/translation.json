@@ -1,4 +1,8 @@
 {
+  "GroupUngroup": {
+    "en": "Group/Ungroup",
+    "ru": "Группировка/Отмена"
+  },
   "Simple": {
     "en": "Simple",
     "ru": "Простое"
