@@ -15,6 +15,7 @@ namespace StockSharp.Algo.Strategies.Protective
 	/// <summary>
 	/// The base strategy of the position protection.
 	/// </summary>
+	[Obsolete("Use ProtectiveController class.")]
 	public abstract class ProtectiveStrategy : QuotingStrategy, IProtectiveStrategy
 	{
 		private readonly bool _isUpTrend;

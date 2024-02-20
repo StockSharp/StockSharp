@@ -29,9 +29,13 @@ namespace SampleHistoryTesting
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 	using StockSharp.Charting;
+	using StockSharp.Algo.Strategies.Protective;
 
 	class SmaStrategy : Strategy
 	{
+		private readonly ProtectiveController _protectiveController = new();
+		private IProtectivePositionController _posController;
+
 		private IChart _chart;
 
 		private readonly List<MyTrade> _myTrades = new();
@@ -48,6 +52,8 @@ namespace SampleHistoryTesting
         {
 			_longSmaParam = this.Param(nameof(LongSma), 80);
 			_shortSmaParam = this.Param(nameof(ShortSma), 30);
+			_takeValue = this.Param(nameof(TakeValue), new Unit(1, UnitTypes.Percent));
+			_stopValue = this.Param(nameof(StopValue), new Unit(2, UnitTypes.Percent));
 			_candleTypeParam = this.Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(1))).NotNull();
 			_candleTimeFrameParam = this.Param<TimeSpan?>(nameof(CandleTimeFrame));
 			_buildFromParam = this.Param<DataType>(nameof(BuildFrom));
@@ -102,6 +108,30 @@ namespace SampleHistoryTesting
 			set => _buildFieldParam.Value = value;
 		}
 
+		private readonly StrategyParam<Unit> _takeValue;
+
+		public Unit TakeValue
+		{
+			get => _takeValue.Value;
+			set => _takeValue.Value = value;
+		}
+
+		private readonly StrategyParam<Unit> _stopValue;
+
+		public Unit StopValue
+		{
+			get => _stopValue.Value;
+			set => _stopValue.Value = value;
+		}
+
+		protected override void OnReseted()
+		{
+			base.OnReseted();
+
+			_protectiveController.Clear();
+			_posController = default;
+		}
+
 		protected override void OnStarted(DateTimeOffset time)
 		{
 			base.OnStarted(time);
@@ -150,7 +180,27 @@ namespace SampleHistoryTesting
 
 			this
 				.WhenNewMyTrade()
-				.Do(_myTrades.Add)
+				.Do(t =>
+				{
+					_myTrades.Add(t);
+
+					var security = t.Order.Security;
+					var portfolio = t.Order.Portfolio;
+
+					if (TakeValue.IsSet() || StopValue.IsSet())
+					{
+						_posController ??= _protectiveController.GetController(
+							security.ToSecurityId(),
+							portfolio.Name,
+							new LocalProtectiveBehaviourFactory(security.PriceStep, security.Decimals),
+							TakeValue, StopValue, true, true, default, default, true);
+					}
+
+					var info = _posController?.Update(t.Trade.Price, t.GetPosition());
+
+					if (info is not null)
+						ActiveProtection(info.Value);
+				})
 				.Apply(this);
 
 			_isShortLessThenLong = null;
@@ -168,6 +218,12 @@ namespace SampleHistoryTesting
 			}
 
 			this.AddInfoLog(LocalizedStrings.SmaNewCandleLog, candle.OpenTime, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume, candle.SecurityId);
+
+			// try activate local stop orders (if they present)
+			var info = _posController?.TryActivate(candle.ClosePrice, CurrentTime);
+
+			if (info is not null)
+				ActiveProtection(info.Value);
 
 			// process new candle
 			var longValue = _longSma.Process(candle);
@@ -227,6 +283,12 @@ namespace SampleHistoryTesting
 					;
 
 			_chart.Draw(data);
+		}
+
+		private void ActiveProtection((bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition) info)
+		{
+			// sending protection (=closing position) order as regular order
+			RegisterOrder(this.CreateOrder(info.side, info.price, info.volume));
 		}
 	}
 }

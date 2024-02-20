@@ -10,6 +10,7 @@ namespace StockSharp.Algo.Strategies.Protective
 	/// <summary>
 	/// The strategy protecting trades together by strategies <see cref="TakeProfitStrategy"/> and <see cref="StopLossStrategy"/>.
 	/// </summary>
+	[Obsolete("Use ProtectiveController class.")]
 	public class TakeProfitStopLossStrategy : BasketStrategy, IProtectiveStrategy
 	{
 		/// <summary>

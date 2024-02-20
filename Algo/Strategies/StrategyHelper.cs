@@ -777,6 +777,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="takePriceDelta">The delta from the price of the protected order, by which the protective take profit order is to be registered.</param>
 		/// <param name="stopPriceDelta">The delta from the price of the protected order, by which the protective stop loss order is to be registered.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use ProtectiveController class.")]
 		public static MarketRule<Order, MyTrade> Protect(this MarketRule<Order, MyTrade> rule, Unit takePriceDelta, Unit stopPriceDelta)
 		{
 			return rule.Protect(
@@ -795,6 +796,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="takeProfit">The function that creates the strategy <see cref="TakeProfitStrategy"/> by the order.</param>
 		/// <param name="stopLoss">The function that creates the strategy <see cref="StopLossStrategy"/> by the order.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use ProtectiveController class.")]
 		public static MarketRule<Order, MyTrade> Protect(this MarketRule<Order, MyTrade> rule, Func<MyTrade, TakeProfitStrategy> takeProfit, Func<MyTrade, StopLossStrategy> stopLoss)
 		{
 			if (rule == null)
@@ -819,6 +821,7 @@ namespace StockSharp.Algo.Strategies
 			return rule;
 		}
 
+		[Obsolete("Use ProtectiveController class.")]
 		private sealed class ActivatedStrategyRule : MarketRule<ProtectiveStrategy, ProtectiveStrategy>
 		{
 			private readonly ProtectiveStrategy _strategy;
@@ -844,6 +847,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		/// <param name="strategy">The strategy, by which the event will be monitored.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use ProtectiveController class.")]
 		public static IMarketRule WhenActivated(this ProtectiveStrategy strategy)
 		{
 			return new ActivatedStrategyRule(strategy);

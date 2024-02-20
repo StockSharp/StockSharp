@@ -1,11 +1,14 @@
 namespace StockSharp.Algo.Strategies.Protective
 {
+	using System;
+
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
 	/// Profit protection strategy.
 	/// </summary>
+	[Obsolete("Use ProtectiveController class.")]
 	public class TakeProfitStrategy : ProtectiveStrategy
 	{
 		/// <summary>

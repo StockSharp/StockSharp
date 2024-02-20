@@ -19,6 +19,7 @@ namespace StockSharp.Algo.Strategies.Protective
 	/// <remarks>
 	/// New trades come in strategy via <see cref="ProcessNewMyTrade"/>. They are automatically protected by <see cref="TakeProfitStopLossStrategy"/>. Also, <see cref="AutoProtectiveStrategy"/> turns over stops in case of position flipping.
 	/// </remarks>
+	[Obsolete("Use ProtectiveController class.")]
 	public class AutoProtectiveStrategy : Strategy
 	{
 		private class AutoProtectivePositionManager : PositionManager
