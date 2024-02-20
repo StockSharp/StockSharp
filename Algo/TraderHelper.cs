@@ -265,7 +265,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="trade">Own trade, used for position calculation. At buy the trade volume <see cref="Trade.Volume"/> is taken with positive sign, at sell - with negative.</param>
 		/// <returns>Position.</returns>
-		public static decimal? GetPosition(this MyTrade trade)
+		public static decimal GetPosition(this MyTrade trade)
 		{
 			if (trade == null)
 				throw new ArgumentNullException(nameof(trade));
