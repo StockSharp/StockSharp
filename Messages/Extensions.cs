@@ -5701,5 +5701,13 @@ namespace StockSharp.Messages
 
 			return !isInvalid;
 		}
+
+		/// <summary>
+		/// Determines the value is set.
+		/// </summary>
+		/// <param name="value"><see cref="Unit"/></param>
+		/// <returns>Check result.</returns>
+		public static bool IsSet(this Unit value)
+			=> value is not null && value.Value != 0;
 	}
 }
