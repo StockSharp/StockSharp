@@ -41,7 +41,7 @@ namespace StockSharp.Algo.Testing
 		/// <param name="initChannels">Initialize channels.</param>
 		protected BaseEmulationConnector(EmulationMessageAdapter emulationAdapter, bool applyHeartbeat, bool initChannels)
 			: base(
-				new InMemorySecurityStorage(emulationAdapter.CheckOnNull().Emulator.SecurityProvider),
+				new InMemorySecurityStorage(emulationAdapter.CheckOnNull(nameof(emulationAdapter)).Emulator.SecurityProvider),
 				new InMemoryPositionStorage(emulationAdapter.Emulator.PortfolioProvider),
 				emulationAdapter.Emulator.ExchangeInfoProvider, initChannels: initChannels)
 		{

@@ -43,7 +43,7 @@ namespace StockSharp.Algo.Export
 		/// <param name="drive">Storage.</param>
 		/// <param name="format">Format type.</param>
 		public StockSharpExporter(DataType dataType, Func<int, bool> isCancelled, IStorageRegistry storageRegistry, IMarketDataDrive drive, StorageFormats format)
-			: base(dataType, isCancelled, drive.CheckOnNull().Path)
+			: base(dataType, isCancelled, drive.CheckOnNull(nameof(drive)).Path)
 		{
 			_storageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
 			_drive = drive ?? throw new ArgumentNullException(nameof(drive));

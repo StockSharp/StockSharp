@@ -114,7 +114,7 @@ namespace StockSharp.Algo
 		/// <param name="buffer">Storage buffer.</param>
 		[Obsolete]
 		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry, StorageBuffer buffer = null)
-			: this(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry.CheckOnNull().ExchangeInfoProvider, storageRegistry, snapshotRegistry, buffer)
+			: this(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry.CheckOnNull(nameof(storageRegistry)).ExchangeInfoProvider, storageRegistry, snapshotRegistry, buffer)
 		{
 		}
 
