@@ -7135,9 +7135,13 @@
     "en": "HydraServer is not available.",
     "ru": "HydraServer недоступен."
   },
-  "WrongSecCode": {
-    "en": "Wrong security code {0}.",
-    "ru": "Неправильный код инструмента {0}."
+  "WrongSecId": {
+    "en": "Wrong security id {0}. Must be {1}.",
+    "ru": "Неправильный идентификатор инструмента {0}. Должен быть {1}."
+  },
+  "WrongPortfolioId": {
+    "en": "Wrong portfolio id {0}. Must be {1}.",
+    "ru": "Неправильный идентификатор портфеля {0}. Должен быть {1}."
   },
   "FileNotParsedLineError": {
     "en": "File '{0}' was not successfully parsed and was deleted. Wrong line of file '{1}'.",
