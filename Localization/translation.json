@@ -7135,6 +7135,10 @@
     "en": "HydraServer is not available.",
     "ru": "HydraServer недоступен."
   },
+  "WrongSecCode": {
+    "en": "Wrong security code {0}.",
+    "ru": "Неправильный код инструмента {0}."
+  },
   "WrongSecId": {
     "en": "Wrong security id {0}. Must be {1}.",
     "ru": "Неправильный идентификатор инструмента {0}. Должен быть {1}."
