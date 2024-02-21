@@ -2,12 +2,13 @@
 
 using System;
 
+using StockSharp.Logging;
 using StockSharp.Messages;
 
 /// <summary>
 /// Position protection behaviour.
 /// </summary>
-public interface IProtectiveBehaviour
+public interface IProtectiveBehaviour : ILogSource
 {
 	/// <summary>
 	/// Update position difference.
@@ -36,7 +37,7 @@ public interface IProtectiveBehaviour
 /// <summary>
 /// Base implementation of <see cref="IProtectiveBehaviour"/>.
 /// </summary>
-public abstract class BaseProtectiveBehaviour : IProtectiveBehaviour
+public abstract class BaseProtectiveBehaviour : BaseLogReceiver, IProtectiveBehaviour
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BaseProtectiveBehaviour"/>.

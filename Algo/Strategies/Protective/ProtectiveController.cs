@@ -6,14 +6,15 @@ using System.Collections.Generic;
 using Ecng.Collections;
 using Ecng.Common;
 
+using StockSharp.Logging;
 using StockSharp.Messages;
 
 /// <summary>
 /// Protective controller.
 /// </summary>
-public class ProtectiveController
+public class ProtectiveController : BaseLogReceiver
 {
-	private class ProtectivePositionController : IProtectivePositionController
+	private class ProtectivePositionController : BaseLogReceiver, IProtectivePositionController
 	{
 		private readonly IProtectiveBehaviour _behaviour;
 
@@ -32,6 +33,7 @@ public class ProtectiveController
 			PortfolioName = portfolioName;
 
 			_behaviour = factory.Create(takeValue, stopValue, isTakeTrailing, isStopTrailing, takeTimeout, stopTimeout, useMarketOrders);
+			_behaviour.Parent = this;
 		}
 
 		public SecurityId SecurityId { get; }
@@ -78,7 +80,7 @@ public class ProtectiveController
 				isTakeTrailing, isStopTrailing,
 				takeTimeout, stopTimeout,
 				useMarketOrders
-			));
+			) { Parent = this });
 
 	/// <summary>
 	/// Try activate protection.

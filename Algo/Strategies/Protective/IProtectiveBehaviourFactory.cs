@@ -220,8 +220,8 @@ public class LocalProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 						_posPrice = _posPrice.ShrinkPrice(_priceStep, _decimals);
 				}
 
-				_take = TakeValue.IsSet() ? new ProtectiveProcessor(protectiveSide, _posPrice, protectiveSide == Sides.Buy, IsTakeTrailing, TakeValue, UseMarketOrders, new(), TakeTimeout) : null;
-				_stop = StopValue.IsSet() ? new ProtectiveProcessor(protectiveSide, _posPrice, protectiveSide == Sides.Sell, IsStopTrailing, StopValue, UseMarketOrders, new(), StopTimeout) : null;
+				_take = TakeValue.IsSet() ? new ProtectiveProcessor(protectiveSide, _posPrice, protectiveSide == Sides.Buy, IsTakeTrailing, TakeValue, UseMarketOrders, new(), TakeTimeout) { Parent = this } : null;
+				_stop = StopValue.IsSet() ? new ProtectiveProcessor(protectiveSide, _posPrice, protectiveSide == Sides.Sell, IsStopTrailing, StopValue, UseMarketOrders, new(), StopTimeout) { Parent = this } : null;
 			}
 
 			return null;
