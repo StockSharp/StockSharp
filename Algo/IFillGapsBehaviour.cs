@@ -58,7 +58,7 @@ public class StorageFillGapsBehaviour : IFillGapsBehaviour
 
 		if (existing.Count > 0)
 		{
-			foreach (var required in from.Date.Range(to.Date, TimeSpan.FromDays(1)).Where(d => fillGaps == FillGapsDays.All || (d.DayOfWeek != DayOfWeek.Saturday && d.DayOfWeek != DayOfWeek.Sunday)))
+			foreach (var required in from.Date.Range(to.Date, TimeSpan.FromDays(1)).Where(d => fillGaps == FillGapsDays.All || !d.DayOfWeek.IsWeekend()))
 			{
 				if (existing.Remove(required))
 				{
