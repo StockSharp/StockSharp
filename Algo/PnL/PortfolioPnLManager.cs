@@ -193,7 +193,8 @@ namespace StockSharp.Algo.PnL
 
 				default:
 				{
-					var candleMsg = (CandleMessage)message;
+					if (message is not CandleMessage candleMsg)
+						break;
 
 					if (!TryGetQueue(candleMsg, out var queue))
 						break;
