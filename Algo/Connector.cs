@@ -1072,26 +1072,17 @@ namespace StockSharp.Algo
 
 			var security = SecurityStorage.GetOrCreate(id, key =>
 			{
-				var s = new Security { Id = key };
-
 				var idInfo = SecurityIdGenerator.Split(key);
 
 				var code = idInfo.SecurityCode;
 				var board = ExchangeInfoProvider.GetOrCreateBoard(idInfo.BoardCode);
 
-				if (s.Board == null)
-					s.Board = board;
-
-				if (s.Code.IsEmpty())
-					s.Code = code;
-
-				//if (s.Name.IsEmpty())
-				//	s.Name = code;
-
-				//if (s.Class.IsEmpty())
-				//	s.Class = board.Code;
-
-				return s;
+				return new()
+				{
+					Id = key,
+					Code = code,
+					Board = board,
+				};
 			}, out isNew);
 
 			if (isNew)
