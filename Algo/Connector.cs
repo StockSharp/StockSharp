@@ -1077,7 +1077,7 @@ namespace StockSharp.Algo
 				var idInfo = SecurityIdGenerator.Split(key);
 
 				var code = idInfo.SecurityCode;
-				var board = ExchangeInfoProvider.GetOrCreateBoard(GetBoardCode(idInfo.BoardCode));
+				var board = ExchangeInfoProvider.GetOrCreateBoard(idInfo.BoardCode);
 
 				if (s.Board == null)
 					s.Board = board;
@@ -1111,18 +1111,14 @@ namespace StockSharp.Algo
 		public SecurityId GetSecurityId(Security security)
 			=> security.ToSecurityId(SecurityIdGenerator, copyExtended: true);
 
-		private string GetBoardCode(string secClass)
-			// MarketDataAdapter can be null then loading infos from StorageAdapter.
-			=> MarketDataAdapter != null ? MarketDataAdapter.GetBoardCode(secClass) : secClass;
-
 		/// <summary>
 		/// Generate <see cref="Security.Id"/> security.
 		/// </summary>
-		/// <param name="secCode">Security code.</param>
-		/// <param name="secClass">Security class.</param>
+		/// <param name="secCode"><see cref="SecurityId.SecurityCode"/>.</param>
+		/// <param name="boardCode"><see cref="SecurityId.BoardCode"/>.</param>
 		/// <returns><see cref="Security.Id"/> security.</returns>
-		protected string CreateSecurityId(string secCode, string secClass)
-			=> SecurityIdGenerator.GenerateId(secCode, GetBoardCode(secClass));
+		protected string CreateSecurityId(string secCode, string boardCode)
+			=> SecurityIdGenerator.GenerateId(secCode, boardCode);
 
 		/// <inheritdoc />
 		public object GetSecurityValue(Security security, Level1Fields field)

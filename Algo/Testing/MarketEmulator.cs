@@ -3665,8 +3665,6 @@ namespace StockSharp.Algo.Testing
 			DataType.MarketDepth,
 		};
 
-		IDictionary<string, RefPair<SecurityTypes, string>> IMessageAdapter.SecurityClassInfo { get; } = new Dictionary<string, RefPair<SecurityTypes, string>>();
-
 		IEnumerable<Level1Fields> IMessageAdapter.CandlesBuildFrom => Enumerable.Empty<Level1Fields>();
 
 		bool IMessageAdapter.CheckTimeFrameByRequest => true;

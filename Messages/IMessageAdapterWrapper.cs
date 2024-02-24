@@ -286,8 +286,6 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public virtual IEnumerable<DataType> SupportedMarketDataTypes => InnerAdapter.SupportedMarketDataTypes;
 
-		IDictionary<string, RefPair<SecurityTypes, string>> IMessageAdapter.SecurityClassInfo => InnerAdapter.SecurityClassInfo;
-
 		/// <inheritdoc />
 		public TimeSpan HeartbeatInterval
 		{

@@ -41,7 +41,6 @@ namespace StockSharp.Messages
 		protected MessageAdapter(IdGenerator transactionIdGenerator)
 		{
 			TransactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
-			SecurityClassInfo = new Dictionary<string, RefPair<SecurityTypes, string>>();
 
 			StorageName = GetType().Namespace.Remove(nameof(StockSharp)).Remove(".");
 
@@ -134,10 +133,6 @@ namespace StockSharp.Messages
 				OnPropertyChanged();
 			}
 		}
-
-		/// <inheritdoc />
-		[Browsable(false)]
-		public IDictionary<string, RefPair<SecurityTypes, string>> SecurityClassInfo { get; }
 
 		/// <inheritdoc />
 		[Browsable(false)]

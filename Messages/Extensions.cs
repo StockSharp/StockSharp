@@ -2543,35 +2543,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// To get the instrument description by the class.
-		/// </summary>
-		/// <param name="securityClassInfo">Description of the class of securities, depending on which will be marked in the <see cref="SecurityMessage.SecurityType"/> and <see cref="SecurityId.BoardCode"/>.</param>
-		/// <param name="secClass">Security class.</param>
-		/// <returns>The instrument description. If the class is not found, then empty value is returned as instrument type.</returns>
-		public static Tuple<SecurityTypes?, string> GetSecurityClassInfo(this IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo, string secClass)
-		{
-			var pair = securityClassInfo.TryGetValue(secClass);
-			return Tuple.Create(pair?.First, pair == null ? secClass : pair.Second);
-		}
-
-		/// <summary>
-		/// To get the board code for the instrument class.
-		/// </summary>
-		/// <param name="adapter">Adapter to the trading system.</param>
-		/// <param name="secClass">Security class.</param>
-		/// <returns>Board code.</returns>
-		public static string GetBoardCode(this IMessageAdapter adapter, string secClass)
-		{
-			if (adapter == null)
-				throw new ArgumentNullException(nameof(adapter));
-
-			if (secClass.IsEmpty())
-				throw new ArgumentNullException(nameof(secClass));
-
-			return adapter.SecurityClassInfo.GetSecurityClassInfo(secClass).Item2;
-		}
-
-		/// <summary>
 		/// Convert <see cref="Level1Fields"/> to <see cref="Type"/> value.
 		/// </summary>
 		/// <param name="field"><see cref="Level1Fields"/> value.</param>
