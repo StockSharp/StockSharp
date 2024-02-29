@@ -86,6 +86,7 @@ namespace StockSharp.Messages
 
 		void IDisposable.Dispose()
 		{
+			GC.SuppressFinalize(this);
 		}
 
 		ChannelStates IMessageChannel.State => ChannelStates.Started;
