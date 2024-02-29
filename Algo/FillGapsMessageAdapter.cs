@@ -107,7 +107,7 @@ public class FillGapsMessageAdapter : MessageAdapterWrapper
 
 				var current = info.Current;
 
-				var (gapsStart, gapsEnd) = _behaviour.TryGetNextGap(info.SecId, info.Original.DataType, current.From.Value.AddDays(1).UtcDateTime, info.Original.To?.UtcDateTime ?? DateTime.UtcNow, info.Days);
+				var (gapsStart, gapsEnd) = _behaviour.TryGetNextGap(info.SecId, info.Original.DataType, current.To.Value.AddDays(1).UtcDateTime, info.Original.To?.UtcDateTime ?? DateTime.UtcNow, info.Days);
 
 				if (gapsStart is null)
 				{
