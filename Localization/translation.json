@@ -1,4 +1,12 @@
 {
+  "Theme": {
+    "en": "Theme",
+    "ru": "Тема"
+  },
+  "ChangeTheme": {
+    "en": "Change theme.",
+    "ru": "Сменить тему."
+  },
   "GroupUngroup": {
     "en": "Group/Ungroup",
     "ru": "Группировка/Отмена"
