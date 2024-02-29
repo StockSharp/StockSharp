@@ -133,6 +133,7 @@ namespace StockSharp.Logging
 
 		void IDisposable.Dispose()
 		{
+			GC.SuppressFinalize(this);
 		}
 	}
 

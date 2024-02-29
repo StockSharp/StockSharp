@@ -255,6 +255,8 @@ namespace StockSharp.Messages
 		void IDisposable.Dispose()
 		{
 			Close();
+
+			GC.SuppressFinalize(this);
 		}
 	}
 }
