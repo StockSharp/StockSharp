@@ -111,7 +111,7 @@ namespace StockSharp.Algo.Storages.Remote
 			criteria = criteria.TypedClone();
 			criteria.OnlySecurityId = true;
 
-			var securities = Do<SecurityMessage>(criteria).Select(s => s.SecurityId).ToArray();
+			var securities = Do<SecurityMessage>(criteria, () => (typeof(SecurityLookupMessage), criteria.ToString())).Select(s => s.SecurityId).ToArray();
 
 			var newSecurityIds = securities
 				.Where(id => !existingIds.Contains(id))
@@ -158,7 +158,7 @@ namespace StockSharp.Algo.Storages.Remote
 		/// <returns>Exchange boards.</returns>
 		public IEnumerable<BoardMessage> LoadExchangeBoards(BoardLookupMessage criteria)
 		{
-			return Do<BoardMessage>(criteria);
+			return Do<BoardMessage>(criteria, () => (typeof(BoardLookupMessage), criteria.ToString()));
 		}
 
 		/// <summary>
@@ -255,7 +255,7 @@ namespace StockSharp.Algo.Storages.Remote
 				From = date,
 				To = date.AddDays(1),
 				Format = (int)format,
-			}).FirstOrDefault()?.Body.To<Stream>() ?? Stream.Null;
+			}, () => null).FirstOrDefault()?.Body.To<Stream>() ?? Stream.Null;
 		}
 
 		/// <summary>
@@ -284,13 +284,16 @@ namespace StockSharp.Algo.Storages.Remote
 			Adapter.TypedClone().Upload(messages);
 		}
 
-		private IEnumerable<TResult> Do<TResult>(Message message, Func<object> getKey = default)
+		private IEnumerable<TResult> Do<TResult>(Message message, Func<object> getKey)
 			where TResult : Message, IOriginalTransactionIdMessage
 		{
-			var needCache = getKey is not null && Cache is not null;
-			object key = default;
+			if (message is null)	throw new ArgumentNullException(nameof(message));
+			if (getKey is null)		throw new ArgumentNullException(nameof(getKey));
 
-			if (needCache && Cache.TryGet(key = getKey(), out var messages))
+			var key = Cache is null ? null : getKey();
+			var needCache = key is not null;
+
+			if (needCache && Cache.TryGet(key, out var messages))
 				return messages.Cast<TResult>();
 
 			var result = Adapter.TypedClone().Download<TResult>(message);
