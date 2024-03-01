@@ -1634,14 +1634,7 @@ namespace StockSharp.Algo
 
 		private void ProcessErrorMessage(ErrorMessage message)
 		{
-			var error = message.Error;
-
-			RaiseError(error);
-
-			if (message.Adapter is not null and not BasketMessageAdapter)
-				message.Adapter.AddErrorLog(error);
-			else
-				this.AddErrorLog(error);
+			RaiseError(message.Error);
 		}
 	}
 }

@@ -611,6 +611,8 @@ namespace StockSharp.Algo
 
 			ErrorCount++;
 			Error?.Invoke(exception);
+
+			this.AddErrorLog(exception);
 		}
 
 		/// <summary>
