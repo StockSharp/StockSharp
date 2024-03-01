@@ -38,10 +38,16 @@
 		public int? Format { get; set; }
 
 		/// <summary>
-		/// Create a copy of <see cref="AvailableDataRequestMessage"/>.
+		/// Include dates.
 		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
+		[DataMember]
+		public bool IncludeDates { get; set; }
+
+        /// <summary>
+        /// Create a copy of <see cref="AvailableDataRequestMessage"/>.
+        /// </summary>
+        /// <returns>Copy.</returns>
+        public override Message Clone()
 		{
 			var clone = new AvailableDataRequestMessage
 			{
@@ -49,6 +55,7 @@
 				SecurityId = SecurityId,
 				Format = Format,
 				RequestDataType = RequestDataType?.TypedClone(),
+				IncludeDates = IncludeDates,
 			};
 
 			CopyTo(clone);
@@ -58,7 +65,7 @@
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",TrId={TransactionId},SecId={SecurityId},DT={RequestDataType},Fmt={Format}";
+			return base.ToString() + $",TrId={TransactionId},SecId={SecurityId},DT={RequestDataType},Fmt={Format},Dates={IncludeDates}";
 		}
 	}
 }
