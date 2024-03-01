@@ -1034,10 +1034,11 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Build an index for fast performance of accessing available data types from the storage.
 		/// </summary>
+		/// <param name="logs">Logs. Can be <see langword="null"/>.</param>
 		/// <param name="updateProgress">Progress handler.</param>
 		/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 		/// <returns><see cref="Task"/></returns>
-		public Task BuildIndexAsync(Action<int, int> updateProgress, CancellationToken cancellationToken)
+		public Task BuildIndexAsync(ILogReceiver logs, Action<int, int> updateProgress, CancellationToken cancellationToken)
 		{
 			if (updateProgress is null)
 				throw new ArgumentNullException(nameof(updateProgress));
@@ -1109,6 +1110,7 @@ namespace StockSharp.Algo.Storages
 					}
 
 					updateProgress(i, secPaths.Length);
+					logs?.AddInfoLog("Sec {0} processed.", secId);
 				}
 			}
 
@@ -1116,6 +1118,8 @@ namespace StockSharp.Algo.Storages
 				_index = index;
 
 			SaveIndex(index);
+
+			logs?.AddInfoLog("Index saved.");
 
 			return Task.CompletedTask;
 		}
