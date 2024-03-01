@@ -210,6 +210,7 @@ namespace StockSharp.Algo.Storages.Remote
 				SecurityId = securityId,
 				RequestDataType = dataType,
 				Format = (int)format,
+				IncludeDates = true,
 			}, () => (typeof(AvailableDataRequestMessage), securityId, dataType, format)).Select(i => i.Date.UtcDateTime).ToArray();
 		}
 
