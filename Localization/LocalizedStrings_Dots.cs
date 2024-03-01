@@ -390,11 +390,6 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string FastSettingsDot => AppendDot(FastSettings);
-
-		/// <summary>
-		/// 
-		/// </summary>
 		public static string NewsDot => AppendDot(News);
 
 		/// <summary>

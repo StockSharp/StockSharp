@@ -1,4 +1,16 @@
 {
+  "Sbe": {
+    "en": "SBE",
+    "ru": "SBE"
+  },
+  "SbeDesc": {
+    "en": "Simple Binary Encoding protocol connector.",
+    "ru": "Коннектор для протокола Simple Binary Encoding."
+  },
+  "SbeDialectProtocol": {
+    "en": "Dialect SBE protocol.",
+    "ru": "Диалект SBE протокола."
+  },
   "Theme": {
     "en": "Theme",
     "ru": "Тема"
@@ -12947,9 +12959,9 @@
     "en": "Snapshot data feed.",
     "ru": "Поток срезов."
   },
-  "FastSettings": {
-    "en": "FAST settings",
-    "ru": "Настройки FAST"
+  "DialectSettings": {
+    "en": "Dialect settings.",
+    "ru": "Настройки диалекта."
   },
   "NewsSkrin": {
     "en": "News (SKRIN)",
