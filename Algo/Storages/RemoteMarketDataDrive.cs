@@ -189,13 +189,20 @@ namespace StockSharp.Algo.Storages
 			var adapter = _createAdapter();
 
 			((IAddressAdapter<EndPoint>)adapter).Address = Address;
-			((ILoginPasswordAdapter)adapter).Password = Credentials.Password;
 
-			var login = Credentials.Email;
-			if (login.IsEmpty())
-				login = "stocksharp";
-			((ISenderTargetAdapter)adapter).SenderCompId = login;
-			((ISenderTargetAdapter)adapter).TargetCompId = TargetCompId;
+			var login = Credentials.Email.IsEmpty("stocksharp");
+
+			if (adapter is ISenderTargetAdapter sta)
+			{
+				sta.SenderCompId = login;
+				sta.TargetCompId = TargetCompId;
+			}
+
+			if (adapter is ILoginPasswordAdapter la)
+			{
+				la.Login = login;
+				la.Password = Credentials.Password;
+			}
 
 			adapter.Parent ??= ServicesRegistry.LogManager?.Application;
 

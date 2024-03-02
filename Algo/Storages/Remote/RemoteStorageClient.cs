@@ -291,16 +291,17 @@ namespace StockSharp.Algo.Storages.Remote
 			if (message is null)	throw new ArgumentNullException(nameof(message));
 			if (getKey is null)		throw new ArgumentNullException(nameof(getKey));
 
-			var key = Cache is null ? null : getKey();
+			var cache = Cache;
+			var key = cache is null ? null : getKey();
 			var needCache = key is not null;
 
-			if (needCache && Cache.TryGet(key, out var messages))
+			if (needCache && cache.TryGet(key, out var messages))
 				return messages.Cast<TResult>();
 
 			var result = Adapter.TypedClone().Download<TResult>(message);
 
 			if (needCache)
-				Cache.Set(key, result.Cast<Message>().ToArray());
+				cache.Set(key, result.Cast<Message>().ToArray());
 
 			return result;
 		}
