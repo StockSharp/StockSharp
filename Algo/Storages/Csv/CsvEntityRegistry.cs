@@ -237,125 +237,94 @@ namespace StockSharp.Algo.Storages.Csv
 
 			protected override SecurityId GetKey(Security item) => item.ToSecurityId();
 
-			private class LiteSecurity
+			public Security FromCache(Security cache)
 			{
-				public string Id { get; set; }
-				public string Name { get; set; }
-				public string Code { get; set; }
-				public string Class { get; set; }
-				public string ShortName { get; set; }
-				public string Board { get; set; }
-				public string UnderlyingSecurityId { get; set; }
-				public decimal? PriceStep { get; set; }
-				public decimal? VolumeStep { get; set; }
-				public decimal? MinVolume { get; set; }
-				public decimal? MaxVolume { get; set; }
-				public decimal? Multiplier { get; set; }
-				public int? Decimals { get; set; }
-				public SecurityTypes? Type { get; set; }
-				public DateTimeOffset? ExpiryDate { get; set; }
-				public DateTimeOffset? SettlementDate { get; set; }
-				public decimal? Strike { get; set; }
-				public OptionTypes? OptionType { get; set; }
-				public CurrencyTypes? Currency { get; set; }
-				public SecurityExternalId ExternalId { get; set; }
-				public SecurityTypes? UnderlyingSecurityType { get; set; }
-				public decimal? UnderlyingSecurityMinVolume { get; set; }
-				public string BinaryOptionType { get; set; }
-				public string CfiCode { get; set; }
-				public DateTimeOffset? IssueDate { get; set; }
-				public decimal? IssueSize { get; set; }
-				public bool? Shortable { get; set; }
-				public string BasketCode { get; set; }
-				public string BasketExpression { get; set; }
-				public string PrimaryId { get; set; }
-				public OptionStyles? OptionStyle { get; set; }
-				public SettlementTypes? SettlementType { get; set; }
+				if (cache is null)
+					throw new ArgumentNullException(nameof(cache));
 
-				public Security ToSecurity(SecurityCsvList list)
+				if (cache.Id.EqualsIgnoreCase(TraderHelper.AllSecurity.Id))
+					return TraderHelper.AllSecurity;
+
+				var boardCode = (cache.Board?.Code).IsEmpty(cache.Id.ToSecurityId().BoardCode);
+
+				return new()
 				{
-					if (Id.EqualsIgnoreCase(TraderHelper.AllSecurity.Id))
-						return TraderHelper.AllSecurity;
-
-					var board = Board;
-
-					if (board.IsEmpty())
-						board = Id.ToSecurityId().BoardCode;
-
-					return new Security
-					{
-						Id = Id,
-						Name = Name,
-						Code = Code,
-						Class = Class,
-						ShortName = ShortName,
-						Board = list.Registry.GetBoard(board),
-						UnderlyingSecurityId = UnderlyingSecurityId,
-						PriceStep = PriceStep,
-						VolumeStep = VolumeStep,
-						MinVolume = MinVolume,
-						MaxVolume = MaxVolume,
-						Multiplier = Multiplier,
-						Decimals = Decimals,
-						Type = Type,
-						ExpiryDate = ExpiryDate,
-						SettlementDate = SettlementDate,
-						Strike = Strike,
-						OptionType = OptionType,
-						Currency = Currency,
-						ExternalId = ExternalId.Clone(),
-						UnderlyingSecurityType = UnderlyingSecurityType,
-						UnderlyingSecurityMinVolume = UnderlyingSecurityMinVolume,
-						BinaryOptionType = BinaryOptionType,
-						CfiCode = CfiCode,
-						IssueDate = IssueDate,
-						IssueSize = IssueSize,
-						Shortable = Shortable,
-						BasketCode = BasketCode,
-						BasketExpression = BasketExpression,
-						PrimaryId = PrimaryId,
-						OptionStyle = OptionStyle,
-						SettlementType = SettlementType,
-					};
-				}
-
-				public void Update(Security security)
-				{
-					Name = security.Name;
-					Code = security.Code;
-					Class = security.Class;
-					ShortName = security.ShortName;
-					Board = security.Board?.Code;
-					UnderlyingSecurityId = security.UnderlyingSecurityId;
-					PriceStep = security.PriceStep;
-					VolumeStep = security.VolumeStep;
-					MinVolume = security.MinVolume;
-					MaxVolume = security.MaxVolume;
-					Multiplier = security.Multiplier;
-					Decimals = security.Decimals;
-					Type = security.Type;
-					ExpiryDate = security.ExpiryDate;
-					SettlementDate = security.SettlementDate;
-					Strike = security.Strike;
-					OptionType = security.OptionType;
-					Currency = security.Currency;
-					ExternalId = security.ExternalId.Clone();
-					UnderlyingSecurityType = security.UnderlyingSecurityType;
-					UnderlyingSecurityMinVolume = security.UnderlyingSecurityMinVolume;
-					BinaryOptionType = security.BinaryOptionType;
-					CfiCode = security.CfiCode;
-					IssueDate = security.IssueDate;
-					IssueSize = security.IssueSize;
-					Shortable = security.Shortable;
-					BasketCode = security.BasketCode;
-					BasketExpression = security.BasketExpression;
-					PrimaryId = security.PrimaryId;
-					OptionStyle = security.OptionStyle;
-					SettlementType = security.SettlementType;
-				}
+					Id = cache.Id,
+					Name = cache.Name,
+					Code = cache.Code,
+					Class = cache.Class,
+					ShortName = cache.ShortName,
+					Board = Registry.GetBoard(boardCode),
+					UnderlyingSecurityId = cache.UnderlyingSecurityId,
+					PriceStep = cache.PriceStep,
+					VolumeStep = cache.VolumeStep,
+					MinVolume = cache.MinVolume,
+					MaxVolume = cache.MaxVolume,
+					Multiplier = cache.Multiplier,
+					Decimals = cache.Decimals,
+					Type = cache.Type,
+					ExpiryDate = cache.ExpiryDate,
+					SettlementDate = cache.SettlementDate,
+					Strike = cache.Strike,
+					OptionType = cache.OptionType,
+					Currency = cache.Currency,
+					ExternalId = cache.ExternalId.Clone(),
+					UnderlyingSecurityType = cache.UnderlyingSecurityType,
+					UnderlyingSecurityMinVolume = cache.UnderlyingSecurityMinVolume,
+					BinaryOptionType = cache.BinaryOptionType,
+					CfiCode = cache.CfiCode,
+					IssueDate = cache.IssueDate,
+					IssueSize = cache.IssueSize,
+					Shortable = cache.Shortable,
+					BasketCode = cache.BasketCode,
+					BasketExpression = cache.BasketExpression,
+					PrimaryId = cache.PrimaryId,
+					OptionStyle = cache.OptionStyle,
+					SettlementType = cache.SettlementType,
+				};
 			}
 
-			private readonly Dictionary<SecurityId, LiteSecurity> _cache = new();
+			private static void UpdateCache(Security cache, Security security)
+			{
+				if (cache is null)		throw new ArgumentNullException(nameof(cache));
+				if (security is null)	throw new ArgumentNullException(nameof(security));
+
+				var boardCode = security.Board?.Code;
+
+				cache.Name = security.Name;
+				cache.Code = security.Code;
+				cache.Class = security.Class;
+				cache.ShortName = security.ShortName;
+				cache.Board = boardCode.IsEmpty() ? null : new() { Code = boardCode };
+				cache.UnderlyingSecurityId = security.UnderlyingSecurityId;
+				cache.PriceStep = security.PriceStep;
+				cache.VolumeStep = security.VolumeStep;
+				cache.MinVolume = security.MinVolume;
+				cache.MaxVolume = security.MaxVolume;
+				cache.Multiplier = security.Multiplier;
+				cache.Decimals = security.Decimals;
+				cache.Type = security.Type;
+				cache.ExpiryDate = security.ExpiryDate;
+				cache.SettlementDate = security.SettlementDate;
+				cache.Strike = security.Strike;
+				cache.OptionType = security.OptionType;
+				cache.Currency = security.Currency;
+				cache.ExternalId = security.ExternalId.Clone();
+				cache.UnderlyingSecurityType = security.UnderlyingSecurityType;
+				cache.UnderlyingSecurityMinVolume = security.UnderlyingSecurityMinVolume;
+				cache.BinaryOptionType = security.BinaryOptionType;
+				cache.CfiCode = security.CfiCode;
+				cache.IssueDate = security.IssueDate;
+				cache.IssueSize = security.IssueSize;
+				cache.Shortable = security.Shortable;
+				cache.BasketCode = security.BasketCode;
+				cache.BasketExpression = security.BasketExpression;
+				cache.PrimaryId = security.PrimaryId;
+				cache.OptionStyle = security.OptionStyle;
+				cache.SettlementType = security.SettlementType;
+			}
+
+			private readonly Dictionary<SecurityId, Security> _cache = new();
 
 			private static bool IsChanged(string original, string cached, bool forced)
 			{
@@ -376,108 +345,110 @@ namespace StockSharp.Algo.Storages.Csv
 
 			protected override bool IsChanged(Security security, bool forced)
 			{
-				var liteSec = _cache.TryGetValue(security.ToSecurityId())
+				var cache = _cache.TryGetValue(security.ToSecurityId())
 					?? throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(security.Id));
 
-				if (IsChanged(security.Name, liteSec.Name, forced))
+				if (IsChanged(security.Name, cache.Name, forced))
 					return true;
 
-				if (IsChanged(security.Code, liteSec.Code, forced))
+				if (IsChanged(security.Code, cache.Code, forced))
 					return true;
 
-				if (IsChanged(security.Class, liteSec.Class, forced))
+				if (IsChanged(security.Class, cache.Class, forced))
 					return true;
 
-				if (IsChanged(security.ShortName, liteSec.ShortName, forced))
+				if (IsChanged(security.ShortName, cache.ShortName, forced))
 					return true;
 
-				if (IsChanged(security.UnderlyingSecurityId, liteSec.UnderlyingSecurityId, forced))
+				if (IsChanged(security.UnderlyingSecurityId, cache.UnderlyingSecurityId, forced))
 					return true;
 
-				if (IsChanged(security.UnderlyingSecurityType, liteSec.UnderlyingSecurityType, forced))
+				if (IsChanged(security.UnderlyingSecurityType, cache.UnderlyingSecurityType, forced))
 					return true;
 
-				if (IsChanged(security.UnderlyingSecurityMinVolume, liteSec.UnderlyingSecurityMinVolume, forced))
+				if (IsChanged(security.UnderlyingSecurityMinVolume, cache.UnderlyingSecurityMinVolume, forced))
 					return true;
 
-				if (IsChanged(security.PriceStep, liteSec.PriceStep, forced))
+				if (IsChanged(security.PriceStep, cache.PriceStep, forced))
 					return true;
 
-				if (IsChanged(security.VolumeStep, liteSec.VolumeStep, forced))
+				if (IsChanged(security.VolumeStep, cache.VolumeStep, forced))
 					return true;
 
-				if (IsChanged(security.MinVolume, liteSec.MinVolume, forced))
+				if (IsChanged(security.MinVolume, cache.MinVolume, forced))
 					return true;
 
-				if (IsChanged(security.MaxVolume, liteSec.MaxVolume, forced))
+				if (IsChanged(security.MaxVolume, cache.MaxVolume, forced))
 					return true;
 
-				if (IsChanged(security.Multiplier, liteSec.Multiplier, forced))
+				if (IsChanged(security.Multiplier, cache.Multiplier, forced))
 					return true;
 
-				if (IsChanged(security.Decimals, liteSec.Decimals, forced))
+				if (IsChanged(security.Decimals, cache.Decimals, forced))
 					return true;
 
-				if (IsChanged(security.Type, liteSec.Type, forced))
+				if (IsChanged(security.Type, cache.Type, forced))
 					return true;
 
-				if (IsChanged(security.ExpiryDate, liteSec.ExpiryDate, forced))
+				if (IsChanged(security.ExpiryDate, cache.ExpiryDate, forced))
 					return true;
 
-				if (IsChanged(security.SettlementDate, liteSec.SettlementDate, forced))
+				if (IsChanged(security.SettlementDate, cache.SettlementDate, forced))
 					return true;
 
-				if (IsChanged(security.Strike, liteSec.Strike, forced))
+				if (IsChanged(security.Strike, cache.Strike, forced))
 					return true;
 
-				if (IsChanged(security.OptionType, liteSec.OptionType, forced))
+				if (IsChanged(security.OptionType, cache.OptionType, forced))
 					return true;
 
-				if (IsChanged(security.Currency, liteSec.Currency, forced))
+				if (IsChanged(security.Currency, cache.Currency, forced))
 					return true;
 
-				if (IsChanged(security.BinaryOptionType, liteSec.BinaryOptionType, forced))
+				if (IsChanged(security.BinaryOptionType, cache.BinaryOptionType, forced))
 					return true;
 
-				if (IsChanged(security.CfiCode, liteSec.CfiCode, forced))
+				if (IsChanged(security.CfiCode, cache.CfiCode, forced))
 					return true;
 
-				if (IsChanged(security.Shortable, liteSec.Shortable, forced))
+				if (IsChanged(security.Shortable, cache.Shortable, forced))
 					return true;
 
-				if (IsChanged(security.IssueDate, liteSec.IssueDate, forced))
+				if (IsChanged(security.IssueDate, cache.IssueDate, forced))
 					return true;
 
-				if (IsChanged(security.IssueSize, liteSec.IssueSize, forced))
+				if (IsChanged(security.IssueSize, cache.IssueSize, forced))
 					return true;
+
+				var cacheBoard = cache.Board;
 
 				if (security.Board == null)
 				{
-					if (!liteSec.Board.IsEmpty() && forced)
+					if (cacheBoard != null && forced)
 						return true;
 				}
 				else
 				{
-					if (liteSec.Board.IsEmpty() || (forced && !liteSec.Board.EqualsIgnoreCase(security.Board?.Code)))
+					if (cacheBoard is null || (forced && !cacheBoard.Code.EqualsIgnoreCase(security.Board?.Code)))
 						return true;
 				}
 
-				if (forced && security.ExternalId != liteSec.ExternalId)
+				if (forced && security.ExternalId != cache.ExternalId)
 					return true;
 
-				if (IsChanged(security.BasketCode, liteSec.BasketCode, forced))
+				if (IsChanged(security.BasketCode, cache.BasketCode, forced))
 					return true;
 
-				if (IsChanged(security.BasketExpression, liteSec.BasketExpression, forced))
+				if (IsChanged(security.BasketExpression, cache.BasketExpression, forced))
 					return true;
 
-				if (IsChanged(security.PrimaryId, liteSec.PrimaryId, forced))
+				if (IsChanged(security.PrimaryId, cache.PrimaryId, forced))
 					return true;
 
-				if (IsChanged(security.SettlementType, liteSec.SettlementType, forced))
+				if (IsChanged(security.SettlementType, cache.SettlementType, forced))
 					return true;
 
-				if (IsChanged(security.OptionStyle, liteSec.OptionStyle, forced))
+				if (IsChanged(security.OptionStyle, cache.OptionStyle, forced))
 					return true;
 
 				return false;
@@ -490,9 +461,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 			protected override void AddCache(Security item)
 			{
-				var sec = new LiteSecurity { Id = item.Id };
-				sec.Update(item);
-				_cache.Add(item.ToSecurityId(), sec);
+				var cache = new Security { Id = item.Id };
+				UpdateCache(cache, item);
+				_cache.Add(item.ToSecurityId(), cache);
 			}
 
 			protected override void RemoveCache(Security item)
@@ -502,24 +473,22 @@ namespace StockSharp.Algo.Storages.Csv
 
 			protected override void UpdateCache(Security item)
 			{
-				_cache[item.ToSecurityId()].Update(item);
+				UpdateCache(_cache[item.ToSecurityId()], item);
 			}
-
-			//protected override void WriteMany(Security[] values)
-			//{
-			//	base.WriteMany(_cache.Values.Select(l => l.ToSecurity(this)).ToArray());
-			//}
 
 			protected override Security Read(FastCsvReader reader)
 			{
-				var liteSec = new LiteSecurity
+				static ExchangeBoard toBoard(string boardCode)
+					=> boardCode.IsEmpty() ? null : new() { Code = boardCode };
+
+				var cache = new Security
 				{
 					Id = reader.ReadString(),
 					Name = reader.ReadString(),
 					Code = reader.ReadString(),
 					Class = reader.ReadString(),
 					ShortName = reader.ReadString(),
-					Board = reader.ReadString(),
+					Board = toBoard(reader.ReadString()),
 					UnderlyingSecurityId = reader.ReadString(),
 					PriceStep = reader.ReadNullableDecimal(),
 					VolumeStep = reader.ReadNullableDecimal(),
@@ -546,41 +515,41 @@ namespace StockSharp.Algo.Storages.Csv
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				{
-					liteSec.UnderlyingSecurityType = reader.ReadNullableEnum<SecurityTypes>();
-					liteSec.BinaryOptionType = reader.ReadString();
-					liteSec.CfiCode = reader.ReadString();
-					liteSec.IssueDate = ReadNullableDateTime(reader);
-					liteSec.IssueSize = reader.ReadNullableDecimal();
+					cache.UnderlyingSecurityType = reader.ReadNullableEnum<SecurityTypes>();
+					cache.BinaryOptionType = reader.ReadString();
+					cache.CfiCode = reader.ReadString();
+					cache.IssueDate = ReadNullableDateTime(reader);
+					cache.IssueSize = reader.ReadNullableDecimal();
 				}
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					liteSec.BasketCode = reader.ReadString();
+					cache.BasketCode = reader.ReadString();
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					liteSec.BasketExpression = reader.ReadString();
+					cache.BasketExpression = reader.ReadString();
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				{
-					liteSec.MinVolume = reader.ReadNullableDecimal();
-					liteSec.Shortable = reader.ReadNullableBool();
+					cache.MinVolume = reader.ReadNullableDecimal();
+					cache.Shortable = reader.ReadNullableBool();
 				}
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					liteSec.UnderlyingSecurityMinVolume = reader.ReadNullableDecimal();
+					cache.UnderlyingSecurityMinVolume = reader.ReadNullableDecimal();
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					liteSec.MaxVolume = reader.ReadNullableDecimal();
+					cache.MaxVolume = reader.ReadNullableDecimal();
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					liteSec.PrimaryId = reader.ReadString();
+					cache.PrimaryId = reader.ReadString();
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				{
-					liteSec.SettlementType = reader.ReadNullableEnum<SettlementTypes>();
-					liteSec.OptionStyle = reader.ReadNullableEnum<OptionStyles>();
+					cache.SettlementType = reader.ReadNullableEnum<SettlementTypes>();
+					cache.OptionStyle = reader.ReadNullableEnum<OptionStyles>();
 				}
 
-				return liteSec.ToSecurity(this);
+				return FromCache(cache);
 			}
 
 			protected override void Write(CsvFileWriter writer, Security data)
