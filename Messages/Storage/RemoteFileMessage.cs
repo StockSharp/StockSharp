@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Remove file message (upload or download).
 	/// </summary>
-	public class RemoteFileMessage : BaseSubscriptionIdMessage<RemoteFileMessage>, ITransactionIdMessage, ISecurityIdMessage
+	public class RemoteFileMessage : BaseSubscriptionIdMessage<RemoteFileMessage>, ITransactionIdMessage, ISecurityIdMessage, IFileMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RemoteFileMessage"/>.
@@ -22,11 +22,17 @@ namespace StockSharp.Messages
 		[DataMember]
 		public long TransactionId { get; set; }
 
+		private byte[] _body = Array.Empty<byte>();
+
 		/// <summary>
 		/// File body.
 		/// </summary>
 		[DataMember]
-		public byte[] Body { get; set; }
+		public byte[] Body
+		{
+			get => _body;
+			set => _body = value ?? throw new ArgumentNullException(nameof(value));
+		}
 
 		/// <inheritdoc />
 		[DataMember]
@@ -83,7 +89,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",SecId={SecurityId},DT={FileDataType},Date={Date},Fmt={Format}";
+			return base.ToString() + $",SecId={SecurityId},DT={FileDataType},Date={Date},Fmt={Format},BodyLen={Body.Length}";
 		}
 	}
 }

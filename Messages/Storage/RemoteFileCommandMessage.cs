@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Remote file command.
 	/// </summary>
-	public class RemoteFileCommandMessage : CommandMessage, ISecurityIdMessage
+	public class RemoteFileCommandMessage : CommandMessage, ISecurityIdMessage, IFileMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RemoteFileCommandMessage"/>.
