@@ -575,7 +575,7 @@ namespace StockSharp.Algo.Export
 						.SetCell(colIndex++, rowIndex, security.OptionType?.GetDisplayName() ?? string.Empty)
 						.SetCell(colIndex++, rowIndex, security.Strike)
 						.SetCell(colIndex++, rowIndex, security.BinaryOptionType)
-						.SetCell(colIndex++, rowIndex, security.UnderlyingSecurityCode)
+						.SetCell(colIndex++, rowIndex, security.UnderlyingSecurityId.ToStringId(nullIfEmpty: true))
 						.SetCell(colIndex++, rowIndex, security.UnderlyingSecurityType?.GetDisplayName() ?? string.Empty)
 						.SetCell(colIndex++, rowIndex, security.UnderlyingSecurityMinVolume)
 						.SetCell(colIndex++, rowIndex, security.ExpiryDate)

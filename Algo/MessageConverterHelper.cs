@@ -582,7 +582,7 @@ namespace StockSharp.Algo
 			message.OptionType = security.OptionType;
 			message.Strike = security.Strike;
 			message.BinaryOptionType = security.BinaryOptionType;
-			message.UnderlyingSecurityCode = security.UnderlyingSecurityId.IsEmpty() ? null : security.UnderlyingSecurityId.ToSecurityId().SecurityCode;
+			message.UnderlyingSecurityId = security.UnderlyingSecurityId.IsEmpty() ? default : security.UnderlyingSecurityId.ToSecurityId();
 			message.SettlementDate = security.SettlementDate;
 			message.ExpiryDate = security.ExpiryDate;
 			message.IssueSize = security.IssueSize;

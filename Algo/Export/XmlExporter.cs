@@ -461,14 +461,14 @@ namespace StockSharp.Algo.Export
 				if (security.IssueDate != null)
 					writer.WriteAttribute("issueDate", security.IssueDate.Value);
 
-				if (!security.UnderlyingSecurityCode.IsEmpty())
-					writer.WriteAttribute("underlyingSecurityCode", security.UnderlyingSecurityCode);
+				if (!security.GetUnderlyingCode().IsEmpty())
+					writer.WriteAttribute("underlyingId", security.GetUnderlyingCode());
 
 				if (security.UnderlyingSecurityType != null)
-					writer.WriteAttribute("underlyingSecurityType", security.UnderlyingSecurityType);
+					writer.WriteAttribute("underlyingType", security.UnderlyingSecurityType);
 
 				if (security.UnderlyingSecurityMinVolume != null)
-					writer.WriteAttribute("underlyingSecurityMinVolume", security.UnderlyingSecurityMinVolume.Value);
+					writer.WriteAttribute("underlyingMinVolume", security.UnderlyingSecurityMinVolume.Value);
 
 				if (security.ExpiryDate != null)
 					writer.WriteAttribute("expiryDate", security.ExpiryDate.Value.ToString("yyyy-MM-dd"));

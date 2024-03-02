@@ -1429,10 +1429,10 @@ namespace StockSharp.Algo
 				}
 			}
 
-			if (!message.UnderlyingSecurityCode.IsEmpty())
+			if (!message.GetUnderlyingCode().IsEmpty())
 			{
 				if (isOverride || security.UnderlyingSecurityId.IsEmpty())
-					security.UnderlyingSecurityId = message.UnderlyingSecurityCode + "@" + secId.BoardCode;
+					security.UnderlyingSecurityId = message.UnderlyingSecurityId.ToStringId(nullIfEmpty: true);
 			}
 
 			if (secId.HasExternalId())

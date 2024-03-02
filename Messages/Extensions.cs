@@ -3109,7 +3109,7 @@ namespace StockSharp.Messages
 			if (criteria.SettlementDate != null && security.SettlementDate?.Date != criteria.SettlementDate?.Date)
 				return false;
 
-			if (!criteria.UnderlyingSecurityCode.IsEmpty() && !security.UnderlyingSecurityCode.ContainsIgnoreCase(criteria.UnderlyingSecurityCode))
+			if (!criteria.GetUnderlyingCode().IsEmpty() && !security.GetUnderlyingCode().ContainsIgnoreCase(criteria.GetUnderlyingCode()))
 				return false;
 
 			if (criteria.UnderlyingSecurityMinVolume != null && security.UnderlyingSecurityMinVolume != criteria.UnderlyingSecurityMinVolume)
@@ -3227,7 +3227,7 @@ namespace StockSharp.Messages
 				criteria.CfiCode.IsEmpty() &&
 				criteria.ExpiryDate == null &&
 				criteria.SettlementDate == null &&
-				criteria.UnderlyingSecurityCode.IsEmpty() &&
+				criteria.UnderlyingSecurityId == default &&
 				criteria.UnderlyingSecurityMinVolume == null &&
 				criteria.Strike == null &&
 				criteria.OptionType == null &&
@@ -4598,9 +4598,20 @@ namespace StockSharp.Messages
 		public static readonly string AllSecurityId = $"{SecurityId.AssociatedBoardCode}@{SecurityId.AssociatedBoardCode}";
 
 		/// <summary>
-		/// Convert <see cref="SecurityId"/> to <see cref="SecurityId"/> value.
+		/// Convert <see cref="string"/> to <see cref="SecurityId"/> value.
 		/// </summary>
-		/// <param name="id"><see cref="SecurityId"/> value.</param>
+		/// <param name="id"><see cref="string"/> value.</param>
+		/// <param name="generator">The instrument identifiers generator <see cref="SecurityId"/>. Can be <see langword="null"/>.</param>
+		/// <returns><see cref="SecurityId"/> value.</returns>
+		public static SecurityId ToNullableSecurityId(this string id, SecurityIdGenerator generator = null)
+		{
+			return id.IsEmpty() ? default : id.ToSecurityId(generator);
+		}
+
+		/// <summary>
+		/// Convert <see cref="string"/> to <see cref="SecurityId"/> value.
+		/// </summary>
+		/// <param name="id"><see cref="string"/> value.</param>
 		/// <param name="generator">The instrument identifiers generator <see cref="SecurityId"/>. Can be <see langword="null"/>.</param>
 		/// <returns><see cref="SecurityId"/> value.</returns>
 		public static SecurityId ToSecurityId(this string id, SecurityIdGenerator generator = null)
@@ -4624,6 +4635,28 @@ namespace StockSharp.Messages
 
 			return securityId.BoardCode.EqualsIgnoreCase(boardCode);
 		}
+
+		/// <summary>
+		/// Fill <see cref="SecurityMessage.UnderlyingSecurityId"/> property.
+		/// </summary>
+		/// <param name="secMsg"><see cref="SecurityMessage"/></param>
+		/// <param name="underlyingCode">Underlying asset id.</param>
+		/// <returns><see cref="SecurityMessage"/></returns>
+		public static SecurityMessage TryFillUnderlyingId(this SecurityMessage secMsg, string underlyingCode)
+		{
+			if (!underlyingCode.IsEmpty())
+				secMsg.UnderlyingSecurityId = new() { SecurityCode = underlyingCode, BoardCode = secMsg.SecurityId.BoardCode };
+
+			return secMsg;
+		}
+
+		/// <summary>
+		/// Get underlying asset.
+		/// </summary>
+		/// <param name="secMsg"><see cref="SecurityMessage"/></param>
+		/// <returns>Underlying asset.</returns>
+		public static string GetUnderlyingCode(this SecurityMessage secMsg)
+			=> secMsg.UnderlyingSecurityId.SecurityCode;
 
 		/// <summary>
 		/// To get the number of operations, or discard the exception, if no information available.

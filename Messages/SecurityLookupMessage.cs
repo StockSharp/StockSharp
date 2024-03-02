@@ -100,7 +100,7 @@ namespace StockSharp.Messages
 			!CfiCode.IsEmpty() || MinVolume != null || MaxVolume != null ||
 			Multiplier != null || Decimals != null || ExpiryDate != null ||
 			SettlementDate != null || IssueDate != null || IssueSize != null ||
-			!UnderlyingSecurityCode.IsEmpty() || UnderlyingSecurityMinVolume != null ||
+			UnderlyingSecurityId != default || UnderlyingSecurityMinVolume != null ||
 			UnderlyingSecurityType != null || !Class.IsEmpty() || Currency != null ||
 			!BinaryOptionType.IsEmpty() || Shortable != null || FaceValue != null ||
 			SettlementType != null || OptionStyle != null;

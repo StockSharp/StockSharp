@@ -190,15 +190,15 @@ namespace StockSharp.Messages
 		public DateTimeOffset? SettlementDate { get; set; }
 
 		/// <summary>
-		/// Underlying asset code, on which the current security is based.
+		/// Underlying asset on which the current security is built.
 		/// </summary>
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.UnderlyingAssetKey,
-			Description = LocalizedStrings.UnderlyingAssetCodeKey,
+			Description = LocalizedStrings.UnderlyingAssetDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
-		public string UnderlyingSecurityCode { get; set; }
+		public SecurityId UnderlyingSecurityId { get; set; }
 
 		/// <summary>
 		/// Minimum volume allowed in order for underlying security.
@@ -405,7 +405,7 @@ namespace StockSharp.Messages
 			destination.CfiCode = CfiCode;
 			destination.SettlementDate = SettlementDate;
 			destination.Strike = Strike;
-			destination.UnderlyingSecurityCode = UnderlyingSecurityCode;
+			destination.UnderlyingSecurityId = UnderlyingSecurityId;
 			destination.VolumeStep = VolumeStep;
 			destination.MinVolume = MinVolume;
 			destination.MaxVolume = MaxVolume;
@@ -475,8 +475,8 @@ namespace StockSharp.Messages
 			if (CfiCode != null)
 				str += $",CFI={CfiCode}";
 
-			if (UnderlyingSecurityCode != null)
-				str += $",Under={UnderlyingSecurityCode}";
+			if (UnderlyingSecurityId != default)
+				str += $",Under={UnderlyingSecurityId}";
 
 			if (Class != null)
 				str += $",Class={Class}";

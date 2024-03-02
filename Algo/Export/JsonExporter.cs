@@ -274,8 +274,8 @@
 				if (security.IssueDate != null)
 					writer.WriteProperty("issueDate", security.IssueDate.Value);
 
-				if (!security.UnderlyingSecurityCode.IsEmpty())
-					writer.WriteProperty("underlyingCode", security.UnderlyingSecurityCode);
+				if (!security.GetUnderlyingCode().IsEmpty())
+					writer.WriteProperty("underlyingId", security.GetUnderlyingCode());
 
 				if (security.UnderlyingSecurityType != null)
 					writer.WriteProperty("underlyingType", security.UnderlyingSecurityType);
