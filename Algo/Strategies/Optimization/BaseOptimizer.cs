@@ -202,6 +202,11 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	public event Action<Strategy, IStrategyParam[]> StrategyInitialized;
 
 	/// <summary>
+	/// Init <see cref="Connector"/>. Called before <see cref="Connector.Connect"/>.
+	/// </summary>
+	public event Action<Connector> ConnectorInitialized;
+
+	/// <summary>
 	/// Start optimization.
 	/// </summary>
 	protected void OnStart()
@@ -321,7 +326,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	/// <param name="adapterCache"><see cref="HistoryMessageAdapter.AdapterCache"/></param>
 	/// <param name="storageCache"><see cref="HistoryMessageAdapter.StorageCache"/></param>
 	/// <param name="iterationFinished">Callback to notify the iteration was finished.</param>
-	protected internal void TryNextRun(DateTime startTime, DateTime stopTime, Func<(Strategy, IStrategyParam[])?> tryGetNext,
+	protected internal void TryNextRun(DateTime startTime, DateTime stopTime, Func<(Strategy strategy, IStrategyParam[] parameters)?> tryGetNext,
 		MarketDataStorageCache adapterCache, MarketDataStorageCache storageCache,
 		Action iterationFinished)
 	{
@@ -340,7 +345,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			if (State == ChannelStates.Suspending || State == ChannelStates.Suspended)
 				return;
 
-			(Strategy, IStrategyParam[])? t;
+			(Strategy strategy, IStrategyParam[] parameters)? t;
 
 			if (_cancelEmulation || (t = tryGetNext()) is null)
 			{
@@ -363,8 +368,8 @@ public abstract class BaseOptimizer : BaseLogReceiver
 				return;
 			}
 
-			strategy = t.Value.Item1;
-			parameters = t.Value.Item2;
+			strategy = t.Value.strategy;
+			parameters = t.Value.parameters;
 
 			strategy.Parent ??= this;
 
@@ -451,6 +456,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		strategy.Reset();
 
 		StrategyInitialized?.Invoke(strategy, parameters);
+		ConnectorInitialized?.Invoke(connector);
 
 		strategy.Start();
 
