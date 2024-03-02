@@ -87,12 +87,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			private Exchange GetExchange(string exchangeCode)
 			{
-				var exchange = Registry.Exchanges.ReadById(exchangeCode);
-
-				if (exchange == null)
-					throw new InvalidOperationException(LocalizedStrings.BoardNotFound.Put(exchangeCode));
-
-				return exchange;
+				return Registry.Exchanges.ReadById(exchangeCode) ?? throw new InvalidOperationException(LocalizedStrings.BoardNotFound.Put(exchangeCode));
 			}
 
 			protected override ExchangeBoard Read(FastCsvReader reader)
@@ -381,10 +376,8 @@ namespace StockSharp.Algo.Storages.Csv
 
 			protected override bool IsChanged(Security security, bool forced)
 			{
-				var liteSec = _cache.TryGetValue(security.ToSecurityId());
-
-				if (liteSec == null)
-					throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(security.Id));
+				var liteSec = _cache.TryGetValue(security.ToSecurityId())
+					?? throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(security.Id));
 
 				if (IsChanged(security.Name, liteSec.Name, forced))
 					return true;
@@ -538,7 +531,7 @@ namespace StockSharp.Algo.Storages.Csv
 					Strike = reader.ReadNullableDecimal(),
 					OptionType = reader.ReadNullableEnum<OptionTypes>(),
 					Currency = reader.ReadNullableEnum<CurrencyTypes>(),
-					ExternalId = new SecurityExternalId
+					ExternalId = new()
 					{
 						Sedol = reader.ReadString(),
 						Cusip = reader.ReadString(),
@@ -736,24 +729,20 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 		}
 
-		private class PositionCsvList : CsvEntityList<Tuple<Portfolio, Security, string, Sides?>, Position>, IStoragePositionList
+		private class PositionCsvList : CsvEntityList<(Portfolio, Security, string, Sides?), Position>, IStoragePositionList
 		{
 			public PositionCsvList(CsvEntityRegistry registry)
 				: base(registry, "position.csv")
 			{
 			}
 
-			protected override Tuple<Portfolio, Security, string, Sides?> GetKey(Position item)
+			protected override (Portfolio, Security, string, Sides?) GetKey(Position item)
 				=> CreateKey(item.Portfolio, item.Security, item.StrategyId, item.Side);
 
 			private Portfolio GetPortfolio(string id)
 			{
-				var portfolio = Registry.Portfolios.ReadById(id);
-
-				if (portfolio == null)
-					throw new InvalidOperationException(LocalizedStrings.PortfolioNotFound.Put(id));
-
-				return portfolio;
+				return Registry.Portfolios.ReadById(id)
+					?? throw new InvalidOperationException(LocalizedStrings.PortfolioNotFound.Put(id));
 			}
 
 			private Security GetSecurity(string id)
@@ -761,10 +750,7 @@ namespace StockSharp.Algo.Storages.Csv
 				var secId = id.ToSecurityId();
 				var security = secId.IsMoney() ? TraderHelper.MoneySecurity : Registry.Securities.ReadById(secId);
 
-				if (security == null)
-					throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(id));
-
-				return security;
+				return security ?? throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(id));
 			}
 
 			protected override Position Read(FastCsvReader reader)
@@ -877,18 +863,19 @@ namespace StockSharp.Algo.Storages.Csv
 			public Position GetPosition(Portfolio portfolio, Security security, string strategyId, Sides? side, string clientCode = "", string depoName = "", TPlusLimits? limit = null)
 				=> ((IStorageEntityList<Position>)this).ReadById(CreateKey(portfolio, security, strategyId, side));
 
-			private Tuple<Portfolio, Security, string, Sides?> CreateKey(Portfolio portfolio, Security security, string strategyId, Sides? side)
-				=> Tuple.Create(portfolio, security, strategyId?.ToLowerInvariant() ?? string.Empty, side);
+			private static (Portfolio, Security, string, Sides?) CreateKey(Portfolio portfolio, Security security, string strategyId, Sides? side)
+				=> (portfolio, security, strategyId?.ToLowerInvariant() ?? string.Empty, side);
 		}
 
-		private class SubscriptionCsvList : CsvEntityList<Tuple<SecurityId, DataType>, MarketDataMessage>
+		private class SubscriptionCsvList : CsvEntityList<(SecurityId, DataType), MarketDataMessage>
 		{
 			public SubscriptionCsvList(CsvEntityRegistry registry)
 				: base(registry, "subscription.csv")
 			{
 			}
 
-			protected override Tuple<SecurityId, DataType> GetKey(MarketDataMessage item) => Tuple.Create(item.SecurityId, item.DataType2);
+			protected override (SecurityId, DataType) GetKey(MarketDataMessage item)
+				=> (item.SecurityId, item.DataType2);
 
 			protected override void Write(CsvFileWriter writer, MarketDataMessage data)
 			{
