@@ -130,7 +130,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Information about the login and password for access to remote storage.
 		/// </summary>
-		public ServerCredentials Credentials { get; } = new ServerCredentials();
+		public ServerCredentials Credentials { get; } = new();
 
 		private EndPoint _address = DefaultAddress;
 
@@ -168,12 +168,6 @@ namespace StockSharp.Algo.Storages
 			{
 				if (value.IsEmpty())
 					throw new ArgumentNullException(nameof(value));
-
-				if (value.StartsWithIgnoreCase("net.tcp://"))
-				{
-					var uri = value.To<Uri>();
-					value = $"{uri.Host}:{uri.Port}";
-				}
 
 				Address = value.To<EndPoint>();
 			}
