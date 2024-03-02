@@ -151,8 +151,9 @@ namespace StockSharp.Algo.Testing
 			UpdateSecurityLastQuotes = false;
 			UpdateSecurityByLevel1 = false;
 
-			if (innerAdapter.Parent is null)
-				innerAdapter.Parent = this;
+			innerAdapter.Parent ??= this;
+
+			LookupMessagesOnConnect.Remove(MessageTypes.SecurityLookup);
 		}
 
 		/// <inheritdoc />
