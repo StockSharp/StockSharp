@@ -26,7 +26,12 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		/// <param name="errors">Possible errors.</param>
 		void Init(IList<Exception> errors);
-	}
+
+		/// <summary>
+		/// CSV file name.
+		/// </summary>
+		string FileName { get; }
+    }
 
 	/// <summary>
 	/// List of trade objects, received from the CSV storage.
@@ -58,9 +63,7 @@ namespace StockSharp.Algo.Storages.Csv
 			FileName = Path.Combine(Registry.Path, fileName);
 		}
 
-		/// <summary>
-		/// CSV file name.
-		/// </summary>
+		/// <inheritdoc />
 		public string FileName { get; }
 
 		#region IStorageEntityList<T>
@@ -318,65 +321,63 @@ namespace StockSharp.Algo.Storages.Csv
 
 			Do.Invariant(() =>
 			{
-				using (var stream = new FileStream(FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+				using var stream = new FileStream(FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+
+				var reader = new FastCsvReader(stream, Registry.Encoding, StringHelper.RN);
+
+				var hasDuplicates = false;
+				var currErrors = 0;
+
+				while (reader.NextLine())
 				{
-					var reader = new FastCsvReader(stream, Registry.Encoding, StringHelper.RN);
-
-					var hasDuplicates = false;
-					var currErrors = 0;
-
-					while (reader.NextLine())
-					{
-						try
-						{
-							var item = Read(reader);
-							var key = GetNormalizedKey(item);
-
-							lock (SyncRoot)
-							{
-								if (_items.TryAdd2(key, item))
-								{
-									InnerCollection.Add(item);
-									AddCache(item);
-								}
-								else
-									hasDuplicates = true;
-							}
-
-							currErrors = 0;
-						}
-						catch (Exception ex)
-						{
-							if (errors.Count < 100)
-								errors.Add(ex);
-
-							currErrors++;
-
-							if (currErrors >= 1000)
-								break;
-						}
-					}
-
-					if (!hasDuplicates)
-						return;
-
 					try
 					{
+						var item = Read(reader);
+						var key = GetNormalizedKey(item);
+
 						lock (SyncRoot)
 						{
-							stream.SetLength(0);
-
-							using (var writer = new CsvFileWriter(stream, Registry.Encoding))
+							if (_items.TryAdd2(key, item))
 							{
-								foreach (var item in InnerCollection)
-									Write(writer, item);
+								InnerCollection.Add(item);
+								AddCache(item);
 							}
+							else
+								hasDuplicates = true;
 						}
+
+						currErrors = 0;
 					}
 					catch (Exception ex)
 					{
-						errors.Add(ex);
+						if (errors.Count < 100)
+							errors.Add(ex);
+
+						currErrors++;
+
+						if (currErrors >= 1000)
+							break;
 					}
+				}
+
+				if (!hasDuplicates)
+					return;
+
+				try
+				{
+					lock (SyncRoot)
+					{
+						stream.SetLength(0);
+
+						using var writer = new CsvFileWriter(stream, Registry.Encoding);
+
+						foreach (var item in InnerCollection)
+							Write(writer, item);
+					}
+				}
+				catch (Exception ex)
+				{
+					errors.Add(ex);
 				}
 			});
 
