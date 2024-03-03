@@ -241,13 +241,13 @@ namespace StockSharp.Algo
 
 								if (_subscriptionsById.TryGetValue(subscrMsg.OriginalTransactionId, out var info) &&
 									info.Subscription is ISecurityIdMessage subscriptionMsg &&
-									!subscriptionMsg.SecurityId.IsAllSecurity())
+									!subscriptionMsg.IsAllSecurity())
 								{
 									secIdMsg.SecurityId = getSecId(subscriptionMsg);
 								}
 								else if (_historicalRequests.TryGetValue(subscrMsg.OriginalTransactionId, out var hist) &&
 									hist is ISecurityIdMessage subscriptionMsg2 &&
-									!subscriptionMsg2.SecurityId.IsAllSecurity())
+									!subscriptionMsg2.IsAllSecurity())
 								{
 									secIdMsg.SecurityId = getSecId(subscriptionMsg2);
 								}

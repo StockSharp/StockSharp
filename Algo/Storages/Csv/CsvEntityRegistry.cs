@@ -388,16 +388,14 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				var msg = reader.ReadSecurity();
 
-				var secId = msg.SecurityId;
-
-				if (secId.IsAllSecurity())
+				if (msg.IsAllSecurity())
 					return TraderHelper.AllSecurity;
 
-				var idStr = secId.ToStringId();
+				var secId = msg.SecurityId;
 
 				return new()
 				{
-					Id = idStr,
+					Id = secId.ToStringId(),
 					Name = msg.Name,
 					Code = secId.SecurityCode,
 					Class = msg.Class,

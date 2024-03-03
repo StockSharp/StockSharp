@@ -294,7 +294,7 @@ namespace StockSharp.Algo.Storages.Remote
 							{
 								var security = reader.ReadSecurity();
 
-								if (security.SecurityId.IsAllSecurity())
+								if (security.IsAllSecurity())
 									continue;
 
 								secList.Add(security);

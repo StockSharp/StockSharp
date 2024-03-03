@@ -62,7 +62,7 @@ public class FillGapsMessageAdapter : MessageAdapterWrapper
 						if (subscrMsg.FillGaps is FillGapsDays days &&
 							subscrMsg.From is DateTimeOffset from &&
 							subscrMsg is ISecurityIdMessage secIdMsg &&
-							!secIdMsg.SecurityId.IsAllSecurity())
+							!secIdMsg.IsAllSecurity())
 						{
 							var (gapsStart, gapsEnd) = _behaviour.TryGetNextGap(secIdMsg.SecurityId, subscrMsg.DataType, from.UtcDateTime, subscrMsg.To?.UtcDateTime ?? DateTime.UtcNow, days);
 

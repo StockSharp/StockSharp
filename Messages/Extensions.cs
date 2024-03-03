@@ -2475,10 +2475,23 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Check if the specified identifier is <see cref="IsAllSecurity"/>.
+		/// Check if the specified <see cref="ISecurityIdMessage"/> is <see cref="IsAllSecurity(SecurityId)"/>.
 		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		/// <returns><see langword="true"/>, if the specified identifier is <see cref="IsAllSecurity"/>, otherwise, <see langword="false"/>.</returns>
+		/// <param name="message"><see cref="ISecurityIdMessage"/></param>
+		/// <returns><see langword="true"/>, if the specified <see cref="ISecurityIdMessage"/> is <see cref="IsAllSecurity(SecurityId)"/>, otherwise, <see langword="false"/>.</returns>
+		public static bool IsAllSecurity(this ISecurityIdMessage message)
+		{
+			if (message is null)
+				throw new ArgumentNullException(nameof(message));
+
+			return message.SecurityId.IsAllSecurity();
+		}
+
+		/// <summary>
+		/// Check if the specified <see cref="SecurityId"/> is <see cref="IsAllSecurity(SecurityId)"/>.
+		/// </summary>
+		/// <param name="securityId"><see cref="SecurityId"/></param>
+		/// <returns><see langword="true"/>, if the specified <see cref="SecurityId"/> is <see cref="IsAllSecurity(SecurityId)"/>, otherwise, <see langword="false"/>.</returns>
 		public static bool IsAllSecurity(this SecurityId securityId)
 		{
 			//if (security == null)
