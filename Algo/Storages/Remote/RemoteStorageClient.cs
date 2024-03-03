@@ -4,14 +4,18 @@ namespace StockSharp.Algo.Storages.Remote
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.IO;
+	using System.IO.Compression;
+	using System.Text;
 
 	using Ecng.Common;
 	using Ecng.Collections;
+	using Ecng.IO;
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.Algo.Storages.Csv;
 
 	/// <summary>
 	/// The client for access to the history server.
@@ -63,8 +67,8 @@ namespace StockSharp.Algo.Storages.Remote
 			{
 				return Do<SecurityMessage>(
 					new SecurityLookupMessage { OnlySecurityId = true },
-					() => (typeof(SecurityLookupMessage), true)
-				).Select(s => s.SecurityId).ToArray();
+					() => (typeof(SecurityLookupMessage), Extensions.LookupAllCriteriaMessage.ToString())
+				, out _).Select(s => s.SecurityId).ToArray();
 			}
 		}
 
@@ -111,9 +115,16 @@ namespace StockSharp.Algo.Storages.Remote
 			criteria = criteria.TypedClone();
 			criteria.OnlySecurityId = true;
 
-			var securities = Do<SecurityMessage>(criteria, () => (typeof(SecurityLookupMessage), criteria.ToString())).Select(s => s.SecurityId).ToArray();
+			var securities = Do<SecurityMessage>(criteria, () => (typeof(SecurityLookupMessage), criteria.ToString()), out var isFull).ToArray();
+
+			if (isFull)
+			{
+				updateProgress(securities.Length, securities.Length);
+				return;
+			}
 
 			var newSecurityIds = securities
+				.Select(s => s.SecurityId)
 				.Where(id => !existingIds.Contains(id))
 				.ToArray();
 
@@ -121,17 +132,18 @@ namespace StockSharp.Algo.Storages.Remote
 
 			var count = 0;
 
-			foreach (var b in newSecurityIds.Chunk(SecurityBatchSize))
+			foreach (var batch in newSecurityIds.Chunk(_securityBatchSize))
 			{
 				if (isCancelled())
 					break;
 
-				var batch = b.ToArray();
-
 				foreach (var security in Do<SecurityMessage>(
 					new SecurityLookupMessage { SecurityIds = batch },
-					() => (typeof(SecurityLookupMessage), batch.Select(i => i.To<string>()).JoinComma())))
+					() => (typeof(SecurityLookupMessage), batch.Select(i => i.To<string>()).JoinComma()),
+					out _))
+				{
 					newSecurity(security);
+				}
 
 				count += batch.Length;
 
@@ -158,7 +170,7 @@ namespace StockSharp.Algo.Storages.Remote
 		/// <returns>Exchange boards.</returns>
 		public IEnumerable<BoardMessage> LoadExchangeBoards(BoardLookupMessage criteria)
 		{
-			return Do<BoardMessage>(criteria, () => (typeof(BoardLookupMessage), criteria.ToString()));
+			return Do<BoardMessage>(criteria, () => (typeof(BoardLookupMessage), criteria.ToString()), out _);
 		}
 
 		/// <summary>
@@ -185,7 +197,7 @@ namespace StockSharp.Algo.Storages.Remote
 			{
 				SecurityId = securityId,
 				Format = (int)format,
-			}, () => (typeof(AvailableDataRequestMessage), securityId, format)).Select(t => t.FileDataType).Distinct().ToArray();
+			}, () => (typeof(AvailableDataRequestMessage), securityId, format), out _).Select(t => t.FileDataType).Distinct().ToArray();
 		}
 
 		/// <summary>
@@ -211,7 +223,7 @@ namespace StockSharp.Algo.Storages.Remote
 				RequestDataType = dataType,
 				Format = (int)format,
 				IncludeDates = true,
-			}, () => (typeof(AvailableDataRequestMessage), securityId, dataType, format)).Select(i => i.Date.UtcDateTime).ToArray();
+			}, () => (typeof(AvailableDataRequestMessage), securityId, dataType, format), out _).Select(i => i.Date.UtcDateTime).ToArray();
 		}
 
 		/// <summary>
@@ -256,7 +268,7 @@ namespace StockSharp.Algo.Storages.Remote
 				From = date,
 				To = date.AddDays(1),
 				Format = (int)format,
-			}, () => null).FirstOrDefault()?.Body.To<Stream>() ?? Stream.Null;
+			}, () => null, out _).FirstOrDefault()?.Body.To<Stream>() ?? Stream.Null;
 		}
 
 		/// <summary>
@@ -285,7 +297,7 @@ namespace StockSharp.Algo.Storages.Remote
 			Adapter.TypedClone().Upload(messages);
 		}
 
-		private IEnumerable<TResult> Do<TResult>(Message message, Func<object> getKey)
+		private IEnumerable<TResult> Do<TResult>(Message message, Func<object> getKey, out bool isFull)
 			where TResult : Message, IOriginalTransactionIdMessage
 		{
 			if (message is null)	throw new ArgumentNullException(nameof(message));
@@ -295,10 +307,39 @@ namespace StockSharp.Algo.Storages.Remote
 			var key = cache is null ? null : getKey();
 			var needCache = key is not null;
 
+			isFull = false;
+
 			if (needCache && cache.TryGet(key, out var messages))
 				return messages.Cast<TResult>();
 
-			var result = Adapter.TypedClone().Download<TResult>(message);
+			var result = Adapter.TypedClone().Download<TResult>(message, out var archive);
+
+			if (archive.Length > 0)
+			{
+				var secList = typeof(TResult) == typeof(SecurityMessage) ? new List<SecurityMessage>() : null;
+				var boardList = typeof(TResult) == typeof(BoardMessage) ? new List<BoardMessage>() : null;
+
+				if (secList is not null || boardList is not null)
+				{
+					var encoding = Encoding.UTF8;
+					var reader = archive.Uncompress<GZipStream>().To<Stream>().CreateCsvReader(encoding);
+
+					while (reader.NextLine())
+					{
+						if (secList is not null)
+							secList.Add(reader.ReadSecurity());
+						else
+							boardList.Add(reader.ReadBoard(encoding));
+					}
+
+					isFull = true;
+
+					if (secList is not null)
+						result = secList.To<IEnumerable<TResult>>();
+					else if (boardList is not null)
+						result = boardList.To<IEnumerable<TResult>>();
+				}
+			}
 
 			if (needCache)
 				cache.Set(key, result.Cast<Message>().ToArray());

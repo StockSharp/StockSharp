@@ -2338,10 +2338,13 @@ namespace StockSharp.Algo
 		/// <typeparam name="TResult">Result message.</typeparam>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="request">Request.</param>
+		/// <param name="archive">Result data was sent as archive.</param>
 		/// <returns>Downloaded data.</returns>
-		public static IEnumerable<TResult> Download<TResult>(this IMessageAdapter adapter, Message request)
+		public static IEnumerable<TResult> Download<TResult>(this IMessageAdapter adapter, Message request, out byte[] archive)
 			where TResult : Message
 		{
+			var archiveLocal = Array.Empty<byte>();
+
 			var retVal = new List<TResult>();
 
 			var transIdMsg = request as ITransactionIdMessage;
@@ -2362,7 +2365,11 @@ namespace StockSharp.Algo
 				if (err != null)
 					throw err;
 
-				return resp is SubscriptionFinishedMessage;
+				if (resp is not SubscriptionFinishedMessage finishedMsg)
+					return false;
+
+				archiveLocal = finishedMsg.Body;
+				return true;
 			}
 
 			bool OtherMessageHandler(Message msg)
@@ -2379,6 +2386,7 @@ namespace StockSharp.Algo
 			adapter.DoConnect(request is null ? Enumerable.Empty<Message>() : new[] { request }, !resultIsConnect,
 				msg => transIdMsg != null && resultIsOrigIdMsg ? msg is IOriginalTransactionIdMessage origIdMsg && TransactionMessageHandler(transIdMsg, origIdMsg) : OtherMessageHandler(msg));
 
+			archive = archiveLocal;
 			return retVal;
 		}
 
@@ -2407,7 +2415,7 @@ namespace StockSharp.Algo
 				Count = maxCount,
 			};
 
-			return adapter.Download<Level1ChangeMessage>(mdMsg);
+			return adapter.Download<Level1ChangeMessage>(mdMsg, out _);
 		}
 
 		/// <summary>
@@ -2433,7 +2441,7 @@ namespace StockSharp.Algo
 				Count = maxCount,
 			};
 
-			return adapter.Download<ExecutionMessage>(mdMsg);
+			return adapter.Download<ExecutionMessage>(mdMsg, out _);
 		}
 
 		/// <summary>
@@ -2459,7 +2467,7 @@ namespace StockSharp.Algo
 				Count = maxCount,
 			};
 
-			return adapter.Download<ExecutionMessage>(mdMsg);
+			return adapter.Download<ExecutionMessage>(mdMsg, out _);
 		}
 
 		/// <summary>
@@ -2470,7 +2478,7 @@ namespace StockSharp.Algo
 		/// <returns>All securities.</returns>
 		public static IEnumerable<SecurityMessage> GetSecurities(this IMessageAdapter adapter, SecurityLookupMessage lookupMsg)
 		{
-			return adapter.Download<SecurityMessage>(lookupMsg);
+			return adapter.Download<SecurityMessage>(lookupMsg, out _);
 		}
 
 		/// <summary>
@@ -2499,7 +2507,7 @@ namespace StockSharp.Algo
 				SecurityType = secType,
 			};
 
-			return adapter.Download<TimeFrameCandleMessage>(mdMsg);
+			return adapter.Download<TimeFrameCandleMessage>(mdMsg, out _);
 		}
 
 		/// <summary>

@@ -11,7 +11,6 @@ namespace StockSharp.Algo.Storages.Csv
 	using Ecng.Serialization;
 
 	using StockSharp.BusinessEntities;
-	using StockSharp.Configuration;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -92,37 +91,10 @@ namespace StockSharp.Algo.Storages.Csv
 
 			protected override ExchangeBoard Read(FastCsvReader reader)
 			{
-				var board = new ExchangeBoard
-				{
-					Code = reader.ReadString(),
-					Exchange = GetExchange(reader.ReadString()),
-					ExpiryTime = reader.ReadString().ToTime(),
-					//IsSupportAtomicReRegister = reader.ReadBool(),
-					//IsSupportMarketOrders = reader.ReadBool(),
-					TimeZone = reader.ReadString().To<TimeZoneInfo>(),
-				};
+				var msg = reader.ReadBoard(Registry.Encoding);
 
-				var time = board.WorkingTime;
-
-				if (reader.ColumnCount == 7)
-				{
-					time.Periods = Deserialize<List<WorkingTimePeriod>>(reader.ReadString());
-					time.SpecialWorkingDays = Deserialize<IEnumerable<DateTime>>(reader.ReadString()).ToArray();
-					time.SpecialHolidays = Deserialize<IEnumerable<DateTime>>(reader.ReadString()).ToArray();
-				}
-				else
-				{
-					time.Periods.AddRange(reader.ReadString().DecodeToPeriods());
-					time.SpecialDays.AddRange(reader.ReadString().DecodeToSpecialDays());
-
-					if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					{
-						reader.Skip();
-
-						time.IsEnabled = reader.ReadBool();
-					}
-				}
-
+				var board = msg.ToBoard();
+				board.Exchange = GetExchange(msg.ExchangeCode);
 				return board;
 			}
 
@@ -145,23 +117,6 @@ namespace StockSharp.Algo.Storages.Csv
 					data.WorkingTime.IsEnabled.ToString(),
 				});
 			}
-
-			private readonly SynchronizedDictionary<Type, ISerializer> _serializers = new();
-
-			private TItem Deserialize<TItem>(string value)
-				where TItem : class
-			{
-				if (value.IsEmpty())
-					return null;
-
-				var serializer = GetSerializer<TItem>();
-				var bytes = Registry.Encoding.GetBytes(value.Replace("'", "\""));
-
-				return serializer.Deserialize(bytes);
-			}
-
-			private ISerializer<TItem> GetSerializer<TItem>()
-				=> (ISerializer<TItem>)_serializers.SafeAdd(typeof(TItem), k => new JsonSerializer<TItem> { Indent = false, EnumAsString = true });
 		}
 
 		private class SecurityCsvList : CsvEntityList<SecurityId, Security>, IStorageSecurityList
@@ -431,80 +386,50 @@ namespace StockSharp.Algo.Storages.Csv
 
 			protected override Security Read(FastCsvReader reader)
 			{
-				var id = reader.ReadString();
+				var msg = reader.ReadSecurity();
 
-				var security = new Security
-				{
-					Id = id,
-					Name = reader.ReadString(),
-					Code = reader.ReadString(),
-					Class = reader.ReadString(),
-					ShortName = reader.ReadString(),
-					Board = Registry.GetBoard(reader.ReadString().IsEmpty(id.ToSecurityId().BoardCode)),
-					UnderlyingSecurityId = reader.ReadString(),
-					PriceStep = reader.ReadNullableDecimal(),
-					VolumeStep = reader.ReadNullableDecimal(),
-					Multiplier = reader.ReadNullableDecimal(),
-					Decimals = reader.ReadNullableInt(),
-					Type = reader.ReadNullableEnum<SecurityTypes>(),
-					ExpiryDate = reader.ReadNullableDateTime(),
-					SettlementDate = reader.ReadNullableDateTime(),
-					Strike = reader.ReadNullableDecimal(),
-					OptionType = reader.ReadNullableEnum<OptionTypes>(),
-					Currency = reader.ReadNullableEnum<CurrencyTypes>(),
-					ExternalId = new()
-					{
-						Sedol = reader.ReadString(),
-						Cusip = reader.ReadString(),
-						Isin = reader.ReadString(),
-						Ric = reader.ReadString(),
-						Bloomberg = reader.ReadString(),
-						IQFeed = reader.ReadString(),
-						InteractiveBrokers = reader.ReadNullableInt(),
-						Plaza = reader.ReadString()
-					},
-				};
+				var secId = msg.SecurityId;
 
-				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-				{
-					security.UnderlyingSecurityType = reader.ReadNullableEnum<SecurityTypes>();
-					security.BinaryOptionType = reader.ReadString();
-					security.CfiCode = reader.ReadString();
-					security.IssueDate = reader.ReadNullableDateTime();
-					security.IssueSize = reader.ReadNullableDecimal();
-				}
-
-				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					security.BasketCode = reader.ReadString();
-
-				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					security.BasketExpression = reader.ReadString();
-
-				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-				{
-					security.MinVolume = reader.ReadNullableDecimal();
-					security.Shortable = reader.ReadNullableBool();
-				}
-
-				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					security.UnderlyingSecurityMinVolume = reader.ReadNullableDecimal();
-
-				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					security.MaxVolume = reader.ReadNullableDecimal();
-
-				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					security.PrimaryId = reader.ReadString();
-
-				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-				{
-					security.SettlementType = reader.ReadNullableEnum<SettlementTypes>();
-					security.OptionStyle = reader.ReadNullableEnum<OptionStyles>();
-				}
-
-				if (security.Id.EqualsIgnoreCase(TraderHelper.AllSecurity.Id))
+				if (secId.IsAllSecurity())
 					return TraderHelper.AllSecurity;
 
-				return security;
+				var idStr = secId.ToStringId();
+
+				return new()
+				{
+					Id = idStr,
+					Name = msg.Name,
+					Code = secId.SecurityCode,
+					Class = msg.Class,
+					ShortName = msg.ShortName,
+					Board = Registry.GetBoard(secId.BoardCode),
+					UnderlyingSecurityId = msg.UnderlyingSecurityId.ToStringId(nullIfEmpty: true),
+					PriceStep = msg.PriceStep,
+					VolumeStep = msg.VolumeStep,
+					MinVolume = msg.MinVolume,
+					MaxVolume = msg.MaxVolume,
+					Multiplier = msg.Multiplier,
+					Decimals = msg.Decimals,
+					Type = msg.SecurityType,
+					ExpiryDate = msg.ExpiryDate,
+					SettlementDate = msg.SettlementDate,
+					Strike = msg.Strike,
+					OptionType = msg.OptionType,
+					Currency = msg.Currency,
+					ExternalId = secId.ToExternalId(),
+					UnderlyingSecurityType = msg.UnderlyingSecurityType,
+					UnderlyingSecurityMinVolume = msg.UnderlyingSecurityMinVolume,
+					BinaryOptionType = msg.BinaryOptionType,
+					CfiCode = msg.CfiCode,
+					IssueDate = msg.IssueDate,
+					IssueSize = msg.IssueSize,
+					Shortable = msg.Shortable,
+					BasketCode = msg.BasketCode,
+					BasketExpression = msg.BasketExpression,
+					PrimaryId = msg.PrimaryId.ToStringId(nullIfEmpty: true),
+					OptionStyle = msg.OptionStyle,
+					SettlementType = msg.SettlementType,
+				};
 			}
 
 			protected override void Write(CsvFileWriter writer, Security data)

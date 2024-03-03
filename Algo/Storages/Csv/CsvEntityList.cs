@@ -3,10 +3,12 @@ namespace StockSharp.Algo.Storages.Csv
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
+	using System.IO.Compression;
 	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.IO;
 	using Ecng.Serialization;
 
 	using StockSharp.Messages;
@@ -31,6 +33,17 @@ namespace StockSharp.Algo.Storages.Csv
 		/// CSV file name.
 		/// </summary>
 		string FileName { get; }
+
+		/// <summary>
+		/// Create archived copy.
+		/// </summary>
+		bool CreateArchivedCopy { get; set; }
+
+		/// <summary>
+		/// Get archived copy body.
+		/// </summary>
+		/// <returns>File body.</returns>
+		byte[] GetCopy();
     }
 
 	/// <summary>
@@ -42,6 +55,9 @@ namespace StockSharp.Algo.Storages.Csv
 		where TEntity : class
 	{
 		private readonly Dictionary<TKey, TEntity> _items = new();
+
+		private readonly SyncObject _copySync = new();
+		private byte[] _copy;
 
 		/// <summary>
 		/// The CSV storage of trading objects.
@@ -65,6 +81,48 @@ namespace StockSharp.Algo.Storages.Csv
 
 		/// <inheritdoc />
 		public string FileName { get; }
+
+		/// <inheritdoc />
+		public bool CreateArchivedCopy { get; set; }
+
+		/// <inheritdoc />
+		public byte[] GetCopy()
+		{
+			if (!CreateArchivedCopy)
+				throw new NotSupportedException();
+
+			byte[] body;
+
+			lock (_copySync)
+				body = _copy;
+
+			if (body is null)
+			{
+				lock (_copySync)
+				{
+					if (File.Exists(FileName))
+						body = File.ReadAllBytes(FileName);
+					else
+						body = Array.Empty<byte>();
+				}
+
+				body = body.Compress<GZipStream>();
+
+				lock (_copySync)
+					_copy ??= body;
+			}
+
+			return body;
+		}
+
+		private void ResetCopy()
+		{
+			if (!CreateArchivedCopy)
+				return;
+
+			lock (_copySync)
+				_copy = null;
+		}
 
 		#region IStorageEntityList<T>
 
@@ -227,7 +285,11 @@ namespace StockSharp.Algo.Storages.Csv
 
 				AddCache(item);
 
-				_delayActionGroup.Add(Write, item);
+				_delayActionGroup.Add((writer, data) =>
+				{
+					ResetCopy();
+					Write(writer, data);
+				}, item);
 			}
 
 			return base.OnAdding(item);
@@ -280,7 +342,11 @@ namespace StockSharp.Algo.Storages.Csv
 				_items.Clear();
 				ClearCache();
 
-				_delayActionGroup.Add(writer => writer.Writer.Truncate());
+				_delayActionGroup.Add(writer =>
+				{
+					ResetCopy();
+					writer.Writer.Truncate();
+				});
 			}
 		}
 
@@ -292,6 +358,8 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			_delayActionGroup.Add((writer, state) =>
 			{
+				ResetCopy();
+
 				writer.Writer.Truncate();
 
 				foreach (var item in state)
@@ -323,7 +391,7 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				using var stream = new FileStream(FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
 
-				var reader = new FastCsvReader(stream, Registry.Encoding, StringHelper.RN);
+				var reader = stream.CreateCsvReader(Registry.Encoding);
 
 				var hasDuplicates = false;
 				var currErrors = 0;

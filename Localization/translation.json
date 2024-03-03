@@ -1,4 +1,12 @@
 {
+  "Archives": {
+    "en": "Archives",
+    "ru": "Архивы"
+  },
+  "TranslateSecuritiesAsArchives": {
+    "en": "Translates securities as archives.",
+    "ru": "Передавать инструменты как архивы."
+  },
   "Sbe": {
     "en": "SBE",
     "ru": "SBE"
