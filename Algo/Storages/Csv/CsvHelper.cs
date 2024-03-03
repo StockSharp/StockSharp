@@ -1,7 +1,9 @@
 namespace StockSharp.Algo.Storages.Csv
 {
 	using System;
-
+	using System.Collections.Generic;
+	
+	using Ecng.Collections;
 	using Ecng.Common;
 
 	using StockSharp.Messages;
@@ -117,5 +119,27 @@ namespace StockSharp.Algo.Storages.Csv
 			
 			return str.To<int>().ToDataType(reader.ReadLong(), reader.ReadDecimal(), reader.ReadInt());
 		}
+
+		private const string _dateTimeFormat = "yyyyMMddHHmmss";
+		private static readonly FastDateTimeParser _dateTimeParser = new(_dateTimeFormat);
+
+		public static DateTimeOffset? ReadNullableDateTime(this FastCsvReader reader)
+		{
+			var str = reader.ReadString();
+
+			if (str.IsEmpty())
+				return null;
+
+			return _dateTimeParser.Parse(str).UtcKind();
+		}
+
+		public static DateTimeOffset ReadDateTime(this FastCsvReader reader)
+			=> reader.ReadNullableDateTime().Value;
+
+		public static string WriteNullableDateTime(this DateTimeOffset? dto)
+			=> dto?.WriteDateTime();
+
+		public static string WriteDateTime(this DateTimeOffset dto)
+			=> dto.UtcDateTime.ToString(_dateTimeFormat);
 	}
 }

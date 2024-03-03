@@ -237,53 +237,6 @@ namespace StockSharp.Algo.Storages.Csv
 
 			protected override SecurityId GetKey(Security item) => item.ToSecurityId();
 
-			public Security FromCache(Security cache)
-			{
-				if (cache is null)
-					throw new ArgumentNullException(nameof(cache));
-
-				if (cache.Id.EqualsIgnoreCase(TraderHelper.AllSecurity.Id))
-					return TraderHelper.AllSecurity;
-
-				var boardCode = (cache.Board?.Code).IsEmpty(cache.Id.ToSecurityId().BoardCode);
-
-				return new()
-				{
-					Id = cache.Id,
-					Name = cache.Name,
-					Code = cache.Code,
-					Class = cache.Class,
-					ShortName = cache.ShortName,
-					Board = Registry.GetBoard(boardCode),
-					UnderlyingSecurityId = cache.UnderlyingSecurityId,
-					PriceStep = cache.PriceStep,
-					VolumeStep = cache.VolumeStep,
-					MinVolume = cache.MinVolume,
-					MaxVolume = cache.MaxVolume,
-					Multiplier = cache.Multiplier,
-					Decimals = cache.Decimals,
-					Type = cache.Type,
-					ExpiryDate = cache.ExpiryDate,
-					SettlementDate = cache.SettlementDate,
-					Strike = cache.Strike,
-					OptionType = cache.OptionType,
-					Currency = cache.Currency,
-					ExternalId = cache.ExternalId.Clone(),
-					UnderlyingSecurityType = cache.UnderlyingSecurityType,
-					UnderlyingSecurityMinVolume = cache.UnderlyingSecurityMinVolume,
-					BinaryOptionType = cache.BinaryOptionType,
-					CfiCode = cache.CfiCode,
-					IssueDate = cache.IssueDate,
-					IssueSize = cache.IssueSize,
-					Shortable = cache.Shortable,
-					BasketCode = cache.BasketCode,
-					BasketExpression = cache.BasketExpression,
-					PrimaryId = cache.PrimaryId,
-					OptionStyle = cache.OptionStyle,
-					SettlementType = cache.SettlementType,
-				};
-			}
-
 			private static void UpdateCache(Security cache, Security security)
 			{
 				if (cache is null)		throw new ArgumentNullException(nameof(cache));
@@ -478,25 +431,24 @@ namespace StockSharp.Algo.Storages.Csv
 
 			protected override Security Read(FastCsvReader reader)
 			{
-				static ExchangeBoard toBoard(string boardCode)
-					=> boardCode.IsEmpty() ? null : new() { Code = boardCode };
+				var id = reader.ReadString();
 
-				var cache = new Security
+				var security = new Security
 				{
-					Id = reader.ReadString(),
+					Id = id,
 					Name = reader.ReadString(),
 					Code = reader.ReadString(),
 					Class = reader.ReadString(),
 					ShortName = reader.ReadString(),
-					Board = toBoard(reader.ReadString()),
+					Board = Registry.GetBoard(reader.ReadString().IsEmpty(id.ToSecurityId().BoardCode)),
 					UnderlyingSecurityId = reader.ReadString(),
 					PriceStep = reader.ReadNullableDecimal(),
 					VolumeStep = reader.ReadNullableDecimal(),
 					Multiplier = reader.ReadNullableDecimal(),
 					Decimals = reader.ReadNullableInt(),
 					Type = reader.ReadNullableEnum<SecurityTypes>(),
-					ExpiryDate = ReadNullableDateTime(reader),
-					SettlementDate = ReadNullableDateTime(reader),
+					ExpiryDate = reader.ReadNullableDateTime(),
+					SettlementDate = reader.ReadNullableDateTime(),
 					Strike = reader.ReadNullableDecimal(),
 					OptionType = reader.ReadNullableEnum<OptionTypes>(),
 					Currency = reader.ReadNullableEnum<CurrencyTypes>(),
@@ -515,41 +467,44 @@ namespace StockSharp.Algo.Storages.Csv
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				{
-					cache.UnderlyingSecurityType = reader.ReadNullableEnum<SecurityTypes>();
-					cache.BinaryOptionType = reader.ReadString();
-					cache.CfiCode = reader.ReadString();
-					cache.IssueDate = ReadNullableDateTime(reader);
-					cache.IssueSize = reader.ReadNullableDecimal();
+					security.UnderlyingSecurityType = reader.ReadNullableEnum<SecurityTypes>();
+					security.BinaryOptionType = reader.ReadString();
+					security.CfiCode = reader.ReadString();
+					security.IssueDate = reader.ReadNullableDateTime();
+					security.IssueSize = reader.ReadNullableDecimal();
 				}
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					cache.BasketCode = reader.ReadString();
+					security.BasketCode = reader.ReadString();
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					cache.BasketExpression = reader.ReadString();
+					security.BasketExpression = reader.ReadString();
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				{
-					cache.MinVolume = reader.ReadNullableDecimal();
-					cache.Shortable = reader.ReadNullableBool();
+					security.MinVolume = reader.ReadNullableDecimal();
+					security.Shortable = reader.ReadNullableBool();
 				}
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					cache.UnderlyingSecurityMinVolume = reader.ReadNullableDecimal();
+					security.UnderlyingSecurityMinVolume = reader.ReadNullableDecimal();
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					cache.MaxVolume = reader.ReadNullableDecimal();
+					security.MaxVolume = reader.ReadNullableDecimal();
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					cache.PrimaryId = reader.ReadString();
+					security.PrimaryId = reader.ReadString();
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				{
-					cache.SettlementType = reader.ReadNullableEnum<SettlementTypes>();
-					cache.OptionStyle = reader.ReadNullableEnum<OptionStyles>();
+					security.SettlementType = reader.ReadNullableEnum<SettlementTypes>();
+					security.OptionStyle = reader.ReadNullableEnum<OptionStyles>();
 				}
 
-				return FromCache(cache);
+				if (security.Id.EqualsIgnoreCase(TraderHelper.AllSecurity.Id))
+					return TraderHelper.AllSecurity;
+
+				return security;
 			}
 
 			protected override void Write(CsvFileWriter writer, Security data)
@@ -568,8 +523,8 @@ namespace StockSharp.Algo.Storages.Csv
 					data.Multiplier.To<string>(),
 					data.Decimals.To<string>(),
 					data.Type.To<string>(),
-					data.ExpiryDate?.UtcDateTime.ToString(_dateTimeFormat),
-					data.SettlementDate?.UtcDateTime.ToString(_dateTimeFormat),
+					data.ExpiryDate.WriteNullableDateTime(),
+					data.SettlementDate.WriteNullableDateTime(),
 					data.Strike.To<string>(),
 					data.OptionType.To<string>(),
 					data.Currency.To<string>(),
@@ -584,7 +539,7 @@ namespace StockSharp.Algo.Storages.Csv
 					data.UnderlyingSecurityType.To<string>(),
 					data.BinaryOptionType,
 					data.CfiCode,
-					data.IssueDate?.UtcDateTime.ToString(_dateTimeFormat),
+					data.IssueDate.WriteNullableDateTime(),
 					data.IssueSize.To<string>(),
 					data.BasketCode,
 					data.BasketExpression,
@@ -639,8 +594,8 @@ namespace StockSharp.Algo.Storages.Csv
 					Currency = reader.ReadNullableEnum<CurrencyTypes>(),
 					State = reader.ReadNullableEnum<PortfolioStates>(),
 					Description = reader.ReadString(),
-					LastChangeTime = _dateTimeParser.Parse(reader.ReadString()).UtcKind(),
-					LocalTime = _dateTimeParser.Parse(reader.ReadString()).UtcKind()
+					LastChangeTime = reader.ReadDateTime(),
+					LocalTime = reader.ReadDateTime(),
 				};
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
@@ -649,9 +604,7 @@ namespace StockSharp.Algo.Storages.Csv
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				{
 					portfolio.Currency = reader.ReadString().To<CurrencyTypes?>();
-
-					var str = reader.ReadString();
-					portfolio.ExpirationDate = str.IsEmpty() ? null : _dateTimeParser.Parse(str).UtcKind();
+					portfolio.ExpirationDate = reader.ReadNullableDateTime();
 				}
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
@@ -686,11 +639,11 @@ namespace StockSharp.Algo.Storages.Csv
 					data.Currency.To<string>(),
 					data.State.To<string>(),
 					data.Description,
-					data.LastChangeTime.UtcDateTime.ToString(_dateTimeFormat),
-					data.LocalTime.UtcDateTime.ToString(_dateTimeFormat),
+					data.LastChangeTime.WriteDateTime(),
+					data.LocalTime.WriteDateTime(),
 					data.ClientCode,
 					data.Currency?.To<string>(),
-					data.ExpirationDate?.UtcDateTime.ToString(_dateTimeFormat),
+					data.ExpirationDate.WriteNullableDateTime(),
 					data.CommissionMaker.To<string>(),
 					data.CommissionTaker.To<string>(),
 					/*data.InternalId.To<string>()*/string.Empty,
@@ -739,8 +692,8 @@ namespace StockSharp.Algo.Storages.Csv
 					VariationMargin = reader.ReadNullableDecimal(),
 					Commission = reader.ReadNullableDecimal(),
 					Currency = reader.ReadNullableEnum<CurrencyTypes>(),
-					LastChangeTime = _dateTimeParser.Parse(reader.ReadString()).UtcKind(),
-					LocalTime = _dateTimeParser.Parse(reader.ReadString()).UtcKind(),
+					LastChangeTime = reader.ReadDateTime(),
+					LocalTime = reader.ReadDateTime(),
 				};
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
@@ -749,9 +702,7 @@ namespace StockSharp.Algo.Storages.Csv
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				{
 					position.Currency = reader.ReadString().To<CurrencyTypes?>();
-
-					var str = reader.ReadString();
-					position.ExpirationDate = str.IsEmpty() ? null : _dateTimeParser.Parse(str).UtcKind();
+					position.ExpirationDate = reader.ReadNullableDateTime();
 				}
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
@@ -803,11 +754,11 @@ namespace StockSharp.Algo.Storages.Csv
 					data.VariationMargin.To<string>(),
 					data.Commission.To<string>(),
 					data.Description,
-					data.LastChangeTime.UtcDateTime.ToString(_dateTimeFormat),
-					data.LocalTime.UtcDateTime.ToString(_dateTimeFormat),
+					data.LastChangeTime.WriteDateTime(),
+					data.LocalTime.WriteDateTime(),
 					data.ClientCode,
 					data.Currency.To<string>(),
-					data.ExpirationDate?.UtcDateTime.ToString(_dateTimeFormat),
+					data.ExpirationDate.WriteNullableDateTime(),
 					data.Leverage.To<string>(),
 					data.CommissionMaker.To<string>(),
 					data.CommissionTaker.To<string>(),
@@ -852,7 +803,7 @@ namespace StockSharp.Algo.Storages.Csv
 					throw new ArgumentNullException(nameof(data));
 
 				if (!data.IsSubscribe)
-					throw new ArgumentException(nameof(data));
+					throw new ArgumentException("Must be subscribe request.");
 
 				var (type, arg) = data.DataType2.FormatToString();
 				var buildFromTuples = data.BuildFrom?.FormatToString();
@@ -869,8 +820,8 @@ namespace StockSharp.Algo.Storages.Csv
 					data.IsRegularTradingHours.To<string>(),
 					data.MaxDepth.To<string>(),
 					data.NewsId,
-					data.From?.UtcDateTime.ToString(_dateTimeFormat),
-					data.To?.UtcDateTime.ToString(_dateTimeFormat),
+					data.From.WriteNullableDateTime(),
+					data.To.WriteNullableDateTime(),
 					data.Count.To<string>(),
 					data.BuildMode.To<string>(),
 					null,
@@ -908,17 +859,14 @@ namespace StockSharp.Algo.Storages.Csv
 
 					MaxDepth = reader.ReadNullableInt(),
 					NewsId = reader.ReadString(),
+
+					From = reader.ReadNullableDateTime(),
+					To = reader.ReadNullableDateTime(),
+					Count = reader.ReadNullableLong(),
+
+					BuildMode = reader.ReadEnum<MarketDataBuildModes>(),
 				};
 
-				var str = reader.ReadString();
-				message.From = str.IsEmpty() ? null : _dateTimeParser.Parse(str).UtcKind();
-
-				str = reader.ReadString();
-				message.To = str.IsEmpty() ? null : _dateTimeParser.Parse(str).UtcKind();
-
-				message.Count = reader.ReadNullableLong();
-
-				message.BuildMode = reader.ReadEnum<MarketDataBuildModes>();
 				reader.ReadString();
 				message.BuildField = reader.ReadNullableEnum<Level1Fields>();
 
@@ -944,7 +892,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				{
-					str = reader.ReadString();
+					var str = reader.ReadString();
 
 					if (!str.IsEmpty())
 						message.Fields = str.SplitByComma().Select(s => (Level1Fields)s.To<int>()).ToArray();
@@ -955,19 +903,6 @@ namespace StockSharp.Algo.Storages.Csv
 
 				return message;
 			}
-		}
-
-		private const string _dateTimeFormat = "yyyyMMddHHmmss";
-		private static readonly FastDateTimeParser _dateTimeParser = new(_dateTimeFormat);
-
-		private static DateTimeOffset? ReadNullableDateTime(FastCsvReader reader)
-		{
-			var str = reader.ReadString();
-
-			if (str == null)
-				return null;
-
-			return _dateTimeParser.Parse(str).UtcKind();
 		}
 
 		private readonly List<ICsvEntityList> _csvLists = new();
