@@ -13,13 +13,14 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Algo.Storages.Remote;
+	using StockSharp.Localization;
 
 	/// <summary>
 	/// Remote storage of market data working via <see cref="RemoteStorageClient"/>.
 	/// </summary>
 	public class RemoteMarketDataDrive : BaseMarketDataDrive
 	{
-		private sealed class RemoteStorageDrive : IMarketDataStorageDrive
+		private class RemoteStorageDrive : IMarketDataStorageDrive
 		{
 			private readonly RemoteMarketDataDrive _parent;
 			private readonly SecurityId _securityId;
@@ -55,7 +56,7 @@ namespace StockSharp.Algo.Storages
 				{
 					if (_prevDatesSync == default || (DateTime.Now - _prevDatesSync).TotalSeconds > 3)
 					{
-						_dates = _parent.CreateClient().GetDates(_securityId, _dataType, _format);
+						_dates = _parent.EnsureGetClient().GetDates(_securityId, _dataType, _format);
 
 						_prevDatesSync = DateTime.Now;
 					}
@@ -70,17 +71,20 @@ namespace StockSharp.Algo.Storages
 			}
 
 			void IMarketDataStorageDrive.Delete(DateTime date)
-				=> _parent.CreateClient().Delete(_securityId, _dataType, _format, date);
+				=> _parent.EnsureGetClient().Delete(_securityId, _dataType, _format, date);
 
 			void IMarketDataStorageDrive.SaveStream(DateTime date, Stream stream)
-				=> _parent.CreateClient().SaveStream(_securityId, _dataType, _format, date, stream);
+				=> _parent.EnsureGetClient().SaveStream(_securityId, _dataType, _format, date, stream);
 
 			Stream IMarketDataStorageDrive.LoadStream(DateTime date, bool readOnly)
-				=> _parent.CreateClient().LoadStream(_securityId, _dataType, _format, date);
+				=> _parent.EnsureGetClient().LoadStream(_securityId, _dataType, _format, date);
 		}
 
 		private readonly SynchronizedDictionary<(SecurityId, DataType, StorageFormats), RemoteStorageDrive> _remoteStorages = new();
 		private readonly Func<IMessageAdapter> _createAdapter;
+		
+		private readonly SyncObject _clientSync = new();
+		private RemoteStorageClient _client;
 
 		/// <summary>
 		/// Default value for <see cref="Address"/>.
@@ -160,6 +164,23 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
+		private int _securityBatchSize = 1000;
+
+		/// <summary>
+		/// The new instruments request block size. By default it does not exceed 1000 elements.
+		/// </summary>
+		public int SecurityBatchSize
+		{
+			get => _securityBatchSize;
+			set
+			{
+				if (value <= 0)
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+				_securityBatchSize = value;
+			}
+		}
+
 		/// <inheritdoc />
 		public override string Path
 		{
@@ -200,16 +221,25 @@ namespace StockSharp.Algo.Storages
 
 			adapter.Parent ??= ServicesRegistry.LogManager?.Application;
 
-			return new(adapter) { Cache = Cache };
+			return new(adapter, Cache, SecurityBatchSize);
+		}
+
+		private RemoteStorageClient EnsureGetClient()
+		{
+			lock (_clientSync)
+			{
+				_client ??= CreateClient();
+				return _client;
+			}
 		}
 
 		/// <inheritdoc />
 		public override IEnumerable<SecurityId> AvailableSecurities
-			=> CreateClient().AvailableSecurities;
+			=> EnsureGetClient().AvailableSecurities;
 
 		/// <inheritdoc />
 		public override IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
-			=> CreateClient().GetAvailableDataTypes(securityId, format);
+			=> EnsureGetClient().GetAvailableDataTypes(securityId, format);
 
 		/// <inheritdoc />
 		public override IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, DataType dataType, StorageFormats format)
@@ -226,15 +256,17 @@ namespace StockSharp.Algo.Storages
 
 		/// <inheritdoc />
 		public override void LookupSecurities(SecurityLookupMessage criteria, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Func<bool> isCancelled, Action<int, int> updateProgress)
-			=> CreateClient().LookupSecurities(criteria, securityProvider, newSecurity, isCancelled, updateProgress);
+			=> EnsureGetClient().LookupSecurities(criteria, securityProvider, newSecurity, isCancelled, updateProgress);
 
 		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
 
-			TargetCompId = storage.GetValue(nameof(TargetCompId), TargetCompId);
 			Credentials.Load(storage, nameof(Credentials));
+
+			TargetCompId = storage.GetValue(nameof(TargetCompId), TargetCompId);
+			SecurityBatchSize = storage.GetValue(nameof(SecurityBatchSize), SecurityBatchSize);
 		}
 
 		/// <inheritdoc />
@@ -242,8 +274,11 @@ namespace StockSharp.Algo.Storages
 		{
 			base.Save(storage);
 
-			storage.SetValue(nameof(TargetCompId), TargetCompId);
-			storage.SetValue(nameof(Credentials), Credentials.Save());
+			storage
+				.Set(nameof(Credentials), Credentials.Save())
+				.Set(nameof(TargetCompId), TargetCompId)
+				.Set(nameof(SecurityBatchSize), SecurityBatchSize)
+			;
 		}
 	}
 }
