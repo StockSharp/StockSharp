@@ -91,7 +91,16 @@ namespace StockSharp.Algo.Storages.Remote
 
 			if (isFull)
 			{
-				updateProgress(securities.Length, securities.Length);
+				var newSecurities = securities
+					.Where(s => !existingIds.Contains(s.SecurityId))
+					.ToArray();
+
+				updateProgress(0, newSecurities.Length);
+
+				foreach (var security in newSecurities)
+					newSecurity(security);
+
+				updateProgress(newSecurities.Length, newSecurities.Length);
 				return;
 			}
 
@@ -282,7 +291,14 @@ namespace StockSharp.Algo.Storages.Remote
 						while (reader.NextLine())
 						{
 							if (secList is not null)
-								secList.Add(reader.ReadSecurity());
+							{
+								var security = reader.ReadSecurity();
+
+								if (security.SecurityId.IsAllSecurity())
+									continue;
+
+								secList.Add(security);
+							}
 							else
 								boardList.Add(reader.ReadBoard(encoding));
 						}
