@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.PeriodResAvgKey,
+			Name = LocalizedStrings.SqrtKey,
 			Description = LocalizedStrings.PeriodResAvgDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public int SqrtPeriod

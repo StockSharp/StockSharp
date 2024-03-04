@@ -1,4 +1,8 @@
 {
+  "Sqrt": {
+    "en": "Sqrt",
+    "ru": "Кв. корень"
+  },
   "Archives": {
     "en": "Archives",
     "ru": "Архивы"
@@ -4748,8 +4752,8 @@
     "ru": "Период результирующей средней"
   },
   "PeriodResAvgDesc": {
-    "en": "Period of resulting average. If equal to 0, period of resulting average is equal to the square root of HMA period. By default equal to 0.",
-    "ru": "Период результирующей средней. Если равно 0, период результирующей средней равен квадратному корню периода HMA. По умолчанию равно 0."
+    "en": "Period of resulting average.",
+    "ru": "Период результирующей средней."
   },
   "JurikMovingAverage": {
     "en": "Jurik Moving Average.",
