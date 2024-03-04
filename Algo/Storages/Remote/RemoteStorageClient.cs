@@ -87,51 +87,87 @@ namespace StockSharp.Algo.Storages.Remote
 			if (updateProgress == null)
 				throw new ArgumentNullException(nameof(updateProgress));
 
-			criteria = criteria.TypedClone();
-			criteria.OnlySecurityId = true;
-
-			var securities = Do<SecurityMessage>(criteria, () => (typeof(SecurityLookupMessage), criteria.ToString()), out var isFull).ToArray();
-
-			if (isFull)
+			if (criteria.SecurityId != default || criteria.SecurityIds.Length > 0)
 			{
-				var newSecurities = securities
-					.Where(s => !existingIds.Contains(s.SecurityId))
-					.ToArray();
+				var newSecurityIds = new HashSet<SecurityId>();
 
-				updateProgress(0, newSecurities.Length);
-
-				foreach (var security in newSecurities)
-					newSecurity(security);
-
-				updateProgress(newSecurities.Length, newSecurities.Length);
-				return;
-			}
-
-			var newSecurityIds = securities
-				.Select(s => s.SecurityId)
-				.Where(id => !existingIds.Contains(id))
-				.ToArray();
-
-			updateProgress(0, newSecurityIds.Length);
-
-			var count = 0;
-
-			foreach (var batch in newSecurityIds.Chunk(_securityBatchSize))
-			{
-				if (isCancelled())
-					break;
-
-				foreach (var security in Do<SecurityMessage>(
-					new SecurityLookupMessage { SecurityIds = batch },
-					() => (typeof(SecurityLookupMessage), batch.Select(i => i.To<string>()).JoinComma()),
-					out _))
+				void tryAdd(SecurityId secId)
 				{
-					newSecurity(security);
+					if (!existingIds.Contains(secId))
+						newSecurityIds.Add(secId);
 				}
 
-				count += batch.Length;
+				if (criteria.SecurityId != default)
+					tryAdd(criteria.SecurityId);
 
-				updateProgress(count, newSecurityIds.Length);
+				foreach (var secId in criteria.SecurityIds)
+					tryAdd(secId);
+
+				if (newSecurityIds.Count > 0)
+				{
+					criteria = criteria.TypedClone();
+					criteria.SecurityId = default;
+					criteria.SecurityIds = newSecurityIds.ToArray();
+
+					var newSecurities = Do<SecurityMessage>(criteria, () => (typeof(SecurityLookupMessage), criteria.ToString()), out _).ToArray();
+
+					updateProgress(0, newSecurities.Length);
+
+					foreach (var security in newSecurities)
+						newSecurity(security);
+
+					updateProgress(newSecurities.Length, newSecurities.Length);
+				}
+			}
+			else
+			{
+				criteria = criteria.TypedClone();
+				criteria.OnlySecurityId = true;
+
+				var securities = Do<SecurityMessage>(criteria, () => (typeof(SecurityLookupMessage), criteria.ToString()), out var isFull).ToArray();
+
+				if (isFull)
+				{
+					var newSecurities = securities
+						.Where(s => !existingIds.Contains(s.SecurityId))
+						.ToArray();
+
+					updateProgress(0, newSecurities.Length);
+
+					foreach (var security in newSecurities)
+						newSecurity(security);
+
+					updateProgress(newSecurities.Length, newSecurities.Length);
+				}
+				else
+				{
+					var newSecurityIds = securities
+						.Select(s => s.SecurityId)
+						.Where(id => !existingIds.Contains(id))
+						.ToArray();
+
+					updateProgress(0, newSecurityIds.Length);
+
+					var count = 0;
+
+					foreach (var batch in newSecurityIds.Chunk(_securityBatchSize))
+					{
+						if (isCancelled())
+							break;
+
+						foreach (var security in Do<SecurityMessage>(
+							new SecurityLookupMessage { SecurityIds = batch },
+							() => (typeof(SecurityLookupMessage), batch.Select(i => i.To<string>()).JoinComma()),
+							out _))
+						{
+							newSecurity(security);
+						}
+
+						count += batch.Length;
+
+						updateProgress(count, newSecurityIds.Length);
+					}
+				}
 			}
 		}
 
