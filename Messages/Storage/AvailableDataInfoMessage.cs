@@ -31,7 +31,7 @@
 		private DateTime[] _dates = Array.Empty<DateTime>();
 
 		/// <summary>
-		/// Start date.
+		/// Dates.
 		/// </summary>
 		[DataMember]
 		public DateTime[] Dates
