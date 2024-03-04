@@ -28,11 +28,17 @@
 		[DataMember]
 		public DataType FileDataType { get; set; }
 
+		private DateTime[] _dates = Array.Empty<DateTime>();
+
 		/// <summary>
 		/// Start date.
 		/// </summary>
 		[DataMember]
-		public DateTimeOffset Date { get; set; }
+		public DateTime[] Dates
+		{
+			get => _dates;
+			set => _dates = value ?? throw new ArgumentNullException(nameof(value));
+		}
 
 		/// <summary>
 		/// Storage format.
@@ -53,7 +59,7 @@
 			{
 				SecurityId = SecurityId,
 				FileDataType = FileDataType?.TypedClone(),
-				Date = Date,
+				Dates = Dates,
 				Format = Format,
 			};
 
@@ -64,7 +70,7 @@
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",SecId={SecurityId},DT={FileDataType},Date={Date},Fmt={Format}";
+			return base.ToString() + $",SecId={SecurityId},DT={FileDataType},DatesLen={Dates.Length},Fmt={Format}";
 		}
 	}
 }

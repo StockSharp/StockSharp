@@ -231,7 +231,7 @@ namespace StockSharp.Algo.Storages.Remote
 				RequestDataType = dataType,
 				Format = (int)format,
 				IncludeDates = true,
-			}, () => (typeof(AvailableDataRequestMessage), securityId, dataType, format), out _).Select(i => i.Date.UtcDateTime).ToArray();
+			}, () => (typeof(AvailableDataRequestMessage), securityId, dataType, format), out _).SelectMany(i => i.Dates).OrderBy().Distinct().ToArray();
 
 		/// <summary>
 		/// To save data in the format of StockSharp storage.
