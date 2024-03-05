@@ -16,6 +16,7 @@ namespace StockSharp.Algo.Storages.Remote
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 
 	/// <summary>
 	/// The client for access to the history server.
@@ -45,6 +46,7 @@ namespace StockSharp.Algo.Storages.Remote
 				throw new ArgumentOutOfRangeException(nameof(timeout), timeout, LocalizedStrings.InvalidValue);
 
 			_adapter = new AutoConnectMessageAdapter(adapter ?? throw new ArgumentNullException(nameof(adapter)));
+			_adapter = new ChannelMessageAdapter(_adapter, new InMemoryMessageChannel(new MessageByOrderQueue(), "Adapter In", _adapter.AddErrorLog), new InMemoryMessageChannel(new MessageByOrderQueue(), "Adapter Out", _adapter.AddErrorLog));
 			_adapter.NewOutMessage += OnNewOutMessage;
 
 			_cache = cache;
@@ -379,6 +381,9 @@ namespace StockSharp.Algo.Storages.Remote
 
 			lock (sync)
 			{
+				if (needCache && cache.TryGet(key, out cached))
+					return cached.Cast<TResult>();
+
 				var transId = ((ITransactionIdMessage)request).TransactionId = _adapter.TransactionIdGenerator.GetNextId();
 
 				var requestSync = new SyncObject();
