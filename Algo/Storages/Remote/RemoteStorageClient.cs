@@ -20,11 +20,14 @@ namespace StockSharp.Algo.Storages.Remote
 	/// <summary>
 	/// The client for access to the history server.
 	/// </summary>
-	public class RemoteStorageClient
+	public class RemoteStorageClient : Disposable
 	{
 		private readonly IMessageAdapter _adapter;
 		private readonly RemoteStorageCache _cache;
 		private readonly int _securityBatchSize;
+		private readonly TimeSpan _timeout;
+
+		private readonly SynchronizedDictionary<long, (SyncObject sync, List<Message> messages)> _pendings = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RemoteStorageClient"/>.
@@ -32,14 +35,68 @@ namespace StockSharp.Algo.Storages.Remote
 		/// <param name="adapter">Message adapter.</param>
 		/// <param name="cache">Cache.</param>
 		/// <param name="securityBatchSize">The new instruments request block size.</param>
-		public RemoteStorageClient(IMessageAdapter adapter, RemoteStorageCache cache, int securityBatchSize)
+		/// <param name="timeout">Timeout.</param>
+		public RemoteStorageClient(IMessageAdapter adapter, RemoteStorageCache cache, int securityBatchSize, TimeSpan timeout)
 		{
 			if (securityBatchSize <= 0)
 				throw new ArgumentOutOfRangeException(nameof(securityBatchSize), securityBatchSize, LocalizedStrings.InvalidValue);
 
-			_adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
+			if (timeout <= TimeSpan.Zero)
+				throw new ArgumentOutOfRangeException(nameof(timeout), timeout, LocalizedStrings.InvalidValue);
+
+			_adapter = new AutoConnectMessageAdapter(adapter ?? throw new ArgumentNullException(nameof(adapter)));
+			_adapter.NewOutMessage += OnNewOutMessage;
+
 			_cache = cache;
 			_securityBatchSize = securityBatchSize;
+			_timeout = timeout;
+		}
+
+		/// <inheritdoc />
+		protected override void DisposeManaged()
+		{
+			_adapter.NewOutMessage -= OnNewOutMessage;
+			_adapter.Dispose();
+
+			base.DisposeManaged();
+		}
+
+		private void OnNewOutMessage(Message message)
+		{
+			if (message.IsBack())
+			{
+				_adapter.SendInMessage(message);
+				return;
+			}
+
+			if (message is ConnectMessage cm && cm.Error is not null || message is DisconnectMessage)
+			{
+				foreach (var (_, (sync, messages)) in _pendings.CopyAndClear())
+					sync.PulseSignal(messages);
+
+				return;
+			}
+
+			if (message is not IOriginalTransactionIdMessage responseMsg)
+				return;
+
+			if (!_pendings.TryGetValue(responseMsg.OriginalTransactionId, out var t))
+				return;
+
+			var isError = message is SubscriptionResponseMessage r && r.Error is not null;
+
+			if (message is SubscriptionFinishedMessage ||
+				message is SubscriptionOnlineMessage ||
+				isError)
+			{
+				if (!isError)
+					t.messages.Add(message);
+
+				t.sync.PulseSignal(t.messages);
+				_pendings.Remove(responseMsg.OriginalTransactionId);
+			}
+			else
+				t.messages.Add(message);
 		}
 
 		/// <summary>
@@ -294,7 +351,13 @@ namespace StockSharp.Algo.Storages.Remote
 			});
 
 		private void Do(params Message[] messages)
-			=> CreateAdapter().Upload(messages);
+		{
+			if (messages is null)
+				throw new ArgumentNullException(nameof(messages));
+
+			foreach (var message in messages)
+				_adapter.SendInMessage(message);
+		}
 
 		private IEnumerable<TResult> Do<TResult>(Message request, Func<object> getKey, out bool isFull)
 			where TResult : Message, IOriginalTransactionIdMessage
@@ -308,17 +371,35 @@ namespace StockSharp.Algo.Storages.Remote
 
 			isFull = false;
 
-			if (needCache && cache.TryGet(key, out var messages))
-				return messages.Cast<TResult>();
+			if (needCache && cache.TryGet(key, out var cached))
+				return cached.Cast<TResult>();
 
 			object sync = string.Intern(request.ToString());
 
 			lock (sync)
 			{
-				var result = CreateAdapter().Download<TResult>(request, out var archive);
+				var transId = ((ITransactionIdMessage)request).TransactionId = _adapter.TransactionIdGenerator.GetNextId();
+
+				var requestSync = new SyncObject();
+				var messages = new List<Message>();
+
+				_pendings.Add(transId, (requestSync, messages));
+
+				if (!_adapter.SendInMessage(request))
+					throw new NotSupportedException(request.ToString());
+
+				lock (requestSync)
+				{
+					if (!requestSync.WaitSignal(_timeout, out _))
+						throw new TimeoutException();
+				}
+
+				var archive = messages.Count == 1 && messages[0] is SubscriptionFinishedMessage finishedMsg && finishedMsg.Body.Length > 0 ? finishedMsg.Body : Array.Empty<byte>();
 
 				if (archive.Length > 0)
 				{
+					messages.Clear();
+
 					var secList = typeof(TResult) == typeof(SecurityMessage) ? new List<SecurityMessage>() : null;
 					var boardList = typeof(TResult) == typeof(BoardMessage) ? new List<BoardMessage>() : null;
 
@@ -345,19 +426,19 @@ namespace StockSharp.Algo.Storages.Remote
 						isFull = true;
 
 						if (secList is not null)
-							result = secList.To<IEnumerable<TResult>>();
+							messages.AddRange(secList);
 						else if (boardList is not null)
-							result = boardList.To<IEnumerable<TResult>>();
+							messages.AddRange(boardList);
 					}
 				}
+				else
+					messages.AddRange(messages.CopyAndClear().OfType<TResult>());
 
 				if (needCache)
-					cache.Set(key, result.Cast<Message>().ToArray());
+					cache.Set(key, messages.ToArray());
 
-				return result;
+				return messages.Cast<TResult>();
 			}
 		}
-
-		private IMessageAdapter CreateAdapter() => _adapter.TypedClone();
 	}
 }

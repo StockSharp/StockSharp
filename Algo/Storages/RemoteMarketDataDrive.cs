@@ -131,6 +131,18 @@ namespace StockSharp.Algo.Storages
 			_createAdapter = createAdapter ?? throw new ArgumentNullException(nameof(createAdapter));
 		}
 
+		/// <inheritdoc />
+		protected override void DisposeManaged()
+		{
+			lock (_clientSync)
+			{
+				_client?.Dispose();
+				_client = null;
+			}
+
+			base.DisposeManaged();
+		}
+
 		/// <summary>
 		/// Information about the login and password for access to remote storage.
 		/// </summary>
@@ -181,6 +193,23 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
+		private TimeSpan _timeout = TimeSpan.FromMinutes(2);
+
+		/// <summary>
+		/// Timeout
+		/// </summary>
+		public TimeSpan Timeout
+		{
+			get => _timeout;
+			set
+			{
+				if (value <= TimeSpan.Zero)
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+				_timeout = value;
+			}
+		}
+
 		/// <inheritdoc />
 		public override string Path
 		{
@@ -221,7 +250,7 @@ namespace StockSharp.Algo.Storages
 
 			adapter.Parent ??= ServicesRegistry.LogManager?.Application;
 
-			return new(adapter, Cache, SecurityBatchSize);
+			return new(adapter, Cache, SecurityBatchSize, Timeout);
 		}
 
 		private RemoteStorageClient EnsureGetClient()
@@ -267,6 +296,7 @@ namespace StockSharp.Algo.Storages
 
 			TargetCompId = storage.GetValue(nameof(TargetCompId), TargetCompId);
 			SecurityBatchSize = storage.GetValue(nameof(SecurityBatchSize), SecurityBatchSize);
+			Timeout = storage.GetValue(nameof(Timeout), Timeout);
 		}
 
 		/// <inheritdoc />
@@ -278,6 +308,7 @@ namespace StockSharp.Algo.Storages
 				.Set(nameof(Credentials), Credentials.Save())
 				.Set(nameof(TargetCompId), TargetCompId)
 				.Set(nameof(SecurityBatchSize), SecurityBatchSize)
+				.Set(nameof(Timeout), Timeout)
 			;
 		}
 	}
