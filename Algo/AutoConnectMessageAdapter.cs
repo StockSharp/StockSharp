@@ -8,6 +8,7 @@ using StockSharp.Messages;
 public class AutoConnectMessageAdapter : OfflineMessageAdapter
 {
 	private bool _isConnect;
+	private bool _wasConnected;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="AutoConnectMessageAdapter"/>.
@@ -25,6 +26,7 @@ public class AutoConnectMessageAdapter : OfflineMessageAdapter
 		{
 			case MessageTypes.Reset:
 				_isConnect = false;
+				_wasConnected = default;
 				break;
 			case MessageTypes.Connect:
 			case MessageTypes.Disconnect:
@@ -35,7 +37,13 @@ public class AutoConnectMessageAdapter : OfflineMessageAdapter
 			default:
 			{
 				if (!_isConnect)
+				{
+					if (_wasConnected)
+						base.OnSendInMessage(new ResetMessage());
+
+					_wasConnected = true;
 					base.OnSendInMessage(new ConnectMessage());
+				}
 
 				break;
 			}

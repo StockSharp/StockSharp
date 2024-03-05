@@ -69,10 +69,11 @@ namespace StockSharp.Algo.Storages.Remote
 				return;
 			}
 
-			if (message is ConnectMessage cm && cm.Error is not null || message is DisconnectMessage)
+			var connError = message is ConnectMessage cm ? cm.Error : null;
+			if (connError is not null || message is DisconnectMessage)
 			{
-				foreach (var (_, (sync, messages)) in _pendings.CopyAndClear())
-					sync.PulseSignal(messages);
+				foreach (var (_, (sync, _)) in _pendings.CopyAndClear())
+					sync.PulseSignal(connError ?? new InvalidOperationException(LocalizedStrings.UnexpectedDisconnection));
 
 				return;
 			}
@@ -83,16 +84,16 @@ namespace StockSharp.Algo.Storages.Remote
 			if (!_pendings.TryGetValue(responseMsg.OriginalTransactionId, out var t))
 				return;
 
-			var isError = message is SubscriptionResponseMessage r && r.Error is not null;
+			var error = message is SubscriptionResponseMessage r ? r.Error : null;
 
 			if (message is SubscriptionFinishedMessage ||
 				message is SubscriptionOnlineMessage ||
-				isError)
+				error is not null)
 			{
-				if (!isError)
+				if (error is not null)
 					t.messages.Add(message);
 
-				t.sync.PulseSignal(t.messages);
+				t.sync.PulseSignal(error);
 				_pendings.Remove(responseMsg.OriginalTransactionId);
 			}
 			else
@@ -388,11 +389,11 @@ namespace StockSharp.Algo.Storages.Remote
 				if (!_adapter.SendInMessage(request))
 					throw new NotSupportedException(request.ToString());
 
-				lock (requestSync)
-				{
-					if (!requestSync.WaitSignal(_timeout, out _))
-						throw new TimeoutException();
-				}
+				if (!requestSync.WaitSignal(_timeout, out var error))
+					throw new TimeoutException(request.ToString());
+
+				if (error is not null)
+					throw new InvalidOperationException(LocalizedStrings.SomeConnectionFailed, (Exception)error);
 
 				var archive = messages.Count == 1 && messages[0] is SubscriptionFinishedMessage finishedMsg && finishedMsg.Body.Length > 0 ? finishedMsg.Body : Array.Empty<byte>();
 
