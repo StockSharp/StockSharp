@@ -107,7 +107,8 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Fractal up.
 		/// </summary>
-		[TypeConverter(typeof(ExpandableObjectConverter))]
+		//[TypeConverter(typeof(ExpandableObjectConverter))]
+		[Browsable(false)]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.UpKey,
@@ -118,7 +119,8 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Fractal down.
 		/// </summary>
-		[TypeConverter(typeof(ExpandableObjectConverter))]
+		//[TypeConverter(typeof(ExpandableObjectConverter))]
+		[Browsable(false)]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.DownKey,

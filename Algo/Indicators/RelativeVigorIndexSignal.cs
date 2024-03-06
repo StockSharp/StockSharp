@@ -15,12 +15,10 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
-
 	/// <summary>
 	/// The signaling part of indicator <see cref="RelativeVigorIndex"/>.
 	/// </summary>
-	[Browsable(false)]
+	[IndicatorHidden]
 	public class RelativeVigorIndexSignal : LengthIndicator<decimal>
 	{
 		/// <summary>

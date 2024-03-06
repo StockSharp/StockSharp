@@ -66,7 +66,6 @@ namespace StockSharp.Algo.Indicators
 			Name = LocalizedStrings.JawKey,
 			Description = LocalizedStrings.JawKey,
 			GroupName = LocalizedStrings.GeneralKey)]
-		[Browsable(true)]
 		public AlligatorLine Jaw { get; }
 
 		/// <summary>
@@ -78,7 +77,6 @@ namespace StockSharp.Algo.Indicators
 			Name = LocalizedStrings.TeethKey,
 			Description = LocalizedStrings.TeethKey,
 			GroupName = LocalizedStrings.GeneralKey)]
-		[Browsable(true)]
 		public AlligatorLine Teeth { get; }
 
 		/// <summary>
@@ -90,7 +88,6 @@ namespace StockSharp.Algo.Indicators
 			Name = LocalizedStrings.LipsKey,
 			Description = LocalizedStrings.LipsKey,
 			GroupName = LocalizedStrings.GeneralKey)]
-		[Browsable(true)]
 		public AlligatorLine Lips { get; }
 
 		/// <inheritdoc />

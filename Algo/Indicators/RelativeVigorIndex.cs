@@ -69,7 +69,6 @@ namespace StockSharp.Algo.Indicators
 			Name = LocalizedStrings.AverageKey,
 			Description = LocalizedStrings.AveragePartKey,
 			GroupName = LocalizedStrings.GeneralKey)]
-		[Browsable(true)]
 		public RelativeVigorIndexAverage Average { get; }
 
 		/// <summary>
@@ -81,7 +80,6 @@ namespace StockSharp.Algo.Indicators
 			Name = LocalizedStrings.SignalKey,
 			Description = LocalizedStrings.SignalPartKey,
 			GroupName = LocalizedStrings.GeneralKey)]
-		[Browsable(true)]
 		public RelativeVigorIndexSignal Signal { get; }
 
 		/// <inheritdoc />

@@ -70,4 +70,12 @@ namespace StockSharp.Algo.Indicators
 		{
 		}
 	}
+
+	/// <summary>
+	/// Attribute, applied to indicator that must be hidden from any UI selections.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Class)]
+	public class IndicatorHiddenAttribute : Attribute
+	{
+	}
 }

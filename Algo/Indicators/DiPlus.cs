@@ -15,14 +15,12 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
-
 	using StockSharp.Messages;
 
 	/// <summary>
 	/// DIPlus is a component of the Directional Movement System developed by Welles Wilder.
 	/// </summary>
-	[Browsable(false)]
+	[IndicatorHidden]
 	public class DiPlus : DiPart
 	{
 		/// <summary>

@@ -17,7 +17,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System;
-	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Serialization;
@@ -27,7 +26,7 @@ namespace StockSharp.Algo.Indicators
 	/// <summary>
 	/// The realization of one of indicator lines Alligator (Jaw, Teeth, and Lips).
 	/// </summary>
-	[Browsable(false)]
+	[IndicatorHidden]
 	public class AlligatorLine : LengthIndicator<decimal>
 	{
 		private readonly MedianPrice _medianPrice;

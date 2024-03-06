@@ -8,6 +8,7 @@
 	using Ecng.Reflection;
 
 	using StockSharp.Algo.Indicators;
+	using Ecng.Common;
 
 	/// <summary>
 	/// Provider <see cref="IndicatorType"/>.
@@ -58,7 +59,7 @@
 			_indicatorTypes.Clear();
 			_indicatorTypes.AddRange(typeof(IIndicator)
 				.Assembly
-				.FindImplementations<IIndicator>(true, extraFilter: t => t.Namespace == ns && t.GetConstructor(Type.EmptyTypes) != null)
+				.FindImplementations<IIndicator>(true, extraFilter: t => t.Namespace == ns && t.GetConstructor(Type.EmptyTypes) != null && t.GetAttribute<IndicatorHiddenAttribute>() is null)
 				.Select(t => new IndicatorType(t, null))
 				.OrderBy(t => t.Name));
 		}
