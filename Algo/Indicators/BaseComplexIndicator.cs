@@ -66,6 +66,18 @@ namespace StockSharp.Algo.Indicators
 		[Browsable(false)]
 		public ComplexIndicatorModes Mode { get; protected set; }
 
+		private class InnerResetScope
+		{
+		}
+
+		private void InnerReseted()
+		{
+			if (Scope<InnerResetScope>.IsDefined)
+				return;
+
+			Reset();
+		}
+
 		/// <summary>
 		/// Add to <see cref="InnerIndicators"/>.
 		/// </summary>
@@ -73,6 +85,7 @@ namespace StockSharp.Algo.Indicators
 		protected void AddInner(IIndicator inner)
 		{
 			_innerIndicators.Add(inner ?? throw new ArgumentNullException(nameof(inner)));
+			inner.Reseted += InnerReseted;
 		}
 
 		/// <summary>
@@ -82,6 +95,7 @@ namespace StockSharp.Algo.Indicators
 		protected void RemoveInner(IIndicator inner)
 		{
 			_innerIndicators.Remove(inner ?? throw new ArgumentNullException(nameof(inner)));
+			inner.Reseted -= InnerReseted;
 		}
 
 		private readonly List<IIndicator> _innerIndicators = new();
@@ -131,7 +145,9 @@ namespace StockSharp.Algo.Indicators
 		public override void Reset()
 		{
 			base.Reset();
-			InnerIndicators.ForEach(i => i.Reset());
+
+			using (new Scope<InnerResetScope>(new()))
+				InnerIndicators.ForEach(i => i.Reset());
 		}
 
 		/// <inheritdoc />
