@@ -51,17 +51,11 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="kijun">Kijun line.</param>
 		public Ichimoku(IchimokuLine tenkan, IchimokuLine kijun)
 		{
-			if (tenkan == null)
-				throw new ArgumentNullException(nameof(tenkan));
-
-			if (kijun == null)
-				throw new ArgumentNullException(nameof(kijun));
-
-			InnerIndicators.Add(Tenkan = tenkan);
-			InnerIndicators.Add(Kijun = kijun);
-			InnerIndicators.Add(SenkouA = new IchimokuSenkouALine(Tenkan, Kijun));
-			InnerIndicators.Add(SenkouB = new IchimokuSenkouBLine(Kijun) { Length = 52 });
-			InnerIndicators.Add(Chinkou = new IchimokuChinkouLine { Length = kijun.Length });
+			AddInner(Tenkan = tenkan ?? throw new ArgumentNullException(nameof(tenkan)));
+			AddInner(Kijun = kijun ?? throw new ArgumentNullException(nameof(kijun)));
+			AddInner(SenkouA = new IchimokuSenkouALine(Tenkan, Kijun));
+			AddInner(SenkouB = new IchimokuSenkouBLine(Kijun) { Length = 52 });
+			AddInner(Chinkou = new IchimokuChinkouLine { Length = kijun.Length });
 		}
 
 		/// <summary>

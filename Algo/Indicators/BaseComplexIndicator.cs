@@ -54,10 +54,8 @@ namespace StockSharp.Algo.Indicators
 			if (innerIndicators == null)
 				throw new ArgumentNullException(nameof(innerIndicators));
 
-			if (innerIndicators.Any(i => i == null))
-				throw new ArgumentException(nameof(innerIndicators));
-
-			InnerIndicators = new List<IIndicator>(innerIndicators);
+			foreach (var inner in innerIndicators)
+				AddInner(inner);
 
 			Mode = ComplexIndicatorModes.Parallel;
 		}
@@ -69,12 +67,27 @@ namespace StockSharp.Algo.Indicators
 		public ComplexIndicatorModes Mode { get; protected set; }
 
 		/// <summary>
-		/// Embedded indicators.
+		/// Add to <see cref="InnerIndicators"/>.
 		/// </summary>
-		[Browsable(false)]
-		protected IList<IIndicator> InnerIndicators { get; }
+		/// <param name="inner">Indicator.</param>
+		protected void AddInner(IIndicator inner)
+		{
+			_innerIndicators.Add(inner ?? throw new ArgumentNullException(nameof(inner)));
+		}
 
-		IEnumerable<IIndicator> IComplexIndicator.InnerIndicators => InnerIndicators;
+		/// <summary>
+		/// Remove from <see cref="InnerIndicators"/>.
+		/// </summary>
+		/// <param name="inner">Indicator.</param>
+		protected void RemoveInner(IIndicator inner)
+		{
+			_innerIndicators.Remove(inner ?? throw new ArgumentNullException(nameof(inner)));
+		}
+
+		private readonly List<IIndicator> _innerIndicators = new();
+
+		/// <inheritdoc />
+		public IEnumerable<IIndicator> InnerIndicators => _innerIndicators;
 
 		/// <inheritdoc />
 		[Browsable(false)]
@@ -156,9 +169,9 @@ namespace StockSharp.Algo.Indicators
 		{
 			var value = new ComplexIndicatorValue(this);
 
-			for (var i = 0; i < InnerIndicators.Count; i++)
+			for (var i = 0; i < _innerIndicators.Count; i++)
 			{
-				var ii = InnerIndicators[i];
+				var ii = _innerIndicators[i];
 
 				var val = i < values.Length ? new DecimalIndicatorValue(ii, values[i].To<decimal>()) : new DecimalIndicatorValue(ii);
 				val.IsFinal = val.IsFormed = true;

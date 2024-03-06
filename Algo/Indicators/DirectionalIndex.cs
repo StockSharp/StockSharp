@@ -66,8 +66,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		public DirectionalIndex()
 		{
-			InnerIndicators.Add(Plus = new());
-			InnerIndicators.Add(Minus = new());
+			AddInner(Plus = new());
+			AddInner(Minus = new());
 		}
 
 		/// <inheritdoc />

@@ -50,9 +50,9 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="ma">Middle line.</param>
 		public Envelope(LengthIndicator<decimal> ma)
 		{
-			InnerIndicators.Add(Middle = ma);
-			InnerIndicators.Add(Upper = ma.TypedClone());
-			InnerIndicators.Add(Lower = ma.TypedClone());
+			AddInner(Middle = ma);
+			AddInner(Upper = ma.TypedClone());
+			AddInner(Lower = ma.TypedClone());
 
 			Upper.Name = nameof(Upper);
 			Lower.Name = nameof(Lower);

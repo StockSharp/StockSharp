@@ -38,8 +38,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		public StochasticOscillator()
 		{
-			InnerIndicators.Add(K = new());
-			InnerIndicators.Add(D = new() { Length = 3 });
+			AddInner(K = new());
+			AddInner(D = new() { Length = 3 });
 
 			Mode = ComplexIndicatorModes.Sequence;
 		}

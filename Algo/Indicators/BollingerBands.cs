@@ -52,9 +52,9 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="ma">Moving Average.</param>
 		public BollingerBands(LengthIndicator<decimal> ma)
 		{
-			InnerIndicators.Add(MovingAverage = ma);
-			InnerIndicators.Add(UpBand = new BollingerBand(MovingAverage, _dev) { Name = nameof(UpBand) });
-			InnerIndicators.Add(LowBand = new BollingerBand(MovingAverage, _dev) { Name = nameof(LowBand) });
+			AddInner(MovingAverage = ma);
+			AddInner(UpBand = new(MovingAverage, _dev) { Name = nameof(UpBand) });
+			AddInner(LowBand = new(MovingAverage, _dev) { Name = nameof(LowBand) });
 			_dev.Length = ma.Length;
 			Width = 2;
 		}

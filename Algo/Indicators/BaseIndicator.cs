@@ -19,7 +19,6 @@ namespace StockSharp.Algo.Indicators
 	using System;
 	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
-	using System.Collections.Generic;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;

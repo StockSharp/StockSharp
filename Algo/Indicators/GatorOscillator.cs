@@ -44,10 +44,8 @@ namespace StockSharp.Algo.Indicators
 		public GatorOscillator()
 		{
 			_alligator = new Alligator();
-			Histogram1 = new GatorHistogram(_alligator.Jaw, _alligator.Lips, false);
-			Histogram2 = new GatorHistogram(_alligator.Lips, _alligator.Teeth, true);
-			InnerIndicators.Add(Histogram1);
-			InnerIndicators.Add(Histogram2);
+			AddInner(Histogram1 = new(_alligator.Jaw, _alligator.Lips, false));
+			AddInner(Histogram2 = new(_alligator.Lips, _alligator.Teeth, true));
 		}
 
 		/// <summary>

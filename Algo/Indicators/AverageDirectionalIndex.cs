@@ -15,7 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System;
 	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 
@@ -51,15 +50,10 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="dx">Welles Wilder Directional Movement Index.</param>
 		/// <param name="movingAverage">Moving Average.</param>
 		public AverageDirectionalIndex(DirectionalIndex dx, LengthIndicator<decimal> movingAverage)
+			: base(dx, movingAverage)
 		{
-			if (dx == null)
-				throw new ArgumentNullException(nameof(dx));
-
-			if (movingAverage == null)
-				throw new ArgumentNullException(nameof(movingAverage));
-
-			InnerIndicators.Add(Dx = dx);
-			InnerIndicators.Add(MovingAverage = movingAverage);
+			Dx = dx;
+			MovingAverage = movingAverage;
 			Mode = ComplexIndicatorModes.Sequence;
 		}
 
