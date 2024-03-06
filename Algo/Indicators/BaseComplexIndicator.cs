@@ -101,6 +101,7 @@ namespace StockSharp.Algo.Indicators
 		private readonly List<IIndicator> _innerIndicators = new();
 
 		/// <inheritdoc />
+		[Browsable(false)]
 		public IEnumerable<IIndicator> InnerIndicators => _innerIndicators;
 
 		/// <inheritdoc />
