@@ -61,7 +61,7 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 		get => _maxParallelMessages;
 		set
 		{
-			if (_maxParallelMessages < 1)
+			if (value < 1)
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 			_maxParallelMessages = value;
