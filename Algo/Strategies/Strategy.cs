@@ -998,6 +998,12 @@ namespace StockSharp.Algo.Strategies
 				catch (Exception error)
 				{
 					OnError(this, error);
+
+					if (value == ProcessStates.Started)
+					{
+						Stop(error);
+						return;
+					}
 				}
 
 				try
