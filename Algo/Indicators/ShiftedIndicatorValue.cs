@@ -37,9 +37,9 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ShiftedIndicatorValue"/>.
 		/// </summary>
+		/// <param name="indicator">Indicator.</param>
 		/// <param name="shift">The shift of the indicator value.</param>
 		/// <param name="value">Indicator value.</param>
-		/// <param name="indicator">Indicator.</param>
 		public ShiftedIndicatorValue(IIndicator indicator, int shift, IIndicatorValue value)
 			: base(indicator, value)
 		{

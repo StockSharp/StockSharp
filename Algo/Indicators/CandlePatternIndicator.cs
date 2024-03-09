@@ -16,7 +16,7 @@ using StockSharp.Logging;
 namespace StockSharp.Algo.Indicators;
 
 /// <summary>
-/// Candle pattern indicator value.
+/// <see cref="CandlePatternIndicator"/> value.
 /// </summary>
 public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 {
@@ -70,6 +70,7 @@ public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 	Name = LocalizedStrings.PatternKey,
 	Description = LocalizedStrings.PatternKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
+[IndicatorOut(typeof(CandlePatternIndicatorValue))]
 public class CandlePatternIndicator : BaseIndicator
 {
 	private ICandlePatternProvider _candlePatternProvider;

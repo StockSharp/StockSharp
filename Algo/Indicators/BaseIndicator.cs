@@ -112,7 +112,7 @@ namespace StockSharp.Algo.Indicators
 			get
 			{
 				if (_isFormed)
-					return _isFormed;
+					return true;
 
 				return _isFormed = CalcIsFormed();
 			}
