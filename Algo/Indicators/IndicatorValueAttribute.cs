@@ -17,16 +17,10 @@ namespace StockSharp.Algo.Indicators
 		public Type Type { get; }
 
 		/// <summary>
-		/// Is input.
-		/// </summary>
-		public bool IsInput { get; }
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="IndicatorValueAttribute"/>.
 		/// </summary>
 		/// <param name="type">Value type.</param>
-		/// <param name="isInput">Is input.</param>
-		protected IndicatorValueAttribute(Type type, bool isInput)
+		protected IndicatorValueAttribute(Type type)
 		{
 			if (type == null)
 				throw new ArgumentNullException(nameof(type));
@@ -35,7 +29,6 @@ namespace StockSharp.Algo.Indicators
 				throw new ArgumentException(LocalizedStrings.TypeNotImplemented.Put(type.Name, nameof(IIndicatorValue)), nameof(type));
 
 			Type = type;
-			IsInput = isInput;
 		}
 	}
 
@@ -50,7 +43,7 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		/// <param name="type">Values type.</param>
 		public IndicatorInAttribute(Type type)
-			: base(type, true)
+			: base(type)
 		{
 		}
 	}
@@ -66,7 +59,7 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		/// <param name="type">Values type.</param>
 		public IndicatorOutAttribute(Type type)
-			: base(type, false)
+			: base(type)
 		{
 		}
 	}
