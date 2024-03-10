@@ -1,15 +1,8 @@
 namespace StockSharp.Alerts
 {
-	using System;
 	using System.Collections;
-	using System.Reflection;
 
-	using Ecng.Common;
-	using Ecng.ComponentModel;
-	using Ecng.Serialization;
 	using Ecng.Reflection;
-
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// Tracking field info.

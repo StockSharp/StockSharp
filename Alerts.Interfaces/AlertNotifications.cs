@@ -1,11 +1,5 @@
 ﻿namespace StockSharp.Alerts
 {
-	using System;
-	using System.ComponentModel.DataAnnotations;
-	using System.Runtime.Serialization;
-
-	using StockSharp.Localization;
-
 	/// <summary>
 	/// Alert types.
 	/// </summary>

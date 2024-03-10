@@ -1,11 +1,5 @@
 namespace StockSharp.Alerts
 {
-	using System;
-	using System.Threading;
-	using System.Threading.Tasks;
-
-	using StockSharp.Logging;
-
 	/// <summary>
 	/// Defines an alert notification service.
 	/// </summary>
