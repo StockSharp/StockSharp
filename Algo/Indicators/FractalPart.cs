@@ -107,9 +107,21 @@ namespace StockSharp.Algo.Indicators
 						_isUpTrend = isUpTrend.Value;
 
 						if (isUpTrend.Value)
-							_upTrendCounter++;
+						{
+							if (++_upTrendCounter == _numCenter)
+							{
+								_extremum = currValue;
+								_isUpTrend = false;
+							}
+						}
 						else
-							_downTrendCounter++;
+						{
+							if (++_downTrendCounter == _numCenter)
+							{
+								_extremum = currValue;
+								_isUpTrend = true;
+							}
+						}
 					}
 				}
 
