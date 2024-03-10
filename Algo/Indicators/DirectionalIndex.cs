@@ -43,7 +43,7 @@ namespace StockSharp.Algo.Indicators
 		{
 			private decimal _value;
 
-			public DxValue(IIndicator indicator)
+			public DxValue(IComplexIndicator indicator)
 				: base(indicator)
 			{
 			}

@@ -82,6 +82,23 @@ namespace StockSharp.Algo.Indicators
 					yield return level.Value;
 				}
 			}
+
+			/// <inheritdoc />
+			public override void FromValues(object[] values)
+			{
+				if (values.Length == 0)
+				{
+					IsEmpty = true;
+					return;
+				}
+
+				IsEmpty = false;
+
+				Levels.Clear();
+
+				for (var i = 0; i < values.Length; i += 2)
+					Levels.Add(values[i].To<decimal>(), values[i + 1].To<decimal>());
+			}
 		}
 
 		private readonly Dictionary<decimal, decimal> _levels = new();
@@ -141,22 +158,6 @@ namespace StockSharp.Algo.Indicators
 			var currentValue = _levels.TryGetValue(level);
 
 			_levels[level] = currentValue + volume;
-		}
-
-		/// <inheritdoc />
-		public override IIndicatorValue CreateValue(object[] values)
-		{
-			var value = new VolumeProfileIndicatorValue(this);
-
-			if (values.Length > 0)
-			{
-				for (var i = 0; i < values.Length; i += 2)
-				{
-					value.Levels.Add(values[i].To<decimal>(), values[i + 1].To<decimal>());
-				}
-			}
-			
-			return value;
 		}
 	}
 }

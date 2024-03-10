@@ -15,8 +15,12 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
+	using System;
 	using System.Collections.Generic;
+	
+	using Ecng.Common;
 
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -45,10 +49,22 @@ namespace StockSharp.Algo.Indicators
 			Shift = shift;
 		}
 
+		private int _shift;
+
 		/// <summary>
 		/// The shift of the indicator value.
 		/// </summary>
-		public int Shift { get; }
+		public int Shift
+		{
+			get => _shift;
+			private set
+			{
+				if (value < 0)
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+				_shift = value;
+			}
+		}
 
 		/// <inheritdoc />
 		public override T GetValue<T>(Level1Fields? field) => base.GetValue<IIndicatorValue>(default).GetValue<T>(field);
@@ -62,11 +78,22 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		public override IEnumerable<object> ToValues()
 		{
-			if (IsEmpty)
-				yield break;
+			foreach (var v in base.ToValues())
+				yield return v;
 
-			yield return Shift;
-			yield return Value;
+			if (!IsEmpty)
+				yield return Shift;
+		}
+
+		/// <inheritdoc />
+		public override void FromValues(object[] values)
+		{
+			base.FromValues(values);
+
+			if (IsEmpty)
+				return;
+
+			Shift = values[1].To<int>();
 		}
 	}
 }

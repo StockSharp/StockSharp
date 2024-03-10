@@ -22,7 +22,6 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
-	using Ecng.Common;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -248,11 +247,5 @@ namespace StockSharp.Algo.Indicators
 
 			storage.SetValue(nameof(Deviation), Deviation);
 		}
-
-		/// <inheritdoc />
-		public override IIndicatorValue CreateValue(object[] values)
-			=> values.Length == 0
-				? new ShiftedIndicatorValue(this)
-				: new ShiftedIndicatorValue(this, values[0].To<decimal>(), values[1].To<int>());
 	}
 }

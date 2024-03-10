@@ -1,4 +1,6 @@
-﻿using System;
+﻿namespace StockSharp.Algo.Indicators;
+
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,17 +15,21 @@ using StockSharp.Messages;
 using StockSharp.Localization;
 using StockSharp.Logging;
 
-namespace StockSharp.Algo.Indicators;
-
 /// <summary>
 /// <see cref="CandlePatternIndicator"/> value.
 /// </summary>
 public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 {
+	private DateTimeOffset[] _candleOpenTimes;
+
 	/// <summary>
 	/// Pattern candle times.
 	/// </summary>
-	public DateTimeOffset[] CandleOpenTimes { get; init; }
+	public DateTimeOffset[] CandleOpenTimes
+	{
+		get => _candleOpenTimes;
+		set => _candleOpenTimes = value ?? throw new ArgumentNullException(nameof(value));
+	}
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CandlePatternIndicatorValue"/>.
@@ -49,16 +55,25 @@ public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 	/// <inheritdoc />
 	public override IEnumerable<object> ToValues()
 	{
+		foreach (var v in base.ToValues())
+			yield return v;
+
 		if (IsEmpty)
 			yield break;
 
-		yield return Value;
+		foreach (var time in CandleOpenTimes)
+			yield return time.UtcDateTime;
+	}
 
-		if (CandleOpenTimes is not null)
-		{
-			foreach (var time in CandleOpenTimes)
-				yield return time.UtcDateTime;
-		}
+	/// <inheritdoc />
+	public override void FromValues(object[] values)
+	{
+		base.FromValues(values);
+
+		if (IsEmpty)
+			return;
+
+		CandleOpenTimes = values.Skip(1).Select(v => (DateTimeOffset)v.To<DateTime>().UtcKind()).ToArray();
 	}
 }
 
@@ -183,13 +198,14 @@ public class CandlePatternIndicator : BaseIndicator
 			};
 		}
 
-		var candle = input.GetValue<ICandleMessage>();
-		var recognized = false;
-		DateTimeOffset[] times = null;
-
 		try
 		{
+			var candle = input.GetValue<ICandleMessage>();
+		
 			_buffer.Add(candle);
+
+			var recognized = false;
+			var times = Array.Empty<DateTimeOffset>();
 
 			if (_buffer.Count == candlesCount)
 			{
@@ -224,11 +240,4 @@ public class CandlePatternIndicator : BaseIndicator
 				_buffer.RemoveAt(_buffer.Count - 1);
 		}
 	}
-
-	/// <inheritdoc />
-	public override IIndicatorValue CreateValue(object[] values)
-		=> values.Length == 0 ? new CandlePatternIndicatorValue(this) : new CandlePatternIndicatorValue(this, values[0].To<bool>())
-		{
-			CandleOpenTimes = values.Length == 1 ? null : values.Skip(1).Select(v => (DateTimeOffset)v.To<DateTime>().UtcKind()).ToArray(),
-		};
 }

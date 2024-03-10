@@ -78,6 +78,12 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		/// <returns>Primitive values.</returns>
 		IEnumerable<object> ToValues();
+
+		/// <summary>
+		/// Convert to indicator value.
+		/// </summary>
+		/// <param name="values"><see cref="ToValues"/></param>
+		void FromValues(object[] values);
 	}
 
 	/// <summary>
@@ -132,6 +138,9 @@ namespace StockSharp.Algo.Indicators
 
 		/// <inheritdoc />
 		public abstract IEnumerable<object> ToValues();
+
+		/// <inheritdoc />
+		public abstract void FromValues(object[] values);
 	}
 
 	/// <summary>
@@ -165,7 +174,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Value.
 		/// </summary>
-		public TValue Value { get; }
+		public TValue Value { get; protected set; }
 
 		/// <inheritdoc />
 		public override bool IsEmpty { get; set; }
@@ -214,6 +223,19 @@ namespace StockSharp.Algo.Indicators
 		{
 			if (!IsEmpty)
 				yield return Value;
+		}
+
+		/// <inheritdoc />
+		public override void FromValues(object[] values)
+		{
+			if (values.Length == 0)
+			{
+				IsEmpty = true;
+				return;
+			}
+
+			IsEmpty = false;
+			Value = values[0].To<TValue>();
 		}
 	}
 
@@ -427,7 +449,7 @@ namespace StockSharp.Algo.Indicators
 		/// Initializes a new instance of the <see cref="ComplexIndicatorValue"/>.
 		/// </summary>
 		/// <param name="indicator">Indicator.</param>
-		public ComplexIndicatorValue(IIndicator indicator)
+		public ComplexIndicatorValue(IComplexIndicator indicator)
 			: base(indicator)
 		{
 			InnerValues = new Dictionary<IIndicator, IIndicatorValue>();
@@ -462,11 +484,27 @@ namespace StockSharp.Algo.Indicators
 			if (IsEmpty)
 				yield break;
 
-			foreach (var ii in ((IComplexIndicator)Indicator).InnerIndicators)
+			foreach (var inner in ((IComplexIndicator)Indicator).InnerIndicators)
+				yield return InnerValues[inner].ToValues();
+		}
+
+		/// <inheritdoc />
+		public override void FromValues(object[] values)
+		{
+			if (values.Length == 0)
 			{
-				foreach (var v1 in InnerValues[ii].ToValues())
-					yield return v1;
+				IsEmpty = true;
+				return;
 			}
+
+			IsEmpty = false;
+
+			InnerValues.Clear();
+
+			var idx = 0;
+
+			foreach (var inner in ((IComplexIndicator)Indicator).InnerIndicators)
+				InnerValues.Add(inner, inner.CreateValue(values[idx++].To<object[]>()));
 		}
 	}
 }

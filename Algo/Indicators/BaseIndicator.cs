@@ -193,15 +193,17 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override IIndicator Clone()
-		{
-			return PersistableHelper.Clone(this);
-		}
+			=> PersistableHelper.Clone(this);
 
 		/// <inheritdoc />
 		public override string ToString() => Name;
 
 		/// <inheritdoc/>
 		public virtual IIndicatorValue CreateValue(object[] values)
-			=> values.Length == 0 ? new DecimalIndicatorValue(this) : new DecimalIndicatorValue(this, values[0].To<decimal>());
+		{
+			var value = GetType().GetValueType(false).CreateInstance<IIndicatorValue>(this);
+			value.FromValues(values);
+			return value;
+		}
 	}
 }
