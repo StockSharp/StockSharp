@@ -56,8 +56,8 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 			=> IsEmpty
-				? new ZigZagIndicatorValue(indicator)
-				: new ZigZagIndicatorValue(indicator, Value, Shift);
+				? new ShiftedIndicatorValue(indicator)
+				: new ShiftedIndicatorValue(indicator, Value, Shift);
 
 		/// <inheritdoc />
 		public override IEnumerable<object> ToValues()
