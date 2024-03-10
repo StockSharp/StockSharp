@@ -75,19 +75,19 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var candle = input.GetValue<ICandleMessage>();
+			var (_, high, low, _) = input.GetOhlc();
 
 			var cm = _currentMaximum;
 			var vbc = _valueBarCount;
 
 			try
 			{
-				if (candle.HighPrice > cm)
+				if (high > cm)
 				{
-					cm = candle.HighPrice;
+					cm = high;
 					vbc = _currentBarCount;
 				}
-				else if (candle.LowPrice <= cm - ReversalAmount)
+				else if (low <= (cm - ReversalAmount))
 				{
 					if (input.IsFinal)
 						IsFormed = true;

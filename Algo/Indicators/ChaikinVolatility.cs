@@ -23,7 +23,6 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -83,8 +82,9 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var candle = input.GetValue<ICandleMessage>();
-			var emaValue = Ema.Process(input.SetValue(this, candle.HighPrice - candle.LowPrice));
+			var (_, high, low, _) = input.GetOhlc();
+
+			var emaValue = Ema.Process(input.SetValue(this, high - low));
 
 			if (Ema.IsFormed)
 			{

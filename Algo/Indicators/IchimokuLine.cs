@@ -20,8 +20,6 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.Collections;
 
-	using StockSharp.Messages;
-
 	/// <summary>
 	/// The implementation of the lines of Ishimoku KInko Khayo indicator (Tenkan, Kijun, Senkou Span B).
 	/// </summary>
@@ -29,7 +27,7 @@ namespace StockSharp.Algo.Indicators
 	[IndicatorHidden]
 	public class IchimokuLine : LengthIndicator<decimal>
 	{
-		private readonly CircularBuffer<ICandleMessage> _buffer;
+		private readonly CircularBuffer<(decimal, decimal)> _buffer;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IchimokuLine"/>.
@@ -56,20 +54,20 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var candle = input.GetValue<ICandleMessage>();
+			var (_, high, low, _) = input.GetOhlc();
 
-			IList<ICandleMessage> buff = _buffer;
+			IList<(decimal high, decimal low)> buff = _buffer;
 
 			if (input.IsFinal)
-				_buffer.PushBack(candle);
+				_buffer.PushBack((high, low));
 			else
-				buff = _buffer.Skip(1).Append(candle).ToList();
+				buff = _buffer.Skip(1).Append((high, low)).ToList();
 
 			if (IsFormed)
 			{
 				// рассчитываем значение
-				var max = buff.Max(t => t.HighPrice);
-				var min = buff.Min(t => t.LowPrice);
+				var max = buff.Max(t => t.high);
+				var min = buff.Min(t => t.low);
 
 				return new DecimalIndicatorValue(this, (max + min) / 2);
 			}

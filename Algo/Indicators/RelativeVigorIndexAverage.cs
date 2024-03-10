@@ -15,11 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
-
 	using Ecng.Collections;
-
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// The weight-average part of indicator <see cref="RelativeVigorIndex"/>.
@@ -28,7 +24,7 @@ namespace StockSharp.Algo.Indicators
 	[IndicatorHidden]
 	public class RelativeVigorIndexAverage : LengthIndicator<decimal>
 	{
-		private readonly CircularBuffer<ICandleMessage> _buffer;
+		private readonly CircularBuffer<(decimal open, decimal high, decimal low, decimal close)> _buffer;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RelativeVigorIndexAverage"/>.
@@ -53,11 +49,11 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var newValue = input.GetValue<ICandleMessage>();
+			var t = input.GetOhlc();
 
 			if (input.IsFinal)
 			{
-				_buffer.PushBack(newValue);
+				_buffer.PushBack(t);
 			}
 
 			if (IsFormed)
@@ -71,27 +67,27 @@ namespace StockSharp.Algo.Indicators
 
 				if (input.IsFinal)
 				{
-					valueUp = ((value0.ClosePrice - value0.OpenPrice) +
-					           2 * (value1.ClosePrice - value1.OpenPrice) +
-					           2 * (value2.ClosePrice - value2.OpenPrice) +
-					           (value3.ClosePrice - value3.OpenPrice)) / 6m;
+					valueUp = ((value0.close - value0.open) +
+					           2 * (value1.close - value1.open) +
+					           2 * (value2.close - value2.open) +
+					           (value3.close - value3.open)) / 6m;
 
-					valueDn = ((value0.HighPrice - value0.LowPrice) +
-					           2 * (value1.HighPrice - value1.LowPrice) +
-					           2 * (value2.HighPrice - value2.LowPrice) +
-					           (value3.HighPrice - value3.LowPrice)) / 6m;
+					valueDn = ((value0.high - value0.low) +
+					           2 * (value1.high - value1.low) +
+					           2 * (value2.high - value2.low) +
+					           (value3.high - value3.low)) / 6m;
 				}
 				else
 				{
-					valueUp = ((value1.ClosePrice - value1.OpenPrice) +
-					           2 * (value2.ClosePrice - value2.OpenPrice) +
-					           2 * (value3.ClosePrice - value3.OpenPrice) +
-							   (newValue.ClosePrice - newValue.OpenPrice)) / 6m;
+					valueUp = ((value1.close - value1.open) +
+					           2 * (value2.close - value2.open) +
+					           2 * (value3.close - value3.open) +
+							   (t.c - t.o)) / 6m;
 
-					valueDn = ((value1.HighPrice - value1.LowPrice) +
-					           2 * (value2.HighPrice - value2.LowPrice) +
-					           2 * (value3.HighPrice - value3.LowPrice) +
-							   (newValue.HighPrice - newValue.LowPrice)) / 6m;
+					valueDn = ((value1.high - value1.low) +
+					           2 * (value2.high - value2.low) +
+					           2 * (value3.high - value3.low) +
+							   (t.h - t.l)) / 6m;
 				}
 
 				return new DecimalIndicatorValue(this, valueDn == decimal.Zero 

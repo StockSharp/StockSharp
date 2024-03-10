@@ -18,7 +18,6 @@ namespace StockSharp.Algo.Indicators
 	using System;
 
 	using Ecng.Common;
-	using Ecng.Serialization;
 
 	using StockSharp.Localization;
 	using StockSharp.Messages;
@@ -174,6 +173,59 @@ namespace StockSharp.Algo.Indicators
 					? (IndicatorValueAttribute)indicatorType.GetAttribute<IndicatorInAttribute>()
 					: indicatorType.GetAttribute<IndicatorOutAttribute>()
 				)?.Type ?? typeof(DecimalIndicatorValue);
+		}
+
+		/// <summary>
+		/// Does value support data type, required for the indicator.
+		/// </summary>
+		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
+		/// <param name="value"><see cref="IIndicatorValue"/></param>
+		/// <returns><see langword="true" />, if data type is supported, otherwise, <see langword="false" />.</returns>
+		public static bool IsSupport<T>(this IIndicatorValue value)
+			=> value.CheckOnNull(nameof(value)).IsSupport(typeof(T));
+
+		/// <summary>
+		/// Get OHLC.
+		/// </summary>
+		/// <param name="value"><see cref="IIndicatorValue"/></param>
+		/// <returns>OHLC.</returns>
+		public static (decimal o, decimal h, decimal l, decimal c) GetOhlc(this IIndicatorValue value)
+		{
+			if (value is null)
+				throw new ArgumentNullException(nameof(value));
+
+			if (value.IsSupport<ICandleMessage>())
+			{
+				var candle = value.GetValue<ICandleMessage>();
+				return (candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice);
+			}
+			else
+			{
+				var dec = value.GetValue<decimal>();
+				return (dec, dec, dec, dec);
+			}
+		}
+
+		/// <summary>
+		/// Get OHLCV.
+		/// </summary>
+		/// <param name="value"><see cref="IIndicatorValue"/></param>
+		/// <returns>OHLCV.</returns>
+		public static (decimal o, decimal h, decimal l, decimal c, decimal v) GetOhlcv(this IIndicatorValue value)
+		{
+			if (value is null)
+				throw new ArgumentNullException(nameof(value));
+
+			if (value.IsSupport<ICandleMessage>())
+			{
+				var candle = value.GetValue<ICandleMessage>();
+				return (candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume);
+			}
+			else
+			{
+				var dec = value.GetValue<decimal>();
+				return (dec, dec, dec, dec, 0);
+			}
 		}
 	}
 }

@@ -15,8 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using StockSharp.Messages;
-
 	/// <summary>
 	/// Chinkou line.
 	/// </summary>
@@ -34,12 +32,12 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var price = input.GetValue<ICandleMessage>().ClosePrice;
+			var (_, _, _, close) = input.GetOhlc();
 
 			if (input.IsFinal)
-				Buffer.PushBack(price);
+				Buffer.PushBack(close);
 
-			return new DecimalIndicatorValue(this, price);
+			return new DecimalIndicatorValue(this, close);
 		}
 	}
 }

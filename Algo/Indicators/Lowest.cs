@@ -20,7 +20,6 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.ComponentModel;
 
-	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -48,15 +47,16 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var newValue = input.IsSupport(typeof(ICandleMessage)) ? input.GetValue<ICandleMessage>().LowPrice : input.GetValue<decimal>();
-			var lastValue = Buffer.Count == 0 ? newValue : this.GetCurrentValue();
+			var (_, _, low, _) = input.GetOhlc();
 
-			if (newValue < lastValue)
-				lastValue = newValue;
+			var lastValue = Buffer.Count == 0 ? low : this.GetCurrentValue();
+
+			if (low < lastValue)
+				lastValue = low;
 
 			if (input.IsFinal)
 			{
-				Buffer.AddEx(newValue);
+				Buffer.AddEx(low);
 				lastValue = Buffer.Min.Value;
 			}
 

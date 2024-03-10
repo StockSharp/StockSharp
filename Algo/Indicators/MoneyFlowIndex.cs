@@ -19,7 +19,6 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.ComponentModel;
 
-	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -75,10 +74,10 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var candle = input.GetValue<ICandleMessage>();
+			var (_, high, low, close, vol) = input.GetOhlcv();
 
-			var typicalPrice = (candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 3.0m;
-			var moneyFlow = typicalPrice * candle.TotalVolume;
+			var typicalPrice = (high + low + close) / 3.0m;
+			var moneyFlow = typicalPrice * vol;
 			
 			var positiveFlow = _positiveFlow.Process(input.SetValue(this, typicalPrice > _previousPrice ? moneyFlow : 0.0m)).GetValue<decimal>();
 			var negativeFlow = _negativeFlow.Process(input.SetValue(this, typicalPrice < _previousPrice ? moneyFlow : 0.0m)).GetValue<decimal>();

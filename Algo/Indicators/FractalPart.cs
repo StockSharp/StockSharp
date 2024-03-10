@@ -3,7 +3,6 @@ namespace StockSharp.Algo.Indicators
 	using System;
 
 	using StockSharp.Localization;
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// Part <see cref="Fractals"/>.
@@ -60,20 +59,9 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			(decimal high, decimal low) curr;
+			var (_, currHigh, currLow, _) = input.GetOhlc();
 
-			if (input.IsSupport(typeof(ICandleMessage)))
-			{
-				var candle = input.GetValue<ICandleMessage>();
-				curr = (candle.HighPrice, candle.LowPrice);
-			}
-			else
-			{
-				var dec = input.GetValue<decimal>();
-				curr = (dec, dec);
-			}
-
-			var currValue = IsUp ? curr.high : curr.low;
+			var currValue = IsUp ? currHigh : currLow;
 
 			if (Buffer.Count > 0)
 			{
@@ -209,7 +197,7 @@ namespace StockSharp.Algo.Indicators
 			}
 
 			if (input.IsFinal)
-				Buffer.PushBack(curr);
+				Buffer.PushBack((currHigh, currLow));
 
 			return new ShiftedIndicatorValue(this);
 		}

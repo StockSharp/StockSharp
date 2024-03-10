@@ -23,8 +23,6 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.ComponentModel;
 
-	using StockSharp.Messages;
-
 	/// <summary>
 	/// Optimal Tracking.
 	/// </summary>
@@ -117,9 +115,10 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var candle = input.GetValue<ICandleMessage>();
-			var average = (candle.HighPrice + candle.LowPrice) / 2;
-			var halfRange = (candle.HighPrice - candle.LowPrice) / 2;
+			var (_, high, low, _) = input.GetOhlc();
+
+			var average = (high + low) / 2;
+			var halfRange = (high - low) / 2;
 
 			if (input.IsFinal)
 				Buffer.AddEx(average);

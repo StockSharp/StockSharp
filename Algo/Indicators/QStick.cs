@@ -17,8 +17,6 @@ namespace StockSharp.Algo.Indicators
 {
 	using Ecng.ComponentModel;
 
-	using StockSharp.Messages;
-
 	/// <summary>
 	/// QStick.
 	/// </summary>
@@ -56,8 +54,9 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var candle = input.GetValue<ICandleMessage>();
-			var val = _sma.Process(input.SetValue(this, candle.OpenPrice - candle.ClosePrice));
+			var (open, _, _, close) = input.GetOhlc();
+
+			var val = _sma.Process(input.SetValue(this, open - close));
 			return val.SetValue(this, val.GetValue<decimal>());
 		}
 	}

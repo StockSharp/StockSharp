@@ -19,7 +19,6 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.ComponentModel;
 
-	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -46,12 +45,12 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var candle = input.GetValue<ICandleMessage>();
+			var (_, high, low, _) = input.GetOhlc();
 
 			if (input.IsFinal)
 				IsFormed = true;
 
-			return new DecimalIndicatorValue(this, (candle.HighPrice + candle.LowPrice) / 2);
+			return new DecimalIndicatorValue(this, (high + low) / 2);
 		}
 	}
 }

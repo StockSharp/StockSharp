@@ -64,10 +64,7 @@ namespace StockSharp.Algo.Indicators
 			get => _reversalAmount;
 			set
 			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_reversalAmount = value;
+				_reversalAmount = value ?? throw new ArgumentNullException(nameof(value));
 
 				Reset();
 			}
@@ -76,18 +73,19 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var candle = input.GetValue<ICandleMessage>();
+			var (_, high, low, _) = input.GetOhlc();
+
 			var cm = _currentMinimum;
 			var vbc = _valueBarCount;
 
 			try
 			{
-				if (candle.LowPrice < cm)
+				if (low < cm)
 				{
-					cm = candle.LowPrice;
+					cm = low;
 					vbc = _currentBarCount;
 				}
-				else if (candle.HighPrice >= cm + ReversalAmount.Value)
+				else if (high >= (cm + ReversalAmount.Value))
 				{
 					if (input.IsFinal)
 						IsFormed = true;
