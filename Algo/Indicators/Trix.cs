@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
+	using Ecng.Serialization;
 
 	using StockSharp.Localization;
 
@@ -96,6 +97,22 @@ namespace StockSharp.Algo.Indicators
 			return _ema3.IsFormed ?
 				new DecimalIndicatorValue(this, 10m * _roc.Process(ema3Value).GetValue<decimal>()) :
 				new DecimalIndicatorValue(this);
+		}
+
+		/// <inheritdoc />
+		public override void Load(SettingsStorage storage)
+		{
+			base.Load(storage);
+
+			RocLength = storage.GetValue(nameof(RocLength), RocLength);
+		}
+
+		/// <inheritdoc />
+		public override void Save(SettingsStorage storage)
+		{
+			base.Save(storage);
+
+			storage.SetValue(nameof(RocLength), RocLength);
 		}
 	}
 }
