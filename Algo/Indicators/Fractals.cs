@@ -201,8 +201,8 @@ namespace StockSharp.Algo.Indicators
 
 				var shift = buffer.Count - _numCenter - 1;
 
-				var upValue = new ShiftedIndicatorValue(this, centerHighPrice, shift);
-				var downValue = new ShiftedIndicatorValue(this, centerLowPrice, shift);
+				var upValue = new ShiftedIndicatorValue(this, isMax ? centerHighPrice : 0, shift);
+				var downValue = new ShiftedIndicatorValue(this, isMin ? centerLowPrice : 0, shift);
 
 				upValue.IsFinal = input.IsFinal;
 				downValue.IsFinal = input.IsFinal;

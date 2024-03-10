@@ -21,7 +21,6 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.Common;
 
 	using StockSharp.Localization;
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// The shifted value of the indicator.
@@ -65,9 +64,6 @@ namespace StockSharp.Algo.Indicators
 				_shift = value;
 			}
 		}
-
-		/// <inheritdoc />
-		public override T GetValue<T>(Level1Fields? field) => base.GetValue<IIndicatorValue>(default).GetValue<T>(field);
 
 		/// <inheritdoc />
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
