@@ -201,8 +201,8 @@ namespace StockSharp.Algo.Indicators
 
 				var shift = buffer.Count - _numCenter - 1;
 
-				var upValue = new ShiftedIndicatorValue(this, shift, isMax ? new DecimalIndicatorValue(this, centerHighPrice) : null);
-				var downValue = new ShiftedIndicatorValue(this, shift, isMin ? new DecimalIndicatorValue(this, centerLowPrice) : null);
+				var upValue = new ShiftedIndicatorValue(this, centerHighPrice, shift);
+				var downValue = new ShiftedIndicatorValue(this, centerLowPrice, shift);
 
 				upValue.IsFinal = input.IsFinal;
 				downValue.IsFinal = input.IsFinal;
@@ -214,7 +214,7 @@ namespace StockSharp.Algo.Indicators
 				return complexValue;
 			}
 
-			return base.OnProcess(new ShiftedIndicatorValue(this, 0, input.SetValue(this, 0)));
+			return base.OnProcess(new ShiftedIndicatorValue(this, 0, 0));
 		}
 
 		/// <inheritdoc />

@@ -22,6 +22,7 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
+	using Ecng.Common;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -133,7 +134,7 @@ namespace StockSharp.Algo.Indicators
 			else
 			{
 				_buffer[_buffer.Count - 1] = value;
-				_zigZagBuffer[_zigZagBuffer.Count - 1] = 0;
+				_zigZagBuffer[^1] = 0;
 			}
 
 			const int level = 3;
@@ -229,7 +230,7 @@ namespace StockSharp.Algo.Indicators
 
 			CurrentValue = last;
 
-			return new ShiftedIndicatorValue(this, valueId - 1, input.SetValue(this, lastButOne));
+			return new ShiftedIndicatorValue(this, lastButOne, valueId - 1);
 		}
 
 		/// <inheritdoc />
@@ -247,5 +248,11 @@ namespace StockSharp.Algo.Indicators
 
 			storage.SetValue(nameof(Deviation), Deviation);
 		}
+
+		/// <inheritdoc />
+		public override IIndicatorValue CreateValue(object[] values)
+			=> values.Length == 0
+				? new ShiftedIndicatorValue(this)
+				: new ShiftedIndicatorValue(this, values[0].To<decimal>(), values[1].To<int>());
 	}
 }

@@ -61,7 +61,7 @@ namespace StockSharp.Algo.Indicators
 					if (input.IsFinal)
 						IsFormed = !lastValue.IsEmpty;
 
-					return IsFormed ? new ShiftedIndicatorValue(this, lastValue.Shift + 1, lastValue.Value) : lastValue;
+					return IsFormed ? new ShiftedIndicatorValue(this, lastValue.Value, lastValue.Shift + 1) : lastValue;
 				}
 			}
 

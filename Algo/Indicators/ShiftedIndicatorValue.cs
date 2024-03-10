@@ -15,7 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System;
 	using System.Collections.Generic;
 
 	using StockSharp.Messages;
@@ -23,7 +22,7 @@ namespace StockSharp.Algo.Indicators
 	/// <summary>
 	/// The shifted value of the indicator.
 	/// </summary>
-	public class ShiftedIndicatorValue : SingleIndicatorValue<IIndicatorValue>
+	public class ShiftedIndicatorValue : SingleIndicatorValue<decimal>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ShiftedIndicatorValue"/>.
@@ -38,9 +37,9 @@ namespace StockSharp.Algo.Indicators
 		/// Initializes a new instance of the <see cref="ShiftedIndicatorValue"/>.
 		/// </summary>
 		/// <param name="indicator">Indicator.</param>
-		/// <param name="shift">The shift of the indicator value.</param>
 		/// <param name="value">Indicator value.</param>
-		public ShiftedIndicatorValue(IIndicator indicator, int shift, IIndicatorValue value)
+		/// <param name="shift">The shift of the indicator value.</param>
+		public ShiftedIndicatorValue(IIndicator indicator, decimal value, int shift)
 			: base(indicator, value)
 		{
 			Shift = shift;
@@ -52,13 +51,13 @@ namespace StockSharp.Algo.Indicators
 		public int Shift { get; }
 
 		/// <inheritdoc />
-		public override bool IsSupport(Type valueType) => !IsEmpty && Value.IsSupport(valueType);
-
-		/// <inheritdoc />
 		public override T GetValue<T>(Level1Fields? field) => base.GetValue<IIndicatorValue>(default).GetValue<T>(field);
 
 		/// <inheritdoc />
-		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value) => new ShiftedIndicatorValue(indicator, Shift, Value);
+		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
+			=> IsEmpty
+				? new ZigZagIndicatorValue(indicator)
+				: new ZigZagIndicatorValue(indicator, Value, Shift);
 
 		/// <inheritdoc />
 		public override IEnumerable<object> ToValues()
@@ -67,9 +66,7 @@ namespace StockSharp.Algo.Indicators
 				yield break;
 
 			yield return Shift;
-
-			foreach (var v in Value.ToValues())
-				yield return v;
+			yield return Value;
 		}
 	}
 }
