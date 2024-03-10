@@ -63,11 +63,6 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="securityId">Security identifier.</param>
 		void Delete(SecurityId securityId);
-
-		/// <summary>
-		/// Fields data need to be reloaded.
-		/// </summary>
-		event Action Reset;
 	}
 
 	/// <summary>
@@ -131,12 +126,6 @@ namespace StockSharp.Algo.Storages
 			private readonly SyncObject _lock = new();
 			//private readonly Dictionary<string, Type> _fieldTypes = new Dictionary<string, Type>(StringComparer.InvariantCultureIgnoreCase);
 			private readonly Dictionary<SecurityId, Dictionary<string, object>> _cache = new();
-
-			event Action IExtendedInfoStorageItem.Reset
-			{
-				add { }
-				remove { }
-			}
 
 			public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName)
 			{
