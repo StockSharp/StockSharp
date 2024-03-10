@@ -315,18 +315,19 @@ class AsyncMessageProcessor : Disposable
 						}
 						else
 						{
-							if (token.IsCancellationRequested && msg is ISubscriptionMessage subMsg)
+							if (msg is ISubscriptionMessage)
 							{
-								// cancellation not an error for subscriptions as well as all responses
-								// must be reply for request only (see above item.UnsubscribeRequest logic)
-								return;
-							}
+								if (token.IsCancellationRequested)
+								{
+									// cancellation not an error for subscriptions as well as all responses
+									// must be reply for request only (see above item.UnsubscribeRequest logic)
+									return;
+								}
 
-							var error = token.IsCancellationRequested ? new OperationCanceledException() : ex;
-							_adapter.AddVerboseLog("endprocess: {0} ({1})", msg.Type, error.GetType().Name);
+								_adapter.AddVerboseLog("endprocess: {0} ({1})", msg.Type, ex);
 
-							if (!token.IsCancellationRequested)
 								await _adapter.FaultDelay.Delay(_globalCts.Token);
+							}
 
 							_adapter.SendOutMessage(msg.CreateErrorResponse(ex, _adapter));
 						}
