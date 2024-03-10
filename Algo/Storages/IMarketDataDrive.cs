@@ -139,9 +139,7 @@ namespace StockSharp.Algo.Storages
 
 		/// <inheritdoc />
 		public IMarketDataStorage<NewsMessage> GetNewsMessageStorage(IMarketDataSerializer<NewsMessage> serializer)
-		{
-			throw new NotImplementedException();
-		}
+			=> throw new NotSupportedException();
 
 		/// <inheritdoc />
 		public abstract IEnumerable<SecurityId> AvailableSecurities { get; }

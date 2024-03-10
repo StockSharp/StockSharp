@@ -3686,7 +3686,7 @@ namespace StockSharp.Algo.Testing
 		MessageAdapterCategories IMessageAdapter.Categories => default;
 
 		IEnumerable<Tuple<string, Type>> IMessageAdapter.SecurityExtendedFields { get; } = Enumerable.Empty<Tuple<string, Type>>();
-		IEnumerable<int> IMessageAdapter.SupportedOrderBookDepths => throw new NotImplementedException();
+		IEnumerable<int> IMessageAdapter.SupportedOrderBookDepths => throw new NotSupportedException();
 		bool IMessageAdapter.IsSupportOrderBookIncrements => false;
 		bool IMessageAdapter.IsSupportExecutionsPnL => true;
 		bool IMessageAdapter.IsSecurityNewsOnly => false;
