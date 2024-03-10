@@ -35,20 +35,16 @@ namespace StockSharp.Algo.Indicators
 	[Doc("topics/IndicatorTrix.html")]
 	public class Trix : LengthIndicator<IIndicatorValue>
 	{
-		private readonly ExponentialMovingAverage _ema1;
-		private readonly ExponentialMovingAverage _ema2;
-		private readonly ExponentialMovingAverage _ema3;
-		private readonly RateOfChange _roc;
+		private readonly ExponentialMovingAverage _ema1 = new();
+		private readonly ExponentialMovingAverage _ema2 = new();
+		private readonly ExponentialMovingAverage _ema3 = new();
+		private readonly RateOfChange _roc = new() { Length = 1 };
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="VolumeWeightedMovingAverage"/>.
+		/// Initializes a new instance of the <see cref="Trix"/>.
 		/// </summary>
 		public Trix()
 		{
-			_ema1 = new ExponentialMovingAverage();
-			_ema2 = new ExponentialMovingAverage();
-			_ema3 = new ExponentialMovingAverage();
-			_roc = new RateOfChange { Length = 1 };
 		}
 
 		/// <inheritdoc />
@@ -65,19 +61,38 @@ namespace StockSharp.Algo.Indicators
 		public int RocLength
 		{
 			get => _roc.Length;
-			set => _roc.Length = value;
+			set
+			{
+				_roc.Length = value;
+				Reset();
+			}
+		}
+
+		/// <inheritdoc />
+		public override int Length
+		{
+			get => _ema1.Length;
+			set
+			{
+				_ema3.Length = _ema2.Length = _ema1.Length = value;
+				Reset();
+			}
 		}
 
 		/// <inheritdoc />
 		public override void Reset()
 		{
-			_ema3.Length = _ema2.Length = _ema1.Length = Length;
+			_ema1.Reset();
+			_ema2.Reset();
+			_ema3.Reset();
+
 			_roc.Reset();
+
 			base.Reset();
 		}
 
 		/// <inheritdoc />
-		protected override bool CalcIsFormed() => _ema1.IsFormed && _ema2.IsFormed && _ema3.IsFormed && _roc.IsFormed;
+		protected override bool CalcIsFormed() => _roc.IsFormed;
 
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
