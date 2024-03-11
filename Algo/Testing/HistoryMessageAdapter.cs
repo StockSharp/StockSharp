@@ -403,7 +403,7 @@ namespace StockSharp.Algo.Testing
 			var transId = message.TransactionId;
 			var originId = message.OriginalTransactionId;
 
-			// security check must be done loop thread
+			// security check must be done Start thread's loop
 			//if (SecurityProvider.LookupById(securityId) == null)
 			//{
 			//	SendSubscriptionReply(transId, new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(securityId)));
