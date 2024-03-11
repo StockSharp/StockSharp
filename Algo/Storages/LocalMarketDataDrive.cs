@@ -17,7 +17,6 @@ namespace StockSharp.Algo.Storages
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics;
 	using System.Threading;
 	using System.Threading.Tasks;
 	using System.IO;
@@ -302,7 +301,7 @@ namespace StockSharp.Algo.Storages
 			{
 				var result = IOPath.Combine(GetDataPath(date), _fileNameWithExtension);
 
-				Debug.WriteLine("FileAccess ({0}): {1}".Put(isLoad ? "Load" : "Save", result));
+				System.Diagnostics.Debug.WriteLine($"FileAccess ({(isLoad ? "Load" : "Save")}): {result}");
 				return result;
 			}
 

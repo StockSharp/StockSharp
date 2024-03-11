@@ -377,7 +377,8 @@ namespace StockSharp.Algo.Storages.Remote
 			if (needCache && cache.TryGet(key, out var cached))
 				return cached.Cast<TResult>();
 
-			object sync = string.Intern(request.ToString());
+			var str = request.ToString();
+			object sync = string.Intern(str);
 
 			lock (sync)
 			{
@@ -390,6 +391,8 @@ namespace StockSharp.Algo.Storages.Remote
 				var messages = new List<Message>();
 
 				_pendings.Add(transId, (requestSync, messages));
+
+				System.Diagnostics.Debug.WriteLine($"Download: {str}");
 
 				if (!_adapter.SendInMessage(request))
 					throw new NotSupportedException(request.ToString());
