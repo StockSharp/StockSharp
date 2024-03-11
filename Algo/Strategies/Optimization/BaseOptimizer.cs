@@ -409,7 +409,9 @@ public abstract class BaseOptimizer : BaseLogReceiver
 				SingleProgressChanged?.Invoke(strategy, parameters, 100);
 
 				strategy.Stop();
-				strategy.Dispose();
+
+				// strategy object can be used in SingleProgressChanged callback
+				//strategy.Dispose();
 			}
 
 			var needStop = false;
