@@ -403,11 +403,12 @@ namespace StockSharp.Algo.Testing
 			var transId = message.TransactionId;
 			var originId = message.OriginalTransactionId;
 
-			if (SecurityProvider.LookupById(securityId) == null)
-			{
-				SendSubscriptionReply(transId, new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(securityId)));
-				return;
-			}
+			// security check must be done loop thread
+			//if (SecurityProvider.LookupById(securityId) == null)
+			//{
+			//	SendSubscriptionReply(transId, new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(securityId)));
+			//	return;
+			//}
 
 			if (StorageRegistry == null)
 			{
