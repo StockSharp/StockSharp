@@ -162,10 +162,11 @@ public class GeneticOptimizer : BaseOptimizer
 			{
 				if (f is not null && t is not null)
 				{
-					var u = (Unit)f;
+					var fu = (Unit)f;
+					var tu = (Unit)t;
 					var su = (Unit)s;
 
-					var vu = new Unit(RandomGen.GetDecimal(u.Value, u.Value, su.Value.GetDecimalInfo().EffectiveScale), u.Type);
+					var vu = new Unit(RandomGen.GetDecimal(fu.Value, tu.Value, su.Value.GetDecimalInfo().EffectiveScale), fu.Type);
 
 					if (su > 0)
 						vu.Value = MathHelper.Round(vu.Value, su.Value, null);
