@@ -50,29 +50,44 @@ public class StrategyParameterDictionary : CachedSynchronizedDictionary<string, 
 	/// Get parameter by the specified name.
 	/// </summary>
 	/// <param name="name"><see cref="IStrategyParam.Name"/></param>
-	/// <returns><see cref="IStrategyParam"/></returns>
-	public IStrategyParam TryGetByName(string name)
-		=> CachedValues.FirstOrDefault(p => p.Name == name) ?? (name == _secParam.Name ? _secParam : null);
+	/// <param name="param"><see cref="IStrategyParam"/> or <see langword="null"/> if parameter not exist.</param>
+	/// <returns><see langword="true"/> if parameter exist.</returns>
+	public bool TryGetByName(string name, out IStrategyParam param)
+	{
+		param = CachedValues.FirstOrDefault(p => p.Name == name) ?? (name == _secParam.Name ? _secParam : null);
+		return param is not null;
+	}
 
 	/// <summary>
-	/// Try get parameter by the specified name.
+	/// Try get parameter by the specified <see cref="IStrategyParam.Name"/>.
 	/// </summary>
 	/// <param name="name"><see cref="IStrategyParam.Name"/></param>
-	/// <returns><see cref="IStrategyParam"/> or <see langword="null"/> if parameter not exist.</returns>
+	/// <returns><see cref="IStrategyParam"/></returns>
 	public IStrategyParam GetByName(string name)
-		=> TryGetByName(name) ?? throw new ArgumentException($"Parameter {name} doesn't exist.");
+		=> TryGetByName(name, out var param) ? param : throw new ArgumentException($"Parameter {name} doesn't exist.");
+
+	/// <summary>
+	/// Try get parameter by the specified <see cref="IStrategyParam.Id"/>.
+	/// </summary>
+	/// <param name="id"><see cref="IStrategyParam.Id"/></param>
+	/// <param name="param"><see cref="IStrategyParam"/> or <see langword="null"/> if parameter not exist.</param>
+	/// <returns><see langword="true"/> if parameter exist.</returns>
+	public bool TryGetById(string id, out IStrategyParam param)
+	{
+		if (TryGetValue(id, out param))
+			return true;
+		else if (id == _secParam.Name)
+		{
+			param = _secParam;
+			return true;
+		}
+
+		return false;
+	}
 
 	/// <inheritdoc/>
 	public override IStrategyParam this[string key]
-	{
-		get
-		{
-			if (TryGetValue(key, out var value))
-				return value;
-
-			return key == _secParam.Name ? _secParam : throw new KeyNotFoundException($"Parameter with '{key}' doesn't exist.");
-		}
-	}
+		=> TryGetById(key, out var param) ? param : throw new KeyNotFoundException($"Parameter with '{key}' doesn't exist.");
 
 	private static string GetKey(IStrategyParam p) => p.CheckOnNull(nameof(p)).Id;
 
