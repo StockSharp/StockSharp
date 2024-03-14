@@ -1,4 +1,20 @@
 {
+  "IndexRebuildInterval": {
+    "en": "Index rebuild interval.",
+    "ru": "Интервал перестройки индекса."
+  },
+  "IndexWasRebuildInSeconds": {
+    "en": "Index was rebuild in {0} seconds.",
+    "ru": "Индекс был перестроен за {0} секунд."
+  },
+  "ConnectorMustBeExtraInstalled": {
+    "en": "The connector {0} must be installed as a separate product and the terminal must be configured as per the instructions. Select the product {0} to install?",
+    "ru": "Коннектор {0} необходимо установить как отдельный продукт и настроить терминал как по инструкции. Выбрать продукт {0} для установки?"
+  },
+  "ConnectorMustSetupFirst": {
+    "en": "To connect via connector {0}, you need to configure the terminal itself. Open a documentation site with instructions?",
+    "ru": "Для подключения через коннектор {0} необходимо настроить сам терминал. Открыть сайт документации с инструкцией?"
+  },
   "Sqrt": {
     "en": "Sqrt",
     "ru": "Кв. корень"
