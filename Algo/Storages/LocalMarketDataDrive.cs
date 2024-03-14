@@ -599,7 +599,7 @@ namespace StockSharp.Algo.Storages
 							if (dates.Count == 0)
 								typesDict.Remove(dataType);
 
-							_lastTimeChanged = DateTime.UtcNow;
+							_lastTimeChanged ??= DateTime.UtcNow;
 						}
 					}
 					else
@@ -612,7 +612,7 @@ namespace StockSharp.Algo.Storages
 						var added = dates.Add(date);
 
 						if (isNew1 || isNew2 || isNew3 || added)
-							_lastTimeChanged = DateTime.UtcNow;
+							_lastTimeChanged ??= DateTime.UtcNow;
 					}
 				}
 			}
@@ -1127,7 +1127,8 @@ namespace StockSharp.Algo.Storages
 		/// Try save existing index.
 		/// </summary>
 		/// <param name="diff">Time diff from prev index change.</param>
-		public void TrySaveIndex(TimeSpan diff)
+		/// <returns>Time taken by build process. <see langword="null"/> means no build happened.</returns>
+		public TimeSpan? TrySaveIndex(TimeSpan diff)
 		{
 			Index index;
 
@@ -1135,9 +1136,9 @@ namespace StockSharp.Algo.Storages
 				index = _index;
 
 			if (index?.NeedSave(diff) != true)
-				return;
+				return null;
 
-			SaveIndex(index);
+			return Watch.Do(() => SaveIndex(index));
 		}
 
 		private void SaveIndex(Index index)
