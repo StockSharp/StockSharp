@@ -454,7 +454,7 @@ namespace StockSharp.Algo.Storages
 
 					for (var i = 0; i < typesLen; i++)
 					{
-						var dtCode = (byte)stream.ReadByte();
+						var dtCode = (byte)reader.ReadInt();
 
 						if (_map.TryGetKey(dtCode, out var dt))
 						{
