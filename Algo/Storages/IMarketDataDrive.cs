@@ -107,6 +107,15 @@ namespace StockSharp.Algo.Storages
 		IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, DataType dataType, StorageFormats format);
 
 		/// <summary>
+		/// To get available dates.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="dataType">Data type info.</param>
+		/// <param name="format">Format type.</param>
+		/// <returns>Available dates.</returns>
+		IEnumerable<DateTime> GetDates(SecurityId securityId, DataType dataType, StorageFormats format);
+
+		/// <summary>
 		/// Verify settings.
 		/// </summary>
 		void Verify();
@@ -149,6 +158,9 @@ namespace StockSharp.Algo.Storages
 
 		/// <inheritdoc />
 		public abstract IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, DataType dataType, StorageFormats format);
+
+		/// <inheritdoc />
+		public abstract IEnumerable<DateTime> GetDates(SecurityId securityId, DataType dataType, StorageFormats format);
 
 		/// <inheritdoc />
 		public abstract void Verify();

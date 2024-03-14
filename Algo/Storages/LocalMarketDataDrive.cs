@@ -638,6 +638,19 @@ namespace StockSharp.Algo.Storages
 
 				return Enumerable.Empty<DataType>();
 			}
+
+			public IEnumerable<DateTime> GetDates(SecurityId securityId, DataType dataType, StorageFormats format)
+			{
+				lock (SyncRoot)
+				{
+					if (TryGetValue(securityId, out var dict) &&
+						dict.TryGetValue(format, out var dict2) &&
+						dict2.TryGetValue(dataType, out var dates))
+						return dates.OrderBy().ToArray();
+				}
+
+				return Enumerable.Empty<DateTime>();
+			}
 		}
 
 		private readonly SynchronizedDictionary<(SecurityId, DataType, StorageFormats), LocalMarketDataStorageDrive> _drives = new();
@@ -823,6 +836,15 @@ namespace StockSharp.Algo.Storages
 			var s = GetSecurityPath(securityId);
 
 			return Directory.Exists(s) ? GetDataTypes(s) : Enumerable.Empty<DataType>();
+		}
+
+		/// <inheritdoc />
+		public override IEnumerable<DateTime> GetDates(SecurityId securityId, DataType dataType, StorageFormats format)
+		{
+			if (TryGetIndex(out var index))
+				return index.GetDates(securityId, dataType, format);
+
+			return GetStorageDrive(securityId, dataType, format).Dates;
 		}
 
 		/// <inheritdoc />
