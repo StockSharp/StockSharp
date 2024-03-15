@@ -840,7 +840,9 @@ namespace StockSharp.Algo
 			SubscriptionStopped?.Invoke(subscription, error);
 		}
 
-		private void RaiseSubscriptionFailed(Subscription subscription, Exception error, bool isSubscribe)
+		/// <summary>
+		/// </summary>
+		protected virtual void RaiseSubscriptionFailed(Subscription subscription, Exception error, bool isSubscribe)
 		{
 			if (subscription == null)
 				throw new ArgumentNullException(nameof(subscription));

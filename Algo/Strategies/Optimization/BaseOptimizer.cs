@@ -182,6 +182,11 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	}
 
 	/// <summary>
+	/// <see cref="HistoryEmulationConnector.StopOnSubscriptionError"/>
+	/// </summary>
+	public bool StopOnSubscriptionError { get; set; }
+
+	/// <summary>
 	/// The event on change of paper trade state.
 	/// </summary>
 	public event Action<ChannelStates, ChannelStates> StateChanged;
@@ -376,6 +381,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			connector = new(SecurityProvider, PortfolioProvider, ExchangeInfoProvider, StorageSettings.StorageRegistry)
 			{
 				Parent = this,
+				StopOnSubscriptionError = StopOnSubscriptionError,
 
 				HistoryMessageAdapter =
 				{

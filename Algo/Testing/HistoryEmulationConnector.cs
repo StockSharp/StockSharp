@@ -34,6 +34,8 @@ namespace StockSharp.Algo.Testing
 	/// </summary>
 	public class HistoryEmulationConnector : BaseEmulationConnector
 	{
+		private bool _stopPending;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HistoryEmulationConnector"/>.
 		/// </summary>
@@ -251,6 +253,20 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
+		/// Call <see cref="Connector.Disconnect"/> when any <see cref="Subscription"/> failed.
+		/// </summary>
+		public bool StopOnSubscriptionError { get; set; }
+
+		/// <inheritdoc/>
+		protected override void RaiseSubscriptionFailed(Subscription subscription, Exception error, bool isSubscribe)
+		{
+			base.RaiseSubscriptionFailed(subscription, error, isSubscribe);
+
+			if (StopOnSubscriptionError && subscription.SubscriptionMessage is MarketDataMessage)
+				Disconnect();
+		}
+
+		/// <summary>
 		/// The event on the emulator state change <see cref="State"/>.
 		/// </summary>
 		[Obsolete("Use StateChanged2 event.")]
@@ -328,6 +344,8 @@ namespace StockSharp.Algo.Testing
 
 			_nextTime = _startTime + _progressStep;
 
+			_stopPending = false;
+
 			base.OnConnect();
 		}
 
@@ -339,6 +357,8 @@ namespace StockSharp.Algo.Testing
 
 			if (State is not ChannelStates.Stopped and not ChannelStates.Stopping)
 				SendEmulationState(ChannelStates.Stopping);
+			else
+				_stopPending = true;
 		}
 
 		private void OnDisconnected()
@@ -451,6 +471,9 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 			}
+
+			if (_stopPending && (State is ChannelStates.Started or ChannelStates.Suspended))
+				ProcessEmulationStateMessage(new() { State = ChannelStates.Stopping });
 		}
 
 		/// <summary>
