@@ -199,6 +199,10 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <inheritdoc />
+		public override IEnumerable<DataType> GetSupportedDataTypes(SecurityId securityId)
+			=> DriveInternal.GetAvailableDataTypes(securityId, StorageFormat);
+
+		/// <inheritdoc />
 		public override bool IsFullCandlesOnly => false;
 
 		/// <inheritdoc />

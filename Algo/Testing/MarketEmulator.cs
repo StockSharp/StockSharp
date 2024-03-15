@@ -3664,6 +3664,8 @@ namespace StockSharp.Algo.Testing
 			DataType.CandleTimeFrame,
 			DataType.MarketDepth,
 		};
+		IEnumerable<DataType> IMessageAdapter.GetSupportedDataTypes(SecurityId securityId)
+			=> ((IMessageAdapter)this).SupportedMarketDataTypes;
 
 		IEnumerable<Level1Fields> IMessageAdapter.CandlesBuildFrom => Enumerable.Empty<Level1Fields>();
 
@@ -3711,7 +3713,7 @@ namespace StockSharp.Algo.Testing
 		IEnumerable<object> IMessageAdapter.GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
 			=> Enumerable.Empty<object>();
 
-		TimeSpan IMessageAdapter.GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval)
+		TimeSpan IMessageAdapter.GetHistoryStepSize(SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)
 		{
 			iterationInterval = TimeSpan.Zero;
 			return TimeSpan.Zero;

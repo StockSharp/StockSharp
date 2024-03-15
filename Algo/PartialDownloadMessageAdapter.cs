@@ -222,7 +222,7 @@
 
 						if (from != null || to != null || subscriptionMsg.Count != null)
 						{
-							var step = InnerAdapter.GetHistoryStepSize(DataType.Transactions, out _);
+							var step = InnerAdapter.GetHistoryStepSize(default, DataType.Transactions, out _);
 
 							// adapter do not provide historical request
 							if (step == TimeSpan.Zero)
@@ -267,7 +267,7 @@
 
 						if (from != null || to != null)
 						{
-							var step = InnerAdapter.GetHistoryStepSize(mdMsg.DataType2, out var iterationInterval);
+							var step = InnerAdapter.GetHistoryStepSize(mdMsg.SecurityId, mdMsg.DataType2, out var iterationInterval);
 
 							// adapter do not provide historical request
 							if (step == TimeSpan.Zero)

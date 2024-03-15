@@ -135,6 +135,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		public virtual IEnumerable<DataType> GetSupportedDataTypes(SecurityId securityId)
+			=> SupportedMarketDataTypes;
+
+		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual IEnumerable<Level1Fields> CandlesBuildFrom => Enumerable.Empty<Level1Fields>();
 
@@ -575,8 +579,8 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public virtual TimeSpan GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval)
-			=> Extensions.GetHistoryStepSize(this, dataType, out iterationInterval);
+		public virtual TimeSpan GetHistoryStepSize(SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)
+			=> Extensions.GetHistoryStepSize(this, securityId, dataType, out iterationInterval);
 
 		/// <inheritdoc />
 		public virtual int? GetMaxCount(DataType dataType) => dataType.GetDefaultMaxCount();

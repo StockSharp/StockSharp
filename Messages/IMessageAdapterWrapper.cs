@@ -287,6 +287,10 @@ namespace StockSharp.Messages
 		public virtual IEnumerable<DataType> SupportedMarketDataTypes => InnerAdapter.SupportedMarketDataTypes;
 
 		/// <inheritdoc />
+		public virtual IEnumerable<DataType> GetSupportedDataTypes(SecurityId securityId)
+			=> InnerAdapter.GetSupportedDataTypes(securityId);
+
+		/// <inheritdoc />
 		public TimeSpan HeartbeatInterval
 		{
 			get => InnerAdapter.HeartbeatInterval;
@@ -383,8 +387,8 @@ namespace StockSharp.Messages
 			=> InnerAdapter.GetCandleArgs(candleType, securityId, from, to);
 
 		/// <inheritdoc />
-		public virtual TimeSpan GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval)
-			=> InnerAdapter.GetHistoryStepSize(dataType, out iterationInterval);
+		public virtual TimeSpan GetHistoryStepSize(SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)
+			=> InnerAdapter.GetHistoryStepSize(securityId, dataType, out iterationInterval);
 
 		/// <inheritdoc />
 		public virtual int? GetMaxCount(DataType dataType) => InnerAdapter.GetMaxCount(dataType);
@@ -407,6 +411,8 @@ namespace StockSharp.Messages
 
 			if (OwnInnerAdapter)
 				InnerAdapter.Dispose();
+
+			GC.SuppressFinalize(this);
 		}
 
 		/// <inheritdoc />

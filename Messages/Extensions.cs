@@ -2149,10 +2149,11 @@ namespace StockSharp.Messages
 		/// Get maximum size step allowed for historical download.
 		/// </summary>
 		/// <param name="adapter">Trading system adapter.</param>
+		/// <param name="securityId"><see cref="SecurityId"/></param>
 		/// <param name="dataType">Data type info.</param>
 		/// <param name="iterationInterval">Interval between iterations.</param>
 		/// <returns>Step.</returns>
-		public static TimeSpan GetHistoryStepSize(this IMessageAdapter adapter, DataType dataType, out TimeSpan iterationInterval)
+		public static TimeSpan GetHistoryStepSize(this IMessageAdapter adapter, SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
@@ -2164,7 +2165,7 @@ namespace StockSharp.Messages
 
 			if (dataType.IsCandles)
 			{
-				var supportedCandles = adapter.SupportedMarketDataTypes.FirstOrDefault(d => d.MessageType == dataType.MessageType);
+				var supportedCandles = adapter.GetSupportedDataTypes(securityId).FirstOrDefault(d => d.MessageType == dataType.MessageType);
 
 				if (supportedCandles == null)
 					return TimeSpan.Zero;

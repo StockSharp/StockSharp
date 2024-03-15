@@ -306,7 +306,7 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 		=> throw SubscriptionResponseMessage.NotSupported;
 
 	/// <inheritdoc />
-	public override TimeSpan GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval)
+	public override TimeSpan GetHistoryStepSize(SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)
 	{
 		iterationInterval = TimeSpan.Zero;
 		return TimeSpan.MaxValue;

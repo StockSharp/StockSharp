@@ -596,6 +596,9 @@ namespace StockSharp.Algo
 
 		IEnumerable<DataType> IMessageAdapter.SupportedMarketDataTypes => GetSortedAdapters().SelectMany(a => a.SupportedMarketDataTypes).Distinct();
 
+		IEnumerable<DataType> IMessageAdapter.GetSupportedDataTypes(SecurityId securityId)
+			 => GetSortedAdapters().SelectMany(a => a.GetSupportedDataTypes(securityId)).Distinct();
+
 		IEnumerable<Level1Fields> IMessageAdapter.CandlesBuildFrom => GetSortedAdapters().SelectMany(a => a.CandlesBuildFrom).Distinct();
 
 		bool IMessageAdapter.CheckTimeFrameByRequest => false;
@@ -644,11 +647,11 @@ namespace StockSharp.Algo
 		IEnumerable<object> IMessageAdapter.GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
 			=> GetSortedAdapters().SelectMany(a => a.GetCandleArgs(candleType, securityId, from, to)).Distinct().OrderBy();
 
-		TimeSpan IMessageAdapter.GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval)
+		TimeSpan IMessageAdapter.GetHistoryStepSize(SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)
 		{
 			foreach (var adapter in GetSortedAdapters())
 			{
-				var step = adapter.GetHistoryStepSize(dataType, out iterationInterval);
+				var step = adapter.GetHistoryStepSize(securityId, dataType, out iterationInterval);
 
 				if (step > TimeSpan.Zero)
 					return step;

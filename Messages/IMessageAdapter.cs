@@ -55,6 +55,13 @@ namespace StockSharp.Messages
 		IEnumerable<DataType> SupportedMarketDataTypes { get; }
 
 		/// <summary>
+		/// Get supported data types for the specified <see cref="SecurityId"/>.
+		/// </summary>
+		/// <param name="securityId"><see cref="SecurityId"/></param>
+		/// <returns>Supported data types.</returns>
+		IEnumerable<DataType> GetSupportedDataTypes(SecurityId securityId);
+
+		/// <summary>
 		/// Possible options for candles building.
 		/// </summary>
 		IEnumerable<Level1Fields> CandlesBuildFrom { get; }
@@ -221,10 +228,11 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Get maximum size step allowed for historical download.
 		/// </summary>
+		/// <param name="securityId"><see cref="SecurityId"/></param>
 		/// <param name="dataType">Data type info.</param>
 		/// <param name="iterationInterval">Interval between iterations.</param>
 		/// <returns>Step.</returns>
-		TimeSpan GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval);
+		TimeSpan GetHistoryStepSize(SecurityId securityId, DataType dataType, out TimeSpan iterationInterval);
 
 		/// <summary>
 		/// Get maximum possible items count per single subscription request.
