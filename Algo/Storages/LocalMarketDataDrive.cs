@@ -74,33 +74,40 @@ namespace StockSharp.Algo.Storages
 				{
 					var retVal = new CachedSynchronizedOrderedDictionary<DateTime, DateTime>();
 
-					if (File.Exists(_datesPath))
+					var save = false;
+					IEnumerable<DateTime> dates;
+
+					if (_drive.TryGetIndex(out var index))
 					{
-						foreach (var date in LoadDates())
-							retVal.Add(date, date);
+						dates = index.GetDates(_secId, _dataType, format);
+					}
+					else if (File.Exists(_datesPath))
+					{
+						dates = LoadDates();
 					}
 					else if (File.Exists(_datesPathObsoleteBin))
 					{
-						foreach (var date in LoadDatesObsoleteBin())
-							retVal.Add(date, date);
+						dates = LoadDatesObsoleteBin();
 					}
 					else if (File.Exists(_datesPathObsoleteTxt))
 					{
-						foreach (var date in LoadDatesObsoleteTxt())
-							retVal.Add(date, date);
+						dates = LoadDatesObsoleteTxt();
 					}
 					else
 					{
-						var dates = IOHelper
+						dates = IOHelper
 							.GetDirectories(_path)
 							.Where(dir => File.Exists(IOPath.Combine(dir, _fileNameWithExtension)))
 							.Select(dir => GetDate(IOPath.GetFileName(dir)));
 
-						foreach (var date in dates)
-							retVal.Add(date, date);
-
-						SaveDates(retVal.CachedValues);
+						save = true;
 					}
+
+					foreach (var date in dates)
+						retVal.Add(date, date);
+
+					if (save)
+						SaveDates(retVal.CachedValues);
 
 					return retVal;
 				}).Track();
@@ -109,10 +116,9 @@ namespace StockSharp.Algo.Storages
 			private readonly LocalMarketDataDrive _drive;
 			IMarketDataDrive IMarketDataStorageDrive.Drive => _drive;
 
-			public IEnumerable<DateTime> Dates => DatesDict.CachedValues;
+			IEnumerable<DateTime> IMarketDataStorageDrive.Dates => DatesDict.CachedValues;
 
 			private readonly Lazy<CachedSynchronizedOrderedDictionary<DateTime, DateTime>> _datesDict;
-
 			private CachedSynchronizedOrderedDictionary<DateTime, DateTime> DatesDict => _datesDict.Value;
 
 			public void ClearDatesCache()
@@ -836,15 +842,6 @@ namespace StockSharp.Algo.Storages
 			var s = GetSecurityPath(securityId);
 
 			return Directory.Exists(s) ? GetDataTypes(s) : Enumerable.Empty<DataType>();
-		}
-
-		/// <inheritdoc />
-		public override IEnumerable<DateTime> GetDates(SecurityId securityId, DataType dataType, StorageFormats format)
-		{
-			if (TryGetIndex(out var index))
-				return index.GetDates(securityId, dataType, format);
-
-			return GetStorageDrive(securityId, dataType, format).Dates;
 		}
 
 		/// <inheritdoc />

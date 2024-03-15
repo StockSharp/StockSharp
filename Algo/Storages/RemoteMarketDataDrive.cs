@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Storages
 				{
 					if (_prevDatesSync == default || (DateTime.Now - _prevDatesSync).TotalSeconds > 3)
 					{
-						_dates = _parent.GetDates(_securityId, _dataType, _format);
+						_dates = _parent.EnsureGetClient().GetDates(_securityId, _dataType, _format);
 
 						_prevDatesSync = DateTime.Now;
 					}
@@ -269,10 +269,6 @@ namespace StockSharp.Algo.Storages
 		/// <inheritdoc />
 		public override IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
 			=> EnsureGetClient().GetAvailableDataTypes(securityId, format);
-
-		/// <inheritdoc />
-		public override IEnumerable<DateTime> GetDates(SecurityId securityId, DataType dataType, StorageFormats format)
-			=> EnsureGetClient().GetDates(securityId, dataType, format);
 
 		/// <inheritdoc />
 		public override IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, DataType dataType, StorageFormats format)
