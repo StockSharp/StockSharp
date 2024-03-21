@@ -1,4 +1,8 @@
 {
+  "Model": {
+    "en": "Model",
+    "ru": "Модель"
+  },
   "IndexRebuildInterval": {
     "en": "Index rebuild interval.",
     "ru": "Интервал перестройки индекса."
@@ -3701,7 +3705,7 @@
   },
   "ExpiryDate": {
     "en": "Expiration date",
-    "ru": "Дата экспирация"
+    "ru": "Дата экспирации"
   },
   "ExpiryDateDesc": {
     "en": "Security expiration date (for derivatives - expiration, for bonds — redemption).",
