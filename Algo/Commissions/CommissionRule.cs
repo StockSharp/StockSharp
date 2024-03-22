@@ -403,7 +403,7 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <inheritdoc />
-		protected override string GetTitle() => _security?.To<string>();
+		protected override string GetTitle() => _securityId?.ToStringId();
 
 		/// <inheritdoc />
 		public override decimal? Process(ExecutionMessage message)
@@ -419,8 +419,8 @@ namespace StockSharp.Algo.Commissions
 		{
 			base.Save(storage);
 
-			if (Security != null)
-				storage.SetValue(nameof(Security), Security);
+			if (_securityId != null)
+				storage.SetValue(nameof(Security), _securityId.Value.ToStringId());
 		}
 
 		/// <inheritdoc />
@@ -428,7 +428,8 @@ namespace StockSharp.Algo.Commissions
 		{
 			base.Load(storage);
 
-			Security = storage.GetValue<Security>(nameof(Security));
+			if (storage.Contains(nameof(Security)) && ServicesRegistry.TrySecurityProvider is not null)
+				Security = ServicesRegistry.SecurityProvider.LookupByStringId(storage.GetValue<string>(nameof(Security)));
 		}
 	}
 
