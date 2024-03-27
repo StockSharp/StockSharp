@@ -276,6 +276,8 @@ namespace StockSharp.Messages
 			Order = 4)]
 		public string PaymentId { get; set; }
 
+		private BankDetails _bankDetails = new();
+
 		/// <summary>
 		/// Bank details.
 		/// </summary>
@@ -286,7 +288,13 @@ namespace StockSharp.Messages
 			Description = LocalizedStrings.BankDetailsKey,
 			GroupName = LocalizedStrings.BankKey,
 			Order = 50)]
-		public BankDetails BankDetails { get; set; }
+		public BankDetails BankDetails
+		{
+			get => _bankDetails;
+			set => _bankDetails = value ?? throw new ArgumentNullException(nameof(value));
+		}
+
+		private BankDetails _intermediaryBankDetails = new();
 
 		/// <summary>
 		/// Intermediary bank details.
@@ -298,7 +306,13 @@ namespace StockSharp.Messages
 			Description = LocalizedStrings.IntermediaryBankDetailsKey,
 			GroupName = LocalizedStrings.BankKey,
 			Order = 51)]
-		public BankDetails IntermediaryBankDetails { get; set; }
+		public BankDetails IntermediaryBankDetails
+		{
+			get => _intermediaryBankDetails;
+			set => _intermediaryBankDetails = value ?? throw new ArgumentNullException(nameof(value));
+		}
+
+		private BankDetails _companyDetails = new();
 
 		/// <summary>
 		/// Company details.
@@ -310,7 +324,11 @@ namespace StockSharp.Messages
 			Description = LocalizedStrings.CompanyDetailsKey,
 			GroupName = LocalizedStrings.BankKey,
 			Order = 7)]
-		public BankDetails CompanyDetails { get; set; }
+		public BankDetails CompanyDetails
+		{
+			get => _companyDetails;
+			set => _companyDetails = value ?? throw new ArgumentNullException(nameof(value));
+		}
 
 		/// <summary>
 		/// Bank card number.
@@ -345,9 +363,9 @@ namespace StockSharp.Messages
 			Type = storage.GetValue<WithdrawTypes>(nameof(Type));
 			Express = storage.GetValue<bool>(nameof(Express));
 			ChargeFee = storage.GetValue<decimal?>(nameof(ChargeFee));
-			BankDetails = storage.GetValue<SettingsStorage>(nameof(BankDetails))?.Load<BankDetails>();
-			IntermediaryBankDetails = storage.GetValue<SettingsStorage>(nameof(IntermediaryBankDetails))?.Load<BankDetails>();
-			CompanyDetails = storage.GetValue<SettingsStorage>(nameof(CompanyDetails))?.Load<BankDetails>();
+			BankDetails = storage.GetValue<BankDetails>(nameof(BankDetails));
+			IntermediaryBankDetails = storage.GetValue<BankDetails>(nameof(IntermediaryBankDetails));
+			CompanyDetails = storage.GetValue<BankDetails>(nameof(CompanyDetails));
 			CardNumber = storage.GetValue<string>(nameof(CardNumber));
 			PaymentId = storage.GetValue<string>(nameof(PaymentId));
 			CryptoAddress = storage.GetValue<string>(nameof(CryptoAddress));
@@ -363,9 +381,9 @@ namespace StockSharp.Messages
 			storage.SetValue(nameof(Type), Type);
 			storage.SetValue(nameof(Express), Express);
 			storage.SetValue(nameof(ChargeFee), ChargeFee);
-			storage.SetValue(nameof(BankDetails), BankDetails?.Save());
-			storage.SetValue(nameof(IntermediaryBankDetails), IntermediaryBankDetails?.Save());
-			storage.SetValue(nameof(CompanyDetails), CompanyDetails?.Save());
+			storage.SetValue(nameof(BankDetails), BankDetails.Save());
+			storage.SetValue(nameof(IntermediaryBankDetails), IntermediaryBankDetails.Save());
+			storage.SetValue(nameof(CompanyDetails), CompanyDetails.Save());
 			storage.SetValue(nameof(CardNumber), CardNumber);
 			storage.SetValue(nameof(PaymentId), PaymentId);
 			storage.SetValue(nameof(CryptoAddress), CryptoAddress);
