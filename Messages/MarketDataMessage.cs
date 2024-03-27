@@ -300,7 +300,7 @@ namespace StockSharp.Messages
 		/// Use only the regular trading hours for which data will be requested.
 		/// </summary>
 		[DataMember]
-		public bool IsRegularTradingHours { get; set; }
+		public bool IsRegularTradingHours { get; set; } = true;
 
 		/// <summary>
 		/// Request <see cref="CandleStates.Finished"/> only candles.

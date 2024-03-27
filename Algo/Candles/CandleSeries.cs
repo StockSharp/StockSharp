@@ -179,7 +179,7 @@ namespace StockSharp.Algo.Candles
 			Description = LocalizedStrings.RegularTradingHoursKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 6)]
-		public bool IsRegularTradingHours { get; set; }
+		public bool IsRegularTradingHours { get; set; } = true;
 
 		/// <summary>
 		/// Market-data count.
