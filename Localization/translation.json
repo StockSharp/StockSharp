@@ -1,4 +1,8 @@
 {
+  "HideZeroBalances": {
+    "en": "Hide zero balances",
+    "ru": "Скрывать нулевые балансы"
+  },
   "Navigator": {
     "en": "Navigator",
     "ru": "Навигатор"
