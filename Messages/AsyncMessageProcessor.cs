@@ -420,7 +420,9 @@ class AsyncMessageProcessor : Disposable
 		_isDisconnecting = true;
 
 		// token is already canceled in EnqueueMessage
-		await AsyncHelper.CatchHandle(() => WhenChildrenComplete(_adapter.DisconnectTimeout.CreateTimeoutToken()));
+		await AsyncHelper.CatchHandle(
+			() => WhenChildrenComplete(_adapter.DisconnectTimeout.CreateTimeoutToken()),
+			_globalCts.Token);
 
 		foreach (var (_, item) in _subscriptionItems.CopyAndClear())
 			item.Cts.Cancel();
@@ -442,7 +444,7 @@ class AsyncMessageProcessor : Disposable
 
 		var allComplete = true;
 
-		await Task.WhenAll(tasks.Select(t => t.Value.WithCancellation(token))).CatchHandle(finalizer: () =>
+		await Task.WhenAll(tasks.Select(t => t.Value.WithCancellation(token))).CatchHandle(token, finalizer: () =>
 		{
 			var incomplete = tasks.Where(t => !t.Value.IsCompleted).Select(t => t.Key.ToString()).ToArray();
 			if(incomplete.Any())
