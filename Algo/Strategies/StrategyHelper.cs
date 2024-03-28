@@ -854,7 +854,20 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// <see cref="Strategy.IsFormed"/> and <see cref="Strategy.TradingMode"/>.
+		/// <see cref="Strategy.IsFormed"/> and <see cref="Strategy.IsOnline"/>.
+		/// </summary>
+		/// <param name="strategy"><see cref="Strategy"/></param>
+		/// <returns>Check result.</returns>
+		public static bool IsFormedAndOnline(this Strategy strategy)
+		{
+			if (strategy is null)
+				throw new ArgumentNullException(nameof(strategy));
+
+			return strategy.IsFormed && strategy.IsOnline;
+		}
+
+		/// <summary>
+		/// <see cref="IsFormedAndOnline"/> and <see cref="Strategy.TradingMode"/>.
 		/// </summary>
 		/// <param name="strategy"><see cref="Strategy"/></param>
 		/// <param name="required">Required action.</param>
@@ -864,7 +877,7 @@ namespace StockSharp.Algo.Strategies
 			if (strategy is null)
 				throw new ArgumentNullException(nameof(strategy));
 
-			if (!strategy.IsFormed || !strategy.IsOnline || strategy.TradingMode == StrategyTradingModes.Disabled)
+			if (!strategy.IsFormedAndOnline() || strategy.TradingMode == StrategyTradingModes.Disabled)
 				return false;
 
 			return required switch
