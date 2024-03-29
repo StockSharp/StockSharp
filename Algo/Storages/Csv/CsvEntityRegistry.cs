@@ -778,7 +778,7 @@ namespace StockSharp.Algo.Storages.Csv
 					DataType2 = reader.ReadString().ToDataType(reader.ReadString()),
 					IsCalcVolumeProfile = reader.ReadBool(),
 					AllowBuildFromSmallerTimeFrame = reader.ReadBool(),
-					IsRegularTradingHours = reader.ReadBool(),
+					IsRegularTradingHours = reader.ReadNullableBool(),
 
 					MaxDepth = reader.ReadNullableInt(),
 					NewsId = reader.ReadString(),

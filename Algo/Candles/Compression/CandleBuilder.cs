@@ -75,14 +75,14 @@ namespace StockSharp.Algo.Candles.Compression
 			if (subscription is null)
 				throw new ArgumentNullException(nameof(subscription));
 
-			var board = subscription.Message.IsRegularTradingHours ? ExchangeInfoProvider.GetOrCreateBoard(subscription.Message.SecurityId.BoardCode) : ExchangeBoard.Associated;
+			var board = subscription.Message.IsRegularTradingHours == true ? ExchangeInfoProvider.GetOrCreateBoard(subscription.Message.SecurityId.BoardCode) : ExchangeBoard.Associated;
 
 			return (board.TimeZone, board.WorkingTime);
 		}
 
 		private bool IsTimeValid(MarketDataMessage message, DateTimeOffset time)
 		{
-			if (!message.IsRegularTradingHours)
+			if (message.IsRegularTradingHours != true)
 				return true;
 
 			var board = ExchangeInfoProvider.TryGetExchangeBoard(message.SecurityId.BoardCode);

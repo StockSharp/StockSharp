@@ -300,7 +300,7 @@ namespace StockSharp.Messages
 		/// Use only the regular trading hours for which data will be requested.
 		/// </summary>
 		[DataMember]
-		public bool IsRegularTradingHours { get; set; } = true;
+		public bool? IsRegularTradingHours { get; set; }
 
 		/// <summary>
 		/// Request <see cref="CandleStates.Finished"/> only candles.
@@ -429,8 +429,8 @@ namespace StockSharp.Messages
 			if (AllowBuildFromSmallerTimeFrame)
 				str += $",SmallTF={AllowBuildFromSmallerTimeFrame}";
 
-			if (IsRegularTradingHours)
-				str += $",RTH={IsRegularTradingHours}";
+			if (IsRegularTradingHours is bool rth)
+				str += $",RTH={rth}";
 
 			if (IsFinishedOnly)
 				str += $",FinOnly={IsFinishedOnly}";
