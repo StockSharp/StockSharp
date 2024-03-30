@@ -1,4 +1,12 @@
 {
+  "Stub": {
+    "en": "Stub",
+    "ru": "Заглушка"
+  },
+  "StubIndicator": {
+    "en": "Indicator without logic. Used to draw lines.",
+    "ru": "Индикатор без логики. Используется для отрисовки линий."
+  },
   "HideZeroBalances": {
     "en": "Hide zero balances",
     "ru": "Скрывать нулевые балансы"
