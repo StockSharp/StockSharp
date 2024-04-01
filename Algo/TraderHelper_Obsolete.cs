@@ -904,15 +904,15 @@ namespace StockSharp.Algo
 		/// <param name="maxDepth">Max depth of requested order book.</param>
 		/// <param name="refreshSpeed">Interval for data refresh.</param>
 		/// <param name="depthBuilder">Order log to market depth builder.</param>
-		/// <param name="passThroughOrderBookInrement">Pass through incremental <see cref="QuoteChangeMessage"/>.</param>
+		/// <param name="passThroughOrderBookIncrement">Pass through incremental <see cref="QuoteChangeMessage"/>.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		/// <param name="skip">Skip count.</param>
 		/// <param name="fillGaps"><see cref="FillGapsDays"/></param>
 		/// <returns>Subscription.</returns>
 		//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
-		public static Subscription SubscribeMarketDepth(this ISubscriptionProvider provider, Security security, DateTimeOffset? from = default, DateTimeOffset? to = default, long? count = default, MarketDataBuildModes buildMode = default, DataType buildFrom = default, int? maxDepth = default, TimeSpan? refreshSpeed = default, IOrderLogMarketDepthBuilder depthBuilder = default, bool passThroughOrderBookInrement = default, IMessageAdapter adapter = default, long? skip = default, FillGapsDays? fillGaps = default)
+		public static Subscription SubscribeMarketDepth(this ISubscriptionProvider provider, Security security, DateTimeOffset? from = default, DateTimeOffset? to = default, long? count = default, MarketDataBuildModes buildMode = default, DataType buildFrom = default, int? maxDepth = default, TimeSpan? refreshSpeed = default, IOrderLogMarketDepthBuilder depthBuilder = default, bool passThroughOrderBookIncrement = default, IMessageAdapter adapter = default, long? skip = default, FillGapsDays? fillGaps = default)
 		{
-			return provider.SubscribeMarketData(security, DataType.MarketDepth, from, to, count, buildMode, buildFrom, null, maxDepth, refreshSpeed, depthBuilder, passThroughOrderBookInrement, adapter, skip: skip, fillGaps: fillGaps);
+			return provider.SubscribeMarketData(security, DataType.MarketDepth, from, to, count, buildMode, buildFrom, null, maxDepth, refreshSpeed, depthBuilder, passThroughOrderBookIncrement, adapter, skip: skip, fillGaps: fillGaps);
 		}
 
 		/// <summary>
@@ -1121,7 +1121,8 @@ namespace StockSharp.Algo
 			long? count = default, MarketDataBuildModes buildMode = default,
 			DataType buildFrom = default, Level1Fields? buildField = default,
 			int? maxDepth = default, TimeSpan? refreshSpeed = default,
-			IOrderLogMarketDepthBuilder depthBuilder = default, bool doNotBuildOrderBookInrement = default,
+			IOrderLogMarketDepthBuilder depthBuilder = default,
+			bool doNotBuildOrderBookIncrement = default,
 			IMessageAdapter adapter = default, long? skip = default,
 			FillGapsDays? fillGaps = default)
 		{
@@ -1138,7 +1139,7 @@ namespace StockSharp.Algo
 				MaxDepth = maxDepth,
 				RefreshSpeed = refreshSpeed,
 				DepthBuilder = depthBuilder,
-				DoNotBuildOrderBookInrement = doNotBuildOrderBookInrement,
+				DoNotBuildOrderBookIncrement = doNotBuildOrderBookIncrement,
 				Adapter = adapter,
 				Skip = skip,
 				FillGaps = fillGaps,

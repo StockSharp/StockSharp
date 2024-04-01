@@ -63,7 +63,7 @@
 
 					if (mdMsg.IsSubscribe)
 					{
-						if (mdMsg.SecurityId == default || mdMsg.DoNotBuildOrderBookInrement || mdMsg.To != null)
+						if (mdMsg.SecurityId == default || mdMsg.DoNotBuildOrderBookIncrement || mdMsg.To != null)
 							break;
 
 						if (mdMsg.DataType2 != DataType.MarketDepth && mdMsg.DataType2 != DataType.Level1)

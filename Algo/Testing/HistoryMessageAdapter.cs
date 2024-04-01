@@ -475,7 +475,7 @@ namespace StockSharp.Algo.Testing
 						var historySource = GetHistorySource();
 
 						AddStorage(historySource == null
-							? StorageRegistry.GetQuoteMessageStorage(securityId, Drive, StorageFormat, message.DoNotBuildOrderBookInrement)
+							? StorageRegistry.GetQuoteMessageStorage(securityId, Drive, StorageFormat, message.DoNotBuildOrderBookIncrement)
 							: new InMemoryMarketDataStorage<QuoteChangeMessage>(securityId, null, historySource),
 							transId);
 					}

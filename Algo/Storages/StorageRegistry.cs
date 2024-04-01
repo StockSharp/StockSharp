@@ -164,7 +164,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public IMarketDataStorage<QuoteChangeMessage> GetQuoteMessageStorage(SecurityId securityId, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary, bool passThroughOrderBookInrement = false)
+		public IMarketDataStorage<QuoteChangeMessage> GetQuoteMessageStorage(SecurityId securityId, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary, bool passThroughOrderBookIncrement = false)
 		{
 			if (securityId == default)
 				throw new ArgumentNullException(nameof(securityId));
@@ -173,7 +173,7 @@ namespace StockSharp.Algo.Storages
 			{
 				IMarketDataSerializer<QuoteChangeMessage> serializer = format switch
 				{
-					StorageFormats.Binary => new QuoteBinarySerializer(key.Item1, ExchangeInfoProvider) { PassThroughOrderBookInrement = passThroughOrderBookInrement },
+					StorageFormats.Binary => new QuoteBinarySerializer(key.Item1, ExchangeInfoProvider) { PassThroughOrderBookIncrement = passThroughOrderBookIncrement },
 					StorageFormats.Csv => new MarketDepthCsvSerializer(key.Item1),
 					_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue),
 				};

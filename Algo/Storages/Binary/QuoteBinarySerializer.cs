@@ -143,7 +143,7 @@ namespace StockSharp.Algo.Storages.Binary
 		/// <summary>
 		/// Pass through incremental <see cref="QuoteChangeMessage"/>.
 		/// </summary>
-		public bool PassThroughOrderBookInrement { get; set; }
+		public bool PassThroughOrderBookIncrement { get; set; }
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<QuoteChangeMessage> messages, QuoteMetaInfo metaInfo)
 		{
@@ -361,7 +361,7 @@ namespace StockSharp.Algo.Storages.Binary
 					diff.Asks = diff.Asks.OrderBy(q => q.Price).ToArray();
 				}
 
-				if (PassThroughOrderBookInrement)
+				if (PassThroughOrderBookIncrement)
 				{
 					quoteMsg = diff;
 					quoteMsg.State = isFull ? QuoteChangeStates.SnapshotComplete : QuoteChangeStates.Increment;

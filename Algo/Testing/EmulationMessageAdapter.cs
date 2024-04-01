@@ -184,7 +184,7 @@ namespace StockSharp.Algo.Testing
 				{
 					// MarketEmulator works faster with order book increments
 					if (message is MarketDataMessage mdMsg && mdMsg.IsSubscribe)
-						mdMsg.DoNotBuildOrderBookInrement = true;
+						mdMsg.DoNotBuildOrderBookIncrement = true;
 
 					_subscriptionIds.Add(((ISubscriptionMessage)message).TransactionId);
 

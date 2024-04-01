@@ -45,7 +45,7 @@
 							if (mdMsg.SecurityId == default)
 								break;
 
-							if (mdMsg.DoNotBuildOrderBookInrement)
+							if (mdMsg.DoNotBuildOrderBookIncrement)
 								break;
 
 							if (mdMsg.MaxDepth != null)

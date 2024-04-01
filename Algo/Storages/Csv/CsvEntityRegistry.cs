@@ -754,7 +754,7 @@ namespace StockSharp.Algo.Storages.Csv
 					buildFromTuples?.type,
 					buildFromTuples?.arg,
 					data.Skip.To<string>(),
-					data.DoNotBuildOrderBookInrement.To<string>(),
+					data.DoNotBuildOrderBookIncrement.To<string>(),
 					data.Fields?.Select(f => ((int)f).To<string>()).JoinComma(),
 					data.FillGaps.To<string>(),
 				});
@@ -811,7 +811,7 @@ namespace StockSharp.Algo.Storages.Csv
 					message.Skip = reader.ReadNullableLong();
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					message.DoNotBuildOrderBookInrement = reader.ReadBool();
+					message.DoNotBuildOrderBookIncrement = reader.ReadBool();
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				{

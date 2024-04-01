@@ -40,9 +40,9 @@ namespace StockSharp.Algo.Storages
 		/// <param name="securityId">Security ID.</param>
 		/// <param name="drive">The storage.</param>
 		/// <param name="format">The format type.</param>
-		/// <param name="passThroughOrderBookInrement">Pass through incremental <see cref="QuoteChangeMessage"/>.</param>
+		/// <param name="passThroughOrderBookIncrement">Pass through incremental <see cref="QuoteChangeMessage"/>.</param>
 		/// <returns>The order books storage.</returns>
-		IMarketDataStorage<QuoteChangeMessage> GetQuoteMessageStorage(SecurityId securityId, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary, bool passThroughOrderBookInrement = false);
+		IMarketDataStorage<QuoteChangeMessage> GetQuoteMessageStorage(SecurityId securityId, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary, bool passThroughOrderBookIncrement = false);
 
 		/// <summary>
 		/// To get the storage of orders log for the specified instrument.

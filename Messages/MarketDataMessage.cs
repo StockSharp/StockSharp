@@ -333,7 +333,7 @@ namespace StockSharp.Messages
 		/// Pass through incremental <see cref="QuoteChangeMessage"/>.
 		/// </summary>
 		[DataMember]
-		public bool DoNotBuildOrderBookInrement { get; set; }
+		public bool DoNotBuildOrderBookIncrement { get; set; }
 
 		bool ISubscriptionMessage.FilterEnabled => false;
 
@@ -393,7 +393,7 @@ namespace StockSharp.Messages
 			destination.RefreshSpeed = RefreshSpeed;
 			destination.DepthBuilder = DepthBuilder;
 			destination.FillGaps = FillGaps;
-			destination.DoNotBuildOrderBookInrement = DoNotBuildOrderBookInrement;
+			destination.DoNotBuildOrderBookIncrement = DoNotBuildOrderBookIncrement;
 			destination.Fields = Fields?.ToArray();
 		}
 
@@ -447,8 +447,8 @@ namespace StockSharp.Messages
 			if (FillGaps is not null)
 				str += $",gaps={FillGaps}";
 
-			if (DoNotBuildOrderBookInrement)
-				str += $",NotBuildInc={DoNotBuildOrderBookInrement}";
+			if (DoNotBuildOrderBookIncrement)
+				str += $",NotBuildInc={DoNotBuildOrderBookIncrement}";
 
 			if (Fields is not null)
 				str += $",Fields={Fields.Select(f => f.GetDisplayName()).JoinCommaSpace()}";

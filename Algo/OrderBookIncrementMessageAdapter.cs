@@ -73,7 +73,7 @@
 							{
 								if (mdMsg.SecurityId == default)
 								{
-									if (mdMsg.DoNotBuildOrderBookInrement)
+									if (mdMsg.DoNotBuildOrderBookIncrement)
 										_allSecSubscriptionsPassThrough.Add(transId);
 									else
 										_allSecSubscriptions.Add(transId);
@@ -81,7 +81,7 @@
 									break;
 								}
 
-								if (mdMsg.DoNotBuildOrderBookInrement)
+								if (mdMsg.DoNotBuildOrderBookIncrement)
 								{
 									_passThrough.Add(transId);
 									break;

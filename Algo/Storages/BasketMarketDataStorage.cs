@@ -112,7 +112,7 @@ namespace StockSharp.Algo.Storages
 							var loaded = storage.Load(_date);
 
 							// built books slower for emulation, so this case is not real one
-							//if (!_storage.PassThroughOrderBookInrement && loaded is IEnumerable<QuoteChangeMessage> quotes)
+							//if (!_storage.PassThroughOrderBookIncrement && loaded is IEnumerable<QuoteChangeMessage> quotes)
 							//{
 							//	loaded = quotes.BuildIfNeed();
 							//}
