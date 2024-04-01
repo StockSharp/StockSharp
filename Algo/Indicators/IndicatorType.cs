@@ -6,6 +6,8 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
+	using StockSharp.Localization;
+
 	/// <summary>
 	/// The indicator type description.
 	/// </summary>
@@ -28,6 +30,12 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		public string Description { get; private set; }
 
+		private void RefreshNameDesc(Type indicator)
+		{
+			Name = indicator.GetDisplayName();
+			Description = indicator.GetDescription();
+		}
+
 		/// <summary>
 		/// Indicator type.
 		/// </summary>
@@ -41,14 +49,13 @@ namespace StockSharp.Algo.Indicators
 
 				_indicator = value ?? throw new ArgumentNullException(nameof(value));
 
-				Name = _indicator?.GetDisplayName() ?? string.Empty;
-				Description = _indicator?.GetDescription() ?? string.Empty;
-				IsObsolete = _indicator?.IsObsolete() ?? false;
-				DocUrl = _indicator?.GetDocUrl() ?? string.Empty;
-				IsComplex = _indicator?.Is<IComplexIndicator>() ?? false;
+				RefreshNameDesc(value);
+				IsObsolete = value.IsObsolete();
+				DocUrl = value.GetDocUrl() ?? string.Empty;
+				IsComplex = value.Is<IComplexIndicator>();
 
-				InputValue = _indicator?.GetValueType(true);
-				OutputValue = _indicator?.GetValueType(false);
+				InputValue = value.GetValueType(true);
+				OutputValue = value.GetValueType(false);
 
 				IndicatorChanged?.Invoke();
 			}
@@ -92,7 +99,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IndicatorType"/>.
 		/// </summary>
-		public IndicatorType()
+		protected IndicatorType()
 		{
 		}
 
@@ -105,6 +112,14 @@ namespace StockSharp.Algo.Indicators
 		{
 			Indicator = indicator;
 			Painter = painter;
+
+			LocalizedStrings.ActiveLanguageChanged += OnActiveLanguageChanged;
+		}
+
+		private void OnActiveLanguageChanged()
+		{
+			if (Indicator is Type t)
+				RefreshNameDesc(t);
 		}
 
 		/// <summary>
