@@ -11860,12 +11860,12 @@
     "ru": "Зашифрована"
   },
   "LoadCompositionWrongPasswordError": {
-    "en": "Error while loading scheme. Verify the specified password.",
-    "ru": "Ошибка загрузки схемы. Проверьте правильность указанного пароля."
+    "en": "Error while loading content. Verify the specified password.",
+    "ru": "Ошибка загрузки контента. Проверьте правильность указанного пароля."
   },
   "LoadCompositionError": {
-    "en": "Error while loading scheme. Possibly file is corrupted, has an incorrect format or cannot be read.",
-    "ru": "Ошибка загрузки схемы. Возможно Файл поврежден, имеет неверный формат или не может быть прочитан."
+    "en": "Error while loading сontent. Possibly file is corrupted, has an incorrect format or cannot be read.",
+    "ru": "Ошибка загрузки контента. Возможно Файл поврежден, имеет неверный формат или не может быть прочитан."
   },
   "StorageHasNoDataParams": {
     "en": "Selected storage does not contains market data for {0} {1} {2} from {3} till {4}.",
