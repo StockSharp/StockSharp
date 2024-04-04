@@ -44,7 +44,7 @@
 					if (strategy is null)
 						continue;
 
-					AddStrategy(strategy.Name, strategy);
+					AddStrategy(strategy);
 				}
 				catch (Exception ex)
 				{
@@ -94,39 +94,35 @@
 			//		.Apply(quoting);
 			//}
 
-			AddStrategy($"Quoting {quoting.Security} {quoting.QuotingDirection} Vol={quoting.QuotingVolume}", quoting);
+			AddStrategy(quoting);
 
 			SaveStrategy(quoting);
 		}
 
-		private void AddStrategy(string name, Strategy strategy)
+		private void AddStrategy(Strategy strategy)
 		{
 			strategy.Connector = MainWindow.Instance.Connector;
 			strategy.DisposeOnStop = false;
 
-			Dashboard.Items.Add(new StrategiesDashboardItem(name, strategy, null));
+			Dashboard.Items.Add(new StrategiesDashboardItem(strategy)
+			{
+				SettingsCommand = new DelegateCommand(_ =>
+				{
+					var wnd = new StrategyEditWindow
+					{
+						Strategy = strategy.TypedClone(),
+					};
+
+					if (!wnd.ShowModal(this))
+						return;
+
+					var id = strategy.Id;
+					strategy.Apply(wnd.Strategy);
+					strategy.Id = id;
+					SaveStrategy(strategy);
+				}, _ => strategy.ProcessState == ProcessStates.Stopped)
+			});
 			MainWindow.Instance.LogManager.Sources.Add(strategy);
-		}
-
-		private bool Dashboard_OnCanExecuteStart(StrategiesDashboardItem item)
-		{
-			return item.Strategy?.ProcessState == ProcessStates.Stopped;
-		}
-
-		private bool Dashboard_OnCanExecuteStop(StrategiesDashboardItem item)
-		{
-			return item.Strategy?.ProcessState == ProcessStates.Started;
-		}
-
-		private void Dashboard_OnExecuteStart(StrategiesDashboardItem item)
-		{
-			SaveStrategy(item.Strategy);
-			item.Strategy.Start();
-		}
-
-		private void Dashboard_OnExecuteStop(StrategiesDashboardItem item)
-		{
-			item.Strategy.Stop();
 		}
 
 		private void SaveStrategy(Strategy strategy)
@@ -135,27 +131,6 @@
 				throw new ArgumentNullException(nameof(strategy));
 
 			strategy.SaveEntire(false).Serialize(Path.Combine(_dir, $"{strategy.Id}{Paths.DefaultSettingsExt}"));
-		}
-
-		private bool Dashboard_OnCanExecuteSettings(StrategiesDashboardItem item)
-		{
-			return item.Strategy.ProcessState == ProcessStates.Stopped;
-		}
-
-		private void Dashboard_OnExecuteSettings(StrategiesDashboardItem item)
-		{
-			var wnd = new StrategyEditWindow
-			{
-				Strategy = item.Strategy.TypedClone(),
-			};
-
-			if (!wnd.ShowModal(this))
-				return;
-
-			var id = item.Strategy.Id;
-			item.Strategy.Apply(wnd.Strategy);
-			item.Strategy.Id = id;
-			SaveStrategy(item.Strategy);
 		}
 	}
 }

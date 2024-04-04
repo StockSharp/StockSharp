@@ -11,13 +11,7 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		<xaml:StrategiesDashboard x:Name="Dashboard" Grid.Row="0"
-								  CanExecuteStart="Dashboard_OnCanExecuteStart"
-								  CanExecuteStop="Dashboard_OnCanExecuteStop"
-								  ExecuteStart="Dashboard_OnExecuteStart"
-								  ExecuteStop="Dashboard_OnExecuteStop"
-								  CanExecuteSettings="Dashboard_OnCanExecuteSettings"
-								  ExecuteSettings="Dashboard_OnExecuteSettings"/>
+		<xaml:StrategiesDashboard x:Name="Dashboard" Grid.Row="0" />
 
 		<StackPanel Grid.Row="2" Orientation="Horizontal">
 			<Button x:Name="Quoting" Width="100" Click="QuotingClick">
