@@ -55,7 +55,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Check can optimize parameter.
 		/// </summary>
-		bool CanOptimize { get; }
+		bool CanOptimize { get; set; }
 
 		/// <summary>
 		/// The From value at optimization.
