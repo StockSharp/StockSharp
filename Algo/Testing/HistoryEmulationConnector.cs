@@ -257,6 +257,24 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public bool StopOnSubscriptionError { get; set; }
 
+		private InMemoryMessageChannel InMemChannel
+			=> (Adapter.InnerAdapters.FirstOrDefault() as EmulationMessageAdapter)?.InChannel as InMemoryMessageChannel;
+
+		/// <summary>
+		/// <see cref="InMemoryMessageChannel.MaxMessageCount"/>
+		/// </summary>
+		public int MaxMessageCount
+		{
+			get => InMemChannel?.MaxMessageCount ?? -1;
+			set
+			{
+				var channel = InMemChannel;
+
+				if (channel is not null)
+					channel.MaxMessageCount = value;
+			}
+		}
+
 		/// <inheritdoc/>
 		protected override void RaiseSubscriptionFailed(Subscription subscription, Exception error, bool isSubscribe)
 		{

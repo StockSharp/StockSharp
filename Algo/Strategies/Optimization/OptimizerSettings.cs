@@ -8,6 +8,7 @@ using Ecng.Serialization;
 
 using StockSharp.Algo.Testing;
 using StockSharp.Localization;
+using StockSharp.Messages;
 
 /// <summary>
 /// Optimizer settings.
@@ -96,8 +97,19 @@ public class OptimizerSettings : MarketEmulatorSettings
 		}
 	}
 
-	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	/// <summary>
+	/// <see cref="InMemoryMessageChannel.MaxMessageCount"/>
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.MaxMessagesKey,
+		Description = LocalizedStrings.MaxMessagesDescKey,
+		GroupName = LocalizedStrings.OptimizationKey,
+		Order = 202)]
+	public int MaxMessageCount { get; set; } = -1;
+
+    /// <inheritdoc />
+    public override void Save(SettingsStorage storage)
 	{
 		base.Save(storage);
 
@@ -108,6 +120,7 @@ public class OptimizerSettings : MarketEmulatorSettings
 #pragma warning restore CS0618 // Type or member is obsolete
 			.Set(nameof(BatchSize), BatchSize)
 			.Set(nameof(MaxIterations), MaxIterations)
+			.Set(nameof(MaxMessageCount), MaxMessageCount)
 		;
 	}
 
@@ -122,5 +135,6 @@ public class OptimizerSettings : MarketEmulatorSettings
 #pragma warning restore CS0618 // Type or member is obsolete
 		BatchSize = storage.GetValue(nameof(BatchSize), BatchSize);
 		MaxIterations = storage.GetValue(nameof(MaxIterations), MaxIterations);
+		MaxMessageCount = storage.GetValue(nameof(MaxMessageCount), MaxMessageCount);
 	}
 }

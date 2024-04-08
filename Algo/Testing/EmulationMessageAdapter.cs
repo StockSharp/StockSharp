@@ -120,6 +120,8 @@ namespace StockSharp.Algo.Testing
 		/// <inheritdoc />
 		protected override bool OnSendInMessage(Message message)
 		{
+			message.Forced = true;
+
 			switch (message.Type)
 			{
 				case MessageTypes.OrderRegister:

@@ -57,7 +57,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public override void Enqueue(Message message) => Enqueue(message.LocalTime.UtcTicks, message);
+		public override void Enqueue(Message message) => Enqueue((message.LocalTime.UtcTicks, message), message.Forced);
 	}
 
 	/// <summary>

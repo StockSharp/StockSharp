@@ -1,4 +1,12 @@
 {
+  "MaxMessages": {
+    "en": "Max messages",
+    "ru": "Макс сообщений"
+  },
+  "MaxMessagesDesc": {
+    "en": "Max messages count in handling queue.",
+    "ru": "Максимальное кол-во сообщений в очереди обработки."
+  },
   "Stub": {
     "en": "Stub",
     "ru": "Заглушка"

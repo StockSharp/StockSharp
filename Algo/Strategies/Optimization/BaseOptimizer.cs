@@ -394,6 +394,8 @@ public abstract class BaseOptimizer : BaseLogReceiver
 					AdapterCache = adapterCache,
 					StorageCache = storageCache,
 				},
+
+				MaxMessageCount = EmulationSettings.MaxMessageCount,
 			};
 
 			_startedConnectors.Add(connector);

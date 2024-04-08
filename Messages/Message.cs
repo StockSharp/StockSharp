@@ -114,6 +114,12 @@ namespace StockSharp.Messages
 		public IMessageAdapter Adapter { get; set; }
 
 		/// <summary>
+		/// <see cref="IMessageChannel.SendInMessage"/>
+		/// </summary>
+		[XmlIgnore]
+		public bool Forced { get; set; }
+
+		/// <summary>
 		/// Initialize <see cref="Message"/>.
 		/// </summary>
 		/// <param name="type">Message type.</param>
@@ -159,6 +165,7 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(destination));
 
 			destination.LocalTime = LocalTime;
+			destination.Forced = Forced;
 #if MSG_TRACE
 			destination.StackTrace = StackTrace;
 #endif
