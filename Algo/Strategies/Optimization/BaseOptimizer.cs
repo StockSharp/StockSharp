@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Ecng.Collections;
 using Ecng.Common;
@@ -467,6 +468,18 @@ public abstract class BaseOptimizer : BaseLogReceiver
 
 		StrategyInitialized?.Invoke(strategy, parameters);
 		ConnectorInitialized?.Invoke(connector);
+
+		if (StopOnSubscriptionError)
+		{
+			strategy.ProcessStateChanged += (s) =>
+			{
+				if (s == strategy && s.ProcessState == ProcessStates.Started && !((ISubscriptionProvider)s).Subscriptions.Any(s => s.DataType.IsMarketData))
+				{
+					s.AddErrorLog("No any market data subscription.");
+					connector.Disconnect();
+				}
+			};
+		}
 
 		strategy.Start();
 
