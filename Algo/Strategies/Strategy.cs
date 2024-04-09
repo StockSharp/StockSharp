@@ -409,19 +409,19 @@ namespace StockSharp.Algo.Strategies
 			_id = this.Param(nameof(Id), base.Id);
 			_volume = this.Param<decimal>(nameof(Volume), 1).SetValidator(v => v > 0);
 			_name = this.Param(nameof(Name), new string(GetType().Name.Where(char.IsUpper).ToArray()));
-			_disposeOnStop = this.Param(nameof(DisposeOnStop), false);
-			_waitRulesOnStop = this.Param(nameof(WaitRulesOnStop), true);
-			_cancelOrdersWhenStopping = this.Param(nameof(CancelOrdersWhenStopping), true);
-			_waitAllTrades = this.Param<bool>(nameof(WaitAllTrades));
+			_disposeOnStop = this.Param(nameof(DisposeOnStop), false).CanOptimize(false);
+			_waitRulesOnStop = this.Param(nameof(WaitRulesOnStop), true).CanOptimize(false);
+			_cancelOrdersWhenStopping = this.Param(nameof(CancelOrdersWhenStopping), true).CanOptimize(false);
+			_waitAllTrades = this.Param<bool>(nameof(WaitAllTrades)).CanOptimize(false);
 			_commentMode = this.Param<StrategyCommentModes>(nameof(CommentMode));
 			_ordersKeepTime = this.Param(nameof(OrdersKeepTime), TimeSpan.FromDays(1)).SetValidator(v => v >= TimeSpan.Zero);
 			_logLevel = this.Param(nameof(LogLevel), LogLevels.Inherit);
-			_stopOnChildStrategyErrors = this.Param(nameof(StopOnChildStrategyErrors), false);
-			_restoreChildOrders = this.Param(nameof(RestoreChildOrders), false);
+			_stopOnChildStrategyErrors = this.Param(nameof(StopOnChildStrategyErrors), false).CanOptimize(false);
+			_restoreChildOrders = this.Param(nameof(RestoreChildOrders), false).CanOptimize(false);
 			_tradingMode = this.Param(nameof(TradingMode), StrategyTradingModes.Full);
-			_unsubscribeOnStop = this.Param(nameof(UnsubscribeOnStop), true);
+			_unsubscribeOnStop = this.Param(nameof(UnsubscribeOnStop), true).CanOptimize(false);
 			_workingTime = this.Param(nameof(WorkingTime), new WorkingTime()).NotNull();
-			_isOnlineStateIncludesChildren = this.Param(nameof(IsOnlineStateIncludesChildren), true);
+			_isOnlineStateIncludesChildren = this.Param(nameof(IsOnlineStateIncludesChildren), true).CanOptimize(false);
 			_historySize = this.Param<TimeSpan?>(nameof(HistorySize)).SetValidator(v => v is null || v >= TimeSpan.Zero);
 
 			_systemParams = new IStrategyParam[]

@@ -70,6 +70,23 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
+		/// Set <see cref="StrategyParam{T}.CanOptimize"/> value.
+		/// </summary>
+		/// <typeparam name="T">The type of the parameter value.</typeparam>
+		/// <param name="param">The strategy parameter.</param>
+		/// <param name="canOptimize">The value of <see cref="StrategyParam{T}.CanOptimize"/>.</param>
+		/// <returns>The strategy parameter.</returns>
+		public static StrategyParam<T> CanOptimize<T>(this StrategyParam<T> param, bool canOptimize)
+		{
+			if (param == null)
+				throw new ArgumentNullException(nameof(param));
+
+			param.CanOptimize = canOptimize;
+
+			return param;
+		}
+
+		/// <summary>
 		/// Check can optimize parameter.
 		/// </summary>
 		/// <param name="type">The type of the parameter value.</param>
@@ -82,7 +99,7 @@ namespace StockSharp.Algo.Strategies
 			if (type.IsNullable())
 				type = type.GetUnderlyingType();
 
-			return type.IsNumeric() && !type.IsEnum() || type == typeof(Unit) || type == typeof(TimeSpan);
+			return type.IsNumeric() && !type.IsEnum() || type == typeof(bool) || type == typeof(Unit) || type == typeof(TimeSpan);
 		}
 
 		/// <summary>
