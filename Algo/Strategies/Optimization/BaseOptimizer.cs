@@ -40,6 +40,37 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			=> _cache.Enqueue(cache ?? throw new ArgumentNullException(nameof(cache)));
 	}
 
+	private class CopyPortfolioProvider : IPortfolioProvider
+	{
+		private readonly IPortfolioProvider _provider;
+		private readonly SynchronizedDictionary<string, Portfolio> _copies = new(StringComparer.InvariantCultureIgnoreCase);
+
+		public CopyPortfolioProvider(IPortfolioProvider provider)
+		{
+			_provider = provider ?? throw new ArgumentNullException(nameof(provider));
+
+			_provider.NewPortfolio += OnNewPortfolio;
+			_provider.PortfolioChanged += OnPortfolioChanged;
+		}
+
+		private void OnNewPortfolio(Portfolio portfolio)
+			=> NewPortfolio?.Invoke(GetCopy(portfolio));
+
+		private void OnPortfolioChanged(Portfolio portfolio)
+			=> PortfolioChanged?.Invoke(GetCopy(portfolio));
+
+		private Portfolio GetCopy(Portfolio portfolio)
+			=> LookupByPortfolioName(portfolio.CheckOnNull(nameof(portfolio)).Name);
+
+		public Portfolio LookupByPortfolioName(string name)
+			=> _copies.SafeAdd(name, key => (Portfolio)_provider.LookupByPortfolioName(key)?.Clone() ?? new Portfolio { Name = name });
+
+		public IEnumerable<Portfolio> Portfolios => _provider.Portfolios.Select(GetCopy);
+
+		public event Action<Portfolio> NewPortfolio;
+		public event Action<Portfolio> PortfolioChanged;
+	}
+
 	private readonly HashSet<HistoryEmulationConnector> _startedConnectors = new();
 	private bool _cancelEmulation;
 	private bool _finished;
@@ -332,7 +363,8 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	/// <param name="adapterCache"><see cref="HistoryMessageAdapter.AdapterCache"/></param>
 	/// <param name="storageCache"><see cref="HistoryMessageAdapter.StorageCache"/></param>
 	/// <param name="iterationFinished">Callback to notify the iteration was finished.</param>
-	protected internal void TryNextRun(DateTime startTime, DateTime stopTime, Func<(Strategy strategy, IStrategyParam[] parameters)?> tryGetNext,
+	protected internal void TryNextRun(DateTime startTime, DateTime stopTime,
+		Func<IPortfolioProvider, (Strategy strategy, IStrategyParam[] parameters)?> tryGetNext,
 		MarketDataStorageCache adapterCache, MarketDataStorageCache storageCache,
 		Action iterationFinished)
 	{
@@ -351,9 +383,11 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			if (State == ChannelStates.Suspending || State == ChannelStates.Suspended)
 				return;
 
+			var pfProvider = new CopyPortfolioProvider(PortfolioProvider);
+
 			(Strategy strategy, IStrategyParam[] parameters)? t;
 
-			if (_cancelEmulation || (t = tryGetNext()) is null)
+			if (_cancelEmulation || (t = tryGetNext(pfProvider)) is null)
 			{
 				if (_finished || State == ChannelStates.Stopped)
 					return;
@@ -379,7 +413,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 
 			strategy.Parent ??= this;
 
-			connector = new(SecurityProvider, PortfolioProvider, ExchangeInfoProvider, StorageSettings.StorageRegistry)
+			connector = new(SecurityProvider, pfProvider, ExchangeInfoProvider, StorageSettings.StorageRegistry)
 			{
 				Parent = this,
 				StopOnSubscriptionError = StopOnSubscriptionError,

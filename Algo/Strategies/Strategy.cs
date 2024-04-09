@@ -2875,6 +2875,7 @@ namespace StockSharp.Algo.Strategies
 			//clone.Connector = Connector;
 			clone.Security = Security;
 			clone.Portfolio = Portfolio;
+			clone.PortfolioProvider = PortfolioProvider;
 
 			var id = clone.Id;
 			clone.Load(this.Save());
@@ -2883,7 +2884,12 @@ namespace StockSharp.Algo.Strategies
 			return clone;
 		}
 
-		private void TryInvoke(Action handler)
+		/// <summary>
+		/// <see cref="IPortfolioProvider"/>
+		/// </summary>
+		public IPortfolioProvider PortfolioProvider { get; set; }
+
+        private void TryInvoke(Action handler)
 		{
 			if (!IsDisposeStarted)
 				handler();

@@ -2,7 +2,7 @@ namespace StockSharp.Algo.Strategies.Optimization;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 
 using Ecng.Common;
 
@@ -63,8 +63,30 @@ public class BruteForceOptimizer : BaseOptimizer
 	/// <param name="iterationCount">Iteration count.</param>
 	public void Start(DateTime startTime, DateTime stopTime, IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> strategies, int iterationCount)
 	{
-		if (strategies is null)
-			throw new ArgumentNullException(nameof(strategies));
+		var enumetator = strategies.GetEnumerator();
+
+		Start(startTime, stopTime, pfProvider =>
+		{
+			if (!enumetator.MoveNext())
+				return null;
+
+			var strategy = enumetator.Current.strategy;
+			strategy.Portfolio = pfProvider.LookupByPortfolioName((strategy.Portfolio?.Name).IsEmpty(Messages.Extensions.SimulatorPortfolioName));
+			return enumetator.Current;
+		}, iterationCount);
+	}
+
+	/// <summary>
+	/// Start optimization.
+	/// </summary>
+	/// <param name="startTime">Date in history for starting the paper trading.</param>
+	/// <param name="stopTime">Date in history to stop the paper trading (date is included).</param>
+	/// <param name="tryGetNext">Handler to try to get next strategy object.</param>
+	/// <param name="iterationCount">Iteration count.</param>
+	public void Start(DateTime startTime, DateTime stopTime, Func<IPortfolioProvider, (Strategy strategy, IStrategyParam[] parameters)?> tryGetNext, int iterationCount)
+	{
+		if (tryGetNext is null)
+			throw new ArgumentNullException(nameof(tryGetNext));
 
 		if (iterationCount <= 0)
 			throw new ArgumentOutOfRangeException(nameof(iterationCount), iterationCount, LocalizedStrings.InvalidValue);
@@ -73,17 +95,17 @@ public class BruteForceOptimizer : BaseOptimizer
 		if (maxIters > 0 && iterationCount > maxIters)
 		{
 			iterationCount = maxIters;
-			strategies = strategies.Take(iterationCount);
 		}
 
 		_itersCount = iterationCount;
 		_itersDone = 0;
 
+		var leftSync = new SyncObject();
+		var left = iterationCount;
+
 		OnStart();
 
 		var batchSize = EmulationSettings.BatchSize;
-
-		var enumerator = strategies.GetEnumerator();
 
 		for (var i = 0; i < batchSize; i++)
 		{
@@ -93,13 +115,17 @@ public class BruteForceOptimizer : BaseOptimizer
 			void _()
 			{
 				TryNextRun(startTime, stopTime,
-					() =>
+					pfProvider =>
 					{
-						if (enumerator.MoveNext())
-							return enumerator.Current;
+						lock (leftSync)
+						{
+							if (left <= 0)
+								return null;
 
-						enumerator.Dispose();
-						return default;
+							left--;
+						}
+
+						return tryGetNext(pfProvider);
 					},
 					adapterCache, storageCache,
 					() => _());

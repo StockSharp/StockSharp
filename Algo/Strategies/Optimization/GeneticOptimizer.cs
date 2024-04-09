@@ -68,7 +68,6 @@ public class GeneticOptimizer : BaseOptimizer
 				strategy = _strategy.Clone();
 
 			strategy.Security = _strategy.Security;
-			strategy.Portfolio = _strategy.Portfolio;
 
 			var genes = spc.GetGenes();
 			var parameters = new IStrategyParam[genes.Length];
@@ -92,7 +91,12 @@ public class GeneticOptimizer : BaseOptimizer
 				var storageCache = _optimizer.AllocateStorageCache();
 
 				_optimizer.TryNextRun(_startTime, _stopTime,
-					() => (strategy, parameters),
+					pfProvider =>
+					{
+						strategy.Portfolio = pfProvider.LookupByPortfolioName((_strategy.Portfolio?.Name).IsEmpty(Extensions.SimulatorPortfolioName));
+
+						return (strategy, parameters);
+					},
 					adapterCache,
 					storageCache,
 					() =>
