@@ -129,9 +129,9 @@ public class GeneticOptimizer : BaseOptimizer
 
 	private class StrategyParametersChromosome : ChromosomeBase
 	{
-		private readonly (IStrategyParam param, object from, object to, object step, object value)[] _parameters;
+		private readonly (IStrategyParam param, object from, object to, object step, IEnumerable values)[] _parameters;
 
-		public StrategyParametersChromosome((IStrategyParam, object, object, object, object)[] parameters)
+		public StrategyParametersChromosome((IStrategyParam, object, object, object, IEnumerable)[] parameters)
 			: base(parameters.CheckOnNull(nameof(parameters)).Length)
 		{
 			_parameters = parameters;
@@ -329,7 +329,7 @@ public class GeneticOptimizer : BaseOptimizer
 		DateTime startTime,
 		DateTime stopTime,
 		Strategy strategy,
-		IEnumerable<(IStrategyParam param, object from, object to, object step, object value)> parameters,
+		IEnumerable<(IStrategyParam param, object from, object to, object step, IEnumerable values)> parameters,
 		Func<Strategy, decimal> calcFitness = default,
 		ISelection selection = default,
 		ICrossover crossover = default,
@@ -346,7 +346,7 @@ public class GeneticOptimizer : BaseOptimizer
 
 		foreach (var (p, f, t, s, v) in paramArr)
 		{
-			if (v is not null)
+			if (v is not null && v.Cast<object>().Any())
 				continue;
 
 			if (f is null)

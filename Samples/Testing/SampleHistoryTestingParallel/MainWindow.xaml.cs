@@ -21,6 +21,7 @@ namespace SampleHistoryTestingParallel
 	using System.Linq;
 	using System.Windows;
 	using System.Windows.Media;
+	using System.Collections;
 	using System.Collections.Generic;
 
 	using Ecng.Xaml;
@@ -263,11 +264,14 @@ namespace SampleHistoryTestingParallel
 
 				var go = (GeneticOptimizer)_optimizer;
 				go.Settings.Apply((GeneticSettings)GeneticSettings.SelectedObject);
-				go.Start(startTime, stopTime, strategy, new (IStrategyParam, object, object, object, object)[]
+				go.Start(startTime, stopTime, strategy, new (IStrategyParam, object, object, object, IEnumerable)[]
 				{
 					(strategy.Parameters.GetByName(nameof(strategy.ShortSma)), shortRange.min, shortRange.max, shortRange.step, null),
 					(strategy.Parameters.GetByName(nameof(strategy.LongSma)), longRange.min, longRange.max, longRange.step, null),
-					(strategy.Parameters.GetByName(nameof(strategy.CandleTimeFrame)), tfRange.min, tfRange.max, tfRange.step, null),
+
+					// Specifing time frame range as exact 2 values (Min and Max).
+					// In that case generic will select from them only instead of random from range.
+					(strategy.Parameters.GetByName(nameof(strategy.CandleTimeFrame)), null, null, tfRange.step, new[] { tfRange.min, tfRange.max }),
 				});
 			}
 		}
