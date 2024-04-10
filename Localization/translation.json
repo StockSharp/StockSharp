@@ -8695,6 +8695,10 @@
     "en": "Value",
     "ru": "Значение"
   },
+  "Values": {
+    "en": "Values",
+    "ru": "Значения"
+  },
   "IndexValue": {
     "en": "Index value.",
     "ru": "Значение индекса."
