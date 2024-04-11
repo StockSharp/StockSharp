@@ -302,7 +302,9 @@ public class GeneticOptimizer : BaseOptimizer
 				var tu = (Unit)to;
 				var su = (Unit)step;
 
-				if (su.Value < 0)
+				if (su.Value == 0)
+					throw new ArgumentException(LocalizedStrings.ChangeStepCannotBeZero);
+				else if (su.Value < 0)
 				{
 					(fu, tu) = (tu, fu);
 					su = new(su.Value.Abs(), su.Type);
@@ -310,15 +312,7 @@ public class GeneticOptimizer : BaseOptimizer
 
 				var scale = su.Value.GetDecimalInfo().EffectiveScale;
 
-				getValue = () =>
-				{
-					var vu = new Unit(RandomGen.GetDecimal(fu.Value, tu.Value, scale), fu.Type);
-
-					if (su.Value > 0)
-						vu.Value = MathHelper.Round(vu.Value, su.Value, null);
-
-					return vu;
-				};
+				getValue = () => new Unit(RandomGen.GetDecimal(fu.Value, tu.Value, scale).Round(su.Value, null), fu.Type);
 			}
 			else if (type == typeof(decimal))
 			{
@@ -326,7 +320,9 @@ public class GeneticOptimizer : BaseOptimizer
 				var td = (decimal)to;
 				var sd = (decimal)step;
 
-				if (sd < 0)
+				if (sd == 0)
+					throw new ArgumentException(LocalizedStrings.ChangeStepCannotBeZero);
+				else if (sd < 0)
 				{
 					(fd, td) = (td, fd);
 					sd = sd.Abs();
@@ -334,15 +330,7 @@ public class GeneticOptimizer : BaseOptimizer
 
 				var scale = sd.GetDecimalInfo().EffectiveScale;
 
-				getValue = () =>
-				{
-					var val = RandomGen.GetDecimal(fd, td, scale);
-
-					if (sd > 0)
-						val = MathHelper.Round(val, sd, null);
-
-					return val;
-				};
+				getValue = () => RandomGen.GetDecimal(fd, td, scale).Round(sd, null);
 			}
 			else if (type == typeof(bool))
 			{
@@ -356,7 +344,9 @@ public class GeneticOptimizer : BaseOptimizer
 					var td = (decimal)to;
 					var sd = step.To<decimal>();
 
-					if (sd < 0)
+					if (sd == 0)
+						throw new ArgumentException(LocalizedStrings.ChangeStepCannotBeZero);
+					else if (sd < 0)
 					{
 						(fd, td) = (td, fd);
 						sd = sd.Abs();
@@ -368,7 +358,7 @@ public class GeneticOptimizer : BaseOptimizer
 					{
 						var d = RandomGen.GetDecimal(fd, td, scale);
 
-						if (sd != 0)
+						if (sd != 1)
 							d = (d / sd) * sd;
 
 						return d.To(type);
@@ -380,7 +370,9 @@ public class GeneticOptimizer : BaseOptimizer
 					var tl = to.To<long>();
 					var sl = step.To<long>();
 
-					if (sl < 0)
+					if (sl == 0)
+						throw new ArgumentException(LocalizedStrings.ChangeStepCannotBeZero);
+					else if (sl < 0)
 					{
 						(fl, tl) = (tl, fl);
 						sl = sl.Abs();
@@ -390,7 +382,7 @@ public class GeneticOptimizer : BaseOptimizer
 					{
 						var l = RandomGen.GetLong(fl, tl);
 
-						if (sl != 0)
+						if (sl != 1)
 							l = (l / sl) * sl;
 
 						return l.To(type);
