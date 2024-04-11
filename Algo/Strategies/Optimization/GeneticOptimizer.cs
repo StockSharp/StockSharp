@@ -289,12 +289,15 @@ public class GeneticOptimizer : BaseOptimizer
 
 			var from = t.from ?? throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(name, LocalizedStrings.From));
 			var to = t.to ?? throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(name, LocalizedStrings.Until));
-			var step = t.step ?? throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(name, LocalizedStrings.Step));
+			var step = t.step;
 
 			Func<object> getValue;
 
 			var type = param.Type;
 			type = type.IsNullable() ? type.GetUnderlyingType() : type;
+
+			if (step is null && type != typeof(bool))
+				throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(name, LocalizedStrings.Step));
 
 			if (type == typeof(Unit))
 			{
