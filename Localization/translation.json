@@ -1,4 +1,8 @@
 {
+  "ValuesMustBeSameType": {
+    "en": "Values must be same type.",
+    "ru": "Значения должны быть одного типа."
+  },
   "MaxMessages": {
     "en": "Max messages",
     "ru": "Макс сообщений"
