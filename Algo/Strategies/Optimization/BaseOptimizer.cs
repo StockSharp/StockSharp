@@ -395,7 +395,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 				if (State != ChannelStates.Stopping)
 					State = ChannelStates.Stopping;
 
-				if (_cancelEmulation)
+				if (_cancelEmulation || _startedConnectors.IsEmpty())
 				{
 					Stop();
 					RaiseStopped();
