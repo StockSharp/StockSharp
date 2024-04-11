@@ -63,16 +63,16 @@ public class BruteForceOptimizer : BaseOptimizer
 	/// <param name="iterationCount">Iteration count.</param>
 	public void Start(DateTime startTime, DateTime stopTime, IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> strategies, int iterationCount)
 	{
-		var enumetator = strategies.GetEnumerator();
+		var enumerator = strategies.GetEnumerator();
 
 		Start(startTime, stopTime, pfProvider =>
 		{
-			if (!enumetator.MoveNext())
+			if (!enumerator.MoveNext())
 				return null;
 
-			var strategy = enumetator.Current.strategy;
+			var strategy = enumerator.Current.strategy;
 			strategy.Portfolio = pfProvider.LookupByPortfolioName((strategy.Portfolio?.Name).IsEmpty(Messages.Extensions.SimulatorPortfolioName));
-			return enumetator.Current;
+			return enumerator.Current;
 		}, iterationCount);
 	}
 
