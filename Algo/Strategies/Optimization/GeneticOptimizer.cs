@@ -129,9 +129,9 @@ public class GeneticOptimizer : BaseOptimizer
 
 	private class StrategyParametersChromosome : ChromosomeBase
 	{
-		private readonly (IStrategyParam param, object from, object to, object step, IEnumerable values)[] _parameters;
+		private readonly (IStrategyParam param, Func<object> getValue)[] _parameters;
 
-		public StrategyParametersChromosome((IStrategyParam, object, object, object, IEnumerable)[] parameters)
+		public StrategyParametersChromosome((IStrategyParam, Func<object>)[] parameters)
 			: base(parameters.CheckOnNull(nameof(parameters)).Length)
 		{
 			_parameters = parameters;
@@ -147,74 +147,9 @@ public class GeneticOptimizer : BaseOptimizer
 
 		public override Gene GenerateGene(int geneIndex)
 		{
-			var (p, f, t, s, v) = _parameters[geneIndex];
+			var (p, g) = _parameters[geneIndex];
 
-			if (f is null && t is null && v is null)
-				throw new InvalidOperationException($"No values for {p.Name}.");
-
-			object val;
-
-			var type = p.Type;
-
-			type = type.IsNullable() ? type.GetUnderlyingType() : type;
-
-			if (type == typeof(Security))
-			{
-				val = RandomGen.GetElement((IEnumerable<Security>)v);
-			}
-			else if (type == typeof(Unit))
-			{
-				if (f is not null && t is not null)
-				{
-					var fu = (Unit)f;
-					var tu = (Unit)t;
-					var su = (Unit)s;
-
-					var vu = new Unit(RandomGen.GetDecimal(fu.Value, tu.Value, su.Value.GetDecimalInfo().EffectiveScale), fu.Type);
-
-					if (su.Value > 0)
-						vu.Value = MathHelper.Round(vu.Value, su.Value, null);
-
-					val = vu;
-				}
-				else
-					val = RandomGen.GetElement((IEnumerable<Unit>)v);
-			}
-			else if (type == typeof(decimal))
-			{
-				if (f is not null && t is not null)
-				{
-					var sd = (decimal)s;
-
-					val = RandomGen.GetDecimal((decimal)f, (decimal)t, sd.GetDecimalInfo().EffectiveScale);
-
-					if (sd > 0)
-						val = MathHelper.Round((decimal)val, sd, null);
-				}
-				else
-					val = RandomGen.GetElement((IEnumerable<decimal>)v);
-			}
-			else if (type.IsPrimitive() || type == typeof(TimeSpan))
-			{
-				if (f is not null && t is not null)
-				{
-					var l = RandomGen.GetLong(f.To<long>(), t.To<long>());
-					var sl = s.To<long>();
-
-					if (sl != 0)
-						l = (l / sl) * sl;
-
-					val = l;
-				}
-				else
-					val = RandomGen.GetElement(v.Cast<object>());
-
-				val = val.To(type);
-			}
-			else
-				throw new NotSupportedException(LocalizedStrings.TypeNotSupported.Put(type));
-
-			return new((p, val));
+			return new((p, g()));
 		}
 	}
 
@@ -344,36 +279,128 @@ public class GeneticOptimizer : BaseOptimizer
 
 		var paramArr = parameters.Select(t =>
 		{
-			if (t.values?.Cast<object>().Any() == true)
-				return t;
+			var param = t.param;
+			var values = t.values?.Cast<object>().ToArray();
 
-			var name = t.param.Name;
+			if (values?.Any() == true)
+				return (param, () => RandomGen.GetElement(values));
 
-			if (t.from is null)
-				throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(name, LocalizedStrings.From));
+			var name = param.Name;
 
-			if (t.to is null)
-				throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(name, LocalizedStrings.Until));
+			var from = t.from ?? throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(name, LocalizedStrings.From));
+			var to = t.to ?? throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(name, LocalizedStrings.Until));
+			var step = t.step ?? throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(name, LocalizedStrings.Step));
 
-			if (t.step is null)
-				throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(name, LocalizedStrings.Step));
+			Func<object> getValue;
 
-			var step = t.step;
-			var stepNum = step switch
+			var type = param.Type;
+			type = type.IsNullable() ? type.GetUnderlyingType() : type;
+
+			if (type == typeof(Unit))
 			{
-				Unit u => u.Value,
-				decimal d => d,
-				bool b => b ? 1 : 0,
-				TimeSpan ts => ts.Ticks,
-				_ => step.To<decimal>(),
-			};
+				var fu = (Unit)from;
+				var tu = (Unit)to;
+				var su = (Unit)step;
 
-			if (stepNum < 0)
-			{
-				return (t.param, t.to, t.from, step is Unit u ? new Unit(stepNum, u.Type) : stepNum.To(step.GetType()), t.values);
+				if (su.Value < 0)
+				{
+					(fu, tu) = (tu, fu);
+					su = new(su.Value.Abs(), su.Type);
+				}
+
+				var scale = su.Value.GetDecimalInfo().EffectiveScale;
+
+				getValue = () =>
+				{
+					var vu = new Unit(RandomGen.GetDecimal(fu.Value, tu.Value, scale), fu.Type);
+
+					if (su.Value > 0)
+						vu.Value = MathHelper.Round(vu.Value, su.Value, null);
+
+					return vu;
+				};
 			}
+			else if (type == typeof(decimal))
+			{
+				var fd = (decimal)from;
+				var td = (decimal)to;
+				var sd = (decimal)step;
 
-			return t;
+				if (sd < 0)
+				{
+					(fd, td) = (td, fd);
+					sd = sd.Abs();
+				}
+
+				var scale = sd.GetDecimalInfo().EffectiveScale;
+
+				getValue = () =>
+				{
+					var val = RandomGen.GetDecimal(fd, td, scale);
+
+					if (sd > 0)
+						val = MathHelper.Round(val, sd, null);
+
+					return val;
+				};
+			}
+			else if (type == typeof(bool))
+			{
+				getValue = () => RandomGen.GetBool();
+			}
+			else if (type.IsPrimitive() || type == typeof(TimeSpan))
+			{
+				if (type.IsNumeric() && !type.IsNumericInteger())
+				{
+					var fd = (decimal)from;
+					var td = (decimal)to;
+					var sd = step.To<decimal>();
+
+					if (sd < 0)
+					{
+						(fd, td) = (td, fd);
+						sd = sd.Abs();
+					}
+
+					var scale = sd.GetDecimalInfo().EffectiveScale;
+
+					getValue = () =>
+					{
+						var d = RandomGen.GetDecimal(fd, td, scale);
+
+						if (sd != 0)
+							d = (d / sd) * sd;
+
+						return d.To(type);
+					};
+				}
+				else
+				{
+					var fl = from.To<long>();
+					var tl = to.To<long>();
+					var sl = step.To<long>();
+
+					if (sl < 0)
+					{
+						(fl, tl) = (tl, fl);
+						sl = sl.Abs();
+					}
+
+					getValue = () =>
+					{
+						var l = RandomGen.GetLong(fl, tl);
+
+						if (sl != 0)
+							l = (l / sl) * sl;
+
+						return l.To(type);
+					};
+				}
+			}
+			else
+				throw new NotSupportedException(LocalizedStrings.TypeNotSupported.Put(type));
+
+			return (param, getValue);
 		}).ToArray();
 
 		var population = new Population(Settings.Population, Settings.PopulationMax, new StrategyParametersChromosome(paramArr));
