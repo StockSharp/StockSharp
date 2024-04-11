@@ -172,7 +172,7 @@ public class GeneticOptimizer : BaseOptimizer
 
 					var vu = new Unit(RandomGen.GetDecimal(fu.Value, tu.Value, su.Value.GetDecimalInfo().EffectiveScale), fu.Type);
 
-					if (su > 0)
+					if (su.Value > 0)
 						vu.Value = MathHelper.Round(vu.Value, su.Value, null);
 
 					val = vu;
@@ -207,7 +207,7 @@ public class GeneticOptimizer : BaseOptimizer
 					val = l;
 				}
 				else
-					val = RandomGen.GetElement(((IEnumerable)v).Cast<object>());
+					val = RandomGen.GetElement(v.Cast<object>());
 
 				val = val.To(type);
 			}
@@ -342,22 +342,39 @@ public class GeneticOptimizer : BaseOptimizer
 		if (_ga is not null)
 			throw new InvalidOperationException("Not stopped.");
 
-		var paramArr = parameters.ToArray();
-
-		foreach (var (p, f, t, s, v) in paramArr)
+		var paramArr = parameters.Select(t =>
 		{
-			if (v is not null && v.Cast<object>().Any())
-				continue;
+			if (t.values?.Cast<object>().Any() == true)
+				return t;
 
-			if (f is null)
-				throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(p.Name, LocalizedStrings.From));
+			var name = t.param.Name;
 
-			if (t is null)
-				throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(p.Name, LocalizedStrings.Until));
+			if (t.from is null)
+				throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(name, LocalizedStrings.From));
 
-			if (s is null)
-				throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(p.Name, LocalizedStrings.Step));
-		}
+			if (t.to is null)
+				throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(name, LocalizedStrings.Until));
+
+			if (t.step is null)
+				throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(name, LocalizedStrings.Step));
+
+			var step = t.step;
+			var stepNum = step switch
+			{
+				Unit u => u.Value,
+				decimal d => d,
+				bool b => b ? 1 : 0,
+				TimeSpan ts => ts.Ticks,
+				_ => step.To<decimal>(),
+			};
+
+			if (stepNum < 0)
+			{
+				return (t.param, t.to, t.from, step is Unit u ? new Unit(stepNum, u.Type) : stepNum.To(step.GetType()), t.values);
+			}
+
+			return t;
+		}).ToArray();
 
 		var population = new Population(Settings.Population, Settings.PopulationMax, new StrategyParametersChromosome(paramArr));
 
