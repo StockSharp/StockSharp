@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 
 using Ecng.Common;
 using Ecng.Serialization;
+using Ecng.ComponentModel;
 
 using StockSharp.Algo.Candles.Patterns;
 using StockSharp.Messages;
@@ -80,12 +81,16 @@ public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 /// <summary>
 /// Indicator, based on <see cref="ICandlePattern"/>.
 /// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/pattern.html
+/// </remarks>
 [Display(
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.PatternKey,
 	Description = LocalizedStrings.PatternKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [IndicatorOut(typeof(CandlePatternIndicatorValue))]
+[Doc("topics/api/indicators/list_of_indicators/pattern.html")]
 public class CandlePatternIndicator : BaseIndicator
 {
 	private ICandlePatternProvider _candlePatternProvider;
