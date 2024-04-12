@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -24,12 +24,13 @@ namespace StockSharp.Algo.Indicators
 	/// Correlation.
 	/// </summary>
 	/// <remarks>
-	/// https://en.wikipedia.org/wiki/Correlation_and_dependence.
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/correlation.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.CORKey,
 		Description = LocalizedStrings.CorrelationKey)]
+	[Doc("topics/api/indicators/list_of_indicators/correlation.html")]
 	[IndicatorIn(typeof(PairIndicatorValue<decimal>))]
 	public class Correlation : Covariance
 	{

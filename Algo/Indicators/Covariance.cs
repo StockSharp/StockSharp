@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -24,12 +24,13 @@ namespace StockSharp.Algo.Indicators
 	/// Covariance.
 	/// </summary>
 	/// <remarks>
-	/// https://en.wikipedia.org/wiki/Covariance.
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/covariation.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.COVKey,
 		Description = LocalizedStrings.CovarianceKey)]
+	[Doc("topics/api/indicators/list_of_indicators/covariation.html")]
 	[IndicatorIn(typeof(PairIndicatorValue<decimal>))]
 	public class Covariance : LengthIndicator<Tuple<decimal, decimal>>
 	{

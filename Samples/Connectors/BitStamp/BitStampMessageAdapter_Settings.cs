@@ -9,7 +9,7 @@ using Ecng.ComponentModel;
 /// The message adapter for <see cref="BitStamp"/>.
 /// </summary>
 [MediaIcon("BitStamp_logo.svg")]
-[Doc("topics/BitStamp.html")]
+[Doc("topics/api/connectors/crypto_exchanges/bitstamp.html")]
 [Display(
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.BitStampKey,
