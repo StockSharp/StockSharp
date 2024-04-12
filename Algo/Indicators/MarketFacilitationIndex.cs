@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -25,14 +25,14 @@ namespace StockSharp.Algo.Indicators
 	/// Market Facilitation Index.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorMarketFacilitationIndex.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/market_facilitation_index.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.MFIKey,
 		Description = LocalizedStrings.MarketFacilitationIndexKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[Doc("topics/IndicatorMarketFacilitationIndex.html")]
+	[Doc("topics/api/indicators/list_of_indicators/market_facilitation_index.html")]
 	public class MarketFacilitationIndex : BaseIndicator
 	{
 		/// <summary>

@@ -26,14 +26,14 @@ namespace StockSharp.Algo.Indicators
 	/// Williams Percent Range.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorWilliamsR.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/%r.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.WRKey,
 		Description = LocalizedStrings.WilliamsRKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[Doc("topics/IndicatorWilliamsR.html")]
+	[Doc("topics/api/indicators/list_of_indicators/%r.html")]
 	public class WilliamsR : LengthIndicator<decimal>
 	{
 		private readonly Lowest _low;

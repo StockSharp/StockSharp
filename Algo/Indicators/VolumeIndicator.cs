@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -26,7 +26,7 @@ namespace StockSharp.Algo.Indicators
 	/// Candle volume.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorVolumeIndicator.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/volume.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
@@ -34,7 +34,7 @@ namespace StockSharp.Algo.Indicators
 		Description = LocalizedStrings.CandleVolumeKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[IndicatorOut(typeof(CandleIndicatorValue))]
-	[Doc("topics/IndicatorVolumeIndicator.html")]
+	[Doc("topics/api/indicators/list_of_indicators/volume.html")]
 	public class VolumeIndicator : BaseIndicator
 	{
 		/// <summary>

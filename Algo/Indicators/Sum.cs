@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -25,13 +25,13 @@ namespace StockSharp.Algo.Indicators
 	/// Sum of N last values.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorSum.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/sum_n.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.SumKey,
 		Description = LocalizedStrings.SumNLastValuesKey)]
-	[Doc("topics/IndicatorSum.html")]
+	[Doc("topics/api/indicators/list_of_indicators/sum_n.html")]
 	public class Sum : LengthIndicator<decimal>
 	{
 		/// <summary>

@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -28,14 +28,14 @@ namespace StockSharp.Algo.Indicators
 	/// Last oscillator.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorUltimateOscillator.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/uo.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.UltimateOscKey,
 		Description = LocalizedStrings.UltimateOscillatorKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[Doc("topics/IndicatorUltimateOscillator.html")]
+	[Doc("topics/api/indicators/list_of_indicators/uo.html")]
 	public class UltimateOscillator : BaseIndicator
 	{
 		private const decimal _stoProcentov = 100m;

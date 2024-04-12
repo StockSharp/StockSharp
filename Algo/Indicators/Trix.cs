@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -26,13 +26,13 @@ namespace StockSharp.Algo.Indicators
 	/// Triple Exponential Moving Average.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorTrix.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/trix.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.TrixKey,
 		Description = LocalizedStrings.TripleExponentialMovingAverageKey)]
-	[Doc("topics/IndicatorTrix.html")]
+	[Doc("topics/api/indicators/list_of_indicators/trix.html")]
 	public class Trix : LengthIndicator<IIndicatorValue>
 	{
 		private readonly ExponentialMovingAverage _ema1 = new();

@@ -23,11 +23,11 @@ namespace StockSharp.Algo.Indicators
 	/// Double Exponential Moving Average.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorDoubleExponentialMovingAverage.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/dema.html
 	/// </remarks>
 	[DisplayName("DEMA")]
 	[Description("Double Exponential Moving Average")]
-	[Doc("topics/IndicatorDoubleExponentialMovingAverage.html")]
+	[Doc("topics/api/indicators/list_of_indicators/dema.html")]
 	public class DoubleExponentialMovingAverage : LengthIndicator<decimal>
 	{
 		private readonly ExponentialMovingAverage _ema1;

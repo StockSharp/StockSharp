@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -26,13 +26,13 @@ namespace StockSharp.Algo.Indicators
 	/// Convergence/divergence of moving averages with signal line.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorMovingAverageConvergenceDivergenceSignal.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/macd_with_signal_line.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.MACDSignalKey,
 		Description = LocalizedStrings.MACDSignalDescKey)]
-	[Doc("topics/IndicatorMovingAverageConvergenceDivergenceSignal.html")]
+	[Doc("topics/api/indicators/list_of_indicators/macd_with_signal_line.html")]
 	public class MovingAverageConvergenceDivergenceSignal : BaseComplexIndicator
 	{
 		/// <summary>

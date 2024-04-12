@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -26,13 +26,13 @@ namespace StockSharp.Algo.Indicators
 	/// Weighted moving average.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorWeightedMovingAverage.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/weighted_ma.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.WMAKey,
 		Description = LocalizedStrings.WeightedMovingAverageKey)]
-	[Doc("topics/IndicatorWeightedMovingAverage.html")]
+	[Doc("topics/api/indicators/list_of_indicators/weighted_ma.html")]
 	public class WeightedMovingAverage : LengthIndicator<decimal>
 	{
 		private decimal _denominator = 1;

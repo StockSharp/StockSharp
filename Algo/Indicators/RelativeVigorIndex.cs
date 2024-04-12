@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -26,13 +26,13 @@ namespace StockSharp.Algo.Indicators
 	/// Relative Vigor Index.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorRelativeVigorIndex.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/rvi.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.RVIKey,
 		Description = LocalizedStrings.RelativeVigorIndexKey)]
-	[Doc("topics/IndicatorRelativeVigorIndex.html")]
+	[Doc("topics/api/indicators/list_of_indicators/rvi.html")]
 	public class RelativeVigorIndex : BaseComplexIndicator
 	{
 		/// <summary>

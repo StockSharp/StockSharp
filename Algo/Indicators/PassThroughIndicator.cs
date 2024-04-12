@@ -13,7 +13,7 @@ using StockSharp.Localization;
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.StubKey,
 	Description = LocalizedStrings.StubIndicatorKey)]
-[Doc("topics/IndicatorPassThrough.html")]
+[Doc("topics/api/indicators/list_of_indicators/pass_through.html")]
 public class PassThroughIndicator : BaseIndicator
 {
 	/// <inheritdoc/>

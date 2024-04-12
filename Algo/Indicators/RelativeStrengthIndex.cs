@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -25,13 +25,13 @@ namespace StockSharp.Algo.Indicators
 	/// Relative Strength Index.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorRelativeStrengthIndex.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/rsi.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.RSIKey,
 		Description = LocalizedStrings.RelativeStrengthIndexKey)]
-	[Doc("topics/IndicatorRelativeStrengthIndex.html")]
+	[Doc("topics/api/indicators/list_of_indicators/rsi.html")]
 	public class RelativeStrengthIndex : LengthIndicator<decimal>
 	{
 		private readonly SmoothedMovingAverage _gain;

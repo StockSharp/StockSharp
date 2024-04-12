@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -27,12 +27,12 @@ namespace StockSharp.Algo.Indicators
 	/// Optimal Tracking.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorOptimalTrackingFilter.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/optimal_tracking.html
 	/// </remarks>
 	[DisplayName("OptimalTracking")]
 	[Description("Optimal Tracking Filter published by John Ehlers")]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[Doc("topics/IndicatorOptimalTrackingFilter.html")]
+	[Doc("topics/api/indicators/list_of_indicators/optimal_tracking.html")]
 	public sealed class OptimalTracking : LengthIndicator<decimal>
 	{
 		private static readonly decimal _smoothConstant1 = (decimal)Math.Exp(-0.25);

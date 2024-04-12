@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -28,14 +28,14 @@ namespace StockSharp.Algo.Indicators
 	/// True range.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorTrueRange.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/true_range.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.TRKey,
 		Description = LocalizedStrings.TrueRangeKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[Doc("topics/IndicatorTrueRange.html")]
+	[Doc("topics/api/indicators/list_of_indicators/true_range.html")]
 	public class TrueRange : BaseIndicator
 	{
 		private ICandleMessage _prevCandle;

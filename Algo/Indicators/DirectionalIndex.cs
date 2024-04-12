@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -30,13 +30,13 @@ namespace StockSharp.Algo.Indicators
 	/// Welles Wilder Directional Movement Index.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorDirectionalIndex.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/dmi.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.DMIKey,
 		Description = LocalizedStrings.WellesWilderDirectionalMovementIndexKey)]
-	[Doc("topics/IndicatorDirectionalIndex.html")]
+	[Doc("topics/api/indicators/list_of_indicators/dmi.html")]
 	public class DirectionalIndex : BaseComplexIndicator
 	{
 		private class DxValue : ComplexIndicatorValue

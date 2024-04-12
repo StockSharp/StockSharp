@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -25,13 +25,13 @@ namespace StockSharp.Algo.Indicators
 	/// Smoothed Moving Average.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorSmoothedMovingAverage.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/smoothed_ma.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.SMMAKey,
 		Description = LocalizedStrings.SmoothedMovingAverageKey)]
-	[Doc("topics/IndicatorSmoothedMovingAverage.html")]
+	[Doc("topics/api/indicators/list_of_indicators/smoothed_ma.html")]
 	public class SmoothedMovingAverage : LengthIndicator<decimal>
 	{
 		private decimal _prevFinalValue;

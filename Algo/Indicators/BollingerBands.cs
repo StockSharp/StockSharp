@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -27,13 +27,13 @@ namespace StockSharp.Algo.Indicators
 	/// Bollinger Bands.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorBollingerBands.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/bollinger_bands.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.BollingerKey,
 		Description = LocalizedStrings.BollingerBandsKey)]
-	[Doc("topics/IndicatorBollingerBands.html")]
+	[Doc("topics/api/indicators/list_of_indicators/bollinger_bands.html")]
 	public class BollingerBands : BaseComplexIndicator
 	{
 		private readonly StandardDeviation _dev = new();

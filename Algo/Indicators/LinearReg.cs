@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -27,13 +27,13 @@ namespace StockSharp.Algo.Indicators
 	/// Linear regression - Value returns the last point prediction.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorLinearReg.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/lrc.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.LRCKey,
 		Description = LocalizedStrings.LinearRegressionKey)]
-	[Doc("topics/IndicatorLinearReg.html")]
+	[Doc("topics/api/indicators/list_of_indicators/lrc.html")]
 	public class LinearReg : LengthIndicator<decimal>
 	{
 		// Коэффициент при независимой переменной, угол наклона прямой.

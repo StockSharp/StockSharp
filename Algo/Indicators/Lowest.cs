@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -26,13 +26,13 @@ namespace StockSharp.Algo.Indicators
 	/// Minimum value for a period.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorLowest.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/lowest.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.LowestKey,
 		Description = LocalizedStrings.MinValuePeriodKey)]
-	[Doc("topics/IndicatorLowest.html")]
+	[Doc("topics/api/indicators/list_of_indicators/lowest.html")]
 	public class Lowest : LengthIndicator<decimal>
 	{
 		/// <summary>

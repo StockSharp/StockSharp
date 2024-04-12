@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -26,13 +26,13 @@ namespace StockSharp.Algo.Indicators
 	/// Welles Wilder Moving Average.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorWilderMovingAverage.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/wilder_ma.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.WilderMAKey,
 		Description = LocalizedStrings.WilderMovingAverageKey)]
-	[Doc("topics/IndicatorWilderMovingAverage.html")]
+	[Doc("topics/api/indicators/list_of_indicators/wilder_ma.html")]
 	public class WilderMovingAverage : LengthIndicator<decimal>
 	{
 		/// <summary>

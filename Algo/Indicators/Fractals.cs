@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Indicators
+﻿namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
@@ -11,14 +11,14 @@ namespace StockSharp.Algo.Indicators
 	/// Fractals.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorFractals.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/fractals.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.FractalsKey,
 		Description = LocalizedStrings.FractalsKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[Doc("topics/IndicatorFractals.html")]
+	[Doc("topics/api/indicators/list_of_indicators/fractals.html")]
 	public class Fractals : BaseComplexIndicator
 	{
 		/// <summary>

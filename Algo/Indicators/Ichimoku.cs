@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -27,13 +27,13 @@ namespace StockSharp.Algo.Indicators
 	/// Ichimoku.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorIchimoku.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/ichimoku.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.IchimokuKey,
 		Description = LocalizedStrings.IchimokuKey)]
-	[Doc("topics/IndicatorIchimoku.html")]
+	[Doc("topics/api/indicators/list_of_indicators/ichimoku.html")]
 	public class Ichimoku : BaseComplexIndicator
 	{
 		/// <summary>

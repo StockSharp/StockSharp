@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -26,13 +26,13 @@ namespace StockSharp.Algo.Indicators
 	/// Peak.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorPeak.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/peak.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.PeakKey,
 		Description = LocalizedStrings.PeakKey)]
-	[Doc("topics/IndicatorPeak.html")]
+	[Doc("topics/api/indicators/list_of_indicators/peak.html")]
 	public sealed class Peak : ZigZagEquis
 	{
 		/// <summary>

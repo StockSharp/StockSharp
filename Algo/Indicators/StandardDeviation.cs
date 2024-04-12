@@ -28,13 +28,13 @@ namespace StockSharp.Algo.Indicators
 	/// Standard deviation.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorStandardDeviation.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/standard_deviation.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.StdDevKey,
 		Description = LocalizedStrings.StandardDeviationKey)]
-	[Doc("topics/IndicatorStandardDeviation.html")]
+	[Doc("topics/api/indicators/list_of_indicators/standard_deviation.html")]
 	public class StandardDeviation : LengthIndicator<decimal>
 	{
 		private readonly SimpleMovingAverage _sma;

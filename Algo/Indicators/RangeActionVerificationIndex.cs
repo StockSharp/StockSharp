@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -28,11 +28,11 @@ namespace StockSharp.Algo.Indicators
 	/// Range Action Verification Index.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorRangeActionVerificationIndex.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/ravi.html
 	/// </remarks>
 	[DisplayName("RAVI")]
 	[Description("Range Action Verification Index.")]
-	[Doc("topics/IndicatorRangeActionVerificationIndex.html")]
+	[Doc("topics/api/indicators/list_of_indicators/ravi.html")]
 	public class RangeActionVerificationIndex : BaseIndicator
 	{
 		/// <summary>

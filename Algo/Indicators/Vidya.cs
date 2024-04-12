@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -26,13 +26,13 @@ namespace StockSharp.Algo.Indicators
 	/// The dynamic average of variable index  (Variable Index Dynamic Average).
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorVidya.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/vidya.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.VidyaKey,
 		Description = LocalizedStrings.VariableIndexDynamicAverageKey)]
-	[Doc("topics/IndicatorVidya.html")]
+	[Doc("topics/api/indicators/list_of_indicators/vidya.html")]
 	public class Vidya : LengthIndicator<decimal>
 	{
 		private decimal _multiplier = 1;

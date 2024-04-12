@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -26,13 +26,13 @@ namespace StockSharp.Algo.Indicators
 	/// Price oscillator without trend.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorDetrendedPriceOscillator.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/dpo.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.DPOKey,
 		Description = LocalizedStrings.DetrendedPriceOscillatorKey)]
-	[Doc("topics/IndicatorDetrendedPriceOscillator.html")]
+	[Doc("topics/api/indicators/list_of_indicators/dpo.html")]
 	public class DetrendedPriceOscillator : LengthIndicator<decimal>
 	{
 		private readonly SimpleMovingAverage _sma;

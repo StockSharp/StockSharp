@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -26,13 +26,13 @@ namespace StockSharp.Algo.Indicators
 	/// Maximum value for a period.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorHighest.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/highest.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.HighestKey,
 		Description = LocalizedStrings.MaxValueForPeriodKey)]
-	[Doc("topics/IndicatorHighest.html")]
+	[Doc("topics/api/indicators/list_of_indicators/highest.html")]
 	public class Highest : LengthIndicator<decimal>
 	{
 		/// <summary>

@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -27,11 +27,11 @@ namespace StockSharp.Algo.Indicators
 	/// NickRypockTrailingReverse (Nick Rypock Trailing reverse).
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorNickRypockTrailingReverse.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/nrtr.html
 	/// </remarks>
 	[DisplayName("NRTR")]
 	[Description("Nick Rypock Trailing reverse.")]
-	[Doc("topics/IndicatorNickRypockTrailingReverse.html")]
+	[Doc("topics/api/indicators/list_of_indicators/nrtr.html")]
 	public class NickRypockTrailingReverse : LengthIndicator<decimal>
 	{
 		private class CalcBuffer

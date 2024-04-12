@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -27,13 +27,13 @@ namespace StockSharp.Algo.Indicators
 	/// Hull Moving Average.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorHullMovingAverage.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/hma.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.HMAKey,
 		Description = LocalizedStrings.HullMovingAverageKey)]
-	[Doc("topics/IndicatorHullMovingAverage.html")]
+	[Doc("topics/api/indicators/list_of_indicators/hma.html")]
 	public class HullMovingAverage : LengthIndicator<decimal>
 	{
 		private readonly WeightedMovingAverage _wmaSlow = new();

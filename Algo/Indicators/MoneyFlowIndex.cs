@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -25,14 +25,14 @@ namespace StockSharp.Algo.Indicators
 	/// Money Flow Index.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorMoneyFlowIndex.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/money_flow_index.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.MFIKey,
 		Description = LocalizedStrings.MoneyFlowIndexKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[Doc("topics/IndicatorMoneyFlowIndex.html")]
+	[Doc("topics/api/indicators/list_of_indicators/money_flow_index.html")]
 	public class MoneyFlowIndex : LengthIndicator<decimal>
 	{
 		private decimal _previousPrice;

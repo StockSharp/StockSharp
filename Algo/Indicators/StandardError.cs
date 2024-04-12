@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -28,13 +28,13 @@ namespace StockSharp.Algo.Indicators
 	/// Standard error in linear regression.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorStandardError.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/standard_error.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.StandardErrorKey,
 		Description = LocalizedStrings.StandardErrorLinearRegKey)]
-	[Doc("topics/IndicatorStandardError.html")]
+	[Doc("topics/api/indicators/list_of_indicators/standard_error.html")]
 	public class StandardError : LengthIndicator<decimal>
 	{
 		// Коэффициент при независимой переменной, угол наклона прямой.

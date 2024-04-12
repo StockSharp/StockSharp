@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -25,13 +25,13 @@ namespace StockSharp.Algo.Indicators
 	/// Rate of change.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorRateOfChange.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/roc.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ROCKey,
 		Description = LocalizedStrings.RateOfChangeKey)]
-	[Doc("topics/IndicatorRateOfChange.html")]
+	[Doc("topics/api/indicators/list_of_indicators/roc.html")]
 	public class RateOfChange : Momentum
 	{
 		/// <summary>

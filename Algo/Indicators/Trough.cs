@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -26,13 +26,13 @@ namespace StockSharp.Algo.Indicators
 	/// Trough.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorTrough.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/trough.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.TroughKey,
 		Description = LocalizedStrings.TroughDescKey)]
-	[Doc("topics/IndicatorTrough.html")]
+	[Doc("topics/api/indicators/list_of_indicators/trough.html")]
 	public sealed class Trough : ZigZagEquis
 	{
 		/// <summary>

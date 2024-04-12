@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -28,14 +28,14 @@ namespace StockSharp.Algo.Indicators
 	/// PeakBar.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorPeakBar.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/peakbar.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.PeakBarKey,
 		Description = LocalizedStrings.PeakBarKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[Doc("topics/IndicatorPeakBar.html")]
+	[Doc("topics/api/indicators/list_of_indicators/peakbar.html")]
 	public class PeakBar : BaseIndicator
 	{
 		private decimal _currentMaximum = decimal.MinValue;

@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -28,14 +28,14 @@ namespace StockSharp.Algo.Indicators
 	/// TroughBar.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorTroughBar.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/troughbar.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.TroughBarKey,
 		Description = LocalizedStrings.TroughBarDescKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[Doc("topics/IndicatorTroughBar.html")]
+	[Doc("topics/api/indicators/list_of_indicators/troughbar.html")]
 	public class TroughBar : BaseIndicator
 	{
 		private decimal _currentMinimum = decimal.MaxValue;

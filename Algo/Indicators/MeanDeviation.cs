@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -28,13 +28,13 @@ namespace StockSharp.Algo.Indicators
 	/// Average deviation.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorMeanDeviation.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/mean_deviation.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.MeanDevKey,
 		Description = LocalizedStrings.AverageDeviationKey)]
-	[Doc("topics/IndicatorMeanDeviation.html")]
+	[Doc("topics/api/indicators/list_of_indicators/mean_deviation.html")]
 	public class MeanDeviation : LengthIndicator<decimal>
 	{
 		/// <summary>

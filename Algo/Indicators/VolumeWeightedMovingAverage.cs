@@ -26,14 +26,14 @@ namespace StockSharp.Algo.Indicators
 	/// Volume weighted moving average.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorVolumeWeightedMovingAverage.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/volume_weighted_ma.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.VMAKey,
 		Description = LocalizedStrings.VolumeWeightedMovingAverageKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[Doc("topics/IndicatorVolumeWeightedMovingAverage.html")]
+	[Doc("topics/api/indicators/list_of_indicators/volume_weighted_ma.html")]
 	public class VolumeWeightedMovingAverage : LengthIndicator<decimal>
 	{
 		// Текущее значение числителя

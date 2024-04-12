@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -27,13 +27,13 @@ namespace StockSharp.Algo.Indicators
 	/// Gator oscillator.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorGatorOscillator.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/gator_oscillator.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.GatorKey,
 		Description = LocalizedStrings.GatorOscillatorKey)]
-	[Doc("topics/IndicatorGatorOscillator.html")]
+	[Doc("topics/api/indicators/list_of_indicators/gator_oscillator.html")]
 	public class GatorOscillator : BaseComplexIndicator
 	{
 		private readonly Alligator _alligator;

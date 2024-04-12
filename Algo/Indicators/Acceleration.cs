@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -29,13 +29,13 @@ namespace StockSharp.Algo.Indicators
 	/// Acceleration / Deceleration Indicator.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorAcceleration.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/a_d.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ADKey,
 		Description = LocalizedStrings.AccDecIndicatorKey)]
-	[Doc("topics/IndicatorAcceleration.html")]
+	[Doc("topics/api/indicators/list_of_indicators/a_d.html")]
 	public class Acceleration : BaseIndicator
 	{
 		/// <summary>

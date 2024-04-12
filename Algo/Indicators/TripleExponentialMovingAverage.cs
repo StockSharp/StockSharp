@@ -25,13 +25,13 @@ namespace StockSharp.Algo.Indicators
 	/// Triple Exponential Moving Average.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorTripleExponentialMovingAverage.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/tema.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.TEMAKey,
 		Description = LocalizedStrings.TripleExponentialMovingAverageKey)]
-	[Doc("topics/IndicatorTripleExponentialMovingAverage.html")]
+	[Doc("topics/api/indicators/list_of_indicators/tema.html")]
 	public class TripleExponentialMovingAverage : LengthIndicator<decimal>
 	{
 		private readonly ExponentialMovingAverage _ema1;

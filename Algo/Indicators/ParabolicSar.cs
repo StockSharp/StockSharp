@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -30,14 +30,14 @@ namespace StockSharp.Algo.Indicators
 	/// Trend indicator implementation - Parabolic SAR.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorParabolicSar.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/parabolic_sar.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ParabolicSARKey,
 		Description = LocalizedStrings.ParabolicSARDescKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[Doc("topics/IndicatorParabolicSar.html")]
+	[Doc("topics/api/indicators/list_of_indicators/parabolic_sar.html")]
 	public class ParabolicSar : BaseIndicator
 	{
 		private class CalcBuffer

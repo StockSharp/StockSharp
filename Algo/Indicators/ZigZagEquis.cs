@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Indicators
 	/// Zig Zag (Metastock).
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorZigZagEquis.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/zigzag_metastock.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
@@ -38,7 +38,7 @@ namespace StockSharp.Algo.Indicators
 		Description = LocalizedStrings.ZigZagDescKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[IndicatorOut(typeof(ShiftedIndicatorValue))]
-	[Doc("topics/IndicatorZigZagEquis.html")]
+	[Doc("topics/api/indicators/list_of_indicators/zigzag_metastock.html")]
 	public class ZigZagEquis : BaseIndicator
 	{
 		private readonly IList<decimal> _buffer = new List<decimal>();

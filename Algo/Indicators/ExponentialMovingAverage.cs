@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -25,13 +25,13 @@ namespace StockSharp.Algo.Indicators
 	/// Exponential Moving Average.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorExponentialMovingAverage.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/ema.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.EMAKey,
 		Description = LocalizedStrings.ExponentialMovingAverageKey)]
-	[Doc("topics/IndicatorExponentialMovingAverage.html")]
+	[Doc("topics/api/indicators/list_of_indicators/ema.html")]
 	public class ExponentialMovingAverage : LengthIndicator<decimal>
 	{
 		private decimal _prevFinalValue;

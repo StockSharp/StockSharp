@@ -25,13 +25,13 @@ namespace StockSharp.Algo.Indicators
 	/// Momentum.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorMomentum.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/momentum.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.MomentumKey,
 		Description = LocalizedStrings.MomentumKey)]
-	[Doc("topics/IndicatorMomentum.html")]
+	[Doc("topics/api/indicators/list_of_indicators/momentum.html")]
 	public class Momentum : LengthIndicator<decimal>
 	{
 		/// <summary>

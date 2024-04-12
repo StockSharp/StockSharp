@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -27,13 +27,13 @@ namespace StockSharp.Algo.Indicators
 	/// Jurik Moving Average.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorJurikMovingAverage.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/jma.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.JMAKey,
 		Description = LocalizedStrings.JurikMovingAverageKey)]
-	[Doc("topics/IndicatorJurikMovingAverage.html")]
+	[Doc("topics/api/indicators/list_of_indicators/jma.html")]
 	public class JurikMovingAverage : LengthIndicator<decimal>
 	{
 		private class CalcBuffer

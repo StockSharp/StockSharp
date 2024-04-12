@@ -29,13 +29,13 @@ namespace StockSharp.Algo.Indicators
 	/// Kaufman adaptive moving average.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorKaufmannAdaptiveMovingAverage.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/kama.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.KAMAKey,
 		Description = LocalizedStrings.KaufmannAdaptiveMovingAverageKey)]
-	[Doc("topics/IndicatorKaufmannAdaptiveMovingAverage.html")]
+	[Doc("topics/api/indicators/list_of_indicators/kama.html")]
 	public class KaufmannAdaptiveMovingAverage : LengthIndicator<decimal>
 	{
 		private decimal _prevFinalValue;

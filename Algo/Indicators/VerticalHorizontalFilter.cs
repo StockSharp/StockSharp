@@ -27,14 +27,14 @@ namespace StockSharp.Algo.Indicators
 	/// The vertical-horizontal filter.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorVerticalHorizontalFilter.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/vhf.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.VHFKey,
 		Description = LocalizedStrings.VerticalHorizontalFilterKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[Doc("topics/IndicatorVerticalHorizontalFilter.html")]
+	[Doc("topics/api/indicators/list_of_indicators/vhf.html")]
 	public class VerticalHorizontalFilter : LengthIndicator<decimal>
 	{
 		// Текущее значение минимума

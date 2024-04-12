@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -26,11 +26,11 @@ namespace StockSharp.Algo.Indicators
 	/// The stochastic oscillator.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorStochasticOscillator.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/stochastic_oscillator.html
 	/// </remarks>
 	[DisplayName("Stochastic Oscillator")]
 	[Description("Stochastic Oscillator")]
-	[Doc("topics/IndicatorStochasticOscillator.html")]
+	[Doc("topics/api/indicators/list_of_indicators/stochastic_oscillator.html")]
 	public class StochasticOscillator : BaseComplexIndicator
 	{
 		/// <summary>

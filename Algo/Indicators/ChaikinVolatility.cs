@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -29,14 +29,14 @@ namespace StockSharp.Algo.Indicators
 	/// Chaikin volatility.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorChaikinVolatility.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/chv.html
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ChaikinVolatilityKey,
 		Description = LocalizedStrings.ChaikinVolatilityIndicatorKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[Doc("topics/IndicatorChaikinVolatility.html")]
+	[Doc("topics/api/indicators/list_of_indicators/chv.html")]
 	public class ChaikinVolatility : BaseIndicator
 	{
 		/// <summary>

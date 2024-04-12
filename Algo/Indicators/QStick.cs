@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -21,10 +21,10 @@ namespace StockSharp.Algo.Indicators
 	/// QStick.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorQStick.html
+	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/qstick.html
 	/// </remarks>
 	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[Doc("topics/IndicatorQStick.html")]
+	[Doc("topics/api/indicators/list_of_indicators/qstick.html")]
 	public class QStick : LengthIndicator<IIndicatorValue>
 	{
 		private readonly SimpleMovingAverage _sma;
