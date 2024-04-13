@@ -3162,25 +3162,63 @@ namespace StockSharp.Algo.Strategies
 			=> Enumerable.Empty<IOrderBookSource>();
 
 		/// <summary>
-		/// <see cref="Draw"/>.
+		/// <see cref="DrawOrderBook"/>.
 		/// </summary>
-		public event Action<Subscription, IOrderBookMessage, IOrderBookSource> OrderBookDrawing;
+		public event Action<Subscription, IOrderBookSource, IOrderBookMessage> OrderBookDrawing;
+
+		/// <summary>
+		/// <see cref="DrawOrderBookOrder"/>.
+		/// </summary>
+		public event Action<Subscription, IOrderBookSource, Order> OrderBookDrawingOrder;
+
+		/// <summary>
+		/// <see cref="DrawOrderBookOrderFail"/>.
+		/// </summary>
+		public event Action<Subscription, IOrderBookSource, OrderFail> OrderBookDrawingOrderFail;
 
 		/// <summary>
 		/// Draw <see cref="IOrderBookMessage"/>.
 		/// </summary>
 		/// <param name="subscription"><see cref="Subscription"/></param>
+		/// <param name="source"><see cref="IOrderBookSource"/></param>
 		/// <param name="book"><see cref="IOrderBookMessage"/></param>
-		/// <param name="source"><see cref="IOrderBookSource"/>.</param>
-		public void Draw(Subscription subscription, IOrderBookMessage book, IOrderBookSource source)
+		public void DrawOrderBook(Subscription subscription, IOrderBookSource source, IOrderBookMessage book)
 		{
-			if (subscription is null)
-				throw new ArgumentNullException(nameof(subscription));
+			if (subscription is null)	throw new ArgumentNullException(nameof(subscription));
+			if (source is null)			throw new ArgumentNullException(nameof(source));
+			if (book is null)			throw new ArgumentNullException(nameof(book));
 
-			if (book is null)
-				throw new ArgumentNullException(nameof(book));
+			OrderBookDrawing?.Invoke(subscription, source, book);
+		}
 
-			OrderBookDrawing?.Invoke(subscription, book, source);
+		/// <summary>
+		/// Draw order book order.
+		/// </summary>
+		/// <param name="subscription"><see cref="Subscription"/></param>
+		/// <param name="source"><see cref="IOrderBookSource"/></param>
+		/// <param name="order">Order.</param>
+		public void DrawOrderBookOrder(Subscription subscription, IOrderBookSource source, Order order)
+		{
+			if (subscription is null)	throw new ArgumentNullException(nameof(subscription));
+			if (source is null)			throw new ArgumentNullException(nameof(source));
+			if (order is null)			throw new ArgumentNullException(nameof(order));
+
+			OrderBookDrawingOrder?.Invoke(subscription, source, order);
+		}
+
+		/// <summary>
+		/// Draw order book order fail.
+		/// </summary>
+		/// <param name="subscription"><see cref="Subscription"/></param>
+		/// <param name="source"><see cref="IOrderBookSource"/></param>
+		/// <param name="fail">Order fail.</param>
+		public void DrawOrderBookOrderFail(Subscription subscription, IOrderBookSource source, OrderFail fail)
+		{
+			if (subscription is null)	throw new ArgumentNullException(nameof(subscription));
+			if (source is null)			throw new ArgumentNullException(nameof(source));
+			if (fail is null)			throw new ArgumentNullException(nameof(fail));
+
+			OrderBookDrawingOrderFail?.Invoke(subscription, source, fail);
 		}
 
 		/// <summary>
