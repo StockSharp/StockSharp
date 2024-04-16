@@ -27,6 +27,11 @@ namespace StockSharp.Algo.Storages
 	public interface IStorageEntityList<T> : INotifyList<T>, ISynchronizedCollection<T>
 	{
 		/// <summary>
+		/// Cached items.
+		/// </summary>
+		T[] Cache { get; }
+
+		/// <summary>
 		/// To load the trading object by identifier.
 		/// </summary>
 		/// <param name="id">Identifier.</param>

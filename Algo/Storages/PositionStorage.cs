@@ -3,6 +3,7 @@ namespace StockSharp.Algo.Storages
 	using System;
 	using System.Collections.Generic;
 
+	using Ecng.Collections;
 	using Ecng.Common;
 
 	using StockSharp.BusinessEntities;
@@ -17,7 +18,7 @@ namespace StockSharp.Algo.Storages
 			_entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
 		}
 
-		IEnumerable<Position> IPositionProvider.Positions => _entityRegistry.Positions;
+		IEnumerable<Position> IPositionProvider.Positions => _entityRegistry.Positions.Cache;
 
 		event Action<Position> IPositionProvider.NewPosition
 		{
@@ -39,7 +40,7 @@ namespace StockSharp.Algo.Storages
 			return _entityRegistry.Portfolios.ReadById(portfolioName);
 		}
 
-		IEnumerable<Portfolio> IPortfolioProvider.Portfolios => _entityRegistry.Portfolios;
+		IEnumerable<Portfolio> IPortfolioProvider.Portfolios => _entityRegistry.Portfolios.Cache;
 
 		SyncObject IPositionStorage.SyncRoot => _entityRegistry.Portfolios.SyncRoot;
 
