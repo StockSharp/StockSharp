@@ -44,7 +44,7 @@ namespace StockSharp.Algo.Strategies
 		/// </remarks>
 		public static Order BuyAtMarket(this Strategy strategy, decimal? volume = null)
 		{
-			return strategy.CreateOrder(Sides.Buy, null, volume);
+			return strategy.CreateOrder(Sides.Buy, default, volume);
 		}
 
 		/// <summary>
@@ -58,7 +58,7 @@ namespace StockSharp.Algo.Strategies
 		/// </remarks>
 		public static Order SellAtMarket(this Strategy strategy, decimal? volume = null)
 		{
-			return strategy.CreateOrder(Sides.Sell, null, volume);
+			return strategy.CreateOrder(Sides.Sell, default, volume);
 		}
 
 		/// <summary>
@@ -102,7 +102,7 @@ namespace StockSharp.Algo.Strategies
 		/// <remarks>
 		/// The order is not registered, only the object is created.
 		/// </remarks>
-		public static Order CreateOrder(this Strategy strategy, Sides side, decimal? price, decimal? volume = null)
+		public static Order CreateOrder(this Strategy strategy, Sides side, decimal price, decimal? volume = null)
 		{
 			if (strategy == null)
 				throw new ArgumentNullException(nameof(strategy));
@@ -115,7 +115,7 @@ namespace StockSharp.Algo.Strategies
 				Volume = volume ?? strategy.Volume,
 			};
 
-			if (price == null)
+			if (price == 0)
 			{
 				//if (security.Board.IsSupportMarketOrders)
 				order.Type = OrderTypes.Market;
@@ -123,7 +123,7 @@ namespace StockSharp.Algo.Strategies
 				//	order.Price = strategy.GetMarketPrice(direction) ?? 0;
 			}
 			else
-				order.Price = price.Value;
+				order.Price = price;
 
 			return order;
 		}
