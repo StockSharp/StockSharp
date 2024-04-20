@@ -794,14 +794,17 @@ namespace StockSharp.Algo.Candles.Compression
 
 			info.LastTime = candleMsg.OpenTime;
 
-			var nonFinished = info.NonFinishedCandle;
-
-			if (nonFinished != null && nonFinished.OpenTime < candleMsg.OpenTime)
+			if (info.NonFinishedCandle is CandleMessage nonFinished)
 			{
-				nonFinished.State = CandleStates.Finished;
-				nonFinished.LocalTime = candleMsg.LocalTime;
-				RaiseNewOutCandle(info, nonFinished);
-				info.NonFinishedCandle = null;
+				if (nonFinished.OpenTime < candleMsg.OpenTime)
+				{
+					nonFinished.State = CandleStates.Finished;
+					nonFinished.LocalTime = candleMsg.LocalTime;
+					RaiseNewOutCandle(info, nonFinished);
+					info.NonFinishedCandle = null;
+				}
+				else if (candleMsg.State == CandleStates.Finished)
+					info.NonFinishedCandle = null;
 			}
 
 			candleMsg = _isHistory ? candleMsg : candleMsg.TypedClone();
