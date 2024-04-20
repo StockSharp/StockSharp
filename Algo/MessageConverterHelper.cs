@@ -388,7 +388,7 @@ namespace StockSharp.Algo
 				ClientCode = order.ClientCode,
 				Currency = order.Currency,
 				IsMarketMaker = order.IsMarketMaker,
-				IsMargin = order.IsMargin,
+				MarginMode = order.MarginMode,
 				Slippage = order.Slippage,
 				IsManual = order.IsManual,
 				MinOrderVolume = order.MinVolume,
@@ -429,7 +429,7 @@ namespace StockSharp.Algo
 				Balance = order.Balance,
 				Volume = order.Volume,
 				Side = order.Side,
-				IsMargin = order.IsMargin,
+				MarginMode = order.MarginMode,
 			};
 
 			order.Security.ToMessage(securityId).CopyTo(msg, false);
@@ -484,7 +484,7 @@ namespace StockSharp.Algo
 
 				IsManual = newOrder.IsManual,
 				IsMarketMaker = newOrder.IsMarketMaker,
-				IsMargin = newOrder.IsMargin,
+				MarginMode = newOrder.MarginMode,
 
 				Slippage = newOrder.Slippage,
 
@@ -1295,7 +1295,7 @@ namespace StockSharp.Algo
 			order.CommissionCurrency = message.CommissionCurrency;
 			order.Currency = message.Currency;
 			order.IsMarketMaker = message.IsMarketMaker;
-			order.IsMargin = message.IsMargin;
+			order.MarginMode = message.MarginMode;
 			order.Slippage = message.Slippage;
 			order.IsManual = message.IsManual;
 			order.AveragePrice = message.AveragePrice;

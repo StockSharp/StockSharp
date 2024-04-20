@@ -119,15 +119,15 @@ namespace StockSharp.Messages
 		public string Comment { get; set; }
 
 		/// <summary>
-		/// Is margin enabled.
+		/// Margin mode.
 		/// </summary>
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.MarginKey,
-			Description = LocalizedStrings.IsMarginKey,
+			Description = LocalizedStrings.MarginModeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
-		public bool? IsMargin { get; set; }
+		public MarginModes? MarginMode { get; set; }
 
 		/// <summary>
 		/// Copy the message into the <paramref name="destination" />.
@@ -146,7 +146,7 @@ namespace StockSharp.Messages
 			destination.ClientCode = ClientCode;
 			destination.Condition = Condition?.Clone();
 			destination.Comment = Comment;
-			destination.IsMargin = IsMargin;
+			destination.MarginMode = MarginMode;
 		}
 
 		/// <summary>
@@ -161,7 +161,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			var str = base.ToString() + $",TransId={TransactionId},OrdType={OrderType},Pf={PortfolioName}(ClCode={ClientCode}),Cond={Condition},MR={IsMargin}";
+			var str = base.ToString() + $",TransId={TransactionId},OrdType={OrderType},Pf={PortfolioName}(ClCode={ClientCode}),Cond={Condition},MR={MarginMode}";
 
 			if (!Comment.IsEmpty())
 				str += $",Comment={Comment}";

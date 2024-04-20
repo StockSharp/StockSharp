@@ -226,7 +226,7 @@ namespace StockSharp.BusinessEntities
 				Condition = oldOrder.Condition?.TypedClone(),
 				IsManual = oldOrder.IsManual,
 				IsMarketMaker = oldOrder.IsMarketMaker,
-				IsMargin = oldOrder.IsMargin,
+				MarginMode = oldOrder.MarginMode,
 				MinVolume = oldOrder.MinVolume,
 				PositionEffect = oldOrder.PositionEffect,
 				PostOnly = oldOrder.PostOnly,

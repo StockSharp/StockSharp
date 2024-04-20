@@ -93,7 +93,7 @@ namespace StockSharp.Algo.Storages.Csv
 				data.LocalTime.ToString("zzz"),
 				data.IsMarketMaker.To<int?>().ToString(),
 				data.CommissionCurrency,
-				data.IsMargin.To<int?>().ToString(),
+				data.MarginMode.To<int?>().ToString(),
 				data.IsManual.To<int?>().ToString(),
 				data.MinVolume.To<string>(),
 				data.PositionEffect.To<int?>().ToString(),
@@ -184,7 +184,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 			{
-				msg.IsMargin = reader.ReadNullableBool();
+				msg.MarginMode = reader.ReadNullableEnum<MarginModes>();
 				msg.IsManual = reader.ReadNullableBool();
 			}
 

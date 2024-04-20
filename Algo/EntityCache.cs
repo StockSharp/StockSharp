@@ -549,7 +549,7 @@ namespace StockSharp.Algo
 						ClientCode = message.ClientCode,
 						BrokerCode = message.BrokerCode,
 						IsMarketMaker = message.IsMarketMaker,
-						IsMargin = message.IsMargin,
+						MarginMode = message.MarginMode,
 						Slippage = message.Slippage,
 						IsManual = message.IsManual,
 						MinVolume = message.MinVolume,

@@ -565,15 +565,15 @@ namespace StockSharp.Messages
 		public bool? IsMarketMaker { get; set; }
 
 		/// <summary>
-		/// Is margin enabled.
+		/// Margin mode.
 		/// </summary>
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.MarginKey,
-			Description = LocalizedStrings.IsMarginKey,
+			Description = LocalizedStrings.MarginModeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
-		public bool? IsMargin { get; set; }
+		public MarginModes? MarginMode { get; set; }
 
 		/// <summary>
 		/// Is order manual.
@@ -759,7 +759,7 @@ namespace StockSharp.Messages
 			destination.HasOrderInfo = HasOrderInfo;
 
 			destination.IsMarketMaker = IsMarketMaker;
-			destination.IsMargin = IsMargin;
+			destination.MarginMode = MarginMode;
 			destination.IsManual = IsManual;
 
 			destination.CommissionCurrency = CommissionCurrency;

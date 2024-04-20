@@ -172,7 +172,7 @@ namespace StockSharp.Algo.Export
 					.WriteAttribute("userOrderId", item.UserOrderId)
 					.WriteAttribute("strategyId", item.StrategyId)
 					.WriteAttribute("currency", item.Currency)
-					.WriteAttribute("isMargin", item.IsMargin)
+					.WriteAttribute("marginMode", item.MarginMode)
 					.WriteAttribute("isMarketMaker", item.IsMarketMaker)
 					.WriteAttribute("isManual", item.IsManual)
 					.WriteAttribute("averagePrice", item.AveragePrice)

@@ -13623,6 +13623,10 @@
     "en": "Is margin enabled.",
     "ru": "Включена ли маржинальность."
   },
+  "MarginMode": {
+    "en": "Margin mode.",
+    "ru": "Режим маржинальности."
+  },
   "Ssl": {
     "en": "SSL",
     "ru": "SSL"

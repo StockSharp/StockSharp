@@ -435,7 +435,7 @@ public class DatabaseExporter : BaseExporter
 			.Property(m => m.UserOrderId).HasLength(32)
 			.Property(m => m.StrategyId).HasLength(32)
 
-			.Property(m => m.IsMargin)
+			.Property(m => m.MarginMode)
 			.Property(m => m.IsMarketMaker)
 			.Property(m => m.IsManual)
 			.Property(m => m.AveragePrice)

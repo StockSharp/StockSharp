@@ -482,7 +482,7 @@
 					.WriteProperty("userOrderId", item.UserOrderId)
 					.WriteProperty("strategyId", item.StrategyId)
 					.WriteProperty("currency", item.Currency)
-					.WriteProperty("isMargin", item.IsMargin)
+					.WriteProperty("marginMode", item.MarginMode)
 					.WriteProperty("isMarketMaker", item.IsMarketMaker)
 					.WriteProperty("isManual", item.IsManual)
 					.WriteProperty("averagePrice", item.AveragePrice)

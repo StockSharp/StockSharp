@@ -444,10 +444,10 @@ namespace StockSharp.Algo.Storages.Binary
 				if (metaInfo.Version < MarketDataVersions.Version62)
 					continue;
 
-				writer.Write(msg.IsMargin != null);
+				writer.Write(msg.MarginMode != null);
 
-				if (msg.IsMargin != null)
-					writer.Write(msg.IsMargin.Value);
+				if (msg.MarginMode != null)
+					writer.Write(msg.MarginMode == MarginModes.Cross);
 
 				if (metaInfo.Version < MarketDataVersions.Version63)
 					continue;
@@ -664,7 +664,7 @@ namespace StockSharp.Algo.Storages.Binary
 				return msg;
 
 			if (reader.Read())
-				msg.IsMargin = reader.Read();
+				msg.MarginMode = reader.Read() ? MarginModes.Cross : MarginModes.Isolated;
 
 			if (metaInfo.Version < MarketDataVersions.Version63)
 				return msg;

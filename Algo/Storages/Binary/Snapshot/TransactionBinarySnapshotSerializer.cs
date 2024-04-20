@@ -104,7 +104,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public string TradeStringId;
 
 			public BlittableDecimal? OpenInterest;
-			public byte? IsMargin;
+			public byte? MarginMode;
 			public byte? IsManual;
 
 			public BlittableDecimal? AveragePrice;
@@ -180,7 +180,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				Error = (message.Error?.Message).VerifySize(Sizes.S200),
 				ExpiryDate = message.ExpiryDate?.To<long>(),
 				IsMarketMaker = message.IsMarketMaker?.ToByte(),
-				IsMargin = message.IsMargin?.ToByte(),
+				MarginMode = message.MarginMode?.ToByte(),
 				IsManual = message.IsManual?.ToByte(),
 				Side = (byte)message.Side,
 				OrderId = message.OrderId,
@@ -398,7 +398,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 				execMsg.ExpiryDate = snapshot.ExpiryDate?.To<DateTimeOffset>();
 				execMsg.IsMarketMaker = snapshot.IsMarketMaker?.ToBool();
-				execMsg.IsMargin = snapshot.IsMargin?.ToBool();
+				execMsg.MarginMode = (MarginModes?)snapshot.MarginMode;
 				execMsg.IsManual = snapshot.IsManual?.ToBool();
 				execMsg.Side = (Sides)snapshot.Side;
 				execMsg.OrderId = snapshot.OrderId;
@@ -639,8 +639,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			if (changes.OpenInterest != default)
 				message.OpenInterest = changes.OpenInterest;
 
-			if (changes.IsMargin != default)
-				message.IsMargin = changes.IsMargin;
+			if (changes.MarginMode != default)
+				message.MarginMode = changes.MarginMode;
 
 			if (changes.TimeInForce != default)
 				message.TimeInForce = changes.TimeInForce;
