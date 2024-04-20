@@ -126,8 +126,11 @@ public class LocalProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 		private ProtectiveProcessor _stop;
 
 		private decimal _posValue;
-		private readonly LinkedList<decimal> _posPrices = new();
 		private decimal _posPrice;
+		
+		private decimal _totalVolume;
+		private decimal _weightedPriceSum;
+		private readonly LinkedList<(decimal price, decimal vol)> _trades = new();
 
 		public LocalProtectiveBehaviour(
 			decimal? priceStep, int? decimals,
@@ -181,44 +184,68 @@ public class LocalProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 
 			if (_posValue == 0)
 			{
-				_posPrices.Clear();
-				_posPrice = default;
+				_trades.Clear();
+				_posPrice = _totalVolume = _weightedPriceSum = default;
 			}
 			else
 			{
-				var protectiveSide = _posValue > 0 ? Sides.Buy : Sides.Sell;
-
 				if (wasZero || wasPositive != (_posValue > 0))
 				{
-					_posPrices.Clear();
-					_posPrices.AddLast(price);
+					var volume = _posValue.Abs();
+
+					_totalVolume = volume;
+					_weightedPriceSum = price * volume;
+
+					_trades.Clear();
+					_trades.AddLast((price, volume));
+
 					_posPrice = price;
 				}
 				else
 				{
-					if (_posPrices.Count == 0)
+					if (_trades.Count == 0)
 						throw new InvalidOperationException();
 
-					_posPrice *= _posPrices.Count;
-
 					var isPosReduced = wasPositive == (value < 0);
+					var volume = value.Abs();
 
 					if (isPosReduced)
 					{
-						_posPrice -= _posPrices.First.Value;
-						_posPrices.RemoveFirst();
+						var left = volume;
+
+						while (left > 0)
+						{
+							var firstNode = _trades.First ?? throw new InvalidOperationException("First node is null.");
+
+							var (fp, fv) = firstNode.Value;
+							var volumeToDeduct = left.Min(fv);
+
+							_totalVolume -= volumeToDeduct;
+							_weightedPriceSum -= fp * volumeToDeduct;
+
+							if (fv <= volumeToDeduct)
+								_trades.RemoveFirst();
+							else
+								firstNode.Value = new(fp, fv - volumeToDeduct);
+
+							left -= volumeToDeduct;
+						}
 					}
 					else
 					{
-						_posPrice += price;
-						_posPrices.AddLast(price);
+						_totalVolume += volume;
+						_weightedPriceSum += price * volume;
+
+						_trades.AddLast((price, volume));
 					}
 
-					_posPrice /= _posPrices.Count;
+					_posPrice = _weightedPriceSum / _totalVolume;
 
 					if (_priceStep is not null)
 						_posPrice = _posPrice.ShrinkPrice(_priceStep, _decimals);
 				}
+
+				var protectiveSide = _posValue > 0 ? Sides.Buy : Sides.Sell;
 
 				_take = TakeValue.IsSet() ? new ProtectiveProcessor(protectiveSide, _posPrice, protectiveSide == Sides.Buy, IsTakeTrailing, TakeValue, UseMarketOrders, new(), TakeTimeout) { Parent = this } : null;
 				_stop = StopValue.IsSet() ? new ProtectiveProcessor(protectiveSide, _posPrice, protectiveSide == Sides.Sell, IsStopTrailing, StopValue, UseMarketOrders, new(), StopTimeout) { Parent = this } : null;
@@ -237,9 +264,8 @@ public class LocalProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 		public override void Clear()
 		{
 			ResetProcessors();
-			_posPrices.Clear();
-			_posPrice = default;
-			_posValue = default;
+			_trades.Clear();
+			_posPrice = _posValue = _totalVolume = _weightedPriceSum = default;
 		}
 	}
 
