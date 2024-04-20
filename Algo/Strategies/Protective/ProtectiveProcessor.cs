@@ -2,6 +2,7 @@
 
 using System;
 
+using StockSharp.Localization;
 using StockSharp.Logging;
 using StockSharp.Messages;
 
@@ -16,12 +17,12 @@ public class ProtectiveProcessor : BaseLogReceiver
 	private readonly bool _useMarketOrders;
 	private readonly Unit _priceOffset;
 	private readonly TimeSpan _timeout;
-	private bool _isTrailingActivated;
 	private decimal? _prevBestPrice;
 	private readonly decimal _protectivePrice;
 	private readonly Sides _protectiveSide;
 
 	private DateTimeOffset? _startedTime;
+	private decimal? _prevCurrPrice;
 
 	/// <summary>
 	/// Initialize <see cref="ProtectiveProcessor"/>.
@@ -36,121 +37,93 @@ public class ProtectiveProcessor : BaseLogReceiver
 	/// <param name="timeout"></param>
 	public ProtectiveProcessor(Sides protectiveSide, decimal protectivePrice, bool isUpTrend, bool isTrailing, Unit protectiveLevel, bool useMarketOrders, Unit priceOffset, TimeSpan timeout)
 	{
+		if (protectivePrice <= 0)
+			throw new ArgumentOutOfRangeException(nameof(protectivePrice), protectivePrice, LocalizedStrings.InvalidValue);
+
+		if (timeout < TimeSpan.Zero)
+			throw new ArgumentOutOfRangeException(nameof(timeout), timeout, LocalizedStrings.InvalidValue);
+
 		_protectiveSide = protectiveSide;
 		_protectivePrice = protectivePrice;
 		_isUpTrend = isUpTrend;
 		_isTrailing = isTrailing;
-		_protectiveLevel = protectiveLevel;
+		_protectiveLevel = protectiveLevel ?? throw new ArgumentNullException(nameof(protectiveLevel));
 		_useMarketOrders = useMarketOrders;
-		_priceOffset = priceOffset;
+		_priceOffset = priceOffset ?? throw new ArgumentNullException(nameof(priceOffset));
 		_timeout = timeout;
 	}
-
-	/// <summary>
-	/// Protected position side
-	/// </summary>
-	public Sides ProtectiveSide => _protectiveSide;
 
 	/// <summary>
 	/// The absolute value of the price when the one is reached the protective strategy is activated.
 	/// </summary>
 	/// <remarks>If the price is equal to <see langword="null" /> then the activation is not required.</remarks>
-	public virtual decimal? GetActivationPrice(decimal? currentPrice, DateTimeOffset currentTime)
+	public decimal? GetActivationPrice(decimal? currentPrice, DateTimeOffset currentTime)
 	{
-		_prevBestPrice ??= _protectivePrice;
-
-		if (currentPrice is null)
-		{
-			this.AddDebugLog("Current price is null.");
-			return null;
-		}
+		_prevCurrPrice ??= currentPrice;
 
 		decimal? getClosePosPrice()
 		{
 			if (_useMarketOrders)
 				return 0;
 
-			//if (!Security.Board.IsSupportMarketOrders)
-			//	return this.GetMarketPrice(QuotingDirection);
+			if ((currentPrice ?? _prevCurrPrice) is not decimal closePrice)
+			{
+				this.AddWarningLog("No price for close position.");
+				return null;
+			}
 
-			if (currentPrice is not null)
-				return (decimal)(currentPrice.Value + (_protectiveSide == Sides.Buy ? -_priceOffset : _priceOffset));
-
-			this.AddWarningLog("No best price.");
-			return null;
+			return (decimal)(closePrice + (_protectiveSide == Sides.Buy ? -_priceOffset : _priceOffset));
 		}
 
 		bool isTimeOut()
 		{
-			if (_startedTime is null)
+			if (_timeout == default)
+				return false;
+			else if (_startedTime is null)
 			{
 				_startedTime = currentTime;
 				return false;
 			}
-
-			return _timeout > TimeSpan.Zero && (currentTime - _startedTime.Value) >= _timeout;
+			else
+				return (currentTime - _startedTime.Value) >= _timeout;
 		}
 
-		if (isTimeOut() && (_isUpTrend ? currentPrice > _protectivePrice : currentPrice < _protectivePrice))
+		if (isTimeOut())
 		{
 			this.AddDebugLog("Timeout.");
 			return getClosePosPrice();
 		}
 
-		this.AddDebugLog("PrevBest={0} CurrBest={1}", _prevBestPrice, currentPrice);
+		if (currentPrice is not decimal currPriceDec)
+		{
+			this.AddDebugLog("Current price is null.");
+			return null;
+		}
 
 		if (_isTrailing)
 		{
-			if (_isUpTrend)
-			{
-				if (_prevBestPrice < currentPrice)
-				{
-					_prevBestPrice = currentPrice;
-				}
-				else if (_prevBestPrice > currentPrice)
-				{
-					_isTrailingActivated = true;
-				}
-			}
-			else
-			{
-				if (_prevBestPrice > currentPrice)
-				{
-					_prevBestPrice = currentPrice;
-				}
-				else if (_prevBestPrice < currentPrice)
-				{
-					_isTrailingActivated = true;
-				}
-			}
-
-			if (!_isTrailingActivated)
-				return null;
-
-			var activationPrice = _isUpTrend
-				? _prevBestPrice.Value - _protectiveLevel
-				: _prevBestPrice.Value + _protectiveLevel;
-
-			this.AddDebugLog("ActivationPrice={0} level={1}", activationPrice, _protectiveLevel);
+			this.AddDebugLog("PrevBest={0} CurrBest={1}", _prevBestPrice, currPriceDec);
 
 			if (_isUpTrend)
 			{
-				if (currentPrice <= activationPrice)
+				if (_prevBestPrice < currPriceDec)
+					_prevBestPrice = currPriceDec;
+				else if (_prevBestPrice > currPriceDec)
 					return getClosePosPrice();
 			}
 			else
 			{
-				if (currentPrice >= activationPrice)
+				if (_prevBestPrice > currPriceDec)
+					_prevBestPrice = currPriceDec;
+				else if (_prevBestPrice < currPriceDec)
 					return getClosePosPrice();
 			}
-
-			return null;
 		}
 		else
 		{
 			var activationPrice = (_protectiveLevel.Type == UnitTypes.Limit)
 				? _protectiveLevel
-				: (_isUpTrend ? _prevBestPrice + _protectiveLevel : _prevBestPrice - _protectiveLevel);
+				: (_isUpTrend ? _protectivePrice + _protectiveLevel : _protectivePrice - _protectiveLevel);
 
 			this.AddDebugLog("ActivationPrice={0} level={1}", activationPrice, _protectiveLevel);
 
@@ -161,16 +134,16 @@ public class ProtectiveProcessor : BaseLogReceiver
 
 			if (_isUpTrend)
 			{
-				if (currentPrice >= activationPrice)
+				if (currPriceDec >= activationPrice)
 					return getClosePosPrice();
 			}
 			else
 			{
-				if (currentPrice <= activationPrice)
+				if (currPriceDec <= activationPrice)
 					return getClosePosPrice();
 			}
-
-			return null;
 		}
+
+		return null;
 	}
 }

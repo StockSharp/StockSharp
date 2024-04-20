@@ -159,12 +159,19 @@ public class LocalProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 					isTake,
 					_posValue > 0 ? Sides.Sell : Sides.Buy,
 					activationPrice.Value,
-					_posValue.Abs(),
+					_totalVolume,
 					null
 				);
 			}
 
-			return TryActivate(_take, true) ?? TryActivate(_stop, false);
+			var info = TryActivate(_take, true) ?? TryActivate(_stop, false);
+
+			if (info is null)
+				return null;
+
+			Clear();
+
+			return info.Value;
 		}
 
 		public override (bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)? Update(decimal price, decimal value)

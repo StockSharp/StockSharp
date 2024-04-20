@@ -2,6 +2,7 @@
 
 using System;
 
+using StockSharp.Localization;
 using StockSharp.Logging;
 using StockSharp.Messages;
 
@@ -55,8 +56,14 @@ public abstract class BaseProtectiveBehaviour : BaseLogReceiver, IProtectiveBeha
 		TimeSpan takeTimeout, TimeSpan stopTimeout,
 		bool useMarketOrders)
     {
-		TakeValue = takeValue;
-		StopValue = stopValue;
+		if (takeTimeout < TimeSpan.Zero)
+			throw new ArgumentOutOfRangeException(nameof(takeTimeout), takeTimeout, LocalizedStrings.InvalidValue);
+
+		if (stopTimeout < TimeSpan.Zero)
+			throw new ArgumentOutOfRangeException(nameof(stopTimeout), stopTimeout, LocalizedStrings.InvalidValue);
+
+		TakeValue = takeValue ?? throw new ArgumentNullException(nameof(takeValue));
+		StopValue = stopValue ?? throw new ArgumentNullException(nameof(stopValue));
 		IsTakeTrailing = isTakeTrailing;
 		IsStopTrailing = isStopTrailing;
 		TakeTimeout = takeTimeout;
