@@ -1,4 +1,12 @@
 {
+  "CancelledTime": {
+    "en": "Cancelled time.",
+    "ru": "Время отмены."
+  },
+  "MatchedTime": {
+    "en": "Matched time.",
+    "ru": "Время исполнения."
+  },
   "ValuesMustBeSameType": {
     "en": "Values must be same type.",
     "ru": "Значения должны быть одного типа."

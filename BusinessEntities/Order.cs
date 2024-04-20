@@ -298,10 +298,58 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		private DateTimeOffset? _cancelledTime;
+
+		/// <summary>
+		/// Cancelled time.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CancelKey,
+			Description = LocalizedStrings.CancelledTimeKey,
+			GroupName = LocalizedStrings.GeneralKey)]
+		public DateTimeOffset? CancelledTime
+		{
+			get => _cancelledTime;
+			set
+			{
+				if (_cancelledTime == value)
+					return;
+
+				_cancelledTime = value;
+				NotifyChanged();
+			}
+		}
+
+		private DateTimeOffset? _matchedTime;
+
+		/// <summary>
+		/// Cancelled time.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.MatchKey,
+			Description = LocalizedStrings.MatchedTimeKey,
+			GroupName = LocalizedStrings.GeneralKey)]
+		public DateTimeOffset? MatchedTime
+		{
+			get => _matchedTime;
+			set
+			{
+				if (_matchedTime == value)
+					return;
+
+				_matchedTime = value;
+				NotifyChanged();
+			}
+		}
+
 		/// <summary>
 		/// Time of last order change (Cancellation, Fill).
 		/// </summary>
-		[Obsolete("Use LastChangeTime property.")]
+		[Obsolete("Use ServerTime property.")]
 		[Browsable(false)]
 		public DateTimeOffset LastChangeTime
 		{

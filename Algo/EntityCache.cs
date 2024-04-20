@@ -137,6 +137,14 @@ namespace StockSharp.Algo
 				order.ServerTime = _raiseNewOrder ? message.ServerTime : message.LocalTime;
 				order.LocalTime = message.LocalTime;
 
+				if (message.OrderState == OrderStates.Done)
+				{
+					if (message.IsCanceled())
+						order.CancelledTime = message.ServerTime;
+					else
+						order.MatchedTime = message.ServerTime;
+				}
+
 				if (message.OrderPrice != 0)
 					order.Price = message.OrderPrice;
 
