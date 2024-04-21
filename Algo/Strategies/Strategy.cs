@@ -286,7 +286,6 @@ namespace StockSharp.Algo.Strategies
 			public bool IsOwn { get; set; }
 			public bool IsCanceled { get; set; }
 			public decimal ReceivedVolume { get; set; }
-			public OrderFail RegistrationFail { get; set; }
 			public OrderStates PrevState { get; set; }
 		}
 
@@ -1202,7 +1201,8 @@ namespace StockSharp.Algo.Strategies
 		/// Orders with errors, registered within the strategy.
 		/// </summary>
 		[Browsable(false)]
-		public IEnumerable<OrderFail> OrderFails => _ordersInfo.CachedValues.Where(i => i.RegistrationFail != null).Select(i => i.RegistrationFail);
+		[Obsolete("Subscribe on OrderRegisterFailed event.")]
+		public IEnumerable<OrderFail> OrderFails => Enumerable.Empty<OrderFail>();
 
 		private readonly StrategyParam<decimal> _volume;
 
@@ -1512,9 +1512,9 @@ namespace StockSharp.Algo.Strategies
 
 		private string _lastCantTradeReason;
 
-		private bool CanTrade(bool reducePosition)
+		private bool CanTrade(bool reducePosition, out string reason)
 		{
-			if(CanTrade(CurrentTime, reducePosition, out var reason))
+			if(CanTrade(CurrentTime, reducePosition, out reason))
 			{
 				_lastCantTradeReason = null;
 				return true;
@@ -1523,7 +1523,7 @@ namespace StockSharp.Algo.Strategies
 			var logLevel = reason == _lastCantTradeReason ? LogLevels.Verbose : LogLevels.Warning;
 
 			_lastCantTradeReason = reason;
-			this.AddLog(logLevel, () => $"can't send orders: {reason}");
+			this.AddLog(logLevel, () => $"can't send orders: {_lastCantTradeReason}");
 			return false;
 		}
 
@@ -1573,8 +1573,11 @@ namespace StockSharp.Algo.Strategies
 
 			var pos = _positions.TryGetValue((order.Security, order.Portfolio))?.CurrentValue;
 
-			if (!CanTrade(pos > 0 && pos.Value.GetDirection() == order.Side.Invert() && pos.Value.Abs() >= order.Volume))
+			if (!CanTrade(pos > 0 && pos.Value.GetDirection() == order.Side.Invert() && pos.Value.Abs() >= order.Volume, out var reason))
+			{
+				ProcessOrderFail(order, new InvalidOperationException(reason));
 				return;
+			}
 
 			this.AddInfoLog("Registration {0} (0x{5:X}) order for {1} with price {2} and volume {3}. {4}",
 				order.Type, order.Side, order.Price, order.Volume, order.Comment, order.GetHashCode());
@@ -1602,7 +1605,10 @@ namespace StockSharp.Algo.Strategies
 			var action = AddOrder(order, false);
 
 			if (action is not null)
+			{
+				ProcessOrderFail(order, new InvalidOperationException(action.Value.GetFieldDisplayName()));
 				return;
+			}
 
 			ProcessRegisterOrderAction(null, order, (oOrder, nOrder) =>
 			{
@@ -1623,8 +1629,11 @@ namespace StockSharp.Algo.Strategies
 		{
 			this.AddInfoLog("EditOrder: {0}", order);
 
-			if (!CanTrade(changes.Volume > 0 && order.Balance > changes.Volume))
+			if (!CanTrade(changes.Volume > 0 && order.Balance > changes.Volume, out var reason))
+			{
+				ProcessOrderFail(order, new InvalidOperationException(reason));
 				return;
+			}
 
 			var action = ProcessRisk(() => order.CreateReplaceMessage(changes, order.Security.ToSecurityId()));
 
@@ -1643,13 +1652,19 @@ namespace StockSharp.Algo.Strategies
 
 			this.AddInfoLog("Reregistration {0} with price {1} to price {2}. {3}", oldOrder.TransactionId, oldOrder.Price, newOrder.Price, oldOrder.Comment);
 
-			if (!CanTrade(newOrder.Volume > 0 && oldOrder.Balance > newOrder.Volume))
+			if (!CanTrade(newOrder.Volume > 0 && oldOrder.Balance > newOrder.Volume, out var reason))
+			{
+				ProcessOrderFail(newOrder, new InvalidOperationException(reason));
 				return;
+			}
 
 			var action = AddOrder(newOrder, false);
 
 			if (action is not null)
+			{
+				ProcessOrderFail(newOrder, new InvalidOperationException(action.Value.GetFieldDisplayName()));
 				return;
+			}
 
 			ProcessRegisterOrderAction(oldOrder, newOrder, (oOrder, nOrder) =>
 			{
@@ -1701,14 +1716,32 @@ namespace StockSharp.Algo.Strategies
 			}
 			catch (Exception excp)
 			{
-				Rules.RemoveRulesByToken(nOrder, null);
+				this.AddErrorLog(LocalizedStrings.ErrorRegOrder, nOrder.TransactionId, excp.Message);
 
-				nOrder.ApplyNewState(OrderStates.Failed, this);
-
-				var fail = new OrderFail { Order = nOrder, Error = excp, ServerTime = CurrentTime };
-
-				OnConnectorOrderRegisterFailed(fail);
+				ProcessOrderFail(nOrder, excp, true);
 			}
+		}
+
+		private void ProcessOrderFail(Order order, Exception error, bool canRisk = false)
+		{
+			if (order is null)	throw new ArgumentNullException(nameof(order));
+			if (error is null)	throw new ArgumentNullException(nameof(error));
+
+			Rules.RemoveRulesByToken(order, null);
+
+			order.ApplyNewState(OrderStates.Failed, this);
+
+			if (IsDisposeStarted)
+				return;
+
+			var fail = new OrderFail
+			{
+				Order = order,
+				Error = error,
+				ServerTime = CurrentTime,
+			};
+
+			OnOrderRegisterFailed(fail, canRisk && _ordersInfo.TryGetValue(order, out var info) && info.IsOwn);
 		}
 
 		private void ApplyMonitorRules(Order order)
@@ -2267,12 +2300,14 @@ namespace StockSharp.Algo.Strategies
 		/// The method, called at strategy order registration error.
 		/// </summary>
 		/// <param name="fail">Error registering order.</param>
-		protected virtual void OnOrderRegisterFailed(OrderFail fail)
+		/// <param name="calcRisk">Invoke risk manager.</param>
+		protected virtual void OnOrderRegisterFailed(OrderFail fail, bool calcRisk)
 		{
 			OrderRegisterFailed?.Invoke(fail);
 			StatisticManager.AddRegisterFailedOrder(fail);
 
-			ProcessRisk(() => fail.ToMessage(fail.Order.TransactionId));
+			if (calcRisk)
+				ProcessRisk(() => fail.ToMessage(fail.Order.TransactionId));
 		}
 
 		private void TryAddChildOrder(Order order)
@@ -2496,24 +2531,8 @@ namespace StockSharp.Algo.Strategies
 			if(IsDisposeStarted)
 				return;
 
-			OrderInfo info;
-
-			lock (_ordersInfo.SyncRoot)
-			{
-				info = _ordersInfo.TryGetValue(fail.Order);
-
-				if (info == null)
-					return;
-
-				info.RegistrationFail = fail;
-			}
-
-			this.AddErrorLog(LocalizedStrings.ErrorRegOrder, fail.Order.TransactionId, fail.Error.Message);
-
-			TryInvoke(() => OnOrderRegisterFailed(fail));
-
-			if (info.IsOwn)
-				ProcessRisk(() => fail.ToMessage(fail.Order.TransactionId));
+			if (_ordersInfo.TryGetValue(fail.Order, out var info))
+				OnOrderRegisterFailed(fail, info.IsOwn);
 		}
 
 		private void UpdatePnLManager(Security security)
