@@ -101,7 +101,7 @@ namespace StockSharp.Algo
 			private readonly SyncObject _syncObject = new();
 
 			private readonly Dictionary<long, SubscriptionInfo> _subscriptions = new();
-			private readonly Dictionary<long, Tuple<ISubscriptionMessage, Subscription>> _requests = new();
+			private readonly Dictionary<long, (ISubscriptionMessage request, Subscription subscription)> _requests = new();
 			private readonly List<SubscriptionInfo> _keeped = new();
 			private readonly HashSet<long> _notFound = new();
 			private readonly Dictionary<long, long> _subscriptionAllMap = new();
@@ -292,7 +292,7 @@ namespace StockSharp.Algo
 						// do not remove cause subscription can be interrupted after successful response
 						//_requests.Remove(response.OriginalTransactionId);
 
-						originalMsg = tuple.Item1;
+						originalMsg = tuple.request;
 
 						info = originalMsg.IsSubscribe
 							? TryGetInfo(originalMsg.TransactionId, false, false, null, false)
@@ -410,7 +410,7 @@ namespace StockSharp.Algo
 			private void SendRequest(ISubscriptionMessage request, Subscription subscription, bool isAllExtension)
 			{
 				lock (_syncObject)
-					_requests.Add(request.TransactionId, Tuple.Create(request, subscription));
+					_requests.Add(request.TransactionId, (request, subscription));
 
 				if(isAllExtension)
 					_connector.AddVerboseLog("(ALL+) " + (request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent), subscription.SecurityId, request);

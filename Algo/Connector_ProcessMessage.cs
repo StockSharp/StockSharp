@@ -423,12 +423,12 @@ namespace StockSharp.Algo
 		/// </summary>
 		public StorageBuffer Buffer { get; }
 
-		private Tuple<IMessageAdapter, IMessageAdapter, IMessageAdapter> GetAdapter(Type type)
+		private (IMessageAdapter prev, IMessageAdapter adapter, IMessageAdapter next) GetAdapter(Type type)
 		{
 			var adapter = _inAdapter;
 
 			if (adapter == null)
-				return null;
+				return default;
 
 			var prev = (adapter as IMessageAdapterWrapper)?.InnerAdapter;
 			var next = (IMessageAdapter)null;
@@ -436,19 +436,19 @@ namespace StockSharp.Algo
 			while (true)
 			{
 				if (adapter.GetType() == type)
-					return Tuple.Create(prev, adapter, next);
+					return (prev, adapter, next);
 
 				next = adapter;
 				adapter = prev;
 
 				if (adapter == null)
-					return null;
+					return default;
 
 				prev = (adapter as IMessageAdapterWrapper)?.InnerAdapter;
 			}
 		}
 
-		private Tuple<IMessageAdapter, IMessageAdapter, IMessageAdapter> GetAdapter<T>()
+		private (IMessageAdapter prev, IMessageAdapter adapter, IMessageAdapter next) GetAdapter<T>()
 			where T : IMessageAdapterWrapper
 		{
 			return GetAdapter(typeof(T));
@@ -459,21 +459,21 @@ namespace StockSharp.Algo
 			if (_inAdapter == null)
 				return;
 
-			var tuple = type != null ? GetAdapter(type) : null;
-			var adapter = tuple?.Item2;
+			var tuple = type != null ? GetAdapter(type) : default;
+			var adapter = tuple.adapter;
 
 			if (adapter != null)
 			{
 				//if (after)
 				//{
-				if (tuple.Item3 is IMessageAdapterWrapper nextWrapper)
+				if (tuple.next is IMessageAdapterWrapper nextWrapper)
 					nextWrapper.InnerAdapter = create(adapter);
 				else
 					AddAdapter(create);
 				//}
 				//else
 				//{
-				//	var prevWrapper = tuple.Item1;
+				//	var prevWrapper = tuple.prev;
 				//	var nextWrapper = adapter as IMessageAdapterWrapper;
 
 				//	if (prevWrapper == null)
@@ -502,16 +502,13 @@ namespace StockSharp.Algo
 		{
 			var tuple = GetAdapter<T>();
 
-			if (tuple == null)
+			if (tuple == default)
 				return;
 
-			var adapter = tuple.Item2;
-			var adapterWrapper = (MessageAdapterWrapper)adapter;
+			var adapterWrapper = (MessageAdapterWrapper)tuple.adapter;
+			var nextWrapper = (MessageAdapterWrapper)tuple.next;
 
-			var next = tuple.Item3;
-			var nextWrapper = (MessageAdapterWrapper)next;
-
-			if (next == null)
+			if (nextWrapper == null)
 			{
 				adapterWrapper.NewOutMessage -= AdapterOnNewOutMessage;
 
@@ -1501,16 +1498,16 @@ namespace StockSharp.Algo
 
 		private void ProcessOwnTradeMessage(Order order, Security security, ExecutionMessage message, long transactionId)
 		{
-			var tuple = _entityCache.ProcessOwnTradeMessage(order, security, message, transactionId);
+			var (trade, isNew) = _entityCache.ProcessOwnTradeMessage(order, security, message, transactionId);
 
-			if (tuple == null)
+			if (trade == null)
 				return;
 
-			if (tuple.Item2)
-				RaiseNewMyTrade(tuple.Item1);
+			if (isNew)
+				RaiseNewMyTrade(trade);
 
 			//this.AddWarningLog("Duplicate own trade message: {0}", message);
-			RaiseReceived(tuple.Item1, message, OwnTradeReceived);
+			RaiseReceived(trade, message, OwnTradeReceived);
 		}
 
 		private void ProcessTransactionMessage(ExecutionMessage message)
