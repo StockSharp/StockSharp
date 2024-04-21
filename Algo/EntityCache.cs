@@ -59,7 +59,7 @@ namespace StockSharp.Algo
 			public static readonly OrderChangeInfo NotExist = new();
 		}
 
-		private sealed class OrderInfo
+		private class OrderInfo
 		{
 			private readonly EntityCache _parent;
 			private bool _raiseNewOrder;
@@ -232,6 +232,7 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<(long transId, OrderOperations operation), OrderFail> _allOrdersByFailedId = new();
 		private readonly SynchronizedDictionary<long, Order> _allOrdersById = new();
 		private readonly SynchronizedDictionary<string, Order> _allOrdersByStringId = new(StringComparer.InvariantCultureIgnoreCase);
+		private readonly SynchronizedDictionary<Order, (decimal totalVolume, decimal weightedPriceSum)> _ordersAvgPrices = new();
 
 		private readonly SynchronizedDictionary<string, News> _newsById = new(StringComparer.InvariantCultureIgnoreCase);
 		private readonly SynchronizedList<News> _newsWithoutId = new();
@@ -809,6 +810,25 @@ namespace StockSharp.Algo
 					t.Yield = message.Yield;
 
 				_myTrades.Add(t);
+
+				if (order.AveragePrice is null)
+				{
+					var weightedPrice = trade.Price * trade.Volume;
+
+					if (_ordersAvgPrices.TryGetValue(order, out var t1))
+					{
+						t1.totalVolume += trade.Volume;
+						t1.weightedPriceSum += weightedPrice;
+						
+						_ordersAvgPrices[order] = t1;
+					}
+					else
+					{
+						_ordersAvgPrices.Add(order, t1 = new(trade.Volume, weightedPrice));
+					}
+
+					order.AveragePrice = t1.weightedPriceSum / t1.totalVolume;
+				}
 
 				return t;
 			});
