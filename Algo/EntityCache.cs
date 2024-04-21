@@ -140,9 +140,9 @@ namespace StockSharp.Algo
 				if (message.OrderState == OrderStates.Done)
 				{
 					if (message.IsCanceled())
-						order.CancelledTime = message.ServerTime;
+						order.CancelledTime ??= message.ServerTime;
 					else
-						order.MatchedTime = message.ServerTime;
+						order.MatchedTime ??= message.ServerTime;
 				}
 
 				if (message.OrderPrice != 0)
