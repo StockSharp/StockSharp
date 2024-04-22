@@ -1,4 +1,8 @@
 {
+  "FlagElement": {
+    "en": "A diagram element in the form of a Flag. It is set and reset based on the incoming sockets. The output value is transmitted only in the case of the initial setting of the flag.",
+    "ru": "Элемент диаграммы ввиде Флага. Взводится и сбрасывается на основе входящих сокетов. Выходное значение передается только в случае первоначального взведения флага."
+  },
   "CancelledTime": {
     "en": "Cancelled time.",
     "ru": "Время отмены."
