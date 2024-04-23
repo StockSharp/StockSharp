@@ -1727,8 +1727,6 @@ namespace StockSharp.Algo.Strategies
 			if (order is null)	throw new ArgumentNullException(nameof(order));
 			if (error is null)	throw new ArgumentNullException(nameof(error));
 
-			Rules.RemoveRulesByToken(order, null);
-
 			order.ApplyNewState(OrderStates.Failed, this);
 
 			if (IsDisposeStarted)
@@ -1742,6 +1740,8 @@ namespace StockSharp.Algo.Strategies
 			};
 
 			OnOrderRegisterFailed(fail, canRisk && _ordersInfo.TryGetValue(order, out var info) && info.IsOwn);
+
+			Rules.RemoveRulesByToken(order, null);
 		}
 
 		private void ApplyMonitorRules(Order order)
