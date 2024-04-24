@@ -480,8 +480,8 @@
     "ru": "Кубик используется для объединения однотипных данных поступающих из разных кубиков в один выходной параметр для дальнейшей передачи в какой-либо элемент. Или разделения получаемых данных на несколько элементов."
   },
   "PositionProtectionElementDescription": {
-    "en": "The element is used to automatically protect opened trades using stop loss and take-profit.",
-    "ru": "Кубик используется для автоматической защиты открываемых сделок с помощью стоп-лосса и тейк-профита."
+    "en": "The element is used to automatically protect opened positions using stop loss and take-profit.",
+    "ru": "Кубик используется для автоматической защиты открытых позиций с помощью стоп-лосса и тейк-профита."
   },
   "IsTradeAllowedElementDescription": {
     "en": "The element is used to check if trade is currently allowed.",
