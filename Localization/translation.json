@@ -1,4 +1,8 @@
 {
+  "MarketOrderCannotCancel": {
+    "en": "Market order cannot be cancelled.",
+    "ru": "Рыночную заявку невозможно отменить."
+  },
   "Part": {
     "en": "Part",
     "ru": "Часть"
