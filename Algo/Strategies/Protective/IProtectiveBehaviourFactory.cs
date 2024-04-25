@@ -91,10 +91,6 @@ public class ServerProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 				condition
 			);
 		}
-
-		public override void Clear()
-		{
-		}
 	}
 
 	private readonly IMessageAdapter _adapter;
@@ -169,7 +165,9 @@ public class LocalProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 			if (info is null)
 				return null;
 
-			Clear();
+			ResetProcessors();
+			_trades.Clear();
+			_posPrice = _posValue = _totalVolume = _weightedPriceSum = default;
 
 			return info.Value;
 		}
@@ -254,8 +252,8 @@ public class LocalProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 
 				var protectiveSide = _posValue > 0 ? Sides.Buy : Sides.Sell;
 
-				_take = TakeValue.IsSet() ? new ProtectiveProcessor(protectiveSide, _posPrice, protectiveSide == Sides.Buy, IsTakeTrailing, TakeValue, UseMarketOrders, new(), TakeTimeout) { Parent = this } : null;
-				_stop = StopValue.IsSet() ? new ProtectiveProcessor(protectiveSide, _posPrice, protectiveSide == Sides.Sell, IsStopTrailing, StopValue, UseMarketOrders, new(), StopTimeout) { Parent = this } : null;
+				_take = TakeValue.IsSet() ? new(protectiveSide, _posPrice, protectiveSide == Sides.Buy, IsTakeTrailing, TakeValue, UseMarketOrders, new(), TakeTimeout, this) : null;
+				_stop = StopValue.IsSet() ? new(protectiveSide, _posPrice, protectiveSide == Sides.Sell, IsStopTrailing, StopValue, UseMarketOrders, new(), StopTimeout, this) : null;
 			}
 
 			return null;
@@ -263,16 +261,7 @@ public class LocalProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 
 		private void ResetProcessors()
 		{
-			_take?.Dispose();
-			_stop?.Dispose();
 			_take = _stop = default;
-		}
-
-		public override void Clear()
-		{
-			ResetProcessors();
-			_trades.Clear();
-			_posPrice = _posValue = _totalVolume = _weightedPriceSum = default;
 		}
 	}
 

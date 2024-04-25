@@ -9,7 +9,7 @@ using StockSharp.Messages;
 /// <summary>
 /// Protective strategy processor.
 /// </summary>
-public class ProtectiveProcessor : BaseLogReceiver
+public class ProtectiveProcessor
 {
 	private readonly bool _isUpTrend;
 	private readonly bool _isTrailing;
@@ -17,6 +17,7 @@ public class ProtectiveProcessor : BaseLogReceiver
 	private readonly bool _useMarketOrders;
 	private readonly Unit _priceOffset;
 	private readonly TimeSpan _timeout;
+	private readonly ILogReceiver _logs;
 	private decimal? _prevBestPrice;
 	private readonly decimal _protectivePrice;
 	private readonly Sides _protectiveSide;
@@ -34,8 +35,9 @@ public class ProtectiveProcessor : BaseLogReceiver
 	/// <param name="protectiveLevel">The protective level. If the <see cref="Unit.Type"/> type is equal to <see cref="UnitTypes.Limit"/>, then the given price is specified. Otherwise, the shift value from the protected trade <see cref="DataType.Ticks"/> is specified.</param>
 	/// <param name="useMarketOrders">Whether to use <see cref="OrderTypes.Market"/> for protection.</param>
 	/// <param name="priceOffset">The price shift for the registering order. It determines the amount of shift from the best quote (for the buy it is added to the price, for the sell it is subtracted).</param>
-	/// <param name="timeout"></param>
-	public ProtectiveProcessor(Sides protectiveSide, decimal protectivePrice, bool isUpTrend, bool isTrailing, Unit protectiveLevel, bool useMarketOrders, Unit priceOffset, TimeSpan timeout)
+	/// <param name="timeout">Time limit. If protection has not worked by this time, the position will be closed on the market.</param>
+	/// <param name="logs">The log source.</param>
+	public ProtectiveProcessor(Sides protectiveSide, decimal protectivePrice, bool isUpTrend, bool isTrailing, Unit protectiveLevel, bool useMarketOrders, Unit priceOffset, TimeSpan timeout, ILogReceiver logs)
 	{
 		if (protectivePrice <= 0)
 			throw new ArgumentOutOfRangeException(nameof(protectivePrice), protectivePrice, LocalizedStrings.InvalidValue);
@@ -51,6 +53,7 @@ public class ProtectiveProcessor : BaseLogReceiver
 		_useMarketOrders = useMarketOrders;
 		_priceOffset = priceOffset ?? throw new ArgumentNullException(nameof(priceOffset));
 		_timeout = timeout;
+		_logs = logs ?? throw new ArgumentNullException(nameof(logs));
 	}
 
 	/// <summary>
@@ -68,7 +71,7 @@ public class ProtectiveProcessor : BaseLogReceiver
 
 			if ((currentPrice ?? _prevCurrPrice) is not decimal closePrice)
 			{
-				this.AddWarningLog("No price for close position.");
+				_logs.AddWarningLog("No price for close position.");
 				return null;
 			}
 
@@ -90,19 +93,19 @@ public class ProtectiveProcessor : BaseLogReceiver
 
 		if (isTimeOut())
 		{
-			this.AddDebugLog("Timeout.");
+			_logs.AddDebugLog("Timeout.");
 			return getClosePosPrice();
 		}
 
 		if (currentPrice is not decimal currPriceDec)
 		{
-			this.AddDebugLog("Current price is null.");
+			_logs.AddDebugLog("Current price is null.");
 			return null;
 		}
 
 		if (_isTrailing)
 		{
-			this.AddDebugLog("PrevBest={0} CurrBest={1}", _prevBestPrice, currPriceDec);
+			_logs.AddDebugLog("PrevBest={0} CurrBest={1}", _prevBestPrice, currPriceDec);
 
 			if (_isUpTrend)
 			{
@@ -125,7 +128,7 @@ public class ProtectiveProcessor : BaseLogReceiver
 				? _protectiveLevel
 				: (_isUpTrend ? _protectivePrice + _protectiveLevel : _protectivePrice - _protectiveLevel);
 
-			this.AddDebugLog("ActivationPrice={0} level={1}", activationPrice, _protectiveLevel);
+			_logs.AddDebugLog("ActivationPrice={0} level={1}", activationPrice, _protectiveLevel);
 
 			// protectiveLevel may has extra big value.
 			// In that case activationPrice may less that zero.

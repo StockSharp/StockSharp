@@ -44,9 +44,6 @@ public class ProtectiveController : BaseLogReceiver
 
 		public (bool, Sides, decimal, decimal, OrderCondition)? TryActivate(decimal price, DateTimeOffset time)
 			=> _behaviour.TryActivate(price, time);
-
-		public void Clear()
-			=> _behaviour.Clear();
 	}
 
 	private readonly SynchronizedDictionary<SecurityId, CachedSynchronizedDictionary<string, ProtectivePositionController>> _contollers = new();

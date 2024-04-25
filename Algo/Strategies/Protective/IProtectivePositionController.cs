@@ -36,9 +36,4 @@ public interface IProtectivePositionController
 	/// <returns>Registration order info.</returns>
 	(bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)?
 		TryActivate(decimal price, DateTimeOffset time);
-
-	/// <summary>
-	/// Clear state.
-	/// </summary>
-	void Clear();
 }

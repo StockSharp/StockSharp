@@ -239,7 +239,7 @@ namespace StockSharp.Algo.Strategies.Protective
 			var ltp = LastTradePrice;
 			var bestPrice = UseLastTradePrice && ltp != null ? ltp : BestPrice;
 
-			_processor ??= new(ProtectiveSide, ProtectivePrice, _isUpTrend, IsTrailing, ProtectiveLevel, UseMarketOrders, PriceOffset, TimeOut) { Parent = this };
+			_processor ??= new(ProtectiveSide, ProtectivePrice, _isUpTrend, IsTrailing, ProtectiveLevel, UseMarketOrders, PriceOffset, TimeOut, this);
 			
 			var price = _processor.GetActivationPrice(bestPrice, currentTime);
 

@@ -28,11 +28,6 @@ public interface IProtectiveBehaviour : ILogSource
 	/// <returns>Registration order info.</returns>
 	(bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)?
 		TryActivate(decimal price, DateTimeOffset time);
-
-	/// <summary>
-	/// Clear state.
-	/// </summary>
-	void Clear();
 }
 
 /// <summary>
@@ -111,7 +106,4 @@ public abstract class BaseProtectiveBehaviour : BaseLogReceiver, IProtectiveBeha
 
 	/// <inheritdoc />
 	public abstract (bool, Sides, decimal, decimal, OrderCondition)? TryActivate(decimal price, DateTimeOffset time);
-	
-	/// <inheritdoc />
-	public abstract void Clear();
 }
