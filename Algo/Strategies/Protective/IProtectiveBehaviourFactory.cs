@@ -145,7 +145,7 @@ public class LocalProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 			if (_posValue == 0)
 				return null;
 
-			(bool, Sides, decimal, decimal, OrderCondition)? TryActivate(ProtectiveProcessor proc, bool isTake)
+			(bool, Sides, decimal, decimal, OrderCondition)? tryActivate(ProtectiveProcessor proc, bool isTake)
 			{
 				var activationPrice = proc?.GetActivationPrice(price, time);
 				if (activationPrice is null)
@@ -160,14 +160,12 @@ public class LocalProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 				);
 			}
 
-			var info = TryActivate(_take, true) ?? TryActivate(_stop, false);
+			var info = tryActivate(_take, true) ?? tryActivate(_stop, false);
 
 			if (info is null)
 				return null;
 
 			ResetProcessors();
-			_trades.Clear();
-			_posPrice = _posValue = _totalVolume = _weightedPriceSum = default;
 
 			return info.Value;
 		}
