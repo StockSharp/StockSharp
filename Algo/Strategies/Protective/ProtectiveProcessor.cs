@@ -18,12 +18,12 @@ public class ProtectiveProcessor
 	private readonly Unit _priceOffset;
 	private readonly TimeSpan _timeout;
 	private readonly ILogReceiver _logs;
-	private decimal? _prevBestPrice;
 	private readonly decimal _protectivePrice;
 	private readonly Sides _protectiveSide;
 
 	private DateTimeOffset? _startedTime;
 	private decimal? _prevCurrPrice;
+	private decimal? _prevBestPrice;
 
 	/// <summary>
 	/// Initialize <see cref="ProtectiveProcessor"/>.
@@ -62,7 +62,8 @@ public class ProtectiveProcessor
 	/// <remarks>If the price is equal to <see langword="null" /> then the activation is not required.</remarks>
 	public decimal? GetActivationPrice(decimal? currentPrice, DateTimeOffset currentTime)
 	{
-		_prevCurrPrice ??= currentPrice;
+		if (currentPrice is decimal currPriceDec2)
+			_prevCurrPrice = currPriceDec2;
 
 		decimal? getClosePosPrice()
 		{
@@ -103,48 +104,63 @@ public class ProtectiveProcessor
 			return null;
 		}
 
-		if (_isTrailing)
+		decimal getActivationPrice()
 		{
-			_logs.AddDebugLog("PrevBest={0} CurrBest={1}", _prevBestPrice, currPriceDec);
-
-			if (_isUpTrend)
-			{
-				if (_prevBestPrice < currPriceDec)
-					_prevBestPrice = currPriceDec;
-				else if (_prevBestPrice > currPriceDec)
-					return getClosePosPrice();
-			}
-			else
-			{
-				if (_prevBestPrice > currPriceDec)
-					_prevBestPrice = currPriceDec;
-				else if (_prevBestPrice < currPriceDec)
-					return getClosePosPrice();
-			}
-		}
-		else
-		{
-			var activationPrice = (_protectiveLevel.Type == UnitTypes.Limit)
-				? _protectiveLevel
-				: (_isUpTrend ? _protectivePrice + _protectiveLevel : _protectivePrice - _protectiveLevel);
-
-			_logs.AddDebugLog("ActivationPrice={0} level={1}", activationPrice, _protectiveLevel);
+			var activationPrice = _protectiveLevel.Type == UnitTypes.Limit
+				? _protectiveLevel.Value
+				: (_isUpTrend ? _protectivePrice + _protectiveLevel.Value : _protectivePrice - _protectiveLevel.Value);
 
 			// protectiveLevel may has extra big value.
 			// In that case activationPrice may less that zero.
 			if (activationPrice <= 0)
 				activationPrice = 0.01m;
 
-			if (_isUpTrend)
+			return activationPrice;
+		}
+
+		bool isActivation(decimal activationPrice)
+			=> (_isUpTrend && currPriceDec >= activationPrice) || (!_isUpTrend && currPriceDec <= activationPrice);
+
+		if (_isTrailing)
+		{
+			_logs.AddDebugLog("PrevPrice={0} CurrPrice={1}", _prevBestPrice, currPriceDec);
+
+			if (_prevBestPrice is null)
 			{
-				if (currPriceDec >= activationPrice)
-					return getClosePosPrice();
+				var activationPrice = getActivationPrice();
+
+				if (isActivation(activationPrice))
+				{
+					// Protective level reached, trailing activated
+					_prevBestPrice = currPriceDec;
+				}
 			}
 			else
 			{
-				if (currPriceDec <= activationPrice)
-					return getClosePosPrice();
+				if (_isUpTrend)
+				{
+					if (_prevBestPrice < currPriceDec)
+						_prevBestPrice = currPriceDec;
+					else
+						return getClosePosPrice();
+				}
+				else
+				{
+					if (_prevBestPrice > currPriceDec)
+						_prevBestPrice = currPriceDec;
+					else
+						return getClosePosPrice();
+				}
 			}
+		}
+		else
+		{
+			var activationPrice = getActivationPrice();
+
+			_logs.AddDebugLog("ActivationPrice={0} ProtectLvl={1}", activationPrice, _protectiveLevel);
+
+			if (isActivation(activationPrice))
+				return getClosePosPrice();
 		}
 
 		return null;
