@@ -1,4 +1,8 @@
 {
+  "IgnoreErrorsDesc": {
+    "en": "Ignore calculation errors (like arithmetic overflows).",
+    "ru": "Игнорировать ошибки вычисления (например, арифметическое переполнение)."
+  },
   "MarketOrderCannotCancel": {
     "en": "Market order cannot be cancelled.",
     "ru": "Рыночную заявку невозможно отменить."

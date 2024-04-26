@@ -30,7 +30,7 @@ namespace StockSharp.Algo
 	public abstract class IndexSecurity : BasketSecurity
 	{
 		/// <summary>
-		/// Ignore calculation errors.
+		/// Ignore calculation errors (like arithmetic overflows).
 		/// </summary>
 		public bool IgnoreErrors { get; set; }
 
