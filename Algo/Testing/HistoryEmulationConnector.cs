@@ -152,6 +152,7 @@ namespace StockSharp.Algo.Testing
 			SupportFilteredMarketDepth = false;
 			UpdateSecurityLastQuotes = false;
 			UpdateSecurityByLevel1 = false;
+			SupportBasketSecurities = true;
 
 			innerAdapter.Parent ??= this;
 
