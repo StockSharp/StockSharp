@@ -1,10 +1,10 @@
 {
   "IgnoreErrorsDesc": {
-    "en": "Ignore calculation errors (like arithmetic overflows).",
+    "en": "Ignore calculation errors (such as arithmetic overflows).",
     "ru": "Игнорировать ошибки вычисления (например, арифметическое переполнение)."
   },
   "MarketOrderCannotCancel": {
-    "en": "Market order cannot be cancelled.",
+    "en": "Market orders cannot be cancelled.",
     "ru": "Рыночную заявку невозможно отменить."
   },
   "Part": {
@@ -13,7 +13,7 @@
   },
   "VolumePart": {
     "en": "The part into which the algorithm will split the target volume.",
-    "ru": "Часть, на которую будет дробить алгоритм целевой объем."
+    "ru": "Часть, на которую алгоритм разделит целевой объем."
   },
   "Iceberg": {
     "en": "Iceberg",
@@ -24,32 +24,32 @@
     "ru": "VWAP"
   },
   "PosModifyMarketOrders": {
-    "en": "Change position using market order.",
-    "ru": "Изменить позицию маркет заявкой."
+    "en": "Change position using market orders.",
+    "ru": "Изменить позицию с использованием рыночных заявок."
   },
   "PosModifyVWAP": {
     "en": "Change position using the VWAP algorithm.",
-    "ru": "Изменить позицию через VWAP алгоритм."
+    "ru": "Изменить позицию с использованием алгоритма VWAP."
   },
   "PosModifyIceberg": {
     "en": "Change position using the Iceberg algorithm.",
-    "ru": "Изменить позицию через Айсберг алгоритм."
+    "ru": "Изменить позицию с использованием алгоритма 'Айсберг'."
   },
   "PosModifyAlgo": {
     "en": "Position modification algorithm.",
     "ru": "Алгоритм изменения позиции."
   },
   "PositionModify": {
-    "en": "Position modify",
+    "en": "Modify position",
     "ru": "Изменить позицию"
   },
   "PositionModifyDesc": {
-    "en": "Element that changes position (buy, sell, reduce, reverse).",
+    "en": "Element that changes position (open, close, reduce, reverse).",
     "ru": "Элемент, изменяющий позицию (открыть, закрыть, уменьшить, перевернуть)."
   },
   "FlagElement": {
-    "en": "A diagram element in the form of a Flag. It is set and reset based on the incoming sockets. The output value is transmitted only in the case of the initial setting of the flag.",
-    "ru": "Элемент диаграммы ввиде Флага. Взводится и сбрасывается на основе входящих сокетов. Выходное значение передается только в случае первоначального взведения флага."
+    "en": "A diagram element in the form of a flag. It is set and reset based on the incoming sockets. The output value is transmitted only in the initial setting of the flag.",
+    "ru": "Элемент диаграммы в виде флага. Взводится и сбрасывается на основе входящих сокетов. Выходное значение передается только при первоначальной установке флага."
   },
   "CancelledTime": {
     "en": "Cancelled time.",
@@ -57,27 +57,27 @@
   },
   "MatchedTime": {
     "en": "Matched time.",
-    "ru": "Время исполнения."
+    "ru": "Время сведения."
   },
   "ValuesMustBeSameType": {
-    "en": "Values must be same type.",
+    "en": "Values must be of the same type.",
     "ru": "Значения должны быть одного типа."
   },
   "MaxMessages": {
     "en": "Max messages",
-    "ru": "Макс сообщений"
+    "ru": "Макс. сообщений"
   },
   "MaxMessagesDesc": {
-    "en": "Max messages count in handling queue.",
-    "ru": "Максимальное кол-во сообщений в очереди обработки."
+    "en": "Maximum message count in handling queue.",
+    "ru": "Максимальное количество сообщений в очереди обработки."
   },
   "Stub": {
     "en": "Stub",
     "ru": "Заглушка"
   },
   "StubIndicator": {
-    "en": "Indicator without logic. Used to draw lines.",
-    "ru": "Индикатор без логики. Используется для отрисовки линий."
+    "en": "An indicator without logic. Used to draw lines.",
+    "ru": "Индикатор без логики. Используется для рисования линий."
   },
   "HideZeroBalances": {
     "en": "Hide zero balances",
@@ -96,27 +96,27 @@
     "ru": "Интервал перестройки индекса."
   },
   "IndexWasRebuildInSeconds": {
-    "en": "Index was rebuild in {0} seconds.",
+    "en": "Index was rebuilt in {0} seconds.",
     "ru": "Индекс был перестроен за {0} секунд."
   },
   "ConnectorMustBeExtraInstalled": {
-    "en": "The connector {0} must be installed as a separate product and the terminal must be configured as per the instructions. Select the product {0} to install?",
-    "ru": "Коннектор {0} необходимо установить как отдельный продукт и настроить терминал как по инструкции. Выбрать продукт {0} для установки?"
+    "en": "The connector {0} must be installed as a separate product, and the terminal must be configured as per the instructions. Would you like to select the product {0} for installation?",
+    "ru": "Коннектор {0} необходимо установить как отдельный продукт и настроить терминал согласно инструкции. Выбрать продукт {0} для установки?"
   },
   "ConnectorMustSetupFirst": {
-    "en": "To connect via connector {0}, you need to configure the terminal itself. Open a documentation site with instructions?",
+    "en": "To connect via the connector {0}, you need to configure the terminal itself. Would you like to open a documentation site with instructions?",
     "ru": "Для подключения через коннектор {0} необходимо настроить сам терминал. Открыть сайт документации с инструкцией?"
   },
   "Sqrt": {
-    "en": "Sqrt",
-    "ru": "Кв. корень"
+    "en": "Square root",
+    "ru": "Квадратный корень"
   },
   "Archives": {
     "en": "Archives",
     "ru": "Архивы"
   },
   "TranslateSecuritiesAsArchives": {
-    "en": "Translates securities as archives.",
+    "en": "Transmit securities as archives.",
     "ru": "Передавать инструменты как архивы."
   },
   "Sbe": {
@@ -124,11 +124,11 @@
     "ru": "SBE"
   },
   "SbeDesc": {
-    "en": "Simple Binary Encoding protocol connector.",
+    "en": "Connector for the Simple Binary Encoding protocol.",
     "ru": "Коннектор для протокола Simple Binary Encoding."
   },
   "SbeDialectProtocol": {
-    "en": "Dialect SBE protocol.",
+    "en": "Dialect of the SBE protocol.",
     "ru": "Диалект SBE протокола."
   },
   "Theme": {
@@ -141,7 +141,7 @@
   },
   "GroupUngroup": {
     "en": "Group/Ungroup",
-    "ru": "Группировка/Отмена"
+    "ru": "Группировка/Отмена группировки"
   },
   "Simple": {
     "en": "Simple",
@@ -149,7 +149,7 @@
   },
   "Bracket": {
     "en": "Bracket",
-    "ru": "Вилка"
+    "ru": "Скобка"
   },
   "MT": {
     "en": "MT",
@@ -157,11 +157,11 @@
   },
   "FaultDelay": {
     "en": "Fault delay",
-    "ru": "Паузе ошибок"
+    "ru": "Задержка при сбое"
   },
   "FaultDelayDesc": {
     "en": "Delay between faulted iterations.",
-    "ru": "Пауза между ошибочными итерациями."
+    "ru": "Задержка между неудачными итерациями."
   },
   "AllDays": {
     "en": "All days.",
@@ -172,8 +172,8 @@
     "ru": "Будни"
   },
   "WeekdaysDesc": {
-    "en": "Weekdays only.",
-    "ru": "Только будни."
+    "en": "Only on weekdays.",
+    "ru": "Только в будние дни."
   },
   "Terminal": {
     "en": "Terminal",
@@ -213,59 +213,59 @@
   },
   "DriveMustBeLocal": {
     "en": "Drive must be local.",
-    "ru": "Хранилище должно быть локальным."
+    "ru": "Диск должен быть локальным."
   },
   "BuildIndex": {
     "en": "Build an index for fast performance of accessing available data types from the storage.",
-    "ru": "Построить индекс для быстрой производительности получения доступных типов данных из хранилища."
+    "ru": "Построить индекс для ускорения доступа к имеющимся типам данных в хранилище."
   },
   "UpdatePluginsSelectionHint": {
-    "en": "Selected plugins will be updated",
-    "ru": "Выбранные плагины будут обновлены"
+    "en": "Selected plugins will be updated.",
+    "ru": "Выбранные плагины будут обновлены."
   },
   "RepairPluginsSelectionHint": {
-    "en": "Selected plugins will be installed or reinstalled, deselected plugins will be removed",
-    "ru": "Выбранные плагины будут установлены или переустановлены, невыбранные плагины будут удалены"
+    "en": "Selected plugins will be installed or reinstalled, deselected plugins will be removed.",
+    "ru": "Выбранные плагины будут установлены или переустановлены, невыбранные плагины будут удалены."
   },
   "NoActionSelected": {
-    "en": "No action is selected",
-    "ru": "Ни одного действия не выбрано"
+    "en": "No action has been selected.",
+    "ru": "Ни одно действие не выбрано."
   },
   "MainApplicationParams": {
-    "en": "{0} main application",
-    "ru": "{0} основное приложение"
+    "en": "{0} main application parameters",
+    "ru": "{0} основные параметры приложения"
   },
   "DoNotUpdate": {
-    "en": "do not update",
-    "ru": "не обновлять"
+    "en": "Do not update",
+    "ru": "Не обновлять"
   },
   "DoNotRepair": {
-    "en": "do not repair",
-    "ru": "не переустанавливать"
+    "en": "Do not repair",
+    "ru": "Не переустанавливать"
   },
   "TypeNotSupported": {
-    "en": "Type '{0}' not supported.",
+    "en": "Type '{0}' is not supported.",
     "ru": "Тип '{0}' не поддерживается."
   },
   "CodeNotAllowed": {
-    "en": "C# code is not allowed.",
-    "ru": "C# код не допустим."
+    "en": "C# code is not permitted.",
+    "ru": "Код C# не допускается."
   },
   "Dedicated": {
     "en": "Dedicated",
-    "ru": "Выделенное"
+    "ru": "Выделенный"
   },
   "ShowWhitespace": {
-    "en": "Show whitespaces.",
-    "ru": "Показывать пробелы."
+    "en": "Show whitespace characters.",
+    "ru": "Показывать пробельные символы."
   },
   "HighlightCurrentLine": {
-    "en": "Current line highlighting.",
-    "ru": "Подсветка текущей линии."
+    "en": "Highlight the current line.",
+    "ru": "Подсветить текущую строку."
   },
   "ShowLineNumber": {
-    "en": "Show lines numbers.",
-    "ru": "Показывать номера строчек."
+    "en": "Show line numbers.",
+    "ru": "Показывать номера строк."
   },
   "Usdt": {
     "en": "USDT",
@@ -273,19 +273,19 @@
   },
   "UsdtSection": {
     "en": "USDT Section",
-    "ru": "USDT Section"
+    "ru": "Раздел USDT"
   },
   "CurrentTimeElement": {
-    "en": "The element is used to provide current time.",
-    "ru": "Элемент предоставляющий текущее время."
+    "en": "This element displays the current time.",
+    "ru": "Этот элемент отображает текущее время."
   },
   "Public": {
     "en": "Public",
-    "ru": "Публично"
+    "ru": "Публичный"
   },
   "Restricted": {
     "en": "Restricted",
-    "ru": "Ограниченное"
+    "ru": "Ограниченный доступ"
   },
   "Catalog": {
     "en": "Catalog",
@@ -313,167 +313,167 @@
   },
   "ReleaseNotes": {
     "en": "Release notes",
-    "ru": "Примечания к обновлению"
+    "ru": "Примечания к выпуску"
   },
   "NotApproved": {
     "en": "Not approved",
-    "ru": "Не утвержден"
+    "ru": "Не утверждено"
   },
   "NotApprovedDesc": {
-    "en": "The product not approved. Please wait for moderation to finish. For any questions, please contact us at info@stocksharp.com",
-    "ru": "Продукт не утвержден. Пожалуйста, дождитесь окончания модерации. По всем вопросам обращайтесь на почту info@stocksharp.com"
+    "en": "The product is not approved. Please await moderation completion. For inquiries, contact us at info@stocksharp.com",
+    "ru": "Продукт не утвержден. Пожалуйста, дождитесь завершения модерации. По всем вопросам обращайтесь на info@stocksharp.com"
   },
   "NotInCatalog": {
     "en": "Not in catalog",
-    "ru": "Не в каталоге"
+    "ru": "Отсутствует в каталоге"
   },
   "SelectNupkgParams": {
-    "en": "Select .nupkg package {0}.",
-    "ru": "Выберите .nupkg пакет {0}."
+    "en": "Select .nupkg package '{0}'.",
+    "ru": "Выберите пакет .nupkg '{0}'."
   },
   "InvalidPackageIdParams": {
-    "en": "Invalid nuget package id. Expected '{0}', got '{1}'",
-    "ru": "Неверный идентификатор пакета. Требуется '{0}' вместо '{1}'"
+    "en": "Invalid NuGet package ID. Expected '{0}', received '{1}'",
+    "ru": "Неверный идентификатор пакета NuGet. Ожидалось '{0}', получено '{1}'"
   },
   "Manage": {
     "en": "Manage",
     "ru": "Управление"
   },
   "RandomElement": {
-    "en": "The diagram element to generate random value.",
-    "ru": "Элемент диаграммы, генерирующее случайное значение."
+    "en": "This diagram element generates a random value.",
+    "ru": "Этот элемент диаграммы генерирует случайное значение."
   },
   "InstallerAutoKillApplication": {
-    "en": "Try to close target application if it's not responding",
-    "ru": "Попытаться закрыть целевое приложение если оно не отвечает"
+    "en": "Attempt to close the target application if it is not responding.",
+    "ru": "Попытаться закрыть целевое приложение, если оно не отвечает."
   },
   "Numeric": {
     "en": "Numeric",
-    "ru": "Числовое"
+    "ru": "Числовой"
   },
   "RemoveAppDataFolder": {
-    "en": "Remove the application data folder including all downloaded data and settings",
-    "ru": "Удалить папку данных приложения включая все скачанные данные и настройки"
+    "en": "Remove the application data folder, including all downloaded data and settings.",
+    "ru": "Удалите папку данных приложения, включая все загруженные данные и настройки."
   },
   "CompileCodeFirst": {
-    "en": "Compile code first.",
-    "ru": "Код должен быть скомпилирован."
+    "en": "Compile the code first.",
+    "ru": "Сначала скомпилируйте код."
   },
   "LeftSeconds": {
-    "en": "{0} sec left",
-    "ru": "{0} сек осталось"
+    "en": "{0} seconds remaining",
+    "ru": "Осталось {0} секунд"
   },
   "PluginIsPurchased": {
-    "en": "The plugin was purchased successfully. In order to use it, you need to reinstall applications which support plugins.",
-    "ru": "Плагин успешно приобретен. Для использования переустановите приложения, поддерживающие работу с плагинами."
+    "en": "The plugin was successfully purchased. To use it, reinstall applications that support plugins.",
+    "ru": "Плагин успешно приобретен. Для его использования переустановите приложения, поддерживающие плагины."
   },
   "CopyStrategy": {
-    "en": "Copy the strategy file. Turn off if you want to change the strategy in Designer and have the ability to launch in Runner with the latest strategy changes without the need for constant exporting.",
-    "ru": "Копировать файл стратегии. Выключите, если хотите менять стратегию в Дизайнере, и иметь возможность запуска в Раннере с последними изменениями стратегии без необходимости постоянного экспорта."
+    "en": "Copy the strategy file. Turn off if you wish to modify the strategy in Designer and launch it in Runner with the latest changes without constant exporting.",
+    "ru": "Скопируйте файл стратегии. Выключите, если хотите изменить стратегию в Дизайнере и запустить её в Раннере с последними изменениями без необходимости постоянного экспорта."
   },
   "LaunchRunner": {
-    "en": "Launch Runner",
+    "en": "Launch the Runner",
     "ru": "Запустить Раннер"
   },
   "CopyLicense": {
-    "en": "Copy license file. This is useful when you need to transfer all necessary files for the strategy to another computer (server).",
-    "ru": "Копировать файл лицензии. Подходит для случаев, когда необходимо перенести на другой компьютер (сервер) все необходимые файлы для работы стратегии."
+    "en": "Copy the license file. This is useful when you need to transfer all necessary files for the strategy to another computer or server.",
+    "ru": "Скопируйте файл лицензии. Это полезно, когда вам нужно перенести все необходимые файлы стратегии на другой компьютер или сервер."
   },
   "TelegramAlerts": {
     "en": "Telegram alerts",
-    "ru": "Уведомления Телеграм"
+    "ru": "Уведомления через Telegram"
   },
   "Bot": {
     "en": "Bot",
     "ru": "Бот"
   },
   "TelegramAlertsDesc": {
-    "en": "Use Telegram to receive notifications about the trading progress.",
-    "ru": "Использовать Телеграм для получения уведомления о ходе торгов."
+    "en": "Use Telegram to receive notifications about trading progress.",
+    "ru": "Используйте Telegram для получения уведомлений о прогрессе торговли."
   },
   "TelegramControlDesc": {
-    "en": "Use Telegram to manage the strategy through a Telegram bot.",
-    "ru": "Использовать Телеграм для управления стратегией через Телеграм бота."
+    "en": "Use Telegram to manage the strategy via a Telegram bot.",
+    "ru": "Используйте Telegram для управления стратегией через бота Telegram."
   },
   "CopyRunner": {
-    "en": "Copy Runner",
-    "ru": "Копировать Раннер"
+    "en": "Copy the Runner",
+    "ru": "Скопируйте Раннер"
   },
   "CopyRunnerDesc": {
-    "en": "Copy all files of Runner from the folder where it is installed. This is useful when you need to transfer all necessary files for the strategy to another computer (server).",
-    "ru": "Копировать все файлы Раннер из папки, где он установлен. Подходит для случаев, когда необходимо перенести на другой компьютер (сервер) все необходимые файлы для работы стратегии."
+    "en": "Copy all files from the Runner's installation folder. This is useful when you need to transfer all necessary files for the strategy to another computer or server.",
+    "ru": "Скопируйте все файлы из папки установки Раннера. Это полезно, когда вам нужно перенести все необходимые файлы стратегии на другой компьютер или сервер."
   },
   "PublishDesc": {
-    "en": "Publish content publicly in Store or for private use with a team.",
-    "ru": "Опубликовать контент публично в Магазин или для приватного пользования с командой."
+    "en": "Publish content publicly in the Store or for private use within a team.",
+    "ru": "Опубликовать контент публично в магазине или для частного использования внутри команды."
   },
   "Runner": {
     "en": "Runner",
     "ru": "Раннер"
   },
   "RunnerDesc": {
-    "en": "Launch strategy in Runner (cross-platform tiny console application).",
-    "ru": "Запустить стратегию в Раннер (кросс-платформенное маленькое консольное приложение)."
+    "en": "Launch the strategy in Runner, a cross-platform, minimal console application.",
+    "ru": "Запустите стратегию в Раннере, кроссплатформенном минимальном консольном приложении."
   },
   "InstallerNotStarted": {
-    "en": "Installer is not running. Do you want to launch it?",
-    "ru": "Инсталлер не запущен. Хотите запустить его?"
+    "en": "The installer is not running. Would you like to launch it?",
+    "ru": "Инсталлятор не запущен. Хотите его запустить?"
   },
   "AppNotFound": {
-    "en": "{0} not found on the computer. Please install it first.",
-    "ru": "{0} не найден на компьютере. Пожалуйста, установите его сначала."
+    "en": "{0} is not found on the computer. Please install it first.",
+    "ru": "{0} не найден на компьютере. Пожалуйста, сначала установите его."
   },
   "Copy2": {
     "en": "Copy",
-    "ru": "Копия"
+    "ru": "Копировать"
   },
   "ChartPaneGroupDescription": {
-    "en": "Chart panes with same group id scroll and zoom together.",
-    "ru": "Панели графика с одинаковым идентификатором группы скроллируются и масштабируются вместе."
+    "en": "Chart panes with the same group ID will scroll and zoom together.",
+    "ru": "Панели графика с одним и тем же идентификатором группы будут скроллироваться и масштабироваться вместе."
   },
   "ConfigurationIsInvalid": {
-    "en": "Configuration is invalid.",
-    "ru": "Конфигурация не валидна."
+    "en": "The configuration is invalid.",
+    "ru": "Конфигурация недействительна."
   },
   "ValueMustBeOfType": {
-    "en": "Value '{0}' must be of type '{1}'.",
-    "ru": "Значение должно быть типа '{1}'."
+    "en": "The value '{0}' must be of type '{1}'.",
+    "ru": "Значение '{0}' должно быть типа '{1}'."
   },
   "ExportSchema": {
-    "en": "Export schema.",
+    "en": "Export the schema.",
     "ru": "Экспортировать схему."
   },
   "ExportOnlyCodeFile": {
-    "en": "Export only C# file",
-    "ru": "Экспортировать только C# файл"
+    "en": "Export only the C# file.",
+    "ru": "Экспортировать только C# файл."
   },
   "ExportOnlyCodeFileDesc": {
-    "en": "Export only C# file. Result file will be .cs extension.",
-    "ru": "Экспортировать только C# файл. Полученный файл будет иметь .cs расширение."
+    "en": "Export only the C# file. The resulting file will have a .cs extension.",
+    "ru": "Экспортировать только C# файл. Полученный файл будет иметь расширение .cs."
   },
   "ExportWithReferences": {
     "en": "Export with references",
     "ru": "Экспортировать с зависимостями"
   },
   "ExportWithReferencesDesc": {
-    "en": "Export with references. Result file will be .json extension and contains code + references (paths).",
-    "ru": "Экспортировать с зависимостями. Полученный файл будет иметь .json расширение и содержать код + зависимости (пути)."
+    "en": "Export with references. The resulting file will have a .json extension and include code and references (paths).",
+    "ru": "Экспортировать с зависимостями. Полученный файл будет иметь расширение .json и содержать код и зависимости (пути)."
   },
   "ExportAsDll": {
-    "en": "Export as DLL",
+    "en": "Export as a DLL",
     "ru": "Экспортировать как DLL"
   },
   "ExportAsDllDesc": {
-    "en": "Export as DLL. Result file will contains compiled .NET assembly.",
-    "ru": "Экспортировать как DLL. Полученный файл будет содержать .NET сборку."
+    "en": "Export as a DLL. The resulting file will contain a compiled .NET assembly.",
+    "ru": "Экспортировать как DLL. Полученный файл будет содержать скомпилированную .NET сборку."
   },
   "ExportAsCodeGenDesc": {
     "en": "Export as generated C# code.",
     "ru": "Экспортировать как сгенерированный C# код."
   },
   "BasketBlackScholes": {
-    "en": "Portfolio model for calculating the values of Greeks by the Black-Scholes formula.",
-    "ru": "Портфельная модель вычисления значений Греков на основе Блэк-Шоулз формулы."
+    "en": "Portfolio model for calculating Greeks using the Black-Scholes formula.",
+    "ru": "Портфельная модель для расчета Греков по формуле Блэка-Шоулза."
   },
   "Strikes": {
     "en": "Strikes",
@@ -488,84 +488,84 @@
     "ru": "Греки"
   },
   "GreeksElement": {
-    "en": "The element calculates 'Greeks' from Black-Scholes model.",
-    "ru": "Элемент вычисляющий 'Греки' по модели Блэк-Шоулз."
+    "en": "This element calculates Greeks based on the Black-Scholes model.",
+    "ru": "Этот элемент вычисляет Греки по модели Блэка-Шоулза."
   },
   "OwnElements": {
     "en": "Own elements",
-    "ru": "Собственные кубики"
+    "ru": "Собственные элементы"
   },
   "CandleSourceElementDescription": {
-    "en": "The element is used to build candles for a specified instrument.",
-    "ru": "Кубик используется для построения свечей по заданному инструменту."
+    "en": "This element is used to construct candles for a specified instrument.",
+    "ru": "Этот элемент используется для построения свечей для заданного инструмента."
   },
   "Level1ElementDescription": {
-    "en": "The element is used to get the Level1 data by the instrument.",
-    "ru": "Кубик используется для получения Level1 данных по инструменту."
+    "en": "This element is used to obtain Level 1 data for the instrument.",
+    "ru": "Этот элемент используется для получения данных первого уровня по инструменту."
   },
   "VariableElementDescription": {
-    "en": "The element is used to store values, pass the previously stored value further along the chain of elements.",
-    "ru": "Кубик используется для хранения значений, передачи ранее сохраненного значения дальше по цепочке элементов."
+    "en": "This element stores values and passes the previously stored value further along the chain of elements.",
+    "ru": "Этот элемент хранит значения и передает ранее сохраненное значение дальше по цепочке элементов."
   },
   "CrossingElementDescription": {
-    "en": "The element is used to fire a signal when the first value (up socket) becomes bigger (crossing up) than the second value (down socket).",
-    "ru": "Кубик используется для получения сигнала когда первое значение (верний сокет) становится больше (пересечение вверх) чем второе значение (нижний сокет)."
+    "en": "This element triggers a signal when the first value (upper socket) exceeds the second value (lower socket).",
+    "ru": "Этот элемент инициирует сигнал, когда первое значение (верхний сокет) превышает второе значение (нижний сокет)."
   },
   "IndicatorElementDescription": {
-    "en": "The element is used to calculate indicator values.",
-    "ru": "Кубик используется для расчета значений индикатора."
+    "en": "This element is used to calculate indicator values.",
+    "ru": "Этот элемент используется для расчета значений индикаторов."
   },
   "LogicalConditionElementDescription": {
-    "en": "The element is used to calculate a logical formula with two arguments.",
-    "ru": "Элемент используется для вычисления логической формулы с двумя аргументами."
+    "en": "This element is used to compute a logical formula with two arguments.",
+    "ru": "Этот элемент используется для вычисления логической формулы с двумя аргументами."
   },
   "CombinationElementDescription": {
-    "en": "The element is used to combine the same type of data coming from different cubes into one output parameter for further passing to some element. Or dividing the received data into several elements.",
-    "ru": "Кубик используется для объединения однотипных данных поступающих из разных кубиков в один выходной параметр для дальнейшей передачи в какой-либо элемент. Или разделения получаемых данных на несколько элементов."
+    "en": "This element combines the same type of data from different cubes into one output parameter for further transmission to another element, or it divides the received data into several elements.",
+    "ru": "Этот элемент объединяет однотипные данные из разных кубов в один выходной параметр для дальнейшей передачи в другой элемент или разделяет полученные данные на несколько элементов."
   },
   "PositionProtectionElementDescription": {
-    "en": "The element is used to automatically protect opened positions using stop loss and take-profit.",
-    "ru": "Кубик используется для автоматической защиты открытых позиций с помощью стоп-лосса и тейк-профита."
+    "en": "This element is used to automatically protect open positions using stop loss and take profit.",
+    "ru": "Этот элемент используется для автоматической защиты открытых позиций с помощью стоп-лосса и тейк-профита."
   },
   "IsTradeAllowedElementDescription": {
-    "en": "The element is used to check if trade is currently allowed.",
-    "ru": "Кубик используется для проверки разрешена ли торговля в текущий момент."
+    "en": "This element checks whether trading is currently allowed.",
+    "ru": "Этот элемент проверяет, разрешена ли в данный момент торговля."
   },
   "IndexerElementDescription": {
-    "en": "The element is used to get an element from a collection with the specified index.",
-    "ru": "Элемент используется для получения элемента из коллекции с указанным индексом."
+    "en": "This element retrieves an item from a collection by its specified index.",
+    "ru": "Этот элемент извлекает элемент из коллекции по указанному индексу."
   },
   "ConverterDescription": {
-    "en": "This element is used to convert complex objects into simple data types. For example, it allows to get the value of the price step for the instrument.",
-    "ru": "Кубик используется для конвертации сложных объектов в простые типы данных. Например, позволяет получить значение шага цены для инструмента."
+    "en": "This element converts complex objects into simple data types, such as retrieving the price step value for an instrument.",
+    "ru": "Этот элемент конвертирует сложные объекты в простые типы данных, например, позволяет получить значение шага цены для инструмента."
   },
   "ParamDoesntContain": {
-    "en": "Param {0} doesn't contain {1} value.",
-    "ru": "Параметр {0} не содержит {1} значение."
+    "en": "Parameter {0} does not contain the value {1}.",
+    "ru": "Параметр {0} не содержит значение {1}."
   },
   "Validation": {
     "en": "Validation",
     "ru": "Проверка"
   },
   "ValidationInputValues": {
-    "en": "Validation input values expression.",
-    "ru": "Выражение проверки входных значений."
+    "en": "Expression for validating input values.",
+    "ru": "Выражение для проверки входных значений."
   },
   "Empty": {
     "en": "Empty",
-    "ru": "Пустое"
+    "ru": "Пусто"
   },
   "SendEmptyIndicatorValues": {
     "en": "Send empty indicator values.",
     "ru": "Отправлять пустые значения индикаторов."
   },
   "ServerStopOrders": {
-    "en": "Try use server-side stop orders if underlying connector provide it.",
-    "ru": "Попытаться использовать серверные стоп-заявки если подключение их поддерживает."
+    "en": "Attempt to use server-side stop orders if the underlying connector supports it.",
+    "ru": "Попытаться использовать серверные стоп-заявки, если подключение их поддерживает."
   },
   "SupportEmptyDepth": {
-    "en": "Translates empty depth.",
-    "ru": "Передавать пустые стаканы."
+    "en": "Transmit empty market depth.",
+    "ru": "Передавать пустой стакан."
   },
   "Tenkan": {
     "en": "Tenkan",
@@ -868,72 +868,72 @@
     "ru": "MACD"
   },
   "DelaySignal": {
-    "en": "Delay signal",
+    "en": "Delay Signal",
     "ru": "Задержка сигнала"
   },
   "DelaySignalDesc": {
-    "en": "The diagram element to delay signal for specified number of input values.",
-    "ru": "Элемент диаграммы, задерживающий исполнение на указанное кол-во входящих значений."
+    "en": "This diagram element delays the signal by a specified number of input values.",
+    "ru": "Элемент диаграммы задерживает сигнал на указанное количество входных значений."
   },
   "NetProfitPercent": {
     "en": "% Net profit",
     "ru": "$ Чистая прибыль"
   },
   "NetProfitPercentDesc": {
-    "en": "Net profit for whole time period in percent.",
-    "ru": "Чистая прибыль за весь период в процентах."
+    "en": "Net profit over the entire time period, expressed as a percentage.",
+    "ru": "Чистая прибыль за весь период, выраженная в процентах."
   },
   "MaxDrawdownPercent": {
     "en": "% Max drawdown",
     "ru": "$ Макс просадка"
   },
   "MaxDrawdownPercentDesc": {
-    "en": "Maximum absolute drawdown during the whole period in percent.",
-    "ru": "Максимальная просадка за весь период в процентах."
+    "en": "Maximum absolute drawdown during the period, expressed as a percentage.",
+    "ru": "Максимальная абсолютная просадка за период, выраженная в процентах."
   },
   "MaxDrawdownDate": {
-    "en": "Max drawdown date",
-    "ru": "Дата макс просадки"
+    "en": "Maximum Drawdown Date",
+    "ru": "Дата максимальной просадки"
   },
   "MaxDrawdownDateDesc": {
-    "en": "Date of maximum absolute drawdown during the whole period.",
-    "ru": "Дата максимальной просадки за весь период."
+    "en": "Date of the maximum absolute drawdown during the period.",
+    "ru": "Дата максимальной абсолютной просадки за период."
   },
   "MaxProfitDate": {
-    "en": "Max profit date",
-    "ru": "Дата макс прибыли"
+    "en": "Maximum Profit Date",
+    "ru": "Дата максимальной прибыли"
   },
   "MaxProfitDateDesc": {
-    "en": "Date of maximum profit value for the entire period.",
-    "ru": "Дата максимальной прибыли за весь период."
+    "en": "Date of the highest profit value for the entire period.",
+    "ru": "Дата максимального значения прибыли за весь период."
   },
   "PerMonthTrades": {
-    "en": "Average per month",
-    "ru": "Средне в месяц"
+    "en": "Average Trades per Month",
+    "ru": "Среднее количество сделок в месяц"
   },
   "PerMonthTradesDesc": {
-    "en": "Average per month trades count.",
-    "ru": "Средне в месяц количество сделок."
+    "en": "Average number of trades per month.",
+    "ru": "Среднее количество сделок в месяц."
   },
   "PerDayTrades": {
-    "en": "Average per day",
-    "ru": "Средне в день"
+    "en": "Average Trades per Day",
+    "ru": "Среднее количество сделок в день"
   },
   "PerDayTradesDesc": {
-    "en": "Average per day trades count.",
-    "ru": "Средне в день количество сделок."
+    "en": "Average number of trades per day.",
+    "ru": "Среднее количество сделок в день."
   },
   "Content": {
     "en": "Content",
     "ru": "Контент"
   },
   "FitnessFormulaExample": {
-    "en": "Fitness function example: PnL / max(abs(MaxPnL - PnL), 1)",
-    "ru": "Пример фитнесс функции: PnL / max(abs(MaxPnL - PnL), 1)"
+    "en": "Example of a fitness function: PnL / max(abs(MaxPnL - PnL), 1)",
+    "ru": "Пример функции фитнеса: PnL / max(abs(MaxPnL - PnL), 1)"
   },
   "DoubleClickOnVarToInsert": {
-    "en": "Double click on variable to insert.",
-    "ru": "Двойной клик на переменной для вставки."
+    "en": "Double-click on a variable to insert it.",
+    "ru": "Двойной клик по переменной для вставки."
   },
   "YearMonth": {
     "en": "YearMonth",
@@ -941,22 +941,22 @@
   },
   "YearMonthFormat": {
     "en": "YearMonth format.",
-    "ru": "ГодМесяц формат."
+    "ru": "Формат ГодМесяц."
   },
   "AvailableVariables": {
-    "en": "Available variables",
+    "en": "Available Variables",
     "ru": "Доступные переменные"
   },
   "FormulaEditor": {
-    "en": "Formula editor",
+    "en": "Formula Editor",
     "ru": "Редактор формул"
   },
   "SignInStockSharp": {
-    "en": "Sign in to StockSharp.Com",
-    "ru": "Вход на StockSharp.Ru"
+    "en": "Sign in to StockSharp.com",
+    "ru": "Вход на StockSharp.ru"
   },
   "LoginAndPassword": {
-    "en": "Login and password",
+    "en": "Login and Password",
     "ru": "Логин и пароль"
   },
   "OAuth": {
@@ -965,27 +965,27 @@
   },
   "YourLanguage": {
     "en": "Your language is English.",
-    "ru": "Ваш язык Русский."
+    "ru": "Ваш язык русский."
   },
   "ChangeLanguage": {
-    "en": "Change current language",
-    "ru": "Изменить язык"
+    "en": "Change Current Language",
+    "ru": "Изменить текущий язык"
   },
   "Cloud": {
     "en": "Cloud",
     "ru": "Облако"
   },
   "LastReportTime": {
-    "en": "Last report time",
+    "en": "Last Report Time",
     "ru": "Время последнего отчета"
   },
   "SearchForCloudSecurities": {
-    "en": "You need to perform search to see available securities in the cloud",
-    "ru": "Вам необходимо выполнить поиск чтобы увидеть доступные инструменты в облаке"
+    "en": "Perform a search to view available securities in the cloud.",
+    "ru": "Выполните поиск, чтобы увидеть доступные инструменты в облаке."
   },
   "SearchMaxResultsParams": {
-    "en": "Search can return up to {0} results",
-    "ru": "Поиск может вернуть до {0} результатов"
+    "en": "Search can return up to {0} results.",
+    "ru": "Поиск может вернуть до {0} результатов."
   },
   "Renko": {
     "en": "Renko",
@@ -1000,43 +1000,43 @@
     "ru": "X0"
   },
   "CloudSecurities": {
-    "en": "Cloud securities",
+    "en": "Cloud Securities",
     "ru": "Инструменты в облаке"
   },
   "InvalidDataRangeParams": {
-    "en": "Selected market data range is invalid. For {0} security the available data range is {1} — {2}",
-    "ru": "Выбранный диапазон маркет данных некорректен. Для инструмента {0} доступны маркет данные в диапазоне {1} — {2}"
+    "en": "The selected market data range is invalid. For the security {0}, the available data range is from {1} to {2}.",
+    "ru": "Выбранный диапазон маркет данных неверен. Для инструмента {0} доступен диапазон данных с {1} по {2}."
   },
   "CopyError": {
-    "en": "Copy error",
-    "ru": "Скопировать ошибку"
+    "en": "Copy Error",
+    "ru": "Ошибка копирования"
   },
   "TaskIsComplete": {
-    "en": "Task is complete",
-    "ru": "Задача завершена"
+    "en": "Task is Complete",
+    "ru": "Задача выполнена"
   },
   "AvailableFrom": {
-    "en": "available from",
-    "ru": "доступно от"
+    "en": "Available from",
+    "ru": "Доступно с"
   },
   "AvailableTo": {
-    "en": "available to",
-    "ru": "доступно до"
+    "en": "Available to",
+    "ru": "Доступно до"
   },
   "StringLenMustBeAtLeastParams": {
-    "en": "Enter at least {0} symbols to search",
-    "ru": "Введите как минимум {0} символов для поиска"
+    "en": "Please enter at least {0} characters to perform a search.",
+    "ru": "Введите минимум {0} символов для выполнения поиска."
   },
   "SearchCloudSecurity": {
-    "en": "Search for security in the cloud",
+    "en": "Search for Securities in the Cloud",
     "ru": "Поиск инструментов в облаке"
   },
   "InQueue": {
-    "en": "enqueued",
-    "ru": "в очереди"
+    "en": "In Queue",
+    "ru": "В очереди"
   },
   "CloudTasks": {
-    "en": "Cloud tasks",
+    "en": "Cloud Tasks",
     "ru": "Облачные задачи"
   },
   "To": {
@@ -1048,19 +1048,19 @@
     "ru": "Поколения"
   },
   "GenerationsMax": {
-    "en": "Maximum number of generations.",
-    "ru": "Максимальное количество поколений."
+    "en": "Maximum Generations",
+    "ru": "Максимальное количество поколений"
   },
   "Fitness": {
     "en": "Fitness",
     "ru": "Фитнес"
   },
   "FitnessFormula": {
-    "en": "Fitness function formula. For example, 'PnL'.",
-    "ru": "Формула фитнес-функции. Например, 'PnL'."
+    "en": "Fitness Function Formula, e.g., 'PnL'.",
+    "ru": "Формула функции фитнеса, например, 'PnL'."
   },
   "LiquidationPrice": {
-    "en": "Liquidation price",
+    "en": "Liquidation Price",
     "ru": "Цена ликвидации"
   },
   "IFE": {
@@ -1068,23 +1068,23 @@
     "ru": "IFE"
   },
   "InsufficientFundError": {
-    "en": "Total number of insufficient fund error orders.",
-    "ru": "Количество заявок с ошибками регистрации недостаточности средств."
+    "en": "Total number of orders with insufficient fund errors.",
+    "ru": "Общее количество заявок с ошибками из-за недостаточности средств."
   },
   "Population": {
     "en": "Population",
     "ru": "Популяция"
   },
   "PopulationDesc": {
-    "en": "The initial size of population.",
+    "en": "The initial population size.",
     "ru": "Начальный размер популяции."
   },
   "PopulationMax": {
-    "en": "Population (max)",
-    "ru": "Популяция (макс)"
+    "en": "Maximum Population",
+    "ru": "Максимальная популяция"
   },
   "PopulationMaxDesc": {
-    "en": "The maximum population.",
+    "en": "The maximum population size.",
     "ru": "Максимальный размер популяции."
   },
   "Stagnation": {
@@ -1092,40 +1092,40 @@
     "ru": "Стагнация"
   },
   "StagnationDesc": {
-    "en": "The genetic algorithm will be terminate when the best chromosome's fitness has no change in the last generations specified.",
-    "ru": "Генетический алгоритм завершится, когда приспособленность наилучшей хромосомы не изменится в последних указанных поколениях."
+    "en": "The genetic algorithm terminates when there is no change in the best chromosome's fitness for the specified number of generations.",
+    "ru": "Генетический алгоритм прекращает работу, когда не происходит изменений в приспособленности лучшей хромосомы за указанное число поколений."
   },
   "MutationProbability": {
-    "en": "Mutation probability",
+    "en": "Mutation Probability",
     "ru": "Вероятность мутации"
   },
   "MutationProbabilityDesc": {
-    "en": "Mutation probability.",
-    "ru": "Вероятность мутации."
+    "en": "Probability of mutation occurring.",
+    "ru": "Вероятность наступления мутации."
   },
   "CrossoverProbability": {
-    "en": "Crossover probability",
+    "en": "Crossover Probability",
     "ru": "Вероятность скрещивания"
   },
   "CrossoverProbabilityDesc": {
-    "en": "Crossover probability.",
-    "ru": "Вероятность скрещивания."
+    "en": "Probability of crossover occurring.",
+    "ru": "Вероятность наступления скрещивания."
   },
   "Reinsertion": {
     "en": "Reinsertion",
-    "ru": "Повторение"
+    "ru": "Перевставка"
   },
   "ReinsertionDesc": {
-    "en": "Reinsertion algorithm.",
-    "ru": "Алгоритм повторения."
+    "en": "Reinsertion algorithm used in genetic computation.",
+    "ru": "Алгоритм перевставки, используемый в генетических вычислениях."
   },
   "Mutation": {
     "en": "Mutation",
     "ru": "Мутация"
   },
   "MutationDesc": {
-    "en": "Mutation algorithm.",
-    "ru": "Алгоритм мутации."
+    "en": "Mutation algorithm used in genetic computation.",
+    "ru": "Алгоритм мутации, используемый в генетических вычислениях."
   },
   "Crossover": {
     "en": "Crossover",
@@ -1157,11 +1157,11 @@
   },
   "UseCloud": {
     "en": "Use cloud",
-    "ru": "Облако"
+    "ru": "Использовать облако"
   },
   "NotSelectedMT": {
-    "en": "You have not selected any of the directories. Install the connector in directory and configure it as instructed in the documentation https://doc.stocksharp.com/topics/api/connectors/forex/metatrader.html",
-    "ru": "Вы не выбрали ни одну из директорий. Установите коннектор в директорию, и настройте как указано в инструкции https://doc.stocksharp.ru/topics/api/connectors/forex/metatrader.html"
+    "en": "You have not selected any directories. Install the connector in a directory and configure it as instructed in the documentation https://doc.stocksharp.com/topics/api/connectors/forex/metatrader.html",
+    "ru": "Вы не выбрали ни одну из директорий. Установите коннектор в директорию и настройте его согласно инструкциям на https://doc.stocksharp.com/topics/api/connectors/forex/metatrader.html"
   },
   "SeveralDirectoriesMT": {
     "en": "Several directories with the MT terminal were found. Choose the appropriate one.",
@@ -1173,7 +1173,7 @@
   },
   "MaxIterations": {
     "en": "Maximum possible iterations count.",
-    "ru": "Максимально возможно кол-во итераций."
+    "ru": "Максимально возможное количество итераций."
   },
   "Parallel": {
     "en": "Parallel",
@@ -1185,31 +1185,31 @@
   },
   "OnlineAuthorization": {
     "en": "You have been redirected to the StockSharp.Com website where you need to log in. After a successful login, you will be automatically logged into the application.",
-    "ru": "Вы были переадресованы на сайт StockSharp.Ru где вам необходимо залогиниться. После успешного логина вы автоматически войдете в приложение."
+    "ru": "Вы были переадресованы на сайт StockSharp.Ru, где вам необходимо войти в систему. После успешного входа вы автоматически войдете в приложение."
   },
   "DoubleClickToEdit": {
-    "en": "Double click on formula to edit. Enter to finish editing.",
-    "ru": "Двойной клик на формуле для редактирования. Enter для завершения редактирования."
+    "en": "Double click on the formula to edit. Press Enter to finish editing.",
+    "ru": "Двойной клик на формуле для редактирования. Нажмите Enter для завершения редактирования."
   },
   "OnlineOnly": {
     "en": "Online only",
     "ru": "Только онлайн"
   },
   "OnlineOnlyDescription": {
-    "en": "Allow transactions only when in online state",
-    "ru": "Разрешать транзакции только в состоянии онлайн"
+    "en": "Allow transactions only when online.",
+    "ru": "Разрешать транзакции только в онлайн-режиме."
   },
   "Logout": {
     "en": "Logout",
-    "ru": "Разлогиниться"
+    "ru": "Выйти"
   },
   "LogoutQuestion": {
     "en": "Do you want to logout?",
-    "ru": "Вы хотите разлогиниться?"
+    "ru": "Вы хотите выйти?"
   },
   "TelegramActivation": {
-    "en": "Now you will be redirected to our Telegram bot to activate your profile.",
-    "ru": "Сейчас вы будете перенаправлены в наш Телеграм бот для активации профиля."
+    "en": "You will now be redirected to our Telegram bot to activate your profile.",
+    "ru": "Сейчас вы будете перенаправлены к нашему Телеграм-боту для активации вашего профиля."
   },
   "RemoteControl": {
     "en": "Remote control.",
@@ -1217,47 +1217,47 @@
   },
   "NotificationChannel": {
     "en": "Notification channel.",
-    "ru": "Канал с уведомлениями."
+    "ru": "Канал уведомлений."
   },
   "PatternParameterIndexDescription": {
-    "en": "Parameter indexes using closing price as example:\\nC: current candle\\nC1: first candle after current\\nC2: second candle after current\\npC: previous candle\\npC1: first candle before previous candle\\nAll indexes must be in range of the current pattern.",
-    "ru": "Индексы параметров на примере цены закрытия:\\nC: текущая свеча\\nC1: первая свеча после текущей\\nC2: вторая свеча после текущей\\npC: предыдущая свеча\\npC1: первая свеча перед предыдущей свечой\\nВсе индексы должны быть в диапазоне текущего шаблона."
+    "en": "Parameter indexes using closing price as an example:\\nC: current candle\\nC1: first candle after current\\nC2: second candle after current\\npC: previous candle\\npC1: first candle before previous candle\\nAll indexes must be within the range of the current pattern.",
+    "ru": "Индексы параметров на примере цены закрытия:\\nC: текущая свеча\\nC1: первая свеча после текущей\\nC2: вторая свеча после текущей\\npC: предыдущая свеча\\npC1: первая свеча перед предыдущей\\nВсе индексы должны находиться в пределах диапазона текущего паттерна."
   },
   "OfflineWarning": {
-    "en": "Offline mode. Unable to continue the operation.",
-    "ru": "Оффлайн режим. Невозможно продолжить операцию."
+    "en": "Offline mode. Operation cannot continue.",
+    "ru": "Офлайн-режим. Операция не может быть продолжена."
   },
   "ForumNotifications": {
     "en": "Forum notifications",
-    "ru": "Уведомления о сообщениях на форуме"
+    "ru": "Уведомления форума"
   },
   "Promotion": {
     "en": "Promotion",
-    "ru": "Предложения"
+    "ru": "Акции"
   },
   "PromotionNewsletters": {
-    "en": "Newsletters about special promotion",
-    "ru": "Рассылки о специальных предложениях"
+    "en": "Newsletters about special promotions",
+    "ru": "Рассылки о специальных акциях"
   },
   "Releases": {
     "en": "Releases",
-    "ru": "Новые версии"
+    "ru": "Выпуски"
   },
   "ReleasesNewsletters": {
-    "en": "Releases newsletters",
-    "ru": "Рассылки о новых версиях"
+    "en": "Newsletters about new releases",
+    "ru": "Рассылки о новых выпусках"
   },
   "AmazonS3": {
     "en": "Amazon S3",
-    "ru": "Амазон S3"
+    "ru": "Amazon S3"
   },
   "AmazonGlacier": {
     "en": "Amazon Glacier",
-    "ru": "Амазон Glacier"
+    "ru": "Amazon Glacier"
   },
   "Amazon": {
     "en": "Amazon",
-    "ru": "Амазон"
+    "ru": "Amazon"
   },
   "Mega": {
     "en": "Mega",
@@ -1272,12 +1272,12 @@
     "ru": "Папка"
   },
   "FolderCloud": {
-    "en": "A folder in the cloud storage used as a root for uploading data.",
-    "ru": "Папка в облачном хранилище, используемая в качестве корня для загрузки данных."
+    "en": "A folder in the cloud used as a root for data upload.",
+    "ru": "Папка в облаке, используемая как корневая для загрузки данных."
   },
   "OAuthStart": {
-    "en": "By clicking the Start button below, you will be redirected to the service website to provide access rights.",
-    "ru": "Нажимая ниже кнопку Старт вы будете переадресованы на сайт сервиса для предоставления прав доступа."
+    "en": "By clicking the 'Start' button below, you will be redirected to the service's website to authorize access.",
+    "ru": "Нажатием кнопки 'Старт' ниже, вы будете переадресованы на сайт сервиса для авторизации доступа."
   },
   "DelayParams": {
     "en": "{0} values",
@@ -1288,12 +1288,12 @@
     "ru": "Длительность задержки"
   },
   "DelayLengthDetails": {
-    "en": "Number of values to delay signal for.",
-    "ru": "Количество значений на которое будет задержан сигнал."
+    "en": "Number of values to delay the signal by.",
+    "ru": "Количество значений, на которое задерживается сигнал."
   },
   "PosCondition": {
     "en": "Position condition",
-    "ru": "Условие по позиции"
+    "ru": "Условие позиции"
   },
   "PosConditionNone": {
     "en": "No additional condition",
@@ -1304,40 +1304,40 @@
     "ru": "Только увеличение"
   },
   "PosConditionIncreaseOnlyDetails": {
-    "en": "Increase position only. Send order only if it is of the same direction as the current position or if the current position is zero.",
-    "ru": "Только увеличение позиции. Посылать заявку только того же направления что и текущая позиция или если текущая позиция нулевая."
+    "en": "Increase position only. Send orders only if they are in the same direction as the current position or if the current position is zero.",
+    "ru": "Только увеличение позиции. Отправлять заявки только если они в том же направлении, что и текущая позиция, или если текущая позиция равна нулю."
   },
   "PosConditionReduceOnly": {
     "en": "Reduce only",
     "ru": "Только сокращение"
   },
   "PosConditionReduceOnlyDetails": {
-    "en": "Reduce position only. Send order only if it is of the opposite direction of the current non-zero position. Order size is limited by current position.",
-    "ru": "Только сокращение позиции. Посылать заявку только на сокращение текущей позиции. Размер заявки ограничен текущей позицией."
+    "en": "Reduce position only. Send orders only if they are in the opposite direction of the current non-zero position. Order size is limited by the current position.",
+    "ru": "Только сокращение позиции. Отправлять заявки только в противоположном направлении текущей ненулевой позиции. Размер заявки ограничен текущей позицией."
   },
   "PosConditionOpen": {
     "en": "Open position",
     "ru": "Открытие позиции"
   },
   "PosConditionOpenDetails": {
-    "en": "Open position. Send order only if the current position is zero.",
-    "ru": "Открытие позиции. Посылать заявку только если текущая позиция нулевая."
+    "en": "Open position. Send orders only if the current position is zero.",
+    "ru": "Открытие позиции. Отправлять заявки только если текущая позиция равна нулю."
   },
   "PosConditionClose": {
     "en": "Close position",
     "ru": "Закрытие позиции"
   },
   "PosConditionCloseDetails": {
-    "en": "Close position. Order volume and direction is calculated automatically based on current position.",
-    "ru": "Закрытие позиции. Объем и направление заявки расчитывается автоматически на основе текущей позиции."
+    "en": "Close position. Order volume and direction are automatically calculated based on the current position.",
+    "ru": "Закрытие позиции. Объем и направление заявки автоматически рассчитываются на основе текущей позиции."
   },
   "PosConditionInvert": {
     "en": "Invert position",
     "ru": "Переворот позиции"
   },
   "PosConditionInvertDetails": {
-    "en": "Invert position. Order volume and direction is calculated automatically based on current position.",
-    "ru": "Переворот позиции. Объем и направление заявки расчитывается автоматически на основе текущей позиции."
+    "en": "Invert position. Order volume and direction are automatically calculated based on the current position.",
+    "ru": "Переворот позиции. Объем и направление заявки автоматически рассчитываются на основе текущей позиции."
   },
   "BiggestCandle": {
     "en": "Biggest candle",
@@ -1389,39 +1389,39 @@
   },
   "PatternBuilder": {
     "en": "Pattern builder",
-    "ru": "Построитель паттерна"
+    "ru": "Построитель паттернов"
   },
   "MorningStar": {
     "en": "Morning Star",
-    "ru": "Утренняя Звезда"
+    "ru": "Утренняя звезда"
   },
   "EveningStar": {
     "en": "Evening Star",
-    "ru": "Вечерняя Звезда"
+    "ru": "Вечерняя звезда"
   },
   "ThreeWhiteSoldiers": {
-    "en": "3 White Soldiers",
-    "ru": "3 Белых Солдата"
+    "en": "Three White Soldiers",
+    "ru": "Три белых солдата"
   },
   "ThreeBlackCrows": {
-    "en": "3 Black Crows",
-    "ru": "3 Черных Ворона"
+    "en": "Three Black Crows",
+    "ru": "Три черных ворона"
   },
   "BullishEngulfing": {
     "en": "Bullish Engulfing",
-    "ru": "Бычье Поглощение"
+    "ru": "Бычье поглощение"
   },
   "BearishEngulfing": {
     "en": "Bearish Engulfing",
-    "ru": "Медвежье Поглощение"
+    "ru": "Медвежье поглощение"
   },
   "BullishHarami": {
     "en": "Bullish Harami",
-    "ru": "Бычий Харами"
+    "ru": "Бычий харами"
   },
   "BearishHarami": {
     "en": "Bearish Harami",
-    "ru": "Медвежий Харами"
+    "ru": "Медвежий харами"
   },
   "HangingMan": {
     "en": "Hanging Man",
@@ -1433,43 +1433,43 @@
   },
   "TweezerTop": {
     "en": "Tweezer Top",
-    "ru": "Пинцет Верх"
+    "ru": "Пинцет (верх)"
   },
   "TweezerBottom": {
     "en": "Tweezer Bottom",
-    "ru": "Пинцет Низ"
+    "ru": "Пинцет (низ)"
   },
   "OnNeck": {
     "en": "On-Neck",
     "ru": "На шее"
   },
   "ThreeInsideUp": {
-    "en": "3 Inside Up",
-    "ru": "3 Внутри Вверх"
+    "en": "Three Inside Up",
+    "ru": "Три внутри вверх"
   },
   "ThreeInsideDown": {
-    "en": "3 Inside Down",
-    "ru": "3 Внутри Вниз"
+    "en": "Three Inside Down",
+    "ru": "Три внутри вниз"
   },
   "ThreeOutsideUp": {
-    "en": "3 Outside Up",
-    "ru": "3 Снаружи Вверх"
+    "en": "Three Outside Up",
+    "ru": "Три снаружи вверх"
   },
   "ThreeOutsideDown": {
-    "en": "3 Outside Down",
-    "ru": "3 Снаружи Вниз"
+    "en": "Three Outside Down",
+    "ru": "Три снаружи вниз"
   },
   "FallingThreeMethods": {
-    "en": "Falling 3 Methods",
-    "ru": "3 Падающих"
+    "en": "Falling Three Methods",
+    "ru": "Падение трех методов"
   },
   "RisingThreeMethods": {
-    "en": "Rising 3 Methods",
-    "ru": "3 Всходящих"
+    "en": "Rising Three Methods",
+    "ru": "Рост трех методов"
   },
   "Piercing": {
     "en": "Piercing",
-    "ru": "Просвет"
+    "ru": "Прокол"
   },
   "FlatCandle": {
     "en": "Flat",
@@ -1485,11 +1485,11 @@
   },
   "WhiteMarubozu": {
     "en": "White Marubozu",
-    "ru": "Белая Марубозу"
+    "ru": "Белая марубозу"
   },
   "BlackMarubozu": {
     "en": "Black Marubozu",
-    "ru": "Черная Марубозу"
+    "ru": "Черная марубозу"
   },
   "SpinningTop": {
     "en": "Spinning top",
@@ -1501,7 +1501,7 @@
   },
   "InvertedHammer": {
     "en": "Inverted Hammer",
-    "ru": "Перевернутый Молот"
+    "ru": "Перевернутый молот"
   },
   "Dragonfly": {
     "en": "Dragonfly",
@@ -1509,7 +1509,7 @@
   },
   "Gravestone": {
     "en": "Gravestone",
-    "ru": "Надгробье"
+    "ru": "Надгробие"
   },
   "BullishCandle": {
     "en": "Bullish",
@@ -1525,11 +1525,11 @@
   },
   "PatternDesc": {
     "en": "Candle pattern (hammer, dragonfly, shadowless, etc.).",
-    "ru": "Паттерн свечи (молот, стрекоза, бестеневая и т.д.)."
+    "ru": "Паттерн свечи (молот, стрекоза, бестеневая и др.)."
   },
   "ContinueSubscriptionParams": {
     "en": "Continue free subscription with connector {0}?",
-    "ru": "Выполнить бесплатную подписку с коннектором {0}?"
+    "ru": "Продолжить бесплатную подписку с коннектором {0}?"
   },
   "SelectYourConnector": {
     "en": "Select one connector for this subscription",
@@ -1537,7 +1537,7 @@
   },
   "ChooseLater": {
     "en": "Postpone the choice",
-    "ru": "Выбрать потом"
+    "ru": "Отложить выбор"
   },
   "ChooseYourTariff": {
     "en": "Choose your StockSharp subscription",
@@ -1548,8 +1548,8 @@
     "ru": "Разрешить несортированные данные."
   },
   "AllowUnsortedDataDetails": {
-    "en": "Allows to draw unsorted data on chart. May negatively affect performance.",
-    "ru": "Разрешить отрисовку неотсортированных данных на графике. Может негативно повлиять на производительность."
+    "en": "Allow unsorted data to be displayed on charts. This may negatively affect performance.",
+    "ru": "Разрешить отображение несортированных данных на графиках. Это может негативно сказаться на производительности."
   },
   "Shortcut": {
     "en": "Shortcut",
@@ -1568,8 +1568,8 @@
     "ru": "Невозможно изменить."
   },
   "WrongSecurityBoard": {
-    "en": "Subscription cannot be processes for the {0} security cause it is not contain board code {1}. Security must be like {2}.",
-    "ru": "Подписка не может быть выполнена для {0} так как поддерживается код площадки должен быть {1}. Инструмент должен быть вида {2}."
+    "en": "Subscription cannot be processed for {0} security because it does not contain board code {1}. Security must be of type {2}.",
+    "ru": "Подписка не может быть выполнена для {0}, так как не поддерживается код площадки {1}. Инструмент должен быть вида {2}."
   },
   "MaximumInstrumentsCount": {
     "en": "Maximum instruments count to download.",
@@ -1589,7 +1589,7 @@
   },
   "RefreshingLicense": {
     "en": "Requesting license info from StockSharp server",
-    "ru": "Получение текущей лицензии с сервера StockSharp"
+    "ru": "Получение информации о лицензии с сервера StockSharp"
   },
   "RefreshLicenseComplete": {
     "en": "License was updated successfully",
@@ -1604,16 +1604,16 @@
     "ru": "Отслеживать заявки по инструментам"
   },
   "TrackOrdersForSecuritiesDesc": {
-    "en": "The Binance connector during connection/reconnection process will request order/trade status for the listed securities. Security ids, comma-separated. For example: BTC/USDT@BNB,BTCUSDT_PERPETUAL@BNB",
-    "ru": "Коннектор Binance в процессе подключения/переподключения будет запрашивать состояние заявок/сделок по перечисленным инструментам. Id инструментов через запятую. Например: BTC/USDT@BNB,BTCUSDT_PERPETUAL@BNB"
+    "en": "The Binance connector during the connection/reconnection process will request the status of orders/trades for the listed securities. Security IDs, comma-separated. For example: BTC/USDT@BNB, BTCUSDT_PERPETUAL@BNB",
+    "ru": "Коннектор Binance в процессе подключения/переподключения будет запрашивать состояние заявок/сделок по перечисленным инструментам. Id инструментов через запятую. Например: BTC/USDT@BNB, BTCUSDT_PERPETUAL@BNB"
   },
   "Dialogs": {
     "en": "Dialogs",
-    "ru": "Окна"
+    "ru": "Диалоги"
   },
   "ErrorsDialogs": {
     "en": "Show error dialog windows.",
-    "ru": "Показывать ошибки в диалоговых окнах."
+    "ru": "Показывать диалоговые окна ошибок."
   },
   "ConfirmNewVersionPublishParams": {
     "en": "Do you want to publish the new version of \"{0}\"?",
@@ -1624,7 +1624,7 @@
     "ru": "Запрос был отменен"
   },
   "NewProductVersionPublishedParams": {
-    "en": "The new version {0} of the \"{1}\" was published successfully!",
+    "en": "The new version {0} of \"{1}\" was published successfully!",
     "ru": "Новая версия {0} продукта \"{1}\" была успешно опубликована!"
   },
   "CreateNewProduct": {
@@ -1648,20 +1648,20 @@
     "ru": "Доступные стратегии"
   },
   "InstallerMustBeRunning": {
-    "en": "An error has occurred. Please check that latest version of Installer is running.",
-    "ru": "Произошла ошибка. Убедитесь, что последняя версия Installer запущена."
+    "en": "An error has occurred. Please check that the latest version of Installer is running.",
+    "ru": "Произошла ошибка. Убедитесь, что запущена последняя версия Installer."
   },
   "ReportProblem": {
     "en": "Report a problem",
     "ru": "Сообщить о проблеме"
   },
   "DescribeTheQuestionInDetails": {
-    "en": "Please explain your question in details",
+    "en": "Please explain your question in detail",
     "ru": "Пожалуйста, подробно опишите ваш вопрос"
   },
   "DescribeTheBugInDetails": {
-    "en": "Please explain what the prolem is and provide detailed scenario on how to reproduce the problem",
-    "ru": "Пожалуйста, подробно опишите в чем состоит проблема и опишите детальный сценарий воспроизведения"
+    "en": "Please explain what the problem is and provide a detailed scenario on how to reproduce the problem",
+    "ru": "Пожалуйста, подробно опишите, в чем состоит проблема и опишите детальный сценарий воспроизведения"
   },
   "TunisBvmt": {
     "en": "Tunis BVMT",
@@ -1676,27 +1676,27 @@
     "ru": "Адреса web socket"
   },
   "ProductId": {
-    "en": "Product id",
+    "en": "Product ID",
     "ru": "Идентификатор продукта"
   },
   "RecentOrdersRequestLimit": {
-    "en": "Number of requested recent orders for each instrument type",
+    "en": "Number of recent orders requested for each instrument type",
     "ru": "Количество запрашиваемых недавних заявок по каждому типу инструмента"
   },
   "RecentTradesRequestLimit": {
-    "en": "Number of requested recent own trades",
+    "en": "Number of recent trades requested",
     "ru": "Количество запрашиваемых недавних сделок"
   },
   "DumpBooks": {
     "en": "Dump order books",
-    "ru": "Лог книги заявок"
+    "ru": "Сохранить лог книги заявок"
   },
   "Bitmart": {
     "en": "Bitmart",
     "ru": "Bitmart"
   },
   "ResumeFromLastDate": {
-    "en": "Resume operation starting from last date",
+    "en": "Resume operation starting from the last date",
     "ru": "Возобновить операцию начиная с последней даты"
   },
   "Freelance": {
@@ -1709,22 +1709,22 @@
   },
   "HowToUseConnector": {
     "en": "Click to learn how to use this connector in your own projects",
-    "ru": "Нажмите чтобы узнать как можно использовать этот коннектор в ваших проектах"
+    "ru": "Нажмите, чтобы узнать, как использовать этот коннектор в ваших проектах"
   },
   "ProductIsNotApproved": {
-    "en": "The product was not yet approved",
+    "en": "The product has not yet been approved",
     "ru": "Этот продукт еще не одобрен"
   },
   "PublishSelectContentFile": {
-    "en": "Select content file you want to publish",
+    "en": "Select the content file you want to publish",
     "ru": "Выберите файл контента для публикации"
   },
   "PublishSelectProjectSolutionFolder": {
-    "en": "Select project/solution folder you want to publish",
+    "en": "Select the project/solution folder you want to publish",
     "ru": "Выберите папку с проектом или решением для публикации"
   },
   "PublishSelectFolder": {
-    "en": "Select folder you want to publish",
+    "en": "Select the folder you want to publish",
     "ru": "Выберите папку для публикации"
   },
   "FoundProjectsSolutionsParams": {
@@ -1752,7 +1752,7 @@
     "ru": "Запрошен пробный доступ"
   },
   "RequestRefund": {
-    "en": "Request refund",
+    "en": "Request a refund",
     "ru": "Запросить возврат средств"
   },
   "RequestedRefund": {
@@ -1781,7 +1781,7 @@
   },
   "DotNetRuntimeNotInstalled": {
     "en": ".NET SDK v5.0+ is not installed. You can download it here: https://dotnet.microsoft.com/download/dotnet/6.0",
-    "ru": ".NET SDK v5.0+ не установлен. Его можно скачать по ссылке: https://dotnet.microsoft.com/download/dotnet/6.0"
+    "ru": ".NET SDK v5.0+ не установлен. Вы можете скачать его здесь: https://dotnet.microsoft.com/download/dotnet/6.0"
   },
   "SelectImage": {
     "en": "Select image",
@@ -1793,7 +1793,7 @@
   },
   "InvalidProductAccessParams": {
     "en": "You can create products with Private access level only. To open the Public option, please email us about your product at info@stocksharp.com",
-    "ru": "Вы можете создавать продукты с только уровнем доступа Частное. Для открытия опции Публично, пожалуйста, напишите нам о своем продукте на почту info@stocksharp.com"
+    "ru": "Вы можете создавать продукты только с уровнем доступа Частное. Для открытия опции Публично, пожалуйста, напишите нам о своем продукте на почту info@stocksharp.com"
   },
   "UserLookupError": {
     "en": "User lookup error",
@@ -2044,8 +2044,8 @@
     "ru": "Принудительная проверка обновлений"
   },
   "ConflictResolverTooltipParams": {
-    "en": "Rules for conflict resolving in case same package id was found in multiple repositories.\\nA rule consists of package id and nuget repository separated with colon.\\nEvery rule must be on its own line. Examples:\\n\\nStockSharp.Terminal:nugetorg\\n*:stocksharp\\n'*' means other packages.\\nAvailable nuget repos: {0}",
-    "ru": "Правила разрешения конфликтов для случая пакетов с одинаковым id в разных nuget репозиториях.\\nПравило состоит из id пакета и нугет репо разделенных двоеточием.\\nКаждое правило на своей строке. Примеры:\\nStockSharp.Terminal:nugetorg\\n*:stocksharp\\n'*' означает все остальные пакеты.\\nДоступные nuget репо: {0}"
+    "en": "Rules for conflict resolving in case the same package id was found in multiple repositories.\\nA rule consists of a package id and nuget repository separated by a colon.\\nEach rule must be on its own line. Examples:\\n\\nStockSharp.Terminal:nugetorg\\n*:stocksharp\\n'*' means other packages.\\nAvailable nuget repos: {0}",
+    "ru": "Правила разрешения конфликтов для случая пакетов с одинаковым id в разных nuget репозиториях.\\nПравило состоит из id пакета и нугет репо, разделенных двоеточием.\\nКаждое правило на своей строке. Примеры:\\nStockSharp.Terminal:nugetorg\\n*:stocksharp\\n'*' означает все остальные пакеты.\\nДоступные nuget репо: {0}"
   },
   "InstallerInstall": {
     "en": "Install",
@@ -2088,7 +2088,7 @@
     "ru": "Ошибка загрузки конфигурации"
   },
   "ErrorAppIsLockedParams": {
-    "en": "{0}: some of the application files are locked. Perhaps, the the application is running. File: {1}",
+    "en": "{0}: some of the application files are locked. Perhaps, the application is running. File: {1}",
     "ru": "{0}: некоторые из файлов приложения заблокированы. Возможно приложение запущено. Файл: {1}"
   },
   "LeftClick": {
@@ -2108,7 +2108,7 @@
     "ru": "Правая кнопка мыши (двойное нажатие)"
   },
   "PressEscToCancel": {
-    "en": "Press Escape to cancel operation.",
+    "en": "Press Escape to cancel the operation.",
     "ru": "Нажмите Escape для отмены операции."
   },
   "MovingOrdersParams": {
@@ -2164,7 +2164,7 @@
     "ru": "Завершение приложения"
   },
   "ExitingAppForInstaller": {
-    "en": "The application will be stopped in order to run installer",
+    "en": "The application will be stopped in order to run the installer",
     "ru": "Для запуска инсталлера приложение будет закрыто"
   },
   "UpdateIsNotRequired": {
@@ -2172,7 +2172,7 @@
     "ru": "Обновление не требуется"
   },
   "InstallerNotFoundDetailParams": {
-    "en": "The installer was not found. In order to be able to update the applications you need to download application installer at {0}.",
+    "en": "The installer was not found. In order to be able to update the applications you need to download the application installer at {0}.",
     "ru": "Программа-инсталлер обновлений не найдена. Чтобы использовать функцию обновления приложений, необходимо скачать установщик обновлений по адресу {0}."
   },
   "AppInstallDir": {
@@ -2628,7 +2628,7 @@
     "ru": "Неизвестная ошибка сервера."
   },
   "MessageNoText": {
-    "en": "Message contains no text.",
+    "en": "The message contains no text.",
     "ru": "Сообщение не содержит текст."
   },
   "MessageTextMax": {
@@ -2636,11 +2636,11 @@
     "ru": "Текст сообщения превысил максимально допустимую длину."
   },
   "SmsNotEnough": {
-    "en": "SMS is not enough.",
+    "en": "Insufficient SMS credits.",
     "ru": "Недостаточно СМС."
   },
   "EmailNotEnough": {
-    "en": "Email is not enough.",
+    "en": "Insufficient email credits.",
     "ru": "Недостаточно Email."
   },
   "PhoneNotSpecified": {
@@ -2676,7 +2676,7 @@
     "ru": "Указанный логин уже занят."
   },
   "IncorrectVerificationCode": {
-    "en": "Incorrect verification code.",
+    "en": "The verification code is incorrect.",
     "ru": "Неверный код подтверждения."
   },
   "IncorrectSmsCode": {
@@ -2732,104 +2732,104 @@
     "ru": "Код"
   },
   "BoardCode": {
-    "en": "Board code",
+    "en": "Board Code",
     "ru": "Код площадки"
   },
   "Reregistering": {
-    "en": "Reregistering",
+    "en": "Reregistration",
     "ru": "Перерегистрация"
   },
   "MarketOrders": {
-    "en": "Market orders",
+    "en": "Market Orders",
     "ru": "Рыночные заявки"
   },
   "MarketOrdersSupported": {
-    "en": "Are market type orders supported.",
-    "ru": "Поддерживается ли рыночный тип заявок."
+    "en": "Determines market orders supported.",
+    "ru": "Поддерживаются ли рыночные заявки."
   },
   "SecExpirationTime": {
-    "en": "Securities expiration times.",
-    "ru": "Время экспирации инструментов."
+    "en": "Securities Expiration Time.",
+    "ru": "Время истечения срока действия ценных бумаг."
   },
   "WorkingHours": {
-    "en": "Board working hours.",
+    "en": "Board Working Hours.",
     "ru": "Время работы площадки."
   },
   "TimeZone": {
-    "en": "Time zone",
+    "en": "Time Zone",
     "ru": "Часовой пояс"
   },
   "BoardTimeZone": {
-    "en": "Information about the time zone where the exchange is located.",
-    "ru": "Информация о временной зоне, где находится биржа."
+    "en": "Exchange Time Zone Information.",
+    "ru": "Информация о часовом поясе биржи."
   },
   "SecurityId": {
     "en": "Security ID",
-    "ru": "Идентификатор инструмента"
+    "ru": "Идентификатор ценной бумаги"
   },
   "CandleOpenTime": {
-    "en": "Time of candle open",
+    "en": "Candle Opening Time",
     "ru": "Время открытия свечи"
   },
   "CandleHighTime": {
-    "en": "Time of candle high",
-    "ru": "Время максимума свечи"
+    "en": "Candle High Time",
+    "ru": "Время максимальной цены свечи"
   },
   "CandleLowTime": {
-    "en": "Time of candle low",
-    "ru": "Время минимума свечи"
+    "en": "Candle Low Time",
+    "ru": "Время минимальной цены свечи"
   },
   "CandleCloseTime": {
-    "en": "Time of candle close",
+    "en": "Candle Closing Time",
     "ru": "Время закрытия свечи"
   },
   "OpenPrice": {
-    "en": "Opening price",
+    "en": "Opening Price",
     "ru": "Цена открытия"
   },
   "CandleOpenPrice": {
-    "en": "Candle opening price.",
-    "ru": "Цена открытия свечи."
+    "en": "Candle Opening Price",
+    "ru": "Цена открытия свечи"
   },
   "HighestPrice": {
-    "en": "Highest price",
+    "en": "Highest Price",
     "ru": "Максимальная цена"
   },
   "HighPriceOfCandle": {
-    "en": "Highest price of a candle.",
-    "ru": "Максимальная цена свечи."
+    "en": "Highest Candle Price",
+    "ru": "Максимальная цена свечи"
   },
   "LowestPrice": {
-    "en": "Lowest price",
+    "en": "Lowest Price",
     "ru": "Минимальная цена"
   },
   "LowPriceOfCandle": {
-    "en": "Lowest price of a candle.",
-    "ru": "Минимальная цена свечи."
+    "en": "Lowest Candle Price",
+    "ru": "Минимальная цена свечи"
   },
   "ClosingPrice": {
-    "en": "Closing price",
+    "en": "Closing Price",
     "ru": "Цена закрытия"
   },
   "ClosePriceOfCandle": {
-    "en": "Candle closing price.",
-    "ru": "Цена закрытия свечи."
+    "en": "Candle Closing Price",
+    "ru": "Цена закрытия свечи"
   },
   "Volume": {
     "en": "Volume",
     "ru": "Объем"
   },
   "VolumeOrder": {
-    "en": "Volume (order)",
-    "ru": "Объем (заявка)"
+    "en": "Order Volume",
+    "ru": "Объем заявки"
   },
   "VolumeTrade": {
-    "en": "Volume (trade)",
-    "ru": "Объем (сделка)"
+    "en": "Trade Volume",
+    "ru": "Объем сделки"
   },
   "TotalCandleVolume": {
-    "en": "Total candle volume.",
-    "ru": "Суммарный объем свечи."
+    "en": "Total Candle Volume",
+    "ru": "Общий объем свечи"
   },
   "OI": {
     "en": "OI",
@@ -2844,31 +2844,31 @@
     "ru": "Тики"
   },
   "TickCount": {
-    "en": "Number of ticks.",
-    "ru": "Количество тиковых сделок."
+    "en": "Tick Count",
+    "ru": "Количество тиков"
   },
   "TickUp": {
-    "en": "Ticks (up)",
-    "ru": "Тики (вверх)"
+    "en": "Tick Up",
+    "ru": "Тики вверх"
   },
   "TickUpCount": {
-    "en": "Number of up trending ticks.",
-    "ru": "Количество восходящих тиковых сделок."
+    "en": "Tick Up Count",
+    "ru": "Количество восходящих тиков"
   },
   "TickDown": {
-    "en": "Ticks (down)",
-    "ru": "Тики (вниз)"
+    "en": "Tick Down",
+    "ru": "Тики вниз"
   },
   "TickDownCount": {
-    "en": "Number of down trending ticks.",
-    "ru": "Количество нисходящих тиковых сделок."
+    "en": "Tick Down Count",
+    "ru": "Количество нисходящих тиков"
   },
   "State": {
     "en": "State",
     "ru": "Состояние"
   },
   "CandleState": {
-    "en": "Candle state",
+    "en": "Candle State",
     "ru": "Состояние свечи"
   },
   "Portfolio": {
@@ -2876,11 +2876,11 @@
     "ru": "Портфель"
   },
   "PortfolioName": {
-    "en": "Portfolio name.",
-    "ru": "Название портфеля."
+    "en": "Portfolio Name",
+    "ru": "Название портфеля"
   },
   "Depo": {
-    "en": "Depositary",
+    "en": "Depository",
     "ru": "Депозитарий"
   },
   "DepoName": {
@@ -2888,7 +2888,7 @@
     "ru": "Название депозитария, где физически находится ценная бумага."
   },
   "ServerTime": {
-    "en": "Server time",
+    "en": "Server Time",
     "ru": "Серверное время"
   },
   "Transaction": {
@@ -2900,15 +2900,15 @@
     "ru": "Идентификатор транзакции"
   },
   "OriginalTransaction": {
-    "en": "Original transaction",
+    "en": "Original Transaction",
     "ru": "Первоначальная транзакция"
   },
   "OriginalTransactionId": {
-    "en": "ID of original transaction, for which this message is the answer.",
-    "ru": "Идентификатор первоначальной транзакции, для которой данное сообщение является ответом."
+    "en": "Original Transaction ID.",
+    "ru": "Идентификатор первоначальной транзакции."
   },
   "DataType": {
-    "en": "Data type",
+    "en": "Data Type",
     "ru": "Тип данных"
   },
   "Cancel": {
@@ -2916,151 +2916,151 @@
     "ru": "Отмена"
   },
   "IsActionOrderCancellation": {
-    "en": "Is the action an order cancellation.",
-    "ru": "Является ли действие отменой заявки."
+    "en": "Is the action an order cancellation?",
+    "ru": "Является ли действие отменой заявки?"
   },
   "OrderId": {
     "en": "Order ID",
     "ru": "Идентификатор заявки"
   },
   "IdString": {
-    "en": "ID (string)",
+    "en": "ID (String)",
     "ru": "Идентификатор (строка)"
   },
   "OrderIdStringDesc": {
-    "en": "Order ID (as string, if electronic board does not use numeric order ID representation).",
-    "ru": "Идентификатор заявки (в виде строки, если электронная площадка не использует числовое представление идентификатора заявки)."
+    "en": "Order ID (String).",
+    "ru": "Идентификатор заявки (строка)."
   },
   "OrderBoardId": {
-    "en": "Order ID (board)",
-    "ru": "Идентификатор заявки (площадка)"
+    "en": "Order Board ID",
+    "ru": "Идентификатор заявки на площадке"
   },
   "OrderBoardIdDesc": {
-    "en": "Electronic board order ID.",
-    "ru": "Идентификатор заявки электронной площадки."
+    "en": "Electronic Board Order ID",
+    "ru": "Идентификатор заявки электронной площадки"
   },
   "Derived": {
     "en": "Derived",
     "ru": "Производная"
   },
   "DerivedOrderId": {
-    "en": "Derived order ID (e.g., conditional order generated a real exchange order).",
-    "ru": "Идентификатор производной заявки (например, условная заявка сгенерировала реальную биржевую)."
+    "en": "Derived Order ID",
+    "ru": "Идентификатор производной заявки"
   },
   "DerivedString": {
-    "en": "Derived (string)",
+    "en": "Derived (String)",
     "ru": "Производная (строка)"
   },
   "DerivedStringDesc": {
-    "en": "Derived order ID (string value).",
-    "ru": "Идентификатор производной заявки (строковое значение)."
+    "en": "Derived Order ID (String)",
+    "ru": "Идентификатор производной заявки (строка)"
   },
   "Price": {
     "en": "Price",
     "ru": "Цена"
   },
   "OrderPrice": {
-    "en": "Order price.",
-    "ru": "Цена заявки."
+    "en": "Order Price",
+    "ru": "Цена заявки"
   },
   "OrderVolume": {
-    "en": "Number of contracts in the order.",
-    "ru": "Количество контрактов в заявке."
+    "en": "Order Volume",
+    "ru": "Количество контрактов в заявке"
   },
   "VisibleVolume": {
-    "en": "Visible volume",
+    "en": "Visible Volume",
     "ru": "Видимый объем"
   },
   "VisibleVolumeDesc": {
-    "en": "Visible quantity of contracts in order.",
-    "ru": "Видимое количество контрактов в заявке."
+    "en": "Visible Quantity of Contracts in Order",
+    "ru": "Видимое количество контрактов в заявке"
   },
   "Direction": {
     "en": "Direction",
     "ru": "Направление"
   },
   "OrderSideDesc": {
-    "en": "Order side (buy or sell).",
-    "ru": "Направление заявки (покупка или продажа)."
+    "en": "Order Direction (Buy or Sell)",
+    "ru": "Направление заявки (покупка или продажа)"
   },
   "Balance": {
     "en": "Balance",
     "ru": "Остаток"
   },
   "OrderBalance": {
-    "en": "Order contracts balance.",
-    "ru": "Остаток контрактов в заявке."
+    "en": "Order Balance",
+    "ru": "Остаток по заявке"
   },
   "OrderType": {
-    "en": "Order type",
+    "en": "Order Type",
     "ru": "Тип заявки"
   },
   "OrderTypeDesc": {
-    "en": "Order type (Limit, Market, Stop-order etc.).",
-    "ru": "Тип заявки (Лимитированная, Рыночная, Стоп-заявка и т.д.)."
+    "en": "Order Type (e.g., Limit, Market, Stop Order)",
+    "ru": "Тип заявки (например, лимитированная, рыночная, стоп-заявка)"
   },
   "OrderStateDesc": {
-    "en": "Order state (Active, Not active, Error).",
-    "ru": "Состояние заявки (Активна, Не активна, Ошибка)."
+    "en": "Order State (Active, Inactive, Error)",
+    "ru": "Состояние заявки (активна, неактивна, ошибка)"
   },
   "Comment": {
     "en": "Comment",
     "ru": "Комментарий"
   },
   "OrderComment": {
-    "en": "Placed order comment.",
-    "ru": "Комментарий к выставляемой заявке."
+    "en": "Order Comment",
+    "ru": "Комментарий к заявке"
   },
   "SystemComment": {
-    "en": "System comment",
+    "en": "System Comment",
     "ru": "Системное сообщение"
   },
   "SystemCommentDesc": {
-    "en": "System comment for order (created by the trading system when registered, changed or cancelled).",
-    "ru": "Системное сообщение к заявке (создается торговой системой при регистрации, изменении или снятии)."
+    "en": "System Comment for Order",
+    "ru": "Системное сообщение к заявке"
   },
   "IsSystemTrade": {
-    "en": "Is a system trade.",
-    "ru": "Является ли сделка системной."
+    "en": "Is this a system trade?",
+    "ru": "Является ли сделка системной?"
   },
   "OrderExpirationTime": {
-    "en": "Order expiration time.",
-    "ru": "Время истечения срока действия заявки."
+    "en": "Order Expiration Time",
+    "ru": "Время истечения срока действия заявки"
   },
   "ExecutionCondition": {
-    "en": "Execution condition",
+    "en": "Execution Condition",
     "ru": "Условие исполнения"
   },
   "ExecutionConditionDesc": {
-    "en": "Limit order execution condition.",
-    "ru": "Условие исполнения лимитированной заявки."
+    "en": "Execution Condition of a Limit Order",
+    "ru": "Условие исполнения лимитированной заявки"
   },
   "TradeId": {
-    "en": "Trade ID.",
-    "ru": "Идентификатор сделки."
+    "en": "Trade ID",
+    "ru": "Идентификатор сделки"
   },
   "TradeIdString": {
-    "en": "Trade ID (as string, if electronic board does not use numeric order ID representation).",
-    "ru": "Идентификатор сделки (в виде строки, если электронная площадка не использует числовое представление идентификатора сделки)."
+    "en": "Trade ID (String).",
+    "ru": "Идентификатор сделки (строка)."
   },
   "TradePriceDesc": {
-    "en": "Trade price.",
-    "ru": "Цена сделки."
+    "en": "Trade Price",
+    "ru": "Цена сделки"
   },
   "OpenInterest": {
-    "en": "Open interest",
+    "en": "Open Interest",
     "ru": "Открытый интерес"
   },
   "OpenInterestDesc": {
-    "en": "Number of open positions (open interest).",
-    "ru": "Количество открытых позиций (открытый интерес)."
+    "en": "Number of Open Positions (Open Interest)",
+    "ru": "Количество открытых позиций (открытый интерес)"
   },
   "Error": {
     "en": "Error",
     "ru": "Ошибка"
   },
   "OrderError": {
-    "en": "Error registering/cancelling order",
+    "en": "Error in Order Registration/ Cancellation",
     "ru": "Ошибка регистрации/отмены заявки"
   },
   "Condition": {
@@ -3068,67 +3068,67 @@
     "ru": "Условие"
   },
   "OrderConditionDesc": {
-    "en": "Order condition (e.g., stop- and algo- orders parameters).",
-    "ru": "Условие заявки (например, параметры стоп - или алго- заявки)."
+    "en": "Order Condition (e.g., Stop and Algo Order Parameters)",
+    "ru": "Условие заявки (например, параметры стоп- и алго-заявок)"
   },
   "ConditionalOrder": {
-    "en": "Conditional order",
+    "en": "Conditional Order",
     "ru": "Условная заявка"
   },
   "UpTrend": {
-    "en": "Uptrend",
-    "ru": "Восходящий"
+    "en": "Up Trend",
+    "ru": "Восходящий тренд"
   },
   "UpTrendDesc": {
-    "en": "Is tick ascending or descending in price.",
-    "ru": "Является ли тик восходящим или нисходящим в цене."
+    "en": "Is the tick trending upward or downward in price?",
+    "ru": "Является ли тик восходящим или нисходящим по цене?"
   },
   "Commission": {
     "en": "Commission",
     "ru": "Комиссия"
   },
   "CommissionDesc": {
-    "en": "Commission (broker, exchange etc.).",
-    "ru": "Комиссия (брокерская, биржевая и т.д.)."
+    "en": "Commission (e.g., Broker, Exchange)",
+    "ru": "Комиссия (например, брокерская, биржевая)"
   },
   "Latency": {
     "en": "Latency",
     "ru": "Задержка"
   },
   "NetworkLatency": {
-    "en": "Network latency.",
-    "ru": "Сетевая задержка."
+    "en": "Network Latency",
+    "ru": "Сетевая задержка"
   },
   "Slippage": {
     "en": "Slippage",
     "ru": "Проскальзывание"
   },
   "SlippageTrade": {
-    "en": "Slippage in trade price.",
-    "ru": "Проскальзывание в цене сделки."
+    "en": "Trade Slippage",
+    "ru": "Проскальзывание в цене сделки"
   },
   "UserOrderId": {
-    "en": "User's order ID.",
-    "ru": "Пользовательский идентификатор заявки."
+    "en": "User's Order ID",
+    "ru": "Идентификатор заявки пользователя"
   },
   "General": {
     "en": "General",
     "ru": "Основные"
   },
   "ChangeServerTime": {
-    "en": "Change server time.",
-    "ru": "Серверное время изменения."
+    "en": "Server Time Change",
+    "ru": "Изменение серверного времени"
   },
   "BitSystemIncompatible": {
     "en": "Current bit system is not compatible with adapter {0}. Recompile under {1}.",
     "ru": "Текущая разрядность процесса не совместима с адаптером {0}. Необходимо перекомпилировать под {1}."
   },
   "DisconnectTimeout": {
-    "en": "Connection was not disconnected in allowed time.",
-    "ru": "Подключение не было разорвано в отведенный отрезок времени."
+    "en": "Connection was not disconnected in the allowed time.",
+    "ru": "Соединение не было разорвано в отведенное время."
   },
   "ReConnectionSettings": {
-    "en": "Reconnection settings",
+    "en": "Reconnection Settings",
     "ru": "Настройки переподключения"
   },
   "Connection": {
@@ -3140,16 +3140,16 @@
     "ru": "Интервал"
   },
   "IntervalToConnect": {
-    "en": "Interval, with which there will be attempts to establish a connection.",
-    "ru": "Интервал, с которым будут происходить попытки подключения."
+    "en": "Interval for Connection Attempts.",
+    "ru": "Интервал для попыток подключения."
   },
   "Initially": {
     "en": "Initially",
     "ru": "Первоначально"
   },
   "InitiallyConnect": {
-    "en": "Number of attempts to reestablish the initial connection, if it was not reestablished (timeout, network failure etc.).",
-    "ru": "Количество попыток установить первоначальное соединение, если оно не было установлено (тайм-аут, сетевой сбой и т.д.)."
+    "en": "Initial Connection Attempts.",
+    "ru": "Первоначальные попытки подключения."
   },
   "Reconnection": {
     "en": "Reconnection",
@@ -3160,16 +3160,16 @@
     "ru": "Количество попыток переподключиться, если подключение было разорвано в процессе работы."
   },
   "ConnectDisconnectTimeout": {
-    "en": "Successful connection / disconnection time out.",
-    "ru": "Время ожидания успешного подключения/отключения."
+    "en": "Connection/Disconnection Timeout",
+    "ru": "Тайм-аут подключения/отключения"
   },
   "WorkSchedule": {
-    "en": "Work schedule",
+    "en": "Work Schedule",
     "ru": "Режим работы"
   },
   "ReConnectWorkSchedule": {
-    "en": "Work schedule, during which connections must be established.",
-    "ru": "Режим работы, во время которого необходимо производить подключения."
+    "en": "Reconnect Work Schedule.",
+    "ru": "Режим работы для переподключения."
   },
   "Adapters": {
     "en": "Adapters",
@@ -3177,34 +3177,34 @@
   },
   "Securities": {
     "en": "Securities",
-    "ru": "Инструменты"
+    "ru": "Ценные бумаги"
   },
   "MarketData": {
-    "en": "Market data",
+    "en": "Market Data",
     "ru": "Маркет-данные"
   },
   "UseMarketDataSession": {
-    "en": "Use session to receive market-data.",
-    "ru": "Использовать сессию для получения маркет-данных."
+    "en": "Use Session for Market Data",
+    "ru": "Использовать сессию для получения маркет-данных"
   },
   "Transactions": {
     "en": "Transactions",
     "ru": "Транзакции"
   },
   "UseTransactionalSession": {
-    "en": "Use session to send transactions.",
-    "ru": "Использовать сессию для отправки транзакций."
+    "en": "Use Session for Transactions",
+    "ru": "Использовать сессию для отправки транзакций"
   },
   "HeartBeat": {
-    "en": "Heart beat",
+    "en": "Heartbeat",
     "ru": "Интервал контроля"
   },
   "HeartBeatDesc": {
-    "en": "Server check interval for track the connection alive. By default equal to 1 minute.",
-    "ru": "Интервал оповещения сервера о том, что подключение еще живое. По умолчанию равно 1 минуте."
+    "en": "Heartbeat Interval to Keep Connection Alive.",
+    "ru": "Интервал оповещения сервера о том, что подключение еще живо."
   },
   "TimeInterval": {
-    "en": "Time interval",
+    "en": "Time Interval",
     "ru": "Интервал времени"
   },
   "Messages": {
@@ -14937,7 +14937,7 @@
   },
   "Size": {
     "en": "Size",
-    "ru": "Разм"
+    "ru": "Размер"
   },
   "Rev": {
     "en": "Rev",
@@ -15257,7 +15257,7 @@
   },
   "PositionEffectOpenOnly": {
     "en": "A trade should open a position.",
-    "ru": "Сделка должна закрывать позицию."
+    "ru": "Сделка должна открывать позицию."
   },
   "CloseOnly": {
     "en": "Close only",
@@ -15316,7 +15316,7 @@
     "ru": "Невозможно преобразовать {0} в {1}."
   },
   "Sections": {
-    "en": "Section",
+    "en": "Sections",
     "ru": "Секции"
   },
   "SectionsDesc": {
@@ -15504,7 +15504,7 @@
     "ru": "Версия клиент-программы."
   },
   "UnsubscribeOnStop": {
-    "en": "Unsubscribe all active subscription while strategy become stopping.",
+    "en": "Unsubscribe all active subscriptions while the strategy is stopping.",
     "ru": "Отписаться от всех активных подписок при остановке стратегии."
   },
   "MaxRegisterCount": {
@@ -15608,8 +15608,8 @@
     "ru": "Открыть директорию"
   },
   "OrdersKeepTime": {
-    "en": "The time for storing orders in memory. By default it equals to 2 days. If value is set in 0, orders will not be deleted.",
-    "ru": "Время хранения заявок в памяти. По-умолчанию равно 2 дням. Если значение равно 0, то заявки не будут удаляться."
+    "en": "The time for storing orders in memory. By default, it equals to 2 days. If the value is set to 0, orders will not be deleted.",
+    "ru": "Время хранения заявок в памяти. По умолчанию равно 2 дням. Если значение установлено в 0, заявки удаляться не будут."
   },
   "ExternalIdIsNotSet": {
     "en": "External ID is not set.",
