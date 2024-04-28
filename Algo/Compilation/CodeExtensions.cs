@@ -33,7 +33,6 @@ namespace StockSharp.Algo.Compilation
 			"Ecng.Collections",
 			"Ecng.ComponentModel",
 			"Ecng.Configuration",
-			"Ecng.Localization",
 			"Ecng.Serialization",
 			"Ecng.Reflection",
 			"Ecng.Drawing",

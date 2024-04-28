@@ -12,18 +12,15 @@ using Microsoft.CodeAnalysis;
 [Generator]
 public class LocalizedStringsGenerator : IIncrementalGenerator
 {
-	private class Pair
-	{
-		public string en { get; set; }
-	}
-
 	void IIncrementalGenerator.Initialize(IncrementalGeneratorInitializationContext initContext)
 	{
 		//System.Diagnostics.Debugger.Launch();
 
+		const string stringsFileName = "strings.json";
+
 		var json = initContext
 			.AdditionalTextsProvider
-			.Where(static file => Path.GetFileName(file.Path).Equals("translation.json", StringComparison.InvariantCultureIgnoreCase))
+			.Where(static file => Path.GetFileName(file.Path).Equals(stringsFileName, StringComparison.InvariantCultureIgnoreCase))
 			.Select((text, cancellationToken) => text.GetText(cancellationToken).ToString());
 
 		initContext.RegisterSourceOutput(json, static (spc, content) =>
@@ -31,12 +28,12 @@ public class LocalizedStringsGenerator : IIncrementalGenerator
 			var items = new StringBuilder();
 			var resetCache = new StringBuilder();
 
-			var dict = JsonSerializer.Deserialize<IDictionary<string, Pair>>(content);
+			var dict = JsonSerializer.Deserialize<IDictionary<string, string>>(content);
 
 			foreach (var p in dict)
 			{
 				var prop = p.Key;
-				var xmlComment = p.Value.en.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
+				var xmlComment = p.Value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
 
 				items.AppendLine($@"	/// <summary>
 	/// {xmlComment}
@@ -59,6 +56,8 @@ namespace StockSharp.Localization;
 
 partial class LocalizedStrings
 {{
+	private const string _stringsFileName = ""{stringsFileName}"";
+
 {items}
 
 	/// <summary>

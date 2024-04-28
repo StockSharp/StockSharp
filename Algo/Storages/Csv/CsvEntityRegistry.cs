@@ -52,9 +52,7 @@ namespace StockSharp.Algo.Storages.Csv
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 					board.FullNameLoc = reader.ReadString();
 				else
-				{
-					board.FullNameLoc = LocalizedStrings.LocalizationManager.GetResourceId(engName) ?? engName;
-				}
+					board.FullNameLoc = engName;
 
 				return board;
 			}

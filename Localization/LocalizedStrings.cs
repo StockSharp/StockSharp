@@ -1,149 +1,225 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
+namespace StockSharp.Localization;
 
-Project: StockSharp.Localization.Localization
-File: LocalizedStrings.cs
-Created: 2015, 11, 11, 2:32 PM
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
 
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.Localization
+using Ecng.Common;
+using Ecng.Serialization;
+
+/// <summary>
+/// Localized strings.
+/// </summary>
+public static partial class LocalizedStrings
 {
-	using System;
-	using System.Diagnostics;
-	using System.Globalization;
-	using System.IO;
-	using System.Threading;
-
-	using Ecng.Common;
-	using Ecng.Localization;
-
-	/// <summary>
-	/// Extension for <see cref="LocalizedStrings"/>.
-	/// </summary>
-	public static class LocalizedStringsExtension
+	private class Translation
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		public static Func<Stream> GetResourceStream = () =>
-		{
-			var asmHolder = typeof(LocalizedStrings).Assembly;
+		private readonly Dictionary<string, string> _stringsById = new();
+		private readonly Dictionary<string, string> _idsByString = new();
 
-			return asmHolder.GetManifestResourceStream($"{asmHolder.GetName().Name}.{Path.GetFileName("translation.json")}");
-		};
+		public void Add(string id, string text)
+		{
+			_stringsById.Add(id, text);
+			_idsByString[text] = id;
+		}
+
+		public string GetTextById(string id) => _stringsById.TryGetValue(id, out var text) ? text : null;
+		public string GetIdByText(string text) => _idsByString.TryGetValue(text, out var id) ? id : null;
 	}
 
-	/// <summary>
-	/// Localized strings.
-	/// </summary>
-	public static partial class LocalizedStrings
+	private static readonly List<Translation> _translations = new();
+	private static readonly Dictionary<string, int> _langIds = new(StringComparer.InvariantCultureIgnoreCase);
+
+	static LocalizedStrings()
 	{
-		static LocalizedStrings()
+		static void addLanguage(Assembly asm, string langCode)
 		{
-			try
-			{
-				var manager = new LocalizationManager();
-				manager.Init(new StreamReader(LocalizedStringsExtension.GetResourceStream()));
-				_localizationManager = manager;
-			}
-			catch (Exception ex)
-			{
-				Trace.WriteLine(InitError = ex);
-			}
+			if (asm is null)
+				throw new ArgumentNullException(nameof(asm));
+
+			var stream = asm.GetManifestResourceStream($"{asm.GetName().Name}.{_stringsFileName}");
+
+			if (stream is null)
+				return;
+
+			using var reader = new StreamReader(stream);
+			var strings = reader.ReadToEnd().DeserializeObject<IDictionary<string, string>>();
+
+			var translation = new Translation();
+
+			foreach (var pair in strings)
+				translation.Add(pair.Key, pair.Value);
+
+			_langIds.Add(langCode, _langIds.Count);
+			_translations.Add(translation);
 		}
 
-		/// <summary>
-		/// Initialization error.
-		/// </summary>
-		public static Exception InitError { get; }
-
-		private readonly static LocalizationManager _localizationManager;
-
-		/// <summary>
-		/// Localization manager.
-		/// </summary>
-		public static LocalizationManager LocalizationManager => _localizationManager ?? throw new InvalidOperationException("Not initialized.");
-
-		/// <summary>
-		/// Error handler to track missed translations or resource keys.
-		/// </summary>
-		public static event Action<string, bool> Missing
+		try
 		{
-			add => LocalizationManager.Missing += value;
-			remove => LocalizationManager.Missing -= value;
-		}
+			var mainAsm = typeof(LocalizedStrings).Assembly;
+			addLanguage(mainAsm, EnCode);
 
-		/// <summary>
-		/// <see cref="ActiveLanguage"/> changed event.
-		/// </summary>
-		public static event Action ActiveLanguageChanged;
-
-		/// <summary>
-		/// Current language.
-		/// </summary>
-		public static string ActiveLanguage
-		{
-			get => LocalizationManager.ActiveLanguage;
-			set
+			foreach (var resFile in Directory.GetFiles(global::System.IO.Path.GetDirectoryName(mainAsm.Location), "StockSharp.Localization.*.dll"))
 			{
-				//if (ActiveLanguage == value)
-				//	return;
-
-				LocalizationManager.ActiveLanguage = value;
-				ResetCache();
-
 				try
 				{
-					var cultureInfo = CultureInfo.GetCultureInfo(CultureCode);
+					var lang = global::System.IO.Path.GetFileNameWithoutExtension(resFile).Remove("StockSharp.Localization.", true);
 
-					Thread.CurrentThread.CurrentCulture = cultureInfo;
-					Thread.CurrentThread.CurrentUICulture = cultureInfo;
+					if (lang.Length != 2)
+						continue;
+
+					var asm = global::System.Reflection.Assembly.LoadFrom(resFile);
+					addLanguage(asm, lang);
 				}
 				catch (Exception ex)
 				{
 					Trace.WriteLine(ex);
 				}
+			}
 
-				ActiveLanguageChanged?.Invoke();
+			var currCulture = CultureInfo.CurrentCulture.Name;
+
+			if (!currCulture.IsEmpty() && currCulture.Contains('-'))
+			{
+				currCulture = currCulture.SplitBySep("-").First().ToLowerInvariant();
+
+				if (_langIds.ContainsKey(currCulture))
+					ActiveLanguage = currCulture;
 			}
 		}
-
-		/// <summary>
-		/// Get localized string.
-		/// </summary>
-		/// <param name="resourceId">Resource unique key.</param>
-		/// <param name="language">Language.</param>
-		/// <returns>Localized string.</returns>
-		public static string GetString(string resourceId, string language = null)
+		catch (Exception ex)
 		{
-			return LocalizationManager.GetString(resourceId, language);
+			Trace.WriteLine(InitError = ex);
+		}
+	}
+
+	/// <summary>
+	/// Russian language.
+	/// </summary>
+	public const string RuCode = "ru";
+
+	/// <summary>
+	/// English language.
+	/// </summary>
+	public const string EnCode = "en";
+
+	/// <summary>
+	/// Get all available languages.
+	/// </summary>
+	public static IEnumerable<string> LangCodes => _langIds.Keys;
+
+	/// <summary>
+	/// Initialization error.
+	/// </summary>
+	public static Exception InitError { get; }
+
+	/// <summary>
+	/// Error handler to track missed translations or resource keys.
+	/// </summary>
+	public static event Action<string, bool> Missing;
+
+	/// <summary>
+	/// <see cref="ActiveLanguage"/> changed event.
+	/// </summary>
+	public static event Action ActiveLanguageChanged;
+
+	private static string _activeLanguage = EnCode;
+
+	/// <summary>
+	/// Current language.
+	/// </summary>
+	public static string ActiveLanguage
+	{
+		get => _activeLanguage;
+		set
+		{
+			if (!_langIds.ContainsKey(value))
+				return;
+
+			_activeLanguage = value;
+			ResetCache();
+
+			try
+			{
+				var cultureInfo = CultureInfo.GetCultureInfo(CultureCode);
+
+				Thread.CurrentThread.CurrentCulture = cultureInfo;
+				Thread.CurrentThread.CurrentUICulture = cultureInfo;
+			}
+			catch (Exception ex)
+			{
+				Trace.WriteLine(ex);
+			}
+
+			ActiveLanguageChanged?.Invoke();
+		}
+	}
+
+	private static int GetLangCode(string lang)
+		=> _langIds.TryGetValue(lang, out var langCode) ? langCode : -1;
+
+	/// <summary>
+	/// Get localized string.
+	/// </summary>
+	/// <param name="resourceId">Resource unique key.</param>
+	/// <param name="language">Language.</param>
+	/// <returns>Localized string.</returns>
+	public static string GetString(string resourceId, string language = null)
+	{
+		var langId = GetLangCode(language.IsEmpty(ActiveLanguage));
+		if (langId < 0)
+		{
+			Missing?.Invoke(resourceId, false);
+			return resourceId;
 		}
 
-		/// <summary>
-		/// Get localized string in <paramref name="to"/> language.
-		/// </summary>
-		/// <param name="text">Text.</param>
-		/// <param name="from">Language of the <paramref name="text"/>.</param>
-		/// <param name="to">Destination language.</param>
-		/// <returns>Localized string.</returns>
-		public static string Translate(this string text, string from = LangCodes.En, string to = null)
+		var result = _translations[langId].GetTextById(resourceId);
+		if (result != null)
+			return result;
+
+		Missing?.Invoke(resourceId, false);
+		return resourceId;
+	}
+
+	/// <summary>
+	/// Get localized string in <paramref name="to"/> language.
+	/// </summary>
+	/// <param name="text">Text.</param>
+	/// <param name="from">Language of the <paramref name="text"/>.</param>
+	/// <param name="to">Destination language.</param>
+	/// <returns>Localized string.</returns>
+	public static string Translate(this string text, string from = null, string to = null)
+	{
+		var langIdFrom = GetLangCode(from.IsEmpty(EnCode));
+		var langIdTo = GetLangCode(to.IsEmpty(ActiveLanguage));
+
+		if (langIdFrom < 0 || langIdTo < 0)
 		{
-			var manager = LocalizationManager;
-
-			if (manager is null)
-				return text;
-
-			if (to.IsEmpty())
-				to = manager.ActiveLanguage;
-
-			return manager.Translate(text, from, to);
+			Missing?.Invoke(text, true);
+			return text;
 		}
+		else if (langIdFrom == langIdTo)
+			return text;
+
+		var id = _translations[langIdFrom].GetIdByText(text);
+		if (id.IsEmpty())
+		{
+			Missing?.Invoke(text, true);
+			return text;
+		}
+
+		var result = _translations[langIdTo].GetTextById(id);
+		if (result.IsEmpty())
+		{
+			Missing?.Invoke(text, true);
+			return text;
+		}
+
+		return result;
 	}
 }

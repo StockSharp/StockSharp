@@ -1,21 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\common_target_standard.props" />
+  <Import Project="..\common_localization.props" />
   <PropertyGroup>
     <ProjectGuid>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="XmlComments\**" />
-    <EmbeddedResource Remove="XmlComments\**" />
-    <None Remove="XmlComments\**" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Ecng.ComponentModel" Version="$(EcngVer)" />
-    <PackageReference Include="Ecng.Localization" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="translation.json" />
-    <AdditionalFiles Include="translation.json" />
-   </ItemGroup>
+    <AdditionalFiles Include="strings.json" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Localization.Generator\Localization.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />

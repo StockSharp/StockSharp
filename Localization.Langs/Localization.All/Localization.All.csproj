@@ -1,0 +1,6 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_target_standard.props" />
+  <ItemGroup>
+    <ProjectReference Include="..\ru\Localization.ru.csproj" />
+  </ItemGroup>
+</Project>

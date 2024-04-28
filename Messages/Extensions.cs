@@ -24,7 +24,6 @@ namespace StockSharp.Messages
 	using Ecng.Common;
 	using Ecng.Collections;
 	using Ecng.ComponentModel;
-	using Ecng.Localization;
 	using Ecng.Reflection;
 
 	using StockSharp.Localization;
@@ -1203,7 +1202,7 @@ namespace StockSharp.Messages
 		/// <returns>Language</returns>
 		public static string GetPreferredLanguage(this MessageAdapterCategories? categories)
 		{
-			return categories?.HasFlag(MessageAdapterCategories.Russia) == true ? LangCodes.Ru : LangCodes.En;
+			return categories?.HasFlag(MessageAdapterCategories.Russia) == true ? LocalizedStrings.RuCode : LocalizedStrings.EnCode;
 		}
 
 		/// <summary>
