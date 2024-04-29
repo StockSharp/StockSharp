@@ -546,9 +546,9 @@ namespace StockSharp.Messages
 			{
 				UnitTypes.Percent	=> "%",
 				UnitTypes.Absolute	=> string.Empty,
-				UnitTypes.Step		=> LocalizedStrings.UnitStepPostfix,
-				UnitTypes.Point		=> LocalizedStrings.UnitPointPostfix,
-				UnitTypes.Limit		=> LocalizedStrings.UnitLimitPostfix,
+				UnitTypes.Step		=> "s",
+				UnitTypes.Point		=> "p",
+				UnitTypes.Limit		=> "l",
 
 				_ => throw new InvalidOperationException(LocalizedStrings.UnknownUnitMeasurement.Put(type)),
 			};
