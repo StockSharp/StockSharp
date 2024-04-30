@@ -198,6 +198,25 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Get price by side.
+		/// </summary>
+		/// <param name="message"><see cref="IOrderBookMessage"/></param>
+		/// <param name="side"><see cref="Sides"/></param>
+		/// <returns>Price.</returns>
+		public static decimal? GetPrice(this IOrderBookMessage message, Sides? side)
+		{
+			if (message is null)
+				throw new ArgumentNullException(nameof(message));
+
+			return side switch
+			{
+				Sides.Buy	=> message.GetBestBid()?.Price,
+				Sides.Sell	=> message.GetBestAsk()?.Price,
+				_			=> message.GetSpreadMiddle(null),
+			};
+		}
+
+		/// <summary>
 		/// Get middle of spread.
 		/// </summary>
 		/// <param name="message">Market depth.</param>
