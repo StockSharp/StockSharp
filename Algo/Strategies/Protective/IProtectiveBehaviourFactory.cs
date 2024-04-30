@@ -57,6 +57,8 @@ public class ServerProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 			_adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
 		}
 
+		public override decimal Position => 0;
+
 		public override (bool, Sides, decimal, decimal, OrderCondition)? TryActivate(decimal price, DateTimeOffset time)
 			=> default;
 
@@ -139,6 +141,8 @@ public class LocalProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 			_priceStep = priceStep;
 			_decimals = decimals;
 		}
+
+		public override decimal Position => _posValue;
 
 		public override (bool, Sides, decimal, decimal, OrderCondition)? TryActivate(decimal price, DateTimeOffset time)
 		{

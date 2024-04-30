@@ -12,6 +12,11 @@ using StockSharp.Messages;
 public interface IProtectiveBehaviour : ILogSource
 {
 	/// <summary>
+	/// Current position value.
+	/// </summary>
+	decimal Position { get; }
+
+	/// <summary>
 	/// Update position difference.
 	/// </summary>
 	/// <param name="price">Position difference price.</param>
@@ -100,6 +105,9 @@ public abstract class BaseProtectiveBehaviour : BaseLogReceiver, IProtectiveBeha
 	/// Whether to use market orders.
 	/// </summary>
 	protected bool UseMarketOrders { get; }
+
+	/// <inheritdoc />
+	public abstract decimal Position { get; }
 
 	/// <inheritdoc />
 	public abstract (bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)? Update(decimal price, decimal value);

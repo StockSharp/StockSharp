@@ -20,6 +20,11 @@ public interface IProtectivePositionController
     string PortfolioName { get; }
 
 	/// <summary>
+	/// Current position value.
+	/// </summary>
+	decimal Position { get; }
+
+	/// <summary>
 	/// Update position difference.
 	/// </summary>
 	/// <param name="price">Position difference price.</param>

@@ -39,6 +39,8 @@ public class ProtectiveController : BaseLogReceiver
 		public SecurityId SecurityId { get; }
 		public string PortfolioName { get; }
 
+		public decimal Position => _behaviour.Position;
+
 		public (bool, Sides, decimal, decimal, OrderCondition)? Update(decimal price, decimal value)
 			=> _behaviour.Update(price, value);
 
