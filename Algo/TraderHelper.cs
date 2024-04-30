@@ -2644,7 +2644,11 @@ namespace StockSharp.Algo
 			if (required is null)
 				throw new ArgumentNullException(nameof(required));
 
-			return !type.IsAbstract && type.IsPublic && required.IsAssignableFrom(type);
+			return !type.IsAbstract &&
+				type.IsPublic &&
+				!type.IsGenericTypeDefinition &&
+				required.IsAssignableFrom(type) &&
+				type.GetConstructor(Array.Empty<Type>()) is not null;
 		}
 
 		/// <summary>
