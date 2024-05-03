@@ -5,6 +5,41 @@
     <IsSourcesAllow>false</IsSourcesAllow>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ar\Localization.ar.csproj" />
+    <ProjectReference Include="..\bn\Localization.bn.csproj" />
+    <ProjectReference Include="..\ca\Localization.ca.csproj" />
+    <ProjectReference Include="..\cs\Localization.cs.csproj" />
+    <ProjectReference Include="..\da\Localization.da.csproj" />
+    <ProjectReference Include="..\de\Localization.de.csproj" />
+    <ProjectReference Include="..\el\Localization.el.csproj" />
+    <ProjectReference Include="..\es\Localization.es.csproj" />
+    <ProjectReference Include="..\fa\Localization.fa.csproj" />
+    <ProjectReference Include="..\fi\Localization.fi.csproj" />
+    <ProjectReference Include="..\fr\Localization.fr.csproj" />
+    <ProjectReference Include="..\he\Localization.he.csproj" />
+    <ProjectReference Include="..\hi\Localization.hi.csproj" />
+    <ProjectReference Include="..\hu\Localization.hu.csproj" />
+    <ProjectReference Include="..\it\Localization.it.csproj" />
+    <ProjectReference Include="..\ja\Localization.ja.csproj" />
+    <ProjectReference Include="..\jv\Localization.jv.csproj" />
+    <ProjectReference Include="..\ko\Localization.ko.csproj" />
+    <ProjectReference Include="..\ms\Localization.ms.csproj" />
+    <ProjectReference Include="..\nl\Localization.nl.csproj" />
+    <ProjectReference Include="..\no\Localization.no.csproj" />
+    <ProjectReference Include="..\pa\Localization.pa.csproj" />
+    <ProjectReference Include="..\pl\Localization.pl.csproj" />
+    <ProjectReference Include="..\pt\Localization.pt.csproj" />
+    <ProjectReference Include="..\ro\Localization.ro.csproj" />
     <ProjectReference Include="..\ru\Localization.ru.csproj" />
+    <ProjectReference Include="..\sk\Localization.sk.csproj" />
+    <ProjectReference Include="..\sr\Localization.sr.csproj" />
+    <ProjectReference Include="..\sv\Localization.sv.csproj" />
+    <ProjectReference Include="..\ta\Localization.ta.csproj" />
+    <ProjectReference Include="..\th\Localization.th.csproj" />
+    <ProjectReference Include="..\tr\Localization.tr.csproj" />
+    <ProjectReference Include="..\uk\Localization.uk.csproj" />
+    <ProjectReference Include="..\uz\Localization.uz.csproj" />
+    <ProjectReference Include="..\vi\Localization.vi.csproj" />
+    <ProjectReference Include="..\zh\Localization.zh.csproj" />
   </ItemGroup>
 </Project>

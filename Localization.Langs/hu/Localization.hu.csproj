@@ -1,0 +1,3 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\common_lang.props" />
+</Project>
