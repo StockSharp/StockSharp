@@ -55,6 +55,5 @@ namespace StockSharp.Algo.Testing
 
 		decimal? ITakeProfitOrderCondition.ClosePositionPrice { get; set; }
 		decimal? ITakeProfitOrderCondition.ActivationPrice { get; set; }
-		bool ITakeProfitOrderCondition.IsTrailing { get; set; }
 	}
 }

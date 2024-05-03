@@ -18,16 +18,17 @@ public interface IProtectiveBehaviourFactory
 	/// </summary>
 	/// <param name="takeValue">Take offset.</param>
 	/// <param name="stopValue">Stop offset.</param>
-	/// <param name="isTakeTrailing">Whether to use a trailing technique.</param>
 	/// <param name="isStopTrailing">Whether to use a trailing technique.</param>
 	/// <param name="takeTimeout">Time limit. If protection has not worked by this time, the position will be closed on the market.</param>
 	/// <param name="stopTimeout">Time limit. If protection has not worked by this time, the position will be closed on the market.</param>
 	/// <param name="useMarketOrders">Whether to use market orders.</param>
 	/// <returns><see cref="IProtectiveBehaviour"/></returns>
 	IProtectiveBehaviour Create(
-		Unit takeValue, Unit stopValue,
-		bool isTakeTrailing, bool isStopTrailing,
-		TimeSpan takeTimeout, TimeSpan stopTimeout,
+		Unit takeValue,
+		Unit stopValue,
+		bool isStopTrailing,
+		TimeSpan takeTimeout,
+		TimeSpan stopTimeout,
 		bool useMarketOrders);
 }
 
@@ -43,10 +44,10 @@ public class ServerProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 		public ServerProtectiveBehaviour(
 			IMessageAdapter adapter,
 			Unit takeValue, Unit stopValue,
-			bool isTakeTrailing, bool isStopTrailing,
+			bool isStopTrailing,
 			TimeSpan takeTimeout, TimeSpan stopTimeout,
 			bool useMarketOrders)
-			: base(takeValue, stopValue, isTakeTrailing, isStopTrailing, takeTimeout, stopTimeout, useMarketOrders)
+			: base(takeValue, stopValue, isStopTrailing, takeTimeout, stopTimeout, useMarketOrders)
 		{
 			if (StopValue.IsSet() && !adapter.IsSupportStopLoss())
 				throw new ArgumentException($"{nameof(IStopLossOrderCondition)} not supported.");
@@ -71,7 +72,6 @@ public class ServerProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 
 			if (TakeValue.IsSet() && condition is ITakeProfitOrderCondition take)
 			{
-				take.IsTrailing = IsTakeTrailing;
 				take.ActivationPrice = (decimal)(protectiveSide == Sides.Buy ? protectivePrice + TakeValue : protectivePrice - TakeValue);
 				take.ClosePositionPrice = UseMarketOrders ? null : take.ActivationPrice;
 			}
@@ -106,8 +106,8 @@ public class ServerProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 		_adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
 	}
 
-	IProtectiveBehaviour IProtectiveBehaviourFactory.Create(Unit takeValue, Unit stopValue, bool isTakeTrailing, bool isStopTrailing, TimeSpan takeTimeout, TimeSpan stopTimeout, bool useMarketOrders)
-		=> new ServerProtectiveBehaviour(_adapter, takeValue, stopValue, isTakeTrailing, isStopTrailing, takeTimeout, stopTimeout, useMarketOrders);
+	IProtectiveBehaviour IProtectiveBehaviourFactory.Create(Unit takeValue, Unit stopValue, bool isStopTrailing, TimeSpan takeTimeout, TimeSpan stopTimeout, bool useMarketOrders)
+		=> new ServerProtectiveBehaviour(_adapter, takeValue, stopValue, isStopTrailing, takeTimeout, stopTimeout, useMarketOrders);
 }
 
 /// <summary>
@@ -133,10 +133,10 @@ public class LocalProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 		public LocalProtectiveBehaviour(
 			decimal? priceStep, int? decimals,
 			Unit takeValue, Unit stopValue,
-			bool isTakeTrailing, bool isStopTrailing,
+			bool isStopTrailing,
 			TimeSpan takeTimeout, TimeSpan stopTimeout,
 			bool useMarketOrders)
-			: base(takeValue, stopValue, isTakeTrailing, isStopTrailing, takeTimeout, stopTimeout, useMarketOrders)
+			: base(takeValue, stopValue, isStopTrailing, takeTimeout, stopTimeout, useMarketOrders)
 		{
 			_priceStep = priceStep;
 			_decimals = decimals;
@@ -254,7 +254,7 @@ public class LocalProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 
 				var protectiveSide = _posValue > 0 ? Sides.Buy : Sides.Sell;
 
-				_take = TakeValue.IsSet() ? new(protectiveSide, _posPrice, protectiveSide == Sides.Buy, IsTakeTrailing, TakeValue, UseMarketOrders, new(), TakeTimeout, this) : null;
+				_take = TakeValue.IsSet() ? new(protectiveSide, _posPrice, protectiveSide == Sides.Buy, false, TakeValue, UseMarketOrders, new(), TakeTimeout, this) : null;
 				_stop = StopValue.IsSet() ? new(protectiveSide, _posPrice, protectiveSide == Sides.Sell, IsStopTrailing, StopValue, UseMarketOrders, new(), StopTimeout, this) : null;
 			}
 
@@ -281,6 +281,6 @@ public class LocalProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 		_decimals = decimals;
 	}
 
-    IProtectiveBehaviour IProtectiveBehaviourFactory.Create(Unit takeValue, Unit stopValue, bool isTakeTrailing, bool isStopTrailing, TimeSpan takeTimeout, TimeSpan stopTimeout, bool useMarketOrders)
-		=> new LocalProtectiveBehaviour(_priceStep, _decimals, takeValue, stopValue, isTakeTrailing, isStopTrailing, takeTimeout, stopTimeout, useMarketOrders);
+    IProtectiveBehaviour IProtectiveBehaviourFactory.Create(Unit takeValue, Unit stopValue, bool isStopTrailing, TimeSpan takeTimeout, TimeSpan stopTimeout, bool useMarketOrders)
+		=> new LocalProtectiveBehaviour(_priceStep, _decimals, takeValue, stopValue, isStopTrailing, takeTimeout, stopTimeout, useMarketOrders);
 }

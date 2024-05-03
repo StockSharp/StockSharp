@@ -127,11 +127,6 @@ namespace StockSharp.Messages
 		/// The absolute value of the price when the one is reached the protective strategy is activated.
 		/// </summary>
 		decimal? ActivationPrice { get; set; }
-
-		/// <summary>
-		/// Trailing take-profit.
-		/// </summary>
-		bool IsTrailing { get; set; }
 	}
 
 	/// <summary>

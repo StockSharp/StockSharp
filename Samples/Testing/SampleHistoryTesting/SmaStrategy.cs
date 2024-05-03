@@ -52,7 +52,7 @@ namespace SampleHistoryTesting
         {
 			_longSmaParam = this.Param(nameof(LongSma), 80);
 			_shortSmaParam = this.Param(nameof(ShortSma), 30);
-			_takeValue = this.Param(nameof(TakeValue), new Unit(1, UnitTypes.Percent));
+			_takeValue = this.Param(nameof(TakeValue), new Unit(0, UnitTypes.Absolute));
 			_stopValue = this.Param(nameof(StopValue), new Unit(2, UnitTypes.Percent));
 			_candleTypeParam = this.Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(1))).NotNull();
 			_candleTimeFrameParam = this.Param<TimeSpan?>(nameof(CandleTimeFrame));
@@ -193,7 +193,7 @@ namespace SampleHistoryTesting
 							security.ToSecurityId(),
 							portfolio.Name,
 							new LocalProtectiveBehaviourFactory(security.PriceStep, security.Decimals),
-							TakeValue, StopValue, true, true, default, default, true);
+							TakeValue, StopValue, true, default, default, true);
 					}
 
 					var info = _posController?.Update(t.Trade.Price, t.GetPosition());
