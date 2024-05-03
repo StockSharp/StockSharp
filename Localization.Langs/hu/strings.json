@@ -2336,7 +2336,7 @@
   "PackageVersion": "Csomag verzió",
   "Page": "Oldal",
   "Paid": "Fizetett",
-  "PaidConnectorToolip": "Ez a kapcsolat fizetős opciókat használ. Kattintson további információkért.",
+  "PaidConnectorTooltip": "Ez a kapcsolat fizetős opciókat használ. Kattintson további információkért.",
   "Pair": "Pár",
   "PairOptions": "Opciós párok",
   "Palette": "Paletta",

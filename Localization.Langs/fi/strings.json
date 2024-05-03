@@ -2336,7 +2336,7 @@
   "PackageVersion": "Pakettiversio",
   "Page": "Sivu",
   "Paid": "Maksettu",
-  "PaidConnectorToolip": "Tämä yhteys käyttää maksullisia vaihtoehtoja. Klikkaa saadaksesi lisätietoja.",
+  "PaidConnectorTooltip": "Tämä yhteys käyttää maksullisia vaihtoehtoja. Klikkaa saadaksesi lisätietoja.",
   "Pair": "Pari",
   "PairOptions": "Vaihtoehtoparit",
   "Palette": "Paletti",

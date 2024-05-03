@@ -2336,7 +2336,7 @@
   "PackageVersion": "패키지 버전",
   "Page": "페이지",
   "Paid": "유료",
-  "PaidConnectorToolip": "이 연결은 유료 옵션을 사용합니다. 자세한 정보를 보려면 클릭하세요.",
+  "PaidConnectorTooltip": "이 연결은 유료 옵션을 사용합니다. 자세한 정보를 보려면 클릭하세요.",
   "Pair": "쌍",
   "PairOptions": "페어 옵션",
   "Palette": "팔레트",

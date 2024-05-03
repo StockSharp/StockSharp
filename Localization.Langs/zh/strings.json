@@ -2336,7 +2336,7 @@
   "PackageVersion": "包版本",
   "Page": "文章",
   "Paid": "付费",
-  "PaidConnectorToolip": "此连接使用付费选项。点击以获取更多信息。",
+  "PaidConnectorTooltip": "此连接使用付费选项。点击以获取更多信息。",
   "Pair": "对",
   "PairOptions": "对期权",
   "Palette": "调色板",

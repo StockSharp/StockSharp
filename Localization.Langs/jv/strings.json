@@ -2336,7 +2336,7 @@
   "PackageVersion": "Versi Paket",
   "Page": "Kaca",
   "Paid": "Mbayar",
-  "PaidConnectorToolip": "Koneksi iki nggunakake opsi sing dibayar. Klik kanggo informasi luwih lanjut.",
+  "PaidConnectorTooltip": "Koneksi iki nggunakake opsi sing dibayar. Klik kanggo informasi luwih lanjut.",
   "Pair": "Pasangan",
   "PairOptions": "Pasangan Opsi",
   "Palette": "Palet",

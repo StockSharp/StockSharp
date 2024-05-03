@@ -2336,7 +2336,7 @@
   "PackageVersion": "Pakkeversjon",
   "Page": "Side",
   "Paid": "Betalt",
-  "PaidConnectorToolip": "Denne tilkoblingen bruker betalte alternativer. Klikk for mer informasjon.",
+  "PaidConnectorTooltip": "Denne tilkoblingen bruker betalte alternativer. Klikk for mer informasjon.",
   "Pair": "Par",
   "PairOptions": "Par alternativer",
   "Palette": "Palett",

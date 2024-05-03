@@ -2336,7 +2336,7 @@
   "PackageVersion": "גרסת החבילה",
   "Page": "דף",
   "Paid": "שולם",
-  "PaidConnectorToolip": "החיבור הזה משתמש באפשרויות בתשלום. לחץ למידע נוסף.",
+  "PaidConnectorTooltip": "החיבור הזה משתמש באפשרויות בתשלום. לחץ למידע נוסף.",
   "Pair": "זוג",
   "PairOptions": "זוג אופציות",
   "Palette": "פלטה",

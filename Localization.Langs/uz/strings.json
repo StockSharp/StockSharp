@@ -2336,7 +2336,7 @@
   "PackageVersion": "Paket versiyasi",
   "Page": "Sahifa",
   "Paid": "To'langan",
-  "PaidConnectorToolip": "Ushbu ulanish pullik variantlardan foydalanadi. Batafsil ma'lumot uchun bosing.",
+  "PaidConnectorTooltip": "Ushbu ulanish pullik variantlardan foydalanadi. Batafsil ma'lumot uchun bosing.",
   "Pair": "Juft",
   "PairOptions": "Variantlar juftligi",
   "Palette": "Paleta",

@@ -2336,7 +2336,7 @@
   "PackageVersion": "Verze balíčku",
   "Page": "Stránka",
   "Paid": "Placené",
-  "PaidConnectorToolip": "Toto spojení využívá placené možnosti. Klikněte pro další informace.",
+  "PaidConnectorTooltip": "Toto spojení využívá placené možnosti. Klikněte pro další informace.",
   "Pair": "Pár",
   "PairOptions": "Párové možnosti",
   "Palette": "Paleta",

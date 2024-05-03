@@ -2336,7 +2336,7 @@
   "PackageVersion": "Pakkeversion",
   "Page": "Side",
   "Paid": "Betalt",
-  "PaidConnectorToolip": "Denne forbindelse anvender betalte optioner. Klik for yderligere information.",
+  "PaidConnectorTooltip": "Denne forbindelse anvender betalte optioner. Klik for yderligere information.",
   "Pair": "Par",
   "PairOptions": "Par muligheder",
   "Palette": "Palet",

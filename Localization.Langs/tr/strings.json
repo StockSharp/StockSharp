@@ -2336,7 +2336,7 @@
   "PackageVersion": "Paket Versiyonu",
   "Page": "Sayfa",
   "Paid": "Ücretli",
-  "PaidConnectorToolip": "Bu bağlantı ücretli seçenekler kullanır. Daha fazla bilgi için tıklayınız.",
+  "PaidConnectorTooltip": "Bu bağlantı ücretli seçenekler kullanır. Daha fazla bilgi için tıklayınız.",
   "Pair": "Çift",
   "PairOptions": "Çift Opsiyonları",
   "Palette": "Palet",

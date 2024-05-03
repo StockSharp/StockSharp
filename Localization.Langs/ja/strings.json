@@ -2336,7 +2336,7 @@
   "PackageVersion": "パッケージバージョン",
   "Page": "ページ",
   "Paid": "有料",
-  "PaidConnectorToolip": "この接続は有料オプションを使用しています。詳細についてはクリックしてください。",
+  "PaidConnectorTooltip": "この接続は有料オプションを使用しています。詳細についてはクリックしてください。",
   "Pair": "ペア",
   "PairOptions": "ペアオプション",
   "Palette": "パレット",

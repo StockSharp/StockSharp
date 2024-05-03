@@ -2336,7 +2336,7 @@
   "PackageVersion": "Versiunea pachetului",
   "Page": "Pagină",
   "Paid": "Plătit",
-  "PaidConnectorToolip": "Această conexiune utilizează opțiuni plătite. Faceți clic pentru mai multe informații.",
+  "PaidConnectorTooltip": "Această conexiune utilizează opțiuni plătite. Faceți clic pentru mai multe informații.",
   "Pair": "Pereche",
   "PairOptions": "Perechi de opțiuni",
   "Palette": "Paletă",

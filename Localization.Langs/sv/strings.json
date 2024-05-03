@@ -2336,7 +2336,7 @@
   "PackageVersion": "Paketversion",
   "Page": "Sida",
   "Paid": "Betald",
-  "PaidConnectorToolip": "Denna anslutning använder betalda alternativ. Klicka för mer information.",
+  "PaidConnectorTooltip": "Denna anslutning använder betalda alternativ. Klicka för mer information.",
   "Pair": "Par",
   "PairOptions": "Paralternativ",
   "Palette": "Palett",

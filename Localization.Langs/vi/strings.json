@@ -2336,7 +2336,7 @@
   "PackageVersion": "Phiên bản gói",
   "Page": "Trang",
   "Paid": "Trả phí",
-  "PaidConnectorToolip": "Kết nối này sử dụng các tùy chọn trả phí. Nhấn vào đây để biết thêm thông tin.",
+  "PaidConnectorTooltip": "Kết nối này sử dụng các tùy chọn trả phí. Nhấn vào đây để biết thêm thông tin.",
   "Pair": "Cặp",
   "PairOptions": "Cặp lựa chọn",
   "Palette": "Bảng màu",

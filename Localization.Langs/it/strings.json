@@ -2336,7 +2336,7 @@
   "PackageVersion": "Versione del pacchetto",
   "Page": "Pagina",
   "Paid": "Pagato",
-  "PaidConnectorToolip": "Questa connessione utilizza opzioni a pagamento. Clicca per maggiori informazioni.",
+  "PaidConnectorTooltip": "Questa connessione utilizza opzioni a pagamento. Clicca per maggiori informazioni.",
   "Pair": "Coppia",
   "PairOptions": "Coppie di opzioni",
   "Palette": "Palette",

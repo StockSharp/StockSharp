@@ -2336,7 +2336,7 @@
   "PackageVersion": "Versi Pakej",
   "Page": "Halaman",
   "Paid": "Berbayar",
-  "PaidConnectorToolip": "Sambungan ini menggunakan pilihan berbayar. Klik untuk maklumat lanjut.",
+  "PaidConnectorTooltip": "Sambungan ini menggunakan pilihan berbayar. Klik untuk maklumat lanjut.",
   "Pair": "Pasangan",
   "PairOptions": "Pasangan Opsyen",
   "Palette": "Palet",
