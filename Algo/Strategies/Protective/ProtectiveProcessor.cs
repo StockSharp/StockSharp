@@ -18,12 +18,11 @@ public class ProtectiveProcessor
 	private readonly Unit _priceOffset;
 	private readonly TimeSpan _timeout;
 	private readonly ILogReceiver _logs;
-	private readonly decimal _protectivePrice;
 	private readonly Sides _protectiveSide;
 
 	private DateTimeOffset? _startedTime;
 	private decimal? _prevCurrPrice;
-	private decimal? _prevBestPrice;
+	private decimal _prevBestPrice;
 
 	/// <summary>
 	/// Initialize <see cref="ProtectiveProcessor"/>.
@@ -46,7 +45,6 @@ public class ProtectiveProcessor
 			throw new ArgumentOutOfRangeException(nameof(timeout), timeout, LocalizedStrings.InvalidValue);
 
 		_protectiveSide = protectiveSide;
-		_protectivePrice = protectivePrice;
 		_isUpTrend = isUpTrend;
 		_isTrailing = isTrailing;
 		_protectiveLevel = protectiveLevel ?? throw new ArgumentNullException(nameof(protectiveLevel));
@@ -54,6 +52,8 @@ public class ProtectiveProcessor
 		_priceOffset = priceOffset ?? throw new ArgumentNullException(nameof(priceOffset));
 		_timeout = timeout;
 		_logs = logs ?? throw new ArgumentNullException(nameof(logs));
+
+		_prevBestPrice = protectivePrice;
 	}
 
 	/// <summary>
@@ -65,16 +65,10 @@ public class ProtectiveProcessor
 		if (currentPrice is decimal currPriceDec2)
 			_prevCurrPrice = currPriceDec2;
 
-		decimal? getClosePosPrice()
+		decimal? getClosePosPrice(decimal closePrice)
 		{
 			if (_useMarketOrders)
 				return 0;
-
-			if ((currentPrice ?? _prevCurrPrice) is not decimal closePrice)
-			{
-				_logs.AddWarningLog("No price for close position.");
-				return null;
-			}
 
 			return (decimal)(closePrice + (_protectiveSide == Sides.Buy ? -_priceOffset : _priceOffset));
 		}
@@ -95,7 +89,14 @@ public class ProtectiveProcessor
 		if (isTimeOut())
 		{
 			_logs.AddDebugLog("Timeout.");
-			return getClosePosPrice();
+
+			if ((currentPrice ?? _prevCurrPrice) is not decimal closePrice)
+			{
+				_logs.AddWarningLog("No price for close position.");
+				return null;
+			}
+
+			return getClosePosPrice(closePrice);
 		}
 
 		if (currentPrice is not decimal currPriceDec)
@@ -104,63 +105,54 @@ public class ProtectiveProcessor
 			return null;
 		}
 
-		decimal getActivationPrice()
+		decimal? isActivation()
 		{
 			var activationPrice = _protectiveLevel.Type == UnitTypes.Limit
 				? _protectiveLevel.Value
-				: (_isUpTrend ? _protectivePrice + _protectiveLevel.Value : _protectivePrice - _protectiveLevel.Value);
+				: (_isUpTrend ? _prevBestPrice + _protectiveLevel.Value : _prevBestPrice - _protectiveLevel.Value);
 
 			// protectiveLevel may has extra big value.
 			// In that case activationPrice may less that zero.
 			if (activationPrice <= 0)
 				activationPrice = 0.01m;
 
-			return activationPrice;
-		}
+			if ((_isUpTrend && currPriceDec < activationPrice) || (!_isUpTrend && currPriceDec > activationPrice))
+				return null;
 
-		bool isActivation(decimal activationPrice)
-			=> (_isUpTrend && currPriceDec >= activationPrice) || (!_isUpTrend && currPriceDec <= activationPrice);
+			_logs.AddDebugLog("ActivationPrice={0} CurrPrice={1} ProtectLvl={2}", activationPrice, currPriceDec, _protectiveLevel);
+
+			return getClosePosPrice(currPriceDec);
+		}
 
 		if (_isTrailing)
 		{
-			_logs.AddDebugLog("PrevPrice={0} CurrPrice={1}", _prevBestPrice, currPriceDec);
+			//_logs.AddDebugLog("PrevPrice={0} CurrPrice={1}", _prevBestPrice, currPriceDec);
 
-			if (_prevBestPrice is null)
+			if (_isUpTrend)
 			{
-				var activationPrice = getActivationPrice();
-
-				if (isActivation(activationPrice))
-				{
-					// Protective level reached, trailing activated
+				if (_prevBestPrice > currPriceDec)
 					_prevBestPrice = currPriceDec;
+				else
+				{
+					if (isActivation() is decimal closePrice)
+						return closePrice;
 				}
 			}
 			else
 			{
-				if (_isUpTrend)
-				{
-					if (_prevBestPrice < currPriceDec)
-						_prevBestPrice = currPriceDec;
-					else
-						return getClosePosPrice();
-				}
+				if (_prevBestPrice < currPriceDec)
+					_prevBestPrice = currPriceDec;
 				else
 				{
-					if (_prevBestPrice > currPriceDec)
-						_prevBestPrice = currPriceDec;
-					else
-						return getClosePosPrice();
+					if (isActivation() is decimal closePrice)
+						return closePrice;
 				}
 			}
 		}
 		else
 		{
-			var activationPrice = getActivationPrice();
-
-			_logs.AddDebugLog("ActivationPrice={0} ProtectLvl={1}", activationPrice, _protectiveLevel);
-
-			if (isActivation(activationPrice))
-				return getClosePosPrice();
+			if (isActivation() is decimal closePrice)
+				return closePrice;
 		}
 
 		return null;
