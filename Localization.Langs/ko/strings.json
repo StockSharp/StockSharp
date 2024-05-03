@@ -1,6 +1,4 @@
 {
-  "PatternBuilder": "패턴 빌더",
-  "VariableElementDescription": "이 요소는 값을 저장하고 이전에 저장된 값을 요소 체인에 전달합니다.",
   "About": "프로그램 정보",
   "Absolute": "절대적인",
   "AccDecIndicator": "가속/감속 지표.",
@@ -2380,6 +2378,7 @@
   "PathToData": "데이터 경로.",
   "PathToRevisions": "리비전이 저장될 디렉토리 경로입니다.",
   "Pattern": "패턴",
+  "PatternBuilder": "패턴 빌더",
   "PatternDesc": "캔들 패턴 (망치, 잠자리, 무그림자 등).",
   "PatternParameterIndexDescription": "종가 예를 들어 매개변수 인덱스:\nC: 현재 캔들\nC1: 현재 캔들 다음의 첫 번째 캔들\nC2: 현재 캔들 다음의 두 번째 캔들\npC: 이전 캔들\npC1: 이전 캔들 전의 첫 번째 캔들\n모든 인덱스는 현재 패턴의 범위 내에 있어야 합니다.",
   "Pause": "일시 정지",
@@ -3762,6 +3761,7 @@
   "Values": "값",
   "ValuesMustBeSameType": "값은 같은 유형이어야 합니다.",
   "Variable": "변수",
+  "VariableElementDescription": "이 요소는 값을 저장하고 이전에 저장된 값을 요소 체인에 전달합니다.",
   "VariableIndexDynamicAverage": "동적 가변 인덱스 평균",
   "VariationMargin": "변동 마진",
   "VariationMarginDesc": "변동 마진.",

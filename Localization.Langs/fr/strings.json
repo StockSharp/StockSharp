@@ -1,6 +1,4 @@
 {
-  "MACDSignal": "Signal MACD",
-  "PatternBuilder": "Constructeur de motifs",
   "About": "À propos du programme",
   "Absolute": "Absolu",
   "AccDecIndicator": "Indicateur d'Accélération / Ralentissement.",
@@ -1765,6 +1763,7 @@
   "MACD": "MACD",
   "MACDDesc": "Convergence/divergence des moyennes mobiles.",
   "MACDHistogram": "Histogramme MACD",
+  "MACDSignal": "Signal MACD",
   "MACDSignalDesc": "Convergence/divergence des moyennes mobiles avec la ligne de signal.",
   "MadridStockExchange": "Bourse de Madrid",
   "Main": "Principal",
@@ -2379,6 +2378,7 @@
   "PathToData": "Chemin vers les données.",
   "PathToRevisions": "Chemin vers le répertoire où les révisions seront enregistrées.",
   "Pattern": "Motif",
+  "PatternBuilder": "Constructeur de motifs",
   "PatternDesc": "Motif de bougie (marteau, libellule, sans ombre, etc.).",
   "PatternParameterIndexDescription": "Indices de paramètres sur l'exemple du prix de clôture :\nC : bougie actuelle\nC1 : première bougie après la courante\nC2: deuxième bougie après la courante\npC: bougie précédente\npC1: première bougie avant la précédente\nTous les indices doivent se situer dans la plage du modèle actuel.",
   "Pause": "Pause",
