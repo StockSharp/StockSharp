@@ -2791,6 +2791,7 @@
   "ResetSettings": "Ayarları Sıfırla",
   "ResetTimeZone": "Eksenin saat dilimini sıfırlayın",
   "Restart": "Yeniden başlat",
+  "RestartRequired": "Programın yeniden başlatılması gerekiyor.",
   "RestorePositions": "Pozisyonları geri yükle",
   "RestorePositionsWhenStrategyStarts": "Strateji başladığında pozisyonları geri yükle",
   "Restricted": "Kısıtlı",

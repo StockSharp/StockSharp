@@ -2791,6 +2791,7 @@
   "ResetSettings": "Resetuj ustawienia",
   "ResetTimeZone": "Zresetuj strefę czasową osi",
   "Restart": "Restart",
+  "RestartRequired": "Wymagane jest ponowne uruchomienie programu.",
   "RestorePositions": "Przywróć pozycje",
   "RestorePositionsWhenStrategyStarts": "Przywróć pozycje przy starcie strategii",
   "Restricted": "Ograniczony",

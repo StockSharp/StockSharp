@@ -2791,6 +2791,7 @@
   "ResetSettings": "Đặt lại cài đặt",
   "ResetTimeZone": "Đặt lại múi giờ của trục",
   "Restart": "Khởi động lại",
+  "RestartRequired": "Cần phải khởi động lại chương trình.",
   "RestorePositions": "Khôi phục vị trí",
   "RestorePositionsWhenStrategyStarts": "Khôi phục vị trí khi chiến lược bắt đầu",
   "Restricted": "Bị hạn chế",

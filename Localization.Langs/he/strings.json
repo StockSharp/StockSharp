@@ -2791,6 +2791,7 @@
   "ResetSettings": "אפס הגדרות",
   "ResetTimeZone": "אפס את אזור הזמן של הציר",
   "Restart": "הפעלה מחדש",
+  "RestartRequired": "יש להפעיל מחדש את התוכנית.",
   "RestorePositions": "שחזר מיקומים",
   "RestorePositionsWhenStrategyStarts": "שחזר מצבים כאשר האסטרטגיה מתחילה",
   "Restricted": "גישה מוגבלת",

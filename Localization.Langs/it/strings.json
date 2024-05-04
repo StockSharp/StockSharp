@@ -2791,6 +2791,7 @@
   "ResetSettings": "Reimposta impostazioni",
   "ResetTimeZone": "Reimposta il fuso orario dell'asse",
   "Restart": "Riavvia",
+  "RestartRequired": "È necessario riavviare il programma.",
   "RestorePositions": "Ripristina posizioni",
   "RestorePositionsWhenStrategyStarts": "Ripristinare le posizioni all'avvio della strategia",
   "Restricted": "Ristretto",

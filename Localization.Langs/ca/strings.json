@@ -2791,6 +2791,7 @@
   "ResetSettings": "Reiniciar configuracions",
   "ResetTimeZone": "Reiniciar la zona horària de l'eix",
   "Restart": "Reiniciar",
+  "RestartRequired": "Cal reiniciar el programa.",
   "RestorePositions": "Restaurar posicions",
   "RestorePositionsWhenStrategyStarts": "Restaurar posicions quan s'inicia l'estratègia",
   "Restricted": "Accés restringit",

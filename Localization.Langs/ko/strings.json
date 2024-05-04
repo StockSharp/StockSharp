@@ -2791,6 +2791,7 @@
   "ResetSettings": "설정 재설정",
   "ResetTimeZone": "축의 시간대 재설정",
   "Restart": "재시작",
+  "RestartRequired": "프로그램을 다시 시작해야 합니다.",
   "RestorePositions": "위치 복원",
   "RestorePositionsWhenStrategyStarts": "전략 시작 시 위치 복원",
   "Restricted": "제한",

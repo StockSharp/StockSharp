@@ -2791,6 +2791,7 @@
   "ResetSettings": "設定をリセット",
   "ResetTimeZone": "軸のタイムゾーンをリセットする",
   "Restart": "再起動",
+  "RestartRequired": "プログラムを再起動する必要があります。",
   "RestorePositions": "位置を復元",
   "RestorePositionsWhenStrategyStarts": "戦略が開始されたときに位置を復元する",
   "Restricted": "制限",

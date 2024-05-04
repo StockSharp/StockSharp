@@ -2791,6 +2791,7 @@
   "ResetSettings": "Επαναφορά ρυθμίσεων",
   "ResetTimeZone": "Επαναφορά ζώνης ώρας του άξονα",
   "Restart": "Επανεκκίνηση",
+  "RestartRequired": "Απαιτείται επανεκκίνηση του προγράμματος.",
   "RestorePositions": "Επαναφορά θέσεων",
   "RestorePositionsWhenStrategyStarts": "Επαναφορά θέσεων κατά την έναρξη της στρατηγικής",
   "Restricted": "Περιορισμένη πρόσβαση",

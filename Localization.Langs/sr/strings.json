@@ -2791,6 +2791,7 @@
   "ResetSettings": "Ресетуј подешавања",
   "ResetTimeZone": "Ресетујте временску зону оcи",
   "Restart": "Рестарт",
+  "RestartRequired": "Потребно је поново покренути програм.",
   "RestorePositions": "Врати позиције",
   "RestorePositionsWhenStrategyStarts": "Врати позиције када стратегија почне",
   "Restricted": "Ограничен",

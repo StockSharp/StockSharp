@@ -2791,6 +2791,7 @@
   "ResetSettings": "รีเซ็ตการตั้งค่า",
   "ResetTimeZone": "รีเซ็ตเขตเวลาของแกน",
   "Restart": "รีสตาร์ท",
+  "RestartRequired": "ต้องการรีสตาร์ทโปรแกรม.",
   "RestorePositions": "คืนสถานะ",
   "RestorePositionsWhenStrategyStarts": "กู้คืนตำแหน่งเมื่อกลยุทธ์เริ่มต้น",
   "Restricted": "ถูกจำกัด",

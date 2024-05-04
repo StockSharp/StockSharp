@@ -2791,6 +2791,7 @@
   "ResetSettings": "Instellingen resetten",
   "ResetTimeZone": "Tijdzone van de as resetten",
   "Restart": "Herstarten",
+  "RestartRequired": "Het programma moet opnieuw worden opgestart.",
   "RestorePositions": "Posities herstellen",
   "RestorePositionsWhenStrategyStarts": "Posities herstellen wanneer strategie start",
   "Restricted": "Beperkte toegang",

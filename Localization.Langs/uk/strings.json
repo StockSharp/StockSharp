@@ -2791,6 +2791,7 @@
   "ResetSettings": "Скинути налаштування",
   "ResetTimeZone": "Скинути часовий пояс осі",
   "Restart": "Перезавантаження",
+  "RestartRequired": "Необхідно перезапустити програму.",
   "RestorePositions": "Відновити позиції",
   "RestorePositionsWhenStrategyStarts": "Відновлювати позиції при старті стратегії",
   "Restricted": "Обмежений",

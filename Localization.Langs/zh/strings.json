@@ -2791,6 +2791,7 @@
   "ResetSettings": "重置设置",
   "ResetTimeZone": "重置轴的时区",
   "Restart": "重启",
+  "RestartRequired": "需要重启程序。",
   "RestorePositions": "恢复位置",
   "RestorePositionsWhenStrategyStarts": "策略启动时恢复位置",
   "Restricted": "受限",

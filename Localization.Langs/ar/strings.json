@@ -2791,6 +2791,7 @@
   "ResetSettings": "إعادة تعيين الإعدادات",
   "ResetTimeZone": "إعادة تعيين المنطقة الزمنية للمحور",
   "Restart": "إعادة التشغيل",
+  "RestartRequired": "مطلوب إعادة تشغيل البرنامج.",
   "RestorePositions": "استعادة الوظائف",
   "RestorePositionsWhenStrategyStarts": "استعادة الوضعيات عند بدء الاستراتيجية",
   "Restricted": "مقيد",

@@ -2791,6 +2791,7 @@
   "ResetSettings": "Obnovit nastavení",
   "ResetTimeZone": "Resetovat časové pásmo osy",
   "Restart": "Restartovat",
+  "RestartRequired": "Je nutné restartovat program.",
   "RestorePositions": "Obnovit pozice",
   "RestorePositionsWhenStrategyStarts": "Obnovit pozice při spuštění strategie",
   "Restricted": "Omezený přístup",

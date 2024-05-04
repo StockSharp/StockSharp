@@ -2791,6 +2791,7 @@
   "ResetSettings": "Återställ inställningar",
   "ResetTimeZone": "Återställ axelns tidszon",
   "Restart": "Starta om",
+  "RestartRequired": "Programmet behöver startas om.",
   "RestorePositions": "Återställ positioner",
   "RestorePositionsWhenStrategyStarts": "Återställ positioner när strategin startar",
   "Restricted": "Begränsad åtkomst",

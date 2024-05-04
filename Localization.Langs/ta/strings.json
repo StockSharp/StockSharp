@@ -2791,6 +2791,7 @@
   "ResetSettings": "அமைப்புகளை மீட்டமை",
   "ResetTimeZone": "அச்சின் நேர மண்டலத்தை மீட்டமை",
   "Restart": "மீண்டும் தொடங்கு",
+  "RestartRequired": "நிரலை மீண்டும் தொடங்க வேண்டும்.",
   "RestorePositions": "நிலைகளை மீட்டமை",
   "RestorePositionsWhenStrategyStarts": "கொள்கை தொடங்கும்போது நிலைகளை மீட்டமைக்கவும்",
   "Restricted": "கட்டுப்பாட்டு",

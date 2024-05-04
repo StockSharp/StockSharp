@@ -2791,6 +2791,7 @@
   "ResetSettings": "Einstellungen zurücksetzen",
   "ResetTimeZone": "Zeitzone der Achse zurücksetzen",
   "Restart": "Neustart",
+  "RestartRequired": "Ein Neustart des Programms ist erforderlich.",
   "RestorePositions": "Positionen wiederherstellen",
   "RestorePositionsWhenStrategyStarts": "Positionen bei Start der Strategie wiederherstellen",
   "Restricted": "Eingeschränkt",

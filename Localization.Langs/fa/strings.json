@@ -2791,6 +2791,7 @@
   "ResetSettings": "تنظیم مجدد تنظیمات",
   "ResetTimeZone": "تنظیم مجدد منطقه زمانی محور",
   "Restart": "راه اندازی مجدد",
+  "RestartRequired": "باید برنامه را مجدداً راه‌اندازی کرد.",
   "RestorePositions": "بازیابی موقعیت‌ها",
   "RestorePositionsWhenStrategyStarts": "بازیابی موقعیت‌ها هنگام شروع استراتژی",
   "Restricted": "محدود",

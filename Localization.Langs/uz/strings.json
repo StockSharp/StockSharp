@@ -2791,6 +2791,7 @@
   "ResetSettings": "Sozlamalarni tiklash",
   "ResetTimeZone": "O'qning vaqt zonasini tiklash",
   "Restart": "Qayta ishga tushirish",
+  "RestartRequired": "Dasturni qayta ishga tushirish kerak.",
   "RestorePositions": "Pozitsiyalarni tiklash",
   "RestorePositionsWhenStrategyStarts": "Strategiya boshlaganda pozitsiyalarni tiklash",
   "Restricted": "Cheklangan",

@@ -2791,6 +2791,7 @@
   "ResetSettings": "Restablecer configuración",
   "ResetTimeZone": "Restablecer la zona horaria del eje",
   "Restart": "Reiniciar",
+  "RestartRequired": "Es necesario reiniciar el programa.",
   "RestorePositions": "Restaurar posiciones",
   "RestorePositionsWhenStrategyStarts": "Restaurar posiciones al inicio de la estrategia",
   "Restricted": "Restringido",

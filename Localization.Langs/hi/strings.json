@@ -2791,6 +2791,7 @@
   "ResetSettings": "सेटिंग्स रीसेट करें",
   "ResetTimeZone": "अक्ष का समय क्षेत्र रीसेट करें",
   "Restart": "पुनः आरंभ करें",
+  "RestartRequired": "प्रोग्राम को पुनः आरंभ करना आवश्यक है।",
   "RestorePositions": "पदों को पुनःस्थापित करें",
   "RestorePositionsWhenStrategyStarts": "रणनीति शुरू होने पर स्थितियों को पुनः स्थापित करें",
   "Restricted": "सीमित",

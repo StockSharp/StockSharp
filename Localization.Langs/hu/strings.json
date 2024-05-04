@@ -2791,6 +2791,7 @@
   "ResetSettings": "Beállítások visszaállítása",
   "ResetTimeZone": "Az tengely időzónájának visszaállítása",
   "Restart": "Újraindítás",
+  "RestartRequired": "Újra kell indítani a programot.",
   "RestorePositions": "Pozíciók visszaállítása",
   "RestorePositionsWhenStrategyStarts": "Helyzetek visszaállítása a stratégia indításakor",
   "Restricted": "Korlátozott",

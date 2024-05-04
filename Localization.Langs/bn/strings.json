@@ -2791,6 +2791,7 @@
   "ResetSettings": "সেটিংস রিসেট করুন",
   "ResetTimeZone": "অক্ষের সময় অঞ্চল রিসেট করুন",
   "Restart": "পুনরায় আরম্ভ করুন",
+  "RestartRequired": "প্রোগ্রামটি পুনরায় চালু করা প্রয়োজন।",
   "RestorePositions": "অবস্থান পুনরুদ্ধার করুন",
   "RestorePositionsWhenStrategyStarts": "কৌশল শুরু হলে অবস্থানগুলো পুনরুদ্ধার করুন",
   "Restricted": "সীমাবদ্ধ",

@@ -2791,6 +2791,7 @@
   "ResetSettings": "Reset settings",
   "ResetTimeZone": "Reset axis time zone",
   "Restart": "Restart",
+  "RestartRequired": "Program restart required.",
   "RestorePositions": "Restore positions",
   "RestorePositionsWhenStrategyStarts": "Restore positions when strategy starts",
   "Restricted": "Restricted",

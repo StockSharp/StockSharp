@@ -2791,6 +2791,7 @@
   "ResetSettings": "Palauta asetukset",
   "ResetTimeZone": "Nollaa akselin aikavyöhyke",
   "Restart": "Käynnistä uudelleen",
+  "RestartRequired": "Ohjelma on käynnistettävä uudelleen.",
   "RestorePositions": "Palauta sijainnit",
   "RestorePositionsWhenStrategyStarts": "Palauta sijainnit kun strategia käynnistyy",
   "Restricted": "Rajoitettu pääsy",
