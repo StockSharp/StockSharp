@@ -146,7 +146,7 @@ public static partial class LocalizedStrings
 
 			try
 			{
-				var cultureInfo = CultureInfo.GetCultureInfo(CultureCode);
+				var cultureInfo = CurrentCulture;
 
 				Thread.CurrentThread.CurrentCulture = cultureInfo;
 				Thread.CurrentThread.CurrentUICulture = cultureInfo;
@@ -159,6 +159,12 @@ public static partial class LocalizedStrings
 			ActiveLanguageChanged?.Invoke();
 		}
 	}
+
+	/// <summary>
+	/// Get current culture info.
+	/// </summary>
+	public static CultureInfo CurrentCulture
+		=> CultureInfo.GetCultureInfo(CultureCode);
 
 	private static int GetLangCode(string lang)
 		=> _langIds.TryGetValue(lang, out var langCode) ? langCode : -1;
