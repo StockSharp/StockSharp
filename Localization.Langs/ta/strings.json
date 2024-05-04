@@ -801,7 +801,7 @@
   "DaysLeft": "{0} நாட்கள்",
   "DaysLetter": "நா",
   "DaysParams": "{0:0} நாட்கள்",
-  "DaysParamSmartPlural": "{0} {0:நாள்|நாட்கள்|நாட்கள்}",
+  "DaysParamSmartPlural": "{0} {0:நாள்|நாட்கள்}",
   "DaysPart": "நாட்கள்",
   "Dde": "DDE",
   "DDESettings": "DDE அமைப்புகள்",

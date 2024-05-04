@@ -801,7 +801,7 @@
   "DaysLeft": "{0} kun",
   "DaysLetter": "k",
   "DaysParams": "{0:0} kun",
-  "DaysParamSmartPlural": "{0} {0:kun|kun|kun}",
+  "DaysParamSmartPlural": "{0} {0:kun|kun}",
   "DaysPart": "Kunlar",
   "Dde": "DDE",
   "DDESettings": "DDE sozlamalari",

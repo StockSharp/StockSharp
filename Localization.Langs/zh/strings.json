@@ -801,7 +801,7 @@
   "DaysLeft": "{0} 天",
   "DaysLetter": "天",
   "DaysParams": "{0:0} 天",
-  "DaysParamSmartPlural": "{0} {0:天|天|天}",
+  "DaysParamSmartPlural": "{0} {0:天|天}",
   "DaysPart": "天",
   "Dde": "DDE",
   "DDESettings": "DDE 设置",

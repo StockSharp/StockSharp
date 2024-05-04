@@ -801,7 +801,7 @@
   "DaysLeft": "{0} gün",
   "DaysLetter": "g",
   "DaysParams": "{0:0} gün",
-  "DaysParamSmartPlural": "{0} {0:gün|gün|gün}",
+  "DaysParamSmartPlural": "{0} {0:gün|günler}",
   "DaysPart": "Günler",
   "Dde": "DDE",
   "DDESettings": "DDE Ayarları",

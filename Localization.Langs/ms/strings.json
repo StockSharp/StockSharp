@@ -801,7 +801,7 @@
   "DaysLeft": "{0} hari",
   "DaysLetter": "h",
   "DaysParams": "{0:0} hari",
-  "DaysParamSmartPlural": "{0} {0:hari|hari|hari}",
+  "DaysParamSmartPlural": "{0} {0:hari|hari}",
   "DaysPart": "Hari",
   "Dde": "DDE",
   "DDESettings": "Tetapan DDE",

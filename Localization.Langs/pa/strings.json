@@ -801,7 +801,7 @@
   "DaysLeft": "{0} ਦਿਨ",
   "DaysLetter": "ਦਿਨ",
   "DaysParams": "{0:0} ਦਿਨ",
-  "DaysParamSmartPlural": "{0} {0:ਦਿਨ|ਦਿਨ|ਦਿਨ}",
+  "DaysParamSmartPlural": "{0} {0:ਦਿਨ|ਦਿਨ}",
   "DaysPart": "ਦਿਨ",
   "Dde": "DDE",
   "DDESettings": "DDE ਸੈਟਿੰਗਜ਼",

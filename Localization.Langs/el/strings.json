@@ -801,7 +801,7 @@
   "DaysLeft": "{0} ημέρες",
   "DaysLetter": "ημ",
   "DaysParams": "{0:0} ημέρες",
-  "DaysParamSmartPlural": "{0} {0:ημέρα|ημέρες|ημέρες}",
+  "DaysParamSmartPlural": "{0} {0:ημέρα|ημέρες}",
   "DaysPart": "Ημέρες",
   "Dde": "DDE",
   "DDESettings": "Ρυθμίσεις DDE",

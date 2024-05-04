@@ -801,7 +801,7 @@
   "DaysLeft": "{0} ימים",
   "DaysLetter": "י",
   "DaysParams": "{0:0} ימים",
-  "DaysParamSmartPlural": "{0} {0:יום|ימים|ימים}",
+  "DaysParamSmartPlural": "{0} {0:יום|ימים}",
   "DaysPart": "ימים",
   "Dde": "DDE",
   "DDESettings": "הגדרות DDE",

@@ -801,7 +801,7 @@
   "DaysLeft": "{0} dina",
   "DaysLetter": "d",
   "DaysParams": "{0:0} dina",
-  "DaysParamSmartPlural": "{0} {0:dina|dina|dina}",
+  "DaysParamSmartPlural": "{0} {0:dina|dina}",
   "DaysPart": "Dina",
   "Dde": "DDE",
   "DDESettings": "Setelan DDE",

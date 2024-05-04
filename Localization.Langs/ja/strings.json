@@ -801,7 +801,7 @@
   "DaysLeft": "{0}日",
   "DaysLetter": "日",
   "DaysParams": "{0:0} 日間",
-  "DaysParamSmartPlural": "{0} {0:日|日|日}",
+  "DaysParamSmartPlural": "{0} {0:日|日}",
   "DaysPart": "日",
   "Dde": "DDE",
   "DDESettings": "DDEの設定",

@@ -801,7 +801,7 @@
   "DaysLeft": "{0} päivää",
   "DaysLetter": "p",
   "DaysParams": "{0:0} päivää",
-  "DaysParamSmartPlural": "{0} {0:päivä|päivää|päivää}",
+  "DaysParamSmartPlural": "{0} {0:päivä|päivää}",
   "DaysPart": "Päivät",
   "Dde": "DDE",
   "DDESettings": "DDE-asetukset",

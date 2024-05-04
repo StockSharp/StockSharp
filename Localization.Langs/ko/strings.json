@@ -801,7 +801,7 @@
   "DaysLeft": "{0} 일",
   "DaysLetter": "일",
   "DaysParams": "{0:0} 일",
-  "DaysParamSmartPlural": "{0} {0:일|일|일}",
+  "DaysParamSmartPlural": "{0} {0:일|일}",
   "DaysPart": "일",
   "Dde": "DDE",
   "DDESettings": "DDE 설정",

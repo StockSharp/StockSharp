@@ -801,7 +801,7 @@
   "DaysLeft": "{0} روز",
   "DaysLetter": "روز",
   "DaysParams": "{0:0} روز",
-  "DaysParamSmartPlural": "{0} {0:روز|روز|روز}",
+  "DaysParamSmartPlural": "{0} {0:روز|روزها}",
   "DaysPart": "روزها",
   "Dde": "DDE",
   "DDESettings": "تنظیمات DDE",

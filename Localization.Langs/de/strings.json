@@ -801,7 +801,7 @@
   "DaysLeft": "{0} Tage",
   "DaysLetter": "T",
   "DaysParams": "{0:0} Tage",
-  "DaysParamSmartPlural": "{0} {0:Tag|Tage|Tage}",
+  "DaysParamSmartPlural": "{0} {0:Tag|Tage}",
   "DaysPart": "Tage",
   "Dde": "DDE",
   "DDESettings": "DDE-Einstellungen",

@@ -801,7 +801,7 @@
   "DaysLeft": "{0} dagen",
   "DaysLetter": "d",
   "DaysParams": "{0:0} dagen",
-  "DaysParamSmartPlural": "{0} {0:dag|dagen|dagen}",
+  "DaysParamSmartPlural": "{0} {0:dag|dagen}",
   "DaysPart": "Dagen",
   "Dde": "DDE",
   "DDESettings": "DDE-instellingen",

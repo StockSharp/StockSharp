@@ -801,7 +801,7 @@
   "DaysLeft": "{0} nap",
   "DaysLetter": "n",
   "DaysParams": "{0:0} nap",
-  "DaysParamSmartPlural": "{0} {0:nap|nap|napok}",
+  "DaysParamSmartPlural": "{0} {0:nap|napok}",
   "DaysPart": "Napok",
   "Dde": "DDE",
   "DDESettings": "DDE beállítások",

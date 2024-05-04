@@ -801,7 +801,7 @@
   "DaysLeft": "{0} ngày",
   "DaysLetter": "ngày",
   "DaysParams": "{0:0} ngày",
-  "DaysParamSmartPlural": "{0} {0:ngày|ngày|ngày}",
+  "DaysParamSmartPlural": "{0} {0:ngày|ngày}",
   "DaysPart": "Ngày",
   "Dde": "DDE",
   "DDESettings": "Cài đặt DDE",
