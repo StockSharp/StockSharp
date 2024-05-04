@@ -801,7 +801,7 @@
   "DaysLeft": "{0} أيام",
   "DaysLetter": "ي",
   "DaysParams": "{0:0} أيام",
-  "DaysParamSmartPlural": "{0} {0:يوم|أيام|أيام}",
+  "DaysParamSmartPlural": "{0} {0:يوم|يومان|أيام قليلة|أيام كثيرة|أيام|أيام}",
   "DaysPart": "أيام",
   "Dde": "DDE",
   "DDESettings": "إعدادات DDE",
