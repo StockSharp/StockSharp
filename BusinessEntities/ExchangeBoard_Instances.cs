@@ -2549,5 +2549,14 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.YHF.Name,
 			Exchange = Exchange.YHF,
 		};
+
+		/// <summary>
+		/// Information about board <see cref="EUREX"/>.
+		/// </summary>
+		public static ExchangeBoard EUREX { get; } = new()
+		{
+			Code = Exchange.EUREX.Name,
+			Exchange = Exchange.EUREX,
+		};
 	}
 }

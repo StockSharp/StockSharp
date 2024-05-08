@@ -1117,5 +1117,13 @@ namespace StockSharp.BusinessEntities
 			Name = "YHF",
 			FullNameLoc = LocalizedStrings.Yahoo,
 		};
+
+		/// <summary>
+		/// Information about board <see cref="EUREX"/>.
+		/// </summary>
+		public static Exchange EUREX { get; } = new()
+		{
+			Name = nameof(EUREX),
+		};
 	}
 }

@@ -1144,4 +1144,9 @@ public static class BoardCodes
 	/// <see cref="YHF"/>.
 	/// </summary>
 	public const string YHF = "YHF";
+
+	/// <summary>
+	/// <see cref="EUREX"/>.
+	/// </summary>
+	public const string EUREX = "EUREX";
 }
