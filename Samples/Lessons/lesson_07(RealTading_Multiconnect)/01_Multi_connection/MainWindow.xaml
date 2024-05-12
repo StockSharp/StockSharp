@@ -1,0 +1,54 @@
+﻿<Window x:Class="Multi_connection.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xaml="http://schemas.stocksharp.com/xaml"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="941" Width="1018">
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="180"/>
+			<ColumnDefinition Width="180"/>
+			<ColumnDefinition Width="180"/>
+			<ColumnDefinition Width="180"/>
+			<ColumnDefinition Width="1*"/>
+			<ColumnDefinition Width="180"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="30"/>
+			<RowDefinition Height="30"/>
+			<RowDefinition Height="30"/>
+			<RowDefinition Height="30"/>
+			<RowDefinition Height="30"/>
+			<RowDefinition Height="30"/>
+			<RowDefinition Height="30"/>
+			<RowDefinition Height="30"/>
+			<RowDefinition Height="30"/>
+
+			<RowDefinition Height="30"/>
+			<RowDefinition Height="31*"/>
+			<RowDefinition Height="25*"/>
+			<RowDefinition Height="554*"/>
+		</Grid.RowDefinitions>
+		<Button Grid.Row="0" Grid.Column="0" x:Name="Setting" Content="Setting" Click="Setting_Click" />
+		<Button Grid.Row="0" Grid.Column="1" x:Name="Connect" Content="Connect" Click="Connect_Click" />
+
+		<xaml:MyTradeGrid x:Name="MyTradeGrid" Grid.Row="12" Grid.ColumnSpan="5" Grid.Column="1" />
+		<xaml:OrderGrid x:Name="OrderGrid" Grid.Row="1" Grid.ColumnSpan="5" Grid.Column="1" Grid.RowSpan="11" />
+
+		<xaml:SecurityEditor x:Name="SecurityEditor1" Grid.Row="1" Grid.Column="0" />
+		<xaml:PortfolioEditor x:Name="PortfolioEditor1" Grid.Row="2" Grid.Column="0" />
+		<TextBox x:Name="TextBoxPrice1" Grid.Row="3" Grid.Column="0" Text="Price"/>
+		<Button x:Name="Buy1" Content="Buy" Grid.Row="4" Grid.Column="0" Click="Buy_Click"/>
+		<Button x:Name="Sell1" Content="Sell" Grid.Row="5" Grid.Column="0" Click="Sell_Click"/>
+
+		<xaml:SecurityEditor x:Name="SecurityEditor2" Grid.Row="7" Grid.Column="0" />
+		<xaml:PortfolioEditor x:Name="PortfolioEditor2" Grid.Row="8" Grid.Column="0" />
+		<TextBox x:Name="TextBoxPrice2" Grid.Row="9" Grid.Column="0" Text="Price"/>
+		<Button x:Name="Buy2" Content="Buy" Grid.Row="10" Grid.Column="0" Click="Buy2_Click" />
+		<Button x:Name="Sell2" Content="Sell" Grid.Row="11" Grid.Column="0" Click="Sell2_Click" />
+
+
+	</Grid>
+</Window>
