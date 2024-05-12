@@ -1,6 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\common_connectors.props" />
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Messages\Messages.csproj" />
-  </ItemGroup>
-</Project>

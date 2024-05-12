@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29215.179
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{880DD952-EC23-463F-BC5B-E92B47BB2041}"
 EndProject
@@ -35,10 +35,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Connectors", "Connectors", "{43177359-B2EC-460E-AB92-1FACB29048B1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleConnection", "Connectors\SampleConnection\SampleConnection.csproj", "{1F698A62-C461-4A8A-9D81-FFEF09C0DC52}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BitStamp", "Connectors\BitStamp\BitStamp.csproj", "{4AE01FC0-D338-4902-80D1-28DC34529A1E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fix.Dialects", "Connectors\Fix.Dialects\Fix.Dialects.csproj", "{E73D7D1C-64A1-47EB-A688-1C76CA2BAE4E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,14 +94,6 @@ Global
 		{1F698A62-C461-4A8A-9D81-FFEF09C0DC52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F698A62-C461-4A8A-9D81-FFEF09C0DC52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F698A62-C461-4A8A-9D81-FFEF09C0DC52}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4AE01FC0-D338-4902-80D1-28DC34529A1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4AE01FC0-D338-4902-80D1-28DC34529A1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4AE01FC0-D338-4902-80D1-28DC34529A1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4AE01FC0-D338-4902-80D1-28DC34529A1E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E73D7D1C-64A1-47EB-A688-1C76CA2BAE4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E73D7D1C-64A1-47EB-A688-1C76CA2BAE4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E73D7D1C-64A1-47EB-A688-1C76CA2BAE4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E73D7D1C-64A1-47EB-A688-1C76CA2BAE4E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -124,8 +112,6 @@ Global
 		{81A84C3B-EC88-4746-AA4D-247DD1F66EB6} = {223279C5-1EB1-4978-B9AC-152A1C1D563E}
 		{B50ADCF8-CD33-46BE-902D-359A4EDFECA7} = {223279C5-1EB1-4978-B9AC-152A1C1D563E}
 		{1F698A62-C461-4A8A-9D81-FFEF09C0DC52} = {43177359-B2EC-460E-AB92-1FACB29048B1}
-		{4AE01FC0-D338-4902-80D1-28DC34529A1E} = {43177359-B2EC-460E-AB92-1FACB29048B1}
-		{E73D7D1C-64A1-47EB-A688-1C76CA2BAE4E} = {43177359-B2EC-460E-AB92-1FACB29048B1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {05C6C3D9-0063-47AB-BC11-315B396BEBD0}

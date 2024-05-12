@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\common_connectors.props" />
+  <Import Project="..\common_connectors.props" />
   <ItemGroup>
     <PackageReference Include="StockSharp.Fix.Core" Version="$(StockSharpVer)" />
   </ItemGroup>
