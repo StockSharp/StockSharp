@@ -2,9 +2,12 @@
   <Import Project="..\common_target_net.props" />
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);NO_LICENSE</DefineConstants>
+    <IsPrivatePackable>true</IsPrivatePackable>
+    <IncludeSourceRevisionInInformationalVersion>true</IncludeSourceRevisionInInformationalVersion>
+    <InformationalVersion>S#.$(MSBuildProjectName)</InformationalVersion>
+    <SourceRevisionId>v$([System.DateTime]::UtcNow.ToString("yyyyMMddHHmmss"))</SourceRevisionId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="$(CSharpVer)"/>
     <PackageReference Include="Ecng.Net.SocketIO" Version="$(EcngVer)" />
   </ItemGroup>
 </Project>
