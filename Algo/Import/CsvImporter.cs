@@ -83,10 +83,15 @@
 				var prevPercent = 0;
 				var lineIndex = 0;
 
+				var isSecurityRequired = DataType.IsSecurityRequired;
+
 				foreach (var msg in Parse(fileName, isCancelled))
 				{
 					if (msg is SecurityMappingMessage)
 						continue;
+
+					if (isSecurityRequired && msg is ISecurityIdMessage secIdMsg && secIdMsg.SecurityId == default)
+						throw new InvalidOperationException($"{LocalizedStrings.EmptySecId}: {msg}");
 
 					if (msg is not SecurityMessage secMsg)
 					{
