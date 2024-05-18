@@ -7,7 +7,4 @@
     <InformationalVersion>S#.$(MSBuildProjectName)</InformationalVersion>
     <SourceRevisionId>v$([System.DateTime]::UtcNow.ToString("yyyyMMddHHmmss"))</SourceRevisionId>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Ecng.Net.SocketIO" Version="$(EcngVer)" />
-  </ItemGroup>
 </Project>

@@ -1,9 +1,5 @@
 namespace StockSharp.BitStamp;
 
-#if !NO_LICENSE
-using StockSharp.Licensing;
-#endif
-
 [OrderCondition(typeof(BitStampOrderCondition))]
 public partial class BitStampMessageAdapter : AsyncMessageAdapter
 {
@@ -83,11 +79,6 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 		_pusherClient.NewTrade -= SessionOnNewTrade;
 	}
 
-#if !NO_LICENSE
-	/// <inheritdoc />
-	public override string FeatureName => nameof(BitStamp);
-#endif
-
 	/// <inheritdoc />
 	public override async ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
 	{
@@ -99,12 +90,6 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 			if (Secret.IsEmpty())
 				throw new InvalidOperationException(LocalizedStrings.SecretNotSpecified);
 		}
-
-#if !NO_LICENSE
-		var msg = await nameof(BitStamp).ValidateLicenseAsync(component: GetType(), cancellationToken: cancellationToken);
-		if (!msg.IsEmpty())
-			throw new InvalidOperationException(msg);
-#endif
 
 		if (_httpClient != null)
 			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);

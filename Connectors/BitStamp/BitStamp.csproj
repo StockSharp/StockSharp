@@ -1,6 +1,3 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\common_connectors.props" />
-  <ItemGroup>
-    <ProjectReference Include="..\..\Messages\Messages.csproj" />
-  </ItemGroup>
+  <Import Project="..\common_crypto.props" />
 </Project>
