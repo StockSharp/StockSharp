@@ -138,6 +138,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bitalong", "Connectors\Bita
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Btce", "Connectors\Btce\Btce.csproj", "{34177DB4-CD5E-4349-ABAF-D698B84838A0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bitexbook", "Connectors\Bitexbook\Bitexbook.csproj", "{48CE7CFF-19E5-4989-B4D6-00702500FE6A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -352,6 +354,10 @@ Global
 		{34177DB4-CD5E-4349-ABAF-D698B84838A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34177DB4-CD5E-4349-ABAF-D698B84838A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34177DB4-CD5E-4349-ABAF-D698B84838A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48CE7CFF-19E5-4989-B4D6-00702500FE6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48CE7CFF-19E5-4989-B4D6-00702500FE6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48CE7CFF-19E5-4989-B4D6-00702500FE6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48CE7CFF-19E5-4989-B4D6-00702500FE6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -411,6 +417,7 @@ Global
 		{DA68F4E9-6B95-44A7-B7DF-4C69A60487EE} = {A71761D3-B633-4C8B-A307-6C4C14CB3D8D}
 		{DF5322FD-2C5F-467B-A067-E51DA5419DF6} = {7F7B05F0-13D7-4087-92FE-0E765581D850}
 		{34177DB4-CD5E-4349-ABAF-D698B84838A0} = {7F7B05F0-13D7-4087-92FE-0E765581D850}
+		{48CE7CFF-19E5-4989-B4D6-00702500FE6A} = {7F7B05F0-13D7-4087-92FE-0E765581D850}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {05C6C3D9-0063-47AB-BC11-315B396BEBD0}
