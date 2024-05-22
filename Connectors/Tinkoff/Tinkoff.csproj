@@ -1,0 +1,8 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\common_connector_private.props" />
+
+  <ItemGroup>
+    <PackageReference Include="Tinkoff.InvestApi" Version="0.6.*" />
+    <PackageReference Include="Ecng.Net.SocketIO" Version="$(EcngVer)" />
+  </ItemGroup>
+</Project>

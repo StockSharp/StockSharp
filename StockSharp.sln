@@ -142,6 +142,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bitexbook", "Connectors\Bit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coinbase", "Connectors\Coinbase\Coinbase.csproj", "{0E146A4B-5461-4B86-8D84-E100FA054C36}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tinkoff", "Connectors\Tinkoff\Tinkoff.csproj", "{580D7D59-F6D8-4D63-87A9-ECD6C86CCCE4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -364,6 +366,10 @@ Global
 		{0E146A4B-5461-4B86-8D84-E100FA054C36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E146A4B-5461-4B86-8D84-E100FA054C36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E146A4B-5461-4B86-8D84-E100FA054C36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{580D7D59-F6D8-4D63-87A9-ECD6C86CCCE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{580D7D59-F6D8-4D63-87A9-ECD6C86CCCE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{580D7D59-F6D8-4D63-87A9-ECD6C86CCCE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{580D7D59-F6D8-4D63-87A9-ECD6C86CCCE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -425,6 +431,7 @@ Global
 		{34177DB4-CD5E-4349-ABAF-D698B84838A0} = {7F7B05F0-13D7-4087-92FE-0E765581D850}
 		{48CE7CFF-19E5-4989-B4D6-00702500FE6A} = {7F7B05F0-13D7-4087-92FE-0E765581D850}
 		{0E146A4B-5461-4B86-8D84-E100FA054C36} = {7F7B05F0-13D7-4087-92FE-0E765581D850}
+		{580D7D59-F6D8-4D63-87A9-ECD6C86CCCE4} = {7F7B05F0-13D7-4087-92FE-0E765581D850}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {05C6C3D9-0063-47AB-BC11-315B396BEBD0}
