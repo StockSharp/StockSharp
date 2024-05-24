@@ -1,9 +1,5 @@
 namespace StockSharp.Tinkoff;
 
-#if !NO_LICENSE
-using StockSharp.Licensing;
-#endif
-
 public partial class TinkoffMessageAdapter
 {
 	private GrpcChannel _channel;
@@ -53,11 +49,6 @@ public partial class TinkoffMessageAdapter
 	/// <inheritdoc />
 	public override string StorageName => nameof(Tinkoff);
 
-#if !NO_LICENSE
-	/// <inheritdoc />
-	public override string FeatureName => IsDemo ? base.FeatureName : nameof(Tinkoff);
-#endif
-
 	/// <inheritdoc />
 	public override async ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
 	{
@@ -66,12 +57,6 @@ public partial class TinkoffMessageAdapter
 			if (Token.IsEmpty())
 				throw new InvalidOperationException(LocalizedStrings.TokenNotSpecified);
 		}
-
-#if !NO_LICENSE
-		var msg = IsDemo ? null : await nameof(Tinkoff).ValidateLicenseAsync(component: GetType(), cancellationToken: cancellationToken);
-		if (!msg.IsEmpty())
-			throw new InvalidOperationException(msg);
-#endif
 
 		if (_channel != null)
 			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
