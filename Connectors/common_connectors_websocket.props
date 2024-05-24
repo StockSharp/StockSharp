@@ -4,7 +4,6 @@
     <PackageReference Include="Ecng.Net.SocketIO" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="$(RepoAppsPath)Licensing\Licensing.csproj" />
     <ProjectReference Include="..\..\Messages\Messages.csproj" />
   </ItemGroup>
 </Project>

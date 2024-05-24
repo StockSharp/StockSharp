@@ -1,3 +1,3 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\common_crypto.props" />
+  <Import Project="..\common_connectors_websocket.props" />
 </Project>
