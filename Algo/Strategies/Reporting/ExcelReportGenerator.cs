@@ -57,7 +57,7 @@ public class ExcelReportGenerator : BaseReportGenerator
 		if (hasTemplate)
 			File.Copy(Template, fileName);
 
-		using var stream = File.OpenWrite(fileName);
+		using var stream = new FileStream(fileName, FileMode.Create, FileAccess.Write);
 		using var worker = hasTemplate ? _provider.OpenExist(stream) : _provider.CreateNew(stream);
 
 		if (Template.IsEmpty())

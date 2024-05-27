@@ -174,7 +174,7 @@ namespace StockSharp.Algo.Storages
 
 				Directory.CreateDirectory(GetDataPath(date));
 
-				using (var file = File.OpenWrite(GetPath(date, false)))
+				using (var file = new FileStream(GetPath(date, false), FileMode.Create, FileAccess.Write))
 					stream.CopyTo(file);
 
 				DatesDict[date] = date;

@@ -616,7 +616,7 @@ namespace StockSharp.Algo.Export
 			if (action is null)
 				throw new ArgumentNullException(nameof(action));
 
-			using (var stream = File.OpenWrite(Path))
+			using (var stream = new FileStream(Path, FileMode.Create, FileAccess.Write))
 			using (var worker = _provider.CreateNew(stream))
 			{
 				worker
