@@ -563,7 +563,12 @@ public partial class TinkoffMessageAdapter
 							{
 								InstrumentId = mdMsg.GetInstrumentId(),
 								Depth = mdMsg.MaxDepth ?? _defBook,
-								OrderBookType = mdMsg.IsRegularTradingHours == false ? OrderBookType.Unspecified : OrderBookType.Exchange,
+								OrderBookType = mdMsg.IsRegularTradingHours switch
+								{
+									null => OrderBookType.Unspecified,
+									false => OrderBookType.Dealer,
+									_ => OrderBookType.Exchange,
+								},
 							}
 						},
 						SubscriptionAction = SubscriptionAction.Subscribe,
@@ -588,6 +593,12 @@ public partial class TinkoffMessageAdapter
 						{
 							InstrumentId = t.uid,
 							Depth = mdMsg.MaxDepth ?? _defBook,
+							OrderBookType = mdMsg.IsRegularTradingHours switch
+							{
+								null => OrderBookType.Unspecified,
+								false => OrderBookType.Dealer,
+								_ => OrderBookType.Exchange,
+							},
 						}
 					},
 					SubscriptionAction = SubscriptionAction.Unsubscribe,
@@ -619,6 +630,12 @@ public partial class TinkoffMessageAdapter
 							}
 						},
 						SubscriptionAction = SubscriptionAction.Subscribe,
+						TradeType = mdMsg.IsRegularTradingHours switch
+						{
+							null => TradeSourceType.TradeSourceUnspecified,
+							false => TradeSourceType.TradeSourceAll,
+							_ => TradeSourceType.TradeSourceExchange,
+						}
 					}
 				}, cancellationToken);
 			}
@@ -642,6 +659,12 @@ public partial class TinkoffMessageAdapter
 						}
 					},
 					SubscriptionAction = SubscriptionAction.Unsubscribe,
+					TradeType = mdMsg.IsRegularTradingHours switch
+					{
+						null => TradeSourceType.TradeSourceUnspecified,
+						false => TradeSourceType.TradeSourceAll,
+						_ => TradeSourceType.TradeSourceExchange,
+					}
 				}
 			}, cancellationToken);
 		}

@@ -85,26 +85,6 @@ public partial class TinkoffMessageAdapter
 		}
 	}
 
-	private async Task RefreshOrderState(string orderId, string accountId, long transactionId, CancellationToken cancellationToken)
-	{
-		var state = await (IsDemo
-			? _service.Sandbox.GetSandboxOrderStateAsync(new() { OrderId = orderId, AccountId = accountId }, cancellationToken: cancellationToken)
-			: _service.Orders.GetOrderStateAsync(new() { OrderId = orderId, AccountId = accountId }, cancellationToken: cancellationToken)
-		);
-
-		SendOutMessage(new ExecutionMessage
-		{
-			DataTypeEx = DataType.Transactions,
-			HasOrderInfo = true,
-			OriginalTransactionId = transactionId,
-			ServerTime = CurrentTime,
-			OrderStringId = orderId,
-			OrderState = state.ExecutionReportStatus.ToOrderState(),
-			Balance = state.LotsRequested - state.LotsExecuted,
-			AveragePrice = state.ExecutedOrderPrice,
-		});
-	}
-
 	/// <inheritdoc/>
 	public override async ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
@@ -143,8 +123,6 @@ public partial class TinkoffMessageAdapter
 					AccountId = cancelMsg.PortfolioName,
 				}, cancellationToken: cancellationToken);
 			}
-
-			await RefreshOrderState(cancelMsg.OrderStringId, cancelMsg.PortfolioName, cancelMsg.TransactionId, cancellationToken);
 		}
 	}
 
@@ -179,8 +157,6 @@ public partial class TinkoffMessageAdapter
 					IdempotencyKey = replaceMsg.TransactionId.To<string>(),
 				}, cancellationToken: cancellationToken);
 			}
-
-			await RefreshOrderState(replaceMsg.OldOrderStringId, replaceMsg.PortfolioName, replaceMsg.TransactionId, cancellationToken);
 		}
 	}
 
@@ -322,9 +298,9 @@ public partial class TinkoffMessageAdapter
 
 		if (!statusMsg.IsHistoryOnly() && !IsDemo)
 		{
-			var (cts, ordersToken) = cancellationToken.CreateChildToken();
+			var (statesCts, statesToken) = cancellationToken.CreateChildToken();
 
-			_ordersCts.Add(statusMsg.TransactionId, cts);
+			_ordersCts.Add(statusMsg.TransactionId, statesCts);
 
 			_ = Task.Run(async () =>
 			{
@@ -334,47 +310,64 @@ public partial class TinkoffMessageAdapter
 				{
 					try
 					{
-						var tradesStream = _service.OrdersStream.TradesStream(new(), cancellationToken: ordersToken).ResponseStream;
+						var statesStream = _service.OrdersStream.OrderStateStream(new(), cancellationToken: statesToken).ResponseStream;
 						currError = 0;
 
-						await foreach (var response in tradesStream.ReadAllAsync(ordersToken))
+						await foreach (var response in statesStream.ReadAllAsync(statesToken))
 						{
-							var orderTrades = response.OrderTrades;
+							var orderState = response.OrderState;
 
-							if (orderTrades is null)
+							if (orderState is null)
 								continue;
 
-							var secId = orderTrades.InstrumentUid.FromInstrumentIdToSecId();
+							if (!long.TryParse(orderState.OrderRequestId, out var transId))
+								continue;
 
-							foreach (var trade in orderTrades.Trades)
+							SendOutMessage(new ExecutionMessage
 							{
-								SendOutMessage(new ExecutionMessage
-								{
-									DataTypeEx = DataType.Transactions,
-									SecurityId = secId,
-									OrderStringId = orderTrades.OrderId,
-									ServerTime = trade.DateTime.ToDateTimeOffset(),
-									TradeStringId = trade.TradeId,
-									TradePrice = trade.Price,
-									TradeVolume = trade.Quantity,
-								});
-							}
+								DataTypeEx = DataType.Transactions,
+								HasOrderInfo = true,
+								OriginalTransactionId = transId,
+								ServerTime = CurrentTime,
+								OrderStringId = orderState.OrderId,
+								OrderState = orderState.ExecutionReportStatus.ToOrderState(),
+								Balance = orderState.LotsRequested - orderState.LotsExecuted,
+								AveragePrice = orderState.ExecutedOrderPrice,
+							});
 
-							await RefreshOrderState(orderTrades.OrderId, orderTrades.AccountId, 0, cancellationToken);
+							var secId = orderState.InstrumentUid.FromInstrumentIdToSecId();
+
+							if (orderState.Trades is not null)
+							{
+								foreach (var trade in orderState.Trades)
+								{
+									SendOutMessage(new ExecutionMessage
+									{
+										DataTypeEx = DataType.Transactions,
+										SecurityId = secId,
+										OrderStringId = orderState.OrderId,
+										OriginalTransactionId = transId,
+										ServerTime = trade.DateTime.ToDateTimeOffset(),
+										TradeStringId = trade.TradeId,
+										TradePrice = trade.Price,
+										TradeVolume = trade.Quantity,
+									});
+								}
+							}
 						}
 					}
 					catch (Exception ex)
 					{
-						if (ordersToken.IsCancellationRequested)
+						if (statesToken.IsCancellationRequested)
 							break;
-						
+
 						this.AddErrorLog(ex);
 
 						if (++currError >= 10)
 							break;
 					}
 				}
-			}, ordersToken);
+			}, statesToken);
 		}
 
 		SendSubscriptionResult(statusMsg);
