@@ -18,6 +18,8 @@ namespace StockSharp.Messages
 	using System;
 	using System.Collections.Generic;
 	using System.Security;
+	using System.Threading;
+	using System.Threading.Tasks;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
@@ -367,5 +369,21 @@ namespace StockSharp.Messages
 		/// Target ID.
 		/// </summary>
 		string TargetCompId { get; set; }
+	}
+
+	/// <summary>
+	/// Message adapter, provided OAuth authorization.
+	/// </summary>
+	public interface IOAuthAdapter
+	{
+		/// <summary>
+		/// Social id.
+		/// </summary>
+		long SocialId { get; }
+
+		/// <summary>
+		/// Request token event.
+		/// </summary>
+		event Func<bool, CancellationToken, Task<string>> RequestToken;
 	}
 }
