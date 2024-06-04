@@ -1149,4 +1149,14 @@ public static class BoardCodes
 	/// <see cref="EUREX"/>.
 	/// </summary>
 	public const string EUREX = "EUREX";
+
+	/// <summary>
+	/// <see cref="ByBit"/>
+	/// </summary>
+	public const string ByBit = "BBIT";
+
+	/// <summary>
+	/// <see cref="cTrader"/>
+	/// </summary>
+	public const string cTrader = "CTRD";
 }
