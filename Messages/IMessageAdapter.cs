@@ -372,18 +372,17 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// Message adapter, provided OAuth authorization.
+	/// Provider for OAuth.
 	/// </summary>
-	public interface IOAuthAdapter
+	public interface IOAuthProvider
 	{
-		/// <summary>
-		/// Social id.
-		/// </summary>
-		long SocialId { get; }
-
 		/// <summary>
 		/// Request token event.
 		/// </summary>
-		event Func<bool, CancellationToken, Task<string>> RequestToken;
+		/// <param name="socialId"></param>
+		/// <param name="isRefreshToken"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		Task<SecureString> RequestToken(long socialId, bool isRefreshToken, CancellationToken cancellationToken);
 	}
 }
