@@ -86,6 +86,21 @@ namespace SampleConnection
 			}
 		}
 
+		private class Level1DatesSettings : DatesSettings
+		{
+			private Level1Fields? _field;
+
+			public Level1Fields? Field
+			{
+				get => _field;
+				set
+				{
+					_field = value;
+					NotifyChanged(nameof(Field));
+				}
+			}
+		}
+
 		private class DepthSettings : IPersistable
 		{
 			public DateTimeOffset? From { get; set; }
@@ -360,7 +375,7 @@ namespace SampleConnection
 		{
 			var connector = Connector;
 
-			var settings = new DatesSettings { From = DateTime.Today.AddDays(-1) };
+			var settings = new Level1DatesSettings { From = DateTime.Today.AddDays(-1) };
 
 			var wnd = new SettingsWindow { Settings = settings };
 
@@ -369,7 +384,17 @@ namespace SampleConnection
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				connector.SubscribeLevel1(security, settings.From, settings.To, skip: settings.Skip, count: settings.Count);
+				connector.SubscribeMarketData(security, new MarketDataMessage
+				{
+					DataType2 = DataType.Level1,
+					From = settings.From,
+					To = settings.To,
+					Skip = settings.Skip,
+					Count = settings.Count,
+					BuildMode = settings.BuildMode,
+					IsFinishedOnly = settings.IsFinishedOnly,
+					Fields = settings.Field is null ? null : new[] { settings.Field.Value },
+				});
 			}
 		}
 
