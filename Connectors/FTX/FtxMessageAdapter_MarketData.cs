@@ -1,14 +1,5 @@
 ﻿namespace StockSharp.FTX
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-
-	using StockSharp.Messages;
-
-	using FTX.Native.Model;
-	using FTX.Native;
-
 	partial class FtxMessageAdapter
 	{
 		private const int _TickPaginationLimit = 5000;
@@ -41,7 +32,7 @@
 				Bids = book.Bids.Select(e => new QuoteChange(e.Price, e.Size)).ToArray(),
 				Asks = book.Asks.Select(e => new QuoteChange(e.Price, e.Size)).ToArray(),
 
-				ServerTime = book.ConvertTime(),
+				ServerTime = book.Time,
 			});
 
 		}
@@ -50,7 +41,7 @@
 			var l1 = new Level1ChangeMessage()
 			{
 				SecurityId = pair.ToStockSharp(),
-				ServerTime = level1.ConvertTime()
+				ServerTime = level1.Time
 			};
 			if (level1.Bid > 0) l1.Changes[Level1Fields.BestBidPrice] = level1.Bid;
 			if (level1.Ask > 0) l1.Changes[Level1Fields.BestAskPrice] = level1.Ask;

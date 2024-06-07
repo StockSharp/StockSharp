@@ -1,17 +1,9 @@
 ﻿namespace StockSharp.Bitexbook
 {
-	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
-	using System.Linq;
 	using System.Security;
 
-	using Ecng.Common;
 	using Ecng.ComponentModel;
-	using Ecng.Serialization;
-
-	using StockSharp.Localization;
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// The message adapter for <see cref="Bitexbook"/>.

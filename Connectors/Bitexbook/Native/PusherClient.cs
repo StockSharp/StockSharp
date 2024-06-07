@@ -1,18 +1,7 @@
 namespace StockSharp.Bitexbook.Native
 {
-	using System;
-	using System.Collections.Generic;
-
-	using Ecng.Common;
-	using Ecng.Net;
-	using Ecng.Serialization;
-
 	using Newtonsoft.Json.Linq;
-
-	using StockSharp.Logging;
-	using StockSharp.Localization;
-	using StockSharp.Bitexbook.Native.Model;
-
+	
 	class PusherClient : BaseLogReceiver
 	{
 		// to get readable name after obfuscation

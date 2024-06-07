@@ -1,10 +1,5 @@
 namespace StockSharp.Bitalong
 {
-	using System;
-
-	using StockSharp.Localization;
-	using StockSharp.Messages;
-
 	static class Extensions
 	{
 		public static string ToNative(this Sides side)

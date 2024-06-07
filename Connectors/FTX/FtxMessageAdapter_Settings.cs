@@ -1,15 +1,9 @@
 ﻿namespace StockSharp.FTX
 {
-	using System;
 	using System.ComponentModel.DataAnnotations;
 	using System.Security;
 
 	using Ecng.ComponentModel;
-	using Ecng.Common;
-	using Ecng.Serialization;
-
-	using StockSharp.Localization;
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// The message adapter for <see cref="FTX"/>.

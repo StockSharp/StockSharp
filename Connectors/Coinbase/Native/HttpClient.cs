@@ -1,23 +1,8 @@
 namespace StockSharp.Coinbase.Native
 {
-	using System;
-	using System.Collections.Generic;
 	using System.Dynamic;
-	using System.Linq;
 
-	using Ecng.Common;
-	using Ecng.Net;
-	using Ecng.Serialization;
-
-	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
-
-	using RestSharp;
-
-	using StockSharp.Coinbase.Native.Model;
-	using StockSharp.Localization;
-	using StockSharp.Logging;
-	using StockSharp.Messages;
 
 	class HttpClient : BaseLogReceiver
 	{

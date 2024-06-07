@@ -1,15 +1,9 @@
 ﻿namespace StockSharp.Btce
 {
-	using System;
 	using System.ComponentModel.DataAnnotations;
 	using System.Security;
 
-	using Ecng.Common;
 	using Ecng.ComponentModel;
-	using Ecng.Serialization;
-
-	using StockSharp.Localization;
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// The messages adapter for BTC-e.

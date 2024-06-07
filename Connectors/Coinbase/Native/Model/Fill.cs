@@ -1,10 +1,5 @@
 namespace StockSharp.Coinbase.Native.Model
 {
-	using System;
-	using System.Reflection;
-
-	using Newtonsoft.Json;
-
 	[Obfuscation(Feature = "renaming", ApplyToMembers = true)]
 	class Fill
 	{

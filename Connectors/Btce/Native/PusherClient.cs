@@ -1,14 +1,5 @@
 namespace StockSharp.Btce.Native
 {
-	using System;
-
-	using Ecng.Common;
-	using Ecng.Net;
-	using Ecng.Serialization;
-
-	using StockSharp.Logging;
-	using StockSharp.Localization;
-
 	class PusherClient : BaseLogReceiver
 	{
 		// to get readable name after obfuscation

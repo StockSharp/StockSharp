@@ -1,14 +1,5 @@
 namespace StockSharp.Coinbase
 {
-	using System;
-	using System.Collections.Generic;
-
-	using Ecng.Collections;
-	using Ecng.Common;
-
-	using StockSharp.Localization;
-	using StockSharp.Messages;
-
 	public partial class CoinbaseMessageAdapter
 	{
 		private readonly Dictionary<string, RefPair<long, decimal>> _orderInfo = new(StringComparer.InvariantCultureIgnoreCase);

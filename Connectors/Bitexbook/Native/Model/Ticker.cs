@@ -1,12 +1,5 @@
 namespace StockSharp.Bitexbook.Native.Model
 {
-	using System;
-	using System.Reflection;
-
-	using Ecng.Serialization;
-
-	using Newtonsoft.Json;
-
 	[Obfuscation(Feature = "renaming", ApplyToMembers = true)]
 	class Ticker
 	{

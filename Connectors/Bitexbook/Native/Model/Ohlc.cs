@@ -1,8 +1,5 @@
 namespace StockSharp.Bitexbook.Native.Model
 {
-	using System;
-	using System.Reflection;
-
 	[Obfuscation(Feature = "renaming", ApplyToMembers = false)]
 	class Ohlc
 	{

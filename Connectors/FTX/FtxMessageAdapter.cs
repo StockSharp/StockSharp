@@ -1,15 +1,5 @@
 namespace StockSharp.FTX
 {
-	using System;
-	using System.Collections.Generic;
-
-	using Ecng.Common;
-
-	using FTX.Native;
-
-	using StockSharp.Localization;
-	using StockSharp.Messages;
-
 	public partial class FtxMessageAdapter : MessageAdapter
 	{
 		private FtxRestClient _restClient;

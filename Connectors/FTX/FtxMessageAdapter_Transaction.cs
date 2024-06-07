@@ -1,18 +1,5 @@
 ﻿namespace StockSharp.FTX
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-
-	using Ecng.Common;
-
-	using StockSharp.Localization;
-	using StockSharp.Messages;
-
-	using FTX.Native.Model;
-
-	using Order = FTX.Native.Model.Order;
-
 	partial class FtxMessageAdapter
 	{
 		private readonly TimeSpan _orderHistoryInterval = TimeSpan.FromDays(7);
@@ -323,7 +310,7 @@
 
 		private string GetPortfolioName()
 		{
-			return string.IsNullOrEmpty(SubaccountName) ? PortfolioName : SubaccountName;
+			return SubaccountName.IsEmpty(PortfolioName);
 		}
 	}
 }

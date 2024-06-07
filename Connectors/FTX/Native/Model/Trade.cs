@@ -1,10 +1,5 @@
 ﻿namespace StockSharp.FTX.Native.Model
 {
-	using System;
-	using System.Reflection;
-	using Newtonsoft.Json;
-	using StockSharp.Messages;
-
 	[Obfuscation(Feature = "renaming", ApplyToMembers = true)]
 	internal class Trade
 	{
@@ -22,8 +17,5 @@
 
 		[JsonProperty("time")]
 		public DateTime Time { get; set; }
-
-		public DataType DataType => DataType.Ticks;
-
 	}
 }

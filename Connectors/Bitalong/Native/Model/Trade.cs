@@ -1,10 +1,5 @@
 namespace StockSharp.Bitalong.Native.Model
 {
-	using System;
-	using System.Reflection;
-
-	using Newtonsoft.Json;
-
 	[Obfuscation(Feature = "renaming", ApplyToMembers = false)]
 	class Trade
 	{

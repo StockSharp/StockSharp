@@ -1,27 +1,10 @@
 ﻿namespace StockSharp.FTX.Native
 {
-	using System;
-	using System.Linq;
 	using System.Security;
 	using System.Security.Cryptography;
-	using System.Collections.Generic;
 	using System.Text;
 
-	using Ecng.Common;
-	using Ecng.Collections;
-	using Ecng.Net;
-	using Ecng.Serialization;
-
-	using StockSharp.Localization;
-	using StockSharp.Logging;
-	using StockSharp.Messages;
-
-	using FTX.Native.Model;
-
 	using Newtonsoft.Json.Linq;
-
-	using Trade = Model.Trade;
-	using Order = Model.Order;
 
 	/// <summary>
 	/// Subscriber for Websocket "trade" channel
@@ -36,7 +19,6 @@
 
 	class FtxWebSocketClient : BaseLogReceiver
 	{
-		private static readonly DateTime _epochTime = new(1970, 1, 1, 0, 0, 0);
 		private readonly SecureString _key;
 		private readonly HMACSHA256 _hasher;
 
@@ -381,17 +363,10 @@
 			return GetMillisecondsFromEpochStart(DateTime.UtcNow);
 		}
 
-
 		private static long GetMillisecondsFromEpochStart(DateTime time)
 		{
-			return (long)(time - _epochTime).TotalMilliseconds;
+			return (long)time.ToUnix(false);
 		}
-
-
-		//private static long GetSecondsFromEpochStart(DateTime time)
-		//{
-		//	return (long)(time - _epochTime).TotalSeconds;
-		//}
 
 		private void SendAuthRequest(string subaccountName)
 		{

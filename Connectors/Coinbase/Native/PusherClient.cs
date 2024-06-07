@@ -1,16 +1,6 @@
 namespace StockSharp.Coinbase.Native
 {
-	using System;
-
-	using Ecng.Common;
-	using Ecng.Net;
-	using Ecng.Serialization;
-
 	using Newtonsoft.Json.Linq;
-
-	using StockSharp.Coinbase.Native.Model;
-	using StockSharp.Logging;
-	using StockSharp.Localization;
 
 	class PusherClient : BaseLogReceiver
 	{

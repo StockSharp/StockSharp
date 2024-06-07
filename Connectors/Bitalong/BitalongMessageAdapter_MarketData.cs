@@ -1,15 +1,5 @@
 namespace StockSharp.Bitalong
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-
-	using Ecng.Common;
-	using Ecng.Collections;
-
-	using StockSharp.Messages;
-	using StockSharp.Bitalong.Native.Model;
-
 	public partial class BitalongMessageAdapter
 	{
 		private readonly HashSet<string> _orderBookSubscriptions = new(StringComparer.InvariantCultureIgnoreCase);

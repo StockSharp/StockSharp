@@ -1,13 +1,5 @@
 namespace StockSharp.Coinbase
 {
-	using System;
-	using System.Collections.Generic;
-
-	using Ecng.Common;
-
-	using StockSharp.Localization;
-	using StockSharp.Messages;
-	using StockSharp.Coinbase.Native;
 #if !NO_LICENSE
 	using StockSharp.Licensing;
 #endif

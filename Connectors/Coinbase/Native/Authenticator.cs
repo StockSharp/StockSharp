@@ -1,12 +1,7 @@
 ﻿namespace StockSharp.Coinbase.Native
 {
-	using System;
 	using System.Security;
 	using System.Security.Cryptography;
-
-	using Ecng.Common;
-
-	using RestSharp;
 
 	class Authenticator : Disposable
 	{

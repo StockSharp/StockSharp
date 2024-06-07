@@ -1,16 +1,5 @@
 namespace StockSharp.Bitalong
 {
-	using System;
-	using System.Collections.Generic;
-
-	using Ecng.Collections;
-	using Ecng.Common;
-
-	using StockSharp.Localization;
-	using StockSharp.Messages;
-
-	using Order = StockSharp.Bitalong.Native.Model.Order;
-
 	public partial class BitalongMessageAdapter
 	{
 		private string PortfolioName => nameof(Bitalong) + "_" + Key.ToId();

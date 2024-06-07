@@ -1,11 +1,7 @@
 namespace StockSharp.Btce
 {
-	using System;
 	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
-
-	using StockSharp.Localization;
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// <see cref="Btce"/> order condition.

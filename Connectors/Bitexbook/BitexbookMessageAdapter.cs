@@ -1,14 +1,5 @@
 namespace StockSharp.Bitexbook
 {
-	using System;
-	using System.Collections.Generic;
-
-	using Ecng.Common;
-
-	using StockSharp.Localization;
-	using StockSharp.Messages;
-	using StockSharp.Bitexbook.Native;
-
 	[OrderCondition(typeof(BitexbookOrderCondition))]
 	public partial class BitexbookMessageAdapter : MessageAdapter
 	{

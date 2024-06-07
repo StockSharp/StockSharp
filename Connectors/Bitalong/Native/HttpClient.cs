@@ -1,23 +1,9 @@
 namespace StockSharp.Bitalong.Native
 {
-	using System;
-	using System.Collections.Generic;
 	using System.Security;
 	using System.Security.Cryptography;
 
-	using Ecng.Common;
-	using Ecng.Net;
-	using Ecng.Serialization;
-
-	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
-
-	using RestSharp;
-
-	using StockSharp.Localization;
-	using StockSharp.Logging;
-	using StockSharp.Messages;
-	using StockSharp.Bitalong.Native.Model;
 
 	class HttpClient : BaseLogReceiver
 	{

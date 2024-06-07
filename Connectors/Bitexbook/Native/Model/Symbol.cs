@@ -1,9 +1,5 @@
 namespace StockSharp.Bitexbook.Native.Model
 {
-	using System.Reflection;
-
-	using Newtonsoft.Json;
-
 	[Obfuscation(Feature = "renaming", ApplyToMembers = true)]
 	class Symbol
 	{

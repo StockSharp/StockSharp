@@ -1,11 +1,5 @@
 namespace StockSharp.Coinbase.Native.Model
 {
-	using System.Reflection;
-
-	using Ecng.Serialization;
-
-	using Newtonsoft.Json;
-
 	[Obfuscation(Feature = "renaming", ApplyToMembers = false)]
 	[JsonConverter(typeof(JArrayToObjectConverter))]
 	class Ohlc

@@ -1,14 +1,5 @@
 namespace StockSharp.Bitexbook
 {
-	using System;
-
-	using Ecng.Collections;
-
-	using StockSharp.Localization;
-	using StockSharp.Messages;
-
-	using Order = StockSharp.Bitexbook.Native.Model.Order;
-
 	static class Extensions
 	{
 		public static string ToNative(this Sides side)

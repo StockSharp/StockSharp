@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.FTX
 {
-	using StockSharp.Messages;
-
 	static class Extensions
 	{
 		/// <summary>

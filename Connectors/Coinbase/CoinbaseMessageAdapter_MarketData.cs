@@ -1,14 +1,5 @@
 namespace StockSharp.Coinbase
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-
-	using Ecng.Common;
-
-	using StockSharp.Coinbase.Native.Model;
-	using StockSharp.Messages;
-
 	public partial class CoinbaseMessageAdapter
 	{
 		private void ProcessSecurityLookup(SecurityLookupMessage lookupMsg)

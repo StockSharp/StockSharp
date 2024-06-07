@@ -1,12 +1,5 @@
 namespace StockSharp.Coinbase
 {
-	using System;
-
-	using Ecng.Common;
-
-	using StockSharp.Localization;
-	using StockSharp.Messages;
-
 	static class Extensions
 	{
 		public static string ToNative(this Sides side)

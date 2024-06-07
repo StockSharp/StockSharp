@@ -1,13 +1,7 @@
 namespace StockSharp.Coinbase
 {
-	using System;
 	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
-
-	using Ecng.Collections;
-
-	using StockSharp.Localization;
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// <see cref="Coinbase"/> order condition.

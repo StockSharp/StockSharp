@@ -1,15 +1,5 @@
 namespace StockSharp.Bitexbook
 {
-	using System;
-
-	using Ecng.Collections;
-	using Ecng.Common;
-
-	using StockSharp.Localization;
-	using StockSharp.Messages;
-
-	using Order = StockSharp.Bitexbook.Native.Model.Order;
-
 	public partial class BitexbookMessageAdapter
 	{
 		private string PortfolioName => nameof(Bitexbook) + "_" + Key.ToId();

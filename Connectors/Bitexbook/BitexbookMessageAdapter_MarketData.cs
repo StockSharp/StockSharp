@@ -1,14 +1,5 @@
 namespace StockSharp.Bitexbook
 {
-	using System;
-	using System.Collections.Generic;
-
-	using Ecng.Collections;
-	using Ecng.Common;
-
-	using StockSharp.Messages;
-	using StockSharp.Bitexbook.Native.Model;
-
 	public partial class BitexbookMessageAdapter
 	{
 		private readonly SynchronizedDictionary<string, SecurityId> _secIdMapping = new(StringComparer.InvariantCultureIgnoreCase);

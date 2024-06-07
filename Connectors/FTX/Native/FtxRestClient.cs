@@ -1,28 +1,18 @@
 ﻿namespace StockSharp.FTX.Native
 {
 	using System.Web;
+	using System.Net.Http;
 	using System.Security;
 	using System.Security.Cryptography;
 	using System.Text;
-	using Ecng.Common;
-	using Ecng.Net;
-	using Ecng.Serialization;
-	using FTX.Native.Model;
+
 	using Newtonsoft.Json.Linq;
-	using RestSharp;
-	using StockSharp.Logging;
-	using StockSharp.Messages;
-	using Candle = Model.Candle;
-	using System;
-	using System.Collections.Generic;
-	using System.Net.Http;
 
 	/// <summary>
 	/// REST API Client of <see cref="FTX"/> adapter
 	/// </summary>
 	internal class FtxRestClient : BaseLogReceiver
 	{
-		private static readonly DateTime _epochTime = new(1970, 1, 1, 0, 0, 0);
 		private readonly SecureString _key;
 		private readonly HMACSHA256 _hasher;
 
@@ -124,7 +114,7 @@
 				(price.HasValue ? $"\"price\": {price.Value}," : "\"price\": null,") +
 				$"\"type\": \"{orderType.ToString().ToLower()}\"," +
 				$"\"size\": {amount}," +
-				$"\"clientId\": {(string.IsNullOrEmpty(clientId) ? "null" : $"\"{clientId}\"")}}}";
+				$"\"clientId\": {(clientId.IsEmpty() ? "null" : $"\"{clientId}\"")}}}";
 			return ProcessSignedRequest<Order>(Method.Post, "api/orders", subaccountName, body);
 		}
 
@@ -179,18 +169,18 @@
 
 		private static long GetMillisecondsFromEpochStart(DateTime time)
 		{
-			if(time <= _epochTime)
+			if(time <= TimeHelper.GregorianStart)
 				return 0;
 
-			return (long)(time - _epochTime).TotalMilliseconds;
+			return (long)time.ToUnix(false);
 		}
 
 		private static long GetSecondsFromEpochStart(DateTime time)
 		{
-			if(time <= _epochTime)
+			if(time <= TimeHelper.GregorianStart)
 				return 0;
 
-			return (long)(time - _epochTime).TotalSeconds;
+			return (long)time.ToUnix();
 		}
 
 		private Uri GetUri(string endpoint)
@@ -201,7 +191,7 @@
 		private dynamic ProcessRequest(Method method, string endpoint, string jsonBody = null)
 		{
 			var request = new RestRequest((string)null, method);
-			if (!string.IsNullOrEmpty(jsonBody))
+			if (!jsonBody.IsEmpty())
 			{
 				request.AddParameter("json", jsonBody, ParameterType.RequestBody);
 			}
@@ -226,7 +216,7 @@
 			long nonce = GetMillisecondsFromEpochStart();
 			var request = new RestRequest((string)null, method);
 			string signature = $"{nonce}{method.ToString().ToUpper()}/{endpoint}";
-			if (!string.IsNullOrEmpty(jsonBody))
+			if (!jsonBody.IsEmpty())
 			{
 				request.AddParameter("application/json; charset=utf-8", jsonBody, ParameterType.RequestBody);
 				signature += jsonBody;
@@ -238,7 +228,7 @@
 			request.AddHeader("FTX-SIGN", sign);
 			request.AddHeader("FTX-TS", nonce.ToString());
 
-			if (!string.IsNullOrEmpty(subaccountName))
+			if (!subaccountName.IsEmpty())
 			{
 				request.AddHeader("FTX-SUBACCOUNT", HttpUtility.UrlEncode(subaccountName));
 			}

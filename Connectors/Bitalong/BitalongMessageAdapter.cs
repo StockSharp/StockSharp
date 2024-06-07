@@ -1,13 +1,5 @@
 namespace StockSharp.Bitalong
 {
-	using System;
-
-	using Ecng.Common;
-
-	using StockSharp.Localization;
-	using StockSharp.Messages;
-	using StockSharp.Bitalong.Native;
-
 	[OrderCondition(typeof(BitalongOrderCondition))]
 	public partial class BitalongMessageAdapter : MessageAdapter
 	{
