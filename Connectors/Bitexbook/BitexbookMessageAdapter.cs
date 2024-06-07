@@ -1,234 +1,233 @@
-namespace StockSharp.Bitexbook
+namespace StockSharp.Bitexbook;
+
+[OrderCondition(typeof(BitexbookOrderCondition))]
+public partial class BitexbookMessageAdapter : MessageAdapter
 {
-	[OrderCondition(typeof(BitexbookOrderCondition))]
-	public partial class BitexbookMessageAdapter : MessageAdapter
+	private HttpClient _httpClient;
+	private PusherClient _pusherClient;
+	private DateTimeOffset? _lastTimeBalanceCheck;
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="BitexbookMessageAdapter"/>.
+	/// </summary>
+	/// <param name="transactionIdGenerator">Transaction id generator.</param>
+	public BitexbookMessageAdapter(IdGenerator transactionIdGenerator)
+		: base(transactionIdGenerator)
 	{
-		private HttpClient _httpClient;
-		private PusherClient _pusherClient;
-		private DateTimeOffset? _lastTimeBalanceCheck;
+		HeartbeatInterval = TimeSpan.FromSeconds(1);
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BitexbookMessageAdapter"/>.
-		/// </summary>
-		/// <param name="transactionIdGenerator">Transaction id generator.</param>
-		public BitexbookMessageAdapter(IdGenerator transactionIdGenerator)
-			: base(transactionIdGenerator)
+		this.AddMarketDataSupport();
+		this.AddTransactionalSupport();
+		this.RemoveSupportedMessage(MessageTypes.Portfolio);
+		this.RemoveSupportedMessage(MessageTypes.OrderReplace);
+		this.RemoveSupportedMessage(MessageTypes.OrderGroupCancel);
+
+		this.AddSupportedMarketDataType(DataType.CandleTimeFrame);
+		this.AddSupportedMarketDataType(DataType.OrderLog);
+
+		this.AddSupportedResultMessage(MessageTypes.SecurityLookup);
+		this.AddSupportedResultMessage(MessageTypes.PortfolioLookup);
+		this.AddSupportedResultMessage(MessageTypes.OrderStatus);
+	}
+
+	/// <inheritdoc />
+	public override bool IsAllDownloadingSupported(DataType dataType)
+		=> dataType == DataType.Securities || base.IsAllDownloadingSupported(dataType);
+
+	/// <inheritdoc />
+	protected override IEnumerable<TimeSpan> TimeFrames => AllTimeFrames;
+
+	/// <inheritdoc />
+	public override string AssociatedBoard => BoardCodes.Bitexbook;
+
+	private void SubscribePusherClient()
+	{
+		_pusherClient.Connected += SessionOnPusherConnected;
+		_pusherClient.Disconnected += SessionOnPusherDisconnected;
+		_pusherClient.Error += SessionOnPusherError;
+		_pusherClient.NewSymbols += SessionOnNewSymbols;
+		_pusherClient.TickerChanged += SessionOnTickerChanged;
+		_pusherClient.NewTickerChange += SessionOnNewTickerChange;
+		_pusherClient.TicketsActive += SessionOnTicketsActive;
+		_pusherClient.TicketAdded += SessionOnTicketAdded;
+		_pusherClient.TicketCanceled += SessionOnTicketCanceled;
+		_pusherClient.TicketExecuted += SessionOnTicketExecuted;
+	}
+
+	private void UnsubscribePusherClient()
+	{
+		_pusherClient.Connected -= SessionOnPusherConnected;
+		_pusherClient.Disconnected -= SessionOnPusherDisconnected;
+		_pusherClient.Error -= SessionOnPusherError;
+		_pusherClient.NewSymbols -= SessionOnNewSymbols;
+		_pusherClient.TickerChanged -= SessionOnTickerChanged;
+		_pusherClient.NewTickerChange -= SessionOnNewTickerChange;
+		_pusherClient.TicketsActive -= SessionOnTicketsActive;
+		_pusherClient.TicketAdded -= SessionOnTicketAdded;
+		_pusherClient.TicketCanceled -= SessionOnTicketCanceled;
+		_pusherClient.TicketExecuted -= SessionOnTicketExecuted;
+	}
+
+	/// <inheritdoc />
+	protected override bool OnSendInMessage(Message message)
+	{
+		switch (message.Type)
 		{
-			HeartbeatInterval = TimeSpan.FromSeconds(1);
-
-			this.AddMarketDataSupport();
-			this.AddTransactionalSupport();
-			this.RemoveSupportedMessage(MessageTypes.Portfolio);
-			this.RemoveSupportedMessage(MessageTypes.OrderReplace);
-			this.RemoveSupportedMessage(MessageTypes.OrderGroupCancel);
-
-			this.AddSupportedMarketDataType(DataType.CandleTimeFrame);
-			this.AddSupportedMarketDataType(DataType.OrderLog);
-
-			this.AddSupportedResultMessage(MessageTypes.SecurityLookup);
-			this.AddSupportedResultMessage(MessageTypes.PortfolioLookup);
-			this.AddSupportedResultMessage(MessageTypes.OrderStatus);
-		}
-
-		/// <inheritdoc />
-		public override bool IsAllDownloadingSupported(DataType dataType)
-			=> dataType == DataType.Securities || base.IsAllDownloadingSupported(dataType);
-
-		/// <inheritdoc />
-		protected override IEnumerable<TimeSpan> TimeFrames => AllTimeFrames;
-
-		/// <inheritdoc />
-		public override string AssociatedBoard => BoardCodes.Bitexbook;
-
-		private void SubscribePusherClient()
-		{
-			_pusherClient.Connected += SessionOnPusherConnected;
-			_pusherClient.Disconnected += SessionOnPusherDisconnected;
-			_pusherClient.Error += SessionOnPusherError;
-			_pusherClient.NewSymbols += SessionOnNewSymbols;
-			_pusherClient.TickerChanged += SessionOnTickerChanged;
-			_pusherClient.NewTickerChange += SessionOnNewTickerChange;
-			_pusherClient.TicketsActive += SessionOnTicketsActive;
-			_pusherClient.TicketAdded += SessionOnTicketAdded;
-			_pusherClient.TicketCanceled += SessionOnTicketCanceled;
-			_pusherClient.TicketExecuted += SessionOnTicketExecuted;
-		}
-
-		private void UnsubscribePusherClient()
-		{
-			_pusherClient.Connected -= SessionOnPusherConnected;
-			_pusherClient.Disconnected -= SessionOnPusherDisconnected;
-			_pusherClient.Error -= SessionOnPusherError;
-			_pusherClient.NewSymbols -= SessionOnNewSymbols;
-			_pusherClient.TickerChanged -= SessionOnTickerChanged;
-			_pusherClient.NewTickerChange -= SessionOnNewTickerChange;
-			_pusherClient.TicketsActive -= SessionOnTicketsActive;
-			_pusherClient.TicketAdded -= SessionOnTicketAdded;
-			_pusherClient.TicketCanceled -= SessionOnTicketCanceled;
-			_pusherClient.TicketExecuted -= SessionOnTicketExecuted;
-		}
-
-		/// <inheritdoc />
-		protected override bool OnSendInMessage(Message message)
-		{
-			switch (message.Type)
+			case MessageTypes.Reset:
 			{
-				case MessageTypes.Reset:
+				if (_httpClient != null)
 				{
-					if (_httpClient != null)
+					try
 					{
-						try
-						{
-							_httpClient.Dispose();
-						}
-						catch (Exception ex)
-						{
-							SendOutError(ex);
-						}
-
-						_httpClient = null;
+						_httpClient.Dispose();
+					}
+					catch (Exception ex)
+					{
+						SendOutError(ex);
 					}
 
-					if (_pusherClient != null)
-					{
-						try
-						{
-							UnsubscribePusherClient();
-							_pusherClient.Disconnect();
-						}
-						catch (Exception ex)
-						{
-							SendOutError(ex);
-						}
-
-						_pusherClient = null;
-					}
-
-					_secIdMapping.Clear();
-
-					_orderInfo.Clear();
-					_lastTimeBalanceCheck = null;
-
-					SendOutMessage(new ResetMessage());
-
-					break;
-				}
-
-				case MessageTypes.Connect:
-				{
-					//if (this.IsTransactional())
-					//{
-					//	if (Key.IsEmpty())
-					//		throw new InvalidOperationException(LocalizedStrings.KeyNotSpecified);
-						
-					//	if (Secret.IsEmpty())
-					//		throw new InvalidOperationException(LocalizedStrings.SecretNotSpecified);
-					//}
-
-					if (_httpClient != null)
-						throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
-
-					if (_pusherClient != null)
-						throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
-
-					_httpClient = new HttpClient(Key, Secret) { Parent = this };
-
-					_pusherClient = new PusherClient { Parent = this };
-					SubscribePusherClient();
-					_pusherClient.Connect();
-
-					break;
-				}
-
-				case MessageTypes.Disconnect:
-				{
-					if (_httpClient == null)
-						throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
-
-					if (_pusherClient == null)
-						throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
-
-					_httpClient.Dispose();
 					_httpClient = null;
-
-					_pusherClient.Disconnect();
-
-					break;
 				}
 
-				case MessageTypes.PortfolioLookup:
+				if (_pusherClient != null)
 				{
-					ProcessPortfolioLookup((PortfolioLookupMessage)message);
-					break;
-				}
-
-				case MessageTypes.OrderStatus:
-				{
-					ProcessOrderStatus((OrderStatusMessage)message);
-					break;
-				}
-
-				case MessageTypes.OrderRegister:
-				{
-					ProcessOrderRegister((OrderRegisterMessage)message);
-					break;
-				}
-
-				case MessageTypes.OrderCancel:
-				{
-					ProcessOrderCancel((OrderCancelMessage)message);
-					break;
-				}
-
-				case MessageTypes.Time:
-				{
-					if (_orderInfo.Count > 0)
+					try
 					{
-						ProcessOrderStatus(null);
-						ProcessPortfolioLookup(null);
+						UnsubscribePusherClient();
+						_pusherClient.Disconnect();
+					}
+					catch (Exception ex)
+					{
+						SendOutError(ex);
 					}
 
-					if (BalanceCheckInterval > TimeSpan.Zero &&
-					    (_lastTimeBalanceCheck == null || (CurrentTime - _lastTimeBalanceCheck) > BalanceCheckInterval))
-					{
-						ProcessPortfolioLookup(null);
-					}
-
-					break;
+					_pusherClient = null;
 				}
 
-				case MessageTypes.SecurityLookup:
-				{
-					ProcessSecurityLookup((SecurityLookupMessage)message);
-					break;
-				}
+				_secIdMapping.Clear();
 
-				case MessageTypes.MarketData:
-				{
-					ProcessMarketData((MarketDataMessage)message);
-					break;
-				}
-			
-				default:
-					return false;
+				_orderInfo.Clear();
+				_lastTimeBalanceCheck = null;
+
+				SendOutMessage(new ResetMessage());
+
+				break;
 			}
 
-			return true;
+			case MessageTypes.Connect:
+			{
+				//if (this.IsTransactional())
+				//{
+				//	if (Key.IsEmpty())
+				//		throw new InvalidOperationException(LocalizedStrings.KeyNotSpecified);
+					
+				//	if (Secret.IsEmpty())
+				//		throw new InvalidOperationException(LocalizedStrings.SecretNotSpecified);
+				//}
+
+				if (_httpClient != null)
+					throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
+
+				if (_pusherClient != null)
+					throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
+
+				_httpClient = new HttpClient(Key, Secret) { Parent = this };
+
+				_pusherClient = new PusherClient { Parent = this };
+				SubscribePusherClient();
+				_pusherClient.Connect();
+
+				break;
+			}
+
+			case MessageTypes.Disconnect:
+			{
+				if (_httpClient == null)
+					throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
+
+				if (_pusherClient == null)
+					throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
+
+				_httpClient.Dispose();
+				_httpClient = null;
+
+				_pusherClient.Disconnect();
+
+				break;
+			}
+
+			case MessageTypes.PortfolioLookup:
+			{
+				ProcessPortfolioLookup((PortfolioLookupMessage)message);
+				break;
+			}
+
+			case MessageTypes.OrderStatus:
+			{
+				ProcessOrderStatus((OrderStatusMessage)message);
+				break;
+			}
+
+			case MessageTypes.OrderRegister:
+			{
+				ProcessOrderRegister((OrderRegisterMessage)message);
+				break;
+			}
+
+			case MessageTypes.OrderCancel:
+			{
+				ProcessOrderCancel((OrderCancelMessage)message);
+				break;
+			}
+
+			case MessageTypes.Time:
+			{
+				if (_orderInfo.Count > 0)
+				{
+					ProcessOrderStatus(null);
+					ProcessPortfolioLookup(null);
+				}
+
+				if (BalanceCheckInterval > TimeSpan.Zero &&
+				    (_lastTimeBalanceCheck == null || (CurrentTime - _lastTimeBalanceCheck) > BalanceCheckInterval))
+				{
+					ProcessPortfolioLookup(null);
+				}
+
+				break;
+			}
+
+			case MessageTypes.SecurityLookup:
+			{
+				ProcessSecurityLookup((SecurityLookupMessage)message);
+				break;
+			}
+
+			case MessageTypes.MarketData:
+			{
+				ProcessMarketData((MarketDataMessage)message);
+				break;
+			}
+		
+			default:
+				return false;
 		}
 
-		private void SessionOnPusherConnected()
-		{
-			SendOutMessage(new ConnectMessage());
-		}
+		return true;
+	}
 
-		private void SessionOnPusherError(Exception exception)
-		{
-			SendOutError(exception);
-		}
+	private void SessionOnPusherConnected()
+	{
+		SendOutMessage(new ConnectMessage());
+	}
 
-		private void SessionOnPusherDisconnected(bool expected)
-		{
-			SendOutDisconnectMessage(expected);
-		}
+	private void SessionOnPusherError(Exception exception)
+	{
+		SendOutError(exception);
+	}
+
+	private void SessionOnPusherDisconnected(bool expected)
+	{
+		SendOutDisconnectMessage(expected);
 	}
 }

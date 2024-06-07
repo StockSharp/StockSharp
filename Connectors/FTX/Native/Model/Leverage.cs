@@ -1,9 +1,8 @@
-﻿namespace StockSharp.FTX.Native.Model
+﻿namespace StockSharp.FTX.Native.Model;
+
+[Obfuscation(Feature = "renaming", ApplyToMembers = true)]
+internal class Leverage
 {
-	[Obfuscation(Feature = "renaming", ApplyToMembers = true)]
-	internal class Leverage
-	{
-		[JsonProperty("leverage")]
-		public decimal? Cost { get; set; }
-	}
+	[JsonProperty("leverage")]
+	public decimal? Cost { get; set; }
 }

@@ -1,142 +1,105 @@
-namespace StockSharp.Coinbase
+namespace StockSharp.Coinbase;
+
+static class Extensions
 {
-	static class Extensions
+	public static string ToNative(this Sides side)
 	{
-		public static string ToNative(this Sides side)
+		return side switch
 		{
-			switch (side)
-			{
-				case Sides.Buy:
-					return "buy";
-				case Sides.Sell:
-					return "sell";
-				default:
-					throw new ArgumentOutOfRangeException(nameof(side), side, LocalizedStrings.InvalidValue);
-			}
-		}
+			Sides.Buy => "buy",
+			Sides.Sell => "sell",
+			_ => throw new ArgumentOutOfRangeException(nameof(side), side, LocalizedStrings.InvalidValue),
+		};
+	}
 
-		public static Sides ToSide(this string side)
+	public static Sides ToSide(this string side)
+	{
+		return side switch
 		{
-			switch (side)
-			{
-				case "buy":
-					return Sides.Buy;
-				case "sell":
-					return Sides.Sell;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(side), side, LocalizedStrings.InvalidValue);
-			}
-		}
+			"buy" => Sides.Buy,
+			"sell" => Sides.Sell,
+			_ => throw new ArgumentOutOfRangeException(nameof(side), side, LocalizedStrings.InvalidValue),
+		};
+	}
 
-		public static string ToNative(this OrderTypes? type)
+	public static string ToNative(this OrderTypes? type)
+	{
+		return type switch
 		{
-			switch (type)
-			{
-				case null:
-					return null;
-				case OrderTypes.Limit:
-					return "limit";
-				case OrderTypes.Market:
-					return "market";
-				case OrderTypes.Conditional:
-					return "stop";
-				default:
-					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue);
-			}
-		}
+			null => null,
+			OrderTypes.Limit => "limit",
+			OrderTypes.Market => "market",
+			OrderTypes.Conditional => "stop",
+			_ => throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue),
+		};
+	}
 
-		public static OrderTypes ToOrderType(this string type)
+	public static OrderTypes ToOrderType(this string type)
+	{
+		return type switch
 		{
-			switch (type)
-			{
-				case "limit":
-					return OrderTypes.Limit;
-				case "market":
-					return OrderTypes.Market;
-				case "stop":
-					return OrderTypes.Conditional;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue);
-			}
-		}
+			"limit" => OrderTypes.Limit,
+			"market" => OrderTypes.Market,
+			"stop" => OrderTypes.Conditional,
+			_ => throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue),
+		};
+	}
 
-		public static OrderStates ToOrderState(this string type)
+	public static OrderStates ToOrderState(this string type)
+	{
+		return type switch
 		{
-			switch (type)
-			{
-				case "pending":
-				case "received":
-					return OrderStates.Pending;
-				case "open":
-				case "active":
-					return OrderStates.Active;
-				case "filled":
-				case "done":
-				case "canceled":
-				case "settled":
-					return OrderStates.Done;
-				case "rejected":
-					return OrderStates.Failed;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue);
-			}
-		}
+			"pending" or "received" => OrderStates.Pending,
+			"open" or "active" => OrderStates.Active,
+			"filled" or "done" or "canceled" or "settled" => OrderStates.Done,
+			"rejected" => OrderStates.Failed,
+			_ => throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue),
+		};
+	}
 
-		public static string ToNative(this TimeInForce? tif, DateTimeOffset? tillDate)
+	public static string ToNative(this TimeInForce? tif, DateTimeOffset? tillDate)
+	{
+		return tif switch
 		{
-			switch (tif)
-			{
-				case null:
-					return null;
-				case TimeInForce.PutInQueue:
-					return tillDate == null ? "GTC" : "GTT";
-				case TimeInForce.CancelBalance:
-					return "IOC";
-				case TimeInForce.MatchOrCancel:
-					return "FOK";
-				default:
-					throw new ArgumentOutOfRangeException(nameof(tif), tif, LocalizedStrings.InvalidValue);
-			}
-		}
+			null => null,
+			TimeInForce.PutInQueue => tillDate == null ? "GTC" : "GTT",
+			TimeInForce.CancelBalance => "IOC",
+			TimeInForce.MatchOrCancel => "FOK",
+			_ => throw new ArgumentOutOfRangeException(nameof(tif), tif, LocalizedStrings.InvalidValue),
+		};
+	}
 
-		public static TimeInForce? ToTimeInForce(this string tif)
+	public static TimeInForce? ToTimeInForce(this string tif)
+	{
+		return tif switch
 		{
-			switch (tif)
-			{
-				case null:
-					return null;
-				case "GTC":
-				case "GTT":
-					return TimeInForce.PutInQueue;
-				case "IOC":
-					return TimeInForce.CancelBalance;
-				case "FOK":
-					return TimeInForce.MatchOrCancel;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(tif), tif, LocalizedStrings.InvalidValue);
-			}
-		}
+			null => null,
+			"GTC" or "GTT" => (TimeInForce?)TimeInForce.PutInQueue,
+			"IOC" => (TimeInForce?)TimeInForce.CancelBalance,
+			"FOK" => (TimeInForce?)TimeInForce.MatchOrCancel,
+			_ => throw new ArgumentOutOfRangeException(nameof(tif), tif, LocalizedStrings.InvalidValue),
+		};
+	}
 
-		public static decimal GetBalance(this Native.Model.Order order)
+	public static decimal GetBalance(this Native.Model.Order order)
+	{
+		if (order == null)
+			throw new ArgumentNullException(nameof(order));
+
+		return (order.Size - order.FilledSize ?? 0).ToDecimal().Value;
+	}
+
+	public static string ToCurrency(this SecurityId securityId)
+	{
+		return securityId.SecurityCode.Replace("/", "-").ToUpperInvariant();
+	}
+
+	public static SecurityId ToStockSharp(this string currency)
+	{
+		return new SecurityId
 		{
-			if (order == null)
-				throw new ArgumentNullException(nameof(order));
-
-			return (order.Size - order.FilledSize ?? 0).ToDecimal().Value;
-		}
-
-		public static string ToCurrency(this SecurityId securityId)
-		{
-			return securityId.SecurityCode.Replace("/", "-").ToUpperInvariant();
-		}
-
-		public static SecurityId ToStockSharp(this string currency)
-		{
-			return new SecurityId
-			{
-				SecurityCode = currency.Replace("-", "/").ToUpperInvariant(),
-				BoardCode = BoardCodes.Coinbase,
-			};
-		}
+			SecurityCode = currency.Replace("-", "/").ToUpperInvariant(),
+			BoardCode = BoardCodes.Coinbase,
+		};
 	}
 }

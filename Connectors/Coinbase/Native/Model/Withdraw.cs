@@ -1,9 +1,8 @@
-namespace StockSharp.Coinbase.Native.Model
+namespace StockSharp.Coinbase.Native.Model;
+
+[Obfuscation(Feature = "renaming", ApplyToMembers = true)]
+class Withdraw
 {
-	[Obfuscation(Feature = "renaming", ApplyToMembers = true)]
-	class Withdraw
-	{
-		[JsonProperty("id")]
-		public string Id { get; set; }
-	}
+	[JsonProperty("id")]
+	public string Id { get; set; }
 }
