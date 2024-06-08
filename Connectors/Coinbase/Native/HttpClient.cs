@@ -18,12 +18,12 @@ class HttpClient : BaseLogReceiver
 	// to get readable name after obfuscation
 	public override string Name => nameof(Coinbase) + "_" + nameof(HttpClient);
 
-	public IEnumerable<Product> GetProducts()
+	public Task<IEnumerable<Product>> GetProducts(CancellationToken cancellationToken)
 	{
-		return MakeRequest<IEnumerable<Product>>(CreateUrl("products"), CreateRequest(Method.Get));
+		return MakeRequest<IEnumerable<Product>>(CreateUrl("products"), CreateRequest(Method.Get), cancellationToken);
 	}
 
-	public IEnumerable<Ohlc> GetCandles(string currency, DateTimeOffset? start, DateTimeOffset? end, int granularity)
+	public Task<IEnumerable<Ohlc>> GetCandles(string currency, DateTimeOffset? start, DateTimeOffset? end, int granularity, CancellationToken cancellationToken)
 	{
 		var request = CreateRequest(Method.Get);
 
@@ -35,16 +35,16 @@ class HttpClient : BaseLogReceiver
 
 		request.AddParameter("granularity", granularity);
 
-		return MakeRequest<IEnumerable<Ohlc>>(CreateUrl($"/products/{currency}/candles"), request);
+		return MakeRequest<IEnumerable<Ohlc>>(CreateUrl($"/products/{currency}/candles"), request, cancellationToken);
 	}
 
-	public IEnumerable<Account> GetAccounts()
+	public Task<IEnumerable<Account>> GetAccounts(CancellationToken cancellationToken)
 	{
 		var url = CreateUrl("accounts");
-		return MakeRequest<IEnumerable<Account>>(url, ApplySecret(CreateRequest(Method.Get), url));
+		return MakeRequest<IEnumerable<Account>>(url, ApplySecret(CreateRequest(Method.Get), url), cancellationToken);
 	}
 
-	public IEnumerable<Order> GetOrders(params string[] status)
+	public Task<IEnumerable<Order>> GetOrders(string[] status, CancellationToken cancellationToken)
 	{
 		if (status == null)
 			throw new ArgumentNullException(nameof(status));
@@ -56,19 +56,19 @@ class HttpClient : BaseLogReceiver
 		foreach (var s in status)
 			request.AddParameter("status", s, ParameterType.QueryString);
 
-		return MakeRequest<IEnumerable<Order>>(url, ApplySecret(request, url));
+		return MakeRequest<IEnumerable<Order>>(url, ApplySecret(request, url), cancellationToken);
 	}
 
-	public Order GetOrderInfo(string orderId)
+	public Task<Order> GetOrderInfo(string orderId, CancellationToken cancellationToken)
 	{
 		var url = CreateUrl($"orders/{orderId}");
 
 		var request = CreateRequest(Method.Get);
 
-		return MakeRequest<Order>(url, ApplySecret(request, url), true);
+		return MakeRequest<Order>(url, ApplySecret(request, url), cancellationToken);
 	}
 
-	public IEnumerable<Fill> GetFills(string orderId)
+	public async Task<IEnumerable<Fill>> GetFills(string orderId, CancellationToken cancellationToken)
 	{
 		var url = CreateUrl("fills");
 
@@ -76,10 +76,10 @@ class HttpClient : BaseLogReceiver
 
 		request.AddParameter("order_id", orderId, ParameterType.QueryString);
 
-		return MakeRequest<IEnumerable<Fill>>(url, ApplySecret(request, url)) ?? Enumerable.Empty<Fill>();
+		return await MakeRequest<IEnumerable<Fill>>(url, ApplySecret(request, url), cancellationToken) ?? Enumerable.Empty<Fill>();
 	}
 
-	public Order RegisterOrder(string currency, string type, Sides side, decimal? price, decimal? stopPrice, decimal volume, TimeInForce? timeInForce, DateTimeOffset? tillDate/*, long transactionId*/)
+	public Task<Order> RegisterOrder(string currency, string type, Sides side, decimal? price, decimal? stopPrice, decimal volume, TimeInForce? timeInForce, DateTimeOffset? tillDate, CancellationToken cancellationToken)
 	{
 		var url = CreateUrl("orders");
 
@@ -110,22 +110,22 @@ class HttpClient : BaseLogReceiver
 			body.stop_price = stopPrice.Value;
 		}
 
-		return MakeRequest<Order>(url, ApplySecret(request, url, (object)body));
+		return MakeRequest<Order>(url, ApplySecret(request, url, (object)body), cancellationToken);
 	}
 
-	public void CancelOrder(string orderId)
+	public Task CancelOrder(string orderId, CancellationToken cancellationToken)
 	{
 		var url = CreateUrl($"orders/{orderId}");
-		MakeRequest<object>(url, ApplySecret(CreateRequest(Method.Delete), url));
+		return MakeRequest<object>(url, ApplySecret(CreateRequest(Method.Delete), url), cancellationToken);
 	}
 
-	public string[] CancelAllOrders()
+	public Task<string[]> CancelAllOrders(CancellationToken cancellationToken)
 	{
 		var url = CreateUrl("orders");
-		return MakeRequest<string[]>(url, ApplySecret(CreateRequest(Method.Delete), url));
+		return MakeRequest<string[]>(url, ApplySecret(CreateRequest(Method.Delete), url), cancellationToken);
 	}
 
-	public string Withdraw(string currency, decimal volume, WithdrawInfo info)
+	public async Task<string> Withdraw(string currency, decimal volume, WithdrawInfo info, CancellationToken cancellationToken)
 	{
 		if (info == null)
 			throw new ArgumentNullException(nameof(info));
@@ -165,7 +165,7 @@ class HttpClient : BaseLogReceiver
 				throw new NotSupportedException(LocalizedStrings.WithdrawTypeNotSupported.Put(info.Type));
 		}
 
-		return MakeRequest<Withdraw>(url, ApplySecret(request, url, (object)body)).Id;
+		return (await MakeRequest<Withdraw>(url, ApplySecret(request, url, (object)body), cancellationToken)).Id;
 	}
 
 	private static Uri CreateUrl(string methodName, string version = "")
@@ -220,10 +220,10 @@ class HttpClient : BaseLogReceiver
 
 	private static readonly JsonSerializerSettings _serializerSettings = JsonHelper.CreateJsonSerializerSettings();
 
-	private T MakeRequest<T>(Uri url, RestRequest request, bool is404AsNull = false)
+	private async Task<T> MakeRequest<T>(Uri url, RestRequest request, CancellationToken cancellationToken)
 		where T : class
 	{
-		dynamic obj = request.Invoke(url, this, this.AddVerboseLog);
+		dynamic obj = await request.InvokeAsync(url, this, this.AddVerboseLog, cancellationToken);
 
 		if (((JToken)obj).Type == JTokenType.Object && (string)obj.type == "error")
 			throw new InvalidOperationException((string)obj.message + " " + (string)obj.reason);

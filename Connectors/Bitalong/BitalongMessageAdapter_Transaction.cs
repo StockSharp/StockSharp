@@ -6,7 +6,8 @@ public partial class BitalongMessageAdapter
 
 	private readonly SynchronizedDictionary<long, RefTriple<long, decimal, string>> _orderInfo = new();
 
-	private void ProcessOrderRegister(OrderRegisterMessage regMsg)
+	/// <inheritdoc />
+	public override async ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
 	{
 		var symbol = regMsg.SecurityId.ToNative();
 
@@ -23,7 +24,7 @@ public partial class BitalongMessageAdapter
 				if (!condition.IsWithdraw)
 					throw new NotSupportedException(LocalizedStrings.OrderUnsupportedType.Put(regMsg.OrderType, regMsg.TransactionId));
 
-				_httpClient.Withdraw(symbol, regMsg.Volume, condition.WithdrawInfo);
+				await _httpClient.Withdraw(symbol, regMsg.Volume, condition.WithdrawInfo, cancellationToken);
 
 				SendOutMessage(new ExecutionMessage
 				{
@@ -34,7 +35,7 @@ public partial class BitalongMessageAdapter
 					HasOrderInfo = true,
 				});
 
-				ProcessPortfolioLookup(null);
+				await PortfolioLookupAsync(null, cancellationToken);
 				return;
 			}
 			default:
@@ -43,7 +44,7 @@ public partial class BitalongMessageAdapter
 
 		var isMarket = regMsg.OrderType == OrderTypes.Market;
 
-		var orderId = _httpClient.RegisterOrder(symbol, regMsg.Side.ToNative(), regMsg.Price, regMsg.Volume);
+		var orderId = await _httpClient.RegisterOrder(symbol, regMsg.Side.ToNative(), regMsg.Price, regMsg.Volume, cancellationToken);
 
 		SendOutMessage(new ExecutionMessage
 		{
@@ -63,15 +64,16 @@ public partial class BitalongMessageAdapter
 		else
 			_orderInfo.Add(orderId, RefTuple.Create(regMsg.TransactionId, regMsg.Volume, symbol));
 
-		ProcessPortfolioLookup(null);
+		await PortfolioLookupAsync(null, cancellationToken);
 	}
 
-	private void ProcessOrderCancel(OrderCancelMessage cancelMsg)
+	/// <inheritdoc />
+	public override async ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
 		if (cancelMsg.OrderId == null)
 			throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(cancelMsg.OriginalTransactionId));
 
-		_httpClient.CancelOrder(cancelMsg.SecurityId.ToNative(), cancelMsg.OrderId.Value);
+		await _httpClient.CancelOrder(cancelMsg.SecurityId.ToNative(), cancelMsg.OrderId.Value, cancellationToken);
 
 		//SendOutMessage(new ExecutionMessage
 		//{
@@ -82,33 +84,37 @@ public partial class BitalongMessageAdapter
 		//	HasOrderInfo = true,
 		//});
 
-		ProcessOrderStatus(null);
-		ProcessPortfolioLookup(null);
+		await OrderStatusAsync(null, cancellationToken);
+		await PortfolioLookupAsync(null, cancellationToken);
 	}
 
-	private void ProcessOrderGroupCancel(OrderGroupCancelMessage message)
+	/// <inheritdoc />
+	public override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
-		_httpClient.CancelAllOrders(message.SecurityId.ToNative(), message.Side);
+		await _httpClient.CancelAllOrders(cancelMsg.SecurityId.ToNative(), cancelMsg.Side, cancellationToken);
 	}
 
-	private void ProcessPortfolioLookup(PortfolioLookupMessage message)
+	/// <inheritdoc />
+	public override async ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
-		if (message != null)
+		if (lookupMsg != null)
 		{
-			if (!message.IsSubscribe)
+			SendSubscriptionReply(lookupMsg.TransactionId);
+
+			if (!lookupMsg.IsSubscribe)
 				return;
 
 			SendOutMessage(new PortfolioMessage
 			{
 				PortfolioName = PortfolioName,
 				BoardCode = BoardCodes.Bitalong,
-				OriginalTransactionId = message.TransactionId
+				OriginalTransactionId = lookupMsg.TransactionId
 			});
 
-			SendSubscriptionResult(message);
+			SendSubscriptionResult(lookupMsg);
 		}
 
-		var tuple = _httpClient.GetBalances();
+		var tuple = await _httpClient.GetBalances(cancellationToken);
 
 		PositionChangeMessage CreateMessage(string asset)
 		{
@@ -140,16 +146,17 @@ public partial class BitalongMessageAdapter
 		_lastTimeBalanceCheck = CurrentTime;
 	}
 
-	private void ProcessOrderStatus(OrderStatusMessage message)
+	/// <inheritdoc />
+	public override async ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
 	{
-		if (message == null)
+		if (statusMsg == null)
 		{
 			if (_orderInfo.Count == 0)
 				return;
 
 			var portfolioRefresh = false;
 
-			var opened = _httpClient.GetOrders();
+			var opened = await _httpClient.GetOrders(cancellationToken);
 
 			var uuids = _orderInfo.Keys.ToSet();
 
@@ -201,7 +208,7 @@ public partial class BitalongMessageAdapter
 			{
 				var info = _orderInfo.GetAndRemove(orderId);
 
-				var order = _httpClient.GetOrderInfo(info.Third, orderId);
+				var order = await _httpClient.GetOrderInfo(info.Third, orderId, cancellationToken);
 
 				ProcessOrder(order, 0, info.First);
 				//ProcessTrades(order.Trades, info.Third, transId);
@@ -210,21 +217,23 @@ public partial class BitalongMessageAdapter
 			}
 
 			if (portfolioRefresh)
-				ProcessPortfolioLookup(null);
+				await PortfolioLookupAsync(null, cancellationToken);
 		}
 		else
 		{
-			if (!message.IsSubscribe)
+			SendSubscriptionReply(statusMsg.TransactionId);
+
+			if (!statusMsg.IsSubscribe)
 				return;
 
-			foreach (var order in _httpClient.GetOrders())
+			foreach (var order in await _httpClient.GetOrders(cancellationToken))
 			{
 				var transId = TransactionIdGenerator.GetNextId();
 				_orderInfo.Add(transId, RefTuple.Create(order.Id, (decimal)order.Amount, order.CurrencyPair));
-				ProcessOrder(order, transId, message.TransactionId);
+				ProcessOrder(order, transId, statusMsg.TransactionId);
 			}
 		
-			SendSubscriptionResult(message);
+			SendSubscriptionResult(statusMsg);
 		}
 	}
 

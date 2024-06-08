@@ -1,7 +1,7 @@
 namespace StockSharp.Bitalong;
 
 [OrderCondition(typeof(BitalongOrderCondition))]
-public partial class BitalongMessageAdapter : MessageAdapter
+public partial class BitalongMessageAdapter
 {
 	private HttpClient _httpClient;
 	private DateTimeOffset? _lastTimeBalanceCheck;
@@ -37,135 +37,83 @@ public partial class BitalongMessageAdapter : MessageAdapter
 	public override string AssociatedBoard => BoardCodes.Bitalong;
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	public override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
-		switch (message.Type)
+		if (_httpClient != null)
 		{
-			case MessageTypes.Reset:
+			try
 			{
-				if (_httpClient != null)
-				{
-					try
-					{
-						_httpClient.Dispose();
-					}
-					catch (Exception ex)
-					{
-						SendOutError(ex);
-					}
-
-					_httpClient = null;
-				}
-
-				_orderInfo.Clear();
-				_lastTimeBalanceCheck = null;
-
-				_orderBookSubscriptions.Clear();
-				_tradesSubscriptions.Clear();
-				_level1Subscriptions.Clear();
-
-				SendOutMessage(new ResetMessage());
-
-				break;
-			}
-
-			case MessageTypes.Connect:
-			{
-				if (this.IsTransactional())
-				{
-					if (Key.IsEmpty())
-						throw new InvalidOperationException(LocalizedStrings.KeyNotSpecified);
-					
-					if (Secret.IsEmpty())
-						throw new InvalidOperationException(LocalizedStrings.SecretNotSpecified);
-				}
-
-				if (_httpClient != null)
-					throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
-
-				_httpClient = new HttpClient(Address, Key, Secret) { Parent = this };
-
-				SendOutMessage(new ConnectMessage());
-				break;
-			}
-
-			case MessageTypes.Disconnect:
-			{
-				if (_httpClient == null)
-					throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
-
 				_httpClient.Dispose();
-				_httpClient = null;
-
-				SendOutMessage(new DisconnectMessage());
-				break;
 			}
-
-			case MessageTypes.PortfolioLookup:
+			catch (Exception ex)
 			{
-				ProcessPortfolioLookup((PortfolioLookupMessage)message);
-				break;
+				SendOutError(ex);
 			}
 
-			case MessageTypes.OrderStatus:
-			{
-				ProcessOrderStatus((OrderStatusMessage)message);
-				break;
-			}
-
-			case MessageTypes.OrderRegister:
-			{
-				ProcessOrderRegister((OrderRegisterMessage)message);
-				break;
-			}
-
-			case MessageTypes.OrderCancel:
-			{
-				ProcessOrderCancel((OrderCancelMessage)message);
-				break;
-			}
-
-			case MessageTypes.OrderGroupCancel:
-			{
-				ProcessOrderGroupCancel((OrderGroupCancelMessage)message);
-				break;
-			}
-
-			case MessageTypes.Time:
-			{
-				if (_orderInfo.Count > 0)
-				{
-					ProcessOrderStatus(null);
-					ProcessPortfolioLookup(null);
-				}
-
-				if (BalanceCheckInterval > TimeSpan.Zero &&
-				    (_lastTimeBalanceCheck == null || (CurrentTime - _lastTimeBalanceCheck) > BalanceCheckInterval))
-				{
-					ProcessPortfolioLookup(null);
-				}
-
-				ProcessSubscriptions();
-
-				break;
-			}
-
-			case MessageTypes.SecurityLookup:
-			{
-				ProcessSecurityLookup((SecurityLookupMessage)message);
-				break;
-			}
-
-			case MessageTypes.MarketData:
-			{
-				ProcessMarketData((MarketDataMessage)message);
-				break;
-			}
-		
-			default:
-				return false;
+			_httpClient = null;
 		}
 
-		return true;
+		_orderInfo.Clear();
+		_lastTimeBalanceCheck = null;
+
+		_orderBookSubscriptions.Clear();
+		_tradesSubscriptions.Clear();
+		_level1Subscriptions.Clear();
+
+		SendOutMessage(new ResetMessage());
+
+		return default;
+	}
+
+	/// <inheritdoc />
+	public override ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
+	{
+		if (this.IsTransactional())
+		{
+			if (Key.IsEmpty())
+				throw new InvalidOperationException(LocalizedStrings.KeyNotSpecified);
+
+			if (Secret.IsEmpty())
+				throw new InvalidOperationException(LocalizedStrings.SecretNotSpecified);
+		}
+
+		if (_httpClient != null)
+			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
+
+		_httpClient = new HttpClient(Address, Key, Secret) { Parent = this };
+
+		SendOutMessage(new ConnectMessage());
+		return default;
+	}
+
+	/// <inheritdoc />
+	public override ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
+	{
+		if (_httpClient == null)
+			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
+
+		_httpClient.Dispose();
+		_httpClient = null;
+
+		SendOutMessage(new DisconnectMessage());
+		return default;
+	}
+
+	/// <inheritdoc />
+	public override async ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
+	{
+		if (_orderInfo.Count > 0)
+		{
+			await OrderStatusAsync(null, cancellationToken);
+			await PortfolioLookupAsync(null, cancellationToken);
+		}
+
+		if (BalanceCheckInterval > TimeSpan.Zero &&
+			(_lastTimeBalanceCheck == null || (CurrentTime - _lastTimeBalanceCheck) > BalanceCheckInterval))
+		{
+			await PortfolioLookupAsync(null, cancellationToken);
+		}
+
+		await ProcessSubscriptions(cancellationToken);
 	}
 }

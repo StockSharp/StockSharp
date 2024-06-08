@@ -4,71 +4,78 @@ public partial class BitexbookMessageAdapter
 {
 	private readonly SynchronizedDictionary<string, SecurityId> _secIdMapping = new(StringComparer.InvariantCultureIgnoreCase);
 
-	private void ProcessSecurityLookup(SecurityLookupMessage message)
+	/// <inheritdoc />
+	public override async ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
-		foreach (var symbol in _httpClient.GetSymbols())
+		var left = lookupMsg.Count ?? long.MaxValue;
+
+		foreach (var symbol in await _httpClient.GetSymbols(cancellationToken))
 		{
-			ProcessSymbol(symbol, message.TransactionId);
+			SendOutMessage(new SecurityMessage
+			{
+				SecurityId = symbol.Alias.ToStockSharp(),
+				MinVolume = (decimal?)symbol.MinAmount,
+				OriginalTransactionId = lookupMsg.TransactionId,
+				SecurityType = SecurityTypes.CryptoCurrency,
+			}
+			.TryFillUnderlyingId(symbol.CurrencyBase)
+			.FillDefaultCryptoFields());
+
+			if (--left <= 0)
+				break;
 		}
 
-		SendSubscriptionResult(message);
+		SendSubscriptionResult(lookupMsg);
 	}
 
-	private void ProcessMarketData(MarketDataMessage mdMsg)
+	/// <inheritdoc />
+	protected override ValueTask OnOrderLogSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		var secId = mdMsg.SecurityId;
-		var transId = mdMsg.TransactionId;
+		SendSubscriptionReply(mdMsg.TransactionId);
 
+		var secId = mdMsg.SecurityId;
 		var symbol = secId.ToNative();
 
-		switch (mdMsg.DataType)
+		if (mdMsg.IsSubscribe)
+			return _pusherClient.SubscribeTicker(symbol, cancellationToken);
+		else
+			return _pusherClient.UnSubscribeTicker(symbol, cancellationToken);
+	}
+
+	/// <inheritdoc />
+	protected override async ValueTask OnTFCandlesSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	{
+		SendSubscriptionReply(mdMsg.TransactionId);
+
+		var secId = mdMsg.SecurityId;
+		var symbol = secId.ToNative();
+
+		var tf = mdMsg.GetTimeFrame();
+		var tfName = tf.ToNative();
+
+		if (mdMsg.IsSubscribe)
 		{
-			case MarketDataTypes.OrderLog:
+			if (mdMsg.From is not null)
 			{
-				if (mdMsg.IsSubscribe)
-					_pusherClient.SubscribeTicker(symbol);
-				else
-					_pusherClient.UnSubscribeTicker(symbol);
+				var candles = await _httpClient.GetCandles(symbol, tfName, (long)mdMsg.From.Value.ToUnix(), (long)(mdMsg.To ?? DateTimeOffset.UtcNow).ToUnix(), cancellationToken);
+				var left = mdMsg.Count ?? long.MaxValue;
 
-				break;
-			}
-			case MarketDataTypes.CandleTimeFrame:
-			{
-				break;
-			}
-			default:
-			{
-				SendSubscriptionNotSupported(transId);
-				return;
-			}
-		}
-
-		SendSubscriptionReply(transId);
-
-		if (mdMsg.DataType == MarketDataTypes.CandleTimeFrame)
-		{
-			var tf = mdMsg.GetTimeFrame();
-			var tfName = tf.ToNative();
-
-			if (mdMsg.IsSubscribe)
-			{
-				if (mdMsg.To != null)
+				foreach (var candle in candles)
 				{
-					var candles = _httpClient.GetCandles(symbol, tfName, (long)mdMsg.From.Value.ToUnix(), (long)mdMsg.To.Value.ToUnix());
+					ProcessCandle(candle, secId, tf, mdMsg.TransactionId);
 
-					foreach (var candle in candles)
-					{
-						ProcessCandle(candle, secId, tf, transId);
-					}
-
-					SendSubscriptionResult(mdMsg);
+					if (--left <= 0)
+						break;
 				}
-				else
-					_pusherClient.SubscribeCandles(symbol, tfName);
 			}
-			else
-				_pusherClient.UnSubscribeCandles(symbol, tfName);
+			
+			if (!mdMsg.IsHistoryOnly())
+				_pusherClient.SubscribeCandles(symbol, tfName, cancellationToken);
+
+			SendSubscriptionResult(mdMsg);
 		}
+		else
+			_pusherClient.UnSubscribeCandles(symbol, tfName, cancellationToken);
 	}
 
 	private void ProcessCandle(Ohlc candle, SecurityId securityId, TimeSpan timeFrame, long originTransId)
@@ -109,21 +116,7 @@ public partial class BitexbookMessageAdapter
 		foreach (var symbol in symbols)
 		{
 			_secIdMapping.Add(symbol.Code, symbol.Alias.ToStockSharp());
-			ProcessSymbol(symbol, 0);
 		}
-	}
-
-	private void ProcessSymbol(Symbol symbol, long transId)
-	{
-		SendOutMessage(new SecurityMessage
-		{
-			SecurityId = symbol.Alias.ToStockSharp(),
-			MinVolume = (decimal?)symbol.MinAmount,
-			OriginalTransactionId = transId,
-		}
-		.TryFillUnderlyingId(symbol.CurrencyBase)
-		.FillDefaultCryptoFields()
-		);
 	}
 
 	private void SessionOnNewTickerChange(TickerChange ticker)

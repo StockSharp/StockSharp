@@ -1,11 +1,7 @@
 namespace StockSharp.Coinbase;
 
-#if !NO_LICENSE
-using StockSharp.Licensing;
-#endif
-
 [OrderCondition(typeof(CoinbaseOrderCondition))]
-public partial class CoinbaseMessageAdapter : MessageAdapter
+public partial class CoinbaseMessageAdapter
 {
 	private Authenticator _authenticator;
 	private HttpClient _httpClient;
@@ -50,31 +46,6 @@ public partial class CoinbaseMessageAdapter : MessageAdapter
 	/// <inheritdoc />
 	public override string AssociatedBoard => BoardCodes.Coinbase;
 
-	/// <inheritdoc />
-	public override TimeSpan GetHistoryStepSize(SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)
-	{
-		if (dataType.IsCandles)
-		{
-			iterationInterval = TimeSpan.FromSeconds(1);
-
-			var tf = (TimeSpan)dataType.Arg;
-
-			if (tf.TotalMinutes <= 1)
-				return TimeSpan.FromHours(1);
-			else if (tf.TotalDays < 1)
-				return TimeSpan.FromDays(2);
-			else
-				return TimeSpan.FromTicks(tf.Ticks * 100);
-		}
-
-		return base.GetHistoryStepSize(securityId, dataType, out iterationInterval);
-	}
-
-#if !NO_LICENSE
-	/// <inheritdoc />
-	public override string FeatureName => nameof(Coinbase);
-#endif
-
 	private void SubscribePusherClient()
 	{
 		_pusherClient.Connected += SessionOnPusherConnected;
@@ -102,185 +73,117 @@ public partial class CoinbaseMessageAdapter : MessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	public override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
-		switch (message.Type)
+		if (_httpClient != null)
 		{
-			case MessageTypes.Reset:
+			try
 			{
-				if (_httpClient != null)
-				{
-					try
-					{
-						_httpClient.Dispose();
-					}
-					catch (Exception ex)
-					{
-						SendOutError(ex);
-					}
-
-					_httpClient = null;
-				}
-
-				if (_pusherClient != null)
-				{
-					try
-					{
-						UnsubscribePusherClient();
-						_pusherClient.Disconnect();
-					}
-					catch (Exception ex)
-					{
-						SendOutError(ex);
-					}
-
-					_pusherClient = null;
-				}
-
-				if (_authenticator != null)
-				{
-					try
-					{
-						_authenticator.Dispose();
-					}
-					catch (Exception ex)
-					{
-						SendOutError(ex);
-					}
-
-					_authenticator = null;
-				}
-
-				_orderInfo.Clear();
-				_lastTimeBalanceCheck = null;
-
-				SendOutMessage(new ResetMessage());
-
-				break;
-			}
-
-			case MessageTypes.Connect:
-			{
-				if (this.IsTransactional())
-				{
-					if (Key.IsEmpty())
-						throw new InvalidOperationException(LocalizedStrings.KeyNotSpecified);
-					
-					if (Secret.IsEmpty())
-						throw new InvalidOperationException(LocalizedStrings.SecretNotSpecified);
-				}
-
-#if !NO_LICENSE
-				var msg = "Crypto".ValidateLicense(component: GetType());
-				if (!msg.IsEmpty())
-				{
-					msg = nameof(Coinbase).ValidateLicense(component: GetType());
-					
-					if (!msg.IsEmpty())
-						throw new InvalidOperationException(msg);
-				}
-#endif
-
-				_authenticator = new Authenticator(this.IsTransactional(), Key, Secret, Passphrase);
-
-				if (_httpClient != null)
-					throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
-
-				if (_pusherClient != null)
-					throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
-
-				_httpClient = new HttpClient(_authenticator) { Parent = this };
-
-				_pusherClient = new PusherClient(_authenticator) { Parent = this };
-				SubscribePusherClient();
-				_pusherClient.Connect();
-
-				_pusherClient.SubscribeStatus();
-
-				break;
-			}
-
-			case MessageTypes.Disconnect:
-			{
-				if (_httpClient == null)
-					throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
-
-				if (_pusherClient == null)
-					throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
-
 				_httpClient.Dispose();
-				_httpClient = null;
-
-				_pusherClient.UnSubscribeStatus();
-				_pusherClient.Disconnect();
-
-				break;
 			}
-
-			case MessageTypes.PortfolioLookup:
+			catch (Exception ex)
 			{
-				ProcessPortfolioLookup((PortfolioLookupMessage)message);
-				break;
+				SendOutError(ex);
 			}
 
-			case MessageTypes.OrderStatus:
-			{
-				ProcessOrderStatus((OrderStatusMessage)message);
-				break;
-			}
-
-			case MessageTypes.OrderRegister:
-			{
-				ProcessOrderRegister((OrderRegisterMessage)message);
-				break;
-			}
-
-			case MessageTypes.OrderCancel:
-			{
-				ProcessOrderCancel((OrderCancelMessage)message);
-				break;
-			}
-
-			case MessageTypes.OrderGroupCancel:
-			{
-				ProcessOrderGroupCancel((OrderGroupCancelMessage)message);
-				break;
-			}
-
-			case MessageTypes.Time:
-			{
-				if (_orderInfo.Count > 0)
-				{
-					ProcessOrderStatus(null);
-					ProcessPortfolioLookup(null);
-				}
-
-				if (BalanceCheckInterval > TimeSpan.Zero &&
-				    (_lastTimeBalanceCheck == null || (CurrentTime - _lastTimeBalanceCheck) > BalanceCheckInterval))
-				{
-					ProcessPortfolioLookup(null);
-				}
-
-				break;
-			}
-
-			case MessageTypes.SecurityLookup:
-			{
-				ProcessSecurityLookup((SecurityLookupMessage)message);
-				break;
-			}
-
-			case MessageTypes.MarketData:
-			{
-				ProcessMarketData((MarketDataMessage)message);
-				break;
-			}
-
-			default:
-				return false;
+			_httpClient = null;
 		}
 
-		return true;
+		if (_pusherClient != null)
+		{
+			try
+			{
+				UnsubscribePusherClient();
+				_pusherClient.Disconnect();
+			}
+			catch (Exception ex)
+			{
+				SendOutError(ex);
+			}
+
+			_pusherClient = null;
+		}
+
+		if (_authenticator != null)
+		{
+			try
+			{
+				_authenticator.Dispose();
+			}
+			catch (Exception ex)
+			{
+				SendOutError(ex);
+			}
+
+			_authenticator = null;
+		}
+
+		_orderInfo.Clear();
+		_lastTimeBalanceCheck = null;
+
+		SendOutMessage(new ResetMessage());
+		return default;
+	}
+
+	/// <inheritdoc />
+	public override async ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
+	{
+		if (this.IsTransactional())
+		{
+			if (Key.IsEmpty())
+				throw new InvalidOperationException(LocalizedStrings.KeyNotSpecified);
+
+			if (Secret.IsEmpty())
+				throw new InvalidOperationException(LocalizedStrings.SecretNotSpecified);
+		}
+
+		_authenticator = new Authenticator(this.IsTransactional(), Key, Secret, Passphrase);
+
+		if (_httpClient != null)
+			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
+
+		if (_pusherClient != null)
+			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
+
+		_httpClient = new HttpClient(_authenticator) { Parent = this };
+
+		_pusherClient = new PusherClient(_authenticator) { Parent = this };
+		SubscribePusherClient();
+
+		await _pusherClient.Connect(cancellationToken);
+		await _pusherClient.SubscribeStatus(cancellationToken);
+	}
+
+	/// <inheritdoc />
+	public override async ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
+	{
+		if (_httpClient == null)
+			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
+
+		if (_pusherClient == null)
+			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
+
+		_httpClient.Dispose();
+		_httpClient = null;
+
+		await _pusherClient.UnSubscribeStatus(cancellationToken);
+		_pusherClient.Disconnect();
+	}
+
+	/// <inheritdoc />
+	public override async ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
+	{
+		if (_orderInfo.Count > 0)
+		{
+			await OrderStatusAsync(null, cancellationToken);
+			await PortfolioLookupAsync(null, cancellationToken);
+		}
+
+		if (BalanceCheckInterval > TimeSpan.Zero &&
+			(_lastTimeBalanceCheck == null || (CurrentTime - _lastTimeBalanceCheck) > BalanceCheckInterval))
+		{
+			await PortfolioLookupAsync(null, cancellationToken);
+		}
 	}
 
 	private void SessionOnPusherConnected()

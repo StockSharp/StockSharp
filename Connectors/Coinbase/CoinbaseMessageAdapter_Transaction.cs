@@ -6,7 +6,8 @@ public partial class CoinbaseMessageAdapter
 
 	private string PortfolioName => nameof(Coinbase) + "_" + Key.ToId();
 
-	private void ProcessOrderRegister(OrderRegisterMessage regMsg)
+	/// <inheritdoc />
+	public override async ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
 	{
 		var condition = (CoinbaseOrderCondition)regMsg.Condition;
 
@@ -21,7 +22,7 @@ public partial class CoinbaseMessageAdapter
 				if (!condition.IsWithdraw)
 					break;
 
-				var withdrawId = _httpClient.Withdraw(regMsg.SecurityId.SecurityCode, regMsg.Volume, condition.WithdrawInfo);
+				var withdrawId = await _httpClient.Withdraw(regMsg.SecurityId.SecurityCode, regMsg.Volume, condition.WithdrawInfo, cancellationToken);
 
 				SendOutMessage(new ExecutionMessage
 				{
@@ -33,7 +34,7 @@ public partial class CoinbaseMessageAdapter
 					HasOrderInfo = true,
 				});
 
-				ProcessPortfolioLookup(null);
+				await PortfolioLookupAsync(null, cancellationToken);
 				return;
 			}
 			default:
@@ -43,8 +44,8 @@ public partial class CoinbaseMessageAdapter
 		var isMarket = regMsg.OrderType == OrderTypes.Market;
 		var price = isMarket ? (decimal?)null : regMsg.Price;
 		
-		var result = _httpClient.RegisterOrder(regMsg.SecurityId.ToCurrency(), regMsg.OrderType.ToNative(),
-			regMsg.Side, price, condition?.StopPrice, regMsg.Volume, regMsg.TimeInForce, regMsg.TillDate.EnsureToday()/*, regMsg.TransactionId*/);
+		var result = await _httpClient.RegisterOrder(regMsg.SecurityId.ToCurrency(), regMsg.OrderType.ToNative(),
+			regMsg.Side, price, condition?.StopPrice, regMsg.Volume, regMsg.TimeInForce, regMsg.TillDate.EnsureToday()/*, regMsg.TransactionId*/, cancellationToken);
 
 		var orderState = result.Status.ToOrderState();
 
@@ -76,24 +77,25 @@ public partial class CoinbaseMessageAdapter
 
 		if (isMarket)
 		{
-			ProcessOwnTrades(result.Id, regMsg.TransactionId);
+			await ProcessOwnTrades(result.Id, regMsg.TransactionId, cancellationToken);
 		}
 		else
 		{
 			_orderInfo.Add(result.Id, RefTuple.Create(regMsg.TransactionId, regMsg.Volume));
 		}
 
-		ProcessPortfolioLookup(null);
+		await PortfolioLookupAsync(null, cancellationToken);
 	}
 
-	private void ProcessOrderCancel(OrderCancelMessage cancelMsg)
+	/// <inheritdoc />
+	public override async ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
 		if (cancelMsg.OrderStringId.IsEmpty())
 			throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(cancelMsg.OriginalTransactionId));
 
-		_httpClient.CancelOrder(cancelMsg.OrderStringId);
+		await _httpClient.CancelOrder(cancelMsg.OrderStringId, cancellationToken);
 
-		/*var order = */_httpClient.GetOrderInfo(cancelMsg.OrderStringId);
+		/*var order = */await _httpClient.GetOrderInfo(cancelMsg.OrderStringId, cancellationToken);
 
 		//if (order == null)
 		//{
@@ -111,20 +113,21 @@ public partial class CoinbaseMessageAdapter
 		//else
 		//	ProcessOrder(order, 0, cancelMsg.TransactionId, true);
 
-		ProcessOrderStatus(null);
-		ProcessPortfolioLookup(null);
+		await OrderStatusAsync(null, cancellationToken);
+		await PortfolioLookupAsync(null, cancellationToken);
 	}
 
-	private void ProcessOrderGroupCancel(OrderGroupCancelMessage cancelMsg)
+	/// <inheritdoc />
+	public override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
-		var ids = _httpClient.CancelAllOrders();
+		var ids = await _httpClient.CancelAllOrders(cancellationToken);
 
 		foreach (var id in ids)
 		{
 			if (!_orderInfo.TryGetValue(id, out var info))
 				continue;
 
-			var order = _httpClient.GetOrderInfo(id);
+			var order = await _httpClient.GetOrderInfo(id, cancellationToken);
 
 			if (order == null)
 			{
@@ -140,19 +143,22 @@ public partial class CoinbaseMessageAdapter
 				});
 			}
 			else
-				ProcessOrder(order, 0, cancelMsg.TransactionId, true);
+				await ProcessOrder(order, 0, cancelMsg.TransactionId, true, cancellationToken);
 		}
 
-		ProcessPortfolioLookup(null);
+		await PortfolioLookupAsync(null, cancellationToken);
 	}
 
-	private void ProcessPortfolioLookup(PortfolioLookupMessage message)
+	/// <inheritdoc />
+	public override async ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
-		var transId = message?.TransactionId ?? 0;
+		var transId = lookupMsg?.TransactionId ?? 0;
 
-		if (message != null)
+		if (lookupMsg != null)
 		{
-			if (!message.IsSubscribe)
+			SendSubscriptionReply(transId);
+
+			if (!lookupMsg.IsSubscribe)
 				return;
 
 			SendOutMessage(new PortfolioMessage
@@ -163,7 +169,7 @@ public partial class CoinbaseMessageAdapter
 			});
 		}
 
-		var accounts = _httpClient.GetAccounts();
+		var accounts = await _httpClient.GetAccounts(cancellationToken);
 
 		foreach (var account in accounts)
 		{
@@ -190,21 +196,22 @@ public partial class CoinbaseMessageAdapter
 			.TryAdd(PositionChangeTypes.BlockedValue, account.Hold.RemoveTrailingZeros(), true));
 		}
 
-		if (message != null)
-			SendSubscriptionResult(message);
+		if (lookupMsg != null)
+			SendSubscriptionResult(lookupMsg);
 
 		_lastTimeBalanceCheck = CurrentTime;
 	}
 
-	private void ProcessOrderStatus(OrderStatusMessage message)
+	/// <inheritdoc />
+	public override async ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
 	{
-		if (message == null)
+		if (statusMsg == null)
 		{
 			var portfolioRefresh = false;
 
 			var ids = _orderInfo.Keys.ToIgnoreCaseSet();
 
-			var orders = _httpClient.GetOrders("open", "pending");
+			var orders = await _httpClient.GetOrders(new[] { "open", "pending" }, cancellationToken);
 
 			foreach (var order in orders)
 			{
@@ -218,7 +225,7 @@ public partial class CoinbaseMessageAdapter
 
 					_orderInfo.Add(order.Id, RefTuple.Create(transId, balance));
 
-					ProcessOrder(order, transId, 0, true);
+					await ProcessOrder(order, transId, 0, true, cancellationToken);
 
 					portfolioRefresh = true;
 				}
@@ -226,7 +233,7 @@ public partial class CoinbaseMessageAdapter
 				{
 					ids.Remove(order.Id);
 
-					ProcessOrder(order, 0, info.First, balance < info.Second);
+					await ProcessOrder(order, 0, info.First, balance < info.Second, cancellationToken);
 
 					info.Second = balance;
 
@@ -237,7 +244,7 @@ public partial class CoinbaseMessageAdapter
 			foreach (var id in ids)
 			{
 				var info = _orderInfo.GetAndRemove(id);
-				var order = _httpClient.GetOrderInfo(id);
+				var order = await _httpClient.GetOrderInfo(id, cancellationToken);
 
 				if (order == null)
 				{
@@ -252,21 +259,23 @@ public partial class CoinbaseMessageAdapter
 				}
 				else
 				{
-					ProcessOrder(order, 0, info.First, true);
+					await ProcessOrder(order, 0, info.First, true, cancellationToken);
 				}
 
 				portfolioRefresh = true;
 			}
 
 			if (portfolioRefresh)
-				ProcessPortfolioLookup(null);
+				await PortfolioLookupAsync(null, cancellationToken);
 		}
 		else
 		{
-			if (!message.IsSubscribe)
+			SendSubscriptionReply(statusMsg.TransactionId);
+
+			if (!statusMsg.IsSubscribe)
 				return;
 
-			var orders = _httpClient.GetOrders("open", "pending");
+			var orders = await _httpClient.GetOrders(new[] { "open", "pending" }, cancellationToken);
 
 			foreach (var order in orders)
 			{
@@ -274,14 +283,14 @@ public partial class CoinbaseMessageAdapter
 
 				_orderInfo.Add(order.Id, RefTuple.Create(transId, order.GetBalance()));
 
-				ProcessOrder(order, transId, message.TransactionId, true);
+				await ProcessOrder(order, transId, statusMsg.TransactionId, true, cancellationToken);
 			}
 		
-			SendSubscriptionResult(message);
+			SendSubscriptionResult(statusMsg);
 		}
 	}
 
-	private void ProcessOrder(Native.Model.Order order, long transId, long originTransId, bool processFills)
+	private async ValueTask ProcessOrder(Order order, long transId, long originTransId, bool processFills, CancellationToken cancellationToken)
 	{
 		var state = order.Status.ToOrderState();
 
@@ -309,13 +318,13 @@ public partial class CoinbaseMessageAdapter
 
 		if (processFills && order.FilledSize > 0)
 		{
-			ProcessOwnTrades(order.Id, transId == 0 ? originTransId : transId);
+			await ProcessOwnTrades(order.Id, transId == 0 ? originTransId : transId, cancellationToken);
 		}
 	}
 
-	private void ProcessOwnTrades(string orderId, long transId)
+	private async ValueTask ProcessOwnTrades(string orderId, long transId, CancellationToken cancellationToken)
 	{
-		var fills = _httpClient.GetFills(orderId);
+		var fills = await _httpClient.GetFills(orderId, cancellationToken);
 
 		foreach (var fill in fills)
 		{

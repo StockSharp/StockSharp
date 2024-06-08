@@ -1,16 +1,12 @@
 ﻿namespace StockSharp.FTX.Native;
 
-using System.Web;
 using System.Net.Http;
 using System.Security;
 using System.Security.Cryptography;
 
 using Newtonsoft.Json.Linq;
 
-/// <summary>
-/// REST API Client of <see cref="FTX"/> adapter
-/// </summary>
-internal class FtxRestClient : BaseLogReceiver
+class FtxRestClient : BaseLogReceiver
 {
 	private readonly SecureString _key;
 	private readonly HMACSHA256 _hasher;
@@ -30,82 +26,38 @@ internal class FtxRestClient : BaseLogReceiver
 	// to get readable name after obfuscation
 	public override string Name => nameof(FTX) + "_" + nameof(HttpClient);
 
-	/// <summary>
-	/// Get markets API request
-	/// </summary>
-	/// <returns>API request</returns>
-	public List<Market> GetMarkets()
+	public Task<List<Market>> GetMarkets(CancellationToken cancellationToken)
 	{
-		return ProcessRequest<List<Market>>(Method.Get, "api/markets");
+		return ProcessRequest<List<Market>>(Method.Get, "api/markets", default, cancellationToken);
 	}
 
-	/// <summary>
-	/// Get trades API request
-	/// </summary>
-	/// <param name="currency">Currency</param>
-	/// <param name="start">Start <see cref="DateTime"/></param>
-	/// <param name="end">End <see cref="DateTime"/></param>
-	/// <returns></returns>
-	public List<Trade> GetMarketTrades(string currency, DateTime start, DateTime end)
+	public Task<List<Trade>> GetMarketTrades(string currency, DateTime start, DateTime end, CancellationToken cancellationToken)
 	{
-		return ProcessRequest<List<Trade>>(Method.Get, $"api/markets/{currency}/trades?start_time={GetSecondsFromEpochStart(start)}&end_time={GetSecondsFromEpochStart(end)}");
+		return ProcessRequest<List<Trade>>(Method.Get, $"api/markets/{currency}/trades?start_time={GetSecondsFromEpochStart(start)}&end_time={GetSecondsFromEpochStart(end)}", default, cancellationToken);
 	}
 
-	/// <summary>
-	/// Get candles API request
-	/// </summary>
-	/// <param name="currency">Currency</param>
-	/// <param name="resolution">Time frame</param>
-	/// <param name="start">Start <see cref="DateTime"/></param>
-	/// <param name="end">End <see cref="DateTime"/></param>
-	/// <returns></returns>
-	public List<Candle> GetMarketCandles(string currency, TimeSpan resolution, DateTime start, DateTime end)
+	public Task<List<Candle>> GetMarketCandles(string currency, TimeSpan resolution, DateTime start, DateTime end, CancellationToken cancellationToken)
 	{
-		return ProcessRequest<List<Candle>>(Method.Get, $"api/markets/{currency}/candles?resolution={resolution.TotalSeconds}&start_time={GetSecondsFromEpochStart(start)}&end_time={GetSecondsFromEpochStart(end)}");
+		return ProcessRequest<List<Candle>>(Method.Get, $"api/markets/{currency}/candles?resolution={resolution.TotalSeconds}&start_time={GetSecondsFromEpochStart(start)}&end_time={GetSecondsFromEpochStart(end)}", default, cancellationToken);
 	}
 
-
-	/// <summary>
-	/// Get history orders API request
-	/// </summary>
-	/// <returns>History orders and flag if history has more data and require next request</returns>
-	public (List<Order> histOrders, bool hasMoreData) GetMarketOrderHistoryAndHasMoreOrders(string subaccountName, DateTime startTime)
+	public async Task<(List<Order> histOrders, bool hasMoreData)> GetMarketOrderHistoryAndHasMoreOrders(string subaccountName, DateTime startTime, CancellationToken cancellationToken)
 	{
-		var response = ProcessSignedRequest<List<Order>, FtxRestResponseHasMoreData<List<Order>>>(Method.Get, $"api/orders/history?start_time={GetSecondsFromEpochStart(startTime)}", subaccountName);
+		var response = await ProcessSignedRequest<List<Order>, FtxRestResponseHasMoreData<List<Order>>>(Method.Get, $"api/orders/history?start_time={GetSecondsFromEpochStart(startTime)}", subaccountName, default, cancellationToken);
 		return (response.Result, response.HasMoreData);
 	}
 
-	/// <summary>
-	/// Get balances API request
-	/// </summary>
-	/// <returns></returns>
-	public List<Balance> GetBalances(string subaccountName)
+	public Task<List<Balance>> GetBalances(string subaccountName, CancellationToken cancellationToken)
 	{
-		return ProcessSignedRequest<List<Balance>>(Method.Get, "api/wallet/balances", subaccountName);
+		return ProcessSignedRequest<List<Balance>>(Method.Get, "api/wallet/balances", subaccountName, default, cancellationToken);
 	}
 
-
-	/// <summary>
-	/// Get futures API request
-	/// </summary>
-	/// <returns></returns>
-	public List<Futures> GetFuturesPositions(string subaccountName)
+	public Task<List<Futures>> GetFuturesPositions(string subaccountName, CancellationToken cancellationToken)
 	{
-		return ProcessSignedRequest<List<Futures>>(Method.Get, "api/positions", subaccountName);
+		return ProcessSignedRequest<List<Futures>>(Method.Get, "api/positions", subaccountName, default, cancellationToken);
 	}
 
-	/// <summary>
-	/// Register order API request
-	/// </summary>
-	/// <param name="marketName"></param>
-	/// <param name="side">Side</param>
-	/// <param name="price">Price</param>
-	/// <param name="orderType">Order type</param>
-	/// <param name="amount">Amount</param>
-	/// <param name="clientId">Client ID</param>
-	/// <param name="subaccountName"></param>
-	/// <returns></returns>
-	public Order RegisterOrder(string marketName, Sides side, decimal? price, OrderTypes orderType, decimal amount, string clientId, string subaccountName)
+	public Task<Order> RegisterOrder(string marketName, Sides side, decimal? price, OrderTypes orderType, decimal amount, string clientId, string subaccountName, CancellationToken cancellationToken)
 	{
 		var body =
 			$"{{\"market\": \"{marketName}\"," +
@@ -114,50 +66,29 @@ internal class FtxRestClient : BaseLogReceiver
 			$"\"type\": \"{orderType.ToString().ToLower()}\"," +
 			$"\"size\": {amount}," +
 			$"\"clientId\": {(clientId.IsEmpty() ? "null" : $"\"{clientId}\"")}}}";
-		return ProcessSignedRequest<Order>(Method.Post, "api/orders", subaccountName, body);
+		return ProcessSignedRequest<Order>(Method.Post, "api/orders", subaccountName, body, cancellationToken);
 	}
 
-	/// <summary>
-	/// Cancel order API request
-	/// </summary>
-	/// <param name="id">Order ID</param>
-	/// <param name="subaccountName"></param>
-	/// <returns>Is order cancelled</returns>
-	public bool CancelOrder(long id, string subaccountName)
+	public async Task<bool> CancelOrder(long id, string subaccountName, CancellationToken cancellationToken)
 	{
-		var result = ProcessSignedRequest<object>(Method.Delete, $"api/orders/{id}", subaccountName);
+		var result = await ProcessSignedRequest<object>(Method.Delete, $"api/orders/{id}", subaccountName, default, cancellationToken);
 		return result != null;
 	}
 
-	/// <summary>
-	/// Cancel all orders API request
-	/// </summary>
-	/// <returns>Are orders cancelled</returns>
-	public bool CancelAllOrders(string subaccountName)
+	public async Task<bool> CancelAllOrders(string subaccountName, CancellationToken cancellationToken)
 	{
-		var result = ProcessSignedRequest<object>(Method.Delete, "api/orders", subaccountName);
+		var result = await ProcessSignedRequest<object>(Method.Delete, "api/orders", subaccountName, default, cancellationToken);
 		return result != null;
 	}
 
-	/// <summary>
-	/// Get open orders API request
-	/// </summary>
-	/// <returns>Opened orders</returns>
-	public List<Order> GetOpenOrders(string subaccountName)
+	public Task<List<Order>> GetOpenOrders(string subaccountName, CancellationToken cancellationToken)
 	{
-		return ProcessSignedRequest<List<Order>>(Method.Get, "api/orders", subaccountName);
+		return ProcessSignedRequest<List<Order>>(Method.Get, "api/orders", subaccountName, default, cancellationToken);
 	}
 
-	/// <summary>
-	/// Get fills API request
-	/// </summary>
-	/// <param name="start">Start <see cref="DateTime"/></param>
-	/// <param name="end">End <see cref="DateTime"/></param>
-	/// <param name="subaccountName"></param>
-	/// <returns></returns>
-	public List<Fill> GetFills(DateTime start, DateTime end, string subaccountName)
+	public Task<List<Fill>> GetFills(DateTime start, DateTime end, string subaccountName, CancellationToken cancellationToken)
 	{
-		return ProcessSignedRequest<List<Fill>>(Method.Get, $"api/fills?start_time={GetSecondsFromEpochStart(start)}&end_time={GetSecondsFromEpochStart(end)}", subaccountName);
+		return ProcessSignedRequest<List<Fill>>(Method.Get, $"api/fills?start_time={GetSecondsFromEpochStart(start)}&end_time={GetSecondsFromEpochStart(end)}", subaccountName, default, cancellationToken);
 	}
 
 	#region Util
@@ -182,24 +113,25 @@ internal class FtxRestClient : BaseLogReceiver
 		return (long)time.ToUnix();
 	}
 
-	private Uri GetUri(string endpoint)
+	private static Uri GetUri(string endpoint)
 	{
 		return new Uri($"https://ftx.com/{endpoint}");
 	}
 
-	private dynamic ProcessRequest(Method method, string endpoint, string jsonBody = null)
+	private Task<dynamic> ProcessRequest(Method method, string endpoint, string jsonBody, CancellationToken cancellationToken)
 	{
 		var request = new RestRequest((string)null, method);
 		if (!jsonBody.IsEmpty())
 		{
 			request.AddParameter("json", jsonBody, ParameterType.RequestBody);
 		}
-		return request.Invoke(GetUri(endpoint), this, this.AddVerboseLog);
+		return request.InvokeAsync(GetUri(endpoint), this, this.AddVerboseLog, cancellationToken);
 	}
 
-	private T ProcessRequest<T>(Method method, string endpoint, string jsonBody = null) where T : class
+	private async Task<T> ProcessRequest<T>(Method method, string endpoint, string jsonBody, CancellationToken cancellationToken)
+		where T : class
 	{
-		dynamic response = ProcessRequest(method, endpoint, jsonBody);
+		dynamic response = await ProcessRequest(method, endpoint, jsonBody, cancellationToken);
 		FtxRestResponse<T> restResponse = Parse<FtxRestResponse<T>>(response);
 
 		if (restResponse == null) return null;
@@ -210,7 +142,7 @@ internal class FtxRestClient : BaseLogReceiver
 		return null;
 	}
 
-	private dynamic ProcessSignedRequest(Method method, string endpoint, string subaccountName, string jsonBody = null)
+	private Task<dynamic> ProcessSignedRequest(Method method, string endpoint, string subaccountName, string jsonBody, CancellationToken cancellationToken)
 	{
 		long nonce = GetMillisecondsFromEpochStart();
 		var request = new RestRequest((string)null, method);
@@ -229,15 +161,16 @@ internal class FtxRestClient : BaseLogReceiver
 
 		if (!subaccountName.IsEmpty())
 		{
-			request.AddHeader("FTX-SUBACCOUNT", HttpUtility.UrlEncode(subaccountName));
+			request.AddHeader("FTX-SUBACCOUNT", subaccountName.EncodeUrl());
 		}
 
-		return request.Invoke(GetUri(endpoint), this, this.AddVerboseLog);
+		return request.InvokeAsync(GetUri(endpoint), this, this.AddVerboseLog, cancellationToken);
 	}
 
-	private T ProcessSignedRequest<T>(Method method, string endpoint, string subaccountName, string jsonBody = null) where T : class
+	private async Task<T> ProcessSignedRequest<T>(Method method, string endpoint, string subaccountName, string jsonBody, CancellationToken cancellationToken)
+		where T : class
 	{
-		dynamic response = ProcessSignedRequest(method, endpoint, subaccountName, jsonBody);
+		dynamic response = await ProcessSignedRequest(method, endpoint, subaccountName, jsonBody, cancellationToken);
 		FtxRestResponse<T> restResponse = Parse<FtxRestResponse<T>>(response);
 		if (restResponse == null) return null;
 
@@ -248,9 +181,11 @@ internal class FtxRestClient : BaseLogReceiver
 		return null;
 	}
 
-	private T1 ProcessSignedRequest<T, T1>(Method method, string endpoint, string subaccountName, string jsonBody = null) where T : class where T1 : FtxRestResponse<T>
+	private async Task<T1> ProcessSignedRequest<T, T1>(Method method, string endpoint, string subaccountName, string jsonBody, CancellationToken cancellationToken)
+		where T : class
+		where T1 : FtxRestResponse<T>
 	{
-		dynamic response = ProcessSignedRequest(method, endpoint, subaccountName, jsonBody);
+		dynamic response = await ProcessSignedRequest(method, endpoint, subaccountName, jsonBody, cancellationToken);
 		T1 restResponse = Parse<T1>(response);
 
 		if (restResponse == null) return null;
@@ -260,7 +195,8 @@ internal class FtxRestClient : BaseLogReceiver
 		}
 		return null;
 	}
-	private T Parse<T>(dynamic obj)
+
+	private static T Parse<T>(dynamic obj)
 	{
 		if (((JToken)obj).Type == JTokenType.Object && obj.status == "error")
 			throw new InvalidOperationException((string)obj.reason.ToString());

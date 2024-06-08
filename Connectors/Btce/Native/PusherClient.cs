@@ -48,10 +48,10 @@ class PusherClient : BaseLogReceiver
 		base.DisposeManaged();
 	}
 
-	public void Connect()
+	public ValueTask Connect(CancellationToken cancellationToken)
 	{
 		this.AddInfoLog(LocalizedStrings.Connecting);
-		_client.Connect("wss://ws-eu.pusher.com/app/ee987526a24ba107824c?client=stocksharp&version=1.0&protocol=7", false);
+		return _client.ConnectAsync("wss://ws-eu.pusher.com/app/ee987526a24ba107824c?client=stocksharp&version=1.0&protocol=7", false, cancellationToken: cancellationToken);
 	}
 
 	public void Disconnect()
@@ -96,27 +96,27 @@ class PusherClient : BaseLogReceiver
 		public const string OrderBook = "depth";
 	}
 
-	public void SubscribeTrades(string currency)
+	public ValueTask SubscribeTrades(string currency, CancellationToken cancellationToken)
 	{
-		Process("subscribe", Channels.Trades, currency);
+		return Process("subscribe", Channels.Trades, currency, cancellationToken);
 	}
 
-	public void UnSubscribeTrades(string currency)
+	public ValueTask UnSubscribeTrades(string currency, CancellationToken cancellationToken)
 	{
-		Process("unsubscribe", Channels.Trades, currency);
+		return Process("unsubscribe", Channels.Trades, currency, cancellationToken);
 	}
 
-	public void SubscribeOrderBook(string currency)
+	public ValueTask SubscribeOrderBook(string currency, CancellationToken cancellationToken)
 	{
-		Process("subscribe", Channels.OrderBook, currency);
+		return Process("subscribe", Channels.OrderBook, currency, cancellationToken);
 	}
 
-	public void UnSubscribeOrderBook(string currency)
+	public ValueTask UnSubscribeOrderBook(string currency, CancellationToken cancellationToken)
 	{
-		Process("unsubscribe", Channels.OrderBook, currency);
+		return Process("unsubscribe", Channels.OrderBook, currency, cancellationToken);
 	}
 
-	private void Process(string action, string channel, string currency)
+	private ValueTask Process(string action, string channel, string currency, CancellationToken cancellationToken)
 	{
 		if (action.IsEmpty())
 			throw new ArgumentNullException(nameof(action));
@@ -127,13 +127,13 @@ class PusherClient : BaseLogReceiver
 		if (channel.IsEmpty())
 			throw new ArgumentNullException(nameof(channel));
 
-		_client.Send(new
+		return _client.SendAsync(new
 		{
 			@event = "pusher:" + action,
 			data = new
 			{
 				channel = currency + "." + channel,
 			},
-		});
+		}, cancellationToken);
 	}
 }

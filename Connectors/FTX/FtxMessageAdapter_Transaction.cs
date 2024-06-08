@@ -3,7 +3,10 @@
 partial class FtxMessageAdapter
 {
 	private readonly TimeSpan _orderHistoryInterval = TimeSpan.FromDays(7);
-	private const int _FillsPaginationLimit = 100;
+	private const int _fillsPaginationLimit = 100;
+
+	private long? _portfolioLookupSubMessageTransactionID;
+	private bool _isOrderSubscribed;
 
 	private string PortfolioName => nameof(FTX) + "_" + Key.ToId().To<string>();
 
@@ -75,7 +78,8 @@ partial class FtxMessageAdapter
 		SendOutMessage(message);
 	}
 
-	private void ProcessOrderRegister(OrderRegisterMessage regMsg)
+	/// <inheritdoc />
+	public override async ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
 	{
 		switch (regMsg.OrderType)
 		{
@@ -88,40 +92,40 @@ partial class FtxMessageAdapter
 
 		var price = regMsg.OrderType == OrderTypes.Market ? (decimal?)null : regMsg.Price;
 
-		var order = _restClient.RegisterOrder(regMsg.SecurityId.ToCurrency(), regMsg.Side, price, regMsg.OrderType.Value, regMsg.Volume, regMsg.TransactionId.To<string>(), SubaccountName);
-		if (order == null)
-		{
-			throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(regMsg.TransactionId));
-		}
+		var order = await _restClient.RegisterOrder(regMsg.SecurityId.ToCurrency(), regMsg.Side, price, regMsg.OrderType.Value, regMsg.Volume, regMsg.TransactionId.To<string>(), SubaccountName, cancellationToken)
+			?? throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(regMsg.TransactionId));
 
 		SendProcessOrderStatusResult(order, regMsg);
 	}
 
-	private void ProcessOrderCancel(OrderCancelMessage cancelMsg)
+	/// <inheritdoc />
+	public override async ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
 		if (cancelMsg.OrderId == null)
 			throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(cancelMsg.OriginalTransactionId));
-		if (!_restClient.CancelOrder(cancelMsg.OrderId.Value, SubaccountName))
+
+		if (!await _restClient.CancelOrder(cancelMsg.OrderId.Value, SubaccountName, cancellationToken))
 		{
 			throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(cancelMsg.OriginalTransactionId));
 		}
 	}
 
-	private void ProcessOrderGroupCancel(OrderGroupCancelMessage cancelMsg)
+	/// <inheritdoc />
+	public override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
-		if (!_restClient.CancelAllOrders(SubaccountName))
+		if (!await _restClient.CancelAllOrders(SubaccountName, cancellationToken))
 		{
 			throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(cancelMsg.OriginalTransactionId));
 		}
 	}
 
-	private bool _isOrderSubscribed;
-	private void ProcessOrderStatus(OrderStatusMessage message)
+	/// <inheritdoc />
+	public override async ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
 	{
-
-		if (message != null)
+		if (statusMsg != null)
 		{
-			_isOrderSubscribed = message.IsSubscribe;
+			SendSubscriptionReply(statusMsg.TransactionId);
+			_isOrderSubscribed = statusMsg.IsSubscribe;
 		}
 
 		if (!_isOrderSubscribed)
@@ -129,138 +133,98 @@ partial class FtxMessageAdapter
 			return;
 		}
 
-		var orders = _restClient.GetOpenOrders(SubaccountName);
+		var orders = await _restClient.GetOpenOrders(SubaccountName, cancellationToken);
 
-		List<Fill> fills = new();
-
-		if (orders != null && orders.Count > 0)
+		if (statusMsg == null)
 		{
-			var start = orders.Where(x => x.CreatedAt != null).Min(x => x.CreatedAt.Value);
-			var fillsResult = _restClient.GetFills(start, DateTime.UtcNow, SubaccountName);
-			if (fillsResult != null)
+			if (orders != null && orders.Count > 0)
 			{
-				fills.AddRange(fillsResult);
-			}
-		}
+				foreach (var order in orders)
+					SessionOnNewOrder(order);
 
-		if (message == null)
-		{
-			if (orders != null) foreach (var order in orders) SessionOnNewOrder(order);
-			foreach (var fill in fills) SessionOnNewFill(fill);
+				var start = orders.Where(x => x.CreatedAt != null).Min(x => x.CreatedAt.Value);
+				var fills = await _restClient.GetFills(start, DateTime.UtcNow, SubaccountName, cancellationToken);
+
+				foreach (var fill in fills)
+					SessionOnNewFill(fill);
+			}
 		}
 		else
 		{
-			if (!message.IsSubscribe)
+			if (!statusMsg.IsSubscribe)
 			{
 				return;
 			}
 
-			GetPaginationOrderHistory(message);
-			GetPaginationFillsFromMarket(DateTime.UtcNow - _orderHistoryInterval, DateTime.UtcNow);
-			SendSubscriptionResult(message);
+			var fromTime = DateTime.UtcNow - _orderHistoryInterval;
+
+			do
+			{
+				var prevFromTime = fromTime;
+
+				var (histOrders, hasMoreData) = await _restClient.GetMarketOrderHistoryAndHasMoreOrders(SubaccountName, fromTime, cancellationToken);
+
+				if (!histOrders.Any())
+					break;
+
+				foreach (var order in histOrders.Where(o => o.ClientId != null).OrderBy(o => o.CreatedAt))
+				{
+					if (order.CreatedAt > fromTime)
+						fromTime = order.CreatedAt.Value;
+
+					if (order.ClientId != null)
+					SendProcessOrderStatusResult(order, statusMsg);
+				}
+
+				if (!hasMoreData || fromTime <= prevFromTime)
+					break;
+			}
+			while (true);
+
+			var now = DateTime.UtcNow;
+
+			var startTime = now - _orderHistoryInterval;
+			var endTime = (now - startTime) < _orderHistoryInterval ? (startTime + (now - startTime)) : startTime + _orderHistoryInterval;
+
+			while (startTime < endTime)
+			{
+				var fills = await _restClient.GetFills(startTime, endTime, SubaccountName, cancellationToken);
+
+				var lastTime = startTime;
+
+				foreach (var fill in fills.OrderBy(f => f.Time))
+				{
+					if (fill.Time < startTime)
+						continue;
+
+					if (fill.Time > endTime)
+						break;
+
+					SessionOnNewFill(fill);
+
+					lastTime = fill.Time;
+				}
+
+				if (fills.Count != _fillsPaginationLimit)
+					break;
+
+				startTime = lastTime;
+			}
+
+			SendSubscriptionResult(statusMsg);
 		}
 	}
 
-	#region Pagination Fills
-	private void GetPaginationFillsFromMarket(DateTime dateTimeFrom, DateTime dateTimeTo)
+	/// <inheritdoc />
+	public override async ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
-		var startTime = dateTimeFrom;
-		var endTime = (dateTimeTo - dateTimeFrom) < _orderHistoryInterval ? (dateTimeFrom + (dateTimeTo - dateTimeFrom)) : dateTimeFrom + _orderHistoryInterval;
-
-		while (true)
+		if (lookupMsg != null)
 		{
-			GetMarketFillsByChunks(startTime, endTime);
-			if (endTime == dateTimeTo)
-			{
-				GetMarketFillsByChunks(endTime, DateTime.UtcNow);
-				break;
-			}
-			startTime = new DateTime(endTime.Ticks);
-			endTime = (dateTimeTo - startTime) < _orderHistoryInterval ? (startTime + (dateTimeTo - startTime)) : startTime + _orderHistoryInterval;
+			SendSubscriptionReply(lookupMsg.TransactionId);
 
-		}
-	}
+			_portfolioLookupSubMessageTransactionID = lookupMsg.IsSubscribe ? lookupMsg.TransactionId : null;
 
-	private void GetMarketFillsByChunks(DateTime dateTimeFrom, DateTime dateTimeTo)
-	{
-		List<Fill> fills = new();
-		var startTime = dateTimeFrom;
-		var endTime = dateTimeTo;
-
-		while (true)
-		{
-			var fillsChunk = _restClient.GetFills(startTime, endTime, SubaccountName);
-			fillsChunk.Reverse();
-			fills.InsertRange(0, fillsChunk);
-
-			if (fillsChunk.Count > 0)
-			{
-				endTime -= fillsChunk.Last().Time - startTime;
-			}
-			else
-			{
-				endTime -= endTime - startTime;
-			}
-
-			if (fillsChunk.Count != _FillsPaginationLimit)
-			{
-				break;
-			}
-		}
-
-		foreach (var fill in fills)
-		{
-			SessionOnNewFill(fill);
-		}
-	}
-	#endregion
-
-	#region Pagination Orders
-	private void GetPaginationOrderHistory(OrderStatusMessage message)
-	{
-		List<Order> resultOrders = new();
-		var fromTime = DateTime.UtcNow - _orderHistoryInterval;
-
-		do
-		{
-			var prevFromTime = fromTime;
-
-			var ordersTuple = _restClient.GetMarketOrderHistoryAndHasMoreOrders(SubaccountName, fromTime);
-
-			if(!ordersTuple.histOrders.Any())
-				break;
-
-			foreach (var o in ordersTuple.histOrders)
-			{
-				if(o.CreatedAt > fromTime)
-					fromTime = o.CreatedAt.Value;
-
-				resultOrders.Add(o);
-			}
-
-			if(!ordersTuple.hasMoreData || fromTime <= prevFromTime)
-				break;
-		}
-		while(true);
-
-		resultOrders = resultOrders
-					.Where(o => o.ClientId != null)
-					.OrderBy(o => o.CreatedAt)
-					.ToList();
-
-		foreach (var order in resultOrders)
-			SendProcessOrderStatusResult(order, message);
-	}
-	#endregion
-
-	private long? _portfolioLookupSubMessageTransactionID;
-	private void ProcessPortfolioLookup(PortfolioLookupMessage message)
-	{
-		if (message != null)
-		{
-			_portfolioLookupSubMessageTransactionID = message.IsSubscribe ? message.TransactionId : null;
-
-			if (!message.IsSubscribe)
+			if (!lookupMsg.IsSubscribe)
 			{
 				return;
 			}
@@ -277,12 +241,13 @@ partial class FtxMessageAdapter
 			BoardCode = BoardCodes.FTX,
 			OriginalTransactionId = (long)_portfolioLookupSubMessageTransactionID,
 		});
-		if (message != null)
+
+		if (lookupMsg != null)
 		{
-			SendSubscriptionResult(message);
+			SendSubscriptionResult(lookupMsg);
 		}
 
-		var balances = _restClient.GetBalances(SubaccountName);
+		var balances = await _restClient.GetBalances(SubaccountName, cancellationToken);
 		if (balances != null)
 		{
 			foreach (var balance in balances)
@@ -294,7 +259,8 @@ partial class FtxMessageAdapter
 				SendOutMessage(msg);
 			}
 		}
-		var futures = _restClient.GetFuturesPositions(SubaccountName);
+
+		var futures = await _restClient.GetFuturesPositions(SubaccountName, cancellationToken);
 
 		foreach (var fut in futures)
 		{
@@ -305,7 +271,6 @@ partial class FtxMessageAdapter
 			if (_portfolioLookupSubMessageTransactionID != null) msg.OriginalTransactionId = (long)_portfolioLookupSubMessageTransactionID;
 			SendOutMessage(msg);
 		}
-
 	}
 
 	private string GetPortfolioName()

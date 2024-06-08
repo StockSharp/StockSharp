@@ -58,10 +58,10 @@ class PusherClient : BaseLogReceiver
 		base.DisposeManaged();
 	}
 
-	public void Connect()
+	public ValueTask Connect(CancellationToken cancellationToken)
 	{
 		this.AddInfoLog(LocalizedStrings.Connecting);
-		_client.Connect("wss://api.bitexbook.com/api/v2/ws", true);
+		return _client.ConnectAsync("wss://api.bitexbook.com/api/v2/ws", true, cancellationToken: cancellationToken);
 	}
 
 	public void Disconnect()
@@ -162,47 +162,47 @@ class PusherClient : BaseLogReceiver
 		public const string OrdersLatest = "orders_latest";
 	}
 
-	public void SubscribeTicker(string symbol)
+	public ValueTask SubscribeTicker(string symbol, CancellationToken cancellationToken)
 	{
-		Process(Commands.Subscribe, symbol);
+		return Process(Commands.Subscribe, symbol, cancellationToken);
 	}
 
-	public void UnSubscribeTicker(string symbol)
+	public ValueTask UnSubscribeTicker(string symbol, CancellationToken cancellationToken)
 	{
-		Process(Commands.Unsubscribe, symbol);
+		return Process(Commands.Unsubscribe, symbol, cancellationToken);
 	}
 
-	public void SubscribeTrades(string symbol)
+	public void SubscribeTrades(string symbol, CancellationToken cancellationToken)
 	{
 		//Process(Commands.Subscribe, Channels.Deals.Put(symbol));
 	}
 
-	public void UnSubscribeTrades(string symbol)
+	public void UnSubscribeTrades(string symbol, CancellationToken cancellationToken)
 	{
 		//Process(Commands.Unsubscribe, Channels.Deals.Put(symbol));
 	}
 
-	public void SubscribeOrderBook(string symbol)
+	public void SubscribeOrderBook(string symbol, CancellationToken cancellationToken)
 	{
 		//Process(Commands.Subscribe, Channels.OrderBook.Put(symbol));
 	}
 
-	public void UnSubscribeOrderBook(string symbol)
+	public void UnSubscribeOrderBook(string symbol, CancellationToken cancellationToken)
 	{
 		//Process(Commands.Unsubscribe, Channels.OrderBook.Put(symbol));
 	}
 
-	public void SubscribeCandles(string symbol, string timeFrame)
+	public void SubscribeCandles(string symbol, string timeFrame, CancellationToken cancellationToken)
 	{
 		//Process(Commands.Subscribe, Channels.Candles.Put(symbol, timeFrame));
 	}
 
-	public void UnSubscribeCandles(string symbol, string timeFrame)
+	public void UnSubscribeCandles(string symbol, string timeFrame, CancellationToken cancellationToken)
 	{
 		//Process(Commands.Unsubscribe, Channels.Candles.Put(symbol, timeFrame));
 	}
 
-	private void Process(string method, string channel)
+	private ValueTask Process(string method, string channel, CancellationToken cancellationToken)
 	{
 		if (method.IsEmpty())
 			throw new ArgumentNullException(nameof(method));
@@ -210,10 +210,10 @@ class PusherClient : BaseLogReceiver
 		if (channel.IsEmpty())
 			throw new ArgumentNullException(nameof(channel));
 
-		_client.Send(new
+		return _client.SendAsync(new
 		{
 			method,
 			data = new { channel },
-		});
+		}, cancellationToken);
 	}
 }

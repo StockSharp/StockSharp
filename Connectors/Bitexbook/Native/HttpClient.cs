@@ -36,13 +36,13 @@ class HttpClient : BaseLogReceiver
 	// to get readable name after obfuscation
 	public override string Name => nameof(Bitexbook) + "_" + nameof(HttpClient);
 
-	public IEnumerable<Symbol> GetSymbols()
+	public async Task<IEnumerable<Symbol>> GetSymbols(CancellationToken cancellationToken)
 	{
-		dynamic response = MakeRequest<object>(CreateUrl("symbols/statistic"), CreateRequest(Method.Get));
+		dynamic response = await MakeRequest<object>(CreateUrl("symbols/statistic"), CreateRequest(Method.Get), cancellationToken);
 		return ((JToken)response.symbols).DeserializeObject<IEnumerable<Symbol>>();
 	}
 
-	public IEnumerable<Ohlc> GetCandles(string symbol, string resolution, long? from = null, long? to = null)
+	public async Task<IEnumerable<Ohlc>> GetCandles(string symbol, string resolution, long? from, long? to, CancellationToken cancellationToken)
 	{
 		var request = CreateRequest(Method.Get);
 
@@ -56,7 +56,7 @@ class HttpClient : BaseLogReceiver
 		if (to != null)
 			request.AddParameter("to", to.Value);
 
-		dynamic response = MakeRequest<object>(CreateUrl("charts/history", string.Empty), request);
+		dynamic response = await MakeRequest<object>(CreateUrl("charts/history", string.Empty), request, cancellationToken);
 
 		var candles = new Ohlc[(int)response.c.Count];
 
@@ -76,14 +76,14 @@ class HttpClient : BaseLogReceiver
 		return candles;
 	}
 
-	public IEnumerable<Order> GetOrders()
+	public Task<IEnumerable<Order>> GetOrders(CancellationToken cancellationToken)
 	{
 		var request = CreateRequest(Method.Get);
 
-		return MakeRequest<IEnumerable<Order>>(CreateUrl("order_info.do"), ApplySecret(request));
+		return MakeRequest<IEnumerable<Order>>(CreateUrl("order_info.do"), ApplySecret(request), cancellationToken);
 	}
 
-	public long RegisterOrder(string symbol, string side, decimal? price, decimal volume)
+	public async Task<long> RegisterOrder(string symbol, string side, decimal? price, decimal volume, CancellationToken cancellationToken)
 	{
 		var request = CreateRequest(Method.Post);
 
@@ -97,12 +97,12 @@ class HttpClient : BaseLogReceiver
 			request.AddParameter("price", price.Value);
 		}
 
-		dynamic response = MakeRequest<object>(CreateUrl("trade.do"), ApplySecret(request));
+		dynamic response = await MakeRequest<object>(CreateUrl("trade.do"), ApplySecret(request), cancellationToken);
 
 		return (long)response.order_id;
 	}
 
-	public void CancelOrder(string symbol, long orderId)
+	public Task CancelOrder(string symbol, long orderId, CancellationToken cancellationToken)
 	{
 		var request = CreateRequest(Method.Post);
 
@@ -110,10 +110,10 @@ class HttpClient : BaseLogReceiver
 			.AddParameter("symbol", symbol)
 			.AddParameter("order_id", orderId);
 
-		MakeRequest<object>(CreateUrl("cancel_order.do"), ApplySecret(request));
+		return MakeRequest<object>(CreateUrl("cancel_order.do"), ApplySecret(request), cancellationToken);
 	}
 
-	public long Withdraw(string currency, decimal volume, WithdrawInfo info)
+	public async Task<long> Withdraw(string currency, decimal volume, WithdrawInfo info, CancellationToken cancellationToken)
 	{
 		if (info == null)
 			throw new ArgumentNullException(nameof(info));
@@ -138,7 +138,7 @@ class HttpClient : BaseLogReceiver
 			.AddParameter("withdraw_amount", volume)
 			.AddParameter("target", target);
 
-		dynamic response = MakeRequest<object>(CreateUrl("withdraw.do"), ApplySecret(request));
+		dynamic response = await MakeRequest<object>(CreateUrl("withdraw.do"), ApplySecret(request), cancellationToken);
 
 		return (long)response.order_id;
 	}
@@ -180,9 +180,9 @@ class HttpClient : BaseLogReceiver
 		return request;
 	}
 
-	private T MakeRequest<T>(Uri url, RestRequest request)
+	private async Task<T> MakeRequest<T>(Uri url, RestRequest request, CancellationToken cancellationToken)
 	{
-		dynamic obj = request.Invoke(url, this, this.AddVerboseLog);
+		dynamic obj = await request.InvokeAsync(url, this, this.AddVerboseLog, cancellationToken);
 
 		if (obj is JObject)
 		{

@@ -44,10 +44,10 @@ class FtxWebSocketClient : BaseLogReceiver
 				this.AddInfoLog(LocalizedStrings.Connected);
 				try
 				{
-					SendAuthRequest(subaccountName);
-					SendPingRequest();
-					SubscribeFills();
-					SubscribeOrders();
+					_ = SendAuthRequest(subaccountName, default);
+					_ = SendPingRequest(default);
+					_ = SubscribeFills(default);
+					_ = SubscribeOrders(default);
 				}
 				catch (Exception ex)
 				{
@@ -92,11 +92,11 @@ class FtxWebSocketClient : BaseLogReceiver
 	/// <summary>
 	/// Connect to the websocket
 	/// </summary>
-	public void Connect()
+	public ValueTask Connect(CancellationToken cancellationToken)
 	{
 		_nextPing = null;
 		this.AddInfoLog(LocalizedStrings.Connecting);
-		_client.Connect("wss://ftx.com/ws", true);
+		return _client.ConnectAsync("wss://ftx.com/ws", true, cancellationToken: cancellationToken);
 	}
 
 	/// <summary>
@@ -111,53 +111,46 @@ class FtxWebSocketClient : BaseLogReceiver
 	/// <summary>
 	/// Market ping request
 	/// </summary>
-	public void ProcessPing()
+	public ValueTask ProcessPing(CancellationToken cancellationToken)
 	{
 		if (_nextPing == null || DateTime.UtcNow < _nextPing.Value)
 		{
-			return;
+			return default;
 		}
-		SendPingRequest();
+		return SendPingRequest(cancellationToken);
 	}
 
-	/// <summary>
-	/// Fills subscribing
-	/// </summary>
-	public void SubscribeFills()
+	public ValueTask SubscribeFills(CancellationToken cancellationToken)
 	{
 		if (_client == null || !_client.IsConnected)
-			return;
+			return default;
 
-		_client?.Send(new
+		return SendAsync(new
 		{
 			op = "subscribe",
 			channel = "fills"
-		});
+		}, cancellationToken);
 
 	}
 
 	/// <summary>
 	/// Orders subscribing
 	/// </summary>
-	public void SubscribeOrders()
+	public ValueTask SubscribeOrders(CancellationToken cancellationToken)
 	{
 		if (_client == null || !_client.IsConnected)
-			return;
+			return default;
 
-		_client?.Send(new
+		return SendAsync(new
 		{
 			op = "subscribe",
 			channel = "orders"
-		});
+		}, cancellationToken);
 	}
 
 	private readonly SynchronizedList<string> _level1Subs = new();
 
-	/// <summary>
-	/// Level1 subscribing
-	/// </summary>
-	/// <param name="market">Currency</param>
-	public void SubscribeLevel1(string market)
+	public async ValueTask SubscribeLevel1(string market, CancellationToken cancellationToken)
 	{
 		var subs = _level1Subs.ToList();
 
@@ -166,135 +159,110 @@ class FtxWebSocketClient : BaseLogReceiver
 			if (_client == null || !_client.IsConnected)
 				return;
 
-			_client?.Send(new
+			await SendAsync(new
 			{
 				op = "subscribe",
 				channel = "ticker",
 				market
-			});
+			}, cancellationToken);
 		}
 
 		_level1Subs.Add(market);
 	}
 
-	/// <summary>
-	/// Level1 unsubscribing
-	/// </summary>
-	/// <param name="market">Currency</param>
-	public void UnsubscribeLevel1(string market)
+	public async ValueTask UnsubscribeLevel1(string market, CancellationToken cancellationToken)
 	{
 
-		lock (_level1Subs.SyncRoot)
+		var subs = _level1Subs.ToList();
+
+		var subToDel = subs.FirstOrDefault(d => d == market);
+
+		if (subToDel == null)
+			return;
+
+		_level1Subs.Remove(market);
+
+		if (_level1Subs.All(d => d != market))
 		{
-			var subs = _level1Subs.ToList();
-
-			var subToDel = subs.FirstOrDefault(d => d == market);
-
-			if (subToDel == null)
+			if (_client == null || !_client.IsConnected)
 				return;
 
-			_level1Subs.Remove(market);
-
-			if (_level1Subs.All(d => d != market))
+			await SendAsync(new
 			{
-				if (_client == null || !_client.IsConnected)
-					return;
+				op = "unsubscribe",
+				channel = "ticker",
+				market
+			}, cancellationToken);
 
-				_client?.Send(new
-				{
-					op = "unsubscribe",
-					channel = "ticker",
-					market
-				});
-
-			}
 		}
 	}
 
 	private WsTradeChannelSubscriber _tradesMarketChannelSubFlags;
 
-	/// <summary>
-	/// Market trade channel subscribing
-	/// </summary>
-	/// <param name="market">Currency</param>
-	/// <param name="subscriber">Subscriber for "trades" channel</param>
-	public void SubscribeTradesChannel(string market, WsTradeChannelSubscriber subscriber)
+	public async ValueTask SubscribeTradesChannel(string market, WsTradeChannelSubscriber subscriber, CancellationToken cancellationToken)
 	{
-
 		if (_tradesMarketChannelSubFlags == WsTradeChannelSubscriber.None)
 		{
 			if (_client == null || !_client.IsConnected)
 				return;
 
-			_client?.Send(new
+			await SendAsync(new
 			{
 				op = "subscribe",
 				channel = "trades",
 				market
-			});
+			}, cancellationToken);
 		}
 		_tradesMarketChannelSubFlags |= subscriber;
 	}
 
-	/// <summary>
-	/// Market trade channel unsubscribing
-	/// </summary>
-	/// <param name="market">Currency</param>
-	/// <param name="subscriber">Subscriber for "trades" channel</param>
-	public void UnsubscribeTradesChannel(string market, WsTradeChannelSubscriber subscriber)
+	public ValueTask UnsubscribeTradesChannel(string market, WsTradeChannelSubscriber subscriber, CancellationToken cancellationToken)
 	{
 		_tradesMarketChannelSubFlags = Enumerator.Remove(_tradesMarketChannelSubFlags, subscriber);
 
 		if (_tradesMarketChannelSubFlags == WsTradeChannelSubscriber.None)
 		{
 			if (_client == null || !_client.IsConnected)
-				return;
+				return default;
 
-			_client?.Send(new
+			return SendAsync(new
 			{
 				op = "unsubscribe",
 				channel = "trades",
 				market
-			});
+			}, cancellationToken);
 
 
 		}
+
+		return default;
 	}
 
-	/// <summary>
-	/// Market orderbook channel subscribing
-	/// </summary>
-	/// <param name="market">Currency</param>
-	public void SubscribeOrderBook(string market)
+	public ValueTask SubscribeOrderBook(string market, CancellationToken cancellationToken)
 	{
 		if (_client == null || !_client.IsConnected)
-			return;
+			return default;
 
-		_client?.Send(new
+		return SendAsync(new
 		{
 			op = "subscribe",
 			channel = "orderbook",
 			market
-		});
+		}, cancellationToken);
 
 	}
 
-	/// <summary>
-	/// Market Order book channel unsubscribing
-	/// </summary>
-	/// <param name="market">Currency</param>
-	public void UnsubscribeOrderBook(string market)
+	public ValueTask UnsubscribeOrderBook(string market, CancellationToken cancellationToken)
 	{
 		if (_client == null || !_client.IsConnected)
-			return;
+			return default;
 
-		_client?.Send(new
+		return SendAsync(new
 		{
 			op = "unsubscribe",
 			channel = "orderbook",
 			market
-		});
-
+		}, cancellationToken);
 	}
 
 
@@ -367,19 +335,17 @@ class FtxWebSocketClient : BaseLogReceiver
 		return (long)time.ToUnix(false);
 	}
 
-	private void SendAuthRequest(string subaccountName)
+	private ValueTask SendAuthRequest(string subaccountName, CancellationToken cancellationToken)
 	{
 		long time = GetMillisecondsFromEpochStart();
 		string sign = GenerateSignature(time);
 
 		if (_client == null || !_client.IsConnected)
-			return;
+			return default;
 
 		if (subaccountName == null)
 		{
-
-
-			_client?.Send(new
+			return SendAsync(new
 			{
 				op = "login",
 				args = new
@@ -388,11 +354,11 @@ class FtxWebSocketClient : BaseLogReceiver
 					sign,
 					time
 				}
-			});
+			}, cancellationToken);
 		}
 		else
 		{
-			_client?.Send(new
+			return SendAsync(new
 			{
 				op = "login",
 				args = new
@@ -402,35 +368,37 @@ class FtxWebSocketClient : BaseLogReceiver
 					time,
 					subaccount = subaccountName
 				}
-			});
+			}, cancellationToken);
 		}
 	}
 
-	public void SendPingRequest()
+	public async ValueTask SendPingRequest(CancellationToken cancellationToken)
 	{
 		if (_client == null || !_client.IsConnected)
 			return;
 
-		_client?.Send(new
+		await SendAsync(new
 		{
 			op = "ping"
-		});
+		}, cancellationToken);
 
 		_nextPing = DateTime.UtcNow.AddSeconds(5);
 	}
 
+	private ValueTask SendAsync(object request, CancellationToken cancellationToken)
+		=> _client.SendAsync(request, cancellationToken);
+
 	private string GenerateSignature(long time)
 	{
 		var signature = $"{time}websocket_login";
-		var hash = _hasher.ComputeHash(signature.UTF8());
-		var hashStringBase64 = BitConverter.ToString(hash).Replace("-", string.Empty);
-		return hashStringBase64.ToLower();
+		return _hasher.ComputeHash(signature.UTF8()).Digest();
 	}
 
 	private static T Parse<T>(dynamic obj)
 	{
 		if (((JToken)obj).Type == JTokenType.Object && obj.status == "error")
 			throw new InvalidOperationException((string)obj.reason.ToString());
+
 		return ((JToken)obj).DeserializeObject<T>();
 	}
 	#endregion

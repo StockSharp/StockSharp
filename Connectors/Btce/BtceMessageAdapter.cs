@@ -1,7 +1,7 @@
 namespace StockSharp.Btce;
 
 [OrderCondition(typeof(BtceOrderCondition))]
-public partial class BtceMessageAdapter : MessageAdapter
+public partial class BtceMessageAdapter
 {
 	private HttpClient _httpClient;
 	private PusherClient _pusherClient;
@@ -40,17 +40,6 @@ public partial class BtceMessageAdapter : MessageAdapter
 	/// <inheritdoc />
 	public override string AssociatedBoard => BoardCodes.Btce;
 
-	/// <inheritdoc />
-	public override TimeSpan GetHistoryStepSize(SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)
-	{
-		var step = base.GetHistoryStepSize(securityId, dataType, out iterationInterval);
-		
-		if (dataType == DataType.Ticks)
-			step = TimeSpan.FromDays(1);
-
-		return step;
-	}
-
 	private void SubscribePusherClient()
 	{
 		_pusherClient.Connected += SessionOnPusherConnected;
@@ -70,155 +59,105 @@ public partial class BtceMessageAdapter : MessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	public override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
-		switch (message.Type)
+		_orderBooks.Clear();
+
+		_orderInfo.Clear();
+		//_unkOrds.Clear();
+		_positions.Clear();
+
+		_lastMyTradeId = 0;
+		_lastTimeBalanceCheck = null;
+
+		if (_httpClient != null)
 		{
-			case MessageTypes.Reset:
+			try
 			{
-				_orderBooks.Clear();
-
-				_orderInfo.Clear();
-				//_unkOrds.Clear();
-				_positions.Clear();
-
-				_lastMyTradeId = 0;
-				_lastTimeBalanceCheck = null;
-
-				if (_httpClient != null)
-				{
-					try
-					{
-						_httpClient.Dispose();
-					}
-					catch (Exception ex)
-					{
-						SendOutError(ex);
-					}
-
-					_httpClient = null;
-				}
-
-				if (_pusherClient != null)
-				{
-					try
-					{
-						UnsubscribePusherClient();
-						_pusherClient.Disconnect();
-					}
-					catch (Exception ex)
-					{
-						SendOutError(ex);
-					}
-
-					_pusherClient = null;
-				}
-
-				SendOutMessage(new ResetMessage());
-
-				break;
-			}
-
-			case MessageTypes.Connect:
-			{
-				if (this.IsTransactional())
-				{
-					if (Key.IsEmpty())
-						throw new InvalidOperationException(LocalizedStrings.KeyNotSpecified);
-					
-					if (Secret.IsEmpty())
-						throw new InvalidOperationException(LocalizedStrings.SecretNotSpecified);
-				}
-
-				if (_httpClient != null)
-					throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
-
-				if (_pusherClient != null)
-					throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
-
-				_httpClient = new HttpClient(Address, Key, Secret);
-
-				_pusherClient = new PusherClient { Parent = this };
-				SubscribePusherClient();
-				_pusherClient.Connect();
-
-				break;
-			}
-
-			case MessageTypes.Disconnect:
-			{
-				if (_httpClient == null)
-					throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
-
-				if (_pusherClient == null)
-					throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
-
 				_httpClient.Dispose();
-				_httpClient = null;
-
-				_pusherClient.Disconnect();
-
-				break;
 			}
-
-			case MessageTypes.PortfolioLookup:
+			catch (Exception ex)
 			{
-				ProcessPortfolioLookup((PortfolioLookupMessage)message);
-				break;
+				SendOutError(ex);
 			}
 
-			case MessageTypes.SecurityLookup:
-			{
-				ProcessSecurityLookup((SecurityLookupMessage)message);
-				break;
-			}
-
-			case MessageTypes.OrderStatus:
-			{
-				ProcessOrderStatus((OrderStatusMessage)message);
-				break;
-			}
-
-			case MessageTypes.OrderRegister:
-			{
-				ProcessOrderRegister((OrderRegisterMessage)message);
-				break;
-			}
-
-			case MessageTypes.OrderCancel:
-			{
-				ProcessOrderCancel((OrderCancelMessage)message);
-				break;
-			}
-
-			case MessageTypes.MarketData:
-			{
-				ProcessMarketData((MarketDataMessage)message);
-				break;
-			}
-
-			case MessageTypes.Time:
-			{
-				if (_orderInfo.Count > 0/* || _unkOrds.Count > 0*/)
-				{
-					ProcessOrderStatus(null);
-					ProcessPortfolioLookup(null);
-				}
-
-				if (BalanceCheckInterval > TimeSpan.Zero &&
-				    (_lastTimeBalanceCheck == null || (CurrentTime - _lastTimeBalanceCheck) > BalanceCheckInterval))
-				{
-					ProcessPortfolioLookup(null);
-				}
-
-				break;
-			}
-		
-			default:
-				return false;
+			_httpClient = null;
 		}
 
-		return true;
+		if (_pusherClient != null)
+		{
+			try
+			{
+				UnsubscribePusherClient();
+				_pusherClient.Disconnect();
+			}
+			catch (Exception ex)
+			{
+				SendOutError(ex);
+			}
+
+			_pusherClient = null;
+		}
+
+		SendOutMessage(new ResetMessage());
+		return default;
+	}
+
+	/// <inheritdoc />
+	public override ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
+	{
+		if (this.IsTransactional())
+		{
+			if (Key.IsEmpty())
+				throw new InvalidOperationException(LocalizedStrings.KeyNotSpecified);
+
+			if (Secret.IsEmpty())
+				throw new InvalidOperationException(LocalizedStrings.SecretNotSpecified);
+		}
+
+		if (_httpClient != null)
+			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
+
+		if (_pusherClient != null)
+			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
+
+		_httpClient = new HttpClient(Address, Key, Secret);
+
+		_pusherClient = new PusherClient { Parent = this };
+		SubscribePusherClient();
+		return _pusherClient.Connect(cancellationToken);
+	}
+
+	/// <inheritdoc />
+	public override ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
+	{
+		if (_httpClient == null)
+			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
+
+		if (_pusherClient == null)
+			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
+
+		_httpClient.Dispose();
+		_httpClient = null;
+
+		_pusherClient.Disconnect();
+		return default;
+	}
+
+	/// <inheritdoc />
+	public override async ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
+	{
+		if (_orderInfo.Count > 0/* || _unkOrds.Count > 0*/)
+		{
+			await OrderStatusAsync(null, cancellationToken);
+			await PortfolioLookupAsync(null, cancellationToken);
+		}
+
+		if (BalanceCheckInterval > TimeSpan.Zero &&
+			(_lastTimeBalanceCheck == null || (CurrentTime - _lastTimeBalanceCheck) > BalanceCheckInterval))
+		{
+			await PortfolioLookupAsync(null, cancellationToken);
+		}
 	}
 
 	private void SessionOnPusherConnected()

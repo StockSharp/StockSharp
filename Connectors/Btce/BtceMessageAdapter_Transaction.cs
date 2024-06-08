@@ -1,5 +1,7 @@
 namespace StockSharp.Btce;
 
+using System.Runtime.CompilerServices;
+
 partial class BtceMessageAdapter
 {
 	private long _lastMyTradeId;
@@ -10,7 +12,8 @@ partial class BtceMessageAdapter
 
 	private string PortfolioName => nameof(Btce) + "_" + Key.ToId();
 
-	private void ProcessOrderRegister(OrderRegisterMessage regMsg)
+	/// <inheritdoc />
+	public override async ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
 	{
 		switch (regMsg.OrderType)
 		{
@@ -25,7 +28,7 @@ partial class BtceMessageAdapter
 				if (!condition.IsWithdraw)
 					throw new NotSupportedException(LocalizedStrings.OrderUnsupportedType.Put(regMsg.OrderType, regMsg.TransactionId));
 
-				var withdrawId = _httpClient.Withdraw(regMsg.SecurityId.SecurityCode, regMsg.Volume, condition.WithdrawInfo);
+				var withdrawId = await _httpClient.Withdraw(regMsg.SecurityId.SecurityCode, regMsg.Volume, condition.WithdrawInfo, cancellationToken);
 
 				SendOutMessage(new ExecutionMessage
 				{
@@ -37,7 +40,7 @@ partial class BtceMessageAdapter
 					HasOrderInfo = true,
 				});
 
-				ProcessPortfolioLookup(null);
+				await PortfolioLookupAsync(null, cancellationToken);
 				return;
 			}
 			default:
@@ -45,11 +48,12 @@ partial class BtceMessageAdapter
 		}
 
 		var currency = regMsg.SecurityId.ToCurrency();
-		var reply = _httpClient.MakeOrder(
+		var reply = await _httpClient.MakeOrder(
 			currency,
 			regMsg.Side.ToBtce(),
 			regMsg.Price,
-			regMsg.Volume
+			regMsg.Volume,
+			cancellationToken
 		);
 
 		var isDone = reply.Command.OrderId == 0;
@@ -73,9 +77,9 @@ partial class BtceMessageAdapter
 		{
 			//_unkOrds.SafeAdd(currency).Add(msg);
 
-			var trades = GetTrades();
+			var trades = GetTrades(cancellationToken);
 
-			foreach (var trade in trades)
+			await foreach(var trade in trades)
 			{
 				if (!_orderInfo.ContainsKey(trade.OrderId) && msg != null)
 				{
@@ -100,12 +104,13 @@ partial class BtceMessageAdapter
 		ProcessFunds(reply.Command.Funds);
 	}
 
-	private void ProcessOrderCancel(OrderCancelMessage cancelMsg)
+	/// <inheritdoc />
+	public override async ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
 		if (cancelMsg.OrderId == null)
 			throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(cancelMsg.OriginalTransactionId));
 
-		var reply = _httpClient.CancelOrder(cancelMsg.OrderId.Value);
+		var reply = await _httpClient.CancelOrder(cancelMsg.OrderId.Value, cancellationToken);
 
 		//SendOutMessage(new ExecutionMessage
 		//{
@@ -117,7 +122,7 @@ partial class BtceMessageAdapter
 		//	ServerTime = CurrentTime.ConvertToUtc(),
 		//});
 
-		ProcessOrderStatus(null);
+		await OrderStatusAsync(null, cancellationToken);
 		ProcessFunds(reply.Command.Funds);
 	}
 
@@ -272,13 +277,14 @@ partial class BtceMessageAdapter
 		}
 	}
 
-	private void ProcessOrderStatus(OrderStatusMessage message)
+	/// <inheritdoc />
+	public override async ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
 	{
-		if (message == null)
+		if (statusMsg == null)
 		{
 			var portfolioRefresh = false;
 
-			var orders = _httpClient.GetActiveOrders().Items.Values;
+			var orders = (await _httpClient.GetActiveOrders(cancellationToken)).Items.Values;
 
 			var ids = _orderInfo.Keys.ToSet();
 			
@@ -304,9 +310,9 @@ partial class BtceMessageAdapter
 				}
 			}
 
-			var trades = GetTrades();
+			var trades = GetTrades(cancellationToken);
 
-			foreach (var trade in trades)
+			await foreach(var trade in trades)
 			{
 				ProcessTrade(trade);
 			}
@@ -331,14 +337,16 @@ partial class BtceMessageAdapter
 			}
 
 			if (portfolioRefresh)
-				ProcessPortfolioLookup(null);
+				await PortfolioLookupAsync(null, cancellationToken);
 		}
 		else
 		{
-			if (!message.IsSubscribe)
+			SendSubscriptionReply(statusMsg.TransactionId);
+
+			if (!statusMsg.IsSubscribe)
 				return;
 
-			var orders = _httpClient.GetActiveOrders().Items.Values;
+			var orders = (await _httpClient.GetActiveOrders(cancellationToken)).Items.Values;
 
 			foreach (var order in orders)
 			{
@@ -346,42 +354,43 @@ partial class BtceMessageAdapter
 
 				_orderInfo.Add(order.Id, info);
 
-				ProcessOrder(order, (decimal)order.Volume, info.First, message.TransactionId);
+				ProcessOrder(order, (decimal)order.Volume, info.First, statusMsg.TransactionId);
 			}
 
-			var trades = GetTrades();
+			var trades = GetTrades(cancellationToken);
 
-			foreach (var trade in trades)
+			await foreach(var trade in trades)
 			{
 				ProcessTrade(trade);
 			}
 		
-			SendSubscriptionResult(message);
+			SendSubscriptionResult(statusMsg);
 		}
 	}
 
-	private IEnumerable<Trade> GetTrades()
+	private async IAsyncEnumerable<Trade> GetTrades([EnumeratorCancellation]CancellationToken cancellationToken)
 	{
 		const int pageSize = 1000;
 		const int maxIter = 10;
-
-		var trades = new List<Trade>();
 
 		var i = 0;
 
 		while (true)
 		{
-			var batch = _httpClient.GetMyTrades(_lastMyTradeId + 1).Items.Values;
+			var batch = (await _httpClient.GetMyTrades(_lastMyTradeId + 1, cancellationToken)).Items.Values;
 
 			var anyLess = false;
-			trades.AddRange(batch.Where(t =>
+
+			foreach (var t in batch)
 			{
-				if (t.Id > _lastMyTradeId)
-					return true;
+				if (_lastMyTradeId < t.Id)
+				{
+					_lastMyTradeId = t.Id;
+					yield return t;
+				}
 
 				anyLess = true;
-				return false;
-			}).ToArray());
+			}
 
 			if (anyLess || batch.Count < pageSize)
 				break;
@@ -389,25 +398,20 @@ partial class BtceMessageAdapter
 			if (++i >= maxIter)
 				break;
 		}
-
-		if (trades.Count > 0)
-		{
-			trades = trades.DistinctBy(t => t.Id).OrderBy(t => t.Id).ToList();
-			_lastMyTradeId = trades.Last().Id;
-		}
-
-		return trades;
 	}
 
-	private void ProcessPortfolioLookup(PortfolioLookupMessage message)
+	/// <inheritdoc />
+	public override async ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
-		if (message != null)
+		if (lookupMsg != null)
 		{
-			if (!message.IsSubscribe)
+			SendSubscriptionReply(lookupMsg.TransactionId);
+
+			if (!lookupMsg.IsSubscribe)
 				return;
 		}
 
-		var transId = message?.TransactionId ?? 0;
+		var transId = lookupMsg?.TransactionId ?? 0;
 
 		SendOutMessage(new PortfolioMessage
 		{
@@ -416,7 +420,7 @@ partial class BtceMessageAdapter
 			OriginalTransactionId = transId
 		});
 
-		var reply = _httpClient.GetInfo();
+		var reply = await _httpClient.GetInfo(cancellationToken);
 		ProcessFunds(reply.State.Funds, true);
 
 		if (!reply.State.Rights.CanTrade)
@@ -426,8 +430,8 @@ partial class BtceMessageAdapter
 				.Add(PositionChangeTypes.State, PortfolioStates.Blocked));
 		}
 
-		if (message != null)
-			SendSubscriptionResult(message);
+		if (lookupMsg != null)
+			SendSubscriptionResult(lookupMsg);
 
 		_lastTimeBalanceCheck = CurrentTime;
 	}

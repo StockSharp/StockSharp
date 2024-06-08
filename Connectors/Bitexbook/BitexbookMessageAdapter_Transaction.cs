@@ -6,7 +6,8 @@ public partial class BitexbookMessageAdapter
 
 	private readonly SynchronizedDictionary<long, RefTriple<long, decimal, string>> _orderInfo = new();
 
-	private void ProcessOrderRegister(OrderRegisterMessage regMsg)
+	/// <inheritdoc />
+	public override async ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
 	{
 		var symbol = regMsg.SecurityId.ToNative();
 
@@ -23,7 +24,7 @@ public partial class BitexbookMessageAdapter
 				if (!condition.IsWithdraw)
 					throw new NotSupportedException(LocalizedStrings.OrderUnsupportedType.Put(regMsg.OrderType, regMsg.TransactionId));
 
-				var withdrawId = _httpClient.Withdraw(symbol, regMsg.Volume, condition.WithdrawInfo);
+				var withdrawId = await _httpClient.Withdraw(symbol, regMsg.Volume, condition.WithdrawInfo, cancellationToken);
 
 				SendOutMessage(new ExecutionMessage
 				{
@@ -35,7 +36,7 @@ public partial class BitexbookMessageAdapter
 					HasOrderInfo = true,
 				});
 
-				ProcessPortfolioLookup(null);
+				await PortfolioLookupAsync(null, cancellationToken);
 				return;
 			}
 			default:
@@ -45,7 +46,7 @@ public partial class BitexbookMessageAdapter
 		var isMarket = regMsg.OrderType == OrderTypes.Market;
 		var price = regMsg.OrderType == OrderTypes.Market ? (decimal?)null : regMsg.Price;
 
-		var orderId = _httpClient.RegisterOrder(symbol, regMsg.Side.ToNative(), price, regMsg.Volume);
+		var orderId = await _httpClient.RegisterOrder(symbol, regMsg.Side.ToNative(), price, regMsg.Volume, cancellationToken);
 
 		SendOutMessage(new ExecutionMessage
 		{
@@ -65,15 +66,16 @@ public partial class BitexbookMessageAdapter
 		else
 			_orderInfo.Add(orderId, RefTuple.Create(regMsg.TransactionId, regMsg.Volume, symbol));
 
-		ProcessPortfolioLookup(null);
+		await PortfolioLookupAsync(null, cancellationToken);
 	}
 
-	private void ProcessOrderCancel(OrderCancelMessage cancelMsg)
+	/// <inheritdoc />
+	public override async ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
 		if (cancelMsg.OrderId == null)
 			throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(cancelMsg.OriginalTransactionId));
 
-		_httpClient.CancelOrder(cancelMsg.SecurityId.ToNative(), cancelMsg.OrderId.Value);
+		await _httpClient.CancelOrder(cancelMsg.SecurityId.ToNative(), cancelMsg.OrderId.Value, cancellationToken);
 
 		//SendOutMessage(new ExecutionMessage
 		//{
@@ -84,25 +86,29 @@ public partial class BitexbookMessageAdapter
 		//	HasOrderInfo = true,
 		//});
 
-		ProcessOrderStatus(null);
-		ProcessPortfolioLookup(null);
+		await OrderStatusAsync(null, cancellationToken);
+		await PortfolioLookupAsync(null, cancellationToken);
 	}
 
-	private void ProcessPortfolioLookup(PortfolioLookupMessage message)
+	/// <inheritdoc />
+	public override ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
-		if (message != null)
+		if (lookupMsg != null)
 		{
-			if (!message.IsSubscribe)
-				return;
+			SendSubscriptionReply(lookupMsg.TransactionId);
+
+			if (!lookupMsg.IsSubscribe)
+				return default;
 
 			SendOutMessage(new PortfolioMessage
 			{
 				PortfolioName = PortfolioName,
 				BoardCode = BoardCodes.Bitexbook,
-				OriginalTransactionId = message.TransactionId
+				OriginalTransactionId = lookupMsg.TransactionId
 			});
 
-			SendSubscriptionResult(message);
+			SendSubscriptionResult(lookupMsg);
+			return default;
 		}
 
 		//ProcessPosition("BTC", balance.Free?.Btc, balance.Freezed?.Btc);
@@ -113,21 +119,24 @@ public partial class BitexbookMessageAdapter
 		//ProcessPosition("USD", balance.Free?.Usd, balance.Freezed?.Usd);
 
 		_lastTimeBalanceCheck = CurrentTime;
+
+		return default;
 	}
 
-	private void ProcessOrderStatus(OrderStatusMessage message)
+	/// <inheritdoc />
+	public override ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
 	{
-		if (message == null)
+		if (statusMsg == null)
 		{
 			
 		}
 		else
 		{
-			if (!message.IsSubscribe)
-				return;
-		
-			SendSubscriptionResult(message);
+			SendSubscriptionReply(statusMsg.TransactionId);
+			SendSubscriptionResult(statusMsg);
 		}
+
+		return default;
 	}
 
 	private void ProcessOrder(SecurityId secId, Order order, long transId, long origTransId, OrderStates state)

@@ -2,11 +2,13 @@ namespace StockSharp.Coinbase;
 
 public partial class CoinbaseMessageAdapter
 {
-	private void ProcessSecurityLookup(SecurityLookupMessage lookupMsg)
+	/// <inheritdoc />
+	public override async ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
 		var secTypes = lookupMsg.GetSecurityTypes();
+		var left = lookupMsg.Count ?? long.MaxValue;
 
-		var products = _httpClient.GetProducts();
+		var products = await _httpClient.GetProducts(cancellationToken);
 
 		foreach (var product in products)
 		{
@@ -37,109 +39,117 @@ public partial class CoinbaseMessageAdapter
 					ServerTime = CurrentTime.ConvertToUtc(),
 				}.Add(Level1Fields.State, SecurityStates.Stoped));
 			}
+
+			if (--left <= 0)
+				break;
 		}
 
 		SendSubscriptionResult(lookupMsg);
 	}
 
-	private void ProcessMarketData(MarketDataMessage mdMsg)
+	/// <inheritdoc />
+	protected override ValueTask OnLevel1SubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		var currency = mdMsg.SecurityId.ToCurrency();
-
-		switch (mdMsg.DataType)
-		{
-			case MarketDataTypes.Level1:
-			{
-				if (mdMsg.IsSubscribe)
-					_pusherClient.SubscribeTicker(currency);
-				else
-					_pusherClient.UnSubscribeTicker(currency);
-
-				break;
-			}
-			case MarketDataTypes.MarketDepth:
-			{
-				if (mdMsg.IsSubscribe)
-					_pusherClient.SubscribeOrderBook(currency);
-				else
-					_pusherClient.UnSubscribeOrderBook(currency);
-
-				break;
-			}
-			case MarketDataTypes.Trades:
-			{
-				if (mdMsg.IsSubscribe)
-				{
-					//if (mdMsg.From != null && mdMsg.From.Value.IsToday())
-					//{
-					//	_httpClient.RequestTransactions(currency, "minute").Select(t => new ExecutionMessage
-					//	{
-					//		DataTypeEx = DataType.Ticks,
-					//		SecurityId = mdMsg.SecurityId,
-					//		TradeId = t.Id,
-					//		TradePrice = (decimal)t.Price,
-					//		TradeVolume = (decimal)t.Amount,
-					//		ServerTime = t.Time.To<long>().FromUnix(),
-					//	}).ForEach(SendOutMessage);
-					//}
-					//else
-					_pusherClient.SubscribeTrades(currency);
-				}
-				else
-				{
-					_pusherClient.UnSubscribeTrades(currency);
-				}
-
-				break;
-			}
-			case MarketDataTypes.OrderLog:
-			{
-				if (mdMsg.IsSubscribe)
-					_pusherClient.SubscribeOrderLog(currency);
-				else
-					_pusherClient.UnSubscribeOrderLog(currency);
-
-				break;
-			}
-			case MarketDataTypes.CandleTimeFrame:
-			{
-				break;
-			}
-			default:
-			{
-				SendSubscriptionNotSupported(mdMsg.TransactionId);
-				return;
-			}
-		}
-
 		SendSubscriptionReply(mdMsg.TransactionId);
 
-		if (mdMsg.DataType == MarketDataTypes.CandleTimeFrame)
+		var currency = mdMsg.SecurityId.ToCurrency();
+
+		if (mdMsg.IsSubscribe)
+			return _pusherClient.SubscribeTicker(currency, cancellationToken);
+		else
+			return _pusherClient.UnSubscribeTicker(currency, cancellationToken);
+	}
+
+	/// <inheritdoc />
+	protected override ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	{
+		SendSubscriptionReply(mdMsg.TransactionId);
+
+		var currency = mdMsg.SecurityId.ToCurrency();
+
+		if (mdMsg.IsSubscribe)
+			return _pusherClient.SubscribeOrderBook(currency, cancellationToken);
+		else
+			return _pusherClient.UnSubscribeOrderBook(currency, cancellationToken);
+	}
+
+	/// <inheritdoc />
+	protected override ValueTask OnTicksSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	{
+		SendSubscriptionReply(mdMsg.TransactionId);
+
+		var currency = mdMsg.SecurityId.ToCurrency();
+
+		if (mdMsg.IsSubscribe)
 		{
-			if (!mdMsg.IsSubscribe)
-				return;
-
-			var candles = _httpClient.GetCandles(currency, mdMsg.From, mdMsg.To, (int)mdMsg.GetTimeFrame().TotalSeconds).Reverse();
-
-			foreach (var candle in candles)
-			{
-				SendOutMessage(new TimeFrameCandleMessage
-				{
-					SecurityId = mdMsg.SecurityId,
-					TypedArg = mdMsg.GetTimeFrame(),
-					OpenPrice = candle.Open,
-					ClosePrice = candle.Close,
-					HighPrice = candle.High,
-					LowPrice = candle.Low,
-					TotalVolume = candle.Volume,
-					OpenTime = candle.Time.FromUnix(),
-					State = CandleStates.Finished,
-					OriginalTransactionId = mdMsg.TransactionId,
-				});
-			}
-
-			SendSubscriptionFinished(mdMsg.TransactionId);
+			//if (mdMsg.From != null && mdMsg.From.Value.IsToday())
+			//{
+			//	_httpClient.RequestTransactions(currency, "minute").Select(t => new ExecutionMessage
+			//	{
+			//		DataTypeEx = DataType.Ticks,
+			//		SecurityId = mdMsg.SecurityId,
+			//		TradeId = t.Id,
+			//		TradePrice = (decimal)t.Price,
+			//		TradeVolume = (decimal)t.Amount,
+			//		ServerTime = t.Time.To<long>().FromUnix(),
+			//	}).ForEach(SendOutMessage);
+			//}
+			//else
+			return _pusherClient.SubscribeTrades(currency, cancellationToken);
 		}
+		else
+		{
+			return _pusherClient.UnSubscribeTrades(currency, cancellationToken);
+		}
+	}
+
+	/// <inheritdoc />
+	protected override ValueTask OnOrderLogSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	{
+		SendSubscriptionReply(mdMsg.TransactionId);
+
+		var currency = mdMsg.SecurityId.ToCurrency();
+
+		if (mdMsg.IsSubscribe)
+			return _pusherClient.SubscribeOrderLog(currency, cancellationToken);
+		else
+			return _pusherClient.UnSubscribeOrderLog(currency, cancellationToken);
+	}
+
+	/// <inheritdoc />
+	protected override async ValueTask OnTFCandlesSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	{
+		SendSubscriptionReply(mdMsg.TransactionId);
+
+		if (!mdMsg.IsSubscribe)
+			return;
+
+		var currency = mdMsg.SecurityId.ToCurrency();
+
+		var candles = await _httpClient.GetCandles(currency, mdMsg.From, mdMsg.To, (int)mdMsg.GetTimeFrame().TotalSeconds, cancellationToken);
+		var left = mdMsg.Count ?? long.MaxValue;
+
+		foreach (var candle in candles.OrderBy(c => c.Time))
+		{
+			SendOutMessage(new TimeFrameCandleMessage
+			{
+				SecurityId = mdMsg.SecurityId,
+				TypedArg = mdMsg.GetTimeFrame(),
+				OpenPrice = candle.Open,
+				ClosePrice = candle.Close,
+				HighPrice = candle.High,
+				LowPrice = candle.Low,
+				TotalVolume = candle.Volume,
+				OpenTime = candle.Time.FromUnix(),
+				State = CandleStates.Finished,
+				OriginalTransactionId = mdMsg.TransactionId,
+			});
+
+			if (--left <= 0)
+				break;
+		}
+
+		SendSubscriptionFinished(mdMsg.TransactionId);
 	}
 
 	private void SessionOnTickerChanged(Ticker ticker)
@@ -176,7 +186,7 @@ public partial class CoinbaseMessageAdapter
 
 	private void SessionOnOrderBookSnapshot(OrderBook book)
 	{
-		QuoteChange ToChange(OrderBookEntry entry) => new(entry.Price, entry.Size);
+		static QuoteChange ToChange(OrderBookEntry entry) => new(entry.Price, entry.Size);
 
 		SendOutMessage(new QuoteChangeMessage
 		{

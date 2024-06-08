@@ -18,7 +18,7 @@ using Ecng.ComponentModel;
 [MessageAdapterCategory(MessageAdapterCategories.Crypto | MessageAdapterCategories.RealTime |
 	MessageAdapterCategories.Free | MessageAdapterCategories.Ticks | MessageAdapterCategories.MarketDepth |
 	MessageAdapterCategories.Level1 | MessageAdapterCategories.Transactions)]
-public partial class FtxMessageAdapter : IKeySecretAdapter
+public partial class FtxMessageAdapter : AsyncMessageAdapter, IKeySecretAdapter
 {
 	/// <summary>
 	/// Default value for <see cref="MessageAdapter.HeartbeatInterval"/>.

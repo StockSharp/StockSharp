@@ -22,244 +22,198 @@ partial class FtxMessageAdapter
 		}
 	}
 
-	private void SessionOnNewOrderBook(string pair, OrderBook book, QuoteChangeStates quoteChangeStates)
+	private void SessionOnNewOrderBook(string pair, OrderBook book, QuoteChangeStates state)
 	{
-
 		SendOutMessage(new QuoteChangeMessage
 		{
-			State = quoteChangeStates,
+			State = state,
 			SecurityId = pair.ToStockSharp(),
 			Bids = book.Bids.Select(e => new QuoteChange(e.Price, e.Size)).ToArray(),
 			Asks = book.Asks.Select(e => new QuoteChange(e.Price, e.Size)).ToArray(),
-
 			ServerTime = book.Time,
 		});
-
 	}
+
 	private void SessionOnNewLevel1(string pair, Level1 level1)
 	{
-		var l1 = new Level1ChangeMessage()
+		SendOutMessage(new Level1ChangeMessage()
 		{
 			SecurityId = pair.ToStockSharp(),
 			ServerTime = level1.Time
-		};
-		if (level1.Bid > 0) l1.Changes[Level1Fields.BestBidPrice] = level1.Bid;
-		if (level1.Ask > 0) l1.Changes[Level1Fields.BestAskPrice] = level1.Ask;
-		if (level1.BidSize > 0) l1.Changes[Level1Fields.BestBidVolume] = level1.BidSize;
-		if (level1.AskSize > 0) l1.Changes[Level1Fields.BestAskVolume] = level1.AskSize;
-		SendOutMessage(l1);
+		}
+		.TryAdd(Level1Fields.BestBidPrice, level1.Bid)
+		.TryAdd(Level1Fields.BestAskPrice, level1.Ask)
+		.TryAdd(Level1Fields.BestBidVolume, level1.BidSize)
+		.TryAdd(Level1Fields.BestAskVolume, level1.AskSize)
+		);
 	}
 
-	private void ProcessMarketData(MarketDataMessage mdMsg)
+	/// <inheritdoc />
+	protected override ValueTask OnLevel1SubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
+		SendSubscriptionReply(mdMsg.TransactionId);
+
 		var currency = mdMsg.SecurityId.ToCurrency();
 
-		if (mdMsg.DataType == MarketDataTypes.Level1)
+		if (mdMsg.IsSubscribe)
+			return _wsClient.SubscribeLevel1(currency, cancellationToken);
+		else
+			return _wsClient.UnsubscribeLevel1(currency, cancellationToken);
+	}
+
+	/// <inheritdoc />
+	protected override ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	{
+		SendSubscriptionReply(mdMsg.TransactionId);
+
+		var currency = mdMsg.SecurityId.ToCurrency();
+
+		if (mdMsg.IsSubscribe)
+			return _wsClient.SubscribeOrderBook(currency, cancellationToken);
+		else
+			return _wsClient.UnsubscribeOrderBook(currency, cancellationToken);
+	}
+
+	/// <inheritdoc />
+	protected override async ValueTask OnTicksSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	{
+		SendSubscriptionReply(mdMsg.TransactionId);
+
+		var currency = mdMsg.SecurityId.ToCurrency();
+
+		if (mdMsg.IsSubscribe)
 		{
-			if (mdMsg.IsSubscribe)
-				_wsClient.SubscribeLevel1(currency);
-			else
-				_wsClient.UnsubscribeLevel1(currency);
-		}
-		else if (mdMsg.DataType == MarketDataTypes.MarketDepth)
-		{
-			if (mdMsg.IsSubscribe)
-				_wsClient.SubscribeOrderBook(currency);
-			else
-				_wsClient.UnsubscribeOrderBook(currency);
-		}
-		else if (mdMsg.DataType2 == DataType.Ticks)
-		{
-			if (mdMsg.IsSubscribe)
-				if (mdMsg.To != null)
+			if (mdMsg.From is not null)
+			{
+				var startTime = mdMsg.From.Value.UtcDateTime;
+				var endTime = mdMsg.To?.UtcDateTime ?? DateTime.UtcNow;
+				var left = mdMsg.Count ?? long.MaxValue;
+
+				while (startTime < endTime)
 				{
-					if (mdMsg.From == null)
-						throw new ArgumentException(nameof(mdMsg.From));
+					var trades = await _restClient.GetMarketTrades(currency, startTime, endTime, cancellationToken);
 
-					if (mdMsg.From > mdMsg.To)
-						throw new Exception(
-						                    $"Property \"From\" of type {mdMsg.GetType().Name} is greater than property \"To\".");
+					var lastTime = startTime;
 
-					SendSubscriptionReply(mdMsg.TransactionId);
-
-					GetPaginatedTradesFromMarket(mdMsg, currency, mdMsg.From.Value.DateTime.ToUniversalTime(), mdMsg.To.Value.DateTime.ToUniversalTime());
-
-					SendSubscriptionResult(mdMsg);
-				}
-				else
-				{
-
-
-					if (mdMsg.From != null)
+					foreach (var trade in trades.OrderBy(t => t.Time))
 					{
-						GetPaginatedTradesFromMarket(mdMsg, currency, mdMsg.From.Value.DateTime.ToUniversalTime(), DateTime.UtcNow);
+						if (trade.Time < startTime)
+							continue;
+
+						if (trade.Time > endTime)
+							break;
+
+						SendOutMessage(new ExecutionMessage
+						{
+							DataTypeEx = DataType.Ticks,
+							SecurityId = mdMsg.SecurityId,
+							TradeId = trade.Id,
+							TradePrice = trade.Price,
+							TradeVolume = trade.Size,
+							ServerTime = trade.Time,
+							OriginSide = trade.Side.ToSide(),
+							OriginalTransactionId = mdMsg.TransactionId
+						});
+
+						if (--left <= 0)
+							break;
+
+						lastTime = trade.Time;
 					}
 
+					if (trades.Count != _tickPaginationLimit || --left <= 0)
+						break;
 
-					_wsClient.SubscribeTradesChannel(currency, WsTradeChannelSubscriber.Trade);
-				}
-			else
-			{
-				_wsClient.UnsubscribeTradesChannel(currency, WsTradeChannelSubscriber.Trade);
-			}
-		}
-		else if (mdMsg.DataType == MarketDataTypes.CandleTimeFrame)
-		{
-			if (mdMsg.IsSubscribe)
-			{
-				if (mdMsg.To != null)
-				{
-					if (mdMsg.From == null)
-						throw new ArgumentException(nameof(mdMsg.From));
-
-
-					if (mdMsg.From > mdMsg.To)
-						throw new Exception(
-											$"Property \"From\" of type {mdMsg.GetType().Name} is greater than property \"To\".");
-
-					SendSubscriptionReply(mdMsg.TransactionId);
-
-					GetPaginatedCandlesFromMarket(mdMsg, currency, mdMsg.From.Value.DateTime.ToUniversalTime(), mdMsg.To.Value.DateTime.ToUniversalTime());
-
-					SendSubscriptionResult(mdMsg);
-				}
-				else
-				{
-					if (mdMsg.From != null)
-					{
-						GetPaginatedCandlesFromMarket(mdMsg, currency, mdMsg.From.Value.DateTime.ToUniversalTime(), DateTime.UtcNow);
-					}
-
-					_wsClient.SubscribeTradesChannel(currency, WsTradeChannelSubscriber.Candles);
+					startTime = lastTime;
 				}
 			}
-			else
-			{
-				_wsClient.UnsubscribeTradesChannel(currency, WsTradeChannelSubscriber.Candles);
-			}
 
+			if (!mdMsg.IsHistoryOnly())
+				await _wsClient.SubscribeTradesChannel(currency, WsTradeChannelSubscriber.Trade, cancellationToken);
+
+			SendSubscriptionResult(mdMsg);
 		}
 		else
 		{
-			SendSubscriptionNotSupported(mdMsg.TransactionId);
-			return;
+			await _wsClient.UnsubscribeTradesChannel(currency, WsTradeChannelSubscriber.Trade, cancellationToken);
 		}
+	}
 
+	/// <inheritdoc />
+	protected override async ValueTask OnTFCandlesSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	{
 		SendSubscriptionReply(mdMsg.TransactionId);
-	}
 
-	#region Candles pagination
-	private void GetPaginatedCandlesFromMarket(MarketDataMessage mdMsg, string currency, DateTime dateTimeFrom, DateTime dateTimeTo)
-	{
-		GetMarketCandlesByChunks(mdMsg, currency, dateTimeFrom, dateTimeTo);
-	}
+		var currency = mdMsg.SecurityId.ToCurrency();
 
-	private void GetMarketCandlesByChunks(MarketDataMessage mdMsg, string currency, DateTime dateTimeFrom, DateTime dateTimeTo)
-	{
-		List<Candle> candles = new();
-		var endTime = dateTimeTo;
-
-		var resolution = (TimeSpan)mdMsg.DataType2.Arg;
-		while (true)
+		if (mdMsg.IsSubscribe)
 		{
-			var candlesChunk = _restClient.GetMarketCandles(currency, resolution, dateTimeFrom, endTime);
-
-			candles.InsertRange(0, candlesChunk);
-			if (candlesChunk.Count != _candlesPaginationLimit)
+			if (mdMsg.From is not null)
 			{
-				break;
+				var startTime = mdMsg.From.Value.UtcDateTime;
+				var endTime = mdMsg.To?.UtcDateTime ?? DateTime.UtcNow;
+				var left = mdMsg.Count ?? long.MaxValue;
+
+				var resolution = (TimeSpan)mdMsg.DataType2.Arg;
+
+				while (startTime < endTime)
+				{
+					var candles = await _restClient.GetMarketCandles(currency, resolution, startTime, endTime, cancellationToken);
+
+					var lastTime = startTime;
+
+					foreach (var candle in candles.OrderBy(t => t.OpenTime))
+					{
+						if (candle.OpenTime < startTime)
+							continue;
+
+						if (candle.OpenTime > endTime)
+							break;
+
+						SendOutMessage(new TimeFrameCandleMessage
+						{
+							OriginalTransactionId = mdMsg.TransactionId,
+							ClosePrice = candle.ClosePrice,
+							HighPrice = candle.HightPrice,
+							LowPrice = candle.LowPrice,
+							OpenPrice = candle.OpenPrice,
+							TotalVolume = candle.WindowVolume,
+							OpenTime = candle.OpenTime,
+							State = CandleStates.Finished,
+						});
+
+						if (--left <= 0)
+							break;
+
+						lastTime = candle.OpenTime;
+					}
+
+					if (candles.Count != _candlesPaginationLimit || --left <= 0)
+						break;
+
+					startTime = lastTime;
+				}
 			}
-			endTime -= candlesChunk.Last().OpenTime - candlesChunk.First().OpenTime;
 
+			if (!mdMsg.IsHistoryOnly())
+				await _wsClient.SubscribeTradesChannel(currency, WsTradeChannelSubscriber.Candles, cancellationToken);
+
+			SendSubscriptionResult(mdMsg);
 		}
-		CreateCandlesSendoutMessage(mdMsg, candles, resolution);
-	}
-
-	private void CreateCandlesSendoutMessage(MarketDataMessage mdMsg, List<Candle> candles, TimeSpan resolution)
-	{
-		foreach (var candle in candles.OrderBy(t => t.OpenTime))
+		else
 		{
-			SendOutMessage(new TimeFrameCandleMessage
-			{
-				OriginalTransactionId = mdMsg.TransactionId,
-				SecurityId = mdMsg.SecurityId,
-				ClosePrice = candle.ClosePrice,
-				HighPrice = candle.HightPrice,
-				LowPrice = candle.LowPrice,
-				OpenPrice = candle.OpenPrice,
-				TotalVolume = candle.WindowVolume,
-				OpenTime = candle.OpenTime,
-				State = CandleStates.Finished,
-				TypedArg = resolution
-			});
+			await _wsClient.UnsubscribeTradesChannel(currency, WsTradeChannelSubscriber.Candles, cancellationToken);
 		}
 	}
 
-	#endregion
-
-	#region Ticks pagination
-	private void GetPaginatedTradesFromMarket(MarketDataMessage mdMsg, string currency, DateTime dateTimeFrom, DateTime dateTimeTo)
-	{
-		GetMarketTradesByChunks(mdMsg, currency, dateTimeFrom, dateTimeTo);
-	}
-
-	private void GetMarketTradesByChunks(MarketDataMessage mdMsg, string currency, DateTime dateTimeFrom, DateTime dateTimeTo)
-	{
-		List<Trade> trades = new();
-		var startTime = dateTimeFrom;
-		var endTime = dateTimeTo;
-
-		while (true)
-		{
-			var tradesChunk = _restClient.GetMarketTrades(currency, startTime, endTime);
-			tradesChunk.Reverse();
-			trades.InsertRange(0, tradesChunk);
-			if (tradesChunk.Count != _tickPaginationLimit)
-			{
-				break;
-			}
-			endTime -= tradesChunk.Last().Time - tradesChunk.First().Time;
-		}
-
-		CreateTradesSendoutMessage(mdMsg, trades);
-	}
-
-	private void CreateTradesSendoutMessage(MarketDataMessage mdMsg, List<Trade> trades)
-	{
-		foreach (var trade in trades.OrderBy(t => t.Time))
-		{
-			SendOutMessage(new ExecutionMessage
-			{
-				DataTypeEx = DataType.Ticks,
-				SecurityId = mdMsg.SecurityId,
-				TradeId = trade.Id,
-				TradePrice = trade.Price,
-				TradeVolume = trade.Size,
-				ServerTime = trade.Time,
-				OriginSide = trade.Side.ToSide(),
-				OriginalTransactionId = mdMsg.TransactionId
-			});
-		}
-	}
-	#endregion
-
-	private static int GetDecimalPlaces(decimal n)
-	{
-		n = Math.Abs(n);
-		n -= (int)n;
-		var decimalPlaces = 0;
-		while (n > 0)
-		{
-			decimalPlaces++;
-			n *= 10;
-			n -= (int)n;
-		}
-		return decimalPlaces;
-	}
-	private void ProcessSecurityLookup(SecurityLookupMessage lookupMsg)
+	/// <inheritdoc />
+	public override async ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
 		var secTypes = lookupMsg.GetSecurityTypes();
-		var markets = _restClient.GetMarkets();
+		var left = lookupMsg.Count ?? long.MaxValue;
+
+		var markets = await _restClient.GetMarkets(cancellationToken);
+
 		foreach (var info in markets)
 		{
 			var secMsg = new SecurityMessage
@@ -267,7 +221,6 @@ partial class FtxMessageAdapter
 				SecurityId = info.Name.ToStockSharp(),
 				SecurityType = info.Type == "future" ? SecurityTypes.Future : SecurityTypes.CryptoCurrency,
 				MinVolume = info.MinProvideSize,
-				Decimals = GetDecimalPlaces(info.PriceIncrement),
 				Name = info.Name,
 				VolumeStep = info.SizeIncrement,
 				OriginalTransactionId = lookupMsg.TransactionId,
@@ -278,7 +231,11 @@ partial class FtxMessageAdapter
 				continue;
 
 			SendOutMessage(secMsg);
+
+			if (--left <= 0)
+				break;
 		}
+
 		SendSubscriptionResult(lookupMsg);
 	}
 }

@@ -6,11 +6,13 @@ public partial class BitalongMessageAdapter
 	private readonly Dictionary<string, long?> _tradesSubscriptions = new(StringComparer.InvariantCultureIgnoreCase);
 	private readonly HashSet<string> _level1Subscriptions = new(StringComparer.InvariantCultureIgnoreCase);
 
-	private void ProcessSecurityLookup(SecurityLookupMessage lookupMsg)
+	/// <inheritdoc />
+	public override async ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
 		var secTypes = lookupMsg.GetSecurityTypes();
+		var left = lookupMsg.Count ?? long.MaxValue;
 
-		foreach (var pair in _httpClient.GetSymbols())
+		foreach (var pair in await _httpClient.GetSymbols(cancellationToken))
 		{
 			var symbol = pair.Value;
 
@@ -34,97 +36,95 @@ public partial class BitalongMessageAdapter
 			}
 			.TryAdd(Level1Fields.CommissionMaker, (decimal)symbol.FeeSell)
 			.TryAdd(Level1Fields.CommissionTaker, (decimal)symbol.FeeBuy));
+
+			if (--left <= 0)
+				break;
 		}
 
 		SendSubscriptionResult(lookupMsg);
 	}
 
-	private void ProcessMarketData(MarketDataMessage mdMsg)
+	/// <inheritdoc />
+	protected override async ValueTask OnLevel1SubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		var secId = mdMsg.SecurityId;
-		var transId = mdMsg.TransactionId;
+		SendSubscriptionReply(mdMsg.TransactionId);
 
+		var secId = mdMsg.SecurityId;
 		var symbol = secId.ToNative();
 
-		switch (mdMsg.DataType)
+		if (mdMsg.IsSubscribe)
 		{
-			case MarketDataTypes.Level1:
-			{
-				if (mdMsg.IsSubscribe)
-				{
-					ProcessLevel1Subscriptions(new[] { symbol });
-					_level1Subscriptions.Add(symbol);
-				}
-				else
-					_level1Subscriptions.Remove(symbol);
-
-				break;
-			}
-			case MarketDataTypes.Trades:
-			{
-				if (mdMsg.IsSubscribe)
-				{
-					if (mdMsg.To != null)
-					{
-						SendSubscriptionReply(mdMsg.TransactionId);
-
-						ProcessTicksSubscription(mdMsg.TransactionId, symbol);
-						SendSubscriptionResult(mdMsg);
-						return;
-					}
-					else
-						ProcessTicksSubscription(0, symbol);
-				}
-				else
-				{
-					_tradesSubscriptions.Remove(symbol);
-				}
-
-				break;
-			}
-			case MarketDataTypes.MarketDepth:
-			{
-				if (mdMsg.IsSubscribe)
-				{
-					ProcessOrderBookSubscription(symbol);
-					_orderBookSubscriptions.Add(symbol);
-				}
-				else
-					_orderBookSubscriptions.Remove(symbol);
-
-				break;
-			}
-			default:
-			{
-				SendSubscriptionNotSupported(transId);
-				return;
-			}
+			await ProcessLevel1Subscriptions(new[] { symbol }, cancellationToken);
+			_level1Subscriptions.Add(symbol);
 		}
-
-		SendSubscriptionReply(transId);
+		else
+			_level1Subscriptions.Remove(symbol);
 	}
 
-	private void ProcessSubscriptions()
+	/// <inheritdoc />
+	protected override async ValueTask OnTicksSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	{
+		SendSubscriptionReply(mdMsg.TransactionId);
+
+		var secId = mdMsg.SecurityId;
+		var symbol = secId.ToNative();
+
+		if (mdMsg.IsSubscribe)
+		{
+			if (mdMsg.To != null)
+			{
+				SendSubscriptionReply(mdMsg.TransactionId);
+
+				await ProcessTicksSubscription(mdMsg.TransactionId, symbol, cancellationToken);
+				SendSubscriptionResult(mdMsg);
+			}
+			else
+				await ProcessTicksSubscription(0, symbol, cancellationToken);
+		}
+		else
+		{
+			_tradesSubscriptions.Remove(symbol);
+		}
+	}
+
+	/// <inheritdoc />
+	protected override async ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	{
+		SendSubscriptionReply(mdMsg.TransactionId);
+
+		var secId = mdMsg.SecurityId;
+		var symbol = secId.ToNative();
+
+		if (mdMsg.IsSubscribe)
+		{
+			await ProcessOrderBookSubscription(symbol, cancellationToken);
+			_orderBookSubscriptions.Add(symbol);
+		}
+		else
+			_orderBookSubscriptions.Remove(symbol);
+	}
+
+	private async Task ProcessSubscriptions(CancellationToken cancellationToken)
 	{
 		foreach (var symbol in _orderBookSubscriptions)
 		{
-			ProcessOrderBookSubscription(symbol);
+			await ProcessOrderBookSubscription(symbol, cancellationToken);
 		}
 
 		foreach (var symbol in _tradesSubscriptions.Keys.ToArray())
 		{
-			ProcessTicksSubscription(0, symbol);
+			await ProcessTicksSubscription(0, symbol, cancellationToken);
 		}
 
 		if (_level1Subscriptions.Count > 0)
 		{
-			ProcessLevel1Subscriptions(_level1Subscriptions.ToArray());
+			await ProcessLevel1Subscriptions(_level1Subscriptions.ToArray(), cancellationToken);
 		}
 	}
 
-	private void ProcessOrderBookSubscription(string symbol)
+	private async Task ProcessOrderBookSubscription(string symbol, CancellationToken cancellationToken)
 	{
-		var book = _httpClient.GetOrderBook(symbol);
+		var book = await _httpClient.GetOrderBook(symbol, cancellationToken);
 
 		SendOutMessage(new QuoteChangeMessage
 		{
@@ -135,13 +135,13 @@ public partial class BitalongMessageAdapter
 		});
 	}
 
-	private void ProcessTicksSubscription(long transId, string symbol)
+	private async Task ProcessTicksSubscription(long transId, string symbol, CancellationToken cancellationToken)
 	{
 		var secId = symbol.ToStockSharp();
 
 		var lastId = _tradesSubscriptions.TryGetValue(symbol);
 
-		foreach (var trade in _httpClient.GetTradeHistory(symbol).OrderBy(t => t.Timestamp))
+		foreach (var trade in (await _httpClient.GetTradeHistory(symbol, cancellationToken)).OrderBy(t => t.Timestamp))
 		{
 			if (lastId != null && trade.Id <= lastId)
 				continue;
@@ -153,7 +153,7 @@ public partial class BitalongMessageAdapter
 		}
 	}
 
-	private void ProcessLevel1Subscriptions(string[] symbols)
+	private async Task ProcessLevel1Subscriptions(string[] symbols, CancellationToken cancellationToken)
 	{
 		void ProcessTicker(string symbol, Ticker ticker)
 		{
@@ -173,7 +173,7 @@ public partial class BitalongMessageAdapter
 		
 		if (symbols.Length > 2)
 		{
-			foreach (var pair in _httpClient.GetTickers())
+			foreach (var pair in await _httpClient.GetTickers(cancellationToken))
 			{
 				ProcessTicker(pair.Key, pair.Value);
 			}
@@ -182,7 +182,7 @@ public partial class BitalongMessageAdapter
 		{
 			foreach (var symbol in symbols)
 			{
-				ProcessTicker(symbol, _httpClient.GetTicker(symbol));
+				ProcessTicker(symbol, await _httpClient.GetTicker(symbol, cancellationToken));
 			}
 		}
 	}

@@ -4,11 +4,13 @@ partial class BtceMessageAdapter
 {
 	private readonly SynchronizedSet<string> _orderBooks = new(StringComparer.InvariantCultureIgnoreCase);
 
-	private void ProcessSecurityLookup(SecurityLookupMessage lookupMsg)
+	/// <inheritdoc />
+	public override async ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
 		var secTypes = lookupMsg.GetSecurityTypes();
+		var left = lookupMsg.Count ?? long.MaxValue;
 
-		var reply = _httpClient.GetInstruments();
+		var reply = await _httpClient.GetInstruments(cancellationToken);
 
 		foreach (var info in reply.Items.Values)
 		{
@@ -53,84 +55,86 @@ partial class BtceMessageAdapter
 			.TryAdd(Level1Fields.MaxPrice, info.MaxPrice.ToDecimal())
 			.TryAdd(Level1Fields.CommissionTaker, info.Fee.ToDecimal())
 			.Add(Level1Fields.State, info.IsHidden ? SecurityStates.Stoped : SecurityStates.Trading));
+
+			if (--left <= 0)
+				break;
 		}
 
 		SendSubscriptionResult(lookupMsg);
 	}
 
-	private void ProcessMarketData(MarketDataMessage mdMsg)
+	/// <inheritdoc />
+	protected override ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
+		SendSubscriptionReply(mdMsg.TransactionId);
+
 		var currency = mdMsg.SecurityId.ToCurrency();
 
-		switch (mdMsg.DataType)
-		{
-			case MarketDataTypes.Level1:
-			{
-				break;
-			}
-			case MarketDataTypes.MarketDepth:
-			{
-				if (mdMsg.IsSubscribe)
-					_pusherClient.SubscribeOrderBook(currency);
-				else
-					_pusherClient.UnSubscribeOrderBook(currency);
-
-				break;
-			}
-			case MarketDataTypes.Trades:
-			{
-				if (mdMsg.IsSubscribe)
-				{
-					if (mdMsg.To != null)
-					{
-						SendSubscriptionReply(mdMsg.TransactionId);
-
-						var trades = _httpClient.GetTrades(5000, new[] { currency }).Items.TryGetValue(currency);
-
-						if (trades != null)
-						{
-							foreach (var trade in trades.OrderBy(t => t.Timestamp))
-							{
-								SendOutMessage(new ExecutionMessage
-								{
-									DataTypeEx = DataType.Ticks,
-									SecurityId = mdMsg.SecurityId,
-									TradeId = trade.Id,
-									TradePrice = (decimal)trade.Price,
-									TradeVolume = trade.Volume.ToDecimal(),
-									ServerTime = trade.Timestamp,
-									OriginSide = trade.Side.ToSide(),
-									OriginalTransactionId = mdMsg.TransactionId,
-								});
-							}
-						}
-
-						SendSubscriptionResult(mdMsg);
-						return;
-					}
-					else
-						_pusherClient.SubscribeTrades(currency);
-				}
-				else
-					_pusherClient.UnSubscribeTrades(currency);
-
-				break;
-			}
-			default:
-			{
-				SendSubscriptionNotSupported(mdMsg.TransactionId);
-				return;
-			}
-		}
-
-		SendSubscriptionReply(mdMsg.TransactionId);
+		if (mdMsg.IsSubscribe)
+			return _pusherClient.SubscribeOrderBook(currency, cancellationToken);
+		else
+			return _pusherClient.UnSubscribeOrderBook(currency, cancellationToken);
 	}
+
+	/// <inheritdoc />
+	protected override async ValueTask OnTicksSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	{
+		SendSubscriptionReply(mdMsg.TransactionId);
+
+		var currency = mdMsg.SecurityId.ToCurrency();
+
+		if (mdMsg.IsSubscribe)
+		{
+			if (mdMsg.From is not null)
+			{
+				var to = mdMsg.To ?? DateTimeOffset.UtcNow;
+				var left = mdMsg.Count ?? long.MaxValue;
+
+				var trades = (await _httpClient.GetTrades(5000, new[] { currency }, cancellationToken)).Items.TryGetValue(currency);
+
+				if (trades != null)
+				{
+					foreach (var trade in trades.OrderBy(t => t.Timestamp))
+					{
+						if (trade.Timestamp < mdMsg.From)
+							continue;
+
+						if (trade.Timestamp > to)
+							break;
+
+						SendOutMessage(new ExecutionMessage
+						{
+							DataTypeEx = DataType.Ticks,
+							SecurityId = mdMsg.SecurityId,
+							TradeId = trade.Id,
+							TradePrice = (decimal)trade.Price,
+							TradeVolume = trade.Volume.ToDecimal(),
+							ServerTime = trade.Timestamp,
+							OriginSide = trade.Side.ToSide(),
+							OriginalTransactionId = mdMsg.TransactionId,
+						});
+
+						if (--left <= 0)
+							break;
+					}
+				}
+			}
+			
+			if (!mdMsg.IsHistoryOnly())
+				await _pusherClient.SubscribeTrades(currency, cancellationToken);
+
+			SendSubscriptionResult(mdMsg);
+		}
+		else
+			await _pusherClient.UnSubscribeTrades(currency, cancellationToken);
+	}
+
 
 	private void SessionOnOrderBookChanged(string ticker, OrderBook book)
 	{
 		var state = _orderBooks.TryAdd(ticker) ? QuoteChangeStates.SnapshotComplete : QuoteChangeStates.Increment;
 
-		QuoteChange ToChange(OrderBookEntry entry)
+		static QuoteChange ToChange(OrderBookEntry entry)
 			=> new(entry.Price, entry.Size);
 
 		SendOutMessage(new QuoteChangeMessage

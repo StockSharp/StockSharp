@@ -1,6 +1,6 @@
 namespace StockSharp.FTX;
 
-public partial class FtxMessageAdapter : MessageAdapter
+public partial class FtxMessageAdapter
 {
 	private FtxRestClient _restClient;
 	private FtxWebSocketClient _wsClient;
@@ -54,20 +54,6 @@ public partial class FtxMessageAdapter : MessageAdapter
 	public override bool IsAllDownloadingSupported(DataType dataType)
 		=> dataType == DataType.Securities || base.IsAllDownloadingSupported(dataType);
 
-	/// <inheritdoc />
-	public override TimeSpan GetHistoryStepSize(SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)
-	{
-		var step = base.GetHistoryStepSize(securityId, dataType, out iterationInterval);
-
-		if (dataType == DataType.Ticks)
-			step = TimeSpan.FromDays(1);
-
-		if (dataType.MessageType == typeof(TimeFrameCandleMessage))
-			step = TimeSpan.FromDays(1);
-
-		return step;
-	}
-
 	private void SubscribeWsClient()
 	{
 		_wsClient.Connected += SessionOnWsConnected;
@@ -93,139 +79,78 @@ public partial class FtxMessageAdapter : MessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	public override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
+		_lastStateUpdate = default;
 
-		switch (message.Type)
+		_restClient?.Dispose();
+		_restClient = null;
+
+		if (_wsClient != null)
 		{
-			case MessageTypes.Reset:
-			{
-				_lastStateUpdate = DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
+			UnsubscribeWsClient();
 
-				_restClient?.Dispose();
-				_restClient = null;
-
-
-				if (_wsClient != null)
-				{
-					UnsubscribeWsClient();
-					_wsClient.Disconnect();
-
-					_wsClient = null;
-				}
-
-				SendOutMessage(new ResetMessage());
-
-				break;
-			}
-
-			case MessageTypes.Connect:
-			{
-				if (this.IsTransactional())
-				{
-					if (Key.IsEmpty())
-						throw new InvalidOperationException(LocalizedStrings.KeyNotSpecified);
-
-					if (Secret.IsEmpty())
-						throw new InvalidOperationException(LocalizedStrings.SecretNotSpecified);
-				}
-
-				if (_restClient != null)
-					throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
-
-				if (_wsClient != null)
-					throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
-
-				_restClient = new FtxRestClient(Key, Secret)
-				{
-					Parent = this
-				};
-
-				_wsClient = new FtxWebSocketClient(Key, Secret, SubaccountName)
-				{
-					Parent = this
-				};
-
-				SubscribeWsClient();
-				_wsClient.Connect();
-
-				break;
-			}
-
-			case MessageTypes.Disconnect:
-			{
-				if (_restClient == null)
-					throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
-
-				if (_wsClient == null)
-					throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
-
-				_restClient.Dispose();
-				_restClient = null;
-				_wsClient.Disconnect();
-
-				break;
-			}
-
-			case MessageTypes.PortfolioLookup:
-			{
-				ProcessPortfolioLookup((PortfolioLookupMessage)message);
-				break;
-			}
-
-			case MessageTypes.OrderStatus:
-			{
-				ProcessOrderStatus((OrderStatusMessage)message);
-				break;
-			}
-
-			case MessageTypes.OrderRegister:
-			{
-				ProcessOrderRegister((OrderRegisterMessage)message);
-				break;
-			}
-
-			case MessageTypes.OrderCancel:
-			{
-				ProcessOrderCancel((OrderCancelMessage)message);
-				break;
-			}
-
-			case MessageTypes.OrderGroupCancel:
-			{
-				ProcessOrderGroupCancel((OrderGroupCancelMessage)message);
-				break;
-			}
-
-			case MessageTypes.Time:
-			{
-				if ((DateTime.UtcNow - _lastStateUpdate).TotalMilliseconds >= 1000)
-				{
-					ProcessPortfolioLookup(null);
-					_lastStateUpdate = DateTime.UtcNow;
-				}
-
-				_wsClient?.ProcessPing();
-				break;
-			}
-
-			case MessageTypes.SecurityLookup:
-			{
-				ProcessSecurityLookup((SecurityLookupMessage)message);
-				break;
-			}
-
-			case MessageTypes.MarketData:
-			{
-				ProcessMarketData((MarketDataMessage)message);
-				break;
-			}
-
-			default:
-				return false;
+			_wsClient.Dispose();
+			_wsClient = null;
 		}
 
-		return true;
+		_portfolioLookupSubMessageTransactionID = default;
+		_isOrderSubscribed = default;
+
+		SendOutMessage(new ResetMessage());
+		return default;
+	}
+
+	/// <inheritdoc />
+	public override ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
+	{
+		if (this.IsTransactional())
+		{
+			if (Key.IsEmpty())
+				throw new InvalidOperationException(LocalizedStrings.KeyNotSpecified);
+
+			if (Secret.IsEmpty())
+				throw new InvalidOperationException(LocalizedStrings.SecretNotSpecified);
+		}
+
+		if (_restClient != null)
+			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
+
+		if (_wsClient != null)
+			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
+
+		_restClient = new(Key, Secret) { Parent = this };
+		_wsClient = new(Key, Secret, SubaccountName) { Parent = this };
+
+		SubscribeWsClient();
+		return _wsClient.Connect(cancellationToken);
+	}
+
+	/// <inheritdoc />
+	public override ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
+	{
+		if (_restClient == null)
+			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
+
+		if (_wsClient == null)
+			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
+
+		_wsClient.Disconnect();
+
+		return default;
+	}
+
+	/// <inheritdoc />
+	public override async ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
+	{
+		if ((DateTime.UtcNow - _lastStateUpdate).TotalMilliseconds >= 1000)
+		{
+			await PortfolioLookupAsync(null, cancellationToken);
+			_lastStateUpdate = DateTime.UtcNow;
+		}
+
+		if (_wsClient is FtxWebSocketClient sc)
+			await sc.ProcessPing(cancellationToken);
 	}
 
 	private void SessionOnWsConnected()

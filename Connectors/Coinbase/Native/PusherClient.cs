@@ -57,11 +57,10 @@ class PusherClient : BaseLogReceiver
 		base.DisposeManaged();
 	}
 
-	public void Connect()
+	public ValueTask Connect(CancellationToken cancellationToken)
 	{
 		this.AddInfoLog(LocalizedStrings.Connecting);
-		// TODO
-		_client.Connect("wss://ws-feed.pro.coinbase.com", true/*!_authenticator.CanSign*/);
+		return _client.ConnectAsync("wss://ws-feed.pro.coinbase.com", true, cancellationToken: cancellationToken);
 	}
 
 	public void Disconnect()
@@ -146,57 +145,57 @@ class PusherClient : BaseLogReceiver
 		public const string UnSubscribe = "unsubscribe";
 	}
 
-	public void SubscribeStatus()
+	public ValueTask SubscribeStatus(CancellationToken cancellationToken)
 	{
-		Process(Commands.Subscribe, Channels.Status, null);
+		return Process(Commands.Subscribe, Channels.Status, null, cancellationToken);
 	}
 
-	public void UnSubscribeStatus()
+	public ValueTask UnSubscribeStatus(CancellationToken cancellationToken)
 	{
-		Process(Commands.UnSubscribe, Channels.Status, null);
+		return Process(Commands.UnSubscribe, Channels.Status, null, cancellationToken);
 	}
 
-	public void SubscribeTicker(string currency)
+	public ValueTask SubscribeTicker(string currency, CancellationToken cancellationToken)
 	{
-		Process(Commands.Subscribe, Channels.Ticker, currency);
+		return Process(Commands.Subscribe, Channels.Ticker, currency, cancellationToken);
 	}
 
-	public void UnSubscribeTicker(string currency)
+	public ValueTask UnSubscribeTicker(string currency, CancellationToken cancellationToken)
 	{
-		Process(Commands.UnSubscribe, Channels.Ticker, currency);
+		return Process(Commands.UnSubscribe, Channels.Ticker, currency, cancellationToken);
 	}
 
-	public void SubscribeTrades(string currency)
+	public ValueTask SubscribeTrades(string currency, CancellationToken cancellationToken)
 	{
-		Process(Commands.Subscribe, Channels.Trades, currency);
+		return Process(Commands.Subscribe, Channels.Trades, currency, cancellationToken);
 	}
 
-	public void UnSubscribeTrades(string currency)
+	public ValueTask UnSubscribeTrades(string currency, CancellationToken cancellationToken)
 	{
-		Process(Commands.UnSubscribe, Channels.Trades, currency);
+		return Process(Commands.UnSubscribe, Channels.Trades, currency, cancellationToken);
 	}
 
-	public void SubscribeOrderBook(string currency)
+	public ValueTask SubscribeOrderBook(string currency, CancellationToken cancellationToken)
 	{
-		Process(Commands.Subscribe, Channels.OrderBook, currency);
+		return Process(Commands.Subscribe, Channels.OrderBook, currency, cancellationToken);
 	}
 
-	public void UnSubscribeOrderBook(string currency)
+	public ValueTask UnSubscribeOrderBook(string currency, CancellationToken cancellationToken)
 	{
-		Process(Commands.UnSubscribe, Channels.OrderBook, currency);
+		return Process(Commands.UnSubscribe, Channels.OrderBook, currency, cancellationToken);
 	}
 
-	public void SubscribeOrderLog(string currency)
+	public ValueTask SubscribeOrderLog(string currency, CancellationToken cancellationToken)
 	{
-		Process(Commands.Subscribe, Channels.OrderLog, currency);
+		return Process(Commands.Subscribe, Channels.OrderLog, currency, cancellationToken);
 	}
 
-	public void UnSubscribeOrderLog(string currency)
+	public ValueTask UnSubscribeOrderLog(string currency, CancellationToken cancellationToken)
 	{
-		Process(Commands.UnSubscribe, Channels.OrderLog, currency);
+		return Process(Commands.UnSubscribe, Channels.OrderLog, currency, cancellationToken);
 	}
 
-	private void Process(string type, string channel, string currency)
+	private ValueTask Process(string type, string channel, string currency, CancellationToken cancellationToken)
 	{
 		if (type.IsEmpty())
 			throw new ArgumentNullException(nameof(type));
@@ -207,11 +206,11 @@ class PusherClient : BaseLogReceiver
 		//if (currency.IsEmpty())
 		//	throw new ArgumentNullException(nameof(currency));
 
-		_client.Send(new
+		return _client.SendAsync(new
 		{
 			type,
 			product_ids = currency == null ? null : new[] { currency },
 			channels = new[] { channel },
-		});
+		}, cancellationToken);
 	}
 }
