@@ -1067,6 +1067,7 @@
   "Expiration": "Son kullanma tarihi",
   "ExpirationDays": "Vade günleri",
   "Expired": "Süresi Doldu",
+  "ExpiredInstruments": "Süresi dolmuş araçlar.",
   "ExpiryDate": "Son kullanma tarihi",
   "ExpiryDateDesc": "Enstrümanın son kullanma tarihi (türevler için - vade sonu, tahviller için - itfa).",
   "Explorer": "Gezgin",

@@ -1067,6 +1067,7 @@
   "Expiration": "Utgång",
   "ExpirationDays": "Utgångsdagar",
   "Expired": "Utgången",
+  "ExpiredInstruments": "Utgångna instrument.",
   "ExpiryDate": "Utgångsdatum",
   "ExpiryDateDesc": "Instrumentets utgångsdatum (för derivat - utgång, för obligationer - inlösen).",
   "Explorer": "Utforskare",

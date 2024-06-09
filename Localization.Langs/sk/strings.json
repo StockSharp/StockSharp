@@ -1067,6 +1067,7 @@
   "Expiration": "Expirácia",
   "ExpirationDays": "Expirácia (dni)",
   "Expired": "Vypršané",
+  "ExpiredInstruments": "Platné nástroje.",
   "ExpiryDate": "Dátum expirácie",
   "ExpiryDateDesc": "Dátum expirácie nástroja (pre deriváty - expirácia, pre dlhopisy - splatnosť).",
   "Explorer": "Prieskumník",

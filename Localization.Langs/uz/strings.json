@@ -1067,6 +1067,7 @@
   "Expiration": "Muddati",
   "ExpirationDays": "Amal qilish kunlari",
   "Expired": "Muddati o'tgan",
+  "ExpiredInstruments": "Muddati o'tgan asboblar.",
   "ExpiryDate": "Muddati",
   "ExpiryDateDesc": "Instrumentning muddati (derivativlar uchun - muddat, obligatsiyalar uchun - to'lov).",
   "Explorer": "Explorer",

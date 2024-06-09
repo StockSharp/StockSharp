@@ -1067,6 +1067,7 @@
   "Expiration": "Истек",
   "ExpirationDays": "Дани истека",
   "Expired": "Истекло",
+  "ExpiredInstruments": "Истекли инструменти.",
   "ExpiryDate": "Датум истека",
   "ExpiryDateDesc": "Датум истека инструмента (за деривате - истек, за обвезнице - отплата).",
   "Explorer": "Истраживач",

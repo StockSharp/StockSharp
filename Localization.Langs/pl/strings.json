@@ -1067,6 +1067,7 @@
   "Expiration": "Wygaśnięcie",
   "ExpirationDays": "Dni ważności",
   "Expired": "Wygasło",
+  "ExpiredInstruments": "Przedawnione instrumenty.",
   "ExpiryDate": "Data ważności",
   "ExpiryDateDesc": "Data wygaśnięcia instrumentu (dla instrumentów pochodnych - wygaśnięcie, dla obligacji - wykupienie).",
   "Explorer": "Eksplorator",

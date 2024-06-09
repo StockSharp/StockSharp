@@ -1067,6 +1067,7 @@
   "Expiration": "Vanhentuminen",
   "ExpirationDays": "Viimeiset voimassaolopäivät",
   "Expired": "Vanhentunut",
+  "ExpiredInstruments": "Vanhentuneet instrumentit.",
   "ExpiryDate": "Eräpäivä",
   "ExpiryDateDesc": "Instrumentin erääntymispäivä (johdannaisille - erääntyminen, obligaatioille - lunastus).",
   "Explorer": "Tutkimusmatkailija",

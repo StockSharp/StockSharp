@@ -1067,6 +1067,7 @@
   "Expiration": "Expiración",
   "ExpirationDays": "Días de vencimiento",
   "Expired": "Expirado",
+  "ExpiredInstruments": "Instrumentos caducados.",
   "ExpiryDate": "Fecha de expiración",
   "ExpiryDateDesc": "Fecha de vencimiento del instrumento (para derivados - expiración, para bonos - redención).",
   "Explorer": "Explorador",

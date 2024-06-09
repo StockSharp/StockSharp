@@ -1067,6 +1067,7 @@
   "Expiration": "Scadenza",
   "ExpirationDays": "Giorni alla scadenza",
   "Expired": "Scaduto",
+  "ExpiredInstruments": "Strumenti scaduti.",
   "ExpiryDate": "Data di scadenza",
   "ExpiryDateDesc": "Data di scadenza dello strumento (per i derivati - scadenza, per i bond - rimborso).",
   "Explorer": "Esploratore",

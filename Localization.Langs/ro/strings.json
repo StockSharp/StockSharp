@@ -1067,6 +1067,7 @@
   "Expiration": "Expirare",
   "ExpirationDays": "Zile de expirare",
   "Expired": "Expirat",
+  "ExpiredInstruments": "Instrumente expirate.",
   "ExpiryDate": "Data expirării",
   "ExpiryDateDesc": "Data de expirare a instrumentului (pentru derivate - expirare, pentru obligațiuni - răscumpărare).",
   "Explorer": "Explorator",

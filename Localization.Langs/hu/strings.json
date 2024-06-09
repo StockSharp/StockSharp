@@ -1067,6 +1067,7 @@
   "Expiration": "Lejárat",
   "ExpirationDays": "Lejárat napjai",
   "Expired": "Lejárt",
+  "ExpiredInstruments": "Lejárt eszközök.",
   "ExpiryDate": "Lejárat dátuma",
   "ExpiryDateDesc": "Az eszköz lejárati dátuma (derivatívák esetén - lejárat, kötvények esetén - visszafizetés).",
   "Explorer": "Böngésző",

@@ -1067,6 +1067,7 @@
   "Expiration": "Verval",
   "ExpirationDays": "Vervaldagen",
   "Expired": "Verlopen",
+  "ExpiredInstruments": "Verlopen instrumenten.",
   "ExpiryDate": "Vervaldatum",
   "ExpiryDateDesc": "Vervaldatum van het instrument (voor derivaten - afloop, voor obligaties - aflossing).",
   "Explorer": "Verkenner",

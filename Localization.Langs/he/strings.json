@@ -1067,6 +1067,7 @@
   "Expiration": "תְפוּגָה",
   "ExpirationDays": "ימי תפוגה",
   "Expired": "פג תוקף",
+  "ExpiredInstruments": "מכשירים שפג תוקפם.",
   "ExpiryDate": "תאריך תפוגה",
   "ExpiryDateDesc": "תאריך תפוגה של הכלי (לנגזרים - פקיעה, לאג\"ח - פדיון).",
   "Explorer": "גלישה",

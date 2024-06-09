@@ -1069,6 +1069,7 @@
   "Expiration": "Expiration",
   "ExpirationDays": "Expiry (days)",
   "Expired": "Expired",
+  "ExpiredInstruments": "Expired instruments.",
   "ExpiryDate": "Expiration date",
   "ExpiryDateDesc": "Security expiration date (for derivatives - expiration, for bonds — redemption).",
   "Explorer": "Explorer",

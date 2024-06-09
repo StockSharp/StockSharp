@@ -1067,6 +1067,7 @@
   "Expiration": "انقضا",
   "ExpirationDays": "روزهای انقضا",
   "Expired": "منقضی شده",
+  "ExpiredInstruments": "ابزارهای منقضی شده.",
   "ExpiryDate": "تاریخ انقضا",
   "ExpiryDateDesc": "تاریخ انقضای ابزار (برای مشتقات - انقضا، برای اوراق قرضه - بازخرید).",
   "Explorer": "جستجوگر",

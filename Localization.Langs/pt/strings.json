@@ -1067,6 +1067,7 @@
   "Expiration": "Expiração",
   "ExpirationDays": "Dias de expiração",
   "Expired": "Expirado",
+  "ExpiredInstruments": "Instrumentos expirados.",
   "ExpiryDate": "Data de expiração",
   "ExpiryDateDesc": "Data de expiração do instrumento (para derivativos - expiração, para títulos - resgate).",
   "Explorer": "Explorador",

@@ -1067,6 +1067,7 @@
   "Expiration": "有効期限",
   "ExpirationDays": "期限切れまでの日数",
   "Expired": "期限切れ",
+  "ExpiredInstruments": "有効期限が切れた楽器。",
   "ExpiryDate": "有効期限",
   "ExpiryDateDesc": "金融商品の有効期限（デリバティブの場合は満期、債券の場合は償還）。",
   "Explorer": "エクスプローラー",

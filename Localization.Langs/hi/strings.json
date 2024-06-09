@@ -1067,6 +1067,7 @@
   "Expiration": "समाप्ति",
   "ExpirationDays": "समाप्ति के दिन",
   "Expired": "समाप्त",
+  "ExpiredInstruments": "अवधि समाप्त उपकरण।",
   "ExpiryDate": "समाप्ति तिथि",
   "ExpiryDateDesc": "साधन की समाप्ति तिथि (डेरिवेटिव के लिए - समाप्ति, बॉन्ड के लिए - रिडेम्पशन)।",
   "Explorer": "एक्सप्लोरर",

@@ -1067,6 +1067,7 @@
   "Expiration": "Kadaluwarsa",
   "ExpirationDays": "Dina kadaluwarsa",
   "Expired": "Kadaluwarsa",
+  "ExpiredInstruments": "Instrumen sing wis kadaluwarsa.",
   "ExpiryDate": "Tanggal kadaluwarsa",
   "ExpiryDateDesc": "Tanggal kadaluwarsa instrumen (kanggo derivatif - kadaluwarsa, kanggo obligasi - penebusan).",
   "Explorer": "Penjelajah",

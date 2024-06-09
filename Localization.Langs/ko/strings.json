@@ -1067,6 +1067,7 @@
   "Expiration": "만료",
   "ExpirationDays": "만료일",
   "Expired": "만료됨",
+  "ExpiredInstruments": "만료된 악기.",
   "ExpiryDate": "만료일",
   "ExpiryDateDesc": "도구의 만료 날짜(파생 상품의 경우 - 만료, 채권의 경우 - 상환).",
   "Explorer": "탐색기",

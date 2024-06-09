@@ -1067,6 +1067,7 @@
   "Expiration": "Expiració",
   "ExpirationDays": "Dies fins a l'expiració",
   "Expired": "Expirat",
+  "ExpiredInstruments": "Instruments caducats.",
   "ExpiryDate": "Data de venciment",
   "ExpiryDateDesc": "Data de venciment del valor (per a derivats - expiració, per a bons - redempció)",
   "Explorer": "Explorador",

@@ -1067,6 +1067,7 @@
   "Expiration": "Ablauf",
   "ExpirationDays": "Verfallstage",
   "Expired": "Abgelaufen",
+  "ExpiredInstruments": "Abgelaufene Instrumente.",
   "ExpiryDate": "Ablaufdatum",
   "ExpiryDateDesc": "Verfallsdatum des Instruments (für Derivate – Ablauf, für Anleihen – Rückzahlung).",
   "Explorer": "Explorer",

@@ -1067,6 +1067,7 @@
   "Expiration": "到期",
   "ExpirationDays": "到期天数",
   "Expired": "已过期",
+  "ExpiredInstruments": "已过期的工具。",
   "ExpiryDate": "到期日",
   "ExpiryDateDesc": "工具（衍生品为期满，债券为偿还）的到期日期。",
   "Explorer": "探索器",

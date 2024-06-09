@@ -1067,6 +1067,7 @@
   "Expiration": "Udløb",
   "ExpirationDays": "Udløbsdage",
   "Expired": "Udløbet",
+  "ExpiredInstruments": "Udløbne instrumenter.",
   "ExpiryDate": "Udløbsdato",
   "ExpiryDateDesc": "Udløbsdato for instrumentet (for derivater - udløb, for obligationer - indfrielse).",
   "Explorer": "Udforsker",

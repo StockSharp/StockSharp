@@ -1067,6 +1067,7 @@
   "Expiration": "Tamat tempoh",
   "ExpirationDays": "Hari Luput",
   "Expired": "Tamat",
+  "ExpiredInstruments": "Instrumen yang telah tamat tempoh.",
   "ExpiryDate": "Tarikh Luput",
   "ExpiryDateDesc": "Tarikh Luput Instrumen (untuk derivatif - tamat tempoh, untuk bon - penebusan).",
   "Explorer": "Peneroka",
