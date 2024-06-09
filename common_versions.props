@@ -26,6 +26,7 @@
     <GeneticSharpVer>3.1.4</GeneticSharpVer>
     <InterprocessVer>2.0.0-alpha176</InterprocessVer>
     <SharpPcapVer>6.*</SharpPcapVer>
+    <GoogleProtobufVer>3.*</GoogleProtobufVer>
 
     <MicrosoftCodeAnalysisCSharpVer>4.8.0</MicrosoftCodeAnalysisCSharpVer>
     <MicrosoftCodeAnalysisAnalyzersVer>3.3.4</MicrosoftCodeAnalysisAnalyzersVer>
