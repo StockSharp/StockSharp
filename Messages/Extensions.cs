@@ -3249,36 +3249,37 @@ namespace StockSharp.Messages
 				criteria.SecurityId == default &&
 				criteria.Name.IsEmpty() &&
 				criteria.ShortName.IsEmpty() &&
-				criteria.VolumeStep == null &&
-				criteria.MinVolume == null &&
-				criteria.MaxVolume == null &&
-				criteria.Multiplier == null &&
-				criteria.Decimals == null &&
-				criteria.PriceStep == null &&
-				criteria.SecurityType == null &&
+				criteria.VolumeStep == default &&
+				criteria.MinVolume == default &&
+				criteria.MaxVolume == default &&
+				criteria.Multiplier == default &&
+				criteria.Decimals == default &&
+				criteria.PriceStep == default &&
+				criteria.SecurityType == default &&
 				criteria.CfiCode.IsEmpty() &&
-				criteria.ExpiryDate == null &&
-				criteria.SettlementDate == null &&
+				criteria.ExpiryDate == default &&
+				criteria.SettlementDate == default &&
 				criteria.UnderlyingSecurityId == default &&
-				criteria.UnderlyingSecurityMinVolume == null &&
-				criteria.Strike == null &&
-				criteria.OptionType == null &&
+				criteria.UnderlyingSecurityMinVolume == default &&
+				criteria.Strike == default &&
+				criteria.OptionType == default &&
 				criteria.BinaryOptionType.IsEmpty() &&
-				criteria.Currency == null &&
+				criteria.Currency == default &&
 				criteria.Class.IsEmpty() &&
-				criteria.IssueSize == null &&
-				criteria.IssueDate == null &&
-				criteria.UnderlyingSecurityType == null &&
-				criteria.Shortable == null &&
+				criteria.IssueSize == default &&
+				criteria.IssueDate == default &&
+				criteria.UnderlyingSecurityType == default &&
+				criteria.Shortable == default &&
 				criteria.BasketCode.IsEmpty() &&
 				criteria.BasketExpression.IsEmpty() &&
-				criteria.FaceValue == null &&
-				criteria.SettlementType == null &&
-				criteria.OptionStyle == null &&
+				criteria.FaceValue == default &&
+				criteria.SettlementType == default &&
+				criteria.OptionStyle == default &&
 				criteria.PrimaryId == default &&
-				(criteria.SecurityTypes == null || criteria.SecurityTypes.Length == 0) &&
+				(criteria.SecurityTypes == default || criteria.SecurityTypes.Length == 0) &&
+				criteria.IncludeExpired == default &&
 				// count is NOT filter by fields
-				//criteria.Count == null &&
+				//criteria.Count == default &&
 				criteria.SecurityIds.Length == 0;
 		}
 

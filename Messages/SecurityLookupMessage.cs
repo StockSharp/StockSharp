@@ -82,9 +82,15 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SecurityLookupMessage"/>.
+		/// Include expired securities.
 		/// </summary>
-		public SecurityLookupMessage()
+		[DataMember]
+		public bool IncludeExpired { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SecurityLookupMessage"/>.
+        /// </summary>
+        public SecurityLookupMessage()
 			: base(MessageTypes.SecurityLookup)
 		{
 		}
@@ -132,6 +138,7 @@ namespace StockSharp.Messages
 			destination.Count = Count;
 			destination.SecurityIds = SecurityIds.ToArray();
 			destination.FillGaps = FillGaps;
+			destination.IncludeExpired = IncludeExpired;
 
 			base.CopyTo(destination);
 		}
@@ -155,6 +162,9 @@ namespace StockSharp.Messages
 
 			if (FillGaps is not null)
 				str += $",gaps={FillGaps}";
+
+			if (IncludeExpired)
+				str += $",expired={IncludeExpired}";
 
 			return str;
 		}
