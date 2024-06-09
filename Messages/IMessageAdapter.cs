@@ -377,7 +377,7 @@ namespace StockSharp.Messages
 	public interface IOAuthProvider
 	{
 		/// <summary>
-		/// Request token event.
+		/// Request token.
 		/// </summary>
 		/// <param name="socialId"></param>
 		/// <param name="isRefreshToken"></param>
