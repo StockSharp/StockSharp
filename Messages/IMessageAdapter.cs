@@ -382,6 +382,6 @@ namespace StockSharp.Messages
 		/// <param name="socialId"></param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
-		Task<SecureString> RequestToken(long socialId, CancellationToken cancellationToken);
+		Task<(SecureString token, DateTime? till)> RequestToken(long socialId, CancellationToken cancellationToken);
 	}
 }
