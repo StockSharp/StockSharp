@@ -380,9 +380,8 @@ namespace StockSharp.Messages
 		/// Request token.
 		/// </summary>
 		/// <param name="socialId"></param>
-		/// <param name="isRefreshToken"></param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
-		Task<SecureString> RequestToken(long socialId, bool isRefreshToken, CancellationToken cancellationToken);
+		Task<SecureString> RequestToken(long socialId, CancellationToken cancellationToken);
 	}
 }
