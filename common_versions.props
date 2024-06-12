@@ -17,7 +17,7 @@
     <MsTestVer>3.*</MsTestVer>
     <MsTestSdkVer>17.*</MsTestSdkVer>
     <MsExtensionsVer>6.*</MsExtensionsVer>
-    <NuGetApiVer>6.8.0</NuGetApiVer>
+    <NuGetApiVer>6.10.0</NuGetApiVer>
     <MicrosoftDataSqlClientVer>5.1.4</MicrosoftDataSqlClientVer>
     <AsyncLinqVer>6.0.1</AsyncLinqVer>
     <SBEVer>1.23.1.1</SBEVer>
