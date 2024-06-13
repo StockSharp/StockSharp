@@ -80,7 +80,7 @@
 					var boardCode = securityId.BoardCode;
 
 					if (securityCode.IsEmpty())
-						throw new InvalidOperationException();
+						throw new InvalidOperationException("Sec code is missed.");
 
 					var noNative = securityId;
 					noNative.Native = null;

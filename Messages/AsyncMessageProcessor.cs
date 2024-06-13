@@ -97,7 +97,8 @@ class AsyncMessageProcessor : Disposable
 		if (IsDisposed)
 			throw new ObjectDisposedException(nameof(AsyncMessageProcessor));
 
-		_adapter.AddVerboseLog("enqueue: {0}", msg.Type);
+		if (msg.Type != MessageTypes.Time)
+			_adapter.AddVerboseLog("enqueue: {0}", msg.Type);
 
 		lock (_messages.SyncRoot)
 		{
@@ -210,7 +211,8 @@ class AsyncMessageProcessor : Disposable
 					return;
 				}
 
-				_adapter.AddVerboseLog("beginprocess: {0}", msg.Type);
+				if (msg.Type != MessageTypes.Time)
+					_adapter.AddVerboseLog("beginprocess: {0}", msg.Type);
 
 				if (!item.IsControl)
 				{
@@ -300,7 +302,8 @@ class AsyncMessageProcessor : Disposable
 					else if (vt.IsCanceled)
 						throw new OperationCanceledException();
 
-					_adapter.AddVerboseLog("endprocess: {0}", msg.Type);
+					if (msg.Type != MessageTypes.Time)
+						_adapter.AddVerboseLog("endprocess: {0}", msg.Type);
 
 					if (msg is ISubscriptionMessage subMsg && subMsg.IsSubscribe)
 						_subscriptionItems.Remove(subMsg.TransactionId);
