@@ -103,7 +103,10 @@ class AsyncMessageProcessor : Disposable
 		lock (_messages.SyncRoot)
 		{
 			if (msg is ResetMessage)
+			{
+				_messages.Clear();
 				CancelAndReplaceGlobalCts();
+			}
 
 			_messages.Add(new(msg));
 		}
