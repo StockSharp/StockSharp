@@ -198,6 +198,7 @@ public class SimpleStrategy : Strategy
 ## Forex
 |Logo | Name | Documentation Eng| Documentation Ru| 
 |:---:|:----:|:----------------:|:---------------:|
+|<img src="./Media/logos/devexperts_logo.svg" height="30" /> |DXtrade | <a href="//doc.stocksharp.com/topics/api/connectors/forex/dxtrade.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/api/connectors/forex/dxtrade.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/ctrader_logo.svg" height="30" /> |cTrader | <a href="//doc.stocksharp.com/topics/api/connectors/forex/ctrader.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/api/connectors/forex/ctrader.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/mt4_logo.svg" height="30" /> |MT4 | <a href="//doc.stocksharp.com/topics/api/connectors/forex/metatrader.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/api/connectors/forex/metatrader.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/mt5_logo.svg" height="30" /> |MT5 | <a href="//doc.stocksharp.com/topics/api/connectors/forex/metatrader.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/api/connectors/forex/metatrader.html" target="_blank">Ru</a> |
