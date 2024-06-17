@@ -1159,4 +1159,14 @@ public static class BoardCodes
 	/// <see cref="cTrader"/>
 	/// </summary>
 	public const string cTrader = "CTRD";
+
+	/// <summary>
+	/// <see cref="DevExperts"/>
+	/// </summary>
+	public const string DevExperts = "DEVX";
+
+	/// <summary>
+	/// <see cref="TradingTechnologies"/>
+	/// </summary>
+	public const string TradingTechnologies = "TT";
 }
