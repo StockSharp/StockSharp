@@ -1,4 +1,4 @@
-namespace StockSharp.Btce;
+namespace StockSharp.Btce.Native;
 
 static class Extensions
 {

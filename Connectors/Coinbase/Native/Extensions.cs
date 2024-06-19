@@ -1,4 +1,4 @@
-namespace StockSharp.Coinbase;
+namespace StockSharp.Coinbase.Native;
 
 static class Extensions
 {
@@ -81,7 +81,7 @@ static class Extensions
 		};
 	}
 
-	public static decimal GetBalance(this Native.Model.Order order)
+	public static decimal GetBalance(this Order order)
 	{
 		if (order == null)
 			throw new ArgumentNullException(nameof(order));
@@ -89,17 +89,44 @@ static class Extensions
 		return (order.Size - order.FilledSize ?? 0).ToDecimal().Value;
 	}
 
-	public static string ToCurrency(this SecurityId securityId)
+	public static string ToSymbol(this SecurityId securityId)
 	{
-		return securityId.SecurityCode.Replace("/", "-").ToUpperInvariant();
+		return securityId.SecurityCode.ToUpperInvariant();
 	}
 
-	public static SecurityId ToStockSharp(this string currency)
+	public static SecurityId ToStockSharp(this string symbol)
 	{
 		return new SecurityId
 		{
-			SecurityCode = currency.Replace("-", "/").ToUpperInvariant(),
+			SecurityCode = symbol.ToUpperInvariant(),
 			BoardCode = BoardCodes.Coinbase,
 		};
 	}
+
+	public static SecurityTypes? ToSecurityType(this string secType)
+		=> secType?.ToLowerInvariant() switch
+		{
+			"spot" => SecurityTypes.CryptoCurrency,
+			"futures" => SecurityTypes.Future,
+			_ => null,
+		};
+
+	public static readonly PairSet<TimeSpan, string> TimeFrames = new()
+	{
+		{ TimeSpan.FromMinutes(1), "ONE_MINUTE" },
+		{ TimeSpan.FromMinutes(5), "FIVE_MINUTE" },
+		{ TimeSpan.FromMinutes(15), "FIFTEEN_MINUTE" },
+		{ TimeSpan.FromMinutes(30), "THIRTY_MINUTE" },
+		{ TimeSpan.FromHours(1), "ONE_HOUR" },
+		{ TimeSpan.FromHours(2), "TWO_HOUR" },
+		{ TimeSpan.FromHours(6), "SIX_HOUR" },
+		{ TimeSpan.FromDays(1), "ONE_DAY" },
+	};
+
+	public static string ToNative(this TimeSpan timeFrame)
+		=> TimeFrames.TryGetValue(timeFrame) ?? throw new ArgumentOutOfRangeException(nameof(timeFrame), timeFrame, LocalizedStrings.InvalidValue);
+
+	public static TimeSpan ToTimeFrame(this string name)
+		=> TimeFrames.TryGetKey2(name) ?? throw new ArgumentOutOfRangeException(nameof(name), name, LocalizedStrings.InvalidValue);
+
 }

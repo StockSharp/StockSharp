@@ -1,4 +1,4 @@
-namespace StockSharp.Bitexbook;
+namespace StockSharp.Bitexbook.Native;
 
 static class Extensions
 {

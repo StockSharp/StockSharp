@@ -64,15 +64,6 @@ partial class BitStampMessageAdapter
 
 		await _httpClient.CancelOrder(cancelMsg.OrderId.Value, cancellationToken);
 
-		//SendOutMessage(new ExecutionMessage
-		//{
-		//	ServerTime = CurrentTime.ConvertToUtc(),
-		//	DataTypeEx = DataType.Transactions,
-		//	OriginalTransactionId = cancelMsg.TransactionId,
-		//	OrderState = OrderStates.Done,
-		//	HasOrderInfo = true,
-		//});
-
 		await OrderStatusAsync(null, cancellationToken);
 		await PortfolioLookupAsync(null, cancellationToken);
 	}

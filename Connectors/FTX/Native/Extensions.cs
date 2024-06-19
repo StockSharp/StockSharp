@@ -1,4 +1,4 @@
-﻿namespace StockSharp.FTX;
+﻿namespace StockSharp.FTX.Native;
 
 static class Extensions
 {

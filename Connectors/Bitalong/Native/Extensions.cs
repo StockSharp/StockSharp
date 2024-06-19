@@ -1,4 +1,4 @@
-namespace StockSharp.Bitalong;
+namespace StockSharp.Bitalong.Native;
 
 static class Extensions
 {
