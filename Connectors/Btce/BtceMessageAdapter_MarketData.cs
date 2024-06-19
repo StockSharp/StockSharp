@@ -64,16 +64,20 @@ partial class BtceMessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	protected override async ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
 		SendSubscriptionReply(mdMsg.TransactionId);
 
 		var currency = mdMsg.SecurityId.ToCurrency();
 
 		if (mdMsg.IsSubscribe)
-			return _pusherClient.SubscribeOrderBook(currency, cancellationToken);
+		{
+			await _pusherClient.SubscribeOrderBook(currency, cancellationToken);
+
+			SendSubscriptionResult(mdMsg);
+		}
 		else
-			return _pusherClient.UnSubscribeOrderBook(currency, cancellationToken);
+			await _pusherClient.UnSubscribeOrderBook(currency, cancellationToken);
 	}
 
 	/// <inheritdoc />

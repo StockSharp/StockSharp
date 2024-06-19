@@ -23,7 +23,7 @@ public partial class BitexbookMessageAdapter : AsyncMessageAdapter, IKeySecretAd
 	/// <summary>
 	/// Possible time-frames.
 	/// </summary>
-	public static IEnumerable<TimeSpan> AllTimeFrames => Extensions.TimeFrames.Keys.ToArray();
+	public static IEnumerable<TimeSpan> AllTimeFrames => Native.Extensions.TimeFrames.Keys.ToArray();
 
 	/// <inheritdoc />
 	[Display(

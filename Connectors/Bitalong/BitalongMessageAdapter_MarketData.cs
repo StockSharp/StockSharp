@@ -55,7 +55,11 @@ public partial class BitalongMessageAdapter
 		if (mdMsg.IsSubscribe)
 		{
 			await ProcessLevel1Subscriptions(new[] { symbol }, cancellationToken);
-			_level1Subscriptions.Add(symbol);
+
+			if (!mdMsg.IsHistoryOnly())
+				_level1Subscriptions.Add(symbol);
+
+			SendSubscriptionResult(mdMsg);
 		}
 		else
 			_level1Subscriptions.Remove(symbol);
@@ -71,15 +75,12 @@ public partial class BitalongMessageAdapter
 
 		if (mdMsg.IsSubscribe)
 		{
-			if (mdMsg.To != null)
-			{
-				SendSubscriptionReply(mdMsg.TransactionId);
+			await ProcessTicksSubscription(mdMsg.TransactionId, symbol, cancellationToken);
 
-				await ProcessTicksSubscription(mdMsg.TransactionId, symbol, cancellationToken);
-				SendSubscriptionResult(mdMsg);
-			}
-			else
-				await ProcessTicksSubscription(0, symbol, cancellationToken);
+			if (!mdMsg.IsHistoryOnly())
+				_tradesSubscriptions.Add(symbol, 0);
+
+			SendSubscriptionResult(mdMsg);
 		}
 		else
 		{
@@ -98,7 +99,11 @@ public partial class BitalongMessageAdapter
 		if (mdMsg.IsSubscribe)
 		{
 			await ProcessOrderBookSubscription(symbol, cancellationToken);
-			_orderBookSubscriptions.Add(symbol);
+
+			if (!mdMsg.IsHistoryOnly())
+				_orderBookSubscriptions.Add(symbol);
+
+			SendSubscriptionResult(mdMsg);
 		}
 		else
 			_orderBookSubscriptions.Remove(symbol);

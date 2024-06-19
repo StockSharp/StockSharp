@@ -29,7 +29,7 @@ public partial class BitexbookMessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask OnOrderLogSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	protected override async ValueTask OnOrderLogSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
 		SendSubscriptionReply(mdMsg.TransactionId);
 
@@ -37,9 +37,12 @@ public partial class BitexbookMessageAdapter
 		var symbol = secId.ToNative();
 
 		if (mdMsg.IsSubscribe)
-			return _pusherClient.SubscribeTicker(symbol, cancellationToken);
+		{
+			await _pusherClient.SubscribeTicker(symbol, cancellationToken);
+			SendSubscriptionResult(mdMsg);
+		}
 		else
-			return _pusherClient.UnSubscribeTicker(symbol, cancellationToken);
+			await _pusherClient.UnSubscribeTicker(symbol, cancellationToken);
 	}
 
 	/// <inheritdoc />
