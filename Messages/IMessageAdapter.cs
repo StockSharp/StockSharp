@@ -18,8 +18,6 @@ namespace StockSharp.Messages
 	using System;
 	using System.Collections.Generic;
 	using System.Security;
-	using System.Threading;
-	using System.Threading.Tasks;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
@@ -209,6 +207,11 @@ namespace StockSharp.Messages
 		/// The adapter can process subscription only with instruments associated with the specified board.
 		/// </summary>
 		string AssociatedBoard { get; }
+
+		/// <summary>
+		/// The adapter requires extra setup.
+		/// </summary>
+		bool ExtraSetup { get; }
 
 		/// <summary>
 		/// Create market depth builder.

@@ -368,6 +368,8 @@ namespace StockSharp.Messages
 
 		string IMessageAdapter.FeatureName => InnerAdapter.FeatureName;
 
+		bool IMessageAdapter.ExtraSetup => InnerAdapter.ExtraSetup;
+
 		/// <inheritdoc />
 		public virtual bool? IsPositionsEmulationRequired => InnerAdapter.IsPositionsEmulationRequired;
 

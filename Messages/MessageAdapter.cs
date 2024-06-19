@@ -298,6 +298,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		public virtual bool ExtraSetup => false;
+
+		/// <inheritdoc />
 		public event Action<Message> NewOutMessage;
 
 		ChannelStates IMessageChannel.State => ChannelStates.Started;

@@ -3706,6 +3706,7 @@ namespace StockSharp.Algo.Testing
 		bool IMessageAdapter.IsReplaceCommandEditCurrent => false;
 		bool IMessageAdapter.GenerateOrderBookFromLevel1 { get; set; }
 		TimeSpan? IMessageAdapter.LookupTimeout => null;
+		bool IMessageAdapter.ExtraSetup => false;
 
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> new OrderLogMarketDepthBuilder(securityId);

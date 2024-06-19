@@ -797,6 +797,8 @@ namespace StockSharp.Algo
 
 		string IMessageAdapter.AssociatedBoard => string.Empty;
 
+		bool IMessageAdapter.ExtraSetup => false;
+
 		/// <summary>
 		/// To get adapters <see cref="IInnerAdapterList.SortedAdapters"/> sorted by the specified priority. By default, there is no sorting.
 		/// </summary>
