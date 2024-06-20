@@ -13,14 +13,12 @@ static class Extensions
 	}
 
 	public static Sides ToSide(this string side)
-	{
-		return side switch
+		=> side?.ToLowerInvariant() switch
 		{
-			"buy" => Sides.Buy,
-			"sell" => Sides.Sell,
+			"buy" or "bid" => Sides.Buy,
+			"sell" or "ask" or "offer" => Sides.Sell,
 			_ => throw new ArgumentOutOfRangeException(nameof(side), side, LocalizedStrings.InvalidValue),
 		};
-	}
 
 	public static string ToNative(this OrderTypes? type)
 	{
@@ -35,27 +33,23 @@ static class Extensions
 	}
 
 	public static OrderTypes ToOrderType(this string type)
-	{
-		return type switch
+		=> type?.ToLowerInvariant() switch
 		{
 			"limit" => OrderTypes.Limit,
 			"market" => OrderTypes.Market,
-			"stop" => OrderTypes.Conditional,
+			"stop" or "stop limit" => OrderTypes.Conditional,
 			_ => throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue),
 		};
-	}
 
-	public static OrderStates ToOrderState(this string type)
-	{
-		return type switch
+	public static OrderStates ToOrderState(this string status)
+		=> status?.ToLowerInvariant() switch
 		{
 			"pending" or "received" => OrderStates.Pending,
 			"open" or "active" => OrderStates.Active,
-			"filled" or "done" or "canceled" or "settled" => OrderStates.Done,
-			"rejected" => OrderStates.Failed,
-			_ => throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue),
+			"filled" or "done" or "canceled" or "cancelled" or "expired" => OrderStates.Done,
+			"rejected" or "rejected" => OrderStates.Failed,
+			_ => throw new ArgumentOutOfRangeException(nameof(status), status, LocalizedStrings.InvalidValue),
 		};
-	}
 
 	public static string ToNative(this TimeInForce? tif, DateTimeOffset? tillDate)
 	{
@@ -79,14 +73,6 @@ static class Extensions
 			"FOK" => (TimeInForce?)TimeInForce.MatchOrCancel,
 			_ => throw new ArgumentOutOfRangeException(nameof(tif), tif, LocalizedStrings.InvalidValue),
 		};
-	}
-
-	public static decimal GetBalance(this Order order)
-	{
-		if (order == null)
-			throw new ArgumentNullException(nameof(order));
-
-		return (order.Size - order.FilledSize ?? 0).ToDecimal().Value;
 	}
 
 	public static string ToSymbol(this SecurityId securityId)

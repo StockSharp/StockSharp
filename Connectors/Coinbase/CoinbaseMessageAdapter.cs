@@ -1,12 +1,14 @@
 namespace StockSharp.Coinbase;
 
+using StockSharp.Coinbase.Native;
+using StockSharp.Coinbase.Native.Model;
+
 [OrderCondition(typeof(CoinbaseOrderCondition))]
 public partial class CoinbaseMessageAdapter
 {
 	private Authenticator _authenticator;
-	private HttpClient _httpClient;
-	private PusherClient _pusherClient;
-	private DateTimeOffset? _lastTimeBalanceCheck;
+	private HttpClient _restClient;
+	private SocketClient _socketClient;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CoinbaseMessageAdapter"/>.
@@ -20,12 +22,11 @@ public partial class CoinbaseMessageAdapter
 		this.AddMarketDataSupport();
 		this.AddTransactionalSupport();
 		this.RemoveSupportedMessage(MessageTypes.Portfolio);
-		this.RemoveSupportedMessage(MessageTypes.OrderReplace);
+		this.RemoveSupportedMessage(MessageTypes.OrderGroupCancel);
 
 		this.AddSupportedMarketDataType(DataType.Ticks);
 		this.AddSupportedMarketDataType(DataType.MarketDepth);
 		this.AddSupportedMarketDataType(DataType.Level1);
-		this.AddSupportedMarketDataType(DataType.OrderLog);
 		this.AddSupportedMarketDataType(DataType.CandleTimeFrame);
 
 		this.AddSupportedResultMessage(MessageTypes.SecurityLookup);
@@ -38,70 +39,80 @@ public partial class CoinbaseMessageAdapter
 		=> dataType == DataType.Securities || base.IsAllDownloadingSupported(dataType);
 
 	/// <inheritdoc />
-	protected override IEnumerable<TimeSpan> TimeFrames => AllTimeFrames;
+	protected override IEnumerable<TimeSpan> TimeFrames { get; } = Native.Extensions.TimeFrames.Keys.ToArray();
 
 	/// <inheritdoc />
 	public override bool IsSupportOrderBookIncrements => true;
+
+	private static readonly DataType _tf5min = DataType.TimeFrame(TimeSpan.FromMinutes(5));
+
+	/// <inheritdoc />
+	public override bool IsSupportCandlesUpdates(MarketDataMessage subscription)
+	{
+		// Coinbase supports 5min tf live updates
+		// So build from ticks other time-frames (compression will be done internally in S# core)
+		return subscription.DataType2 == _tf5min;
+	}
 
 	/// <inheritdoc />
 	public override string AssociatedBoard => BoardCodes.Coinbase;
 
 	private void SubscribePusherClient()
 	{
-		_pusherClient.Connected += SessionOnPusherConnected;
-		_pusherClient.Disconnected += SessionOnPusherDisconnected;
-		_pusherClient.Error += SessionOnPusherError;
-		_pusherClient.Heartbeat += SessionOnHeartbeat;
-		_pusherClient.TickerChanged += SessionOnTickerChanged;
-		_pusherClient.OrderBookSnapshot += SessionOnOrderBookSnapshot;
-		_pusherClient.OrderBookChanged += SessionOnOrderBookChanged;
-		_pusherClient.NewTrade += SessionOnNewTrade;
-		_pusherClient.NewOrderLog += SessionOnNewOrderLog;
+		_socketClient.Connected += SessionOnSocketConnected;
+		_socketClient.Disconnected += SessionOnSocketDisconnected;
+		_socketClient.Error += SessionOnSocketError;
+		_socketClient.HeartbeatReceived += SessionOnHeartbeatReceived;
+		_socketClient.TickerReceived += SessionOnTickerChanged;
+		_socketClient.OrderBookReceived += SessionOnOrderBookReceived;
+		_socketClient.TradeReceived += SessionOnTradeReceived;
+		_socketClient.CandleReceived += SessionOnCandleReceived;
+		_socketClient.OrderReceived += SessionOnOrderReceived;
 	}
 
 	private void UnsubscribePusherClient()
 	{
-		_pusherClient.Connected -= SessionOnPusherConnected;
-		_pusherClient.Disconnected -= SessionOnPusherDisconnected;
-		_pusherClient.Error -= SessionOnPusherError;
-		_pusherClient.Heartbeat -= SessionOnHeartbeat;
-		_pusherClient.TickerChanged -= SessionOnTickerChanged;
-		_pusherClient.OrderBookSnapshot -= SessionOnOrderBookSnapshot;
-		_pusherClient.OrderBookChanged -= SessionOnOrderBookChanged;
-		_pusherClient.NewTrade -= SessionOnNewTrade;
-		_pusherClient.NewOrderLog -= SessionOnNewOrderLog;
+		_socketClient.Connected -= SessionOnSocketConnected;
+		_socketClient.Disconnected -= SessionOnSocketDisconnected;
+		_socketClient.Error -= SessionOnSocketError;
+		_socketClient.HeartbeatReceived -= SessionOnHeartbeatReceived;
+		_socketClient.TickerReceived -= SessionOnTickerChanged;
+		_socketClient.OrderBookReceived -= SessionOnOrderBookReceived;
+		_socketClient.TradeReceived -= SessionOnTradeReceived;
+		_socketClient.CandleReceived -= SessionOnCandleReceived;
+		_socketClient.OrderReceived -= SessionOnOrderReceived;
 	}
 
 	/// <inheritdoc />
 	public override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
-		if (_httpClient != null)
+		if (_restClient != null)
 		{
 			try
 			{
-				_httpClient.Dispose();
+				_restClient.Dispose();
 			}
 			catch (Exception ex)
 			{
 				SendOutError(ex);
 			}
 
-			_httpClient = null;
+			_restClient = null;
 		}
 
-		if (_pusherClient != null)
+		if (_socketClient != null)
 		{
 			try
 			{
 				UnsubscribePusherClient();
-				_pusherClient.Disconnect();
+				_socketClient.Disconnect();
 			}
 			catch (Exception ex)
 			{
 				SendOutError(ex);
 			}
 
-			_pusherClient = null;
+			_socketClient = null;
 		}
 
 		if (_authenticator != null)
@@ -118,8 +129,7 @@ public partial class CoinbaseMessageAdapter
 			_authenticator = null;
 		}
 
-		_orderInfo.Clear();
-		_lastTimeBalanceCheck = null;
+		_candlesTransIds.Clear();
 
 		SendOutMessage(new ResetMessage());
 		return default;
@@ -137,67 +147,64 @@ public partial class CoinbaseMessageAdapter
 				throw new InvalidOperationException(LocalizedStrings.SecretNotSpecified);
 		}
 
-		_authenticator = new Authenticator(this.IsTransactional(), Key, Secret, Passphrase);
+		_authenticator = new(this.IsTransactional(), Key, Secret, Passphrase);
 
-		if (_httpClient != null)
+		if (_restClient != null)
 			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
 
-		if (_pusherClient != null)
+		if (_socketClient != null)
 			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
 
-		_httpClient = new HttpClient(_authenticator) { Parent = this };
+		_restClient = new(_authenticator) { Parent = this };
 
-		_pusherClient = new PusherClient(_authenticator) { Parent = this };
+		_socketClient = new(_authenticator, ReConnectionSettings.ReAttemptCount) { Parent = this };
 		SubscribePusherClient();
 
-		await _pusherClient.Connect(cancellationToken);
-		await _pusherClient.SubscribeStatus(cancellationToken);
-	}
-
-	/// <inheritdoc />
-	public override async ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
-	{
-		if (_httpClient == null)
-			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
-
-		if (_pusherClient == null)
-			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
-
-		_httpClient.Dispose();
-		_httpClient = null;
-
-		await _pusherClient.UnSubscribeStatus(cancellationToken);
-		_pusherClient.Disconnect();
-	}
-
-	/// <inheritdoc />
-	public override async ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
-	{
-		if (_orderInfo.Count > 0)
-		{
-			await OrderStatusAsync(null, cancellationToken);
-			await PortfolioLookupAsync(null, cancellationToken);
-		}
-
-		if (BalanceCheckInterval > TimeSpan.Zero &&
-			(_lastTimeBalanceCheck == null || (CurrentTime - _lastTimeBalanceCheck) > BalanceCheckInterval))
-		{
-			await PortfolioLookupAsync(null, cancellationToken);
-		}
-	}
-
-	private void SessionOnPusherConnected()
-	{
+		await _socketClient.Connect(cancellationToken);
+		//await _pusherClient.SubscribeStatus(cancellationToken);
 		SendOutMessage(new ConnectMessage());
 	}
 
-	private void SessionOnPusherError(Exception exception)
+	/// <inheritdoc />
+	public override ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
+	{
+		if (_restClient == null)
+			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
+
+		if (_socketClient == null)
+			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
+
+		_restClient.Dispose();
+		_restClient = null;
+
+		//await _pusherClient.UnSubscribeStatus(cancellationToken);
+		_socketClient.Disconnect();
+		SendOutDisconnectMessage(true);
+		return default;
+	}
+
+	/// <inheritdoc />
+	public override ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
+	{
+		// can send pings to keep web socket alive
+		return default;
+	}
+
+	private void SessionOnHeartbeatReceived(Heartbeat heartbeat)
+	{
+
+	}
+
+	private void SessionOnSocketConnected()
+	{
+	}
+
+	private void SessionOnSocketError(Exception exception)
 	{
 		SendOutError(exception);
 	}
 
-	private void SessionOnPusherDisconnected(bool expected)
+	private void SessionOnSocketDisconnected(bool expected)
 	{
-		SendOutDisconnectMessage(expected);
 	}
 }

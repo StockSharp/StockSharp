@@ -8,7 +8,7 @@ class HttpClient : BaseLogReceiver
 {
 	private readonly Authenticator _authenticator;
 
-	private const string _baseUrl = "https://api.pro.coinbase.com";
+	private const string _baseUrl = "https://api.coinbase.com/api";
 
 	public HttpClient(Authenticator authenticator)
 	{
@@ -18,24 +18,39 @@ class HttpClient : BaseLogReceiver
 	// to get readable name after obfuscation
 	public override string Name => nameof(Coinbase) + "_" + nameof(HttpClient);
 
-	public Task<IEnumerable<Product>> GetProducts(CancellationToken cancellationToken)
-	{
-		return MakeRequest<IEnumerable<Product>>(CreateUrl("products"), CreateRequest(Method.Get), cancellationToken);
-	}
-
-	public Task<IEnumerable<Ohlc>> GetCandles(string currency, DateTimeOffset? start, DateTimeOffset? end, int granularity, CancellationToken cancellationToken)
+	public async Task<IEnumerable<Product>> GetProducts(string type, CancellationToken cancellationToken)
 	{
 		var request = CreateRequest(Method.Get);
+		request.AddParameter("product_type", type);
 
-		if (start != null)
-			request.AddParameter("start", start.Value.UtcDateTime);
+		dynamic response = await MakeRequest<object>(CreateUrl("brokerage/market/products"), request, cancellationToken);
 
-		if (end != null)
-			request.AddParameter("end", end.Value.UtcDateTime);
+		return ((JToken)response.products).DeserializeObject<IEnumerable<Product>>();
+	}
 
-		request.AddParameter("granularity", granularity);
+	public async Task<IEnumerable<Ohlc>> GetCandles(string symbol, long start, long end, string granularity, CancellationToken cancellationToken)
+	{
+		var request = CreateRequest(Method.Get)
+			.AddQueryParameter("start", start)
+			.AddQueryParameter("end", end)
+			.AddQueryParameter("granularity", granularity)
+		;
 
-		return MakeRequest<IEnumerable<Ohlc>>(CreateUrl($"/products/{currency}/candles"), request, cancellationToken);
+		dynamic response = await MakeRequest<object>(CreateUrl($"brokerage/market/products/{symbol}/candles"), request, cancellationToken);
+
+		return ((JToken)response.candles).DeserializeObject<IEnumerable<Ohlc>>();
+	}
+
+	public async Task<IEnumerable<Trade>> GetTrades(string symbol, long start, long end, CancellationToken cancellationToken)
+	{
+		var request = CreateRequest(Method.Get)
+			.AddQueryParameter("start", start)
+			.AddQueryParameter("end", end)
+		;
+
+		dynamic response = await MakeRequest<object>(CreateUrl($"brokerage/market/products/{symbol}/ticker"), request, cancellationToken);
+
+		return ((JToken)response.trades).DeserializeObject<IEnumerable<Trade>>();
 	}
 
 	public Task<IEnumerable<Account>> GetAccounts(CancellationToken cancellationToken)
@@ -44,56 +59,44 @@ class HttpClient : BaseLogReceiver
 		return MakeRequest<IEnumerable<Account>>(url, ApplySecret(CreateRequest(Method.Get), url), cancellationToken);
 	}
 
-	public Task<IEnumerable<Order>> GetOrders(string[] status, CancellationToken cancellationToken)
+	public async Task<IEnumerable<Order>> GetOrders(CancellationToken cancellationToken)
 	{
-		if (status == null)
-			throw new ArgumentNullException(nameof(status));
-
-		var request = CreateRequest(Method.Get);
-
-		var url = CreateUrl("orders");
-
-		foreach (var s in status)
-			request.AddParameter("status", s, ParameterType.QueryString);
-
-		return MakeRequest<IEnumerable<Order>>(url, ApplySecret(request, url), cancellationToken);
-	}
-
-	public Task<Order> GetOrderInfo(string orderId, CancellationToken cancellationToken)
-	{
-		var url = CreateUrl($"orders/{orderId}");
-
-		var request = CreateRequest(Method.Get);
-
-		return MakeRequest<Order>(url, ApplySecret(request, url), cancellationToken);
+		var url = CreateUrl("brokerage/orders/historical/batch");
+		dynamic response = await MakeRequest<object>(url, ApplySecret(CreateRequest(Method.Get), url), cancellationToken);
+		return ((JToken)response.orders).DeserializeObject<IEnumerable<Order>>();
 	}
 
 	public async Task<IEnumerable<Fill>> GetFills(string orderId, CancellationToken cancellationToken)
 	{
-		var url = CreateUrl("fills");
+		var url = CreateUrl("brokerage/orders/historical/fills");
 
 		var request = CreateRequest(Method.Get);
 
-		request.AddParameter("order_id", orderId, ParameterType.QueryString);
+		if (!orderId.IsEmpty())
+			request.AddQueryParameter("order_id", orderId);
 
-		return await MakeRequest<IEnumerable<Fill>>(url, ApplySecret(request, url), cancellationToken) ?? Enumerable.Empty<Fill>();
+		dynamic response = await MakeRequest<object>(url, ApplySecret(request, url), cancellationToken);
+		return ((JToken)response.fills).DeserializeObject<IEnumerable<Fill>>();
 	}
 
-	public Task<Order> RegisterOrder(string currency, string type, Sides side, decimal? price, decimal? stopPrice, decimal volume, TimeInForce? timeInForce, DateTimeOffset? tillDate, CancellationToken cancellationToken)
+	public Task<Order> RegisterOrder(string clientOrderId, string symbol, string type, string side, decimal? price, decimal? stopPrice, decimal volume, TimeInForce? timeInForce, DateTimeOffset? tillDate, int? leverage, CancellationToken cancellationToken)
 	{
-		var url = CreateUrl("orders");
+		var url = CreateUrl("brokerage/orders");
 
 		var request = CreateRequest(Method.Post);
 
 		var body = (dynamic)new ExpandoObject();
 
-		//body.client_oid = transactionId.To<string>();
-		body.side = side.ToNative();
-		body.product_id = currency;
+		body.client_order_id = clientOrderId;
+		body.side = side;
+		body.product_id = symbol;
 		body.size = volume;
 
 		if (!type.IsEmpty())
 			body.type = type;
+
+		if (leverage is int l)
+			body.leverage = l;
 
 		if (price != null)
 			body.price = price.Value;
@@ -113,16 +116,28 @@ class HttpClient : BaseLogReceiver
 		return MakeRequest<Order>(url, ApplySecret(request, url, (object)body), cancellationToken);
 	}
 
-	public Task CancelOrder(string orderId, CancellationToken cancellationToken)
+	public Task EditOrder(string orderId, decimal? price, decimal? size, CancellationToken cancellationToken)
 	{
-		var url = CreateUrl($"orders/{orderId}");
-		return MakeRequest<object>(url, ApplySecret(CreateRequest(Method.Delete), url), cancellationToken);
+		var url = CreateUrl("brokerage/orders/edit");
+		var request = CreateRequest(Method.Post);
+		var body = new
+		{
+			order_id = orderId,
+			price,
+			size,
+		};
+		return MakeRequest<object>(url, ApplySecret(request, url, body), cancellationToken);
 	}
 
-	public Task<string[]> CancelAllOrders(CancellationToken cancellationToken)
+	public Task CancelOrder(string orderId, CancellationToken cancellationToken)
 	{
-		var url = CreateUrl("orders");
-		return MakeRequest<string[]>(url, ApplySecret(CreateRequest(Method.Delete), url), cancellationToken);
+		var url = CreateUrl("brokerage/orders/batch_cancel");
+		var request = CreateRequest(Method.Post);
+		var body = new
+		{
+			order_ids = new[] { orderId }
+		};
+		return MakeRequest<object>(url, ApplySecret(request, url, body), cancellationToken);
 	}
 
 	public async Task<string> Withdraw(string currency, decimal volume, WithdrawInfo info, CancellationToken cancellationToken)
@@ -168,12 +183,12 @@ class HttpClient : BaseLogReceiver
 		return (await MakeRequest<Withdraw>(url, ApplySecret(request, url, (object)body), cancellationToken)).Id;
 	}
 
-	private static Uri CreateUrl(string methodName, string version = "")
+	private static Uri CreateUrl(string methodName, string version = "v3")
 	{
 		if (methodName.IsEmpty())
 			throw new ArgumentNullException(nameof(methodName));
 
-		return $"{_baseUrl}/{version}{methodName}".To<Uri>();
+		return $"{_baseUrl}/{version}/{methodName}".To<Uri>();
 	}
 
 	private static RestRequest CreateRequest(Method method)

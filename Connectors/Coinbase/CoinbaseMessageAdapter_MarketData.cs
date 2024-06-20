@@ -2,45 +2,47 @@ namespace StockSharp.Coinbase;
 
 public partial class CoinbaseMessageAdapter
 {
+	private readonly SynchronizedDictionary<string, long> _candlesTransIds = new();
+
 	/// <inheritdoc />
 	public override async ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
 		var secTypes = lookupMsg.GetSecurityTypes();
 		var left = lookupMsg.Count ?? long.MaxValue;
 
-		var products = await _httpClient.GetProducts(cancellationToken);
-
-		foreach (var product in products)
+		foreach (var type in new[] { "SPOT", "FUTURE" })
 		{
-			var secId = product.Id.ToStockSharp();
+			var products = await _restClient.GetProducts(type, cancellationToken);
 
-			var secMsg = new SecurityMessage
+			foreach (var product in products)
 			{
-				SecurityType = SecurityTypes.CryptoCurrency,
-				SecurityId = secId,
-				Name = product.DisplayName,
-				PriceStep = product.QuoteIncrement,
-				VolumeStep = 0.00000001m,
-				MinVolume = product.BaseMinSize,
-				OriginalTransactionId = lookupMsg.TransactionId,
-			}
-			.TryFillUnderlyingId(product.BaseCurrency.ToUpperInvariant());
+				var secId = product.ProductId.ToStockSharp();
 
-			if (!secMsg.IsMatch(lookupMsg, secTypes))
-				continue;
-
-			SendOutMessage(secMsg);
-
-			if (product.Status != "online")
-			{
-				SendOutMessage(new Level1ChangeMessage
+				var secMsg = new SecurityMessage
 				{
+					SecurityType = product.ProductType.ToSecurityType(),
 					SecurityId = secId,
-					ServerTime = CurrentTime.ConvertToUtc(),
-				}.Add(Level1Fields.State, SecurityStates.Stoped));
+					Name = product.DisplayName,
+					PriceStep = product.QuoteIncrement?.ToDecimal(),
+					VolumeStep = product.BaseIncrement?.ToDecimal(),
+					MinVolume = product.BaseMinSize?.ToDecimal(),
+					MaxVolume = product.BaseMaxSize?.ToDecimal(),
+					ExpiryDate = product.FutureProductDetails?.ContractExpiry,
+					Multiplier = product.FutureProductDetails?.ContractSize?.ToDecimal(),
+					OriginalTransactionId = lookupMsg.TransactionId,
+				}
+				.TryFillUnderlyingId(product.BaseCurrencyId.ToUpperInvariant());
+
+				if (!secMsg.IsMatch(lookupMsg, secTypes))
+					continue;
+
+				SendOutMessage(secMsg);
+
+				if (--left <= 0)
+					break;
 			}
 
-			if (--left <= 0)
+			if (left <= 0)
 				break;
 		}
 
@@ -48,72 +50,112 @@ public partial class CoinbaseMessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask OnLevel1SubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	protected override async ValueTask OnLevel1SubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
 		SendSubscriptionReply(mdMsg.TransactionId);
 
-		var currency = mdMsg.SecurityId.ToCurrency();
-
-		if (mdMsg.IsSubscribe)
-			return _pusherClient.SubscribeTicker(currency, cancellationToken);
-		else
-			return _pusherClient.UnSubscribeTicker(currency, cancellationToken);
-	}
-
-	/// <inheritdoc />
-	protected override ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
-	{
-		SendSubscriptionReply(mdMsg.TransactionId);
-
-		var currency = mdMsg.SecurityId.ToCurrency();
-
-		if (mdMsg.IsSubscribe)
-			return _pusherClient.SubscribeOrderBook(currency, cancellationToken);
-		else
-			return _pusherClient.UnSubscribeOrderBook(currency, cancellationToken);
-	}
-
-	/// <inheritdoc />
-	protected override ValueTask OnTicksSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
-	{
-		SendSubscriptionReply(mdMsg.TransactionId);
-
-		var currency = mdMsg.SecurityId.ToCurrency();
+		var symbol = mdMsg.SecurityId.ToSymbol();
 
 		if (mdMsg.IsSubscribe)
 		{
-			//if (mdMsg.From != null && mdMsg.From.Value.IsToday())
-			//{
-			//	_httpClient.RequestTransactions(currency, "minute").Select(t => new ExecutionMessage
-			//	{
-			//		DataTypeEx = DataType.Ticks,
-			//		SecurityId = mdMsg.SecurityId,
-			//		TradeId = t.Id,
-			//		TradePrice = (decimal)t.Price,
-			//		TradeVolume = (decimal)t.Amount,
-			//		ServerTime = t.Time.To<long>().FromUnix(),
-			//	}).ForEach(SendOutMessage);
-			//}
-			//else
-			return _pusherClient.SubscribeTrades(currency, cancellationToken);
+			await _socketClient.SubscribeTicker(symbol, cancellationToken);
+
+			SendSubscriptionResult(mdMsg);
 		}
 		else
-		{
-			return _pusherClient.UnSubscribeTrades(currency, cancellationToken);
-		}
+			await _socketClient.UnSubscribeTicker(symbol, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask OnOrderLogSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	protected override async ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
 		SendSubscriptionReply(mdMsg.TransactionId);
 
-		var currency = mdMsg.SecurityId.ToCurrency();
+		var symbol = mdMsg.SecurityId.ToSymbol();
 
 		if (mdMsg.IsSubscribe)
-			return _pusherClient.SubscribeOrderLog(currency, cancellationToken);
+		{
+			await _socketClient.SubscribeOrderBook(symbol, cancellationToken);
+
+			SendSubscriptionResult(mdMsg);
+		}
 		else
-			return _pusherClient.UnSubscribeOrderLog(currency, cancellationToken);
+			await _socketClient.UnSubscribeOrderBook(symbol, cancellationToken);
+	}
+
+	/// <inheritdoc />
+	protected override async ValueTask OnTicksSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	{
+		SendSubscriptionReply(mdMsg.TransactionId);
+
+		var symbol = mdMsg.SecurityId.ToSymbol();
+
+		if (mdMsg.IsSubscribe)
+		{
+			if (mdMsg.From is not null)
+			{
+				var from = (long)mdMsg.From.Value.ToUnix(false);
+				var to = (long)(mdMsg.To ?? DateTimeOffset.UtcNow).ToUnix(false);
+				var left = mdMsg.Count ?? long.MaxValue;
+
+				while (from < to)
+				{
+					var trades = await _restClient.GetTrades(symbol, from, to, cancellationToken);
+					var needBreak = true;
+					var last = from;
+
+					foreach (var trade in trades.OrderBy(t => t.Time))
+					{
+						cancellationToken.ThrowIfCancellationRequested();
+
+						var time = (long)trade.Time.ToUnix();
+
+						if (time < from)
+							continue;
+
+						if (time > to)
+						{
+							needBreak = true;
+							break;
+						}
+
+						SendOutMessage(new ExecutionMessage
+						{
+							DataTypeEx = DataType.Ticks,
+							TradeId = trade.TradeId,
+							TradePrice = trade.Price?.ToDecimal(),
+							TradeVolume = trade.Size?.ToDecimal(),
+							ServerTime = trade.Time,
+							OriginSide = trade.Side.ToSide(),
+							OriginalTransactionId = mdMsg.TransactionId,
+						});
+
+						if (--left <= 0)
+						{
+							needBreak = true;
+							break;
+						}
+
+						last = time;
+						needBreak = false;
+					}
+
+					if (needBreak)
+						break;
+
+					from = last;
+				}
+			}
+			
+			if (!mdMsg.IsHistoryOnly())
+				await _socketClient.SubscribeTrades(symbol, cancellationToken);
+
+			SendSubscriptionResult(mdMsg);
+		}
+		else
+		{
+			await _socketClient.UnSubscribeTrades(symbol, cancellationToken);
+		}
 	}
 
 	/// <inheritdoc />
@@ -121,35 +163,84 @@ public partial class CoinbaseMessageAdapter
 	{
 		SendSubscriptionReply(mdMsg.TransactionId);
 
-		if (!mdMsg.IsSubscribe)
-			return;
+		var symbol = mdMsg.SecurityId.ToSymbol();
 
-		var currency = mdMsg.SecurityId.ToCurrency();
-
-		var candles = await _httpClient.GetCandles(currency, mdMsg.From, mdMsg.To, (int)mdMsg.GetTimeFrame().TotalSeconds, cancellationToken);
-		var left = mdMsg.Count ?? long.MaxValue;
-
-		foreach (var candle in candles.OrderBy(c => c.Time))
+		if (mdMsg.IsSubscribe)
 		{
-			SendOutMessage(new TimeFrameCandleMessage
+			var tf = mdMsg.GetTimeFrame();
+
+			if (mdMsg.From is not null)
 			{
-				SecurityId = mdMsg.SecurityId,
-				TypedArg = mdMsg.GetTimeFrame(),
-				OpenPrice = candle.Open,
-				ClosePrice = candle.Close,
-				HighPrice = candle.High,
-				LowPrice = candle.Low,
-				TotalVolume = candle.Volume,
-				OpenTime = candle.Time.FromUnix(),
-				State = CandleStates.Finished,
-				OriginalTransactionId = mdMsg.TransactionId,
-			});
+				var from = (long)mdMsg.From.Value.ToUnix();
+				var to = (long)(mdMsg.To ?? DateTimeOffset.UtcNow).ToUnix();
+				var left = mdMsg.Count ?? long.MaxValue;
+				var step = (long)tf.Multiply(200).TotalSeconds;
+				var granularity = mdMsg.GetTimeFrame().ToNative();
 
-			if (--left <= 0)
-				break;
+				while (from < to)
+				{
+					var candles = await _restClient.GetCandles(symbol, from, from + step, granularity, cancellationToken);
+					var needBreak = true;
+					var last = from;
+
+					foreach (var candle in candles.OrderBy(t => t.Time))
+					{
+						cancellationToken.ThrowIfCancellationRequested();
+
+						var time = (long)candle.Time.ToUnix();
+
+						if (time < from)
+							continue;
+
+						if (time > to)
+						{
+							needBreak = true;
+							break;
+						}
+
+						SendOutMessage(new TimeFrameCandleMessage
+						{
+							OpenPrice = (decimal)candle.Open,
+							ClosePrice = (decimal)candle.Close,
+							HighPrice = (decimal)candle.High,
+							LowPrice = (decimal)candle.Low,
+							TotalVolume = (decimal)candle.Volume,
+							OpenTime = candle.Time,
+							State = CandleStates.Finished,
+							OriginalTransactionId = mdMsg.TransactionId,
+						});
+
+						if (--left <= 0)
+						{
+							needBreak = true;
+							break;
+						}
+
+						last = time;
+						needBreak = false;
+					}
+
+					if (needBreak)
+						break;
+
+					from = last;
+				}
+			}
+
+			if (!mdMsg.IsHistoryOnly() && mdMsg.DataType2 == _tf5min)
+			{
+				_candlesTransIds[symbol] = mdMsg.TransactionId;
+				await _socketClient.SubscribeCandles(symbol, cancellationToken);
+				SendSubscriptionResult(mdMsg);
+			}
+			else
+				SendSubscriptionFinished(mdMsg.TransactionId);
 		}
-
-		SendSubscriptionFinished(mdMsg.TransactionId);
+		else
+		{
+			_candlesTransIds.Remove(symbol);
+			await _socketClient.UnSubscribeCandles(symbol, cancellationToken);
+		}
 	}
 
 	private void SessionOnTickerChanged(Ticker ticker)
@@ -157,7 +248,7 @@ public partial class CoinbaseMessageAdapter
 		SendOutMessage(new Level1ChangeMessage
 		{
 			SecurityId = ticker.Product.ToStockSharp(),
-			ServerTime = ticker.Time ?? CurrentTime.ConvertToUtc(),
+			ServerTime = CurrentTime.ConvertToUtc(),
 		}
 		.TryAdd(Level1Fields.LastTradeId, ticker.LastTradeId)
 		.TryAdd(Level1Fields.LastTradePrice, ticker.LastTradePrice?.ToDecimal())
@@ -166,81 +257,67 @@ public partial class CoinbaseMessageAdapter
 		.TryAdd(Level1Fields.HighPrice, ticker.High?.ToDecimal())
 		.TryAdd(Level1Fields.LowPrice, ticker.Low?.ToDecimal())
 		.TryAdd(Level1Fields.Volume, ticker.Volume?.ToDecimal())
+		.TryAdd(Level1Fields.Change, ticker.Change?.ToDecimal())
 		.TryAdd(Level1Fields.BestBidPrice, ticker.Bid?.ToDecimal())
-		.TryAdd(Level1Fields.BestAskPrice, ticker.Ask?.ToDecimal()));
+		.TryAdd(Level1Fields.BestAskPrice, ticker.Ask?.ToDecimal())
+		.TryAdd(Level1Fields.BestBidVolume, ticker.BidSize?.ToDecimal())
+		.TryAdd(Level1Fields.BestAskVolume, ticker.AskSize?.ToDecimal())
+		);
 	}
 
-	private void SessionOnNewTrade(Trade trade)
+	private void SessionOnTradeReceived(Trade trade)
 	{
 		SendOutMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Ticks,
-			SecurityId = trade.Product.ToStockSharp(),
-			TradeId = trade.Id,
-			TradePrice = trade.Price,
-			TradeVolume = trade.Size,
+			SecurityId = trade.ProductId.ToStockSharp(),
+			TradeId = trade.TradeId,
+			TradePrice = (decimal)trade.Price,
+			TradeVolume = (decimal)trade.Size,
 			ServerTime = trade.Time,
 			OriginSide = trade.Side.ToSide(),
 		});
 	}
 
-	private void SessionOnOrderBookSnapshot(OrderBook book)
-	{
-		static QuoteChange ToChange(OrderBookEntry entry) => new(entry.Price, entry.Size);
-
-		SendOutMessage(new QuoteChangeMessage
-		{
-			SecurityId = book.Product.ToStockSharp(),
-			Bids = book.Bids?.Select(ToChange).ToArray() ?? Array.Empty<QuoteChange>(),
-			Asks = book.Asks?.Select(ToChange).ToArray() ?? Array.Empty<QuoteChange>(),
-			State = QuoteChangeStates.SnapshotComplete,
-			ServerTime = CurrentTime.ConvertToUtc(),
-		});
-	}
-
-	private void SessionOnOrderBookChanged(OrderBookChanges changes)
+	private void SessionOnOrderBookReceived(string type, string symbol, IEnumerable<OrderBookChange> changes)
 	{
 		var bids = new List<QuoteChange>();
 		var asks = new List<QuoteChange>();
 
-		foreach (var entry in changes.Entries)
+		foreach (var change in changes)
 		{
-			var side = entry.Side.ToSide();
+			var side = change.Side.ToSide();
 
 			var quotes = side == Sides.Buy ? bids : asks;
 
-			quotes.Add(new QuoteChange(entry.Price, entry.Size));
+			quotes.Add(new((decimal)change.Price, (decimal)change.Size));
 		}
 
 		SendOutMessage(new QuoteChangeMessage
 		{
-			SecurityId = changes.Product.ToStockSharp(),
+			SecurityId = symbol.ToStockSharp(),
 			Bids = bids.ToArray(),
 			Asks = asks.ToArray(),
 			ServerTime = CurrentTime.ConvertToUtc(),
-			State = QuoteChangeStates.Increment,
+			State = type == "snapshot" ? QuoteChangeStates.SnapshotComplete : QuoteChangeStates.Increment,
 		});
 	}
 
-	private void SessionOnNewOrderLog(OrderLog log)
+	private void SessionOnCandleReceived(Ohlc candle)
 	{
-		SendOutMessage(new ExecutionMessage
+		if (!_candlesTransIds.TryGetValue(candle.Symbol, out var transId))
+			return;
+
+		SendOutMessage(new TimeFrameCandleMessage
 		{
-			DataTypeEx = DataType.OrderLog,
-			SecurityId = log.Product.ToStockSharp(),
-			ServerTime = log.Time,
-			OrderStringId = log.OrderId,
-			OrderPrice = log.Price ?? 0,
-			OrderVolume = log.Size,
-			Balance = log.RemainingSize,
-			OrderType = log.OrderType?.ToOrderType(),
-			OrderState = log.Reason.IsEmpty() ? OrderStates.Active : log.Reason.ToOrderState(),
-			Side = log.Side.ToSide(),
+			OpenPrice = (decimal)candle.Open,
+			ClosePrice = (decimal)candle.Close,
+			HighPrice = (decimal)candle.High,
+			LowPrice = (decimal)candle.Low,
+			TotalVolume = (decimal)candle.Volume,
+			OpenTime = candle.Time,
+			State = CandleStates.Active,
+			OriginalTransactionId = transId,
 		});
-	}
-
-	private void SessionOnHeartbeat(Heartbeat heartbeat)
-	{
-		
 	}
 }

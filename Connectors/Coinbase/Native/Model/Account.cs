@@ -1,6 +1,5 @@
 namespace StockSharp.Coinbase.Native.Model;
 
-[Obfuscation(Feature = "renaming", ApplyToMembers = true)]
 class Account
 {
 	[JsonProperty("id")]
@@ -10,20 +9,20 @@ class Account
 	public string Currency { get; set; }
 
 	[JsonProperty("balance")]
-	public decimal Balance { get; set; }
+	public double Balance { get; set; }
 
 	[JsonProperty("hold")]
-	public decimal Hold { get; set; }
+	public double Hold { get; set; }
 
 	[JsonProperty("available")]
-	public decimal Available { get; set; }
+	public double Available { get; set; }
 
 	[JsonProperty("margin_enabled")]
 	public bool MarginEnabled { get; set; }
 
 	[JsonProperty("funded_amount")]
-	public decimal FundedAmount { get; set; }
+	public double FundedAmount { get; set; }
 
 	[JsonProperty("default_amount")]
-	public decimal DefaultAmount { get; set; }
+	public double DefaultAmount { get; set; }
 }

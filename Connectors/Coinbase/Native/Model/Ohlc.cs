@@ -1,19 +1,26 @@
 namespace StockSharp.Coinbase.Native.Model;
 
-[Obfuscation(Feature = "renaming", ApplyToMembers = false)]
-[JsonConverter(typeof(JArrayToObjectConverter))]
 class Ohlc
 {
-	//[JsonConverter(typeof(JsonDateTimeMlsConverter))]
-	public long Time { get; set; }
+	[JsonConverter(typeof(JsonDateTimeConverter))]
+	[JsonProperty("start")]
+	public DateTime Time { get; set; }
 
-	public decimal Low { get; set; }
+	[JsonProperty("low")]
+	public double Low { get; set; }
 
-	public decimal High { get; set; }
+	[JsonProperty("high")]
+	public double High { get; set; }
 
-	public decimal Open { get; set; }
+	[JsonProperty("open")]
+	public double Open { get; set; }
 
-	public decimal Close { get; set; }
+	[JsonProperty("close")]
+	public double Close { get; set; }
 
-	public decimal Volume { get; set; }
+	[JsonProperty("volume")]
+	public double Volume { get; set; }
+
+	[JsonProperty("product_id")]
+	public string Symbol { get; set; }
 }

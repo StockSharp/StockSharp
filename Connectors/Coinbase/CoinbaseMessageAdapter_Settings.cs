@@ -19,21 +19,6 @@ using Ecng.ComponentModel;
 	MessageAdapterCategories.Free | MessageAdapterCategories.Level1 | MessageAdapterCategories.Transactions)]
 public partial class CoinbaseMessageAdapter : AsyncMessageAdapter, IKeySecretAdapter, IPassphraseAdapter
 {
-	private static readonly HashSet<TimeSpan> _timeFrames = new(new[]
-	{
-		TimeSpan.FromMinutes(1),
-		TimeSpan.FromMinutes(5),
-		TimeSpan.FromMinutes(15),
-		TimeSpan.FromHours(1),
-		TimeSpan.FromHours(6),
-		TimeSpan.FromDays(1),
-	});
-
-	/// <summary>
-	/// Possible time-frames.
-	/// </summary>
-	public static IEnumerable<TimeSpan> AllTimeFrames => _timeFrames;
-
 	/// <inheritdoc />
 	[Display(
 		ResourceType = typeof(LocalizedStrings),

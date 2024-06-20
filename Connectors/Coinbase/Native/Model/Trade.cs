@@ -1,32 +1,28 @@
 namespace StockSharp.Coinbase.Native.Model;
 
-[Obfuscation(Feature = "renaming", ApplyToMembers = true)]
 class Trade
 {
 	[JsonProperty("trade_id")]
-	public long Id { get; set; }
+	public long TradeId { get; set; }
 
-	[JsonProperty("sequence")]
-	public long Sequence { get; set; }
+	[JsonProperty("product_id")]
+	public string ProductId { get; set; }
 
-	[JsonProperty("maker_order_id")]
-	public string MakerOrderId { get; set; }
+	[JsonProperty("price")]
+	public double? Price { get; set; }
 
-	[JsonProperty("taker_order_id")]
-	public string TakerOrderId { get; set; }
+	[JsonProperty("size")]
+	public double? Size { get; set; }
 
 	[JsonProperty("time")]
 	public DateTime Time { get; set; }
 
-	[JsonProperty("product_id")]
-	public string Product { get; set; }
-
-	[JsonProperty("price")]
-	public decimal Price { get; set; }
-
-	[JsonProperty("size")]
-	public decimal Size { get; set; }
-
 	[JsonProperty("side")]
 	public string Side { get; set; }
+
+	[JsonProperty("bid")]
+	public double? Bid { get; set; }
+
+	[JsonProperty("ask")]
+	public double? Ask { get; set; }
 }

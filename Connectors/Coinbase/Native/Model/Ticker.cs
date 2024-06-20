@@ -1,6 +1,5 @@
 namespace StockSharp.Coinbase.Native.Model;
 
-[Obfuscation(Feature = "renaming", ApplyToMembers = true)]
 class Ticker
 {
 	[JsonProperty("trade_id")]
@@ -8,9 +7,6 @@ class Ticker
 
 	[JsonProperty("sequence")]
 	public long Sequence { get; set; }
-
-	[JsonProperty("time")]
-	public DateTime? Time { get; set; }
 
 	[JsonProperty("product_id")]
 	public string Product { get; set; }
@@ -30,6 +26,12 @@ class Ticker
 	[JsonProperty("best_ask")]
 	public double? Ask { get; set; }
 
+	[JsonProperty("best_bid_quantity")]
+	public double? BidSize { get; set; }
+
+	[JsonProperty("best_ask_quantity")]
+	public double? AskSize { get; set; }
+
 	[JsonProperty("volume_24h")]
 	public double? Volume { get; set; }
 
@@ -38,4 +40,7 @@ class Ticker
 
 	[JsonProperty("high_24h")]
 	public double? High { get; set; }
+
+	[JsonProperty("price_percent_chg_24_h")]
+	public double? Change { get; set; }
 }

@@ -1,6 +1,5 @@
 namespace StockSharp.Coinbase.Native.Model;
 
-[Obfuscation(Feature = "renaming", ApplyToMembers = true)]
 class Fill
 {
 	[JsonProperty("trade_id")]
@@ -10,10 +9,10 @@ class Fill
 	public string Product { get; set; }
 
 	[JsonProperty("price")]
-	public decimal Price { get; set; }
+	public double Price { get; set; }
 
 	[JsonProperty("size")]
-	public decimal Size { get; set; }
+	public double Size { get; set; }
 
 	[JsonProperty("order_id")]
 	public string OrderId { get; set; }
@@ -25,7 +24,7 @@ class Fill
 	public string Liquidity { get; set; }
 
 	[JsonProperty("fee")]
-	public decimal Fee { get; set; }
+	public double Fee { get; set; }
 
 	[JsonProperty("settled")]
 	public bool Settled { get; set; }
