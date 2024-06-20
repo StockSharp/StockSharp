@@ -163,7 +163,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 						if (mdMsg.IsCalcVolumeProfile)
 						{
-							if (!IsSupportCandlesPriceLevels)
+							if (!IsSupportCandlesPriceLevels(mdMsg))
 							{
 								if (isLoadOnly)
 								{
@@ -201,7 +201,7 @@ namespace StockSharp.Algo.Candles.Compression
 								if (mdMsg.To == null &&
 									mdMsg.BuildMode == MarketDataBuildModes.LoadAndBuild &&
 									!mdMsg.IsFinishedOnly &&
-									!InnerAdapter.IsSupportCandlesUpdates &&
+									!InnerAdapter.IsSupportCandlesUpdates(mdMsg) &&
 									InnerAdapter.TryGetCandlesBuildFrom(original, _candleBuilderProvider) != null)
 								{
 									mdMsg.To = DateTimeOffset.Now;

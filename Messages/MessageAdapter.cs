@@ -184,12 +184,10 @@ namespace StockSharp.Messages
 		public virtual bool IsSupportSubscriptions => true;
 
 		/// <inheritdoc />
-		[Browsable(false)]
-		public virtual bool IsSupportCandlesUpdates => false;
+		public virtual bool IsSupportCandlesUpdates(MarketDataMessage subscription) => false;
 
 		/// <inheritdoc />
-		[Browsable(false)]
-		public virtual bool IsSupportCandlesPriceLevels => false;
+		public virtual bool IsSupportCandlesPriceLevels(MarketDataMessage subscription) => false;
 
 		/// <inheritdoc />
 		[Browsable(false)]

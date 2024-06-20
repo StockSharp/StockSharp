@@ -313,10 +313,10 @@ namespace StockSharp.Messages
 		public virtual bool IsSupportSubscriptions => InnerAdapter.IsSupportSubscriptions;
 
 		/// <inheritdoc />
-		public virtual bool IsSupportCandlesUpdates => InnerAdapter.IsSupportCandlesUpdates;
+		public virtual bool IsSupportCandlesUpdates(MarketDataMessage subscription) => InnerAdapter.IsSupportCandlesUpdates(subscription);
 
 		/// <inheritdoc />
-		public virtual bool IsSupportCandlesPriceLevels => InnerAdapter.IsSupportCandlesPriceLevels;
+		public virtual bool IsSupportCandlesPriceLevels(MarketDataMessage subscription) => InnerAdapter.IsSupportCandlesPriceLevels(subscription);
 
 		/// <inheritdoc />
 		public virtual bool IsSupportPartialDownloading => InnerAdapter.IsSupportPartialDownloading;

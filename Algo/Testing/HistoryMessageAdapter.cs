@@ -206,7 +206,7 @@ namespace StockSharp.Algo.Testing
 		public override bool IsFullCandlesOnly => false;
 
 		/// <inheritdoc />
-		public override bool IsSupportCandlesUpdates => true;
+		public override bool IsSupportCandlesUpdates(MarketDataMessage subscription) => true;
 
 		/// <inheritdoc />
 		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)

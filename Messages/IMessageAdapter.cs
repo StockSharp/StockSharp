@@ -109,12 +109,16 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Support candles subscription and live updates.
 		/// </summary>
-		bool IsSupportCandlesUpdates { get; }
+		/// <param name="subscription"><see cref="MarketDataMessage"/></param>
+		/// <returns>Check result.</returns>
+		bool IsSupportCandlesUpdates(MarketDataMessage subscription);
 
 		/// <summary>
 		/// Support candles <see cref="CandleMessage.PriceLevels"/>.
 		/// </summary>
-		bool IsSupportCandlesPriceLevels { get; }
+		/// <param name="subscription"><see cref="MarketDataMessage"/></param>
+		/// <returns>Check result.</returns>
+		bool IsSupportCandlesPriceLevels(MarketDataMessage subscription);
 
 		/// <summary>
 		/// Support partial downloading.

@@ -617,9 +617,9 @@ namespace StockSharp.Algo
 
 		bool IMessageAdapter.IsSupportSubscriptions => true;
 
-		bool IMessageAdapter.IsSupportCandlesUpdates => GetSortedAdapters().Any(a => a.IsSupportCandlesUpdates);
+		bool IMessageAdapter.IsSupportCandlesUpdates(MarketDataMessage subscription) => GetSortedAdapters().Any(a => a.IsSupportCandlesUpdates(subscription));
 
-		bool IMessageAdapter.IsSupportCandlesPriceLevels => GetSortedAdapters().Any(a => a.IsSupportCandlesPriceLevels);
+		bool IMessageAdapter.IsSupportCandlesPriceLevels(MarketDataMessage subscription) => GetSortedAdapters().Any(a => a.IsSupportCandlesPriceLevels(subscription));
 
 		bool IMessageAdapter.IsSupportPartialDownloading => GetSortedAdapters().Any(a => a.IsSupportPartialDownloading);
 

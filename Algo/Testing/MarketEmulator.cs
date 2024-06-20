@@ -3681,8 +3681,8 @@ namespace StockSharp.Algo.Testing
 		bool IMessageAdapter.IsNativeIdentifiers => false;
 		bool IMessageAdapter.IsFullCandlesOnly => false;
 		bool IMessageAdapter.IsSupportSubscriptions => true;
-		bool IMessageAdapter.IsSupportCandlesUpdates => true;
-		bool IMessageAdapter.IsSupportCandlesPriceLevels => false;
+		bool IMessageAdapter.IsSupportCandlesUpdates(MarketDataMessage subscription) => true;
+		bool IMessageAdapter.IsSupportCandlesPriceLevels(MarketDataMessage subscription) => false;
 		bool IMessageAdapter.IsSupportPartialDownloading => false;
 
 		MessageAdapterCategories IMessageAdapter.Categories => default;
