@@ -39,10 +39,10 @@ public partial class CoinbaseMessageAdapter
 		=> dataType == DataType.Securities || base.IsAllDownloadingSupported(dataType);
 
 	/// <inheritdoc />
-	protected override IEnumerable<TimeSpan> TimeFrames { get; } = Native.Extensions.TimeFrames.Keys.ToArray();
+	public override bool IsSupportOrderBookIncrements => true;
 
 	/// <inheritdoc />
-	public override bool IsSupportOrderBookIncrements => true;
+	protected override IEnumerable<TimeSpan> TimeFrames { get; } = Extensions.TimeFrames.Keys.ToArray();
 
 	private static readonly DataType _tf5min = DataType.TimeFrame(TimeSpan.FromMinutes(5));
 
@@ -53,6 +53,9 @@ public partial class CoinbaseMessageAdapter
 		// So build from ticks other time-frames (compression will be done internally in S# core)
 		return subscription.DataType2 == _tf5min;
 	}
+
+	/// <inheritdoc />
+	public override bool IsReplaceCommandEditCurrent => true;
 
 	/// <inheritdoc />
 	public override string AssociatedBoard => BoardCodes.Coinbase;

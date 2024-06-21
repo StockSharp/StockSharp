@@ -48,29 +48,6 @@ public partial class CoinbaseMessageAdapter : AsyncMessageAdapter, IKeySecretAda
 		Order = 2)]
 	public SecureString Passphrase { get; set; }
 
-	private TimeSpan _balanceCheckInterval;
-
-	/// <summary>
-	/// Balance check interval. Required in case of deposit and withdraw actions.
-	/// </summary>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.BalanceKey,
-		Description = LocalizedStrings.BalanceCheckIntervalKey,
-		GroupName = LocalizedStrings.ConnectionKey,
-		Order = 3)]
-	public TimeSpan BalanceCheckInterval
-	{
-		get => _balanceCheckInterval;
-		set
-		{
-			if (value < TimeSpan.Zero)
-				throw new ArgumentOutOfRangeException(nameof(value));
-
-			_balanceCheckInterval = value;
-		}
-	}
-
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
 	{
@@ -79,7 +56,6 @@ public partial class CoinbaseMessageAdapter : AsyncMessageAdapter, IKeySecretAda
 		storage.SetValue(nameof(Key), Key);
 		storage.SetValue(nameof(Secret), Secret);
 		storage.SetValue(nameof(Passphrase), Passphrase);
-		storage.SetValue(nameof(BalanceCheckInterval), BalanceCheckInterval);
 	}
 
 	/// <inheritdoc />
@@ -90,7 +66,6 @@ public partial class CoinbaseMessageAdapter : AsyncMessageAdapter, IKeySecretAda
 		Key = storage.GetValue<SecureString>(nameof(Key));
 		Secret = storage.GetValue<SecureString>(nameof(Secret));
 		Passphrase = storage.GetValue<SecureString>(nameof(Passphrase));
-		BalanceCheckInterval = storage.GetValue<TimeSpan>(nameof(BalanceCheckInterval));
 	}
 
 	/// <inheritdoc />
