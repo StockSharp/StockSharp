@@ -326,6 +326,19 @@
 		}
 
 		/// <summary>
+		/// Try to build documentation URL.
+		/// </summary>
+		/// <param name="urlPart">URL part.</param>
+		/// <returns>Absolute URL.</returns>
+		public static string TryBuildDocUrl(this string urlPart)
+		{
+			if (!urlPart.StartsWithIgnoreCase("http"))
+				urlPart = GetDocUrl(urlPart);
+
+			return urlPart;
+		}
+
+		/// <summary>
 		/// To create localized url.
 		/// </summary>
 		/// <param name="docUrl">Help topic.</param>
