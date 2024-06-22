@@ -36,14 +36,12 @@
 			return (CurrentTime - candle.CloseTime).TotalSeconds < 10;
 		}
 
-		private bool IsHistoryEmulationConnector => Connector is HistoryEmulationConnector;
-
 		private void ProcessCandle(ICandleMessage candle)
 		{
 			BollingerBands.Process(candle);
 
 			if (!BollingerBands.IsFormed) return;
-			if (!IsHistoryEmulationConnector && !IsRealTime(candle)) return;
+			if (!IsBacktesting && !IsRealTime(candle)) return;
 
 			if (candle.ClosePrice <= BollingerBands.LowBand.GetCurrentValue() && Position == 0)
 			{

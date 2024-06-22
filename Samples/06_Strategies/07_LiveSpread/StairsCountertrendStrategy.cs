@@ -4,7 +4,6 @@ using System;
 using StockSharp.Algo;
 using StockSharp.Algo.Candles;
 using StockSharp.Algo.Strategies;
-using StockSharp.Algo.Testing;
 using StockSharp.Messages;
 
 public class StairsCountertrendStrategy : Strategy
@@ -37,8 +36,6 @@ public class StairsCountertrendStrategy : Strategy
 		return (CurrentTime - candle.CloseTime).TotalSeconds < 40;
 	}
 
-	private bool IsHistoryEmulationConnector => Connector is HistoryEmulationConnector;
-
 	private void CandleManager_Processing(ICandleMessage candle)
 	{
 		if (candle.OpenPrice < candle.ClosePrice)
@@ -52,7 +49,7 @@ public class StairsCountertrendStrategy : Strategy
 			_bearLength++;
 		}
 
-		if (!IsHistoryEmulationConnector && !IsRealTime(candle)) return;
+		if (!IsBacktesting && !IsRealTime(candle)) return;
 
 		if (_bullLength >= Length && Position >= 0)
 		{

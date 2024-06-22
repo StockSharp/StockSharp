@@ -24,7 +24,6 @@ namespace StockSharp.Samples.Strategies.HistorySMA
 			return (CurrentTime - candle.CloseTime).TotalSeconds < 10;
 		}
 
-		private bool IsHistoryEmulationConnector => Connector is HistoryEmulationConnector;
 		protected override void OnStarted(DateTimeOffset time)
 		{
 			this
@@ -48,7 +47,7 @@ namespace StockSharp.Samples.Strategies.HistorySMA
 			var isShortLessPrev = ShortSma.GetValue(1) < LongSma.GetValue(1);
 
 			if (isShortLessCurrent == isShortLessPrev) return;
-			if (!IsRealTime(candle) && !IsHistoryEmulationConnector) return;
+			if (!IsRealTime(candle) && !IsBacktesting) return;
 
 			var volume = Volume + Math.Abs(Position);
 			RegisterOrder(isShortLessCurrent ?

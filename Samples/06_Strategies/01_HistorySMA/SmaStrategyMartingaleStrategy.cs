@@ -25,8 +25,6 @@ namespace StockSharp.Samples.Strategies.HistorySMA
 			return (CurrentTime - candle.CloseTime).TotalSeconds < 10;
 		}
 
-		private bool IsHistoryEmulationConnector => Connector is HistoryEmulationConnector;
-
 		protected override void OnStarted(DateTimeOffset time)
 		{
 			this.WhenCandlesFinished(_subscription).Do(ProcessCandle).Apply(this);
@@ -41,7 +39,7 @@ namespace StockSharp.Samples.Strategies.HistorySMA
 			ShortSma.Process(candle);
 
 			if (!LongSma.IsFormed || !longSmaIsFormedPrev) return;
-			if (!IsHistoryEmulationConnector && !IsRealTime(candle)) return;
+			if (!IsBacktesting && !IsRealTime(candle)) return;
 
 			var isShortLessThenLongCurrent = ShortSma.GetCurrentValue() < LongSma.GetCurrentValue();
 			var isShortLessThenLongPrevios = ShortSma.GetValue(1) < LongSma.GetValue(1);
