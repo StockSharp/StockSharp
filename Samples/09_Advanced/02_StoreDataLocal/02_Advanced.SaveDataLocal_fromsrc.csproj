@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\common_samples_netwindows.props" />
   <ItemGroup>
-    <ApplicationDefinition Include="..\SampleConnection\App.xaml" Link="App.xaml" />
-    <Compile Include="..\SampleConnection\App.xaml.cs" DependentUpon="App.xaml" Link="App.xaml.cs" />
+    <ApplicationDefinition Include="..\01_MultiConnect\App.xaml" Link="App.xaml" />
+    <Compile Include="..\01_MultiConnect\App.xaml.cs" DependentUpon="App.xaml" Link="App.xaml.cs" />
 
-    <Page Include="..\SampleConnection\*.xaml" Exclude="..\SampleConnection\App.xaml;..\SampleConnection\MainWindow.xaml" DependentUpon="%(Filename).xaml" Link="%(Filename).xaml" />
-    <Compile Include="..\SampleConnection\*.xaml.cs" Exclude="..\SampleConnection\App.xaml.cs;..\SampleConnection\MainWindow.xaml.cs" DependentUpon="%(Filename)" />
+    <Page Include="..\01_MultiConnect\*.xaml" Exclude="..\01_MultiConnect\App.xaml;..\01_MultiConnect\MainWindow.xaml" DependentUpon="%(Filename).xaml" Link="%(Filename).xaml" />
+    <Compile Include="..\01_MultiConnect\*.xaml.cs" Exclude="..\01_MultiConnect\App.xaml.cs;..\01_MultiConnect\MainWindow.xaml.cs" DependentUpon="%(Filename)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj" />

@@ -1,5 +1,5 @@
 ﻿namespace StockSharp.Samples.Strategies.HistoryBollingerBands;
 
-public class App
+public partial class App
 {
 }
