@@ -1,4 +1,4 @@
-namespace SampleConnection;
+namespace StockSharp.Samples.Advanced.MultiConnect;
 
 using System.ComponentModel;
 using System.IO;

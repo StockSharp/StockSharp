@@ -1,7 +1,16 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <IsPackable>false</IsPackable>
-    <SampleProjectName>$([System.Text.RegularExpressions.Regex]::Replace($(MSBuildProjectName), '^\d+_(.+?)(_fromsrc)?$', '$1'))</SampleProjectName>
+    <SampleProjectNameBase>$(MSBuildProjectName)</SampleProjectNameBase>
+  </PropertyGroup>
+  
+    <!-- workaround for https://github.com/dotnet/wpf/issues/5711 -->
+  <PropertyGroup Condition="$(_TargetAssemblyProjectName) != ''">
+    <SampleProjectNameBase>$(_TargetAssemblyProjectName)</SampleProjectNameBase>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <SampleProjectName>$([System.Text.RegularExpressions.Regex]::Replace($(SampleProjectNameBase), '^\d+_(.+?)(_fromsrc)?$', '$1'))</SampleProjectName>
     <RootNamespace>StockSharp.Samples.$(SampleProjectName)</RootNamespace>
     <AssemblyName>StockSharp.Samples.$(SampleProjectName)</AssemblyName>
   </PropertyGroup>

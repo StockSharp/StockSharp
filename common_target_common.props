@@ -2,7 +2,7 @@
   <Import Project="common_versions.props" />
 
   <PropertyGroup>
-    <SSProjectName>$([System.String]::Copy('StockSharp.$(MSBuildProjectName)').Replace('GitHub',''))</SSProjectName>
+    <SSProjectName>StockSharp.$(MSBuildProjectName)</SSProjectName>
 
     <RootNamespace>$(SSProjectName)</RootNamespace>
     <AssemblyName>$(SSProjectName)</AssemblyName>
@@ -26,7 +26,7 @@
   
   <!-- workaround for https://github.com/dotnet/wpf/issues/5711 -->
   <PropertyGroup Condition="$(_TargetAssemblyProjectName) != ''">
-    <SSProjectName>$([System.String]::Copy('StockSharp.$(_TargetAssemblyProjectName)').Replace('GitHub',''))</SSProjectName>
+    <SSProjectName>StockSharp.$(_TargetAssemblyProjectName)</SSProjectName>
     <AssemblyName>$(SSProjectName)</AssemblyName>
   </PropertyGroup>
   
