@@ -1,0 +1,28 @@
+﻿<Window x:Class="StockSharp.Samples.Chart.Performance.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:charting="http://schemas.stocksharp.com/xaml"
+		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+		Title="{x:Static loc:LocalizedStrings.SampleAppFor}" Height="400" Width="970">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<StackPanel Orientation="Horizontal">
+			<CheckBox Content="{x:Static loc:LocalizedStrings.RealTime}" Margin="10,0,0,0" x:Name="IsRealtime" VerticalAlignment="Center"/>
+		</StackPanel>
+
+		<dx:LoadingDecorator x:Name="BusyIndicator" Grid.Row="1">
+			<dx:LoadingDecorator.SplashScreenTemplate>
+				<DataTemplate>
+					<dx:WaitIndicator DeferedVisibility="True" Content="{Binding Title}"/>
+				</DataTemplate>
+			</dx:LoadingDecorator.SplashScreenTemplate>
+
+			<charting:ChartPanel x:Name="Chart" IsInteracted="True" ShowPerfStats="True"/>
+		</dx:LoadingDecorator>
+	</Grid>
+</Window>

@@ -1,9 +1,0 @@
-﻿<sx:BaseApplication x:Class="SampleOptionQuoting.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:sx="http://schemas.stocksharp.com/xaml"
-             StartupUri="MainWindow.xaml" DispatcherUnhandledException="ApplicationDispatcherUnhandledException">
-    <sx:BaseApplication.Resources>
-         
-    </sx:BaseApplication.Resources>
-</sx:BaseApplication>

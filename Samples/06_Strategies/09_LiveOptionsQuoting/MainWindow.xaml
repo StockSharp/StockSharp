@@ -1,0 +1,69 @@
+<Window x:Class="StockSharp.Samples.Strategies.LiveOptionsQuoting.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		xmlns:ex="clr-namespace:Ecng.Xaml;assembly=StockSharp.Xaml"
+        xmlns:xaml="http://schemas.stocksharp.com/xaml"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        Title="{x:Static loc:LocalizedStrings.SampleOptionApp}" Height="430" Width="630">
+	<Grid Margin="5">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition />
+			<ColumnDefinition />
+			<ColumnDefinition />
+			<ColumnDefinition />
+			<ColumnDefinition />
+			<ColumnDefinition />
+		</Grid.ColumnDefinitions>
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<Button x:Name="SettingsBtn" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.Settings}" Click="SettingsClick" />
+        <Button x:Name="ConnectBtn" Content="{x:Static loc:LocalizedStrings.Connect}" Grid.Row="0" Grid.Column="1" Click="ConnectClick" />
+
+        <TextBlock Grid.Row="0" Grid.Column="3" VerticalAlignment="Center">
+					<Run Text="{x:Static loc:LocalizedStrings.EvaluateGreeks}" />:
+        </TextBlock>
+        <ex:SubsetComboBox x:Name="Level1FieldsCtrl" Grid.Column="4" Grid.Row="0" Grid.ColumnSpan="2" EditValueChanged="Level1FieldsCtrl_OnEditValueChanged"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+			<Run Text="{x:Static loc:LocalizedStrings.UnderlyingAsset}"/>:
+		</TextBlock>
+		<ex:ComboBoxEditEx x:Name="Assets" Grid.Column="1" Grid.Row="2" DisplayMember="Code" EditValueChanged="Assets_OnSelectionChanged" />
+
+		<ex:ComboBoxEditEx x:Name="Options" Margin="5,0,0,0" Grid.ColumnSpan="2" Grid.Column="2" Grid.Row="2" DisplayMember="Code" EditValueChanged="Options_OnSelectionChanged" />
+
+		<xaml:PortfolioComboBox x:Name="Portfolio" Grid.Row="2" Grid.Column="4" EditValueChanged="Portfolio_OnEditValueChanged" />
+		<Button x:Name="Start" Content="{x:Static loc:LocalizedStrings.Start}" Grid.Row="2" Grid.Column="5" IsEnabled="False" Click="StartClick" />
+
+		<TextBlock Grid.Column="0" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center"><Run Text="{x:Static loc:LocalizedStrings.Volatility}"/><Run Text=":"/></TextBlock>
+		<TextBox x:Name="ImpliedVolatility" Grid.Column="1" Grid.Row="5" IsReadOnly="True" />
+
+		<TextBlock Text="{x:Static loc:LocalizedStrings.VolaMin}" Grid.Column="2" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" />
+		<dxe:SpinEdit x:Name="ImpliedVolatilityMin" IsFloatValue="True" Grid.Column="3" Grid.Row="5" IsReadOnly="True" />
+
+		<TextBlock Text="{x:Static loc:LocalizedStrings.VolaMax}" Grid.Column="4" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" />
+		<dxe:SpinEdit x:Name="ImpliedVolatilityMax" IsFloatValue="True" Grid.Column="5" Grid.Row="5" IsReadOnly="True" />
+
+		<TabControl Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="6">
+			<TabItem Header="Position">
+				<xaml:OptionPositionChart x:Name="PosChart" />
+			</TabItem>
+			<TabItem Header="Desk">
+				<xaml:OptionDesk x:Name="Desk" />
+			</TabItem>
+			<TabItem Header="Smile">
+				<xaml:OptionVolatilitySmileChart x:Name="SmileChart" />
+			</TabItem>
+		</TabControl>
+	</Grid>
+</Window>

@@ -1,0 +1,60 @@
+﻿<Window x:Class="StockSharp.Samples.Strategies.LiveArbitrage.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xaml="http://schemas.stocksharp.com/xaml"
+        mc:Ignorable="d"
+          Title="MainWindow" Height="1000" Width="1406">
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="170"/>
+			<ColumnDefinition Width="170"/>
+			<ColumnDefinition Width="170"/>
+			<ColumnDefinition Width="170"/>
+			<ColumnDefinition Width="170"/>
+			<ColumnDefinition Width="170"/>
+			<ColumnDefinition Width="170"/>
+			<ColumnDefinition Width="170"/>
+			<ColumnDefinition Width="598*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="30"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		<TabControl Grid.Row="1" Grid.ColumnSpan="9">
+			<TabItem Header="Order&amp;MyTrade">
+				<Grid Background="#FFE5E5E5">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="170"/>
+						<ColumnDefinition Width="739*"/>
+						<ColumnDefinition Width="495*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="415*"/>
+						<RowDefinition Height="497*"/>
+					</Grid.RowDefinitions>
+					<xaml:OrderGrid x:Name="OrderGrid" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
+					<xaml:MyTradeGrid x:Name="MyTradeGrid" Grid.Row="1" Grid.Column="2" />
+					<xaml:PortfolioGrid x:Name="PortfolioGrid" Grid.Row="0" Grid.Column="2" />
+				</Grid>
+			</TabItem>
+			<TabItem Header="Monitor">
+				<Grid Background="#FFE5E5E5">
+					<xaml:Monitor x:Name="Monitor" />
+				</Grid>
+			</TabItem>
+		</TabControl>
+		<Button x:Name="Start" Content="Start" Click="Start_Click" Grid.Row="0" Grid.Column="6"/>
+		<Button Grid.Row="0" Grid.Column="0" x:Name="Setting" Content="Setting" Click="Setting_Click" />
+		<Button Grid.Row="0" Grid.Column="1" x:Name="Connect" Content="Connect" Click="Connect_Click" />
+
+		<xaml:SecurityEditor x:Name="SecurityEditor1" Grid.Row="0" Grid.Column="2"/>
+		<xaml:PortfolioEditor x:Name="PortfolioEditor1" Grid.Row="0" Grid.Column="3"/>
+		
+		<xaml:SecurityEditor x:Name="SecurityEditor2" Grid.Row="0" Grid.Column="4"/>		
+		<xaml:PortfolioEditor x:Name="PortfolioEditor2" Grid.Row="0" Grid.Column="5"/>
+
+		<Button x:Name="Stop" Content="Stop" Grid.Row="0" Grid.Column="7" Click="Stop_Click"/>
+	</Grid>
+</Window>

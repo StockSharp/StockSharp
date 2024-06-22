@@ -1,0 +1,50 @@
+﻿<Window x:Class="StockSharp.Samples.Chart.ActiveOrders.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:charting="http://schemas.stocksharp.com/xaml"
+		Title="Chart active orders sample" Height="750" Width="1000">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="200"/>
+		</Grid.RowDefinitions>
+
+		<charting:ChartPanel x:Name="Chart" IsInteracted="True" Grid.Row="0" ChartTheme="ExpressionDark"
+							 RegisterOrder="Chart_OnRegisterOrder" MoveOrder="Chart_OnMoveOrder" CancelOrder="Chart_OnCancelOrder"/>
+
+		<GridSplitter Grid.Row="1" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="Gray"/>
+
+		<Grid Grid.Row="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="150"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+
+			<StackPanel Orientation="Vertical" Grid.Column="0">
+				<CheckBox x:Name="DelayCtrl" Content="Delay transactions" IsChecked="True"/>
+				<CheckBox x:Name="FailCtrl" Content="Fail transactions"/>
+				<CheckBox x:Name="ConfirmCtrl" Content="Confirm transactions"/>
+				<CheckBox x:Name="SameOrderCtrl" Content="Use same order object for move op"/>
+			</StackPanel>
+
+			<DockPanel LastChildFill="True" Grid.Column="1">
+				<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
+					<Button x:Name="FillBtn" Content="Fill" IsEnabled="False" Click="Fill_Click" Margin="5,0" Width="70"/>
+					<Button x:Name="CancelBtn" Content="Cancel" IsEnabled="False" Click="Cancel_Click" Margin="5,0" Width="70"/>
+					<Button x:Name="MoveBtn" Content="Move" IsEnabled="False" Click="Move_Click" Margin="5,0" Width="70"/>
+					<Button x:Name="Save" Content="Save" Click="Save_Click" Margin="5,0" Width="70"/>
+					<Button x:Name="Load" Content="Load" Click="Load_Click" Margin="5,0" Width="70"/>
+				</StackPanel>
+				<ListBox DockPanel.Dock="Bottom" x:Name="OrdersList" SelectionChanged="OrdersList_OnSelectionChanged" DisplayMemberPath="Description" SelectionMode="Single" HorizontalAlignment="Stretch"/>
+			</DockPanel>
+
+			<GridSplitter Grid.Column="2" Width="2" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="Gray"/>
+
+			<TextBox x:Name="LogBox" Grid.Column="3" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsReadOnly="True" AcceptsReturn="True"
+					 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+		</Grid>
+	</Grid>
+</Window>

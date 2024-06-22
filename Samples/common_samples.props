@@ -1,14 +1,8 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\common_target_netwindows.props" />
   <PropertyGroup>
     <IsPackable>false</IsPackable>
+    <SampleProjectName>$([System.Text.RegularExpressions.Regex]::Replace($(MSBuildProjectName), '^\d+_(.+?)(_fromsrc)?$', '$1'))</SampleProjectName>
+    <RootNamespace>StockSharp.Samples.$(SampleProjectName)</RootNamespace>
+    <AssemblyName>StockSharp.Samples.$(SampleProjectName)</AssemblyName>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>..\..\..\stocksharp.ico</ApplicationIcon>
-  </PropertyGroup>
-  <ItemGroup>
-    <Resource Include="..\..\..\stocksharp.ico">
-      <Link>Properties\stocksharp.ico</Link>
-    </Resource>
-  </ItemGroup>
 </Project>

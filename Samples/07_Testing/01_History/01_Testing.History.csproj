@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_samples_netwindows.props" />
+  <ItemGroup>
+    <PackageReference Include="StockSharp.Xaml.Charting" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(SampleHistoryDataVersion)" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="StockSharp.Samples.Advanced.MultiConnect.MainPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             xmlns:sx="http://schemas.stocksharp.com/xaml" Loaded="MainPanel_OnLoaded">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="10" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="10" />
+			<RowDefinition />
+		</Grid.RowDefinitions>
+		<WrapPanel Grid.Row="0">
+			<Button x:Name="SettingsBtn" Content="{x:Static loc:LocalizedStrings.Settings}" Click="SettingsClick" Width="100"/>
+			<Button x:Name="ConnectBtn" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" Width="100" Background="LightPink" />
+			<Button x:Name="ThemeSwitch" Content="{x:Static loc:LocalizedStrings.Themes}" Click="ThemeSwitchClick" Width="100"/>
+		</WrapPanel>
+		<WrapPanel Grid.Row="2">
+			<Button x:Name="ShowSecurities" Content="{x:Static loc:LocalizedStrings.Securities}" Click="ShowSecuritiesClick" Width="100"/>
+			<Button x:Name="ShowPortfolios" Content="{x:Static loc:LocalizedStrings.Portfolios}" Click="ShowPortfoliosClick" Width="100"/>
+			<Button x:Name="ShowTrades" Content="{x:Static loc:LocalizedStrings.Ticks}" Click="ShowTradesClick" Width="100"/>
+			<Button x:Name="ShowOrderLog" Content="{x:Static loc:LocalizedStrings.OrderLog}" Click="ShowOrderLogClick" Width="100"/>
+			<Button x:Name="ShowMyTrades" Content="{x:Static loc:LocalizedStrings.MyTrades}" Click="ShowMyTradesClick" Width="100"/>
+			<Button x:Name="ShowOrders" Content="{x:Static loc:LocalizedStrings.Orders}" Click="ShowOrdersClick" Width="100"/>
+			<Button x:Name="ShowNews" Content="{x:Static loc:LocalizedStrings.News}" Click="ShowNewsClick" Width="100"/>
+			<Button x:Name="ShowLevel1" Content="{x:Static loc:LocalizedStrings.Level1}" Click="ShowLevel1Click" Width="100"/>
+		</WrapPanel>
+		<sx:Monitor x:Name="Monitor" Grid.Row="4" ShowStrategies="False"/>
+	</Grid>
+</UserControl>

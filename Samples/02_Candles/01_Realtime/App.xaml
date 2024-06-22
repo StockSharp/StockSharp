@@ -1,0 +1,6 @@
+﻿<xaml:BaseApplication x:Class="StockSharp.Samples.Candles.Realtime.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:xaml="http://schemas.stocksharp.com/xaml"
+             StartupUri="MainWindow.xaml">
+</xaml:BaseApplication>

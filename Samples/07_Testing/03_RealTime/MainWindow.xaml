@@ -1,0 +1,129 @@
+<Window x:Class="StockSharp.Samples.Testing.RealTime.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:sx="http://schemas.stocksharp.com/xaml"
+        xmlns:charting="http://schemas.stocksharp.com/xaml"
+        Title="{x:Static loc:LocalizedStrings.SampleMarketEmulation}" Height="800" SizeToContent="Width">
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<Grid Grid.Row="0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition MinWidth="400" Width="*" />
+				<ColumnDefinition MinWidth="250" MaxWidth="260" />
+				<ColumnDefinition MinWidth="250" MaxWidth="260" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition MinWidth="300" Width="Auto" />
+			</Grid.ColumnDefinitions>
+
+			<!--Chart and chart control grid-->
+			<Grid Grid.Row="0" Grid.Column="0">
+				<Grid.RowDefinitions>
+					<RowDefinition MaxHeight="25" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+
+				<!--Chart control grid-->
+				<Grid Grid.Row="0" Grid.Column="0">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition />
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition />
+					</Grid.ColumnDefinitions>
+
+					<charting:CandleSettingsEditor x:Name="CandleSettingsEditor" HorizontalAlignment="Left" />
+				</Grid>
+				<!--End chart control grid-->
+
+				<charting:ChartPanel x:Name="Chart" Grid.Row="1" RegisterOrder="Chart_RegisterOrder" CancelOrder="Chart_CancelOrder" MoveOrder="Chart_MoveOrder" />
+			</Grid>
+			<!--End chart and chart control grid-->
+
+			<sx:MarketDepthControl x:Name="DepthControl" Grid.Column="1" MaxDepth="10" />
+			<sx:MarketDepthControl x:Name="RealDepthControl" Grid.Column="2" MaxDepth="10" />
+
+			<GridSplitter Grid.Row="0" Grid.Column="3" Width="3"
+			              Background="LightSteelBlue"
+			              VerticalAlignment="Stretch" HorizontalAlignment="Center" />
+
+			<Grid Grid.Column="4">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="5" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="5" />
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="5" />
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="5" />
+						<ColumnDefinition Width="Auto" />
+					</Grid.ColumnDefinitions>
+
+					<Button x:Name="SettingsBtn" Grid.Column="0" Width="100" Content="{x:Static loc:LocalizedStrings.Settings}" Click="SettingsClick" />
+
+					<Button x:Name="ConnectBtn" Grid.Column="2" Width="100" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
+
+					<Button x:Name="Find" Width="100" Grid.Column="4" IsEnabled="False" Click="FindClick">
+						<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Find}" />...</TextBlock>
+					</Button>
+
+					<Button x:Name="NewOrder" Grid.Column="6" Width="100" Click="NewOrder_OnClick">
+						<TextBlock Text="{x:Static loc:LocalizedStrings.Order}" />
+					</Button>
+				</Grid>
+
+				<sx:PortfolioGrid x:Name="PortfolioGrid" Grid.Row="2" />
+			</Grid>
+		</Grid>
+
+		<Grid Grid.Row="1">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition />
+				<RowDefinition Height="Auto" />
+				<RowDefinition />
+				<RowDefinition Height="Auto" />
+				<RowDefinition />
+			</Grid.RowDefinitions>
+
+			<sx:SecurityPicker x:Name="SecurityPicker"
+			                   Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3"
+			                   SecuritySelected="SecurityPicker_OnSecuritySelected" />
+
+			<sx:MyTradeGrid x:Name="TradeGrid"
+			                Grid.Row="2" Grid.Column="0" />
+
+			<GridSplitter Grid.Column="1" Grid.Row="2" Width="3"
+			              Background="LightSteelBlue"
+			              VerticalAlignment="Stretch" HorizontalAlignment="Center" />
+
+			<sx:OrderGrid x:Name="OrderGrid" Grid.Row="2" Grid.Column="2"
+			              OrderRegistering="OrderGrid_OrderRegistering" OrderCanceling="OrderGrid_OnOrderCanceling"
+			              OrderReRegistering="OrderGrid_OnOrderReRegistering" />
+
+			<GridSplitter Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Height="3"
+			              Background="LightSteelBlue"
+			              VerticalAlignment="Center" HorizontalAlignment="Stretch" />
+
+			<GridSplitter Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Height="3"
+			              Background="LightSteelBlue"
+			              VerticalAlignment="Center" HorizontalAlignment="Stretch" />
+
+			<sx:LogControl Grid.Row="4" Grid.ColumnSpan="3" Grid.Column="0" x:Name="Log" />
+		</Grid>
+	</Grid>
+</Window>

@@ -1,0 +1,45 @@
+<Window x:Class="StockSharp.Samples.Advanced.MultiConnect.SecuritiesWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+	xmlns:sx="http://schemas.stocksharp.com/xaml" Loaded="SecuritiesWindow_OnLoaded"
+	Title="{x:Static loc:LocalizedStrings.Securities}" Height="500" Width="1200">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<sx:SecurityPicker x:Name="SecurityPicker" x:FieldModifier="public" SecuritySelected="SecurityPicker_OnSecuritySelected" ShowCommonStatColumns="True" />
+
+		<Grid Grid.Row="1">
+			<StackPanel Orientation="Horizontal">
+				<Button x:Name="Find" Width="70" Click="FindClick">
+					<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Find}" />...</TextBlock>
+				</Button>
+
+				<Button x:Name="Level1" Content="{x:Static loc:LocalizedStrings.Level1}" Margin="5,0,0,0"  Width="60" IsEnabled="False" Click="Level1Click" />
+				<Button x:Name="Level1Hist" Width="100" IsEnabled="False" Click="Level1HistClick">
+					<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Level1}" /> (hist)...</TextBlock>
+				</Button>
+				<Button x:Name="Depth" Width="100" IsEnabled="False" Click="DepthClick" Margin="5,0,0,0">
+					<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" />...</TextBlock>
+				</Button>
+				<Button x:Name="DepthAdvanced" IsEnabled="False" Click="DepthAdvancedClick" Padding="5,0,5,0">
+					<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" /> (advanced)...</TextBlock>
+				</Button>
+				<Button x:Name="DepthFiltered" IsEnabled="False" Click="DepthFilteredClick" Padding="5,0,5,0">
+					<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" /> (filtered)...</TextBlock>
+				</Button>
+				<Button x:Name="Ticks" Content="{x:Static loc:LocalizedStrings.Ticks}" Width="50" Margin="5,0,0,0" IsEnabled="False" Click="TicksClick" />
+				<Button x:Name="TicksHist" Content="{x:Static loc:LocalizedStrings.TicksHistory}" IsEnabled="False" Width="100" Click="TicksHistClick" />
+				<Button x:Name="OrderLog" Content="{x:Static loc:LocalizedStrings.OrderLog}" Width="100" Margin="5,0,0,0" IsEnabled="False" Click="OrderLogClick" />
+				<Button x:Name="NewOrder" Width="100" IsEnabled="False" Click="NewOrderClick" Margin="5,0,0,0">
+					<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewOrder}" />...</TextBlock>
+				</Button>
+			    <Button x:Name="Candles" Content="{x:Static loc:LocalizedStrings.Candles}" Width="100" Margin="5,0,0,0" IsEnabled="False" Click="CandlesClick" />
+			    <ComboBox x:Name="CandlesPeriods" Width="100" SelectionChanged="CandlesPeriods_SelectionChanged" />
+            </StackPanel>
+		</Grid>
+	</Grid>
+</Window>

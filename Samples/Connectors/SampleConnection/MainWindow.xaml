@@ -1,8 +1,0 @@
-<Window x:Class="SampleConnection.MainWindow"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
-    xmlns:local="clr-namespace:SampleConnection"
-    Title="{x:Static loc:LocalizedStrings.SampleAppFor}" Height="500" Width="850">
-    <local:MainPanel x:Name="MainPanel" />
-</Window>

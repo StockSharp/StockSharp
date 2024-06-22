@@ -1,0 +1,6 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_samples_netwindows.props" />
+  <ItemGroup>
+    <ProjectReference Include="$(RepoAppsPath)Xaml\Xaml.csproj" />
+  </ItemGroup>
+</Project>

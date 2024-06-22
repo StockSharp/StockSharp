@@ -1,0 +1,8 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_samples_netwindows.props" />
+  <ItemGroup>
+    <PackageReference Include="Ecng.Compilation.Roslyn" Version="1.*" />
+    <PackageReference Include="StockSharp.Xaml.Charting" Version="5.*" />
+    <PackageReference Include="StockSharp.Samples.HistoryData" Version="1.*" />
+  </ItemGroup>
+</Project>

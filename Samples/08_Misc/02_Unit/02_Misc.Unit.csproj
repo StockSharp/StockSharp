@@ -1,0 +1,6 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_samples_net.props" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />
+  </ItemGroup>
+</Project>

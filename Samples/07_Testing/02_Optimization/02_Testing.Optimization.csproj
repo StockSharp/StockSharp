@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_samples_netwindows.props" />
+  <ItemGroup>
+    <Compile Include="..\01_History\SmaStrategy.cs" Link="SmaStrategy.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Ecng.Compilation.Roslyn" Version="$(EcngVer)" />
+
+    <PackageReference Include="StockSharp.Xaml.Charting" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(SampleHistoryDataVersion)" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,6 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_camples_net.props" />
+  <ItemGroup>
+    <ProjectReference Include="$(RepoGitHubPath)Algo\Algo.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_samples_netwindows.props" />
+  <ItemGroup>
+    <PackageReference Include="StockSharp.Xaml" Version="$(StockSharpVer)" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />
+  </ItemGroup>
+</Project>

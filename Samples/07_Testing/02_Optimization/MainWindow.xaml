@@ -1,0 +1,66 @@
+<Window x:Class="StockSharp.Samples.Testing.Optimization.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:sx="http://schemas.stocksharp.com/xaml"
+        xmlns:ex="clr-namespace:Ecng.Xaml;assembly=StockSharp.Xaml"
+        Title="{x:Static loc:LocalizedStrings.SampleOptimizationApp}" Height="430" Width="525">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<Grid Grid.Row="0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			
+			<Label Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.Path}" />
+		    <ex:FolderBrowserPicker x:Name="HistoryPath" Grid.Column="1" Grid.Row="0" />
+		</Grid>
+		
+		<Grid x:Name="OptimizeTypeGrid" Grid.Row="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+			
+			<RadioButton x:Name="BruteForce" GroupName="OptimizerType" IsChecked="True" Content="{x:Static loc:LocalizedStrings.BruteForce}" />
+			<RadioButton x:Name="Genetic" GroupName="OptimizerType" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Genetic}" />
+		</Grid>
+		
+		<Grid Grid.Row="4">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<Button x:Name="StartBtn" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.Start}" Width="100" Click="StartBtnClick" />
+			<Button x:Name="PauseBtn" Grid.Column="1" Content="{x:Static loc:LocalizedStrings.Pause}" Width="100" Click="PauseBtnClick" IsEnabled="False"/>
+			<Button x:Name="StopBtn" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Stop}" Width="100" HorizontalAlignment="Left" Click="StopBtnClick" IsEnabled="False"/>
+			
+			<Grid Grid.Column="3" Grid.Row="2">  
+			   <ProgressBar x:Name="TestingProcess" Maximum="100" />
+			   <TextBlock x:Name="TestingProcessText" HorizontalAlignment="Center" VerticalAlignment="Center" />
+			</Grid>
+		</Grid>
+
+		<Grid Grid.Row="6">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="250" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<sx:PropertyGridEx x:Name="GeneticSettings" IsEnabled="{Binding ElementName=Genetic, Path=IsChecked}" />
+			<sx:StrategiesStatisticsPanel x:Name="Stat" Grid.Column="2" ShowProgress="True" ShowPnLChart="True" />
+		</Grid>
+	</Grid>
+</Window>
