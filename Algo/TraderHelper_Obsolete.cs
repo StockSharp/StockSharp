@@ -1332,16 +1332,16 @@ namespace StockSharp.Algo
 				changedVolume[quote.Price] = vol;
 			}
 
-			var bids = new QuoteChange[depth.Bids2.Length];
+			var bids = new QuoteChange[depth.Bids.Length];
 
 			void B1()
 			{
 				var i = 0;
 				var count = 0;
 
-				for (; i < depth.Bids2.Length; i++)
+				for (; i < depth.Bids.Length; i++)
 				{
-					var quote = depth.Bids2[i];
+					var quote = depth.Bids[i];
 					var price = quote.Price;
 
 					if (price > minTradePrice)
@@ -1365,22 +1365,22 @@ namespace StockSharp.Algo
 					break;
 				}
 
-				Array.Copy(depth.Bids2, i, bids, count, depth.Bids2.Length - i);
-				Array.Resize(ref bids, count + (depth.Bids2.Length - i));
+				Array.Copy(depth.Bids, i, bids, count, depth.Bids.Length - i);
+				Array.Resize(ref bids, count + (depth.Bids.Length - i));
 			}
 
 			B1();
 
-			var asks = new QuoteChange[depth.Asks2.Length];
+			var asks = new QuoteChange[depth.Asks.Length];
 
 			void A1()
 			{
 				var i = 0;
 				var count = 0;
 
-				for (; i < depth.Asks2.Length; i++)
+				for (; i < depth.Asks.Length; i++)
 				{
-					var quote = depth.Asks2[i];
+					var quote = depth.Asks[i];
 					var price = quote.Price;
 
 					if (price < maxTradePrice)
@@ -1404,8 +1404,8 @@ namespace StockSharp.Algo
 					break;
 				}
 
-				Array.Copy(depth.Asks2, i, asks, count, depth.Asks2.Length - i);
-				Array.Resize(ref asks, count + (depth.Asks2.Length - i));
+				Array.Copy(depth.Asks, i, asks, count, depth.Asks.Length - i);
+				Array.Resize(ref asks, count + (depth.Asks.Length - i));
 			}
 
 			A1();

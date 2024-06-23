@@ -78,7 +78,7 @@ namespace StockSharp.Algo
 		/// To calculate the current price by the order book depending on the order direction.
 		/// </summary>
 		/// <param name="depth">The order book for the current price calculation.</param>
-		/// <param name="side">The order direction. If it is a buy, <see cref="MarketDepth.BestAsk2"/> value is used, otherwise <see cref="MarketDepth.BestBid2"/>.</param>
+		/// <param name="side">The order direction. If it is a buy, <see cref="MarketDepth.BestAsk"/> value is used, otherwise <see cref="MarketDepth.BestBid"/>.</param>
 		/// <param name="priceStep"><see cref="SecurityMessage.PriceStep"/></param>
 		/// <param name="priceType">The type of current price.</param>
 		/// <param name="orders">Orders to be ignored.</param>

@@ -122,7 +122,7 @@
 		[Obsolete("Use WhenOrderBookReceived method.")]
 		public static MarketRule<MarketDepth, MarketDepth> WhenBestBidPriceMore(this MarketDepth depth, Unit price, IMarketDataProvider provider)
 		{
-			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestBid2, false))
+			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestBid, false))
 			{
 				Name = $"{depth.Security} {LocalizedStrings.BestBid} > {price}"
 			};
@@ -138,7 +138,7 @@
 		[Obsolete("Use WhenOrderBookReceived method.")]
 		public static MarketRule<MarketDepth, MarketDepth> WhenBestBidPriceLess(this MarketDepth depth, Unit price, IMarketDataProvider provider)
 		{
-			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestBid2, true))
+			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestBid, true))
 			{
 				Name = $"{depth.Security} {LocalizedStrings.BestBid} < {price}"
 			};
@@ -154,7 +154,7 @@
 		[Obsolete("Use WhenOrderBookReceived method.")]
 		public static MarketRule<MarketDepth, MarketDepth> WhenBestAskPriceMore(this MarketDepth depth, Unit price, IMarketDataProvider provider)
 		{
-			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestAsk2, false))
+			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestAsk, false))
 			{
 				Name = $"{depth.Security} {LocalizedStrings.BestAsk} > {price}"
 			};
@@ -170,7 +170,7 @@
 		[Obsolete("Use WhenOrderBookReceived method.")]
 		public static MarketRule<MarketDepth, MarketDepth> WhenBestAskPriceLess(this MarketDepth depth, Unit price, IMarketDataProvider provider)
 		{
-			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestAsk2, true))
+			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestAsk, true))
 			{
 				Name = $"{depth.Security} {LocalizedStrings.BestAsk} < {price}"
 			};

@@ -352,8 +352,8 @@
 				if (depth.Security != Order.Security)
 					return;
 
-				_bestBidPrice = depth.BestBid2?.Price;
-				_bestAskPrice = depth.BestAsk2?.Price;
+				_bestBidPrice = depth.BestBid?.Price;
+				_bestAskPrice = depth.BestAsk?.Price;
 
 				TryActivate();
 			}

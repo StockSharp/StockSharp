@@ -104,7 +104,7 @@ public partial class MainWindow
 		// !!! IMPORTANT !!!
 		// Uncomment the desired strategy
 		//
-		_strategy = new BollingerStrategyClasicStrategy(_candleSeries)
+		_strategy = new BollingerStrategyClassicStrategy(_candleSeries)
 		//_strategy = new BollingerStrategyLowBandStrategy(_candleSeries)
 		//_strategy = new BollingerStrategyUpBandStrategy(_candleSeries)
 		{

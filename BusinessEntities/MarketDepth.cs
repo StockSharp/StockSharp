@@ -103,18 +103,6 @@ namespace StockSharp.BusinessEntities
 		/// <inheritdoc/>
 		public Messages.DataType BuildFrom { get; set; }
 
-		/// <summary>
-		/// Get the array of bids sorted by descending price. The first (best) bid will be the maximum price.
-		/// </summary>
-		[Obsolete("Use Bids property.")]
-		public QuoteChange[] Bids2 => Bids;
-
-		/// <summary>
-		/// Get the array of asks sorted by ascending price. The first (best) ask will be the minimum price.
-		/// </summary>
-		[Obsolete("Use Asks property.")]
-		public QuoteChange[] Asks2 => Asks;
-
 		private QuoteChange[] _bids = Array.Empty<QuoteChange>();
 
 		/// <inheritdoc/>
@@ -155,13 +143,13 @@ namespace StockSharp.BusinessEntities
 		/// The best bid. If the order book does not contain bids, will be returned <see langword="null" />.
 		/// </summary>
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BestBidKey)]
-		public QuoteChange? BestBid2 { get; private set; }
+		public QuoteChange? BestBid { get; private set; }
 
 		/// <summary>
 		/// The best ask. If the order book does not contain asks, will be returned <see langword="null" />.
 		/// </summary>
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BestAskKey)]
-		public QuoteChange? BestAsk2 { get; private set; }
+		public QuoteChange? BestAsk { get; private set; }
 
 		/// <summary>
 		/// The best pair. If the order book is empty, will be returned <see langword="null" />.
@@ -287,7 +275,7 @@ namespace StockSharp.BusinessEntities
 		/// <returns>The best quote. If the order book is empty, then the <see langword="null" /> will be returned.</returns>
 		public QuoteChange? GetBestQuote(Sides orderDirection)
 		{
-			return orderDirection == Sides.Buy ? BestBid2 : BestAsk2;
+			return orderDirection == Sides.Buy ? BestBid : BestAsk;
 		}
 
 		/// <summary>
@@ -679,9 +667,9 @@ namespace StockSharp.BusinessEntities
 
 		private Sides? GetDirection(decimal price)
 		{
-			if (BestBid2 != null && BestBid2.Value.Price >= price)
+			if (BestBid != null && BestBid.Value.Price >= price)
 				return Sides.Buy;
-			else if (BestAsk2 != null && BestAsk2.Value.Price <= price)
+			else if (BestAsk != null && BestAsk.Value.Price <= price)
 				return Sides.Sell;
 			else
 				return null;
@@ -691,8 +679,8 @@ namespace StockSharp.BusinessEntities
 		{
 			Depth = _bids.Length > _asks.Length ? _bids.Length : _asks.Length;
 
-			BestBid2 = _bids.Length > 0 ? _bids[0] : null;
-			BestAsk2 = _asks.Length > 0 ? _asks[0] : null;
+			BestBid = _bids.Length > 0 ? _bids[0] : null;
+			BestAsk = _asks.Length > 0 ? _asks[0] : null;
 
 			UpdateTime(lastChangeTime);
 		}
