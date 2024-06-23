@@ -127,7 +127,13 @@ namespace StockSharp.BusinessEntities
 			return unit.Convert(destinationType, type => GetTypeValue(security, type));
 		}
 
-		internal static decimal ShrinkPrice(this Security security, decimal price)
+		/// <summary>
+		/// To cut the price, to make it multiple of minimal step, also to limit number of signs after the comma.
+		/// </summary>
+		/// <param name="security"><see cref="Security"/></param>
+		/// <param name="price">The price to be made multiple.</param>
+		/// <returns>The multiple price.</returns>
+		public static decimal ShrinkPrice(this Security security, decimal price)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
