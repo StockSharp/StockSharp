@@ -1397,7 +1397,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="drive">The storage.</param>
 		/// <param name="format">The format type.</param>
 		/// <returns>The candles storage.</returns>
-		public static IMarketDataStorage<CandleMessage> GetTimeFrameCandleMessageStorage(this IMessageStorageRegistry registry, SecurityId securityId, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		public static IMarketDataStorage<CandleMessage> GetTimeFrameCandleMessageStorage(this IMessageStorageRegistry registry, SecurityId securityId, TimeSpan arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 			=> registry.CheckOnNull(nameof(registry)).GetCandleMessageStorage(typeof(TimeFrameCandleMessage), securityId, arg, drive, format);
 
 		/// <summary>
