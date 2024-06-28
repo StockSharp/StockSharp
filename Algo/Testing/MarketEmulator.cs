@@ -2001,7 +2001,15 @@ namespace StockSharp.Algo.Testing
 
 				if (order.OrderType == OrderTypes.Market)
 				{
-					execPrice = candle.GetMiddlePrice(GetPriceStep());
+					execPrice = _settings.CandlePrice switch
+					{
+						EmulationCandlePrices.Middle => candle.GetMiddlePrice(GetPriceStep()),
+						EmulationCandlePrices.Open => candle.OpenPrice,
+						EmulationCandlePrices.High => candle.HighPrice,
+						EmulationCandlePrices.Low => candle.LowPrice,
+						EmulationCandlePrices.Close => candle.ClosePrice,
+						_ => throw new InvalidOperationException(_settings.CandlePrice.To<string>()),
+					};
 
 					// price step is wrong, so adjust by candle boundaries
 					if (execPrice > candle.HighPrice || execPrice < candle.LowPrice)

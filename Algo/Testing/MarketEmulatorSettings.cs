@@ -1,18 +1,3 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
-
-Project: StockSharp.Algo.Testing.Algo
-File: MarketEmulatorSettings.cs
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
 namespace StockSharp.Algo.Testing
 {
 	using System;
@@ -29,6 +14,57 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.Algo.Commissions;
 
 	/// <summary>
+	/// Candle price for execution.
+	/// </summary>
+	public enum EmulationCandlePrices
+	{
+		/// <summary>
+		/// Middle price.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.MiddleKey,
+			Description = LocalizedStrings.MiddlePriceKey)]
+		Middle,
+
+		/// <summary>
+		/// Open price.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.OpenPriceKey,
+			Description = LocalizedStrings.CandleOpenPriceKey)]
+		Open,
+
+		/// <summary>
+		/// High price.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.HighestPriceKey,
+			Description = LocalizedStrings.HighPriceOfCandleKey)]
+		High,
+
+		/// <summary>
+		/// Low price.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.LowestPriceKey,
+			Description = LocalizedStrings.LowPriceOfCandleKey)]
+		Low,
+
+		/// <summary>
+		/// Close price.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ClosingPriceKey,
+			Description = LocalizedStrings.ClosePriceOfCandleKey)]
+		Close,
+	}
+
+	/// <summary>
 	/// Settings of exchange emulator.
 	/// </summary>
 	public class MarketEmulatorSettings : NotifiableObject, IPersistable
@@ -38,6 +74,30 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public MarketEmulatorSettings()
 		{
+		}
+
+		private EmulationCandlePrices _candlePrice;
+
+		/// <summary>
+		/// <see cref="EmulationCandlePrices"/>
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CandleKey,
+			Description = LocalizedStrings.CandleExecPriceKey,
+			GroupName = LocalizedStrings.BacktestExtraKey,
+			Order = 200)]
+		public EmulationCandlePrices CandlePrice
+		{
+			get => _candlePrice;
+			set
+			{
+				if (_candlePrice == value)
+					return;
+
+				_candlePrice = value;
+				NotifyChanged();
+			}
 		}
 
 		private bool _matchOnTouch = true;
@@ -50,7 +110,7 @@ namespace StockSharp.Algo.Testing
 			Name = LocalizedStrings.MatchOnTouchKey,
 			Description = LocalizedStrings.MatchOnTouchDescKey,
 			GroupName = LocalizedStrings.BacktestExtraKey,
-			Order = 200)]
+			Order = 201)]
 		public bool MatchOnTouch
 		{
 			get => _matchOnTouch;
@@ -423,6 +483,7 @@ namespace StockSharp.Algo.Testing
 		public virtual void Save(SettingsStorage storage)
 		{
 			storage
+				.Set(nameof(CandlePrice), CandlePrice)
 				.Set(nameof(MatchOnTouch), MatchOnTouch)
 				.Set(nameof(Failing), Failing)
 				.Set(nameof(Latency), Latency)
@@ -451,6 +512,7 @@ namespace StockSharp.Algo.Testing
 		/// <param name="storage">Storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
+			CandlePrice = storage.GetValue(nameof(CandlePrice), CandlePrice);
 			MatchOnTouch = storage.GetValue(nameof(MatchOnTouch), MatchOnTouch);
 			Failing = storage.GetValue(nameof(Failing), Failing);
 			Latency = storage.GetValue(nameof(Latency), Latency);
