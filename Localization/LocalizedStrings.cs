@@ -81,16 +81,6 @@ public static partial class LocalizedStrings
 					Trace.WriteLine(ex);
 				}
 			}
-
-			var currCulture = CultureInfo.CurrentCulture.Name;
-
-			if (!currCulture.IsEmpty() && currCulture.Contains('-'))
-			{
-				currCulture = currCulture.SplitBySep("-").First().ToLowerInvariant();
-
-				if (_langIds.ContainsKey(currCulture))
-					ActiveLanguage = currCulture;
-			}
 		}
 		catch (Exception ex)
 		{
@@ -138,7 +128,10 @@ public static partial class LocalizedStrings
 		get => _activeLanguage;
 		set
 		{
-			if (!_langIds.ContainsKey(value))
+			if (value.IsEmpty())
+				throw new ArgumentNullException(nameof(value));
+
+			if (ActiveLanguage.EqualsIgnoreCase(value) || !_langIds.ContainsKey(value))
 				return;
 
 			_activeLanguage = value;
@@ -158,6 +151,22 @@ public static partial class LocalizedStrings
 
 			ActiveLanguageChanged?.Invoke();
 		}
+	}
+
+	/// <summary>
+	/// Try update <see cref="ActiveLanguage"/>.
+	/// </summary>
+	public static void TryUpdateActiveLanguage()
+	{
+		var currCulture = CultureInfo.CurrentCulture.Name;
+
+		if (currCulture.IsEmpty() || !currCulture.Contains('-'))
+			return;
+
+		currCulture = currCulture.SplitBySep("-").First().ToLowerInvariant();
+
+		if (_langIds.ContainsKey(currCulture))
+			ActiveLanguage = currCulture;
 	}
 
 	/// <summary>
