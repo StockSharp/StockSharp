@@ -19,7 +19,6 @@
     <MsExtensionsVer>6.*</MsExtensionsVer>
     <NuGetApiVer>6.10.0</NuGetApiVer>
     <MicrosoftDataSqlClientVer>5.1.4</MicrosoftDataSqlClientVer>
-    <AsyncLinqVer>6.0.1</AsyncLinqVer>
     <SBEVer>1.23.1.1</SBEVer>
     <SpectreVer>0.48.0</SpectreVer>
     <AWSSDKVer>3.*</AWSSDKVer>
