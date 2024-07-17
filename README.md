@@ -7,12 +7,12 @@
 
 **StockSharp** (shortly **S#**) – are **free** platform for trading at any markets of the world (crypto exchanges, American, European, Asian, Russian, stocks, futures, options, Bitcoins, forex, etc.). You will be able to trade manually or automated trading (algorithmic trading robots, conventional or HFT).
 
-**Available connections**: FIX/FAST, ITCH (LSE, NASDAQ), Blackwood/Fusion, BarChart, CQG, E*Trade, IQFeed, InteractiveBrokers, LMAX, MatLab, Oanda, FXCM, OpenECry, Rithmic, RSS, Sterling, BTCE, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck, Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, KuCoin, BITEXBOOK, CoinExchange, QuantFEED and many other.
+**Available connections**: Binace, MT4, MT5, FIX/FAST, PolygonIO, Trading Technologies, Alpaca Markets, BarChart, CQG, E*Trade, IQFeed, InteractiveBrokers, LMAX, MatLab, Oanda, FXCM, Rithmic, cTrader, DXtrade, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, OKX, Coincheck, CEX.IO, BitMEX, YoBit, Livecoin, EXMO, Deribit, HTX, KuCoin, QuantFEED and many other.
 
-## [S#.Designer][8]
+## [Designer][8]
 <img src="./Media/Designer500.gif" align="left" />
 
-**S#.Designer** - **free** universal algorithmic strategies application for easy strategy creation:
+**Designer** - **free** universal algorithmic strategies application for easy strategy creation:
   - Visual designer to create strategies by mouse clicking
   - Embedded C# editor
   - Easy to create own indicators
@@ -21,10 +21,10 @@
   - All world platforms
   - Schema sharing with own team
 
-## [S#.Data][9]
+## [Data][9]
 <img src="./Media/Hydra500.gif" align="right" />
 
-**S#.Data** - **free** software to automatically load and store market data:
+**Hydra** - **free** software to automatically load and store market data:
   - Supports many sources
   - High compression ratio
   - Any data type
@@ -34,7 +34,7 @@
   - Scheduled tasks
   - Auto-sync over the Internet between several running programs S#.Data
 
-## [S#.Terminal][10]
+## [Terminal][10]
 <img src="./Media/Terminal500.gif" align="left" />
 
 **Terminal** - **free** trading charting application (trading terminal):
@@ -46,10 +46,10 @@
   - Box charts
   - Volume Profile
   
-## [S#.Shell][11]
+## [Shell][11]
 <img src="./Media/Shell500.gif" align="right" />
 
-**S#.Shell** - the ready-made graphical framework with the ability to quickly change to your needs and with fully open source code in C#:
+**Shell** - the ready-made graphical framework with the ability to quickly change to your needs and with fully open source code in C#:
   - Complete source code
   - Support for all StockSharp platform connections
   - Support for S#.Designer schemas
@@ -60,8 +60,8 @@
   - Detailed information on strategy performance 
   - Launch strategies on schedule
 
-## [S#.API][12]
-S#.API is a **free** C# library for programmers who use Visual Studio. S#.API lets you create any trading strategy, from long-timeframe positional strategies to high frequency strategies (HFT) with direct access to the exchange (DMA). [More info...][12]
+## [API][12]
+API is a **free** C# library for programmers who use Visual Studio. S#.API lets you create any trading strategy, from long-timeframe positional strategies to high frequency strategies (HFT) with direct access to the exchange (DMA). [More info...][12]
 ### Strategy example
 ```C#
 public class SimpleStrategy : Strategy
