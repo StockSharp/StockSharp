@@ -632,15 +632,17 @@ namespace StockSharp.Messages
 			Id = storage.GetValue(nameof(Id), Id);
 			HeartbeatInterval = storage.GetValue<TimeSpan>(nameof(HeartbeatInterval));
 
-			if (storage.ContainsKey(nameof(SupportedInMessages)) || storage.ContainsKey("SupportedMessages"))
-				SupportedInMessages = (storage.GetValue<string[]>(nameof(SupportedInMessages)) ?? storage.GetValue<string[]>("SupportedMessages")).Select(i =>
-				{
-					// TODO Remove few releases later 2020-02-26
-					if (i == "AdapterCommand")
-						i = "Command";
+			if (storage.ContainsKey(nameof(SupportedInMessages)))
+			{
+				SupportedInMessages = Do.Invariant(() => storage.GetValue<string[]>(nameof(SupportedInMessages))
+					.Select(i =>
+					{
+						// TODO Remove few releases later 2024-07-20
+						i = i.Length > 1 && i[0] == 1564 ? i.Substring(1) : i;
 
-					return i.To<MessageTypes>();
-				}).ToArray();
+						return i.To<MessageTypes>();
+					}).ToArray());
+			}
 
 			if (storage.ContainsKey(nameof(ReConnectionSettings)))
 				ReConnectionSettings.Load(storage, nameof(ReConnectionSettings));
@@ -658,7 +660,7 @@ namespace StockSharp.Messages
 		{
 			storage.SetValue(nameof(Id), Id);
 			storage.SetValue(nameof(HeartbeatInterval), HeartbeatInterval);
-			storage.SetValue(nameof(SupportedInMessages), SupportedInMessages.Select(t => t.To<string>()).ToArray());
+			storage.SetValue(nameof(SupportedInMessages), Do.Invariant(() => SupportedInMessages.Select(t => t.To<string>()).ToArray()));
 			storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
 			storage.SetValue(nameof(EnqueueSubscriptions), EnqueueSubscriptions);
 			storage.SetValue(nameof(GenerateOrderBookFromLevel1), GenerateOrderBookFromLevel1);
