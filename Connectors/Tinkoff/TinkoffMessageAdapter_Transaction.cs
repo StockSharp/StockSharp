@@ -58,7 +58,7 @@ public partial class TinkoffMessageAdapter
 			}
 			else
 			{
-				response = await _service.Orders.PostOrderAsync(new()
+				response = await _service.Orders.PostOrderAsync(new PostOrderRequest
 				{
 					AccountId = regMsg.PortfolioName,
 					Direction = regMsg.Side.ToNative(),

@@ -70,6 +70,7 @@ public partial class TinkoffMessageAdapter
 									TradePrice = t.Price,
 									TradeVolume = t.Quantity,
 									OriginSide = t.Direction.ToSide(),
+									IsSystem = t.TradeSource == TradeSourceType.TradeSourceDealer ? true : null,
 								});
 							}
 						}
@@ -456,16 +457,19 @@ public partial class TinkoffMessageAdapter
 				var from = mdMsg.From.Value;
 				var to = mdMsg.To ?? CurrentTime;
 
-				var left = mdMsg.Count ?? long.MaxValue;
-
-				var candles = await _service.MarketData.GetCandlesAsync(new()
+				var request = new GetCandlesRequest
 				{
 					InstrumentId = mdMsg.GetInstrumentId(),
 					Interval = tf.ToNative2(),
 					From = from.ToTimestamp(),
 					To = to.ToTimestamp(),
 					CandleSourceType = mdMsg.IsRegularTradingHours == false ? GetCandlesRequest.Types.CandleSource.Unspecified : GetCandlesRequest.Types.CandleSource.Exchange,
-				}, cancellationToken: cancellationToken);
+				};
+
+				if (mdMsg.Count is long count)
+					request.Limit = (int)count;
+
+				var candles = await _service.MarketData.GetCandlesAsync(request, cancellationToken: cancellationToken);
 
 				foreach (var c in candles.Candles)
 				{
@@ -487,9 +491,6 @@ public partial class TinkoffMessageAdapter
 
 						State = c.IsComplete ? CandleStates.Finished : CandleStates.Active,
 					});
-
-					if (--left <= 0)
-						break;
 				}
 			}
 
