@@ -84,7 +84,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public override DataType DataType => DataType.Create<RemoteFileMessage>();
+		public override DataType DataType => DataType.RemoteFile;
 
 		/// <inheritdoc />
 		public override string ToString()

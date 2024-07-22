@@ -47,7 +47,7 @@
 		public int Format { get; set; }
 
 		/// <inheritdoc />
-		public override DataType DataType => DataType.Create<AvailableDataInfoMessage>();
+		public override DataType DataType => DataType.AvailableDataInfo;
 
 		/// <summary>
 		/// Create a copy of <see cref="AvailableDataInfoMessage"/>.

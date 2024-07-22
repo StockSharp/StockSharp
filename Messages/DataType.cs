@@ -191,6 +191,21 @@ namespace StockSharp.Messages
 		public static DataType Command { get; } = CreateImmutable<CommandMessage>();
 
 		/// <summary>
+		/// <see cref="RemoteFileMessage"/>.
+		/// </summary>
+		public static DataType RemoteFile { get; } = CreateImmutable<RemoteFileMessage>();
+
+		/// <summary>
+		/// <see cref="SecurityMappingMessage"/>.
+		/// </summary>
+		public static DataType SecurityMapping { get; } = CreateImmutable<SecurityMappingMessage>();
+
+		/// <summary>
+		/// <see cref="AvailableDataInfoMessage"/>.
+		/// </summary>
+		public static DataType AvailableDataInfo { get; } = CreateImmutable<AvailableDataInfoMessage>();
+
+		/// <summary>
 		/// Create data type info for <see cref="TimeFrameCandleMessage"/>.
 		/// </summary>
 		/// <param name="tf">Candle arg.</param>
