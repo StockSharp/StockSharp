@@ -296,6 +296,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual bool ExtraSetup => false;
 
 		/// <inheritdoc />
