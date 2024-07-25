@@ -108,7 +108,7 @@
 		/// <param name="security">Security.</param>
 		/// <param name="portfolio">Portfolio.</param>
 		/// <returns>Position.</returns>
-		protected decimal? GetPositionValue(Security security, Portfolio portfolio)
+		public decimal? GetPositionValue(Security security, Portfolio portfolio)
 			=> _positions.TryGetValue(CreatePositionKey(security, portfolio))?.CurrentValue;
 
 		// All strategy orders are sent with StrategyId=rootStrategy.StrategyId
