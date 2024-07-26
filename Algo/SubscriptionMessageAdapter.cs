@@ -349,23 +349,36 @@ namespace StockSharp.Algo
 			{
 				if (isSubscribe)
 				{
-					if (_replaceId.ContainsKey(transId))
+					if (message.From > DateTimeOffset.UtcNow)
 					{
-						sendInMsg = message;
+						message = message.TypedClone();
+						message.From = DateTimeOffset.UtcNow;
+					}
+
+					if (message.From >= message.To)
+					{
+						sendOutMsgs = new[] { message.CreateResult() };
 					}
 					else
 					{
-						var clone = message.TypedClone();
-
-						if (message.IsHistoryOnly())
-							_historicalRequests.Add(transId, clone);
+						if (_replaceId.ContainsKey(transId))
+						{
+							sendInMsg = message;
+						}
 						else
-							_subscriptionsById.Add(transId, new SubscriptionInfo(clone));
+						{
+							var clone = message.TypedClone();
 
-						sendInMsg = message;
+							if (message.IsHistoryOnly())
+								_historicalRequests.Add(transId, clone);
+							else
+								_subscriptionsById.Add(transId, new SubscriptionInfo(clone));
+
+							sendInMsg = message;
+						}
+
+						isInfoLevel = !_allSecIdChilds.Contains(transId);
 					}
-
-					isInfoLevel = !_allSecIdChilds.Contains(transId);
 				}
 				else
 				{
