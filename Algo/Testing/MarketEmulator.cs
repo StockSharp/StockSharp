@@ -3709,7 +3709,7 @@ namespace StockSharp.Algo.Testing
 		bool IMessageAdapter.UseChannels => false;
 		TimeSpan IMessageAdapter.IterationInterval => default;
 		string IMessageAdapter.FeatureName => string.Empty;
-		string IMessageAdapter.AssociatedBoard => string.Empty;
+		string[] IMessageAdapter.AssociatedBoards => Array.Empty<string>();
 		bool? IMessageAdapter.IsPositionsEmulationRequired => null;
 		bool IMessageAdapter.IsReplaceCommandEditCurrent => false;
 		bool IMessageAdapter.GenerateOrderBookFromLevel1 { get; set; }

@@ -795,7 +795,7 @@ namespace StockSharp.Algo
 
 		bool IMessageAdapter.GenerateOrderBookFromLevel1 { get; set; }
 
-		string IMessageAdapter.AssociatedBoard => string.Empty;
+		string[] IMessageAdapter.AssociatedBoards => Array.Empty<string>();
 
 		bool IMessageAdapter.ExtraSetup => false;
 

@@ -332,7 +332,7 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual string AssociatedBoard => string.Empty;
+		public virtual string[] AssociatedBoards => Array.Empty<string>();
 
 		/// <summary>
 		/// Validate the specified security id is supported by the adapter and subscription can be done.
@@ -344,7 +344,12 @@ namespace StockSharp.Messages
 			if (secId == SecurityId.News)
 				return SupportedMarketDataTypes.Contains(DataType.News);
 
-			return secId.IsAssociated(AssociatedBoard);
+			var boards = AssociatedBoards;
+
+			if (boards.Length > 0)
+				return boards.Any(b => secId.IsAssociated(b));
+
+			return false;
 		}
 
 		/// <inheritdoc />
@@ -367,14 +372,14 @@ namespace StockSharp.Messages
 
 			try
 			{
-				if (message.Type == MessageTypes.MarketData && !AssociatedBoard.IsEmpty())
+				if (message.Type == MessageTypes.MarketData && AssociatedBoards.Length > 0)
 				{
 					var mdMsg = (MarketDataMessage)message;
 					var secId = mdMsg.SecurityId;
 
 					if (!ValidateSecurityId(secId))
 					{
-						var boardCode = AssociatedBoard;
+						var boardCode = AssociatedBoards.First();
 						SendOutMessage(mdMsg.TransactionId.CreateSubscriptionResponse(new NotSupportedException(LocalizedStrings.WrongSecurityBoard.Put(secId, boardCode, $"{secId.SecurityCode}@{boardCode}"))));
 						return false;
 					}

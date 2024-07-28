@@ -210,7 +210,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// The adapter can process subscription only with instruments associated with the specified board.
 		/// </summary>
-		string AssociatedBoard { get; }
+		string[] AssociatedBoards { get; }
 
 		/// <summary>
 		/// The adapter requires extra setup.

@@ -40,7 +40,7 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 		=> dataType == DataType.Securities || base.IsAllDownloadingSupported(dataType);
 
 	/// <inheritdoc />
-	public override string AssociatedBoard => BoardCodes.BitStamp;
+	public override string[] AssociatedBoards { get; } = new[] { BoardCodes.BitStamp };
 
 	/// <inheritdoc />
 	protected override IEnumerable<TimeSpan> TimeFrames { get; } = new[]

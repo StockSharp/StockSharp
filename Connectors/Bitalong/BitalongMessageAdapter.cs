@@ -34,7 +34,7 @@ public partial class BitalongMessageAdapter
 		=> dataType == DataType.Securities || base.IsAllDownloadingSupported(dataType);
 
 	/// <inheritdoc />
-	public override string AssociatedBoard => BoardCodes.Bitalong;
+	public override string[] AssociatedBoards { get; } = new[] { BoardCodes.Bitalong };
 
 	/// <inheritdoc />
 	public override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
