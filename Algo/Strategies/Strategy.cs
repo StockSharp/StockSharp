@@ -2552,7 +2552,12 @@ namespace StockSharp.Algo.Strategies
 
 		private void AddMyTrade(MyTrade trade) => TryAddMyTrade(trade);
 
-		private bool TryAddMyTrade(MyTrade trade)
+		/// <summary>
+		/// Try add own trade.
+		/// </summary>
+		/// <param name="trade"><see cref="MyTrade"/></param>
+		/// <returns>Operation result.</returns>
+		public bool TryAddMyTrade(MyTrade trade)
 		{
 			if (!_myTrades.TryAdd(trade))
 				return false;
@@ -2906,6 +2911,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// <see cref="IPortfolioProvider"/>
 		/// </summary>
+		[Browsable(false)]
 		public IPortfolioProvider PortfolioProvider { get; set; }
 
         private void TryInvoke(Action handler)
