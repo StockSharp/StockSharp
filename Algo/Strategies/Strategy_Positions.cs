@@ -111,6 +111,20 @@
 		public decimal? GetPositionValue(Security security, Portfolio portfolio)
 			=> _positions.TryGetValue(CreatePositionKey(security, portfolio))?.CurrentValue;
 
+		/// <summary>
+		/// Set position.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <param name="portfolio">Portfolio.</param>
+		/// <param name="value">Position.</param>
+		public void SetPositionValue(Security security, Portfolio portfolio, decimal value)
+			=> _positions.SafeAdd(CreatePositionKey(security, portfolio), _ => new()
+			{
+				Security = security,
+				Portfolio = portfolio,
+				StrategyId = EnsureGetId(),
+			}).CurrentValue = value;
+
 		// All strategy orders are sent with StrategyId=rootStrategy.StrategyId
 		// Also, child strategies do not subscribe for positions
 		// So, child strategies do not recieve and position updates.
