@@ -866,6 +866,11 @@ public static class BoardCodes
 	public const string BinanceCoin = "BNBCN";
 
 	/// <summary>
+	/// <see cref="BinanceFut"/>.
+	/// </summary>
+	public const string BinanceFut = "BNBFT";
+
+	/// <summary>
 	/// <see cref="Bitexbook"/>.
 	/// </summary>
 	public const string Bitexbook = "BTXB";
