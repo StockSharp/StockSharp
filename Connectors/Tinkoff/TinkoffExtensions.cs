@@ -209,4 +209,10 @@ static class TinkoffExtensions
 
 	public static Timestamp ToTimestamp(this DateTimeOffset dto)
 		=> Timestamp.FromDateTimeOffset(dto);
+
+	public static decimal ToDecimal(this Quotation v)
+		=> (decimal)v;
+
+	public static decimal ToDecimal(this MoneyValue v)
+		=> (decimal)v;
 }

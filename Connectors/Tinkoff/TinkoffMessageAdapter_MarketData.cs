@@ -1,5 +1,7 @@
 namespace StockSharp.Tinkoff;
 
+using Google.Protobuf.Collections;
+
 public partial class TinkoffMessageAdapter
 {
 	private readonly SynchronizedPairSet<(DataType dt, string uid), long> _mdTransIds = new();
@@ -48,10 +50,10 @@ public partial class TinkoffMessageAdapter
 									OriginalTransactionId = transId,
 									OpenTime = c.Time.ToDateTimeOffset(),
 									CloseTime = c.LastTradeTs?.ToDateTimeOffset() ?? default,
-									OpenPrice = c.Open,
-									HighPrice = c.High,
-									LowPrice = c.Low,
-									ClosePrice = c.Close,
+									OpenPrice = c.Open?.ToDecimal() ?? default,
+									HighPrice = c.High?.ToDecimal() ?? default,
+									LowPrice = c.Low?.ToDecimal() ?? default,
+									ClosePrice = c.Close?.ToDecimal() ?? default,
 									TotalVolume = c.Volume,
 									State = CandleStates.Active,
 								});
@@ -67,7 +69,7 @@ public partial class TinkoffMessageAdapter
 									DataTypeEx = DataType.Ticks,
 									OriginalTransactionId = transId,
 									ServerTime = t.Time.ToDateTimeOffset(),
-									TradePrice = t.Price,
+									TradePrice = t.Price?.ToDecimal(),
 									TradeVolume = t.Quantity,
 									OriginSide = t.Direction.ToSide(),
 									IsSystem = t.TradeSource == TradeSourceType.TradeSourceDealer ? true : null,
@@ -83,7 +85,7 @@ public partial class TinkoffMessageAdapter
 								{
 									OriginalTransactionId = transId,
 									ServerTime = p.Time.ToDateTimeOffset(),
-								}.TryAdd(Level1Fields.LastTradePrice, (decimal)p.Price));
+								}.TryAdd(Level1Fields.LastTradePrice, p.Price?.ToDecimal()));
 							}
 						}
 
@@ -103,13 +105,16 @@ public partial class TinkoffMessageAdapter
 						{
 							if (TryGetTransId(DataType.MarketDepth, b.InstrumentUid, out var transId))
 							{
+								static QuoteChange[] convert(RepeatedField<Order> quotes)
+									=> quotes.Select(p => new QuoteChange(p.Price?.ToDecimal() ?? default, p.Quantity)).ToArray();
+
 								SendOutMessage(new QuoteChangeMessage
 								{
 									OriginalTransactionId = transId,
 									ServerTime = b.Time.ToDateTimeOffset(),
 
-									Bids = b.Bids.Select(p => new QuoteChange(p.Price, p.Quantity)).ToArray(),
-									Asks = b.Asks.Select(p => new QuoteChange(p.Price, p.Quantity)).ToArray(),
+									Bids = convert(b.Bids),
+									Asks = convert(b.Asks),
 								});
 							}
 						}
@@ -248,7 +253,7 @@ public partial class TinkoffMessageAdapter
 							IssueDate = instr.IpoDate?.ToDateTimeOffset(),
 							IssueSize = instr.IssueSize,
 							Shortable = instr.ShortEnabledFlag,
-							PriceStep = instr.MinPriceIncrement,
+							PriceStep = instr.MinPriceIncrement?.ToDecimal(),
 							OriginalTransactionId = lookupMsg.TransactionId,
 						}))
 						{
@@ -282,7 +287,7 @@ public partial class TinkoffMessageAdapter
 							IssueDate = instr.FirstTradeDate?.ToDateTimeOffset(),
 							UnderlyingSecurityType = instr.AssetType.ToSecurityType(),
 							Shortable = instr.ShortEnabledFlag,
-							PriceStep = instr.MinPriceIncrement,
+							PriceStep = instr.MinPriceIncrement?.ToDecimal(),
 							SettlementType = instr.FuturesType.ToSettlementType(),
 							OriginalTransactionId = lookupMsg.TransactionId,
 						}.TryFillUnderlyingId(instr.BasicAsset)))
@@ -317,7 +322,7 @@ public partial class TinkoffMessageAdapter
 				//			IssueDate = instr.FirstTradeDate?.ToDateTimeOffset(),
 				//			UnderlyingSecurityType = instr.AssetType.ToSecurityType(),
 				//			Shortable = instr.ShortEnabledFlag,
-				//			PriceStep = instr.MinPriceIncrement,
+				//			PriceStep = instr.MinPriceIncrement?.ToDecimal(),
 				//			OptionType = instr.Direction.ToOptionType(),
 				//			OptionStyle = instr.Style.ToOptionStyle(),
 				//			SettlementType = instr.SettlementType.ToSettlementType(),
@@ -352,7 +357,7 @@ public partial class TinkoffMessageAdapter
 							SecurityType = SecurityTypes.Currency,
 							Class = instr.ClassCode,
 							Shortable = instr.ShortEnabledFlag,
-							PriceStep = instr.MinPriceIncrement,
+							PriceStep = instr.MinPriceIncrement?.ToDecimal(),
 							OriginalTransactionId = lookupMsg.TransactionId,
 						}))
 						{
@@ -387,8 +392,8 @@ public partial class TinkoffMessageAdapter
 							IssueDate = instr.StateRegDate?.ToDateTimeOffset(),
 							IssueSize = instr.IssueSize,
 							Shortable = instr.ShortEnabledFlag,
-							PriceStep = instr.MinPriceIncrement,
-							FaceValue = instr.Nominal,
+							PriceStep = instr.MinPriceIncrement?.ToDecimal(),
+							FaceValue = instr.Nominal?.ToDecimal(),
 							OriginalTransactionId = lookupMsg.TransactionId,
 						}))
 						{
@@ -421,8 +426,8 @@ public partial class TinkoffMessageAdapter
 							Class = instr.ClassCode,
 							Shortable = instr.ShortEnabledFlag,
 							IssueDate = instr.ReleasedDate?.ToDateTimeOffset(),
-							IssueSize = instr.NumShares,
-							PriceStep = instr.MinPriceIncrement,
+							IssueSize = instr.NumShares?.ToDecimal(),
+							PriceStep = instr.MinPriceIncrement?.ToDecimal(),
 							OriginalTransactionId = lookupMsg.TransactionId,
 						}))
 						{
@@ -483,10 +488,10 @@ public partial class TinkoffMessageAdapter
 						OriginalTransactionId = mdMsg.TransactionId,
 
 						OpenTime = c.Time.ToDateTimeOffset(),
-						OpenPrice = c.Open,
-						HighPrice = c.High,
-						LowPrice = c.Low,
-						ClosePrice = c.Close,
+						OpenPrice = c.Open?.ToDecimal() ?? default,
+						HighPrice = c.High?.ToDecimal() ?? default,
+						LowPrice = c.Low?.ToDecimal() ?? default,
+						ClosePrice = c.Close?.ToDecimal() ?? default,
 						TotalVolume = c.Volume,
 
 						State = c.IsComplete ? CandleStates.Finished : CandleStates.Active,
