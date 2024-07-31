@@ -1184,4 +1184,14 @@ public static class BoardCodes
 	/// <see cref="TradingTechnologies"/>
 	/// </summary>
 	public const string TradingTechnologies = "TT";
+
+	/// <summary>
+	/// <see cref="GateIO"/>
+	/// </summary>
+	public const string GateIO = "GTIO";
+
+	/// <summary>
+	/// <see cref="Bitget"/>
+	/// </summary>
+	public const string Bitget = "BTGT";
 }
