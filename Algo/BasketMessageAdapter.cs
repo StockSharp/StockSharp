@@ -1091,6 +1091,7 @@ namespace StockSharp.Algo
 					break;
 
 				case MessageTypes.Connect:
+				case MessageTypes.ChangePassword:
 				{
 					ProcessReset(new ResetMessage(), true);
 
@@ -1193,17 +1194,6 @@ namespace StockSharp.Algo
 				case MessageTypes.MarketData:
 				{
 					ProcessMarketDataRequest((MarketDataMessage)message);
-					break;
-				}
-
-				case MessageTypes.ChangePassword:
-				{
-					var adapter = GetSortedAdapters().FirstOrDefault(a => a.IsMessageSupported(MessageTypes.ChangePassword));
-
-					if (adapter == null)
-						throw new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(message.Type));
-
-					adapter.SendInMessage(message);
 					break;
 				}
 
