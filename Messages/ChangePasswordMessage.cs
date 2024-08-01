@@ -14,19 +14,10 @@ namespace StockSharp.Messages
 		BaseResultMessage<ChangePasswordMessage>, ITransactionIdMessage, IErrorMessage
 	{
 		/// <summary>
-		/// Initialize <see cref="ChangePasswordMessage"/>.
-		/// </summary>
-		/// <param name="type">Message type.</param>
-		protected ChangePasswordMessage(MessageTypes type)
-			: base(type)
-		{
-		}
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="ChangePasswordMessage"/>.
 		/// </summary>
 		public ChangePasswordMessage()
-			: this(MessageTypes.ChangePassword)
+			: base(MessageTypes.ChangePassword)
 		{
 		}
 
