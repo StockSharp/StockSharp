@@ -149,23 +149,7 @@
 				return item;
 			}
 
-			return item.Add(element, candle, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.PriceLevels?./*Select(l => Tuple.Create(l.Price, l.TotalVolume)).*/ToArray());
-		}
-
-		/// <summary>
-		/// Put the candle data.
-		/// </summary>
-		/// <param name="item"><see cref="IChartDrawDataItem"/> instance.</param>
-		/// <param name="element">The chart element representing a candle.</param>
-		/// <param name="candle">Candle.</param>
-		/// <param name="openPrice">Opening price.</param>
-		/// <param name="highPrice">Highest price.</param>
-		/// <param name="lowPrice">Lowest price.</param>
-		/// <param name="closePrice">Closing price.</param>
-		/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-		public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartCandleElement element, ICandleMessage candle, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice)
-		{
-			return item.Add(element, candle, openPrice, highPrice, lowPrice, closePrice, null);
+			return item.Add(element, candle, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.PriceLevels?.ToArray(), candle.State);
 		}
 
 		/// <summary>
@@ -179,8 +163,9 @@
 		/// <param name="lowPrice">Lowest price.</param>
 		/// <param name="closePrice">Closing price.</param>
 		/// <param name="priceLevels">Price levels.</param>
+		/// <param name="state">Candle state.</param>
 		/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-		public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartCandleElement element, ICandleMessage candle, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, CandlePriceLevel[] priceLevels)
+		public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartCandleElement element, ICandleMessage candle, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, CandlePriceLevel[] priceLevels, CandleStates state)
 		{
 			if (candle == null)
 			{
@@ -188,7 +173,7 @@
 				return item;
 			}
 
-			return item.Add(element, candle.DataType, candle.SecurityId, openPrice, highPrice, lowPrice, closePrice, priceLevels);
+			return item.Add(element, candle.DataType, candle.SecurityId, openPrice, highPrice, lowPrice, closePrice, priceLevels, state);
 		}
 
 		/// <summary>

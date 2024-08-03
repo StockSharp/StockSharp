@@ -36,8 +36,9 @@
 			/// <param name="lowPrice">Lowest price.</param>
 			/// <param name="closePrice">Closing price.</param>
 			/// <param name="priceLevels">Price levels.</param>
+			/// <param name="state">Candle state.</param>
 			/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-			IChartDrawDataItem Add(IChartCandleElement element, DataType dataType, SecurityId secId, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, CandlePriceLevel[] priceLevels);
+			IChartDrawDataItem Add(IChartCandleElement element, DataType dataType, SecurityId secId, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, CandlePriceLevel[] priceLevels, CandleStates state);
 
 			/// <summary>
 			/// Put the indicator data.
