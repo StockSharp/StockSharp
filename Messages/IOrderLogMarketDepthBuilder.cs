@@ -28,9 +28,11 @@ namespace StockSharp.Messages
 	public interface IOrderLogMarketDepthBuilder
 	{
 		/// <summary>
-		/// Snapshot.
+		/// Get snapshot.
 		/// </summary>
-		QuoteChangeMessage Snapshot { get; }
+		/// <param name="serverTime"><see cref="QuoteChangeMessage.ServerTime"/></param>
+		/// <returns>Snapshot.</returns>
+		QuoteChangeMessage GetSnapshot(DateTimeOffset serverTime);
 
 		/// <summary>
 		/// Process order log item.
@@ -68,10 +70,7 @@ namespace StockSharp.Messages
 		/// <param name="depth">Messages containing quotes.</param>
 		public OrderLogMarketDepthBuilder(QuoteChangeMessage depth)
 		{
-			if (depth == null)
-				throw new ArgumentNullException(nameof(depth));
-
-			_depth = depth;
+			_depth = depth ?? throw new ArgumentNullException(nameof(depth));
 			_depth.State = QuoteChangeStates.SnapshotComplete;
 
 			foreach (var bid in depth.Bids)
@@ -81,17 +80,16 @@ namespace StockSharp.Messages
 				_asks.Add(ask.Price, ask);
 		}
 
-		QuoteChangeMessage IOrderLogMarketDepthBuilder.Snapshot
+		QuoteChangeMessage IOrderLogMarketDepthBuilder.GetSnapshot(DateTimeOffset serverTime)
 		{
-			get
-			{
-				var depth = _depth.TypedClone();
+			var depth = _depth.TypedClone();
 
-				depth.Bids = _bids.Values.ToArray();
-				depth.Asks = _asks.Values.ToArray();
+			depth.ServerTime = serverTime;
+			depth.LocalTime = serverTime;
+			depth.Bids = _bids.Values.ToArray();
+			depth.Asks = _asks.Values.ToArray();
 
-				return depth;
-			}
+			return depth;
 		}
 
 		QuoteChangeMessage IOrderLogMarketDepthBuilder.Update(ExecutionMessage item)

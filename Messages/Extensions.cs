@@ -5487,7 +5487,7 @@ namespace StockSharp.Messages
 			{
 				if (!snapshotSent)
 				{
-					yield return builder.Snapshot;
+					yield return builder.GetSnapshot(item.ServerTime);
 					snapshotSent = true;
 				}
 
@@ -5500,14 +5500,14 @@ namespace StockSharp.Messages
 
 				if (maxDepth < int.MaxValue)
 				{
-					depth = builder.Snapshot; // cannot trim incremental book
+					depth = builder.GetSnapshot(item.ServerTime); // cannot trim incremental book
 
 					depth.Bids = depth.Bids.Take(maxDepth).ToArray();
 					depth.Asks = depth.Asks.Take(maxDepth).ToArray();
 				}
 				else if (interval != default)
 				{
-					depth = builder.Snapshot; // cannot return incrementals if interval is set
+					depth = builder.GetSnapshot(item.ServerTime); // cannot return incrementals if interval is set
 				}
 
 				yield return depth;

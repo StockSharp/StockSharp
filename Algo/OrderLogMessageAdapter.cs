@@ -6,6 +6,7 @@
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 
@@ -139,7 +140,8 @@
 
 							if (!info.IsTicks)
 							{
-								snapshot = info.Builder.Snapshot?.TypedClone();
+								snapshot = info.Builder.GetSnapshot(responseMsg.LocalTime)
+									?? throw new InvalidOperationException(LocalizedStrings.MarketDepthIsEmpty);
 							}
 
 							if (snapshot != null)
