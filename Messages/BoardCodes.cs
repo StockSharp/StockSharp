@@ -1191,7 +1191,27 @@ public static class BoardCodes
 	public const string GateIO = "GTIO";
 
 	/// <summary>
+	/// <see cref="GateIODelivery"/>
+	/// </summary>
+	public const string GateIODelivery = "GTIODL";
+
+	/// <summary>
+	/// <see cref="GateIOPerpetual"/>
+	/// </summary>
+	public const string GateIOPerpetual = "GTIOPT";
+
+	/// <summary>
+	/// <see cref="GateIOOptions"/>
+	/// </summary>
+	public const string GateIOOptions = "GTIOOP";
+
+	/// <summary>
 	/// <see cref="Bitget"/>
 	/// </summary>
 	public const string Bitget = "BTGT";
+
+	/// <summary>
+	/// <see cref="BitgetFut"/>
+	/// </summary>
+	public const string BitgetFut = "BTGTFT";
 }
