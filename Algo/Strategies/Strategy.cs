@@ -2942,7 +2942,7 @@ namespace StockSharp.Algo.Strategies
 				switch (rule.Action)
 				{
 					case RiskActions.ClosePositions:
-						this.ClosePosition();
+						ClosePosition();
 						return rule.Action;
 					case RiskActions.StopTrading:
 						Stop();
@@ -3113,10 +3113,7 @@ namespace StockSharp.Algo.Strategies
 
 				case CommandTypes.ClosePosition:
 				{
-					var slippage = parameters.TryGet(nameof(Order.Slippage)).To<decimal?>();
-
-					this.ClosePosition(slippage ?? 0);
-
+					ClosePosition();
 					break;
 				}
 			}

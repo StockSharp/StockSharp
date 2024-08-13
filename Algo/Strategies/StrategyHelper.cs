@@ -34,64 +34,6 @@ namespace StockSharp.Algo.Strategies
 	public static partial class StrategyHelper
 	{
 		/// <summary>
-		/// To create initialized object of buy order at market price.
-		/// </summary>
-		/// <param name="strategy">Strategy.</param>
-		/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
-		/// <returns>The initialized order object.</returns>
-		/// <remarks>
-		/// The order is not registered, only the object is created.
-		/// </remarks>
-		public static Order BuyAtMarket(this Strategy strategy, decimal? volume = null)
-		{
-			return strategy.CreateOrder(Sides.Buy, default, volume);
-		}
-
-		/// <summary>
-		/// To create the initialized order object of sell order at market price.
-		/// </summary>
-		/// <param name="strategy">Strategy.</param>
-		/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
-		/// <returns>The initialized order object.</returns>
-		/// <remarks>
-		/// The order is not registered, only the object is created.
-		/// </remarks>
-		public static Order SellAtMarket(this Strategy strategy, decimal? volume = null)
-		{
-			return strategy.CreateOrder(Sides.Sell, default, volume);
-		}
-
-		/// <summary>
-		/// To create the initialized order object for buy.
-		/// </summary>
-		/// <param name="strategy">Strategy.</param>
-		/// <param name="price">Price.</param>
-		/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
-		/// <returns>The initialized order object.</returns>
-		/// <remarks>
-		/// The order is not registered, only the object is created.
-		/// </remarks>
-		public static Order BuyAtLimit(this Strategy strategy, decimal price, decimal? volume = null)
-		{
-			return strategy.CreateOrder(Sides.Buy, price, volume);
-		}
-
-		/// <summary>
-		/// To create the initialized order object for sell.
-		/// </summary>
-		/// <param name="strategy">Strategy.</param>
-		/// <param name="price">Price.</param>
-		/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
-		/// <returns>The initialized order object.</returns>
-		/// <remarks>
-		/// The order is not registered, only the object is created.
-		/// </remarks>
-		public static Order SellAtLimit(this Strategy strategy, decimal price, decimal? volume = null)
-		{
-			return strategy.CreateOrder(Sides.Sell, price, volume);
-		}
-
-		/// <summary>
 		/// To create the initialized order object.
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
@@ -126,36 +68,6 @@ namespace StockSharp.Algo.Strategies
 				order.Price = price;
 
 			return order;
-		}
-
-		/// <summary>
-		/// To close open position by market (to register the order of the type <see cref="OrderTypes.Market"/>).
-		/// </summary>
-		/// <param name="strategy">Strategy.</param>
-		/// <param name="slippage">The slippage level, admissible at the order registration. It is used, if the order is registered using the limit order.</param>
-		/// <remarks>
-		/// The market order is not operable on all exchanges.
-		/// </remarks>
-		public static void ClosePosition(this Strategy strategy, decimal slippage = 0)
-		{
-			if (strategy == null)
-				throw new ArgumentNullException(nameof(strategy));
-
-			var position = strategy.Position;
-
-			if (position != 0)
-			{
-				var volume = position.Abs();
-
-				var order = position > 0 ? strategy.SellAtMarket(volume) : strategy.BuyAtMarket(volume);
-
-				if (order.Type != OrderTypes.Market)
-				{
-					order.Price += (order.Side == Sides.Buy ? slippage : -slippage);
-				}
-
-				strategy.RegisterOrder(order);
-			}
 		}
 
 		private const string _isEmulationModeKey = "IsEmulationMode";

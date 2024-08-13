@@ -1,6 +1,7 @@
 ﻿using StockSharp.Algo;
 using StockSharp.Algo.Strategies;
 using StockSharp.Logging;
+using StockSharp.Messages;
 using System;
 
 namespace StockSharp.Samples.Strategies.HistoryMarketRule
@@ -13,7 +14,7 @@ namespace StockSharp.Samples.Strategies.HistoryMarketRule
 
 			sub.WhenTickTradeReceived(this).Do(() =>
 			{
-				var order = this.BuyAtMarket(1);
+				var order = this.CreateOrder(Sides.Buy, default, 1);
 				var ruleReg = order.WhenRegistered(this);
 				var ruleRegFailed = order.WhenRegisterFailed(this);
 
@@ -34,7 +35,7 @@ namespace StockSharp.Samples.Strategies.HistoryMarketRule
 
 			sub.WhenTickTradeReceived(this).Do(() =>
 			{
-				var order = this.BuyAtMarket(10000000);
+				var order = this.CreateOrder(Sides.Buy, default, 10000000);
 				var ruleReg = order.WhenRegistered(this);
 				var ruleRegFailed = order.WhenRegisterFailed(this);
 

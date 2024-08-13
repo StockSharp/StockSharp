@@ -239,11 +239,10 @@ namespace StockSharp.Samples.Testing.History
 						// calc order price as a close price
 						var price = candle.ClosePrice;
 
-						RegisterOrder(this.CreateOrder(direction, price, volume));
-
-						// or revert position via market quoting
-						//var strategy = new MarketQuotingStrategy(direction, volume);
-						//ChildStrategies.Add(strategy);
+						if (direction == Sides.Buy)
+							BuyAtLimit(price, volume);
+						else
+							SellAtLimit(price, volume);
 
 						// store current values for short and long
 						_isShortLessThenLong = isShortLessThenLong;

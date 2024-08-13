@@ -50,9 +50,11 @@ namespace StockSharp.Samples.Strategies.HistorySMA
 			if (!IsRealTime(candle) && !IsBacktesting) return;
 
 			var volume = Volume + Math.Abs(Position);
-			RegisterOrder(isShortLessCurrent ?
-				this.SellAtMarket(volume) :
-				this.BuyAtMarket(volume));
+
+			if (isShortLessCurrent)
+				SellAtMarket(volume);
+			else
+				BuyAtMarket(volume);
 		}
 	}
 }
