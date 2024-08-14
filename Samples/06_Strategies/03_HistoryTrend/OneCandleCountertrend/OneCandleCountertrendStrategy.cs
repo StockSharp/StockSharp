@@ -44,13 +44,13 @@ namespace StockSharp.Samples.Strategies.HistoryTrend
 
 			if (candle.OpenPrice < candle.ClosePrice && Position >= 0)
 			{
-				SellAtMarket(Volume + Math.Abs(Position));
+				SellMarket(Volume + Math.Abs(Position));
 			}
 
 			else
 			if (candle.OpenPrice > candle.ClosePrice && Position <= 0)
 			{
-				BuyAtMarket(Volume + Math.Abs(Position));
+				BuyMarket(Volume + Math.Abs(Position));
 			}
 		}
 	}

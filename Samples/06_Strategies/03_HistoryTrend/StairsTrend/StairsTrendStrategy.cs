@@ -59,13 +59,13 @@ namespace StockSharp.Samples.Strategies.HistoryTrend
 
 			if (_bullLength >= Length && Position <= 0)
 			{
-				BuyAtMarket(Volume + Math.Abs(Position));
+				BuyMarket(Volume + Math.Abs(Position));
 			}
 
 			else
 			if (_bearLength >= Length && Position >= 0)
 			{
-				SellAtMarket(Volume + Math.Abs(Position));
+				SellMarket(Volume + Math.Abs(Position));
 			}
 		}
 	}

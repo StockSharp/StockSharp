@@ -34,6 +34,68 @@ namespace StockSharp.Algo.Strategies
 	public static partial class StrategyHelper
 	{
 		/// <summary>
+		/// To create initialized object of buy order at market price.
+		/// </summary>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
+		/// <returns>The initialized order object.</returns>
+		/// <remarks>
+		/// The order is not registered, only the object is created.
+		/// </remarks>
+		[Obsolete("Use Strategy.BuyMarket method.")]
+		public static Order BuyAtMarket(this Strategy strategy, decimal? volume = null)
+		{
+			return strategy.CreateOrder(Sides.Buy, default, volume);
+		}
+
+		/// <summary>
+		/// To create the initialized order object of sell order at market price.
+		/// </summary>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
+		/// <returns>The initialized order object.</returns>
+		/// <remarks>
+		/// The order is not registered, only the object is created.
+		/// </remarks>
+		[Obsolete("Use Strategy.SellMarket method.")]
+		public static Order SellAtMarket(this Strategy strategy, decimal? volume = null)
+		{
+			return strategy.CreateOrder(Sides.Sell, default, volume);
+		}
+
+		/// <summary>
+		/// To create the initialized order object for buy.
+		/// </summary>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="price">Price.</param>
+		/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
+		/// <returns>The initialized order object.</returns>
+		/// <remarks>
+		/// The order is not registered, only the object is created.
+		/// </remarks>
+		[Obsolete("Use Strategy.BuyLimit method.")]
+		public static Order BuyAtLimit(this Strategy strategy, decimal price, decimal? volume = null)
+		{
+			return strategy.CreateOrder(Sides.Buy, price, volume);
+		}
+
+		/// <summary>
+		/// To create the initialized order object for sell.
+		/// </summary>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="price">Price.</param>
+		/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
+		/// <returns>The initialized order object.</returns>
+		/// <remarks>
+		/// The order is not registered, only the object is created.
+		/// </remarks>
+		[Obsolete("Use Strategy.SellLimit method.")]
+		public static Order SellAtLimit(this Strategy strategy, decimal price, decimal? volume = null)
+		{
+			return strategy.CreateOrder(Sides.Sell, price, volume);
+		}
+
+		/// <summary>
 		/// To create the initialized order object.
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>

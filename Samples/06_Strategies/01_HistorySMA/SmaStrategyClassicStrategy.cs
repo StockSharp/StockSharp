@@ -52,9 +52,9 @@ namespace StockSharp.Samples.Strategies.HistorySMA
 			var volume = Volume + Math.Abs(Position);
 
 			if (isShortLessCurrent)
-				SellAtMarket(volume);
+				SellMarket(volume);
 			else
-				BuyAtMarket(volume);
+				BuyMarket(volume);
 		}
 	}
 }

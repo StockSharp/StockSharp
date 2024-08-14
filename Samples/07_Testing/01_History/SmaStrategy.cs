@@ -240,9 +240,9 @@ namespace StockSharp.Samples.Testing.History
 						var price = candle.ClosePrice;
 
 						if (direction == Sides.Buy)
-							BuyAtLimit(price, volume);
+							BuyLimit(price, volume);
 						else
-							SellAtLimit(price, volume);
+							SellLimit(price, volume);
 
 						// store current values for short and long
 						_isShortLessThenLong = isShortLessThenLong;

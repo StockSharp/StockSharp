@@ -40,12 +40,12 @@
 
 			if (candle.ClosePrice >= BollingerBands.UpBand.GetCurrentValue() && Position == 0)
 			{
-				BuyAtMarket(Volume);
+				BuyMarket(Volume);
 			}
 
 			else if (candle.ClosePrice <= BollingerBands.MovingAverage.GetCurrentValue() && Position > 0)
 			{
-				SellAtMarket(Math.Abs(Position));
+				SellMarket(Math.Abs(Position));
 			}
 		}
 	}

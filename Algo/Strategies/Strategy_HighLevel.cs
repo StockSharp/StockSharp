@@ -17,7 +17,7 @@ public partial class Strategy
 	/// <remarks>
 	/// The order is not registered, only the object is created.
 	/// </remarks>
-	public Order BuyAtMarket(decimal? volume = null)
+	public Order BuyMarket(decimal? volume = null)
 	{
 		var order = this.CreateOrder(Sides.Buy, default, volume);
 		RegisterOrder(order);
@@ -32,7 +32,7 @@ public partial class Strategy
 	/// <remarks>
 	/// The order is not registered, only the object is created.
 	/// </remarks>
-	public Order SellAtMarket(decimal? volume = null)
+	public Order SellMarket(decimal? volume = null)
 	{
 		var order = this.CreateOrder(Sides.Sell, default, volume);
 		RegisterOrder(order);
@@ -48,7 +48,7 @@ public partial class Strategy
 	/// <remarks>
 	/// The order is not registered, only the object is created.
 	/// </remarks>
-	public Order BuyAtLimit(decimal price, decimal? volume = null)
+	public Order BuyLimit(decimal price, decimal? volume = null)
 	{
 		var order = this.CreateOrder(Sides.Buy, price, volume);
 		RegisterOrder(order);
@@ -64,7 +64,7 @@ public partial class Strategy
 	/// <remarks>
 	/// The order is not registered, only the object is created.
 	/// </remarks>
-	public Order SellAtLimit(decimal price, decimal? volume = null)
+	public Order SellLimit(decimal price, decimal? volume = null)
 	{
 		var order = this.CreateOrder(Sides.Sell, price, volume);
 		RegisterOrder(order);
@@ -89,6 +89,6 @@ public partial class Strategy
 
 		var volume = position.Abs();
 
-		return position > 0 ? SellAtMarket(volume) : BuyAtMarket(volume);
+		return position > 0 ? SellMarket(volume) : BuyMarket(volume);
 	}
 }
