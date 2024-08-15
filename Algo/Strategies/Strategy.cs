@@ -1030,7 +1030,14 @@ namespace StockSharp.Algo.Strategies
 							_childStrategies.TryRemoveStoppedRule(rule);
 					}
 
-					TryFinalStop();
+					try
+					{
+						TryFinalStop();
+					}
+					catch (Exception error)
+					{
+						OnError(this, error);
+					}
 				}
 			}
 		}
