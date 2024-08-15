@@ -141,7 +141,7 @@ namespace StockSharp.Algo.Storages
 							if (hasValues)
 							{
 								lock (_enumerators)
-									_enumerators.Enqueue(GetServerTime(enu).Ticks, (enu, storage, action.Value.transId));
+									_enumerators.Enqueue(GetServerTime(enu).UtcTicks, (enu, storage, action.Value.transId));
 							}
 							else
 								enu.DoDispose();
@@ -185,7 +185,7 @@ namespace StockSharp.Algo.Storages
 
 				if (enumerator.MoveNext())
 				{
-					var serverTime = GetServerTime(enumerator).Ticks;
+					var serverTime = GetServerTime(enumerator).UtcTicks;
 
 					lock (_enumerators)
 						_enumerators.Enqueue(serverTime, element);
