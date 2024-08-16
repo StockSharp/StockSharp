@@ -436,7 +436,7 @@ namespace StockSharp.Algo
 
 		private Dictionary<SecurityId, TMessage> GetDict<TMessage>(MessageTypes type)
 		{
-			return (Dictionary<SecurityId, TMessage>)_messages.SafeAdd(type, key => new Dictionary<SecurityId, TMessage>());
+			return (Dictionary<SecurityId, TMessage>)_messages.SafeAdd(type, _ => new());
 		}
 
 		private void FillIndexCandle(CandleMessage indexCandle, CandleMessage candleMsg, CandleMessage[] candles)

@@ -214,7 +214,7 @@ namespace StockSharp.Algo.Import
 								if (field.IsAdapter)
 								{
 									var adapter = adapters.SafeAdd(field.AdapterType, key => key.CreateAdapter());
-									var info = mappings.SafeAdd(adapter.StorageName, key => new SecurityIdMapping());
+									var info = mappings.SafeAdd(adapter.StorageName, _ => new());
 									
 									field.ApplyFileValue(info, cell);
 								}

@@ -2103,7 +2103,7 @@ namespace StockSharp.Algo
 					// try loopback only subscribe messages
 					if (subscrMsg.IsSubscribe)
 					{
-						var set = _nonSupportedAdapters.SafeAdd(originalTransactionId, k => new HashSet<IMessageAdapter>());
+						var set = _nonSupportedAdapters.SafeAdd(originalTransactionId, _ => new());
 						set.Add(GetUnderlyingAdapter(adapter));
 
 						subscrMsg.LoopBack(this);

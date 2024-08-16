@@ -1086,7 +1086,7 @@ namespace StockSharp.Algo.Storages
 					if (secId == default)
 						continue;
 
-					var formatDict = index.SafeAdd(secId, key => new());
+					var formatDict = index.SafeAdd(secId, _ => new());
 
 					foreach (var format in formats)
 					{
@@ -1112,7 +1112,7 @@ namespace StockSharp.Algo.Storages
 								}
 							);
 
-						var typesDict = formatDict.SafeAdd(format, key => new());
+						var typesDict = formatDict.SafeAdd(format, _ => new());
 
 						foreach (var dt in dates.Values.SelectMany().Distinct())
 						{
