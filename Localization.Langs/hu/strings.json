@@ -2434,7 +2434,7 @@
   "PlazaPassword": "Jelszó. Engedélyezett kapcsolat esetén a routerhez használható.",
   "PlazaTimeOut": "Az az idő, amikor a várakozás szerint üzenet érkezik az adatfolyamból vagy tranzakciókat küldenek.",
   "PleaseRateProductParams": "Kérjük, értékelje {0}.",
-  "PluginIsPurchased": "A beépülő modult sikeresen megvásárolta. A beépülő modulok használatához telepítse újra a beépülő modulokat támogató alkalmazásokat.",
+  "PluginIsPurchased": "A bővítmény elérhető telepítésre. Használatához telepítse újra a bővítményeket támogató alkalmazásokat.",
   "Plugins": "Beépülő modulok",
   "PnF": "X0",
   "PnFBoxSize": "Az az árváltozás, amely meghaladja ezt az értéket, megnöveli a gyertyatestet",

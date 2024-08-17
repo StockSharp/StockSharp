@@ -2434,7 +2434,7 @@
   "PlazaPassword": "Salasana. Käytetään, jos yhteys reitittimeen on valtuutettu.",
   "PlazaTimeOut": "Aika, jolloin odotetaan vastaanotettavan viestiä datavirrasta tai lähetettävän transaktioita.",
   "PleaseRateProductParams": "Arvioi {0}.",
-  "PluginIsPurchased": "Liitännäinen on hankittu onnistuneesti. Asenna sovellukset uudelleen, jotka tukevat liitännäisiä, käyttöä varten.",
+  "PluginIsPurchased": "Laajennus on asennettavissa. Käyttääksesi sitä, asenna uudelleen laajennuksia tukevat sovellukset.",
   "Plugins": "Lisäosat",
   "PnF": "X0",
   "PnFBoxSize": "Hinnanmuutos, joka ylittää tämän arvon, kasvattaa kynttilän vartaloa",

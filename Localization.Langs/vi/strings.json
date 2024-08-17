@@ -2434,7 +2434,7 @@
   "PlazaPassword": "Mật khẩu. Được sử dụng trong trường hợp kết nối được ủy quyền tới bộ định tuyến.",
   "PlazaTimeOut": "Thời gian dự kiến nhận tin nhắn từ luồng dữ liệu hoặc gửi giao dịch.",
   "PleaseRateProductParams": "Vui lòng đánh giá {0}.",
-  "PluginIsPurchased": "Đã mua thành công Plugin. Vui lòng cài đặt lại các ứng dụng hỗ trợ Plugin để sử dụng.",
+  "PluginIsPurchased": "Plugin có sẵn để cài đặt. Để sử dụng nó, hãy cài đặt lại các ứng dụng hỗ trợ plugin.",
   "Plugins": "Phần mở rộng",
   "PnF": "X0",
   "PnFBoxSize": "Thay đổi giá vượt quá giá trị này làm tăng thân nến",

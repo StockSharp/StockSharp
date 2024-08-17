@@ -2434,7 +2434,7 @@
   "PlazaPassword": "密码。用于授权连接到路由器。",
   "PlazaTimeOut": "等待从数据流中接收消息或发送交易的时间。",
   "PleaseRateProductParams": "请评价 {0}。",
-  "PluginIsPurchased": "已成功购买插件。 请重新安装支持插件的应用程序以进行使用。",
+  "PluginIsPurchased": "插件可供安装。要使用它，请重新安装支持插件的应用程序。",
   "Plugins": "插件",
   "PnF": "X0",
   "PnFBoxSize": "当价格变动超过这个值时，蜡烛图的实体会变大",

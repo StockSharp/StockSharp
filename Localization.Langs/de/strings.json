@@ -2434,7 +2434,7 @@
   "PlazaPassword": "Passwort. Wird verwendet, im Falle einer autorisierten Verbindung zum Router.",
   "PlazaTimeOut": "Zeit, in der eine Nachricht aus dem Datenstrom erwartet oder eine Transaktion gesendet wird.",
   "PleaseRateProductParams": "Bitte bewerten Sie {0}.",
-  "PluginIsPurchased": "Das Plugin wurde erfolgreich gekauft. Installieren Sie die Anwendungen, die Plugins unterstützen, erneut, um sie zu verwenden.",
+  "PluginIsPurchased": "Das Plugin ist zur Installation verfügbar. Um es zu verwenden, installieren Sie die Anwendungen neu, die Plugins unterstützen.",
   "Plugins": "Plugins",
   "PnF": "X0",
   "PnFBoxSize": "Preisänderung, die diesen Wert überschreitet, vergrößert den Kerzenkörper",

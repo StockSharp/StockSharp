@@ -2434,7 +2434,7 @@
   "PlazaPassword": "Password. Utilizzata in caso di connessione autorizzata al router.",
   "PlazaTimeOut": "Tempo durante il quale si prevede di ricevere un messaggio dal flusso di dati o di inviare transazioni.",
   "PleaseRateProductParams": "Valuta {0}, per favore.",
-  "PluginIsPurchased": "Il plugin è stato acquistato con successo. Reinstalla le applicazioni che supportano i plugin per usarli.",
+  "PluginIsPurchased": "Il plugin è disponibile per l'installazione. Per utilizzarlo, reinstalla le applicazioni che supportano i plugin.",
   "Plugins": "Plugin",
   "PnF": "X0",
   "PnFBoxSize": "Una variazione di prezzo che supera questo valore aumenta il corpo della candela",

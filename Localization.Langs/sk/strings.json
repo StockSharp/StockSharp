@@ -2434,7 +2434,7 @@
   "PlazaPassword": "Heslo. Používa sa v prípade autorizovaného pripojenia k routeru.",
   "PlazaTimeOut": "Čas, počas ktorého sa očakáva prijatie správy z dátového prúdu alebo odoslanie transakcií.",
   "PleaseRateProductParams": "Prosím, ohodnoťte {0}.",
-  "PluginIsPurchased": "Plugin bol úspešne zakúpený. Pre jeho použitie reinstalujte aplikácie, ktoré podporujú pluginy.",
+  "PluginIsPurchased": "Plugin je k dispozícii na inštaláciu. Ak ho chcete použiť, preinštalujte aplikácie, ktoré podporujú pluginy.",
   "Plugins": "Pluginy",
   "PnF": "X0",
   "PnFBoxSize": "Zmena ceny, pri prekročení ktorej sa zväčšuje telo sviečky",

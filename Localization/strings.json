@@ -2439,7 +2439,7 @@
   "PlazaPassword": "Password. Used in case of authorized router connection.",
   "PlazaTimeOut": "Time, during which messages from data stream are expected to be received or transactions are expected to be sent.",
   "PleaseRateProductParams": "Please rate the {0}.",
-  "PluginIsPurchased": "The plugin was successfully purchased. To use it, reinstall applications that support plugins.",
+  "PluginIsPurchased": "The plugin is available for installation. To use it, reinstall the applications that support plugins.",
   "Plugins": "Plugins",
   "PnF": "X0",
   "PnFBoxSize": "Range of price above which increase the candle body",

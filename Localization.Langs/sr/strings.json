@@ -2434,7 +2434,7 @@
   "PlazaPassword": "Лозинка. Користи се у случају ауторизоване везе са рутером.",
   "PlazaTimeOut": "Vreme tokom kojeg se očekuje prijem poruke iz toka podataka ili slanje transakcija.",
   "PleaseRateProductParams": "Молимо вас да оцените {0}.",
-  "PluginIsPurchased": "Плугин је успешно купљен. Да бисте га користили, поново инсталирајте апликације које подржавају плугине.",
+  "PluginIsPurchased": "Плагин је доступан за инсталацију. Да бисте га користили, поново инсталирајте апликације које подржавају плагине.",
   "Plugins": "Плагини",
   "PnF": "X0",
   "PnFBoxSize": "Промена цене која прелази ову вредност повећава тело свеће",

@@ -2434,7 +2434,7 @@
   "PlazaPassword": "Adgangskode. Anvendes i tilfælde af en autoriseret forbindelse til routeren.",
   "PlazaTimeOut": "Tidsrummet, hvor det forventes at modtage en besked fra datastrømmen eller sende transaktioner.",
   "PleaseRateProductParams": "Bedøm venligst {0}.",
-  "PluginIsPurchased": "Plugin er købt med succes. For at bruge det, geninstaller de applikationer, der understøtter plugins.",
+  "PluginIsPurchased": "Plugin'et er tilgængeligt til installation. For at bruge det skal du geninstallere de applikationer, der understøtter plugins.",
   "Plugins": "Plugins",
   "PnF": "X0",
   "PnFBoxSize": "Prisændring, der overstiger denne værdi, forstørrer stearinets krop",

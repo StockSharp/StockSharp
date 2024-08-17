@@ -2434,7 +2434,7 @@
   "PlazaPassword": "Mot de passe. Utilisé en cas de connexion autorisée au routeur.",
   "PlazaTimeOut": "Temps pendant lequel un message est attendu du flux de données ou une transaction envoyée.",
   "PleaseRateProductParams": "Veuillez évaluer {0}.",
-  "PluginIsPurchased": "Le plugin a été acheté avec succès. Réinstallez les applications qui prennent en charge les plugins pour les utiliser.",
+  "PluginIsPurchased": "Le plugin est disponible pour l'installation. Pour l'utiliser, réinstallez les applications qui prennent en charge les plugins.",
   "Plugins": "Plugins",
   "PnF": "X0",
   "PnFBoxSize": "Changement de prix qui dépasse cette valeur augmente le corps de la bougie",

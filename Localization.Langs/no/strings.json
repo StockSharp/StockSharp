@@ -2434,7 +2434,7 @@
   "PlazaPassword": "Passord. Brukes i tilfelle av en autorisert tilkobling til ruteren.",
   "PlazaTimeOut": "Tiden det forventes å motta en melding fra datstrømmen eller sende transaksjoner.",
   "PleaseRateProductParams": "Vennligst vurder {0}.",
-  "PluginIsPurchased": "Plugin er vellykket kjøpt. For å bruke den, installer applikasjonene som støtter plugins på nytt.",
+  "PluginIsPurchased": "Pluginet er tilgjengelig for installasjon. For å bruke det, installer applikasjonene som støtter plugins på nytt.",
   "Plugins": "Tillegg",
   "PnF": "X0",
   "PnFBoxSize": "Prisendring som overstiger denne verdien øker lyskroppen",

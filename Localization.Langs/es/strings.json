@@ -2434,7 +2434,7 @@
   "PlazaPassword": "Contraseña. Se utiliza en caso de conexión autorizada al router.",
   "PlazaTimeOut": "Tiempo durante el cual se espera recibir un mensaje del flujo de datos o enviar transacciones.",
   "PleaseRateProductParams": "Por favor, califica {0}.",
-  "PluginIsPurchased": "El complemento se ha comprado con éxito. Reinstale las aplicaciones que admiten complementos para usarlos.",
+  "PluginIsPurchased": "El complemento está disponible para su instalación. Para utilizarlo, reinstale las aplicaciones que admiten complementos.",
   "Plugins": "Complementos",
   "PnF": "X0",
   "PnFBoxSize": "Cambio de precio que excede este valor aumenta el cuerpo de la vela",

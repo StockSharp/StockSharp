@@ -2434,7 +2434,7 @@
   "PlazaPassword": "Şifre. Yetkilendirilmiş bir bağlantı halinde yönlendiriciye bağlanmak için kullanılır.",
   "PlazaTimeOut": "Veri akışından bir mesajın alınması veya işlemlerin gönderilmesi beklenen süre.",
   "PleaseRateProductParams": "Lütfen {0} değerlendirin.",
-  "PluginIsPurchased": "Eklenti başarıyla satın alındı. Kullanmak için eklentiyi destekleyen uygulamaları yeniden yükleyin.",
+  "PluginIsPurchased": "Eklenti kurulum için uygundur. Kullanmak için eklentileri destekleyen uygulamaları yeniden yükleyin.",
   "Plugins": "Eklentiler",
   "PnF": "X0",
   "PnFBoxSize": "Bu değeri aşan fiyat değişikliği, mum gövdesini büyütür",

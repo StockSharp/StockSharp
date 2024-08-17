@@ -2434,7 +2434,7 @@
   "PlazaPassword": "Lösenord. Används i händelse av en auktoriserad anslutning till routern.",
   "PlazaTimeOut": "Tiden under vilken det förväntas att ett meddelande mottas från dataströmmen eller transaktioner skickas.",
   "PleaseRateProductParams": "Vänligen betygsätt {0}.",
-  "PluginIsPurchased": "Plugin har framgångsrikt köpts. Installera om applikationerna som stöder plugins för att använda det.",
+  "PluginIsPurchased": "Plugin är tillgängligt för installation. För att använda det, installera om applikationerna som stöder plugins.",
   "Plugins": "Plugin",
   "PnF": "X0",
   "PnFBoxSize": "Prisändring som överstiger detta värde ökar ljuskroppen",

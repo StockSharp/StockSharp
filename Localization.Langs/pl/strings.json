@@ -2434,7 +2434,7 @@
   "PlazaPassword": "Hasło. Używane w przypadku autoryzowanego połączenia z routerem.",
   "PlazaTimeOut": "Czas, w którym oczekuje się otrzymania wiadomości z strumienia danych lub wysłania transakcji.",
   "PleaseRateProductParams": "Proszę ocenić {0}.",
-  "PluginIsPurchased": "Wtyczka została pomyślnie zakupiona. Aby korzystać z niej, zainstaluj ponownie aplikacje obsługujące wtyczki.",
+  "PluginIsPurchased": "Wtyczka jest dostępna do zainstalowania. Aby z niej korzystać, ponownie zainstaluj aplikacje obsługujące wtyczki.",
   "Plugins": "Wtyczki",
   "PnF": "X0",
   "PnFBoxSize": "Zmiana ceny, która przekracza tę wartość, powiększa korpus świecy",

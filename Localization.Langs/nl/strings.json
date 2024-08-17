@@ -2434,7 +2434,7 @@
   "PlazaPassword": "Wachtwoord. Wordt gebruikt in geval van een geautoriseerde verbinding met de router.",
   "PlazaTimeOut": "Tijd waarin wordt verwacht een bericht uit de gegevensstroom te ontvangen of transacties te verzenden.",
   "PleaseRateProductParams": "Beoordeel {0} alstublieft.",
-  "PluginIsPurchased": "Plugin succesvol aangeschaft. Om het te gebruiken, installeer opnieuw de applicaties die plugins ondersteunen.",
+  "PluginIsPurchased": "De plugin is beschikbaar voor installatie. Installeer de applicaties die plugins ondersteunen opnieuw om het te gebruiken.",
   "Plugins": "Plugins",
   "PnF": "X0",
   "PnFBoxSize": "Prijsverandering die deze waarde overschrijdt, vergroot het lichaam van de kaars",

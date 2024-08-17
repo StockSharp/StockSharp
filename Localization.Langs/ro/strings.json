@@ -2434,7 +2434,7 @@
   "PlazaPassword": "Parolă. Utilizată în cazul unei conexiuni autorizate la router.",
   "PlazaTimeOut": "Timpul în care se așteaptă primirea unui mesaj din fluxul de date sau trimiterea tranzacțiilor.",
   "PleaseRateProductParams": "Vă rugăm să evaluați {0}.",
-  "PluginIsPurchased": "Pluginul a fost achiziționat cu succes. Reinstalați aplicațiile care suportă pluginuri pentru a le utiliza.",
+  "PluginIsPurchased": "Pluginul este disponibil pentru instalare. Pentru a-l folosi, reinstalați aplicațiile care acceptă pluginuri.",
   "Plugins": "Plugin-uri",
   "PnF": "X0",
   "PnFBoxSize": "Schimbarea de preț care depășește această valoare mărește corpul lumânării",

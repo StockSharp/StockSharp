@@ -2434,7 +2434,7 @@
   "PlazaPassword": "Senha. Usada em caso de conexão autorizada ao roteador.",
   "PlazaTimeOut": "Tempo durante o qual se espera receber uma mensagem do fluxo de dados ou enviar transações.",
   "PleaseRateProductParams": "Por favor, avalie {0}.",
-  "PluginIsPurchased": "O plugin foi comprado com sucesso. Reinstale os aplicativos que suportam plugins para usar.",
+  "PluginIsPurchased": "O plugin está disponível para instalação. Para usá-lo, reinstale os aplicativos que suportam plugins.",
   "Plugins": "Plugins",
   "PnF": "X0",
   "PnFBoxSize": "Mudança de preço que excede esse valor aumenta o corpo do candle",
