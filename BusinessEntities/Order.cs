@@ -427,7 +427,7 @@ namespace StockSharp.BusinessEntities
 		/// Order side (buy or sell).
 		/// </summary>
 		[Browsable(false)]
-		[Obsolete("Use Direction property.")]
+		[Obsolete("Use Side property.")]
 		public Sides Direction
 		{
 			get => Side;
