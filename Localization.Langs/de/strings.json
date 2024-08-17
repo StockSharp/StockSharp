@@ -671,7 +671,7 @@
   "ContentType": "Inhaltstyp",
   "Continue": "Fortfahren",
   "Continue2": "Fortsetzen",
-  "ContinueSubscriptionParams": "Kostenloses Abonnement mit dem Konnektor {0} fortsetzen?",
+  "ContinueSubscriptionParams": "Kostenloses Abonnement mit dem Konnektor {0} fortsetzen? Ein Wechsel des Konnektors wird in Zukunft nicht möglich sein!",
   "ContinuousSecurity": "Kontinuierliches Instrument",
   "ContinuousSecurityDesc": "Kontinuierliches Instrument (in der Regel ein Future), das Instrumente enthält, die einer Auslaufzeit unterliegen.",
   "Contract": "Vertrag",

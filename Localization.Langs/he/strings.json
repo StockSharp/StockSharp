@@ -671,7 +671,7 @@
   "ContentType": "סוג התוכן",
   "Continue": "המשך",
   "Continue2": "המשך",
-  "ContinueSubscriptionParams": "להמשיך במנוי החינמי עם המחבר {0}?",
+  "ContinueSubscriptionParams": "המשך מנוי חינם עם הקונקטור {0}? שינוי הקונקטור בעתיד לא יהיה אפשרי!",
   "ContinuousSecurity": "כלי רציף",
   "ContinuousSecurityDesc": "כלי מתמשך (בדרך כלל עתיד) הכולל כלים עם תפוגה.",
   "Contract": "חוזה",

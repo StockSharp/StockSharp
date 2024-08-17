@@ -671,7 +671,7 @@
   "ContentType": "Tipo de contenido",
   "Continue": "Continuar",
   "Continue2": "Continuar",
-  "ContinueSubscriptionParams": "¿Continuar la suscripción gratuita con el conector {0}?",
+  "ContinueSubscriptionParams": "Voleu continuar la subscripció gratuïta amb el connector {0}? No serà possible canviar el connector en el futur!",
   "ContinuousSecurity": "Instrumento continuo",
   "ContinuousSecurityDesc": "Instrumento continuo (generalmente un futuro) que contiene instrumentos sujetos a expiración",
   "Contract": "Contrato",

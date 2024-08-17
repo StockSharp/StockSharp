@@ -671,7 +671,7 @@
   "ContentType": "Indholdstype",
   "Continue": "Fortsæt",
   "Continue2": "Fortsæt",
-  "ContinueSubscriptionParams": "Fortsæt gratis abonnement med stik {0}?",
+  "ContinueSubscriptionParams": "Fortsæt gratis abonnement med connectoren {0}? Ændring af connectoren i fremtiden vil ikke være muligt!",
   "ContinuousSecurity": "Kontinuerligt instrument",
   "ContinuousSecurityDesc": "Kontinuerlig instrument (normalt en fremtid) indeholdende instrumenter udsat for udløb.",
   "Contract": "Kontrakt",

@@ -671,7 +671,7 @@
   "ContentType": "Innholdstype",
   "Continue": "Fortsett",
   "Continue2": "Fortsett",
-  "ContinueSubscriptionParams": "Fortsette gratis abonnement med tilkoblingen {0}?",
+  "ContinueSubscriptionParams": "Fortsett gratis abonnement med kontakten {0}? Endring av kontakten i fremtiden vil ikke være mulig!",
   "ContinuousSecurity": "Kontinuerlig instrument",
   "ContinuousSecurityDesc": "Kontinuerlig instrument (vanligvis en fremtid) som inneholder instrumenter utsatt for utløp.",
   "Contract": "Kontrakt",

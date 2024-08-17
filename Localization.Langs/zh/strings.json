@@ -671,7 +671,7 @@
   "ContentType": "内容类型",
   "Continue": "继续",
   "Continue2": "继续",
-  "ContinueSubscriptionParams": "继续使用连接器 {0} 的免费订阅？",
+  "ContinueSubscriptionParams": "继续使用连接器 {0} 进行免费订阅？ 将来无法更改连接器！",
   "ContinuousSecurity": "持续的安全工具",
   "ContinuousSecurityDesc": "连续工具（通常是期货），包含有到期日的工具。",
   "Contract": "合同",

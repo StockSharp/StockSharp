@@ -673,7 +673,7 @@
   "ContentType": "Content type",
   "Continue": "Continue",
   "Continue2": "Cont-ue",
-  "ContinueSubscriptionParams": "Continue free subscription with connector {0}?",
+  "ContinueSubscriptionParams": "Continue free subscription with the connector {0}? Changing the connector in the future will not be possible!",
   "ContinuousSecurity": "Continuous security",
   "ContinuousSecurityDesc": "Continuous security (generally, a futures contract), containing expirable securities.",
   "Contract": "Contract",

@@ -671,7 +671,7 @@
   "ContentType": "Typ obsahu",
   "Continue": "Pokračovať",
   "Continue2": "Pokračovať",
-  "ContinueSubscriptionParams": "Pokračovať v bezplatnom predplatnom s konektorom {0}?",
+  "ContinueSubscriptionParams": "Pokračujte v bezplatnom predplatnom s konektorom {0}? Zmena konektora v budúcnosti nebude možná!",
   "ContinuousSecurity": "Nepretržitý nástroj",
   "ContinuousSecurityDesc": "Nepretržitý nástroj (zvyčajne futures), obsahujúci nástroje podliehajúce expirácií.",
   "Contract": "Kontrakt",

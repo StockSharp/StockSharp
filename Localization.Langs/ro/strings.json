@@ -671,7 +671,7 @@
   "ContentType": "Tipul conținutului",
   "Continue": "Continuați",
   "Continue2": "Continuați",
-  "ContinueSubscriptionParams": "Continuați abonamentul gratuit cu conectorul {0}?",
+  "ContinueSubscriptionParams": "Continuați abonamentul gratuit cu conectorul {0}? Schimbarea conectorului în viitor nu va fi posibilă!",
   "ContinuousSecurity": "Instrument continuu",
   "ContinuousSecurityDesc": "Instrument continuu (de obicei un viitor) care conține instrumente supuse expirării.",
   "Contract": "Contract",

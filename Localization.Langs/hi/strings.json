@@ -671,7 +671,7 @@
   "ContentType": "सामग्री का प्रकार",
   "Continue": "जारी रखें",
   "Continue2": "जारी रखें",
-  "ContinueSubscriptionParams": "कनेक्टर {0} के साथ मुफ्त सदस्यता जारी रखें?",
+  "ContinueSubscriptionParams": "कनेक्टर {0} के साथ नि:शुल्क सदस्यता जारी रखें? भविष्य में कनेक्टर बदलना संभव नहीं होगा!",
   "ContinuousSecurity": "निरंतर उपकरण",
   "ContinuousSecurityDesc": "एक सतत उपकरण (आम तौर पर एक वायदा), जिसमें समाप्ति वाले उपकरण होते हैं।",
   "Contract": "अनुबंध",

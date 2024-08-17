@@ -671,7 +671,7 @@
   "ContentType": "Jenis Kandungan",
   "Continue": "Teruskan",
   "Continue2": "Teruskan",
-  "ContinueSubscriptionParams": "Teruskan langganan percuma dengan penyambung {0}?",
+  "ContinueSubscriptionParams": "Teruskan langganan percuma dengan penyambung {0}? Menukar penyambung pada masa hadapan tidak akan dapat dilakukan!",
   "ContinuousSecurity": "Instrumen berterusan",
   "ContinuousSecurityDesc": "Instrumen berterusan (biasanya hadapan) yang mengandungi instrumen tertakluk kepada penyudahan.",
   "Contract": "Kontrak",

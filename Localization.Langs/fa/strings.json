@@ -671,7 +671,7 @@
   "ContentType": "نوع محتوا",
   "Continue": "ادامه دهید",
   "Continue2": "ادامه دهید",
-  "ContinueSubscriptionParams": "اشتراک رایگان با اتصال دهنده {0} ادامه یابد؟",
+  "ContinueSubscriptionParams": "ادامه اشتراک رایگان با کانکتور {0}؟ تغییر کانکتور در آینده امکان‌پذیر نخواهد بود!",
   "ContinuousSecurity": "ابزار مستمر",
   "ContinuousSecurityDesc": "ابزار تداومی (معمولاً آتی) که شامل ابزارهایی است که دارای انقضاء هستند.",
   "Contract": "قرارداد",

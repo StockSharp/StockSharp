@@ -671,7 +671,7 @@
   "ContentType": "Jinis konten",
   "Continue": "Terus",
   "Continue2": "Terusake",
-  "ContinueSubscriptionParams": "Terusake langganan gratis karo konektor {0}?",
+  "ContinueSubscriptionParams": "Terusake langganan gratis nganggo konektor {0}? Ganti konektor ing mangsa ngarep ora bakal bisa!",
   "ContinuousSecurity": "Instrumen terus-menerus",
   "ContinuousSecurityDesc": "Instrumen kontinyu (biasane mbesuk) kang ngemot instrumen sing duwé wates kadaluwarsa.",
   "Contract": "Kontrak",

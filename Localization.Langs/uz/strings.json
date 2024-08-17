@@ -671,7 +671,7 @@
   "ContentType": "Kontent turi",
   "Continue": "Davom eting",
   "Continue2": "Davom eting",
-  "ContinueSubscriptionParams": "{0} ulagichi bilan bepul obunani davom ettirishmi?",
+  "ContinueSubscriptionParams": "Konnektor {0} bilan bepul obunani davom ettirishni xohlaysizmi? Kelajakda ulagichni o'zgartirish mumkin emas!",
   "ContinuousSecurity": "Davomli asbob",
   "ContinuousSecurityDesc": "Muddati tugaydigan asboblar mavjud bo'lgan davomiy asbob (odatda kelajak).",
   "Contract": "Shartnoma",

@@ -671,7 +671,7 @@
   "ContentType": "Sisällön tyyppi",
   "Continue": "Jatka",
   "Continue2": "Jatka",
-  "ContinueSubscriptionParams": "Jatketaanko ilmaista tilausta liittimellä {0}?",
+  "ContinueSubscriptionParams": "Jatka ilmaista tilausta liittimen {0} kanssa? Liittimen vaihtaminen tulevaisuudessa ei ole mahdollista!",
   "ContinuousSecurity": "Jatkuva instrumentti",
   "ContinuousSecurityDesc": "Jatkuva väline (yleensä futuuri), joka sisältää päättymiselle alttiita välineitä.",
   "Contract": "Sopimus",

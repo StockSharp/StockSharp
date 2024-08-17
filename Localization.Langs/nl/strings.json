@@ -671,7 +671,7 @@
   "ContentType": "Inhoudstype",
   "Continue": "Doorgaan",
   "Continue2": "Doorgaan",
-  "ContinueSubscriptionParams": "Doorgaan met gratis abonnement met connector {0}?",
+  "ContinueSubscriptionParams": "Gratis abonnement voortzetten met connector {0}? Het is in de toekomst niet mogelijk om de connector te wijzigen!",
   "ContinuousSecurity": "Voortdurend instrument",
   "ContinuousSecurityDesc": "Doorlopend instrument (meestal een future) dat instrumenten bevat die aan vervallen zijn.",
   "Contract": "Contract",

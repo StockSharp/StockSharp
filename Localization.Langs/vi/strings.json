@@ -671,7 +671,7 @@
   "ContentType": "Loại nội dung",
   "Continue": "Tiếp tục",
   "Continue2": "Tiếp tục",
-  "ContinueSubscriptionParams": "Tiếp tục đăng ký miễn phí với bộ kết nối {0}?",
+  "ContinueSubscriptionParams": "Tiếp tục đăng ký miễn phí với đầu nối {0}? Thay đổi đầu nối trong tương lai sẽ không thể thực hiện được!",
   "ContinuousSecurity": "Công cụ liên tục",
   "ContinuousSecurityDesc": "Công cụ liên tục (thường là tương lai) chứa các công cụ chịu sự hết hạn.",
   "Contract": "Hợp đồng",

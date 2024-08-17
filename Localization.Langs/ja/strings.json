@@ -671,7 +671,7 @@
   "ContentType": "コンテンツタイプ",
   "Continue": "続ける",
   "Continue2": "続ける",
-  "ContinueSubscriptionParams": "コネクタ {0} で無料サブスクリプションを続けますか？",
+  "ContinueSubscriptionParams": "コネクタ {0} で無料サブスクリプションを続行しますか？ 今後コネクタを変更することはできません！",
   "ContinuousSecurity": "連続的なセキュリティ",
   "ContinuousSecurityDesc": "有効期限のあるインストゥルメントを含む連続インストゥルメント（通常はフューチャー）。",
   "Contract": "契約",

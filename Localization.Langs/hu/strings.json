@@ -671,7 +671,7 @@
   "ContentType": "Tartalom típusa",
   "Continue": "Folytatás",
   "Continue2": "Folytatás",
-  "ContinueSubscriptionParams": "Folytatja az ingyenes előfizetést a {0} csatlakozóval?",
+  "ContinueSubscriptionParams": "Folytatja az ingyenes előfizetést a(z) {0} csatlakozóval? A csatlakozó megváltoztatása a jövőben nem lesz lehetséges!",
   "ContinuousSecurity": "Folyamatos eszköz",
   "ContinuousSecurityDesc": "Folyamatos eszköz (általában egy jövőbeni), amely lejárati eszközöket tartalmaz.",
   "Contract": "Szerződés",

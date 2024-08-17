@@ -671,7 +671,7 @@
   "ContentType": "İçerik Türü",
   "Continue": "Devam et",
   "Continue2": "Devam et",
-  "ContinueSubscriptionParams": "{0} konektörü ile ücretsiz aboneliği devam ettirilsin mi?",
+  "ContinueSubscriptionParams": "Bağlayıcı {0} ile ücretsiz aboneliğe devam edilsin mi? Gelecekte bağlayıcıyı değiştirmek mümkün olmayacak!",
   "ContinuousSecurity": "Sürekli araç",
   "ContinuousSecurityDesc": "Son kullanma tarihine tabi aletleri içeren sürekli bir alet (genellikle bir vadeli işlem).",
   "Contract": "Kontrat",

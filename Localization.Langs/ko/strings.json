@@ -671,7 +671,7 @@
   "ContentType": "콘텐츠 유형",
   "Continue": "계속하다",
   "Continue2": "계속하다",
-  "ContinueSubscriptionParams": "커넥터 {0}와 무료 구독을 계속하시겠습니까?",
+  "ContinueSubscriptionParams": "커넥터 {0}로 무료 구독을 계속하시겠습니까? 나중에 커넥터를 변경할 수 없습니다!",
   "ContinuousSecurity": "지속적인 도구",
   "ContinuousSecurityDesc": "만료 대상 도구를 포함하는 연속 도구(일반적으로 선물).",
   "Contract": "계약",

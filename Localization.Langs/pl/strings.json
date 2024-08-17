@@ -671,7 +671,7 @@
   "ContentType": "Typ zawartości",
   "Continue": "Kontynuować",
   "Continue2": "Kontynuować",
-  "ContinueSubscriptionParams": "Czy kontynuować darmową subskrypcję z konektorem {0}?",
+  "ContinueSubscriptionParams": "Kontynuować bezpłatną subskrypcję z konektorem {0}? Zmiana konektora w przyszłości nie będzie możliwa!",
   "ContinuousSecurity": "Narzędzie ciągłe",
   "ContinuousSecurityDesc": "Narzędzie ciągłe (zwykle futures), zawierające narzędzia podlegające wygaśnięciu.",
   "Contract": "Umowa",

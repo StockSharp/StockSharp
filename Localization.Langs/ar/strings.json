@@ -671,7 +671,7 @@
   "ContentType": "نوع المحتوى",
   "Continue": "استمر",
   "Continue2": "استمر",
-  "ContinueSubscriptionParams": "هل ترغب في متابعة الاشتراك المجاني مع الموصل {0}؟",
+  "ContinueSubscriptionParams": "هل ترغب في مواصلة الاشتراك المجاني مع الموصل {0}؟ لن يكون من الممكن تغيير الموصل في المستقبل!",
   "ContinuousSecurity": "أداة مستمرة",
   "ContinuousSecurityDesc": "أداة مستمرة (عادةً مستقبلية) تحتوي على أدوات خاضعة للانتهاء.",
   "Contract": "عقد",
