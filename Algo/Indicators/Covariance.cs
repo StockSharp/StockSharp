@@ -21,6 +21,7 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
+	using StockSharp.Charting;
 
 	/// <summary>
 	/// Covariance.
@@ -34,6 +35,7 @@ namespace StockSharp.Algo.Indicators
 		Description = LocalizedStrings.CovarianceKey)]
 	[Doc("topics/api/indicators/list_of_indicators/covariation.html")]
 	[IndicatorIn(typeof(PairIndicatorValue<decimal>))]
+	[ChartIgnore]
 	public class Covariance : LengthIndicator<Tuple<decimal, decimal>>
 	{
 		/// <summary>

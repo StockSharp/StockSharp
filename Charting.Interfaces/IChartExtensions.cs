@@ -49,24 +49,7 @@
 				throw new ArgumentNullException(nameof(chart));
 
 			chart.IndicatorTypes.Clear();
-			chart.IndicatorTypes.AddRange(IndicatorProvider.All.ExcludeObsolete().Where(it => it.Indicator?.IsIndicatorSupportedByChart() == true));
-		}
-
-		private static readonly Type[] _chartUnsupportedIndicators =
-		{
-			typeof(Level1Indicator),
-			typeof(Covariance),
-			typeof(Correlation),
-		};
-
-		/// <summary>
-		/// Check if indicator is supported by chart.
-		/// </summary>
-		public static bool IsIndicatorSupportedByChart(this Type itype)
-		{
-			return
-				itype.Is<IIndicator>() &&
-				!_chartUnsupportedIndicators.Any(t => t.IsAssignableFrom(itype));
+			chart.IndicatorTypes.AddRange(IndicatorProvider.All.ExcludeObsolete().Where(it => it.Indicator?.GetAttribute<ChartIgnoreAttribute>() is null));
 		}
 
 		/// <summary>

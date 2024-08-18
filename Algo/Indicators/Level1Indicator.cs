@@ -21,6 +21,7 @@ namespace StockSharp.Algo.Indicators
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.Charting;
 
 	/// <summary>
 	/// The indicator, built on the market data basis.
@@ -30,6 +31,7 @@ namespace StockSharp.Algo.Indicators
 		Name = LocalizedStrings.Level1Key,
 		Description = LocalizedStrings.Level1IndicatorKey)]
 	[IndicatorIn(typeof(SingleIndicatorValue<Level1ChangeMessage>))]
+	[ChartIgnore]
 	public class Level1Indicator : BaseIndicator
 	{
 		/// <summary>

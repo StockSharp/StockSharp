@@ -19,7 +19,8 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
-
+	
+	using StockSharp.Charting;
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -34,6 +35,7 @@ namespace StockSharp.Algo.Indicators
 		Description = LocalizedStrings.CorrelationKey)]
 	[Doc("topics/api/indicators/list_of_indicators/correlation.html")]
 	[IndicatorIn(typeof(PairIndicatorValue<decimal>))]
+	[ChartIgnore]
 	public class Correlation : Covariance
 	{
 		private readonly StandardDeviation _source;
