@@ -1,13 +1,5 @@
 namespace StockSharp.BusinessEntities;
 
-using System;
-using System.Collections.Generic;
-
-using Ecng.Serialization;
-
-using StockSharp.Logging;
-using StockSharp.Messages;
-
 /// <summary>
 /// The main interface providing the connection to the trading systems.
 /// </summary>

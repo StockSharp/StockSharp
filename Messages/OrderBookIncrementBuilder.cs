@@ -1,14 +1,5 @@
 ﻿namespace StockSharp.Messages;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-
-using StockSharp.Localization;
-using StockSharp.Logging;
-
 /// <summary>
 /// Order book builder, used incremental <see cref="QuoteChangeMessage"/>.
 /// </summary>

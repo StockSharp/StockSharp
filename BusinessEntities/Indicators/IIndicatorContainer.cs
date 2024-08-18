@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Indicators;
 
-using System.Collections.Generic;
-
 /// <summary>
 /// The interface of the container, storing indicator data.
 /// </summary>

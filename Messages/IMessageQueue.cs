@@ -1,8 +1,5 @@
 namespace StockSharp.Messages;
 
-using Ecng.Collections;
-using Ecng.Common;
-
 /// <summary>
 /// The interfaces described message queue.
 /// </summary>

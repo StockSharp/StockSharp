@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Indicators;
 
-using System.Collections.Generic;
-
 /// <summary>
 /// The interface of indicator, built as combination of several indicators.
 /// </summary>

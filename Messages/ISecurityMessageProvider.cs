@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Messages;
 
-using System.Collections.Generic;
-
 /// <summary>
 /// The interface for access to provider of information about instruments.
 /// </summary>

@@ -1,17 +1,7 @@
 ﻿namespace StockSharp.Charting;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
 using Ecng.Configuration;
 
-using StockSharp.Algo.Indicators;
-using StockSharp.BusinessEntities;
-using StockSharp.Localization;
-using StockSharp.Messages;
 using static StockSharp.Charting.IChartDrawData;
 
 /// <summary>

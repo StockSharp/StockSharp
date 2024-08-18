@@ -1,13 +1,5 @@
 namespace StockSharp.BusinessEntities;
 
-using System;
-using System.Linq;
-
-using Ecng.Common;
-using Ecng.Serialization;
-
-using StockSharp.Messages;
-
 partial class ExchangeBoard
 {
 	private static readonly DateTime[] _russianSpecialWorkingDays = new DateTime[]

@@ -1,14 +1,6 @@
 namespace StockSharp.BusinessEntities;
 
-using System;
-using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
-
-using Ecng.Common;
-using Ecng.Serialization;
-
-using StockSharp.Localization;
 
 /// <summary>
 /// Exchange info.

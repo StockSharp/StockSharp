@@ -1,10 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Fill gaps days.
 /// </summary>

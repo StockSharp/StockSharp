@@ -1,9 +1,5 @@
 ﻿namespace StockSharp.Charting;
 
-using System.Collections.Generic;
-
-using StockSharp.Algo.Indicators;
-
 /// <summary>
 /// Provider <see cref="IndicatorType"/>.
 /// </summary>

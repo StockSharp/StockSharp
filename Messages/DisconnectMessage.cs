@@ -1,8 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.Runtime.Serialization;
-
 /// <summary>
 /// Disconnect from a server message (uses as a command in outgoing case, event in incoming case).
 /// </summary>

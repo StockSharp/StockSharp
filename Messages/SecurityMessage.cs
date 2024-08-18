@@ -1,14 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-using System.ComponentModel;
-
-using Ecng.Common;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// A message containing info about the security.
 /// </summary>

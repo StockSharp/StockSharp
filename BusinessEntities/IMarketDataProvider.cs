@@ -1,10 +1,5 @@
 namespace StockSharp.BusinessEntities;
 
-using System;
-using System.Collections.Generic;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// The market data by the instrument provider interface.
 /// </summary>

@@ -1,15 +1,5 @@
 namespace StockSharp.BusinessEntities;
 
-using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-
-using Ecng.Common;
-using Ecng.ComponentModel;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Own trade.
 /// </summary>

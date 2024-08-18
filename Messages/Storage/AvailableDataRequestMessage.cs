@@ -1,9 +1,5 @@
 ﻿namespace StockSharp.Messages;
 
-using System.Runtime.Serialization;
-
-    using Ecng.Common;
-
 /// <summary>
 /// Available data info request.
 /// </summary>

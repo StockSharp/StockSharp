@@ -1,10 +1,5 @@
 namespace StockSharp.BusinessEntities;
 
-using System;
-using System.Collections.Generic;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// The interface for access to provider of information about instruments.
 /// </summary>

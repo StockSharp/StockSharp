@@ -1,13 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Xml.Serialization;
-
-using Ecng.Common;
-
 /// <summary>
 /// Security legs result message.
 /// </summary>

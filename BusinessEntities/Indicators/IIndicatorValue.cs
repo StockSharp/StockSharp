@@ -1,14 +1,5 @@
 namespace StockSharp.Algo.Indicators;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Common;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
-
 /// <summary>
 /// The indicator value, based on which it will renew its value, as well as value, containing result of indicator calculation.
 /// </summary>

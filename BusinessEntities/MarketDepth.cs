@@ -1,17 +1,6 @@
 namespace StockSharp.BusinessEntities;
 
-using System;
-using System.ComponentModel;
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
 
 /// <summary>
 /// Order book.
@@ -270,7 +259,7 @@ public class MarketDepth : Cloneable<MarketDepth>, IEnumerable<QuoteChange>, IOr
 	/// <returns>The pair of quotes. If the index is larger than book order depth <see cref="MarketDepth.Depth"/>, then the <see langword="null" /> is returned.</returns>
 	public MarketDepthPair GetPair(int depthIndex)
 	{
-		var (bid, ask) = Extensions.GetPair(this, depthIndex);
+		var (bid, ask) = Messages.Extensions.GetPair(this, depthIndex);
 
 		if (bid is null && ask is null)
 			return null;
@@ -284,7 +273,7 @@ public class MarketDepth : Cloneable<MarketDepth>, IEnumerable<QuoteChange>, IOr
 	/// <param name="depth">Book depth. The counting is from the best quotes.</param>
 	/// <returns>Spread.</returns>
 	public IEnumerable<MarketDepthPair> GetTopPairs(int depth)
-		=> Extensions.GetTopPairs(this, depth).Select(t => new MarketDepthPair(t.bid, t.ask));
+		=> Messages.Extensions.GetTopPairs(this, depth).Select(t => new MarketDepthPair(t.bid, t.ask));
 
 	/// <summary>
 	/// To get quotes for a given book depth.
@@ -292,7 +281,7 @@ public class MarketDepth : Cloneable<MarketDepth>, IEnumerable<QuoteChange>, IOr
 	/// <param name="depth">Book depth. Quotes are in order of price increasing from bids to offers.</param>
 	/// <returns>Spread.</returns>
 	public IEnumerable<QuoteChange> GetTopQuotes(int depth)
-		=> Extensions.GetTopQuotes(this, depth);
+		=> Messages.Extensions.GetTopQuotes(this, depth);
 
 	/// <summary>
 	/// To update the order book. The version without checks and blockings.

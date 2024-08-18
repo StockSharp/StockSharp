@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Messages;
 
-using Ecng.Common;
-
 /// <summary>
 /// Interface describes an currency based message.
 /// </summary>

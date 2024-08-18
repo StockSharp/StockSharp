@@ -1,10 +1,5 @@
 namespace StockSharp.Algo.Indicators;
 
-using System;
-
-using Ecng.Common;
-using Ecng.Serialization;
-
 /// <summary>
 /// Indicator measures.
 /// </summary>

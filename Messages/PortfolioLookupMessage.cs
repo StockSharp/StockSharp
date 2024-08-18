@@ -1,11 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.Runtime.Serialization;
-using System.ComponentModel;
-
-using Ecng.Common;
-
 /// <summary>
 /// Message portfolio lookup for specified criteria.
 /// </summary>

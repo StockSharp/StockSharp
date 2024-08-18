@@ -1,10 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-
-using Ecng.Common;
-using Ecng.ComponentModel;
-
 /// <summary>
 /// The types of messages.
 /// </summary>

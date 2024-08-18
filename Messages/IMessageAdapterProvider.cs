@@ -1,9 +1,6 @@
 namespace StockSharp.Messages;
 
-using System.Collections.Generic;
 using System.Security;
-
-using Ecng.Common;
 
 /// <summary>
 /// The message adapter's provider interface.

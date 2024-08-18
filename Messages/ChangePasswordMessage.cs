@@ -1,9 +1,6 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.Runtime.Serialization;
 using System.Security;
-using System.Xml.Serialization;
 
 /// <summary>
 /// Change password message.

@@ -1,10 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.Runtime.Serialization;
-
-using Ecng.Serialization;
-
 /// <summary>
 /// Security mapping result message.
 /// </summary>

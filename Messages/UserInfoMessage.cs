@@ -1,17 +1,7 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Net;
-using System.Runtime.Serialization;
 using System.Security;
-using System.Xml.Serialization;
-
-using Ecng.Collections;
-
-using StockSharp.Localization;
 
 /// <summary>
 /// The message contains information about user.

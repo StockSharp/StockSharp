@@ -1,16 +1,5 @@
 namespace StockSharp.BusinessEntities;
 
-using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-using System.Xml.Serialization;
-
-using Ecng.Common;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
-
 /// <summary>
 /// Tick trade.
 /// </summary>

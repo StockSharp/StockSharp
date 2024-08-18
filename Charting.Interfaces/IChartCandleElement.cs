@@ -1,8 +1,5 @@
 ﻿namespace StockSharp.Charting;
 
-using System;
-using System.Drawing;
-
 /// <summary>
 /// The chart element representing a candle.
 /// </summary>

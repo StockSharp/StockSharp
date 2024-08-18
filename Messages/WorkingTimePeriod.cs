@@ -1,19 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Xml.Serialization;
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Common;
-using Ecng.ComponentModel;
-using Ecng.Serialization;
-using Ecng.Collections;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Schedule validity period.
 /// </summary>

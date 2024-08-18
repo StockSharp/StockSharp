@@ -1,16 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.Runtime.Serialization;
-using System.Collections.Generic;
-
-using Ecng.Common;
-using Ecng.ComponentModel;
-using Ecng.Serialization;
-
-using StockSharp.Localization;
-using StockSharp.Logging;
-
 /// <summary>
 /// Data type info.
 /// </summary>

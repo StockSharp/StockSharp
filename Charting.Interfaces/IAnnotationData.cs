@@ -1,9 +1,5 @@
 ﻿namespace StockSharp.Charting;
 
-using System;
-
-using Ecng.Drawing;
-
 /// <summary>
 /// Used to transfer annotation draw data.
 /// </summary>

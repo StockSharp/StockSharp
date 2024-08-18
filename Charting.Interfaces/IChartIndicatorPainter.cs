@@ -1,9 +1,5 @@
 namespace StockSharp.Charting;
 
-using System.Collections.Generic;
-
-using Ecng.Serialization;
-
 /// <summary>
 /// The interface describing the indicator renderer on the chart (for example, lines, histograms, etc.).
 /// </summary>

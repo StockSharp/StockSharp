@@ -1,8 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.Runtime.Serialization;
-
 /// <summary>
 /// Message to request supported time-frames.
 /// </summary>

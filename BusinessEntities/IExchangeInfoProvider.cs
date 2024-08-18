@@ -1,14 +1,5 @@
 namespace StockSharp.BusinessEntities;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Common;
-using Ecng.Collections;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// Interface describing exchanges and trading boards provider.
 /// </summary>

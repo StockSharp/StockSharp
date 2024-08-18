@@ -1,11 +1,5 @@
 ﻿namespace StockSharp.Messages;
 
-using System;
-
-using Ecng.Collections;
-
-using StockSharp.Localization;
-
 partial class Extensions
 {
 	[Obsolete]

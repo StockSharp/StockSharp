@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Configuration;
 
-using Ecng.Configuration;
-
 /// <summary>
 /// Services registry.
 /// </summary>

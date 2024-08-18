@@ -1,12 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.ComponentModel;
-using System.Runtime.Serialization;
-
-using Ecng.Common;
-using Ecng.Serialization;
-
 /// <summary>
 /// Negotiated Trades Mode information.
 /// </summary>

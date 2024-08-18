@@ -1,15 +1,6 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 using System.Globalization;
-
-using Ecng.Common;
-using Ecng.Serialization;
-
-using StockSharp.Localization;
 
 /// <summary>
 /// Security ID.

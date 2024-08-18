@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Configuration;
 
-using System;
-
 /// <summary>
 /// Product id attribute.
 /// </summary>

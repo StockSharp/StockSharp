@@ -1,10 +1,5 @@
 ﻿namespace StockSharp.Configuration;
 
-using System;
-
-using Ecng.Common;
-using Ecng.Serialization;
-
 /// <summary>
 /// Invariant culture <see cref="ISerializer"/>.
 /// </summary>

@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Messages;
 
-using System;
-
 /// <summary>
 /// Insufficient fund exception.
 /// </summary>

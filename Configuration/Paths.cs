@@ -1,23 +1,10 @@
 ﻿namespace StockSharp.Configuration;
 
-using System;
 using System.Text;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Collections.Generic;
-
-using Ecng.Common;
-using Ecng.Configuration;
-using Ecng.Serialization;
-using Ecng.ComponentModel;
 
 using Newtonsoft.Json;
 
 using NuGet.Configuration;
-
-using StockSharp.Localization;
-using StockSharp.Logging;
 
 /// <summary>
 /// System paths.

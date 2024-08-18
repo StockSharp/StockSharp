@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Charting;
 
-using System.Drawing;
-
 /// <summary>
 /// The chart element representing active orders.
 /// </summary>

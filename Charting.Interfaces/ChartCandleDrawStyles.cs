@@ -1,9 +1,5 @@
 namespace StockSharp.Charting;
 
-using System.ComponentModel.DataAnnotations;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Styles of the candles chart drawing.
 /// </summary>

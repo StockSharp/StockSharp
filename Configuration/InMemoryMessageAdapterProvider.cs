@@ -1,17 +1,6 @@
 namespace StockSharp.Configuration;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Security;
-
-using Ecng.Common;
 using Ecng.Reflection;
-
-using StockSharp.Logging;
-using StockSharp.Messages;
 
 /// <summary>
 /// In memory configuration message adapter's provider.

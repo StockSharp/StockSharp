@@ -1,13 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-
-using Ecng.Common;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Portfolio states.
 /// </summary>

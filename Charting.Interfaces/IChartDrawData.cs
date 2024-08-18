@@ -1,12 +1,5 @@
 ﻿namespace StockSharp.Charting;
 
-using System;
-using System.Drawing;
-
-using StockSharp.Algo.Indicators;
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 /// <summary>
 /// Chart drawing data.
 /// </summary>

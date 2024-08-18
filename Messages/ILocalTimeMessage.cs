@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Messages;
 
-using System;
-
 /// <summary>
 /// The interface describing an message with <see cref="LocalTime"/> property.
 /// </summary>

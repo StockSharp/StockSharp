@@ -1,11 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-
-using Ecng.Serialization;
-
 /// <summary>
 /// Security identifier mapping.
 /// </summary>

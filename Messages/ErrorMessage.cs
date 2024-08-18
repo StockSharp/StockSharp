@@ -1,9 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.Runtime.Serialization;
-using System.Xml.Serialization;
-
 /// <summary>
 /// Error message.
 /// </summary>

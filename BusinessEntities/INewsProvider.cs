@@ -1,7 +1,5 @@
 namespace StockSharp.BusinessEntities;
 
-using StockSharp.Messages;
-
 /// <summary>
 /// The interface for access to provider of information about news.
 /// </summary>

@@ -1,11 +1,5 @@
 namespace StockSharp.Algo.Indicators;
 
-using System;
-
-using Ecng.Common;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Attribute, applied to indicator, to provide information about type of values <see cref="IIndicatorValue"/>.
 /// </summary>

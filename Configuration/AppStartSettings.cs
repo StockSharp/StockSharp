@@ -1,10 +1,5 @@
 ﻿namespace StockSharp.Configuration;
 
-using Ecng.Common;
-using Ecng.Serialization;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Application start configuration.
 /// </summary>

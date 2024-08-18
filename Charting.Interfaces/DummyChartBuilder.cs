@@ -1,15 +1,5 @@
 ﻿namespace StockSharp.Charting;
 
-using System;
-using System.ComponentModel;
-using System.Drawing;
-
-using Ecng.Collections;
-using Ecng.Common;
-using Ecng.ComponentModel;
-using Ecng.Serialization;
-using Ecng.Drawing;
-
 /// <summary>
 /// Dummy implementation of <see cref="IChartBuilder"/>.
 /// </summary>

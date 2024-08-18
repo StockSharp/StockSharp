@@ -1,12 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Xml.Serialization;
-
-using Ecng.Collections;
-
 /// <summary>
 /// Command types.
 /// </summary>

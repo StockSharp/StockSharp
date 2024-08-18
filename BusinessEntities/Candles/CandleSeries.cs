@@ -1,17 +1,8 @@
 namespace StockSharp.Algo.Candles;
 
-using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Common;
-using Ecng.ComponentModel;
-using Ecng.Serialization;
 using Ecng.Configuration;
 
 using StockSharp.BusinessEntities;
-using StockSharp.Localization;
-using StockSharp.Messages;
 
 /// <summary>
 /// Candles series.

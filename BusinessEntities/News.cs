@@ -1,14 +1,5 @@
 namespace StockSharp.BusinessEntities;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-
-using Ecng.ComponentModel;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
-
 /// <summary>
 /// News.
 /// </summary>

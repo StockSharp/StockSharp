@@ -1,13 +1,5 @@
 ﻿namespace StockSharp.Charting;
 
-using System;
-using System.Collections.Generic;
-
-using Ecng.Common;
-
-using StockSharp.Messages;
-using StockSharp.Algo.Indicators;
-
 /// <summary>
 /// Extension class for <see cref="IChart"/>.
 /// </summary>

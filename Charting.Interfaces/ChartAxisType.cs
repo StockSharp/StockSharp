@@ -1,9 +1,5 @@
 ﻿namespace StockSharp.Charting;
 
-using System.ComponentModel.DataAnnotations;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Chart axes types.
 /// </summary>

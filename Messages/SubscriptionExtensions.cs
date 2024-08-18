@@ -1,10 +1,5 @@
 ﻿namespace StockSharp.Messages;
 
-using System;
-
-using StockSharp.Localization;
-using StockSharp.Logging;
-
 /// <summary>
 /// <see cref="ISubscriptionMessage"/> extensions.
 /// </summary>

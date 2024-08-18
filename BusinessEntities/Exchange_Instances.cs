@@ -1,9 +1,5 @@
 namespace StockSharp.BusinessEntities;
 
-using Ecng.Common;
-
-using StockSharp.Localization;
-
 partial class Exchange
 {
 	/// <summary>

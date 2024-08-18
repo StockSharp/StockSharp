@@ -1,13 +1,5 @@
 namespace StockSharp.BusinessEntities;
 
-using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
-
 /// <summary>
 /// Portfolio, describing the trading account and the size of its generated commission.
 /// </summary>
@@ -99,7 +91,7 @@ public class Portfolio : Position
 	/// </summary>
 	public static Portfolio AnonymousPortfolio { get; } = new Portfolio
 	{
-		Name = Extensions.AnonymousPortfolioName,
+		Name = Messages.Extensions.AnonymousPortfolioName,
 	};
 
 	/// <summary>
@@ -108,7 +100,7 @@ public class Portfolio : Position
 	/// <returns>Simulator.</returns>
 	public static Portfolio CreateSimulator() => new()
 	{
-		Name = Extensions.SimulatorPortfolioName,
+		Name = Messages.Extensions.SimulatorPortfolioName,
 		BeginValue = 1000000,
 	};
 

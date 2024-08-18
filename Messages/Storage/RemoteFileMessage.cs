@@ -1,10 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.Runtime.Serialization;
-
-using Ecng.Common;
-
 /// <summary>
 /// Remove file message (upload or download).
 /// </summary>

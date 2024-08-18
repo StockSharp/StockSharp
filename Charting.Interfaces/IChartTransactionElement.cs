@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Charting;
 
-using System.Drawing;
-
 /// <summary>
 /// The interface that describes the Orders Or Trades chart element.
 /// </summary>

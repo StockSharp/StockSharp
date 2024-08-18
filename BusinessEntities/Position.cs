@@ -1,17 +1,5 @@
 namespace StockSharp.BusinessEntities;
 
-using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-using System.Xml.Serialization;
-
-using Ecng.Common;
-using Ecng.ComponentModel;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
-
 /// <summary>
 /// The position by the instrument.
 /// </summary>

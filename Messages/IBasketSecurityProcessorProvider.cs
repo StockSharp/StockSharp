@@ -1,7 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-
 /// <summary>
 /// The interface for provider of <see cref="IBasketSecurityProcessor"/>.
 /// </summary>

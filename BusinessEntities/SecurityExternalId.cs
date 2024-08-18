@@ -1,14 +1,5 @@
 namespace StockSharp.BusinessEntities;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-
-using Ecng.Common;
-using Ecng.ComponentModel;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Security IDs in other systems.
 /// </summary>

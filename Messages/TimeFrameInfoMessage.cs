@@ -1,11 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.Linq;
-using System.Runtime.Serialization;
-
-using Ecng.Common;
-
 /// <summary>
 /// Time-frames search result message.
 /// </summary>

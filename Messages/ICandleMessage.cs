@@ -1,8 +1,5 @@
 ﻿namespace StockSharp.Messages;
 
-using System;
-using System.Collections.Generic;
-
 /// <summary>
 /// The interfaces describes candle.
 /// </summary>

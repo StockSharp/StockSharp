@@ -1,13 +1,5 @@
 ﻿namespace StockSharp.Messages;
 
-using System;
-using System.Collections.Generic;
-
-using Ecng.Common;
-using Ecng.Serialization;
-
-using StockSharp.Logging;
-
 /// <summary>
 /// Wrapping based adapter.
 /// </summary>

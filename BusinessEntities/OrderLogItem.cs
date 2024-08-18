@@ -1,13 +1,5 @@
 namespace StockSharp.BusinessEntities;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Common;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
-
 /// <summary>
 /// Order log item.
 /// </summary>

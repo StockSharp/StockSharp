@@ -1,21 +1,11 @@
 namespace StockSharp.BusinessEntities;
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
-using Ecng.Collections;
-using Ecng.Common;
-using Ecng.ComponentModel;
 using Ecng.Reflection;
-using Ecng.Serialization;
 
 using StockSharp.Algo.Candles;
-using StockSharp.Localization;
-using StockSharp.Logging;
-using StockSharp.Messages;
 
 /// <summary>
 /// Extension class for <see cref="BusinessEntities"/>.

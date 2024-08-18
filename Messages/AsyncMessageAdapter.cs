@@ -1,16 +1,5 @@
 ﻿namespace StockSharp.Messages;
 
-using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Threading;
-using System.Threading.Tasks;
-
-using Ecng.Common;
-using Ecng.Serialization;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Message adapter with async processing support.
 /// </summary>

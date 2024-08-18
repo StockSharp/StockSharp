@@ -1,11 +1,5 @@
 ﻿namespace StockSharp.Charting;
 
-using System;
-using System.ComponentModel;
-
-using Ecng.ComponentModel;
-using Ecng.Serialization;
-
 /// <summary>
 /// The chart axis.
 /// </summary>

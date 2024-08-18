@@ -1,14 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Runtime.Serialization;
-
-using Ecng.Common;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Type of the changes in <see cref="PositionChangeMessage"/>.
 /// </summary>

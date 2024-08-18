@@ -1,7 +1,5 @@
 namespace StockSharp.Messages;
 
-using System.Collections.Generic;
-
 /// <summary>
 /// The interface of market data processor for basket securities.
 /// </summary>

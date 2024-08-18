@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Messages;
 
-using System;
-
 /// <summary>
 /// Interface describes an order book message.
 /// </summary>

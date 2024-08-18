@@ -1,18 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Runtime.Serialization;
-
-using Ecng.Collections;
-using Ecng.Common;
-using Ecng.Serialization;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Base order condition (for example, for stop order algo orders).
 /// </summary>

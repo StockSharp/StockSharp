@@ -1,10 +1,5 @@
 ﻿namespace StockSharp.Charting;
 
-using System;
-using System.ComponentModel;
-
-using Ecng.Serialization;
-
 /// <summary>
 /// The interfaces that describes the part of the chart.
 /// </summary>

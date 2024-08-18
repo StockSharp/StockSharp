@@ -1,18 +1,9 @@
 namespace StockSharp.Messages;
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
-using Ecng.Common;
-using Ecng.Collections;
-using Ecng.ComponentModel;
 using Ecng.Reflection;
-
-using StockSharp.Localization;
-using StockSharp.Logging;
 
 /// <summary>
 /// Extension class.

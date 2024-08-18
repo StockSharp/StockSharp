@@ -1,9 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-
-using Ecng.Common;
-
 /// <summary>
 /// Message channel base interface.
 /// </summary>

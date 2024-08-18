@@ -1,15 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-using System.Xml.Serialization;
-
-using Ecng.Common;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// The types of data that contain information in <see cref="ExecutionMessage"/>.
 /// </summary>

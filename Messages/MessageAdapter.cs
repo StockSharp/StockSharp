@@ -1,18 +1,6 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Runtime.CompilerServices;
-
-using Ecng.Collections;
-using Ecng.Common;
-using Ecng.Serialization;
-
-using StockSharp.Logging;
-using StockSharp.Localization;
 
 /// <summary>
 /// The base adapter converts messages <see cref="Message"/> to the command of the trading system and back.

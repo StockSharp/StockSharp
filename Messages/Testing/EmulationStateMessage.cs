@@ -1,7 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-
 /// <summary>
 /// The message, informing about the emulator state change.
 /// </summary>

@@ -1,11 +1,5 @@
 namespace StockSharp.Charting;
 
-using System;
-using System.Collections.Generic;
-
-using StockSharp.Algo.Candles;
-using StockSharp.Algo.Indicators;
-
 /// <summary>
 /// The interface for work with the chart.
 /// </summary>

@@ -1,14 +1,5 @@
 ﻿namespace StockSharp.Configuration;
 
-using System;
-using System.IO;
-
-using Ecng.Common;
-using Ecng.ComponentModel;
-using Ecng.Serialization;
-
-using StockSharp.Logging;
-
 /// <summary>
 /// Default implementation of <see cref="ICredentialsProvider"/>.
 /// </summary>

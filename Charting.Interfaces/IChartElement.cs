@@ -1,8 +1,5 @@
 ﻿namespace StockSharp.Charting;
 
-using System;
-using System.Drawing;
-
 /// <summary>
 /// The interface that describes the chart element (indicator, candle, etc.).
 /// </summary>

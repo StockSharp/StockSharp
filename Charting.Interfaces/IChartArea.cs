@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Charting;
 
-using Ecng.Collections;
-
 /// <summary>
 /// Chart area.
 /// </summary>

@@ -1,11 +1,5 @@
 ﻿namespace StockSharp.Configuration;
 
-using System;
-using System.Security;
-
-using Ecng.Common;
-using Ecng.ComponentModel;
-
 /// <summary>
 /// Interface describing credentials provider.
 /// </summary>

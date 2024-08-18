@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Messages;
 
-using System.Collections.Generic;
-
 /// <summary>
 /// Interface describing exchanges and trading boards provider.
 /// </summary>

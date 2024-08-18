@@ -1,10 +1,5 @@
 namespace StockSharp.BusinessEntities;
 
-using System;
-using System.Runtime.Serialization;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// Description of the error that occurred during the registration or cancellation of the order.
 /// </summary>

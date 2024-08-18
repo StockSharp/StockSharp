@@ -1,10 +1,5 @@
 ﻿namespace StockSharp.Charting;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// The annotations types.
 /// </summary>

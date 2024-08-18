@@ -1,13 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Serialization;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Connection tracking settings <see cref="IMessageAdapter"/> with a server.
 /// </summary>

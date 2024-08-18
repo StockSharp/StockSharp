@@ -1,17 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Xml.Serialization;
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Common;
-using Ecng.ComponentModel;
-using Ecng.Serialization;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Measure units.
 /// </summary>

@@ -1,10 +1,5 @@
 ﻿namespace StockSharp.Messages;
 
-using System;
-
-using Ecng.Common;
-using Ecng.Collections;
-
 static partial class Extensions
 {
 	/// <summary>

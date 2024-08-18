@@ -1,8 +1,5 @@
 ﻿namespace StockSharp.Messages;
 
-using System;
-using System.Runtime.Serialization;
-
 /// <summary>
 /// Base implementation of <see cref="ISubscriptionMessage"/> interface.
 /// </summary>

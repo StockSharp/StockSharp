@@ -1,15 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.Linq;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-
-using Ecng.Common;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Order book states.
 /// </summary>

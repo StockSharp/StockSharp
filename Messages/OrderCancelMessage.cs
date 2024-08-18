@@ -1,10 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.Runtime.Serialization;
-
-using Ecng.Common;
-
 /// <summary>
 /// A message containing the data for the cancellation of the order.
 /// </summary>

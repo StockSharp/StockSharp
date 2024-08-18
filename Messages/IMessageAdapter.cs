@@ -1,13 +1,6 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.Collections.Generic;
 using System.Security;
-
-using Ecng.Common;
-using Ecng.Serialization;
-
-using StockSharp.Logging;
 
 /// <summary>
 /// Base message adapter interface which convert messages <see cref="Message"/> to native commands and back.

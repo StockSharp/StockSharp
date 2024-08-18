@@ -1,17 +1,6 @@
 namespace StockSharp.Algo.Candles;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Common;
-
 using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-using StockSharp.Localization;
-using DataType = Messages.DataType;
 
 /// <summary>
 /// Base candle class (contains main parameters).

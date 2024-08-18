@@ -1,15 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ComponentModel;
-
-using Ecng.Common;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// News priorities.
 /// </summary>

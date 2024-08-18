@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Configuration;
 
-using Ecng.Common;
-
 /// <summary>
 /// Extension class.
 /// </summary>

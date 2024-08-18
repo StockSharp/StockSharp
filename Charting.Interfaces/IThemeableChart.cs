@@ -1,7 +1,5 @@
 namespace StockSharp.Charting;
 
-using Ecng.Serialization;
-
 /// <summary>
 /// Base interface for all chart components.
 /// </summary>

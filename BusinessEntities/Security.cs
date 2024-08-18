@@ -1,17 +1,6 @@
 namespace StockSharp.BusinessEntities;
 
-using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-using System.Xml.Serialization;
 using System.Runtime.CompilerServices;
-
-using Ecng.Common;
-using Ecng.ComponentModel;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
 
 /// <summary>
 /// Security (shares, futures, options etc.).

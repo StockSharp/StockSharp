@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Messages;
 
-using System;
-
 /// <summary>
 /// Shows the message adapter is stub.
 /// </summary>

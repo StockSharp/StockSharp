@@ -1,11 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// User request message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).
 /// </summary>

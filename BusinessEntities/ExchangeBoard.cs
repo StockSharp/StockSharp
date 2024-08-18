@@ -1,18 +1,7 @@
 namespace StockSharp.BusinessEntities;
 
-using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 using System.Xml;
-using System.Xml.Serialization;
 using System.Runtime.CompilerServices;
-
-using Ecng.Common;
-using Ecng.Serialization;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
 
 /// <summary>
 /// Information about electronic board.

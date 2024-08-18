@@ -1,12 +1,5 @@
 namespace StockSharp.Algo.Indicators;
 
-using System;
-
-using Ecng.Common;
-
-using StockSharp.Localization;
-using StockSharp.Messages;
-
 /// <summary>
 /// Extension class for indicators.
 /// </summary>

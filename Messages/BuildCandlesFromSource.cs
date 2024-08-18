@@ -1,9 +1,5 @@
 ﻿namespace StockSharp.Messages;
 
-using System.Collections.Generic;
-
-using Ecng.ComponentModel;
-
 /// <summary>
 /// Source for <see cref="MarketDataMessage.BuildFrom"/>.
 /// </summary>

@@ -1,9 +1,5 @@
 namespace StockSharp.Messages;
 
-using System;
-
-using Ecng.Common;
-
 /// <summary>
 /// The instrument identifiers generator <see cref="SecurityId"/>.
 /// </summary>

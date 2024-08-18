@@ -1,13 +1,5 @@
 namespace StockSharp.Algo.Indicators;
 
-using System;
-
-using Ecng.Common;
-using Ecng.ComponentModel;
-using Ecng.Serialization;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// The indicator type description.
 /// </summary>
