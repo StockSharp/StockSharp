@@ -1,6 +1,5 @@
 namespace StockSharp.Algo.Export;
 
-using Ecng.ComponentModel;
 using Ecng.Interop;
 
 /// <summary>

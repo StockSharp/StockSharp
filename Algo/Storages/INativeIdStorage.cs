@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using System.Text;
-
 /// <summary>
 /// Security native identifier storage.
 /// </summary>

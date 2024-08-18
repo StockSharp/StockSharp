@@ -2,8 +2,6 @@
 
 using System.Runtime.InteropServices;
 
-using Ecng.ComponentModel;
-
 using StockSharp.Algo.Candles.Patterns;
 
 /// <summary>

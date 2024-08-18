@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using Ecng.ComponentModel;
-
 /// <summary>
 /// Candle volume.
 /// </summary>

@@ -1,7 +1,5 @@
 namespace StockSharp.Algo;
 
-using Ecng.ComponentModel;
-
 /// <summary>
 /// The messages adapter controlling the connection.
 /// </summary>

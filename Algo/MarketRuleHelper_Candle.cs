@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Algo;
 
-using Ecng.ComponentModel;
-
 using StockSharp.Algo.Candles;
 
 partial class MarketRuleHelper

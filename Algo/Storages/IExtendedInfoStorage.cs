@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using System.Text;
-
 /// <summary>
 /// Extended info storage.
 /// </summary>

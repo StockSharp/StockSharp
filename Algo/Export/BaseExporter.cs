@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Export;
 
-using System.Collections;
-
 /// <summary>
 /// The base class of export.
 /// </summary>

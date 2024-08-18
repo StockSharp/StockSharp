@@ -1,6 +1,5 @@
 namespace StockSharp.Algo.Strategies.Reporting;
 
-using System.Text;
 using System.Xml;
 
 /// <summary>

@@ -1,7 +1,6 @@
 namespace StockSharp.Algo.Storages.Remote;
 
 using System.IO.Compression;
-using System.Text;
 
 using Ecng.IO;
 

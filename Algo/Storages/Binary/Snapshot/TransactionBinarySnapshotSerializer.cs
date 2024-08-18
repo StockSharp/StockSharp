@@ -2,7 +2,6 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot;
 
 using System.Runtime.InteropServices;
 
-using Ecng.ComponentModel;
 using Ecng.Interop;
 
 using StockSharp.Configuration;

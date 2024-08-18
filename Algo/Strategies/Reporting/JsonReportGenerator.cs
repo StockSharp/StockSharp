@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Algo.Strategies.Reporting;
 
-using System.Text;
-
 using Newtonsoft.Json;
 
 /// <summary>

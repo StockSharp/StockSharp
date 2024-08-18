@@ -1,7 +1,5 @@
 namespace StockSharp.Algo;
 
-using Ecng.ComponentModel;
-
 /// <summary>
 /// Continuous security (generally, a futures contract), containing expirable securities.
 /// </summary>

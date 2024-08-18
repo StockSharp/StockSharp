@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages.Binary;
 
-using System.Collections;
-
 static class BinaryHelper
 {
 	public static decimal WriteDecimal(this BitArrayWriter writer, decimal value, decimal prevValue)

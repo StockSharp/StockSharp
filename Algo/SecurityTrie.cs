@@ -1,7 +1,5 @@
 namespace StockSharp.Algo;
 
-using System.Collections;
-
 using Gma.DataStructures.StringSearch;
 
 /// <summary>

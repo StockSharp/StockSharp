@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using Ecng.ComponentModel;
-
 /// <summary>
 /// Triple Exponential Moving Average.
 /// </summary>

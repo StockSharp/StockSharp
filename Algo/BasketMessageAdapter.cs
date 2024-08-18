@@ -1,7 +1,5 @@
 namespace StockSharp.Algo;
 
-using Ecng.ComponentModel;
-
 using StockSharp.Algo.Candles;
 using StockSharp.Algo.Candles.Compression;
 using StockSharp.Algo.Commissions;

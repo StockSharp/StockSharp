@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Testing;
 
-using Ecng.ComponentModel;
-
 using StockSharp.Algo.Commissions;
 
 /// <summary>

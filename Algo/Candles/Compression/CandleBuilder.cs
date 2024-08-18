@@ -464,7 +464,7 @@ public class TimeFrameCandleBuilder : CandleBuilder<TimeFrameCandleMessage>
 	/// </summary>
 	public bool GenerateEmptyCandles { get; set; }
 
-	private Unit _timeout = 10.Percents();
+	private Unit _timeout = UnitHelper.Percents(10);
 
 	/// <summary>
 	/// The time shift from the time frame end after which a signal is sent to close the unclosed candle forcibly. The default is 10% of the time frame.

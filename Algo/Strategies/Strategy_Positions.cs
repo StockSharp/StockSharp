@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Algo.Strategies;
 
-using Ecng.ComponentModel;
-
 using StockSharp.Algo.Positions;
 
 partial class Strategy

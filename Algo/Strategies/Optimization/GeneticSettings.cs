@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Algo.Strategies.Optimization;
 
-using Ecng.ComponentModel;
-
 using GeneticSharp;
 
 using StockSharp.Algo.Statistics;

@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Statistics;
 
-using Ecng.ComponentModel;
-
 /// <summary>
 /// The interface, describing statistic parameter.
 /// </summary>

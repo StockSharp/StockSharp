@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Algo.Strategies.Optimization;
 
-using System.Collections;
-
 using Ecng.Compilation;
 
 using GeneticSharp;

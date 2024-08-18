@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-using System.Text;
-
 /// <summary>
 /// The order log serializer in the CSV format.
 /// </summary>

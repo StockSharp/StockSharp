@@ -2,8 +2,6 @@ namespace StockSharp.Algo;
 
 using System.Security;
 
-using Ecng.ComponentModel;
-
 using StockSharp.Algo.Candles.Compression;
 using StockSharp.Algo.Commissions;
 using StockSharp.Algo.Latency;

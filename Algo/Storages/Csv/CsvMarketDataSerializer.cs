@@ -1,8 +1,5 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-using System.Collections;
-using System.Text;
-
 class CsvMetaInfo : MetaInfo
 {
 	private readonly Encoding _encoding;

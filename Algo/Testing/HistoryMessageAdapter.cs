@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Testing;
 
-using Ecng.ComponentModel;
-
 /// <summary>
 /// The adapter, receiving messages form the storage <see cref="IStorageRegistry"/>.
 /// </summary>

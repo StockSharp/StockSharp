@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using Ecng.ComponentModel;
-
 /// <summary>
 /// The dynamic average of variable index  (Variable Index Dynamic Average).
 /// </summary>

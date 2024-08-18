@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Import;
 
-using Ecng.ComponentModel;
-
 /// <summary>
 /// Importing field description.
 /// </summary>

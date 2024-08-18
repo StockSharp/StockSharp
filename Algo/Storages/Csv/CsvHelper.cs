@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-using System.Text;
-
 /// <summary>
 /// CSV helper class.
 /// </summary>

@@ -2,8 +2,6 @@ namespace StockSharp.Algo.Strategies.Reporting;
 
 using System.Globalization;
 
-using Ecng.ComponentModel;
-
 using StockSharp.Algo.Strategies;
 
 /// <summary>

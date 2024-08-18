@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using System.Collections;
-
 using Ecng.Reflection;
 
 class TradeStorage : MarketDataStorage<ExecutionMessage, DateTimeOffset>

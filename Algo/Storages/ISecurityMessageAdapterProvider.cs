@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using System.Text;
-
 using Key = System.Tuple<Messages.SecurityId, Messages.DataType>;
 
 /// <summary>

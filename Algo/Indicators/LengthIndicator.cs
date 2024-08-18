@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Indicators;
 
-using Ecng.ComponentModel;
-
 /// <summary>
 /// The interface for indicators with one resulting value and based on the period.
 /// </summary>

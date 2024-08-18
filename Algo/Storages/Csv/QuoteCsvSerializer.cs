@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-using System.Text;
-
 class NullableTimeQuoteChange
 {
 	public DateTimeOffset ServerTime { get; set; }

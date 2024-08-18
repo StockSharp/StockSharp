@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Strategies.Derivatives;
 
-using Ecng.ComponentModel;
-
 using StockSharp.Algo.Derivatives;
 using StockSharp.Algo.Strategies.Quoting;
 

@@ -2,8 +2,6 @@ namespace StockSharp.Algo.Storages;
 
 using System.Net;
 
-using Ecng.ComponentModel;
-
 using StockSharp.Algo.Storages.Remote;
 
 /// <summary>

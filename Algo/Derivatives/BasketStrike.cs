@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Derivatives;
 
-using Ecng.ComponentModel;
-
 /// <summary>
 /// The virtual strike created from a combination of other strikes.
 /// </summary>

@@ -1,6 +1,5 @@
 ﻿namespace StockSharp.Algo.Storages.Binary;
 
-using System.Collections;
 using System.Diagnostics;
 
 static class MarketDataVersions

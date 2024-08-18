@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Import;
 
-using Ecng.ComponentModel;
-
 /// <summary>
 /// Settings of import.
 /// </summary>

@@ -1,7 +1,6 @@
 namespace StockSharp.Algo.Strategies.Reporting;
 
 using Ecng.Interop;
-using Ecng.ComponentModel;
 
 /// <summary>
 /// The report generator for the strategy in the Excel format.

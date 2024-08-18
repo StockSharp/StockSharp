@@ -2,8 +2,6 @@
 
 namespace StockSharp.Algo.Testing;
 
-using System.Collections;
-
 using StockSharp.Algo.Commissions;
 using StockSharp.Algo.PnL;
 using StockSharp.Algo.Candles;

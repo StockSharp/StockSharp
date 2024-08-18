@@ -1,9 +1,6 @@
 namespace StockSharp.Algo.Storages;
 
-using System.Collections;
 using System.Diagnostics;
-
-using Ecng.ComponentModel;
 
 using StockSharp.Algo.Candles;
 using StockSharp.Algo.Candles.Compression;

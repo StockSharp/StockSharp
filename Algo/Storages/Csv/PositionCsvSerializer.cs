@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-using System.Text;
-
 /// <summary>
 /// The position change serializer in the CSV format.
 /// </summary>

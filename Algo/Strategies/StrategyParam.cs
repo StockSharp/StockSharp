@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Strategies;
 
-using Ecng.ComponentModel;
-
 /// <summary>
 /// The strategy parameter.
 /// </summary>

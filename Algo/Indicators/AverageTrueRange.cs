@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using Ecng.ComponentModel;
-
 /// <summary>
 /// The average true range <see cref="Indicators.TrueRange"/>.
 /// </summary>

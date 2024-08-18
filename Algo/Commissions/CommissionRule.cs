@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Commissions;
 
-using Ecng.ComponentModel;
-
 /// <summary>
 /// The commission calculating rule.
 /// </summary>
