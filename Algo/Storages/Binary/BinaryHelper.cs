@@ -23,6 +23,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.BusinessEntities;
 
 	static class BinaryHelper
 	{

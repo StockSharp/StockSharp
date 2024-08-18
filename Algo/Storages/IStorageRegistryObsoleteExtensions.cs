@@ -229,22 +229,22 @@ public static class IStorageRegistryObsoleteExtensions
 
 		if (typeof(TEntity) == typeof(MarketDepth))
 		{
-			Func<MarketDepth, QuoteChangeMessage> converter = MessageConverterHelper.ToMessage;
+			Func<MarketDepth, QuoteChangeMessage> converter = EntitiesExtensions.ToMessage;
 			toMessage = converter.To<Func<TEntity, TMessage>>();
 		}
 		else if (typeof(TEntity) == typeof(Trade))
 		{
-			Func<Trade, ExecutionMessage> converter = MessageConverterHelper.ToMessage;
+			Func<Trade, ExecutionMessage> converter = EntitiesExtensions.ToMessage;
 			toMessage = converter.To<Func<TEntity, TMessage>>();
 		}
 		else if (typeof(TEntity) == typeof(OrderLogItem))
 		{
-			Func<OrderLogItem, ExecutionMessage> converter = MessageConverterHelper.ToMessage;
+			Func<OrderLogItem, ExecutionMessage> converter = EntitiesExtensions.ToMessage;
 			toMessage = converter.To<Func<TEntity, TMessage>>();
 		}
 		else if (typeof(TEntity) == typeof(News))
 		{
-			Func<News, NewsMessage> converter = MessageConverterHelper.ToMessage;
+			Func<News, NewsMessage> converter = EntitiesExtensions.ToMessage;
 			toMessage = converter.To<Func<TEntity, TMessage>>();
 		}
 		else if (typeof(TEntity) == typeof(Security))
@@ -259,17 +259,17 @@ public static class IStorageRegistryObsoleteExtensions
 		}
 		else if (typeof(TEntity) == typeof(Order))
 		{
-			Func<Order, ExecutionMessage> converter = MessageConverterHelper.ToMessage;
+			Func<Order, ExecutionMessage> converter = EntitiesExtensions.ToMessage;
 			toMessage = converter.To<Func<TEntity, TMessage>>();
 		}
 		else if (typeof(TEntity) == typeof(MyTrade))
 		{
-			Func<MyTrade, ExecutionMessage> converter = MessageConverterHelper.ToMessage;
+			Func<MyTrade, ExecutionMessage> converter = EntitiesExtensions.ToMessage;
 			toMessage = converter.To<Func<TEntity, TMessage>>();
 		}
 		else if (typeof(TEntity) == typeof(Candle) || typeof(TEntity).IsCandle())
 		{
-			Func<Candle, CandleMessage> converter = MessageConverterHelper.ToMessage;
+			Func<Candle, CandleMessage> converter = EntitiesExtensions.ToMessage;
 
 			if (typeof(TEntity) == typeof(Candle) && typeof(TMessage) == typeof(CandleMessage))
 				toMessage = converter.To<Func<TEntity, TMessage>>();

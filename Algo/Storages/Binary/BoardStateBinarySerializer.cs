@@ -10,6 +10,7 @@
 
 	using StockSharp.Localization;
 	using StockSharp.Messages;
+	using StockSharp.BusinessEntities;
 
 	class BoardStateMetaInfo : BinaryMetaInfo
 	{

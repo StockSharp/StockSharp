@@ -22,6 +22,7 @@ namespace StockSharp.Algo.Candles
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
+	using Ecng.Configuration;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
@@ -277,7 +278,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			var secProvider = ServicesRegistry.TrySecurityProvider;
+			var secProvider = ConfigManager.TryGetService<ISecurityProvider>();
 			if (secProvider != null)
 			{
 				var securityId = storage.GetValue<string>(nameof(SecurityId));

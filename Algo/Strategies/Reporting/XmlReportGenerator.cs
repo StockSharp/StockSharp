@@ -8,6 +8,7 @@ using System.Xml;
 
 using Ecng.Common;
 
+using StockSharp.BusinessEntities;
 using StockSharp.Messages;
 
 /// <summary>

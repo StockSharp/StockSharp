@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Ecng.ComponentModel;
 
 using StockSharp.Algo.Strategies;
+using StockSharp.BusinessEntities;
 using StockSharp.Localization;
 using StockSharp.Messages;
 

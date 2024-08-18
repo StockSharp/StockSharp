@@ -23,6 +23,7 @@ namespace StockSharp.Algo.Storages.Binary
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 

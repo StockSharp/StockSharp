@@ -25,6 +25,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.BusinessEntities;
 
 	class Level1MetaInfo : BinaryMetaInfo
 	{

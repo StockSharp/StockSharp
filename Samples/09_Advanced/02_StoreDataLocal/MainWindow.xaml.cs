@@ -10,6 +10,7 @@ using StockSharp.Messages;
 using StockSharp.Algo;
 using StockSharp.Algo.Storages;
 using StockSharp.Algo.Storages.Csv;
+using StockSharp.BusinessEntities;
 
 public partial class MainWindow
 {

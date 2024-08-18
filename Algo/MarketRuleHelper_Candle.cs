@@ -5,12 +5,12 @@
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
-	using Ecng.ComponentModel;
-	using System.Xml.Linq;
+	using StockSharp.BusinessEntities;
 
 	partial class MarketRuleHelper
 	{
