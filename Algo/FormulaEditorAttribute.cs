@@ -1,10 +1,12 @@
-﻿using System;
+﻿namespace StockSharp.Algo;
+
+using System;
+
 using Ecng.Common;
 using Ecng.ComponentModel;
 
-namespace StockSharp.Algo;
-
 /// <summary>
+/// Formula editor attribute.
 /// </summary>
 public class FormulaEditorAttribute : Attribute
 {
@@ -14,7 +16,9 @@ public class FormulaEditorAttribute : Attribute
 	public Type VariablesSource { get; }
 
 	/// <summary>
+	/// Initializes a new instance of the <see cref="FormulaEditorAttribute"/>.
 	/// </summary>
+	/// <param name="type">Variables source.</param>
 	public FormulaEditorAttribute(Type type)
 	{
 		if (type is null)
