@@ -2,22 +2,11 @@
 
 namespace StockSharp.Algo.Testing;
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
 
 using StockSharp.Algo.Commissions;
 using StockSharp.Algo.PnL;
-using StockSharp.Logging;
-using StockSharp.Messages;
 using StockSharp.Algo.Candles;
-using StockSharp.Localization;
-using StockSharp.BusinessEntities;
-using StockSharp.Algo.Storages;
 
 using QuotesDict = System.Collections.Generic.SortedDictionary<decimal, Ecng.Common.RefPair<LevelOrders, Messages.QuoteChange>>;
 

@@ -1,11 +1,6 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Common;
 using Ecng.ComponentModel;
-
-using StockSharp.Localization;
 
 /// <summary>
 /// Welles Wilder Moving Average.

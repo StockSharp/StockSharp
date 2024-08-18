@@ -1,17 +1,6 @@
 namespace StockSharp.Algo.Indicators;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
 using Ecng.ComponentModel;
-using Ecng.Serialization;
-
-using StockSharp.Localization;
 
 /// <summary>
 /// The interface for indicators with one resulting value and based on the period.

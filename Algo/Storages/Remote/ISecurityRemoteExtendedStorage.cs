@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages.Remote;
 
-using StockSharp.Messages;
-
 /// <summary>
 /// Remote security extended info storage.
 /// </summary>

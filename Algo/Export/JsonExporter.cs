@@ -1,15 +1,6 @@
 ﻿namespace StockSharp.Algo.Export;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-using Ecng.Common;
-
 using Newtonsoft.Json;
-
-using StockSharp.Messages;
 
 static class Helper
 {

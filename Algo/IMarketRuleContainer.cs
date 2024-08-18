@@ -1,9 +1,5 @@
 namespace StockSharp.Algo;
 
-using System;
-
-using StockSharp.Logging;
-
 /// <summary>
 /// The interface, describing the rules container.
 /// </summary>

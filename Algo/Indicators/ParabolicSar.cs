@@ -1,15 +1,6 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-
-using Ecng.Serialization;
 using Ecng.ComponentModel;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
 
 /// <summary>
 /// Trend indicator implementation - Parabolic SAR.

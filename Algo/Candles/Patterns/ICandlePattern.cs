@@ -1,11 +1,5 @@
 ﻿namespace StockSharp.Algo.Candles.Patterns;
 
-using System;
-
-using Ecng.Serialization;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// The interfaces describes candle pattern.
 /// </summary>

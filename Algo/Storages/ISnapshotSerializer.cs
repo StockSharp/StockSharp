@@ -1,9 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// The interface for serialize snapshots.
 /// </summary>

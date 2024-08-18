@@ -1,14 +1,5 @@
 namespace StockSharp.Algo.PnL;
 
-using System;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Localization;
-using StockSharp.Messages;
-
 /// <summary>
 /// The queue of profit calculation by messages stream.
 /// </summary>

@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Positions;
 
-using StockSharp.Messages;
-
 /// <summary>
 /// The interface for the position calculation manager.
 /// </summary>

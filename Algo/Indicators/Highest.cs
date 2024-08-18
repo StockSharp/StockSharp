@@ -1,11 +1,6 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic;
-
 using Ecng.ComponentModel;
-
-using StockSharp.Localization;
 
 /// <summary>
 /// Maximum value for a period.

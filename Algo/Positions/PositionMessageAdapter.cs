@@ -1,15 +1,5 @@
 namespace StockSharp.Algo.Positions;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Logging;
-using StockSharp.Messages;
-
 /// <summary>
 /// The message adapter, automatically calculating position.
 /// </summary>

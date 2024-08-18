@@ -1,18 +1,5 @@
 namespace StockSharp.Algo.Strategies.Quoting;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Logging;
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-using StockSharp.Localization;
-
 /// <summary>
 /// Base quoting strategy class.
 /// </summary>

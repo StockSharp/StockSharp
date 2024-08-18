@@ -1,13 +1,6 @@
 namespace StockSharp.Algo.Export;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Xml;
-
-using Ecng.Common;
-
-using StockSharp.Messages;
 
 /// <summary>
 /// The export into xml.

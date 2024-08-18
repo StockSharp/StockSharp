@@ -1,16 +1,5 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
-
 class MarketDepthCsvSerializer : CsvMarketDataSerializer<QuoteChangeMessage>
 {
 	private class QuoteEnumerable : SimpleEnumerable<QuoteChangeMessage>

@@ -1,9 +1,5 @@
 namespace StockSharp.Algo.Slippage;
 
-using Ecng.Serialization;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// The interface for the slippage calculation manager.
 /// </summary>

@@ -1,17 +1,8 @@
 namespace StockSharp.Algo;
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
 
 using Gma.DataStructures.StringSearch;
-
-using StockSharp.Messages;
-using StockSharp.BusinessEntities;
 
 /// <summary>
 /// Security trie collection.

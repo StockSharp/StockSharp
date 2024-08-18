@@ -1,9 +1,5 @@
 namespace StockSharp.Algo.Risk;
 
-using System.ComponentModel.DataAnnotations;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Types of actions.
 /// </summary>

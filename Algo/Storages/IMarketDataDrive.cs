@@ -1,15 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
-using Ecng.Common;
-using Ecng.Serialization;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 /// <summary>
 /// The interface, describing the storage, associated with <see cref="IMarketDataStorage"/>.
 /// </summary>

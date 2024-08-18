@@ -1,11 +1,5 @@
 namespace StockSharp.Algo.Commissions;
 
-using System;
-
-using Ecng.Common;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// The message adapter, automatically calculating commission.
 /// </summary>

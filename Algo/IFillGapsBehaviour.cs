@@ -1,15 +1,5 @@
 ﻿namespace StockSharp.Algo;
 
-using System;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Algo.Storages;
-using StockSharp.Messages;
-using DataType = Messages.DataType;
-
 /// <summary>
 /// Interface describes missed historical data (gaps) dates.
 /// </summary>

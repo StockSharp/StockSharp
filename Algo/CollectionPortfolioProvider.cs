@@ -1,13 +1,5 @@
 namespace StockSharp.Algo;
 
-using System;
-using System.Collections.Generic;
-
-using Ecng.Common;
-using Ecng.Collections;
-
-using StockSharp.BusinessEntities;
-
 /// <summary>
 /// Collection based implementation of <see cref="IPortfolioProvider"/>.
 /// </summary>

@@ -1,11 +1,5 @@
 namespace StockSharp.Algo.Indicators;
 
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Serialization;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
 using StockSharp.Charting;
 
 /// <summary>

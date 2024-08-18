@@ -1,15 +1,7 @@
 namespace StockSharp.Algo.Strategies.Reporting;
 
-using System;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Xml;
-
-using Ecng.Common;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
 
 /// <summary>
 /// The report generator for the strategy in the xml format.

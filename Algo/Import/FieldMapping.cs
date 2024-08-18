@@ -1,15 +1,6 @@
 namespace StockSharp.Algo.Import;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
 using Ecng.ComponentModel;
-using Ecng.Serialization;
-
-using StockSharp.Localization;
 
 /// <summary>
 /// Importing field description.

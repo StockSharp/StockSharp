@@ -1,16 +1,6 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Localization;
-using StockSharp.Messages;
 
 /// <summary>
 /// The candle serializer in the CSV format.

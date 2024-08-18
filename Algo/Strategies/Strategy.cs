@@ -1,25 +1,12 @@
 namespace StockSharp.Algo.Strategies;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Runtime.Serialization;
 using System.Runtime.CompilerServices;
 
-using Ecng.Common;
-using Ecng.Collections;
 using Ecng.ComponentModel;
-using Ecng.Serialization;
 
 using StockSharp.Algo.PnL;
 using StockSharp.Algo.Risk;
 using StockSharp.Algo.Statistics;
-using StockSharp.BusinessEntities;
-using StockSharp.Logging;
-using StockSharp.Messages;
-using StockSharp.Localization;
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Testing;
 

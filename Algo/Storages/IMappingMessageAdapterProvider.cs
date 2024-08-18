@@ -1,8 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
-using System.Collections.Generic;
-
 /// <summary>
 /// The mapping message adapter's provider interface.
 /// </summary>

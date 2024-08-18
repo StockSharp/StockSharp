@@ -1,9 +1,5 @@
 namespace StockSharp.Algo.Storages.Binary.Snapshot;
 
-using System;
-
-using Ecng.Common;
-
 static class Sizes
 {
 	public const int S100 = 100;

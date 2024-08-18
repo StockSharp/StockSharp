@@ -1,14 +1,6 @@
 namespace StockSharp.Algo;
 
-using System;
-using System.Threading;
-
-using Ecng.Common;
 using Ecng.ComponentModel;
-
-using StockSharp.Localization;
-using StockSharp.Logging;
-using StockSharp.Messages;
 
 /// <summary>
 /// The messages adapter controlling the connection.

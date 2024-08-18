@@ -1,11 +1,5 @@
 namespace StockSharp.Algo.Slippage;
 
-using System;
-
-using Ecng.Common;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// The message adapter, automatically calculating slippage.
 /// </summary>

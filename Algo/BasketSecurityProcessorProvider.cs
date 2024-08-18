@@ -1,13 +1,6 @@
 namespace StockSharp.Algo;
 
-using System;
-
-using Ecng.Collections;
-using Ecng.Common;
-
 using StockSharp.Algo.Expressions;
-using StockSharp.Localization;
-using StockSharp.Messages;
 
 /// <summary>
 /// Basket security processors provider.

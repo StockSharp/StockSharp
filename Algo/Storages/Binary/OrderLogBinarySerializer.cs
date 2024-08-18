@@ -1,17 +1,5 @@
 namespace StockSharp.Algo.Storages.Binary;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-using StockSharp.Localization;
-
 class OrderLogMetaInfo : BinaryMetaInfo
 {
 	public OrderLogMetaInfo(DateTime date)

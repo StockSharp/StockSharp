@@ -1,12 +1,6 @@
 namespace StockSharp.Algo.Indicators;
 
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-
 using Ecng.ComponentModel;
-
-using StockSharp.Localization;
 
 /// <summary>
 /// Linear regression R-squared.

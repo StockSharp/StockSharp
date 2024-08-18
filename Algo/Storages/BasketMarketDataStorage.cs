@@ -1,16 +1,8 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
-using Ecng.Collections;
-using Ecng.Common;
 using Ecng.Reflection;
-
-using StockSharp.Messages;
 
 /// <summary>
 /// The aggregator-storage enumerator.

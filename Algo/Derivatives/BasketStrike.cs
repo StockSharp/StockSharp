@@ -1,13 +1,6 @@
 namespace StockSharp.Algo.Derivatives;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 using Ecng.ComponentModel;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
 
 /// <summary>
 /// The virtual strike created from a combination of other strikes.

@@ -1,11 +1,8 @@
 ﻿namespace StockSharp.Algo.Storages.Binary.Snapshot;
 
-using System;
 using System.Runtime.InteropServices;
 
 using Ecng.Interop;
-
-using StockSharp.Messages;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Unicode)]
 struct SnapshotDataType

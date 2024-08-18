@@ -1,12 +1,5 @@
 namespace StockSharp.Algo.Derivatives;
 
-using System;
-
-using Ecng.Common;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Localization;
-
 /// <summary>
 /// The Greeks values calculating model by the Black formula.
 /// </summary>

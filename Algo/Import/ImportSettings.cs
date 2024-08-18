@@ -1,21 +1,6 @@
 namespace StockSharp.Algo.Import;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Linq;
-
-using Ecng.Common;
 using Ecng.ComponentModel;
-using Ecng.Serialization;
-
-using StockSharp.Algo;
-using StockSharp.Algo.Storages;
-using StockSharp.Localization;
-using StockSharp.Messages;
-using DataType = StockSharp.Messages.DataType;
 
 /// <summary>
 /// Settings of import.

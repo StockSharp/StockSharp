@@ -1,11 +1,6 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using System.ComponentModel.DataAnnotations;
-
 using Ecng.ComponentModel;
-using Ecng.Serialization;
-
-using StockSharp.Localization;
 
 /// <summary>
 /// Triple Exponential Moving Average.

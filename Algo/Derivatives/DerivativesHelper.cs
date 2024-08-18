@@ -1,18 +1,9 @@
 namespace StockSharp.Algo.Derivatives;
 
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text.RegularExpressions;
 
-using Ecng.Collections;
-using Ecng.Common;
 using Ecng.MathLight;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-using StockSharp.Localization;
 
 /// <summary>
 /// Extension class for derivatives.

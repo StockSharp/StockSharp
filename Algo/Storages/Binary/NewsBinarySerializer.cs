@@ -1,17 +1,5 @@
 ﻿namespace StockSharp.Algo.Storages.Binary;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Localization;
-using StockSharp.Messages;
-
 class NewsMetaInfo : BinaryMetaInfo
 {
 	public NewsMetaInfo(DateTime date)

@@ -1,9 +1,5 @@
 namespace StockSharp.Algo.Indicators;
 
-using System;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Part <see cref="Fractals"/>.
 /// </summary>

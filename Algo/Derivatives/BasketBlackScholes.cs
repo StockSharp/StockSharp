@@ -1,14 +1,5 @@
 namespace StockSharp.Algo.Derivatives;
 
-using System;
-using System.Linq;
-
-using Ecng.Collections;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-using StockSharp.Localization;
-
 /// <summary>
 /// Portfolio model for calculating the values of Greeks by the Black-Scholes formula.
 /// </summary>

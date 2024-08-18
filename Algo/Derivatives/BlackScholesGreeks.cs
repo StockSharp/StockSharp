@@ -1,9 +1,5 @@
 ﻿namespace StockSharp.Algo.Derivatives;
 
-using System.ComponentModel.DataAnnotations;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Black-Scholes "greeks".
 /// </summary>

@@ -1,9 +1,6 @@
 namespace StockSharp.Algo.Testing;
 
-using Ecng.Serialization;
-
 using StockSharp.Algo.Commissions;
-using StockSharp.Messages;
 
 /// <summary>
 /// The message, containing information on the commission calculation rule.

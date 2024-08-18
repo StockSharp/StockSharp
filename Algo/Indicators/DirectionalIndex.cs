@@ -1,15 +1,6 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Common;
-using Ecng.Serialization;
 using Ecng.ComponentModel;
-
-using StockSharp.Localization;
-using StockSharp.Messages;
 
 /// <summary>
 /// Welles Wilder Directional Movement Index.

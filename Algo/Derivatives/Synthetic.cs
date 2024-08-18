@@ -1,13 +1,5 @@
 namespace StockSharp.Algo.Derivatives;
 
-using System;
-
-using Ecng.Common;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-using StockSharp.Localization;
-
 /// <summary>
 /// The synthetic positions builder.
 /// </summary>

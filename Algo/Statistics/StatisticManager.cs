@@ -1,16 +1,6 @@
 namespace StockSharp.Algo.Statistics;
 
-using System;
-using System.Linq;
-using System.Collections.Generic;
-
-using Ecng.Common;
-using Ecng.Collections;
-using Ecng.Serialization;
-
 using StockSharp.Algo.PnL;
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
 
 /// <summary>
 /// The statistics manager.

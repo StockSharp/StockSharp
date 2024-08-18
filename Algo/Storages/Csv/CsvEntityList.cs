@@ -1,17 +1,8 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.IO.Compression;
-using System.Linq;
 
-using Ecng.Collections;
-using Ecng.Common;
 using Ecng.IO;
-using Ecng.Serialization;
-
-using StockSharp.Messages;
 
 /// <summary>
 /// The interface for presentation in the form of list of trade objects, received from the external storage.

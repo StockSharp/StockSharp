@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Strategies.Quoting;
 
-using StockSharp.Messages;
-
 /// <summary>
 /// The strategy realizing volume quoting algorithm by the limited price.
 /// </summary>

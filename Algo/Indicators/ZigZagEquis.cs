@@ -1,15 +1,6 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Serialization;
 using Ecng.ComponentModel;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
 
 /// <summary>
 /// Zig Zag (Metastock).

@@ -1,13 +1,5 @@
 ﻿namespace StockSharp.Algo.Statistics;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// <see cref="IStatisticParameter"/> registry.
 /// </summary>

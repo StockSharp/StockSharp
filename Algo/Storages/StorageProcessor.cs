@@ -1,12 +1,6 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
-
-using Ecng.Collections;
-using Ecng.Common;
-
 using StockSharp.Algo.Candles.Compression;
-using StockSharp.Messages;
 
 /// <summary>
 /// Storage processor.

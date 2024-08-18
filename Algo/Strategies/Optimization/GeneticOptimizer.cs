@@ -1,23 +1,10 @@
 ﻿namespace StockSharp.Algo.Strategies.Optimization;
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-using Ecng.Collections;
-using Ecng.Common;
 using Ecng.Compilation;
 
 using GeneticSharp;
-
-using StockSharp.Algo.Storages;
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-using StockSharp.Logging;
-using StockSharp.Localization;
 
 /// <summary>
 /// The genetic optimizer of strategies.

@@ -1,12 +1,5 @@
 namespace StockSharp.Algo.Indicators;
 
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Serialization;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// The full class of linear regression, calculates LinearReg, LinearRegSlope, RSquared and StandardError at the same time.
 /// </summary>

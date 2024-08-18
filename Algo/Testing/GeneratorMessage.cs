@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Testing;
 
-using StockSharp.Messages;
-
 /// <summary>
 /// The message about creation or deletion of the market data generator.
 /// </summary>

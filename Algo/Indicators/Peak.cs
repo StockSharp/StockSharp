@@ -1,11 +1,6 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using System.ComponentModel.DataAnnotations;
-
 using Ecng.ComponentModel;
-
-using StockSharp.Localization;
-using StockSharp.Messages;
 
 /// <summary>
 /// Peak.

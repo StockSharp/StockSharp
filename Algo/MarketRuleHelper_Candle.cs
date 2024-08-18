@@ -1,16 +1,8 @@
 ﻿namespace StockSharp.Algo;
 
-using System;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
 using Ecng.ComponentModel;
 
 using StockSharp.Algo.Candles;
-using StockSharp.Messages;
-using StockSharp.Localization;
-using StockSharp.BusinessEntities;
 
 partial class MarketRuleHelper
 {

@@ -1,15 +1,5 @@
 namespace StockSharp.Algo;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-
-using Ecng.Common;
-using Ecng.Collections;
-
-using StockSharp.BusinessEntities;
-
 /// <summary>
 /// Basket portfolio.
 /// </summary>

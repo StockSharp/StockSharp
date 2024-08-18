@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Expressions;
 
-using StockSharp.BusinessEntities;
-
 /// <summary>
 /// Index securities processor for <see cref="ExpressionIndexSecurity"/>.
 /// </summary>

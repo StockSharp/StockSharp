@@ -1,14 +1,6 @@
 namespace StockSharp.Algo;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Common;
-
 using StockSharp.Algo.Candles;
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
 
 partial class Connector
 {

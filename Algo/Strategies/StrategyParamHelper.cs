@@ -1,11 +1,5 @@
 namespace StockSharp.Algo.Strategies;
 
-using System;
-
-using Ecng.Common;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// The auxiliary class for <see cref="StrategyParam{T}"/>.
 /// </summary>

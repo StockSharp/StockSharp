@@ -1,12 +1,5 @@
 namespace StockSharp.Algo.Candles.Compression;
 
-using System;
-
-using Ecng.Collections;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Localization;
-
 /// <summary>
 /// Candle builders provider.
 /// </summary>

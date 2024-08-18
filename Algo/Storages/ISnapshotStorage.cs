@@ -1,10 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
-using System.Collections.Generic;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// The interface for access to the storage of snapshot prices.
 /// </summary>

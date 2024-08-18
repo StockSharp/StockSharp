@@ -1,14 +1,6 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Messages;
 
 /// <summary>
 /// The position change serializer in the CSV format.

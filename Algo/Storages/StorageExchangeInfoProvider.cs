@@ -1,13 +1,5 @@
 ﻿namespace StockSharp.Algo.Storages;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-
-using StockSharp.BusinessEntities;
-
 /// <summary>
 /// The storage based provider of stocks and trade boards.
 /// </summary>

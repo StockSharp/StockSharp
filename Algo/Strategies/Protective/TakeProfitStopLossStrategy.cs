@@ -1,12 +1,5 @@
 namespace StockSharp.Algo.Strategies.Protective;
 
-using System;
-using System.Linq;
-
-using Ecng.Collections;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// The strategy protecting trades together by strategies <see cref="TakeProfitStrategy"/> and <see cref="StopLossStrategy"/>.
 /// </summary>

@@ -1,10 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using Ecng.Collections;
-using Ecng.Serialization;
-
-using StockSharp.BusinessEntities;
-
 /// <summary>
 /// The interface for presentation in the form of list of trade objects, received from the external storage.
 /// </summary>

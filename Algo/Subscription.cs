@@ -1,10 +1,6 @@
 namespace StockSharp.Algo;
 
 using StockSharp.Algo.Candles;
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
-using DataType = StockSharp.Messages.DataType;
 
 /// <summary>
 /// Subscription.

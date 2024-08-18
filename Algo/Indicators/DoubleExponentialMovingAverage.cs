@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using System.ComponentModel;
-
 using Ecng.ComponentModel;
 
 /// <summary>

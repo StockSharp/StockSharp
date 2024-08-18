@@ -1,16 +1,5 @@
 namespace StockSharp.Algo;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Messages;
-using StockSharp.Logging;
-using StockSharp.Localization;
-
 /// <summary>
 /// Filtered market depth adapter.
 /// </summary>

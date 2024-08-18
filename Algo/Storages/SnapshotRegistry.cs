@@ -1,22 +1,11 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading;
 
-using Ecng.Collections;
-using Ecng.Common;
 using Ecng.Reflection;
 using Ecng.Interop;
-using Ecng.Serialization;
 
 using StockSharp.Algo.Storages.Binary.Snapshot;
-using StockSharp.Localization;
-using StockSharp.Logging;
-using StockSharp.Messages;
 
 /// <summary>
 /// Snapshot storage registry.

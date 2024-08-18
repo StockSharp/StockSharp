@@ -1,19 +1,7 @@
 namespace StockSharp.Algo.Strategies.Derivatives;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
 using StockSharp.Algo.Derivatives;
 using StockSharp.Algo.Strategies.Quoting;
-using StockSharp.Logging;
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-using StockSharp.Localization;
 
 /// <summary>
 /// The base strategy of hedging.

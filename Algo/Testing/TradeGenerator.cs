@@ -1,12 +1,5 @@
 namespace StockSharp.Algo.Testing;
 
-using System;
-
-using Ecng.Common;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 /// <summary>
 /// Tick trades generator using random method.
 /// </summary>

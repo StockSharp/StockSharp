@@ -1,12 +1,5 @@
 namespace StockSharp.Algo.Indicators;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-
-using Ecng.Collections;
-
 /// <summary>
 /// Senkou (B) line.
 /// </summary>

@@ -1,17 +1,5 @@
 namespace StockSharp.Algo.Storages.Binary;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-using Ecng.Common;
-using Ecng.Collections;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
-using StockSharp.BusinessEntities;
-
 class TickMetaInfo : BinaryMetaInfo
 {
 	public TickMetaInfo(DateTime date)

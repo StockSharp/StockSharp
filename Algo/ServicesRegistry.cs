@@ -1,7 +1,5 @@
 namespace StockSharp.Algo;
 
-using System;
-
 using Ecng.Compilation;
 using Ecng.Configuration;
 using Ecng.Interop;
@@ -10,11 +8,7 @@ using StockSharp.Algo.Candles.Compression;
 using StockSharp.Algo.Candles.Patterns;
 using StockSharp.Algo.Commissions;
 using StockSharp.Algo.Risk;
-using StockSharp.Algo.Storages;
 using StockSharp.Algo.Strategies.Reporting;
-using StockSharp.BusinessEntities;
-using StockSharp.Logging;
-using StockSharp.Messages;
 
 /// <summary>
 /// Services registry.

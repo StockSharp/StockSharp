@@ -1,11 +1,6 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-
 using Ecng.ComponentModel;
-
-using StockSharp.Localization;
 
 /// <summary>
 /// Weighted moving average.

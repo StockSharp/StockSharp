@@ -1,14 +1,5 @@
 namespace StockSharp.Algo.Strategies;
 
-using System;
-using System.ComponentModel;
-
-using Ecng.Common;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-using StockSharp.Localization;
-using StockSharp.Logging;
 using StockSharp.Algo.Strategies.Protective;
 using StockSharp.Algo.Strategies.Quoting;
 using StockSharp.Algo.Derivatives;

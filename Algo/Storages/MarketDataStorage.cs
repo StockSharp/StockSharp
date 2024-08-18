@@ -1,16 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
-
 interface IMarketDataStorageInfo
 {
 	DateTimeOffset GetTime(object data);

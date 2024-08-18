@@ -1,21 +1,7 @@
 namespace StockSharp.Algo.Strategies.Reporting;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Threading;
-
-using Ecng.Common;
 using Ecng.Interop;
-using Ecng.Collections;
 using Ecng.ComponentModel;
-
-using StockSharp.Algo.PnL;
-using StockSharp.BusinessEntities;
-using StockSharp.Localization;
-using StockSharp.Messages;
 
 /// <summary>
 /// The report generator for the strategy in the Excel format.

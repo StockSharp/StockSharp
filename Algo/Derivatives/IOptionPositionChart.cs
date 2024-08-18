@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Algo.Derivatives;
 
-using System;
-
 using StockSharp.Charting;
 
 /// <summary>

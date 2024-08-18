@@ -1,14 +1,5 @@
 namespace StockSharp.Algo.Statistics;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Common;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Localization;
-using StockSharp.Messages;
-
 /// <summary>
 /// The interface, describing statistic parameter, calculated based on orders.
 /// </summary>

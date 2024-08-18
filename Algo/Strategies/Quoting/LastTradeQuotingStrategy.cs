@@ -1,8 +1,5 @@
 namespace StockSharp.Algo.Strategies.Quoting;
 
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 /// <summary>
 /// The quoting by the last trade price.
 /// </summary>

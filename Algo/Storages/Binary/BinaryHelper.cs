@@ -1,14 +1,6 @@
 namespace StockSharp.Algo.Storages.Binary;
 
-using System;
 using System.Collections;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
-using StockSharp.BusinessEntities;
 
 static class BinaryHelper
 {

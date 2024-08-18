@@ -1,16 +1,7 @@
 namespace StockSharp.Algo.Testing;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic;
-using System.Linq;
-
 using Ecng.ComponentModel;
-using Ecng.Serialization;
 
-using StockSharp.Localization;
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
 using StockSharp.Algo.Commissions;
 
 /// <summary>

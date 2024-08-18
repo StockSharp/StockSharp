@@ -1,7 +1,6 @@
 ﻿namespace StockSharp.Algo;
 
 using StockSharp.Algo.Testing;
-using StockSharp.Messages;
 
 /// <summary>
 /// Extended <see cref="MessageTypes"/>.

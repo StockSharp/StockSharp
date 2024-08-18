@@ -1,17 +1,5 @@
 namespace StockSharp.Algo;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Logging;
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-using StockSharp.Localization;
-
 /// <summary>
 /// Extension class for <see cref="IMarketRule"/>.
 /// </summary>

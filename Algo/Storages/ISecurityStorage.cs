@@ -1,15 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 /// <summary>
 /// The interface for access to the storage of information on instruments.
 /// </summary>

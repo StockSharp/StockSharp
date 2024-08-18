@@ -1,10 +1,5 @@
 namespace StockSharp.Algo.Commissions;
 
-using Ecng.Collections;
-using Ecng.Serialization;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// The commission calculating manager interface.
 /// </summary>

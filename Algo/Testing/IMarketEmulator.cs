@@ -1,9 +1,5 @@
 namespace StockSharp.Algo.Testing;
 
-using StockSharp.BusinessEntities;
-using StockSharp.Logging;
-using StockSharp.Messages;
-
 /// <summary>
 /// The interface, describing paper trading.
 /// </summary>

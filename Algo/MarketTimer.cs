@@ -1,12 +1,5 @@
 namespace StockSharp.Algo;
 
-using System;
-
-using Ecng.Common;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Localization;
-
 /// <summary>
 /// The timer, based on trading system time.
 /// </summary>

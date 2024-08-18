@@ -1,30 +1,16 @@
 namespace StockSharp.Algo;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Collections;
-using Ecng.Common;
 using Ecng.ComponentModel;
-using Ecng.Serialization;
 
-using StockSharp.BusinessEntities;
 using StockSharp.Algo.Candles;
 using StockSharp.Algo.Candles.Compression;
 using StockSharp.Algo.Commissions;
 using StockSharp.Algo.Latency;
 using StockSharp.Algo.PnL;
 using StockSharp.Algo.Slippage;
-using StockSharp.Algo.Storages;
 using StockSharp.Algo.Testing;
 using StockSharp.Algo.Positions;
-using StockSharp.Logging;
-using StockSharp.Messages;
-using StockSharp.Localization;
 using StockSharp.Algo.Strategies;
-using DataType = Messages.DataType;
 
 /// <summary>
 /// The interface describing the list of adapters to trading systems with which the aggregator operates.

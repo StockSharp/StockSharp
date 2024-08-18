@@ -1,14 +1,5 @@
 namespace StockSharp.Algo.Strategies.Quoting;
 
-using System;
-
-using Ecng.Collections;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Logging;
-using StockSharp.Messages;
-using StockSharp.Localization;
-
 /// <summary>
 /// The quoting according to the Best By Volume rule. For this quoting the volume delta <see cref="VolumeExchange"/> is specified, which can stand in front of the quoted order.
 /// </summary>

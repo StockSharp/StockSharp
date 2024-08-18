@@ -1,8 +1,5 @@
 ﻿namespace StockSharp.Algo;
 
-using System;
-
-using Ecng.Common;
 using Ecng.ComponentModel;
 
 /// <summary>

@@ -1,15 +1,6 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Common;
-using Ecng.Collections;
 using Ecng.ComponentModel;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
 
 /// <summary>
 /// Volume profile.

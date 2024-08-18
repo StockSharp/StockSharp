@@ -1,14 +1,5 @@
 namespace StockSharp.Algo.Risk;
 
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Serialization;
-
-using StockSharp.Logging;
-using StockSharp.Messages;
-
 /// <summary>
 /// The risks control manager.
 /// </summary>

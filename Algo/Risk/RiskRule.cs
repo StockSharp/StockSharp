@@ -1,17 +1,6 @@
 namespace StockSharp.Algo.Risk;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
-
-using Ecng.Common;
-using Ecng.Serialization;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
-using StockSharp.Logging;
 
 /// <summary>
 /// Base risk-rule.

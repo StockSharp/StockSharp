@@ -1,9 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
-
-using StockSharp.BusinessEntities;
-
 /// <summary>
 /// The interface describing the storage of market data.
 /// </summary>

@@ -1,22 +1,9 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using System.IO;
-using System.Linq;
 using IOPath = System.IO.Path;
 
-using Ecng.Collections;
-using Ecng.Common;
-using Ecng.Serialization;
 using Ecng.Reflection;
 
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-using StockSharp.Localization;
-using StockSharp.Logging;
 using StockSharp.Algo.Storages.Binary;
 
 /// <summary>

@@ -1,11 +1,6 @@
 ﻿namespace StockSharp.Algo.Strategies;
 
-using System;
-
-using Ecng.Common;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
+using StockSharp.Charting;
 
 public partial class Strategy
 {

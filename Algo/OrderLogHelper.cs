@@ -1,12 +1,5 @@
 namespace StockSharp.Algo;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 /// <summary>
 /// Building order book by the orders log.
 /// </summary>

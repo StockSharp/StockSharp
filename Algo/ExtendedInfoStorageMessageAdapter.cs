@@ -1,14 +1,5 @@
 namespace StockSharp.Algo;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Common;
-
-using StockSharp.Algo.Storages;
-using StockSharp.Messages;
-
 /// <summary>
 /// The message adapter, that save extension info into <see cref="IExtendedInfoStorage"/>.
 /// </summary>

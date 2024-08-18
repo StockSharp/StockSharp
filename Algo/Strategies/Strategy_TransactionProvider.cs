@@ -1,13 +1,5 @@
 namespace StockSharp.Algo.Strategies;
 
-using System;
-using System.Collections.Generic;
-
-using Ecng.Common;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 partial class Strategy
 {
 	IdGenerator ITransactionProvider.TransactionIdGenerator => SafeGetConnector().TransactionIdGenerator;

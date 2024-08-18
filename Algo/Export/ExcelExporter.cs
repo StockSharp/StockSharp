@@ -1,16 +1,7 @@
 namespace StockSharp.Algo.Export;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-using Ecng.Common;
 using Ecng.ComponentModel;
 using Ecng.Interop;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
 
 /// <summary>
 /// The export into Excel.

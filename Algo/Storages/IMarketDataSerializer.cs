@@ -1,9 +1,6 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 
 /// <summary>
 /// The serializer.

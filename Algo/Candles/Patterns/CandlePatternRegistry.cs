@@ -1,10 +1,5 @@
 ﻿namespace StockSharp.Algo.Candles.Patterns;
 
-using System.Collections.Generic;
-using System.Linq;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Registry of basic patterns.
 /// </summary>

@@ -1,12 +1,6 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using System.Linq;
-using System.ComponentModel.DataAnnotations;
-
 using Ecng.ComponentModel;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
 
 /// <summary>
 /// Last oscillator.

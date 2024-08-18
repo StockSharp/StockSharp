@@ -1,12 +1,5 @@
 ﻿namespace StockSharp.Algo.Strategies.Testing;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using StockSharp.Algo.Storages;
-using StockSharp.BusinessEntities;
-
 /// <summary>
 /// </summary>
 [Obsolete("Use BruteForceOptimizer.")]

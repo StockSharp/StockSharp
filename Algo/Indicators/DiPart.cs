@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using StockSharp.Messages;
-
 /// <summary>
 /// The part of the indicator <see cref="DirectionalIndex"/>.
 /// </summary>

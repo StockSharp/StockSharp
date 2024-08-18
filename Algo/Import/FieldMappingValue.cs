@@ -1,9 +1,5 @@
 namespace StockSharp.Algo.Import;
 
-using System;
-
-using Ecng.Serialization;
-
 /// <summary>
 /// Mapping value.
 /// </summary>

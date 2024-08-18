@@ -1,10 +1,5 @@
 namespace StockSharp.Algo;
 
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// The type of market prices.
 /// </summary>

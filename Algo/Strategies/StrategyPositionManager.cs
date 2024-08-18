@@ -1,14 +1,6 @@
 ﻿namespace StockSharp.Algo.Strategies;
 
-using System;
-using System.Collections.Generic;
-
-using Ecng.Collections;
-using Ecng.Common;
-
 using StockSharp.Algo.Positions;
-using StockSharp.Logging;
-using StockSharp.Messages;
 
 /// <summary>
 /// The position calculation manager.

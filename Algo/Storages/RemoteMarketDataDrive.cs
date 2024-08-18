@@ -1,19 +1,10 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
-using System.Collections.Generic;
 using System.Net;
-using System.IO;
 
-using Ecng.Common;
-using Ecng.Serialization;
 using Ecng.ComponentModel;
-using Ecng.Collections;
 
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
 using StockSharp.Algo.Storages.Remote;
-using StockSharp.Localization;
 
 /// <summary>
 /// Remote storage of market data working via <see cref="RemoteStorageClient"/>.

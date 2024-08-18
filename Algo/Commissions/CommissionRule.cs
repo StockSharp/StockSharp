@@ -1,17 +1,6 @@
 namespace StockSharp.Algo.Commissions;
 
-using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-
-using Ecng.Common;
 using Ecng.ComponentModel;
-using Ecng.Serialization;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-using StockSharp.Localization;
 
 /// <summary>
 /// The commission calculating rule.

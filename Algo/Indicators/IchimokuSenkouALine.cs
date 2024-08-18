@@ -1,8 +1,5 @@
 namespace StockSharp.Algo.Indicators;
 
-using System;
-using System.ComponentModel;
-
 /// <summary>
 /// Senkou (A) line.
 /// </summary>

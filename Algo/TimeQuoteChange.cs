@@ -1,9 +1,5 @@
 namespace StockSharp.Algo;
 
-using System;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// The quote with the time mark. It used for CSV files.
 /// </summary>

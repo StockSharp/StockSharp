@@ -1,16 +1,5 @@
 namespace StockSharp.Algo.Strategies.Derivatives;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-
-using Ecng.Common;
-
-using StockSharp.Logging;
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-using StockSharp.Localization;
 using StockSharp.Algo.Derivatives;
 
 /// <summary>

@@ -1,12 +1,5 @@
 namespace StockSharp.Algo.Candles.Compression;
 
-using System;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// Candle holder adapter.
 /// </summary>

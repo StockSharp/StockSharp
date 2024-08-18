@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Indicators;
 
-using StockSharp.Messages;
-
 /// <summary>
 /// DIMinus is a component of the Directional Movement System developed by Welles Wilder.
 /// </summary>

@@ -1,14 +1,8 @@
 namespace StockSharp.Algo;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security;
 
-using Ecng.Common;
 using Ecng.ComponentModel;
-using Ecng.Serialization;
-using Ecng.Collections;
 
 using StockSharp.Algo.Candles.Compression;
 using StockSharp.Algo.Commissions;
@@ -16,11 +10,6 @@ using StockSharp.Algo.Latency;
 using StockSharp.Algo.PnL;
 using StockSharp.Algo.Risk;
 using StockSharp.Algo.Slippage;
-using StockSharp.Algo.Storages;
-using StockSharp.BusinessEntities;
-using StockSharp.Logging;
-using StockSharp.Messages;
-using StockSharp.Localization;
 
 /// <summary>
 /// The class to create connections to trading systems.

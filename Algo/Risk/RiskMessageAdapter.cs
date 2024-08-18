@@ -1,14 +1,6 @@
 namespace StockSharp.Algo.Risk;
 
-using System;
-
-using Ecng.Common;
 using Ecng.ComponentModel;
-using Ecng.Serialization;
-
-using StockSharp.Localization;
-using StockSharp.Logging;
-using StockSharp.Messages;
 
 /// <summary>
 /// The message adapter, automatically controlling risk rules.

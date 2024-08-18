@@ -1,19 +1,11 @@
 namespace StockSharp.Algo.Candles;
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 
-using Ecng.Collections;
-using Ecng.Common;
 using Ecng.ComponentModel;
 using Ecng.Configuration;
 
 using StockSharp.Algo.Candles.Compression;
-using StockSharp.BusinessEntities;
-using StockSharp.Localization;
-using StockSharp.Messages;
 
 /// <summary>
 /// Extension class for candles.

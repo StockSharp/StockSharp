@@ -1,12 +1,5 @@
 namespace StockSharp.Algo.Export;
 
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Serialization;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Txt templates registry.
 /// </summary>

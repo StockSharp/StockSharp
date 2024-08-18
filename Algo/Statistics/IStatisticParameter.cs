@@ -1,15 +1,6 @@
 namespace StockSharp.Algo.Statistics;
 
-using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
 using Ecng.ComponentModel;
-using Ecng.Serialization;
-using Ecng.Common;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
 
 /// <summary>
 /// The interface, describing statistic parameter.

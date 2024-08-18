@@ -1,12 +1,6 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-using System;
 using System.Text;
-
-using Ecng.Common;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
 
 class NullableTimeQuoteChange
 {

@@ -1,9 +1,5 @@
 namespace StockSharp.Algo.Strategies.Testing;
 
-using System.ComponentModel.DataAnnotations;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// The data type for paper trading.
 /// </summary>

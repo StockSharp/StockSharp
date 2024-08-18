@@ -1,12 +1,6 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Serialization;
 using Ecng.ComponentModel;
-
-using StockSharp.Localization;
 
 /// <summary>
 /// Hull Moving Average.

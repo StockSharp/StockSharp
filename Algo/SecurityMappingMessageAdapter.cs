@@ -1,13 +1,5 @@
 namespace StockSharp.Algo;
 
-using System;
-
-using Ecng.Common;
-
-using StockSharp.Algo.Storages;
-using StockSharp.Logging;
-using StockSharp.Messages;
-
 /// <summary>
 /// Security identifier mappings message adapter.
 /// </summary>

@@ -1,9 +1,5 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-using Ecng.Common;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// The news serializer in the CSV format.
 /// </summary>

@@ -1,10 +1,5 @@
 namespace StockSharp.Algo.Testing;
 
-using System;
-using System.Collections.Generic;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// Market-data message with historical source.
 /// </summary>

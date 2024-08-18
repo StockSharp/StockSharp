@@ -1,13 +1,5 @@
 namespace StockSharp.Algo.Testing;
 
-using System;
-using System.Collections.Generic;
-
-using Ecng.Common;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
-
 /// <summary>
 /// The order book generator using random method.
 /// </summary>

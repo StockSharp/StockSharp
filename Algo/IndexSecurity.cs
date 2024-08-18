@@ -1,14 +1,5 @@
 namespace StockSharp.Algo;
 
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 /// <summary>
 /// The index, built of instruments. For example, to specify spread at arbitrage or pair trading.
 /// </summary>

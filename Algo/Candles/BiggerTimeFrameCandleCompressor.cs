@@ -1,13 +1,6 @@
 namespace StockSharp.Algo.Candles;
 
-using System;
-using System.Linq;
-using System.Collections.Generic;
-
-using Ecng.Common;
-
 using StockSharp.Algo.Candles.Compression;
-using StockSharp.Messages;
 
 /// <summary>
 /// Compressor of candles from smaller time-frames to bigger.

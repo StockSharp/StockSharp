@@ -1,10 +1,5 @@
 namespace StockSharp.Algo;
 
-using System;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 /// <summary>
 /// The interface of the business-essences factory (<see cref="Security"/>, <see cref="Order"/> etc.).
 /// </summary>

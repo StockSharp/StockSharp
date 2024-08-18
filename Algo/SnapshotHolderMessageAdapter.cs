@@ -1,13 +1,5 @@
 ﻿namespace StockSharp.Algo;
 
-using System;
-using System.Collections.Generic;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// Interface, described snapshot holder.
 /// </summary>

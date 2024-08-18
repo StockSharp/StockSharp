@@ -1,12 +1,9 @@
 namespace StockSharp.Algo.Storages.Binary.Snapshot;
 
-using System;
 using System.Runtime.InteropServices;
 
-using Ecng.Common;
 using Ecng.Interop;
 
-using StockSharp.Messages;
 using Key = System.Tuple<Messages.SecurityId, string, string>;
 
 /// <summary>

@@ -1,16 +1,6 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Text;
-
-using Ecng.Collections;
-using Ecng.Common;
-using Ecng.Serialization;
-
-using StockSharp.Logging;
-using StockSharp.Messages;
 
 using Key = System.Tuple<Messages.SecurityId, Messages.DataType>;
 

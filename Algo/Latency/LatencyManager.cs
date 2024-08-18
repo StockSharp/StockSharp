@@ -1,14 +1,5 @@
 namespace StockSharp.Algo.Latency;
 
-using System;
-using System.Collections.Generic;
-
-using Ecng.Common;
-using Ecng.Serialization;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
-
 /// <summary>
 /// Orders registration delay calculation manager.
 /// </summary>

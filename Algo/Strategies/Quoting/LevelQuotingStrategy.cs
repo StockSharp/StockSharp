@@ -1,13 +1,6 @@
 namespace StockSharp.Algo.Strategies.Quoting;
 
-using System;
-using System.Linq;
-
 using Ecng.ComponentModel;
-using Ecng.Collections;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
 
 /// <summary>
 /// The quoting by specified level in the order book.

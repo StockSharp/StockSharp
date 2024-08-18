@@ -1,12 +1,5 @@
 namespace StockSharp.Algo.Testing;
 
-using System;
-
-using Ecng.Common;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
-
 /// <summary>
 /// The market data generator.
 /// </summary>

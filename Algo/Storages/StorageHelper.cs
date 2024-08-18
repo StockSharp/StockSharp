@@ -1,22 +1,12 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
-using System.IO;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
-using Ecng.Collections;
-using Ecng.Common;
 using Ecng.ComponentModel;
 
 using StockSharp.Algo.Candles;
 using StockSharp.Algo.Candles.Compression;
-using StockSharp.BusinessEntities;
-using StockSharp.Localization;
-using StockSharp.Logging;
-using StockSharp.Messages;
 
 /// <summary>
 /// Extension class for storage.

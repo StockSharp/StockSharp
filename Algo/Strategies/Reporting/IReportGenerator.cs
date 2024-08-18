@@ -1,10 +1,5 @@
 namespace StockSharp.Algo.Strategies.Reporting;
 
-using System.Threading;
-using System.Threading.Tasks;
-
-using StockSharp.BusinessEntities;
-
 /// <summary>
 /// The interface describe report generator for strategies.
 /// </summary>

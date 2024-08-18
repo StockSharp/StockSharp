@@ -1,15 +1,5 @@
 namespace StockSharp.Algo.PnL;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Common;
-using Ecng.Collections;
-using Ecng.Serialization;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// The profit-loss manager, related for specified <see cref="PortfolioName"/>.
 /// </summary>

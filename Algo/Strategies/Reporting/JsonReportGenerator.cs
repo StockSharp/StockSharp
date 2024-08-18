@@ -1,16 +1,8 @@
 ﻿namespace StockSharp.Algo.Strategies.Reporting;
 
 using System.Text;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-
-using Ecng.Common;
 
 using Newtonsoft.Json;
-
-using StockSharp.Messages;
-using StockSharp.BusinessEntities;
 
 /// <summary>
 /// The report generator for the strategy in the json format.

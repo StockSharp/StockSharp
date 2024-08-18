@@ -1,22 +1,12 @@
 namespace StockSharp.Algo.Storages.Remote;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
 using System.IO.Compression;
 using System.Text;
 
-using Ecng.Common;
-using Ecng.Collections;
 using Ecng.IO;
 
 using StockSharp.Algo.Storages;
 using StockSharp.Algo.Storages.Csv;
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-using StockSharp.Localization;
-using StockSharp.Logging;
 
 /// <summary>
 /// The client for access to the history server.

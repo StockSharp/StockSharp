@@ -1,9 +1,5 @@
 namespace StockSharp.Algo.PnL;
 
-using System;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Information on trade, its closed volume and its profitability.
 /// </summary>

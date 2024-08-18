@@ -1,16 +1,6 @@
 namespace StockSharp.Algo.Strategies;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-
-using Ecng.Common;
-using Ecng.Collections;
-using Ecng.Serialization;
 using Ecng.ComponentModel;
-
-using StockSharp.Logging;
-using StockSharp.Localization;
 
 /// <summary>
 /// The strategy parameter.

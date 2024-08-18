@@ -1,16 +1,6 @@
 namespace StockSharp.Algo.Strategies.Protective;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Common;
-
 using StockSharp.Algo.Strategies.Quoting;
-using StockSharp.BusinessEntities;
-using StockSharp.Logging;
-using StockSharp.Messages;
-using StockSharp.Localization;
 
 /// <summary>
 /// The base strategy of the position protection.

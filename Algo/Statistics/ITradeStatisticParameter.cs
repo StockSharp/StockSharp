@@ -1,13 +1,6 @@
 namespace StockSharp.Algo.Statistics;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Serialization;
-
 using StockSharp.Algo.PnL;
-using StockSharp.Localization;
-using StockSharp.Messages;
 
 /// <summary>
 /// The interface, describing statistic parameter, calculated based on trade.

@@ -1,13 +1,5 @@
 namespace StockSharp.Algo.Positions;
 
-using System;
-using System.Collections.Generic;
-
-using Ecng.Collections;
-
-using StockSharp.Logging;
-using StockSharp.Messages;
-
 /// <summary>
 /// The position calculation manager.
 /// </summary>

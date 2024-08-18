@@ -1,13 +1,5 @@
 namespace StockSharp.Algo.Slippage;
 
-using System;
-
-using Ecng.Common;
-using Ecng.Collections;
-using Ecng.Serialization;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// The slippage manager.
 /// </summary>

@@ -1,16 +1,6 @@
 namespace StockSharp.Algo.Candles.Compression;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
 using StockSharp.Algo.Testing;
-using StockSharp.Localization;
-using StockSharp.Logging;
-using StockSharp.Messages;
 
 /// <summary>
 /// Candle builder adapter.

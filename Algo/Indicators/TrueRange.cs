@@ -1,13 +1,6 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-
 using Ecng.ComponentModel;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
 
 /// <summary>
 /// True range.

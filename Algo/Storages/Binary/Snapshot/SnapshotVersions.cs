@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages.Binary.Snapshot;
 
-using System;
-
 static class SnapshotVersions
 {
 	public static readonly Version V20 = new(2, 0);

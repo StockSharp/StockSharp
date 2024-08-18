@@ -1,11 +1,5 @@
 namespace StockSharp.Algo.Strategies;
 
-using System;
-using System.Collections.Generic;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 partial class Strategy
 {
 	private IMarketDataProvider MarketDataProvider => SafeGetConnector();

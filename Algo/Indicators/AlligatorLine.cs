@@ -1,12 +1,5 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Serialization;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// The realization of one of indicator lines Alligator (Jaw, Teeth, and Lips).
 /// </summary>

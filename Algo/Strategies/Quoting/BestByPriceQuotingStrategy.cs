@@ -1,10 +1,5 @@
 namespace StockSharp.Algo.Strategies.Quoting;
 
-using System;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 /// <summary>
 /// The quoting by the best price. For this quoting the shift from the best price <see cref="BestPriceOffset"/> is specified, on which quoted order can be changed.
 /// </summary>

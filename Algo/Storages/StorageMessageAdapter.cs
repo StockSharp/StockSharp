@@ -1,13 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Common;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// Storage based message adapter.
 /// </summary>

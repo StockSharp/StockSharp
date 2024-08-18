@@ -1,20 +1,10 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
 
-using Ecng.Common;
-using Ecng.Serialization;
 using Ecng.ComponentModel;
 
 using StockSharp.Algo.Candles.Patterns;
-using StockSharp.Messages;
-using StockSharp.Localization;
-using StockSharp.Logging;
 
 /// <summary>
 /// <see cref="CandlePatternIndicator"/> value.

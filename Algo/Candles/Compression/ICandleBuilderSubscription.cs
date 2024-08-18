@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Algo.Candles.Compression;
 
-using StockSharp.Messages;
-
 /// <summary>
 /// Interface described candles subscription.
 /// </summary>

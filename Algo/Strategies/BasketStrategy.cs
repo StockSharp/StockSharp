@@ -1,10 +1,5 @@
 namespace StockSharp.Algo.Strategies;
 
-using System;
-using System.Linq;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Conditions of subsidiary strategies operation end.
 /// </summary>

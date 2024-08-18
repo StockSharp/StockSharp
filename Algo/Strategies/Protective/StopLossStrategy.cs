@@ -1,10 +1,5 @@
 namespace StockSharp.Algo.Strategies.Protective;
 
-using System;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 /// <summary>
 /// The loss protection strategy.
 /// </summary>

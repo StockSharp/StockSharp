@@ -1,16 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-using Ecng.Serialization;
-
-using StockSharp.Localization;
-using StockSharp.Messages;
-
 /// <summary>
 /// Storage buffer.
 /// </summary>

@@ -1,18 +1,9 @@
 ﻿namespace StockSharp.Algo.Candles.Patterns;
 
-using System;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Collections.Generic;
 
-using Ecng.Collections;
-using Ecng.Common;
 using Ecng.Compilation;
 using Ecng.Compilation.Expressions;
-using Ecng.Serialization;
-
-using StockSharp.Localization;
-using StockSharp.Messages;
 
 /// <summary>
 /// Formula for a single candle inside pattern.

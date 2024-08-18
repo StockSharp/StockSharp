@@ -1,18 +1,5 @@
 namespace StockSharp.Algo.Testing;
 
-using System;
-using System.Linq;
-using System.Collections.Generic;
-
-using Ecng.Common;
-using Ecng.Serialization;
-
-using StockSharp.Messages;
-using StockSharp.Algo.Storages;
-using StockSharp.Logging;
-using StockSharp.Localization;
-using StockSharp.BusinessEntities;
-
 /// <summary>
 /// The base connection of emulation.
 /// </summary>

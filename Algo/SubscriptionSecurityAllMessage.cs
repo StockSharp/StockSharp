@@ -1,10 +1,5 @@
 ﻿namespace StockSharp.Algo;
 
-using System;
-using System.Runtime.Serialization;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// Subscription ALL parent-child mapping message.
 /// </summary>

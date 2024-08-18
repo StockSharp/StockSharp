@@ -1,11 +1,5 @@
 namespace StockSharp.Algo.PnL;
 
-using System.Collections.Generic;
-
-using Ecng.Serialization;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// The interface of the profit-loss calculation manager.
 /// </summary>

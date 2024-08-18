@@ -1,14 +1,5 @@
 ﻿namespace StockSharp.Algo.Candles.Compression;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-
-using StockSharp.Localization;
-using StockSharp.Messages;
-
 /// <summary>
 /// Volume profile.
 /// </summary>

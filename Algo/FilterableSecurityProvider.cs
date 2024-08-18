@@ -1,15 +1,5 @@
 namespace StockSharp.Algo;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Common;
-using Ecng.Collections;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 /// <summary>
 /// Provider of information about instruments supporting search using <see cref="SecurityTrie"/>.
 /// </summary>

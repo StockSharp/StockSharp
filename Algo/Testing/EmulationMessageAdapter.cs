@@ -1,18 +1,7 @@
 namespace StockSharp.Algo.Testing;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Common;
-using Ecng.Collections;
-using Ecng.Serialization;
-
 using StockSharp.Algo.Positions;
 using StockSharp.Algo.Strategies;
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-using StockSharp.Algo.Storages;
 
 /// <summary>
 /// The interface of the real time market data adapter.

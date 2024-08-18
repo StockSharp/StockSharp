@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Indicators;
 
-using Ecng.Collections;
-
 /// <summary>
 /// The weight-average part of indicator <see cref="RelativeVigorIndex"/>.
 /// </summary>

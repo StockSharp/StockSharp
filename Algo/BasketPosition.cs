@@ -1,9 +1,5 @@
 namespace StockSharp.Algo;
 
-using System.Collections.Generic;
-
-using StockSharp.BusinessEntities;
-
 /// <summary>
 /// The basket with positions which belong to <see cref="BasketPortfolio"/>.
 /// </summary>

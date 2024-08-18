@@ -1,14 +1,5 @@
 namespace StockSharp.Algo;
 
-using System;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 /// <summary>
 /// The messages adapter builds market data for basket securities.
 /// </summary>

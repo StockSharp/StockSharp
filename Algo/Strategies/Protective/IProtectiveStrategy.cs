@@ -1,9 +1,5 @@
 namespace StockSharp.Algo.Strategies.Protective;
 
-using System;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// Protective strategy base interface.
 /// </summary>

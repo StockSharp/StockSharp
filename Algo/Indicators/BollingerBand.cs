@@ -1,9 +1,5 @@
 namespace StockSharp.Algo.Indicators;
 
-using System;
-
-using Ecng.Serialization;
-
 /// <summary>
 /// Bollinger band.
 /// </summary>

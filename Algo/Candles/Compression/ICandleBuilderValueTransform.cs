@@ -1,10 +1,5 @@
 namespace StockSharp.Algo.Candles.Compression;
 
-using System;
-using System.Collections.Generic;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// The interface that describes data transformation of the <see cref="ICandleBuilder"/> source.
 /// </summary>

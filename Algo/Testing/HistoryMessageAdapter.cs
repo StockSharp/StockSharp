@@ -1,19 +1,6 @@
 namespace StockSharp.Algo.Testing;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-
-using Ecng.Collections;
-using Ecng.Common;
 using Ecng.ComponentModel;
-
-using StockSharp.Algo.Storages;
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-using StockSharp.Localization;
-using StockSharp.Logging;
 
 /// <summary>
 /// The adapter, receiving messages form the storage <see cref="IStorageRegistry"/>.

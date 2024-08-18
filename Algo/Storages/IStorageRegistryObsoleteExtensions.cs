@@ -1,15 +1,6 @@
 ﻿namespace StockSharp.Algo.Storages;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Ecng.Collections;
-using Ecng.Common;
-
 using StockSharp.Algo.Candles;
-using StockSharp.BusinessEntities;
-using StockSharp.Localization;
-using StockSharp.Messages;
 
 /// <summary>
 /// </summary>

@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Strategies;
 
-using System;
-
 /// <summary>
 /// Results of the trading strategy one iteration operation.
 /// </summary>

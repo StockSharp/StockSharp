@@ -1,16 +1,5 @@
 namespace StockSharp.Algo.Testing;
 
-using System;
-using System.Linq;
-using System.Collections.Generic;
-
-using Ecng.Common;
-
-using StockSharp.Logging;
-using StockSharp.BusinessEntities;
-using StockSharp.Algo.Storages;
-using StockSharp.Messages;
-using StockSharp.Localization;
 using StockSharp.Algo.Risk;
 using StockSharp.Algo.Commissions;
 

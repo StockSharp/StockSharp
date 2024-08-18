@@ -1,15 +1,5 @@
 ﻿namespace StockSharp.Algo;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Common;
-using Ecng.Collections;
-
-using StockSharp.Messages;
-using StockSharp.Logging;
-
 /// <summary>
 /// Transactional messages ordering adapter.
 /// </summary>

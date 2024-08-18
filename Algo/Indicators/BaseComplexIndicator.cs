@@ -1,14 +1,5 @@
 namespace StockSharp.Algo.Indicators;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-
-using Ecng.Serialization;
-using Ecng.Collections;
-using Ecng.Common;
-
 /// <summary>
 /// Embedded indicators processing modes.
 /// </summary>

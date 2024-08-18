@@ -1,22 +1,10 @@
 namespace StockSharp.Algo;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.IO;
 using System.Xml.Linq;
-
-using Ecng.Common;
-using Ecng.Collections;
 
 using StockSharp.Algo.Candles;
 using StockSharp.Algo.Positions;
-using StockSharp.BusinessEntities;
-using StockSharp.Logging;
-using StockSharp.Messages;
-using StockSharp.Localization;
-using StockSharp.Algo.Storages;
 using StockSharp.Algo.Testing;
 
 partial class TraderHelper

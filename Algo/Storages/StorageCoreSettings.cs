@@ -1,11 +1,5 @@
 ﻿namespace StockSharp.Algo.Storages;
 
-using System;
-using Ecng.Serialization;
-
-using StockSharp.Localization;
-using StockSharp.Messages;
-
 /// <summary>
 /// Storage modes.
 /// </summary>

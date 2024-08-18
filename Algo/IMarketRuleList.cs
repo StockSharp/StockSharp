@@ -1,15 +1,5 @@
 namespace StockSharp.Algo;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Logging;
-using StockSharp.Localization;
-
 /// <summary>
 /// The interface, describing the rules list.
 /// </summary>

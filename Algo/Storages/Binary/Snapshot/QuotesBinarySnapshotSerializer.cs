@@ -1,13 +1,8 @@
 namespace StockSharp.Algo.Storages.Binary.Snapshot;
 
-using System;
-using System.Linq;
 using System.Runtime.InteropServices;
 
-using Ecng.Common;
 using Ecng.Interop;
-
-using StockSharp.Messages;
 
 /// <summary>
 /// Implementation of <see cref="ISnapshotSerializer{TKey,TMessage}"/> in binary format for <see cref="QuoteChangeMessage"/>.

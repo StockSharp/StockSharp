@@ -1,15 +1,7 @@
 namespace StockSharp.Algo.Export;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
-using Ecng.Common;
-
 using SmartFormat;
 using SmartFormat.Core.Formatting;
-
-using StockSharp.Messages;
 
 /// <summary>
 /// The export into text file.

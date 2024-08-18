@@ -1,10 +1,5 @@
 namespace StockSharp.Algo.Risk;
 
-using Ecng.Serialization;
-
-using StockSharp.Logging;
-using StockSharp.Messages;
-
 /// <summary>
 /// The interface, describing risk-rule.
 /// </summary>

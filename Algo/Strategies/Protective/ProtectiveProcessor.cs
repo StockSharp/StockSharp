@@ -1,11 +1,5 @@
 ﻿namespace StockSharp.Algo.Strategies.Protective;
 
-using System;
-
-using StockSharp.Localization;
-using StockSharp.Logging;
-using StockSharp.Messages;
-
 /// <summary>
 /// Protective strategy processor.
 /// </summary>

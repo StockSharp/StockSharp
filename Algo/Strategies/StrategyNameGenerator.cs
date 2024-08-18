@@ -1,11 +1,5 @@
 namespace StockSharp.Algo.Strategies;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-
 using SmartFormat;
 using SmartFormat.Core.Extensions;
 using SmartFormat.Core.Parsing;

@@ -1,18 +1,10 @@
 namespace StockSharp.Algo.Storages.Binary.Snapshot;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 
-using Ecng.Common;
 using Ecng.ComponentModel;
 using Ecng.Interop;
-using Ecng.Serialization;
 
-using StockSharp.Localization;
-using StockSharp.Logging;
-using StockSharp.Messages;
 using StockSharp.Configuration;
 
 /// <summary>

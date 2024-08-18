@@ -1,15 +1,5 @@
 ﻿namespace StockSharp.Algo;
 
-using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Logging;
-using StockSharp.Messages;
-
 /// <summary>
 /// Message adapter that splits large market data requests on smaller.
 /// </summary>

@@ -1,10 +1,5 @@
 ﻿namespace StockSharp.Algo;
 
-using System;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 partial class MarketRuleHelper
 {
 	private abstract class SubscriptionRule<TArg> : MarketRule<Subscription, TArg>

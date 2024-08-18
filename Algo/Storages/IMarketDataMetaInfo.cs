@@ -1,10 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
-using System.IO;
-
-using StockSharp.BusinessEntities;
-
 /// <summary>
 /// Meta-information on data for one day.
 /// </summary>

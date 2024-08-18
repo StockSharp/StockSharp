@@ -1,14 +1,5 @@
 ﻿namespace StockSharp.Algo;
 
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Logging;
-using StockSharp.Messages;
-
 /// <summary>
 /// The messages adapter build order book from incremental updates <see cref="QuoteChangeStates.Increment"/>.
 /// </summary>

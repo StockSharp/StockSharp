@@ -1,14 +1,5 @@
 namespace StockSharp.Algo;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-
-using Ecng.Common;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 /// <summary>
 /// Attribute, applied to derived from <see cref="BasketSecurity"/> class, to provide basket type code.
 /// </summary>

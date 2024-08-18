@@ -1,11 +1,8 @@
 namespace StockSharp.Algo.Strategies.Derivatives;
 
-using System;
-
 using Ecng.ComponentModel;
 
 using StockSharp.Algo.Strategies.Quoting;
-using StockSharp.Messages;
 
 /// <summary>
 /// Option theoretical price quoting.

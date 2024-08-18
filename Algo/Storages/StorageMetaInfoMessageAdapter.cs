@@ -1,14 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
-using System.Linq;
-
-using Ecng.Common;
-using Ecng.Serialization;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 /// <summary>
 /// Meta-info storage based message adapter.
 /// </summary>

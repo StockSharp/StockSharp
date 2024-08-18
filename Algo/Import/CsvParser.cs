@@ -1,17 +1,5 @@
 namespace StockSharp.Algo.Import;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Algo.Storages;
-using StockSharp.Localization;
-using StockSharp.Logging;
-using StockSharp.Messages;
-
 /// <summary>
 /// Messages parser from text file in CSV format.
 /// </summary>

@@ -1,11 +1,6 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-using System;
 using System.Text;
-
-using Ecng.Common;
-
-using StockSharp.Messages;
 
 /// <summary>
 /// The tick serializer in the CSV format.

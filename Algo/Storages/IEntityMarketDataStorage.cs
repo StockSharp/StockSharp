@@ -1,10 +1,5 @@
 ﻿namespace StockSharp.Algo.Storages;
 
-using System;
-using System.Collections.Generic;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// The interface, describing the storage of market data (ticks, order books etc.).
 /// </summary>

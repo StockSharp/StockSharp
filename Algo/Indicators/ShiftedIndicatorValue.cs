@@ -1,12 +1,5 @@
 namespace StockSharp.Algo.Indicators;
 
-using System;
-using System.Collections.Generic;
-
-using Ecng.Common;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// The shifted value of the indicator.
 /// </summary>

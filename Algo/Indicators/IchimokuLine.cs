@@ -1,10 +1,5 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-
 /// <summary>
 /// The implementation of the lines of Ishimoku KInko Khayo indicator (Tenkan, Kijun, Senkou Span B).
 /// </summary>

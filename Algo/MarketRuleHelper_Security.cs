@@ -1,15 +1,5 @@
 ﻿namespace StockSharp.Algo;
 
-using System;
-using System.Collections.Generic;
-
-using Ecng.Common;
-using Ecng.Collections;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-using StockSharp.Localization;
-
 partial class MarketRuleHelper
 {
 	private abstract class SecurityRule<TArg> : MarketRule<Security, TArg>

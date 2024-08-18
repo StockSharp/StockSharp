@@ -1,11 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Format types.
 /// </summary>

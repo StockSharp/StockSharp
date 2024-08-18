@@ -1,19 +1,7 @@
 namespace StockSharp.Algo.Expressions;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Common;
-using Ecng.Collections;
 using Ecng.Compilation.Expressions;
 using Ecng.Compilation;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Localization;
-using StockSharp.Logging;
-using StockSharp.Messages;
 
 /// <summary>
 /// The index, built of combination of several instruments through mathematical formula <see cref="Expression"/>.

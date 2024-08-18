@@ -1,9 +1,5 @@
 ﻿namespace StockSharp.Algo.Strategies.Reporting;
 
-using Ecng.Collections;
-using System;
-using System.Collections.Generic;
-
 /// <summary>
 /// <see cref="IReportGenerator"/> provider.
 /// </summary>

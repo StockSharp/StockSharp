@@ -1,15 +1,5 @@
 namespace StockSharp.Algo;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Common;
-using Ecng.Collections;
-
-using StockSharp.Logging;
-using StockSharp.Messages;
-
 /// <summary>
 /// Message adapter that tracks multiple lookups requests and put them into single queue.
 /// </summary>

@@ -1,15 +1,7 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
-
-using Ecng.Collections;
-using Ecng.Common;
-
 using StockSharp.Algo.Storages.Binary;
 using StockSharp.Algo.Storages.Csv;
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-using StockSharp.Localization;
 
 /// <summary>
 /// The storage of market data.

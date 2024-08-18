@@ -1,12 +1,5 @@
 namespace StockSharp.Algo.PnL;
 
-using System;
-using System.Collections.Generic;
-
-using Ecng.Common;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// The message adapter, automatically calculating profit-loss.
 /// </summary>

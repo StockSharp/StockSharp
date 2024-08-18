@@ -1,12 +1,5 @@
 namespace StockSharp.Algo.Strategies.Quoting;
 
-using System;
-
-using Ecng.Collections;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 /// <summary>
 /// The quoting by the market price.
 /// </summary>

@@ -1,13 +1,6 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Serialization;
 using Ecng.ComponentModel;
-
-using StockSharp.Localization;
 
 /// <summary>
 /// Range Action Verification Index.

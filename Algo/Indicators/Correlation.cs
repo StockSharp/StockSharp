@@ -1,12 +1,8 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-
 using Ecng.ComponentModel;
 
 using StockSharp.Charting;
-using StockSharp.Localization;
 
 /// <summary>
 /// Correlation.

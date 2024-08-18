@@ -1,14 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using System;
-using System.Collections.Generic;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 class PositionStorage : IPositionStorage
 {
 	private readonly IEntityRegistry _entityRegistry;

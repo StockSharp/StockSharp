@@ -1,11 +1,5 @@
 ﻿namespace StockSharp.Algo;
 
-using System;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-using StockSharp.Localization;
-
 partial class MarketRuleHelper
 {
 	[Obsolete]

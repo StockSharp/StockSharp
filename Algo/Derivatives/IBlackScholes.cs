@@ -1,9 +1,5 @@
 namespace StockSharp.Algo.Derivatives;
 
-using System;
-
-using StockSharp.BusinessEntities;
-
 /// <summary>
 /// The interface of the model for calculating Greeks values by the Black-Scholes formula.
 /// </summary>

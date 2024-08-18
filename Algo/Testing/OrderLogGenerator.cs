@@ -1,13 +1,5 @@
 namespace StockSharp.Algo.Testing;
 
-using System;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 /// <summary>
 /// The orders log generator using random method.
 /// </summary>

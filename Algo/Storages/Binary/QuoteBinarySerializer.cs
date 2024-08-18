@@ -1,17 +1,5 @@
 namespace StockSharp.Algo.Storages.Binary;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
-using StockSharp.BusinessEntities;
-
 class QuoteMetaInfo : BinaryMetaInfo
 {
 	public QuoteMetaInfo(DateTime date)
