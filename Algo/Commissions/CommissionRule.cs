@@ -429,7 +429,7 @@ namespace StockSharp.Algo.Commissions
 			base.Load(storage);
 
 			if (storage.Contains(nameof(Security)) && ServicesRegistry.TrySecurityProvider is not null)
-				Security = ServicesRegistry.SecurityProvider.LookupByStringId(storage.GetValue<string>(nameof(Security)));
+				Security = ServicesRegistry.SecurityProvider.LookupById(storage.GetValue<string>(nameof(Security)));
 		}
 	}
 

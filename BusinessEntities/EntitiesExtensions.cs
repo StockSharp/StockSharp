@@ -301,17 +301,6 @@ namespace StockSharp.BusinessEntities
 		public static Security LookupById(this ISecurityProvider provider, string id)
 			=> provider.LookupById(id.ToSecurityId());
 
-		/// <summary>
-		/// To get the instrument by the identifier.
-		/// </summary>
-		/// <param name="provider">The provider of information about instruments.</param>
-		/// <param name="id">Security ID.</param>
-		/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
-		public static Security LookupByStringId(this ISecurityProvider provider, string id)
-		{
-			return provider.LookupById(id.ToSecurityId());
-		}
-
 		private const BindingFlags _publicStatic = BindingFlags.Public | BindingFlags.Static;
 
 		/// <summary>
