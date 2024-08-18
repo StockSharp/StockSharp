@@ -1,8 +1,8 @@
-﻿namespace StockSharp.Charting;
+﻿namespace StockSharp.Algo.Derivatives;
 
 using System;
 
-using StockSharp.Algo.Derivatives;
+using StockSharp.Charting;
 
 /// <summary>
 /// The chart showing the position and options Greeks regarding to the underlying asset.
