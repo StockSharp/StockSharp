@@ -1,4 +1,6 @@
-﻿using System;
+﻿namespace StockSharp.Algo.Strategies.Optimization;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,8 +15,6 @@ using GeneticSharp;
 using StockSharp.Localization;
 using StockSharp.Algo.Statistics;
 using StockSharp.Messages;
-
-namespace StockSharp.Algo.Strategies.Optimization;
 
 /// <summary>
 /// Genetic settings.

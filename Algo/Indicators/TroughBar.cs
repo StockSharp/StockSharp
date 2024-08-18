@@ -1,110 +1,109 @@
-﻿namespace StockSharp.Algo.Indicators
+﻿namespace StockSharp.Algo.Indicators;
+
+using System;
+using System.ComponentModel.DataAnnotations;
+
+using Ecng.Serialization;
+using Ecng.ComponentModel;
+
+using StockSharp.Localization;
+using StockSharp.Messages;
+
+/// <summary>
+/// TroughBar.
+/// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/troughbar.html
+/// </remarks>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.TroughBarKey,
+	Description = LocalizedStrings.TroughBarDescKey)]
+[IndicatorIn(typeof(CandleIndicatorValue))]
+[Doc("topics/api/indicators/list_of_indicators/troughbar.html")]
+public class TroughBar : BaseIndicator
 {
-	using System;
-	using System.ComponentModel.DataAnnotations;
-
-	using Ecng.Serialization;
-	using Ecng.ComponentModel;
-
-	using StockSharp.Localization;
-	using StockSharp.Messages;
+	private decimal _currentMinimum = decimal.MaxValue;
+	private int _currentBarCount;
+	private int _valueBarCount;
 
 	/// <summary>
-	/// TroughBar.
+	/// Initializes a new instance of the <see cref="TroughBar"/>.
 	/// </summary>
-	/// <remarks>
-	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/troughbar.html
-	/// </remarks>
+	public TroughBar()
+	{
+	}
+
+	private Unit _reversalAmount = new();
+
+	/// <summary>
+	/// Indicator changes threshold.
+	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.TroughBarKey,
-		Description = LocalizedStrings.TroughBarDescKey)]
-	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[Doc("topics/api/indicators/list_of_indicators/troughbar.html")]
-	public class TroughBar : BaseIndicator
+		Name = LocalizedStrings.ThresholdKey,
+		Description = LocalizedStrings.ThresholdDescKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public Unit ReversalAmount
 	{
-		private decimal _currentMinimum = decimal.MaxValue;
-		private int _currentBarCount;
-		private int _valueBarCount;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="TroughBar"/>.
-		/// </summary>
-		public TroughBar()
+		get => _reversalAmount;
+		set
 		{
+			_reversalAmount = value ?? throw new ArgumentNullException(nameof(value));
+
+			Reset();
 		}
+	}
 
-		private Unit _reversalAmount = new();
+	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{
+		var (_, high, low, _) = input.GetOhlc();
 
-		/// <summary>
-		/// Indicator changes threshold.
-		/// </summary>
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.ThresholdKey,
-			Description = LocalizedStrings.ThresholdDescKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		public Unit ReversalAmount
+		var cm = _currentMinimum;
+		var vbc = _valueBarCount;
+
+		try
 		{
-			get => _reversalAmount;
-			set
+			if (low < cm)
 			{
-				_reversalAmount = value ?? throw new ArgumentNullException(nameof(value));
+				cm = low;
+				vbc = _currentBarCount;
+			}
+			else if (high >= (cm + ReversalAmount.Value))
+			{
+				if (input.IsFinal)
+					IsFormed = true;
 
-				Reset();
+				return new DecimalIndicatorValue(this, vbc);
+			}
+
+			return new DecimalIndicatorValue(this, this.GetCurrentValue());
+		}
+		finally
+		{
+			if(input.IsFinal)
+			{
+				_currentBarCount++;
+				_currentMinimum = cm;
+				_valueBarCount = vbc;
 			}
 		}
+	}
 
-		/// <inheritdoc />
-		protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		{
-			var (_, high, low, _) = input.GetOhlc();
+	/// <inheritdoc />
+	public override void Load(SettingsStorage storage)
+	{
+		base.Load(storage);
 
-			var cm = _currentMinimum;
-			var vbc = _valueBarCount;
+		ReversalAmount.Load(storage, nameof(ReversalAmount));
+	}
 
-			try
-			{
-				if (low < cm)
-				{
-					cm = low;
-					vbc = _currentBarCount;
-				}
-				else if (high >= (cm + ReversalAmount.Value))
-				{
-					if (input.IsFinal)
-						IsFormed = true;
+	/// <inheritdoc />
+	public override void Save(SettingsStorage storage)
+	{
+		base.Save(storage);
 
-					return new DecimalIndicatorValue(this, vbc);
-				}
-
-				return new DecimalIndicatorValue(this, this.GetCurrentValue());
-			}
-			finally
-			{
-				if(input.IsFinal)
-				{
-					_currentBarCount++;
-					_currentMinimum = cm;
-					_valueBarCount = vbc;
-				}
-			}
-		}
-
-		/// <inheritdoc />
-		public override void Load(SettingsStorage storage)
-		{
-			base.Load(storage);
-
-			ReversalAmount.Load(storage, nameof(ReversalAmount));
-		}
-
-		/// <inheritdoc />
-		public override void Save(SettingsStorage storage)
-		{
-			base.Save(storage);
-
-			storage.SetValue(nameof(ReversalAmount), ReversalAmount.Save());
-		}
+		storage.SetValue(nameof(ReversalAmount), ReversalAmount.Save());
 	}
 }

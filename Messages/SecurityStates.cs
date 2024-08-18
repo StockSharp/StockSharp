@@ -1,30 +1,29 @@
-namespace StockSharp.Messages
-{
-	using System;
-	using System.ComponentModel.DataAnnotations;
-	using System.Runtime.Serialization;
+namespace StockSharp.Messages;
 
-	using StockSharp.Localization;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// Security states.
+/// </summary>
+[Serializable]
+[DataContract]
+public enum SecurityStates
+{
+	/// <summary>
+	/// Active.
+	/// </summary>
+	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SecurityActiveKey)]
+	Trading,
 
 	/// <summary>
-	/// Security states.
+	/// Suspended.
 	/// </summary>
-	[Serializable]
-	[DataContract]
-	public enum SecurityStates
-	{
-		/// <summary>
-		/// Active.
-		/// </summary>
-		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SecurityActiveKey)]
-		Trading,
-
-		/// <summary>
-		/// Suspended.
-		/// </summary>
-		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SuspendedKey)]
-		Stoped,
-	}
+	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SuspendedKey)]
+	Stoped,
 }

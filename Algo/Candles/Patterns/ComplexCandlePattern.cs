@@ -1,11 +1,12 @@
-﻿using System;
+﻿namespace StockSharp.Algo.Candles.Patterns;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Ecng.Serialization;
 
 using StockSharp.Messages;
-
-namespace StockSharp.Algo.Candles.Patterns;
 
 /// <summary>
 /// Base complex implementation of <see cref="ICandlePattern"/>.

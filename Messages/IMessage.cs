@@ -1,25 +1,24 @@
-namespace StockSharp.Messages
+namespace StockSharp.Messages;
+
+using System;
+
+/// <summary>
+/// The interface describing an message with <see cref="Type"/> method.
+/// </summary>
+public interface IMessage : ILocalTimeMessage, ICloneable
 {
-	using System;
+	/// <summary>
+	/// Message type.
+	/// </summary>
+	MessageTypes Type { get; }
 
 	/// <summary>
-	/// The interface describing an message with <see cref="Type"/> method.
+	/// Source adapter. Can be <see langword="null" />.
 	/// </summary>
-	public interface IMessage : ILocalTimeMessage, ICloneable
-	{
-		/// <summary>
-		/// Message type.
-		/// </summary>
-		MessageTypes Type { get; }
+	IMessageAdapter Adapter { get; set; }
 
-		/// <summary>
-		/// Source adapter. Can be <see langword="null" />.
-		/// </summary>
-		IMessageAdapter Adapter { get; set; }
-
-		/// <summary>
-		/// Back mode.
-		/// </summary>
-		MessageBackModes BackMode { get; set; }
-	}
+	/// <summary>
+	/// Back mode.
+	/// </summary>
+	MessageBackModes BackMode { get; set; }
 }

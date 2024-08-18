@@ -1,60 +1,59 @@
-﻿namespace StockSharp.Algo.Indicators
+﻿namespace StockSharp.Algo.Indicators;
+
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+using Ecng.ComponentModel;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// The stochastic oscillator.
+/// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/stochastic_oscillator.html
+/// </remarks>
+[DisplayName("Stochastic Oscillator")]
+[Description("Stochastic Oscillator")]
+[Doc("topics/api/indicators/list_of_indicators/stochastic_oscillator.html")]
+public class StochasticOscillator : BaseComplexIndicator
 {
-	using System.ComponentModel;
-	using System.ComponentModel.DataAnnotations;
+	/// <summary>
+	/// Initializes a new instance of the <see cref="StochasticOscillator"/>.
+	/// </summary>
+	public StochasticOscillator()
+	{
+		AddInner(K = new());
+		AddInner(D = new() { Length = 3 });
 
-	using Ecng.ComponentModel;
+		Mode = ComplexIndicatorModes.Sequence;
+	}
 
-	using StockSharp.Localization;
+	/// <inheritdoc />
+	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
 	/// <summary>
-	/// The stochastic oscillator.
+	/// %K.
 	/// </summary>
-	/// <remarks>
-	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/stochastic_oscillator.html
-	/// </remarks>
-	[DisplayName("Stochastic Oscillator")]
-	[Description("Stochastic Oscillator")]
-	[Doc("topics/api/indicators/list_of_indicators/stochastic_oscillator.html")]
-	public class StochasticOscillator : BaseComplexIndicator
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="StochasticOscillator"/>.
-		/// </summary>
-		public StochasticOscillator()
-		{
-			AddInner(K = new());
-			AddInner(D = new() { Length = 3 });
+	[TypeConverter(typeof(ExpandableObjectConverter))]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.KKey,
+		Description = LocalizedStrings.KKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public StochasticK K { get; }
 
-			Mode = ComplexIndicatorModes.Sequence;
-		}
+	/// <summary>
+	/// %D.
+	/// </summary>
+	[TypeConverter(typeof(ExpandableObjectConverter))]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.DKey,
+		Description = LocalizedStrings.DKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public SimpleMovingAverage D { get; }
 
-		/// <inheritdoc />
-		public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
-
-		/// <summary>
-		/// %K.
-		/// </summary>
-		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.KKey,
-			Description = LocalizedStrings.KKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		public StochasticK K { get; }
-
-		/// <summary>
-		/// %D.
-		/// </summary>
-		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.DKey,
-			Description = LocalizedStrings.DKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		public SimpleMovingAverage D { get; }
-
-		/// <inheritdoc />
-		public override string ToString() => base.ToString() + $" %K={K.Length} %D={D.Length}";
-	}
+	/// <inheritdoc />
+	public override string ToString() => base.ToString() + $" %K={K.Length} %D={D.Length}";
 }

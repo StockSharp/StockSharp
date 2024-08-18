@@ -1,15 +1,14 @@
-namespace StockSharp.Messages
-{
-	using System;
+namespace StockSharp.Messages;
 
+using System;
+
+/// <summary>
+/// The interface describing an message with <see cref="Error"/> property.
+/// </summary>
+public interface IErrorMessage
+{
 	/// <summary>
-	/// The interface describing an message with <see cref="Error"/> property.
+	/// Error info.
 	/// </summary>
-	public interface IErrorMessage
-	{
-		/// <summary>
-		/// Error info.
-		/// </summary>
-		Exception Error { get; set; }
-	}
+	Exception Error { get; set; }
 }

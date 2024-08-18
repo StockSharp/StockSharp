@@ -1,80 +1,79 @@
-namespace StockSharp.Algo.Indicators
-{
-	using System;
-	using System.Collections.Generic;
-	
-	using Ecng.Common;
+namespace StockSharp.Algo.Indicators;
 
-	using StockSharp.Localization;
+using System;
+using System.Collections.Generic;
+
+using Ecng.Common;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// The shifted value of the indicator.
+/// </summary>
+public class ShiftedIndicatorValue : SingleIndicatorValue<decimal>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ShiftedIndicatorValue"/>.
+	/// </summary>
+	/// <param name="indicator">Indicator.</param>
+	public ShiftedIndicatorValue(IIndicator indicator)
+		: base(indicator)
+	{
+	}
 
 	/// <summary>
-	/// The shifted value of the indicator.
+	/// Initializes a new instance of the <see cref="ShiftedIndicatorValue"/>.
 	/// </summary>
-	public class ShiftedIndicatorValue : SingleIndicatorValue<decimal>
+	/// <param name="indicator">Indicator.</param>
+	/// <param name="value">Indicator value.</param>
+	/// <param name="shift">The shift of the indicator value.</param>
+	public ShiftedIndicatorValue(IIndicator indicator, decimal value, int shift)
+		: base(indicator, value)
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ShiftedIndicatorValue"/>.
-		/// </summary>
-		/// <param name="indicator">Indicator.</param>
-		public ShiftedIndicatorValue(IIndicator indicator)
-			: base(indicator)
+		Shift = shift;
+	}
+
+	private int _shift;
+
+	/// <summary>
+	/// The shift of the indicator value.
+	/// </summary>
+	public int Shift
+	{
+		get => _shift;
+		private set
 		{
+			if (value < 0)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			_shift = value;
 		}
+	}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ShiftedIndicatorValue"/>.
-		/// </summary>
-		/// <param name="indicator">Indicator.</param>
-		/// <param name="value">Indicator value.</param>
-		/// <param name="shift">The shift of the indicator value.</param>
-		public ShiftedIndicatorValue(IIndicator indicator, decimal value, int shift)
-			: base(indicator, value)
-		{
-			Shift = shift;
-		}
+	/// <inheritdoc />
+	public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
+		=> IsEmpty
+			? new ShiftedIndicatorValue(indicator)
+			: new ShiftedIndicatorValue(indicator, Value, Shift);
 
-		private int _shift;
+	/// <inheritdoc />
+	public override IEnumerable<object> ToValues()
+	{
+		foreach (var v in base.ToValues())
+			yield return v;
 
-		/// <summary>
-		/// The shift of the indicator value.
-		/// </summary>
-		public int Shift
-		{
-			get => _shift;
-			private set
-			{
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+		if (!IsEmpty)
+			yield return Shift;
+	}
 
-				_shift = value;
-			}
-		}
+	/// <inheritdoc />
+	public override void FromValues(object[] values)
+	{
+		base.FromValues(values);
 
-		/// <inheritdoc />
-		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
-			=> IsEmpty
-				? new ShiftedIndicatorValue(indicator)
-				: new ShiftedIndicatorValue(indicator, Value, Shift);
+		if (IsEmpty)
+			return;
 
-		/// <inheritdoc />
-		public override IEnumerable<object> ToValues()
-		{
-			foreach (var v in base.ToValues())
-				yield return v;
-
-			if (!IsEmpty)
-				yield return Shift;
-		}
-
-		/// <inheritdoc />
-		public override void FromValues(object[] values)
-		{
-			base.FromValues(values);
-
-			if (IsEmpty)
-				return;
-
-			Shift = values[1].To<int>();
-		}
+		Shift = values[1].To<int>();
 	}
 }

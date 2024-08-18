@@ -1,174 +1,146 @@
-namespace StockSharp.Messages
-{
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+namespace StockSharp.Messages;
 
-	using Ecng.Collections;
-	using Ecng.Common;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Ecng.Collections;
+using Ecng.Common;
+
+/// <summary>
+/// Base interface for order book builder.
+/// </summary>
+public interface IOrderLogMarketDepthBuilder
+{
+	/// <summary>
+	/// Get snapshot.
+	/// </summary>
+	/// <param name="serverTime"><see cref="QuoteChangeMessage.ServerTime"/></param>
+	/// <returns>Snapshot.</returns>
+	QuoteChangeMessage GetSnapshot(DateTimeOffset serverTime);
 
 	/// <summary>
-	/// Base interface for order book builder.
+	/// Process order log item.
 	/// </summary>
-	public interface IOrderLogMarketDepthBuilder
-	{
-		/// <summary>
-		/// Get snapshot.
-		/// </summary>
-		/// <param name="serverTime"><see cref="QuoteChangeMessage.ServerTime"/></param>
-		/// <returns>Snapshot.</returns>
-		QuoteChangeMessage GetSnapshot(DateTimeOffset serverTime);
+	/// <param name="item">Order log item.</param>
+	/// <returns>Market depth.</returns>
+	QuoteChangeMessage Update(ExecutionMessage item);
+}
 
-		/// <summary>
-		/// Process order log item.
-		/// </summary>
-		/// <param name="item">Order log item.</param>
-		/// <returns>Market depth.</returns>
-		QuoteChangeMessage Update(ExecutionMessage item);
+/// <summary>
+/// Default implementation of <see cref="IOrderLogMarketDepthBuilder"/>.
+/// </summary>
+public class OrderLogMarketDepthBuilder : IOrderLogMarketDepthBuilder
+{
+	private readonly Dictionary<long, decimal> _ordersByNum = new();
+	private readonly Dictionary<string, decimal> _ordersByString = new(StringComparer.InvariantCultureIgnoreCase);
+
+	private readonly SortedList<decimal, QuoteChange> _bids = new(new BackwardComparer<decimal>());
+	private readonly SortedList<decimal, QuoteChange> _asks = new();
+
+	private readonly QuoteChangeMessage _depth;
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="OrderLogMarketDepthBuilder"/>.
+	/// </summary>
+	/// <param name="securityId">Security ID.</param>
+	public OrderLogMarketDepthBuilder(SecurityId securityId)
+		: this(new QuoteChangeMessage { SecurityId = securityId, BuildFrom = DataType.OrderLog })
+	{
 	}
 
 	/// <summary>
-	/// Default implementation of <see cref="IOrderLogMarketDepthBuilder"/>.
+	/// Initializes a new instance of the <see cref="OrderLogMarketDepthBuilder"/>.
 	/// </summary>
-	public class OrderLogMarketDepthBuilder : IOrderLogMarketDepthBuilder
+	/// <param name="depth">Messages containing quotes.</param>
+	public OrderLogMarketDepthBuilder(QuoteChangeMessage depth)
 	{
-		private readonly Dictionary<long, decimal> _ordersByNum = new();
-		private readonly Dictionary<string, decimal> _ordersByString = new(StringComparer.InvariantCultureIgnoreCase);
+		_depth = depth ?? throw new ArgumentNullException(nameof(depth));
+		_depth.State = QuoteChangeStates.SnapshotComplete;
 
-		private readonly SortedList<decimal, QuoteChange> _bids = new(new BackwardComparer<decimal>());
-		private readonly SortedList<decimal, QuoteChange> _asks = new();
+		foreach (var bid in depth.Bids)
+			_bids.Add(bid.Price, bid);
 
-		private readonly QuoteChangeMessage _depth;
+		foreach (var ask in depth.Asks)
+			_asks.Add(ask.Price, ask);
+	}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="OrderLogMarketDepthBuilder"/>.
-		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		public OrderLogMarketDepthBuilder(SecurityId securityId)
-			: this(new QuoteChangeMessage { SecurityId = securityId, BuildFrom = DataType.OrderLog })
+	QuoteChangeMessage IOrderLogMarketDepthBuilder.GetSnapshot(DateTimeOffset serverTime)
+	{
+		var depth = _depth.TypedClone();
+
+		depth.ServerTime = serverTime;
+		depth.LocalTime = serverTime;
+		depth.Bids = _bids.Values.ToArray();
+		depth.Asks = _asks.Values.ToArray();
+
+		return depth;
+	}
+
+	QuoteChangeMessage IOrderLogMarketDepthBuilder.Update(ExecutionMessage item)
+	{
+		if (item == null)
+			throw new ArgumentNullException(nameof(item));
+
+		if (item.DataType != DataType.OrderLog)
+			throw new ArgumentException(nameof(item));
+
+		if (item.OrderPrice == 0)
+			return null;
+
+		_depth.ServerTime = item.ServerTime;
+		_depth.LocalTime = item.LocalTime;
+
+		QuoteChange? changedQuote = null;
+
+		var quotes = item.Side == Sides.Buy ? _bids : _asks;
+
+		if (item.IsOrderLogRegistered())
 		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="OrderLogMarketDepthBuilder"/>.
-		/// </summary>
-		/// <param name="depth">Messages containing quotes.</param>
-		public OrderLogMarketDepthBuilder(QuoteChangeMessage depth)
-		{
-			_depth = depth ?? throw new ArgumentNullException(nameof(depth));
-			_depth.State = QuoteChangeStates.SnapshotComplete;
-
-			foreach (var bid in depth.Bids)
-				_bids.Add(bid.Price, bid);
-
-			foreach (var ask in depth.Asks)
-				_asks.Add(ask.Price, ask);
-		}
-
-		QuoteChangeMessage IOrderLogMarketDepthBuilder.GetSnapshot(DateTimeOffset serverTime)
-		{
-			var depth = _depth.TypedClone();
-
-			depth.ServerTime = serverTime;
-			depth.LocalTime = serverTime;
-			depth.Bids = _bids.Values.ToArray();
-			depth.Asks = _asks.Values.ToArray();
-
-			return depth;
-		}
-
-		QuoteChangeMessage IOrderLogMarketDepthBuilder.Update(ExecutionMessage item)
-		{
-			if (item == null)
-				throw new ArgumentNullException(nameof(item));
-
-			if (item.DataType != DataType.OrderLog)
-				throw new ArgumentException(nameof(item));
-
-			if (item.OrderPrice == 0)
-				return null;
-
-			_depth.ServerTime = item.ServerTime;
-			_depth.LocalTime = item.LocalTime;
-
-			QuoteChange? changedQuote = null;
-
-			var quotes = item.Side == Sides.Buy ? _bids : _asks;
-
-			if (item.IsOrderLogRegistered())
+			if (item.OrderVolume != null)
 			{
-				if (item.OrderVolume != null)
+				QuoteChange ProcessRegister<T>(T id, Dictionary<T, decimal> orders)
 				{
-					QuoteChange ProcessRegister<T>(T id, Dictionary<T, decimal> orders)
+					var quote = quotes.SafeAdd(item.OrderPrice, key => new QuoteChange(key, 0));
+
+					var volume = item.OrderVolume.Value;
+
+					if (orders.TryGetValue(id, out var prevVolume))
 					{
-						var quote = quotes.SafeAdd(item.OrderPrice, key => new QuoteChange(key, 0));
-
-						var volume = item.OrderVolume.Value;
-
-						if (orders.TryGetValue(id, out var prevVolume))
-						{
-							quote.Volume += (volume - prevVolume);
-							orders[id] = volume;
-						}
-						else
-						{
-							quote.Volume += volume;
-							orders.Add(id, volume);
-						}
-
-						quotes[item.OrderPrice] = quote;
-						return quote;
+						quote.Volume += (volume - prevVolume);
+						orders[id] = volume;
+					}
+					else
+					{
+						quote.Volume += volume;
+						orders.Add(id, volume);
 					}
 
-					if (item.OrderId != null)
-						changedQuote = ProcessRegister(item.OrderId.Value, _ordersByNum);
-					else if (!item.OrderStringId.IsEmpty())
-						changedQuote = ProcessRegister(item.OrderStringId, _ordersByString);
+					quotes[item.OrderPrice] = quote;
+					return quote;
 				}
+
+				if (item.OrderId != null)
+					changedQuote = ProcessRegister(item.OrderId.Value, _ordersByNum);
+				else if (!item.OrderStringId.IsEmpty())
+					changedQuote = ProcessRegister(item.OrderStringId, _ordersByString);
 			}
-			else if (item.IsOrderLogMatched())
+		}
+		else if (item.IsOrderLogMatched())
+		{
+			var volume = item.TradeVolume ?? item.OrderVolume;
+
+			if (volume != null)
 			{
-				var volume = item.TradeVolume ?? item.OrderVolume;
-
-				if (volume != null)
+				QuoteChange? ProcessMatched<T>(T id, Dictionary<T, decimal> orders)
 				{
-					QuoteChange? ProcessMatched<T>(T id, Dictionary<T, decimal> orders)
+					if (orders.TryGetValue(id, out var prevVolume))
 					{
-						if (orders.TryGetValue(id, out var prevVolume))
-						{
-							orders[id] = prevVolume - volume.Value;
+						orders[id] = prevVolume - volume.Value;
 
-							if (quotes.TryGetValue(item.OrderPrice, out var quote))
-							{
-								quote.Volume -= volume.Value;
-
-								if (quote.Volume <= 0)
-									quotes.Remove(item.OrderPrice);
-								else
-									quotes[item.OrderPrice] = quote;
-
-								return quote;
-							}
-						}
-
-						return null;
-					}
-
-					if (item.OrderId != null)
-						changedQuote = ProcessMatched(item.OrderId.Value, _ordersByNum);
-					else if (!item.OrderStringId.IsEmpty())
-						changedQuote = ProcessMatched(item.OrderStringId, _ordersByString);
-				}
-			}
-			else if (item.IsOrderLogCanceled())
-			{
-				QuoteChange? ProcessCanceled<T>(T id, Dictionary<T, decimal> orders)
-				{
-					if (orders.TryGetAndRemove(id, out var prevVolume))
-					{
 						if (quotes.TryGetValue(item.OrderPrice, out var quote))
 						{
-							quote.Volume -= prevVolume;
+							quote.Volume -= volume.Value;
 
 							if (quote.Volume <= 0)
 								quotes.Remove(item.OrderPrice);
@@ -183,30 +155,57 @@ namespace StockSharp.Messages
 				}
 
 				if (item.OrderId != null)
-					changedQuote = ProcessCanceled(item.OrderId.Value, _ordersByNum);
+					changedQuote = ProcessMatched(item.OrderId.Value, _ordersByNum);
 				else if (!item.OrderStringId.IsEmpty())
-					changedQuote = ProcessCanceled(item.OrderStringId, _ordersByString);
+					changedQuote = ProcessMatched(item.OrderStringId, _ordersByString);
+			}
+		}
+		else if (item.IsOrderLogCanceled())
+		{
+			QuoteChange? ProcessCanceled<T>(T id, Dictionary<T, decimal> orders)
+			{
+				if (orders.TryGetAndRemove(id, out var prevVolume))
+				{
+					if (quotes.TryGetValue(item.OrderPrice, out var quote))
+					{
+						quote.Volume -= prevVolume;
+
+						if (quote.Volume <= 0)
+							quotes.Remove(item.OrderPrice);
+						else
+							quotes[item.OrderPrice] = quote;
+
+						return quote;
+					}
+				}
+
+				return null;
 			}
 
-			if (changedQuote == null)
-				return null;
-
-			var increment = new QuoteChangeMessage
-			{
-				ServerTime = item.ServerTime,
-				LocalTime = item.LocalTime,
-				SecurityId = _depth.SecurityId,
-				State = QuoteChangeStates.Increment,
-			};
-
-			var q = changedQuote.Value;
-
-			if (item.Side == Sides.Buy)
-				increment.Bids = new[] { q };
-			else
-				increment.Asks = new[] { q };
-
-			return increment;
+			if (item.OrderId != null)
+				changedQuote = ProcessCanceled(item.OrderId.Value, _ordersByNum);
+			else if (!item.OrderStringId.IsEmpty())
+				changedQuote = ProcessCanceled(item.OrderStringId, _ordersByString);
 		}
+
+		if (changedQuote == null)
+			return null;
+
+		var increment = new QuoteChangeMessage
+		{
+			ServerTime = item.ServerTime,
+			LocalTime = item.LocalTime,
+			SecurityId = _depth.SecurityId,
+			State = QuoteChangeStates.Increment,
+		};
+
+		var q = changedQuote.Value;
+
+		if (item.Side == Sides.Buy)
+			increment.Bids = new[] { q };
+		else
+			increment.Asks = new[] { q };
+
+		return increment;
 	}
 }

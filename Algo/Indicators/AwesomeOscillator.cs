@@ -1,118 +1,117 @@
-﻿namespace StockSharp.Algo.Indicators
+﻿namespace StockSharp.Algo.Indicators;
+
+using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+using Ecng.Serialization;
+using Ecng.ComponentModel;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// Awesome Oscillator.
+/// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/ao.html
+/// </remarks>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.AOKey,
+	Description = LocalizedStrings.AwesomeOscillatorKey)]
+[Doc("topics/api/indicators/list_of_indicators/ao.html")]
+public class AwesomeOscillator : BaseIndicator
 {
-	using System;
-	using System.ComponentModel;
-	using System.ComponentModel.DataAnnotations;
+	/// <summary>
+	/// Initializes a new instance of the <see cref="AwesomeOscillator"/>.
+	/// </summary>
+	public AwesomeOscillator()
+		: this(new SimpleMovingAverage { Length = 34 }, new SimpleMovingAverage { Length = 5 })
+	{
+	}
 
-	using Ecng.Serialization;
-	using Ecng.ComponentModel;
-
-	using StockSharp.Localization;
+	/// <inheritdoc />
+	public override int NumValuesToInitialize => Math.Max(LongMa.NumValuesToInitialize, Math.Max(ShortMa.NumValuesToInitialize, MedianPrice.NumValuesToInitialize));
 
 	/// <summary>
-	/// Awesome Oscillator.
+	/// Initializes a new instance of the <see cref="AwesomeOscillator"/>.
 	/// </summary>
-	/// <remarks>
-	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/ao.html
-	/// </remarks>
+	/// <param name="longSma">Long moving average.</param>
+	/// <param name="shortSma">Short moving average.</param>
+	public AwesomeOscillator(SimpleMovingAverage longSma, SimpleMovingAverage shortSma)
+	{
+		ShortMa = shortSma ?? throw new ArgumentNullException(nameof(shortSma));
+		LongMa = longSma ?? throw new ArgumentNullException(nameof(longSma));
+		MedianPrice = new MedianPrice();
+	}
+
+	/// <inheritdoc />
+	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
+
+	/// <summary>
+	/// Long moving average.
+	/// </summary>
+	[TypeConverter(typeof(ExpandableObjectConverter))]
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.AOKey,
-		Description = LocalizedStrings.AwesomeOscillatorKey)]
-	[Doc("topics/api/indicators/list_of_indicators/ao.html")]
-	public class AwesomeOscillator : BaseIndicator
+		Name = LocalizedStrings.LongMaKey,
+		Description = LocalizedStrings.LongMaDescKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public SimpleMovingAverage LongMa { get; }
+
+	/// <summary>
+	/// Short moving average.
+	/// </summary>
+	[TypeConverter(typeof(ExpandableObjectConverter))]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.ShortMaKey,
+		Description = LocalizedStrings.ShortMaDescKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public SimpleMovingAverage ShortMa { get; }
+
+	/// <summary>
+	/// Median price.
+	/// </summary>
+	[TypeConverter(typeof(ExpandableObjectConverter))]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.MedPriceKey,
+		Description = LocalizedStrings.MedianPriceKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public MedianPrice MedianPrice { get; }
+
+	/// <inheritdoc />
+	protected override bool CalcIsFormed() => LongMa.IsFormed;
+
+	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AwesomeOscillator"/>.
-		/// </summary>
-		public AwesomeOscillator()
-			: this(new SimpleMovingAverage { Length = 34 }, new SimpleMovingAverage { Length = 5 })
-		{
-		}
+		var mpValue = MedianPrice.Process(input);
 
-		/// <inheritdoc />
-		public override int NumValuesToInitialize => Math.Max(LongMa.NumValuesToInitialize, Math.Max(ShortMa.NumValuesToInitialize, MedianPrice.NumValuesToInitialize));
+		var sValue = ShortMa.Process(mpValue).GetValue<decimal>();
+		var lValue = LongMa.Process(mpValue).GetValue<decimal>();
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AwesomeOscillator"/>.
-		/// </summary>
-		/// <param name="longSma">Long moving average.</param>
-		/// <param name="shortSma">Short moving average.</param>
-		public AwesomeOscillator(SimpleMovingAverage longSma, SimpleMovingAverage shortSma)
-		{
-			ShortMa = shortSma ?? throw new ArgumentNullException(nameof(shortSma));
-			LongMa = longSma ?? throw new ArgumentNullException(nameof(longSma));
-			MedianPrice = new MedianPrice();
-		}
+		return new DecimalIndicatorValue(this, sValue - lValue);
+	}
 
-		/// <inheritdoc />
-		public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
+	/// <inheritdoc />
+	public override void Load(SettingsStorage storage)
+	{
+		base.Load(storage);
 
-		/// <summary>
-		/// Long moving average.
-		/// </summary>
-		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.LongMaKey,
-			Description = LocalizedStrings.LongMaDescKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		public SimpleMovingAverage LongMa { get; }
+		LongMa.LoadIfNotNull(storage, nameof(LongMa));
+		ShortMa.LoadIfNotNull(storage, nameof(ShortMa));
+		MedianPrice.LoadIfNotNull(storage, nameof(MedianPrice));
+	}
 
-		/// <summary>
-		/// Short moving average.
-		/// </summary>
-		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.ShortMaKey,
-			Description = LocalizedStrings.ShortMaDescKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		public SimpleMovingAverage ShortMa { get; }
+	/// <inheritdoc />
+	public override void Save(SettingsStorage storage)
+	{
+		base.Save(storage);
 
-		/// <summary>
-		/// Median price.
-		/// </summary>
-		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.MedPriceKey,
-			Description = LocalizedStrings.MedianPriceKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		public MedianPrice MedianPrice { get; }
-
-		/// <inheritdoc />
-		protected override bool CalcIsFormed() => LongMa.IsFormed;
-
-		/// <inheritdoc />
-		protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		{
-			var mpValue = MedianPrice.Process(input);
-
-			var sValue = ShortMa.Process(mpValue).GetValue<decimal>();
-			var lValue = LongMa.Process(mpValue).GetValue<decimal>();
-
-			return new DecimalIndicatorValue(this, sValue - lValue);
-		}
-
-		/// <inheritdoc />
-		public override void Load(SettingsStorage storage)
-		{
-			base.Load(storage);
-
-			LongMa.LoadIfNotNull(storage, nameof(LongMa));
-			ShortMa.LoadIfNotNull(storage, nameof(ShortMa));
-			MedianPrice.LoadIfNotNull(storage, nameof(MedianPrice));
-		}
-
-		/// <inheritdoc />
-		public override void Save(SettingsStorage storage)
-		{
-			base.Save(storage);
-
-			storage.SetValue(nameof(LongMa), LongMa.Save());
-			storage.SetValue(nameof(ShortMa), ShortMa.Save());
-			storage.SetValue(nameof(MedianPrice), MedianPrice.Save());
-		}
+		storage.SetValue(nameof(LongMa), LongMa.Save());
+		storage.SetValue(nameof(ShortMa), ShortMa.Save());
+		storage.SetValue(nameof(MedianPrice), MedianPrice.Save());
 	}
 }

@@ -1,17 +1,16 @@
-namespace StockSharp.Algo.Positions
-{
-	using StockSharp.Messages;
+namespace StockSharp.Algo.Positions;
 
+using StockSharp.Messages;
+
+/// <summary>
+/// The interface for the position calculation manager.
+/// </summary>
+public interface IPositionManager
+{
 	/// <summary>
-	/// The interface for the position calculation manager.
+	/// To calculate position.
 	/// </summary>
-	public interface IPositionManager
-	{
-		/// <summary>
-		/// To calculate position.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		/// <returns>The position by order or trade.</returns>
-		PositionChangeMessage ProcessMessage(Message message);
-	}
+	/// <param name="message">Message.</param>
+	/// <returns>The position by order or trade.</returns>
+	PositionChangeMessage ProcessMessage(Message message);
 }

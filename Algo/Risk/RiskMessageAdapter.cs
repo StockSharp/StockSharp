@@ -1,114 +1,113 @@
-namespace StockSharp.Algo.Risk
+namespace StockSharp.Algo.Risk;
+
+using System;
+
+using Ecng.Common;
+using Ecng.ComponentModel;
+using Ecng.Serialization;
+
+using StockSharp.Localization;
+using StockSharp.Logging;
+using StockSharp.Messages;
+
+/// <summary>
+/// The message adapter, automatically controlling risk rules.
+/// </summary>
+public class RiskMessageAdapter : MessageAdapterWrapper
 {
-	using System;
+	/// <summary>
+	/// Initializes a new instance of the <see cref="RiskMessageAdapter"/>.
+	/// </summary>
+	/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
+	public RiskMessageAdapter(IMessageAdapter innerAdapter)
+		: base(innerAdapter)
+	{
+	}
 
-	using Ecng.Common;
-	using Ecng.ComponentModel;
-	using Ecng.Serialization;
-
-	using StockSharp.Localization;
-	using StockSharp.Logging;
-	using StockSharp.Messages;
+	private IRiskManager _riskManager = new RiskManager();
 
 	/// <summary>
-	/// The message adapter, automatically controlling risk rules.
+	/// Risk control manager.
 	/// </summary>
-	public class RiskMessageAdapter : MessageAdapterWrapper
+	public IRiskManager RiskManager
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="RiskMessageAdapter"/>.
-		/// </summary>
-		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-		public RiskMessageAdapter(IMessageAdapter innerAdapter)
-			: base(innerAdapter)
+		get => _riskManager;
+		set
 		{
+			_riskManager = value ?? throw new ArgumentNullException(nameof(value));
+
+			if (_riskManager.Parent != null)
+				_riskManager.Parent = this;
 		}
+	}
 
-		private IRiskManager _riskManager = new RiskManager();
-
-		/// <summary>
-		/// Risk control manager.
-		/// </summary>
-		public IRiskManager RiskManager
+	/// <inheritdoc />
+	public override bool SendInMessage(Message message)
+	{
+		if (message.IsBack())
 		{
-			get => _riskManager;
-			set
+			if (message.Adapter == this)
 			{
-				_riskManager = value ?? throw new ArgumentNullException(nameof(value));
+				message.UndoBack();
 
-				if (_riskManager.Parent != null)
-					_riskManager.Parent = this;
+				return base.OnSendInMessage(message);
 			}
 		}
 
-		/// <inheritdoc />
-		public override bool SendInMessage(Message message)
-		{
-			if (message.IsBack())
-			{
-				if (message.Adapter == this)
-				{
-					message.UndoBack();
+		return base.SendInMessage(message);
+	}
 
-					return base.OnSendInMessage(message);
-				}
-			}
+	/// <inheritdoc />
+	protected override bool OnSendInMessage(Message message)
+	{
+		ProcessRisk(message);
+		
+		return base.OnSendInMessage(message);
+	}
 
-			return base.SendInMessage(message);
-		}
-
-		/// <inheritdoc />
-		protected override bool OnSendInMessage(Message message)
-		{
+	/// <inheritdoc />
+	protected override void OnInnerAdapterNewOutMessage(Message message)
+	{
+		if (message.Type != MessageTypes.Reset)
 			ProcessRisk(message);
-			
-			return base.OnSendInMessage(message);
-		}
 
-		/// <inheritdoc />
-		protected override void OnInnerAdapterNewOutMessage(Message message)
+		base.OnInnerAdapterNewOutMessage(message);
+	}
+
+	private void ProcessRisk(Message message)
+	{
+		foreach (var rule in RiskManager.ProcessRules(message))
 		{
-			if (message.Type != MessageTypes.Reset)
-				ProcessRisk(message);
+			this.AddWarningLog(LocalizedStrings.ActivatingRiskRule,
+				rule.GetType().GetDisplayName(), rule.Title, rule.Action);
 
-			base.OnInnerAdapterNewOutMessage(message);
-		}
-
-		private void ProcessRisk(Message message)
-		{
-			foreach (var rule in RiskManager.ProcessRules(message))
+			switch (rule.Action)
 			{
-				this.AddWarningLog(LocalizedStrings.ActivatingRiskRule,
-					rule.GetType().GetDisplayName(), rule.Title, rule.Action);
-
-				switch (rule.Action)
+				case RiskActions.ClosePositions:
 				{
-					case RiskActions.ClosePositions:
-					{
-						break;
-					}
-					//case RiskActions.StopTrading:
-					//	base.OnSendInMessage(new DisconnectMessage());
-					//	break;
-					case RiskActions.CancelOrders:
-						RaiseNewOutMessage(new OrderGroupCancelMessage { TransactionId = TransactionIdGenerator.GetNextId() }.LoopBack(this));
-						break;
-					default:
-						throw new InvalidOperationException(rule.Action.To<string>());
+					break;
 				}
+				//case RiskActions.StopTrading:
+				//	base.OnSendInMessage(new DisconnectMessage());
+				//	break;
+				case RiskActions.CancelOrders:
+					RaiseNewOutMessage(new OrderGroupCancelMessage { TransactionId = TransactionIdGenerator.GetNextId() }.LoopBack(this));
+					break;
+				default:
+					throw new InvalidOperationException(rule.Action.To<string>());
 			}
 		}
+	}
 
-		/// <summary>
-		/// Create a copy of <see cref="RiskMessageAdapter"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override IMessageChannel Clone()
+	/// <summary>
+	/// Create a copy of <see cref="RiskMessageAdapter"/>.
+	/// </summary>
+	/// <returns>Copy.</returns>
+	public override IMessageChannel Clone()
+	{
+		return new RiskMessageAdapter(InnerAdapter.TypedClone())
 		{
-			return new RiskMessageAdapter(InnerAdapter.TypedClone())
-			{
-				RiskManager = RiskManager.Clone(),
-			};
-		}
+			RiskManager = RiskManager.Clone(),
+		};
 	}
 }

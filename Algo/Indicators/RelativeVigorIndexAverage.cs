@@ -1,89 +1,88 @@
-namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators;
+
+using Ecng.Collections;
+
+/// <summary>
+/// The weight-average part of indicator <see cref="RelativeVigorIndex"/>.
+/// </summary>
+[IndicatorIn(typeof(CandleIndicatorValue))]
+[IndicatorHidden]
+public class RelativeVigorIndexAverage : LengthIndicator<decimal>
 {
-	using Ecng.Collections;
+	private readonly CircularBuffer<(decimal open, decimal high, decimal low, decimal close)> _buffer;
 
 	/// <summary>
-	/// The weight-average part of indicator <see cref="RelativeVigorIndex"/>.
+	/// Initializes a new instance of the <see cref="RelativeVigorIndexAverage"/>.
 	/// </summary>
-	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[IndicatorHidden]
-	public class RelativeVigorIndexAverage : LengthIndicator<decimal>
+	public RelativeVigorIndexAverage()
 	{
-		private readonly CircularBuffer<(decimal open, decimal high, decimal low, decimal close)> _buffer;
+		_buffer = new(Length);
+		Length = 4;
+	}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="RelativeVigorIndexAverage"/>.
-		/// </summary>
-		public RelativeVigorIndexAverage()
+	/// <inheritdoc />
+	public override void Reset()
+	{
+		base.Reset();
+
+		_buffer.Clear();
+		_buffer.Capacity = Length;
+
+		Buffer.Reset();
+	}
+
+	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{
+		var t = input.GetOhlc();
+
+		if (input.IsFinal)
 		{
-			_buffer = new(Length);
-			Length = 4;
+			_buffer.PushBack(t);
 		}
 
-		/// <inheritdoc />
-		public override void Reset()
+		if (IsFormed)
 		{
-			base.Reset();
+			decimal valueUp, valueDn;
 
-			_buffer.Clear();
-			_buffer.Capacity = Length;
-
-			Buffer.Reset();
-		}
-
-		/// <inheritdoc />
-		protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		{
-			var t = input.GetOhlc();
+			var value0 = _buffer[0];
+			var value1 = _buffer[1];
+			var value2 = _buffer[2];
+			var value3 = _buffer[3];
 
 			if (input.IsFinal)
 			{
-				_buffer.PushBack(t);
-			}
+				valueUp = ((value0.close - value0.open) +
+				           2 * (value1.close - value1.open) +
+				           2 * (value2.close - value2.open) +
+				           (value3.close - value3.open)) / 6m;
 
-			if (IsFormed)
+				valueDn = ((value0.high - value0.low) +
+				           2 * (value1.high - value1.low) +
+				           2 * (value2.high - value2.low) +
+				           (value3.high - value3.low)) / 6m;
+			}
+			else
 			{
-				decimal valueUp, valueDn;
+				valueUp = ((value1.close - value1.open) +
+				           2 * (value2.close - value2.open) +
+				           2 * (value3.close - value3.open) +
+						   (t.c - t.o)) / 6m;
 
-				var value0 = _buffer[0];
-				var value1 = _buffer[1];
-				var value2 = _buffer[2];
-				var value3 = _buffer[3];
-
-				if (input.IsFinal)
-				{
-					valueUp = ((value0.close - value0.open) +
-					           2 * (value1.close - value1.open) +
-					           2 * (value2.close - value2.open) +
-					           (value3.close - value3.open)) / 6m;
-
-					valueDn = ((value0.high - value0.low) +
-					           2 * (value1.high - value1.low) +
-					           2 * (value2.high - value2.low) +
-					           (value3.high - value3.low)) / 6m;
-				}
-				else
-				{
-					valueUp = ((value1.close - value1.open) +
-					           2 * (value2.close - value2.open) +
-					           2 * (value3.close - value3.open) +
-							   (t.c - t.o)) / 6m;
-
-					valueDn = ((value1.high - value1.low) +
-					           2 * (value2.high - value2.low) +
-					           2 * (value3.high - value3.low) +
-							   (t.h - t.l)) / 6m;
-				}
-
-				return new DecimalIndicatorValue(this, valueDn == decimal.Zero 
-					? valueUp 
-					: valueUp / valueDn);
+				valueDn = ((value1.high - value1.low) +
+				           2 * (value2.high - value2.low) +
+				           2 * (value3.high - value3.low) +
+						   (t.h - t.l)) / 6m;
 			}
 
-			return new DecimalIndicatorValue(this);
+			return new DecimalIndicatorValue(this, valueDn == decimal.Zero 
+				? valueUp 
+				: valueUp / valueDn);
 		}
 
-		/// <inheritdoc />
-		protected override bool CalcIsFormed() => _buffer.Count >= Length;
+		return new DecimalIndicatorValue(this);
 	}
+
+	/// <inheritdoc />
+	protected override bool CalcIsFormed() => _buffer.Count >= Length;
 }

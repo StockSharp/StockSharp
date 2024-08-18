@@ -1,20 +1,19 @@
-﻿namespace StockSharp.Configuration
+﻿namespace StockSharp.Configuration;
+
+using Ecng.Configuration;
+
+/// <summary>
+/// Services registry.
+/// </summary>
+public static class ConfigurationServicesRegistry
 {
-	using Ecng.Configuration;
+	/// <summary>
+	/// <see cref="ICredentialsProvider"/>.
+	/// </summary>
+	public static ICredentialsProvider TryCredentialsProvider => ConfigManager.TryGetService<ICredentialsProvider>();
 
 	/// <summary>
-	/// Services registry.
+	/// <see cref="ICredentialsProvider"/>.
 	/// </summary>
-	public static class ConfigurationServicesRegistry
-	{
-		/// <summary>
-		/// <see cref="ICredentialsProvider"/>.
-		/// </summary>
-		public static ICredentialsProvider TryCredentialsProvider => ConfigManager.TryGetService<ICredentialsProvider>();
-
-		/// <summary>
-		/// <see cref="ICredentialsProvider"/>.
-		/// </summary>
-		public static ICredentialsProvider CredentialsProvider => ConfigManager.GetService<ICredentialsProvider>();
-	}
+	public static ICredentialsProvider CredentialsProvider => ConfigManager.GetService<ICredentialsProvider>();
 }

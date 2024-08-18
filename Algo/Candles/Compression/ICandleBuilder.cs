@@ -1,26 +1,25 @@
-namespace StockSharp.Algo.Candles.Compression
-{
-	using System;
-	using System.Collections.Generic;
+namespace StockSharp.Algo.Candles.Compression;
 
-	using StockSharp.Messages;
+using System;
+using System.Collections.Generic;
+
+using StockSharp.Messages;
+
+/// <summary>
+/// The candles builder interface.
+/// </summary>
+public interface ICandleBuilder : IDisposable
+{
+	/// <summary>
+	/// The candle type.
+	/// </summary>
+	Type CandleType { get; }
 
 	/// <summary>
-	/// The candles builder interface.
+	/// To process the new data.
 	/// </summary>
-	public interface ICandleBuilder : IDisposable
-	{
-		/// <summary>
-		/// The candle type.
-		/// </summary>
-		Type CandleType { get; }
-
-		/// <summary>
-		/// To process the new data.
-		/// </summary>
-		/// <param name="subscription">Subscription.</param>
-		/// <param name="transform">The data source transformation.</param>
-		/// <returns>A new candles changes.</returns>
-		IEnumerable<CandleMessage> Process(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform);
-	}
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="transform">The data source transformation.</param>
+	/// <returns>A new candles changes.</returns>
+	IEnumerable<CandleMessage> Process(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform);
 }

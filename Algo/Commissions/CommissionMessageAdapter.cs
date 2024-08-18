@@ -1,59 +1,58 @@
-namespace StockSharp.Algo.Commissions
+namespace StockSharp.Algo.Commissions;
+
+using System;
+
+using Ecng.Common;
+
+using StockSharp.Messages;
+
+/// <summary>
+/// The message adapter, automatically calculating commission.
+/// </summary>
+public class CommissionMessageAdapter : MessageAdapterWrapper
 {
-	using System;
+	/// <summary>
+	/// Initializes a new instance of the <see cref="CommissionMessageAdapter"/>.
+	/// </summary>
+	/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
+	public CommissionMessageAdapter(IMessageAdapter innerAdapter)
+		: base(innerAdapter)
+	{
+	}
 
-	using Ecng.Common;
-
-	using StockSharp.Messages;
+	private ICommissionManager _commissionManager = new CommissionManager();
 
 	/// <summary>
-	/// The message adapter, automatically calculating commission.
+	/// The commission calculating manager.
 	/// </summary>
-	public class CommissionMessageAdapter : MessageAdapterWrapper
+	public ICommissionManager CommissionManager
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CommissionMessageAdapter"/>.
-		/// </summary>
-		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-		public CommissionMessageAdapter(IMessageAdapter innerAdapter)
-			: base(innerAdapter)
-		{
-		}
+		get => _commissionManager;
+		set => _commissionManager = value ?? throw new ArgumentNullException(nameof(value));
+	}
 
-		private ICommissionManager _commissionManager = new CommissionManager();
+	/// <inheritdoc />
+	protected override bool OnSendInMessage(Message message)
+	{
+		CommissionManager.Process(message);
+		return base.OnSendInMessage(message);
+	}
 
-		/// <summary>
-		/// The commission calculating manager.
-		/// </summary>
-		public ICommissionManager CommissionManager
-		{
-			get => _commissionManager;
-			set => _commissionManager = value ?? throw new ArgumentNullException(nameof(value));
-		}
+	/// <inheritdoc />
+	protected override void OnInnerAdapterNewOutMessage(Message message)
+	{
+		if (message is ExecutionMessage execMsg && execMsg.DataType == DataType.Transactions && execMsg.Commission == null)
+			execMsg.Commission = CommissionManager.Process(execMsg);
 
-		/// <inheritdoc />
-		protected override bool OnSendInMessage(Message message)
-		{
-			CommissionManager.Process(message);
-			return base.OnSendInMessage(message);
-		}
+		base.OnInnerAdapterNewOutMessage(message);
+	}
 
-		/// <inheritdoc />
-		protected override void OnInnerAdapterNewOutMessage(Message message)
-		{
-			if (message is ExecutionMessage execMsg && execMsg.DataType == DataType.Transactions && execMsg.Commission == null)
-				execMsg.Commission = CommissionManager.Process(execMsg);
-
-			base.OnInnerAdapterNewOutMessage(message);
-		}
-
-		/// <summary>
-		/// Create a copy of <see cref="CommissionMessageAdapter"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override IMessageChannel Clone()
-		{
-			return new CommissionMessageAdapter(InnerAdapter.TypedClone());
-		}
+	/// <summary>
+	/// Create a copy of <see cref="CommissionMessageAdapter"/>.
+	/// </summary>
+	/// <returns>Copy.</returns>
+	public override IMessageChannel Clone()
+	{
+		return new CommissionMessageAdapter(InnerAdapter.TypedClone());
 	}
 }

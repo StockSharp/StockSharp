@@ -1,495 +1,494 @@
-namespace StockSharp.Algo.Storages.Csv
+namespace StockSharp.Algo.Storages.Csv;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
+
+using Ecng.Collections;
+using Ecng.Common;
+using Ecng.IO;
+using Ecng.Serialization;
+
+using StockSharp.Messages;
+
+/// <summary>
+/// The interface for presentation in the form of list of trade objects, received from the external storage.
+/// </summary>
+public interface ICsvEntityList
 {
-	using System;
-	using System.Collections.Generic;
-	using System.IO;
-	using System.IO.Compression;
-	using System.Linq;
-
-	using Ecng.Collections;
-	using Ecng.Common;
-	using Ecng.IO;
-	using Ecng.Serialization;
-
-	using StockSharp.Messages;
+	/// <summary>
+	/// The time delayed action.
+	/// </summary>
+	DelayAction DelayAction { get; set; }
 
 	/// <summary>
-	/// The interface for presentation in the form of list of trade objects, received from the external storage.
+	/// Initialize the storage.
 	/// </summary>
-	public interface ICsvEntityList
-	{
-		/// <summary>
-		/// The time delayed action.
-		/// </summary>
-		DelayAction DelayAction { get; set; }
+	/// <param name="errors">Possible errors.</param>
+	void Init(IList<Exception> errors);
 
-		/// <summary>
-		/// Initialize the storage.
-		/// </summary>
-		/// <param name="errors">Possible errors.</param>
-		void Init(IList<Exception> errors);
+	/// <summary>
+	/// CSV file name.
+	/// </summary>
+	string FileName { get; }
 
-		/// <summary>
-		/// CSV file name.
-		/// </summary>
-		string FileName { get; }
+	/// <summary>
+	/// Create archived copy.
+	/// </summary>
+	bool CreateArchivedCopy { get; set; }
 
-		/// <summary>
-		/// Create archived copy.
-		/// </summary>
-		bool CreateArchivedCopy { get; set; }
-
-		/// <summary>
-		/// Get archived copy body.
-		/// </summary>
-		/// <returns>File body.</returns>
-		byte[] GetCopy();
+	/// <summary>
+	/// Get archived copy body.
+	/// </summary>
+	/// <returns>File body.</returns>
+	byte[] GetCopy();
     }
 
+/// <summary>
+/// List of trade objects, received from the CSV storage.
+/// </summary>
+/// <typeparam name="TKey">Key type.</typeparam>
+/// <typeparam name="TEntity">Entity type.</typeparam>
+public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, IStorageEntityList<TEntity>, ICsvEntityList
+	where TEntity : class
+{
+	private readonly CachedSynchronizedDictionary<TKey, TEntity> _items = new();
+
+	private readonly SyncObject _copySync = new();
+	private byte[] _copy;
+
 	/// <summary>
-	/// List of trade objects, received from the CSV storage.
+	/// The CSV storage of trading objects.
 	/// </summary>
-	/// <typeparam name="TKey">Key type.</typeparam>
-	/// <typeparam name="TEntity">Entity type.</typeparam>
-	public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, IStorageEntityList<TEntity>, ICsvEntityList
-		where TEntity : class
+	protected CsvEntityRegistry Registry { get; }
+
+	/// <inheritdoc />
+	public TEntity[] Cache => _items.CachedValues;
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="CsvEntityList{TKey,TEntity}"/>.
+	/// </summary>
+	/// <param name="registry">The CSV storage of trading objects.</param>
+	/// <param name="fileName">CSV file name.</param>
+	protected CsvEntityList(CsvEntityRegistry registry, string fileName)
 	{
-		private readonly CachedSynchronizedDictionary<TKey, TEntity> _items = new();
+		if (fileName == null)
+			throw new ArgumentNullException(nameof(fileName));
 
-		private readonly SyncObject _copySync = new();
-		private byte[] _copy;
+		Registry = registry ?? throw new ArgumentNullException(nameof(registry));
 
-		/// <summary>
-		/// The CSV storage of trading objects.
-		/// </summary>
-		protected CsvEntityRegistry Registry { get; }
+		FileName = Path.Combine(Registry.Path, fileName);
+	}
 
-		/// <inheritdoc />
-		public TEntity[] Cache => _items.CachedValues;
+	/// <inheritdoc />
+	public string FileName { get; }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CsvEntityList{TKey,TEntity}"/>.
-		/// </summary>
-		/// <param name="registry">The CSV storage of trading objects.</param>
-		/// <param name="fileName">CSV file name.</param>
-		protected CsvEntityList(CsvEntityRegistry registry, string fileName)
+	/// <inheritdoc />
+	public bool CreateArchivedCopy { get; set; }
+
+	/// <inheritdoc />
+	public byte[] GetCopy()
+	{
+		if (!CreateArchivedCopy)
+			throw new NotSupportedException();
+
+		byte[] body;
+
+		lock (_copySync)
+			body = _copy;
+
+		if (body is null)
 		{
-			if (fileName == null)
-				throw new ArgumentNullException(nameof(fileName));
-
-			Registry = registry ?? throw new ArgumentNullException(nameof(registry));
-
-			FileName = Path.Combine(Registry.Path, fileName);
-		}
-
-		/// <inheritdoc />
-		public string FileName { get; }
-
-		/// <inheritdoc />
-		public bool CreateArchivedCopy { get; set; }
-
-		/// <inheritdoc />
-		public byte[] GetCopy()
-		{
-			if (!CreateArchivedCopy)
-				throw new NotSupportedException();
-
-			byte[] body;
-
 			lock (_copySync)
-				body = _copy;
-
-			if (body is null)
 			{
-				lock (_copySync)
-				{
-					if (File.Exists(FileName))
-						body = File.ReadAllBytes(FileName);
-					else
-						body = Array.Empty<byte>();
-				}
-
-				body = body.Compress<GZipStream>();
-
-				lock (_copySync)
-					_copy ??= body;
+				if (File.Exists(FileName))
+					body = File.ReadAllBytes(FileName);
+				else
+					body = Array.Empty<byte>();
 			}
 
-			return body;
+			body = body.Compress<GZipStream>();
+
+			lock (_copySync)
+				_copy ??= body;
 		}
 
-		private void ResetCopy()
+		return body;
+	}
+
+	private void ResetCopy()
+	{
+		if (!CreateArchivedCopy)
+			return;
+
+		lock (_copySync)
+			_copy = null;
+	}
+
+	#region IStorageEntityList<T>
+
+	private DelayAction.IGroup<CsvFileWriter> _delayActionGroup;
+	private DelayAction _delayAction;
+
+	/// <inheritdoc cref="ICsvEntityList" />
+	public DelayAction DelayAction
+	{
+		get => _delayAction;
+		set
 		{
-			if (!CreateArchivedCopy)
+			if (_delayAction == value)
 				return;
 
-			lock (_copySync)
-				_copy = null;
-		}
-
-		#region IStorageEntityList<T>
-
-		private DelayAction.IGroup<CsvFileWriter> _delayActionGroup;
-		private DelayAction _delayAction;
-
-		/// <inheritdoc cref="ICsvEntityList" />
-		public DelayAction DelayAction
-		{
-			get => _delayAction;
-			set
+			if (_delayAction != null)
 			{
-				if (_delayAction == value)
-					return;
-
-				if (_delayAction != null)
-				{
-					_delayAction.DeleteGroup(_delayActionGroup);
-					_delayActionGroup = null;
-				}
-
-				_delayAction = value;
-
-				if (_delayAction != null)
-				{
-					_delayActionGroup = _delayAction.CreateGroup(() =>
-					{
-						var stream = new TransactionFileStream(FileName, FileMode.OpenOrCreate);
-						stream.Seek(0, SeekOrigin.End);
-						return new CsvFileWriter(stream, Registry.Encoding);
-					});
-				}
-			}
-		}
-
-		/// <inheritdoc />
-		void IStorageEntityList<TEntity>.WaitFlush()
-		{
-			_delayActionGroup?.WaitFlush(false);
-		}
-
-		TEntity IStorageEntityList<TEntity>.ReadById(object id)
-		{
-			lock (SyncRoot)
-				return _items.TryGetValue(NormalizedKey(id));
-		}
-
-		private TKey GetNormalizedKey(TEntity entity)
-		{
-			return NormalizedKey(GetKey(entity));
-		}
-
-		private static readonly bool _isSecId = typeof(TKey) == typeof(SecurityId);
-
-		private static TKey NormalizedKey(object key)
-		{
-			if (key is string str)
-			{
-				str = str.ToLowerInvariant();
-
-				if (_isSecId)
-				{
-					// backward compatibility when SecurityList accept as a key string
-					key = str.ToSecurityId();
-				}
-				else
-					key = str;
+				_delayAction.DeleteGroup(_delayActionGroup);
+				_delayActionGroup = null;
 			}
 
-			return (TKey)key;
-		}
+			_delayAction = value;
 
-		/// <inheritdoc />
-		public void Save(TEntity entity)
-		{
-			Save(entity, false);
-		}
-
-		/// <summary>
-		/// Save object into storage.
-		/// </summary>
-		/// <param name="entity">Trade object.</param>
-		/// <param name="forced">Forced update.</param>
-		public virtual void Save(TEntity entity, bool forced)
-		{
-			lock (SyncRoot)
+			if (_delayAction != null)
 			{
-				var item = _items.TryGetValue(GetNormalizedKey(entity));
-
-				if (item == null)
+				_delayActionGroup = _delayAction.CreateGroup(() =>
 				{
-					Add(entity);
-					return;
-				}
-				else if (IsChanged(entity, forced))
-					UpdateCache(entity);
-				else
-					return;
-
-				WriteMany(_items.Values.ToArray());
-			}
-		}
-
-		#endregion
-
-		/// <summary>
-		/// Is <paramref name="entity"/> changed.
-		/// </summary>
-		/// <param name="entity">Trade object.</param>
-		/// <param name="forced">Forced update.</param>
-		/// <returns>Is changed.</returns>
-		protected virtual bool IsChanged(TEntity entity, bool forced)
-		{
-			return true;
-		}
-
-		/// <summary>
-		/// Get key from trade object.
-		/// </summary>
-		/// <param name="item">Trade object.</param>
-		/// <returns>The key.</returns>
-		protected abstract TKey GetKey(TEntity item);
-
-		/// <summary>
-		/// Write data into CSV.
-		/// </summary>
-		/// <param name="writer">CSV writer.</param>
-		/// <param name="data">Trade object.</param>
-		protected abstract void Write(CsvFileWriter writer, TEntity data);
-
-		/// <summary>
-		/// Read data from CSV.
-		/// </summary>
-		/// <param name="reader">CSV reader.</param>
-		/// <returns>Trade object.</returns>
-		protected abstract TEntity Read(FastCsvReader reader);
-
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="item"></param>
-		/// <returns></returns>
-		public override bool Contains(TEntity item)
-		{
-			lock (SyncRoot)
-				return _items.ContainsKey(GetNormalizedKey(item));
-		}
-
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="item">Trade object.</param>
-		/// <returns></returns>
-		protected override bool OnAdding(TEntity item)
-		{
-			lock (SyncRoot)
-			{
-				if (!_items.TryAdd2(GetNormalizedKey(item), item))
-					return false;
-
-				AddCache(item);
-
-				_delayActionGroup.Add((writer, data) =>
-				{
-					ResetCopy();
-					Write(writer, data);
-				}, item);
-			}
-
-			return base.OnAdding(item);
-		}
-
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="item">Trade object.</param>
-		protected override void OnRemoved(TEntity item)
-		{
-			base.OnRemoved(item);
-
-			lock (SyncRoot)
-			{
-				_items.Remove(GetNormalizedKey(item));
-				RemoveCache(item);
-
-				WriteMany(_items.Values.ToArray());
-			}
-		}
-
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="items"></param>
-		protected void OnRemovedRange(IEnumerable<TEntity> items)
-		{
-			lock (SyncRoot)
-			{
-				foreach (var item in items)
-				{
-					_items.Remove(GetNormalizedKey(item));
-					RemoveCache(item);
-				}
-
-				WriteMany(_items.Values.ToArray());
-			}
-		}
-
-		/// <summary>
-		///
-		/// </summary>
-		protected override void OnCleared()
-		{
-			base.OnCleared();
-
-			lock (SyncRoot)
-			{
-				_items.Clear();
-				ClearCache();
-
-				_delayActionGroup.Add(writer =>
-				{
-					ResetCopy();
-					writer.Writer.Truncate();
+					var stream = new TransactionFileStream(FileName, FileMode.OpenOrCreate);
+					stream.Seek(0, SeekOrigin.End);
+					return new CsvFileWriter(stream, Registry.Encoding);
 				});
 			}
 		}
+	}
 
-		/// <summary>
-		/// Write data into storage.
-		/// </summary>
-		/// <param name="values">Trading objects.</param>
-		private void WriteMany(TEntity[] values)
+	/// <inheritdoc />
+	void IStorageEntityList<TEntity>.WaitFlush()
+	{
+		_delayActionGroup?.WaitFlush(false);
+	}
+
+	TEntity IStorageEntityList<TEntity>.ReadById(object id)
+	{
+		lock (SyncRoot)
+			return _items.TryGetValue(NormalizedKey(id));
+	}
+
+	private TKey GetNormalizedKey(TEntity entity)
+	{
+		return NormalizedKey(GetKey(entity));
+	}
+
+	private static readonly bool _isSecId = typeof(TKey) == typeof(SecurityId);
+
+	private static TKey NormalizedKey(object key)
+	{
+		if (key is string str)
 		{
-			_delayActionGroup.Add((writer, state) =>
+			str = str.ToLowerInvariant();
+
+			if (_isSecId)
 			{
-				ResetCopy();
-
-				writer.Writer.Truncate();
-
-				foreach (var item in state)
-					Write(writer, item);
-			}, values, compareStates: (v1, v2) =>
-			{
-				if (v1 == null)
-					return v2 == null;
-
-				if (v2 == null)
-					return false;
-
-				if (v1.Length != v2.Length)
-					return false;
-
-				return v1.SequenceEqual(v2);
-			});
+				// backward compatibility when SecurityList accept as a key string
+				key = str.ToSecurityId();
+			}
+			else
+				key = str;
 		}
 
-		void ICsvEntityList.Init(IList<Exception> errors)
-		{
-			if (errors == null)
-				throw new ArgumentNullException(nameof(errors));
+		return (TKey)key;
+	}
 
-			if (!File.Exists(FileName))
+	/// <inheritdoc />
+	public void Save(TEntity entity)
+	{
+		Save(entity, false);
+	}
+
+	/// <summary>
+	/// Save object into storage.
+	/// </summary>
+	/// <param name="entity">Trade object.</param>
+	/// <param name="forced">Forced update.</param>
+	public virtual void Save(TEntity entity, bool forced)
+	{
+		lock (SyncRoot)
+		{
+			var item = _items.TryGetValue(GetNormalizedKey(entity));
+
+			if (item == null)
+			{
+				Add(entity);
+				return;
+			}
+			else if (IsChanged(entity, forced))
+				UpdateCache(entity);
+			else
 				return;
 
-			Do.Invariant(() =>
+			WriteMany(_items.Values.ToArray());
+		}
+	}
+
+	#endregion
+
+	/// <summary>
+	/// Is <paramref name="entity"/> changed.
+	/// </summary>
+	/// <param name="entity">Trade object.</param>
+	/// <param name="forced">Forced update.</param>
+	/// <returns>Is changed.</returns>
+	protected virtual bool IsChanged(TEntity entity, bool forced)
+	{
+		return true;
+	}
+
+	/// <summary>
+	/// Get key from trade object.
+	/// </summary>
+	/// <param name="item">Trade object.</param>
+	/// <returns>The key.</returns>
+	protected abstract TKey GetKey(TEntity item);
+
+	/// <summary>
+	/// Write data into CSV.
+	/// </summary>
+	/// <param name="writer">CSV writer.</param>
+	/// <param name="data">Trade object.</param>
+	protected abstract void Write(CsvFileWriter writer, TEntity data);
+
+	/// <summary>
+	/// Read data from CSV.
+	/// </summary>
+	/// <param name="reader">CSV reader.</param>
+	/// <returns>Trade object.</returns>
+	protected abstract TEntity Read(FastCsvReader reader);
+
+	/// <summary>
+	///
+	/// </summary>
+	/// <param name="item"></param>
+	/// <returns></returns>
+	public override bool Contains(TEntity item)
+	{
+		lock (SyncRoot)
+			return _items.ContainsKey(GetNormalizedKey(item));
+	}
+
+	/// <summary>
+	///
+	/// </summary>
+	/// <param name="item">Trade object.</param>
+	/// <returns></returns>
+	protected override bool OnAdding(TEntity item)
+	{
+		lock (SyncRoot)
+		{
+			if (!_items.TryAdd2(GetNormalizedKey(item), item))
+				return false;
+
+			AddCache(item);
+
+			_delayActionGroup.Add((writer, data) =>
 			{
-				using var stream = new FileStream(FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+				ResetCopy();
+				Write(writer, data);
+			}, item);
+		}
 
-				var reader = stream.CreateCsvReader(Registry.Encoding);
+		return base.OnAdding(item);
+	}
 
-				var hasDuplicates = false;
-				var currErrors = 0;
+	/// <summary>
+	///
+	/// </summary>
+	/// <param name="item">Trade object.</param>
+	protected override void OnRemoved(TEntity item)
+	{
+		base.OnRemoved(item);
 
-				while (reader.NextLine())
-				{
-					try
-					{
-						var item = Read(reader);
-						var key = GetNormalizedKey(item);
+		lock (SyncRoot)
+		{
+			_items.Remove(GetNormalizedKey(item));
+			RemoveCache(item);
 
-						lock (SyncRoot)
-						{
-							if (_items.TryAdd2(key, item))
-							{
-								InnerCollection.Add(item);
-								AddCache(item);
-							}
-							else
-								hasDuplicates = true;
-						}
+			WriteMany(_items.Values.ToArray());
+		}
+	}
 
-						currErrors = 0;
-					}
-					catch (Exception ex)
-					{
-						if (errors.Count < 100)
-							errors.Add(ex);
+	/// <summary>
+	///
+	/// </summary>
+	/// <param name="items"></param>
+	protected void OnRemovedRange(IEnumerable<TEntity> items)
+	{
+		lock (SyncRoot)
+		{
+			foreach (var item in items)
+			{
+				_items.Remove(GetNormalizedKey(item));
+				RemoveCache(item);
+			}
 
-						currErrors++;
+			WriteMany(_items.Values.ToArray());
+		}
+	}
 
-						if (currErrors >= 1000)
-							break;
-					}
-				}
+	/// <summary>
+	///
+	/// </summary>
+	protected override void OnCleared()
+	{
+		base.OnCleared();
 
-				if (!hasDuplicates)
-					return;
+		lock (SyncRoot)
+		{
+			_items.Clear();
+			ClearCache();
 
+			_delayActionGroup.Add(writer =>
+			{
+				ResetCopy();
+				writer.Writer.Truncate();
+			});
+		}
+	}
+
+	/// <summary>
+	/// Write data into storage.
+	/// </summary>
+	/// <param name="values">Trading objects.</param>
+	private void WriteMany(TEntity[] values)
+	{
+		_delayActionGroup.Add((writer, state) =>
+		{
+			ResetCopy();
+
+			writer.Writer.Truncate();
+
+			foreach (var item in state)
+				Write(writer, item);
+		}, values, compareStates: (v1, v2) =>
+		{
+			if (v1 == null)
+				return v2 == null;
+
+			if (v2 == null)
+				return false;
+
+			if (v1.Length != v2.Length)
+				return false;
+
+			return v1.SequenceEqual(v2);
+		});
+	}
+
+	void ICsvEntityList.Init(IList<Exception> errors)
+	{
+		if (errors == null)
+			throw new ArgumentNullException(nameof(errors));
+
+		if (!File.Exists(FileName))
+			return;
+
+		Do.Invariant(() =>
+		{
+			using var stream = new FileStream(FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+
+			var reader = stream.CreateCsvReader(Registry.Encoding);
+
+			var hasDuplicates = false;
+			var currErrors = 0;
+
+			while (reader.NextLine())
+			{
 				try
 				{
+					var item = Read(reader);
+					var key = GetNormalizedKey(item);
+
 					lock (SyncRoot)
 					{
-						stream.SetLength(0);
-
-						using var writer = new CsvFileWriter(stream, Registry.Encoding);
-
-						foreach (var item in InnerCollection)
-							Write(writer, item);
+						if (_items.TryAdd2(key, item))
+						{
+							InnerCollection.Add(item);
+							AddCache(item);
+						}
+						else
+							hasDuplicates = true;
 					}
+
+					currErrors = 0;
 				}
 				catch (Exception ex)
 				{
-					errors.Add(ex);
+					if (errors.Count < 100)
+						errors.Add(ex);
+
+					currErrors++;
+
+					if (currErrors >= 1000)
+						break;
 				}
-			});
+			}
 
-			InnerCollection.ForEach(OnAdded);
-		}
+			if (!hasDuplicates)
+				return;
 
-		/// <summary>
-		/// Clear cache.
-		/// </summary>
-		protected virtual void ClearCache()
-		{
-		}
+			try
+			{
+				lock (SyncRoot)
+				{
+					stream.SetLength(0);
 
-		/// <summary>
-		/// Add item to cache.
-		/// </summary>
-		/// <param name="item">New item.</param>
-		protected virtual void AddCache(TEntity item)
-		{
-		}
+					using var writer = new CsvFileWriter(stream, Registry.Encoding);
 
-		/// <summary>
-		/// Update item in cache.
-		/// </summary>
-		/// <param name="item">Item.</param>
-		protected virtual void UpdateCache(TEntity item)
-		{
-		}
+					foreach (var item in InnerCollection)
+						Write(writer, item);
+				}
+			}
+			catch (Exception ex)
+			{
+				errors.Add(ex);
+			}
+		});
 
-		/// <summary>
-		/// Remove item from cache.
-		/// </summary>
-		/// <param name="item">Item.</param>
-		protected virtual void RemoveCache(TEntity item)
-		{
-		}
+		InnerCollection.ForEach(OnAdded);
+	}
 
-		/// <inheritdoc />
-		public override string ToString()
-		{
-			return FileName;
-		}
+	/// <summary>
+	/// Clear cache.
+	/// </summary>
+	protected virtual void ClearCache()
+	{
+	}
+
+	/// <summary>
+	/// Add item to cache.
+	/// </summary>
+	/// <param name="item">New item.</param>
+	protected virtual void AddCache(TEntity item)
+	{
+	}
+
+	/// <summary>
+	/// Update item in cache.
+	/// </summary>
+	/// <param name="item">Item.</param>
+	protected virtual void UpdateCache(TEntity item)
+	{
+	}
+
+	/// <summary>
+	/// Remove item from cache.
+	/// </summary>
+	/// <param name="item">Item.</param>
+	protected virtual void RemoveCache(TEntity item)
+	{
+	}
+
+	/// <inheritdoc />
+	public override string ToString()
+	{
+		return FileName;
 	}
 }

@@ -1,27 +1,26 @@
-namespace StockSharp.Messages
+namespace StockSharp.Messages;
+
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>
+/// Reset state message.
+/// </summary>
+[DataContract]
+[Serializable]
+public sealed class ResetMessage : Message
 {
-	using System;
-	using System.Runtime.Serialization;
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ResetMessage"/>.
+	/// </summary>
+	public ResetMessage()
+		: base(MessageTypes.Reset)
+	{
+	}
 
 	/// <summary>
-	/// Reset state message.
+	/// Create a copy of <see cref="ResetMessage"/>.
 	/// </summary>
-	[DataContract]
-	[Serializable]
-	public sealed class ResetMessage : Message
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ResetMessage"/>.
-		/// </summary>
-		public ResetMessage()
-			: base(MessageTypes.Reset)
-		{
-		}
-
-		/// <summary>
-		/// Create a copy of <see cref="ResetMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone() => new ResetMessage();
-	}
+	/// <returns>Copy.</returns>
+	public override Message Clone() => new ResetMessage();
 }

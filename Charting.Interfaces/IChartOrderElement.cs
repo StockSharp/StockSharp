@@ -1,25 +1,24 @@
-﻿namespace StockSharp.Charting
+﻿namespace StockSharp.Charting;
+
+using System.Drawing;
+
+/// <summary>
+/// The chart element representing orders.
+/// </summary>
+public interface IChartOrderElement : IChartTransactionElement
 {
-	using System.Drawing;
+	/// <summary>
+	/// Fill color of transaction errors.
+	/// </summary>
+	Color ErrorColor { get; set; }
 
 	/// <summary>
-	/// The chart element representing orders.
+	/// Stroke color of transaction errors.
 	/// </summary>
-	public interface IChartOrderElement : IChartTransactionElement
-	{
-		/// <summary>
-		/// Fill color of transaction errors.
-		/// </summary>
-		Color ErrorColor { get; set; }
+	Color ErrorStrokeColor { get; set; }
 
-		/// <summary>
-		/// Stroke color of transaction errors.
-		/// </summary>
-		Color ErrorStrokeColor { get; set; }
-
-		/// <summary>
-		/// Orders display filter.
-		/// </summary>
-		ChartOrderDisplayFilter Filter { get; set; }
-	}
+	/// <summary>
+	/// Orders display filter.
+	/// </summary>
+	ChartOrderDisplayFilter Filter { get; set; }
 }

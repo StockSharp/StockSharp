@@ -1,30 +1,29 @@
-﻿namespace StockSharp.Charting
-{
-	using System.ComponentModel.DataAnnotations;
+﻿namespace StockSharp.Charting;
 
-	using StockSharp.Localization;
+using System.ComponentModel.DataAnnotations;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// Chart axes types.
+/// </summary>
+public enum ChartAxisType
+{
+	/// <summary>
+	/// Time.
+	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TimeKey)]
+	DateTime,
 
 	/// <summary>
-	/// Chart axes types.
+	/// Time without breaks.
 	/// </summary>
-	public enum ChartAxisType
-	{
-		/// <summary>
-		/// Time.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TimeKey)]
-		DateTime,
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TimeNoBreaksKey)]
+	CategoryDateTime,
 
-		/// <summary>
-		/// Time without breaks.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TimeNoBreaksKey)]
-		CategoryDateTime,
-
-		/// <summary>
-		/// Number.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NumericKey)]
-		Numeric
-	}
+	/// <summary>
+	/// Number.
+	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NumericKey)]
+	Numeric
 }

@@ -1,80 +1,79 @@
-﻿namespace StockSharp.Algo.Indicators
+﻿namespace StockSharp.Algo.Indicators;
+
+using System.ComponentModel.DataAnnotations;
+
+using Ecng.ComponentModel;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// Chande Momentum Oscillator.
+/// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/cmo.html
+/// </remarks>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.CMOKey,
+	Description = LocalizedStrings.ChandeMomentumOscillatorKey)]
+[Doc("topics/api/indicators/list_of_indicators/cmo.html")]
+public class ChandeMomentumOscillator : LengthIndicator<decimal>
 {
-	using System.ComponentModel.DataAnnotations;
-
-	using Ecng.ComponentModel;
-
-	using StockSharp.Localization;
+	private readonly Sum _cmoUp = new();
+	private readonly Sum _cmoDn = new();
+	private bool _isInitialized;
+	private decimal _last;
 
 	/// <summary>
-	/// Chande Momentum Oscillator.
+	/// Initializes a new instance of the <see cref="ChandeMomentumOscillator"/>.
 	/// </summary>
-	/// <remarks>
-	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/cmo.html
-	/// </remarks>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.CMOKey,
-		Description = LocalizedStrings.ChandeMomentumOscillatorKey)]
-	[Doc("topics/api/indicators/list_of_indicators/cmo.html")]
-	public class ChandeMomentumOscillator : LengthIndicator<decimal>
+	public ChandeMomentumOscillator()
 	{
-		private readonly Sum _cmoUp = new();
-		private readonly Sum _cmoDn = new();
-		private bool _isInitialized;
-		private decimal _last;
+		Length = 15;
+	}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ChandeMomentumOscillator"/>.
-		/// </summary>
-		public ChandeMomentumOscillator()
+	/// <inheritdoc />
+	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
+
+	/// <inheritdoc />
+	public override void Reset()
+	{
+		_cmoDn.Length = _cmoUp.Length = Length;
+		_isInitialized = false;
+		_last = 0;
+
+		base.Reset();
+	}
+
+	/// <inheritdoc />
+	protected override bool CalcIsFormed() => _cmoUp.IsFormed;
+
+	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{
+		var newValue = input.GetValue<decimal>();
+
+		if (!_isInitialized)
 		{
-			Length = 15;
-		}
-
-		/// <inheritdoc />
-		public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
-
-		/// <inheritdoc />
-		public override void Reset()
-		{
-			_cmoDn.Length = _cmoUp.Length = Length;
-			_isInitialized = false;
-			_last = 0;
-
-			base.Reset();
-		}
-
-		/// <inheritdoc />
-		protected override bool CalcIsFormed() => _cmoUp.IsFormed;
-
-		/// <inheritdoc />
-		protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		{
-			var newValue = input.GetValue<decimal>();
-
-			if (!_isInitialized)
+			if (input.IsFinal)
 			{
-				if (input.IsFinal)
-				{
-					_last = newValue;
-					_isInitialized = true;
-				}
-
-				return new DecimalIndicatorValue(this);
+				_last = newValue;
+				_isInitialized = true;
 			}
 
-			var delta = newValue - _last;
-
-			var upValue = _cmoUp.Process(input.SetValue(this, delta > 0 ? delta : 0m)).GetValue<decimal>();
-			var downValue = _cmoDn.Process(input.SetValue(this, delta > 0 ? 0m : -delta)).GetValue<decimal>();
-
-			if (input.IsFinal)
-				_last = newValue;
-
-			var value = (upValue + downValue) == 0 ? 0 : 100m * (upValue - downValue) / (upValue + downValue);
-
-			return IsFormed ? new DecimalIndicatorValue(this, value) : new DecimalIndicatorValue(this);
+			return new DecimalIndicatorValue(this);
 		}
+
+		var delta = newValue - _last;
+
+		var upValue = _cmoUp.Process(input.SetValue(this, delta > 0 ? delta : 0m)).GetValue<decimal>();
+		var downValue = _cmoDn.Process(input.SetValue(this, delta > 0 ? 0m : -delta)).GetValue<decimal>();
+
+		if (input.IsFinal)
+			_last = newValue;
+
+		var value = (upValue + downValue) == 0 ? 0 : 100m * (upValue - downValue) / (upValue + downValue);
+
+		return IsFormed ? new DecimalIndicatorValue(this, value) : new DecimalIndicatorValue(this);
 	}
 }

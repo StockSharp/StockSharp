@@ -1,84 +1,83 @@
-﻿namespace StockSharp.Algo.Indicators
+﻿namespace StockSharp.Algo.Indicators;
+
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+
+using Ecng.ComponentModel;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// Linear regression - Value returns the last point prediction.
+/// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/lrc.html
+/// </remarks>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.LRCKey,
+	Description = LocalizedStrings.LinearRegressionKey)]
+[Doc("topics/api/indicators/list_of_indicators/lrc.html")]
+public class LinearReg : LengthIndicator<decimal>
 {
-	using System.Collections.Generic;
-	using System.ComponentModel.DataAnnotations;
-	using System.Linq;
-
-	using Ecng.ComponentModel;
-
-	using StockSharp.Localization;
+	// Коэффициент при независимой переменной, угол наклона прямой.
+	private decimal _slope;
 
 	/// <summary>
-	/// Linear regression - Value returns the last point prediction.
+	/// Initializes a new instance of the <see cref="LinearReg"/>.
 	/// </summary>
-	/// <remarks>
-	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/lrc.html
-	/// </remarks>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.LRCKey,
-		Description = LocalizedStrings.LinearRegressionKey)]
-	[Doc("topics/api/indicators/list_of_indicators/lrc.html")]
-	public class LinearReg : LengthIndicator<decimal>
+	public LinearReg()
 	{
-		// Коэффициент при независимой переменной, угол наклона прямой.
-		private decimal _slope;
+		Length = 11;
+	}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="LinearReg"/>.
-		/// </summary>
-		public LinearReg()
+	/// <inheritdoc />
+	public override void Reset()
+	{
+		_slope = 0;
+		base.Reset();
+	}
+
+	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{
+		var newValue = input.GetValue<decimal>();
+
+		if (input.IsFinal)
 		{
-			Length = 11;
+			Buffer.PushBack(newValue);
+
+			if (Buffer.Count > Length)
+				Buffer.PopFront();
 		}
 
-		/// <inheritdoc />
-		public override void Reset()
+		var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
+
+		//x - независимая переменная, номер значения в буфере
+		//y - зависимая переменная - значения из буфера
+		var sumX = 0m; //сумма x
+		var sumY = 0m; //сумма y
+		var sumXy = 0m; //сумма x*y
+		var sumX2 = 0m; //сумма x^2
+
+		for (var i = 0; i < buff.Count; i++)
 		{
-			_slope = 0;
-			base.Reset();
+			sumX += i;
+			sumY += buff[i];
+			sumXy += i * buff[i];
+			sumX2 += i * i;
 		}
 
-		/// <inheritdoc />
-		protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		{
-			var newValue = input.GetValue<decimal>();
+		//коэффициент при независимой переменной
+		var divisor = Length * sumX2 - sumX * sumX;
+		if (divisor == 0) _slope = 0;
+		else _slope = (Length * sumXy - sumX * sumY) / divisor;
 
-			if (input.IsFinal)
-			{
-				Buffer.PushBack(newValue);
+		//свободный член
+		var b = (sumY - _slope * sumX) / Length;
 
-				if (Buffer.Count > Length)
-					Buffer.PopFront();
-			}
-
-			var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
-
-			//x - независимая переменная, номер значения в буфере
-			//y - зависимая переменная - значения из буфера
-			var sumX = 0m; //сумма x
-			var sumY = 0m; //сумма y
-			var sumXy = 0m; //сумма x*y
-			var sumX2 = 0m; //сумма x^2
-
-			for (var i = 0; i < buff.Count; i++)
-			{
-				sumX += i;
-				sumY += buff[i];
-				sumXy += i * buff[i];
-				sumX2 += i * i;
-			}
-
-			//коэффициент при независимой переменной
-			var divisor = Length * sumX2 - sumX * sumX;
-			if (divisor == 0) _slope = 0;
-			else _slope = (Length * sumXy - sumX * sumY) / divisor;
-
-			//свободный член
-			var b = (sumY - _slope * sumX) / Length;
-
-			//прогноз последнего значения (его номер Length - 1)
-			return new DecimalIndicatorValue(this, _slope * (Length - 1) + b);
-		}
+		//прогноз последнего значения (его номер Length - 1)
+		return new DecimalIndicatorValue(this, _slope * (Length - 1) + b);
 	}
 }

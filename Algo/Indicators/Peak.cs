@@ -1,56 +1,55 @@
-﻿namespace StockSharp.Algo.Indicators
+﻿namespace StockSharp.Algo.Indicators;
+
+using System.ComponentModel.DataAnnotations;
+
+using Ecng.ComponentModel;
+
+using StockSharp.Localization;
+using StockSharp.Messages;
+
+/// <summary>
+/// Peak.
+/// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/peak.html
+/// </remarks>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.PeakKey,
+	Description = LocalizedStrings.PeakKey)]
+[Doc("topics/api/indicators/list_of_indicators/peak.html")]
+public sealed class Peak : ZigZagEquis
 {
-	using System.ComponentModel.DataAnnotations;
-
-	using Ecng.ComponentModel;
-
-	using StockSharp.Localization;
-	using StockSharp.Messages;
-
 	/// <summary>
-	/// Peak.
+	/// To create the indicator <see cref="Peak"/>.
 	/// </summary>
-	/// <remarks>
-	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/peak.html
-	/// </remarks>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.PeakKey,
-		Description = LocalizedStrings.PeakKey)]
-	[Doc("topics/api/indicators/list_of_indicators/peak.html")]
-	public sealed class Peak : ZigZagEquis
+	public Peak()
 	{
-		/// <summary>
-		/// To create the indicator <see cref="Peak"/>.
-		/// </summary>
-		public Peak()
-		{
-			PriceField = Level1Fields.HighPrice;
-		}
+		PriceField = Level1Fields.HighPrice;
+	}
 
-		/// <inheritdoc />
-		protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		{
-			var value = base.OnProcess(input);
+	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{
+		var value = base.OnProcess(input);
 
-			if (IsFormed && !value.IsEmpty)
+		if (IsFormed && !value.IsEmpty)
+		{
+			if (CurrentValue < value.GetValue<decimal>())
 			{
-				if (CurrentValue < value.GetValue<decimal>())
-				{
-					return value;
-				}
-
-				var lastValue = this.GetCurrentValue<ShiftedIndicatorValue>();
-
-				if (input.IsFinal)
-					IsFormed = !lastValue.IsEmpty;
-
-				return IsFormed ? new ShiftedIndicatorValue(this, lastValue.Value, lastValue.Shift + 1) : lastValue;
+				return value;
 			}
 
-			IsFormed = false;
+			var lastValue = this.GetCurrentValue<ShiftedIndicatorValue>();
 
-			return value;
+			if (input.IsFinal)
+				IsFormed = !lastValue.IsEmpty;
+
+			return IsFormed ? new ShiftedIndicatorValue(this, lastValue.Value, lastValue.Shift + 1) : lastValue;
 		}
+
+		IsFormed = false;
+
+		return value;
 	}
 }

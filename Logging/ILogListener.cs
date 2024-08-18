@@ -1,24 +1,23 @@
-namespace StockSharp.Logging
-{
-	using System;
-	using System.Collections.Generic;
+namespace StockSharp.Logging;
 
-	using Ecng.Serialization;
+using System;
+using System.Collections.Generic;
+
+using Ecng.Serialization;
+
+/// <summary>
+/// The class interface that monitors the event <see cref="ILogSource.Log"/> and saves to some storage.
+/// </summary>
+public interface ILogListener : IPersistable, IDisposable
+{
+	/// <summary>
+	/// Can save listener.
+	/// </summary>
+	bool CanSave { get; }
 
 	/// <summary>
-	/// The class interface that monitors the event <see cref="ILogSource.Log"/> and saves to some storage.
+	/// To record messages.
 	/// </summary>
-	public interface ILogListener : IPersistable, IDisposable
-	{
-		/// <summary>
-		/// Can save listener.
-		/// </summary>
-		bool CanSave { get; }
-
-		/// <summary>
-		/// To record messages.
-		/// </summary>
-		/// <param name="messages">Debug messages.</param>
-		void WriteMessages(IEnumerable<LogMessage> messages);
-	}
+	/// <param name="messages">Debug messages.</param>
+	void WriteMessages(IEnumerable<LogMessage> messages);
 }

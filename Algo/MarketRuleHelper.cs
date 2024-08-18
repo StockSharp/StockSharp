@@ -1,884 +1,883 @@
-namespace StockSharp.Algo
+namespace StockSharp.Algo;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Ecng.Collections;
+using Ecng.Common;
+
+using StockSharp.Logging;
+using StockSharp.BusinessEntities;
+using StockSharp.Messages;
+using StockSharp.Localization;
+
+/// <summary>
+/// Extension class for <see cref="IMarketRule"/>.
+/// </summary>
+public static partial class MarketRuleHelper
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+	#region IConnector rules
 
-	using Ecng.Collections;
-	using Ecng.Common;
+	private abstract class ConnectorRule<TArg> : MarketRule<IConnector, TArg>
+	{
+		protected ConnectorRule(IConnector connector)
+			: base(connector)
+		{
+			Connector = connector ?? throw new ArgumentNullException(nameof(connector));
+		}
 
-	using StockSharp.Logging;
-	using StockSharp.BusinessEntities;
-	using StockSharp.Messages;
-	using StockSharp.Localization;
+		protected IConnector Connector { get; }
+	}
+
+	private class IntervalTimeRule : ConnectorRule<IConnector>
+	{
+		private readonly MarketTimer _timer;
+
+		public IntervalTimeRule(IConnector connector, TimeSpan interval/*, bool firstTimeRun*/)
+			: base(connector)
+		{
+			Name = LocalizedStrings.Interval + " " + interval;
+
+			_timer = new MarketTimer(connector, () => Activate(connector))
+				.Interval(interval)
+				.Start();
+		}
+
+		protected override void DisposeManaged()
+		{
+			_timer.Dispose();
+			base.DisposeManaged();
+		}
+	}
+
+	private abstract class TransactionProviderRule<TArg> : MarketRule<ITransactionProvider, TArg>
+	{
+		protected TransactionProviderRule(ITransactionProvider provider)
+			: base(provider)
+		{
+			Provider = provider ?? throw new ArgumentNullException(nameof(provider));
+		}
+
+		protected ITransactionProvider Provider { get; }
+	}
+
+	private class NewMyTradeTraderRule : TransactionProviderRule<MyTrade>
+	{
+		public NewMyTradeTraderRule(ITransactionProvider provider)
+			: base(provider)
+		{
+			Name = LocalizedStrings.Trades;
+			Provider.NewMyTrade += OnNewMyTrade;
+		}
+
+		private void OnNewMyTrade(MyTrade trade)
+		{
+			Activate(trade);
+		}
+
+		protected override void DisposeManaged()
+		{
+			Provider.NewMyTrade -= OnNewMyTrade;
+			base.DisposeManaged();
+		}
+	}
+
+	private class NewOrderTraderRule : TransactionProviderRule<Order>
+	{
+		public NewOrderTraderRule(ITransactionProvider provider)
+			: base(provider)
+		{
+			Name = LocalizedStrings.Orders;
+			Provider.NewOrder += OnNewOrder;
+		}
+
+		private void OnNewOrder(Order order)
+		{
+			Activate(order);
+		}
+
+		protected override void DisposeManaged()
+		{
+			Provider.NewOrder -= OnNewOrder;
+			base.DisposeManaged();
+		}
+	}
+
+	private class ConnectedRule : ConnectorRule<IMessageAdapter>
+	{
+		public ConnectedRule(IConnector connector)
+			: base(connector)
+		{
+			Name = "Connected rule";
+			Connector.ConnectedEx += OnConnectedEx;
+		}
+
+		private void OnConnectedEx(IMessageAdapter adapter)
+		{
+			Activate(adapter);
+		}
+
+		protected override void DisposeManaged()
+		{
+			Connector.ConnectedEx -= OnConnectedEx;
+			base.DisposeManaged();
+		}
+	}
+
+	private class DisconnectedRule : ConnectorRule<IMessageAdapter>
+	{
+		public DisconnectedRule(IConnector connector)
+			: base(connector)
+		{
+			Name = "Disconnected rule";
+			Connector.DisconnectedEx += OnDisconnectedEx;
+		}
+
+		private void OnDisconnectedEx(IMessageAdapter adapter)
+		{
+			Activate(adapter);
+		}
+
+		protected override void DisposeManaged()
+		{
+			Connector.DisconnectedEx -= OnDisconnectedEx;
+			base.DisposeManaged();
+		}
+	}
+
+	private class ConnectionLostRule : ConnectorRule<Tuple<IMessageAdapter, Exception>>
+	{
+		public ConnectionLostRule(IConnector connector)
+			: base(connector)
+		{
+			Name = "Connection lost rule";
+			Connector.ConnectionErrorEx += OnConnectionErrorEx;
+		}
+
+		private void OnConnectionErrorEx(IMessageAdapter adapter, Exception error)
+		{
+			Activate(Tuple.Create(adapter, error));
+		}
+
+		protected override void DisposeManaged()
+		{
+			Connector.ConnectionErrorEx -= OnConnectionErrorEx;
+			base.DisposeManaged();
+		}
+	}
 
 	/// <summary>
-	/// Extension class for <see cref="IMarketRule"/>.
+	/// To create a rule for the event <see cref="IConnector.MarketTimeChanged"/>, activated after expiration of <paramref name="interval" />.
 	/// </summary>
-	public static partial class MarketRuleHelper
+	/// <param name="connector">Connection to the trading system.</param>
+	/// <param name="interval">Interval.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<IConnector, IConnector> WhenIntervalElapsed(this IConnector connector, TimeSpan interval)
 	{
-		#region IConnector rules
+		if (connector == null)
+			throw new ArgumentNullException(nameof(connector));
 
-		private abstract class ConnectorRule<TArg> : MarketRule<IConnector, TArg>
+		return new IntervalTimeRule(connector, interval);
+	}
+
+	/// <summary>
+	/// To create a rule for the event of new trade occurrences.
+	/// </summary>
+	/// <param name="provider">The transactional provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<ITransactionProvider, MyTrade> WhenNewMyTrade(this ITransactionProvider provider)
+	{
+		return new NewMyTradeTraderRule(provider);
+	}
+
+	/// <summary>
+	/// To create a rule for the event of new orders occurrences.
+	/// </summary>
+	/// <param name="provider">The transactional provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<ITransactionProvider, Order> WhenNewOrder(this ITransactionProvider provider)
+	{
+		return new NewOrderTraderRule(provider);
+	}
+
+	/// <summary>
+	/// To create a rule for the event of connection established.
+	/// </summary>
+	/// <param name="connector">The connection to be traced for state.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<IConnector, IMessageAdapter> WhenConnected(this IConnector connector)
+	{
+		return new ConnectedRule(connector);
+	}
+
+	/// <summary>
+	/// To create a rule for the event of disconnection.
+	/// </summary>
+	/// <param name="connector">The connection to be traced for state.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<IConnector, IMessageAdapter> WhenDisconnected(this IConnector connector)
+	{
+		return new DisconnectedRule(connector);
+	}
+
+	/// <summary>
+	/// To create a rule for the event of connection lost.
+	/// </summary>
+	/// <param name="connector">The connection to be traced for state.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<IConnector, Tuple<IMessageAdapter, Exception>> WhenConnectionLost(this IConnector connector)
+	{
+		return new ConnectionLostRule(connector);
+	}
+
+	#endregion
+
+	#region Apply
+
+	/// <summary>
+	/// To form a rule (include <see cref="IMarketRule.IsReady"/>).
+	/// </summary>
+	/// <param name="rule">Rule.</param>
+	/// <returns>Rule.</returns>
+	public static IMarketRule Apply(this IMarketRule rule)
+	{
+		if (rule == null)
+			throw new ArgumentNullException(nameof(rule));
+
+		return rule.Apply(DefaultRuleContainer);
+	}
+
+	/// <summary>
+	/// To form a rule (include <see cref="IMarketRule.IsReady"/>).
+	/// </summary>
+	/// <param name="rule">Rule.</param>
+	/// <param name="container">The rules container.</param>
+	/// <returns>Rule.</returns>
+	public static IMarketRule Apply(this IMarketRule rule, IMarketRuleContainer container)
+	{
+		if (rule == null)
+			throw new ArgumentNullException(nameof(rule));
+
+		if (container == null)
+			throw new ArgumentNullException(nameof(container));
+
+		container.Rules.Add(rule);
+		return rule;
+	}
+
+	/// <summary>
+	/// To form a rule (include <see cref="IMarketRule.IsReady"/>).
+	/// </summary>
+	/// <typeparam name="TToken">The type of token.</typeparam>
+	/// <typeparam name="TArg">The type of argument, accepted by the rule.</typeparam>
+	/// <param name="rule">Rule.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<TToken, TArg> Apply<TToken, TArg>(this MarketRule<TToken, TArg> rule)
+	{
+		return rule.Apply(DefaultRuleContainer);
+	}
+
+	/// <summary>
+	/// To form a rule (include <see cref="IMarketRule.IsReady"/>).
+	/// </summary>
+	/// <typeparam name="TToken">The type of token.</typeparam>
+	/// <typeparam name="TArg">The type of argument, accepted by the rule.</typeparam>
+	/// <param name="rule">Rule.</param>
+	/// <param name="container">The rules container.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<TToken, TArg> Apply<TToken, TArg>(this MarketRule<TToken, TArg> rule, IMarketRuleContainer container)
+	{
+		return (MarketRule<TToken, TArg>)((IMarketRule)rule).Apply(container);
+	}
+
+	/// <summary>
+	/// To activate the rule.
+	/// </summary>
+	/// <param name="container">The rules container.</param>
+	/// <param name="rule">Rule.</param>
+	/// <param name="process">The handler.</param>
+	public static void ActiveRule(this IMarketRuleContainer container, IMarketRule rule, Func<bool> process)
+	{
+		if (process == null)
+			throw new ArgumentNullException(nameof(process));
+
+		container.AddRuleLog(LogLevels.Debug, rule, LocalizedStrings.Activation);
+
+		List<IMarketRule> removedRules = null;
+
+		// mika
+		// проверяем правило, так как оно могло быть удалено параллельным потоком
+		if (!rule.IsReady)
+			return;
+
+		rule.IsActive = true;
+
+		try
 		{
-			protected ConnectorRule(IConnector connector)
-				: base(connector)
+			if (process())
 			{
-				Connector = connector ?? throw new ArgumentNullException(nameof(connector));
-			}
-
-			protected IConnector Connector { get; }
-		}
-
-		private class IntervalTimeRule : ConnectorRule<IConnector>
-		{
-			private readonly MarketTimer _timer;
-
-			public IntervalTimeRule(IConnector connector, TimeSpan interval/*, bool firstTimeRun*/)
-				: base(connector)
-			{
-				Name = LocalizedStrings.Interval + " " + interval;
-
-				_timer = new MarketTimer(connector, () => Activate(connector))
-					.Interval(interval)
-					.Start();
-			}
-
-			protected override void DisposeManaged()
-			{
-				_timer.Dispose();
-				base.DisposeManaged();
-			}
-		}
-
-		private abstract class TransactionProviderRule<TArg> : MarketRule<ITransactionProvider, TArg>
-		{
-			protected TransactionProviderRule(ITransactionProvider provider)
-				: base(provider)
-			{
-				Provider = provider ?? throw new ArgumentNullException(nameof(provider));
-			}
-
-			protected ITransactionProvider Provider { get; }
-		}
-
-		private class NewMyTradeTraderRule : TransactionProviderRule<MyTrade>
-		{
-			public NewMyTradeTraderRule(ITransactionProvider provider)
-				: base(provider)
-			{
-				Name = LocalizedStrings.Trades;
-				Provider.NewMyTrade += OnNewMyTrade;
-			}
-
-			private void OnNewMyTrade(MyTrade trade)
-			{
-				Activate(trade);
-			}
-
-			protected override void DisposeManaged()
-			{
-				Provider.NewMyTrade -= OnNewMyTrade;
-				base.DisposeManaged();
-			}
-		}
-
-		private class NewOrderTraderRule : TransactionProviderRule<Order>
-		{
-			public NewOrderTraderRule(ITransactionProvider provider)
-				: base(provider)
-			{
-				Name = LocalizedStrings.Orders;
-				Provider.NewOrder += OnNewOrder;
-			}
-
-			private void OnNewOrder(Order order)
-			{
-				Activate(order);
-			}
-
-			protected override void DisposeManaged()
-			{
-				Provider.NewOrder -= OnNewOrder;
-				base.DisposeManaged();
-			}
-		}
-
-		private class ConnectedRule : ConnectorRule<IMessageAdapter>
-		{
-			public ConnectedRule(IConnector connector)
-				: base(connector)
-			{
-				Name = "Connected rule";
-				Connector.ConnectedEx += OnConnectedEx;
-			}
-
-			private void OnConnectedEx(IMessageAdapter adapter)
-			{
-				Activate(adapter);
-			}
-
-			protected override void DisposeManaged()
-			{
-				Connector.ConnectedEx -= OnConnectedEx;
-				base.DisposeManaged();
-			}
-		}
-
-		private class DisconnectedRule : ConnectorRule<IMessageAdapter>
-		{
-			public DisconnectedRule(IConnector connector)
-				: base(connector)
-			{
-				Name = "Disconnected rule";
-				Connector.DisconnectedEx += OnDisconnectedEx;
-			}
-
-			private void OnDisconnectedEx(IMessageAdapter adapter)
-			{
-				Activate(adapter);
-			}
-
-			protected override void DisposeManaged()
-			{
-				Connector.DisconnectedEx -= OnDisconnectedEx;
-				base.DisposeManaged();
-			}
-		}
-
-		private class ConnectionLostRule : ConnectorRule<Tuple<IMessageAdapter, Exception>>
-		{
-			public ConnectionLostRule(IConnector connector)
-				: base(connector)
-			{
-				Name = "Connection lost rule";
-				Connector.ConnectionErrorEx += OnConnectionErrorEx;
-			}
-
-			private void OnConnectionErrorEx(IMessageAdapter adapter, Exception error)
-			{
-				Activate(Tuple.Create(adapter, error));
-			}
-
-			protected override void DisposeManaged()
-			{
-				Connector.ConnectionErrorEx -= OnConnectionErrorEx;
-				base.DisposeManaged();
+				container.Rules.Remove(rule);
+				removedRules = new List<IMarketRule> { rule };
 			}
 		}
-
-		/// <summary>
-		/// To create a rule for the event <see cref="IConnector.MarketTimeChanged"/>, activated after expiration of <paramref name="interval" />.
-		/// </summary>
-		/// <param name="connector">Connection to the trading system.</param>
-		/// <param name="interval">Interval.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<IConnector, IConnector> WhenIntervalElapsed(this IConnector connector, TimeSpan interval)
+		finally
 		{
-			if (connector == null)
-				throw new ArgumentNullException(nameof(connector));
-
-			return new IntervalTimeRule(connector, interval);
+			rule.IsActive = false;
 		}
 
-		/// <summary>
-		/// To create a rule for the event of new trade occurrences.
-		/// </summary>
-		/// <param name="provider">The transactional provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<ITransactionProvider, MyTrade> WhenNewMyTrade(this ITransactionProvider provider)
+		if (removedRules == null)
+			return;
+
+		if (rule.ExclusiveRules.Count > 0)
 		{
-			return new NewMyTradeTraderRule(provider);
-		}
-
-		/// <summary>
-		/// To create a rule for the event of new orders occurrences.
-		/// </summary>
-		/// <param name="provider">The transactional provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<ITransactionProvider, Order> WhenNewOrder(this ITransactionProvider provider)
-		{
-			return new NewOrderTraderRule(provider);
-		}
-
-		/// <summary>
-		/// To create a rule for the event of connection established.
-		/// </summary>
-		/// <param name="connector">The connection to be traced for state.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<IConnector, IMessageAdapter> WhenConnected(this IConnector connector)
-		{
-			return new ConnectedRule(connector);
-		}
-
-		/// <summary>
-		/// To create a rule for the event of disconnection.
-		/// </summary>
-		/// <param name="connector">The connection to be traced for state.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<IConnector, IMessageAdapter> WhenDisconnected(this IConnector connector)
-		{
-			return new DisconnectedRule(connector);
-		}
-
-		/// <summary>
-		/// To create a rule for the event of connection lost.
-		/// </summary>
-		/// <param name="connector">The connection to be traced for state.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<IConnector, Tuple<IMessageAdapter, Exception>> WhenConnectionLost(this IConnector connector)
-		{
-			return new ConnectionLostRule(connector);
-		}
-
-		#endregion
-
-		#region Apply
-
-		/// <summary>
-		/// To form a rule (include <see cref="IMarketRule.IsReady"/>).
-		/// </summary>
-		/// <param name="rule">Rule.</param>
-		/// <returns>Rule.</returns>
-		public static IMarketRule Apply(this IMarketRule rule)
-		{
-			if (rule == null)
-				throw new ArgumentNullException(nameof(rule));
-
-			return rule.Apply(DefaultRuleContainer);
-		}
-
-		/// <summary>
-		/// To form a rule (include <see cref="IMarketRule.IsReady"/>).
-		/// </summary>
-		/// <param name="rule">Rule.</param>
-		/// <param name="container">The rules container.</param>
-		/// <returns>Rule.</returns>
-		public static IMarketRule Apply(this IMarketRule rule, IMarketRuleContainer container)
-		{
-			if (rule == null)
-				throw new ArgumentNullException(nameof(rule));
-
-			if (container == null)
-				throw new ArgumentNullException(nameof(container));
-
-			container.Rules.Add(rule);
-			return rule;
-		}
-
-		/// <summary>
-		/// To form a rule (include <see cref="IMarketRule.IsReady"/>).
-		/// </summary>
-		/// <typeparam name="TToken">The type of token.</typeparam>
-		/// <typeparam name="TArg">The type of argument, accepted by the rule.</typeparam>
-		/// <param name="rule">Rule.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<TToken, TArg> Apply<TToken, TArg>(this MarketRule<TToken, TArg> rule)
-		{
-			return rule.Apply(DefaultRuleContainer);
-		}
-
-		/// <summary>
-		/// To form a rule (include <see cref="IMarketRule.IsReady"/>).
-		/// </summary>
-		/// <typeparam name="TToken">The type of token.</typeparam>
-		/// <typeparam name="TArg">The type of argument, accepted by the rule.</typeparam>
-		/// <param name="rule">Rule.</param>
-		/// <param name="container">The rules container.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<TToken, TArg> Apply<TToken, TArg>(this MarketRule<TToken, TArg> rule, IMarketRuleContainer container)
-		{
-			return (MarketRule<TToken, TArg>)((IMarketRule)rule).Apply(container);
-		}
-
-		/// <summary>
-		/// To activate the rule.
-		/// </summary>
-		/// <param name="container">The rules container.</param>
-		/// <param name="rule">Rule.</param>
-		/// <param name="process">The handler.</param>
-		public static void ActiveRule(this IMarketRuleContainer container, IMarketRule rule, Func<bool> process)
-		{
-			if (process == null)
-				throw new ArgumentNullException(nameof(process));
-
-			container.AddRuleLog(LogLevels.Debug, rule, LocalizedStrings.Activation);
-
-			List<IMarketRule> removedRules = null;
-
-			// mika
-			// проверяем правило, так как оно могло быть удалено параллельным потоком
-			if (!rule.IsReady)
-				return;
-
-			rule.IsActive = true;
-
-			try
+			foreach (var exclusiveRule in rule.ExclusiveRules.SyncGet(c => c.CopyAndClear()))
 			{
-				if (process())
-				{
-					container.Rules.Remove(rule);
-					removedRules = new List<IMarketRule> { rule };
-				}
+				container.TryRemoveRule(exclusiveRule, false);
+				removedRules.Add(exclusiveRule);
 			}
-			finally
+		}
+
+		foreach (var removedRule in removedRules)
+		{
+			container.AddRuleLog(LogLevels.Debug, removedRule, LocalizedStrings.Delete);
+		}
+	}
+
+	private sealed class MarketRuleContainer : BaseLogReceiver, IMarketRuleContainer
+	{
+		private readonly object _rulesSuspendLock = new();
+		private int _rulesSuspendCount;
+
+		public MarketRuleContainer()
+		{
+			_rules = new MarketRuleList(this);
+		}
+
+		ProcessStates IMarketRuleContainer.ProcessState => ProcessStates.Started;
+
+		void IMarketRuleContainer.ActivateRule(IMarketRule rule, Func<bool> process)
+		{
+			this.ActiveRule(rule, process);
+		}
+
+		bool IMarketRuleContainer.IsRulesSuspended => _rulesSuspendCount > 0;
+
+		void IMarketRuleContainer.SuspendRules()
+		{
+			lock (_rulesSuspendLock)
+				_rulesSuspendCount++;
+		}
+
+		void IMarketRuleContainer.ResumeRules()
+		{
+			lock (_rulesSuspendLock)
 			{
-				rule.IsActive = false;
+				if (_rulesSuspendCount > 0)
+					_rulesSuspendCount--;
 			}
+		}
 
-			if (removedRules == null)
-				return;
+		private readonly MarketRuleList _rules;
 
+		IMarketRuleList IMarketRuleContainer.Rules => _rules;
+	}
+
+	/// <summary>
+	/// The container of rules, which will be applied by default to all rules, not included into strategy.
+	/// </summary>
+	public static readonly IMarketRuleContainer DefaultRuleContainer = new MarketRuleContainer();
+
+	/// <summary>
+	/// To process rules in suspended mode (for example, create several rules and start them up simultaneously). After completion of method operation all rules, attached to the container resume their activity.
+	/// </summary>
+	/// <param name="action">The action to be processed at suspended rules. For example, to add several rules simultaneously.</param>
+	public static void SuspendRules(Action action)
+	{
+		DefaultRuleContainer.SuspendRules(action);
+	}
+
+	/// <summary>
+	/// To process rules in suspended mode (for example, create several rules and start them up simultaneously). After completion of method operation all rules, attached to the container resume their activity.
+	/// </summary>
+	/// <param name="container">The rules container.</param>
+	/// <param name="action">The action to be processed at suspended rules. For example, to add several rules simultaneously.</param>
+	public static void SuspendRules(this IMarketRuleContainer container, Action action)
+	{
+		if (container == null)
+			throw new ArgumentNullException(nameof(container));
+
+		if (action == null)
+			throw new ArgumentNullException(nameof(action));
+
+		container.SuspendRules();
+
+		try
+		{
+			action();
+		}
+		finally
+		{
+			container.ResumeRules();
+		}
+	}
+
+	#endregion
+
+	/// <summary>
+	/// To delete a rule. If a rule is executed at the time when this method is called, it will not be deleted.
+	/// </summary>
+	/// <param name="container">The rules container.</param>
+	/// <param name="rule">Rule.</param>
+	/// <param name="checkCanFinish">To check the possibility of rule suspension.</param>
+	/// <returns><see langword="true" />, if a rule was successfully deleted, <see langword="false" />, if a rule cannot be currently deleted.</returns>
+	public static bool TryRemoveRule(this IMarketRuleContainer container, IMarketRule rule, bool checkCanFinish = true)
+	{
+		if (container == null)
+			throw new ArgumentNullException(nameof(container));
+
+		if (rule == null)
+			throw new ArgumentNullException(nameof(rule));
+
+		var isRemoved = false;
+
+		if ((!checkCanFinish && !rule.IsActive && rule.IsReady) || rule.CanFinish())
+		{
+			container.Rules.Remove(rule);
+			isRemoved = true;
+		}
+
+		if (isRemoved)
+		{
+			container.AddRuleLog(LogLevels.Debug, rule, LocalizedStrings.Delete, rule);
+		}
+
+		return isRemoved;
+	}
+
+	/// <summary>
+	/// To delete the rule and all opposite rules. If the rule is executed at the time when this method is called, it will not be deleted.
+	/// </summary>
+	/// <param name="container">The rules container.</param>
+	/// <param name="rule">Rule.</param>
+	/// <returns><see langword="true" />, if rule was removed, otherwise, <see langword="false" />.</returns>
+	public static bool TryRemoveWithExclusive(this IMarketRuleContainer container, IMarketRule rule)
+	{
+		if (container == null)
+			throw new ArgumentNullException(nameof(container));
+
+		if (rule == null)
+			throw new ArgumentNullException(nameof(rule));
+
+		if (container.TryRemoveRule(rule))
+		{
 			if (rule.ExclusiveRules.Count > 0)
 			{
 				foreach (var exclusiveRule in rule.ExclusiveRules.SyncGet(c => c.CopyAndClear()))
 				{
 					container.TryRemoveRule(exclusiveRule, false);
-					removedRules.Add(exclusiveRule);
 				}
 			}
 
-			foreach (var removedRule in removedRules)
-			{
-				container.AddRuleLog(LogLevels.Debug, removedRule, LocalizedStrings.Delete);
-			}
+			return true;
 		}
 
-		private sealed class MarketRuleContainer : BaseLogReceiver, IMarketRuleContainer
+		return false;
+	}
+
+	/// <summary>
+	/// To make rules mutually exclusive.
+	/// </summary>
+	/// <param name="rule1">First rule.</param>
+	/// <param name="rule2">Second rule.</param>
+	public static void Exclusive(this IMarketRule rule1, IMarketRule rule2)
+	{
+		if (rule1 == null)
+			throw new ArgumentNullException(nameof(rule1));
+
+		if (rule2 == null)
+			throw new ArgumentNullException(nameof(rule2));
+
+		if (rule1 == rule2)
+			throw new ArgumentException(LocalizedStrings.RulesSame.Put(rule1), nameof(rule2));
+
+		rule1.ExclusiveRules.Add(rule2);
+		rule2.ExclusiveRules.Add(rule1);
+	}
+
+	#region Or
+
+	private abstract class BaseComplexRule<TToken, TArg> : MarketRule<TToken, TArg>, IMarketRuleContainer
+	{
+		private readonly List<IMarketRule> _innerRules = new();
+
+		protected BaseComplexRule(IEnumerable<IMarketRule> innerRules)
+			: base(default)
 		{
-			private readonly object _rulesSuspendLock = new();
-			private int _rulesSuspendCount;
+			if (innerRules == null)
+				throw new ArgumentNullException(nameof(innerRules));
 
-			public MarketRuleContainer()
-			{
-				_rules = new MarketRuleList(this);
-			}
+			_innerRules.AddRange(innerRules.Select(Init));
 
-			ProcessStates IMarketRuleContainer.ProcessState => ProcessStates.Started;
+			if (_innerRules.IsEmpty())
+				throw new InvalidOperationException(LocalizedStrings.RulesEmpty);
 
-			void IMarketRuleContainer.ActivateRule(IMarketRule rule, Func<bool> process)
-			{
-				this.ActiveRule(rule, process);
-			}
+			Name = _innerRules.Select(r => r.Name).Join(" OR ");
 
-			bool IMarketRuleContainer.IsRulesSuspended => _rulesSuspendCount > 0;
-
-			void IMarketRuleContainer.SuspendRules()
-			{
-				lock (_rulesSuspendLock)
-					_rulesSuspendCount++;
-			}
-
-			void IMarketRuleContainer.ResumeRules()
-			{
-				lock (_rulesSuspendLock)
-				{
-					if (_rulesSuspendCount > 0)
-						_rulesSuspendCount--;
-				}
-			}
-
-			private readonly MarketRuleList _rules;
-
-			IMarketRuleList IMarketRuleContainer.Rules => _rules;
+			_innerRules.ForEach(r => r.Container = this);
 		}
 
-		/// <summary>
-		/// The container of rules, which will be applied by default to all rules, not included into strategy.
-		/// </summary>
-		public static readonly IMarketRuleContainer DefaultRuleContainer = new MarketRuleContainer();
+		protected abstract IMarketRule Init(IMarketRule rule);
 
-		/// <summary>
-		/// To process rules in suspended mode (for example, create several rules and start them up simultaneously). After completion of method operation all rules, attached to the container resume their activity.
-		/// </summary>
-		/// <param name="action">The action to be processed at suspended rules. For example, to add several rules simultaneously.</param>
-		public static void SuspendRules(Action action)
+		public override LogLevels LogLevel
 		{
-			DefaultRuleContainer.SuspendRules(action);
+			set
+			{
+				base.LogLevel = value;
+
+				foreach (var rule in _innerRules)
+					rule.LogLevel = value;
+			}
 		}
 
-		/// <summary>
-		/// To process rules in suspended mode (for example, create several rules and start them up simultaneously). After completion of method operation all rules, attached to the container resume their activity.
-		/// </summary>
-		/// <param name="container">The rules container.</param>
-		/// <param name="action">The action to be processed at suspended rules. For example, to add several rules simultaneously.</param>
-		public static void SuspendRules(this IMarketRuleContainer container, Action action)
+		public override bool IsSuspended
 		{
-			if (container == null)
-				throw new ArgumentNullException(nameof(container));
-
-			if (action == null)
-				throw new ArgumentNullException(nameof(action));
-
-			container.SuspendRules();
-
-			try
+			set
 			{
-				action();
-			}
-			finally
-			{
-				container.ResumeRules();
+				base.IsSuspended = value;
+				_innerRules.ForEach(r => r.Suspend(value));
 			}
 		}
+
+		protected override void DisposeManaged()
+		{
+			_innerRules.ForEach(r => r.Dispose());
+			base.DisposeManaged();
+		}
+
+		#region Implementation of ILogSource
+
+		Guid ILogSource.Id { get; } = Guid.NewGuid();
+
+		ILogSource ILogSource.Parent
+		{
+			get => Container;
+			set => throw new NotSupportedException();
+		}
+
+		/// <inheritdoc />
+		public event Action<ILogSource> ParentRemoved
+		{
+			add { }
+			remove { }
+		}
+
+		LogLevels ILogSource.LogLevel
+		{
+			get => Container.LogLevel;
+			set => throw new NotSupportedException();
+		}
+
+		event Action<LogMessage> ILogSource.Log
+		{
+			add => Container.Log += value;
+			remove => Container.Log -= value;
+		}
+
+		DateTimeOffset ILogSource.CurrentTime => Container.CurrentTime;
+
+		bool ILogSource.IsRoot => Container.IsRoot;
 
 		#endregion
 
-		/// <summary>
-		/// To delete a rule. If a rule is executed at the time when this method is called, it will not be deleted.
-		/// </summary>
-		/// <param name="container">The rules container.</param>
-		/// <param name="rule">Rule.</param>
-		/// <param name="checkCanFinish">To check the possibility of rule suspension.</param>
-		/// <returns><see langword="true" />, if a rule was successfully deleted, <see langword="false" />, if a rule cannot be currently deleted.</returns>
-		public static bool TryRemoveRule(this IMarketRuleContainer container, IMarketRule rule, bool checkCanFinish = true)
+		void ILogReceiver.AddLog(LogMessage message)
 		{
-			if (container == null)
-				throw new ArgumentNullException(nameof(container));
-
-			if (rule == null)
-				throw new ArgumentNullException(nameof(rule));
-
-			var isRemoved = false;
-
-			if ((!checkCanFinish && !rule.IsActive && rule.IsReady) || rule.CanFinish())
-			{
-				container.Rules.Remove(rule);
-				isRemoved = true;
-			}
-
-			if (isRemoved)
-			{
-				container.AddRuleLog(LogLevels.Debug, rule, LocalizedStrings.Delete, rule);
-			}
-
-			return isRemoved;
+			Container.AddLog(new LogMessage(Container, message.Time, message.Level, () => message.Message));
 		}
 
-		/// <summary>
-		/// To delete the rule and all opposite rules. If the rule is executed at the time when this method is called, it will not be deleted.
-		/// </summary>
-		/// <param name="container">The rules container.</param>
-		/// <param name="rule">Rule.</param>
-		/// <returns><see langword="true" />, if rule was removed, otherwise, <see langword="false" />.</returns>
-		public static bool TryRemoveWithExclusive(this IMarketRuleContainer container, IMarketRule rule)
+		#region Implementation of IMarketRuleContainer
+
+		ProcessStates IMarketRuleContainer.ProcessState => Container.ProcessState;
+
+		void IMarketRuleContainer.ActivateRule(IMarketRule rule, Func<bool> process)
 		{
-			if (container == null)
-				throw new ArgumentNullException(nameof(container));
-
-			if (rule == null)
-				throw new ArgumentNullException(nameof(rule));
-
-			if (container.TryRemoveRule(rule))
-			{
-				if (rule.ExclusiveRules.Count > 0)
-				{
-					foreach (var exclusiveRule in rule.ExclusiveRules.SyncGet(c => c.CopyAndClear()))
-					{
-						container.TryRemoveRule(exclusiveRule, false);
-					}
-				}
-
-				return true;
-			}
-
-			return false;
+			process();
 		}
 
-		/// <summary>
-		/// To make rules mutually exclusive.
-		/// </summary>
-		/// <param name="rule1">First rule.</param>
-		/// <param name="rule2">Second rule.</param>
-		public static void Exclusive(this IMarketRule rule1, IMarketRule rule2)
-		{
-			if (rule1 == null)
-				throw new ArgumentNullException(nameof(rule1));
+		bool IMarketRuleContainer.IsRulesSuspended => Container.IsRulesSuspended;
 
-			if (rule2 == null)
-				throw new ArgumentNullException(nameof(rule2));
+		void IMarketRuleContainer.SuspendRules() => throw new NotSupportedException();
 
-			if (rule1 == rule2)
-				throw new ArgumentException(LocalizedStrings.RulesSame.Put(rule1), nameof(rule2));
+		void IMarketRuleContainer.ResumeRules() => throw new NotSupportedException();
 
-			rule1.ExclusiveRules.Add(rule2);
-			rule2.ExclusiveRules.Add(rule1);
-		}
-
-		#region Or
-
-		private abstract class BaseComplexRule<TToken, TArg> : MarketRule<TToken, TArg>, IMarketRuleContainer
-		{
-			private readonly List<IMarketRule> _innerRules = new();
-
-			protected BaseComplexRule(IEnumerable<IMarketRule> innerRules)
-				: base(default)
-			{
-				if (innerRules == null)
-					throw new ArgumentNullException(nameof(innerRules));
-
-				_innerRules.AddRange(innerRules.Select(Init));
-
-				if (_innerRules.IsEmpty())
-					throw new InvalidOperationException(LocalizedStrings.RulesEmpty);
-
-				Name = _innerRules.Select(r => r.Name).Join(" OR ");
-
-				_innerRules.ForEach(r => r.Container = this);
-			}
-
-			protected abstract IMarketRule Init(IMarketRule rule);
-
-			public override LogLevels LogLevel
-			{
-				set
-				{
-					base.LogLevel = value;
-
-					foreach (var rule in _innerRules)
-						rule.LogLevel = value;
-				}
-			}
-
-			public override bool IsSuspended
-			{
-				set
-				{
-					base.IsSuspended = value;
-					_innerRules.ForEach(r => r.Suspend(value));
-				}
-			}
-
-			protected override void DisposeManaged()
-			{
-				_innerRules.ForEach(r => r.Dispose());
-				base.DisposeManaged();
-			}
-
-			#region Implementation of ILogSource
-
-			Guid ILogSource.Id { get; } = Guid.NewGuid();
-
-			ILogSource ILogSource.Parent
-			{
-				get => Container;
-				set => throw new NotSupportedException();
-			}
-
-			/// <inheritdoc />
-			public event Action<ILogSource> ParentRemoved
-			{
-				add { }
-				remove { }
-			}
-
-			LogLevels ILogSource.LogLevel
-			{
-				get => Container.LogLevel;
-				set => throw new NotSupportedException();
-			}
-
-			event Action<LogMessage> ILogSource.Log
-			{
-				add => Container.Log += value;
-				remove => Container.Log -= value;
-			}
-
-			DateTimeOffset ILogSource.CurrentTime => Container.CurrentTime;
-
-			bool ILogSource.IsRoot => Container.IsRoot;
-
-			#endregion
-
-			void ILogReceiver.AddLog(LogMessage message)
-			{
-				Container.AddLog(new LogMessage(Container, message.Time, message.Level, () => message.Message));
-			}
-
-			#region Implementation of IMarketRuleContainer
-
-			ProcessStates IMarketRuleContainer.ProcessState => Container.ProcessState;
-
-			void IMarketRuleContainer.ActivateRule(IMarketRule rule, Func<bool> process)
-			{
-				process();
-			}
-
-			bool IMarketRuleContainer.IsRulesSuspended => Container.IsRulesSuspended;
-
-			void IMarketRuleContainer.SuspendRules() => throw new NotSupportedException();
-
-			void IMarketRuleContainer.ResumeRules() => throw new NotSupportedException();
-
-			IMarketRuleList IMarketRuleContainer.Rules => throw new NotSupportedException();
-
-			#endregion
-
-			public override string ToString()
-			{
-				return _innerRules.Select(r => r.ToString()).Join(" OR ");
-			}
-		}
-
-		private sealed class OrRule : BaseComplexRule<object, object>
-		{
-			public OrRule(IEnumerable<IMarketRule> innerRules)
-				: base(innerRules)
-			{
-			}
-
-			protected override IMarketRule Init(IMarketRule rule)
-			{
-				return rule.Do(arg => Activate(arg));
-			}
-		}
-
-		private sealed class OrRule<TToken, TArg> : BaseComplexRule<TToken, TArg>
-		{
-			public OrRule(IEnumerable<MarketRule<TToken, TArg>> innerRules)
-				: base(innerRules)
-			{
-			}
-
-			protected override IMarketRule Init(IMarketRule rule)
-			{
-				return ((MarketRule<TToken, TArg>)rule).Do(a => Activate(a));
-			}
-		}
-
-		private sealed class AndRule : BaseComplexRule<object, object>
-		{
-			private readonly List<object> _args = new();
-			private readonly SynchronizedSet<IMarketRule> _nonActivatedRules = new();
-
-			public AndRule(IMarketRule[] innerRules)
-				: base(innerRules)
-			{
-				_nonActivatedRules.AddRange(innerRules);
-			}
-
-			protected override IMarketRule Init(IMarketRule rule)
-			{
-				return rule.Do(a =>
-				{
-					var canActivate = false;
-
-					lock (_nonActivatedRules.SyncRoot)
-					{
-						if (_nonActivatedRules.Remove(rule))
-						{
-							_args.Add(a);
-
-							if (_nonActivatedRules.IsEmpty())
-								canActivate = true;
-						}
-					}
-
-					if (canActivate)
-						Activate(_args);
-				});
-			}
-		}
-
-		private sealed class AndRule<TToken, TArg> : BaseComplexRule<TToken, TArg>
-		{
-			private readonly List<TArg> _args = new();
-			private readonly SynchronizedSet<IMarketRule> _nonActivatedRules = new();
-
-			public AndRule(MarketRule<TToken, TArg>[] innerRules)
-				: base(innerRules)
-			{
-				_nonActivatedRules.AddRange(innerRules);
-			}
-
-			protected override IMarketRule Init(IMarketRule rule)
-			{
-				return ((MarketRule<TToken, TArg>)rule).Do(a =>
-				{
-					var canActivate = false;
-
-					lock (_nonActivatedRules.SyncRoot)
-					{
-						if (_nonActivatedRules.Remove(rule))
-						{
-							_args.Add(a);
-
-							if (_nonActivatedRules.IsEmpty())
-								canActivate = true;
-						}
-					}
-
-					if (canActivate)
-						Activate(_args.FirstOrDefault());
-				});
-			}
-		}
-
-		/// <summary>
-		/// To combine rules by OR condition.
-		/// </summary>
-		/// <param name="rule">First rule.</param>
-		/// <param name="rules">Additional rules.</param>
-		/// <returns>Combined rule.</returns>
-		public static IMarketRule Or(this IMarketRule rule, params IMarketRule[] rules)
-		{
-			return new OrRule(new[] { rule }.Concat(rules));
-		}
-
-		/// <summary>
-		/// To combine rules by OR condition.
-		/// </summary>
-		/// <param name="rules">Rules.</param>
-		/// <returns>Combined rule.</returns>
-		public static IMarketRule Or(this IEnumerable<IMarketRule> rules)
-		{
-			return new OrRule(rules);
-		}
-
-		/// <summary>
-		/// To combine rules by OR condition.
-		/// </summary>
-		/// <typeparam name="TToken">The type of token.</typeparam>
-		/// <typeparam name="TArg">The type of argument, accepted by the rule.</typeparam>
-		/// <param name="rule">First rule.</param>
-		/// <param name="rules">Additional rules.</param>
-		/// <returns>Combined rule.</returns>
-		public static MarketRule<TToken, TArg> Or<TToken, TArg>(this MarketRule<TToken, TArg> rule, params MarketRule<TToken, TArg>[] rules)
-		{
-			return new OrRule<TToken, TArg>(new[] { rule }.Concat(rules));
-		}
-
-		/// <summary>
-		/// To combine rules by AND condition.
-		/// </summary>
-		/// <param name="rule">First rule.</param>
-		/// <param name="rules">Additional rules.</param>
-		/// <returns>Combined rule.</returns>
-		public static IMarketRule And(this IMarketRule rule, params IMarketRule[] rules)
-		{
-			return new AndRule(new[] { rule }.Concat(rules));
-		}
-
-		/// <summary>
-		/// To combine rules by AND condition.
-		/// </summary>
-		/// <param name="rules">Rules.</param>
-		/// <returns>Combined rule.</returns>
-		public static IMarketRule And(this IEnumerable<IMarketRule> rules)
-		{
-			return new AndRule(rules.ToArray());
-		}
-
-		/// <summary>
-		/// To combine rules by AND condition.
-		/// </summary>
-		/// <typeparam name="TToken">The type of token.</typeparam>
-		/// <typeparam name="TArg">The type of argument, accepted by the rule.</typeparam>
-		/// <param name="rule">First rule.</param>
-		/// <param name="rules">Additional rules.</param>
-		/// <returns>Combined rule.</returns>
-		public static MarketRule<TToken, TArg> And<TToken, TArg>(this MarketRule<TToken, TArg> rule, params MarketRule<TToken, TArg>[] rules)
-		{
-			return new AndRule<TToken, TArg>(new[] { rule }.Concat(rules));
-		}
+		IMarketRuleList IMarketRuleContainer.Rules => throw new NotSupportedException();
 
 		#endregion
 
-		/// <summary>
-		/// To assign the rule a new name <see cref="IMarketRule.Name"/>.
-		/// </summary>
-		/// <typeparam name="TRule">The type of the rule.</typeparam>
-		/// <param name="rule">Rule.</param>
-		/// <param name="name">The rule new name.</param>
-		/// <returns>Rule.</returns>
-		public static TRule UpdateName<TRule>(this TRule rule, string name)
-			where TRule : IMarketRule
+		public override string ToString()
 		{
-			return rule.Modify(r => r.Name = name);
+			return _innerRules.Select(r => r.ToString()).Join(" OR ");
+		}
+	}
+
+	private sealed class OrRule : BaseComplexRule<object, object>
+	{
+		public OrRule(IEnumerable<IMarketRule> innerRules)
+			: base(innerRules)
+		{
 		}
 
-		/// <summary>
-		/// To set the logging level.
-		/// </summary>
-		/// <typeparam name="TRule">The type of the rule.</typeparam>
-		/// <param name="rule">Rule.</param>
-		/// <param name="level">The level, on which logging is performed.</param>
-		/// <returns>Rule.</returns>
-		public static TRule UpdateLogLevel<TRule>(this TRule rule, LogLevels level)
-			where TRule : IMarketRule
+		protected override IMarketRule Init(IMarketRule rule)
 		{
-			return rule.Modify(r => r.LogLevel = level);
+			return rule.Do(arg => Activate(arg));
+		}
+	}
+
+	private sealed class OrRule<TToken, TArg> : BaseComplexRule<TToken, TArg>
+	{
+		public OrRule(IEnumerable<MarketRule<TToken, TArg>> innerRules)
+			: base(innerRules)
+		{
 		}
 
-		/// <summary>
-		/// To suspend or resume the rule.
-		/// </summary>
-		/// <typeparam name="TRule">The type of the rule.</typeparam>
-		/// <param name="rule">Rule.</param>
-		/// <param name="suspend"><see langword="true" /> - suspend, <see langword="false" /> - resume.</param>
-		/// <returns>Rule.</returns>
-		public static TRule Suspend<TRule>(this TRule rule, bool suspend)
-			where TRule : IMarketRule
+		protected override IMarketRule Init(IMarketRule rule)
 		{
-			return rule.Modify(r => r.IsSuspended = suspend);
+			return ((MarketRule<TToken, TArg>)rule).Do(a => Activate(a));
+		}
+	}
+
+	private sealed class AndRule : BaseComplexRule<object, object>
+	{
+		private readonly List<object> _args = new();
+		private readonly SynchronizedSet<IMarketRule> _nonActivatedRules = new();
+
+		public AndRule(IMarketRule[] innerRules)
+			: base(innerRules)
+		{
+			_nonActivatedRules.AddRange(innerRules);
 		}
 
-		///// <summary>
-		///// Синхронизировать или рассинхронизировать реагирование правила с другими правилами.
-		///// </summary>
-		///// <typeparam name="TRule">Тип правила.</typeparam>
-		///// <param name="rule">Правило.</param>
-		///// <param name="syncToken">Объект синхронизации. Если значение равно <see langword="null"/>, то правило рассинхронизовывается.</param>
-		///// <returns>Правило.</returns>
-		//public static TRule Sync<TRule>(this TRule rule, SyncObject syncToken)
-		//	where TRule : IMarketRule
-		//{
-		//	return rule.Modify(r => r.SyncRoot = syncToken);
-		//}
-
-		/// <summary>
-		/// To make the rule one-time rule (will be called only once).
-		/// </summary>
-		/// <typeparam name="TRule">The type of the rule.</typeparam>
-		/// <param name="rule">Rule.</param>
-		/// <returns>Rule.</returns>
-		public static TRule Once<TRule>(this TRule rule)
-			where TRule : IMarketRule
+		protected override IMarketRule Init(IMarketRule rule)
 		{
-			return rule.Modify(r => r.Until(() => true));
+			return rule.Do(a =>
+			{
+				var canActivate = false;
+
+				lock (_nonActivatedRules.SyncRoot)
+				{
+					if (_nonActivatedRules.Remove(rule))
+					{
+						_args.Add(a);
+
+						if (_nonActivatedRules.IsEmpty())
+							canActivate = true;
+					}
+				}
+
+				if (canActivate)
+					Activate(_args);
+			});
+		}
+	}
+
+	private sealed class AndRule<TToken, TArg> : BaseComplexRule<TToken, TArg>
+	{
+		private readonly List<TArg> _args = new();
+		private readonly SynchronizedSet<IMarketRule> _nonActivatedRules = new();
+
+		public AndRule(MarketRule<TToken, TArg>[] innerRules)
+			: base(innerRules)
+		{
+			_nonActivatedRules.AddRange(innerRules);
 		}
 
-		private static TRule Modify<TRule>(this TRule rule, Action<TRule> action)
-			where TRule : IMarketRule
+		protected override IMarketRule Init(IMarketRule rule)
 		{
-			if (rule is null)
-				throw new ArgumentNullException(nameof(rule));
+			return ((MarketRule<TToken, TArg>)rule).Do(a =>
+			{
+				var canActivate = false;
 
-			action(rule);
+				lock (_nonActivatedRules.SyncRoot)
+				{
+					if (_nonActivatedRules.Remove(rule))
+					{
+						_args.Add(a);
 
-			return rule;
+						if (_nonActivatedRules.IsEmpty())
+							canActivate = true;
+					}
+				}
+
+				if (canActivate)
+					Activate(_args.FirstOrDefault());
+			});
 		}
+	}
 
-		/// <summary>
-		/// To write the message from the rule.
-		/// </summary>
-		/// <param name="container">The rules container.</param>
-		/// <param name="level">The level of the log message.</param>
-		/// <param name="rule">Rule.</param>
-		/// <param name="message">Text message.</param>
-		/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
-		public static void AddRuleLog(this IMarketRuleContainer container, LogLevels level, IMarketRule rule, string message, params object[] args)
-		{
-			if (container == null)
-				return; // правило еще не было добавлено в контейнер
+	/// <summary>
+	/// To combine rules by OR condition.
+	/// </summary>
+	/// <param name="rule">First rule.</param>
+	/// <param name="rules">Additional rules.</param>
+	/// <returns>Combined rule.</returns>
+	public static IMarketRule Or(this IMarketRule rule, params IMarketRule[] rules)
+	{
+		return new OrRule(new[] { rule }.Concat(rules));
+	}
 
-			if (rule == null)
-				throw new ArgumentNullException(nameof(rule));
+	/// <summary>
+	/// To combine rules by OR condition.
+	/// </summary>
+	/// <param name="rules">Rules.</param>
+	/// <returns>Combined rule.</returns>
+	public static IMarketRule Or(this IEnumerable<IMarketRule> rules)
+	{
+		return new OrRule(rules);
+	}
 
-			if (rule.LogLevel != LogLevels.Inherit && rule.LogLevel > level)
-				return;
+	/// <summary>
+	/// To combine rules by OR condition.
+	/// </summary>
+	/// <typeparam name="TToken">The type of token.</typeparam>
+	/// <typeparam name="TArg">The type of argument, accepted by the rule.</typeparam>
+	/// <param name="rule">First rule.</param>
+	/// <param name="rules">Additional rules.</param>
+	/// <returns>Combined rule.</returns>
+	public static MarketRule<TToken, TArg> Or<TToken, TArg>(this MarketRule<TToken, TArg> rule, params MarketRule<TToken, TArg>[] rules)
+	{
+		return new OrRule<TToken, TArg>(new[] { rule }.Concat(rules));
+	}
 
-			container.AddLog(level, () => $"Rule '{rule}'. {message.Put(args)}");
-		}
+	/// <summary>
+	/// To combine rules by AND condition.
+	/// </summary>
+	/// <param name="rule">First rule.</param>
+	/// <param name="rules">Additional rules.</param>
+	/// <returns>Combined rule.</returns>
+	public static IMarketRule And(this IMarketRule rule, params IMarketRule[] rules)
+	{
+		return new AndRule(new[] { rule }.Concat(rules));
+	}
+
+	/// <summary>
+	/// To combine rules by AND condition.
+	/// </summary>
+	/// <param name="rules">Rules.</param>
+	/// <returns>Combined rule.</returns>
+	public static IMarketRule And(this IEnumerable<IMarketRule> rules)
+	{
+		return new AndRule(rules.ToArray());
+	}
+
+	/// <summary>
+	/// To combine rules by AND condition.
+	/// </summary>
+	/// <typeparam name="TToken">The type of token.</typeparam>
+	/// <typeparam name="TArg">The type of argument, accepted by the rule.</typeparam>
+	/// <param name="rule">First rule.</param>
+	/// <param name="rules">Additional rules.</param>
+	/// <returns>Combined rule.</returns>
+	public static MarketRule<TToken, TArg> And<TToken, TArg>(this MarketRule<TToken, TArg> rule, params MarketRule<TToken, TArg>[] rules)
+	{
+		return new AndRule<TToken, TArg>(new[] { rule }.Concat(rules));
+	}
+
+	#endregion
+
+	/// <summary>
+	/// To assign the rule a new name <see cref="IMarketRule.Name"/>.
+	/// </summary>
+	/// <typeparam name="TRule">The type of the rule.</typeparam>
+	/// <param name="rule">Rule.</param>
+	/// <param name="name">The rule new name.</param>
+	/// <returns>Rule.</returns>
+	public static TRule UpdateName<TRule>(this TRule rule, string name)
+		where TRule : IMarketRule
+	{
+		return rule.Modify(r => r.Name = name);
+	}
+
+	/// <summary>
+	/// To set the logging level.
+	/// </summary>
+	/// <typeparam name="TRule">The type of the rule.</typeparam>
+	/// <param name="rule">Rule.</param>
+	/// <param name="level">The level, on which logging is performed.</param>
+	/// <returns>Rule.</returns>
+	public static TRule UpdateLogLevel<TRule>(this TRule rule, LogLevels level)
+		where TRule : IMarketRule
+	{
+		return rule.Modify(r => r.LogLevel = level);
+	}
+
+	/// <summary>
+	/// To suspend or resume the rule.
+	/// </summary>
+	/// <typeparam name="TRule">The type of the rule.</typeparam>
+	/// <param name="rule">Rule.</param>
+	/// <param name="suspend"><see langword="true" /> - suspend, <see langword="false" /> - resume.</param>
+	/// <returns>Rule.</returns>
+	public static TRule Suspend<TRule>(this TRule rule, bool suspend)
+		where TRule : IMarketRule
+	{
+		return rule.Modify(r => r.IsSuspended = suspend);
+	}
+
+	///// <summary>
+	///// Синхронизировать или рассинхронизировать реагирование правила с другими правилами.
+	///// </summary>
+	///// <typeparam name="TRule">Тип правила.</typeparam>
+	///// <param name="rule">Правило.</param>
+	///// <param name="syncToken">Объект синхронизации. Если значение равно <see langword="null"/>, то правило рассинхронизовывается.</param>
+	///// <returns>Правило.</returns>
+	//public static TRule Sync<TRule>(this TRule rule, SyncObject syncToken)
+	//	where TRule : IMarketRule
+	//{
+	//	return rule.Modify(r => r.SyncRoot = syncToken);
+	//}
+
+	/// <summary>
+	/// To make the rule one-time rule (will be called only once).
+	/// </summary>
+	/// <typeparam name="TRule">The type of the rule.</typeparam>
+	/// <param name="rule">Rule.</param>
+	/// <returns>Rule.</returns>
+	public static TRule Once<TRule>(this TRule rule)
+		where TRule : IMarketRule
+	{
+		return rule.Modify(r => r.Until(() => true));
+	}
+
+	private static TRule Modify<TRule>(this TRule rule, Action<TRule> action)
+		where TRule : IMarketRule
+	{
+		if (rule is null)
+			throw new ArgumentNullException(nameof(rule));
+
+		action(rule);
+
+		return rule;
+	}
+
+	/// <summary>
+	/// To write the message from the rule.
+	/// </summary>
+	/// <param name="container">The rules container.</param>
+	/// <param name="level">The level of the log message.</param>
+	/// <param name="rule">Rule.</param>
+	/// <param name="message">Text message.</param>
+	/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
+	public static void AddRuleLog(this IMarketRuleContainer container, LogLevels level, IMarketRule rule, string message, params object[] args)
+	{
+		if (container == null)
+			return; // правило еще не было добавлено в контейнер
+
+		if (rule == null)
+			throw new ArgumentNullException(nameof(rule));
+
+		if (rule.LogLevel != LogLevels.Inherit && rule.LogLevel > level)
+			return;
+
+		container.AddLog(level, () => $"Rule '{rule}'. {message.Put(args)}");
 	}
 }

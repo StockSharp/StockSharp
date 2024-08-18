@@ -1,63 +1,62 @@
-namespace StockSharp.Logging
-{
-	using System.ComponentModel.DataAnnotations;
-	using System.Runtime.Serialization;
+namespace StockSharp.Logging;
 
-	using StockSharp.Localization;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// Levels of log messages <see cref="LogMessage"/>.
+/// </summary>
+[DataContract]
+public enum LogLevels
+{
+	/// <summary>
+	/// To use the logging level of the container.
+	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.InheritedKey)]
+	[EnumMember]
+	Inherit,
 
 	/// <summary>
-	/// Levels of log messages <see cref="LogMessage"/>.
+	/// Verbose message, debug message, information, warnings and errors.
 	/// </summary>
-	[DataContract]
-	public enum LogLevels
-	{
-		/// <summary>
-		/// To use the logging level of the container.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.InheritedKey)]
-		[EnumMember]
-		Inherit,
+	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VerboseKey)]
+	Verbose,
 
-		/// <summary>
-		/// Verbose message, debug message, information, warnings and errors.
-		/// </summary>
-		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VerboseKey)]
-		Verbose,
+	/// <summary>
+	/// Debug message, information, warnings and errors.
+	/// </summary>
+	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DebugKey)]
+	Debug,
+	
+	/// <summary>
+	/// Information, warnings and errors.
+	/// </summary>
+	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.InfoKey)]
+	Info,
 
-		/// <summary>
-		/// Debug message, information, warnings and errors.
-		/// </summary>
-		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DebugKey)]
-		Debug,
-		
-		/// <summary>
-		/// Information, warnings and errors.
-		/// </summary>
-		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.InfoKey)]
-		Info,
+	/// <summary>
+	/// Warnings and errors.
+	/// </summary>
+	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.WarningsKey)]
+	Warning,
+	
+	/// <summary>
+	/// Errors only.
+	/// </summary>
+	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ErrorsKey)]
+	Error,
 
-		/// <summary>
-		/// Warnings and errors.
-		/// </summary>
-		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.WarningsKey)]
-		Warning,
-		
-		/// <summary>
-		/// Errors only.
-		/// </summary>
-		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ErrorsKey)]
-		Error,
-
-		/// <summary>
-		/// Logs off.
-		/// </summary>
-		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.OffKey)]
-		Off,
-	}
+	/// <summary>
+	/// Logs off.
+	/// </summary>
+	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.OffKey)]
+	Off,
 }

@@ -1,62 +1,61 @@
-﻿namespace StockSharp.Configuration
-{
-	using Ecng.Common;
-	using Ecng.Serialization;
+﻿namespace StockSharp.Configuration;
 
-	using StockSharp.Localization;
+using Ecng.Common;
+using Ecng.Serialization;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// Application start configuration.
+/// </summary>
+public class AppStartSettings : IPersistable
+{
+	/// <summary>
+	/// Selected application language.
+	/// </summary>
+	public string Language { get; set; } = LocalizedStrings.ActiveLanguage;
 
 	/// <summary>
-	/// Application start configuration.
+	/// Online mode.
 	/// </summary>
-	public class AppStartSettings : IPersistable
+	public bool Online { get; set; } = true;
+
+	void IPersistable.Load(SettingsStorage storage)
 	{
-		/// <summary>
-		/// Selected application language.
-		/// </summary>
-		public string Language { get; set; } = LocalizedStrings.ActiveLanguage;
+		Online = storage.GetValue(nameof(Online), Online);
+		Language = storage.GetValue<string>(nameof(Language));
+	}
 
-		/// <summary>
-		/// Online mode.
-		/// </summary>
-		public bool Online { get; set; } = true;
+	void IPersistable.Save(SettingsStorage storage)
+	{
+		storage
+			.Set(nameof(Language), Language)
+			.Set(nameof(Online), Online);
+	}
 
-		void IPersistable.Load(SettingsStorage storage)
-		{
-			Online = storage.GetValue(nameof(Online), Online);
-			Language = storage.GetValue<string>(nameof(Language));
-		}
+	/// <summary>
+	/// Try load settings, if config file exists.
+	/// </summary>
+	public static AppStartSettings TryLoad()
+	{
+		var configFile = Paths.PlatformConfigurationFile;
 
-		void IPersistable.Save(SettingsStorage storage)
-		{
-			storage
-				.Set(nameof(Language), Language)
-				.Set(nameof(Online), Online);
-		}
+		if (configFile.IsEmptyOrWhiteSpace() || !configFile.IsConfigExists())
+			return null;
 
-		/// <summary>
-		/// Try load settings, if config file exists.
-		/// </summary>
-		public static AppStartSettings TryLoad()
-		{
-			var configFile = Paths.PlatformConfigurationFile;
+		return configFile.Deserialize<SettingsStorage>()?.Load<AppStartSettings>();
+	}
 
-			if (configFile.IsEmptyOrWhiteSpace() || !configFile.IsConfigExists())
-				return null;
+	/// <summary>
+	/// Save settings into <see cref="Paths.PlatformConfigurationFile"/> if it is defined.
+	/// </summary>
+	public void TrySave()
+	{
+		var configFile = Paths.PlatformConfigurationFile;
+		if (configFile.IsEmptyOrWhiteSpace())
+			return;
 
-			return configFile.Deserialize<SettingsStorage>()?.Load<AppStartSettings>();
-		}
-
-		/// <summary>
-		/// Save settings into <see cref="Paths.PlatformConfigurationFile"/> if it is defined.
-		/// </summary>
-		public void TrySave()
-		{
-			var configFile = Paths.PlatformConfigurationFile;
-			if (configFile.IsEmptyOrWhiteSpace())
-				return;
-
-			configFile.CreateDirIfNotExists();
-			this.Save().Serialize(configFile);
-		}
+		configFile.CreateDirIfNotExists();
+		this.Save().Serialize(configFile);
 	}
 }

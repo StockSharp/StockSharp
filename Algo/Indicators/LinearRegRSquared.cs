@@ -1,106 +1,105 @@
-namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators;
+
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+
+using Ecng.ComponentModel;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// Linear regression R-squared.
+/// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/IndicatorLinearRegRSquared.html
+/// </remarks>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.RSquaredKey,
+	Description = LocalizedStrings.LinearRegRSquaredKey)]
+[Doc("topics/IndicatorLinearRegRSquared.html")]
+public class LinearRegRSquared : LengthIndicator<decimal>
 {
-	using System.Collections.Generic;
-	using System.ComponentModel.DataAnnotations;
-	using System.Linq;
-
-	using Ecng.ComponentModel;
-
-	using StockSharp.Localization;
+	// Коэффициент при независимой переменной, угол наклона прямой.
+	private decimal _slope;
 
 	/// <summary>
-	/// Linear regression R-squared.
+	/// Initializes a new instance of the <see cref="LinearRegRSquared"/>.
 	/// </summary>
-	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorLinearRegRSquared.html
-	/// </remarks>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.RSquaredKey,
-		Description = LocalizedStrings.LinearRegRSquaredKey)]
-	[Doc("topics/IndicatorLinearRegRSquared.html")]
-	public class LinearRegRSquared : LengthIndicator<decimal>
+	public LinearRegRSquared()
 	{
-		// Коэффициент при независимой переменной, угол наклона прямой.
-		private decimal _slope;
+		Length = 10;
+	}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="LinearRegRSquared"/>.
-		/// </summary>
-		public LinearRegRSquared()
+	/// <inheritdoc />
+	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
+
+	/// <inheritdoc />
+	public override void Reset()
+	{
+		base.Reset();
+		_slope = 0;
+	}
+
+	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{
+		var newValue = input.GetValue<decimal>();
+
+		if (input.IsFinal)
 		{
-			Length = 10;
+			Buffer.AddEx(newValue);
 		}
 
-		/// <inheritdoc />
-		public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
+		var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
 
-		/// <inheritdoc />
-		public override void Reset()
+		// если значений хватает, считаем регрессию
+		if (IsFormed)
 		{
-			base.Reset();
-			_slope = 0;
-		}
+			//x - независимая переменная, номер значения в буфере
+			//y - зависимая переменная - значения из буфера
+			var sumX = 0m; //сумма x
+			var sumY = 0m; //сумма y
+			var sumXy = 0m; //сумма x*y
+			var sumX2 = 0m; //сумма x^2
 
-		/// <inheritdoc />
-		protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		{
-			var newValue = input.GetValue<decimal>();
-
-			if (input.IsFinal)
+			for (var i = 0; i < Length; i++)
 			{
-				Buffer.AddEx(newValue);
+				sumX += i;
+				sumY += buff[i];
+				sumXy += i * buff[i];
+				sumX2 += i * i;
 			}
 
-			var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
+			//коэффициент при независимой переменной
+			var divisor = Length * sumX2 - sumX * sumX;
+			if (divisor == 0) _slope = 0;
+			else _slope = (Length * sumXy - sumX * sumY) / divisor;
 
-			// если значений хватает, считаем регрессию
-			if (IsFormed)
+			//свободный член
+			var b = (sumY - _slope * sumX) / Length;
+
+			//сумма квадратов отклонений от среднего и сумма квадратов ошибок
+			var av = buff.Average();// среднее значение
+			var sumYAv2 = 0m; //сумма квадратов отклонений от среднего
+			var sumErr2 = 0m; //сумма квадратов ошибок
+
+			for (var i = 0; i < Length; i++)
 			{
-				//x - независимая переменная, номер значения в буфере
-				//y - зависимая переменная - значения из буфера
-				var sumX = 0m; //сумма x
-				var sumY = 0m; //сумма y
-				var sumXy = 0m; //сумма x*y
-				var sumX2 = 0m; //сумма x^2
-
-				for (var i = 0; i < Length; i++)
-				{
-					sumX += i;
-					sumY += buff[i];
-					sumXy += i * buff[i];
-					sumX2 += i * i;
-				}
-
-				//коэффициент при независимой переменной
-				var divisor = Length * sumX2 - sumX * sumX;
-				if (divisor == 0) _slope = 0;
-				else _slope = (Length * sumXy - sumX * sumY) / divisor;
-
-				//свободный член
-				var b = (sumY - _slope * sumX) / Length;
-
-				//сумма квадратов отклонений от среднего и сумма квадратов ошибок
-				var av = buff.Average();// среднее значение
-				var sumYAv2 = 0m; //сумма квадратов отклонений от среднего
-				var sumErr2 = 0m; //сумма квадратов ошибок
-
-				for (var i = 0; i < Length; i++)
-				{
-					var y = buff[i];// значение
-					var yEst = _slope * i + b;// оценка по регрессии
-					sumYAv2 += (y - av) * (y - av);
-					sumErr2 += (y - yEst) * (y - yEst);
-				}
-
-				//R-квадрат регресии
-				if (sumYAv2 == 0) 
-					return new DecimalIndicatorValue(this, 0);
-
-				return new DecimalIndicatorValue(this, (1 - sumErr2 / sumYAv2));
+				var y = buff[i];// значение
+				var yEst = _slope * i + b;// оценка по регрессии
+				sumYAv2 += (y - av) * (y - av);
+				sumErr2 += (y - yEst) * (y - yEst);
 			}
 
-			return new DecimalIndicatorValue(this);
+			//R-квадрат регресии
+			if (sumYAv2 == 0) 
+				return new DecimalIndicatorValue(this, 0);
+
+			return new DecimalIndicatorValue(this, (1 - sumErr2 / sumYAv2));
 		}
+
+		return new DecimalIndicatorValue(this);
 	}
 }

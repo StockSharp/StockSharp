@@ -1,68 +1,67 @@
-﻿namespace StockSharp.Algo.Indicators
+﻿namespace StockSharp.Algo.Indicators;
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+
+using Ecng.ComponentModel;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// Standard deviation.
+/// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/standard_deviation.html
+/// </remarks>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.StdDevKey,
+	Description = LocalizedStrings.StandardDeviationKey)]
+[Doc("topics/api/indicators/list_of_indicators/standard_deviation.html")]
+public class StandardDeviation : LengthIndicator<decimal>
 {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel.DataAnnotations;
-	using System.Linq;
-
-	using Ecng.ComponentModel;
-
-	using StockSharp.Localization;
+	private readonly SimpleMovingAverage _sma;
 
 	/// <summary>
-	/// Standard deviation.
+	/// Initializes a new instance of the <see cref="StandardDeviation"/>.
 	/// </summary>
-	/// <remarks>
-	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/standard_deviation.html
-	/// </remarks>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.StdDevKey,
-		Description = LocalizedStrings.StandardDeviationKey)]
-	[Doc("topics/api/indicators/list_of_indicators/standard_deviation.html")]
-	public class StandardDeviation : LengthIndicator<decimal>
+	public StandardDeviation()
 	{
-		private readonly SimpleMovingAverage _sma;
+		_sma = new SimpleMovingAverage();
+		Length = 10;
+	}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="StandardDeviation"/>.
-		/// </summary>
-		public StandardDeviation()
+	/// <inheritdoc />
+	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
+
+	/// <inheritdoc />
+	protected override bool CalcIsFormed() => _sma.IsFormed;
+
+	/// <inheritdoc />
+	public override void Reset()
+	{
+		_sma.Length = Length;
+		base.Reset();
+	}
+
+	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{
+		var newValue = input.GetValue<decimal>();
+		var smaValue = _sma.Process(input).GetValue<decimal>();
+
+		if (input.IsFinal)
 		{
-			_sma = new SimpleMovingAverage();
-			Length = 10;
+			Buffer.AddEx(newValue);
 		}
 
-		/// <inheritdoc />
-		public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
+		var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
 
-		/// <inheritdoc />
-		protected override bool CalcIsFormed() => _sma.IsFormed;
+		//считаем значение отклонения в последней точке
+		var std = buff.Select(t1 => t1 - smaValue).Select(t => t * t).Sum();
 
-		/// <inheritdoc />
-		public override void Reset()
-		{
-			_sma.Length = Length;
-			base.Reset();
-		}
-
-		/// <inheritdoc />
-		protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		{
-			var newValue = input.GetValue<decimal>();
-			var smaValue = _sma.Process(input).GetValue<decimal>();
-
-			if (input.IsFinal)
-			{
-				Buffer.AddEx(newValue);
-			}
-
-			var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
-
-			//считаем значение отклонения в последней точке
-			var std = buff.Select(t1 => t1 - smaValue).Select(t => t * t).Sum();
-
-			return new DecimalIndicatorValue(this, (decimal)Math.Sqrt((double)(std / Length)));
-		}
+		return new DecimalIndicatorValue(this, (decimal)Math.Sqrt((double)(std / Length)));
 	}
 }

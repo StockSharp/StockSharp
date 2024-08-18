@@ -1,112 +1,111 @@
-﻿namespace StockSharp.Algo.Indicators
+﻿namespace StockSharp.Algo.Indicators;
+
+using System;
+using System.ComponentModel.DataAnnotations;
+
+using Ecng.Serialization;
+using Ecng.ComponentModel;
+
+using StockSharp.Localization;
+using StockSharp.Messages;
+
+/// <summary>
+/// PeakBar.
+/// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/peakbar.html
+/// </remarks>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.PeakBarKey,
+	Description = LocalizedStrings.PeakBarKey)]
+[IndicatorIn(typeof(CandleIndicatorValue))]
+[Doc("topics/api/indicators/list_of_indicators/peakbar.html")]
+public class PeakBar : BaseIndicator
 {
-	using System;
-	using System.ComponentModel.DataAnnotations;
+	private decimal _currentMaximum = decimal.MinValue;
 
-	using Ecng.Serialization;
-	using Ecng.ComponentModel;
+	private int _currentBarCount;
 
-	using StockSharp.Localization;
-	using StockSharp.Messages;
+	private int _valueBarCount;
 
 	/// <summary>
-	/// PeakBar.
+	/// Initializes a new instance of the <see cref="PeakBar"/>.
 	/// </summary>
-	/// <remarks>
-	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/peakbar.html
-	/// </remarks>
+	public PeakBar()
+	{
+	}
+
+	private Unit _reversalAmount = new();
+
+	/// <summary>
+	/// Indicator changes threshold.
+	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.PeakBarKey,
-		Description = LocalizedStrings.PeakBarKey)]
-	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[Doc("topics/api/indicators/list_of_indicators/peakbar.html")]
-	public class PeakBar : BaseIndicator
+		Name = LocalizedStrings.ThresholdKey,
+		Description = LocalizedStrings.ThresholdDescKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public Unit ReversalAmount
 	{
-		private decimal _currentMaximum = decimal.MinValue;
-
-		private int _currentBarCount;
-
-		private int _valueBarCount;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="PeakBar"/>.
-		/// </summary>
-		public PeakBar()
+		get => _reversalAmount;
+		set
 		{
+			_reversalAmount = value ?? throw new ArgumentNullException(nameof(value));
+
+			Reset();
 		}
+	}
 
-		private Unit _reversalAmount = new();
+	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{
+		var (_, high, low, _) = input.GetOhlc();
 
-		/// <summary>
-		/// Indicator changes threshold.
-		/// </summary>
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.ThresholdKey,
-			Description = LocalizedStrings.ThresholdDescKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		public Unit ReversalAmount
+		var cm = _currentMaximum;
+		var vbc = _valueBarCount;
+
+		try
 		{
-			get => _reversalAmount;
-			set
+			if (high > cm)
 			{
-				_reversalAmount = value ?? throw new ArgumentNullException(nameof(value));
-
-				Reset();
+				cm = high;
+				vbc = _currentBarCount;
 			}
-		}
-
-		/// <inheritdoc />
-		protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		{
-			var (_, high, low, _) = input.GetOhlc();
-
-			var cm = _currentMaximum;
-			var vbc = _valueBarCount;
-
-			try
-			{
-				if (high > cm)
-				{
-					cm = high;
-					vbc = _currentBarCount;
-				}
-				else if (low <= (cm - ReversalAmount))
-				{
-					if (input.IsFinal)
-						IsFormed = true;
-
-					return new DecimalIndicatorValue(this, vbc);
-				}
-
-				return new DecimalIndicatorValue(this, this.GetCurrentValue());
-			}
-			finally
+			else if (low <= (cm - ReversalAmount))
 			{
 				if (input.IsFinal)
-				{
-					_currentBarCount++;
-					_currentMaximum = cm;
-					_valueBarCount = vbc;
-				}
+					IsFormed = true;
+
+				return new DecimalIndicatorValue(this, vbc);
+			}
+
+			return new DecimalIndicatorValue(this, this.GetCurrentValue());
+		}
+		finally
+		{
+			if (input.IsFinal)
+			{
+				_currentBarCount++;
+				_currentMaximum = cm;
+				_valueBarCount = vbc;
 			}
 		}
+	}
 
-		/// <inheritdoc />
-		public override void Load(SettingsStorage storage)
-		{
-			base.Load(storage);
+	/// <inheritdoc />
+	public override void Load(SettingsStorage storage)
+	{
+		base.Load(storage);
 
-			ReversalAmount.Load(storage, nameof(ReversalAmount));
-		}
+		ReversalAmount.Load(storage, nameof(ReversalAmount));
+	}
 
-		/// <inheritdoc />
-		public override void Save(SettingsStorage storage)
-		{
-			base.Save(storage);
+	/// <inheritdoc />
+	public override void Save(SettingsStorage storage)
+	{
+		base.Save(storage);
 
-			storage.SetValue(nameof(ReversalAmount), ReversalAmount.Save());
-		}
+		storage.SetValue(nameof(ReversalAmount), ReversalAmount.Save());
 	}
 }

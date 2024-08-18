@@ -1,34 +1,33 @@
-﻿namespace StockSharp.Charting
-{
-	using System.Collections.Generic;
+﻿namespace StockSharp.Charting;
 
-	using StockSharp.Algo.Indicators;
+using System.Collections.Generic;
+
+using StockSharp.Algo.Indicators;
+
+/// <summary>
+/// Provider <see cref="IndicatorType"/>.
+/// </summary>
+public interface IIndicatorProvider
+{
+	/// <summary>
+	/// Initialize provider.
+	/// </summary>
+	void Init();
 
 	/// <summary>
-	/// Provider <see cref="IndicatorType"/>.
+	/// All indicator types.
 	/// </summary>
-	public interface IIndicatorProvider
-	{
-		/// <summary>
-		/// Initialize provider.
-		/// </summary>
-		void Init();
+	IEnumerable<IndicatorType> All { get; }
 
-		/// <summary>
-		/// All indicator types.
-		/// </summary>
-		IEnumerable<IndicatorType> All { get; }
+	/// <summary>
+	/// Add <see cref="IndicatorType"/>.
+	/// </summary>
+	/// <param name="type"><see cref="IndicatorType"/></param>
+	void Add(IndicatorType type);
 
-		/// <summary>
-		/// Add <see cref="IndicatorType"/>.
-		/// </summary>
-		/// <param name="type"><see cref="IndicatorType"/></param>
-		void Add(IndicatorType type);
-
-		/// <summary>
-		/// Remove <see cref="IndicatorType"/>.
-		/// </summary>
-		/// <param name="type"><see cref="IndicatorType"/></param>
-		void Remove(IndicatorType type);
-	}
+	/// <summary>
+	/// Remove <see cref="IndicatorType"/>.
+	/// </summary>
+	/// <param name="type"><see cref="IndicatorType"/></param>
+	void Remove(IndicatorType type);
 }

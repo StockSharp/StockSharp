@@ -1,79 +1,78 @@
-namespace StockSharp.Algo.PnL
+namespace StockSharp.Algo.PnL;
+
+using System;
+using System.Collections.Generic;
+
+using Ecng.Common;
+
+using StockSharp.Messages;
+
+/// <summary>
+/// The message adapter, automatically calculating profit-loss.
+/// </summary>
+public class PnLMessageAdapter : MessageAdapterWrapper
 {
-	using System;
-	using System.Collections.Generic;
+	/// <summary>
+	/// Initializes a new instance of the <see cref="PnLMessageAdapter"/>.
+	/// </summary>
+	/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
+	public PnLMessageAdapter(IMessageAdapter innerAdapter)
+		: base(innerAdapter)
+	{
+	}
 
-	using Ecng.Common;
-
-	using StockSharp.Messages;
+	private IPnLManager _pnLManager = new PnLManager();
 
 	/// <summary>
-	/// The message adapter, automatically calculating profit-loss.
+	/// The profit-loss manager.
 	/// </summary>
-	public class PnLMessageAdapter : MessageAdapterWrapper
+	public IPnLManager PnLManager
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="PnLMessageAdapter"/>.
-		/// </summary>
-		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-		public PnLMessageAdapter(IMessageAdapter innerAdapter)
-			: base(innerAdapter)
-		{
-		}
+		get => _pnLManager;
+		set => _pnLManager = value ?? throw new ArgumentNullException(nameof(value));
+	}
 
-		private IPnLManager _pnLManager = new PnLManager();
+	/// <inheritdoc />
+	protected override bool OnSendInMessage(Message message)
+	{
+		PnLManager.ProcessMessage(message);
+		return base.OnSendInMessage(message);
+	}
 
-		/// <summary>
-		/// The profit-loss manager.
-		/// </summary>
-		public IPnLManager PnLManager
+	/// <inheritdoc />
+	protected override void OnInnerAdapterNewOutMessage(Message message)
+	{
+		if (message.Type != MessageTypes.Reset)
 		{
-			get => _pnLManager;
-			set => _pnLManager = value ?? throw new ArgumentNullException(nameof(value));
-		}
+			var list = new List<PortfolioPnLManager>();
+			var info = PnLManager.ProcessMessage(message, list);
 
-		/// <inheritdoc />
-		protected override bool OnSendInMessage(Message message)
-		{
-			PnLManager.ProcessMessage(message);
-			return base.OnSendInMessage(message);
-		}
+			if (info != null && info.PnL != 0)
+				((ExecutionMessage)message).PnL = info.PnL;
 
-		/// <inheritdoc />
-		protected override void OnInnerAdapterNewOutMessage(Message message)
-		{
-			if (message.Type != MessageTypes.Reset)
+			foreach (var manager in list)
 			{
-				var list = new List<PortfolioPnLManager>();
-				var info = PnLManager.ProcessMessage(message, list);
-
-				if (info != null && info.PnL != 0)
-					((ExecutionMessage)message).PnL = info.PnL;
-
-				foreach (var manager in list)
+				base.OnInnerAdapterNewOutMessage(new PositionChangeMessage
 				{
-					base.OnInnerAdapterNewOutMessage(new PositionChangeMessage
-					{
-						SecurityId = SecurityId.Money,
-						ServerTime = message.LocalTime,
-						PortfolioName = manager.PortfolioName,
-						BuildFrom = DataType.Transactions,
-					}
-					.Add(PositionChangeTypes.RealizedPnL, manager.RealizedPnL)
-					.TryAdd(PositionChangeTypes.UnrealizedPnL, manager.UnrealizedPnL));
+					SecurityId = SecurityId.Money,
+					ServerTime = message.LocalTime,
+					PortfolioName = manager.PortfolioName,
+					BuildFrom = DataType.Transactions,
 				}
+				.Add(PositionChangeTypes.RealizedPnL, manager.RealizedPnL)
+				.TryAdd(PositionChangeTypes.UnrealizedPnL, manager.UnrealizedPnL));
 			}
-
-			base.OnInnerAdapterNewOutMessage(message);
 		}
 
-		/// <summary>
-		/// Create a copy of <see cref="PnLMessageAdapter"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override IMessageChannel Clone()
-		{
-			return new PnLMessageAdapter(InnerAdapter.TypedClone());
-		}
+		base.OnInnerAdapterNewOutMessage(message);
+	}
+
+	/// <summary>
+	/// Create a copy of <see cref="PnLMessageAdapter"/>.
+	/// </summary>
+	/// <returns>Copy.</returns>
+	public override IMessageChannel Clone()
+	{
+		return new PnLMessageAdapter(InnerAdapter.TypedClone());
 	}
 }

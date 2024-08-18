@@ -1,79 +1,78 @@
-﻿namespace StockSharp.Algo.Storages
+﻿namespace StockSharp.Algo.Storages;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Ecng.Collections;
+
+using StockSharp.BusinessEntities;
+
+/// <summary>
+/// The storage based provider of stocks and trade boards.
+/// </summary>
+public class StorageExchangeInfoProvider : InMemoryExchangeInfoProvider
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-
-	using Ecng.Collections;
-
-	using StockSharp.BusinessEntities;
+	private readonly IEntityRegistry _entityRegistry;
 
 	/// <summary>
-	/// The storage based provider of stocks and trade boards.
+	/// Initializes a new instance of the <see cref="StorageExchangeInfoProvider"/>.
 	/// </summary>
-	public class StorageExchangeInfoProvider : InMemoryExchangeInfoProvider
+	/// <param name="entityRegistry">The storage of trade objects.</param>
+	/// <param name="autoInit">Invoke <see cref="Init"/> method.</param>
+	public StorageExchangeInfoProvider(IEntityRegistry entityRegistry, bool autoInit = true)
 	{
-		private readonly IEntityRegistry _entityRegistry;
+		_entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="StorageExchangeInfoProvider"/>.
-		/// </summary>
-		/// <param name="entityRegistry">The storage of trade objects.</param>
-		/// <param name="autoInit">Invoke <see cref="Init"/> method.</param>
-		public StorageExchangeInfoProvider(IEntityRegistry entityRegistry, bool autoInit = true)
+		if (autoInit)
+			Init();
+	}
+
+	/// <inheritdoc />
+	public override void Init()
+	{
+		var boardCodes = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+
+		boardCodes.AddRange(_entityRegistry.ExchangeBoards.Select(b => b.Code));
+
+		var boards = Boards.Where(b => !boardCodes.Contains(b.Code)).ToArray();
+
+		if (boards.Length > 0)
 		{
-			_entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
+			boards
+				.Select(b => b.Exchange)
+				.Distinct()
+				.ForEach(Save);
 
-			if (autoInit)
-				Init();
+			boards
+				.ForEach(Save);
 		}
 
-		/// <inheritdoc />
-		public override void Init()
-		{
-			var boardCodes = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+		_entityRegistry.Exchanges.ForEach(e => base.Save(e));
+		_entityRegistry.ExchangeBoards.ForEach(b => base.Save(b));
 
-			boardCodes.AddRange(_entityRegistry.ExchangeBoards.Select(b => b.Code));
+		base.Init();
+	}
 
-			var boards = Boards.Where(b => !boardCodes.Contains(b.Code)).ToArray();
+	/// <inheritdoc />
+	public override void Save(ExchangeBoard board)
+	{
+		if (board == null)
+			throw new ArgumentNullException(nameof(board));
 
-			if (boards.Length > 0)
-			{
-				boards
-					.Select(b => b.Exchange)
-					.Distinct()
-					.ForEach(Save);
+		_entityRegistry.ExchangeBoards.Save(board);
 
-				boards
-					.ForEach(Save);
-			}
+		base.Save(board);
+	}
 
-			_entityRegistry.Exchanges.ForEach(e => base.Save(e));
-			_entityRegistry.ExchangeBoards.ForEach(b => base.Save(b));
+	/// <inheritdoc />
+	public override void Save(Exchange exchange)
+	{
+		if (exchange == null)
+			throw new ArgumentNullException(nameof(exchange));
 
-			base.Init();
-		}
+		_entityRegistry.Exchanges.Save(exchange);
 
-		/// <inheritdoc />
-		public override void Save(ExchangeBoard board)
-		{
-			if (board == null)
-				throw new ArgumentNullException(nameof(board));
-
-			_entityRegistry.ExchangeBoards.Save(board);
-
-			base.Save(board);
-		}
-
-		/// <inheritdoc />
-		public override void Save(Exchange exchange)
-		{
-			if (exchange == null)
-				throw new ArgumentNullException(nameof(exchange));
-
-			_entityRegistry.Exchanges.Save(exchange);
-
-			base.Save(exchange);
-		}
+		base.Save(exchange);
 	}
 }

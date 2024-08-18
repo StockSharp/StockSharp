@@ -1,140 +1,139 @@
-namespace StockSharp.BusinessEntities
-{
-	using System;
-	using System.ComponentModel;
-	using System.ComponentModel.DataAnnotations;
-	using System.Runtime.Serialization;
+namespace StockSharp.BusinessEntities;
 
-	using StockSharp.Messages;
-	using StockSharp.Localization;
+using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+
+using StockSharp.Messages;
+using StockSharp.Localization;
+
+/// <summary>
+/// Portfolio, describing the trading account and the size of its generated commission.
+/// </summary>
+[Serializable]
+[DataContract]
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.PortfolioKey,
+	Description = LocalizedStrings.PortfolioDescKey)]
+public class Portfolio : Position
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="Portfolio"/>.
+	/// </summary>
+	public Portfolio()
+	{
+	}
+
+	private string _name;
 
 	/// <summary>
-	/// Portfolio, describing the trading account and the size of its generated commission.
+	/// Portfolio code name.
 	/// </summary>
-	[Serializable]
-	[DataContract]
+	[DataMember]
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.PortfolioKey,
-		Description = LocalizedStrings.PortfolioDescKey)]
-	public class Portfolio : Position
+		Name = LocalizedStrings.NameKey,
+		Description = LocalizedStrings.PortfolioNameKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public string Name
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Portfolio"/>.
-		/// </summary>
-		public Portfolio()
+		get => _name;
+		set
 		{
+			if (_name == value)
+				return;
+
+			_name = value;
+			NotifyChanged();
 		}
+	}
 
-		private string _name;
+	/// <summary>
+	/// Exchange board, for which the current portfolio is active.
+	/// </summary>
+	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.BoardKey,
+		Description = LocalizedStrings.PortfolioBoardKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public ExchangeBoard Board { get; set; }
 
-		/// <summary>
-		/// Portfolio code name.
-		/// </summary>
-		[DataMember]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.NameKey,
-			Description = LocalizedStrings.PortfolioNameKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		public string Name
+	private PortfolioStates? _state;
+
+	/// <summary>
+	/// Portfolio state.
+	/// </summary>
+	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.StateKey,
+		Description = LocalizedStrings.PortfolioStateKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	[Browsable(false)]
+	public PortfolioStates? State
+	{
+		get => _state;
+		set
 		{
-			get => _name;
-			set
-			{
-				if (_name == value)
-					return;
+			if (_state == value)
+				return;
 
-				_name = value;
-				NotifyChanged();
-			}
+			_state = value;
+			NotifyChanged();
 		}
+	}
 
-		/// <summary>
-		/// Exchange board, for which the current portfolio is active.
-		/// </summary>
-		[DataMember]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.BoardKey,
-			Description = LocalizedStrings.PortfolioBoardKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		public ExchangeBoard Board { get; set; }
+	/// <inheritdoc />
+	[Browsable(false)]
+	public override string StrategyId { get => base.StrategyId; set => base.StrategyId = value; }
 
-		private PortfolioStates? _state;
+	/// <inheritdoc />
+	[Browsable(false)]
+	public override Sides? Side { get => base.Side; set => base.Side = value; }
 
-		/// <summary>
-		/// Portfolio state.
-		/// </summary>
-		[DataMember]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.StateKey,
-			Description = LocalizedStrings.PortfolioStateKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		[Browsable(false)]
-		public PortfolioStates? State
-		{
-			get => _state;
-			set
-			{
-				if (_state == value)
-					return;
+	/// <summary>
+	/// Portfolio associated with the orders received through the orders log.
+	/// </summary>
+	public static Portfolio AnonymousPortfolio { get; } = new Portfolio
+	{
+		Name = Extensions.AnonymousPortfolioName,
+	};
 
-				_state = value;
-				NotifyChanged();
-			}
-		}
+	/// <summary>
+	/// Create virtual portfolio for simulation.
+	/// </summary>
+	/// <returns>Simulator.</returns>
+	public static Portfolio CreateSimulator() => new()
+	{
+		Name = Extensions.SimulatorPortfolioName,
+		BeginValue = 1000000,
+	};
 
-		/// <inheritdoc />
-		[Browsable(false)]
-		public override string StrategyId { get => base.StrategyId; set => base.StrategyId = value; }
+	/// <summary>
+	/// To copy the current portfolio fields to the <paramref name="destination" />.
+	/// </summary>
+	/// <param name="destination">The portfolio, in which fields should be copied.</param>
+	public void CopyTo(Portfolio destination)
+	{
+		base.CopyTo(destination);
 
-		/// <inheritdoc />
-		[Browsable(false)]
-		public override Sides? Side { get => base.Side; set => base.Side = value; }
+		destination.Name = Name;
+		destination.Board = Board;
+		//destination.Connector = Connector;
+		destination.State = State;
+	}
 
-		/// <summary>
-		/// Portfolio associated with the orders received through the orders log.
-		/// </summary>
-		public static Portfolio AnonymousPortfolio { get; } = new Portfolio
-		{
-			Name = Extensions.AnonymousPortfolioName,
-		};
+	/// <inheritdoc />
+	public override string ToString() => Name;
 
-		/// <summary>
-		/// Create virtual portfolio for simulation.
-		/// </summary>
-		/// <returns>Simulator.</returns>
-		public static Portfolio CreateSimulator() => new()
-		{
-			Name = Extensions.SimulatorPortfolioName,
-			BeginValue = 1000000,
-		};
-
-		/// <summary>
-		/// To copy the current portfolio fields to the <paramref name="destination" />.
-		/// </summary>
-		/// <param name="destination">The portfolio, in which fields should be copied.</param>
-		public void CopyTo(Portfolio destination)
-		{
-			base.CopyTo(destination);
-
-			destination.Name = Name;
-			destination.Board = Board;
-			//destination.Connector = Connector;
-			destination.State = State;
-		}
-
-		/// <inheritdoc />
-		public override string ToString() => Name;
-
-		/// <inheritdoc />
-		public override Position Clone()
-		{
-			var clone = new Portfolio();
-			CopyTo(clone);
-			return clone;
-		}
+	/// <inheritdoc />
+	public override Position Clone()
+	{
+		var clone = new Portfolio();
+		CopyTo(clone);
+		return clone;
 	}
 }

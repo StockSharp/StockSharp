@@ -1,62 +1,61 @@
-﻿namespace StockSharp.Charting
-{
-	using System;
-	using System.ComponentModel.DataAnnotations;
+﻿namespace StockSharp.Charting;
 
-	using StockSharp.Localization;
+using System;
+using System.ComponentModel.DataAnnotations;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// The annotations types.
+/// </summary>
+[Serializable]
+public enum ChartAnnotationTypes
+{
+	/// <summary>
+	/// None.
+	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NoneKey)]
+	None,
 
 	/// <summary>
-	/// The annotations types.
+	/// Line.
 	/// </summary>
-	[Serializable]
-	public enum ChartAnnotationTypes
-	{
-		/// <summary>
-		/// None.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NoneKey)]
-		None,
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Line2Key)]
+	LineAnnotation,
 
-		/// <summary>
-		/// Line.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Line2Key)]
-		LineAnnotation,
+	/// <summary>
+	/// Pointer.
+	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PointerKey)]
+	LineArrowAnnotation,
 
-		/// <summary>
-		/// Pointer.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PointerKey)]
-		LineArrowAnnotation,
+	/// <summary>
+	/// Text.
+	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TextKey)]
+	TextAnnotation,
 
-		/// <summary>
-		/// Text.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TextKey)]
-		TextAnnotation,
+	/// <summary>
+	/// Area.
+	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AreaKey)]
+	BoxAnnotation,
 
-		/// <summary>
-		/// Area.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AreaKey)]
-		BoxAnnotation,
+	/// <summary>
+	/// Horizontal line.
+	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.HorLineKey)]
+	HorizontalLineAnnotation,
 
-		/// <summary>
-		/// Horizontal line.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.HorLineKey)]
-		HorizontalLineAnnotation,
+	/// <summary>
+	/// Vertical line.
+	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VerLineKey)]
+	VerticalLineAnnotation,
 
-		/// <summary>
-		/// Vertical line.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VerLineKey)]
-		VerticalLineAnnotation,
-
-		/// <summary>
-		/// Ruler.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.RulerKey)]
-		RulerAnnotation,
-	}
+	/// <summary>
+	/// Ruler.
+	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.RulerKey)]
+	RulerAnnotation,
 }

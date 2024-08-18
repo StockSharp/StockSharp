@@ -1,15 +1,14 @@
-namespace StockSharp.Messages
-{
-	using System;
+namespace StockSharp.Messages;
 
+using System;
+
+/// <summary>
+/// The interface describing an message with <see cref="ServerTime"/> property.
+/// </summary>
+public interface IServerTimeMessage
+{
 	/// <summary>
-	/// The interface describing an message with <see cref="ServerTime"/> property.
+	/// Server time.
 	/// </summary>
-	public interface IServerTimeMessage
-	{
-		/// <summary>
-		/// Server time.
-		/// </summary>
-		DateTimeOffset ServerTime { get; set; }
-	}
+	DateTimeOffset ServerTime { get; set; }
 }

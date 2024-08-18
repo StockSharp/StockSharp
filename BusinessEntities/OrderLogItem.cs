@@ -1,44 +1,43 @@
-namespace StockSharp.BusinessEntities
+namespace StockSharp.BusinessEntities;
+
+using System;
+using System.ComponentModel.DataAnnotations;
+
+using Ecng.Common;
+
+using StockSharp.Messages;
+using StockSharp.Localization;
+
+/// <summary>
+/// Order log item.
+/// </summary>
+[Serializable]
+[System.Runtime.Serialization.DataContract]
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.OrderLogOfKey,
+	Description = LocalizedStrings.OrderLogDescKey)]
+[Obsolete("Use IOrderLogMessage.")]
+public class OrderLogItem : MyTrade, IOrderLogMessage
 {
-	using System;
-	using System.ComponentModel.DataAnnotations;
-
-	using Ecng.Common;
-
-	using StockSharp.Messages;
-	using StockSharp.Localization;
-
 	/// <summary>
-	/// Order log item.
+	/// Initializes a new instance of the <see cref="OrderLogItem"/>.
 	/// </summary>
-	[Serializable]
-	[System.Runtime.Serialization.DataContract]
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.OrderLogOfKey,
-		Description = LocalizedStrings.OrderLogDescKey)]
-	[Obsolete("Use IOrderLogMessage.")]
-	public class OrderLogItem : MyTrade, IOrderLogMessage
+	public OrderLogItem()
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="OrderLogItem"/>.
-		/// </summary>
-		public OrderLogItem()
-		{
-		}
+	}
 
-		IOrderMessage IOrderLogMessage.Order => Order;
-		ITickTradeMessage IOrderLogMessage.Trade => Trade;
+	IOrderMessage IOrderLogMessage.Order => Order;
+	ITickTradeMessage IOrderLogMessage.Trade => Trade;
 
-		/// <inheritdoc />
-		public override string ToString()
-		{
-			var result = LocalizedStrings.OLFromOrder.Put(Trade == null ? (Order.State == OrderStates.Done ? LocalizedStrings.Cancellation : LocalizedStrings.Registration) : LocalizedStrings.Matching, Order);
+	/// <inheritdoc />
+	public override string ToString()
+	{
+		var result = LocalizedStrings.OLFromOrder.Put(Trade == null ? (Order.State == OrderStates.Done ? LocalizedStrings.Cancellation : LocalizedStrings.Registration) : LocalizedStrings.Matching, Order);
 
-			if (Trade != null)
-				result += " " + LocalizedStrings.OLFromTrade.Put(Trade);
+		if (Trade != null)
+			result += " " + LocalizedStrings.OLFromTrade.Put(Trade);
 
-			return result;
-		}
+		return result;
 	}
 }

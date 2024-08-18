@@ -1,74 +1,73 @@
-namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators;
+
+using System;
+
+using Ecng.Common;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// Attribute, applied to indicator, to provide information about type of values <see cref="IIndicatorValue"/>.
+/// </summary>
+public abstract class IndicatorValueAttribute : Attribute
 {
-	using System;
-
-	using Ecng.Common;
-
-	using StockSharp.Localization;
+	/// <summary>
+	/// Value type.
+	/// </summary>
+	public Type Type { get; }
 
 	/// <summary>
-	/// Attribute, applied to indicator, to provide information about type of values <see cref="IIndicatorValue"/>.
+	/// Initializes a new instance of the <see cref="IndicatorValueAttribute"/>.
 	/// </summary>
-	public abstract class IndicatorValueAttribute : Attribute
+	/// <param name="type">Value type.</param>
+	protected IndicatorValueAttribute(Type type)
 	{
-		/// <summary>
-		/// Value type.
-		/// </summary>
-		public Type Type { get; }
+		if (type == null)
+			throw new ArgumentNullException(nameof(type));
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="IndicatorValueAttribute"/>.
-		/// </summary>
-		/// <param name="type">Value type.</param>
-		protected IndicatorValueAttribute(Type type)
-		{
-			if (type == null)
-				throw new ArgumentNullException(nameof(type));
+		if (!type.Is<IIndicatorValue>())
+			throw new ArgumentException(LocalizedStrings.TypeNotImplemented.Put(type.Name, nameof(IIndicatorValue)), nameof(type));
 
-			if (!type.Is<IIndicatorValue>())
-				throw new ArgumentException(LocalizedStrings.TypeNotImplemented.Put(type.Name, nameof(IIndicatorValue)), nameof(type));
-
-			Type = type;
-		}
+		Type = type;
 	}
+}
 
+/// <summary>
+/// Attribute, applied to indicator, to provide information about type of input values <see cref="IIndicatorValue"/>.
+/// </summary>
+[AttributeUsage(AttributeTargets.Class)]
+public class IndicatorInAttribute : IndicatorValueAttribute
+{
 	/// <summary>
-	/// Attribute, applied to indicator, to provide information about type of input values <see cref="IIndicatorValue"/>.
+	/// Initializes a new instance of the <see cref="IndicatorInAttribute"/>.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class)]
-	public class IndicatorInAttribute : IndicatorValueAttribute
+	/// <param name="type">Values type.</param>
+	public IndicatorInAttribute(Type type)
+		: base(type)
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="IndicatorInAttribute"/>.
-		/// </summary>
-		/// <param name="type">Values type.</param>
-		public IndicatorInAttribute(Type type)
-			: base(type)
-		{
-		}
 	}
+}
 
+/// <summary>
+/// Attribute, applied to indicator, to provide information about type of output values <see cref="IIndicatorValue"/>.
+/// </summary>
+[AttributeUsage(AttributeTargets.Class)]
+public class IndicatorOutAttribute : IndicatorValueAttribute
+{
 	/// <summary>
-	/// Attribute, applied to indicator, to provide information about type of output values <see cref="IIndicatorValue"/>.
+	/// Initializes a new instance of the <see cref="IndicatorOutAttribute"/>.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class)]
-	public class IndicatorOutAttribute : IndicatorValueAttribute
+	/// <param name="type">Values type.</param>
+	public IndicatorOutAttribute(Type type)
+		: base(type)
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="IndicatorOutAttribute"/>.
-		/// </summary>
-		/// <param name="type">Values type.</param>
-		public IndicatorOutAttribute(Type type)
-			: base(type)
-		{
-		}
 	}
+}
 
-	/// <summary>
-	/// Attribute, applied to indicator that must be hidden from any UI selections.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class)]
-	public class IndicatorHiddenAttribute : Attribute
-	{
-	}
+/// <summary>
+/// Attribute, applied to indicator that must be hidden from any UI selections.
+/// </summary>
+[AttributeUsage(AttributeTargets.Class)]
+public class IndicatorHiddenAttribute : Attribute
+{
 }

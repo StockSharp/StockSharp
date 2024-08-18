@@ -1,27 +1,26 @@
-namespace StockSharp.Charting
+namespace StockSharp.Charting;
+
+using Ecng.Serialization;
+
+/// <summary>
+/// Base interface for all chart components.
+/// </summary>
+public interface IThemeableChart : IPersistable
 {
-	using Ecng.Serialization;
+	/// <summary>
+	/// The name of the graphic theme.
+	/// </summary>
+	string ChartTheme { get; set; }
 
 	/// <summary>
-	/// Base interface for all chart components.
+	/// Create <see cref="IChartDrawData"/> instance.
 	/// </summary>
-	public interface IThemeableChart : IPersistable
-	{
-		/// <summary>
-		/// The name of the graphic theme.
-		/// </summary>
-		string ChartTheme { get; set; }
+	/// <returns><see cref="IChartDrawData"/> instance.</returns>
+	IChartDrawData CreateData();
 
-		/// <summary>
-		/// Create <see cref="IChartDrawData"/> instance.
-		/// </summary>
-		/// <returns><see cref="IChartDrawData"/> instance.</returns>
-		IChartDrawData CreateData();
-
-		/// <summary>
-		/// To process the new data.
-		/// </summary>
-		/// <param name="data">New data.</param>
-		void Draw(IChartDrawData data);
-	}
+	/// <summary>
+	/// To process the new data.
+	/// </summary>
+	/// <param name="data">New data.</param>
+	void Draw(IChartDrawData data);
 }

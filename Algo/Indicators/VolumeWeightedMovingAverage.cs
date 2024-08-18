@@ -1,61 +1,60 @@
-﻿namespace StockSharp.Algo.Indicators
+﻿namespace StockSharp.Algo.Indicators;
+
+using System.ComponentModel.DataAnnotations;
+
+using Ecng.ComponentModel;
+
+using StockSharp.Messages;
+using StockSharp.Localization;
+
+/// <summary>
+/// Volume weighted moving average.
+/// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/volume_weighted_ma.html
+/// </remarks>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.VMAKey,
+	Description = LocalizedStrings.VolumeWeightedMovingAverageKey)]
+[IndicatorIn(typeof(CandleIndicatorValue))]
+[Doc("topics/api/indicators/list_of_indicators/volume_weighted_ma.html")]
+public class VolumeWeightedMovingAverage : LengthIndicator<decimal>
 {
-	using System.ComponentModel.DataAnnotations;
+	// Текущее значение числителя
+	private readonly Sum _nominator = new();
 
-	using Ecng.ComponentModel;
-
-	using StockSharp.Messages;
-	using StockSharp.Localization;
+	// Текущее значение знаменателя
+	private readonly Sum _denominator = new();
 
 	/// <summary>
-	/// Volume weighted moving average.
+	/// To create the indicator <see cref="VolumeWeightedMovingAverage"/>.
 	/// </summary>
-	/// <remarks>
-	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/volume_weighted_ma.html
-	/// </remarks>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.VMAKey,
-		Description = LocalizedStrings.VolumeWeightedMovingAverageKey)]
-	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[Doc("topics/api/indicators/list_of_indicators/volume_weighted_ma.html")]
-	public class VolumeWeightedMovingAverage : LengthIndicator<decimal>
+	public VolumeWeightedMovingAverage()
 	{
-		// Текущее значение числителя
-		private readonly Sum _nominator = new();
+		Length = 32;
+	}
 
-		// Текущее значение знаменателя
-		private readonly Sum _denominator = new();
+	/// <inheritdoc />
+	public override void Reset()
+	{
+		base.Reset();
+		_denominator.Length = _nominator.Length = Length;
+	}
 
-		/// <summary>
-		/// To create the indicator <see cref="VolumeWeightedMovingAverage"/>.
-		/// </summary>
-		public VolumeWeightedMovingAverage()
-		{
-			Length = 32;
-		}
+	/// <inheritdoc />
+	protected override bool CalcIsFormed() => _nominator.IsFormed && _denominator.IsFormed;
 
-		/// <inheritdoc />
-		public override void Reset()
-		{
-			base.Reset();
-			_denominator.Length = _nominator.Length = Length;
-		}
+	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{
+		var candle = input.GetValue<ICandleMessage>();
 
-		/// <inheritdoc />
-		protected override bool CalcIsFormed() => _nominator.IsFormed && _denominator.IsFormed;
+		var shValue = _nominator.Process(input.SetValue(this, candle.ClosePrice * candle.TotalVolume)).GetValue<decimal>();
+		var znValue = _denominator.Process(input.SetValue(this, candle.TotalVolume)).GetValue<decimal>();
 
-		/// <inheritdoc />
-		protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		{
-			var candle = input.GetValue<ICandleMessage>();
-
-			var shValue = _nominator.Process(input.SetValue(this, candle.ClosePrice * candle.TotalVolume)).GetValue<decimal>();
-			var znValue = _denominator.Process(input.SetValue(this, candle.TotalVolume)).GetValue<decimal>();
-
-			return znValue != 0 
-				? new DecimalIndicatorValue(this, shValue / znValue) 
-				: new DecimalIndicatorValue(this);
-		}
+		return znValue != 0 
+			? new DecimalIndicatorValue(this, shValue / znValue) 
+			: new DecimalIndicatorValue(this);
 	}
 }

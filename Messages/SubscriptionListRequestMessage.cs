@@ -1,35 +1,34 @@
-namespace StockSharp.Messages
+namespace StockSharp.Messages;
+
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>
+/// Subscriptions list request message.
+/// </summary>
+[Serializable]
+[DataContract]
+public class SubscriptionListRequestMessage : BaseRequestMessage
 {
-	using System;
-	using System.Runtime.Serialization;
+	/// <summary>
+	/// Initialize <see cref="SubscriptionListRequestMessage"/>.
+	/// </summary>
+	public SubscriptionListRequestMessage()
+		: base(MessageTypes.SubscriptionListRequest)
+	{
+	}
+
+	/// <inheritdoc />
+	public override DataType DataType => DataType.Create<MarketDataMessage>();
 
 	/// <summary>
-	/// Subscriptions list request message.
+	/// Create a copy of <see cref="SubscriptionListRequestMessage"/>.
 	/// </summary>
-	[Serializable]
-	[DataContract]
-	public class SubscriptionListRequestMessage : BaseRequestMessage
+	/// <returns>Copy.</returns>
+	public override Message Clone()
 	{
-		/// <summary>
-		/// Initialize <see cref="SubscriptionListRequestMessage"/>.
-		/// </summary>
-		public SubscriptionListRequestMessage()
-			: base(MessageTypes.SubscriptionListRequest)
-		{
-		}
-
-		/// <inheritdoc />
-		public override DataType DataType => DataType.Create<MarketDataMessage>();
-
-		/// <summary>
-		/// Create a copy of <see cref="SubscriptionListRequestMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			var clone = new SubscriptionListRequestMessage();
-			CopyTo(clone);
-			return clone;
-		}
+		var clone = new SubscriptionListRequestMessage();
+		CopyTo(clone);
+		return clone;
 	}
 }

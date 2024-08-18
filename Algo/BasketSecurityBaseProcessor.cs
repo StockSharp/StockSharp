@@ -1,623 +1,622 @@
-namespace StockSharp.Algo
+namespace StockSharp.Algo;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Ecng.Collections;
+using Ecng.Common;
+
+using StockSharp.BusinessEntities;
+using StockSharp.Localization;
+using StockSharp.Logging;
+using StockSharp.Messages;
+
+/// <summary>
+/// Base basket securities processor.
+/// </summary>
+/// <typeparam name="TBasketSecurity">Basket security type.</typeparam>
+public abstract class BasketSecurityBaseProcessor<TBasketSecurity> : IBasketSecurityProcessor
+	where TBasketSecurity : BasketSecurity, new()
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-
-	using Ecng.Collections;
-	using Ecng.Common;
-
-	using StockSharp.BusinessEntities;
-	using StockSharp.Localization;
-	using StockSharp.Logging;
-	using StockSharp.Messages;
+	private readonly CachedSynchronizedSet<SecurityId> _basketLegs = new();
 
 	/// <summary>
-	/// Base basket securities processor.
+	/// Initializes a new instance of the <see cref="BasketSecurityBaseProcessor{TBasketSecurity}"/>.
 	/// </summary>
-	/// <typeparam name="TBasketSecurity">Basket security type.</typeparam>
-	public abstract class BasketSecurityBaseProcessor<TBasketSecurity> : IBasketSecurityProcessor
-		where TBasketSecurity : BasketSecurity, new()
+	/// <param name="security">Security.</param>
+	protected BasketSecurityBaseProcessor(Security security)
 	{
-		private readonly CachedSynchronizedSet<SecurityId> _basketLegs = new();
+		Security = security ?? throw new ArgumentNullException(nameof(security));
+		SecurityId = security.ToSecurityId();
+		BasketExpression = security.BasketExpression;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BasketSecurityBaseProcessor{TBasketSecurity}"/>.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		protected BasketSecurityBaseProcessor(Security security)
-		{
-			Security = security ?? throw new ArgumentNullException(nameof(security));
-			SecurityId = security.ToSecurityId();
-			BasketExpression = security.BasketExpression;
+		BasketSecurity = Security.ToBasket<TBasketSecurity>();
 
-			BasketSecurity = Security.ToBasket<TBasketSecurity>();
+		if (BasketSecurity.InnerSecurityIds.IsEmpty())
+			throw new ArgumentException(LocalizedStrings.SecurityDoNotContainsLegs.Put(BasketExpression), nameof(security));
 
-			if (BasketSecurity.InnerSecurityIds.IsEmpty())
-				throw new ArgumentException(LocalizedStrings.SecurityDoNotContainsLegs.Put(BasketExpression), nameof(security));
-
-			_basketLegs.AddRange(BasketSecurity.InnerSecurityIds);
-		}
-
-		/// <summary>
-		/// Security.
-		/// </summary>
-		public Security Security { get; }
-
-		/// <summary>
-		/// Instruments basket.
-		/// </summary>
-		public TBasketSecurity BasketSecurity { get; }
-
-		/// <inheritdoc />
-		public SecurityId SecurityId { get; }
-
-		/// <inheritdoc />
-		public string BasketExpression { get; }
-
-		/// <inheritdoc />
-		public SecurityId[] BasketLegs => _basketLegs.Cache;
-
-		/// <inheritdoc />
-		public abstract IEnumerable<Message> Process(Message message);
-
-		/// <summary>
-		/// Whether contains the specified leg.
-		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		/// <returns><see langword="true"/> if the leg exist, otherwise <see langword="false"/>.</returns>
-		protected bool ContainsLeg(SecurityId securityId) => _basketLegs.Contains(securityId);
+		_basketLegs.AddRange(BasketSecurity.InnerSecurityIds);
 	}
 
 	/// <summary>
-	/// Base continuous securities processor.
+	/// Security.
 	/// </summary>
-	/// <typeparam name="TBasketSecurity">Basket security type.</typeparam>
-	public abstract class ContinuousSecurityBaseProcessor<TBasketSecurity> : BasketSecurityBaseProcessor<TBasketSecurity>
-		where TBasketSecurity : ContinuousSecurity, new()
+	public Security Security { get; }
+
+	/// <summary>
+	/// Instruments basket.
+	/// </summary>
+	public TBasketSecurity BasketSecurity { get; }
+
+	/// <inheritdoc />
+	public SecurityId SecurityId { get; }
+
+	/// <inheritdoc />
+	public string BasketExpression { get; }
+
+	/// <inheritdoc />
+	public SecurityId[] BasketLegs => _basketLegs.Cache;
+
+	/// <inheritdoc />
+	public abstract IEnumerable<Message> Process(Message message);
+
+	/// <summary>
+	/// Whether contains the specified leg.
+	/// </summary>
+	/// <param name="securityId">Security ID.</param>
+	/// <returns><see langword="true"/> if the leg exist, otherwise <see langword="false"/>.</returns>
+	protected bool ContainsLeg(SecurityId securityId) => _basketLegs.Contains(securityId);
+}
+
+/// <summary>
+/// Base continuous securities processor.
+/// </summary>
+/// <typeparam name="TBasketSecurity">Basket security type.</typeparam>
+public abstract class ContinuousSecurityBaseProcessor<TBasketSecurity> : BasketSecurityBaseProcessor<TBasketSecurity>
+	where TBasketSecurity : ContinuousSecurity, new()
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ContinuousSecurityBaseProcessor{TBasketSecurity}"/>.
+	/// </summary>
+	/// <param name="security">Security.</param>
+	protected ContinuousSecurityBaseProcessor(Security security)
+		: base(security)
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ContinuousSecurityBaseProcessor{TBasketSecurity}"/>.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		protected ContinuousSecurityBaseProcessor(Security security)
-			: base(security)
-		{
-		}
+	}
 
-		/// <inheritdoc />
-		public override IEnumerable<Message> Process(Message message)
+	/// <inheritdoc />
+	public override IEnumerable<Message> Process(Message message)
+	{
+		switch (message.Type)
 		{
-			switch (message.Type)
+			case MessageTypes.QuoteChange:
 			{
-				case MessageTypes.QuoteChange:
-				{
-					var quoteMsg = (QuoteChangeMessage)message;
+				var quoteMsg = (QuoteChangeMessage)message;
 
-					if (quoteMsg.State != null || !ContainsLeg(quoteMsg.SecurityId))
+				if (quoteMsg.State != null || !ContainsLeg(quoteMsg.SecurityId))
+					yield break;
+
+				var bestBid = quoteMsg.GetBestBid();
+				var bestAsk = quoteMsg.GetBestAsk();
+
+				var volume = bestBid?.Volume;
+
+				if (bestAsk?.Volume != null)
+					volume = volume ?? 0 + bestAsk?.Volume;
+
+				if (!CanProcess(quoteMsg.SecurityId, quoteMsg.ServerTime, (bestBid?.Price).GetSpreadMiddle(bestAsk?.Price, Security.PriceStep), volume, null))
+					yield break;
+
+				break;
+			}
+
+			case MessageTypes.Execution:
+			{
+				var execMsg = (ExecutionMessage)message;
+
+				if (!ContainsLeg(execMsg.SecurityId))
+					yield break;
+
+				if (execMsg.DataType == DataType.Ticks)
+				{
+					if (!CanProcess(execMsg.SecurityId, execMsg.ServerTime, execMsg.TradePrice, execMsg.TradeVolume, execMsg.OpenInterest))
+						yield break;
+				}
+				else if (execMsg.DataType == DataType.OrderLog)
+				{
+					if (!CanProcess(execMsg.SecurityId, execMsg.ServerTime, execMsg.OrderPrice, execMsg.OrderVolume, execMsg.OpenInterest))
+						yield break;
+				}
+
+				break;
+			}
+
+			default:
+			{
+				if (message is CandleMessage candleMsg)
+				{
+					if (!ContainsLeg(candleMsg.SecurityId))
 						yield break;
 
-					var bestBid = quoteMsg.GetBestBid();
-					var bestAsk = quoteMsg.GetBestAsk();
-
-					var volume = bestBid?.Volume;
-
-					if (bestAsk?.Volume != null)
-						volume = volume ?? 0 + bestAsk?.Volume;
-
-					if (!CanProcess(quoteMsg.SecurityId, quoteMsg.ServerTime, (bestBid?.Price).GetSpreadMiddle(bestAsk?.Price, Security.PriceStep), volume, null))
+					if (!CanProcess(candleMsg.SecurityId, candleMsg.OpenTime, candleMsg.ClosePrice, candleMsg.TotalVolume, candleMsg.OpenInterest))
 						yield break;
 
 					break;
 				}
 
-				case MessageTypes.Execution:
-				{
-					var execMsg = (ExecutionMessage)message;
-
-					if (!ContainsLeg(execMsg.SecurityId))
-						yield break;
-
-					if (execMsg.DataType == DataType.Ticks)
-					{
-						if (!CanProcess(execMsg.SecurityId, execMsg.ServerTime, execMsg.TradePrice, execMsg.TradeVolume, execMsg.OpenInterest))
-							yield break;
-					}
-					else if (execMsg.DataType == DataType.OrderLog)
-					{
-						if (!CanProcess(execMsg.SecurityId, execMsg.ServerTime, execMsg.OrderPrice, execMsg.OrderVolume, execMsg.OpenInterest))
-							yield break;
-					}
-
-					break;
-				}
-
-				default:
-				{
-					if (message is CandleMessage candleMsg)
-					{
-						if (!ContainsLeg(candleMsg.SecurityId))
-							yield break;
-
-						if (!CanProcess(candleMsg.SecurityId, candleMsg.OpenTime, candleMsg.ClosePrice, candleMsg.TotalVolume, candleMsg.OpenInterest))
-							yield break;
-
-						break;
-					}
-
-					throw new ArgumentOutOfRangeException(nameof(message), LocalizedStrings.UnknownType.Put(message.Type));
-				}
+				throw new ArgumentOutOfRangeException(nameof(message), LocalizedStrings.UnknownType.Put(message.Type));
 			}
-
-			message = message.Clone();
-			message.ReplaceSecurityId(SecurityId);
-			yield return message;
 		}
 
-		/// <summary>
-		/// Determines can process message.
-		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		/// <param name="serverTime">Change server time.</param>
-		/// <param name="price">Price.</param>
-		/// <param name="volume">Volume.</param>
-		/// <param name="openInterest">Number of open positions (open interest).</param>
-		/// <returns><see langword="true"/> if the specified message can be processed, otherwise, <see langword="false"/>.</returns>
-		protected abstract bool CanProcess(SecurityId securityId, DateTimeOffset serverTime, decimal? price, decimal? volume, decimal? openInterest);
+		message = message.Clone();
+		message.ReplaceSecurityId(SecurityId);
+		yield return message;
 	}
 
 	/// <summary>
-	/// Continuous securities processor for <see cref="ContinuousSecurity"/>.
+	/// Determines can process message.
 	/// </summary>
-	public class ContinuousSecurityExpirationProcessor : ContinuousSecurityBaseProcessor<ExpirationContinuousSecurity>
-	{
-		private SecurityId _currId;
-		private DateTimeOffset _expirationDate;
+	/// <param name="securityId">Security ID.</param>
+	/// <param name="serverTime">Change server time.</param>
+	/// <param name="price">Price.</param>
+	/// <param name="volume">Volume.</param>
+	/// <param name="openInterest">Number of open positions (open interest).</param>
+	/// <returns><see langword="true"/> if the specified message can be processed, otherwise, <see langword="false"/>.</returns>
+	protected abstract bool CanProcess(SecurityId securityId, DateTimeOffset serverTime, decimal? price, decimal? volume, decimal? openInterest);
+}
 
-		private bool _finished;
+/// <summary>
+/// Continuous securities processor for <see cref="ContinuousSecurity"/>.
+/// </summary>
+public class ContinuousSecurityExpirationProcessor : ContinuousSecurityBaseProcessor<ExpirationContinuousSecurity>
+{
+	private SecurityId _currId;
+	private DateTimeOffset _expirationDate;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ContinuousSecurityExpirationProcessor"/>.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		public ContinuousSecurityExpirationProcessor(Security security)
-			: base(security)
-		{
-			_currId = BasketSecurity.ExpirationJumps.FirstSecurity;
-			_expirationDate = BasketSecurity.ExpirationJumps[_currId];
-		}
-
-		/// <inheritdoc />
-		protected override bool CanProcess(SecurityId securityId, DateTimeOffset serverTime, decimal? price, decimal? volume, decimal? openInterest)
-		{
-			if (_finished)
-				return false;
-
-			if (serverTime > _expirationDate)
-			{
-				var next = BasketSecurity.ExpirationJumps.GetNextSecurity(_currId);
-
-				if (next == null)
-				{
-					_finished = true;
-					return false;
-				}
-
-				_currId = next.Value;
-				_expirationDate = BasketSecurity.ExpirationJumps[_currId];
-				return true;
-			}
-			else
-				return securityId == _currId;
-		}
-	}
+	private bool _finished;
 
 	/// <summary>
-	/// Continuous securities processor for <see cref="VolumeContinuousSecurity"/>.
+	/// Initializes a new instance of the <see cref="ContinuousSecurityExpirationProcessor"/>.
 	/// </summary>
-	public class ContinuousSecurityVolumeProcessor : ContinuousSecurityBaseProcessor<VolumeContinuousSecurity>
+	/// <param name="security">Security.</param>
+	public ContinuousSecurityExpirationProcessor(Security security)
+		: base(security)
 	{
-		private int _idIdx;
-		private SecurityId _currId;
-		private SecurityId _nextId;
-		private decimal? _currVolume;
-		private decimal? _nextVolume;
-		private bool _finished;
+		_currId = BasketSecurity.ExpirationJumps.FirstSecurity;
+		_expirationDate = BasketSecurity.ExpirationJumps[_currId];
+	}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ContinuousSecurityVolumeProcessor"/>.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		public ContinuousSecurityVolumeProcessor(Security security)
-			: base(security)
+	/// <inheritdoc />
+	protected override bool CanProcess(SecurityId securityId, DateTimeOffset serverTime, decimal? price, decimal? volume, decimal? openInterest)
+	{
+		if (_finished)
+			return false;
+
+		if (serverTime > _expirationDate)
 		{
-			if (!NextId())
-				throw new InvalidOperationException();
-		}
+			var next = BasketSecurity.ExpirationJumps.GetNextSecurity(_currId);
 
-		private bool NextId()
-		{
-			if ((_idIdx + 1) >= BasketLegs.Length)
-				return false;
-
-			_currId = BasketLegs[_idIdx];
-			_nextId = BasketLegs[_idIdx + 1];
-
-			_idIdx++;
-			return true;
-		}
-
-		/// <inheritdoc />
-		protected override bool CanProcess(SecurityId securityId, DateTimeOffset serverTime, decimal? price, decimal? volume, decimal? openInterest)
-		{
-			if (_finished)
-				return _currId == securityId;
-
-			var vol = BasketSecurity.IsOpenInterest ? openInterest : volume;
-
-			if (vol == null)
-				return false;
-
-			if (securityId == _currId)
-				_currVolume = vol;
-			else if (securityId == _nextId)
-				_nextVolume = vol;
-
-			if (_currVolume == null || _nextVolume == null)
-				return false;
-
-			if ((_currVolume.Value + BasketSecurity.VolumeLevel) >= _nextVolume.Value)
-				return securityId == _currId;
-
-			if (!NextId())
+			if (next == null)
 			{
 				_finished = true;
 				return false;
 			}
 
-			return _currId == securityId;
+			_currId = next.Value;
+			_expirationDate = BasketSecurity.ExpirationJumps[_currId];
+			return true;
 		}
+		else
+			return securityId == _currId;
 	}
+}
+
+/// <summary>
+/// Continuous securities processor for <see cref="VolumeContinuousSecurity"/>.
+/// </summary>
+public class ContinuousSecurityVolumeProcessor : ContinuousSecurityBaseProcessor<VolumeContinuousSecurity>
+{
+	private int _idIdx;
+	private SecurityId _currId;
+	private SecurityId _nextId;
+	private decimal? _currVolume;
+	private decimal? _nextVolume;
+	private bool _finished;
 
 	/// <summary>
-	/// Base index securities processor.
+	/// Initializes a new instance of the <see cref="ContinuousSecurityVolumeProcessor"/>.
 	/// </summary>
-	/// <typeparam name="TBasketSecurity">Basket security type.</typeparam>
-	public abstract class IndexSecurityBaseProcessor<TBasketSecurity> : BasketSecurityBaseProcessor<TBasketSecurity>
-		where TBasketSecurity : IndexSecurity, new()
+	/// <param name="security">Security.</param>
+	public ContinuousSecurityVolumeProcessor(Security security)
+		: base(security)
 	{
-		private readonly SynchronizedDictionary<MessageTypes, object> _messages = new();
+		if (!NextId())
+			throw new InvalidOperationException();
+	}
 
-		private readonly Dictionary<SecurityId, ExecutionMessage> _ticks = new();
-		private readonly Dictionary<SecurityId, ExecutionMessage> _ol = new();
+	private bool NextId()
+	{
+		if ((_idIdx + 1) >= BasketLegs.Length)
+			return false;
 
-		private readonly SortedDictionary<DateTimeOffset, Dictionary<SecurityId, CandleMessage>> _candles = new();
+		_currId = BasketLegs[_idIdx];
+		_nextId = BasketLegs[_idIdx + 1];
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="IndexSecurityBaseProcessor{TBasketSecurity}"/>.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		protected IndexSecurityBaseProcessor(Security security)
-			: base(security)
+		_idIdx++;
+		return true;
+	}
+
+	/// <inheritdoc />
+	protected override bool CanProcess(SecurityId securityId, DateTimeOffset serverTime, decimal? price, decimal? volume, decimal? openInterest)
+	{
+		if (_finished)
+			return _currId == securityId;
+
+		var vol = BasketSecurity.IsOpenInterest ? openInterest : volume;
+
+		if (vol == null)
+			return false;
+
+		if (securityId == _currId)
+			_currVolume = vol;
+		else if (securityId == _nextId)
+			_nextVolume = vol;
+
+		if (_currVolume == null || _nextVolume == null)
+			return false;
+
+		if ((_currVolume.Value + BasketSecurity.VolumeLevel) >= _nextVolume.Value)
+			return securityId == _currId;
+
+		if (!NextId())
 		{
+			_finished = true;
+			return false;
 		}
 
-		/// <inheritdoc />
-		public override IEnumerable<Message> Process(Message message)
+		return _currId == securityId;
+	}
+}
+
+/// <summary>
+/// Base index securities processor.
+/// </summary>
+/// <typeparam name="TBasketSecurity">Basket security type.</typeparam>
+public abstract class IndexSecurityBaseProcessor<TBasketSecurity> : BasketSecurityBaseProcessor<TBasketSecurity>
+	where TBasketSecurity : IndexSecurity, new()
+{
+	private readonly SynchronizedDictionary<MessageTypes, object> _messages = new();
+
+	private readonly Dictionary<SecurityId, ExecutionMessage> _ticks = new();
+	private readonly Dictionary<SecurityId, ExecutionMessage> _ol = new();
+
+	private readonly SortedDictionary<DateTimeOffset, Dictionary<SecurityId, CandleMessage>> _candles = new();
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="IndexSecurityBaseProcessor{TBasketSecurity}"/>.
+	/// </summary>
+	/// <param name="security">Security.</param>
+	protected IndexSecurityBaseProcessor(Security security)
+		: base(security)
+	{
+	}
+
+	/// <inheritdoc />
+	public override IEnumerable<Message> Process(Message message)
+	{
+		switch (message.Type)
 		{
-			switch (message.Type)
-			{
-				case MessageTypes.QuoteChange:
-					var quotesMsg = (QuoteChangeMessage)message;
+			case MessageTypes.QuoteChange:
+				var quotesMsg = (QuoteChangeMessage)message;
 
-					if (quotesMsg.State != null || !ContainsLeg(quotesMsg.SecurityId))
-						yield break;
+				if (quotesMsg.State != null || !ContainsLeg(quotesMsg.SecurityId))
+					yield break;
 
-					foreach (var msg in ProcessMessage(GetDict<QuoteChangeMessage>(message.Type), quotesMsg.SecurityId, quotesMsg, quotes => new QuoteChangeMessage
+				foreach (var msg in ProcessMessage(GetDict<QuoteChangeMessage>(message.Type), quotesMsg.SecurityId, quotesMsg, quotes => new QuoteChangeMessage
+				{
+					SecurityId = SecurityId,
+					ServerTime = quotesMsg.ServerTime,
+				}))
+					yield return msg;
+
+				break;
+
+			case MessageTypes.Execution:
+				var execMsg = (ExecutionMessage)message;
+
+				if (!ContainsLeg(execMsg.SecurityId))
+					yield break;
+
+				if (execMsg.DataType == DataType.OrderLog)
+				{
+					foreach (var msg in ProcessMessage(_ol, execMsg.SecurityId, execMsg, execMsgs =>
 					{
-						SecurityId = SecurityId,
-						ServerTime = quotesMsg.ServerTime,
+						var prices = new decimal[execMsgs.Length];
+						var volumes = new decimal[execMsgs.Length];
+
+						for (var i = 0; i < execMsgs.Length; i++)
+						{
+							var msg = execMsgs[i];
+
+							prices[i] = msg.OrderPrice;
+							volumes[i] = msg.OrderVolume ?? 0;
+						}
+
+						return new ExecutionMessage
+						{
+							SecurityId = SecurityId,
+							ServerTime = execMsg.ServerTime,
+							DataTypeEx = execMsg.DataTypeEx,
+							OrderPrice = Calculate(prices, true),
+							OrderVolume = Calculate(volumes, false),
+						};
 					}))
 						yield return msg;
-
-					break;
-
-				case MessageTypes.Execution:
-					var execMsg = (ExecutionMessage)message;
-
-					if (!ContainsLeg(execMsg.SecurityId))
-						yield break;
-
-					if (execMsg.DataType == DataType.OrderLog)
-					{
-						foreach (var msg in ProcessMessage(_ol, execMsg.SecurityId, execMsg, execMsgs =>
-						{
-							var prices = new decimal[execMsgs.Length];
-							var volumes = new decimal[execMsgs.Length];
-
-							for (var i = 0; i < execMsgs.Length; i++)
-							{
-								var msg = execMsgs[i];
-
-								prices[i] = msg.OrderPrice;
-								volumes[i] = msg.OrderVolume ?? 0;
-							}
-
-							return new ExecutionMessage
-							{
-								SecurityId = SecurityId,
-								ServerTime = execMsg.ServerTime,
-								DataTypeEx = execMsg.DataTypeEx,
-								OrderPrice = Calculate(prices, true),
-								OrderVolume = Calculate(volumes, false),
-							};
-						}))
-							yield return msg;
-					}
-					else if (execMsg.DataType == DataType.Ticks)
-					{
-						foreach (var msg in ProcessMessage(_ticks, execMsg.SecurityId, execMsg, execMsgs =>
-						{
-							var prices = new decimal[execMsgs.Length];
-							var volumes = new decimal[execMsgs.Length];
-
-							for (var i = 0; i < execMsgs.Length; i++)
-							{
-								var msg = execMsgs[i];
-
-								prices[i] = msg.TradePrice ?? 0;
-								volumes[i] = msg.TradeVolume ?? 0;
-							}
-
-							return new ExecutionMessage
-							{
-								SecurityId = SecurityId,
-								ServerTime = execMsg.ServerTime,
-								DataTypeEx = execMsg.DataTypeEx,
-								TradePrice = Calculate(prices, true),
-								TradeVolume = Calculate(volumes, false),
-							};
-						}))
-							yield return msg;
-					}
-
-					break;
-
-				case MessageTypes.CandleTimeFrame:
+				}
+				else if (execMsg.DataType == DataType.Ticks)
 				{
-					var candleMsg = (CandleMessage)message;
+					foreach (var msg in ProcessMessage(_ticks, execMsg.SecurityId, execMsg, execMsgs =>
+					{
+						var prices = new decimal[execMsgs.Length];
+						var volumes = new decimal[execMsgs.Length];
 
+						for (var i = 0; i < execMsgs.Length; i++)
+						{
+							var msg = execMsgs[i];
+
+							prices[i] = msg.TradePrice ?? 0;
+							volumes[i] = msg.TradeVolume ?? 0;
+						}
+
+						return new ExecutionMessage
+						{
+							SecurityId = SecurityId,
+							ServerTime = execMsg.ServerTime,
+							DataTypeEx = execMsg.DataTypeEx,
+							TradePrice = Calculate(prices, true),
+							TradeVolume = Calculate(volumes, false),
+						};
+					}))
+						yield return msg;
+				}
+
+				break;
+
+			case MessageTypes.CandleTimeFrame:
+			{
+				var candleMsg = (CandleMessage)message;
+
+				if (!ContainsLeg(candleMsg.SecurityId))
+					yield break;
+
+				var dict = _candles.SafeAdd(candleMsg.OpenTime);
+
+				dict[candleMsg.SecurityId] = candleMsg.TypedClone();
+
+				if (dict.Count == BasketLegs.Length)
+				{
+					var keys = _candles.Keys.Where(t => t <= candleMsg.OpenTime).ToArray();
+
+					foreach (var key in keys)
+					{
+						var d = _candles.GetAndRemove(key);
+
+						if (d.Count < BasketLegs.Length && !BasketSecurity.FillGapsByZeros)
+							continue;
+
+						var indexCandle = new TimeFrameCandleMessage();
+
+						FillIndexCandle(indexCandle, candleMsg, d.Values.ToArray());
+
+						yield return indexCandle;
+					}
+				}
+
+				break;
+			}
+
+			default:
+			{
+				if (message is CandleMessage candleMsg)
+				{
 					if (!ContainsLeg(candleMsg.SecurityId))
 						yield break;
 
-					var dict = _candles.SafeAdd(candleMsg.OpenTime);
-
-					dict[candleMsg.SecurityId] = candleMsg.TypedClone();
-
-					if (dict.Count == BasketLegs.Length)
-					{
-						var keys = _candles.Keys.Where(t => t <= candleMsg.OpenTime).ToArray();
-
-						foreach (var key in keys)
-						{
-							var d = _candles.GetAndRemove(key);
-
-							if (d.Count < BasketLegs.Length && !BasketSecurity.FillGapsByZeros)
-								continue;
-
-							var indexCandle = new TimeFrameCandleMessage();
-
-							FillIndexCandle(indexCandle, candleMsg, d.Values.ToArray());
-
-							yield return indexCandle;
-						}
-					}
-
-					break;
+					foreach (var msg in ProcessMessage(GetDict<CandleMessage>(candleMsg.Type), candleMsg.SecurityId, candleMsg, candles => CreateBasketCandle(candles, candleMsg)))
+						yield return msg;
 				}
 
-				default:
-				{
-					if (message is CandleMessage candleMsg)
-					{
-						if (!ContainsLeg(candleMsg.SecurityId))
-							yield break;
-
-						foreach (var msg in ProcessMessage(GetDict<CandleMessage>(candleMsg.Type), candleMsg.SecurityId, candleMsg, candles => CreateBasketCandle(candles, candleMsg)))
-							yield return msg;
-					}
-
-					break;
-				}
+				break;
 			}
-
-			//return Enumerable.Empty<Message>();
 		}
 
-		private Dictionary<SecurityId, TMessage> GetDict<TMessage>(MessageTypes type)
+		//return Enumerable.Empty<Message>();
+	}
+
+	private Dictionary<SecurityId, TMessage> GetDict<TMessage>(MessageTypes type)
+	{
+		return (Dictionary<SecurityId, TMessage>)_messages.SafeAdd(type, _ => new());
+	}
+
+	private void FillIndexCandle(CandleMessage indexCandle, CandleMessage candleMsg, CandleMessage[] candles)
+	{
+		indexCandle.SecurityId = SecurityId;
+		indexCandle.DataType = candleMsg.DataType;
+		indexCandle.OpenTime = candleMsg.OpenTime;
+		indexCandle.CloseTime = candleMsg.CloseTime;
+
+		try
 		{
-			return (Dictionary<SecurityId, TMessage>)_messages.SafeAdd(type, _ => new());
-		}
+			indexCandle.OpenPrice = Calculate(candles, true, c => c.OpenPrice);
+			indexCandle.ClosePrice = Calculate(candles, true, c => c.ClosePrice);
+			indexCandle.HighPrice = Calculate(candles, true, c => c.HighPrice);
+			indexCandle.LowPrice = Calculate(candles, true, c => c.LowPrice);
 
-		private void FillIndexCandle(CandleMessage indexCandle, CandleMessage candleMsg, CandleMessage[] candles)
+			if (BasketSecurity.CalculateExtended)
+			{
+				indexCandle.TotalVolume = Calculate(candles, false, c => c.TotalVolume);
+
+				indexCandle.TotalPrice = Calculate(candles, true, c => c.TotalPrice);
+				indexCandle.OpenVolume = Calculate(candles, false, c => c.OpenVolume ?? 0);
+				indexCandle.CloseVolume = Calculate(candles, false, c => c.CloseVolume ?? 0);
+				indexCandle.HighVolume = Calculate(candles, false, c => c.HighVolume ?? 0);
+				indexCandle.LowVolume = Calculate(candles, false, c => c.LowVolume ?? 0);
+			}
+		}
+		catch (ArithmeticException ex)
 		{
-			indexCandle.SecurityId = SecurityId;
-			indexCandle.DataType = candleMsg.DataType;
-			indexCandle.OpenTime = candleMsg.OpenTime;
-			indexCandle.CloseTime = candleMsg.CloseTime;
+			if (!BasketSecurity.IgnoreErrors)
+				throw;
 
-			try
-			{
-				indexCandle.OpenPrice = Calculate(candles, true, c => c.OpenPrice);
-				indexCandle.ClosePrice = Calculate(candles, true, c => c.ClosePrice);
-				indexCandle.HighPrice = Calculate(candles, true, c => c.HighPrice);
-				indexCandle.LowPrice = Calculate(candles, true, c => c.LowPrice);
-
-				if (BasketSecurity.CalculateExtended)
-				{
-					indexCandle.TotalVolume = Calculate(candles, false, c => c.TotalVolume);
-
-					indexCandle.TotalPrice = Calculate(candles, true, c => c.TotalPrice);
-					indexCandle.OpenVolume = Calculate(candles, false, c => c.OpenVolume ?? 0);
-					indexCandle.CloseVolume = Calculate(candles, false, c => c.CloseVolume ?? 0);
-					indexCandle.HighVolume = Calculate(candles, false, c => c.HighVolume ?? 0);
-					indexCandle.LowVolume = Calculate(candles, false, c => c.LowVolume ?? 0);
-				}
-			}
-			catch (ArithmeticException ex)
-			{
-				if (!BasketSecurity.IgnoreErrors)
-					throw;
-
-				ex.LogError();
-				return;
-			}
-
-			// если некоторые свечи имеют неполные данные, то и индекс будет таким же неполным
-			if (indexCandle.OpenPrice == 0 || indexCandle.HighPrice == 0 || indexCandle.LowPrice == 0 || indexCandle.ClosePrice == 0)
-			{
-				var nonZeroPrice = indexCandle.OpenPrice;
-
-				if (nonZeroPrice == 0)
-					nonZeroPrice = indexCandle.HighPrice;
-
-				if (nonZeroPrice == 0)
-					nonZeroPrice = indexCandle.LowPrice;
-
-				if (nonZeroPrice == 0)
-					nonZeroPrice = indexCandle.LowPrice;
-
-				if (nonZeroPrice != 0)
-				{
-					if (indexCandle.OpenPrice == 0)
-						indexCandle.OpenPrice = nonZeroPrice;
-
-					if (indexCandle.HighPrice == 0)
-						indexCandle.HighPrice = nonZeroPrice;
-
-					if (indexCandle.LowPrice == 0)
-						indexCandle.LowPrice = nonZeroPrice;
-
-					if (indexCandle.ClosePrice == 0)
-						indexCandle.ClosePrice = nonZeroPrice;
-				}
-			}
-
-			if (indexCandle.HighPrice < indexCandle.LowPrice)
-			{
-				(indexCandle.LowPrice, indexCandle.HighPrice) = (indexCandle.HighPrice, indexCandle.LowPrice);
-			}
-
-			if (indexCandle.OpenPrice > indexCandle.HighPrice)
-				indexCandle.HighPrice = indexCandle.OpenPrice;
-			else if (indexCandle.OpenPrice < indexCandle.LowPrice)
-				indexCandle.LowPrice = indexCandle.OpenPrice;
-
-			if (indexCandle.ClosePrice > indexCandle.HighPrice)
-				indexCandle.HighPrice = indexCandle.ClosePrice;
-			else if (indexCandle.ClosePrice < indexCandle.LowPrice)
-				indexCandle.LowPrice = indexCandle.ClosePrice;
-
-			indexCandle.State = CandleStates.Finished;
+			ex.LogError();
+			return;
 		}
 
-		private CandleMessage CreateBasketCandle(CandleMessage[] candles, CandleMessage last)
+		// если некоторые свечи имеют неполные данные, то и индекс будет таким же неполным
+		if (indexCandle.OpenPrice == 0 || indexCandle.HighPrice == 0 || indexCandle.LowPrice == 0 || indexCandle.ClosePrice == 0)
 		{
-			if (last == null)
-				throw new ArgumentNullException(nameof(last));
+			var nonZeroPrice = indexCandle.OpenPrice;
 
-			var indexCandle = last.GetType().CreateCandleMessage();
+			if (nonZeroPrice == 0)
+				nonZeroPrice = indexCandle.HighPrice;
 
-			FillIndexCandle(indexCandle, last, candles);
+			if (nonZeroPrice == 0)
+				nonZeroPrice = indexCandle.LowPrice;
 
-			return indexCandle;
+			if (nonZeroPrice == 0)
+				nonZeroPrice = indexCandle.LowPrice;
+
+			if (nonZeroPrice != 0)
+			{
+				if (indexCandle.OpenPrice == 0)
+					indexCandle.OpenPrice = nonZeroPrice;
+
+				if (indexCandle.HighPrice == 0)
+					indexCandle.HighPrice = nonZeroPrice;
+
+				if (indexCandle.LowPrice == 0)
+					indexCandle.LowPrice = nonZeroPrice;
+
+				if (indexCandle.ClosePrice == 0)
+					indexCandle.ClosePrice = nonZeroPrice;
+			}
 		}
 
-		private IEnumerable<Message> ProcessMessage<TMessage>(Dictionary<SecurityId, TMessage> dict, SecurityId securityId, TMessage message, Func<TMessage[], TMessage> convert)
-			where TMessage : Message
+		if (indexCandle.HighPrice < indexCandle.LowPrice)
 		{
-			dict[securityId] = message.TypedClone();
-
-			if (dict.Count != BasketLegs.Length)
-				yield break;
-
-			yield return convert(BasketLegs.Select(leg => dict[leg]).ToArray());
-			dict.Clear();
+			(indexCandle.LowPrice, indexCandle.HighPrice) = (indexCandle.HighPrice, indexCandle.LowPrice);
 		}
 
-		private decimal Calculate(IEnumerable<CandleMessage> candles, bool isPrice, Func<CandleMessage, decimal> getPart)
+		if (indexCandle.OpenPrice > indexCandle.HighPrice)
+			indexCandle.HighPrice = indexCandle.OpenPrice;
+		else if (indexCandle.OpenPrice < indexCandle.LowPrice)
+			indexCandle.LowPrice = indexCandle.OpenPrice;
+
+		if (indexCandle.ClosePrice > indexCandle.HighPrice)
+			indexCandle.HighPrice = indexCandle.ClosePrice;
+		else if (indexCandle.ClosePrice < indexCandle.LowPrice)
+			indexCandle.LowPrice = indexCandle.ClosePrice;
+
+		indexCandle.State = CandleStates.Finished;
+	}
+
+	private CandleMessage CreateBasketCandle(CandleMessage[] candles, CandleMessage last)
+	{
+		if (last == null)
+			throw new ArgumentNullException(nameof(last));
+
+		var indexCandle = last.GetType().CreateCandleMessage();
+
+		FillIndexCandle(indexCandle, last, candles);
+
+		return indexCandle;
+	}
+
+	private IEnumerable<Message> ProcessMessage<TMessage>(Dictionary<SecurityId, TMessage> dict, SecurityId securityId, TMessage message, Func<TMessage[], TMessage> convert)
+		where TMessage : Message
+	{
+		dict[securityId] = message.TypedClone();
+
+		if (dict.Count != BasketLegs.Length)
+			yield break;
+
+		yield return convert(BasketLegs.Select(leg => dict[leg]).ToArray());
+		dict.Clear();
+	}
+
+	private decimal Calculate(IEnumerable<CandleMessage> candles, bool isPrice, Func<CandleMessage, decimal> getPart)
+	{
+		var values = candles.Select(getPart).ToArray();
+
+		try
 		{
-			var values = candles.Select(getPart).ToArray();
-
-			try
-			{
-				return Calculate(values, isPrice);
-			}
-			catch (ArithmeticException excp)
-			{
-				throw new ArithmeticException(LocalizedStrings.BuildIndexError.Put(SecurityId, BasketLegs.Zip(values, (s, v) => $"{s}: {v}").JoinCommaSpace()), excp);
-			}
+			return Calculate(values, isPrice);
 		}
-
-		private decimal Calculate(decimal[] values, bool isPrice)
+		catch (ArithmeticException excp)
 		{
-			var value = OnCalculate(values);
+			throw new ArithmeticException(LocalizedStrings.BuildIndexError.Put(SecurityId, BasketLegs.Zip(values, (s, v) => $"{s}: {v}").JoinCommaSpace()), excp);
+		}
+	}
 
-			if (isPrice)
-			{
-				var step = Security.PriceStep;
+	private decimal Calculate(decimal[] values, bool isPrice)
+	{
+		var value = OnCalculate(values);
 
-				if (step != null)
-					value = Security.ShrinkPrice(value);
-			}
-			else
-			{
-				var step = Security.VolumeStep;
+		if (isPrice)
+		{
+			var step = Security.PriceStep;
 
-				if (step != null)
-					value = value.Round(step.Value, step.Value.GetCachedDecimals());
-			}
+			if (step != null)
+				value = Security.ShrinkPrice(value);
+		}
+		else
+		{
+			var step = Security.VolumeStep;
 
-			return value;
+			if (step != null)
+				value = value.Round(step.Value, step.Value.GetCachedDecimals());
 		}
 
-		/// <summary>
-		/// To calculate the basket value.
-		/// </summary>
-		/// <param name="values">Values of basket composite instruments <see cref="BasketSecurity.InnerSecurityIds"/>.</param>
-		/// <returns>The basket value.</returns>
-		protected abstract decimal OnCalculate(decimal[] values);
+		return value;
 	}
 
 	/// <summary>
-	/// Index securities processor for <see cref="WeightedIndexSecurity"/>.
+	/// To calculate the basket value.
 	/// </summary>
-	public class WeightedIndexSecurityProcessor : IndexSecurityBaseProcessor<WeightedIndexSecurity>
+	/// <param name="values">Values of basket composite instruments <see cref="BasketSecurity.InnerSecurityIds"/>.</param>
+	/// <returns>The basket value.</returns>
+	protected abstract decimal OnCalculate(decimal[] values);
+}
+
+/// <summary>
+/// Index securities processor for <see cref="WeightedIndexSecurity"/>.
+/// </summary>
+public class WeightedIndexSecurityProcessor : IndexSecurityBaseProcessor<WeightedIndexSecurity>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="WeightedIndexSecurityProcessor"/>.
+	/// </summary>
+	/// <param name="security">Security.</param>
+	public WeightedIndexSecurityProcessor(Security security)
+		: base(security)
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="WeightedIndexSecurityProcessor"/>.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		public WeightedIndexSecurityProcessor(Security security)
-			: base(security)
-		{
-		}
+	}
 
-		/// <inheritdoc />
-		protected override decimal OnCalculate(decimal[] values)
-		{
-			if (values == null)
-				throw new ArgumentNullException(nameof(values));
+	/// <inheritdoc />
+	protected override decimal OnCalculate(decimal[] values)
+	{
+		if (values == null)
+			throw new ArgumentNullException(nameof(values));
 
-			if (values.Length != BasketLegs.Length)// || !InnerSecurities.All(prices.ContainsKey))
-				throw new ArgumentOutOfRangeException(nameof(values));
+		if (values.Length != BasketLegs.Length)// || !InnerSecurities.All(prices.ContainsKey))
+			throw new ArgumentOutOfRangeException(nameof(values));
 
-			var value = 0M;
+		var value = 0M;
 
-			for (var i = 0; i < values.Length; i++)
-				value += BasketSecurity.Weights.CachedValues[i] * values[i];
+		for (var i = 0; i < values.Length; i++)
+			value += BasketSecurity.Weights.CachedValues[i] * values[i];
 
-			return value;
-		}
+		return value;
 	}
 }

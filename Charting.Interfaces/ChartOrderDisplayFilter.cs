@@ -1,24 +1,23 @@
-﻿namespace StockSharp.Charting
+﻿namespace StockSharp.Charting;
+
+using System.ComponentModel.DataAnnotations;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// Orders display filter.
+/// </summary>
+public enum ChartOrderDisplayFilter
 {
-	using System.ComponentModel.DataAnnotations;
+	/// <summary>All orders.</summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AllOrdersKey)]
+	All,
 
-	using StockSharp.Localization;
+	/// <summary>Orders with errors.</summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ErrorOrdersOnlyKey)]
+	ErrorsOnly,
 
-	/// <summary>
-	/// Orders display filter.
-	/// </summary>
-	public enum ChartOrderDisplayFilter
-	{
-		/// <summary>All orders.</summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AllOrdersKey)]
-		All,
-
-		/// <summary>Orders with errors.</summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ErrorOrdersOnlyKey)]
-		ErrorsOnly,
-
-		/// <summary>Orders with no errors.</summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NoErrorOrdersOnlyKey)]
-		NoErrorsOnly
-	}
+	/// <summary>Orders with no errors.</summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NoErrorOrdersOnlyKey)]
+	NoErrorsOnly
 }

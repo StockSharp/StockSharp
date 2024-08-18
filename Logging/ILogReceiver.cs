@@ -1,141 +1,140 @@
-namespace StockSharp.Logging
+namespace StockSharp.Logging;
+
+using System;
+
+using Ecng.Common;
+
+/// <summary>
+/// Logs recipient interface.
+/// </summary>
+public interface ILogReceiver : ILogSource
 {
-	using System;
-
-	using Ecng.Common;
-
 	/// <summary>
-	/// Logs recipient interface.
+	/// To record a message to the log.
 	/// </summary>
-	public interface ILogReceiver : ILogSource
+	/// <param name="message">A debug message.</param>
+	void AddLog(LogMessage message);
+}
+
+/// <summary>
+/// The base implementation <see cref="ILogReceiver"/>.
+/// </summary>
+public abstract class BaseLogReceiver : BaseLogSource, ILogReceiver
+{
+	/// <summary>
+	/// Initialize <see cref="BaseLogReceiver"/>.
+	/// </summary>
+	protected BaseLogReceiver()
 	{
-		/// <summary>
-		/// To record a message to the log.
-		/// </summary>
-		/// <param name="message">A debug message.</param>
-		void AddLog(LogMessage message);
+	}
+
+	void ILogReceiver.AddLog(LogMessage message)
+	{
+		RaiseLog(message);
+	}
+}
+
+/// <summary>
+/// Global logs receiver.
+/// </summary>
+public class GlobalLogReceiver : ILogReceiver
+{
+	private ILogReceiver App => LogManager.Instance?.Application;
+
+	private GlobalLogReceiver()
+	{
 	}
 
 	/// <summary>
-	/// The base implementation <see cref="ILogReceiver"/>.
+	/// Instance.
 	/// </summary>
-	public abstract class BaseLogReceiver : BaseLogSource, ILogReceiver
-	{
-		/// <summary>
-		/// Initialize <see cref="BaseLogReceiver"/>.
-		/// </summary>
-		protected BaseLogReceiver()
-		{
-		}
+	public static GlobalLogReceiver Instance { get; } = new GlobalLogReceiver();
 
-		void ILogReceiver.AddLog(LogMessage message)
+	Guid ILogSource.Id => App?.Id ?? default;
+
+	string ILogSource.Name
+	{
+		get => App?.Name;
+		set { }
+	}
+	
+	ILogSource ILogSource.Parent
+	{
+		get => App?.Parent;
+		set => throw new NotSupportedException();
+	}
+
+	/// <inheritdoc />
+	public event Action<ILogSource> ParentRemoved
+	{
+		add { }
+		remove { }
+	}
+	
+	LogLevels ILogSource.LogLevel
+	{
+		get => App?.LogLevel ?? default;
+		set
 		{
-			RaiseLog(message);
+			var app = App;
+
+			if (app == null)
+				return;
+
+			app.LogLevel = value;
 		}
 	}
 
-	/// <summary>
-	/// Global logs receiver.
-	/// </summary>
-	public class GlobalLogReceiver : ILogReceiver
+	DateTimeOffset ILogSource.CurrentTime => App?.CurrentTime ?? default;
+
+	bool ILogSource.IsRoot => true;
+
+	event Action<LogMessage> ILogSource.Log
 	{
-		private ILogReceiver App => LogManager.Instance?.Application;
-
-		private GlobalLogReceiver()
+		add
 		{
+			var app = App;
+
+			if (app == null)
+				return;
+
+			app.Log += value;
 		}
-
-		/// <summary>
-		/// Instance.
-		/// </summary>
-		public static GlobalLogReceiver Instance { get; } = new GlobalLogReceiver();
-
-		Guid ILogSource.Id => App?.Id ?? default;
-
-		string ILogSource.Name
+		remove
 		{
-			get => App?.Name;
-			set { }
-		}
-		
-		ILogSource ILogSource.Parent
-		{
-			get => App?.Parent;
-			set => throw new NotSupportedException();
-		}
+			var app = App;
 
-		/// <inheritdoc />
-		public event Action<ILogSource> ParentRemoved
-		{
-			add { }
-			remove { }
-		}
-		
-		LogLevels ILogSource.LogLevel
-		{
-			get => App?.LogLevel ?? default;
-			set
-			{
-				var app = App;
+			if (app == null)
+				return;
 
-				if (app == null)
-					return;
-
-				app.LogLevel = value;
-			}
-		}
-
-		DateTimeOffset ILogSource.CurrentTime => App?.CurrentTime ?? default;
-
-		bool ILogSource.IsRoot => true;
-
-		event Action<LogMessage> ILogSource.Log
-		{
-			add
-			{
-				var app = App;
-
-				if (app == null)
-					return;
-
-				app.Log += value;
-			}
-			remove
-			{
-				var app = App;
-
-				if (app == null)
-					return;
-
-				app.Log -= value;
-			}
-		}
-
-		void ILogReceiver.AddLog(LogMessage message)
-		{
-			App?.AddLog(message);
-		}
-
-		void IDisposable.Dispose()
-		{
-			GC.SuppressFinalize(this);
+			app.Log -= value;
 		}
 	}
 
-	/// <summary>
-	/// <see cref="BaseLogReceiver"/>.
-	/// </summary>
-	public class LogReceiver : BaseLogReceiver
+	void ILogReceiver.AddLog(LogMessage message)
 	{
-		/// <summary>
-		/// Create instance.
-		/// </summary>
-		/// <param name="name">Name.</param>
-		public LogReceiver(string name = null)
-		{
-			if (!name.IsEmptyOrWhiteSpace())
-				// ReSharper disable once VirtualMemberCallInConstructor
-				Name = name;
-		}
+		App?.AddLog(message);
+	}
+
+	void IDisposable.Dispose()
+	{
+		GC.SuppressFinalize(this);
+	}
+}
+
+/// <summary>
+/// <see cref="BaseLogReceiver"/>.
+/// </summary>
+public class LogReceiver : BaseLogReceiver
+{
+	/// <summary>
+	/// Create instance.
+	/// </summary>
+	/// <param name="name">Name.</param>
+	public LogReceiver(string name = null)
+	{
+		if (!name.IsEmptyOrWhiteSpace())
+			// ReSharper disable once VirtualMemberCallInConstructor
+			Name = name;
 	}
 }

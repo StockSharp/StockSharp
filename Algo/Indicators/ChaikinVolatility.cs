@@ -1,100 +1,99 @@
-﻿namespace StockSharp.Algo.Indicators
+﻿namespace StockSharp.Algo.Indicators;
+
+using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+using Ecng.Serialization;
+using Ecng.ComponentModel;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// Chaikin volatility.
+/// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/chv.html
+/// </remarks>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.ChaikinVolatilityKey,
+	Description = LocalizedStrings.ChaikinVolatilityIndicatorKey)]
+[IndicatorIn(typeof(CandleIndicatorValue))]
+[Doc("topics/api/indicators/list_of_indicators/chv.html")]
+public class ChaikinVolatility : BaseIndicator
 {
-	using System;
-	using System.ComponentModel;
-	using System.ComponentModel.DataAnnotations;
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ChaikinVolatility"/>.
+	/// </summary>
+	public ChaikinVolatility()
+	{
+		Ema = new ExponentialMovingAverage();
+		Roc = new RateOfChange();
+	}
 
-	using Ecng.Serialization;
-	using Ecng.ComponentModel;
+	/// <inheritdoc />
+	public override int NumValuesToInitialize => Math.Max(Ema.NumValuesToInitialize, Roc.NumValuesToInitialize);
 
-	using StockSharp.Localization;
+	/// <inheritdoc />
+	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
 	/// <summary>
-	/// Chaikin volatility.
+	/// Moving Average.
 	/// </summary>
-	/// <remarks>
-	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/chv.html
-	/// </remarks>
+	[TypeConverter(typeof(ExpandableObjectConverter))]
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.ChaikinVolatilityKey,
-		Description = LocalizedStrings.ChaikinVolatilityIndicatorKey)]
-	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[Doc("topics/api/indicators/list_of_indicators/chv.html")]
-	public class ChaikinVolatility : BaseIndicator
+		Name = LocalizedStrings.MAKey,
+		Description = LocalizedStrings.MovingAverageKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public ExponentialMovingAverage Ema { get; }
+
+	/// <summary>
+	/// Rate of change.
+	/// </summary>
+	[TypeConverter(typeof(ExpandableObjectConverter))]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.ROCKey,
+		Description = LocalizedStrings.RateOfChangeKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public RateOfChange Roc { get; }
+
+	/// <inheritdoc />
+	protected override bool CalcIsFormed() => Roc.IsFormed;
+
+	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ChaikinVolatility"/>.
-		/// </summary>
-		public ChaikinVolatility()
+		var (_, high, low, _) = input.GetOhlc();
+
+		var emaValue = Ema.Process(input.SetValue(this, high - low));
+
+		if (Ema.IsFormed)
 		{
-			Ema = new ExponentialMovingAverage();
-			Roc = new RateOfChange();
+			var val = Roc.Process(emaValue);
+			return new DecimalIndicatorValue(this, val.GetValue<decimal>());
 		}
 
-		/// <inheritdoc />
-		public override int NumValuesToInitialize => Math.Max(Ema.NumValuesToInitialize, Roc.NumValuesToInitialize);
+		return new DecimalIndicatorValue(this);
+	}
 
-		/// <inheritdoc />
-		public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
+	/// <inheritdoc />
+	public override void Load(SettingsStorage storage)
+	{
+		base.Load(storage);
 
-		/// <summary>
-		/// Moving Average.
-		/// </summary>
-		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.MAKey,
-			Description = LocalizedStrings.MovingAverageKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		public ExponentialMovingAverage Ema { get; }
+		Ema.LoadIfNotNull(storage, nameof(Ema));
+		Roc.LoadIfNotNull(storage, nameof(Roc));
+	}
 
-		/// <summary>
-		/// Rate of change.
-		/// </summary>
-		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.ROCKey,
-			Description = LocalizedStrings.RateOfChangeKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		public RateOfChange Roc { get; }
+	/// <inheritdoc />
+	public override void Save(SettingsStorage storage)
+	{
+		base.Save(storage);
 
-		/// <inheritdoc />
-		protected override bool CalcIsFormed() => Roc.IsFormed;
-
-		/// <inheritdoc />
-		protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		{
-			var (_, high, low, _) = input.GetOhlc();
-
-			var emaValue = Ema.Process(input.SetValue(this, high - low));
-
-			if (Ema.IsFormed)
-			{
-				var val = Roc.Process(emaValue);
-				return new DecimalIndicatorValue(this, val.GetValue<decimal>());
-			}
-
-			return new DecimalIndicatorValue(this);
-		}
-
-		/// <inheritdoc />
-		public override void Load(SettingsStorage storage)
-		{
-			base.Load(storage);
-
-			Ema.LoadIfNotNull(storage, nameof(Ema));
-			Roc.LoadIfNotNull(storage, nameof(Roc));
-		}
-
-		/// <inheritdoc />
-		public override void Save(SettingsStorage storage)
-		{
-			base.Save(storage);
-
-			storage.SetValue(nameof(Ema), Ema.Save());
-			storage.SetValue(nameof(Roc), Roc.Save());
-		}
+		storage.SetValue(nameof(Ema), Ema.Save());
+		storage.SetValue(nameof(Roc), Roc.Save());
 	}
 }

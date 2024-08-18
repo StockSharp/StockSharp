@@ -1,82 +1,81 @@
-namespace StockSharp.Messages
-{
-	using System;
-	using System.Runtime.Serialization;
+namespace StockSharp.Messages;
 
-	using Ecng.Common;
+using System;
+using System.Runtime.Serialization;
+
+using Ecng.Common;
+
+/// <summary>
+/// Remote file command.
+/// </summary>
+public class RemoteFileCommandMessage : CommandMessage, ISecurityIdMessage, IFileMessage
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="RemoteFileCommandMessage"/>.
+	/// </summary>
+	public RemoteFileCommandMessage()
+		: base(MessageTypes.RemoteFileCommand)
+	{
+		Scope = CommandScopes.File;
+	}
+
+	/// <inheritdoc />
+	[DataMember]
+	public SecurityId SecurityId { get; set; }
 
 	/// <summary>
-	/// Remote file command.
+	/// Market data type.
 	/// </summary>
-	public class RemoteFileCommandMessage : CommandMessage, ISecurityIdMessage, IFileMessage
+	[DataMember]
+	public DataType FileDataType { get; set; }
+
+	/// <inheritdoc />
+	[DataMember]
+	public override DateTimeOffset? From { get; set; }
+
+	/// <inheritdoc />
+	[DataMember]
+	public override DateTimeOffset? To { get; set; }
+
+	/// <summary>
+	/// Storage format.
+	/// </summary>
+	[DataMember]
+	public int Format { get; set; }
+
+	private byte[] _body = Array.Empty<byte>();
+
+	/// <summary>
+	/// File body.
+	/// </summary>
+	[DataMember]
+	public byte[] Body
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="RemoteFileCommandMessage"/>.
-		/// </summary>
-		public RemoteFileCommandMessage()
-			: base(MessageTypes.RemoteFileCommand)
+		get => _body;
+		set => _body = value ?? throw new ArgumentNullException(nameof(value));
+	}
+
+	/// <summary>
+	/// Create a copy of <see cref="RemoteFileCommandMessage"/>.
+	/// </summary>
+	/// <returns>Copy.</returns>
+	public override Message Clone()
+	{
+		var clone = new RemoteFileCommandMessage
 		{
-			Scope = CommandScopes.File;
-		}
+			SecurityId = SecurityId,
+			FileDataType = FileDataType?.TypedClone(),
+			Format = Format,
+			Body = Body,
+		};
 
-		/// <inheritdoc />
-		[DataMember]
-		public SecurityId SecurityId { get; set; }
+		CopyTo(clone);
+		return clone;
+	}
 
-		/// <summary>
-		/// Market data type.
-		/// </summary>
-		[DataMember]
-		public DataType FileDataType { get; set; }
-
-		/// <inheritdoc />
-		[DataMember]
-		public override DateTimeOffset? From { get; set; }
-
-		/// <inheritdoc />
-		[DataMember]
-		public override DateTimeOffset? To { get; set; }
-
-		/// <summary>
-		/// Storage format.
-		/// </summary>
-		[DataMember]
-		public int Format { get; set; }
-
-		private byte[] _body = Array.Empty<byte>();
-
-		/// <summary>
-		/// File body.
-		/// </summary>
-		[DataMember]
-		public byte[] Body
-		{
-			get => _body;
-			set => _body = value ?? throw new ArgumentNullException(nameof(value));
-		}
-
-		/// <summary>
-		/// Create a copy of <see cref="RemoteFileCommandMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			var clone = new RemoteFileCommandMessage
-			{
-				SecurityId = SecurityId,
-				FileDataType = FileDataType?.TypedClone(),
-				Format = Format,
-				Body = Body,
-			};
-
-			CopyTo(clone);
-			return clone;
-		}
-
-		/// <inheritdoc />
-		public override string ToString()
-		{
-			return base.ToString() + $",SecId={SecurityId},DT={FileDataType},Fmt={Format},BodyLen={Body.Length}";
-		}
+	/// <inheritdoc />
+	public override string ToString()
+	{
+		return base.ToString() + $",SecId={SecurityId},DT={FileDataType},Fmt={Format},BodyLen={Body.Length}";
 	}
 }

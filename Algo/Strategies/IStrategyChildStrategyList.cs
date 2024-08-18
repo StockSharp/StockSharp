@@ -1,11 +1,10 @@
-namespace StockSharp.Algo.Strategies
-{
-	using Ecng.Collections;
+namespace StockSharp.Algo.Strategies;
 
-	/// <summary>
-	/// The collection of subsidiary strategies.
-	/// </summary>
-	public interface IStrategyChildStrategyList : INotifyList<Strategy>
-	{
-	}
+using Ecng.Collections;
+
+/// <summary>
+/// The collection of subsidiary strategies.
+/// </summary>
+public interface IStrategyChildStrategyList : INotifyList<Strategy>
+{
 }

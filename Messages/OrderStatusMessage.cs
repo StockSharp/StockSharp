@@ -1,137 +1,136 @@
-namespace StockSharp.Messages
+namespace StockSharp.Messages;
+
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Runtime.Serialization;
+
+using Ecng.Common;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// A message requesting current registered orders and trades.
+/// </summary>
+[DataContract]
+[Serializable]
+public class OrderStatusMessage : OrderCancelMessage, ISubscriptionMessage
 {
-	using System;
-	using System.ComponentModel.DataAnnotations;
-	using System.Linq;
-	using System.Runtime.Serialization;
+	/// <inheritdoc />
+	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.FromKey,
+		Description = LocalizedStrings.StartDateDescKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public DateTimeOffset? From { get; set; }
 
-	using Ecng.Common;
+	/// <inheritdoc />
+	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.UntilKey,
+		Description = LocalizedStrings.ToDateDescKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public DateTimeOffset? To { get; set; }
 
-	using StockSharp.Localization;
+	/// <inheritdoc />
+	[DataMember]
+	public long? Skip { get; set; }
+
+	/// <inheritdoc />
+	[DataMember]
+	public long? Count { get; set; }
+
+	/// <inheritdoc />
+	[DataMember]
+	public FillGapsDays? FillGaps { get; set; }
+
+	/// <inheritdoc />
+	[DataMember]
+	public bool IsSubscribe { get; set; }
+
+	private OrderStates[] _states = Array.Empty<OrderStates>();
 
 	/// <summary>
-	/// A message requesting current registered orders and trades.
+	/// Filter order by the specified states.
 	/// </summary>
-	[DataContract]
-	[Serializable]
-	public class OrderStatusMessage : OrderCancelMessage, ISubscriptionMessage
+	[DataMember]
+	public OrderStates[] States
 	{
-		/// <inheritdoc />
-		[DataMember]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.FromKey,
-			Description = LocalizedStrings.StartDateDescKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		public DateTimeOffset? From { get; set; }
+		get => _states;
+		set => _states = value ?? throw new ArgumentNullException(nameof(value));
+	}
 
-		/// <inheritdoc />
-		[DataMember]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.UntilKey,
-			Description = LocalizedStrings.ToDateDescKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		public DateTimeOffset? To { get; set; }
+	bool ISubscriptionMessage.FilterEnabled
+		=>
+		States.Length != 0 || SecurityId != default ||
+		!PortfolioName.IsEmpty() || Side != null ||
+		Volume != null || !StrategyId.IsEmpty();
 
-		/// <inheritdoc />
-		[DataMember]
-		public long? Skip { get; set; }
+	/// <summary>
+	/// Initializes a new instance of the <see cref="OrderStatusMessage"/>.
+	/// </summary>
+	public OrderStatusMessage()
+		: base(MessageTypes.OrderStatus)
+	{
+	}
 
-		/// <inheritdoc />
-		[DataMember]
-		public long? Count { get; set; }
+	DataType ISubscriptionMessage.DataType => DataType.Transactions;
 
-		/// <inheritdoc />
-		[DataMember]
-		public FillGapsDays? FillGaps { get; set; }
+	/// <summary>
+	/// Copy the message into the <paramref name="destination" />.
+	/// </summary>
+	/// <param name="destination">The object, to which copied information.</param>
+	protected void CopyTo(OrderStatusMessage destination)
+	{
+		base.CopyTo(destination);
 
-		/// <inheritdoc />
-		[DataMember]
-		public bool IsSubscribe { get; set; }
+		destination.From = From;
+		destination.To = To;
+		destination.Skip = Skip;
+		destination.Count = Count;
+		destination.FillGaps = FillGaps;
+		destination.IsSubscribe = IsSubscribe;
+		destination.States = States.ToArray();
+	}
 
-		private OrderStates[] _states = Array.Empty<OrderStates>();
+	/// <summary>
+	/// Create a copy of <see cref="OrderStatusMessage"/>.
+	/// </summary>
+	/// <returns>Copy.</returns>
+	public override Message Clone()
+	{
+		var clone = new OrderStatusMessage();
+		CopyTo(clone);
+		return clone;
+	}
 
-		/// <summary>
-		/// Filter order by the specified states.
-		/// </summary>
-		[DataMember]
-		public OrderStates[] States
-		{
-			get => _states;
-			set => _states = value ?? throw new ArgumentNullException(nameof(value));
-		}
+	/// <inheritdoc />
+	public override string ToString()
+	{
+		var str = base.ToString();
 
-		bool ISubscriptionMessage.FilterEnabled
-			=>
-			States.Length != 0 || SecurityId != default ||
-			!PortfolioName.IsEmpty() || Side != null ||
-			Volume != null || !StrategyId.IsEmpty();
+		str += $",IsSubscribe={IsSubscribe}";
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="OrderStatusMessage"/>.
-		/// </summary>
-		public OrderStatusMessage()
-			: base(MessageTypes.OrderStatus)
-		{
-		}
+		if (From != default)
+			str += $",From={From}";
 
-		DataType ISubscriptionMessage.DataType => DataType.Transactions;
+		if (To != default)
+			str += $",To={To}";
 
-		/// <summary>
-		/// Copy the message into the <paramref name="destination" />.
-		/// </summary>
-		/// <param name="destination">The object, to which copied information.</param>
-		protected void CopyTo(OrderStatusMessage destination)
-		{
-			base.CopyTo(destination);
+		if (Skip != default)
+			str += $",Skip={Skip}";
 
-			destination.From = From;
-			destination.To = To;
-			destination.Skip = Skip;
-			destination.Count = Count;
-			destination.FillGaps = FillGaps;
-			destination.IsSubscribe = IsSubscribe;
-			destination.States = States.ToArray();
-		}
+		if (Count != default)
+			str += $",Count={Count}";
 
-		/// <summary>
-		/// Create a copy of <see cref="OrderStatusMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			var clone = new OrderStatusMessage();
-			CopyTo(clone);
-			return clone;
-		}
+		if (FillGaps != default)
+			str += $",Gaps={FillGaps}";
 
-		/// <inheritdoc />
-		public override string ToString()
-		{
-			var str = base.ToString();
+		if (States.Length > 0)
+			str += $",States={States.Select(s => s.To<string>()).JoinComma()}";
 
-			str += $",IsSubscribe={IsSubscribe}";
-
-			if (From != default)
-				str += $",From={From}";
-
-			if (To != default)
-				str += $",To={To}";
-
-			if (Skip != default)
-				str += $",Skip={Skip}";
-
-			if (Count != default)
-				str += $",Count={Count}";
-
-			if (FillGaps != default)
-				str += $",Gaps={FillGaps}";
-
-			if (States.Length > 0)
-				str += $",States={States.Select(s => s.To<string>()).JoinComma()}";
-
-			return str;
-		}
+		return str;
 	}
 }

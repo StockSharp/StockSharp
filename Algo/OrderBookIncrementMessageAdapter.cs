@@ -1,282 +1,281 @@
-﻿namespace StockSharp.Algo
+﻿namespace StockSharp.Algo;
+
+using System.Collections.Generic;
+using System.Linq;
+
+using Ecng.Collections;
+using Ecng.Common;
+
+using StockSharp.Logging;
+using StockSharp.Messages;
+
+/// <summary>
+/// The messages adapter build order book from incremental updates <see cref="QuoteChangeStates.Increment"/>.
+/// </summary>
+public class OrderBookIncrementMessageAdapter : MessageAdapterWrapper
 {
-	using System.Collections.Generic;
-	using System.Linq;
+	private class BookInfo
+	{
+		public BookInfo(SecurityId securityId)
+			=> Builder = new OrderBookIncrementBuilder(securityId);
 
-	using Ecng.Collections;
-	using Ecng.Common;
+		public readonly OrderBookIncrementBuilder Builder;
+		public readonly CachedSynchronizedSet<long> SubscriptionIds = new();
+	}
 
-	using StockSharp.Logging;
-	using StockSharp.Messages;
+	private readonly SyncObject _syncObject = new();
+
+	private readonly Dictionary<long, BookInfo> _byId = new();
+	private readonly Dictionary<SecurityId, BookInfo> _online = new();
+	private readonly HashSet<long> _passThrough = new();
+	private readonly CachedSynchronizedSet<long> _allSecSubscriptions = new();
+	private readonly CachedSynchronizedSet<long> _allSecSubscriptionsPassThrough = new();
 
 	/// <summary>
-	/// The messages adapter build order book from incremental updates <see cref="QuoteChangeStates.Increment"/>.
+	/// Initializes a new instance of the <see cref="OrderBookIncrementMessageAdapter"/>.
 	/// </summary>
-	public class OrderBookIncrementMessageAdapter : MessageAdapterWrapper
+	/// <param name="innerAdapter">Underlying adapter.</param>
+	public OrderBookIncrementMessageAdapter(IMessageAdapter innerAdapter)
+		: base(innerAdapter)
 	{
-		private class BookInfo
+	}
+
+	/// <inheritdoc />
+	protected override bool OnSendInMessage(Message message)
+	{
+		switch (message.Type)
 		{
-			public BookInfo(SecurityId securityId)
-				=> Builder = new OrderBookIncrementBuilder(securityId);
-
-			public readonly OrderBookIncrementBuilder Builder;
-			public readonly CachedSynchronizedSet<long> SubscriptionIds = new();
-		}
-
-		private readonly SyncObject _syncObject = new();
-
-		private readonly Dictionary<long, BookInfo> _byId = new();
-		private readonly Dictionary<SecurityId, BookInfo> _online = new();
-		private readonly HashSet<long> _passThrough = new();
-		private readonly CachedSynchronizedSet<long> _allSecSubscriptions = new();
-		private readonly CachedSynchronizedSet<long> _allSecSubscriptionsPassThrough = new();
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="OrderBookIncrementMessageAdapter"/>.
-		/// </summary>
-		/// <param name="innerAdapter">Underlying adapter.</param>
-		public OrderBookIncrementMessageAdapter(IMessageAdapter innerAdapter)
-			: base(innerAdapter)
-		{
-		}
-
-		/// <inheritdoc />
-		protected override bool OnSendInMessage(Message message)
-		{
-			switch (message.Type)
+			case MessageTypes.Reset:
 			{
-				case MessageTypes.Reset:
+				lock (_syncObject)
 				{
-					lock (_syncObject)
-					{
-						_byId.Clear();
-						_online.Clear();
-						_passThrough.Clear();
-						_allSecSubscriptions.Clear();
-						_allSecSubscriptionsPassThrough.Clear();
-					}
-
-					break;
+					_byId.Clear();
+					_online.Clear();
+					_passThrough.Clear();
+					_allSecSubscriptions.Clear();
+					_allSecSubscriptionsPassThrough.Clear();
 				}
 
-				case MessageTypes.MarketData:
-				{
-					var mdMsg = (MarketDataMessage)message;
-
-					if (mdMsg.IsSubscribe)
-					{
-						if (mdMsg.DataType2 == DataType.MarketDepth)
-						{
-							var transId = mdMsg.TransactionId;
-
-							lock (_syncObject)
-							{
-								if (mdMsg.SecurityId == default)
-								{
-									if (mdMsg.DoNotBuildOrderBookIncrement)
-										_allSecSubscriptionsPassThrough.Add(transId);
-									else
-										_allSecSubscriptions.Add(transId);
-
-									break;
-								}
-
-								if (mdMsg.DoNotBuildOrderBookIncrement)
-								{
-									_passThrough.Add(transId);
-									break;
-								}
-
-								var info = new BookInfo(mdMsg.SecurityId)
-								{
-									Builder = { Parent = this }
-								};
-
-								info.SubscriptionIds.Add(transId);
-								
-								_byId.Add(transId, info);
-							}
-
-							this.AddInfoLog("OB incr subscribed {0}/{1}.", mdMsg.SecurityId, transId);
-						}
-					}
-					else
-					{
-						RemoveSubscription(mdMsg.OriginalTransactionId);
-					}
-
-					break;
-				}
+				break;
 			}
 
-			return base.OnSendInMessage(message);
-		}
-
-		private void RemoveSubscription(long id)
-		{
-			lock (_syncObject)
+			case MessageTypes.MarketData:
 			{
-				var changeId = true;
+				var mdMsg = (MarketDataMessage)message;
 
-				if (!_byId.TryGetAndRemove(id, out var info))
+				if (mdMsg.IsSubscribe)
 				{
-					changeId = false;
-
-					info = _online.FirstOrDefault(p => p.Value.SubscriptionIds.Contains(id)).Value;
-
-					if (info == null)
-						return;
-				}
-
-				var secId = info.Builder.SecurityId;
-
-				if (info != _online.TryGetValue(secId))
-					return;
-
-				info.SubscriptionIds.Remove(id);
-
-				var ids = info.SubscriptionIds.Cache;
-
-				if (ids.Length == 0)
-					_online.Remove(secId);
-				else if (changeId)
-					_byId.Add(ids[0], info);
-			}
-
-			this.AddInfoLog("Unsubscribed {0}.", id);
-		}
-
-		/// <inheritdoc />
-		protected override void OnInnerAdapterNewOutMessage(Message message)
-		{
-			List<QuoteChangeMessage> clones = null;
-
-			switch (message.Type)
-			{
-				case MessageTypes.SubscriptionResponse:
-				{
-					var responseMsg = (SubscriptionResponseMessage)message;
-
-					if (!responseMsg.IsOk())
-						RemoveSubscription(responseMsg.OriginalTransactionId);
-
-					break;
-				}
-
-				case MessageTypes.SubscriptionFinished:
-				{
-					RemoveSubscription(((SubscriptionFinishedMessage)message).OriginalTransactionId);
-					break;
-				}
-
-				case MessageTypes.SubscriptionOnline:
-				{
-					var id = ((SubscriptionOnlineMessage)message).OriginalTransactionId;
-
-					lock (_syncObject)
+					if (mdMsg.DataType2 == DataType.MarketDepth)
 					{
-						if (_byId.TryGetValue(id, out var info))
-						{
-							var secId = info.Builder.SecurityId;
-
-							if (_online.TryGetValue(secId, out var online))
-							{
-								online.SubscriptionIds.Add(id);
-								_byId.Remove(id);
-							}
-							else
-							{
-								_online.Add(secId, info);
-							}
-						}
-					}
-					
-					break;
-				}
-
-				case MessageTypes.QuoteChange:
-				{
-					var quoteMsg = (QuoteChangeMessage)message;
-
-					if (quoteMsg.State == null)
-						break;
-
-					lock (_syncObject)
-					{
-						if (_allSecSubscriptions.Count == 0 &&
-							_allSecSubscriptionsPassThrough.Count == 0 &&
-							_byId.Count == 0 &&
-							_passThrough.Count == 0 &&
-							_online.Count == 0)
-							break;
-					}
-
-					List<long> passThrough = null;
-
-					foreach (var subscriptionId in quoteMsg.GetSubscriptionIds())
-					{
-						QuoteChangeMessage newQuoteMsg;
-						long[] ids;
+						var transId = mdMsg.TransactionId;
 
 						lock (_syncObject)
 						{
-							if (!_byId.TryGetValue(subscriptionId, out var info))
+							if (mdMsg.SecurityId == default)
 							{
-								if (_passThrough.Contains(subscriptionId) || _allSecSubscriptionsPassThrough.Contains(subscriptionId))
-								{
-									if (passThrough is null)
-										passThrough = new List<long>();
+								if (mdMsg.DoNotBuildOrderBookIncrement)
+									_allSecSubscriptionsPassThrough.Add(transId);
+								else
+									_allSecSubscriptions.Add(transId);
 
-									passThrough.Add(subscriptionId);
-								}
-
-								continue;
+								break;
 							}
 
-							newQuoteMsg = info.Builder.TryApply(quoteMsg, subscriptionId);
+							if (mdMsg.DoNotBuildOrderBookIncrement)
+							{
+								_passThrough.Add(transId);
+								break;
+							}
 
-							if (newQuoteMsg == null)
-								continue;
+							var info = new BookInfo(mdMsg.SecurityId)
+							{
+								Builder = { Parent = this }
+							};
 
-							ids = info.SubscriptionIds.Cache;
+							info.SubscriptionIds.Add(transId);
+							
+							_byId.Add(transId, info);
 						}
 
-						if (_allSecSubscriptions.Count > 0)
-							ids = ids.Concat(_allSecSubscriptions.Cache);
+						this.AddInfoLog("OB incr subscribed {0}/{1}.", mdMsg.SecurityId, transId);
+					}
+				}
+				else
+				{
+					RemoveSubscription(mdMsg.OriginalTransactionId);
+				}
 
-						if (clones == null)
-							clones = new List<QuoteChangeMessage>();
+				break;
+			}
+		}
 
-						newQuoteMsg.SetSubscriptionIds(ids);
-						clones.Add(newQuoteMsg);
+		return base.OnSendInMessage(message);
+	}
+
+	private void RemoveSubscription(long id)
+	{
+		lock (_syncObject)
+		{
+			var changeId = true;
+
+			if (!_byId.TryGetAndRemove(id, out var info))
+			{
+				changeId = false;
+
+				info = _online.FirstOrDefault(p => p.Value.SubscriptionIds.Contains(id)).Value;
+
+				if (info == null)
+					return;
+			}
+
+			var secId = info.Builder.SecurityId;
+
+			if (info != _online.TryGetValue(secId))
+				return;
+
+			info.SubscriptionIds.Remove(id);
+
+			var ids = info.SubscriptionIds.Cache;
+
+			if (ids.Length == 0)
+				_online.Remove(secId);
+			else if (changeId)
+				_byId.Add(ids[0], info);
+		}
+
+		this.AddInfoLog("Unsubscribed {0}.", id);
+	}
+
+	/// <inheritdoc />
+	protected override void OnInnerAdapterNewOutMessage(Message message)
+	{
+		List<QuoteChangeMessage> clones = null;
+
+		switch (message.Type)
+		{
+			case MessageTypes.SubscriptionResponse:
+			{
+				var responseMsg = (SubscriptionResponseMessage)message;
+
+				if (!responseMsg.IsOk())
+					RemoveSubscription(responseMsg.OriginalTransactionId);
+
+				break;
+			}
+
+			case MessageTypes.SubscriptionFinished:
+			{
+				RemoveSubscription(((SubscriptionFinishedMessage)message).OriginalTransactionId);
+				break;
+			}
+
+			case MessageTypes.SubscriptionOnline:
+			{
+				var id = ((SubscriptionOnlineMessage)message).OriginalTransactionId;
+
+				lock (_syncObject)
+				{
+					if (_byId.TryGetValue(id, out var info))
+					{
+						var secId = info.Builder.SecurityId;
+
+						if (_online.TryGetValue(secId, out var online))
+						{
+							online.SubscriptionIds.Add(id);
+							_byId.Remove(id);
+						}
+						else
+						{
+							_online.Add(secId, info);
+						}
+					}
+				}
+				
+				break;
+			}
+
+			case MessageTypes.QuoteChange:
+			{
+				var quoteMsg = (QuoteChangeMessage)message;
+
+				if (quoteMsg.State == null)
+					break;
+
+				lock (_syncObject)
+				{
+					if (_allSecSubscriptions.Count == 0 &&
+						_allSecSubscriptionsPassThrough.Count == 0 &&
+						_byId.Count == 0 &&
+						_passThrough.Count == 0 &&
+						_online.Count == 0)
+						break;
+				}
+
+				List<long> passThrough = null;
+
+				foreach (var subscriptionId in quoteMsg.GetSubscriptionIds())
+				{
+					QuoteChangeMessage newQuoteMsg;
+					long[] ids;
+
+					lock (_syncObject)
+					{
+						if (!_byId.TryGetValue(subscriptionId, out var info))
+						{
+							if (_passThrough.Contains(subscriptionId) || _allSecSubscriptionsPassThrough.Contains(subscriptionId))
+							{
+								if (passThrough is null)
+									passThrough = new List<long>();
+
+								passThrough.Add(subscriptionId);
+							}
+
+							continue;
+						}
+
+						newQuoteMsg = info.Builder.TryApply(quoteMsg, subscriptionId);
+
+						if (newQuoteMsg == null)
+							continue;
+
+						ids = info.SubscriptionIds.Cache;
 					}
 
-					if (passThrough is null)
-						message = null;
-					else
-						quoteMsg.SetSubscriptionIds(passThrough.ToArray());
+					if (_allSecSubscriptions.Count > 0)
+						ids = ids.Concat(_allSecSubscriptions.Cache);
 
-					break;
+					if (clones == null)
+						clones = new List<QuoteChangeMessage>();
+
+					newQuoteMsg.SetSubscriptionIds(ids);
+					clones.Add(newQuoteMsg);
 				}
-			}
 
-			if (message != null)
-				base.OnInnerAdapterNewOutMessage(message);
+				if (passThrough is null)
+					message = null;
+				else
+					quoteMsg.SetSubscriptionIds(passThrough.ToArray());
 
-			if (clones != null)
-			{
-				foreach (var clone in clones)
-					base.OnInnerAdapterNewOutMessage(clone);
+				break;
 			}
 		}
 
-		/// <summary>
-		/// Create a copy of <see cref="OrderBookIncrementMessageAdapter"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override IMessageChannel Clone()
+		if (message != null)
+			base.OnInnerAdapterNewOutMessage(message);
+
+		if (clones != null)
 		{
-			return new OrderBookIncrementMessageAdapter(InnerAdapter.TypedClone());
+			foreach (var clone in clones)
+				base.OnInnerAdapterNewOutMessage(clone);
 		}
+	}
+
+	/// <summary>
+	/// Create a copy of <see cref="OrderBookIncrementMessageAdapter"/>.
+	/// </summary>
+	/// <returns>Copy.</returns>
+	public override IMessageChannel Clone()
+	{
+		return new OrderBookIncrementMessageAdapter(InnerAdapter.TypedClone());
 	}
 }

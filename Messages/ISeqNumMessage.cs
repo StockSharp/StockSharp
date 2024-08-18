@@ -1,14 +1,13 @@
-﻿namespace StockSharp.Messages
+﻿namespace StockSharp.Messages;
+
+/// <summary>
+/// The interface describing an message with <see cref="SeqNum"/> property.
+/// </summary>
+public interface ISeqNumMessage
 {
 	/// <summary>
-	/// The interface describing an message with <see cref="SeqNum"/> property.
+	/// Sequence number.
 	/// </summary>
-	public interface ISeqNumMessage
-	{
-		/// <summary>
-		/// Sequence number.
-		/// </summary>
-		/// <remarks>Zero means no information.</remarks>
-		long SeqNum { get; set; }
-	}
+	/// <remarks>Zero means no information.</remarks>
+	long SeqNum { get; set; }
 }

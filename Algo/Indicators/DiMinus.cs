@@ -1,27 +1,26 @@
-namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators;
+
+using StockSharp.Messages;
+
+/// <summary>
+/// DIMinus is a component of the Directional Movement System developed by Welles Wilder.
+/// </summary>
+[IndicatorHidden]
+public class DiMinus : DiPart
 {
-	using StockSharp.Messages;
-
 	/// <summary>
-	/// DIMinus is a component of the Directional Movement System developed by Welles Wilder.
+	/// Initializes a new instance of the <see cref="DiMinus"/>.
 	/// </summary>
-	[IndicatorHidden]
-	public class DiMinus : DiPart
+	public DiMinus()
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DiMinus"/>.
-		/// </summary>
-		public DiMinus()
-		{
-		}
+	}
 
-		/// <inheritdoc />
-		protected override decimal GetValue(ICandleMessage current, ICandleMessage prev)
-		{
-			if (current.LowPrice < prev.LowPrice && current.HighPrice - prev.HighPrice < prev.LowPrice - current.LowPrice)
-				return prev.LowPrice - current.LowPrice;
-			else
-				return 0;
-		}
+	/// <inheritdoc />
+	protected override decimal GetValue(ICandleMessage current, ICandleMessage prev)
+	{
+		if (current.LowPrice < prev.LowPrice && current.HighPrice - prev.HighPrice < prev.LowPrice - current.LowPrice)
+			return prev.LowPrice - current.LowPrice;
+		else
+			return 0;
 	}
 }

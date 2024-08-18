@@ -1,217 +1,216 @@
-namespace StockSharp.Algo.Testing
+namespace StockSharp.Algo.Testing;
+
+using System;
+
+using Ecng.Common;
+
+using StockSharp.Messages;
+using StockSharp.Localization;
+
+/// <summary>
+/// The market data generator.
+/// </summary>
+public abstract class MarketDataGenerator : Cloneable<MarketDataGenerator>
 {
-	using System;
+	/// <summary>
+	/// Initialize <see cref="MarketDataGenerator"/>.
+	/// </summary>
+	/// <param name="securityId">The identifier of the instrument, for which data shall be generated.</param>
+	protected MarketDataGenerator(SecurityId securityId)
+	{
+		SecurityId = securityId;
 
-	using Ecng.Common;
+		MaxVolume = 20;
+		MinVolume = 1;
+		MaxPriceStepCount = 10;
+		RandomArrayLength = 100;
 
-	using StockSharp.Messages;
-	using StockSharp.Localization;
+		Interval = TimeSpan.FromMilliseconds(50);
+	}
 
 	/// <summary>
-	/// The market data generator.
+	/// Market data type.
 	/// </summary>
-	public abstract class MarketDataGenerator : Cloneable<MarketDataGenerator>
+	public abstract DataType DataType { get; }
+
+	/// <summary>
+	/// The length of massive of preliminarily generated random numbers. The default is 100.
+	/// </summary>
+	public int RandomArrayLength { get; set; }
+
+	/// <summary>
+	/// To initialize the generator state.
+	/// </summary>
+	public virtual void Init()
 	{
-		/// <summary>
-		/// Initialize <see cref="MarketDataGenerator"/>.
-		/// </summary>
-		/// <param name="securityId">The identifier of the instrument, for which data shall be generated.</param>
-		protected MarketDataGenerator(SecurityId securityId)
+		LastGenerationTime = DateTimeOffset.MinValue;
+
+		Volumes = new RandomArray<int>(MinVolume, MaxVolume, RandomArrayLength);
+		Steps = new RandomArray<int>(1, MaxPriceStepCount, RandomArrayLength);
+
+		SecurityDefinition = null;
+	}
+
+	/// <summary>
+	/// The identifier of the instrument, for which data shall be generated.
+	/// </summary>
+	public SecurityId SecurityId { get; }
+
+	/// <summary>
+	/// Information about the trading instrument.
+	/// </summary>
+	protected SecurityMessage SecurityDefinition { get; private set; }
+
+	/// <summary>
+	/// The time of last data generation.
+	/// </summary>
+	protected DateTimeOffset LastGenerationTime { get; set; }
+
+	/// <summary>
+	/// The data generation interval.
+	/// </summary>
+	public TimeSpan Interval { get; set; }
+
+	private int _maxVolume;
+
+	/// <summary>
+	/// The maximal volume. The volume will be selected randomly from <see cref="MinVolume"/> to <see cref="MaxVolume"/>.
+	/// </summary>
+	/// <remarks>
+	/// The default value equals 20.
+	/// </remarks>
+	public int MaxVolume
+	{
+		get => _maxVolume;
+		set
 		{
-			SecurityId = securityId;
+			if (value < 1)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
-			MaxVolume = 20;
-			MinVolume = 1;
-			MaxPriceStepCount = 10;
-			RandomArrayLength = 100;
-
-			Interval = TimeSpan.FromMilliseconds(50);
+			_maxVolume = value;
 		}
+	}
 
-		/// <summary>
-		/// Market data type.
-		/// </summary>
-		public abstract DataType DataType { get; }
+	private int _minVolume;
 
-		/// <summary>
-		/// The length of massive of preliminarily generated random numbers. The default is 100.
-		/// </summary>
-		public int RandomArrayLength { get; set; }
-
-		/// <summary>
-		/// To initialize the generator state.
-		/// </summary>
-		public virtual void Init()
+	/// <summary>
+	/// The maximal volume. The volume will be selected randomly from <see cref="MinVolume"/> to <see cref="MaxVolume"/>.
+	/// </summary>
+	/// <remarks>
+	/// The default value is 1.
+	/// </remarks>
+	public int MinVolume
+	{
+		get => _minVolume;
+		set
 		{
-			LastGenerationTime = DateTimeOffset.MinValue;
+			if (value < 1)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
-			Volumes = new RandomArray<int>(MinVolume, MaxVolume, RandomArrayLength);
-			Steps = new RandomArray<int>(1, MaxPriceStepCount, RandomArrayLength);
-
-			SecurityDefinition = null;
+			_minVolume = value;
 		}
+	}
 
-		/// <summary>
-		/// The identifier of the instrument, for which data shall be generated.
-		/// </summary>
-		public SecurityId SecurityId { get; }
+	private int _maxPriceStepCount;
 
-		/// <summary>
-		/// Information about the trading instrument.
-		/// </summary>
-		protected SecurityMessage SecurityDefinition { get; private set; }
-
-		/// <summary>
-		/// The time of last data generation.
-		/// </summary>
-		protected DateTimeOffset LastGenerationTime { get; set; }
-
-		/// <summary>
-		/// The data generation interval.
-		/// </summary>
-		public TimeSpan Interval { get; set; }
-
-		private int _maxVolume;
-
-		/// <summary>
-		/// The maximal volume. The volume will be selected randomly from <see cref="MinVolume"/> to <see cref="MaxVolume"/>.
-		/// </summary>
-		/// <remarks>
-		/// The default value equals 20.
-		/// </remarks>
-		public int MaxVolume
+	/// <summary>
+	/// The maximal number of price increments <see cref="BusinessEntities.Security.PriceStep"/> to be returned through massive <see cref="Steps"/>.
+	/// </summary>
+	/// <remarks>
+	/// The default value is 10.
+	/// </remarks>
+	public int MaxPriceStepCount
+	{
+		get => _maxPriceStepCount;
+		set
 		{
-			get => _maxVolume;
-			set
-			{
-				if (value < 1)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+			if (value < 1)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
-				_maxVolume = value;
-			}
+			_maxPriceStepCount = value;
 		}
+	}
 
-		private int _minVolume;
+	/// <summary>
+	/// Process message.
+	/// </summary>
+	/// <param name="message">Message.</param>
+	/// <returns>The result of processing. If <see langword="null" /> is returned, then generator has no sufficient data to generate new message.</returns>
+	public virtual Message Process(Message message)
+	{
+		if (message == null)
+			throw new ArgumentNullException(nameof(message));
 
-		/// <summary>
-		/// The maximal volume. The volume will be selected randomly from <see cref="MinVolume"/> to <see cref="MaxVolume"/>.
-		/// </summary>
-		/// <remarks>
-		/// The default value is 1.
-		/// </remarks>
-		public int MinVolume
+		if (message.Type == MessageTypes.Security)
+			SecurityDefinition = (SecurityMessage)message.Clone();
+		else if (SecurityDefinition != null)
+			return OnProcess(message);
+
+		return null;
+	}
+
+	/// <summary>
+	/// Process message.
+	/// </summary>
+	/// <param name="message">Message.</param>
+	/// <returns>The result of processing. If <see langword="null" /> is returned, then generator has no sufficient data to generate new message.</returns>
+	protected abstract Message OnProcess(Message message);
+
+	/// <summary>
+	/// Is new data generation required.
+	/// </summary>
+	/// <param name="time">The current time.</param>
+	/// <returns><see langword="true" />, if data shall be generated, Otherwise, <see langword="false" />.</returns>
+	protected bool IsTimeToGenerate(DateTimeOffset time)
+	{
+		return time >= LastGenerationTime + Interval;
+	}
+
+	private RandomArray<int> _volumes;
+
+	/// <summary>
+	/// The massive of random volumes in the range from <see cref="MinVolume"/> to <see cref="MaxVolume"/>.
+	/// </summary>
+	public RandomArray<int> Volumes
+	{
+		get
 		{
-			get => _minVolume;
-			set
-			{
-				if (value < 1)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+			if (_volumes == null)
+				throw new InvalidOperationException(LocalizedStrings.GeneratorNotInitialized);
 
-				_minVolume = value;
-			}
+			return _volumes;
 		}
+		protected set => _volumes = value ?? throw new ArgumentNullException(nameof(value));
+	}
 
-		private int _maxPriceStepCount;
+	private RandomArray<int> _steps;
 
-		/// <summary>
-		/// The maximal number of price increments <see cref="BusinessEntities.Security.PriceStep"/> to be returned through massive <see cref="Steps"/>.
-		/// </summary>
-		/// <remarks>
-		/// The default value is 10.
-		/// </remarks>
-		public int MaxPriceStepCount
+	/// <summary>
+	/// The massive of random price increments in the range from 1 to <see cref="MaxPriceStepCount"/>.
+	/// </summary>
+	public RandomArray<int> Steps
+	{
+		get
 		{
-			get => _maxPriceStepCount;
-			set
-			{
-				if (value < 1)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+			if (_steps == null)
+				throw new InvalidOperationException(LocalizedStrings.GeneratorNotInitialized);
 
-				_maxPriceStepCount = value;
-			}
+			return _steps;
 		}
+		protected set => _steps = value ?? throw new ArgumentNullException(nameof(value));
+	}
 
-		/// <summary>
-		/// Process message.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		/// <returns>The result of processing. If <see langword="null" /> is returned, then generator has no sufficient data to generate new message.</returns>
-		public virtual Message Process(Message message)
-		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			if (message.Type == MessageTypes.Security)
-				SecurityDefinition = (SecurityMessage)message.Clone();
-			else if (SecurityDefinition != null)
-				return OnProcess(message);
-
-			return null;
-		}
-
-		/// <summary>
-		/// Process message.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		/// <returns>The result of processing. If <see langword="null" /> is returned, then generator has no sufficient data to generate new message.</returns>
-		protected abstract Message OnProcess(Message message);
-
-		/// <summary>
-		/// Is new data generation required.
-		/// </summary>
-		/// <param name="time">The current time.</param>
-		/// <returns><see langword="true" />, if data shall be generated, Otherwise, <see langword="false" />.</returns>
-		protected bool IsTimeToGenerate(DateTimeOffset time)
-		{
-			return time >= LastGenerationTime + Interval;
-		}
-
-		private RandomArray<int> _volumes;
-
-		/// <summary>
-		/// The massive of random volumes in the range from <see cref="MinVolume"/> to <see cref="MaxVolume"/>.
-		/// </summary>
-		public RandomArray<int> Volumes
-		{
-			get
-			{
-				if (_volumes == null)
-					throw new InvalidOperationException(LocalizedStrings.GeneratorNotInitialized);
-
-				return _volumes;
-			}
-			protected set => _volumes = value ?? throw new ArgumentNullException(nameof(value));
-		}
-
-		private RandomArray<int> _steps;
-
-		/// <summary>
-		/// The massive of random price increments in the range from 1 to <see cref="MaxPriceStepCount"/>.
-		/// </summary>
-		public RandomArray<int> Steps
-		{
-			get
-			{
-				if (_steps == null)
-					throw new InvalidOperationException(LocalizedStrings.GeneratorNotInitialized);
-
-				return _steps;
-			}
-			protected set => _steps = value ?? throw new ArgumentNullException(nameof(value));
-		}
-
-		/// <summary>
-		/// Copy the message into the <paramref name="destination" />.
-		/// </summary>
-		/// <param name="destination">The object, to which copied information.</param>
-		protected void CopyTo(MarketDataGenerator destination)
-		{
-			destination.Interval = Interval;
-			destination.MinVolume = MinVolume;
-			destination.MaxVolume = MaxVolume;
-			destination.MaxPriceStepCount = MaxPriceStepCount;
-			destination._volumes = _volumes;
-			destination._steps = _steps;
-		}
+	/// <summary>
+	/// Copy the message into the <paramref name="destination" />.
+	/// </summary>
+	/// <param name="destination">The object, to which copied information.</param>
+	protected void CopyTo(MarketDataGenerator destination)
+	{
+		destination.Interval = Interval;
+		destination.MinVolume = MinVolume;
+		destination.MaxVolume = MaxVolume;
+		destination.MaxPriceStepCount = MaxPriceStepCount;
+		destination._volumes = _volumes;
+		destination._steps = _steps;
 	}
 }

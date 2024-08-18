@@ -1,13 +1,12 @@
-namespace StockSharp.Messages
+namespace StockSharp.Messages;
+
+/// <summary>
+/// The interface describing an message with <see cref="PortfolioName"/> property.
+/// </summary>
+public interface IPortfolioNameMessage
 {
 	/// <summary>
-	/// The interface describing an message with <see cref="PortfolioName"/> property.
+	/// Portfolio code name.
 	/// </summary>
-	public interface IPortfolioNameMessage
-	{
-		/// <summary>
-		/// Portfolio code name.
-		/// </summary>
-		string PortfolioName { get; set; }
-	}
+	string PortfolioName { get; set; }
 }

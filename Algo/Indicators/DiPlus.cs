@@ -1,27 +1,26 @@
-namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators;
+
+using StockSharp.Messages;
+
+/// <summary>
+/// DIPlus is a component of the Directional Movement System developed by Welles Wilder.
+/// </summary>
+[IndicatorHidden]
+public class DiPlus : DiPart
 {
-	using StockSharp.Messages;
-
 	/// <summary>
-	/// DIPlus is a component of the Directional Movement System developed by Welles Wilder.
+	/// Initializes a new instance of the <see cref="DiPlus"/>.
 	/// </summary>
-	[IndicatorHidden]
-	public class DiPlus : DiPart
+	public DiPlus()
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DiPlus"/>.
-		/// </summary>
-		public DiPlus()
-		{
-		}
+	}
 
-		/// <inheritdoc />
-		protected override decimal GetValue(ICandleMessage current, ICandleMessage prev)
-		{
-			if (current.HighPrice > prev.HighPrice && current.HighPrice - prev.HighPrice > prev.LowPrice - current.LowPrice)
-				return current.HighPrice - prev.HighPrice;
-			else
-				return 0;
-		}
+	/// <inheritdoc />
+	protected override decimal GetValue(ICandleMessage current, ICandleMessage prev)
+	{
+		if (current.HighPrice > prev.HighPrice && current.HighPrice - prev.HighPrice > prev.LowPrice - current.LowPrice)
+			return current.HighPrice - prev.HighPrice;
+		else
+			return 0;
 	}
 }

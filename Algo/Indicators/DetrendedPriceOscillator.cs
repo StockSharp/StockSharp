@@ -1,60 +1,59 @@
-﻿namespace StockSharp.Algo.Indicators
+﻿namespace StockSharp.Algo.Indicators;
+
+using System;
+using System.ComponentModel.DataAnnotations;
+
+using Ecng.ComponentModel;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// Price oscillator without trend.
+/// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/dpo.html
+/// </remarks>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.DPOKey,
+	Description = LocalizedStrings.DetrendedPriceOscillatorKey)]
+[Doc("topics/api/indicators/list_of_indicators/dpo.html")]
+public class DetrendedPriceOscillator : LengthIndicator<decimal>
 {
-	using System;
-	using System.ComponentModel.DataAnnotations;
-
-	using Ecng.ComponentModel;
-
-	using StockSharp.Localization;
+	private readonly SimpleMovingAverage _sma;
+	private int _lookBack;
 
 	/// <summary>
-	/// Price oscillator without trend.
+	/// Initializes a new instance of the <see cref="DetrendedPriceOscillator"/>.
 	/// </summary>
-	/// <remarks>
-	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/dpo.html
-	/// </remarks>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.DPOKey,
-		Description = LocalizedStrings.DetrendedPriceOscillatorKey)]
-	[Doc("topics/api/indicators/list_of_indicators/dpo.html")]
-	public class DetrendedPriceOscillator : LengthIndicator<decimal>
+	public DetrendedPriceOscillator()
 	{
-		private readonly SimpleMovingAverage _sma;
-		private int _lookBack;
+		_sma = new SimpleMovingAverage();
+		Length = 3;
+	}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DetrendedPriceOscillator"/>.
-		/// </summary>
-		public DetrendedPriceOscillator()
-		{
-			_sma = new SimpleMovingAverage();
-			Length = 3;
-		}
+	/// <inheritdoc />
+	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
-		/// <inheritdoc />
-		public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
+	/// <inheritdoc />
+	public override void Reset()
+	{
+		_sma.Length = Length;
+		_lookBack = Length / 2 + 1;
+		base.Reset();
+	}
 
-		/// <inheritdoc />
-		public override void Reset()
-		{
-			_sma.Length = Length;
-			_lookBack = Length / 2 + 1;
-			base.Reset();
-		}
+	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{
+		var smaValue = _sma.Process(input);
 
-		/// <inheritdoc />
-		protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		{
-			var smaValue = _sma.Process(input);
+		if (_sma.IsFormed && input.IsFinal)
+			Buffer.PushBack(smaValue.GetValue<decimal>());
 
-			if (_sma.IsFormed && input.IsFinal)
-				Buffer.PushBack(smaValue.GetValue<decimal>());
+		if (!IsFormed)
+			return new DecimalIndicatorValue(this);
 
-			if (!IsFormed)
-				return new DecimalIndicatorValue(this);
-
-			return new DecimalIndicatorValue(this, input.GetValue<decimal>() - Buffer[Math.Max(0, Buffer.Count - 1 - _lookBack)]);
-		}
+		return new DecimalIndicatorValue(this, input.GetValue<decimal>() - Buffer[Math.Max(0, Buffer.Count - 1 - _lookBack)]);
 	}
 }

@@ -1,77 +1,76 @@
-namespace StockSharp.Messages
-{
-	using System;
-	using System.ComponentModel.DataAnnotations;
-	using System.Runtime.Serialization;
+namespace StockSharp.Messages;
 
-	using StockSharp.Localization;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// The message containing the order group cancel filter.
+/// </summary>
+[DataContract]
+[Serializable]
+public class OrderGroupCancelMessage : OrderMessage
+{
+	/// <summary>
+	/// <see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.
+	/// </summary>
+	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.StopOrdersKey,
+		Description = LocalizedStrings.StopOrdersDescKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public bool? IsStop { get; set; }
 
 	/// <summary>
-	/// The message containing the order group cancel filter.
+	/// Order side. If the value is <see langword="null" />, the direction does not use.
 	/// </summary>
-	[DataContract]
-	[Serializable]
-	public class OrderGroupCancelMessage : OrderMessage
+	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.DirectionKey,
+		Description = LocalizedStrings.CancelOrdersSideKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public Sides? Side { get; set; }
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="OrderGroupCancelMessage"/>.
+	/// </summary>
+	public OrderGroupCancelMessage()
+		: base(MessageTypes.OrderGroupCancel)
 	{
-		/// <summary>
-		/// <see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.
-		/// </summary>
-		[DataMember]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.StopOrdersKey,
-			Description = LocalizedStrings.StopOrdersDescKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		public bool? IsStop { get; set; }
+	}
 
-		/// <summary>
-		/// Order side. If the value is <see langword="null" />, the direction does not use.
-		/// </summary>
-		[DataMember]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.DirectionKey,
-			Description = LocalizedStrings.CancelOrdersSideKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		public Sides? Side { get; set; }
+	/// <inheritdoc />
+	public override string ToString()
+	{
+		return base.ToString() + $",IsStop={IsStop},Side={Side}";
+	}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="OrderGroupCancelMessage"/>.
-		/// </summary>
-		public OrderGroupCancelMessage()
-			: base(MessageTypes.OrderGroupCancel)
-		{
-		}
+	/// <summary>
+	/// Create a copy of <see cref="OrderGroupCancelMessage"/>.
+	/// </summary>
+	/// <returns>Copy.</returns>
+	public override Message Clone()
+	{
+		var clone = new OrderGroupCancelMessage();
 
-		/// <inheritdoc />
-		public override string ToString()
-		{
-			return base.ToString() + $",IsStop={IsStop},Side={Side}";
-		}
+		CopyTo(clone);
 
-		/// <summary>
-		/// Create a copy of <see cref="OrderGroupCancelMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			var clone = new OrderGroupCancelMessage();
+		return clone;
+	}
 
-			CopyTo(clone);
+	/// <summary>
+	/// Copy the message into the <paramref name="destination" />.
+	/// </summary>
+	/// <param name="destination">The object, to which copied information.</param>
+	public void CopyTo(OrderGroupCancelMessage destination)
+	{
+		base.CopyTo(destination);
 
-			return clone;
-		}
-
-		/// <summary>
-		/// Copy the message into the <paramref name="destination" />.
-		/// </summary>
-		/// <param name="destination">The object, to which copied information.</param>
-		public void CopyTo(OrderGroupCancelMessage destination)
-		{
-			base.CopyTo(destination);
-
-			destination.IsStop = IsStop;
-			destination.Side = Side;
-		}
+		destination.IsStop = IsStop;
+		destination.Side = Side;
 	}
 }

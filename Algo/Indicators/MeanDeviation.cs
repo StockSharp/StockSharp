@@ -1,74 +1,73 @@
-﻿namespace StockSharp.Algo.Indicators
+﻿namespace StockSharp.Algo.Indicators;
+
+using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+
+using Ecng.ComponentModel;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// Average deviation.
+/// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/mean_deviation.html
+/// </remarks>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.MeanDevKey,
+	Description = LocalizedStrings.AverageDeviationKey)]
+[Doc("topics/api/indicators/list_of_indicators/mean_deviation.html")]
+public class MeanDeviation : LengthIndicator<decimal>
 {
-	using System;
-	using System.ComponentModel;
-	using System.ComponentModel.DataAnnotations;
-	using System.Linq;
+	/// <summary>
+	/// Initializes a new instance of the <see cref="MeanDeviation"/>.
+	/// </summary>
+	public MeanDeviation()
+	{
+		Sma = new SimpleMovingAverage();
+		Length = 5;
+	}
 
-	using Ecng.ComponentModel;
-
-	using StockSharp.Localization;
+	/// <inheritdoc />
+	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 	/// <summary>
-	/// Average deviation.
+	/// Moving Average.
 	/// </summary>
-	/// <remarks>
-	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/mean_deviation.html
-	/// </remarks>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.MeanDevKey,
-		Description = LocalizedStrings.AverageDeviationKey)]
-	[Doc("topics/api/indicators/list_of_indicators/mean_deviation.html")]
-	public class MeanDeviation : LengthIndicator<decimal>
+	[Browsable(false)]
+	public SimpleMovingAverage Sma { get; }
+
+	/// <inheritdoc />
+	protected override bool CalcIsFormed() => Sma.IsFormed;
+
+	/// <inheritdoc />
+	public override void Reset()
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MeanDeviation"/>.
-		/// </summary>
-		public MeanDeviation()
-		{
-			Sma = new SimpleMovingAverage();
-			Length = 5;
-		}
+		Sma.Length = Length;
+		base.Reset();
+	}
 
-		/// <inheritdoc />
-		public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
+	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{
+		var val = input.GetValue<decimal>();
 
-		/// <summary>
-		/// Moving Average.
-		/// </summary>
-		[Browsable(false)]
-		public SimpleMovingAverage Sma { get; }
+		if (input.IsFinal)
+			Buffer.PushBack(val);
 
-		/// <inheritdoc />
-		protected override bool CalcIsFormed() => Sma.IsFormed;
+		var smaValue = Sma.Process(input).GetValue<decimal>();
 
-		/// <inheritdoc />
-		public override void Reset()
-		{
-			Sma.Length = Length;
-			base.Reset();
-		}
+		if (Buffer.Count > Length)
+			Buffer.PopFront();
 
-		/// <inheritdoc />
-		protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		{
-			var val = input.GetValue<decimal>();
+		// считаем значение отклонения
+		var md = input.IsFinal
+			? Buffer.Sum(t => Math.Abs(t - smaValue))
+			: Buffer.Skip(IsFormed ? 1 : 0).Sum(t => Math.Abs(t - smaValue)) + Math.Abs(val - smaValue);
 
-			if (input.IsFinal)
-				Buffer.PushBack(val);
-
-			var smaValue = Sma.Process(input).GetValue<decimal>();
-
-			if (Buffer.Count > Length)
-				Buffer.PopFront();
-
-			// считаем значение отклонения
-			var md = input.IsFinal
-				? Buffer.Sum(t => Math.Abs(t - smaValue))
-				: Buffer.Skip(IsFormed ? 1 : 0).Sum(t => Math.Abs(t - smaValue)) + Math.Abs(val - smaValue);
-
-			return new DecimalIndicatorValue(this, md / Length);
-		}
+		return new DecimalIndicatorValue(this, md / Length);
 	}
 }

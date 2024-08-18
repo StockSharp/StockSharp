@@ -1,30 +1,29 @@
-namespace StockSharp.Algo.Strategies.Testing
-{
-	using System.ComponentModel.DataAnnotations;
+namespace StockSharp.Algo.Strategies.Testing;
 
-	using StockSharp.Localization;
+using System.ComponentModel.DataAnnotations;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// The data type for paper trading.
+/// </summary>
+public enum EmulationMarketDataModes
+{
+	/// <summary>
+	/// Storage.
+	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.StorageKey)]
+	Storage,
 
 	/// <summary>
-	/// The data type for paper trading.
+	/// Generated.
 	/// </summary>
-	public enum EmulationMarketDataModes
-	{
-		/// <summary>
-		/// Storage.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.StorageKey)]
-		Storage,
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.GeneratedKey)]
+	Generate,
 
-		/// <summary>
-		/// Generated.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.GeneratedKey)]
-		Generate,
-
-		/// <summary>
-		/// None.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NoneKey)]
-		No
-	}
+	/// <summary>
+	/// None.
+	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NoneKey)]
+	No
 }

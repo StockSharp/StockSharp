@@ -1,108 +1,107 @@
-namespace StockSharp.Algo
+namespace StockSharp.Algo;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Ecng.Common;
+using Ecng.Collections;
+
+using StockSharp.BusinessEntities;
+using StockSharp.Messages;
+
+/// <summary>
+/// Provider of information about instruments supporting search using <see cref="SecurityTrie"/>.
+/// </summary>
+public class FilterableSecurityProvider : Disposable, ISecurityProvider
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+	private readonly SecurityTrie _trie = new();
 
-	using Ecng.Common;
-	using Ecng.Collections;
-
-	using StockSharp.BusinessEntities;
-	using StockSharp.Messages;
+	private readonly ISecurityProvider _provider;
 
 	/// <summary>
-	/// Provider of information about instruments supporting search using <see cref="SecurityTrie"/>.
+	/// Initializes a new instance of the <see cref="FilterableSecurityProvider"/>.
 	/// </summary>
-	public class FilterableSecurityProvider : Disposable, ISecurityProvider
+	/// <param name="provider">Security meta info provider.</param>
+	public FilterableSecurityProvider(ISecurityProvider provider)
 	{
-		private readonly SecurityTrie _trie = new();
+		_provider = provider ?? throw new ArgumentNullException(nameof(provider));
 
-		private readonly ISecurityProvider _provider;
+		_provider.Added += AddSecurities;
+		_provider.Removed += RemoveSecurities;
+		_provider.Cleared += ClearSecurities;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="FilterableSecurityProvider"/>.
-		/// </summary>
-		/// <param name="provider">Security meta info provider.</param>
-		public FilterableSecurityProvider(ISecurityProvider provider)
-		{
-			_provider = provider ?? throw new ArgumentNullException(nameof(provider));
+		AddSecurities(_provider.LookupAll());
+	}
 
-			_provider.Added += AddSecurities;
-			_provider.Removed += RemoveSecurities;
-			_provider.Cleared += ClearSecurities;
+	/// <inheritdoc />
+	public int Count => _trie.Count;
 
-			AddSecurities(_provider.LookupAll());
-		}
+	/// <inheritdoc />
+	public event Action<IEnumerable<Security>> Added;
 
-		/// <inheritdoc />
-		public int Count => _trie.Count;
+	/// <inheritdoc />
+	public event Action<IEnumerable<Security>> Removed;
 
-		/// <inheritdoc />
-		public event Action<IEnumerable<Security>> Added;
+	/// <inheritdoc />
+	public event Action Cleared;
 
-		/// <inheritdoc />
-		public event Action<IEnumerable<Security>> Removed;
+	/// <inheritdoc />
+	public Security LookupById(SecurityId id) => _trie.GetById(id);
 
-		/// <inheritdoc />
-		public event Action Cleared;
+	/// <inheritdoc />
+	public IEnumerable<Security> Lookup(SecurityLookupMessage criteria)
+	{
+		if (criteria == null)
+			throw new ArgumentNullException(nameof(criteria));
 
-		/// <inheritdoc />
-		public Security LookupById(SecurityId id) => _trie.GetById(id);
+		var secId = criteria.SecurityId.ToStringId(nullIfEmpty: true);
 
-		/// <inheritdoc />
-		public IEnumerable<Security> Lookup(SecurityLookupMessage criteria)
-		{
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
+		var filter = secId.IsEmpty()
+			? (criteria.IsLookupAll() ? string.Empty : criteria.SecurityId.SecurityCode)
+			: secId;
 
-			var secId = criteria.SecurityId.ToStringId(nullIfEmpty: true);
+		var securities = _trie.Retrieve(filter);
 
-			var filter = secId.IsEmpty()
-				? (criteria.IsLookupAll() ? string.Empty : criteria.SecurityId.SecurityCode)
-				: secId;
+		if (!secId.IsEmpty())
+			securities = securities.Where(s => s.Id.EqualsIgnoreCase(secId));
 
-			var securities = _trie.Retrieve(filter);
+		return securities.Filter(criteria).TryLimitByCount(criteria);
+	}
 
-			if (!secId.IsEmpty())
-				securities = securities.Where(s => s.Id.EqualsIgnoreCase(secId));
+	SecurityMessage ISecurityMessageProvider.LookupMessageById(SecurityId id)
+		=> LookupById(id)?.ToMessage();
 
-			return securities.Filter(criteria).TryLimitByCount(criteria);
-		}
+	IEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessages(SecurityLookupMessage criteria)
+		=> Lookup(criteria).Select(s => s.ToMessage());
 
-		SecurityMessage ISecurityMessageProvider.LookupMessageById(SecurityId id)
-			=> LookupById(id)?.ToMessage();
-
-		IEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessages(SecurityLookupMessage criteria)
-			=> Lookup(criteria).Select(s => s.ToMessage());
-
-		private void AddSecurities(IEnumerable<Security> securities)
-		{
-			securities.ForEach(_trie.Add);
+	private void AddSecurities(IEnumerable<Security> securities)
+	{
+		securities.ForEach(_trie.Add);
             Added?.Invoke(securities);
-		}
+	}
 
-		private void RemoveSecurities(IEnumerable<Security> securities)
-		{
-			_trie.RemoveRange(securities);
+	private void RemoveSecurities(IEnumerable<Security> securities)
+	{
+		_trie.RemoveRange(securities);
             Removed?.Invoke(securities);
-		}
+	}
 
-		private void ClearSecurities()
-		{
-			_trie.Clear();
-			Cleared?.Invoke();
-		}
+	private void ClearSecurities()
+	{
+		_trie.Clear();
+		Cleared?.Invoke();
+	}
 
-		/// <summary>
-		/// Release resources.
-		/// </summary>
-		protected override void DisposeManaged()
-		{
-			_provider.Added -= AddSecurities;
-			_provider.Removed -= RemoveSecurities;
-			_provider.Cleared -= ClearSecurities;
+	/// <summary>
+	/// Release resources.
+	/// </summary>
+	protected override void DisposeManaged()
+	{
+		_provider.Added -= AddSecurities;
+		_provider.Removed -= RemoveSecurities;
+		_provider.Cleared -= ClearSecurities;
 
-			base.DisposeManaged();
-		}
+		base.DisposeManaged();
 	}
 }

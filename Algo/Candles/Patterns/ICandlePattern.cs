@@ -1,10 +1,10 @@
-﻿using System;
+﻿namespace StockSharp.Algo.Candles.Patterns;
+
+using System;
 
 using Ecng.Serialization;
 
 using StockSharp.Messages;
-
-namespace StockSharp.Algo.Candles.Patterns;
 
 /// <summary>
 /// The interfaces describes candle pattern.

@@ -1,104 +1,103 @@
-﻿namespace StockSharp.Algo.Indicators
+﻿namespace StockSharp.Algo.Indicators;
+
+using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+using Ecng.ComponentModel;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// Ichimoku.
+/// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/ichimoku.html
+/// </remarks>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.IchimokuKey,
+	Description = LocalizedStrings.IchimokuKey)]
+[Doc("topics/api/indicators/list_of_indicators/ichimoku.html")]
+public class Ichimoku : BaseComplexIndicator
 {
-	using System;
-	using System.ComponentModel;
-	using System.ComponentModel.DataAnnotations;
-
-	using Ecng.ComponentModel;
-
-	using StockSharp.Localization;
+	/// <summary>
+	/// Initializes a new instance of the <see cref="Ichimoku"/>.
+	/// </summary>
+	public Ichimoku()
+		: this(new() { Length = 9 }, new() { Length = 26 })
+	{
+	}
 
 	/// <summary>
-	/// Ichimoku.
+	/// Initializes a new instance of the <see cref="Ichimoku"/>.
 	/// </summary>
-	/// <remarks>
-	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/ichimoku.html
-	/// </remarks>
+	/// <param name="tenkan">Tenkan line.</param>
+	/// <param name="kijun">Kijun line.</param>
+	public Ichimoku(IchimokuLine tenkan, IchimokuLine kijun)
+	{
+		AddInner(Tenkan = tenkan ?? throw new ArgumentNullException(nameof(tenkan)));
+		AddInner(Kijun = kijun ?? throw new ArgumentNullException(nameof(kijun)));
+		AddInner(SenkouA = new IchimokuSenkouALine(Tenkan, Kijun));
+		AddInner(SenkouB = new IchimokuSenkouBLine(Kijun) { Length = 52 });
+		AddInner(Chinkou = new IchimokuChinkouLine { Length = kijun.Length });
+	}
+
+	/// <summary>
+	/// Tenkan line.
+	/// </summary>
+	[TypeConverter(typeof(ExpandableObjectConverter))]
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.IchimokuKey,
-		Description = LocalizedStrings.IchimokuKey)]
-	[Doc("topics/api/indicators/list_of_indicators/ichimoku.html")]
-	public class Ichimoku : BaseComplexIndicator
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Ichimoku"/>.
-		/// </summary>
-		public Ichimoku()
-			: this(new() { Length = 9 }, new() { Length = 26 })
-		{
-		}
+		Name = LocalizedStrings.TenkanKey,
+		Description = LocalizedStrings.TenkanLineKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public IchimokuLine Tenkan { get; }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Ichimoku"/>.
-		/// </summary>
-		/// <param name="tenkan">Tenkan line.</param>
-		/// <param name="kijun">Kijun line.</param>
-		public Ichimoku(IchimokuLine tenkan, IchimokuLine kijun)
-		{
-			AddInner(Tenkan = tenkan ?? throw new ArgumentNullException(nameof(tenkan)));
-			AddInner(Kijun = kijun ?? throw new ArgumentNullException(nameof(kijun)));
-			AddInner(SenkouA = new IchimokuSenkouALine(Tenkan, Kijun));
-			AddInner(SenkouB = new IchimokuSenkouBLine(Kijun) { Length = 52 });
-			AddInner(Chinkou = new IchimokuChinkouLine { Length = kijun.Length });
-		}
+	/// <summary>
+	/// Kijun line.
+	/// </summary>
+	[TypeConverter(typeof(ExpandableObjectConverter))]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.KijunKey,
+		Description = LocalizedStrings.KijunLineKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public IchimokuLine Kijun { get; }
 
-		/// <summary>
-		/// Tenkan line.
-		/// </summary>
-		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.TenkanKey,
-			Description = LocalizedStrings.TenkanLineKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		public IchimokuLine Tenkan { get; }
+	/// <summary>
+	/// Senkou (A) line.
+	/// </summary>
+	[TypeConverter(typeof(ExpandableObjectConverter))]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.SenkouAKey,
+		Description = LocalizedStrings.SenkouADescKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public IchimokuSenkouALine SenkouA { get; }
 
-		/// <summary>
-		/// Kijun line.
-		/// </summary>
-		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.KijunKey,
-			Description = LocalizedStrings.KijunLineKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		public IchimokuLine Kijun { get; }
+	/// <summary>
+	/// Senkou (B) line.
+	/// </summary>
+	[TypeConverter(typeof(ExpandableObjectConverter))]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.SenkouBKey,
+		Description = LocalizedStrings.SenkouBDescKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public IchimokuSenkouBLine SenkouB { get; }
 
-		/// <summary>
-		/// Senkou (A) line.
-		/// </summary>
-		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.SenkouAKey,
-			Description = LocalizedStrings.SenkouADescKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		public IchimokuSenkouALine SenkouA { get; }
+	/// <summary>
+	/// Chinkou line.
+	/// </summary>
+	[TypeConverter(typeof(ExpandableObjectConverter))]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.ChinkouKey,
+		Description = LocalizedStrings.ChinkouLineKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public IchimokuChinkouLine Chinkou { get; }
 
-		/// <summary>
-		/// Senkou (B) line.
-		/// </summary>
-		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.SenkouBKey,
-			Description = LocalizedStrings.SenkouBDescKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		public IchimokuSenkouBLine SenkouB { get; }
-
-		/// <summary>
-		/// Chinkou line.
-		/// </summary>
-		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.ChinkouKey,
-			Description = LocalizedStrings.ChinkouLineKey,
-			GroupName = LocalizedStrings.GeneralKey)]
-		public IchimokuChinkouLine Chinkou { get; }
-
-		/// <inheritdoc />
-		public override string ToString() => base.ToString() + $" T={Tenkan.Length} K={Kijun.Length} A={SenkouA.Length} B={SenkouB.Length} C={Chinkou.Length}";
-	}
+	/// <inheritdoc />
+	public override string ToString() => base.ToString() + $" T={Tenkan.Length} K={Kijun.Length} A={SenkouA.Length} B={SenkouB.Length} C={Chinkou.Length}";
 }

@@ -1,45 +1,44 @@
-namespace StockSharp.Messages
+namespace StockSharp.Messages;
+
+using System;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
+
+/// <summary>
+/// Base connect/disconnect message.
+/// </summary>
+[DataContract]
+[Serializable]
+public abstract class BaseConnectionMessage : Message, IErrorMessage
 {
-	using System;
-	using System.Runtime.Serialization;
-	using System.Xml.Serialization;
+	/// <summary>
+	/// Initialize <see cref="BaseConnectionMessage"/>.
+	/// </summary>
+	/// <param name="type">Message type.</param>
+	protected BaseConnectionMessage(MessageTypes type)
+		: base(type)
+	{
+	}
+
+	/// <inheritdoc />
+	[DataMember]
+	[XmlIgnore]
+	public Exception Error { get; set; }
 
 	/// <summary>
-	/// Base connect/disconnect message.
+	/// Copy the message into the <paramref name="destination" />.
 	/// </summary>
-	[DataContract]
-	[Serializable]
-	public abstract class BaseConnectionMessage : Message, IErrorMessage
+	/// <param name="destination">The object, to which copied information.</param>
+	protected virtual void CopyTo(BaseConnectionMessage destination)
 	{
-		/// <summary>
-		/// Initialize <see cref="BaseConnectionMessage"/>.
-		/// </summary>
-		/// <param name="type">Message type.</param>
-		protected BaseConnectionMessage(MessageTypes type)
-			: base(type)
-		{
-		}
+		base.CopyTo(destination);
 
-		/// <inheritdoc />
-		[DataMember]
-		[XmlIgnore]
-		public Exception Error { get; set; }
+		destination.Error = Error;
+	}
 
-		/// <summary>
-		/// Copy the message into the <paramref name="destination" />.
-		/// </summary>
-		/// <param name="destination">The object, to which copied information.</param>
-		protected virtual void CopyTo(BaseConnectionMessage destination)
-		{
-			base.CopyTo(destination);
-
-			destination.Error = Error;
-		}
-
-		/// <inheritdoc />
-		public override string ToString()
-		{
-			return base.ToString() + (Error == null ? null : $",Error={Error.Message}");
-		}
+	/// <inheritdoc />
+	public override string ToString()
+	{
+		return base.ToString() + (Error == null ? null : $",Error={Error.Message}");
 	}
 }

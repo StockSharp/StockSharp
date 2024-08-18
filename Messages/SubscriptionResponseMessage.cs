@@ -1,68 +1,67 @@
-namespace StockSharp.Messages
+namespace StockSharp.Messages;
+
+using System;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
+
+/// <summary>
+/// Subscription response message.
+/// </summary>
+public class SubscriptionResponseMessage : Message, IOriginalTransactionIdMessage, IErrorMessage
 {
-	using System;
-	using System.Runtime.Serialization;
-	using System.Xml.Serialization;
+	/// <summary>
+	/// Not supported error.
+	/// </summary>
+	public static readonly NotSupportedException NotSupported = new();
+	
+	/// <inheritdoc />
+	[DataMember]
+	[XmlIgnore]
+	public Exception Error { get; set; }
+
+	/// <inheritdoc />
+	[DataMember]
+	public long OriginalTransactionId { get; set; }
 
 	/// <summary>
-	/// Subscription response message.
+	/// Initialize <see cref="SubscriptionResponseMessage"/>.
 	/// </summary>
-	public class SubscriptionResponseMessage : Message, IOriginalTransactionIdMessage, IErrorMessage
+	public SubscriptionResponseMessage()
+		: base(MessageTypes.SubscriptionResponse)
 	{
-		/// <summary>
-		/// Not supported error.
-		/// </summary>
-		public static readonly NotSupportedException NotSupported = new();
-		
-		/// <inheritdoc />
-		[DataMember]
-		[XmlIgnore]
-		public Exception Error { get; set; }
+	}
 
-		/// <inheritdoc />
-		[DataMember]
-		public long OriginalTransactionId { get; set; }
+	/// <summary>
+	/// Create a copy of <see cref="SubscriptionResponseMessage"/>.
+	/// </summary>
+	/// <returns>Copy.</returns>
+	public override Message Clone()
+	{
+		var clone = new SubscriptionResponseMessage();
+		CopyTo(clone);
+		return clone;
+	}
 
-		/// <summary>
-		/// Initialize <see cref="SubscriptionResponseMessage"/>.
-		/// </summary>
-		public SubscriptionResponseMessage()
-			: base(MessageTypes.SubscriptionResponse)
-		{
-		}
+	/// <summary>
+	/// Copy the message into the <paramref name="destination" />.
+	/// </summary>
+	/// <param name="destination">The object, to which copied information.</param>
+	protected void CopyTo(SubscriptionResponseMessage destination)
+	{
+		base.CopyTo(destination);
 
-		/// <summary>
-		/// Create a copy of <see cref="SubscriptionResponseMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			var clone = new SubscriptionResponseMessage();
-			CopyTo(clone);
-			return clone;
-		}
+		destination.OriginalTransactionId = OriginalTransactionId;
+		destination.Error = Error;
+	}
 
-		/// <summary>
-		/// Copy the message into the <paramref name="destination" />.
-		/// </summary>
-		/// <param name="destination">The object, to which copied information.</param>
-		protected void CopyTo(SubscriptionResponseMessage destination)
-		{
-			base.CopyTo(destination);
+	/// <inheritdoc />
+	public override string ToString()
+	{
+		var str = base.ToString() + $",OrigTrId={OriginalTransactionId}";
 
-			destination.OriginalTransactionId = OriginalTransactionId;
-			destination.Error = Error;
-		}
+		if (Error != default)
+			str += $",Error={Error.Message}";
 
-		/// <inheritdoc />
-		public override string ToString()
-		{
-			var str = base.ToString() + $",OrigTrId={OriginalTransactionId}";
-
-			if (Error != default)
-				str += $",Error={Error.Message}";
-
-			return str;
-		}
+		return str;
 	}
 }

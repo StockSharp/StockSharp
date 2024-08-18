@@ -1,48 +1,47 @@
-namespace StockSharp.Algo.Testing
-{
-	using System;
-	using System.Collections.Generic;
+namespace StockSharp.Algo.Testing;
 
-	using StockSharp.Messages;
+using System;
+using System.Collections.Generic;
+
+using StockSharp.Messages;
+
+/// <summary>
+/// Market-data message with historical source.
+/// </summary>
+public class HistorySourceMessage : MarketDataMessage
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="HistorySourceMessage"/>.
+	/// </summary>
+	public HistorySourceMessage()
+		: base(ExtendedMessageTypes.HistorySource)
+	{
+	}
 
 	/// <summary>
-	/// Market-data message with historical source.
+	/// Callback to retrieve historical data for the specified date.
 	/// </summary>
-	public class HistorySourceMessage : MarketDataMessage
+	public Func<DateTimeOffset, IEnumerable<Message>> GetMessages { get; set; }
+
+	/// <summary>
+	/// Copy the message into the <paramref name="destination" />.
+	/// </summary>
+	/// <param name="destination">The object, to which copied information.</param>
+	public void CopyTo(HistorySourceMessage destination)
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="HistorySourceMessage"/>.
-		/// </summary>
-		public HistorySourceMessage()
-			: base(ExtendedMessageTypes.HistorySource)
-		{
-		}
+		base.CopyTo(destination);
 
-		/// <summary>
-		/// Callback to retrieve historical data for the specified date.
-		/// </summary>
-		public Func<DateTimeOffset, IEnumerable<Message>> GetMessages { get; set; }
+		destination.GetMessages = GetMessages;
+	}
 
-		/// <summary>
-		/// Copy the message into the <paramref name="destination" />.
-		/// </summary>
-		/// <param name="destination">The object, to which copied information.</param>
-		public void CopyTo(HistorySourceMessage destination)
-		{
-			base.CopyTo(destination);
-
-			destination.GetMessages = GetMessages;
-		}
-
-		/// <summary>
-		/// Create a copy of <see cref="HistorySourceMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			var clone = new HistorySourceMessage();
-			CopyTo(clone);
-			return clone;
-		}
+	/// <summary>
+	/// Create a copy of <see cref="HistorySourceMessage"/>.
+	/// </summary>
+	/// <returns>Copy.</returns>
+	public override Message Clone()
+	{
+		var clone = new HistorySourceMessage();
+		CopyTo(clone);
+		return clone;
 	}
 }

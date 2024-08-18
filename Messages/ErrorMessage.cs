@@ -1,54 +1,53 @@
-namespace StockSharp.Messages
+namespace StockSharp.Messages;
+
+using System;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
+
+/// <summary>
+/// Error message.
+/// </summary>
+[DataContract]
+[Serializable]
+public class ErrorMessage : Message, IErrorMessage, IOriginalTransactionIdMessage
 {
-	using System;
-	using System.Runtime.Serialization;
-	using System.Xml.Serialization;
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ErrorMessage"/>.
+	/// </summary>
+	public ErrorMessage()
+		: base(MessageTypes.Error)
+	{
+	}
+
+	/// <inheritdoc />
+	[DataMember]
+	[XmlIgnore]
+	public Exception Error { get; set; }
+
+	/// <inheritdoc />
+	[DataMember]
+	public long OriginalTransactionId { get; set; }
+
+	/// <inheritdoc />
+	public override string ToString()
+	{
+		return base.ToString() + $",Error={Error?.Message},OrigTrId={OriginalTransactionId}";
+	}
 
 	/// <summary>
-	/// Error message.
+	/// Create a copy of <see cref="ErrorMessage"/>.
 	/// </summary>
-	[DataContract]
-	[Serializable]
-	public class ErrorMessage : Message, IErrorMessage, IOriginalTransactionIdMessage
+	/// <returns>Copy.</returns>
+	public override Message Clone()
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ErrorMessage"/>.
-		/// </summary>
-		public ErrorMessage()
-			: base(MessageTypes.Error)
+		var clone = new ErrorMessage
 		{
-		}
+			Error = Error,
+			OriginalTransactionId = OriginalTransactionId,
+		};
 
-		/// <inheritdoc />
-		[DataMember]
-		[XmlIgnore]
-		public Exception Error { get; set; }
+		CopyTo(clone);
 
-		/// <inheritdoc />
-		[DataMember]
-		public long OriginalTransactionId { get; set; }
-
-		/// <inheritdoc />
-		public override string ToString()
-		{
-			return base.ToString() + $",Error={Error?.Message},OrigTrId={OriginalTransactionId}";
-		}
-
-		/// <summary>
-		/// Create a copy of <see cref="ErrorMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			var clone = new ErrorMessage
-			{
-				Error = Error,
-				OriginalTransactionId = OriginalTransactionId,
-			};
-
-			CopyTo(clone);
-
-			return clone;
-		}
+		return clone;
 	}
 }
