@@ -5182,14 +5182,6 @@ public static partial class Extensions
 	}
 
 	/// <summary>
-	/// Determines the specified adapter type is stub.
-	/// </summary>
-	/// <param name="adapterType"><see cref="IMessageAdapter"/> type.</param>
-	/// <returns>Check result.</returns>
-	public static bool IsStub(this Type adapterType)
-		=> adapterType.GetAttribute<MessageAdapterStubAttribute>() is not null;
-
-	/// <summary>
 	/// To filter messages for the given time period.
 	/// </summary>
 	/// <param name="messages">All messages, in which the required shall be searched for.</param>
