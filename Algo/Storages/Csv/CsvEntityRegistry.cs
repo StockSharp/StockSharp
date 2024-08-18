@@ -387,7 +387,7 @@ namespace StockSharp.Algo.Storages.Csv
 				var msg = reader.ReadSecurity();
 
 				if (msg.IsAllSecurity())
-					return TraderHelper.AllSecurity;
+					return EntitiesExtensions.AllSecurity;
 
 				var secId = msg.SecurityId;
 
@@ -591,7 +591,7 @@ namespace StockSharp.Algo.Storages.Csv
 			private Security GetSecurity(string id)
 			{
 				var secId = id.ToSecurityId();
-				var security = secId.IsMoney() ? TraderHelper.MoneySecurity : Registry.Securities.ReadById(secId);
+				var security = secId.IsMoney() ? EntitiesExtensions.MoneySecurity : Registry.Securities.ReadById(secId);
 
 				return security ?? throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(id));
 			}

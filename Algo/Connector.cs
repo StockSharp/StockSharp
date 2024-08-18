@@ -1036,7 +1036,7 @@ namespace StockSharp.Algo
 			var secId = message.SecurityId;
 
 			if (secId.IsMoney())
-				return TraderHelper.MoneySecurity;
+				return EntitiesExtensions.MoneySecurity;
 
 			if (secId == default)
 			{

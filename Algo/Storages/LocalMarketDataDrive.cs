@@ -1042,7 +1042,7 @@ namespace StockSharp.Algo.Storages
 		/// <returns>The path to the folder with market data.</returns>
 		public string GetSecurityPath(SecurityId securityId)
 		{
-			var id = securityId == default ? TraderHelper.AllSecurity.Id : securityId.ToStringId();
+			var id = securityId == default ? EntitiesExtensions.AllSecurity.Id : securityId.ToStringId();
 
 			var folderName = id.SecurityIdToFolderName();
 
