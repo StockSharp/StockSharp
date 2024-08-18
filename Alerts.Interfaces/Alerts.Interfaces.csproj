@@ -4,8 +4,4 @@
   <ItemGroup>
     <ProjectReference Include="..\BusinessEntities\BusinessEntities.csproj" />
   </ItemGroup>
-	
-  <ItemGroup>
-    <PackageReference Include="Ecng.Configuration" Version="$(EcngVer)" />
-  </ItemGroup>
 </Project>
