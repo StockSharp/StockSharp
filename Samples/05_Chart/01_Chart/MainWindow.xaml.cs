@@ -256,7 +256,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 			_tradeGenerator.Process(_security.ToMessage());
 
 			_candleElement = Chart.CreateCandleElement();
-			((ChartCandleElement)_candleElement).PriceStep = 0.01m;
+			((ChartCandleElement)_candleElement).PriceStep = _security.PriceStep;
 			Chart.AddElement(_areaComb, _candleElement, SeriesEditor.DataType.ToCandleSeries(_security));
 		});
 	}

@@ -62,6 +62,11 @@ public interface IChartCandleElement : IChartElement
 	/// </summary>
 	new Func<DateTimeOffset, bool, bool, Color?> Colorer { get; set; }
 
+	/// <summary>
+	/// Minimum price step.
+	/// </summary>
+	decimal? PriceStep { get; set; }
+
 	#endregion
 
 	#region volume charts properties
