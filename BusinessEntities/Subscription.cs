@@ -1,4 +1,4 @@
-namespace StockSharp.Algo;
+namespace StockSharp.BusinessEntities;
 
 using StockSharp.Algo.Candles;
 
