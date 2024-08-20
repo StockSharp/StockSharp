@@ -382,6 +382,61 @@ public class MarketDepthIndicatorValue : SingleIndicatorValue<IOrderBookMessage>
 }
 
 /// <summary>
+/// The indicator value, operating with data type <see cref="Level1ChangeMessage"/>.
+/// </summary>
+public class Level1IndicatorValue : SingleIndicatorValue<Level1ChangeMessage>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="Level1IndicatorValue"/>.
+	/// </summary>
+	/// <param name="indicator">Indicator.</param>
+	/// <param name="l1Msg"><see cref="Level1ChangeMessage"/></param>
+	public Level1IndicatorValue(IIndicator indicator, Level1ChangeMessage l1Msg)
+		: base(indicator, l1Msg)
+	{
+		if (l1Msg is null)
+			throw new ArgumentNullException(nameof(l1Msg));
+	}
+
+	/// <inheritdoc />
+	public override bool IsSupport(Type valueType)
+	{
+		return valueType == typeof(decimal) || base.IsSupport(valueType);
+	}
+
+	/// <inheritdoc />
+	public override T GetValue<T>(Level1Fields? field)
+	{
+		var l1Msg = base.GetValue<Level1ChangeMessage>(default);
+
+		if (typeof(T) == typeof(decimal) || typeof(T) == typeof(decimal?))
+		{
+			var value = field switch
+			{
+				Level1Fields.SpreadMiddle => l1Msg.GetSpreadMiddle(null),
+				_ => l1Msg.TryGet(field ?? Level1Fields.LastTradePrice),
+			};
+
+			if (value is null && typeof(T) == typeof(decimal))
+				return default;
+
+			return value.To<T>();
+		}
+		else
+			return l1Msg.To<T>();
+	}
+
+	/// <inheritdoc />
+	public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
+	{
+		return new Level1IndicatorValue(indicator, base.GetValue<Level1ChangeMessage>(default))
+		{
+			IsFinal = IsFinal
+		};
+	}
+}
+
+/// <summary>
 /// The value of the indicator, operating with pair <see ref="Tuple{TValue, TValue}" />.
 /// </summary>
 /// <typeparam name="TValue">Value type.</typeparam>
