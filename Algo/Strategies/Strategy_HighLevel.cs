@@ -1,5 +1,9 @@
 ﻿namespace StockSharp.Algo.Strategies;
 
+using System.Drawing;
+
+using StockSharp.Algo.Indicators;
+using StockSharp.Algo.Strategies.Protective;
 using StockSharp.Charting;
 
 public partial class Strategy
@@ -85,5 +89,571 @@ public partial class Strategy
 		var volume = position.Abs();
 
 		return position > 0 ? SellMarket(volume) : BuyMarket(volume);
+	}
+
+	/// <summary>
+	/// Subscription handler.
+	/// </summary>
+	/// <typeparam name="T">Market-data type.</typeparam>
+	protected class SubscriptionHandler<T>
+	{
+		/// <summary>
+		/// Subscription binder with zero indicators.
+		/// </summary>
+		public class SubscriptionHandlerBinder0
+		{
+			private readonly SubscriptionHandler<T> _parent;
+			private Action<T> _callback;
+
+			internal SubscriptionHandlerBinder0(SubscriptionHandler<T> parent)
+			{
+				_parent = parent ?? throw new ArgumentNullException(nameof(parent));
+			}
+
+			internal void StartSubscription()
+				=> _parent.StartSubscription();
+
+			internal SubscriptionHandlerBinder0 SetCallback(Action<T> callback)
+			{
+				_callback = callback ?? throw new ArgumentNullException(nameof(callback));
+				StartSubscription();
+				return this;
+			}
+
+			internal virtual IEnumerable<IIndicatorValue> Invoke(T typed)
+			{
+				_callback(typed);
+				return Enumerable.Empty<IIndicatorValue>();
+			}
+		}
+
+		/// <summary>
+		/// Subscription binder with single indicator.
+		/// </summary>
+		public class SubscriptionHandlerBinder1 : SubscriptionHandlerBinder0
+		{
+			private Action<T, IIndicatorValue> _callback;
+
+			internal SubscriptionHandlerBinder1(SubscriptionHandler<T> parent, IIndicator indicator1)
+				: base(parent)
+			{
+				Indicator1 = indicator1 ?? throw new ArgumentNullException(nameof(indicator1));
+
+				parent._strategy.Indicators.TryAdd(indicator1);
+			}
+
+			/// <summary>
+			/// <see cref="IIndicator"/>
+			/// </summary>
+			protected IIndicator Indicator1 { get; }
+
+			internal SubscriptionHandlerBinder1 SetCallback(Action<T, IIndicatorValue> callback)
+			{
+				_callback = callback ?? throw new ArgumentNullException(nameof(callback));
+				StartSubscription();
+				return this;
+			}
+
+			internal override IEnumerable<IIndicatorValue> Invoke(T typed)
+			{
+				var v1 = Indicator1.Process(typed, true);
+
+				_callback(typed, v1);
+
+				return new[] { v1 };
+			}
+		}
+
+		/// <summary>
+		/// Subscription binder with two indicators.
+		/// </summary>
+		public class SubscriptionHandlerBinder2 : SubscriptionHandlerBinder1
+		{
+			private Action<T, IIndicatorValue, IIndicatorValue> _callback;
+
+			internal SubscriptionHandlerBinder2(SubscriptionHandler<T> parent, IIndicator indicator1, IIndicator indicator2)
+				: base(parent, indicator1)
+			{
+				Indicator2 = indicator2 ?? throw new ArgumentNullException(nameof(indicator2));
+
+				parent._strategy.Indicators.TryAdd(indicator2);
+			}
+
+			/// <summary>
+			/// <see cref="IIndicator"/>
+			/// </summary>
+			protected IIndicator Indicator2 { get; }
+
+			internal SubscriptionHandlerBinder2 SetCallback(Action<T, IIndicatorValue, IIndicatorValue> callback)
+			{
+				_callback = callback ?? throw new ArgumentNullException(nameof(callback));
+				StartSubscription();
+				return this;
+			}
+
+			internal override IEnumerable<IIndicatorValue> Invoke(T typed)
+			{
+				var v1 = Indicator1.Process(typed, true);
+				var v2 = Indicator2.Process(typed, true);
+
+				_callback(typed, v1, v2);
+
+				return new[] { v1, v2 };
+			}
+		}
+
+		/// <summary>
+		/// Subscription binder with three indicators.
+		/// </summary>
+		public class SubscriptionHandlerBinder3 : SubscriptionHandlerBinder2
+		{
+			private Action<T, IIndicatorValue, IIndicatorValue, IIndicatorValue> _callback;
+
+			internal SubscriptionHandlerBinder3(SubscriptionHandler<T> parent, IIndicator indicator1, IIndicator indicator2, IIndicator indicator3)
+				: base(parent, indicator1, indicator2)
+			{
+				Indicator3 = indicator3 ?? throw new ArgumentNullException(nameof(indicator3));
+
+				parent._strategy.Indicators.TryAdd(indicator3);
+			}
+
+			/// <summary>
+			/// <see cref="IIndicator"/>
+			/// </summary>
+			protected IIndicator Indicator3 { get; }
+
+			internal SubscriptionHandlerBinder3 SetCallback(Action<T, IIndicatorValue, IIndicatorValue, IIndicatorValue> callback)
+			{
+				_callback = callback ?? throw new ArgumentNullException(nameof(callback));
+				StartSubscription();
+				return this;
+			}
+
+			internal override IEnumerable<IIndicatorValue> Invoke(T typed)
+			{
+				var v1 = Indicator1.Process(typed, true);
+				var v2 = Indicator2.Process(typed, true);
+				var v3 = Indicator3.Process(typed, true);
+
+				_callback(typed, v1, v2, v3);
+
+				return new[] { v1, v2, v3 };
+			}
+		}
+
+		private readonly Strategy _strategy;
+		private readonly CachedSynchronizedList<SubscriptionHandlerBinder0> _binders = new();
+
+		internal SubscriptionHandler(Strategy strategy, Subscription subscription)
+        {
+			_strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
+			Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
+		}
+
+		/// <summary>
+		/// <see cref="Subscription"/>.
+		/// </summary>
+		public Subscription Subscription { get; }
+
+		private void StartSubscription()
+		{
+			var type = typeof(T);
+
+			void tryActivateProtection(decimal price, DateTimeOffset time)
+			{
+				var info = _strategy._posController?.TryActivate(price, time);
+
+				if (info is not null)
+					_strategy.ActiveProtection(info.Value);
+			}
+
+			void handle(object v, Func<ICandleMessage> getCandle)
+			{
+				var typed = v.To<T>();
+
+				var indValues = new List<IIndicatorValue>();
+
+				foreach (var binder in _binders.Cache)
+					indValues.AddRange(binder.Invoke(typed));
+
+				_strategy.DrawFlush(Subscription, getCandle, indValues);
+			}
+
+			if (type.Is<ICandleMessage>())
+			{
+				Subscription
+					.WhenCandleReceived(_strategy)
+					.Do(v =>
+					{
+						if (_strategy.ProcessState != ProcessStates.Started)
+							return;
+
+						tryActivateProtection(v.ClosePrice, _strategy.CurrentTime);
+
+						handle(v, () => v);
+					})
+					.Apply(_strategy);
+			}
+			else if (type.Is<ITickTradeMessage>())
+			{
+				Subscription
+					.WhenTickTradeReceived(_strategy)
+					.Do(v =>
+					{
+						if (_strategy.ProcessState != ProcessStates.Started)
+							return;
+
+						tryActivateProtection(v.Price, _strategy.CurrentTime);
+
+						handle(v, () =>	new TimeFrameCandleMessage
+						{
+							OpenTime = v.ServerTime,
+							SecurityId = v.SecurityId,
+							OpenPrice = v.Price,
+							HighPrice = v.Price,
+							LowPrice = v.Price,
+							ClosePrice = v.Price,
+							TotalVolume = v.Volume,
+							State = CandleStates.Finished,
+						});
+					})
+					.Apply(_strategy);
+			}
+			else if (type.Is<IOrderBookMessage>())
+			{
+				Subscription
+					.WhenOrderBookReceived(_strategy)
+					.Do(v =>
+					{
+						if (_strategy.ProcessState != ProcessStates.Started)
+							return;
+
+						var spreadNullable = v.GetSpreadMiddle(null);
+
+						if (spreadNullable is not decimal spread)
+							return;
+
+						tryActivateProtection(spread, _strategy.CurrentTime);
+
+						handle(v, () => new TimeFrameCandleMessage
+						{
+							OpenTime = v.ServerTime,
+							SecurityId = v.SecurityId,
+							OpenPrice = spread,
+							HighPrice = spread,
+							LowPrice = spread,
+							ClosePrice = spread,
+							State = CandleStates.Finished,
+						});
+					})
+					.Apply(_strategy);
+			}
+			else
+			{
+				throw new NotSupportedException(LocalizedStrings.UnsupportedType.Put(type));
+			}
+
+			_strategy.Subscribe(Subscription);
+		}
+
+		/// <summary>
+		/// Bind the subscription.
+		/// </summary>
+		/// <param name="callback">Callback.</param>
+		/// <returns><see cref="SubscriptionHandler{T}"/></returns>
+		public SubscriptionHandler<T> Bind(Action<T> callback)
+		{
+			_binders.Add(new SubscriptionHandlerBinder0(this).SetCallback(callback));
+			return this;
+		}
+
+		/// <summary>
+		/// Bind indicator to the subscription.
+		/// </summary>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="callback">Callback.</param>
+		/// <returns><see cref="SubscriptionHandler{T}"/></returns>
+		public SubscriptionHandler<T> Bind(IIndicator indicator, Action<T, decimal> callback)
+		{
+			if (callback is null)
+				throw new ArgumentNullException(nameof(callback));
+
+			return Bind(indicator, (v, iv) => callback(v, iv.GetValue<decimal>()));
+		}
+
+		/// <summary>
+		/// Bind indicator to the subscription.
+		/// </summary>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="callback">Callback.</param>
+		/// <returns><see cref="SubscriptionHandler{T}"/></returns>
+		public SubscriptionHandler<T> Bind(IIndicator indicator, Action<T, IIndicatorValue> callback)
+		{
+			_binders.Add(new SubscriptionHandlerBinder1(this, indicator).SetCallback(callback));
+			return this;
+		}
+
+		/// <summary>
+		/// Bind indicator to the subscription.
+		/// </summary>
+		/// <param name="indicator1">Indicator.</param>
+		/// <param name="indicator2">Indicator.</param>
+		/// <param name="callback">Callback.</param>
+		/// <returns><see cref="SubscriptionHandler{T}"/></returns>
+		public SubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, Action<T, decimal, decimal> callback)
+		{
+			if (callback is null)
+				throw new ArgumentNullException(nameof(callback));
+
+			return Bind(indicator1, indicator2, (v, iv1, iv2) => callback(v, iv1.GetValue<decimal>(), iv2.GetValue<decimal>()));
+		}
+
+		/// <summary>
+		/// Bind indicators to the subscription.
+		/// </summary>
+		/// <param name="indicator1">Indicator.</param>
+		/// <param name="indicator2">Indicator.</param>
+		/// <param name="callback">Callback.</param>
+		/// <returns><see cref="SubscriptionHandler{T}"/></returns>
+		public SubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, Action<T, IIndicatorValue, IIndicatorValue> callback)
+		{
+			_binders.Add(new SubscriptionHandlerBinder2(this, indicator1, indicator2).SetCallback(callback));
+			return this;
+		}
+
+		/// <summary>
+		/// Bind indicator to the subscription.
+		/// </summary>
+		/// <param name="indicator1">Indicator.</param>
+		/// <param name="indicator2">Indicator.</param>
+		/// <param name="indicator3">Indicator.</param>
+		/// <param name="callback">Callback.</param>
+		/// <returns><see cref="SubscriptionHandler{T}"/></returns>
+		public SubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, Action<T, decimal, decimal, decimal> callback)
+		{
+			if (callback is null)
+				throw new ArgumentNullException(nameof(callback));
+
+			return Bind(indicator1, indicator2, indicator3, (v, iv1, iv2, iv3) => callback(v, iv1.GetValue<decimal>(), iv2.GetValue<decimal>(), iv3.GetValue<decimal>()));
+		}
+
+		/// <summary>
+		/// Bind indicators to the subscription.
+		/// </summary>
+		/// <param name="indicator1">Indicator.</param>
+		/// <param name="indicator2">Indicator.</param>
+		/// <param name="indicator3">Indicator.</param>
+		/// <param name="callback">Callback.</param>
+		/// <returns><see cref="SubscriptionHandler{T}"/></returns>
+		public SubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, Action<T, IIndicatorValue, IIndicatorValue, IIndicatorValue> callback)
+		{
+			_binders.Add(new SubscriptionHandlerBinder3(this, indicator1, indicator2, indicator3).SetCallback(callback));
+			return this;
+		}
+	}
+
+	private void ActiveProtection((bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition) info)
+	{
+		// sending protection (=closing position) order as regular order
+		RegisterOrder(this.CreateOrder(info.side, info.price, info.volume));
+	}
+
+	/// <summary>
+	/// Subscribe to candles.
+	/// </summary>
+	/// <param name="tf">Time-frame.</param>
+	/// <param name="isFinishedOnly"><see cref="MarketDataMessage.IsFinishedOnly"/></param>
+	/// <param name="security"><see cref="BusinessEntities.Security"/>. If security is not passed, then <see cref="Security"/> value is used.</param>
+	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
+	protected SubscriptionHandler<ICandleMessage> SubscribeCandles(TimeSpan tf, bool isFinishedOnly = true, Security security = default)
+		=> SubscribeCandles(DataType.TimeFrame(tf), isFinishedOnly, security);
+
+	/// <summary>
+	/// Subscribe to candles.
+	/// </summary>
+	/// <param name="dt"><see cref="DataType"/></param>
+	/// <param name="isFinishedOnly"><see cref="MarketDataMessage.IsFinishedOnly"/></param>
+	/// <param name="security"><see cref="BusinessEntities.Security"/>. If security is not passed, then <see cref="Security"/> value is used.</param>
+	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
+	protected SubscriptionHandler<ICandleMessage> SubscribeCandles(DataType dt, bool isFinishedOnly = true, Security security = default)
+		=> SubscribeCandles(new(dt, Security)
+		{
+			MarketData =
+			{
+				IsFinishedOnly = isFinishedOnly,
+			}
+		});
+
+	/// <summary>
+	/// Subscribe to candles.
+	/// </summary>
+	/// <param name="subscription"><see cref="Subscription"/></param>
+	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
+	protected SubscriptionHandler<ICandleMessage> SubscribeCandles(Subscription subscription)
+		=> new(this, subscription);
+
+	private IChart _chart;
+	private SynchronizedList<Order> _drawingOrders;
+	private SynchronizedList<MyTrade> _drawingTrades;
+	private readonly CachedSynchronizedList<IChartOrderElement> _ordersElems = new();
+	private readonly CachedSynchronizedList<IChartTradeElement> _tradesElems = new();
+	private readonly SynchronizedDictionary<Subscription, IChartElement> _subscriptionElems = new();
+	private readonly SynchronizedDictionary<IIndicator, IChartIndicatorElement> _indElems = new();
+
+	/// <summary>
+	/// Create chart area.
+	/// </summary>
+	/// <returns><see cref="IChartArea"/></returns>
+	protected IChartArea CreateChartArea()
+	{
+		_chart ??= this.GetChart();
+		return _chart?.AddArea();
+	}
+
+	/// <summary>
+	/// Draw candles on chart.
+	/// </summary>
+	/// <param name="area"><see cref="IChartArea"/></param>
+	/// <param name="subscription"><see cref="SubscriptionHandler{T}"/></param>
+	/// <returns><see cref="IChartCandleElement"/></returns>
+	protected IChartCandleElement DrawCandles(IChartArea area, SubscriptionHandler<ICandleMessage> subscription)
+		=> DrawCandles(area, subscription.Subscription);
+
+	/// <summary>
+	/// Draw candles on chart.
+	/// </summary>
+	/// <param name="area"><see cref="IChartArea"/></param>
+	/// <param name="subscription"><see cref="Subscription"/></param>
+	/// <returns><see cref="IChartCandleElement"/></returns>
+	protected IChartCandleElement DrawCandles(IChartArea area, Subscription subscription)
+	{
+		var elem = area.AddCandles();
+		_subscriptionElems.Add(subscription, elem);
+		return elem;
+	}
+
+	/// <summary>
+	/// Draw indicator on chart.
+	/// </summary>
+	/// <param name="area"><see cref="IChartArea"/></param>
+	/// <param name="indicator"><see cref="IIndicator"/></param>
+	/// <param name="color"><see cref="IChartIndicatorElement.Color"/></param>
+	/// <param name="additionalColor"><see cref="IChartIndicatorElement.AdditionalColor"/></param>
+	/// <returns><see cref="IChartIndicatorElement"/></returns>
+	protected IChartIndicatorElement DrawIndicator(IChartArea area, IIndicator indicator, Color? color = default, Color? additionalColor = default)
+	{
+		var elem = area.AddIndicator(indicator);
+
+		if (color is not null)
+			elem.Color = color.Value;
+
+		if (additionalColor is not null)
+			elem.AdditionalColor = additionalColor.Value;
+
+		_indElems.Add(indicator, elem);
+
+		return elem;
+	}
+
+	/// <summary>
+	/// Draw trades on chart.
+	/// </summary>
+	/// <param name="area"><see cref="IChartArea"/></param>
+	/// <returns><see cref="IChartTradeElement"/></returns>
+	protected IChartTradeElement DrawOwnTrades(IChartArea area)
+	{
+		var elem = area.AddTrades();
+		_drawingTrades = new();
+		_tradesElems.Add(elem);
+		return elem;
+	}
+
+	/// <summary>
+	/// Draw orders on chart.
+	/// </summary>
+	/// <param name="area"><see cref="IChartArea"/></param>
+	/// <returns><see cref="IChartOrderElement"/></returns>
+	protected IChartOrderElement DrawOrders(IChartArea area)
+	{
+		var elem = area.AddOrders();
+		_drawingOrders = new();
+		_ordersElems.Add(elem);
+		return elem;
+	}
+
+	private void DrawFlush(Subscription subscription, Func<ICandleMessage> getCandle, List<IIndicatorValue> indValues)
+	{
+		if (subscription is null)	throw new ArgumentNullException(nameof(subscription));
+		if (getCandle is null)		throw new ArgumentNullException(nameof(getCandle));
+		if (indValues is null)		throw new ArgumentNullException(nameof(indValues));
+
+		var trade = _drawingTrades?.CopyAndClear().FirstOrDefault();
+		var order = _drawingOrders?.CopyAndClear().FirstOrDefault();
+
+		if (_chart == null)
+			return;
+
+		var data = _chart.CreateData();
+		var candle = getCandle();
+
+		var item = data.Group(candle.OpenTime);
+
+		if (_subscriptionElems.TryGetValue(subscription, out var candleElem))
+			item.Add(candleElem, candle);
+
+		foreach (var indValue in indValues)
+		{
+			if (_indElems.TryGetValue(indValue.Indicator, out var indElem))
+				item.Add(indElem, indValue);
+		}
+
+		if (order is not null)
+		{
+			foreach (var ordersElem in _ordersElems.Cache)
+				item.Add(ordersElem, order);
+		}
+
+		if (trade is not null)
+		{
+			foreach (var tradesElem in _tradesElems.Cache)
+				item.Add(tradesElem, trade);
+		}
+
+		_chart.Draw(data);
+	}
+
+	private Unit _takeProfit, _stopLoss;
+	private bool _isStopTrailing;
+	private TimeSpan _takeTimeout, _stopTimeout;
+	private bool _protectiveUseMarketOrders;
+	private ProtectiveController _protectiveController;
+	private IProtectivePositionController _posController;
+
+	/// <summary>
+	/// Start position protection.
+	/// </summary>
+	/// <param name="takeProfit">Take offset.</param>
+	/// <param name="stopLoss">Stop offset.</param>
+	/// <param name="isStopTrailing">Whether to use a trailing technique.</param>
+	/// <param name="takeTimeout">Time limit. If protection has not worked by this time, the position will be closed on the market.</param>
+	/// <param name="stopTimeout">Time limit. If protection has not worked by this time, the position will be closed on the market.</param>
+	/// <param name="useMarketOrders">Whether to use market orders.</param>
+	protected void StartProtection(
+		Unit takeProfit, Unit stopLoss,
+		bool isStopTrailing = default,
+		TimeSpan takeTimeout = default,
+		TimeSpan stopTimeout = default,
+		bool useMarketOrders = default)
+	{
+		if (!takeProfit.IsSet() && !stopLoss.IsSet())
+			return;
+
+		_protectiveController = new();
+		_takeProfit = takeProfit;
+		_stopLoss = stopLoss;
+		_isStopTrailing = isStopTrailing;
+		_takeTimeout = takeTimeout;
+		_stopTimeout = stopTimeout;
+		_protectiveUseMarketOrders = useMarketOrders;
 	}
 }

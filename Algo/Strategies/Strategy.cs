@@ -7,6 +7,7 @@ using StockSharp.Algo.Risk;
 using StockSharp.Algo.Statistics;
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Testing;
+using StockSharp.Algo.Strategies.Protective;
 
 /// <summary>
 /// <see cref="Order.Comment"/> auto-fill modes.
@@ -2107,6 +2108,23 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	protected virtual void OnReseted()
 	{
 		RaiseReseted();
+
+		_protectiveController = default;
+		_posController = default;
+		_takeProfit = default;
+		_stopLoss = default;
+		_isStopTrailing = default;
+		_takeTimeout = default;
+		_stopTimeout = default;
+		_protectiveUseMarketOrders = default;
+
+		_chart = default;
+		_drawingOrders = default;
+		_drawingTrades = default;
+		_ordersElems.Clear();
+		_tradesElems.Clear();
+		_subscriptionElems.Clear();
+		_indElems.Clear();
 	}
 
 	void IMarketRuleContainer.SuspendRules()
@@ -2434,7 +2452,29 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if (IsDisposeStarted || !IsOwnOrder(trade.Order) || !TryAddMyTrade(trade))
 			return;
 
-		TryInvoke(() => OwnTradeReceived?.Invoke(subscription, trade));
+		TryInvoke(() =>
+		{
+			OwnTradeReceived?.Invoke(subscription, trade);
+
+			_drawingTrades?.Add(trade);
+
+			if (_protectiveController is null)
+				return;
+
+			var security = trade.Order.Security;
+			var portfolio = trade.Order.Portfolio;
+
+			_posController ??= _protectiveController.GetController(
+				security.ToSecurityId(),
+				portfolio.Name,
+				new LocalProtectiveBehaviourFactory(security.PriceStep, security.Decimals),
+				_takeProfit, _stopLoss, _isStopTrailing, _takeTimeout, _stopTimeout, _protectiveUseMarketOrders);
+
+			var info = _posController?.Update(trade.Trade.Price, trade.GetPosition());
+
+			if (info is not null)
+				ActiveProtection(info.Value);
+		});
 	}
 
 	/// <summary>
@@ -2462,7 +2502,12 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		else if (IsOwnOrder(order))
 			TryInvoke(() => ProcessOrder(order, true));
 
-		TryInvoke(() => OrderReceived?.Invoke(subscription, order));
+		TryInvoke(() =>
+		{
+			OrderReceived?.Invoke(subscription, order);
+
+			_drawingOrders?.Add(order);
+		});
 	}
 
 	private void OnConnectorOrderEditFailed(long transactionId, OrderFail fail)
