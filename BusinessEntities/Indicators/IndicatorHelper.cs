@@ -167,6 +167,9 @@ public static class IndicatorHelper
 			case IOrderBookMessage d:
 				input = new MarketDepthIndicatorValue(indicator, d) { IsFinal = isFinal };
 				break;
+			case ITickTradeMessage t:
+				input = new DecimalIndicatorValue(indicator, t.Price) { IsFinal = isFinal };
+				break;
 			case Level1ChangeMessage l1:
 				input = new Level1IndicatorValue(indicator, l1) { IsFinal = isFinal };
 				break;

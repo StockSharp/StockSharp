@@ -134,7 +134,9 @@ namespace StockSharp.Samples.Testing.History
 
 			SubscribeCandles(subscription)
 				// bind indicators to the candles
-				.Bind(longSma, shortSma, OnProcess);
+				.Bind(longSma, shortSma, OnProcess)
+				// start processing
+				.Start();
 
 			// ----------------------------------------
 

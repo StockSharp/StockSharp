@@ -296,6 +296,8 @@ public partial class Strategy
 			}
 			else if (type.Is<ITickTradeMessage>())
 			{
+				var dt = DataType.Create(typeof(TickCandleMessage), 1);
+
 				Subscription
 					.WhenTickTradeReceived(_strategy)
 					.Do(v =>
@@ -305,8 +307,9 @@ public partial class Strategy
 
 						tryActivateProtection(v.Price, _strategy.CurrentTime);
 
-						handle(v, () =>	new TimeFrameCandleMessage
+						handle(v, () =>	new TickCandleMessage
 						{
+							DataType = dt,
 							OpenTime = v.ServerTime,
 							SecurityId = v.SecurityId,
 							OpenPrice = v.Price,
@@ -321,6 +324,9 @@ public partial class Strategy
 			}
 			else if (type.Is<IOrderBookMessage>())
 			{
+				var dt = DataType.Create(typeof(TickCandleMessage), 1);
+				var field = Subscription.MarketData?.BuildField ?? Level1Fields.SpreadMiddle;
+
 				Subscription
 					.WhenOrderBookReceived(_strategy)
 					.Do(v =>
@@ -328,21 +334,59 @@ public partial class Strategy
 						if (_strategy.ProcessState != ProcessStates.Started)
 							return;
 
-						var spreadNullable = v.GetSpreadMiddle(null);
+						var value = field switch
+						{
+							Level1Fields.BestBidPrice => v.GetBestBid()?.Price,
+							Level1Fields.BestAskPrice => v.GetBestAsk()?.Price,
+							Level1Fields.SpreadMiddle => v.GetSpreadMiddle(null),
+							_ => throw new ArgumentOutOfRangeException(field.To<string>()),
+						};
 
-						if (spreadNullable is not decimal spread)
+						if (value is not decimal price)
 							return;
 
-						tryActivateProtection(spread, _strategy.CurrentTime);
+						tryActivateProtection(price, _strategy.CurrentTime);
 
-						handle(v, () => new TimeFrameCandleMessage
+						handle(v, () => new TickCandleMessage
 						{
+							DataType = dt,
 							OpenTime = v.ServerTime,
 							SecurityId = v.SecurityId,
-							OpenPrice = spread,
-							HighPrice = spread,
-							LowPrice = spread,
-							ClosePrice = spread,
+							OpenPrice = price,
+							HighPrice = price,
+							LowPrice = price,
+							ClosePrice = price,
+							State = CandleStates.Finished,
+						});
+					})
+					.Apply(_strategy);
+			}
+			else if (type.Is<Level1ChangeMessage>())
+			{
+				var dt = DataType.Create(typeof(TickCandleMessage), 1);
+				var field = Subscription.MarketData?.BuildField ?? Level1Fields.LastTradePrice;
+
+				Subscription
+					.WhenLevel1Received(_strategy)
+					.Do(v =>
+					{
+						if (_strategy.ProcessState != ProcessStates.Started)
+							return;
+
+						if (v.TryGet(field) is not decimal price)
+							return;
+
+						tryActivateProtection(price, _strategy.CurrentTime);
+
+						handle(v, () => new TickCandleMessage
+						{
+							DataType = dt,
+							OpenTime = v.ServerTime,
+							SecurityId = v.SecurityId,
+							OpenPrice = price,
+							HighPrice = price,
+							LowPrice = price,
+							ClosePrice = price,
 							State = CandleStates.Finished,
 						});
 					})
@@ -352,8 +396,16 @@ public partial class Strategy
 			{
 				throw new NotSupportedException(LocalizedStrings.UnsupportedType.Put(type));
 			}
+		}
 
+		/// <summary>
+		/// Start subscription.
+		/// </summary>
+		/// <returns><see cref="SubscriptionHandler{T}"/></returns>
+		public SubscriptionHandler<T> Start()
+		{
 			_strategy.Subscribe(Subscription);
+			return this;
 		}
 
 		/// <summary>
@@ -476,7 +528,7 @@ public partial class Strategy
 	/// <param name="security"><see cref="BusinessEntities.Security"/>. If security is not passed, then <see cref="Security"/> value is used.</param>
 	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
 	protected SubscriptionHandler<ICandleMessage> SubscribeCandles(DataType dt, bool isFinishedOnly = true, Security security = default)
-		=> SubscribeCandles(new(dt, Security)
+		=> SubscribeCandles(new(dt, security ?? Security)
 		{
 			MarketData =
 			{
@@ -490,6 +542,54 @@ public partial class Strategy
 	/// <param name="subscription"><see cref="Subscription"/></param>
 	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
 	protected SubscriptionHandler<ICandleMessage> SubscribeCandles(Subscription subscription)
+		=> new(this, subscription);
+
+	/// <summary>
+	/// Subscribe to <see cref="DataType.Ticks"/>.
+	/// </summary>
+	/// <param name="security"><see cref="BusinessEntities.Security"/>. If security is not passed, then <see cref="Security"/> value is used.</param>
+	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
+	protected SubscriptionHandler<ITickTradeMessage> SubscribeTicks(Security security = null)
+		=> SubscribeTicks(new Subscription(DataType.Ticks, security ?? Security));
+
+	/// <summary>
+	/// Subscribe to <see cref="DataType.Ticks"/>.
+	/// </summary>
+	/// <param name="subscription"><see cref="Subscription"/></param>
+	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
+	protected SubscriptionHandler<ITickTradeMessage> SubscribeTicks(Subscription subscription)
+		=> new(this, subscription);
+
+	/// <summary>
+	/// Subscribe to <see cref="DataType.Level1"/>.
+	/// </summary>
+	/// <param name="security"><see cref="BusinessEntities.Security"/>. If security is not passed, then <see cref="Security"/> value is used.</param>
+	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
+	protected SubscriptionHandler<Level1ChangeMessage> SubscribeLevel1(Security security = null)
+		=> SubscribeLevel1(new Subscription(DataType.Level1, security ?? Security));
+
+	/// <summary>
+	/// Subscribe to <see cref="DataType.Level1"/>.
+	/// </summary>
+	/// <param name="subscription"><see cref="Subscription"/></param>
+	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
+	protected SubscriptionHandler<Level1ChangeMessage> SubscribeLevel1(Subscription subscription)
+		=> new(this, subscription);
+
+	/// <summary>
+	/// Subscribe to <see cref="DataType.MarketDepth"/>.
+	/// </summary>
+	/// <param name="security"><see cref="BusinessEntities.Security"/>. If security is not passed, then <see cref="Security"/> value is used.</param>
+	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
+	protected SubscriptionHandler<IOrderBookMessage> SubscribeOrderBook(Security security = null)
+		=> SubscribeOrderBook(new Subscription(DataType.MarketDepth, security ?? Security));
+
+	/// <summary>
+	/// Subscribe to <see cref="DataType.MarketDepth"/>.
+	/// </summary>
+	/// <param name="subscription"><see cref="Subscription"/></param>
+	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
+	protected SubscriptionHandler<IOrderBookMessage> SubscribeOrderBook(Subscription subscription)
 		=> new(this, subscription);
 
 	private IChart _chart;
@@ -516,7 +616,7 @@ public partial class Strategy
 	/// <param name="area"><see cref="IChartArea"/></param>
 	/// <param name="subscription"><see cref="SubscriptionHandler{T}"/></param>
 	/// <returns><see cref="IChartCandleElement"/></returns>
-	protected IChartCandleElement DrawCandles(IChartArea area, SubscriptionHandler<ICandleMessage> subscription)
+	protected IChartCandleElement DrawCandles<T>(IChartArea area, SubscriptionHandler<T> subscription)
 		=> DrawCandles(area, subscription.Subscription);
 
 	/// <summary>
