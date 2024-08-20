@@ -134,6 +134,57 @@ public static class IndicatorHelper
 	}
 
 	/// <summary>
+	/// To renew the indicator with new value.
+	/// </summary>
+	/// <param name="indicator">Indicator.</param>
+	/// <param name="inputValue">Input value.</param>
+	/// <param name="isFinal"><see cref="IIndicatorValue.IsFinal"/></param>
+	/// <returns><see cref="IIndicatorValue"/>.</returns>
+	public static IIndicatorValue Process(this IIndicator indicator, object inputValue, bool isFinal)
+	{
+		if (indicator == null)
+			throw new ArgumentNullException(nameof(indicator));
+
+		if (inputValue == null)
+			throw new ArgumentNullException(nameof(inputValue));
+
+		IIndicatorValue input = null;
+
+		switch (inputValue)
+		{
+			case ICandleMessage c:
+				input = new CandleIndicatorValue(indicator, c);
+				break;
+			case IIndicatorValue v:
+				input = v;
+				break;
+			case Unit u:
+				input = new DecimalIndicatorValue(indicator, u.Value) { IsFinal = isFinal };
+				break;
+			case Tuple<decimal, decimal> t:
+				input = new PairIndicatorValue<decimal>(indicator, t) { IsFinal = isFinal };
+				break;
+			case IOrderBookMessage d:
+				input = new MarketDepthIndicatorValue(indicator, d) { IsFinal = isFinal };
+				break;
+			case Level1ChangeMessage l1:
+				input = new Level1IndicatorValue(indicator, l1) { IsFinal = isFinal };
+				break;
+			case bool b:
+				input = new DecimalIndicatorValue(indicator, b ? 1 : 0) { IsFinal = isFinal };
+				break;
+		}
+
+		if (input == null && inputValue.GetType().IsNumeric())
+			input = new DecimalIndicatorValue(indicator, inputValue.To<decimal>()) { IsFinal = isFinal };
+
+		if (input == null)
+			throw new ArgumentException(LocalizedStrings.IndicatorNotWorkWithType.Put(inputValue.GetType().Name));
+
+		return indicator.Process(input);
+	}
+
+	/// <summary>
 	/// Get value type for specified indicator.
 	/// </summary>
 	/// <param name="indicatorType">Indicator type.</param>
