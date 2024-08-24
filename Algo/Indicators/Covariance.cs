@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using StockSharp.Charting;
-
 /// <summary>
 /// Covariance.
 /// </summary>
@@ -14,7 +12,7 @@ using StockSharp.Charting;
 	Description = LocalizedStrings.CovarianceKey)]
 [Doc("topics/api/indicators/list_of_indicators/covariation.html")]
 [IndicatorIn(typeof(PairIndicatorValue<decimal>))]
-[ChartIgnore]
+[IndicatorHidden]
 public class Covariance : LengthIndicator<Tuple<decimal, decimal>>
 {
 	/// <summary>

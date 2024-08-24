@@ -39,7 +39,7 @@ public static class IChartExtensions
 			throw new ArgumentNullException(nameof(chart));
 
 		chart.IndicatorTypes.Clear();
-		chart.IndicatorTypes.AddRange(IndicatorProvider.All.ExcludeObsolete().Where(it => it.Indicator?.GetAttribute<ChartIgnoreAttribute>() is null));
+		chart.IndicatorTypes.AddRange(IndicatorProvider.All.ExcludeObsolete());
 	}
 
 	/// <summary>

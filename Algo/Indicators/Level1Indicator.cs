@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Indicators;
 
-using StockSharp.Charting;
-
 /// <summary>
 /// The indicator, built on the market data basis.
 /// </summary>
@@ -10,7 +8,7 @@ using StockSharp.Charting;
 	Name = LocalizedStrings.Level1Key,
 	Description = LocalizedStrings.Level1IndicatorKey)]
 [IndicatorIn(typeof(SingleIndicatorValue<Level1ChangeMessage>))]
-[ChartIgnore]
+[IndicatorHidden]
 public class Level1Indicator : BaseIndicator
 {
 	/// <summary>
