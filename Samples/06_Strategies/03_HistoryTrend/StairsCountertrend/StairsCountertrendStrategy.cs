@@ -3,6 +3,7 @@ using StockSharp.Algo;
 using StockSharp.Algo.Candles;
 using StockSharp.Algo.Strategies;
 using StockSharp.Messages;
+using StockSharp.BusinessEntities;
 
 namespace StockSharp.Samples.Strategies.HistoryTrend
 {

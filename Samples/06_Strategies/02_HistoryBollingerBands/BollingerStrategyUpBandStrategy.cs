@@ -8,6 +8,7 @@
 	using StockSharp.Algo.Strategies;
 	using StockSharp.Algo.Testing;
 	using StockSharp.Messages;
+	using StockSharp.BusinessEntities;
 
 	internal class BollingerStrategyUpBandStrategy : Strategy
 	{

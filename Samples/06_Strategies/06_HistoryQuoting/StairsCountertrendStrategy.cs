@@ -8,6 +8,7 @@ using StockSharp.Algo.Candles;
 using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Strategies.Quoting;
 using StockSharp.Messages;
+using StockSharp.BusinessEntities;
 
 public class StairsCountertrendStrategy : Strategy
 {
