@@ -28,7 +28,18 @@ public class LocalizedStringsGenerator : IIncrementalGenerator
 			var items = new StringBuilder();
 			var resetCache = new StringBuilder();
 
-			var dict = JsonSerializer.Deserialize<IDictionary<string, string>>(content);
+			var dict = new Dictionary<string, string>();
+
+			using var doc = JsonDocument.Parse(content);
+			{
+				foreach (var property in doc.RootElement.EnumerateObject())
+				{
+					if (dict.ContainsKey(property.Name))
+						throw new InvalidOperationException(property.Name);
+
+					dict.Add(property.Name, property.Value.GetString());
+				}
+			}
 
 			foreach (var p in dict)
 			{
