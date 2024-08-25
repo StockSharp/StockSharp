@@ -3,4 +3,7 @@
   <ItemGroup>
     <PackageReference Include="StockSharp.Xaml" Version="5.*" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Connectors\DarkHorse\DarkHorse.csproj" />
+  </ItemGroup>
 </Project>
