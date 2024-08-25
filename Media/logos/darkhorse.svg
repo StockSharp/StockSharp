@@ -1,64 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg version="1.1" id="svg2" width="200px" height="200px" viewBox="0 0 131.819 137.177" xmlns="http://www.w3.org/2000/svg">
-	<defs id="defs6">
-		<clipPath clipPathUnits="userSpaceOnUse" id="clipPath16">
-			<path d="M 0,147.695 H 611.667 V 0 H 0 Z" id="path14"/>
-		</clipPath>
-		<clipPath clipPathUnits="userSpaceOnUse" id="clipPath28">
-			<path d="m 69.854,72.583 c 0,-9.975 3.869,-19.049 10.186,-25.8 v 0 c -0.696,2.863 -1.062,5.859 -1.062,8.935 v 0 c 0,20.86 16.906,37.78 37.765,37.78 v 0 c 10.894,0 20.7,-4.617 27.591,-11.986 v 0 c -4.003,16.557 -18.921,28.843 -36.702,28.843 v 0 c -20.862,0 -37.778,-16.91 -37.778,-37.772" id="path26"/>
-		</clipPath>
-		<linearGradient x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(-29.270372,59.586025,59.586025,29.270372,105.9541,75.988281)" spreadMethod="pad" id="linearGradient42">
-			<stop style="stop-opacity:0;stop-color:#ffffff" offset="0" id="stop38"/>
-			<stop style="stop-opacity:1;stop-color:#ffffff" offset="1" id="stop40"/>
-		</linearGradient>
-		<mask maskUnits="userSpaceOnUse" x="0" y="0" width="1" height="1" id="mask44">
-			<g id="g54">
-				<g id="g52">
-					<g id="g50">
-						<g id="g48">
-							<path d="M -32768,32767 H 32767 V -32768 H -32768 Z" style="fill:url(#linearGradient42);stroke:none" id="path46"/>
-						</g>
-					</g>
-				</g>
-			</g>
-		</mask>
-		<linearGradient x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(-29.270372,59.586025,59.586025,29.270372,105.9541,75.988281)" spreadMethod="pad" id="linearGradient64">
-			<stop style="stop-opacity:1;stop-color:#ffffff" offset="0" id="stop60"/>
-			<stop style="stop-opacity:1;stop-color:#ffffff" offset="1" id="stop62"/>
-		</linearGradient>
-		<linearGradient x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(-5.8e-6,132.42194,132.42194,5.8e-6,107.4082,15.794922)" spreadMethod="pad" id="linearGradient84">
-			<stop style="stop-opacity:1;stop-color:#cccccc" offset="0" id="stop80"/>
-			<stop style="stop-opacity:1;stop-color:#ffffff" offset="1" id="stop82"/>
-		</linearGradient>
-	</defs>
-	<g id="g8" transform="matrix(1.333333, 0, 0, -1.333333, -77.613342, 165.511749)">
-		<g id="g10">
-			<g id="g12" clip-path="url(#clipPath16)">
-				<g id="g18" transform="translate(107.6323,33.9707)">
-					<path d="m 0,0 c -21.326,0 -38.61,17.29 -38.61,38.612 0,21.319 17.284,38.607 38.61,38.607 21.326,0 38.611,-17.288 38.611,-38.607 C 38.611,17.29 21.326,0 0,0" style="fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:none" id="path20"/>
-				</g>
-			</g>
-		</g>
-		<g id="g22">
-			<g id="g24" clip-path="url(#clipPath28)">
-				<g id="g30">
-					<g id="g32"/>
-					<g id="g56" mask="url(#mask44)">
-						<g id="g58">
-							<path d="m 69.854,72.583 c 0,-9.975 3.869,-19.049 10.186,-25.8 v 0 c -0.696,2.863 -1.062,5.859 -1.062,8.935 v 0 c 0,20.86 16.906,37.78 37.765,37.78 v 0 c 10.894,0 20.7,-4.617 27.591,-11.986 v 0 c -4.003,16.557 -18.921,28.843 -36.702,28.843 v 0 c -20.862,0 -37.778,-16.91 -37.778,-37.772" style="fill:url(#linearGradient64);stroke:none" id="path66"/>
-						</g>
-					</g>
-				</g>
-			</g>
-		</g>
-		<g id="g68">
-			<g id="g70">
-				<g id="g76">
-					<g id="g78">
-						<path d="m 65.587,72.583 c 0,-23.103 18.731,-41.817 41.824,-41.817 v 0 c 23.095,0 41.819,18.714 41.819,41.817 v 0 c 0,23.091 -18.724,41.813 -41.819,41.813 v 0 c -23.093,0 -41.824,-18.722 -41.824,-41.813 m 4.577,0 c 0,20.571 16.682,37.242 37.247,37.242 v 0 c 16.954,0 30.818,-11.464 35.766,-26.827 v 0 c 1.92,-5.948 1.686,-17.135 -5.86,-25.695 v 0 c -4.038,-4.567 -9.321,-7.399 -13.442,-9.043 v 0 C 112.64,43.771 100.84,47.481 97.312,56.162 v 0 c -3.525,8.67 2.713,19.397 13.923,23.951 v 0 c 5.893,2.401 11.985,2.61 16.951,1.023 v 0 l 2.048,10.218 -1.231,0.25 c -2.782,0.568 -8.186,1.55 -14.902,1.55 v 0 C 86.99,93.154 73.802,74.406 73.802,57.119 v 0 c 0,-0.208 0,-0.42 0.011,-0.632 v 0 c -2.339,4.87 -3.649,10.329 -3.649,16.096" style="fill:url(#linearGradient84);stroke:none" id="path86"/>
-					</g>
-				</g>
-			</g>
-		</g>
-	</g>
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 460 460" style="enable-background:new 0 0 460 460;" xml:space="preserve">
+<g>
+	<path style="fill:#C2001B;" d="M230,0C102.974,0,0,102.974,0,230c0,127.025,102.974,230,230,230c7.51,0,14.936-0.36,22.261-1.063
+		l195.793-302.292C417.434,65.587,331.376,0,230,0z"/>
+	<path style="fill:#940030;" d="M460,230c0-25.65-4.203-50.317-11.951-73.356l-86.647-86.647l-131.069,367l21.927,21.927
+		C368.84,447.726,460,349.514,460,230z"/>
+	<polygon style="fill:#71E2F0;" points="361.402,69.997 426.936,203.734 354.014,223.955 295.868,203.734 306.831,140.096 	"/>
+	<polygon style="fill:#C2FBFF;" points="426.936,203.734 230.333,436.996 249.59,296.482 295.868,203.734 	"/>
+	<polygon style="fill:#38C6D9;" points="361.402,69.997 295.868,203.734 248.649,148.638 230.333,69.997 	"/>
+	<polygon style="fill:#71E2F0;" points="230.333,69.997 295.868,203.734 220.223,213.844 	"/>
+	<polygon style="fill:#38C6D9;" points="295.868,203.734 230.333,436.996 210.113,289.054 230.333,203.734 	"/>
+	<polygon style="fill:#71E2F0;" points="230.333,203.734 230.333,436.996 169.436,292.212 164.799,203.734 	"/>
+	<polygon style="fill:#C2FBFF;" points="230.333,69.997 230.333,203.734 164.799,203.734 174.23,143.224 	"/>
+	<polygon style="fill:#71E2F0;" points="230.333,69.997 164.799,203.734 113.659,140.635 99.265,69.997 	"/>
+	<polygon style="fill:#C2FBFF;" points="99.265,69.997 164.799,203.734 115.414,223.955 33.73,203.734 	"/>
+	<polygon style="fill:#FFFFFF;" points="164.799,203.734 230.333,436.996 33.73,203.734 	"/>
+</g>
 </svg>

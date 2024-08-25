@@ -6,9 +6,9 @@ using System.Security;
 using Ecng.ComponentModel;
 
 /// <summary>
-/// The messages adapter for BTC-e.
+/// The messages adapter for DarkHorse.
 /// </summary>
-[MediaIcon("ctrader_logo.svg")]
+[MediaIcon("darkhorse.svg")]
 [Doc("topics/api/connectors/crypto_exchanges/wex_btc_e.html")]
 [Display(
 	ResourceType = typeof(LocalizedStrings),
