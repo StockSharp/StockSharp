@@ -64,13 +64,13 @@ public class MoneyFlowIndex : LengthIndicator<decimal>
 		_previousPrice = typicalPrice;
 		
 		if (negativeFlow == 0)
-			return new DecimalIndicatorValue(this, 100m);
+			return new DecimalIndicatorValue(this, 100m, input.Time);
 		
 		if (positiveFlow / negativeFlow == 1)
-			return new DecimalIndicatorValue(this, 0m);
+			return new DecimalIndicatorValue(this, 0m, input.Time);
 
 		return negativeFlow != 0 
-			? new DecimalIndicatorValue(this, 100m - 100m / (1m + positiveFlow / negativeFlow))
-			: new DecimalIndicatorValue(this);
+			? new DecimalIndicatorValue(this, 100m - 100m / (1m + positiveFlow / negativeFlow), input.Time)
+			: new DecimalIndicatorValue(this, input.Time);
 	}
 }

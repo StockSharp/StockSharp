@@ -69,6 +69,6 @@ public class Covariance : LengthIndicator<Tuple<decimal, decimal>>
 			Buffer.PopBack();
 		}
 
-		return new DecimalIndicatorValue(this, covariance / len);
+		return new DecimalIndicatorValue(this, covariance / len, input.Time);
 	}
 }

@@ -30,11 +30,11 @@ public class MarketFacilitationIndex : BaseIndicator
 		var (_, high, low, _, vol) = input.GetOhlcv();
 
 		if (vol == 0)
-			return new DecimalIndicatorValue(this);
+			return new DecimalIndicatorValue(this, input.Time);
 
 		if (input.IsFinal)
 			IsFormed = true;
 
-		return new DecimalIndicatorValue(this, (high - low) / vol);
+		return new DecimalIndicatorValue(this, (high - low) / vol, input.Time);
 	}
 }

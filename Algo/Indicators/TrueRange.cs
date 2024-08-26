@@ -67,12 +67,12 @@ public class TrueRange : BaseIndicator
 			if (input.IsFinal)
 				_prevCandle = candle;
 
-			return new DecimalIndicatorValue(this, priceMovements.Max());
+			return new DecimalIndicatorValue(this, priceMovements.Max(), input.Time);
 		}
 
 		if (input.IsFinal)
 			_prevCandle = candle;
 
-		return new DecimalIndicatorValue(this, candle.HighPrice - candle.LowPrice);
+		return new DecimalIndicatorValue(this, candle.HighPrice - candle.LowPrice, input.Time);
 	}
 }

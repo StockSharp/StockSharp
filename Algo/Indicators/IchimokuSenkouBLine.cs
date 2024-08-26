@@ -65,6 +65,6 @@ public class IchimokuSenkouBLine : LengthIndicator<decimal>
 				Buffer.PopFront();
 		}
 
-		return result == null ? new DecimalIndicatorValue(this) : new DecimalIndicatorValue(this, result.Value);
+		return result == null ? new DecimalIndicatorValue(this, input.Time) : new DecimalIndicatorValue(this, result.Value, input.Time);
 	}
 }

@@ -90,15 +90,15 @@ public class UltimateOscillator : BaseIndicator
 				var average7 = p7BpValue / p7TrValue;
 				var average14 = p14BpValue / p14TrValue;
 				var average28 = p28BpValue / p28TrValue;
-				return new DecimalIndicatorValue(this, _stoProcentov * (_weight4 * average7 + _weight2 * average14 + _weight1 * average28) / (_weight4 + _weight2 + _weight1));
+				return new DecimalIndicatorValue(this, _stoProcentov * (_weight4 * average7 + _weight2 * average14 + _weight1 * average28) / (_weight4 + _weight2 + _weight1), input.Time);
 			}
 
-			return new DecimalIndicatorValue(this);
+			return new DecimalIndicatorValue(this, input.Time);
 		}
 
 		if (input.IsFinal)
 			_previouseClosePrice = candle.ClosePrice;
 
-		return new DecimalIndicatorValue(this);
+		return new DecimalIndicatorValue(this, input.Time);
 	}
 }

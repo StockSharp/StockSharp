@@ -49,7 +49,7 @@ public abstract class DiPart : LengthIndicator<decimal>
 		{
 			var trValue = _averageTrueRange.GetCurrentValue();
 
-			var maValue = _movingAverage.Process(new DecimalIndicatorValue(this, GetValue(candle, _lastCandle)) { IsFinal = input.IsFinal });
+			var maValue = _movingAverage.Process(new DecimalIndicatorValue(this, GetValue(candle, _lastCandle), input.Time) { IsFinal = input.IsFinal });
 
 			if (!maValue.IsEmpty)
 				result = trValue != 0m ? 100m * maValue.GetValue<decimal>() / trValue : 0m;
@@ -58,7 +58,7 @@ public abstract class DiPart : LengthIndicator<decimal>
 		if (input.IsFinal)
 			_lastCandle = candle;
 
-		return result == null ? new DecimalIndicatorValue(this) : new DecimalIndicatorValue(this, result.Value);
+		return result == null ? new DecimalIndicatorValue(this, input.Time) : new DecimalIndicatorValue(this, result.Value, input.Time);
 	}
 
 	/// <summary>

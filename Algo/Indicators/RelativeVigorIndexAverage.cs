@@ -75,10 +75,10 @@ public class RelativeVigorIndexAverage : LengthIndicator<decimal>
 
 			return new DecimalIndicatorValue(this, valueDn == decimal.Zero 
 				? valueUp 
-				: valueUp / valueDn);
+				: valueUp / valueDn, input.Time);
 		}
 
-		return new DecimalIndicatorValue(this);
+		return new DecimalIndicatorValue(this, input.Time);
 	}
 
 	/// <inheritdoc />

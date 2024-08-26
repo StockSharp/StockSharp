@@ -48,14 +48,14 @@ public class Correlation : Covariance
 
 		var value = input.GetValue<Tuple<decimal, decimal>>();
 
-		var sourceDev = _source.Process(value.Item1);
-		var otherDev = _other.Process(value.Item2);
+		var sourceDev = _source.Process(value.Item1, input.Time);
+		var otherDev = _other.Process(value.Item2, input.Time);
 
 		var v = sourceDev.GetValue<decimal>() * otherDev.GetValue<decimal>();
 
 		if (v != 0)
 			v = cov.GetValue<decimal>() / v;
 
-		return new DecimalIndicatorValue(this, v);
+		return new DecimalIndicatorValue(this, v, input.Time);
 	}
 }

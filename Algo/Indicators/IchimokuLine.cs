@@ -49,9 +49,9 @@ public class IchimokuLine : LengthIndicator<decimal>
 			var max = buff.Max(t => t.high);
 			var min = buff.Min(t => t.low);
 
-			return new DecimalIndicatorValue(this, (max + min) / 2);
+			return new DecimalIndicatorValue(this, (max + min) / 2, input.Time);
 		}
 			
-		return new DecimalIndicatorValue(this);
+		return new DecimalIndicatorValue(this, input.Time);
 	}
 }

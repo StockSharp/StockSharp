@@ -35,11 +35,11 @@ public class Sum : LengthIndicator<decimal>
 
 		if (input.IsFinal)
 		{
-			return new DecimalIndicatorValue(this, Buffer.Sum);
+			return new DecimalIndicatorValue(this, Buffer.Sum, input.Time);
 		}
 		else
 		{
-			return new DecimalIndicatorValue(this, (Buffer.SumNoFirst + newValue));
+			return new DecimalIndicatorValue(this, (Buffer.SumNoFirst + newValue), input.Time);
 		}
 	}
 }

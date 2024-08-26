@@ -31,7 +31,7 @@ public class VolumeIndicator : BaseIndicator
 		if (input.IsFinal)
 			IsFormed = true;
 
-		return new DecimalIndicatorValue(this, input.GetValue<ICandleMessage>().TotalVolume)
+		return new DecimalIndicatorValue(this, input.GetValue<ICandleMessage>().TotalVolume, input.Time)
 		{
 			IsFinal = input.IsFinal,
 		};

@@ -68,10 +68,10 @@ public class PeakBar : BaseIndicator
 				if (input.IsFinal)
 					IsFormed = true;
 
-				return new DecimalIndicatorValue(this, vbc);
+				return new DecimalIndicatorValue(this, vbc, input.Time);
 			}
 
-			return new DecimalIndicatorValue(this, this.GetCurrentValue());
+			return new DecimalIndicatorValue(this, this.GetCurrentValue(), input.Time);
 		}
 		finally
 		{

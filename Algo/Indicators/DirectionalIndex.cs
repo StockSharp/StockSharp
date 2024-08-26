@@ -17,8 +17,8 @@ public class DirectionalIndex : BaseComplexIndicator
 	{
 		private decimal _value;
 
-		public DxValue(IComplexIndicator indicator)
-			: base(indicator)
+		public DxValue(IComplexIndicator indicator, DateTimeOffset time)
+			: base(indicator, time)
 		{
 		}
 
@@ -26,7 +26,7 @@ public class DirectionalIndex : BaseComplexIndicator
 		{
 			IsEmpty = false;
 			_value = value.To<decimal>();
-			return new DecimalIndicatorValue(indicator, _value);
+			return new DecimalIndicatorValue(indicator, _value, Time);
 		}
 
 		public override T GetValue<T>(Level1Fields? field)
@@ -90,7 +90,7 @@ public class DirectionalIndex : BaseComplexIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var value = new DxValue(this) { IsFinal = input.IsFinal };
+		var value = new DxValue(this, input.Time) { IsFinal = input.IsFinal };
 
 		var plusValue = Plus.Process(input);
 		var minusValue = Minus.Process(input);

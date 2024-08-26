@@ -22,6 +22,6 @@ public class IchimokuChinkouLine : LengthIndicator<decimal>
 		if (input.IsFinal)
 			Buffer.PushBack(close);
 
-		return new DecimalIndicatorValue(this, close);
+		return new DecimalIndicatorValue(this, close, input.Time);
 	}
 }

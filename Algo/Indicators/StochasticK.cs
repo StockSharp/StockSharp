@@ -52,8 +52,8 @@ public class StochasticK : LengthIndicator<decimal>
 		var diff = highValue - lowValue;
 
 		if (diff == 0)
-			return new DecimalIndicatorValue(this, 0);
+			return new DecimalIndicatorValue(this, 0, input.Time);
 
-		return new DecimalIndicatorValue(this, 100 * (close - lowValue) / diff);
+		return new DecimalIndicatorValue(this, 100 * (close - lowValue) / diff, input.Time);
 	}
 }

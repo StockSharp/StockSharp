@@ -55,7 +55,7 @@ public class ChandeMomentumOscillator : LengthIndicator<decimal>
 				_isInitialized = true;
 			}
 
-			return new DecimalIndicatorValue(this);
+			return new DecimalIndicatorValue(this, input.Time);
 		}
 
 		var delta = newValue - _last;
@@ -68,6 +68,6 @@ public class ChandeMomentumOscillator : LengthIndicator<decimal>
 
 		var value = (upValue + downValue) == 0 ? 0 : 100m * (upValue - downValue) / (upValue + downValue);
 
-		return IsFormed ? new DecimalIndicatorValue(this, value) : new DecimalIndicatorValue(this);
+		return IsFormed ? new DecimalIndicatorValue(this, value, input.Time) : new DecimalIndicatorValue(this, input.Time);
 	}
 }

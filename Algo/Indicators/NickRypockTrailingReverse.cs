@@ -154,7 +154,7 @@ public class NickRypockTrailingReverse : LengthIndicator<decimal>
 		}
 
 		// значение NickRypockTrailingReverse
-		return new DecimalIndicatorValue(this, newValue);
+		return new DecimalIndicatorValue(this, newValue, input.Time);
 	}
 
 	/// <inheritdoc />

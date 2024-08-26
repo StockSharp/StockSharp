@@ -83,7 +83,7 @@ public class AwesomeOscillator : BaseIndicator
 		var sValue = ShortMa.Process(mpValue).GetValue<decimal>();
 		var lValue = LongMa.Process(mpValue).GetValue<decimal>();
 
-		return new DecimalIndicatorValue(this, sValue - lValue);
+		return new DecimalIndicatorValue(this, sValue - lValue, input.Time);
 	}
 
 	/// <inheritdoc />

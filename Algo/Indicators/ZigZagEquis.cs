@@ -196,14 +196,14 @@ public class ZigZagEquis : BaseIndicator
 		_needAdd = input.IsFinal;
 
 		if (valuesCount != 2)
-			return Container.Count > 1 ? this.GetCurrentValue<ShiftedIndicatorValue>() : new ShiftedIndicatorValue(this);
+			return Container.Count > 1 ? this.GetCurrentValue<ShiftedIndicatorValue>() : new ShiftedIndicatorValue(this, input.Time);
 
 		if (input.IsFinal)
 			IsFormed = true;
 
 		CurrentValue = last;
 
-		return new ShiftedIndicatorValue(this, lastButOne, valueId - 1);
+		return new ShiftedIndicatorValue(this, lastButOne, valueId - 1, input.Time);
 	}
 
 	/// <inheritdoc />

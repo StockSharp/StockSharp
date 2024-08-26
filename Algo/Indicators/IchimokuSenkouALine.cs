@@ -51,6 +51,6 @@ public class IchimokuSenkouALine : LengthIndicator<decimal>
 				Buffer.PushBack((Tenkan.GetCurrentValue() + Kijun.GetCurrentValue()) / 2);
 		}
 
-		return result == null ? new DecimalIndicatorValue(this) : new DecimalIndicatorValue(this, result.Value);
+		return result == null ? new DecimalIndicatorValue(this, input.Time) : new DecimalIndicatorValue(this, result.Value, input.Time);
 	}
 }

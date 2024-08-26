@@ -41,10 +41,10 @@ public class DoubleExponentialMovingAverage : LengthIndicator<decimal>
 		var ema1Value = _ema1.Process(input);
 
 		if (!_ema1.IsFormed)
-			return new DecimalIndicatorValue(this);
+			return new DecimalIndicatorValue(this, input.Time);
 
 		var ema2Value = _ema2.Process(ema1Value);
 
-		return new DecimalIndicatorValue(this, 2 * ema1Value.GetValue<decimal>() - ema2Value.GetValue<decimal>());
+		return new DecimalIndicatorValue(this, 2 * ema1Value.GetValue<decimal>() - ema2Value.GetValue<decimal>(), input.Time);
 	}
 }

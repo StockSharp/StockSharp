@@ -85,14 +85,14 @@ public class StandardError : LengthIndicator<decimal>
 			//Стандартная ошибка
 			if (Length == 2)
 			{
-				return new DecimalIndicatorValue(this, 0); //если всего 2 точки, то прямая проходит через них и стандартная ошибка равна нулю.
+				return new DecimalIndicatorValue(this, 0, input.Time); //если всего 2 точки, то прямая проходит через них и стандартная ошибка равна нулю.
 			}
 			else
 			{
-				return new DecimalIndicatorValue(this, (decimal)Math.Sqrt((double)(sumErr2 / (Length - 2))));
+				return new DecimalIndicatorValue(this, (decimal)Math.Sqrt((double)(sumErr2 / (Length - 2))), input.Time);
 			}
 		}
 
-		return new DecimalIndicatorValue(this);
+		return new DecimalIndicatorValue(this, input.Time);
 	}
 }

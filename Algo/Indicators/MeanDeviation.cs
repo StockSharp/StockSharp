@@ -59,6 +59,6 @@ public class MeanDeviation : LengthIndicator<decimal>
 			? Buffer.Sum(t => Math.Abs(t - smaValue))
 			: Buffer.Skip(IsFormed ? 1 : 0).Sum(t => Math.Abs(t - smaValue)) + Math.Abs(val - smaValue);
 
-		return new DecimalIndicatorValue(this, md / Length);
+		return new DecimalIndicatorValue(this, md / Length, input.Time);
 	}
 }

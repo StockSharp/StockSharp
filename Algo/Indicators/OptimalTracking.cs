@@ -106,6 +106,6 @@ public sealed class OptimalTracking : LengthIndicator<decimal>
 
 		var result = b.Calculate(this, buff, average, halfRange);
 
-		return new DecimalIndicatorValue(this, result);
+		return new DecimalIndicatorValue(this, result, input.Time);
 	}
 }

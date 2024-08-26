@@ -683,7 +683,7 @@ public class JurikMovingAverage : LengthIndicator<decimal>
 			Buffer.PushBack(newValue);
 		}
 
-		return new DecimalIndicatorValue(this, lastValue);
+		return new DecimalIndicatorValue(this, lastValue, input.Time);
 	}
 
 	/// <inheritdoc />

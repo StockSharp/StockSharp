@@ -53,6 +53,6 @@ public class StandardDeviation : LengthIndicator<decimal>
 		//считаем значение отклонения в последней точке
 		var std = buff.Select(t1 => t1 - smaValue).Select(t => t * t).Sum();
 
-		return new DecimalIndicatorValue(this, (decimal)Math.Sqrt((double)(std / Length)));
+		return new DecimalIndicatorValue(this, (decimal)Math.Sqrt((double)(std / Length)), input.Time);
 	}
 }

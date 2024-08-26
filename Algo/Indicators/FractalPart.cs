@@ -127,7 +127,7 @@ public class FractalPart : LengthIndicator<(decimal high, decimal low)>
 
 								resetCounters();
 
-								return new ShiftedIndicatorValue(this, extremum, _numCenter);
+								return new ShiftedIndicatorValue(this, extremum, _numCenter, input.Time);
 							}
 							else
 							{
@@ -149,7 +149,7 @@ public class FractalPart : LengthIndicator<(decimal high, decimal low)>
 
 								resetCounters();
 
-								return new ShiftedIndicatorValue(this, extremum, _numCenter);
+								return new ShiftedIndicatorValue(this, extremum, _numCenter, input.Time);
 							}
 							else
 							{
@@ -170,7 +170,7 @@ public class FractalPart : LengthIndicator<(decimal high, decimal low)>
 						{
 							if (_downTrendCounter == _numCenter)
 							{
-								return new ShiftedIndicatorValue(this, _extremum.Value, _numCenter);
+								return new ShiftedIndicatorValue(this, _extremum.Value, _numCenter, input.Time);
 							}
 						}
 					}
@@ -180,7 +180,7 @@ public class FractalPart : LengthIndicator<(decimal high, decimal low)>
 						{
 							if (_upTrendCounter == _numCenter)
 							{
-								return new ShiftedIndicatorValue(this, _extremum.Value, _numCenter);
+								return new ShiftedIndicatorValue(this, _extremum.Value, _numCenter, input.Time);
 							}
 						}
 					}
@@ -195,6 +195,6 @@ public class FractalPart : LengthIndicator<(decimal high, decimal low)>
 		if (input.IsFinal)
 			Buffer.PushBack((currHigh, currLow));
 
-		return new ShiftedIndicatorValue(this);
+		return new ShiftedIndicatorValue(this, input.Time);
 	}
 }

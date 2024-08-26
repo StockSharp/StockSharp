@@ -54,8 +54,8 @@ public class LinearRegSlope : LengthIndicator<decimal>
 		//коэффициент при независимой переменной
 		var divisor = Length * sumX2 - sumX * sumX;
 		if (divisor == 0) 
-			return new DecimalIndicatorValue(this);
+			return new DecimalIndicatorValue(this, input.Time);
 
-		return new DecimalIndicatorValue(this, (Length * sumXy - sumX * sumY) / divisor);
+		return new DecimalIndicatorValue(this, (Length * sumXy - sumX * sumY) / divisor, input.Time);
 	}
 }

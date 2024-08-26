@@ -120,7 +120,7 @@ public partial class Strategy
 				return this;
 			}
 
-			internal virtual IEnumerable<IIndicatorValue> Invoke(T typed)
+			internal virtual IEnumerable<IIndicatorValue> Invoke(T typed, DateTimeOffset time)
 			{
 				_callback(typed);
 				return Enumerable.Empty<IIndicatorValue>();
@@ -154,9 +154,9 @@ public partial class Strategy
 				return this;
 			}
 
-			internal override IEnumerable<IIndicatorValue> Invoke(T typed)
+			internal override IEnumerable<IIndicatorValue> Invoke(T typed, DateTimeOffset time)
 			{
-				var v1 = Indicator1.Process(typed, true);
+				var v1 = Indicator1.Process(typed, time, true);
 
 				_callback(typed, v1);
 
@@ -191,10 +191,10 @@ public partial class Strategy
 				return this;
 			}
 
-			internal override IEnumerable<IIndicatorValue> Invoke(T typed)
+			internal override IEnumerable<IIndicatorValue> Invoke(T typed, DateTimeOffset time)
 			{
-				var v1 = Indicator1.Process(typed, true);
-				var v2 = Indicator2.Process(typed, true);
+				var v1 = Indicator1.Process(typed, time, true);
+				var v2 = Indicator2.Process(typed, time, true);
 
 				_callback(typed, v1, v2);
 
@@ -229,11 +229,11 @@ public partial class Strategy
 				return this;
 			}
 
-			internal override IEnumerable<IIndicatorValue> Invoke(T typed)
+			internal override IEnumerable<IIndicatorValue> Invoke(T typed, DateTimeOffset time)
 			{
-				var v1 = Indicator1.Process(typed, true);
-				var v2 = Indicator2.Process(typed, true);
-				var v3 = Indicator3.Process(typed, true);
+				var v1 = Indicator1.Process(typed, time, true);
+				var v2 = Indicator2.Process(typed, time, true);
+				var v3 = Indicator3.Process(typed, time, true);
 
 				_callback(typed, v1, v2, v3);
 
@@ -267,14 +267,14 @@ public partial class Strategy
 					_strategy.ActiveProtection(info.Value);
 			}
 
-			void handle(object v, Func<ICandleMessage> getCandle)
+			void handle(object v, DateTimeOffset time, Func<ICandleMessage> getCandle)
 			{
 				var typed = v.To<T>();
 
 				var indValues = new List<IIndicatorValue>();
 
 				foreach (var binder in _binders.Cache)
-					indValues.AddRange(binder.Invoke(typed));
+					indValues.AddRange(binder.Invoke(typed, time));
 
 				_strategy.DrawFlush(Subscription, getCandle, indValues);
 			}
@@ -290,7 +290,7 @@ public partial class Strategy
 
 						tryActivateProtection(v.ClosePrice, _strategy.CurrentTime);
 
-						handle(v, () => v);
+						handle(v, v.ServerTime, () => v);
 					})
 					.Apply(_strategy);
 			}
@@ -307,7 +307,7 @@ public partial class Strategy
 
 						tryActivateProtection(v.Price, _strategy.CurrentTime);
 
-						handle(v, () =>	new TickCandleMessage
+						handle(v, v.ServerTime, () =>	new TickCandleMessage
 						{
 							DataType = dt,
 							OpenTime = v.ServerTime,
@@ -347,7 +347,7 @@ public partial class Strategy
 
 						tryActivateProtection(price, _strategy.CurrentTime);
 
-						handle(v, () => new TickCandleMessage
+						handle(v, v.ServerTime, () => new TickCandleMessage
 						{
 							DataType = dt,
 							OpenTime = v.ServerTime,
@@ -378,7 +378,7 @@ public partial class Strategy
 
 						tryActivateProtection(price, _strategy.CurrentTime);
 
-						handle(v, () => new TickCandleMessage
+						handle(v, v.ServerTime, () => new TickCandleMessage
 						{
 							DataType = dt,
 							OpenTime = v.ServerTime,

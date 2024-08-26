@@ -68,7 +68,7 @@ public class MovingAverageConvergenceDivergence : BaseIndicator
 	{
 		var shortValue = ShortMa.Process(input);
 		var longValue = LongMa.Process(input);
-		return new DecimalIndicatorValue(this, shortValue.GetValue<decimal>() - longValue.GetValue<decimal>());
+		return new DecimalIndicatorValue(this, shortValue.GetValue<decimal>() - longValue.GetValue<decimal>(), input.Time);
 	}
 
 	/// <inheritdoc />

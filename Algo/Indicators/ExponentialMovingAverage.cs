@@ -49,11 +49,11 @@ public class ExponentialMovingAverage : LengthIndicator<decimal>
 
 				_prevFinalValue = Buffer.Sum / Length;
 
-				return new DecimalIndicatorValue(this, _prevFinalValue);
+				return new DecimalIndicatorValue(this, _prevFinalValue, input.Time);
 			}
 			else
 			{
-				return new DecimalIndicatorValue(this, (Buffer.SumNoFirst + newValue) / Length);
+				return new DecimalIndicatorValue(this, (Buffer.SumNoFirst + newValue) / Length, input.Time);
 			}
 		}
 		else
@@ -65,7 +65,7 @@ public class ExponentialMovingAverage : LengthIndicator<decimal>
 			if (input.IsFinal)
 				_prevFinalValue = curValue;
 
-			return new DecimalIndicatorValue(this, curValue);
+			return new DecimalIndicatorValue(this, curValue, input.Time);
 		}
 	}
 }

@@ -38,7 +38,7 @@ public sealed class Peak : ZigZagEquis
 			if (input.IsFinal)
 				IsFormed = !lastValue.IsEmpty;
 
-			return IsFormed ? new ShiftedIndicatorValue(this, lastValue.Value, lastValue.Shift + 1) : lastValue;
+			return IsFormed ? new ShiftedIndicatorValue(this, lastValue.Value, lastValue.Shift + 1, input.Time) : lastValue;
 		}
 
 		IsFormed = false;

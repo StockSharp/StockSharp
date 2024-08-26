@@ -282,7 +282,7 @@ public class ParabolicSar : BaseIndicator
 		var b = input.IsFinal ? _buf : _buf.Clone();
 		var val = b.Calculate(input.GetValue<ICandleMessage>());
 
-		return val == 0 ? new DecimalIndicatorValue(this) : new DecimalIndicatorValue(this, val);
+		return val == 0 ? new DecimalIndicatorValue(this, input.Time) : new DecimalIndicatorValue(this, val, input.Time);
 	}
 
 	/// <inheritdoc />

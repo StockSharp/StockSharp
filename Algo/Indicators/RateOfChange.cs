@@ -29,8 +29,8 @@ public class RateOfChange : Momentum
 		var result = base.OnProcess(input);
 
 		if (Buffer.Count > 0 && Buffer[0] != 0)
-			return new DecimalIndicatorValue(this, result.GetValue<decimal>() / Buffer[0] * 100);
+			return new DecimalIndicatorValue(this, result.GetValue<decimal>() / Buffer[0] * 100, input.Time);
 		
-		return new DecimalIndicatorValue(this);
+		return new DecimalIndicatorValue(this, input.Time);
 	}
 }

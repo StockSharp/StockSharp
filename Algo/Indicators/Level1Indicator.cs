@@ -30,8 +30,8 @@ public class Level1Indicator : BaseIndicator
 			IsFormed = true;
 
 		return value is decimal d
-			? new DecimalIndicatorValue(this, d)
-			: new DecimalIndicatorValue(this);
+			? new DecimalIndicatorValue(this, d, input.Time)
+			: new DecimalIndicatorValue(this, input.Time);
 	}
 
 	/// <inheritdoc />

@@ -38,6 +38,6 @@ public class Highest : LengthIndicator<decimal>
 			lastValue = Buffer.Max.Value;
 		}
 
-		return new DecimalIndicatorValue(this, lastValue);
+		return new DecimalIndicatorValue(this, lastValue, input.Time);
 	}
 }

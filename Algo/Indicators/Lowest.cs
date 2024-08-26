@@ -38,6 +38,6 @@ public class Lowest : LengthIndicator<decimal>
 			lastValue = Buffer.Min.Value;
 		}
 
-		return new DecimalIndicatorValue(this, lastValue);
+		return new DecimalIndicatorValue(this, lastValue, input.Time);
 	}
 }

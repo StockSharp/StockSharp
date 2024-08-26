@@ -113,11 +113,12 @@ public static class IndicatorHelper
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="value">Numeric value.</param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
 	/// <param name="isFinal">Is the value final (the indicator finally forms its value and will not be changed in this point of time anymore). Default is <see langword="true" />.</param>
 	/// <returns>The new value of the indicator.</returns>
-	public static IIndicatorValue Process(this IIndicator indicator, decimal value, bool isFinal = true)
+	public static IIndicatorValue Process(this IIndicator indicator, decimal value, DateTimeOffset time, bool isFinal = true)
 	{
-		return indicator.Process(new DecimalIndicatorValue(indicator, value) { IsFinal = isFinal });
+		return indicator.Process(new DecimalIndicatorValue(indicator, value, time) { IsFinal = isFinal });
 	}
 
 	/// <summary>
@@ -126,11 +127,12 @@ public static class IndicatorHelper
 	/// <typeparam name="TValue">Value type.</typeparam>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="value">The pair of values.</param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
 	/// <param name="isFinal">If the pair final (the indicator finally forms its value and will not be changed in this point of time anymore). Default is <see langword="true" />.</param>
 	/// <returns>The new value of the indicator.</returns>
-	public static IIndicatorValue Process<TValue>(this IIndicator indicator, Tuple<TValue, TValue> value, bool isFinal = true)
+	public static IIndicatorValue Process<TValue>(this IIndicator indicator, Tuple<TValue, TValue> value, DateTimeOffset time, bool isFinal = true)
 	{
-		return indicator.Process(new PairIndicatorValue<TValue>(indicator, value) { IsFinal = isFinal });
+		return indicator.Process(new PairIndicatorValue<TValue>(indicator, value, time) { IsFinal = isFinal });
 	}
 
 	/// <summary>
@@ -138,9 +140,10 @@ public static class IndicatorHelper
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="inputValue">Input value.</param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
 	/// <param name="isFinal"><see cref="IIndicatorValue.IsFinal"/></param>
 	/// <returns><see cref="IIndicatorValue"/>.</returns>
-	public static IIndicatorValue Process(this IIndicator indicator, object inputValue, bool isFinal)
+	public static IIndicatorValue Process(this IIndicator indicator, object inputValue, DateTimeOffset time, bool isFinal)
 	{
 		if (indicator == null)
 			throw new ArgumentNullException(nameof(indicator));
@@ -159,27 +162,27 @@ public static class IndicatorHelper
 				input = v;
 				break;
 			case Unit u:
-				input = new DecimalIndicatorValue(indicator, u.Value) { IsFinal = isFinal };
+				input = new DecimalIndicatorValue(indicator, u.Value, time) { IsFinal = isFinal };
 				break;
 			case Tuple<decimal, decimal> t:
-				input = new PairIndicatorValue<decimal>(indicator, t) { IsFinal = isFinal };
+				input = new PairIndicatorValue<decimal>(indicator, t, time) { IsFinal = isFinal };
 				break;
 			case IOrderBookMessage d:
 				input = new MarketDepthIndicatorValue(indicator, d) { IsFinal = isFinal };
 				break;
 			case ITickTradeMessage t:
-				input = new DecimalIndicatorValue(indicator, t.Price) { IsFinal = isFinal };
+				input = new DecimalIndicatorValue(indicator, t.Price, time) { IsFinal = isFinal };
 				break;
 			case Level1ChangeMessage l1:
 				input = new Level1IndicatorValue(indicator, l1) { IsFinal = isFinal };
 				break;
 			case bool b:
-				input = new DecimalIndicatorValue(indicator, b ? 1 : 0) { IsFinal = isFinal };
+				input = new DecimalIndicatorValue(indicator, b ? 1 : 0, time) { IsFinal = isFinal };
 				break;
 		}
 
 		if (input == null && inputValue.GetType().IsNumeric())
-			input = new DecimalIndicatorValue(indicator, inputValue.To<decimal>()) { IsFinal = isFinal };
+			input = new DecimalIndicatorValue(indicator, inputValue.To<decimal>(), time) { IsFinal = isFinal };
 
 		if (input == null)
 			throw new ArgumentException(LocalizedStrings.IndicatorNotWorkWithType.Put(inputValue.GetType().Name));

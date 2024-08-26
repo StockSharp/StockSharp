@@ -67,12 +67,12 @@ public class VerticalHorizontalFilter : LengthIndicator<decimal>
 			_previousClosePrice = candle.ClosePrice;
 
 		if (!IsFormed)
-			return new DecimalIndicatorValue(this);
+			return new DecimalIndicatorValue(this, input.Time);
 
 		// Вычисляем значение индикатора
 		if (sumValue != 0)
-			return new DecimalIndicatorValue(this, ((maxValue - minValue) / sumValue));
+			return new DecimalIndicatorValue(this, ((maxValue - minValue) / sumValue), input.Time);
 
-		return new DecimalIndicatorValue(this);
+		return new DecimalIndicatorValue(this, input.Time);
 	}
 }

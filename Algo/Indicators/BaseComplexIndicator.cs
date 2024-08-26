@@ -96,7 +96,7 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var value = new ComplexIndicatorValue(this);
+		var value = new ComplexIndicatorValue(this, input.Time);
 
 		foreach (var indicator in InnerIndicators)
 		{
@@ -104,15 +104,13 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 
 			value.InnerValues.Add(indicator, result);
 
-			if (Mode == ComplexIndicatorModes.Sequence)
-			{
-				if (!indicator.IsFormed)
-				{
-					break;
-				}
+			if (Mode != ComplexIndicatorModes.Sequence)
+				continue;
 
-				input = result;
-			}
+			if (!indicator.IsFormed)
+				break;
+
+			input = result;
 		}
 
 		return value;

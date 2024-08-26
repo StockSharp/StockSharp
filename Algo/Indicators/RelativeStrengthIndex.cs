@@ -55,7 +55,7 @@ public class RelativeStrengthIndex : LengthIndicator<decimal>
 				_isInitialized = true;
 			}
 
-			return new DecimalIndicatorValue(this);
+			return new DecimalIndicatorValue(this, input.Time);
 		}
 
 		var delta = newValue - _last;
@@ -67,11 +67,11 @@ public class RelativeStrengthIndex : LengthIndicator<decimal>
 			_last = newValue;
 
 		if (lossValue == 0)
-			return new DecimalIndicatorValue(this, 100m);
+			return new DecimalIndicatorValue(this, 100m, input.Time);
 		
 		if (gainValue / lossValue == 1)
-			return new DecimalIndicatorValue(this, 0m);
+			return new DecimalIndicatorValue(this, 0m, input.Time);
 
-		return new DecimalIndicatorValue(this, 100m - 100m / (1m + gainValue / lossValue));
+		return new DecimalIndicatorValue(this, 100m - 100m / (1m + gainValue / lossValue), input.Time);
 	}
 }

@@ -45,15 +45,15 @@ public class TripleExponentialMovingAverage : LengthIndicator<decimal>
 		var ema1Value = _ema1.Process(input);
 
 		if (!_ema1.IsFormed)
-			return new DecimalIndicatorValue(this);
+			return new DecimalIndicatorValue(this, input.Time);
 
 		var ema2Value = _ema2.Process(ema1Value);
 
 		if (!_ema2.IsFormed)
-			return new DecimalIndicatorValue(this);
+			return new DecimalIndicatorValue(this, input.Time);
 
 		var ema3Value = _ema3.Process(ema2Value);
 
-		return new DecimalIndicatorValue(this, 3 * ema1Value.GetValue<decimal>() - 3 * ema2Value.GetValue<decimal>() + ema3Value.GetValue<decimal>());
+		return new DecimalIndicatorValue(this, 3 * ema1Value.GetValue<decimal>() - 3 * ema2Value.GetValue<decimal>() + ema3Value.GetValue<decimal>(), input.Time);
 	}
 }

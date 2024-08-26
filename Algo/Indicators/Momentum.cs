@@ -45,8 +45,8 @@ public class Momentum : LengthIndicator<decimal>
 		}
 
 		if (Buffer.Count == 0)
-			return new DecimalIndicatorValue(this);
+			return new DecimalIndicatorValue(this, input.Time);
 
-		return new DecimalIndicatorValue(this, newValue - Buffer[0]);
+		return new DecimalIndicatorValue(this, newValue - Buffer[0], input.Time);
 	}
 }
