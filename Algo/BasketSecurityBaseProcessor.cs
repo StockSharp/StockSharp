@@ -424,7 +424,7 @@ public abstract class IndexSecurityBaseProcessor<TBasketSecurity> : BasketSecuri
 
 	private Dictionary<SecurityId, TMessage> GetDict<TMessage>(MessageTypes type)
 	{
-		return (Dictionary<SecurityId, TMessage>)_messages.SafeAdd(type, _ => new());
+		return (Dictionary<SecurityId, TMessage>)_messages.SafeAdd(type, _ => new Dictionary<SecurityId, TMessage>());
 	}
 
 	private void FillIndexCandle(CandleMessage indexCandle, CandleMessage candleMsg, CandleMessage[] candles)
