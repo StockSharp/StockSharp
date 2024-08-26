@@ -421,18 +421,6 @@ public class STOCH : StochasticOscillator
 }
 
 /// <summary>
-/// <see cref="Sum"/> alias.
-/// </summary>
-[Browsable(false)]
-public class SUM : Sum
-{
-	/// <summary>
-	/// Initializes a new instance of the <see cref="SUM"/>.
-	/// </summary>
-	public SUM() { }
-}
-
-/// <summary>
 /// <see cref="TripleExponentialMovingAverage"/> alias.
 /// </summary>
 [Browsable(false)]
@@ -442,18 +430,6 @@ public class TEMA : TripleExponentialMovingAverage
 	/// Initializes a new instance of the <see cref="TEMA"/>.
 	/// </summary>
 	public TEMA() { }
-}
-
-/// <summary>
-/// <see cref="Trix"/> alias.
-/// </summary>
-[Browsable(false)]
-public class TRIX : Trix
-{
-	/// <summary>
-	/// Initializes a new instance of the <see cref="TRIX"/>.
-	/// </summary>
-	public TRIX() { }
 }
 
 /// <summary>
@@ -490,18 +466,6 @@ public class VHF : VerticalHorizontalFilter
 	/// Initializes a new instance of the <see cref="VHF"/>.
 	/// </summary>
 	public VHF() { }
-}
-
-/// <summary>
-/// <see cref="Vidya"/> alias.
-/// </summary>
-[Browsable(false)]
-public class VIDYA : Vidya
-{
-	/// <summary>
-	/// Initializes a new instance of the <see cref="VIDYA"/>.
-	/// </summary>
-	public VIDYA() { }
 }
 
 /// <summary>
