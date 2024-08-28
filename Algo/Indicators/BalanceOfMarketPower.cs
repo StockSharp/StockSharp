@@ -28,7 +28,7 @@ public class BalanceOfMarketPower : SimpleMovingAverage
 		var (open, high, low, close, volume) = input.GetOhlcv();
 
 		var bmp = volume != 0
-			? ((close - open) / (high - low == 0 ? 0.01m : high - low))
+			? ((close - open) / (high == low ? 0.01m : high - low))
 			: 0;
 
 		var smaValue = base.OnProcess(input.SetValue(this, bmp));
