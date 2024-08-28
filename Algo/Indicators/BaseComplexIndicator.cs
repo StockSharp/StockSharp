@@ -102,7 +102,7 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 		{
 			var result = indicator.Process(input);
 
-			value.InnerValues.Add(indicator, result);
+			value.Add(indicator, result);
 
 			if (Mode != ComplexIndicatorModes.Sequence)
 				continue;

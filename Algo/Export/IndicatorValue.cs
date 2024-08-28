@@ -88,9 +88,7 @@ public class IndicatorValue : IServerTimeMessage, ISecurityIdMessage
 		{
 			foreach (var innerIndicator in ((IComplexIndicator)value.Indicator).InnerIndicators)
 			{
-				var innerValue = complexValue.InnerValues.TryGetValue(innerIndicator);
-
-				if (innerValue == null)
+				if (!complexValue.TryGet(innerIndicator, out var innerValue))
 					values.Add(null);
 				else
 					FillValues(innerValue, values);

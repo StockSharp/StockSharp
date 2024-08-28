@@ -95,8 +95,8 @@ public class DirectionalIndex : BaseComplexIndicator
 		var plusValue = Plus.Process(input);
 		var minusValue = Minus.Process(input);
 
-		value.InnerValues.Add(Plus, plusValue);
-		value.InnerValues.Add(Minus, minusValue);
+		value.Add(Plus, plusValue);
+		value.Add(Minus, minusValue);
 
 		if (plusValue.IsEmpty || minusValue.IsEmpty)
 			return value;
@@ -107,7 +107,7 @@ public class DirectionalIndex : BaseComplexIndicator
 		var diSum = plus + minus;
 		var diDiff = Math.Abs(plus - minus);
 
-		value.InnerValues.Add(this, value.SetValue(this, diSum != 0m ? (100 * diDiff / diSum) : 0m));
+		value.Add(this, value.SetValue(this, diSum != 0m ? (100 * diDiff / diSum) : 0m));
 
 		return value;
 	}

@@ -100,11 +100,11 @@ public class Envelope : BaseComplexIndicator
 	{
 		var value = (ComplexIndicatorValue)base.OnProcess(input);
 
-		var upper = value.InnerValues[Upper];
-		value.InnerValues[Upper] = upper.SetValue(Upper, upper.GetValue<decimal>() * (1 + Shift));
+		var upper = value[Upper];
+		value[Upper] = upper.SetValue(Upper, upper.GetValue<decimal>() * (1 + Shift));
 
-		var lower = value.InnerValues[Lower];
-		value.InnerValues[Lower] = lower.SetValue(Lower, lower.GetValue<decimal>() * (1 - Shift));
+		var lower = value[Lower];
+		value[Lower] = lower.SetValue(Lower, lower.GetValue<decimal>() * (1 - Shift));
 
 		return value;
 	}

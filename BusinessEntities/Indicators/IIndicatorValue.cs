@@ -515,6 +515,34 @@ public class ComplexIndicatorValue : BaseIndicatorValue
 	/// </summary>
 	public IDictionary<IIndicator, IIndicatorValue> InnerValues { get; }
 
+	/// <summary>
+	/// Gets or sets a value of inner indicator.
+	/// </summary>
+	/// <param name="indicator"><see cref="IIndicator"/></param>
+	/// <returns><see cref="IIndicatorValue"/></returns>
+	public IIndicatorValue this[IIndicator indicator]
+	{
+		get => InnerValues[indicator];
+		set => InnerValues[indicator] = value ?? throw new ArgumentNullException(nameof(value));
+	}
+
+	/// <summary>
+	/// Add a value of inner indicator.
+	/// </summary>
+	/// <param name="indicator"><see cref="IIndicator"/></param>
+	/// <param name="value"><see cref="IIndicatorValue"/></param>
+	public void Add(IIndicator indicator, IIndicatorValue value)
+		=> InnerValues.Add(indicator, value);
+
+	/// <summary>
+	/// Try get a value of inner indicator.
+	/// </summary>
+	/// <param name="indicator"><see cref="IIndicator"/></param>
+	/// <param name="value"><see cref="IIndicatorValue"/></param>
+	/// <returns>Operation result.</returns>
+	public bool TryGet(IIndicator indicator, out IIndicatorValue value)
+		=> InnerValues.TryGetValue(indicator, out value);
+
 	/// <inheritdoc />
 	public override bool IsSupport(Type valueType) => InnerValues.Any(v => v.Value.IsSupport(valueType));
 

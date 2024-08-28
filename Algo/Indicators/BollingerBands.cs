@@ -117,9 +117,9 @@ public class BollingerBands : BaseComplexIndicator
 
 		var value = new ComplexIndicatorValue(this, input.Time);
 
-		value.InnerValues.Add(MovingAverage, maValue);
-		value.InnerValues.Add(UpBand, UpBand.Process(input));
-		value.InnerValues.Add(LowBand, LowBand.Process(input));
+		value.Add(MovingAverage, maValue);
+		value.Add(UpBand, UpBand.Process(input));
+		value.Add(LowBand, LowBand.Process(input));
 
 		return value;
 	}
