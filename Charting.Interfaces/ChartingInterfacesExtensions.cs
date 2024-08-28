@@ -167,4 +167,22 @@ public static class ChartingInterfacesExtensions
 		area.Chart.AddElement(area, elem);
 		return elem;
 	}
+
+	/// <summary>
+	/// Create <see cref="IChartIndicatorPainter"/> instance.
+	/// </summary>
+	/// <param name="type"><see cref="IndicatorType"/></param>
+	/// <returns><see cref="IChartIndicatorPainter"/></returns>
+	public static IChartIndicatorPainter CreatePainter(this IndicatorType type)
+	{
+		if (type is null)
+			throw new ArgumentNullException(nameof(type));
+
+		var painter = type.Painter;
+
+		if (painter is null)
+			return null;
+
+		return painter.CreateInstance<IChartIndicatorPainter>();
+	}
 }
