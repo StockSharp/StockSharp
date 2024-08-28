@@ -58,8 +58,8 @@ public class MoneyFlowIndex : LengthIndicator<decimal>
 		var typicalPrice = (high + low + close) / 3.0m;
 		var moneyFlow = typicalPrice * vol;
 		
-		var positiveFlow = _positiveFlow.Process(input.SetValue(this, typicalPrice > _previousPrice ? moneyFlow : 0.0m)).GetValue<decimal>();
-		var negativeFlow = _negativeFlow.Process(input.SetValue(this, typicalPrice < _previousPrice ? moneyFlow : 0.0m)).GetValue<decimal>();
+		var positiveFlow = _positiveFlow.Process(input.SetValue(this, typicalPrice > _previousPrice ? moneyFlow : 0.0m)).ToDecimal();
+		var negativeFlow = _negativeFlow.Process(input.SetValue(this, typicalPrice < _previousPrice ? moneyFlow : 0.0m)).ToDecimal();
 
 		_previousPrice = typicalPrice;
 		

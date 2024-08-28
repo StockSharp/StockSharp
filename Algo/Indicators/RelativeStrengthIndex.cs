@@ -45,7 +45,7 @@ public class RelativeStrengthIndex : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var newValue = input.GetValue<decimal>();
+		var newValue = input.ToDecimal();
 
 		if (!_isInitialized)
 		{
@@ -60,8 +60,8 @@ public class RelativeStrengthIndex : LengthIndicator<decimal>
 
 		var delta = newValue - _last;
 
-		var gainValue = _gain.Process(input.SetValue(this, delta > 0 ? delta : 0m)).GetValue<decimal>();
-		var lossValue = _loss.Process(input.SetValue(this, delta > 0 ? 0m : -delta)).GetValue<decimal>();
+		var gainValue = _gain.Process(input.SetValue(this, delta > 0 ? delta : 0m)).ToDecimal();
+		var lossValue = _loss.Process(input.SetValue(this, delta > 0 ? 0m : -delta)).ToDecimal();
 
 		if(input.IsFinal)
 			_last = newValue;

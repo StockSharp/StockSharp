@@ -54,14 +54,14 @@ public class VerticalHorizontalFilter : LengthIndicator<decimal>
 		var candle = input.GetValue<ICandleMessage>();
 
 		// Находим минимум и максимум для заданного периода
-		var minValue = _min.Process(input.SetValue(this, candle.LowPrice)).GetValue<decimal>();
-		var maxValue = _max.Process(input.SetValue(this, candle.HighPrice)).GetValue<decimal>();
+		var minValue = _min.Process(input.SetValue(this, candle.LowPrice)).ToDecimal();
+		var maxValue = _max.Process(input.SetValue(this, candle.HighPrice)).ToDecimal();
 
 		var sumValue = 0m;
 
 		// Вычисляем сумму модулей разности цен закрытия текущего и предыдущего дня для заданного периода
 		if (_previousClosePrice != null)
-			sumValue = _sum.Process(input.SetValue(this, Math.Abs(_previousClosePrice.Value - candle.ClosePrice))).GetValue<decimal>();
+			sumValue = _sum.Process(input.SetValue(this, Math.Abs(_previousClosePrice.Value - candle.ClosePrice))).ToDecimal();
 
 		if (input.IsFinal)
 			_previousClosePrice = candle.ClosePrice;

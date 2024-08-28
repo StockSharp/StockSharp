@@ -62,7 +62,7 @@ public class KaufmannAdaptiveMovingAverage : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var newValue = input.GetValue<decimal>();
+		var newValue = input.ToDecimal();
 		var lastValue = this.GetCurrentValue();
 
 		if (input.IsFinal)

@@ -28,7 +28,7 @@ public sealed class Peak : ZigZagEquis
 
 		if (IsFormed && !value.IsEmpty)
 		{
-			if (CurrentValue < value.GetValue<decimal>())
+			if (CurrentValue < value.ToDecimal())
 			{
 				return value;
 			}

@@ -101,8 +101,8 @@ public class DirectionalIndex : BaseComplexIndicator
 		if (plusValue.IsEmpty || minusValue.IsEmpty)
 			return value;
 
-		var plus = plusValue.GetValue<decimal>();
-		var minus = minusValue.GetValue<decimal>();
+		var plus = plusValue.ToDecimal();
+		var minus = minusValue.ToDecimal();
 
 		var diSum = plus + minus;
 		var diDiff = Math.Abs(plus - minus);

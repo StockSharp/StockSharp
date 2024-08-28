@@ -236,7 +236,7 @@ public static class IndicatorHelper
 		}
 		else
 		{
-			var dec = value.GetValue<decimal>();
+			var dec = value.ToDecimal();
 			return (dec, dec, dec, dec);
 		}
 	}
@@ -258,8 +258,21 @@ public static class IndicatorHelper
 		}
 		else
 		{
-			var dec = value.GetValue<decimal>();
+			var dec = value.ToDecimal();
 			return (dec, dec, dec, dec, 0);
 		}
+	}
+
+	/// <summary>
+	/// Convert <see cref="IIndicatorValue"/> to <see cref="decimal"/>.
+	/// </summary>
+	/// <param name="value"><see cref="IIndicatorValue"/></param>
+	/// <returns><see cref="decimal"/></returns>
+	public static decimal ToDecimal(this IIndicatorValue value)
+	{
+		if (value is null)
+			throw new ArgumentNullException(nameof(value));
+
+		return value.GetValue<decimal>();
 	}
 }

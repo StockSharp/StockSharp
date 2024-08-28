@@ -36,7 +36,7 @@ public class ExponentialMovingAverage : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var newValue = input.GetValue<decimal>();
+		var newValue = input.ToDecimal();
 
 		// буфер нужен только для формирования начального значение - SMA
 		if (!IsFormed)

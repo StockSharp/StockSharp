@@ -17,6 +17,6 @@ public class PassThroughIndicator : BaseIndicator
 
 		return input.IsEmpty
 			? new DecimalIndicatorValue(this, input.Time)
-			: new DecimalIndicatorValue(this, input.GetValue<decimal>(), input.Time);
+			: new DecimalIndicatorValue(this, input.ToDecimal(), input.Time);
 	}
 }

@@ -88,7 +88,7 @@ public class Trix : LengthIndicator<IIndicatorValue>
 		var ema3Value = _ema3.Process(ema2Value);
 
 		return _ema3.IsFormed ?
-			new DecimalIndicatorValue(this, 10m * _roc.Process(ema3Value).GetValue<decimal>(), input.Time) :
+			new DecimalIndicatorValue(this, 10m * _roc.Process(ema3Value).ToDecimal(), input.Time) :
 			new DecimalIndicatorValue(this, input.Time);
 	}
 

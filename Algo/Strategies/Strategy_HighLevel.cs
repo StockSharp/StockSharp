@@ -430,7 +430,7 @@ public partial class Strategy
 			if (callback is null)
 				throw new ArgumentNullException(nameof(callback));
 
-			return Bind(indicator, (v, iv) => callback(v, iv.GetValue<decimal>()));
+			return Bind(indicator, (v, iv) => callback(v, iv.ToDecimal()));
 		}
 
 		/// <summary>
@@ -457,7 +457,7 @@ public partial class Strategy
 			if (callback is null)
 				throw new ArgumentNullException(nameof(callback));
 
-			return Bind(indicator1, indicator2, (v, iv1, iv2) => callback(v, iv1.GetValue<decimal>(), iv2.GetValue<decimal>()));
+			return Bind(indicator1, indicator2, (v, iv1, iv2) => callback(v, iv1.ToDecimal(), iv2.ToDecimal()));
 		}
 
 		/// <summary>
@@ -486,7 +486,7 @@ public partial class Strategy
 			if (callback is null)
 				throw new ArgumentNullException(nameof(callback));
 
-			return Bind(indicator1, indicator2, indicator3, (v, iv1, iv2, iv3) => callback(v, iv1.GetValue<decimal>(), iv2.GetValue<decimal>(), iv3.GetValue<decimal>()));
+			return Bind(indicator1, indicator2, indicator3, (v, iv1, iv2, iv3) => callback(v, iv1.ToDecimal(), iv2.ToDecimal(), iv3.ToDecimal()));
 		}
 
 		/// <summary>

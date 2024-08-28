@@ -82,7 +82,7 @@ public class IndicatorValue : IServerTimeMessage, ISecurityIdMessage
 
 		if (value is DecimalIndicatorValue or CandleIndicatorValue or ShiftedIndicatorValue)
 		{
-			values.Add(value.IsEmpty ? null : value.GetValue<decimal>());
+			values.Add(value.IsEmpty ? null : value.ToDecimal());
 		}
 		else if (value is ComplexIndicatorValue complexValue)
 		{

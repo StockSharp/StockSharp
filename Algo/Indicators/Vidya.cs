@@ -41,7 +41,7 @@ public class Vidya : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var newValue = input.GetValue<decimal>();
+		var newValue = input.ToDecimal();
 
 		// calc СMO
 		var cmoValue = _cmo.Process(input);
@@ -62,7 +62,7 @@ public class Vidya : LengthIndicator<decimal>
 			return new DecimalIndicatorValue(this, _prevFinalValue, input.Time);
 		}
 
-		var curValue = (newValue - _prevFinalValue) * _multiplier * Math.Abs(cmoValue.GetValue<decimal>() / 100m) + _prevFinalValue;
+		var curValue = (newValue - _prevFinalValue) * _multiplier * Math.Abs(cmoValue.ToDecimal() / 100m) + _prevFinalValue;
 			
 		if (input.IsFinal)
 			_prevFinalValue = curValue;

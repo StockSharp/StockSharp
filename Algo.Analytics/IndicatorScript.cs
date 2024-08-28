@@ -36,7 +36,7 @@
 				{
 					// fill series
 					candlesSeries[candle.OpenTime] = candle.ClosePrice;
-					indicatorSeries[candle.OpenTime] = roc.Process(candle).GetValue<decimal>();
+					indicatorSeries[candle.OpenTime] = roc.Process(candle).ToDecimal();
 				}
 
 				// draw series on chart

@@ -46,8 +46,8 @@ public class StochasticK : LengthIndicator<decimal>
 	{
 		var (_, high, low, close) = input.GetOhlc();
 
-		var highValue = _high.Process(input.SetValue(this, high)).GetValue<decimal>();
-		var lowValue = _low.Process(input.SetValue(this, low)).GetValue<decimal>();
+		var highValue = _high.Process(input.SetValue(this, high)).ToDecimal();
+		var lowValue = _low.Process(input.SetValue(this, low)).ToDecimal();
 
 		var diff = highValue - lowValue;
 

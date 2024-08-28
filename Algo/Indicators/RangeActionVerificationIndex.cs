@@ -54,8 +54,8 @@ public class RangeActionVerificationIndex : BaseIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var shortValue = ShortSma.Process(input).GetValue<decimal>();
-		var longValue = LongSma.Process(input).GetValue<decimal>();
+		var shortValue = ShortSma.Process(input).ToDecimal();
+		var longValue = LongSma.Process(input).ToDecimal();
 
 		return new DecimalIndicatorValue(this, Math.Abs(100m * (shortValue - longValue) / longValue), input.Time);
 	}

@@ -193,7 +193,7 @@ public class JurikMovingAverage : LengthIndicator<decimal>
 		{
 			var originalLastValue = ind.GetCurrentValue();
 			var lastValue = originalLastValue;
-			var newValue = input.GetValue<decimal>();
+			var newValue = input.ToDecimal();
 
 			#region Расчет JMA
 

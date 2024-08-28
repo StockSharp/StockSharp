@@ -40,6 +40,6 @@ public class QStick : LengthIndicator<IIndicatorValue>
 		var (open, _, _, close) = input.GetOhlc();
 
 		var val = _sma.Process(input.SetValue(this, open - close));
-		return val.SetValue(this, val.GetValue<decimal>());
+		return val.SetValue(this, val.ToDecimal());
 	}
 }

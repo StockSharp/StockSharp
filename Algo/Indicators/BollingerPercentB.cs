@@ -70,14 +70,14 @@ public class BollingerPercentB : BaseIndicator
 			if (input.IsFinal)
 				IsFormed = true;
 
-			var upperBand = bbValue[_bollingerBands.UpBand].GetValue<decimal>();
-			var lowerBand = bbValue[_bollingerBands.LowBand].GetValue<decimal>();
+			var upperBand = bbValue[_bollingerBands.UpBand].ToDecimal();
+			var lowerBand = bbValue[_bollingerBands.LowBand].ToDecimal();
 			
 			var bandWidth = upperBand - lowerBand;
 
 			if (bandWidth != 0)
 			{
-				var price = input.GetValue<decimal>();
+				var price = input.ToDecimal();
 
 				var percentB = (price - lowerBand) / bandWidth * 100;
 				return new DecimalIndicatorValue(this, percentB, input.Time);

@@ -72,7 +72,7 @@ public class ArnaudLegouxMovingAverage : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var price = input.GetValue<decimal>();
+		var price = input.ToDecimal();
 
 		if (input.IsFinal)
 		{

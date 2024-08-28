@@ -34,7 +34,7 @@ public class BalanceOfMarketPower : SimpleMovingAverage
 		var smaValue = base.OnProcess(input.SetValue(this, bmp));
 
 		return IsFormed
-			? new DecimalIndicatorValue(this, smaValue.GetValue<decimal>(), input.Time)
+			? new DecimalIndicatorValue(this, smaValue.ToDecimal(), input.Time)
 			: new DecimalIndicatorValue(this, input.Time);
 	}
 }

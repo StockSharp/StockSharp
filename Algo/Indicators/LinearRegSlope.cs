@@ -27,7 +27,7 @@ public class LinearRegSlope : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var newValue = input.GetValue<decimal>();
+		var newValue = input.ToDecimal();
 
 		if (input.IsFinal)
 		{

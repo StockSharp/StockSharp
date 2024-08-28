@@ -65,6 +65,6 @@ public class AverageTrueRange : LengthIndicator<IIndicatorValue>
 			IsFormed = true;
 
 		var val = MovingAverage.Process(TrueRange.Process(input));
-		return val.SetValue(this, val.GetValue<decimal>());
+		return val.SetValue(this, val.ToDecimal());
 	}
 }
