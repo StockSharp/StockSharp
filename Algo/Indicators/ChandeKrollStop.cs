@@ -113,19 +113,10 @@ public class ChandeKrollStop : BaseComplexIndicator
 			var stopLong = highest - highLowDiff * Multiplier;
 			var stopShort = lowest + highLowDiff * Multiplier;
 
-			var smaHighValue = _smaHigh.Process(input.SetValue(this, stopLong));
-			var smaLowValue = _smaLow.Process(input.SetValue(this, stopShort));
-
-			if (_smaHigh.IsFormed && _smaLow.IsFormed)
-			{
-				var longStop = smaHighValue.ToDecimal();
-				var shortStop = smaLowValue.ToDecimal();
-
-				var result = new ComplexIndicatorValue(this, input.Time);
-				result.Add(_highest, new DecimalIndicatorValue(this, longStop, input.Time));
-				result.Add(_lowest, new DecimalIndicatorValue(this, shortStop, input.Time));
-				return result;
-			}
+			var result = new ComplexIndicatorValue(this, input.Time);
+			result.Add(_highest, _smaHigh.Process(input.SetValue(this, stopLong)));
+			result.Add(_lowest, _smaLow.Process(input.SetValue(this, stopShort)));
+			return result;
 		}
 
 		return new ComplexIndicatorValue(this, input.Time);
