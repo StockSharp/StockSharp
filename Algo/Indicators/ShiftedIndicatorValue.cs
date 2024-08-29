@@ -48,8 +48,8 @@ public class ShiftedIndicatorValue : SingleIndicatorValue<decimal>
 	/// <inheritdoc />
 	public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		=> IsEmpty
-			? new ShiftedIndicatorValue(indicator, Time)
-			: new ShiftedIndicatorValue(indicator, Value, Shift, Time);
+			? new ShiftedIndicatorValue(indicator, Time) { IsFinal = IsFinal }
+			: new ShiftedIndicatorValue(indicator, Value, Shift, Time) { IsFinal = IsFinal };
 
 	/// <inheritdoc />
 	public override IEnumerable<object> ToValues()

@@ -26,7 +26,7 @@ public class DirectionalIndex : BaseComplexIndicator
 		{
 			IsEmpty = false;
 			_value = value.To<decimal>();
-			return new DecimalIndicatorValue(indicator, _value, Time);
+			return new DecimalIndicatorValue(indicator, _value, Time) { IsFinal = IsFinal };
 		}
 
 		public override T GetValue<T>(Level1Fields? field)

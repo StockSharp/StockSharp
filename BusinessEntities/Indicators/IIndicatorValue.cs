@@ -332,8 +332,8 @@ public class CandleIndicatorValue : SingleIndicatorValue<ICandleMessage>
 	public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 	{
 		return value is ICandleMessage candle
-				? new CandleIndicatorValue(indicator, candle)
-				: value.IsNull() ? new CandleIndicatorValue(indicator, Time) : base.SetValue(indicator, value);
+				? new CandleIndicatorValue(indicator, candle) { IsFinal = IsFinal }
+				: value.IsNull() ? new CandleIndicatorValue(indicator, Time) { IsFinal = IsFinal } : base.SetValue(indicator, value);
 	}
 }
 
