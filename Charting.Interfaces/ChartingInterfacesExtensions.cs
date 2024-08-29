@@ -183,6 +183,9 @@ public static class ChartingInterfacesExtensions
 		if (painter is null)
 			return null;
 
+		if (painter.Is<IChartIndicatorPainterFactory>())
+			return painter.CreateInstance<IChartIndicatorPainterFactory>().Create(type.CreateIndicator());
+
 		return painter.CreateInstance<IChartIndicatorPainter>();
 	}
 }
