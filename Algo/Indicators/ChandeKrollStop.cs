@@ -49,8 +49,6 @@ public class ChandeKrollStop : BaseComplexIndicator
 		{
 			_highest.Length = value;
 			_lowest.Length = value;
-
-			Reset();
 		}
 	}
 
