@@ -89,6 +89,8 @@ public class AdaptivePriceZone : BaseComplexIndicator
 		var maValue = _ma.Process(input);
 		var stdDevValue = _stdDev.Process(input);
 
+		var result = new ComplexIndicatorValue(this, input.Time);
+
 		if (_ma.IsFormed && _stdDev.IsFormed)
 		{
 			var ma = maValue.ToDecimal();
@@ -97,15 +99,12 @@ public class AdaptivePriceZone : BaseComplexIndicator
 			var upperBand = ma + BandPercentage * stdDev;
 			var lowerBand = ma - BandPercentage * stdDev;
 
-			var result = new ComplexIndicatorValue(this, input.Time);
 			result.Add(_ma, new DecimalIndicatorValue(this, ma, input.Time));
 			result.Add(_upperBand, _upperBand.Process(upperBand, input.Time, input.IsFinal));
 			result.Add(_lowerBand, _lowerBand.Process(lowerBand, input.Time, input.IsFinal));
-
-			return result;
 		}
 
-		return new ComplexIndicatorValue(this, input.Time);
+		return result;
 	}
 
 	/// <inheritdoc />

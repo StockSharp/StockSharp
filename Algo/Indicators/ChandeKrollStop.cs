@@ -101,6 +101,8 @@ public class ChandeKrollStop : BaseComplexIndicator
 		var highestValue = _highest.Process(input.SetValue(this, high));
 		var lowestValue = _lowest.Process(input.SetValue(this, low));
 
+		var result = new ComplexIndicatorValue(this, input.Time);
+
 		if (_highest.IsFormed && _lowest.IsFormed)
 		{
 			IsFormed = true;
@@ -113,13 +115,11 @@ public class ChandeKrollStop : BaseComplexIndicator
 			var stopLong = highest - highLowDiff * Multiplier;
 			var stopShort = lowest + highLowDiff * Multiplier;
 
-			var result = new ComplexIndicatorValue(this, input.Time);
 			result.Add(_highest, _smaHigh.Process(input.SetValue(this, stopLong)));
 			result.Add(_lowest, _smaLow.Process(input.SetValue(this, stopShort)));
-			return result;
 		}
 
-		return new ComplexIndicatorValue(this, input.Time);
+		return result;
 	}
 
 	/// <inheritdoc />
