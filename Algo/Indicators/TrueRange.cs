@@ -55,7 +55,7 @@ public class TrueRange : BaseIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var candle = input.GetValue<ICandleMessage>();
+		var candle = input.ToCandle();
 
 		if (_prevCandle != null)
 		{

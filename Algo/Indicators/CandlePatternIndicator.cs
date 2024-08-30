@@ -199,7 +199,7 @@ public class CandlePatternIndicator : BaseIndicator
 
 		try
 		{
-			var candle = input.GetValue<ICandleMessage>();
+			var candle = input.ToCandle();
 		
 			_buffer.Add(candle);
 

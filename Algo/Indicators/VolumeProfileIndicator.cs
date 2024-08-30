@@ -106,7 +106,7 @@ public class VolumeProfileIndicator : BaseIndicator
 
 		IsFormed = true;
 
-		var candle = input.GetValue<ICandleMessage>();
+		var candle = input.ToCandle();
 
 		if (!UseTotalVolume)
 		{

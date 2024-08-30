@@ -241,7 +241,7 @@ public static class IndicatorHelper
 
 		if (value.IsSupport<ICandleMessage>())
 		{
-			var candle = value.GetValue<ICandleMessage>();
+			var candle = value.ToCandle();
 			return (candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice);
 		}
 		else
@@ -263,7 +263,7 @@ public static class IndicatorHelper
 
 		if (value.IsSupport<ICandleMessage>())
 		{
-			var candle = value.GetValue<ICandleMessage>();
+			var candle = value.ToCandle();
 			return (candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume);
 		}
 		else
@@ -284,5 +284,18 @@ public static class IndicatorHelper
 			throw new ArgumentNullException(nameof(value));
 
 		return value.GetValue<decimal>();
+	}
+
+	/// <summary>
+	/// Convert <see cref="IIndicatorValue"/> to <see cref="ICandleMessage"/>.
+	/// </summary>
+	/// <param name="value"><see cref="IIndicatorValue"/></param>
+	/// <returns><see cref="ICandleMessage"/></returns>
+	public static ICandleMessage ToCandle(this IIndicatorValue value)
+	{
+		if (value is null)
+			throw new ArgumentNullException(nameof(value));
+
+		return value.GetValue<ICandleMessage>();
 	}
 }

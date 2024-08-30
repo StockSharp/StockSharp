@@ -37,7 +37,7 @@ public abstract class DiPart : LengthIndicator<decimal>
 	{
 		decimal? result = null;
 
-		var candle = input.GetValue<ICandleMessage>();
+		var candle = input.ToCandle();
 
 		// 1 period delay
 		if (_averageTrueRange.IsFormed && _movingAverage.IsFormed)

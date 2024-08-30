@@ -51,7 +51,7 @@ public class VerticalHorizontalFilter : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var candle = input.GetValue<ICandleMessage>();
+		var candle = input.ToCandle();
 
 		// Находим минимум и максимум для заданного периода
 		var minValue = _min.Process(input, candle.LowPrice).ToDecimal();

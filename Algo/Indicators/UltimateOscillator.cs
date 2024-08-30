@@ -63,7 +63,7 @@ public class UltimateOscillator : BaseIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var candle = input.GetValue<ICandleMessage>();
+		var candle = input.ToCandle();
 
 		if (_previouseClosePrice != null)
 		{
