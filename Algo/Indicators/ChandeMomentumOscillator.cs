@@ -60,8 +60,8 @@ public class ChandeMomentumOscillator : LengthIndicator<decimal>
 
 		var delta = newValue - _last;
 
-		var upValue = _cmoUp.Process(input.SetValue(this, delta > 0 ? delta : 0m)).ToDecimal();
-		var downValue = _cmoDn.Process(input.SetValue(this, delta > 0 ? 0m : -delta)).ToDecimal();
+		var upValue = _cmoUp.Process(input, delta > 0 ? delta : 0m).ToDecimal();
+		var downValue = _cmoDn.Process(input, delta > 0 ? 0m : -delta).ToDecimal();
 
 		if (input.IsFinal)
 			_last = newValue;

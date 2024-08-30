@@ -44,11 +44,13 @@ public class WilliamsR : LengthIndicator<decimal>
 	{
 		var candle = input.GetValue<ICandleMessage>();
 
-		var lowValue = _low.Process(input.SetValue(this, candle.LowPrice)).ToDecimal();
-		var highValue = _high.Process(input.SetValue(this, candle.HighPrice)).ToDecimal();
+		var lowValue = _low.Process(input, candle.LowPrice).ToDecimal();
+		var highValue = _high.Process(input, candle.HighPrice).ToDecimal();
 
-		if ((highValue - lowValue) != 0)
-			return new DecimalIndicatorValue(this, -100m * (highValue - candle.ClosePrice) / (highValue - lowValue), input.Time);
+		var diff = highValue - lowValue;
+
+		if (diff != 0)
+			return new DecimalIndicatorValue(this, -100m * (highValue - candle.ClosePrice) / diff, input.Time);
 			
 		return new DecimalIndicatorValue(this, input.Time);
 	}

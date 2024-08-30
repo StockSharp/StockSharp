@@ -59,7 +59,7 @@ public class ChaikinVolatility : BaseIndicator
 	{
 		var (_, high, low, _) = input.GetOhlc();
 
-		var emaValue = Ema.Process(input.SetValue(this, high - low));
+		var emaValue = Ema.Process(input, high - low);
 
 		if (Ema.IsFormed)
 		{

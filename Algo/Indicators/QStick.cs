@@ -39,7 +39,7 @@ public class QStick : LengthIndicator<IIndicatorValue>
 	{
 		var (open, _, _, close) = input.GetOhlc();
 
-		var val = _sma.Process(input.SetValue(this, open - close));
+		var val = _sma.Process(input, open - close);
 		return val.SetValue(this, val.ToDecimal());
 	}
 }

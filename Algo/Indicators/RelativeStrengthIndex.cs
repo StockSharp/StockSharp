@@ -60,8 +60,8 @@ public class RelativeStrengthIndex : LengthIndicator<decimal>
 
 		var delta = newValue - _last;
 
-		var gainValue = _gain.Process(input.SetValue(this, delta > 0 ? delta : 0m)).ToDecimal();
-		var lossValue = _loss.Process(input.SetValue(this, delta > 0 ? 0m : -delta)).ToDecimal();
+		var gainValue = _gain.Process(input, delta > 0 ? delta : 0m).ToDecimal();
+		var lossValue = _loss.Process(input, delta > 0 ? 0m : -delta).ToDecimal();
 
 		if(input.IsFinal)
 			_last = newValue;

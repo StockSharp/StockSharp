@@ -98,6 +98,16 @@ public static class IndicatorHelper
 	}
 
 	/// <summary>
+	/// To renew the indicator with numeric value.
+	/// </summary>
+	/// <param name="indicator">Indicator.</param>
+	/// <param name="input"><see cref="IIndicatorValue"/></param>
+	/// <param name="value">Numeric value.</param>
+	/// <returns>The new value of the indicator.</returns>
+	public static IIndicatorValue Process(this IIndicator indicator, IIndicatorValue input, decimal value)
+		=> indicator.Process(input.SetValue(indicator, value));
+
+	/// <summary>
 	/// To renew the indicator with candle closing price <see cref="ICandleMessage.ClosePrice"/>.
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>

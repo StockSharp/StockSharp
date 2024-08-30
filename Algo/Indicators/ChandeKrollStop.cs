@@ -98,8 +98,8 @@ public class ChandeKrollStop : BaseComplexIndicator
 	{
 		var (_, high, low, _) = input.GetOhlc();
 
-		var highestValue = _highest.Process(input.SetValue(this, high));
-		var lowestValue = _lowest.Process(input.SetValue(this, low));
+		var highestValue = _highest.Process(input, high);
+		var lowestValue = _lowest.Process(input, low);
 
 		var result = new ComplexIndicatorValue(this, input.Time);
 
@@ -115,8 +115,8 @@ public class ChandeKrollStop : BaseComplexIndicator
 			var stopLong = highest - highLowDiff * Multiplier;
 			var stopShort = lowest + highLowDiff * Multiplier;
 
-			result.Add(_highest, _smaHigh.Process(input.SetValue(this, stopLong)));
-			result.Add(_lowest, _smaLow.Process(input.SetValue(this, stopShort)));
+			result.Add(_highest, _smaHigh.Process(input, stopLong));
+			result.Add(_lowest, _smaLow.Process(input, stopShort));
 		}
 
 		return result;
