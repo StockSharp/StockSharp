@@ -266,6 +266,11 @@ public static class IndicatorHelper
 			var candle = value.ToCandle();
 			return (candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume);
 		}
+		else if (value.IsSupport<ITickTradeMessage>())
+		{
+			var trade = value.GetValue<ITickTradeMessage>();
+			return (trade.Price, trade.Price, trade.Price, trade.Price, trade.Volume);
+		}
 		else
 		{
 			var dec = value.ToDecimal();

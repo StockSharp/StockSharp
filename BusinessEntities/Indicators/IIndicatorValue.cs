@@ -283,9 +283,6 @@ public class CandleIndicatorValue : SingleIndicatorValue<ICandleMessage>
 	public CandleIndicatorValue(IIndicator indicator, ICandleMessage value)
 		: base(indicator, value, value.CheckOnNull(nameof(value)).ServerTime)
 	{
-		if (value == null)
-			throw new ArgumentNullException(nameof(value));
-
 		IsFinal = value.State == CandleStates.Finished;
 	}
 
@@ -350,8 +347,6 @@ public class MarketDepthIndicatorValue : SingleIndicatorValue<IOrderBookMessage>
 	public MarketDepthIndicatorValue(IIndicator indicator, IOrderBookMessage depth)
 		: base(indicator, depth, depth.CheckOnNull(nameof(depth)).ServerTime)
 	{
-		if (depth is null)
-			throw new ArgumentNullException(nameof(depth));
 	}
 
 	/// <inheritdoc />
@@ -409,8 +404,6 @@ public class Level1IndicatorValue : SingleIndicatorValue<Level1ChangeMessage>
 	public Level1IndicatorValue(IIndicator indicator, Level1ChangeMessage l1Msg)
 		: base(indicator, l1Msg, l1Msg.CheckOnNull(nameof(l1Msg)).ServerTime)
 	{
-		if (l1Msg is null)
-			throw new ArgumentNullException(nameof(l1Msg));
 	}
 
 	/// <inheritdoc />
@@ -445,6 +438,60 @@ public class Level1IndicatorValue : SingleIndicatorValue<Level1ChangeMessage>
 	public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 	{
 		return new Level1IndicatorValue(indicator, base.GetValue<Level1ChangeMessage>(default))
+		{
+			IsFinal = IsFinal
+		};
+	}
+}
+
+/// <summary>
+/// The indicator value, operating with data type <see cref="ITickTradeMessage"/>.
+/// </summary>
+public class TickIndicatorValue : SingleIndicatorValue<ITickTradeMessage>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="TickIndicatorValue"/>.
+	/// </summary>
+	/// <param name="indicator">Indicator.</param>
+	/// <param name="tick"><see cref="ITickTradeMessage"/></param>
+	public TickIndicatorValue(IIndicator indicator, ITickTradeMessage tick)
+		: base(indicator, tick, tick.CheckOnNull(nameof(tick)).ServerTime)
+	{
+	}
+
+	/// <inheritdoc />
+	public override bool IsSupport(Type valueType)
+	{
+		return valueType == typeof(decimal) || base.IsSupport(valueType);
+	}
+
+	/// <inheritdoc />
+	public override T GetValue<T>(Level1Fields? field)
+	{
+		var tick = base.GetValue<ITickTradeMessage>(default);
+
+		if (typeof(T) == typeof(decimal) || typeof(T) == typeof(decimal?))
+		{
+			var value = field switch
+			{
+				Level1Fields.LastTradePrice or null => tick.Price,
+				Level1Fields.LastTradeVolume => tick.Volume,
+				_ => (decimal?)null,
+			};
+
+			if (value is null && typeof(T) == typeof(decimal))
+				return default;
+
+			return value.To<T>();
+		}
+		else
+			return tick.To<T>();
+	}
+
+	/// <inheritdoc />
+	public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
+	{
+		return new TickIndicatorValue(indicator, base.GetValue<ITickTradeMessage>(default))
 		{
 			IsFinal = IsFinal
 		};
