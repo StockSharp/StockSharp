@@ -93,6 +93,28 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 	/// <inheritdoc />
 	public override Type ResultType { get; } = typeof(ComplexIndicatorValue);
 
+	/// <summary>
+	/// Create empty value.
+	/// </summary>
+	/// <param name="indicator"><see cref="IIndicator"/></param>
+	/// <param name="time">Time</param>
+	/// <returns>Empty value.</returns>
+	protected virtual IIndicatorValue CreateEmpty(IIndicator indicator, DateTimeOffset time)
+		=> new DecimalIndicatorValue(indicator, time);
+
+	/// <inheritdoc />
+	public override IIndicatorValue Process(IIndicatorValue input)
+	{
+		var output = base.Process(input);
+
+		var cv = (ComplexIndicatorValue)output;
+
+		foreach (var inner in InnerIndicators)
+			cv.InnerValues.TryAdd(inner, CreateEmpty(inner, input.Time));
+
+		return output;
+	}
+
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
