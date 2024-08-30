@@ -39,15 +39,15 @@ public class IchimokuSenkouBLine : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, high, low, _) = input.GetOhlc();
+		var candle = input.ToCandle();
 
 		decimal? result = null;
 		IList<(decimal high, decimal low)> buff = _buffer;
 
 		if (input.IsFinal)
-			_buffer.PushBack((high, low));
+			_buffer.PushBack((candle.HighPrice, candle.LowPrice));
 		else
-			buff = _buffer.Skip(1).Append((high, low)).ToList();
+			buff = _buffer.Skip(1).Append((candle.HighPrice, candle.LowPrice)).ToList();
 
 		if (buff.Count >= Length)
 		{

@@ -25,10 +25,10 @@ public class BalanceOfMarketPower : SimpleMovingAverage
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (open, high, low, close, volume) = input.GetOhlcv();
+		var candle = input.ToCandle();
 
-		var bmp = volume != 0
-			? ((close - open) / (high == low ? 0.01m : high - low))
+		var bmp = candle.TotalVolume != 0
+			? ((candle.ClosePrice - candle.OpenPrice) / (candle.HighPrice == candle.LowPrice ? 0.01m : candle.HighPrice - candle.LowPrice))
 			: 0;
 
 		var smaValue = base.OnProcess(input.SetValue(this, bmp));

@@ -94,10 +94,10 @@ public class ChandeKrollStop : BaseComplexIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, high, low, _) = input.GetOhlc();
+		var candle = input.ToCandle();
 
-		var highestValue = _highest.Process(input, high);
-		var lowestValue = _lowest.Process(input, low);
+		var highestValue = _highest.Process(input, candle.HighPrice);
+		var lowestValue = _lowest.Process(input, candle.LowPrice);
 
 		var result = new ComplexIndicatorValue(this, input.Time);
 

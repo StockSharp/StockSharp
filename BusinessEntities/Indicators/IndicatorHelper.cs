@@ -230,55 +230,6 @@ public static class IndicatorHelper
 		=> value.CheckOnNull(nameof(value)).IsSupport(typeof(T));
 
 	/// <summary>
-	/// Get OHLC.
-	/// </summary>
-	/// <param name="value"><see cref="IIndicatorValue"/></param>
-	/// <returns>OHLC.</returns>
-	public static (decimal o, decimal h, decimal l, decimal c) GetOhlc(this IIndicatorValue value)
-	{
-		if (value is null)
-			throw new ArgumentNullException(nameof(value));
-
-		if (value.IsSupport<ICandleMessage>())
-		{
-			var candle = value.ToCandle();
-			return (candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice);
-		}
-		else
-		{
-			var dec = value.ToDecimal();
-			return (dec, dec, dec, dec);
-		}
-	}
-
-	/// <summary>
-	/// Get OHLCV.
-	/// </summary>
-	/// <param name="value"><see cref="IIndicatorValue"/></param>
-	/// <returns>OHLCV.</returns>
-	public static (decimal o, decimal h, decimal l, decimal c, decimal v) GetOhlcv(this IIndicatorValue value)
-	{
-		if (value is null)
-			throw new ArgumentNullException(nameof(value));
-
-		if (value.IsSupport<ICandleMessage>())
-		{
-			var candle = value.ToCandle();
-			return (candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume);
-		}
-		else if (value.IsSupport<ITickTradeMessage>())
-		{
-			var trade = value.GetValue<ITickTradeMessage>();
-			return (trade.Price, trade.Price, trade.Price, trade.Price, trade.Volume);
-		}
-		else
-		{
-			var dec = value.ToDecimal();
-			return (dec, dec, dec, dec, 0);
-		}
-	}
-
-	/// <summary>
 	/// Convert <see cref="IIndicatorValue"/> to <see cref="decimal"/>.
 	/// </summary>
 	/// <param name="value"><see cref="IIndicatorValue"/></param>
@@ -301,6 +252,36 @@ public static class IndicatorHelper
 		if (value is null)
 			throw new ArgumentNullException(nameof(value));
 
-		return value.GetValue<ICandleMessage>();
+		if (value.IsSupport<ICandleMessage>())
+			return value.GetValue<ICandleMessage>();
+		else if (value.IsSupport<ITickTradeMessage>())
+		{
+			var tick = value.GetValue<ITickTradeMessage>();
+
+			return new TimeFrameCandleMessage
+			{
+				OpenPrice = tick.Price,
+				HighPrice = tick.Price,
+				LowPrice = tick.Price,
+				ClosePrice = tick.Price,
+				TotalVolume = tick.Volume,
+				OpenTime = tick.ServerTime,
+				CloseTime = tick.ServerTime,
+				OpenInterest = tick.OpenInterest,
+			};
+		}
+		else
+		{
+			var dec = value.ToDecimal();
+
+			return new TimeFrameCandleMessage
+			{
+				OpenPrice = dec,
+				HighPrice = dec,
+				LowPrice = dec,
+				ClosePrice = dec,
+				OpenTime = value.Time,
+			};
+		}
 	}
 }

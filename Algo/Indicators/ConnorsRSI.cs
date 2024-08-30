@@ -95,11 +95,11 @@ public class ConnorsRSI : BaseComplexIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, _, _, price) = input.GetOhlc();
+		var candle = input.ToCandle();
 
 		var rsiValue = _rsi.Process(input);
 
-		var streak = CalculateStreak(price);
+		var streak = CalculateStreak(candle.ClosePrice);
 		var updownRsiValue = _updownRsi.Process(input, streak);
 
 		var rocValue = _roc.Process(input);

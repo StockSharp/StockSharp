@@ -25,7 +25,7 @@ public class Lowest : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, _, low, _) = input.GetOhlc();
+		var low = input.ToCandle().LowPrice;
 
 		var lastValue = Buffer.Count == 0 ? low : this.GetCurrentValue();
 

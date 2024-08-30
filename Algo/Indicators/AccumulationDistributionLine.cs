@@ -1,5 +1,7 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
+using StockSharp.Algo.Candles;
+
 /// <summary>
 /// Accumulation/Distribution Line (A/D Line).
 /// </summary>
@@ -16,12 +18,14 @@ public class AccumulationDistributionLine : BaseIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, high, low, close, volume) = input.GetOhlcv();
+		var candle = input.ToCandle();
 
-		if (high != low)
+		var cl = candle.GetLength();
+
+		if (cl != 0)
 		{
-			var mfm = ((close - low) - (high - close)) / (high - low);
-			var mfv = mfm * volume;
+			var mfm = ((candle.ClosePrice - candle.LowPrice) - (candle.HighPrice - candle.ClosePrice)) / cl;
+			var mfv = mfm * candle.TotalVolume;
 			_adLine += mfv;
 		}
 

@@ -1,5 +1,7 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
+using StockSharp.Algo.Candles;
+
 /// <summary>
 /// Balance of Power (BOP).
 /// </summary>
@@ -17,13 +19,15 @@ public class BalanceOfPower : BaseIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (open, high, low, close) = input.GetOhlc();
+		var candle = input.ToCandle();
 
-		if (high != low)
+		var cl = candle.GetLength();
+
+		if (cl != 0)
 		{
 			IsFormed = true;
 
-			var bop = (close - open) / (high - low);
+			var bop = (candle.ClosePrice - candle.OpenPrice) / cl;
 			return new DecimalIndicatorValue(this, bop, input.Time);
 		}
 

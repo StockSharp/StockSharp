@@ -7,15 +7,15 @@ namespace StockSharp.Algo.Indicators;
 [IndicatorHidden]
 public class RelativeVigorIndexAverage : LengthIndicator<decimal>
 {
-	private readonly CircularBuffer<(decimal open, decimal high, decimal low, decimal close)> _buffer;
+	private readonly CircularBuffer<ICandleMessage> _buffer;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RelativeVigorIndexAverage"/>.
 	/// </summary>
 	public RelativeVigorIndexAverage()
 	{
-		_buffer = new(Length);
-		Length = 4;
+		_buffer = new(4);
+		Length = _buffer.Capacity;
 	}
 
 	/// <inheritdoc />
@@ -32,11 +32,11 @@ public class RelativeVigorIndexAverage : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var t = input.GetOhlc();
+		var candle = input.ToCandle();
 
 		if (input.IsFinal)
 		{
-			_buffer.PushBack(t);
+			_buffer.PushBack(candle);
 		}
 
 		if (IsFormed)
@@ -50,27 +50,27 @@ public class RelativeVigorIndexAverage : LengthIndicator<decimal>
 
 			if (input.IsFinal)
 			{
-				valueUp = ((value0.close - value0.open) +
-				           2 * (value1.close - value1.open) +
-				           2 * (value2.close - value2.open) +
-				           (value3.close - value3.open)) / 6m;
+				valueUp = ((value0.ClosePrice - value0.OpenPrice) +
+				           2 * (value1.ClosePrice - value1.OpenPrice) +
+				           2 * (value2.ClosePrice - value2.OpenPrice) +
+				           (value3.ClosePrice - value3.OpenPrice)) / 6m;
 
-				valueDn = ((value0.high - value0.low) +
-				           2 * (value1.high - value1.low) +
-				           2 * (value2.high - value2.low) +
-				           (value3.high - value3.low)) / 6m;
+				valueDn = ((value0.HighPrice - value0.LowPrice) +
+				           2 * (value1.HighPrice - value1.LowPrice) +
+				           2 * (value2.HighPrice - value2.LowPrice) +
+				           (value3.HighPrice - value3.LowPrice)) / 6m;
 			}
 			else
 			{
-				valueUp = ((value1.close - value1.open) +
-				           2 * (value2.close - value2.open) +
-				           2 * (value3.close - value3.open) +
-						   (t.c - t.o)) / 6m;
+				valueUp = ((value1.ClosePrice - value1.OpenPrice) +
+				           2 * (value2.ClosePrice - value2.OpenPrice) +
+				           2 * (value3.ClosePrice - value3.OpenPrice) +
+						   (candle.ClosePrice - candle.OpenPrice)) / 6m;
 
-				valueDn = ((value1.high - value1.low) +
-				           2 * (value2.high - value2.low) +
-				           2 * (value3.high - value3.low) +
-						   (t.h - t.l)) / 6m;
+				valueDn = ((value1.HighPrice - value1.LowPrice) +
+				           2 * (value2.HighPrice - value2.LowPrice) +
+				           2 * (value3.HighPrice - value3.LowPrice) +
+						   (candle.HighPrice - candle.LowPrice)) / 6m;
 			}
 
 			return new DecimalIndicatorValue(this, valueDn == decimal.Zero 

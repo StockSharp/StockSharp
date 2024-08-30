@@ -37,9 +37,9 @@ public class QStick : LengthIndicator<IIndicatorValue>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (open, _, _, close) = input.GetOhlc();
+		var candle = input.ToCandle();
 
-		var val = _sma.Process(input, open - close);
+		var val = _sma.Process(input, candle.OpenPrice - candle.ClosePrice);
 		return val.SetValue(this, val.ToDecimal());
 	}
 }

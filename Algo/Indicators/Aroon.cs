@@ -105,16 +105,16 @@ public class AroonUp : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, high, _, _) = input.GetOhlc();
+		var candle = input.ToCandle();
 
 		//decimal tempMaxValue;
 		decimal tempMaxValueAge;
 
 		if (input.IsFinal)
 		{
-			if (high >= _maxValue)
+			if (candle.HighPrice >= _maxValue)
 			{
-				_maxValue = high;
+				_maxValue = candle.HighPrice;
 				_maxValueAge = 0;
 			}
 			else
@@ -127,7 +127,7 @@ public class AroonUp : LengthIndicator<decimal>
 				var removedValue = Buffer[0];
 				if (removedValue == _maxValue)
 				{
-					_maxValue = high;
+					_maxValue = candle.HighPrice;
 					_maxValueAge = 0;
 
 					for (var i = 1; i < Length; i++)
@@ -141,7 +141,7 @@ public class AroonUp : LengthIndicator<decimal>
 				}
 			}
 
-			Buffer.PushBack(high);
+			Buffer.PushBack(candle.HighPrice);
 
 			//tempMaxValue = _maxValue;
 			tempMaxValueAge = _maxValueAge;
@@ -151,7 +151,7 @@ public class AroonUp : LengthIndicator<decimal>
 			//tempMaxValue = _maxValue;
 			tempMaxValueAge = _maxValueAge;
 
-			if (high > _maxValue)
+			if (candle.HighPrice > _maxValue)
 			{
 				//tempMaxValue = high;
 				tempMaxValueAge = 0;
@@ -193,16 +193,16 @@ public class AroonDown : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, _, low, _) = input.GetOhlc();
+		var candle = input.ToCandle();
 
 		//decimal tempMinValue;
 		decimal tempMinValueAge;
 
 		if (input.IsFinal)
 		{
-			if (low <= _minValue)
+			if (candle.LowPrice <= _minValue)
 			{
-				_minValue = low;
+				_minValue = candle.LowPrice;
 				_minValueAge = 0;
 			}
 			else
@@ -215,7 +215,7 @@ public class AroonDown : LengthIndicator<decimal>
 				var removedValue = Buffer[0];
 				if (removedValue == _minValue)
 				{
-					_minValue = low;
+					_minValue = candle.LowPrice;
 					_minValueAge = 0;
 
 					for (var i = 1; i < Length; i++)
@@ -229,7 +229,7 @@ public class AroonDown : LengthIndicator<decimal>
 				}
 			}
 
-			Buffer.PushBack(low);
+			Buffer.PushBack(candle.LowPrice);
 
 			//tempMinValue = _minValue;
 			tempMinValueAge = _minValueAge;
@@ -239,7 +239,7 @@ public class AroonDown : LengthIndicator<decimal>
 			//tempMinValue = _minValue;
 			tempMinValueAge = _minValueAge;
 
-			if (low < _minValue)
+			if (candle.LowPrice < _minValue)
 			{
 				//tempMinValue = low;
 				tempMinValueAge = 0;

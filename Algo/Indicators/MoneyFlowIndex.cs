@@ -53,10 +53,10 @@ public class MoneyFlowIndex : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, high, low, close, vol) = input.GetOhlcv();
+		var candle = input.ToCandle();
 
-		var typicalPrice = (high + low + close) / 3.0m;
-		var moneyFlow = typicalPrice * vol;
+		var typicalPrice = (candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 3.0m;
+		var moneyFlow = typicalPrice * candle.TotalVolume;
 		
 		var positiveFlow = _positiveFlow.Process(input, typicalPrice > _previousPrice ? moneyFlow : 0.0m).ToDecimal();
 		var negativeFlow = _negativeFlow.Process(input, typicalPrice < _previousPrice ? moneyFlow : 0.0m).ToDecimal();

@@ -92,10 +92,10 @@ public sealed class OptimalTracking : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, high, low, _) = input.GetOhlc();
+		var candle = input.ToCandle();
 
-		var average = (high + low) / 2;
-		var halfRange = (high - low) / 2;
+		var average = (candle.HighPrice + candle.LowPrice) / 2;
+		var halfRange = (candle.HighPrice - candle.LowPrice) / 2;
 
 		if (input.IsFinal)
 			Buffer.AddEx(average);

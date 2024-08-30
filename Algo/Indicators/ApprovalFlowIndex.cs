@@ -30,19 +30,19 @@ public class ApprovalFlowIndex : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, _, _, close, volume) = input.GetOhlcv();
+		var candle = input.ToCandle();
 
 		if (_prevClose == 0)
 		{
-			_prevClose = close;
+			_prevClose = candle.ClosePrice;
 			return new DecimalIndicatorValue(this, input.Time);
 		}
 
 		if (_count < Length)
 			_count++;
 
-		var upVolume = close > _prevClose ? volume : 0;
-		var downVolume = close < _prevClose ? volume : 0;
+		var upVolume = candle.ClosePrice > _prevClose ? candle.TotalVolume : 0;
+		var downVolume = candle.ClosePrice < _prevClose ? candle.TotalVolume : 0;
 
 		_totalUpVolume += upVolume;
 		_totalDownVolume += downVolume;
@@ -60,7 +60,7 @@ public class ApprovalFlowIndex : LengthIndicator<decimal>
 			}
 		}
 
-		_prevClose = close;
+		_prevClose = candle.ClosePrice;
 		return new DecimalIndicatorValue(this, input.Time);
 	}
 

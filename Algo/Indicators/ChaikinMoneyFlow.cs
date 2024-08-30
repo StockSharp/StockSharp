@@ -1,5 +1,7 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
+using StockSharp.Algo.Candles;
+
 /// <summary>
 /// Chaikin Money Flow (CMF) indicator.
 /// </summary>
@@ -40,15 +42,15 @@ public class ChaikinMoneyFlow : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, high, low, close, volume) = input.GetOhlcv();
+		var candle = input.ToCandle();
 
-		var hl = high - low;
+		var hl = candle.GetLength();
 
 		var moneyFlowMultiplier = hl != 0
-			? ((close - low) - (high - close)) / hl
+			? ((candle.ClosePrice - candle.LowPrice) - (candle.HighPrice - candle.ClosePrice)) / hl
 			: 0;
 
-		var moneyFlowVolume = moneyFlowMultiplier * volume;
+		var moneyFlowVolume = moneyFlowMultiplier * candle.TotalVolume;
 
 		decimal moneyFlowVolumeSum;
 		decimal volumeSum;
@@ -56,7 +58,7 @@ public class ChaikinMoneyFlow : LengthIndicator<decimal>
 		if (input.IsFinal)
 		{
 			_moneyFlowVolumeSum += moneyFlowVolume;
-			_volumeSum += volume;
+			_volumeSum += candle.TotalVolume;
 
 			if (Buffer.Count == Length)
 			{
@@ -73,7 +75,7 @@ public class ChaikinMoneyFlow : LengthIndicator<decimal>
 		else
 		{
 			moneyFlowVolumeSum = _moneyFlowVolumeSum - Buffer.Front() + moneyFlowVolume;
-			volumeSum = _volumeSum - Buffer.Front() + volume;
+			volumeSum = _volumeSum - Buffer.Front() + candle.TotalVolume;
 		}
 
 		if (IsFormed)

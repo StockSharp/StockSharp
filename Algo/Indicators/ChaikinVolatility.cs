@@ -1,5 +1,7 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
+using StockSharp.Algo.Candles;
+
 /// <summary>
 /// Chaikin volatility.
 /// </summary>
@@ -57,9 +59,9 @@ public class ChaikinVolatility : BaseIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, high, low, _) = input.GetOhlc();
+		var candle = input.ToCandle();
 
-		var emaValue = Ema.Process(input, high - low);
+		var emaValue = Ema.Process(input, candle.GetLength());
 
 		if (Ema.IsFormed)
 		{

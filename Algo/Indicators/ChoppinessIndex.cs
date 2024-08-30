@@ -1,5 +1,7 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
+using StockSharp.Algo.Candles;
+
 /// <summary>
 /// Choppiness Index indicator.
 /// </summary>
@@ -37,10 +39,10 @@ public class ChoppinessIndex : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, high, low, close) = input.GetOhlc();
+		var candle = input.ToCandle();
 
-		var highLowRange = high - low;
-		var trueRange = Math.Max(highLowRange, Math.Max(Math.Abs(high - _prevClose), Math.Abs(low - _prevClose)));
+		var highLowRange = candle.GetLength();
+		var trueRange = Math.Max(highLowRange, Math.Max(Math.Abs(candle.HighPrice - _prevClose), Math.Abs(candle.LowPrice - _prevClose)));
 
 		decimal sumTrueRange;
 		decimal sumHighLowRange;
@@ -59,7 +61,7 @@ public class ChoppinessIndex : LengthIndicator<decimal>
 			_sumTrueRange += trueRange;
 			_sumHighLowRange += highLowRange;
 
-			_prevClose = close;
+			_prevClose = candle.ClosePrice;
 
 			sumTrueRange = _sumTrueRange;
 			sumHighLowRange = _sumHighLowRange;

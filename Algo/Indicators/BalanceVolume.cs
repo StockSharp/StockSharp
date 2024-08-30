@@ -27,22 +27,22 @@ public class BalanceVolume : BaseIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, _, _, close, volume) = input.GetOhlcv();
+		var candle = input.ToCandle();
 
 		if (_prevClose == 0)
 		{
-			_prevClose = close;
+			_prevClose = candle.ClosePrice;
 			return new DecimalIndicatorValue(this, input.Time);
 		}
 
 		decimal cumulativeBalanceVolume;
 
-		var balanceVolume = close > _prevClose ? volume : (close < _prevClose ? -volume : 0);
+		var balanceVolume = candle.ClosePrice > _prevClose ? candle.TotalVolume : (candle.ClosePrice < _prevClose ? -candle.TotalVolume : 0);
 
 		if (input.IsFinal)
 		{
 			_cumulativeBalanceVolume += balanceVolume;
-			_prevClose = close;
+			_prevClose = candle.ClosePrice;
 			cumulativeBalanceVolume = _cumulativeBalanceVolume;
 			IsFormed = true;
 		}
