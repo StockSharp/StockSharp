@@ -118,10 +118,10 @@ public class ConnorsRSI : BaseComplexIndicator
 			var crsi = (rsi + updownRsi + rocRsi) / 3;
 			var crsiValue = _crsiLine.Process(input, crsi);
 
-			result.InnerValues.Add(_rsi, rsiValue);
-			result.InnerValues.Add(_updownRsi, updownRsiValue);
-			result.InnerValues.Add(_rocRsi, rocRsiValue);
-			result.InnerValues.Add(_crsiLine, crsiValue);
+			result.Add(_rsi, rsiValue);
+			result.Add(_updownRsi, updownRsiValue);
+			result.Add(_rocRsi, rocRsiValue);
+			result.Add(_crsiLine, crsiValue);
 		}
 
 		return result;
