@@ -270,6 +270,42 @@ public static class IndicatorHelper
 				OpenInterest = tick.OpenInterest,
 			};
 		}
+		else if (value.IsSupport<Level1ChangeMessage>())
+		{
+			var l1Msg = value.GetValue<Level1ChangeMessage>();
+
+			decimal get(Level1Fields field)
+				=> (decimal?)l1Msg.TryGet(field) ?? default;
+
+			return new TimeFrameCandleMessage
+			{
+				OpenPrice = get(Level1Fields.OpenPrice),
+				HighPrice = get(Level1Fields.HighPrice),
+				LowPrice = get(Level1Fields.LowPrice),
+				ClosePrice = get(Level1Fields.ClosePrice),
+				TotalVolume = get(Level1Fields.Volume),
+				OpenTime = l1Msg.ServerTime,
+				OpenInterest = get(Level1Fields.OpenInterest),
+			};
+		}
+		else if (value.IsSupport<IOrderBookMessage>())
+		{
+			var book = value.GetValue<IOrderBookMessage>();
+
+			var price = book.GetSpreadMiddle(default)
+				?? book.GetBestBid()?.Price
+				?? book.GetBestAsk()?.Price
+				?? default;
+
+			return new TimeFrameCandleMessage
+			{
+				OpenPrice = price,
+				HighPrice = price,
+				LowPrice = price,
+				ClosePrice = price,
+				OpenTime = book.ServerTime,
+			};
+		}
 		else
 		{
 			var dec = value.ToDecimal();
