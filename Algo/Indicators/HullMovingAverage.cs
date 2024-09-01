@@ -62,12 +62,12 @@ public class HullMovingAverage : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		_wmaSlow.Process(input);
-		_wmaFast.Process(input);
+		var slowVal = _wmaSlow.Process(input);
+		var fastVal = _wmaFast.Process(input);
 
 		if (_wmaFast.IsFormed && _wmaSlow.IsFormed)
 		{
-			var diff = 2 * _wmaFast.GetCurrentValue() - _wmaSlow.GetCurrentValue();
+			var diff = 2 * fastVal.ToDecimal() - slowVal.ToDecimal();
 			_wmaResult.Process(diff, input.Time);
 		}
 
