@@ -11,8 +11,8 @@
 [Doc("topics/indicators/ehlers_fisher_transform.html")]
 public class EhlersFisherTransform : BaseComplexIndicator
 {
-	private readonly LengthIndicatorBuffer<decimal> _highBuffer;
-	private readonly LengthIndicatorBuffer<decimal> _lowBuffer;
+	private readonly CircularBufferEx<decimal> _highBuffer;
+	private readonly CircularBufferEx<decimal> _lowBuffer;
 	private decimal _prevValue;
 	private decimal _currValue;
 
@@ -101,8 +101,8 @@ public class EhlersFisherTransform : BaseComplexIndicator
 	/// <inheritdoc />
 	public override void Reset()
 	{
-		_highBuffer.Reset(Length);
-		_lowBuffer.Reset(Length);
+		_highBuffer.Capacity = Length;
+		_lowBuffer.Capacity = Length;
 		_prevValue = 0;
 		_currValue = 0;
 

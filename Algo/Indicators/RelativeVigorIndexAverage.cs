@@ -26,7 +26,7 @@ public class RelativeVigorIndexAverage : LengthIndicator<decimal>
 		_buffer.Clear();
 		_buffer.Capacity = Length;
 
-		Buffer.Reset(Length);
+		Buffer.Capacity = Length;
 	}
 
 	/// <inheritdoc />

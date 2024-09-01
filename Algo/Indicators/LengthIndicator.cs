@@ -17,7 +17,7 @@ public abstract class LengthIndicator<TResult> : BaseIndicator
 	/// <inheritdoc />
 	public override void Reset()
 	{
-		Buffer.Reset(Length);
+		Buffer.Capacity = Length;
 		base.Reset();
 	}
 
@@ -53,7 +53,7 @@ public abstract class LengthIndicator<TResult> : BaseIndicator
 	/// The buffer for data storage.
 	/// </summary>
 	[Browsable(false)]
-	protected LengthIndicatorBuffer<TResult> Buffer { get; }
+	protected CircularBufferEx<TResult> Buffer { get; }
 
 	/// <inheritdoc />
 	public override void Load(SettingsStorage storage)

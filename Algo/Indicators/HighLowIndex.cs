@@ -11,8 +11,8 @@
 [Doc("topics/indicators/high_low_index.html")]
 public class HighLowIndex : LengthIndicator<decimal>
 {
-	private readonly LengthIndicatorBuffer<decimal> _highBuffer;
-	private readonly LengthIndicatorBuffer<decimal> _lowBuffer;
+	private readonly CircularBufferEx<decimal> _highBuffer;
+	private readonly CircularBufferEx<decimal> _lowBuffer;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="HighLowIndex"/>.
@@ -27,19 +27,6 @@ public class HighLowIndex : LengthIndicator<decimal>
 
 	/// <inheritdoc />
 	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
-
-	/// <inheritdoc />
-	public override int Length
-	{
-		get => base.Length;
-		set
-		{
-			base.Length = value;
-
-			_highBuffer.Capacity = value;
-			_lowBuffer.Capacity = value;
-		}
-	}
 
 	/// <inheritdoc />
 	protected override bool CalcIsFormed() => _highBuffer.Count == Length;
@@ -83,8 +70,8 @@ public class HighLowIndex : LengthIndicator<decimal>
 	/// <inheritdoc />
 	public override void Reset()
 	{
-		_highBuffer.Clear();
-		_lowBuffer.Clear();
+		_highBuffer.Capacity = Length;
+		_lowBuffer.Capacity = Length;
 		base.Reset();
 	}
 }
