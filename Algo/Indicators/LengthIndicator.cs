@@ -1,21 +1,10 @@
 namespace StockSharp.Algo.Indicators;
 
 /// <summary>
-/// The interface for indicators with one resulting value and based on the period.
-/// </summary>
-public interface ILengthIndicator
-{
-	/// <summary>
-	/// Period length. By default equal to 1.
-	/// </summary>
-	int Length { get; }
-}
-
-/// <summary>
 /// The base class for indicators with one resulting value and based on the period.
 /// </summary>
 /// <typeparam name="TResult">Result values type.</typeparam>
-public abstract class LengthIndicator<TResult> : BaseIndicator, ILengthIndicator
+public abstract class LengthIndicator<TResult> : BaseIndicator
 {
 	/// <summary>
 	/// Initialize <see cref="LengthIndicator{T}"/>.
