@@ -30,6 +30,9 @@ public class MovingAverageConvergenceDivergence : BaseIndicator
 	{
 		ShortMa = shortMa ?? throw new ArgumentNullException(nameof(shortMa));
 		LongMa = longMa ?? throw new ArgumentNullException(nameof(longMa));
+
+		ShortMa.Reseted += Reset;
+		LongMa.Reseted += Reset;
 	}
 
 	/// <inheritdoc />
