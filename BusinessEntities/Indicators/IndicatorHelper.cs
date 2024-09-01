@@ -6,6 +6,29 @@ namespace StockSharp.Algo.Indicators;
 public static class IndicatorHelper
 {
 	/// <summary>
+	/// To get the first value of the indicator.
+	/// </summary>
+	/// <param name="indicator">Indicator.</param>
+	/// <returns>The current value.</returns>
+	public static decimal GetFirstValue(this IIndicator indicator)
+	{
+		return indicator.GetNullableFirstValue() ?? 0;
+	}
+
+	/// <summary>
+	/// To get the first value of the indicator.
+	/// </summary>
+	/// <param name="indicator">Indicator.</param>
+	/// <returns>The current value.</returns>
+	public static decimal? GetNullableFirstValue(this IIndicator indicator)
+	{
+		if (!(indicator.Container?.Count > 0))
+			return null;
+
+		return indicator.GetValue(indicator.Container.Count - 1);
+	}
+
+	/// <summary>
 	/// To get the current value of the indicator.
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
