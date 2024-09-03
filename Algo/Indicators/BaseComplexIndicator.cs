@@ -16,6 +16,10 @@ public enum ComplexIndicatorModes
 	Parallel,
 }
 
+class InnerIndicatorResetScope
+{
+}
+
 /// <summary>
 /// The base indicator, built in form of several indicators combination.
 /// </summary>
@@ -42,13 +46,9 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 	[Browsable(false)]
 	public ComplexIndicatorModes Mode { get; protected set; }
 
-	private class InnerResetScope
-	{
-	}
-
 	private void InnerReseted()
 	{
-		if (Scope<InnerResetScope>.IsDefined)
+		if (Scope<InnerIndicatorResetScope>.IsDefined)
 			return;
 
 		Reset();
@@ -143,7 +143,7 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 	{
 		base.Reset();
 
-		using (new Scope<InnerResetScope>(new()))
+		using (new Scope<InnerIndicatorResetScope>(new()))
 			InnerIndicators.ForEach(i => i.Reset());
 	}
 
