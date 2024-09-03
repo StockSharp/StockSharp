@@ -628,6 +628,6 @@ public class ComplexIndicatorValue : BaseIndicatorValue
 		var idx = 0;
 
 		foreach (var inner in ((IComplexIndicator)Indicator).InnerIndicators)
-			InnerValues.Add(inner, inner.CreateValue(values[idx++].To<object[]>()));
+			InnerValues.Add(inner, inner.CreateValue(Time, values[idx++].To<object[]>()));
 	}
 }
