@@ -34,7 +34,7 @@ public class Highest : LengthIndicator<decimal>
 
 		if (input.IsFinal)
 		{
-			Buffer.AddEx(high);
+			Buffer.PushBack(high);
 			lastValue = Buffer.Max.Value;
 		}
 

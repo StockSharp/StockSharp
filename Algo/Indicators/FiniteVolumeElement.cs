@@ -43,7 +43,7 @@ public class FiniteVolumeElement : LengthIndicator<decimal>
 		}
 
 		if (input.IsFinal)
-			Buffer.AddEx(fve);
+			Buffer.PushBack(fve);
 
 		if (IsFormed)
 		{

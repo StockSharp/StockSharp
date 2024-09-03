@@ -76,7 +76,7 @@ public class ArnaudLegouxMovingAverage : LengthIndicator<decimal>
 
 		if (input.IsFinal)
 		{
-			Buffer.AddEx(price);
+			Buffer.PushBack(price);
 		}
 
 		if (IsFormed)

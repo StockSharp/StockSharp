@@ -21,7 +21,7 @@ public class RelativeVigorIndexSignal : LengthIndicator<decimal>
 
 		if (input.IsFinal)
 		{
-			Buffer.AddEx(newValue);
+			Buffer.PushBack(newValue);
 		}
 
 		if (IsFormed)

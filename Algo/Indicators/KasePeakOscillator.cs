@@ -105,8 +105,8 @@ public class KasePeakOscillator : BaseComplexIndicator
 
 			if (input.IsFinal)
 			{
-				_peakBuffer.AddEx(peak);
-				_valleyBuffer.AddEx(valley);
+				_peakBuffer.PushBack(peak);
+				_valleyBuffer.PushBack(valley);
 
 				_prevClose = candle.ClosePrice;
 

@@ -66,8 +66,8 @@ public class EhlersFisherTransform : BaseComplexIndicator
 
 		if (input.IsFinal)
 		{
-			_highBuffer.AddEx(candle.HighPrice);
-			_lowBuffer.AddEx(candle.LowPrice);
+			_highBuffer.PushBack(candle.HighPrice);
+			_lowBuffer.PushBack(candle.LowPrice);
 		}
 
 		if (_highBuffer.Count >= Length)

@@ -95,7 +95,7 @@ public class DynamicZonesRSI : LengthIndicator<decimal>
 			decimal min, max;
 			if (input.IsFinal)
 			{
-				Buffer.AddEx(rsi);
+				Buffer.PushBack(rsi);
 
 				min = Buffer.Min.Value;
 				max = Buffer.Max.Value;

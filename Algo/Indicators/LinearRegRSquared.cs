@@ -41,7 +41,7 @@ public class LinearRegRSquared : LengthIndicator<decimal>
 
 		if (input.IsFinal)
 		{
-			Buffer.AddEx(newValue);
+			Buffer.PushBack(newValue);
 		}
 
 		var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();

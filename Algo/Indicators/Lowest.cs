@@ -34,7 +34,7 @@ public class Lowest : LengthIndicator<decimal>
 
 		if (input.IsFinal)
 		{
-			Buffer.AddEx(low);
+			Buffer.PushBack(low);
 			lastValue = Buffer.Min.Value;
 		}
 

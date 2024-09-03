@@ -55,7 +55,7 @@ public class Vidya : LengthIndicator<decimal>
 			if (!input.IsFinal)
 				return new DecimalIndicatorValue(this, (Buffer.SumNoFirst + newValue) / Length, input.Time);
 
-			Buffer.AddEx(newValue);
+			Buffer.PushBack(newValue);
 
 			_prevFinalValue = Buffer.Sum / Length;
 

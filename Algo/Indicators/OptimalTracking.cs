@@ -98,7 +98,7 @@ public sealed class OptimalTracking : LengthIndicator<decimal>
 		var halfRange = (candle.HighPrice - candle.LowPrice) / 2;
 
 		if (input.IsFinal)
-			Buffer.AddEx(average);
+			Buffer.PushBack(average);
 
 		var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(Buffer.Count >= Length ? 1 : 0).Append(average).ToArray();
 

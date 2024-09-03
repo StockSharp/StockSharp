@@ -45,7 +45,7 @@ public class ExponentialMovingAverage : LengthIndicator<decimal>
 			// или "недоделанную" sma c пропущенным первым значением из буфера + промежуточное значение
 			if (input.IsFinal)
 			{
-				Buffer.AddEx(newValue);
+				Buffer.PushBack(newValue);
 
 				_prevFinalValue = Buffer.Sum / Length;
 

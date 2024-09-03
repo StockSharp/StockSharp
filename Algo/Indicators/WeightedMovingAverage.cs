@@ -41,7 +41,7 @@ public class WeightedMovingAverage : LengthIndicator<decimal>
 
 		if (input.IsFinal)
 		{
-			Buffer.AddEx(newValue);
+			Buffer.PushBack(newValue);
 		}
 
 		var buff = input.IsFinal ? Buffer : Buffer.Skip(1).Append(newValue);

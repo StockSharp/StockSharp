@@ -31,7 +31,7 @@ public class Sum : LengthIndicator<decimal>
 		var newValue = input.ToDecimal();
 
 		if (input.IsFinal)
-			Buffer.AddEx(newValue);
+			Buffer.PushBack(newValue);
 
 		if (input.IsFinal)
 		{

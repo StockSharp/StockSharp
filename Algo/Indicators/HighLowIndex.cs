@@ -41,8 +41,8 @@ public class HighLowIndex : LengthIndicator<decimal>
 
 		if (input.IsFinal)
 		{
-			_highBuffer.AddEx(candle.HighPrice);
-			_lowBuffer.AddEx(candle.LowPrice);
+			_highBuffer.PushBack(candle.HighPrice);
+			_lowBuffer.PushBack(candle.LowPrice);
 
 			highestHigh = _highBuffer.Max.Value;
 			lowestLow = _lowBuffer.Min.Value;

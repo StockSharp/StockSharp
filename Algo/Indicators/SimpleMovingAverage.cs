@@ -29,7 +29,7 @@ public class SimpleMovingAverage : LengthIndicator<decimal>
 
 		if (input.IsFinal)
 		{
-			Buffer.AddEx(newValue);
+			Buffer.PushBack(newValue);
 			return new DecimalIndicatorValue(this, Buffer.Sum / Length, input.Time);
 		}
 

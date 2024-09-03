@@ -40,7 +40,7 @@ public class SmoothedMovingAverage : LengthIndicator<decimal>
 		{
 			if (input.IsFinal)
 			{
-				Buffer.AddEx(newValue);
+				Buffer.PushBack(newValue);
 
 				_prevFinalValue = Buffer.Sum / Length;
 

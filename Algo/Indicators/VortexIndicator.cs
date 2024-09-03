@@ -161,8 +161,8 @@ public class VortexPart : LengthIndicator<decimal>
 
 		if (input.IsFinal)
 		{
-			_trBuffer.AddEx(tr);
-			_vmBuffer.AddEx(vm);
+			_trBuffer.PushBack(tr);
+			_vmBuffer.PushBack(vm);
 
 			_prevHigh = candle.HighPrice;
 			_prevLow = candle.LowPrice;

@@ -33,7 +33,7 @@ public class GopalakrishnanRangeIndex : LengthIndicator<(decimal high, decimal l
 		var candle = input.ToCandle();
 
 		if (input.IsFinal)
-			Buffer.AddEx((candle.HighPrice, candle.LowPrice));
+			Buffer.PushBack((candle.HighPrice, candle.LowPrice));
 
 		if (IsFormed)
 		{

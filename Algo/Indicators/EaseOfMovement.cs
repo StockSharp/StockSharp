@@ -44,7 +44,7 @@ public class EaseOfMovement : LengthIndicator<decimal>
 
 			if (input.IsFinal)
 			{
-				Buffer.AddEx(emv);
+				Buffer.PushBack(emv);
 				sum = Buffer.Sum;
 			}
 			else
