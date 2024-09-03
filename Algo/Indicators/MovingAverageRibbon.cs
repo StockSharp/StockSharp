@@ -126,5 +126,5 @@ public class MovingAverageRibbon : BaseComplexIndicator
 	}
 
 	/// <inheritdoc />
-	public override string ToString() => base.ToString() + $" Short={ShortPeriod} Long={LongPeriod} Count={RibbonCount}";
+	public override string ToString() => base.ToString() + $" S={ShortPeriod} L={LongPeriod} C={RibbonCount}";
 }
