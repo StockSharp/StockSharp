@@ -26,7 +26,9 @@ public abstract class LengthIndicator<TResult> : BaseIndicator
 
 	private int _length = 1;
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Period length. By default equal to 1.
+	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.PeriodKey,
