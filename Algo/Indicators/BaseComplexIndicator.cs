@@ -74,6 +74,15 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 		inner.Reseted -= InnerReseted;
 	}
 
+	/// <summary>
+	/// Clear <see cref="InnerIndicators"/>.
+	/// </summary>
+	protected void ClearInner()
+	{
+		foreach (var sma in InnerIndicators.ToArray())
+			RemoveInner(sma);
+	}
+
 	private readonly List<IIndicator> _innerIndicators = new();
 
 	/// <inheritdoc />
