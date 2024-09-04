@@ -8,5 +8,5 @@ public interface IComplexIndicator : IIndicator
 	/// <summary>
 	/// Embedded indicators.
 	/// </summary>
-	IEnumerable<IIndicator> InnerIndicators { get; }
+	IReadOnlyList<IIndicator> InnerIndicators { get; }
 }

@@ -87,7 +87,7 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 
 	/// <inheritdoc />
 	[Browsable(false)]
-	public IEnumerable<IIndicator> InnerIndicators => _innerIndicators;
+	public IReadOnlyList<IIndicator> InnerIndicators => _innerIndicators;
 
 	/// <inheritdoc />
 	[Browsable(false)]
