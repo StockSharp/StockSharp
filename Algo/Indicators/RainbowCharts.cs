@@ -41,7 +41,7 @@ public class RainbowCharts : BaseComplexIndicator
 
 			ClearInner();
 
-			for (var i = 1; i < Lines - 1; i++)
+			for (var i = 1; i < Lines; i++)
 				AddInner(new SimpleMovingAverage { Length = i * 2 });
 
 			Reset();
