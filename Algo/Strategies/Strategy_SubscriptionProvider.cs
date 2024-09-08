@@ -125,6 +125,9 @@ partial class Strategy
 	/// <inheritdoc />
 	public void UnSubscribe(Subscription subscription)
 	{
+		if (ProcessState != ProcessStates.Started && IsBacktesting)
+			return;
+
 		if (_rulesSuspendCount > 0 && _suspendSubscriptions.Remove(subscription))
 		{
 			_subscriptions.Remove(subscription);
