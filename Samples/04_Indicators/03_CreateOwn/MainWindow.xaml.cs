@@ -89,6 +89,6 @@ internal class LazyMovingAverage : BaseIndicator
 		else
 			_outputValue += (value - _outputValue) / Length;
 
-		return new DecimalIndicatorValue(this, _outputValue.Value);
+		return new DecimalIndicatorValue(this, _outputValue.Value, input.Time);
 	}
 }
