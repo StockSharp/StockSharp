@@ -173,9 +173,9 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	public override string ToString() => Name;
 
 	/// <inheritdoc/>
-	public virtual IIndicatorValue CreateValue(object[] values)
+	public virtual IIndicatorValue CreateValue(DateTimeOffset time, object[] values)
 	{
-		var value = GetType().GetValueType(false).CreateInstance<IIndicatorValue>(this);
+		var value = GetType().GetValueType(false).CreateInstance<IIndicatorValue>(this, time);
 		value.FromValues(values);
 		return value;
 	}

@@ -37,11 +37,11 @@ public class StandardError : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var newValue = input.GetValue<decimal>();
+		var newValue = input.ToDecimal();
 
 		if (input.IsFinal)
 		{
-			Buffer.AddEx(newValue);
+			Buffer.PushBack(newValue);
 		}
 
 		var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
@@ -85,14 +85,14 @@ public class StandardError : LengthIndicator<decimal>
 			//Стандартная ошибка
 			if (Length == 2)
 			{
-				return new DecimalIndicatorValue(this, 0); //если всего 2 точки, то прямая проходит через них и стандартная ошибка равна нулю.
+				return new DecimalIndicatorValue(this, 0, input.Time); //если всего 2 точки, то прямая проходит через них и стандартная ошибка равна нулю.
 			}
 			else
 			{
-				return new DecimalIndicatorValue(this, (decimal)Math.Sqrt((double)(sumErr2 / (Length - 2))));
+				return new DecimalIndicatorValue(this, (decimal)Math.Sqrt((double)(sumErr2 / (Length - 2))), input.Time);
 			}
 		}
 
-		return new DecimalIndicatorValue(this);
+		return new DecimalIndicatorValue(this, input.Time);
 	}
 }

@@ -41,13 +41,13 @@ public class VolumeWeightedMovingAverage : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var candle = input.GetValue<ICandleMessage>();
+		var candle = input.ToCandle();
 
-		var shValue = _nominator.Process(input.SetValue(this, candle.ClosePrice * candle.TotalVolume)).GetValue<decimal>();
-		var znValue = _denominator.Process(input.SetValue(this, candle.TotalVolume)).GetValue<decimal>();
+		var shValue = _nominator.Process(input, candle.ClosePrice * candle.TotalVolume).ToDecimal();
+		var znValue = _denominator.Process(input, candle.TotalVolume).ToDecimal();
 
 		return znValue != 0 
-			? new DecimalIndicatorValue(this, shValue / znValue) 
-			: new DecimalIndicatorValue(this);
+			? new DecimalIndicatorValue(this, shValue / znValue, input.Time) 
+			: new DecimalIndicatorValue(this, input.Time);
 	}
 }

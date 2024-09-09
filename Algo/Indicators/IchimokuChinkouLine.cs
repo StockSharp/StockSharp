@@ -17,11 +17,11 @@ public class IchimokuChinkouLine : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, _, _, close) = input.GetOhlc();
+		var close = input.ToCandle().ClosePrice;
 
 		if (input.IsFinal)
 			Buffer.PushBack(close);
 
-		return new DecimalIndicatorValue(this, close);
+		return new DecimalIndicatorValue(this, close, input.Time);
 	}
 }

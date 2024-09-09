@@ -1,5 +1,7 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
+using StockSharp.Algo.Candles;
+
 /// <summary>
 /// Chaikin volatility.
 /// </summary>
@@ -57,17 +59,17 @@ public class ChaikinVolatility : BaseIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, high, low, _) = input.GetOhlc();
+		var candle = input.ToCandle();
 
-		var emaValue = Ema.Process(input.SetValue(this, high - low));
+		var emaValue = Ema.Process(input, candle.GetLength());
 
 		if (Ema.IsFormed)
 		{
 			var val = Roc.Process(emaValue);
-			return new DecimalIndicatorValue(this, val.GetValue<decimal>());
+			return new DecimalIndicatorValue(this, val.ToDecimal(), input.Time);
 		}
 
-		return new DecimalIndicatorValue(this);
+		return new DecimalIndicatorValue(this, input.Time);
 	}
 
 	/// <inheritdoc />

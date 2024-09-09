@@ -3,7 +3,7 @@ namespace StockSharp.Algo;
 /// <summary>
 /// The interface, describing the rules list.
 /// </summary>
-public interface IMarketRuleList : INotifyList<IMarketRule>
+public interface IMarketRuleList : INotifyList<IMarketRule>, ISynchronizedCollection
 {
 	/// <summary>
 	/// To get all active tokens of rules.

@@ -33,14 +33,14 @@ public class NickRypockTrailingReverse : LengthIndicator<decimal>
 		{
 			if (_isInitialized == false)
 			{
-				_k = input.GetValue<decimal>();
-				_highPrice = input.GetValue<decimal>();
-				_lowPrice = input.GetValue<decimal>();
+				_k = input.ToDecimal();
+				_highPrice = input.ToDecimal();
+				_lowPrice = input.ToDecimal();
 
 				_isInitialized = true;
 			}
 
-			_price = input.GetValue<decimal>();
+			_price = input.ToDecimal();
 
 			_k = (_k + (_price - _k) / ind.Length) * ind._multiple;
 
@@ -154,7 +154,7 @@ public class NickRypockTrailingReverse : LengthIndicator<decimal>
 		}
 
 		// значение NickRypockTrailingReverse
-		return new DecimalIndicatorValue(this, newValue);
+		return new DecimalIndicatorValue(this, newValue, input.Time);
 	}
 
 	/// <inheritdoc />

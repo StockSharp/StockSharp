@@ -388,7 +388,8 @@ public class BufferMessageAdapter : MessageAdapterWrapper
 
 							message.OriginalTransactionId = 0;
 
-							SaveTransaction(snapshotStorage, message);
+							if (message.TransactionId != 0)
+								SaveTransaction(snapshotStorage, message);
 						}
 					}
 				}

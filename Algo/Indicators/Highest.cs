@@ -25,7 +25,7 @@ public class Highest : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, high, _, _) = input.GetOhlc();
+		var high = input.ToCandle().HighPrice;
 
 		var lastValue = Buffer.Count == 0 ? high : this.GetCurrentValue();
 
@@ -34,10 +34,10 @@ public class Highest : LengthIndicator<decimal>
 
 		if (input.IsFinal)
 		{
-			Buffer.AddEx(high);
+			Buffer.PushBack(high);
 			lastValue = Buffer.Max.Value;
 		}
 
-		return new DecimalIndicatorValue(this, lastValue);
+		return new DecimalIndicatorValue(this, lastValue, input.Time);
 	}
 }

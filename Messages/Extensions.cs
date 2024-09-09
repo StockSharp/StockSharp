@@ -774,6 +774,22 @@ public static partial class Extensions
 	}
 
 	/// <summary>
+	/// Determines whether the specified data type is supported by the storage.
+	/// </summary>
+	/// <param name="dataType"><see cref="DataType"/></param>
+	/// <returns>Check result.</returns>
+	public static bool IsStorageSupported(this DataType dataType)
+	{
+		if (dataType is null)
+			throw new ArgumentNullException(nameof(dataType));
+
+		if (dataType.MessageType.IsCandleMessage())
+			return _fileNames.ContainsKey(DataType.Create(dataType.MessageType, null));
+		else
+			return _fileNames.ContainsKey(dataType);
+	}
+
+	/// <summary>
 	/// All registered candle types.
 	/// </summary>
 	public static IEnumerable<Type> AllCandleTypes => _candleDataTypes.CachedValues;

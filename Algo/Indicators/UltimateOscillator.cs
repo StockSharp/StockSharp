@@ -63,7 +63,7 @@ public class UltimateOscillator : BaseIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var candle = input.GetValue<ICandleMessage>();
+		var candle = input.ToCandle();
 
 		if (_previouseClosePrice != null)
 		{
@@ -72,15 +72,15 @@ public class UltimateOscillator : BaseIndicator
 
 			input = input.SetValue(this, candle.ClosePrice - min);
 
-			var p7BpValue = _period7BpSum.Process(input).GetValue<decimal>();
-			var p14BpValue = _period14BpSum.Process(input).GetValue<decimal>();
-			var p28BpValue = _period28BpSum.Process(input).GetValue<decimal>();
+			var p7BpValue = _period7BpSum.Process(input).ToDecimal();
+			var p14BpValue = _period14BpSum.Process(input).ToDecimal();
+			var p28BpValue = _period28BpSum.Process(input).ToDecimal();
 
 			input = input.SetValue(this, max - min);
 
-			var p7TrValue = _period7TrSum.Process(input).GetValue<decimal>();
-			var p14TrValue = _period14TrSum.Process(input).GetValue<decimal>();
-			var p28TrValue = _period28TrSum.Process(input).GetValue<decimal>();
+			var p7TrValue = _period7TrSum.Process(input).ToDecimal();
+			var p14TrValue = _period14TrSum.Process(input).ToDecimal();
+			var p28TrValue = _period28TrSum.Process(input).ToDecimal();
 
 			if (input.IsFinal)
 				_previouseClosePrice = candle.ClosePrice;
@@ -90,15 +90,15 @@ public class UltimateOscillator : BaseIndicator
 				var average7 = p7BpValue / p7TrValue;
 				var average14 = p14BpValue / p14TrValue;
 				var average28 = p28BpValue / p28TrValue;
-				return new DecimalIndicatorValue(this, _stoProcentov * (_weight4 * average7 + _weight2 * average14 + _weight1 * average28) / (_weight4 + _weight2 + _weight1));
+				return new DecimalIndicatorValue(this, _stoProcentov * (_weight4 * average7 + _weight2 * average14 + _weight1 * average28) / (_weight4 + _weight2 + _weight1), input.Time);
 			}
 
-			return new DecimalIndicatorValue(this);
+			return new DecimalIndicatorValue(this, input.Time);
 		}
 
 		if (input.IsFinal)
 			_previouseClosePrice = candle.ClosePrice;
 
-		return new DecimalIndicatorValue(this);
+		return new DecimalIndicatorValue(this, input.Time);
 	}
 }

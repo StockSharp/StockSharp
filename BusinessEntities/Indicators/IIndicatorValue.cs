@@ -26,6 +26,11 @@ public interface IIndicatorValue : IComparable<IIndicatorValue>, IComparable
 	bool IsFormed { get; set; }
 
 	/// <summary>
+	/// Value time.
+	/// </summary>
+	DateTimeOffset Time { get; }
+
+	/// <summary>
 	/// Does value support data type, required for the indicator.
 	/// </summary>
 	/// <param name="valueType">The data type, operated by indicator.</param>
@@ -71,10 +76,12 @@ public abstract class BaseIndicatorValue : IIndicatorValue
 	/// Initialize <see cref="BaseIndicatorValue"/>.
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
-	protected BaseIndicatorValue(IIndicator indicator)
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	protected BaseIndicatorValue(IIndicator indicator, DateTimeOffset time)
 	{
 		Indicator = indicator ?? throw new ArgumentNullException(nameof(indicator));
 		IsFormed = indicator.IsFormed;
+		Time = time;
 	}
 
 	/// <inheritdoc />
@@ -88,6 +95,9 @@ public abstract class BaseIndicatorValue : IIndicatorValue
 
 	/// <inheritdoc />
 	public bool IsFormed { get; set; }
+
+	/// <inheritdoc />
+	public DateTimeOffset Time { get; }
 
 	/// <inheritdoc />
 	public abstract bool IsSupport(Type valueType);
@@ -130,8 +140,9 @@ public class SingleIndicatorValue<TValue> : BaseIndicatorValue
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="value">Value.</param>
-	public SingleIndicatorValue(IIndicator indicator, TValue value)
-		: base(indicator)
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public SingleIndicatorValue(IIndicator indicator, TValue value, DateTimeOffset time)
+		: base(indicator, time)
 	{
 		Value = value;
 		IsEmpty = value.IsNull();
@@ -141,8 +152,9 @@ public class SingleIndicatorValue<TValue> : BaseIndicatorValue
 	/// Initializes a new instance of the <see cref="SingleIndicatorValue{T}"/>.
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
-	public SingleIndicatorValue(IIndicator indicator)
-		: base(indicator)
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public SingleIndicatorValue(IIndicator indicator, DateTimeOffset time)
+		: base(indicator, time)
 	{
 		IsEmpty = true;
 	}
@@ -171,7 +183,7 @@ public class SingleIndicatorValue<TValue> : BaseIndicatorValue
 	/// <inheritdoc />
 	public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 	{
-		return new SingleIndicatorValue<T>(indicator, value) { IsFinal = IsFinal };
+		return new SingleIndicatorValue<T>(indicator, value, Time) { IsFinal = IsFinal };
 	}
 
 	private void ThrowIfEmpty()
@@ -225,8 +237,9 @@ public class DecimalIndicatorValue : SingleIndicatorValue<decimal>
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="value">Value.</param>
-	public DecimalIndicatorValue(IIndicator indicator, decimal value)
-		: base(indicator, value)
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public DecimalIndicatorValue(IIndicator indicator, decimal value, DateTimeOffset time)
+		: base(indicator, value, time)
 	{
 	}
 
@@ -234,8 +247,9 @@ public class DecimalIndicatorValue : SingleIndicatorValue<decimal>
 	/// Initializes a new instance of the <see cref="DecimalIndicatorValue"/>.
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
-	public DecimalIndicatorValue(IIndicator indicator)
-		: base(indicator)
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public DecimalIndicatorValue(IIndicator indicator, DateTimeOffset time)
+		: base(indicator, time)
 	{
 	}
 
@@ -243,7 +257,7 @@ public class DecimalIndicatorValue : SingleIndicatorValue<decimal>
 	public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 	{
 		return typeof(T) == typeof(decimal)
-			? new DecimalIndicatorValue(indicator, value.To<decimal>()) { IsFinal = IsFinal }
+			? new DecimalIndicatorValue(indicator, value.To<decimal>(), Time) { IsFinal = IsFinal }
 			: base.SetValue(indicator, value);
 	}
 
@@ -267,11 +281,8 @@ public class CandleIndicatorValue : SingleIndicatorValue<ICandleMessage>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="value">Value.</param>
 	public CandleIndicatorValue(IIndicator indicator, ICandleMessage value)
-		: base(indicator, value)
+		: base(indicator, value, value.CheckOnNull(nameof(value)).ServerTime)
 	{
-		if (value == null)
-			throw new ArgumentNullException(nameof(value));
-
 		IsFinal = value.State == CandleStates.Finished;
 	}
 
@@ -279,8 +290,9 @@ public class CandleIndicatorValue : SingleIndicatorValue<ICandleMessage>
 	/// Initializes a new instance of the <see cref="CandleIndicatorValue"/>.
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
-	private CandleIndicatorValue(IIndicator indicator)
-		: base(indicator)
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	private CandleIndicatorValue(IIndicator indicator, DateTimeOffset time)
+		: base(indicator, time)
 	{
 	}
 
@@ -317,8 +329,8 @@ public class CandleIndicatorValue : SingleIndicatorValue<ICandleMessage>
 	public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 	{
 		return value is ICandleMessage candle
-				? new CandleIndicatorValue(indicator, candle)
-				: value.IsNull() ? new CandleIndicatorValue(indicator) : base.SetValue(indicator, value);
+				? new CandleIndicatorValue(indicator, candle) { IsFinal = IsFinal }
+				: value.IsNull() ? new CandleIndicatorValue(indicator, Time) { IsFinal = IsFinal } : base.SetValue(indicator, value);
 	}
 }
 
@@ -333,10 +345,8 @@ public class MarketDepthIndicatorValue : SingleIndicatorValue<IOrderBookMessage>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="depth">Market depth.</param>
 	public MarketDepthIndicatorValue(IIndicator indicator, IOrderBookMessage depth)
-		: base(indicator, depth)
+		: base(indicator, depth, depth.CheckOnNull(nameof(depth)).ServerTime)
 	{
-		if (depth is null)
-			throw new ArgumentNullException(nameof(depth));
 	}
 
 	/// <inheritdoc />
@@ -392,10 +402,8 @@ public class Level1IndicatorValue : SingleIndicatorValue<Level1ChangeMessage>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="l1Msg"><see cref="Level1ChangeMessage"/></param>
 	public Level1IndicatorValue(IIndicator indicator, Level1ChangeMessage l1Msg)
-		: base(indicator, l1Msg)
+		: base(indicator, l1Msg, l1Msg.CheckOnNull(nameof(l1Msg)).ServerTime)
 	{
-		if (l1Msg is null)
-			throw new ArgumentNullException(nameof(l1Msg));
 	}
 
 	/// <inheritdoc />
@@ -437,6 +445,60 @@ public class Level1IndicatorValue : SingleIndicatorValue<Level1ChangeMessage>
 }
 
 /// <summary>
+/// The indicator value, operating with data type <see cref="ITickTradeMessage"/>.
+/// </summary>
+public class TickIndicatorValue : SingleIndicatorValue<ITickTradeMessage>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="TickIndicatorValue"/>.
+	/// </summary>
+	/// <param name="indicator">Indicator.</param>
+	/// <param name="tick"><see cref="ITickTradeMessage"/></param>
+	public TickIndicatorValue(IIndicator indicator, ITickTradeMessage tick)
+		: base(indicator, tick, tick.CheckOnNull(nameof(tick)).ServerTime)
+	{
+	}
+
+	/// <inheritdoc />
+	public override bool IsSupport(Type valueType)
+	{
+		return valueType == typeof(decimal) || base.IsSupport(valueType);
+	}
+
+	/// <inheritdoc />
+	public override T GetValue<T>(Level1Fields? field)
+	{
+		var tick = base.GetValue<ITickTradeMessage>(default);
+
+		if (typeof(T) == typeof(decimal) || typeof(T) == typeof(decimal?))
+		{
+			var value = field switch
+			{
+				Level1Fields.LastTradePrice or null => tick.Price,
+				Level1Fields.LastTradeVolume => tick.Volume,
+				_ => (decimal?)null,
+			};
+
+			if (value is null && typeof(T) == typeof(decimal))
+				return default;
+
+			return value.To<T>();
+		}
+		else
+			return tick.To<T>();
+	}
+
+	/// <inheritdoc />
+	public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
+	{
+		return new TickIndicatorValue(indicator, base.GetValue<ITickTradeMessage>(default))
+		{
+			IsFinal = IsFinal
+		};
+	}
+}
+
+/// <summary>
 /// The value of the indicator, operating with pair <see ref="Tuple{TValue, TValue}" />.
 /// </summary>
 /// <typeparam name="TValue">Value type.</typeparam>
@@ -447,8 +509,9 @@ public class PairIndicatorValue<TValue> : SingleIndicatorValue<Tuple<TValue, TVa
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="value">Value.</param>
-	public PairIndicatorValue(IIndicator indicator, Tuple<TValue, TValue> value)
-		: base(indicator, value)
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public PairIndicatorValue(IIndicator indicator, Tuple<TValue, TValue> value, DateTimeOffset time)
+		: base(indicator, value, time)
 	{
 	}
 
@@ -456,15 +519,16 @@ public class PairIndicatorValue<TValue> : SingleIndicatorValue<Tuple<TValue, TVa
 	/// Initializes a new instance of the <see cref="PairIndicatorValue{T}"/>.
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
-	public PairIndicatorValue(IIndicator indicator)
-		: base(indicator)
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public PairIndicatorValue(IIndicator indicator, DateTimeOffset time)
+		: base(indicator, time)
 	{
 	}
 
 	/// <inheritdoc />
 	public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 	{
-		return new PairIndicatorValue<TValue>(indicator, GetValue<Tuple<TValue, TValue>>(default))
+		return new PairIndicatorValue<TValue>(indicator, GetValue<Tuple<TValue, TValue>>(default), Time)
 		{
 			IsFinal = IsFinal
 		};
@@ -480,8 +544,9 @@ public class ComplexIndicatorValue : BaseIndicatorValue
 	/// Initializes a new instance of the <see cref="ComplexIndicatorValue"/>.
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
-	public ComplexIndicatorValue(IComplexIndicator indicator)
-		: base(indicator)
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public ComplexIndicatorValue(IComplexIndicator indicator, DateTimeOffset time)
+		: base(indicator, time)
 	{
 		InnerValues = new Dictionary<IIndicator, IIndicatorValue>();
 	}
@@ -496,6 +561,34 @@ public class ComplexIndicatorValue : BaseIndicatorValue
 	/// Embedded values.
 	/// </summary>
 	public IDictionary<IIndicator, IIndicatorValue> InnerValues { get; }
+
+	/// <summary>
+	/// Gets or sets a value of inner indicator.
+	/// </summary>
+	/// <param name="indicator"><see cref="IIndicator"/></param>
+	/// <returns><see cref="IIndicatorValue"/></returns>
+	public IIndicatorValue this[IIndicator indicator]
+	{
+		get => InnerValues[indicator];
+		set => InnerValues[indicator] = value ?? throw new ArgumentNullException(nameof(value));
+	}
+
+	/// <summary>
+	/// Add a value of inner indicator.
+	/// </summary>
+	/// <param name="indicator"><see cref="IIndicator"/></param>
+	/// <param name="value"><see cref="IIndicatorValue"/></param>
+	public void Add(IIndicator indicator, IIndicatorValue value)
+		=> InnerValues.Add(indicator, value);
+
+	/// <summary>
+	/// Try get a value of inner indicator.
+	/// </summary>
+	/// <param name="indicator"><see cref="IIndicator"/></param>
+	/// <param name="value"><see cref="IIndicatorValue"/></param>
+	/// <returns>Operation result.</returns>
+	public bool TryGet(IIndicator indicator, out IIndicatorValue value)
+		=> InnerValues.TryGetValue(indicator, out value);
 
 	/// <inheritdoc />
 	public override bool IsSupport(Type valueType) => InnerValues.Any(v => v.Value.IsSupport(valueType));
@@ -535,6 +628,6 @@ public class ComplexIndicatorValue : BaseIndicatorValue
 		var idx = 0;
 
 		foreach (var inner in ((IComplexIndicator)Indicator).InnerIndicators)
-			InnerValues.Add(inner, inner.CreateValue(values[idx++].To<object[]>()));
+			InnerValues.Add(inner, inner.CreateValue(Time, values[idx++].To<object[]>()));
 	}
 }

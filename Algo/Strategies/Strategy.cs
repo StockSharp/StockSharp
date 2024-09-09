@@ -995,7 +995,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 					ProcessCancelActiveOrders();
 				}
 
-				foreach (var rule in Rules.ToArray())
+				foreach (var rule in GetRules())
 				{
 					if (this.TryRemoveWithExclusive(rule))
 						_childStrategies.TryRemoveStoppedRule(rule);
@@ -1336,6 +1336,12 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// <inheritdoc />
 	[Browsable(false)]
 	public IMarketRuleList Rules { get; }
+
+	private IMarketRule[] GetRules()
+	{
+		lock (Rules.SyncRoot)
+			return Rules.ToArray();
+	}
 
 	//private readonly object _rulesSuspendLock = new object();
 	private int _rulesSuspendCount;
@@ -2152,17 +2158,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 	private void TryFinalStop()
 	{
-		IMarketRule[] rules;
-
-		if(Rules is ISynchronizedCollection coll)
-		{
-			lock (coll.SyncRoot)
-				rules = Rules.ToArray();
-		}
-		else
-		{
-			rules = Rules.ToArray();
-		}
+		var rules = GetRules();
 
 		if (rules.Any())
 		{

@@ -82,15 +82,13 @@ public class IndicatorValue : IServerTimeMessage, ISecurityIdMessage
 
 		if (value is DecimalIndicatorValue or CandleIndicatorValue or ShiftedIndicatorValue)
 		{
-			values.Add(value.IsEmpty ? null : value.GetValue<decimal>());
+			values.Add(value.IsEmpty ? null : value.ToDecimal());
 		}
 		else if (value is ComplexIndicatorValue complexValue)
 		{
 			foreach (var innerIndicator in ((IComplexIndicator)value.Indicator).InnerIndicators)
 			{
-				var innerValue = complexValue.InnerValues.TryGetValue(innerIndicator);
-
-				if (innerValue == null)
+				if (!complexValue.TryGet(innerIndicator, out var innerValue))
 					values.Add(null);
 				else
 					FillValues(innerValue, values);

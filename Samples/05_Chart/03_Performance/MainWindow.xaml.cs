@@ -200,7 +200,7 @@ public partial class MainWindow
 						group.Add(_candleElement, candle);
 
 						if (_indicatorElement != null)
-							group.Add(_indicatorElement, _indicator.Process((double)candle.ClosePrice));
+							group.Add(_indicatorElement, _indicator.Process(candle));
 					}
 
 					Chart.Draw(data);
@@ -275,7 +275,7 @@ public partial class MainWindow
 		group.Add(_candleElement, candle);
 
 		if (_indicatorElement != null)
-			group.Add(_indicatorElement, _indicator.Process((double)candle.ClosePrice));
+			group.Add(_indicatorElement, _indicator.Process(candle));
 
 		Chart.Draw(data);
 	}
@@ -368,27 +368,27 @@ class LightCandle
 class MyMovingAverage : IIndicator
 {
 	private readonly int _period;
-	private readonly Queue<double> _values = new();
-	private double _sum;
+	private readonly Queue<decimal> _values = new();
+	private decimal _sum;
 
 	public MyMovingAverage(int period)
 	{
 		_period = period;
 	}
 
-	public double Current { get; private set; }
+	public decimal Current { get; private set; }
 
-	public DecimalIndicatorValue Process(double newValue)
+	public DecimalIndicatorValue Process(ICandleMessage candle)
 	{
 		while (_values.Count >= _period)
 			_sum -= _values.Dequeue();
 
-		_values.Enqueue(newValue);
-		_sum += newValue;
+		_values.Enqueue(candle.ClosePrice);
+		_sum += candle.ClosePrice;
 
 		Current = _sum / _values.Count;
 
-		return new DecimalIndicatorValue(this, (decimal)Current)
+		return new DecimalIndicatorValue(this, Current, candle.ServerTime)
 		{
 			IsEmpty = false,
 			IsFinal = true,
@@ -415,8 +415,8 @@ class MyMovingAverage : IIndicator
 	{
 	}
 
-	IIndicatorValue IIndicator.CreateValue(object[] values)
-		=> values.Length == 0 ? new DecimalIndicatorValue(this) : new DecimalIndicatorValue(this, values[0].To<decimal>());
+	IIndicatorValue IIndicator.CreateValue(DateTimeOffset time, object[] values)
+		=> values.Length == 0 ? new DecimalIndicatorValue(this, time) : new DecimalIndicatorValue(this, values[0].To<decimal>(), time);
 
 	int IIndicator.NumValuesToInitialize => _period;
 

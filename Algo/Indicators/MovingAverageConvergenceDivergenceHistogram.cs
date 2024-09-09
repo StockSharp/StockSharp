@@ -37,12 +37,11 @@ public class MovingAverageConvergenceDivergenceHistogram : MovingAverageConverge
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
 		var macdValue = Macd.Process(input);
-		var signalValue = Macd.IsFormed ? SignalMa.Process(macdValue) : new DecimalIndicatorValue(SignalMa, 0);
+		var signalValue = Macd.IsFormed ? SignalMa.Process(macdValue) : new DecimalIndicatorValue(SignalMa, 0, input.Time);
 
-		var value = new ComplexIndicatorValue(this);
-		//value.InnerValues.Add(Macd, input.SetValue(this, macdValue.GetValue<decimal>() - signalValue.GetValue<decimal>()));
-		value.InnerValues.Add(Macd, macdValue);
-		value.InnerValues.Add(SignalMa, signalValue);
+		var value = new ComplexIndicatorValue(this, input.Time);
+		value.Add(Macd, macdValue);
+		value.Add(SignalMa, signalValue);
 		return value;
 	}
 }

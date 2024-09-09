@@ -37,16 +37,16 @@ public class WeightedMovingAverage : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var newValue = input.GetValue<decimal>();
+		var newValue = input.ToDecimal();
 
 		if (input.IsFinal)
 		{
-			Buffer.AddEx(newValue);
+			Buffer.PushBack(newValue);
 		}
 
 		var buff = input.IsFinal ? Buffer : Buffer.Skip(1).Append(newValue);
 
 		var w = 1;
-		return new DecimalIndicatorValue(this, buff.Sum(v => w++ * v) / _denominator);
+		return new DecimalIndicatorValue(this, buff.Sum(v => w++ * v) / _denominator, input.Time);
 	}
 }

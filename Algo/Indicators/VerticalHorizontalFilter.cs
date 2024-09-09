@@ -51,28 +51,28 @@ public class VerticalHorizontalFilter : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var candle = input.GetValue<ICandleMessage>();
+		var candle = input.ToCandle();
 
 		// Находим минимум и максимум для заданного периода
-		var minValue = _min.Process(input.SetValue(this, candle.LowPrice)).GetValue<decimal>();
-		var maxValue = _max.Process(input.SetValue(this, candle.HighPrice)).GetValue<decimal>();
+		var minValue = _min.Process(input, candle.LowPrice).ToDecimal();
+		var maxValue = _max.Process(input, candle.HighPrice).ToDecimal();
 
 		var sumValue = 0m;
 
 		// Вычисляем сумму модулей разности цен закрытия текущего и предыдущего дня для заданного периода
 		if (_previousClosePrice != null)
-			sumValue = _sum.Process(input.SetValue(this, Math.Abs(_previousClosePrice.Value - candle.ClosePrice))).GetValue<decimal>();
+			sumValue = _sum.Process(input, Math.Abs(_previousClosePrice.Value - candle.ClosePrice)).ToDecimal();
 
 		if (input.IsFinal)
 			_previousClosePrice = candle.ClosePrice;
 
 		if (!IsFormed)
-			return new DecimalIndicatorValue(this);
+			return new DecimalIndicatorValue(this, input.Time);
 
 		// Вычисляем значение индикатора
 		if (sumValue != 0)
-			return new DecimalIndicatorValue(this, ((maxValue - minValue) / sumValue));
+			return new DecimalIndicatorValue(this, ((maxValue - minValue) / sumValue), input.Time);
 
-		return new DecimalIndicatorValue(this);
+		return new DecimalIndicatorValue(this, input.Time);
 	}
 }

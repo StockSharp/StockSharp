@@ -1,5 +1,7 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
+using StockSharp.Algo.Candles;
+
 /// <summary>
 /// Market Facilitation Index.
 /// </summary>
@@ -27,14 +29,14 @@ public class MarketFacilitationIndex : BaseIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, high, low, _, vol) = input.GetOhlcv();
+		var candle = input.ToCandle();
 
-		if (vol == 0)
-			return new DecimalIndicatorValue(this);
+		if (candle.TotalVolume == 0)
+			return new DecimalIndicatorValue(this, input.Time);
 
 		if (input.IsFinal)
 			IsFormed = true;
 
-		return new DecimalIndicatorValue(this, (high - low) / vol);
+		return new DecimalIndicatorValue(this, candle.GetLength() / candle.TotalVolume, input.Time);
 	}
 }

@@ -13,7 +13,7 @@ public interface IChartIndicatorPainter : IPersistable
 	/// <summary>
 	/// Child elements.
 	/// </summary>
-	IEnumerable<IChartElement> InnerElements { get; }
+	IReadOnlyList<IChartElement> InnerElements { get; }
 
 	/// <summary>
 	/// To process the new data.

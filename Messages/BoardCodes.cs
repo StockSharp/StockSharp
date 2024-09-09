@@ -1171,6 +1171,11 @@ public static class BoardCodes
 	public const string ByBitLin = "BBITLIN";
 
 	/// <summary>
+	/// <see cref="ByBitOpt"/>
+	/// </summary>
+	public const string ByBitOpt = "BBITOPT";
+
+	/// <summary>
 	/// <see cref="cTrader"/>
 	/// </summary>
 	public const string cTrader = "CTRD";

@@ -29,9 +29,9 @@ public class GatorHistogram : BaseIndicator
 		var line2Curr = _line2.GetNullableCurrentValue();
 
 		if (line1Curr == null || line2Curr == null)
-			return new DecimalIndicatorValue(this);
+			return new DecimalIndicatorValue(this, input.Time);
 
-		return new DecimalIndicatorValue(this, (_isNegative ? -1 : 1) * Math.Abs(line1Curr.Value - line2Curr.Value));
+		return new DecimalIndicatorValue(this, (_isNegative ? -1 : 1) * Math.Abs(line1Curr.Value - line2Curr.Value), input.Time);
 	}
 
 	/// <summary>

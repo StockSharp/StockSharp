@@ -45,7 +45,7 @@ public class ChandeMomentumOscillator : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var newValue = input.GetValue<decimal>();
+		var newValue = input.ToDecimal();
 
 		if (!_isInitialized)
 		{
@@ -55,19 +55,19 @@ public class ChandeMomentumOscillator : LengthIndicator<decimal>
 				_isInitialized = true;
 			}
 
-			return new DecimalIndicatorValue(this);
+			return new DecimalIndicatorValue(this, input.Time);
 		}
 
 		var delta = newValue - _last;
 
-		var upValue = _cmoUp.Process(input.SetValue(this, delta > 0 ? delta : 0m)).GetValue<decimal>();
-		var downValue = _cmoDn.Process(input.SetValue(this, delta > 0 ? 0m : -delta)).GetValue<decimal>();
+		var upValue = _cmoUp.Process(input, delta > 0 ? delta : 0m).ToDecimal();
+		var downValue = _cmoDn.Process(input, delta > 0 ? 0m : -delta).ToDecimal();
 
 		if (input.IsFinal)
 			_last = newValue;
 
 		var value = (upValue + downValue) == 0 ? 0 : 100m * (upValue - downValue) / (upValue + downValue);
 
-		return IsFormed ? new DecimalIndicatorValue(this, value) : new DecimalIndicatorValue(this);
+		return IsFormed ? new DecimalIndicatorValue(this, value, input.Time) : new DecimalIndicatorValue(this, input.Time);
 	}
 }

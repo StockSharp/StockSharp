@@ -16,7 +16,7 @@ public class PassThroughIndicator : BaseIndicator
 		IsFormed |= !input.IsEmpty;
 
 		return input.IsEmpty
-			? new DecimalIndicatorValue(this)
-			: new DecimalIndicatorValue(this, input.GetValue<decimal>());
+			? new DecimalIndicatorValue(this, input.Time)
+			: new DecimalIndicatorValue(this, input.ToDecimal(), input.Time);
 	}
 }

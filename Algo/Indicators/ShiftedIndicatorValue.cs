@@ -9,8 +9,9 @@ public class ShiftedIndicatorValue : SingleIndicatorValue<decimal>
 	/// Initializes a new instance of the <see cref="ShiftedIndicatorValue"/>.
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
-	public ShiftedIndicatorValue(IIndicator indicator)
-		: base(indicator)
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public ShiftedIndicatorValue(IIndicator indicator, DateTimeOffset time)
+		: base(indicator, time)
 	{
 	}
 
@@ -20,8 +21,9 @@ public class ShiftedIndicatorValue : SingleIndicatorValue<decimal>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="value">Indicator value.</param>
 	/// <param name="shift">The shift of the indicator value.</param>
-	public ShiftedIndicatorValue(IIndicator indicator, decimal value, int shift)
-		: base(indicator, value)
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public ShiftedIndicatorValue(IIndicator indicator, decimal value, int shift, DateTimeOffset time)
+		: base(indicator, value, time)
 	{
 		Shift = shift;
 	}
@@ -46,8 +48,8 @@ public class ShiftedIndicatorValue : SingleIndicatorValue<decimal>
 	/// <inheritdoc />
 	public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		=> IsEmpty
-			? new ShiftedIndicatorValue(indicator)
-			: new ShiftedIndicatorValue(indicator, Value, Shift);
+			? new ShiftedIndicatorValue(indicator, Time) { IsFinal = IsFinal }
+			: new ShiftedIndicatorValue(indicator, Value, Shift, Time) { IsFinal = IsFinal };
 
 	/// <inheritdoc />
 	public override IEnumerable<object> ToValues()

@@ -25,14 +25,14 @@ public class SimpleMovingAverage : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var newValue = input.GetValue<decimal>();
+		var newValue = input.ToDecimal();
 
 		if (input.IsFinal)
 		{
-			Buffer.AddEx(newValue);
-			return new DecimalIndicatorValue(this, Buffer.Sum / Length);
+			Buffer.PushBack(newValue);
+			return new DecimalIndicatorValue(this, Buffer.Sum / Length, input.Time);
 		}
 
-		return new DecimalIndicatorValue(this, (Buffer.SumNoFirst + newValue) / Length);
+		return new DecimalIndicatorValue(this, (Buffer.SumNoFirst + newValue) / Length, input.Time);
 	}
 }

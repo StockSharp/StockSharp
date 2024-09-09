@@ -42,14 +42,16 @@ public class WilliamsR : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var candle = input.GetValue<ICandleMessage>();
+		var candle = input.ToCandle();
 
-		var lowValue = _low.Process(input.SetValue(this, candle.LowPrice)).GetValue<decimal>();
-		var highValue = _high.Process(input.SetValue(this, candle.HighPrice)).GetValue<decimal>();
+		var lowValue = _low.Process(input, candle.LowPrice).ToDecimal();
+		var highValue = _high.Process(input, candle.HighPrice).ToDecimal();
 
-		if ((highValue - lowValue) != 0)
-			return new DecimalIndicatorValue(this, -100m * (highValue - candle.ClosePrice) / (highValue - lowValue));
+		var diff = highValue - lowValue;
+
+		if (diff != 0)
+			return new DecimalIndicatorValue(this, -100m * (highValue - candle.ClosePrice) / diff, input.Time);
 			
-		return new DecimalIndicatorValue(this);
+		return new DecimalIndicatorValue(this, input.Time);
 	}
 }

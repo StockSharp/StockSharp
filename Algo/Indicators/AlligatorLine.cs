@@ -64,12 +64,12 @@ public class AlligatorLine : LengthIndicator<decimal>
 			if (Buffer.Count > Shift)
 				Buffer.PopFront();
 
-			Buffer.PushBack(smaResult.GetValue<decimal>());
+			Buffer.PushBack(smaResult.ToDecimal());
 		}
 
 		return Buffer.Count > Shift
-			? new DecimalIndicatorValue(this, Buffer[input.IsFinal ? 0 : Math.Min(1, Buffer.Count - 1)])
-			: new DecimalIndicatorValue(this);
+			? new DecimalIndicatorValue(this, Buffer[input.IsFinal ? 0 : Math.Min(1, Buffer.Count - 1)], input.Time)
+			: new DecimalIndicatorValue(this, input.Time);
 	}
 
 	/// <inheritdoc />

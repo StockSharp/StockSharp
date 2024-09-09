@@ -27,11 +27,11 @@ public class LinearRegSlope : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var newValue = input.GetValue<decimal>();
+		var newValue = input.ToDecimal();
 
 		if (input.IsFinal)
 		{
-			Buffer.AddEx(newValue);
+			Buffer.PushBack(newValue);
 		}
 
 		var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
@@ -54,8 +54,8 @@ public class LinearRegSlope : LengthIndicator<decimal>
 		//коэффициент при независимой переменной
 		var divisor = Length * sumX2 - sumX * sumX;
 		if (divisor == 0) 
-			return new DecimalIndicatorValue(this);
+			return new DecimalIndicatorValue(this, input.Time);
 
-		return new DecimalIndicatorValue(this, (Length * sumXy - sumX * sumY) / divisor);
+		return new DecimalIndicatorValue(this, (Length * sumXy - sumX * sumY) / divisor, input.Time);
 	}
 }

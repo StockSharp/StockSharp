@@ -24,11 +24,11 @@ public class MedianPrice : BaseIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, high, low, _) = input.GetOhlc();
+		var candle = input.ToCandle();
 
 		if (input.IsFinal)
 			IsFormed = true;
 
-		return new DecimalIndicatorValue(this, (high + low) / 2);
+		return new DecimalIndicatorValue(this, (candle.HighPrice + candle.LowPrice) / 2, input.Time);
 	}
 }

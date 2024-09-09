@@ -45,7 +45,7 @@ public class RelativeStrengthIndex : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var newValue = input.GetValue<decimal>();
+		var newValue = input.ToDecimal();
 
 		if (!_isInitialized)
 		{
@@ -55,23 +55,23 @@ public class RelativeStrengthIndex : LengthIndicator<decimal>
 				_isInitialized = true;
 			}
 
-			return new DecimalIndicatorValue(this);
+			return new DecimalIndicatorValue(this, input.Time);
 		}
 
 		var delta = newValue - _last;
 
-		var gainValue = _gain.Process(input.SetValue(this, delta > 0 ? delta : 0m)).GetValue<decimal>();
-		var lossValue = _loss.Process(input.SetValue(this, delta > 0 ? 0m : -delta)).GetValue<decimal>();
+		var gainValue = _gain.Process(input, delta > 0 ? delta : 0m).ToDecimal();
+		var lossValue = _loss.Process(input, delta > 0 ? 0m : -delta).ToDecimal();
 
 		if(input.IsFinal)
 			_last = newValue;
 
 		if (lossValue == 0)
-			return new DecimalIndicatorValue(this, 100m);
+			return new DecimalIndicatorValue(this, 100m, input.Time);
 		
 		if (gainValue / lossValue == 1)
-			return new DecimalIndicatorValue(this, 0m);
+			return new DecimalIndicatorValue(this, 0m, input.Time);
 
-		return new DecimalIndicatorValue(this, 100m - 100m / (1m + gainValue / lossValue));
+		return new DecimalIndicatorValue(this, 100m - 100m / (1m + gainValue / lossValue), input.Time);
 	}
 }

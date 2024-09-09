@@ -30,6 +30,9 @@ public class MovingAverageConvergenceDivergence : BaseIndicator
 	{
 		ShortMa = shortMa ?? throw new ArgumentNullException(nameof(shortMa));
 		LongMa = longMa ?? throw new ArgumentNullException(nameof(longMa));
+
+		ShortMa.Reseted += Reset;
+		LongMa.Reseted += Reset;
 	}
 
 	/// <inheritdoc />
@@ -68,7 +71,7 @@ public class MovingAverageConvergenceDivergence : BaseIndicator
 	{
 		var shortValue = ShortMa.Process(input);
 		var longValue = LongMa.Process(input);
-		return new DecimalIndicatorValue(this, shortValue.GetValue<decimal>() - longValue.GetValue<decimal>());
+		return new DecimalIndicatorValue(this, shortValue.ToDecimal() - longValue.ToDecimal(), input.Time);
 	}
 
 	/// <inheritdoc />

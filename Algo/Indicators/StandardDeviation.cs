@@ -40,12 +40,12 @@ public class StandardDeviation : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var newValue = input.GetValue<decimal>();
-		var smaValue = _sma.Process(input).GetValue<decimal>();
+		var newValue = input.ToDecimal();
+		var smaValue = _sma.Process(input).ToDecimal();
 
 		if (input.IsFinal)
 		{
-			Buffer.AddEx(newValue);
+			Buffer.PushBack(newValue);
 		}
 
 		var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
@@ -53,6 +53,6 @@ public class StandardDeviation : LengthIndicator<decimal>
 		//считаем значение отклонения в последней точке
 		var std = buff.Select(t1 => t1 - smaValue).Select(t => t * t).Sum();
 
-		return new DecimalIndicatorValue(this, (decimal)Math.Sqrt((double)(std / Length)));
+		return new DecimalIndicatorValue(this, (decimal)Math.Sqrt((double)(std / Length)), input.Time);
 	}
 }

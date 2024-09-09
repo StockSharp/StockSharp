@@ -40,15 +40,15 @@ public class CommodityChannelIndex : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, high, low, close) = input.GetOhlc();
+		var candle = input.ToCandle();
 
-		var aveP = (high + low + close) / 3m;
+		var aveP = (candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 3m;
 
-		var meanValue = _mean.Process(new DecimalIndicatorValue(this, aveP) { IsFinal = input.IsFinal });
+		var meanValue = _mean.Process(new DecimalIndicatorValue(this, aveP, input.Time) { IsFinal = input.IsFinal });
 
-		if (IsFormed && meanValue.GetValue<decimal>() != 0)
-			return new DecimalIndicatorValue(this, ((aveP - _mean.Sma.GetCurrentValue()) / (0.015m * meanValue.GetValue<decimal>())));
+		if (IsFormed && meanValue.ToDecimal() != 0)
+			return new DecimalIndicatorValue(this, ((aveP - _mean.Sma.GetCurrentValue()) / (0.015m * meanValue.ToDecimal())), input.Time);
 
-		return new DecimalIndicatorValue(this);
+		return new DecimalIndicatorValue(this, input.Time);
 	}
 }

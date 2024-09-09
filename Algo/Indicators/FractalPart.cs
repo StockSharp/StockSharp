@@ -55,9 +55,9 @@ public class FractalPart : LengthIndicator<(decimal high, decimal low)>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, currHigh, currLow, _) = input.GetOhlc();
+		var candle = input.ToCandle();
 
-		var currValue = IsUp ? currHigh : currLow;
+		var currValue = IsUp ? candle.HighPrice : candle.LowPrice;
 
 		if (Buffer.Count > 0)
 		{
@@ -127,7 +127,7 @@ public class FractalPart : LengthIndicator<(decimal high, decimal low)>
 
 								resetCounters();
 
-								return new ShiftedIndicatorValue(this, extremum, _numCenter);
+								return new ShiftedIndicatorValue(this, extremum, _numCenter, input.Time);
 							}
 							else
 							{
@@ -149,7 +149,7 @@ public class FractalPart : LengthIndicator<(decimal high, decimal low)>
 
 								resetCounters();
 
-								return new ShiftedIndicatorValue(this, extremum, _numCenter);
+								return new ShiftedIndicatorValue(this, extremum, _numCenter, input.Time);
 							}
 							else
 							{
@@ -170,7 +170,7 @@ public class FractalPart : LengthIndicator<(decimal high, decimal low)>
 						{
 							if (_downTrendCounter == _numCenter)
 							{
-								return new ShiftedIndicatorValue(this, _extremum.Value, _numCenter);
+								return new ShiftedIndicatorValue(this, _extremum.Value, _numCenter, input.Time);
 							}
 						}
 					}
@@ -180,7 +180,7 @@ public class FractalPart : LengthIndicator<(decimal high, decimal low)>
 						{
 							if (_upTrendCounter == _numCenter)
 							{
-								return new ShiftedIndicatorValue(this, _extremum.Value, _numCenter);
+								return new ShiftedIndicatorValue(this, _extremum.Value, _numCenter, input.Time);
 							}
 						}
 					}
@@ -193,8 +193,8 @@ public class FractalPart : LengthIndicator<(decimal high, decimal low)>
 		}
 
 		if (input.IsFinal)
-			Buffer.PushBack((currHigh, currLow));
+			Buffer.PushBack((candle.HighPrice, candle.LowPrice));
 
-		return new ShiftedIndicatorValue(this);
+		return new ShiftedIndicatorValue(this, input.Time);
 	}
 }

@@ -34,7 +34,7 @@ public class LinearReg : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var newValue = input.GetValue<decimal>();
+		var newValue = input.ToDecimal();
 
 		if (input.IsFinal)
 		{
@@ -70,6 +70,6 @@ public class LinearReg : LengthIndicator<decimal>
 		var b = (sumY - _slope * sumX) / Length;
 
 		//прогноз последнего значения (его номер Length - 1)
-		return new DecimalIndicatorValue(this, _slope * (Length - 1) + b);
+		return new DecimalIndicatorValue(this, _slope * (Length - 1) + b, input.Time);
 	}
 }

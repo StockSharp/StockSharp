@@ -49,27 +49,27 @@ public class TroughBar : BaseIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, high, low, _) = input.GetOhlc();
+		var candle = input.ToCandle();
 
 		var cm = _currentMinimum;
 		var vbc = _valueBarCount;
 
 		try
 		{
-			if (low < cm)
+			if (candle.LowPrice < cm)
 			{
-				cm = low;
+				cm = candle.LowPrice;
 				vbc = _currentBarCount;
 			}
-			else if (high >= (cm + ReversalAmount.Value))
+			else if (candle.HighPrice >= (cm + ReversalAmount.Value))
 			{
 				if (input.IsFinal)
 					IsFormed = true;
 
-				return new DecimalIndicatorValue(this, vbc);
+				return new DecimalIndicatorValue(this, vbc, input.Time);
 			}
 
-			return new DecimalIndicatorValue(this, this.GetCurrentValue());
+			return new DecimalIndicatorValue(this, this.GetCurrentValue(), input.Time);
 		}
 		finally
 		{

@@ -36,7 +36,7 @@ public class ExponentialMovingAverage : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var newValue = input.GetValue<decimal>();
+		var newValue = input.ToDecimal();
 
 		// буфер нужен только для формирования начального значение - SMA
 		if (!IsFormed)
@@ -45,15 +45,15 @@ public class ExponentialMovingAverage : LengthIndicator<decimal>
 			// или "недоделанную" sma c пропущенным первым значением из буфера + промежуточное значение
 			if (input.IsFinal)
 			{
-				Buffer.AddEx(newValue);
+				Buffer.PushBack(newValue);
 
 				_prevFinalValue = Buffer.Sum / Length;
 
-				return new DecimalIndicatorValue(this, _prevFinalValue);
+				return new DecimalIndicatorValue(this, _prevFinalValue, input.Time);
 			}
 			else
 			{
-				return new DecimalIndicatorValue(this, (Buffer.SumNoFirst + newValue) / Length);
+				return new DecimalIndicatorValue(this, (Buffer.SumNoFirst + newValue) / Length, input.Time);
 			}
 		}
 		else
@@ -65,7 +65,7 @@ public class ExponentialMovingAverage : LengthIndicator<decimal>
 			if (input.IsFinal)
 				_prevFinalValue = curValue;
 
-			return new DecimalIndicatorValue(this, curValue);
+			return new DecimalIndicatorValue(this, curValue, input.Time);
 		}
 	}
 }

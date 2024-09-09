@@ -37,11 +37,11 @@ public class LinearRegRSquared : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var newValue = input.GetValue<decimal>();
+		var newValue = input.ToDecimal();
 
 		if (input.IsFinal)
 		{
-			Buffer.AddEx(newValue);
+			Buffer.PushBack(newValue);
 		}
 
 		var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
@@ -87,11 +87,11 @@ public class LinearRegRSquared : LengthIndicator<decimal>
 
 			//R-квадрат регресии
 			if (sumYAv2 == 0) 
-				return new DecimalIndicatorValue(this, 0);
+				return new DecimalIndicatorValue(this, 0, input.Time);
 
-			return new DecimalIndicatorValue(this, (1 - sumErr2 / sumYAv2));
+			return new DecimalIndicatorValue(this, (1 - sumErr2 / sumYAv2), input.Time);
 		}
 
-		return new DecimalIndicatorValue(this);
+		return new DecimalIndicatorValue(this, input.Time);
 	}
 }

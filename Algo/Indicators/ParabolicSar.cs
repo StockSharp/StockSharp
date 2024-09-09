@@ -35,12 +35,12 @@ public class ParabolicSar : BaseIndicator
 
 		public CalcBuffer Clone() => (CalcBuffer) MemberwiseClone();
 
-		public decimal Calculate(ICandleMessage candle)
+		public decimal Calculate(bool isFinal, ICandleMessage candle)
 		{
 			if (Candles.Count == 0)
 				Candles.Add(candle);
 
-			if (candle.OpenTime != Candles[Candles.Count - 1].OpenTime)
+			if (isFinal)
 				Candles.Add(candle);
 			else
 				Candles[Candles.Count - 1] = candle;
@@ -71,15 +71,17 @@ public class ParabolicSar : BaseIndicator
 
 				for (var x = 1; x <= 2; x++)
 				{
+					var t = Candles[Candles.Count - 1 - x];
+
 					if (_longPosition)
 					{
-						if (_todaySar > Candles[Candles.Count - 1 - x].LowPrice)
-							_todaySar = Candles[Candles.Count - 1 - x].LowPrice;
+						if (_todaySar > t.LowPrice)
+							_todaySar = t.LowPrice;
 					}
 					else
 					{
-						if (_todaySar < Candles[Candles.Count - 1 - x].HighPrice)
-							_todaySar = Candles[Candles.Count - 1 - x].HighPrice;
+						if (_todaySar < t.HighPrice)
+							_todaySar = t.HighPrice;
 					}
 				}
 
@@ -280,9 +282,9 @@ public class ParabolicSar : BaseIndicator
 			IsFormed = true;
 
 		var b = input.IsFinal ? _buf : _buf.Clone();
-		var val = b.Calculate(input.GetValue<ICandleMessage>());
+		var val = b.Calculate(input.IsFinal, input.ToCandle());
 
-		return val == 0 ? new DecimalIndicatorValue(this) : new DecimalIndicatorValue(this, val);
+		return val == 0 ? new DecimalIndicatorValue(this, input.Time) : new DecimalIndicatorValue(this, val, input.Time);
 	}
 
 	/// <inheritdoc />

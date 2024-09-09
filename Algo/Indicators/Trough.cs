@@ -28,7 +28,7 @@ public sealed class Trough : ZigZagEquis
 
 		if (IsFormed && !value.IsEmpty)
 		{
-			if (CurrentValue > value.GetValue<decimal>())
+			if (CurrentValue > value.ToDecimal())
 			{
 				return value;
 			}
@@ -39,7 +39,7 @@ public sealed class Trough : ZigZagEquis
 				if (input.IsFinal)
 					IsFormed = !lastValue.IsEmpty;
 
-				return IsFormed ? new ShiftedIndicatorValue(this, lastValue.Value, lastValue.Shift + 1) : lastValue;
+				return IsFormed ? new ShiftedIndicatorValue(this, lastValue.Value, lastValue.Shift + 1, input.Time) : lastValue;
 			}
 		}
 

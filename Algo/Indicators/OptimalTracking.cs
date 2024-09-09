@@ -92,13 +92,13 @@ public sealed class OptimalTracking : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, high, low, _) = input.GetOhlc();
+		var candle = input.ToCandle();
 
-		var average = (high + low) / 2;
-		var halfRange = (high - low) / 2;
+		var average = (candle.HighPrice + candle.LowPrice) / 2;
+		var halfRange = (candle.HighPrice - candle.LowPrice) / 2;
 
 		if (input.IsFinal)
-			Buffer.AddEx(average);
+			Buffer.PushBack(average);
 
 		var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(Buffer.Count >= Length ? 1 : 0).Append(average).ToArray();
 
@@ -106,6 +106,6 @@ public sealed class OptimalTracking : LengthIndicator<decimal>
 
 		var result = b.Calculate(this, buff, average, halfRange);
 
-		return new DecimalIndicatorValue(this, result);
+		return new DecimalIndicatorValue(this, result, input.Time);
 	}
 }

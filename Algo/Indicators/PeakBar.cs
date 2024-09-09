@@ -51,27 +51,27 @@ public class PeakBar : BaseIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, high, low, _) = input.GetOhlc();
+		var candle = input.ToCandle();
 
 		var cm = _currentMaximum;
 		var vbc = _valueBarCount;
 
 		try
 		{
-			if (high > cm)
+			if (candle.HighPrice > cm)
 			{
-				cm = high;
+				cm = candle.HighPrice;
 				vbc = _currentBarCount;
 			}
-			else if (low <= (cm - ReversalAmount))
+			else if (candle.LowPrice <= (cm - ReversalAmount))
 			{
 				if (input.IsFinal)
 					IsFormed = true;
 
-				return new DecimalIndicatorValue(this, vbc);
+				return new DecimalIndicatorValue(this, vbc, input.Time);
 			}
 
-			return new DecimalIndicatorValue(this, this.GetCurrentValue());
+			return new DecimalIndicatorValue(this, this.GetCurrentValue(), input.Time);
 		}
 		finally
 		{

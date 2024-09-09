@@ -53,24 +53,24 @@ public class MoneyFlowIndex : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, high, low, close, vol) = input.GetOhlcv();
+		var candle = input.ToCandle();
 
-		var typicalPrice = (high + low + close) / 3.0m;
-		var moneyFlow = typicalPrice * vol;
+		var typicalPrice = (candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 3.0m;
+		var moneyFlow = typicalPrice * candle.TotalVolume;
 		
-		var positiveFlow = _positiveFlow.Process(input.SetValue(this, typicalPrice > _previousPrice ? moneyFlow : 0.0m)).GetValue<decimal>();
-		var negativeFlow = _negativeFlow.Process(input.SetValue(this, typicalPrice < _previousPrice ? moneyFlow : 0.0m)).GetValue<decimal>();
+		var positiveFlow = _positiveFlow.Process(input, typicalPrice > _previousPrice ? moneyFlow : 0.0m).ToDecimal();
+		var negativeFlow = _negativeFlow.Process(input, typicalPrice < _previousPrice ? moneyFlow : 0.0m).ToDecimal();
 
 		_previousPrice = typicalPrice;
 		
 		if (negativeFlow == 0)
-			return new DecimalIndicatorValue(this, 100m);
+			return new DecimalIndicatorValue(this, 100m, input.Time);
 		
 		if (positiveFlow / negativeFlow == 1)
-			return new DecimalIndicatorValue(this, 0m);
+			return new DecimalIndicatorValue(this, 0m, input.Time);
 
 		return negativeFlow != 0 
-			? new DecimalIndicatorValue(this, 100m - 100m / (1m + positiveFlow / negativeFlow))
-			: new DecimalIndicatorValue(this);
+			? new DecimalIndicatorValue(this, 100m - 100m / (1m + positiveFlow / negativeFlow), input.Time)
+			: new DecimalIndicatorValue(this, input.Time);
 	}
 }

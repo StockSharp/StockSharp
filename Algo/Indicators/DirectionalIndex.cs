@@ -17,8 +17,8 @@ public class DirectionalIndex : BaseComplexIndicator
 	{
 		private decimal _value;
 
-		public DxValue(IComplexIndicator indicator)
-			: base(indicator)
+		public DxValue(IComplexIndicator indicator, DateTimeOffset time)
+			: base(indicator, time)
 		{
 		}
 
@@ -26,7 +26,7 @@ public class DirectionalIndex : BaseComplexIndicator
 		{
 			IsEmpty = false;
 			_value = value.To<decimal>();
-			return new DecimalIndicatorValue(indicator, _value);
+			return new DecimalIndicatorValue(indicator, _value, Time) { IsFinal = IsFinal };
 		}
 
 		public override T GetValue<T>(Level1Fields? field)
@@ -90,24 +90,24 @@ public class DirectionalIndex : BaseComplexIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var value = new DxValue(this) { IsFinal = input.IsFinal };
+		var value = new DxValue(this, input.Time) { IsFinal = input.IsFinal };
 
 		var plusValue = Plus.Process(input);
 		var minusValue = Minus.Process(input);
 
-		value.InnerValues.Add(Plus, plusValue);
-		value.InnerValues.Add(Minus, minusValue);
+		value.Add(Plus, plusValue);
+		value.Add(Minus, minusValue);
 
 		if (plusValue.IsEmpty || minusValue.IsEmpty)
 			return value;
 
-		var plus = plusValue.GetValue<decimal>();
-		var minus = minusValue.GetValue<decimal>();
+		var plus = plusValue.ToDecimal();
+		var minus = minusValue.ToDecimal();
 
 		var diSum = plus + minus;
 		var diDiff = Math.Abs(plus - minus);
 
-		value.InnerValues.Add(this, value.SetValue(this, diSum != 0m ? (100 * diDiff / diSum) : 0m));
+		value.Add(this, value.SetValue(this, diSum != 0m ? (100 * diDiff / diSum) : 0m));
 
 		return value;
 	}

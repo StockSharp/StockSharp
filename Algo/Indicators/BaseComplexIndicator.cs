@@ -16,6 +16,10 @@ public enum ComplexIndicatorModes
 	Parallel,
 }
 
+class InnerIndicatorResetScope
+{
+}
+
 /// <summary>
 /// The base indicator, built in form of several indicators combination.
 /// </summary>
@@ -42,13 +46,9 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 	[Browsable(false)]
 	public ComplexIndicatorModes Mode { get; protected set; }
 
-	private class InnerResetScope
-	{
-	}
-
 	private void InnerReseted()
 	{
-		if (Scope<InnerResetScope>.IsDefined)
+		if (Scope<InnerIndicatorResetScope>.IsDefined)
 			return;
 
 		Reset();
@@ -74,11 +74,20 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 		inner.Reseted -= InnerReseted;
 	}
 
+	/// <summary>
+	/// Clear <see cref="InnerIndicators"/>.
+	/// </summary>
+	protected void ClearInner()
+	{
+		foreach (var sma in InnerIndicators.ToArray())
+			RemoveInner(sma);
+	}
+
 	private readonly List<IIndicator> _innerIndicators = new();
 
 	/// <inheritdoc />
 	[Browsable(false)]
-	public IEnumerable<IIndicator> InnerIndicators => _innerIndicators;
+	public IReadOnlyList<IIndicator> InnerIndicators => _innerIndicators;
 
 	/// <inheritdoc />
 	[Browsable(false)]
@@ -93,26 +102,46 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 	/// <inheritdoc />
 	public override Type ResultType { get; } = typeof(ComplexIndicatorValue);
 
+	/// <summary>
+	/// Create empty value.
+	/// </summary>
+	/// <param name="indicator"><see cref="IIndicator"/></param>
+	/// <param name="time">Time</param>
+	/// <returns>Empty value.</returns>
+	protected virtual IIndicatorValue CreateEmpty(IIndicator indicator, DateTimeOffset time)
+		=> new DecimalIndicatorValue(indicator, time);
+
+	/// <inheritdoc />
+	public override IIndicatorValue Process(IIndicatorValue input)
+	{
+		var output = base.Process(input);
+
+		var cv = (ComplexIndicatorValue)output;
+
+		foreach (var inner in InnerIndicators)
+			cv.InnerValues.TryAdd(inner, CreateEmpty(inner, input.Time));
+
+		return output;
+	}
+
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var value = new ComplexIndicatorValue(this);
+		var value = new ComplexIndicatorValue(this, input.Time);
 
 		foreach (var indicator in InnerIndicators)
 		{
 			var result = indicator.Process(input);
 
-			value.InnerValues.Add(indicator, result);
+			value.Add(indicator, result);
 
-			if (Mode == ComplexIndicatorModes.Sequence)
-			{
-				if (!indicator.IsFormed)
-				{
-					break;
-				}
+			if (Mode != ComplexIndicatorModes.Sequence)
+				continue;
 
-				input = result;
-			}
+			if (!indicator.IsFormed)
+				break;
+
+			input = result;
 		}
 
 		return value;
@@ -123,7 +152,7 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 	{
 		base.Reset();
 
-		using (new Scope<InnerResetScope>(new()))
+		using (new Scope<InnerIndicatorResetScope>(new()))
 			InnerIndicators.ForEach(i => i.Reset());
 	}
 

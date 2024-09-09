@@ -32,7 +32,7 @@ public class BollingerBand : BaseIndicator
 	{
 		IsFormed = _ma.IsFormed && _dev.IsFormed;
 
-		return new DecimalIndicatorValue(this, _ma.GetCurrentValue() + (Width * _dev.GetCurrentValue()));
+		return new DecimalIndicatorValue(this, _ma.GetCurrentValue() + (Width * _dev.GetCurrentValue()), input.Time);
 	}
 
 	/// <inheritdoc />

@@ -34,14 +34,14 @@ public class IchimokuLine : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, high, low, _) = input.GetOhlc();
+		var candle = input.ToCandle();
 
 		IList<(decimal high, decimal low)> buff = _buffer;
 
 		if (input.IsFinal)
-			_buffer.PushBack((high, low));
+			_buffer.PushBack((candle.HighPrice, candle.LowPrice));
 		else
-			buff = _buffer.Skip(1).Append((high, low)).ToList();
+			buff = _buffer.Skip(1).Append((candle.HighPrice, candle.LowPrice)).ToList();
 
 		if (IsFormed)
 		{
@@ -49,9 +49,9 @@ public class IchimokuLine : LengthIndicator<decimal>
 			var max = buff.Max(t => t.high);
 			var min = buff.Min(t => t.low);
 
-			return new DecimalIndicatorValue(this, (max + min) / 2);
+			return new DecimalIndicatorValue(this, (max + min) / 2, input.Time);
 		}
 			
-		return new DecimalIndicatorValue(this);
+		return new DecimalIndicatorValue(this, input.Time);
 	}
 }

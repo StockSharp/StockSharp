@@ -44,16 +44,16 @@ public class StochasticK : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var (_, high, low, close) = input.GetOhlc();
+		var candle = input.ToCandle();
 
-		var highValue = _high.Process(input.SetValue(this, high)).GetValue<decimal>();
-		var lowValue = _low.Process(input.SetValue(this, low)).GetValue<decimal>();
+		var highValue = _high.Process(input, candle.HighPrice).ToDecimal();
+		var lowValue = _low.Process(input, candle.LowPrice).ToDecimal();
 
 		var diff = highValue - lowValue;
 
 		if (diff == 0)
-			return new DecimalIndicatorValue(this, 0);
+			return new DecimalIndicatorValue(this, 0, input.Time);
 
-		return new DecimalIndicatorValue(this, 100 * (close - lowValue) / diff);
+		return new DecimalIndicatorValue(this, 100 * (candle.ClosePrice - lowValue) / diff, input.Time);
 	}
 }

@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Candles;
 
+using System.Text.RegularExpressions;
+
 using Ecng.Configuration;
 
 using StockSharp.BusinessEntities;
@@ -263,7 +265,16 @@ public class CandleSeries : NotifiableObject, IPersistable
 				Security = secProvider.LookupById(securityId);
 		}
 
-		CandleType = storage.GetValue(nameof(CandleType), CandleType);
+		var candleType = storage.GetValue<string>(nameof(CandleType));
+
+		if (!candleType.IsEmpty())
+		{
+			candleType = Regex.Replace(candleType,
+				@"(StockSharp\.Algo\.Candles\.(?:.*?)Candle), StockSharp\.Algo",
+				"$1, StockSharp.BusinessEntities");
+
+			CandleType = candleType.To<Type>();
+		}
 
 		if (CandleType != null)
 			Arg = CandleType.ToCandleMessageType().ToDataTypeArg(storage.GetValue<string>(nameof(Arg)));

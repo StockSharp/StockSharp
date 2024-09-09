@@ -388,7 +388,7 @@ public class ZigZag : BaseIndicator
 		_needAdd = input.IsFinal;
 
 		if (valuesCount != 2)
-			return new DecimalIndicatorValue(this);
+			return new DecimalIndicatorValue(this, input.Time);
 
 		if (input.IsFinal)
 			IsFormed = true;
@@ -397,7 +397,7 @@ public class ZigZag : BaseIndicator
 
 		CurrentValue = input.GetValue<decimal>(ClosePriceField);
 
-		return new DecimalIndicatorValue(this, _zigZagBuffer[LastValueShift]);
+		return new DecimalIndicatorValue(this, _zigZagBuffer[LastValueShift], input.Time);
 	}
 
 	/// <inheritdoc />

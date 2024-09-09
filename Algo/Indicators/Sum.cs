@@ -28,18 +28,18 @@ public class Sum : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var newValue = input.GetValue<decimal>();
+		var newValue = input.ToDecimal();
 
 		if (input.IsFinal)
-			Buffer.AddEx(newValue);
+			Buffer.PushBack(newValue);
 
 		if (input.IsFinal)
 		{
-			return new DecimalIndicatorValue(this, Buffer.Sum);
+			return new DecimalIndicatorValue(this, Buffer.Sum, input.Time);
 		}
 		else
 		{
-			return new DecimalIndicatorValue(this, (Buffer.SumNoFirst + newValue));
+			return new DecimalIndicatorValue(this, (Buffer.SumNoFirst + newValue), input.Time);
 		}
 	}
 }

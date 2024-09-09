@@ -24,8 +24,9 @@ public class VolumeProfileIndicator : BaseIndicator
 		/// Initializes a new instance of the <see cref="VolumeProfileIndicatorValue"/>.
 		/// </summary>
 		/// <param name="indicator">Indicator.</param>
-		public VolumeProfileIndicatorValue(IIndicator indicator)
-			: base(indicator)
+		/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+		public VolumeProfileIndicatorValue(IIndicator indicator, DateTimeOffset time)
+			: base(indicator, time)
 		{
 			Levels = new Dictionary<decimal, decimal>();
 		}
@@ -98,14 +99,14 @@ public class VolumeProfileIndicator : BaseIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var result = new VolumeProfileIndicatorValue(this);
+		var result = new VolumeProfileIndicatorValue(this, input.Time);
 
 		if (!input.IsFinal)
 			return result;
 
 		IsFormed = true;
 
-		var candle = input.GetValue<ICandleMessage>();
+		var candle = input.ToCandle();
 
 		if (!UseTotalVolume)
 		{

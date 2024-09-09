@@ -97,7 +97,8 @@ public interface IIndicator : IPersistable, ICloneable<IIndicator>
 	/// <summary>
 	/// Convert to indicator value.
 	/// </summary>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
 	/// <param name="values"><see cref="IIndicatorValue.ToValues"/></param>
 	/// <returns><see cref="IIndicatorValue"/></returns>
-	IIndicatorValue CreateValue(object[] values);
+	IIndicatorValue CreateValue(DateTimeOffset time, object[] values);
 }
