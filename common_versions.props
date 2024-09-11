@@ -16,8 +16,8 @@
     <MsTestVer>3.*</MsTestVer>
     <MsTestSdkVer>17.*</MsTestSdkVer>
     <MsExtensionsVer>6.*</MsExtensionsVer>
-    <NuGetApiVer>6.10.0</NuGetApiVer>
-    <MicrosoftDataSqlClientVer>5.1.4</MicrosoftDataSqlClientVer>
+    <NuGetApiVer>6.11.0</NuGetApiVer>
+    <MicrosoftDataSqlClientVer>5.2.2</MicrosoftDataSqlClientVer>
     <SBEVer>1.23.1.1</SBEVer>
     <SpectreVer>0.48.0</SpectreVer>
     <AWSSDKVer>3.*</AWSSDKVer>
@@ -26,7 +26,7 @@
     <SharpPcapVer>6.*</SharpPcapVer>
     <GoogleProtobufVer>3.*</GoogleProtobufVer>
 
-    <MicrosoftCodeAnalysisCSharpVer>4.8.0</MicrosoftCodeAnalysisCSharpVer>
+    <MicrosoftCodeAnalysisCSharpVer>4.11.0</MicrosoftCodeAnalysisCSharpVer>
     <MicrosoftCodeAnalysisAnalyzersVer>3.3.4</MicrosoftCodeAnalysisAnalyzersVer>
   </PropertyGroup>
 </Project>
