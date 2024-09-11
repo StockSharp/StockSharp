@@ -1,6 +1,5 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ProductVersion>9.0.30729</ProductVersion>
     <LangVersion>11.0</LangVersion>
 
     <EcngVer>1.0.*</EcngVer>
