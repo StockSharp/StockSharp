@@ -1,496 +1,285 @@
 namespace StockSharp.DarkHorse;
 
+using StockSharp.DarkHorse.Native.Model;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
+using static System.Net.WebRequestMethods;
 
 partial class DarkHorseMessageAdapter
 {
-	private long _lastMyTradeId;
-	private readonly Dictionary<long, RefPair<long, decimal>> _orderInfo = new();
-	//private readonly Dictionary<string, List<ExecutionMessage>> _unkOrds = new Dictionary<string, List<ExecutionMessage>>(StringComparer.InvariantCultureIgnoreCase);
+    private readonly TimeSpan _orderHistoryInterval = TimeSpan.FromDays(7);
+    private const int _fillsPaginationLimit = 100;
 
-	private readonly Dictionary<SecurityId, decimal> _positions = new();
+    private long? _portfolioLookupSubMessageTransactionID;
+    private bool _isOrderSubscribed;
 
-	private string PortfolioName => nameof(DarkHorse) + "_" + Key.ToId();
+    private string PortfolioName => nameof(DarkHorse) + "_" + Key.ToId().To<string>();
 
-	/// <inheritdoc />
-	public override async ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
-	{
-		switch (regMsg.OrderType)
-		{
-			case null:
-			case OrderTypes.Limit:
-			//case OrderTypes.Market:
-				break;
-			case OrderTypes.Conditional:
-			{
-				var condition = (DarkHorseCondition)regMsg.Condition;
+    private void SessionOnNewFill(Fill fill)
+    {
+        SendOutMessage(new ExecutionMessage
+        {
+            DataTypeEx = DataType.Transactions,
+            PortfolioName = GetPortfolioName(),
+            TradeId = fill.TradeId,
+            TradePrice = fill.Price,
+            TradeVolume = fill.Size,
+            SecurityId = fill.Market.ToStockSharp(),
+            OrderId = fill.OrderId,
+            Side = fill.Side.ToSide(),
+            ServerTime = fill.Time
+        });
+    }
 
-				if (!condition.IsWithdraw)
-					throw new NotSupportedException(LocalizedStrings.OrderUnsupportedType.Put(regMsg.OrderType, regMsg.TransactionId));
+    private void SendProcessOrderStatusResult(Order order, OrderMessage message)
+    {
+        if (!long.TryParse(order.ClientId, out var transId))
+            return;
 
-				var withdrawId = await _httpClient.Withdraw(regMsg.SecurityId.SecurityCode, regMsg.Volume, condition.WithdrawInfo, cancellationToken);
+        SendOutMessage(new ExecutionMessage
+        {
+            OriginalTransactionId = message.TransactionId,
+            TransactionId = transId,
+            OrderId = order.Id,
+            DataTypeEx = DataType.Transactions,
+            PortfolioName = GetPortfolioName(),
+            HasOrderInfo = true,
+            ServerTime = order.CreatedAt ?? CurrentTime.ConvertToUtc(),
+            OrderState = order.Status.ToOrderState(),
+            OrderType = order.Type.ToOrderType(),
+            AveragePrice = order.AvgFillPrice,
+            OrderPrice = order.Price ?? (order.AvgFillPrice ?? 0),
+            SecurityId = order.Market.ToStockSharp(),
+            Side = order.Side.ToSide(),
+            OrderVolume = order.Size,
+            Balance = order.Size - order.FilledSize,
 
-				SendOutMessage(new ExecutionMessage
-				{
-					DataTypeEx = DataType.Transactions,
-					OrderId = withdrawId,
-					ServerTime = CurrentTime.ConvertToUtc(),
-					OriginalTransactionId = regMsg.TransactionId,
-					OrderState = OrderStates.Done,
-					HasOrderInfo = true,
-				});
+        });
+    }
+    private void SessionOnNewOrder(Order order)
+    {
+        if (!long.TryParse(order.ClientId, out var transId))
+            return;
 
-				await PortfolioLookupAsync(null, cancellationToken);
-				return;
-			}
-			default:
-				throw new NotSupportedException(LocalizedStrings.OrderUnsupportedType.Put(regMsg.OrderType, regMsg.TransactionId));
-		}
+        var message = new ExecutionMessage
+        {
+            OriginalTransactionId = transId,
+            TransactionId = transId,
+            DataTypeEx = DataType.Transactions,
+            PortfolioName = GetPortfolioName(),
+            HasOrderInfo = true,
+            ServerTime = order.CreatedAt ?? CurrentTime.ConvertToUtc(),
+            OrderId = order.Id,
+            OrderState = order.Status.ToOrderState(),
+            OrderType = order.Type.ToOrderType(),
+            AveragePrice = order.AvgFillPrice,
+            OrderPrice = order.Price ?? (order.AvgFillPrice ?? 0),
+            SecurityId = order.Market.ToStockSharp(),
+            Side = order.Side.ToSide(),
+            OrderVolume = order.Size,
+            Balance = order.Size - order.FilledSize,
+        };
 
-		var currency = regMsg.SecurityId.ToCurrency();
-		var reply = await _httpClient.MakeOrder(
-			currency,
-			regMsg.Side.ToBtce(),
-			regMsg.Price,
-			regMsg.Volume,
-			cancellationToken
-		);
+        SendOutMessage(message);
+    }
 
-		var isDone = reply.Command.OrderId == 0;
-		var msg = new ExecutionMessage
-		{
-			OriginalTransactionId = regMsg.TransactionId,
-			DataTypeEx = DataType.Transactions,
-			OrderId = isDone ? null : reply.Command.OrderId,
-			Balance = isDone ? 0m : (decimal)reply.Command.Remains,
-			OrderState = isDone ? OrderStates.Done : OrderStates.Active,
-			HasOrderInfo = true,
+    /// <inheritdoc />
+    public override async ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
+    {
+        switch (regMsg.OrderType)
+        {
+            case OrderTypes.Limit:
+            case OrderTypes.Market:
+                break;
+            default:
+                throw new NotSupportedException(LocalizedStrings.OrderUnsupportedType.Put(regMsg.OrderType, regMsg.TransactionId));
+        }
 
-			OrderPrice = regMsg.Price,
-			OrderVolume = regMsg.Volume,
-			Side = regMsg.Side,
-			SecurityId = regMsg.SecurityId,
-			OrderType = OrderTypes.Limit
-		};
+        var price = regMsg.OrderType == OrderTypes.Market ? (decimal?)null : regMsg.Price;
 
-		if (isDone)
-		{
-			//_unkOrds.SafeAdd(currency).Add(msg);
+        var order = await _restClient.RegisterOrder(regMsg.SecurityId.ToCurrency(), regMsg.Side, price, regMsg.OrderType.Value, regMsg.Volume, regMsg.TransactionId.To<string>(), AccountCode, cancellationToken)
+            ?? throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(regMsg.TransactionId));
 
-			var trades = GetTrades(cancellationToken);
+        SendProcessOrderStatusResult(order, regMsg);
+    }
 
-			await foreach(var trade in trades)
-			{
-				if (!_orderInfo.ContainsKey(trade.OrderId) && msg != null)
-				{
-					msg.OrderId = trade.OrderId;
+    /// <inheritdoc />
+    public override async ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
+    {
+        if (cancelMsg.OrderId == null)
+            throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(cancelMsg.OriginalTransactionId));
 
-					_orderInfo.Add(trade.OrderId, RefTuple.Create(regMsg.TransactionId, regMsg.Volume));
-					
-					// send only 1 time
-					SendOutMessage(msg);
-					msg = null;
-				}
+        if (!await _restClient.CancelOrder(cancelMsg.OrderId.Value, AccountCode, cancellationToken))
+        {
+            throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(cancelMsg.OriginalTransactionId));
+        }
+    }
 
-				ProcessTrade(trade);
-			}
-		}
-		else
-		{
-			_orderInfo.Add(reply.Command.OrderId, RefTuple.Create(regMsg.TransactionId, regMsg.Volume));
-			SendOutMessage(msg);
-		}
-
-		ProcessFunds(reply.Command.Funds);
-	}
-
-	/// <inheritdoc />
-	public override async ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
-	{
-		if (cancelMsg.OrderId == null)
-			throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(cancelMsg.OriginalTransactionId));
-
-		var reply = await _httpClient.CancelOrder(cancelMsg.OrderId.Value, cancellationToken);
-
-		//SendOutMessage(new ExecutionMessage
-		//{
-		//	OriginalTransactionId = cancelMsg.TransactionId,
-		//	OrderId = cancelMsg.OrderId,
-		//	OrderState = OrderStates.Done,
-		//	DataTypeEx = DataType.Transactions,
-		//	HasOrderInfo = true,
-		//	ServerTime = CurrentTime.ConvertToUtc(),
-		//});
-
-		await OrderStatusAsync(null, cancellationToken);
-		ProcessFunds(reply.Command.Funds);
-	}
-
-	private void ProcessOrder(Order order, decimal balance, long transId, long origTransId)
-	{
-		SendOutMessage(new ExecutionMessage
-		{
-			DataTypeEx = DataType.Transactions,
-			OrderId = order.Id,
-			TransactionId = transId,
-			OriginalTransactionId = origTransId,
-			OrderPrice = (decimal)order.Price,
-			Balance = balance,
-			OrderVolume = (decimal)order.Volume,
-			Side = order.Side.ToSide(),
-			SecurityId = order.Instrument.ToStockSharp(),
-			ServerTime = transId != 0 ? order.Timestamp.ApplyUtc() : CurrentTime.ConvertToUtc(),
-			PortfolioName = PortfolioName,
-			//OrderState = order.Status.ToOrderState(),
-			OrderState = OrderStates.Active,
-			HasOrderInfo = true,
-			OrderType = OrderTypes.Limit
-		});
-	}
-
-	//private const decimal _epsilon = 0.000000001m;
-
-	private void ProcessTrade(Trade trade)
-	{
-		var serverTime = trade.Timestamp.ApplyUtc();
-		var secId = trade.Instrument.ToStockSharp();
-		var side = trade.Side.ToSide();
-
-		var info = _orderInfo.TryGetValue(trade.OrderId);
-		if (info == null)
-		{
-			return;
-
-			//if (!_unkOrds.TryGetValue(trade.Instrument, out var que) || que.Count == 0)
-			//	return;
-
-			//// последни?неизвестны?орде??деке
-			//var msg = que.FindLast(o => o.SecurityId == secId);
-			//if (msg == null)
-			//	return;
-
-			//que.Remove(msg);
-			//msg.OrderId = trade.OrderId;
-			//msg.ServerTime = serverTime;
-			//msg.PortfolioName = PortfolioName;
-			//msg.Balance = msg.OrderVolume - (decimal)trade.Volume;
-
-			//var waitingMoreTrades = msg.Balance > _epsilon;
-			//if (waitingMoreTrades)
-			//	msg.OrderState = OrderStates.Active;
-
-			//SendOutMessage(msg);
-
-			//if (waitingMoreTrades)
-			//{
-			//	info = new RefPair<long, decimal>
-			//	{
-			//		First = msg.OriginalTransactionId,
-			//		Second = msg.OrderVolume.Value
-			//	};
-
-			//	_orderInfo.Add(trade.OrderId, info);
-			//}
-		}
-
-		SendOutMessage(new ExecutionMessage
-		{
-			DataTypeEx = DataType.Transactions,
-			OrderId = trade.OrderId,
-			OriginalTransactionId = info.First,
-			TradeId = trade.Id,
-			TradePrice = (decimal)trade.Price,
-			TradeVolume = (decimal)trade.Volume,
-			Side = side,
-			SecurityId = secId,
-			ServerTime = serverTime,
-			PortfolioName = PortfolioName,
-			OriginSide = trade.IsMyOrder ? side.Invert() : side,
-		});
-
-		//if (info == null || info.Second <= 0)
-		//	return;
-
-		info.Second -= (decimal)trade.Volume;
-
-		if (info.Second < 0)
-			throw new InvalidOperationException(LocalizedStrings.OrderBalanceNotEnough.Put(trade.OrderId, info.Second));
-
-		SendOutMessage(new ExecutionMessage
-		{
-			DataTypeEx = DataType.Transactions,
-			OrderId = trade.OrderId,
-			OriginalTransactionId = info.First,
-			Balance = info.Second,
-			OrderState = info.Second > 0 ? OrderStates.Active : OrderStates.Done,
-			HasOrderInfo = true,
-			ServerTime = serverTime,
-		});
-
-		if (info.Second == 0)
-			_orderInfo.Remove(trade.OrderId);
-	}
-
-	private void ProcessFunds(IEnumerable<KeyValuePair<string, double>> funds, bool init = false)
-	{
-		foreach (var fund in funds)
-		{
-			//var currency = fund.Key;
-
-			//if (!currency.StartsWithIgnoreCase("usd") &&
-			//	!currency.StartsWithIgnoreCase("eur") &&
-			//    !currency.StartsWithIgnoreCase("rur"))
-			//{
-			//	currency += "_usd";
-			//}
-
-			var pos = fund.Value.ToDecimal();
-
-			if (pos == null)
-				continue;
-
-			var secId = new SecurityId
-			{
-				SecurityCode = fund.Key,
-				BoardCode = BoardCodes.Btce,
-			};
-
-			if (init)
-			{
-				_positions[secId] = pos.Value;
-
-				if (pos.Value == 0)
-					continue;
-			}
-			else
-			{
-				if (_positions.ContainsKey(secId))
-				{
-					if (_positions[secId] == pos.Value)
-						continue;
-				}	
-			}
-			
-			SendOutMessage(this
-				.CreatePositionChangeMessage(PortfolioName, secId)
-				.Add(PositionChangeTypes.CurrentValue, pos.Value));
-		}
-	}
+    /// <inheritdoc />
+    public override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
+    {
+        if (!await _restClient.CancelAllOrders(AccountCode, cancellationToken))
+        {
+            throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(cancelMsg.OriginalTransactionId));
+        }
+    }
 
     /// <inheritdoc />
     public override async ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
     {
-        try
+        if (statusMsg != null)
         {
-            if (statusMsg == null)
+            SendSubscriptionReply(statusMsg.TransactionId);
+            _isOrderSubscribed = statusMsg.IsSubscribe;
+        }
+
+        if (!_isOrderSubscribed)
+        {
+            return;
+        }
+
+        var orders = await _restClient.GetOpenOrders(AccountCode, cancellationToken);
+
+        if (statusMsg == null)
+        {
+            if (orders != null && orders.Count > 0)
             {
-                var portfolioRefresh = false;
-
-                // Retrieve active orders
-                var orders = (await _httpClient.GetActiveOrders(cancellationToken)).Items.Values;
-
-                var ids = _orderInfo.Keys.ToSet();
-
                 foreach (var order in orders)
-                {
-                    ids.Remove(order.Id);
+                    SessionOnNewOrder(order);
 
-                    var info = _orderInfo.TryGetValue(order.Id);
+                var start = orders.Where(x => x.CreatedAt != null).Min(x => x.CreatedAt.Value);
+                var fills = await _restClient.GetFills(start, DateTime.UtcNow, AccountCode, cancellationToken);
 
-                    if (info == null)
-                    {
-                        info = RefTuple.Create(TransactionIdGenerator.GetNextId(), (decimal)order.Volume);
-
-                        _orderInfo.Add(order.Id, info);
-
-                        ProcessOrder(order, (decimal)order.Volume, info.First, 0);
-
-                        portfolioRefresh = true;
-                    }
-                    else
-                    {
-                        // Balance existing orders tracked by trades
-                    }
-                }
-
-                // Process trades
-                var trades = GetTrades(cancellationToken);
-
-                await foreach (var trade in trades)
-                {
-                    ProcessTrade(trade);
-                }
-
-                // Handle orders that are no longer active
-                foreach (var id in ids)
-                {
-                    portfolioRefresh = true;
-
-                    // Can be removed from ProcessTrade
-                    if (!_orderInfo.TryGetAndRemove(id, out var info))
-                        return;
-
-                    SendOutMessage(new ExecutionMessage
-                    {
-                        DataTypeEx = DataType.Transactions,
-                        HasOrderInfo = true,
-                        OrderId = id,
-                        OriginalTransactionId = info.First,
-                        ServerTime = CurrentTime.ConvertToUtc(),
-                        OrderState = OrderStates.Done,
-                    });
-                }
-
-                if (portfolioRefresh)
-                    await PortfolioLookupAsync(null, cancellationToken);
-            }
-            else
-            {
-                SendSubscriptionReply(statusMsg.TransactionId);
-
-                if (!statusMsg.IsSubscribe)
-                    return;
-
-                // Retrieve active orders
-                var orders = (await _httpClient.GetActiveOrders(cancellationToken)).Items.Values;
-
-                foreach (var order in orders)
-                {
-                    var info = RefTuple.Create(TransactionIdGenerator.GetNextId(), (decimal)order.Volume);
-
-                    _orderInfo.Add(order.Id, info);
-
-                    ProcessOrder(order, (decimal)order.Volume, info.First, statusMsg.TransactionId);
-                }
-
-                // Process trades
-                var trades = GetTrades(cancellationToken);
-
-                await foreach (var trade in trades)
-                {
-                    ProcessTrade(trade);
-                }
-
-                SendSubscriptionResult(statusMsg);
+                foreach (var fill in fills)
+                    SessionOnNewFill(fill);
             }
         }
-        catch (HttpRequestException httpEx)
+        else
         {
-            // Handle HTTP request-related exceptions
-            this.AddErrorLog($"HTTP request error in OrderStatusAsync: {httpEx.Message}");
-            //SendOutMessage(new ErrorMessage { Error = httpEx.Message });
-        }
-        catch (TaskCanceledException taskCanceledEx)
-        {
-            // Handle task cancellation, e.g., when a timeout or cancellation occurs
-            this.AddErrorLog($"Task canceled in OrderStatusAsync: {taskCanceledEx.Message}");
-            //SendOutMessage(new ErrorMessage { Error = "Task was canceled." });
-        }
-        catch (Exception ex)
-        {
-            // General exception handling for any other errors
-            this.AddErrorLog($"Unexpected error in OrderStatusAsync: {ex.Message}");
-            //SendOutMessage(new ErrorMessage { Error = "An unexpected error occurred during order status processing." });
+            if (!statusMsg.IsSubscribe)
+            {
+                return;
+            }
+
+            var fromTime = DateTime.UtcNow - _orderHistoryInterval;
+
+            do
+            {
+                var prevFromTime = fromTime;
+
+                var (histOrders, hasMoreData) = await _restClient.GetMarketOrderHistoryAndHasMoreOrders(AccountCode, fromTime, cancellationToken);
+
+                if (!histOrders.Any())
+                    break;
+
+                foreach (var order in histOrders.Where(o => o.ClientId != null).OrderBy(o => o.CreatedAt))
+                {
+                    if (order.CreatedAt > fromTime)
+                        fromTime = order.CreatedAt.Value;
+
+                    if (order.ClientId != null)
+                        SendProcessOrderStatusResult(order, statusMsg);
+                }
+
+                if (!hasMoreData || fromTime <= prevFromTime)
+                    break;
+            }
+            while (true);
+
+            var now = DateTime.UtcNow;
+
+            var startTime = now - _orderHistoryInterval;
+            var endTime = (now - startTime) < _orderHistoryInterval ? (startTime + (now - startTime)) : startTime + _orderHistoryInterval;
+
+            while (startTime < endTime)
+            {
+                var fills = await _restClient.GetFills(startTime, endTime, AccountCode, cancellationToken);
+
+                var lastTime = startTime;
+
+                foreach (var fill in fills.OrderBy(f => f.Time))
+                {
+                    if (fill.Time < startTime)
+                        continue;
+
+                    if (fill.Time > endTime)
+                        break;
+
+                    SessionOnNewFill(fill);
+
+                    lastTime = fill.Time;
+                }
+
+                if (fills.Count != _fillsPaginationLimit)
+                    break;
+
+                startTime = lastTime;
+            }
+
+            SendSubscriptionResult(statusMsg);
         }
     }
-
-
-    private async IAsyncEnumerable<Trade> GetTrades([EnumeratorCancellation]CancellationToken cancellationToken)
-	{
-		const int pageSize = 1000;
-		const int maxIter = 10;
-
-		var i = 0;
-
-		while (true)
-		{
-			var batch = (await _httpClient.GetMyTrades(_lastMyTradeId + 1, cancellationToken)).Items.Values;
-
-			var anyLess = false;
-
-			foreach (var t in batch)
-			{
-				if (_lastMyTradeId < t.Id)
-				{
-					_lastMyTradeId = t.Id;
-					yield return t;
-				}
-
-				anyLess = true;
-			}
-
-			if (anyLess || batch.Count < pageSize)
-				break;
-
-			if (++i >= maxIter)
-				break;
-		}
-	}
 
     /// <inheritdoc />
     public override async ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
     {
-        try
+        if (lookupMsg != null)
         {
-            if (lookupMsg != null)
-            {
-                SendSubscriptionReply(lookupMsg.TransactionId);
+            SendSubscriptionReply(lookupMsg.TransactionId);
 
-                if (!lookupMsg.IsSubscribe)
-                    return;
+            _portfolioLookupSubMessageTransactionID = lookupMsg.IsSubscribe ? lookupMsg.TransactionId : null;
+
+            if (!lookupMsg.IsSubscribe)
+            {
+                return;
             }
+        }
 
-            var transId = lookupMsg?.TransactionId ?? 0;
+        if (_portfolioLookupSubMessageTransactionID == null)
+        {
+            return;
+        }
 
-            SendOutMessage(new PortfolioMessage
+        SendOutMessage(new PortfolioMessage
+        {
+            PortfolioName = GetPortfolioName(),
+            BoardCode = BoardCodes.FTX,
+            OriginalTransactionId = (long)_portfolioLookupSubMessageTransactionID,
+        });
+
+        if (lookupMsg != null)
+        {
+            SendSubscriptionResult(lookupMsg);
+        }
+
+        var balances = await _restClient.GetBalances(AccountCode, cancellationToken);
+        if (balances != null)
+        {
+            foreach (var balance in balances)
             {
-                PortfolioName = PortfolioName,
-                BoardCode = BoardCodes.Btce,
-                OriginalTransactionId = transId
-            });
-
-            // Attempt to retrieve information from the external service
-            var reply = await _httpClient.GetInfo(cancellationToken);
-
-            // Process funds returned from the reply
-            ProcessFunds(reply.State.Funds, true);
-
-            // Check if trading rights are available
-            if (!reply.State.Rights.CanTrade)
-            {
-                SendOutMessage(this
-                    .CreatePortfolioChangeMessage(PortfolioName)
-                    .Add(PositionChangeTypes.State, PortfolioStates.Blocked));
+                var msg = this.CreatePositionChangeMessage(GetPortfolioName(), balance.Coin.ToStockSharp());
+                msg.TryAdd(PositionChangeTypes.CurrentValue, balance.Total, true);
+                msg.TryAdd(PositionChangeTypes.BlockedValue, balance.Total - balance.Free, true);
+                if (_portfolioLookupSubMessageTransactionID != null) msg.OriginalTransactionId = (long)_portfolioLookupSubMessageTransactionID;
+                SendOutMessage(msg);
             }
+        }
 
-            // Send subscription result if necessary
-            if (lookupMsg != null)
-                SendSubscriptionResult(lookupMsg);
+        var futures = await _restClient.GetFuturesPositions(AccountCode, cancellationToken);
 
-            _lastTimeBalanceCheck = CurrentTime;
-        }
-        catch (HttpRequestException httpEx)
+        foreach (var fut in futures)
         {
-            // Handle potential HTTP request-related exceptions (e.g., network issues)
-            this.AddErrorLog($"HTTP request error while fetching portfolio data: {httpEx.Message}");
-            // Optionally, send an error message or notification
-            //SendOutMessage(new ErrorMessage { Error = httpEx.Message });
-        }
-        catch (TaskCanceledException taskCanceledEx)
-        {
-            // Handle operation cancellation (e.g., timeout or cancellation token triggered)
-            this.AddErrorLog($"Task canceled while fetching portfolio data: {taskCanceledEx.Message}");
-            // Optionally, send a cancellation message or notification
-            //SendOutMessage(new ErrorMessage { Error = "Portfolio data retrieval was canceled." });
-        }
-        catch (Exception ex)
-        {
-            // Handle any other general exceptions
-            this.AddErrorLog($"Unexpected error in PortfolioLookupAsync: {ex.Message}");
-            // Optionally, send a general error message or notification
-            //SendOutMessage(new ErrorMessage { Error = "An unexpected error occurred while processing the portfolio lookup." });
+            var msg = this.CreatePositionChangeMessage(GetPortfolioName(), fut.Name.ToStockSharp());
+            msg.TryAdd(PositionChangeTypes.CurrentValue, fut.Cost, true);
+            msg.TryAdd(PositionChangeTypes.UnrealizedPnL, fut.UnrealizedPnl, true);
+            msg.TryAdd(PositionChangeTypes.AveragePrice, fut.EntryPrice, true);
+            if (_portfolioLookupSubMessageTransactionID != null) msg.OriginalTransactionId = (long)_portfolioLookupSubMessageTransactionID;
+            SendOutMessage(msg);
         }
     }
 
+    private string GetPortfolioName()
+    {
+        return AccountCode.IsEmpty(PortfolioName);
+    }
 }

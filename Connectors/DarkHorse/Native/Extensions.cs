@@ -1,64 +1,84 @@
-namespace StockSharp.DarkHorse.Native;
+﻿namespace StockSharp.DarkHorse.Native;
 
 static class Extensions
 {
-	public static string ToBtce(this Sides side)
+	/// <summary>
+	/// Market side to S# side
+	/// </summary>
+	/// <param name="type">Side</param>
+	/// <returns></returns>
+	public static Sides ToSide(this string type)
 	{
-		return side switch
-		{
-			Sides.Buy => "buy",
-			Sides.Sell => "sell",
-			_ => throw new ArgumentOutOfRangeException(nameof(side), side, LocalizedStrings.InvalidValue),
-		};
+		return type == "buy" ? Sides.Buy : Sides.Sell;
 	}
 
-	public static Sides ToSide(this string side)
+	/// <summary>
+	/// Market order state to S# order state
+	/// </summary>
+	/// <param name="status">State</param>
+	/// <returns></returns>
+	public static OrderStates ToOrderState(this string status)
 	{
-		return side switch
-		{
-			"sell" or "ask" => Sides.Sell,
-			"buy" or "bid" => Sides.Buy,
-			_ => throw new ArgumentOutOfRangeException(nameof(side), side, LocalizedStrings.InvalidValue),
-		};
+		if (status == "new" || status == "open") return OrderStates.Active;
+		return OrderStates.Done;
 	}
 
-	public static OrderStates ToOrderState(this int status)
+	/// <summary>
+	/// Market order type to S# order type
+	/// </summary>
+	/// <param name="type">Type</param>
+	/// <returns></returns>
+	public static OrderTypes ToOrderType(this string type)
 	{
-		return status switch
-		{
-			0 => OrderStates.Active,
-			// executed
-			1 or 2 or 3 => OrderStates.Done,
-			_ => throw new ArgumentOutOfRangeException(nameof(status), status, LocalizedStrings.InvalidValue),
-		};
+		return type == "market" ? OrderTypes.Market : OrderTypes.Limit;
 	}
 
-	//public static DateTime ToTime(this long timeStamp)
-	//{
-	//	return Converter.GregorianStart + TimeSpan.FromMilliseconds(timeStamp);
-	//}
-
+	/// <summary>
+	/// Security ID to currency string
+	/// </summary>
+	/// <param name="securityId">ID</param>
+	/// <returns></returns>
 	public static string ToCurrency(this SecurityId securityId)
 	{
-		return securityId.SecurityCode.Replace('/', '_').ToLowerInvariant();
+		return securityId.SecurityCode;
 	}
 
-	public static SecurityId ToStockSharp(this string currency)
+    /// <summary>
+    /// Security ID to currency string
+    /// </summary>
+    /// <param name="securityId">ID</param>
+    /// <returns></returns>
+    public static string ToSymbol(this SecurityId securityId)
+    {
+        return securityId.SecurityCode;
+    }
+
+    /// <summary>
+    /// Currency string to S# Security Id
+    /// </summary>
+    /// <param name="currency"></param>
+    /// <returns></returns>
+    public static SecurityId ToStockSharp(this string currency)
 	{
 		return new SecurityId
 		{
-			SecurityCode = currency.Replace('_', '/').ToUpperInvariant(),
-			BoardCode = BoardCodes.Btce,
+			SecurityCode = currency,
+			BoardCode = BoardCodes.FTX,
 		};
 	}
 
-	//public static string ToStockSharpCode(this string btceCode)
-	//{
-	//	return btceCode.Replace('_', '/').ToUpperInvariant();
-	//}
 
-	//public static string ToBtceCode(this string stockSharpCode)
-	//{
-	//	return stockSharpCode.Replace('/', '_').ToLowerInvariant();
-	//}
+    /// <summary>
+    /// Symbol string to S# Security Id
+    /// </summary>
+    /// <param name="symbol"></param>
+    /// <returns></returns>
+    public static SecurityId ToStockSharpFromDarkHorse(this string symbol)
+    {
+        return new SecurityId
+        {
+            SecurityCode = symbol,
+            BoardCode = BoardCodes.Krx,
+        };
+    }
 }

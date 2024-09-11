@@ -11,10 +11,57 @@ using StockSharp.Algo;
 using StockSharp.Algo.Storages;
 using StockSharp.Algo.Storages.Csv;
 using StockSharp.BusinessEntities;
+using StockSharp.DarkHorse;
+using System.Threading;
+using System.Security;
 
 public partial class MainWindow
 {
-	public MainWindow()
+    private DarkHorseMessageAdapter darkhorseMessageAdapter;
+    public class DarkHorseIdGenerator : Ecng.Common.IdGenerator
+    {
+        private long _currentId;
+
+        public DarkHorseIdGenerator()
+        {
+            _currentId = 1;
+        }
+
+        public override long GetNextId()
+        {
+            return Interlocked.Increment(ref _currentId);
+        }
+    }
+
+    private static SecureString ToSecureString(string str)
+    {
+        var secureString = new SecureString();
+        foreach (char c in str)
+        {
+            secureString.AppendChar(c);
+        }
+        secureString.MakeReadOnly();
+        return secureString;
+    }
+
+    private void InitDarkHorseMessageAdapter()
+    {
+        darkhorseMessageAdapter = new DarkHorseMessageAdapter(new DarkHorseIdGenerator());
+        var apiKey = ToSecureString("angelpie"); // Replace with your actual API key
+        var apiSecret = ToSecureString("orion"); // Replace with your actual API secret
+
+        darkhorseMessageAdapter.Key = apiKey;
+        darkhorseMessageAdapter.Secret = apiSecret;
+
+        var connector = MainPanel.Connector;
+
+        if (connector == null)
+            return;
+        // Add the Coinbase adapter to the connector
+        connector.Adapter.InnerAdapters.Add(darkhorseMessageAdapter);
+    }
+
+    public MainWindow()
 	{
 		InitializeComponent();
 		Instance = this;
@@ -68,8 +115,9 @@ public partial class MainWindow
 
 		if (connector == null)
 			return;
+		InitDarkHorseMessageAdapter();
 
-		connector.Adapter.StorageSettings.Drive = new LocalMarketDataDrive(path.ToFullPath());
+        connector.Adapter.StorageSettings.Drive = new LocalMarketDataDrive(path.ToFullPath());
 		connector.LookupAll();
 	}
 }

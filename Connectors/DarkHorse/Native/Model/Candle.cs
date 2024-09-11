@@ -1,4 +1,4 @@
-﻿namespace StockSharp.DarkHorse.Native;
+﻿namespace StockSharp.DarkHorse.Native.Model;
 
 [Obfuscation(Feature = "renaming", ApplyToMembers = true)]
 internal class Candle

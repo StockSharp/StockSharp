@@ -10,6 +10,7 @@ using StockSharp.Messages;
 using StockSharp.Xaml.Charting;
 using StockSharp.Charting;
 
+
 partial class ChartWindow
 {
 	private readonly Connector _connector;

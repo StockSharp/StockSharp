@@ -9,9 +9,27 @@ using StockSharp.BusinessEntities;
 [OrderCondition(typeof(DarkHorseCondition))]
 public partial class DarkHorseMessageAdapter
 {
-	private HttpClient _httpClient;
-	private PusherClient _pusherClient;
-	private DateTimeOffset? _lastTimeBalanceCheck;
+    private DarkHorseRestClient _restClient;
+    private DarkHorseWebSocketClient _wsClient;
+    private DateTimeOffset _lastStateUpdate;
+
+    private readonly TimeSpan[] _timeFrames = new[]
+    {
+        TimeSpan.FromSeconds(15),
+        TimeSpan.FromSeconds(60),
+        TimeSpan.FromSeconds(300),
+        TimeSpan.FromSeconds(900),
+        TimeSpan.FromSeconds(3600),
+        TimeSpan.FromSeconds(14400),
+        TimeSpan.FromSeconds(86400),
+    };
+
+    /// <inheritdoc />
+    protected override IEnumerable<TimeSpan> TimeFrames => _timeFrames;
+
+    /// <inheritdoc />
+    public override IEnumerable<int> SupportedOrderBookDepths => new[] { 100 };
+
 	
 	/// <summary>
 	/// Initializes a new instance of the <see cref="DarkHorseMessageAdapter"/>.
@@ -20,22 +38,22 @@ public partial class DarkHorseMessageAdapter
 	public DarkHorseMessageAdapter(IdGenerator transactionIdGenerator)
 		: base(transactionIdGenerator)
 	{
-		HeartbeatInterval = DefaultHeartbeatInterval;
+        HeartbeatInterval = DefaultHeartbeatInterval;
 
-		this.AddMarketDataSupport();
-		this.AddTransactionalSupport();
-		this.RemoveSupportedMessage(MessageTypes.Portfolio);
-		this.RemoveSupportedMessage(MessageTypes.OrderReplace);
+        this.AddMarketDataSupport();
+        this.AddTransactionalSupport();
+        this.RemoveSupportedMessage(MessageTypes.Portfolio);
+        this.RemoveSupportedMessage(MessageTypes.OrderReplace);
 
-		//this.AddSupportedMarketDataType(DataType.Ticks);
-		//this.AddSupportedMarketDataType(DataType.MarketDepth);
-		//this.AddSupportedMarketDataType(DataType.Level1);
-        //this.AddSupportedMarketDataType(DataType.CandleTimeFrame);
 
-        //this.AddSupportedResultMessage(MessageTypes.SecurityLookup);
-		//this.AddSupportedResultMessage(MessageTypes.PortfolioLookup);
-		//this.AddSupportedResultMessage(MessageTypes.OrderStatus);
-	}
+        this.AddSupportedMarketDataType(DataType.Ticks);
+        this.AddSupportedMarketDataType(DataType.MarketDepth);
+        this.AddSupportedMarketDataType(DataType.Level1);
+        this.AddSupportedMarketDataType(DataType.CandleTimeFrame);
+
+        this.AddSupportedResultMessage(MessageTypes.SecurityLookup);
+        this.AddSupportedResultMessage(MessageTypes.PortfolioLookup);
+    }
 
 	/// <inheritdoc />
 	public override bool IsAllDownloadingSupported(DataType dataType)
@@ -44,141 +62,120 @@ public partial class DarkHorseMessageAdapter
 	/// <inheritdoc />
 	public override bool IsSupportOrderBookIncrements => true;
 
-	/// <inheritdoc />
-	public override string[] AssociatedBoards { get; } = new[] { BoardCodes.Btce };
+    /// <inheritdoc />
+    public override string[] AssociatedBoards { get; } = new[] { BoardCodes.FTX };
 
-	private void SubscribePusherClient()
-	{
-		_pusherClient.Connected += SessionOnPusherConnected;
-		_pusherClient.Disconnected += SessionOnPusherDisconnected;
-		_pusherClient.Error += SessionOnPusherError;
-		_pusherClient.OrderBookChanged += SessionOnOrderBookChanged;
-		_pusherClient.NewTrades += SessionOnNewTrades;
-	}
+    private void SubscribeWsClient()
+    {
+        _wsClient.Connected += SessionOnWsConnected;
+        _wsClient.Disconnected += SessionOnWsDisconnected;
+        _wsClient.Error += SessionOnWsError;
+        _wsClient.NewLevel1 += SessionOnNewLevel1;
+        _wsClient.NewOrderBook += SessionOnNewOrderBook;
+        _wsClient.NewTrade += SessionOnNewTrade;
+        _wsClient.NewFill += SessionOnNewFill;
+        _wsClient.NewOrder += SessionOnNewOrder;
+    }
 
-	private void UnsubscribePusherClient()
-	{
-		_pusherClient.Connected -= SessionOnPusherConnected;
-		_pusherClient.Disconnected -= SessionOnPusherDisconnected;
-		_pusherClient.Error -= SessionOnPusherError;
-		_pusherClient.OrderBookChanged -= SessionOnOrderBookChanged;
-		_pusherClient.NewTrades -= SessionOnNewTrades;
-	}
+    private void UnsubscribeWsClient()
+    {
+        _wsClient.Connected -= SessionOnWsConnected;
+        _wsClient.Disconnected -= SessionOnWsDisconnected;
+        _wsClient.Error -= SessionOnWsError;
+        _wsClient.NewLevel1 -= SessionOnNewLevel1;
+        _wsClient.NewOrderBook -= SessionOnNewOrderBook;
+        _wsClient.NewTrade -= SessionOnNewTrade;
+        _wsClient.NewFill -= SessionOnNewFill;
+        _wsClient.NewOrder -= SessionOnNewOrder;
+    }
 
-	/// <inheritdoc />
-	public override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
-	{
-		_orderBooks.Clear();
+    /// <inheritdoc />
+    public override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+    {
+        _lastStateUpdate = default;
 
-		_orderInfo.Clear();
-		//_unkOrds.Clear();
-		_positions.Clear();
+        _restClient?.Dispose();
+        _restClient = null;
 
-		_lastMyTradeId = 0;
-		_lastTimeBalanceCheck = null;
+        if (_wsClient != null)
+        {
+            UnsubscribeWsClient();
 
-		if (_httpClient != null)
-		{
-			try
-			{
-				_httpClient.Dispose();
-			}
-			catch (Exception ex)
-			{
-				SendOutError(ex);
-			}
+            _wsClient.Dispose();
+            _wsClient = null;
+        }
 
-			_httpClient = null;
-		}
+        _portfolioLookupSubMessageTransactionID = default;
+        _isOrderSubscribed = default;
 
-		if (_pusherClient != null)
-		{
-			try
-			{
-				UnsubscribePusherClient();
-				_pusherClient.Disconnect();
-			}
-			catch (Exception ex)
-			{
-				SendOutError(ex);
-			}
+        SendOutMessage(new ResetMessage());
+        return default;
+    }
 
-			_pusherClient = null;
-		}
+    /// <inheritdoc />
+    public override ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
+    {
+        if (this.IsTransactional())
+        {
+            if (Key.IsEmpty())
+                throw new InvalidOperationException(LocalizedStrings.KeyNotSpecified);
 
-		SendOutMessage(new ResetMessage());
-		return default;
-	}
+            if (Secret.IsEmpty())
+                throw new InvalidOperationException(LocalizedStrings.SecretNotSpecified);
+        }
 
-	/// <inheritdoc />
-	public override ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
-	{
-		if (this.IsTransactional())
-		{
-			if (Key.IsEmpty())
-				throw new InvalidOperationException(LocalizedStrings.KeyNotSpecified);
+        if (_restClient != null)
+            throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
 
-			if (Secret.IsEmpty())
-				throw new InvalidOperationException(LocalizedStrings.SecretNotSpecified);
-		}
+        if (_wsClient != null)
+            throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
 
-		if (_httpClient != null)
-			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
+        _restClient = new(Key, Secret) { Parent = this };
+        _wsClient = new(Key, Secret, AccountCode) { Parent = this };
 
-		if (_pusherClient != null)
-			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
+        SubscribeWsClient();
+        return _wsClient.Connect(cancellationToken);
+    }
 
-		_httpClient = new HttpClient(Address, Key, Secret);
+    /// <inheritdoc />
+    public override ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
+    {
+        if (_restClient == null)
+            throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
 
-		_pusherClient = new PusherClient { Parent = this };
-		SubscribePusherClient();
-		return _pusherClient.Connect(cancellationToken);
-	}
+        if (_wsClient == null)
+            throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
 
-	/// <inheritdoc />
-	public override ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
-	{
-		if (_httpClient == null)
-			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
+        _wsClient.Disconnect();
 
-		if (_pusherClient == null)
-			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
+        return default;
+    }
 
-		_httpClient.Dispose();
-		_httpClient = null;
+    /// <inheritdoc />
+    public override async ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
+    {
+        if ((DateTime.UtcNow - _lastStateUpdate).TotalMilliseconds >= 1000)
+        {
+            await PortfolioLookupAsync(null, cancellationToken);
+            _lastStateUpdate = DateTime.UtcNow;
+        }
 
-		_pusherClient.Disconnect();
-		return default;
-	}
+        if (_wsClient is DarkHorseWebSocketClient sc)
+            await sc.ProcessPing(cancellationToken);
+    }
 
-	/// <inheritdoc />
-	public override async ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
-	{
-		//if (_orderInfo.Count > 0/* || _unkOrds.Count > 0*/)
-		//{
-		//	await OrderStatusAsync(null, cancellationToken);
-		//	await PortfolioLookupAsync(null, cancellationToken);
-		//}
+    private void SessionOnWsConnected()
+    {
+        SendOutMessage(new ConnectMessage());
+    }
 
-		//if (BalanceCheckInterval > TimeSpan.Zero &&
-		//	(_lastTimeBalanceCheck == null || (CurrentTime - _lastTimeBalanceCheck) > BalanceCheckInterval))
-		//{
-		//	await PortfolioLookupAsync(null, cancellationToken);
-		//}
-	}
+    private void SessionOnWsError(Exception exception)
+    {
+        SendOutError(exception);
+    }
 
-	private void SessionOnPusherConnected()
-	{
-		SendOutMessage(new ConnectMessage());
-	}
-
-	private void SessionOnPusherError(Exception exception)
-	{
-		SendOutError(exception);
-	}
-
-	private void SessionOnPusherDisconnected(bool expected)
-	{
-		SendOutDisconnectMessage(expected);
-	}
+    private void SessionOnWsDisconnected(bool expected)
+    {
+        SendOutDisconnectMessage(expected);
+    }
 }

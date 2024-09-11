@@ -8,7 +8,7 @@ using Ecng.ComponentModel;
 /// <summary>
 /// The messages adapter for DarkHorse.
 /// </summary>
-[MediaIcon("darkhorse.svg")]
+[MediaIcon("ctrader_logo.svg")]
 [Doc("topics/api/connectors/crypto_exchanges/wex_btc_e.html")]
 [Display(
 	ResourceType = typeof(LocalizedStrings),
@@ -63,8 +63,28 @@ public partial class DarkHorseMessageAdapter : AsyncMessageAdapter, IKeySecretAd
 			_address = value;
 		}
 	}
+	private string _accountCode;
+    /// <summary>
+    /// SubAccount name from GUI
+    /// </summary>
+    [Display(
+                ResourceType = typeof(LocalizedStrings),
+                Name = LocalizedStrings.SubAccKey,
+                Description = LocalizedStrings.SubAccKey,
+                GroupName = LocalizedStrings.ConnectionKey,
+                Order = 3)]
+    public string AccountCode
+    {
+        get => _accountCode;
+        set
+        {
+            if (value.IsEmpty())
+                throw new ArgumentNullException(nameof(value));
 
-	private TimeSpan _balanceCheckInterval;
+            _accountCode = value;
+        }
+    }
+    private TimeSpan _balanceCheckInterval;
 
 	/// <summary>
 	/// Balance check interval. Required in case of deposit and withdraw actions.
@@ -74,7 +94,7 @@ public partial class DarkHorseMessageAdapter : AsyncMessageAdapter, IKeySecretAd
 		Name = LocalizedStrings.BalanceKey,
 		Description = LocalizedStrings.BalanceCheckIntervalKey,
 		GroupName = LocalizedStrings.ConnectionKey,
-		Order = 3)]
+		Order = 4)]
 	public TimeSpan BalanceCheckInterval
 	{
 		get => _balanceCheckInterval;
@@ -90,7 +110,7 @@ public partial class DarkHorseMessageAdapter : AsyncMessageAdapter, IKeySecretAd
 	/// <summary>
 	/// Default value for <see cref="Address"/>.
 	/// </summary>
-	public const string DefaultDomain = "https://wex.nz/";
+	public const string DefaultDomain = "http://localhost:80/";
 
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
@@ -100,7 +120,8 @@ public partial class DarkHorseMessageAdapter : AsyncMessageAdapter, IKeySecretAd
 		storage.SetValue(nameof(Address), Address);
 		storage.SetValue(nameof(Key), Key);
 		storage.SetValue(nameof(Secret), Secret);
-		storage.SetValue(nameof(BalanceCheckInterval), BalanceCheckInterval);
+        storage.SetValue(nameof(AccountCode), AccountCode);
+        storage.SetValue(nameof(BalanceCheckInterval), BalanceCheckInterval);
 	}
 
 	/// <inheritdoc />
@@ -111,7 +132,8 @@ public partial class DarkHorseMessageAdapter : AsyncMessageAdapter, IKeySecretAd
 		Address = storage.GetValue<string>(nameof(Address));
 		Key = storage.GetValue<SecureString>(nameof(Key));
 		Secret = storage.GetValue<SecureString>(nameof(Secret));
-		BalanceCheckInterval = storage.GetValue<TimeSpan>(nameof(BalanceCheckInterval));
+        AccountCode = storage.GetValue<string>(nameof(AccountCode));
+        BalanceCheckInterval = storage.GetValue<TimeSpan>(nameof(BalanceCheckInterval));
 	}
 
 	/// <inheritdoc />

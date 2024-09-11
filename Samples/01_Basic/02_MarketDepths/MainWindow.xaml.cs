@@ -47,16 +47,16 @@ public partial class MainWindow
     public MainWindow()
 	{
 		InitializeComponent();
+        InitDarkHorseMessageAdapter();
 
-		// registering all connectors
-		ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(_connector.Adapter.InnerAdapters));
+        // registering all connectors
+        ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(_connector.Adapter.InnerAdapters));
 
 		if (File.Exists(_connectorFile))
 		{
 			_connector.Load(_connectorFile.Deserialize<SettingsStorage>());
 		}
 
-		InitDarkHorseMessageAdapter();
 
     }
 
