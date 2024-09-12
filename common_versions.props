@@ -1,6 +1,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>11.0</LangVersion>
+    <LangVersion>12.0</LangVersion>
 
     <EcngVer>1.0.*</EcngVer>
     <SampleHistoryDataVersion>1.*</SampleHistoryDataVersion>
