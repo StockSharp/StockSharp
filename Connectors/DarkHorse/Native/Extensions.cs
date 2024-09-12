@@ -1,4 +1,6 @@
-﻿namespace StockSharp.DarkHorse.Native;
+﻿using System.Runtime.CompilerServices;
+
+namespace StockSharp.DarkHorse.Native;
 
 static class Extensions
 {
@@ -73,7 +75,7 @@ static class Extensions
     /// </summary>
     /// <param name="symbol"></param>
     /// <returns></returns>
-    public static SecurityId ToStockSharpFromDarkHorse(this string symbol)
+    public static SecurityId ToStockSharpFromSymbol(this string symbol)
     {
         return new SecurityId
         {

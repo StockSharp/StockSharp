@@ -63,7 +63,7 @@ public partial class DarkHorseMessageAdapter
 	public override bool IsSupportOrderBookIncrements => true;
 
     /// <inheritdoc />
-    public override string[] AssociatedBoards { get; } = new[] { BoardCodes.FTX };
+    public override string[] AssociatedBoards { get; } = new[] { BoardCodes.Krx };
 
     private void SubscribeWsClient()
     {

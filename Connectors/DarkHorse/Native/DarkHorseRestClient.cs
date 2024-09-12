@@ -32,7 +32,12 @@ class DarkHorseRestClient : BaseLogReceiver
 		return ProcessRequest<List<Market>>(Method.Get, "api/markets", default, cancellationToken);
 	}
 
-	public Task<List<Trade>> GetMarketTrades(string symbol, DateTime start, DateTime end, CancellationToken cancellationToken)
+    public Task<List<Symbol>> GetSymbols(CancellationToken cancellationToken)
+    {
+        return ProcessRequest<List<Symbol>>(Method.Get, "api/symbols", default, cancellationToken);
+    }
+
+    public Task<List<Trade>> GetMarketTrades(string symbol, DateTime start, DateTime end, CancellationToken cancellationToken)
 	{
 		return ProcessRequest<List<Trade>>(Method.Get, $"api/markets/trades?symbol={symbol}&start_time={GetSecondsFromEpochStart(start)}&end_time={GetSecondsFromEpochStart(end)}", default, cancellationToken);
 	}
@@ -53,7 +58,12 @@ class DarkHorseRestClient : BaseLogReceiver
 		return ProcessSignedRequest<List<Balance>>(Method.Get, "api/balances", accountName, default, cancellationToken);
 	}
 
-	public Task<List<Futures>> GetFuturesPositions(string accountName, CancellationToken cancellationToken)
+    public Task<List<Balance>> GetPortfolio(string accountName, CancellationToken cancellationToken)
+    {
+        return ProcessSignedRequest<List<Balance>>(Method.Get, "api/portfolio", accountName, default, cancellationToken);
+    }
+
+    public Task<List<Futures>> GetFuturesPositions(string accountName, CancellationToken cancellationToken)
 	{
 		return ProcessSignedRequest<List<Futures>>(Method.Get, "api/positions", accountName, default, cancellationToken);
 	}

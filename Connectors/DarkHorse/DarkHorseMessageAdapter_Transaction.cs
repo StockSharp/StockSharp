@@ -243,7 +243,7 @@ partial class DarkHorseMessageAdapter
         SendOutMessage(new PortfolioMessage
         {
             PortfolioName = GetPortfolioName(),
-            BoardCode = BoardCodes.FTX,
+            BoardCode = BoardCodes.Krx,
             OriginalTransactionId = (long)_portfolioLookupSubMessageTransactionID,
         });
 

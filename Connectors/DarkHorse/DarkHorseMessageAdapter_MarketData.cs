@@ -214,7 +214,7 @@ partial class DarkHorseMessageAdapter
     {
         var secTypes = lookupMsg.GetSecurityTypes();
         var left = lookupMsg.Count ?? long.MaxValue;
-
+        /*
         var markets = await _restClient.GetMarkets(cancellationToken);
 
         foreach (var info in markets)
@@ -228,6 +228,32 @@ partial class DarkHorseMessageAdapter
                 VolumeStep = info.SizeIncrement,
                 OriginalTransactionId = lookupMsg.TransactionId,
                 PriceStep = info.PriceIncrement
+            };
+
+            if (!secMsg.IsMatch(lookupMsg, secTypes))
+                continue;
+
+            SendOutMessage(secMsg);
+
+            if (--left <= 0)
+                break;
+        }
+        */
+
+        var symbols = await _restClient.GetSymbols(cancellationToken);
+
+        foreach (var symbol in symbols)
+        {
+            var secMsg = new SecurityMessage
+            {
+                SecurityId = symbol.SymbolCode.ToStockSharpFromSymbol(),
+                SecurityType = symbol.Type == "future" ? SecurityTypes.Future : SecurityTypes.CryptoCurrency,
+                Decimals = int.Parse(symbol.Decimal),
+                MinVolume = decimal.Parse(symbol.tickSize) * (decimal)Math.Pow(10, int.Parse(symbol.Decimal)),
+                Name = symbol.Name,
+                VolumeStep = decimal.Parse(symbol.tickSize) * (decimal)Math.Pow(10, int.Parse(symbol.Decimal)),
+                OriginalTransactionId = lookupMsg.TransactionId,
+                PriceStep = decimal.Parse(symbol.tickSize)
             };
 
             if (!secMsg.IsMatch(lookupMsg, secTypes))
