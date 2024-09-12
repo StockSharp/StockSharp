@@ -15,6 +15,7 @@ using StockSharp.Xaml;
 using StockSharp.DarkHorse;
 using System.Threading;
 using System.Security;
+using System;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml
@@ -57,6 +58,12 @@ public partial class MainWindow
 			_connector.Load(_connectorFile.Deserialize<SettingsStorage>());
 		}
 
+        var portfolios = _connector.Portfolios;
+        // Assuming 'connector' is already initialized and contains portfolios
+        foreach (var portfolio in _connector.Portfolios)
+        {
+            Console.WriteLine($"Portfolio Name: {portfolio.Name}");
+        }
 
     }
 

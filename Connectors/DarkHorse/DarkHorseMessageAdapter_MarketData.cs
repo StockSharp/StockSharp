@@ -214,32 +214,7 @@ partial class DarkHorseMessageAdapter
     {
         var secTypes = lookupMsg.GetSecurityTypes();
         var left = lookupMsg.Count ?? long.MaxValue;
-        /*
-        var markets = await _restClient.GetMarkets(cancellationToken);
-
-        foreach (var info in markets)
-        {
-            var secMsg = new SecurityMessage
-            {
-                SecurityId = info.Name.ToStockSharp(),
-                SecurityType = info.Type == "future" ? SecurityTypes.Future : SecurityTypes.CryptoCurrency,
-                MinVolume = info.MinProvideSize,
-                Name = info.Name,
-                VolumeStep = info.SizeIncrement,
-                OriginalTransactionId = lookupMsg.TransactionId,
-                PriceStep = info.PriceIncrement
-            };
-
-            if (!secMsg.IsMatch(lookupMsg, secTypes))
-                continue;
-
-            SendOutMessage(secMsg);
-
-            if (--left <= 0)
-                break;
-        }
-        */
-
+       
         var symbols = await _restClient.GetSymbols(cancellationToken);
 
         foreach (var symbol in symbols)

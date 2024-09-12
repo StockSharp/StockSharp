@@ -58,6 +58,11 @@ class DarkHorseRestClient : BaseLogReceiver
 		return ProcessSignedRequest<List<Balance>>(Method.Get, "api/balances", accountName, default, cancellationToken);
 	}
 
+    public Task<List<Account>> GetAccounts(string accountName, CancellationToken cancellationToken)
+    {
+        return ProcessSignedRequest<List<Account>>(Method.Get, "api/accounts", accountName, default, cancellationToken);
+    }
+
     public Task<List<Balance>> GetPortfolio(string accountName, CancellationToken cancellationToken)
     {
         return ProcessSignedRequest<List<Balance>>(Method.Get, "api/portfolio", accountName, default, cancellationToken);

@@ -1,5 +1,6 @@
 namespace StockSharp.DarkHorse;
-
+//using StockSharp.Xaml;
+using StockSharp.BusinessEntities;
 using StockSharp.DarkHorse.Native.Model;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
@@ -12,6 +13,9 @@ partial class DarkHorseMessageAdapter
 
     private long? _portfolioLookupSubMessageTransactionID;
     private bool _isOrderSubscribed;
+
+    private readonly Dictionary<string, Portfolio> _portfolios = new();
+
 
     private string PortfolioName => nameof(DarkHorse) + "_" + Key.ToId().To<string>();
 
@@ -31,7 +35,7 @@ partial class DarkHorseMessageAdapter
         });
     }
 
-    private void SendProcessOrderStatusResult(Order order, OrderMessage message)
+    private void SendProcessOrderStatusResult(Native.Model.Order order, OrderMessage message)
     {
         if (!long.TryParse(order.ClientId, out var transId))
             return;
@@ -56,7 +60,7 @@ partial class DarkHorseMessageAdapter
 
         });
     }
-    private void SessionOnNewOrder(Order order)
+    private void SessionOnNewOrder(Native.Model.Order order)
     {
         if (!long.TryParse(order.ClientId, out var transId))
             return;
@@ -223,59 +227,43 @@ partial class DarkHorseMessageAdapter
     /// <inheritdoc />
     public override async ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
     {
-        if (lookupMsg != null)
-        {
-            SendSubscriptionReply(lookupMsg.TransactionId);
+        if (lookupMsg == null) return;
+        var transId = lookupMsg.TransactionId;
 
-            _portfolioLookupSubMessageTransactionID = lookupMsg.IsSubscribe ? lookupMsg.TransactionId : null;
+        SendSubscriptionReply(transId);
 
-            if (!lookupMsg.IsSubscribe)
-            {
-                return;
-            }
-        }
-
-        if (_portfolioLookupSubMessageTransactionID == null)
-        {
+        if (!lookupMsg.IsSubscribe)
             return;
-        }
 
-        SendOutMessage(new PortfolioMessage
+        var accounts = await _restClient.GetAccounts("", cancellationToken);
+
+        if (accounts == null) return;
+
+        foreach (var account in accounts)
         {
-            PortfolioName = GetPortfolioName(),
-            BoardCode = BoardCodes.Krx,
-            OriginalTransactionId = (long)_portfolioLookupSubMessageTransactionID,
-        });
+            SendOutMessage(new PortfolioMessage
+            {
+                PortfolioName = account.AccountCode,
+                BoardCode = BoardCodes.Krx,
+                OriginalTransactionId = transId,
+            });
+
+            var portfolio = new Portfolio
+            {
+                Name = account.AccountCode,
+                BeginValue = 10000,
+                CurrentValue = 10000,
+            };
+
+            _portfolios[account.AccountCode] = portfolio;
+        }
 
         if (lookupMsg != null)
         {
             SendSubscriptionResult(lookupMsg);
         }
 
-        var balances = await _restClient.GetBalances(AccountCode, cancellationToken);
-        if (balances != null)
-        {
-            foreach (var balance in balances)
-            {
-                var msg = this.CreatePositionChangeMessage(GetPortfolioName(), balance.Coin.ToStockSharp());
-                msg.TryAdd(PositionChangeTypes.CurrentValue, balance.Total, true);
-                msg.TryAdd(PositionChangeTypes.BlockedValue, balance.Total - balance.Free, true);
-                if (_portfolioLookupSubMessageTransactionID != null) msg.OriginalTransactionId = (long)_portfolioLookupSubMessageTransactionID;
-                SendOutMessage(msg);
-            }
-        }
-
-        var futures = await _restClient.GetFuturesPositions(AccountCode, cancellationToken);
-
-        foreach (var fut in futures)
-        {
-            var msg = this.CreatePositionChangeMessage(GetPortfolioName(), fut.Name.ToStockSharp());
-            msg.TryAdd(PositionChangeTypes.CurrentValue, fut.Cost, true);
-            msg.TryAdd(PositionChangeTypes.UnrealizedPnL, fut.UnrealizedPnl, true);
-            msg.TryAdd(PositionChangeTypes.AveragePrice, fut.EntryPrice, true);
-            if (_portfolioLookupSubMessageTransactionID != null) msg.OriginalTransactionId = (long)_portfolioLookupSubMessageTransactionID;
-            SendOutMessage(msg);
-        }
+        
     }
 
     private string GetPortfolioName()

@@ -14,6 +14,7 @@ using StockSharp.BusinessEntities;
 using StockSharp.DarkHorse;
 using System.Threading;
 using System.Security;
+using System;
 
 public partial class MainWindow
 {
@@ -119,5 +120,12 @@ public partial class MainWindow
 
         connector.Adapter.StorageSettings.Drive = new LocalMarketDataDrive(path.ToFullPath());
 		connector.LookupAll();
-	}
+
+		var portfolios = connector.Portfolios;
+        // Assuming 'connector' is already initialized and contains portfolios
+        foreach (var portfolio in connector.Portfolios)
+        {
+            Console.WriteLine($"Portfolio Name: {portfolio.Name}");
+        }
+    }
 }
