@@ -5,14 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
+using System.Drawing;
 
 using Ecng.Collections;
 using Ecng.Common;
 using Ecng.ComponentModel;
 using Ecng.Xaml;
 using Ecng.Serialization;
+using Ecng.Drawing;
 
-using StockSharp.Algo;
 using StockSharp.Algo.Candles;
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Storages;
@@ -133,7 +134,7 @@ public partial class MainWindow
 			};
 
 			_indicatorElement = Chart.CreateIndicatorElement();
-			_indicatorElement.DrawStyle = ChartIndicatorDrawStyles.Line;
+			_indicatorElement.DrawStyle = DrawStyles.Line;
 			_indicatorElement.AntiAliasing = true;
 			_indicatorElement.StrokeThickness = 1;
 			_indicatorElement.Color = System.Drawing.Color.Blue;
@@ -428,6 +429,9 @@ class MyMovingAverage : IIndicator
 	Type IIndicator.ResultType { get; } = typeof(DecimalIndicatorValue);
 
 	IndicatorMeasures IIndicator.Measure => IndicatorMeasures.Price;
+
+	DrawStyles IIndicator.Style => DrawStyles.Line;
+	Color? IIndicator.Color => default;
 
 	event Action<IIndicatorValue, IIndicatorValue> IIndicator.Changed
 	{

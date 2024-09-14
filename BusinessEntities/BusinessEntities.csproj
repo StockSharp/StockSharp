@@ -5,6 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.Configuration" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.Drawing" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Messages\Messages.csproj" />

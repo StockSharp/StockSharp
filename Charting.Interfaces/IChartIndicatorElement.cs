@@ -23,7 +23,7 @@ public interface IChartIndicatorElement : IChartElement
 	bool AntiAliasing { get; set; }
 
 	/// <summary>Compatibility property for <see cref="IChartLineElement.Style"/>.</summary>
-	ChartIndicatorDrawStyles DrawStyle { get; set; }
+	DrawStyles DrawStyle { get; set; }
 
 	/// <summary>Compatibility property for <see cref="IChartLineElement.ShowAxisMarker"/>.</summary>
 	bool ShowAxisMarker { get; set; }

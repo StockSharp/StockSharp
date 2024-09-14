@@ -2,7 +2,7 @@ namespace StockSharp.Algo.Indicators;
 
 using System.Drawing;
 
-using StockSharp.Charting;
+using Ecng.Drawing;
 
 /// <summary>
 /// The base Indicator.
@@ -49,15 +49,11 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	[Browsable(false)]
 	public virtual int NumValuesToInitialize => 1;
 
-	/// <summary>
-	/// Chart indicator draw style.
-	/// </summary>
+	/// <inheritdoc />
 	[Browsable(false)]
-	public virtual ChartIndicatorDrawStyles Style => ChartIndicatorDrawStyles.Line;
+	public virtual DrawStyles Style => DrawStyles.Line;
 
-	/// <summary>
-	/// Indicator color. If <see langword="null"/> then the color will be automatically selected.
-	/// </summary>
+	/// <inheritdoc />
 	[Browsable(false)]
 	public virtual Color? Color => default;
 

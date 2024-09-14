@@ -1,5 +1,9 @@
 namespace StockSharp.Algo.Indicators;
 
+using System.Drawing;
+
+using Ecng.Drawing;
+
 /// <summary>
 /// Indicator measures.
 /// </summary>
@@ -101,4 +105,14 @@ public interface IIndicator : IPersistable, ICloneable<IIndicator>
 	/// <param name="values"><see cref="IIndicatorValue.ToValues"/></param>
 	/// <returns><see cref="IIndicatorValue"/></returns>
 	IIndicatorValue CreateValue(DateTimeOffset time, object[] values);
+
+	/// <summary>
+	/// Chart indicator draw style.
+	/// </summary>
+	DrawStyles Style { get; }
+
+	/// <summary>
+	/// Indicator color. If <see langword="null"/> then the color will be automatically selected.
+	/// </summary>
+	Color? Color { get; }
 }

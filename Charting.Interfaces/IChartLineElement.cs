@@ -26,9 +26,9 @@ public interface IChartLineElement : IChartElement
 	bool AntiAliasing { get; set; }
 
 	/// <summary>
-	/// The line drawing style. The default is <see cref="ChartIndicatorDrawStyles.Line"/>.
+	/// The line drawing style. The default is <see cref="DrawStyles.Line"/>.
 	/// </summary>
-	ChartIndicatorDrawStyles Style { get; set; }
+	DrawStyles Style { get; set; }
 
 	/// <summary>
 	/// Show Y-axis market.
