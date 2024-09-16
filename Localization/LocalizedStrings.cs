@@ -55,8 +55,7 @@ public static partial class LocalizedStrings
 					if (lang.Length != 2)
 						continue;
 
-					var asm = global::System.Reflection.Assembly.LoadFrom(resFile);
-					var stream = extractResource(asm);
+					var stream = extractResource(global::System.Reflection.Assembly.LoadFrom(resFile));
 
 					if (stream is not null)
 						AddLanguage(lang, stream);
@@ -80,14 +79,22 @@ public static partial class LocalizedStrings
 	/// <param name="stream">Resource stream.</param>
 	public static void AddLanguage(string langCode, Stream stream)
 	{
+		using var reader = new StreamReader(stream);
+		AddLanguage(langCode, reader.ReadToEnd().DeserializeObject<IDictionary<string, string>>());
+	}
+
+	/// <summary>
+	/// Add language.
+	/// </summary>
+	/// <param name="langCode">Language.</param>
+	/// <param name="strings">Localized strings.</param>
+	public static void AddLanguage(string langCode, IDictionary<string, string> strings)
+	{
 		if (langCode.IsEmpty())
 			throw new ArgumentNullException(nameof(langCode));
 
-		if (stream is null)
-			throw new ArgumentNullException(nameof(stream));
-
-		using var reader = new StreamReader(stream);
-		var strings = reader.ReadToEnd().DeserializeObject<IDictionary<string, string>>();
+		if (strings is null)
+			throw new ArgumentNullException(nameof(strings));
 
 		var translation = new Translation();
 
