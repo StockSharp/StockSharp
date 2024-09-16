@@ -7,10 +7,10 @@ using Ecng.Reflection;
 /// </summary>
 public class InMemoryMessageAdapterProvider : IMessageAdapterProvider
 {
-        static InMemoryMessageAdapterProvider()
-        {
+	static InMemoryMessageAdapterProvider()
+	{
 		AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-        }
+	}
 
 	private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
 	{
@@ -91,11 +91,7 @@ public class InMemoryMessageAdapterProvider : IMessageAdapterProvider
 		"StockSharp.Server.Utils",
 	};
 	
-	/// <summary>
-	/// Get all available adapters.
-	/// </summary>
-	/// <returns>All available adapters.</returns>
-	protected virtual IEnumerable<Type> GetAdapters()
+	private IEnumerable<Type> GetAdapters()
 	{
 		var adapters = new List<Type>();
 
