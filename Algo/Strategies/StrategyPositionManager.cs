@@ -59,16 +59,6 @@ public class StrategyPositionManager : BaseLogReceiver, IPositionManager
 				break;
 			}
 
-			case MessageTypes.OrderPairReplace:
-			{
-				var pairMsg = (OrderPairReplaceMessage)message;
-
-				ProcessRegOrder(pairMsg.Message1);
-				ProcessRegOrder(pairMsg.Message2);
-
-				break;
-			}
-
 			case MessageTypes.Execution:
 			{
 				var execMsg = (ExecutionMessage)message;

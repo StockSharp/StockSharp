@@ -56,21 +56,6 @@ public class LatencyManager : ILatencyManager
 
 				break;
 			}
-			case MessageTypes.OrderPairReplace:
-			{
-				var replaceMsg = (OrderPairReplaceMessage)message;
-
-				lock (_syncObject)
-				{
-					AddCancel(replaceMsg.Message1.TransactionId, replaceMsg.LocalTime);
-					AddRegister(replaceMsg.Message1.TransactionId, replaceMsg.LocalTime);
-
-					AddCancel(replaceMsg.Message2.TransactionId, replaceMsg.LocalTime);
-					AddRegister(replaceMsg.Message2.TransactionId, replaceMsg.LocalTime);
-				}
-
-				break;
-			}
 			case MessageTypes.OrderCancel:
 			{
 				var cancelMsg = (OrderCancelMessage)message;

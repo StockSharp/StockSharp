@@ -100,21 +100,6 @@ public class TransactionOrderingMessageAdapter : MessageAdapterWrapper
 
 				break;
 			}
-			case MessageTypes.OrderPairReplace:
-			{
-				var replaceMsg = (OrderPairReplaceMessage)message;
-
-				RemoteTrailingZeros(replaceMsg.Message1);
-				RemoteTrailingZeros(replaceMsg.Message2);
-
-				if (_secIds.TryGetValue(replaceMsg.Message1.OriginalTransactionId, out var secId))
-					_secIds.TryAdd2(replaceMsg.Message1.TransactionId, secId);
-
-				if (_secIds.TryGetValue(replaceMsg.Message2.OriginalTransactionId, out secId))
-					_secIds.TryAdd2(replaceMsg.Message2.TransactionId, secId);
-
-				break;
-			}
 			case MessageTypes.OrderCancel:
 			{
 				var cancelMsg = (OrderCancelMessage)message;

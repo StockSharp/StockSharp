@@ -106,16 +106,6 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 				return base.OnSendInMessage(message);
 			}
 
-			case MessageTypes.OrderPairReplace:
-			{
-				var pairMsg = (OrderPairReplaceMessage)message;
-
-				TryAddOrderSubscription(pairMsg.Message1);
-				TryAddOrderSubscription(pairMsg.Message2);
-
-				return base.OnSendInMessage(message);
-			}
-
 			case MessageTypes.OrderStatus:
 			{
 				var statusMsg = (OrderStatusMessage)message;

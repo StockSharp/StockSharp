@@ -102,25 +102,6 @@ public class BufferMessageAdapter : MessageAdapterWrapper
 
 				break;
 			}
-			case MessageTypes.OrderPairReplace:
-			{
-				if (Buffer.EnabledTransactions)
-				{
-					var pairMsg = (OrderPairReplaceMessage)message;
-
-					// can be looped back from offline
-					if (!_replaceTransactions.ContainsKey(pairMsg.Message1.TransactionId))
-					{
-						_replaceTransactions.Add(pairMsg.Message1.TransactionId, pairMsg.Message1.OriginalTransactionId);
-						_replaceTransactions.Add(pairMsg.Message2.TransactionId, pairMsg.Message2.OriginalTransactionId);
-					}
-
-					Buffer.ProcessInMessage(message);
-				}
-
-				break;
-			}
-
 			case MessageTypes.OrderCancel:
 			{
 				if (Buffer.EnabledTransactions)

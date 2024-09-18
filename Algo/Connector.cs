@@ -657,6 +657,7 @@ public partial class Connector : BaseLogReceiver, IConnector, IMarketDataProvide
 	/// <param name="newOrder1">New order to register.</param>
 	/// <param name="oldOrder2">Cancelling order.</param>
 	/// <param name="newOrder2">New order to register.</param>
+	[Obsolete("Use ReRegisterOrder method.")]
 	public void ReRegisterOrderPair(Order oldOrder1, Order newOrder1, Order oldOrder2, Order newOrder2)
 	{
 		if (oldOrder1 == null)
@@ -679,36 +680,8 @@ public partial class Connector : BaseLogReceiver, IConnector, IMarketDataProvide
 			if (oldOrder2.Security != newOrder2.Security)
 				throw new ArgumentException(LocalizedStrings.SecuritiesMismatch.Put(newOrder2.Security.Id, oldOrder2.Security.Id), nameof(newOrder2));
 
-			if (oldOrder1.Type == OrderTypes.Conditional || oldOrder2.Type == OrderTypes.Conditional)
-			{
-				CancelOrder(oldOrder1);
-				RegisterOrder(newOrder1);
-
-				CancelOrder(oldOrder2);
-				RegisterOrder(newOrder2);
-			}
-			else
-			{
-				CheckOnOld(oldOrder1);
-				CheckOnNew(newOrder1);
-
-				CheckOnOld(oldOrder2);
-				CheckOnNew(newOrder2);
-
-				if (oldOrder1.Comment.IsEmpty())
-					oldOrder1.Comment = newOrder1.Comment;
-
-				if (oldOrder2.Comment.IsEmpty())
-					oldOrder2.Comment = newOrder2.Comment;
-
-				InitNewOrder(newOrder1);
-				InitNewOrder(newOrder2);
-
-				_entityCache.AddOrderByCancelationId(oldOrder1, newOrder1.TransactionId);
-				_entityCache.AddOrderByCancelationId(oldOrder2, newOrder2.TransactionId);
-
-				OnReRegisterOrderPair(oldOrder1, newOrder1, oldOrder2, newOrder2);
-			}
+			ReRegisterOrder(oldOrder1, newOrder1);
+			ReRegisterOrder(oldOrder2, newOrder2);
 		}
 		catch (Exception ex)
 		{
@@ -874,18 +847,6 @@ public partial class Connector : BaseLogReceiver, IConnector, IMarketDataProvide
 	protected void OnReRegisterOrder(Order oldOrder, Order newOrder)
 	{
 		SendInMessage(oldOrder.CreateReplaceMessage(newOrder, GetSecurityId(newOrder.Security)));
-	}
-
-	/// <summary>
-	/// Reregister of pair orders.
-	/// </summary>
-	/// <param name="oldOrder1">First order to cancel.</param>
-	/// <param name="newOrder1">First new order to register.</param>
-	/// <param name="oldOrder2">Second order to cancel.</param>
-	/// <param name="newOrder2">Second new order to register.</param>
-	protected void OnReRegisterOrderPair(Order oldOrder1, Order newOrder1, Order oldOrder2, Order newOrder2)
-	{
-		SendInMessage(oldOrder1.CreateReplaceMessage(newOrder1, GetSecurityId(newOrder1.Security), oldOrder2, newOrder2, GetSecurityId(newOrder2.Security)));
 	}
 
 	/// <summary>

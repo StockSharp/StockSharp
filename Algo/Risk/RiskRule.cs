@@ -794,7 +794,6 @@ public class RiskOrderFreqRule : RiskRule
 		{
 			case MessageTypes.OrderRegister:
 			case MessageTypes.OrderReplace:
-			case MessageTypes.OrderPairReplace:
 			{
 				var time = message.LocalTime;
 

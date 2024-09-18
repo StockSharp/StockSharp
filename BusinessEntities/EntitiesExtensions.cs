@@ -805,30 +805,6 @@ public static class EntitiesExtensions
 	}
 
 	/// <summary>
-	/// To create the message of replacing pair of old orders to new ones.
-	/// </summary>
-	/// <param name="oldOrder1">Old order.</param>
-	/// <param name="newOrder1">New order.</param>
-	/// <param name="security1">Security ID.</param>
-	/// <param name="oldOrder2">Old order.</param>
-	/// <param name="newOrder2">New order.</param>
-	/// <param name="security2">Security ID.</param>
-	/// <returns>Message.</returns>
-	public static OrderPairReplaceMessage CreateReplaceMessage(this Order oldOrder1, Order newOrder1, SecurityId security1,
-		Order oldOrder2, Order newOrder2, SecurityId security2)
-	{
-		var msg = new OrderPairReplaceMessage
-		{
-			Message1 = oldOrder1.CreateReplaceMessage(newOrder1, security1),
-			Message2 = oldOrder2.CreateReplaceMessage(newOrder2, security2)
-		};
-
-		oldOrder1.Security.ToMessage(security1).CopyTo(msg.Message1, false);
-
-		return msg;
-	}
-
-	/// <summary>
 	/// To convert the instrument into message.
 	/// </summary>
 	/// <param name="security">Security.</param>

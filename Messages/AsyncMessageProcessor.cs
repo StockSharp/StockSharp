@@ -30,7 +30,6 @@ class AsyncMessageProcessor : Disposable
 			IsTransaction = Message.Type
 				is MessageTypes.OrderRegister
 				or MessageTypes.OrderReplace
-				or MessageTypes.OrderPairReplace
 				or MessageTypes.OrderCancel
 				or MessageTypes.OrderGroupCancel;
 		}
@@ -255,7 +254,6 @@ class AsyncMessageProcessor : Disposable
 						OrderStatusMessage m		=> _adapter.OrderStatusAsync(m, token),
 
 						OrderReplaceMessage m		=> _adapter.ReplaceOrderAsync(m, token),
-						OrderPairReplaceMessage m	=> _adapter.ReplaceOrderPairAsync(m, token),
 						OrderRegisterMessage m		=> _adapter.RegisterOrderAsync(m, token),
 						OrderCancelMessage m		=> _adapter.CancelOrderAsync(m, token),
 						OrderGroupCancelMessage m	=> _adapter.CancelOrderGroupAsync(m, token),

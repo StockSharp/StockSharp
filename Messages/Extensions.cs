@@ -354,7 +354,9 @@ public static partial class Extensions
 		MessageTypes.OrderStatus,
 		MessageTypes.OrderGroupCancel,
 		MessageTypes.OrderReplace,
+#pragma warning disable CS0612 // Type or member is obsolete
 		MessageTypes.OrderPairReplace,
+#pragma warning restore CS0612 // Type or member is obsolete
 		MessageTypes.Portfolio,
 		MessageTypes.PortfolioLookup
 	});
@@ -1881,8 +1883,6 @@ public static partial class Extensions
 			case MessageTypes.OrderCancel:
 			case MessageTypes.OrderGroupCancel:
 				return makeErrorExecution(((OrderMessage)message).CreateReply(ex));
-			case MessageTypes.OrderPairReplace:
-				return makeErrorExecution(((OrderPairReplaceMessage)message).Message1.CreateReply(ex));
 
 			case MessageTypes.ChangePassword:
 			{

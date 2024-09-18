@@ -210,33 +210,6 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 			}
 			case MessageTypes.SecurityLookup:
 				break;
-			case MessageTypes.OrderPairReplace:
-			{
-				var pairMsg = (OrderPairReplaceMessage)message;
-
-				var securityId1 = pairMsg.Message1.SecurityId;
-				var securityId2 = pairMsg.Message2.SecurityId;
-
-				if (securityId1.Native != null && securityId2.Native != null)
-					break;
-
-				var nativeId1 = GetNativeId(pairMsg.Message1, securityId1);
-
-				if (nativeId1 == null)
-					return true;
-
-				var nativeId2 = GetNativeId(pairMsg.Message2, securityId2);
-
-				if (nativeId2 == null)
-					return true;
-
-				securityId1.Native = nativeId1;
-				pairMsg.Message1.ReplaceSecurityId(securityId1);
-
-				securityId2.Native = nativeId2;
-				pairMsg.Message2.ReplaceSecurityId(securityId2);
-				break;
-			}
 
 			case MessageTypes.ProcessSuspended:
 				var suspendMsg = (ProcessSuspendedMessage)message;

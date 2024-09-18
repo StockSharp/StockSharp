@@ -275,16 +275,6 @@ public class FilteredMarketDepthAdapter : MessageAdapterWrapper
 				break;
 			}
 
-			case MessageTypes.OrderPairReplace:
-			{
-				var pairMsg = (OrderPairReplaceMessage)message;
-
-				AddInfo(pairMsg.Message1);
-				AddInfo(pairMsg.Message2);
-
-				break;
-			}
-
 			case MessageTypes.MarketData:
 			{
 				var mdMsg = (MarketDataMessage)message;

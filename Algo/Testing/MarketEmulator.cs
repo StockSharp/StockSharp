@@ -612,7 +612,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					yield break;
 				}
 
-				case MessageTypes.OrderPairReplace:
 				case MessageTypes.OrderGroupCancel:
 					throw new NotSupportedException();
 
