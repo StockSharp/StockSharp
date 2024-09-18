@@ -243,7 +243,7 @@ public partial class TinkoffMessageAdapter
 			}
 			else
 			{
-				foreach (var order in (await _service.StopOrders.GetStopOrdersAsync(new() { AccountId = accountId, From = statusMsg.From?.ToTimestamp(), To = statusMsg.To?.ToTimestamp() }, cancellationToken: cancellationToken)).StopOrders)
+				foreach (var order in (await _service.StopOrders.GetStopOrdersAsync(new() { AccountId = accountId }, cancellationToken: cancellationToken)).StopOrders)
 				{
 					SendOutMessage(new ExecutionMessage
 					{
