@@ -2009,7 +2009,8 @@ public static partial class Extensions
 	/// </summary>
 	/// <param name="message">Message.</param>
 	/// <param name="securityId">Security ID.</param>
-	public static void ReplaceSecurityId(this Message message, SecurityId securityId)
+	/// <returns>Message.</returns>
+	public static Message ReplaceSecurityId(this Message message, SecurityId securityId)
 	{
 		switch (message)
 		{
@@ -2022,6 +2023,8 @@ public static partial class Extensions
 			default:
 				throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.InvalidValue);
 		}
+
+		return message;
 	}
 
 	/// <summary>
