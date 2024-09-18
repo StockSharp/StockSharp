@@ -211,7 +211,7 @@ public struct SecurityId : IEquatable<SecurityId>, IPersistable
 				return 0;
 
 			_hashCode = (_nativeAsInt != 0 ? _nativeAsInt.GetHashCode() : _native?.GetHashCode())
-			            ?? ((_securityCode ?? string.Empty).GetHashCode() ^ (_boardCode ?? string.Empty).GetHashCode());
+			            ?? ((_securityCode?.ToUpperInvariant() ?? string.Empty).GetHashCode() ^ (_boardCode?.ToUpperInvariant() ?? string.Empty).GetHashCode());
 		}
 
 		return _hashCode;
