@@ -595,6 +595,8 @@ public partial class TinkoffMessageAdapter
 
 				while (reader.NextLine())
 				{
+					cancellationToken.ThrowIfCancellationRequested();
+
 					reader.Skip();
 
 					var timestamp = reader.ReadDateTime("yyyy-MM-ddTHH:mm:ssZ").UtcKind();
