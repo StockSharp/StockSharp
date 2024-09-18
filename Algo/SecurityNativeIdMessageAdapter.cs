@@ -5,9 +5,9 @@
 /// </summary>
 public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 {
-	private readonly PairSet<object, SecurityId> _securityIds = new();
-	private readonly Dictionary<SecurityId, List<Message>> _suspendedInMessages = new();
-	private readonly Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>> _suspendedOutMessages = new();
+	private readonly PairSet<object, SecurityId> _securityIds = [];
+	private readonly Dictionary<SecurityId, List<Message>> _suspendedInMessages = [];
+	private readonly Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>> _suspendedOutMessages = [];
 	private readonly SyncObject _syncRoot = new();
 
 	/// <summary>
@@ -45,11 +45,8 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 
 				lock (_syncRoot)
 				{
-					foreach (var tuple in nativeIds)
+					foreach (var (securityId, nativeId) in nativeIds)
 					{
-						var securityId = tuple.Item1;
-						var nativeId = tuple.Item2;
-
 						_securityIds[nativeId] = securityId;
 					}
 				}
@@ -330,15 +327,13 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 
 					if (processSuspend == null)
 					{
-						if (tuple.First == null)
-							tuple.First = new List<Message>();
+						tuple.First ??= [];
 
 						tuple.First.Add(clone);
 					}
 					else
 					{
-						if (tuple.Second == null)
-							tuple.Second = new Dictionary<MessageTypes, Message>();
+						tuple.Second ??= [];
 
 						var prev = tuple.Second.TryGetValue(clone.Type);
 
@@ -443,7 +438,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 			var retVal = tuple.First;
 
 			if (retVal == null)
-				retVal = tuple.Second.Values.ToList();
+				retVal = [.. tuple.Second.Values];
 			else if (tuple.Second != null)
 				retVal.AddRange(tuple.Second.Values);
 
