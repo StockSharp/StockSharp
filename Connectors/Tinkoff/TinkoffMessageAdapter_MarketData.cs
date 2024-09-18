@@ -249,14 +249,14 @@ public partial class TinkoffMessageAdapter
 							SecurityId = new()
 							{
 								SecurityCode = instr.Ticker,
-								BoardCode = instr.Exchange,
+								BoardCode = instr.ClassCode,
 								Native = instr.Uid,
+								Isin = instr.Isin,
 							},
 							Name = instr.Name,
 							Multiplier = instr.Lot,
 							SecurityType = SecurityTypes.Stock,
 							Currency = instr.Currency.To<CurrencyTypes?>(),
-							Class = instr.ClassCode,
 							IssueDate = instr.IpoDate?.ToDateTimeOffset(),
 							IssueSize = instr.IssueSize,
 							Shortable = instr.ShortEnabledFlag,
@@ -282,7 +282,7 @@ public partial class TinkoffMessageAdapter
 							SecurityId = new()
 							{
 								SecurityCode = instr.Ticker,
-								BoardCode = instr.Exchange,
+								BoardCode = instr.ClassCode,
 								Native = instr.Uid,
 							},
 							Name = instr.Name,
@@ -306,44 +306,48 @@ public partial class TinkoffMessageAdapter
 
 					break;
 				}
-				//case SecurityTypes.Option:
-				//{
-				//	foreach (var instr in (await instrSvc.OptionsAsync(new(), cancellationToken: cancellationToken)).Instruments)
-				//	{
-				//		cancellationToken.ThrowIfCancellationRequested();
-				//
-				//		if (TrySendOut(new SecurityMessage
-				//		{
-				//			SecurityId = new()
-				//			{
-				//				SecurityCode = instr.Ticker,
-				//				BoardCode = instr.Exchange,
-				//				Native = instr.Uid,
-				//			},
-				//			Name = instr.Name,
-				//			Multiplier = instr.Lot,
-				//			SecurityType = SecurityTypes.Option,
-				//			Currency = instr.Currency.To<CurrencyTypes?>(),
-				//			Class = instr.ClassCode,
-				//			ExpiryDate = instr.ExpirationDate?.ToDateTimeOffset(),
-				//			IssueDate = instr.FirstTradeDate?.ToDateTimeOffset(),
-				//			UnderlyingSecurityType = instr.AssetType.ToSecurityType(),
-				//			Shortable = instr.ShortEnabledFlag,
-				//			PriceStep = instr.MinPriceIncrement?.ToDecimal(),
-				//			OptionType = instr.Direction.ToOptionType(),
-				//			OptionStyle = instr.Style.ToOptionStyle(),
-				//			SettlementType = instr.SettlementType.ToSettlementType(),
-				//			Strike = instr.StrikePrice,
-				//			OriginalTransactionId = lookupMsg.TransactionId,
-				//		}.TryFillUnderlyingId(instr.BasicAsset)))
-				//		{
-				//			if (--left <= 0)
-				//				break;
-				//		}
-				//	}
+				case SecurityTypes.Option:
+				{
+					var underlying = lookupMsg.UnderlyingSecurityId;
 
-				//	break;
-				//}
+					if (underlying.Native is null)
+						break;
+
+					foreach (var instr in (await instrSvc.OptionsByAsync(new() { BasicAssetUid = (string)underlying.Native }, cancellationToken: cancellationToken)).Instruments)
+					{
+						cancellationToken.ThrowIfCancellationRequested();
+
+						if (TrySendOut(new SecurityMessage
+						{
+							SecurityId = new()
+							{
+								SecurityCode = instr.Ticker,
+								BoardCode = instr.ClassCode,
+								Native = instr.Uid,
+							},
+							Name = instr.Name,
+							Multiplier = instr.Lot,
+							SecurityType = SecurityTypes.Option,
+							Currency = instr.Currency.To<CurrencyTypes?>(),
+							ExpiryDate = instr.ExpirationDate?.ToDateTimeOffset(),
+							IssueDate = instr.FirstTradeDate?.ToDateTimeOffset(),
+							UnderlyingSecurityType = instr.AssetType.ToSecurityType(),
+							Shortable = instr.ShortEnabledFlag,
+							PriceStep = instr.MinPriceIncrement?.ToDecimal(),
+							OptionType = instr.Direction.ToOptionType(),
+							OptionStyle = instr.Style.ToOptionStyle(),
+							SettlementType = instr.SettlementType.ToSettlementType(),
+							Strike = instr.StrikePrice,
+							OriginalTransactionId = lookupMsg.TransactionId,
+						}.TryFillUnderlyingId(instr.BasicAsset)))
+						{
+							if (--left <= 0)
+								break;
+						}
+					}
+
+					break;
+				}
 				case SecurityTypes.Currency:
 				{
 					foreach (var instr in (await instrSvc.CurrenciesAsync(new(), cancellationToken: cancellationToken)).Instruments)
@@ -355,14 +359,13 @@ public partial class TinkoffMessageAdapter
 							SecurityId = new()
 							{
 								SecurityCode = instr.Ticker,
-								BoardCode = instr.Exchange,
-								Isin = instr.Isin,
+								BoardCode = instr.ClassCode,
 								Native = instr.Uid,
+								Isin = instr.Isin,
 							},
 							Name = instr.Name,
 							Multiplier = instr.Lot,
 							SecurityType = SecurityTypes.Currency,
-							Class = instr.ClassCode,
 							Shortable = instr.ShortEnabledFlag,
 							PriceStep = instr.MinPriceIncrement?.ToDecimal(),
 							OriginalTransactionId = lookupMsg.TransactionId,
@@ -386,15 +389,14 @@ public partial class TinkoffMessageAdapter
 							SecurityId = new()
 							{
 								SecurityCode = instr.Ticker,
-								BoardCode = instr.Exchange,
-								Isin = instr.Isin,
+								BoardCode = instr.ClassCode,
 								Native = instr.Uid,
+								Isin = instr.Isin,
 							},
 							Name = instr.Name,
 							Multiplier = instr.Lot,
 							SecurityType = SecurityTypes.Bond,
 							Currency = instr.Currency.To<CurrencyTypes?>(),
-							Class = instr.ClassCode,
 							ExpiryDate = instr.MaturityDate?.ToDateTimeOffset(),
 							IssueDate = instr.StateRegDate?.ToDateTimeOffset(),
 							IssueSize = instr.IssueSize,
@@ -422,15 +424,14 @@ public partial class TinkoffMessageAdapter
 							SecurityId = new()
 							{
 								SecurityCode = instr.Ticker,
-								BoardCode = instr.Exchange,
-								Isin = instr.Isin,
+								BoardCode = instr.ClassCode,
 								Native = instr.Uid,
+								Isin = instr.Isin,
 							},
 							Name = instr.Name,
 							Multiplier = instr.Lot,
 							SecurityType = SecurityTypes.Etf,
 							Currency = instr.Currency.To<CurrencyTypes?>(),
-							Class = instr.ClassCode,
 							Shortable = instr.ShortEnabledFlag,
 							IssueDate = instr.ReleasedDate?.ToDateTimeOffset(),
 							IssueSize = instr.NumShares?.ToDecimal(),
