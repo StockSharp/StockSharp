@@ -1,5 +1,7 @@
 namespace StockSharp.Tinkoff;
 
+using Ecng.Net;
+
 public partial class TinkoffMessageAdapter
 {
 	private GrpcChannel _channel;
@@ -63,7 +65,7 @@ public partial class TinkoffMessageAdapter
 
 		var credentials = ChannelCredentials.Create(new SslCredentials(), CallCredentials.FromInterceptor((_, metadata) =>
 		{
-			metadata.Add("Authorization", $"Bearer {Token.UnSecure()}");
+			metadata.Add(HttpHeaders.Authorization, AuthSchemas.Bearer.FormatAuth(Token));
 			metadata.Add("x-app-name", nameof(StockSharp));
 			return Task.CompletedTask;
 		}));
