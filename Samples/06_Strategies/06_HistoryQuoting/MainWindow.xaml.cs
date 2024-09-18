@@ -3,8 +3,10 @@
 using System;
 using System.Windows;
 using System.Windows.Media;
+
 using Ecng.Common;
 using Ecng.Collections;
+using Ecng.Drawing;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Candles;
@@ -129,9 +131,9 @@ public partial class MainWindow
 		Chart.AddElement(area, _candleElement);
 		Chart.AddElement(area, _tradesElem);
 
-		_pnl = (ChartBandElement)EquityCurveChart.CreateCurve("PNL", Colors.Green, ChartIndicatorDrawStyles.Area);
-		_unrealizedPnL = (ChartBandElement)EquityCurveChart.CreateCurve("unrealizedPnL", Colors.Black, ChartIndicatorDrawStyles.Line);
-		_commissionCurve = (ChartBandElement)EquityCurveChart.CreateCurve("commissionCurve", Colors.Red, ChartIndicatorDrawStyles.Line);
+		_pnl = (ChartBandElement)EquityCurveChart.CreateCurve("PNL", Colors.Green, DrawStyles.Area);
+		_unrealizedPnL = (ChartBandElement)EquityCurveChart.CreateCurve("unrealizedPnL", Colors.Black, DrawStyles.Line);
+		_commissionCurve = (ChartBandElement)EquityCurveChart.CreateCurve("commissionCurve", Colors.Red, DrawStyles.Line);
 	}
 
 	private void Connector_Connected()

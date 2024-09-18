@@ -6,9 +6,9 @@
 public interface IChartBandElement : IChartElement
 {
 	/// <summary>
-	/// The band drawing style. The default is <see cref="ChartIndicatorDrawStyles.Band"/>. Can also be <see cref="ChartIndicatorDrawStyles.BandOneValue"/>.
+	/// The band drawing style. The default is <see cref="DrawStyles.Band"/>. Can also be <see cref="DrawStyles.BandOneValue"/>.
 	/// </summary>
-	ChartIndicatorDrawStyles Style { get; set; }
+	DrawStyles Style { get; set; }
 
 	/// <summary>
 	/// <see cref="Line1"/>.

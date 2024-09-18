@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 
+using Ecng.Collections;
 using Ecng.Common;
 using Ecng.Serialization;
 
@@ -37,32 +38,13 @@ public static partial class LocalizedStrings
 
 	static LocalizedStrings()
 	{
-		static void addLanguage(Assembly asm, string langCode)
-		{
-			if (asm is null)
-				throw new ArgumentNullException(nameof(asm));
-
-			var stream = asm.GetManifestResourceStream($"{asm.GetName().Name}.{_stringsFileName}");
-
-			if (stream is null)
-				return;
-
-			using var reader = new StreamReader(stream);
-			var strings = reader.ReadToEnd().DeserializeObject<IDictionary<string, string>>();
-
-			var translation = new Translation();
-
-			foreach (var pair in strings)
-				translation.Add(pair.Key, pair.Value);
-
-			_langIds.Add(langCode, _langIds.Count);
-			_translations.Add(translation);
-		}
-
 		try
 		{
+			static Stream extractResource(Assembly asm)
+				=> asm.CheckOnNull(nameof(asm)).GetManifestResourceStream($"{asm.GetName().Name}.{_stringsFileName}");
+
 			var mainAsm = typeof(LocalizedStrings).Assembly;
-			addLanguage(mainAsm, EnCode);
+			AddLanguage(EnCode, extractResource(mainAsm));
 
 			foreach (var resFile in Directory.GetFiles(global::System.IO.Path.GetDirectoryName(mainAsm.Location), "StockSharp.Localization.*.dll"))
 			{
@@ -73,8 +55,10 @@ public static partial class LocalizedStrings
 					if (lang.Length != 2)
 						continue;
 
-					var asm = global::System.Reflection.Assembly.LoadFrom(resFile);
-					addLanguage(asm, lang);
+					var stream = extractResource(global::System.Reflection.Assembly.LoadFrom(resFile));
+
+					if (stream is not null)
+						AddLanguage(lang, stream);
 				}
 				catch (Exception ex)
 				{
@@ -86,6 +70,65 @@ public static partial class LocalizedStrings
 		{
 			Trace.WriteLine(InitError = ex);
 		}
+	}
+
+	/// <summary>
+	/// Add language.
+	/// </summary>
+	/// <param name="langCode">Language.</param>
+	/// <param name="stream">Resource stream.</param>
+	public static void AddLanguage(string langCode, Stream stream)
+	{
+		using var reader = new StreamReader(stream);
+		AddLanguage(langCode, reader.ReadToEnd().DeserializeObject<IDictionary<string, string>>());
+	}
+
+	/// <summary>
+	/// Add language.
+	/// </summary>
+	/// <param name="langCode">Language.</param>
+	/// <param name="strings">Localized strings.</param>
+	public static void AddLanguage(string langCode, IDictionary<string, string> strings)
+	{
+		if (langCode.IsEmpty())
+			throw new ArgumentNullException(nameof(langCode));
+
+		if (strings is null)
+			throw new ArgumentNullException(nameof(strings));
+
+		var translation = new Translation();
+
+		foreach (var pair in strings)
+			translation.Add(pair.Key, pair.Value);
+
+		_langIds.Add(langCode, _langIds.Count);
+		_translations.Add(translation);
+	}
+
+	/// <summary>
+	/// Remove language.
+	/// </summary>
+	/// <param name="langCode">Language.</param>
+	/// <returns>Operation result.</returns>
+	public static bool RemoveLanguage(string langCode)
+	{
+		if (langCode.IsEmpty())
+			throw new ArgumentNullException(nameof(langCode));
+
+		if (!_langIds.TryGetAndRemove(langCode, out var langId))
+			return false;
+
+		_translations.RemoveAt(langId);
+
+		foreach (var p in _langIds.ToArray())
+		{
+			if (p.Value < langId)
+				continue;
+
+			_langIds[p.Key] = p.Value - 1;
+		}
+
+		return true;
 	}
 
 	/// <summary>

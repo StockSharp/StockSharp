@@ -24,7 +24,7 @@ public MainWindow()
 	var chartIndicatorElement = new ChartIndicatorElement()
 	{
 		IndicatorPainter = new BollingerBandsPainter(),
-		DrawStyle = ChartIndicatorDrawStyles.StepLine
+		DrawStyle = DrawStyles.StepLine
 	};
 	Chart.AddElement(chartArea, chartIndicatorElement);
 }

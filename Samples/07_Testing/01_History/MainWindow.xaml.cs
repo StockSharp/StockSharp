@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Ecng.Xaml;
 using Ecng.Common;
 using Ecng.Collections;
+using Ecng.Drawing;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Commissions;
@@ -483,10 +484,10 @@ public partial class MainWindow
 			statistic.Parameters.Clear();
 			statistic.Parameters.AddRange(strategy.StatisticManager.Parameters);
 
-			var pnlCurve = equity.CreateCurve(LocalizedStrings.PnL + " " + emulationInfo.StrategyName, Colors.Green, Colors.Red, ChartIndicatorDrawStyles.Area);
-			var realizedPnLCurve = equity.CreateCurve(LocalizedStrings.PnLRealized + " " + emulationInfo.StrategyName, Colors.Black, ChartIndicatorDrawStyles.Line);
-			var unrealizedPnLCurve = equity.CreateCurve(LocalizedStrings.PnLUnreal + " " + emulationInfo.StrategyName, Colors.DarkGray, ChartIndicatorDrawStyles.Line);
-			var commissionCurve = equity.CreateCurve(LocalizedStrings.Commission + " " + emulationInfo.StrategyName, Colors.Red, ChartIndicatorDrawStyles.DashedLine);
+			var pnlCurve = equity.CreateCurve(LocalizedStrings.PnL + " " + emulationInfo.StrategyName, Colors.Green, Colors.Red, DrawStyles.Area);
+			var realizedPnLCurve = equity.CreateCurve(LocalizedStrings.PnLRealized + " " + emulationInfo.StrategyName, Colors.Black, DrawStyles.Line);
+			var unrealizedPnLCurve = equity.CreateCurve(LocalizedStrings.PnLUnreal + " " + emulationInfo.StrategyName, Colors.DarkGray, DrawStyles.Line);
+			var commissionCurve = equity.CreateCurve(LocalizedStrings.Commission + " " + emulationInfo.StrategyName, Colors.Red, DrawStyles.DashedLine);
 			
 			strategy.PnLReceived2 += (s, pf, t, r, u, c) =>
 			{
@@ -502,7 +503,7 @@ public partial class MainWindow
 				equity.Draw(data);
 			};
 
-			var posItems = pos.CreateCurve(emulationInfo.StrategyName, emulationInfo.CurveColor, ChartIndicatorDrawStyles.Line);
+			var posItems = pos.CreateCurve(emulationInfo.StrategyName, emulationInfo.CurveColor, DrawStyles.Line);
 
 			strategy.PositionReceived += (s, p) =>
 			{

@@ -3,6 +3,8 @@
 using System;
 using System.Windows.Media;
 
+using Ecng.Drawing;
+
 using StockSharp.Algo;
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Storages;
@@ -31,7 +33,7 @@ public partial class MainWindow
 		var chartIndicatorElement = new ChartIndicatorElement()
 		{
 			Color = Colors.Brown,
-			DrawStyle = ChartIndicatorDrawStyles.Line
+			DrawStyle = DrawStyles.Line
 		};
 		Chart.AddElement(chartArea, chartIndicatorElement);
 

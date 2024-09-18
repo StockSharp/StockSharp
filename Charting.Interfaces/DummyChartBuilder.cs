@@ -186,7 +186,7 @@ public class DummyChartBuilder : IChartBuilder
 
 	private class DummyBandElement : DummyElement, IChartBandElement
 	{
-		ChartIndicatorDrawStyles IChartBandElement.Style { get; set; }
+		DrawStyles IChartBandElement.Style { get; set; }
 		IChartLineElement IChartBandElement.Line1 => throw new NotSupportedException();
 		IChartLineElement IChartBandElement.Line2 => throw new NotSupportedException();
 	}
@@ -201,7 +201,7 @@ public class DummyChartBuilder : IChartBuilder
 		public Color AdditionalColor { get; set; }
 		public int StrokeThickness { get; set; }
 		public bool AntiAliasing { get; set; }
-		public ChartIndicatorDrawStyles Style { get; set; }
+		public DrawStyles Style { get; set; }
 		public bool ShowAxisMarker { get; set; }
 
 		public override void Load(SettingsStorage storage)
@@ -212,7 +212,7 @@ public class DummyChartBuilder : IChartBuilder
 			//AdditionalColor = storage.GetValue<int>(nameof(AdditionalColor)).ToColor();
 			StrokeThickness = storage.GetValue<int>(nameof(StrokeThickness));
 			AntiAliasing = storage.GetValue<bool>(nameof(AntiAliasing));
-			Style = storage.GetValue<ChartIndicatorDrawStyles>(nameof(Style));
+			Style = storage.GetValue<DrawStyles>(nameof(Style));
 			ShowAxisMarker = storage.GetValue<bool>(nameof(ShowAxisMarker));
 		}
 	}
@@ -329,7 +329,7 @@ public class DummyChartBuilder : IChartBuilder
 		Color IChartIndicatorElement.AdditionalColor { get; set; }
 		int IChartIndicatorElement.StrokeThickness { get; set; }
 		bool IChartIndicatorElement.AntiAliasing { get; set; }
-		ChartIndicatorDrawStyles IChartIndicatorElement.DrawStyle { get; set; }
+		DrawStyles IChartIndicatorElement.DrawStyle { get; set; }
 		bool IChartIndicatorElement.ShowAxisMarker { get; set; }
 		bool IChartIndicatorElement.AutoAssignYAxis { get; set; }
 	}
