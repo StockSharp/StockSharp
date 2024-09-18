@@ -44,6 +44,9 @@ public partial class TinkoffMessageAdapter
 	protected override IEnumerable<TimeSpan> TimeFrames => TinkoffExtensions.TimeFrames;
 
 	/// <inheritdoc />
+	public override bool IsSupportCandlesUpdates(MarketDataMessage subscription) => true;
+
+	/// <inheritdoc />
 	public override bool IsNativeIdentifiers => true;
 
 	/// <inheritdoc />
