@@ -478,7 +478,8 @@ public partial class TinkoffMessageAdapter
 						Id = mdMsg.GetInstrumentId(),
 					}, cancellationToken: cancellationToken);
 
-					await DownloadHistoryAsync(mdMsg.TransactionId, response.Instrument.Figi, from, to, cancellationToken);
+					if (response.Instrument is not null)
+						await DownloadHistoryAsync(mdMsg.TransactionId, response.Instrument.Figi, from, to, cancellationToken);
 
 					from = to.Date.UtcKind();
 				}
