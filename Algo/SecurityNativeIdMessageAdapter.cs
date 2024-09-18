@@ -6,7 +6,7 @@
 public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 {
 	private readonly PairSet<object, SecurityId> _securityIds = [];
-	private readonly Dictionary<SecurityId, List<Message>> _suspendedInMessages = [];
+	private readonly Dictionary<SecurityId, List<ISecurityIdMessage>> _suspendedInMessages = [];
 	private readonly Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>> _suspendedOutMessages = [];
 	private readonly SyncObject _syncRoot = new();
 
@@ -52,6 +52,9 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 				}
 
 				base.OnInnerAdapterNewOutMessage(message);
+
+				ProcessAllSuspended();
+
 				break;
 			}
 
@@ -217,12 +220,12 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 				if (securityId1.Native != null && securityId2.Native != null)
 					break;
 
-				var nativeId1 = GetNativeId(pairMsg, securityId1);
+				var nativeId1 = GetNativeId(pairMsg.Message1, securityId1);
 
 				if (nativeId1 == null)
 					return true;
 
-				var nativeId2 = GetNativeId(pairMsg, securityId2);
+				var nativeId2 = GetNativeId(pairMsg.Message2, securityId2);
 
 				if (nativeId2 == null)
 					return true;
@@ -255,7 +258,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 					if (securityId.Native != null)
 						break;
 
-					var native = GetNativeId(message, securityId);
+					var native = GetNativeId(secIdMsg, securityId);
 
 					if (native == null)
 						return true;
@@ -271,7 +274,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 		return base.OnSendInMessage(message);
 	}
 
-	private object GetNativeId(Message message, SecurityId securityId)
+	private object GetNativeId(ISecurityIdMessage message, SecurityId securityId)
 	{
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
@@ -283,7 +286,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 			if (native != null)
 				return native;
 
-			_suspendedInMessages.SafeAdd(securityId).Add(message.Clone());
+			_suspendedInMessages.SafeAdd(securityId).Add((ISecurityIdMessage)((Message)message).Clone());
 		}
 
 		this.AddInfoLog("Suspended {0}.", message);
@@ -390,6 +393,68 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 		base.OnInnerAdapterNewOutMessage(message);
 	}
 
+	private void ProcessAllSuspended()
+	{
+		List<Message> inMsgs;
+		List<Message> outMsgs;
+
+		lock (_syncRoot)
+		{
+			inMsgs = [];
+			outMsgs = [];
+
+			foreach (var (secId, messages) in _suspendedInMessages.ToArray())
+			{
+				if (!_securityIds.TryGetKey(secId, out var nativeId))
+					continue;
+
+				inMsgs.AddRange(messages.Select(m =>
+				{
+					var tempId = m.SecurityId;
+					tempId.Native = nativeId;
+					m.SecurityId = tempId;
+					return (Message)m;
+				}));
+
+				_suspendedInMessages.Remove(secId);
+			}
+
+			foreach (var (nativeId, secId) in _securityIds)
+			{
+				void processOut(RefPair<List<Message>, Dictionary<MessageTypes, Message>> messages)
+				{
+					if (messages.First is not null)
+					{
+						outMsgs.AddRange(messages.First.Select(m => m.ReplaceSecurityId(secId)));
+					}
+
+					if (messages.Second is not null)
+					{
+						outMsgs.AddRange(messages.Second.Select(p => p.Value.ReplaceSecurityId(secId)));
+					}
+				}
+
+				if (_suspendedOutMessages.TryGetAndRemove(secId, out var messages1))
+					processOut(messages1);
+
+				var tempId = secId;
+				tempId.Native = nativeId;
+
+				if (_suspendedOutMessages.TryGetAndRemove(tempId, out var messages2))
+					processOut(messages2);
+			}
+		}
+
+		foreach (var msg in inMsgs)
+		{
+			msg.LoopBack(this);
+			base.OnSendInMessage(msg);
+		}
+
+		foreach (var msg in outMsgs)
+			base.OnInnerAdapterNewOutMessage(msg);
+	}
+
 	private void ProcessInSuspended(SecurityId securityId)
 	{
 		var noNativeId = securityId.Native == null ? (SecurityId?)null : securityId;
@@ -401,7 +466,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 			noNativeId = t;
 		}
 
-		List<Message> msgs = null;
+		List<ISecurityIdMessage> msgs = null;
 
 		lock (_syncRoot)
 		{
@@ -426,8 +491,8 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 
 		foreach (var msg in msgs)
 		{
-			msg.ReplaceSecurityId(securityId);
-			base.OnSendInMessage(msg);
+			msg.SecurityId = securityId;
+			base.OnSendInMessage((Message)msg);
 		}
 	}
 
@@ -503,10 +568,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 		securityId.Native = null;
 
 		foreach (var msg in msgs)
-		{
-			msg.ReplaceSecurityId(securityId);
-			base.OnInnerAdapterNewOutMessage(msg);
-		}
+			base.OnInnerAdapterNewOutMessage(msg.ReplaceSecurityId(securityId));
 	}
 
 	private void OnStorageNewIdentifierAdded(string storageName, SecurityId securityId, object nativeId)
