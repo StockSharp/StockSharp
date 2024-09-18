@@ -7,6 +7,7 @@ public partial class TinkoffMessageAdapter
 	private GrpcChannel _channel;
 	private InvestApiClient _service;
 	private AsyncDuplexStreamingCall<MarketDataRequest, MarketDataResponse> _mdStream;
+	private const string _domainAddr = "invest-public-api.tinkoff.ru";
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="TinkoffMessageAdapter"/>.
@@ -71,7 +72,7 @@ public partial class TinkoffMessageAdapter
 		}));
 
 		var prefix = IsDemo ? "sandbox-" : string.Empty;
-		_channel = GrpcChannel.ForAddress($"https://{prefix}invest-public-api.tinkoff.ru:443", new()
+		_channel = GrpcChannel.ForAddress($"https://{prefix}{_domainAddr}", new()
 		{
 			Credentials = credentials,
 			MaxReceiveMessageSize = null,
@@ -88,6 +89,9 @@ public partial class TinkoffMessageAdapter
 
 		if (this.IsMarketData())
 			StartMarketDataStreaming(cancellationToken);
+
+		_historyClient = new();
+		_historyClient.SetBearer(Token);
 
 		SendOutMessage(new ConnectMessage());
 	}
@@ -136,6 +140,9 @@ public partial class TinkoffMessageAdapter
 
 		_service = default;
 		_accountIds.Clear();
+
+		_historyClient.Dispose();
+		_historyClient = null;
 
 		SendOutMessage(new ResetMessage());
 

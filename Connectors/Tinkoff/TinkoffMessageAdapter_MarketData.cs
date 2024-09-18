@@ -1,10 +1,17 @@
 namespace StockSharp.Tinkoff;
 
+using System.IO;
+using System.Net.Http;
+using System.Text;
+
+using Ecng.IO;
+
 using Google.Protobuf.Collections;
 
 public partial class TinkoffMessageAdapter
 {
 	private readonly SynchronizedPairSet<(DataType dt, string uid), long> _mdTransIds = new();
+	private HttpClient _historyClient;
 
 	private void AddTransId(MarketDataMessage mdMsg)
 	{
@@ -462,6 +469,19 @@ public partial class TinkoffMessageAdapter
 				var from = mdMsg.From.Value;
 				var to = mdMsg.To ?? CurrentTime;
 
+				if (interval == SubscriptionInterval.OneMinute && (to - from).TotalDays > 1)
+				{
+					var response = await _service.Instruments.GetInstrumentByAsync(new()
+					{
+						IdType = InstrumentIdType.Uid,
+						Id = mdMsg.GetInstrumentId(),
+					}, cancellationToken: cancellationToken);
+
+					await DownloadHistoryAsync(mdMsg.TransactionId, response.Instrument.Figi, from, to, cancellationToken);
+
+					from = to.Date.UtcKind();
+				}
+
 				var request = new GetCandlesRequest
 				{
 					InstrumentId = mdMsg.GetInstrumentId(),
@@ -544,6 +564,76 @@ public partial class TinkoffMessageAdapter
 				}
 			}, cancellationToken);
 		}
+	}
+
+	private async Task<DateTimeOffset> DownloadHistoryAsync(long transId, string figi, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellationToken)
+	{
+		var last = from;
+		var curr = from;
+
+		while (curr < to)
+		{
+			using var response = await _historyClient.GetAsync($"https://{_domainAddr}/history-data?figi={figi}&year={curr.Year}", cancellationToken);
+			response.EnsureSuccessStatusCode();
+
+			using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
+
+			foreach (var (name, body) in stream.Unzip(true).Select(t => (t.name, t.body.To<byte[]>())).OrderBy(t => t.name))
+			{
+				var fileDate = name.Substring(name.Length - 12, 8).ToDateTime("yyyyMMdd");
+
+				if (fileDate < from.Date)
+					continue;
+
+				if (fileDate > to.Date)
+					break;
+
+				var reader = new FastCsvReader(body.To<Stream>(), Encoding.UTF8, StringHelper.N);
+				var needBreak = false;
+
+				while (reader.NextLine())
+				{
+					reader.Skip();
+
+					var timestamp = reader.ReadDateTime("yyyy-MM-ddTHH:mm:ssZ").UtcKind();
+					var open = reader.ReadDecimal();
+					var close = reader.ReadDecimal();
+					var high = reader.ReadDecimal();
+					var low = reader.ReadDecimal();
+					var volume = reader.ReadDecimal();
+
+					if (timestamp < from)
+						continue;
+
+					if (timestamp > to)
+					{
+						needBreak = true;
+						break;
+					}
+
+					SendOutMessage(new TimeFrameCandleMessage
+					{
+						OpenTime = timestamp,
+						OpenPrice = open,
+						HighPrice = high,
+						LowPrice = low,
+						ClosePrice = close,
+						TotalVolume = volume,
+						OriginalTransactionId = transId,
+						State = CandleStates.Finished,
+					});
+
+					last = last.Max(timestamp);
+				}
+
+				if (needBreak)
+					break;
+			}
+
+			curr = curr.AddYears(1);
+		}
+
+		return last;
 	}
 
 	private const int _defBook = 10;
