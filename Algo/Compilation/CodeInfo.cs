@@ -192,7 +192,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	{
 		Id = storage.GetValue(nameof(Id), Id);
 		Name = storage.GetValue(nameof(Name), Name);
-		Text = storage.GetValue(nameof(Text), storage.GetValue<string>("SourceCode")).Replace("ChartIndicatorDrawStyles", "DrawStyles");
+		Text = storage.GetValue(nameof(Text), storage.GetValue<string>("SourceCode"))?.Replace("ChartIndicatorDrawStyles", "DrawStyles");
 		ExtraSources = storage.GetValue(nameof(ExtraSources), ExtraSources);
 
 		_references.Clear();
