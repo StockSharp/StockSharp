@@ -3504,25 +3504,25 @@ public static partial class Extensions
 	public static QuoteChangeMessage Sparse(this IOrderBookMessage depth, Unit priceRange, decimal? priceStep)
 		=> depth.Sparse(GetActualPriceRange(priceRange), priceStep);
 
-	private static void ValidatePriceRange(decimal? priceRange)
+	private static void ValidatePriceRange(decimal priceRange)
 	{
-		if (priceRange is null)
-			throw new ArgumentNullException(nameof(priceRange));
-
 		if (priceRange <= 0)
 			throw new ArgumentOutOfRangeException(nameof(priceRange), priceRange, LocalizedStrings.InvalidValue);
 	}
 
 	private static decimal GetActualPriceRange(Unit priceRange)
 	{
-		var val = (decimal?)priceRange;
+		if (priceRange is null)
+			throw new ArgumentNullException(nameof(priceRange));
+		
+		var val = (decimal)priceRange;
 		ValidatePriceRange(val);
 
-		if (priceRange.Type is not UnitTypes.Absolute and not UnitTypes.Step)
-			throw new ArgumentOutOfRangeException(LocalizedStrings.UnsupportedType.Put(priceRange.Type));
+		// Limit can be casted to decimal, so check it extra
+		if (priceRange.Type is UnitTypes.Limit)
+			throw new ArgumentException(LocalizedStrings.UnsupportedType.Put(priceRange.Type), nameof(priceRange));
 
-		// ReSharper disable once PossibleInvalidOperationException
-		return val.Value;
+		return val;
 	}
 
 	/// <summary>
