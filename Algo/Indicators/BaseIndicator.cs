@@ -69,7 +69,7 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public virtual void Save(SettingsStorage storage)
+	protected void SaveValues(SettingsStorage storage)
 	{
 		storage.SetValue(nameof(Id), Id);
 		storage.SetValue(nameof(Name), Name);
@@ -79,10 +79,28 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public virtual void Load(SettingsStorage storage)
+	protected void LoadValues(SettingsStorage storage)
 	{
 		Id = storage.GetValue<Guid>(nameof(Id));
 		Name = storage.GetValue<string>(nameof(Name));
+	}
+
+	/// <summary>
+	/// Save settings.
+	/// </summary>
+	/// <param name="storage">Settings storage.</param>
+	public virtual void Save(SettingsStorage storage)
+	{
+		SaveValues(storage);
+	}
+
+	/// <summary>
+	/// Load settings.
+	/// </summary>
+	/// <param name="storage">Settings storage.</param>
+	public virtual void Load(SettingsStorage storage)
+	{
+		LoadValues(storage);
 	}
 
 	/// <inheritdoc />
