@@ -3485,7 +3485,7 @@ public static partial class Extensions
 		var bestAsk = depth.GetBestAsk();
 
 		var spreadQuotes = bestBid is null || bestAsk is null
-			? (Array.Empty<QuoteChange>(), Array.Empty<QuoteChange>())
+			? (bids: [], asks: [])
 			: bestBid.Value.Sparse(bestAsk.Value, priceRange, priceStep);
 
 		return new()
@@ -3493,8 +3493,8 @@ public static partial class Extensions
 			SecurityId = depth.SecurityId,
 			ServerTime = depth.ServerTime,
 			BuildFrom = DataType.MarketDepth,
-			Bids = spreadQuotes.Item1.Concat(bids),
-			Asks = spreadQuotes.Item2.Concat(asks),
+			Bids = spreadQuotes.bids.Concat(bids),
+			Asks = spreadQuotes.asks.Concat(asks),
 		};
 	}
 
@@ -3550,37 +3550,28 @@ public static partial class Extensions
 		var askPrice = ask.Price;
 
 		if (bidPrice == default || askPrice == default || bidPrice == askPrice)
-			return (Array.Empty<QuoteChange>(), Array.Empty<QuoteChange>());
+			return ([], []);
 
 		const int maxLimit = 1000;
 
 		var bids = new List<QuoteChange>();
 		var asks = new List<QuoteChange>();
 
-		while (true)
+		var currentBidPrice = bidPrice.ShrinkPrice(priceStep, null, ShrinkRules.More);
+		var currentAskPrice = askPrice.ShrinkPrice(priceStep, null, ShrinkRules.Less);
+
+		while (currentBidPrice < currentAskPrice && (bids.Count + asks.Count) < maxLimit)
 		{
-			bidPrice = (bidPrice + priceRange).ShrinkPrice(priceStep, null, ShrinkRules.More);
-			askPrice = (askPrice - priceRange).ShrinkPrice(priceStep, null, ShrinkRules.Less);
+			currentBidPrice = (currentBidPrice + priceRange).ShrinkPrice(priceStep, null, ShrinkRules.Less);
 
-			if (bidPrice > askPrice)
-				break;
+			if (currentBidPrice > bidPrice && currentBidPrice < askPrice)
+				bids.Add(new() { Price = currentBidPrice });
 
-			bids.Add(new QuoteChange { Price = bidPrice });
+			currentAskPrice = (currentAskPrice - priceRange).ShrinkPrice(priceStep, null, ShrinkRules.More);
 
-			if (bids.Count > maxLimit)
-				break;
-
-			if (bidPrice == askPrice)
-				break;
-
-			asks.Add(new QuoteChange { Price = askPrice });
-
-			if (asks.Count > maxLimit)
-				break;
+			if (currentAskPrice > bidPrice && currentAskPrice < askPrice)
+				asks.Insert(0, new() { Price = currentAskPrice });
 		}
-
-		bids.Reverse();
-		asks.Reverse();
 
 		return (bids.ToArray(), asks.ToArray());
 	}
@@ -3604,7 +3595,7 @@ public static partial class Extensions
 		ValidatePriceRange(priceRange);
 
 		if (quotes.Length < 2)
-			return Array.Empty<QuoteChange>();
+			return [.. quotes];
 
 		const int maxLimit = 10000;
 
@@ -3614,6 +3605,9 @@ public static partial class Extensions
 		{
 			var from = quotes[i];
 			var toPrice = quotes[i + 1].Price;
+
+			// Always add the original quote
+			retVal.Add(from);
 
 			if (side == Sides.Buy)
 			{
@@ -3650,7 +3644,8 @@ public static partial class Extensions
 				break;
 		}
 
-		return retVal.ToArray();
+		retVal.Add(quotes[quotes.Length - 1]);  // Add the last quote
+		return [.. retVal];
 	}
 
 	/// <summary>
