@@ -3734,8 +3734,13 @@ public static partial class Extensions
 
 		ValidatePriceRange(priceRange);
 
-		if (quotes.Length < 2)
-			return [.. quotes];
+		if (quotes.Length == 0)
+			return [];
+		else if (quotes.Length == 1)
+		{
+			var q = quotes[0];
+			return [new(q.Price, q.Volume) { InnerQuotes = [q] }];
+		}
 
 		if (side == Sides.Buy)
 			priceRange = -priceRange;
