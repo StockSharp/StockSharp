@@ -3714,8 +3714,8 @@ public static partial class Extensions
 		{
 			SecurityId = depth.SecurityId,
 			ServerTime = depth.ServerTime,
-			Bids = depth.Bids.SelectMany(GetInner).OrderByDescending(q => q.Price).ToArray(),
-			Asks = depth.Asks.SelectMany(GetInner).OrderBy(q => q.Price).ToArray(),
+			Bids = [.. depth.Bids.SelectMany(GetInner).OrderByDescending(q => q.Price)],
+			Asks = [.. depth.Asks.SelectMany(GetInner).OrderBy(q => q.Price)],
 			BuildFrom = DataType.MarketDepth,
 		};
 	}
@@ -3735,7 +3735,7 @@ public static partial class Extensions
 		ValidatePriceRange(priceRange);
 
 		if (quotes.Length < 2)
-			return quotes.ToArray();
+			return [.. quotes];
 
 		if (side == Sides.Buy)
 			priceRange = -priceRange;
@@ -3755,7 +3755,7 @@ public static partial class Extensions
 
 			if (side == Sides.Buy)
 			{
-				if (currQuote.Price >= nextPrice)
+				if (currQuote.Price > nextPrice)
 				{
 					innerQuotes.Add(currQuote);
 
@@ -3767,7 +3767,7 @@ public static partial class Extensions
 			}
 			else
 			{
-				if (currQuote.Price <= nextPrice)
+				if (currQuote.Price < nextPrice)
 				{
 					innerQuotes.Add(currQuote);
 
@@ -3796,7 +3796,7 @@ public static partial class Extensions
 			retVal.Add(groupedQuote);
 		}
 
-		return retVal.ToArray();
+		return [.. retVal];
 	}
 
 	/// <summary>
