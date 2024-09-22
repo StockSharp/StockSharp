@@ -1,6 +1,5 @@
 using RestSharp;
 using StockSharp.DarkHorse.Native.Model;
-using System.Web;
 
 namespace StockSharp.DarkHorse;
 
@@ -8,7 +7,6 @@ partial class DarkHorseMessageAdapter
 {
     private const int _tickPaginationLimit = 5000;
     private const int _candlesPaginationLimit = 1501;
-    private string _prevTradeReqId = string.Empty;
 
     private void SessionOnNewTrade(string pair, List<Trade> trades)
     {
@@ -84,7 +82,7 @@ partial class DarkHorseMessageAdapter
     {
         SendSubscriptionReply(mdMsg.TransactionId);
 
-        var symbol = mdMsg.SecurityId.ToSymbol();
+        var currency = mdMsg.SecurityId.ToCurrency();
 
         if (mdMsg.IsSubscribe)
         {
@@ -96,9 +94,7 @@ partial class DarkHorseMessageAdapter
 
                 while (startTime < endTime)
                 {
-                    var prevTradeReqId = _prevTradeReqId;
-                    _prevTradeReqId = mdMsg.TransactionId.ToString();
-                    var trades = await _restClient.GetMarketTrades(mdMsg.TransactionId.ToString(), symbol, startTime, endTime, cancellationToken);
+                    var trades = await _restClient.GetMarketTrades(currency, startTime, endTime, cancellationToken);
 
                     var lastTime = startTime;
 
@@ -136,13 +132,13 @@ partial class DarkHorseMessageAdapter
             }
 
             if (!mdMsg.IsHistoryOnly())
-                await _wsClient.SubscribeTradesChannel(symbol, WsTradeChannelSubscriber.Trade, cancellationToken);
+                await _wsClient.SubscribeTradesChannel(currency, WsTradeChannelSubscriber.Trade, cancellationToken);
 
             SendSubscriptionResult(mdMsg);
         }
         else
         {
-            await _wsClient.UnsubscribeTradesChannel(symbol, WsTradeChannelSubscriber.Trade, cancellationToken);
+            await _wsClient.UnsubscribeTradesChannel(currency, WsTradeChannelSubscriber.Trade, cancellationToken);
         }
     }
 
@@ -151,7 +147,7 @@ partial class DarkHorseMessageAdapter
     {
         SendSubscriptionReply(mdMsg.TransactionId);
 
-        var symbol = mdMsg.SecurityId.ToSymbol();
+        var currency = mdMsg.SecurityId.ToCurrency();
 
         if (mdMsg.IsSubscribe)
         {
@@ -165,7 +161,7 @@ partial class DarkHorseMessageAdapter
 
                 while (startTime < endTime)
                 {
-                    var candles = await _restClient.GetMarketCandles(symbol, resolution, startTime, endTime, cancellationToken);
+                    var candles = await _restClient.GetMarketCandles(currency, resolution, startTime, endTime, cancellationToken);
 
                     var lastTime = startTime;
 
@@ -203,80 +199,13 @@ partial class DarkHorseMessageAdapter
             }
 
             if (!mdMsg.IsHistoryOnly())
-                await _wsClient.SubscribeTradesChannel(symbol, WsTradeChannelSubscriber.Candles, cancellationToken);
+                await _wsClient.SubscribeTradesChannel(currency, WsTradeChannelSubscriber.Candles, cancellationToken);
 
             SendSubscriptionResult(mdMsg);
         }
         else
         {
-            await _wsClient.UnsubscribeTradesChannel(symbol, WsTradeChannelSubscriber.Candles, cancellationToken);
-        }
-    }
-
-
-    protected override async ValueTask OnCandlesSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
-    {
-        SendSubscriptionReply(mdMsg.TransactionId);
-
-        var symbol = mdMsg.SecurityId.ToSymbol();
-
-        if (mdMsg.IsSubscribe)
-        {
-            if (mdMsg.From is not null)
-            {
-                var startTime = mdMsg.From.Value.UtcDateTime;
-                var endTime = mdMsg.To?.UtcDateTime ?? DateTime.UtcNow;
-                var left = mdMsg.Count ?? long.MaxValue;
-
-                var resolution = (TimeSpan)mdMsg.DataType2.Arg;
-
-                while (startTime < endTime)
-                {
-                    var candles = await _restClient.GetMarketCandles(symbol, resolution, startTime, endTime, cancellationToken);
-
-                    var lastTime = startTime;
-
-                    foreach (var candle in candles.OrderBy(t => t.OpenTime))
-                    {
-                        if (candle.OpenTime < startTime)
-                            continue;
-
-                        if (candle.OpenTime > endTime)
-                            break;
-
-                        SendOutMessage(new TimeFrameCandleMessage
-                        {
-                            OriginalTransactionId = mdMsg.TransactionId,
-                            ClosePrice = candle.ClosePrice,
-                            HighPrice = candle.HightPrice,
-                            LowPrice = candle.LowPrice,
-                            OpenPrice = candle.OpenPrice,
-                            TotalVolume = candle.WindowVolume,
-                            OpenTime = candle.OpenTime,
-                            State = CandleStates.Finished,
-                        });
-
-                        if (--left <= 0)
-                            break;
-
-                        lastTime = candle.OpenTime;
-                    }
-
-                    if (candles.Count != _candlesPaginationLimit || --left <= 0)
-                        break;
-
-                    startTime = lastTime;
-                }
-            }
-
-            if (!mdMsg.IsHistoryOnly())
-                await _wsClient.SubscribeTradesChannel(symbol, WsTradeChannelSubscriber.Candles, cancellationToken);
-
-            SendSubscriptionResult(mdMsg);
-        }
-        else
-        {
-            await _wsClient.UnsubscribeTradesChannel(symbol, WsTradeChannelSubscriber.Candles, cancellationToken);
+            await _wsClient.UnsubscribeTradesChannel(currency, WsTradeChannelSubscriber.Candles, cancellationToken);
         }
     }
 

@@ -150,13 +150,12 @@ partial class DarkHorseMessageAdapter
             {
                 foreach (var order in orders)
                     SessionOnNewOrder(order);
-                /*
+
                 var start = orders.Where(x => x.CreatedAt != null).Min(x => x.CreatedAt.Value);
                 var fills = await _restClient.GetFills(start, DateTime.UtcNow, AccountCode, cancellationToken);
 
                 foreach (var fill in fills)
                     SessionOnNewFill(fill);
-                */
             }
         }
         else
@@ -167,7 +166,7 @@ partial class DarkHorseMessageAdapter
             }
 
             var fromTime = DateTime.UtcNow - _orderHistoryInterval;
-            /*
+
             do
             {
                 var prevFromTime = fromTime;
@@ -220,7 +219,7 @@ partial class DarkHorseMessageAdapter
 
                 startTime = lastTime;
             }
-            */
+
             SendSubscriptionResult(statusMsg);
         }
     }

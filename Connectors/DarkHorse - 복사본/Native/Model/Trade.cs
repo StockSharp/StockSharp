@@ -16,6 +16,5 @@ internal class Trade
 	public string Side { get; set; }
 
 	[JsonProperty("time")]
-    [JsonConverter(typeof(JsonDateTimeFmtConverter))]
-    public DateTime Time { get; set; }
+	public DateTime Time { get; set; }
 }

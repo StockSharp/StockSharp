@@ -15,13 +15,13 @@ public partial class DarkHorseMessageAdapter
 
     private readonly TimeSpan[] _timeFrames = new[]
     {
-        TimeSpan.FromTicks(120),
-        TimeSpan.FromTicks(300),
-        TimeSpan.FromTicks(900),
-        TimeSpan.FromMinutes(1),
-        TimeSpan.FromMinutes(60),
-        TimeSpan.FromMinutes(240),
-        TimeSpan.FromDays(1),
+        TimeSpan.FromSeconds(15),
+        TimeSpan.FromSeconds(60),
+        TimeSpan.FromSeconds(300),
+        TimeSpan.FromSeconds(900),
+        TimeSpan.FromSeconds(3600),
+        TimeSpan.FromSeconds(14400),
+        TimeSpan.FromSeconds(86400),
     };
 
     /// <inheritdoc />

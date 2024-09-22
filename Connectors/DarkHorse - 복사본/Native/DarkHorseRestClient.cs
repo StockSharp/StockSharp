@@ -37,19 +37,19 @@ class DarkHorseRestClient : BaseLogReceiver
         return ProcessRequest<List<Symbol>>(Method.Get, "api/symbols", default, cancellationToken);
     }
 
-    public Task<List<Trade>> GetMarketTrades(string requestID, string symbol, DateTime start, DateTime end, CancellationToken cancellationToken)
+    public Task<List<Trade>> GetMarketTrades(string symbol, DateTime start, DateTime end, CancellationToken cancellationToken)
 	{
-		return ProcessRequest<List<Trade>>(Method.Get, $"api/markets/trades?request_id={requestID}&symbol={symbol}&start_time={start}&end_time={end}", default, cancellationToken);
+		return ProcessRequest<List<Trade>>(Method.Get, $"api/markets/trades?symbol={symbol}&start_time={GetSecondsFromEpochStart(start)}&end_time={GetSecondsFromEpochStart(end)}", default, cancellationToken);
 	}
 
 	public Task<List<Candle>> GetMarketCandles(string symbol, TimeSpan resolution, DateTime start, DateTime end, CancellationToken cancellationToken)
 	{
-		return ProcessRequest<List<Candle>>(Method.Get, $"api/markets/candles?symbol={symbol}&resolution={resolution.TotalMinutes}&start_time={start}&end_time={end}", default, cancellationToken);
+		return ProcessRequest<List<Candle>>(Method.Get, $"api/markets/candles?symbol={symbol}&resolution={resolution.TotalSeconds}&start_time={GetSecondsFromEpochStart(start)}&end_time={GetSecondsFromEpochStart(end)}", default, cancellationToken);
 	}
 
 	public async Task<(List<Order> histOrders, bool hasMoreData)> GetMarketOrderHistoryAndHasMoreOrders(string subaccountName, DateTime startTime, CancellationToken cancellationToken)
 	{
-		var response = await ProcessSignedRequest<List<Order>, DarkHorseRestResponseHasMoreData<List<Order>>>(Method.Get, $"api/orders/history?start_time={startTime}", subaccountName, default, cancellationToken);
+		var response = await ProcessSignedRequest<List<Order>, DarkHorseRestResponseHasMoreData<List<Order>>>(Method.Get, $"api/orders/history?start_time={GetSecondsFromEpochStart(startTime)}", subaccountName, default, cancellationToken);
 		return (response.Result, response.HasMoreData);
 	}
 
@@ -137,10 +137,7 @@ class DarkHorseRestClient : BaseLogReceiver
 	private Task<dynamic> ProcessRequest(Method method, string endpoint, string jsonBody, CancellationToken cancellationToken)
 	{
 		var request = new RestRequest((string)null, method);
-        // Set timeout to 10 seconds
-        TimeSpan timeout = TimeSpan.FromSeconds(10);
-        request.Timeout = timeout;
-        if (!jsonBody.IsEmpty())
+		if (!jsonBody.IsEmpty())
 		{
 			request.AddParameter("json", jsonBody, ParameterType.RequestBody);
 		}
