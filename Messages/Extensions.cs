@@ -4073,8 +4073,6 @@ public static partial class Extensions
 		if (depth < 0)
 			throw new ArgumentOutOfRangeException(nameof(depth), depth, LocalizedStrings.InvalidValue);
 
-		var retVal = new List<(QuoteChange?, QuoteChange?)>();
-
 		for (var i = 0; i < depth; i++)
 		{
 			var (bid, ask) = book.GetPair(i);
@@ -4082,10 +4080,8 @@ public static partial class Extensions
 			if (bid is null && ask is null)
 				break;
 
-			retVal.Add(new(bid, ask));
+			yield return new(bid, ask);
 		}
-
-		return retVal;
 	}
 
 	/// <summary>
