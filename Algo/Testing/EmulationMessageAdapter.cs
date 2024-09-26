@@ -110,13 +110,6 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 				return true;
 			}
 
-			case MessageTypes.OrderPairReplace:
-			{
-				var ordMsg = (OrderPairReplaceMessage)message;
-				ProcessOrderMessage(ordMsg.Message1.OriginalTransactionId, message);
-				return true;
-			}
-
 			case MessageTypes.OrderGroupCancel:
 			{
 				SendToEmulator(message);

@@ -1,10 +1,17 @@
 namespace StockSharp.Tinkoff;
 
+using System.IO;
+using System.Net.Http;
+using System.Text;
+
+using Ecng.IO;
+
 using Google.Protobuf.Collections;
 
 public partial class TinkoffMessageAdapter
 {
 	private readonly SynchronizedPairSet<(DataType dt, string uid), long> _mdTransIds = new();
+	private HttpClient _historyClient;
 
 	private void AddTransId(MarketDataMessage mdMsg)
 	{
@@ -242,14 +249,14 @@ public partial class TinkoffMessageAdapter
 							SecurityId = new()
 							{
 								SecurityCode = instr.Ticker,
-								BoardCode = instr.Exchange,
+								BoardCode = instr.ClassCode,
 								Native = instr.Uid,
+								Isin = instr.Isin,
 							},
 							Name = instr.Name,
 							Multiplier = instr.Lot,
 							SecurityType = SecurityTypes.Stock,
 							Currency = instr.Currency.To<CurrencyTypes?>(),
-							Class = instr.ClassCode,
 							IssueDate = instr.IpoDate?.ToDateTimeOffset(),
 							IssueSize = instr.IssueSize,
 							Shortable = instr.ShortEnabledFlag,
@@ -275,7 +282,7 @@ public partial class TinkoffMessageAdapter
 							SecurityId = new()
 							{
 								SecurityCode = instr.Ticker,
-								BoardCode = instr.Exchange,
+								BoardCode = instr.ClassCode,
 								Native = instr.Uid,
 							},
 							Name = instr.Name,
@@ -299,44 +306,48 @@ public partial class TinkoffMessageAdapter
 
 					break;
 				}
-				//case SecurityTypes.Option:
-				//{
-				//	foreach (var instr in (await instrSvc.OptionsAsync(new(), cancellationToken: cancellationToken)).Instruments)
-				//	{
-				//		cancellationToken.ThrowIfCancellationRequested();
-				//
-				//		if (TrySendOut(new SecurityMessage
-				//		{
-				//			SecurityId = new()
-				//			{
-				//				SecurityCode = instr.Ticker,
-				//				BoardCode = instr.Exchange,
-				//				Native = instr.Uid,
-				//			},
-				//			Name = instr.Name,
-				//			Multiplier = instr.Lot,
-				//			SecurityType = SecurityTypes.Option,
-				//			Currency = instr.Currency.To<CurrencyTypes?>(),
-				//			Class = instr.ClassCode,
-				//			ExpiryDate = instr.ExpirationDate?.ToDateTimeOffset(),
-				//			IssueDate = instr.FirstTradeDate?.ToDateTimeOffset(),
-				//			UnderlyingSecurityType = instr.AssetType.ToSecurityType(),
-				//			Shortable = instr.ShortEnabledFlag,
-				//			PriceStep = instr.MinPriceIncrement?.ToDecimal(),
-				//			OptionType = instr.Direction.ToOptionType(),
-				//			OptionStyle = instr.Style.ToOptionStyle(),
-				//			SettlementType = instr.SettlementType.ToSettlementType(),
-				//			Strike = instr.StrikePrice,
-				//			OriginalTransactionId = lookupMsg.TransactionId,
-				//		}.TryFillUnderlyingId(instr.BasicAsset)))
-				//		{
-				//			if (--left <= 0)
-				//				break;
-				//		}
-				//	}
+				case SecurityTypes.Option:
+				{
+					var underlying = lookupMsg.UnderlyingSecurityId;
 
-				//	break;
-				//}
+					if (underlying.Native is null)
+						break;
+
+					foreach (var instr in (await instrSvc.OptionsByAsync(new() { BasicAssetUid = (string)underlying.Native }, cancellationToken: cancellationToken)).Instruments)
+					{
+						cancellationToken.ThrowIfCancellationRequested();
+
+						if (TrySendOut(new SecurityMessage
+						{
+							SecurityId = new()
+							{
+								SecurityCode = instr.Ticker,
+								BoardCode = instr.ClassCode,
+								Native = instr.Uid,
+							},
+							Name = instr.Name,
+							Multiplier = instr.Lot,
+							SecurityType = SecurityTypes.Option,
+							Currency = instr.Currency.To<CurrencyTypes?>(),
+							ExpiryDate = instr.ExpirationDate?.ToDateTimeOffset(),
+							IssueDate = instr.FirstTradeDate?.ToDateTimeOffset(),
+							UnderlyingSecurityType = instr.AssetType.ToSecurityType(),
+							Shortable = instr.ShortEnabledFlag,
+							PriceStep = instr.MinPriceIncrement?.ToDecimal(),
+							OptionType = instr.Direction.ToOptionType(),
+							OptionStyle = instr.Style.ToOptionStyle(),
+							SettlementType = instr.SettlementType.ToSettlementType(),
+							Strike = instr.StrikePrice,
+							OriginalTransactionId = lookupMsg.TransactionId,
+						}.TryFillUnderlyingId(instr.BasicAsset)))
+						{
+							if (--left <= 0)
+								break;
+						}
+					}
+
+					break;
+				}
 				case SecurityTypes.Currency:
 				{
 					foreach (var instr in (await instrSvc.CurrenciesAsync(new(), cancellationToken: cancellationToken)).Instruments)
@@ -348,14 +359,13 @@ public partial class TinkoffMessageAdapter
 							SecurityId = new()
 							{
 								SecurityCode = instr.Ticker,
-								BoardCode = instr.Exchange,
-								Isin = instr.Isin,
+								BoardCode = instr.ClassCode,
 								Native = instr.Uid,
+								Isin = instr.Isin,
 							},
 							Name = instr.Name,
 							Multiplier = instr.Lot,
 							SecurityType = SecurityTypes.Currency,
-							Class = instr.ClassCode,
 							Shortable = instr.ShortEnabledFlag,
 							PriceStep = instr.MinPriceIncrement?.ToDecimal(),
 							OriginalTransactionId = lookupMsg.TransactionId,
@@ -379,15 +389,14 @@ public partial class TinkoffMessageAdapter
 							SecurityId = new()
 							{
 								SecurityCode = instr.Ticker,
-								BoardCode = instr.Exchange,
-								Isin = instr.Isin,
+								BoardCode = instr.ClassCode,
 								Native = instr.Uid,
+								Isin = instr.Isin,
 							},
 							Name = instr.Name,
 							Multiplier = instr.Lot,
 							SecurityType = SecurityTypes.Bond,
 							Currency = instr.Currency.To<CurrencyTypes?>(),
-							Class = instr.ClassCode,
 							ExpiryDate = instr.MaturityDate?.ToDateTimeOffset(),
 							IssueDate = instr.StateRegDate?.ToDateTimeOffset(),
 							IssueSize = instr.IssueSize,
@@ -415,15 +424,14 @@ public partial class TinkoffMessageAdapter
 							SecurityId = new()
 							{
 								SecurityCode = instr.Ticker,
-								BoardCode = instr.Exchange,
-								Isin = instr.Isin,
+								BoardCode = instr.ClassCode,
 								Native = instr.Uid,
+								Isin = instr.Isin,
 							},
 							Name = instr.Name,
 							Multiplier = instr.Lot,
 							SecurityType = SecurityTypes.Etf,
 							Currency = instr.Currency.To<CurrencyTypes?>(),
-							Class = instr.ClassCode,
 							Shortable = instr.ShortEnabledFlag,
 							IssueDate = instr.ReleasedDate?.ToDateTimeOffset(),
 							IssueSize = instr.NumShares?.ToDecimal(),
@@ -461,6 +469,20 @@ public partial class TinkoffMessageAdapter
 			{
 				var from = mdMsg.From.Value;
 				var to = mdMsg.To ?? CurrentTime;
+
+				if (interval == SubscriptionInterval.OneMinute && (to - from).TotalDays > 1)
+				{
+					var response = await _service.Instruments.GetInstrumentByAsync(new()
+					{
+						IdType = InstrumentIdType.Uid,
+						Id = mdMsg.GetInstrumentId(),
+					}, cancellationToken: cancellationToken);
+
+					if (response.Instrument is not null)
+						await DownloadHistoryAsync(mdMsg.TransactionId, response.Instrument.Figi, from, to, cancellationToken);
+
+					from = to.Date.UtcKind();
+				}
 
 				var request = new GetCandlesRequest
 				{
@@ -544,6 +566,78 @@ public partial class TinkoffMessageAdapter
 				}
 			}, cancellationToken);
 		}
+	}
+
+	private async Task<DateTimeOffset> DownloadHistoryAsync(long transId, string figi, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellationToken)
+	{
+		var last = from;
+		var curr = from;
+
+		while (curr < to)
+		{
+			using var response = await _historyClient.GetAsync($"https://{_domainAddr}/history-data?figi={figi}&year={curr.Year}", cancellationToken);
+			response.EnsureSuccessStatusCode();
+
+			using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
+
+			foreach (var (name, body) in stream.Unzip(true).Select(t => (t.name, t.body.To<byte[]>())).OrderBy(t => t.name))
+			{
+				var fileDate = name.Substring(name.Length - 12, 8).ToDateTime("yyyyMMdd");
+
+				if (fileDate < from.Date)
+					continue;
+
+				if (fileDate > to.Date)
+					break;
+
+				var reader = new FastCsvReader(body.To<Stream>(), Encoding.UTF8, StringHelper.N);
+				var needBreak = false;
+
+				while (reader.NextLine())
+				{
+					cancellationToken.ThrowIfCancellationRequested();
+
+					reader.Skip();
+
+					var timestamp = reader.ReadDateTime("yyyy-MM-ddTHH:mm:ssZ").UtcKind();
+					var open = reader.ReadDecimal();
+					var close = reader.ReadDecimal();
+					var high = reader.ReadDecimal();
+					var low = reader.ReadDecimal();
+					var volume = reader.ReadDecimal();
+
+					if (timestamp < from)
+						continue;
+
+					if (timestamp > to)
+					{
+						needBreak = true;
+						break;
+					}
+
+					SendOutMessage(new TimeFrameCandleMessage
+					{
+						OpenTime = timestamp,
+						OpenPrice = open,
+						HighPrice = high,
+						LowPrice = low,
+						ClosePrice = close,
+						TotalVolume = volume,
+						OriginalTransactionId = transId,
+						State = CandleStates.Finished,
+					});
+
+					last = last.Max(timestamp);
+				}
+
+				if (needBreak)
+					break;
+			}
+
+			curr = curr.AddYears(1);
+		}
+
+		return last;
 	}
 
 	private const int _defBook = 10;

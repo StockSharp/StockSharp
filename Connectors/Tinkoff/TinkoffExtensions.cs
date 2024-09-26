@@ -66,13 +66,29 @@ static class TinkoffExtensions
 	private static readonly PairSet<TimeSpan, SubscriptionInterval> _timeFrames = new()
 	{
 		{ TimeSpan.FromMinutes(1), SubscriptionInterval.OneMinute },
+		{ TimeSpan.FromMinutes(2), SubscriptionInterval._2Min },
+		{ TimeSpan.FromMinutes(3), SubscriptionInterval._3Min },
 		{ TimeSpan.FromMinutes(5), SubscriptionInterval.FiveMinutes },
+		{ TimeSpan.FromMinutes(10), SubscriptionInterval._10Min },
+		{ TimeSpan.FromMinutes(15), SubscriptionInterval.FifteenMinutes },
+		{ TimeSpan.FromHours(1), SubscriptionInterval.OneHour },
+		{ TimeSpan.FromDays(1), SubscriptionInterval.OneDay },
+		{ TimeSpan.FromDays(7), SubscriptionInterval.Week },
+		{ TimeSpan.FromTicks(TimeHelper.TicksPerMonth), SubscriptionInterval.Month },
 	};
 
 	private static readonly PairSet<TimeSpan, CandleInterval> _timeFrames2 = new()
 	{
 		{ TimeSpan.FromMinutes(1), CandleInterval._1Min },
+		{ TimeSpan.FromMinutes(2), CandleInterval._2Min },
+		{ TimeSpan.FromMinutes(3), CandleInterval._3Min },
 		{ TimeSpan.FromMinutes(5), CandleInterval._5Min },
+		{ TimeSpan.FromMinutes(10), CandleInterval._10Min },
+		{ TimeSpan.FromMinutes(15), CandleInterval._15Min },
+		{ TimeSpan.FromHours(1), CandleInterval.Hour },
+		{ TimeSpan.FromDays(1), CandleInterval.Day },
+		{ TimeSpan.FromDays(7), CandleInterval.Week },
+		{ TimeSpan.FromTicks(TimeHelper.TicksPerMonth), CandleInterval.Month },
 	};
 
 	public static SubscriptionInterval ToNative(this TimeSpan timeFrame)

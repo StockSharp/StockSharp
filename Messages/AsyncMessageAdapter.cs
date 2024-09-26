@@ -178,15 +178,6 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 		=> ProcessMessageAsync(replaceMsg, cancellationToken);
 
 	/// <summary>
-	/// Process <see cref="OrderPairReplaceMessage"/>.
-	/// </summary>
-	/// <param name="replaceMsg"><see cref="OrderPairReplaceMessage"/>.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
-	/// <returns><see cref="ValueTask"/>.</returns>
-	public virtual ValueTask ReplaceOrderPairAsync(OrderPairReplaceMessage replaceMsg, CancellationToken cancellationToken)
-		=> ProcessMessageAsync(replaceMsg, cancellationToken);
-
-	/// <summary>
 	/// Process <see cref="OrderCancelMessage"/>.
 	/// </summary>
 	/// <param name="cancelMsg"><see cref="OrderCancelMessage"/>.</param>

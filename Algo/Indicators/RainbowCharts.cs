@@ -51,14 +51,18 @@ public class RainbowCharts : BaseComplexIndicator
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
 	{
-		base.Save(storage);
+		//base.Save(storage);
+		SaveValues(storage);
+
 		storage.SetValue(nameof(Lines), Lines);
 	}
 
 	/// <inheritdoc />
 	public override void Load(SettingsStorage storage)
 	{
-		base.Load(storage);
+		//base.Load(storage);
+		LoadValues(storage);
+
 		Lines = storage.GetValue<int>(nameof(Lines));
 	}
 

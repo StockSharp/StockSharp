@@ -354,7 +354,9 @@ public static partial class Extensions
 		MessageTypes.OrderStatus,
 		MessageTypes.OrderGroupCancel,
 		MessageTypes.OrderReplace,
+#pragma warning disable CS0612 // Type or member is obsolete
 		MessageTypes.OrderPairReplace,
+#pragma warning restore CS0612 // Type or member is obsolete
 		MessageTypes.Portfolio,
 		MessageTypes.PortfolioLookup
 	});
@@ -1881,8 +1883,6 @@ public static partial class Extensions
 			case MessageTypes.OrderCancel:
 			case MessageTypes.OrderGroupCancel:
 				return makeErrorExecution(((OrderMessage)message).CreateReply(ex));
-			case MessageTypes.OrderPairReplace:
-				return makeErrorExecution(((OrderPairReplaceMessage)message).Message1.CreateReply(ex));
 
 			case MessageTypes.ChangePassword:
 			{
@@ -2009,7 +2009,8 @@ public static partial class Extensions
 	/// </summary>
 	/// <param name="message">Message.</param>
 	/// <param name="securityId">Security ID.</param>
-	public static void ReplaceSecurityId(this Message message, SecurityId securityId)
+	/// <returns>Message.</returns>
+	public static Message ReplaceSecurityId(this Message message, SecurityId securityId)
 	{
 		switch (message)
 		{
@@ -2022,6 +2023,8 @@ public static partial class Extensions
 			default:
 				throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.InvalidValue);
 		}
+
+		return message;
 	}
 
 	/// <summary>
@@ -3482,7 +3485,7 @@ public static partial class Extensions
 		var bestAsk = depth.GetBestAsk();
 
 		var spreadQuotes = bestBid is null || bestAsk is null
-			? (Array.Empty<QuoteChange>(), Array.Empty<QuoteChange>())
+			? (bids: [], asks: [])
 			: bestBid.Value.Sparse(bestAsk.Value, priceRange, priceStep);
 
 		return new()
@@ -3490,8 +3493,8 @@ public static partial class Extensions
 			SecurityId = depth.SecurityId,
 			ServerTime = depth.ServerTime,
 			BuildFrom = DataType.MarketDepth,
-			Bids = spreadQuotes.Item1.Concat(bids),
-			Asks = spreadQuotes.Item2.Concat(asks),
+			Bids = spreadQuotes.bids.Concat(bids),
+			Asks = spreadQuotes.asks.Concat(asks),
 		};
 	}
 
@@ -3501,25 +3504,25 @@ public static partial class Extensions
 	public static QuoteChangeMessage Sparse(this IOrderBookMessage depth, Unit priceRange, decimal? priceStep)
 		=> depth.Sparse(GetActualPriceRange(priceRange), priceStep);
 
-	private static void ValidatePriceRange(decimal? priceRange)
+	private static void ValidatePriceRange(decimal priceRange)
 	{
-		if (priceRange is null)
-			throw new ArgumentNullException(nameof(priceRange));
-
 		if (priceRange <= 0)
 			throw new ArgumentOutOfRangeException(nameof(priceRange), priceRange, LocalizedStrings.InvalidValue);
 	}
 
 	private static decimal GetActualPriceRange(Unit priceRange)
 	{
-		var val = (decimal?)priceRange;
+		if (priceRange is null)
+			throw new ArgumentNullException(nameof(priceRange));
+		
+		var val = (decimal)priceRange;
 		ValidatePriceRange(val);
 
-		if (priceRange.Type is not UnitTypes.Absolute and not UnitTypes.Step)
-			throw new ArgumentOutOfRangeException(LocalizedStrings.UnsupportedType.Put(priceRange.Type));
+		// Limit can be casted to decimal, so check it extra
+		if (priceRange.Type is UnitTypes.Limit)
+			throw new ArgumentException(LocalizedStrings.UnsupportedType.Put(priceRange.Type), nameof(priceRange));
 
-		// ReSharper disable once PossibleInvalidOperationException
-		return val.Value;
+		return val;
 	}
 
 	/// <summary>
@@ -3547,37 +3550,28 @@ public static partial class Extensions
 		var askPrice = ask.Price;
 
 		if (bidPrice == default || askPrice == default || bidPrice == askPrice)
-			return (Array.Empty<QuoteChange>(), Array.Empty<QuoteChange>());
+			return ([], []);
 
 		const int maxLimit = 1000;
 
 		var bids = new List<QuoteChange>();
 		var asks = new List<QuoteChange>();
 
-		while (true)
+		var currentBidPrice = bidPrice.ShrinkPrice(priceStep, null, ShrinkRules.More);
+		var currentAskPrice = askPrice.ShrinkPrice(priceStep, null, ShrinkRules.Less);
+
+		while (currentBidPrice < currentAskPrice && (bids.Count + asks.Count) < maxLimit)
 		{
-			bidPrice = (bidPrice + priceRange).ShrinkPrice(priceStep, null, ShrinkRules.More);
-			askPrice = (askPrice - priceRange).ShrinkPrice(priceStep, null, ShrinkRules.Less);
+			currentBidPrice = (currentBidPrice + priceRange).ShrinkPrice(priceStep, null, ShrinkRules.Less);
 
-			if (bidPrice > askPrice)
-				break;
+			if (currentBidPrice > bidPrice && currentBidPrice < askPrice)
+				bids.Add(new() { Price = currentBidPrice });
 
-			bids.Add(new QuoteChange { Price = bidPrice });
+			currentAskPrice = (currentAskPrice - priceRange).ShrinkPrice(priceStep, null, ShrinkRules.More);
 
-			if (bids.Count > maxLimit)
-				break;
-
-			if (bidPrice == askPrice)
-				break;
-
-			asks.Add(new QuoteChange { Price = askPrice });
-
-			if (asks.Count > maxLimit)
-				break;
+			if (currentAskPrice > bidPrice && currentAskPrice < askPrice)
+				asks.Insert(0, new() { Price = currentAskPrice });
 		}
-
-		bids.Reverse();
-		asks.Reverse();
 
 		return (bids.ToArray(), asks.ToArray());
 	}
@@ -3601,7 +3595,7 @@ public static partial class Extensions
 		ValidatePriceRange(priceRange);
 
 		if (quotes.Length < 2)
-			return Array.Empty<QuoteChange>();
+			return [.. quotes];
 
 		const int maxLimit = 10000;
 
@@ -3611,6 +3605,9 @@ public static partial class Extensions
 		{
 			var from = quotes[i];
 			var toPrice = quotes[i + 1].Price;
+
+			// Always add the original quote
+			retVal.Add(from);
 
 			if (side == Sides.Buy)
 			{
@@ -3647,7 +3644,8 @@ public static partial class Extensions
 				break;
 		}
 
-		return retVal.ToArray();
+		retVal.Add(quotes[quotes.Length - 1]);  // Add the last quote
+		return [.. retVal];
 	}
 
 	/// <summary>
@@ -3716,8 +3714,8 @@ public static partial class Extensions
 		{
 			SecurityId = depth.SecurityId,
 			ServerTime = depth.ServerTime,
-			Bids = depth.Bids.SelectMany(GetInner).OrderByDescending(q => q.Price).ToArray(),
-			Asks = depth.Asks.SelectMany(GetInner).OrderBy(q => q.Price).ToArray(),
+			Bids = [.. depth.Bids.SelectMany(GetInner).OrderByDescending(q => q.Price)],
+			Asks = [.. depth.Asks.SelectMany(GetInner).OrderBy(q => q.Price)],
 			BuildFrom = DataType.MarketDepth,
 		};
 	}
@@ -3736,8 +3734,13 @@ public static partial class Extensions
 
 		ValidatePriceRange(priceRange);
 
-		if (quotes.Length < 2)
-			return quotes.ToArray();
+		if (quotes.Length == 0)
+			return [];
+		else if (quotes.Length == 1)
+		{
+			var q = quotes[0];
+			return [new(q.Price, q.Volume) { InnerQuotes = [q] }];
+		}
 
 		if (side == Sides.Buy)
 			priceRange = -priceRange;
@@ -3757,7 +3760,7 @@ public static partial class Extensions
 
 			if (side == Sides.Buy)
 			{
-				if (currQuote.Price >= nextPrice)
+				if (currQuote.Price > nextPrice)
 				{
 					innerQuotes.Add(currQuote);
 
@@ -3769,7 +3772,7 @@ public static partial class Extensions
 			}
 			else
 			{
-				if (currQuote.Price <= nextPrice)
+				if (currQuote.Price < nextPrice)
 				{
 					innerQuotes.Add(currQuote);
 
@@ -3798,7 +3801,7 @@ public static partial class Extensions
 			retVal.Add(groupedQuote);
 		}
 
-		return retVal.ToArray();
+		return [.. retVal];
 	}
 
 	/// <summary>
@@ -4070,8 +4073,6 @@ public static partial class Extensions
 		if (depth < 0)
 			throw new ArgumentOutOfRangeException(nameof(depth), depth, LocalizedStrings.InvalidValue);
 
-		var retVal = new List<(QuoteChange?, QuoteChange?)>();
-
 		for (var i = 0; i < depth; i++)
 		{
 			var (bid, ask) = book.GetPair(i);
@@ -4079,10 +4080,8 @@ public static partial class Extensions
 			if (bid is null && ask is null)
 				break;
 
-			retVal.Add(new(bid, ask));
+			yield return new(bid, ask);
 		}
-
-		return retVal;
 	}
 
 	/// <summary>

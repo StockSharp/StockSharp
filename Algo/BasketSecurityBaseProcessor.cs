@@ -137,9 +137,7 @@ public abstract class ContinuousSecurityBaseProcessor<TBasketSecurity> : BasketS
 			}
 		}
 
-		message = message.Clone();
-		message.ReplaceSecurityId(SecurityId);
-		yield return message;
+		yield return message.Clone().ReplaceSecurityId(SecurityId);
 	}
 
 	/// <summary>

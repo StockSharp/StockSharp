@@ -330,15 +330,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 									break;
 								}
-								case MessageTypes.OrderPairReplace:
-								{
-									var pairMsg = (OrderPairReplaceMessage)message;
-
-									_managersByTransId[pairMsg.Message1.TransactionId] = manager;
-									_managersByTransId[pairMsg.Message2.TransactionId] = manager;
-
-									break;
-								}
 							}
 
 							return manager.ProcessMessage(message);
@@ -1142,13 +1133,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				ProcessOrderMessage(ordMsg.TransactionId, ordMsg.OriginalTransactionId, ordMsg);
 				break;
 			}
-			case MessageTypes.OrderPairReplace:
-			{
-				var ordMsg = (OrderPairReplaceMessage)message;
-				var m1 = ordMsg.Message1;
-				ProcessOrderMessage(m1.TransactionId, m1.OriginalTransactionId, ordMsg);
-				break;
-			}
 			case MessageTypes.OrderGroupCancel:
 			{
 				var groupMsg = (OrderGroupCancelMessage)message;
@@ -1577,8 +1561,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		{
 			if (message is OrderMessage ordMsg && !ordMsg.PortfolioName.IsEmpty())
 				adapter = GetAdapter(ordMsg.PortfolioName, message, out _);
-			else if (message is OrderPairReplaceMessage pairMsg)
-				adapter = GetAdapter(pairMsg.Message1.PortfolioName, message, out _);
 		}
 
 		var wrapper = _adapterWrappers.TryGetValue(adapter);
@@ -1602,11 +1584,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			if (message is OrderReplaceMessage replace)
 			{
 				TryAddOrderAdapter(replace.TransactionId, adapter);
-			}
-			else if (message is OrderPairReplaceMessage pairReplace)
-			{
-				TryAddOrderAdapter(pairReplace.Message1.TransactionId, adapter);
-				TryAddOrderAdapter(pairReplace.Message2.TransactionId, adapter);
 			}
 		}
 

@@ -2,7 +2,7 @@
 <svg version="1.1" width="500" height="500" viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
   <g transform="matrix(1 0 0 1 540 540)" />
   <g transform="matrix(1 0 0 1 540 540)" >
-    <rect style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1; visibility: hidden;" x="-540" y="-540" rx="0" ry="0" width="1080" height="1080"/>
+    <rect style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: transparent; fill-rule: nonzero; opacity: 1; visibility: hidden;" x="-540" y="-540" rx="0" ry="0" width="1080" height="1080"/>
   </g>
   <g transform="matrix(1, 0, 0, 1, 90.664246, 95.328629)">
     <path style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255, 221, 45); fill-rule: nonzero; opacity: 1;" d="M -65.939 -65.939 L 933.522 -65.939 L 933.522 455.484 C 933.522 589.154 864.78 712.674 753.191 779.516 L 433.792 970.836 L 114.393 779.516 C 2.803 712.674 -65.939 589.154 -65.939 455.484 L -65.939 -65.939 Z" stroke-linecap="round"/>

@@ -169,22 +169,6 @@ public class OfflineMessageAdapter : MessageAdapterWrapper
 
 				break;
 			}
-			case MessageTypes.OrderPairReplace:
-			{
-				lock (_syncObject)
-				{
-					if (!_connected)
-					{
-						var pairMsg = (OrderPairReplaceMessage)message.Clone();
-
-						ProcessOrderReplaceMessage(pairMsg.Message1);
-						ProcessOrderReplaceMessage(pairMsg.Message2);
-						return true;
-					}
-				}
-
-				break;
-			}
 			case MessageTypes.ProcessSuspended:
 			{
 				Message[] msgs;

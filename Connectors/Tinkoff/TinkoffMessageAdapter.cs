@@ -1,10 +1,13 @@
 namespace StockSharp.Tinkoff;
 
+using Ecng.Net;
+
 public partial class TinkoffMessageAdapter
 {
 	private GrpcChannel _channel;
 	private InvestApiClient _service;
 	private AsyncDuplexStreamingCall<MarketDataRequest, MarketDataResponse> _mdStream;
+	private const string _domainAddr = "invest-public-api.tinkoff.ru";
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="TinkoffMessageAdapter"/>.
@@ -17,6 +20,8 @@ public partial class TinkoffMessageAdapter
 		this.AddTransactionalSupport();
 		this.RemoveSupportedMessage(MessageTypes.Portfolio);
 		this.RemoveSupportedMessage(MessageTypes.OrderGroupCancel);
+
+		MaxParallelMessages = 1;
 
 		this.AddSupportedMarketDataType(DataType.MarketDepth);
 		this.AddSupportedMarketDataType(DataType.Level1);
@@ -41,6 +46,9 @@ public partial class TinkoffMessageAdapter
 	protected override IEnumerable<TimeSpan> TimeFrames => TinkoffExtensions.TimeFrames;
 
 	/// <inheritdoc />
+	public override bool IsSupportCandlesUpdates(MarketDataMessage subscription) => true;
+
+	/// <inheritdoc />
 	public override bool IsNativeIdentifiers => true;
 
 	/// <inheritdoc />
@@ -63,13 +71,13 @@ public partial class TinkoffMessageAdapter
 
 		var credentials = ChannelCredentials.Create(new SslCredentials(), CallCredentials.FromInterceptor((_, metadata) =>
 		{
-			metadata.Add("Authorization", $"Bearer {Token.UnSecure()}");
+			metadata.Add(HttpHeaders.Authorization, AuthSchemas.Bearer.FormatAuth(Token));
 			metadata.Add("x-app-name", nameof(StockSharp));
 			return Task.CompletedTask;
 		}));
 
 		var prefix = IsDemo ? "sandbox-" : string.Empty;
-		_channel = GrpcChannel.ForAddress($"https://{prefix}invest-public-api.tinkoff.ru:443", new()
+		_channel = GrpcChannel.ForAddress($"https://{prefix}{_domainAddr}", new()
 		{
 			Credentials = credentials,
 			MaxReceiveMessageSize = null,
@@ -86,6 +94,9 @@ public partial class TinkoffMessageAdapter
 
 		if (this.IsMarketData())
 			StartMarketDataStreaming(cancellationToken);
+
+		_historyClient = new();
+		_historyClient.SetBearer(Token);
 
 		SendOutMessage(new ConnectMessage());
 	}
@@ -134,6 +145,9 @@ public partial class TinkoffMessageAdapter
 
 		_service = default;
 		_accountIds.Clear();
+
+		_historyClient.Dispose();
+		_historyClient = null;
 
 		SendOutMessage(new ResetMessage());
 

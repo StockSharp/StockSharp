@@ -5,6 +5,7 @@ namespace StockSharp.Messages;
 /// </summary>
 [DataContract]
 [Serializable]
+[Obsolete]
 public class OrderPairReplaceMessage : Message
 {
 	/// <summary>

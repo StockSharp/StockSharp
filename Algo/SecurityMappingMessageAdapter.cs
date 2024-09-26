@@ -91,11 +91,6 @@ public class SecurityMappingMessageAdapter : MessageAdapterWrapper
 			case SecurityMessage secMsg:
 				ReplaceSecurityId(secMsg);
 				break;
-
-			case OrderPairReplaceMessage pairMsg:
-				ReplaceSecurityId(pairMsg.Message1);
-				ReplaceSecurityId(pairMsg.Message2);
-				break;
 		}
 
 		return base.OnSendInMessage(message);

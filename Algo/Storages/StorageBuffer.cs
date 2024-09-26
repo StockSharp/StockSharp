@@ -175,7 +175,6 @@ public class StorageBuffer : IPersistable
 			case MessageTypes.OrderRegister:
 			case MessageTypes.OrderReplace:
 			case MessageTypes.OrderCancel:
-			case MessageTypes.OrderPairReplace:
 			case MessageTypes.OrderGroupCancel:
 				return CanStore(message, EnabledTransactions, IgnoreGeneratedTransactional);
 
@@ -250,17 +249,6 @@ public class StorageBuffer : IPersistable
 					break;
 
 				_transactionsBuffer.Add(replaceMsg.SecurityId, replaceMsg.ToExec());
-				break;
-			}
-			case MessageTypes.OrderPairReplace:
-			{
-				var pairMsg = (OrderPairReplaceMessage)message;
-
-				if (!CanStore(pairMsg))
-					break;
-
-				_transactionsBuffer.Add(pairMsg.Message1.SecurityId, pairMsg.Message1.ToExec());
-				_transactionsBuffer.Add(pairMsg.Message2.SecurityId, pairMsg.Message2.ToExec());
 				break;
 			}
 			//case MessageTypes.OrderCancel:

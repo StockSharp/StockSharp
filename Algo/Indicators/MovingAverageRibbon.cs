@@ -84,7 +84,7 @@ public class MovingAverageRibbon : BaseComplexIndicator
 		get => _ribbonCount;
 		set
 		{
-			if (value < 1 || value > 1000)
+			if (value < 1)
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 			_ribbonCount = value;
@@ -108,7 +108,8 @@ public class MovingAverageRibbon : BaseComplexIndicator
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
 	{
-		base.Save(storage);
+		//base.Save(storage);
+		SaveValues(storage);
 
 		storage.SetValue(nameof(ShortPeriod), ShortPeriod);
 		storage.SetValue(nameof(LongPeriod), LongPeriod);
@@ -118,7 +119,8 @@ public class MovingAverageRibbon : BaseComplexIndicator
 	/// <inheritdoc />
 	public override void Load(SettingsStorage storage)
 	{
-		base.Load(storage);
+		//base.Load(storage);
+		LoadValues(storage);
 
 		ShortPeriod = storage.GetValue<int>(nameof(ShortPeriod));
 		LongPeriod = storage.GetValue<int>(nameof(LongPeriod));
