@@ -7,7 +7,7 @@ namespace StockSharp.DarkHorse;
 partial class DarkHorseMessageAdapter
 {
     private const int _tickPaginationLimit = 5000;
-    private const int _candlesPaginationLimit = 1501;
+    private const int _candlesPaginationLimit = 5000;
     private string _prevTradeReqId = string.Empty;
 
     private void SessionOnNewTrade(string pair, List<Trade> trades)
@@ -17,7 +17,7 @@ partial class DarkHorseMessageAdapter
             SendOutMessage(new ExecutionMessage
             {
                 DataTypeEx = DataType.Ticks,
-                SecurityId = pair.ToStockSharp(),
+                SecurityId = pair.ToStockSharpFromSymbol(),
                 TradeId = trade.Id,
                 TradePrice = trade.Price,
                 TradeVolume = trade.Size,
@@ -32,7 +32,7 @@ partial class DarkHorseMessageAdapter
         SendOutMessage(new QuoteChangeMessage
         {
             State = state,
-            SecurityId = pair.ToStockSharp(),
+            SecurityId = pair.ToStockSharpFromSymbol(),
             Bids = book.Bids.Select(e => new QuoteChange(e.Price, e.Size)).ToArray(),
             Asks = book.Asks.Select(e => new QuoteChange(e.Price, e.Size)).ToArray(),
             ServerTime = book.Time,
@@ -43,7 +43,7 @@ partial class DarkHorseMessageAdapter
     {
         SendOutMessage(new Level1ChangeMessage()
         {
-            SecurityId = pair.ToStockSharp(),
+            SecurityId = pair.ToStockSharpFromSymbol(),
             ServerTime = level1.Time
         }
         .TryAdd(Level1Fields.BestBidPrice, level1.Bid)
@@ -90,11 +90,11 @@ partial class DarkHorseMessageAdapter
         {
             if (mdMsg.From is not null)
             {
-                var startTime = mdMsg.From.Value.UtcDateTime;
-                var endTime = mdMsg.To?.UtcDateTime ?? DateTime.UtcNow;
+                var startTime = mdMsg.From.Value.DateTime;
+                var endTime = mdMsg.To?.UtcDateTime ?? DateTime.Now;
                 var left = mdMsg.Count ?? long.MaxValue;
-
-                while (startTime < endTime)
+                var received_all = false;
+                while (!received_all)
                 {
                     var prevTradeReqId = _prevTradeReqId;
                     _prevTradeReqId = mdMsg.TransactionId.ToString();
@@ -108,7 +108,10 @@ partial class DarkHorseMessageAdapter
                             continue;
 
                         if (trade.Time > endTime)
+                        {
+                            received_all = true;
                             break;
+                        }
 
                         SendOutMessage(new ExecutionMessage
                         {
@@ -158,12 +161,12 @@ partial class DarkHorseMessageAdapter
             if (mdMsg.From is not null)
             {
                 var startTime = mdMsg.From.Value.UtcDateTime;
-                var endTime = mdMsg.To?.UtcDateTime ?? DateTime.UtcNow;
+                var endTime = mdMsg.To?.UtcDateTime ?? DateTime.Now;
                 var left = mdMsg.Count ?? long.MaxValue;
 
                 var resolution = (TimeSpan)mdMsg.DataType2.Arg;
-
-                while (startTime < endTime)
+                var received_all = false;
+                while (!received_all)
                 {
                     var candles = await _restClient.GetMarketCandles(symbol, resolution, startTime, endTime, cancellationToken);
 
@@ -175,7 +178,10 @@ partial class DarkHorseMessageAdapter
                             continue;
 
                         if (candle.OpenTime > endTime)
+                        {
+                            //received_all = true;
                             break;
+                        }
 
                         SendOutMessage(new TimeFrameCandleMessage
                         {
@@ -196,7 +202,10 @@ partial class DarkHorseMessageAdapter
                     }
 
                     if (candles.Count != _candlesPaginationLimit || --left <= 0)
+                    {
+                        received_all = true;
                         break;
+                    }
 
                     startTime = lastTime;
                 }

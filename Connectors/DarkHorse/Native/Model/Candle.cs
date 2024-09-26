@@ -15,8 +15,9 @@ internal class Candle
 	[JsonProperty("open")]
 	public decimal OpenPrice { get; set; }
 
-	[JsonProperty("startTime")]
-	public DateTime OpenTime { get; set; }
+	[JsonProperty("timestamp")]
+    [JsonConverter(typeof(JsonDateTimeFmtConverter))]
+    public DateTime OpenTime { get; set; }
 
 	[JsonProperty("volume")]
 	public decimal WindowVolume { get; set; }

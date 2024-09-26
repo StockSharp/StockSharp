@@ -199,7 +199,7 @@ class DarkHorseWebSocketClient : BaseLogReceiver
 
 	private WsTradeChannelSubscriber _tradesMarketChannelSubFlags;
 
-	public async ValueTask SubscribeTradesChannel(string market, WsTradeChannelSubscriber subscriber, CancellationToken cancellationToken)
+	public async ValueTask SubscribeTradesChannel(string symbol, WsTradeChannelSubscriber subscriber, CancellationToken cancellationToken)
 	{
 		if (_tradesMarketChannelSubFlags == WsTradeChannelSubscriber.None)
 		{
@@ -210,13 +210,13 @@ class DarkHorseWebSocketClient : BaseLogReceiver
 			{
 				op = "subscribe",
 				channel = "trades",
-				market
+				symbol
 			}, cancellationToken);
 		}
 		_tradesMarketChannelSubFlags |= subscriber;
 	}
 
-	public ValueTask UnsubscribeTradesChannel(string market, WsTradeChannelSubscriber subscriber, CancellationToken cancellationToken)
+	public ValueTask UnsubscribeTradesChannel(string symbol, WsTradeChannelSubscriber subscriber, CancellationToken cancellationToken)
 	{
 		_tradesMarketChannelSubFlags = Enumerator.Remove(_tradesMarketChannelSubFlags, subscriber);
 
@@ -229,7 +229,7 @@ class DarkHorseWebSocketClient : BaseLogReceiver
 			{
 				op = "unsubscribe",
 				channel = "trades",
-				market
+				symbol
 			}, cancellationToken);
 
 
@@ -238,7 +238,7 @@ class DarkHorseWebSocketClient : BaseLogReceiver
 		return default;
 	}
 
-	public ValueTask SubscribeOrderBook(string market, CancellationToken cancellationToken)
+	public ValueTask SubscribeOrderBook(string symbol, CancellationToken cancellationToken)
 	{
 		if (_client == null || !_client.IsConnected)
 			return default;
@@ -247,12 +247,12 @@ class DarkHorseWebSocketClient : BaseLogReceiver
 		{
 			op = "subscribe",
 			channel = "orderbook",
-			market
+			symbol
 		}, cancellationToken);
 
 	}
 
-	public ValueTask UnsubscribeOrderBook(string market, CancellationToken cancellationToken)
+	public ValueTask UnsubscribeOrderBook(string symbol, CancellationToken cancellationToken)
 	{
 		if (_client == null || !_client.IsConnected)
 			return default;
@@ -261,7 +261,7 @@ class DarkHorseWebSocketClient : BaseLogReceiver
 		{
 			op = "unsubscribe",
 			channel = "orderbook",
-			market
+			symbol
 		}, cancellationToken);
 	}
 
@@ -394,12 +394,30 @@ class DarkHorseWebSocketClient : BaseLogReceiver
 		return _hasher.ComputeHash(signature.UTF8()).Digest();
 	}
 
-	private static T Parse<T>(dynamic obj)
-	{
-		if (((JToken)obj).Type == JTokenType.Object && obj.status == "error")
-			throw new InvalidOperationException((string)obj.reason.ToString());
+    private static T Parse<T>(dynamic obj)
+    {
+        try
+        {
+            // Check if the object has an error status
+            if (((JToken)obj).Type == JTokenType.Object && obj.status == "error")
+                throw new InvalidOperationException((string)obj.reason.ToString());
 
-		return ((JToken)obj).DeserializeObject<T>();
-	}
-	#endregion
+            // Attempt to deserialize the object to the specified type
+            return ((JToken)obj).DeserializeObject<T>();
+        }
+        catch (InvalidOperationException ex)
+        {
+            // Handle InvalidOperationException specifically (e.g., status == "error")
+            Console.WriteLine($"Error occurred: {ex.Message}");
+            throw; // Re-throw the exception if you want it to propagate further
+        }
+        catch (Exception ex)
+        {
+            // Handle any other exceptions that might occur (e.g., deserialization failure)
+            Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+            throw; // Re-throw the exception or handle it as needed
+        }
+    }
+
+    #endregion
 }
