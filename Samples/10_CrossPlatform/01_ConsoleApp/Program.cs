@@ -23,14 +23,12 @@ static class Program
 		// !!! DO NOT FORGET ADD NUGET PACKAGE WITH REQUIRED CONNECTOR !!!
 		// https://stocksharp.com/products/nuget_manual/#privateserver
 		//
-		//var messageAdapter = new StockSharp.Binance.BinanceMessageAdapter(connector.TransactionIdGenerator)
-		//{
-		//	Key = "<Your key>".Secure(),
-		//	Secret = "<Your secret>".Secure(),
-		//	IsDemo = true
-		//};
-
-		//connector.Adapter.InnerAdapters.Add(messageAdapter);
+		connector.Adapter.InnerAdapters.Add(new Binance.BinanceMessageAdapter(connector.TransactionIdGenerator)
+		{
+			Key = "<Your key>".Secure(),
+			Secret = "<Your secret>".Secure(),
+			IsDemo = true
+		});
 
 		connector.ConnectionError += Console.WriteLine;
 		connector.Error += Console.WriteLine;

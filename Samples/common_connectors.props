@@ -1,0 +1,8 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PackageReference Include="StockSharp.Binance" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.Okex" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.GateIO" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.Fix" Version="$(StockSharpVer)" />
+  </ItemGroup>
+</Project>
