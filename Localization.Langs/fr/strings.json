@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "Compteur d'erreurs actuel {0}. Maximum {1}.",
   "CurrPriceBestPrice": "Prix actuel {0} et meilleur prix {1}.",
   "CurrValueInLots": "Valeur actuelle (en lots)",
+  "Cursor": "Curseur",
+  "CursorTextFormat": "Format des étiquettes du curseur",
   "Cusip": "CUSIP",
   "CusipDesc": "Identifiant au format CUSIP (Comité des procédures uniformes d'identification des valeurs mobilières).",
   "Custom": "Personnalisé",

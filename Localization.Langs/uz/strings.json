@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "Hozirgi xatolar soni {0}. Maksimal {1}.",
   "CurrPriceBestPrice": "Joriy narx {0} va eng yaxshi narx {1}.",
   "CurrValueInLots": "Joriy qiymat (lotlarda)",
+  "Cursor": "Kursor",
+  "CursorTextFormat": "Kursor yorliqlari formati",
   "Cusip": "CUSIP",
   "CusipDesc": "CUSIP formatidagi identifikator (Yagona Qimmatli Qog'ozlarni Aniqlash Bo'yicha Qo'mita).",
   "Custom": "Maxsus",

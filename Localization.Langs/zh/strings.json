@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "当前错误数量 {0}。 最大 {1}。",
   "CurrPriceBestPrice": "当前价格 {0} 和最佳价格 {1}。",
   "CurrValueInLots": "当前价值（按手数）",
+  "Cursor": "光标",
+  "CursorTextFormat": "光标标签格式",
   "Cusip": "CUSIP",
   "CusipDesc": "CUSIP格式的标识符（统一证券识别程序委员会）。",
   "Custom": "自定义",

@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "מונה השגיאות הנוכחי {0}. מקסימלי {1}.",
   "CurrPriceBestPrice": "המחיר הנוכחי {0} והמחיר הטוב ביותר {1}.",
   "CurrValueInLots": "ערך נוכחי (בלוטים)",
+  "Cursor": "סמן",
+  "CursorTextFormat": "פורמט תוויות הסמן",
   "Cusip": "CUSIP",
   "CusipDesc": "מזהה בפורמט CUSIP (ועדת נוהלי הזיהוי המאוחדים של ניירות ערך).",
   "Custom": "מותאם אישית",

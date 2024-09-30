@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "شمارنده خطاهای کنونی {0}. بیشترین {1}.",
   "CurrPriceBestPrice": "قیمت کنونی {0} و بهترین قیمت {1}.",
   "CurrValueInLots": "ارزش فعلی (به لات)",
+  "Cursor": "نشانگر",
+  "CursorTextFormat": "قالب برچسب‌های نشانگر",
   "Cusip": "CUSIP",
   "CusipDesc": "شناسه در قالب CUSIP (کمیته‌ای برای رویه‌های یکنواخت شناسایی اوراق بهادار).",
   "Custom": "سفارشی",

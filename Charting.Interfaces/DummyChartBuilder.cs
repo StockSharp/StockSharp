@@ -156,6 +156,7 @@ public class DummyChartBuilder : IChartBuilder
 		public bool DrawMinorGridLines { get; set; }
 		public bool DrawLabels { get; set; }
 		public string TextFormatting { get; set; }
+		public string CursorTextFormatting { get; set; }
 		public string SubDayTextFormatting { get; set; }
 		public TimeZoneInfo TimeZone { get; set; }
 
@@ -177,6 +178,7 @@ public class DummyChartBuilder : IChartBuilder
 			DrawMinorGridLines = storage.GetValue<bool>(nameof(DrawMinorGridLines));
 			DrawLabels = storage.GetValue<bool>(nameof(DrawLabels));
 			TextFormatting = storage.GetValue<string>(nameof(TextFormatting));
+			CursorTextFormatting = storage.GetValue<string>(nameof(CursorTextFormatting));
 			SubDayTextFormatting = storage.GetValue(nameof(SubDayTextFormatting), SubDayTextFormatting);
 			SwitchAxisLocation = storage.GetValue<bool>(nameof(SwitchAxisLocation));
 			AxisType = storage.GetValue<ChartAxisType>(nameof(AxisType));

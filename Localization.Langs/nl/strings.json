@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "Huidige foutteller {0}. Maximum {1}.",
   "CurrPriceBestPrice": "Huidige prijs {0} en beste prijs {1}.",
   "CurrValueInLots": "Huidige waarde (in loten)",
+  "Cursor": "Cursor",
+  "CursorTextFormat": "Opmaak cursorlabels",
   "Cusip": "CUSIP",
   "CusipDesc": "Identificator in CUSIP-formaat (Comité voor Uniforme Waardepapieren Identificatie Procedures).",
   "Custom": "Aangepast",

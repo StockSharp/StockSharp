@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "Jelenlegi hibaszámláló {0}. Maximális {1}.",
   "CurrPriceBestPrice": "Jelenlegi ár {0} és a legjobb ár {1}.",
   "CurrValueInLots": "Jelenlegi érték (lotokban)",
+  "Cursor": "Kurzor",
+  "CursorTextFormat": "Kurzor címkék formátuma",
   "Cusip": "CUSIP",
   "CusipDesc": "Azonosító CUSIP formátumban (Egységes Értékpapír-Azonosítási Eljárások Bizottsága).",
   "Custom": "Egyedi",

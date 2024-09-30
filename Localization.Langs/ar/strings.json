@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "عداد الأخطاء الحالي {0}. الحد الأقصى {1}.",
   "CurrPriceBestPrice": "السعر الحالي {0} وأفضل سعر {1}.",
   "CurrValueInLots": "القيمة الحالية (باللوتات)",
+  "Cursor": "المؤشر",
+  "CursorTextFormat": "تنسيق عناوين المؤشر",
   "Cusip": "CUSIP",
   "CusipDesc": "معرف بتنسيق CUSIP (لجنة إجراءات تعريف الأوراق المالية الموحدة).",
   "Custom": "مخصص",

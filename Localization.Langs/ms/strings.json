@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "Penghitung Ralat Semasa {0}. Maksimum {1}.",
   "CurrPriceBestPrice": "Harga semasa {0} dan harga terbaik {1}.",
   "CurrValueInLots": "Nilai Semasa (dalam Lot)",
+  "Cursor": "Kursor",
+  "CursorTextFormat": "Format label kursor",
   "Cusip": "CUSIP",
   "CusipDesc": "Pengenal dalam format CUSIP (Jawatankuasa Prosedur Pengenalan Sekuriti Seragam).",
   "Custom": "Custom",

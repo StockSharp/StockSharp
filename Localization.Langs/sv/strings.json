@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "Aktuellt felantal {0}. Maximalt {1}.",
   "CurrPriceBestPrice": "Nuvarande pris {0} och bästa pris {1}.",
   "CurrValueInLots": "Nuvarande värde (i lotter)",
+  "Cursor": "Markör",
+  "CursorTextFormat": "Format för markörens etiketter",
   "Cusip": "CUSIP",
   "CusipDesc": "Identifierare i CUSIP-format (Kommittén för enhetliga förfaranden för identifiering av värdepapper).",
   "Custom": "Anpassad",
