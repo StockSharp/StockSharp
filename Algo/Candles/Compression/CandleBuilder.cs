@@ -360,6 +360,15 @@ public abstract class CandleBuilder<TCandleMessage> : BaseLogReceiver, ICandleBu
 
 	//	RaiseProcessing(series, candleMessage);
 	//}
+
+	/// <summary>
+	/// To cut the price, to make it multiple of minimal step, also to limit number of signs after the comma.
+	/// </summary>
+	/// <param name="price">The price to be made multiple.</param>
+	/// <param name="subscription"><see cref="ICandleBuilderSubscription"/></param>
+	/// <returns>The multiple price.</returns>
+	protected decimal ShrinkPrice(decimal price, ICandleBuilderSubscription subscription)
+		=> price.ShrinkPrice(subscription.CheckOnNull(nameof(subscription)).Message);
 }
 
 /// <summary>
@@ -696,12 +705,12 @@ public class PnFCandleBuilder : CandleBuilder<PnFCandleMessage>
 
 		var boxSize = pnf.BoxSize.Value;
 
-		var price = pnf.BoxSize.Type switch
+		var price = ShrinkPrice(pnf.BoxSize.Type switch
 		{
 			UnitTypes.Percent => roundToPercentage(transform.Price, boxSize),
 			UnitTypes.Absolute => roundToAbs(transform.Price, boxSize),
 			_ => throw new InvalidOperationException(LocalizedStrings.UnknownUnitMeasurement.Put(pnf.BoxSize.Type)),
-		};
+		}, subscription);
 
 		var volume = transform.Volume;
 		var time = transform.Time;
@@ -712,7 +721,7 @@ public class PnFCandleBuilder : CandleBuilder<PnFCandleMessage>
 		if (currentPnFCandle == null)
 		{
 			var openPrice = price;
-			var highPrice = (decimal)(openPrice + pnf.BoxSize);
+			var highPrice = ShrinkPrice((decimal)(openPrice + pnf.BoxSize), subscription);
 
 			currentPnFCandle = CreateCandle(subscription, buildFrom, pnf, openPrice, highPrice, openPrice, highPrice, price, volume, side, time, oi);
 			yield return currentPnFCandle;
