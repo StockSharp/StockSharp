@@ -292,17 +292,29 @@ class DarkHorseWebSocketClient : BaseLogReceiver
 				NewTrade?.Invoke(trade.Market, trade.Data);
 			}
 		}
-		else if (channel == "orderbook")
-		{
-			if (type != "update" && type != "partial") return;
+        else if (channel == "orderbook")
+        {
+            try
+            {
+                if (type != "update" && type != "partial") return;
 
-			WebSocketResponse<OrderBook> ob = Parse<WebSocketResponse<OrderBook>>(obj);
-			if (ob != null && ob.Data != null)
-			{
-				NewOrderBook?.Invoke(ob.Market, ob.Data, type == "partial" ? QuoteChangeStates.SnapshotComplete : QuoteChangeStates.Increment);
-			}
-		}
-		else if (channel == "orders")
+                WebSocketResponse<OrderBook> ob = Parse<WebSocketResponse<OrderBook>>(obj);
+
+                if (ob != null && ob.Data != null)
+                {
+                    NewOrderBook?.Invoke(ob.Market, ob.Data, type == "partial" ? QuoteChangeStates.SnapshotComplete : QuoteChangeStates.Increment);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception, handle the error or report it appropriately
+                Console.WriteLine($"Error processing orderbook update: {ex.Message}");
+                // Optionally, you can log the full exception stack trace
+                Console.WriteLine(ex.StackTrace);
+            }
+        }
+
+        else if (channel == "orders")
 		{
 			if (type != "update") return;
 

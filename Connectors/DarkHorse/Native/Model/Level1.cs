@@ -6,16 +6,16 @@ internal class Level1
 	[JsonProperty("bid")]
 	public decimal Bid { get; set; }
 
-	[JsonProperty("bidSize")]
+	[JsonProperty("bid_size")]
 	public decimal BidSize { get; set; }
 
 	[JsonProperty("ask")]
 	public decimal Ask { get; set; }
 
-	[JsonProperty("askSize")]
+	[JsonProperty("ask_size")]
 	public decimal AskSize { get; set; }
 
 	[JsonProperty("time")]
-	[JsonConverter(typeof(JsonDateTimeConverter))]
+	[JsonConverter(typeof(JsonDateTimeFmtConverter))]
 	public DateTime Time { get; set; }
 }

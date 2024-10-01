@@ -154,6 +154,7 @@ public partial class DarkHorseMessageAdapter
     /// <inheritdoc />
     public override async ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
     {
+        /*
         if ((DateTime.UtcNow - _lastStateUpdate).TotalMilliseconds >= 1000)
         {
             await PortfolioLookupAsync(null, cancellationToken);
@@ -162,6 +163,7 @@ public partial class DarkHorseMessageAdapter
 
         if (_wsClient is DarkHorseWebSocketClient sc)
             await sc.ProcessPing(cancellationToken);
+        */
     }
 
     private void SessionOnWsConnected()

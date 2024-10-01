@@ -236,7 +236,7 @@ partial class DarkHorseMessageAdapter
         if (!lookupMsg.IsSubscribe)
             return;
 
-        var accounts = await _restClient.GetAccounts("", cancellationToken);
+        var accounts = await _restClient.GetAccounts(AccountCode, cancellationToken);
 
         if (accounts == null) return;
 

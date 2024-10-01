@@ -29,6 +29,6 @@ internal class OrderBook
 	public OrderBookEntry[] Asks { get; set; }
 
 	[JsonProperty("time")]
-	[JsonConverter(typeof(JsonDateTimeConverter))]
+	[JsonConverter(typeof(JsonDateTimeFmtConverter))]
 	public DateTime Time { get; set; }
 }
