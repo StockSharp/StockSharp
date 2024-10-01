@@ -765,6 +765,8 @@
   "CurrErrorsCounter": "Current errors count {0}. Maximum {1}.",
   "CurrPriceBestPrice": "Price of current {0} and best {1}.",
   "CurrValueInLots": "Current value (in lots)",
+  "Cursor": "Cursor",
+  "CursorTextFormat": "Cursor labels format.",
   "Cusip": "CUSIP",
   "CusipDesc": "ID in CUSIP format (Committee on Uniform Securities Identification Procedures).",
   "Custom": "Custom",

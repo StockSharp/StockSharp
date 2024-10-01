@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "현재 오류 수 {0}. 최대 {1}.",
   "CurrPriceBestPrice": "현재 가격 {0} 및 최고 가격 {1}.",
   "CurrValueInLots": "현재 가치(로트 단위)",
+  "Cursor": "커서",
+  "CursorTextFormat": "커서 라벨 형식",
   "Cusip": "CUSIP",
   "CusipDesc": "CUSIP 형식의 식별자(유니폼 증권 식별 절차 위원회).",
   "Custom": "사용자 정의",

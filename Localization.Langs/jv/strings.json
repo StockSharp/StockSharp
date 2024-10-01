@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "Pangitung Kesalahan Saiki {0}. Maksimal {1}.",
   "CurrPriceBestPrice": "Regane saiki {0} lan rega paling apik {1}.",
   "CurrValueInLots": "Nilai Saiki (ing Lot)",
+  "Cursor": "Kursor",
+  "CursorTextFormat": "Format label kursor",
   "Cusip": "CUSIP",
   "CusipDesc": "Identifier format CUSIP (Komite Prosedur Identifikasi Sekuritas Seragam).",
   "Custom": "Khusus",

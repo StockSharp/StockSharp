@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "現在のエラー数 {0}。 最大 {1}。",
   "CurrPriceBestPrice": "現在の価格 {0} と最良の価格 {1}。",
   "CurrValueInLots": "現在の価値（ロットで）",
+  "Cursor": "カーソル",
+  "CursorTextFormat": "カーソルラベルの形式",
   "Cusip": "CUSIP",
   "CusipDesc": "CUSIP形式の識別子（統一証券識別手順委員会）。",
   "Custom": "カスタム",

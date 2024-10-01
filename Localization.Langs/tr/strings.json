@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "Mevcut hata sayacı {0}. Maksimum {1}.",
   "CurrPriceBestPrice": "Şu anki fiyat {0} ve en iyi fiyat {1}.",
   "CurrValueInLots": "Mevcut Değer (lot olarak)",
+  "Cursor": "İmleç",
+  "CursorTextFormat": "İmleç etiketleri biçimi",
   "Cusip": "CUSIP",
   "CusipDesc": "CUSIP formatında tanımlayıcı (Birleşik Menkul Kıymetler Tanımlama Prosedürleri Komitesi).",
   "Custom": "Özel",

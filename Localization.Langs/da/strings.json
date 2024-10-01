@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "Nuværende fejltæller {0}. Maksimum {1}.",
   "CurrPriceBestPrice": "Nuværende pris {0} og bedste pris {1}.",
   "CurrValueInLots": "Nuværende værdi (i partier)",
+  "Cursor": "Markør",
+  "CursorTextFormat": "Format for markøretiketter",
   "Cusip": "CUSIP",
   "CusipDesc": "Identifikator i CUSIP-format (Komiteen for Ensartede Værdipapiridentifikationsprocedurer).",
   "Custom": "Brugerdefineret",

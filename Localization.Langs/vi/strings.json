@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "Số lỗi hiện tại {0}. Tối đa {1}.",
   "CurrPriceBestPrice": "Giá hiện tại {0} và giá tốt nhất {1}.",
   "CurrValueInLots": "Giá trị hiện tại (theo lượng)",
+  "Cursor": "Con trỏ",
+  "CursorTextFormat": "Định dạng nhãn con trỏ",
   "Cusip": "CUSIP",
   "CusipDesc": "Định danh dạng CUSIP (Ủy ban Thủ tục Nhận dạng Chứng khoán Thống nhất).",
   "Custom": "Tùy chỉnh",

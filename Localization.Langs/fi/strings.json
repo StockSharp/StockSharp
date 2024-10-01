@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "Nykyinen virhelaskuri {0}. Maksimi {1}.",
   "CurrPriceBestPrice": "Nykyinen hinta {0} ja paras hinta {1}.",
   "CurrValueInLots": "Nykyarvo (erissä)",
+  "Cursor": "Kohdistin",
+  "CursorTextFormat": "Kohdistimen nimikkeiden muoto",
   "Cusip": "CUSIP",
   "CusipDesc": "Tunniste CUSIP-muodossa (Yhtenäisten arvopapereiden tunnistamismenettelyjen komitea).",
   "Custom": "Mukautettu",

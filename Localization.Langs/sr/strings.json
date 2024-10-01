@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "Тренутни број грешака {0}. Максимум {1}.",
   "CurrPriceBestPrice": "Тренутна цена {0} и најбоља цена {1}.",
   "CurrValueInLots": "Тренутна вредност (у лотовима)",
+  "Cursor": "Курсор",
+  "CursorTextFormat": "Формат ознака курсора",
   "Cusip": "CUSIP",
   "CusipDesc": "Identifikator u CUSIP formatu (Komitet za uniformne procedure identifikacije hartija od vrednosti).",
   "Custom": "Прилагођен",

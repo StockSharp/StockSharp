@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "Contorul de erori curente {0}. Maxim {1}.",
   "CurrPriceBestPrice": "Prețul curent {0} și cel mai bun preț {1}.",
   "CurrValueInLots": "Valoarea curentă (în loturi)",
+  "Cursor": "Cursor",
+  "CursorTextFormat": "Format etichete cursor",
   "Cusip": "CUSIP",
   "CusipDesc": "Identificator în formatul CUSIP (Comitetul pentru Procedurile Uniforme de Identificare a Securităților).",
   "Custom": "Personalizat",

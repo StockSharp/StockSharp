@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "Súčasný počet chýb {0}. Maximálny {1}.",
   "CurrPriceBestPrice": "Cena súčasnej {0} a najlepšej {1}.",
   "CurrValueInLots": "Súčasná hodnota (v lotoch)",
+  "Cursor": "Kurzor",
+  "CursorTextFormat": "Formát popisov kurzora",
   "Cusip": "CUSIP",
   "CusipDesc": "Identifikátor vo formáte CUSIP (Committee on Uniform Securities Identification Procedures).",
   "Custom": "Vlastný",

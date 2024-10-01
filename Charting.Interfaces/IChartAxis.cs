@@ -81,6 +81,11 @@ public interface IChartAxis : IPersistable, INotifyPropertyChangedEx, INotifyPro
 	string TextFormatting { get; set; }
 
 	/// <summary>
+	/// Cursor labels format.
+	/// </summary>
+	string CursorTextFormatting { get; set; }
+
+	/// <summary>
 	/// The format of X-axis labels within the day.
 	/// </summary>
 	string SubDayTextFormatting { get; set; }

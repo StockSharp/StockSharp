@@ -226,12 +226,12 @@ class AsyncMessageProcessor : Disposable
 						{
 							// in case a subscription still in "subscribe" state
 							// (for example, for long historical data request)
-							if (_subscriptionItems.TryGetAndRemove(subMsg.OriginalTransactionId, out var item))
+							if (_subscriptionItems.TryGetAndRemove(subMsg.OriginalTransactionId, out var subItem))
 							{
-								item.UnsubscribeRequest = subMsg.TransactionId;
-								item.Cts.Cancel();
+								subItem.UnsubscribeRequest = subMsg.TransactionId;
+								subItem.Cts.Cancel();
 
-								_processMessageEvt.Set();
+								done();
 								return;
 							}
 						}

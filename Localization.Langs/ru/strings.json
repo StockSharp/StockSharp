@@ -799,6 +799,8 @@
   "CurrErrorsCounter": "Текущее кол-во ошибок {0}. Максимальное {1}.",
   "CurrPriceBestPrice": "Цена текущей {0} и лучшей {1}.",
   "CurrValueInLots": "Текущее значение (в лотах)",
+  "Cursor": "Курсор",
+  "CursorTextFormat": "Формат меток курсора",
   "Cusip": "CUSIP",
   "CusipDesc": "Идентификатор в формате CUSIP (Committee on Uniform Securities Identification Procedures).",
   "Custom": "Пользовательский",
