@@ -4127,6 +4127,21 @@ public static partial class Extensions
 	/// To cut the price, to make it multiple of minimal step, also to limit number of signs after the comma.
 	/// </summary>
 	/// <param name="price">The price to be made multiple.</param>
+	/// <param name="secMsg"><see cref="SecurityMessage"/></param>
+	/// <param name="rule"></param>
+	/// <returns>The multiple price.</returns>
+	public static decimal ShrinkPrice(this decimal price, SecurityMessage secMsg, ShrinkRules rule = ShrinkRules.Auto)
+	{
+		if (secMsg is null)
+			throw new ArgumentNullException(nameof(secMsg));
+
+		return ShrinkPrice(price, secMsg.PriceStep, secMsg.Decimals, rule);
+	}
+
+	/// <summary>
+	/// To cut the price, to make it multiple of minimal step, also to limit number of signs after the comma.
+	/// </summary>
+	/// <param name="price">The price to be made multiple.</param>
 	/// <param name="priceStep">Price step.</param>
 	/// <param name="decimals">Number of digits in price after coma.</param>
 	/// <param name="rule"></param>
