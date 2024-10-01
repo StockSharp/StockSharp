@@ -663,84 +663,112 @@ public class PnFCandleBuilder : CandleBuilder<PnFCandleMessage>
 	{
 		var currentPnFCandle = (PnFCandleMessage)subscription.CurrentCandle;
 
-		var price = transform.Price;
+		var pnf = subscription.Message.GetArg<PnFArg>();
+
+		static decimal roundToPercentage(decimal price, decimal step)
+		{
+			if (step <= 0 || step >= 100)
+				throw new ArgumentOutOfRangeException(nameof(step), step, LocalizedStrings.InvalidValue);
+
+			if (price == 0)
+				return 0;
+
+			var stepFactor = 1m + (step / 100m);
+			var logStepFactor = Math.Log((double)stepFactor);
+			var logPrice = Math.Log((double)price);
+
+			int steps = (int)Math.Round(logPrice / logStepFactor);
+			var roundedPrice = (decimal)Math.Pow((double)stepFactor, steps);
+
+			var lowerStep = roundedPrice / stepFactor;
+			var upperStep = roundedPrice * stepFactor;
+
+			if (Math.Abs(price - lowerStep) < Math.Abs(price - roundedPrice))
+				return lowerStep;
+			else if (Math.Abs(price - upperStep) < Math.Abs(price - roundedPrice))
+				return upperStep;
+			else
+				return roundedPrice;
+		}
+
+		static decimal roundToAbs(decimal price, decimal step)
+			=> Math.Round(price / step) * step;
+
+		var boxSize = pnf.BoxSize.Value;
+
+		var price = pnf.BoxSize.Type switch
+		{
+			UnitTypes.Percent => roundToPercentage(transform.Price, boxSize),
+			UnitTypes.Absolute => roundToAbs(transform.Price, boxSize),
+			_ => throw new InvalidOperationException(LocalizedStrings.UnknownUnitMeasurement.Put(pnf.BoxSize.Type)),
+		};
+
 		var volume = transform.Volume;
 		var time = transform.Time;
 		var side = transform.Side;
 		var oi = transform.OpenInterest;
 		var buildFrom = transform.BuildFrom;
 
-		var pnf = subscription.Message.GetArg<PnFArg>();
-		var pnfStep = (decimal)(1 * pnf.BoxSize);
-
 		if (currentPnFCandle == null)
 		{
-			var openPrice = price.Floor(pnfStep);
-			var highPrice = openPrice + pnfStep;
+			var openPrice = price;
+			var highPrice = (decimal)(openPrice + pnf.BoxSize);
 
 			currentPnFCandle = CreateCandle(subscription, buildFrom, pnf, openPrice, highPrice, openPrice, highPrice, price, volume, side, time, oi);
 			yield return currentPnFCandle;
 		}
 		else
 		{
-			if (currentPnFCandle.LowPrice <= price && price <= currentPnFCandle.HighPrice)
-			{
-				UpdateCandle(currentPnFCandle, price, volume, time, side, oi, subscription.VolumeProfile);
-				yield return currentPnFCandle;
-			}
-			else
-			{
-				var isX = currentPnFCandle.OpenPrice < currentPnFCandle.ClosePrice;
+			var isX = currentPnFCandle.OpenPrice <= currentPnFCandle.ClosePrice;
 
-				if (isX)
+			if (isX)
+			{
+				if (price > currentPnFCandle.HighPrice)
 				{
-					if (price > currentPnFCandle.HighPrice)
-					{
-						currentPnFCandle.HighPrice = currentPnFCandle.ClosePrice = price.Floor(pnfStep) + pnfStep;
-						UpdateCandle(currentPnFCandle, price, volume, time, side, oi, subscription.VolumeProfile);
-						yield return currentPnFCandle;
-					}
-					else if (price < (currentPnFCandle.HighPrice - pnfStep * pnf.ReversalAmount))
-					{
-						currentPnFCandle.State = CandleStates.Finished;
-						yield return currentPnFCandle;
+					currentPnFCandle.HighPrice = currentPnFCandle.ClosePrice = price;
+					UpdateCandle(currentPnFCandle, price, volume, time, side, oi, subscription.VolumeProfile);
+					yield return currentPnFCandle;
+				}
+				else if (price <= (currentPnFCandle.HighPrice - pnf.BoxSize * pnf.ReversalAmount))
+				{
+					currentPnFCandle.State = CandleStates.Finished;
+					yield return currentPnFCandle;
 
-						var highPrice = currentPnFCandle.HighPrice - pnfStep;
-						var lowPrice = price.Floor(pnfStep);
+					var highPrice = currentPnFCandle.HighPrice;
+					var lowPrice = price;
 
-						currentPnFCandle = CreateCandle(subscription, buildFrom, pnf, highPrice, highPrice, lowPrice, lowPrice, price, volume, side, time, oi);
-						yield return currentPnFCandle;
-					}
-					else
-					{
-						UpdateCandle(currentPnFCandle, price, volume, time, side, oi, subscription.VolumeProfile);
-						yield return currentPnFCandle;
-					}
+					currentPnFCandle = CreateCandle(subscription, buildFrom, pnf, highPrice, highPrice, lowPrice, lowPrice, price, volume, side, time, oi);
+					yield return currentPnFCandle;
 				}
 				else
 				{
-					if (price < currentPnFCandle.LowPrice)
-					{
-						currentPnFCandle.LowPrice = currentPnFCandle.ClosePrice = price.Floor(pnfStep);
-						UpdateCandle(currentPnFCandle, price, volume, time, side, oi, subscription.VolumeProfile);
-						yield return currentPnFCandle;
-					}
-					else if (price > (currentPnFCandle.LowPrice + pnfStep * pnf.ReversalAmount))
-					{
-						currentPnFCandle.State = CandleStates.Finished;
-						yield return currentPnFCandle;
+					UpdateCandle(currentPnFCandle, price, volume, time, side, oi, subscription.VolumeProfile);
+					yield return currentPnFCandle;
+				}
+			}
+			else
+			{
+				if (price < currentPnFCandle.LowPrice)
+				{
+					currentPnFCandle.LowPrice = currentPnFCandle.ClosePrice = price;
+					UpdateCandle(currentPnFCandle, price, volume, time, side, oi, subscription.VolumeProfile);
+					yield return currentPnFCandle;
+				}
+				else if (price >= (currentPnFCandle.LowPrice + pnf.BoxSize * pnf.ReversalAmount))
+				{
+					currentPnFCandle.State = CandleStates.Finished;
+					yield return currentPnFCandle;
 
-						var highPrice = price.Floor(pnfStep) + pnfStep;
-						var lowPrice = currentPnFCandle.LowPrice + pnfStep;
+					var highPrice = price;
+					var lowPrice = currentPnFCandle.LowPrice;
 
-						currentPnFCandle = CreateCandle(subscription, buildFrom, pnf, lowPrice, highPrice, lowPrice, highPrice, price, volume, side, time, oi);
-						yield return currentPnFCandle;
-					}
-					else
-					{
-						UpdateCandle(currentPnFCandle, price, volume, time, side, oi, subscription.VolumeProfile);
-						yield return currentPnFCandle;
-					}
+					currentPnFCandle = CreateCandle(subscription, buildFrom, pnf, lowPrice, highPrice, lowPrice, highPrice, price, volume, side, time, oi);
+					yield return currentPnFCandle;
+				}
+				else
+				{
+					UpdateCandle(currentPnFCandle, price, volume, time, side, oi, subscription.VolumeProfile);
+					yield return currentPnFCandle;
 				}
 			}
 		}
