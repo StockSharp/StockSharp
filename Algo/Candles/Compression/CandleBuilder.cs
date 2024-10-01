@@ -390,38 +390,12 @@ public abstract class CandleBuilder<TCandleMessage> : BaseLogReceiver, ICandleBu
 		if (step is null)
 			throw new ArgumentNullException(nameof(step));
 
-		static decimal roundToPercentage(decimal price, decimal step)
-		{
-			if (step <= 0 || step >= 100)
-				throw new ArgumentOutOfRangeException(nameof(step), step, LocalizedStrings.InvalidValue);
-
-			if (price == 0)
-				return 0;
-
-			var stepFactor = 1m + (step / 100m);
-			var logStepFactor = Math.Log((double)stepFactor);
-			var logPrice = Math.Log((double)price);
-
-			int steps = (int)Math.Round(logPrice / logStepFactor);
-			var roundedPrice = (decimal)Math.Pow((double)stepFactor, steps);
-
-			var lowerStep = roundedPrice / stepFactor;
-			var upperStep = roundedPrice * stepFactor;
-
-			if (Math.Abs(price - lowerStep) < Math.Abs(price - roundedPrice))
-				return lowerStep;
-			else if (Math.Abs(price - upperStep) < Math.Abs(price - roundedPrice))
-				return upperStep;
-			else
-				return roundedPrice;
-		}
-
 		static decimal roundToAbs(decimal price, decimal step)
 			=> Math.Round(price / step) * step;
 
 		return step.Type switch
 		{
-			UnitTypes.Percent => roundToPercentage(price, step.Value),
+			UnitTypes.Percent => roundToAbs(price, (decimal)((price + step) - price)),
 			_ => roundToAbs(price, (decimal)step),
 		};
 	}
