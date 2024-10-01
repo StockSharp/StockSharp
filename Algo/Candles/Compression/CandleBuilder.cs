@@ -367,8 +367,64 @@ public abstract class CandleBuilder<TCandleMessage> : BaseLogReceiver, ICandleBu
 	/// <param name="price">The price to be made multiple.</param>
 	/// <param name="subscription"><see cref="ICandleBuilderSubscription"/></param>
 	/// <returns>The multiple price.</returns>
+	protected decimal ShrinkPrice(Unit price, ICandleBuilderSubscription subscription)
+		=> ShrinkPrice((decimal)price, subscription);
+
+	/// <summary>
+	/// To cut the price, to make it multiple of minimal step, also to limit number of signs after the comma.
+	/// </summary>
+	/// <param name="price">The price to be made multiple.</param>
+	/// <param name="subscription"><see cref="ICandleBuilderSubscription"/></param>
+	/// <returns>The multiple price.</returns>
 	protected decimal ShrinkPrice(decimal price, ICandleBuilderSubscription subscription)
 		=> price.ShrinkPrice(subscription.CheckOnNull(nameof(subscription)).Message);
+
+	/// <summary>
+	/// Round the price to the specified step.
+	/// </summary>
+	/// <param name="price">Price.</param>
+	/// <param name="step">Step.</param>
+	/// <returns>Rounded value.</returns>
+	protected decimal Round(decimal price, Unit step)
+	{
+		if (step is null)
+			throw new ArgumentNullException(nameof(step));
+
+		static decimal roundToPercentage(decimal price, decimal step)
+		{
+			if (step <= 0 || step >= 100)
+				throw new ArgumentOutOfRangeException(nameof(step), step, LocalizedStrings.InvalidValue);
+
+			if (price == 0)
+				return 0;
+
+			var stepFactor = 1m + (step / 100m);
+			var logStepFactor = Math.Log((double)stepFactor);
+			var logPrice = Math.Log((double)price);
+
+			int steps = (int)Math.Round(logPrice / logStepFactor);
+			var roundedPrice = (decimal)Math.Pow((double)stepFactor, steps);
+
+			var lowerStep = roundedPrice / stepFactor;
+			var upperStep = roundedPrice * stepFactor;
+
+			if (Math.Abs(price - lowerStep) < Math.Abs(price - roundedPrice))
+				return lowerStep;
+			else if (Math.Abs(price - upperStep) < Math.Abs(price - roundedPrice))
+				return upperStep;
+			else
+				return roundedPrice;
+		}
+
+		static decimal roundToAbs(decimal price, decimal step)
+			=> Math.Round(price / step) * step;
+
+		return step.Type switch
+		{
+			UnitTypes.Percent => roundToPercentage(price, step.Value),
+			_ => roundToAbs(price, (decimal)step),
+		};
+	}
 }
 
 /// <summary>
@@ -674,43 +730,9 @@ public class PnFCandleBuilder : CandleBuilder<PnFCandleMessage>
 
 		var pnf = subscription.Message.GetArg<PnFArg>();
 
-		static decimal roundToPercentage(decimal price, decimal step)
-		{
-			if (step <= 0 || step >= 100)
-				throw new ArgumentOutOfRangeException(nameof(step), step, LocalizedStrings.InvalidValue);
+		var boxSize = pnf.BoxSize;
 
-			if (price == 0)
-				return 0;
-
-			var stepFactor = 1m + (step / 100m);
-			var logStepFactor = Math.Log((double)stepFactor);
-			var logPrice = Math.Log((double)price);
-
-			int steps = (int)Math.Round(logPrice / logStepFactor);
-			var roundedPrice = (decimal)Math.Pow((double)stepFactor, steps);
-
-			var lowerStep = roundedPrice / stepFactor;
-			var upperStep = roundedPrice * stepFactor;
-
-			if (Math.Abs(price - lowerStep) < Math.Abs(price - roundedPrice))
-				return lowerStep;
-			else if (Math.Abs(price - upperStep) < Math.Abs(price - roundedPrice))
-				return upperStep;
-			else
-				return roundedPrice;
-		}
-
-		static decimal roundToAbs(decimal price, decimal step)
-			=> Math.Round(price / step) * step;
-
-		var boxSize = pnf.BoxSize.Value;
-
-		var price = ShrinkPrice(pnf.BoxSize.Type switch
-		{
-			UnitTypes.Percent => roundToPercentage(transform.Price, boxSize),
-			UnitTypes.Absolute => roundToAbs(transform.Price, boxSize),
-			_ => throw new InvalidOperationException(LocalizedStrings.UnknownUnitMeasurement.Put(pnf.BoxSize.Type)),
-		}, subscription);
+		var price = ShrinkPrice(Round(transform.Price, boxSize), subscription);
 
 		var volume = transform.Volume;
 		var time = transform.Time;
@@ -721,7 +743,7 @@ public class PnFCandleBuilder : CandleBuilder<PnFCandleMessage>
 		if (currentPnFCandle == null)
 		{
 			var openPrice = price;
-			var highPrice = ShrinkPrice((decimal)(openPrice + pnf.BoxSize), subscription);
+			var highPrice = ShrinkPrice(openPrice + pnf.BoxSize, subscription);
 
 			currentPnFCandle = CreateCandle(subscription, buildFrom, pnf, openPrice, highPrice, openPrice, highPrice, price, volume, side, time, oi);
 			yield return currentPnFCandle;
@@ -867,7 +889,6 @@ public class RenkoCandleBuilder : CandleBuilder<RenkoCandleMessage>
 		var buildFrom = transform.BuildFrom;
 
 		var boxSize = subscription.Message.GetArg<Unit>();
-		var renkoStep = (decimal)(1 * boxSize);
 		var currentCandle = (RenkoCandleMessage)subscription.CurrentCandle;
 		var prevCandle = subscription.PrevCandle;
 
@@ -936,23 +957,23 @@ public class RenkoCandleBuilder : CandleBuilder<RenkoCandleMessage>
 
 				var minPrevPrice = Math.Min(prevCandle.OpenPrice, prevCandle.ClosePrice);
 
-				greenClose = minPrevPrice + 2 * renkoStep;
-				redClose = minPrevPrice - renkoStep;
+				greenClose = ShrinkPrice(minPrevPrice + 2 * boxSize, subscription);
+				redClose = ShrinkPrice(minPrevPrice - boxSize, subscription);
 			}
 			else
 			{
 				var p = Uninitialized(currentCandle.OpenPrice) ? price : currentCandle.OpenPrice;
-				var openFloor = p.Floor(renkoStep);
+				var openFloor = ShrinkPrice(Round(p, boxSize), subscription);
 				var openIsFixed = openFloor == p;
 
-				redClose = openFloor - renkoStep;
-				greenClose = openIsFixed ? openFloor + renkoStep : openFloor + 2 * renkoStep;
+				redClose = ShrinkPrice(openFloor - boxSize, subscription);
+				greenClose = ShrinkPrice(openIsFixed ? openFloor + boxSize : openFloor + 2 * boxSize, subscription);
 			}
 
 			if (price > greenClose)
 			{
 				currentCandle.ClosePrice = greenClose;
-				currentCandle.OpenPrice = greenClose - renkoStep;
+				currentCandle.OpenPrice = ShrinkPrice(greenClose - boxSize, subscription);
 
 				if (currentCandle.HighPrice < greenClose || Uninitialized(currentCandle.HighPrice))
 					currentCandle.HighPrice = greenClose;
@@ -966,7 +987,7 @@ public class RenkoCandleBuilder : CandleBuilder<RenkoCandleMessage>
 			if (price < redClose)
 			{
 				currentCandle.ClosePrice = redClose;
-				currentCandle.OpenPrice = redClose + renkoStep;
+				currentCandle.OpenPrice = ShrinkPrice(redClose + boxSize, subscription);
 
 				if (currentCandle.HighPrice < currentCandle.OpenPrice || Uninitialized(currentCandle.HighPrice))
 					currentCandle.HighPrice = currentCandle.OpenPrice;
@@ -1014,12 +1035,12 @@ public class RenkoCandleBuilder : CandleBuilder<RenkoCandleMessage>
 
 			if (price == greenClose)
 			{
-				currentCandle.OpenPrice = price - renkoStep;
+				currentCandle.OpenPrice = ShrinkPrice(price - boxSize, subscription);
 				TryFinishCurrentCandle();
 			}
 			else if (price == redClose)
 			{
-				currentCandle.OpenPrice = price + renkoStep;
+				currentCandle.OpenPrice = ShrinkPrice(price + boxSize, subscription);
 				TryFinishCurrentCandle();
 			}
 
