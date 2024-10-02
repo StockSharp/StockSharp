@@ -77,7 +77,6 @@ public partial class MainWindow : ICandleBuilderSubscription
 	MarketDataMessage ICandleBuilderSubscription.Message => _mdMsg;
 	VolumeProfileBuilder ICandleBuilderSubscription.VolumeProfile { get; set; }
 	public CandleMessage CurrentCandle { get; set; }
-	CandleMessage ICandleBuilderSubscription.PrevCandle { get; set; }
 
 	public MainWindow()
 	{
