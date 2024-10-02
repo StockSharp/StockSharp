@@ -19,11 +19,6 @@ public interface ICandleBuilderSubscription
 	/// The current candle.
 	/// </summary>
 	CandleMessage CurrentCandle { get; set; }
-
-	/// <summary>
-	/// The current candle.
-	/// </summary>
-	CandleMessage PrevCandle { get; set; }
 }
 
 /// <summary>
@@ -45,5 +40,4 @@ public class CandleBuilderSubscription : ICandleBuilderSubscription
 
 	VolumeProfileBuilder ICandleBuilderSubscription.VolumeProfile { get; set; }
 	CandleMessage ICandleBuilderSubscription.CurrentCandle { get; set; }
-	CandleMessage ICandleBuilderSubscription.PrevCandle { get; set; }
 }

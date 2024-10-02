@@ -850,8 +850,6 @@ public class RenkoCandleBuilder : CandleBuilder<RenkoCandleMessage>
 	{
 	}
 
-	private static readonly decimal _decimalEpsilon = new(1, 0, 0, false, 28);
-
 	/// <inheritdoc />
 	protected override IEnumerable<RenkoCandleMessage> OnProcess(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)
 	{
@@ -861,182 +859,73 @@ public class RenkoCandleBuilder : CandleBuilder<RenkoCandleMessage>
 		var side = transform.Side;
 		var oi = transform.OpenInterest;
 		var buildFrom = transform.BuildFrom;
-
 		var boxSize = subscription.Message.GetArg<Unit>();
-		var currentCandle = (RenkoCandleMessage)subscription.CurrentCandle;
-		var prevCandle = subscription.PrevCandle;
 
-		bool TryFinishCurrentCandle()
+		RenkoCandleMessage GenerateNewCandle(decimal openPrice, decimal closePrice)
 		{
-			if (currentCandle.State == CandleStates.Finished)
-				return false;
-
-			subscription.PrevCandle = null;
-
-			if (currentCandle.TotalTicks == 0)
-			{
-				currentCandle.RelativeVolume = null;
-				currentCandle.TotalTicks = null;
-			}
-
-			currentCandle.State = CandleStates.Finished;
-			return true;
-		}
-
-		void GenerateNewCandle()
-		{
-			prevCandle = currentCandle;
-
-			// TODO исправляет отображение свечей с повторяющимся временем на графике
-			// но вообще это нужно фиксить в самом графике, а не тут
-			// при сохранении в csv время может быть округлено, и после восстановления эти тики потеряются
-			if (prevCandle != null && time <= prevCandle.OpenTime)
-				time = prevCandle.OpenTime + TimeSpan.FromTicks(1);
-
-			currentCandle = new()
+			var candle = new RenkoCandleMessage
 			{
 				SecurityId = subscription.Message.SecurityId,
 				TypedArg = boxSize,
 				BuildFrom = buildFrom,
-				OpenPrice = _decimalEpsilon,
-				HighPrice = _decimalEpsilon,
-				LowPrice = _decimalEpsilon,
-				ClosePrice = _decimalEpsilon,
 				OpenTime = time,
 				CloseTime = time,
-				HighTime = time,
-				LowTime = time,
-				State = CandleStates.Active,
-				RelativeVolume = 0,
-				TotalTicks = 0,
+				OpenPrice = openPrice,
+				ClosePrice = closePrice,
+				HighPrice = openPrice.Max(closePrice),
+				LowPrice = openPrice.Min(closePrice),
+				State = CandleStates.Active
 			};
 
-			if(prevCandle != null)
-				subscription.PrevCandle = prevCandle;
-		}
-
-		bool Uninitialized(decimal p) => p == _decimalEpsilon;
-
-		bool TryApplyTick()
-		{
-			if (currentCandle == null || currentCandle.State == CandleStates.Finished)
-				return false;
-
-			decimal greenClose, redClose;
-
-			if (prevCandle != null)
-			{
-				if (prevCandle.State != CandleStates.Finished)
-					throw new InvalidOperationException("previous candle was not finished");
-
-				var minPrevPrice = Math.Min(prevCandle.OpenPrice, prevCandle.ClosePrice);
-
-				greenClose = ShrinkPrice(minPrevPrice + 2 * boxSize, subscription);
-				redClose = ShrinkPrice(minPrevPrice - boxSize, subscription);
-			}
-			else
-			{
-				var p = Uninitialized(currentCandle.OpenPrice) ? price : currentCandle.OpenPrice;
-				var openFloor = ShrinkPrice(Round(p, boxSize), subscription);
-				var openIsFixed = openFloor == p;
-
-				redClose = ShrinkPrice(openFloor - boxSize, subscription);
-				greenClose = ShrinkPrice(openIsFixed ? openFloor + boxSize : openFloor + 2 * boxSize, subscription);
-			}
-
-			if (price > greenClose)
-			{
-				currentCandle.ClosePrice = greenClose;
-				currentCandle.OpenPrice = ShrinkPrice(greenClose - boxSize, subscription);
-
-				if (currentCandle.HighPrice < greenClose || Uninitialized(currentCandle.HighPrice))
-					currentCandle.HighPrice = greenClose;
-
-				if (currentCandle.LowPrice > currentCandle.OpenPrice || Uninitialized(currentCandle.LowPrice))
-					currentCandle.LowPrice = currentCandle.OpenPrice;
-
-				return false;
-			}
-
-			if (price < redClose)
-			{
-				currentCandle.ClosePrice = redClose;
-				currentCandle.OpenPrice = ShrinkPrice(redClose + boxSize, subscription);
-
-				if (currentCandle.HighPrice < currentCandle.OpenPrice || Uninitialized(currentCandle.HighPrice))
-					currentCandle.HighPrice = currentCandle.OpenPrice;
-
-				if (currentCandle.LowPrice > redClose || Uninitialized(currentCandle.LowPrice))
-					currentCandle.LowPrice = redClose;
-
-				return false;
-			}
-
-			++currentCandle.TotalTicks;
-
-			currentCandle.ClosePrice  = price;
-			currentCandle.CloseVolume = volume;
-			currentCandle.CloseTime   = time;
-			currentCandle.OpenInterest = oi;
-
-			if (Uninitialized(currentCandle.OpenPrice))
-				currentCandle.OpenPrice = price;
-
-			if (price > currentCandle.HighPrice || Uninitialized(currentCandle.HighPrice))
-				currentCandle.HighPrice = price;
-
-			if (price < currentCandle.LowPrice || Uninitialized(currentCandle.LowPrice))
-				currentCandle.LowPrice = price;
-
-			if (volume != null)
-			{
-				currentCandle.TotalPrice += volume.Value * price;
-
-				AddVolume(currentCandle, volume.Value, side);
-			}
-
-			if (subscription.Message.IsCalcVolumeProfile && currentCandle.PriceLevels == null)
+			if (subscription.Message.IsCalcVolumeProfile)
 			{
 				var levels = new List<CandlePriceLevel>();
-
 				subscription.VolumeProfile = new VolumeProfileBuilder(levels);
-				subscription.VolumeProfile.Update(price, volume, side);
-
-				currentCandle.PriceLevels = levels;
+				candle.PriceLevels = levels;
 			}
 
-			subscription.VolumeProfile?.Update(price, volume, side);
-
-			if (price == greenClose)
-			{
-				currentCandle.OpenPrice = ShrinkPrice(price - boxSize, subscription);
-				TryFinishCurrentCandle();
-			}
-			else if (price == redClose)
-			{
-				currentCandle.OpenPrice = ShrinkPrice(price + boxSize, subscription);
-				TryFinishCurrentCandle();
-			}
-
-			return true;
+			return candle;
 		}
 
-		do
+		var currentCandle = (RenkoCandleMessage)subscription.CurrentCandle;
+
+		currentCandle ??= GenerateNewCandle(price, price);
+
+		var priceChange = price - currentCandle.OpenPrice;
+		var boxSizeAbs = (decimal)((price + boxSize) - price);
+		var boxesMoved = Math.Abs((int)(priceChange / boxSizeAbs));
+
+		if (boxesMoved >= 1)
 		{
-			if (TryApplyTick())
+			var sign = priceChange.Sign();
+
+			for (var i = 0; i < boxesMoved; i++)
 			{
+				currentCandle.State = CandleStates.Finished;
 				yield return currentCandle;
-				yield break;
-			}
 
-			if (currentCandle != null)
-			{
-				if(TryFinishCurrentCandle())
-					yield return currentCandle;
+				var openPrice = ShrinkPrice(currentCandle.OpenPrice + (boxSize * sign), subscription);
+				currentCandle = GenerateNewCandle(openPrice, openPrice);
 			}
+		}
 
-			GenerateNewCandle();
-		} while (true);
+		currentCandle.TotalTicks++;
+		currentCandle.ClosePrice = price;
+		currentCandle.CloseVolume = volume;
+		currentCandle.CloseTime = time;
+		currentCandle.OpenInterest = oi;
+		currentCandle.HighPrice = Math.Max(currentCandle.HighPrice, price);
+		currentCandle.LowPrice = Math.Min(currentCandle.LowPrice, price);
+
+		if (volume != null)
+		{
+			currentCandle.TotalPrice += volume.Value * price;
+			AddVolume(currentCandle, volume.Value, side);
+		}
+
+		subscription.VolumeProfile?.Update(price, volume, side);
+
+		yield return currentCandle;
 	}
 }
 
