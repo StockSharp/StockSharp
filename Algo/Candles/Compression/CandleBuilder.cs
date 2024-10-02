@@ -880,7 +880,7 @@ public class RenkoCandleBuilder : CandleBuilder<RenkoCandleMessage>
 			if (subscription.Message.IsCalcVolumeProfile)
 			{
 				var levels = new List<CandlePriceLevel>();
-				subscription.VolumeProfile = new VolumeProfileBuilder(levels);
+				subscription.VolumeProfile = new(levels);
 				candle.PriceLevels = levels;
 			}
 
@@ -902,6 +902,7 @@ public class RenkoCandleBuilder : CandleBuilder<RenkoCandleMessage>
 			for (var i = 0; i < boxesMoved; i++)
 			{
 				currentCandle.State = CandleStates.Finished;
+				subscription.VolumeProfile?.Update(price, volume, side);
 				yield return currentCandle;
 
 				var openPrice = ShrinkPrice(currentCandle.OpenPrice + (boxSize * sign), subscription);
@@ -914,8 +915,8 @@ public class RenkoCandleBuilder : CandleBuilder<RenkoCandleMessage>
 		currentCandle.CloseVolume = volume;
 		currentCandle.CloseTime = time;
 		currentCandle.OpenInterest = oi;
-		currentCandle.HighPrice = Math.Max(currentCandle.HighPrice, price);
-		currentCandle.LowPrice = Math.Min(currentCandle.LowPrice, price);
+		currentCandle.HighPrice = currentCandle.HighPrice.Max(price);
+		currentCandle.LowPrice = currentCandle.LowPrice.Min(price);
 
 		if (volume != null)
 		{
@@ -924,7 +925,6 @@ public class RenkoCandleBuilder : CandleBuilder<RenkoCandleMessage>
 		}
 
 		subscription.VolumeProfile?.Update(price, volume, side);
-
 		yield return currentCandle;
 	}
 }
