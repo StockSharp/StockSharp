@@ -402,26 +402,7 @@ public class DataType : Equatable<DataType>, IPersistable
 	/// <summary>
 	/// Possible data types that can be used as candles source.
 	/// </summary>
-	public static ISet<DataType> CandleSources { get; } = new HashSet<DataType>(new[] { Ticks, Level1, MarketDepth, OrderLog });
-
-	private static object TryParseArg(object arg)
-	{
-		if (arg is not string str)
-			str = arg.ToString();
-
-		if(TimeSpan.TryParse(str, out var ts))
-			return ts;
-
-		if(Enum.TryParse(str, true, out ExecutionTypes et))
-			return et;
-
-		if(decimal.TryParse(str, out var val))
-			return val;
-
-		LogManager.Instance?.Application.AddWarningLog("Unable to parse Arg. type='{0}', val='{1}'", arg.GetType().FullName, str);
-
-		return arg;
-	}
+	public static ISet<DataType> CandleSources { get; } = new HashSet<DataType>([Ticks, Level1, MarketDepth, OrderLog]);
 
 	/// <summary>
 	/// Load settings.
@@ -448,12 +429,21 @@ public class DataType : Equatable<DataType>, IPersistable
 				}
 				else
 				{
-					Arg = ss.GetValue<object>("value").To(type);
+					var value = ss.GetValue<object>("value");
+
+					if (MessageType?.IsCandleMessage() == true && value is string str)
+						Arg = MessageType.ToDataTypeArg(str);
+					else
+						Arg = value.To(type);
 				}
+			}
+			else if (MessageType?.IsCandleMessage() == true && arg is string str)
+			{
+				Arg = MessageType.ToDataTypeArg(str);
 			}
 			else
 			{
-				Arg = arg == null ? null : TryParseArg(arg);
+				Arg = arg;
 			}
 		}
 
@@ -476,6 +466,8 @@ public class DataType : Equatable<DataType>, IPersistable
 
 			if (Arg is IPersistable per)
 				ss.SetValue("value", per.Save());
+			else if (MessageType?.IsCandleMessage() == true)
+				ss.SetValue("value", MessageType.DataTypeArgToString(Arg));
 			else
 				ss.SetValue("value", Arg.To<string>());
 
