@@ -228,27 +228,27 @@ public class DummyChartBuilder : IChartBuilder
 		public Color UpBorderColor { get; set; }
 		public int StrokeThickness { get; set; }
 		public bool AntiAliasing { get; set; }
-		public Color LineColor { get; set; }
-		public Color AreaColor { get; set; }
+		public Color? LineColor { get; set; }
+		public Color? AreaColor { get; set; }
 		public bool ShowAxisMarker { get; set; }
 		Func<DateTimeOffset, bool, bool, Color?> IChartCandleElement.Colorer { get; set; }
 		public int Timeframe2Multiplier { get; set; }
 		public int Timeframe3Multiplier { get; set; }
-		public Color FontColor { get; set; }
-		public Color Timeframe2Color { get; set; }
-		public Color Timeframe2FrameColor { get; set; }
-		public Color Timeframe3Color { get; set; }
-		public Color MaxVolumeColor { get; set; }
-		public Color ClusterLineColor { get; set; }
-		public Color ClusterSeparatorLineColor { get; set; }
-		public Color ClusterTextColor { get; set; }
-		public Color ClusterColor { get; set; }
-		public Color ClusterMaxColor { get; set; }
+		public Color? FontColor { get; set; }
+		public Color? Timeframe2Color { get; set; }
+		public Color? Timeframe2FrameColor { get; set; }
+		public Color? Timeframe3Color { get; set; }
+		public Color? MaxVolumeColor { get; set; }
+		public Color? ClusterLineColor { get; set; }
+		public Color? ClusterSeparatorLineColor { get; set; }
+		public Color? ClusterTextColor { get; set; }
+		public Color? ClusterColor { get; set; }
+		public Color? ClusterMaxColor { get; set; }
 		public bool ShowHorizontalVolumes { get; set; }
 		public bool LocalHorizontalVolumes { get; set; }
 		public double HorizontalVolumeWidthFraction { get; set; }
-		public Color HorizontalVolumeColor { get; set; }
-		public Color HorizontalVolumeFontColor { get; set; }
+		public Color? HorizontalVolumeColor { get; set; }
+		public Color? HorizontalVolumeFontColor { get; set; }
 		public decimal? PriceStep { get; set; }
 
 		public override void Load(SettingsStorage storage)
