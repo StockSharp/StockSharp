@@ -156,5 +156,20 @@ public interface IChartCandleElement : IChartElement
 	/// </summary>
 	decimal? PriceStep { get; set; }
 
+	/// <summary>
+	/// Draw <see cref="Sides.Buy"/> and <see cref="Sides.Sell"/> volumes separately.
+	/// </summary>
+	bool DrawSeparateVolumes { get; set; }
+
+	/// <summary>
+	/// Buy volume color.
+	/// </summary>
+	Color? BuyColor { get; set; }
+
+	/// <summary>
+	/// Sell volume color.
+	/// </summary>
+	Color? SellColor { get; set; }
+
 	#endregion
 }

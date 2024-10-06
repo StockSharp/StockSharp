@@ -3030,6 +3030,8 @@
   "SenkouBDesc": "Senkou (B) line",
   "SenkouRange": "Senkou range",
   "Sent": "Sent",
+  "Separate": "Separate",
+  "DrawSeparateVolumes": "Draw Buy and Sell volumes separately.",
   "SeqNum": "Number",
   "SequenceNumber": "Sequence number.",
   "Series": "Series",

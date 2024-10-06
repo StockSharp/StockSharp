@@ -250,6 +250,9 @@ public class DummyChartBuilder : IChartBuilder
 		public Color? HorizontalVolumeColor { get; set; }
 		public Color? HorizontalVolumeFontColor { get; set; }
 		public decimal? PriceStep { get; set; }
+		public bool DrawSeparateVolumes { get; set; }
+		public Color? BuyColor { get; set; }
+		public Color? SellColor { get; set; }
 
 		public override void Load(SettingsStorage storage)
 		{
@@ -287,6 +290,9 @@ public class DummyChartBuilder : IChartBuilder
 			HorizontalVolumeColor = storage.GetValue<int>(nameof(HorizontalVolumeColor)).ToColor();
 			HorizontalVolumeFontColor = storage.GetValue<int>(nameof(HorizontalVolumeFontColor)).ToColor();
 			PriceStep = storage.GetValue<decimal?>(nameof(PriceStep));
+			DrawSeparateVolumes = storage.GetValue<bool>(nameof(DrawSeparateVolumes));
+			BuyColor = storage.GetValue<int>(nameof(BuyColor)).ToColor();
+			SellColor = storage.GetValue<int>(nameof(SellColor)).ToColor();
 		}
 	}
 
