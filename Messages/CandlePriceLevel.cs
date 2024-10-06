@@ -64,6 +64,7 @@ public struct CandlePriceLevel// : ICloneable<CandlePriceLevel>
 	{
 		return new()
 		{
+			Price = Price,
 			TotalVolume = TotalVolume + other.TotalVolume,
 			BuyVolume = BuyVolume + other.BuyVolume,
 			SellVolume = SellVolume + other.SellVolume,
