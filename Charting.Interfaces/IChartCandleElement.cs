@@ -62,11 +62,6 @@ public interface IChartCandleElement : IChartElement
 	/// </summary>
 	new Func<DateTimeOffset, bool, bool, Color?> Colorer { get; set; }
 
-	/// <summary>
-	/// Minimum price step.
-	/// </summary>
-	decimal? PriceStep { get; set; }
-
 	#endregion
 
 	#region volume charts properties
@@ -155,6 +150,11 @@ public interface IChartCandleElement : IChartElement
 	/// Horizontal volume font color.
 	/// </summary>
 	Color? HorizontalVolumeFontColor { get; set; }
+
+	/// <summary>
+	/// Price step for group volumes. <see langword="null"/> means no grouping.
+	/// </summary>
+	decimal? PriceStep { get; set; }
 
 	#endregion
 }
