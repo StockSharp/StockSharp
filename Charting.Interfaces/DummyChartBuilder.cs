@@ -264,8 +264,8 @@ public class DummyChartBuilder : IChartBuilder
 			UpBorderColor = storage.GetValue<int>(nameof(UpBorderColor)).ToColor();
 			DownFillColor = storage.GetValue<int>(nameof(DownFillColor)).ToColor();
 			DownBorderColor = storage.GetValue<int>(nameof(DownBorderColor)).ToColor();
-			LineColor = storage.GetValue<int>(nameof(LineColor)).ToColor();
-			AreaColor = storage.GetValue<int>(nameof(AreaColor)).ToColor();
+			LineColor = storage.GetValue<int?>(nameof(LineColor))?.ToColor();
+			AreaColor = storage.GetValue<int?>(nameof(AreaColor))?.ToColor();
 
 			DrawStyle = storage.GetValue<ChartCandleDrawStyles>(nameof(DrawStyle));
 			StrokeThickness = storage.GetValue<int>(nameof(StrokeThickness));
@@ -274,25 +274,25 @@ public class DummyChartBuilder : IChartBuilder
 
 			Timeframe2Multiplier = storage.GetValue<int>(nameof(Timeframe2Multiplier));
 			Timeframe3Multiplier = storage.GetValue<int>(nameof(Timeframe3Multiplier));
-			FontColor = storage.GetValue<int>(nameof(FontColor)).ToColor();
-			Timeframe2Color = storage.GetValue<int>(nameof(Timeframe2Color)).ToColor();
-			Timeframe2FrameColor = storage.GetValue<int>(nameof(Timeframe2FrameColor)).ToColor();
-			Timeframe3Color = storage.GetValue<int>(nameof(Timeframe3Color)).ToColor();
-			MaxVolumeColor = storage.GetValue<int>(nameof(MaxVolumeColor)).ToColor();
-			ClusterSeparatorLineColor = storage.GetValue<int>(nameof(ClusterSeparatorLineColor)).ToColor();
-			ClusterLineColor = storage.GetValue<int>(nameof(ClusterLineColor)).ToColor();
-			ClusterTextColor = storage.GetValue<int>(nameof(ClusterTextColor)).ToColor();
-			ClusterColor = storage.GetValue<int>(nameof(ClusterColor)).ToColor();
-			ClusterMaxColor = storage.GetValue<int>(nameof(ClusterMaxColor)).ToColor();
+			FontColor = storage.GetValue<int?>(nameof(FontColor))?.ToColor();
+			Timeframe2Color = storage.GetValue<int?>(nameof(Timeframe2Color))?.ToColor();
+			Timeframe2FrameColor = storage.GetValue<int?>(nameof(Timeframe2FrameColor))?.ToColor();
+			Timeframe3Color = storage.GetValue<int?>(nameof(Timeframe3Color))?.ToColor();
+			MaxVolumeColor = storage.GetValue<int?>(nameof(MaxVolumeColor))?.ToColor();
+			ClusterSeparatorLineColor = storage.GetValue<int?>(nameof(ClusterSeparatorLineColor))?.ToColor();
+			ClusterLineColor = storage.GetValue<int?>(nameof(ClusterLineColor))?.ToColor();
+			ClusterTextColor = storage.GetValue<int?>(nameof(ClusterTextColor))?.ToColor();
+			ClusterColor = storage.GetValue<int?>(nameof(ClusterColor))?.ToColor();
+			ClusterMaxColor = storage.GetValue<int?>(nameof(ClusterMaxColor))?.ToColor();
 			ShowHorizontalVolumes = storage.GetValue<bool>(nameof(ShowHorizontalVolumes));
 			LocalHorizontalVolumes = storage.GetValue<bool>(nameof(LocalHorizontalVolumes));
 			HorizontalVolumeWidthFraction = storage.GetValue<double>(nameof(HorizontalVolumeWidthFraction));
-			HorizontalVolumeColor = storage.GetValue<int>(nameof(HorizontalVolumeColor)).ToColor();
-			HorizontalVolumeFontColor = storage.GetValue<int>(nameof(HorizontalVolumeFontColor)).ToColor();
+			HorizontalVolumeColor = storage.GetValue<int?>(nameof(HorizontalVolumeColor))?.ToColor();
+			HorizontalVolumeFontColor = storage.GetValue<int?>(nameof(HorizontalVolumeFontColor))?.ToColor();
 			PriceStep = storage.GetValue<decimal?>(nameof(PriceStep));
 			DrawSeparateVolumes = storage.GetValue<bool>(nameof(DrawSeparateVolumes));
-			BuyColor = storage.GetValue<int>(nameof(BuyColor)).ToColor();
-			SellColor = storage.GetValue<int>(nameof(SellColor)).ToColor();
+			BuyColor = storage.GetValue<int?>(nameof(BuyColor))?.ToColor();
+			SellColor = storage.GetValue<int?>(nameof(SellColor))?.ToColor();
 		}
 	}
 
