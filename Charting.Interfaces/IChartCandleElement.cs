@@ -69,12 +69,12 @@ public interface IChartCandleElement : IChartElement
 	/// <summary>
 	/// Timeframe #2 multiplier.
 	/// </summary>
-	int Timeframe2Multiplier { get; set; }
+	int? Timeframe2Multiplier { get; set; }
 
 	/// <summary>
 	/// Timeframe #3 multiplier.
 	/// </summary>
-	int Timeframe3Multiplier { get; set; }
+	int? Timeframe3Multiplier { get; set; }
 
 	/// <summary>
 	/// Font color.

@@ -232,8 +232,8 @@ public class DummyChartBuilder : IChartBuilder
 		public Color? AreaColor { get; set; }
 		public bool ShowAxisMarker { get; set; }
 		Func<DateTimeOffset, bool, bool, Color?> IChartCandleElement.Colorer { get; set; }
-		public int Timeframe2Multiplier { get; set; }
-		public int Timeframe3Multiplier { get; set; }
+		public int? Timeframe2Multiplier { get; set; }
+		public int? Timeframe3Multiplier { get; set; }
 		public Color? FontColor { get; set; }
 		public Color? Timeframe2Color { get; set; }
 		public Color? Timeframe2FrameColor { get; set; }
@@ -272,8 +272,8 @@ public class DummyChartBuilder : IChartBuilder
 			AntiAliasing = storage.GetValue<bool>(nameof(AntiAliasing));
 			ShowAxisMarker = storage.GetValue<bool>(nameof(ShowAxisMarker));
 
-			Timeframe2Multiplier = storage.GetValue<int>(nameof(Timeframe2Multiplier));
-			Timeframe3Multiplier = storage.GetValue<int>(nameof(Timeframe3Multiplier));
+			Timeframe2Multiplier = storage.GetValue<int?>(nameof(Timeframe2Multiplier));
+			Timeframe3Multiplier = storage.GetValue<int?>(nameof(Timeframe3Multiplier));
 			FontColor = storage.GetValue<int?>(nameof(FontColor))?.ToColor();
 			Timeframe2Color = storage.GetValue<int?>(nameof(Timeframe2Color))?.ToColor();
 			Timeframe2FrameColor = storage.GetValue<int?>(nameof(Timeframe2FrameColor))?.ToColor();
