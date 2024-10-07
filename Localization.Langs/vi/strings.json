@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "Giá trị tối đa cho giai đoạn.",
   "MaxVolForGeneration": "Khối lượng tối đa cho báo giá thế hệ",
   "MaxVolume": "Khối lượng tối đa",
+  "MaxVolumeBackground": "Màu nền tối đa",
   "MaxVolumeColor": "Màu của khối lượng tối đa",
   "MaxVolumeDesc": "Khối lượng tối đa được phép trong đơn hàng.",
   "MaxWriteBytes": "Số byte ghi tối đa",

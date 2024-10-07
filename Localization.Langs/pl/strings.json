@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "Maksymalna wartość dla okresu.",
   "MaxVolForGeneration": "Maksymalna objętość wyceny dla generacji",
   "MaxVolume": "Maksymalna objętość",
+  "MaxVolumeBackground": "Maksymalny kolor tła",
   "MaxVolumeColor": "Kolor maksymalnego wolumenu",
   "MaxVolumeDesc": "Maksymalna ilość dopuszczalna w zamówieniu.",
   "MaxWriteBytes": "Maksymalna liczba zapisanych bajtów",

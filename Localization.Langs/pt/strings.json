@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "Valor máximo para o período.",
   "MaxVolForGeneration": "Volume máximo para geração de cotação",
   "MaxVolume": "Volume máximo",
+  "MaxVolumeBackground": "Cor de fundo máxima",
   "MaxVolumeColor": "Cor do volume máximo",
   "MaxVolumeDesc": "Volume máximo permitido no pedido.",
   "MaxWriteBytes": "Máximo de bytes escritos",

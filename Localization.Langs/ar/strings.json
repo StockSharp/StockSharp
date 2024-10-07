@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "القيمة القصوى للفترة.",
   "MaxVolForGeneration": "الحجم الأقصى للجيل للاقتباس",
   "MaxVolume": "الحجم الأقصى",
+  "MaxVolumeBackground": "لون الخلفية الأقصى",
   "MaxVolumeColor": "لون الحجم الأقصى",
   "MaxVolumeDesc": "الحجم الأقصى المسموح به في الطلب.",
   "MaxWriteBytes": "الحد الأقصى لعدد البايتات للكتابة",

@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "Μέγιστη τιμή για την περίοδο.",
   "MaxVolForGeneration": "Μέγιστος όγκος για τη δημιουργία προσφοράς",
   "MaxVolume": "Μέγιστος όγκος",
+  "MaxVolumeBackground": "Μέγιστο χρώμα φόντου",
   "MaxVolumeColor": "Χρώμα μέγιστου όγκου",
   "MaxVolumeDesc": "Μέγιστος επιτρεπτός όγκος στην παραγγελία.",
   "MaxWriteBytes": "Μέγιστος αριθμός byte εγγραφής",

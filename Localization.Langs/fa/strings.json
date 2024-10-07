@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "بیشترین ارزش برای دوره.",
   "MaxVolForGeneration": "حداکثر حجم برای تولید نقل قول",
   "MaxVolume": "حداکثر حجم",
+  "MaxVolumeBackground": "حداکثر رنگ پس زمینه",
   "MaxVolumeColor": "رنگ حجم حداکثر",
   "MaxVolumeDesc": "حجم حداکثر مجاز در سفارش.",
   "MaxWriteBytes": "بیشترین بایت نوشتاری",

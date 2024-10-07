@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "Nilai Maksimal kanggo Periode.",
   "MaxVolForGeneration": "Volume maksimum kanggo generasi kutipan",
   "MaxVolume": "Volume Maks",
+  "MaxVolumeBackground": "Warna latar maksimum",
   "MaxVolumeColor": "Werna volume maksimal",
   "MaxVolumeDesc": "Volume maksimal diijini ing pesenan.",
   "MaxWriteBytes": "Bait Tulis Maksimal",

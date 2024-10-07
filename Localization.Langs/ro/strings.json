@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "Valoarea maximă pentru perioada.",
   "MaxVolForGeneration": "Volum maxim pentru generarea cotației",
   "MaxVolume": "Volum maxim",
+  "MaxVolumeBackground": "Culoare de fundal maximă",
   "MaxVolumeColor": "Culoarea volumului maxim",
   "MaxVolumeDesc": "Volumul maxim permis în comandă.",
   "MaxWriteBytes": "Număr maxim de octeți de scris",

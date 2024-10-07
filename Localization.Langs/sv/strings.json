@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "Maximalt värde för perioden.",
   "MaxVolForGeneration": "Maximal volym för generationsnotering",
   "MaxVolume": "Maximal volym",
+  "MaxVolumeBackground": "Maximal bakgrundsfärg",
   "MaxVolumeColor": "Färg på maximal volym",
   "MaxVolumeDesc": "Maximal volym tillåten i beställningen.",
   "MaxWriteBytes": "Maximalt antal skrivbytes",

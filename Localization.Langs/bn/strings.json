@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "সময়কালের জন্য সর্বাধিক মূল্য।",
   "MaxVolForGeneration": "জেনারেশনের জন্য সর্বাধিক ভলিউম কোট",
   "MaxVolume": "সর্বাধিক পরিমাণ",
+  "MaxVolumeBackground": "সর্বোচ্চ পটভূমির রং",
   "MaxVolumeColor": "সর্বাধিক ভলিউমের রঙ",
   "MaxVolumeDesc": "অর্ডারে অনুমোদিত সর্বাধিক ভলিউম।",
   "MaxWriteBytes": "সর্বাধিক লেখা বাইট",

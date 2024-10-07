@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "Valor màxim per al període.",
   "MaxVolForGeneration": "Volum màxim de la cotització generada del llibre d'ordres",
   "MaxVolume": "Màx volum",
+  "MaxVolumeBackground": "Color de fons màxim",
   "MaxVolumeColor": "Color del volum màxim",
   "MaxVolumeDesc": "Volum màxim permès en una comanda.",
   "MaxWriteBytes": "Màxim bytes (escriptura)",

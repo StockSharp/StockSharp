@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "Maximale waarde voor de periode.",
   "MaxVolForGeneration": "Maximaal volume voor het genereren van een offerte",
   "MaxVolume": "Maximaal volume",
+  "MaxVolumeBackground": "Maximale achtergrondkleur",
   "MaxVolumeColor": "Kleur van het maximale volume",
   "MaxVolumeDesc": "Maximaal toegestaan volume in de bestelling.",
   "MaxWriteBytes": "Maximale schrijfbytes",

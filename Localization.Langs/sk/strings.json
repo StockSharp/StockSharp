@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "Maximálna hodnota za obdobie.",
   "MaxVolForGeneration": "Maximálny objem kotácie generovaného stakanu",
   "MaxVolume": "Max objem",
+  "MaxVolumeBackground": "Maximálna farba pozadia",
   "MaxVolumeColor": "Farba maximálneho objemu",
   "MaxVolumeDesc": "Maximálny objem, povolený v objednávke.",
   "MaxWriteBytes": "Maximálne bajty (zápis)",

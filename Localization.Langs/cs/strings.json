@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "Maximální hodnota pro období.",
   "MaxVolForGeneration": "Maximální objem pro generování kvotace",
   "MaxVolume": "Maximální objem",
+  "MaxVolumeBackground": "Maximální barva pozadí",
   "MaxVolumeColor": "Barva maximálního objemu",
   "MaxVolumeDesc": "Maximální povolený objem v objednávce.",
   "MaxWriteBytes": "Maximální počet zapsaných bytů",

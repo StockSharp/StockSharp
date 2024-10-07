@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "기간 동안의 최대 값입니다.",
   "MaxVolForGeneration": "생성을 위한 최대 견적량",
   "MaxVolume": "최대 볼륨",
+  "MaxVolumeBackground": "최대 배경색",
   "MaxVolumeColor": "최대 볼륨 색상",
   "MaxVolumeDesc": "주문에 허용된 최대 볼륨입니다.",
   "MaxWriteBytes": "최대 쓰기 바이트",

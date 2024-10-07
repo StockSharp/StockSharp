@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "Dönem için Maksimum Değer.",
   "MaxVolForGeneration": "Nesil için azami teklif miktarı",
   "MaxVolume": "Maksimum Hacim",
+  "MaxVolumeBackground": "Maksimum arka plan rengi",
   "MaxVolumeColor": "Maksimum Hacim Rengi",
   "MaxVolumeDesc": "Emirde izin verilen maksimum hacim.",
   "MaxWriteBytes": "Maksimum Yazma Baytları",

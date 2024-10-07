@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "காலகட்டத்திற்கான அதிகபட்ச மதிப்பு.",
   "MaxVolForGeneration": "தலைமுறைக்கான அதிகபட்ச மொத்தம்",
   "MaxVolume": "அதிகபட்ச தொகை",
+  "MaxVolumeBackground": "அதிகபட்ச பின்னணி நிறம்",
   "MaxVolumeColor": "அதிகபட்ச வால்யூமின் நிறம்",
   "MaxVolumeDesc": "ஆர்டரில் அனுமதிக்கப்பட்ட அதிகபட்ச அளவு.",
   "MaxWriteBytes": "அதிகபட்ச எழுது பைட்டுகள்",

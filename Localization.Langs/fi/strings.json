@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "Ajanjakson suurin arvo.",
   "MaxVolForGeneration": "Maksimivolyymi tarjouksen generointiin",
   "MaxVolume": "Suurin tilavuus",
+  "MaxVolumeBackground": "Maksimitaustaväri",
   "MaxVolumeColor": "Maksimivolyysin väri",
   "MaxVolumeDesc": "Tilauksessa sallittu maksimitilavuus.",
   "MaxWriteBytes": "Kirjoitusen enimmäisbytesmäärä",

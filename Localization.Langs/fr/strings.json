@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "Valeur maximale pour la période.",
   "MaxVolForGeneration": "Volume maximum pour la génération de devis",
   "MaxVolume": "Volume maximum",
+  "MaxVolumeBackground": "Couleur de fond maximale",
   "MaxVolumeColor": "Couleur du volume maximal",
   "MaxVolumeDesc": "Volume maximum autorisé dans la commande.",
   "MaxWriteBytes": "Nombre maximal d'octets d'écriture",

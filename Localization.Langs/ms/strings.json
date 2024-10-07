@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "Nilai Maksimum untuk Tempoh.",
   "MaxVolForGeneration": "Jumlah maksimum untuk penjanaan sebut harga",
   "MaxVolume": "Jilid Maksimum",
+  "MaxVolumeBackground": "Warna latar belakang maksimum",
   "MaxVolumeColor": "Warna Jilid Maksimum",
   "MaxVolumeDesc": "Isipadu maksimum yang dibenarkan dalam pesanan.",
   "MaxWriteBytes": "Bait Tulis Maksimum",

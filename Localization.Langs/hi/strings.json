@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "अवधि के लिए अधिकतम मूल्य।",
   "MaxVolForGeneration": "पीढ़ी के लिए अधिकतम कोट की मात्रा",
   "MaxVolume": "अधिकतम मात्रा",
+  "MaxVolumeBackground": "अधिकतम पृष्ठभूमि रंग",
   "MaxVolumeColor": "अधिकतम मात्रा का रंग",
   "MaxVolumeDesc": "ऑर्डर में अनुमतित अधिकतम वॉल्यूम।",
   "MaxWriteBytes": "अधिकतम लिखित बाइट्स",

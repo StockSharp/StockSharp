@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "周期内的最大值。",
   "MaxVolForGeneration": "生成的报价单的最大体积",
   "MaxVolume": "最大容量",
+  "MaxVolumeBackground": "最大背景色",
   "MaxVolumeColor": "最大成交量的颜色",
   "MaxVolumeDesc": "订单中允许的最大量。",
   "MaxWriteBytes": "最大写入字节数",

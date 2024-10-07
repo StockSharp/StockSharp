@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "Maksimalverdi for perioden.",
   "MaxVolForGeneration": "Maksimalt volum for generering av tilbud",
   "MaxVolume": "Maksimalt volum",
+  "MaxVolumeBackground": "Maksimal bakgrunnsfarge",
   "MaxVolumeColor": "Farge på maksimalt volum",
   "MaxVolumeDesc": "Maksimalt tillatt volum i bestillingen.",
   "MaxWriteBytes": "Maks skrivebytes",

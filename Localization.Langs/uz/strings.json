@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "Davri uchun maksimal qiymat.",
   "MaxVolForGeneration": "Avlod uchun maksimal kotirovka hajmi",
   "MaxVolume": "Maksimal hajm",
+  "MaxVolumeBackground": "Maksimal fon rangi",
   "MaxVolumeColor": "Maksimal hajm rangi",
   "MaxVolumeDesc": "Buyurtmada ruxsat etilgan maksimal hajm.",
   "MaxWriteBytes": "Maksimal yoziladigan baytlar",

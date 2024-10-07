@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "הערך המרבי לתקופה.",
   "MaxVolForGeneration": "הנפח המרבי ליצירת הצעה",
   "MaxVolume": "נפח מרבי",
+  "MaxVolumeBackground": "צבע רקע מקסימלי",
   "MaxVolumeColor": "צבע הנפח המקסימלי",
   "MaxVolumeDesc": "הנפח המרבי המותר בהזמנה.",
   "MaxWriteBytes": "מקסימום בתים לכתיבה",

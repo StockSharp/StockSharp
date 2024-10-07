@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "期間の最大値。",
   "MaxVolForGeneration": "生成用の最大見積もり量",
   "MaxVolume": "最大ボリューム",
+  "MaxVolumeBackground": "最大背景色",
   "MaxVolumeColor": "最大ボリュームの色",
   "MaxVolumeDesc": "注文で許可される最大ボリューム。",
   "MaxWriteBytes": "最大書き込みバイト数",

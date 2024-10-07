@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "Maximális érték az időszakra.",
   "MaxVolForGeneration": "Maximális mennyiség az ajánlatok generálására",
   "MaxVolume": "Maximális térfogat",
+  "MaxVolumeBackground": "Maximális háttérszín",
   "MaxVolumeColor": "Maximális kötet színe",
   "MaxVolumeDesc": "A megrendelésben engedélyezett maximális mennyiség.",
   "MaxWriteBytes": "Maximális írható bájtok",

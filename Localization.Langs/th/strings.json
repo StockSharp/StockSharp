@@ -2008,6 +2008,7 @@
   "MaxValueForPeriod": "ค่าสูงสุดสำหรับระยะเวลานั้น",
   "MaxVolForGeneration": "ปริมาณสูงสุดสำหรับการสร้างใบเสนอราคา",
   "MaxVolume": "ปริมาณสูงสุด",
+  "MaxVolumeBackground": "สีพื้นหลังสูงสุด",
   "MaxVolumeColor": "สีของปริมาณสูงสุด",
   "MaxVolumeDesc": "ปริมาณสูงสุดที่อนุญาตในคำสั่งซื้อ",
   "MaxWriteBytes": "ไบต์การเขียนสูงสุด",
