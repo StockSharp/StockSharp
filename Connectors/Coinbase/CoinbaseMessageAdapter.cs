@@ -1,3 +1,6 @@
+using System.Security;
+using Ecng.Security;
+
 namespace StockSharp.Coinbase;
 
 using StockSharp.Coinbase.Native;
@@ -143,14 +146,22 @@ public partial class CoinbaseMessageAdapter
 	{
 		if (this.IsTransactional())
 		{
-			if (Key.IsEmpty())
-				throw new InvalidOperationException(LocalizedStrings.KeyNotSpecified);
+			if (Name.IsEmpty())
+				throw new InvalidOperationException(LocalizedStrings.NameIsNotSpecified);
 
-			if (Secret.IsEmpty())
-				throw new InvalidOperationException(LocalizedStrings.SecretNotSpecified);
+			if (Token.IsEmpty())
+				throw new InvalidOperationException(LocalizedStrings.Token);
 		}
 
-		_authenticator = new(this.IsTransactional(), Key, Secret, Passphrase);
+		// Convert Name to SecureString
+		SecureString secureName = new SecureString();
+		foreach (char c in Name)
+		{
+			secureName.AppendChar(c);
+		}
+		secureName.MakeReadOnly();
+
+		_authenticator = new Authenticator(secureName, Token); // Assuming Authenticator expects SecureString for Name
 
 		if (_restClient != null)
 			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
@@ -158,9 +169,9 @@ public partial class CoinbaseMessageAdapter
 		if (_socketClient != null)
 			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
 
-		_restClient = new(_authenticator) { Parent = this };
+		_restClient = new HttpClient(_authenticator) { Parent = this };
 
-		_socketClient = new(_authenticator, ReConnectionSettings.ReAttemptCount) { Parent = this };
+		_socketClient = new SocketClient(_authenticator, ReConnectionSettings.ReAttemptCount) { Parent = this };
 		SubscribePusherClient();
 
 		await _socketClient.Connect(cancellationToken);
