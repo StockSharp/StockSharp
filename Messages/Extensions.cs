@@ -3475,13 +3475,14 @@ public static partial class Extensions
 	/// <param name="depth">The regular order book.</param>
 	/// <param name="priceRange">Minimum price step.</param>
 	/// <param name="priceStep">Security price step.</param>
+	/// <param name="maxDepth">Max depth.</param>
 	/// <returns>The sparse order book.</returns>
-	public static QuoteChangeMessage Sparse(this IOrderBookMessage depth, decimal priceRange, decimal? priceStep)
+	public static QuoteChangeMessage Sparse(this IOrderBookMessage depth, decimal priceRange, decimal? priceStep, int maxDepth = 20)
 	{
 		depth.CheckIsSnapshot();
 
-		var bids = depth.Bids.Sparse(Sides.Buy, priceRange, priceStep);
-		var asks = depth.Asks.Sparse(Sides.Sell, priceRange, priceStep);
+		var bids = depth.Bids.Sparse(Sides.Buy, priceRange, priceStep, maxDepth);
+		var asks = depth.Asks.Sparse(Sides.Sell, priceRange, priceStep, maxDepth);
 
 		var bestBid = depth.GetBestBid();
 		var bestAsk = depth.GetBestAsk();
@@ -3543,8 +3544,9 @@ public static partial class Extensions
 	/// <param name="ask">Ask.</param>
 	/// <param name="priceRange">Minimum price step.</param>
 	/// <param name="priceStep">Security price step.</param>
+	/// <param name="maxDepth">Max depth.</param>
 	/// <returns>The sparse collection of quotes.</returns>
-	public static (QuoteChange[] bids, QuoteChange[] asks) Sparse(this QuoteChange bid, QuoteChange ask, decimal priceRange, decimal? priceStep)
+	public static (QuoteChange[] bids, QuoteChange[] asks) Sparse(this QuoteChange bid, QuoteChange ask, decimal priceRange, decimal? priceStep, int maxDepth = 10)
 	{
 		ValidatePriceRange(priceRange);
 
@@ -3554,25 +3556,35 @@ public static partial class Extensions
 		if (bidPrice == default || askPrice == default || bidPrice == askPrice)
 			return ([], []);
 
-		const int maxLimit = 1000;
-
 		var bids = new List<QuoteChange>();
 		var asks = new List<QuoteChange>();
 
 		var currentBidPrice = bidPrice.ShrinkPrice(priceStep, null, ShrinkRules.More);
 		var currentAskPrice = askPrice.ShrinkPrice(priceStep, null, ShrinkRules.Less);
 
-		while (currentBidPrice < currentAskPrice && (bids.Count + asks.Count) < maxLimit)
+		while (currentBidPrice < currentAskPrice && (bids.Count + asks.Count) < maxDepth)
 		{
+			var wasBid = currentBidPrice;
+			var wasAsk = currentAskPrice;
+
 			currentBidPrice = (currentBidPrice + priceRange).ShrinkPrice(priceStep, null, ShrinkRules.Less);
+
+			if (wasBid > currentBidPrice)
+				break;
 
 			if (currentBidPrice > bidPrice && currentBidPrice < askPrice)
 				bids.Add(new() { Price = currentBidPrice });
 
 			currentAskPrice = (currentAskPrice - priceRange).ShrinkPrice(priceStep, null, ShrinkRules.More);
 
+			if (wasAsk < currentAskPrice)
+				break;
+
 			if (currentAskPrice > bidPrice && currentAskPrice < askPrice)
 				asks.Insert(0, new() { Price = currentAskPrice });
+
+			if (wasBid == currentBidPrice && wasAsk == currentAskPrice)
+				break;
 		}
 
 		return (bids.ToArray(), asks.ToArray());
@@ -3588,8 +3600,9 @@ public static partial class Extensions
 	/// <param name="side">Side.</param>
 	/// <param name="priceRange">Minimum price step.</param>
 	/// <param name="priceStep">Security price step.</param>
+	/// <param name="maxDepth">Max depth.</param>
 	/// <returns>The sparse collection of quotes.</returns>
-	public static QuoteChange[] Sparse(this QuoteChange[] quotes, Sides side, decimal priceRange, decimal? priceStep)
+	public static QuoteChange[] Sparse(this QuoteChange[] quotes, Sides side, decimal priceRange, decimal? priceStep, int maxDepth)
 	{
 		if (quotes is null)
 			throw new ArgumentNullException(nameof(quotes));
@@ -3598,8 +3611,6 @@ public static partial class Extensions
 
 		if (quotes.Length < 2)
 			return [.. quotes];
-
-		const int maxLimit = 10000;
 
 		var retVal = new List<QuoteChange>();
 
@@ -3622,7 +3633,7 @@ public static partial class Extensions
 
 					retVal.Add(new QuoteChange { Price = p });
 
-					if (retVal.Count > maxLimit)
+					if (retVal.Count > maxDepth)
 						break;
 				}
 			}
@@ -3637,12 +3648,12 @@ public static partial class Extensions
 
 					retVal.Add(new QuoteChange { Price = p });
 
-					if (retVal.Count > maxLimit)
+					if (retVal.Count > maxDepth)
 						break;
 				}
 			}
 
-			if (retVal.Count > maxLimit)
+			if (retVal.Count > maxDepth)
 				break;
 		}
 
