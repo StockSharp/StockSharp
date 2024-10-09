@@ -47,6 +47,16 @@ public class StorageBuffer : IPersistable
 	public bool Enabled { get; set; } = true;
 
 	/// <summary>
+	/// Enable level1 storage.
+	/// </summary>
+	public bool EnabledLevel1 { get; set; } = true;
+
+	/// <summary>
+	/// Enable order book storage.
+	/// </summary>
+	public bool EnabledOrderBook { get; set; } = true;
+
+	/// <summary>
 	/// Enable positions storage.
 	/// </summary>
 	public bool EnabledPositions { get; set; }
@@ -310,12 +320,16 @@ public class StorageBuffer : IPersistable
 		{
 			case MessageTypes.Level1Change:
 			{
-				TryStore(_level1Buffer, (Level1ChangeMessage)message);
+				if (EnabledLevel1)
+					TryStore(_level1Buffer, (Level1ChangeMessage)message);
+
 				break;
 			}
 			case MessageTypes.QuoteChange:
 			{
-				TryStore(_orderBooksBuffer, (QuoteChangeMessage)message);
+				if (EnabledOrderBook)
+					TryStore(_orderBooksBuffer, (QuoteChangeMessage)message);
+
 				break;
 			}
 			case MessageTypes.Execution:
@@ -378,6 +392,8 @@ public class StorageBuffer : IPersistable
 	void IPersistable.Save(SettingsStorage storage)
 	{
 		storage.SetValue(nameof(Enabled), Enabled);
+		storage.SetValue(nameof(EnabledLevel1), EnabledLevel1);
+		storage.SetValue(nameof(EnabledOrderBook), EnabledOrderBook);
 		storage.SetValue(nameof(EnabledPositions), EnabledPositions);
 		storage.SetValue(nameof(EnabledTransactions), EnabledTransactions);
 		storage.SetValue(nameof(FilterSubscription), FilterSubscription);
@@ -389,6 +405,8 @@ public class StorageBuffer : IPersistable
 	void IPersistable.Load(SettingsStorage storage)
 	{
 		Enabled = storage.GetValue(nameof(Enabled), Enabled);
+		EnabledLevel1 = storage.GetValue(nameof(EnabledLevel1), EnabledLevel1);
+		EnabledOrderBook = storage.GetValue(nameof(EnabledOrderBook), EnabledOrderBook);
 		EnabledPositions = storage.GetValue(nameof(EnabledPositions), EnabledPositions);
 		EnabledTransactions = storage.GetValue(nameof(EnabledTransactions), EnabledTransactions);
 		FilterSubscription = storage.GetValue(nameof(FilterSubscription), FilterSubscription);
