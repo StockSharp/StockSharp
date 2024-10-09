@@ -57,11 +57,6 @@ public class StorageBuffer : IPersistable
 	public bool EnabledTransactions { get; set; } = true;
 
 	/// <summary>
-	/// Interpret tick messages as level1.
-	/// </summary>
-	public bool TicksAsLevel1 { get; set; } = true;
-
-	/// <summary>
 	/// <see cref="BufferMessageAdapter.StartStorageTimer"/>.
 	/// </summary>
 	public bool DisableStorageTimer { get; set; }
@@ -386,7 +381,6 @@ public class StorageBuffer : IPersistable
 		storage.SetValue(nameof(EnabledPositions), EnabledPositions);
 		storage.SetValue(nameof(EnabledTransactions), EnabledTransactions);
 		storage.SetValue(nameof(FilterSubscription), FilterSubscription);
-		storage.SetValue(nameof(TicksAsLevel1), TicksAsLevel1);
 		storage.SetValue(nameof(DisableStorageTimer), DisableStorageTimer);
 		storage.SetValue(nameof(IgnoreGeneratedMarketData), IgnoreGeneratedMarketData);
 		storage.SetValue(nameof(IgnoreGeneratedTransactional), IgnoreGeneratedTransactional);
@@ -398,7 +392,6 @@ public class StorageBuffer : IPersistable
 		EnabledPositions = storage.GetValue(nameof(EnabledPositions), EnabledPositions);
 		EnabledTransactions = storage.GetValue(nameof(EnabledTransactions), EnabledTransactions);
 		FilterSubscription = storage.GetValue(nameof(FilterSubscription), FilterSubscription);
-		TicksAsLevel1 = storage.GetValue(nameof(TicksAsLevel1), TicksAsLevel1);
 		DisableStorageTimer = storage.GetValue(nameof(DisableStorageTimer), DisableStorageTimer);
 		IgnoreGeneratedMarketData = storage.GetValue(nameof(IgnoreGeneratedMarketData), IgnoreGeneratedMarketData);
 		IgnoreGeneratedTransactional = storage.GetValue(nameof(IgnoreGeneratedTransactional), IgnoreGeneratedTransactional);
