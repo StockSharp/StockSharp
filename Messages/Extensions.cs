@@ -42,11 +42,13 @@ public static partial class Extensions
 		static string TimeSpanToString(TimeSpan arg) => arg.ToString().Replace(':', '-');
 		static TimeSpan StringToTimeSpan(string str) => str.Replace('-', ':').To<TimeSpan>();
 
+		static bool validateUnit(Unit v) => v is not null && v.Value > 0;
+
 		RegisterCandleType(typeof(TimeFrameCandleMessage), MessageTypes.CandleTimeFrame, MarketDataTypes.CandleTimeFrame, typeof(TimeFrameCandleMessage).Name.Remove(nameof(Message)), StringToTimeSpan, TimeSpanToString, a => a > TimeSpan.Zero);
 		RegisterCandleType(typeof(TickCandleMessage), MessageTypes.CandleTick, MarketDataTypes.CandleTick, typeof(TickCandleMessage).Name.Remove(nameof(Message)), str => str.To<int>(), arg => arg.ToString(), a => a > 0);
 		RegisterCandleType(typeof(VolumeCandleMessage), MessageTypes.CandleVolume, MarketDataTypes.CandleVolume, typeof(VolumeCandleMessage).Name.Remove(nameof(Message)), str => str.To<decimal>(), arg => arg.ToString(), a => a > 0);
-		RegisterCandleType(typeof(RangeCandleMessage), MessageTypes.CandleRange, MarketDataTypes.CandleRange, typeof(RangeCandleMessage).Name.Remove(nameof(Message)), str => str.ToUnit(), arg => arg.ToString(), a => a > 0);
-		RegisterCandleType(typeof(RenkoCandleMessage), MessageTypes.CandleRenko, MarketDataTypes.CandleRenko, typeof(RenkoCandleMessage).Name.Remove(nameof(Message)), str => str.ToUnit(), arg => arg.ToString(), a => a > 0);
+		RegisterCandleType(typeof(RangeCandleMessage), MessageTypes.CandleRange, MarketDataTypes.CandleRange, typeof(RangeCandleMessage).Name.Remove(nameof(Message)), str => str.ToUnit(), arg => arg.ToString(), validateUnit);
+		RegisterCandleType(typeof(RenkoCandleMessage), MessageTypes.CandleRenko, MarketDataTypes.CandleRenko, typeof(RenkoCandleMessage).Name.Remove(nameof(Message)), str => str.ToUnit(), arg => arg.ToString(), validateUnit);
 		RegisterCandleType(typeof(PnFCandleMessage), MessageTypes.CandlePnF, MarketDataTypes.CandlePnF, typeof(PnFCandleMessage).Name.Remove(nameof(Message)), str =>
 		{
 			var parts = str.Split('_');
@@ -56,7 +58,7 @@ public static partial class Extensions
 				BoxSize = parts[0].ToUnit(),
 				ReversalAmount = parts[1].To<int>()
 			};
-		}, pnf => $"{pnf.BoxSize}_{pnf.ReversalAmount}", a => a is not null && a.BoxSize > 0 && a.ReversalAmount > 0);
+		}, pnf => $"{pnf.BoxSize}_{pnf.ReversalAmount}", a => a is not null && validateUnit(a.BoxSize) && a.ReversalAmount > 0);
 		RegisterCandleType(typeof(HeikinAshiCandleMessage), MessageTypes.CandleHeikinAshi, MarketDataTypes.CandleHeikinAshi, typeof(HeikinAshiCandleMessage).Name.Remove(nameof(Message)), StringToTimeSpan, TimeSpanToString, a => a > TimeSpan.Zero);
 
 		_orderStateValidator = new(s => (int)s);
@@ -4119,6 +4121,21 @@ public static partial class Extensions
 		}
 
 		return retVal;
+	}
+
+	/// <summary>
+	/// To cut the price, to make it multiple of minimal step, also to limit number of signs after the comma.
+	/// </summary>
+	/// <param name="price">The price to be made multiple.</param>
+	/// <param name="secMsg"><see cref="SecurityMessage"/></param>
+	/// <param name="rule"></param>
+	/// <returns>The multiple price.</returns>
+	public static decimal ShrinkPrice(this decimal price, SecurityMessage secMsg, ShrinkRules rule = ShrinkRules.Auto)
+	{
+		if (secMsg is null)
+			throw new ArgumentNullException(nameof(secMsg));
+
+		return ShrinkPrice(price, secMsg.PriceStep, secMsg.Decimals, rule);
 	}
 
 	/// <summary>

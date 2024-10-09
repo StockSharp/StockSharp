@@ -49,7 +49,6 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 		public long? Count { get; set; }
 
 		CandleMessage ICandleBuilderSubscription.CurrentCandle { get; set; }
-		CandleMessage ICandleBuilderSubscription.PrevCandle { get; set; }
 
 		public CandleMessage NonFinishedCandle { get; set; }
 

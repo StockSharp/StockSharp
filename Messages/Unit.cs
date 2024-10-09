@@ -282,7 +282,7 @@ public class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFormattable
 		return value.Value;
 	}
 
-	private static Unit CreateResult(Unit u1, Unit u2, Func<decimal, decimal, decimal> operation, Func<decimal, decimal, decimal> percentOperation)
+	private static Unit CreateResult(Unit u1, Unit u2, bool keepPersent, Func<decimal, decimal, decimal> operation, Func<decimal, decimal, decimal> percentOperation)
 	{
 		//  prevent operator '==' call
 		if (u1 is null)
@@ -317,12 +317,20 @@ public class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFormattable
 		{
 			if (u1.Type == UnitTypes.Percent || u2.Type == UnitTypes.Percent)
 			{
-				result.Type = u1.Type == UnitTypes.Percent ? u2.Type : u1.Type;
+				if (keepPersent)
+				{
+					result.Type = UnitTypes.Percent;
+					result.Value = operation(u1.Value, u2.Value);
+				}
+				else
+				{
+					result.Type = u1.Type == UnitTypes.Percent ? u2.Type : u1.Type;
 
-				var nonPerValue = u1.Type == UnitTypes.Percent ? u2.Value : u1.Value;
-				var perValue = u1.Type == UnitTypes.Percent ? u1.Value : u2.Value;
+					var nonPerValue = u1.Type == UnitTypes.Percent ? u2.Value : u1.Value;
+					var perValue = u1.Type == UnitTypes.Percent ? u1.Value : u2.Value;
 
-				result.Value = percentOperation(nonPerValue, perValue * nonPerValue.Abs() / 100.0m);
+					result.Value = percentOperation(nonPerValue, perValue * nonPerValue.Abs() / 100.0m);
+				}
 			}
 			else
 			{
@@ -357,7 +365,7 @@ public class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFormattable
 	/// <returns>The result of addition.</returns>
 	public static Unit operator +(Unit u1, Unit u2)
 	{
-		return CreateResult(u1, u2, (v1, v2) => v1 + v2, (nonPer, per) => nonPer + per);
+		return CreateResult(u1, u2, false, (v1, v2) => v1 + v2, (nonPer, per) => nonPer + per);
 	}
 
 	/// <summary>
@@ -368,7 +376,7 @@ public class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFormattable
 	/// <returns>The result of the multiplication.</returns>
 	public static Unit operator *(Unit u1, Unit u2)
 	{
-		return CreateResult(u1, u2, (v1, v2) => v1 * v2, (nonPer, per) => nonPer * per);
+		return CreateResult(u1, u2, true, (v1, v2) => v1 * v2, (nonPer, per) => nonPer * per);
 	}
 
 	/// <summary>
@@ -379,7 +387,7 @@ public class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFormattable
 	/// <returns>The result of the subtraction.</returns>
 	public static Unit operator -(Unit u1, Unit u2)
 	{
-		return CreateResult(u1, u2, (v1, v2) => v1 - v2, (nonPer, per) => (u1.Type == UnitTypes.Percent ? (per - nonPer) : (nonPer - per)));
+		return CreateResult(u1, u2, false, (v1, v2) => v1 - v2, (nonPer, per) => (u1.Type == UnitTypes.Percent ? (per - nonPer) : (nonPer - per)));
 	}
 
 	/// <summary>
@@ -390,7 +398,7 @@ public class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFormattable
 	/// <returns>The result of the division.</returns>
 	public static Unit operator /(Unit u1, Unit u2)
 	{
-		return CreateResult(u1, u2, (v1, v2) => v1 / v2, (nonPer, per) => u1.Type == UnitTypes.Percent ? per / nonPer : nonPer / per);
+		return CreateResult(u1, u2, u2?.Type != UnitTypes.Percent, (v1, v2) => v1 / v2, (nonPer, per) => u1.Type == UnitTypes.Percent ? per / nonPer : nonPer / per);
 	}
 
 	/// <summary>
@@ -623,7 +631,10 @@ public class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFormattable
 		if (u1.Type != u2.Type)
 		{
 			if (u1.Type == UnitTypes.Percent || u2.Type == UnitTypes.Percent)
-				throw new ArgumentException(LocalizedStrings.PercentagesCannotCompare.Put(u1, u2));
+			{
+				return null;
+				//throw new ArgumentException(LocalizedStrings.PercentagesCannotCompare.Put(u1, u2));
+			}
 
 			if (u2.Type == UnitTypes.Absolute)
 			{

@@ -45,12 +45,12 @@ public interface IChartCandleElement : IChartElement
 	/// <summary>
 	/// Line color for <see cref="DrawStyle"/> Line*.
 	/// </summary>
-	Color LineColor { get; set; }
+	Color? LineColor { get; set; }
 
 	/// <summary>
 	/// Area color for <see cref="DrawStyle"/> set as <see cref="ChartCandleDrawStyles.Area"/>.
 	/// </summary>
-	Color AreaColor { get; set; }
+	Color? AreaColor { get; set; }
 
 	/// <summary>
 	/// Show Y-axis market.
@@ -62,11 +62,6 @@ public interface IChartCandleElement : IChartElement
 	/// </summary>
 	new Func<DateTimeOffset, bool, bool, Color?> Colorer { get; set; }
 
-	/// <summary>
-	/// Minimum price step.
-	/// </summary>
-	decimal? PriceStep { get; set; }
-
 	#endregion
 
 	#region volume charts properties
@@ -74,62 +69,62 @@ public interface IChartCandleElement : IChartElement
 	/// <summary>
 	/// Timeframe #2 multiplier.
 	/// </summary>
-	int Timeframe2Multiplier { get; set; }
+	int? Timeframe2Multiplier { get; set; }
 
 	/// <summary>
 	/// Timeframe #3 multiplier.
 	/// </summary>
-	int Timeframe3Multiplier { get; set; }
+	int? Timeframe3Multiplier { get; set; }
 
 	/// <summary>
 	/// Font color.
 	/// </summary>
-	Color FontColor { get; set; }
+	Color? FontColor { get; set; }
 
 	/// <summary>
 	/// Timeframe #2 color.
 	/// </summary>
-	Color Timeframe2Color { get; set; }
+	Color? Timeframe2Color { get; set; }
 
 	/// <summary>
 	/// Timeframe #2 frame color.
 	/// </summary>
-	Color Timeframe2FrameColor { get; set; }
+	Color? Timeframe2FrameColor { get; set; }
 
 	/// <summary>
 	/// Timeframe #3 color.
 	/// </summary>
-	Color Timeframe3Color { get; set; }
+	Color? Timeframe3Color { get; set; }
 
 	/// <summary>
 	/// Max volume color.
 	/// </summary>
-	Color MaxVolumeColor { get; set; }
+	Color? MaxVolumeColor { get; set; }
 
 	/// <summary>
 	/// Cluster profile line color.
 	/// </summary>
-	Color ClusterLineColor { get; set; }
+	Color? ClusterLineColor { get; set; }
 
 	/// <summary>
 	/// Cluster profile separator line color.
 	/// </summary>
-	Color ClusterSeparatorLineColor { get; set; }
+	Color? ClusterSeparatorLineColor { get; set; }
 
 	/// <summary>
 	/// Cluster text color.
 	/// </summary>
-	Color ClusterTextColor { get; set; }
+	Color? ClusterTextColor { get; set; }
 
 	/// <summary>
 	/// Cluster color.
 	/// </summary>
-	Color ClusterColor { get; set; }
+	Color? ClusterColor { get; set; }
 
 	/// <summary>
 	/// Cluster max color.
 	/// </summary>
-	Color ClusterMaxColor { get; set; }
+	Color? ClusterMaxColor { get; set; }
 
 	/// <summary>
 	/// Show horizontal volume.
@@ -149,12 +144,32 @@ public interface IChartCandleElement : IChartElement
 	/// <summary>
 	/// Horizontal volume color.
 	/// </summary>
-	Color HorizontalVolumeColor { get; set; }
+	Color? HorizontalVolumeColor { get; set; }
 
 	/// <summary>
 	/// Horizontal volume font color.
 	/// </summary>
-	Color HorizontalVolumeFontColor { get; set; }
+	Color? HorizontalVolumeFontColor { get; set; }
+
+	/// <summary>
+	/// Price step for group volumes. <see langword="null"/> means no grouping.
+	/// </summary>
+	decimal? PriceStep { get; set; }
+
+	/// <summary>
+	/// Draw <see cref="Sides.Buy"/> and <see cref="Sides.Sell"/> volumes separately.
+	/// </summary>
+	bool DrawSeparateVolumes { get; set; }
+
+	/// <summary>
+	/// Buy volume color.
+	/// </summary>
+	Color? BuyColor { get; set; }
+
+	/// <summary>
+	/// Sell volume color.
+	/// </summary>
+	Color? SellColor { get; set; }
 
 	#endregion
 }

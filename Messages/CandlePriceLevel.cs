@@ -55,6 +55,37 @@ public struct CandlePriceLevel// : ICloneable<CandlePriceLevel>
 	[DataMember]
 	public IEnumerable<decimal> SellVolumes { get; set; }
 
+	/// <summary>
+	/// Join two <see cref="CandlePriceLevel"/>.
+	/// </summary>
+	/// <param name="other">Second part.</param>
+	/// <returns>Joined <see cref="CandlePriceLevel"/>.</returns>
+	public CandlePriceLevel Join(CandlePriceLevel other)
+	{
+		return new()
+		{
+			Price = Price,
+			TotalVolume = TotalVolume + other.TotalVolume,
+			BuyVolume = BuyVolume + other.BuyVolume,
+			SellVolume = SellVolume + other.SellVolume,
+			BuyCount = BuyCount + other.BuyCount,
+			SellCount = SellCount + other.SellCount,
+			BuyVolumes = BuyVolumes?.Concat(other.BuyVolumes ?? []) ?? other.BuyVolumes,
+			SellVolumes = SellVolumes?.Concat(other.SellVolumes ?? []) ?? other.SellVolumes,
+		};
+	}
+
+	/// <inheritdoc />
+	public override readonly string ToString()
+	{
+		var str = $"P:{Price} V:{TotalVolume}";
+
+		if (BuyVolume != 0 || SellVolume != 0)
+			str += $" {BuyVolume}/{SellVolume} CNT:{BuyCount}/{SellCount}";
+
+		return str;
+	}
+
 	///// <summary>
 	///// Create a copy of <see cref="CandlePriceLevel"/>.
 	///// </summary>
