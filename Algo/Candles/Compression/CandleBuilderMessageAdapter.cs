@@ -83,6 +83,11 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 	/// </summary>
 	public bool SendFinishedCandlesImmediatelly { get; set; }
 
+	/// <summary>
+	/// Storage buffer.
+	/// </summary>
+	public StorageBuffer Buffer { get; set; }
+
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
 	{
@@ -407,6 +412,7 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 		lock (_syncObject)
 			_series.Add(original.TransactionId, series);
 
+		Buffer?.ProcessInMessage(current);
 		base.OnSendInMessage(current);
 		return true;
 	}
@@ -523,7 +529,10 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 				var subscrMsg = (ISubscriptionIdMessage)message;
 
 				if (ProcessValue(subscrMsg))
+				{
+					Buffer?.ProcessOutMessage(message);
 					return;
+				}
 
 				break;
 			}
@@ -936,6 +945,10 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 	/// <returns>Copy.</returns>
 	public override IMessageChannel Clone()
 	{
-		return new CandleBuilderMessageAdapter(InnerAdapter.TypedClone(), _candleBuilderProvider) { SendFinishedCandlesImmediatelly = SendFinishedCandlesImmediatelly };
+		return new CandleBuilderMessageAdapter(InnerAdapter.TypedClone(), _candleBuilderProvider)
+		{
+			SendFinishedCandlesImmediatelly = SendFinishedCandlesImmediatelly,
+			Buffer = Buffer,
+		};
 	}
 }

@@ -139,7 +139,7 @@ public class StorageBuffer : IPersistable
 	public IEnumerable<BoardStateMessage> GetBoardStates()
 		=> _boardStatesBuffer.SyncGet(c => c.CopyAndClear());
 
-	private bool CanStore(Message message, bool canStore, bool ignoreGenerated)
+	private static bool CanStore(Message message, bool canStore, bool ignoreGenerated)
 	{
 		if (!canStore)
 			return false;
