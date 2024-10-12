@@ -2407,6 +2407,7 @@
   "OrderLogOf": "Log Pesenan",
   "OrderMassCancelling": "Pembatalan Pesanan Massal",
   "OrderMatched": "Pesenan {0} wis rampung dilakokaken.",
+  "OrderMatched2": "Pesenan wis diisi kanthi lengkap",
   "OrderMatchedRemainBalance": "Pesenan {0} wis rampung. Volume sing isih {1}.",
   "OrderNoExchangeId": "Pesenan {0} ora duwe identifier exchange.",
   "OrderNoLongerActive": "Order {0} ora aktif maneh.",

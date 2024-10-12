@@ -2407,6 +2407,7 @@
   "OrderLogOf": "Sipariş Kaydı",
   "OrderMassCancelling": "Toplu Sipariş İptali",
   "OrderMatched": "Sipariş {0} tamamen gerçekleştirildi.",
+  "OrderMatched2": "Emir tamamen gerçekleştirildi",
   "OrderMatchedRemainBalance": "Sipariş {0} tamamen gerçekleştirildi. Kalan hacim {1}.",
   "OrderNoExchangeId": "Sipariş {0} için borsa kimliği yok.",
   "OrderNoLongerActive": "Sipariş {0} artık aktif değil.",

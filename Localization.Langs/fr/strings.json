@@ -2407,6 +2407,7 @@
   "OrderLogOf": "Journal de commande de",
   "OrderMassCancelling": "Annulation massive des ordres",
   "OrderMatched": "La commande {0} a été entièrement exécutée.",
+  "OrderMatched2": "Ordre entièrement exécuté",
   "OrderMatchedRemainBalance": "L'ordre {0} a été entièrement exécuté. Volume restant {1}.",
   "OrderNoExchangeId": "La commande {0} n'a pas d'identifiant boursier.",
   "OrderNoLongerActive": "La commande {0} n'est plus active.",

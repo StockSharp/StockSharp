@@ -2407,6 +2407,7 @@
   "OrderLogOf": "Auftragsprotokoll von",
   "OrderMassCancelling": "Massenstornierung von Aufträgen",
   "OrderMatched": "Die Bestellung {0} wurde vollständig ausgeführt.",
+  "OrderMatched2": "Auftrag vollständig ausgeführt",
   "OrderMatchedRemainBalance": "Auftrag {0} ist vollständig ausgeführt. Verbleibendes Volumen {1}.",
   "OrderNoExchangeId": "Auftrag {0} hat keine Börsen-ID.",
   "OrderNoLongerActive": "Bestellung {0} ist nicht mehr aktiv.",

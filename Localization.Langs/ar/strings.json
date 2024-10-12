@@ -2407,6 +2407,7 @@
   "OrderLogOf": "سجل الطلب لـ",
   "OrderMassCancelling": "إلغاء الأوامر الجماعي",
   "OrderMatched": "تم تنفيذ الطلب {0} بالكامل.",
+  "OrderMatched2": "تم تنفيذ الأمر بالكامل",
   "OrderMatchedRemainBalance": "تم تنفيذ الطلب {0} بالكامل. الرصيد المتبقي {1}.",
   "OrderNoExchangeId": "الطلب {0} لا يحتوي على معرف البورصة.",
   "OrderNoLongerActive": "الطلب {0} لم يعد نشطًا.",

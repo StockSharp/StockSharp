@@ -2407,6 +2407,7 @@
   "OrderLogOf": "Ordrelog fra",
   "OrderMassCancelling": "Masseannullering af ordrer",
   "OrderMatched": "Ordren {0} er fuldt ud udført.",
+  "OrderMatched2": "Ordre fuldstændigt udfyldt",
   "OrderMatchedRemainBalance": "Ordrer {0} er fuldt ud udført. Resterende volumen {1}.",
   "OrderNoExchangeId": "Ordre {0} har ikke en børs-ID.",
   "OrderNoLongerActive": "Ordre {0} er ikke længere aktiv.",

@@ -2407,6 +2407,7 @@
   "OrderLogOf": "گزارش سفارش از",
   "OrderMassCancelling": "لغو دسته‌جمعی سفارشات",
   "OrderMatched": "سفارش {0} به طور کامل انجام شده است.",
+  "OrderMatched2": "سفارش کاملاً اجرا شد",
   "OrderMatchedRemainBalance": "سفارش {0} به طور کامل اجرا شد. حجم باقیمانده {1}.",
   "OrderNoExchangeId": "سفارش {0} شناسه مبادله‌ای ندارد.",
   "OrderNoLongerActive": "سفارش {0} دیگر فعال نیست.",

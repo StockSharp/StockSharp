@@ -2407,6 +2407,7 @@
   "OrderLogOf": "ОЛ",
   "OrderMassCancelling": "Массовая отмена заявок",
   "OrderMatched": "Заявка {0} полностью исполнена.",
+  "OrderMatched2": "Ордер полностью исполнен",
   "OrderMatchedRemainBalance": "Заявка {0} полностью исполнилась. Оставшийся объем {1}.",
   "OrderNoExchangeId": "Заявка {0} не имеет биржевого идентификатора.",
   "OrderNoLongerActive": "Заявка {0} больше не активна.",

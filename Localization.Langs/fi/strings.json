@@ -2407,6 +2407,7 @@
   "OrderLogOf": "Tilauksen loki",
   "OrderMassCancelling": "Tilausten massaperuutus",
   "OrderMatched": "Tilaus {0} on suoritettu täysin.",
+  "OrderMatched2": "Toimeksianto täysin täytetty",
   "OrderMatchedRemainBalance": "Tilaus {0} on suoritettu kokonaan. Jäljellä oleva määrä {1}.",
   "OrderNoExchangeId": "Tilaus {0} ei ole pörssitunnusta.",
   "OrderNoLongerActive": "Tilaus {0} ei ole enää aktiivinen.",

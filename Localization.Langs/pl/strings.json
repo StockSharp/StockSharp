@@ -2407,6 +2407,7 @@
   "OrderLogOf": "Dziennik zamówień",
   "OrderMassCancelling": "Masowe anulowanie zamówień",
   "OrderMatched": "Zamówienie {0} zostało całkowicie zrealizowane.",
+  "OrderMatched2": "Zlecenie całkowicie zrealizowane",
   "OrderMatchedRemainBalance": "Zamówienie {0} zostało całkowicie zrealizowane. Pozostała objętość {1}.",
   "OrderNoExchangeId": "Zamówienie {0} nie posiada identyfikatora giełdowego.",
   "OrderNoLongerActive": "Zamówienie {0} nie jest już aktywne.",

@@ -2280,6 +2280,7 @@
   "OrderLogOf": "OL",
   "OrderMassCancelling": "Mass orders cancelling",
   "OrderMatched": "Order {0} completely filled.",
+  "OrderMatched2": "Order completely filled.",
   "OrderMatchedRemainBalance": "Order {0} completely filled. Active volume is {1}.",
   "OrderNoExchangeId": "Order {0} does not have an exchange ID.",
   "OrderNoLongerActive": "Order {0} no longer active.",

@@ -2407,6 +2407,7 @@
   "OrderLogOf": "주문 로그",
   "OrderMassCancelling": "대량 주문 취소",
   "OrderMatched": "주문 {0}이 완전히 실행되었습니다.",
+  "OrderMatched2": "주문이 완전히 체결되었습니다",
   "OrderMatchedRemainBalance": "주문 {0}이 완전히 체결되었습니다. 잔여 수량 {1}.",
   "OrderNoExchangeId": "주문 {0}은(는) 거래소 식별자가 없습니다.",
   "OrderNoLongerActive": "주문 {0}이(가) 더 이상 활성화되어 있지 않습니다.",

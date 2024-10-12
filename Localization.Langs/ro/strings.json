@@ -2407,6 +2407,7 @@
   "OrderLogOf": "Jurnalul de comenzi al",
   "OrderMassCancelling": "Anulare în masă a comenzilor",
   "OrderMatched": "Comanda {0} a fost executată integral.",
+  "OrderMatched2": "Ordin complet executat",
   "OrderMatchedRemainBalance": "Comanda {0} a fost executată complet. Volumul rămas {1}.",
   "OrderNoExchangeId": "Comanda {0} nu are un identificator de schimb.",
   "OrderNoLongerActive": "Comanda {0} nu mai este activă.",

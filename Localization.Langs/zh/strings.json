@@ -2407,6 +2407,7 @@
   "OrderLogOf": "订单日志",
   "OrderMassCancelling": "批量取消订单",
   "OrderMatched": "订单 {0} 已完全执行。",
+  "OrderMatched2": "订单已完全成交",
   "OrderMatchedRemainBalance": "订单 {0} 已完全执行。剩余数量 {1}。",
   "OrderNoExchangeId": "订单 {0} 没有交易所标识符。",
   "OrderNoLongerActive": "订单 {0} 不再活跃。",

@@ -2407,6 +2407,7 @@
   "OrderLogOf": "יומן הזמנות של",
   "OrderMassCancelling": "ביטול הזמנות המוני",
   "OrderMatched": "הזמנה {0} בוצעה במלואה.",
+  "OrderMatched2": "ההזמנה מולאה במלואה",
   "OrderMatchedRemainBalance": "ההזמנה {0} הושלמה במלואה. לנפח הנותר {1}.",
   "OrderNoExchangeId": "הזמנה {0} אין לה מזהה של בורסה.",
   "OrderNoLongerActive": "ההזמנה {0} אינה פעילה יותר.",

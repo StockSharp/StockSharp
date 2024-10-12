@@ -2407,6 +2407,7 @@
   "OrderLogOf": "OL",
   "OrderMassCancelling": "Cancel·lació massiva de comandes",
   "OrderMatched": "La comanda {0} ha estat completament executada.",
+  "OrderMatched2": "Ordre completament executada",
   "OrderMatchedRemainBalance": "La comanda {0} s'ha executat completament. Volum restant {1}.",
   "OrderNoExchangeId": "La comanda {0} no té identificador borsari.",
   "OrderNoLongerActive": "La comanda {0} ja no és activa.",

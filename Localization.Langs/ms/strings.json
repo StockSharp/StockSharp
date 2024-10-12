@@ -2407,6 +2407,7 @@
   "OrderLogOf": "Log Pesanan",
   "OrderMassCancelling": "Pembatalan Pesanan Massal",
   "OrderMatched": "Pesanan {0} telah sepenuhnya dilaksanakan.",
+  "OrderMatched2": "Pesanan telah diisi sepenuhnya",
   "OrderMatchedRemainBalance": "Pesanan {0} telah dilaksanakan sepenuhnya. Baki volum {1}.",
   "OrderNoExchangeId": "Pesanan {0} tidak mempunyai penanda pertukaran.",
   "OrderNoLongerActive": "Pesanan {0} tidak lagi aktif.",

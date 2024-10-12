@@ -2407,6 +2407,7 @@
   "OrderLogOf": "Registro de orden de",
   "OrderMassCancelling": "Cancelación masiva de órdenes",
   "OrderMatched": "La orden {0} se ha ejecutado completamente.",
+  "OrderMatched2": "Orden completamente ejecutada",
   "OrderMatchedRemainBalance": "La orden {0} se ha ejecutado completamente. Volumen restante {1}.",
   "OrderNoExchangeId": "La orden {0} no tiene identificador de bolsa.",
   "OrderNoLongerActive": "La orden {0} ya no está activa.",

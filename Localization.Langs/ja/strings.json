@@ -2407,6 +2407,7 @@
   "OrderLogOf": "注文ログ",
   "OrderMassCancelling": "オーダーの一括取消し",
   "OrderMatched": "注文 {0} が完全に実行されました。",
+  "OrderMatched2": "注文が完全に約定しました",
   "OrderMatchedRemainBalance": "注文 {0} は完全に実行されました。残りの量 {1}。",
   "OrderNoExchangeId": "注文 {0} は取引所の識別子がありません。",
   "OrderNoLongerActive": "注文 {0} はもうアクティブではありません。",

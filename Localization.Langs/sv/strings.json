@@ -2407,6 +2407,7 @@
   "OrderLogOf": "Orderlogg för",
   "OrderMassCancelling": "Massavbokning av order",
   "OrderMatched": "Order {0} har fullgjorts helt.",
+  "OrderMatched2": "Order fullständigt fylld",
   "OrderMatchedRemainBalance": "Ordern {0} har utförts helt. Återstående volym {1}.",
   "OrderNoExchangeId": "Order {0} har inget börs-ID.",
   "OrderNoLongerActive": "Order {0} är inte längre aktiv.",

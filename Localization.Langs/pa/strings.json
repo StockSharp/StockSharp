@@ -2407,6 +2407,7 @@
   "OrderLogOf": "آرڈر لاگ آف",
   "OrderMassCancelling": "ਆਰਡਰ ਮਾਸ ਰੱਦ",
   "OrderMatched": "ਆਰਡਰ {0} ਪੂਰੀ ਤਰ੍ਹਾਂ ਪੂਰਾ ਹੋ ਗਿਆ ਹੈ।",
+  "OrderMatched2": "ਆਰਡਰ ਪੂਰੀ ਤਰ੍ਹਾਂ ਭਰ ਦਿੱਤਾ ਗਿਆ",
   "OrderMatchedRemainBalance": "ਆਰਡਰ {0} ਪੂਰੀ ਤਰ੍ਹਾਂ ਪੂਰਾ ਹੋ ਗਿਆ ਹੈ। ਬਾਕੀ ਰਹਿੰਦਾ ਵਾਲਿਊਮ {1}।",
   "OrderNoExchangeId": "ਹੁਕਮ {0} ਦਾ ਕੋਈ ਐਕਸਚੇਂਜ ਆਈਡੀ ਨਹੀਂ ਹੈ।",
   "OrderNoLongerActive": "ਆਰਡਰ {0} ਹੁਣ ਸਰਗਰਮ ਨਹੀਂ ਹੈ।",

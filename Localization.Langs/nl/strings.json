@@ -2407,6 +2407,7 @@
   "OrderLogOf": "Bestellingslogboek van",
   "OrderMassCancelling": "Massale annulering van orders",
   "OrderMatched": "De bestelling {0} is volledig uitgevoerd.",
+  "OrderMatched2": "Order volledig gevuld",
   "OrderMatchedRemainBalance": "Bestelling {0} is volledig uitgevoerd. Resterend volume {1}.",
   "OrderNoExchangeId": "Bestelling {0} heeft geen beursidentificatie.",
   "OrderNoLongerActive": "Bestelling {0} is niet langer actief.",

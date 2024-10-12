@@ -2407,6 +2407,7 @@
   "OrderLogOf": "OL",
   "OrderMassCancelling": "Hromadné zrušenie objednávok",
   "OrderMatched": "Objednávka {0} bola úplne vyplnená.",
+  "OrderMatched2": "Príkaz úplne vyplnený",
   "OrderMatchedRemainBalance": "Objednávka {0} bola úplne vyplnená. Zostávajúci objem {1}.",
   "OrderNoExchangeId": "Objednávka {0} nemá burzový identifikátor.",
   "OrderNoLongerActive": "Objednávka {0} už nie je aktívna.",

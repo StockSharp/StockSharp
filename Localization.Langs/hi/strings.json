@@ -2407,6 +2407,7 @@
   "OrderLogOf": "आदेश लॉग का",
   "OrderMassCancelling": "आदेशों का सामूहिक रद्दीकरण",
   "OrderMatched": "ऑर्डर {0} पूरी तरह से पूरा हो गया है।",
+  "OrderMatched2": "ऑर्डर पूरी तरह से भर दिया गया",
   "OrderMatchedRemainBalance": "ऑर्डर {0} पूरी तरह से पूरा हो गया है। शेष मात्रा {1}।",
   "OrderNoExchangeId": "ऑर्डर {0} का कोई एक्सचेंज आईडी नहीं है।",
   "OrderNoLongerActive": "ऑर्डर {0} अब सक्रिय नहीं है।",

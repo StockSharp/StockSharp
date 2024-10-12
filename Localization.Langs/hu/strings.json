@@ -2407,6 +2407,7 @@
   "OrderLogOf": "Rendelési napló",
   "OrderMassCancelling": "Rendelések tömeges törlése",
   "OrderMatched": "A {0} számú megrendelés teljesen végrehajtódott.",
+  "OrderMatched2": "A megbízás teljesen teljesítve",
   "OrderMatchedRemainBalance": "A rendelés {0} teljesen megtörtént. Maradék mennyiség {1}.",
   "OrderNoExchangeId": "A {0} számú megrendelésnek nincs tőzsdei azonosítója.",
   "OrderNoLongerActive": "A(z) {0} rendelés már nem aktív.",

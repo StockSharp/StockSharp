@@ -2407,6 +2407,7 @@
   "OrderLogOf": "Nhật ký đơn hàng của",
   "OrderMassCancelling": "Hủy hàng loạt đơn hàng",
   "OrderMatched": "Đơn hàng {0} đã được thực hiện hoàn toàn.",
+  "OrderMatched2": "Lệnh đã được thực hiện hoàn toàn",
   "OrderMatchedRemainBalance": "Lệnh {0} đã được thực hiện hoàn toàn. Khối lượng còn lại {1}.",
   "OrderNoExchangeId": "Đơn hàng {0} không có mã giao dịch.",
   "OrderNoLongerActive": "Đơn hàng {0} không còn hoạt động.",

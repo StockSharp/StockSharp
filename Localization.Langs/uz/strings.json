@@ -2407,6 +2407,7 @@
   "OrderLogOf": "Buyurtma logi",
   "OrderMassCancelling": "Buyurtmalar ommaviy bekor qilinishi",
   "OrderMatched": "Buyurtma {0} to'liq bajarildi.",
+  "OrderMatched2": "Buyurtma to'liq bajarildi",
   "OrderMatchedRemainBalance": "Buyurtma {0} to'liq amalga oshirildi. Qolgan hajmi {1}.",
   "OrderNoExchangeId": "Buyurtma {0} birja identifikatori yo'q.",
   "OrderNoLongerActive": "Buyurtma {0} endi faol emas.",
