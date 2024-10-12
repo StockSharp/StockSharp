@@ -1278,7 +1278,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 					{
 						adapters = adapters.Where(a => !set.Contains(GetUnderlyingAdapter(a))).ToArray();
 					}
-					else if (mdMsg1.DataType2 == DataType.News && mdMsg1.SecurityId == default)
+					else if (mdMsg1.DataType2 == DataType.News && (mdMsg1.SecurityId == default || mdMsg1.SecurityId == SecurityId.News))
 					{
 						adapters = adapters.Where(a => !a.IsSecurityNewsOnly).ToArray();
 					}
