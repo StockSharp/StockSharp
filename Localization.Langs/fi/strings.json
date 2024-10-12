@@ -3300,6 +3300,7 @@
   "SineWave": "Siniaalto",
   "SingaporeExchange": "Singaporen pörssi",
   "Single": "Yksittäinen",
+  "SingleOwnColumn": "Yksittäisten omien toimeksiantojen sarake",
   "Size": "Koko",
   "SkipLines": "Ohita alusta",
   "SkipLinesDesc": "Rivien määrä, jotka on ohitettava tiedoston alusta (jos ne sisältävät meta-tietoa).",

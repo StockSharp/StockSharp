@@ -3300,6 +3300,7 @@
   "SineWave": "Onda senoidal",
   "SingaporeExchange": "Bolsa de Singapura",
   "Single": "Único",
+  "SingleOwnColumn": "Coluna de ordens próprias individuais",
   "Size": "Tamanho",
   "SkipLines": "Pular do início",
   "SkipLinesDesc": "Número de linhas a serem ignoradas no início do arquivo (se contiverem meta-informação).",

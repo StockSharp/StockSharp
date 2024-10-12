@@ -3300,6 +3300,7 @@
   "SineWave": "사인파",
   "SingaporeExchange": "싱가포르 거래소",
   "Single": "단일",
+  "SingleOwnColumn": "단일 자기 주문 열",
   "Size": "크기",
   "SkipLines": "시작부터 스킵",
   "SkipLinesDesc": "파일 시작 부분에서 건너뛸 줄의 수(메타 정보가 포함된 경우).",

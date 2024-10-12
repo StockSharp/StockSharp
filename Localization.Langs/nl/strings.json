@@ -3300,6 +3300,7 @@
   "SineWave": "Sinusgolf",
   "SingaporeExchange": "Beurs van Singapore",
   "Single": "Enkelvoudig",
+  "SingleOwnColumn": "Kolom voor afzonderlijke eigen orders",
   "Size": "Grootte",
   "SkipLines": "Overslaan vanaf het begin",
   "SkipLinesDesc": "Aantal regels dat aan het begin van het bestand moet worden overgeslagen (als ze meta-informatie bevatten).",

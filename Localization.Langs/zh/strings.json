@@ -3300,6 +3300,7 @@
   "SineWave": "正弦波",
   "SingaporeExchange": "新加坡交易所",
   "Single": "单一的",
+  "SingleOwnColumn": "单一自有订单列",
   "Size": "大小",
   "SkipLines": "从开始处跳过",
   "SkipLinesDesc": "跳过文件开头若干行（如果它们包含元信息）。",

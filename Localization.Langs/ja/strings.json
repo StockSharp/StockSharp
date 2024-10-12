@@ -3300,6 +3300,7 @@
   "SineWave": "サイン波",
   "SingaporeExchange": "シンガポール証券取引所",
   "Single": "単一",
+  "SingleOwnColumn": "単一の自己注文列",
   "Size": "サイズ",
   "SkipLines": "最初からスキップ",
   "SkipLinesDesc": "ファイルの先頭からスキップする行数（メタ情報が含まれている場合）。",

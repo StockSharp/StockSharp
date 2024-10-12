@@ -3300,6 +3300,7 @@
   "SineWave": "Sinusvåg",
   "SingaporeExchange": "Singaporebörsen",
   "Single": "Enskild",
+  "SingleOwnColumn": "Enskild kolumn för egna order",
   "Size": "Storlek",
   "SkipLines": "Hoppa över från början",
   "SkipLinesDesc": "Antal rader som ska hoppas över i början av filen (om de innehåller metadata).",

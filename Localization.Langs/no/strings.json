@@ -3300,6 +3300,7 @@
   "SineWave": "Sinusbølge",
   "SingaporeExchange": "Singapore Børs",
   "Single": "Enkel",
+  "SingleOwnColumn": "Enkeltkolonne for egne ordrer",
   "Size": "Størrelse",
   "SkipLines": "Hopp over fra starten",
   "SkipLinesDesc": "Antall linjer som skal hoppes over fra starten av filen (hvis de inneholder meta-informasjon).",

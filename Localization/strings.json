@@ -3145,6 +3145,7 @@
   "SimulatorSettings": "Simulator settings",
   "SingaporeExchange": "Singapore Exchange",
   "Single": "Single",
+  "SingleOwnColumn": "Single own orders column.",
   "Size": "Size",
   "SkipLines": "Skip lines",
   "SkipLinesDesc": "Number of lines to be skipped from the beginning of the file (if they contain meta information).",
