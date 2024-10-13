@@ -3615,6 +3615,7 @@
   "TelegramActivation": "Sinut ohjataan nyt Telegram-bottiimme aktivoimaan profiilisi.",
   "TelegramAlerts": "Ilmoitukset Telegramin kautta",
   "TelegramAlertsDesc": "Käytä Telegramia saadaksesi ilmoituksia kaupankäynnin edistymisestä.",
+  "TelegramChannel": "Telegram-kanava.",
   "TelegramControlDesc": "Käytä Telegramia hallitaksesi strategiaa Telegram-botin kautta.",
   "TEMA": "TEMA",
   "Template": "Malli",

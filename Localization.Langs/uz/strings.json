@@ -3615,6 +3615,7 @@
   "TelegramActivation": "Endi sizni profilni faollashtirish uchun Telegram botimizga yo'naltiriladi.",
   "TelegramAlerts": "Telegram orqali xabarlar",
   "TelegramAlertsDesc": "Savdo taraqqiyotini xabarlar olish uchun Telegramdan foydalaning.",
+  "TelegramChannel": "Telegram kanali.",
   "TelegramControlDesc": "Telegramni strategiyani nazorat qilish uchun Telegram bot orqali foydalaning.",
   "TEMA": "TEMA",
   "Template": "Shablon",

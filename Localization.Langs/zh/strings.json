@@ -3615,6 +3615,7 @@
   "TelegramActivation": "您现在将被重定向到我们的Telegram机器人以激活您的个人资料。",
   "TelegramAlerts": "通过Telegram的通知",
   "TelegramAlertsDesc": "使用Telegram接收有关交易进展的通知。",
+  "TelegramChannel": "电报频道.",
   "TelegramControlDesc": "使用Telegram通过Telegram机器人控制策略。",
   "TEMA": "TEMA",
   "Template": "模板",

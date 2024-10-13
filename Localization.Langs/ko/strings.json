@@ -3615,6 +3615,7 @@
   "TelegramActivation": "지금 당신의 프로필을 활성화하기 위해 우리의 텔레그램 봇으로 리디렉션됩니다.",
   "TelegramAlerts": "텔레그램을 통한 알림",
   "TelegramAlertsDesc": "텔레그램을 사용하여 거래 진행 상황에 대한 알림을 받으십시오.",
+  "TelegramChannel": "텔레그램 채널.",
   "TelegramControlDesc": "텔레그램을 사용하여 텔레그램 봇을 통해 전략을 제어하세요.",
   "TEMA": "TEMA",
   "Template": "템플릿",

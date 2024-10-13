@@ -3615,6 +3615,7 @@
   "TelegramActivation": "これからプロファイルをアクティベートするために、私たちのTelegramボットへリダイレクトされます。",
   "TelegramAlerts": "Telegramを介したアラート",
   "TelegramAlertsDesc": "Telegramを使用して取引の進行状況に関する通知を受け取ります。",
+  "TelegramChannel": "テレグラムチャンネル.",
   "TelegramControlDesc": "Telegramを使用して、Telegramボットを介して戦略を制御します。",
   "TEMA": "TEMA",
   "Template": "テンプレート",

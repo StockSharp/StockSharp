@@ -3615,6 +3615,7 @@
   "TelegramActivation": "Teraz zostaniesz przekierowany do naszego bota w Telegramie, aby aktywować swój profil.",
   "TelegramAlerts": "Powiadomienia przez Telegram",
   "TelegramAlertsDesc": "Użyj Telegramu, aby otrzymywać powiadomienia o postępach w handlu.",
+  "TelegramChannel": "Kanał Telegram.",
   "TelegramControlDesc": "Użyj Telegramu do sterowania strategią za pomocą bota Telegram.",
   "TEMA": "TEMA",
   "Template": "Szablon",

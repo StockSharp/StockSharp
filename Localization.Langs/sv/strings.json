@@ -3615,6 +3615,7 @@
   "TelegramActivation": "Du kommer nu att omdirigeras till vår Telegram-bot för att aktivera din profil.",
   "TelegramAlerts": "Telegram-aviseringar",
   "TelegramAlertsDesc": "Använd Telegram för att få aviseringar om handelsframsteg.",
+  "TelegramChannel": "Telegram-kanal.",
   "TelegramControlDesc": "Använd Telegram för att styra strategin via en Telegram-bot.",
   "TEMA": "TEMA",
   "Template": "Mall",

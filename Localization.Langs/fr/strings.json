@@ -3615,6 +3615,7 @@
   "TelegramActivation": "Vous serez maintenant redirigé vers notre bot Telegram pour activer votre profil.",
   "TelegramAlerts": "Alertes via Telegram",
   "TelegramAlertsDesc": "Utilisez Telegram pour recevoir des notifications sur la progression des échanges.",
+  "TelegramChannel": "Canal Telegram.",
   "TelegramControlDesc": "Utilisez Telegram pour contrôler la stratégie via un bot Telegram.",
   "TEMA": "TEMA",
   "Template": "Modèle",

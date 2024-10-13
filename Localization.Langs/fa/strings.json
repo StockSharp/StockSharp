@@ -3615,6 +3615,7 @@
   "TelegramActivation": "اکنون به ربات تلگرام ما هدایت می‌شوید تا نمایه خود را فعال کنید.",
   "TelegramAlerts": "اعلانات از طریق Telegram",
   "TelegramAlertsDesc": "برای دریافت اعلانات در مورد پیشرفت معاملات از تلگرام استفاده کنید.",
+  "TelegramChannel": "کانال تلگرام.",
   "TelegramControlDesc": "از Telegram برای کنترل استراتژی از طریق ربات Telegram استفاده کنید.",
   "TEMA": "TEMA",
   "Template": "الگو",

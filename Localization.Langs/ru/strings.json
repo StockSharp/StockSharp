@@ -3615,6 +3615,7 @@
   "TelegramActivation": "Сейчас вы будете перенаправлены к нашему Телеграм-боту для активации вашего профиля.",
   "TelegramAlerts": "Уведомления через Telegram",
   "TelegramAlertsDesc": "Используйте Telegram для получения уведомлений о прогрессе торговли.",
+  "TelegramChannel": "Telegram-канал.",
   "TelegramControlDesc": "Используйте Telegram для управления стратегией через бота Telegram.",
   "TEMA": "TEMA",
   "Template": "Шаблон",

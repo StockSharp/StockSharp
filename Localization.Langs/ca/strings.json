@@ -3615,6 +3615,7 @@
   "TelegramActivation": "Ara seràs redirigit al nostre bot de Telegram per activar el teu perfil.",
   "TelegramAlerts": "Alertes de Telegram",
   "TelegramAlertsDesc": "Utilitza Telegram per rebre notificacions sobre el progrés del comerç.",
+  "TelegramChannel": "Canal de Telegram.",
   "TelegramControlDesc": "Utilitza Telegram per gestionar l'estratègia a través del bot de Telegram.",
   "TEMA": "TEMA",
   "Template": "Plantilla",

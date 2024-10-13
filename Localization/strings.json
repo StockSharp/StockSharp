@@ -3452,6 +3452,7 @@
   "TelegramAlerts": "Telegram alerts",
   "TelegramAlertsDesc": "Use Telegram to receive notifications about trading progress.",
   "TelegramControlDesc": "Use Telegram to manage the strategy via a Telegram bot.",
+  "TelegramChannel": "Telegram channel.",
   "TEMA": "TEMA",
   "Template": "Template",
   "TemplateBoard": "Board template",

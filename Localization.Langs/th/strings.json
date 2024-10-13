@@ -3615,6 +3615,7 @@
   "TelegramActivation": "คุณจะถูกเปลี่ยนเส้นทางไปยังบอทของเราบน Telegram เพื่อเปิดใช้งานโปรไฟล์ของคุณแล้ว",
   "TelegramAlerts": "การแจ้งเตือนผ่าน Telegram",
   "TelegramAlertsDesc": "ใช้ Telegram เพื่อรับการแจ้งเตือนเกี่ยวกับความคืบหน้าในการซื้อขาย",
+  "TelegramChannel": "ช่อง Telegram.",
   "TelegramControlDesc": "ใช้ Telegram เพื่อควบคุมกลยุทธ์ผ่านแม่ข่าย Telegram",
   "TEMA": "TEMA",
   "Template": "แม่แบบ",

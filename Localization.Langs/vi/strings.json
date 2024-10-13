@@ -3615,6 +3615,7 @@
   "TelegramActivation": "Bạn sẽ được chuyển hướng đến bot Telegram của chúng tôi để kích hoạt hồ sơ của bạn.",
   "TelegramAlerts": "Thông báo qua Telegram",
   "TelegramAlertsDesc": "Sử dụng Telegram để nhận thông báo về tiến trình giao dịch.",
+  "TelegramChannel": "Kênh Telegram.",
   "TelegramControlDesc": "Sử dụng Telegram để kiểm soát chiến lược thông qua bot Telegram.",
   "TEMA": "TEMA",
   "Template": "Mẫu",
