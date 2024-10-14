@@ -987,61 +987,57 @@ public static class StorageHelper
 		}
 		else if (subscription.DataType2.IsCandles)
 		{
-			if (subscription.DataType2.IsTFCandles)
+			(DateTimeOffset lastDate, long? left)? TryBuildCandles()
 			{
-				var tf = subscription.GetTimeFrame();
+				IMarketDataStorage storage;
 
-				(DateTimeOffset lastDate, long? left)? TryBuildCandles()
+				var buildFrom = subscription.BuildFrom;
+
+				if (buildFrom == null || buildFrom == DataType.Ticks)
+					storage = GetStorage<ExecutionMessage>(secId, ExecutionTypes.Tick);
+				else if (buildFrom == DataType.OrderLog)
+					storage = GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog);
+				else if (buildFrom == DataType.Level1)
+					storage = GetStorage<Level1ChangeMessage>(secId, null);
+				else if (buildFrom == DataType.MarketDepth)
+					storage = GetStorage<QuoteChangeMessage>(secId, null);
+				else
+					throw new ArgumentOutOfRangeException(nameof(subscription), buildFrom, LocalizedStrings.InvalidValue);
+
+				var range = GetRange(storage, subscription, TimeSpan.FromDays(2));
+
+				if (range != null && buildFrom == null)
+					buildFrom = DataType.Ticks;
+				else if (range == null && buildFrom == null)
 				{
-					IMarketDataStorage storage;
-
-					var buildFrom = subscription.BuildFrom;
-
-					if (buildFrom == null || buildFrom == DataType.Ticks)
-						storage = GetStorage<ExecutionMessage>(secId, ExecutionTypes.Tick);
-					else if (buildFrom == DataType.OrderLog)
-						storage = GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog);
-					else if (buildFrom == DataType.Level1)
-						storage = GetStorage<Level1ChangeMessage>(secId, null);
-					else if (buildFrom == DataType.MarketDepth)
-						storage = GetStorage<QuoteChangeMessage>(secId, null);
-					else
-						throw new ArgumentOutOfRangeException(nameof(subscription), buildFrom, LocalizedStrings.InvalidValue);
-
-					var range = GetRange(storage, subscription, TimeSpan.FromDays(2));
-
-					if (range != null && buildFrom == null)
-						buildFrom = DataType.Ticks;
-					else if (range == null && buildFrom == null)
-					{
-						storage = GetStorage<Level1ChangeMessage>(secId, null);
-						range = GetRange(storage, subscription, TimeSpan.FromDays(2));
-
-						if (range != null)
-							buildFrom = DataType.Level1;
-					}
+					storage = GetStorage<Level1ChangeMessage>(secId, null);
+					range = GetRange(storage, subscription, TimeSpan.FromDays(2));
 
 					if (range != null)
-					{
-						var mdMsg = subscription.TypedClone();
-						mdMsg.From = mdMsg.To = null;
+						buildFrom = DataType.Level1;
+				}
 
-						if (buildFrom == DataType.Ticks)
+				if (range != null)
+				{
+					var mdMsg = subscription.TypedClone();
+					mdMsg.From = mdMsg.To = null;
+
+					if (buildFrom == DataType.Ticks)
+					{
+						return LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
+								.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+								.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
+					}
+					else if (buildFrom == DataType.OrderLog)
+					{
+						switch (subscription.BuildField)
 						{
-							return LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
-									.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-									.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
-						}
-						else if (buildFrom == DataType.OrderLog)
-						{
-							switch (subscription.BuildField)
-							{
-								case null:
-								case Level1Fields.LastTradePrice:
-									return LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
-											.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-											.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
-										
+							case null:
+							case Level1Fields.LastTradePrice:
+								return LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
+										.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+										.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
+
 								// TODO
 								//case Level1Fields.SpreadMiddle:
 								//	lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
@@ -1049,47 +1045,53 @@ public static class StorageHelper
 								//		.ToOrderBooks(OrderLogBuilders.Plaza2.CreateBuilder(security.ToSecurityId()))
 								//	    .ToCandles(mdMsg, false, exchangeInfoProvider: exchangeInfoProvider), range.Item1, subscription.TransactionId, SendReply, SendOut);
 								//	break;
-							}
 						}
-						else if (buildFrom == DataType.Level1)
-						{
-							switch (subscription.BuildField)
-							{
-								case null:
-								case Level1Fields.LastTradePrice:
-									return LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
-											.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-											.ToTicks()
-											.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
-
-								case Level1Fields.BestBidPrice:
-								case Level1Fields.BestAskPrice:
-								case Level1Fields.SpreadMiddle:
-									return LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
-											.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-											.ToOrderBooks()
-											.ToCandles(mdMsg, subscription.BuildField.Value, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
-							}
-						}
-						else if (buildFrom == DataType.MarketDepth)
-						{
-							return LoadMessages(((IMarketDataStorage<QuoteChangeMessage>)storage)
-									.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-									.ToCandles(mdMsg, subscription.BuildField ?? Level1Fields.SpreadMiddle, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
-						}
-						else
-							throw new ArgumentOutOfRangeException(nameof(subscription), subscription.BuildFrom, LocalizedStrings.InvalidValue);
 					}
+					else if (buildFrom == DataType.Level1)
+					{
+						switch (subscription.BuildField)
+						{
+							case null:
+							case Level1Fields.LastTradePrice:
+								return LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
+										.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+										.ToTicks()
+										.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
 
-					return null;
+							case Level1Fields.BestBidPrice:
+							case Level1Fields.BestAskPrice:
+							case Level1Fields.SpreadMiddle:
+								return LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
+										.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+										.ToOrderBooks()
+										.ToCandles(mdMsg, subscription.BuildField.Value, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
+						}
+					}
+					else if (buildFrom == DataType.MarketDepth)
+					{
+						return LoadMessages(((IMarketDataStorage<QuoteChangeMessage>)storage)
+								.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+								.ToCandles(mdMsg, subscription.BuildField ?? Level1Fields.SpreadMiddle, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
+					}
+					else
+						throw new ArgumentOutOfRangeException(nameof(subscription), subscription.BuildFrom, LocalizedStrings.InvalidValue);
 				}
 
-				if (subscription.BuildMode == MarketDataBuildModes.Build)
+				return null;
+			}
+
+			if (subscription.BuildMode == MarketDataBuildModes.Build)
+			{
+				retVal = TryBuildCandles();
+			}
+			else
+			{
+				IMarketDataStorage<CandleMessage> storage;
+
+				if (subscription.DataType2.IsTFCandles)
 				{
-					retVal = TryBuildCandles();
-				}
-				else
-				{
+					var tf = subscription.GetTimeFrame();
+
 					IMarketDataStorage<CandleMessage> GetTimeFrameCandleMessageStorage(SecurityId securityId, TimeSpan timeFrame, bool allowBuildFromSmallerTimeFrame)
 					{
 						if (!allowBuildFromSmallerTimeFrame)
@@ -1098,27 +1100,21 @@ public static class StorageHelper
 						return candleBuilderProvider.GetCandleMessageBuildableStorage(settings.StorageRegistry, securityId, timeFrame, settings.Drive, settings.Format);
 					}
 
-					var filter = subscription.IsCalcVolumeProfile
-						? (Func<CandleMessage, bool>)(c => c.PriceLevels != null)
-						: null;
-
-					retVal = LoadMessages(GetTimeFrameCandleMessageStorage(secId, tf, subscription.AllowBuildFromSmallerTimeFrame), subscription, settings.DaysLoad, SendReply, SendOut, filter);
-
-					if (retVal is null && subscription.BuildMode == MarketDataBuildModes.LoadAndBuild)
-						retVal = TryBuildCandles();
+					storage = GetTimeFrameCandleMessageStorage(secId, tf, subscription.AllowBuildFromSmallerTimeFrame);
 				}
-			}
-			else
-			{
-				var storage = (IMarketDataStorage<CandleMessage>)settings.GetStorage(secId, subscription.DataType2.MessageType, subscription.GetArg());
-
-				var range = GetRange(storage, subscription, settings.DaysLoad);
-
-				if (range != null)
+				else
 				{
-					var messages = storage.Load(range.Item1.Date, range.Item2.Date.EndOfDay());
-					retVal = LoadMessages(messages, range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
+					storage = (IMarketDataStorage<CandleMessage>)settings.GetStorage(secId, subscription.DataType2.MessageType, subscription.GetArg());
 				}
+
+				var filter = subscription.IsCalcVolumeProfile
+					? (Func<CandleMessage, bool>)(c => c.PriceLevels != null)
+					: null;
+
+				retVal = LoadMessages(storage, subscription, settings.DaysLoad, SendReply, SendOut, filter);
+
+				if (retVal is null && subscription.BuildMode == MarketDataBuildModes.LoadAndBuild)
+					retVal = TryBuildCandles();
 			}
 		}
 
