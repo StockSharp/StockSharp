@@ -301,6 +301,18 @@ public abstract class CandleBuilder<TCandleMessage> : BaseLogReceiver, ICandleBu
 			}
 		}
 
+		IncrementTicks(candle);
+	}
+
+	/// <summary>
+	/// Increment the number of ticks in the candle.
+	/// </summary>
+	/// <param name="candle"><see cref="CandleMessage"/></param>
+	protected void IncrementTicks(CandleMessage candle)
+	{
+		if (candle is null)
+			throw new ArgumentNullException(nameof(candle));
+
 		if (candle.TotalTicks != null)
 			candle.TotalTicks++;
 		else
@@ -779,9 +791,9 @@ public class PnFCandleBuilder : CandleBuilder<PnFCandleMessage>
 		}
 	}
 
-	private static void UpdateCandle(PnFCandleMessage currentPnFCandle, decimal price, decimal? volume, DateTimeOffset time, Sides? side, decimal? oi, VolumeProfileBuilder volumeProfile)
+	private void UpdateCandle(PnFCandleMessage currentPnFCandle, decimal price, decimal? volume, DateTimeOffset time, Sides? side, decimal? oi, VolumeProfileBuilder volumeProfile)
 	{
-		currentPnFCandle.TotalTicks = (currentPnFCandle.TotalTicks ?? 0) + 1;
+		IncrementTicks(currentPnFCandle);
 
 		if (volume != null)
 		{
@@ -910,7 +922,8 @@ public class RenkoCandleBuilder : CandleBuilder<RenkoCandleMessage>
 			}
 		}
 
-		currentCandle.TotalTicks++;
+		IncrementTicks(currentCandle);
+
 		currentCandle.ClosePrice = price;
 		currentCandle.CloseVolume = volume;
 		currentCandle.CloseTime = time;
