@@ -812,7 +812,7 @@ public class PnFCandleBuilder : CandleBuilder<PnFCandleMessage>
 		currentPnFCandle.OpenInterest = oi;
 	}
 
-	private static PnFCandleMessage CreateCandle(ICandleBuilderSubscription subscription, DataType buildFrom, PnFArg pnfArg, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, decimal price, decimal? volume, Sides? side, DateTimeOffset time, decimal? oi)
+	private PnFCandleMessage CreateCandle(ICandleBuilderSubscription subscription, DataType buildFrom, PnFArg pnfArg, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, decimal price, decimal? volume, Sides? side, DateTimeOffset time, decimal? oi)
 	{
 		var candle = new PnFCandleMessage
 		{
