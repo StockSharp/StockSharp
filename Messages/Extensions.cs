@@ -5757,4 +5757,25 @@ public static partial class Extensions
 	/// <returns>Check result.</returns>
 	public static bool IsSet(this Unit value)
 		=> value is not null && value.Value != 0;
+
+	/// <summary>
+	/// Determines the specified message is lookup.
+	/// </summary>
+	/// <param name="message"><see cref="Message"/></param>
+	/// <returns>Check result.</returns>
+	public static bool IsLookup(this IMessage message)
+		=> message.CheckOnNull(nameof(message)).Type.IsLookup();
+
+	/// <summary>
+	/// Determines the specified message type is lookup.
+	/// </summary>
+	/// <param name="type"><see cref="MessageTypes"/></param>
+	/// <returns>Check result.</returns>
+	public static bool IsLookup(this MessageTypes type)
+		=> type
+			is MessageTypes.PortfolioLookup
+			or MessageTypes.OrderStatus
+			or MessageTypes.SecurityLookup
+			or MessageTypes.BoardLookup
+			or MessageTypes.TimeFrameLookup;
 }
