@@ -22,32 +22,6 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 		}
 	}
 
-	class ReconnectingFinishedMessage : Message
-	{
-		public ReconnectingFinishedMessage()
-			: base(ExtendedMessageTypes.ReconnectingFinished)
-		{
-		}
-
-		public override Message Clone()
-		{
-			return new ReconnectingFinishedMessage();
-		}
-	}
-
-	private class ReconnectingStartedMessage : Message
-	{
-		public ReconnectingStartedMessage()
-			: base(ExtendedMessageTypes.ReconnectingStarted)
-		{
-		}
-
-		public override Message Clone()
-		{
-			return new ReconnectingStartedMessage();
-		}
-	}
-
 	private const ConnectionStates _none = (ConnectionStates)(-1);
 	private const ConnectionStates _reConnecting = (ConnectionStates)10;
 
@@ -133,7 +107,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 					this.AddInfoLog(LocalizedStrings.ConnectionRestored);
 
 					if (SuppressReconnectingErrors)
-						RaiseNewOutMessage(new ReconnectingFinishedMessage { Adapter = message.Adapter });
+						RaiseNewOutMessage(new ConnectionRestoredMessage { IsResetState = true, Adapter = message.Adapter });
 					else
 						RaiseNewOutMessage(new RestoredConnectMessage { Adapter = message.Adapter });
 				}
@@ -144,7 +118,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 					else if (isReconnectionStarted)
 					{
 						this.AddInfoLog(LocalizedStrings.Reconnecting);
-						base.OnInnerAdapterNewOutMessage(new ReconnectingStartedMessage { Adapter = message.Adapter });
+						base.OnInnerAdapterNewOutMessage(new ConnectionLostMessage { Adapter = message.Adapter });
 					}
 				}
 

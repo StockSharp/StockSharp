@@ -117,6 +117,9 @@ public partial class MainPanel
 
 		Connector.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
+		Connector.ConnectionLost += a => Connector.AddErrorLog(LocalizedStrings.ConnectionLost); ;
+		Connector.ConnectionRestored += a => Connector.AddInfoLog(LocalizedStrings.ConnectionRestored); ;
+
 		// subscribe on error event
 		//Connector.Error += error =>
 		//	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.DataProcessError));

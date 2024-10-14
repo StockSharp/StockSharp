@@ -261,8 +261,11 @@ public class SubscriptionSecurityAllMessageAdapter : MessageAdapterWrapper
 		switch (message.Type)
 		{
 			case MessageTypes.Disconnect:
-			case ExtendedMessageTypes.ReconnectingFinished:
+			case MessageTypes.ConnectionRestored:
 			{
+				if (message is ConnectionRestoredMessage restoredMsg && !restoredMsg.IsResetState)
+					break;
+
 				ClearState();
 				break;
 			}

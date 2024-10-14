@@ -292,7 +292,7 @@ public class OfflineMessageAdapter : MessageAdapterWrapper
 				break;
 			}
 
-			case ExtendedMessageTypes.ReconnectingStarted:
+			case MessageTypes.ConnectionLost:
 			{
 				lock (_syncObject)
 					_connected = false;
@@ -300,7 +300,7 @@ public class OfflineMessageAdapter : MessageAdapterWrapper
 				return;
 			}
 
-			case ExtendedMessageTypes.ReconnectingFinished:
+			case MessageTypes.ConnectionRestored:
 			{
 				break;
 			}
@@ -308,7 +308,7 @@ public class OfflineMessageAdapter : MessageAdapterWrapper
 
 		ProcessSuspendedMessage processMsg = null;
 
-		if ((connectMessage != null && connectMessage.Error == null) || message.Type == ExtendedMessageTypes.ReconnectingFinished)
+		if ((connectMessage != null && connectMessage.Error == null) || message.Type == MessageTypes.ConnectionRestored)
 		{
 			lock (_syncObject)
 			{
