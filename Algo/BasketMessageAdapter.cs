@@ -435,27 +435,20 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	/// </summary>
 	/// <param name="transactionIdGenerator">Transaction id generator.</param>
 	/// <param name="candleBuilderProvider">Candle builders provider.</param>
-	public BasketMessageAdapter(IdGenerator transactionIdGenerator, CandleBuilderProvider candleBuilderProvider)
-		: this(transactionIdGenerator, candleBuilderProvider, new InMemorySecurityMessageAdapterProvider(), new InMemoryPortfolioMessageAdapterProvider())
-	{
-	}
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="BasketMessageAdapter"/>.
-	/// </summary>
-	/// <param name="transactionIdGenerator">Transaction id generator.</param>
-	/// <param name="candleBuilderProvider">Candle builders provider.</param>
 	/// <param name="securityAdapterProvider">The security based message adapter's provider.</param>
 	/// <param name="portfolioAdapterProvider">The portfolio based message adapter's provider.</param>
+	/// <param name="buffer">Storage buffer.</param>
 	public BasketMessageAdapter(IdGenerator transactionIdGenerator,
 		CandleBuilderProvider candleBuilderProvider,
 		ISecurityMessageAdapterProvider securityAdapterProvider,
-		IPortfolioMessageAdapterProvider portfolioAdapterProvider)
+		IPortfolioMessageAdapterProvider portfolioAdapterProvider,
+		StorageBuffer buffer)
 	{
 		TransactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
 		_innerAdapters = new InnerAdapterList(this);
 		SecurityAdapterProvider = securityAdapterProvider ?? throw new ArgumentNullException(nameof(securityAdapterProvider));
 		PortfolioAdapterProvider = portfolioAdapterProvider ?? throw new ArgumentNullException(nameof(portfolioAdapterProvider));
+		Buffer = buffer;
 		StorageProcessor = new StorageProcessor(StorageSettings, candleBuilderProvider);
 
 		LatencyManager = new LatencyManager();
@@ -471,6 +464,11 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	/// The portfolio based message adapter's provider.
 	/// </summary>
 	public IPortfolioMessageAdapterProvider PortfolioAdapterProvider { get; }
+
+	/// <summary>
+	/// Storage buffer.
+	/// </summary>
+	public StorageBuffer Buffer { get; }
 
 	/// <summary>
 	/// The security based message adapter's provider.
@@ -938,7 +936,11 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		if (SupportCandlesCompression)
 		{
-			adapter = ApplyOwnInner(new CandleBuilderMessageAdapter(adapter, StorageProcessor.CandleBuilderProvider) { SendFinishedCandlesImmediatelly = SendFinishedCandlesImmediatelly });
+			adapter = ApplyOwnInner(new CandleBuilderMessageAdapter(adapter, StorageProcessor.CandleBuilderProvider)
+			{
+				SendFinishedCandlesImmediatelly = SendFinishedCandlesImmediatelly,
+				Buffer = Buffer,
+			});
 		}
 
 		if (ExtendedInfoStorage != null && !adapter.SecurityExtendedFields.IsEmpty())
@@ -1276,7 +1278,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 					{
 						adapters = adapters.Where(a => !set.Contains(GetUnderlyingAdapter(a))).ToArray();
 					}
-					else if (mdMsg1.DataType2 == DataType.News && mdMsg1.SecurityId == default)
+					else if (mdMsg1.DataType2 == DataType.News && (mdMsg1.SecurityId == default || mdMsg1.SecurityId == SecurityId.News))
 					{
 						adapters = adapters.Where(a => !a.IsSecurityNewsOnly).ToArray();
 					}
@@ -2181,7 +2183,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	/// <returns>Copy.</returns>
 	public IMessageChannel Clone()
 	{
-		var clone = new BasketMessageAdapter(TransactionIdGenerator, StorageProcessor.CandleBuilderProvider, SecurityAdapterProvider, PortfolioAdapterProvider)
+		var clone = new BasketMessageAdapter(TransactionIdGenerator, StorageProcessor.CandleBuilderProvider, SecurityAdapterProvider, PortfolioAdapterProvider, Buffer)
 		{
 			ExtendedInfoStorage = ExtendedInfoStorage,
 			SupportCandlesCompression = SupportCandlesCompression,

@@ -465,6 +465,11 @@ public static class Paths
 	public static readonly DateTime HistoryEndDate = new DateTime(2020, 4, 30).UtcKind();
 
 	/// <summary>
+	/// Birthday.
+	/// </summary>
+	public static readonly DateTime Birthday = new DateTime(1977, 5, 24).UtcKind();
+
+	/// <summary>
 	/// Default extension for settings file.
 	/// </summary>
 	public const string DefaultSettingsExt = JsonEx;

@@ -20,12 +20,7 @@ class AsyncMessageProcessor : Disposable
 
 			IsPing = Message.Type == MessageTypes.Time;
 
-			IsLookup = Message.Type
-				is MessageTypes.PortfolioLookup
-				or MessageTypes.OrderStatus
-				or MessageTypes.SecurityLookup
-				or MessageTypes.BoardLookup
-				or MessageTypes.TimeFrameLookup;
+			IsLookup = Message.IsLookup();
 
 			IsTransaction = Message.Type
 				is MessageTypes.OrderRegister

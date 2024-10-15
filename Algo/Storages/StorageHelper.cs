@@ -830,7 +830,7 @@ public static class StorageHelper
 	/// <param name="subscription">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 	/// <param name="newOutMessage">New message event.</param>
 	/// <returns>Last date.</returns>
-	public static DateTimeOffset? LoadMessages(this StorageCoreSettings settings, CandleBuilderProvider candleBuilderProvider, MarketDataMessage subscription, Action<Message> newOutMessage)
+	public static (DateTimeOffset lastDate, long? left)? LoadMessages(this StorageCoreSettings settings, CandleBuilderProvider candleBuilderProvider, MarketDataMessage subscription, Action<Message> newOutMessage)
 	{
 		if (settings is null)
 			throw new ArgumentNullException(nameof(settings));
@@ -857,10 +857,10 @@ public static class StorageHelper
 			return (IMarketDataStorage<TMessage>)settings.GetStorage(securityId, typeof(TMessage), arg);
 		}
 
-		DateTimeOffset? lastTime = null;
+		(DateTimeOffset lastTime, long? left)? retVal = default;
 
 		if (subscription.From == null && subscription.To == null)
-			return lastTime;
+			return retVal;
 
 		var secId = subscription.SecurityId;
 
@@ -869,7 +869,7 @@ public static class StorageHelper
 			if (subscription.BuildMode != MarketDataBuildModes.Build)
 			{
 				if (settings.IsMode(StorageModes.Incremental))
-					lastTime = LoadMessages(GetStorage<Level1ChangeMessage>(secId, null), subscription, TimeSpan.Zero, SendReply, SendOut);
+					retVal = LoadMessages(GetStorage<Level1ChangeMessage>(secId, null), subscription, TimeSpan.Zero, SendReply, SendOut);
 			}
 			else
 			{
@@ -881,9 +881,9 @@ public static class StorageHelper
 
 					if (range != null)
 					{
-						lastTime = LoadMessages(storage
+						retVal = LoadMessages(storage
 							.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-							.ToLevel1(subscription.DepthBuilder, subscription.RefreshSpeed ?? default), range.Item1, subscription.TransactionId, SendReply, SendOut);
+							.ToLevel1(subscription.DepthBuilder, subscription.RefreshSpeed ?? default), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
 					}
 				}
 				else if (subscription.BuildFrom == DataType.MarketDepth)
@@ -894,9 +894,9 @@ public static class StorageHelper
 
 					if (range != null)
 					{
-						lastTime = LoadMessages(storage
+						retVal = LoadMessages(storage
 							.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-							.ToLevel1(), range.Item1, subscription.TransactionId, SendReply, SendOut);
+							.ToLevel1(), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
 					}
 				}
 			}
@@ -906,7 +906,7 @@ public static class StorageHelper
 			if (subscription.BuildMode != MarketDataBuildModes.Build)
 			{
 				if (settings.IsMode(StorageModes.Incremental))
-					lastTime = LoadMessages(GetStorage<QuoteChangeMessage>(secId, null), subscription, TimeSpan.Zero, SendReply, SendOut);
+					retVal = LoadMessages(GetStorage<QuoteChangeMessage>(secId, null), subscription, TimeSpan.Zero, SendReply, SendOut);
 			}
 			else
 			{
@@ -918,11 +918,10 @@ public static class StorageHelper
 
 					if (range != null)
 					{
-						lastTime = LoadMessages(storage
+						retVal = LoadMessages(storage
 							.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
 							.ToOrderBooks(subscription.DepthBuilder, subscription.RefreshSpeed ?? default, subscription.MaxDepth ?? int.MaxValue)
-							.BuildIfNeed(),
-						range.Item1, subscription.TransactionId, SendReply, SendOut);
+							.BuildIfNeed(), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
 					}
 				}
 				else if (subscription.BuildFrom == DataType.Level1)
@@ -933,9 +932,9 @@ public static class StorageHelper
 
 					if (range != null)
 					{
-						lastTime = LoadMessages(storage
+						retVal = LoadMessages(storage
 							.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-							.ToOrderBooks(), range.Item1, subscription.TransactionId, SendReply, SendOut);
+							.ToOrderBooks(), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
 					}
 				}
 			}
@@ -943,7 +942,7 @@ public static class StorageHelper
 		else if (subscription.DataType2 == DataType.Ticks)
 		{
 			if (subscription.BuildMode != MarketDataBuildModes.Build)
-				lastTime = LoadMessages(GetStorage<ExecutionMessage>(secId, ExecutionTypes.Tick), subscription, settings.DaysLoad, SendReply, SendOut);
+				retVal = LoadMessages(GetStorage<ExecutionMessage>(secId, ExecutionTypes.Tick), subscription, settings.DaysLoad, SendReply, SendOut);
 			else
 			{
 				if (subscription.BuildFrom == DataType.OrderLog)
@@ -954,9 +953,9 @@ public static class StorageHelper
 
 					if (range != null)
 					{
-						lastTime = LoadMessages(storage
+						retVal = LoadMessages(storage
 							.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-							.ToTicks(), range.Item1, subscription.TransactionId, SendReply, SendOut);
+							.ToTicks(), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
 					}
 				}
 				else if (subscription.BuildFrom == DataType.Level1)
@@ -967,24 +966,24 @@ public static class StorageHelper
 
 					if (range != null)
 					{
-						lastTime = LoadMessages(storage
+						retVal = LoadMessages(storage
 							.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-							.ToTicks(), range.Item1, subscription.TransactionId, SendReply, SendOut);
+							.ToTicks(), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
 					}
 				}
 			}
 		}
 		else if (subscription.DataType2 == DataType.OrderLog)
 		{
-			lastTime = LoadMessages(GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog), subscription, settings.DaysLoad, SendReply, SendOut);
+			retVal = LoadMessages(GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog), subscription, settings.DaysLoad, SendReply, SendOut);
 		}
 		else if (subscription.DataType2 == DataType.News)
 		{
-			lastTime = LoadMessages(GetStorage<NewsMessage>(default, null), subscription, settings.DaysLoad, SendReply, SendOut);
+			retVal = LoadMessages(GetStorage<NewsMessage>(default, null), subscription, settings.DaysLoad, SendReply, SendOut);
 		}
 		else if (subscription.DataType2 == DataType.BoardState)
 		{
-			lastTime = LoadMessages(GetStorage<BoardStateMessage>(default, null), subscription, settings.DaysLoad, SendReply, SendOut);
+			retVal = LoadMessages(GetStorage<BoardStateMessage>(default, null), subscription, settings.DaysLoad, SendReply, SendOut);
 		}
 		else if (subscription.DataType2.IsCandles)
 		{
@@ -992,7 +991,7 @@ public static class StorageHelper
 			{
 				var tf = subscription.GetTimeFrame();
 
-				DateTimeOffset? TryBuildCandles()
+				(DateTimeOffset lastDate, long? left)? TryBuildCandles()
 				{
 					IMarketDataStorage storage;
 
@@ -1030,8 +1029,8 @@ public static class StorageHelper
 						if (buildFrom == DataType.Ticks)
 						{
 							return LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
-											.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-											.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.TransactionId, SendReply, SendOut);
+									.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+									.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
 						}
 						else if (buildFrom == DataType.OrderLog)
 						{
@@ -1040,8 +1039,8 @@ public static class StorageHelper
 								case null:
 								case Level1Fields.LastTradePrice:
 									return LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
-														.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-														.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.TransactionId, SendReply, SendOut);
+											.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+											.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
 										
 								// TODO
 								//case Level1Fields.SpreadMiddle:
@@ -1059,24 +1058,24 @@ public static class StorageHelper
 								case null:
 								case Level1Fields.LastTradePrice:
 									return LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
-														.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-														.ToTicks()
-														.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.TransactionId, SendReply, SendOut);
+											.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+											.ToTicks()
+											.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
 
 								case Level1Fields.BestBidPrice:
 								case Level1Fields.BestAskPrice:
 								case Level1Fields.SpreadMiddle:
 									return LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
-														.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-														.ToOrderBooks()
-														.ToCandles(mdMsg, subscription.BuildField.Value, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.TransactionId, SendReply, SendOut);
+											.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+											.ToOrderBooks()
+											.ToCandles(mdMsg, subscription.BuildField.Value, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
 							}
 						}
 						else if (buildFrom == DataType.MarketDepth)
 						{
 							return LoadMessages(((IMarketDataStorage<QuoteChangeMessage>)storage)
-												.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-												.ToCandles(mdMsg, subscription.BuildField ?? Level1Fields.SpreadMiddle, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.TransactionId, SendReply, SendOut);
+									.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+									.ToCandles(mdMsg, subscription.BuildField ?? Level1Fields.SpreadMiddle, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
 						}
 						else
 							throw new ArgumentOutOfRangeException(nameof(subscription), subscription.BuildFrom, LocalizedStrings.InvalidValue);
@@ -1087,7 +1086,7 @@ public static class StorageHelper
 
 				if (subscription.BuildMode == MarketDataBuildModes.Build)
 				{
-					lastTime = TryBuildCandles();
+					retVal = TryBuildCandles();
 				}
 				else
 				{
@@ -1103,10 +1102,10 @@ public static class StorageHelper
 						? (Func<CandleMessage, bool>)(c => c.PriceLevels != null)
 						: null;
 
-					lastTime = LoadMessages(GetTimeFrameCandleMessageStorage(secId, tf, subscription.AllowBuildFromSmallerTimeFrame), subscription, settings.DaysLoad, SendReply, SendOut, filter);
+					retVal = LoadMessages(GetTimeFrameCandleMessageStorage(secId, tf, subscription.AllowBuildFromSmallerTimeFrame), subscription, settings.DaysLoad, SendReply, SendOut, filter);
 
-					if (lastTime == null && subscription.BuildMode == MarketDataBuildModes.LoadAndBuild)
-						lastTime = TryBuildCandles();
+					if (retVal is null && subscription.BuildMode == MarketDataBuildModes.LoadAndBuild)
+						retVal = TryBuildCandles();
 				}
 			}
 			else
@@ -1118,12 +1117,12 @@ public static class StorageHelper
 				if (range != null)
 				{
 					var messages = storage.Load(range.Item1.Date, range.Item2.Date.EndOfDay());
-					lastTime = LoadMessages(messages, range.Item1, subscription.TransactionId, SendReply, SendOut);
+					retVal = LoadMessages(messages, range.Item1, subscription.Count, subscription.TransactionId, SendReply, SendOut);
 				}
 			}
 		}
 
-		return lastTime;
+		return retVal;
 	}
 
 	private static Tuple<DateTimeOffset, DateTimeOffset> GetRange(IMarketDataStorage storage, ISubscriptionMessage subscription, TimeSpan daysLoad)
@@ -1145,7 +1144,7 @@ public static class StorageHelper
 		return Tuple.Create(from, to);
 	}
 
-	private static DateTimeOffset? LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, ISubscriptionMessage subscription, TimeSpan daysLoad, Action sendReply, Action<Message> newOutMessage, Func<TMessage, bool> filter = null)
+	private static (DateTimeOffset lastTime, long? left)? LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, ISubscriptionMessage subscription, TimeSpan daysLoad, Action sendReply, Action<Message> newOutMessage, Func<TMessage, bool> filter = null)
 		where TMessage : Message, ISubscriptionIdMessage, IServerTimeMessage
 	{
 		var range = GetRange(storage, subscription, daysLoad);
@@ -1158,13 +1157,10 @@ public static class StorageHelper
 		if (subscription.Skip != default)
 			messages = messages.Skip((int)subscription.Skip.Value);
 
-		if (subscription.Count != default)
-			messages = messages.Take((int)subscription.Count.Value);
-
-		return LoadMessages(messages, range.Item1, subscription.TransactionId, sendReply, newOutMessage, filter);
+		return LoadMessages(messages, range.Item1, subscription.Count, subscription.TransactionId, sendReply, newOutMessage, filter);
 	}
 
-	private static DateTimeOffset LoadMessages<TMessage>(IEnumerable<TMessage> messages, DateTimeOffset lastTime, long transactionId, Action sendReply, Action<Message> newOutMessage, Func<TMessage, bool> filter = null)
+	private static (DateTimeOffset lastTime, long? left) LoadMessages<TMessage>(IEnumerable<TMessage> messages, DateTimeOffset lastTime, long? count, long transactionId, Action sendReply, Action<Message> newOutMessage, Func<TMessage, bool> filter = null)
 		where TMessage : Message, ISubscriptionIdMessage, IServerTimeMessage
 	{
 		if (messages == null)
@@ -1177,6 +1173,7 @@ public static class StorageHelper
 			messages = messages.Where(filter);
 
 		var replySent = false;
+		var left = count ?? long.MaxValue;
 
 		foreach (var message in messages)
 		{
@@ -1192,9 +1189,12 @@ public static class StorageHelper
 			lastTime = message.ServerTime;
 
 			newOutMessage(message);
+
+			if (--left < 0)
+				break;
 		}
 
-		return lastTime;
+		return (lastTime, count is null ? null : left);
 	}
 
 	/// <summary>

@@ -278,19 +278,19 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 	private DateTimeOffset _startTime;
 	private DateTimeOffset _stopTime;
 	private DateTimeOffset _nextTime;
-	private TimeSpan _progressStep;
+	private long _stepTicks;
+	private int _progress;
 
 	private void OnMarketTimeChanged(TimeSpan diff)
 	{
-		if (_progressStep == default)
+		if (_stepTicks == default)
 			return;
 
 		if (CurrentTime < _nextTime && CurrentTime < _stopTime)
 			return;
 
-		var steps = (CurrentTime - _startTime).Ticks / _progressStep.Ticks + 1;
-		_nextTime = _startTime + (steps * _progressStep.Ticks).To<TimeSpan>();
-		ProgressChanged?.Invoke((int)steps);
+		_nextTime = _nextTime.AddTicks(_stepTicks);
+		ProgressChanged?.Invoke(++_progress);
 	}
 
 	/// <summary>
@@ -333,9 +333,10 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		_startTime = HistoryMessageAdapter.StartDate;
 		_stopTime = HistoryMessageAdapter.StopDate;
 
-		_progressStep = ((_stopTime - _startTime).Ticks / 100).To<TimeSpan>();
+		_stepTicks = (_stopTime - _startTime).Ticks / 100;
 
-		_nextTime = _startTime + _progressStep;
+		_nextTime = _startTime.AddTicks(_stepTicks);
+		_progress = default;
 
 		_stopPending = false;
 

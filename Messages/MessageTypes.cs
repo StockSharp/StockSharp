@@ -433,6 +433,16 @@ public enum MessageTypes
 	/// <see cref="AvailableDataInfoMessage"/>.
 	/// </summary>
 	AvailableDataInfo,
+
+	/// <summary>
+	/// <see cref="ConnectionLostMessage"/>.
+	/// </summary>
+	ConnectionLost,
+
+	/// <summary>
+	/// <see cref="ConnectionRestoredMessage"/>.
+	/// </summary>
+	ConnectionRestored,
 }
 
 /// <summary>

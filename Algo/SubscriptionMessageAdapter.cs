@@ -252,8 +252,11 @@ public class SubscriptionMessageAdapter : MessageAdapterWrapper
 
 		switch (message.Type)
 		{
-			case ExtendedMessageTypes.ReconnectingFinished:
+			case MessageTypes.ConnectionRestored:
 			{
+				if (!((ConnectionRestoredMessage)message).IsResetState)
+					break;
+
 				ProcessSuspendedMessage supended = null;
 
 				lock (_sync)

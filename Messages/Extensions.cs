@@ -44,7 +44,7 @@ public static partial class Extensions
 
 		static bool validateUnit(Unit v) => v is not null && v.Value > 0;
 
-		RegisterCandleType(typeof(TimeFrameCandleMessage), MessageTypes.CandleTimeFrame, MarketDataTypes.CandleTimeFrame, typeof(TimeFrameCandleMessage).Name.Remove(nameof(Message)), StringToTimeSpan, TimeSpanToString, a => a > TimeSpan.Zero);
+		RegisterCandleType(typeof(TimeFrameCandleMessage), MessageTypes.CandleTimeFrame, MarketDataTypes.CandleTimeFrame, typeof(TimeFrameCandleMessage).Name.Remove(nameof(Message)), StringToTimeSpan, TimeSpanToString, a => a > TimeSpan.Zero, false);
 		RegisterCandleType(typeof(TickCandleMessage), MessageTypes.CandleTick, MarketDataTypes.CandleTick, typeof(TickCandleMessage).Name.Remove(nameof(Message)), str => str.To<int>(), arg => arg.ToString(), a => a > 0);
 		RegisterCandleType(typeof(VolumeCandleMessage), MessageTypes.CandleVolume, MarketDataTypes.CandleVolume, typeof(VolumeCandleMessage).Name.Remove(nameof(Message)), str => str.To<decimal>(), arg => arg.ToString(), a => a > 0);
 		RegisterCandleType(typeof(RangeCandleMessage), MessageTypes.CandleRange, MarketDataTypes.CandleRange, typeof(RangeCandleMessage).Name.Remove(nameof(Message)), str => str.ToUnit(), arg => arg.ToString(), validateUnit);
@@ -798,6 +798,16 @@ public static partial class Extensions
 	/// </summary>
 	public static IEnumerable<Type> AllCandleTypes => _candleDataTypes.CachedValues;
 
+	private static readonly SynchronizedSet<Type> _buildOnlyCandles = [];
+
+	/// <summary>
+	/// Determines whether the specified candle type can build only from underlying data.
+	/// </summary>
+	/// <param name="candleType">The type of candle message.</param>
+	/// <returns>Check result.</returns>
+	public static bool IsBuildOnly(this Type candleType)
+		=> _buildOnlyCandles.Contains(candleType);
+
 	/// <summary>
 	/// Register new candle type.
 	/// </summary>
@@ -808,10 +818,11 @@ public static partial class Extensions
 	/// <param name="argParse"><see cref="string"/> to <typeparamref name="TArg"/> converter.</param>
 	/// <param name="argToString"><typeparamref name="TArg"/> to <see cref="string"/> converter.</param>
 	/// <param name="argValidator">Arg validator.</param>
+	/// <param name="isBuildOnly">The candle type can build only from underlying data.</param>
 	public static void RegisterCandleType<TArg>(
 		Type messageType, MessageTypes type, MarketDataTypes dataType, string fileName,
 		Func<string, TArg> argParse, Func<TArg, string> argToString,
-		Func<TArg, bool> argValidator)
+		Func<TArg, bool> argValidator, bool isBuildOnly = true)
 	{
 		if (messageType is null)
 			throw new ArgumentNullException(nameof(messageType));
@@ -839,6 +850,9 @@ public static partial class Extensions
 		_fileNames.Add(DataType.Create(messageType, null), fileName);
 		_candleArgTypes.Add(messageType, messageType.CreateInstance<ICandleMessage>().ArgType);
 		_candleArgValidators.Add(messageType, a => argValidator((TArg)a));
+
+		if (isBuildOnly)
+			_buildOnlyCandles.Add(messageType);
 	}
 
 	/// <summary>
@@ -3475,13 +3489,14 @@ public static partial class Extensions
 	/// <param name="depth">The regular order book.</param>
 	/// <param name="priceRange">Minimum price step.</param>
 	/// <param name="priceStep">Security price step.</param>
+	/// <param name="maxDepth">Max depth.</param>
 	/// <returns>The sparse order book.</returns>
-	public static QuoteChangeMessage Sparse(this IOrderBookMessage depth, decimal priceRange, decimal? priceStep)
+	public static QuoteChangeMessage Sparse(this IOrderBookMessage depth, decimal priceRange, decimal? priceStep, int maxDepth = 20)
 	{
 		depth.CheckIsSnapshot();
 
-		var bids = depth.Bids.Sparse(Sides.Buy, priceRange, priceStep);
-		var asks = depth.Asks.Sparse(Sides.Sell, priceRange, priceStep);
+		var bids = depth.Bids.Sparse(Sides.Buy, priceRange, priceStep, maxDepth);
+		var asks = depth.Asks.Sparse(Sides.Sell, priceRange, priceStep, maxDepth);
 
 		var bestBid = depth.GetBestBid();
 		var bestAsk = depth.GetBestAsk();
@@ -3543,8 +3558,9 @@ public static partial class Extensions
 	/// <param name="ask">Ask.</param>
 	/// <param name="priceRange">Minimum price step.</param>
 	/// <param name="priceStep">Security price step.</param>
+	/// <param name="maxDepth">Max depth.</param>
 	/// <returns>The sparse collection of quotes.</returns>
-	public static (QuoteChange[] bids, QuoteChange[] asks) Sparse(this QuoteChange bid, QuoteChange ask, decimal priceRange, decimal? priceStep)
+	public static (QuoteChange[] bids, QuoteChange[] asks) Sparse(this QuoteChange bid, QuoteChange ask, decimal priceRange, decimal? priceStep, int maxDepth = 10)
 	{
 		ValidatePriceRange(priceRange);
 
@@ -3554,25 +3570,35 @@ public static partial class Extensions
 		if (bidPrice == default || askPrice == default || bidPrice == askPrice)
 			return ([], []);
 
-		const int maxLimit = 1000;
-
 		var bids = new List<QuoteChange>();
 		var asks = new List<QuoteChange>();
 
 		var currentBidPrice = bidPrice.ShrinkPrice(priceStep, null, ShrinkRules.More);
 		var currentAskPrice = askPrice.ShrinkPrice(priceStep, null, ShrinkRules.Less);
 
-		while (currentBidPrice < currentAskPrice && (bids.Count + asks.Count) < maxLimit)
+		while (currentBidPrice < currentAskPrice && (bids.Count + asks.Count) < maxDepth)
 		{
+			var wasBid = currentBidPrice;
+			var wasAsk = currentAskPrice;
+
 			currentBidPrice = (currentBidPrice + priceRange).ShrinkPrice(priceStep, null, ShrinkRules.Less);
+
+			if (wasBid > currentBidPrice)
+				break;
 
 			if (currentBidPrice > bidPrice && currentBidPrice < askPrice)
 				bids.Add(new() { Price = currentBidPrice });
 
 			currentAskPrice = (currentAskPrice - priceRange).ShrinkPrice(priceStep, null, ShrinkRules.More);
 
+			if (wasAsk < currentAskPrice)
+				break;
+
 			if (currentAskPrice > bidPrice && currentAskPrice < askPrice)
 				asks.Insert(0, new() { Price = currentAskPrice });
+
+			if (wasBid == currentBidPrice && wasAsk == currentAskPrice)
+				break;
 		}
 
 		return (bids.ToArray(), asks.ToArray());
@@ -3588,8 +3614,9 @@ public static partial class Extensions
 	/// <param name="side">Side.</param>
 	/// <param name="priceRange">Minimum price step.</param>
 	/// <param name="priceStep">Security price step.</param>
+	/// <param name="maxDepth">Max depth.</param>
 	/// <returns>The sparse collection of quotes.</returns>
-	public static QuoteChange[] Sparse(this QuoteChange[] quotes, Sides side, decimal priceRange, decimal? priceStep)
+	public static QuoteChange[] Sparse(this QuoteChange[] quotes, Sides side, decimal priceRange, decimal? priceStep, int maxDepth)
 	{
 		if (quotes is null)
 			throw new ArgumentNullException(nameof(quotes));
@@ -3598,8 +3625,6 @@ public static partial class Extensions
 
 		if (quotes.Length < 2)
 			return [.. quotes];
-
-		const int maxLimit = 10000;
 
 		var retVal = new List<QuoteChange>();
 
@@ -3622,7 +3647,7 @@ public static partial class Extensions
 
 					retVal.Add(new QuoteChange { Price = p });
 
-					if (retVal.Count > maxLimit)
+					if (retVal.Count > maxDepth)
 						break;
 				}
 			}
@@ -3637,12 +3662,12 @@ public static partial class Extensions
 
 					retVal.Add(new QuoteChange { Price = p });
 
-					if (retVal.Count > maxLimit)
+					if (retVal.Count > maxDepth)
 						break;
 				}
 			}
 
-			if (retVal.Count > maxLimit)
+			if (retVal.Count > maxDepth)
 				break;
 		}
 
@@ -5746,4 +5771,25 @@ public static partial class Extensions
 	/// <returns>Check result.</returns>
 	public static bool IsSet(this Unit value)
 		=> value is not null && value.Value != 0;
+
+	/// <summary>
+	/// Determines the specified message is lookup.
+	/// </summary>
+	/// <param name="message"><see cref="Message"/></param>
+	/// <returns>Check result.</returns>
+	public static bool IsLookup(this IMessage message)
+		=> message.CheckOnNull(nameof(message)).Type.IsLookup();
+
+	/// <summary>
+	/// Determines the specified message type is lookup.
+	/// </summary>
+	/// <param name="type"><see cref="MessageTypes"/></param>
+	/// <returns>Check result.</returns>
+	public static bool IsLookup(this MessageTypes type)
+		=> type
+			is MessageTypes.PortfolioLookup
+			or MessageTypes.OrderStatus
+			or MessageTypes.SecurityLookup
+			or MessageTypes.BoardLookup
+			or MessageTypes.TimeFrameLookup;
 }

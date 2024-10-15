@@ -10,7 +10,6 @@ public class AlertSchema : IPersistable
 	/// </summary>
 	public AlertSchema()
 	{
-		Rules = new List<AlertRule>();
 	}
 
 	/// <summary>
@@ -20,7 +19,6 @@ public class AlertSchema : IPersistable
 	public AlertSchema(Type messageType)
 	{
 		MessageType = messageType ?? throw new ArgumentNullException(nameof(messageType));
-		Rules = new List<AlertRule>();
 	}
 
 	/// <summary>
@@ -41,7 +39,7 @@ public class AlertSchema : IPersistable
 	/// <summary>
 	/// Rules.
 	/// </summary>
-	public IList<AlertRule> Rules { get; }
+	public IList<AlertRule> Rules { get; } = [];
 
 	/// <summary>
 	/// Alert type.
@@ -72,7 +70,12 @@ public class AlertSchema : IPersistable
 		Rules.Clear();
 		Rules.AddRange(storage.GetValue<SettingsStorage[]>(nameof(Rules)).Select(s => s.Load<AlertRule>()).Where(r => r.Value != null));
 
-		AlertType = storage.GetValue<string>(nameof(AlertType)).To<AlertNotifications?>();
+		var alertType = storage.GetValue<string>(nameof(AlertType));
+
+        if (alertType == "Sms" || alertType == "Email" || alertType == "Speech")
+			alertType = string.Empty;
+
+        AlertType = alertType.To<AlertNotifications?>();
 		ExternalId = storage.GetValue<long?>(nameof(ExternalId));
 		Caption = storage.GetValue<string>(nameof(Caption));
 		Message = storage.GetValue<string>(nameof(Message));

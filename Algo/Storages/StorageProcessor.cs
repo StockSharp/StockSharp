@@ -62,9 +62,9 @@ public class StorageProcessor
 
 			var transactionId = message.TransactionId;
 
-			var lastTime = Settings.LoadMessages(CandleBuilderProvider, message, newOutMessage);
+			var t = Settings.LoadMessages(CandleBuilderProvider, message, newOutMessage);
 
-			if (message.To != null && lastTime != null && message.To <= lastTime)
+			if (message.To != null && t != null && (message.To <= t.Value.lastDate || t.Value.left == 0))
 			{
 				_fullyProcessedSubscriptions.Add(transactionId);
 				newOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = transactionId });
@@ -72,12 +72,13 @@ public class StorageProcessor
 				return null;
 			}
 
-			if (lastTime != null)
+			if (t != null)
 			{
 				if (!(message.DataType2 == DataType.MarketDepth && message.From == null && message.To == null))
 				{
 					var clone = message.TypedClone();
-					clone.From = lastTime;
+					clone.From = t.Value.lastDate;
+					clone.Count = t.Value.left;
 					message = clone;
 					message.ValidateBounds();
 				}

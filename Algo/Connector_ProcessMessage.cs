@@ -599,12 +599,12 @@ partial class Connector
 					ProcessDisconnectMessage((DisconnectMessage)message);
 					break;
 
-				case ExtendedMessageTypes.ReconnectingStarted:
-					ProcessReconnectingStartedMessage(message);
+				case MessageTypes.ConnectionLost:
+					ProcessConnectionLostMessage(message);
 					break;
 
-				case ExtendedMessageTypes.ReconnectingFinished:
-					ProcessReconnectingFinishedMessage(message);
+				case MessageTypes.ConnectionRestored:
+					ProcessConnectionRestoredMessage(message);
 					break;
 
 				case MessageTypes.QuoteChange:
@@ -872,12 +872,12 @@ partial class Connector
 		}
 	}
 
-	private void ProcessReconnectingStartedMessage(Message message)
+	private void ProcessConnectionLostMessage(Message message)
 	{
 		RaiseConnectionLost(message.Adapter);
 	}
 
-	private void ProcessReconnectingFinishedMessage(Message message)
+	private void ProcessConnectionRestoredMessage(Message message)
 	{
 		RaiseConnectionRestored(message.Adapter);
 	}

@@ -6,6 +6,7 @@ using System.Windows;
 
 using Ecng.Serialization;
 using Ecng.Configuration;
+using Ecng.Collections;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Candles;
@@ -56,8 +57,8 @@ public partial class MainWindow
 	{
 		SecurityEditor.SecurityProvider = _connector;
 		PortfolioEditor.Portfolios = new PortfolioDataSource(_connector);
-		_connector.PortfolioReceived += (sub, pf) => PortfolioGrid.Positions.Add(pf);
-		_connector.PositionReceived += (sub, pos) => PortfolioGrid.Positions.Add(pos);
+		_connector.PortfolioReceived += (sub, pf) => PortfolioGrid.Positions.TryAdd(pf);
+		_connector.PositionReceived += (sub, pos) => PortfolioGrid.Positions.TryAdd(pos);
 
 		_connector.Connect();
 	}
