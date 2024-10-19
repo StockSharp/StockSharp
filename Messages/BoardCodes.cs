@@ -866,6 +866,11 @@ public static class BoardCodes
 	public const string BinanceCoin = "BNBCN";
 
 	/// <summary>
+	/// <see cref="BinanceFut"/>.
+	/// </summary>
+	public const string BinanceFut = "BNBFT";
+
+	/// <summary>
 	/// <see cref="Bitexbook"/>.
 	/// </summary>
 	public const string Bitexbook = "BTXB";
@@ -1156,6 +1161,21 @@ public static class BoardCodes
 	public const string ByBit = "BBIT";
 
 	/// <summary>
+	/// <see cref="ByBitInv"/>
+	/// </summary>
+	public const string ByBitInv = "BBITINV";
+
+	/// <summary>
+	/// <see cref="ByBitLin"/>
+	/// </summary>
+	public const string ByBitLin = "BBITLIN";
+
+	/// <summary>
+	/// <see cref="ByBitOpt"/>
+	/// </summary>
+	public const string ByBitOpt = "BBITOPT";
+
+	/// <summary>
 	/// <see cref="cTrader"/>
 	/// </summary>
 	public const string cTrader = "CTRD";
@@ -1169,4 +1189,34 @@ public static class BoardCodes
 	/// <see cref="TradingTechnologies"/>
 	/// </summary>
 	public const string TradingTechnologies = "TT";
+
+	/// <summary>
+	/// <see cref="GateIO"/>
+	/// </summary>
+	public const string GateIO = "GTIO";
+
+	/// <summary>
+	/// <see cref="GateIODelivery"/>
+	/// </summary>
+	public const string GateIODelivery = "GTIODL";
+
+	/// <summary>
+	/// <see cref="GateIOPerpetual"/>
+	/// </summary>
+	public const string GateIOPerpetual = "GTIOPT";
+
+	/// <summary>
+	/// <see cref="GateIOOptions"/>
+	/// </summary>
+	public const string GateIOOptions = "GTIOOP";
+
+	/// <summary>
+	/// <see cref="Bitget"/>
+	/// </summary>
+	public const string Bitget = "BTGT";
+
+	/// <summary>
+	/// <see cref="BitgetFut"/>
+	/// </summary>
+	public const string BitgetFut = "BTGTFT";
 }

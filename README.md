@@ -7,12 +7,12 @@
 
 **StockSharp** (shortly **S#**) – are **free** platform for trading at any markets of the world (crypto exchanges, American, European, Asian, Russian, stocks, futures, options, Bitcoins, forex, etc.). You will be able to trade manually or automated trading (algorithmic trading robots, conventional or HFT).
 
-**Available connections**: FIX/FAST, ITCH (LSE, NASDAQ), Blackwood/Fusion, BarChart, CQG, E*Trade, IQFeed, InteractiveBrokers, LMAX, MatLab, Oanda, FXCM, OpenECry, Rithmic, RSS, Sterling, BTCE, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck, Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, KuCoin, BITEXBOOK, CoinExchange, QuantFEED and many other.
+**Available connections**: Binace, MT4, MT5, FIX/FAST, PolygonIO, Trading Technologies, Alpaca Markets, BarChart, CQG, E*Trade, IQFeed, InteractiveBrokers, LMAX, MatLab, Oanda, FXCM, Rithmic, cTrader, DXtrade, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, OKX, Coincheck, CEX.IO, BitMEX, YoBit, Livecoin, EXMO, Deribit, HTX, KuCoin, QuantFEED and many other.
 
-## [S#.Designer][8]
+## [Designer][8]
 <img src="./Media/Designer500.gif" align="left" />
 
-**S#.Designer** - **free** universal algorithmic strategies application for easy strategy creation:
+**Designer** - **free** universal algorithmic strategies application for easy strategy creation:
   - Visual designer to create strategies by mouse clicking
   - Embedded C# editor
   - Easy to create own indicators
@@ -21,10 +21,10 @@
   - All world platforms
   - Schema sharing with own team
 
-## [S#.Data][9]
+## [Data][9]
 <img src="./Media/Hydra500.gif" align="right" />
 
-**S#.Data** - **free** software to automatically load and store market data:
+**Hydra** - **free** software to automatically load and store market data:
   - Supports many sources
   - High compression ratio
   - Any data type
@@ -34,7 +34,7 @@
   - Scheduled tasks
   - Auto-sync over the Internet between several running programs S#.Data
 
-## [S#.Terminal][10]
+## [Terminal][10]
 <img src="./Media/Terminal500.gif" align="left" />
 
 **Terminal** - **free** trading charting application (trading terminal):
@@ -46,10 +46,10 @@
   - Box charts
   - Volume Profile
   
-## [S#.Shell][11]
+## [Shell][11]
 <img src="./Media/Shell500.gif" align="right" />
 
-**S#.Shell** - the ready-made graphical framework with the ability to quickly change to your needs and with fully open source code in C#:
+**Shell** - the ready-made graphical framework with the ability to quickly change to your needs and with fully open source code in C#:
   - Complete source code
   - Support for all StockSharp platform connections
   - Support for S#.Designer schemas
@@ -60,8 +60,8 @@
   - Detailed information on strategy performance 
   - Launch strategies on schedule
 
-## [S#.API][12]
-S#.API is a **free** C# library for programmers who use Visual Studio. S#.API lets you create any trading strategy, from long-timeframe positional strategies to high frequency strategies (HFT) with direct access to the exchange (DMA). [More info...][12]
+## [API][12]
+API is a **free** C# library for programmers who use Visual Studio. S#.API lets you create any trading strategy, from long-timeframe positional strategies to high frequency strategies (HFT) with direct access to the exchange (DMA). [More info...][12]
 ### Strategy example
 ```C#
 public class SimpleStrategy : Strategy
@@ -100,6 +100,7 @@ public class SimpleStrategy : Strategy
 |<img src="./Media/logos/Binance_logo.svg" height="30" /> |Binance | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/binance.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/api/connectors/crypto_exchanges/binance.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/bitalong_logo.svg" height="30" /> |Bitalong | <a href="https://doc.stocksharp.com/topics/api/connectors/crypto_exchanges/bitalong.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/api/connectors/crypto_exchanges/bitalong.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/bitbank_logo.svg" height="30" /> |Bitbank | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/bitbank.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/api/connectors/crypto_exchanges/bitbank.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/bitget_logo.svg" height="30" /> |Bitget | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/bitget.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/api/connectors/crypto_exchanges/bitget.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/bitexbook_logo.svg" height="30" /> |Bitexbook | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/bitexbook.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/api/connectors/crypto_exchanges/bitexbook.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/bitfinex_logo.svg" height="30" /> |Bitfinex | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/bitfinex.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/api/connectors/crypto_exchanges/bitfinex.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/bithumb_logo.svg" height="30" /> |Bithumb | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/bithumb.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/api/connectors/crypto_exchanges/bithumb.html" target="_blank">Ru</a> |
@@ -125,6 +126,7 @@ public class SimpleStrategy : Strategy
 |<img src="./Media/logos/digitexfutures_logo.svg" height="30" /> |DigitexFutures | <a href="https://doc.stocksharp.com/topics/api/connectors/crypto_exchanges/digitexfutures.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/api/connectors/crypto_exchanges/digitexfutures.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/exmo_logo.svg" height="30" /> |EXMO | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/exmo.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/api/connectors/crypto_exchanges/exmo.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/fatbtc_logo.svg" height="30" /> |FatBTC | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/fatbtc.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/api/connectors/crypto_exchanges/fatbtc.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/gateio_logo.svg" height="30" /> |GateIO | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/gateio.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/api/connectors/crypto_exchanges/gateio.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/gdax_logo.svg" height="30" /> |GDAX | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/gdax.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/api/connectors/crypto_exchanges/gdax.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/gopax_logo.svg" height="30" /> |GOPAX | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/gopax.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/api/connectors/crypto_exchanges/gopax.html" target="blank">Ru</a> |
 |<img src="./Media/logos/hitbtc_logo.svg" height="30" /> |HitBTC | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/hitbtc.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/api/connectors/crypto_exchanges/hitbtc.html" target="_blank">Ru</a> |

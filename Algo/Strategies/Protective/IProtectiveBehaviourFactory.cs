@@ -1,13 +1,5 @@
 ﻿namespace StockSharp.Algo.Strategies.Protective;
 
-using System;
-using System.Collections.Generic;
-
-using Ecng.Common;
-
-using StockSharp.Localization;
-using StockSharp.Messages;
-
 /// <summary>
 /// <see cref="IProtectiveBehaviour"/> factory.
 /// </summary>

@@ -1,11 +1,5 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.ComponentModel;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Pass through indicator.
 /// </summary>
@@ -22,7 +16,7 @@ public class PassThroughIndicator : BaseIndicator
 		IsFormed |= !input.IsEmpty;
 
 		return input.IsEmpty
-			? new DecimalIndicatorValue(this)
-			: new DecimalIndicatorValue(this, input.GetValue<decimal>());
+			? new DecimalIndicatorValue(this, input.Time)
+			: new DecimalIndicatorValue(this, input.ToDecimal(), input.Time);
 	}
 }

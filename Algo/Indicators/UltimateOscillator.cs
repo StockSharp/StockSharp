@@ -1,129 +1,104 @@
-﻿#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
+﻿namespace StockSharp.Algo.Indicators;
 
-Project: StockSharp.Algo.Indicators.Algo
-File: UltimateOscillator.cs
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-
-namespace StockSharp.Algo.Indicators
+/// <summary>
+/// Last oscillator.
+/// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/uo.html
+/// </remarks>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.UltimateOscKey,
+	Description = LocalizedStrings.UltimateOscillatorKey)]
+[IndicatorIn(typeof(CandleIndicatorValue))]
+[Doc("topics/api/indicators/list_of_indicators/uo.html")]
+public class UltimateOscillator : BaseIndicator
 {
-	using System.Linq;
-	using System.ComponentModel.DataAnnotations;
+	private const decimal _stoProcentov = 100m;
 
-	using Ecng.ComponentModel;
+	private const int _period7 = 7;
+	private const int _period14 = 14;
+	private const int _period28 = 28;
 
-	using StockSharp.Messages;
-	using StockSharp.Localization;
+	private const int _weight1 = 1;
+	private const int _weight2 = 2;
+	private const int _weight4 = 4;
+
+	private readonly Sum _period7BpSum;
+	private readonly Sum _period14BpSum;
+	private readonly Sum _period28BpSum;
+
+	private readonly Sum _period7TrSum;
+	private readonly Sum _period14TrSum;
+	private readonly Sum _period28TrSum;
+
+	private decimal? _previouseClosePrice;
 
 	/// <summary>
-	/// Last oscillator.
+	/// To create the indicator <see cref="UltimateOscillator"/>.
 	/// </summary>
-	/// <remarks>
-	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/uo.html
-	/// </remarks>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.UltimateOscKey,
-		Description = LocalizedStrings.UltimateOscillatorKey)]
-	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[Doc("topics/api/indicators/list_of_indicators/uo.html")]
-	public class UltimateOscillator : BaseIndicator
+	public UltimateOscillator()
 	{
-		private const decimal _stoProcentov = 100m;
+		_period7BpSum = new Sum { Length = _period7 };
+		_period14BpSum = new Sum { Length = _period14 };
+		_period28BpSum = new Sum { Length = _period28 };
 
-		private const int _period7 = 7;
-		private const int _period14 = 14;
-		private const int _period28 = 28;
+		_period7TrSum = new Sum { Length = _period7 };
+		_period14TrSum = new Sum { Length = _period14 };
+		_period28TrSum = new Sum { Length = _period28 };
+	}
 
-		private const int _weight1 = 1;
-		private const int _weight2 = 2;
-		private const int _weight4 = 4;
+	/// <inheritdoc />
+	public override int NumValuesToInitialize => new[] { _period7BpSum, _period14BpSum, _period28BpSum, _period7TrSum, _period14TrSum, _period28TrSum }.Select(i => i.NumValuesToInitialize).Sum();
 
-		private readonly Sum _period7BpSum;
-		private readonly Sum _period14BpSum;
-		private readonly Sum _period28BpSum;
+	/// <inheritdoc />
+	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
-		private readonly Sum _period7TrSum;
-		private readonly Sum _period14TrSum;
-		private readonly Sum _period28TrSum;
+	/// <inheritdoc />
+	protected override bool CalcIsFormed()
+		=>	_period7BpSum.IsFormed && _period14BpSum.IsFormed &&
+	        _period28BpSum.IsFormed && _period7TrSum.IsFormed &&
+	        _period14TrSum.IsFormed && _period28TrSum.IsFormed;
 
-		private decimal? _previouseClosePrice;
+	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{
+		var candle = input.ToCandle();
 
-		/// <summary>
-		/// To create the indicator <see cref="UltimateOscillator"/>.
-		/// </summary>
-		public UltimateOscillator()
+		if (_previouseClosePrice != null)
 		{
-			_period7BpSum = new Sum { Length = _period7 };
-			_period14BpSum = new Sum { Length = _period14 };
-			_period28BpSum = new Sum { Length = _period28 };
+			var min = _previouseClosePrice.Value < candle.LowPrice ? _previouseClosePrice.Value : candle.LowPrice;
+			var max = _previouseClosePrice.Value > candle.HighPrice ? _previouseClosePrice.Value : candle.HighPrice;
 
-			_period7TrSum = new Sum { Length = _period7 };
-			_period14TrSum = new Sum { Length = _period14 };
-			_period28TrSum = new Sum { Length = _period28 };
-		}
+			input = input.SetValue(this, candle.ClosePrice - min);
 
-		/// <inheritdoc />
-		public override int NumValuesToInitialize => new[] { _period7BpSum, _period14BpSum, _period28BpSum, _period7TrSum, _period14TrSum, _period28TrSum }.Select(i => i.NumValuesToInitialize).Sum();
+			var p7BpValue = _period7BpSum.Process(input).ToDecimal();
+			var p14BpValue = _period14BpSum.Process(input).ToDecimal();
+			var p28BpValue = _period28BpSum.Process(input).ToDecimal();
 
-		/// <inheritdoc />
-		public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
+			input = input.SetValue(this, max - min);
 
-		/// <inheritdoc />
-		protected override bool CalcIsFormed()
-			=>	_period7BpSum.IsFormed && _period14BpSum.IsFormed &&
-		        _period28BpSum.IsFormed && _period7TrSum.IsFormed &&
-		        _period14TrSum.IsFormed && _period28TrSum.IsFormed;
-
-		/// <inheritdoc />
-		protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		{
-			var candle = input.GetValue<ICandleMessage>();
-
-			if (_previouseClosePrice != null)
-			{
-				var min = _previouseClosePrice.Value < candle.LowPrice ? _previouseClosePrice.Value : candle.LowPrice;
-				var max = _previouseClosePrice.Value > candle.HighPrice ? _previouseClosePrice.Value : candle.HighPrice;
-
-				input = input.SetValue(this, candle.ClosePrice - min);
-
-				var p7BpValue = _period7BpSum.Process(input).GetValue<decimal>();
-				var p14BpValue = _period14BpSum.Process(input).GetValue<decimal>();
-				var p28BpValue = _period28BpSum.Process(input).GetValue<decimal>();
-
-				input = input.SetValue(this, max - min);
-
-				var p7TrValue = _period7TrSum.Process(input).GetValue<decimal>();
-				var p14TrValue = _period14TrSum.Process(input).GetValue<decimal>();
-				var p28TrValue = _period28TrSum.Process(input).GetValue<decimal>();
-
-				if (input.IsFinal)
-					_previouseClosePrice = candle.ClosePrice;
-
-				if (p7TrValue != 0 && p14TrValue != 0 && p28TrValue != 0)
-				{
-					var average7 = p7BpValue / p7TrValue;
-					var average14 = p14BpValue / p14TrValue;
-					var average28 = p28BpValue / p28TrValue;
-					return new DecimalIndicatorValue(this, _stoProcentov * (_weight4 * average7 + _weight2 * average14 + _weight1 * average28) / (_weight4 + _weight2 + _weight1));
-				}
-
-				return new DecimalIndicatorValue(this);
-			}
+			var p7TrValue = _period7TrSum.Process(input).ToDecimal();
+			var p14TrValue = _period14TrSum.Process(input).ToDecimal();
+			var p28TrValue = _period28TrSum.Process(input).ToDecimal();
 
 			if (input.IsFinal)
 				_previouseClosePrice = candle.ClosePrice;
 
-			return new DecimalIndicatorValue(this);
+			if (p7TrValue != 0 && p14TrValue != 0 && p28TrValue != 0)
+			{
+				var average7 = p7BpValue / p7TrValue;
+				var average14 = p14BpValue / p14TrValue;
+				var average28 = p28BpValue / p28TrValue;
+				return new DecimalIndicatorValue(this, _stoProcentov * (_weight4 * average7 + _weight2 * average14 + _weight1 * average28) / (_weight4 + _weight2 + _weight1), input.Time);
+			}
+
+			return new DecimalIndicatorValue(this, input.Time);
 		}
+
+		if (input.IsFinal)
+			_previouseClosePrice = candle.ClosePrice;
+
+		return new DecimalIndicatorValue(this, input.Time);
 	}
 }

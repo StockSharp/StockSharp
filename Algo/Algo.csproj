@@ -14,7 +14,7 @@
     <PackageReference Include="GeneticSharp" Version="$(GeneticSharpVer)" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BusinessEntities\BusinessEntities.csproj" />
+    <ProjectReference Include="..\Charting.Interfaces\Charting.Interfaces.csproj" />
     <ProjectReference Include="..\Configuration\Configuration.csproj" />
   </ItemGroup>
 </Project>

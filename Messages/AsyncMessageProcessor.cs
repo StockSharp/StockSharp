@@ -1,17 +1,6 @@
 ﻿namespace StockSharp.Messages;
 
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-using Ecng.Collections;
-using Ecng.Common;
-
 using Nito.AsyncEx;
-
-using StockSharp.Localization;
-using StockSharp.Logging;
 
 /// <summary>
 /// Async message processor helper.
@@ -31,17 +20,11 @@ class AsyncMessageProcessor : Disposable
 
 			IsPing = Message.Type == MessageTypes.Time;
 
-			IsLookup = Message.Type
-				is MessageTypes.PortfolioLookup
-				or MessageTypes.OrderStatus
-				or MessageTypes.SecurityLookup
-				or MessageTypes.BoardLookup
-				or MessageTypes.TimeFrameLookup;
+			IsLookup = Message.IsLookup();
 
 			IsTransaction = Message.Type
 				is MessageTypes.OrderRegister
 				or MessageTypes.OrderReplace
-				or MessageTypes.OrderPairReplace
 				or MessageTypes.OrderCancel
 				or MessageTypes.OrderGroupCancel;
 		}
@@ -238,12 +221,12 @@ class AsyncMessageProcessor : Disposable
 						{
 							// in case a subscription still in "subscribe" state
 							// (for example, for long historical data request)
-							if (_subscriptionItems.TryGetAndRemove(subMsg.OriginalTransactionId, out var item))
+							if (_subscriptionItems.TryGetAndRemove(subMsg.OriginalTransactionId, out var subItem))
 							{
-								item.UnsubscribeRequest = subMsg.TransactionId;
-								item.Cts.Cancel();
+								subItem.UnsubscribeRequest = subMsg.TransactionId;
+								subItem.Cts.Cancel();
 
-								_processMessageEvt.Set();
+								done();
 								return;
 							}
 						}
@@ -266,7 +249,6 @@ class AsyncMessageProcessor : Disposable
 						OrderStatusMessage m		=> _adapter.OrderStatusAsync(m, token),
 
 						OrderReplaceMessage m		=> _adapter.ReplaceOrderAsync(m, token),
-						OrderPairReplaceMessage m	=> _adapter.ReplaceOrderPairAsync(m, token),
 						OrderRegisterMessage m		=> _adapter.RegisterOrderAsync(m, token),
 						OrderCancelMessage m		=> _adapter.CancelOrderAsync(m, token),
 						OrderGroupCancelMessage m	=> _adapter.CancelOrderGroupAsync(m, token),

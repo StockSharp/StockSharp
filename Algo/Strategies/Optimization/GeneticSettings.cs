@@ -1,20 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-using Ecng.ComponentModel;
-using Ecng.Serialization;
+﻿namespace StockSharp.Algo.Strategies.Optimization;
 
 using GeneticSharp;
 
-using StockSharp.Localization;
 using StockSharp.Algo.Statistics;
-using StockSharp.Messages;
-
-namespace StockSharp.Algo.Strategies.Optimization;
 
 /// <summary>
 /// Genetic settings.

@@ -1,178 +1,154 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
+namespace StockSharp.BusinessEntities;
 
-Project: StockSharp.BusinessEntities.BusinessEntities
-File: Exchange.cs
-Created: 2015, 11, 11, 2:32 PM
+using System.Runtime.CompilerServices;
 
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.BusinessEntities
+/// <summary>
+/// Exchange info.
+/// </summary>
+[Serializable]
+[DataContract]
+[KnownType(typeof(TimeZoneInfo))]
+[KnownType(typeof(TimeZoneInfo.AdjustmentRule))]
+[KnownType(typeof(TimeZoneInfo.AdjustmentRule[]))]
+[KnownType(typeof(TimeZoneInfo.TransitionTime))]
+[KnownType(typeof(DayOfWeek))]
+public partial class Exchange : Equatable<Exchange>, IPersistable, INotifyPropertyChanged
 {
-	using System;
-	using System.ComponentModel;
-	using System.Runtime.CompilerServices;
-	using System.Runtime.Serialization;
+	/// <summary>
+	/// Initializes a new instance of the <see cref="Exchange"/>.
+	/// </summary>
+	public Exchange()
+	{
+	}
 
-	using Ecng.Common;
-	using Ecng.Serialization;
-
-	using StockSharp.Localization;
+	private string _name;
 
 	/// <summary>
-	/// Exchange info.
+	/// Exchange code name.
 	/// </summary>
-	[Serializable]
-	[DataContract]
-	[KnownType(typeof(TimeZoneInfo))]
-	[KnownType(typeof(TimeZoneInfo.AdjustmentRule))]
-	[KnownType(typeof(TimeZoneInfo.AdjustmentRule[]))]
-	[KnownType(typeof(TimeZoneInfo.TransitionTime))]
-	[KnownType(typeof(DayOfWeek))]
-	public partial class Exchange : Equatable<Exchange>, IPersistable, INotifyPropertyChanged
+	[DataMember]
+	public string Name
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Exchange"/>.
-		/// </summary>
-		public Exchange()
+		get => _name;
+		set
 		{
+			if (Name == value)
+				return;
+
+			_name = value;
+			Notify();
 		}
+	}
 
-		private string _name;
+	private string GetLocName(string language) => FullNameLoc.IsEmpty() ? null : LocalizedStrings.GetString(FullNameLoc, language);
 
-		/// <summary>
-		/// Exchange code name.
-		/// </summary>
-		[DataMember]
-		public string Name
+	/// <summary>
+	/// Full name.
+	/// </summary>
+	public string FullName => GetLocName(null);
+
+	private string _fullNameLoc;
+
+	/// <summary>
+	/// Full name (localization key).
+	/// </summary>
+	[DataMember]
+	public string FullNameLoc
+	{
+		get => _fullNameLoc;
+		set
 		{
-			get => _name;
-			set
-			{
-				if (Name == value)
-					return;
+			if (FullNameLoc == value)
+				return;
 
-				_name = value;
-				Notify();
-			}
+			_fullNameLoc = value;
+			Notify();
 		}
+	}
 
-		private string GetLocName(string language) => FullNameLoc.IsEmpty() ? null : LocalizedStrings.GetString(FullNameLoc, language);
+	private CountryCodes? _countryCode;
 
-		/// <summary>
-		/// Full name.
-		/// </summary>
-		public string FullName => GetLocName(null);
-
-		private string _fullNameLoc;
-
-		/// <summary>
-		/// Full name (localization key).
-		/// </summary>
-		[DataMember]
-		public string FullNameLoc
+	/// <summary>
+	/// ISO country code.
+	/// </summary>
+	[DataMember]
+	public CountryCodes? CountryCode
+	{
+		get => _countryCode;
+		set
 		{
-			get => _fullNameLoc;
-			set
-			{
-				if (FullNameLoc == value)
-					return;
+			if (CountryCode == value)
+				return;
 
-				_fullNameLoc = value;
-				Notify();
-			}
+			_countryCode = value;
+			Notify();
 		}
+	}
 
-		private CountryCodes? _countryCode;
+	[field: NonSerialized]
+	private PropertyChangedEventHandler _propertyChanged;
 
-		/// <summary>
-		/// ISO country code.
-		/// </summary>
-		[DataMember]
-		public CountryCodes? CountryCode
+	event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+	{
+		add => _propertyChanged += value;
+		remove => _propertyChanged -= value;
+	}
+
+	private void Notify([CallerMemberName]string propertyName = null)
+	{
+		_propertyChanged?.Invoke(this, propertyName);
+	}
+
+	/// <inheritdoc />
+	public override string ToString() => Name;
+
+	/// <summary>
+	/// Compare <see cref="Exchange"/> on the equivalence.
+	/// </summary>
+	/// <param name="other">Another value with which to compare.</param>
+	/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
+	protected override bool OnEquals(Exchange other)
+	{
+		return Name == other.Name;
+	}
+
+	/// <summary>Serves as a hash function for a particular type. </summary>
+	/// <returns>A hash code for the current <see cref="T:System.Object" />.</returns>
+	public override int GetHashCode() => Name?.GetHashCode() ?? 0;
+
+	/// <summary>
+	/// Create a copy of <see cref="Exchange"/>.
+	/// </summary>
+	/// <returns>Copy.</returns>
+	public override Exchange Clone()
+	{
+		return new Exchange
 		{
-			get => _countryCode;
-			set
-			{
-				if (CountryCode == value)
-					return;
+			Name = Name,
+			FullNameLoc = FullNameLoc,
+			CountryCode = CountryCode,
+		};
+	}
 
-				_countryCode = value;
-				Notify();
-			}
-		}
+	/// <summary>
+	/// Load settings.
+	/// </summary>
+	/// <param name="storage">Settings storage.</param>
+	public void Load(SettingsStorage storage)
+	{
+		Name = storage.GetValue<string>(nameof(Name));
+		FullNameLoc = storage.GetValue<string>(nameof(FullNameLoc));
+		CountryCode = storage.GetValue<CountryCodes?>(nameof(CountryCode));
+	}
 
-		[field: NonSerialized]
-		private PropertyChangedEventHandler _propertyChanged;
-
-		event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
-		{
-			add => _propertyChanged += value;
-			remove => _propertyChanged -= value;
-		}
-
-		private void Notify([CallerMemberName]string propertyName = null)
-		{
-			_propertyChanged?.Invoke(this, propertyName);
-		}
-
-		/// <inheritdoc />
-		public override string ToString() => Name;
-
-		/// <summary>
-		/// Compare <see cref="Exchange"/> on the equivalence.
-		/// </summary>
-		/// <param name="other">Another value with which to compare.</param>
-		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
-		protected override bool OnEquals(Exchange other)
-		{
-			return Name == other.Name;
-		}
-
-		/// <summary>Serves as a hash function for a particular type. </summary>
-		/// <returns>A hash code for the current <see cref="T:System.Object" />.</returns>
-		public override int GetHashCode() => Name?.GetHashCode() ?? 0;
-
-		/// <summary>
-		/// Create a copy of <see cref="Exchange"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Exchange Clone()
-		{
-			return new Exchange
-			{
-				Name = Name,
-				FullNameLoc = FullNameLoc,
-				CountryCode = CountryCode,
-			};
-		}
-
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="storage">Settings storage.</param>
-		public void Load(SettingsStorage storage)
-		{
-			Name = storage.GetValue<string>(nameof(Name));
-			FullNameLoc = storage.GetValue<string>(nameof(FullNameLoc));
-			CountryCode = storage.GetValue<CountryCodes?>(nameof(CountryCode));
-		}
-
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="storage">Settings storage.</param>
-		public void Save(SettingsStorage storage)
-		{
-			storage.SetValue(nameof(Name), Name);
-			storage.SetValue(nameof(FullNameLoc), FullNameLoc);
-			storage.SetValue(nameof(CountryCode), CountryCode.To<string>());
-		}
+	/// <summary>
+	/// Save settings.
+	/// </summary>
+	/// <param name="storage">Settings storage.</param>
+	public void Save(SettingsStorage storage)
+	{
+		storage.SetValue(nameof(Name), Name);
+		storage.SetValue(nameof(FullNameLoc), FullNameLoc);
+		storage.SetValue(nameof(CountryCode), CountryCode.To<string>());
 	}
 }

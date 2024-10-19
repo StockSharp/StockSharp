@@ -24,7 +24,7 @@ public MainWindow()
     var chartIndicatorElement = new ChartIndicatorElement()
     {
         Color = Colors.Brown,
-        DrawStyle = ChartIndicatorDrawStyles.Line
+        DrawStyle = DrawStyles.Line
     };
     Chart.AddElement(chartArea, chartIndicatorElement);
 }

@@ -1,614 +1,602 @@
-﻿namespace StockSharp.Algo
+﻿namespace StockSharp.Algo;
+
+partial class MarketRuleHelper
 {
-	using System;
-	using System.Collections.Generic;
-
-	using Ecng.Collections;
-	using Ecng.Common;
-
-	using StockSharp.Logging;
-	using StockSharp.BusinessEntities;
-	using StockSharp.Messages;
-	using StockSharp.Localization;
-
-	partial class MarketRuleHelper
+	private abstract class OrderRule<TArg> : MarketRule<Order, TArg>
 	{
-		private abstract class OrderRule<TArg> : MarketRule<Order, TArg>
+		protected OrderRule(Order order, ITransactionProvider provider)
+			: base(order)
 		{
-			protected OrderRule(Order order, ITransactionProvider provider)
-				: base(order)
-			{
-				Order = order ?? throw new ArgumentNullException(nameof(order));
-				Provider = provider ?? throw new ArgumentNullException(nameof(provider));
-			}
-
-			protected override bool CanFinish()
-			{
-				return base.CanFinish() || CheckOrderState();
-			}
-
-			protected virtual bool CheckOrderState()
-			{
-				return Order.State.IsFinal();
-			}
-
-			protected Order Order { get; }
-
-			protected ITransactionProvider Provider { get; }
-
-			protected void TrySubscribe()
-			{
-				Subscribe();
-				Container.AddRuleLog(LogLevels.Debug, this, LocalizedStrings.Subscribe);
-			}
-
-			protected abstract void Subscribe();
-			protected abstract void UnSubscribe();
-
-			protected override void DisposeManaged()
-			{
-				//if (Order.Connector != null)
-				UnSubscribe();
-
-				base.DisposeManaged();
-			}
-
-			/// <inheritdoc />
-			public override string ToString()
-			{
-				var order = Order;
-				var strId = order.Id == null ? order.StringId : order.Id.To<string>();
-				return $"{Name} {order.TransactionId}/{strId}";
-			}
+			Order = order ?? throw new ArgumentNullException(nameof(order));
+			Provider = provider ?? throw new ArgumentNullException(nameof(provider));
 		}
 
-		private class RegisterFailedOrderRule : OrderRule<OrderFail>
+		protected override bool CanFinish()
 		{
-			public RegisterFailedOrderRule(Order order, ITransactionProvider provider)
-				: base(order, provider)
-			{
-				Name = LocalizedStrings.ErrorRegistering + " ";
-				TrySubscribe();
-			}
-
-			protected override void Subscribe()
-			{
-				Provider.OrderRegisterFailed += OnOrderRegisterFailed;
-			}
-
-			protected override void UnSubscribe()
-			{
-				Provider.OrderRegisterFailed -= OnOrderRegisterFailed;
-			}
-
-			private void OnOrderRegisterFailed(OrderFail fail)
-			{
-				if (fail.Order == Order)
-					Activate(fail);
-			}
+			return base.CanFinish() || CheckOrderState();
 		}
 
-		private class CancelFailedOrderRule : OrderRule<OrderFail>
+		protected virtual bool CheckOrderState()
 		{
-			public CancelFailedOrderRule(Order order, ITransactionProvider provider)
-				: base(order, provider)
-			{
-				Name = LocalizedStrings.ErrorCancelling;
-				TrySubscribe();
-			}
-
-			protected override void Subscribe()
-			{
-				Provider.OrderCancelFailed += OnOrderCancelFailed;
-			}
-
-			protected override void UnSubscribe()
-			{
-				Provider.OrderCancelFailed -= OnOrderCancelFailed;
-			}
-
-			private void OnOrderCancelFailed(OrderFail fail)
-			{
-				if (fail.Order == Order)
-					Activate(fail);
-			}
+			return Order.State.IsFinal();
 		}
 
-		private class ChangedOrNewOrderRule : OrderRule<Order>
+		protected Order Order { get; }
+
+		protected ITransactionProvider Provider { get; }
+
+		protected void TrySubscribe()
 		{
-			private readonly Func<Order, bool> _condition;
-			private bool _activated;
-
-			public ChangedOrNewOrderRule(Order order, ITransactionProvider provider)
-				: this(order, provider, o => true)
-			{
-			}
-
-			public ChangedOrNewOrderRule(Order order, ITransactionProvider provider, Func<Order, bool> condition)
-				: base(order, provider)
-			{
-				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
-
-				Name = LocalizedStrings.OrderChange;
-
-				TrySubscribe();
-			}
-
-			protected override void Subscribe()
-			{
-				Provider.OrderChanged += OnOrderChanged;
-				Provider.NewOrder += OnOrderChanged;
-			}
-
-			protected override void UnSubscribe()
-			{
-				Provider.OrderChanged -= OnOrderChanged;
-				Provider.NewOrder -= OnOrderChanged;
-			}
-
-			private void OnOrderChanged(Order order)
-			{
-				if (!_activated && order == Order && _condition(order))
-				{
-					_activated = true;
-					Activate(order);
-				}
-			}
+			Subscribe();
+			Container.AddRuleLog(LogLevels.Debug, this, LocalizedStrings.Subscribe);
 		}
 
-		private class EditedOrderRule : OrderRule<Order>
+		protected abstract void Subscribe();
+		protected abstract void UnSubscribe();
+
+		protected override void DisposeManaged()
 		{
-			public EditedOrderRule(Order order, ITransactionProvider provider)
-				: base(order, provider)
-			{
-				Name = "Order edit";
-				TrySubscribe();
-			}
+			//if (Order.Connector != null)
+			UnSubscribe();
 
-			protected override void Subscribe()
-			{
-				Provider.OrderEdited += OnOrderEdited;
-			}
-
-			protected override void UnSubscribe()
-			{
-				Provider.OrderEdited -= OnOrderEdited;
-			}
-
-			private void OnOrderEdited(long transactionId, Order order)
-			{
-				if (order == Order)
-					Activate(order);
-			}
+			base.DisposeManaged();
 		}
 
-		private class EditFailedOrderRule : OrderRule<OrderFail>
+		/// <inheritdoc />
+		public override string ToString()
 		{
-			public EditFailedOrderRule(Order order, ITransactionProvider provider)
-				: base(order, provider)
-			{
-				Name = "Order edit failed";
-				TrySubscribe();
-			}
+			var order = Order;
+			var strId = order.Id == null ? order.StringId : order.Id.To<string>();
+			return $"{Name} {order.TransactionId}/{strId}";
+		}
+	}
 
-			protected override void Subscribe()
-			{
-				Provider.OrderEditFailed += OnOrderEditFailed;
-			}
-
-			protected override void UnSubscribe()
-			{
-				Provider.OrderEditFailed -= OnOrderEditFailed;
-			}
-
-			private void OnOrderEditFailed(long transactionId, OrderFail fail)
-			{
-				if (fail.Order == Order)
-					Activate(fail);
-			}
+	private class RegisterFailedOrderRule : OrderRule<OrderFail>
+	{
+		public RegisterFailedOrderRule(Order order, ITransactionProvider provider)
+			: base(order, provider)
+		{
+			Name = LocalizedStrings.ErrorRegistering + " ";
+			TrySubscribe();
 		}
 
-		private class NewTradeOrderRule : OrderRule<MyTrade>
+		protected override void Subscribe()
 		{
-			private decimal _receivedVolume;
-
-			private bool AllTradesReceived => Order.State == OrderStates.Done && Order.GetMatchedVolume() == _receivedVolume;
-
-			public NewTradeOrderRule(Order order, ITransactionProvider provider)
-				: base(order, provider)
-			{
-				Name = LocalizedStrings.NewTrades;
-				TrySubscribe();
-			}
-
-			protected override void Subscribe()
-			{
-				Provider.NewMyTrade += OnNewMyTrade;
-			}
-
-			protected override void UnSubscribe()
-			{
-				Provider.NewMyTrade -= OnNewMyTrade;
-			}
-
-			protected override bool CheckOrderState()
-			{
-				return Order.State == OrderStates.Failed || AllTradesReceived;
-			}
-
-			private void OnNewMyTrade(MyTrade trade)
-			{
-				if (trade.Order != Order /*&& (Order.Type != OrderTypes.Conditional || trade.Order != Order.DerivedOrder)*/)
-					return;
-
-				_receivedVolume += trade.Trade.Volume;
-				Activate(trade);
-			}
+			Provider.OrderRegisterFailed += OnOrderRegisterFailed;
 		}
 
-		private class AllTradesOrderRule : OrderRule<IEnumerable<MyTrade>>
+		protected override void UnSubscribe()
 		{
-			private decimal _receivedVolume;
+			Provider.OrderRegisterFailed -= OnOrderRegisterFailed;
+		}
 
-			private readonly CachedSynchronizedList<MyTrade> _trades = new();
+		private void OnOrderRegisterFailed(OrderFail fail)
+		{
+			if (fail.Order == Order)
+				Activate(fail);
+		}
+	}
 
-			public AllTradesOrderRule(Order order, ITransactionProvider provider)
-				: base(order, provider)
+	private class CancelFailedOrderRule : OrderRule<OrderFail>
+	{
+		public CancelFailedOrderRule(Order order, ITransactionProvider provider)
+			: base(order, provider)
+		{
+			Name = LocalizedStrings.ErrorCancelling;
+			TrySubscribe();
+		}
+
+		protected override void Subscribe()
+		{
+			Provider.OrderCancelFailed += OnOrderCancelFailed;
+		}
+
+		protected override void UnSubscribe()
+		{
+			Provider.OrderCancelFailed -= OnOrderCancelFailed;
+		}
+
+		private void OnOrderCancelFailed(OrderFail fail)
+		{
+			if (fail.Order == Order)
+				Activate(fail);
+		}
+	}
+
+	private class ChangedOrNewOrderRule : OrderRule<Order>
+	{
+		private readonly Func<Order, bool> _condition;
+		private bool _activated;
+
+		public ChangedOrNewOrderRule(Order order, ITransactionProvider provider)
+			: this(order, provider, o => true)
+		{
+		}
+
+		public ChangedOrNewOrderRule(Order order, ITransactionProvider provider, Func<Order, bool> condition)
+			: base(order, provider)
+		{
+			_condition = condition ?? throw new ArgumentNullException(nameof(condition));
+
+			Name = LocalizedStrings.OrderChange;
+
+			TrySubscribe();
+		}
+
+		protected override void Subscribe()
+		{
+			Provider.OrderChanged += OnOrderChanged;
+			Provider.NewOrder += OnOrderChanged;
+		}
+
+		protected override void UnSubscribe()
+		{
+			Provider.OrderChanged -= OnOrderChanged;
+			Provider.NewOrder -= OnOrderChanged;
+		}
+
+		private void OnOrderChanged(Order order)
+		{
+			if (!_activated && order == Order && _condition(order))
 			{
-				Name = LocalizedStrings.AllTradesForOrder;
-				TrySubscribe();
+				_activated = true;
+				Activate(order);
 			}
+		}
+	}
 
-			private bool AllTradesReceived => Order.State == OrderStates.Done && Order.GetMatchedVolume() == _receivedVolume;
+	private class EditedOrderRule : OrderRule<Order>
+	{
+		public EditedOrderRule(Order order, ITransactionProvider provider)
+			: base(order, provider)
+		{
+			Name = "Order edit";
+			TrySubscribe();
+		}
 
-			protected override void Subscribe()
+		protected override void Subscribe()
+		{
+			Provider.OrderEdited += OnOrderEdited;
+		}
+
+		protected override void UnSubscribe()
+		{
+			Provider.OrderEdited -= OnOrderEdited;
+		}
+
+		private void OnOrderEdited(long transactionId, Order order)
+		{
+			if (order == Order)
+				Activate(order);
+		}
+	}
+
+	private class EditFailedOrderRule : OrderRule<OrderFail>
+	{
+		public EditFailedOrderRule(Order order, ITransactionProvider provider)
+			: base(order, provider)
+		{
+			Name = "Order edit failed";
+			TrySubscribe();
+		}
+
+		protected override void Subscribe()
+		{
+			Provider.OrderEditFailed += OnOrderEditFailed;
+		}
+
+		protected override void UnSubscribe()
+		{
+			Provider.OrderEditFailed -= OnOrderEditFailed;
+		}
+
+		private void OnOrderEditFailed(long transactionId, OrderFail fail)
+		{
+			if (fail.Order == Order)
+				Activate(fail);
+		}
+	}
+
+	private class NewTradeOrderRule : OrderRule<MyTrade>
+	{
+		private decimal _receivedVolume;
+
+		private bool AllTradesReceived => Order.State == OrderStates.Done && Order.GetMatchedVolume() == _receivedVolume;
+
+		public NewTradeOrderRule(Order order, ITransactionProvider provider)
+			: base(order, provider)
+		{
+			Name = LocalizedStrings.NewTrades;
+			TrySubscribe();
+		}
+
+		protected override void Subscribe()
+		{
+			Provider.NewMyTrade += OnNewMyTrade;
+		}
+
+		protected override void UnSubscribe()
+		{
+			Provider.NewMyTrade -= OnNewMyTrade;
+		}
+
+		protected override bool CheckOrderState()
+		{
+			return Order.State == OrderStates.Failed || AllTradesReceived;
+		}
+
+		private void OnNewMyTrade(MyTrade trade)
+		{
+			if (trade.Order != Order /*&& (Order.Type != OrderTypes.Conditional || trade.Order != Order.DerivedOrder)*/)
+				return;
+
+			_receivedVolume += trade.Trade.Volume;
+			Activate(trade);
+		}
+	}
+
+	private class AllTradesOrderRule : OrderRule<IEnumerable<MyTrade>>
+	{
+		private decimal _receivedVolume;
+
+		private readonly CachedSynchronizedList<MyTrade> _trades = new();
+
+		public AllTradesOrderRule(Order order, ITransactionProvider provider)
+			: base(order, provider)
+		{
+			Name = LocalizedStrings.AllTradesForOrder;
+			TrySubscribe();
+		}
+
+		private bool AllTradesReceived => Order.State == OrderStates.Done && Order.GetMatchedVolume() == _receivedVolume;
+
+		protected override void Subscribe()
+		{
+			Provider.OrderChanged += OnOrderChanged;
+			Provider.NewOrder += OnOrderChanged;
+
+			Provider.NewMyTrade += OnNewMyTrade;
+		}
+
+		protected override void UnSubscribe()
+		{
+			Provider.OrderChanged -= OnOrderChanged;
+			Provider.NewOrder -= OnOrderChanged;
+
+			Provider.NewMyTrade -= OnNewMyTrade;
+		}
+
+		private void OnOrderChanged(Order order)
+		{
+			if (order == Order)
 			{
-				Provider.OrderChanged += OnOrderChanged;
-				Provider.NewOrder += OnOrderChanged;
-
-				Provider.NewMyTrade += OnNewMyTrade;
-			}
-
-			protected override void UnSubscribe()
-			{
-				Provider.OrderChanged -= OnOrderChanged;
-				Provider.NewOrder -= OnOrderChanged;
-
-				Provider.NewMyTrade -= OnNewMyTrade;
-			}
-
-			private void OnOrderChanged(Order order)
-			{
-				if (order == Order)
-				{
-					TryActivate();
-				}
-			}
-
-			private void OnNewMyTrade(MyTrade trade)
-			{
-				if (trade.Order != Order /*&& (Order.Type != OrderTypes.Conditional || trade.Order != Order.DerivedOrder)*/)
-					return;
-
-				_receivedVolume += trade.Trade.Volume;
-
-				_trades.Add(trade);
 				TryActivate();
 			}
-
-			private void TryActivate()
-			{
-				if (AllTradesReceived)
-				{
-					Activate(_trades.Cache);
-				}
-			}
 		}
 
-		[Obsolete]
-		private class OrderTakeProfitStopLossRule : OrderRule<Order>
+		private void OnNewMyTrade(MyTrade trade)
 		{
-			private readonly Unit _offset;
-			private readonly bool _isTake;
-			private readonly IMarketDataProvider _marketDataProvider;
-			private decimal? _bestBidPrice;
-			private decimal? _bestAskPrice;
-			private decimal _averagePrice;
+			if (trade.Order != Order /*&& (Order.Type != OrderTypes.Conditional || trade.Order != Order.DerivedOrder)*/)
+				return;
 
-			private readonly List<Tuple<decimal, decimal>> _trades = new();
+			_receivedVolume += trade.Trade.Volume;
 
-			public OrderTakeProfitStopLossRule(Order order, Unit offset, bool isTake, ITransactionProvider transactionProvider, IMarketDataProvider marketDataProvider)
-				: base(order, transactionProvider)
+			_trades.Add(trade);
+			TryActivate();
+		}
+
+		private void TryActivate()
+		{
+			if (AllTradesReceived)
 			{
-				if (offset == null)
-					throw new ArgumentNullException(nameof(offset));
+				Activate(_trades.Cache);
+			}
+		}
+	}
 
-				if (offset.Value <= 0)
-					throw new ArgumentOutOfRangeException(nameof(offset));
+	[Obsolete]
+	private class OrderTakeProfitStopLossRule : OrderRule<Order>
+	{
+		private readonly Unit _offset;
+		private readonly bool _isTake;
+		private readonly IMarketDataProvider _marketDataProvider;
+		private decimal? _bestBidPrice;
+		private decimal? _bestAskPrice;
+		private decimal _averagePrice;
 
-				_offset = offset;
-				_isTake = isTake;
-				_marketDataProvider = marketDataProvider ?? throw new ArgumentNullException(nameof(marketDataProvider));
+		private readonly List<Tuple<decimal, decimal>> _trades = new();
 
-				Name = _isTake ? LocalizedStrings.TakeProfit : LocalizedStrings.StopLoss;
+		public OrderTakeProfitStopLossRule(Order order, Unit offset, bool isTake, ITransactionProvider transactionProvider, IMarketDataProvider marketDataProvider)
+			: base(order, transactionProvider)
+		{
+			if (offset == null)
+				throw new ArgumentNullException(nameof(offset));
 
-				TrySubscribe();
+			if (offset.Value <= 0)
+				throw new ArgumentOutOfRangeException(nameof(offset));
+
+			_offset = offset;
+			_isTake = isTake;
+			_marketDataProvider = marketDataProvider ?? throw new ArgumentNullException(nameof(marketDataProvider));
+
+			Name = _isTake ? LocalizedStrings.TakeProfit : LocalizedStrings.StopLoss;
+
+			TrySubscribe();
+		}
+
+		protected override void Subscribe()
+		{
+			_marketDataProvider.MarketDepthChanged += OnMarketDepthChanged;
+			Provider.NewMyTrade += OnNewMyTrade;
+		}
+
+		protected override void UnSubscribe()
+		{
+			_marketDataProvider.MarketDepthChanged -= OnMarketDepthChanged;
+			Provider.NewMyTrade -= OnNewMyTrade;
+		}
+
+		private void OnMarketDepthChanged(MarketDepth depth)
+		{
+			if (depth.Security != Order.Security)
+				return;
+
+			_bestBidPrice = depth.BestBid?.Price;
+			_bestAskPrice = depth.BestAsk?.Price;
+
+			TryActivate();
+		}
+
+		private void OnNewMyTrade(MyTrade trade)
+		{
+			if (trade.Order != Order)
+				return;
+
+			_trades.Add(Tuple.Create(trade.Trade.Price, trade.Trade.Volume));
+
+			var numerator = 0m;
+			var denominator = 0m;
+
+			foreach (var t in _trades)
+			{
+				if (t.Item2 == 0)
+					continue;
+
+				numerator += t.Item1 * t.Item2;
+				denominator += t.Item2;
 			}
 
-			protected override void Subscribe()
+			if (denominator == 0)
+				return;
+
+			_averagePrice = numerator / denominator;
+
+			TryActivate();
+		}
+
+		private void TryActivate()
+		{
+			if (_trades.Count == 0)
+				return;
+
+			bool isActivate;
+
+			if (_isTake)
 			{
-				_marketDataProvider.MarketDepthChanged += OnMarketDepthChanged;
-				Provider.NewMyTrade += OnNewMyTrade;
-			}
-
-			protected override void UnSubscribe()
-			{
-				_marketDataProvider.MarketDepthChanged -= OnMarketDepthChanged;
-				Provider.NewMyTrade -= OnNewMyTrade;
-			}
-
-			private void OnMarketDepthChanged(MarketDepth depth)
-			{
-				if (depth.Security != Order.Security)
-					return;
-
-				_bestBidPrice = depth.BestBid?.Price;
-				_bestAskPrice = depth.BestAsk?.Price;
-
-				TryActivate();
-			}
-
-			private void OnNewMyTrade(MyTrade trade)
-			{
-				if (trade.Order != Order)
-					return;
-
-				_trades.Add(Tuple.Create(trade.Trade.Price, trade.Trade.Volume));
-
-				var numerator = 0m;
-				var denominator = 0m;
-
-				foreach (var t in _trades)
-				{
-					if (t.Item2 == 0)
-						continue;
-
-					numerator += t.Item1 * t.Item2;
-					denominator += t.Item2;
-				}
-
-				if (denominator == 0)
-					return;
-
-				_averagePrice = numerator / denominator;
-
-				TryActivate();
-			}
-
-			private void TryActivate()
-			{
-				if (_trades.Count == 0)
-					return;
-
-				bool isActivate;
-
-				if (_isTake)
-				{
-					if (Order.Side == Sides.Buy)
-						isActivate = _bestAskPrice != null && _bestAskPrice.Value >= (_averagePrice + _offset);
-					else
-						isActivate = _bestBidPrice != null && _bestBidPrice.Value <= (_averagePrice - _offset);
-				}
+				if (Order.Side == Sides.Buy)
+					isActivate = _bestAskPrice != null && _bestAskPrice.Value >= (_averagePrice + _offset);
 				else
-				{
-					if (Order.Side == Sides.Buy)
-						isActivate = _bestAskPrice != null && _bestAskPrice.Value <= (_averagePrice - _offset);
-					else
-						isActivate = _bestBidPrice != null && _bestBidPrice.Value >= (_averagePrice + _offset);
-				}
-
-				if (isActivate)
-					Activate(Order);
+					isActivate = _bestBidPrice != null && _bestBidPrice.Value <= (_averagePrice - _offset);
 			}
-		}
-
-		/// <summary>
-		/// To create a rule for the event of successful order registration on exchange.
-		/// </summary>
-		/// <param name="order">The order to be traced for the event of successful registration.</param>
-		/// <param name="provider">The transactional provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Order, Order> WhenRegistered(this Order order, ITransactionProvider provider)
-		{
-			if (order == null)
-				throw new ArgumentNullException(nameof(order));
-
-			return new ChangedOrNewOrderRule(order, provider, o => o.State is OrderStates.Active or OrderStates.Done) { Name = LocalizedStrings.OrderRegistering }.Once();
-		}
-
-		/// <summary>
-		/// To create a rule for the event of order partial matching.
-		/// </summary>
-		/// <param name="order">The order to be traced for partial matching event.</param>
-		/// <param name="provider">The transactional provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Order, Order> WhenPartiallyMatched(this Order order, ITransactionProvider provider)
-		{
-			if (order == null)
-				throw new ArgumentNullException(nameof(order));
-
-			var balance = order.Volume;
-			var hasVolume = balance != 0;
-
-			return new ChangedOrNewOrderRule(order, provider, o =>
+			else
 			{
-				if (!hasVolume)
-				{
-					balance = order.Volume;
-					hasVolume = balance != 0;
-				}
+				if (Order.Side == Sides.Buy)
+					isActivate = _bestAskPrice != null && _bestAskPrice.Value <= (_averagePrice - _offset);
+				else
+					isActivate = _bestBidPrice != null && _bestBidPrice.Value >= (_averagePrice + _offset);
+			}
 
-				var result = hasVolume && order.Balance != balance;
-				balance = order.Balance;
+			if (isActivate)
+				Activate(Order);
+		}
+	}
 
-				return result;
-			})
+	/// <summary>
+	/// To create a rule for the event of successful order registration on exchange.
+	/// </summary>
+	/// <param name="order">The order to be traced for the event of successful registration.</param>
+	/// <param name="provider">The transactional provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Order, Order> WhenRegistered(this Order order, ITransactionProvider provider)
+	{
+		if (order == null)
+			throw new ArgumentNullException(nameof(order));
+
+		return new ChangedOrNewOrderRule(order, provider, o => o.State is OrderStates.Active or OrderStates.Done) { Name = LocalizedStrings.OrderRegistering }.Once();
+	}
+
+	/// <summary>
+	/// To create a rule for the event of order partial matching.
+	/// </summary>
+	/// <param name="order">The order to be traced for partial matching event.</param>
+	/// <param name="provider">The transactional provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Order, Order> WhenPartiallyMatched(this Order order, ITransactionProvider provider)
+	{
+		if (order == null)
+			throw new ArgumentNullException(nameof(order));
+
+		var balance = order.Volume;
+		var hasVolume = balance != 0;
+
+		return new ChangedOrNewOrderRule(order, provider, o =>
+		{
+			if (!hasVolume)
 			{
-				Name = LocalizedStrings.OrderFilledPartially,
-			};
-		}
+				balance = order.Volume;
+				hasVolume = balance != 0;
+			}
 
-		/// <summary>
-		/// To create a for the event of order unsuccessful registration on exchange.
-		/// </summary>
-		/// <param name="order">The order to be traced for unsuccessful registration event.</param>
-		/// <param name="provider">The transactional provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Order, OrderFail> WhenRegisterFailed(this Order order, ITransactionProvider provider)
-		{
-			return new RegisterFailedOrderRule(order, provider).Once();
-		}
+			var result = hasVolume && order.Balance != balance;
+			balance = order.Balance;
 
-		/// <summary>
-		/// To create a rule for the event of unsuccessful order cancelling on exchange.
-		/// </summary>
-		/// <param name="order">The order to be traced for unsuccessful cancelling event.</param>
-		/// <param name="provider">The transactional provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Order, OrderFail> WhenCancelFailed(this Order order, ITransactionProvider provider)
+			return result;
+		})
 		{
-			return new CancelFailedOrderRule(order, provider);
-		}
+			Name = LocalizedStrings.OrderFilledPartially,
+		};
+	}
 
-		/// <summary>
-		/// To create a rule for the order cancelling event.
-		/// </summary>
-		/// <param name="order">The order to be traced for cancelling event.</param>
-		/// <param name="provider">The transactional provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Order, Order> WhenCanceled(this Order order, ITransactionProvider provider)
-		{
-			return new ChangedOrNewOrderRule(order, provider, o => o.IsCanceled()) { Name = LocalizedStrings.CancelOrders }.Once();
-		}
+	/// <summary>
+	/// To create a for the event of order unsuccessful registration on exchange.
+	/// </summary>
+	/// <param name="order">The order to be traced for unsuccessful registration event.</param>
+	/// <param name="provider">The transactional provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Order, OrderFail> WhenRegisterFailed(this Order order, ITransactionProvider provider)
+	{
+		return new RegisterFailedOrderRule(order, provider).Once();
+	}
 
-		/// <summary>
-		/// To create a rule for the event of order fully matching.
-		/// </summary>
-		/// <param name="order">The order to be traced for the fully matching event.</param>
-		/// <param name="provider">The transactional provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Order, Order> WhenMatched(this Order order, ITransactionProvider provider)
-		{
-			return new ChangedOrNewOrderRule(order, provider, o => o.IsMatched()) { Name = LocalizedStrings.Matching }.Once();
-		}
+	/// <summary>
+	/// To create a rule for the event of unsuccessful order cancelling on exchange.
+	/// </summary>
+	/// <param name="order">The order to be traced for unsuccessful cancelling event.</param>
+	/// <param name="provider">The transactional provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Order, OrderFail> WhenCancelFailed(this Order order, ITransactionProvider provider)
+	{
+		return new CancelFailedOrderRule(order, provider);
+	}
 
-		/// <summary>
-		/// To create a rule for the order change event.
-		/// </summary>
-		/// <param name="order">The order to be traced for the change event.</param>
-		/// <param name="provider">The transactional provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Order, Order> WhenChanged(this Order order, ITransactionProvider provider)
-		{
-			return new ChangedOrNewOrderRule(order, provider);
-		}
+	/// <summary>
+	/// To create a rule for the order cancelling event.
+	/// </summary>
+	/// <param name="order">The order to be traced for cancelling event.</param>
+	/// <param name="provider">The transactional provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Order, Order> WhenCanceled(this Order order, ITransactionProvider provider)
+	{
+		return new ChangedOrNewOrderRule(order, provider, o => o.IsCanceled()) { Name = LocalizedStrings.CancelOrders }.Once();
+	}
 
-		/// <summary>
-		/// To create a rule for the order <see cref="ITransactionProvider.OrderEdited"/> event.
-		/// </summary>
-		/// <param name="order">The order to be traced.</param>
-		/// <param name="provider">The transactional provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Order, Order> WhenEdited(this Order order, ITransactionProvider provider)
-		{
-			return new EditedOrderRule(order, provider);
-		}
+	/// <summary>
+	/// To create a rule for the event of order fully matching.
+	/// </summary>
+	/// <param name="order">The order to be traced for the fully matching event.</param>
+	/// <param name="provider">The transactional provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Order, Order> WhenMatched(this Order order, ITransactionProvider provider)
+	{
+		return new ChangedOrNewOrderRule(order, provider, o => o.IsMatched()) { Name = LocalizedStrings.Matching }.Once();
+	}
 
-		/// <summary>
-		/// To create a rule for the order <see cref="ITransactionProvider.OrderEditFailed"/> event.
-		/// </summary>
-		/// <param name="order">The order to be traced.</param>
-		/// <param name="provider">The transactional provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Order, OrderFail> WhenEditFailed(this Order order, ITransactionProvider provider)
-		{
-			return new EditFailedOrderRule(order, provider);
-		}
+	/// <summary>
+	/// To create a rule for the order change event.
+	/// </summary>
+	/// <param name="order">The order to be traced for the change event.</param>
+	/// <param name="provider">The transactional provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Order, Order> WhenChanged(this Order order, ITransactionProvider provider)
+	{
+		return new ChangedOrNewOrderRule(order, provider);
+	}
 
-		/// <summary>
-		/// To create a rule for the event of trade occurrence for the order.
-		/// </summary>
-		/// <param name="order">The order to be traced for trades occurrence events.</param>
-		/// <param name="provider">The transactional provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Order, MyTrade> WhenNewTrade(this Order order, ITransactionProvider provider)
-		{
-			return new NewTradeOrderRule(order, provider);
-		}
+	/// <summary>
+	/// To create a rule for the order <see cref="ITransactionProvider.OrderEdited"/> event.
+	/// </summary>
+	/// <param name="order">The order to be traced.</param>
+	/// <param name="provider">The transactional provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Order, Order> WhenEdited(this Order order, ITransactionProvider provider)
+	{
+		return new EditedOrderRule(order, provider);
+	}
 
-		/// <summary>
-		/// To create a rule for the event of all trades occurrence for the order.
-		/// </summary>
-		/// <param name="order">The order to be traced for all trades occurrence event.</param>
-		/// <param name="provider">The transactional provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Order, IEnumerable<MyTrade>> WhenAllTrades(this Order order, ITransactionProvider provider)
-		{
-			return new AllTradesOrderRule(order, provider);
-		}
+	/// <summary>
+	/// To create a rule for the order <see cref="ITransactionProvider.OrderEditFailed"/> event.
+	/// </summary>
+	/// <param name="order">The order to be traced.</param>
+	/// <param name="provider">The transactional provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Order, OrderFail> WhenEditFailed(this Order order, ITransactionProvider provider)
+	{
+		return new EditFailedOrderRule(order, provider);
+	}
 
-		/// <summary>
-		/// To create a rule for the order's profit more on offset.
-		/// </summary>
-		/// <param name="order">The order to be traced for profit.</param>
-		/// <param name="profitOffset">Profit offset.</param>
-		/// <param name="connector">Connection to the trading system.</param>
-		/// <returns>Rule.</returns>
-		[Obsolete("Use WhenOrderChanged method.")]
-		public static MarketRule<Order, Order> WhenProfitMore(this Order order, Unit profitOffset, IConnector connector)
-		{
-			return WhenProfitMore(order, profitOffset, connector, connector);
-		}
+	/// <summary>
+	/// To create a rule for the event of trade occurrence for the order.
+	/// </summary>
+	/// <param name="order">The order to be traced for trades occurrence events.</param>
+	/// <param name="provider">The transactional provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Order, MyTrade> WhenNewTrade(this Order order, ITransactionProvider provider)
+	{
+		return new NewTradeOrderRule(order, provider);
+	}
 
-		/// <summary>
-		/// To create a rule for the order's profit more on offset.
-		/// </summary>
-		/// <param name="order">The order to be traced for profit.</param>
-		/// <param name="profitOffset">Profit offset.</param>
-		/// <param name="transactionProvider">The transactional provider.</param>
-		/// <param name="marketDataProvider">The market data provider.</param>
-		/// <returns>Rule.</returns>
-		[Obsolete("Use WhenOrderChanged method.")]
-		public static MarketRule<Order, Order> WhenProfitMore(this Order order, Unit profitOffset, ITransactionProvider transactionProvider, IMarketDataProvider marketDataProvider)
-		{
-			return new OrderTakeProfitStopLossRule(order, profitOffset, true, transactionProvider, marketDataProvider);
-		}
+	/// <summary>
+	/// To create a rule for the event of all trades occurrence for the order.
+	/// </summary>
+	/// <param name="order">The order to be traced for all trades occurrence event.</param>
+	/// <param name="provider">The transactional provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Order, IEnumerable<MyTrade>> WhenAllTrades(this Order order, ITransactionProvider provider)
+	{
+		return new AllTradesOrderRule(order, provider);
+	}
 
-		/// <summary>
-		/// To create a rule for the order's loss more on offset.
-		/// </summary>
-		/// <param name="order">The order to be traced for loss.</param>
-		/// <param name="profitOffset">Loss offset.</param>
-		/// <param name="connector">Connection to the trading system.</param>
-		/// <returns>Rule.</returns>
-		[Obsolete("Use WhenOrderChanged method.")]
-		public static MarketRule<Order, Order> WhenLossMore(this Order order, Unit profitOffset, IConnector connector)
-		{
-			return WhenLossMore(order, profitOffset, connector, connector);
-		}
+	/// <summary>
+	/// To create a rule for the order's profit more on offset.
+	/// </summary>
+	/// <param name="order">The order to be traced for profit.</param>
+	/// <param name="profitOffset">Profit offset.</param>
+	/// <param name="connector">Connection to the trading system.</param>
+	/// <returns>Rule.</returns>
+	[Obsolete("Use WhenOrderChanged method.")]
+	public static MarketRule<Order, Order> WhenProfitMore(this Order order, Unit profitOffset, IConnector connector)
+	{
+		return WhenProfitMore(order, profitOffset, connector, connector);
+	}
 
-		/// <summary>
-		/// To create a rule for the order's loss more on offset.
-		/// </summary>
-		/// <param name="order">The order to be traced for loss.</param>
-		/// <param name="profitOffset">Loss offset.</param>
-		/// <param name="transactionProvider">The transactional provider.</param>
-		/// <param name="marketDataProvider">The market data provider.</param>
-		/// <returns>Rule.</returns>
-		[Obsolete("Use WhenOrderChanged method.")]
-		public static MarketRule<Order, Order> WhenLossMore(this Order order, Unit profitOffset, ITransactionProvider transactionProvider, IMarketDataProvider marketDataProvider)
-		{
-			return new OrderTakeProfitStopLossRule(order, profitOffset, false, transactionProvider, marketDataProvider);
-		}
+	/// <summary>
+	/// To create a rule for the order's profit more on offset.
+	/// </summary>
+	/// <param name="order">The order to be traced for profit.</param>
+	/// <param name="profitOffset">Profit offset.</param>
+	/// <param name="transactionProvider">The transactional provider.</param>
+	/// <param name="marketDataProvider">The market data provider.</param>
+	/// <returns>Rule.</returns>
+	[Obsolete("Use WhenOrderChanged method.")]
+	public static MarketRule<Order, Order> WhenProfitMore(this Order order, Unit profitOffset, ITransactionProvider transactionProvider, IMarketDataProvider marketDataProvider)
+	{
+		return new OrderTakeProfitStopLossRule(order, profitOffset, true, transactionProvider, marketDataProvider);
+	}
+
+	/// <summary>
+	/// To create a rule for the order's loss more on offset.
+	/// </summary>
+	/// <param name="order">The order to be traced for loss.</param>
+	/// <param name="profitOffset">Loss offset.</param>
+	/// <param name="connector">Connection to the trading system.</param>
+	/// <returns>Rule.</returns>
+	[Obsolete("Use WhenOrderChanged method.")]
+	public static MarketRule<Order, Order> WhenLossMore(this Order order, Unit profitOffset, IConnector connector)
+	{
+		return WhenLossMore(order, profitOffset, connector, connector);
+	}
+
+	/// <summary>
+	/// To create a rule for the order's loss more on offset.
+	/// </summary>
+	/// <param name="order">The order to be traced for loss.</param>
+	/// <param name="profitOffset">Loss offset.</param>
+	/// <param name="transactionProvider">The transactional provider.</param>
+	/// <param name="marketDataProvider">The market data provider.</param>
+	/// <returns>Rule.</returns>
+	[Obsolete("Use WhenOrderChanged method.")]
+	public static MarketRule<Order, Order> WhenLossMore(this Order order, Unit profitOffset, ITransactionProvider transactionProvider, IMarketDataProvider marketDataProvider)
+	{
+		return new OrderTakeProfitStopLossRule(order, profitOffset, false, transactionProvider, marketDataProvider);
 	}
 }

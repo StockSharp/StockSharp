@@ -1,17 +1,6 @@
 namespace StockSharp.Algo.Compilation;
 
-using System;
-using System.Linq;
-using System.Collections.Generic;
-
-using Ecng.Common;
-using Ecng.Serialization;
 using Ecng.Compilation;
-using Ecng.Collections;
-using Ecng.ComponentModel;
-
-using StockSharp.Logging;
-using StockSharp.Algo;
 
 /// <summary>
 /// Code info.
@@ -203,7 +192,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	{
 		Id = storage.GetValue(nameof(Id), Id);
 		Name = storage.GetValue(nameof(Name), Name);
-		Text = storage.GetValue(nameof(Text), storage.GetValue<string>("SourceCode"));
+		Text = storage.GetValue(nameof(Text), storage.GetValue<string>("SourceCode"))?.Replace("ChartIndicatorDrawStyles", "DrawStyles");
 		ExtraSources = storage.GetValue(nameof(ExtraSources), ExtraSources);
 
 		_references.Clear();

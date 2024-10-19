@@ -4,6 +4,10 @@
     <ProjectGuid>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Ecng.Configuration" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.Drawing" Version="$(EcngVer)" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Messages\Messages.csproj" />
   </ItemGroup>
 </Project>

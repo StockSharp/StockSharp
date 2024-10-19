@@ -1,11 +1,8 @@
-﻿namespace StockSharp.Configuration
-{
-	using StockSharp.Messages;
+﻿namespace StockSharp.Configuration;
 
-	/// <summary>
-	/// <see cref="IOrderLogMarketDepthBuilder"/> editor.
-	/// </summary>
-	public interface IOrderLogMarketDepthBuilderEditor
-	{
-	}
+/// <summary>
+/// <see cref="IOrderLogMarketDepthBuilder"/> editor.
+/// </summary>
+public interface IOrderLogMarketDepthBuilderEditor
+{
 }

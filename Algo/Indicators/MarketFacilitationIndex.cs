@@ -1,62 +1,42 @@
-﻿#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
+﻿namespace StockSharp.Algo.Indicators;
 
-Project: StockSharp.Algo.Indicators.Algo
-File: MarketFacilitationIndex.cs
-Created: 2015, 11, 11, 2:32 PM
+using StockSharp.Algo.Candles;
 
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.Algo.Indicators
+/// <summary>
+/// Market Facilitation Index.
+/// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/market_facilitation_index.html
+/// </remarks>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.MFIKey,
+	Description = LocalizedStrings.MarketFacilitationIndexKey)]
+[IndicatorIn(typeof(CandleIndicatorValue))]
+[Doc("topics/api/indicators/list_of_indicators/market_facilitation_index.html")]
+public class MarketFacilitationIndex : BaseIndicator
 {
-	using System.ComponentModel.DataAnnotations;
-
-	using Ecng.ComponentModel;
-
-	using StockSharp.Localization;
-
 	/// <summary>
-	/// Market Facilitation Index.
+	/// Initializes a new instance of the <see cref="MarketFacilitationIndex"/>.
 	/// </summary>
-	/// <remarks>
-	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/market_facilitation_index.html
-	/// </remarks>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.MFIKey,
-		Description = LocalizedStrings.MarketFacilitationIndexKey)]
-	[IndicatorIn(typeof(CandleIndicatorValue))]
-	[Doc("topics/api/indicators/list_of_indicators/market_facilitation_index.html")]
-	public class MarketFacilitationIndex : BaseIndicator
+	public MarketFacilitationIndex()
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MarketFacilitationIndex"/>.
-		/// </summary>
-		public MarketFacilitationIndex()
-		{
-		}
+	}
 
-		/// <inheritdoc />
-		public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
+	/// <inheritdoc />
+	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
-		/// <inheritdoc />
-		protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		{
-			var (_, high, low, _, vol) = input.GetOhlcv();
+	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{
+		var candle = input.ToCandle();
 
-			if (vol == 0)
-				return new DecimalIndicatorValue(this);
+		if (candle.TotalVolume == 0)
+			return new DecimalIndicatorValue(this, input.Time);
 
-			if (input.IsFinal)
-				IsFormed = true;
+		if (input.IsFinal)
+			IsFormed = true;
 
-			return new DecimalIndicatorValue(this, (high - low) / vol);
-		}
+		return new DecimalIndicatorValue(this, candle.GetLength() / candle.TotalVolume, input.Time);
 	}
 }

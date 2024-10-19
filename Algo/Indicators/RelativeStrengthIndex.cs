@@ -1,99 +1,77 @@
-﻿#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
+﻿namespace StockSharp.Algo.Indicators;
 
-Project: StockSharp.Algo.Indicators.Algo
-File: RelativeStrengthIndex.cs
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.Algo.Indicators
+/// <summary>
+/// Relative Strength Index.
+/// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/rsi.html
+/// </remarks>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.RSIKey,
+	Description = LocalizedStrings.RelativeStrengthIndexKey)]
+[Doc("topics/api/indicators/list_of_indicators/rsi.html")]
+public class RelativeStrengthIndex : LengthIndicator<decimal>
 {
-	using System.ComponentModel.DataAnnotations;
-
-	using Ecng.ComponentModel;
-
-	using StockSharp.Localization;
+	private readonly SmoothedMovingAverage _gain;
+	private readonly SmoothedMovingAverage _loss;
+	private bool _isInitialized;
+	private decimal _last;
 
 	/// <summary>
-	/// Relative Strength Index.
+	/// Initializes a new instance of the <see cref="RelativeStrengthIndex"/>.
 	/// </summary>
-	/// <remarks>
-	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/rsi.html
-	/// </remarks>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.RSIKey,
-		Description = LocalizedStrings.RelativeStrengthIndexKey)]
-	[Doc("topics/api/indicators/list_of_indicators/rsi.html")]
-	public class RelativeStrengthIndex : LengthIndicator<decimal>
+	public RelativeStrengthIndex()
 	{
-		private readonly SmoothedMovingAverage _gain;
-		private readonly SmoothedMovingAverage _loss;
-		private bool _isInitialized;
-		private decimal _last;
+		_gain = new SmoothedMovingAverage();
+		_loss = new SmoothedMovingAverage();
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="RelativeStrengthIndex"/>.
-		/// </summary>
-		public RelativeStrengthIndex()
+		Length = 15;
+	}
+
+	/// <inheritdoc />
+	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
+
+	/// <inheritdoc />
+	protected override bool CalcIsFormed() => _gain.IsFormed;
+
+	/// <inheritdoc />
+	public override void Reset()
+	{
+		_loss.Length = _gain.Length = Length;
+		base.Reset();
+	}
+
+	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{
+		var newValue = input.ToDecimal();
+
+		if (!_isInitialized)
 		{
-			_gain = new SmoothedMovingAverage();
-			_loss = new SmoothedMovingAverage();
-
-			Length = 15;
-		}
-
-		/// <inheritdoc />
-		public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
-
-		/// <inheritdoc />
-		protected override bool CalcIsFormed() => _gain.IsFormed;
-
-		/// <inheritdoc />
-		public override void Reset()
-		{
-			_loss.Length = _gain.Length = Length;
-			base.Reset();
-		}
-
-		/// <inheritdoc />
-		protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		{
-			var newValue = input.GetValue<decimal>();
-
-			if (!_isInitialized)
+			if (input.IsFinal)
 			{
-				if (input.IsFinal)
-				{
-					_last = newValue;
-					_isInitialized = true;
-				}
-
-				return new DecimalIndicatorValue(this);
+				_last = newValue;
+				_isInitialized = true;
 			}
 
-			var delta = newValue - _last;
-
-			var gainValue = _gain.Process(input.SetValue(this, delta > 0 ? delta : 0m)).GetValue<decimal>();
-			var lossValue = _loss.Process(input.SetValue(this, delta > 0 ? 0m : -delta)).GetValue<decimal>();
-
-			if(input.IsFinal)
-				_last = newValue;
-
-			if (lossValue == 0)
-				return new DecimalIndicatorValue(this, 100m);
-			
-			if (gainValue / lossValue == 1)
-				return new DecimalIndicatorValue(this, 0m);
-
-			return new DecimalIndicatorValue(this, 100m - 100m / (1m + gainValue / lossValue));
+			return new DecimalIndicatorValue(this, input.Time);
 		}
+
+		var delta = newValue - _last;
+
+		var gainValue = _gain.Process(input, delta > 0 ? delta : 0m).ToDecimal();
+		var lossValue = _loss.Process(input, delta > 0 ? 0m : -delta).ToDecimal();
+
+		if(input.IsFinal)
+			_last = newValue;
+
+		if (lossValue == 0)
+			return new DecimalIndicatorValue(this, 100m, input.Time);
+		
+		if (gainValue / lossValue == 1)
+			return new DecimalIndicatorValue(this, 0m, input.Time);
+
+		return new DecimalIndicatorValue(this, 100m - 100m / (1m + gainValue / lossValue), input.Time);
 	}
 }

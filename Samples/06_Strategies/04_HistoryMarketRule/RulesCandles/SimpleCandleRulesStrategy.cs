@@ -1,6 +1,6 @@
 ﻿using System;
 using StockSharp.Algo;
-using StockSharp.Algo.Candles;
+using StockSharp.BusinessEntities;
 using StockSharp.Algo.Strategies;
 using StockSharp.Logging;
 using StockSharp.Messages;

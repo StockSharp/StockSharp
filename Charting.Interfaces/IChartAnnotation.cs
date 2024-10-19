@@ -1,13 +1,12 @@
-﻿namespace StockSharp.Charting
+﻿namespace StockSharp.Charting;
+
+/// <summary>
+/// Annotation.
+/// </summary>
+public interface IChartAnnotation : IChartElement
 {
 	/// <summary>
-	/// Annotation.
+	/// Annotation type.
 	/// </summary>
-	public interface IChartAnnotation : IChartElement
-	{
-		/// <summary>
-		/// Annotation type.
-		/// </summary>
-		public ChartAnnotationTypes Type { get; set; }
-	}
+	public ChartAnnotationTypes Type { get; set; }
 }

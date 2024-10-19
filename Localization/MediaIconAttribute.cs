@@ -1,19 +1,18 @@
-﻿namespace StockSharp.Localization
-{
-	using Ecng.ComponentModel;
+﻿namespace StockSharp.Localization;
 
+using Ecng.ComponentModel;
+
+/// <summary>
+/// Specify icon, located in S#.Media library.
+/// </summary>
+public class MediaIconAttribute : IconAttribute
+{
 	/// <summary>
-	/// Specify icon, located in S#.Media library.
+	/// Create <see cref="MediaIconAttribute"/>.
 	/// </summary>
-	public class MediaIconAttribute : IconAttribute
+	/// <param name="icon">Icon url.</param>
+	public MediaIconAttribute(string icon)
+		: base($"/StockSharp.Media;component/logos/{icon}", true)
 	{
-		/// <summary>
-		/// Create <see cref="MediaIconAttribute"/>.
-		/// </summary>
-		/// <param name="icon">Icon url.</param>
-		public MediaIconAttribute(string icon)
-			: base($"/StockSharp.Media;component/logos/{icon}", true)
-		{
-		}
 	}
 }

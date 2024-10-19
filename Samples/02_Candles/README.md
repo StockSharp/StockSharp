@@ -6,7 +6,7 @@ This repository contains two key examples demonstrating how to work with candle 
 
 ## Examples
 
-### RealtimeCandles
+### Realtime
 
 This example shows how to set up and subscribe to real-time candle data for a selected security. It includes the setup of a `Connector` to handle live updates and the visualization of these updates using a chart.
 

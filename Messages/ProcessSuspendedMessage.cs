@@ -1,45 +1,41 @@
-﻿namespace StockSharp.Messages
+﻿namespace StockSharp.Messages;
+
+/// <summary>
+/// Process suspended action.
+/// </summary>
+[DataContract]
+[Serializable]
+public class ProcessSuspendedMessage : Message
 {
-	using System;
-	using System.Runtime.Serialization;
+	/// <summary>
+	/// Additional argument.
+	/// </summary>
+	[DataMember]
+	public object Arg { get; }
 
 	/// <summary>
-	/// Process suspended action.
+	/// Initializes a new instance of the <see cref="ProcessSuspendedMessage"/>.
 	/// </summary>
-	[DataContract]
-	[Serializable]
-	public class ProcessSuspendedMessage : Message
+	public ProcessSuspendedMessage()
+		: base(MessageTypes.ProcessSuspended)
 	{
-		/// <summary>
-		/// Additional argument.
-		/// </summary>
-		[DataMember]
-		public object Arg { get; }
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ProcessSuspendedMessage"/>.
-		/// </summary>
-		public ProcessSuspendedMessage()
-			: base(MessageTypes.ProcessSuspended)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ProcessSuspendedMessage"/>.
-		/// </summary>
-		/// <param name="adapter">Adapter.</param>
-		/// <param name="arg">Additional argument.</param>
-		public ProcessSuspendedMessage(IMessageAdapter adapter, object arg = default)
-			: this()
-		{
-			this.LoopBack(adapter);
-			Arg = arg;
-		}
-
-		/// <summary>
-		/// Create a copy of <see cref="ProcessSuspendedMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone() => new ProcessSuspendedMessage(Adapter, Arg);
 	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ProcessSuspendedMessage"/>.
+	/// </summary>
+	/// <param name="adapter">Adapter.</param>
+	/// <param name="arg">Additional argument.</param>
+	public ProcessSuspendedMessage(IMessageAdapter adapter, object arg = default)
+		: this()
+	{
+		this.LoopBack(adapter);
+		Arg = arg;
+	}
+
+	/// <summary>
+	/// Create a copy of <see cref="ProcessSuspendedMessage"/>.
+	/// </summary>
+	/// <returns>Copy.</returns>
+	public override Message Clone() => new ProcessSuspendedMessage(Adapter, Arg);
 }

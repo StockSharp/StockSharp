@@ -1,62 +1,58 @@
-namespace StockSharp.Messages
+namespace StockSharp.Messages;
+
+/// <summary>
+/// Market data request finished message.
+/// </summary>
+[DataContract]
+[Serializable]
+public class SubscriptionFinishedMessage : BaseResultMessage<SubscriptionFinishedMessage>, IFileMessage
 {
-	using System;
-	using System.Runtime.Serialization;
+	/// <summary>
+	/// Initialize <see cref="SubscriptionFinishedMessage"/>.
+	/// </summary>
+	public SubscriptionFinishedMessage()
+		: base(MessageTypes.SubscriptionFinished)
+	{
+	}
 
 	/// <summary>
-	/// Market data request finished message.
+	/// Recommended value for next <see cref="ISubscriptionMessage.From"/> (in case of partial requests).
 	/// </summary>
-	[DataContract]
-	[Serializable]
-	public class SubscriptionFinishedMessage : BaseResultMessage<SubscriptionFinishedMessage>, IFileMessage
+	[DataMember]
+	public DateTimeOffset? NextFrom { get; set; }
+
+	private byte[] _body = Array.Empty<byte>();
+
+	/// <summary>
+	/// Subscription data was sent as archive.
+	/// </summary>
+	[DataMember]
+	public byte[] Body
 	{
-		/// <summary>
-		/// Initialize <see cref="SubscriptionFinishedMessage"/>.
-		/// </summary>
-		public SubscriptionFinishedMessage()
-			: base(MessageTypes.SubscriptionFinished)
-		{
-		}
+		get => _body;
+		set => _body = value ?? throw new ArgumentNullException(nameof(value));
+	}
 
-		/// <summary>
-		/// Recommended value for next <see cref="ISubscriptionMessage.From"/> (in case of partial requests).
-		/// </summary>
-		[DataMember]
-		public DateTimeOffset? NextFrom { get; set; }
+	/// <inheritdoc />
+	protected override void CopyTo(SubscriptionFinishedMessage destination)
+	{
+		base.CopyTo(destination);
 
-		private byte[] _body = Array.Empty<byte>();
+		destination.NextFrom = NextFrom;
+		destination.Body = Body;
+	}
 
-		/// <summary>
-		/// Subscription data was sent as archive.
-		/// </summary>
-		[DataMember]
-		public byte[] Body
-		{
-			get => _body;
-			set => _body = value ?? throw new ArgumentNullException(nameof(value));
-		}
+	/// <inheritdoc />
+	public override string ToString()
+	{
+		var str = base.ToString();
 
-		/// <inheritdoc />
-		protected override void CopyTo(SubscriptionFinishedMessage destination)
-		{
-			base.CopyTo(destination);
+		if (NextFrom != null)
+			str += $",Next={NextFrom}";
 
-			destination.NextFrom = NextFrom;
-			destination.Body = Body;
-		}
+		if (Body.Length > 0)
+			str += $"BodyLen={Body.Length}";
 
-		/// <inheritdoc />
-		public override string ToString()
-		{
-			var str = base.ToString();
-
-			if (NextFrom != null)
-				str += $",Next={NextFrom}";
-
-			if (Body.Length > 0)
-				str += $"BodyLen={Body.Length}";
-
-			return str;
-		}
+		return str;
 	}
 }

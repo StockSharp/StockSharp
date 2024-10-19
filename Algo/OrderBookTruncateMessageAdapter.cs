@@ -1,171 +1,161 @@
-﻿namespace StockSharp.Algo
+﻿namespace StockSharp.Algo;
+
+/// <summary>
+/// The messages adapter build order book from incremental updates <see cref="QuoteChangeStates.Increment"/>.
+/// </summary>
+public class OrderBookTruncateMessageAdapter : MessageAdapterWrapper
 {
-	using System.Collections.Generic;
-	using System.Linq;
-
-	using Ecng.Common;
-	using Ecng.Collections;
-
-	using StockSharp.Logging;
-	using StockSharp.Messages;
+	private readonly SynchronizedDictionary<long, int> _depths = new();
 
 	/// <summary>
-	/// The messages adapter build order book from incremental updates <see cref="QuoteChangeStates.Increment"/>.
+	/// Initializes a new instance of the <see cref="OrderBookTruncateMessageAdapter"/>.
 	/// </summary>
-	public class OrderBookTruncateMessageAdapter : MessageAdapterWrapper
+	/// <param name="innerAdapter">Underlying adapter.</param>
+	public OrderBookTruncateMessageAdapter(IMessageAdapter innerAdapter)
+		: base(innerAdapter)
 	{
-		private readonly SynchronizedDictionary<long, int> _depths = new();
+	}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="OrderBookTruncateMessageAdapter"/>.
-		/// </summary>
-		/// <param name="innerAdapter">Underlying adapter.</param>
-		public OrderBookTruncateMessageAdapter(IMessageAdapter innerAdapter)
-			: base(innerAdapter)
+	/// <inheritdoc />
+	protected override bool OnSendInMessage(Message message)
+	{
+		switch (message.Type)
 		{
-		}
+			case MessageTypes.Reset:
+				_depths.Clear();
+				break;
 
-		/// <inheritdoc />
-		protected override bool OnSendInMessage(Message message)
-		{
-			switch (message.Type)
+			case MessageTypes.MarketData:
 			{
-				case MessageTypes.Reset:
-					_depths.Clear();
-					break;
+				var mdMsg = (MarketDataMessage)message;
 
-				case MessageTypes.MarketData:
+				if (mdMsg.IsSubscribe)
 				{
-					var mdMsg = (MarketDataMessage)message;
-
-					if (mdMsg.IsSubscribe)
+					if (mdMsg.DataType2 == DataType.MarketDepth)
 					{
-						if (mdMsg.DataType2 == DataType.MarketDepth)
+						if (mdMsg.SecurityId == default)
+							break;
+
+						if (mdMsg.DoNotBuildOrderBookIncrement)
+							break;
+
+						if (mdMsg.MaxDepth != null)
 						{
-							if (mdMsg.SecurityId == default)
-								break;
+							var actualDepth = mdMsg.MaxDepth.Value;
 
-							if (mdMsg.DoNotBuildOrderBookIncrement)
-								break;
+							var supportedDepth = InnerAdapter.NearestSupportedDepth(actualDepth);
 
-							if (mdMsg.MaxDepth != null)
+							if (supportedDepth != actualDepth)
 							{
-								var actualDepth = mdMsg.MaxDepth.Value;
+								mdMsg = mdMsg.TypedClone();
+								mdMsg.MaxDepth = supportedDepth;
 
-								var supportedDepth = InnerAdapter.NearestSupportedDepth(actualDepth);
+								_depths.Add(mdMsg.TransactionId, actualDepth);
 
-								if (supportedDepth != actualDepth)
-								{
-									mdMsg = mdMsg.TypedClone();
-									mdMsg.MaxDepth = supportedDepth;
-
-									_depths.Add(mdMsg.TransactionId, actualDepth);
-
-									this.AddInfoLog("MD truncate {0}/{1} ({2}->{3}).", mdMsg.SecurityId, mdMsg.TransactionId, actualDepth, supportedDepth);
-								}
+								this.AddInfoLog("MD truncate {0}/{1} ({2}->{3}).", mdMsg.SecurityId, mdMsg.TransactionId, actualDepth, supportedDepth);
 							}
 						}
 					}
-					else
-					{
-						RemoveSubscription(mdMsg.OriginalTransactionId);
-					}
-
-					break;
 				}
-			}
-
-			return base.OnSendInMessage(message);
-		}
-
-		private void RemoveSubscription(long id)
-		{
-			if (_depths.Remove(id))
-				this.AddInfoLog("Unsubscribed {0}.", id);
-		}
-
-		/// <inheritdoc />
-		protected override void OnInnerAdapterNewOutMessage(Message message)
-		{
-			List<QuoteChangeMessage> clones = null;
-
-			switch (message.Type)
-			{
-				case MessageTypes.SubscriptionResponse:
+				else
 				{
-					var responseMsg = (SubscriptionResponseMessage)message;
-
-					if (!responseMsg.IsOk())
-						RemoveSubscription(responseMsg.OriginalTransactionId);
-
-					break;
+					RemoveSubscription(mdMsg.OriginalTransactionId);
 				}
-				case MessageTypes.SubscriptionFinished:
-				{
-					RemoveSubscription(((SubscriptionFinishedMessage)message).OriginalTransactionId);
-					break;
-				}
-				case MessageTypes.QuoteChange:
-				{
-					if (_depths.Count == 0)
-						break;
 
-					var quoteMsg = (QuoteChangeMessage)message;
-
-					if (quoteMsg.State != null)
-						break;
-
-					foreach (var group in quoteMsg.GetSubscriptionIds().GroupBy(_depths.TryGetValue2))
-					{
-						if (group.Key == null)
-							continue;
-
-						if (clones == null)
-							clones = new List<QuoteChangeMessage>();
-
-						var maxDepth = group.Key.Value;
-
-						var clone = quoteMsg.TypedClone();
-
-						clone.SetSubscriptionIds(group.ToArray());
-
-						if (clone.Bids.Length > maxDepth)
-							clone.Bids = clone.Bids.Take(maxDepth).ToArray();
-
-						if (clone.Asks.Length > maxDepth)
-							clone.Asks = clone.Asks.Take(maxDepth).ToArray();
-
-						clones.Add(clone);
-					}
-
-					if (clones != null)
-					{
-						var ids = quoteMsg.GetSubscriptionIds().Except(clones.SelectMany(c => c.GetSubscriptionIds())).ToArray();
-
-						if (ids.Length > 0)
-							quoteMsg.SetSubscriptionIds(ids);
-						else
-							message = null;
-					}
-
-					break;
-				}
-			}
-
-			if (message != null)
-				base.OnInnerAdapterNewOutMessage(message);
-
-			if (clones != null)
-			{
-				foreach (var clone in clones)
-					base.OnInnerAdapterNewOutMessage(clone);
+				break;
 			}
 		}
 
-		/// <summary>
-		/// Create a copy of <see cref="OrderBookTruncateMessageAdapter"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override IMessageChannel Clone() => new OrderBookTruncateMessageAdapter(InnerAdapter.TypedClone());
+		return base.OnSendInMessage(message);
 	}
+
+	private void RemoveSubscription(long id)
+	{
+		if (_depths.Remove(id))
+			this.AddInfoLog("Unsubscribed {0}.", id);
+	}
+
+	/// <inheritdoc />
+	protected override void OnInnerAdapterNewOutMessage(Message message)
+	{
+		List<QuoteChangeMessage> clones = null;
+
+		switch (message.Type)
+		{
+			case MessageTypes.SubscriptionResponse:
+			{
+				var responseMsg = (SubscriptionResponseMessage)message;
+
+				if (!responseMsg.IsOk())
+					RemoveSubscription(responseMsg.OriginalTransactionId);
+
+				break;
+			}
+			case MessageTypes.SubscriptionFinished:
+			{
+				RemoveSubscription(((SubscriptionFinishedMessage)message).OriginalTransactionId);
+				break;
+			}
+			case MessageTypes.QuoteChange:
+			{
+				if (_depths.Count == 0)
+					break;
+
+				var quoteMsg = (QuoteChangeMessage)message;
+
+				if (quoteMsg.State != null)
+					break;
+
+				foreach (var group in quoteMsg.GetSubscriptionIds().GroupBy(_depths.TryGetValue2))
+				{
+					if (group.Key == null)
+						continue;
+
+					if (clones == null)
+						clones = new List<QuoteChangeMessage>();
+
+					var maxDepth = group.Key.Value;
+
+					var clone = quoteMsg.TypedClone();
+
+					clone.SetSubscriptionIds(group.ToArray());
+
+					if (clone.Bids.Length > maxDepth)
+						clone.Bids = clone.Bids.Take(maxDepth).ToArray();
+
+					if (clone.Asks.Length > maxDepth)
+						clone.Asks = clone.Asks.Take(maxDepth).ToArray();
+
+					clones.Add(clone);
+				}
+
+				if (clones != null)
+				{
+					var ids = quoteMsg.GetSubscriptionIds().Except(clones.SelectMany(c => c.GetSubscriptionIds())).ToArray();
+
+					if (ids.Length > 0)
+						quoteMsg.SetSubscriptionIds(ids);
+					else
+						message = null;
+				}
+
+				break;
+			}
+		}
+
+		if (message != null)
+			base.OnInnerAdapterNewOutMessage(message);
+
+		if (clones != null)
+		{
+			foreach (var clone in clones)
+				base.OnInnerAdapterNewOutMessage(clone);
+		}
+	}
+
+	/// <summary>
+	/// Create a copy of <see cref="OrderBookTruncateMessageAdapter"/>.
+	/// </summary>
+	/// <returns>Copy.</returns>
+	public override IMessageChannel Clone() => new OrderBookTruncateMessageAdapter(InnerAdapter.TypedClone());
 }

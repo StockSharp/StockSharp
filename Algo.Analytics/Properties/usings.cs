@@ -7,6 +7,7 @@ global using global::System.Drawing;
 
 global using global::Ecng.Common;
 global using global::Ecng.Collections;
+global using global::Ecng.Drawing;
 
 global using global::StockSharp.Algo.Candles;
 global using global::StockSharp.Algo.Storages;

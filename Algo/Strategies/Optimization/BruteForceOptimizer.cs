@@ -1,15 +1,5 @@
 namespace StockSharp.Algo.Strategies.Optimization;
 
-using System;
-using System.Collections.Generic;
-using System.Threading;
-
-using Ecng.Common;
-
-using StockSharp.Algo.Storages;
-using StockSharp.BusinessEntities;
-using StockSharp.Localization;
-
 /// <summary>
 /// The brute force optimizer of strategies.
 /// </summary>

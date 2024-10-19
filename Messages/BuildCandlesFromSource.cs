@@ -1,18 +1,13 @@
-﻿namespace StockSharp.Messages
+﻿namespace StockSharp.Messages;
+
+/// <summary>
+/// Source for <see cref="MarketDataMessage.BuildFrom"/>.
+/// </summary>
+public class BuildCandlesFromSource : ItemsSourceBase<DataType>
 {
-	using System.Collections.Generic;
-
-	using Ecng.ComponentModel;
-
 	/// <summary>
-	/// Source for <see cref="MarketDataMessage.BuildFrom"/>.
+	/// Get values.
 	/// </summary>
-	public class BuildCandlesFromSource : ItemsSourceBase<DataType>
-	{
-		/// <summary>
-		/// Get values.
-		/// </summary>
-		/// <returns>Values.</returns>
-		protected override IEnumerable<DataType> GetValues() => DataType.CandleSources;
-	}
+	/// <returns>Values.</returns>
+	protected override IEnumerable<DataType> GetValues() => DataType.CandleSources;
 }

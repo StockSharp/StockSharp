@@ -1,243 +1,216 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
+namespace StockSharp.Algo;
 
-Project: StockSharp.Algo.Algo
-File: SecurityTrie.cs
-Created: 2015, 11, 11, 2:32 PM
+using Gma.DataStructures.StringSearch;
 
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.Algo
+/// <summary>
+/// Security trie collection.
+/// </summary>
+public class SecurityTrie : ICollection<Security>
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
-	using System.Linq;
+	private readonly SyncObject _sync = new();
 
-	using Ecng.Collections;
-	using Ecng.Common;
-
-	using Gma.DataStructures.StringSearch;
-
-	using StockSharp.Messages;
-	using StockSharp.BusinessEntities;
+	private readonly Dictionary<SecurityId, Security> _allSecurities = new();
+	private readonly ITrie<Security> _trie = new PatriciaSuffixTrie<Security>(1);
 
 	/// <summary>
-	/// Security trie collection.
+	/// Initializes a new instance of the <see cref="SecurityTrie"/>.
 	/// </summary>
-	public class SecurityTrie : ICollection<Security>
+	public SecurityTrie()
 	{
-		private readonly SyncObject _sync = new();
+	}
 
-		private readonly Dictionary<SecurityId, Security> _allSecurities = new();
-		private readonly ITrie<Security> _trie = new PatriciaSuffixTrie<Security>(1);
+	/// <summary>
+	/// To get the instrument by the identifier.
+	/// </summary>
+	/// <param name="id">Security ID.</param>
+	/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+	public Security GetById(SecurityId id)
+	{
+		lock (_sync)
+			return _allSecurities.TryGetValue(id);
+	}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="SecurityTrie"/>.
-		/// </summary>
-		public SecurityTrie()
-		{
-		}
-
-		/// <summary>
-		/// To get the instrument by the identifier.
-		/// </summary>
-		/// <param name="id">Security ID.</param>
-		/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
-		public Security GetById(SecurityId id)
+	/// <summary>
+	/// Gets the number of instruments contained in the <see cref="SecurityTrie"/>.
+	/// </summary>
+	public int Count
+	{
+		get
 		{
 			lock (_sync)
-				return _allSecurities.TryGetValue(id);
+				return _allSecurities.Count;
 		}
+	}
 
-		/// <summary>
-		/// Gets the number of instruments contained in the <see cref="SecurityTrie"/>.
-		/// </summary>
-		public int Count
+	/// <summary>
+	/// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
+	/// </summary>
+	/// <returns>
+	/// <see langword="true"/> if the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only; otherwise, <see langword="false"/>.
+	/// </returns>
+	public bool IsReadOnly => false;
+
+	/// <summary>
+	/// Add new instrument.
+	/// </summary>
+	/// <param name="security">New instrument.</param>
+	public void Add(Security security)
+	{
+		if (security == null)
+			throw new ArgumentNullException(nameof(security));
+
+		var externalId = security.ExternalId;
+
+		lock (_sync)
 		{
-			get
+			AddSuffix(security.Id, security);
+			AddSuffix(security.Code, security);
+			//AddSuffix(security.Name, security);
+			//AddSuffix(security.ShortName, security);
+			AddSuffix(externalId.Bloomberg, security);
+			AddSuffix(externalId.Cusip, security);
+			AddSuffix(externalId.Isin, security);
+			AddSuffix(externalId.Ric, security);
+			AddSuffix(externalId.Sedol, security);
+
+			_allSecurities.Add(security.ToSecurityId(), security);
+		}
+	}
+
+	private void AddSuffix(string text, Security security)
+	{
+		if (text.IsEmpty())
+			return;
+
+		// no not trie large strings
+		if (text.Length > 500)
+			return;
+
+		_trie.Add(text.ToLowerInvariant(), security);
+	}
+
+	/// <summary>
+	/// Find all instrument by filter.
+	/// </summary>
+	/// <param name="filter">Filter</param>
+	/// <returns>Found instruments.</returns>
+	public IEnumerable<Security> Retrieve(string filter)
+	{
+		lock (_sync)
+			return (filter.IsEmpty() ? _allSecurities.Values : _trie.Retrieve(filter.ToLowerInvariant())).ToArray();
+	}
+
+	/// <summary>
+	/// Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
+	/// </summary>
+	/// <param name="array">Destination array.</param>
+	/// <param name="arrayIndex">Start index.</param>
+	public void CopyTo(Security[] array, int arrayIndex)
+	{
+		lock (_sync)
+			_allSecurities.Values.CopyTo(array, arrayIndex);
+	}
+
+	/// <summary>
+	/// Remove the instrument.
+	/// </summary>
+	/// <param name="security">The instrument.</param>
+	/// <returns><see langword="true"/> if <paramref name="security"/> was successfully removed from the <see cref="SecurityTrie"/>; otherwise, <see langword="false"/>.</returns>
+	public bool Remove(Security security)
+	{
+		if (security is null)
+			throw new ArgumentNullException(nameof(security));
+
+		lock (_sync)
+		{
+			_trie.Remove(security);
+			return _allSecurities.Remove(security.ToSecurityId());
+		}
+	}
+
+	/// <summary>
+	/// Remove the instruments.
+	/// </summary>
+	/// <param name="securities">The instruments.</param>
+	public void RemoveRange(IEnumerable<Security> securities)
+	{
+		if (securities == null)
+			throw new ArgumentNullException(nameof(securities));
+
+		securities = securities.ToArray();
+
+		lock (_sync)
+		{
+			if (securities.Count() > 1000 || (_allSecurities.Count > 1000 && securities.Count() > _allSecurities.Count * 0.1))
 			{
-				lock (_sync)
-					return _allSecurities.Count;
-			}
-		}
+				foreach (var security in securities)
+					_allSecurities.Remove(security.ToSecurityId());	
 
-		/// <summary>
-		/// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
-		/// </summary>
-		/// <returns>
-		/// <see langword="true"/> if the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only; otherwise, <see langword="false"/>.
-		/// </returns>
-		public bool IsReadOnly => false;
+				securities = _allSecurities.Values.ToArray();
 
-		/// <summary>
-		/// Add new instrument.
-		/// </summary>
-		/// <param name="security">New instrument.</param>
-		public void Add(Security security)
-		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			var externalId = security.ExternalId;
-
-			lock (_sync)
-			{
-				AddSuffix(security.Id, security);
-				AddSuffix(security.Code, security);
-				//AddSuffix(security.Name, security);
-				//AddSuffix(security.ShortName, security);
-				AddSuffix(externalId.Bloomberg, security);
-				AddSuffix(externalId.Cusip, security);
-				AddSuffix(externalId.Isin, security);
-				AddSuffix(externalId.Ric, security);
-				AddSuffix(externalId.Sedol, security);
-
-				_allSecurities.Add(security.ToSecurityId(), security);
-			}
-		}
-
-		private void AddSuffix(string text, Security security)
-		{
-			if (text.IsEmpty())
-				return;
-
-			// no not trie large strings
-			if (text.Length > 500)
-				return;
-
-			_trie.Add(text.ToLowerInvariant(), security);
-		}
-
-		/// <summary>
-		/// Find all instrument by filter.
-		/// </summary>
-		/// <param name="filter">Filter</param>
-		/// <returns>Found instruments.</returns>
-		public IEnumerable<Security> Retrieve(string filter)
-		{
-			lock (_sync)
-				return (filter.IsEmpty() ? _allSecurities.Values : _trie.Retrieve(filter.ToLowerInvariant())).ToArray();
-		}
-
-		/// <summary>
-		/// Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
-		/// </summary>
-		/// <param name="array">Destination array.</param>
-		/// <param name="arrayIndex">Start index.</param>
-		public void CopyTo(Security[] array, int arrayIndex)
-		{
-			lock (_sync)
-				_allSecurities.Values.CopyTo(array, arrayIndex);
-		}
-
-		/// <summary>
-		/// Remove the instrument.
-		/// </summary>
-		/// <param name="security">The instrument.</param>
-		/// <returns><see langword="true"/> if <paramref name="security"/> was successfully removed from the <see cref="SecurityTrie"/>; otherwise, <see langword="false"/>.</returns>
-		public bool Remove(Security security)
-		{
-			if (security is null)
-				throw new ArgumentNullException(nameof(security));
-
-			lock (_sync)
-			{
-				_trie.Remove(security);
-				return _allSecurities.Remove(security.ToSecurityId());
-			}
-		}
-
-		/// <summary>
-		/// Remove the instruments.
-		/// </summary>
-		/// <param name="securities">The instruments.</param>
-		public void RemoveRange(IEnumerable<Security> securities)
-		{
-			if (securities == null)
-				throw new ArgumentNullException(nameof(securities));
-
-			securities = securities.ToArray();
-
-			lock (_sync)
-			{
-				if (securities.Count() > 1000 || (_allSecurities.Count > 1000 && securities.Count() > _allSecurities.Count * 0.1))
-				{
-					foreach (var security in securities)
-						_allSecurities.Remove(security.ToSecurityId());	
-
-					securities = _allSecurities.Values.ToArray();
-
-					_allSecurities.Clear();
-					_trie.Clear();
-
-					securities.ForEach(Add);
-				}
-				else
-				{
-					_trie.RemoveRange(securities);
-					
-					foreach (var security in securities)
-						_allSecurities.Remove(security.ToSecurityId());	
-				}
-			}
-		}
-
-		/// <summary>
-		/// Remove all instruments.
-		/// </summary>
-		public virtual void Clear()
-		{
-			lock (_sync)
-			{
-				_trie.Clear();
 				_allSecurities.Clear();
+				_trie.Clear();
+
+				securities.ForEach(Add);
+			}
+			else
+			{
+				_trie.RemoveRange(securities);
+				
+				foreach (var security in securities)
+					_allSecurities.Remove(security.ToSecurityId());	
 			}
 		}
+	}
 
-		/// <summary>
-		/// Determines whether the <see cref="T:System.Collections.Generic.ICollection`1"/> contains a specific value.
-		/// </summary>
-		/// <returns>
-		/// <see langword="true"/> if <paramref name="item"/> is found in the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, <see langword="false"/>.
-		/// </returns>
-		/// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param>
-		public bool Contains(Security item)
+	/// <summary>
+	/// Remove all instruments.
+	/// </summary>
+	public virtual void Clear()
+	{
+		lock (_sync)
 		{
-			if (item is null)
-				throw new ArgumentNullException(nameof(item));
-
-			lock (_sync)
-				return _allSecurities.ContainsKey(item.ToSecurityId());
+			_trie.Clear();
+			_allSecurities.Clear();
 		}
+	}
 
-		/// <summary>
-		/// Returns an enumerator that iterates through the collection.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
-		/// </returns>
-		public IEnumerator<Security> GetEnumerator()
-		{
-			lock (_sync)
-				return _allSecurities.Values.GetEnumerator();
-		}
+	/// <summary>
+	/// Determines whether the <see cref="T:System.Collections.Generic.ICollection`1"/> contains a specific value.
+	/// </summary>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="item"/> is found in the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, <see langword="false"/>.
+	/// </returns>
+	/// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param>
+	public bool Contains(Security item)
+	{
+		if (item is null)
+			throw new ArgumentNullException(nameof(item));
 
-		/// <summary>
-		/// Returns an enumerator that iterates through a collection.
-		/// </summary>
-		/// <returns>
-		/// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
-		/// </returns>
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
+		lock (_sync)
+			return _allSecurities.ContainsKey(item.ToSecurityId());
+	}
+
+	/// <summary>
+	/// Returns an enumerator that iterates through the collection.
+	/// </summary>
+	/// <returns>
+	/// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
+	/// </returns>
+	public IEnumerator<Security> GetEnumerator()
+	{
+		lock (_sync)
+			return _allSecurities.Values.GetEnumerator();
+	}
+
+	/// <summary>
+	/// Returns an enumerator that iterates through a collection.
+	/// </summary>
+	/// <returns>
+	/// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+	/// </returns>
+	IEnumerator IEnumerable.GetEnumerator()
+	{
+		return GetEnumerator();
 	}
 }

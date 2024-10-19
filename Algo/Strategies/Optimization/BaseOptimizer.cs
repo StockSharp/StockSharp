@@ -1,18 +1,6 @@
 ﻿namespace StockSharp.Algo.Strategies.Optimization;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-using Ecng.Serialization;
-
-using StockSharp.Algo.Storages;
 using StockSharp.Algo.Testing;
-using StockSharp.BusinessEntities;
-using StockSharp.Logging;
-using StockSharp.Messages;
 
 /// <summary>
 /// The base optimizer of strategies.

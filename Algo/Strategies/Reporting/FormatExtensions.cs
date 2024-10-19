@@ -1,9 +1,5 @@
 ﻿namespace StockSharp.Algo.Strategies.Reporting;
 
-using System;
-
-using Ecng.Common;
-
 /// <summary>
 /// Format extensions.
 /// </summary>

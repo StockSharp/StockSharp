@@ -1,11 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\common_target_net.props" />
-	
+
   <ItemGroup>
-    <PackageReference Include="Ecng.Drawing" Version="$(EcngVer)" />
-  </ItemGroup>
-	
-  <ItemGroup>
-    <ProjectReference Include="..\Algo\Algo.csproj" />
+    <ProjectReference Include="..\BusinessEntities\BusinessEntities.csproj" />
   </ItemGroup>
 </Project>

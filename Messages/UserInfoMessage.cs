@@ -1,246 +1,235 @@
-namespace StockSharp.Messages
+namespace StockSharp.Messages;
+
+using System.Net;
+using System.Security;
+
+/// <summary>
+/// The message contains information about user.
+/// </summary>
+[DataContract]
+[Serializable]
+public class UserInfoMessage : BaseSubscriptionIdMessage<UserInfoMessage>, ITransactionIdMessage
 {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel.DataAnnotations;
-	using System.Linq;
-	using System.Net;
-	using System.Runtime.Serialization;
-	using System.Security;
-	using System.Xml.Serialization;
+	/// <summary>
+	/// Login.
+	/// </summary>
+	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.LoginKey,
+		Description = LocalizedStrings.LoginKey + LocalizedStrings.Dot,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 0)]
+	public string Login { get; set; }
 
-	using Ecng.Collections;
-
-	using StockSharp.Localization;
+	[field: NonSerialized]
+	private SecureString _password;
 
 	/// <summary>
-	/// The message contains information about user.
+	/// Portfolio currency.
 	/// </summary>
-	[DataContract]
-	[Serializable]
-	public class UserInfoMessage : BaseSubscriptionIdMessage<UserInfoMessage>, ITransactionIdMessage
+	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.PasswordKey,
+		Description = LocalizedStrings.PasswordKey + LocalizedStrings.Dot,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 1)]
+	public SecureString Password
 	{
-		/// <summary>
-		/// Login.
-		/// </summary>
-		[DataMember]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.LoginKey,
-			Description = LocalizedStrings.LoginKey + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 0)]
-		public string Login { get; set; }
+		get => _password;
+		set => _password = value;
+	}
 
-		[field: NonSerialized]
-		private SecureString _password;
+	/// <inheritdoc />
+	[DataMember]
+	public long TransactionId { get; set; }
 
-		/// <summary>
-		/// Portfolio currency.
-		/// </summary>
-		[DataMember]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.PasswordKey,
-			Description = LocalizedStrings.PasswordKey + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 1)]
-		public SecureString Password
-		{
-			get => _password;
-			set => _password = value;
-		}
+	/// <summary>
+	/// Is blocked.
+	/// </summary>
+	[DataMember]
+	public bool IsBlocked { get; set; }
 
-		/// <inheritdoc />
-		[DataMember]
-		public long TransactionId { get; set; }
+	/// <summary>
+	/// Identifier.
+	/// </summary>
+	[DataMember]
+	public long? Id { get; set; }
 
-		/// <summary>
-		/// Is blocked.
-		/// </summary>
-		[DataMember]
-		public bool IsBlocked { get; set; }
+	/// <summary>
+	/// Display name.
+	/// </summary>
+	[DataMember]
+	public string DisplayName { get; set; }
 
-		/// <summary>
-		/// Identifier.
-		/// </summary>
-		[DataMember]
-		public long? Id { get; set; }
+	/// <summary>
+	/// Phone.
+	/// </summary>
+	[DataMember]
+	public string Phone { get; set; }
 
-		/// <summary>
-		/// Display name.
-		/// </summary>
-		[DataMember]
-		public string DisplayName { get; set; }
+	/// <summary>
+	/// Web site.
+	/// </summary>
+	[DataMember]
+	public string Homepage { get; set; }
 
-		/// <summary>
-		/// Phone.
-		/// </summary>
-		[DataMember]
-		public string Phone { get; set; }
+	/// <summary>
+	/// Skype.
+	/// </summary>
+	[DataMember]
+	public string Skype { get; set; }
 
-		/// <summary>
-		/// Web site.
-		/// </summary>
-		[DataMember]
-		public string Homepage { get; set; }
+	/// <summary>
+	/// City.
+	/// </summary>
+	[DataMember]
+	public string City { get; set; }
 
-		/// <summary>
-		/// Skype.
-		/// </summary>
-		[DataMember]
-		public string Skype { get; set; }
+	/// <summary>
+	/// Gender.
+	/// </summary>
+	[DataMember]
+	public bool? Gender { get; set; }
 
-		/// <summary>
-		/// City.
-		/// </summary>
-		[DataMember]
-		public string City { get; set; }
+	/// <summary>
+	/// Is the mail-out enabled.
+	/// </summary>
+	[DataMember]
+	public bool? IsSubscription { get; set; }
 
-		/// <summary>
-		/// Gender.
-		/// </summary>
-		[DataMember]
-		public bool? Gender { get; set; }
+	/// <summary>
+	/// Language.
+	/// </summary>
+	[DataMember]
+	public string Language { get; set; }
 
-		/// <summary>
-		/// Is the mail-out enabled.
-		/// </summary>
-		[DataMember]
-		public bool? IsSubscription { get; set; }
+	/// <summary>
+	/// Balance.
+	/// </summary>
+	[DataMember]
+	public decimal? Balance { get; set; }
 
-		/// <summary>
-		/// Language.
-		/// </summary>
-		[DataMember]
-		public string Language { get; set; }
+	/// <summary>
+	/// Avatar.
+	/// </summary>
+	[DataMember]
+	public long? Avatar { get; set; }
 
-		/// <summary>
-		/// Balance.
-		/// </summary>
-		[DataMember]
-		public decimal? Balance { get; set; }
+	/// <summary>
+	/// Token.
+	/// </summary>
+	[DataMember]
+	public string AuthToken { get; set; }
 
-		/// <summary>
-		/// Avatar.
-		/// </summary>
-		[DataMember]
-		public long? Avatar { get; set; }
+	/// <summary>
+	/// Date of registration.
+	/// </summary>
+	[DataMember]
+	public DateTimeOffset? CreationDate { get; set; }
 
-		/// <summary>
-		/// Token.
-		/// </summary>
-		[DataMember]
-		public string AuthToken { get; set; }
+	private IEnumerable<IPAddress> _ipRestrictions = Enumerable.Empty<IPAddress>();
 
-		/// <summary>
-		/// Date of registration.
-		/// </summary>
-		[DataMember]
-		public DateTimeOffset? CreationDate { get; set; }
+	/// <summary>
+	/// IP address restrictions.
+	/// </summary>
+	[XmlIgnore]
+	public IEnumerable<IPAddress> IpRestrictions
+	{
+		get => _ipRestrictions;
+		set => _ipRestrictions = value ?? throw new ArgumentNullException(nameof(value));
+	}
 
-		private IEnumerable<IPAddress> _ipRestrictions = Enumerable.Empty<IPAddress>();
+	/// <summary>
+	/// Permission set.
+	/// </summary>
+	public IDictionary<UserPermissions, IDictionary<(string name, string param, string extra, DateTime? till), bool>> Permissions { get; } = new Dictionary<UserPermissions, IDictionary<(string, string, string, DateTime?), bool>>();
 
-		/// <summary>
-		/// IP address restrictions.
-		/// </summary>
-		[XmlIgnore]
-		public IEnumerable<IPAddress> IpRestrictions
-		{
-			get => _ipRestrictions;
-			set => _ipRestrictions = value ?? throw new ArgumentNullException(nameof(value));
-		}
+	/// <summary>
+	/// Can publish NuGet packages.
+	/// </summary>
+	[DataMember]
+	public bool CanPublish { get; set; }
 
-		/// <summary>
-		/// Permission set.
-		/// </summary>
-		public IDictionary<UserPermissions, IDictionary<(string name, string param, string extra, DateTime? till), bool>> Permissions { get; } = new Dictionary<UserPermissions, IDictionary<(string, string, string, DateTime?), bool>>();
+	/// <summary>
+	/// Is EULA accepted.
+	/// </summary>
+	[DataMember]
+	public bool? IsAgreementAccepted { get; set; }
 
-		/// <summary>
-		/// Can publish NuGet packages.
-		/// </summary>
-		[DataMember]
-		public bool CanPublish { get; set; }
+	/// <inheritdoc />
+	public override DataType DataType => DataType.Users;
 
-		/// <summary>
-		/// Is EULA accepted.
-		/// </summary>
-		[DataMember]
-		public bool? IsAgreementAccepted { get; set; }
+	/// <summary>
+	/// Upload size limit.
+	/// </summary>
+	[DataMember]
+	public long UploadLimit { get; set; }
 
-		/// <inheritdoc />
-		public override DataType DataType => DataType.Users;
+	private string[] _features = Array.Empty<string>();
 
-		/// <summary>
-		/// Upload size limit.
-		/// </summary>
-		[DataMember]
-		public long UploadLimit { get; set; }
+	/// <summary>
+	/// Available features.
+	/// </summary>
+	[DataMember]
+	public string[] Features
+	{
+		get => _features;
+		set => _features = value ?? throw new ArgumentNullException(nameof(value));
+	}
 
-		private string[] _features = Array.Empty<string>();
+	/// <summary>
+	/// Is trial verified.
+	/// </summary>
+	[DataMember]
+	public bool IsTrialVerified { get; set; }
 
-		/// <summary>
-		/// Available features.
-		/// </summary>
-		[DataMember]
-		public string[] Features
-		{
-			get => _features;
-			set => _features = value ?? throw new ArgumentNullException(nameof(value));
-		}
+	/// <summary>
+	/// Initializes a new instance of the <see cref="UserInfoMessage"/>.
+	/// </summary>
+	public UserInfoMessage()
+		: base(MessageTypes.UserInfo)
+	{
+	}
 
-		/// <summary>
-		/// Is trial verified.
-		/// </summary>
-		[DataMember]
-		public bool IsTrialVerified { get; set; }
+	/// <inheritdoc />
+	public override string ToString() => base.ToString() + $",Name={Login}";
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="UserInfoMessage"/>.
-		/// </summary>
-		public UserInfoMessage()
-			: base(MessageTypes.UserInfo)
-		{
-		}
+	/// <inheritdoc />
+	public override void CopyTo(UserInfoMessage destination)
+	{
+		base.CopyTo(destination);
 
-		/// <inheritdoc />
-		public override string ToString() => base.ToString() + $",Name={Login}";
+		destination.Login = Login;
+		destination.Password = Password;
+		destination.TransactionId = TransactionId;
+		destination.OriginalTransactionId = OriginalTransactionId;
+		destination.IsBlocked = IsBlocked;
+		destination.IpRestrictions = IpRestrictions?.ToArray() ?? Enumerable.Empty<IPAddress>();
+		destination.Id = Id;
+		destination.DisplayName = DisplayName;
+		destination.Phone = Phone;
+		destination.Homepage = Homepage;
+		destination.Skype = Skype;
+		destination.City = City;
+		destination.Gender = Gender;
+		destination.IsSubscription = IsSubscription;
+		destination.Language = Language;
+		destination.Balance = Balance;
+		destination.Avatar = Avatar;
+		destination.CreationDate = CreationDate;
+		destination.AuthToken = AuthToken;
+		destination.CanPublish = CanPublish;
+		destination.IsAgreementAccepted = IsAgreementAccepted;
+		destination.UploadLimit = UploadLimit;
 
-		/// <inheritdoc />
-		public override void CopyTo(UserInfoMessage destination)
-		{
-			base.CopyTo(destination);
+		if (Features.Length > 0)
+			destination.Features = Features.ToArray();
 
-			destination.Login = Login;
-			destination.Password = Password;
-			destination.TransactionId = TransactionId;
-			destination.OriginalTransactionId = OriginalTransactionId;
-			destination.IsBlocked = IsBlocked;
-			destination.IpRestrictions = IpRestrictions?.ToArray() ?? Enumerable.Empty<IPAddress>();
-			destination.Id = Id;
-			destination.DisplayName = DisplayName;
-			destination.Phone = Phone;
-			destination.Homepage = Homepage;
-			destination.Skype = Skype;
-			destination.City = City;
-			destination.Gender = Gender;
-			destination.IsSubscription = IsSubscription;
-			destination.Language = Language;
-			destination.Balance = Balance;
-			destination.Avatar = Avatar;
-			destination.CreationDate = CreationDate;
-			destination.AuthToken = AuthToken;
-			destination.CanPublish = CanPublish;
-			destination.IsAgreementAccepted = IsAgreementAccepted;
-			destination.UploadLimit = UploadLimit;
+		if (Permissions?.Count > 0)
+			destination.Permissions.AddRange(Permissions.ToDictionary());
 
-			if (Features.Length > 0)
-				destination.Features = Features.ToArray();
-
-			if (Permissions?.Count > 0)
-				destination.Permissions.AddRange(Permissions.ToDictionary());
-
-			destination.IsTrialVerified = IsTrialVerified;
-		}
+		destination.IsTrialVerified = IsTrialVerified;
 	}
 }

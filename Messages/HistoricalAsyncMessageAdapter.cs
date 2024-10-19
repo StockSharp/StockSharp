@@ -1,11 +1,5 @@
 ﻿namespace StockSharp.Messages;
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-using Ecng.Common;
-
 /// <summary>
 /// Historical <see cref="AsyncMessageAdapter"/>.
 /// </summary>

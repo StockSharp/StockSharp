@@ -1,304 +1,261 @@
-﻿namespace StockSharp.Charting
+﻿namespace StockSharp.Charting;
+
+using Ecng.Configuration;
+
+using static StockSharp.Charting.IChartDrawData;
+
+/// <summary>
+/// <see cref="IChart"/> extensions.
+/// </summary>
+public static class IChartExtensions
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-
-	using Ecng.Collections;
-	using Ecng.Common;
-	using Ecng.Configuration;
-
-	using StockSharp.Algo.Indicators;
-	using StockSharp.BusinessEntities;
-	using StockSharp.Localization;
-	using StockSharp.Messages;
-	using static StockSharp.Charting.IChartDrawData;
+	/// <summary>
+	/// <see cref="IIndicatorProvider"/>
+	/// </summary>
+	public static IIndicatorProvider IndicatorProvider => ConfigManager.GetService<IIndicatorProvider>();
 
 	/// <summary>
-	/// <see cref="IChart"/> extensions.
+	/// <see cref="IIndicatorProvider"/>
 	/// </summary>
-	public static class IChartExtensions
+	public static IIndicatorProvider TryIndicatorProvider => ConfigManager.TryGetService<IIndicatorProvider>();
+
+	/// <summary>
+	/// Exclude obsolete indicators.
+	/// </summary>
+	/// <param name="types">All indicator types.</param>
+	/// <returns>Filtered collection.</returns>
+	public static IEnumerable<IndicatorType> ExcludeObsolete(this IEnumerable<IndicatorType> types)
 	{
-		/// <summary>
-		/// <see cref="IIndicatorProvider"/>
-		/// </summary>
-		public static IIndicatorProvider IndicatorProvider => ConfigManager.GetService<IIndicatorProvider>();
+		return types.Where(t => !t.IsObsolete);
+	}
 
-		/// <summary>
-		/// <see cref="IIndicatorProvider"/>
-		/// </summary>
-		public static IIndicatorProvider TryIndicatorProvider => ConfigManager.TryGetService<IIndicatorProvider>();
+	/// <summary>
+	/// Fill <see cref="IChart.IndicatorTypes"/> using <see cref="IIndicatorProvider"/>.
+	/// </summary>
+	/// <param name="chart">Chart.</param>
+	public static void FillIndicators(this IChart chart)
+	{
+		if (chart == null)
+			throw new ArgumentNullException(nameof(chart));
 
-		/// <summary>
-		/// Exclude obsolete indicators.
-		/// </summary>
-		/// <param name="types">All indicator types.</param>
-		/// <returns>Filtered collection.</returns>
-		public static IEnumerable<IndicatorType> ExcludeObsolete(this IEnumerable<IndicatorType> types)
+		chart.IndicatorTypes.Clear();
+		chart.IndicatorTypes.AddRange(IndicatorProvider.All.ExcludeObsolete());
+	}
+
+	/// <summary>
+	/// The primary title for the X-axis.
+	/// </summary>
+	public const string DefaultXAxisId = "X";
+
+	/// <summary>
+	/// The primary title for the Y-axis.
+	/// </summary>
+	public const string DefaultYAxisId = "Y";
+
+	/// <summary>
+	/// Whether this axis can be removed from chart area.
+	/// </summary>
+	public static bool IsDefault(this IChartAxis axis)
+		=> axis.Id == DefaultXAxisId || axis.Id == DefaultYAxisId;
+
+	/// <summary>
+	/// Put the chart data.
+	/// </summary>
+	/// <param name="item"><see cref="IChartDrawData.IChartDrawDataItem"/> instance.</param>
+	/// <param name="element">The chart element.</param>
+	/// <param name="value">The chart value.</param>
+	/// <returns><see cref="IChartDrawData.IChartDrawDataItem"/> instance.</returns>
+	public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartElement element, object value)
+	{
+		switch (element)
 		{
-			return types.Where(t => !t.IsObsolete);
-		}
-
-		/// <summary>
-		/// Fill <see cref="IChart.IndicatorTypes"/> using <see cref="IIndicatorProvider"/>.
-		/// </summary>
-		/// <param name="chart">Chart.</param>
-		public static void FillIndicators(this IChart chart)
-		{
-			if (chart == null)
-				throw new ArgumentNullException(nameof(chart));
-
-			chart.IndicatorTypes.Clear();
-			chart.IndicatorTypes.AddRange(IndicatorProvider.All.ExcludeObsolete().Where(it => it.Indicator?.IsIndicatorSupportedByChart() == true));
-		}
-
-		private static readonly Type[] _chartUnsupportedIndicators =
-		{
-			typeof(Level1Indicator),
-			typeof(Covariance),
-			typeof(Correlation),
-		};
-
-		/// <summary>
-		/// Check if indicator is supported by chart.
-		/// </summary>
-		public static bool IsIndicatorSupportedByChart(this Type itype)
-		{
-			return
-				itype.Is<IIndicator>() &&
-				!_chartUnsupportedIndicators.Any(t => t.IsAssignableFrom(itype));
-		}
-
-		/// <summary>
-		/// The primary title for the X-axis.
-		/// </summary>
-		public const string DefaultXAxisId = "X";
-
-		/// <summary>
-		/// The primary title for the Y-axis.
-		/// </summary>
-		public const string DefaultYAxisId = "Y";
-
-		/// <summary>
-		/// Whether this axis can be removed from chart area.
-		/// </summary>
-		public static bool IsDefault(this IChartAxis axis)
-			=> axis.Id == DefaultXAxisId || axis.Id == DefaultYAxisId;
-
-		/// <summary>
-		/// Put the chart data.
-		/// </summary>
-		/// <param name="item"><see cref="IChartDrawData.IChartDrawDataItem"/> instance.</param>
-		/// <param name="element">The chart element.</param>
-		/// <param name="value">The chart value.</param>
-		/// <returns><see cref="IChartDrawData.IChartDrawDataItem"/> instance.</returns>
-		public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartElement element, object value)
-		{
-			switch (element)
+			case null:
+				throw new ArgumentNullException(nameof(element));
+			case IChartCandleElement candleElem:
+				return item.Add(candleElem, (ICandleMessage)value);
+			case IChartIndicatorElement indElem:
+				return item.Add(indElem, (IIndicatorValue)value);
+			case IChartOrderElement orderElem:
 			{
-				case null:
-					throw new ArgumentNullException(nameof(element));
-				case IChartCandleElement candleElem:
-					return item.Add(candleElem, (ICandleMessage)value);
-				case IChartIndicatorElement indElem:
-					return item.Add(indElem, (IIndicatorValue)value);
-				case IChartOrderElement orderElem:
+				var order = (Order)value;
+				return item.Add(orderElem, order, order.State != OrderStates.Failed ? null : LocalizedStrings.Failed);
+			}
+			case IChartTradeElement tradeElem:
+				return item.Add(tradeElem, (MyTrade)value);
+			//case ChartActiveOrdersElement activeEleme:
+			//	return Add(activeEleme, (ChartActiveOrderInfo)value);
+			case IChartLineElement lineElem:
+				return value switch
 				{
-					var order = (Order)value;
-					return item.Add(orderElem, order, order.State != OrderStates.Failed ? null : LocalizedStrings.Failed);
-				}
-				case IChartTradeElement tradeElem:
-					return item.Add(tradeElem, (MyTrade)value);
-				//case ChartActiveOrdersElement activeEleme:
-				//	return Add(activeEleme, (ChartActiveOrderInfo)value);
-				case IChartLineElement lineElem:
-					return value switch
-					{
-						null => throw new ArgumentNullException(nameof(value)),
-						double d => item.Add(lineElem, d),
-						decimal d => item.Add(lineElem, (double)d),
-						Tuple<double, double> t => item.Add(lineElem, t.Item1, t.Item2),
-						_ => throw new ArgumentException(LocalizedStrings.UnsupportedType.Put(value.GetType().Name)),
-					};
-				case IChartBandElement belem:
-					return value switch
-					{
-						null => throw new ArgumentNullException(nameof(value)),
-						double d => item.Add(belem, d, 0),
-						decimal d => item.Add(belem, d),
-						Tuple<double, double> t => item.Add(belem, t.Item1, t.Item2),
-						_ => throw new ArgumentException(LocalizedStrings.UnsupportedType.Put(value.GetType().Name)),
-					};
-				default:
-					throw new ArgumentException(LocalizedStrings.UnsupportedType.Put(element));
-			}
+					null => throw new ArgumentNullException(nameof(value)),
+					double d => item.Add(lineElem, d),
+					decimal d => item.Add(lineElem, (double)d),
+					Tuple<double, double> t => item.Add(lineElem, t.Item1, t.Item2),
+					_ => throw new ArgumentException(LocalizedStrings.UnsupportedType.Put(value.GetType().Name)),
+				};
+			case IChartBandElement belem:
+				return value switch
+				{
+					null => throw new ArgumentNullException(nameof(value)),
+					double d => item.Add(belem, d, 0),
+					decimal d => item.Add(belem, d),
+					Tuple<double, double> t => item.Add(belem, t.Item1, t.Item2),
+					_ => throw new ArgumentException(LocalizedStrings.UnsupportedType.Put(value.GetType().Name)),
+				};
+			default:
+				throw new ArgumentException(LocalizedStrings.UnsupportedType.Put(element));
 		}
+	}
 
-		/// <summary>
-		/// Put the candle data.
-		/// </summary>
-		/// <param name="item"><see cref="IChartDrawData.IChartDrawDataItem"/> instance.</param>
-		/// <param name="element">The chart element representing a candle.</param>
-		/// <param name="candle">The candle data.</param>
-		/// <returns><see cref="IChartDrawData.IChartDrawDataItem"/> instance.</returns>
-		public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartCandleElement element, ICandleMessage candle)
+	/// <summary>
+	/// Put the candle data.
+	/// </summary>
+	/// <param name="item"><see cref="IChartDrawData.IChartDrawDataItem"/> instance.</param>
+	/// <param name="element">The chart element representing a candle.</param>
+	/// <param name="candle">The candle data.</param>
+	/// <returns><see cref="IChartDrawData.IChartDrawDataItem"/> instance.</returns>
+	public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartCandleElement element, ICandleMessage candle)
+	{
+		if (candle == null)
 		{
-			if (candle == null)
-			{
-				//throw new ArgumentNullException(nameof(candle));
-				return item;
-			}
-
-			return item.Add(element, candle, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.PriceLevels?./*Select(l => Tuple.Create(l.Price, l.TotalVolume)).*/ToArray());
+			//throw new ArgumentNullException(nameof(candle));
+			return item;
 		}
 
-		/// <summary>
-		/// Put the candle data.
-		/// </summary>
-		/// <param name="item"><see cref="IChartDrawDataItem"/> instance.</param>
-		/// <param name="element">The chart element representing a candle.</param>
-		/// <param name="candle">Candle.</param>
-		/// <param name="openPrice">Opening price.</param>
-		/// <param name="highPrice">Highest price.</param>
-		/// <param name="lowPrice">Lowest price.</param>
-		/// <param name="closePrice">Closing price.</param>
-		/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-		public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartCandleElement element, ICandleMessage candle, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice)
+		return item.Add(element, candle, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.PriceLevels?.ToArray(), candle.State);
+	}
+
+	/// <summary>
+	/// Put the candle data.
+	/// </summary>
+	/// <param name="item"><see cref="IChartDrawDataItem"/> instance.</param>
+	/// <param name="element">The chart element representing a candle.</param>
+	/// <param name="candle">Candle.</param>
+	/// <param name="openPrice">Opening price.</param>
+	/// <param name="highPrice">Highest price.</param>
+	/// <param name="lowPrice">Lowest price.</param>
+	/// <param name="closePrice">Closing price.</param>
+	/// <param name="priceLevels">Price levels.</param>
+	/// <param name="state">Candle state.</param>
+	/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
+	public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartCandleElement element, ICandleMessage candle, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, CandlePriceLevel[] priceLevels, CandleStates state)
+	{
+		if (candle == null)
 		{
-			return item.Add(element, candle, openPrice, highPrice, lowPrice, closePrice, null);
+			//throw new ArgumentNullException(nameof(candle));
+			return item;
 		}
 
-		/// <summary>
-		/// Put the candle data.
-		/// </summary>
-		/// <param name="item"><see cref="IChartDrawDataItem"/> instance.</param>
-		/// <param name="element">The chart element representing a candle.</param>
-		/// <param name="candle">Candle.</param>
-		/// <param name="openPrice">Opening price.</param>
-		/// <param name="highPrice">Highest price.</param>
-		/// <param name="lowPrice">Lowest price.</param>
-		/// <param name="closePrice">Closing price.</param>
-		/// <param name="priceLevels">Price levels.</param>
-		/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-		public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartCandleElement element, ICandleMessage candle, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, CandlePriceLevel[] priceLevels)
-		{
-			if (candle == null)
-			{
-				//throw new ArgumentNullException(nameof(candle));
-				return item;
-			}
+		return item.Add(element, candle.DataType, candle.SecurityId, openPrice, highPrice, lowPrice, closePrice, priceLevels, state);
+	}
 
-			return item.Add(element, candle.DataType, candle.SecurityId, openPrice, highPrice, lowPrice, closePrice, priceLevels);
-		}
+	/// <summary>
+	/// Put the order data.
+	/// </summary>
+	/// <param name="item"><see cref="IChartDrawDataItem"/> instance.</param>
+	/// <param name="element">The chart element representing orders.</param>
+	/// <param name="order">The order value.</param>
+	/// <param name="errorMessage">Error registering/cancelling order.</param>
+	/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
+	public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartOrderElement element, Order order, string errorMessage = null)
+	{
+		if (order == null)
+			return item;
+		//	throw new ArgumentNullException(nameof(order));
 
-		/// <summary>
-		/// Put the order data.
-		/// </summary>
-		/// <param name="item"><see cref="IChartDrawDataItem"/> instance.</param>
-		/// <param name="element">The chart element representing orders.</param>
-		/// <param name="order">The order value.</param>
-		/// <param name="errorMessage">Error registering/cancelling order.</param>
-		/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-		public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartOrderElement element, Order order, string errorMessage = null)
-		{
-			if (order == null)
-				return item;
-			//	throw new ArgumentNullException(nameof(order));
+		if (errorMessage.IsEmpty() && order.State == OrderStates.Failed)
+			errorMessage = LocalizedStrings.Failed;
 
-			if (errorMessage.IsEmpty() && order.State == OrderStates.Failed)
-				errorMessage = LocalizedStrings.Failed;
+		return item.Add(element, order.TransactionId, null, order.Side, order.Price, order.Volume, errorMessage);
+	}
 
-			return item.Add(element, order.TransactionId, null, order.Side, order.Price, order.Volume, errorMessage);
-		}
+	/// <summary>
+	/// Put the order data.
+	/// </summary>
+	/// <param name="item"><see cref="IChartDrawDataItem"/> instance.</param>
+	/// <param name="element">The chart element representing trades.</param>
+	/// <param name="trade">The trade value.</param>
+	/// <returns><see cref="IChartDrawData.IChartDrawDataItem"/> instance.</returns>
+	public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartTradeElement element, MyTrade trade)
+	{
+		if (trade == null)
+			return item;
+		//	throw new ArgumentNullException(nameof(trade));
 
-		/// <summary>
-		/// Put the order data.
-		/// </summary>
-		/// <param name="item"><see cref="IChartDrawDataItem"/> instance.</param>
-		/// <param name="element">The chart element representing trades.</param>
-		/// <param name="trade">The trade value.</param>
-		/// <returns><see cref="IChartDrawData.IChartDrawDataItem"/> instance.</returns>
-		public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartTradeElement element, MyTrade trade)
-		{
-			if (trade == null)
-				return item;
-			//	throw new ArgumentNullException(nameof(trade));
+		var tick = trade.Trade;
+		return item.Add(element, tick.Id ?? default, tick.StringId, trade.Order.Side, tick.Price, tick.Volume);
+	}
 
-			var tick = trade.Trade;
-			return item.Add(element, tick.Id ?? default, tick.StringId, trade.Order.Side, tick.Price, tick.Volume);
-		}
+	/// <summary>
+	/// To use automatic range for the X-axis.
+	/// </summary>
+	/// <param name="area"><see cref="IChartArea"/></param>
+	/// <returns>To use automatic range for the X-axis.</returns>
+	public static bool GetAutoRange(this IChartArea area)
+		=> area.XAxises.All(a => a.AutoRange);
 
-		/// <summary>
-		/// To use automatic range for the X-axis.
-		/// </summary>
-		/// <param name="area"><see cref="IChartArea"/></param>
-		/// <returns>To use automatic range for the X-axis.</returns>
-		public static bool GetAutoRange(this IChartArea area)
-			=> area.XAxises.All(a => a.AutoRange);
+	/// <summary>
+	/// To use automatic range for the X-axis.
+	/// </summary>
+	/// <param name="area"><see cref="IChartArea"/></param>
+	/// <param name="value">To use automatic range for the X-axis.</param>
+	public static void SetAutoRange(this IChartArea area, bool value)
+		=> area.XAxises.ForEach(a => a.AutoRange = value);
 
-		/// <summary>
-		/// To use automatic range for the X-axis.
-		/// </summary>
-		/// <param name="area"><see cref="IChartArea"/></param>
-		/// <param name="value">To use automatic range for the X-axis.</param>
-		public static void SetAutoRange(this IChartArea area, bool value)
-			=> area.XAxises.ForEach(a => a.AutoRange = value);
+	/// <summary>
+	/// The chart on which the element is drawn.
+	/// </summary>
+	/// <param name="elem"><see cref="IChartElement"/></param>
+	/// <returns>The chart on which the element is drawn.</returns>
+	public static IChart TryGetChart(this IChartElement elem)
+		=> elem.CheckOnNull(nameof(elem)).ChartArea?.Chart;
 
-		/// <summary>
-		/// The chart on which the element is drawn.
-		/// </summary>
-		/// <param name="elem"><see cref="IChartElement"/></param>
-		/// <returns>The chart on which the element is drawn.</returns>
-		public static IChart TryGetChart(this IChartElement elem)
-			=> elem.CheckOnNull(nameof(elem)).ChartArea?.Chart;
+	/// <summary>
+	/// X axis this element currently attached to.
+	/// </summary>
+	/// <param name="elem"><see cref="IChartElement"/></param>
+	/// <returns>X axis this element currently attached to.</returns>
+	public static IChartAxis TryGetXAxis(this IChartElement elem)
+		=> elem.CheckOnNull(nameof(elem)).ChartArea?.XAxises.FirstOrDefault(xa => xa.Id == elem.XAxisId);
 
-		/// <summary>
-		/// X axis this element currently attached to.
-		/// </summary>
-		/// <param name="elem"><see cref="IChartElement"/></param>
-		/// <returns>X axis this element currently attached to.</returns>
-		public static IChartAxis TryGetXAxis(this IChartElement elem)
-			=> elem.CheckOnNull(nameof(elem)).ChartArea?.XAxises.FirstOrDefault(xa => xa.Id == elem.XAxisId);
+	/// <summary>
+	/// Y axis this element currently attached to.
+	/// </summary>
+	/// <param name="elem"><see cref="IChartElement"/></param>
+	/// <returns>Y axis this element currently attached to.</returns>
+	public static IChartAxis TryGetYAxis(this IChartElement elem)
+		=> elem.CheckOnNull(nameof(elem)).ChartArea?.YAxises.FirstOrDefault(xa => xa.Id == elem.YAxisId);
 
-		/// <summary>
-		/// Y axis this element currently attached to.
-		/// </summary>
-		/// <param name="elem"><see cref="IChartElement"/></param>
-		/// <returns>Y axis this element currently attached to.</returns>
-		public static IChartAxis TryGetYAxis(this IChartElement elem)
-			=> elem.CheckOnNull(nameof(elem)).ChartArea?.YAxises.FirstOrDefault(xa => xa.Id == elem.YAxisId);
+	/// <summary>
+	/// Get all elements.
+	/// </summary>
+	/// <param name="chart"><see cref="IChart"/></param>
+	/// <returns>Chart elements.</returns>
+	public static IEnumerable<IChartElement> GetElements(this IChart chart)
+		=> chart.CheckOnNull(nameof(chart)).Areas.SelectMany(a => a.Elements);
 
-		/// <summary>
-		/// Get all elements.
-		/// </summary>
-		/// <param name="chart"><see cref="IChart"/></param>
-		/// <returns>Chart elements.</returns>
-		public static IEnumerable<IChartElement> GetElements(this IChart chart)
-			=> chart.CheckOnNull(nameof(chart)).Areas.SelectMany(a => a.Elements);
+	/// <summary>
+	/// Get all elements.
+	/// </summary>
+	/// <typeparam name="T"><see cref="IChartElement"/> type.</typeparam>
+	/// <param name="chart"><see cref="IChart"/></param>
+	/// <returns>Chart elements.</returns>
+	public static IEnumerable<T> GetElements<T>(this IChart chart)
+		where T : IChartElement
+		=> chart.GetElements().OfType<T>();
 
-		/// <summary>
-		/// Get all elements.
-		/// </summary>
-		/// <typeparam name="T"><see cref="IChartElement"/> type.</typeparam>
-		/// <param name="chart"><see cref="IChart"/></param>
-		/// <returns>Chart elements.</returns>
-		public static IEnumerable<T> GetElements<T>(this IChart chart)
-			where T : IChartElement
-			=> chart.GetElements().OfType<T>();
+	/// <summary>
+	/// To remove all areas from the chart.
+	/// </summary>
+	/// <param name="chart"><see cref="IChart"/></param>
+	public static void ClearAreas(this IChart chart)
+	{
+		if (chart is null)
+			throw new ArgumentNullException(nameof(chart));
 
-		/// <summary>
-		/// To remove all areas from the chart.
-		/// </summary>
-		/// <param name="chart"><see cref="IChart"/></param>
-		public static void ClearAreas(this IChart chart)
-		{
-			if (chart is null)
-				throw new ArgumentNullException(nameof(chart));
+		chart.Reset(chart.GetElements());
 
-			chart.Reset(chart.GetElements());
-
-			foreach (var area in chart.Areas.ToArray())
-				chart.RemoveArea(area);
-		}
+		foreach (var area in chart.Areas.ToArray())
+			chart.RemoveArea(area);
 	}
 }

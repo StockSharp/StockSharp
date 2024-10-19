@@ -1,163 +1,137 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
+namespace StockSharp.BusinessEntities;
 
-Project: StockSharp.BusinessEntities.BusinessEntities
-File: MyTrade.cs
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.BusinessEntities
+/// <summary>
+/// Own trade.
+/// </summary>
+[Serializable]
+[DataContract]
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.OwnTradeKey,
+	Description = LocalizedStrings.OwnTradeDescKey)]
+public class MyTrade : NotifiableObject
 {
-	using System;
-	using System.ComponentModel;
-	using System.ComponentModel.DataAnnotations;
-	using System.Runtime.Serialization;
-
-	using Ecng.Common;
-	using Ecng.ComponentModel;
-
-	using StockSharp.Localization;
+	/// <summary>
+	/// Initializes a new instance of the <see cref="MyTrade"/>.
+	/// </summary>
+	public MyTrade()
+	{
+	}
 
 	/// <summary>
-	/// Own trade.
+	/// Order, for which a trade was filled.
 	/// </summary>
-	[Serializable]
-	[DataContract]
+	[DataMember]
+	[TypeConverter(typeof(ExpandableObjectConverter))]
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.OwnTradeKey,
-		Description = LocalizedStrings.OwnTradeDescKey)]
-	public class MyTrade : NotifiableObject
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MyTrade"/>.
-		/// </summary>
-		public MyTrade()
-		{
-		}
+		Name = LocalizedStrings.OrderKey,
+		Description = LocalizedStrings.OwnTradeOrderKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 0)]
+	public Order Order { get; set; }
 
-		/// <summary>
-		/// Order, for which a trade was filled.
-		/// </summary>
-		[DataMember]
-		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.OrderKey,
-			Description = LocalizedStrings.OwnTradeOrderKey,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 0)]
-		public Order Order { get; set; }
-
-		/// <summary>
-		/// Trade info.
-		/// </summary>
-		[DataMember]
-		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.TradeKey,
-			Description = LocalizedStrings.TickTradeInfoKey,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 1)]
+	/// <summary>
+	/// Trade info.
+	/// </summary>
+	[DataMember]
+	[TypeConverter(typeof(ExpandableObjectConverter))]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TradeKey,
+		Description = LocalizedStrings.TickTradeInfoKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 1)]
 #pragma warning disable CS0618 // Type or member is obsolete
-		public Trade Trade { get; set; }
+	public Trade Trade { get; set; }
 #pragma warning restore CS0618 // Type or member is obsolete
 
-		/// <summary>
-		/// Commission.
-		/// </summary>
-		[DataMember]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.CommissionKey,
-			Description = LocalizedStrings.CommissionDescKey,
-			GroupName = LocalizedStrings.StatisticsKey,
-			Order = 0)]
-		public decimal? Commission { get; set; }
+	/// <summary>
+	/// Commission.
+	/// </summary>
+	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.CommissionKey,
+		Description = LocalizedStrings.CommissionDescKey,
+		GroupName = LocalizedStrings.StatisticsKey,
+		Order = 0)]
+	public decimal? Commission { get; set; }
 
-		/// <summary>
-		/// Commission currency. Can be <see langword="null"/>.
-		/// </summary>
-		public string CommissionCurrency { get; set; }
+	/// <summary>
+	/// Commission currency. Can be <see langword="null"/>.
+	/// </summary>
+	public string CommissionCurrency { get; set; }
 
-		/// <summary>
-		/// Slippage in trade price.
-		/// </summary>
-		[DataMember]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.SlippageKey,
-			Description = LocalizedStrings.SlippageTradeKey,
-			GroupName = LocalizedStrings.StatisticsKey,
-			Order = 1)]
-		public decimal? Slippage { get; set; }
+	/// <summary>
+	/// Slippage in trade price.
+	/// </summary>
+	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.SlippageKey,
+		Description = LocalizedStrings.SlippageTradeKey,
+		GroupName = LocalizedStrings.StatisticsKey,
+		Order = 1)]
+	public decimal? Slippage { get; set; }
 
-		private decimal? _pnL;
+	private decimal? _pnL;
 
-		/// <summary>
-		/// The profit, realized by trade.
-		/// </summary>
-		[DataMember]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.PnLKey,
-			Description = LocalizedStrings.PnLKey + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.StatisticsKey,
-			Order = 2)]
-		public decimal? PnL
+	/// <summary>
+	/// The profit, realized by trade.
+	/// </summary>
+	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.PnLKey,
+		Description = LocalizedStrings.PnLKey + LocalizedStrings.Dot,
+		GroupName = LocalizedStrings.StatisticsKey,
+		Order = 2)]
+	public decimal? PnL
+	{
+		get => _pnL;
+		set
 		{
-			get => _pnL;
-			set
-			{
-				if (_pnL == value)
-					return;
+			if (_pnL == value)
+				return;
 
-				_pnL = value;
-				NotifyChanged();
-			}
+			_pnL = value;
+			NotifyChanged();
 		}
+	}
 
-		/// <summary>
-		/// The position, generated by trade.
-		/// </summary>
-		[DataMember]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.PositionKey,
-			Description = LocalizedStrings.PositionKey + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.StatisticsKey,
-			Order = 2)]
-		public decimal? Position { get; set; }
+	/// <summary>
+	/// The position, generated by trade.
+	/// </summary>
+	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.PositionKey,
+		Description = LocalizedStrings.PositionKey + LocalizedStrings.Dot,
+		GroupName = LocalizedStrings.StatisticsKey,
+		Order = 2)]
+	public decimal? Position { get; set; }
 
-		/// <summary>
-		/// Used to identify whether the order initiator is an aggressor or not in the trade.
-		/// </summary>
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.InitiatorKey,
-			Description = LocalizedStrings.InitiatorTradeKey,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 3)]
-		public bool? Initiator { get; set; }
+	/// <summary>
+	/// Used to identify whether the order initiator is an aggressor or not in the trade.
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.InitiatorKey,
+		Description = LocalizedStrings.InitiatorTradeKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 3)]
+	public bool? Initiator { get; set; }
 
-		/// <summary>
-		/// Yield.
-		/// </summary>
-		[DataMember]
-		public decimal? Yield { get; set; }
+	/// <summary>
+	/// Yield.
+	/// </summary>
+	[DataMember]
+	public decimal? Yield { get; set; }
 
-		/// <inheritdoc />
-		public override string ToString()
-		{
-			return LocalizedStrings.TradeFromOrder.Put(Trade, Order);
-		}
+	/// <inheritdoc />
+	public override string ToString()
+	{
+		return LocalizedStrings.TradeFromOrder.Put(Trade, Order);
 	}
 }

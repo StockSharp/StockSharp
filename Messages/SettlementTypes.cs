@@ -1,11 +1,5 @@
 ﻿namespace StockSharp.Messages;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Settlement types.
 /// </summary>

@@ -1,14 +1,6 @@
 ﻿namespace StockSharp.Algo.Strategies.Optimization;
 
-using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-using Ecng.Serialization;
-
 using StockSharp.Algo.Testing;
-using StockSharp.Localization;
-using StockSharp.Messages;
 
 /// <summary>
 /// Optimizer settings.

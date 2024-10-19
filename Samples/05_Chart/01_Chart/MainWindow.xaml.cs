@@ -77,7 +77,6 @@ public partial class MainWindow : ICandleBuilderSubscription
 	MarketDataMessage ICandleBuilderSubscription.Message => _mdMsg;
 	VolumeProfileBuilder ICandleBuilderSubscription.VolumeProfile { get; set; }
 	public CandleMessage CurrentCandle { get; set; }
-	CandleMessage ICandleBuilderSubscription.PrevCandle { get; set; }
 
 	public MainWindow()
 	{
@@ -256,7 +255,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 			_tradeGenerator.Process(_security.ToMessage());
 
 			_candleElement = Chart.CreateCandleElement();
-			((ChartCandleElement)_candleElement).PriceStep = 0.01m;
+			_candleElement.PriceStep = _security.PriceStep * 5;
 			Chart.AddElement(_areaComb, _candleElement, SeriesEditor.DataType.ToCandleSeries(_security));
 		});
 	}

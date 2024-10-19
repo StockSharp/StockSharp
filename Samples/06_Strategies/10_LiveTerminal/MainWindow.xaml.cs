@@ -19,6 +19,7 @@ using StockSharp.Configuration;
 using StockSharp.Localization;
 using StockSharp.Messages;
 using StockSharp.Xaml;
+using StockSharp.BusinessEntities;
 
 public partial class MainWindow
 {

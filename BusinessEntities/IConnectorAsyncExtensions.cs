@@ -1,12 +1,7 @@
 ﻿namespace StockSharp.BusinessEntities;
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
-
-using Ecng.Common;
-
-using StockSharp.Messages;
 
 /// <summary>
 /// Async extensions for <see cref="IConnector"/>.

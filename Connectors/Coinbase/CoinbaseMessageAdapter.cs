@@ -61,7 +61,7 @@ public partial class CoinbaseMessageAdapter
 	public override bool IsReplaceCommandEditCurrent => true;
 
 	/// <inheritdoc />
-	public override string AssociatedBoard => BoardCodes.Coinbase;
+	public override string[] AssociatedBoards { get; } = new[] { BoardCodes.Coinbase };
 
 	private void SubscribePusherClient()
 	{

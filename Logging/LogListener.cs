@@ -1,128 +1,112 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
+namespace StockSharp.Logging;
 
-Project: StockSharp.Logging.Logging
-File: LogListener.cs
-Created: 2015, 11, 11, 2:32 PM
+using System;
+using System.Collections.Generic;
 
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.Logging
+using Ecng.Common;
+using Ecng.Serialization;
+using Ecng.Collections;
+
+using StockSharp.Localization;
+
+/// <summary>
+/// The base class that monitors the event <see cref="ILogSource.Log"/> and saves to some storage.
+/// </summary>
+public abstract class LogListener : Disposable, ILogListener
 {
-	using System;
-	using System.Collections.Generic;
+	/// <summary>
+	/// Initialize <see cref="LogListener"/>.
+	/// </summary>
+	protected LogListener()
+	{
+		Filters = new List<Func<LogMessage, bool>>();
 
-	using Ecng.Common;
-	using Ecng.Serialization;
-	using Ecng.Collections;
-
-	using StockSharp.Localization;
+		CanSave = GetType().GetConstructor(Array.Empty<Type>()) is not null;
+	}
 
 	/// <summary>
-	/// The base class that monitors the event <see cref="ILogSource.Log"/> and saves to some storage.
+	/// Messages filters that specify which messages should be handled.
 	/// </summary>
-	public abstract class LogListener : Disposable, ILogListener
+	public IList<Func<LogMessage, bool>> Filters { get; }
+
+	private string _dateFormat = "yyyy/MM/dd";
+
+	/// <summary>
+	/// Date format. By default yyyy/MM/dd.
+	/// </summary>
+	public string DateFormat
 	{
-		/// <summary>
-		/// Initialize <see cref="LogListener"/>.
-		/// </summary>
-		protected LogListener()
+		get => _dateFormat;
+		set
 		{
-			Filters = new List<Func<LogMessage, bool>>();
+			if (value.IsEmpty())
+				throw new ArgumentNullException(nameof(value));
 
-			CanSave = GetType().GetConstructor(Array.Empty<Type>()) is not null;
+			_dateFormat = value;
 		}
+	}
 
-		/// <summary>
-		/// Messages filters that specify which messages should be handled.
-		/// </summary>
-		public IList<Func<LogMessage, bool>> Filters { get; }
+	private string _timeFormat = "HH:mm:ss.fff";
 
-		private string _dateFormat = "yyyy/MM/dd";
-
-		/// <summary>
-		/// Date format. By default yyyy/MM/dd.
-		/// </summary>
-		public string DateFormat
+	/// <summary>
+	/// Time format. By default HH:mm:ss.fff.
+	/// </summary>
+	public string TimeFormat
+	{
+		get => _timeFormat;
+		set
 		{
-			get => _dateFormat;
-			set
-			{
-				if (value.IsEmpty())
-					throw new ArgumentNullException(nameof(value));
-
-				_dateFormat = value;
-			}
+			if (value.IsEmpty())
+				throw new ArgumentNullException(nameof(value));
+			
+			_timeFormat = value;
 		}
+	}
 
-		private string _timeFormat = "HH:mm:ss.fff";
+	/// <inheritdoc />
+	public virtual bool CanSave { get; }
 
-		/// <summary>
-		/// Time format. By default HH:mm:ss.fff.
-		/// </summary>
-		public string TimeFormat
-		{
-			get => _timeFormat;
-			set
-			{
-				if (value.IsEmpty())
-					throw new ArgumentNullException(nameof(value));
-				
-				_timeFormat = value;
-			}
-		}
+	/// <inheritdoc />
+	public void WriteMessages(IEnumerable<LogMessage> messages)
+	{
+		OnWriteMessages(messages.Filter(Filters));
+	}
 
-		/// <inheritdoc />
-		public virtual bool CanSave { get; }
+	/// <summary>
+	/// To record messages.
+	/// </summary>
+	/// <param name="messages">Debug messages.</param>
+	protected virtual void OnWriteMessages(IEnumerable<LogMessage> messages)
+	{
+		messages.ForEach(OnWriteMessage);
+	}
 
-		/// <inheritdoc />
-		public void WriteMessages(IEnumerable<LogMessage> messages)
-		{
-			OnWriteMessages(messages.Filter(Filters));
-		}
+	/// <summary>
+	/// To record a message.
+	/// </summary>
+	/// <param name="message">A debug message.</param>
+	protected virtual void OnWriteMessage(LogMessage message)
+	{
+		throw new NotSupportedException(LocalizedStrings.MethodMustBeOverrided);
+	}
 
-		/// <summary>
-		/// To record messages.
-		/// </summary>
-		/// <param name="messages">Debug messages.</param>
-		protected virtual void OnWriteMessages(IEnumerable<LogMessage> messages)
-		{
-			messages.ForEach(OnWriteMessage);
-		}
+	/// <summary>
+	/// Load settings.
+	/// </summary>
+	/// <param name="storage">Settings storage.</param>
+	public virtual void Load(SettingsStorage storage)
+	{
+		DateFormat = storage.GetValue<string>(nameof(DateFormat));
+		TimeFormat = storage.GetValue<string>(nameof(TimeFormat));
+	}
 
-		/// <summary>
-		/// To record a message.
-		/// </summary>
-		/// <param name="message">A debug message.</param>
-		protected virtual void OnWriteMessage(LogMessage message)
-		{
-			throw new NotSupportedException(LocalizedStrings.MethodMustBeOverrided);
-		}
-
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="storage">Settings storage.</param>
-		public virtual void Load(SettingsStorage storage)
-		{
-			DateFormat = storage.GetValue<string>(nameof(DateFormat));
-			TimeFormat = storage.GetValue<string>(nameof(TimeFormat));
-		}
-
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="storage">Settings storage.</param>
-		public virtual void Save(SettingsStorage storage)
-		{
-			storage.SetValue(nameof(DateFormat), DateFormat);
-			storage.SetValue(nameof(TimeFormat), TimeFormat);
-		}
+	/// <summary>
+	/// Save settings.
+	/// </summary>
+	/// <param name="storage">Settings storage.</param>
+	public virtual void Save(SettingsStorage storage)
+	{
+		storage.SetValue(nameof(DateFormat), DateFormat);
+		storage.SetValue(nameof(TimeFormat), TimeFormat);
 	}
 }

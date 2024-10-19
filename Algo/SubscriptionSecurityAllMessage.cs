@@ -1,48 +1,42 @@
-﻿namespace StockSharp.Algo
-{
-	using System;
-	using System.Runtime.Serialization;
+﻿namespace StockSharp.Algo;
 
-	using StockSharp.Messages;
+/// <summary>
+/// Subscription ALL parent-child mapping message.
+/// </summary>
+[Serializable]
+[DataContract]
+public class SubscriptionSecurityAllMessage : MarketDataMessage
+{
+	/// <summary>
+	/// Initialize <see cref="SubscriptionSecurityAllMessage"/>.
+	/// </summary>
+	public SubscriptionSecurityAllMessage()
+		: base(ExtendedMessageTypes.SubscriptionSecurityAll)
+	{
+	}
 
 	/// <summary>
-	/// Subscription ALL parent-child mapping message.
+	/// Parent <see cref="MarketDataMessage.TransactionId"/>.
 	/// </summary>
-	[Serializable]
-	[DataContract]
-	public class SubscriptionSecurityAllMessage : MarketDataMessage
+	[DataMember]
+	public long ParentTransactionId { get; set; }
+
+	/// <summary>
+	/// Create a copy of <see cref="SubscriptionSecurityAllMessage"/>.
+	/// </summary>
+	/// <returns>Copy.</returns>
+	public override Message Clone()
 	{
-		/// <summary>
-		/// Initialize <see cref="SubscriptionSecurityAllMessage"/>.
-		/// </summary>
-		public SubscriptionSecurityAllMessage()
-			: base(ExtendedMessageTypes.SubscriptionSecurityAll)
+		var clone =  new SubscriptionSecurityAllMessage
 		{
-		}
+			ParentTransactionId = ParentTransactionId,
+		};
 
-		/// <summary>
-		/// Parent <see cref="MarketDataMessage.TransactionId"/>.
-		/// </summary>
-		[DataMember]
-		public long ParentTransactionId { get; set; }
+		CopyTo(clone);
 
-		/// <summary>
-		/// Create a copy of <see cref="SubscriptionSecurityAllMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			var clone =  new SubscriptionSecurityAllMessage
-			{
-				ParentTransactionId = ParentTransactionId,
-			};
-
-			CopyTo(clone);
-
-			return clone;
-		}
-
-		/// <inheritdoc />
-		public override string ToString() => base.ToString() + $",Parent={ParentTransactionId}";
+		return clone;
 	}
+
+	/// <inheritdoc />
+	public override string ToString() => base.ToString() + $",Parent={ParentTransactionId}";
 }

@@ -1,16 +1,5 @@
 ﻿namespace StockSharp.Messages;
 
-using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Threading;
-using System.Threading.Tasks;
-
-using Ecng.Common;
-using Ecng.Serialization;
-
-using StockSharp.Localization;
-
 /// <summary>
 /// Message adapter with async processing support.
 /// </summary>
@@ -186,15 +175,6 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
 	public virtual ValueTask ReplaceOrderAsync(OrderReplaceMessage replaceMsg, CancellationToken cancellationToken)
-		=> ProcessMessageAsync(replaceMsg, cancellationToken);
-
-	/// <summary>
-	/// Process <see cref="OrderPairReplaceMessage"/>.
-	/// </summary>
-	/// <param name="replaceMsg"><see cref="OrderPairReplaceMessage"/>.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
-	/// <returns><see cref="ValueTask"/>.</returns>
-	public virtual ValueTask ReplaceOrderPairAsync(OrderPairReplaceMessage replaceMsg, CancellationToken cancellationToken)
 		=> ProcessMessageAsync(replaceMsg, cancellationToken);
 
 	/// <summary>

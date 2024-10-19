@@ -47,7 +47,7 @@ public class AlertRule : IPersistable
 			var valueType = Field.ValueType;
 
 			Value = (valueType == typeof(SecurityId) || valueType == typeof(SecurityId?))
-				? ConfigManager.GetService<ISecurityProvider>().LookupByStringId(value)
+				? ConfigManager.GetService<ISecurityProvider>().LookupById(value)
 				: value.To(valueType);
 		}
 	}

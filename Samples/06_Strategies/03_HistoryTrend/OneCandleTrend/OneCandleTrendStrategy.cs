@@ -3,6 +3,7 @@ using StockSharp.Algo;
 using StockSharp.Algo.Candles;
 using StockSharp.Algo.Strategies;
 using StockSharp.Messages;
+using StockSharp.BusinessEntities;
 
 namespace StockSharp.Samples.Strategies.HistoryTrend
 {
@@ -44,13 +45,13 @@ namespace StockSharp.Samples.Strategies.HistoryTrend
 
 			if (candle.OpenPrice < candle.ClosePrice && Position <= 0)
 			{
-				RegisterOrder(this.BuyAtMarket(Volume + Math.Abs(Position)));
+				BuyMarket(Volume + Math.Abs(Position));
 			}
 
 			else
 			if (candle.OpenPrice > candle.ClosePrice && Position >= 0)
 			{
-				RegisterOrder(this.SellAtMarket(Volume + Math.Abs(Position)));
+				SellMarket(Volume + Math.Abs(Position));
 			}
 		}
 	}

@@ -1,17 +1,8 @@
 namespace StockSharp.Algo.Strategies.Reporting;
 
-using System;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-using Ecng.ComponentModel;
 
 using StockSharp.Algo.Strategies;
-using StockSharp.Localization;
-using StockSharp.Messages;
 
 /// <summary>
 /// The generator of report on equity in the csv format.

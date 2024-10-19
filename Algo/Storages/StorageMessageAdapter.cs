@@ -1,84 +1,75 @@
-namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages;
+
+/// <summary>
+/// Storage based message adapter.
+/// </summary>
+public class StorageMessageAdapter : MessageAdapterWrapper
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-
-	using Ecng.Common;
-
-	using StockSharp.Messages;
+	private readonly StorageProcessor _storageProcessor;
 
 	/// <summary>
-	/// Storage based message adapter.
+	/// Initializes a new instance of the <see cref="StorageMessageAdapter"/>.
 	/// </summary>
-	public class StorageMessageAdapter : MessageAdapterWrapper
+	/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
+	/// <param name="storageProcessor">Storage processor.</param>
+	public StorageMessageAdapter(IMessageAdapter innerAdapter, StorageProcessor storageProcessor)
+		: base(innerAdapter)
 	{
-		private readonly StorageProcessor _storageProcessor;
+		_storageProcessor = storageProcessor ?? throw new ArgumentNullException(nameof(storageProcessor));
+	}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="StorageMessageAdapter"/>.
-		/// </summary>
-		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-		/// <param name="storageProcessor">Storage processor.</param>
-		public StorageMessageAdapter(IMessageAdapter innerAdapter, StorageProcessor storageProcessor)
-			: base(innerAdapter)
+	/// <inheritdoc />
+	public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
+	{
+		var args = base.GetCandleArgs(candleType, securityId, from, to);
+
+		var settings = _storageProcessor.Settings;
+
+		var drive = settings.Drive ?? settings.StorageRegistry.DefaultDrive;
+
+		if (drive == null)
+			return args;
+
+		return args.Concat(drive.GetCandleArgs(settings.Format, candleType, securityId, from, to)).Distinct();
+	}
+
+	/// <inheritdoc />
+	protected override bool OnSendInMessage(Message message)
+	{
+		switch (message.Type)
 		{
-			_storageProcessor = storageProcessor ?? throw new ArgumentNullException(nameof(storageProcessor));
+			case MessageTypes.Reset:
+				_storageProcessor.Reset();
+				return base.OnSendInMessage(message);
+
+			case MessageTypes.MarketData:
+				return ProcessMarketData((MarketDataMessage)message);
+
+			default:
+				return base.OnSendInMessage(message);
 		}
+	}
 
-		/// <inheritdoc />
-		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
-		{
-			var args = base.GetCandleArgs(candleType, securityId, from, to);
+	private bool ProcessMarketData(MarketDataMessage message)
+	{
+		message = _storageProcessor.ProcessMarketData(message, RaiseStorageMessage);
 
-			var settings = _storageProcessor.Settings;
+		return message == null || base.OnSendInMessage(message);
+	}
 
-			var drive = settings.Drive ?? settings.StorageRegistry.DefaultDrive;
+	private void RaiseStorageMessage(Message message)
+	{
+		message.TryInitLocalTime(this);
 
-			if (drive == null)
-				return args;
+		RaiseNewOutMessage(message);
+	}
 
-			return args.Concat(drive.GetCandleArgs(settings.Format, candleType, securityId, from, to)).Distinct();
-		}
-
-		/// <inheritdoc />
-		protected override bool OnSendInMessage(Message message)
-		{
-			switch (message.Type)
-			{
-				case MessageTypes.Reset:
-					_storageProcessor.Reset();
-					return base.OnSendInMessage(message);
-
-				case MessageTypes.MarketData:
-					return ProcessMarketData((MarketDataMessage)message);
-
-				default:
-					return base.OnSendInMessage(message);
-			}
-		}
-
-		private bool ProcessMarketData(MarketDataMessage message)
-		{
-			message = _storageProcessor.ProcessMarketData(message, RaiseStorageMessage);
-
-			return message == null || base.OnSendInMessage(message);
-		}
-
-		private void RaiseStorageMessage(Message message)
-		{
-			message.TryInitLocalTime(this);
-
-			RaiseNewOutMessage(message);
-		}
-
-		/// <summary>
-		/// Create a copy of <see cref="StorageMessageAdapter"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override IMessageChannel Clone()
-		{
-			return new StorageMessageAdapter(InnerAdapter.TypedClone(), _storageProcessor);
-		}
+	/// <summary>
+	/// Create a copy of <see cref="StorageMessageAdapter"/>.
+	/// </summary>
+	/// <returns>Copy.</returns>
+	public override IMessageChannel Clone()
+	{
+		return new StorageMessageAdapter(InnerAdapter.TypedClone(), _storageProcessor);
 	}
 }

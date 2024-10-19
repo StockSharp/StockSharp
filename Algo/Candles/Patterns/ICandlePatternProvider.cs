@@ -1,16 +1,6 @@
 ﻿namespace StockSharp.Algo.Candles.Patterns;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-using Ecng.Serialization;
-
 using StockSharp.Configuration;
-using StockSharp.Logging;
 
 /// <summary>
 /// Provider <see cref="ICandlePattern"/>.

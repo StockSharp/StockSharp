@@ -1,25 +1,22 @@
-﻿namespace StockSharp.Configuration
+﻿namespace StockSharp.Configuration;
+
+/// <summary>
+/// Product id attribute.
+/// </summary>
+[AttributeUsage(AttributeTargets.Assembly, Inherited = false, AllowMultiple = false)]
+public class ProductIdAttribute : Attribute
 {
-	using System;
+	/// <summary>
+	/// Product id.
+	/// </summary>
+	public long ProductId { get; }
 
 	/// <summary>
-	/// Product id attribute.
+	/// Initializes a new instance of the <see cref="ProductIdAttribute"/>.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Assembly, Inherited = false, AllowMultiple = false)]
-	public class ProductIdAttribute : Attribute
+	/// <param name="productId"><see cref="ProductId"/></param>
+	public ProductIdAttribute(long productId)
 	{
-		/// <summary>
-		/// Product id.
-		/// </summary>
-		public long ProductId { get; }
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ProductIdAttribute"/>.
-		/// </summary>
-		/// <param name="productId"><see cref="ProductId"/></param>
-		public ProductIdAttribute(long productId)
-		{
-			ProductId = productId;
-		}
+		ProductId = productId;
 	}
 }

@@ -1,25 +1,22 @@
-namespace StockSharp.Algo.Expressions
+namespace StockSharp.Algo.Expressions;
+
+/// <summary>
+/// Index securities processor for <see cref="ExpressionIndexSecurity"/>.
+/// </summary>
+public class ExpressionIndexSecurityProcessor : IndexSecurityBaseProcessor<ExpressionIndexSecurity>
 {
-	using StockSharp.BusinessEntities;
-
 	/// <summary>
-	/// Index securities processor for <see cref="ExpressionIndexSecurity"/>.
+	/// Initializes a new instance of the <see cref="ExpressionIndexSecurityProcessor"/>.
 	/// </summary>
-	public class ExpressionIndexSecurityProcessor : IndexSecurityBaseProcessor<ExpressionIndexSecurity>
+	/// <param name="basketSecurity">The index, built of combination of several instruments through mathematical formula <see cref="ExpressionIndexSecurity.Expression"/>.</param>
+	public ExpressionIndexSecurityProcessor(Security basketSecurity)
+		: base(basketSecurity)
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ExpressionIndexSecurityProcessor"/>.
-		/// </summary>
-		/// <param name="basketSecurity">The index, built of combination of several instruments through mathematical formula <see cref="ExpressionIndexSecurity.Expression"/>.</param>
-		public ExpressionIndexSecurityProcessor(Security basketSecurity)
-			: base(basketSecurity)
-		{
-		}
+	}
 
-		/// <inheritdoc />
-		protected override decimal OnCalculate(decimal[] values)
-		{
-			return BasketSecurity.Formula.Calculate(values);
-		}
+	/// <inheritdoc />
+	protected override decimal OnCalculate(decimal[] values)
+	{
+		return BasketSecurity.Formula.Calculate(values);
 	}
 }

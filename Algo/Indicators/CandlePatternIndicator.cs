@@ -1,20 +1,8 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
 
-using Ecng.Common;
-using Ecng.Serialization;
-using Ecng.ComponentModel;
-
 using StockSharp.Algo.Candles.Patterns;
-using StockSharp.Messages;
-using StockSharp.Localization;
-using StockSharp.Logging;
 
 /// <summary>
 /// <see cref="CandlePatternIndicator"/> value.
@@ -37,13 +25,19 @@ public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 	/// </summary>
 	/// <param name="indicator"><see cref="IIndicator"/></param>
 	/// <param name="value">Signal value.</param>
-	public CandlePatternIndicatorValue(IIndicator indicator, bool value) : base(indicator, value) { }
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public CandlePatternIndicatorValue(IIndicator indicator, bool value, DateTimeOffset time)
+		: base(indicator, value, time)
+	{ }
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CandlePatternIndicatorValue"/>.
 	/// </summary>
 	/// <param name="indicator"><see cref="IIndicator"/></param>
-	public CandlePatternIndicatorValue(IIndicator indicator) : base(indicator) { }
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public CandlePatternIndicatorValue(IIndicator indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{ }
 
 	/// <summary>
 	/// Cast object from <see cref="CandlePatternIndicatorValue"/> to <see cref="bool"/>.
@@ -197,7 +191,7 @@ public class CandlePatternIndicator : BaseIndicator
 
 		if (candlesCount == 0)
 		{
-			return new CandlePatternIndicatorValue(this)
+			return new CandlePatternIndicatorValue(this, input.Time)
 			{
 				IsFinal = input.IsFinal
 			};
@@ -205,7 +199,7 @@ public class CandlePatternIndicator : BaseIndicator
 
 		try
 		{
-			var candle = input.GetValue<ICandleMessage>();
+			var candle = input.ToCandle();
 		
 			_buffer.Add(candle);
 
@@ -233,7 +227,7 @@ public class CandlePatternIndicator : BaseIndicator
 				}
 			}
 
-			return new CandlePatternIndicatorValue(this, recognized)
+			return new CandlePatternIndicatorValue(this, recognized, input.Time)
 			{
 				IsFinal = input.IsFinal,
 				CandleOpenTimes = times,

@@ -1,15 +1,5 @@
 ﻿namespace StockSharp.Algo.Strategies;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.BusinessEntities;
-
 /// <summary>
 /// <see cref="IStrategyParam"/> dictionary.
 /// </summary>

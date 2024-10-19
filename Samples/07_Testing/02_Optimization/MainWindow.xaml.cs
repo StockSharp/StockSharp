@@ -111,8 +111,8 @@ public partial class MainWindow
 		// test portfolio
 		var portfolio = Portfolio.CreateSimulator();
 
-		var secProvider = new CollectionSecurityProvider(new[] { security });
-		var pfProvider = new CollectionPortfolioProvider(new[] { portfolio });
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
 
 		if (BruteForce.IsChecked == true)
 			_optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
@@ -248,15 +248,15 @@ public partial class MainWindow
 
 			var go = (GeneticOptimizer)_optimizer;
 			go.Settings.Apply((GeneticSettings)GeneticSettings.SelectedObject);
-			go.Start(startTime, stopTime, strategy, new (IStrategyParam, object, object, object, IEnumerable)[]
-			{
+			go.Start(startTime, stopTime, strategy,
+			[
 				(strategy.Parameters.GetByName(nameof(strategy.ShortSma)), shortRange.min, shortRange.max, shortRange.step, null),
 				(strategy.Parameters.GetByName(nameof(strategy.LongSma)), longRange.min, longRange.max, longRange.step, null),
 
 				// Specifing time frame range as exact 2 values (Min and Max).
 				// In that case generic will select from them only instead of random from range.
 				(strategy.Parameters.GetByName(nameof(strategy.CandleTimeFrame)), null, null, tfRange.step, new[] { tfRange.min, tfRange.max }),
-			});
+			]);
 		}
 	}
 

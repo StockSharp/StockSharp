@@ -139,14 +139,15 @@ public partial class SecuritiesWindow
 
 	private void SecuritiesWindow_OnLoaded(object sender, RoutedEventArgs e)
 	{
-		var timeFrames = Connector.Adapter.GetTimeFrames().ToArray();
-
-		if (timeFrames.Length == 0 && Connector.Adapter.IsMarketDataTypeSupported(DataType.Ticks))
+		UpdateTimeFrames(new[]
 		{
-			timeFrames = new[] { TimeSpan.FromMinutes(1) };
-		}
-
-		UpdateTimeFrames(timeFrames);
+			TimeSpan.FromMinutes(1),
+			TimeSpan.FromMinutes(5),
+			TimeSpan.FromMinutes(15),
+			TimeSpan.FromMinutes(30),
+			TimeSpan.FromHours(1),
+			TimeSpan.FromDays(1),
+		}.Concat(Connector.Adapter.GetTimeFrames()).OrderBy().Distinct());
 	}
 
 	public void UpdateTimeFrames(IEnumerable<TimeSpan> timeFrames)

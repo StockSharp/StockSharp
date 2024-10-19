@@ -5,6 +5,7 @@ using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Testing;
 using StockSharp.Messages;
+using StockSharp.BusinessEntities;
 
 namespace StockSharp.Samples.Strategies.HistorySMA
 {
@@ -50,9 +51,11 @@ namespace StockSharp.Samples.Strategies.HistorySMA
 			if (!IsRealTime(candle) && !IsBacktesting) return;
 
 			var volume = Volume + Math.Abs(Position);
-			RegisterOrder(isShortLessCurrent ?
-				this.SellAtMarket(volume) :
-				this.BuyAtMarket(volume));
+
+			if (isShortLessCurrent)
+				SellMarket(volume);
+			else
+				BuyMarket(volume);
 		}
 	}
 }

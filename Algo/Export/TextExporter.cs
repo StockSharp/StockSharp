@@ -1,127 +1,103 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
+namespace StockSharp.Algo.Export;
 
-Project: StockSharp.Algo.Export.Algo
-File: TextExporter.cs
-Created: 2015, 11, 11, 2:32 PM
+using SmartFormat;
+using SmartFormat.Core.Formatting;
 
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.Algo.Export
+/// <summary>
+/// The export into text file.
+/// </summary>
+public class TextExporter : BaseExporter
 {
-	using System;
-	using System.Collections.Generic;
-	using System.IO;
-
-	using Ecng.Common;
-
-	using SmartFormat;
-	using SmartFormat.Core.Formatting;
-
-	using StockSharp.Messages;
+	private readonly string _template;
+	private readonly string _header;
 
 	/// <summary>
-	/// The export into text file.
+	/// Initializes a new instance of the <see cref="TextExporter"/>.
 	/// </summary>
-	public class TextExporter : BaseExporter
+	/// <param name="dataType">Data type info.</param>
+	/// <param name="isCancelled">The processor, returning process interruption sign.</param>
+	/// <param name="fileName">The path to file.</param>
+	/// <param name="template">The string formatting template.</param>
+	/// <param name="header">Header at the first line. Do not add header while empty string.</param>
+	public TextExporter(DataType dataType, Func<int, bool> isCancelled, string fileName, string template, string header)
+		: base(dataType, isCancelled, fileName)
 	{
-		private readonly string _template;
-		private readonly string _header;
+		if (template.IsEmpty())
+			throw new ArgumentNullException(nameof(template));
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="TextExporter"/>.
-		/// </summary>
-		/// <param name="dataType">Data type info.</param>
-		/// <param name="isCancelled">The processor, returning process interruption sign.</param>
-		/// <param name="fileName">The path to file.</param>
-		/// <param name="template">The string formatting template.</param>
-		/// <param name="header">Header at the first line. Do not add header while empty string.</param>
-		public TextExporter(DataType dataType, Func<int, bool> isCancelled, string fileName, string template, string header)
-			: base(dataType, isCancelled, fileName)
+		_template = template;
+		_header = header;
+	}
+
+	/// <inheritdoc />
+	protected override (int, DateTimeOffset?) ExportOrderLog(IEnumerable<ExecutionMessage> messages)
+		=> Do(messages);
+
+	/// <inheritdoc />
+	protected override (int, DateTimeOffset?) ExportTicks(IEnumerable<ExecutionMessage> messages)
+		=> Do(messages);
+
+	/// <inheritdoc />
+	protected override (int, DateTimeOffset?) ExportTransactions(IEnumerable<ExecutionMessage> messages)
+		=> Do(messages);
+
+	/// <inheritdoc />
+	protected override (int, DateTimeOffset?) Export(IEnumerable<QuoteChangeMessage> messages)
+		=> Do(messages.ToTimeQuotes());
+
+	/// <inheritdoc />
+	protected override (int, DateTimeOffset?) Export(IEnumerable<Level1ChangeMessage> messages)
+		=> Do(messages);
+
+	/// <inheritdoc />
+	protected override (int, DateTimeOffset?) Export(IEnumerable<CandleMessage> messages)
+		=> Do(messages);
+
+	/// <inheritdoc />
+	protected override (int, DateTimeOffset?) Export(IEnumerable<NewsMessage> messages)
+		=> Do(messages);
+
+	/// <inheritdoc />
+	protected override (int, DateTimeOffset?) Export(IEnumerable<SecurityMessage> messages)
+		=> Do(messages);
+
+	/// <inheritdoc />
+	protected override (int, DateTimeOffset?) Export(IEnumerable<PositionChangeMessage> messages)
+		=> Do(messages);
+
+	/// <inheritdoc />
+	protected override (int, DateTimeOffset?) Export(IEnumerable<IndicatorValue> values)
+		=> Do(values);
+
+	private (int, DateTimeOffset?) Do<TValue>(IEnumerable<TValue> values)
+	{
+		var count = 0;
+		var lastTime = default(DateTimeOffset?);
+
+		using (var writer = new StreamWriter(Path, true))
 		{
-			if (template.IsEmpty())
-				throw new ArgumentNullException(nameof(template));
+			if (!_header.IsEmpty())
+				writer.WriteLine(_header);
 
-			_template = template;
-			_header = header;
-		}
+			FormatCache templateCache = null;
+			var formater = Smart.Default;
 
-		/// <inheritdoc />
-		protected override (int, DateTimeOffset?) ExportOrderLog(IEnumerable<ExecutionMessage> messages)
-			=> Do(messages);
-
-		/// <inheritdoc />
-		protected override (int, DateTimeOffset?) ExportTicks(IEnumerable<ExecutionMessage> messages)
-			=> Do(messages);
-
-		/// <inheritdoc />
-		protected override (int, DateTimeOffset?) ExportTransactions(IEnumerable<ExecutionMessage> messages)
-			=> Do(messages);
-
-		/// <inheritdoc />
-		protected override (int, DateTimeOffset?) Export(IEnumerable<QuoteChangeMessage> messages)
-			=> Do(messages.ToTimeQuotes());
-
-		/// <inheritdoc />
-		protected override (int, DateTimeOffset?) Export(IEnumerable<Level1ChangeMessage> messages)
-			=> Do(messages);
-
-		/// <inheritdoc />
-		protected override (int, DateTimeOffset?) Export(IEnumerable<CandleMessage> messages)
-			=> Do(messages);
-
-		/// <inheritdoc />
-		protected override (int, DateTimeOffset?) Export(IEnumerable<NewsMessage> messages)
-			=> Do(messages);
-
-		/// <inheritdoc />
-		protected override (int, DateTimeOffset?) Export(IEnumerable<SecurityMessage> messages)
-			=> Do(messages);
-
-		/// <inheritdoc />
-		protected override (int, DateTimeOffset?) Export(IEnumerable<PositionChangeMessage> messages)
-			=> Do(messages);
-
-		/// <inheritdoc />
-		protected override (int, DateTimeOffset?) Export(IEnumerable<IndicatorValue> values)
-			=> Do(values);
-
-		private (int, DateTimeOffset?) Do<TValue>(IEnumerable<TValue> values)
-		{
-			var count = 0;
-			var lastTime = default(DateTimeOffset?);
-
-			using (var writer = new StreamWriter(Path, true))
+			foreach (var value in values)
 			{
-				if (!_header.IsEmpty())
-					writer.WriteLine(_header);
+				if (!CanProcess())
+					break;
 
-				FormatCache templateCache = null;
-				var formater = Smart.Default;
+				writer.WriteLine(formater.FormatWithCache(ref templateCache, _template, value));
+				
+				count++;
 
-				foreach (var value in values)
-				{
-					if (!CanProcess())
-						break;
-
-					writer.WriteLine(formater.FormatWithCache(ref templateCache, _template, value));
-					
-					count++;
-
-					if (value is IServerTimeMessage timeMsg)
-						lastTime = timeMsg.ServerTime;
-				}
-
-				//writer.Flush();
+				if (value is IServerTimeMessage timeMsg)
+					lastTime = timeMsg.ServerTime;
 			}
 
-			return (count, lastTime);
+			//writer.Flush();
 		}
+
+		return (count, lastTime);
 	}
 }

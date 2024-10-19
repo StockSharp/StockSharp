@@ -1,12 +1,5 @@
 ﻿namespace StockSharp.Algo;
 
-using System;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// Fill gaps by <see cref="IFillGapsBehaviour"/> message adapter.
 /// </summary>

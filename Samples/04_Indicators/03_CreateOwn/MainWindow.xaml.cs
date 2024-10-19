@@ -3,6 +3,8 @@
 using System;
 using System.Windows.Media;
 
+using Ecng.Drawing;
+
 using StockSharp.Algo;
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Storages;
@@ -32,14 +34,14 @@ public partial class MainWindow
 		{
 			FullTitle = "SMA",
 			Color = Colors.Brown,
-			DrawStyle = ChartIndicatorDrawStyles.Line
+			DrawStyle = DrawStyles.Line
 		};
 
 		var chartIndicatorElement2 = new ChartIndicatorElement()
 		{
 			FullTitle = "Lazy",
 			Color = Colors.DodgerBlue,
-			DrawStyle = ChartIndicatorDrawStyles.Line
+			DrawStyle = DrawStyles.Line
 		};
 		Chart.AddElement(chartArea, chartIndicatorElement1);
 		Chart.AddElement(chartArea, chartIndicatorElement2);
@@ -89,6 +91,6 @@ internal class LazyMovingAverage : BaseIndicator
 		else
 			_outputValue += (value - _outputValue) / Length;
 
-		return new DecimalIndicatorValue(this, _outputValue.Value);
+		return new DecimalIndicatorValue(this, _outputValue.Value, input.Time);
 	}
 }

@@ -1,15 +1,5 @@
 ﻿namespace StockSharp.Charting;
 
-using System;
-using System.ComponentModel;
-using System.Drawing;
-
-using Ecng.Collections;
-using Ecng.Common;
-using Ecng.ComponentModel;
-using Ecng.Serialization;
-using Ecng.Drawing;
-
 /// <summary>
 /// Dummy implementation of <see cref="IChartBuilder"/>.
 /// </summary>
@@ -166,6 +156,7 @@ public class DummyChartBuilder : IChartBuilder
 		public bool DrawMinorGridLines { get; set; }
 		public bool DrawLabels { get; set; }
 		public string TextFormatting { get; set; }
+		public string CursorTextFormatting { get; set; }
 		public string SubDayTextFormatting { get; set; }
 		public TimeZoneInfo TimeZone { get; set; }
 
@@ -187,6 +178,7 @@ public class DummyChartBuilder : IChartBuilder
 			DrawMinorGridLines = storage.GetValue<bool>(nameof(DrawMinorGridLines));
 			DrawLabels = storage.GetValue<bool>(nameof(DrawLabels));
 			TextFormatting = storage.GetValue<string>(nameof(TextFormatting));
+			CursorTextFormatting = storage.GetValue<string>(nameof(CursorTextFormatting));
 			SubDayTextFormatting = storage.GetValue(nameof(SubDayTextFormatting), SubDayTextFormatting);
 			SwitchAxisLocation = storage.GetValue<bool>(nameof(SwitchAxisLocation));
 			AxisType = storage.GetValue<ChartAxisType>(nameof(AxisType));
@@ -196,7 +188,7 @@ public class DummyChartBuilder : IChartBuilder
 
 	private class DummyBandElement : DummyElement, IChartBandElement
 	{
-		ChartIndicatorDrawStyles IChartBandElement.Style { get; set; }
+		DrawStyles IChartBandElement.Style { get; set; }
 		IChartLineElement IChartBandElement.Line1 => throw new NotSupportedException();
 		IChartLineElement IChartBandElement.Line2 => throw new NotSupportedException();
 	}
@@ -211,7 +203,7 @@ public class DummyChartBuilder : IChartBuilder
 		public Color AdditionalColor { get; set; }
 		public int StrokeThickness { get; set; }
 		public bool AntiAliasing { get; set; }
-		public ChartIndicatorDrawStyles Style { get; set; }
+		public DrawStyles Style { get; set; }
 		public bool ShowAxisMarker { get; set; }
 
 		public override void Load(SettingsStorage storage)
@@ -222,7 +214,7 @@ public class DummyChartBuilder : IChartBuilder
 			//AdditionalColor = storage.GetValue<int>(nameof(AdditionalColor)).ToColor();
 			StrokeThickness = storage.GetValue<int>(nameof(StrokeThickness));
 			AntiAliasing = storage.GetValue<bool>(nameof(AntiAliasing));
-			Style = storage.GetValue<ChartIndicatorDrawStyles>(nameof(Style));
+			Style = storage.GetValue<DrawStyles>(nameof(Style));
 			ShowAxisMarker = storage.GetValue<bool>(nameof(ShowAxisMarker));
 		}
 	}
@@ -236,27 +228,31 @@ public class DummyChartBuilder : IChartBuilder
 		public Color UpBorderColor { get; set; }
 		public int StrokeThickness { get; set; }
 		public bool AntiAliasing { get; set; }
-		public Color LineColor { get; set; }
-		public Color AreaColor { get; set; }
+		public Color? LineColor { get; set; }
+		public Color? AreaColor { get; set; }
 		public bool ShowAxisMarker { get; set; }
 		Func<DateTimeOffset, bool, bool, Color?> IChartCandleElement.Colorer { get; set; }
-		public int Timeframe2Multiplier { get; set; }
-		public int Timeframe3Multiplier { get; set; }
-		public Color FontColor { get; set; }
-		public Color Timeframe2Color { get; set; }
-		public Color Timeframe2FrameColor { get; set; }
-		public Color Timeframe3Color { get; set; }
-		public Color MaxVolumeColor { get; set; }
-		public Color ClusterLineColor { get; set; }
-		public Color ClusterSeparatorLineColor { get; set; }
-		public Color ClusterTextColor { get; set; }
-		public Color ClusterColor { get; set; }
-		public Color ClusterMaxColor { get; set; }
+		public int? Timeframe2Multiplier { get; set; }
+		public int? Timeframe3Multiplier { get; set; }
+		public Color? FontColor { get; set; }
+		public Color? Timeframe2Color { get; set; }
+		public Color? Timeframe2FrameColor { get; set; }
+		public Color? Timeframe3Color { get; set; }
+		public Color? MaxVolumeColor { get; set; }
+		public Color? ClusterLineColor { get; set; }
+		public Color? ClusterSeparatorLineColor { get; set; }
+		public Color? ClusterTextColor { get; set; }
+		public Color? ClusterColor { get; set; }
+		public Color? ClusterMaxColor { get; set; }
 		public bool ShowHorizontalVolumes { get; set; }
 		public bool LocalHorizontalVolumes { get; set; }
 		public double HorizontalVolumeWidthFraction { get; set; }
-		public Color HorizontalVolumeColor { get; set; }
-		public Color HorizontalVolumeFontColor { get; set; }
+		public Color? HorizontalVolumeColor { get; set; }
+		public Color? HorizontalVolumeFontColor { get; set; }
+		public decimal? PriceStep { get; set; }
+		public bool DrawSeparateVolumes { get; set; }
+		public Color? BuyColor { get; set; }
+		public Color? SellColor { get; set; }
 
 		public override void Load(SettingsStorage storage)
 		{
@@ -268,31 +264,35 @@ public class DummyChartBuilder : IChartBuilder
 			UpBorderColor = storage.GetValue<int>(nameof(UpBorderColor)).ToColor();
 			DownFillColor = storage.GetValue<int>(nameof(DownFillColor)).ToColor();
 			DownBorderColor = storage.GetValue<int>(nameof(DownBorderColor)).ToColor();
-			LineColor = storage.GetValue<int>(nameof(LineColor)).ToColor();
-			AreaColor = storage.GetValue<int>(nameof(AreaColor)).ToColor();
+			LineColor = storage.GetValue<int?>(nameof(LineColor))?.ToColor();
+			AreaColor = storage.GetValue<int?>(nameof(AreaColor))?.ToColor();
 
 			DrawStyle = storage.GetValue<ChartCandleDrawStyles>(nameof(DrawStyle));
 			StrokeThickness = storage.GetValue<int>(nameof(StrokeThickness));
 			AntiAliasing = storage.GetValue<bool>(nameof(AntiAliasing));
 			ShowAxisMarker = storage.GetValue<bool>(nameof(ShowAxisMarker));
 
-			Timeframe2Multiplier = storage.GetValue<int>(nameof(Timeframe2Multiplier));
-			Timeframe3Multiplier = storage.GetValue<int>(nameof(Timeframe3Multiplier));
-			FontColor = storage.GetValue<int>(nameof(FontColor)).ToColor();
-			Timeframe2Color = storage.GetValue<int>(nameof(Timeframe2Color)).ToColor();
-			Timeframe2FrameColor = storage.GetValue<int>(nameof(Timeframe2FrameColor)).ToColor();
-			Timeframe3Color = storage.GetValue<int>(nameof(Timeframe3Color)).ToColor();
-			MaxVolumeColor = storage.GetValue<int>(nameof(MaxVolumeColor)).ToColor();
-			ClusterSeparatorLineColor = storage.GetValue<int>(nameof(ClusterSeparatorLineColor)).ToColor();
-			ClusterLineColor = storage.GetValue<int>(nameof(ClusterLineColor)).ToColor();
-			ClusterTextColor = storage.GetValue<int>(nameof(ClusterTextColor)).ToColor();
-			ClusterColor = storage.GetValue<int>(nameof(ClusterColor)).ToColor();
-			ClusterMaxColor = storage.GetValue<int>(nameof(ClusterMaxColor)).ToColor();
+			Timeframe2Multiplier = storage.GetValue<int?>(nameof(Timeframe2Multiplier));
+			Timeframe3Multiplier = storage.GetValue<int?>(nameof(Timeframe3Multiplier));
+			FontColor = storage.GetValue<int?>(nameof(FontColor))?.ToColor();
+			Timeframe2Color = storage.GetValue<int?>(nameof(Timeframe2Color))?.ToColor();
+			Timeframe2FrameColor = storage.GetValue<int?>(nameof(Timeframe2FrameColor))?.ToColor();
+			Timeframe3Color = storage.GetValue<int?>(nameof(Timeframe3Color))?.ToColor();
+			MaxVolumeColor = storage.GetValue<int?>(nameof(MaxVolumeColor))?.ToColor();
+			ClusterSeparatorLineColor = storage.GetValue<int?>(nameof(ClusterSeparatorLineColor))?.ToColor();
+			ClusterLineColor = storage.GetValue<int?>(nameof(ClusterLineColor))?.ToColor();
+			ClusterTextColor = storage.GetValue<int?>(nameof(ClusterTextColor))?.ToColor();
+			ClusterColor = storage.GetValue<int?>(nameof(ClusterColor))?.ToColor();
+			ClusterMaxColor = storage.GetValue<int?>(nameof(ClusterMaxColor))?.ToColor();
 			ShowHorizontalVolumes = storage.GetValue<bool>(nameof(ShowHorizontalVolumes));
 			LocalHorizontalVolumes = storage.GetValue<bool>(nameof(LocalHorizontalVolumes));
 			HorizontalVolumeWidthFraction = storage.GetValue<double>(nameof(HorizontalVolumeWidthFraction));
-			HorizontalVolumeColor = storage.GetValue<int>(nameof(HorizontalVolumeColor)).ToColor();
-			HorizontalVolumeFontColor = storage.GetValue<int>(nameof(HorizontalVolumeFontColor)).ToColor();
+			HorizontalVolumeColor = storage.GetValue<int?>(nameof(HorizontalVolumeColor))?.ToColor();
+			HorizontalVolumeFontColor = storage.GetValue<int?>(nameof(HorizontalVolumeFontColor))?.ToColor();
+			PriceStep = storage.GetValue<decimal?>(nameof(PriceStep));
+			DrawSeparateVolumes = storage.GetValue<bool>(nameof(DrawSeparateVolumes));
+			BuyColor = storage.GetValue<int?>(nameof(BuyColor))?.ToColor();
+			SellColor = storage.GetValue<int?>(nameof(SellColor))?.ToColor();
 		}
 	}
 
@@ -337,7 +337,7 @@ public class DummyChartBuilder : IChartBuilder
 		Color IChartIndicatorElement.AdditionalColor { get; set; }
 		int IChartIndicatorElement.StrokeThickness { get; set; }
 		bool IChartIndicatorElement.AntiAliasing { get; set; }
-		ChartIndicatorDrawStyles IChartIndicatorElement.DrawStyle { get; set; }
+		DrawStyles IChartIndicatorElement.DrawStyle { get; set; }
 		bool IChartIndicatorElement.ShowAxisMarker { get; set; }
 		bool IChartIndicatorElement.AutoAssignYAxis { get; set; }
 	}

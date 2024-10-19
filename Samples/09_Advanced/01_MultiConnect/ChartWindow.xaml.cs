@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 
+using StockSharp.BusinessEntities;
 using StockSharp.Algo;
 using StockSharp.Messages;
 using StockSharp.Xaml.Charting;

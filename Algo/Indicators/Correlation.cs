@@ -1,83 +1,61 @@
-﻿#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
+﻿namespace StockSharp.Algo.Indicators;
 
-Project: StockSharp.Algo.Indicators.Algo
-File: Correlation.cs
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.Algo.Indicators
+/// <summary>
+/// Correlation.
+/// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/correlation.html
+/// </remarks>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.CORKey,
+	Description = LocalizedStrings.CorrelationKey)]
+[Doc("topics/api/indicators/list_of_indicators/correlation.html")]
+[IndicatorIn(typeof(PairIndicatorValue<decimal>))]
+[IndicatorHidden]
+public class Correlation : Covariance
 {
-	using System;
-	using System.ComponentModel.DataAnnotations;
-
-	using Ecng.ComponentModel;
-
-	using StockSharp.Localization;
+	private readonly StandardDeviation _source;
+	private readonly StandardDeviation _other;
 
 	/// <summary>
-	/// Correlation.
+	/// Initializes a new instance of the <see cref="Correlation"/>.
 	/// </summary>
-	/// <remarks>
-	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/correlation.html
-	/// </remarks>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.CORKey,
-		Description = LocalizedStrings.CorrelationKey)]
-	[Doc("topics/api/indicators/list_of_indicators/correlation.html")]
-	[IndicatorIn(typeof(PairIndicatorValue<decimal>))]
-	public class Correlation : Covariance
+	public Correlation()
 	{
-		private readonly StandardDeviation _source;
-		private readonly StandardDeviation _other;
+		_source = new StandardDeviation();
+		_other = new StandardDeviation();
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Correlation"/>.
-		/// </summary>
-		public Correlation()
-		{
-			_source = new StandardDeviation();
-			_other = new StandardDeviation();
+		Length = 20;
+	}
 
-			Length = 20;
-		}
+	/// <inheritdoc />
+	public override void Reset()
+	{
+		base.Reset();
 
-		/// <inheritdoc />
-		public override void Reset()
-		{
-			base.Reset();
+		if (_source != null)
+			_source.Length = Length;
 
-			if (_source != null)
-				_source.Length = Length;
+		if (_other != null)
+			_other.Length = Length;
+	}
 
-			if (_other != null)
-				_other.Length = Length;
-		}
+	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{
+		var cov = base.OnProcess(input);
 
-		/// <inheritdoc />
-		protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		{
-			var cov = base.OnProcess(input);
+		var value = input.GetValue<Tuple<decimal, decimal>>();
 
-			var value = input.GetValue<Tuple<decimal, decimal>>();
+		var sourceDev = _source.Process(value.Item1, input.Time);
+		var otherDev = _other.Process(value.Item2, input.Time);
 
-			var sourceDev = _source.Process(value.Item1);
-			var otherDev = _other.Process(value.Item2);
+		var v = sourceDev.ToDecimal() * otherDev.ToDecimal();
 
-			var v = sourceDev.GetValue<decimal>() * otherDev.GetValue<decimal>();
+		if (v != 0)
+			v = cov.ToDecimal() / v;
 
-			if (v != 0)
-				v = cov.GetValue<decimal>() / v;
-
-			return new DecimalIndicatorValue(this, v);
-		}
+		return new DecimalIndicatorValue(this, v, input.Time);
 	}
 }

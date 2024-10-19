@@ -1,81 +1,71 @@
-﻿namespace StockSharp.Configuration
+﻿namespace StockSharp.Configuration;
+
+/// <summary>
+/// Default implementation of <see cref="ICredentialsProvider"/>.
+/// </summary>
+public class DefaultCredentialsProvider : ICredentialsProvider
 {
-	using System;
-	using System.IO;
+	private ServerCredentials _credentials;
 
-	using Ecng.Common;
-	using Ecng.ComponentModel;
-	using Ecng.Serialization;
-
-	using StockSharp.Logging;
-
-	/// <summary>
-	/// Default implementation of <see cref="ICredentialsProvider"/>.
-	/// </summary>
-	public class DefaultCredentialsProvider : ICredentialsProvider
+	bool ICredentialsProvider.TryLoad(out ServerCredentials credentials)
 	{
-		private ServerCredentials _credentials;
-
-		bool ICredentialsProvider.TryLoad(out ServerCredentials credentials)
+		lock (this)
 		{
-			lock (this)
+			if(_credentials != null)
 			{
-				if(_credentials != null)
-				{
-					credentials = _credentials.Clone();
-					return credentials.CanAutoLogin();
-				}
-
-				var file = Paths.CredentialsFile;
-				credentials = null;
-
-				try
-				{
-					if (file.IsConfigExists())
-					{
-						credentials = new ServerCredentials();
-						credentials.LoadIfNotNull(file.Deserialize<SettingsStorage>());
-
-						_credentials = credentials.Clone();
-					}
-				}
-				catch (Exception ex)
-				{
-					ex.LogError();
-				}
-
-				return credentials?.CanAutoLogin() == true;
+				credentials = _credentials.Clone();
+				return credentials.CanAutoLogin();
 			}
+
+			var file = Paths.CredentialsFile;
+			credentials = null;
+
+			try
+			{
+				if (file.IsConfigExists())
+				{
+					credentials = new ServerCredentials();
+					credentials.LoadIfNotNull(file.Deserialize<SettingsStorage>());
+
+					_credentials = credentials.Clone();
+				}
+			}
+			catch (Exception ex)
+			{
+				ex.LogError();
+			}
+
+			return credentials?.CanAutoLogin() == true;
 		}
+	}
 
-		void ICredentialsProvider.Save(ServerCredentials credentials, bool keepSecret)
+	void ICredentialsProvider.Save(ServerCredentials credentials, bool keepSecret)
+	{
+		if (credentials is null)
+			throw new ArgumentNullException(nameof(credentials));
+
+		lock (this)
 		{
-			if (credentials is null)
-				throw new ArgumentNullException(nameof(credentials));
+			_credentials = credentials.Clone();
 
-			lock (this)
-			{
-				_credentials = credentials.Clone();
+			Directory.CreateDirectory(Paths.CompanyPath);
 
-				Directory.CreateDirectory(Paths.CompanyPath);
+			var clone = credentials.Clone();
+			if (!keepSecret)
+				clone.Password = clone.Token = null;
 
-				var clone = credentials.Clone();
-				if (!keepSecret)
-					clone.Password = clone.Token = null;
-
-				clone.Save().Serialize(Paths.CredentialsFile);
-			}
+			clone.Save().Serialize(Paths.CredentialsFile);
 		}
+	}
 
-		void ICredentialsProvider.Delete()
+	void ICredentialsProvider.Delete()
+	{
+		var fileName = Paths.CredentialsFile;
+
+		lock (this)
 		{
-			var fileName = Paths.CredentialsFile;
-
-			lock (this)
-			{
-				if (File.Exists(fileName))
-					File.Delete(fileName);
-			}
+			if (File.Exists(fileName))
+				File.Delete(fileName);
 		}
 	}
 }

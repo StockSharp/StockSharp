@@ -1,41 +1,20 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
+namespace StockSharp.Algo.Candles.Compression;
 
-Project: StockSharp.Algo.Candles.Compression.Algo
-File: ICandleBuilder.cs
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.Algo.Candles.Compression
+/// <summary>
+/// The candles builder interface.
+/// </summary>
+public interface ICandleBuilder : IDisposable
 {
-	using System;
-	using System.Collections.Generic;
-
-	using StockSharp.Messages;
+	/// <summary>
+	/// The candle type.
+	/// </summary>
+	Type CandleType { get; }
 
 	/// <summary>
-	/// The candles builder interface.
+	/// To process the new data.
 	/// </summary>
-	public interface ICandleBuilder : IDisposable
-	{
-		/// <summary>
-		/// The candle type.
-		/// </summary>
-		Type CandleType { get; }
-
-		/// <summary>
-		/// To process the new data.
-		/// </summary>
-		/// <param name="subscription">Subscription.</param>
-		/// <param name="transform">The data source transformation.</param>
-		/// <returns>A new candles changes.</returns>
-		IEnumerable<CandleMessage> Process(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform);
-	}
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="transform">The data source transformation.</param>
+	/// <returns>A new candles changes.</returns>
+	IEnumerable<CandleMessage> Process(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform);
 }

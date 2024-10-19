@@ -12,44 +12,23 @@ public enum AlertNotifications
 	/// </summary>
 	[EnumMember]
 	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SoundKey)]
+	[XamlIcon("Bell")]
 	Sound,
-
-	/// <summary>
-	/// Speech.
-	/// </summary>
-	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SpeechKey)]
-	[Obsolete]
-	Speech,
 
 	/// <summary>
 	/// Popup window.
 	/// </summary>
 	[EnumMember]
 	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PopupKey)]
+	[XamlIcon("Copy")]
 	Popup,
-
-	/// <summary>
-	/// SMS.
-	/// </summary>
-	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SmsKey)]
-	[Obsolete]
-	Sms,
-
-	/// <summary>
-	/// Email.
-	/// </summary>
-	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.EmailKey)]
-	[Obsolete]
-	Email,
 
 	/// <summary>
 	/// Log file.
 	/// </summary>
 	[EnumMember]
 	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LogFileKey)]
+	[XamlIcon("Logs")]
 	Log,
 
 	/// <summary>
@@ -57,5 +36,6 @@ public enum AlertNotifications
 	/// </summary>
 	[EnumMember]
 	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TelegramKey)]
+	[XamlIcon("Telegram")]
 	Telegram,
 }

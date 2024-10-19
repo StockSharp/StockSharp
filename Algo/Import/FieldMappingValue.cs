@@ -1,43 +1,38 @@
-namespace StockSharp.Algo.Import
-{
-	using System;
+namespace StockSharp.Algo.Import;
 
-	using Ecng.Serialization;
+/// <summary>
+/// Mapping value.
+/// </summary>
+public class FieldMappingValue : IPersistable
+{
+	/// <summary>
+	/// File value.
+	/// </summary>
+	public string ValueFile { get; set; }
 
 	/// <summary>
-	/// Mapping value.
+	/// S# value.
 	/// </summary>
-	public class FieldMappingValue : IPersistable
+	public object ValueStockSharp { get; set; }
+
+	void IPersistable.Load(SettingsStorage storage)
 	{
-		/// <summary>
-		/// File value.
-		/// </summary>
-		public string ValueFile { get; set; }
+		ValueFile = storage.GetValue<string>(nameof(ValueFile));
 
-		/// <summary>
-		/// S# value.
-		/// </summary>
-		public object ValueStockSharp { get; set; }
-
-		void IPersistable.Load(SettingsStorage storage)
+		try
 		{
-			ValueFile = storage.GetValue<string>(nameof(ValueFile));
-
-			try
-			{
-				ValueStockSharp = storage.GetValue<SettingsStorage>(nameof(ValueStockSharp))?.FromStorage();
-			}
-			catch (Exception)
-			{
-				// 2022-08-08 remove 1 year later
-				ValueStockSharp = storage.GetValue<string>(nameof(ValueStockSharp));
-			}
+			ValueStockSharp = storage.GetValue<SettingsStorage>(nameof(ValueStockSharp))?.FromStorage();
 		}
-
-		void IPersistable.Save(SettingsStorage storage)
+		catch (Exception)
 		{
-			storage.SetValue(nameof(ValueFile), ValueFile);
-			storage.SetValue(nameof(ValueStockSharp), ValueStockSharp?.ToStorage());
+			// 2022-08-08 remove 1 year later
+			ValueStockSharp = storage.GetValue<string>(nameof(ValueStockSharp));
 		}
+	}
+
+	void IPersistable.Save(SettingsStorage storage)
+	{
+		storage.SetValue(nameof(ValueFile), ValueFile);
+		storage.SetValue(nameof(ValueStockSharp), ValueStockSharp?.ToStorage());
 	}
 }

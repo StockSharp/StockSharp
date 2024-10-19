@@ -1,23 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿namespace StockSharp.Algo.Strategies.Optimization;
 
-using Ecng.Collections;
-using Ecng.Common;
 using Ecng.Compilation;
 
 using GeneticSharp;
-
-using StockSharp.Algo.Storages;
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-using StockSharp.Logging;
-using StockSharp.Localization;
-
-namespace StockSharp.Algo.Strategies.Optimization;
 
 /// <summary>
 /// The genetic optimizer of strategies.
@@ -31,6 +16,7 @@ public class GeneticOptimizer : BaseOptimizer
 		private readonly Func<Strategy, decimal> _calcFitness;
 		private readonly DateTime _startTime;
 		private readonly DateTime _stopTime;
+		private readonly SynchronizedDictionary<DynamicTuple, decimal> _cache = [];
 
 		public StrategyFitness(GeneticOptimizer optimizer, Strategy strategy, Func<Strategy, decimal> calcFitness, DateTime startTime, DateTime stopTime)
 		{
@@ -81,6 +67,11 @@ public class GeneticOptimizer : BaseOptimizer
 				parameters[i] = realParam;
 			}
 
+			var key = new DynamicTuple(parameters.Select(p => p.Value).ToArray());
+
+			if (_cache.TryGetValue(key, out var fitVal))
+				return (double)fitVal;
+
 			using var wait = new ManualResetEvent(false);
 
 			_optimizer._events.Add(wait);
@@ -118,7 +109,11 @@ public class GeneticOptimizer : BaseOptimizer
 
 				wait.WaitOne();
 
-				return (double)_calcFitness(strategy);
+				fitVal = _calcFitness(strategy);
+
+				_cache[key] = fitVal;
+				
+				return (double)fitVal;
 			}
 			finally
 			{

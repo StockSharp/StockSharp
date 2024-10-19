@@ -8,6 +8,7 @@
 	using StockSharp.Algo.Strategies;
 	using StockSharp.Algo.Testing;
 	using StockSharp.Messages;
+	using StockSharp.BusinessEntities;
 
 	internal class BollingerStrategyUpBandStrategy : Strategy
 	{
@@ -40,12 +41,12 @@
 
 			if (candle.ClosePrice >= BollingerBands.UpBand.GetCurrentValue() && Position == 0)
 			{
-				RegisterOrder(this.BuyAtMarket(Volume));
+				BuyMarket(Volume);
 			}
 
 			else if (candle.ClosePrice <= BollingerBands.MovingAverage.GetCurrentValue() && Position > 0)
 			{
-				RegisterOrder(this.SellAtMarket(Math.Abs(Position)));
+				SellMarket(Math.Abs(Position));
 			}
 		}
 	}

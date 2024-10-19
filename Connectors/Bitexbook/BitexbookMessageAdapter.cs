@@ -38,7 +38,7 @@ public partial class BitexbookMessageAdapter
 	protected override IEnumerable<TimeSpan> TimeFrames => AllTimeFrames;
 
 	/// <inheritdoc />
-	public override string AssociatedBoard => BoardCodes.Bitexbook;
+	public override string[] AssociatedBoards { get; } = new[] { BoardCodes.Bitexbook };
 
 	private void SubscribePusherClient()
 	{

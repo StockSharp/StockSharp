@@ -1,108 +1,84 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
+namespace StockSharp.Algo.Commissions;
 
-Project: StockSharp.Algo.Commissions.Algo
-File: CommissionManager.cs
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.Algo.Commissions
+/// <summary>
+/// The commission calculating manager.
+/// </summary>
+public class CommissionManager : ICommissionManager
 {
-	using System;
-	using System.Linq;
+	/// <summary>
+	/// Initializes a new instance of the <see cref="CommissionManager"/>.
+	/// </summary>
+	public CommissionManager()
+	{
+	}
 
-	using Ecng.Collections;
-	using Ecng.Serialization;
+	private readonly CachedSynchronizedSet<ICommissionRule> _rules = new();
 
-	using StockSharp.Messages;
+	/// <inheritdoc />
+	public ISynchronizedCollection<ICommissionRule> Rules => _rules;
+
+	/// <inheritdoc />
+	public virtual decimal Commission { get; private set; }
+
+	/// <inheritdoc />
+	public virtual void Reset()
+	{
+		Commission = 0;
+		_rules.Cache.ForEach(r => r.Reset());
+	}
+
+	/// <inheritdoc />
+	public virtual decimal? Process(Message message)
+	{
+		switch (message.Type)
+		{
+			case MessageTypes.Reset:
+			{
+				Reset();
+				return null;
+			}
+			case MessageTypes.Execution:
+			{
+				if (_rules.Count == 0)
+					return null;
+
+				var execMsg = (ExecutionMessage)message;
+
+				decimal? commission = null;
+
+				foreach (var rule in _rules.Cache)
+				{
+					var ruleCom = rule.Process(execMsg);
+
+					if (ruleCom != null)
+						commission = (commission ?? 0) + ruleCom.Value;
+				}
+
+				if (commission != null)
+					Commission += commission.Value;
+
+				return commission;
+			}
+			default:
+				return null;
+		}
+	}
 
 	/// <summary>
-	/// The commission calculating manager.
+	/// Load settings.
 	/// </summary>
-	public class CommissionManager : ICommissionManager
+	/// <param name="storage">Storage.</param>
+	public void Load(SettingsStorage storage)
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CommissionManager"/>.
-		/// </summary>
-		public CommissionManager()
-		{
-		}
+		Rules.AddRange(storage.GetValue<SettingsStorage[]>(nameof(Rules)).Select(s => s.LoadEntire<ICommissionRule>()));
+	}
 
-		private readonly CachedSynchronizedSet<ICommissionRule> _rules = new();
-
-		/// <inheritdoc />
-		public ISynchronizedCollection<ICommissionRule> Rules => _rules;
-
-		/// <inheritdoc />
-		public virtual decimal Commission { get; private set; }
-
-		/// <inheritdoc />
-		public virtual void Reset()
-		{
-			Commission = 0;
-			_rules.Cache.ForEach(r => r.Reset());
-		}
-
-		/// <inheritdoc />
-		public virtual decimal? Process(Message message)
-		{
-			switch (message.Type)
-			{
-				case MessageTypes.Reset:
-				{
-					Reset();
-					return null;
-				}
-				case MessageTypes.Execution:
-				{
-					if (_rules.Count == 0)
-						return null;
-
-					var execMsg = (ExecutionMessage)message;
-
-					decimal? commission = null;
-
-					foreach (var rule in _rules.Cache)
-					{
-						var ruleCom = rule.Process(execMsg);
-
-						if (ruleCom != null)
-							commission = (commission ?? 0) + ruleCom.Value;
-					}
-
-					if (commission != null)
-						Commission += commission.Value;
-
-					return commission;
-				}
-				default:
-					return null;
-			}
-		}
-
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
-		public void Load(SettingsStorage storage)
-		{
-			Rules.AddRange(storage.GetValue<SettingsStorage[]>(nameof(Rules)).Select(s => s.LoadEntire<ICommissionRule>()));
-		}
-
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
-		public void Save(SettingsStorage storage)
-		{
-			storage.SetValue(nameof(Rules), Rules.Select(r => r.SaveEntire(false)).ToArray());
-		}
+	/// <summary>
+	/// Save settings.
+	/// </summary>
+	/// <param name="storage">Storage.</param>
+	public void Save(SettingsStorage storage)
+	{
+		storage.SetValue(nameof(Rules), Rules.Select(r => r.SaveEntire(false)).ToArray());
 	}
 }

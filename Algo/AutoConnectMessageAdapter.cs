@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Algo;
 
-using StockSharp.Messages;
-
 /// <summary>
 /// The messages adapter makes auto connection.
 /// </summary>

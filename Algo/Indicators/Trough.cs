@@ -1,73 +1,50 @@
-﻿#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
+﻿namespace StockSharp.Algo.Indicators;
 
-Project: StockSharp.Algo.Indicators.Algo
-File: Trough.cs
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.Algo.Indicators
+/// <summary>
+/// Trough.
+/// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/trough.html
+/// </remarks>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.TroughKey,
+	Description = LocalizedStrings.TroughDescKey)]
+[Doc("topics/api/indicators/list_of_indicators/trough.html")]
+public sealed class Trough : ZigZagEquis
 {
-	using System.ComponentModel.DataAnnotations;
-
-	using Ecng.ComponentModel;
-
-	using StockSharp.Localization;
-	using StockSharp.Messages;
-
 	/// <summary>
-	/// Trough.
+	/// To create the indicator <see cref="Trough"/>.
 	/// </summary>
-	/// <remarks>
-	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/trough.html
-	/// </remarks>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.TroughKey,
-		Description = LocalizedStrings.TroughDescKey)]
-	[Doc("topics/api/indicators/list_of_indicators/trough.html")]
-	public sealed class Trough : ZigZagEquis
+	public Trough()
 	{
-		/// <summary>
-		/// To create the indicator <see cref="Trough"/>.
-		/// </summary>
-		public Trough()
-		{
-			PriceField = Level1Fields.LowPrice;
-		}
+		PriceField = Level1Fields.LowPrice;
+	}
 
-		/// <inheritdoc />
-		protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		{
-			var value = base.OnProcess(input);
+	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{
+		var value = base.OnProcess(input);
 
-			if (IsFormed && !value.IsEmpty)
+		if (IsFormed && !value.IsEmpty)
+		{
+			if (CurrentValue > value.ToDecimal())
 			{
-				if (CurrentValue > value.GetValue<decimal>())
-				{
-					return value;
-				}
-				else
-				{
-					var lastValue = this.GetCurrentValue<ShiftedIndicatorValue>();
-
-					if (input.IsFinal)
-						IsFormed = !lastValue.IsEmpty;
-
-					return IsFormed ? new ShiftedIndicatorValue(this, lastValue.Value, lastValue.Shift + 1) : lastValue;
-				}
+				return value;
 			}
+			else
+			{
+				var lastValue = this.GetCurrentValue<ShiftedIndicatorValue>();
 
-			IsFormed = false;
+				if (input.IsFinal)
+					IsFormed = !lastValue.IsEmpty;
 
-			return value;
+				return IsFormed ? new ShiftedIndicatorValue(this, lastValue.Value, lastValue.Shift + 1, input.Time) : lastValue;
+			}
 		}
+
+		IsFormed = false;
+
+		return value;
 	}
 }

@@ -1,13 +1,5 @@
 ﻿namespace StockSharp.Algo.Strategies;
 
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System;
-
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
 partial class Strategy
 {
 	/// <summary>

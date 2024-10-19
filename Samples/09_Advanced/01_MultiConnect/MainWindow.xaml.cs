@@ -5,7 +5,7 @@ using System.ComponentModel;
 using Ecng.Common;
 using Ecng.Configuration;
 
-using StockSharp.Algo.Storages;
+using StockSharp.BusinessEntities;
 
 public partial class MainWindow
 {

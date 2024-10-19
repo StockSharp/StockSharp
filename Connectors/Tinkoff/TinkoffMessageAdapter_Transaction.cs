@@ -58,7 +58,7 @@ public partial class TinkoffMessageAdapter
 			}
 			else
 			{
-				response = await _service.Orders.PostOrderAsync(new()
+				response = await _service.Orders.PostOrderAsync(new PostOrderRequest
 				{
 					AccountId = regMsg.PortfolioName,
 					Direction = regMsg.Side.ToNative(),
@@ -78,9 +78,9 @@ public partial class TinkoffMessageAdapter
 				OrderStringId = response.OrderId,
 				OrderState = response.ExecutionReportStatus.ToOrderState(),
 				Error = response.ExecutionReportStatus == OrderExecutionReportStatus.ExecutionReportStatusRejected ? new InvalidOperationException(response.Message) : null,
-				Commission = response.ExecutedCommission,
+				Commission = response.ExecutedCommission?.ToDecimal(),
 				Balance = response.LotsRequested - response.LotsExecuted,
-				AveragePrice = response.ExecutedOrderPrice,
+				AveragePrice = response.ExecutedOrderPrice?.ToDecimal(),
 			});
 		}
 	}
@@ -215,11 +215,11 @@ public partial class TinkoffMessageAdapter
 					ServerTime = order.OrderDate.ToDateTimeOffset(),
 					Side = order.Direction.ToSide(),
 					OrderType = order.OrderType.ToOrderType(),
-					OrderPrice = order.InitialSecurityPrice,
+					OrderPrice = order.InitialSecurityPrice?.ToDecimal() ?? default,
 					Commission = order.InitialCommission ?? order.ExecutedCommission,
 					OrderVolume = order.LotsRequested,
 					Balance = order.LotsRequested - order.LotsExecuted,
-					AveragePrice = order.ExecutedOrderPrice,
+					AveragePrice = order.ExecutedOrderPrice?.ToDecimal(),
 					OrderState = order.ExecutionReportStatus.ToOrderState(),
 				});
 
@@ -230,7 +230,7 @@ public partial class TinkoffMessageAdapter
 						DataTypeEx = DataType.Transactions,
 						OriginalTransactionId = transId,
 						TradeStringId = trade.TradeId,
-						TradePrice = trade.Price,
+						TradePrice = trade.Price?.ToDecimal(),
 						TradeVolume = trade.Quantity,
 						ServerTime = trade.ExecutionTime.ToDateTimeOffset(),
 					});
@@ -243,7 +243,7 @@ public partial class TinkoffMessageAdapter
 			}
 			else
 			{
-				foreach (var order in (await _service.StopOrders.GetStopOrdersAsync(new() { AccountId = accountId, From = statusMsg.From?.ToTimestamp(), To = statusMsg.To?.ToTimestamp() }, cancellationToken: cancellationToken)).StopOrders)
+				foreach (var order in (await _service.StopOrders.GetStopOrdersAsync(new() { AccountId = accountId }, cancellationToken: cancellationToken)).StopOrders)
 				{
 					SendOutMessage(new ExecutionMessage
 					{
@@ -257,7 +257,7 @@ public partial class TinkoffMessageAdapter
 						ServerTime = order.CreateDate.ToDateTimeOffset(),
 						Side = order.Direction.ToSide(),
 						OrderType = OrderTypes.Conditional,
-						OrderPrice = order.Price,
+						OrderPrice = order.Price?.ToDecimal() ?? default,
 						OrderVolume = order.LotsRequested,
 						ExpiryDate = order.ExpirationTime.ToDateTimeOffset(),
 						Condition = new TinkoffOrderCondition
@@ -288,7 +288,7 @@ public partial class TinkoffMessageAdapter
 						DataTypeEx = DataType.Transactions,
 						OriginalTransactionId = transId,
 						TradeStringId = trade.TradeId,
-						TradePrice = trade.Price,
+						TradePrice = trade.Price?.ToDecimal(),
 						TradeVolume = trade.Quantity,
 						ServerTime = trade.DateTime.ToDateTimeOffset(),
 					});
@@ -332,7 +332,7 @@ public partial class TinkoffMessageAdapter
 								OrderStringId = orderState.OrderId,
 								OrderState = orderState.ExecutionReportStatus.ToOrderState(),
 								Balance = orderState.LotsRequested - orderState.LotsExecuted,
-								AveragePrice = orderState.ExecutedOrderPrice,
+								AveragePrice = orderState.ExecutedOrderPrice?.ToDecimal(),
 							});
 
 							var secId = orderState.InstrumentUid.FromInstrumentIdToSecId();
@@ -349,7 +349,7 @@ public partial class TinkoffMessageAdapter
 										OriginalTransactionId = transId,
 										ServerTime = trade.DateTime.ToDateTimeOffset(),
 										TradeStringId = trade.TradeId,
-										TradePrice = trade.Price,
+										TradePrice = trade.Price?.ToDecimal(),
 										TradeVolume = trade.Quantity,
 									});
 								}
@@ -394,9 +394,9 @@ public partial class TinkoffMessageAdapter
 				PortfolioName = portfolio.AccountId,
 				ServerTime = CurrentTime,
 			}
-			.TryAdd(PositionChangeTypes.CurrentValue, (decimal?)portfolio.TotalAmountPortfolio, true)
-			.TryAdd(PositionChangeTypes.RealizedPnL, (decimal?)portfolio.ExpectedYield, true)
-			.TryAdd(PositionChangeTypes.CurrentPrice, (decimal?)portfolio.TotalAmountPortfolio, true)
+			.TryAdd(PositionChangeTypes.CurrentValue, portfolio.TotalAmountPortfolio?.ToDecimal(), true)
+			.TryAdd(PositionChangeTypes.RealizedPnL, portfolio.ExpectedYield?.ToDecimal(), true)
+			.TryAdd(PositionChangeTypes.CurrentPrice, portfolio.TotalAmountPortfolio?.ToDecimal(), true)
 			);
 
 			foreach (var position in portfolio.Positions)
@@ -407,11 +407,11 @@ public partial class TinkoffMessageAdapter
 					PortfolioName = portfolio.AccountId,
 					ServerTime = CurrentTime,
 				}
-				.TryAdd(PositionChangeTypes.CurrentValue, (decimal?)position.Quantity, true)
-				.TryAdd(PositionChangeTypes.AveragePrice, (decimal?)position.AveragePositionPrice, true)
-				.TryAdd(PositionChangeTypes.RealizedPnL, (decimal?)position.ExpectedYield ?? (decimal?)position.CurrentNkd, true)
-				.TryAdd(PositionChangeTypes.CurrentPrice, (decimal?)position.CurrentPrice, true)
-				.TryAdd(PositionChangeTypes.VariationMargin, (decimal?)position.VarMargin, true)
+				.TryAdd(PositionChangeTypes.CurrentValue, position.Quantity?.ToDecimal(), true)
+				.TryAdd(PositionChangeTypes.AveragePrice, position.AveragePositionPrice?.ToDecimal(), true)
+				.TryAdd(PositionChangeTypes.RealizedPnL, position.ExpectedYield?.ToDecimal() ?? position.CurrentNkd?.ToDecimal(), true)
+				.TryAdd(PositionChangeTypes.CurrentPrice, position.CurrentPrice?.ToDecimal(), true)
+				.TryAdd(PositionChangeTypes.VariationMargin, position.VarMargin?.ToDecimal(), true)
 				);
 			}
 		}

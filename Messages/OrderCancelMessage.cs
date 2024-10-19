@@ -1,126 +1,105 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
+namespace StockSharp.Messages;
 
-Project: StockSharp.Messages.Messages
-File: OrderCancelMessage.cs
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.Messages
+/// <summary>
+/// A message containing the data for the cancellation of the order.
+/// </summary>
+[DataContract]
+[Serializable]
+public class OrderCancelMessage : OrderMessage
 {
-	using System;
-	using System.Runtime.Serialization;
-
-	using Ecng.Common;
+	/// <summary>
+	/// ID cancellation order.
+	/// </summary>
+	[DataMember]
+	public long? OrderId { get; set; }
 
 	/// <summary>
-	/// A message containing the data for the cancellation of the order.
+	/// Cancelling order id (as a string if the electronic board does not use a numeric representation of the identifiers).
 	/// </summary>
-	[DataContract]
-	[Serializable]
-	public class OrderCancelMessage : OrderMessage
+	[DataMember]
+	public string OrderStringId { get; set; }
+
+	/// <summary>
+	/// Cancelling balance.
+	/// </summary>
+	[DataMember]
+	public decimal? Balance { get; set; }
+
+	/// <summary>
+	/// Cancelling volume. If not specified, then it canceled the entire balance.
+	/// </summary>
+	[DataMember]
+	public decimal? Volume { get; set; }
+
+	/// <summary>
+	/// Order side.
+	/// </summary>
+	[DataMember]
+	public Sides? Side { get; set; }
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="OrderCancelMessage"/>.
+	/// </summary>
+	public OrderCancelMessage()
+		: base(MessageTypes.OrderCancel)
 	{
-		/// <summary>
-		/// ID cancellation order.
-		/// </summary>
-		[DataMember]
-		public long? OrderId { get; set; }
+	}
 
-		/// <summary>
-		/// Cancelling order id (as a string if the electronic board does not use a numeric representation of the identifiers).
-		/// </summary>
-		[DataMember]
-		public string OrderStringId { get; set; }
+	/// <summary>
+	/// Initialize <see cref="OrderCancelMessage"/>.
+	/// </summary>
+	/// <param name="type">Message type.</param>
+	protected OrderCancelMessage(MessageTypes type)
+		: base(type)
+	{
+	}
 
-		/// <summary>
-		/// Cancelling balance.
-		/// </summary>
-		[DataMember]
-		public decimal? Balance { get; set; }
+	/// <summary>
+	/// Copy the message into the <paramref name="destination" />.
+	/// </summary>
+	/// <param name="destination">The object, to which copied information.</param>
+	protected void CopyTo(OrderCancelMessage destination)
+	{
+		base.CopyTo(destination);
 
-		/// <summary>
-		/// Cancelling volume. If not specified, then it canceled the entire balance.
-		/// </summary>
-		[DataMember]
-		public decimal? Volume { get; set; }
+		destination.OrderId = OrderId;
+		destination.OrderStringId = OrderStringId;
+		destination.Balance = Balance;
+		destination.Volume = Volume;
+		destination.Side = Side;
+	}
 
-		/// <summary>
-		/// Order side.
-		/// </summary>
-		[DataMember]
-		public Sides? Side { get; set; }
+	/// <summary>
+	/// Create a copy of <see cref="OrderCancelMessage"/>.
+	/// </summary>
+	/// <returns>Copy.</returns>
+	public override Message Clone()
+	{
+		var clone = new OrderCancelMessage();
+		CopyTo(clone);
+		return clone;
+	}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="OrderCancelMessage"/>.
-		/// </summary>
-		public OrderCancelMessage()
-			: base(MessageTypes.OrderCancel)
-		{
-		}
+	/// <inheritdoc />
+	public override string ToString()
+	{
+		var str = base.ToString();
 
-		/// <summary>
-		/// Initialize <see cref="OrderCancelMessage"/>.
-		/// </summary>
-		/// <param name="type">Message type.</param>
-		protected OrderCancelMessage(MessageTypes type)
-			: base(type)
-		{
-		}
+		if (OrderId != null)
+			str += $",OrdId={OrderId.Value}";
 
-		/// <summary>
-		/// Copy the message into the <paramref name="destination" />.
-		/// </summary>
-		/// <param name="destination">The object, to which copied information.</param>
-		protected void CopyTo(OrderCancelMessage destination)
-		{
-			base.CopyTo(destination);
+		if (!OrderStringId.IsEmpty())
+			str += $",OrdStrId={OrderStringId}";
 
-			destination.OrderId = OrderId;
-			destination.OrderStringId = OrderStringId;
-			destination.Balance = Balance;
-			destination.Volume = Volume;
-			destination.Side = Side;
-		}
+		if (Balance != null)
+			str += $",Bal={Balance.Value}";
 
-		/// <summary>
-		/// Create a copy of <see cref="OrderCancelMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			var clone = new OrderCancelMessage();
-			CopyTo(clone);
-			return clone;
-		}
+		if (Volume != null)
+			str += $",Vol={Volume.Value}";
 
-		/// <inheritdoc />
-		public override string ToString()
-		{
-			var str = base.ToString();
+		if (Side != null)
+			str += $",Side={Side.Value}";
 
-			if (OrderId != null)
-				str += $",OrdId={OrderId.Value}";
-
-			if (!OrderStringId.IsEmpty())
-				str += $",OrdStrId={OrderStringId}";
-
-			if (Balance != null)
-				str += $",Bal={Balance.Value}";
-
-			if (Volume != null)
-				str += $",Vol={Volume.Value}";
-
-			if (Side != null)
-				str += $",Side={Side.Value}";
-
-			return str;
-		}
+		return str;
 	}
 }

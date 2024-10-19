@@ -1,88 +1,62 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
+namespace StockSharp.Algo.Risk;
 
-Project: StockSharp.Algo.Risk.Algo
-File: RiskManager.cs
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.Algo.Risk
+/// <summary>
+/// The risks control manager.
+/// </summary>
+public class RiskManager : BaseLogReceiver, IRiskManager
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-
-	using Ecng.Collections;
-	using Ecng.Serialization;
-
-	using StockSharp.Logging;
-	using StockSharp.Messages;
-
 	/// <summary>
-	/// The risks control manager.
+	/// Initializes a new instance of the <see cref="RiskManager"/>.
 	/// </summary>
-	public class RiskManager : BaseLogReceiver, IRiskManager
+	public RiskManager()
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="RiskManager"/>.
-		/// </summary>
-		public RiskManager()
+		_rules.Added += r => r.Parent = this;
+		_rules.Removed += r => r.Parent = null;
+		_rules.Inserted += (i, r) => r.Parent = this;
+		_rules.Clearing += () =>
 		{
-			_rules.Added += r => r.Parent = this;
-			_rules.Removed += r => r.Parent = null;
-			_rules.Inserted += (i, r) => r.Parent = this;
-			_rules.Clearing += () =>
-			{
-				_rules.Cache.ForEach(r => r.Parent = null);
-				return true;
-			};
+			_rules.Cache.ForEach(r => r.Parent = null);
+			return true;
+		};
+	}
+
+	private readonly CachedSynchronizedList<IRiskRule> _rules = new();
+
+	/// <inheritdoc />
+	public INotifyList<IRiskRule> Rules => _rules;
+
+	/// <inheritdoc />
+	public virtual void Reset()
+	{
+		_rules.Cache.ForEach(r => r.Reset());
+	}
+
+	/// <inheritdoc />
+	public IEnumerable<IRiskRule> ProcessRules(Message message)
+	{
+		if (message.Type == MessageTypes.Reset)
+		{
+			Reset();
+			return Enumerable.Empty<IRiskRule>();
 		}
 
-		private readonly CachedSynchronizedList<IRiskRule> _rules = new();
+		return _rules.Cache.Where(r => r.ProcessMessage(message)).ToArray();
+	}
 
-		/// <inheritdoc />
-		public INotifyList<IRiskRule> Rules => _rules;
+	/// <inheritdoc />
+	public override void Load(SettingsStorage storage)
+	{
+		Rules.Clear();
+		Rules.AddRange(storage.GetValue<SettingsStorage[]>(nameof(Rules)).Select(s => s.LoadEntire<IRiskRule>()));
 
-		/// <inheritdoc />
-		public virtual void Reset()
-		{
-			_rules.Cache.ForEach(r => r.Reset());
-		}
+		base.Load(storage);
+	}
 
-		/// <inheritdoc />
-		public IEnumerable<IRiskRule> ProcessRules(Message message)
-		{
-			if (message.Type == MessageTypes.Reset)
-			{
-				Reset();
-				return Enumerable.Empty<IRiskRule>();
-			}
+	/// <inheritdoc />
+	public override void Save(SettingsStorage storage)
+	{
+		storage.SetValue(nameof(Rules), Rules.Select(r => r.SaveEntire(false)).ToArray());
 
-			return _rules.Cache.Where(r => r.ProcessMessage(message)).ToArray();
-		}
-
-		/// <inheritdoc />
-		public override void Load(SettingsStorage storage)
-		{
-			Rules.Clear();
-			Rules.AddRange(storage.GetValue<SettingsStorage[]>(nameof(Rules)).Select(s => s.LoadEntire<IRiskRule>()));
-
-			base.Load(storage);
-		}
-
-		/// <inheritdoc />
-		public override void Save(SettingsStorage storage)
-		{
-			storage.SetValue(nameof(Rules), Rules.Select(r => r.SaveEntire(false)).ToArray());
-
-			base.Save(storage);
-		}
+		base.Save(storage);
 	}
 }

@@ -48,7 +48,7 @@ public partial class FtxMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override string AssociatedBoard => BoardCodes.FTX;
+	public override string[] AssociatedBoards { get; } = new[] { BoardCodes.FTX };
 
 	/// <inheritdoc />
 	public override bool IsAllDownloadingSupported(DataType dataType)

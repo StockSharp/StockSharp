@@ -1,14 +1,5 @@
 ﻿namespace StockSharp.Algo.Strategies.Protective;
 
-using System;
-using System.Collections.Generic;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.Logging;
-using StockSharp.Messages;
-
 /// <summary>
 /// Protective controller.
 /// </summary>

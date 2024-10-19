@@ -38,7 +38,7 @@ public partial class BtceMessageAdapter
 	public override bool IsSupportOrderBookIncrements => true;
 
 	/// <inheritdoc />
-	public override string AssociatedBoard => BoardCodes.Btce;
+	public override string[] AssociatedBoards { get; } = new[] { BoardCodes.Btce };
 
 	private void SubscribePusherClient()
 	{

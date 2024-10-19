@@ -1,555 +1,549 @@
-﻿namespace StockSharp.Algo
+﻿namespace StockSharp.Algo;
+
+partial class MarketRuleHelper
 {
-	using System;
-
-	using StockSharp.BusinessEntities;
-	using StockSharp.Messages;
-
-	partial class MarketRuleHelper
+	private abstract class SubscriptionRule<TArg> : MarketRule<Subscription, TArg>
 	{
-		private abstract class SubscriptionRule<TArg> : MarketRule<Subscription, TArg>
+		protected SubscriptionRule(Subscription subscription, ISubscriptionProvider provider)
+			: base(subscription)
 		{
-			protected SubscriptionRule(Subscription subscription, ISubscriptionProvider provider)
-				: base(subscription)
-			{
-				Provider = provider;
-				Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
-			}
-
-			protected ISubscriptionProvider Provider { get; }
-			protected Subscription Subscription { get; }
+			Provider = provider;
+			Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
 		}
 
-		private class SubscriptionStartedRule : SubscriptionRule<Subscription>
+		protected ISubscriptionProvider Provider { get; }
+		protected Subscription Subscription { get; }
+	}
+
+	private class SubscriptionStartedRule : SubscriptionRule<Subscription>
+	{
+		public SubscriptionStartedRule(Subscription subscription, ISubscriptionProvider provider)
+			: base(subscription, provider)
 		{
-			public SubscriptionStartedRule(Subscription subscription, ISubscriptionProvider provider)
-				: base(subscription, provider)
-			{
-				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.SubscriptionStarted)}";
-				Provider.SubscriptionStarted += ProviderOnSubscriptionStarted;
-			}
-
-			private void ProviderOnSubscriptionStarted(Subscription subscription)
-			{
-				if (Subscription == subscription)
-					Activate(subscription);
-			}
-
-			protected override void DisposeManaged()
-			{
-				Provider.SubscriptionStarted -= ProviderOnSubscriptionStarted;
-				base.DisposeManaged();
-			}
+			Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.SubscriptionStarted)}";
+			Provider.SubscriptionStarted += ProviderOnSubscriptionStarted;
 		}
 
-		/// <summary>
-		/// To create a rule for the event of <see cref="ISubscriptionProvider.SubscriptionStarted"/>.
-		/// </summary>
-		/// <param name="subscription">Subscription.</param>
-		/// <param name="provider">Subscription provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, Subscription> WhenSubscriptionStarted(this Subscription subscription, ISubscriptionProvider provider)
+		private void ProviderOnSubscriptionStarted(Subscription subscription)
 		{
-			return new SubscriptionStartedRule(subscription, provider);
+			if (Subscription == subscription)
+				Activate(subscription);
 		}
 
-		private class SubscriptionOnlineRule : SubscriptionRule<Subscription>
+		protected override void DisposeManaged()
 		{
-			public SubscriptionOnlineRule(Subscription subscription, ISubscriptionProvider provider)
-				: base(subscription, provider)
-			{
-				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.SubscriptionOnline)}";
-				Provider.SubscriptionOnline += ProviderOnSubscriptionOnline;
-			}
+			Provider.SubscriptionStarted -= ProviderOnSubscriptionStarted;
+			base.DisposeManaged();
+		}
+	}
 
-			private void ProviderOnSubscriptionOnline(Subscription subscription)
-			{
-				if (Subscription == subscription)
-					Activate(subscription);
-			}
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.SubscriptionStarted"/>.
+	/// </summary>
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, Subscription> WhenSubscriptionStarted(this Subscription subscription, ISubscriptionProvider provider)
+	{
+		return new SubscriptionStartedRule(subscription, provider);
+	}
 
-			protected override void DisposeManaged()
-			{
-				Provider.SubscriptionOnline -= ProviderOnSubscriptionOnline;
-				base.DisposeManaged();
-			}
+	private class SubscriptionOnlineRule : SubscriptionRule<Subscription>
+	{
+		public SubscriptionOnlineRule(Subscription subscription, ISubscriptionProvider provider)
+			: base(subscription, provider)
+		{
+			Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.SubscriptionOnline)}";
+			Provider.SubscriptionOnline += ProviderOnSubscriptionOnline;
 		}
 
-		/// <summary>
-		/// To create a rule for the event of <see cref="ISubscriptionProvider.SubscriptionOnline"/>.
-		/// </summary>
-		/// <param name="subscription">Subscription.</param>
-		/// <param name="provider">Subscription provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, Subscription> WhenSubscriptionOnline(this Subscription subscription, ISubscriptionProvider provider)
+		private void ProviderOnSubscriptionOnline(Subscription subscription)
 		{
-			return new SubscriptionOnlineRule(subscription, provider);
+			if (Subscription == subscription)
+				Activate(subscription);
 		}
 
-		private class SubscriptionStoppedRule : MarketRule<Subscription, Tuple<Subscription, Exception>>
+		protected override void DisposeManaged()
 		{
-			private readonly ISubscriptionProvider _provider;
-			private readonly Subscription _subscription;
+			Provider.SubscriptionOnline -= ProviderOnSubscriptionOnline;
+			base.DisposeManaged();
+		}
+	}
 
-			public SubscriptionStoppedRule(Subscription subscription, ISubscriptionProvider provider)
-				: base(subscription)
-			{
-				_provider = provider ?? throw new ArgumentNullException(nameof(provider));
-				_subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.SubscriptionOnline"/>.
+	/// </summary>
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, Subscription> WhenSubscriptionOnline(this Subscription subscription, ISubscriptionProvider provider)
+	{
+		return new SubscriptionOnlineRule(subscription, provider);
+	}
 
-				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.SubscriptionStopped)}";
-				
-				_provider.SubscriptionStopped += ProviderOnSubscriptionStopped;
-			}
+	private class SubscriptionStoppedRule : MarketRule<Subscription, Tuple<Subscription, Exception>>
+	{
+		private readonly ISubscriptionProvider _provider;
+		private readonly Subscription _subscription;
 
-			private void ProviderOnSubscriptionStopped(Subscription subscription, Exception error)
-			{
-				if (_subscription == subscription)
-					Activate(Tuple.Create(subscription, error));
-			}
+		public SubscriptionStoppedRule(Subscription subscription, ISubscriptionProvider provider)
+			: base(subscription)
+		{
+			_provider = provider ?? throw new ArgumentNullException(nameof(provider));
+			_subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
 
-			protected override void DisposeManaged()
-			{
-				_provider.SubscriptionStopped -= ProviderOnSubscriptionStopped;
-				base.DisposeManaged();
-			}
+			Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.SubscriptionStopped)}";
+			
+			_provider.SubscriptionStopped += ProviderOnSubscriptionStopped;
 		}
 
-		/// <summary>
-		/// To create a rule for the event of <see cref="ISubscriptionProvider.SubscriptionStopped"/>.
-		/// </summary>
-		/// <param name="subscription">Subscription.</param>
-		/// <param name="provider">Subscription provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, Tuple<Subscription, Exception>> WhenSubscriptionStopped(this Subscription subscription, ISubscriptionProvider provider)
+		private void ProviderOnSubscriptionStopped(Subscription subscription, Exception error)
 		{
-			return new SubscriptionStoppedRule(subscription, provider);
+			if (_subscription == subscription)
+				Activate(Tuple.Create(subscription, error));
 		}
 
-		private class SubscriptionFailedRule : MarketRule<Subscription, Tuple<Subscription, Exception, bool>>
+		protected override void DisposeManaged()
 		{
-			private readonly ISubscriptionProvider _provider;
-			private readonly Subscription _subscription;
+			_provider.SubscriptionStopped -= ProviderOnSubscriptionStopped;
+			base.DisposeManaged();
+		}
+	}
 
-			public SubscriptionFailedRule(Subscription subscription, ISubscriptionProvider provider)
-				: base(subscription)
-			{
-				_provider = provider ?? throw new ArgumentNullException(nameof(provider));
-				_subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
-				
-				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.SubscriptionFailed)}";
-				
-				_provider.SubscriptionFailed += ProviderOnSubscriptionFailed;
-			}
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.SubscriptionStopped"/>.
+	/// </summary>
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, Tuple<Subscription, Exception>> WhenSubscriptionStopped(this Subscription subscription, ISubscriptionProvider provider)
+	{
+		return new SubscriptionStoppedRule(subscription, provider);
+	}
 
-			private void ProviderOnSubscriptionFailed(Subscription subscription, Exception error, bool isSubscribe)
-			{
-				if (_subscription == subscription)
-					Activate(Tuple.Create(subscription, error, isSubscribe));
-			}
+	private class SubscriptionFailedRule : MarketRule<Subscription, Tuple<Subscription, Exception, bool>>
+	{
+		private readonly ISubscriptionProvider _provider;
+		private readonly Subscription _subscription;
 
-			protected override void DisposeManaged()
-			{
-				_provider.SubscriptionFailed -= ProviderOnSubscriptionFailed;
-				base.DisposeManaged();
-			}
+		public SubscriptionFailedRule(Subscription subscription, ISubscriptionProvider provider)
+			: base(subscription)
+		{
+			_provider = provider ?? throw new ArgumentNullException(nameof(provider));
+			_subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
+			
+			Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.SubscriptionFailed)}";
+			
+			_provider.SubscriptionFailed += ProviderOnSubscriptionFailed;
 		}
 
-		/// <summary>
-		/// To create a rule for the event of <see cref="ISubscriptionProvider.SubscriptionFailed"/>.
-		/// </summary>
-		/// <param name="subscription">Subscription.</param>
-		/// <param name="provider">Subscription provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, Tuple<Subscription, Exception, bool>> WhenSubscriptionFailed(this Subscription subscription, ISubscriptionProvider provider)
+		private void ProviderOnSubscriptionFailed(Subscription subscription, Exception error, bool isSubscribe)
 		{
-			return new SubscriptionFailedRule(subscription, provider);
+			if (_subscription == subscription)
+				Activate(Tuple.Create(subscription, error, isSubscribe));
 		}
 
-		private class OrderBookReceivedRule : SubscriptionRule<IOrderBookMessage>
+		protected override void DisposeManaged()
 		{
-			public OrderBookReceivedRule(Subscription subscription, ISubscriptionProvider provider)
-				: base(subscription, provider)
-			{
-				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.OrderBookReceived)}";
-				Provider.OrderBookReceived += ProviderOnOrderBookReceived;
-			}
+			_provider.SubscriptionFailed -= ProviderOnSubscriptionFailed;
+			base.DisposeManaged();
+		}
+	}
 
-			private void ProviderOnOrderBookReceived(Subscription subscription, IOrderBookMessage message)
-			{
-				if (Subscription == subscription)
-					Activate(message);
-			}
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.SubscriptionFailed"/>.
+	/// </summary>
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, Tuple<Subscription, Exception, bool>> WhenSubscriptionFailed(this Subscription subscription, ISubscriptionProvider provider)
+	{
+		return new SubscriptionFailedRule(subscription, provider);
+	}
 
-			protected override void DisposeManaged()
-			{
-				Provider.OrderBookReceived -= ProviderOnOrderBookReceived;
-				base.DisposeManaged();
-			}
+	private class OrderBookReceivedRule : SubscriptionRule<IOrderBookMessage>
+	{
+		public OrderBookReceivedRule(Subscription subscription, ISubscriptionProvider provider)
+			: base(subscription, provider)
+		{
+			Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.OrderBookReceived)}";
+			Provider.OrderBookReceived += ProviderOnOrderBookReceived;
 		}
 
-		/// <summary>
-		/// To create a rule for the event of <see cref="ISubscriptionProvider.OrderBookReceived"/>.
-		/// </summary>
-		/// <param name="subscription">Subscription.</param>
-		/// <param name="provider">Subscription provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, IOrderBookMessage> WhenOrderBookReceived(this Subscription subscription, ISubscriptionProvider provider)
+		private void ProviderOnOrderBookReceived(Subscription subscription, IOrderBookMessage message)
 		{
-			return new OrderBookReceivedRule(subscription, provider);
+			if (Subscription == subscription)
+				Activate(message);
 		}
 
-		private class Level1ReceivedRule : SubscriptionRule<Level1ChangeMessage>
+		protected override void DisposeManaged()
 		{
-			public Level1ReceivedRule(Subscription subscription, ISubscriptionProvider provider)
-				: base(subscription, provider)
-			{
-				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.Level1Received)}";
-				Provider.Level1Received += ProviderOnLevel1Received;
-			}
+			Provider.OrderBookReceived -= ProviderOnOrderBookReceived;
+			base.DisposeManaged();
+		}
+	}
 
-			private void ProviderOnLevel1Received(Subscription subscription, Level1ChangeMessage message)
-			{
-				if (Subscription == subscription)
-					Activate(message);
-			}
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.OrderBookReceived"/>.
+	/// </summary>
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, IOrderBookMessage> WhenOrderBookReceived(this Subscription subscription, ISubscriptionProvider provider)
+	{
+		return new OrderBookReceivedRule(subscription, provider);
+	}
 
-			protected override void DisposeManaged()
-			{
-				Provider.Level1Received -= ProviderOnLevel1Received;
-				base.DisposeManaged();
-			}
+	private class Level1ReceivedRule : SubscriptionRule<Level1ChangeMessage>
+	{
+		public Level1ReceivedRule(Subscription subscription, ISubscriptionProvider provider)
+			: base(subscription, provider)
+		{
+			Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.Level1Received)}";
+			Provider.Level1Received += ProviderOnLevel1Received;
 		}
 
-		/// <summary>
-		/// To create a rule for the event of <see cref="ISubscriptionProvider.Level1Received"/>.
-		/// </summary>
-		/// <param name="subscription">Subscription.</param>
-		/// <param name="provider">Subscription provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, Level1ChangeMessage> WhenLevel1Received(this Subscription subscription, ISubscriptionProvider provider)
+		private void ProviderOnLevel1Received(Subscription subscription, Level1ChangeMessage message)
 		{
-			return new Level1ReceivedRule(subscription, provider);
+			if (Subscription == subscription)
+				Activate(message);
 		}
 
-		private class OrderLogReceivedRule : SubscriptionRule<IOrderLogMessage>
+		protected override void DisposeManaged()
 		{
-			public OrderLogReceivedRule(Subscription subscription, ISubscriptionProvider provider)
-				: base(subscription, provider)
-			{
-				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.OrderLogReceived)}";
-				Provider.OrderLogReceived += ProviderOnOrderLogReceived;
-			}
+			Provider.Level1Received -= ProviderOnLevel1Received;
+			base.DisposeManaged();
+		}
+	}
 
-			private void ProviderOnOrderLogReceived(Subscription subscription, IOrderLogMessage item)
-			{
-				if (Subscription == subscription)
-					Activate(item);
-			}
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.Level1Received"/>.
+	/// </summary>
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, Level1ChangeMessage> WhenLevel1Received(this Subscription subscription, ISubscriptionProvider provider)
+	{
+		return new Level1ReceivedRule(subscription, provider);
+	}
 
-			protected override void DisposeManaged()
-			{
-				Provider.OrderLogReceived -= ProviderOnOrderLogReceived;
-				base.DisposeManaged();
-			}
+	private class OrderLogReceivedRule : SubscriptionRule<IOrderLogMessage>
+	{
+		public OrderLogReceivedRule(Subscription subscription, ISubscriptionProvider provider)
+			: base(subscription, provider)
+		{
+			Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.OrderLogReceived)}";
+			Provider.OrderLogReceived += ProviderOnOrderLogReceived;
 		}
 
-		/// <summary>
-		/// To create a rule for the event of <see cref="ISubscriptionProvider.OrderLogItemReceived"/>.
-		/// </summary>
-		/// <param name="subscription">Subscription.</param>
-		/// <param name="provider">Subscription provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, IOrderLogMessage> WhenOrderLogReceived(this Subscription subscription, ISubscriptionProvider provider)
+		private void ProviderOnOrderLogReceived(Subscription subscription, IOrderLogMessage item)
 		{
-			return new OrderLogReceivedRule(subscription, provider);
+			if (Subscription == subscription)
+				Activate(item);
 		}
 
-		private class TickTradeReceivedRule : SubscriptionRule<ITickTradeMessage>
+		protected override void DisposeManaged()
 		{
-			public TickTradeReceivedRule(Subscription subscription, ISubscriptionProvider provider)
-				: base(subscription, provider)
-			{
-				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.TickTradeReceived)}";
-				Provider.TickTradeReceived += ProviderOnTickTradeReceived;
-			}
+			Provider.OrderLogReceived -= ProviderOnOrderLogReceived;
+			base.DisposeManaged();
+		}
+	}
 
-			private void ProviderOnTickTradeReceived(Subscription subscription, ITickTradeMessage trade)
-			{
-				if (Subscription == subscription)
-					Activate(trade);
-			}
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.OrderLogItemReceived"/>.
+	/// </summary>
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, IOrderLogMessage> WhenOrderLogReceived(this Subscription subscription, ISubscriptionProvider provider)
+	{
+		return new OrderLogReceivedRule(subscription, provider);
+	}
 
-			protected override void DisposeManaged()
-			{
-				Provider.TickTradeReceived -= ProviderOnTickTradeReceived;
-				base.DisposeManaged();
-			}
+	private class TickTradeReceivedRule : SubscriptionRule<ITickTradeMessage>
+	{
+		public TickTradeReceivedRule(Subscription subscription, ISubscriptionProvider provider)
+			: base(subscription, provider)
+		{
+			Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.TickTradeReceived)}";
+			Provider.TickTradeReceived += ProviderOnTickTradeReceived;
 		}
 
-		/// <summary>
-		/// To create a rule for the event of <see cref="ISubscriptionProvider.TickTradeReceived"/>.
-		/// </summary>
-		/// <param name="subscription">Subscription.</param>
-		/// <param name="provider">Subscription provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, ITickTradeMessage> WhenTickTradeReceived(this Subscription subscription, ISubscriptionProvider provider)
+		private void ProviderOnTickTradeReceived(Subscription subscription, ITickTradeMessage trade)
 		{
-			return new TickTradeReceivedRule(subscription, provider);
+			if (Subscription == subscription)
+				Activate(trade);
 		}
 
-		private class CandleReceivedRule<TCandle> : SubscriptionRule<TCandle>
-			where TCandle : ICandleMessage
+		protected override void DisposeManaged()
 		{
-			public CandleReceivedRule(Subscription subscription, ISubscriptionProvider provider)
-				: base(subscription, provider)
-			{
-				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.CandleReceived)}";
-				Provider.CandleReceived += ProviderOnCandleReceived;
-			}
+			Provider.TickTradeReceived -= ProviderOnTickTradeReceived;
+			base.DisposeManaged();
+		}
+	}
 
-			private void ProviderOnCandleReceived(Subscription subscription, ICandleMessage candle)
-			{
-				if (Subscription == subscription)
-					Activate((TCandle)candle);
-			}
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.TickTradeReceived"/>.
+	/// </summary>
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, ITickTradeMessage> WhenTickTradeReceived(this Subscription subscription, ISubscriptionProvider provider)
+	{
+		return new TickTradeReceivedRule(subscription, provider);
+	}
 
-			protected override void DisposeManaged()
-			{
-				Provider.CandleReceived -= ProviderOnCandleReceived;
-				base.DisposeManaged();
-			}
+	private class CandleReceivedRule<TCandle> : SubscriptionRule<TCandle>
+		where TCandle : ICandleMessage
+	{
+		public CandleReceivedRule(Subscription subscription, ISubscriptionProvider provider)
+			: base(subscription, provider)
+		{
+			Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.CandleReceived)}";
+			Provider.CandleReceived += ProviderOnCandleReceived;
 		}
 
-		/// <summary>
-		/// To create a rule for the event of <see cref="ISubscriptionProvider.CandleReceived"/>.
-		/// </summary>
-		/// <param name="subscription">Subscription.</param>
-		/// <param name="provider">Subscription provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, ICandleMessage> WhenCandleReceived(this Subscription subscription, ISubscriptionProvider provider)
-			=> WhenCandleReceived<ICandleMessage>(subscription, provider);
-
-		/// <summary>
-		/// To create a rule for the event of <see cref="ISubscriptionProvider.CandleReceived"/>.
-		/// </summary>
-		/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
-		/// <param name="subscription">Subscription.</param>
-		/// <param name="provider">Subscription provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, TCandle> WhenCandleReceived<TCandle>(this Subscription subscription, ISubscriptionProvider provider)
-			where TCandle : ICandleMessage
+		private void ProviderOnCandleReceived(Subscription subscription, ICandleMessage candle)
 		{
-			return new CandleReceivedRule<TCandle>(subscription, provider);
+			if (Subscription == subscription)
+				Activate((TCandle)candle);
 		}
 
-		private class NewsReceivedRule : SubscriptionRule<News>
+		protected override void DisposeManaged()
 		{
-			public NewsReceivedRule(Subscription subscription, ISubscriptionProvider provider)
-				: base(subscription, provider)
-			{
-				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.NewsReceived)}";
-				Provider.NewsReceived += ProviderOnNewsReceived;
-			}
+			Provider.CandleReceived -= ProviderOnCandleReceived;
+			base.DisposeManaged();
+		}
+	}
 
-			private void ProviderOnNewsReceived(Subscription subscription, News news)
-			{
-				if (Subscription == subscription)
-					Activate(news);
-			}
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.CandleReceived"/>.
+	/// </summary>
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, ICandleMessage> WhenCandleReceived(this Subscription subscription, ISubscriptionProvider provider)
+		=> WhenCandleReceived<ICandleMessage>(subscription, provider);
 
-			protected override void DisposeManaged()
-			{
-				Provider.NewsReceived -= ProviderOnNewsReceived;
-				base.DisposeManaged();
-			}
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.CandleReceived"/>.
+	/// </summary>
+	/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, TCandle> WhenCandleReceived<TCandle>(this Subscription subscription, ISubscriptionProvider provider)
+		where TCandle : ICandleMessage
+	{
+		return new CandleReceivedRule<TCandle>(subscription, provider);
+	}
+
+	private class NewsReceivedRule : SubscriptionRule<News>
+	{
+		public NewsReceivedRule(Subscription subscription, ISubscriptionProvider provider)
+			: base(subscription, provider)
+		{
+			Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.NewsReceived)}";
+			Provider.NewsReceived += ProviderOnNewsReceived;
 		}
 
-		/// <summary>
-		/// To create a rule for the event of <see cref="ISubscriptionProvider.NewsReceived"/>.
-		/// </summary>
-		/// <param name="subscription">Subscription.</param>
-		/// <param name="provider">Subscription provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, News> WhenNewsReceived(this Subscription subscription, ISubscriptionProvider provider)
+		private void ProviderOnNewsReceived(Subscription subscription, News news)
 		{
-			return new NewsReceivedRule(subscription, provider);
+			if (Subscription == subscription)
+				Activate(news);
 		}
 
-		private class OwnTradeReceivedRule : SubscriptionRule<MyTrade>
+		protected override void DisposeManaged()
 		{
-			public OwnTradeReceivedRule(Subscription subscription, ISubscriptionProvider provider)
-				: base(subscription, provider)
-			{
-				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.OwnTradeReceived)}";
-				Provider.OwnTradeReceived += ProviderOnOwnTradeReceived;
-			}
+			Provider.NewsReceived -= ProviderOnNewsReceived;
+			base.DisposeManaged();
+		}
+	}
 
-			private void ProviderOnOwnTradeReceived(Subscription subscription, MyTrade trade)
-			{
-				if (Subscription == subscription)
-					Activate(trade);
-			}
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.NewsReceived"/>.
+	/// </summary>
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, News> WhenNewsReceived(this Subscription subscription, ISubscriptionProvider provider)
+	{
+		return new NewsReceivedRule(subscription, provider);
+	}
 
-			protected override void DisposeManaged()
-			{
-				Provider.OwnTradeReceived -= ProviderOnOwnTradeReceived;
-				base.DisposeManaged();
-			}
+	private class OwnTradeReceivedRule : SubscriptionRule<MyTrade>
+	{
+		public OwnTradeReceivedRule(Subscription subscription, ISubscriptionProvider provider)
+			: base(subscription, provider)
+		{
+			Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.OwnTradeReceived)}";
+			Provider.OwnTradeReceived += ProviderOnOwnTradeReceived;
 		}
 
-		/// <summary>
-		/// To create a rule for the event of <see cref="ISubscriptionProvider.OwnTradeReceived"/>.
-		/// </summary>
-		/// <param name="subscription">Subscription.</param>
-		/// <param name="provider">Subscription provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, MyTrade> WhenOwnTradeReceived(this Subscription subscription, ISubscriptionProvider provider)
+		private void ProviderOnOwnTradeReceived(Subscription subscription, MyTrade trade)
 		{
-			return new OwnTradeReceivedRule(subscription, provider);
+			if (Subscription == subscription)
+				Activate(trade);
 		}
 
-		private class OrderReceivedRule : SubscriptionRule<Order>
+		protected override void DisposeManaged()
 		{
-			public OrderReceivedRule(Subscription subscription, ISubscriptionProvider provider)
-				: base(subscription, provider)
-			{
-				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.OrderReceived)}";
-				Provider.OrderReceived += ProviderOnOrderReceived;
-			}
+			Provider.OwnTradeReceived -= ProviderOnOwnTradeReceived;
+			base.DisposeManaged();
+		}
+	}
 
-			private void ProviderOnOrderReceived(Subscription subscription, Order order)
-			{
-				if (Subscription == subscription)
-					Activate(order);
-			}
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.OwnTradeReceived"/>.
+	/// </summary>
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, MyTrade> WhenOwnTradeReceived(this Subscription subscription, ISubscriptionProvider provider)
+	{
+		return new OwnTradeReceivedRule(subscription, provider);
+	}
 
-			protected override void DisposeManaged()
-			{
-				Provider.OrderReceived -= ProviderOnOrderReceived;
-				base.DisposeManaged();
-			}
+	private class OrderReceivedRule : SubscriptionRule<Order>
+	{
+		public OrderReceivedRule(Subscription subscription, ISubscriptionProvider provider)
+			: base(subscription, provider)
+		{
+			Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.OrderReceived)}";
+			Provider.OrderReceived += ProviderOnOrderReceived;
 		}
 
-		/// <summary>
-		/// To create a rule for the event of <see cref="ISubscriptionProvider.OrderReceived"/>.
-		/// </summary>
-		/// <param name="subscription">Subscription.</param>
-		/// <param name="provider">Subscription provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, Order> WhenOrderReceived(this Subscription subscription, ISubscriptionProvider provider)
+		private void ProviderOnOrderReceived(Subscription subscription, Order order)
 		{
-			return new OrderReceivedRule(subscription, provider);
+			if (Subscription == subscription)
+				Activate(order);
 		}
 
-		private class OrderFailReceivedRule : SubscriptionRule<OrderFail>
+		protected override void DisposeManaged()
 		{
-			private readonly bool _isRegister;
+			Provider.OrderReceived -= ProviderOnOrderReceived;
+			base.DisposeManaged();
+		}
+	}
 
-			public OrderFailReceivedRule(Subscription subscription, ISubscriptionProvider provider, bool isRegister)
-				: base(subscription, provider)
-			{
-				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(OrderFail)}Received";
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.OrderReceived"/>.
+	/// </summary>
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, Order> WhenOrderReceived(this Subscription subscription, ISubscriptionProvider provider)
+	{
+		return new OrderReceivedRule(subscription, provider);
+	}
 
-				_isRegister = isRegister;
+	private class OrderFailReceivedRule : SubscriptionRule<OrderFail>
+	{
+		private readonly bool _isRegister;
 
-				if (_isRegister)
-					Provider.OrderRegisterFailReceived += ProviderOnOrderFailReceived;
-				else
-					Provider.OrderCancelFailReceived += ProviderOnOrderFailReceived;
-			}
+		public OrderFailReceivedRule(Subscription subscription, ISubscriptionProvider provider, bool isRegister)
+			: base(subscription, provider)
+		{
+			Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(OrderFail)}Received";
 
-			private void ProviderOnOrderFailReceived(Subscription subscription, OrderFail fail)
-			{
-				if (Subscription == subscription)
-					Activate(fail);
-			}
+			_isRegister = isRegister;
 
-			protected override void DisposeManaged()
-			{
-				if (_isRegister)
-					Provider.OrderRegisterFailReceived -= ProviderOnOrderFailReceived;
-				else
-					Provider.OrderCancelFailReceived -= ProviderOnOrderFailReceived;
-
-				base.DisposeManaged();
-			}
+			if (_isRegister)
+				Provider.OrderRegisterFailReceived += ProviderOnOrderFailReceived;
+			else
+				Provider.OrderCancelFailReceived += ProviderOnOrderFailReceived;
 		}
 
-		/// <summary>
-		/// To create a rule for the event of <see cref="ISubscriptionProvider.OrderRegisterFailReceived"/> or <see cref="ISubscriptionProvider.OrderCancelFailReceived"/>.
-		/// </summary>
-		/// <param name="subscription">Subscription.</param>
-		/// <param name="provider">Subscription provider.</param>
-		/// <param name="isRegister"><see cref="ISubscriptionProvider.OrderRegisterFailReceived"/> or <see cref="ISubscriptionProvider.OrderCancelFailReceived"/>.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, OrderFail> WhenOrderFailReceived(this Subscription subscription, ISubscriptionProvider provider, bool isRegister)
+		private void ProviderOnOrderFailReceived(Subscription subscription, OrderFail fail)
 		{
-			return new OrderFailReceivedRule(subscription, provider, isRegister);
+			if (Subscription == subscription)
+				Activate(fail);
 		}
 
-		private class OrderEditFailReceivedRule : SubscriptionRule<OrderFail>
+		protected override void DisposeManaged()
 		{
-			public OrderEditFailReceivedRule(Subscription subscription, ISubscriptionProvider provider)
-				: base(subscription, provider)
-			{
-				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(OrderFail)}Received";
-				Provider.OrderEditFailReceived += ProviderOnOrderFailReceived;
-			}
+			if (_isRegister)
+				Provider.OrderRegisterFailReceived -= ProviderOnOrderFailReceived;
+			else
+				Provider.OrderCancelFailReceived -= ProviderOnOrderFailReceived;
 
-			private void ProviderOnOrderFailReceived(Subscription subscription, OrderFail fail)
-			{
-				if (Subscription == subscription)
-					Activate(fail);
-			}
+			base.DisposeManaged();
+		}
+	}
 
-			protected override void DisposeManaged()
-			{
-				Provider.OrderEditFailReceived -= ProviderOnOrderFailReceived;
-				base.DisposeManaged();
-			}
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.OrderRegisterFailReceived"/> or <see cref="ISubscriptionProvider.OrderCancelFailReceived"/>.
+	/// </summary>
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="provider">Subscription provider.</param>
+	/// <param name="isRegister"><see cref="ISubscriptionProvider.OrderRegisterFailReceived"/> or <see cref="ISubscriptionProvider.OrderCancelFailReceived"/>.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, OrderFail> WhenOrderFailReceived(this Subscription subscription, ISubscriptionProvider provider, bool isRegister)
+	{
+		return new OrderFailReceivedRule(subscription, provider, isRegister);
+	}
+
+	private class OrderEditFailReceivedRule : SubscriptionRule<OrderFail>
+	{
+		public OrderEditFailReceivedRule(Subscription subscription, ISubscriptionProvider provider)
+			: base(subscription, provider)
+		{
+			Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(OrderFail)}Received";
+			Provider.OrderEditFailReceived += ProviderOnOrderFailReceived;
 		}
 
-		/// <summary>
-		/// To create a rule for the event of <see cref="ISubscriptionProvider.OrderEditFailReceived"/> or <see cref="ISubscriptionProvider.OrderCancelFailReceived"/>.
-		/// </summary>
-		/// <param name="subscription">Subscription.</param>
-		/// <param name="provider">Subscription provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, OrderFail> WhenOrderEditFailReceived(this Subscription subscription, ISubscriptionProvider provider)
-			=> new OrderEditFailReceivedRule(subscription, provider);
-
-		private class PositionReceivedRule : SubscriptionRule<Position>
+		private void ProviderOnOrderFailReceived(Subscription subscription, OrderFail fail)
 		{
-			public PositionReceivedRule(Subscription subscription, ISubscriptionProvider provider)
-				: base(subscription, provider)
-			{
-				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.PositionReceived)}";
-				Provider.PositionReceived += ProviderOnPositionReceived;
-			}
-
-			private void ProviderOnPositionReceived(Subscription subscription, Position position)
-			{
-				if (Subscription == subscription)
-					Activate(position);
-			}
-
-			protected override void DisposeManaged()
-			{
-				Provider.PositionReceived -= ProviderOnPositionReceived;
-				base.DisposeManaged();
-			}
+			if (Subscription == subscription)
+				Activate(fail);
 		}
 
-		/// <summary>
-		/// To create a rule for the event of <see cref="ISubscriptionProvider.PositionReceived"/>.
-		/// </summary>
-		/// <param name="subscription">Subscription.</param>
-		/// <param name="provider">Subscription provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, Position> WhenPositionReceived(this Subscription subscription, ISubscriptionProvider provider)
+		protected override void DisposeManaged()
 		{
-			return new PositionReceivedRule(subscription, provider);
+			Provider.OrderEditFailReceived -= ProviderOnOrderFailReceived;
+			base.DisposeManaged();
 		}
+	}
+
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.OrderEditFailReceived"/> or <see cref="ISubscriptionProvider.OrderCancelFailReceived"/>.
+	/// </summary>
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, OrderFail> WhenOrderEditFailReceived(this Subscription subscription, ISubscriptionProvider provider)
+		=> new OrderEditFailReceivedRule(subscription, provider);
+
+	private class PositionReceivedRule : SubscriptionRule<Position>
+	{
+		public PositionReceivedRule(Subscription subscription, ISubscriptionProvider provider)
+			: base(subscription, provider)
+		{
+			Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.PositionReceived)}";
+			Provider.PositionReceived += ProviderOnPositionReceived;
+		}
+
+		private void ProviderOnPositionReceived(Subscription subscription, Position position)
+		{
+			if (Subscription == subscription)
+				Activate(position);
+		}
+
+		protected override void DisposeManaged()
+		{
+			Provider.PositionReceived -= ProviderOnPositionReceived;
+			base.DisposeManaged();
+		}
+	}
+
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.PositionReceived"/>.
+	/// </summary>
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, Position> WhenPositionReceived(this Subscription subscription, ISubscriptionProvider provider)
+	{
+		return new PositionReceivedRule(subscription, provider);
 	}
 }

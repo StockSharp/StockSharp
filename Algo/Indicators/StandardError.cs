@@ -1,123 +1,98 @@
-﻿#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
+﻿namespace StockSharp.Algo.Indicators;
 
-Project: StockSharp.Algo.Indicators.Algo
-File: StandardError.cs
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.Algo.Indicators
+/// <summary>
+/// Standard error in linear regression.
+/// </summary>
+/// <remarks>
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/standard_error.html
+/// </remarks>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.StandardErrorKey,
+	Description = LocalizedStrings.StandardErrorLinearRegKey)]
+[Doc("topics/api/indicators/list_of_indicators/standard_error.html")]
+public class StandardError : LengthIndicator<decimal>
 {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel.DataAnnotations;
-	using System.Linq;
-
-	using Ecng.ComponentModel;
-
-	using StockSharp.Localization;
+	// Коэффициент при независимой переменной, угол наклона прямой.
+	private decimal _slope;
 
 	/// <summary>
-	/// Standard error in linear regression.
+	/// Initializes a new instance of the <see cref="StandardError"/>.
 	/// </summary>
-	/// <remarks>
-	/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/standard_error.html
-	/// </remarks>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.StandardErrorKey,
-		Description = LocalizedStrings.StandardErrorLinearRegKey)]
-	[Doc("topics/api/indicators/list_of_indicators/standard_error.html")]
-	public class StandardError : LengthIndicator<decimal>
+	public StandardError()
 	{
-		// Коэффициент при независимой переменной, угол наклона прямой.
-		private decimal _slope;
+		Length = 10;
+	}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="StandardError"/>.
-		/// </summary>
-		public StandardError()
+	/// <inheritdoc />
+	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
+
+	/// <inheritdoc />
+	public override void Reset()
+	{
+		base.Reset();
+		_slope = 0;
+	}
+
+	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{
+		var newValue = input.ToDecimal();
+
+		if (input.IsFinal)
 		{
-			Length = 10;
+			Buffer.PushBack(newValue);
 		}
 
-		/// <inheritdoc />
-		public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
+		var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
 
-		/// <inheritdoc />
-		public override void Reset()
+		// если значений хватает, считаем регрессию
+		if (IsFormed)
 		{
-			base.Reset();
-			_slope = 0;
-		}
+			//x - независимая переменная, номер значения в буфере
+			//y - зависимая переменная - значения из буфера
+			var sumX = 0m; //сумма x
+			var sumY = 0m; //сумма y
+			var sumXy = 0m; //сумма x*y
+			var sumX2 = 0m; //сумма x^2
 
-		/// <inheritdoc />
-		protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		{
-			var newValue = input.GetValue<decimal>();
-
-			if (input.IsFinal)
+			for (var i = 0; i < Length; i++)
 			{
-				Buffer.AddEx(newValue);
+				sumX += i;
+				sumY += buff[i];
+				sumXy += i * buff[i];
+				sumX2 += i * i;
 			}
 
-			var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
+			//коэффициент при независимой переменной
+			var divisor = Length * sumX2 - sumX * sumX;
+			if (divisor == 0) _slope = 0;
+			else _slope = (Length * sumXy - sumX * sumY) / divisor;
 
-			// если значений хватает, считаем регрессию
-			if (IsFormed)
+			//свободный член
+			var b = (sumY - _slope * sumX) / Length;
+
+			//счиаем сумму квадратов ошибок
+			var sumErr2 = 0m; //сумма квадратов ошибок
+
+			for (var i = 0; i < Length; i++)
 			{
-				//x - независимая переменная, номер значения в буфере
-				//y - зависимая переменная - значения из буфера
-				var sumX = 0m; //сумма x
-				var sumY = 0m; //сумма y
-				var sumXy = 0m; //сумма x*y
-				var sumX2 = 0m; //сумма x^2
-
-				for (var i = 0; i < Length; i++)
-				{
-					sumX += i;
-					sumY += buff[i];
-					sumXy += i * buff[i];
-					sumX2 += i * i;
-				}
-
-				//коэффициент при независимой переменной
-				var divisor = Length * sumX2 - sumX * sumX;
-				if (divisor == 0) _slope = 0;
-				else _slope = (Length * sumXy - sumX * sumY) / divisor;
-
-				//свободный член
-				var b = (sumY - _slope * sumX) / Length;
-
-				//счиаем сумму квадратов ошибок
-				var sumErr2 = 0m; //сумма квадратов ошибок
-
-				for (var i = 0; i < Length; i++)
-				{
-					var y = buff[i]; // значение
-					var yEst = _slope * i + b; // оценка по регрессии
-					sumErr2 += (y - yEst) * (y - yEst);
-				}
-
-				//Стандартная ошибка
-				if (Length == 2)
-				{
-					return new DecimalIndicatorValue(this, 0); //если всего 2 точки, то прямая проходит через них и стандартная ошибка равна нулю.
-				}
-				else
-				{
-					return new DecimalIndicatorValue(this, (decimal)Math.Sqrt((double)(sumErr2 / (Length - 2))));
-				}
+				var y = buff[i]; // значение
+				var yEst = _slope * i + b; // оценка по регрессии
+				sumErr2 += (y - yEst) * (y - yEst);
 			}
 
-			return new DecimalIndicatorValue(this);
+			//Стандартная ошибка
+			if (Length == 2)
+			{
+				return new DecimalIndicatorValue(this, 0, input.Time); //если всего 2 точки, то прямая проходит через них и стандартная ошибка равна нулю.
+			}
+			else
+			{
+				return new DecimalIndicatorValue(this, (decimal)Math.Sqrt((double)(sumErr2 / (Length - 2))), input.Time);
+			}
 		}
+
+		return new DecimalIndicatorValue(this, input.Time);
 	}
 }

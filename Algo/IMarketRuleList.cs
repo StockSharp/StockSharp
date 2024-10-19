@@ -1,153 +1,127 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
+namespace StockSharp.Algo;
 
-Project: StockSharp.Algo.Algo
-File: IMarketRuleList.cs
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.Algo
+/// <summary>
+/// The interface, describing the rules list.
+/// </summary>
+public interface IMarketRuleList : INotifyList<IMarketRule>, ISynchronizedCollection
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-
-	using Ecng.Collections;
-	using Ecng.Common;
-
-	using StockSharp.Logging;
-	using StockSharp.Localization;
+	/// <summary>
+	/// To get all active tokens of rules.
+	/// </summary>
+	IEnumerable<object> Tokens { get; }
 
 	/// <summary>
-	/// The interface, describing the rules list.
+	/// To get all rules, associated with tokens.
 	/// </summary>
-	public interface IMarketRuleList : INotifyList<IMarketRule>
+	/// <param name="token">Token rules.</param>
+	/// <returns>All rules, associated with token.</returns>
+	IEnumerable<IMarketRule> GetRulesByToken(object token);
+
+	/// <summary>
+	/// Delete all rules, for which <see cref="IMarketRule.Token"/> is equal to <paramref name="token" />.
+	/// </summary>
+	/// <param name="token">Token rules.</param>
+	/// <param name="currentRule">The current rule that has initiated deletion. If it was passed, it will not be deleted.</param>
+	void RemoveRulesByToken(object token, IMarketRule currentRule);
+}
+
+/// <summary>
+/// Rule list.
+/// </summary>
+public class MarketRuleList : SynchronizedSet<IMarketRule>, IMarketRuleList
+{
+	private readonly IMarketRuleContainer _container;
+	private readonly Dictionary<object, HashSet<IMarketRule>> _rulesByToken = new(); 
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="MarketRuleList"/>.
+	/// </summary>
+	/// <param name="container">The rules container.</param>
+	public MarketRuleList(IMarketRuleContainer container)
+		: base(true)
 	{
-		/// <summary>
-		/// To get all active tokens of rules.
-		/// </summary>
-		IEnumerable<object> Tokens { get; }
-
-		/// <summary>
-		/// To get all rules, associated with tokens.
-		/// </summary>
-		/// <param name="token">Token rules.</param>
-		/// <returns>All rules, associated with token.</returns>
-		IEnumerable<IMarketRule> GetRulesByToken(object token);
-
-		/// <summary>
-		/// Delete all rules, for which <see cref="IMarketRule.Token"/> is equal to <paramref name="token" />.
-		/// </summary>
-		/// <param name="token">Token rules.</param>
-		/// <param name="currentRule">The current rule that has initiated deletion. If it was passed, it will not be deleted.</param>
-		void RemoveRulesByToken(object token, IMarketRule currentRule);
+		_container = container ?? throw new ArgumentNullException(nameof(container));
 	}
 
 	/// <summary>
-	/// Rule list.
+	/// Adding the element.
 	/// </summary>
-	public class MarketRuleList : SynchronizedSet<IMarketRule>, IMarketRuleList
+	/// <param name="item">Element.</param>
+	protected override void OnAdded(IMarketRule item)
 	{
-		private readonly IMarketRuleContainer _container;
-		private readonly Dictionary<object, HashSet<IMarketRule>> _rulesByToken = new(); 
+		if (item.Token != null)
+			_rulesByToken.SafeAdd(item.Token).Add(item);
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MarketRuleList"/>.
-		/// </summary>
-		/// <param name="container">The rules container.</param>
-		public MarketRuleList(IMarketRuleContainer container)
-			: base(true)
+		item.Container = _container;
+		base.OnAdded(item);
+	}
+
+	/// <summary>
+	/// Deleting the element.
+	/// </summary>
+	/// <param name="item">Element.</param>
+	protected override void OnRemoved(IMarketRule item)
+	{
+		item.Container.AddRuleLog(LogLevels.Debug, item, LocalizedStrings.Deleting);
+
+		if (item.Token != null)
 		{
-			_container = container ?? throw new ArgumentNullException(nameof(container));
+			var set = _rulesByToken[item.Token];
+			set.Remove(item);
+
+			if (set.IsEmpty())
+				_rulesByToken.Remove(item.Token);
 		}
 
-		/// <summary>
-		/// Adding the element.
-		/// </summary>
-		/// <param name="item">Element.</param>
-		protected override void OnAdded(IMarketRule item)
-		{
-			if (item.Token != null)
-				_rulesByToken.SafeAdd(item.Token).Add(item);
+		item.Dispose();
 
-			item.Container = _container;
-			base.OnAdded(item);
-		}
+		base.OnRemoved(item);
+	}
 
-		/// <summary>
-		/// Deleting the element.
-		/// </summary>
-		/// <param name="item">Element.</param>
-		protected override void OnRemoved(IMarketRule item)
-		{
-			item.Container.AddRuleLog(LogLevels.Debug, item, LocalizedStrings.Deleting);
+	/// <summary>
+	/// Clearing elements.
+	/// </summary>
+	/// <returns>The sign of possible action.</returns>
+	protected override bool OnClearing()
+	{
+		foreach (var item in this.ToArray())
+			Remove(item);
 
-			if (item.Token != null)
-			{
-				var set = _rulesByToken[item.Token];
-				set.Remove(item);
+		return base.OnClearing();
+	}
 
-				if (set.IsEmpty())
-					_rulesByToken.Remove(item.Token);
-			}
-
-			item.Dispose();
-
-			base.OnRemoved(item);
-		}
-
-		/// <summary>
-		/// Clearing elements.
-		/// </summary>
-		/// <returns>The sign of possible action.</returns>
-		protected override bool OnClearing()
-		{
-			foreach (var item in this.ToArray())
-				Remove(item);
-
-			return base.OnClearing();
-		}
-
-		IEnumerable<object> IMarketRuleList.Tokens
-		{
-			get
-			{
-				lock (SyncRoot)
-					return _rulesByToken.Keys.ToArray();
-			}
-		}
-
-		/// <summary>
-		/// To get all rules, associated with tokens.
-		/// </summary>
-		/// <param name="token">Token rules.</param>
-		/// <returns>All rules, associated with token.</returns>
-		public IEnumerable<IMarketRule> GetRulesByToken(object token)
+	IEnumerable<object> IMarketRuleList.Tokens
+	{
+		get
 		{
 			lock (SyncRoot)
-			{
-				return _rulesByToken.TryGetValue(token, out var set)
-					? set.ToArray()
-					: Enumerable.Empty<IMarketRule>();
-			}
+				return _rulesByToken.Keys.ToArray();
 		}
+	}
 
-		void IMarketRuleList.RemoveRulesByToken(object token, IMarketRule currentRule)
+	/// <summary>
+	/// To get all rules, associated with tokens.
+	/// </summary>
+	/// <param name="token">Token rules.</param>
+	/// <returns>All rules, associated with token.</returns>
+	public IEnumerable<IMarketRule> GetRulesByToken(object token)
+	{
+		lock (SyncRoot)
 		{
-			lock (SyncRoot)
+			return _rulesByToken.TryGetValue(token, out var set)
+				? set.ToArray()
+				: Enumerable.Empty<IMarketRule>();
+		}
+	}
+
+	void IMarketRuleList.RemoveRulesByToken(object token, IMarketRule currentRule)
+	{
+		lock (SyncRoot)
+		{
+			foreach (var rule in GetRulesByToken(token))
 			{
-				foreach (var rule in GetRulesByToken(token))
-				{
-					if (currentRule != rule)
-						Remove(rule);
-				}
+				if (currentRule != rule)
+					Remove(rule);
 			}
 		}
 	}

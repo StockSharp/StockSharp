@@ -5,7 +5,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Algo\Algo.csproj" />
-    <ProjectReference Include="..\Charting.Interfaces\Charting.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

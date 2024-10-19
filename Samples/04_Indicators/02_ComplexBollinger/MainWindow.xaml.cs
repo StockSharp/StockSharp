@@ -2,6 +2,8 @@
 
 using System;
 
+using Ecng.Drawing;
+
 using StockSharp.Algo;
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Storages;
@@ -31,7 +33,7 @@ public partial class MainWindow
 		var chartIndicatorElement = new ChartIndicatorElement()
 		{
 			IndicatorPainter = new BollingerBandsPainter(),
-			DrawStyle = ChartIndicatorDrawStyles.StepLine
+			DrawStyle = DrawStyles.StepLine
 		};
 		Chart.AddElement(chartArea, chartIndicatorElement);
 

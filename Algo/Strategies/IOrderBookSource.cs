@@ -1,9 +1,5 @@
 ﻿namespace StockSharp.Algo.Strategies;
 
-using Ecng.Common;
-
-using StockSharp.Messages;
-
 /// <summary>
 /// <see cref="IOrderBookMessage"/> source.
 /// </summary>

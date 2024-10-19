@@ -3,5 +3,6 @@
 
   <ItemGroup>
     <PackageReference Include="Tinkoff.InvestApi" Version="0.6.*" />
+    <PackageReference Include="Ecng.IO" Version="$(EcngVer)" />
   </ItemGroup>
 </Project>

@@ -12,6 +12,7 @@ using StockSharp.Algo.Storages;
 using StockSharp.Messages;
 using StockSharp.Algo.Storages.Csv;
 using StockSharp.Fix;
+using StockSharp.BusinessEntities;
 
 static class Program
 {
