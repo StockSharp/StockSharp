@@ -464,6 +464,16 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 	}
 
 	/// <summary>
+	/// Send to <see cref="SendOutMessage"/> connection state message.
+	/// </summary>
+	/// <param name="state"><see cref="ConnectionStates"/></param>
+	protected void SendOutConnectionState(ConnectionStates state)
+	{
+		if (state.ToMessage() is Message msg)
+			SendOutMessage(msg);
+	}
+
+	/// <summary>
 	/// Initialize a new message <see cref="ErrorMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
 	/// </summary>
 	/// <param name="description">Error details.</param>

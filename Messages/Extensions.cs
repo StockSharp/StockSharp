@@ -5792,4 +5792,22 @@ public static partial class Extensions
 			or MessageTypes.SecurityLookup
 			or MessageTypes.BoardLookup
 			or MessageTypes.TimeFrameLookup;
+
+	/// <summary>
+	/// Convert <see cref="ConnectionStates"/> to <see cref="Message"/>.
+	/// </summary>
+	/// <param name="state"><see cref="ConnectionStates"/> value.</param>
+	/// <returns><see cref="Message"/> value.</returns>
+	public static Message ToMessage(this ConnectionStates state)
+		=> state switch
+		{
+			ConnectionStates.Disconnected => new DisconnectMessage(),
+			ConnectionStates.Disconnecting => null,
+			ConnectionStates.Connecting => null,
+			ConnectionStates.Connected => new ConnectMessage(),
+			ConnectionStates.Reconnecting => new ConnectionLostMessage(),
+			ConnectionStates.Restored => new ConnectionRestoredMessage(),
+			ConnectionStates.Failed => new ConnectMessage { Error = new InvalidOperationException(LocalizedStrings.UnexpectedDisconnection) },
+			_ => throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.InvalidValue),
+		};
 }
