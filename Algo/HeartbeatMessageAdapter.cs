@@ -23,7 +23,6 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 	}
 
 	private const ConnectionStates _none = (ConnectionStates)(-1);
-	private const ConnectionStates _reConnecting = (ConnectionStates)10;
 
 	private readonly SyncObject _timeSync = new();
 	private readonly TimeMessage _timeMessage = new() { OfflineMode = MessageOfflineModes.Ignore };
@@ -70,7 +69,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 				if (connectMsg.Error == null)
 				{
-					isRestored = _currState == ConnectionStates.Connecting && (_prevState == ConnectionStates.Failed || _prevState == _reConnecting);
+					isRestored = _currState == ConnectionStates.Connecting && (_prevState == ConnectionStates.Failed || _prevState == ConnectionStates.Reconnecting);
 
 					lock (_timeSync)
 					{
@@ -89,10 +88,10 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 							isReconnectionStarted = _prevState == ConnectionStates.Connected;
 
 							_prevState = _currState == ConnectionStates.Connected
-								? _reConnecting
+								? ConnectionStates.Reconnecting
 								: ConnectionStates.Failed;
 
-							_currState = _reConnecting;
+							_currState = ConnectionStates.Reconnecting;
 							isReconnecting = true;
 						}
 						else
@@ -378,7 +377,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 						if (_currState == ConnectionStates.Connecting && _connectingAttemptCount != 0)
 						{
 							lock (_timeSync)
-								_currState = _reConnecting;
+								_currState = ConnectionStates.Reconnecting;
 
 							this.AddInfoLog("RCM: To Reconnecting Attempts {0} Timeout {1}.", _connectingAttemptCount, _connectionTimeOut);
 						}
@@ -392,7 +391,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 				break;
 			}
-			case _reConnecting:
+			case ConnectionStates.Reconnecting:
 			{
 				if (_connectingAttemptCount == 0)
 				{
@@ -435,7 +434,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 	{
 		switch (state)
 		{
-			case _reConnecting:
+			case ConnectionStates.Reconnecting:
 				return LocalizedStrings.Reconnecting;
 
 			case _none:
