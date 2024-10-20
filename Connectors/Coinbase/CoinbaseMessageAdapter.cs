@@ -42,7 +42,7 @@ public partial class CoinbaseMessageAdapter
 	public override bool IsSupportOrderBookIncrements => true;
 
 	/// <inheritdoc />
-	protected override IEnumerable<TimeSpan> TimeFrames { get; } = Extensions.TimeFrames.Keys.ToArray();
+	protected override IEnumerable<TimeSpan> TimeFrames { get; } = [.. Extensions.TimeFrames.Keys];
 
 	private static readonly DataType _tf5min = DataType.TimeFrame(TimeSpan.FromMinutes(5));
 
@@ -58,12 +58,11 @@ public partial class CoinbaseMessageAdapter
 	public override bool IsReplaceCommandEditCurrent => true;
 
 	/// <inheritdoc />
-	public override string[] AssociatedBoards { get; } = new[] { BoardCodes.Coinbase };
+	public override string[] AssociatedBoards { get; } = [BoardCodes.Coinbase];
 
 	private void SubscribePusherClient()
 	{
-		_socketClient.Connected += SessionOnSocketConnected;
-		_socketClient.Disconnected += SessionOnSocketDisconnected;
+		_socketClient.StateChanged += SendOutConnectionState;
 		_socketClient.Error += SessionOnSocketError;
 		_socketClient.HeartbeatReceived += SessionOnHeartbeatReceived;
 		_socketClient.TickerReceived += SessionOnTickerChanged;
@@ -75,8 +74,7 @@ public partial class CoinbaseMessageAdapter
 
 	private void UnsubscribePusherClient()
 	{
-		_socketClient.Connected -= SessionOnSocketConnected;
-		_socketClient.Disconnected -= SessionOnSocketDisconnected;
+		_socketClient.StateChanged -= SendOutConnectionState;
 		_socketClient.Error -= SessionOnSocketError;
 		_socketClient.HeartbeatReceived -= SessionOnHeartbeatReceived;
 		_socketClient.TickerReceived -= SessionOnTickerChanged;
@@ -164,8 +162,7 @@ public partial class CoinbaseMessageAdapter
 		SubscribePusherClient();
 
 		await _socketClient.Connect(cancellationToken);
-		//await _pusherClient.SubscribeStatus(cancellationToken);
-		SendOutMessage(new ConnectMessage());
+		//await _socketClient.SubscribeStatus(cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -180,9 +177,8 @@ public partial class CoinbaseMessageAdapter
 		_restClient.Dispose();
 		_restClient = null;
 
-		//await _pusherClient.UnSubscribeStatus(cancellationToken);
+		//await _socketClient.UnSubscribeStatus(cancellationToken);
 		_socketClient.Disconnect();
-		SendOutDisconnectMessage(true);
 		return default;
 	}
 
@@ -198,16 +194,8 @@ public partial class CoinbaseMessageAdapter
 
 	}
 
-	private void SessionOnSocketConnected()
-	{
-	}
-
 	private void SessionOnSocketError(Exception exception)
 	{
 		SendOutError(exception);
-	}
-
-	private void SessionOnSocketDisconnected(bool expected)
-	{
 	}
 }

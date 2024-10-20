@@ -38,12 +38,11 @@ public partial class BtceMessageAdapter
 	public override bool IsSupportOrderBookIncrements => true;
 
 	/// <inheritdoc />
-	public override string[] AssociatedBoards { get; } = new[] { BoardCodes.Btce };
+	public override string[] AssociatedBoards { get; } = [BoardCodes.Btce];
 
 	private void SubscribePusherClient()
 	{
-		_pusherClient.Connected += SessionOnPusherConnected;
-		_pusherClient.Disconnected += SessionOnPusherDisconnected;
+		_pusherClient.StateChanged += SendOutConnectionState;
 		_pusherClient.Error += SessionOnPusherError;
 		_pusherClient.OrderBookChanged += SessionOnOrderBookChanged;
 		_pusherClient.NewTrades += SessionOnNewTrades;
@@ -51,8 +50,7 @@ public partial class BtceMessageAdapter
 
 	private void UnsubscribePusherClient()
 	{
-		_pusherClient.Connected -= SessionOnPusherConnected;
-		_pusherClient.Disconnected -= SessionOnPusherDisconnected;
+		_pusherClient.StateChanged -= SendOutConnectionState;
 		_pusherClient.Error -= SessionOnPusherError;
 		_pusherClient.OrderBookChanged -= SessionOnOrderBookChanged;
 		_pusherClient.NewTrades -= SessionOnNewTrades;
@@ -160,18 +158,8 @@ public partial class BtceMessageAdapter
 		}
 	}
 
-	private void SessionOnPusherConnected()
-	{
-		SendOutMessage(new ConnectMessage());
-	}
-
 	private void SessionOnPusherError(Exception exception)
 	{
 		SendOutError(exception);
-	}
-
-	private void SessionOnPusherDisconnected(bool expected)
-	{
-		SendOutDisconnectMessage(expected);
 	}
 }

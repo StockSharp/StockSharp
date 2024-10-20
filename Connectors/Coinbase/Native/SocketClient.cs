@@ -14,8 +14,7 @@ class SocketClient : BaseLogReceiver
 	public event Action<string, string, IEnumerable<OrderBookChange>> OrderBookReceived;
 	public event Action<Order> OrderReceived;
 	public event Action<Exception> Error;
-	public event Action Connected;
-	public event Action<bool> Disconnected;
+	public event Action<ConnectionStates> StateChanged;
 
 	private readonly WebSocketClient _client;
 	private readonly Authenticator _authenticator;
@@ -25,20 +24,7 @@ class SocketClient : BaseLogReceiver
 		_authenticator = authenticator ?? throw new ArgumentNullException(nameof(authenticator));
 
 		_client = new(
-			() =>
-			{
-				this.AddInfoLog(LocalizedStrings.Connected);
-				Connected?.Invoke();
-			},
-			expected =>
-			{
-				if (expected)
-					this.AddInfoLog(LocalizedStrings.Disconnected);
-				else
-					this.AddErrorLog(LocalizedStrings.ErrorConnection);
-
-				Disconnected?.Invoke(expected);
-			},
+			state => StateChanged?.Invoke(state),
 			error =>
 			{
 				this.AddErrorLog(error);
@@ -47,8 +33,7 @@ class SocketClient : BaseLogReceiver
 			OnProcess,
 			(s, a) => this.AddInfoLog(s, a),
 			(s, a) => this.AddErrorLog(s, a),
-			(s, a) => this.AddVerboseLog(s, a),
-			(s) => this.AddVerboseLog(s));
+			(s, a) => this.AddVerboseLog(s, a));
 
 		_client.ReconnectAttempts = reconnectAttempts;
 	}
@@ -62,7 +47,7 @@ class SocketClient : BaseLogReceiver
 	public ValueTask Connect(CancellationToken cancellationToken)
 	{
 		this.AddInfoLog(LocalizedStrings.Connecting);
-		return _client.ConnectAsync("wss://advanced-trade-ws.coinbase.com", true, cancellationToken: cancellationToken);
+		return _client.ConnectAsync("wss://advanced-trade-ws.coinbase.com", cancellationToken: cancellationToken);
 	}
 
 	public void Disconnect()
@@ -71,8 +56,9 @@ class SocketClient : BaseLogReceiver
 		_client.Disconnect();
 	}
 
-	private void OnProcess(dynamic obj)
+	private ValueTask OnProcess(WebSocketMessage msg, CancellationToken cancellationToken)
 	{
+		var obj = msg.AsObject();
 		var channel = (string)obj.channel;
 		var arr = (JArray)obj.events;
 
@@ -156,6 +142,8 @@ class SocketClient : BaseLogReceiver
 				this.AddErrorLog(LocalizedStrings.UnknownEvent, channel);
 				break;
 		}
+
+		return default;
 	}
 
 	private static class Channels

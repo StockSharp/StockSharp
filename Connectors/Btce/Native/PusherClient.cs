@@ -1,5 +1,7 @@
 namespace StockSharp.Btce.Native;
 
+using Ecng.ComponentModel;
+
 class PusherClient : BaseLogReceiver
 {
 	// to get readable name after obfuscation
@@ -8,28 +10,14 @@ class PusherClient : BaseLogReceiver
 	public event Action<string, PusherTransaction[]> NewTrades;
 	public event Action<string, OrderBook> OrderBookChanged;
 	public event Action<Exception> Error;
-	public event Action Connected;
-	public event Action<bool> Disconnected;
+	public event Action<ConnectionStates> StateChanged;
 
 	private readonly WebSocketClient _client;
 
 	public PusherClient()
 	{
 		_client = new WebSocketClient(
-			() =>
-			{
-				this.AddInfoLog(LocalizedStrings.Connected);
-				Connected?.Invoke();
-			},
-			expected =>
-			{
-				if (expected)
-					this.AddInfoLog(LocalizedStrings.Disconnected);
-				else
-					this.AddErrorLog(LocalizedStrings.ErrorConnection);
-
-				Disconnected?.Invoke(expected);
-			},
+			state => StateChanged?.Invoke(state),
 			error =>
 			{
 				this.AddErrorLog(error);
@@ -38,8 +26,7 @@ class PusherClient : BaseLogReceiver
 			OnProcess,
 			(s, a) => this.AddInfoLog(s, a),
 			(s, a) => this.AddErrorLog(s, a),
-			(s, a) => this.AddVerboseLog(s, a),
-			(s) => this.AddVerboseLog(s));
+			(s, a) => this.AddVerboseLog(s, a));
 	}
 
 	protected override void DisposeManaged()
@@ -51,7 +38,7 @@ class PusherClient : BaseLogReceiver
 	public ValueTask Connect(CancellationToken cancellationToken)
 	{
 		this.AddInfoLog(LocalizedStrings.Connecting);
-		return _client.ConnectAsync("wss://ws-eu.pusher.com/app/ee987526a24ba107824c?client=stocksharp&version=1.0&protocol=7", false, cancellationToken: cancellationToken);
+		return _client.ConnectAsync("wss://ws-eu.pusher.com/app/ee987526a24ba107824c?client=stocksharp&version=1.0&protocol=7", cancellationToken: cancellationToken);
 	}
 
 	public void Disconnect()
@@ -60,16 +47,13 @@ class PusherClient : BaseLogReceiver
 		_client.Disconnect();
 	}
 
-	private void OnProcess(dynamic obj)
+	private ValueTask OnProcess(WebSocketMessage msg, CancellationToken cancellationToken)
 	{
+		var obj = msg.AsObject();
 		var evt = (string)obj.@event;
 
 		switch (evt)
 		{
-			case "pusher:connection_established":
-				Connected?.Invoke();
-				break;
-
 			case "pusher_internal:subscription_succeeded":
 				break;
 
@@ -88,6 +72,8 @@ class PusherClient : BaseLogReceiver
 				this.AddErrorLog(LocalizedStrings.UnknownEvent, evt);
 				break;
 		}
+
+		return default;
 	}
 
 	private static class Channels

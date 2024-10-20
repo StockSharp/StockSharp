@@ -61,8 +61,7 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 
 	private void SubscribePusherClient()
 	{
-		_pusherClient.Connected += SessionOnPusherConnected;
-		_pusherClient.Disconnected += SessionOnPusherDisconnected;
+		_pusherClient.StateChanged += SendOutConnectionState;
 		_pusherClient.Error += SessionOnPusherError;
 		_pusherClient.NewOrderBook += SessionOnNewOrderBook;
 		_pusherClient.NewOrderLog += SessionOnNewOrderLog;
@@ -71,8 +70,7 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 
 	private void UnsubscribePusherClient()
 	{
-		_pusherClient.Connected -= SessionOnPusherConnected;
-		_pusherClient.Disconnected -= SessionOnPusherDisconnected;
+		_pusherClient.StateChanged -= SendOutConnectionState;
 		_pusherClient.Error -= SessionOnPusherError;
 		_pusherClient.NewOrderBook -= SessionOnNewOrderBook;
 		_pusherClient.NewOrderLog -= SessionOnNewOrderLog;
@@ -179,18 +177,8 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 			await _pusherClient.ProcessPing(cancellationToken);
 	}
 
-	private void SessionOnPusherConnected()
-	{
-		SendOutMessage(new ConnectMessage());
-	}
-
 	private void SessionOnPusherError(Exception exception)
 	{
 		SendOutError(exception);
-	}
-
-	private void SessionOnPusherDisconnected(bool expected)
-	{
-		SendOutDisconnectMessage(expected);
 	}
 }
