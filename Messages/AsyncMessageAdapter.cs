@@ -124,6 +124,15 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 	}
 
 	/// <summary>
+	/// Process <see cref="ChangePasswordMessage"/>.
+	/// </summary>
+	/// <param name="pwdMsg"><see cref="ChangePasswordMessage"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	/// <returns><see cref="ValueTask"/>.</returns>
+	public virtual ValueTask ChangePasswordAsync(ChangePasswordMessage pwdMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(pwdMsg, cancellationToken);
+
+	/// <summary>
 	/// Process <see cref="SecurityLookupMessage"/>.
 	/// </summary>
 	/// <param name="lookupMsg"><see cref="SecurityLookupMessage"/>.</param>
