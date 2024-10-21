@@ -161,8 +161,8 @@ public class CsvParser : BaseLogReceiver
 
 			void FlushQuotes()
 			{
-				quoteMsg.Bids = bids.ToArray();
-				quoteMsg.Asks = asks.ToArray();
+				quoteMsg.Bids = [.. bids];
+				quoteMsg.Asks = [.. asks];
 				quoteMsg.HasPositions = hasPos;
 			}
 
@@ -284,8 +284,8 @@ public class CsvParser : BaseLogReceiver
 							yield return quoteMsg;
 
 							quoteMsg = new QuoteChangeMessage();
-							bids = new List<QuoteChange>();
-							asks = new List<QuoteChange>();
+							bids = [];
+							asks = [];
 							hasPos = false;
 							FillQuote(quote);
 						}

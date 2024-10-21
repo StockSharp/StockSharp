@@ -6,7 +6,7 @@ class OrderLogMetaInfo : BinaryMetaInfo
 		: base(date)
 	{
 		FirstOrderId = -1;
-		Portfolios = new List<string>();
+		Portfolios = [];
 	}
 
 	public override object LastId => LastTransactionId;

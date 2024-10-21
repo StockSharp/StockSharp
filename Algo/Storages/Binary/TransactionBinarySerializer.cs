@@ -10,15 +10,15 @@ class TransactionSerializerMetaInfo : BinaryMetaInfo
 		FirstOriginalTransactionId = -1;
 		FirstTradeId = -1;
 
-		Portfolios = new List<string>();
-		ClientCodes = new List<string>();
-		BrokerCodes = new List<string>();
-		DepoNames = new List<string>();
-		UserOrderIds = new List<string>();
-		StrategyIds = new List<string>();
-		Comments = new List<string>();
-		SystemComments = new List<string>();
-		Errors = new List<string>();
+		Portfolios = [];
+		ClientCodes = [];
+		BrokerCodes = [];
+		DepoNames = [];
+		UserOrderIds = [];
+		StrategyIds = [];
+		Comments = [];
+		SystemComments = [];
+		Errors = [];
 	}
 
 	public override object LastId => LastTransactionId;

@@ -25,7 +25,7 @@ public class RealTimeEmulationTrader<TUnderlyingMarketDataAdapter> : BaseEmulati
 	/// <param name="portfolio">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
 	/// <param name="ownAdapter">Track the connection <paramref name="underlyngMarketDataAdapter" /> lifetime.</param>
 	public RealTimeEmulationTrader(TUnderlyingMarketDataAdapter underlyngMarketDataAdapter, ISecurityProvider securityProvider, Portfolio portfolio, bool ownAdapter = true)
-		: this(underlyngMarketDataAdapter, securityProvider, new CollectionPortfolioProvider(new[] { portfolio }), new InMemoryExchangeInfoProvider(), ownAdapter)
+		: this(underlyngMarketDataAdapter, securityProvider, new CollectionPortfolioProvider([portfolio]), new InMemoryExchangeInfoProvider(), ownAdapter)
 	{
 	}
 

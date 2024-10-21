@@ -182,8 +182,8 @@ class EntityCache : ISnapshotHolder
 
 	private class SecurityData
 	{
-		public readonly CachedSynchronizedDictionary<(long transId, long tradeId, string tradeStrId), MyTrade> MyTrades = new();
-		public readonly CachedSynchronizedDictionary<(long transId, bool conditional, OrderOperations operation), OrderInfo> Orders = new();
+		public readonly CachedSynchronizedDictionary<(long transId, long tradeId, string tradeStrId), MyTrade> MyTrades = [];
+		public readonly CachedSynchronizedDictionary<(long transId, bool conditional, OrderOperations operation), OrderInfo> Orders = [];
 
 		public OrderInfo TryGetOrder(OrderTypes? type, long transactionId, OrderOperations operation)
 		{
@@ -191,25 +191,25 @@ class EntityCache : ISnapshotHolder
 				?? (type == null ? Orders.TryGetValue(CreateOrderKey(OrderTypes.Conditional, transactionId, operation)) : null);
 		}
 
-		public readonly SynchronizedDictionary<long, Order> OrdersById = new();
+		public readonly SynchronizedDictionary<long, Order> OrdersById = [];
 		public readonly SynchronizedDictionary<string, Order> OrdersByStringId = new(StringComparer.InvariantCultureIgnoreCase);
 	}
 
-	private readonly SynchronizedDictionary<Security, SecurityData> _securityData = new();
+	private readonly SynchronizedDictionary<Security, SecurityData> _securityData = [];
 
 	private SecurityData GetData(Security security)
 		=> _securityData.SafeAdd(security);
 
-	private readonly SynchronizedDictionary<(long transId, OrderOperations operation), Order> _allOrdersByTransactionId = new();
-	private readonly SynchronizedDictionary<(long transId, OrderOperations operation), OrderFail> _allOrdersByFailedId = new();
-	private readonly SynchronizedDictionary<long, Order> _allOrdersById = new();
+	private readonly SynchronizedDictionary<(long transId, OrderOperations operation), Order> _allOrdersByTransactionId = [];
+	private readonly SynchronizedDictionary<(long transId, OrderOperations operation), OrderFail> _allOrdersByFailedId = [];
+	private readonly SynchronizedDictionary<long, Order> _allOrdersById = [];
 	private readonly SynchronizedDictionary<string, Order> _allOrdersByStringId = new(StringComparer.InvariantCultureIgnoreCase);
-	private readonly SynchronizedDictionary<Order, (decimal totalVolume, decimal weightedPriceSum)> _ordersAvgPrices = new();
+	private readonly SynchronizedDictionary<Order, (decimal totalVolume, decimal weightedPriceSum)> _ordersAvgPrices = [];
 
 	private readonly SynchronizedDictionary<string, News> _newsById = new(StringComparer.InvariantCultureIgnoreCase);
-	private readonly SynchronizedList<News> _newsWithoutId = new();
+	private readonly SynchronizedList<News> _newsWithoutId = [];
 
-	public IEnumerable<News> News => _newsWithoutId.SyncGet(t => t.ToArray()).Concat(_newsById.SyncGet(t => t.Values.ToArray())).ToArray();
+	public IEnumerable<News> News => [.. _newsWithoutId.SyncGet(t => t.ToArray()), .. _newsById.SyncGet(t => t.Values.ToArray())];
 
 	private int _ordersKeepCount = 1000;
 
@@ -240,24 +240,24 @@ class EntityCache : ISnapshotHolder
 		RecycleOrders();
 	}
 
-	private readonly HashSet<long> _orderStatusTransactions = new();
-	private readonly HashSet<long> _massCancelationTransactions = new();
+	private readonly HashSet<long> _orderStatusTransactions = [];
+	private readonly HashSet<long> _massCancelationTransactions = [];
 
 	public IExchangeInfoProvider ExchangeInfoProvider { get; }
 
-	private readonly CachedSynchronizedDictionary<Order, IMessageAdapter> _orders = new();
+	private readonly CachedSynchronizedDictionary<Order, IMessageAdapter> _orders = [];
 	public IEnumerable<Order> Orders => _orders.CachedKeys;
 
-	private readonly CachedSynchronizedList<MyTrade> _myTrades = new();
+	private readonly CachedSynchronizedList<MyTrade> _myTrades = [];
 	public IEnumerable<MyTrade> MyTrades => _myTrades.Cache;
 
-	private readonly SynchronizedList<OrderFail> _orderRegisterFails = new();
+	private readonly SynchronizedList<OrderFail> _orderRegisterFails = [];
 	public IEnumerable<OrderFail> OrderRegisterFails => _orderRegisterFails.SyncGet(c => c.ToArray());
 
-	private readonly SynchronizedList<OrderFail> _orderCancelFails = new();
+	private readonly SynchronizedList<OrderFail> _orderCancelFails = [];
 	public IEnumerable<OrderFail> OrderCancelFails => _orderCancelFails.SyncGet(c => c.ToArray());
 
-	private readonly SynchronizedList<OrderFail> _orderEditFails = new();
+	private readonly SynchronizedList<OrderFail> _orderEditFails = [];
 	public IEnumerable<OrderFail> OrderEditFails => _orderEditFails.SyncGet(c => c.ToArray());
 
 	private readonly ILogReceiver _logReceiver;
@@ -982,7 +982,7 @@ class EntityCache : ISnapshotHolder
 			get
 			{
 				lock (_sync)
-					return _snapshot.Changes.Keys.ToArray();
+					return [.. _snapshot.Changes.Keys];
 			}
 		}
 
@@ -1039,12 +1039,12 @@ class EntityCache : ISnapshotHolder
 		}
 	}
 
-	private readonly SynchronizedDictionary<ExchangeBoard, SessionStates?> _boardStates = new();
+	private readonly SynchronizedDictionary<ExchangeBoard, SessionStates?> _boardStates = [];
 
 	public SessionStates? GetSessionState(ExchangeBoard board) => _boardStates.TryGetValue(board);
 	public void SetSessionState(ExchangeBoard board, SessionStates? value) => _boardStates[board] = value;
 
-	private readonly SynchronizedDictionary<Security, Level1Info> _securityValues = new();
+	private readonly SynchronizedDictionary<Security, Level1Info> _securityValues = [];
 
 	public object GetSecurityValue(Security security, Level1Fields field)
 	{
@@ -1062,7 +1062,7 @@ class EntityCache : ISnapshotHolder
 		if (_securityValues.TryGetValue(security, out var info))
 			return info.Level1Fields;
 
-		return Enumerable.Empty<Level1Fields>();
+		return [];
 	}
 
 	public bool HasLevel1Info(Security security)
@@ -1082,10 +1082,10 @@ class EntityCache : ISnapshotHolder
 		if (dataType == DataType.Level1)
 		{
 			if (security == null)
-				return Enumerable.Empty<Message>();
+				return [];
 
 			if (_securityValues.TryGetValue(security, out var info))
-				return new[] { info.GetCopy() };
+				return [info.GetCopy()];
 		}
 		else if (dataType == DataType.Transactions)
 		{
@@ -1102,6 +1102,6 @@ class EntityCache : ISnapshotHolder
 			return positions.Select(p => p.ToChangeMessage()).ToArray();
 		}
 
-		return Enumerable.Empty<Message>();
+		return [];
 	}
 }

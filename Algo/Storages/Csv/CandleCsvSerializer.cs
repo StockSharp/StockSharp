@@ -10,7 +10,7 @@ public class CandleCsvSerializer<TCandleMessage> : CsvMarketDataSerializer<TCand
 	private class CandleCsvMetaInfo : MetaInfo
 		//where TCandleMessage : CandleMessage, new()
 	{
-		private readonly Dictionary<DateTime, TCandleMessage> _items = new();
+		private readonly Dictionary<DateTime, TCandleMessage> _items = [];
 
 		private readonly CandleCsvSerializer<TCandleMessage> _serializer;
 		private readonly Encoding _encoding;
@@ -71,7 +71,7 @@ public class CandleCsvSerializer<TCandleMessage> : CsvMarketDataSerializer<TCand
 			messages = messages.ToArray();
 
 			if (messages.IsEmpty())
-				return Enumerable.Empty<TCandleMessage>();
+				return [];
 
 			foreach (var message in messages)
 			{
@@ -149,10 +149,10 @@ public class CandleCsvSerializer<TCandleMessage> : CsvMarketDataSerializer<TCand
 			data.LowPrice.ToString(),
 			data.ClosePrice.ToString(),
 			data.TotalVolume.ToString()
-		}.Concat(data.BuildFrom.ToCsv()).Concat(new[]
-		{
+		}.Concat(data.BuildFrom.ToCsv()).Concat(
+		[
 			data.SeqNum.DefaultAsNull().ToString(),
-		}));
+		]));
 	}
 
 	/// <inheritdoc />

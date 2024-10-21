@@ -55,11 +55,11 @@ public class Synthetic
 	{
 		var asset = Option.GetUnderlyingAsset(_provider);
 
-		return new (Security, Sides)[]
-		{
+		return
+		[
 			new(asset, Option.OptionType == OptionTypes.Call ? side : side.Invert()),
 			new(Option.GetOppositeOption(_provider), side)
-		};
+		];
 	}
 
 	/// <summary>
@@ -116,11 +116,11 @@ public class Synthetic
 		var call = _security.GetCall(_provider, strike, expiryDate);
 		var put = _security.GetPut(_provider, strike, expiryDate);
 
-		return new (Security, Sides)[]
-		{
+		return
+		[
 			new (call, side),
 			new (put, side.Invert())
-		};
+		];
 	}
 
 	private DateTimeOffset GetExpiryDate()

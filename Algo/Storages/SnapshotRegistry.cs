@@ -28,9 +28,9 @@ public class SnapshotRegistry : Disposable
 	{
 		private class SnapshotStorageDate
 		{
-			private readonly HashSet<TKey> _dirtyKeys = new();
-			private readonly SynchronizedDictionary<TKey, TMessage> _snapshots = new();
-			private readonly Dictionary<TKey, byte[]> _buffers = new();
+			private readonly HashSet<TKey> _dirtyKeys = [];
+			private readonly SynchronizedDictionary<TKey, TMessage> _snapshots = [];
+			private readonly Dictionary<TKey, byte[]> _buffers = [];
 			private readonly ISnapshotSerializer<TKey, TMessage> _serializer;
 			private readonly Version _version;
 			private readonly string _fileName;
@@ -221,7 +221,7 @@ public class SnapshotRegistry : Disposable
 
 					_dirtyKeys.Clear();
 
-					buffers = _buffers.Values.ToArray();
+					buffers = [.. _buffers.Values];
 				}
 
 				Directory.CreateDirectory(Path.GetDirectoryName(_fileName));
@@ -249,7 +249,7 @@ public class SnapshotRegistry : Disposable
 
 		private readonly SyncObject _cacheSync = new();
 
-		private readonly CachedSynchronizedDictionary<DateTime, SnapshotStorageDate> _dates = new();
+		private readonly CachedSynchronizedDictionary<DateTime, SnapshotStorageDate> _dates = [];
 
 		private readonly ISnapshotSerializer<TKey, TMessage> _serializer;
 
@@ -502,7 +502,7 @@ public class SnapshotRegistry : Disposable
 	}
 
 	private readonly string _path;
-	private readonly CachedSynchronizedDictionary<DataType, SnapshotStorage> _snapshotStorages = new();
+	private readonly CachedSynchronizedDictionary<DataType, SnapshotStorage> _snapshotStorages = [];
 	private Timer _timer;
 
 	/// <summary>

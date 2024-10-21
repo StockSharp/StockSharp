@@ -164,7 +164,7 @@ public static class StorageHelper
 		var range = GetRange(storage, null, null);
 
 		if (range == null)
-			return Enumerable.Empty<Range<DateTimeOffset>>();
+			return [];
 
 		return storage.Dates.Select(d => d.ApplyUtc()).GetRanges(range.Min, range.Max);
 	}
@@ -183,7 +183,7 @@ public static class StorageHelper
 		var range = GetRange(storage, from, to);
 
 		return range == null
-			? Enumerable.Empty<TMessage>()
+			? []
 			: new RangeEnumerable<TMessage>(storage, range.Min, range.Max, ((IMarketDataStorageInfo<TMessage>)storage).GetTime);
 	}
 
@@ -557,7 +557,7 @@ public static class StorageHelper
 				var compressor = _compressors.TryGetValue((TimeSpan)s.DataType.Arg);
 
 				if (compressor == null)
-					return Enumerable.Empty<CandleMessage>();
+					return [];
 
 				return data.SelectMany(message => compressor.Process(message));
 			}).Select(e => e.GetEnumerator()).ToList();
@@ -770,11 +770,11 @@ public static class StorageHelper
 
 	// http://stackoverflow.com/questions/62771/how-check-if-given-string-is-legal-allowed-file-name-under-windows
 	private static readonly string[] _reservedDos =
-	{
+	[
 		"CON", "PRN", "AUX", "NUL",
 		"COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
 		"LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
-	};
+	];
 
 	/// <summary>
 	/// To convert the instrument identifier into the folder name, replacing reserved symbols.
@@ -812,7 +812,7 @@ public static class StorageHelper
 		var id = folderName.ToUpperInvariant();
 
 		if (id[0] == '_' && _reservedDos.Any(d => id.StartsWithIgnoreCase("_" + d)))
-			id = id.Substring(1);
+			id = id[1..];
 
 		if (id.StartsWithIgnoreCase(SecurityFirstDot))
 			id = id.ReplaceIgnoreCase(SecurityFirstDot, ".");

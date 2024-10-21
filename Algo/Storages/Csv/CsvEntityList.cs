@@ -45,7 +45,7 @@ public interface ICsvEntityList
 public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, IStorageEntityList<TEntity>, ICsvEntityList
 	where TEntity : class
 {
-	private readonly CachedSynchronizedDictionary<TKey, TEntity> _items = new();
+	private readonly CachedSynchronizedDictionary<TKey, TEntity> _items = [];
 
 	private readonly SyncObject _copySync = new();
 	private byte[] _copy;
@@ -97,7 +97,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 				if (File.Exists(FileName))
 					body = File.ReadAllBytes(FileName);
 				else
-					body = Array.Empty<byte>();
+					body = [];
 			}
 
 			body = body.Compress<GZipStream>();
@@ -216,7 +216,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 			else
 				return;
 
-			WriteMany(_items.Values.ToArray());
+			WriteMany([.. _items.Values]);
 		}
 	}
 
@@ -302,7 +302,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 			_items.Remove(GetNormalizedKey(item));
 			RemoveCache(item);
 
-			WriteMany(_items.Values.ToArray());
+			WriteMany([.. _items.Values]);
 		}
 	}
 
@@ -320,7 +320,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 				RemoveCache(item);
 			}
 
-			WriteMany(_items.Values.ToArray());
+			WriteMany([.. _items.Values]);
 		}
 	}
 

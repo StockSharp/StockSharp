@@ -41,8 +41,8 @@ public class Level1DepthBuilderAdapter : MessageAdapterWrapper
 				ServerTime = message.ServerTime,
 				LocalTime = message.LocalTime,
 				BuildFrom = DataType.Level1,
-				Bids = bidPrice == null ? Array.Empty<QuoteChange>() : new[] { new QuoteChange(bidPrice.Value, bidVolume ?? 0) },
-				Asks = askPrice == null ? Array.Empty<QuoteChange>() : new[] { new QuoteChange(askPrice.Value, askVolume ?? 0) },
+				Bids = bidPrice == null ? [] : [new QuoteChange(bidPrice.Value, bidVolume ?? 0)],
+				Asks = askPrice == null ? [] : [new QuoteChange(askPrice.Value, askVolume ?? 0)],
 			};
 		}
 	}
@@ -52,13 +52,13 @@ public class Level1DepthBuilderAdapter : MessageAdapterWrapper
 		public BookInfo(Level1DepthBuilder builder) => Builder = builder;
 
 		public readonly Level1DepthBuilder Builder;
-		public readonly CachedSynchronizedSet<long> SubscriptionIds = new();
+		public readonly CachedSynchronizedSet<long> SubscriptionIds = [];
 	}
 
 	private readonly SyncObject _syncObject = new();
 
-	private readonly Dictionary<long, BookInfo> _byId = new();
-	private readonly Dictionary<SecurityId, BookInfo> _online = new();
+	private readonly Dictionary<long, BookInfo> _byId = [];
+	private readonly Dictionary<SecurityId, BookInfo> _online = [];
 	
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Level1DepthBuilderAdapter"/>.
@@ -238,7 +238,7 @@ public class Level1DepthBuilderAdapter : MessageAdapterWrapper
 						quoteMsg.SetSubscriptionIds(info.SubscriptionIds.Cache);
 
 						if (books == null)
-							books = new List<QuoteChangeMessage>();
+							books = [];
 
 						books.Add(quoteMsg);
 
@@ -257,7 +257,7 @@ public class Level1DepthBuilderAdapter : MessageAdapterWrapper
 						break;
 					}
 
-					level1Msg.SetSubscriptionIds(leftIds.ToArray());
+					level1Msg.SetSubscriptionIds([.. leftIds]);
 				}
 
 				break;

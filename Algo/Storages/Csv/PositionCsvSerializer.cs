@@ -5,7 +5,7 @@ namespace StockSharp.Algo.Storages.Csv;
 /// </summary>
 public class PositionCsvSerializer : CsvMarketDataSerializer<PositionChangeMessage>
 {
-	private static readonly PositionChangeTypes[] _types = Enumerator.GetValues<PositionChangeTypes>().OrderBy(t => (int)t).ToArray();
+	private static readonly PositionChangeTypes[] _types = [.. Enumerator.GetValues<PositionChangeTypes>().OrderBy(t => (int)t)];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="PositionCsvSerializer"/>.
@@ -24,8 +24,8 @@ public class PositionCsvSerializer : CsvMarketDataSerializer<PositionChangeMessa
 	{
 		var row = new List<string>();
 
-		row.AddRange(new[]
-		{
+		row.AddRange(
+		[
 			data.ServerTime.WriteTimeMls(),
 			data.ServerTime.ToString("zzz"),
 			data.PortfolioName,
@@ -35,7 +35,7 @@ public class PositionCsvSerializer : CsvMarketDataSerializer<PositionChangeMessa
 			data.Description,
 			data.StrategyId,
 			data.Side.To<int?>().ToString(),
-		});
+		]);
 
 		row.AddRange(data.BuildFrom.ToCsv());
 
@@ -50,7 +50,7 @@ public class PositionCsvSerializer : CsvMarketDataSerializer<PositionChangeMessa
 			if (type == PositionChangeTypes.ExpirationDate)
 			{
 				var date = (DateTimeOffset?)value;
-				row.AddRange(new[] { date?.WriteDate(), date?.WriteTimeMls(), date?.ToString("zzz") });
+				row.AddRange([date?.WriteDate(), date?.WriteTimeMls(), date?.ToString("zzz")]);
 			}
 			else
 				row.Add(value?.ToString());

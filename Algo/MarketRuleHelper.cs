@@ -306,7 +306,7 @@ public static partial class MarketRuleHelper
 			if (process())
 			{
 				container.Rules.Remove(rule);
-				removedRules = new List<IMarketRule> { rule };
+				removedRules = [rule];
 			}
 		}
 		finally
@@ -497,7 +497,7 @@ public static partial class MarketRuleHelper
 
 	private abstract class BaseComplexRule<TToken, TArg> : MarketRule<TToken, TArg>, IMarketRuleContainer
 	{
-		private readonly List<IMarketRule> _innerRules = new();
+		private readonly List<IMarketRule> _innerRules = [];
 
 		protected BaseComplexRule(IEnumerable<IMarketRule> innerRules)
 			: base(default)
@@ -636,8 +636,8 @@ public static partial class MarketRuleHelper
 
 	private sealed class AndRule : BaseComplexRule<object, object>
 	{
-		private readonly List<object> _args = new();
-		private readonly SynchronizedSet<IMarketRule> _nonActivatedRules = new();
+		private readonly List<object> _args = [];
+		private readonly SynchronizedSet<IMarketRule> _nonActivatedRules = [];
 
 		public AndRule(IMarketRule[] innerRules)
 			: base(innerRules)
@@ -670,8 +670,8 @@ public static partial class MarketRuleHelper
 
 	private sealed class AndRule<TToken, TArg> : BaseComplexRule<TToken, TArg>
 	{
-		private readonly List<TArg> _args = new();
-		private readonly SynchronizedSet<IMarketRule> _nonActivatedRules = new();
+		private readonly List<TArg> _args = [];
+		private readonly SynchronizedSet<IMarketRule> _nonActivatedRules = [];
 
 		public AndRule(MarketRule<TToken, TArg>[] innerRules)
 			: base(innerRules)

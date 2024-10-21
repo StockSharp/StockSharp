@@ -297,7 +297,7 @@ public abstract class CandleBuilder<TCandleMessage> : BaseLogReceiver, ICandleBu
 						dict.Add(level.Price, level);
 				}
 
-				candle.PriceLevels = dict.Values.ToArray();
+				candle.PriceLevels = [.. dict.Values];
 			}
 		}
 

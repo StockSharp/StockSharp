@@ -90,12 +90,12 @@ public class BiggerTimeFrameCandleCompressor : ICandleBuilderSubscription
 	}
 
 	private static readonly Level1Fields[] _processParts =
-	{
+	[
 		Level1Fields.OpenPrice,
 		Level1Fields.HighPrice,
 		Level1Fields.LowPrice,
 		Level1Fields.ClosePrice,
-	};
+	];
 
 	/// <summary>
 	/// To process the new data.

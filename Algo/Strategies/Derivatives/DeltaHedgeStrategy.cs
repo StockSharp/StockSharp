@@ -40,14 +40,14 @@ public class DeltaHedgeStrategy : HedgeStrategy
 		var futurePosition = BlackScholes.Delta(currentTime);
 
 		if (futurePosition == null)
-			return Enumerable.Empty<Order>();
+			return [];
 
 		var diff = futurePosition.Value.Round() + PositionOffset;
 
 		this.AddInfoLog("Delta total {0}, Futures position {1}, Directional position {2}, Difference in position {3}.", futurePosition, BlackScholes.UnderlyingAsset, PositionOffset, diff);
 
 		if (diff == 0)
-			return Enumerable.Empty<Order>();
+			return [];
 
 		var side = diff > 0 ? Sides.Sell : Sides.Buy;
 		var security = this.GetSecurity();
@@ -55,10 +55,10 @@ public class DeltaHedgeStrategy : HedgeStrategy
 		var price = security.GetCurrentPrice(this, side);
 
 		if (price == null)
-			return Enumerable.Empty<Order>();
+			return [];
 
-		return new[]
-		{
+		return
+		[
 			new Order
 			{
 				Side = side,
@@ -67,6 +67,6 @@ public class DeltaHedgeStrategy : HedgeStrategy
 				Portfolio = Portfolio,
 				Price = price.ApplyOffset(side, PriceOffset, security)
 			}
-		};
+		];
 	}
 }

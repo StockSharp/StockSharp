@@ -39,7 +39,7 @@ public class ProtectiveController : BaseLogReceiver
 			=> _behaviour.TryActivate(price, time);
 	}
 
-	private readonly SynchronizedDictionary<SecurityId, CachedSynchronizedDictionary<string, ProtectivePositionController>> _contollers = new();
+	private readonly SynchronizedDictionary<SecurityId, CachedSynchronizedDictionary<string, ProtectivePositionController>> _contollers = [];
 
 	/// <summary>
 	/// Get <see cref="IProtectivePositionController"/> instance.

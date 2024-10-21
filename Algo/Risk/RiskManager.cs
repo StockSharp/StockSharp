@@ -20,7 +20,7 @@ public class RiskManager : BaseLogReceiver, IRiskManager
 		};
 	}
 
-	private readonly CachedSynchronizedList<IRiskRule> _rules = new();
+	private readonly CachedSynchronizedList<IRiskRule> _rules = [];
 
 	/// <inheritdoc />
 	public INotifyList<IRiskRule> Rules => _rules;
@@ -37,7 +37,7 @@ public class RiskManager : BaseLogReceiver, IRiskManager
 		if (message.Type == MessageTypes.Reset)
 		{
 			Reset();
-			return Enumerable.Empty<IRiskRule>();
+			return [];
 		}
 
 		return _rules.Cache.Where(r => r.ProcessMessage(message)).ToArray();

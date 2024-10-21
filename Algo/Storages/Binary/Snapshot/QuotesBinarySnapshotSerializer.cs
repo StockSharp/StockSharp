@@ -164,8 +164,8 @@ public class QuotesBinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Qu
 
 	void ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Update(QuoteChangeMessage message, QuoteChangeMessage changes)
 	{
-		message.Bids = changes.Bids.ToArray();
-		message.Asks = changes.Asks.ToArray();
+		message.Bids = [.. changes.Bids];
+		message.Asks = [.. changes.Asks];
 
 		if (changes.BuildFrom != default)
 			message.BuildFrom = changes.BuildFrom;

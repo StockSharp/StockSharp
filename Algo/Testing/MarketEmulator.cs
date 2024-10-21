@@ -10,7 +10,7 @@ using QuotesDict = System.Collections.Generic.SortedDictionary<decimal, Ecng.Com
 
 class LevelOrders : IEnumerable<ExecutionMessage>
 {
-	private readonly Dictionary<long, ExecutionMessage> _ordersByTrId = new();
+	private readonly Dictionary<long, ExecutionMessage> _ordersByTrId = [];
 
 	public int Count => _ordersByTrId.Count;
 	public decimal TotalBalance { get; set; }
@@ -66,7 +66,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 {
 	private abstract class Pool<T>
 	{
-		private readonly Queue<T> _pool = new();
+		private readonly Queue<T> _pool = [];
 
 		public T Allocate()
 		{
@@ -97,18 +97,18 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		private readonly MarketEmulator _parent;
 		private readonly SecurityId _securityId;
 
-		private readonly Dictionary<ExecutionMessage, TimeSpan> _expirableOrders = new();
-		private readonly Dictionary<long, ExecutionMessage> _activeOrders = new();
+		private readonly Dictionary<ExecutionMessage, TimeSpan> _expirableOrders = [];
+		private readonly Dictionary<long, ExecutionMessage> _activeOrders = [];
 		private readonly QuotesDict _bids = new(new BackwardComparer<decimal>());
-		private readonly QuotesDict _asks = new();
-		private readonly Dictionary<ExecutionMessage, TimeSpan> _pendingExecutions = new();
+		private readonly QuotesDict _asks = [];
+		private readonly Dictionary<ExecutionMessage, TimeSpan> _pendingExecutions = [];
 		private DateTimeOffset _prevTime;
 		private readonly MarketEmulatorSettings _settings;
 		private readonly Random _volumeRandom = new(TimeHelper.Now.Millisecond);
 		private readonly Random _priceRandom = new(TimeHelper.Now.Millisecond);
 		private readonly RandomArray<bool> _isMatch = new(100);
 		private int _volumeDecimals;
-		private readonly SortedDictionary<DateTimeOffset, List<(CandleMessage candle, (Sides? side, decimal price, decimal vol, DateTimeOffset time)[] ticks)>> _candleInfo = new();
+		private readonly SortedDictionary<DateTimeOffset, List<(CandleMessage candle, (Sides? side, decimal price, decimal vol, DateTimeOffset time)[] ticks)>> _candleInfo = [];
 		private LogLevels? _logLevel;
 		private DateTime _lastStripDate;
 
@@ -405,7 +405,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						// в трейдах используется время открытия свечи, при разных MarketTimeChangedInterval и TimeFrame свечек
 						// возможны ситуации, когда придет TimeMsg 11:03:00, а время закрытия будет 11:03:30
 						// т.о. время уйдет вперед данных, которые построены по свечкам.
-						var candles = _candleInfo.SafeAdd(candleMsg.OpenTime, key => new());
+						var candles = _candleInfo.SafeAdd(candleMsg.OpenTime, key => []);
 
 						(Sides? side, decimal price, decimal vol, DateTimeOffset time)[] ticks = null;
 
@@ -667,7 +667,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					return;
 
 				void AddQuote(QuotesDict quotes, decimal price, decimal volume)
-					=> quotes.Add(price, new(new(), new() { Price = price, Volume = volume }));
+					=> quotes.Add(price, new([], new() { Price = price, Volume = volume }));
 
 				var serverTime = message.ServerTime;
 
@@ -727,14 +727,14 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 							if (quote.Price * sign > price * sign)
 							{
-								toRemove ??= new();
+								toRemove ??= [];
 								toRemove.Add(pair.Value);
 							}
 							else
 							{
 								if (quote.Price == price)
 								{
-									toRemove ??= new();
+									toRemove ??= [];
 									toRemove.Add(pair.Value);
 								}
 								else
@@ -891,7 +891,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					foreach (var bid in message.Bids)
 					{
 						bestBidPrice ??= bid.Price;
-						_bids.Add(bid.Price, new(new(), new() { Price = bid.Price, Volume = bid.Volume }));
+						_bids.Add(bid.Price, new([], new() { Price = bid.Price, Volume = bid.Volume }));
 
 						_totalBidVolume += bid.Volume;
 					}
@@ -899,7 +899,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					foreach (var ask in message.Asks)
 					{
 						bestAskPrice ??= ask.Price;
-						_asks.Add(ask.Price, new(new(), new() { Price = ask.Price, Volume = ask.Volume }));
+						_asks.Add(ask.Price, new([], new() { Price = ask.Price, Volume = ask.Volume }));
 
 						_totalAskVolume += ask.Volume;
 					}
@@ -1361,14 +1361,14 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 					if (quote.Price * sign > tradePrice * sign)
 					{
-						toRemove ??= new();
+						toRemove ??= [];
 						toRemove.Add(pair.Value);
 					}
 					else
 					{
 						if (quote.Price == tradePrice)
 						{
-							toRemove ??= new();
+							toRemove ??= [];
 							toRemove.Add(pair.Value);
 						}
 						else
@@ -1873,7 +1873,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		private static QuoteChange[] BuildQuoteChanges(QuotesDict quotes)
 		{
 			return quotes.Count == 0
-				? Array.Empty<QuoteChange>()
+				? []
 				: quotes.Select(p => p.Value.Second).ToArray();
 		}
 
@@ -2046,7 +2046,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						if (levelOrders.Count > 0)
 							throw new NotSupportedException("MatchOnTouch doesn't support cross trades.");
 
-						toRemove ??= new();
+						toRemove ??= [];
 						toRemove.Add(qc);
 
 						break;
@@ -2087,7 +2087,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						}
 					}
 
-					toRemove ??= new();
+					toRemove ??= [];
 					toRemove.Add(qc);
 
 					var diff = qc.Volume - levelOrdersExecVol;
@@ -2293,7 +2293,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				if (pair.Key >= message.LocalTime)
 					break;
 
-				toRemove ??= new();
+				toRemove ??= [];
 				toRemove.Add(pair.Key);
 
 				if (_ticksSubscription is not null)
@@ -2748,7 +2748,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		private readonly MarketEmulator _parent;
 		private readonly string _name;
-		private readonly Dictionary<SecurityId, MoneyInfo> _moneys = new();
+		private readonly Dictionary<SecurityId, MoneyInfo> _moneys = [];
 
 		private decimal _beginMoney;
 		private decimal _currentMoney;
@@ -3041,11 +3041,11 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		}
 	}
 
-	private readonly Dictionary<SecurityId, SecurityMarketEmulator> _securityEmulators = new();
+	private readonly Dictionary<SecurityId, SecurityMarketEmulator> _securityEmulators = [];
 	private readonly Dictionary<string, List<SecurityMarketEmulator>> _securityEmulatorsByBoard = new(StringComparer.InvariantCultureIgnoreCase);
-	private readonly Dictionary<string, PortfolioEmulator> _portfolios = new();
+	private readonly Dictionary<string, PortfolioEmulator> _portfolios = [];
 	private readonly Dictionary<string, BoardMessage> _boardDefinitions = new(StringComparer.InvariantCultureIgnoreCase);
-	private readonly Dictionary<SecurityId, Dictionary<Level1Fields, object>> _secStates = new();
+	private readonly Dictionary<SecurityId, Dictionary<Level1Fields, object>> _secStates = [];
 	private DateTimeOffset _portfoliosPrevRecalc;
 	private readonly ICommissionManager _commissionManager = new CommissionManager();
 	private readonly Dictionary<string, SessionStates> _boardStates = new(StringComparer.InvariantCultureIgnoreCase);
@@ -3455,12 +3455,12 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			var sec = SecurityProvider.LookupById(securityId);
 
 			if (sec != null)
-				emulator.Process(sec.ToMessage(), new List<Message>());
+				emulator.Process(sec.ToMessage(), []);
 
 			var board = _boardDefinitions.TryGetValue(securityId.BoardCode);
 
 			if (board != null)
-				emulator.Process(board, new List<Message>());
+				emulator.Process(board, []);
 
 			return emulator;
 		});
@@ -3604,8 +3604,8 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 	IdGenerator IMessageAdapter.TransactionIdGenerator { get; } = new IncrementalIdGenerator();
 
-	IEnumerable<MessageTypeInfo> IMessageAdapter.PossibleSupportedMessages { get; } = new[]
-	{
+	IEnumerable<MessageTypeInfo> IMessageAdapter.PossibleSupportedMessages { get; } =
+	[
 		MessageTypes.SecurityLookup.ToInfo(),
 		MessageTypes.TimeFrameLookup.ToInfo(),
 		MessageTypes.BoardLookup.ToInfo(),
@@ -3626,26 +3626,26 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		MessageTypes.EmulationState.ToInfo(),
 		ExtendedMessageTypes.CommissionRule.ToInfo(),
 		//ExtendedMessageTypes.Clearing.ToInfo(),
-	};
+	];
 	IEnumerable<MessageTypes> IMessageAdapter.SupportedInMessages { get; set; }
-	IEnumerable<MessageTypes> IMessageAdapter.SupportedResultMessages { get; } = new[]
-	{
+	IEnumerable<MessageTypes> IMessageAdapter.SupportedResultMessages { get; } =
+	[
 		MessageTypes.SecurityLookup,
 		MessageTypes.PortfolioLookup,
 		MessageTypes.TimeFrameLookup,
 		MessageTypes.BoardLookup,
-	};
-	IEnumerable<DataType> IMessageAdapter.SupportedMarketDataTypes { get; } = new[]
-	{
+	];
+	IEnumerable<DataType> IMessageAdapter.SupportedMarketDataTypes { get; } =
+	[
 		DataType.OrderLog,
 		DataType.Ticks,
 		DataType.CandleTimeFrame,
 		DataType.MarketDepth,
-	};
+	];
 	IEnumerable<DataType> IMessageAdapter.GetSupportedDataTypes(SecurityId securityId)
 		=> ((IMessageAdapter)this).SupportedMarketDataTypes;
 
-	IEnumerable<Level1Fields> IMessageAdapter.CandlesBuildFrom => Enumerable.Empty<Level1Fields>();
+	IEnumerable<Level1Fields> IMessageAdapter.CandlesBuildFrom => [];
 
 	bool IMessageAdapter.CheckTimeFrameByRequest => true;
 
@@ -3665,7 +3665,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 	MessageAdapterCategories IMessageAdapter.Categories => default;
 
-	IEnumerable<Tuple<string, Type>> IMessageAdapter.SecurityExtendedFields { get; } = Enumerable.Empty<Tuple<string, Type>>();
+	IEnumerable<Tuple<string, Type>> IMessageAdapter.SecurityExtendedFields { get; } = [];
 	IEnumerable<int> IMessageAdapter.SupportedOrderBookDepths => throw new NotSupportedException();
 	bool IMessageAdapter.IsSupportOrderBookIncrements => false;
 	bool IMessageAdapter.IsSupportExecutionsPnL => true;
@@ -3679,7 +3679,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	bool IMessageAdapter.UseChannels => false;
 	TimeSpan IMessageAdapter.IterationInterval => default;
 	string IMessageAdapter.FeatureName => string.Empty;
-	string[] IMessageAdapter.AssociatedBoards => Array.Empty<string>();
+	string[] IMessageAdapter.AssociatedBoards => [];
 	bool? IMessageAdapter.IsPositionsEmulationRequired => null;
 	bool IMessageAdapter.IsReplaceCommandEditCurrent => false;
 	bool IMessageAdapter.GenerateOrderBookFromLevel1 { get; set; }
@@ -3690,7 +3690,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		=> new OrderLogMarketDepthBuilder(securityId);
 
 	IEnumerable<object> IMessageAdapter.GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
-		=> Enumerable.Empty<object>();
+		=> [];
 
 	TimeSpan IMessageAdapter.GetHistoryStepSize(SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)
 	{

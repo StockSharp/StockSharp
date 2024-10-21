@@ -89,7 +89,7 @@ public class CandlePatternIndicator : BaseIndicator
 {
 	private ICandlePatternProvider _candlePatternProvider;
 	private ICandlePattern _pattern;
-	private readonly List<ICandleMessage> _buffer = new();
+	private readonly List<ICandleMessage> _buffer = [];
 
 	/// <summary>
 	/// Candle pattern.

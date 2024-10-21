@@ -17,7 +17,7 @@ public class RemoteStorageClient : Disposable
 	private readonly int _securityBatchSize;
 	private readonly TimeSpan _timeout;
 
-	private readonly SynchronizedDictionary<long, (SyncObject sync, List<Message> messages)> _pendings = new();
+	private readonly SynchronizedDictionary<long, (SyncObject sync, List<Message> messages)> _pendings = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RemoteStorageClient"/>.
@@ -156,7 +156,7 @@ public class RemoteStorageClient : Disposable
 			{
 				criteria = criteria.TypedClone();
 				criteria.SecurityId = default;
-				criteria.SecurityIds = newSecurityIds.ToArray();
+				criteria.SecurityIds = [.. newSecurityIds];
 
 				var newSecurities = Do<SecurityMessage>(criteria, () => (typeof(SecurityLookupMessage), criteria.ToString()), out _).ToArray();
 
@@ -229,7 +229,7 @@ public class RemoteStorageClient : Disposable
 	{
 		var securities = new List<SecurityMessage>();
 		LookupSecurities(criteria, new HashSet<SecurityId>(), securities.Add, () => false, (i, c) => { });
-		return securities.ToArray();
+		return [.. securities];
 	}
 
 	/// <summary>
@@ -392,7 +392,7 @@ public class RemoteStorageClient : Disposable
 			if (error is not null)
 				throw new InvalidOperationException(LocalizedStrings.SomeConnectionFailed, (Exception)error);
 
-			var archive = messages.Count == 1 && messages[0] is SubscriptionFinishedMessage finishedMsg && finishedMsg.Body.Length > 0 ? finishedMsg.Body : Array.Empty<byte>();
+			var archive = messages.Count == 1 && messages[0] is SubscriptionFinishedMessage finishedMsg && finishedMsg.Body.Length > 0 ? finishedMsg.Body : [];
 
 			if (archive.Length > 0)
 			{
@@ -433,7 +433,7 @@ public class RemoteStorageClient : Disposable
 				messages.AddRange(messages.CopyAndClear().OfType<TResult>());
 
 			if (needCache)
-				cache.Set(key, messages.ToArray());
+				cache.Set(key, [.. messages]);
 
 			return messages.Cast<TResult>();
 		}

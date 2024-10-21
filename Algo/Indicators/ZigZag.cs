@@ -14,10 +14,10 @@
 [Doc("topics/api/indicators/list_of_indicators/zigzag.html")]
 public class ZigZag : BaseIndicator
 {
-	private readonly List<(decimal low, decimal high)> _buffer = new();
-	private readonly List<decimal> _lowBuffer = new();
-	private readonly List<decimal> _highBuffer = new();
-	private readonly List<decimal> _zigZagBuffer = new();
+	private readonly List<(decimal low, decimal high)> _buffer = [];
+	private readonly List<decimal> _lowBuffer = [];
+	private readonly List<decimal> _highBuffer = [];
+	private readonly List<decimal> _zigZagBuffer = [];
 
 	private bool _needAdd = true;
 

@@ -64,7 +64,7 @@ public class ExpressionIndexSecurity : IndexSecurity
 		}
 	}
 
-	private readonly CachedSynchronizedList<SecurityId> _innerSecurityIds = new();
+	private readonly CachedSynchronizedList<SecurityId> _innerSecurityIds = [];
 
 	/// <inheritdoc />
 	public override IEnumerable<SecurityId> InnerSecurityIds => _innerSecurityIds.Cache;

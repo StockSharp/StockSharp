@@ -747,13 +747,13 @@ partial class Connector
 				if (originalMsg is OrderStatusMessage orderLookup)
 					RaiseOrderStatusFailed(orderLookup.TransactionId, error, replyMsg.LocalTime);
 				else if (originalMsg is SecurityLookupMessage secLookup)
-					RaiseLookupSecuritiesResult(secLookup, error, Securities.Filter(secLookup).ToArray(), Array.Empty<Security>());
+					RaiseLookupSecuritiesResult(secLookup, error, Securities.Filter(secLookup).ToArray(), []);
 				else if (originalMsg is BoardLookupMessage boardLookup)
-					RaiseLookupBoardsResult(boardLookup, error, ExchangeBoards.Filter(boardLookup).ToArray(), Array.Empty<ExchangeBoard>());
+					RaiseLookupBoardsResult(boardLookup, error, ExchangeBoards.Filter(boardLookup).ToArray(), []);
 				else if (originalMsg is PortfolioLookupMessage pfLookup)
-					RaiseLookupPortfoliosResult(pfLookup, error, Portfolios.Filter(pfLookup).ToArray(), Array.Empty<Portfolio>());
+					RaiseLookupPortfoliosResult(pfLookup, error, Portfolios.Filter(pfLookup).ToArray(), []);
 				else if (originalMsg is TimeFrameLookupMessage tfLookup)
-					RaiseLookupTimeFramesResult(tfLookup, error, Array.Empty<TimeSpan>(), Array.Empty<TimeSpan>());
+					RaiseLookupTimeFramesResult(tfLookup, error, [], []);
 			}
 		}
 	}
@@ -816,7 +816,7 @@ partial class Connector
 		if (security != null)
 		{
 			SecurityStorage.Delete(security);
-			_removed?.Invoke(new[] { security });
+			_removed?.Invoke([security]);
 		}
 	}
 
@@ -1119,13 +1119,13 @@ partial class Connector
 
 		var news = _entityCache.ProcessNewsMessage(security, message);
 
-		if (RaiseReceived(news.Item1, message, NewsReceived) == false)
+		if (RaiseReceived(news.news, message, NewsReceived) == false)
 			return;
 
-		if (news.Item2)
-			RaiseNewNews(news.Item1);
+		if (news.isNew)
+			RaiseNewNews(news.news);
 		else
-			RaiseNewsChanged(news.Item1);
+			RaiseNewsChanged(news.news);
 	}
 
 	private void ProcessQuotesMessage(QuoteChangeMessage message)
@@ -1154,9 +1154,9 @@ partial class Connector
 			md ??= message.ToMarketDepth(security);
 
 			NewMarketDepth?.Invoke(md);
-			NewMarketDepths?.Invoke(new[] { md });
+			NewMarketDepths?.Invoke([md]);
 			MarketDepthChanged?.Invoke(md);
-			MarketDepthsChanged?.Invoke(new[] { md });
+			MarketDepthsChanged?.Invoke([md]);
 		}
 
 		var bestBid = message.GetBestBid();
@@ -1281,7 +1281,7 @@ partial class Connector
 						innerSecurity.LastChangeTime = message.ServerTime;
 					}
 
-					RaiseSecuritiesChanged(changedSecurities.Keys.ToArray());
+					RaiseSecuritiesChanged([.. changedSecurities.Keys]);
 				}
 			}
 		}
@@ -1309,7 +1309,7 @@ partial class Connector
 			entity ??= CreateEntity();
 
 			NewOrderLogItem?.Invoke(entity);
-			NewOrderLogItems?.Invoke(new[] { entity });
+			NewOrderLogItems?.Invoke([entity]);
 		}
 	}
 
@@ -1329,7 +1329,7 @@ partial class Connector
 			trade.ServerTime = message.ServerTime;
 
 			NewTrade?.Invoke(trade);
-			NewTrades?.Invoke(new[] { trade });
+			NewTrades?.Invoke([trade]);
 		}
 
 		if (ValuesChanged is not null)

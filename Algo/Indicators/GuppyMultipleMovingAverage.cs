@@ -10,12 +10,14 @@
 [Doc("topics/indicators/guppy_multiple_moving_average.html")]
 public class GuppyMultipleMovingAverage : BaseComplexIndicator
 {
+	private static readonly int[] _lengths = new[] { 3, 5, 8, 10, 12, 15 }.Concat([30, 35, 40, 45, 50, 60]);
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="GuppyMultipleMovingAverage"/>.
 	/// </summary>
 	public GuppyMultipleMovingAverage()
 	{
-		foreach (var length in new[] { 3, 5, 8, 10, 12, 15 }.Concat(new[] { 30, 35, 40, 45, 50, 60 }))
+		foreach (var length in _lengths)
 			AddInner(new ExponentialMovingAverage { Length = length });
 	}
 }

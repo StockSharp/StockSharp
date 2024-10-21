@@ -37,7 +37,7 @@ public class InMemorySecurityMessageAdapterProvider : ISecurityMessageAdapterPro
 	{
 	}
 
-	private readonly CachedSynchronizedDictionary<Key, Guid> _adapters = new();
+	private readonly CachedSynchronizedDictionary<Key, Guid> _adapters = [];
 
 	/// <inheritdoc />
 	public IEnumerable<KeyValuePair<Key, Guid>> Adapters => _adapters.CachedPairs;
@@ -185,7 +185,7 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 		if (!_inMemory.SetAdapter(securityId, dataType, adapterId))
 			return false;
 
-		Save(has, has ? _inMemory.Adapters : new[] { new KeyValuePair<Key, Guid>(Tuple.Create(securityId, dataType), adapterId) });
+		Save(has, has ? _inMemory.Adapters : [new KeyValuePair<Key, Guid>(Tuple.Create(securityId, dataType), adapterId)]);
 		return true;
 	}
 
@@ -241,28 +241,28 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 			{
 				if (appendHeader)
 				{
-					writer.WriteRow(new[]
-					{
+					writer.WriteRow(
+					[
 						"Symbol",
 						"Board",
 						"MessageType",
 						"Arg",
 						"Adapter"
-					});
+					]);
 				}
 
 				foreach (var pair in adapters)
 				{
 					var dataType = pair.Key.Item2?.FormatToString();
 
-					writer.WriteRow(new[]
-					{
+					writer.WriteRow(
+					[
 						pair.Key.Item1.SecurityCode,
 						pair.Key.Item1.BoardCode,
 						dataType?.type,
 						dataType?.arg,
 						pair.Value.To<string>()
-					});
+					]);
 				}
 			}
 		});

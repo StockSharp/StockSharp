@@ -611,10 +611,10 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 					return this.SelectMany(p => p.Value.TryGetValue(format, out var formatsDict) ? formatsDict.Keys : Enumerable.Empty<DataType>()).Distinct().ToArray();
 
 				if (TryGetValue(securityId, out var formatsDict) && formatsDict.TryGetValue(format, out var typesDict))
-					return typesDict.Keys.ToArray();
+					return [.. typesDict.Keys];
 			}
 
-			return Enumerable.Empty<DataType>();
+			return [];
 		}
 
 		public IEnumerable<DateTime> GetDates(SecurityId securityId, DataType dataType, StorageFormats format)
@@ -627,11 +627,11 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 					return dates.OrderBy().ToArray();
 			}
 
-			return Enumerable.Empty<DateTime>();
+			return [];
 		}
 	}
 
-	private readonly SynchronizedDictionary<(SecurityId, DataType, StorageFormats), LocalMarketDataStorageDrive> _drives = new();
+	private readonly SynchronizedDictionary<(SecurityId, DataType, StorageFormats), LocalMarketDataStorageDrive> _drives = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="LocalMarketDataDrive"/>.
@@ -724,7 +724,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		var path = Path;
 
 		if (!Directory.Exists(path))
-			return Enumerable.Empty<SecurityId>();
+			return [];
 
 		return Directory
 			.EnumerateDirectories(path)
@@ -807,13 +807,13 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 					tuple.Second = true;
 				}
 
-				return tuple.First.ToArray();
+				return [.. tuple.First];
 			}
 		}
 
 		var s = GetSecurityPath(securityId);
 
-		return Directory.Exists(s) ? GetDataTypes(s) : Enumerable.Empty<DataType>();
+		return Directory.Exists(s) ? GetDataTypes(s) : [];
 	}
 
 	/// <inheritdoc />
@@ -1018,7 +1018,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 		var folderName = id.SecurityIdToFolderName();
 
-		return IOPath.Combine(Path, folderName.Substring(0, 1), folderName);
+		return IOPath.Combine(Path, folderName[..1], folderName);
 	}
 
 	/// <summary>
@@ -1058,7 +1058,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 				if (secId == default)
 					continue;
 
-				var formatDict = index.SafeAdd(secId, _ => new());
+				var formatDict = index.SafeAdd(secId, _ => []);
 
 				foreach (var format in formats)
 				{
@@ -1084,7 +1084,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 							}
 						);
 
-					var typesDict = formatDict.SafeAdd(format, _ => new());
+					var typesDict = formatDict.SafeAdd(format, _ => []);
 
 					foreach (var dt in dates.Values.SelectMany().Distinct())
 					{

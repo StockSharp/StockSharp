@@ -11,16 +11,16 @@ public class OrderBookIncrementMessageAdapter : MessageAdapterWrapper
 			=> Builder = new OrderBookIncrementBuilder(securityId);
 
 		public readonly OrderBookIncrementBuilder Builder;
-		public readonly CachedSynchronizedSet<long> SubscriptionIds = new();
+		public readonly CachedSynchronizedSet<long> SubscriptionIds = [];
 	}
 
 	private readonly SyncObject _syncObject = new();
 
-	private readonly Dictionary<long, BookInfo> _byId = new();
-	private readonly Dictionary<SecurityId, BookInfo> _online = new();
-	private readonly HashSet<long> _passThrough = new();
-	private readonly CachedSynchronizedSet<long> _allSecSubscriptions = new();
-	private readonly CachedSynchronizedSet<long> _allSecSubscriptionsPassThrough = new();
+	private readonly Dictionary<long, BookInfo> _byId = [];
+	private readonly Dictionary<SecurityId, BookInfo> _online = [];
+	private readonly HashSet<long> _passThrough = [];
+	private readonly CachedSynchronizedSet<long> _allSecSubscriptions = [];
+	private readonly CachedSynchronizedSet<long> _allSecSubscriptionsPassThrough = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="OrderBookIncrementMessageAdapter"/>.
@@ -216,7 +216,7 @@ public class OrderBookIncrementMessageAdapter : MessageAdapterWrapper
 							if (_passThrough.Contains(subscriptionId) || _allSecSubscriptionsPassThrough.Contains(subscriptionId))
 							{
 								if (passThrough is null)
-									passThrough = new List<long>();
+									passThrough = [];
 
 								passThrough.Add(subscriptionId);
 							}
@@ -236,7 +236,7 @@ public class OrderBookIncrementMessageAdapter : MessageAdapterWrapper
 						ids = ids.Concat(_allSecSubscriptions.Cache);
 
 					if (clones == null)
-						clones = new List<QuoteChangeMessage>();
+						clones = [];
 
 					newQuoteMsg.SetSubscriptionIds(ids);
 					clones.Add(newQuoteMsg);
@@ -245,7 +245,7 @@ public class OrderBookIncrementMessageAdapter : MessageAdapterWrapper
 				if (passThrough is null)
 					message = null;
 				else
-					quoteMsg.SetSubscriptionIds(passThrough.ToArray());
+					quoteMsg.SetSubscriptionIds([.. passThrough]);
 
 				break;
 			}

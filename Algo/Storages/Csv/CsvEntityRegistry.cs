@@ -44,14 +44,14 @@ public class CsvEntityRegistry : IEntityRegistry
 
 		protected override void Write(CsvFileWriter writer, Exchange data)
 		{
-			writer.WriteRow(new[]
-			{
+			writer.WriteRow(
+			[
 				data.Name,
 				data.CountryCode.To<string>(),
 				string.Empty/*data.EngName*/,
 				string.Empty/*data.RusName*/,
 				data.FullNameLoc,
-			});
+			]);
 		}
 	}
 
@@ -83,8 +83,8 @@ public class CsvEntityRegistry : IEntityRegistry
 
 		protected override void Write(CsvFileWriter writer, ExchangeBoard data)
 		{
-			writer.WriteRow(new[]
-			{
+			writer.WriteRow(
+			[
 				data.Code,
 				data.Exchange.Name,
 				data.ExpiryTime.WriteTime(),
@@ -98,7 +98,7 @@ public class CsvEntityRegistry : IEntityRegistry
 				data.WorkingTime.SpecialDays.EncodeToString(),
 				string.Empty,
 				data.WorkingTime.IsEnabled.ToString(),
-			});
+			]);
 		}
 	}
 
@@ -144,7 +144,7 @@ public class CsvEntityRegistry : IEntityRegistry
 			}
 
 			var security = GetById(secId);
-			return security == null ? Enumerable.Empty<Security>() : new[] { security };
+			return security == null ? [] : [security];
 		}
 
 		SecurityMessage ISecurityMessageProvider.LookupMessageById(SecurityId id)
@@ -215,7 +215,7 @@ public class CsvEntityRegistry : IEntityRegistry
 			cache.SettlementType = security.SettlementType;
 		}
 
-		private readonly Dictionary<SecurityId, Security> _cache = new();
+		private readonly Dictionary<SecurityId, Security> _cache = [];
 
 		private static bool IsChanged(string original, string cached, bool forced)
 		{
@@ -415,8 +415,8 @@ public class CsvEntityRegistry : IEntityRegistry
 
 		protected override void Write(CsvFileWriter writer, Security data)
 		{
-			writer.WriteRow(new[]
-			{
+			writer.WriteRow(
+			[
 				data.Id,
 				data.Name,
 				data.Code,
@@ -456,7 +456,7 @@ public class CsvEntityRegistry : IEntityRegistry
 				data.PrimaryId,
 				data.SettlementType.To<string>(),
 				data.OptionStyle.To<string>(),
-			});
+			]);
 		}
 
 		public override void Save(Security entity, bool forced)
@@ -532,8 +532,8 @@ public class CsvEntityRegistry : IEntityRegistry
 
 		protected override void Write(CsvFileWriter writer, Portfolio data)
 		{
-			writer.WriteRow(new[]
-			{
+			writer.WriteRow(
+			[
 				data.Name,
 				data.Board?.Code,
 				data.Leverage.To<string>(),
@@ -553,7 +553,7 @@ public class CsvEntityRegistry : IEntityRegistry
 				data.CommissionMaker.To<string>(),
 				data.CommissionTaker.To<string>(),
 				/*data.InternalId.To<string>()*/string.Empty,
-			});
+			]);
 		}
 	}
 
@@ -648,8 +648,8 @@ public class CsvEntityRegistry : IEntityRegistry
 
 		protected override void Write(CsvFileWriter writer, Position data)
 		{
-			writer.WriteRow(new[]
-			{
+			writer.WriteRow(
+			[
 				data.Portfolio.Name,
 				data.Security.Id,
 				data.DepoName,
@@ -683,7 +683,7 @@ public class CsvEntityRegistry : IEntityRegistry
 				data.StrategyId,
 				data.Side.To<string>(),
 				data.LiquidationPrice.To<string>(),
-			});
+			]);
 		}
 
 		public Position GetPosition(Portfolio portfolio, Security security, string strategyId, Sides? side, string clientCode = "", string depoName = "", TPlusLimits? limit = null)
@@ -714,8 +714,8 @@ public class CsvEntityRegistry : IEntityRegistry
 			var (type, arg) = data.DataType2.FormatToString();
 			var buildFromTuples = data.BuildFrom?.FormatToString();
 
-			writer.WriteRow(new[]
-			{
+			writer.WriteRow(
+			[
 				string.Empty,//data.TransactionId.To<string>(),
 				data.SecurityId.SecurityCode,
 				data.SecurityId.BoardCode,
@@ -740,7 +740,7 @@ public class CsvEntityRegistry : IEntityRegistry
 				data.DoNotBuildOrderBookIncrement.To<string>(),
 				data.Fields?.Select(f => ((int)f).To<string>()).JoinComma(),
 				data.FillGaps.To<string>(),
-			});
+			]);
 		}
 
 		protected override MarketDataMessage Read(FastCsvReader reader)
@@ -811,7 +811,7 @@ public class CsvEntityRegistry : IEntityRegistry
 		}
 	}
 
-	private readonly List<ICsvEntityList> _csvLists = new();
+	private readonly List<ICsvEntityList> _csvLists = [];
 
 	/// <summary>
 	/// The path to data directory.

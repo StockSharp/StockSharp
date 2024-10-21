@@ -8,13 +8,13 @@ public class BoardStateCsvSerializer : CsvMarketDataSerializer<BoardStateMessage
 	/// <inheritdoc />
 	protected override void Write(CsvFileWriter writer, BoardStateMessage data, IMarketDataMetaInfo metaInfo)
 	{
-		writer.WriteRow(new[]
-		{
+		writer.WriteRow(
+		[
 			data.ServerTime.WriteTimeMls(),
 			data.ServerTime.ToString("zzz"),
 			data.BoardCode,
 			((int)data.State).To<string>(),
-		});
+		]);
 
 		metaInfo.LastTime = data.ServerTime.UtcDateTime;
 	}

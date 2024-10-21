@@ -53,7 +53,7 @@ public class StatisticManager : IStatisticManager
 			}
 		}
 
-		private readonly Dictionary<StatisticParameterTypes, IStatisticParameter> _dict = new();
+		private readonly Dictionary<StatisticParameterTypes, IStatisticParameter> _dict = [];
 
 		public bool TryGetValue(StatisticParameterTypes type, out IStatisticParameter parameter)
 		{

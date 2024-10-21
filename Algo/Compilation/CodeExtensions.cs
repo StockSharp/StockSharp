@@ -7,8 +7,8 @@ using Ecng.Compilation;
 /// </summary>
 public static class CodeExtensions
 {
-	private static readonly IEnumerable<string> _defaultReferences = new[]
-	{
+	private static readonly IEnumerable<string> _defaultReferences =
+	[
 		"mscorlib",
 		"netstandard",
 
@@ -42,7 +42,7 @@ public static class CodeExtensions
 		"StockSharp.Diagram.Core",
 		"StockSharp.Charting.Interfaces",
 		"StockSharp.Alerts.Interfaces",
-	};
+	];
 
 	/// <summary>
 	/// Default references.

@@ -7,9 +7,9 @@ public class OfflineMessageAdapter : MessageAdapterWrapper
 {
 	private bool _connected;
 	private readonly SyncObject _syncObject = new();
-	private readonly List<Message> _suspendedIn = new();
-	private readonly PairSet<long, ISubscriptionMessage> _pendingSubscriptions = new();
-	private readonly PairSet<long, OrderRegisterMessage> _pendingRegistration = new();
+	private readonly List<Message> _suspendedIn = [];
+	private readonly PairSet<long, ISubscriptionMessage> _pendingSubscriptions = [];
+	private readonly PairSet<long, OrderRegisterMessage> _pendingRegistration = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="OfflineMessageAdapter"/>.

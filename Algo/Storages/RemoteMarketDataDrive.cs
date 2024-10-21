@@ -69,7 +69,7 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 			=> _parent.EnsureGetClient().LoadStream(_securityId, _dataType, _format, date);
 	}
 
-	private readonly SynchronizedDictionary<(SecurityId, DataType, StorageFormats), RemoteStorageDrive> _remoteStorages = new();
+	private readonly SynchronizedDictionary<(SecurityId, DataType, StorageFormats), RemoteStorageDrive> _remoteStorages = [];
 	private readonly Func<IMessageAdapter> _createAdapter;
 	
 	private readonly SyncObject _clientSync = new();

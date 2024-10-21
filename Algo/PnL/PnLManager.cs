@@ -6,8 +6,8 @@ namespace StockSharp.Algo.PnL;
 public class PnLManager : IPnLManager
 {
 	private readonly CachedSynchronizedDictionary<string, PortfolioPnLManager> _managersByPf = new(StringComparer.InvariantCultureIgnoreCase);
-	private readonly Dictionary<long, PortfolioPnLManager> _managersByTransId = new();
-	private readonly Dictionary<long, PortfolioPnLManager> _managersByOrderId = new();
+	private readonly Dictionary<long, PortfolioPnLManager> _managersByTransId = [];
+	private readonly Dictionary<long, PortfolioPnLManager> _managersByOrderId = [];
 	private readonly Dictionary<string, PortfolioPnLManager> _managersByOrderStringId = new(StringComparer.InvariantCultureIgnoreCase);
 
 	/// <summary>

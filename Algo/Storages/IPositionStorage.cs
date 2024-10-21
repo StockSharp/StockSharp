@@ -45,7 +45,7 @@ public class InMemoryPositionStorage : IPositionStorage
 	private readonly IPortfolioProvider _underlying;
 
 	private readonly CachedSynchronizedDictionary<string, Portfolio> _portfolios = new(StringComparer.InvariantCultureIgnoreCase);
-	private readonly CachedSynchronizedDictionary<Key, Position> _positions = new();
+	private readonly CachedSynchronizedDictionary<Key, Position> _positions = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="InMemoryPositionStorage"/>.

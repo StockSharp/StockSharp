@@ -5,7 +5,7 @@
 /// </summary>
 public class VolumeProfileBuilder
 {
-	private readonly Dictionary<decimal, int> _volumeProfileInfo = new();
+	private readonly Dictionary<decimal, int> _volumeProfileInfo = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="VolumeProfileBuilder"/>.

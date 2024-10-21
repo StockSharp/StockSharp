@@ -19,7 +19,7 @@ public interface ISnapshotHolder
 public class SnapshotHolderMessageAdapter : MessageAdapterWrapper
 {
 	private readonly SyncObject _sync = new();
-	private readonly SynchronizedDictionary<long, ISubscriptionMessage> _pending = new();
+	private readonly SynchronizedDictionary<long, ISubscriptionMessage> _pending = [];
 
 	private readonly ISnapshotHolder _holder;
 

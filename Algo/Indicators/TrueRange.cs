@@ -44,12 +44,12 @@ public class TrueRange : BaseIndicator
 	/// <returns>Price components.</returns>
 	protected virtual decimal[] GetPriceMovements(ICandleMessage currentCandle, ICandleMessage prevCandle)
 	{
-		return new[]
-		{
+		return
+		[
 			Math.Abs(currentCandle.HighPrice - currentCandle.LowPrice),
 			Math.Abs(prevCandle.ClosePrice - currentCandle.HighPrice),
 			Math.Abs(prevCandle.ClosePrice - currentCandle.LowPrice)
-		};
+		];
 	}
 
 	/// <inheritdoc />

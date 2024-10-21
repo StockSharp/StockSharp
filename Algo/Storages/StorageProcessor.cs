@@ -7,7 +7,7 @@ using StockSharp.Algo.Candles.Compression;
 /// </summary>
 public class StorageProcessor
 {
-	private readonly SynchronizedSet<long> _fullyProcessedSubscriptions = new();
+	private readonly SynchronizedSet<long> _fullyProcessedSubscriptions = [];
 	
 	/// <summary>
 	/// Initializes a new instance of the <see cref="StorageProcessor"/>.

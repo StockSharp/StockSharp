@@ -37,7 +37,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	private sealed class InnerAdapterList : CachedSynchronizedList<IMessageAdapter>, IInnerAdapterList
 	{
 		private readonly BasketMessageAdapter _parent;
-		private readonly Dictionary<IMessageAdapter, int> _enables = new();
+		private readonly Dictionary<IMessageAdapter, int> _enables = [];
 
 		public InnerAdapterList(BasketMessageAdapter parent)
 		{
@@ -114,7 +114,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	private class ParentChildMap
 	{
 		private readonly SyncObject _syncObject = new();
-		private readonly Dictionary<long, RefQuadruple<long, SubscriptionStates, IMessageAdapter, Exception>> _childToParentIds = new();
+		private readonly Dictionary<long, RefQuadruple<long, SubscriptionStates, IMessageAdapter, Exception>> _childToParentIds = [];
 
 		public void AddMapping(long childId, ISubscriptionMessage parentMsg, IMessageAdapter adapter)
 		{
@@ -146,7 +146,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		{
 			allError = true;
 			needParentResponse = true;
-			innerErrors = Enumerable.Empty<Exception>();
+			innerErrors = [];
 
 			if (childId == 0)
 				return null;
@@ -235,7 +235,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		private readonly IPositionManager _nonStrategyManager;
 		private readonly IPositionManager _strategyManager;
 
-		private readonly Dictionary<long, IPositionManager> _managersByTransId = new();
+		private readonly Dictionary<long, IPositionManager> _managersByTransId = [];
 
 		private readonly BasketMessageAdapter _adapter;
 		private readonly Connector _connector;
@@ -412,23 +412,23 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		}
 	}
 
-	private readonly Dictionary<long, HashSet<IMessageAdapter>> _nonSupportedAdapters = new();
-	private readonly CachedSynchronizedDictionary<IMessageAdapter, IMessageAdapter> _adapterWrappers = new();
+	private readonly Dictionary<long, HashSet<IMessageAdapter>> _nonSupportedAdapters = [];
+	private readonly CachedSynchronizedDictionary<IMessageAdapter, IMessageAdapter> _adapterWrappers = [];
 	private readonly SyncObject _connectedResponseLock = new();
-	private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = new();
-	private readonly List<Message> _pendingMessages = new();
+	private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = [];
+	private readonly List<Message> _pendingMessages = [];
 
-	private readonly Dictionary<IMessageAdapter, Tuple<ConnectionStates, Exception>> _adapterStates = new();
+	private readonly Dictionary<IMessageAdapter, Tuple<ConnectionStates, Exception>> _adapterStates = [];
 	private ConnectionStates _currState = ConnectionStates.Disconnected;
 
 	private readonly SynchronizedDictionary<string, IMessageAdapter> _portfolioAdapters = new(StringComparer.InvariantCultureIgnoreCase);
-	private readonly SynchronizedDictionary<Tuple<SecurityId, DataType>, IMessageAdapter> _securityAdapters = new();
+	private readonly SynchronizedDictionary<Tuple<SecurityId, DataType>, IMessageAdapter> _securityAdapters = [];
 
-	private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter[], DataType>> _subscription = new();
-	private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>> _requestsById = new();
+	private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter[], DataType>> _subscription = [];
+	private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>> _requestsById = [];
 	private readonly ParentChildMap _parentChildMap = new();
 
-	private readonly SynchronizedDictionary<long, IMessageAdapter> _orderAdapters = new();
+	private readonly SynchronizedDictionary<long, IMessageAdapter> _orderAdapters = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BasketMessageAdapter"/>.
@@ -754,7 +754,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 	bool IMessageAdapter.GenerateOrderBookFromLevel1 { get; set; }
 
-	string[] IMessageAdapter.AssociatedBoards => Array.Empty<string>();
+	string[] IMessageAdapter.AssociatedBoards => [];
 
 	bool IMessageAdapter.ExtraSetup => false;
 
@@ -956,7 +956,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		return adapter;
 	}
 
-	private readonly Dictionary<IMessageAdapter, bool> _hearbeatFlags = new();
+	private readonly Dictionary<IMessageAdapter, bool> _hearbeatFlags = [];
 
 	private bool IsHeartbeatOn(IMessageAdapter adapter)
 	{
@@ -973,7 +973,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		_hearbeatFlags[adapter] = on;
 	}
 
-	private IMessageAdapter GetUnderlyingAdapter(IMessageAdapter adapter)
+	private static IMessageAdapter GetUnderlyingAdapter(IMessageAdapter adapter)
 	{
 		if (adapter == null)
 			throw new ArgumentNullException(nameof(adapter));
@@ -1257,7 +1257,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 			if (adapter != null)
 			{
-				adapters = new[] { adapter };
+				adapters = [adapter];
 				skipSupportedMessages = true;
 			}
 		}
@@ -1301,14 +1301,14 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				{
 					isPended = true;
 					_pendingMessages.Add(message.Clone());
-					return Array.Empty<IMessageAdapter>();
+					return [];
 				}
 			}
 		}
 
 		if (adapters == null)
 		{
-			adapters = Array.Empty<IMessageAdapter>();
+			adapters = [];
 		}
 
 		if (adapters.Length == 0)
@@ -1696,12 +1696,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 					return;
 
 				case MessageTypes.Connect:
-					extra = new List<Message>();
+					extra = [];
 					ProcessConnectMessage(innerAdapter, (ConnectMessage)message, extra);
 					break;
 
 				case MessageTypes.Disconnect:
-					extra = new List<Message>();
+					extra = [];
 					ProcessDisconnectMessage(innerAdapter, (DisconnectMessage)message, extra);
 					break;
 
@@ -1791,7 +1791,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 			if (!changed)
 			{
-				ids = originIds.ToArray();
+				ids = [.. originIds];
 				changed = true;
 			}
 
@@ -2052,7 +2052,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				// try loopback only subscribe messages
 				if (subscrMsg.IsSubscribe)
 				{
-					var set = _nonSupportedAdapters.SafeAdd(originalTransactionId, _ => new());
+					var set = _nonSupportedAdapters.SafeAdd(originalTransactionId, _ => []);
 					set.Add(GetUnderlyingAdapter(adapter));
 
 					subscrMsg.LoopBack(this);

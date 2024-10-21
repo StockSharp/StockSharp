@@ -30,7 +30,7 @@ public interface ICommissionRuleProvider
 /// </summary>
 public class InMemoryCommissionRuleProvider : ICommissionRuleProvider
 {
-	private readonly List<Type> _rules = new();
+	private readonly List<Type> _rules = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="InMemoryCommissionRuleProvider"/>.

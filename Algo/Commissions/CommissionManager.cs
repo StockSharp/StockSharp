@@ -12,7 +12,7 @@ public class CommissionManager : ICommissionManager
 	{
 	}
 
-	private readonly CachedSynchronizedSet<ICommissionRule> _rules = new();
+	private readonly CachedSynchronizedSet<ICommissionRule> _rules = [];
 
 	/// <inheritdoc />
 	public ISynchronizedCollection<ICommissionRule> Rules => _rules;

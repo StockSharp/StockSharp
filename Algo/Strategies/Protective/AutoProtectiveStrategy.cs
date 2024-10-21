@@ -36,7 +36,7 @@ public class AutoProtectiveStrategy : Strategy
 		}
 	}
 
-	private readonly SynchronizedDictionary<Security, AutoProtectivePositionManager> _positionManagers = new();
+	private readonly SynchronizedDictionary<Security, AutoProtectivePositionManager> _positionManagers = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="AutoProtectiveStrategy"/>.
@@ -413,7 +413,7 @@ public class AutoProtectiveStrategy : Strategy
 		{
 			this.AddInfoLog(LocalizedStrings.StopsDecreased, diffVolume);
 
-			diffVolume = ChangeVolume(strategies.ToArray(), diffVolume);
+			diffVolume = ChangeVolume([.. strategies], diffVolume);
 
 			if (diffVolume <= 0)
 				break;

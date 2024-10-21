@@ -109,7 +109,7 @@ public class CandleExpressionCondition : IPersistable
 			if(name.StartsWithIgnoreCase("p"))
 			{
 				idx = -idx - 1;
-				name = name.Substring(1);
+				name = name[1..];
 			}
 
 			MinIndex = MinIndex.Min(idx);
@@ -148,7 +148,7 @@ public class CandleExpressionCondition : IPersistable
 	/// Candle formula variables.
 	/// </summary>
 	public static readonly Variable[] Variables =
-	{
+	[
 		new("O",   LocalizedStrings.OpenPrice,      msg => msg.OpenPrice),
 		new("H",   LocalizedStrings.HighestPrice,   msg => msg.HighPrice),
 		new("L",   LocalizedStrings.LowestPrice,    msg => msg.LowPrice),
@@ -159,7 +159,7 @@ public class CandleExpressionCondition : IPersistable
 		new("LEN", LocalizedStrings.CandleLength,   msg => msg.GetLength()),
 		new("BS",  LocalizedStrings.BottomShadow,   msg => msg.GetBottomShadow()),
 		new("TS",  LocalizedStrings.TopShadow,      msg => msg.GetTopShadow()),
-	};
+	];
 
 	private void EnsureEmpty()
 	{
@@ -202,7 +202,7 @@ public class ExpressionCandlePattern : ICandlePattern
 	/// <summary>
 	/// Create instance.
 	/// </summary>
-	public ExpressionCandlePattern() : this(null, Enumerable.Empty<CandleExpressionCondition>()) { }
+	public ExpressionCandlePattern() : this(null, []) { }
 
 	/// <summary>
 	/// Condition error.

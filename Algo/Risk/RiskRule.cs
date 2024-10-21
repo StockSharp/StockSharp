@@ -290,7 +290,7 @@ public class RiskPositionSizeRule : RiskRule
 	GroupName = LocalizedStrings.PositionsKey)]
 public class RiskPositionTimeRule : RiskRule
 {
-	private readonly Dictionary<Tuple<SecurityId, string>, DateTimeOffset> _posOpenTime = new();
+	private readonly Dictionary<Tuple<SecurityId, string>, DateTimeOffset> _posOpenTime = [];
 	private TimeSpan _time;
 
 	/// <summary>
@@ -376,7 +376,7 @@ public class RiskPositionTimeRule : RiskRule
 						continue;
 
 					if (removingPos == null)
-						removingPos = new List<Tuple<SecurityId, string>>();
+						removingPos = [];
 
 					removingPos.Add(pair.Key);
 				}

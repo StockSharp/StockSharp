@@ -6,7 +6,7 @@
 public class RemoteStorageCache
 {
 	private readonly SyncObject _sync = new();
-	private readonly Dictionary<object, (Message[] messages, DateTime till)> _state = new();
+	private readonly Dictionary<object, (Message[] messages, DateTime till)> _state = [];
 	private readonly TimeSpan _timeout;
 
 	/// <summary>

@@ -17,8 +17,8 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>, 
 	private readonly Func<TMessage, SecurityId> _getSecurityId;
 	private readonly Func<TMessage, TId> _getId;
 	private readonly Func<TMessage, bool> _isValid;
-	private readonly SynchronizedDictionary<DateTime, SyncObject> _syncRoots = new();
-	private readonly SynchronizedDictionary<DateTime, IMarketDataMetaInfo> _dateMetaInfos = new();
+	private readonly SynchronizedDictionary<DateTime, SyncObject> _syncRoots = [];
+	private readonly SynchronizedDictionary<DateTime, IMarketDataMetaInfo> _dateMetaInfos = [];
 
 	protected MarketDataStorage(SecurityId securityId, object arg, Func<TMessage, DateTimeOffset> getTime, Func<TMessage, SecurityId> getSecurityId, Func<TMessage, TId> getId, IMarketDataSerializer<TMessage> serializer, IMarketDataStorageDrive drive, Func<TMessage, bool> isValid)
 	{
@@ -283,7 +283,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>, 
 
 							if (loadedItems == null)
 							{
-								loadedItems = new List<TMessage> { item };
+								loadedItems = [item];
 								loadedData.Add(id, loadedItems);
 							}
 							else
@@ -341,7 +341,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>, 
 				var metaInfo = GetInfo(stream, date);
 
 				if (metaInfo == null)
-					return Enumerable.Empty<TMessage>();
+					return [];
 
 				// нельзя закрывать поток, так как из него будут читаться данные через энумератор
 				//using (stream)

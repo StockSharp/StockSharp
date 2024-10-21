@@ -14,7 +14,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 
 		public CacheAllocator(int capacity, MarketDataStorageCache original)
 		{
-			_cache = new();
+			_cache = [];
 			_original = original ?? throw new ArgumentNullException(nameof(original));
 
 			for (var i = 0; i < capacity; i++)
@@ -59,7 +59,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		public event Action<Portfolio> PortfolioChanged;
 	}
 
-	private readonly HashSet<HistoryEmulationConnector> _startedConnectors = new();
+	private readonly HashSet<HistoryEmulationConnector> _startedConnectors = [];
 	private bool _cancelEmulation;
 	private bool _finished;
 	private int _lastTotalProgress;

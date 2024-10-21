@@ -46,8 +46,8 @@ public class LookupTrackingMessageAdapter : MessageAdapterWrapper
 		}
 	}
 
-	private readonly CachedSynchronizedDictionary<long, LookupInfo> _lookups = new();
-	private readonly Dictionary<MessageTypes, Dictionary<long, ISubscriptionMessage>> _queue = new();
+	private readonly CachedSynchronizedDictionary<long, LookupInfo> _lookups = [];
+	private readonly Dictionary<MessageTypes, Dictionary<long, ISubscriptionMessage>> _queue = [];
 	private DateTimeOffset _prevTime;
 
 	/// <summary>
@@ -258,7 +258,7 @@ public class LookupTrackingMessageAdapter : MessageAdapterWrapper
 				base.OnInnerAdapterNewOutMessage(info.Subscription.CreateResult());
 
 				if (nextLookups == null)
-					nextLookups = new List<Message>();
+					nextLookups = [];
 
 				lock (_lookups.SyncRoot)
 				{

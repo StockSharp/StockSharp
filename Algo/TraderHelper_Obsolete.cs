@@ -1476,7 +1476,7 @@ partial class TraderHelper
 
 		var trades = new List<MyTrade>();
 
-		using (IMarketEmulator emulator = new MarketEmulator(new CollectionSecurityProvider(new[] { order.Security }), new CollectionPortfolioProvider(new[] { testPf }), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator()))
+		using (IMarketEmulator emulator = new MarketEmulator(new CollectionSecurityProvider([order.Security]), new CollectionPortfolioProvider([testPf]), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator()))
 		{
 			var errors = new List<Exception>();
 

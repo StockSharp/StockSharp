@@ -6,7 +6,7 @@ namespace StockSharp.Algo.Testing;
 public class OrderLogGenerator : MarketDataGenerator
 {
 	private decimal _lastOrderPrice;
-	private readonly SynchronizedQueue<ExecutionMessage> _activeOrders = new();
+	private readonly SynchronizedQueue<ExecutionMessage> _activeOrders = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="OrderLogGenerator"/>.

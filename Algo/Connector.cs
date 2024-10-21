@@ -18,9 +18,9 @@ public partial class Connector : BaseLogReceiver, IConnector, IMarketDataProvide
 	private readonly SubscriptionManager _subscriptionManager;
 
 	// backward compatibility for NewXXX events
-	private readonly CachedSynchronizedSet<Security> _existingSecurities = new();
-	private readonly CachedSynchronizedSet<Portfolio> _existingPortfolios = new();
-	private readonly CachedSynchronizedSet<Position> _existingPositions = new();
+	private readonly CachedSynchronizedSet<Security> _existingSecurities = [];
+	private readonly CachedSynchronizedSet<Portfolio> _existingPortfolios = [];
+	private readonly CachedSynchronizedSet<Position> _existingPositions = [];
 
 	private bool _isDisposing;
 
@@ -265,7 +265,7 @@ public partial class Connector : BaseLogReceiver, IConnector, IMarketDataProvide
 
 	/// <inheritdoc />
 	[Obsolete("Use NewTrade event to collect data.")]
-	public IEnumerable<Trade> Trades => Enumerable.Empty<Trade>();
+	public IEnumerable<Trade> Trades => [];
 
 	/// <inheritdoc />
 	[Obsolete("Use NewMyTrade event to collect data.")]
@@ -414,13 +414,13 @@ public partial class Connector : BaseLogReceiver, IConnector, IMarketDataProvide
 	/// </summary>
 	public bool KeepStrategiesPositions { get; set; }
 
-	private readonly CachedSynchronizedSet<MessageTypes> _lookupMessagesOnConnect = new(new[]
-	{
+	private readonly CachedSynchronizedSet<MessageTypes> _lookupMessagesOnConnect = new(
+	[
 		MessageTypes.SecurityLookup,
 		MessageTypes.PortfolioLookup,
 		MessageTypes.OrderStatus,
 		MessageTypes.TimeFrameLookup,
-	});
+	]);
 
 	/// <summary>
 	/// Send lookup messages on connect.

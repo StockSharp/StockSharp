@@ -7,8 +7,8 @@ public class FilteredMarketDepthAdapter : MessageAdapterWrapper
 {
 	private class FilteredMarketDepthInfo
 	{
-		private readonly Dictionary<ValueTuple<Sides, decimal>, decimal> _totals = new();
-		private readonly Dictionary<long, RefTriple<Sides, decimal, decimal?>> _ordersInfo = new();
+		private readonly Dictionary<ValueTuple<Sides, decimal>, decimal> _totals = [];
+		private readonly Dictionary<long, RefTriple<Sides, decimal, decimal?>> _ordersInfo = [];
 
 		private QuoteChangeMessage _lastSnapshot;
 
@@ -205,19 +205,19 @@ public class FilteredMarketDepthAdapter : MessageAdapterWrapper
 
 	private class OnlineInfo
 	{
-		public readonly CachedSynchronizedSet<long> Subscribers = new();
+		public readonly CachedSynchronizedSet<long> Subscribers = [];
 
-		public readonly CachedSynchronizedSet<long> BookSubscribers = new();
-		public readonly CachedSynchronizedSet<long> OrdersSubscribers = new();
+		public readonly CachedSynchronizedSet<long> BookSubscribers = [];
+		public readonly CachedSynchronizedSet<long> OrdersSubscribers = [];
 	}
 
 	private readonly SyncObject _sync = new();
 
-	private readonly Dictionary<long, FilteredMarketDepthInfo> _byId = new();
-	private readonly Dictionary<long, FilteredMarketDepthInfo> _byBookId = new();
-	private readonly Dictionary<long, FilteredMarketDepthInfo> _byOrderStatusId = new();
-	private readonly Dictionary<SecurityId, OnlineInfo> _online = new();
-	private readonly Dictionary<long, Tuple<FilteredMarketDepthInfo, bool>> _unsubscribeRequests = new();
+	private readonly Dictionary<long, FilteredMarketDepthInfo> _byId = [];
+	private readonly Dictionary<long, FilteredMarketDepthInfo> _byBookId = [];
+	private readonly Dictionary<long, FilteredMarketDepthInfo> _byOrderStatusId = [];
+	private readonly Dictionary<SecurityId, OnlineInfo> _online = [];
+	private readonly Dictionary<long, Tuple<FilteredMarketDepthInfo, bool>> _unsubscribeRequests = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="FilteredMarketDepthAdapter"/>.
@@ -297,7 +297,7 @@ public class FilteredMarketDepthAdapter : MessageAdapterWrapper
 					{
 						TransactionId = TransactionIdGenerator.GetNextId(),
 						IsSubscribe = true,
-						States = new[] { OrderStates.Active },
+						States = [OrderStates.Active],
 						SecurityId = mdMsg.SecurityId,
 					};
 
@@ -542,14 +542,14 @@ public class FilteredMarketDepthAdapter : MessageAdapterWrapper
 						else
 						{
 							if (processed is null)
-								processed = new HashSet<long>();
+								processed = [];
 
 							processed.AddRange(info.Online.BookSubscribers.Cache);
 							leftIds.RemoveRange(info.Online.BookSubscribers.Cache);
 						}
 
 						if (filtered == null)
-							filtered = new List<QuoteChangeMessage>();
+							filtered = [];
 
 						filtered.Add(book);
 					}
@@ -560,7 +560,7 @@ public class FilteredMarketDepthAdapter : MessageAdapterWrapper
 				else if (leftIds.Count == 0)
 					message = null;
 				else
-					quoteMsg.SetSubscriptionIds(leftIds.ToArray());
+					quoteMsg.SetSubscriptionIds([.. leftIds]);
 
 				break;
 			}
@@ -598,14 +598,14 @@ public class FilteredMarketDepthAdapter : MessageAdapterWrapper
 						else
 						{
 							if (processed is null)
-								processed = new HashSet<long>();
+								processed = [];
 
 							processed.AddRange(info.Online.OrdersSubscribers.Cache);
 							leftIds.RemoveRange(info.Online.OrdersSubscribers.Cache);
 						}
 
 						if (filtered is null)
-							filtered = new List<QuoteChangeMessage>();
+							filtered = [];
 
 						var book = info.Process(execMsg);
 
@@ -619,7 +619,7 @@ public class FilteredMarketDepthAdapter : MessageAdapterWrapper
 				else if (leftIds.Count == 0)
 					message = null;
 				else
-					execMsg.SetSubscriptionIds(leftIds.ToArray());
+					execMsg.SetSubscriptionIds([.. leftIds]);
 
 				break;
 			}

@@ -355,7 +355,7 @@ public class ImportSettings : NotifiableObject, IPersistable
 	[Browsable(false)]
 	public IEnumerable<FieldMapping> ExtendedFields => AllFields.Where(f => f.IsExtended);
 
-	private IEnumerable<FieldMapping> _selectedFields = Enumerable.Empty<FieldMapping>();
+	private IEnumerable<FieldMapping> _selectedFields = [];
 
 	/// <summary>
 	/// Selected fields.
@@ -378,7 +378,7 @@ public class ImportSettings : NotifiableObject, IPersistable
 	public IEnumerable<string> GetFiles()
 	{
 		if (!FileName.IsEmpty())
-			return new[] { FileName };
+			return [FileName];
 
 		if (!Directory.IsEmpty())
 			return System.IO.Directory.GetFiles(Directory, FileMask, IncludeSubDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
