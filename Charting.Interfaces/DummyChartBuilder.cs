@@ -115,7 +115,7 @@ public class DummyChartBuilder : IChartBuilder
 			};
 		}
 
-		private readonly SynchronizedList<IChartElement> _elements = new();
+		private readonly SynchronizedList<IChartElement> _elements = [];
 		INotifyList<IChartElement> IChartArea.Elements => _elements;
 
 		INotifyList<IChartAxis> IChartArea.XAxises { get; } = new SynchronizedList<IChartAxis>();

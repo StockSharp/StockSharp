@@ -21,7 +21,7 @@ public class SubscriptionFinishedMessage : BaseResultMessage<SubscriptionFinishe
 	[DataMember]
 	public DateTimeOffset? NextFrom { get; set; }
 
-	private byte[] _body = Array.Empty<byte>();
+	private byte[] _body = [];
 
 	/// <summary>
 	/// Subscription data was sent as archive.

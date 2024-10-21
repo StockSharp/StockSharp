@@ -300,7 +300,7 @@ public static class LoggingHelper
 			}
 		}
 
-		return list.ToArray();
+		return [.. list];
 	}
 
 	/// <summary>
@@ -333,5 +333,5 @@ public static class LoggingHelper
 	/// <param name="listener"><see cref="ILogListener"/></param>
 	/// <param name="message"><see cref="LogMessage"/></param>
 	public static void WriteMessage(this ILogListener listener, LogMessage message)
-		=> listener.CheckOnNull(nameof(message)).WriteMessages(new[] { message });
+		=> listener.CheckOnNull(nameof(message)).WriteMessages([message]);
 }

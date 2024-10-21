@@ -45,7 +45,7 @@ public class SecurityLookupMessage : SecurityMessage, ISubscriptionMessage
 	[DataMember]
 	public FillGapsDays? FillGaps { get; set; }
 
-	private SecurityId[] _securityIds = Array.Empty<SecurityId>();
+	private SecurityId[] _securityIds = [];
 
 	/// <summary>
 	/// Security identifiers.
@@ -112,7 +112,7 @@ public class SecurityLookupMessage : SecurityMessage, ISubscriptionMessage
 		destination.OnlySecurityId = OnlySecurityId;
 		destination.Skip = Skip;
 		destination.Count = Count;
-		destination.SecurityIds = SecurityIds.ToArray();
+		destination.SecurityIds = [.. SecurityIds];
 		destination.FillGaps = FillGaps;
 		destination.IncludeExpired = IncludeExpired;
 

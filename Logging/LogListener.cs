@@ -19,9 +19,9 @@ public abstract class LogListener : Disposable, ILogListener
 	/// </summary>
 	protected LogListener()
 	{
-		Filters = new List<Func<LogMessage, bool>>();
+		Filters = [];
 
-		CanSave = GetType().GetConstructor(Array.Empty<Type>()) is not null;
+		CanSave = GetType().GetConstructor([]) is not null;
 	}
 
 	/// <summary>

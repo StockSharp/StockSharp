@@ -14,7 +14,7 @@ public abstract class OrderCondition : Cloneable<OrderCondition>
 	{
 	}
 
-	private readonly SynchronizedDictionary<string, object> _parameters = new();
+	private readonly SynchronizedDictionary<string, object> _parameters = [];
 
 	/// <summary>
 	/// Condition parameters.

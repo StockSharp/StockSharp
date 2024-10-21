@@ -86,7 +86,7 @@ public class FileLogListener : LogListener
 		public string Path { get; }
 	}
 
-	private readonly PairSet<(string, DateTime), StreamWriterEx> _writers = new();
+	private readonly PairSet<(string, DateTime), StreamWriterEx> _writers = [];
 
 	/// <summary>
 	/// To create <see cref="FileLogListener"/>. For each <see cref="ILogSource"/> a separate file with a name equal to <see cref="ILogSource.Name"/> will be created.

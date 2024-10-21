@@ -40,7 +40,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 		return arr;
 	}
 
-	private IEnumerable<MessageTypes> _supportedInMessages = Enumerable.Empty<MessageTypes>();
+	private IEnumerable<MessageTypes> _supportedInMessages = [];
 
 	/// <inheritdoc />
 	[Browsable(false)]
@@ -50,10 +50,10 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 		set => _supportedInMessages = CheckDuplicate(value, nameof(SupportedInMessages));
 	}
 
-	private IEnumerable<MessageTypes> _supportedResultMessages = new[]
-	{
+	private IEnumerable<MessageTypes> _supportedResultMessages =
+	[
 		MessageTypes.MarketData, MessageTypes.Portfolio,
-	};
+	];
 
 	/// <inheritdoc />
 	[Browsable(false)]
@@ -63,7 +63,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 		set => _supportedResultMessages = CheckDuplicate(value, nameof(SupportedResultMessages));
 	}
 
-	private IEnumerable<MessageTypeInfo> _possibleSupportedMessages = Enumerable.Empty<MessageTypeInfo>();
+	private IEnumerable<MessageTypeInfo> _possibleSupportedMessages = [];
 
 	/// <inheritdoc />
 	[Browsable(false)]
@@ -86,7 +86,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 		}
 	}
 
-	private IEnumerable<DataType> _supportedMarketDataTypes = Enumerable.Empty<DataType>();
+	private IEnumerable<DataType> _supportedMarketDataTypes = [];
 
 	/// <inheritdoc />
 	[Browsable(false)]
@@ -113,7 +113,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 
 	/// <inheritdoc />
 	[Browsable(false)]
-	public virtual IEnumerable<Level1Fields> CandlesBuildFrom => Enumerable.Empty<Level1Fields>();
+	public virtual IEnumerable<Level1Fields> CandlesBuildFrom => [];
 
 	/// <inheritdoc />
 	[Browsable(false)]
@@ -188,11 +188,11 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 
 	/// <inheritdoc />
 	[Browsable(false)]
-	public virtual IEnumerable<Tuple<string, Type>> SecurityExtendedFields { get; } = Enumerable.Empty<Tuple<string, Type>>();
+	public virtual IEnumerable<Tuple<string, Type>> SecurityExtendedFields { get; } = [];
 
 	/// <inheritdoc />
 	[Browsable(false)]
-	public virtual IEnumerable<int> SupportedOrderBookDepths => Enumerable.Empty<int>();
+	public virtual IEnumerable<int> SupportedOrderBookDepths => [];
 
 	/// <inheritdoc />
 	[Browsable(false)]
@@ -305,7 +305,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 
 	/// <inheritdoc />
 	[Browsable(false)]
-	public virtual string[] AssociatedBoards => Array.Empty<string>();
+	public virtual string[] AssociatedBoards => [];
 
 	/// <summary>
 	/// Validate the specified security id is supported by the adapter and subscription can be done.
@@ -542,7 +542,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 	public virtual IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 		=> new OrderLogMarketDepthBuilder(securityId);
 
-	private readonly HashSet<TimeSpan> _timeFrames = new();
+	private readonly HashSet<TimeSpan> _timeFrames = [];
 
 	/// <summary>
 	/// Get possible time-frames for the specified instrument.
@@ -565,7 +565,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 	{
 		return candleType == typeof(TimeFrameCandleMessage)
 			? TimeFrames.Cast<object>()
-			: Enumerable.Empty<object>();
+			: [];
 	}
 
 	/// <inheritdoc />

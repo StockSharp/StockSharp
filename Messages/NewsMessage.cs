@@ -160,7 +160,7 @@ public class NewsMessage : BaseSubscriptionIdMessage<NewsMessage>,
 	/// <inheritdoc />
 	public override DataType DataType => DataType.News;
 
-	private long[] _attachments = Array.Empty<long>();
+	private long[] _attachments = [];
 
 	/// <summary>
 	/// Attachments.
@@ -223,7 +223,7 @@ public class NewsMessage : BaseSubscriptionIdMessage<NewsMessage>,
 		destination.Priority = Priority;
 		destination.Language = Language;
 		destination.ExpiryDate = ExpiryDate;
-		destination.Attachments = Attachments.ToArray();
+		destination.Attachments = [.. Attachments];
 		destination.SeqNum = SeqNum;
 		destination.ProductId = ProductId;
 	}

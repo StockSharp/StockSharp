@@ -136,7 +136,7 @@ public class InMemoryMessageAdapterProvider : IMessageAdapterProvider
 	}
 
 	/// <inheritdoc />
-	public virtual IEnumerable<IMessageAdapter> CreateStockSharpAdapters(IdGenerator transactionIdGenerator, string login, SecureString password) => Enumerable.Empty<IMessageAdapter>();
+	public virtual IEnumerable<IMessageAdapter> CreateStockSharpAdapters(IdGenerator transactionIdGenerator, string login, SecureString password) => [];
 
 	/// <inheritdoc />
 	public virtual IMessageAdapter CreateTransportAdapter(IdGenerator transactionIdGenerator)

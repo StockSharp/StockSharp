@@ -2,8 +2,8 @@ namespace StockSharp.BusinessEntities;
 
 partial class ExchangeBoard
 {
-	private static readonly DateTime[] _russianSpecialWorkingDays = new DateTime[]
-	{
+	private static readonly DateTime[] _russianSpecialWorkingDays =
+	[
 		// http://www.rts.ru/a742
 		new(2001, 3, 11),
 		new(2001, 4, 28),
@@ -60,9 +60,9 @@ partial class ExchangeBoard
 
 		// http://moex.com/a3367
 		new(2016, 02, 20)
-	};
-	private static readonly DateTime[] _russianSpecialHolidays = new DateTime[]
-	{
+	];
+	private static readonly DateTime[] _russianSpecialHolidays =
+	[
 		// http://www.rts.ru/a742
 		new(2001, 1, 1),
 		new(2001, 1, 2),
@@ -299,22 +299,22 @@ partial class ExchangeBoard
 		new(2016, 5, 9),
 		new(2016, 6, 13),
 		new(2016, 11, 4),
-	};
+	];
 
 	private static readonly WorkingTime _micexWorkingTime = new()
 	{
 		IsEnabled = true,
-		Periods = new()
-		{
+		Periods =
+		[
 			new()
 			{
 				Till = DateTime.MaxValue,
-				Times = new()
-				{
+				Times =
+				[
 					new("10:00:00".To<TimeSpan>(), "18:45:00".To<TimeSpan>())
-				},
+				],
 			}
-		},
+		],
 		SpecialWorkingDays = _russianSpecialWorkingDays,
 		SpecialHolidays = _russianSpecialHolidays,
 	};
@@ -370,19 +370,19 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("10:00:00".To<TimeSpan>(), "14:00:00".To<TimeSpan>()),
 						new("14:03:00".To<TimeSpan>(), "18:45:00".To<TimeSpan>()),
 						new("19:00:00".To<TimeSpan>(), "23:50:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 			SpecialWorkingDays = _russianSpecialWorkingDays,
 			SpecialHolidays = _russianSpecialHolidays,
 		},
@@ -916,18 +916,18 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("10:30:00".To<TimeSpan>(), "13:00:00".To<TimeSpan>()),
 						new("13:03:00".To<TimeSpan>(), "17:30:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		ExpiryTime = new TimeSpan(18, 45, 00),
 		//IsSupportAtomicReRegister = true,
@@ -944,17 +944,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("10:30:00".To<TimeSpan>(), "17:30:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Ux,
 		TimeZone = TimeHelper.Fle,
@@ -1019,17 +1019,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:30:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		//IsSupportMarketOrders = true,
 		TimeZone = TimeHelper.Est,
@@ -1045,17 +1045,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:30:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		//IsSupportMarketOrders = true,
 		TimeZone = TimeHelper.Est,
@@ -1071,17 +1071,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:30:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		//IsSupportMarketOrders = true,
 		Exchange = Exchange.Nasdaq,
@@ -1107,17 +1107,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("08:00:00".To<TimeSpan>(), "16:30:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Lse,
 		TimeZone = TimeHelper.Gmt,
@@ -1132,17 +1132,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:00:00".To<TimeSpan>(), "18:00:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Lme,
 		TimeZone = TimeHelper.Gmt,
@@ -1157,18 +1157,18 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:00:00".To<TimeSpan>(), "11:30:00".To<TimeSpan>()),
 						new("12:30:00".To<TimeSpan>(), "15:00:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Tse,
 		TimeZone = TimeHelper.Tokyo,
@@ -1183,18 +1183,18 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:20:00".To<TimeSpan>(), "12:00:00".To<TimeSpan>()),
 						new("13:00:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Hkex,
 		TimeZone = TimeHelper.China,
@@ -1209,18 +1209,18 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:15:00".To<TimeSpan>(), "12:00:00".To<TimeSpan>()),
 						new("13:00:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Hkfe,
 		TimeZone = TimeHelper.China,
@@ -1235,18 +1235,18 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:30:00".To<TimeSpan>(), "11:30:00".To<TimeSpan>()),
 						new("13:00:00".To<TimeSpan>(), "15:00:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Sse,
 		TimeZone = TimeHelper.China,
@@ -1261,18 +1261,18 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:30:00".To<TimeSpan>(), "11:30:00".To<TimeSpan>()),
 						new("13:00:00".To<TimeSpan>(), "15:00:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Szse,
 		TimeZone = TimeHelper.China,
@@ -1287,17 +1287,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:30:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Tsx,
 		TimeZone = TimeHelper.Est,
@@ -1312,17 +1312,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("08:00:00".To<TimeSpan>(), "22:00:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Fwb,
 		TimeZone = "W. Europe Standard Time".To<TimeZoneInfo>(),
@@ -1337,17 +1337,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:50:00".To<TimeSpan>(), "16:12:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Asx,
 		TimeZone = "AUS Eastern Standard Time".To<TimeZoneInfo>(),
@@ -1362,17 +1362,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("10:00:00".To<TimeSpan>(), "17:00:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Nzx,
 		TimeZone = "New Zealand Standard Time".To<TimeZoneInfo>(),
@@ -1387,17 +1387,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:15:00".To<TimeSpan>(), "15:30:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Bse,
 		TimeZone = _indiaTime,
@@ -1412,17 +1412,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:15:00".To<TimeSpan>(), "15:30:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Nse,
 		TimeZone = _indiaTime,
@@ -1437,17 +1437,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("9:00:00".To<TimeSpan>(), "17:30:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Swx,
 		TimeZone = GetTimeZone("Central European Standard Time", TimeSpan.FromHours(1)),
@@ -1462,17 +1462,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:00:00".To<TimeSpan>(), "15:00:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Krx,
 		TimeZone = TimeHelper.Korea,
@@ -1487,17 +1487,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("9:00:00".To<TimeSpan>(), "17:30:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Mse,
 		TimeZone = "Romance Standard Time".To<TimeZoneInfo>(),
@@ -1512,17 +1512,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("9:00:00".To<TimeSpan>(), "17:00:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Jse,
 		TimeZone = GetTimeZone("South Africa Standard Time", TimeSpan.FromHours(2)),
@@ -1537,17 +1537,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:00:00".To<TimeSpan>(), "17:00:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Sgx,
 		TimeZone = _singaporeTime,
@@ -1562,17 +1562,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:00:00".To<TimeSpan>(), "13:30:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Tsec,
 		TimeZone = TimeHelper.China,
@@ -1587,18 +1587,18 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:30:00".To<TimeSpan>(), "12:00:00".To<TimeSpan>()),
 						new("13:30:00".To<TimeSpan>(), "15:30:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Pse,
 		TimeZone = _singaporeTime,
@@ -1613,18 +1613,18 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:00:00".To<TimeSpan>(), "12:30:00".To<TimeSpan>()),
 						new("14:00:00".To<TimeSpan>(), "17:00:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Klse,
 		TimeZone = _singaporeTime,
@@ -1639,17 +1639,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:30:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Idx,
 		TimeZone = _bangkokTime,
@@ -1664,18 +1664,18 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("10:00:00".To<TimeSpan>(), "12:30:00".To<TimeSpan>()),
 						new("14:30:00".To<TimeSpan>(), "16:30:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Set,
 		TimeZone = _bangkokTime,
@@ -1690,17 +1690,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:30:00".To<TimeSpan>(), "14:30:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Cse,
 		TimeZone = "Sri Lanka Standard Time".To<TimeZoneInfo>(),
@@ -1715,17 +1715,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:00:00".To<TimeSpan>(), "16:25:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Tase,
 		TimeZone = "Israel Standard Time".To<TimeZoneInfo>(),
@@ -1740,17 +1740,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("9:00:00".To<TimeSpan>(), "17:00:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 		Exchange = Exchange.Lmax,
 	};
@@ -2459,17 +2459,17 @@ partial class ExchangeBoard
 		WorkingTime = new()
 		{
 			IsEnabled = true,
-			Periods = new()
-			{
+			Periods =
+			[
 				new()
 				{
 					Till = DateTime.MaxValue,
-					Times = new()
-					{
+					Times =
+					[
 						new("09:00:00".To<TimeSpan>(), "14:00:00".To<TimeSpan>())
-					},
+					],
 				}
-			},
+			],
 		},
 	};
 

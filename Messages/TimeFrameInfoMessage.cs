@@ -15,7 +15,7 @@ public class TimeFrameInfoMessage : BaseSubscriptionIdMessage<TimeFrameInfoMessa
 	{
 	}
 
-	private TimeSpan[] _timeFrames = Array.Empty<TimeSpan>();
+	private TimeSpan[] _timeFrames = [];
 
 	/// <summary>
 	/// Possible time-frames.

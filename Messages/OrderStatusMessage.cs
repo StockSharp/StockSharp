@@ -41,7 +41,7 @@ public class OrderStatusMessage : OrderCancelMessage, ISubscriptionMessage
 	[DataMember]
 	public bool IsSubscribe { get; set; }
 
-	private OrderStates[] _states = Array.Empty<OrderStates>();
+	private OrderStates[] _states = [];
 
 	/// <summary>
 	/// Filter order by the specified states.
@@ -83,7 +83,7 @@ public class OrderStatusMessage : OrderCancelMessage, ISubscriptionMessage
 		destination.Count = Count;
 		destination.FillGaps = FillGaps;
 		destination.IsSubscribe = IsSubscribe;
-		destination.States = States.ToArray();
+		destination.States = [.. States];
 	}
 
 	/// <summary>

@@ -344,7 +344,7 @@ public static class EntitiesExtensions
 		return trade;
 	}
 
-	private static readonly CachedSynchronizedPairSet<Type, Type> _candleTypes = new();
+	private static readonly CachedSynchronizedPairSet<Type, Type> _candleTypes = [];
 
 	/// <summary>
 	/// Cast candle type <see cref="Candle"/> to the message <see cref="CandleMessage"/>.
@@ -449,8 +449,8 @@ public static class EntitiesExtensions
 		{
 			LocalTime = depth.LocalTime,
 			SecurityId = securityId,
-			Bids = depth.Bids.ToArray(),
-			Asks = depth.Asks.ToArray(),
+			Bids = [.. depth.Bids],
+			Asks = [.. depth.Asks],
 			ServerTime = depth.ServerTime,
 			Currency = depth.Currency,
 			SeqNum = depth.SeqNum,
@@ -1401,9 +1401,9 @@ public static class EntitiesExtensions
 	}
 
 #pragma warning disable CS0618 // Type or member is obsolete
-	private static readonly SynchronizedDictionary<Type, Func<Candle>> _candleCreators = new();
+	private static readonly SynchronizedDictionary<Type, Func<Candle>> _candleCreators = [];
 #pragma warning restore CS0618 // Type or member is obsolete
-	private static readonly SynchronizedDictionary<Type, Func<CandleMessage>> _candleMessageCreators = new();
+	private static readonly SynchronizedDictionary<Type, Func<CandleMessage>> _candleMessageCreators = [];
 
 	/// <summary>
 	/// Create instance of <see cref="CandleMessage"/>.
@@ -1926,8 +1926,8 @@ public static class EntitiesExtensions
 	public static MarketDepth ToMarketDepth(this Level1ChangeMessage message, Security security)
 	{
 		return new MarketDepth(security) { LocalTime = message.LocalTime }.Update(
-			new[] { message.CreateQuote(Level1Fields.BestBidPrice, Level1Fields.BestBidVolume) },
-			new[] { message.CreateQuote(Level1Fields.BestAskPrice, Level1Fields.BestAskVolume) },
+			[message.CreateQuote(Level1Fields.BestBidPrice, Level1Fields.BestBidVolume)],
+			[message.CreateQuote(Level1Fields.BestAskPrice, Level1Fields.BestAskVolume)],
 			message.ServerTime);
 	}
 

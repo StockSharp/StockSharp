@@ -349,8 +349,8 @@ public static partial class Extensions
 		return new MessageTypeInfo(type, isMarketData);
 	}
 
-	private static readonly CachedSynchronizedSet<MessageTypes> _transactionalTypes = new(new[]
-	{
+	private static readonly CachedSynchronizedSet<MessageTypes> _transactionalTypes = new(
+	[
 		MessageTypes.OrderRegister,
 		MessageTypes.OrderCancel,
 		MessageTypes.OrderStatus,
@@ -361,7 +361,7 @@ public static partial class Extensions
 #pragma warning restore CS0612 // Type or member is obsolete
 		MessageTypes.Portfolio,
 		MessageTypes.PortfolioLookup
-	});
+	]);
 
 	/// <summary>
 	/// Transactional message types.
@@ -388,11 +388,11 @@ public static partial class Extensions
 			adapter.RemoveSupportedMessage(type);
 	}
 
-	private static readonly CachedSynchronizedSet<MessageTypes> _marketDataTypes = new(new[]
-	{
+	private static readonly CachedSynchronizedSet<MessageTypes> _marketDataTypes = new(
+	[
 		MessageTypes.MarketData,
 		MessageTypes.SecurityLookup,
-	});
+	]);
 
 	/// <summary>
 	/// Market-data message types.
@@ -522,7 +522,7 @@ public static partial class Extensions
 		if (adapter == null)
 			throw new ArgumentNullException(nameof(adapter));
 
-		adapter.SupportedMarketDataTypes = adapter.SupportedMarketDataTypes.Except(new[] { type }).ToArray();
+		adapter.SupportedMarketDataTypes = adapter.SupportedMarketDataTypes.Except([type]).ToArray();
 	}
 
 	/// <summary>
@@ -565,7 +565,7 @@ public static partial class Extensions
 		return adapter.SupportedResultMessages.Contains(type);
 	}
 
-	private static readonly SynchronizedDictionary<Type, Type> _candleArgTypes = new();
+	private static readonly SynchronizedDictionary<Type, Type> _candleArgTypes = [];
 
 	/// <summary>
 	/// Get candle arg type.
@@ -575,7 +575,7 @@ public static partial class Extensions
 	public static Type GetCandleArgType(this Type candleMessageType)
 		=> _candleArgTypes[candleMessageType];
 
-	private static readonly SynchronizedDictionary<Type, Func<object, bool>> _candleArgValidators = new();
+	private static readonly SynchronizedDictionary<Type, Func<object, bool>> _candleArgValidators = [];
 
 	/// <summary>
 	/// Validate candle arg.
@@ -586,7 +586,7 @@ public static partial class Extensions
 	public static bool ValidateCandleArg(this Type candleMessageType, object value)
 		=> _candleArgValidators[candleMessageType](value);
 
-	private static readonly CachedSynchronizedPairSet<MessageTypes, Type> _candleDataTypes = new();
+	private static readonly CachedSynchronizedPairSet<MessageTypes, Type> _candleDataTypes = [];
 
 	/// <summary>
 	/// Determine the <paramref name="type"/> is candle data type.
@@ -595,7 +595,7 @@ public static partial class Extensions
 	/// <returns><see langword="true" />, if data type is candle, otherwise, <see langword="false" />.</returns>
 	public static bool IsCandle(this MessageTypes type)	=> _candleDataTypes.ContainsKey(type);
 
-	private static readonly SynchronizedPairSet<MessageTypes, Type> _messageTypeMap = new();
+	private static readonly SynchronizedPairSet<MessageTypes, Type> _messageTypeMap = [];
 
 	/// <summary>
 	/// Convert <see cref="Type"/> to <see cref="MessageTypes"/> value.
@@ -1140,8 +1140,8 @@ public static partial class Extensions
 	/// <summary>
 	/// Fields related to last trade.
 	/// </summary>
-	public static CachedSynchronizedSet<Level1Fields> LastTradeFields { get; } = new CachedSynchronizedSet<Level1Fields>(new[]
-	{
+	public static CachedSynchronizedSet<Level1Fields> LastTradeFields { get; } = new CachedSynchronizedSet<Level1Fields>(
+	[
 		Level1Fields.LastTradeId,
 		Level1Fields.LastTradeStringId,
 		Level1Fields.LastTradeTime,
@@ -1150,7 +1150,7 @@ public static partial class Extensions
 		Level1Fields.LastTradeUpDown,
 		Level1Fields.LastTradeVolume,
 		Level1Fields.IsSystem,
-	});
+	]);
 
 	/// <summary>
 	/// Is the specified <see cref="Level1Fields"/> is related to last trade.
@@ -1162,12 +1162,12 @@ public static partial class Extensions
 	/// <summary>
 	/// Fields related to best bid.
 	/// </summary>
-	public static CachedSynchronizedSet<Level1Fields> BestBidFields { get; } = new CachedSynchronizedSet<Level1Fields>(new[]
-	{
+	public static CachedSynchronizedSet<Level1Fields> BestBidFields { get; } = new CachedSynchronizedSet<Level1Fields>(
+	[
 		Level1Fields.BestBidPrice,
 		Level1Fields.BestBidTime,
 		Level1Fields.BestBidVolume
-	});
+	]);
 
 	/// <summary>
 	/// Is the specified <see cref="Level1Fields"/> is related to best bid.
@@ -1179,12 +1179,12 @@ public static partial class Extensions
 	/// <summary>
 	/// Fields related to best ask.
 	/// </summary>
-	public static CachedSynchronizedSet<Level1Fields> BestAskFields { get; } = new CachedSynchronizedSet<Level1Fields>(new[]
-	{
+	public static CachedSynchronizedSet<Level1Fields> BestAskFields { get; } = new CachedSynchronizedSet<Level1Fields>(
+	[
 		Level1Fields.BestAskPrice,
 		Level1Fields.BestAskTime,
 		Level1Fields.BestAskVolume
-	});
+	]);
 
 	/// <summary>
 	/// Is the specified <see cref="Level1Fields"/> is related to best ask.
@@ -1497,7 +1497,7 @@ public static partial class Extensions
 			if (set.Count == 1)
 				message.SecurityType = set.First();
 			else
-				message.SecurityTypes = set.ToArray();
+				message.SecurityTypes = [.. set];
 		}
 	}
 
@@ -1961,9 +1961,9 @@ public static partial class Extensions
 		if (message.SubscriptionIds != null)
 			return message.SubscriptionIds;
 		else if (message.SubscriptionId > 0)
-			return new[] { message.SubscriptionId };
+			return [message.SubscriptionId];
 		else
-			return Array.Empty<long>();
+			return [];
 	}
 
 	/// <summary>
@@ -2430,8 +2430,8 @@ public static partial class Extensions
 						SecurityId = level1.SecurityId,
 						LocalTime = level1.LocalTime,
 						ServerTime = level1.ServerTime,
-						Bids = _prevBidPrice == null ? Array.Empty<QuoteChange>() : new[] { new QuoteChange(_prevBidPrice.Value, _prevBidVolume ?? 0) },
-						Asks = _prevAskPrice == null ? Array.Empty<QuoteChange>() : new[] { new QuoteChange(_prevAskPrice.Value, _prevAskVolume ?? 0) },
+						Bids = _prevBidPrice == null ? [] : [new QuoteChange(_prevBidPrice.Value, _prevBidVolume ?? 0)],
+						Asks = _prevAskPrice == null ? [] : [new QuoteChange(_prevAskPrice.Value, _prevAskVolume ?? 0)],
 						BuildFrom = level1.BuildFrom ?? DataType.Level1,
 					};
 
@@ -3314,7 +3314,7 @@ public static partial class Extensions
 		adapter.SupportedInMessages = supported.Distinct().ToArray();
 	}
 
-	private static readonly SynchronizedDictionary<DataType, MessageTypes> _messageTypes = new();
+	private static readonly SynchronizedDictionary<DataType, MessageTypes> _messageTypes = [];
 
 	/// <summary>
 	/// Convert <see cref="DataType"/> to <see cref="MessageTypes"/> value.
@@ -3922,7 +3922,7 @@ public static partial class Extensions
 			}
 		}
 
-		return mapTo.Values.ToArray();
+		return [.. mapTo.Values];
 	}
 
 	/// <summary>
@@ -4021,7 +4021,7 @@ public static partial class Extensions
 			}
 		}
 
-		return result.ToArray();
+		return [.. result];
 	}
 
 	/// <summary>
@@ -4044,8 +4044,8 @@ public static partial class Extensions
 			SecurityId = original.SecurityId,
 			BuildFrom = DataType.MarketDepth,
 
-			Bids = original.Bids.Concat(rare.Bids).OrderByDescending(q => q.Price).ToArray(),
-			Asks = original.Asks.Concat(rare.Asks).OrderBy(q => q.Price).ToArray(),
+			Bids = [.. original.Bids.Concat(rare.Bids).OrderByDescending(q => q.Price)],
+			Asks = [.. original.Asks.Concat(rare.Asks).OrderBy(q => q.Price)],
 		};
 	}
 
@@ -5260,7 +5260,7 @@ public static partial class Extensions
 		{
 			private readonly IEnumerator<ExecutionMessage> _itemsEnumerator;
 
-			private readonly HashSet<long> _tradesByNum = new();
+			private readonly HashSet<long> _tradesByNum = [];
 			private readonly HashSet<string> _tradesByString = new(StringComparer.InvariantCultureIgnoreCase);
 
 			public OrderLogTickEnumerator(IEnumerable<ExecutionMessage> items)
@@ -5572,7 +5572,7 @@ public static partial class Extensions
 			return ask is null;
 	}
 
-	private static readonly SynchronizedDictionary<Type, IEnumerable<PropertyInfo>> _basicSettingsCache = new();
+	private static readonly SynchronizedDictionary<Type, IEnumerable<PropertyInfo>> _basicSettingsCache = [];
 
 	/// <summary>
 	/// Find properties marked by <see cref="BasicSettingAttribute"/>.
