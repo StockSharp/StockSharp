@@ -409,7 +409,7 @@ public class SubscriptionMessageAdapter : MessageAdapterWrapper
 				{
 					sendOutMsgs =
 					[
-						(Message)originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
+						(originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId))))
 					];
 				}
 

@@ -523,7 +523,7 @@ class OrderLogBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, Or
 
 				execMsg.IsSystem = metaInfo.Version < MarketDataVersions.Version49
 					? reader.Read()
-					: (reader.Read() ? reader.Read() : (bool?)null);
+					: (reader.Read() ? reader.Read() : null);
 
 				if (metaInfo.Version >= MarketDataVersions.Version34)
 				{
