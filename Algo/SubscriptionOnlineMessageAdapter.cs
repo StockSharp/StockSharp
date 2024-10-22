@@ -44,6 +44,7 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 
 		public readonly HashSet<long> ExtraFilters = [];
 		public readonly CachedSynchronizedDictionary<long, ISubscriptionMessage> Subscribers = [];
+		public readonly CachedSynchronizedSet<long> OnlineSubscribers = [];
 
 		private readonly List<long> _linked = [];
 
@@ -191,10 +192,15 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 
 			case MessageTypes.SubscriptionOnline:
 			{
+				var originTransId = ((SubscriptionOnlineMessage)message).OriginalTransactionId;
+
 				lock (_sync)
 				{
-					if (_subscriptionsById.TryGetValue(((SubscriptionOnlineMessage)message).OriginalTransactionId, out var info))
+					if (_subscriptionsById.TryGetValue(originTransId, out var info))
+					{
 						ChangeState(info, SubscriptionStates.Online);
+						info.OnlineSubscribers.Add(originTransId);
+					}
 				}
 
 				break;
@@ -228,6 +234,11 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 									false // lookup history can request order changes (registered, filled, cancelled)
 								);
 							}
+							else if (info.State != SubscriptionStates.Online)
+							{
+								subscrMsg.SetSubscriptionIds([subscrMsg.OriginalTransactionId]);
+								break;
+							}
 						}
 						else
 						{
@@ -238,7 +249,7 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 								break;
 						}
 
-						var ids = info.Subscribers.CachedKeys;
+						var ids = info.OnlineSubscribers.Cache;
 
 						if (info.ExtraFilters.Count > 0)
 						{
@@ -349,7 +360,7 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 
 						sendInMsg = message;
 
-						info = new SubscriptionInfo(message.TypedClone());
+						info = new(message.TypedClone());
 
 						_subscriptionsByKey.Add(key, info);
 					}
@@ -405,7 +416,7 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 					{
 						sendOutMsgs =
 						[
-							(Message)originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
+							originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
 						];
 					}
 					else
@@ -445,7 +456,7 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 				{
 					sendOutMsgs =
 					[
-						(Message)originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
+						originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
 					];
 				}
 			}
