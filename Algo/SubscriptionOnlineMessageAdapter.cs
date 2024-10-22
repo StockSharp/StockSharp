@@ -366,21 +366,31 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 					}
 					else
 					{
-						this.AddDebugLog("Subscription {0} joined to {1}.", transId, info.Subscription.TransactionId);
-
-						var resultMsg = message.CreateResult();
-
-						if (message.Type == MessageTypes.MarketData)
+						if (message.From is not null)
 						{
-							sendOutMsgs =
-							[
-								message.CreateResponse(),
-								resultMsg,
-							];
+							// history+live must be processed anyway but without live part
+							var clone = message.TypedClone();
+							clone.To = DateTimeOffset.Now;
+							sendInMsg = clone;
 						}
 						else
 						{
-							sendOutMsgs = [resultMsg];
+							this.AddDebugLog("Subscription {0} joined to {1}.", transId, info.Subscription.TransactionId);
+
+							var resultMsg = message.CreateResult();
+
+							if (message.Type == MessageTypes.MarketData)
+							{
+								sendOutMsgs =
+								[
+									message.CreateResponse(),
+									resultMsg,
+								];
+							}
+							else
+							{
+								sendOutMsgs = [resultMsg];
+							}
 						}
 					}
 
