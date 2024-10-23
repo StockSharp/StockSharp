@@ -6,7 +6,7 @@ class OrderLogMetaInfo : BinaryMetaInfo
 		: base(date)
 	{
 		FirstOrderId = -1;
-		Portfolios = new List<string>();
+		Portfolios = [];
 	}
 
 	public override object LastId => LastTransactionId;
@@ -523,7 +523,7 @@ class OrderLogBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, Or
 
 				execMsg.IsSystem = metaInfo.Version < MarketDataVersions.Version49
 					? reader.Read()
-					: (reader.Read() ? reader.Read() : (bool?)null);
+					: (reader.Read() ? reader.Read() : null);
 
 				if (metaInfo.Version >= MarketDataVersions.Version34)
 				{

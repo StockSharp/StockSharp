@@ -408,8 +408,8 @@ public class TrendMarketDepthGenerator : MarketDepthGenerator
 			askPrice = quote.Price;
 		}
 
-		depth.Bids = bids.ToArray();
-		depth.Asks = asks.ToArray();
+		depth.Bids = [.. bids];
+		depth.Asks = [.. asks];
 
 		_newTrades = false;
 

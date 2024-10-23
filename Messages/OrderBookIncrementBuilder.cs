@@ -9,12 +9,12 @@ public class OrderBookIncrementBuilder : BaseLogReceiver
 	private QuoteChangeStates _state = _none;
 
 	private readonly SortedList<decimal, QuoteChange> _bids = new(new BackwardComparer<decimal>());
-	private readonly SortedList<decimal, QuoteChange> _asks = new();
+	private readonly SortedList<decimal, QuoteChange> _asks = [];
 
-	private readonly List<QuoteChange> _bidsByPos = new();
-	private readonly List<QuoteChange> _asksByPos = new();
+	private readonly List<QuoteChange> _bidsByPos = [];
+	private readonly List<QuoteChange> _asksByPos = [];
 
-	private readonly HashSet<long> _invalidSubscriptions = new();
+	private readonly HashSet<long> _invalidSubscriptions = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="OrderBookIncrementBuilder"/>.
@@ -205,13 +205,13 @@ public class OrderBookIncrementBuilder : BaseLogReceiver
 
 		if (change.HasPositions)
 		{
-			bids = _bidsByPos.ToArray();
-			asks = _asksByPos.ToArray();
+			bids = [.. _bidsByPos];
+			asks = [.. _asksByPos];
 		}
 		else
 		{
-			bids = _bids.Values.ToArray();
-			asks = _asks.Values.ToArray();
+			bids = [.. _bids.Values];
+			asks = [.. _asks.Values];
 		}
 
 		return new QuoteChangeMessage

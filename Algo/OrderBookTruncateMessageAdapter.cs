@@ -5,7 +5,7 @@
 /// </summary>
 public class OrderBookTruncateMessageAdapter : MessageAdapterWrapper
 {
-	private readonly SynchronizedDictionary<long, int> _depths = new();
+	private readonly SynchronizedDictionary<long, int> _depths = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="OrderBookTruncateMessageAdapter"/>.
@@ -112,13 +112,13 @@ public class OrderBookTruncateMessageAdapter : MessageAdapterWrapper
 						continue;
 
 					if (clones == null)
-						clones = new List<QuoteChangeMessage>();
+						clones = [];
 
 					var maxDepth = group.Key.Value;
 
 					var clone = quoteMsg.TypedClone();
 
-					clone.SetSubscriptionIds(group.ToArray());
+					clone.SetSubscriptionIds([.. group]);
 
 					if (clone.Bids.Length > maxDepth)
 						clone.Bids = clone.Bids.Take(maxDepth).ToArray();

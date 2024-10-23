@@ -164,10 +164,10 @@ public class PartialDownloadMessageAdapter : MessageAdapterWrapper
 	}
 
 	private readonly SyncObject _syncObject = new();
-	private readonly Dictionary<long, DownloadInfo> _original = new();
-	private readonly Dictionary<long, DownloadInfo> _partialRequests = new();
-	private readonly Dictionary<long, bool> _liveRequests = new();
-	private readonly HashSet<long> _finished = new();
+	private readonly Dictionary<long, DownloadInfo> _original = [];
+	private readonly Dictionary<long, DownloadInfo> _partialRequests = [];
+	private readonly Dictionary<long, bool> _liveRequests = [];
+	private readonly HashSet<long> _finished = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="PartialDownloadMessageAdapter"/>.

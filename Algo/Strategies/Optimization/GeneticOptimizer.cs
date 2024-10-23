@@ -164,7 +164,7 @@ public class GeneticOptimizer : BaseOptimizer
 		}
 	}
 
-	private readonly SynchronizedSet<ManualResetEvent> _events = new();
+	private readonly SynchronizedSet<ManualResetEvent> _events = [];
 	private GeneticAlgorithm _ga;
 
 	private readonly SyncObject _leftIterLock = new();
@@ -424,7 +424,7 @@ public class GeneticOptimizer : BaseOptimizer
 
 		var termination = terminations.Count == 1
 			? terminations[0]
-			: new OrTermination(terminations.ToArray());
+			: new OrTermination([.. terminations]);
 
 		_ga = new(population, new StrategyFitness(this, strategy, calcFitness, startTime, stopTime), selection, crossover, mutation)
 		{

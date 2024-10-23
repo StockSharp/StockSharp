@@ -63,7 +63,7 @@ public static class OrderLogHelper
 		var first = items.FirstOrDefault();
 
 		if (first == null)
-			return Enumerable.Empty<MarketDepth>();
+			return [];
 
 		return items.ToMessages<OrderLogItem, ExecutionMessage>()
 			.ToOrderBooks(builder, interval)
@@ -82,7 +82,7 @@ public static class OrderLogHelper
 		var first = items.FirstOrDefault();
 
 		if (first == null)
-			return Enumerable.Empty<Trade>();
+			return [];
 
 		var ticks = items
 			.Select(i => i.ToMessage())

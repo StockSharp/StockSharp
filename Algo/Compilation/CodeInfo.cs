@@ -183,7 +183,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		return new()
 		{
 			Assembly = asm,
-			Errors = errors.ToArray(),
+			Errors = [.. errors],
 		};
 	}
 

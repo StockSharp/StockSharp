@@ -31,7 +31,7 @@ public interface IMarketRuleList : INotifyList<IMarketRule>, ISynchronizedCollec
 public class MarketRuleList : SynchronizedSet<IMarketRule>, IMarketRuleList
 {
 	private readonly IMarketRuleContainer _container;
-	private readonly Dictionary<object, HashSet<IMarketRule>> _rulesByToken = new(); 
+	private readonly Dictionary<object, HashSet<IMarketRule>> _rulesByToken = []; 
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MarketRuleList"/>.
@@ -95,7 +95,7 @@ public class MarketRuleList : SynchronizedSet<IMarketRule>, IMarketRuleList
 		get
 		{
 			lock (SyncRoot)
-				return _rulesByToken.Keys.ToArray();
+				return [.. _rulesByToken.Keys];
 		}
 	}
 
@@ -109,8 +109,8 @@ public class MarketRuleList : SynchronizedSet<IMarketRule>, IMarketRuleList
 		lock (SyncRoot)
 		{
 			return _rulesByToken.TryGetValue(token, out var set)
-				? set.ToArray()
-				: Enumerable.Empty<IMarketRule>();
+				? [.. set]
+				: [];
 		}
 	}
 

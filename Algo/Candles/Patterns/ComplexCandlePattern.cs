@@ -24,7 +24,7 @@ public class ComplexCandlePattern : ICandlePattern
 	/// <inheritdoc />
 	public string Name { get; private set; }
 
-	private readonly List<ICandlePattern> _inner = new();
+	private readonly List<ICandlePattern> _inner = [];
 
 	/// <summary>
 	/// Inner patterns.

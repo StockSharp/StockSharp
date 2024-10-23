@@ -5,7 +5,7 @@ namespace StockSharp.Algo;
 /// </summary>
 public class CollectionSecurityProvider : ISecurityProvider
 {
-	private readonly SynchronizedDictionary<SecurityId, Security> _inner = new();
+	private readonly SynchronizedDictionary<SecurityId, Security> _inner = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CollectionSecurityProvider"/>.
@@ -67,7 +67,7 @@ public class CollectionSecurityProvider : ISecurityProvider
 	public void Add(Security security)
 	{
 		if (_inner.TryAdd2(security.ToSecurityId(), security))
-			_added?.Invoke(new[] { security });
+			_added?.Invoke([security]);
 	}
 
 	/// <summary>
@@ -80,7 +80,7 @@ public class CollectionSecurityProvider : ISecurityProvider
 		if (security is null)
 			throw new ArgumentNullException(nameof(security));
 
-		RemoveRange(new[] { security });
+		RemoveRange([security]);
 		return true;
 	}
 

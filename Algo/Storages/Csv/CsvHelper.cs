@@ -93,7 +93,7 @@ static class CsvHelper
 
 		var (messageType, arg1, arg2, arg3) = dataType.Extract();
 
-		return new[] { messageType.To<string>(), arg1.To<string>(), arg2.To<string>(), arg3.To<string>() };
+		return [messageType.To<string>(), arg1.To<string>(), arg2.To<string>(), arg3.To<string>()];
 	}
 
 	public static DataType ReadBuildFrom(this FastCsvReader reader)
@@ -211,7 +211,7 @@ static class CsvHelper
 		return sec;
 	}
 
-	private static readonly SynchronizedDictionary<Type, ISerializer> _legacyBoardSerializers = new();
+	private static readonly SynchronizedDictionary<Type, ISerializer> _legacyBoardSerializers = [];
 
 	public static BoardMessage ReadBoard(this FastCsvReader reader, Encoding encoding)
 	{

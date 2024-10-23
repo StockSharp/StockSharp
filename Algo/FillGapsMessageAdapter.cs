@@ -21,7 +21,7 @@ public class FillGapsMessageAdapter : MessageAdapterWrapper
         public bool ResponseSent { get; set; }
     }
 
-	private readonly SynchronizedDictionary<long, FillGapInfo> _gapsRequests = new();
+	private readonly SynchronizedDictionary<long, FillGapInfo> _gapsRequests = [];
 	private readonly IFillGapsBehaviour _behaviour;
 
 	/// <summary>

@@ -25,8 +25,8 @@ public class SubscriptionSecurityAllMessageAdapter : MessageAdapterWrapper
 
 		public ParentSubscription Parent { get; }
 		public SubscriptionStates State { get; set; } = SubscriptionStates.Stopped;
-		public List<ISubscriptionIdMessage> Suspended { get; } = new List<ISubscriptionIdMessage>();
-		public CachedSynchronizedDictionary<long, MarketDataMessage> Subscribers { get; } = new CachedSynchronizedDictionary<long, MarketDataMessage>();
+		public List<ISubscriptionIdMessage> Suspended { get; } = [];
+		public CachedSynchronizedDictionary<long, MarketDataMessage> Subscribers { get; } = [];
 	}
 
 	private class ParentSubscription : BaseSubscription
@@ -36,18 +36,18 @@ public class SubscriptionSecurityAllMessageAdapter : MessageAdapterWrapper
 		{
 		}
 
-		public CachedSynchronizedPairSet<long, MarketDataMessage> Alls = new();
-		public SynchronizedDictionary<SecurityId, CachedSynchronizedSet<long>> NonAlls = new();
-		public Dictionary<SecurityId, ChildSubscription> Child { get; } = new Dictionary<SecurityId, ChildSubscription>();
+		public CachedSynchronizedPairSet<long, MarketDataMessage> Alls = [];
+		public SynchronizedDictionary<SecurityId, CachedSynchronizedSet<long>> NonAlls = [];
+		public Dictionary<SecurityId, ChildSubscription> Child { get; } = [];
 	}
 
 	private readonly SyncObject _sync = new();
 
-	private readonly Dictionary<long, RefPair<long, SubscriptionStates>> _pendingLoopbacks = new();
-	private readonly Dictionary<long, ParentSubscription> _parents = new();
-	private readonly Dictionary<long, ParentSubscription> _unsubscribes = new();
-	private readonly Dictionary<long, Tuple<ParentSubscription, MarketDataMessage>> _requests = new();
-	private readonly List<ChildSubscription> _toFlush = new();
+	private readonly Dictionary<long, RefPair<long, SubscriptionStates>> _pendingLoopbacks = [];
+	private readonly Dictionary<long, ParentSubscription> _parents = [];
+	private readonly Dictionary<long, ParentSubscription> _unsubscribes = [];
+	private readonly Dictionary<long, Tuple<ParentSubscription, MarketDataMessage>> _requests = [];
+	private readonly List<ChildSubscription> _toFlush = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="SubscriptionSecurityAllMessageAdapter"/>.
@@ -282,7 +282,7 @@ public class SubscriptionSecurityAllMessageAdapter : MessageAdapterWrapper
 						{
 							this.AddErrorLog("Sec ALL {0} error.", parent.Origin.TransactionId);
 						
-							extra = new List<Message>();
+							extra = [];
 
 							foreach (var child in parent.Child.Values)
 							{
@@ -323,7 +323,7 @@ public class SubscriptionSecurityAllMessageAdapter : MessageAdapterWrapper
 				{
 					if (_parents.TryGetAndRemove(finishMsg.OriginalTransactionId, out var parent))
 					{
-						extra = new List<Message>();
+						extra = [];
 
 						foreach (var child in parent.Child.Values)
 						{
@@ -417,7 +417,7 @@ public class SubscriptionSecurityAllMessageAdapter : MessageAdapterWrapper
 						// parent subscription has security id (not null)
 						if (parent.Origin.SecurityId == secIdMsg.SecurityId)
 						{
-							ApplySubscriptionIds(subscrMsg, parent, new[] { parent.Origin.TransactionId });
+							ApplySubscriptionIds(subscrMsg, parent, [parent.Origin.TransactionId]);
 							return null;
 						}
 

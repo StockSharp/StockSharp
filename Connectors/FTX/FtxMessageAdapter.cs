@@ -56,8 +56,7 @@ public partial class FtxMessageAdapter
 
 	private void SubscribeWsClient()
 	{
-		_wsClient.Connected += SessionOnWsConnected;
-		_wsClient.Disconnected += SessionOnWsDisconnected;
+		_wsClient.StateChanged += SendOutConnectionState;
 		_wsClient.Error += SessionOnWsError;
 		_wsClient.NewLevel1 += SessionOnNewLevel1;
 		_wsClient.NewOrderBook += SessionOnNewOrderBook;
@@ -68,8 +67,7 @@ public partial class FtxMessageAdapter
 
 	private void UnsubscribeWsClient()
 	{
-		_wsClient.Connected -= SessionOnWsConnected;
-		_wsClient.Disconnected -= SessionOnWsDisconnected;
+		_wsClient.StateChanged -= SendOutConnectionState;
 		_wsClient.Error -= SessionOnWsError;
 		_wsClient.NewLevel1 -= SessionOnNewLevel1;
 		_wsClient.NewOrderBook -= SessionOnNewOrderBook;
@@ -153,18 +151,8 @@ public partial class FtxMessageAdapter
 			await sc.ProcessPing(cancellationToken);
 	}
 
-	private void SessionOnWsConnected()
-	{
-		SendOutMessage(new ConnectMessage());
-	}
-
 	private void SessionOnWsError(Exception exception)
 	{
 		SendOutError(exception);
-	}
-
-	private void SessionOnWsDisconnected(bool expected)
-	{
-		SendOutDisconnectMessage(expected);
 	}
 }

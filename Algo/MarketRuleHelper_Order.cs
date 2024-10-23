@@ -239,7 +239,7 @@ partial class MarketRuleHelper
 	{
 		private decimal _receivedVolume;
 
-		private readonly CachedSynchronizedList<MyTrade> _trades = new();
+		private readonly CachedSynchronizedList<MyTrade> _trades = [];
 
 		public AllTradesOrderRule(Order order, ITransactionProvider provider)
 			: base(order, provider)
@@ -304,7 +304,7 @@ partial class MarketRuleHelper
 		private decimal? _bestAskPrice;
 		private decimal _averagePrice;
 
-		private readonly List<Tuple<decimal, decimal>> _trades = new();
+		private readonly List<Tuple<decimal, decimal>> _trades = [];
 
 		public OrderTakeProfitStopLossRule(Order order, Unit offset, bool isTake, ITransactionProvider transactionProvider, IMarketDataProvider marketDataProvider)
 			: base(order, transactionProvider)

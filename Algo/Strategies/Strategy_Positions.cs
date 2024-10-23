@@ -84,7 +84,7 @@ partial class Strategy
 		StatisticManager.AddPnL(time, PnL, Commission);
 	}
 
-	private readonly CachedSynchronizedDictionary<(Security, Portfolio), Position> _positions = new();
+	private readonly CachedSynchronizedDictionary<(Security, Portfolio), Position> _positions = [];
 
 	private static (Security, Portfolio) CreatePositionKey(Security security, Portfolio portfolio)
 		=> (security ?? throw new ArgumentNullException(nameof(security)), portfolio ?? throw new ArgumentNullException(nameof(portfolio)));
@@ -119,7 +119,7 @@ partial class Strategy
 	private class ChildStrategyPositionManager : BaseLogReceiver, IPositionManager
 	{
 		readonly StrategyPositionManager _inner;
-		readonly CachedSynchronizedDictionary<(SecurityId secId, string portName), decimal> _positions = new();
+		readonly CachedSynchronizedDictionary<(SecurityId secId, string portName), decimal> _positions = [];
 
 		public ChildStrategyPositionManager() => _inner = new StrategyPositionManager(true) { Parent = this };
 
@@ -210,7 +210,7 @@ partial class Strategy
 		=> SafeGetConnector().LookupByPortfolioName(name);
 
 	IEnumerable<Portfolio> IPortfolioProvider.Portfolios
-		=> Portfolio == null ? Enumerable.Empty<Portfolio>() : new[] { Portfolio };
+		=> Portfolio == null ? [] : [Portfolio];
 
 	event Action<Portfolio> IPortfolioProvider.NewPortfolio
 	{

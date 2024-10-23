@@ -85,7 +85,7 @@ public class InMemorySecurityMappingStorage : ISecurityMappingStorage
 	IEnumerable<string> ISecurityMappingStorage.GetStorageNames()
 	{
 		lock (_mappings.SyncRoot)
-			return _mappings.Keys.ToArray();
+			return [.. _mappings.Keys];
 	}
 
 	IEnumerable<SecurityIdMapping> ISecurityMappingStorage.Get(string storageName)
@@ -299,7 +299,7 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 		var added = ((InMemorySecurityMappingStorage)_inMemory).Save(storageName, mapping, out var all);
 
 		if (added)
-			Save(storageName, false, new[] { mapping });
+			Save(storageName, false, [mapping]);
 		else
 			Save(storageName, true, all);
 
@@ -381,17 +381,17 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 			using (var writer = new CsvFileWriter(new TransactionFileStream(fileName, mode)))
 			{
 				if (appendHeader)
-					writer.WriteRow(new[] { "SecurityCode", "BoardCode", "AdapterCode", "AdapterBoard" });
+					writer.WriteRow(["SecurityCode", "BoardCode", "AdapterCode", "AdapterBoard"]);
 
 				foreach (var mapping in mappings)
 				{
-					writer.WriteRow(new[]
-					{
+					writer.WriteRow(
+					[
 						mapping.StockSharpId.SecurityCode,
 						mapping.StockSharpId.BoardCode,
 						mapping.AdapterId.SecurityCode,
 						mapping.AdapterId.BoardCode
-					});
+					]);
 				}
 			}
 		});

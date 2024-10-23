@@ -22,7 +22,7 @@ public class WorkingTimePeriod : Cloneable<WorkingTimePeriod>, IPersistable
 		GroupName = LocalizedStrings.GeneralKey)]
 	public DateTime Till { get; set; }
 
-	private List<Range<TimeSpan>> _times = new();
+	private List<Range<TimeSpan>> _times = [];
 
 	/// <summary>
 	/// Work schedule within day.

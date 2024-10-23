@@ -8,9 +8,9 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 	private readonly SyncObject _sync = new();
 	private readonly IPositionManager _positionManager;
 
-	private readonly CachedSynchronizedSet<long> _subscriptions = new();
+	private readonly CachedSynchronizedSet<long> _subscriptions = [];
 	private readonly SynchronizedDictionary<string, CachedSynchronizedSet<long>> _strategySubscriptions = new(StringComparer.InvariantCultureIgnoreCase);
-	private readonly SynchronizedDictionary<long, string> _strategyIdMap = new();
+	private readonly SynchronizedDictionary<long, string> _strategyIdMap = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="PositionMessageAdapter"/>.
@@ -30,11 +30,11 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 
 	/// <inheritdoc />
 	public override IEnumerable<MessageTypeInfo> PossibleSupportedMessages
-		=> InnerAdapter.PossibleSupportedMessages.Concat(IsEmulate ? new[] { MessageTypes.PortfolioLookup.ToInfo() } : Enumerable.Empty<MessageTypeInfo>()).Distinct();
+		=> InnerAdapter.PossibleSupportedMessages.Concat(IsEmulate ? [MessageTypes.PortfolioLookup.ToInfo()] : []).Distinct();
 
 	/// <inheritdoc />
 	public override IEnumerable<MessageTypes> SupportedResultMessages
-		=> InnerAdapter.SupportedResultMessages.Concat(IsEmulate ? new[] { MessageTypes.PortfolioLookup } : Enumerable.Empty<MessageTypes>()).Distinct();
+		=> InnerAdapter.SupportedResultMessages.Concat(IsEmulate ? [MessageTypes.PortfolioLookup] : []).Distinct();
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)

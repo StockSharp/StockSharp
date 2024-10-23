@@ -42,10 +42,10 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 			}
 		}
 
-		public readonly HashSet<long> ExtraFilters = new();
-		public readonly CachedSynchronizedDictionary<long, ISubscriptionMessage> Subscribers = new();
+		public readonly HashSet<long> ExtraFilters = [];
+		public readonly CachedSynchronizedDictionary<long, ISubscriptionMessage> Subscribers = [];
 
-		private readonly List<long> _linked = new();
+		private readonly List<long> _linked = [];
 
 		public List<long> Linked
 		{
@@ -61,9 +61,9 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 
 	private readonly SyncObject _sync = new();
 
-	private readonly PairSet<(DataType, SecurityId), SubscriptionInfo> _subscriptionsByKey = new();
-	private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = new();
-	private readonly HashSet<long> _skipSubscriptions = new();
+	private readonly PairSet<(DataType, SecurityId), SubscriptionInfo> _subscriptionsByKey = [];
+	private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = [];
+	private readonly HashSet<long> _skipSubscriptions = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="SubscriptionOnlineMessageAdapter"/>.
@@ -251,7 +251,7 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 							}
 
 							if (ids.Length != set.Count)
-								ids = set.ToArray();
+								ids = [.. set];
 						}
 
 						subscrMsg.SetSubscriptionIds(ids);
@@ -361,15 +361,15 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 
 						if (message.Type == MessageTypes.MarketData)
 						{
-							sendOutMsgs = new[]
-							{
+							sendOutMsgs =
+							[
 								message.CreateResponse(),
 								resultMsg,
-							};
+							];
 						}
 						else
 						{
-							sendOutMsgs = new[] { resultMsg };
+							sendOutMsgs = [resultMsg];
 						}
 					}
 
@@ -403,10 +403,10 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 				{
 					if (!info.Subscribers.Remove(originId))
 					{
-						sendOutMsgs = new[]
-						{
+						sendOutMsgs =
+						[
 							(Message)originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
-						};
+						];
 					}
 					else
 					{
@@ -433,7 +433,7 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 						}
 						else
 						{
-							sendOutMsgs = new[] { message.CreateResult() };
+							sendOutMsgs = [message.CreateResult()];
 						}
 					}
 				}
@@ -443,10 +443,10 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 				}
 				else
 				{
-					sendOutMsgs = new[]
-					{
+					sendOutMsgs =
+					[
 						(Message)originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
-					};
+					];
 				}
 			}
 

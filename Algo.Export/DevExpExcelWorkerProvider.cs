@@ -22,10 +22,10 @@ public class DevExpExcelWorkerProvider : IExcelWorkerProvider
 		private class SheetData : IDisposable
 		{
 			private readonly DevExpExcelWorker _worker;
-			private readonly Dictionary<int, SortedDictionary<int, object>> _cells = new();
+			private readonly Dictionary<int, SortedDictionary<int, object>> _cells = [];
 
-			public readonly SortedDictionary<int, RefPair<Type, string>> Columns = new();
-			public readonly HashSet<int> Rows = new();
+			public readonly SortedDictionary<int, RefPair<Type, string>> Columns = [];
+			public readonly HashSet<int> Rows = [];
 
 			public SheetData(DevExpExcelWorker worker)
 			{
@@ -38,12 +38,12 @@ public class DevExpExcelWorkerProvider : IExcelWorkerProvider
 			{
 				Columns.TryAdd(col, new RefPair<Type, string>());
 				Rows.Add(row);
-				_cells.SafeAdd(row, key => new SortedDictionary<int, object>())[col] = value;
+				_cells.SafeAdd(row, key => [])[col] = value;
 			}
 
 			public T GetCell<T>(int col, int row)
 			{
-				return (T)_cells.SafeAdd(row, key => new SortedDictionary<int, object>()).TryGetValue(col);
+				return (T)_cells.SafeAdd(row, key => []).TryGetValue(col);
 			}
 
 			public void Dispose()
@@ -55,60 +55,56 @@ public class DevExpExcelWorkerProvider : IExcelWorkerProvider
 
 					foreach (var pair in Columns)
 					{
-						using (var xlCol = sheet.CreateColumn(pair.Key))
+						if (pair.Value.First != null)
 						{
-							if (pair.Value.First != null)
-							{
 
-							}
-							else if (!pair.Value.Second.IsEmpty())
+						}
+						else if (!pair.Value.Second.IsEmpty())
+						{
+							using var xlCol = sheet.CreateColumn(pair.Key);
+
+							xlCol.Formatting = new XlCellFormatting
 							{
-								xlCol.Formatting = new XlCellFormatting
-								{
-									IsDateTimeFormatString = true,
-									NetFormatString = pair.Value.Second,
-								};
-							}
+								IsDateTimeFormatString = true,
+								NetFormatString = pair.Value.Second,
+							};
 						}
 					}
 
 					foreach (var row in Rows.OrderBy())
 					{
-						using (var xlRow = sheet.CreateRow(row))
+						if (!_cells.TryGetValue(row, out var dict))
+							continue;
+
+						using var xlRow = sheet.CreateRow(row);
+
+						foreach (var pair in dict)
 						{
-							if (!_cells.TryGetValue(row, out var dict))
+							if (pair.Value == null)
 								continue;
 
-							foreach (var pair in dict)
+							XlVariantValue xlVal;
+
+							if (pair.Value is bool b)
+								xlVal = new XlVariantValue { BooleanValue = b };
+							else if (pair.Value is DateTime dt)
+								xlVal = new XlVariantValue { DateTimeValue = dt };
+							else if (pair.Value is DateTimeOffset dto)
+								xlVal = new XlVariantValue { DateTimeValue = dto.DateTime };
+							//else if (pair.Value is string s)
+							//	xlVal = new XlVariantValue { TextValue = s };
+							else if (pair.Value.GetType().IsNumeric())
+								xlVal = new XlVariantValue { NumericValue = pair.Value.To<double>() };
+							//else if (typeof(T) == typeof(Exception))
+							//	xlVal = new XlVariantValue { ErrorValue = new NameError() };
+							else
 							{
-								using (var cell = xlRow.CreateCell(pair.Key))
-								{
-									if (pair.Value == null)
-										continue;
-
-									XlVariantValue xlVal;
-
-									if (pair.Value is bool b)
-										xlVal = new XlVariantValue { BooleanValue = b };
-									else if (pair.Value is DateTime dt)
-										xlVal = new XlVariantValue { DateTimeValue = dt };
-									else if (pair.Value is DateTimeOffset dto)
-										xlVal = new XlVariantValue { DateTimeValue = dto.DateTime };
-									//else if (pair.Value is string s)
-									//	xlVal = new XlVariantValue { TextValue = s };
-									else if (pair.Value.GetType().IsNumeric())
-										xlVal = new XlVariantValue { NumericValue = pair.Value.To<double>() };
-									//else if (typeof(T) == typeof(Exception))
-									//	xlVal = new XlVariantValue { ErrorValue = new NameError() };
-									else
-									{
-										xlVal = new XlVariantValue { TextValue = pair.Value.To<string>() };
-										//throw new ArgumentOutOfRangeException(pair.Value?.ToString());
-									}
-
-									cell.Value = xlVal;
-								}
+								xlVal = new XlVariantValue { TextValue = pair.Value.To<string>() };
+								//throw new ArgumentOutOfRangeException(pair.Value?.ToString());
 							}
+
+							using var cell = xlRow.CreateCell(pair.Key);
+							cell.Value = xlVal;
 						}
 					}
 				}
@@ -122,7 +118,7 @@ public class DevExpExcelWorkerProvider : IExcelWorkerProvider
 
 		private readonly IXlExporter _exporter = XlExport.CreateExporter(XlDocumentFormat.Xlsx);
 		private readonly IXlDocument _document;
-		private readonly List<SheetData> _sheets = new();
+		private readonly List<SheetData> _sheets = [];
 		private SheetData _currSheet;
 
 		public DevExpExcelWorker(Stream stream)

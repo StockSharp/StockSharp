@@ -8,7 +8,7 @@ public class StorageBuffer : IPersistable
 	private class DataBuffer<TKey, TMarketData>
 		where TMarketData : Message
 	{
-		private readonly SynchronizedDictionary<TKey, List<TMarketData>> _data = new();
+		private readonly SynchronizedDictionary<TKey, List<TMarketData>> _data = [];
 
 		public void Add(TKey key, TMarketData data)
 			=> _data.SyncDo(d => d.SafeAdd(key).Add(data));
@@ -31,10 +31,10 @@ public class StorageBuffer : IPersistable
 	private readonly DataBuffer<SecurityId, Level1ChangeMessage> _level1Buffer = new();
 	private readonly DataBuffer<SecurityId, PositionChangeMessage> _positionChangesBuffer = new();
 	private readonly DataBuffer<SecurityId, ExecutionMessage> _transactionsBuffer = new();
-	private readonly SynchronizedSet<BoardStateMessage> _boardStatesBuffer = new();
+	private readonly SynchronizedSet<BoardStateMessage> _boardStatesBuffer = [];
 	private readonly DataBuffer<(SecurityId, DataType), CandleMessage> _candleBuffer = new();
-	private readonly SynchronizedSet<NewsMessage> _newsBuffer = new();
-	private readonly SynchronizedSet<long> _subscriptionsById = new();
+	private readonly SynchronizedSet<NewsMessage> _newsBuffer = [];
+	private readonly SynchronizedSet<long> _subscriptionsById = [];
 
 	/// <summary>
 	/// Save data only for subscriptions.

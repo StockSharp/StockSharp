@@ -8,7 +8,7 @@ using StockSharp.Algo.Positions;
 public class StrategyPositionManager : BaseLogReceiver, IPositionManager
 {
 	private readonly Dictionary<string, IPositionManager> _managersByStrategyId = new(StringComparer.InvariantCultureIgnoreCase);
-	private readonly Dictionary<long, Tuple<IPositionManager, string>> _managersByTransId = new();
+	private readonly Dictionary<long, Tuple<IPositionManager, string>> _managersByTransId = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="StrategyPositionManager"/>.

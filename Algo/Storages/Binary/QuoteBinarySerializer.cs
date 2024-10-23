@@ -331,8 +331,8 @@ class QuoteBinarySerializer : BinaryMarketDataSerializer<QuoteChangeMessage, Quo
 
 			if (metaInfo.Version < MarketDataVersions.Version48)
 			{
-				diff.Bids = diff.Bids.OrderByDescending(q => q.Price).ToArray();
-				diff.Asks = diff.Asks.OrderBy(q => q.Price).ToArray();
+				diff.Bids = [.. diff.Bids.OrderByDescending(q => q.Price)];
+				diff.Asks = [.. diff.Asks.OrderBy(q => q.Price)];
 			}
 
 			if (PassThroughOrderBookIncrement)
@@ -485,7 +485,7 @@ class QuoteBinarySerializer : BinaryMarketDataSerializer<QuoteChangeMessage, Quo
 		var count = reader.ReadInt();
 
 		if (count == 0)
-			return Array.Empty<QuoteChange>();
+			return [];
 
 		var is56 = metaInfo.Version >= MarketDataVersions.Version56;
 		var is57 = metaInfo.Version >= MarketDataVersions.Version57;

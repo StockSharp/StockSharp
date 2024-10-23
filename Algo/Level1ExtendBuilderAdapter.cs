@@ -22,7 +22,7 @@ public class Level1ExtendBuilderAdapter : MessageAdapterWrapper
 	}
 
 	private readonly SyncObject _syncObject = new();
-	private readonly Dictionary<long, Level1Info> _level1Subscriptions = new();
+	private readonly Dictionary<long, Level1Info> _level1Subscriptions = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Level1ExtendBuilderAdapter"/>.
@@ -111,12 +111,12 @@ public class Level1ExtendBuilderAdapter : MessageAdapterWrapper
 			{
 				if (!_level1Subscriptions.TryGetValue(id, out var info) || info.Origin.DataType2 != dataType)
 				{
-					leftSubscriptions ??= new List<long>();
+					leftSubscriptions ??= [];
 					leftSubscriptions.Add(id);
 					continue;
 				}
 
-				subscriptions ??= new List<long>();
+				subscriptions ??= [];
 				subscriptions.Add(id);
 			}
 		}
@@ -125,13 +125,13 @@ public class Level1ExtendBuilderAdapter : MessageAdapterWrapper
 			return subscrMsg;
 
 		var level1 = convert(subscrMsg);
-		level1.SetSubscriptionIds(subscriptions.ToArray());
+		level1.SetSubscriptionIds([.. subscriptions]);
 		base.OnInnerAdapterNewOutMessage(level1);
 
 		if (leftSubscriptions == null)
 			return default;
 
-		subscrMsg.SetSubscriptionIds(leftSubscriptions.ToArray());
+		subscrMsg.SetSubscriptionIds([.. leftSubscriptions]);
 		return subscrMsg;
 	}
 

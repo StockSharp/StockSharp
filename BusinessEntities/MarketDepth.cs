@@ -77,7 +77,7 @@ public class MarketDepth : Cloneable<MarketDepth>, IEnumerable<QuoteChange>, IOr
 	/// <inheritdoc/>
 	public Messages.DataType BuildFrom { get; set; }
 
-	private QuoteChange[] _bids = Array.Empty<QuoteChange>();
+	private QuoteChange[] _bids = [];
 
 	/// <inheritdoc/>
 	[Display(
@@ -92,7 +92,7 @@ public class MarketDepth : Cloneable<MarketDepth>, IEnumerable<QuoteChange>, IOr
 		set => _bids = value ?? throw new ArgumentNullException(nameof(value));
 	}
 
-	private QuoteChange[] _asks = Array.Empty<QuoteChange>();
+	private QuoteChange[] _asks = [];
 
 	/// <inheritdoc/>
 	[Display(
@@ -298,8 +298,8 @@ public class MarketDepth : Cloneable<MarketDepth>, IEnumerable<QuoteChange>, IOr
 		if (asks is null)
 			throw new ArgumentNullException(nameof(asks));
 
-		_bids = bids.ToArray();
-		_asks = asks.ToArray();
+		_bids = [.. bids];
+		_asks = [.. asks];
 
 		UpdateDepthAndTime(lastChangeTime);
 
@@ -634,7 +634,7 @@ public class MarketDepth : Cloneable<MarketDepth>, IEnumerable<QuoteChange>, IOr
 		var dir = GetDirection(price);
 
 		if (dir == null)
-			return Array.Empty<QuoteChange>();
+			return [];
 		else
 			return dir == Sides.Buy ? _bids : _asks;
 	}
@@ -681,8 +681,8 @@ public class MarketDepth : Cloneable<MarketDepth>, IEnumerable<QuoteChange>, IOr
 			Currency = Currency,
 			LocalTime = LocalTime,
 			ServerTime = ServerTime,
-			_bids = _bids.ToArray(),
-			_asks = _asks.ToArray(),
+			_bids = [.. _bids],
+			_asks = [.. _asks],
 			SeqNum = SeqNum,
 			BuildFrom = BuildFrom,
 		};

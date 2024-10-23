@@ -1,5 +1,7 @@
 namespace StockSharp.Bitexbook.Native;
 
+using Ecng.ComponentModel;
+
 using Newtonsoft.Json.Linq;
 
 class PusherClient : BaseLogReceiver
@@ -16,8 +18,7 @@ class PusherClient : BaseLogReceiver
 	public event Action<Ticket> TicketCanceled;
 	public event Action<Ticket> TicketExecuted;
 	public event Action<Exception> Error;
-	public event Action Connected;
-	public event Action<bool> Disconnected;
+	public event Action<ConnectionStates> StateChanged;
 	//public event Action<string> TradesSubscribed;
 	//public event Action<string> OrderBooksSubscribed;
 
@@ -26,20 +27,7 @@ class PusherClient : BaseLogReceiver
 	public PusherClient()
 	{
 		_client = new WebSocketClient(
-			() =>
-			{
-				this.AddInfoLog(LocalizedStrings.Connected);
-				Connected?.Invoke();
-			},
-			expected =>
-			{
-				if (expected)
-					this.AddInfoLog(LocalizedStrings.Disconnected);
-				else
-					this.AddErrorLog(LocalizedStrings.ErrorConnection);
-
-				Disconnected?.Invoke(expected);
-			},
+			state => StateChanged?.Invoke(state),
 			error =>
 			{
 				this.AddErrorLog(error);
@@ -48,8 +36,7 @@ class PusherClient : BaseLogReceiver
 			OnProcess,
 			(s, a) => this.AddInfoLog(s, a),
 			(s, a) => this.AddErrorLog(s, a),
-			(s, a) => this.AddVerboseLog(s, a),
-			(s) => this.AddVerboseLog(s));
+			(s, a) => this.AddVerboseLog(s, a));
 	}
 
 	protected override void DisposeManaged()
@@ -61,7 +48,7 @@ class PusherClient : BaseLogReceiver
 	public ValueTask Connect(CancellationToken cancellationToken)
 	{
 		this.AddInfoLog(LocalizedStrings.Connecting);
-		return _client.ConnectAsync("wss://api.bitexbook.com/api/v2/ws", true, cancellationToken: cancellationToken);
+		return _client.ConnectAsync("wss://api.bitexbook.com/api/v2/ws", cancellationToken: cancellationToken);
 	}
 
 	public void Disconnect()
@@ -70,8 +57,9 @@ class PusherClient : BaseLogReceiver
 		_client.Disconnect();
 	}
 
-	private void OnProcess(dynamic obj)
+	private ValueTask OnProcess(WebSocketMessage msg, CancellationToken cancellationToken)
 	{
+		var obj = msg.AsObject();
 		var method = (string)obj.method;
 		var data = (JToken)obj.data;
 
@@ -142,6 +130,8 @@ class PusherClient : BaseLogReceiver
 				this.AddErrorLog(LocalizedStrings.UnknownEvent, method);
 				break;
 		}
+
+		return default;
 	}
 
 	private static class Commands

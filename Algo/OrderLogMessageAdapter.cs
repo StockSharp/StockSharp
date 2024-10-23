@@ -23,7 +23,7 @@ public class OrderLogMessageAdapter : MessageAdapterWrapper
 		public SubscriptionStates State { get; set; }
 	}
 
-	private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionIds = new();
+	private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionIds = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="OrderLogMessageAdapter"/>.
@@ -183,7 +183,7 @@ public class OrderLogMessageAdapter : MessageAdapterWrapper
 			if (!_subscriptionIds.TryGetValue(subscriptionId, out var info))
 			{
 				if (nonBuilderIds == null)
-					nonBuilderIds = new List<long>();
+					nonBuilderIds = [];
 
 				nonBuilderIds.Add(subscriptionId);
 
@@ -233,7 +233,7 @@ public class OrderLogMessageAdapter : MessageAdapterWrapper
 		if (nonBuilderIds is null)
 			return null;
 
-		execMsg.SetSubscriptionIds(nonBuilderIds.ToArray());
+		execMsg.SetSubscriptionIds([.. nonBuilderIds]);
 		return execMsg;
 	}
 

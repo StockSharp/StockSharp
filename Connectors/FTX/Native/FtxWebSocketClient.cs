@@ -3,6 +3,8 @@
 using System.Security;
 using System.Security.Cryptography;
 
+using Ecng.ComponentModel;
+
 using Newtonsoft.Json.Linq;
 
 /// <summary>
@@ -26,9 +28,8 @@ class FtxWebSocketClient : BaseLogReceiver
 	public event Action<string, Level1> NewLevel1;
 	public event Action<Order> NewOrder;
 	public event Action<Fill> NewFill;
-	public event Action Connected;
+	public event Action<ConnectionStates> StateChanged;
 	public event Action<Exception> Error;
-	public event Action<bool> Disconnected;
 
 	private DateTime? _nextPing;
 
@@ -38,33 +39,9 @@ class FtxWebSocketClient : BaseLogReceiver
 	{
 		_key = key;
 		_hasher = secret.IsEmpty() ? null : new(secret.UnSecure().UTF8());
-		_client = new WebSocketClient(
-			() =>
-			{
-				this.AddInfoLog(LocalizedStrings.Connected);
-				try
-				{
-					_ = SendAuthRequest(subaccountName, default);
-					_ = SendPingRequest(default);
-					_ = SubscribeFills(default);
-					_ = SubscribeOrders(default);
-				}
-				catch (Exception ex)
-				{
-					Error?.Invoke(ex);
-				}
 
-				Connected?.Invoke();
-			},
-			expected =>
-			{
-				if (expected)
-					this.AddInfoLog(LocalizedStrings.Disconnected);
-				else
-					this.AddErrorLog(LocalizedStrings.ErrorConnection);
-
-				Disconnected?.Invoke(expected);
-			},
+		_client = new(
+			state => StateChanged?.Invoke(state),
 			exception =>
 			{
 				this.AddErrorLog(exception);
@@ -72,12 +49,8 @@ class FtxWebSocketClient : BaseLogReceiver
 			},
 			OnProcess,
 			(s, a) => this.AddInfoLog(s, a),
-			(s, a) =>
-			{
-				this.AddErrorLog(s, a);
-			},
-			(s, a) => this.AddVerboseLog(s, a),
-			(s) => this.AddVerboseLog(s));
+			(s, a) => this.AddErrorLog(s, a),
+			(s, a) => this.AddVerboseLog(s, a));
 	}
 
 
@@ -96,7 +69,7 @@ class FtxWebSocketClient : BaseLogReceiver
 	{
 		_nextPing = null;
 		this.AddInfoLog(LocalizedStrings.Connecting);
-		return _client.ConnectAsync("wss://ftx.com/ws", true, cancellationToken: cancellationToken);
+		return _client.ConnectAsync("wss://ftx.com/ws", cancellationToken: cancellationToken);
 	}
 
 	/// <summary>
@@ -266,14 +239,15 @@ class FtxWebSocketClient : BaseLogReceiver
 	}
 
 
-	private void OnProcess(dynamic obj)
+	private ValueTask OnProcess(WebSocketMessage msg, CancellationToken cancellationToken)
 	{
+		var obj = msg.AsObject();
 		var channel = (string)obj.channel;
 		var type = (string)obj.type;
 
 		if (channel == "ticker")
 		{
-			if (type != "update") return;
+			if (type != "update") return default;
 
 			WebSocketResponse<Level1> level1 = Parse<WebSocketResponse<Level1>>(obj);
 			if (level1 != null && level1.Data != null)
@@ -283,7 +257,7 @@ class FtxWebSocketClient : BaseLogReceiver
 		}
 		else if (channel == "trades")
 		{
-			if (type != "update") return;
+			if (type != "update") return default;
 
 			WebSocketResponse<List<Trade>> trade = Parse<WebSocketResponse<List<Trade>>>(obj);
 
@@ -294,7 +268,7 @@ class FtxWebSocketClient : BaseLogReceiver
 		}
 		else if (channel == "orderbook")
 		{
-			if (type != "update" && type != "partial") return;
+			if (type != "update" && type != "partial") return default;
 
 			WebSocketResponse<OrderBook> ob = Parse<WebSocketResponse<OrderBook>>(obj);
 			if (ob != null && ob.Data != null)
@@ -304,7 +278,7 @@ class FtxWebSocketClient : BaseLogReceiver
 		}
 		else if (channel == "orders")
 		{
-			if (type != "update") return;
+			if (type != "update") return default;
 
 			WebSocketResponse<Order> order = Parse<WebSocketResponse<Order>>(obj);
 			if (order != null && order.Data != null)
@@ -314,7 +288,7 @@ class FtxWebSocketClient : BaseLogReceiver
 		}
 		else if (channel == "fills")
 		{
-			if (type != "update") return;
+			if (type != "update") return default;
 
 			WebSocketResponse<Fill> fill = Parse<WebSocketResponse<Fill>>(obj);
 			if (fill != null && fill.Data != null)
@@ -322,6 +296,8 @@ class FtxWebSocketClient : BaseLogReceiver
 				NewFill?.Invoke(fill.Data);
 			}
 		}
+
+		return default;
 	}
 
 	#region Utils

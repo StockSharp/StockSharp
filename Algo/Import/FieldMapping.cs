@@ -136,7 +136,7 @@ public abstract class FieldMapping : NotifiableObject, IPersistable, ICloneable
 		}
 	}
 
-	private IEnumerable<FieldMappingValue> _values = Enumerable.Empty<FieldMappingValue>();
+	private IEnumerable<FieldMappingValue> _values = [];
 
 	/// <summary>
 	/// Mapping values.

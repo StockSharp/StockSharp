@@ -80,7 +80,7 @@ public class LogManager : Disposable, IPersistable
 	private static readonly DisposeLogMessage _disposeMessage = new();
 
 	private readonly object _syncRoot = new();
-	private readonly List<LogMessage> _pendingMessages = new();
+	private readonly List<LogMessage> _pendingMessages = [];
 	private readonly Timer _flushTimer;
 	private bool _isFlusing;
 	private readonly bool _asyncMode;

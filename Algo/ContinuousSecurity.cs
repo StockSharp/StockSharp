@@ -71,7 +71,7 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 			Func<Range<DateTimeOffset>, Range<DateTimeOffset>, int> comparer = (r1, r2) => r1.Max.CompareTo(r2.Max);
 			_expirationRanges = new SortedDictionary<Range<DateTimeOffset>, SecurityId>(comparer.ToComparer());
 
-			InnerSecurities = Array.Empty<SecurityId>();
+			InnerSecurities = [];
 		}
 
 		public SecurityId[] InnerSecurities { get; private set; }
@@ -107,7 +107,7 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 
 				_expirationRanges.Clear();
 				_current = null;
-				InnerSecurities = Array.Empty<SecurityId>();
+				InnerSecurities = [];
 
 				DisposeEnumerator();
 			}
@@ -125,11 +125,11 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 				prevTime = pair.Value + TimeSpan.FromTicks(1);
 			}
 
-			InnerSecurities = _expirationRanges.Values.ToArray();
+			InnerSecurities = [.. _expirationRanges.Values];
 
 			DisposeEnumerator();
 
-			_enumerator = new CircularBuffer<KeyValuePair<Range<DateTimeOffset>, SecurityId>>(_expirationRanges.Count, _expirationRanges.ToArray()).GetEnumerator();
+			_enumerator = new CircularBuffer<KeyValuePair<Range<DateTimeOffset>, SecurityId>>(_expirationRanges.Count, [.. _expirationRanges]).GetEnumerator();
 
 			MoveNext();
 		}
@@ -280,7 +280,7 @@ public class VolumeContinuousSecurity : ContinuousSecurity
 	/// <summary>
 	/// Instruments rollover by volume.
 	/// </summary>
-	public SynchronizedList<SecurityId> InnerSecurities { get; } = new SynchronizedList<SecurityId>();
+	public SynchronizedList<SecurityId> InnerSecurities { get; } = [];
 
 	/// <summary>
 	/// Use open interest for <see cref="VolumeLevel"/>.

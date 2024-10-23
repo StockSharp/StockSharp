@@ -205,7 +205,7 @@ public class ParabolicSar : BaseIndicator
 	}
 
 	private readonly CalcBuffer _buf;
-	private readonly List<ICandleMessage> _candles = new();
+	private readonly List<ICandleMessage> _candles = [];
 	private decimal _acceleration;
 	private decimal _accelerationStep;
 	private decimal _accelerationMax;

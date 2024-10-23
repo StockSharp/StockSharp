@@ -15,21 +15,21 @@ public class TransactionOrderingMessageAdapter : MessageAdapterWrapper
 		public SyncObject Sync { get; } = new SyncObject();
 
 		public OrderStatusMessage Original { get; }
-		public Dictionary<long, Tuple<List<ExecutionMessage>, List<ExecutionMessage>, long>> Transactions { get; } = new Dictionary<long, Tuple<List<ExecutionMessage>, List<ExecutionMessage>, long>>();
+		public Dictionary<long, Tuple<List<ExecutionMessage>, List<ExecutionMessage>, long>> Transactions { get; } = [];
 	}
 
-	private readonly SynchronizedDictionary<long, SubscriptionInfo> _transactionLogSubscriptions = new();
-	private readonly SynchronizedSet<long> _orderStatusIds = new();
+	private readonly SynchronizedDictionary<long, SubscriptionInfo> _transactionLogSubscriptions = [];
+	private readonly SynchronizedSet<long> _orderStatusIds = [];
 
-	private readonly SynchronizedDictionary<long, long> _orders = new();
-	private readonly SynchronizedDictionary<long, SecurityId> _secIds = new();
+	private readonly SynchronizedDictionary<long, long> _orders = [];
+	private readonly SynchronizedDictionary<long, SecurityId> _secIds = [];
 
-	private readonly SynchronizedPairSet<long, long> _orderIds = new();
+	private readonly SynchronizedPairSet<long, long> _orderIds = [];
 	private readonly SynchronizedPairSet<string, long> _orderStringIds = new(StringComparer.InvariantCultureIgnoreCase);
 
 	private readonly SyncObject _nonAssociatedLock = new();
-	private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedOrderIds = new();
-	private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedStringOrderIds = new();
+	private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedOrderIds = [];
+	private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedStringOrderIds = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="TransactionOrderingMessageAdapter"/>.
@@ -157,7 +157,7 @@ public class TransactionOrderingMessageAdapter : MessageAdapterWrapper
 				Tuple<List<ExecutionMessage>, List<ExecutionMessage>, long>[] tuples;
 
 				lock (subscription.Sync)
-					tuples = subscription.Transactions.Values.ToArray();
+					tuples = [.. subscription.Transactions.Values];
 
 				//var canProcessFailed = truesubscription.Original.States.Contains(OrderStates.Failed);
 

@@ -30,7 +30,7 @@ public interface IRiskRuleProvider
 /// </summary>
 public class InMemoryRiskRuleProvider : IRiskRuleProvider
 {
-	private readonly List<Type> _rules = new();
+	private readonly List<Type> _rules = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="InMemoryRiskRuleProvider"/>.

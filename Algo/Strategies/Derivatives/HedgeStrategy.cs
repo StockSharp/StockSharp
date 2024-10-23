@@ -19,11 +19,11 @@ public abstract class HedgeStrategy : Strategy
 		}
 	}
 
-	private readonly SynchronizedDictionary<Security, Strategy> _strategies = new();
+	private readonly SynchronizedDictionary<Security, Strategy> _strategies = [];
 	//private bool _isSuspended;
 	//private int _reHedgeOrders;
 	private Strategy _assetStrategy;
-	private readonly HashSet<Order> _awaitingOrders = new();
+	private readonly HashSet<Order> _awaitingOrders = [];
 	private readonly SyncObject _syncRoot = new();
 
 	/// <summary>

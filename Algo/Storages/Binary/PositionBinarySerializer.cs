@@ -19,9 +19,9 @@ class PositionMetaInfo : BinaryMetaInfo
 		SettlementPrice = new();
 		LiquidationPrice = new();
 
-		Portfolios = new List<string>();
-		ClientCodes = new List<string>();
-		DepoNames = new List<string>();
+		Portfolios = [];
+		ClientCodes = [];
+		DepoNames = [];
 	}
 
 	public RefPair<decimal, decimal> BeginValue { get; private set; }

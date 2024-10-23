@@ -6,7 +6,7 @@ namespace StockSharp.Algo.PnL;
 public class PnLQueue
 {
 	private Sides _openedPosSide;
-	private readonly SynchronizedStack<RefPair<decimal, decimal>> _openedTrades = new();
+	private readonly SynchronizedStack<RefPair<decimal, decimal>> _openedTrades = [];
 	private decimal _multiplier;
 
 	/// <summary>

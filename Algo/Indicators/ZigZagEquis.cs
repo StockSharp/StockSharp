@@ -15,8 +15,8 @@
 [Doc("topics/api/indicators/list_of_indicators/zigzag_metastock.html")]
 public class ZigZagEquis : BaseIndicator
 {
-	private readonly IList<decimal> _buffer = new List<decimal>();
-	private readonly List<decimal> _zigZagBuffer = new();
+	private readonly IList<decimal> _buffer = [];
+	private readonly List<decimal> _zigZagBuffer = [];
 
 	private bool _needAdd = true;
 

@@ -21,11 +21,11 @@ public class SubscriptionMessageAdapter : MessageAdapterWrapper
 
 	private readonly SyncObject _sync = new();
 
-	private readonly Dictionary<long, ISubscriptionMessage> _historicalRequests = new();
-	private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = new();
-	private readonly PairSet<long, long> _replaceId = new();
-	private readonly HashSet<long> _allSecIdChilds = new();
-	private readonly List<Message> _reMapSubscriptions = new();
+	private readonly Dictionary<long, ISubscriptionMessage> _historicalRequests = [];
+	private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = [];
+	private readonly PairSet<long, long> _replaceId = [];
+	private readonly HashSet<long> _allSecIdChilds = [];
+	private readonly List<Message> _reMapSubscriptions = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="SubscriptionMessageAdapter"/>.
@@ -349,7 +349,7 @@ public class SubscriptionMessageAdapter : MessageAdapterWrapper
 
 				if (message.From >= message.To)
 				{
-					sendOutMsgs = new[] { message.CreateResult() };
+					sendOutMsgs = [message.CreateResult()];
 				}
 				else
 				{
@@ -407,10 +407,10 @@ public class SubscriptionMessageAdapter : MessageAdapterWrapper
 				}
 				else
 				{
-					sendOutMsgs = new[]
-					{
-						(Message)originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
-					};
+					sendOutMsgs =
+					[
+						(originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId))))
+					];
 				}
 
 				if (sendInMsg != null)

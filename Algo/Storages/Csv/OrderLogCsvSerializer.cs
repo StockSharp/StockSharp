@@ -24,8 +24,8 @@ public class OrderLogCsvSerializer : CsvMarketDataSerializer<ExecutionMessage>
 	/// <inheritdoc />
 	protected override void Write(CsvFileWriter writer, ExecutionMessage data, IMarketDataMetaInfo metaInfo)
 	{
-		writer.WriteRow(new[]
-		{
+		writer.WriteRow(
+		[
 			data.ServerTime.WriteTimeMls(),
 			data.ServerTime.ToString("zzz"),
 			data.TransactionId.ToString(),
@@ -50,7 +50,7 @@ public class OrderLogCsvSerializer : CsvMarketDataSerializer<ExecutionMessage>
 			data.TradeStatus.ToString(),
 			data.OpenInterest.ToString(),
 			data.OriginSide.To<int?>().ToString(),
-		});
+		]);
 
 		metaInfo.LastTime = data.ServerTime.UtcDateTime;
 		metaInfo.LastId = data.TransactionId;

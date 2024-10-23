@@ -1,5 +1,7 @@
 namespace StockSharp.BitStamp.Native;
 
+using Ecng.ComponentModel;
+
 using Newtonsoft.Json.Linq;
 
 class PusherClient : BaseLogReceiver
@@ -8,8 +10,7 @@ class PusherClient : BaseLogReceiver
 	public event Action<string, OrderBook> NewOrderBook;
 	public event Action<string, OrderStates, Order> NewOrderLog;
 	public event Action<Exception> Error;
-	public event Action Connected;
-	public event Action<bool> Disconnected;
+	public event Action<ConnectionStates> StateChanged;
 	public event Action<string> TradesSubscribed;
 	public event Action<string> OrderBookSubscribed;
 	public event Action<string> OrderLogSubscribed;
@@ -25,20 +26,7 @@ class PusherClient : BaseLogReceiver
 	public PusherClient()
 	{
 		_client = new WebSocketClient(
-			() =>
-			{
-				this.AddInfoLog(LocalizedStrings.Connected);
-				Connected?.Invoke();
-			},
-			expected =>
-			{
-				if (expected)
-					this.AddInfoLog(LocalizedStrings.Disconnected);
-				else
-					this.AddErrorLog(LocalizedStrings.ErrorConnection);
-
-				Disconnected?.Invoke(expected);
-			},
+			state => StateChanged?.Invoke(state),
 			error =>
 			{
 				this.AddErrorLog(error);
@@ -47,8 +35,7 @@ class PusherClient : BaseLogReceiver
 			OnProcess,
 			(s, a) => this.AddInfoLog(s, a),
 			(s, a) => this.AddErrorLog(s, a),
-			(s, a) => this.AddVerboseLog(s, a),
-			(s) => this.AddVerboseLog(s));
+			(s, a) => this.AddVerboseLog(s, a));
 	}
 
 	protected override void DisposeManaged()
@@ -63,7 +50,7 @@ class PusherClient : BaseLogReceiver
 		_activityTimeout = 0;
 
 		this.AddInfoLog(LocalizedStrings.Connecting);
-		return _client.ConnectAsync("wss://ws.bitstamp.net", true, cancellationToken: cancellationToken);
+		return _client.ConnectAsync("wss://ws.bitstamp.net", cancellationToken: cancellationToken);
 	}
 
 	public void Disconnect()
@@ -72,8 +59,9 @@ class PusherClient : BaseLogReceiver
 		_client.Disconnect();
 	}
 
-	private void OnProcess(dynamic obj)
+	private async ValueTask OnProcess(WebSocketMessage msg, CancellationToken cancellationToken)
 	{
+		var obj = msg.AsObject();
 		var channel = (string)obj.channel;
 		var evt = (string)obj.@event;
 		var data = obj.data;
@@ -94,7 +82,7 @@ class PusherClient : BaseLogReceiver
 				break;
 
 			case "ping":
-				_ = SendPingPong("pong", default);
+				await SendPingPong("pong", cancellationToken);
 				break;
 
 			case "pong":

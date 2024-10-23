@@ -23,7 +23,7 @@ public class AvailableDataInfoMessage : BaseSubscriptionIdMessage<AvailableDataI
 	[DataMember]
 	public DataType FileDataType { get; set; }
 
-	private DateTime[] _dates = Array.Empty<DateTime>();
+	private DateTime[] _dates = [];
 
 	/// <summary>
 	/// Dates.

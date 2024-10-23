@@ -49,8 +49,8 @@ public class GeneticSettings : NotifiableObject, IPersistable
 		static readonly Dictionary<StatisticParameterTypes, IStatisticParameter> _paramByType;
 		static readonly PairSet<string, StatisticParameterTypes> _acronymsDict;
 
-		static readonly List<(StatisticParameterTypes type, string acronym)> _acronyms = new()
-		{
+		static readonly List<(StatisticParameterTypes type, string acronym)> _acronyms =
+		[
 			(StatisticParameterTypes.NetProfit,                         "PnL"),
 			(StatisticParameterTypes.WinningTrades,                     "WinTrades"),
 			(StatisticParameterTypes.LossingTrades,                     "LosTrades"),
@@ -73,13 +73,13 @@ public class GeneticSettings : NotifiableObject, IPersistable
 			(StatisticParameterTypes.OrderCount,                        "OrdCount"),
 			(StatisticParameterTypes.OrderErrorCount,                   "OrdErrCount"),
 			(StatisticParameterTypes.OrderInsufficientFundErrorCount,   "OrdFundErrCount"),
-		};
+		];
 
 		static FormulaVarsItemsSource()
 		{
 			_acronymsDict = new PairSet<string, StatisticParameterTypes>(StringComparer.InvariantCultureIgnoreCase);
 			_acronyms.ForEach(a => _acronymsDict.Add(a.acronym, a.type));
-			_allParams = StatisticParameterRegistry.All.OrderBy(VarNameFromParam).ToArray();
+			_allParams = [.. StatisticParameterRegistry.All.OrderBy(VarNameFromParam)];
 			_paramByType = _allParams.ToDictionary(v => v.Type);
 		}
 

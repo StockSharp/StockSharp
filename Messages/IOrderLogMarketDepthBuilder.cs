@@ -25,11 +25,11 @@ public interface IOrderLogMarketDepthBuilder
 /// </summary>
 public class OrderLogMarketDepthBuilder : IOrderLogMarketDepthBuilder
 {
-	private readonly Dictionary<long, decimal> _ordersByNum = new();
+	private readonly Dictionary<long, decimal> _ordersByNum = [];
 	private readonly Dictionary<string, decimal> _ordersByString = new(StringComparer.InvariantCultureIgnoreCase);
 
 	private readonly SortedList<decimal, QuoteChange> _bids = new(new BackwardComparer<decimal>());
-	private readonly SortedList<decimal, QuoteChange> _asks = new();
+	private readonly SortedList<decimal, QuoteChange> _asks = [];
 
 	private readonly QuoteChangeMessage _depth;
 
@@ -64,8 +64,8 @@ public class OrderLogMarketDepthBuilder : IOrderLogMarketDepthBuilder
 
 		depth.ServerTime = serverTime;
 		depth.LocalTime = serverTime;
-		depth.Bids = _bids.Values.ToArray();
-		depth.Asks = _asks.Values.ToArray();
+		depth.Bids = [.. _bids.Values];
+		depth.Asks = [.. _asks.Values];
 
 		return depth;
 	}
@@ -195,9 +195,9 @@ public class OrderLogMarketDepthBuilder : IOrderLogMarketDepthBuilder
 		var q = changedQuote.Value;
 
 		if (item.Side == Sides.Buy)
-			increment.Bids = new[] { q };
+			increment.Bids = [q];
 		else
-			increment.Asks = new[] { q };
+			increment.Asks = [q];
 
 		return increment;
 	}

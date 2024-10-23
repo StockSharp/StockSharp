@@ -29,7 +29,7 @@ public class WorkingTime : IPersistable
 		Order = 0)]
 	public bool IsEnabled { get; set; }
 
-	private List<WorkingTimePeriod> _periods = new();
+	private List<WorkingTimePeriod> _periods = [];
 
 	/// <summary>
 	/// Schedule validity periods.
@@ -63,7 +63,7 @@ public class WorkingTime : IPersistable
 			{
 				var period = this.GetPeriod(day);
 
-				_specialDays[day] = period?.Times.ToArray() ?? new[] { new Range<TimeSpan>(new TimeSpan(9, 0, 0), new TimeSpan(16, 0, 0)) };
+				_specialDays[day] = period?.Times.ToArray() ?? [new Range<TimeSpan>(new TimeSpan(9, 0, 0), new TimeSpan(16, 0, 0))];
 			}
 		}
 	}
@@ -79,7 +79,7 @@ public class WorkingTime : IPersistable
 		set
 		{
 			foreach (var day in CheckDates(value))
-				_specialDays[day] = Array.Empty<Range<TimeSpan>>();
+				_specialDays[day] = [];
 		}
 	}
 
@@ -147,8 +147,8 @@ public class WorkingTime : IPersistable
 			}
 			else
 			{
-				SpecialWorkingDays = storage.GetValue<List<DateTime>>(nameof(SpecialWorkingDays)).ToArray();
-				SpecialHolidays = storage.GetValue<List<DateTime>>(nameof(SpecialHolidays)).ToArray();
+				SpecialWorkingDays = [.. storage.GetValue<List<DateTime>>(nameof(SpecialWorkingDays))];
+				SpecialHolidays = [.. storage.GetValue<List<DateTime>>(nameof(SpecialHolidays))];
 			}
 		}
 		finally

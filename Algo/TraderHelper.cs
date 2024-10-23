@@ -114,8 +114,8 @@ public static partial class TraderHelper
 			{
 				SecurityId = depth.SecurityId,
 				ServerTime = depth.ServerTime,
-				Bids = bids.ToArray(),
-				Asks = asks.ToArray(),
+				Bids = [.. bids],
+				Asks = [.. asks],
 			};
 		}
 
@@ -1317,7 +1317,7 @@ public static partial class TraderHelper
 			return msg is SubscriptionFinishedMessage;
 		}
 
-		adapter.DoConnect(request is null ? Enumerable.Empty<Message>() : new[] { request }, !resultIsConnect,
+		adapter.DoConnect(request is null ? [] : [request], !resultIsConnect,
 			msg => transIdMsg != null && resultIsOrigIdMsg ? msg is IOriginalTransactionIdMessage origIdMsg && TransactionMessageHandler(transIdMsg, origIdMsg) : OtherMessageHandler(msg));
 
 		archive = archiveLocal;
@@ -1469,7 +1469,7 @@ public static partial class TraderHelper
 
 	private static class CacheHolder<TResult>
 	{
-		public static readonly SynchronizedDictionary<string, ExpressionFormula<TResult>> Cache = new();
+		public static readonly SynchronizedDictionary<string, ExpressionFormula<TResult>> Cache = [];
 	}
 
 	/// <summary>
@@ -1582,7 +1582,7 @@ public static partial class TraderHelper
 			type.IsPublic &&
 			!type.IsGenericTypeDefinition &&
 			required.IsAssignableFrom(type) &&
-			type.GetConstructor(Array.Empty<Type>()) is not null;
+			type.GetConstructor([]) is not null;
 	}
 
 	/// <summary>

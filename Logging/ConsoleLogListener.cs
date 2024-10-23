@@ -27,25 +27,13 @@ public class ConsoleLogListener : LogListener
 			return;
 		}
 
-		ConsoleColor color;
-
-		switch (message.Level)
+		var color = message.Level switch
 		{
-			case LogLevels.Verbose:
-			case LogLevels.Debug:
-			case LogLevels.Info:
-				color = ConsoleHelper.Info;
-				break;
-			case LogLevels.Warning:
-				color = ConsoleHelper.Warning;
-				break;
-			case LogLevels.Error:
-				color = ConsoleHelper.Error;
-				break;
-			default:
-				throw new ArgumentOutOfRangeException(nameof(message), message.Level, LocalizedStrings.InvalidValue);
-		}
-
+			LogLevels.Verbose or LogLevels.Debug or LogLevels.Info => ConsoleHelper.Info,
+			LogLevels.Warning => ConsoleHelper.Warning,
+			LogLevels.Error => ConsoleHelper.Error,
+			_ => throw new ArgumentOutOfRangeException(nameof(message), message.Level, LocalizedStrings.InvalidValue),
+		};
 		var newLine = "{0} | {1, -15} | {2}".Put(message.Time.ToString(TimeFormat), message.Source.Name, message.Message);
 
 		newLine.ConsoleWithColor(color);

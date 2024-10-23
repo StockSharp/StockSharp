@@ -15,7 +15,7 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 	/// </summary>
 	/// <param name="securityProvider">The provider of information about instruments.</param>
 	public HistoryEmulationConnector(ISecurityProvider securityProvider)
-		: this(securityProvider, new[] { Portfolio.CreateSimulator() })
+		: this(securityProvider, [Portfolio.CreateSimulator()])
 	{
 	}
 

@@ -42,7 +42,7 @@ public interface ISecurityStorage : ISecurityProvider
 public class InMemorySecurityStorage : ISecurityStorage
 {
 	private readonly ISecurityProvider _underlying;
-	private readonly SynchronizedDictionary<SecurityId, Security> _inner = new();
+	private readonly SynchronizedDictionary<SecurityId, Security> _inner = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="InMemorySecurityStorage"/>.
@@ -81,7 +81,7 @@ public class InMemorySecurityStorage : ISecurityStorage
 			throw new ArgumentNullException(nameof(security));
 
 		if (_inner.Remove(security.ToSecurityId()))
-			Removed?.Invoke(new[] { security });
+			Removed?.Invoke([security]);
 	}
 
 	/// <inheritdoc />
@@ -153,6 +153,6 @@ public class InMemorySecurityStorage : ISecurityStorage
 			throw new ArgumentNullException(nameof(security));
 
 		if (_inner.TryAdd2(security.ToSecurityId(), security))
-			Added?.Invoke(new[] { security });
+			Added?.Invoke([security]);
 	}
 }

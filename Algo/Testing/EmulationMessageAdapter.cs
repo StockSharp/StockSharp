@@ -15,8 +15,8 @@ public interface IEmulationMessageAdapter : IMessageAdapterWrapper
 /// </summary>
 public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageAdapter
 {
-	private readonly SynchronizedSet<long> _subscriptionIds = new();
-	private readonly SynchronizedSet<long> _emuOrderIds = new();
+	private readonly SynchronizedSet<long> _subscriptionIds = [];
+	private readonly SynchronizedSet<long> _emuOrderIds = [];
 
 	private readonly IMessageAdapter _inAdapter;
 	private readonly bool _isEmulationOnly;

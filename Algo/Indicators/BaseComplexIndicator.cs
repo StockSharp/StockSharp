@@ -83,7 +83,7 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 			RemoveInner(sma);
 	}
 
-	private readonly List<IIndicator> _innerIndicators = new();
+	private readonly List<IIndicator> _innerIndicators = [];
 
 	/// <inheritdoc />
 	[Browsable(false)]

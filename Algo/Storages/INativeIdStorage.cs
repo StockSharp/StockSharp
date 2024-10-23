@@ -80,7 +80,7 @@ public interface INativeIdStorage
 public sealed class CsvNativeIdStorage : INativeIdStorage
 {
 	private readonly INativeIdStorage _inMemory = new InMemoryNativeIdStorage();
-	private readonly SynchronizedDictionary<SecurityId, object> _buffer = new();
+	private readonly SynchronizedDictionary<SecurityId, object> _buffer = [];
 
 	private readonly string _path;
 
@@ -255,12 +255,12 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 		}
 		else
 		{
-			writer.WriteRow(new[]
-			{
+			writer.WriteRow(
+			[
 				symbol,
 				board,
 				GetTypeName(nativeId.GetType()),
-			});
+			]);
 		}
 	}
 
@@ -278,12 +278,12 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 		}
 		else
 		{
-			writer.WriteRow(new[]
-			{
+			writer.WriteRow(
+			[
 				securityId.SecurityCode,
 				securityId.BoardCode,
 				nativeId.ToString()
-			});
+			]);
 		}
 	}
 
@@ -477,7 +477,7 @@ public class InMemoryNativeIdStorage : INativeIdStorage
 			throw new ArgumentNullException(nameof(storageName));
 
 		lock (_syncRoot)
-			return _nativeIds.TryGetValue(storageName)?.Select(p => (p.Key, p.Value)).ToArray() ?? Array.Empty<(SecurityId, object)>();
+			return _nativeIds.TryGetValue(storageName)?.Select(p => (p.Key, p.Value)).ToArray() ?? [];
 	}
 
 	bool INativeIdStorage.RemoveBySecurityId(string storageName, SecurityId securityId, bool isPersistable)

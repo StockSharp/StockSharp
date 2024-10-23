@@ -5,10 +5,10 @@ namespace StockSharp.Algo.Testing;
 /// </summary>
 public class HistoryMessageAdapter : MessageAdapter
 {
-	private readonly Dictionary<(SecurityId secId, DataType dataType), (MarketDataGenerator generator, long transId)> _generators = new();
-	private readonly Dictionary<(SecurityId secId, DataType dataType), Func<DateTimeOffset, IEnumerable<Message>>> _historySources = new();
+	private readonly Dictionary<(SecurityId secId, DataType dataType), (MarketDataGenerator generator, long transId)> _generators = [];
+	private readonly Dictionary<(SecurityId secId, DataType dataType), Func<DateTimeOffset, IEnumerable<Message>>> _historySources = [];
 
-	private readonly List<Tuple<IMarketDataStorage, long>> _actions = new();
+	private readonly List<Tuple<IMarketDataStorage, long>> _actions = [];
 	private readonly SyncObject _moveNextSyncRoot = new();
 	private readonly SyncObject _syncRoot = new();
 
@@ -199,7 +199,7 @@ public class HistoryMessageAdapter : MessageAdapter
 		var drive = DriveInternal;
 
 		if (drive == null)
-			return Enumerable.Empty<object>();
+			return [];
 
 		var args = _historySources
              .Where(t => t.Key.dataType.MessageType == candleType && (t.Key.secId == securityId || t.Key.secId == default))
@@ -583,7 +583,7 @@ public class HistoryMessageAdapter : MessageAdapter
 								_basketStorage.InnerStorages.Remove(subscriptionId);
 						}
 
-						boards ??= CheckTradableDates ? GetBoard() : Array.Empty<BoardMessage>();
+						boards ??= CheckTradableDates ? GetBoard() : [];
 
 						var currentTime = _currentTime == default ? startDateTime : _currentTime;
 
@@ -702,7 +702,7 @@ public class HistoryMessageAdapter : MessageAdapter
 				var period = board.WorkingTime.GetPeriod(date.ToLocalTime(board.TimeZone));
 
 				return period == null || period.Times.Count == 0
-					       ? new[] { (board, new Range<TimeSpan>(TimeSpan.Zero, TimeHelper.LessOneDay)) }
+					       ? [(board, new Range<TimeSpan>(TimeSpan.Zero, TimeHelper.LessOneDay))]
 					       : period.Times.Select(t => (board, ToUtc(board, t)));
 			})
 			.OrderBy(i => i.Item2.Min)

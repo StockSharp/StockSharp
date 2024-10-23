@@ -7,7 +7,7 @@ public class AssociatedSecurityAdapter : MessageAdapterWrapper
 {
 	private sealed class QuoteChangeDepthBuilder
 	{
-		private readonly Dictionary<SecurityId, QuoteChangeMessage> _feeds = new();
+		private readonly Dictionary<SecurityId, QuoteChangeMessage> _feeds = [];
 
 		private readonly string _securityCode;
 		private readonly string _boardCode;

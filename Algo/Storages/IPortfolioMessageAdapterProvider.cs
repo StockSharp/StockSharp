@@ -141,7 +141,7 @@ public class CsvPortfolioMessageAdapterProvider : IPortfolioMessageAdapterProvid
 		if (!_inMemory.SetAdapter(key, adapterId))
 			return false;
 
-		Save(has, has ? _inMemory.Adapters : new[] { new KeyValuePair<string, Guid>(key, adapterId) });
+		Save(has, has ? _inMemory.Adapters : [new KeyValuePair<string, Guid>(key, adapterId)]);
 		return true;
 	}
 
@@ -184,20 +184,20 @@ public class CsvPortfolioMessageAdapterProvider : IPortfolioMessageAdapterProvid
 			{
 				if (appendHeader)
 				{
-					writer.WriteRow(new[]
-					{
+					writer.WriteRow(
+					[
 						"Portfolio",
 						"Adapter"
-					});
+					]);
 				}
 
 				foreach (var pair in adapters)
 				{
-					writer.WriteRow(new[]
-					{
+					writer.WriteRow(
+					[
 						pair.Key,
 						pair.Value.To<string>()
-					});
+					]);
 				}
 			}
 		});

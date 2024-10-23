@@ -39,8 +39,8 @@ class MarketDepthCsvSerializer : CsvMarketDataSerializer<QuoteChangeMessage>
 
 				void Flush()
 				{
-					Current.Bids = bids.ToArray();
-					Current.Asks = asks.ToArray();
+					Current.Bids = [.. bids];
+					Current.Asks = [.. asks];
 					Current.HasPositions = hasPos;
 				}
 

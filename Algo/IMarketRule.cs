@@ -153,7 +153,7 @@ public abstract class MarketRule<TToken, TArg> : Disposable, IMarketRule
 	private readonly TToken _token;
 	object IMarketRule.Token => _token;
 
-	private readonly SynchronizedSet<IMarketRule> _exclusiveRules = new();
+	private readonly SynchronizedSet<IMarketRule> _exclusiveRules = [];
 
 	/// <inheritdoc />
 	public virtual ISynchronizedCollection<IMarketRule> ExclusiveRules => _exclusiveRules;

@@ -41,7 +41,7 @@ public class WeightedIndexSecurity : IndexSecurity
 	/// </summary>
 	public WeightedIndexSecurity()
 	{
-		Weights = new CachedSynchronizedDictionary<SecurityId, decimal>();
+		Weights = [];
 	}
 
 	/// <summary>

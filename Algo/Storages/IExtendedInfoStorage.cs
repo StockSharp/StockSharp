@@ -112,7 +112,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 		private Tuple<string, Type>[] _fields;
 		private readonly SyncObject _lock = new();
 		//private readonly Dictionary<string, Type> _fieldTypes = new Dictionary<string, Type>(StringComparer.InvariantCultureIgnoreCase);
-		private readonly Dictionary<SecurityId, Dictionary<string, object>> _cache = new();
+		private readonly Dictionary<SecurityId, Dictionary<string, object>> _cache = [];
 
 		public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName)
 		{
@@ -195,7 +195,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 				if (_fields == null)
 					throw new InvalidOperationException();
 
-				Write(Enumerable.Empty<Tuple<SecurityId, IDictionary<string, object>>>());
+				Write([]);
 			}
 		}
 
@@ -291,7 +291,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 			get
 			{
 				lock (_lock)
-					return _cache.Keys.ToArray();
+					return [.. _cache.Keys];
 			}
 		}
 	}

@@ -38,12 +38,11 @@ public partial class BitexbookMessageAdapter
 	protected override IEnumerable<TimeSpan> TimeFrames => AllTimeFrames;
 
 	/// <inheritdoc />
-	public override string[] AssociatedBoards { get; } = new[] { BoardCodes.Bitexbook };
+	public override string[] AssociatedBoards { get; } = [BoardCodes.Bitexbook];
 
 	private void SubscribePusherClient()
 	{
-		_pusherClient.Connected += SessionOnPusherConnected;
-		_pusherClient.Disconnected += SessionOnPusherDisconnected;
+		_pusherClient.StateChanged += SendOutConnectionState;
 		_pusherClient.Error += SessionOnPusherError;
 		_pusherClient.NewSymbols += SessionOnNewSymbols;
 		_pusherClient.TickerChanged += SessionOnTickerChanged;
@@ -56,8 +55,7 @@ public partial class BitexbookMessageAdapter
 
 	private void UnsubscribePusherClient()
 	{
-		_pusherClient.Connected -= SessionOnPusherConnected;
-		_pusherClient.Disconnected -= SessionOnPusherDisconnected;
+		_pusherClient.StateChanged -= SendOutConnectionState;
 		_pusherClient.Error -= SessionOnPusherError;
 		_pusherClient.NewSymbols -= SessionOnNewSymbols;
 		_pusherClient.TickerChanged -= SessionOnTickerChanged;
@@ -167,18 +165,8 @@ public partial class BitexbookMessageAdapter
 		}
 	}
 
-	private void SessionOnPusherConnected()
-	{
-		SendOutMessage(new ConnectMessage());
-	}
-
 	private void SessionOnPusherError(Exception exception)
 	{
 		SendOutError(exception);
-	}
-
-	private void SessionOnPusherDisconnected(bool expected)
-	{
-		SendOutDisconnectMessage(expected);
 	}
 }

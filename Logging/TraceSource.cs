@@ -53,30 +53,15 @@ public class TraceSource : BaseLogSource
 
 		private static LogLevels? ToStockSharp(TraceEventType eventType)
 		{
-			switch (eventType)
+			return eventType switch
 			{
-				case TraceEventType.Critical:
-				case TraceEventType.Error:
-					return LogLevels.Error;
-
-				case TraceEventType.Warning:
-					return LogLevels.Warning;
-
-				case TraceEventType.Information:
-					return LogLevels.Info;
-
-				case TraceEventType.Verbose:
-					return LogLevels.Debug;
-
-				case TraceEventType.Start:
-				case TraceEventType.Stop:
-				case TraceEventType.Suspend:
-				case TraceEventType.Resume:
-				case TraceEventType.Transfer:
-					return null;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(eventType), eventType, LocalizedStrings.InvalidValue);
-			}
+				TraceEventType.Critical or TraceEventType.Error => LogLevels.Error,
+				TraceEventType.Warning => LogLevels.Warning,
+				TraceEventType.Information => LogLevels.Info,
+				TraceEventType.Verbose => LogLevels.Debug,
+				TraceEventType.Start or TraceEventType.Stop or TraceEventType.Suspend or TraceEventType.Resume or TraceEventType.Transfer => null,
+				_ => throw new ArgumentOutOfRangeException(nameof(eventType), eventType, LocalizedStrings.InvalidValue),
+			};
 		}
 	}
 

@@ -38,7 +38,7 @@ public class RemoteFileCommandMessage : CommandMessage, ISecurityIdMessage, IFil
 	[DataMember]
 	public int Format { get; set; }
 
-	private byte[] _body = Array.Empty<byte>();
+	private byte[] _body = [];
 
 	/// <summary>
 	/// File body.

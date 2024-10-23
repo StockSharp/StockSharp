@@ -29,7 +29,7 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 
 		public MarketDataMessage Original { get; }
 
-		public Dictionary<SecurityId, SeriesInfo> Child { get; } = new Dictionary<SecurityId, SeriesInfo>();
+		public Dictionary<SecurityId, SeriesInfo> Child { get; } = [];
 
 		private MarketDataMessage _current;
 
@@ -59,11 +59,11 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 
 	private readonly SyncObject _syncObject = new();
 
-	private readonly Dictionary<long, SeriesInfo> _series = new();
-	private readonly Dictionary<long, long> _replaceId = new();
+	private readonly Dictionary<long, SeriesInfo> _series = [];
+	private readonly Dictionary<long, long> _replaceId = [];
 	private readonly CandleBuilderProvider _candleBuilderProvider;
-	private readonly Dictionary<long, SeriesInfo> _allChilds = new();
-	private readonly Dictionary<long, RefPair<long, SubscriptionStates>> _pendingLoopbacks = new();
+	private readonly Dictionary<long, SeriesInfo> _allChilds = [];
+	private readonly Dictionary<long, RefPair<long, SubscriptionStates>> _pendingLoopbacks = [];
 	private readonly bool _isHistory;
 
 	/// <summary>
@@ -607,7 +607,7 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 							if (newSubscriptionIds.Count == 0)
 								return;
 
-							candleMsg.SetSubscriptionIds(newSubscriptionIds.ToArray());
+							candleMsg.SetSubscriptionIds([.. newSubscriptionIds]);
 						}
 					}
 					else
@@ -634,7 +634,7 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 							if (newSubscriptionIds.Count == 0)
 								return;
 
-							candleMsg.SetSubscriptionIds(newSubscriptionIds.ToArray());
+							candleMsg.SetSubscriptionIds([.. newSubscriptionIds]);
 						}
 					}
 				}
@@ -919,7 +919,7 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 			if (newSubscriptionIds.Count == 0)
 				return true;
 
-			message.SetSubscriptionIds(newSubscriptionIds.ToArray());
+			message.SetSubscriptionIds([.. newSubscriptionIds]);
 		}
 
 		return false;

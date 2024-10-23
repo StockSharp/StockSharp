@@ -68,7 +68,7 @@ public sealed class StrategyNameGenerator
 			{ nameof(ShortName), ShortName },
 		}));
 
-		_selectors = new SynchronizedSet<string>();
+		_selectors = [];
 
 		AutoGenerateStrategyName = true;
 		Pattern = "{ShortName}{Security:_{0.Security}|}{Portfolio:_{0.Portfolio}|}";
@@ -102,7 +102,7 @@ public sealed class StrategyNameGenerator
 
 			_pattern = value;
 
-			var format = _formatter.Parser.ParseFormat(value, Array.Empty<string>());
+			var format = _formatter.Parser.ParseFormat(value, []);
 			var selectors = format
 				.Items
 				.OfType<Placeholder>()

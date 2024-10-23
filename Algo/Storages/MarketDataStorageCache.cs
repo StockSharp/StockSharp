@@ -5,7 +5,7 @@
 /// </summary>
 public class MarketDataStorageCache : Cloneable<MarketDataStorageCache>
 {
-	private readonly SynchronizedDictionary<(SecurityId, DataType, DateTime), (DateTime lastAccess, Message[] data)> _cache = new();
+	private readonly SynchronizedDictionary<(SecurityId, DataType, DateTime), (DateTime lastAccess, Message[] data)> _cache = [];
 
 	private int _limit = 1000;
 

@@ -394,19 +394,19 @@ partial class Connector
 		this.AddInfoLog("New own trade: {0}", trade);
 
 		NewMyTrade?.Invoke(trade);
-		NewMyTrades?.Invoke(new[] { trade });
+		NewMyTrades?.Invoke([trade]);
 	}
 
 	private void RaiseNewOrder(Order order)
 	{
 		NewOrder?.Invoke(order);
-		NewOrders?.Invoke(new[] { order });
+		NewOrders?.Invoke([order]);
 	}
 
 	private void RaiseOrderChanged(Order order)
 	{
 		OrderChanged?.Invoke(order);
-		OrdersChanged?.Invoke(new[] { order });
+		OrdersChanged?.Invoke([order]);
 	}
 
 	private void RaiseOrderEdited(long transactionId, Order order)
@@ -424,13 +424,13 @@ partial class Connector
 	private void RaiseOrderRegisterFailed(long transactionId, OrderFail fail)
 	{
 		RaiseOrderFailed(nameof(OrderRegisterFailed), transactionId, fail, (id, f) => OrderRegisterFailed?.Invoke(f));
-		OrdersRegisterFailed?.Invoke(new[] { fail });
+		OrdersRegisterFailed?.Invoke([fail]);
 	}
 
 	private void RaiseOrderCancelFailed(long transactionId, OrderFail fail)
 	{
 		RaiseOrderFailed(nameof(OrderCancelFailed), transactionId, fail, (id, f) => OrderCancelFailed?.Invoke(f));
-		OrdersCancelFailed?.Invoke(new[] { fail });
+		OrdersCancelFailed?.Invoke([fail]);
 	}
 
 	private void RaiseOrderEditFailed(long transactionId, OrderFail fail)
@@ -482,31 +482,31 @@ partial class Connector
 	private void RaiseSecurityChanged(Security security)
 	{
 		SecurityChanged?.Invoke(security);
-		SecuritiesChanged?.Invoke(new[] { security });
+		SecuritiesChanged?.Invoke([security]);
 	}
 
 	private void RaiseNewPortfolio(Portfolio portfolio)
 	{
 		NewPortfolio?.Invoke(portfolio);
-		NewPortfolios?.Invoke(new[] { portfolio });
+		NewPortfolios?.Invoke([portfolio]);
 	}
 
 	private void RaisePortfolioChanged(Portfolio portfolio)
 	{
 		PortfolioChanged?.Invoke(portfolio);
-		PortfoliosChanged?.Invoke(new[] { portfolio });
+		PortfoliosChanged?.Invoke([portfolio]);
 	}
 
 	private void RaiseNewPosition(Position position)
 	{
 		NewPosition?.Invoke(position);
-		NewPositions?.Invoke(new[] { position });
+		NewPositions?.Invoke([position]);
 	}
 
 	private void RaisePositionChanged(Position position)
 	{
 		PositionChanged?.Invoke(position);
-		PositionsChanged?.Invoke(new[] { position });
+		PositionsChanged?.Invoke([position]);
 	}
 
 	/// <summary>

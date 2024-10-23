@@ -233,7 +233,7 @@ public class CommandMessage : BaseRequestMessage
 	public string ObjectId { get; set; }
 
 	[field: NonSerialized]
-	private readonly Dictionary<string, string> _parameters = new();
+	private readonly Dictionary<string, string> _parameters = [];
 
 	/// <summary>
 	/// Parameters.

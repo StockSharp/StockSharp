@@ -5,7 +5,7 @@ namespace StockSharp.Algo.Candles.Compression;
 /// </summary>
 public class CandleBuilderProvider
 {
-	private readonly SynchronizedDictionary<Type, ICandleBuilder> _builders = new();
+	private readonly SynchronizedDictionary<Type, ICandleBuilder> _builders = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CandleBuilderProvider"/>.

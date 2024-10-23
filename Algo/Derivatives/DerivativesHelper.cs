@@ -14,9 +14,9 @@ public static class DerivativesHelper
 	private static readonly Regex _optionNameRegex = new(@"(?<code>\w+-[0-9]{1,2}\.[0-9]{1,2})(?<isMargin>[M_])(?<expiryDate>[0-9]{6,6})(?<optionType>[CP])(?<region>\w)\s(?<strike>\d*\.*\d*)", RegexOptions.Compiled);
 	private static readonly Regex _optionCodeRegex = new(@"(?<code>[A-Z,a-z]+)(?<strike>\d*\.*\d*)(?<optionType>[BA])(?<expiryMonth>[A-X]{1})(?<expiryYear>[0-9]{1})", RegexOptions.Compiled);
 
-	private static readonly SynchronizedPairSet<int, char> _futureMonthCodes = new();
-	private static readonly SynchronizedPairSet<int, char> _optionCallMonthCodes = new();
-	private static readonly SynchronizedPairSet<int, char> _optionPutMonthCodes = new();
+	private static readonly SynchronizedPairSet<int, char> _futureMonthCodes = [];
+	private static readonly SynchronizedPairSet<int, char> _optionCallMonthCodes = [];
+	private static readonly SynchronizedPairSet<int, char> _optionPutMonthCodes = [];
 
 	static DerivativesHelper()
 	{
@@ -61,7 +61,7 @@ public static class DerivativesHelper
 		_optionPutMonthCodes.Add(12, 'X');
 	}
 
-	private static readonly SynchronizedDictionary<Security, Security> _underlyingSecurities = new();
+	private static readonly SynchronizedDictionary<Security, Security> _underlyingSecurities = [];
 
 	/// <summary>
 	/// To get the underlying asset by the derivative.
@@ -365,7 +365,7 @@ public static class DerivativesHelper
 		var cs = underlyingAsset.GetCentralStrike(provider, allStrikes);
 
 		if (cs == null)
-			return Enumerable.Empty<Security>();
+			return [];
 
 		return allStrikes.Where(s => s.Strike != null && s.OptionType == OptionTypes.Call ? s.Strike > cs.Strike : s.Strike < cs.Strike);
 	}
@@ -399,7 +399,7 @@ public static class DerivativesHelper
 		var cs = underlyingAsset.GetCentralStrike(provider, allStrikes);
 
 		if (cs == null)
-			return Enumerable.Empty<Security>();
+			return [];
 
 		return allStrikes.Where(s => s.Strike != null && s.OptionType == OptionTypes.Call ? s.Strike < cs.Strike : s.Strike > cs.Strike);
 	}

@@ -16,7 +16,7 @@ public interface IReportGeneratorProvider
 /// </summary>
 public class ReportGeneratorProvider : IReportGeneratorProvider
 {
-	private readonly HashSet<IReportGenerator> _generators = new();
+	private readonly HashSet<IReportGenerator> _generators = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ReportGeneratorProvider"/>.

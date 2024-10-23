@@ -76,7 +76,7 @@ public class VolumeProfileIndicator : BaseIndicator
 		}
 	}
 
-	private readonly Dictionary<decimal, decimal> _levels = new();
+	private readonly Dictionary<decimal, decimal> _levels = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="VolumeProfileIndicator"/>.

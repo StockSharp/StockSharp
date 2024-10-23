@@ -56,7 +56,7 @@ public static class ChartingInterfacesExtensions
 		if (chart == null)
 			throw new ArgumentNullException(nameof(chart));
 
-		chart.Draw(new[] { RefTuple.Create(time, values) });
+		chart.Draw([RefTuple.Create(time, values)]);
 	}
 
 	/// <summary>

@@ -48,7 +48,7 @@ public sealed class QuoteChangeMessage : BaseSubscriptionIdMessage<QuoteChangeMe
 		GroupName = LocalizedStrings.GeneralKey)]
 	public SecurityId SecurityId { get; set; }
 
-	private QuoteChange[] _bids = Array.Empty<QuoteChange>();
+	private QuoteChange[] _bids = [];
 
 	/// <inheritdoc />
 	[DataMember]
@@ -63,7 +63,7 @@ public sealed class QuoteChangeMessage : BaseSubscriptionIdMessage<QuoteChangeMe
 		set => _bids = value ?? throw new ArgumentNullException(nameof(value));
 	}
 
-	private QuoteChange[] _asks = Array.Empty<QuoteChange>();
+	private QuoteChange[] _asks = [];
 
 	/// <inheritdoc />
 	[DataMember]
@@ -138,8 +138,8 @@ public sealed class QuoteChangeMessage : BaseSubscriptionIdMessage<QuoteChangeMe
 		base.CopyTo(destination);
 
 		destination.SecurityId = SecurityId;
-		destination.Bids = Bids.ToArray();
-		destination.Asks = Asks.ToArray();
+		destination.Bids = [.. Bids];
+		destination.Asks = [.. Asks];
 		destination.ServerTime = ServerTime;
 		destination.Currency = Currency;
 		destination.BuildFrom = BuildFrom;

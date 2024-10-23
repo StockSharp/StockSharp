@@ -5,8 +5,8 @@ namespace StockSharp.Algo.Slippage;
 /// </summary>
 public class SlippageManager : ISlippageManager
 {
-	private readonly SynchronizedDictionary<SecurityId, RefPair<decimal, decimal>> _bestPrices = new();
-	private readonly SynchronizedDictionary<long, Tuple<Sides, decimal>> _plannedPrices = new();
+	private readonly SynchronizedDictionary<SecurityId, RefPair<decimal, decimal>> _bestPrices = [];
+	private readonly SynchronizedDictionary<long, Tuple<Sides, decimal>> _plannedPrices = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="SlippageManager"/>.

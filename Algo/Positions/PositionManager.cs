@@ -34,8 +34,8 @@ public class PositionManager : BaseLogReceiver, IPositionManager
 		public override string ToString() => Value.ToString();
 	}
 
-	private readonly Dictionary<long, OrderInfo> _ordersInfo = new();
-	private readonly Dictionary<Tuple<SecurityId, string>, PositionInfo> _positions = new();
+	private readonly Dictionary<long, OrderInfo> _ordersInfo = [];
+	private readonly Dictionary<Tuple<SecurityId, string>, PositionInfo> _positions = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="PositionManager"/>.

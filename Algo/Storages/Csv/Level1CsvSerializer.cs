@@ -24,7 +24,7 @@ public class Level1CsvSerializer : CsvMarketDataSerializer<Level1ChangeMessage>
 	{
 		var row = new List<string>();
 
-		row.AddRange(new[] { data.ServerTime.WriteTimeMls(), data.ServerTime.ToString("zzz") });
+		row.AddRange([data.ServerTime.WriteTimeMls(), data.ServerTime.ToString("zzz")]);
 
 		row.AddRange(data.BuildFrom.ToCsv());
 
@@ -41,7 +41,7 @@ public class Level1CsvSerializer : CsvMarketDataSerializer<Level1ChangeMessage>
 			if (pair.Value == typeof(DateTimeOffset))
 			{
 				var date = (DateTimeOffset?)data.TryGet(field);
-				row.AddRange(new[] { date?.WriteDate(), date?.WriteTimeMls(), date?.ToString("zzz") });
+				row.AddRange([date?.WriteDate(), date?.WriteTimeMls(), date?.ToString("zzz")]);
 			}
 			else
 			{

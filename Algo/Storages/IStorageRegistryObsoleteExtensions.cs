@@ -210,7 +210,7 @@ public static class IStorageRegistryObsoleteExtensions
 		return registry.CheckOnNull(nameof(registry)).GetCandleMessageStorage(candleType.ToCandleMessageType(), security.ToSecurityId(), arg, drive, format).ToEntityStorage<CandleMessage, Candle>(security, registry.ExchangeInfoProvider);
 	}
 
-	private static readonly SynchronizedDictionary<IMarketDataStorage, IMarketDataStorage> _convertedStorages = new();
+	private static readonly SynchronizedDictionary<IMarketDataStorage, IMarketDataStorage> _convertedStorages = [];
 
 	[Obsolete]
 	private static IEntityMarketDataStorage<TEntity, TMessage> ToEntityStorage<TMessage, TEntity>(this IMarketDataStorage<TMessage> storage, Security security, IExchangeInfoProvider exchangeInfoProvider = null)

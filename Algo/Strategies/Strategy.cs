@@ -109,7 +109,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 	private sealed class ChildStrategyList : SynchronizedSet<Strategy>, IStrategyChildStrategyList
 	{
-		private readonly Dictionary<Strategy, IMarketRule> _childStrategyRules = new();
+		private readonly Dictionary<Strategy, IMarketRule> _childStrategyRules = [];
 		private readonly Strategy _parent;
 
 		public ChildStrategyList(Strategy parent)
@@ -263,7 +263,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	private class IndicatorList : SynchronizedSet<IIndicator>
 	{
 		private readonly Strategy _strategy;
-		private readonly CachedSynchronizedSet<IIndicator> _nonFormedIndicators = new();
+		private readonly CachedSynchronizedSet<IIndicator> _nonFormedIndicators = [];
 
 		public IndicatorList(Strategy strategy)
 		{
@@ -343,11 +343,11 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		}
 	}
 
-	private readonly CachedSynchronizedDictionary<Order, OrderInfo> _ordersInfo = new();
+	private readonly CachedSynchronizedDictionary<Order, OrderInfo> _ordersInfo = [];
 
-	private readonly CachedSynchronizedDictionary<Subscription, bool> _subscriptions = new();
-	private readonly SynchronizedDictionary<long, Subscription> _subscriptionsById = new();
-	private readonly CachedSynchronizedSet<Subscription> _suspendSubscriptions = new();
+	private readonly CachedSynchronizedDictionary<Subscription, bool> _subscriptions = [];
+	private readonly SynchronizedDictionary<long, Subscription> _subscriptionsById = [];
+	private readonly CachedSynchronizedSet<Subscription> _suspendSubscriptions = [];
 	private Subscription _pfSubscription;
 	private Subscription _orderSubscription;
 
@@ -394,8 +394,8 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		_isOnlineStateIncludesChildren = this.Param(nameof(IsOnlineStateIncludesChildren), true).CanOptimize(false);
 		_historySize = this.Param<TimeSpan?>(nameof(HistorySize)).SetValidator(v => v is null || v >= TimeSpan.Zero);
 
-		_systemParams = new IStrategyParam[]
-		{
+		_systemParams =
+		[
 			_id,
 			_disposeOnStop,
 			_waitRulesOnStop,
@@ -409,7 +409,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			_workingTime,
 			_isOnlineStateIncludesChildren,
 			_historySize,
-		};
+		];
 
 		_ordersKeepTime.CanOptimize = _historySize.CanOptimize = false;
 
@@ -826,7 +826,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// Strategy environment parameters.
 	/// </summary>
 	[Browsable(false)]
-	public SettingsStorage Environment { get; } = new();
+	public SettingsStorage Environment { get; } = [];
 
 	/// <summary>
 	/// The maximal number of errors, which strategy shall receive prior to stop operation.
@@ -1167,7 +1167,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		set => _unsubscribeOnStop.Value = value;
 	}
 
-	private readonly CachedSynchronizedSet<MyTrade> _myTrades = new();
+	private readonly CachedSynchronizedSet<MyTrade> _myTrades = [];
 
 	/// <summary>
 	/// Trades, matched during the strategy operation.
@@ -1180,7 +1180,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// </summary>
 	[Browsable(false)]
 	[Obsolete("Subscribe on OrderRegisterFailed event.")]
-	public IEnumerable<OrderFail> OrderFails => Enumerable.Empty<OrderFail>();
+	public IEnumerable<OrderFail> OrderFails => [];
 
 	private readonly StrategyParam<decimal> _volume;
 
@@ -1340,7 +1340,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	private IMarketRule[] GetRules()
 	{
 		lock (Rules.SyncRoot)
-			return Rules.ToArray();
+			return [.. Rules];
 	}
 
 	//private readonly object _rulesSuspendLock = new object();
@@ -3199,7 +3199,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// All possible <see cref="IOrderBookMessage"/> sources that can be received via <see cref="OrderBookDrawing"/>.
 	/// </summary>
 	public virtual IEnumerable<IOrderBookSource> OrderBookSources
-		=> Enumerable.Empty<IOrderBookSource>();
+		=> [];
 
 	/// <summary>
 	/// <see cref="DrawOrderBook"/>.

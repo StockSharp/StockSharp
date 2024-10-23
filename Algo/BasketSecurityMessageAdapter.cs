@@ -9,7 +9,7 @@ public class BasketSecurityMessageAdapter : MessageAdapterWrapper
 	{
 		public IBasketSecurityProcessor Processor { get; }
 		public long TransactionId { get; }
-		public CachedSynchronizedDictionary<long, SubscriptionStates> LegsSubscriptions { get; } = new CachedSynchronizedDictionary<long, SubscriptionStates>();
+		public CachedSynchronizedDictionary<long, SubscriptionStates> LegsSubscriptions { get; } = [];
 
 		public SubscriptionInfo(IBasketSecurityProcessor processor, long transactionId)
 		{
@@ -20,8 +20,8 @@ public class BasketSecurityMessageAdapter : MessageAdapterWrapper
 		public SubscriptionStates State { get; set; } = SubscriptionStates.Stopped;
 	}
 
-	private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionsByChildId = new();
-	private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionsByParentId = new();
+	private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionsByChildId = [];
+	private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionsByParentId = [];
 
 	private readonly ISecurityProvider _securityProvider;
 	private readonly IBasketSecurityProcessorProvider _processorProvider;

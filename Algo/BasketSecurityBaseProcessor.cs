@@ -7,7 +7,7 @@ namespace StockSharp.Algo;
 public abstract class BasketSecurityBaseProcessor<TBasketSecurity> : IBasketSecurityProcessor
 	where TBasketSecurity : BasketSecurity, new()
 {
-	private readonly CachedSynchronizedSet<SecurityId> _basketLegs = new();
+	private readonly CachedSynchronizedSet<SecurityId> _basketLegs = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BasketSecurityBaseProcessor{TBasketSecurity}"/>.
@@ -272,12 +272,12 @@ public class ContinuousSecurityVolumeProcessor : ContinuousSecurityBaseProcessor
 public abstract class IndexSecurityBaseProcessor<TBasketSecurity> : BasketSecurityBaseProcessor<TBasketSecurity>
 	where TBasketSecurity : IndexSecurity, new()
 {
-	private readonly SynchronizedDictionary<MessageTypes, object> _messages = new();
+	private readonly SynchronizedDictionary<MessageTypes, object> _messages = [];
 
-	private readonly Dictionary<SecurityId, ExecutionMessage> _ticks = new();
-	private readonly Dictionary<SecurityId, ExecutionMessage> _ol = new();
+	private readonly Dictionary<SecurityId, ExecutionMessage> _ticks = [];
+	private readonly Dictionary<SecurityId, ExecutionMessage> _ol = [];
 
-	private readonly SortedDictionary<DateTimeOffset, Dictionary<SecurityId, CandleMessage>> _candles = new();
+	private readonly SortedDictionary<DateTimeOffset, Dictionary<SecurityId, CandleMessage>> _candles = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="IndexSecurityBaseProcessor{TBasketSecurity}"/>.
@@ -393,7 +393,7 @@ public abstract class IndexSecurityBaseProcessor<TBasketSecurity> : BasketSecuri
 
 						var indexCandle = new TimeFrameCandleMessage();
 
-						FillIndexCandle(indexCandle, candleMsg, d.Values.ToArray());
+						FillIndexCandle(indexCandle, candleMsg, [.. d.Values]);
 
 						yield return indexCandle;
 					}

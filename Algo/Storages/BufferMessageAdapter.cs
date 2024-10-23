@@ -5,10 +5,10 @@ namespace StockSharp.Algo.Storages;
 /// </summary>
 public class BufferMessageAdapter : MessageAdapterWrapper
 {
-	private readonly SynchronizedSet<long> _orderStatusIds = new();
-	private readonly SynchronizedDictionary<long, long> _cancellationTransactions = new();
-	private readonly SynchronizedDictionary<long, long> _replaceTransactions = new();
-	private readonly SynchronizedDictionary<long, long> _replaceTransactionsByTransId = new();
+	private readonly SynchronizedSet<long> _orderStatusIds = [];
+	private readonly SynchronizedDictionary<long, long> _cancellationTransactions = [];
+	private readonly SynchronizedDictionary<long, long> _replaceTransactions = [];
+	private readonly SynchronizedDictionary<long, long> _replaceTransactionsByTransId = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BufferMessageAdapter"/>.

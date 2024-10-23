@@ -129,7 +129,7 @@ public class UserInfoMessage : BaseSubscriptionIdMessage<UserInfoMessage>, ITran
 	[DataMember]
 	public DateTimeOffset? CreationDate { get; set; }
 
-	private IEnumerable<IPAddress> _ipRestrictions = Enumerable.Empty<IPAddress>();
+	private IEnumerable<IPAddress> _ipRestrictions = [];
 
 	/// <summary>
 	/// IP address restrictions.
@@ -167,7 +167,7 @@ public class UserInfoMessage : BaseSubscriptionIdMessage<UserInfoMessage>, ITran
 	[DataMember]
 	public long UploadLimit { get; set; }
 
-	private string[] _features = Array.Empty<string>();
+	private string[] _features = [];
 
 	/// <summary>
 	/// Available features.
@@ -225,7 +225,7 @@ public class UserInfoMessage : BaseSubscriptionIdMessage<UserInfoMessage>, ITran
 		destination.UploadLimit = UploadLimit;
 
 		if (Features.Length > 0)
-			destination.Features = Features.ToArray();
+			destination.Features = [.. Features];
 
 		if (Permissions?.Count > 0)
 			destination.Permissions.AddRange(Permissions.ToDictionary());

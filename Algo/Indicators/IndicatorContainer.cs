@@ -16,7 +16,7 @@ public class IndicatorContainer : IIndicatorContainer
 
 	/// <inheritdoc />
 	public virtual IEnumerable<(IIndicatorValue, IIndicatorValue)> GetValues()
-		=> _values.ToArray();
+		=> [.. _values];
 
 	/// <inheritdoc />
 	public virtual (IIndicatorValue, IIndicatorValue) GetValue(int index)

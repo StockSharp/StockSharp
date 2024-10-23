@@ -5,7 +5,7 @@
 /// </summary>
 public static class StatisticParameterRegistry
 {
-	private static readonly Dictionary<StatisticParameterTypes, IStatisticParameter> _dict = new();
+	private static readonly Dictionary<StatisticParameterTypes, IStatisticParameter> _dict = [];
 
 	static StatisticParameterRegistry()
     {
@@ -13,8 +13,8 @@ public static class StatisticParameterRegistry
 		var maxDd = new MaxDrawdownParameter();
 		var netPf = new NetProfitParameter();
 
-		All = new IStatisticParameter[]
-		{
+		All =
+		[
 			maxPf,
 			new MaxProfitDateParameter(maxPf),
 			maxDd,
@@ -47,7 +47,7 @@ public static class StatisticParameterRegistry
 			new OrderCountParameter(),
 			new OrderErrorCountParameter(),
 			new OrderInsufficientFundErrorCountParameter(),
-		};
+		];
 
 		foreach (var p in All)
 			_dict.Add(p.Type, p);

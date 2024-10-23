@@ -123,7 +123,7 @@ public partial class Strategy
 			internal virtual IEnumerable<IIndicatorValue> Invoke(T typed, DateTimeOffset time)
 			{
 				_callback(typed);
-				return Enumerable.Empty<IIndicatorValue>();
+				return [];
 			}
 		}
 
@@ -160,7 +160,7 @@ public partial class Strategy
 
 				_callback(typed, v1);
 
-				return new[] { v1 };
+				return [v1];
 			}
 		}
 
@@ -198,7 +198,7 @@ public partial class Strategy
 
 				_callback(typed, v1, v2);
 
-				return new[] { v1, v2 };
+				return [v1, v2];
 			}
 		}
 
@@ -237,12 +237,12 @@ public partial class Strategy
 
 				_callback(typed, v1, v2, v3);
 
-				return new[] { v1, v2, v3 };
+				return [v1, v2, v3];
 			}
 		}
 
 		private readonly Strategy _strategy;
-		private readonly CachedSynchronizedList<SubscriptionHandlerBinder0> _binders = new();
+		private readonly CachedSynchronizedList<SubscriptionHandlerBinder0> _binders = [];
 
 		internal SubscriptionHandler(Strategy strategy, Subscription subscription)
         {
@@ -595,10 +595,10 @@ public partial class Strategy
 	private IChart _chart;
 	private SynchronizedList<Order> _drawingOrders;
 	private SynchronizedList<MyTrade> _drawingTrades;
-	private readonly CachedSynchronizedList<IChartOrderElement> _ordersElems = new();
-	private readonly CachedSynchronizedList<IChartTradeElement> _tradesElems = new();
-	private readonly SynchronizedDictionary<Subscription, IChartElement> _subscriptionElems = new();
-	private readonly SynchronizedDictionary<IIndicator, IChartIndicatorElement> _indElems = new();
+	private readonly CachedSynchronizedList<IChartOrderElement> _ordersElems = [];
+	private readonly CachedSynchronizedList<IChartTradeElement> _tradesElems = [];
+	private readonly SynchronizedDictionary<Subscription, IChartElement> _subscriptionElems = [];
+	private readonly SynchronizedDictionary<IIndicator, IChartIndicatorElement> _indElems = [];
 
 	/// <summary>
 	/// Create chart area.
@@ -663,7 +663,7 @@ public partial class Strategy
 	protected IChartTradeElement DrawOwnTrades(IChartArea area)
 	{
 		var elem = area.AddTrades();
-		_drawingTrades = new();
+		_drawingTrades = [];
 		_tradesElems.Add(elem);
 		return elem;
 	}
@@ -676,7 +676,7 @@ public partial class Strategy
 	protected IChartOrderElement DrawOrders(IChartArea area)
 	{
 		var elem = area.AddOrders();
-		_drawingOrders = new();
+		_drawingOrders = [];
 		_ordersElems.Add(elem);
 		return elem;
 	}

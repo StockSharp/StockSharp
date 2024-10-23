@@ -120,7 +120,7 @@ public class LocalProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 		
 		private decimal _totalVolume;
 		private decimal _weightedPriceSum;
-		private readonly LinkedList<(decimal price, decimal vol)> _trades = new();
+		private readonly LinkedList<(decimal price, decimal vol)> _trades = [];
 
 		public LocalProtectiveBehaviour(
 			decimal? priceStep, int? decimals,

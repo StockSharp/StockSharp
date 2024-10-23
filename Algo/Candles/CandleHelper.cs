@@ -143,7 +143,7 @@ public static class CandleHelper
 		var firstTrade = trades.FirstOrDefault();
 
 		if (firstTrade == null)
-			return Enumerable.Empty<TCandle>();
+			return [];
 
 		return trades.ToCandles(new CandleSeries(typeof(TCandle), firstTrade.Security, arg) { IsFinishedOnly = onlyFormed }).Cast<TCandle>();
 	}
@@ -809,7 +809,7 @@ public static class CandleHelper
 	public static VolumeProfileBuilder GetValueArea<TCandle>(this IEnumerable<TCandle> candles)
 		where TCandle : ICandleMessage
 	{
-		var area = new VolumeProfileBuilder(new List<CandlePriceLevel>());
+		var area = new VolumeProfileBuilder([]);
 
 		foreach (var candle in candles)
 		{

@@ -23,7 +23,7 @@ partial class Connector
 				type == DataType.Board ||
 				type == DataType.TimeFrames)
 			{
-				LookupItems = new();
+				LookupItems = [];
 			}
 		}
 
@@ -89,11 +89,11 @@ partial class Connector
 	{
 		private readonly SyncObject _syncObject = new();
 
-		private readonly Dictionary<long, SubscriptionInfo> _subscriptions = new();
-		private readonly Dictionary<long, (ISubscriptionMessage request, Subscription subscription)> _requests = new();
-		private readonly List<SubscriptionInfo> _keeped = new();
-		private readonly HashSet<long> _notFound = new();
-		private readonly Dictionary<long, long> _subscriptionAllMap = new();
+		private readonly Dictionary<long, SubscriptionInfo> _subscriptions = [];
+		private readonly Dictionary<long, (ISubscriptionMessage request, Subscription subscription)> _requests = [];
+		private readonly List<SubscriptionInfo> _keeped = [];
+		private readonly HashSet<long> _notFound = [];
+		private readonly Dictionary<long, long> _subscriptionAllMap = [];
 
 		private readonly Connector _connector;
 		private bool _wasConnected;
@@ -545,14 +545,14 @@ partial class Connector
 
 				if (info == null)
 				{
-					items = Array.Empty<object>();
+					items = [];
 					return null;
 				}
 
 				if (info.Parent == null)
-					items = info.LookupItems?.CopyAndClear() ?? Array.Empty<object>();
+					items = info.LookupItems?.CopyAndClear() ?? [];
 				else
-					items = Array.Empty<object>();
+					items = [];
 
 				ChangeState(info, SubscriptionStates.Finished);
 				_requests.Remove(message.OriginalTransactionId);
@@ -572,14 +572,14 @@ partial class Connector
 
 				if (info == null)
 				{
-					items = Array.Empty<object>();
+					items = [];
 					return null;
 				}
 
 				if (info.Parent == null)
-					items = info.LookupItems?.CopyAndClear() ?? Array.Empty<object>();
+					items = info.LookupItems?.CopyAndClear() ?? [];
 				else
-					items = Array.Empty<object>();
+					items = [];
 
 				ChangeState(info, SubscriptionStates.Online);
 

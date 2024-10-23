@@ -44,7 +44,7 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 	{
 		private readonly BasketMarketDataStorage<TMessage> _storage;
 		private readonly DateTime _date;
-		private readonly SynchronizedQueue<(ActionTypes action, IMarketDataStorage storage, long transId)> _actions = new();
+		private readonly SynchronizedQueue<(ActionTypes action, IMarketDataStorage storage, long transId)> _actions = [];
 		private readonly Ecng.Collections.PriorityQueue<long, (IEnumerator<Message> enu, IMarketDataStorage storage, long transId)> _enumerators = new((p1, p2) => (p1 - p2).Abs());
 
 		public BasketMarketDataStorageEnumerator(BasketMarketDataStorage<TMessage> storage, DateTime date)
@@ -237,7 +237,7 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 				dataTypes.Add(s.DataType.ToMessageType2());
 			}
 
-			DataTypes = dataTypes.ToArray();
+			DataTypes = [.. dataTypes];
 		}
 
 		public IEnumerable<MessageTypes> DataTypes { get; }
@@ -252,7 +252,7 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 	
 	private class BasketMarketDataStorageInnerList : CachedSynchronizedList<IMarketDataStorage>, IBasketMarketDataStorageInnerList
 	{
-		private readonly PairSet<IMarketDataStorage, long> _transactionIds = new();
+		private readonly PairSet<IMarketDataStorage, long> _transactionIds = [];
 
 		public long TryGetTransactionId(IMarketDataStorage storage) => _transactionIds.TryGetValue(storage);
 
@@ -313,7 +313,7 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 	}
 
 	private readonly BasketMarketDataStorageInnerList _innerStorages = new();
-	private readonly CachedSynchronizedList<BasketMarketDataStorageEnumerator> _enumerators = new();
+	private readonly CachedSynchronizedList<BasketMarketDataStorageEnumerator> _enumerators = [];
 
 	/// <summary>
 	/// Embedded storages of market data.

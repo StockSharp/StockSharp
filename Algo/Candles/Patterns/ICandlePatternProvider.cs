@@ -60,7 +60,7 @@ public interface ICandlePatternProvider
 /// </summary>
 public class InMemoryCandlePatternProvider : ICandlePatternProvider
 {
-	private readonly CachedSynchronizedDictionary<string, ICandlePattern> _cache = new();
+	private readonly CachedSynchronizedDictionary<string, ICandlePattern> _cache = [];
 	private readonly ICandlePattern[] _appendOnInit;
 
 	/// <summary>

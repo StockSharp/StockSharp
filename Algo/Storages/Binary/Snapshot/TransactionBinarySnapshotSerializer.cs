@@ -214,7 +214,7 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 			ConditionType = (message.Condition?.GetType().GetTypeName(false)).VerifySize(Sizes.S256),
 		};
 
-		var conParams = message.Condition?.Parameters.Where(p => p.Value != null).ToArray() ?? Array.Empty<KeyValuePair<string, object>>();
+		var conParams = message.Condition?.Parameters.Where(p => p.Value != null).ToArray() ?? [];
 
 		snapshot.ConditionParamsCount = conParams.Length;
 
@@ -345,7 +345,7 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 			result.AddRange(stringValue);
 		}
 
-		return result.ToArray();
+		return [.. result];
 	}
 
 	ExecutionMessage ISnapshotSerializer<string, ExecutionMessage>.Deserialize(Version version, byte[] buffer)

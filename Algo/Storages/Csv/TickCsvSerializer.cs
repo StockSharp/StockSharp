@@ -37,12 +37,12 @@ public class TickCsvSerializer : CsvMarketDataSerializer<ExecutionMessage>
 			data.IsUpTick.To<int?>().ToString(),
 			data.TradeStringId,
 			data.Currency.To<int?>().ToString(),
-		}.Concat(data.BuildFrom.ToCsv()).Concat(new[]
-		{
+		}.Concat(data.BuildFrom.ToCsv()).Concat(
+		[
 			data.SeqNum.DefaultAsNull().ToString(),
 			data.OrderBuyId.ToString(),
 			data.OrderSellId.ToString(),
-		}));
+		]));
 
 		metaInfo.LastTime = data.ServerTime.UtcDateTime;
 		metaInfo.LastId = data.TradeId;

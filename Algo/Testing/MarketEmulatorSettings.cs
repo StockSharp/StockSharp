@@ -444,7 +444,7 @@ public class MarketEmulatorSettings : NotifiableObject, IPersistable
 		}
 	}
 
-	private IEnumerable<ICommissionRule> _commissionRules = Enumerable.Empty<ICommissionRule>();
+	private IEnumerable<ICommissionRule> _commissionRules = [];
 
 	/// <summary>
 	/// Commission rules.
