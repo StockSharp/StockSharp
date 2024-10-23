@@ -417,6 +417,8 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 							{
 								sendOutMsgs = [resultMsg];
 							}
+
+							info.OnlineSubscribers.Add(transId);
 						}
 					}
 
