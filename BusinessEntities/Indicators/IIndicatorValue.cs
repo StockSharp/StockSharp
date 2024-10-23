@@ -291,7 +291,7 @@ public class CandleIndicatorValue : SingleIndicatorValue<ICandleMessage>
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	private CandleIndicatorValue(IIndicator indicator, DateTimeOffset time)
+	public CandleIndicatorValue(IIndicator indicator, DateTimeOffset time)
 		: base(indicator, time)
 	{
 	}
@@ -346,6 +346,16 @@ public class MarketDepthIndicatorValue : SingleIndicatorValue<IOrderBookMessage>
 	/// <param name="depth">Market depth.</param>
 	public MarketDepthIndicatorValue(IIndicator indicator, IOrderBookMessage depth)
 		: base(indicator, depth, depth.CheckOnNull(nameof(depth)).ServerTime)
+	{
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="MarketDepthIndicatorValue"/>.
+	/// </summary>
+	/// <param name="indicator">Indicator.</param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public MarketDepthIndicatorValue(IIndicator indicator, DateTimeOffset time)
+		: base(indicator, time)
 	{
 	}
 
@@ -406,6 +416,16 @@ public class Level1IndicatorValue : SingleIndicatorValue<Level1ChangeMessage>
 	{
 	}
 
+	/// <summary>
+	/// Initializes a new instance of the <see cref="Level1IndicatorValue"/>.
+	/// </summary>
+	/// <param name="indicator">Indicator.</param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public Level1IndicatorValue(IIndicator indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
 	/// <inheritdoc />
 	public override bool IsSupport(Type valueType)
 	{
@@ -456,6 +476,16 @@ public class TickIndicatorValue : SingleIndicatorValue<ITickTradeMessage>
 	/// <param name="tick"><see cref="ITickTradeMessage"/></param>
 	public TickIndicatorValue(IIndicator indicator, ITickTradeMessage tick)
 		: base(indicator, tick, tick.CheckOnNull(nameof(tick)).ServerTime)
+	{
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="TickIndicatorValue"/>.
+	/// </summary>
+	/// <param name="indicator">Indicator.</param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public TickIndicatorValue(IIndicator indicator, DateTimeOffset time)
+		: base(indicator, time)
 	{
 	}
 
