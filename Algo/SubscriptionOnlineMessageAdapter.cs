@@ -14,13 +14,13 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 		public SubscriptionInfo(ISubscriptionMessage subscription)
 		{
 			Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
+			IsMarketData = subscription.DataType.IsMarketData;
 		}
 
 		public SubscriptionInfo(SubscriptionInfo main)
+			: this(main.CheckOnNull(nameof(main)).Subscription)
 		{
-			_main = main ?? throw new ArgumentNullException(nameof(main));
-
-			Subscription = main.Subscription;
+			_main = main;
 			Subscribers = main.Subscribers;
 		}
 
@@ -46,6 +46,7 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 		public readonly CachedSynchronizedDictionary<long, ISubscriptionMessage> Subscribers = [];
 		public readonly CachedSynchronizedSet<long> OnlineSubscribers = [];
 		public readonly SynchronizedSet<long> HistLive = [];
+		public readonly bool IsMarketData;
 
 		private readonly List<long> _linked = [];
 
@@ -274,7 +275,7 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 								break;
 						}
 
-						var ids = info.OnlineSubscribers.Cache;
+						var ids = info.IsMarketData ? info.OnlineSubscribers.Cache : info.Subscribers.CachedKeys;
 
 						if (info.ExtraFilters.Count > 0)
 						{
