@@ -132,6 +132,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_CrossPlatform.ConsoleApp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DarkHorse", "Connectors\DarkHorse\DarkHorse.csproj", "{B046C64D-3495-4B67-9DA9-2642A8E8B442}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SciTrader", "Connectors\SciTrader\SciTrader.csproj", "{39467F12-68D3-45FC-A2F1-02A61482C4EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -350,6 +352,10 @@ Global
 		{B046C64D-3495-4B67-9DA9-2642A8E8B442}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B046C64D-3495-4B67-9DA9-2642A8E8B442}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B046C64D-3495-4B67-9DA9-2642A8E8B442}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39467F12-68D3-45FC-A2F1-02A61482C4EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39467F12-68D3-45FC-A2F1-02A61482C4EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39467F12-68D3-45FC-A2F1-02A61482C4EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39467F12-68D3-45FC-A2F1-02A61482C4EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -407,6 +413,7 @@ Global
 		{FD782CA5-503A-40DF-838A-FA66FDC1FBB0} = {AB18D439-A71C-4734-BA3F-C18820D1E1F8}
 		{BA8ACDEB-5A53-40F6-A462-03477517F20C} = {F61BC84B-4D73-4F77-975A-DB92638363EA}
 		{B046C64D-3495-4B67-9DA9-2642A8E8B442} = {7F7B05F0-13D7-4087-92FE-0E765581D850}
+		{39467F12-68D3-45FC-A2F1-02A61482C4EE} = {7F7B05F0-13D7-4087-92FE-0E765581D850}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {05C6C3D9-0063-47AB-BC11-315B396BEBD0}

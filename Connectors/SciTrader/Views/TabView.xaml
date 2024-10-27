@@ -1,0 +1,283 @@
+﻿<UserControl x:Class="SciTrader.Views.TabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:views="clr-namespace:SciTrader.Views"
+             xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
+             xmlns:dxt="http://schemas.devexpress.com/winfx/2008/xaml/core/themekeys"
+             xmlns:dxdot="http://schemas.devexpress.com/winfx/2008/xaml/docking/themekeys"
+             xmlns:dxdove="http://schemas.devexpress.com/winfx/2008/xaml/docking/visualelements"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+             xmlns:utils="clr-namespace:SciTrader"
+             xmlns:local="clr-namespace:SciTrader.ViewModels"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+             xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts"
+             xmlns:dxcl="clr-namespace:DevExpress.Xpf.Charts.Localization;assembly=DevExpress.Xpf.Charts.v22.1"
+             xmlns:dxcn="clr-namespace:DevExpress.Xpf.Charts.Native;assembly=DevExpress.Xpf.Charts.v22.1"
+             mc:Ignorable="d"
+             dxmvvm:ViewModelExtensions.DocumentTitle="{x:Null}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <local:CreateMultiPaneStockChartsViewModel x:Key="ViewModel" />
+            <Thickness x:Key="{dxt:ThemedWindowThemeKey ResourceKey=HeaderNormalPadding, IsThemeIndependent=True}">2,0,15,0</Thickness>
+            <Style TargetType="dxdove:DocumentPaneItem">
+                <Setter Property="Margin" Value="0,0,0,0"/>
+                <Setter Property="Height" Value="29"/>
+            </Style>
+            <Style TargetType="dxdove:TemplatedTabCaptionControl">
+                <Setter Property="dxmvvm:Interaction.BehaviorsTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <ContentControl>
+                                <utils:TabHeaderMarginBehavior/>
+                            </ContentControl>
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="AddIndicatorSubitemStyle" TargetType="dxb:BarSubItem">
+                <Setter Property="Tag" Value="{Binding Path=(dxc:ChartControlBase.Chart), RelativeSource={RelativeSource Self}}"/>
+                <Setter Property="Content" Value="{dxcl:ChartLocalizer StringId=ToolbarAddIndicatorItemCaption}" />
+                <Setter Property="Glyph" Value="{dx:SvgImageSource Uri={dxcn:UtilsResource Images/Commands/AddIndicator.svg}}"/>
+                <Setter Property="Hint" Value="{dxcl:ChartLocalizer StringId=ToolbarAddIndicatorItemDescription}" />
+                <Setter Property="ItemLinksSource" Value="{DXBinding Expr='@s.Tag.Commands.AvailableSeriesIndicators'}"/>
+                <Setter Property="ItemTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <ContentControl>
+                                <dxb:BarButtonItem Content="{Binding Name}" Command="{DXBinding '@a($views:TabView).DataContext.AddIndicatorCommand'}" CommandParameter="{Binding Type}"/>
+                            </ContentControl>
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="RibbonStyle" Value="Large"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <dxdo:DockLayoutManager ViewStyle="Light"
+                                BorderThickness="0,0,0,1"
+                                FloatingMode="Window"
+                                FloatingDocumentContainer="DocumentHost"
+                                DockItemActivated="DockLayoutManager_DockItemActivated"
+                                Grid.Row="1">
+            <dxdo:LayoutGroup Orientation="Horizontal">
+                <dxdo:LayoutGroup ItemWidth="5*" Orientation="Vertical">
+                    <dxdo:DocumentGroup ItemHeight="3*"
+                                        ShowDropDownButton="False"
+                                        ShowControlBox="False"
+                                        FontWeight="Bold"
+                                        xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+                                        xmlns:dxct="http://schemas.devexpress.com/winfx/2008/xaml/charts/themekeys"
+                                        xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts">
+                        <dxdo:DocumentGroup.Resources>
+                            <ResourceDictionary>
+                                <ControlTemplate x:Key="{dxdot:DocumentPaneElementsThemeKey ResourceKey=TabContainerTemplate, IsThemeIndependent=True}" TargetType="dxdove:DocumentTabContainer">
+                                    <ControlTemplate.Resources>
+                                        <dxdove:GroupCaptionLocationToDockConverter x:Key="groupCaptionLocationToDockConverter"/>
+                                        <dxdove:TabHeaderCaptionLocationToDockConverter x:Key="tabHeaderCaptionLocationToDockConverter"/>
+                                    </ControlTemplate.Resources>
+                                    <dxdove:DockingSplitLayoutPanel SnapsToDevicePixels="True" dxdove:DockPane.HitTestType="Bounds" DataContext="{Binding LayoutItem}"
+                                    Content1Location="{Binding CaptionLocation, Converter={StaticResource groupCaptionLocationToDockConverter}}"
+                                    Margin="{TemplateBinding ActualBorderMargin}"
+                                    x:Name="Root">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="ActiveStates">
+                                                <VisualState x:Name="ActiveEmptyState" />
+                                                <VisualState x:Name="Active" />
+                                                <VisualState x:Name="Inactive" />
+                                            </VisualStateGroup>
+                                            <VisualStateGroup x:Name="HeaderStates">
+                                                <VisualState x:Name="HeaderVisible" />
+                                                <VisualState x:Name="HeaderHidden"/>
+
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                        <dxdove:DockingSplitLayoutPanel.Content1>
+                                            <dxdove:DockingSplitLayoutPanel Canvas.ZIndex="1" Background="Transparent" LeftContent1Margin="8,0" TopContent1Margin="0,8" MaximizeContent1="True"
+                                            Content1Location="{Binding CaptionLocation, Converter={StaticResource tabHeaderCaptionLocationToDockConverter}}"
+                                            ClipMargin="{TemplateBinding ActualClipMargin}" Margin="0"
+                                            x:Name="HeadersPanel">
+                                                <dxdove:DockingSplitLayoutPanel.Content1>
+                                                    <dxb:BarManager xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+                                                CreateStandardLayout="True"
+                                                Style="{DynamicResource {dxct:ChartToolbarThemeKey ResourceKey=BarManager}}"
+                                                Margin="6,2,0,0"
+                                                dx:DXSerializer.SerializationID="{Binding SelectedItem.Caption}"
+                                                dxc:ChartControlBase.Chart="{Binding SelectedItem.Content.Chart}"
+                                                Visibility="{DXBinding Expr='SelectedItem.Caption == `TRADING CHART` ? $Visibility.Visible : $Visibility.Collapsed'}">
+                                                        <dxb:BarManager.Bars>
+                                                            <dxb:Bar x:Name="TemplatesGroup" Style="{DynamicResource {dxct:ChartToolbarThemeKey ResourceKey=BarTemplatesGroup}}">
+                                                                <dxb:BarCheckItem x:Name="AddTextAnnotationItem" Style="{DynamicResource {dxct:ChartToolbarThemeKey ResourceKey=AddTextAnnotationItem}}"/>
+                                                                <dxb:BarCheckItem x:Name="AddImageAnnotationItem" Style="{DynamicResource {dxct:ChartToolbarThemeKey ResourceKey=AddImageAnnotationItem}}"/>
+                                                            </dxb:Bar>
+                                                            <dxb:Bar x:Name="FinancialIndicatorsGroup" Style="{DynamicResource {dxct:ChartToolbarThemeKey ResourceKey=BarFinancialIndicatorsGroup}}">
+                                                                <dxb:BarCheckItem x:Name="DrawTrendLineIndicator" Style="{DynamicResource {dxct:ChartToolbarThemeKey ResourceKey=DrawTrendLineIndicatorItem}}"/>
+                                                                <dxb:BarCheckItem x:Name="DrawFibonacciArcsIndicatorItem" Style="{DynamicResource {dxct:ChartToolbarThemeKey ResourceKey=DrawFibonacciArcsIndicatorItem}}"/>
+                                                                <dxb:BarCheckItem x:Name="DrawFibonacciFansIndicatorItem" Style="{DynamicResource {dxct:ChartToolbarThemeKey ResourceKey=DrawFibonacciFansIndicatorItem}}"/>
+                                                                <dxb:BarCheckItem x:Name="DrawFibonacciRetracementIndicatorItem" Style="{DynamicResource {dxct:ChartToolbarThemeKey ResourceKey=DrawFibonacciRetracementIndicatorItem}}"/>
+                                                                <dxb:BarCheckItem x:Name="RemoveIndicatorItem" Style="{DynamicResource {dxct:ChartToolbarThemeKey ResourceKey=RemoveIndicatorItem}}"/>
+                                                                <dxb:BarItemSeparator/>
+                                                                <dxb:BarSubItem x:Name="AddIndicatorItem" Style="{StaticResource AddIndicatorSubitemStyle}"/>
+                                                            </dxb:Bar>
+                                                            <dxb:Bar Style="{DynamicResource {dxct:ChartToolbarThemeKey ResourceKey=BarFinancialAxisGroup}}">
+                                                                <dxb:BarEditItem EditValue="{Binding DataContext.StockChartModel.SelectedInterval}" EditWidth="77">
+                                                                    <dxb:BarEditItem.EditSettings>
+                                                                        <dxe:ComboBoxEditSettings DisplayMember="Caption" IsTextEditable="False" ItemsSource="{Binding DataContext.StockChartModel.IntervalsSource}"/>
+                                                                    </dxb:BarEditItem.EditSettings>
+                                                                </dxb:BarEditItem>
+                                                            </dxb:Bar>
+                                                        </dxb:BarManager.Bars>
+                                                    </dxb:BarManager>
+
+                                                </dxdove:DockingSplitLayoutPanel.Content1>
+                                                <dxdove:DockingSplitLayoutPanel.Content2>
+
+                                                    <ItemsPresenter x:Name="PART_HeadersPanelPresenter"
+                                                HorizontalAlignment="Right"/>
+                                                </dxdove:DockingSplitLayoutPanel.Content2>
+                                            </dxdove:DockingSplitLayoutPanel>
+                                        </dxdove:DockingSplitLayoutPanel.Content1>
+                                        <dxdove:DockingSplitLayoutPanel.Content2>
+                                            <Border x:Name="PART_SelectedPage"
+                                                    dxdove:DockPane.HitTestType="Content"
+                                                    Background="{TemplateBinding ActualBackground}"
+                                                    BorderBrush="#FFABABAB"
+                                                    CornerRadius="4"
+                                                    Padding="4"
+                                                    BorderThickness="{TemplateBinding ActualContentBorderThickness}">
+                                                <dxdove:LayoutTabFastRenderPanel x:Name="PART_FastRenderPanel"  />
+                                            </Border>
+                                        </dxdove:DockingSplitLayoutPanel.Content2>
+                                    </dxdove:DockingSplitLayoutPanel>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="AreTabHeadersVisible" Value="False">
+                                            <Setter Property="Visibility" TargetName="HeadersPanel" Value="Collapsed"/>
+                                            <Setter Property="BorderThickness" TargetName="PART_SelectedPage" Value="1" />
+                                        </Trigger>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="ViewStyle" Value="Light"/>
+                                                <Condition Property="AreTabHeadersVisible" Value="False" />
+                                            </MultiTrigger.Conditions>
+                                            <Setter Property="BorderThickness" TargetName="PART_SelectedPage" Value="0" />
+                                        </MultiTrigger>
+                                        <Trigger Property="TabbedGroupDisplayMode" Value="ContentOnly">
+                                            <Setter Property="Padding" TargetName="PART_SelectedPage" Value="0" />
+                                            <Setter Property="CornerRadius" TargetName="PART_SelectedPage" Value="0" />
+                                            <Setter Property="BorderThickness" TargetName="PART_SelectedPage" Value="0" />
+                                        </Trigger>
+                                        <Trigger Property="ViewStyle" Value="Light">
+                                            <Setter Property="CornerRadius" TargetName="PART_SelectedPage" Value="0" />
+                                            <Setter Property="Padding" TargetName="PART_SelectedPage" Value="0" />
+                                            <Setter Property="LeftContent1Margin" TargetName="HeadersPanel" Value="0" />
+                                            <Setter Property="TopContent1Margin" TargetName="HeadersPanel" Value="0" />
+                                            <Setter Property="RightContent2Margin" TargetName="HeadersPanel" Value="0,0,0,0"></Setter>
+                                            <Setter Property="BottomContent2Margin" TargetName="HeadersPanel" Value="0,0,0,2"></Setter>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </ResourceDictionary>
+                        </dxdo:DocumentGroup.Resources>
+                        <dxdo:DocumentPanel Caption="STRATEGY"
+                                            AllowClose="False"
+                                            AllowDrag="False"
+                                            TabCaptionHorizontalAlignment="Center"
+                                            FontWeight="Regular">
+                            <views:StrategyView DataContext="{Binding StockChartModel}"
+                                                  Loaded="{DXEvent '@a($views:TabView).DataContext.StockChartViewLoaded(@sender)'}"/>
+                        </dxdo:DocumentPanel>
+                        <dxdo:DocumentPanel Caption="TRADING CHART"
+                                            AllowClose="False"
+                                            AllowDrag="False"
+                                            TabCaptionHorizontalAlignment="Center"
+                                            FontWeight="Regular">
+                            <views:StockChartView DataContext="{Binding StockChartModel}"
+                                                  Loaded="{DXEvent '@a($views:TabView).DataContext.StockChartViewLoaded(@sender)'}"/>
+                        </dxdo:DocumentPanel>
+                        <dxdo:DocumentPanel Caption="SCICHART CHART"
+                                            AllowClose="False"
+                                            AllowDrag="False"
+                                            TabCaptionHorizontalAlignment="Center"
+                                            FontWeight="Regular">
+                            <views:CreateMultiPaneStockCharts DataContext="{StaticResource ViewModel}"
+                          Loaded="{DXEvent '@a($views:TabView).DataContext.StockChartViewLoaded(@sender)'}"/>
+                        </dxdo:DocumentPanel>
+                        <dxdo:DocumentPanel Caption="SHARP CHART"
+                                            AllowClose="False"
+                                            AllowDrag="False"
+                                            TabCaptionHorizontalAlignment="Center"
+                                            FontWeight="Regular">
+                            <views:StockSharpChartView DataContext="{StaticResource ViewModel}"
+                                                              Loaded="{DXEvent '@a($views:TabView).DataContext.StockChartViewLoaded(@sender)'}"/>
+                        </dxdo:DocumentPanel>
+                        <dxdo:DocumentPanel Caption="MARKET DEPTH"
+                                            AllowClose="False"
+                                            AllowDrag="False"
+                                            FontWeight="Regular">
+                            <views:MarketDepthView DataContext="{Binding MarketDepthModel}"/>
+                        </dxdo:DocumentPanel>
+                    </dxdo:DocumentGroup>
+                    <dxdo:DocumentGroup ShowDropDownButton="False"
+                                        ShowControlBox="False"
+                                        FontWeight="Bold"
+                                        Margin="0,-1,0,0">
+                        <dxdo:DocumentPanel Caption="OPEN ORDERS"
+                                            TabCaptionHorizontalAlignment="Center"
+                                            AllowClose="False"
+                                            FontWeight="Regular">
+                            <views:OpenOrdersView DataContext="{Binding OpenOrdersModel}"/>
+                        </dxdo:DocumentPanel>
+                        <dxdo:DocumentPanel Caption="ORDER HISTORY"
+                                            AllowClose="False"
+                                            FontWeight="Regular">
+                            <views:OrderHistoryView DataContext="{Binding OrderHistoryModel}"/>
+                        </dxdo:DocumentPanel>
+                        <dxdo:DocumentPanel Caption="TRADE HISTORY"
+                                            AllowClose="False"
+                                            FontWeight="Regular">
+                            <views:TradeHistoryView DataContext="{Binding TradeHistoryModel}"/>
+                        </dxdo:DocumentPanel>
+                    </dxdo:DocumentGroup>
+                </dxdo:LayoutGroup>
+                <dxdo:DocumentPanel ItemWidth="1.9*">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="1"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="1"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="ORDER BOOK"
+                                   FontWeight="Bold"
+                                   Margin="7,7,0,0"/>
+                        <TextBlock Text="TRADES"
+                                   FontWeight="Bold"
+                                   Margin="7,7,0,0"
+                                   Grid.Column="2"/>
+                        <dx:ThemedBorder BorderThickness="0,1,0,0"
+                                         Grid.Row="1"
+                                         Grid.ColumnSpan="3"/>
+                        <views:OrderBookView DataContext="{Binding OrderBookModel}"
+                                             Grid.Row="2"
+                                             Margin="0,0,-1,0"/>
+                        <dx:ThemedBorder BorderThickness="1,0,0,0"
+                                         Grid.RowSpan="3"
+                                         Grid.Column="1"/>
+                        <views:TradesView DataContext="{Binding TradesModel}"
+                                          Grid.Row="2"
+                                          Grid.Column="2"/>
+                    </Grid>
+                </dxdo:DocumentPanel>
+            </dxdo:LayoutGroup>
+        </dxdo:DockLayoutManager>
+    </Grid>
+</UserControl>

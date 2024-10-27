@@ -1,0 +1,87 @@
+﻿<UserControl x:Class="SciTrader.Views.InformationPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:SciTrader.Views"
+             xmlns:dxga="http://schemas.devexpress.com/winfx/2008/xaml/gauges"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="170"/>
+            <ColumnDefinition Width="160"/>
+            <ColumnDefinition Width="115"/>
+            <ColumnDefinition Width="0"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <DockPanel VerticalAlignment="Center">
+            <TextBlock Text="LAST PRICE" Foreground="#929292"/>
+            <TextBlock Text="{Binding CurrentPrice, StringFormat={}{0:F2}}"
+                       TextAlignment="Left"
+                       Margin="6,0,0,0"
+                       Foreground="{DXBinding Expr='CurrentPrice - PreviousPrice > 0 ? @r(greenBrush) : @r(redBrush)'}"/>
+        </DockPanel>
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="1"
+                    VerticalAlignment="Center">
+            <TextBlock Text="24H CHANGE" Foreground="#929292"/>
+            <TextBlock Grid.Column="1" Text="{Binding Change24, StringFormat={}{0:F2}}"
+                       TextAlignment="Left"
+                       Margin="6,0,0,0"
+                       Foreground="{DXBinding Expr='Change24 > 0 ? @r(greenBrush) : @r(redBrush)'}"/>
+            <TextBlock Grid.Column="2"
+                       Text="{Binding Change24Percent, StringFormat={}{0:F2}%}"
+                       TextAlignment="Left"
+                       Margin="6,0,0,0"
+                       Foreground="{DXBinding Expr='Change24 > 0 ? @r(greenBrush) : @r(redBrush)'}"/>
+        </StackPanel>
+        <DockPanel Grid.Column="2"
+                   VerticalAlignment="Center">
+            <TextBlock Text="24H VOLUME" Foreground="#929292"/>
+            <TextBlock Text="{Binding Volume24, StringFormat={}{0:F2}}"
+                       TextAlignment="Left"
+                       Margin="6,0,0,0"/>
+        </DockPanel>
+        <DockPanel Grid.Column="3"
+                   VerticalAlignment="Center">
+            <TextBlock Text="24H LOW" Foreground="#929292"/>
+            <TextBlock Text="{Binding Low24, StringFormat={}{0:F2}}"
+                       TextAlignment="Left"
+                       Margin="6,0,0,0"/>
+        </DockPanel>
+        <!--<dxga:LinearGaugeControl Width="100" Height="24" Margin="0,0,24,0" Grid.Column="4">
+            <dxga:LinearGaugeControl.Model>
+                <dxga:LinearThemeableModel InnerPadding="0"/>
+            </dxga:LinearGaugeControl.Model>
+            <dxga:LinearGaugeControl.Scales>
+                <dxga:LinearScale LayoutMode="LeftToRight"
+                                          ShowMinorTickmarks="False"
+                                          MajorIntervalCount="1"
+                                          StartValue="{Binding Low24}"
+                                          EndValue="{Binding High24}">
+                    <dxga:LinearScale.Markers>
+                        <dxga:LinearScaleMarker Value="{Binding CurrentPrice}"/>
+                    </dxga:LinearScale.Markers>
+                    <dxga:LinearScale.RangeBars>
+                        <dxga:LinearScaleRangeBar AnchorValue="{Binding PriceDayAgo}"
+                                                          Value="{Binding CurrentPrice}">
+                            <dxga:LinearScaleRangeBar.Presentation>
+                                <dxga:DefaultLinearScaleRangeBarPresentation Fill="{DXBinding Expr='CurrentPrice - PriceDayAgo > 0 ? $Brushes.Green : $Brushes.Red'}"/>
+                            </dxga:LinearScaleRangeBar.Presentation>
+                        </dxga:LinearScaleRangeBar>
+                    </dxga:LinearScale.RangeBars>
+                </dxga:LinearScale>
+            </dxga:LinearGaugeControl.Scales>
+        </dxga:LinearGaugeControl>-->
+        <DockPanel Grid.Column="5"
+                   VerticalAlignment="Center">
+            <TextBlock Text="24H HIGH" Foreground="#929292"/>
+            <TextBlock Text="{Binding High24, StringFormat={}{0:F2}}"
+                       TextAlignment="Left"
+                       Margin="6,0,0,0"/>
+        </DockPanel>
+    </Grid>
+</UserControl>

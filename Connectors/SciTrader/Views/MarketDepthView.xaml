@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="SciTrader.Views.MarketDepthView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts"
+             xmlns:local="clr-namespace:SciTrader.Views"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <dxc:ChartControl BorderThickness="0"
+                          Padding="0"
+                          dx:DXSerializer.SerializationID="marketDepthChart"
+                          dx:DXSerializer.EndDeserializing="{DXEvent 'AfterLoadLayout(@sender)'}">
+            <dxc:ChartControl.CrosshairOptions>
+                <dxc:CrosshairOptions ShowOnlyInFocusedPane="False"
+                                      ShowCrosshairLabels="False"
+                                      ShowArgumentLine="False"
+                                      ShowArgumentLabels="True"
+                                      ShowValueLabels="True">
+                </dxc:CrosshairOptions>
+            </dxc:ChartControl.CrosshairOptions>
+            <dxc:XYDiagram2D>
+                <dxc:XYDiagram2D.DefaultPane>
+                    <dxc:Pane DomainBorderBrush="Transparent"/>
+                </dxc:XYDiagram2D.DefaultPane>
+                <dxc:AreaStepSeries2D DataSource="{Binding BidChartDataSource}"
+                                      ArgumentDataMember="Price"
+                                      ValueDataMember="Count"
+                                      Brush="{StaticResource lightGreenBrush}"/>
+                <dxc:AreaStepSeries2D DataSource="{Binding AskChartDataSource}"
+                                      ArgumentDataMember="Price"
+                                      ValueDataMember="Count"
+                                      Brush="{StaticResource lightRedBrush}"/>
+                <dxc:XYDiagram2D.AxisX>
+                    <dxc:AxisX2D GridLinesVisible="True">
+                        <dxc:AxisX2D.WholeRange>
+                            <dxc:Range AutoSideMargins="False" SideMarginsValue="0"/>
+                        </dxc:AxisX2D.WholeRange>
+                        <dxc:AxisX2D.CrosshairAxisLabelOptions>
+                            <dxc:CrosshairAxisLabelOptions Pattern="{}{V:f2}"/>
+                        </dxc:AxisX2D.CrosshairAxisLabelOptions>
+                    </dxc:AxisX2D>
+                </dxc:XYDiagram2D.AxisX>
+                <dxc:XYDiagram2D.AxisY>
+                    <dxc:AxisY2D Interlaced="False"
+                                 Brush="Transparent">
+                        <dxc:AxisY2D.CrosshairAxisLabelOptions>
+                            <dxc:CrosshairAxisLabelOptions Pattern="{}{V:f2}"/>
+                        </dxc:AxisY2D.CrosshairAxisLabelOptions>
+                    </dxc:AxisY2D>
+                </dxc:XYDiagram2D.AxisY>
+            </dxc:XYDiagram2D>
+        </dxc:ChartControl>
+    </Grid>
+</UserControl>

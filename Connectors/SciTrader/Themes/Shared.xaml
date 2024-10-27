@@ -1,0 +1,31 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts"
+                    xmlns:dxprg="http://schemas.devexpress.com/winfx/2008/xaml/propertygrid"
+                    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+                    xmlns:dxt="http://schemas.devexpress.com/winfx/2008/xaml/core/themekeys"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <Style TargetType="dxc:LegendItemContainer">
+        <Setter Property="ToolTip" Value="{DXBinding Expr='(ChartElement is $dxc:Indicator) ? `Double-click to setup indicator properties` : null'}"/>
+        <Setter Property="ToolTipService.InitialShowDelay" Value="100"/>
+    </Style>
+    <Style TargetType="dxprg:PropertyGridControl">
+        <Setter Property="ShowGridLines" Value="False"/>
+        <Setter Property="ShowMenuButtonInRows" Value="False"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="RowPadding" Value="0,0,8,0"/>
+    </Style>
+    <Style TargetType="dx:DXTabItem">
+        <Setter Property="Height" Value="28"/>
+    </Style>
+    <sys:Double x:Key="{dxt:ThemedWindowThemeKey ResourceKey=WindowIconHeight, IsThemeIndependent=True}">28</sys:Double>
+    <sys:Double x:Key="{dxt:ThemedWindowThemeKey ResourceKey=WindowIconWidth, IsThemeIndependent=True}">28</sys:Double>
+    <Thickness x:Key="{dxt:ThemedWindowThemeKey ResourceKey=WindowIconMargin, IsThemeIndependent=True}">5,3,5,0</Thickness>
+
+    <Color x:Key="lightGreenColor" A="#7F" R="#1A" G="#96" B="#66"/>
+    <Color x:Key="lightRedColor" A="#7F" R="#DD" G="#33" B="#6B"/>
+    <SolidColorBrush x:Key="greenBrush" Color="#FF1A9666"/>
+    <SolidColorBrush x:Key="redBrush" Color="#FFDD336B"/>
+    <SolidColorBrush x:Key="lightRedBrush" Color="{StaticResource lightRedColor}"/>
+    <SolidColorBrush x:Key="lightGreenBrush" Color="{StaticResource lightGreenColor}"/>
+</ResourceDictionary>
