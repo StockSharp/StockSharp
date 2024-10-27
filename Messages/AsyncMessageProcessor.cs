@@ -255,6 +255,8 @@ class AsyncMessageProcessor : Disposable
 
 						MarketDataMessage m			=> _adapter.MarketDataAsync(m, token),
 
+						ChangePasswordMessage m		=> _adapter.ChangePasswordAsync(m, token),
+
 						_ => _adapter.ProcessMessageAsync(msg, token)
 					};
 

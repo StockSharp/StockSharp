@@ -14,13 +14,13 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 		public SubscriptionInfo(ISubscriptionMessage subscription)
 		{
 			Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
+			IsMarketData = subscription.DataType.IsMarketData;
 		}
 
 		public SubscriptionInfo(SubscriptionInfo main)
+			: this(main.CheckOnNull(nameof(main)).Subscription)
 		{
-			_main = main ?? throw new ArgumentNullException(nameof(main));
-
-			Subscription = main.Subscription;
+			_main = main;
 			Subscribers = main.Subscribers;
 		}
 
@@ -44,6 +44,9 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 
 		public readonly HashSet<long> ExtraFilters = [];
 		public readonly CachedSynchronizedDictionary<long, ISubscriptionMessage> Subscribers = [];
+		public readonly CachedSynchronizedSet<long> OnlineSubscribers = [];
+		public readonly SynchronizedSet<long> HistLive = [];
+		public readonly bool IsMarketData;
 
 		private readonly List<long> _linked = [];
 
@@ -126,8 +129,12 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 		}
 	}
 
-	private void ChangeState(SubscriptionInfo info, SubscriptionStates state)
+	private bool ChangeState(SubscriptionInfo info, long transId, SubscriptionStates state)
 	{
+		// secondary hist+live cannot change main subscription state
+		if (info.HistLive.Contains(transId))
+			return false;
+
 		info.State = info.State.ChangeSubscriptionState(state, info.Subscription.TransactionId, this);
 
 		if (!state.IsActive())
@@ -135,6 +142,8 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 			_subscriptionsByKey.RemoveByValue(info);
 			this.AddInfoLog(LocalizedStrings.SubscriptionRemoved, info.Subscription.TransactionId);
 		}
+
+		return true;
 	}
 
 	/// <inheritdoc />
@@ -155,7 +164,7 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 			case MessageTypes.SubscriptionResponse:
 			{
 				var responseMsg = (SubscriptionResponseMessage)message;
-				var id = responseMsg.OriginalTransactionId;
+				var originTransId = responseMsg.OriginalTransactionId;
 
 				HashSet<long> subscribers = null;
 
@@ -163,16 +172,24 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 				{
 					if (responseMsg.IsOk())
 					{
-						if (_subscriptionsById.TryGetValue(id, out var info))
+						if (_subscriptionsById.TryGetValue(originTransId, out var info))
 						{
-							ChangeState(info, SubscriptionStates.Active);
+							if (!ChangeState(info, originTransId, SubscriptionStates.Active))
+								return;
 						}
 					}
 					else
 					{
-						if (_subscriptionsById.TryGetAndRemove(id, out var info))
+						if (_subscriptionsById.TryGetAndRemove(originTransId, out var info))
 						{
-							ChangeState(info, SubscriptionStates.Error);
+							info.OnlineSubscribers.Remove(originTransId);
+							info.Subscribers.Remove(originTransId);
+
+							if (!ChangeState(info, originTransId, SubscriptionStates.Error))
+							{
+								info.HistLive.Remove(originTransId);
+								return;
+							}
 						}
 					}
 				}
@@ -191,10 +208,17 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 
 			case MessageTypes.SubscriptionOnline:
 			{
+				var originTransId = ((SubscriptionOnlineMessage)message).OriginalTransactionId;
+
 				lock (_sync)
 				{
-					if (_subscriptionsById.TryGetValue(((SubscriptionOnlineMessage)message).OriginalTransactionId, out var info))
-						ChangeState(info, SubscriptionStates.Online);
+					if (_subscriptionsById.TryGetValue(originTransId, out var info))
+					{
+						info.OnlineSubscribers.Add(originTransId);
+
+						if (!ChangeState(info, originTransId, SubscriptionStates.Online))
+							return;
+					}
 				}
 
 				break;
@@ -202,10 +226,18 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 
 			case MessageTypes.SubscriptionFinished:
 			{
+				var originTransId = ((SubscriptionFinishedMessage)message).OriginalTransactionId;
+
 				lock (_sync)
 				{
-					if (_subscriptionsById.TryGetValue(((SubscriptionFinishedMessage)message).OriginalTransactionId, out var info))
-						ChangeState(info, SubscriptionStates.Finished);
+					if (_subscriptionsById.TryGetValue(originTransId, out var info))
+					{
+						if (!ChangeState(info, originTransId, SubscriptionStates.Finished))
+						{
+							info.OnlineSubscribers.Add(originTransId);
+							return;
+						}
+					}
 				}
 				
 				break;
@@ -228,6 +260,11 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 									false // lookup history can request order changes (registered, filled, cancelled)
 								);
 							}
+							else if (info.State != SubscriptionStates.Online)
+							{
+								subscrMsg.SetSubscriptionIds([subscrMsg.OriginalTransactionId]);
+								break;
+							}
 						}
 						else
 						{
@@ -238,7 +275,7 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 								break;
 						}
 
-						var ids = info.Subscribers.CachedKeys;
+						var ids = info.IsMarketData ? info.OnlineSubscribers.Cache : info.Subscribers.CachedKeys;
 
 						if (info.ExtraFilters.Count > 0)
 						{
@@ -349,27 +386,40 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 
 						sendInMsg = message;
 
-						info = new SubscriptionInfo(message.TypedClone());
+						info = new(message.TypedClone());
 
 						_subscriptionsByKey.Add(key, info);
 					}
 					else
 					{
-						this.AddDebugLog("Subscription {0} joined to {1}.", transId, info.Subscription.TransactionId);
-
-						var resultMsg = message.CreateResult();
-
-						if (message.Type == MessageTypes.MarketData)
+						if (message.From is not null)
 						{
-							sendOutMsgs =
-							[
-								message.CreateResponse(),
-								resultMsg,
-							];
+							// history+live must be processed anyway but without live part
+							var clone = message.TypedClone();
+							clone.To = DateTimeOffset.Now;
+							info.HistLive.Add(transId);
+							sendInMsg = clone;
 						}
 						else
 						{
-							sendOutMsgs = [resultMsg];
+							this.AddDebugLog("Subscription {0} joined to {1}.", transId, info.Subscription.TransactionId);
+
+							var resultMsg = message.CreateResult();
+
+							if (message.Type == MessageTypes.MarketData)
+							{
+								sendOutMsgs =
+								[
+									message.CreateResponse(),
+									resultMsg,
+								];
+							}
+							else
+							{
+								sendOutMsgs = [resultMsg];
+							}
+
+							info.OnlineSubscribers.Add(transId);
 						}
 					}
 
@@ -405,7 +455,7 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 					{
 						sendOutMsgs =
 						[
-							(Message)originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
+							originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
 						];
 					}
 					else
@@ -445,7 +495,7 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 				{
 					sendOutMsgs =
 					[
-						(Message)originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
+						originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
 					];
 				}
 			}
