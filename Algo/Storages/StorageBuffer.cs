@@ -34,7 +34,7 @@ public class StorageBuffer : IPersistable
 	private readonly SynchronizedSet<BoardStateMessage> _boardStatesBuffer = [];
 	private readonly DataBuffer<(SecurityId, DataType), CandleMessage> _candleBuffer = new();
 	private readonly SynchronizedSet<NewsMessage> _newsBuffer = [];
-	private readonly SynchronizedSet<long> _subscriptionsById = [];
+	private readonly SynchronizedPairSet<long, (DataType dt, SecurityId secId)> _subscriptionsById = [];
 
 	/// <summary>
 	/// Save data only for subscriptions.
@@ -202,7 +202,7 @@ public class StorageBuffer : IPersistable
 		}
 
 		if (message is ISubscriptionIdMessage subscrMsg)
-			return CanStore(message, subscrMsg.GetSubscriptionIds().Any(_subscriptionsById.Contains), IgnoreGeneratedMarketData);
+			return CanStore(message, subscrMsg.GetSubscriptionIds().Any(_subscriptionsById.ContainsKey), IgnoreGeneratedMarketData);
 
 		return false;
 	}
@@ -287,7 +287,7 @@ public class StorageBuffer : IPersistable
 				if (Enabled)
 				{
 					if (mdMsg.IsSubscribe)
-						_subscriptionsById.Add(mdMsg.TransactionId);
+						_subscriptionsById.Add(mdMsg.TransactionId, (mdMsg.DataType2, mdMsg.SecurityId));
 					else
 						_subscriptionsById.Remove(mdMsg.OriginalTransactionId);
 				}
