@@ -1,4 +1,6 @@
-﻿namespace StockSharp.DarkHorse.Native;
+﻿using Ecng.ComponentModel;
+
+namespace StockSharp.DarkHorse.Native;
 
 using System.Security;
 using System.Security.Cryptography;
@@ -29,8 +31,8 @@ class DarkHorseWebSocketClient : BaseLogReceiver
 	public event Action Connected;
 	public event Action<Exception> Error;
 	public event Action<bool> Disconnected;
-
-	private DateTime? _nextPing;
+    public event Action<ConnectionStates> StateChanged;
+    private DateTime? _nextPing;
 
 	private readonly WebSocketClient _client;
 
@@ -38,47 +40,18 @@ class DarkHorseWebSocketClient : BaseLogReceiver
 	{
 		_key = key;
 		_hasher = secret.IsEmpty() ? null : new(secret.UnSecure().UTF8());
-		_client = new WebSocketClient(
-			() =>
-			{
-				this.AddInfoLog(LocalizedStrings.Connected);
-				try
-				{
-					_ = SendAuthRequest(subaccountName, default);
-					_ = SendPingRequest(default);
-					_ = SubscribeFills(default);
-					_ = SubscribeOrders(default);
-				}
-				catch (Exception ex)
-				{
-					Error?.Invoke(ex);
-				}
-
-				Connected?.Invoke();
-			},
-			expected =>
-			{
-				if (expected)
-					this.AddInfoLog(LocalizedStrings.Disconnected);
-				else
-					this.AddErrorLog(LocalizedStrings.ErrorConnection);
-
-				Disconnected?.Invoke(expected);
-			},
-			exception =>
-			{
-				this.AddErrorLog(exception);
-				Error?.Invoke(exception);
-			},
-			OnProcess,
-			(s, a) => this.AddInfoLog(s, a),
-			(s, a) =>
-			{
-				this.AddErrorLog(s, a);
-			},
-			(s, a) => this.AddVerboseLog(s, a),
-			(s) => this.AddVerboseLog(s));
-	}
+        _client = new(
+            state => StateChanged?.Invoke(state),
+            exception =>
+            {
+                this.AddErrorLog(exception);
+                Error?.Invoke(exception);
+            },
+            OnProcess,
+            (s, a) => this.AddInfoLog(s, a),
+            (s, a) => this.AddErrorLog(s, a),
+            (s, a) => this.AddVerboseLog(s, a));
+    }
 
 
 	protected override void DisposeManaged()
@@ -96,7 +69,7 @@ class DarkHorseWebSocketClient : BaseLogReceiver
 	{
 		_nextPing = null;
 		this.AddInfoLog(LocalizedStrings.Connecting);
-		return _client.ConnectAsync("ws://localhost:9002", true, cancellationToken: cancellationToken);
+		return _client.ConnectAsync("ws://localhost:9002", cancellationToken: cancellationToken);
 	}
 
 	/// <summary>
@@ -266,14 +239,15 @@ class DarkHorseWebSocketClient : BaseLogReceiver
 	}
 
 
-	private void OnProcess(dynamic obj)
+	private ValueTask OnProcess(WebSocketMessage msg, CancellationToken cancellationToken)
 	{
-		var channel = (string)obj.channel;
+        var obj = msg.AsObject();
+        var channel = (string)obj.channel;
 		var type = (string)obj.type;
 
 		if (channel == "ticker")
 		{
-			if (type != "update") return;
+			if (type != "update") return default;
 
 			WebSocketResponse<Level1> level1 = Parse<WebSocketResponse<Level1>>(obj);
 			if (level1 != null && level1.Data != null)
@@ -283,7 +257,7 @@ class DarkHorseWebSocketClient : BaseLogReceiver
 		}
 		else if (channel == "trades")
 		{
-			if (type != "update") return;
+			if (type != "update") return default;
 
 			WebSocketResponse<List<Trade>> trade = Parse<WebSocketResponse<List<Trade>>>(obj);
 
@@ -296,7 +270,7 @@ class DarkHorseWebSocketClient : BaseLogReceiver
         {
             try
             {
-                if (type != "update" && type != "partial") return;
+                if (type != "update" && type != "partial") return default;
 
                 WebSocketResponse<OrderBook> ob = Parse<WebSocketResponse<OrderBook>>(obj);
 
@@ -316,7 +290,7 @@ class DarkHorseWebSocketClient : BaseLogReceiver
 
         else if (channel == "orders")
 		{
-			if (type != "update") return;
+			if (type != "update") return default;
 
 			WebSocketResponse<Order> order = Parse<WebSocketResponse<Order>>(obj);
 			if (order != null && order.Data != null)
@@ -326,7 +300,7 @@ class DarkHorseWebSocketClient : BaseLogReceiver
 		}
 		else if (channel == "fills")
 		{
-			if (type != "update") return;
+			if (type != "update") return default;
 
 			WebSocketResponse<Fill> fill = Parse<WebSocketResponse<Fill>>(obj);
 			if (fill != null && fill.Data != null)
@@ -334,7 +308,9 @@ class DarkHorseWebSocketClient : BaseLogReceiver
 				NewFill?.Invoke(fill.Data);
 			}
 		}
-	}
+
+        return default;
+    }
 
 	#region Utils
 	private static long GetMillisecondsFromEpochStart()

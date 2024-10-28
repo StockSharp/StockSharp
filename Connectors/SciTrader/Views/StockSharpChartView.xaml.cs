@@ -17,6 +17,7 @@ using Ecng.Xaml;
 using Ecng.Compilation;
 using Ecng.Compilation.Roslyn;
 using Ecng.Serialization;
+using Ecng.ComponentModel;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Candles;

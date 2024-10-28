@@ -95,6 +95,8 @@
                                 Margin="0,0,20,0"
                                 Loaded="OnInformationPanelLoaded"
                                 dxi:WindowChrome.IsHitTestVisibleInChrome="False"/>
+        <dx:SimpleButton Content="설정" Click="Setting_Click"/>
+        <dx:SimpleButton Content="연결" Click="Connect_Click"/>
     </dx:ThemedWindow.HeaderItems>
     <!--<dxmvvm:Interaction.Behaviors>
         <dxdbi:DpiAwareSizeBehavior/>

@@ -131,6 +131,7 @@
 	</ItemGroup>
  
   <ItemGroup>
+	<PackageReference Include="Ecng.ComponentModel" Version="1.0.257" />
 	<PackageReference Include="StockSharp.Charting.Interfaces" Version="5.0.77" />
 	<PackageReference Include="StockSharp.Localization" Version="5.0.193" />
 	<PackageReference Include="StockSharp.Xaml.Charting" Version="5.0.209" />
@@ -138,7 +139,7 @@
 	<PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
 	<PackageReference Include="System.Reflection.Metadata" Version="8.0.0" />
 	<PackageReference Include="DevExpress.Mvvm.CodeGenerators" Version="22.1.*-*" />
-    <PackageReference Include="Ecng.Common" Version="1.0.178" />
+    <PackageReference Include="Ecng.Common" Version="1.0.179" />
     <PackageReference Include="Ecng.Net" Version="1.0.312" />
     <PackageReference Include="Ecng.Net.SocketIO" Version="1.0.320" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
@@ -147,6 +148,10 @@
     <PackageReference Include="RestSharp" Version="112.1.0" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="WebSocketSharp-netstandard" Version="1.0.1" />
+  </ItemGroup>
+ 
+  <ItemGroup>
+    <ProjectReference Include="..\DarkHorse\DarkHorse.csproj" />
   </ItemGroup>
  
   <ItemGroup>
