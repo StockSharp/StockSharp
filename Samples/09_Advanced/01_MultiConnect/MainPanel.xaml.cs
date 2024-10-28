@@ -181,7 +181,7 @@ public partial class MainPanel
 			LoggingHelper.DoWithLog(ServicesRegistry.EntityRegistry.Init);
 			LoggingHelper.DoWithLog(ServicesRegistry.ExchangeInfoProvider.Init);
 
-			Connector.Adapter.StorageSettings.DaysLoad = TimeSpan.FromDays(3);
+			//Connector.Adapter.StorageSettings.DaysLoad = TimeSpan.FromDays(3);
 			Connector.Adapter.StorageSettings.Mode = StorageModes.Snapshot;
 			Connector.LookupAll();
 

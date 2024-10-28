@@ -52,7 +52,7 @@ public class StorageProcessor
 		if (newOutMessage is null)
 			throw new ArgumentNullException(nameof(newOutMessage));
 
-		if (message.From == null && Settings.DaysLoad == TimeSpan.Zero)
+		if (message.From == null /*&& Settings.DaysLoad == TimeSpan.Zero*/)
 			return message;
 
 		if (message.IsSubscribe)

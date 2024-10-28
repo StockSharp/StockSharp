@@ -202,9 +202,9 @@ public class BufferMessageAdapter : MessageAdapterWrapper
 
 		_orderStatusIds.Add(transId);
 
-		if (!message.HasOrderId() && message.OriginalTransactionId == 0 && Settings.DaysLoad > TimeSpan.Zero)
+		if (!message.HasOrderId() && message.OriginalTransactionId == 0 /*&& Settings.DaysLoad > TimeSpan.Zero*/)
 		{
-			var from = message.From ?? DateTime.UtcNow.Date - Settings.DaysLoad;
+			var from = message.From ?? DateTime.UtcNow.Date/* - Settings.DaysLoad*/;
 			var to = message.To;
 
 			if (Settings.IsMode(StorageModes.Snapshot))
