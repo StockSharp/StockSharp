@@ -287,7 +287,7 @@ public class StorageBuffer : IPersistable
 				if (Enabled)
 				{
 					if (mdMsg.IsSubscribe)
-						_subscriptionsById.Add(mdMsg.TransactionId, (mdMsg.DataType2, mdMsg.SecurityId));
+						_subscriptionsById.TryAdd(mdMsg.TransactionId, (mdMsg.DataType2, mdMsg.SecurityId));
 					else
 						_subscriptionsById.Remove(mdMsg.OriginalTransactionId);
 				}
