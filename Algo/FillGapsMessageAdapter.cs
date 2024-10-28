@@ -145,7 +145,7 @@ public class FillGapsMessageAdapter : MessageAdapterWrapper
 				if (!_gapsRequests.TryGetValue(response.OriginalTransactionId, out var info))
 					break;
 
-				if (response.Error is not null)
+				if (!response.IsOk())
 					_gapsRequests.Remove(response.OriginalTransactionId);
 				else
 				{

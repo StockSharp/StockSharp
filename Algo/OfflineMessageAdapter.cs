@@ -308,7 +308,7 @@ public class OfflineMessageAdapter : MessageAdapterWrapper
 
 		ProcessSuspendedMessage processMsg = null;
 
-		if ((connectMessage != null && connectMessage.Error == null) || message.Type == MessageTypes.ConnectionRestored)
+		if ((connectMessage != null && connectMessage.IsOk()) || message.Type == MessageTypes.ConnectionRestored)
 		{
 			lock (_syncObject)
 			{

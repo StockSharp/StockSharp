@@ -918,7 +918,7 @@ public class RiskOrderErrorRule : RiskRule
 
 		var execMsg = (ExecutionMessage)message;
 
-		if (execMsg.Error is null)
+		if (execMsg.IsOk())
 		{
 			if (execMsg.HasOrderInfo() && execMsg.OrderState == OrderStates.Active)
 				_current = 0;

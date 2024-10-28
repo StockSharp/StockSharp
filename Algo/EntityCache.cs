@@ -412,7 +412,7 @@ class EntityCache : ISnapshotHolder
 		if (getPortfolio is null)
 			throw new ArgumentNullException(nameof(getPortfolio));
 
-		if (message.Error != null)
+		if (!message.IsOk())
 			throw new ArgumentException(LocalizedStrings.MessageHasStateAndError.PutEx(message));
 
 		var securityData = GetData(security);

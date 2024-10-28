@@ -335,7 +335,7 @@ public class BufferMessageAdapter : MessageAdapterWrapper
 							if (_cancellationTransactions.TryGetValue(originTransId, out var cancelledId))
 							{
 								// do not store cancellation errors
-								if (message.Error != null)
+								if (!message.IsOk())
 									continue;
 
 								// override cancel trans id by original order's registration trans id
@@ -348,7 +348,7 @@ public class BufferMessageAdapter : MessageAdapterWrapper
 							}
 							else if (_replaceTransactions.TryGetAndRemove(originTransId, out var replacedId))
 							{
-								if (message.Error == null)
+								if (message.IsOk())
 								{
 									var replaced = (ExecutionMessage)snapshotStorage.Get(replacedId.To<string>());
 

@@ -147,7 +147,7 @@ public class BasketSecurityMessageAdapter : MessageAdapterWrapper
 				{
 					lock (info.LegsSubscriptions.SyncRoot)
 					{
-						if (responseMsg.Error == null)
+						if (responseMsg.IsOk())
 						{
 							info.LegsSubscriptions[responseMsg.OriginalTransactionId] = SubscriptionStates.Active;
 

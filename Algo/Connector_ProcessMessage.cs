@@ -1503,7 +1503,7 @@ partial class Connector
 
 		if (_entityCache.IsMassCancelation(originId))
 		{
-			if (message.Error == null)
+			if (message.IsOk())
 				RaiseMassOrderCanceled(originId, message.ServerTime);
 			else
 				RaiseMassOrderCancelFailed(originId, message.Error, message.ServerTime);
@@ -1513,7 +1513,7 @@ partial class Connector
 
 		var isStatusRequest = _entityCache.IsOrderStatusRequest(originId);
 
-		if (message.Error != null && isStatusRequest)
+		if (!message.IsOk() && isStatusRequest)
 		{
 			// TransId != 0 means contains failed order info (not just status response)
 			if (message.TransactionId == 0)

@@ -441,7 +441,7 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		{
 			case ChannelStates.Stopping:
 			{
-				IsFinished = message.Error == null;
+				IsFinished = message.IsOk();
 				
 				// change ConnectionState to Disconnecting
 				if (ConnectionState != ConnectionStates.Disconnecting)

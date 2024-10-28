@@ -59,7 +59,7 @@ public class AutoConnectMessageAdapter : OfflineMessageAdapter
 			{
 				var connectMsg = (ConnectMessage)message;
 
-				_isConnect = connectMsg.Error is null;
+				_isConnect = connectMsg.IsOk();
 				break;
 			}
 			case MessageTypes.Disconnect:

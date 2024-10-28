@@ -139,7 +139,7 @@ public class TransactionOrderingMessageAdapter : MessageAdapterWrapper
 			{
 				var responseMsg = (SubscriptionResponseMessage)message;
 
-				if (responseMsg.Error != null)
+				if (!responseMsg.IsOk())
 				{
 					_transactionLogSubscriptions.Remove(responseMsg.OriginalTransactionId);
 				}
