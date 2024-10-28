@@ -466,6 +466,8 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 		{
 			case MessageTypes.SubscriptionResponse:
 			{
+				Buffer?.ProcessOutMessage(message);
+
 				var response = (SubscriptionResponseMessage)message;
 				var requestId = response.OriginalTransactionId;
 
@@ -487,6 +489,8 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 
 			case MessageTypes.SubscriptionFinished:
 			{
+				Buffer?.ProcessOutMessage(message);
+
 				var finishMsg = (SubscriptionFinishedMessage)message;
 				var subscriptionId = finishMsg.OriginalTransactionId;
 

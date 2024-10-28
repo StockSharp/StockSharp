@@ -375,7 +375,21 @@ public class StorageBuffer : IPersistable
 				TryStore(_positionChangesBuffer, (PositionChangeMessage)message);
 				break;
 			}
+			case MessageTypes.SubscriptionResponse:
+			{
+				var responseMsg = (SubscriptionResponseMessage)message;
+				
+				if (!responseMsg.IsOk())
+					_subscriptionsById.Remove(responseMsg.OriginalTransactionId);
 
+				break;
+			}
+			case MessageTypes.SubscriptionFinished:
+			{
+				var responseMsg = (SubscriptionFinishedMessage)message;
+				_subscriptionsById.Remove(responseMsg.OriginalTransactionId);
+				break;
+			}
 			default:
 			{
 				if (message is CandleMessage candleMsg && candleMsg.State == CandleStates.Finished)
