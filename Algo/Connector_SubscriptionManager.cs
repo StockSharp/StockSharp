@@ -377,11 +377,11 @@ partial class Connector
 			if (subscription == null)
 				throw new ArgumentNullException(nameof(subscription));
 
-			if (!subscription.State.IsActive())
-			{
-				_connector.AddWarningLog(LocalizedStrings.SubscriptionInvalidState, subscription.TransactionId, subscription.State);
-				return;
-			}
+			//if (!subscription.State.IsActive())
+			//{
+			//	_connector.AddWarningLog(LocalizedStrings.SubscriptionInvalidState, subscription.TransactionId, subscription.State);
+			//	return;
+			//}
 
 			var unsubscribe = subscription.SubscriptionMessage.TypedClone();
 
