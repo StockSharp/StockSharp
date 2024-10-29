@@ -2168,9 +2168,7 @@ public static class EntitiesExtensions
 		if (security == null)
 			throw new ArgumentNullException(nameof(security));
 
-		var series = new CandleSeries { Security = security };
-		message.ToCandleSeries(series, throwIfInvalidType);
-		return series;
+		return message.ToCandleSeries(new CandleSeries { Security = security }, throwIfInvalidType);
 	}
 
 	/// <summary>
@@ -2179,7 +2177,8 @@ public static class EntitiesExtensions
 	/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 	/// <param name="series">Candles series.</param>
 	/// <param name="throwIfInvalidType">Throw an error if <see cref="MarketDataMessage.DataType2"/> isn't candle type.</param>
-	public static void ToCandleSeries(this MarketDataMessage message, CandleSeries series, bool throwIfInvalidType)
+	/// <returns>Candles series.</returns>
+	public static CandleSeries ToCandleSeries(this MarketDataMessage message, CandleSeries series, bool throwIfInvalidType)
 	{
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
@@ -2208,6 +2207,8 @@ public static class EntitiesExtensions
 		series.AllowBuildFromSmallerTimeFrame = message.AllowBuildFromSmallerTimeFrame;
 		series.IsRegularTradingHours = message.IsRegularTradingHours;
 		series.IsFinishedOnly = message.IsFinishedOnly;
+
+		return series;
 	}
 
 	/// <summary>

@@ -224,9 +224,9 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 						if (mdMsg.AllowBuildFromSmallerTimeFrame)
 						{
 							var smaller = timeFrames
-							              .FilterSmallerTimeFrames(originalTf)
-							              .OrderByDescending()
-							              .FirstOr();
+							    .FilterSmallerTimeFrames(originalTf)
+							    .OrderByDescending()
+							    .FirstOr();
 
 							if (smaller != null)
 							{
