@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Indicators;
 /// <summary>
 /// The indicator type description.
 /// </summary>
-public class IndicatorType : Equatable<IndicatorType>, IPersistable
+public class IndicatorType : Equatable<IndicatorType>, IDisposable
 {
 	private Type _indicator;
 
@@ -108,6 +108,13 @@ public class IndicatorType : Equatable<IndicatorType>, IPersistable
 		LocalizedStrings.ActiveLanguageChanged += OnActiveLanguageChanged;
 	}
 
+	/// <inheritdoc />
+	public virtual void Dispose()
+	{
+		LocalizedStrings.ActiveLanguageChanged -= OnActiveLanguageChanged;
+		GC.SuppressFinalize(this);
+	}
+
 	private void OnActiveLanguageChanged()
 	{
 		if (Indicator is Type t)
@@ -115,22 +122,11 @@ public class IndicatorType : Equatable<IndicatorType>, IPersistable
 	}
 
 	/// <summary>
-	/// Create indicator.
-	/// </summary>
-	/// <returns><see cref="IIndicator"/></returns>
-	public IIndicator CreateIndicator()
-		=> Indicator.CreateInstance<IIndicator>();
-
-	/// <summary>
 	/// Create a copy of <see cref="IndicatorType"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
 	public override IndicatorType Clone()
-	{
-		var clone = GetType().CreateInstance<IndicatorType>();
-		clone.Load(this.Save());
-		return clone;
-	}
+		=> new(Indicator, Painter);
 
 	/// <summary>
 	/// Compare <see cref="IndicatorType"/> on the equivalence.
@@ -138,45 +134,9 @@ public class IndicatorType : Equatable<IndicatorType>, IPersistable
 	/// <param name="other">Another value with which to compare.</param>
 	/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
 	protected override bool OnEquals(IndicatorType other)
-	{
-		return Indicator == other.Indicator;
-	}
+		=> Id == other.Id;
 
-	/// <summary>
-	/// Load settings.
-	/// </summary>
-	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
-	{
-		if (storage.ContainsKey(nameof(Indicator)))
-			Indicator = storage.GetValue<string>(nameof(Indicator)).To<Type>();
-
-		if (storage.ContainsKey(nameof(Painter)))
-			Painter = storage.GetValue<string>(nameof(Painter)).To<Type>();
-
-		if (storage.ContainsKey(nameof(InputValue)))
-			InputValue = storage.GetValue<string>(nameof(InputValue)).To<Type>();
-
-		if (storage.ContainsKey(nameof(OutputValue)))
-			OutputValue = storage.GetValue<string>(nameof(OutputValue)).To<Type>();
-	}
-
-	/// <summary>
-	/// Save settings.
-	/// </summary>
-	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
-	{
-		if (Indicator != null)
-			storage.SetValue(nameof(Indicator), Indicator.GetTypeName(false));
-
-		if (Painter != null)
-			storage.SetValue(nameof(Painter), Painter.GetTypeName(false));
-
-		if (InputValue != null)
-			storage.SetValue(nameof(InputValue), InputValue.GetTypeName(false));
-
-		if (OutputValue != null)
-			storage.SetValue(nameof(OutputValue), OutputValue.GetTypeName(false));
-	}
+	/// <inheritdoc />
+	public override int GetHashCode()
+		=> Id?.GetHashCode() ?? 0;
 }
