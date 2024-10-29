@@ -117,7 +117,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 					else if (isReconnectionStarted)
 					{
 						this.AddInfoLog(LocalizedStrings.Reconnecting);
-						base.OnInnerAdapterNewOutMessage(new ConnectionLostMessage { Adapter = message.Adapter });
+						base.OnInnerAdapterNewOutMessage(new ConnectionLostMessage { IsResetState = true, Adapter = message.Adapter });
 					}
 				}
 

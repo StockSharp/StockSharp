@@ -297,7 +297,12 @@ public class OfflineMessageAdapter : MessageAdapterWrapper
 				lock (_syncObject)
 					_connected = false;
 
-				return;
+				var lostMsg = (ConnectionLostMessage)message;
+
+				if (lostMsg.IsResetState)
+					return;
+
+				break;
 			}
 
 			case MessageTypes.ConnectionRestored:

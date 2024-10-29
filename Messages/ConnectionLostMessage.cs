@@ -8,7 +8,7 @@
 /// </remarks>
 [DataContract]
 [Serializable]
-public class ConnectionLostMessage : Message, IServerTimeMessage
+public class ConnectionLostMessage : BaseConnectionControlMessage
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ConnectionLostMessage"/>.
@@ -18,20 +18,10 @@ public class ConnectionLostMessage : Message, IServerTimeMessage
 	{
 	}
 
-    /// <summary>
-    /// Create a copy of <see cref="ConnectionLostMessage"/>.
-    /// </summary>
-    /// <returns>Copy.</returns>
-    public override Message Clone()
-	{
-		var clone = new ConnectionLostMessage();
-		CopyTo(clone);
-		return clone;
-	}
-
-	DateTimeOffset IServerTimeMessage.ServerTime
-	{
-		get => LocalTime;
-		set => LocalTime = value;
-	}
+	/// <summary>
+	/// Create a copy of <see cref="ConnectionLostMessage"/>.
+	/// </summary>
+	/// <returns>Copy.</returns>
+	public override Message Clone()
+		=> CopyTo(new ConnectionLostMessage());
 }
