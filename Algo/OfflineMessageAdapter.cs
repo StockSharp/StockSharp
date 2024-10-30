@@ -297,7 +297,12 @@ public class OfflineMessageAdapter : MessageAdapterWrapper
 				lock (_syncObject)
 					_connected = false;
 
-				return;
+				var lostMsg = (ConnectionLostMessage)message;
+
+				if (lostMsg.IsResetState)
+					return;
+
+				break;
 			}
 
 			case MessageTypes.ConnectionRestored:
@@ -308,7 +313,7 @@ public class OfflineMessageAdapter : MessageAdapterWrapper
 
 		ProcessSuspendedMessage processMsg = null;
 
-		if ((connectMessage != null && connectMessage.Error == null) || message.Type == MessageTypes.ConnectionRestored)
+		if ((connectMessage != null && connectMessage.IsOk()) || message.Type == MessageTypes.ConnectionRestored)
 		{
 			lock (_syncObject)
 			{

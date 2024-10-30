@@ -67,7 +67,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 				var isReconnecting = false;
 				var isReconnectionStarted = false;
 
-				if (connectMsg.Error == null)
+				if (connectMsg.IsOk())
 				{
 					isRestored = _currState == ConnectionStates.Connecting && (_prevState == ConnectionStates.Failed || _prevState == ConnectionStates.Reconnecting);
 
@@ -112,12 +112,12 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 				}
 				else
 				{
-					if (connectMsg.Error == null || !SuppressReconnectingErrors || !isReconnecting)
+					if (connectMsg.IsOk() || !SuppressReconnectingErrors || !isReconnecting)
 						base.OnInnerAdapterNewOutMessage(message);
 					else if (isReconnectionStarted)
 					{
 						this.AddInfoLog(LocalizedStrings.Reconnecting);
-						base.OnInnerAdapterNewOutMessage(new ConnectionLostMessage { Adapter = message.Adapter });
+						base.OnInnerAdapterNewOutMessage(new ConnectionLostMessage { IsResetState = true, Adapter = message.Adapter });
 					}
 				}
 
@@ -127,7 +127,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 			{
 				var disconnectMsg = (DisconnectMessage)message;
 
-				if (disconnectMsg.Error == null)
+				if (disconnectMsg.IsOk())
 				{
 					lock (_timeSync)
 						_prevState = _currState = ConnectionStates.Disconnected;

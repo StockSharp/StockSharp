@@ -1311,7 +1311,7 @@ public static partial class TraderHelper
 			if (msg is TResult resMsg)
 				retVal.Add(resMsg);
 
-			if (msg is IErrorMessage errMsg && errMsg.Error != null)
+			if (msg is IErrorMessage errMsg && !errMsg.IsOk())
 				throw errMsg.Error;
 
 			return msg is SubscriptionFinishedMessage;

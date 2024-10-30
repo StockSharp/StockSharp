@@ -412,7 +412,7 @@ class EntityCache : ISnapshotHolder
 		if (getPortfolio is null)
 			throw new ArgumentNullException(nameof(getPortfolio));
 
-		if (message.Error != null)
+		if (!message.IsOk())
 			throw new ArgumentException(LocalizedStrings.MessageHasStateAndError.PutEx(message));
 
 		var securityData = GetData(security);
@@ -551,7 +551,7 @@ class EntityCache : ISnapshotHolder
 				o.Portfolio = getPortfolio(message.PortfolioName);
 
 				AddOrder(o);
-				_allOrdersByTransactionId.TryAdd((transactionId, OrderOperations.Register), o);
+				_allOrdersByTransactionId.TryAdd2((transactionId, OrderOperations.Register), o);
 
 				registeredInfo = new OrderInfo(this, o, true);
 				securityData.Orders.Add(CreateOrderKey(o.Type, transactionId, OrderOperations.Register), registeredInfo);

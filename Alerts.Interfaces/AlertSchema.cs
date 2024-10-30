@@ -62,6 +62,11 @@ public class AlertSchema : IPersistable
 	public string Message { get; set; }
 
 	/// <summary>
+	/// <see cref="LogLevels"/>
+	/// </summary>
+	public LogLevels LogLevel { get; set; } = LogLevels.Info;
+
+	/// <summary>
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
@@ -82,6 +87,7 @@ public class AlertSchema : IPersistable
 		IsEnabled = storage.GetValue(nameof(IsEnabled), IsEnabled);
 		Id = storage.GetValue<Guid>(nameof(Id));
 		MessageType = storage.GetValue<string>(nameof(MessageType)).To<Type>();
+		LogLevel = storage.GetValue(nameof(LogLevel), LogLevel);
 	}
 
 	/// <summary>
@@ -98,5 +104,6 @@ public class AlertSchema : IPersistable
 		storage.SetValue(nameof(IsEnabled), IsEnabled);
 		storage.SetValue(nameof(Id), Id);
 		storage.SetValue(nameof(MessageType), MessageType.GetTypeName(false));
+		storage.SetValue(nameof(LogLevel), LogLevel);
 	}
 }

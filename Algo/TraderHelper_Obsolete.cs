@@ -1485,7 +1485,7 @@ partial class TraderHelper
 				if (msg is not ExecutionMessage execMsg)
 					return;
 
-				if (execMsg.Error != null)
+				if (!execMsg.IsOk())
 					errors.Add(execMsg.Error);
 
 				if (execMsg.HasTradeInfo())

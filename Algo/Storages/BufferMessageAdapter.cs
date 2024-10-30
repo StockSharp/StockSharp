@@ -202,9 +202,9 @@ public class BufferMessageAdapter : MessageAdapterWrapper
 
 		_orderStatusIds.Add(transId);
 
-		if (!message.HasOrderId() && message.OriginalTransactionId == 0 && Settings.DaysLoad > TimeSpan.Zero)
+		if (!message.HasOrderId() && message.OriginalTransactionId == 0 /*&& Settings.DaysLoad > TimeSpan.Zero*/)
 		{
-			var from = message.From ?? DateTime.UtcNow.Date - Settings.DaysLoad;
+			var from = message.From ?? DateTime.UtcNow.Date/* - Settings.DaysLoad*/;
 			var to = message.To;
 
 			if (Settings.IsMode(StorageModes.Snapshot))
@@ -335,7 +335,7 @@ public class BufferMessageAdapter : MessageAdapterWrapper
 							if (_cancellationTransactions.TryGetValue(originTransId, out var cancelledId))
 							{
 								// do not store cancellation errors
-								if (message.Error != null)
+								if (!message.IsOk())
 									continue;
 
 								// override cancel trans id by original order's registration trans id
@@ -348,7 +348,7 @@ public class BufferMessageAdapter : MessageAdapterWrapper
 							}
 							else if (_replaceTransactions.TryGetAndRemove(originTransId, out var replacedId))
 							{
-								if (message.Error == null)
+								if (message.IsOk())
 								{
 									var replaced = (ExecutionMessage)snapshotStorage.Get(replacedId.To<string>());
 

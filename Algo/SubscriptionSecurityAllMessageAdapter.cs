@@ -274,7 +274,7 @@ public class SubscriptionSecurityAllMessageAdapter : MessageAdapterWrapper
 				var responseMsg = (SubscriptionResponseMessage)message;
 				var originId = responseMsg.OriginalTransactionId;
 
-				if (responseMsg.Error != null)
+				if (!responseMsg.IsOk())
 				{
 					lock (_sync)
 					{

@@ -343,4 +343,26 @@ public static class IndicatorHelper
 			};
 		}
 	}
+
+	/// <summary>
+	/// Create empty <see cref="IIndicatorValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="IIndicator"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	/// <returns>Empty <see cref="IIndicatorValue"/>.</returns>
+	public static IIndicatorValue CreateEmptyValue(this IIndicator indicator, DateTimeOffset time)
+	{
+		if (indicator is null)
+			throw new ArgumentNullException(nameof(indicator));
+
+		return indicator.CreateValue(time, []);
+	}
+
+	/// <summary>
+	/// Create indicator.
+	/// </summary>
+	/// <param name="type"><see cref="IndicatorType"/></param>
+	/// <returns><see cref="IIndicator"/></returns>
+	public static IIndicator CreateIndicator(this IndicatorType type)
+		=> type.CheckOnNull(nameof(type)).Indicator.CreateInstance<IIndicator>();
 }

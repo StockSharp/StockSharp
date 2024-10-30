@@ -8,7 +8,7 @@
 /// </remarks>
 [DataContract]
 [Serializable]
-public class ConnectionRestoredMessage : Message, IServerTimeMessage
+public class ConnectionRestoredMessage : BaseConnectionControlMessage
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ConnectionRestoredMessage"/>.
@@ -19,28 +19,9 @@ public class ConnectionRestoredMessage : Message, IServerTimeMessage
 	}
 
 	/// <summary>
-	/// Determines a state should be reset.
-	/// </summary>
-	public bool IsResetState { get; set; }
-
-	/// <summary>
 	/// Create a copy of <see cref="ConnectionRestoredMessage"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
 	public override Message Clone()
-	{
-		var clone = new ConnectionRestoredMessage { IsResetState = IsResetState };
-		CopyTo(clone);
-		return clone;
-	}
-
-	/// <inheritdoc />
-	public override string ToString()
-		=> $"{base.ToString()},R={IsResetState}";
-
-	DateTimeOffset IServerTimeMessage.ServerTime
-	{
-		get => LocalTime;
-		set => LocalTime = value;
-	}
+		=> CopyTo(new ConnectionRestoredMessage());
 }

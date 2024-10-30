@@ -1625,11 +1625,11 @@ public static partial class Extensions
 	}
 
 	/// <summary>
-	/// Determines whether the reply contains an error <see cref="SubscriptionResponseMessage.Error"/>.
+	/// Determines whether the reply contains an error <see cref="IErrorMessage.Error"/>.
 	/// </summary>
-	/// <param name="message">Reply.</param>
+	/// <param name="message"><see cref="IErrorMessage"/></param>
 	/// <returns>Check result.</returns>
-	public static bool IsOk(this SubscriptionResponseMessage message)
+	public static bool IsOk(this IErrorMessage message)
 	{
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));

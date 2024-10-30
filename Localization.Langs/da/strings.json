@@ -1718,6 +1718,7 @@
   "LegsPrices": "Benpriser",
   "Less": "Mindre",
   "LessOrEqual": "Mindre end eller lig med",
+  "Level": "Niveau",
   "Level1": "Level 1",
   "Level1ElementDescription": "Dette element bruges til at hente data fra første niveau for et instrument.",
   "Level1Field": "Feltet Level1.",
