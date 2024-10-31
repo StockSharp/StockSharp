@@ -64,4 +64,25 @@ public static class CodeExtensions
 
 		return res;
 	}
+
+	/// <summary>
+	/// Try to find type.
+	/// </summary>
+	/// <param name="asm">Assembly.</param>
+	/// <param name="isTypeCompatible">Is type compatible.</param>
+	/// <param name="typeName">Type name.</param>
+	/// <returns>Found type.</returns>
+	public static Type TryFindType(this Assembly asm, Func<Type, bool> isTypeCompatible, string typeName)
+	{
+		if (asm is null)
+			throw new ArgumentNullException(nameof(asm));
+
+		if (isTypeCompatible is null && typeName.IsEmpty())
+			throw new ArgumentNullException(nameof(typeName));
+
+		if (!typeName.IsEmpty())
+			return asm.GetType(typeName, false, true);
+		else
+			return asm.GetTypes().FirstOrDefault(isTypeCompatible);
+	}
 }

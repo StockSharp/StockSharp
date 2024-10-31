@@ -151,12 +151,10 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	/// Compile code.
 	/// </summary>
 	/// <param name="isTypeCompatible">Is type compatible.</param>
+	/// <param name="typeName">Type name.</param>
 	/// <returns><see cref="CompilationResult"/></returns>
-	public CompilationResult Compile(Func<Type, bool> isTypeCompatible)
+	public CompilationResult Compile(Func<Type, bool> isTypeCompatible = default, string typeName = default)
 	{
-		if (isTypeCompatible is null)
-			throw new ArgumentNullException(nameof(isTypeCompatible));
-
 		IsCompilable = false;
 
 		var sources = new[] { Text };
@@ -184,7 +182,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 
 		IsCompilable = true;
 
-		ObjectType = Context.LoadFromStream(asm).GetTypes().FirstOrDefault(isTypeCompatible);
+		ObjectType = Context.LoadFromStream(asm).TryFindType(isTypeCompatible, typeName);
 
 		try
 		{
