@@ -7,18 +7,35 @@ using Ecng.Compilation;
 /// </summary>
 public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 {
+	private readonly bool _ownContext;
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CodeInfo"/>.
 	/// </summary>
 	public CodeInfo()
+		: this(new(), true)
     {
 		_references.Changed += OnReferencesChanged;
 	}
 
-	void IDisposable.Dispose()
+	/// <summary>
+	/// Initializes a new instance of the <see cref="CodeInfo"/>.
+	/// </summary>
+	/// <param name="context"><see cref="AssemblyLoadContextTracker"/></param>
+	/// <param name="ownContext">Own context.</param>
+	public CodeInfo(AssemblyLoadContextTracker context, bool ownContext)
+	{
+		Context = context ?? throw new ArgumentNullException(nameof(context));
+		_ownContext = ownContext;
+	}
+
+	/// <inheritdoc />
+	public void Dispose()
 	{
 		_references.Changed -= OnReferencesChanged;
-		Context.Dispose();
+
+		if (_ownContext)
+			Context.Dispose();
 
 		GC.SuppressFinalize(this);
 	}
@@ -123,7 +140,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	/// <summary>
 	/// <see cref="AssemblyLoadContextTracker"/>
 	/// </summary>
-	public AssemblyLoadContextTracker Context { get; } = new();
+	public AssemblyLoadContextTracker Context { get; }
 
 	/// <summary>
 	/// Last built assembly.
