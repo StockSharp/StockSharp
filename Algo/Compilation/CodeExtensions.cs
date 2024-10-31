@@ -51,4 +51,17 @@ public static class CodeExtensions
 		=>	_defaultReferences
 			.Select(r => new CodeReference { Location = $"{r}.dll" })
 			.ToArray();
+
+	/// <summary>
+	/// Throw if errors.
+	/// </summary>
+	/// <param name="res"><see cref="CompilationResult"/></param>
+	/// <returns><see cref="CompilationResult"/></returns>
+	public static CompilationResult ThrowIfErrors(this CompilationResult res)
+	{
+		if (res.HasErrors())
+			throw new InvalidOperationException($"Compilation error: {res.Errors.Where(e => e.Type == CompilationErrorTypes.Error).Take(2).Select(e => e.ToString()).JoinN()}");
+
+		return res;
+	}
 }
