@@ -51,38 +51,4 @@ public static class CodeExtensions
 		=>	_defaultReferences
 			.Select(r => new CodeReference { Location = $"{r}.dll" })
 			.ToArray();
-
-	/// <summary>
-	/// Throw if errors.
-	/// </summary>
-	/// <param name="res"><see cref="CompilationResult"/></param>
-	/// <returns><see cref="CompilationResult"/></returns>
-	public static CompilationResult ThrowIfErrors(this CompilationResult res)
-	{
-		if (res.HasErrors())
-			throw new InvalidOperationException($"Compilation error: {res.Errors.Where(e => e.Type == CompilationErrorTypes.Error).Take(2).Select(e => e.ToString()).JoinN()}");
-
-		return res;
-	}
-
-	/// <summary>
-	/// Try to find type.
-	/// </summary>
-	/// <param name="asm">Assembly.</param>
-	/// <param name="isTypeCompatible">Is type compatible.</param>
-	/// <param name="typeName">Type name.</param>
-	/// <returns>Found type.</returns>
-	public static Type TryFindType(this Assembly asm, Func<Type, bool> isTypeCompatible, string typeName)
-	{
-		if (asm is null)
-			throw new ArgumentNullException(nameof(asm));
-
-		if (isTypeCompatible is null && typeName.IsEmpty())
-			throw new ArgumentNullException(nameof(typeName));
-
-		if (!typeName.IsEmpty())
-			return asm.GetType(typeName, false, true);
-		else
-			return asm.GetTypes().FirstOrDefault(isTypeCompatible);
-	}
 }
