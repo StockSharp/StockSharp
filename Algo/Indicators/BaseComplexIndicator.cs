@@ -152,7 +152,7 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 	{
 		base.Reset();
 
-		using (new Scope<InnerIndicatorResetScope>(new()))
+		using (new InnerIndicatorResetScope().ToScope())
 			InnerIndicators.ForEach(i => i.Reset());
 	}
 
