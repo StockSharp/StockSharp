@@ -1619,4 +1619,63 @@ public static partial class TraderHelper
 	/// <param name="dataType">Data type info.</param>
 	/// <returns>Subscription.</returns>
 	public static Subscription ToSubscription(this DataType dataType) => new(dataType, (SecurityMessage)null);
+
+	/// <summary>
+	/// Try find <see cref="IndicatorType"/> by identifier.
+	/// </summary>
+	/// <param name="provider"><see cref="IIndicatorProvider"/></param>
+	/// <param name="id">Identifier.</param>
+	/// <returns><see cref="IndicatorType"/> or <see langword="null"/>.</returns>
+	public static IndicatorType TryGetById(this IIndicatorProvider provider, string id)
+		=> provider.CheckOnNull(nameof(provider)).All.FirstOrDefault(it => it.Id == id);
+
+	/// <summary>
+	/// Save <see cref="IndicatorType"/> to <see cref="SettingsStorage"/>.
+	/// </summary>
+	/// <param name="provider"><see cref="IIndicatorProvider"/></param>
+	/// <param name="type"><see cref="IndicatorType"/></param>
+	/// <param name="forceFull">Save full type info.</param>
+	/// <returns><see cref="SettingsStorage"/></returns>
+	public static SettingsStorage SaveType(this IIndicatorProvider provider, IndicatorType type, bool forceFull)
+	{
+		var s = new SettingsStorage();
+
+		s.Set(nameof(type.Id), type.Id);
+
+		if (provider.IsCustom(type) && forceFull)
+		{
+			s.Set(nameof(IndicatorType), provider.Save(type));
+		}
+
+		return s;
+	}
+
+	/// <summary>
+	/// Try load <see cref="IndicatorType"/> from <see cref="SettingsStorage"/>.
+	/// </summary>
+	/// <param name="provider"><see cref="IIndicatorProvider"/></param>
+	/// <param name="storage"><see cref="SettingsStorage"/></param>
+	/// <returns><see cref="IndicatorType"/> or <see langword="null"/>.</returns>
+	public static IndicatorType TryLoadType(this IIndicatorProvider provider, SettingsStorage storage)
+	{
+		if (provider is null)	throw new ArgumentNullException(nameof(provider));
+		if (storage is null)	throw new ArgumentNullException(nameof(storage));
+
+		var id = storage.GetValue<string>(nameof(IndicatorType.Id)) ?? storage.GetValue<string>(nameof(IndicatorType.Indicator));
+
+		if (id.IsEmpty())
+			return null;
+
+		var indicator = provider.TryGetById(id);
+
+		if (indicator is null)
+		{
+			var ss = storage.GetValue<SettingsStorage>(nameof(IndicatorType));
+
+			if (ss is not null)
+				indicator = provider.Load(id, ss);
+		}
+
+		return indicator;
+	}
 }
