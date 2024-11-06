@@ -26,26 +26,4 @@ public interface IIndicatorProvider
 	/// </summary>
 	/// <param name="type"><see cref="IndicatorType"/></param>
 	void Remove(IndicatorType type);
-
-	/// <summary>
-	/// Determines whether the <see cref="IndicatorType"/> is custom (user-defined).
-	/// </summary>
-	/// <param name="type"><see cref="IndicatorType"/></param>
-	/// <returns>Check result.</returns>
-	bool IsCustom(IndicatorType type);
-
-	/// <summary>
-	/// Save <see cref="IndicatorType"/>.
-	/// </summary>
-	/// <param name="type"><see cref="IndicatorType"/></param>
-	/// <returns><see cref="SettingsStorage"/></returns>
-	SettingsStorage Save(IndicatorType type);
-
-	/// <summary>
-	/// Load <see cref="IndicatorType"/>.
-	/// </summary>
-	/// <param name="id"><see cref="IndicatorType.Id"/></param>
-	/// <param name="storage"><see cref="SettingsStorage"/></param>
-	/// <returns><see cref="IndicatorType"/></returns>
-	IndicatorType Load(string id, SettingsStorage storage);
 }
