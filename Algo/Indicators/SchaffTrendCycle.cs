@@ -79,7 +79,7 @@ public class SchaffTrendCycle : ExponentialMovingAverage
 	{
 		base.Reset();
 
-		using (new Scope<InnerIndicatorResetScope>(new()))
+		using (new InnerIndicatorResetScope().ToScope())
 		{
 			Macd?.Reset();
 			StochasticK?.Reset();

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <g transform="translate(20 20) rotate(-10) skewX(-10) scale(2)">
+    <path 
+      d="M 20 20 L 80 20 L 80 80 L 20 80 Z" 
+      fill="none" 
+      stroke="#4CAF50" 
+      stroke-width="3"
+    />
+    <path 
+      d="M 30 55 L 50 35 L 70 55 L 60 55 L 60 65 L 40 65 L 40 55 Z" 
+      fill="#4CAF50"
+    />
+  </g>
+</svg>

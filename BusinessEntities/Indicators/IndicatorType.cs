@@ -10,7 +10,7 @@ public class IndicatorType : Equatable<IndicatorType>, IDisposable
 	/// <summary>
 	/// Identifier.
 	/// </summary>
-	public virtual string Id => Indicator?.GetTypeName(false);
+	public virtual string Id => Indicator?.GetTypeName(false) ?? string.Empty;
 
 	/// <summary>
 	/// Indicator name.
@@ -138,5 +138,5 @@ public class IndicatorType : Equatable<IndicatorType>, IDisposable
 
 	/// <inheritdoc />
 	public override int GetHashCode()
-		=> Id?.GetHashCode() ?? 0;
+		=> Id.GetHashCode();
 }

@@ -1,24 +1,42 @@
 namespace StockSharp.Algo.Compilation;
 
 using Ecng.Compilation;
+using Ecng.Reflection;
 
 /// <summary>
 /// Code info.
 /// </summary>
 public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 {
+	private readonly bool _ownContext;
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CodeInfo"/>.
 	/// </summary>
 	public CodeInfo()
+		: this(new(), true)
     {
 		_references.Changed += OnReferencesChanged;
 	}
 
-	void IDisposable.Dispose()
+	/// <summary>
+	/// Initializes a new instance of the <see cref="CodeInfo"/>.
+	/// </summary>
+	/// <param name="context"><see cref="AssemblyLoadContextTracker"/></param>
+	/// <param name="ownContext">Own context.</param>
+	public CodeInfo(AssemblyLoadContextTracker context, bool ownContext)
+	{
+		Context = context ?? throw new ArgumentNullException(nameof(context));
+		_ownContext = ownContext;
+	}
+
+	/// <inheritdoc />
+	public void Dispose()
 	{
 		_references.Changed -= OnReferencesChanged;
-		Context.Dispose();
+
+		if (_ownContext)
+			Context.Dispose();
 
 		GC.SuppressFinalize(this);
 	}
@@ -123,7 +141,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	/// <summary>
 	/// <see cref="AssemblyLoadContextTracker"/>
 	/// </summary>
-	public AssemblyLoadContextTracker Context { get; } = new();
+	public AssemblyLoadContextTracker Context { get; }
 
 	/// <summary>
 	/// Last built assembly.
@@ -134,12 +152,10 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	/// Compile code.
 	/// </summary>
 	/// <param name="isTypeCompatible">Is type compatible.</param>
+	/// <param name="typeName">Type name.</param>
 	/// <returns><see cref="CompilationResult"/></returns>
-	public CompilationResult Compile(Func<Type, bool> isTypeCompatible)
+	public CompilationResult Compile(Func<Type, bool> isTypeCompatible = default, string typeName = default)
 	{
-		if (isTypeCompatible is null)
-			throw new ArgumentNullException(nameof(isTypeCompatible));
-
 		IsCompilable = false;
 
 		var sources = new[] { Text };
@@ -167,7 +183,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 
 		IsCompilable = true;
 
-		ObjectType = Context.LoadFromStream(asm).GetTypes().FirstOrDefault(isTypeCompatible);
+		ObjectType = Context.LoadFromStream(asm).TryFindType(isTypeCompatible, typeName);
 
 		try
 		{

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Charting;
+﻿namespace StockSharp.Algo.Indicators;
 
 /// <summary>
 /// Provider <see cref="IndicatorType"/>.
