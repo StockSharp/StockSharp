@@ -114,6 +114,13 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	/// </summary>
 	public IList<ICodeReference> ProjectReferences => _projectReferences;
 
+	private readonly CachedSynchronizedSet<NuGetReference> _nugetReferences = [];
+
+	/// <summary>
+	/// NuGet references.
+	/// </summary>
+	public IList<NuGetReference> NuGetReferences => _nugetReferences;
+
 	/// <summary>
 	/// Object type.
 	/// </summary>
@@ -186,7 +193,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 
 		try
 		{
-			refs = (await _assemblyReferences.Cache.Concat(_projectReferences.Cache).ToValidRefImages(cancellationToken)).ToArray();
+			refs = (await _assemblyReferences.Cache.Concat(_projectReferences.Cache).Concat(_nugetReferences.Cache).ToValidRefImages(cancellationToken)).ToArray();
 		}
 		catch (Exception ex)
 		{
@@ -251,6 +258,9 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		_assemblyReferences.Clear();
 		_assemblyReferences.AddRange((storage.GetValue<IEnumerable<SettingsStorage>>(nameof(AssemblyReferences)) ?? storage.GetValue<IEnumerable<SettingsStorage>>("References")).Select(s => s.Load<AssemblyReference>()));
 
+		_nugetReferences.Clear();
+		_nugetReferences.AddRange(storage.GetValue<IEnumerable<SettingsStorage>>(nameof(NuGetReferences)).Select(s => s.Load<NuGetReference>()));
+
 		_projectReferences.Clear();
 
 		if (storage.ContainsKey(nameof(ProjectReferences)))
@@ -272,6 +282,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 			.Set(nameof(ExtraSources), ExtraSources)
 			.Set(nameof(Text), Text)
 			.Set(nameof(AssemblyReferences), _assemblyReferences.Cache.Select(r => r.Save()).ToArray())
+			.Set(nameof(NuGetReferences), _nugetReferences.Cache.Select(r => r.Save()).ToArray())
 			.Set(nameof(ProjectReferences), _projectReferences.Cache.Select(r => r.Id).ToArray())
 		;
 	}
