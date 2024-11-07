@@ -2250,6 +2250,7 @@
   "Ntm": "NTM",
   "NtmDesc": "Mode de transactions négociées",
   "NtmInfo": "Information sur le RPS",
+  "Nuget": "NuGet",
   "NugetPackageId": "Identifiant du paquet Nuget",
   "Numeric": "Numérique",
   "NumericValue": "Valeur numérique",

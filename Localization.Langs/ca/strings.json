@@ -2250,6 +2250,7 @@
   "Ntm": "NST",
   "NtmDesc": "Mode de negociacions per tracte",
   "NtmInfo": "Informació NST",
+  "Nuget": "NuGet",
   "NugetPackageId": "Identificador del paquet Nuget",
   "Numeric": "Numèric",
   "NumericValue": "Valor numèric",

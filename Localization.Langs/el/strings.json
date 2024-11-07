@@ -2250,6 +2250,7 @@
   "Ntm": "NTM",
   "NtmDesc": "Κατάσταση διαπραγματευμένων συναλλαγών",
   "NtmInfo": "Πληροφορίες RPS",
+  "Nuget": "NuGet",
   "NugetPackageId": "Αναγνωριστικό πακέτου Nuget",
   "Numeric": "Αριθμητικό",
   "NumericValue": "Αριθμητική αξία",

@@ -2250,6 +2250,7 @@
   "Ntm": "高频交易",
   "NtmDesc": "协商交易模式",
   "NtmInfo": "RPS信息",
+  "Nuget": "NuGet",
   "NugetPackageId": "Nuget包标识符",
   "Numeric": "数值",
   "NumericValue": "数值",
