@@ -222,7 +222,15 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 				return result;
 
 			errors.AddRange(result.Errors);
-			cache?.Add(sources, refs.Select(r => r.name), asm = result.Assembly);
+
+			try
+			{
+				cache?.Add(sources, refs.Select(r => r.name), asm = result.Assembly);
+			}
+			catch (Exception ex)
+			{
+				ex.LogError();
+			}
 		}
 
 		IsCompilable = true;
@@ -259,7 +267,9 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		_assemblyReferences.AddRange((storage.GetValue<IEnumerable<SettingsStorage>>(nameof(AssemblyReferences)) ?? storage.GetValue<IEnumerable<SettingsStorage>>("References")).Select(s => s.Load<AssemblyReference>()));
 
 		_nugetReferences.Clear();
-		_nugetReferences.AddRange(storage.GetValue<IEnumerable<SettingsStorage>>(nameof(NuGetReferences)).Select(s => s.Load<NuGetReference>()));
+
+		if (storage.ContainsKey(nameof(NuGetReferences)))
+			_nugetReferences.AddRange(storage.GetValue<IEnumerable<SettingsStorage>>(nameof(NuGetReferences)).Select(s => s.Load<NuGetReference>()));
 
 		_projectReferences.Clear();
 
