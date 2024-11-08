@@ -15,7 +15,7 @@ public interface IOrderMessage :
 	/// <summary>
 	/// Order state.
 	/// </summary>
-	OrderStates State { get; }
+	OrderStates? State { get; }
 
 	/// <summary>
 	/// <see cref="TimeInForce"/>
@@ -38,7 +38,7 @@ public interface IOrderMessage :
 	/// <summary>
 	/// Order contracts balance.
 	/// </summary>
-	decimal Balance { get; }
+	decimal? Balance { get; }
 
 	/// <summary>
 	/// Order price.
@@ -48,5 +48,5 @@ public interface IOrderMessage :
 	/// <summary>
 	/// Number of contracts in the order.
 	/// </summary>
-	decimal Volume { get; }
+	decimal? Volume { get; }
 }
