@@ -3,6 +3,8 @@ namespace StockSharp.Algo.Compilation;
 using Ecng.Compilation;
 using Ecng.Reflection;
 
+using Nito.AsyncEx;
+
 /// <summary>
 /// Code info.
 /// </summary>
@@ -15,8 +17,8 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	/// </summary>
 	public CodeInfo()
 		: this(new(), true)
-    {
-		_references.Changed += OnReferencesChanged;
+	{
+		_assemblyReferences.Changed += OnReferencesChanged;
 	}
 
 	/// <summary>
@@ -33,7 +35,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	/// <inheritdoc />
 	public void Dispose()
 	{
-		_references.Changed -= OnReferencesChanged;
+		_assemblyReferences.Changed -= OnReferencesChanged;
 
 		if (_ownContext)
 			Context.Dispose();
@@ -42,7 +44,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	}
 
 	private void OnReferencesChanged()
-		=> NotifyChanged(nameof(References));
+		=> NotifyChanged(nameof(AssemblyReferences));
 
 	private Guid _id = Guid.NewGuid();
 
@@ -98,12 +100,26 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		}
 	}
 
-	private readonly CachedSynchronizedSet<CodeReference> _references = new(CodeExtensions.DefaultReferences);
+	private readonly CachedSynchronizedSet<AssemblyReference> _assemblyReferences = new(CodeExtensions.DefaultReferences);
 
 	/// <summary>
-	/// References.
+	/// Assembly references.
 	/// </summary>
-	public INotifyList<CodeReference> References => _references;
+	public IList<AssemblyReference> AssemblyReferences => _assemblyReferences;
+
+	private readonly CachedSynchronizedSet<ICodeReference> _projectReferences = [];
+
+	/// <summary>
+	/// File references.
+	/// </summary>
+	public IList<ICodeReference> ProjectReferences => _projectReferences;
+
+	private readonly CachedSynchronizedSet<NuGetReference> _nugetReferences = [];
+
+	/// <summary>
+	/// NuGet references.
+	/// </summary>
+	public IList<NuGetReference> NuGetReferences => _nugetReferences;
 
 	/// <summary>
 	/// Object type.
@@ -155,6 +171,16 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	/// <param name="typeName">Type name.</param>
 	/// <returns><see cref="CompilationResult"/></returns>
 	public CompilationResult Compile(Func<Type, bool> isTypeCompatible = default, string typeName = default)
+		=> AsyncContext.Run(() => CompileAsync(isTypeCompatible, typeName, default));
+
+	/// <summary>
+	/// Compile code.
+	/// </summary>
+	/// <param name="isTypeCompatible">Is type compatible.</param>
+	/// <param name="typeName">Type name.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="CompilationResult"/></returns>
+	public async Task<CompilationResult> CompileAsync(Func<Type, bool> isTypeCompatible, string typeName, CancellationToken cancellationToken)
 	{
 		IsCompilable = false;
 
@@ -163,22 +189,48 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		if (ExtraSources is not null)
 			sources = sources.Concat(ExtraSources);
 
-		var refs = References.ToValidPaths().ToArray();
+		(string name, byte[] body)[] refs = null;
+
+		try
+		{
+			refs = (await _assemblyReferences.Cache.Concat(_projectReferences.Cache).Concat(_nugetReferences.Cache).ToValidRefImages(cancellationToken)).ToArray();
+		}
+		catch (Exception ex)
+		{
+			ex.LogError();
+
+			return new()
+			{
+				Errors = [new CompilationError
+				{
+					Message = ex.Message,
+					Type = CompilationErrorTypes.Error,
+				}],
+			};
+		}
 
 		byte[] asm = null;
 		var errors = new List<CompilationError>();
 
 		var cache = ServicesRegistry.TryCompilerCache;
 
-		if (cache?.TryGet(sources, refs, out asm) != true)
+		if (cache?.TryGet(sources, refs.Select(r => r.name), out asm) != true)
 		{
-			var result = ServicesRegistry.Compiler.Compile("Strategy", sources, refs);
+			var result = ServicesRegistry.Compiler.Compile("Strategy", sources, refs, cancellationToken);
 
 			if (result.HasErrors())
 				return result;
 
 			errors.AddRange(result.Errors);
-			cache?.Add(sources, refs, asm = result.Assembly);
+
+			try
+			{
+				cache?.Add(sources, refs.Select(r => r.name), asm = result.Assembly);
+			}
+			catch (Exception ex)
+			{
+				ex.LogError();
+			}
 		}
 
 		IsCompilable = true;
@@ -211,8 +263,24 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		Text = storage.GetValue(nameof(Text), storage.GetValue<string>("SourceCode"))?.Replace("ChartIndicatorDrawStyles", "DrawStyles");
 		ExtraSources = storage.GetValue(nameof(ExtraSources), ExtraSources);
 
-		_references.Clear();
-		_references.AddRange(storage.GetValue<IEnumerable<SettingsStorage>>(nameof(References)).Select(s => s.Load<CodeReference>()).ToArray());
+		_assemblyReferences.Clear();
+		_assemblyReferences.AddRange((storage.GetValue<IEnumerable<SettingsStorage>>(nameof(AssemblyReferences)) ?? storage.GetValue<IEnumerable<SettingsStorage>>("References")).Select(s => s.Load<AssemblyReference>()));
+
+		_nugetReferences.Clear();
+
+		if (storage.ContainsKey(nameof(NuGetReferences)))
+			_nugetReferences.AddRange(storage.GetValue<IEnumerable<SettingsStorage>>(nameof(NuGetReferences)).Select(s => s.Load<NuGetReference>()));
+
+		_projectReferences.Clear();
+
+		if (storage.ContainsKey(nameof(ProjectReferences)))
+		{
+			foreach (var projId in storage.GetValue<IEnumerable<string>>(nameof(ProjectReferences)))
+			{
+				if (CodeExtensions.TryGetProjectReference(projId, out var projRef))
+					_projectReferences.Add(projRef);
+			}
+		}
 	}
 
 	/// <inheritdoc />
@@ -223,6 +291,9 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 			.Set(nameof(Name), Name)
 			.Set(nameof(ExtraSources), ExtraSources)
 			.Set(nameof(Text), Text)
-			.Set(nameof(References), _references.Cache.Select(r => r.Save()).ToArray());
+			.Set(nameof(AssemblyReferences), _assemblyReferences.Cache.Select(r => r.Save()).ToArray())
+			.Set(nameof(NuGetReferences), _nugetReferences.Cache.Select(r => r.Save()).ToArray())
+			.Set(nameof(ProjectReferences), _projectReferences.Cache.Select(r => r.Id).ToArray())
+		;
 	}
 }

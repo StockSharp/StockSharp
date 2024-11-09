@@ -26,7 +26,7 @@ public class Order : NotifiableObject, IOrderMessage
 		set => throw new NotSupportedException();
 	}
 
-	Messages.DataType IGeneratedMessage.BuildFrom { get; set; }
+	DataType IGeneratedMessage.BuildFrom { get; set; }
 
 	private TimeSpan? _latencyRegistration;
 
@@ -727,6 +727,10 @@ public class Order : NotifiableObject, IOrderMessage
 		Description = LocalizedStrings.MarginLeverageKey,
 		GroupName = LocalizedStrings.GeneralKey)]
 	public int? Leverage { get; set; }
+
+	OrderStates? IOrderMessage.State => State;
+	decimal? IOrderMessage.Balance => Balance;
+	decimal? IOrderMessage.Volume => Volume;
 
 	/// <inheritdoc />
 	public override string ToString()

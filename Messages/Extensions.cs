@@ -4357,7 +4357,7 @@ public static partial class Extensions
 		if (order is null)
 			throw new ArgumentNullException(nameof(order));
 
-		return order.Balance > 0 && order.Balance != order.Volume;
+		return order.Balance > 0 && order.Volume > 0 && order.Balance != order.Volume;
 	}
 
 	/// <summary>
@@ -4370,7 +4370,7 @@ public static partial class Extensions
 		if (order is null)
 			throw new ArgumentNullException(nameof(order));
 
-		return order.Balance > 0 && order.Balance == order.Volume;
+		return order.Balance > 0 && order.Volume > 0 && order.Balance == order.Volume;
 	}
 
 	/// <summary>
@@ -4378,7 +4378,7 @@ public static partial class Extensions
 	/// </summary>
 	/// <param name="order">The order, for which the implemented part of volume shall be calculated.</param>
 	/// <returns>The implemented part of volume.</returns>
-	public static decimal GetMatchedVolume(this IOrderMessage order)
+	public static decimal? GetMatchedVolume(this IOrderMessage order)
 	{
 		if (order is null)
 			throw new ArgumentNullException(nameof(order));

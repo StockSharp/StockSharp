@@ -43,9 +43,9 @@ public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 	IPortfolioNameMessage, IErrorMessage, IStrategyIdMessage, IGeneratedMessage,
 	IOrderMessage, ITickTradeMessage, IOrderLogMessage, ISystemMessage
 {
-	OrderStates IOrderMessage.State => OrderState.Value;
-	decimal IOrderMessage.Balance => Balance.Value;
-	decimal IOrderMessage.Volume => OrderVolume.Value;
+	OrderStates? IOrderMessage.State => OrderState;
+	decimal? IOrderMessage.Balance => Balance;
+	decimal? IOrderMessage.Volume => OrderVolume;
 
 	/// <inheritdoc />
 	[DataMember]

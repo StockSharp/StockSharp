@@ -2250,6 +2250,7 @@
   "Ntm": "РПС",
   "NtmDesc": "Режим переговорных сделок",
   "NtmInfo": "Информация РПС",
+  "Nuget": "NuGet",
   "NugetPackageId": "Идентификатор пакета Nuget",
   "Numeric": "Числовой",
   "NumericValue": "Числовое значение",
