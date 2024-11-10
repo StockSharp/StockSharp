@@ -3963,6 +3963,8 @@
   "Zero": "Zero",
   "ZeroAsMarket": "Zero price makes market order.",
   "ZeroPrice": "Zero price",
+  "ZeroVolume": "Zero volume",
+  "ZeroVolumesDowload": "Download zero volume candles.",
   "ZigZag": "Zig Zag",
   "ZigZagDepth": "Candles minimum, on which Zigzag will not build a second maximum (or minimum), if it is smaller (or larger) by a deviation of the previous respectively.",
   "ZigZagDesc": "ZigZag.",

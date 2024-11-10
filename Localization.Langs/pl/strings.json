@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "Cena zero rejestruje ofertę rynkową.",
   "ZeroLagExponentialMovingAverage": "Zero lag wykładnicza średnia krocząca.",
   "ZeroPrice": "Cena zero",
+  "ZeroVolume": "Zerowy wolumen",
+  "ZeroVolumesDowload": "Pobierz świece o zerowym wolumenie",
   "ZigZag": "Zygzak",
   "ZigZagDepth": "Głębokość ZigZag: Minimalna liczba świec, na której Zigzag nie zbuduje drugiego maksimum (lub minimum), jeśli jest mniejsza (lub większa) o odchylenie poprzedniego odpowiednio.",
   "ZigZagDesc": "Zygzak.",

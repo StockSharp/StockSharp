@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "零价格表示市场订单。",
   "ZeroLagExponentialMovingAverage": "零滞后指数移动平均线。",
   "ZeroPrice": "零价格",
+  "ZeroVolume": "零交易量",
+  "ZeroVolumesDowload": "下载零交易量蜡烛图",
   "ZigZag": "之字形",
   "ZigZagDepth": "Zigzag深度：如果第二个最大值（或最小值）小于（或大于）偏差的前一个值，Zigzag在最小蜡烛数量上不会构建第二个最大值（或最小值）。",
   "ZigZagDesc": "锯齿形。",

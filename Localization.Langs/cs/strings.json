@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "Nulová cena registruje tržní objednávku.",
   "ZeroLagExponentialMovingAverage": "Nulové zpoždění exponenciální klouzavý průměr.",
   "ZeroPrice": "Cena nula",
+  "ZeroVolume": "Nulový objem",
+  "ZeroVolumesDowload": "Stáhnout svíčky s nulovým objemem",
   "ZigZag": "ZigZag",
   "ZigZagDepth": "Hloubka ZigZag: Minimální počet svíček, na kterých Zigzag nebude stavět druhé maximum (nebo minimum), pokud je menší (nebo větší) než odchylka od předchozího.",
   "ZigZagDesc": "Zigzag.",

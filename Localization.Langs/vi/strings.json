@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "Giá bằng không đăng ký một lệnh thị trường.",
   "ZeroLagExponentialMovingAverage": "Trung bình Động Lũy thừa Zero Lag.",
   "ZeroPrice": "Giá bằng không",
+  "ZeroVolume": "Khối lượng không",
+  "ZeroVolumesDowload": "Tải xuống nến khối lượng không",
   "ZigZag": "ZigZag",
   "ZigZagDepth": "Độ Sâu ZigZag: Số nến tối thiểu mà Zigzag sẽ không xây dựng một đỉnh cao thứ hai (hoặc thấp nhất) nếu nó nhỏ hơn (hoặc lớn hơn) so với sự chênh lệch của cái trước đó tương ứng.",
   "ZigZagDesc": "Zigzag.",

@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "Un prix nul enregistre un ordre du marché.",
   "ZeroLagExponentialMovingAverage": "Moyenne mobile exponentielle à décalage nul.",
   "ZeroPrice": "Prix zéro",
+  "ZeroVolume": "Volume nul",
+  "ZeroVolumesDowload": "Télécharger les bougies à volume nul",
   "ZigZag": "Zigzag",
   "ZigZagDepth": "Profondeur de ZigZag : Minimum de bougies sur lesquelles Zigzag ne construira pas un second maximum (ou minimum) si celui-ci est inférieur (ou supérieur) à l'écart du précédent respectivement.",
   "ZigZagDesc": "Zigzag.",

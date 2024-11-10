@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "En nullpris registrerer en markedsordre.",
   "ZeroLagExponentialMovingAverage": "Zero lag eksponentielt glidende gjennomsnitt.",
   "ZeroPrice": "Pris null",
+  "ZeroVolume": "Null volum",
+  "ZeroVolumesDowload": "Last ned null volum lys",
   "ZigZag": "ZigZag",
   "ZigZagDepth": "ZigZag Dybde: Minimum antall lys hvor Zigzag ikke vil bygge et annet maksimum (eller minimum) hvis det er mindre (eller større) enn avviket fra den forrige.",
   "ZigZagDesc": "Sikk-sakk.",

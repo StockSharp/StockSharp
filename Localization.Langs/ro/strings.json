@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "Prețul zero înregistrează o ofertă de piață.",
   "ZeroLagExponentialMovingAverage": "Media mobilă exponențială cu întârziere zero.",
   "ZeroPrice": "Preț zero",
+  "ZeroVolume": "Volum zero",
+  "ZeroVolumesDowload": "Descarcă lumânări cu volum zero",
   "ZigZag": "Zig-zag",
   "ZigZagDepth": "Adâncimea ZigZag: Numărul minim de lumânări pe care Zigzag nu va construi un al doilea maxim (sau minim) dacă acesta este mai mic (sau mai mare) decât deviația anterioară respectiv.",
   "ZigZagDesc": "Zigzag.",

@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "Sıfır fiyat, bir piyasa emrini kaydeder.",
   "ZeroLagExponentialMovingAverage": "Sıfır Gecikmeli Üstel Hareketli Ortalama.",
   "ZeroPrice": "Sıfır fiyat",
+  "ZeroVolume": "Sıfır hacim",
+  "ZeroVolumesDowload": "Sıfır hacimli mumları indir",
   "ZigZag": "Zikzak",
   "ZigZagDepth": "ZigZag Derinliği: Zigzag, önceki sapmadan daha küçük (veya daha büyük) ise ikinci bir maksimum (veya minimum) oluşturmayacağı minimum mum sayısı.",
   "ZigZagDesc": "Zigzag.",

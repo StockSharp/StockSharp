@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "Nollpris registrerar en marknadsorder.",
   "ZeroLagExponentialMovingAverage": "Zero Lag Exponential Moving Average.",
   "ZeroPrice": "Pris noll",
+  "ZeroVolume": "Noll volym",
+  "ZeroVolumesDowload": "Ladda ner noll volym ljus",
   "ZigZag": "Zigzag",
   "ZigZagDepth": "ZigZag Djup: Minsta antal ljus där Zigzag inte kommer att bygga en andra topp (eller botten) om det är mindre (eller större) än avvikelsen från den föregående.",
   "ZigZagDesc": "Sicksack.",

@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "En nulpris registrerer en markedsordre.",
   "ZeroLagExponentialMovingAverage": "Nul-lag eksponentielt glidende gennemsnit.",
   "ZeroPrice": "Pris nul",
+  "ZeroVolume": "Nul volumen",
+  "ZeroVolumesDowload": "Download nul volumen lysestager",
   "ZigZag": "Zigzag",
   "ZigZagDepth": "ZigZag Dybde: Minimum antal lysestager hvor Zigzag ikke vil bygge et andet maksimum (eller minimum) hvis det er mindre (eller større) end afvigelsen fra den forrige.",
   "ZigZagDesc": "Zigzag.",

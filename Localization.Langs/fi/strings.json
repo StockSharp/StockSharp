@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "Nollahinta rekisteröi markkinatilauksen.",
   "ZeroLagExponentialMovingAverage": "Nollaviiveen eksponentiaalinen liukuva keskiarvo.",
   "ZeroPrice": "Hinta nolla",
+  "ZeroVolume": "Nollavolyymi",
+  "ZeroVolumesDowload": "Lataa nollavolyymikynttilät",
   "ZigZag": "Zig Zag",
   "ZigZagDepth": "ZigZag Syvyys: Vähimmäismäärä kynttilöitä, joilla Zigzag ei rakenna toista maksimia (tai minimiä), jos se on pienempi (tai suurempi) kuin edellisen poikkeama.",
   "ZigZagDesc": "Siksak.",

@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "Um preço zero registra uma ordem de mercado.",
   "ZeroLagExponentialMovingAverage": "Média Móvel Exponencial de Zero Lag.",
   "ZeroPrice": "Preço zero",
+  "ZeroVolume": "Volume zero",
+  "ZeroVolumesDowload": "Baixar velas de volume zero",
   "ZigZag": "Zigue-zague",
   "ZigZagDepth": "Profundidade de ZigZag: Mínimo de velas em que o Zigzag não construirá um segundo máximo (ou mínimo) se for menor (ou maior) no desvio do anterior respectivamente.",
   "ZigZagDesc": "Ziguezague.",
