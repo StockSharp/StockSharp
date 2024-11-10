@@ -53,7 +53,7 @@ public class DriveCache : Disposable, IPersistable
 	/// <summary>
 	/// The storage used by default.
 	/// </summary>
-	public IMarketDataDrive DefaultDrive => Drives.OfType<LocalMarketDataDrive>().FirstOrDefault();
+	public IMarketDataDrive DefaultDrive => Drives.OfType<LocalMarketDataDrive>().First();
 
 	/// <summary>
 	/// New storage created event.
