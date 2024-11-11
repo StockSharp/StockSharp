@@ -5,18 +5,39 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Ecng.Common;
+using Ecng.Configuration;
 
 using StockSharp.Algo;
-using StockSharp.Algo.Candles;
 using StockSharp.Algo.Storages;
 using StockSharp.BusinessEntities;
+using StockSharp.Configuration;
 using StockSharp.Finam;
 using StockSharp.Messages;
+using StockSharp.Web.Api.Client;
+using StockSharp.Web.Api.Interfaces;
 
 static class Program
 {
 	private static void Main()
 	{
+		ICredentialsProvider credProvider = new DefaultCredentialsProvider();
+
+		string token;
+
+		if (!credProvider.TryLoad(out var credentials))
+		{
+			Console.WriteLine("Enter token (visit https://stocksharp.com/profile/ ):");
+			token = Console.ReadLine();
+		}
+		else
+			token = credentials.Token.UnSecure();
+
+		if (token.IsEmpty())
+			throw new InvalidOperationException("Token is empty.");
+
+		var webApiProvider = new ApiServiceProvider();
+		ConfigManager.RegisterService(webApiProvider.GetService<IInstrumentInfoService>(token));
+
 		var connector = new Connector();
 		connector.LookupMessagesOnConnect.Clear();
 
