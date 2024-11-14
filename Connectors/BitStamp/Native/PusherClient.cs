@@ -25,7 +25,8 @@ class PusherClient : BaseLogReceiver
 
 	public PusherClient()
 	{
-		_client = new WebSocketClient(
+		_client = new(
+			"wss://ws.bitstamp.net",
 			state => StateChanged?.Invoke(state),
 			error =>
 			{
@@ -50,7 +51,7 @@ class PusherClient : BaseLogReceiver
 		_activityTimeout = 0;
 
 		this.AddInfoLog(LocalizedStrings.Connecting);
-		return _client.ConnectAsync("wss://ws.bitstamp.net", cancellationToken: cancellationToken);
+		return _client.ConnectAsync(cancellationToken);
 	}
 
 	public void Disconnect()

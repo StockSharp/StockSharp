@@ -24,6 +24,7 @@ class SocketClient : BaseLogReceiver
 		_authenticator = authenticator ?? throw new ArgumentNullException(nameof(authenticator));
 
 		_client = new(
+			"wss://advanced-trade-ws.coinbase.com",
 			state => StateChanged?.Invoke(state),
 			error =>
 			{
@@ -33,9 +34,10 @@ class SocketClient : BaseLogReceiver
 			OnProcess,
 			(s, a) => this.AddInfoLog(s, a),
 			(s, a) => this.AddErrorLog(s, a),
-			(s, a) => this.AddVerboseLog(s, a));
-
-		_client.ReconnectAttempts = reconnectAttempts;
+			(s, a) => this.AddVerboseLog(s, a))
+		{
+			ReconnectAttempts = reconnectAttempts
+		};
 	}
 	
 	protected override void DisposeManaged()
@@ -47,7 +49,7 @@ class SocketClient : BaseLogReceiver
 	public ValueTask Connect(CancellationToken cancellationToken)
 	{
 		this.AddInfoLog(LocalizedStrings.Connecting);
-		return _client.ConnectAsync("wss://advanced-trade-ws.coinbase.com", cancellationToken: cancellationToken);
+		return _client.ConnectAsync(cancellationToken);
 	}
 
 	public void Disconnect()

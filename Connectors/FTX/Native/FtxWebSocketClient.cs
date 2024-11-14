@@ -41,6 +41,7 @@ class FtxWebSocketClient : BaseLogReceiver
 		_hasher = secret.IsEmpty() ? null : new(secret.UnSecure().UTF8());
 
 		_client = new(
+			"wss://ftx.com/ws",
 			state => StateChanged?.Invoke(state),
 			exception =>
 			{
@@ -69,7 +70,7 @@ class FtxWebSocketClient : BaseLogReceiver
 	{
 		_nextPing = null;
 		this.AddInfoLog(LocalizedStrings.Connecting);
-		return _client.ConnectAsync("wss://ftx.com/ws", cancellationToken: cancellationToken);
+		return _client.ConnectAsync(cancellationToken);
 	}
 
 	/// <summary>

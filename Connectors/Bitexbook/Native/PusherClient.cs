@@ -26,7 +26,8 @@ class PusherClient : BaseLogReceiver
 
 	public PusherClient()
 	{
-		_client = new WebSocketClient(
+		_client = new(
+			"wss://api.bitexbook.com/api/v2/ws",
 			state => StateChanged?.Invoke(state),
 			error =>
 			{
@@ -48,7 +49,7 @@ class PusherClient : BaseLogReceiver
 	public ValueTask Connect(CancellationToken cancellationToken)
 	{
 		this.AddInfoLog(LocalizedStrings.Connecting);
-		return _client.ConnectAsync("wss://api.bitexbook.com/api/v2/ws", cancellationToken: cancellationToken);
+		return _client.ConnectAsync(cancellationToken);
 	}
 
 	public void Disconnect()
