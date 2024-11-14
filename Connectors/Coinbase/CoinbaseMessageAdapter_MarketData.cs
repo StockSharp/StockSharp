@@ -92,60 +92,60 @@ public partial class CoinbaseMessageAdapter
 
 		if (mdMsg.IsSubscribe)
 		{
-			if (mdMsg.From is not null)
-			{
-				var from = (long)mdMsg.From.Value.ToUnix(false);
-				var to = (long)(mdMsg.To ?? DateTimeOffset.UtcNow).ToUnix(false);
-				var left = mdMsg.Count ?? long.MaxValue;
+			//if (mdMsg.From is not null)
+			//{
+			//	var from = (long)mdMsg.From.Value.ToUnix(false);
+			//	var to = (long)(mdMsg.To ?? DateTimeOffset.UtcNow).ToUnix(false);
+			//	var left = mdMsg.Count ?? long.MaxValue;
 
-				while (from < to)
-				{
-					var trades = await _restClient.GetTrades(symbol, from, to, cancellationToken);
-					var needBreak = true;
-					var last = from;
+			//	while (from < to)
+			//	{
+			//		var trades = await _restClient.GetTrades(symbol, from, to, cancellationToken);
+			//		var needBreak = true;
+			//		var last = from;
 
-					foreach (var trade in trades.OrderBy(t => t.Time))
-					{
-						cancellationToken.ThrowIfCancellationRequested();
+			//		foreach (var trade in trades.OrderBy(t => t.Time))
+			//		{
+			//			cancellationToken.ThrowIfCancellationRequested();
 
-						var time = (long)trade.Time.ToUnix();
+			//			var time = (long)trade.Time.ToUnix();
 
-						if (time < from)
-							continue;
+			//			if (time < from)
+			//				continue;
 
-						if (time > to)
-						{
-							needBreak = true;
-							break;
-						}
+			//			if (time > to)
+			//			{
+			//				needBreak = true;
+			//				break;
+			//			}
 
-						SendOutMessage(new ExecutionMessage
-						{
-							DataTypeEx = DataType.Ticks,
-							TradeId = trade.TradeId,
-							TradePrice = trade.Price?.ToDecimal(),
-							TradeVolume = trade.Size?.ToDecimal(),
-							ServerTime = trade.Time,
-							OriginSide = trade.Side.ToSide(),
-							OriginalTransactionId = mdMsg.TransactionId,
-						});
+			//			SendOutMessage(new ExecutionMessage
+			//			{
+			//				DataTypeEx = DataType.Ticks,
+			//				TradeId = trade.TradeId,
+			//				TradePrice = trade.Price?.ToDecimal(),
+			//				TradeVolume = trade.Size?.ToDecimal(),
+			//				ServerTime = trade.Time,
+			//				OriginSide = trade.Side.ToSide(),
+			//				OriginalTransactionId = mdMsg.TransactionId,
+			//			});
 
-						if (--left <= 0)
-						{
-							needBreak = true;
-							break;
-						}
+			//			if (--left <= 0)
+			//			{
+			//				needBreak = true;
+			//				break;
+			//			}
 
-						last = time;
-						needBreak = false;
-					}
+			//			last = time;
+			//			needBreak = false;
+			//		}
 
-					if (needBreak)
-						break;
+			//		if (needBreak)
+			//			break;
 
-					from = last;
-				}
-			}
+			//		from = last;
+			//	}
+			//}
 			
 			if (!mdMsg.IsHistoryOnly())
 				await _socketClient.SubscribeTrades(mdMsg.TransactionId, symbol, cancellationToken);
@@ -220,7 +220,7 @@ public partial class CoinbaseMessageAdapter
 						needBreak = false;
 					}
 
-					if (needBreak)
+					if (needBreak || candles.Length < 10)
 						break;
 
 					from = last;

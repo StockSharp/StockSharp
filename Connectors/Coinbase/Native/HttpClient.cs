@@ -28,7 +28,7 @@ class HttpClient : BaseLogReceiver
 		return ((JToken)response.products).DeserializeObject<IEnumerable<Product>>();
 	}
 
-	public async Task<IEnumerable<Ohlc>> GetCandles(string symbol, long start, long end, string granularity, CancellationToken cancellationToken)
+	public async Task<Ohlc[]> GetCandles(string symbol, long start, long end, string granularity, CancellationToken cancellationToken)
 	{
 		var request = CreateRequest(Method.Get)
 			.AddQueryParameter("start", start)
@@ -38,7 +38,7 @@ class HttpClient : BaseLogReceiver
 
 		dynamic response = await MakeRequest<object>(CreateUrl($"brokerage/market/products/{symbol}/candles"), request, cancellationToken);
 
-		return ((JToken)response.candles).DeserializeObject<IEnumerable<Ohlc>>();
+		return ((JToken)response.candles).DeserializeObject<Ohlc[]>();
 	}
 
 	public async Task<IEnumerable<Trade>> GetTrades(string symbol, long start, long end, CancellationToken cancellationToken)
