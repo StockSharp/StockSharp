@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "Un prezzo zero registra un ordine di mercato.",
   "ZeroLagExponentialMovingAverage": "Media mobile esponenziale a ritardo zero.",
   "ZeroPrice": "Prezzo zero",
+  "ZeroVolume": "Volume zero",
+  "ZeroVolumesDowload": "Scarica candele a volume zero",
   "ZigZag": "Zigzag",
   "ZigZagDepth": "Profondità ZigZag: Numero minimo di candele in cui Zigzag non costruirà un secondo massimo (o minimo) se è inferiore (o superiore) rispetto alla deviazione del precedente rispettivamente.",
   "ZigZagDesc": "Zigzag.",

@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "ゼロ価格は市場注文を記録します。",
   "ZeroLagExponentialMovingAverage": "ゼロラグ指数移動平均。",
   "ZeroPrice": "ゼロ価格",
+  "ZeroVolume": "ゼロボリューム",
+  "ZeroVolumesDowload": "ゼロボリュームローソク足をダウンロード",
   "ZigZag": "ジグザグ",
   "ZigZagDepth": "ジグザグの深さ: ジグザグが前のものよりも偏差が小さい（または大きい）場合、2番目の最大値（または最小値）を構築しない最小ローソク数。",
   "ZigZagDesc": "ジグザグ。",

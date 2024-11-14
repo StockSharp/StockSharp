@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "Rega nol ndhaptar aplikasi pasar.",
   "ZeroLagExponentialMovingAverage": "Zero Lag Exponential Moving Average.",
   "ZeroPrice": "Regane nol",
+  "ZeroVolume": "Volume nol",
+  "ZeroVolumesDowload": "Unduh candlestick volume nol",
   "ZigZag": "Jig-jag",
   "ZigZagDepth": "Kedalaman ZigZag: Minimal lilin sing Zigzag ora bakal mbangun maksimum kapindho (utawa minimum) yen luwih cilik (utawa luwih gedhe) saka penyimpangan sadurungé miturut.",
   "ZigZagDesc": "Zigzag.",

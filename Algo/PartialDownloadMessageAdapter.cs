@@ -56,7 +56,7 @@ public class PartialDownloadMessageAdapter : MessageAdapterWrapper
 		public MarketDataMessage Origin { get; }
 
 		public long CurrTransId { get; private set; }
-		public bool LastIteration => Origin.To != null && _nextFrom >= Origin.To.Value || (_count <= 0);
+		public bool LastIteration => _nextFrom >= Origin.To || (_count <= 0);
 
 		public bool ReplyReceived { get; set; }
 		public long? UnsubscribingId { get; set; }
@@ -96,6 +96,12 @@ public class PartialDownloadMessageAdapter : MessageAdapterWrapper
 			_firstIteration = true;
 
 			_count = origin.Count;
+
+			if (_count <= 0)
+				throw new ArgumentOutOfRangeException(nameof(origin), origin.Count, LocalizedStrings.InvalidValue);
+
+			if (_nextFrom >= origin.To)
+				throw new ArgumentOutOfRangeException(nameof(origin), origin.To, LocalizedStrings.InvalidValue);
 		}
 
 		public void TryUpdateNextFrom(DateTimeOffset last)
@@ -255,7 +261,7 @@ public class PartialDownloadMessageAdapter : MessageAdapterWrapper
 					var from = mdMsg.From;
 					var to = mdMsg.To;
 
-					if (from != null || to != null)
+					if ((from != null || to != null) && mdMsg.Count is null or > 0 && (to is null || to > default(DateTimeOffset)))
 					{
 						var step = InnerAdapter.GetHistoryStepSize(mdMsg.SecurityId, mdMsg.DataType2, out var iterationInterval);
 

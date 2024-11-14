@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "제로 가격이 시장 주문을 등록합니다.",
   "ZeroLagExponentialMovingAverage": "제로 지연 지수 이동 평균.",
   "ZeroPrice": "가격 제로",
+  "ZeroVolume": "제로 볼륨",
+  "ZeroVolumesDowload": "제로 볼륨 캔들 다운로드",
   "ZigZag": "지그재그",
   "ZigZagDepth": "지그재그 깊이: 이전 것에 대한 편차가 더 작은(또는 더 큰) 경우 지그재그가 두 번째 최대(또는 최소)를 생성하지 않을 최소 캔들 수.",
   "ZigZagDesc": "지그재그.",

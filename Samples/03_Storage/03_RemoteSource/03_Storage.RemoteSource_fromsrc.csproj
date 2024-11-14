@@ -1,6 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\common_samples_net.props" />
   <ItemGroup>
+    <PackageReference Include="StockSharp.Web.Api.Client" Version="$(StockSharpVer)" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="$(RepoGitHubPath)Algo\Algo.csproj" />
     <ProjectReference Include="$(RepoAppsPath)Connectors\Finam\Finam.csproj" />
   </ItemGroup>

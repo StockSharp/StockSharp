@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "Ein Nullpreis registriert eine Marktorder.",
   "ZeroLagExponentialMovingAverage": "Null-Verzögerung exponentieller gleitender Durchschnitt.",
   "ZeroPrice": "Preis Null",
+  "ZeroVolume": "Nullvolumen",
+  "ZeroVolumesDowload": "Nullvolumen-Kerzen herunterladen",
   "ZigZag": "Zickzack",
   "ZigZagDepth": "ZigZag-Tiefe: Mindestanzahl an Kerzen, bei der Zigzag kein zweites Maximum (oder Minimum) bildet, wenn es kleiner (oder größer) als die Abweichung des vorherigen ist.",
   "ZigZagDesc": "Zickzack.",

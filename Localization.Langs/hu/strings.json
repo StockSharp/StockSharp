@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "A nulla ár piaci megbízást jelöl.",
   "ZeroLagExponentialMovingAverage": "Zéró késleltetés exponenciális mozgóátlag.",
   "ZeroPrice": "Nulla ár",
+  "ZeroVolume": "Nulla volumen",
+  "ZeroVolumesDowload": "Nulla volumenű gyertyák letöltése",
   "ZigZag": "Cikk-cakk",
   "ZigZagDepth": "ZigZag Mélység: A gyertyák minimális száma, amelyeken a Zigzag nem épít ki második maximumot (vagy minimumot), ha az kisebb (vagy nagyobb) az előző eltérésnél.",
   "ZigZagDesc": "Cikk-cakk.",

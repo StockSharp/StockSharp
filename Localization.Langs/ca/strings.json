@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "Un preu zero registra una comanda de mercat.",
   "ZeroLagExponentialMovingAverage": "Mitjana mòbil exponencial zero retard.",
   "ZeroPrice": "Preu zero",
+  "ZeroVolume": "Volum zero",
+  "ZeroVolumesDowload": "Descarregar espelmes de volum zero",
   "ZigZag": "Zigzag",
   "ZigZagDepth": "Mínim de candeles en què Zigzag no construirà un segon màxim (o mínim) si aquest és menor (o major) que la desviació del precedent.",
   "ZigZagDesc": "Zigzag.",

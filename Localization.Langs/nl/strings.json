@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "Nul prijs registreert marktorder.",
   "ZeroLagExponentialMovingAverage": "Zero lag exponentieel voortschrijdend gemiddelde.",
   "ZeroPrice": "Prijs nul",
+  "ZeroVolume": "Nul volume",
+  "ZeroVolumesDowload": "Download nul volume kaarsen",
   "ZigZag": "Zigzag",
   "ZigZagDepth": "ZigZagDiepte: Minimaal aantal kaarsen waarop Zigzag geen tweede maximum (of minimum) zal bouwen als deze kleiner (of groter) is dan de afwijking van de vorige.",
   "ZigZagDesc": "Zigzag.",

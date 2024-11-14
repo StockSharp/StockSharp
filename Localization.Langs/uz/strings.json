@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "Nol narxi bozor buyurtmasini ro'yxatdan o'tkazadi.",
   "ZeroLagExponentialMovingAverage": "Nol kechikuvchi eksponensial harakatlanuvchi o'rtacha.",
   "ZeroPrice": "Narx nol",
+  "ZeroVolume": "Nol hajm",
+  "ZeroVolumesDowload": "Nol hajmli shamlarni yuklab olish",
   "ZigZag": "Zigzag",
   "ZigZagDepth": "ZigZag chuqurligi: Zigzag ikkinchi maksimumni (yoki minimumni) qurmasligi uchun minimal shamchiroqlar soni, agar u oldingidan kamroq (yoki ko'proq) bo'lsa.",
   "ZigZagDesc": "Zigzag.",

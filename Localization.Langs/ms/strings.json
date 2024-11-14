@@ -4140,6 +4140,8 @@
   "ZeroAsMarket": "Harga sifar mendaftar pesanan pasaran.",
   "ZeroLagExponentialMovingAverage": "Purata Bergerak Eksponen Kelewatan Sifar.",
   "ZeroPrice": "Harga sifar",
+  "ZeroVolume": "Volume sifar",
+  "ZeroVolumesDowload": "Muat turun candlestick volume sifar",
   "ZigZag": "Zig-zag",
   "ZigZagDepth": "Kedalaman ZigZag: Jumlah lilin minimum di mana Zigzag tidak akan membina maksimum kedua (atau minimum) jika ia lebih rendah (atau lebih tinggi) daripada penyimpangan terdahulu masing-masing.",
   "ZigZagDesc": "Zigzag.",
