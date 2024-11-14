@@ -58,12 +58,12 @@ public partial class CoinbaseMessageAdapter
 
 		if (mdMsg.IsSubscribe)
 		{
-			await _socketClient.SubscribeTicker(symbol, cancellationToken);
+			await _socketClient.SubscribeTicker(mdMsg.TransactionId, symbol, cancellationToken);
 
 			SendSubscriptionResult(mdMsg);
 		}
 		else
-			await _socketClient.UnSubscribeTicker(symbol, cancellationToken);
+			await _socketClient.UnSubscribeTicker(mdMsg.OriginalTransactionId, symbol, cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -75,12 +75,12 @@ public partial class CoinbaseMessageAdapter
 
 		if (mdMsg.IsSubscribe)
 		{
-			await _socketClient.SubscribeOrderBook(symbol, cancellationToken);
+			await _socketClient.SubscribeOrderBook(mdMsg.TransactionId, symbol, cancellationToken);
 
 			SendSubscriptionResult(mdMsg);
 		}
 		else
-			await _socketClient.UnSubscribeOrderBook(symbol, cancellationToken);
+			await _socketClient.UnSubscribeOrderBook(mdMsg.OriginalTransactionId, symbol, cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -148,13 +148,13 @@ public partial class CoinbaseMessageAdapter
 			}
 			
 			if (!mdMsg.IsHistoryOnly())
-				await _socketClient.SubscribeTrades(symbol, cancellationToken);
+				await _socketClient.SubscribeTrades(mdMsg.TransactionId, symbol, cancellationToken);
 
 			SendSubscriptionResult(mdMsg);
 		}
 		else
 		{
-			await _socketClient.UnSubscribeTrades(symbol, cancellationToken);
+			await _socketClient.UnSubscribeTrades(mdMsg.OriginalTransactionId, symbol, cancellationToken);
 		}
 	}
 
@@ -230,7 +230,7 @@ public partial class CoinbaseMessageAdapter
 			if (!mdMsg.IsHistoryOnly() && mdMsg.DataType2 == _tf5min)
 			{
 				_candlesTransIds[symbol] = mdMsg.TransactionId;
-				await _socketClient.SubscribeCandles(symbol, cancellationToken);
+				await _socketClient.SubscribeCandles(mdMsg.TransactionId, symbol, cancellationToken);
 				SendSubscriptionResult(mdMsg);
 			}
 			else
@@ -239,7 +239,7 @@ public partial class CoinbaseMessageAdapter
 		else
 		{
 			_candlesTransIds.Remove(symbol);
-			await _socketClient.UnSubscribeCandles(symbol, cancellationToken);
+			await _socketClient.UnSubscribeCandles(mdMsg.OriginalTransactionId, symbol, cancellationToken);
 		}
 	}
 

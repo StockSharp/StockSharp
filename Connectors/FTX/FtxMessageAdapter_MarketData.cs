@@ -56,9 +56,9 @@ partial class FtxMessageAdapter
 		var currency = mdMsg.SecurityId.ToCurrency();
 
 		if (mdMsg.IsSubscribe)
-			return _wsClient.SubscribeLevel1(currency, cancellationToken);
+			return _wsClient.SubscribeLevel1(mdMsg.TransactionId, currency, cancellationToken);
 		else
-			return _wsClient.UnsubscribeLevel1(currency, cancellationToken);
+			return _wsClient.UnsubscribeLevel1(mdMsg.OriginalTransactionId, currency, cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -69,9 +69,9 @@ partial class FtxMessageAdapter
 		var currency = mdMsg.SecurityId.ToCurrency();
 
 		if (mdMsg.IsSubscribe)
-			return _wsClient.SubscribeOrderBook(currency, cancellationToken);
+			return _wsClient.SubscribeOrderBook(mdMsg.TransactionId, currency, cancellationToken);
 		else
-			return _wsClient.UnsubscribeOrderBook(currency, cancellationToken);
+			return _wsClient.UnsubscribeOrderBook(mdMsg.OriginalTransactionId, currency, cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -129,13 +129,13 @@ partial class FtxMessageAdapter
 			}
 
 			if (!mdMsg.IsHistoryOnly())
-				await _wsClient.SubscribeTradesChannel(currency, WsTradeChannelSubscriber.Trade, cancellationToken);
+				await _wsClient.SubscribeTradesChannel(mdMsg.TransactionId, currency, WsTradeChannelSubscriber.Trade, cancellationToken);
 
 			SendSubscriptionResult(mdMsg);
 		}
 		else
 		{
-			await _wsClient.UnsubscribeTradesChannel(currency, WsTradeChannelSubscriber.Trade, cancellationToken);
+			await _wsClient.UnsubscribeTradesChannel(mdMsg.OriginalTransactionId, currency, WsTradeChannelSubscriber.Trade, cancellationToken);
 		}
 	}
 
@@ -196,13 +196,13 @@ partial class FtxMessageAdapter
 			}
 
 			if (!mdMsg.IsHistoryOnly())
-				await _wsClient.SubscribeTradesChannel(currency, WsTradeChannelSubscriber.Candles, cancellationToken);
+				await _wsClient.SubscribeTradesChannel(mdMsg.TransactionId, currency, WsTradeChannelSubscriber.Candles, cancellationToken);
 
 			SendSubscriptionResult(mdMsg);
 		}
 		else
 		{
-			await _wsClient.UnsubscribeTradesChannel(currency, WsTradeChannelSubscriber.Candles, cancellationToken);
+			await _wsClient.UnsubscribeTradesChannel(mdMsg.OriginalTransactionId, currency, WsTradeChannelSubscriber.Candles, cancellationToken);
 		}
 	}
 

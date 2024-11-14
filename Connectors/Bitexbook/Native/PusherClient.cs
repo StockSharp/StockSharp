@@ -24,7 +24,7 @@ class PusherClient : BaseLogReceiver
 
 	private readonly WebSocketClient _client;
 
-	public PusherClient()
+	public PusherClient(int attemptsCount)
 	{
 		_client = new(
 			"wss://api.bitexbook.com/api/v2/ws",
@@ -37,7 +37,10 @@ class PusherClient : BaseLogReceiver
 			OnProcess,
 			(s, a) => this.AddInfoLog(s, a),
 			(s, a) => this.AddErrorLog(s, a),
-			(s, a) => this.AddVerboseLog(s, a));
+			(s, a) => this.AddVerboseLog(s, a))
+		{
+			ReconnectAttempts = attemptsCount,
+		};
 	}
 
 	protected override void DisposeManaged()
@@ -153,14 +156,14 @@ class PusherClient : BaseLogReceiver
 		public const string OrdersLatest = "orders_latest";
 	}
 
-	public ValueTask SubscribeTicker(string symbol, CancellationToken cancellationToken)
+	public ValueTask SubscribeTicker(long transId, string symbol, CancellationToken cancellationToken)
 	{
-		return Process(Commands.Subscribe, symbol, cancellationToken);
+		return Process(transId, Commands.Subscribe, symbol, cancellationToken);
 	}
 
-	public ValueTask UnSubscribeTicker(string symbol, CancellationToken cancellationToken)
+	public ValueTask UnSubscribeTicker(long originTransId, string symbol, CancellationToken cancellationToken)
 	{
-		return Process(Commands.Unsubscribe, symbol, cancellationToken);
+		return Process(-originTransId, Commands.Unsubscribe, symbol, cancellationToken);
 	}
 
 	public void SubscribeTrades(string symbol, CancellationToken cancellationToken)
@@ -193,7 +196,7 @@ class PusherClient : BaseLogReceiver
 		//Process(Commands.Unsubscribe, Channels.Candles.Put(symbol, timeFrame));
 	}
 
-	private ValueTask Process(string method, string channel, CancellationToken cancellationToken)
+	private ValueTask Process(long subId, string method, string channel, CancellationToken cancellationToken)
 	{
 		if (method.IsEmpty())
 			throw new ArgumentNullException(nameof(method));
@@ -205,6 +208,6 @@ class PusherClient : BaseLogReceiver
 		{
 			method,
 			data = new { channel },
-		}, cancellationToken);
+		}, cancellationToken, subId);
 	}
 }

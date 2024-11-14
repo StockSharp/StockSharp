@@ -35,7 +35,7 @@ class FtxWebSocketClient : BaseLogReceiver
 
 	private readonly WebSocketClient _client;
 
-	public FtxWebSocketClient(SecureString key, SecureString secret, string subaccountName)
+	public FtxWebSocketClient(SecureString key, SecureString secret, string subaccountName, int attemptsCount)
 	{
 		_key = key;
 		_hasher = secret.IsEmpty() ? null : new(secret.UnSecure().UTF8());
@@ -51,9 +51,11 @@ class FtxWebSocketClient : BaseLogReceiver
 			OnProcess,
 			(s, a) => this.AddInfoLog(s, a),
 			(s, a) => this.AddErrorLog(s, a),
-			(s, a) => this.AddVerboseLog(s, a));
+			(s, a) => this.AddVerboseLog(s, a))
+		{
+			ReconnectAttempts = attemptsCount,
+		};
 	}
-
 
 	protected override void DisposeManaged()
 	{
@@ -94,28 +96,24 @@ class FtxWebSocketClient : BaseLogReceiver
 		return SendPingRequest(cancellationToken);
 	}
 
-	public ValueTask SubscribeFills(CancellationToken cancellationToken)
+	public ValueTask SubscribeFills(long transId, CancellationToken cancellationToken)
 	{
 		if (_client == null || !_client.IsConnected)
 			return default;
 
-		return SendAsync(new
+		return SendAsync(transId, new
 		{
 			op = "subscribe",
 			channel = "fills"
 		}, cancellationToken);
-
 	}
 
-	/// <summary>
-	/// Orders subscribing
-	/// </summary>
-	public ValueTask SubscribeOrders(CancellationToken cancellationToken)
+	public ValueTask SubscribeOrders(long transId, CancellationToken cancellationToken)
 	{
 		if (_client == null || !_client.IsConnected)
 			return default;
 
-		return SendAsync(new
+		return SendAsync(transId, new
 		{
 			op = "subscribe",
 			channel = "orders"
@@ -124,7 +122,7 @@ class FtxWebSocketClient : BaseLogReceiver
 
 	private readonly SynchronizedList<string> _level1Subs = new();
 
-	public async ValueTask SubscribeLevel1(string market, CancellationToken cancellationToken)
+	public async ValueTask SubscribeLevel1(long transId, string market, CancellationToken cancellationToken)
 	{
 		var subs = _level1Subs.ToList();
 
@@ -133,7 +131,7 @@ class FtxWebSocketClient : BaseLogReceiver
 			if (_client == null || !_client.IsConnected)
 				return;
 
-			await SendAsync(new
+			await SendAsync(transId, new
 			{
 				op = "subscribe",
 				channel = "ticker",
@@ -144,9 +142,8 @@ class FtxWebSocketClient : BaseLogReceiver
 		_level1Subs.Add(market);
 	}
 
-	public async ValueTask UnsubscribeLevel1(string market, CancellationToken cancellationToken)
+	public async ValueTask UnsubscribeLevel1(long originTransId, string market, CancellationToken cancellationToken)
 	{
-
 		var subs = _level1Subs.ToList();
 
 		var subToDel = subs.FirstOrDefault(d => d == market);
@@ -161,26 +158,25 @@ class FtxWebSocketClient : BaseLogReceiver
 			if (_client == null || !_client.IsConnected)
 				return;
 
-			await SendAsync(new
+			await SendAsync(-originTransId, new
 			{
 				op = "unsubscribe",
 				channel = "ticker",
 				market
 			}, cancellationToken);
-
 		}
 	}
 
 	private WsTradeChannelSubscriber _tradesMarketChannelSubFlags;
 
-	public async ValueTask SubscribeTradesChannel(string market, WsTradeChannelSubscriber subscriber, CancellationToken cancellationToken)
+	public async ValueTask SubscribeTradesChannel(long transId, string market, WsTradeChannelSubscriber subscriber, CancellationToken cancellationToken)
 	{
 		if (_tradesMarketChannelSubFlags == WsTradeChannelSubscriber.None)
 		{
 			if (_client == null || !_client.IsConnected)
 				return;
 
-			await SendAsync(new
+			await SendAsync(transId, new
 			{
 				op = "subscribe",
 				channel = "trades",
@@ -190,7 +186,7 @@ class FtxWebSocketClient : BaseLogReceiver
 		_tradesMarketChannelSubFlags |= subscriber;
 	}
 
-	public ValueTask UnsubscribeTradesChannel(string market, WsTradeChannelSubscriber subscriber, CancellationToken cancellationToken)
+	public ValueTask UnsubscribeTradesChannel(long originTransId, string market, WsTradeChannelSubscriber subscriber, CancellationToken cancellationToken)
 	{
 		_tradesMarketChannelSubFlags = Enumerator.Remove(_tradesMarketChannelSubFlags, subscriber);
 
@@ -199,25 +195,23 @@ class FtxWebSocketClient : BaseLogReceiver
 			if (_client == null || !_client.IsConnected)
 				return default;
 
-			return SendAsync(new
+			return SendAsync(-originTransId, new
 			{
 				op = "unsubscribe",
 				channel = "trades",
 				market
 			}, cancellationToken);
-
-
 		}
 
 		return default;
 	}
 
-	public ValueTask SubscribeOrderBook(string market, CancellationToken cancellationToken)
+	public ValueTask SubscribeOrderBook(long transId, string market, CancellationToken cancellationToken)
 	{
 		if (_client == null || !_client.IsConnected)
 			return default;
 
-		return SendAsync(new
+		return SendAsync(transId, new
 		{
 			op = "subscribe",
 			channel = "orderbook",
@@ -226,12 +220,12 @@ class FtxWebSocketClient : BaseLogReceiver
 
 	}
 
-	public ValueTask UnsubscribeOrderBook(string market, CancellationToken cancellationToken)
+	public ValueTask UnsubscribeOrderBook(long originTransId, string market, CancellationToken cancellationToken)
 	{
 		if (_client == null || !_client.IsConnected)
 			return default;
 
-		return SendAsync(new
+		return SendAsync(-originTransId, new
 		{
 			op = "unsubscribe",
 			channel = "orderbook",
@@ -322,7 +316,7 @@ class FtxWebSocketClient : BaseLogReceiver
 
 		if (subaccountName == null)
 		{
-			return SendAsync(new
+			return SendAsync(0, new
 			{
 				op = "login",
 				args = new
@@ -335,7 +329,7 @@ class FtxWebSocketClient : BaseLogReceiver
 		}
 		else
 		{
-			return SendAsync(new
+			return SendAsync(0, new
 			{
 				op = "login",
 				args = new
@@ -354,7 +348,7 @@ class FtxWebSocketClient : BaseLogReceiver
 		if (_client == null || !_client.IsConnected)
 			return;
 
-		await SendAsync(new
+		await SendAsync(0, new
 		{
 			op = "ping"
 		}, cancellationToken);
@@ -362,8 +356,8 @@ class FtxWebSocketClient : BaseLogReceiver
 		_nextPing = DateTime.UtcNow.AddSeconds(5);
 	}
 
-	private ValueTask SendAsync(object request, CancellationToken cancellationToken)
-		=> _client.SendAsync(request, cancellationToken);
+	private ValueTask SendAsync(long subId, object request, CancellationToken cancellationToken)
+		=> _client.SendAsync(request, cancellationToken, subId);
 
 	private string GenerateSignature(long time)
 	{

@@ -14,7 +14,7 @@ class PusherClient : BaseLogReceiver
 
 	private readonly WebSocketClient _client;
 
-	public PusherClient()
+	public PusherClient(int attemptsCount)
 	{
 		_client = new(
 			"wss://ws-eu.pusher.com/app/ee987526a24ba107824c?client=stocksharp&version=1.0&protocol=7",
@@ -27,7 +27,10 @@ class PusherClient : BaseLogReceiver
 			OnProcess,
 			(s, a) => this.AddInfoLog(s, a),
 			(s, a) => this.AddErrorLog(s, a),
-			(s, a) => this.AddVerboseLog(s, a));
+			(s, a) => this.AddVerboseLog(s, a))
+		{
+			ReconnectAttempts = attemptsCount,
+		};
 	}
 
 	protected override void DisposeManaged()
@@ -83,27 +86,27 @@ class PusherClient : BaseLogReceiver
 		public const string OrderBook = "depth";
 	}
 
-	public ValueTask SubscribeTrades(string currency, CancellationToken cancellationToken)
+	public ValueTask SubscribeTrades(long transId, string currency, CancellationToken cancellationToken)
 	{
-		return Process("subscribe", Channels.Trades, currency, cancellationToken);
+		return Process(transId, "subscribe", Channels.Trades, currency, cancellationToken);
 	}
 
-	public ValueTask UnSubscribeTrades(string currency, CancellationToken cancellationToken)
+	public ValueTask UnSubscribeTrades(long originTransId, string currency, CancellationToken cancellationToken)
 	{
-		return Process("unsubscribe", Channels.Trades, currency, cancellationToken);
+		return Process(-originTransId, "unsubscribe", Channels.Trades, currency, cancellationToken);
 	}
 
-	public ValueTask SubscribeOrderBook(string currency, CancellationToken cancellationToken)
+	public ValueTask SubscribeOrderBook(long transId, string currency, CancellationToken cancellationToken)
 	{
-		return Process("subscribe", Channels.OrderBook, currency, cancellationToken);
+		return Process(transId, "subscribe", Channels.OrderBook, currency, cancellationToken);
 	}
 
-	public ValueTask UnSubscribeOrderBook(string currency, CancellationToken cancellationToken)
+	public ValueTask UnSubscribeOrderBook(long originTransId, string currency, CancellationToken cancellationToken)
 	{
-		return Process("unsubscribe", Channels.OrderBook, currency, cancellationToken);
+		return Process(-originTransId, "unsubscribe", Channels.OrderBook, currency, cancellationToken);
 	}
 
-	private ValueTask Process(string action, string channel, string currency, CancellationToken cancellationToken)
+	private ValueTask Process(long subId, string action, string channel, string currency, CancellationToken cancellationToken)
 	{
 		if (action.IsEmpty())
 			throw new ArgumentNullException(nameof(action));
@@ -121,6 +124,6 @@ class PusherClient : BaseLogReceiver
 			{
 				channel = currency + "." + channel,
 			},
-		}, cancellationToken);
+		}, cancellationToken, subId);
 	}
 }

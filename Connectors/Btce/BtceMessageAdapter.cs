@@ -120,7 +120,7 @@ public partial class BtceMessageAdapter
 			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
 
 		_httpClient = new(Address, Key, Secret);
-		_pusherClient = new() { Parent = this };
+		_pusherClient = new(ReConnectionSettings.ReAttemptCount) { Parent = this };
 
 		SubscribePusherClient();
 

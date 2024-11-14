@@ -23,7 +23,7 @@ class PusherClient : BaseLogReceiver
 
 	private readonly WebSocketClient _client;
 
-	public PusherClient()
+	public PusherClient(int attemptsCount)
 	{
 		_client = new(
 			"wss://ws.bitstamp.net",
@@ -36,7 +36,10 @@ class PusherClient : BaseLogReceiver
 			OnProcess,
 			(s, a) => this.AddInfoLog(s, a),
 			(s, a) => this.AddErrorLog(s, a),
-			(s, a) => this.AddVerboseLog(s, a));
+			(s, a) => this.AddVerboseLog(s, a))
+		{
+			ReconnectAttempts = attemptsCount,
+		};
 	}
 
 	protected override void DisposeManaged()
@@ -160,25 +163,25 @@ class PusherClient : BaseLogReceiver
 		public const string UnSubscribe = "unsubscribe";
 	}
 
-	public ValueTask SubscribeTrades(string currency, CancellationToken cancellationToken)
-		=> Process(Commands.Subscribe, ChannelNames.Trades + currency, cancellationToken);
+	public ValueTask SubscribeTrades(long transId, string currency, CancellationToken cancellationToken)
+		=> Process(transId, Commands.Subscribe, ChannelNames.Trades + currency, cancellationToken);
 
-	public ValueTask UnSubscribeTrades(string currency, CancellationToken cancellationToken)
-		=> Process(Commands.UnSubscribe, ChannelNames.Trades + currency, cancellationToken);
+	public ValueTask UnSubscribeTrades(long originTransId, string currency, CancellationToken cancellationToken)
+		=> Process(-originTransId, Commands.UnSubscribe, ChannelNames.Trades + currency, cancellationToken);
 
-	public ValueTask SubscribeOrderBook(string currency, CancellationToken cancellationToken)
-		=> Process(Commands.Subscribe, ChannelNames.OrderBook + currency, cancellationToken);
+	public ValueTask SubscribeOrderBook(long transId, string currency, CancellationToken cancellationToken)
+		=> Process(transId, Commands.Subscribe, ChannelNames.OrderBook + currency, cancellationToken);
 
-	public ValueTask UnSubscribeOrderBook(string currency, CancellationToken cancellationToken)
-		=> Process(Commands.UnSubscribe, ChannelNames.OrderBook + currency, cancellationToken);
+	public ValueTask UnSubscribeOrderBook(long originTransId, string currency, CancellationToken cancellationToken)
+		=> Process(-originTransId, Commands.UnSubscribe, ChannelNames.OrderBook + currency, cancellationToken);
 
-	public ValueTask SubscribeOrderLog(string currency, CancellationToken cancellationToken)
-		=> Process(Commands.Subscribe, ChannelNames.OrderLog + currency, cancellationToken);
+	public ValueTask SubscribeOrderLog(long transId, string currency, CancellationToken cancellationToken)
+		=> Process(transId, Commands.Subscribe, ChannelNames.OrderLog + currency, cancellationToken);
 
-	public ValueTask UnSubscribeOrderLog(string currency, CancellationToken cancellationToken)
-		=> Process(Commands.UnSubscribe, ChannelNames.OrderLog + currency, cancellationToken);
+	public ValueTask UnSubscribeOrderLog(long originTransId, string currency, CancellationToken cancellationToken)
+		=> Process(-originTransId, Commands.UnSubscribe, ChannelNames.OrderLog + currency, cancellationToken);
 
-	private ValueTask Process(string action, string channel, CancellationToken cancellationToken)
+	private ValueTask Process(long subId, string action, string channel, CancellationToken cancellationToken)
 	{
 		if (action.IsEmpty())
 			throw new ArgumentNullException(nameof(action));
@@ -190,7 +193,7 @@ class PusherClient : BaseLogReceiver
 		{
 			@event = $"bts:{action}",
 			data = new { channel }
-		}, cancellationToken);
+		}, cancellationToken, subId);
 	}
 
 	public ValueTask ProcessPing(CancellationToken cancellationToken)
