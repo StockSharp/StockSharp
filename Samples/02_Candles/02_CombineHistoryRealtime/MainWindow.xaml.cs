@@ -49,8 +49,6 @@ public partial class MainWindow
 			_connector.Load(_connectorFile.Deserialize<SettingsStorage>());
 		}
 
-		_connector.Adapter.StorageSettings.DaysLoad = TimeSpan.FromDays(30);
-
 		CandleSettingsEditor.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
 	}
 
