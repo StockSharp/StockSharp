@@ -43,7 +43,7 @@ public partial class BtceMessageAdapter
 	private void SubscribePusherClient()
 	{
 		_pusherClient.StateChanged += SendOutConnectionState;
-		_pusherClient.Error += SessionOnPusherError;
+		_pusherClient.Error += SendOutError;
 		_pusherClient.OrderBookChanged += SessionOnOrderBookChanged;
 		_pusherClient.NewTrades += SessionOnNewTrades;
 	}
@@ -51,7 +51,7 @@ public partial class BtceMessageAdapter
 	private void UnsubscribePusherClient()
 	{
 		_pusherClient.StateChanged -= SendOutConnectionState;
-		_pusherClient.Error -= SessionOnPusherError;
+		_pusherClient.Error -= SendOutError;
 		_pusherClient.OrderBookChanged -= SessionOnOrderBookChanged;
 		_pusherClient.NewTrades -= SessionOnNewTrades;
 	}
@@ -119,10 +119,11 @@ public partial class BtceMessageAdapter
 		if (_pusherClient != null)
 			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
 
-		_httpClient = new HttpClient(Address, Key, Secret);
+		_httpClient = new(Address, Key, Secret);
+		_pusherClient = new() { Parent = this };
 
-		_pusherClient = new PusherClient { Parent = this };
 		SubscribePusherClient();
+
 		return _pusherClient.Connect(cancellationToken);
 	}
 
@@ -156,10 +157,5 @@ public partial class BtceMessageAdapter
 		{
 			await PortfolioLookupAsync(null, cancellationToken);
 		}
-	}
-
-	private void SessionOnPusherError(Exception exception)
-	{
-		SendOutError(exception);
 	}
 }

@@ -62,7 +62,7 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 	private void SubscribePusherClient()
 	{
 		_pusherClient.StateChanged += SendOutConnectionState;
-		_pusherClient.Error += SessionOnPusherError;
+		_pusherClient.Error += SendOutError;
 		_pusherClient.NewOrderBook += SessionOnNewOrderBook;
 		_pusherClient.NewOrderLog += SessionOnNewOrderLog;
 		_pusherClient.NewTrade += SessionOnNewTrade;
@@ -71,7 +71,7 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 	private void UnsubscribePusherClient()
 	{
 		_pusherClient.StateChanged -= SendOutConnectionState;
-		_pusherClient.Error -= SessionOnPusherError;
+		_pusherClient.Error -= SendOutError;
 		_pusherClient.NewOrderBook -= SessionOnNewOrderBook;
 		_pusherClient.NewOrderLog -= SessionOnNewOrderLog;
 		_pusherClient.NewTrade -= SessionOnNewTrade;
@@ -95,10 +95,11 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 		if (_pusherClient != null)
 			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
 
-		_httpClient = new HttpClient(Key, Secret) { Parent = this };
+		_httpClient = new(Key, Secret) { Parent = this };
+		_pusherClient = new() { Parent = this };
 
-		_pusherClient = new PusherClient { Parent = this };
 		SubscribePusherClient();
+
 		await _pusherClient.Connect(cancellationToken);
 	}
 
@@ -175,10 +176,5 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 
 		if (_pusherClient is not null)
 			await _pusherClient.ProcessPing(cancellationToken);
-	}
-
-	private void SessionOnPusherError(Exception exception)
-	{
-		SendOutError(exception);
 	}
 }
