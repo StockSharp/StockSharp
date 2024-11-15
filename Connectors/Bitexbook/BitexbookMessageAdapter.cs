@@ -126,10 +126,11 @@ public partial class BitexbookMessageAdapter
 		if (_pusherClient != null)
 			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
 
-		_httpClient = new HttpClient(Key, Secret) { Parent = this };
+		_httpClient = new(Key, Secret) { Parent = this };
+		_pusherClient = new(ReConnectionSettings.AttemptCount) { Parent = this };
 
-		_pusherClient = new PusherClient { Parent = this };
 		SubscribePusherClient();
+
 		return _pusherClient.Connect(cancellationToken);
 	}
 

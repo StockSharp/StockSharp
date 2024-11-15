@@ -24,6 +24,7 @@ class SocketClient : BaseLogReceiver
 		_authenticator = authenticator ?? throw new ArgumentNullException(nameof(authenticator));
 
 		_client = new(
+			"wss://advanced-trade-ws.coinbase.com",
 			state => StateChanged?.Invoke(state),
 			error =>
 			{
@@ -33,9 +34,10 @@ class SocketClient : BaseLogReceiver
 			OnProcess,
 			(s, a) => this.AddInfoLog(s, a),
 			(s, a) => this.AddErrorLog(s, a),
-			(s, a) => this.AddVerboseLog(s, a));
-
-		_client.ReconnectAttempts = reconnectAttempts;
+			(s, a) => this.AddVerboseLog(s, a))
+		{
+			ReconnectAttempts = reconnectAttempts
+		};
 	}
 	
 	protected override void DisposeManaged()
@@ -47,7 +49,7 @@ class SocketClient : BaseLogReceiver
 	public ValueTask Connect(CancellationToken cancellationToken)
 	{
 		this.AddInfoLog(LocalizedStrings.Connecting);
-		return _client.ConnectAsync("wss://advanced-trade-ws.coinbase.com", cancellationToken: cancellationToken);
+		return _client.ConnectAsync(cancellationToken);
 	}
 
 	public void Disconnect()
@@ -164,57 +166,57 @@ class SocketClient : BaseLogReceiver
 		public const string UnSubscribe = "unsubscribe";
 	}
 
-	public ValueTask SubscribeOrders(CancellationToken cancellationToken)
+	public ValueTask SubscribeOrders(long transId, CancellationToken cancellationToken)
 	{
-		return Process(Commands.Subscribe, Channels.User, null, cancellationToken);
+		return Process(transId, Commands.Subscribe, Channels.User, null, cancellationToken);
 	}
 
-	public ValueTask UnSubscribeOrders(CancellationToken cancellationToken)
+	public ValueTask UnSubscribeOrders(long originTransId, CancellationToken cancellationToken)
 	{
-		return Process(Commands.UnSubscribe, Channels.User, null, cancellationToken);
+		return Process(-originTransId, Commands.UnSubscribe, Channels.User, null, cancellationToken);
 	}
 
-	public ValueTask SubscribeTicker(string symbol, CancellationToken cancellationToken)
+	public ValueTask SubscribeTicker(long transId, string symbol, CancellationToken cancellationToken)
 	{
-		return Process(Commands.Subscribe, Channels.Ticker, symbol, cancellationToken);
+		return Process(transId, Commands.Subscribe, Channels.Ticker, symbol, cancellationToken);
 	}
 
-	public ValueTask UnSubscribeTicker(string symbol, CancellationToken cancellationToken)
+	public ValueTask UnSubscribeTicker(long originTransId, string symbol, CancellationToken cancellationToken)
 	{
-		return Process(Commands.UnSubscribe, Channels.Ticker, symbol, cancellationToken);
+		return Process(-originTransId, Commands.UnSubscribe, Channels.Ticker, symbol, cancellationToken);
 	}
 
-	public ValueTask SubscribeTrades(string symbol, CancellationToken cancellationToken)
+	public ValueTask SubscribeTrades(long transId, string symbol, CancellationToken cancellationToken)
 	{
-		return Process(Commands.Subscribe, Channels.Trades, symbol, cancellationToken);
+		return Process(transId, Commands.Subscribe, Channels.Trades, symbol, cancellationToken);
 	}
 
-	public ValueTask UnSubscribeTrades(string symbol, CancellationToken cancellationToken)
+	public ValueTask UnSubscribeTrades(long originTransId, string symbol, CancellationToken cancellationToken)
 	{
-		return Process(Commands.UnSubscribe, Channels.Trades, symbol, cancellationToken);
+		return Process(-originTransId, Commands.UnSubscribe, Channels.Trades, symbol, cancellationToken);
 	}
 
-	public ValueTask SubscribeOrderBook(string symbol, CancellationToken cancellationToken)
+	public ValueTask SubscribeOrderBook(long transId, string symbol, CancellationToken cancellationToken)
 	{
-		return Process(Commands.Subscribe, Channels.OrderBook, symbol, cancellationToken);
+		return Process(transId, Commands.Subscribe, Channels.OrderBook, symbol, cancellationToken);
 	}
 
-	public ValueTask UnSubscribeOrderBook(string symbol, CancellationToken cancellationToken)
+	public ValueTask UnSubscribeOrderBook(long originTransId, string symbol, CancellationToken cancellationToken)
 	{
-		return Process(Commands.UnSubscribe, Channels.OrderBook, symbol, cancellationToken);
+		return Process(-originTransId, Commands.UnSubscribe, Channels.OrderBook, symbol, cancellationToken);
 	}
 
-	public ValueTask SubscribeCandles(string symbol, CancellationToken cancellationToken)
+	public ValueTask SubscribeCandles(long transId, string symbol, CancellationToken cancellationToken)
 	{
-		return Process(Commands.Subscribe, Channels.Candles, symbol, cancellationToken);
+		return Process(transId, Commands.Subscribe, Channels.Candles, symbol, cancellationToken);
 	}
 
-	public ValueTask UnSubscribeCandles(string symbol, CancellationToken cancellationToken)
+	public ValueTask UnSubscribeCandles(long originTransId, string symbol, CancellationToken cancellationToken)
 	{
-		return Process(Commands.UnSubscribe, Channels.Candles, symbol, cancellationToken);
+		return Process(-originTransId, Commands.UnSubscribe, Channels.Candles, symbol, cancellationToken);
 	}
 
-	private ValueTask Process(string type, string channel, string symbol, CancellationToken cancellationToken)
+	private ValueTask Process(long subId, string type, string channel, string symbol, CancellationToken cancellationToken)
 	{
 		if (type.IsEmpty())
 			throw new ArgumentNullException(nameof(type));
@@ -230,6 +232,6 @@ class SocketClient : BaseLogReceiver
 			type,
 			product_ids = symbol == null ? null : new[] { symbol },
 			channel,
-		}, cancellationToken);
+		}, cancellationToken, subId);
 	}
 }

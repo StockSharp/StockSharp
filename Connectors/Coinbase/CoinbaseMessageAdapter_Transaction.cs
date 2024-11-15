@@ -140,7 +140,7 @@ public partial class CoinbaseMessageAdapter
 			ProcessOrder(order, statusMsg.TransactionId);
 
 		if (!statusMsg.IsHistoryOnly())
-			await _socketClient.SubscribeOrders(cancellationToken);
+			await _socketClient.SubscribeOrders(statusMsg.TransactionId, cancellationToken);
 
 		SendSubscriptionResult(statusMsg);
 	}

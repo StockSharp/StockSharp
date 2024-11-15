@@ -72,12 +72,12 @@ partial class BtceMessageAdapter
 
 		if (mdMsg.IsSubscribe)
 		{
-			await _pusherClient.SubscribeOrderBook(currency, cancellationToken);
+			await _pusherClient.SubscribeOrderBook(mdMsg.TransactionId, currency, cancellationToken);
 
 			SendSubscriptionResult(mdMsg);
 		}
 		else
-			await _pusherClient.UnSubscribeOrderBook(currency, cancellationToken);
+			await _pusherClient.UnSubscribeOrderBook(mdMsg.OriginalTransactionId, currency, cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -125,12 +125,12 @@ partial class BtceMessageAdapter
 			}
 			
 			if (!mdMsg.IsHistoryOnly())
-				await _pusherClient.SubscribeTrades(currency, cancellationToken);
+				await _pusherClient.SubscribeTrades(mdMsg.TransactionId, currency, cancellationToken);
 
 			SendSubscriptionResult(mdMsg);
 		}
 		else
-			await _pusherClient.UnSubscribeTrades(currency, cancellationToken);
+			await _pusherClient.UnSubscribeTrades(mdMsg.OriginalTransactionId, currency, cancellationToken);
 	}
 
 

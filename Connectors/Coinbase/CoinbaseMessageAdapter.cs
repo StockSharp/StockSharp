@@ -63,7 +63,7 @@ public partial class CoinbaseMessageAdapter
 	private void SubscribePusherClient()
 	{
 		_socketClient.StateChanged += SendOutConnectionState;
-		_socketClient.Error += SessionOnSocketError;
+		_socketClient.Error += SendOutError;
 		_socketClient.HeartbeatReceived += SessionOnHeartbeatReceived;
 		_socketClient.TickerReceived += SessionOnTickerChanged;
 		_socketClient.OrderBookReceived += SessionOnOrderBookReceived;
@@ -75,7 +75,7 @@ public partial class CoinbaseMessageAdapter
 	private void UnsubscribePusherClient()
 	{
 		_socketClient.StateChanged -= SendOutConnectionState;
-		_socketClient.Error -= SessionOnSocketError;
+		_socketClient.Error -= SendOutError;
 		_socketClient.HeartbeatReceived -= SessionOnHeartbeatReceived;
 		_socketClient.TickerReceived -= SessionOnTickerChanged;
 		_socketClient.OrderBookReceived -= SessionOnOrderBookReceived;
@@ -192,10 +192,5 @@ public partial class CoinbaseMessageAdapter
 	private void SessionOnHeartbeatReceived(Heartbeat heartbeat)
 	{
 
-	}
-
-	private void SessionOnSocketError(Exception exception)
-	{
-		SendOutError(exception);
 	}
 }

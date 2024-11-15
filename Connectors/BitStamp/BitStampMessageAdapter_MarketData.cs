@@ -129,12 +129,12 @@ partial class BitStampMessageAdapter
 		if (mdMsg.IsSubscribe)
 		{
 			if (!mdMsg.IsHistoryOnly())
-				await _pusherClient.SubscribeOrderBook(currency, cancellationToken);
+				await _pusherClient.SubscribeOrderBook(mdMsg.TransactionId, currency, cancellationToken);
 
 			SendSubscriptionResult(mdMsg);
 		}
 		else
-			await _pusherClient.UnSubscribeOrderBook(currency, cancellationToken);
+			await _pusherClient.UnSubscribeOrderBook(mdMsg.OriginalTransactionId, currency, cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -147,12 +147,12 @@ partial class BitStampMessageAdapter
 		if (mdMsg.IsSubscribe)
 		{
 			if (!mdMsg.IsHistoryOnly())
-				await _pusherClient.SubscribeOrderLog(currency, cancellationToken);
+				await _pusherClient.SubscribeOrderLog(mdMsg.TransactionId, currency, cancellationToken);
 
 			SendSubscriptionResult(mdMsg);
 		}
 		else
-			await _pusherClient.UnSubscribeOrderLog(currency, cancellationToken);
+			await _pusherClient.UnSubscribeOrderLog(mdMsg.OriginalTransactionId, currency, cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -196,13 +196,13 @@ partial class BitStampMessageAdapter
 			}
 
 			if (!mdMsg.IsHistoryOnly())
-				await _pusherClient.SubscribeTrades(currency, cancellationToken);
+				await _pusherClient.SubscribeTrades(mdMsg.TransactionId, currency, cancellationToken);
 
 			SendSubscriptionResult(mdMsg);
 		}
 		else
 		{
-			await _pusherClient.UnSubscribeTrades(currency, cancellationToken);
+			await _pusherClient.UnSubscribeTrades(mdMsg.OriginalTransactionId, currency, cancellationToken);
 		}
 	}
 

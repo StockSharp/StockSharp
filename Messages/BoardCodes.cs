@@ -1061,6 +1061,11 @@ public static class BoardCodes
 	public const string CoinEx = "CIEX";
 
 	/// <summary>
+	/// <see cref="CoinExFT"/>.
+	/// </summary>
+	public const string CoinExFT = "CIEXFT";
+
+	/// <summary>
 	/// <see cref="FatBtc"/>.
 	/// </summary>
 	public const string FatBtc = "FTBT";

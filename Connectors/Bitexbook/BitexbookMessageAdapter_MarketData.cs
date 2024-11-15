@@ -38,11 +38,11 @@ public partial class BitexbookMessageAdapter
 
 		if (mdMsg.IsSubscribe)
 		{
-			await _pusherClient.SubscribeTicker(symbol, cancellationToken);
+			await _pusherClient.SubscribeTicker(mdMsg.TransactionId, symbol, cancellationToken);
 			SendSubscriptionResult(mdMsg);
 		}
 		else
-			await _pusherClient.UnSubscribeTicker(symbol, cancellationToken);
+			await _pusherClient.UnSubscribeTicker(mdMsg.OriginalTransactionId, symbol, cancellationToken);
 	}
 
 	/// <inheritdoc />
