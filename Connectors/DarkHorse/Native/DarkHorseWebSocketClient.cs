@@ -41,6 +41,7 @@ class DarkHorseWebSocketClient : BaseLogReceiver
 		_key = key;
 		_hasher = secret.IsEmpty() ? null : new(secret.UnSecure().UTF8());
         _client = new(
+            "ws://localhost:9002",
             state => StateChanged?.Invoke(state),
             exception =>
             {
@@ -69,7 +70,7 @@ class DarkHorseWebSocketClient : BaseLogReceiver
 	{
 		_nextPing = null;
 		this.AddInfoLog(LocalizedStrings.Connecting);
-		return _client.ConnectAsync("ws://localhost:9002", cancellationToken: cancellationToken);
+		return _client.ConnectAsync(cancellationToken: cancellationToken);
 	}
 
 	/// <summary>

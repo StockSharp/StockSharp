@@ -778,6 +778,7 @@
   "D": "%D",
   "Daily": "Daily",
   "Dark": "Dark",
+  "DarkHorse":  "DarkHorseStock",
   "DarkTheme": "Dark theme.",
   "DashedLine": "Dashed line",
   "Data": "Data",
@@ -4155,6 +4156,5 @@
   "RMI": "RMI",
   "RelativeMomentumIndex": "Relative Momentum Index.",
   "WTO": "WTO",
-  "WaveTrendOscillator": "Wave Trend Oscillator.",
-  "DarkHorse" :  "Dark Horse Stock."
+  "WaveTrendOscillator": "Wave Trend Oscillator."
 }

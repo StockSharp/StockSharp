@@ -131,7 +131,8 @@
 	</ItemGroup>
  
   <ItemGroup>
-	<PackageReference Include="Ecng.ComponentModel" Version="1.0.257" />
+	<PackageReference Include="Ecng.Compilation.Roslyn" Version="1.0.105" />
+	<PackageReference Include="Ecng.ComponentModel" Version="1.0.259" />
 	<PackageReference Include="StockSharp.Charting.Interfaces" Version="5.0.77" />
 	<PackageReference Include="StockSharp.Localization" Version="5.0.193" />
 	<PackageReference Include="StockSharp.Xaml.Charting" Version="5.0.209" />
@@ -139,9 +140,9 @@
 	<PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
 	<PackageReference Include="System.Reflection.Metadata" Version="8.0.0" />
 	<PackageReference Include="DevExpress.Mvvm.CodeGenerators" Version="22.1.*-*" />
-    <PackageReference Include="Ecng.Common" Version="1.0.179" />
-    <PackageReference Include="Ecng.Net" Version="1.0.312" />
-    <PackageReference Include="Ecng.Net.SocketIO" Version="1.0.320" />
+    <PackageReference Include="Ecng.Common" Version="1.0.180" />
+    <PackageReference Include="Ecng.Net" Version="1.0.316" />
+    <PackageReference Include="Ecng.Net.SocketIO" Version="1.0.347" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NLog" Version="5.3.4" />
@@ -151,6 +152,8 @@
   </ItemGroup>
  
   <ItemGroup>
+    <ProjectReference Include="..\..\Localization.Generator\Localization.Generator.csproj" />
+    <ProjectReference Include="..\..\Localization\Localization.csproj" />
     <ProjectReference Include="..\DarkHorse\DarkHorse.csproj" />
   </ItemGroup>
  
