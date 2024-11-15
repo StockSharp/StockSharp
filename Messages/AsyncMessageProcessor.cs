@@ -316,7 +316,7 @@ class AsyncMessageProcessor : Disposable
 
 								_adapter.AddVerboseLog("endprocess: {0} ({1})", msg.Type, ex);
 
-								await _adapter.FaultDelay.Delay(_globalCts.Token);
+								await _adapter.FaultDelay.Delay(token);
 							}
 
 							_adapter.SendOutMessage(msg.CreateErrorResponse(ex, _adapter));
@@ -325,7 +325,9 @@ class AsyncMessageProcessor : Disposable
 					catch (Exception ex2)
 					{
 						done();
-						_adapter.AddErrorLog(ex2);
+
+						if (!token.IsCancellationRequested)
+							_adapter.AddErrorLog(ex2);
 					}
 				}
 				finally
