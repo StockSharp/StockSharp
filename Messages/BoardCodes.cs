@@ -931,6 +931,11 @@ public static class BoardCodes
 	public const string Kucoin = "KUCN";
 
 	/// <summary>
+	/// <see cref="KucoinFT"/>.
+	/// </summary>
+	public const string KucoinFT = "KUCNFT";
+
+	/// <summary>
 	/// <see cref="Liqui"/>.
 	/// </summary>
 	public const string Liqui = "LIQI";
@@ -939,6 +944,16 @@ public static class BoardCodes
 	/// <see cref="Huobi"/>.
 	/// </summary>
 	public const string Huobi = "HUBI";
+
+	/// <summary>
+	/// <see cref="HuobiCoin"/>.
+	/// </summary>
+	public const string HuobiCoin = "HUBICN";
+
+	/// <summary>
+	/// <see cref="HuobiUsdt"/>.
+	/// </summary>
+	public const string HuobiUsdt = "HUBIUS";
 
 	/// <summary>
 	/// <see cref="Globex"/>.
