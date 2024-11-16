@@ -3,6 +3,7 @@
     <PackageReference Include="StockSharp.Binance" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Okex" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.GateIO" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.Bitmex" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Fix" Version="$(StockSharpVer)" />
   </ItemGroup>
 </Project>
