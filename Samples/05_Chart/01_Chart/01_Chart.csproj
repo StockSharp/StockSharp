@@ -2,6 +2,7 @@
   <Import Project="..\..\common_samples_netwindows.props" />
   <ItemGroup>
     <PackageReference Include="Ecng.Compilation.Roslyn" Version="$(EcngVer)" />
+    <PackageReference Include="StockSharp.Charting.Interfaces" Version="5.0.77" />
 
     <PackageReference Include="StockSharp.Xaml.Charting" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(SampleHistoryDataVersion)" />

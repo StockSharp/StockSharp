@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Symbols>
+  <Symbol Name="AAPL" BasePrice="100" Group="Popular"/>
+  <Symbol Name="IBM" BasePrice="160" Group="Popular"/>
+  <Symbol Name="GOOG" BasePrice="523" Group="Popular"/>
+  <Symbol Name="HPQ" BasePrice="18" Group="Popular"/>
+  <Symbol Name="JPM" BasePrice="160" Group="Popular"/>
+  <Symbol Name="ADBE" BasePrice="72" Group="Popular"/>
+  <Symbol Name="AIG" BasePrice="56" Group="US Shares"/>
+  <Symbol Name="AMT" BasePrice="99" Group="US Shares"/>
+  <Symbol Name="BAC" BasePrice="18" Group="US Shares"/>
+  <Symbol Name="GE" BasePrice="24" Group="US Shares"/>
+  <Symbol Name="UTX" BasePrice="115" Group="US Shares"/>
+  <Symbol Name="VZ" BasePrice="47" Group="US Shares"/>
+</Symbols>

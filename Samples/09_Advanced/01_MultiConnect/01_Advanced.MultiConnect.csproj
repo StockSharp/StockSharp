@@ -6,5 +6,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
+    <ProjectReference Include="..\..\..\Connectors\DarkHorse\DarkHorse.csproj" />
   </ItemGroup>
 </Project>

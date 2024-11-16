@@ -4,4 +4,7 @@
   <ItemGroup>
     <PackageReference Include="StockSharp.Xaml" Version="$(StockSharpVer)" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Connectors\DarkHorse\DarkHorse.csproj" />
+  </ItemGroup>
 </Project>

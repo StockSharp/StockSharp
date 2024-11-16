@@ -1,0 +1,165 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IncludePackageReferencesDuringMarkupCompilation>true</IncludePackageReferencesDuringMarkupCompilation>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows7.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\AppIcon.ico" />
+    <None Remove="Resources\LogoStockMarket.svg" />
+    <None Remove="Resources\Symbols.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Symbols.xml" />
+  </ItemGroup>
+	<ItemGroup>
+		<Reference Include="DevExpress.Charts.v22.1.Core">
+		  <HintPath>E:\stocksharp\DevExpress.Charts.v22.1.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Data.Desktop.v22.1">
+		  <HintPath>E:\stocksharp\DevExpress.Data.Desktop.v22.1.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Data.v22.1">
+		  <HintPath>E:\stocksharp\DevExpress.Data.v22.1.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Data.v22.1.resources">
+		  <HintPath>E:\stocksharp\DevExpress.Data.v22.1.resources.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Mvvm.v22.1">
+		  <HintPath>E:\stocksharp\DevExpress.Mvvm.v22.1.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Mvvm.v22.1.DataModel.resources">
+		  <HintPath>E:\stocksharp\DevExpress.Mvvm.v22.1.DataModel.resources.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Printing.v22.1.Core">
+		  <HintPath>E:\stocksharp\DevExpress.Printing.v22.1.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Printing.v22.1.Core.resources">
+		  <HintPath>E:\stocksharp\DevExpress.Printing.v22.1.Core.resources.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Xpf.Charts.v22.1">
+		  <HintPath>E:\stocksharp\DevExpress.Xpf.Charts.v22.1.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Xpf.Charts.v22.1.resources">
+		  <HintPath>E:\stocksharp\DevExpress.Xpf.Charts.v22.1.resources.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Xpf.Core.v22.1">
+		  <HintPath>E:\stocksharp\DevExpress.Xpf.Core.v22.1.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Xpf.Core.v22.1.resources">
+		  <HintPath>E:\stocksharp\DevExpress.Xpf.Core.v22.1.resources.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Xpf.Docking.v22.1">
+		  <HintPath>E:\stocksharp\DevExpress.Xpf.Docking.v22.1.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Xpf.Docking.v22.1.resources">
+		  <HintPath>E:\stocksharp\DevExpress.Xpf.Docking.v22.1.resources.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Xpf.Grid.v22.1">
+		  <HintPath>E:\stocksharp\DevExpress.Xpf.Grid.v22.1.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Xpf.Grid.v22.1.Core">
+		  <HintPath>E:\stocksharp\DevExpress.Xpf.Grid.v22.1.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Xpf.Grid.v22.1.Core.resources">
+		  <HintPath>E:\stocksharp\DevExpress.Xpf.Grid.v22.1.Core.resources.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Xpf.Grid.v22.1.Extensions">
+		  <HintPath>E:\stocksharp\DevExpress.Xpf.Grid.v22.1.Extensions.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Xpf.Layout.v22.1.Core">
+		  <HintPath>E:\stocksharp\DevExpress.Xpf.Layout.v22.1.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Xpf.LayoutControl.v22.1">
+		  <HintPath>E:\stocksharp\DevExpress.Xpf.LayoutControl.v22.1.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Xpf.LayoutControl.v22.1.resources">
+		  <HintPath>E:\stocksharp\DevExpress.Xpf.LayoutControl.v22.1.resources.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Xpf.PropertyGrid.v22.1">
+		  <HintPath>E:\stocksharp\DevExpress.Xpf.PropertyGrid.v22.1.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Xpf.PropertyGrid.v22.1.resources">
+		  <HintPath>E:\stocksharp\DevExpress.Xpf.PropertyGrid.v22.1.resources.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Xpf.Themes.Office2019Colorful.v22.1">
+		  <HintPath>E:\stocksharp\DevExpress.Xpf.Themes.Office2019Colorful.v22.1.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Xpf.Themes.VS2019Dark.v22.1">
+		  <HintPath>E:\stocksharp\DevExpress.Xpf.Themes.VS2019Dark.v22.1.dll</HintPath>
+		</Reference>
+		<Reference Include="DevExpress.Xpf.Themes.Win11Light.v22.1">
+		  <HintPath>E:\stocksharp\DevExpress.Xpf.Themes.Win11Light.v22.1.dll</HintPath>
+		</Reference>
+		<Reference Include="Ecng.Compilation">
+		  <HintPath>E:\stocksharp2\Ecng.Compilation.dll</HintPath>
+		</Reference>
+		<Reference Include="Ecng.Compilation.Roslyn">
+		  <HintPath>E:\stocksharp2\Ecng.Compilation.Roslyn.dll</HintPath>
+		</Reference>
+		<Reference Include="Ecng.Configuration">
+		  <HintPath>E:\stocksharp2\Ecng.Configuration.dll</HintPath>
+		</Reference>
+		<Reference Include="SciChart.Core">
+			<HintPath>C:\Users\shiwan sung\AppData\Local\Programs\SciChart\SciChart SDK\ExamplesBin\net6.0-windows\SciChart.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="SciChart.Data">
+			<HintPath>C:\Users\shiwan sung\AppData\Local\Programs\SciChart\SciChart SDK\ExamplesBin\net6.0-windows\SciChart.Data.dll</HintPath>
+		</Reference>
+		<Reference Include="SciChart.Charting">
+			<HintPath>C:\Users\shiwan sung\AppData\Local\Programs\SciChart\SciChart SDK\ExamplesBin\net6.0-windows\SciChart.Charting.dll</HintPath>
+		</Reference>
+		<Reference Include="SciChart.Charting3D">
+			<HintPath>C:\Users\shiwan sung\AppData\Local\Programs\SciChart\SciChart SDK\ExamplesBin\net6.0-windows\SciChart.Charting3D.dll</HintPath>
+		</Reference>
+		<Reference Include="SciChart.Drawing">
+			<HintPath>C:\Users\shiwan sung\AppData\Local\Programs\SciChart\SciChart SDK\ExamplesBin\net6.0-windows\SciChart.Drawing.dll</HintPath>
+		</Reference>
+		<Reference Include="SciChart.Charting.DrawingTools">
+			<HintPath>C:\Users\shiwan sung\AppData\Local\Programs\SciChart\SciChart SDK\ExamplesBin\net6.0-windows\SciChart.Charting.DrawingTools.dll</HintPath>
+		</Reference>
+		<Reference Include="SciChart.Examples.ExternalDependencies">
+			<HintPath>C:\Users\shiwan sung\AppData\Local\Programs\SciChart\SciChart SDK\ExamplesBin\net6.0-windows\SciChart.Examples.ExternalDependencies.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+ 
+  <ItemGroup>
+	<PackageReference Include="Ecng.Compilation.Roslyn" Version="1.0.105" />
+	<PackageReference Include="Ecng.ComponentModel" Version="1.0.259" />
+	<PackageReference Include="StockSharp.Charting.Interfaces" Version="5.0.77" />
+	<PackageReference Include="StockSharp.Localization" Version="5.0.193" />
+	<PackageReference Include="StockSharp.Xaml.Charting" Version="5.0.209" />
+	<PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
+	<PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
+	<PackageReference Include="System.Reflection.Metadata" Version="8.0.0" />
+	<PackageReference Include="DevExpress.Mvvm.CodeGenerators" Version="22.1.*-*" />
+    <PackageReference Include="Ecng.Common" Version="1.0.180" />
+    <PackageReference Include="Ecng.Net" Version="1.0.316" />
+    <PackageReference Include="Ecng.Net.SocketIO" Version="1.0.347" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NLog" Version="5.3.4" />
+    <PackageReference Include="RestSharp" Version="112.1.0" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+    <PackageReference Include="WebSocketSharp-netstandard" Version="1.0.1" />
+  </ItemGroup>
+ 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Localization.Generator\Localization.Generator.csproj" />
+    <ProjectReference Include="..\..\Localization\Localization.csproj" />
+    <ProjectReference Include="..\DarkHorse\DarkHorse.csproj" />
+  </ItemGroup>
+ 
+  <ItemGroup>
+    <Resource Include="Resources\AppIcon.ico" />
+    <Resource Include="Resources\LogoStockMarket.svg" />
+  </ItemGroup>
+
+</Project>

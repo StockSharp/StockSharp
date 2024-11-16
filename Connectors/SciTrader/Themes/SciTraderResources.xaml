@@ -1,0 +1,222 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
+                    xmlns:s3D="http://schemas.abtsoftware.co.uk/scichart3D">
+
+    
+
+    <!-- Examples Series Colors -->
+
+    <Color x:Key="MainThemeStrokeColor">#50C7E0</Color>
+    <Color x:Key="SecondaryThemeStrokeColor">#F48420</Color>
+    <Color x:Key="MainThemeTransparentStrokeColor">#3350C7E0</Color>
+    <Color x:Key="SecondaryTransparentStrokeColor">#33F48420</Color>
+
+    <Color x:Key="ExtraThemeStrokeColor_1">#882B91</Color>
+    <Color x:Key="ExtraThemeTransparentStrokeColor_1">#33882B91</Color>
+    <Color x:Key="ExtraThemeStrokeColor_2">#30BC9A</Color>
+    <Color x:Key="ExtraThemeTransparentStrokeColor_2">#3330BC9A</Color>
+    <Color x:Key="ExtraThemeStrokeColor_3">#EC0F6C</Color>
+    <Color x:Key="ExtraThemeTransparentStrokeColor_3">#33EC0F6C</Color>
+    <Color x:Key="ExtraThemeStrokeColor_4">#364BA0</Color>
+    <Color x:Key="ExtraThemeTransparentStrokeColor_4">#33364BA0</Color>
+    <Color x:Key="ExtraThemeStrokeColor_5">#F48420</Color>
+    <Color x:Key="ExtraThemeTransparentStrokeColor_5">#33F48420</Color>
+    <Color x:Key="ExtraThemeStrokeColor_6">#C52E60</Color>
+    <Color x:Key="ExtraThemeTransparentStrokeColor_6">#33C52E60</Color>
+
+    <SolidColorBrush x:Key="MainThemeSolidBrush" Color="{StaticResource MainThemeStrokeColor}"/>
+    <SolidColorBrush x:Key="SecondaryThemeSolidBrush" Color="{StaticResource SecondaryThemeStrokeColor}"/>
+    <SolidColorBrush x:Key="MainThemeTransparentSolidBrush" Color="{StaticResource MainThemeTransparentStrokeColor}"/>
+    <SolidColorBrush x:Key="SecondaryThemeTransparentSolidBrush" Color="{StaticResource SecondaryTransparentStrokeColor}"/>
+
+    <SolidColorBrush x:Key="ExtraThemeStrokeBrush_1" Color="{StaticResource ExtraThemeStrokeColor_1}"/>
+    <SolidColorBrush x:Key="ExtraThemeTransparentStrokeBrush_1" Color="{StaticResource ExtraThemeTransparentStrokeColor_1}"/>
+    <SolidColorBrush x:Key="ExtraThemeStrokeBrush_2" Color="{StaticResource ExtraThemeStrokeColor_2}"/>
+    <SolidColorBrush x:Key="ExtraThemeTransparentStrokeBrush_2" Color="{StaticResource ExtraThemeTransparentStrokeColor_2}"/>
+    <SolidColorBrush x:Key="ExtraThemeStrokeBrush_3" Color="{StaticResource ExtraThemeStrokeColor_3}"/>
+    <SolidColorBrush x:Key="ExtraThemeTransparentStrokeBrush_3" Color="{StaticResource ExtraThemeTransparentStrokeColor_3}"/>
+    <SolidColorBrush x:Key="ExtraThemeStrokeBrush_4" Color="{StaticResource ExtraThemeStrokeColor_4}"/>
+    <SolidColorBrush x:Key="ExtraThemeTransparentStrokeBrush_4" Color="{StaticResource ExtraThemeTransparentStrokeColor_4}"/>
+    <SolidColorBrush x:Key="ExtraThemeStrokeBrush_5" Color="{StaticResource ExtraThemeStrokeColor_5}"/>
+    <SolidColorBrush x:Key="ExtraThemeTransparentStrokeBrush_5" Color="{StaticResource ExtraThemeTransparentStrokeColor_5}"/>
+    <SolidColorBrush x:Key="ExtraThemeStrokeBrush_6" Color="{StaticResource ExtraThemeStrokeColor_6}"/>
+    <SolidColorBrush x:Key="ExtraThemeTransparentStrokeBrush_6" Color="{StaticResource ExtraThemeTransparentStrokeColor_6}"/>
+
+    <LinearGradientBrush x:Key="MainFillGradient" StartPoint="0,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{StaticResource MainThemeStrokeColor}" />
+        <GradientStop Offset="1" Color="{StaticResource MainThemeTransparentStrokeColor}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="SecondaryFillGradient" StartPoint="0,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{StaticResource SecondaryThemeStrokeColor}" />
+        <GradientStop Offset="1" Color="{StaticResource SecondaryTransparentStrokeColor}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="ExtraThemeFillGradient_1" StartPoint="0,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{StaticResource ExtraThemeStrokeColor_1}" />
+        <GradientStop Offset="1" Color="{StaticResource ExtraThemeTransparentStrokeColor_1}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="ExtraThemeFillGradient_2" StartPoint="0,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{StaticResource ExtraThemeStrokeColor_2}" />
+        <GradientStop Offset="1" Color="{StaticResource ExtraThemeTransparentStrokeColor_2}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="MountainAreaBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="{StaticResource ExtraThemeTransparentStrokeColor_5}" />
+        <GradientStop Offset="1" Color="Transparent" />
+    </LinearGradientBrush>
+
+    <Color x:Key="PointMarkerStrokeColor">White</Color>
+    <Color x:Key="PointMarkerFillColor">#50C7E0</Color>
+    <Color x:Key="SeriesLightStroke">#E4F5FC</Color>
+
+    <LinearGradientBrush x:Key="NewsBulletGradientForMarkersExample" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0.5" Color="{StaticResource ExtraThemeStrokeColor_1}" />
+        <GradientStop Offset="1" Color="{StaticResource ExtraThemeTransparentStrokeColor_1}" />
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="ThemedChartBackground" Color="#FF11192C"/>
+    <SolidColorBrush x:Key="ThemedTransparentChartBackground" Color="#DF11192C"/>
+    <SolidColorBrush x:Key="ThemedSurfaceChartBackground" Color="#FF17243D"/>
+
+    <Color x:Key="ColorMapColor_1">#FF14233C</Color>
+    <Color x:Key="ColorMapColor_2">#FF264B93</Color>
+    <Color x:Key="ColorMapColor_3">#FF50C7E0</Color>
+    <Color x:Key="ColorMapColor_4">#FF67BDAF</Color>
+    <Color x:Key="ColorMapColor_5">#FFDC7969</Color>
+    <Color x:Key="ColorMapColor_6">#FFF48420</Color>
+    <Color x:Key="ColorMapColor_7">#FFEC0F6C</Color>
+
+    <Color x:Key="GroupSeriesColor_1">#50C7E0</Color>
+    <Color x:Key="GroupSeriesColor_2">#F48420</Color>
+    <Color x:Key="GroupSeriesColor_3">#882B91</Color>
+    <Color x:Key="GroupSeriesColor_4">#30BC9A</Color>
+    <Color x:Key="GroupSeriesColor_5">#EC0F6C</Color>
+    <Color x:Key="GroupSeriesColor_6">#364BA0</Color>
+    <Color x:Key="GroupSeriesColor_7">#F48420</Color>
+    <Color x:Key="GroupSeriesColor_8">#C52E60</Color>
+    <Color x:Key="GroupSeriesColor_9">#FFDC7969</Color>
+    <Color x:Key="GroupSeriesColor_10">#FF264B93</Color>
+    <Color x:Key="GroupSeriesColor_11">#30BC9A</Color>
+
+    <SolidColorBrush x:Key="GroupSeriesFill_1">#AA50C7E0</SolidColorBrush>
+    <SolidColorBrush x:Key="GroupSeriesFill_2">#AAF48420</SolidColorBrush>
+    <SolidColorBrush x:Key="GroupSeriesFill_3">#AA882B91</SolidColorBrush>
+    <SolidColorBrush x:Key="GroupSeriesFill_4">#AA30BC9A</SolidColorBrush>
+    <SolidColorBrush x:Key="GroupSeriesFill_5">#AAEC0F6C</SolidColorBrush>
+    <SolidColorBrush x:Key="GroupSeriesFill_6">#AA364BA0</SolidColorBrush>
+    <SolidColorBrush x:Key="GroupSeriesFill_7">#AAF48420</SolidColorBrush>
+    <SolidColorBrush x:Key="GroupSeriesFill_8">#AAC52E60</SolidColorBrush>
+    <SolidColorBrush x:Key="GroupSeriesFill_9">#AADC7969</SolidColorBrush>
+    <SolidColorBrush x:Key="GroupSeriesFill_10">#AA264B93</SolidColorBrush>
+    <SolidColorBrush x:Key="GroupSeriesFill_11">#AA30BC9A</SolidColorBrush>
+
+    <LinearGradientBrush x:Key="GroupSeriesGradientBrush_1" StartPoint="0.5, 0" EndPoint="0.5, 1">
+        <GradientStop Color="#50C7E0" Offset="0.0"/>
+        <GradientStop Color="#AA50C7E0" Offset="1.0"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GroupSeriesGradientBrush_2" StartPoint="0.5, 0" EndPoint="0.5, 1">
+        <GradientStop Color="#F48420" Offset="0.0"/>
+        <GradientStop Color="#AAF48420" Offset="1.0"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GroupSeriesGradientBrush_3" StartPoint="0.5, 0" EndPoint="0.5, 1">
+        <GradientStop Color="#882B91 " Offset="0.0"/>
+        <GradientStop Color="#AA882B91 " Offset="1.0"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GroupSeriesGradientBrush_4" StartPoint="0.5, 0" EndPoint="0.5, 1.0">
+        <GradientStop Color="#30BC9A" Offset="0.0"/>
+        <GradientStop Color="#AA30BC9A" Offset="1.0"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GroupSeriesGradientBrush_5" StartPoint="0.5, 0" EndPoint="0.5, 1">
+        <GradientStop Color="#EC0F6C" Offset="0.0"/>
+        <GradientStop Color="#AAEC0F6C" Offset="1.0"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GroupSeriesGradientBrush_6" StartPoint="0.5, 0" EndPoint="0.5, 1">
+        <GradientStop Color="#364BA0" Offset="0.0"/>
+        <GradientStop Color="#AA364BA0" Offset="1.0"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GroupSeriesGradientBrush_7" StartPoint="0.5, 0" EndPoint="0.5, 1">
+        <GradientStop Color="#F48420" Offset="0.0"/>
+        <GradientStop Color="#AAF48420" Offset="1.0"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GroupSeriesGradientBrush_8" StartPoint="0.5, 0" EndPoint="0.5, 1">
+        <GradientStop Color="#C52E60" Offset="0.0"/>
+        <GradientStop Color="#AAC52E60" Offset="1.0"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GroupSeriesGradientBrush_9" StartPoint="0.5, 0" EndPoint="0.5, 1">
+        <GradientStop Color="#FFDC7969" Offset="0.0"/>
+        <GradientStop Color="#AADC7969" Offset="1.0"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GroupSeriesGradientBrush_10" StartPoint="0.5, 0" EndPoint="0.5, 1">
+        <GradientStop Color="#FF264B93" Offset="0.0"/>
+        <GradientStop Color="#AA264B93" Offset="1.0"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GroupSeriesGradientBrush_11" StartPoint="0.5, 0" EndPoint="0.5, 1">
+        <GradientStop Color="#FF30BC9A" Offset="0.0"/>
+        <GradientStop Color="#AA30BC9A" Offset="1.0"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="Style3DChartBackground" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0.022" Color="#FF7811FF" />
+        <GradientStop Offset="0.36" Color="#FF232548" />
+        <GradientStop Offset="0.6" Color="#FF13140D" />
+        <GradientStop Offset="0.6" Color="#FF13140D" />
+        <GradientStop Offset="1" Color="Black" />
+    </LinearGradientBrush>
+
+    <!-- SciChart Controls Styles -->
+
+    <Style TargetType="{x:Type s:SciChartSurface}">
+        <Setter Property="s:ThemeManager.Theme" Value="SciChartv7Navy"/>
+    </Style>
+
+    <Style TargetType="{x:Type s:SciStockChart}">
+        <Setter Property="s:ThemeManager.Theme" Value="SciChartv7Navy"/>
+    </Style>
+
+    <Style TargetType="{x:Type s:SciChartDonutSurface}">
+        <Setter Property="s:ThemeManager.Theme" Value="SciChartv7Navy"/>
+    </Style>
+
+    <Style TargetType="{x:Type s:SciChartPieSurface}">
+        <Setter Property="s:ThemeManager.Theme" Value="SciChartv7Navy"/>
+    </Style>
+
+    <Style TargetType="{x:Type s:SciChartRadarSurface}">
+        <Setter Property="s:ThemeManager.Theme" Value="SciChartv7Navy"/>
+    </Style>
+
+    <Style TargetType="{x:Type s:SciChartTernarySurface}">
+        <Setter Property="s:ThemeManager.Theme" Value="SciChartv7Navy"/>
+    </Style>
+
+    <Style TargetType="{x:Type s:SciChartParallelCoordinateSurface}">
+        <Setter Property="s:ThemeManager.Theme" Value="SciChartv7Navy"/>
+    </Style>
+
+    <Style TargetType="{x:Type s3D:SciChart3DSurface}">
+        <Setter Property="IsFpsCounterVisible" Value="False"/>
+        <Setter Property="s:ThemeManager.Theme" Value="SciChartv7Navy"/>
+    </Style>
+
+    <Style TargetType="{x:Type s:SciChartOverview}">
+        <Setter Property="s:ThemeManager.Theme" Value="SciChartv7Navy"/>
+    </Style>
+
+    <Style TargetType="{x:Type s:HeatmapColorMap}">
+        <Setter Property="s:ThemeManager.Theme" Value="SciChartv7Navy"/>
+    </Style>
+    
+</ResourceDictionary>

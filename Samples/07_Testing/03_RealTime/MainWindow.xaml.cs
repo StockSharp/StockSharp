@@ -19,6 +19,9 @@ using StockSharp.Logging;
 using StockSharp.Messages;
 using StockSharp.Xaml;
 using StockSharp.Charting;
+using StockSharp.DarkHorse;
+using System.Threading;
+using System.Security;
 
 public partial class MainWindow
 {
@@ -39,11 +42,29 @@ public partial class MainWindow
 
 	private readonly Portfolio _emuPf = Portfolio.CreateSimulator();
 
-	public MainWindow()
+    private DarkHorseMessageAdapter darkhorseMessageAdapter;
+
+    public class DarkHorseIdGenerator : Ecng.Common.IdGenerator
+    {
+        private long _currentId;
+
+        public DarkHorseIdGenerator()
+        {
+            _currentId = 1;
+        }
+
+        public override long GetNextId()
+        {
+            return Interlocked.Increment(ref _currentId);
+        }
+    }
+
+    public MainWindow()
 	{
 		InitializeComponent();
+        InitDarkHorseMessageAdapter();
 
-		CandleSettingsEditor.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
+        CandleSettingsEditor.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
 		CandleSettingsEditor.DataTypeChanged += CandleSettingsChanged;
 
 		_logManager = new LogManager();
@@ -68,7 +89,31 @@ public partial class MainWindow
 		GuiDispatcher.GlobalDispatcher.AddPeriodicalAction(ProcessCandles);
 	}
 
-	private void InitRealConnector()
+    private static SecureString ToSecureString(string str)
+    {
+        var secureString = new SecureString();
+        foreach (char c in str)
+        {
+            secureString.AppendChar(c);
+        }
+        secureString.MakeReadOnly();
+        return secureString;
+    }
+
+    private void InitDarkHorseMessageAdapter()
+    {
+        darkhorseMessageAdapter = new DarkHorseMessageAdapter(new DarkHorseIdGenerator());
+        var apiKey = ToSecureString("angelpie"); // Replace with your actual API key
+        var apiSecret = ToSecureString("orion"); // Replace with your actual API secret
+
+        darkhorseMessageAdapter.Key = apiKey;
+        darkhorseMessageAdapter.Secret = apiSecret;
+
+        // Add the Coinbase adapter to the connector
+        _realConnector.Adapter.InnerAdapters.Add(darkhorseMessageAdapter);
+    }
+
+    private void InitRealConnector()
 	{
 		_realConnector.NewOrder += OrderGrid.Orders.Add;
 		_realConnector.NewMyTrade += TradeGrid.Trades.Add;

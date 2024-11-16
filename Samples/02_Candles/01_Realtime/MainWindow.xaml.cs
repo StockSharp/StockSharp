@@ -15,6 +15,9 @@ using StockSharp.Xaml;
 using StockSharp.Messages;
 using StockSharp.Xaml.Charting;
 using StockSharp.Charting;
+using StockSharp.DarkHorse;
+using System.Threading;
+using System.Security;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml
@@ -27,12 +30,29 @@ public partial class MainWindow
 	private readonly Connector _connector = new();
 	private const string _connectorFile = "ConnectorFile.json";
 
-	public MainWindow()
+    private DarkHorseMessageAdapter darkhorseMessageAdapter;
+
+    public class DarkHorseIdGenerator : Ecng.Common.IdGenerator
+    {
+        private long _currentId;
+
+        public DarkHorseIdGenerator()
+        {
+            _currentId = 1;
+        }
+
+        public override long GetNextId()
+        {
+            return Interlocked.Increment(ref _currentId);
+        }
+    }
+
+    public MainWindow()
 	{
 		InitializeComponent();
-
-		// registering all connectors
-		ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(_connector.Adapter.InnerAdapters));
+        InitDarkHorseMessageAdapter();
+        // registering all connectors
+        ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(_connector.Adapter.InnerAdapters));
 
 		if (File.Exists(_connectorFile))
 		{
@@ -41,7 +61,31 @@ public partial class MainWindow
 		CandleSettingsEditor.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
 	}
 
-	private void Setting_Click(object sender, RoutedEventArgs e)
+    private static SecureString ToSecureString(string str)
+    {
+        var secureString = new SecureString();
+        foreach (char c in str)
+        {
+            secureString.AppendChar(c);
+        }
+        secureString.MakeReadOnly();
+        return secureString;
+    }
+
+    private void InitDarkHorseMessageAdapter()
+    {
+        darkhorseMessageAdapter = new DarkHorseMessageAdapter(new DarkHorseIdGenerator());
+        var apiKey = ToSecureString("angelpie"); // Replace with your actual API key
+        var apiSecret = ToSecureString("orion"); // Replace with your actual API secret
+
+        darkhorseMessageAdapter.Key = apiKey;
+        darkhorseMessageAdapter.Secret = apiSecret;
+
+        // Add the Coinbase adapter to the connector
+        _connector.Adapter.InnerAdapters.Add(darkhorseMessageAdapter);
+    }
+
+    private void Setting_Click(object sender, RoutedEventArgs e)
 	{
 		if (_connector.Configure(this))
 		{

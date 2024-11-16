@@ -7,6 +7,10 @@
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="$(MsExtensionsVer)" GeneratePathProperty="true" PrivateAssets="all" />
   </ItemGroup>
 	
+  <ItemGroup>
+    <PackageReference Update="Microsoft.CodeAnalysis.CSharp" Version="4.10.0" />
+  </ItemGroup>
+	
   <PropertyGroup>
     <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
   </PropertyGroup>

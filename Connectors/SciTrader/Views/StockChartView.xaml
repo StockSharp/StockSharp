@@ -1,0 +1,242 @@
+﻿<UserControl x:Class="SciTrader.Views.StockChartView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts"
+             xmlns:local="clr-namespace:SciTrader.Views"
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+             xmlns:utils="clr-namespace:SciTrader"
+             xmlns:dxct="http://schemas.devexpress.com/winfx/2008/xaml/charts/themekeys"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <DataTemplate x:Key="legendItemTemplate">
+            <dxc:LegendItemContainer>
+                <StackPanel Orientation="Horizontal"
+                        ToolTip="{DXBinding Expr='(ChartElement is $dxc:Indicator) ? `Double-click to setup indicator properties` : null'}"
+                            Margin="0,0,8,0">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                        <Grid x:Name="markerGrid"
+                          Width="{DynamicResource {dxct:ChartControlThemeKey ResourceKey=LegendMarkerWidth}}"
+                          Height="{DynamicResource {dxct:ChartControlThemeKey ResourceKey=LegendMarkerHeight}}">
+                            <Rectangle Stretch="Uniform"
+                                   Fill="Transparent"/>
+                            <dxc:ChartContentPresenter x:Name="markerPresenter"
+                                                   Content="{Binding}"
+                                                   ContentTemplate="{Binding Path=MarkerTemplate}"/>
+                        </Grid>
+                        <Rectangle x:Name="textIndentRectangle"
+                               Fill="Transparent"
+                               Margin="{DynamicResource {dxct:ChartControlThemeKey ResourceKey=LegendItemTextMargin}}"
+                               Width="0"/>
+                        <TextBlock x:Name="tbLegendItemText"
+                               VerticalAlignment="Center"
+                               Text="{Binding Path=Text, Mode=OneWay}"
+                               FontFamily="{Binding Path=FontFamily}"
+                               FontSize="{Binding Path=FontSize}"
+                               FontStretch="{Binding Path=FontStretch}"
+                               FontStyle="{Binding Path=FontStyle}"
+                               FontWeight="{Binding Path=FontWeight}"
+                               Foreground="{Binding Path=Foreground}"/>
+                    </StackPanel>
+                    <TextBlock x:Name="tbLegendItemCrosshairText"
+                           Height="{Binding Path=CrosshairContentHeight}"
+                           VerticalAlignment="Center"
+                           Text="{DXBinding Expr='CrosshairText == `` ? ChartElement.DisplayName == `Vol` ? Legend.DataContext.CrosshairCurrentVolumeText : Legend.DataContext.CrosshairCurrentFinancialText : CrosshairText'}"
+                           Foreground="{DXBinding Expr='CrosshairText == `` ? Foreground : CrosshairForeground'}"
+                           FontFamily="{Binding Path=CrosshairFontFamily}"
+                           FontSize="{Binding Path=CrosshairFontSize}"
+                           FontStretch="{Binding Path=CrosshairFontStretch}"
+                           FontStyle="{Binding Path=CrosshairFontStyle}"
+                           FontWeight="{Binding Path=CrosshairFontWeight}"
+                           HorizontalAlignment="Left"
+                           TextAlignment="Left"
+                           TextTrimming="WordEllipsis"
+                           Margin="{DynamicResource {dxct:ChartControlThemeKey ResourceKey=LegendItemTextMargin}}"
+                           MinWidth="{DXBinding Expr='ChartElement.DisplayName == `Vol` ? 65 : 0'}"/>
+                </StackPanel>
+            </dxc:LegendItemContainer>
+        </DataTemplate>
+    </UserControl.Resources>
+    <DockPanel>
+        <Grid>
+            <dxc:ChartControl x:Name="chartControl"
+                              DataSource="{Binding ChartDataSource}"
+                              AutoLayout="False"
+                              BorderThickness="0"
+                              Background= "{DXBinding Expr='@a($dx:ThemedWindow).DataContext.ThemeIndex == 0 ? `#FF3F3F46` : `#FFF8F8F8`'}"
+                              Padding="0"
+                              dx:DXSerializer.SerializationID="stockChart"
+                              CustomDrawCrosshair="{DXEvent 'CustomDrawCrosshair(@args)'}">
+                <dxmvvm:Interaction.Behaviors>
+                    <dxmvvm:EventToCommand EventName="BoundDataChanged" Command="{Binding DataChangedCommand}" PassEventArgsToCommand="True"/>
+                    <dxmvvm:EventToCommand EventName="MouseLeftButtonDown" Command="{Binding ElementName=chartControl, Path=Commands.ShowElementPropertiesCommand}">
+                        <dxmvvm:EventToCommand.EventArgsConverter>
+                            <utils:MouseDoubleClickArgsConverter/>
+                        </dxmvvm:EventToCommand.EventArgsConverter>
+                    </dxmvvm:EventToCommand>
+                    <dxmvvm:EventToCommand SourceObject="{DXBinding Expr='@e(chartControl).Annotations'}" EventName="CollectionChanged" Command="{Binding AnnotationsChangedCommand}" PassEventArgsToCommand="True"/>
+                </dxmvvm:Interaction.Behaviors>
+                <dxc:ChartControl.Legends>
+                    <dxc:Legend HorizontalPosition="Left"
+                                VerticalPosition="TopOutside"
+                                BorderThickness="0"
+                                Background="{x:Null}"
+                                ItemTemplate="{StaticResource legendItemTemplate}"
+                                Orientation="Horizontal"
+                                Padding="10,2,0,6"/>
+                </dxc:ChartControl.Legends>
+                <dxc:ChartControl.CrosshairOptions>
+                    <dxc:CrosshairOptions ShowOnlyInFocusedPane="False"
+                                          LinesMode="Free"
+                                          ShowValueLine="True"
+                                          ShowArgumentLabels="True"
+                                          ShowValueLabels="True"
+                                          ContentShowMode="Legend">
+                    </dxc:CrosshairOptions>
+                </dxc:ChartControl.CrosshairOptions>
+                <dxc:XYDiagram2D EnableAxisXNavigation="True"
+                                 DependentAxesYRange="True"
+                                 Margin="0,-20,-1,-25"
+                                 BorderThickness="0,1,0,0"
+                                 BorderBrush="{DXBinding Expr='@a($dx:ThemedWindow).DataContext.ThemeIndex == 0 ? `#00000000` : `#FFABABAB`'}"
+                                 Background="{DXBinding Expr='@a($dx:ThemedWindow).DataContext.ThemeIndex == 0 ? `#FF252526` : `#FFFFFFFF`'}">
+                    <dxmvvm:Interaction.Behaviors>
+                        <dxmvvm:EventToCommand EventName="Scroll" Command="{Binding ChartScrollCommand}" PassEventArgsToCommand="True"/>
+                        <dxmvvm:EventToCommand EventName="Zoom" Command="{Binding ChartZoomCommand}" PassEventArgsToCommand="True"/>
+                    </dxmvvm:Interaction.Behaviors>
+
+                    <dxc:XYDiagram2D.PaneLayout>
+                        <dxc:GridLayout>
+                            <dxc:GridLayout.ColumnDefinitions>
+                                <dxc:LayoutDefinition/>
+                            </dxc:GridLayout.ColumnDefinitions>
+                        </dxc:GridLayout>
+                    </dxc:XYDiagram2D.PaneLayout>
+
+                    <dxc:XYDiagram2D.DefaultPane>
+                        <dxc:Pane x:Name="defaultPane" dxc:GridLayout.RowSpan="3"
+                                  Margin="0,-10,0,0">
+                            <dxc:Pane.AxisXScrollBarOptions>
+                                <dxc:ScrollBarOptions Visible="False"/>
+                            </dxc:Pane.AxisXScrollBarOptions>
+                        </dxc:Pane>
+                    </dxc:XYDiagram2D.DefaultPane>
+                    <dxc:XYDiagram2D.Panes>
+                        <dxc:Pane x:Name="volumePane" Margin="0,-29,0,0" >
+                            <dxc:Pane.AxisXScrollBarOptions>
+                                <dxc:ScrollBarOptions Visible="False"/>
+                            </dxc:Pane.AxisXScrollBarOptions>
+                        </dxc:Pane>
+                    </dxc:XYDiagram2D.Panes>
+
+                    <dxc:XYDiagram2D.AxisX>
+                        <dxc:AxisX2D StickToEdge="True" GridLinesVisible="True">
+                            <dxc:AxisX2D.DateTimeScaleOptions>
+                                <dxc:ManualDateTimeScaleOptions AggregateFunction="None"
+                                                                MeasureUnit="{Binding SelectedInterval.MeasureUnit}"
+                                                                MeasureUnitMultiplier="{Binding SelectedInterval.MeasureUnitMultiplier}"
+                                                                SkipRangesWithoutPoints="True"/>
+                            </dxc:AxisX2D.DateTimeScaleOptions>
+                            <dxc:AxisX2D.VisualRange>
+                                <dxc:Range MinValue="{Binding MinVisibleDate, Mode=TwoWay}"/>
+                            </dxc:AxisX2D.VisualRange>
+                            <dxc:AxisX2D.WholeRange>
+                                <dxc:Range AutoSideMargins="False" SideMarginsValue="1"/>
+                            </dxc:AxisX2D.WholeRange>
+                            <dxc:AxisX2D.VisibilityInPanes>
+                                <dxc:VisibilityInPane Pane="{Binding ElementName=defaultPane}" Visible="False"/>
+                            </dxc:AxisX2D.VisibilityInPanes>
+                        </dxc:AxisX2D>
+                    </dxc:XYDiagram2D.AxisX>
+                    <dxc:XYDiagram2D.AxisY>
+                        <dxc:AxisY2D Alignment="Near"
+                                     Interlaced="False"
+                                     Brush="Transparent">
+                            <dxc:AxisY2D.WholeRange>
+                                <dxc:Range dxc:AxisY2D.AlwaysShowZeroLevel="False"
+                                           SideMarginSizeUnit="AxisRangePercentage"
+                                           EndSideMargin="40"/>
+                            </dxc:AxisY2D.WholeRange>
+                            <dxc:AxisY2D.CrosshairAxisLabelOptions>
+                                <dxc:CrosshairAxisLabelOptions Pattern="{}{V:f2}"/>
+                            </dxc:AxisY2D.CrosshairAxisLabelOptions>
+                            <dxc:AxisY2D.ConstantLinesInFront>
+                                <dxc:ConstantLine Value="{Binding CurrentPrice}">
+                                    <dxc:ConstantLine.Brush>
+                                        <SolidColorBrush Color="{Binding PriceIndicatorColor}"/>
+                                    </dxc:ConstantLine.Brush>
+                                    <dxc:ConstantLine.LineStyle>
+                                        <dxc:LineStyle>
+                                            <dxc:LineStyle.DashStyle>
+                                                <DashStyle Dashes="2,3"/>
+                                            </dxc:LineStyle.DashStyle>
+                                        </dxc:LineStyle>
+                                    </dxc:ConstantLine.LineStyle>
+                                </dxc:ConstantLine>
+                            </dxc:AxisY2D.ConstantLinesInFront>
+                        </dxc:AxisY2D>
+                    </dxc:XYDiagram2D.AxisY>
+                    <dxc:XYDiagram2D.SecondaryAxesY>
+                        <dxc:SecondaryAxisY2D x:Name="volumeAxis"
+                                              Alignment="Near"
+                                              Brush="Transparent">
+                            <dxc:SecondaryAxisY2D.CrosshairAxisLabelOptions>
+                                <dxc:CrosshairAxisLabelOptions Pattern="{}{V:f2}"/>
+                            </dxc:SecondaryAxisY2D.CrosshairAxisLabelOptions>
+                            <dxc:SecondaryAxisY2D.Label>
+                                <dxc:AxisLabel TextPattern="{}{V:0,,}M"/>
+                            </dxc:SecondaryAxisY2D.Label>
+                        </dxc:SecondaryAxisY2D>
+                    </dxc:XYDiagram2D.SecondaryAxesY>
+
+                    <dxc:CandleStickSeries2D ArgumentScaleType="DateTime"
+                                             DisplayName="{Binding SymbolName}"
+                                             OpenValueDataMember="Open"
+                                             LowValueDataMember="Low"
+                                             HighValueDataMember="High"
+                                             CloseValueDataMember="Close"
+                                             ArgumentDataMember="Date"
+                                             Brush="{StaticResource greenBrush}"
+                                             CrosshairLabelPattern="O{OV:f2}&#x09;H{HV:f2}&#x09;L{LV:f2}&#x09;C{CV:f2}&#x09;">
+                        <dxc:CandleStickSeries2D.ReductionOptions>
+                            <dxc:ReductionStockOptions Brush="{StaticResource redBrush}"
+                                                       dxc:CandleStickSeries2D.FillMode="AlwaysFilled"/>
+                        </dxc:CandleStickSeries2D.ReductionOptions>
+                        <dxc:CandleStickSeries2D.Indicators>
+                            <dxc:ExponentialMovingAverage PointsCount="7"
+                                                     DisplayName="EMA 7"
+                                                     ShowInLegend="True"
+                                                     CrosshairEnabled="False"
+                                                     CrosshairLabelPattern="{}{AV:f3}"/>
+                            <dxc:ExponentialMovingAverage PointsCount="25"
+                                                     DisplayName="EMA 25"
+                                                     ShowInLegend="True"
+                                                     CrosshairEnabled="False"
+                                                     CrosshairLabelPattern="{}{AV:f3}"/>
+                            <dxc:ExponentialMovingAverage PointsCount="99"
+                                                     DisplayName="EMA 99"
+                                                     ShowInLegend="True"
+                                                     CrosshairEnabled="False"
+                                                     CrosshairLabelPattern="{}{AV:f3}"/>
+                        </dxc:CandleStickSeries2D.Indicators>
+                    </dxc:CandleStickSeries2D>
+                    <dxc:BarSideBySideSeries2D ArgumentScaleType="DateTime"
+                                               Pane="{Binding ElementName=volumePane}"
+                                               AxisY="{Binding ElementName=volumeAxis}"
+                                               DisplayName="Vol"
+                                               ArgumentDataMember="Date"
+                                               ValueDataMember="Volume"
+                                               ColorDataMember="VolumeColor"
+                                               CrosshairLabelPattern="{}{V:f2}">
+                        <dxc:BarSideBySideSeries2D.Model>
+                            <dxc:BorderlessSimpleBar2DModel/>
+                        </dxc:BarSideBySideSeries2D.Model>
+                    </dxc:BarSideBySideSeries2D>
+                </dxc:XYDiagram2D>
+            </dxc:ChartControl>
+        </Grid>
+    </DockPanel>
+</UserControl>

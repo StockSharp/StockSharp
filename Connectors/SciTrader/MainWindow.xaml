@@ -1,0 +1,165 @@
+﻿<dx:ThemedWindow x:Class="SciTrader.MainWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+                 xmlns:viewmodel="clr-namespace:SciTrader.ViewModels"
+                 xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+                 xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+                 xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+                 xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+                 xmlns:views="clr-namespace:SciTrader.Views"
+                 xmlns:dxi="http://schemas.devexpress.com/winfx/2008/xaml/core/internal"
+                 xmlns:dxdbi="http://schemas.devexpress.com/winfx/2008/xaml/demobase/internal"
+                 mc:Ignorable="d"
+                 MinWidth="1200" MinHeight="600"
+                 Height="900" Width="1600"
+                 DataContext="{dxmvvm:ViewModelSource Type=viewmodel:MainViewModel}"
+                 ShowIcon="True"
+                 Padding="-1,0,-1,-1"
+                 Title="Stock Market"
+                 ShowTitle="False"
+                 Icon="{dx:SvgImageSource Size='128,128', Uri='/SciTrader;component/Resources/LogoStockMarket.svg'}">
+    <dx:ThemedWindow.Resources>
+        <DataTemplate x:Key="controlBoxTemplate">
+            <dxe:PopupBaseEdit ShowText="False"
+                               ShowBorder="False"
+                               AllowDefaultButton="False"
+                               Width="24"
+                               Height="23"
+                               PopupWidth="550"
+                               PopupHeight="450"
+                               AllowRecreatePopupContent="False"
+                               ShowSizeGrip="True">
+                <dxe:PopupBaseEdit.Buttons>
+                    <dxe:ButtonInfo ButtonKind="Simple"
+                                            GlyphKind="Plus"
+                                            Command="{Binding Path=(dxe:ButtonEdit.OwnerEdit).OpenPopupCommand, RelativeSource={RelativeSource Self}}"/>
+                </dxe:PopupBaseEdit.Buttons>
+                <dxe:PopupBaseEdit.PopupContentTemplate>
+                    <ControlTemplate>
+                        <dxg:GridControl DataContext="{Binding Path=(dxe:BaseEdit.OwnerEdit).DataContext, RelativeSource={RelativeSource TemplatedParent}}"
+                                                 ItemsSource="{Binding SymbolsSource}"
+                                                 SelectionMode="Row"
+                                                 SelectedItemChanged="{DXEvent 'CreateTabView(@sender, @args)'}"
+                                                 ShowBorder="False">
+                            <dxg:GridControl.Columns>
+                                <dxg:GridColumn FieldName="Symbol" Header="Symbol"/>
+                                <dxg:GridColumn FieldName="CurrentPrice" Header="Last Price">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:TextEditSettings DisplayFormat="f2"/>
+                                    </dxg:GridColumn.EditSettings>
+                                </dxg:GridColumn>
+                                <dxg:GridColumn FieldName="Change24" Header="Change">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:TextEditSettings DisplayFormat="f3"/>
+                                    </dxg:GridColumn.EditSettings>
+                                </dxg:GridColumn>
+                                <dxg:GridColumn FieldName="Volume24" Header="Volume">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:TextEditSettings DisplayFormat="f3"/>
+                                    </dxg:GridColumn.EditSettings>
+                                </dxg:GridColumn>
+                                <dxg:GridColumn FieldName="Group" Header="Group" GroupIndex="0"/>
+                            </dxg:GridControl.Columns>
+                            <dxg:GridControl.View>
+                                <dxg:TableView x:Name="watchListView"
+                                                       AllowEditing="False"
+                                                       FadeSelectionOnLostFocus="False"
+                                                       AllowPerPixelScrolling="True"
+                                                       ShowGroupPanel="False"
+                                                       AllowGrouping="False"
+                                                       ShowSearchPanelMode="Always"
+                                                       SearchPanelHorizontalAlignment="Left"
+                                                       ShowSearchPanelNavigationButtons="True"
+                                                       ScrollBarAnnotationMode="SearchResult"
+                                                       AutoWidth="True"
+                                                       HorizontalAlignment="Right"
+                                                       UseLayoutRounding="True"
+                                                       RowMinHeight="30"
+                                                       ShowIndicator="False"
+                                                       ShowVerticalLines="False"
+                                                       Loaded="{DXEvent 'TableViewLoaded(@sender, @args)'}"/>
+                            </dxg:GridControl.View>
+                        </dxg:GridControl>
+                    </ControlTemplate>
+                </dxe:PopupBaseEdit.PopupContentTemplate>
+            </dxe:PopupBaseEdit>
+        </DataTemplate>
+    </dx:ThemedWindow.Resources>
+    <dx:ThemedWindow.HeaderItems>
+        <views:InformationPanel DataContext="{Binding InformationPanelModel}"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left"
+                                Margin="0,0,20,0"
+                                Loaded="OnInformationPanelLoaded"
+                                dxi:WindowChrome.IsHitTestVisibleInChrome="False"/>
+        <dx:SimpleButton Content="설정" Click="Setting_Click"/>
+        <dx:SimpleButton Content="연결" Click="Connect_Click"/>
+    </dx:ThemedWindow.HeaderItems>
+    <!--<dxmvvm:Interaction.Behaviors>
+        <dxdbi:DpiAwareSizeBehavior/>
+    </dxmvvm:Interaction.Behaviors>-->
+    <Grid>
+        <dx:DXTabControl x:Name="tab"
+                         Padding="0,0,0,-1"
+                         SnapsToDevicePixels="True"
+                         ControlBoxPanelTemplate="{StaticResource controlBoxTemplate}"
+                         dx:WorkspaceManager.IsEnabled="True"
+                         Initialized="{DXEvent 'CreateTabView(@sender, @args)'}">
+            <dxmvvm:Interaction.Behaviors>
+                <dx:TabbedWindowDocumentUIService  ShowNewItemOnStartup="False"/>
+            </dxmvvm:Interaction.Behaviors>
+            <dx:DXTabControl.View>
+                <dx:TabControlStretchView RemoveTabItemsOnHiding="True"
+                                          MoveItemsWhenDragDrop="False"
+                                          NewButtonShowMode="NoWhere"
+                                          HideButtonShowMode="InAllTabs"
+                                          SingleTabItemHideMode="HideAndShowNewItem"
+                                          CloseWindowOnSingleTabItemHiding="True"
+                                          DragDropMode="Full"
+                                          TabNormalSize="130">
+                    <dx:TabControlStretchView.NewTabControlStyle>
+                        <Style TargetType="dx:DXTabControl">
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="ControlBoxPanelTemplate" Value="{StaticResource controlBoxTemplate}"/>
+                        </Style>
+                    </dx:TabControlStretchView.NewTabControlStyle>
+                </dx:TabControlStretchView>
+            </dx:DXTabControl.View>
+            <dx:DXTabControl.ContentFooterTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <dxb:ToolBarControl BackgroundTemplate="{x:Null}"
+                            GlyphSize="Small"
+                            ShowDragWidget="False"
+                            AllowCollapse="False"
+                            AllowCustomizationMenu="False"
+                            AllowHide="False"
+                            AllowQuickCustomization="False"
+                            AllowRename="False"
+                            Margin="3,-2,0,0">
+                            <dxb:BarSubItem Content="Theme">
+                                <dxb:BarCheckItem Content="Dark"
+                                          IsChecked="{DXBinding Expr='ThemeIndex == 0', BackExpr='0'}"/>
+                                <dxb:BarCheckItem Content="Light"
+                                          IsChecked="{DXBinding Expr='ThemeIndex == 1', BackExpr='1'}"/>
+                            </dxb:BarSubItem>
+                            <dxb:BarSubItem Content="Help">
+                                <dxb:BarButtonItem Content="DevExpress on the Web"
+                                   Command="{Binding DevExpressOnTheWebMenuCommand}"/>
+                                <dxb:BarButtonItem Content="About"
+                                   Command="{Binding AboutMenuCommand}"/>
+                            </dxb:BarSubItem>
+                        </dxb:ToolBarControl>
+                        <TextBlock Text="{Binding CurrentTime, StringFormat='MMMM dd, yyyy H:mm:ss'}"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Center"
+                   Margin="0,-1,7,0"/>
+                    </Grid>
+                </DataTemplate>
+            </dx:DXTabControl.ContentFooterTemplate>
+        </dx:DXTabControl>
+    </Grid>
+</dx:ThemedWindow>
