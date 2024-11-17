@@ -59,11 +59,6 @@ public class IndicatorType : Equatable<IndicatorType>, IDisposable
 	public event Action IndicatorChanged;
 
 	/// <summary>
-	/// The renderer type for indicator extended drawing.
-	/// </summary>
-	public Type Painter { get; private set; }
-
-	/// <summary>
 	/// Input values type.
 	/// </summary>
 	public Type InputValue { get; private set; }
@@ -99,11 +94,9 @@ public class IndicatorType : Equatable<IndicatorType>, IDisposable
 	/// Initializes a new instance of the <see cref="IndicatorType"/>.
 	/// </summary>
 	/// <param name="indicator">Indicator type.</param>
-	/// <param name="painter">The renderer type for indicator extended drawing.</param>
-	public IndicatorType(Type indicator, Type painter)
+	public IndicatorType(Type indicator)
 	{
 		Indicator = indicator;
-		Painter = painter;
 
 		LocalizedStrings.ActiveLanguageChanged += OnActiveLanguageChanged;
 	}
@@ -125,8 +118,7 @@ public class IndicatorType : Equatable<IndicatorType>, IDisposable
 	/// Create a copy of <see cref="IndicatorType"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IndicatorType Clone()
-		=> new(Indicator, Painter);
+	public override IndicatorType Clone() => new(Indicator);
 
 	/// <summary>
 	/// Compare <see cref="IndicatorType"/> on the equivalence.

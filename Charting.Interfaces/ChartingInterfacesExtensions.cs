@@ -178,6 +178,6 @@ public static class ChartingInterfacesExtensions
 		if (type is null)
 			throw new ArgumentNullException(nameof(type));
 
-		return type.Painter?.CreateInstance<IChartIndicatorPainter>();
+		return IChartExtensions.TryIndicatorPainterProvider?.TryGetPainter(type.Indicator)?.CreateInstance<IChartIndicatorPainter>();
 	}
 }

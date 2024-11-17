@@ -20,6 +20,16 @@ public static class IChartExtensions
 	public static IIndicatorProvider TryIndicatorProvider => ConfigManager.TryGetService<IIndicatorProvider>();
 
 	/// <summary>
+	/// <see cref="IChartIndicatorPainterProvider"/>
+	/// </summary>
+	public static IChartIndicatorPainterProvider IndicatorPainterProvider => ConfigManager.GetService<IChartIndicatorPainterProvider>();
+
+	/// <summary>
+	/// <see cref="IIndicatorProvider"/>
+	/// </summary>
+	public static IChartIndicatorPainterProvider TryIndicatorPainterProvider => ConfigManager.TryGetService<IChartIndicatorPainterProvider>();
+
+	/// <summary>
 	/// Exclude obsolete indicators.
 	/// </summary>
 	/// <param name="types">All indicator types.</param>
