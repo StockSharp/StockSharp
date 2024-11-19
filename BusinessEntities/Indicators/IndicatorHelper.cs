@@ -193,6 +193,10 @@ public static class IndicatorHelper
 				break;
 			case IIndicatorValue v:
 				input = v;
+
+				if (input.IsEmpty)
+					return indicator.CreateEmptyValue(time);
+
 				break;
 			case Unit u:
 				input = new DecimalIndicatorValue(indicator, u.Value, time) { IsFinal = isFinal };
