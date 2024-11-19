@@ -18,6 +18,9 @@ public class Portfolio : Position
 	{
 	}
 
+	/// <inheritdoc />
+	public override string PortfolioName => Name;
+
 	private string _name;
 
 	/// <summary>

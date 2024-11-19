@@ -18,6 +18,11 @@ public class Position : NotifiableObject, ILocalTimeMessage, IServerTimeMessage
 	}
 
 	/// <summary>
+	/// Portfolio name.
+	/// </summary>
+	public virtual string PortfolioName => Portfolio?.Name;
+
+	/// <summary>
 	/// Initializes a new instance of the <see cref="Position"/>.
 	/// </summary>
 	public Position()
