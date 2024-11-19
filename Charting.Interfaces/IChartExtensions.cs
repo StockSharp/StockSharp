@@ -30,16 +30,6 @@ public static class IChartExtensions
 	public static IChartIndicatorPainterProvider TryIndicatorPainterProvider => ConfigManager.TryGetService<IChartIndicatorPainterProvider>();
 
 	/// <summary>
-	/// Exclude obsolete indicators.
-	/// </summary>
-	/// <param name="types">All indicator types.</param>
-	/// <returns>Filtered collection.</returns>
-	public static IEnumerable<IndicatorType> ExcludeObsolete(this IEnumerable<IndicatorType> types)
-	{
-		return types.Where(t => !t.IsObsolete);
-	}
-
-	/// <summary>
 	/// Fill <see cref="IChart.IndicatorTypes"/> using <see cref="IIndicatorProvider"/>.
 	/// </summary>
 	/// <param name="chart">Chart.</param>

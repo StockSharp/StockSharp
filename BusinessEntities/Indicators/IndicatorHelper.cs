@@ -369,4 +369,12 @@ public static class IndicatorHelper
 	/// <returns><see cref="IIndicator"/></returns>
 	public static IIndicator CreateIndicator(this IndicatorType type)
 		=> type.CheckOnNull(nameof(type)).Indicator.CreateInstance<IIndicator>();
+
+	/// <summary>
+	/// Exclude obsolete indicators.
+	/// </summary>
+	/// <param name="types">All indicator types.</param>
+	/// <returns>Filtered collection.</returns>
+	public static IEnumerable<IndicatorType> ExcludeObsolete(this IEnumerable<IndicatorType> types)
+		=> types.CheckOnNull(nameof(types)).Where(t => !t.IsObsolete);
 }
