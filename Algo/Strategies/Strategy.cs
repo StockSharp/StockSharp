@@ -3198,6 +3198,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// <summary>
 	/// All possible <see cref="IOrderBookMessage"/> sources that can be received via <see cref="OrderBookDrawing"/>.
 	/// </summary>
+	[Browsable(false)]
 	public virtual IEnumerable<IOrderBookSource> OrderBookSources
 		=> [];
 
