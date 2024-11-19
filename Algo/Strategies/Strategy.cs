@@ -3025,6 +3025,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// <summary>
 	/// Determines <see cref="Connector"/> is <see cref="HistoryEmulationConnector"/>.
 	/// </summary>
+	[Browsable(false)]
 	public bool IsBacktesting => Connector is HistoryEmulationConnector;
 
 	private ISecurityProvider SecurityProvider => SafeGetConnector();
