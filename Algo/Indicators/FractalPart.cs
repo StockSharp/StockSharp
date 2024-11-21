@@ -5,14 +5,10 @@ namespace StockSharp.Algo.Indicators;
 /// </summary>
 [IndicatorHidden]
 [IndicatorOut(typeof(ShiftedIndicatorValue))]
-public class FractalPart : LengthIndicator<(decimal high, decimal low)>
+public class FractalPart : LengthIndicator<decimal>
 {
 	private int _numCenter;
-
-	private int _downTrendCounter;
-	private int _upTrendCounter;
-	private decimal? _extremum;
-	private bool? _isUpTrend;
+	private int _counter;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="FractalPart"/>.
@@ -44,10 +40,8 @@ public class FractalPart : LengthIndicator<(decimal high, decimal low)>
 	/// <inheritdoc />
 	public override void Reset()
 	{
-		_downTrendCounter = _upTrendCounter = default;
-		_isUpTrend = default;
-		_extremum = default;
 		_numCenter = Length / 2;
+		_counter = default;
 
 		base.Reset();
 	}
@@ -57,144 +51,29 @@ public class FractalPart : LengthIndicator<(decimal high, decimal low)>
 	{
 		var candle = input.ToCandle();
 
-		var currValue = IsUp ? candle.HighPrice : candle.LowPrice;
+		if (!input.IsFinal)
+			return new ShiftedIndicatorValue(this, input.Time);
 
-		if (Buffer.Count > 0)
+		Buffer.PushBack(IsUp ? candle.HighPrice : candle.LowPrice);
+
+		if (++_counter < Length)
+			return new ShiftedIndicatorValue(this, input.Time);
+
+		var midValue = Buffer[_numCenter];
+
+		for (var i = 0; i < _numCenter; i++)
 		{
-			var (prevHigh, prevLow) = Buffer.Back();
-
-			var prevValue = IsUp ? prevHigh : prevLow;
-
-			var isUpTrend = currValue == prevValue
-				? (bool?)null
-				: currValue > prevValue;
-
-			void resetCounters()
-			{
-				_upTrendCounter = _downTrendCounter = default;
-				_isUpTrend = default;
-				_extremum = default;
-			}
-
-			void tryStart()
-			{
-				if (!input.IsFinal)
-					return;
-
-				resetCounters();
-
-				if (isUpTrend is not null)
-				{
-					if (IsUp != isUpTrend.Value)
-						return;
-
-					_isUpTrend = isUpTrend.Value;
-
-					if (isUpTrend.Value)
-					{
-						if (++_upTrendCounter == _numCenter)
-						{
-							_extremum = currValue;
-							_isUpTrend = false;
-						}
-					}
-					else
-					{
-						if (++_downTrendCounter == _numCenter)
-						{
-							_extremum = currValue;
-							_isUpTrend = true;
-						}
-					}
-				}
-			}
-
-			if (_isUpTrend is null)
-			{
-				tryStart();
-			}
-			else if (_isUpTrend == isUpTrend)
-			{
-				if (input.IsFinal)
-				{
-					if (isUpTrend.Value)
-					{
-						if (++_upTrendCounter == _numCenter)
-						{
-							if (_downTrendCounter == _numCenter)
-							{
-								var extremum = _extremum.Value;
-
-								resetCounters();
-
-								return new ShiftedIndicatorValue(this, extremum, _numCenter, input.Time);
-							}
-							else
-							{
-								if (_downTrendCounter != default)
-									throw new InvalidOperationException($"_downTrendCounter == {_downTrendCounter}");
-
-								_extremum = currValue;
-								_isUpTrend = false;
-							}
-						}
-					}
-					else
-					{
-						if (++_downTrendCounter == _numCenter)
-						{
-							if (_upTrendCounter == _numCenter)
-							{
-								var extremum = _extremum.Value;
-
-								resetCounters();
-
-								return new ShiftedIndicatorValue(this, extremum, _numCenter, input.Time);
-							}
-							else
-							{
-								if (_upTrendCounter != default)
-									throw new InvalidOperationException($"_upTrendCounter == {_upTrendCounter}");
-
-								_extremum = currValue;
-								_isUpTrend = true;
-							}
-						}
-					}
-				}
-				else
-				{
-					if (isUpTrend.Value)
-					{
-						if ((_upTrendCounter + 1) == _numCenter)
-						{
-							if (_downTrendCounter == _numCenter)
-							{
-								return new ShiftedIndicatorValue(this, _extremum.Value, _numCenter, input.Time);
-							}
-						}
-					}
-					else
-					{
-						if ((_downTrendCounter + 1) == _numCenter)
-						{
-							if (_upTrendCounter == _numCenter)
-							{
-								return new ShiftedIndicatorValue(this, _extremum.Value, _numCenter, input.Time);
-							}
-						}
-					}
-				}
-			}
-			else
-			{
-				tryStart();
-			}
+			if (IsUp && Buffer[i] >= Buffer[i + 1] || !IsUp && Buffer[i] <= Buffer[i + 1])
+				return new ShiftedIndicatorValue(this, input.Time);
 		}
 
-		if (input.IsFinal)
-			Buffer.PushBack((candle.HighPrice, candle.LowPrice));
+		for (var i = _numCenter; i < Buffer.Count - 1; i++)
+		{
+			if (IsUp && Buffer[i] <= Buffer[i + 1] || !IsUp && Buffer[i] >= Buffer[i + 1])
+				return new ShiftedIndicatorValue(this, input.Time);
+		}
 
-		return new ShiftedIndicatorValue(this, input.Time);
+		_counter = default;
+		return new ShiftedIndicatorValue(this, midValue, _numCenter, input.Time);
 	}
 }
