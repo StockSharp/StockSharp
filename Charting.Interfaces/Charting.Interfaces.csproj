@@ -1,4 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyVersion>2024.10.21</AssemblyVersion>
+  </PropertyGroup>
   <Import Project="..\common_target_net.props" />
 
   <ItemGroup>

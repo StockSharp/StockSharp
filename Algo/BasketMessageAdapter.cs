@@ -1,3 +1,5 @@
+using ConnectionStates = StockSharp.Messages.ConnectionStates;
+
 namespace StockSharp.Algo;
 
 using StockSharp.Algo.Candles;
@@ -980,7 +982,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		if (adapter is IMessageAdapterWrapper wrapper)
 		{
-			return wrapper is IEmulationMessageAdapter or HistoryMessageAdapter
+			return wrapper is IEmulationMessageAdapter
 				? wrapper
 				: GetUnderlyingAdapter(wrapper.InnerAdapter);
 		}

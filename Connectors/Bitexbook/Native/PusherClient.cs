@@ -25,31 +25,34 @@ class PusherClient : BaseLogReceiver
 
 	public PusherClient()
 	{
-		_client = new WebSocketClient(
-			() =>
-			{
-				this.AddInfoLog(LocalizedStrings.Connected);
-				Connected?.Invoke();
-			},
-			expected =>
-			{
-				if (expected)
-					this.AddInfoLog(LocalizedStrings.Disconnected);
-				else
-					this.AddErrorLog(LocalizedStrings.ErrorConnection);
 
-				Disconnected?.Invoke(expected);
-			},
-			error =>
-			{
-				this.AddErrorLog(error);
-				Error?.Invoke(error);
-			},
-			OnProcess,
-			(s, a) => this.AddInfoLog(s, a),
-			(s, a) => this.AddErrorLog(s, a),
-			(s, a) => this.AddVerboseLog(s, a),
-			(s) => this.AddVerboseLog(s));
+		throw new NotImplementedException();
+
+		//_client = new WebSocketClient(
+		//	() =>
+		//	{
+		//		this.AddInfoLog(LocalizedStrings.Connected);
+		//		Connected?.Invoke();
+		//	},
+		//	expected =>
+		//	{
+		//		if (expected)
+		//			this.AddInfoLog(LocalizedStrings.Disconnected);
+		//		else
+		//			this.AddErrorLog(LocalizedStrings.ErrorConnection);
+
+		//		Disconnected?.Invoke(expected);
+		//	},
+		//	error =>
+		//	{
+		//		this.AddErrorLog(error);
+		//		Error?.Invoke(error);
+		//	},
+		//	OnProcess,
+		//	(s, a) => this.AddInfoLog(s, a),
+		//	(s, a) => this.AddErrorLog(s, a),
+		//	(s, a) => this.AddVerboseLog(s, a),
+		//	(s) => this.AddVerboseLog(s));
 	}
 
 	protected override void DisposeManaged()
@@ -61,7 +64,7 @@ class PusherClient : BaseLogReceiver
 	public ValueTask Connect(CancellationToken cancellationToken)
 	{
 		this.AddInfoLog(LocalizedStrings.Connecting);
-		return _client.ConnectAsync("wss://api.bitexbook.com/api/v2/ws", true, cancellationToken: cancellationToken);
+		return _client.ConnectAsync("wss://api.bitexbook.com/api/v2/ws", cancellationToken: cancellationToken);
 	}
 
 	public void Disconnect()

@@ -2,6 +2,7 @@
   <Import Project="..\common_target_net.props" />
   <PropertyGroup>
     <ProjectGuid>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</ProjectGuid>
+    <AssemblyVersion>2024.10.21</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.Configuration" Version="$(EcngVer)" />

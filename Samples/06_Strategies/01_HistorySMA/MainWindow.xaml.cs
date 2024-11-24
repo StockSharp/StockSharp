@@ -62,15 +62,20 @@ public partial class MainWindow
 	{
 		_security = new Security
 		{
-			Id = "SBER@TQBR",
-			Code = "SBER",
+			Id = "BTC-EUR@CNBS",
+			Code = "BTC-EUR",
 			PriceStep = 0.01m,
-			Board = ExchangeBoard.Micex
+			Board = ExchangeBoard.Coinbase
 		};
 		_portfolio = new Portfolio { Name = "test account", BeginValue = 100000000 };
+
+
+		var localDrive = new LocalMarketDataDrive(_pathHistory);
+
+
 		var storageRegistry = new StorageRegistry
 		{
-			DefaultDrive = new LocalMarketDataDrive(_pathHistory),
+			DefaultDrive = localDrive,
 		};
 
 		_connector = new HistoryEmulationConnector(new[] { _security }, new[] { _portfolio })

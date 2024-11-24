@@ -24,34 +24,37 @@ class SocketClient : BaseLogReceiver
 	{
 		_authenticator = authenticator ?? throw new ArgumentNullException(nameof(authenticator));
 
-		_client = new(
-			() =>
-			{
-				this.AddInfoLog(LocalizedStrings.Connected);
-				Connected?.Invoke();
-			},
-			expected =>
-			{
-				if (expected)
-					this.AddInfoLog(LocalizedStrings.Disconnected);
-				else
-					this.AddErrorLog(LocalizedStrings.ErrorConnection);
+        _client = new(
+            () =>
+            {
+                this.AddInfoLog(LocalizedStrings.Connected);
+                Connected?.Invoke();
+            },
+            expected =>
+            {
+                if (expected)
+                {
+                    this.AddInfoLog(LocalizedStrings.Disconnected);
+                }
+                else
+                    this.AddErrorLog(LocalizedStrings.ErrorConnection);
 
-				Disconnected?.Invoke(expected);
-			},
-			error =>
-			{
-				this.AddErrorLog(error);
-				Error?.Invoke(error);
-			},
-			OnProcess,
-			(s, a) => this.AddInfoLog(s, a),
-			(s, a) => this.AddErrorLog(s, a),
-			(s, a) => this.AddVerboseLog(s, a),
-			(s) => this.AddVerboseLog(s));
-
-		_client.ReconnectAttempts = reconnectAttempts;
-	}
+                Disconnected?.Invoke(expected);
+            },
+            error =>
+            {
+                this.AddErrorLog(error);
+                Error?.Invoke(error);
+            },
+            OnProcess,
+            (s, a) => this.AddInfoLog(s, a),
+            (s, a) => this.AddErrorLog(s, a),
+            (s, a) => this.AddVerboseLog(s, a),
+            (s) => this.AddVerboseLog(s))
+        {
+            ReconnectAttempts = reconnectAttempts
+        };
+    }
 	
 	protected override void DisposeManaged()
 	{
@@ -62,7 +65,7 @@ class SocketClient : BaseLogReceiver
 	public ValueTask Connect(CancellationToken cancellationToken)
 	{
 		this.AddInfoLog(LocalizedStrings.Connecting);
-		return _client.ConnectAsync("wss://advanced-trade-ws.coinbase.com", true, cancellationToken: cancellationToken);
+		return _client.ConnectAsync("wss://advanced-trade-ws.coinbase.com",  cancellationToken: cancellationToken);
 	}
 
 	public void Disconnect()

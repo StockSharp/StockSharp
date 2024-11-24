@@ -25,7 +25,7 @@ using StockSharp.Charting;
 public partial class MainWindow
 {
 	private readonly Connector _connector;
-	private const string _connectorFile = "ConnectorFile.json";
+	private const string _connectorFile = @"C:\Users\Woife\AppData\Roaming\Microsoft\UserSecrets\00000000-0000-0000-0000-000000000000\ConnectorFile.json";
 
 	private readonly string _pathHistory = Paths.HistoryDataPath;
 

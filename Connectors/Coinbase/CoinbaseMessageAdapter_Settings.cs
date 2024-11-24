@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace StockSharp.Coinbase;
+
+using System.ComponentModel.DataAnnotations;
 using System.Security;
+
 using Ecng.ComponentModel;
 
-namespace StockSharp.Coinbase;
-
 /// <summary>
-///     The message adapter for <see cref="Coinbase" />.
+/// The message adapter for <see cref="Coinbase"/>.
 /// </summary>
 [MediaIcon("Coinbase_logo.svg")]
 [Doc("topics/api/connectors/crypto_exchanges/coinbase.html")]
@@ -15,32 +16,37 @@ namespace StockSharp.Coinbase;
 	Description = LocalizedStrings.CryptoConnectorKey,
 	GroupName = LocalizedStrings.CryptocurrencyKey)]
 [MessageAdapterCategory(MessageAdapterCategories.Crypto | MessageAdapterCategories.RealTime | MessageAdapterCategories.OrderLog |
-                        MessageAdapterCategories.Free | MessageAdapterCategories.Level1 | MessageAdapterCategories.Transactions)]
-public partial class CoinbaseMessageAdapter : AsyncMessageAdapter, ITokenAdapter
+	MessageAdapterCategories.Free | MessageAdapterCategories.Level1 | MessageAdapterCategories.Transactions)]
+public partial class CoinbaseMessageAdapter : AsyncMessageAdapter, IKeySecretAdapter, IPassphraseAdapter
 {
-	#region Properties
-
+	/// <inheritdoc />
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.NameKey,
-		Description = LocalizedStrings.NameKey,
+		Name = LocalizedStrings.KeyKey,
+		Description = LocalizedStrings.KeyKey + LocalizedStrings.Dot,
 		GroupName = LocalizedStrings.ConnectionKey,
 		Order = 0)]
 	public SecureString Key { get; set; }
 
-
-
+	/// <inheritdoc />
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.TokenKey,
-		Description = LocalizedStrings.TokenKey + LocalizedStrings.Dot,
+		Name = LocalizedStrings.SecretKey,
+		Description = LocalizedStrings.SecretDescKey,
 		GroupName = LocalizedStrings.ConnectionKey,
 		Order = 1)]
-	public SecureString Token { get; set; }
+	public SecureString Secret { get; set; }
 
-	#endregion
-
-	#region Methods
+	/// <summary>
+	/// Passphrase.
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.PassphraseKey,
+		Description = LocalizedStrings.PassphraseKey + LocalizedStrings.Dot,
+		GroupName = LocalizedStrings.ConnectionKey,
+		Order = 2)]
+	public SecureString Passphrase { get; set; }
 
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
@@ -48,7 +54,8 @@ public partial class CoinbaseMessageAdapter : AsyncMessageAdapter, ITokenAdapter
 		base.Save(storage);
 
 		storage.SetValue(nameof(Key), Key);
-		storage.SetValue(nameof(Token), Token);
+		storage.SetValue(nameof(Secret), Secret);
+		storage.SetValue(nameof(Passphrase), Passphrase);
 	}
 
 	/// <inheritdoc />
@@ -57,7 +64,8 @@ public partial class CoinbaseMessageAdapter : AsyncMessageAdapter, ITokenAdapter
 		base.Load(storage);
 
 		Key = storage.GetValue<SecureString>(nameof(Key));
-		Token = storage.GetValue<SecureString>(nameof(Token));
+		Secret = storage.GetValue<SecureString>(nameof(Secret));
+		Passphrase = storage.GetValue<SecureString>(nameof(Passphrase));
 	}
 
 	/// <inheritdoc />
@@ -65,8 +73,4 @@ public partial class CoinbaseMessageAdapter : AsyncMessageAdapter, ITokenAdapter
 	{
 		return base.ToString() + ": " + LocalizedStrings.Key + " = " + Key.ToId();
 	}
-
-	#endregion
-
-
 }

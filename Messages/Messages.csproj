@@ -5,6 +5,7 @@
   <Import Project="..\common_target_standard.props" />
   <PropertyGroup>
     <ProjectGuid>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</ProjectGuid>
+    <AssemblyVersion>2024.10.21</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Logging\Logging.csproj" />

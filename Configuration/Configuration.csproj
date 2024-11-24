@@ -2,6 +2,7 @@
   <Import Project="..\common_target_standard.props" />
   <PropertyGroup>
     <ProjectGuid>{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}</ProjectGuid>
+    <AssemblyVersion>2024.10.21</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Messages\Messages.csproj" />

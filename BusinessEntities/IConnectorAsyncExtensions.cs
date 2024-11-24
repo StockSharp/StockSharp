@@ -1,4 +1,6 @@
-﻿namespace StockSharp.BusinessEntities;
+﻿using ConnectionStates = StockSharp.Messages.ConnectionStates;
+
+namespace StockSharp.BusinessEntities;
 
 using System.Threading;
 using System.Threading.Tasks;

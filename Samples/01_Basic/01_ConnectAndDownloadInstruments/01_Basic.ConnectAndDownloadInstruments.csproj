@@ -1,7 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyVersion>2024.10.15</AssemblyVersion>
+  </PropertyGroup>
   <Import Project="..\..\common_samples_netwindows.props" />
   <Import Project="..\..\common_connectors.props" />
   <ItemGroup>
+    <PackageReference Include="StockSharp.Coinbase" Version="5.0.177" />
     <PackageReference Include="StockSharp.Xaml" Version="$(StockSharpVer)" />
   </ItemGroup>
 </Project>

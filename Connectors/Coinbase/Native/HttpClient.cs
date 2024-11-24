@@ -1,5 +1,3 @@
-using System.Net.Http.Headers;
-
 namespace StockSharp.Coinbase.Native;
 
 using System.Dynamic;
@@ -203,6 +201,7 @@ class HttpClient : BaseLogReceiver
 		if (request == null)
 			throw new ArgumentNullException(nameof(request));
 
+		//var body = new JObject();
 		var qs = request
 			.Parameters
 			.Where(p => p.Type == ParameterType.QueryString)
@@ -218,13 +217,16 @@ class HttpClient : BaseLogReceiver
 		var bodyStr = body == null ? string.Empty : JsonConvert.SerializeObject(body, _serializerSettings);
 
 		var signature = _authenticator.MakeSign(urlStr, request.Method, bodyStr, out var timestamp);
-
-		AuthenticationHeaderValue authenticationHeaderValue = new AuthenticationHeaderValue("Bearer", signature);
-
-		request.AddHeader("Authorization", authenticationHeaderValue.ToString()); // Correct way to add Authorization header
+	
+		request
+			.AddHeader("CB-ACCESS-KEY", _authenticator.Key.UnSecure())
+			.AddHeader("CB-ACCESS-TIMESTAMP", timestamp)
+			.AddHeader("CB-ACCESS-PASSPHRASE", _authenticator.Passphrase.UnSecure())
+			.AddHeader("CB-ACCESS-SIGN", signature);
 
 		if (body != null)
 		{
+			//request.RequestFormat = DataFormat.Json;
 			request.AddBodyAsStr(bodyStr);
 		}
 

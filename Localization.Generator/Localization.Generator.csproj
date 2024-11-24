@@ -9,6 +9,7 @@
 	
   <PropertyGroup>
     <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
+    <AssemblyVersion>2024.10.21</AssemblyVersion>
   </PropertyGroup>
 
   <Target Name="GetDependencyTargetPaths">

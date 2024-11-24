@@ -1,3 +1,5 @@
+using ConnectionStates = StockSharp.Messages.ConnectionStates;
+
 namespace StockSharp.Algo;
 
 using StockSharp.Algo.Candles;

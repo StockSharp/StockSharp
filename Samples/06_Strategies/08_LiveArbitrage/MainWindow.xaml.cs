@@ -22,7 +22,7 @@ public partial class MainWindow
 	private ArbitrageStrategy _strategy;
 	private readonly LogManager _logManager;
 	private readonly Connector _connector = new();
-	private const string _connectorFile = "ConnectorFile.json";
+	private const string _connectorFile = @"C:\Users\Woife\AppData\Roaming\Microsoft\UserSecrets\00000000-0000-0000-0000-000000000000\ConnectorFile.json";
 	public MainWindow()
 	{
 		InitializeComponent();
