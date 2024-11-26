@@ -5,4 +5,8 @@
     <PackageReference Include="Tinkoff.InvestApi" Version="0.6.*" />
     <PackageReference Include="Ecng.IO" Version="$(EcngVer)" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Ecng.Net.SocketIO" Version="1.0.352" />
+  </ItemGroup>
 </Project>

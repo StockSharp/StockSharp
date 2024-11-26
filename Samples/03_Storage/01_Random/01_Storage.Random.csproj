@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\common_samples_net.props" />
   <ItemGroup>
-    <PackageReference Include="StockSharp.Algo" Version="5.0.201" />
-    <PackageReference Include="StockSharp.BusinessEntities" Version="5.0.193" />
-    <PackageReference Include="StockSharp.Messages" Version="5.0.198" />
+    <PackageReference Include="StockSharp.Algo" Version="5.0.203" />
+    <PackageReference Include="StockSharp.BusinessEntities" Version="5.0.195" />
+    <PackageReference Include="StockSharp.Messages" Version="5.0.201" />
   </ItemGroup>
 </Project>

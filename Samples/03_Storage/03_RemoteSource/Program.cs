@@ -1,89 +1,89 @@
-﻿namespace StockSharp.Samples.Storage.RemoteSource;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Ecng.Common;
-
-using StockSharp.Algo;
-using StockSharp.Algo.Candles;
-using StockSharp.Algo.Storages;
-using StockSharp.BusinessEntities;
-using StockSharp.Finam;
-using StockSharp.Messages;
-
-static class Program
+﻿namespace StockSharp.Samples.Storage.RemoteSource
 {
-	private static void Main()
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+
+	using Ecng.Common;
+
+	using StockSharp.Algo;
+	using StockSharp.Algo.Candles;
+	using StockSharp.Algo.Storages;
+	using StockSharp.BusinessEntities;
+	using StockSharp.Messages;
+
+	static class Program
 	{
-		var connector = new Connector();
-		connector.LookupMessagesOnConnect.Clear();
-
-		var messageAdapter = new FinamMessageAdapter(connector.TransactionIdGenerator);
-		connector.Adapter.InnerAdapters.Add(messageAdapter);
-		connector.Connect();
-
-		//--------------------------Security--------------------------------------------------------------------------------
-		Console.WriteLine("Security:");
-		connector.LookupSecuritiesResult += (message, securities, arg3) =>
+		private static void Main()
 		{
-			foreach (var security1 in securities)
+			// Initialisiere den Connector
+			var connector = new Connector();
+			connector.LookupMessagesOnConnect.Clear();
+
+			// Adapter für Coinbase (CNBS)
+			connector.Connect();
+
+			//--------------------------Security--------------------------------------------------------------------------------
+			Console.WriteLine("Security:");
+			var securityId = "BTC-USD@CNBS".ToSecurityId();
+
+			var security = new Security
 			{
-				Console.WriteLine(security1);
-			}
-		};
-		connector.LookupSecurities(new Security() { Code = "SBER", Type = SecurityTypes.Stock });
-		var secId = "SBER@TQBR".ToSecurityId();
-		var security = connector.GetSecurity(secId);
+				Id = "BTC-EUR@CNBS",
+				Code = "BTC-EUR",
+				Board = ExchangeBoard.Coinbase
+			};
 
-		Console.ReadLine();
+			Console.WriteLine($"Abonniert: {security.Id}");
 
-		////--------------------------Candles--------------------------------------------------------------------------------
-		Console.WriteLine("Candles:");
-		var candles = new List<CandleMessage>();
-		connector.CandleReceived += (series, candle) =>
-		{
-			Console.WriteLine(candle);
-			candles.Add((CandleMessage)candle);
-		};
+			////--------------------------Candles--------------------------------------------------------------------------------
+			Console.WriteLine("Candles:");
+			var candles = new List<CandleMessage>();
 
-		connector.Subscribe(new(security.TimeFrame(TimeSpan.FromMinutes(15)))
-		{
-			MarketData =
+			// Ereignis abonnieren, um Kerzen zu empfangen
+			connector.CandleReceived += (series, candle) =>
 			{
-				From = DateTime.Now.AddDays(-3),
-				To = DateTime.Now.AddDays(-1),
-			},
-		});
+				Console.WriteLine(candle);
+				candles.Add((CandleMessage)candle);
+			};
 
-		Console.ReadLine();
+			// Kerzen-Daten abonnieren
+			//CandleSeries candleSeries = DataType.CandleRange.ToCandleSeries(security);
+			connector.Subscribe( new Subscription(DataType.CandleRange,security));
 
-		//---------------------------------------------------------------------------------------------
-		const string pathHistory = "Storage";
-		pathHistory.SafeDeleteDir();
 
-		var storageRegistry = new StorageRegistry
-		{
-			DefaultDrive = new LocalMarketDataDrive(pathHistory)
-		};
+			//connector.Subscribe(candleSeries);
 
-		//------------------------------Save---------------------------------------------------
-		Console.WriteLine("Saving...");
-		var candlesStorageCsv = storageRegistry.GetTimeFrameCandleMessageStorage(secId, TimeSpan.FromMinutes(5), format: StorageFormats.Csv);
-		candlesStorageCsv.Save(candles);
-		var candlesStorageBin = storageRegistry.GetTimeFrameCandleMessageStorage(secId, TimeSpan.FromMinutes(5), format: StorageFormats.Binary);
-		candlesStorageBin.Save(candles);
-		Console.WriteLine("Save done!");
+			Console.ReadLine();
 
-		Console.ReadLine();
+			//---------------------------------------------------------------------------------------------
+			const string pathHistory = "Storage";
+			pathHistory.SafeDeleteDir();
 
-		//------------------------------Delete---------------------------------------------------
-		Console.WriteLine("Deleting...");
-		candlesStorageCsv.Delete(candles.First().OpenTime, candles.Last().CloseTime);
-		candlesStorageBin.Delete(candles.First().OpenTime, candles.Last().CloseTime);
-		Console.WriteLine("Delete done!");
+			var storageRegistry = new StorageRegistry
+			{
+				DefaultDrive = new LocalMarketDataDrive(pathHistory)
+			};
 
-		Console.ReadLine();
+			//------------------------------Save---------------------------------------------------
+			Console.WriteLine("Saving...");
+			var candlesStorageCsv = storageRegistry.GetTimeFrameCandleMessageStorage(securityId, TimeSpan.FromMinutes(5), format: StorageFormats.Csv);
+			candlesStorageCsv.Save(candles);
+
+			var candlesStorageBin = storageRegistry.GetTimeFrameCandleMessageStorage(securityId, TimeSpan.FromMinutes(5), format: StorageFormats.Binary);
+			candlesStorageBin.Save(candles);
+
+			Console.WriteLine("Save done!");
+
+			Console.ReadLine();
+
+			//------------------------------Delete---------------------------------------------------
+			Console.WriteLine("Deleting...");
+			candlesStorageCsv.Delete(candles.First().OpenTime, candles.Last().CloseTime);
+			candlesStorageBin.Delete(candles.First().OpenTime, candles.Last().CloseTime);
+			Console.WriteLine("Delete done!");
+
+			Console.ReadLine();
+		}
 	}
 }

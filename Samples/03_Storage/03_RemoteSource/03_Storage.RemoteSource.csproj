@@ -2,6 +2,6 @@
   <Import Project="..\..\common_samples_net.props" />
   <ItemGroup>
     <PackageReference Include="StockSharp.Finam" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.Algo" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.Algo" Version="5.0.203" />
   </ItemGroup>
 </Project>

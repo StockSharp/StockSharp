@@ -8,7 +8,7 @@
     <ProjectReference Include="..\Messages\Messages.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NuGet.Configuration" Version="$(NuGetApiVer)" />
+    <PackageReference Include="NuGet.Configuration" Version="6.12.1" />
     <PackageReference Include="Ecng.Configuration" Version="$(EcngVer)" />
   </ItemGroup>
 </Project>

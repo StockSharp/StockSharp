@@ -5,7 +5,7 @@
     <AssemblyVersion>2024.10.21</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ecng.ComponentModel" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.ComponentModel" Version="1.0.263" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="strings.json" />

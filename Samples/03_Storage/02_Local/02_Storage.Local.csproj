@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\common_samples_net.props" />
   <ItemGroup>
-    <PackageReference Include="Ecng.Compilation.Roslyn" Version="$(EcngVer)" />
-    <PackageReference Include="StockSharp.Algo" Version="$(StockSharpVer)" />
+    <PackageReference Include="Ecng.Compilation.Roslyn" Version="1.0.107" />
+    <PackageReference Include="StockSharp.Algo" Version="5.0.203" />
     <PackageReference Include="StockSharp.Samples.HistoryData" Version="1.*" />
   </ItemGroup>
 </Project>

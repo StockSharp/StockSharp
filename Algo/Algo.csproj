@@ -6,10 +6,10 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.Interop" Version="$(EcngVer)" />
-    <PackageReference Include="Ecng.Net" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.Net" Version="1.0.320" />
     <PackageReference Include="Ecng.IO" Version="$(EcngVer)" />
-    <PackageReference Include="Ecng.StringSearch" Version="$(EcngVer)" />
-    <PackageReference Include="Ecng.Compilation" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.StringSearch" Version="1.0.155" />
+    <PackageReference Include="Ecng.Compilation" Version="1.0.112" />
     <PackageReference Include="Ecng.MathLight" Version="$(EcngVer)" />
 	  
     <PackageReference Include="GeneticSharp" Version="$(GeneticSharpVer)" />
