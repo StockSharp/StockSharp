@@ -286,7 +286,9 @@ public partial class MainWindow
 	{
 		var pfDataSource = new PortfolioDataSource();
 		pfDataSource.Add(_emuPf);
-		pfDataSource.AddRange(_realConnector.Portfolios);
+
+		foreach (var pf in _realConnector.Portfolios)
+			pfDataSource.Add(pf);
 
 		var newOrder = new OrderWindow
 		{
