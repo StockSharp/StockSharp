@@ -3,6 +3,7 @@
   <PropertyGroup>
     <ProjectGuid>{A1A5C8E7-0BA6-4D8C-8FB2-93424A94E5D4}</ProjectGuid>
     <UseWPF>true</UseWPF>
+    <AssemblyVersion>2024.11.26</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <Resource Include="logos\*.png" />

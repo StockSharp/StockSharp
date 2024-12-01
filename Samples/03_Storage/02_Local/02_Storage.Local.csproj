@@ -1,4 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyVersion>2024.11.26</AssemblyVersion>
+  </PropertyGroup>
   <Import Project="..\..\common_samples_net.props" />
   <ItemGroup>
     <PackageReference Include="Ecng.Compilation.Roslyn" Version="1.0.107" />

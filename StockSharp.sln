@@ -4,10 +4,6 @@ VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Algo", "Algo\Algo.csproj", "{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessEntities", "BusinessEntities\BusinessEntities.csproj", "{DCE69DB8-53CA-4B7F-9368-02F175A31074}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localization", "Localization\Localization.csproj", "{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging", "Logging\Logging.csproj", "{C4476ADD-A3D5-41BB-9D43-55D865863B78}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages", "Messages\Messages.csproj", "{B47F9C23-A4BD-46A9-BF27-54CB3D653503}"
@@ -21,8 +17,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alerts.Interfaces", "Alerts.Interfaces\Alerts.Interfaces.csproj", "{43DFFE65-4AB7-4C21-8F2E-F05F86B70BC0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Charting.Interfaces", "Charting.Interfaces\Charting.Interfaces.csproj", "{44953EAC-4E10-4680-BAF3-B4C67F638331}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localization.Generator", "Localization.Generator\Localization.Generator.csproj", "{FCD1242A-B4BF-4D17-AB8D-DAEB891704C8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Algo.Export", "Algo.Export\Algo.Export.csproj", "{D5A9DBB4-8732-412B-989E-ACFAAA275E4B}"
 EndProject
@@ -144,14 +138,6 @@ Global
 		{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DCE69DB8-53CA-4B7F-9368-02F175A31074}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DCE69DB8-53CA-4B7F-9368-02F175A31074}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DCE69DB8-53CA-4B7F-9368-02F175A31074}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DCE69DB8-53CA-4B7F-9368-02F175A31074}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C4476ADD-A3D5-41BB-9D43-55D865863B78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C4476ADD-A3D5-41BB-9D43-55D865863B78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4476ADD-A3D5-41BB-9D43-55D865863B78}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -176,10 +162,6 @@ Global
 		{44953EAC-4E10-4680-BAF3-B4C67F638331}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44953EAC-4E10-4680-BAF3-B4C67F638331}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44953EAC-4E10-4680-BAF3-B4C67F638331}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FCD1242A-B4BF-4D17-AB8D-DAEB891704C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FCD1242A-B4BF-4D17-AB8D-DAEB891704C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FCD1242A-B4BF-4D17-AB8D-DAEB891704C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FCD1242A-B4BF-4D17-AB8D-DAEB891704C8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D5A9DBB4-8732-412B-989E-ACFAAA275E4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D5A9DBB4-8732-412B-989E-ACFAAA275E4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5A9DBB4-8732-412B-989E-ACFAAA275E4B}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,4 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyVersion>2024.11.26</AssemblyVersion>
+  </PropertyGroup>
   <Import Project="..\..\common_samples_netwindows.props" />
   <Import Project="..\..\common_connectors.props" />
   <ItemGroup>

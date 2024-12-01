@@ -1,3 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyVersion>2024.11.27</AssemblyVersion>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+  </PropertyGroup>
   <Import Project="..\common_connectors_websocket.props" />
 </Project>

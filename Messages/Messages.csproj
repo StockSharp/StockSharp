@@ -1,20 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <StockSharpTargets>netstandard2.0;net6.0</StockSharpTargets>
+    <StockSharpTargets>net8.0</StockSharpTargets>
+    <TargetFrameworks>net8.0</TargetFrameworks>
   </PropertyGroup>
   <Import Project="..\common_target_standard.props" />
   <PropertyGroup>
     <ProjectGuid>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</ProjectGuid>
-    <AssemblyVersion>2024.10.21</AssemblyVersion>
+    <AssemblyVersion>2024.11.27</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Logging\Logging.csproj" />
   </ItemGroup>
-
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <Compile Remove="AsyncMessageProcessor.cs" />
     <Compile Remove="AsyncMessageAdapter.cs" />
     <Compile Remove="HistoricalAsyncMessageAdapter.cs" />
   </ItemGroup>
-
 </Project>

@@ -2,6 +2,8 @@
   <Import Project="..\common_target_net.props" />
   <PropertyGroup>
     <ProjectGuid>{D5A9DBB4-8732-412B-989E-ACFAAA275E4B}</ProjectGuid>
+    <AssemblyVersion>2024.11.26</AssemblyVersion>
+    <TargetFrameworks>net8.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.Data.Linq2db" Version="1.0.135" />

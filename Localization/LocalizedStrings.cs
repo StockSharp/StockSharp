@@ -18,6 +18,8 @@ using Ecng.Serialization;
 /// </summary>
 public static partial class LocalizedStrings
 {
+	private static string _stringsFileName="strings.json";
+
 	private class Translation
 	{
 		private readonly Dictionary<string, string> _stringsById = new();
@@ -196,6 +198,11 @@ public static partial class LocalizedStrings
 		}
 	}
 
+	private static void ResetCache()
+	{
+		Console.WriteLine(nameof(ResetCache)+"??");
+	}
+
 	/// <summary>
 	/// Try update <see cref="ActiveLanguage"/>.
 	/// </summary>
@@ -217,6 +224,8 @@ public static partial class LocalizedStrings
 	/// </summary>
 	public static CultureInfo CurrentCulture
 		=> CultureInfo.GetCultureInfo(CultureCode);
+
+	public static int CultureCode { get; set; } = new CultureInfo("de-de").LCID;
 
 	private static int GetLangCode(string lang)
 		=> _langIds.TryGetValue(lang, out var langCode) ? langCode : -1;

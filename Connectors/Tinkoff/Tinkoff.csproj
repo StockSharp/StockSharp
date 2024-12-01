@@ -1,11 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyVersion>2024.11.26</AssemblyVersion>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+  </PropertyGroup>
   <Import Project="..\common_connectors_websocket.props" />
-
   <ItemGroup>
     <PackageReference Include="Tinkoff.InvestApi" Version="0.6.*" />
     <PackageReference Include="Ecng.IO" Version="$(EcngVer)" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Update="Ecng.Net.SocketIO" Version="1.0.352" />
   </ItemGroup>

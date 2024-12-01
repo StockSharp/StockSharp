@@ -1,21 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\common_target_source_generator.props" />
-	
+  <ItemGroup>
+    <AdditionalFiles Include="strings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AdditionalFiles>
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Text.Json" Version="9.0.0" GeneratePathProperty="true" PrivateAssets="all" />
     <PackageReference Include="System.Text.Encodings.Web" Version="9.0.0" GeneratePathProperty="true" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.0" GeneratePathProperty="true" PrivateAssets="all" />
   </ItemGroup>
-	
   <ItemGroup>
     <PackageReference Update="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0" />
   </ItemGroup>
-	
   <PropertyGroup>
     <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
-    <AssemblyVersion>2024.10.21</AssemblyVersion>
+    <AssemblyVersion>2024.11.27</AssemblyVersion>
+    <TargetFrameworks>net8.0</TargetFrameworks>
   </PropertyGroup>
-
   <Target Name="GetDependencyTargetPaths">
     <ItemGroup>
       <TargetPathWithTargetPlatformMoniker Include="$(PKGSystem_Text_Json)\lib\netstandard2.0\System.Text.Json.dll" IncludeRuntimeDependency="false" />
