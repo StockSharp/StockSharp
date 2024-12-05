@@ -49,29 +49,37 @@ partial class FtxMessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask OnLevel1SubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	protected override async ValueTask OnLevel1SubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
 		SendSubscriptionReply(mdMsg.TransactionId);
 
 		var currency = mdMsg.SecurityId.ToCurrency();
 
 		if (mdMsg.IsSubscribe)
-			return _wsClient.SubscribeLevel1(mdMsg.TransactionId, currency, cancellationToken);
+		{
+			await _wsClient.SubscribeLevel1(mdMsg.TransactionId, currency, cancellationToken);
+
+			SendSubscriptionResult(mdMsg);
+		}
 		else
-			return _wsClient.UnsubscribeLevel1(mdMsg.OriginalTransactionId, currency, cancellationToken);
+			await _wsClient.UnsubscribeLevel1(mdMsg.OriginalTransactionId, currency, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	protected override async ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
 		SendSubscriptionReply(mdMsg.TransactionId);
 
 		var currency = mdMsg.SecurityId.ToCurrency();
 
 		if (mdMsg.IsSubscribe)
-			return _wsClient.SubscribeOrderBook(mdMsg.TransactionId, currency, cancellationToken);
+		{
+			await _wsClient.SubscribeOrderBook(mdMsg.TransactionId, currency, cancellationToken);
+
+			SendSubscriptionResult(mdMsg);
+		}
 		else
-			return _wsClient.UnsubscribeOrderBook(mdMsg.OriginalTransactionId, currency, cancellationToken);
+			await _wsClient.UnsubscribeOrderBook(mdMsg.OriginalTransactionId, currency, cancellationToken);
 	}
 
 	/// <inheritdoc />
