@@ -377,4 +377,22 @@ public static class IndicatorHelper
 	/// <returns>Filtered collection.</returns>
 	public static IEnumerable<IndicatorType> ExcludeObsolete(this IEnumerable<IndicatorType> types)
 		=> types.CheckOnNull(nameof(types)).Where(t => !t.IsObsolete);
+
+	/// <summary>
+	/// Try find <see cref="IndicatorType"/> by identifier.
+	/// </summary>
+	/// <param name="provider"><see cref="IIndicatorProvider"/></param>
+	/// <param name="id">Identifier.</param>
+	/// <returns><see cref="IndicatorType"/> or <see langword="null"/>.</returns>
+	public static IndicatorType TryGetById(this IIndicatorProvider provider, string id)
+		=> provider.CheckOnNull(nameof(provider)).All.FirstOrDefault(it => it.Id == id);
+
+	/// <summary>
+	/// Try find <see cref="IndicatorType"/> by type.
+	/// </summary>
+	/// <param name="provider"><see cref="IIndicatorProvider"/></param>
+	/// <param name="type"><see cref="IndicatorType.Indicator"/></param>
+	/// <returns><see cref="IndicatorType"/> or <see langword="null"/>.</returns>
+	public static IndicatorType TryGetByType(this IIndicatorProvider provider, Type type)
+		=> provider.CheckOnNull(nameof(provider)).All.FirstOrDefault(it => it.Indicator == type);
 }

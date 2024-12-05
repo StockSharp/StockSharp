@@ -1619,13 +1619,4 @@ public static partial class TraderHelper
 	/// <param name="dataType">Data type info.</param>
 	/// <returns>Subscription.</returns>
 	public static Subscription ToSubscription(this DataType dataType) => new(dataType, (SecurityMessage)null);
-
-	/// <summary>
-	/// Try find <see cref="IndicatorType"/> by identifier.
-	/// </summary>
-	/// <param name="provider"><see cref="IIndicatorProvider"/></param>
-	/// <param name="id">Identifier.</param>
-	/// <returns><see cref="IndicatorType"/> or <see langword="null"/>.</returns>
-	public static IndicatorType TryGetById(this IIndicatorProvider provider, string id)
-		=> provider.CheckOnNull(nameof(provider)).All.FirstOrDefault(it => it.Id == id);
 }
