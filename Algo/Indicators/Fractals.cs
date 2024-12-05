@@ -1,6 +1,64 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
 /// <summary>
+/// <see cref="Fractals"/> indicator value.
+/// </summary>
+public class FractalsIndicatorValue : ComplexIndicatorValue
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="FractalsIndicatorValue"/>.
+	/// </summary>
+	/// <param name="fractals"><see cref="Fractals"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public FractalsIndicatorValue(Fractals fractals, DateTimeOffset time)
+		: base(fractals, time)
+	{
+	}
+
+	/// <summary>
+	/// Has pattern.
+	/// </summary>
+	public bool HasPattern { get; private set; }
+
+	/// <summary>
+	/// Has up.
+	/// </summary>
+	public bool HasUp { get; set; }
+
+	/// <summary>
+	/// Has down.
+	/// </summary>
+	public bool HasDown { get; set; }
+
+	/// <summary>
+	/// Cast object from <see cref="FractalsIndicatorValue"/> to <see cref="bool"/>.
+	/// </summary>
+	/// <param name="value">Object <see cref="FractalsIndicatorValue"/>.</param>
+	/// <returns><see cref="bool"/> value.</returns>
+	public static explicit operator bool(FractalsIndicatorValue value)
+		=> value.CheckOnNull(nameof(value)).HasPattern;
+
+	/// <inheritdoc />
+	public override void Add(IIndicator indicator, IIndicatorValue value)
+	{
+		if (indicator is null)	throw new ArgumentNullException(nameof(indicator));
+		if (value is null)		throw new ArgumentNullException(nameof(value));
+
+		if (!value.IsEmpty)
+		{
+			HasPattern = true;
+
+			if (((FractalPart)indicator).IsUp)
+				HasUp = true;
+			else 
+				HasDown = true;
+		}
+
+		base.Add(indicator, value);
+	}
+}
+
+/// <summary>
 /// Fractals.
 /// </summary>
 /// <remarks>
@@ -11,6 +69,7 @@
 	Name = LocalizedStrings.FractalsKey,
 	Description = LocalizedStrings.FractalsKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
+[IndicatorOut(typeof(FractalsIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/fractals.html")]
 public class Fractals : BaseComplexIndicator
 {
@@ -77,6 +136,10 @@ public class Fractals : BaseComplexIndicator
 		Description = LocalizedStrings.FractalDownKey,
 		GroupName = LocalizedStrings.GeneralKey)]
 	public FractalPart Down { get; }
+
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new FractalsIndicatorValue(this, time);
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + " " + Length;

@@ -608,7 +608,7 @@ public class ComplexIndicatorValue : BaseIndicatorValue
 	/// </summary>
 	/// <param name="indicator"><see cref="IIndicator"/></param>
 	/// <param name="value"><see cref="IIndicatorValue"/></param>
-	public void Add(IIndicator indicator, IIndicatorValue value)
+	public virtual void Add(IIndicator indicator, IIndicatorValue value)
 		=> InnerValues.Add(indicator, value);
 
 	/// <summary>

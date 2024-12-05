@@ -121,10 +121,18 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 		return output;
 	}
 
+	/// <summary>
+	/// Create <see cref="ComplexIndicatorValue"/>.
+	/// </summary>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	/// <returns><see cref="ComplexIndicatorValue"/></returns>
+	protected virtual ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
+
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var value = new ComplexIndicatorValue(this, input.Time);
+		var value = CreateValue(input.Time);
 
 		foreach (var indicator in InnerIndicators)
 		{
