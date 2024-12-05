@@ -228,6 +228,14 @@ public static class IndicatorHelper
 	}
 
 	/// <summary>
+	/// Get default output type for indicator.
+	/// </summary>
+	/// <param name="indicatorType"><see cref="IComplexIndicator"/></param>
+	/// <returns>Type.</returns>
+	public static Type GetDefaultIndicatorOutput(this Type indicatorType)
+		=> indicatorType.CheckOnNull(nameof(indicatorType)).Is<IComplexIndicator>() ? typeof(ComplexIndicatorValue) : typeof(DecimalIndicatorValue);
+
+	/// <summary>
 	/// Get value type for specified indicator.
 	/// </summary>
 	/// <param name="indicatorType">Indicator type.</param>
@@ -241,10 +249,20 @@ public static class IndicatorHelper
 		if (!indicatorType.Is<IIndicator>())
 			throw new ArgumentException(LocalizedStrings.TypeNotImplemented.Put(indicatorType.Name, nameof(IIndicator)), nameof(indicatorType));
 
-		return (isInput
-				? (IndicatorValueAttribute)indicatorType.GetAttribute<IndicatorInAttribute>()
-				: indicatorType.GetAttribute<IndicatorOutAttribute>()
-			)?.Type ?? typeof(DecimalIndicatorValue);
+		var retVal = (isInput
+			? (IndicatorValueAttribute)indicatorType.GetAttribute<IndicatorInAttribute>()
+			: indicatorType.GetAttribute<IndicatorOutAttribute>()
+		)?.Type;
+
+		if (retVal is null)
+		{
+			if (isInput)
+				retVal = typeof(DecimalIndicatorValue);
+			else
+				retVal = indicatorType.GetDefaultIndicatorOutput();
+		}
+
+		return retVal;
 	}
 
 	/// <summary>

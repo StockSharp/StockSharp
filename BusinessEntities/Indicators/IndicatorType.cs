@@ -49,6 +49,8 @@ public class IndicatorType : Equatable<IndicatorType>, IDisposable
 			InputValue = value.GetValueType(true);
 			OutputValue = value.GetValueType(false);
 
+			IsCustomOutputValue = OutputValue != value.GetDefaultIndicatorOutput();
+
 			IndicatorChanged?.Invoke();
 		}
 	}
@@ -67,6 +69,11 @@ public class IndicatorType : Equatable<IndicatorType>, IDisposable
 	/// Result values type.
 	/// </summary>
 	public Type OutputValue { get; private set; }
+
+	/// <summary>
+	/// Determines whether the indicator is a custom output value.
+	/// </summary>
+	public bool IsCustomOutputValue { get; private set; }
 
 	/// <summary>
 	/// The <see cref="IndicatorType"/> is obsolete.
