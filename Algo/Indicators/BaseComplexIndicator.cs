@@ -99,9 +99,6 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 	/// <inheritdoc />
 	protected override bool CalcIsFormed() => InnerIndicators.All(i => i.IsFormed);
 
-	/// <inheritdoc />
-	public override Type ResultType { get; } = typeof(ComplexIndicatorValue);
-
 	/// <summary>
 	/// Create empty value.
 	/// </summary>

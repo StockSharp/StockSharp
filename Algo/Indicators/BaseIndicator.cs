@@ -17,8 +17,6 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 		var type = GetType();
 
 		_name = type.GetDisplayName();
-		InputType = type.GetValueType(true);
-		ResultType = type.GetValueType(false);
 	}
 
 	/// <inheritdoc />
@@ -132,14 +130,6 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	/// <inheritdoc />
 	[Browsable(false)]
 	public IIndicatorContainer Container { get; } = new IndicatorContainer();
-
-	/// <inheritdoc />
-	[Browsable(false)]
-	public virtual Type InputType { get; }
-
-	/// <inheritdoc />
-	[Browsable(false)]
-	public virtual Type ResultType { get; }
 
 	/// <inheritdoc />
 	public event Action<IIndicatorValue, IIndicatorValue> Changed;
