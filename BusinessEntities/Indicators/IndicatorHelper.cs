@@ -413,4 +413,17 @@ public static class IndicatorHelper
 	/// <returns><see cref="IndicatorType"/> or <see langword="null"/>.</returns>
 	public static IndicatorType TryGetByType(this IIndicatorProvider provider, Type type)
 		=> provider.CheckOnNull(nameof(provider)).All.FirstOrDefault(it => it.Indicator == type);
+
+	/// <summary>
+	/// Determines whether the indicator is a custom output value.
+	/// </summary>
+	/// <param name="indicator">Indicator type.</param>
+	/// <returns>Check result.</returns>
+	public static bool IsCustomOutputValue(this Type indicator)
+	{
+		if (indicator is null)
+			throw new ArgumentNullException(nameof(indicator));
+
+		return indicator.GetValueType(false) != indicator.GetDefaultIndicatorOutput();
+	}
 }
