@@ -1445,20 +1445,6 @@ public static partial class TraderHelper
 	}
 
 	/// <summary>
-	/// Determines the specified portfolio is required.
-	/// </summary>
-	/// <param name="portfolio">Portfolio.</param>
-	/// <param name="uniqueId">Portfolio identifier.</param>
-	/// <returns>Check result.</returns>
-	public static bool IsSame(this Portfolio portfolio, string uniqueId)
-	{
-		if (portfolio == null)
-			throw new ArgumentNullException(nameof(portfolio));
-
-		return portfolio.Name.EqualsIgnoreCase(uniqueId);// || (portfolio.InternalId != null && Guid.TryParse(uniqueId, out var indernalId) && portfolio.InternalId == indernalId);
-	}
-
-	/// <summary>
 	/// Compile mathematical formula.
 	/// </summary>
 	/// <param name="expression">Text expression.</param>
