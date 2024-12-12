@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.PeakKey,
 	Description = LocalizedStrings.PeakKey)]
 [Doc("topics/api/indicators/list_of_indicators/peak.html")]
-public sealed class Peak : ZigZagEquis
+public sealed class Peak : ZigZag
 {
 	/// <summary>
 	/// To create the indicator <see cref="Peak"/>.

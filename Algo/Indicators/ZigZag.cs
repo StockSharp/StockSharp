@@ -1,7 +1,7 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
 /// <summary>
-/// ZigZag.
+/// Zig Zag.
 /// </summary>
 /// <remarks>
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/zigzag.html
@@ -11,12 +11,11 @@
 	Name = LocalizedStrings.ZigZagKey,
 	Description = LocalizedStrings.ZigZagDescKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
+[IndicatorOut(typeof(ShiftedIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/zigzag.html")]
 public class ZigZag : BaseIndicator
 {
-	private readonly List<(decimal low, decimal high)> _buffer = [];
-	private readonly List<decimal> _lowBuffer = [];
-	private readonly List<decimal> _highBuffer = [];
+	private readonly IList<decimal> _buffer = [];
 	private readonly List<decimal> _zigZagBuffer = [];
 
 	private bool _needAdd = true;
@@ -31,69 +30,26 @@ public class ZigZag : BaseIndicator
 	/// <inheritdoc />
 	public override int NumValuesToInitialize => 2;
 
-	private int _backStep = 3;
+	private decimal _deviation = 0.45m * 0.01m;
 
 	/// <summary>
-	/// Minimum number of candles between local maximums, minimums.
+	/// Percentage change.
 	/// </summary>
+	/// <remarks>
+	/// It is specified in the range from 0 to 1.
+	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.CandlesKey,
-		Description = LocalizedStrings.BackStepKey,
+		Name = LocalizedStrings.PercentageChangeKey,
+		Description = LocalizedStrings.PercentageChangeDescKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public int BackStep
-	{
-		get => _backStep;
-		set
-		{
-			if (_backStep == value)
-				return;
-
-			_backStep = value;
-			Reset();
-		}
-	}
-
-	private int _depth = 12;
-
-	/// <summary>
-	/// Candles minimum, on which Zigzag will not build a second maximum (or minimum), if it is smaller (or larger) by a deviation of the previous respectively.
-	/// </summary>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.DepthKey,
-		Description = LocalizedStrings.ZigZagDepthKey,
-		GroupName = LocalizedStrings.GeneralKey)]
-	public int Depth
-	{
-		get => _depth;
-		set
-		{
-			if (_depth == value)
-				return;
-
-			_depth = value;
-			Reset();
-		}
-	}
-
-	private Unit _deviation = new(0.45m, UnitTypes.Percent);
-
-	/// <summary>
-	/// Minimum number of points between maximums (minimums) of two adjacent candles used by Zigzag indicator to form a local peak (local trough).
-	/// </summary>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.MinimumChangeKey,
-		Description = LocalizedStrings.MinimumChangeDescKey,
-		GroupName = LocalizedStrings.GeneralKey)]
-	public Unit Deviation
+	public decimal Deviation
 	{
 		get => _deviation;
 		set
 		{
-			if (value == null)
-				throw new ArgumentNullException(nameof(value));
+			if (value == 0)
+				throw new ArgumentOutOfRangeException(nameof(value));
 
 			if (_deviation == value)
 				return;
@@ -103,47 +59,7 @@ public class ZigZag : BaseIndicator
 		}
 	}
 
-	private Level1Fields _highPriceField = Level1Fields.HighPrice;
-
-	/// <summary>
-	/// The converter, returning from the candle a price for search of maximum.
-	/// </summary>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.HighPriceKey,
-		Description = LocalizedStrings.HighPriceKey,
-		GroupName = LocalizedStrings.GeneralKey)]
-	public Level1Fields HighPriceField
-	{
-		get => _highPriceField;
-		set
-		{
-			_highPriceField = value;
-			Reset();
-		}
-	}
-
-	private Level1Fields _lowPriceField = Level1Fields.LowPrice;
-
-	/// <summary>
-	/// The converter, returning from the candle a price for search of minimum.
-	/// </summary>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.LowPriceKey,
-		Description = LocalizedStrings.LowPriceKey,
-		GroupName = LocalizedStrings.GeneralKey)]
-	public Level1Fields LowPriceField
-	{
-		get => _lowPriceField;
-		set
-		{
-			_lowPriceField = value;
-			Reset();
-		}
-	}
-
-	private Level1Fields _closePriceField = Level1Fields.ClosePrice;
+	private Level1Fields _priceField = Level1Fields.ClosePrice;
 
 	/// <summary>
 	/// The converter, returning from the candle a price for calculations.
@@ -153,12 +69,12 @@ public class ZigZag : BaseIndicator
 		Name = LocalizedStrings.ClosingPriceKey,
 		Description = LocalizedStrings.ClosingPriceKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public Level1Fields ClosePriceField
+	public Level1Fields PriceField
 	{
-		get => _closePriceField;
+		get => _priceField;
 		set
 		{
-			_closePriceField = value;
+			_priceField = value;
 			Reset();
 		}
 	}
@@ -169,235 +85,125 @@ public class ZigZag : BaseIndicator
 	[Browsable(false)]
 	public decimal CurrentValue { get; private set; }
 
-	/// <summary>
-	/// Shift for the last indicator value.
-	/// </summary>
-	[Browsable(false)]
-	public int LastValueShift { get; private set; }
-
 	/// <inheritdoc />
 	public override void Reset()
 	{
 		_needAdd = true;
 		_buffer.Clear();
-		_lowBuffer.Clear();
-		_highBuffer.Clear();
 		_zigZagBuffer.Clear();
 		CurrentValue = 0;
-		LastValueShift = 0;
 		base.Reset();
 	}
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var lowPrice = input.GetValue<decimal>(LowPriceField);
-		var highPrice = input.GetValue<decimal>(HighPriceField);
-
+		var value = input.GetValue<decimal>(PriceField);
 		if (_needAdd)
 		{
-			_buffer.Insert(0, (lowPrice, highPrice));
-			_lowBuffer.Insert(0, 0);
-			_highBuffer.Insert(0, 0);
-			_zigZagBuffer.Insert(0, 0);
+			_buffer.Add(value);
+			_zigZagBuffer.Add(0);
 		}
 		else
 		{
-			_buffer[0] = (lowPrice, highPrice);
-			_lowBuffer[0] = 0;
-			_highBuffer[0] = 0;
-			_zigZagBuffer[0] = 0;
+			_buffer[_buffer.Count - 1] = value;
+			_zigZagBuffer[^1] = 0;
 		}
 
 		const int level = 3;
-		int limit;
-		decimal lastHigh = 0;
-		decimal lastLow = 0;
-
-		if (_buffer.Count - 1 == 0)
+		int limit = 0, count = 0;
+		while (count < level && limit >= 0)
 		{
-			limit = _buffer.Count - Depth;
+			var res = _zigZagBuffer[limit];
+			if (res != 0)
+			{
+				count++;
+			}
+			limit--;
 		}
-		else
+		limit++;
+
+		var min = _buffer[limit];
+		var max = min;
+		int action = 0, j = 0;
+		for (var i = limit + 1; i < _buffer.Count; i++)
 		{
-			int i = 0, count = 0;
-			while (count < level && i < _buffer.Count - Depth)
+			if (_buffer[i] > max)
 			{
-				var res = _zigZagBuffer[i];
-				if (res != 0)
+				max = _buffer[i];
+				if (action != 2) //action=1:building the down-point (min) of ZigZag
 				{
-					count++;
-				}
-				i++;
-			}
-			limit = --i;
-		}
-
-		for (var shift = limit; shift >= 0; shift--)
-		{
-			//--- low
-			var val = _buffer.Skip(shift).Take(Depth).Min(t => t.low);
-			if (val == lastLow)
-			{
-				val = 0.0m;
-			}
-			else
-			{
-				lastLow = val;
-				if (_buffer[shift].low - val > 0.0m * val / 100)
-				{
-					val = 0.0m;
-				}
-				else
-				{
-					for (var back = 1; back <= BackStep; back++)
+					if (max - min >= _deviation * min) //min (action!=2) end,max (action=2) begin
 					{
-						var res = _lowBuffer[shift + back];
-						if (res != 0 && res > val)
-						{
-							_lowBuffer[shift + back] = 0.0m;
-						}
-					}
-				}
-			}
-			if (_buffer[shift].low == val)
-				_lowBuffer[shift] = val;
-			else
-				_lowBuffer[shift] = 0m;
-
-			//--- high
-			val = _buffer.Skip(shift).Take(Depth).Max(t => t.high);
-			if (val == lastHigh)
-			{
-				val = 0.0m;
-			}
-			else
-			{
-				lastHigh = val;
-				if (val - _buffer[shift].high > 0.0m * val / 100)
-				{
-					val = 0.0m;
-				}
-				else
-				{
-					for (var back = 1; back <= BackStep; back++)
-					{
-						var res = _highBuffer[shift + back];
-						if (res != 0 && res < val)
-						{
-							_highBuffer[shift + back] = 0.0m;
-						}
-					}
-				}
-			}
-			if (_buffer[shift].high == val)
-				_highBuffer[shift] = val;
-			else
-				_highBuffer[shift] = 0m;
-		}
-
-		// final cutting
-		lastHigh = -1;
-		lastLow = -1;
-		var lastHighPos = -1;
-		var lastLowPos = -1;
-
-		for (var shift = limit; shift >= 0; shift--)
-		{
-			var curLow = _lowBuffer[shift];
-			var curHigh = _highBuffer[shift];
-
-			if ((curLow == 0) && (curHigh == 0))
-				continue;
-
-			//---
-			if (curHigh != 0)
-			{
-				if (lastHigh > 0)
-				{
-					if (lastHigh < curHigh)
-					{
-						_highBuffer[lastHighPos] = 0;
+						action = 2;
+						_zigZagBuffer[i] = max;
+						j = i;
+						min = max;
 					}
 					else
-					{
-						_highBuffer[shift] = 0;
-					}
+						_zigZagBuffer[i] = 0.0m; //max-min=miser,(action!=2) continue
 				}
-				//---
-				if (lastHigh < curHigh || lastHigh < 0)
+				else //max (action=2) continue
 				{
-					lastHigh = curHigh;
-					lastHighPos = shift;
+					_zigZagBuffer[j] = 0.0m;
+					_zigZagBuffer[i] = max;
+					j = i;
+					min = max;
 				}
-				lastLow = -1;
 			}
-
-			//----
-			if (curLow != 0)
+			else if (_buffer[i] < min)
 			{
-				if (lastLow > 0)
+				min = _buffer[i];
+				if (action != 1) //action=2:building the up-point (max) of ZigZag
 				{
-					if (lastLow > curLow)
+					if (max - min >= _deviation * max) //max (action!=1) end,min (action=1) begin
 					{
-						_lowBuffer[lastLowPos] = 0;
+						action = 1;
+						_zigZagBuffer[i] = min;
+						j = i;
+						max = min;
 					}
 					else
-					{
-						_lowBuffer[shift] = 0;
-					}
+						_zigZagBuffer[i] = 0.0m; //max-min=miser,(action!=1) continue
 				}
-				//---
-				if ((curLow < lastLow) || (lastLow < 0))
+				else //min (action=1) continue
 				{
-					lastLow = curLow;
-					lastLowPos = shift;
+					_zigZagBuffer[j] = 0.0m;
+					_zigZagBuffer[i] = min;
+					j = i;
+					max = min;
 				}
-				lastHigh = -1;
-			}
-		}
-
-		for (var shift = limit; shift >= 0; shift--)
-		{
-			if (shift >= _buffer.Count - Depth)
-			{
-				_zigZagBuffer[shift] = 0.0m;
 			}
 			else
-			{
-				var res = _highBuffer[shift];
-				if (res != 0.0m)
-				{
-					_zigZagBuffer[shift] = res;
-				}
-				else
-				{
-					_zigZagBuffer[shift] = _lowBuffer[shift];
-				}
-			}
+				_zigZagBuffer[i] = 0.0m;
 		}
 
 		int valuesCount = 0, valueId = 0;
-
-		for (; valueId < _zigZagBuffer.Count && valuesCount < 2; valueId++)
+		decimal last = 0, lastButOne = 0;
+		for (var i = _zigZagBuffer.Count - 1; i > 0 && valuesCount < 2; i--, valueId++)
 		{
-			if (_zigZagBuffer[valueId] != 0)
-				valuesCount++;
+			if (_zigZagBuffer[i] == 0)
+				continue;
+
+			valuesCount++;
+
+			if (valuesCount == 1)
+				last = _zigZagBuffer[i];
+			else
+				lastButOne = _zigZagBuffer[i];
 		}
 
 		_needAdd = input.IsFinal;
 
 		if (valuesCount != 2)
-			return new DecimalIndicatorValue(this, input.Time);
+			return Container.Count > 1 ? this.GetCurrentValue<ShiftedIndicatorValue>() : new ShiftedIndicatorValue(this, input.Time);
 
 		if (input.IsFinal)
 			IsFormed = true;
 
-		LastValueShift = valueId - 1;
+		CurrentValue = last;
 
-		CurrentValue = input.GetValue<decimal>(ClosePriceField);
-
-		return new DecimalIndicatorValue(this, _zigZagBuffer[LastValueShift], input.Time);
+		return new ShiftedIndicatorValue(this, lastButOne, valueId - 1, input.Time);
 	}
 
 	/// <inheritdoc />
@@ -405,9 +211,7 @@ public class ZigZag : BaseIndicator
 	{
 		base.Load(storage);
 
-		BackStep = storage.GetValue<int>(nameof(BackStep));
-		Depth = storage.GetValue<int>(nameof(Depth));
-		Deviation.Load(storage, nameof(Deviation));
+		Deviation = storage.GetValue<decimal>(nameof(Deviation));
 	}
 
 	/// <inheritdoc />
@@ -415,8 +219,6 @@ public class ZigZag : BaseIndicator
 	{
 		base.Save(storage);
 
-		storage.SetValue(nameof(BackStep), BackStep);
-		storage.SetValue(nameof(Depth), Depth);
-		storage.SetValue(nameof(Deviation), Deviation.Save());
+		storage.SetValue(nameof(Deviation), Deviation);
 	}
 }

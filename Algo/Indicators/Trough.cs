@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.TroughKey,
 	Description = LocalizedStrings.TroughDescKey)]
 [Doc("topics/api/indicators/list_of_indicators/trough.html")]
-public sealed class Trough : ZigZagEquis
+public sealed class Trough : ZigZag
 {
 	/// <summary>
 	/// To create the indicator <see cref="Trough"/>.
