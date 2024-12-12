@@ -18,8 +18,11 @@ public sealed class Trough : ZigZag
 	/// </summary>
 	public Trough()
 	{
-		PriceField = Level1Fields.LowPrice;
 	}
+
+	/// <inheritdoc />
+	protected override decimal GetPrice(IIndicatorValue input)
+		=> input.ToCandle().LowPrice;
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)

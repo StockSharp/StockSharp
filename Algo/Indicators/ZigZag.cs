@@ -13,9 +13,8 @@
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [IndicatorOut(typeof(ShiftedIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/zigzag.html")]
-public class ZigZag : BaseIndicator
+public class ZigZag : LengthIndicator<decimal>
 {
-	private readonly IList<decimal> _buffer = [];
 	private readonly List<decimal> _zigZagBuffer = [];
 
 	private bool _needAdd = true;
@@ -25,10 +24,8 @@ public class ZigZag : BaseIndicator
 	/// </summary>
 	public ZigZag()
 	{
+		Length = 2;
 	}
-
-	/// <inheritdoc />
-	public override int NumValuesToInitialize => 2;
 
 	private decimal _deviation = 0.45m * 0.01m;
 
@@ -48,33 +45,13 @@ public class ZigZag : BaseIndicator
 		get => _deviation;
 		set
 		{
-			if (value == 0)
+			if (value <= 0 || value > 1)
 				throw new ArgumentOutOfRangeException(nameof(value));
 
 			if (_deviation == value)
 				return;
 
 			_deviation = value;
-			Reset();
-		}
-	}
-
-	private Level1Fields _priceField = Level1Fields.ClosePrice;
-
-	/// <summary>
-	/// The converter, returning from the candle a price for calculations.
-	/// </summary>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.ClosingPriceKey,
-		Description = LocalizedStrings.ClosingPriceKey,
-		GroupName = LocalizedStrings.GeneralKey)]
-	public Level1Fields PriceField
-	{
-		get => _priceField;
-		set
-		{
-			_priceField = value;
 			Reset();
 		}
 	}
@@ -89,24 +66,33 @@ public class ZigZag : BaseIndicator
 	public override void Reset()
 	{
 		_needAdd = true;
-		_buffer.Clear();
 		_zigZagBuffer.Clear();
 		CurrentValue = 0;
+
 		base.Reset();
 	}
+
+	/// <summary>
+	/// Get the price from the input value.
+	/// </summary>
+	/// <param name="input"><see cref="IIndicatorValue"/></param>
+	/// <returns><see cref="decimal"/></returns>
+	protected virtual decimal GetPrice(IIndicatorValue input)
+		=> input.ToDecimal();
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var value = input.GetValue<decimal>(PriceField);
+		var value = GetPrice(input);
+
 		if (_needAdd)
 		{
-			_buffer.Add(value);
+			Buffer.PushBack(value);
 			_zigZagBuffer.Add(0);
 		}
 		else
 		{
-			_buffer[_buffer.Count - 1] = value;
+			Buffer[^1] = value;
 			_zigZagBuffer[^1] = 0;
 		}
 
@@ -123,14 +109,14 @@ public class ZigZag : BaseIndicator
 		}
 		limit++;
 
-		var min = _buffer[limit];
+		var min = Buffer[limit];
 		var max = min;
 		int action = 0, j = 0;
-		for (var i = limit + 1; i < _buffer.Count; i++)
+		for (var i = limit + 1; i < Buffer.Count; i++)
 		{
-			if (_buffer[i] > max)
+			if (Buffer[i] > max)
 			{
-				max = _buffer[i];
+				max = Buffer[i];
 				if (action != 2) //action=1:building the down-point (min) of ZigZag
 				{
 					if (max - min >= _deviation * min) //min (action!=2) end,max (action=2) begin
@@ -151,9 +137,9 @@ public class ZigZag : BaseIndicator
 					min = max;
 				}
 			}
-			else if (_buffer[i] < min)
+			else if (Buffer[i] < min)
 			{
-				min = _buffer[i];
+				min = Buffer[i];
 				if (action != 1) //action=2:building the up-point (max) of ZigZag
 				{
 					if (max - min >= _deviation * max) //max (action!=1) end,min (action=1) begin

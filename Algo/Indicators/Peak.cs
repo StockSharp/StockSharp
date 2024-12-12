@@ -18,8 +18,11 @@ public sealed class Peak : ZigZag
 	/// </summary>
 	public Peak()
 	{
-		PriceField = Level1Fields.HighPrice;
 	}
+
+	/// <inheritdoc />
+	protected override decimal GetPrice(IIndicatorValue input)
+		=> input.ToCandle().HighPrice;
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
