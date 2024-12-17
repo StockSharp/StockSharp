@@ -13,7 +13,7 @@
 [Doc("topics/api/indicators/list_of_indicators/covariation.html")]
 [IndicatorIn(typeof(PairIndicatorValue<decimal>))]
 [IndicatorHidden]
-public class Covariance : LengthIndicator<Tuple<decimal, decimal>>
+public class Covariance : LengthIndicator<(decimal, decimal)>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Covariance"/>.
@@ -26,9 +26,9 @@ public class Covariance : LengthIndicator<Tuple<decimal, decimal>>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var value = input.GetValue<Tuple<decimal, decimal>>();
+		var value = input.GetValue<(decimal, decimal)>();
 
-		Tuple<decimal, decimal> first = null;
+		(decimal, decimal)? first = null;
 
 		if (input.IsFinal)
 		{
@@ -64,7 +64,7 @@ public class Covariance : LengthIndicator<Tuple<decimal, decimal>>
 		if (!input.IsFinal)
 		{
 			if (first != null)
-				Buffer.PushFront(first);
+				Buffer.PushFront(first.Value);
 
 			Buffer.PopBack();
 		}

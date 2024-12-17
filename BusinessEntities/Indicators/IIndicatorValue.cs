@@ -499,7 +499,7 @@ public class TickIndicatorValue : SingleIndicatorValue<ITickTradeMessage>
 /// The value of the indicator, operating with pair <see ref="Tuple{TValue, TValue}" />.
 /// </summary>
 /// <typeparam name="TValue">Value type.</typeparam>
-public class PairIndicatorValue<TValue> : SingleIndicatorValue<Tuple<TValue, TValue>>
+public class PairIndicatorValue<TValue> : SingleIndicatorValue<(TValue, TValue)>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="PairIndicatorValue{T}"/>.
@@ -507,7 +507,7 @@ public class PairIndicatorValue<TValue> : SingleIndicatorValue<Tuple<TValue, TVa
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="value">Value.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public PairIndicatorValue(IIndicator indicator, Tuple<TValue, TValue> value, DateTimeOffset time)
+	public PairIndicatorValue(IIndicator indicator, (TValue, TValue) value, DateTimeOffset time)
 		: base(indicator, value, time)
 	{
 	}

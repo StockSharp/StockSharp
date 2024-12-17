@@ -169,7 +169,7 @@ public static class IndicatorHelper
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
 	/// <param name="isFinal">If the pair final (the indicator finally forms its value and will not be changed in this point of time anymore). Default is <see langword="true" />.</param>
 	/// <returns>The new value of the indicator.</returns>
-	public static IIndicatorValue Process<TValue>(this IIndicator indicator, Tuple<TValue, TValue> value, DateTimeOffset time, bool isFinal = true)
+	public static IIndicatorValue Process<TValue>(this IIndicator indicator, (TValue, TValue) value, DateTimeOffset time, bool isFinal = true)
 		=> indicator.Process(new PairIndicatorValue<TValue>(indicator, value, time) { IsFinal = isFinal });
 
 	/// <summary>
@@ -205,7 +205,7 @@ public static class IndicatorHelper
 			case Unit u:
 				input = new DecimalIndicatorValue(indicator, u.Value, time) { IsFinal = isFinal };
 				break;
-			case Tuple<decimal, decimal> t:
+			case ValueTuple<decimal, decimal> t:
 				input = new PairIndicatorValue<decimal>(indicator, t, time) { IsFinal = isFinal };
 				break;
 			case IOrderBookMessage d:
