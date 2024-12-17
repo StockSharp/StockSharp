@@ -121,6 +121,16 @@ public static class IndicatorHelper
 	}
 
 	/// <summary>
+	/// To replace the indicator input value by new one (for example it is received from another indicator).
+	/// </summary>
+	/// <param name="input"><see cref="IIndicatorValue"/></param>
+	/// <param name="indicator">Indicator.</param>
+	/// <param name="value">Value.</param>
+	/// <returns>New object, containing input value.</returns>
+	public static IIndicatorValue SetValue(this IIndicatorValue input, IIndicator indicator, decimal value)
+		=> new DecimalIndicatorValue(indicator, value, input.Time) { IsFinal = input.IsFinal };
+
+	/// <summary>
 	/// To renew the indicator with numeric value.
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
@@ -137,9 +147,7 @@ public static class IndicatorHelper
 	/// <param name="candle">Candle.</param>
 	/// <returns>The new value of the indicator.</returns>
 	public static IIndicatorValue Process(this IIndicator indicator, ICandleMessage candle)
-	{
-		return indicator.Process(new CandleIndicatorValue(indicator, candle));
-	}
+		=> indicator.Process(new CandleIndicatorValue(indicator, candle));
 
 	/// <summary>
 	/// To renew the indicator with numeric value.
@@ -150,9 +158,7 @@ public static class IndicatorHelper
 	/// <param name="isFinal">Is the value final (the indicator finally forms its value and will not be changed in this point of time anymore). Default is <see langword="true" />.</param>
 	/// <returns>The new value of the indicator.</returns>
 	public static IIndicatorValue Process(this IIndicator indicator, decimal value, DateTimeOffset time, bool isFinal = true)
-	{
-		return indicator.Process(new DecimalIndicatorValue(indicator, value, time) { IsFinal = isFinal });
-	}
+		=> indicator.Process(new DecimalIndicatorValue(indicator, value, time) { IsFinal = isFinal });
 
 	/// <summary>
 	/// To renew the indicator with numeric pair.
@@ -164,9 +170,7 @@ public static class IndicatorHelper
 	/// <param name="isFinal">If the pair final (the indicator finally forms its value and will not be changed in this point of time anymore). Default is <see langword="true" />.</param>
 	/// <returns>The new value of the indicator.</returns>
 	public static IIndicatorValue Process<TValue>(this IIndicator indicator, Tuple<TValue, TValue> value, DateTimeOffset time, bool isFinal = true)
-	{
-		return indicator.Process(new PairIndicatorValue<TValue>(indicator, value, time) { IsFinal = isFinal });
-	}
+		=> indicator.Process(new PairIndicatorValue<TValue>(indicator, value, time) { IsFinal = isFinal });
 
 	/// <summary>
 	/// To renew the indicator with new value.
@@ -266,15 +270,6 @@ public static class IndicatorHelper
 	}
 
 	/// <summary>
-	/// Does value support data type, required for the indicator.
-	/// </summary>
-	/// <typeparam name="T">The data type, operated by indicator.</typeparam>
-	/// <param name="value"><see cref="IIndicatorValue"/></param>
-	/// <returns><see langword="true" />, if data type is supported, otherwise, <see langword="false" />.</returns>
-	public static bool IsSupport<T>(this IIndicatorValue value)
-		=> value.CheckOnNull(nameof(value)).IsSupport(typeof(T));
-
-	/// <summary>
 	/// Convert <see cref="IIndicatorValue"/> to <see cref="decimal"/>.
 	/// </summary>
 	/// <param name="value"><see cref="IIndicatorValue"/></param>
@@ -297,73 +292,7 @@ public static class IndicatorHelper
 		if (value is null)
 			throw new ArgumentNullException(nameof(value));
 
-		if (value.IsSupport<ICandleMessage>())
-			return value.GetValue<ICandleMessage>();
-		else if (value.IsSupport<ITickTradeMessage>())
-		{
-			var tick = value.GetValue<ITickTradeMessage>();
-
-			return new TimeFrameCandleMessage
-			{
-				OpenPrice = tick.Price,
-				HighPrice = tick.Price,
-				LowPrice = tick.Price,
-				ClosePrice = tick.Price,
-				TotalVolume = tick.Volume,
-				OpenTime = tick.ServerTime,
-				CloseTime = tick.ServerTime,
-				OpenInterest = tick.OpenInterest,
-			};
-		}
-		else if (value.IsSupport<Level1ChangeMessage>())
-		{
-			var l1Msg = value.GetValue<Level1ChangeMessage>();
-
-			decimal get(Level1Fields field)
-				=> (decimal?)l1Msg.TryGet(field) ?? default;
-
-			return new TimeFrameCandleMessage
-			{
-				OpenPrice = get(Level1Fields.OpenPrice),
-				HighPrice = get(Level1Fields.HighPrice),
-				LowPrice = get(Level1Fields.LowPrice),
-				ClosePrice = get(Level1Fields.ClosePrice),
-				TotalVolume = get(Level1Fields.Volume),
-				OpenTime = l1Msg.ServerTime,
-				OpenInterest = get(Level1Fields.OpenInterest),
-			};
-		}
-		else if (value.IsSupport<IOrderBookMessage>())
-		{
-			var book = value.GetValue<IOrderBookMessage>();
-
-			var price = book.GetSpreadMiddle(default)
-				?? book.GetBestBid()?.Price
-				?? book.GetBestAsk()?.Price
-				?? default;
-
-			return new TimeFrameCandleMessage
-			{
-				OpenPrice = price,
-				HighPrice = price,
-				LowPrice = price,
-				ClosePrice = price,
-				OpenTime = book.ServerTime,
-			};
-		}
-		else
-		{
-			var dec = value.ToDecimal();
-
-			return new TimeFrameCandleMessage
-			{
-				OpenPrice = dec,
-				HighPrice = dec,
-				LowPrice = dec,
-				ClosePrice = dec,
-				OpenTime = value.Time,
-			};
-		}
+		return value.GetValue<ICandleMessage>();
 	}
 
 	/// <summary>

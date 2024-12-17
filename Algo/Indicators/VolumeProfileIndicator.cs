@@ -18,7 +18,7 @@ public class VolumeProfileIndicator : BaseIndicator
 	/// <summary>
 	/// The indicator value <see cref="VolumeProfileIndicator"/>, derived in result of calculation.
 	/// </summary>
-	private class VolumeProfileIndicatorValue : SingleIndicatorValue<IDictionary<decimal, decimal>>
+	public class VolumeProfileIndicatorValue : SingleIndicatorValue<IDictionary<decimal, decimal>>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VolumeProfileIndicatorValue"/>.
@@ -37,13 +37,7 @@ public class VolumeProfileIndicator : BaseIndicator
 		public IDictionary<decimal, decimal> Levels { get; }
 
 		/// <inheritdoc />
-		public override bool IsSupport(Type valueType) => valueType == typeof(decimal);
-
-		/// <inheritdoc />
 		public override T GetValue<T>(Level1Fields? field) => throw new NotSupportedException();
-
-		/// <inheritdoc />
-		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value) => throw new NotSupportedException();
 
 		/// <inheritdoc />
 		public override IEnumerable<object> ToValues()

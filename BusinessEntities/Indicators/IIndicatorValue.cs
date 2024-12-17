@@ -31,28 +31,12 @@ public interface IIndicatorValue : IComparable<IIndicatorValue>, IComparable
 	DateTimeOffset Time { get; }
 
 	/// <summary>
-	/// Does value support data type, required for the indicator.
-	/// </summary>
-	/// <param name="valueType">The data type, operated by indicator.</param>
-	/// <returns><see langword="true" />, if data type is supported, otherwise, <see langword="false" />.</returns>
-	bool IsSupport(Type valueType);
-
-	/// <summary>
 	/// To get the value by the data type.
 	/// </summary>
 	/// <typeparam name="T">The data type, operated by indicator.</typeparam>
 	/// <param name="field">Field specified value source.</param>
 	/// <returns>Value.</returns>
 	T GetValue<T>(Level1Fields? field = default);
-
-	/// <summary>
-	/// To replace the indicator input value by new one (for example it is received from another indicator).
-	/// </summary>
-	/// <typeparam name="T">The data type, operated by indicator.</typeparam>
-	/// <param name="indicator">Indicator.</param>
-	/// <param name="value">Value.</param>
-	/// <returns>New object, containing input value.</returns>
-	IIndicatorValue SetValue<T>(IIndicator indicator, T value);
 
 	/// <summary>
 	/// Convert to primitive values.
@@ -100,13 +84,7 @@ public abstract class BaseIndicatorValue : IIndicatorValue
 	public DateTimeOffset Time { get; }
 
 	/// <inheritdoc />
-	public abstract bool IsSupport(Type valueType);
-
-	/// <inheritdoc />
 	public abstract T GetValue<T>(Level1Fields? field);
-
-	/// <inheritdoc />
-	public abstract IIndicatorValue SetValue<T>(IIndicator indicator, T value);
 
 	/// <inheritdoc />
 	public abstract int CompareTo(IIndicatorValue other);
@@ -133,7 +111,7 @@ public abstract class BaseIndicatorValue : IIndicatorValue
 /// The base value of the indicator, operating with one data type.
 /// </summary>
 /// <typeparam name="TValue">Value type.</typeparam>
-public class SingleIndicatorValue<TValue> : BaseIndicatorValue
+public abstract class SingleIndicatorValue<TValue> : BaseIndicatorValue
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="SingleIndicatorValue{T}"/>.
@@ -141,7 +119,7 @@ public class SingleIndicatorValue<TValue> : BaseIndicatorValue
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="value">Value.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public SingleIndicatorValue(IIndicator indicator, TValue value, DateTimeOffset time)
+	protected SingleIndicatorValue(IIndicator indicator, TValue value, DateTimeOffset time)
 		: base(indicator, time)
 	{
 		Value = value;
@@ -153,7 +131,7 @@ public class SingleIndicatorValue<TValue> : BaseIndicatorValue
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public SingleIndicatorValue(IIndicator indicator, DateTimeOffset time)
+	protected SingleIndicatorValue(IIndicator indicator, DateTimeOffset time)
 		: base(indicator, time)
 	{
 		IsEmpty = true;
@@ -171,19 +149,27 @@ public class SingleIndicatorValue<TValue> : BaseIndicatorValue
 	public override bool IsFinal { get; set; }
 
 	/// <inheritdoc />
-	public override bool IsSupport(Type valueType) => valueType.IsAssignableFrom(typeof(TValue));
-
-	/// <inheritdoc />
 	public override T GetValue<T>(Level1Fields? field)
 	{
 		ThrowIfEmpty();
-		return Value is T t ? t : throw new InvalidCastException($"Cannot convert {typeof(TValue).Name} to {typeof(T).Name}."); ;
-	}
 
-	/// <inheritdoc />
-	public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
-	{
-		return new SingleIndicatorValue<T>(indicator, value, Time) { IsFinal = IsFinal };
+		if (Value is T t)
+			return t;
+		else if (typeof(T).Is<ICandleMessage>())
+		{
+			var dec = Value.To<decimal>();
+
+			return new TimeFrameCandleMessage
+			{
+				OpenPrice = dec,
+				HighPrice = dec,
+				LowPrice = dec,
+				ClosePrice = dec,
+				OpenTime = Time,
+			}.To<T>();
+		}
+
+		throw new InvalidCastException($"Cannot convert {typeof(TValue).Name} to {typeof(T).Name}.");
 	}
 
 	private void ThrowIfEmpty()
@@ -253,14 +239,6 @@ public class DecimalIndicatorValue : SingleIndicatorValue<decimal>
 	{
 	}
 
-	/// <inheritdoc />
-	public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
-	{
-		return typeof(T) == typeof(decimal)
-			? new DecimalIndicatorValue(indicator, value.To<decimal>(), Time) { IsFinal = IsFinal }
-			: base.SetValue(indicator, value);
-	}
-
 	/// <summary>
 	/// Cast object from <see cref="DecimalIndicatorValue"/> to <see cref="decimal"/>.
 	/// </summary>
@@ -297,9 +275,6 @@ public class CandleIndicatorValue : SingleIndicatorValue<ICandleMessage>
 	}
 
 	/// <inheritdoc />
-	public override bool IsSupport(Type valueType) => valueType == typeof(decimal) || valueType.Is<ICandleMessage>();
-
-	/// <inheritdoc />
 	public override T GetValue<T>(Level1Fields? field)
 	{
 		var candle = base.GetValue<ICandleMessage>(default);
@@ -323,14 +298,6 @@ public class CandleIndicatorValue : SingleIndicatorValue<ICandleMessage>
 		}
 		else
 			return candle is T t ? t : throw new InvalidCastException($"Cannot convert candle to {typeof(T).Name}.");
-	}
-
-	/// <inheritdoc />
-	public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
-	{
-		return value is ICandleMessage candle
-				? new CandleIndicatorValue(indicator, candle) { IsFinal = IsFinal }
-				: value.IsNull() ? new CandleIndicatorValue(indicator, Time) { IsFinal = IsFinal } : base.SetValue(indicator, value);
 	}
 }
 
@@ -360,12 +327,6 @@ public class MarketDepthIndicatorValue : SingleIndicatorValue<IOrderBookMessage>
 	}
 
 	/// <inheritdoc />
-	public override bool IsSupport(Type valueType)
-	{
-		return valueType == typeof(decimal) || base.IsSupport(valueType);
-	}
-
-	/// <inheritdoc />
 	public override T GetValue<T>(Level1Fields? field)
 	{
 		var depth = base.GetValue<IOrderBookMessage>(default);
@@ -387,17 +348,24 @@ public class MarketDepthIndicatorValue : SingleIndicatorValue<IOrderBookMessage>
 
 			return value.To<T>();
 		}
+		else if (typeof(T).Is<ICandleMessage>())
+		{
+			var price = Value.GetSpreadMiddle(default)
+				?? Value.GetBestBid()?.Price
+				?? Value.GetBestAsk()?.Price
+				?? default;
+
+			return new TimeFrameCandleMessage
+			{
+				OpenPrice = price,
+				HighPrice = price,
+				LowPrice = price,
+				ClosePrice = price,
+				OpenTime = Time,
+			}.To<T>();
+		}
 		else
 			return depth.To<T>();
-	}
-
-	/// <inheritdoc />
-	public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
-	{
-		return new MarketDepthIndicatorValue(indicator, base.GetValue<IOrderBookMessage>(default))
-		{
-			IsFinal = IsFinal
-		};
 	}
 }
 
@@ -427,12 +395,6 @@ public class Level1IndicatorValue : SingleIndicatorValue<Level1ChangeMessage>
 	}
 
 	/// <inheritdoc />
-	public override bool IsSupport(Type valueType)
-	{
-		return valueType == typeof(decimal) || base.IsSupport(valueType);
-	}
-
-	/// <inheritdoc />
 	public override T GetValue<T>(Level1Fields? field)
 	{
 		var l1Msg = base.GetValue<Level1ChangeMessage>(default);
@@ -450,17 +412,24 @@ public class Level1IndicatorValue : SingleIndicatorValue<Level1ChangeMessage>
 
 			return value.To<T>();
 		}
+		else if (typeof(T).Is<ICandleMessage>())
+		{
+			decimal get(Level1Fields field)
+				=> (decimal?)l1Msg.TryGet(field) ?? default;
+
+			return new TimeFrameCandleMessage
+			{
+				OpenPrice = get(Level1Fields.OpenPrice),
+				HighPrice = get(Level1Fields.HighPrice),
+				LowPrice = get(Level1Fields.LowPrice),
+				ClosePrice = get(Level1Fields.ClosePrice),
+				TotalVolume = get(Level1Fields.Volume),
+				OpenTime = Time,
+				OpenInterest = get(Level1Fields.OpenInterest),
+			}.To<T>();
+		}
 		else
 			return l1Msg.To<T>();
-	}
-
-	/// <inheritdoc />
-	public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
-	{
-		return new Level1IndicatorValue(indicator, base.GetValue<Level1ChangeMessage>(default))
-		{
-			IsFinal = IsFinal
-		};
 	}
 }
 
@@ -490,12 +459,6 @@ public class TickIndicatorValue : SingleIndicatorValue<ITickTradeMessage>
 	}
 
 	/// <inheritdoc />
-	public override bool IsSupport(Type valueType)
-	{
-		return valueType == typeof(decimal) || base.IsSupport(valueType);
-	}
-
-	/// <inheritdoc />
 	public override T GetValue<T>(Level1Fields? field)
 	{
 		var tick = base.GetValue<ITickTradeMessage>(default);
@@ -514,17 +477,21 @@ public class TickIndicatorValue : SingleIndicatorValue<ITickTradeMessage>
 
 			return value.To<T>();
 		}
+		else if (typeof(T).Is<ICandleMessage>())
+		{
+			return new TimeFrameCandleMessage
+			{
+				OpenPrice = tick.Price,
+				HighPrice = tick.Price,
+				LowPrice = tick.Price,
+				ClosePrice = tick.Price,
+				TotalVolume = tick.Volume,
+				OpenTime = Time,
+				OpenInterest = tick.OpenInterest,
+			}.To<T>();
+		}
 		else
 			return tick.To<T>();
-	}
-
-	/// <inheritdoc />
-	public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
-	{
-		return new TickIndicatorValue(indicator, base.GetValue<ITickTradeMessage>(default))
-		{
-			IsFinal = IsFinal
-		};
 	}
 }
 
@@ -553,15 +520,6 @@ public class PairIndicatorValue<TValue> : SingleIndicatorValue<Tuple<TValue, TVa
 	public PairIndicatorValue(IIndicator indicator, DateTimeOffset time)
 		: base(indicator, time)
 	{
-	}
-
-	/// <inheritdoc />
-	public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
-	{
-		return new PairIndicatorValue<TValue>(indicator, GetValue<Tuple<TValue, TValue>>(default), Time)
-		{
-			IsFinal = IsFinal
-		};
 	}
 }
 
@@ -621,13 +579,13 @@ public class ComplexIndicatorValue : BaseIndicatorValue
 		=> InnerValues.TryGetValue(indicator, out value);
 
 	/// <inheritdoc />
-	public override bool IsSupport(Type valueType) => InnerValues.Any(v => v.Value.IsSupport(valueType));
+	public override T GetValue<T>(Level1Fields? field)
+	{
+		if (InnerValues.TryGetValue(Indicator, out var value))
+			return value.GetValue<T>(field);
 
-	/// <inheritdoc />
-	public override T GetValue<T>(Level1Fields? field) => throw new NotSupportedException();
-
-	/// <inheritdoc />
-	public override IIndicatorValue SetValue<T>(IIndicator indicator, T value) => throw new NotSupportedException();
+		throw new NotSupportedException();
+	}
 
 	/// <inheritdoc />
 	public override int CompareTo(IIndicatorValue other) => throw new NotSupportedException();
