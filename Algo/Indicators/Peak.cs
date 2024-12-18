@@ -21,30 +21,17 @@ public sealed class Peak : ZigZag
 	}
 
 	/// <inheritdoc />
-	protected override decimal GetPrice(IIndicatorValue input)
-		=> input.ToCandle().HighPrice;
-
-	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var value = base.OnProcess(input);
+		var value = CalcZigZag(input, input.ToCandle().HighPrice);
 
-		if (IsFormed && !value.IsEmpty)
+		if (!value.IsEmpty)
 		{
-			if (CurrentValue < value.ToDecimal())
-			{
-				return value;
-			}
+			var typed = value;
 
-			var lastValue = this.GetCurrentValue<ShiftedIndicatorValue>();
-
-			if (input.IsFinal)
-				IsFormed = !lastValue.IsEmpty;
-
-			return IsFormed ? new ShiftedIndicatorValue(this, lastValue.Value, lastValue.Shift + 1, input.Time) : lastValue;
+			if (!typed.IsUp)
+				return new ZigZagIndicatorValue(this, value.Time);
 		}
-
-		IsFormed = false;
 
 		return value;
 	}

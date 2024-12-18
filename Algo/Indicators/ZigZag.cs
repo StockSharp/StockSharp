@@ -1,6 +1,40 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
 /// <summary>
+/// <see cref="ZigZag"/> indicator value.
+/// </summary>
+public class ZigZagIndicatorValue : ShiftedIndicatorValue
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ZigZagIndicatorValue"/>.
+	/// </summary>
+	/// <param name="indicator">Indicator.</param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public ZigZagIndicatorValue(IIndicator indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ZigZagIndicatorValue"/>.
+	/// </summary>
+	/// <param name="indicator">Indicator.</param>
+	/// <param name="value">Indicator value.</param>
+	/// <param name="shift">The shift of the indicator value.</param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	/// <param name="isUp"><see cref="IsUp"/></param>
+	public ZigZagIndicatorValue(IIndicator indicator, decimal value, int shift, DateTimeOffset time, bool isUp)
+		: base(indicator, value, shift, time)
+	{
+	}
+
+	/// <summary>
+	/// Is the trend up.
+	/// </summary>
+	public bool IsUp { get; }
+}
+
+/// <summary>
 /// Zig Zag.
 /// </summary>
 /// <remarks>
@@ -11,23 +45,23 @@
 	Name = LocalizedStrings.ZigZagKey,
 	Description = LocalizedStrings.ZigZagDescKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[IndicatorOut(typeof(ShiftedIndicatorValue))]
+[IndicatorOut(typeof(ZigZagIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/zigzag.html")]
-public class ZigZag : LengthIndicator<decimal>
+public class ZigZag : BaseIndicator
 {
-	private readonly List<decimal> _zigZagBuffer = [];
-
-	private bool _needAdd = true;
+	private readonly CircularBufferEx<decimal> _buffer = new(2);
+	private decimal? _lastExtremum;
+	private int _shift;
+	private bool? _isUpTrend;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ZigZag"/>.
 	/// </summary>
 	public ZigZag()
 	{
-		Length = 2;
 	}
 
-	private decimal _deviation = 0.45m * 0.01m;
+	private decimal _deviation = 0.001m;
 
 	/// <summary>
 	/// Percentage change.
@@ -56,140 +90,77 @@ public class ZigZag : LengthIndicator<decimal>
 		}
 	}
 
-	/// <summary>
-	/// The indicator current value.
-	/// </summary>
-	[Browsable(false)]
-	public decimal CurrentValue { get; private set; }
+	/// <inheritdoc />
+	public override int NumValuesToInitialize => _buffer.Capacity;
+
+	/// <inheritdoc />
+	protected override bool CalcIsFormed() => _buffer.Capacity == _buffer.Count;
 
 	/// <inheritdoc />
 	public override void Reset()
 	{
-		_needAdd = true;
-		_zigZagBuffer.Clear();
-		CurrentValue = 0;
+		_buffer.Clear();
+		_lastExtremum = default;
+		_shift = default;
+		_isUpTrend = default;
 
 		base.Reset();
 	}
 
-	/// <summary>
-	/// Get the price from the input value.
-	/// </summary>
-	/// <param name="input"><see cref="IIndicatorValue"/></param>
-	/// <returns><see cref="decimal"/></returns>
-	protected virtual decimal GetPrice(IIndicatorValue input)
-		=> input.ToDecimal();
-
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
-	{
-		var value = GetPrice(input);
+		=> CalcZigZag(input, input.ToDecimal());
 
-		if (_needAdd)
+	/// <inheritdoc />
+	protected ZigZagIndicatorValue CalcZigZag(IIndicatorValue input, decimal price)
+	{
+		if (input.IsFinal)
+			_buffer.PushBack(price);
+
+		if (!IsFormed || !input.IsFinal)
+			return new ZigZagIndicatorValue(this, input.Time);
+
+		_lastExtremum ??= price;
+		_isUpTrend ??= price >= _buffer[^2];
+
+		if (_isUpTrend is null)
+			return new ZigZagIndicatorValue(this, input.Time);
+
+		var threshold = _lastExtremum * Deviation;
+		var changeTrend = false;
+
+		if (_isUpTrend.Value)
 		{
-			Buffer.PushBack(value);
-			_zigZagBuffer.Add(0);
+			if (_lastExtremum < price)
+				_lastExtremum = price;
+			else
+				changeTrend = price <= (_lastExtremum - threshold);
 		}
 		else
 		{
-			Buffer[^1] = value;
-			_zigZagBuffer[^1] = 0;
-		}
-
-		const int level = 3;
-		int limit = 0, count = 0;
-		while (count < level && limit >= 0)
-		{
-			var res = _zigZagBuffer[limit];
-			if (res != 0)
-			{
-				count++;
-			}
-			limit--;
-		}
-		limit++;
-
-		var min = Buffer[limit];
-		var max = min;
-		int action = 0, j = 0;
-		for (var i = limit + 1; i < Buffer.Count; i++)
-		{
-			if (Buffer[i] > max)
-			{
-				max = Buffer[i];
-				if (action != 2) //action=1:building the down-point (min) of ZigZag
-				{
-					if (max - min >= _deviation * min) //min (action!=2) end,max (action=2) begin
-					{
-						action = 2;
-						_zigZagBuffer[i] = max;
-						j = i;
-						min = max;
-					}
-					else
-						_zigZagBuffer[i] = 0.0m; //max-min=miser,(action!=2) continue
-				}
-				else //max (action=2) continue
-				{
-					_zigZagBuffer[j] = 0.0m;
-					_zigZagBuffer[i] = max;
-					j = i;
-					min = max;
-				}
-			}
-			else if (Buffer[i] < min)
-			{
-				min = Buffer[i];
-				if (action != 1) //action=2:building the up-point (max) of ZigZag
-				{
-					if (max - min >= _deviation * max) //max (action!=1) end,min (action=1) begin
-					{
-						action = 1;
-						_zigZagBuffer[i] = min;
-						j = i;
-						max = min;
-					}
-					else
-						_zigZagBuffer[i] = 0.0m; //max-min=miser,(action!=1) continue
-				}
-				else //min (action=1) continue
-				{
-					_zigZagBuffer[j] = 0.0m;
-					_zigZagBuffer[i] = min;
-					j = i;
-					max = min;
-				}
-			}
+			if (_lastExtremum > price)
+				_lastExtremum = price;
 			else
-				_zigZagBuffer[i] = 0.0m;
+				changeTrend = price >= (_lastExtremum + threshold);
 		}
 
-		int valuesCount = 0, valueId = 0;
-		decimal last = 0, lastButOne = 0;
-		for (var i = _zigZagBuffer.Count - 1; i > 0 && valuesCount < 2; i--, valueId++)
+		if (changeTrend)
 		{
-			if (_zigZagBuffer[i] == 0)
-				continue;
-
-			valuesCount++;
-
-			if (valuesCount == 1)
-				last = _zigZagBuffer[i];
-			else
-				lastButOne = _zigZagBuffer[i];
+			try
+			{
+				return new ZigZagIndicatorValue(this, _lastExtremum.Value, _shift, input.Time, _isUpTrend.Value);
+			}
+			finally
+			{
+				_isUpTrend = !_isUpTrend.Value;
+				_lastExtremum = price;
+				_shift = 1;
+			}
 		}
+		else
+			_shift++;
 
-		_needAdd = input.IsFinal;
-
-		if (valuesCount != 2)
-			return Container.Count > 1 ? this.GetCurrentValue<ShiftedIndicatorValue>() : new ShiftedIndicatorValue(this, input.Time);
-
-		if (input.IsFinal)
-			IsFormed = true;
-
-		CurrentValue = last;
-
-		return new ShiftedIndicatorValue(this, lastButOne, valueId - 1, input.Time);
+		return new ZigZagIndicatorValue(this, input.Time);
 	}
 
 	/// <inheritdoc />
