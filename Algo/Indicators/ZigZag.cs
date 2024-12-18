@@ -26,6 +26,7 @@ public class ZigZagIndicatorValue : ShiftedIndicatorValue
 	public ZigZagIndicatorValue(IIndicator indicator, decimal value, int shift, DateTimeOffset time, bool isUp)
 		: base(indicator, value, shift, time)
 	{
+		IsUp = isUp;
 	}
 
 	/// <summary>
