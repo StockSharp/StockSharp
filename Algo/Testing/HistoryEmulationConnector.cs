@@ -126,6 +126,7 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		SupportFilteredMarketDepth = false;
 		UpdateSecurityLastQuotes = false;
 		UpdateSecurityByLevel1 = false;
+		UpdatePortfolioByChange = false;
 		SupportBasketSecurities = true;
 
 		innerAdapter.Parent ??= this;

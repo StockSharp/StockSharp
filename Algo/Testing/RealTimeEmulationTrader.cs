@@ -42,6 +42,7 @@ public class RealTimeEmulationTrader<TUnderlyingMarketDataAdapter> : BaseEmulati
 	{
 		UpdateSecurityByLevel1 = false;
 		UpdateSecurityLastQuotes = false;
+		UpdatePortfolioByChange = false;
 
 		Adapter.IgnoreExtraAdapters = true;
 	}

@@ -363,6 +363,11 @@ public partial class Connector : BaseLogReceiver, IConnector, IMarketDataProvide
 	public bool UpdateSecurityByDefinition { get; set; } = true;
 
 	/// <summary>
+	/// To update <see cref="Portfolio"/> fields when the <see cref="PositionChangeMessage"/> message appears. By default is enabled.
+	/// </summary>
+	public bool UpdatePortfolioByChange { get; set; } = true;
+
+	/// <summary>
 	/// To update the order book for the instrument when the <see cref="Level1ChangeMessage"/> message appears. By default is enabled.
 	/// </summary>
 	[Obsolete("Use SupportLevel1DepthBuilder property.")]
@@ -1117,6 +1122,7 @@ public partial class Connector : BaseLogReceiver, IConnector, IMarketDataProvide
 		UpdateSecurityLastQuotes = storage.GetValue(nameof(UpdateSecurityLastQuotes), UpdateSecurityLastQuotes);
 		UpdateSecurityByLevel1 = storage.GetValue(nameof(UpdateSecurityByLevel1), UpdateSecurityByLevel1);
 		UpdateSecurityByDefinition = storage.GetValue(nameof(UpdateSecurityByDefinition), UpdateSecurityByDefinition);
+		UpdatePortfolioByChange = storage.GetValue(nameof(UpdatePortfolioByChange), UpdatePortfolioByChange);
 		//ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
 		OverrideSecurityData = storage.GetValue(nameof(OverrideSecurityData), OverrideSecurityData);
 		CheckSteps = storage.GetValue(nameof(CheckSteps), CheckSteps);
@@ -1162,6 +1168,7 @@ public partial class Connector : BaseLogReceiver, IConnector, IMarketDataProvide
 		storage.SetValue(nameof(UpdateSecurityLastQuotes), UpdateSecurityLastQuotes);
 		storage.SetValue(nameof(UpdateSecurityByLevel1), UpdateSecurityByLevel1);
 		storage.SetValue(nameof(UpdateSecurityByDefinition), UpdateSecurityByDefinition);
+		storage.SetValue(nameof(UpdatePortfolioByChange), UpdatePortfolioByChange);
 		//storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
 		storage.SetValue(nameof(OverrideSecurityData), OverrideSecurityData);
 		storage.SetValue(nameof(CheckSteps), CheckSteps);

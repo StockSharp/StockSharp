@@ -1079,7 +1079,7 @@ partial class Connector
 		{
 			portfolio = GetPortfolio(message.PortfolioName, pf =>
 			{
-				if (message.LimitType != null)
+				if (message.LimitType != null || !UpdatePortfolioByChange)
 					return false;
 
 				pf.ApplyChanges(message, ExchangeInfoProvider);
