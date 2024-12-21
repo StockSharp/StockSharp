@@ -124,7 +124,7 @@ public class PnLQueue
 			if (!_recalcUnrealizedPnL)
 				return _unrealizedPnL;
 
-			var price = (_openedPosSide == Sides.Buy ? AskPrice : BidPrice) ?? LastPrice;
+			var price = (_openedPosSide == Sides.Buy ? BidPrice : AskPrice) ?? LastPrice;
 
 			var sum = price == null
 				? 0
