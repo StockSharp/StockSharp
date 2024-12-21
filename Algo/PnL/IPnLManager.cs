@@ -18,7 +18,7 @@ public interface IPnLManager : IPersistable
 	/// <summary>
 	/// The value of unrealized profit-loss.
 	/// </summary>
-	decimal? UnrealizedPnL { get; }
+	decimal UnrealizedPnL { get; }
 
 	/// <summary>
 	/// To zero <see cref="PnL"/>.

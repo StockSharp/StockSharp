@@ -43,7 +43,7 @@ public class PnLManager : IPnLManager
 	public bool UseCandles { get; set; } = true;
 
 	/// <inheritdoc />
-	public decimal PnL => RealizedPnL + UnrealizedPnL ?? 0;
+	public decimal PnL => RealizedPnL + UnrealizedPnL;
 
 	private decimal _realizedPnL;
 
@@ -51,27 +51,7 @@ public class PnLManager : IPnLManager
 	public decimal RealizedPnL => _realizedPnL;
 
 	/// <inheritdoc />
-	public decimal? UnrealizedPnL
-	{
-		get
-		{
-			decimal? retVal = null;
-
-			foreach (var manager in _managersByPf.CachedValues)
-			{
-				var pnl = manager.UnrealizedPnL;
-
-				if (pnl != null)
-				{
-					retVal ??= 0;
-
-					retVal += pnl.Value;
-				}
-			}
-
-			return retVal;
-		}
-	}
+	public decimal UnrealizedPnL => _managersByPf.CachedValues.Sum(m => m.UnrealizedPnL);
 
 	/// <inheritdoc />
 	public void Reset()

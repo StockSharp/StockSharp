@@ -112,12 +112,12 @@ public class PnLQueue
 	public decimal? AskPrice { get; private set; }
 
 	private bool _recalcUnrealizedPnL;
-	private decimal? _unrealizedPnL;
+	private decimal _unrealizedPnL;
 
 	/// <summary>
 	/// Unrealized profit.
 	/// </summary>
-	public decimal? UnrealizedPnL
+	public decimal UnrealizedPnL
 	{
 		get
 		{
@@ -130,7 +130,7 @@ public class PnLQueue
 					var price = (_openedPosSide == Sides.Buy ? AskPrice : BidPrice) ?? LastPrice;
 
 					if (price == null)
-						return null;
+						return 0;
 
 					return GetPnL(t.First, t.Second, _openedPosSide, price.Value);
 				}));
@@ -160,7 +160,7 @@ public class PnLQueue
 		var volume = trade.SafeGetVolume();
 		var price = trade.GetTradePrice();
 
-		_unrealizedPnL = null;
+		_unrealizedPnL = default;
 
 		decimal tradePnL;
 

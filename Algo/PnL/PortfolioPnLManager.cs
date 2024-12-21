@@ -27,7 +27,7 @@ public class PortfolioPnLManager : IPnLManager
 	public string PortfolioName { get; }
 
 	/// <inheritdoc />
-	public decimal PnL => RealizedPnL + UnrealizedPnL ?? 0;
+	public decimal PnL => RealizedPnL + UnrealizedPnL;
 
 	private decimal _realizedPnL;
 
@@ -50,7 +50,7 @@ public class PortfolioPnLManager : IPnLManager
 	}
 
 	/// <inheritdoc />
-	public decimal? UnrealizedPnL => _securityPnLs.CachedValues.Sum(q => q.UnrealizedPnL);
+	public decimal UnrealizedPnL => _securityPnLs.CachedValues.Sum(q => q.UnrealizedPnL);
 
 	/// <summary>
 	/// To calculate trade profitability. If the trade was already processed earlier, previous information returns.
