@@ -124,16 +124,11 @@ public class PnLQueue
 			if (!_recalcUnrealizedPnL)
 				return _unrealizedPnL;
 
-			var sum = _openedTrades
-				.SyncGet(c => c.Sum(t =>
-				{
-					var price = (_openedPosSide == Sides.Buy ? AskPrice : BidPrice) ?? LastPrice;
+			var price = (_openedPosSide == Sides.Buy ? AskPrice : BidPrice) ?? LastPrice;
 
-					if (price == null)
-						return 0;
-
-					return GetPnL(t.First, t.Second, _openedPosSide, price.Value);
-				}));
+			var sum = price == null
+				? 0
+				: _openedTrades.SyncGet(c => c.Sum(t => GetPnL(t.First, t.Second, _openedPosSide, price.Value)));
 
 			_unrealizedPnL = sum * _multiplier;
 			return _unrealizedPnL;
