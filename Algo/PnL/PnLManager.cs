@@ -9,6 +9,7 @@ public class PnLManager : IPnLManager
 	private readonly Dictionary<long, PortfolioPnLManager> _managersByTransId = [];
 	private readonly Dictionary<long, PortfolioPnLManager> _managersByOrderId = [];
 	private readonly Dictionary<string, PortfolioPnLManager> _managersByOrderStringId = new(StringComparer.InvariantCultureIgnoreCase);
+	private readonly Dictionary<SecurityId, Level1ChangeMessage> _secLevel1 = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="PnLManager"/>.
@@ -62,11 +63,23 @@ public class PnLManager : IPnLManager
 			_managersByTransId.Clear();
 			_managersByOrderId.Clear();
 			_managersByOrderStringId.Clear();
+
+			_secLevel1.Clear();
 		}
 	}
 
 	void IPnLManager.UpdateSecurity(Level1ChangeMessage l1Msg)
 	{
+		if (l1Msg is null)
+			throw new ArgumentNullException(nameof(l1Msg));
+
+		if (l1Msg.SecurityId.IsAllSecurity())
+			throw new ArgumentException(l1Msg.SecurityId.ToString(), nameof(l1Msg));
+
+		l1Msg = l1Msg.TypedClone();
+
+		_secLevel1[l1Msg.SecurityId] = l1Msg;
+
 		foreach (var manager in _managersByPf.CachedValues)
 			manager.UpdateSecurity(l1Msg);
 	}
@@ -75,6 +88,13 @@ public class PnLManager : IPnLManager
 	{
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
+
+		PortfolioPnLManager createManager(SecurityId secId, string pfName)
+			=> new(pfName, secId =>
+			{
+				lock (_managersByPf.SyncRoot)
+					return _secLevel1.TryGetValue(secId);
+			});
 
 		switch (message.Type)
 		{
@@ -90,7 +110,7 @@ public class PnLManager : IPnLManager
 
 				lock (_managersByPf.SyncRoot)
 				{
-					var manager = _managersByPf.SafeAdd(regMsg.PortfolioName, pf => new PortfolioPnLManager(pf));
+					var manager = _managersByPf.SafeAdd(regMsg.PortfolioName, pf => createManager(regMsg.SecurityId, pf));
 					_managersByTransId.Add(regMsg.TransactionId, manager);
 				}
 
@@ -116,7 +136,7 @@ public class PnLManager : IPnLManager
 							if (!_managersByTransId.TryGetValue(transId, out manager))
 							{
 								if (!execMsg.PortfolioName.IsEmpty())
-									manager = _managersByPf.SafeAdd(execMsg.PortfolioName, key => new PortfolioPnLManager(key));
+									manager = _managersByPf.SafeAdd(execMsg.PortfolioName, key => createManager(execMsg.SecurityId, key));
 								else if (execMsg.OrderId != null)
 									manager = _managersByOrderId.TryGetValue(execMsg.OrderId.Value);
 								else if (!execMsg.OrderStringId.IsEmpty())

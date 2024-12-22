@@ -2762,7 +2762,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			_parent = parent;
 			_name = name;
 
-			PnLManager = new PortfolioPnLManager(name);
+			PnLManager = new PortfolioPnLManager(name, secId => null);
 		}
 
 		public void RequestState(PortfolioLookupMessage pfMsg, ICollection<Message> result)

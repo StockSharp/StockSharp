@@ -2578,10 +2578,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		}
 
 		var tradeSec = order.Security;
-		var execMsg = trade.ToMessage();
-		DateTimeOffset? pnLChangeTime = null;
-
-		var tradeInfo = PnLManager.ProcessMessage(execMsg);
 
 		PnLManager.UpdateSecurity(new Level1ChangeMessage
 		{
@@ -2592,6 +2588,11 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		.TryAdd(Level1Fields.StepPrice, this.GetSecurityValue<decimal?>(tradeSec, Level1Fields.StepPrice) ?? tradeSec.StepPrice)
 		.TryAdd(Level1Fields.Multiplier, this.GetSecurityValue<decimal?>(tradeSec, Level1Fields.Multiplier) ?? tradeSec.Multiplier)
 		);
+
+		var execMsg = trade.ToMessage();
+		DateTimeOffset? pnLChangeTime = null;
+
+		var tradeInfo = PnLManager.ProcessMessage(execMsg);
 
 		if (tradeInfo != null)
 		{

@@ -8,17 +8,17 @@ public class PortfolioPnLManager : IPnLManager
 	private readonly Dictionary<string, PnLInfo> _tradeByStringIdInfos = new(StringComparer.InvariantCultureIgnoreCase);
 	private readonly Dictionary<long, PnLInfo> _tradeByIdInfos = [];
 	private readonly CachedSynchronizedDictionary<SecurityId, PnLQueue> _securityPnLs = [];
+	private readonly Func<SecurityId, Level1ChangeMessage> _getSecDefinition;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="PortfolioPnLManager"/>.
 	/// </summary>
 	/// <param name="portfolioName">Portfolio name.</param>
-	public PortfolioPnLManager(string portfolioName)
+	/// <param name="getSecDefinition">Get security definition function.</param>
+	public PortfolioPnLManager(string portfolioName, Func<SecurityId, Level1ChangeMessage> getSecDefinition)
 	{
-		if (portfolioName.IsEmpty())
-			throw new ArgumentNullException(nameof(portfolioName));
-
-		PortfolioName = portfolioName;
+		PortfolioName = portfolioName.ThrowIfEmpty(nameof(portfolioName));
+		_getSecDefinition = getSecDefinition ?? throw new ArgumentNullException(nameof(getSecDefinition));
 	}
 
 	/// <summary>
@@ -56,6 +56,18 @@ public class PortfolioPnLManager : IPnLManager
 	PnLInfo IPnLManager.ProcessMessage(Message message, ICollection<PortfolioPnLManager> changedPortfolios)
 		=> throw new NotSupportedException();
 
+	private PnLQueue CreateQueue(SecurityId securityId)
+	{
+		var queue = new PnLQueue(securityId);
+
+		var l1Msg = _getSecDefinition(securityId);
+
+		if (l1Msg != null)
+			queue.UpdateSecurity(l1Msg);
+
+		return queue;
+	}
+
 	/// <summary>
 	/// To calculate trade profitability. If the trade was already processed earlier, previous information returns.
 	/// </summary>
@@ -77,7 +89,7 @@ public class PortfolioPnLManager : IPnLManager
 			if (_tradeByIdInfos.TryGetValue(tradeId.Value, out info))
 				return false;
 
-			var queue = _securityPnLs.SafeAdd(trade.SecurityId, security => new PnLQueue(security));
+			var queue = _securityPnLs.SafeAdd(trade.SecurityId, CreateQueue);
 
 			info = queue.Process(trade);
 
@@ -90,7 +102,7 @@ public class PortfolioPnLManager : IPnLManager
 			if (_tradeByStringIdInfos.TryGetValue(tradeStringId, out info))
 				return false;
 
-			var queue = _securityPnLs.SafeAdd(trade.SecurityId, security => new PnLQueue(security));
+			var queue = _securityPnLs.SafeAdd(trade.SecurityId, CreateQueue);
 
 			info = queue.Process(trade);
 
@@ -164,7 +176,7 @@ public class PortfolioPnLManager : IPnLManager
 					if (posMsg.IsMoney())
 						_securityPnLs.CachedValues.ForEach(q => q.Leverage = leverage.Value);
 					else
-						_securityPnLs.SafeAdd(posMsg.SecurityId, security => new PnLQueue(security)).Leverage = leverage.Value;
+						_securityPnLs.SafeAdd(posMsg.SecurityId, CreateQueue).Leverage = leverage.Value;
 				}
 
 				break;
