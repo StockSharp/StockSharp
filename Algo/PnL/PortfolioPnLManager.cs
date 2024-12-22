@@ -29,15 +29,17 @@ public class PortfolioPnLManager : IPnLManager
 	/// <inheritdoc />
 	public decimal PnL => RealizedPnL + UnrealizedPnL;
 
-	private decimal _realizedPnL;
+	/// <inheritdoc />
+	public decimal RealizedPnL { get; private set; }
 
 	/// <inheritdoc />
-	public virtual decimal RealizedPnL => _realizedPnL;
+	public decimal UnrealizedPnL => _securityPnLs.CachedValues.Sum(q => q.UnrealizedPnL);
 
 	/// <inheritdoc />
 	public void Reset()
 	{
-		_realizedPnL = 0;
+		RealizedPnL = default;
+
 		_securityPnLs.Clear();
 
 		_tradeByStringIdInfos.Clear();
@@ -53,9 +55,6 @@ public class PortfolioPnLManager : IPnLManager
 
 	PnLInfo IPnLManager.ProcessMessage(Message message, ICollection<PortfolioPnLManager> changedPortfolios)
 		=> throw new NotSupportedException();
-
-	/// <inheritdoc />
-	public decimal UnrealizedPnL => _securityPnLs.CachedValues.Sum(q => q.UnrealizedPnL);
 
 	/// <summary>
 	/// To calculate trade profitability. If the trade was already processed earlier, previous information returns.
@@ -83,7 +82,7 @@ public class PortfolioPnLManager : IPnLManager
 			info = queue.Process(trade);
 
 			_tradeByIdInfos.Add(tradeId.Value, info);
-			_realizedPnL += info.PnL;
+			RealizedPnL += info.PnL;
 			return true;
 		}
 		else if (!tradeStringId.IsEmpty())
@@ -96,7 +95,7 @@ public class PortfolioPnLManager : IPnLManager
 			info = queue.Process(trade);
 
 			_tradeByStringIdInfos.Add(tradeStringId, info);
-			_realizedPnL += info.PnL;
+			RealizedPnL += info.PnL;
 			return true;
 		}
 

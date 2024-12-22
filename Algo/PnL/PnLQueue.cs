@@ -9,6 +9,10 @@ public class PnLQueue
 	private readonly SynchronizedStack<RefPair<decimal, decimal>> _openedTrades = [];
 	private decimal _multiplier;
 
+	private decimal? _lastPrice;
+	private decimal? _bidPrice;
+	private decimal? _askPrice;
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="PnLQueue"/>.
 	/// </summary>
@@ -37,6 +41,9 @@ public class PnLQueue
 			if (value <= 0)
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
+			if (_priceStep == value)
+				return;
+
 			_priceStep = value;
 			UpdateMultiplier();
 		}
@@ -54,6 +61,9 @@ public class PnLQueue
 		{
 			if (value <= 0)
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			if (_stepPrice == value)
+				return;
 
 			_stepPrice = value;
 			UpdateMultiplier();
@@ -73,6 +83,9 @@ public class PnLQueue
 			if (value <= 0)
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
+			if (value == _leverage)
+				return;
+
 			_leverage = value;
 			UpdateMultiplier();
 		}
@@ -91,28 +104,15 @@ public class PnLQueue
 			if (value <= 0)
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
+			if (value == _lotMultiplier)
+				return;
+
 			_lotMultiplier = value;
 			UpdateMultiplier();
 		}
 	}
 
-	/// <summary>
-	/// Last price of tick trade.
-	/// </summary>
-	public decimal? LastPrice { get; private set; }
-
-	/// <summary>
-	/// Last price of bid.
-	/// </summary>
-	public decimal? BidPrice { get; private set; }
-
-	/// <summary>
-	/// Last price of offer.
-	/// </summary>
-	public decimal? AskPrice { get; private set; }
-
-	private bool _recalcUnrealizedPnL;
-	private decimal _unrealizedPnL;
+	private decimal? _unrealizedPnL;
 
 	/// <summary>
 	/// Unrealized profit.
@@ -121,17 +121,18 @@ public class PnLQueue
 	{
 		get
 		{
-			if (!_recalcUnrealizedPnL)
-				return _unrealizedPnL;
+			if (_unrealizedPnL is decimal unrealPnL)
+				return unrealPnL;
 
-			var price = (_openedPosSide == Sides.Buy ? BidPrice : AskPrice) ?? LastPrice;
+			var price = (_openedPosSide == Sides.Buy ? _bidPrice : _askPrice) ?? _lastPrice;
 
 			var sum = price == null
 				? 0
 				: _openedTrades.SyncGet(c => c.Sum(t => GetPnL(t.First, t.Second, _openedPosSide, price.Value)));
 
-			_unrealizedPnL = sum * _multiplier;
-			return _unrealizedPnL;
+			unrealPnL = sum * _multiplier;
+			_unrealizedPnL = unrealPnL;
+			return unrealPnL;
 		}
 	}
 
@@ -147,7 +148,7 @@ public class PnLQueue
 	/// <returns>Information on new trade.</returns>
 	public PnLInfo Process(ExecutionMessage trade)
 	{
-		if (trade == null)
+		if (trade is null)
 			throw new ArgumentNullException(nameof(trade));
 
 		var closedVolume = 0m;
@@ -205,51 +206,48 @@ public class PnLQueue
 	}
 
 	/// <summary>
-	/// To process the message, containing market data.
+	/// To update the information on the instrument.
 	/// </summary>
-	/// <param name="levelMsg">The message, containing market data.</param>
+	/// <param name="levelMsg"><see cref="Level1ChangeMessage"/></param>
 	public void UpdateSecurity(Level1ChangeMessage levelMsg)
 	{
-		if (levelMsg.TryGetDecimal(Level1Fields.PriceStep) is decimal priceStep
-			&& PriceStep != priceStep)
+		if (levelMsg is null)
+			throw new ArgumentNullException(nameof(levelMsg));
+
+		if (levelMsg.TryGetDecimal(Level1Fields.PriceStep) is decimal priceStep)
 		{
 			PriceStep = priceStep;
-			_recalcUnrealizedPnL = true;
 		}
 
-		if (levelMsg.TryGetDecimal(Level1Fields.StepPrice) is decimal stepPrice
-			&& StepPrice != stepPrice)
+		if (levelMsg.TryGetDecimal(Level1Fields.StepPrice) is decimal stepPrice)
 		{
 			StepPrice = stepPrice;
-			_recalcUnrealizedPnL = true;
 		}
 
-		if (levelMsg.TryGetDecimal(Level1Fields.Multiplier) is decimal lotMultiplier
-			&& LotMultiplier != lotMultiplier)
+		if (levelMsg.TryGetDecimal(Level1Fields.Multiplier) is decimal lotMultiplier)
 		{
 			LotMultiplier = lotMultiplier;
-			_recalcUnrealizedPnL = true;
 		}
 
 		if (levelMsg.TryGetDecimal(Level1Fields.LastTradePrice) is decimal lastPrice
-			&& LastPrice != lastPrice)
+			&& _lastPrice != lastPrice)
 		{
-			LastPrice = lastPrice;
-			_recalcUnrealizedPnL = true;
+			_lastPrice = lastPrice;
+			_unrealizedPnL = default;
 		}
 
 		if (levelMsg.TryGetDecimal(Level1Fields.BestBidPrice) is decimal bidPrice
-			&& BidPrice != bidPrice)
+			&& _bidPrice != bidPrice)
 		{
-			BidPrice = bidPrice;
-			_recalcUnrealizedPnL = true;
+			_bidPrice = bidPrice;
+			_unrealizedPnL = default;
 		}
 
 		if (levelMsg.TryGetDecimal(Level1Fields.BestAskPrice) is decimal askPrice
-			&& AskPrice != askPrice)
+			&& _askPrice != askPrice)
 		{
-			AskPrice = askPrice;
-			_recalcUnrealizedPnL = true;
+			_askPrice = askPrice;
+			_unrealizedPnL = default;
 		}
 	}
 
@@ -259,9 +257,12 @@ public class PnLQueue
 	/// <param name="candleMsg"><see cref="CandleMessage"/>.</param>
 	public void ProcessCandle(CandleMessage candleMsg)
 	{
-		LastPrice = candleMsg.ClosePrice;
+		if (candleMsg is null)
+			throw new ArgumentNullException(nameof(candleMsg));
 
-		_recalcUnrealizedPnL = true;
+		_lastPrice = candleMsg.ClosePrice;
+
+		_unrealizedPnL = default;
 	}
 
 	/// <summary>
@@ -270,12 +271,15 @@ public class PnLQueue
 	/// <param name="execMsg">The message, containing information on tick trade.</param>
 	public void ProcessExecution(ExecutionMessage execMsg)
 	{
+		if (execMsg is null)
+			throw new ArgumentNullException(nameof(execMsg));
+
 		if (execMsg.TradePrice == null)
 			return;
 
-		LastPrice = execMsg.TradePrice.Value;
+		_lastPrice = execMsg.TradePrice.Value;
 
-		_recalcUnrealizedPnL = true;
+		_unrealizedPnL = default;
 	}
 
 	/// <summary>
@@ -284,10 +288,13 @@ public class PnLQueue
 	/// <param name="quoteMsg">The message, containing data on order book.</param>
 	public void ProcessQuotes(QuoteChangeMessage quoteMsg)
 	{
-		AskPrice = quoteMsg.GetBestAsk()?.Price;
-		BidPrice = quoteMsg.GetBestBid()?.Price;
+		if (quoteMsg is null)
+			throw new ArgumentNullException(nameof(quoteMsg));
 
-		_recalcUnrealizedPnL = true;
+		_askPrice = quoteMsg.GetBestAsk()?.Price;
+		_bidPrice = quoteMsg.GetBestBid()?.Price;
+
+		_unrealizedPnL = default;
 	}
 
 	private void UpdateMultiplier()
@@ -295,6 +302,7 @@ public class PnLQueue
 		var stepPrice = StepPrice;
 
 		_multiplier = (stepPrice == null ? 1 : stepPrice.Value / PriceStep) * Leverage * LotMultiplier;
+		_unrealizedPnL = default;
 	}
 
 	private static decimal GetPnL(decimal price, decimal volume, Sides side, decimal marketPrice)

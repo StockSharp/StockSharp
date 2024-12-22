@@ -28,27 +28,25 @@ public class PnLManager : IPnLManager
 	public bool UseOrderLog { get; set; }
 
 	/// <summary>
-	/// Use <see cref="QuoteChangeMessage"/> for <see cref="UnrealizedPnL"/> calculation.
+	/// Use <see cref="DataType.MarketDepth"/> for <see cref="UnrealizedPnL"/> calculation.
 	/// </summary>
 	public bool UseOrderBook { get; set; }
 
 	/// <summary>
-	/// Use <see cref="Level1ChangeMessage"/> for <see cref="UnrealizedPnL"/> calculation.
+	/// Use <see cref="DataType.Level1"/> for <see cref="UnrealizedPnL"/> calculation.
 	/// </summary>
 	public bool UseLevel1 { get; set; }
 
 	/// <summary>
-	/// Use <see cref="CandleMessage"/> for <see cref="UnrealizedPnL"/> calculation.
+	/// Use <see cref="DataType.IsCandles"/> for <see cref="UnrealizedPnL"/> calculation.
 	/// </summary>
 	public bool UseCandles { get; set; } = true;
 
 	/// <inheritdoc />
 	public decimal PnL => RealizedPnL + UnrealizedPnL;
 
-	private decimal _realizedPnL;
-
 	/// <inheritdoc />
-	public decimal RealizedPnL => _realizedPnL;
+	public decimal RealizedPnL { get; private set; }
 
 	/// <inheritdoc />
 	public decimal UnrealizedPnL => _managersByPf.CachedValues.Sum(m => m.UnrealizedPnL);
@@ -58,7 +56,8 @@ public class PnLManager : IPnLManager
 	{
 		lock (_managersByPf.SyncRoot)
 		{
-			_realizedPnL = 0;
+			RealizedPnL = default;
+
 			_managersByPf.Clear();
 			_managersByTransId.Clear();
 			_managersByOrderId.Clear();
@@ -144,7 +143,7 @@ public class PnLManager : IPnLManager
 							if (!manager.ProcessMyTrade(execMsg, out var info))
 								return null;
 
-							_realizedPnL += info.PnL;
+							RealizedPnL += info.PnL;
 							changedPortfolios?.Add(manager);
 							return info;
 						}
