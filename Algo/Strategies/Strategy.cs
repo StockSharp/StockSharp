@@ -2583,7 +2583,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		var tradeInfo = PnLManager.ProcessMessage(execMsg);
 
-		PnLManager.ProcessMessage(new Level1ChangeMessage
+		PnLManager.UpdateSecurity(new Level1ChangeMessage
 		{
 			SecurityId = tradeSec.ToSecurityId(),
 			ServerTime = CurrentTime

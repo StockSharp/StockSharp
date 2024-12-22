@@ -129,6 +129,17 @@ public class PortfolioPnLManager : IPnLManager
 				return true;
 			}
 
+			case MessageTypes.Level1Change:
+			{
+				var levelMsg = (Level1ChangeMessage)message;
+
+				if (!TryGetQueue(levelMsg, out var queue))
+					break;
+
+				queue.ProcessLevel1(levelMsg);
+				return true;
+			}
+
 			case MessageTypes.QuoteChange:
 			{
 				var quoteMsg = (QuoteChangeMessage)message;

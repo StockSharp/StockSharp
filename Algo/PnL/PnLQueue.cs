@@ -228,6 +228,16 @@ public class PnLQueue
 		{
 			LotMultiplier = lotMultiplier;
 		}
+	}
+
+	/// <summary>
+	/// To process the message, containing market data.
+	/// </summary>
+	/// <param name="levelMsg">The message, containing market data.</param>
+	public void ProcessLevel1(Level1ChangeMessage levelMsg)
+	{
+		if (levelMsg is null)
+			throw new ArgumentNullException(nameof(levelMsg));
 
 		if (levelMsg.TryGetDecimal(Level1Fields.LastTradePrice) is decimal lastPrice
 			&& _lastPrice != lastPrice)
