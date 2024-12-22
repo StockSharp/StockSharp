@@ -210,45 +210,45 @@ public class PnLQueue
 	/// <param name="levelMsg">The message, containing market data.</param>
 	public void ProcessLevel1(Level1ChangeMessage levelMsg)
 	{
-		var priceStep = levelMsg.TryGetDecimal(Level1Fields.PriceStep);
-		if (priceStep != null)
+		if (levelMsg.TryGetDecimal(Level1Fields.PriceStep) is decimal priceStep
+			&& PriceStep != priceStep)
 		{
-			PriceStep = (decimal)priceStep;
+			PriceStep = priceStep;
 			_recalcUnrealizedPnL = true;
 		}
 
-		var stepPrice = levelMsg.TryGetDecimal(Level1Fields.StepPrice);
-		if (stepPrice != null)
+		if (levelMsg.TryGetDecimal(Level1Fields.StepPrice) is decimal stepPrice
+			&& StepPrice != stepPrice)
 		{
-			StepPrice = (decimal)stepPrice;
+			StepPrice = stepPrice;
 			_recalcUnrealizedPnL = true;
 		}
 
-		var lotMultiplier = levelMsg.TryGetDecimal(Level1Fields.Multiplier);
-		if (lotMultiplier != null)
+		if (levelMsg.TryGetDecimal(Level1Fields.Multiplier) is decimal lotMultiplier
+			&& LotMultiplier != lotMultiplier)
 		{
-			LotMultiplier = (decimal)lotMultiplier;
+			LotMultiplier = lotMultiplier;
 			_recalcUnrealizedPnL = true;
 		}
 
-		var tradePrice = levelMsg.TryGetDecimal(Level1Fields.LastTradePrice);
-		if (tradePrice != null)
+		if (levelMsg.TryGetDecimal(Level1Fields.LastTradePrice) is decimal lastPrice
+			&& LastPrice != lastPrice)
 		{
-			LastPrice = (decimal)tradePrice;
+			LastPrice = lastPrice;
 			_recalcUnrealizedPnL = true;
 		}
 
-		var bidPrice = levelMsg.TryGetDecimal(Level1Fields.BestBidPrice);
-		if (bidPrice != null)
+		if (levelMsg.TryGetDecimal(Level1Fields.BestBidPrice) is decimal bidPrice
+			&& BidPrice != bidPrice)
 		{
-			BidPrice = (decimal)bidPrice;
+			BidPrice = bidPrice;
 			_recalcUnrealizedPnL = true;
 		}
 
-		var askPrice = levelMsg.TryGetDecimal(Level1Fields.BestAskPrice);
-		if (askPrice != null)
+		if (levelMsg.TryGetDecimal(Level1Fields.BestAskPrice) is decimal askPrice
+			&& AskPrice != askPrice)
 		{
-			AskPrice = (decimal)askPrice;
+			AskPrice = askPrice;
 			_recalcUnrealizedPnL = true;
 		}
 	}
