@@ -89,17 +89,11 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
     ICloneable<Strategy>, IMarketDataProvider, ISubscriptionProvider, ISecurityProvider,
     ITransactionProvider, IScheduledTask
 {
-	private class StrategyChangeStateMessage : Message
+	private class StrategyChangeStateMessage(Strategy strategy, ProcessStates state)
+		: Message(ExtendedMessageTypes.StrategyChangeState)
 	{
-		public Strategy Strategy { get; }
-		public ProcessStates State { get; }
-
-		public StrategyChangeStateMessage(Strategy strategy, ProcessStates state)
-			: base(ExtendedMessageTypes.StrategyChangeState)
-		{
-			Strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
-			State = state;
-		}
+		public Strategy Strategy { get; } = strategy ?? throw new ArgumentNullException(nameof(strategy));
+		public ProcessStates State { get; } = state;
 
 		public override Message Clone()
 		{
@@ -107,16 +101,11 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		}
 	}
 
-	private sealed class ChildStrategyList : SynchronizedSet<Strategy>, IStrategyChildStrategyList
+	private class ChildStrategyList(Strategy parent)
+		: SynchronizedSet<Strategy>(true), IStrategyChildStrategyList
 	{
 		private readonly Dictionary<Strategy, IMarketRule> _childStrategyRules = [];
-		private readonly Strategy _parent;
-
-		public ChildStrategyList(Strategy parent)
-			: base(true)
-		{
-			_parent = parent ?? throw new ArgumentNullException(nameof(parent));
-		}
+		private readonly Strategy _parent = parent ?? throw new ArgumentNullException(nameof(parent));
 
 		protected override void OnAdded(Strategy item)
 		{
@@ -231,15 +220,10 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		}
 	}
 
-	private sealed class StrategyRuleList : MarketRuleList
+	private class StrategyRuleList(Strategy strategy)
+		: MarketRuleList(strategy)
 	{
-		private readonly Strategy _strategy;
-
-		public StrategyRuleList(Strategy strategy)
-			: base(strategy)
-		{
-			_strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
-		}
+		private readonly Strategy _strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
 
 		protected override bool OnAdding(IMarketRule item)
 		{
@@ -247,7 +231,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		}
 	}
 
-	private sealed class OrderInfo
+	private class OrderInfo
 	{
 		public OrderInfo()
 		{
@@ -260,16 +244,11 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		public OrderStates PrevState { get; set; }
 	}
 
-	private class IndicatorList : SynchronizedSet<IIndicator>
+	private class IndicatorList(Strategy strategy)
+		: SynchronizedSet<IIndicator>
 	{
-		private readonly Strategy _strategy;
+		private readonly Strategy _strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
 		private readonly CachedSynchronizedSet<IIndicator> _nonFormedIndicators = [];
-
-		public IndicatorList(Strategy strategy)
-		{
-			_strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
-		}
-
 		private bool _allFormed = true;
 
 		public bool AllFormed
@@ -2553,16 +2532,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			OnOrderRegisterFailed(fail, info.IsOwn);
 	}
 
-	private void UpdatePnLManager(Security security)
-	{
-		var msg = new Level1ChangeMessage { SecurityId = security.ToSecurityId(), ServerTime = CurrentTime }
-				.TryAdd(Level1Fields.PriceStep, security.PriceStep)
-				.TryAdd(Level1Fields.StepPrice, this.GetSecurityValue<decimal?>(security, Level1Fields.StepPrice) ?? security.StepPrice)
-				.TryAdd(Level1Fields.Multiplier, this.GetSecurityValue<decimal?>(security, Level1Fields.Multiplier) ?? security.Multiplier);
-
-		PnLManager.ProcessMessage(msg);
-	}
-
 	private void OnChildOwnTradeReceived(Subscription subscription, MyTrade trade)
 	{
 		TryInvoke(() => OwnTradeReceived?.Invoke(subscription, trade));
@@ -2580,12 +2549,15 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if (!_myTrades.TryAdd(trade))
 			return false;
 
+		var order = trade.Order;
+		var tick = trade.Trade;
+
 		if (WaitAllTrades)
 		{
 			lock (_ordersInfo.SyncRoot)
 			{
-				if (_ordersInfo.TryGetValue(trade.Order, out var info) && info.IsOwn)
-					info.ReceivedVolume += trade.Trade.Volume;
+				if (_ordersInfo.TryGetValue(order, out var info) && info.IsOwn)
+					info.ReceivedVolume += tick.Volume;
 			}
 		}
 
@@ -2593,9 +2565,9 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		var isSlipChanged = false;
 
 		this.AddInfoLog("{0} trade {1} at price {2} for {3} orders {4}.",
-			trade.Order.Side,
-			(trade.Trade.Id is null ? trade.Trade.StringId : trade.Trade.Id.To<string>()),
-			trade.Trade.Price, trade.Trade.Volume, trade.Order.TransactionId);
+			order.Side,
+			(tick.Id is null ? tick.StringId : tick.Id.To<string>()),
+			tick.Price, tick.Volume, order.TransactionId);
 
 		if (trade.Commission != null)
 		{
@@ -2605,7 +2577,17 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			isComChanged = true;
 		}
 
-		UpdatePnLManager(trade.Trade.Security);
+		var tradeSec = order.Security;
+
+		PnLManager.ProcessMessage(new Level1ChangeMessage
+		{
+			SecurityId = tradeSec.ToSecurityId(),
+			ServerTime = CurrentTime
+		}
+		.TryAdd(Level1Fields.PriceStep, tradeSec.PriceStep)
+		.TryAdd(Level1Fields.StepPrice, this.GetSecurityValue<decimal?>(tradeSec, Level1Fields.StepPrice) ?? tradeSec.StepPrice)
+		.TryAdd(Level1Fields.Multiplier, this.GetSecurityValue<decimal?>(tradeSec, Level1Fields.Multiplier) ?? tradeSec.Multiplier)
+		);
 
 		var execMsg = trade.ToMessage();
 		DateTimeOffset? pnLChangeTime = null;
@@ -2631,7 +2613,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			isSlipChanged = true;
 		}
 
-		trade.Position ??= GetPositionValue(trade.Order.Security, trade.Order.Portfolio);
+		trade.Position ??= GetPositionValue(tradeSec, order.Portfolio);
 
 		TryInvoke(() => OnNewMyTrade(trade));
 
