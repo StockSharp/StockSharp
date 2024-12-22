@@ -208,7 +208,7 @@ public class PnLQueue
 	/// To process the message, containing market data.
 	/// </summary>
 	/// <param name="levelMsg">The message, containing market data.</param>
-	public void ProcessLevel1(Level1ChangeMessage levelMsg)
+	public void UpdateSecurity(Level1ChangeMessage levelMsg)
 	{
 		if (levelMsg.TryGetDecimal(Level1Fields.PriceStep) is decimal priceStep
 			&& PriceStep != priceStep)

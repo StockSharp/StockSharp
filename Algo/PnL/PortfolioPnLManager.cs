@@ -44,10 +44,15 @@ public class PortfolioPnLManager : IPnLManager
 		_tradeByIdInfos.Clear();
 	}
 
-	PnLInfo IPnLManager.ProcessMessage(Message message, ICollection<PortfolioPnLManager> changedPortfolios)
+	/// <inheritdoc />
+	public void UpdateSecurity(Level1ChangeMessage l1Msg)
 	{
-		throw new NotSupportedException();
+		if (TryGetQueue(l1Msg, out var queue))
+			queue.UpdateSecurity(l1Msg);
 	}
+
+	PnLInfo IPnLManager.ProcessMessage(Message message, ICollection<PortfolioPnLManager> changedPortfolios)
+		=> throw new NotSupportedException();
 
 	/// <inheritdoc />
 	public decimal UnrealizedPnL => _securityPnLs.CachedValues.Sum(q => q.UnrealizedPnL);
@@ -98,6 +103,10 @@ public class PortfolioPnLManager : IPnLManager
 		return false;
 	}
 
+	private bool TryGetQueue<TMsg>(TMsg msg, out PnLQueue queue)
+		where TMsg : ISecurityIdMessage
+		=> _securityPnLs.TryGetValue(msg.SecurityId, out queue);
+
 	/// <summary>
 	/// To process the message, containing market data.
 	/// </summary>
@@ -105,10 +114,6 @@ public class PortfolioPnLManager : IPnLManager
 	/// <returns><see cref="PnL"/> was changed.</returns>
 	public bool ProcessMessage(Message message)
 	{
-		bool TryGetQueue<TMsg>(TMsg msg, out PnLQueue queue)
-			where TMsg : ISecurityIdMessage
-			=> _securityPnLs.TryGetValue(msg.SecurityId, out queue);
-
 		switch (message.Type)
 		{
 			case MessageTypes.Execution:
@@ -122,17 +127,6 @@ public class PortfolioPnLManager : IPnLManager
 					break;
 
 				queue.ProcessExecution(execMsg);
-				return true;
-			}
-
-			case MessageTypes.Level1Change:
-			{
-				var levelMsg = (Level1ChangeMessage)message;
-
-				if (!TryGetQueue(levelMsg, out var queue))
-					break;
-
-				queue.ProcessLevel1(levelMsg);
 				return true;
 			}
 

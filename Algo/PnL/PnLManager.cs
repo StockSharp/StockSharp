@@ -66,8 +66,13 @@ public class PnLManager : IPnLManager
 		}
 	}
 
-	/// <inheritdoc />
-	public PnLInfo ProcessMessage(Message message, ICollection<PortfolioPnLManager> changedPortfolios)
+	void IPnLManager.UpdateSecurity(Level1ChangeMessage l1Msg)
+	{
+		foreach (var manager in _managersByPf.CachedValues)
+			manager.UpdateSecurity(l1Msg);
+	}
+
+	PnLInfo IPnLManager.ProcessMessage(Message message, ICollection<PortfolioPnLManager> changedPortfolios)
 	{
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
