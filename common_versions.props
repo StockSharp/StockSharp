@@ -26,7 +26,7 @@
     <SharpPcapVer>6.*</SharpPcapVer>
     <GoogleProtobufVer>3.*</GoogleProtobufVer>
 
-    <MicrosoftCodeAnalysisCSharpVer>4.11.0</MicrosoftCodeAnalysisCSharpVer>
+    <MicrosoftCodeAnalysisVer>4.12.0</MicrosoftCodeAnalysisVer>
     <MicrosoftCodeAnalysisAnalyzersVer>3.3.4</MicrosoftCodeAnalysisAnalyzersVer>
   </PropertyGroup>
 </Project>
