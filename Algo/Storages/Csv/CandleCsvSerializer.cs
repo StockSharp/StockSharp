@@ -47,7 +47,7 @@ public class CandleCsvSerializer<TCandleMessage> : CsvMarketDataSerializer<TCand
 
 					var openTime = message.OpenTime.UtcDateTime;
 
-					_items.Add(openTime, message);
+					_items[openTime] = message;
 
 					if (!firstTimeRead)
 					{
