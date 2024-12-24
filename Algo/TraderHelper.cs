@@ -1117,7 +1117,7 @@ public static partial class TraderHelper
 		if (security == null)
 			throw new ArgumentNullException(nameof(security));
 
-		return security.BasketCode is "CE" or "CV";
+		return security.BasketCode is BasketCodes.ExpirationContinuous or BasketCodes.VolumeContinuous;
 	}
 
 	/// <summary>
