@@ -12,13 +12,29 @@ public abstract class ContinuousSecurity : BasketSecurity
 }
 
 /// <summary>
+/// Basket securities codes.
+/// </summary>
+public static class BasketCodes
+{
+	/// <summary>
+	/// <see cref="ExpirationContinuousSecurity"/>
+	/// </summary>
+	public const string ExpirationContinuous = "CE";
+
+	/// <summary>
+	/// <see cref="VolumeContinuousSecurity"/>
+	/// </summary>
+	public const string VolumeContinuous = "CV";
+}
+
+/// <summary>
 /// Rollover by expiration date continuous security.
 /// </summary>
 [Display(
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.ContinuousSecurityKey,
 	Description = LocalizedStrings.ContinuousSecurityDescKey)]
-[BasketCode("CE")]
+[BasketCode(BasketCodes.ExpirationContinuous)]
 public class ExpirationContinuousSecurity : ContinuousSecurity
 {
 	/// <summary>
@@ -266,7 +282,7 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.ContinuousSecurityKey,
 	Description = LocalizedStrings.ContinuousSecurityDescKey)]
-[BasketCode("CV")]
+[BasketCode(BasketCodes.VolumeContinuous)]
 public class VolumeContinuousSecurity : ContinuousSecurity
 {
 	/// <summary>
