@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "设置目录",
   "SettingsFile": "设置文件",
   "SettingsOk": "所有设置正确。",
-  "SettingsWillBeResetContinue": "设置 {0} 将被重置。此操作不可逆。您确定要继续吗？",
+  "SettingsWillBeResetContinue": "{0}的设置将被重置。此操作不可逆，所有数据都将被删除。您确定要继续吗？",
   "Settlement": "结算",
   "SettlementDate": "结算日期",
   "SettlementDateForSecurity": "证券结算日期（适用于衍生品和债券）。",

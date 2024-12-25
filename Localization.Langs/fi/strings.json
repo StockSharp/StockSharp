@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "Asetushakemisto",
   "SettingsFile": "Asetustiedosto",
   "SettingsOk": "Kaikki asetukset ovat oikein.",
-  "SettingsWillBeResetContinue": "Asetukset {0} palautetaan. Tätä toimenpidettä ei voi peruuttaa. Oletko varma, että haluat jatkaa?",
+  "SettingsWillBeResetContinue": "Asetukset {0}:lle nollataan. Tämä toiminto on peruuttamaton ja kaikki tiedot poistetaan. Haluatko varmasti jatkaa?",
   "Settlement": "Selvitys",
   "SettlementDate": "Maksupäivä",
   "SettlementDateForSecurity": "Vakuuskohteen selvityspäivä (johdannaisille ja velkakirjoille).",

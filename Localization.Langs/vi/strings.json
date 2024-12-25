@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "Thư mục cài đặt",
   "SettingsFile": "Tệp cài đặt",
   "SettingsOk": "Tất cả các cài đặt đều chính xác.",
-  "SettingsWillBeResetContinue": "Cài đặt của {0} sẽ được đặt lại. Thao tác này không thể hoàn tác. Bạn có chắc chắn muốn tiếp tục không?",
+  "SettingsWillBeResetContinue": "Cài đặt cho {0} sẽ được đặt lại. Thao tác này không thể hoàn tác và tất cả dữ liệu sẽ bị xóa. Bạn có chắc chắn muốn tiếp tục không?",
   "Settlement": "Giải quyết",
   "SettlementDate": "Ngày thanh toán",
   "SettlementDateForSecurity": "Ngày thanh toán cho công cụ (cho derivates và trái phiếu).",

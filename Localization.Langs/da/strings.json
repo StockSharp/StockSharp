@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "Indstillingsmappe",
   "SettingsFile": "Indstillingsfil",
   "SettingsOk": "Alle indstillinger er korrekte.",
-  "SettingsWillBeResetContinue": "Indstillingerne for {0} vil blive nulstillet. Denne handling kan ikke fortrydes. Er du sikker på, at du vil fortsætte?",
+  "SettingsWillBeResetContinue": "Indstillinger for {0} vil blive nulstillet. Denne handling kan ikke fortrydes, og alle data vil blive slettet. Er du sikker på, at du vil fortsætte?",
   "Settlement": "Afvikling",
   "SettlementDate": "Afregningsdato",
   "SettlementDateForSecurity": "Afviklingsdato for værdipapiret (for derivater og obligationer).",

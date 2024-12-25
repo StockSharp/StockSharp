@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "Répertoire des paramètres",
   "SettingsFile": "Fichier de paramètres",
   "SettingsOk": "Tous les paramètres sont corrects.",
-  "SettingsWillBeResetContinue": "Les paramètres de {0} seront réinitialisés. Cette opération est irréversible. Êtes-vous sûr de vouloir continuer ?",
+  "SettingsWillBeResetContinue": "Les paramètres de {0} seront réinitialisés. Cette opération est irréversible et toutes les données seront supprimées. Êtes-vous sûr de vouloir continuer ?",
   "Settlement": "Règlement",
   "SettlementDate": "Date de règlement",
   "SettlementDateForSecurity": "Date de règlement pour l'instrument (pour les dérivés et les obligations).",

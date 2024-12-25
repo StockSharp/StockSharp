@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "Direktori Tetapan",
   "SettingsFile": "Fail Tetapan",
   "SettingsOk": "Semua tetapan adalah betul.",
-  "SettingsWillBeResetContinue": "Tetapan {0} akan ditetapkan semula. Operasi ini tidak dapat dibatalkan. Adakah anda pasti ingin meneruskan?",
+  "SettingsWillBeResetContinue": "Tetapan untuk {0} akan diset semula. Operasi ini tidak boleh diterbalikkan dan semua data akan dipadamkan. Adakah anda pasti mahu meneruskan?",
   "Settlement": "Penyelesaian",
   "SettlementDate": "Tarikh penyelesaian",
   "SettlementDateForSecurity": "Tarikh Penyelesaian untuk Sekuriti (untuk derivatif dan bon).",

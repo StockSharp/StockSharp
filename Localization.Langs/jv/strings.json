@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "Direktori Setelan",
   "SettingsFile": "File Setelan",
   "SettingsOk": "Kabeh setelan wis bener.",
-  "SettingsWillBeResetContinue": "Setèlan {0} bakal direset. Tindakan iki ora bisa dibalekake. Apa sampeyan yakin arep nerusake?",
+  "SettingsWillBeResetContinue": "Setelan kanggo {0} bakal direset. Operasi iki ora bisa dibatalake lan kabeh data bakal dihapus. Apa sampeyan yakin arep nerusake?",
   "Settlement": "Penyelesaian",
   "SettlementDate": "Tanggal penyelesaian",
   "SettlementDateForSecurity": "Tanggal Penyelesaian kanggo Sekuritas (kanggo derivatif lan obligasi).",

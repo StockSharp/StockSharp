@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "Innstillingskatalog",
   "SettingsFile": "Innstillingsfil",
   "SettingsOk": "Alle innstillinger er riktige.",
-  "SettingsWillBeResetContinue": "Innstillingene for {0} vil bli tilbakestilt. Denne operasjonen kan ikke reverseres. Er du sikker på at du vil fortsette?",
+  "SettingsWillBeResetContinue": "Innstillingene for {0} vil bli tilbakestilt. Denne operasjonen er irreversibel og all data vil bli slettet. Er du sikker på at du vil fortsette?",
   "Settlement": "Oppgjør",
   "SettlementDate": "Oppgjørsdato",
   "SettlementDateForSecurity": "Oppgjørsdato for sikkerheten (for derivater og obligasjoner).",

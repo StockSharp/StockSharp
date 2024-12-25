@@ -3078,7 +3078,7 @@
   "SettingsDirectory": "Settings directory",
   "SettingsFile": "Settings file",
   "SettingsOk": "Settings OK.",
-  "SettingsWillBeResetContinue": "{0} settings will be reset. This operation is irreversible. Are you sure you want to continue?",
+  "SettingsWillBeResetContinue": "Settings for {0} will be reset. This operation is irreversible and all data will be deleted. Are you sure you want to continue?",
   "Settlement": "Settlement",
   "SettlementDate": "Settlement date",
   "SettlementDateForSecurity": "Settlement date for security (for derivatives and bonds).",

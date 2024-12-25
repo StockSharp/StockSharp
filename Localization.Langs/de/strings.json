@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "Einstellungsverzeichnis",
   "SettingsFile": "Einstellungsdatei",
   "SettingsOk": "Alle Einstellungen sind korrekt.",
-  "SettingsWillBeResetContinue": "Die Einstellungen für {0} werden zurückgesetzt. Dieser Vorgang ist nicht umkehrbar. Sind Sie sicher, dass Sie fortfahren möchten?",
+  "SettingsWillBeResetContinue": "Die Einstellungen für {0} werden zurückgesetzt. Dieser Vorgang ist nicht rückgängig zu machen und alle Daten werden gelöscht. Sind Sie sicher, dass Sie fortfahren möchten?",
   "Settlement": "Abwicklung",
   "SettlementDate": "Abrechnungstermin",
   "SettlementDateForSecurity": "Abrechnungsdatum für das Wertpapier (für Derivate und Anleihen).",

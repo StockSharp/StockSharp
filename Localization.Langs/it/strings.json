@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "Directory delle impostazioni",
   "SettingsFile": "File di impostazioni",
   "SettingsOk": "Tutte le impostazioni sono corrette.",
-  "SettingsWillBeResetContinue": "Le impostazioni di {0} saranno resettate. Questa operazione è irreversibile. Sei sicuro di voler continuare?",
+  "SettingsWillBeResetContinue": "Le impostazioni per {0} verranno ripristinate. Questa operazione è irreversibile e tutti i dati verranno eliminati. Sei sicuro di voler continuare?",
   "Settlement": "Liquidazione",
   "SettlementDate": "Data di liquidazione",
   "SettlementDateForSecurity": "Data di regolamento per lo strumento (per derivati e obbligazioni).",

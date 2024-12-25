@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "Ayarlar Dizini",
   "SettingsFile": "Ayar Dosyası",
   "SettingsOk": "Tüm ayarlar doğru yapılmış.",
-  "SettingsWillBeResetContinue": "{0} ayarları sıfırlanacak. Bu işlem geri alınamaz. Devam etmek istediğinizden emin misiniz?",
+  "SettingsWillBeResetContinue": "{0} için ayarlar sıfırlanacak. Bu işlem geri alınamaz ve tüm veriler silinecektir. Devam etmek istediğinizden emin misiniz?",
   "Settlement": "Tasfiye",
   "SettlementDate": "Ödeme Tarihi",
   "SettlementDateForSecurity": "Güvenlik için Ödeme Tarihi (türevler ve bonolar için).",

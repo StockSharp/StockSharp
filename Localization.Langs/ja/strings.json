@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "設定ディレクトリ",
   "SettingsFile": "設定ファイル",
   "SettingsOk": "すべての設定が正しく行われています。",
-  "SettingsWillBeResetContinue": "{0} の設定がリセットされます。この操作は元に戻せません。続行しますか？",
+  "SettingsWillBeResetContinue": "{0}の設定がリセットされます。この操作は取り消しできず、すべてのデータが削除されます。続行してもよろしいですか？",
   "Settlement": "決済",
   "SettlementDate": "決済日",
   "SettlementDateForSecurity": "証券の決済日（デリバティブおよび債権用）。",

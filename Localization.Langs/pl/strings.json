@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "Katalog ustawień",
   "SettingsFile": "Plik ustawień",
   "SettingsOk": "Wszystkie ustawienia są prawidłowe.",
-  "SettingsWillBeResetContinue": "Ustawienia {0} zostaną zresetowane. Ta operacja jest nieodwracalna. Czy na pewno chcesz kontynuować?",
+  "SettingsWillBeResetContinue": "Ustawienia dla {0} zostaną zresetowane. Ta operacja jest nieodwracalna i wszystkie dane zostaną usunięte. Czy na pewno chcesz kontynuować?",
   "Settlement": "Rozliczenie",
   "SettlementDate": "Data rozliczenia",
   "SettlementDateForSecurity": "Data rozliczenia dla papieru wartościowego (dla instrumentów pochodnych i obligacji).",

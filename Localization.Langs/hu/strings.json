@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "Beállítások könyvtára",
   "SettingsFile": "Beállítások fájla",
   "SettingsOk": "Minden beállítás helyes.",
-  "SettingsWillBeResetContinue": "A(z) {0} beállítások visszaállításra kerülnek. Ez a művelet visszafordíthatatlan. Biztosan folytatni szeretné?",
+  "SettingsWillBeResetContinue": "A {0} beállításai alaphelyzetbe állnak. Ez a művelet visszafordíthatatlan és minden adat törlődni fog. Biztosan folytatni szeretné?",
   "Settlement": "Elszámolás",
   "SettlementDate": "Fizetési dátum",
   "SettlementDateForSecurity": "Eljárásnapja az értékpapírnak (derivatívák és kötvények esetében).",

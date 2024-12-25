@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "Directori de configuracions",
   "SettingsFile": "Arxiu de configuracions",
   "SettingsOk": "Tot està configurat correctament.",
-  "SettingsWillBeResetContinue": "Les configuracions de {0} seran reiniciades. Aquesta operació és irreversible. Segur que voleu continuar?",
+  "SettingsWillBeResetContinue": "Es restabliran els ajustos de {0}. Aquesta operació és irreversible i s'esborraran totes les dades. Estàs segur que vols continuar?",
   "Settlement": "Liquidació",
   "SettlementDate": "Data de liquidació",
   "SettlementDateForSecurity": "Data de liquidació per a l'instrument (per a derivats i bons).",

@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "Adresár s nastaveniami",
   "SettingsFile": "Súbor s nastaveniami",
   "SettingsOk": "Všetko je nastavené správne.",
-  "SettingsWillBeResetContinue": "Nastavenia {0} budú resetované. Táto operácia je nezvratná. Ste si istí, že chcete pokračovať?",
+  "SettingsWillBeResetContinue": "Nastavenia pre {0} budú obnovené. Táto operácia je nevratná a všetky údaje budú vymazané. Naozaj chcete pokračovať?",
   "Settlement": "Doručenie",
   "SettlementDate": "Dátum vyrovnania",
   "SettlementDateForSecurity": "Dátum vyrovnania pre nástroj (pre deriváty a obligácie).",

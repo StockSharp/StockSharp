@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "Instellingenmap",
   "SettingsFile": "Instellingenbestand",
   "SettingsOk": "Alle instellingen zijn correct.",
-  "SettingsWillBeResetContinue": "Instellingen voor {0} worden gereset. Deze handeling is onomkeerbaar. Weet u zeker dat u wilt doorgaan?",
+  "SettingsWillBeResetContinue": "De instellingen voor {0} worden gereset. Deze bewerking is onomkeerbaar en alle gegevens worden verwijderd. Weet u zeker dat u wilt doorgaan?",
   "Settlement": "Afhandeling",
   "SettlementDate": "Afhandelingsdatum",
   "SettlementDateForSecurity": "Verrekeningsdatum voor het effect (voor derivaten en obligaties).",

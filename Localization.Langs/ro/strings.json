@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "Director de setări",
   "SettingsFile": "Fișier de setări",
   "SettingsOk": "Toate setările sunt corecte.",
-  "SettingsWillBeResetContinue": "Setările {0} vor fi resetate. Această operațiune este ireversibilă. Sunteți sigur că doriți să continuați?",
+  "SettingsWillBeResetContinue": "Setările pentru {0} vor fi resetate. Această operațiune este ireversibilă și toate datele vor fi șterse. Sunteți sigur că doriți să continuați?",
   "Settlement": "Lichidare",
   "SettlementDate": "Data de plată",
   "SettlementDateForSecurity": "Data de plată pentru instrument (pentru derivate și obligațiuni).",

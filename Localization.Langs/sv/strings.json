@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "Inställningskatalog",
   "SettingsFile": "Inställningsfil",
   "SettingsOk": "Alla inställningar är korrekta.",
-  "SettingsWillBeResetContinue": "Inställningarna för {0} kommer att återställas. Denna åtgärd är oåterkallelig. Är du säker på att du vill fortsätta?",
+  "SettingsWillBeResetContinue": "Inställningarna för {0} kommer att återställas. Denna åtgärd är oåterkallelig och all data kommer att raderas. Är du säker på att du vill fortsätta?",
   "Settlement": "Avveckling",
   "SettlementDate": "Avvecklingsdatum",
   "SettlementDateForSecurity": "Avvecklingsdatum för säkerheten (för derivat och obligationer).",

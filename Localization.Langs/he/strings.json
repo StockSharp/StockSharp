@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "תיקיית ההגדרות",
   "SettingsFile": "קובץ הגדרות",
   "SettingsOk": "כל ההגדרות נכונות.",
-  "SettingsWillBeResetContinue": "הגדרות {0} יאופסו. פעולה זו היא בלתי הפיכה. האם אתה בטוח שאתה רוצה להמשיך?",
+  "SettingsWillBeResetContinue": "ההגדרות עבור {0} יאופסו. פעולה זו בלתי הפיכה וכל הנתונים יימחקו. האם אתה בטוח שברצונך להמשיך?",
   "Settlement": "סילוק",
   "SettlementDate": "תאריך סגירה",
   "SettlementDateForSecurity": "תאריך פירעון לנכס (לנגזרים ולאג\"ח).",

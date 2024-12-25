@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "Sozlamalar katalogi",
   "SettingsFile": "Sozlamalar fayli",
   "SettingsOk": "Barcha sozlamalar to'g'ri.",
-  "SettingsWillBeResetContinue": "{0} sozlamalari tiklanadi. Bu amal qaytarib bo'lmaydi. Davom etishni xohlaysizmi?",
+  "SettingsWillBeResetContinue": "{0} uchun sozlamalar qayta tiklanadi. Bu operatsiya qaytarilmas va barcha ma'lumotlar o'chiriladi. Davom etishni xohlaysizmi?",
   "Settlement": "Hisob-kitob",
   "SettlementDate": "To'lov sanasi",
   "SettlementDateForSecurity": "Qimmatli qog'ozlar uchun to'lov sanasi (derivativlar va obligatsiyalar uchun).",

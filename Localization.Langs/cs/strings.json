@@ -3230,7 +3230,7 @@
   "SettingsDirectory": "Adresář nastavení",
   "SettingsFile": "Soubor nastavení",
   "SettingsOk": "Všechno je správně nastaveno.",
-  "SettingsWillBeResetContinue": "Nastavení {0} bude resetováno. Tato operace je nevratná. Jste si jisti, že chcete pokračovat?",
+  "SettingsWillBeResetContinue": "Nastavení pro {0} bude resetováno. Tato operace je nevratná a všechna data budou smazána. Opravdu chcete pokračovat?",
   "Settlement": "Vyrovnání",
   "SettlementDate": "Datum vyrovnání",
   "SettlementDateForSecurity": "Datum zúčtování cenného papíru (pro deriváty a dluhopisy).",
