@@ -59,7 +59,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 1)]
 	[Required(AllowEmptyStrings = false)]
-	public string Code
+	public virtual string Code
 	{
 		get => _code;
 		set
