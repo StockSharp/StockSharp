@@ -9,5 +9,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj" />
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Studio\Studio.WebApi.UI\Studio.WebApi.UI.csproj" />
   </ItemGroup>
 </Project>

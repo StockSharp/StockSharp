@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\common_samples_netwindows.props" />
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Studio\Studio.WebApi.UI\Studio.WebApi.UI.csproj" />
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj" />
   </ItemGroup>
 </Project>

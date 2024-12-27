@@ -20,6 +20,9 @@ using StockSharp.Logging;
 using StockSharp.Messages;
 using StockSharp.Xaml;
 using StockSharp.Xaml.GridControl;
+using StockSharp.Web.Api.Client;
+using StockSharp.Web.Api.Interfaces;
+using StockSharp.Studio.Controls;
 
 public partial class MainPanel
 {
@@ -68,6 +71,7 @@ public partial class MainPanel
 		Connector = CreateConnector?.Invoke(_defaultDataPath) ?? new Connector();
 		logManager.Sources.Add(Connector);
 
+		InitWeb();
 		InitConnector();
 	}
 
@@ -92,6 +96,45 @@ public partial class MainPanel
 		_level1Window.Close();
 
 		Connector.Dispose();
+	}
+
+	/// <summary>
+	/// For connectors depends on StockSharp WebAPI.
+	/// </summary>
+	private void InitWeb()
+	{
+		IApiServiceProvider webApiProvider = new ApiServiceProvider();
+		ConfigManager.RegisterService(webApiProvider);
+
+		ICredentialsProvider credProvider = new DefaultCredentialsProvider();
+		ConfigManager.RegisterService(credProvider);
+
+		ConfigManager.ServiceFallback += (type, name) =>
+		{
+			if (type != typeof(IInstrumentInfoService))
+				return null;
+
+			var autoLogon = true;
+
+			if (!credProvider.TryLoad(out var credentials))
+			{
+				//var clientSvc = WebApiServicesRegistry.GetServiceAsAnonymous<IClientService>();
+				var isOk = this.GuiSync(() => CredentialsWindow.TryShow(this, ref credentials, out autoLogon));
+
+				if (!isOk)
+					return null;
+			}
+
+			var token = credentials.Token.UnSecure();
+
+			if (token.IsEmpty())
+				throw new InvalidOperationException("Token is empty.");
+
+			credentials.Password = default;
+			credProvider.Save(credentials, autoLogon);
+
+			return webApiProvider.GetService<IInstrumentInfoService>(token);
+		};
 	}
 
 	private void InitConnector()
