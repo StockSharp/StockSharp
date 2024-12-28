@@ -3476,7 +3476,7 @@
   "Storage": "Memorizzazione",
   "StorageAlreadyExist": "Lo storage '{0}' esiste già.",
   "StorageFormat": "Formato di memorizzazione",
-  "StorageHasNoDataParams": "L'archivio selezionato non contiene dati di mercato per {0} {1} {2} dal {3} al {4}.",
+  "StorageHasNoDataParams": "L'archivio selezionato non contiene dati di mercato per {0} {1} da {2} a {3}.",
   "StorageParameters": "Parametri di archiviazione",
   "StorageRequiredIncremental": "Lo spazio di archiviazione richiede incrementi di={0} libri d'ordine.",
   "StorageSettings": "Impostazioni di archiviazione.",

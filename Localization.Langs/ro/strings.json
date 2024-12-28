@@ -3476,7 +3476,7 @@
   "Storage": "Depozitare",
   "StorageAlreadyExist": "Depozitul '{0}' există deja.",
   "StorageFormat": "Formatul de stocare",
-  "StorageHasNoDataParams": "Stocarea selectată nu conține date de piață pentru {0} {1} {2} de la {3} la {4}.",
+  "StorageHasNoDataParams": "Stocarea selectată nu conține date de piață pentru {0} {1} din {2} până la {3}.",
   "StorageParameters": "Parametri de stocare",
   "StorageRequiredIncremental": "Stocarea necesită creșteri de={0} cărți de comenzi.",
   "StorageSettings": "Setări de stocare.",

@@ -3476,7 +3476,7 @@
   "Storage": "Przechowywanie",
   "StorageAlreadyExist": "Magazyn '{0}' już istnieje.",
   "StorageFormat": "Format przechowywania",
-  "StorageHasNoDataParams": "Wybrany magazyn nie zawiera danych rynkowych dla {0} {1} {2} od {3} do {4}.",
+  "StorageHasNoDataParams": "Wybrane miejsce przechowywania nie zawiera danych rynkowych dla {0} {1} od {2} do {3}.",
   "StorageParameters": "Parametry przechowywania",
   "StorageRequiredIncremental": "Pamięć wymaga przyrostów={0} ksiąg zamówień.",
   "StorageSettings": "Ustawienia przechowywania.",

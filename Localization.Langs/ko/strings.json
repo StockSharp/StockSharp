@@ -3476,7 +3476,7 @@
   "Storage": "저장소",
   "StorageAlreadyExist": "저장소 '{0}'이(가) 이미 존재합니다.",
   "StorageFormat": "저장 형식",
-  "StorageHasNoDataParams": "선택한 저장소에는 {0} {1} {2} 의 {3} 부터 {4} 까지의 시장 데이터가 없습니다.",
+  "StorageHasNoDataParams": "선택된 저장소에 {0} {1}의 {2}부터 {3}까지의 시장 데이터가 없습니다.",
   "StorageParameters": "저장 매개변수",
   "StorageRequiredIncremental": "저장소는 증분이 필요합니다={0} 주문서。",
   "StorageSettings": "저장 설정.",

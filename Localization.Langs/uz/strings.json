@@ -3476,7 +3476,7 @@
   "Storage": "Saqlash",
   "StorageAlreadyExist": "'{0}' saqlash ombori allaqachon mavjud.",
   "StorageFormat": "Saqlash formati",
-  "StorageHasNoDataParams": "Tanlangan saqlash joyida {0} {1} {2} uchun {3} dan {4} gacha bo'lgan bozor ma'lumotlari yo'q.",
+  "StorageHasNoDataParams": "Tanlangan saqlash joyida {0} {1} uchun {2} dan {3} gacha bo'lgan bozor ma'lumotlari mavjud emas.",
   "StorageParameters": "Ma'lumotlarni saqlash parametrlari",
   "StorageRequiredIncremental": "Saqlash o'sishni talab qiladi={0} buyurtma kitoblari.",
   "StorageSettings": "Saqlash sozlamalari.",

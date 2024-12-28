@@ -3476,7 +3476,7 @@
   "Storage": "אחסון",
   "StorageAlreadyExist": "האחסון '{0}' כבר קיים.",
   "StorageFormat": "פורמט אחסון",
-  "StorageHasNoDataParams": "האחסון הנבחר אינו מכיל נתוני שוק עבור {0} {1} {2} מ-{3} עד {4}.",
+  "StorageHasNoDataParams": "האחסון הנבחר אינו מכיל נתוני שוק עבור {0} {1} מ-{2} עד {3}.",
   "StorageParameters": "פרמטרים של אחסון",
   "StorageRequiredIncremental": "האחסון מחייב הגדלה של={0} ספרי הזמנות.",
   "StorageSettings": "הגדרות אחסון.",

@@ -3476,7 +3476,7 @@
   "Storage": "Складиште",
   "StorageAlreadyExist": "Складиште '{0}' већ постоји.",
   "StorageFormat": "Формат складишта",
-  "StorageHasNoDataParams": "Изабрано складиште не садржи податке са тржишта за {0} {1} {2} од {3} до {4}.",
+  "StorageHasNoDataParams": "Изабрано складиште не садржи тржишне податке за {0} {1} од {2} до {3}.",
   "StorageParameters": "Параметри смештаја",
   "StorageRequiredIncremental": "Складиште захтева инкременталне={0} налоге.",
   "StorageSettings": "Подешавања складиштења.",

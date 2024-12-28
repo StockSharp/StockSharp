@@ -3316,7 +3316,7 @@
   "Storage": "Storage",
   "StorageAlreadyExist": "Storage '{0}' already exist.",
   "StorageFormat": "Storage format",
-  "StorageHasNoDataParams": "Selected storage does not contains market data for {0} {1} {2} from {3} till {4}.",
+  "StorageHasNoDataParams": "Selected storage does not contain market data for {0} {1} from {2} to {3}.",
   "StorageParameters": "Storage parameters",
   "StorageRequiredIncremental": "Storage required incremental={0} book only.",
   "StorageSettings": "Storage settings.",

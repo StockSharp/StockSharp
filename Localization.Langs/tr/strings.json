@@ -3476,7 +3476,7 @@
   "Storage": "Depolama",
   "StorageAlreadyExist": "Depolama '{0}' zaten var.",
   "StorageFormat": "Depolama Formatı",
-  "StorageHasNoDataParams": "Seçilen depolama, {0} {1} {2} için {3} ile {4} arasındaki piyasa verilerini içermiyor.",
+  "StorageHasNoDataParams": "Seçili depolama {0} {1} için {2} ile {3} arasındaki piyasa verilerini içermiyor.",
   "StorageParameters": "Depolama Parametreleri",
   "StorageRequiredIncremental": "Depolama artımlı olarak gerektirir={0} sipariş kitapları.",
   "StorageSettings": "Depolama Ayarları.",

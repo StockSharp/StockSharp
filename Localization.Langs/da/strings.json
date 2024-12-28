@@ -3476,7 +3476,7 @@
   "Storage": "Opbevaring",
   "StorageAlreadyExist": "Lageret '{0}' eksisterer allerede.",
   "StorageFormat": "Lagringsformat",
-  "StorageHasNoDataParams": "Den valgte lagring indeholder ikke markedsdata for {0} {1} {2} fra {3} til {4}.",
+  "StorageHasNoDataParams": "Det valgte lager indeholder ikke markedsdata for {0} {1} fra {2} til {3}.",
   "StorageParameters": "Lagringsparametre",
   "StorageRequiredIncremental": "Lagring kræver inkrementelle={0} ordrebøger.",
   "StorageSettings": "Lagringsindstillinger.",

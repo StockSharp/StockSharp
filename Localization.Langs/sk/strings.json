@@ -3476,7 +3476,7 @@
   "Storage": "Úložisko",
   "StorageAlreadyExist": "Úložisko '{0}' už existuje.",
   "StorageFormat": "Formát úložiska",
-  "StorageHasNoDataParams": "Vybrané úložisko neobsahuje market-dáta pre {0} {1} {2} za obdobie od {3} do {4}.",
+  "StorageHasNoDataParams": "Vybrané úložisko neobsahuje trhové dáta pre {0} {1} od {2} do {3}.",
   "StorageParameters": "Parametre úložiska údajov",
   "StorageRequiredIncremental": "Úložisko vyžaduje inkrementálne={0} trhové stĺpce.",
   "StorageSettings": "Nastavenia úložiska.",

@@ -3476,7 +3476,7 @@
   "Storage": "Uložení",
   "StorageAlreadyExist": "Úložiště '{0}' již existuje.",
   "StorageFormat": "Formát úložiště",
-  "StorageHasNoDataParams": "Vybrané úložiště neobsahuje tržní data pro {0} {1} {2} od {3} do {4}.",
+  "StorageHasNoDataParams": "Vybrané úložiště neobsahuje tržní data pro {0} {1} od {2} do {3}.",
   "StorageParameters": "Parametry úložiště",
   "StorageRequiredIncremental": "Ukládání vyžaduje inkrementální={0} knihy objednávek.",
   "StorageSettings": "Nastavení úložiště.",

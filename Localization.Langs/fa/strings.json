@@ -3476,7 +3476,7 @@
   "Storage": "ذخیره‌سازی",
   "StorageAlreadyExist": "ذخیره‌ساز '{0}' از پیش وجود دارد.",
   "StorageFormat": "فرمت ذخیره‌سازی",
-  "StorageHasNoDataParams": "انبار انتخابی داده‌های بازار برای {0} {1} {2} از {3} تا {4} را ندارد.",
+  "StorageHasNoDataParams": "فضای ذخیره‌سازی انتخاب شده شامل داده‌های بازار برای {0} {1} از {2} تا {3} نیست.",
   "StorageParameters": "پارامترهای ذخیره‌سازی",
   "StorageRequiredIncremental": "ذخیره‌سازی نیازمند افزایش‌هایی است={0} دفتر سفارشات.",
   "StorageSettings": "تنظیمات ذخیره‌سازی.",

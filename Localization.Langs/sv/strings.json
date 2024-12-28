@@ -3476,7 +3476,7 @@
   "Storage": "Lagring",
   "StorageAlreadyExist": "Lagringen '{0}' finns redan.",
   "StorageFormat": "Lagringsformat",
-  "StorageHasNoDataParams": "Det valda lagret innehåller inte marknadsdata för {0} {1} {2} från {3} till {4}.",
+  "StorageHasNoDataParams": "Vald lagring innehåller inga marknadsdata för {0} {1} från {2} till {3}.",
   "StorageParameters": "Lagringsparametrar",
   "StorageRequiredIncremental": "Lagring kräver inkrementella={0} orderböcker.",
   "StorageSettings": "Lagringsinställningar.",

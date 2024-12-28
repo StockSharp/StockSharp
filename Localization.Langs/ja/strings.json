@@ -3476,7 +3476,7 @@
   "Storage": "ストレージ",
   "StorageAlreadyExist": "ストレージ '{0}' は既に存在しています。",
   "StorageFormat": "ストレージ形式",
-  "StorageHasNoDataParams": "選択されたストレージには、{0} {1} {2} の期間 {3} から {4} までの市場データが含まれていません。",
+  "StorageHasNoDataParams": "選択されたストレージには{0} {1}の{2}から{3}までの市場データが含まれていません。",
   "StorageParameters": "ストレージパラメータ",
   "StorageRequiredIncremental": "ストレージにはインクリメンタルな={0}のオーダーブックが必要です。",
   "StorageSettings": "ストレージ設定。",

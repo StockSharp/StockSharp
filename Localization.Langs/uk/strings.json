@@ -3476,7 +3476,7 @@
   "Storage": "Зберігання",
   "StorageAlreadyExist": "Сховище '{0}' вже існує.",
   "StorageFormat": "Формат сховища",
-  "StorageHasNoDataParams": "Обраний сховище не містить ринкових даних для {0} {1} {2} за період з {3} по {4}.",
+  "StorageHasNoDataParams": "Обране сховище не містить ринкових даних для {0} {1} з {2} по {3}.",
   "StorageParameters": "Параметри зберігання",
   "StorageRequiredIncremental": "Зберігання вимагає інкрементальних={0} книг замовлень.",
   "StorageSettings": "Налаштування зберігання.",

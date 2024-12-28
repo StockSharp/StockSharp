@@ -3476,7 +3476,7 @@
   "Storage": "存储",
   "StorageAlreadyExist": "存储 '{0}' 已经存在。",
   "StorageFormat": "存储格式",
-  "StorageHasNoDataParams": "选定的存储库未包含 {0} {1} {2} 在 {3} 到 {4} 期间的市场数据。",
+  "StorageHasNoDataParams": "所选存储不包含 {0} {1} 从 {2} 到 {3} 的市场数据。",
   "StorageParameters": "数据存储参数",
   "StorageRequiredIncremental": "存储需要增量={0}个盘口。",
   "StorageSettings": "存储设置。",

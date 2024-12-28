@@ -3476,7 +3476,7 @@
   "Storage": "Penyimpanan",
   "StorageAlreadyExist": "Penyimpanan '{0}' sudah wujud.",
   "StorageFormat": "Format Penyimpanan",
-  "StorageHasNoDataParams": "Penyimpanan yang dipilih tidak mengandungi data pasaran untuk {0} {1} {2} dari {3} hingga {4}.",
+  "StorageHasNoDataParams": "Storan yang dipilih tidak mengandungi data pasaran untuk {0} {1} dari {2} hingga {3}.",
   "StorageParameters": "Parameter Penyimpanan",
   "StorageRequiredIncremental": "Penyimpanan memerlukan peningkatan={0} buku pesanan.",
   "StorageSettings": "Tetapan Penyimpanan.",

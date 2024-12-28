@@ -3476,7 +3476,7 @@
   "Storage": "Lưu trữ",
   "StorageAlreadyExist": "Kho lưu trữ '{0}' đã tồn tại.",
   "StorageFormat": "Định dạng lưu trữ",
-  "StorageHasNoDataParams": "Kho lưu trữ được chọn không chứa dữ liệu thị trường cho {0} {1} {2} từ {3} đến {4}.",
+  "StorageHasNoDataParams": "Kho lưu trữ đã chọn không chứa dữ liệu thị trường cho {0} {1} từ {2} đến {3}.",
   "StorageParameters": "Tham số lưu trữ",
   "StorageRequiredIncremental": "Lưu trữ yêu cầu tăng dần={0} sổ lệnh.",
   "StorageSettings": "Cài đặt lưu trữ.",

@@ -3476,7 +3476,7 @@
   "Storage": "Emmagatzematge",
   "StorageAlreadyExist": "L'emmagatzematge '{0}' ja existeix.",
   "StorageFormat": "Format d'emmagatzematge",
-  "StorageHasNoDataParams": "L'emmagatzematge seleccionat no conté dades de mercat per {0} {1} {2} per al període des de {3} fins a {4}.",
+  "StorageHasNoDataParams": "L'emmagatzematge seleccionat no conté dades de mercat per a {0} {1} des de {2} fins a {3}.",
   "StorageParameters": "Paràmetres de l'emmagatzematge de dades",
   "StorageRequiredIncremental": "L'emmagatzematge requereix llibres d'ordres incrementals={0}.",
   "StorageSettings": "Configuracions d'emmagatzematge.",

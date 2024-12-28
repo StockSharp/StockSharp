@@ -3476,7 +3476,7 @@
   "Storage": "Panyimpenan",
   "StorageAlreadyExist": "Panyimpenan '{0}' wis ana.",
   "StorageFormat": "Format Panyimpenan",
-  "StorageHasNoDataParams": "Panyimpenan sing dipilih ora ngandhut data pasar kanggo {0} {1} {2} saka {3} nganti {4}.",
+  "StorageHasNoDataParams": "Panyimpenan sing dipilih ora ngandhut data pasar kanggo {0} {1} saka {2} nganti {3}.",
   "StorageParameters": "Parameter Penyimpenan",
   "StorageRequiredIncremental": "Panyimpenan mbutuhake increment={0} buku pesenan.",
   "StorageSettings": "Setelan Panyimpenan.",

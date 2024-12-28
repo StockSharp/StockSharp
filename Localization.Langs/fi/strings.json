@@ -3476,7 +3476,7 @@
   "Storage": "Säilytys",
   "StorageAlreadyExist": "Varasto '{0}' on jo olemassa.",
   "StorageFormat": "Tallennusmuoto",
-  "StorageHasNoDataParams": "Valittu varasto ei sisällä markkinadataa ajalle {0} {1} {2} väliseltä ajalta {3} ja {4}.",
+  "StorageHasNoDataParams": "Valittu tallennustila ei sisällä markkinatietoja instrumentille {0} {1} välillä {2} - {3}.",
   "StorageParameters": "Tallennusparametrit",
   "StorageRequiredIncremental": "Varastointi vaatii inkrementaaliset={0} tilauskirjat.",
   "StorageSettings": "Tallennusasetukset.",

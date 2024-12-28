@@ -3476,7 +3476,7 @@
   "Storage": "ਸਟੋਰੇਜ਼",
   "StorageAlreadyExist": "'{0}' ਸਟੋਰੇਜ ਪਹਿਲਾਂ ਹੀ ਮੌਜੂਦ ਹੈ।",
   "StorageFormat": "ਸਟੋਰੇਜ਼ ਫਾਰਮੈਟ",
-  "StorageHasNoDataParams": "ਚੁਣੇ ਗਏ ਸਟੋਰੇਜ ਵਿੱਚ {0} {1} {2} ਲਈ {3} ਤੋਂ {4} ਤਕ ਦੇ ਮਾਰਕੀਟ ਡਾਟਾ ਨਹੀਂ ਹਨ।",
+  "StorageHasNoDataParams": "ਚੁਣੇ ਗਏ ਸਟੋਰੇਜ ਵਿੱਚ {0} {1} ਲਈ {2} ਤੋਂ {3} ਤੱਕ ਦਾ ਮਾਰਕੀਟ ਡਾਟਾ ਨਹੀਂ ਹੈ।",
   "StorageParameters": "ਡਾਟਾ ਸਟੋਰੇਜ ਪੈਰਾਮੀਟਰ",
   "StorageRequiredIncremental": "ਸਟੋਰੇਜ ਨੂੰ ਵਧੇਰੇ={0} ਆਰਡਰ ਬੁੱਕਸ ਦੀ ਲੋੜ ਹੈ।",
   "StorageSettings": "ਸਟੋਰੇਜ਼ ਸੈਟਿੰਗਜ਼।",

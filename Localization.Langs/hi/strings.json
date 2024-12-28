@@ -3476,7 +3476,7 @@
   "Storage": "भंडारण",
   "StorageAlreadyExist": "'{0}' स्टोरेज पहले से मौजूद है।",
   "StorageFormat": "संग्रहण प्रारूप",
-  "StorageHasNoDataParams": "चयनित स्टोरेज में {0} {1} {2} के लिए {3} से {4} तक के मार्केट डेटा नहीं हैं।",
+  "StorageHasNoDataParams": "चयनित स्टोरेज में {0} {1} के लिए {2} से {3} तक का मार्केट डेटा नहीं है।",
   "StorageParameters": "डेटा संग्रहण परामीतियाँ",
   "StorageRequiredIncremental": "स्टोरेज को वृद्धिशील रूप से{0} ऑर्डर बुक की आवश्यकता है।",
   "StorageSettings": "संग्रहण सेटिंग्स।",

@@ -3476,7 +3476,7 @@
   "Storage": "Stockage",
   "StorageAlreadyExist": "Le stockage '{0}' existe déjà.",
   "StorageFormat": "Format de stockage",
-  "StorageHasNoDataParams": "Le stockage sélectionné ne contient pas les données de marché pour {0} {1} {2} du {3} au {4}.",
+  "StorageHasNoDataParams": "Le stockage sélectionné ne contient pas de données de marché pour {0} {1} de {2} à {3}.",
   "StorageParameters": "Paramètres de stockage",
   "StorageRequiredIncremental": "Le stockage nécessite des incréments de={0} carnets d'ordres.",
   "StorageSettings": "Paramètres de stockage.",

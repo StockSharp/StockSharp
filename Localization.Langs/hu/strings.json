@@ -3476,7 +3476,7 @@
   "Storage": "Tárolás",
   "StorageAlreadyExist": "A(z) '{0}' tároló már létezik.",
   "StorageFormat": "Tárolási formátum",
-  "StorageHasNoDataParams": "A kiválasztott tároló nem tartalmaz piaci adatokat {0} {1} {2} időszakra {3} és {4} között.",
+  "StorageHasNoDataParams": "A kiválasztott tárhely nem tartalmaz piaci adatokat {0} {1} számára {2}-től {3}-ig.",
   "StorageParameters": "Tárolási paraméterek",
   "StorageRequiredIncremental": "A tárhely igényel inkrementális={0} rendelési könyveket.",
   "StorageSettings": "Tárolási beállítások.",

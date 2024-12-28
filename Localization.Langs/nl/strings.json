@@ -3476,7 +3476,7 @@
   "Storage": "Opslag",
   "StorageAlreadyExist": "Opslag '{0}' bestaat al.",
   "StorageFormat": "Opslagformaat",
-  "StorageHasNoDataParams": "De geselecteerde opslag bevat geen marktgegevens voor {0} {1} {2} van {3} tot {4}.",
+  "StorageHasNoDataParams": "De geselecteerde opslag bevat geen marktgegevens voor {0} {1} van {2} tot {3}.",
   "StorageParameters": "Opslagparameters",
   "StorageRequiredIncremental": "Opslag vereist incrementele={0} orderboeken.",
   "StorageSettings": "Opslaginstellingen.",

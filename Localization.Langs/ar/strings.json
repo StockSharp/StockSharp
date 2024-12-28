@@ -3476,7 +3476,7 @@
   "Storage": "تخزين",
   "StorageAlreadyExist": "التخزين '{0}' موجود بالفعل.",
   "StorageFormat": "تنسيق التخزين",
-  "StorageHasNoDataParams": "التخزين المختار لا يحتوي على بيانات السوق لـ {0} {1} {2} في الفترة من {3} إلى {4}.",
+  "StorageHasNoDataParams": "التخزين المحدد لا يحتوي على بيانات السوق لـ {0} {1} من {2} إلى {3}.",
   "StorageParameters": "معايير التخزين",
   "StorageRequiredIncremental": "التخزين يتطلب زيادات={0} من دفاتر الطلبات.",
   "StorageSettings": "إعدادات التخزين.",

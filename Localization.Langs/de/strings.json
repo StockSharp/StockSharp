@@ -3476,7 +3476,7 @@
   "Storage": "Speicher",
   "StorageAlreadyExist": "Speicher '{0}' existiert bereits.",
   "StorageFormat": "Speicherformat",
-  "StorageHasNoDataParams": "Der ausgewählte Speicher enthält keine Marktdaten für {0} {1} {2} vom {3} bis zum {4}.",
+  "StorageHasNoDataParams": "Der ausgewählte Speicher enthält keine Marktdaten für {0} {1} von {2} bis {3}.",
   "StorageParameters": "Speicherparameter",
   "StorageRequiredIncremental": "Speicher erfordert inkrementelle={0} Orderbücher.",
   "StorageSettings": "Speichereinstellungen.",
