@@ -44,5 +44,11 @@ public class TinkoffOrderCondition : OrderCondition, IStopLossOrderCondition, IT
 	decimal? IStopLossOrderCondition.ActivationPrice { get => TriggerPrice; set => TriggerPrice = value; }
 	decimal? ITakeProfitOrderCondition.ActivationPrice { get => TriggerPrice; set => TriggerPrice = value; }
 
-	bool IStopLossOrderCondition.IsTrailing { get => false; set { } }
+	/// <inheritdoc />
+	[DataMember]
+	public bool IsTrailing
+	{
+		get => (bool?)Parameters.TryGetValue(nameof(IsTrailing)) ?? false;
+		set => Parameters[nameof(IsTrailing)] = value;
+	}
 }
