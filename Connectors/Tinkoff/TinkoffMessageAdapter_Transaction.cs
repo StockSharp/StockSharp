@@ -5,10 +5,20 @@ public partial class TinkoffMessageAdapter
 	private readonly SynchronizedDictionary<long, CancellationTokenSource> _ordersCts = [];
 	private readonly SynchronizedDictionary<long, CancellationTokenSource> _pfCts = [];
 	private readonly CachedSynchronizedSet<string> _accountIds = [];
+	private readonly SynchronizedPairSet<long, Guid> _orderUids = [];
 
 	/// <inheritdoc/>
 	public override async ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
 	{
+		var transId = regMsg.TransactionId;
+
+		string getOrderId()
+		{
+			var orderId = Guid.NewGuid();
+			_orderUids.Add(transId, orderId);
+			return orderId.ToString();
+		}
+
 		if (regMsg.OrderType == OrderTypes.Conditional)
 		{
 			if (IsDemo)
@@ -18,7 +28,7 @@ public partial class TinkoffMessageAdapter
 
 			var stopOrder = new PostStopOrderRequest
 			{
-				OrderId = regMsg.TransactionId.To<string>(),
+				OrderId = getOrderId(),
 				AccountId = regMsg.PortfolioName,
 				Direction = regMsg.Side.ToStopNative(),
 				InstrumentId = regMsg.GetInstrumentId(),
@@ -39,7 +49,7 @@ public partial class TinkoffMessageAdapter
 			{
 				HasOrderInfo = true,
 				DataTypeEx = DataType.Transactions,
-				OriginalTransactionId = regMsg.TransactionId,
+				OriginalTransactionId = transId,
 				OrderStringId = response.StopOrderId,
 				OrderState = OrderStates.Active,
 			});
@@ -55,7 +65,7 @@ public partial class TinkoffMessageAdapter
 					AccountId = regMsg.PortfolioName,
 					Direction = regMsg.Side.ToNative(),
 					InstrumentId = regMsg.GetInstrumentId(),
-					OrderId = regMsg.TransactionId.To<string>(),
+					OrderId = getOrderId(),
 					OrderType = regMsg.OrderType.ToNative(),
 					Price = regMsg.Price,
 					Quantity = (long)regMsg.Volume,
@@ -69,7 +79,7 @@ public partial class TinkoffMessageAdapter
 					AccountId = regMsg.PortfolioName,
 					Direction = regMsg.Side.ToNative(),
 					InstrumentId = regMsg.GetInstrumentId(),
-					OrderId = regMsg.TransactionId.To<string>(),
+					OrderId = getOrderId(),
 					OrderType = regMsg.OrderType.ToNative(),
 					Price = regMsg.Price,
 					Quantity = (long)regMsg.Volume,
@@ -81,7 +91,7 @@ public partial class TinkoffMessageAdapter
 			{
 				HasOrderInfo = true,
 				DataTypeEx = DataType.Transactions,
-				OriginalTransactionId = regMsg.TransactionId,
+				OriginalTransactionId = transId,
 				OrderStringId = response.OrderId,
 				OrderState = response.ExecutionReportStatus.ToOrderState(),
 				Error = response.ExecutionReportStatus == OrderExecutionReportStatus.ExecutionReportStatusRejected ? new InvalidOperationException(response.Message) : null,
@@ -195,6 +205,19 @@ public partial class TinkoffMessageAdapter
 			return;
 		}
 
+		bool tryGetTransId(string str, out long transId)
+		{
+			transId = default;
+
+			if (!Guid.TryParse(str, out var requestId))
+				return false;
+
+			if (!_orderUids.TryGetKey(requestId, out transId))
+				return false;
+
+			return true;
+		}
+
 		var accountIds = statusMsg.PortfolioName.IsEmpty() ? await EnsureGetAccounts(cancellationToken) : [statusMsg.PortfolioName];
 
 		foreach (var accountId in accountIds)
@@ -206,8 +229,14 @@ public partial class TinkoffMessageAdapter
 
 			foreach (var order in ordersResponse.Orders)
 			{
-				if (!long.TryParse(order.OrderRequestId, out var transId))
+				if (!Guid.TryParse(order.OrderRequestId, out var requestId))
 					continue;
+
+				if (!_orderUids.TryGetKey(requestId, out var transId))
+				{
+					transId = TransactionIdGenerator.GetNextId();
+					_orderUids.Add(transId, requestId);
+				}
 
 				SendOutMessage(new ExecutionMessage
 				{
@@ -282,7 +311,7 @@ public partial class TinkoffMessageAdapter
 
 			foreach (var op in opResponse.Operations)
 			{
-				if (!long.TryParse(op.ParentOperationId ?? op.Id, out var transId))
+				if (!tryGetTransId(op.ParentOperationId ?? op.Id, out var transId))
 					continue;
 
 				var secId = op.InstrumentUid.FromInstrumentIdToSecId();
@@ -327,7 +356,7 @@ public partial class TinkoffMessageAdapter
 							if (orderState is null)
 								continue;
 
-							if (!long.TryParse(orderState.OrderRequestId, out var transId))
+							if (!tryGetTransId(orderState.OrderRequestId, out var transId))
 								continue;
 
 							SendOutMessage(new ExecutionMessage

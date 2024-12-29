@@ -146,6 +146,8 @@ public partial class TinkoffMessageAdapter
 		_service = default;
 		_accountIds.Clear();
 
+		_orderUids.Clear();
+
 		_historyClient.Dispose();
 		_historyClient = null;
 
