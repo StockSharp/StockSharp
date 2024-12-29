@@ -161,11 +161,21 @@ static class TinkoffExtensions
 			_ => null,
 		};
 
-	public static StopOrderExpirationType ToNative(this TimeInForce? tif, DateTimeOffset? till)
+	public static StopOrderExpirationType ToStopNative(this TimeInForce? tif, DateTimeOffset? till)
 		=> tif switch
 		{
 			null => StopOrderExpirationType.Unspecified,
 			TimeInForce.PutInQueue => till is null ? StopOrderExpirationType.GoodTillCancel : StopOrderExpirationType.GoodTillDate,
+			_ => throw new ArgumentOutOfRangeException(nameof(tif), tif, LocalizedStrings.InvalidValue),
+		};
+
+	public static TimeInForceType ToNative(this TimeInForce? tif, DateTimeOffset? till)
+		=> tif switch
+		{
+			null => TimeInForceType.TimeInForceUnspecified,
+			TimeInForce.PutInQueue => till is null ? TimeInForceType.TimeInForceUnspecified : TimeInForceType.TimeInForceDay,
+			TimeInForce.MatchOrCancel => TimeInForceType.TimeInForceFillOrKill,
+			TimeInForce.CancelBalance => TimeInForceType.TimeInForceFillAndKill,
 			_ => throw new ArgumentOutOfRangeException(nameof(tif), tif, LocalizedStrings.InvalidValue),
 		};
 

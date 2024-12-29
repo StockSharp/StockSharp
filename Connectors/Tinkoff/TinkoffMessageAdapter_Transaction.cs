@@ -16,7 +16,7 @@ public partial class TinkoffMessageAdapter
 
 			var condition = (TinkoffOrderCondition)regMsg.Condition;
 
-			var response = await _service.StopOrders.PostStopOrderAsync(new()
+			var stopOrder = new PostStopOrderRequest
 			{
 				OrderId = regMsg.TransactionId.To<string>(),
 				AccountId = regMsg.PortfolioName,
@@ -25,10 +25,12 @@ public partial class TinkoffMessageAdapter
 				Price = regMsg.Price,
 				Quantity = (long)regMsg.Volume,
 				ExpireDate = regMsg.TillDate?.ToTimestamp(),
-				ExpirationType = regMsg.TimeInForce.ToNative(regMsg.TillDate),
+				ExpirationType = regMsg.TimeInForce.ToStopNative(regMsg.TillDate),
 				StopOrderType = ((ITakeProfitOrderCondition)condition).ActivationPrice is not null ? StopOrderType.TakeProfit : (((IStopLossOrderCondition)condition).ClosePositionPrice is not null ? StopOrderType.StopLimit : StopOrderType.StopLoss),
 				StopPrice = condition.TriggerPrice,
-			}, cancellationToken: cancellationToken);
+			};
+
+			var response = await _service.StopOrders.PostStopOrderAsync(stopOrder, cancellationToken: cancellationToken);
 
 			SendOutMessage(new ExecutionMessage
 			{
@@ -54,6 +56,7 @@ public partial class TinkoffMessageAdapter
 					OrderType = regMsg.OrderType.ToNative(),
 					Price = regMsg.Price,
 					Quantity = (long)regMsg.Volume,
+					TimeInForce = regMsg.TimeInForce.ToNative(regMsg.TillDate),
 				}, cancellationToken: cancellationToken);
 			}
 			else
@@ -67,6 +70,7 @@ public partial class TinkoffMessageAdapter
 					OrderType = regMsg.OrderType.ToNative(),
 					Price = regMsg.Price,
 					Quantity = (long)regMsg.Volume,
+					TimeInForce = regMsg.TimeInForce.ToNative(regMsg.TillDate),
 				}, cancellationToken: cancellationToken);
 			}
 
