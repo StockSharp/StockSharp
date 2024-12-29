@@ -2,9 +2,9 @@ namespace StockSharp.Tinkoff;
 
 public partial class TinkoffMessageAdapter
 {
-	private readonly SynchronizedDictionary<long, CancellationTokenSource> _ordersCts = new();
-	private readonly SynchronizedDictionary<long, CancellationTokenSource> _pfCts = new();
-	private readonly CachedSynchronizedSet<string> _accountIds = new();
+	private readonly SynchronizedDictionary<long, CancellationTokenSource> _ordersCts = [];
+	private readonly SynchronizedDictionary<long, CancellationTokenSource> _pfCts = [];
+	private readonly CachedSynchronizedSet<string> _accountIds = [];
 
 	/// <inheritdoc/>
 	public override async ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)

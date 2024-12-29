@@ -10,7 +10,7 @@ using Google.Protobuf.Collections;
 
 public partial class TinkoffMessageAdapter
 {
-	private readonly SynchronizedPairSet<(DataType dt, string uid), long> _mdTransIds = new();
+	private readonly SynchronizedPairSet<(DataType dt, string uid), long> _mdTransIds = [];
 	private HttpClient _historyClient;
 
 	private void AddTransId(MarketDataMessage mdMsg)
