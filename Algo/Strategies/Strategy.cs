@@ -2963,13 +2963,8 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// Get all securities required for strategy.
 	/// </summary>
 	/// <returns>Securities.</returns>
-	public virtual IEnumerable<Security> GetWorkingSecurities()
-	{
-		var security = Security;
-
-		if (security is not null)
-			yield return security;
-	}
+	public virtual IEnumerable<(Security sec, DataType dt)> GetWorkingSecurities()
+		=> [];
 
 	/// <summary>
 	/// Get all portfolios required for strategy.
