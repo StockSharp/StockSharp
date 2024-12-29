@@ -188,7 +188,7 @@ public partial class TinkoffMessageAdapter
 			return;
 		}
 
-		var accountIds = statusMsg.PortfolioName.IsEmpty() ? await EnsureGetAccounts(cancellationToken) : new[] { statusMsg.PortfolioName };
+		var accountIds = statusMsg.PortfolioName.IsEmpty() ? await EnsureGetAccounts(cancellationToken) : [statusMsg.PortfolioName];
 
 		foreach (var accountId in accountIds)
 		{
@@ -376,7 +376,9 @@ public partial class TinkoffMessageAdapter
 	/// <inheritdoc/>
 	public override async ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
-		SendSubscriptionReply(lookupMsg.TransactionId);
+		var transId = lookupMsg.TransactionId;
+
+		SendSubscriptionReply(transId);
 
 		if (!lookupMsg.IsSubscribe)
 		{
@@ -393,6 +395,7 @@ public partial class TinkoffMessageAdapter
 				SecurityId = SecurityId.Money,
 				PortfolioName = portfolio.AccountId,
 				ServerTime = CurrentTime,
+				OriginalTransactionId = transId,
 			}
 			.TryAdd(PositionChangeTypes.CurrentValue, portfolio.TotalAmountPortfolio?.ToDecimal(), true)
 			.TryAdd(PositionChangeTypes.RealizedPnL, portfolio.ExpectedYield?.ToDecimal(), true)
@@ -406,6 +409,7 @@ public partial class TinkoffMessageAdapter
 					SecurityId = position.InstrumentUid.FromInstrumentIdToSecId(),
 					PortfolioName = portfolio.AccountId,
 					ServerTime = CurrentTime,
+					OriginalTransactionId = transId,
 				}
 				.TryAdd(PositionChangeTypes.CurrentValue, position.Quantity?.ToDecimal(), true)
 				.TryAdd(PositionChangeTypes.AveragePrice, position.AveragePositionPrice?.ToDecimal(), true)
@@ -428,7 +432,7 @@ public partial class TinkoffMessageAdapter
 			SendOutMessage(new PortfolioMessage
 			{
 				PortfolioName = account.Id,
-				OriginalTransactionId = lookupMsg.TransactionId
+				OriginalTransactionId = transId
 			});
 
 			var pfResponse = await (IsDemo
@@ -439,7 +443,7 @@ public partial class TinkoffMessageAdapter
 			SendOutMessage(new PortfolioMessage
 			{
 				PortfolioName = pfResponse.AccountId,
-				OriginalTransactionId = lookupMsg.TransactionId
+				OriginalTransactionId = transId
 			});
 
 			processResponse(pfResponse);
@@ -449,7 +453,7 @@ public partial class TinkoffMessageAdapter
 		{
 			var (cts, pfToken) = cancellationToken.CreateChildToken();
 
-			_pfCts.Add(lookupMsg.TransactionId, cts);
+			_pfCts.Add(transId, cts);
 
 			_ = Task.Run(async () =>
 			{
@@ -466,6 +470,107 @@ public partial class TinkoffMessageAdapter
 						{
 							if (response.Portfolio is PortfolioResponse portfolio)
 								processResponse(portfolio);
+						}
+					}
+					catch (Exception ex)
+					{
+						if (pfToken.IsCancellationRequested)
+							break;
+
+						this.AddErrorLog(ex);
+
+						if (++currError >= 10)
+							break;
+					}
+				}
+			}, pfToken);
+
+			_ = Task.Run(async () =>
+			{
+				var currError = 0;
+
+				while (!cancellationToken.IsCancellationRequested)
+				{
+					try
+					{
+						var posStream = _service.OperationsStream.PositionsStream(new(), cancellationToken: pfToken).ResponseStream;
+						currError = 0;
+
+						await foreach (var response in posStream.ReadAllAsync(pfToken))
+						{
+							if (response.Position is PositionData position)
+							{
+								var time = position.Date.ToDateTime();
+								var account = position.AccountId;
+
+								if (position.Money is not null)
+								{
+									foreach (var money in position.Money)
+									{
+										SendOutMessage(new PositionChangeMessage
+										{
+											SecurityId = SecurityId.Money,
+											PortfolioName = account,
+											ServerTime = time,
+											OriginalTransactionId = transId,
+										}
+										.TryAdd(PositionChangeTypes.CurrentValue, money.AvailableValue?.ToDecimal(), true)
+										.TryAdd(PositionChangeTypes.BlockedValue, money.BlockedValue?.ToDecimal(), true)
+										);
+									}
+								}
+
+								if (position.Securities is not null)
+								{
+									foreach (var sec in position.Securities)
+									{
+										SendOutMessage(new PositionChangeMessage
+										{
+											SecurityId = sec.InstrumentUid.FromInstrumentIdToSecId(),
+											PortfolioName = account,
+											ServerTime = time,
+											OriginalTransactionId = transId,
+										}
+										.TryAdd(PositionChangeTypes.CurrentValue, (decimal)sec.Balance, true)
+										.TryAdd(PositionChangeTypes.BlockedValue, (decimal)sec.Blocked, true)
+										);
+									}
+								}
+
+								if (position.Futures is not null)
+								{
+									foreach (var fut in position.Futures)
+									{
+										SendOutMessage(new PositionChangeMessage
+										{
+											SecurityId = fut.InstrumentUid.FromInstrumentIdToSecId(),
+											PortfolioName = account,
+											ServerTime = time,
+											OriginalTransactionId = transId,
+										}
+										.TryAdd(PositionChangeTypes.CurrentValue, (decimal)fut.Balance, true)
+										.TryAdd(PositionChangeTypes.BlockedValue, (decimal)fut.Blocked, true)
+										);
+									}
+								}
+
+								if (position.Options is not null)
+								{
+									foreach (var opt in position.Options)
+									{
+										SendOutMessage(new PositionChangeMessage
+										{
+											SecurityId = opt.InstrumentUid.FromInstrumentIdToSecId(),
+											PortfolioName = account,
+											ServerTime = time,
+											OriginalTransactionId = transId,
+										}
+										.TryAdd(PositionChangeTypes.CurrentValue, (decimal)opt.Balance, true)
+										.TryAdd(PositionChangeTypes.BlockedValue, (decimal)opt.Blocked, true)
+										);
+									}
+								}
+							}
 						}
 					}
 					catch (Exception ex)
