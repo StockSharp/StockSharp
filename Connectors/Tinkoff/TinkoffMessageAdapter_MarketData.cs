@@ -209,14 +209,14 @@ public partial class TinkoffMessageAdapter
 
 		if (secTypes.IsEmpty())
 		{
-			secTypes.AddRange(new[]
-			{
+			secTypes.AddRange(
+			[
 				SecurityTypes.Stock,
 				//SecurityTypes.Etf,
 				//SecurityTypes.Bond,
 				SecurityTypes.Future,
 				//SecurityTypes.Option,
-			});
+			]);
 		}
 
 		var left = lookupMsg.Count ?? long.MaxValue;
