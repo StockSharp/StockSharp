@@ -216,6 +216,7 @@ public partial class TinkoffMessageAdapter
 				//SecurityTypes.Bond,
 				SecurityTypes.Future,
 				//SecurityTypes.Option,
+				SecurityTypes.Currency,
 			]);
 		}
 
@@ -223,28 +224,24 @@ public partial class TinkoffMessageAdapter
 
 		bool TrySendOut(SecurityMessage secMsg)
 		{
+			cancellationToken.ThrowIfCancellationRequested();
+
 			if (!secMsg.IsMatch(lookupMsg, secTypes))
-				return false;
+				return true;
 
 			SendOutMessage(secMsg);
-			return true;
+			return --left > 0;
 		}
 
 		foreach (var secType in secTypes)
 		{
-			var shares = await instrSvc.SharesAsync(cancellationToken);
-			var bonds = await instrSvc.BondsAsync(cancellationToken);
-			var futures = await instrSvc.FuturesAsync(cancellationToken);
-
 			switch (secType)
 			{
 				case SecurityTypes.Stock:
 				{
 					foreach (var instr in (await instrSvc.SharesAsync(cancellationToken)).Instruments)
 					{
-						cancellationToken.ThrowIfCancellationRequested();
-
-						if (TrySendOut(new SecurityMessage
+						if (!TrySendOut(new()
 						{
 							SecurityId = new()
 							{
@@ -264,8 +261,7 @@ public partial class TinkoffMessageAdapter
 							OriginalTransactionId = lookupMsg.TransactionId,
 						}))
 						{
-							if (--left <= 0)
-								break;
+							break;
 						}
 					}
 
@@ -275,9 +271,7 @@ public partial class TinkoffMessageAdapter
 				{
 					foreach (var instr in (await instrSvc.FuturesAsync(cancellationToken)).Instruments)
 					{
-						cancellationToken.ThrowIfCancellationRequested();
-
-						if (TrySendOut(new SecurityMessage
+						if (!TrySendOut(new SecurityMessage
 						{
 							SecurityId = new()
 							{
@@ -299,8 +293,7 @@ public partial class TinkoffMessageAdapter
 							OriginalTransactionId = lookupMsg.TransactionId,
 						}.TryFillUnderlyingId(instr.BasicAsset)))
 						{
-							if (--left <= 0)
-								break;
+							break;
 						}
 					}
 
@@ -315,9 +308,7 @@ public partial class TinkoffMessageAdapter
 
 					foreach (var instr in (await instrSvc.OptionsByAsync(new() { BasicAssetUid = (string)underlying.Native }, cancellationToken: cancellationToken)).Instruments)
 					{
-						cancellationToken.ThrowIfCancellationRequested();
-
-						if (TrySendOut(new SecurityMessage
+						if (!TrySendOut(new SecurityMessage
 						{
 							SecurityId = new()
 							{
@@ -341,8 +332,7 @@ public partial class TinkoffMessageAdapter
 							OriginalTransactionId = lookupMsg.TransactionId,
 						}.TryFillUnderlyingId(instr.BasicAsset)))
 						{
-							if (--left <= 0)
-								break;
+							break;
 						}
 					}
 
@@ -352,9 +342,7 @@ public partial class TinkoffMessageAdapter
 				{
 					foreach (var instr in (await instrSvc.CurrenciesAsync(new(), cancellationToken: cancellationToken)).Instruments)
 					{
-						cancellationToken.ThrowIfCancellationRequested();
-
-						if (TrySendOut(new SecurityMessage
+						if (!TrySendOut(new()
 						{
 							SecurityId = new()
 							{
@@ -371,8 +359,7 @@ public partial class TinkoffMessageAdapter
 							OriginalTransactionId = lookupMsg.TransactionId,
 						}))
 						{
-							if (--left <= 0)
-								break;
+							break;
 						}
 					}
 
@@ -382,9 +369,7 @@ public partial class TinkoffMessageAdapter
 				{
 					foreach (var instr in (await instrSvc.BondsAsync(cancellationToken)).Instruments)
 					{
-						cancellationToken.ThrowIfCancellationRequested();
-
-						if (TrySendOut(new SecurityMessage
+						if (!TrySendOut(new()
 						{
 							SecurityId = new()
 							{
@@ -406,8 +391,7 @@ public partial class TinkoffMessageAdapter
 							OriginalTransactionId = lookupMsg.TransactionId,
 						}))
 						{
-							if (--left <= 0)
-								break;
+							break;
 						}
 					}
 
@@ -417,9 +401,7 @@ public partial class TinkoffMessageAdapter
 				{
 					foreach (var instr in (await instrSvc.EtfsAsync(cancellationToken: cancellationToken)).Instruments)
 					{
-						cancellationToken.ThrowIfCancellationRequested();
-
-						if (TrySendOut(new SecurityMessage
+						if (!TrySendOut(new()
 						{
 							SecurityId = new()
 							{
@@ -439,8 +421,7 @@ public partial class TinkoffMessageAdapter
 							OriginalTransactionId = lookupMsg.TransactionId,
 						}))
 						{
-							if (--left <= 0)
-								break;
+							break;
 						}
 					}
 
