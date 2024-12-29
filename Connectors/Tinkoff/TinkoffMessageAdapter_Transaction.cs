@@ -499,7 +499,7 @@ public partial class TinkoffMessageAdapter
 				{
 					try
 					{
-						var pfStream = _service.OperationsStream.PortfolioStream(new(), cancellationToken: pfToken).ResponseStream;
+						var pfStream = _service.OperationsStream.PortfolioStream(new() { Accounts = { _accountIds } }, cancellationToken: pfToken).ResponseStream;
 						currError = 0;
 
 						await foreach (var response in pfStream.ReadAllAsync(pfToken))
@@ -529,7 +529,7 @@ public partial class TinkoffMessageAdapter
 				{
 					try
 					{
-						var posStream = _service.OperationsStream.PositionsStream(new(), cancellationToken: pfToken).ResponseStream;
+						var posStream = _service.OperationsStream.PositionsStream(new() { Accounts = { _accountIds } }, cancellationToken: pfToken).ResponseStream;
 						currError = 0;
 
 						await foreach (var response in posStream.ReadAllAsync(pfToken))
