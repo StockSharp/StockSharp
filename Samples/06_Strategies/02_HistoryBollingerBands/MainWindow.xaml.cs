@@ -166,7 +166,7 @@ public partial class MainWindow
 		var data = new ChartDrawData();
 		data.Group(_strategy.CurrentTime)
 			.Add(_pnl, _strategy.PnL)
-			.Add(_unrealizedPnL, _strategy.PnLManager.UnrealizedPnL ?? 0)
+			.Add(_unrealizedPnL, _strategy.PnLManager.UnrealizedPnL)
 			.Add(_commissionCurve, _strategy.Commission ?? 0);
 		EquityCurveChart.Draw(data);
 	}
