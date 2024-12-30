@@ -53,14 +53,12 @@ public partial class MainWindow
 		Board = ExchangeBoard.Micex
 	};
 
-	private readonly PortfolioDataSource _portfolios = new();
+	private readonly PortfolioDataSource _portfolios;
 
 	private readonly IdGenerator _idGenerator = new IncrementalIdGenerator();
 
 	public MainWindow()
 	{
-		ConfigManager.RegisterService(_portfolios);
-
 		InitializeComponent();
 
 		OrdersList.ItemsSource = _orders;
@@ -68,7 +66,8 @@ public partial class MainWindow
 		Loaded += OnLoaded;
 
 		var pf = new Portfolio { Name = "Test portfolio" };
-		_portfolios.Add(pf);
+		_portfolios = new(new CollectionPortfolioProvider([pf]));
+		ConfigManager.RegisterService(_portfolios);
 
 		Chart.OrderSettings.Security = _security;
 		Chart.OrderSettings.Portfolio = pf;

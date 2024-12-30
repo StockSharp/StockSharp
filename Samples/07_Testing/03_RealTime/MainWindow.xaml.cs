@@ -284,7 +284,7 @@ public partial class MainWindow
 
 	private void OrderGrid_OrderRegistering()
 	{
-		var pfDataSource = new PortfolioDataSource();
+		var pfDataSource = new PortfolioDataSource(_emuConnector);
 		pfDataSource.Add(_emuPf);
 
 		foreach (var pf in _realConnector.Portfolios)
@@ -319,7 +319,7 @@ public partial class MainWindow
 
 	private void OrderGrid_OnOrderReRegistering(Order order)
 	{
-		var pfDataSource = new PortfolioDataSource();
+		var pfDataSource = new PortfolioDataSource(_emuConnector);
 		pfDataSource.Add(order.Portfolio);
 
 		var window = new OrderWindow
