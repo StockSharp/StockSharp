@@ -435,7 +435,6 @@ public partial class TinkoffMessageAdapter
 			}
 			.TryAdd(PositionChangeTypes.CurrentValue, portfolio.TotalAmountPortfolio?.ToDecimal(), true)
 			.TryAdd(PositionChangeTypes.RealizedPnL, portfolio.ExpectedYield?.ToDecimal(), true)
-			.TryAdd(PositionChangeTypes.CurrentPrice, portfolio.TotalAmountPortfolio?.ToDecimal(), true)
 			);
 
 			foreach (var position in portfolio.Positions)
@@ -539,22 +538,22 @@ public partial class TinkoffMessageAdapter
 								var time = position.Date.ToDateTime();
 								var account = position.AccountId;
 
-								if (position.Money is not null)
-								{
-									foreach (var money in position.Money)
-									{
-										SendOutMessage(new PositionChangeMessage
-										{
-											SecurityId = SecurityId.Money,
-											PortfolioName = account,
-											ServerTime = time,
-											OriginalTransactionId = transId,
-										}
-										.TryAdd(PositionChangeTypes.CurrentValue, money.AvailableValue?.ToDecimal(), true)
-										.TryAdd(PositionChangeTypes.BlockedValue, money.BlockedValue?.ToDecimal(), true)
-										);
-									}
-								}
+								//if (position.Money is not null)
+								//{
+								//	foreach (var money in position.Money)
+								//	{
+								//		SendOutMessage(new PositionChangeMessage
+								//		{
+								//			SecurityId = SecurityId.Money,
+								//			PortfolioName = account,
+								//			ServerTime = time,
+								//			OriginalTransactionId = transId,
+								//		}
+								//		.TryAdd(PositionChangeTypes.CurrentValue, money.AvailableValue?.ToDecimal(), true)
+								//		.TryAdd(PositionChangeTypes.BlockedValue, money.BlockedValue?.ToDecimal(), true)
+								//		);
+								//	}
+								//}
 
 								if (position.Securities is not null)
 								{
