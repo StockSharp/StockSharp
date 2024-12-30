@@ -96,7 +96,10 @@ public partial class TinkoffMessageAdapter
 				OrderState = response.ExecutionReportStatus.ToOrderState(),
 				Error = response.ExecutionReportStatus == OrderExecutionReportStatus.ExecutionReportStatusRejected ? new InvalidOperationException(response.Message) : null,
 				Commission = response.ExecutedCommission?.ToDecimal(),
-				Balance = response.LotsRequested - response.LotsExecuted,
+				
+				// balance updates in stream
+				//Balance = response.LotsRequested - response.LotsExecuted,
+
 				AveragePrice = response.ExecutedOrderPrice?.ToDecimal(),
 			});
 		}
