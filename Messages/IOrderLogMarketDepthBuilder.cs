@@ -81,9 +81,6 @@ public class OrderLogMarketDepthBuilder : IOrderLogMarketDepthBuilder
 		if (item.OrderPrice == 0)
 			return null;
 
-		_depth.ServerTime = item.ServerTime;
-		_depth.LocalTime = item.LocalTime;
-
 		QuoteChange? changedQuote = null;
 
 		var quotes = item.Side == Sides.Buy ? _bids : _asks;
@@ -183,6 +180,9 @@ public class OrderLogMarketDepthBuilder : IOrderLogMarketDepthBuilder
 
 		if (changedQuote == null)
 			return null;
+
+		_depth.ServerTime = item.ServerTime;
+		_depth.LocalTime = item.LocalTime;
 
 		var increment = new QuoteChangeMessage
 		{
