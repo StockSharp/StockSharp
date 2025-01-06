@@ -299,10 +299,89 @@ public abstract class IndexSecurityBaseProcessor<TBasketSecurity> : BasketSecuri
 				if (quotesMsg.State != null || !ContainsLeg(quotesMsg.SecurityId))
 					yield break;
 
-				foreach (var msg in ProcessMessage(GetDict<QuoteChangeMessage>(message.Type), quotesMsg.SecurityId, quotesMsg, quotes => new QuoteChangeMessage
+				foreach (var msg in ProcessMessage(GetDict<QuoteChangeMessage>(message.Type), quotesMsg.SecurityId, quotesMsg, legQuotes =>
 				{
-					SecurityId = SecurityId,
-					ServerTime = quotesMsg.ServerTime,
+					var allBids = new List<QuoteChange>();
+					var allAsks = new List<QuoteChange>();
+
+					DateTimeOffset? time = null;
+
+					var minBidDepth = int.MaxValue;
+					var minAskDepth = int.MaxValue;
+
+					var legsCount = legQuotes.Length;
+
+					for (var i = 0; i < legsCount; i++)
+					{
+						var legQuote = legQuotes[i];
+
+						time = time is null
+							? legQuote.ServerTime
+							: time.Value.Max(legQuote.ServerTime);
+
+						if (legQuote.Bids.Length < minBidDepth)
+							minBidDepth = legQuote.Bids.Length;
+
+						if (legQuote.Asks.Length < minAskDepth)
+							minAskDepth = legQuote.Asks.Length;
+					}
+
+					if (minBidDepth < int.MaxValue)
+					{
+						for (var level = 0; level < minBidDepth; level++)
+						{
+							var prices = new decimal[legsCount];
+							var volumes = new decimal[legsCount];
+
+							for (var j = 0; j < legsCount; j++)
+							{
+								var b = legQuotes[j].Bids[level];
+								prices[j] = b.Price;
+								volumes[j] = b.Volume;
+							}
+
+							var aggregatedPrice = Calculate(prices, isPrice: true);
+							var aggregatedVolume = Calculate(volumes, isPrice: false);
+
+							allBids.Add(new(aggregatedPrice, aggregatedVolume));
+						}
+					}
+
+					if (minAskDepth < int.MaxValue)
+					{
+						for (var level = 0; level < minAskDepth; level++)
+						{
+							var prices = new decimal[legsCount];
+							var volumes = new decimal[legsCount];
+
+							for (var j = 0; j < legsCount; j++)
+							{
+								var a = legQuotes[j].Asks[level];
+								prices[j] = a.Price;
+								volumes[j] = a.Volume;
+							}
+
+							var aggregatedPrice = Calculate(prices, true);
+							var aggregatedVolume = Calculate(volumes, false);
+
+							allAsks.Add(new(aggregatedPrice, aggregatedVolume));
+						}
+					}
+
+					return new QuoteChangeMessage
+					{
+						SecurityId = SecurityId,
+						ServerTime = time ?? quotesMsg.ServerTime,
+
+						Bids = [.. allBids
+							.GroupBy(q => q.Price)
+							.Select(g => new QuoteChange(g.Key, g.Sum(x => x.Volume)))
+							.OrderByDescending(q => q.Price)],
+						Asks = [.. allAsks
+							.GroupBy(q => q.Price)
+							.Select(g => new QuoteChange(g.Key, g.Sum(x => x.Volume)))
+							.OrderBy(q => q.Price)],
+					};
 				}))
 					yield return msg;
 
