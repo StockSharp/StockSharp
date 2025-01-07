@@ -258,17 +258,17 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 9)]
 	//[Nullable]
-	[GreaterThanZero]
+	[NullOrMoreZero]
 	public decimal? PriceStep
 	{
 		get => _priceStep;
 		set
 		{
-			if(!(value > 0))
-				value = null;
-
 			if (_priceStep == value)
 				return;
+
+			if (value <= 0)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 			_priceStep = value;
 			Notify();
@@ -287,7 +287,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		Description = LocalizedStrings.MinVolStepKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 10)]
-	[GreaterThanZero]
+	[NullOrMoreZero]
 	public decimal? VolumeStep
 	{
 		get => _volumeStep;
@@ -296,7 +296,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 			if (_volumeStep == value)
 				return;
 
-			if (value < 0)
+			if (value <= 0)
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 			_volumeStep = value;
@@ -402,7 +402,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		Description = LocalizedStrings.DecimalsDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 13)]
-	//[ReadOnly(true)]
+	[NullOrNotNegative]
 	public int? Decimals
 	{
 		get => _decimals;
