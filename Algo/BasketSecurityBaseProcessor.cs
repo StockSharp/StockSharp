@@ -368,19 +368,30 @@ public abstract class IndexSecurityBaseProcessor<TBasketSecurity> : BasketSecuri
 						}
 					}
 
+					var bidsArr = allBids
+						.GroupBy(q => q.Price)
+						.Select(g => new QuoteChange(g.Key, g.Sum(x => x.Volume)))
+						.OrderByDescending(q => q.Price)
+						.ToArray();
+
+					var asksArr = allAsks
+						.GroupBy(q => q.Price)
+						.Select(g => new QuoteChange(g.Key, g.Sum(x => x.Volume)))
+						.OrderBy(q => q.Price)
+						.ToArray();
+
+					if (bidsArr.FirstOr()?.Price > asksArr.FirstOr()?.Price)
+					{
+						(asksArr, bidsArr) = (bidsArr, asksArr);
+					}
+
 					return new QuoteChangeMessage
 					{
 						SecurityId = SecurityId,
 						ServerTime = time ?? quotesMsg.ServerTime,
 
-						Bids = [.. allBids
-							.GroupBy(q => q.Price)
-							.Select(g => new QuoteChange(g.Key, g.Sum(x => x.Volume)))
-							.OrderByDescending(q => q.Price)],
-						Asks = [.. allAsks
-							.GroupBy(q => q.Price)
-							.Select(g => new QuoteChange(g.Key, g.Sum(x => x.Volume)))
-							.OrderBy(q => q.Price)],
+						Bids = bidsArr,
+						Asks = asksArr,
 					};
 				}))
 					yield return msg;
