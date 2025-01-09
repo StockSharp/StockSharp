@@ -192,6 +192,16 @@ public static class ServicesRegistry
 	public static ICompiler TryCompiler => ConfigManager.TryGetService<ICompiler>();
 
 	/// <summary>
+	/// <see cref="CompilerProvider"/>.
+	/// </summary>
+	public static CompilerProvider CompilerProvider => ConfigManager.GetService<CompilerProvider>();
+
+	/// <summary>
+	/// <see cref="CompilerProvider"/>.
+	/// </summary>
+	public static CompilerProvider TryCompilerProvider => ConfigManager.TryGetService<CompilerProvider>();
+
+	/// <summary>
 	/// Excel provider.
 	/// </summary>
 	public static IExcelWorkerProvider ExcelProvider => ConfigManager.GetService<IExcelWorkerProvider>();

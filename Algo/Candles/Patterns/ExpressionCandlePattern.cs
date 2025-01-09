@@ -86,7 +86,7 @@ public class CandleExpressionCondition : IPersistable
 		if(Expression.IsEmptyOrWhiteSpace())
 			return;
 
-		if (ServicesRegistry.TryCompiler is null)
+		if (CodeExtensions.TryGetCSharpCompiler() is null)
 			throw new InvalidOperationException(LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler)));
 
 		_formula = Expression.Compile<bool>(_context);
@@ -247,7 +247,7 @@ public class ExpressionCandlePattern : ICandlePattern
 		if(Conditions.All(cf => cf.IsEmpty))
 			throw new InvalidOperationException("all candle formulas are empty");
 
-		if (ServicesRegistry.TryCompiler is null)
+		if (CodeExtensions.TryGetCSharpCompiler() is null)
 			throw new InvalidOperationException(LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler)));
 	}
 

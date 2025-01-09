@@ -83,7 +83,7 @@ static class Program
 		Console.ReadLine();
 
 		//--------------------------------Index--------------------------------------------
-		ConfigManager.RegisterService<ICompiler>(new RoslynCompiler());
+		ConfigManager.RegisterService<ICompiler>(new CSharpCompiler());
 		var basketSecurity = new ExpressionIndexSecurity
 		{
 			Id = "IndexInstr@TQBR",

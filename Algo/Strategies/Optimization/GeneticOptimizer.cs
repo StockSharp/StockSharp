@@ -207,7 +207,7 @@ public class GeneticOptimizer : BaseOptimizer
 		if (formula.IsEmpty())
 			throw new ArgumentNullException(nameof(formula));
 
-		if (ServicesRegistry.TryCompiler is null)
+		if (CodeExtensions.TryGetCSharpCompiler() is null)
 			throw new InvalidOperationException(LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler)));
 
 		var expression = formula.Compile<decimal>(_context);

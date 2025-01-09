@@ -3,6 +3,8 @@ namespace StockSharp.Algo;
 using Ecng.Compilation;
 using Ecng.Compilation.Expressions;
 
+using Nito.AsyncEx;
+
 using StockSharp.Algo.Indicators;
 
 /// <summary>
@@ -1451,7 +1453,17 @@ public static partial class TraderHelper
 	/// <param name="tracker"><see cref="AssemblyLoadContextTracker"/></param>
 	/// <returns>Compiled mathematical formula.</returns>
 	public static ExpressionFormula<decimal> Compile(this string expression, AssemblyLoadContextTracker tracker)
-		=> Compile<decimal>(expression, tracker);
+		=> AsyncContext.Run(() => CompileAsync(expression, tracker, default));
+
+	/// <summary>
+	/// Compile mathematical formula.
+	/// </summary>
+	/// <param name="expression">Text expression.</param>
+	/// <param name="tracker"><see cref="AssemblyLoadContextTracker"/></param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Compiled mathematical formula.</returns>
+	public static Task<ExpressionFormula<decimal>> CompileAsync(this string expression, AssemblyLoadContextTracker tracker, CancellationToken cancellationToken)
+		=> CompileAsync<decimal>(expression, tracker, cancellationToken);
 
 	private static class CacheHolder<TResult>
 	{
@@ -1466,7 +1478,28 @@ public static partial class TraderHelper
 	/// <param name="tracker"><see cref="AssemblyLoadContextTracker"/></param>
 	/// <returns>Compiled mathematical formula.</returns>
 	public static ExpressionFormula<TResult> Compile<TResult>(this string expression, AssemblyLoadContextTracker tracker)
-		=> CacheHolder<TResult>.Cache.SafeAdd(expression, key => ServicesRegistry.Compiler.Compile<TResult>(tracker, key, ServicesRegistry.TryCompilerCache));
+		=> AsyncContext.Run(() => CompileAsync<TResult>(expression, tracker, default));
+
+	/// <summary>
+	/// Compile mathematical formula.
+	/// </summary>
+	/// <typeparam name="TResult">Result type.</typeparam>
+	/// <param name="expression">Text expression.</param>
+	/// <param name="tracker"><see cref="AssemblyLoadContextTracker"/></param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Compiled mathematical formula.</returns>
+	public static async Task<ExpressionFormula<TResult>> CompileAsync<TResult>(this string expression, AssemblyLoadContextTracker tracker, CancellationToken cancellationToken)
+	{
+		var cache = CacheHolder<TResult>.Cache;
+
+		if (!cache.TryGetValue(expression, out var formula))
+		{
+			formula = await CodeExtensions.GetCSharpCompiler().Compile<TResult>(tracker, expression, ServicesRegistry.TryCompilerCache, cancellationToken);
+			cache.TryAdd(expression, formula);
+		}
+
+		return formula;
+	}
 
 	/// <summary>
 	/// Create <see cref="IMessageAdapter"/>.

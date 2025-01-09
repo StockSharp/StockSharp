@@ -100,6 +100,11 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		}
 	}
 
+	/// <summary>
+	/// Code language.
+	/// </summary>
+	public CompilationLanguages Language { get; set; } = CompilationLanguages.CSharp;
+
 	private readonly CachedSynchronizedSet<AssemblyReference> _assemblyReferences = new(CodeExtensions.DefaultReferences);
 
 	/// <summary>
@@ -214,9 +219,9 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 
 		var cache = ServicesRegistry.TryCompilerCache;
 
-		if (cache?.TryGet(sources, refs.Select(r => r.name), out asm) != true)
+		if (cache?.TryGet(Language, sources, refs.Select(r => r.name), out asm) != true)
 		{
-			var result = ServicesRegistry.Compiler.Compile("Strategy", sources, refs, cancellationToken);
+			var result = await Language.GetCompiler().Compile("Strategy", sources, refs, cancellationToken);
 
 			if (result.HasErrors())
 				return result;
@@ -225,7 +230,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 
 			try
 			{
-				cache?.Add(sources, refs.Select(r => r.name), asm = result.Assembly);
+				cache?.Add(Language, sources, refs.Select(r => r.name), asm = result.Assembly);
 			}
 			catch (Exception ex)
 			{
@@ -260,6 +265,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	{
 		Id = storage.GetValue(nameof(Id), Id);
 		Name = storage.GetValue(nameof(Name), Name);
+		Language = storage.GetValue(nameof(Language), Language);
 		Text = storage.GetValue(nameof(Text), storage.GetValue<string>("SourceCode"))?.Replace("ChartIndicatorDrawStyles", "DrawStyles");
 		ExtraSources = storage.GetValue(nameof(ExtraSources), ExtraSources);
 
@@ -289,6 +295,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		storage
 			.Set(nameof(Id), Id)
 			.Set(nameof(Name), Name)
+			.Set(nameof(Language), Language)
 			.Set(nameof(ExtraSources), ExtraSources)
 			.Set(nameof(Text), Text)
 			.Set(nameof(AssemblyReferences), _assemblyReferences.Cache.Select(r => r.Save()).ToArray())

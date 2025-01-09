@@ -43,7 +43,7 @@ public class ExpressionIndexSecurity : IndexSecurity
 				//throw new ArgumentNullException(nameof(value));
 			}
 
-			if (ServicesRegistry.TryCompiler is not null)
+			if (CodeExtensions.TryGetCSharpCompiler() is not null)
 			{
 				Formula = value.Compile(_context);
 

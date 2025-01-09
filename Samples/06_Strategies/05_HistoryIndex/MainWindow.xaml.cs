@@ -39,7 +39,7 @@ public partial class MainWindow
 	public MainWindow()
 	{
 		InitializeComponent();
-		ConfigManager.RegisterService<ICompiler>(new RoslynCompiler());
+		ConfigManager.RegisterService<ICompiler>(new CSharpCompiler());
 		_logManager = new LogManager();
 		_logManager.Listeners.Add(new FileLogListener("log.txt"));
 		_logManager.Listeners.Add(new GuiLogListener(Monitor));

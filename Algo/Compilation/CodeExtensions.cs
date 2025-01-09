@@ -106,4 +106,53 @@ public static class CodeExtensions
 	/// <param name="asmFile">Assembly path.</param>
 	public static void AddAsmRef(this CodeInfo ci, string asmFile)
 		=> ci.CheckOnNull(nameof(ci)).AssemblyReferences.Add(new() { FileName = asmFile });
+
+	/// <summary>
+	/// Get C# compiler.
+	/// </summary>
+	/// <returns><see cref="ICompiler"/></returns>
+	public static ICompiler GetCSharpCompiler()
+		=> TryGetCSharpCompiler() ?? throw new InvalidOperationException($"No compiler for {CompilationLanguages.CSharp}.");
+
+	/// <summary>
+	/// Try get C# compiler.
+	/// </summary>
+	/// <returns><see cref="ICompiler"/></returns>
+	public static ICompiler TryGetCSharpCompiler()
+		=> CompilationLanguages.CSharp.TryGetCompiler();
+
+	/// <summary>
+	/// Try get compiler for the specified language.
+	/// </summary>
+	/// <param name="language"><see cref="CompilationLanguages"/></param>
+	/// <returns><see cref="ICompiler"/></returns>
+	public static ICompiler GetCompiler(this CompilationLanguages language)
+		=> TryGetCompiler(language) ?? throw new InvalidOperationException($"No compiler for {language}.");
+
+	/// <summary>
+	/// Try get compiler for the specified language.
+	/// </summary>
+	/// <param name="language"><see cref="CompilationLanguages"/></param>
+	/// <returns><see cref="ICompiler"/></returns>
+	public static ICompiler TryGetCompiler(this CompilationLanguages language)
+	{
+		var provider = ServicesRegistry.TryCompilerProvider;
+
+		ICompiler compiler;
+
+		if (provider is not null)
+		{
+			if (!provider.TryGetValue(language, out compiler))
+				return null;
+		}
+		else
+		{
+			compiler = ServicesRegistry.TryCompiler;
+
+			if (compiler?.Language != language)
+				return null;
+		}
+
+		return compiler;
+	}
 }

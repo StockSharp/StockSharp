@@ -82,7 +82,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 	{
 		MessageBoxBuilder.DefaultHandler = new DevExpMessageBoxHandler();
 
-		ConfigManager.RegisterService<ICompiler>(new RoslynCompiler());
+		ConfigManager.RegisterService<ICompiler>(new CSharpCompiler());
 
 		try
 		{

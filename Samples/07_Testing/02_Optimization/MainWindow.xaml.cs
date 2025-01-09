@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using System.Collections;
 using System.Collections.Generic;
 
 using Ecng.Xaml;
@@ -38,7 +37,7 @@ public partial class MainWindow
 	{
 		InitializeComponent();
 
-		ConfigManager.RegisterService<ICompiler>(new RoslynCompiler());
+		ConfigManager.RegisterService<ICompiler>(new CSharpCompiler());
 		HistoryPath.Folder = Paths.HistoryDataPath;
 		GeneticSettings.SelectedObject = new GeneticSettings();
 	}
