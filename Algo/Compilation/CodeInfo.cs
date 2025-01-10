@@ -5,8 +5,6 @@ using Ecng.Reflection;
 
 using Nito.AsyncEx;
 
-using StockSharp.Configuration;
-
 /// <summary>
 /// Code info.
 /// </summary>
@@ -102,10 +100,25 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		}
 	}
 
+	private string _language = FileExts.CSharp;
+
 	/// <summary>
 	/// Code language.
 	/// </summary>
-	public string Language { get; set; } = FileExts.CSharp;
+	public string Language
+	{
+		get => _language;
+		set
+		{
+			if (_language.EqualsIgnoreCase(value))
+				return;
+
+			_language = value.ThrowIfEmpty(nameof(value));
+
+			if (value.EqualsIgnoreCase(FileExts.FSharp))
+				_assemblyReferences.AddRange(CodeExtensions.FSharpReferences);
+		}
+	}
 
 	private readonly CachedSynchronizedSet<AssemblyReference> _assemblyReferences = new(CodeExtensions.DefaultReferences);
 
@@ -267,7 +280,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	{
 		Id = storage.GetValue(nameof(Id), Id);
 		Name = storage.GetValue(nameof(Name), Name);
-		Language = storage.GetValue(nameof(Language), Language);
+		Language = storage.GetValue(nameof(Language), Language).ReplaceIgnoreCase("csharp", FileExts.CSharp);
 		Text = storage.GetValue(nameof(Text), storage.GetValue<string>("SourceCode"))?.Replace("ChartIndicatorDrawStyles", "DrawStyles");
 		ExtraSources = storage.GetValue(nameof(ExtraSources), ExtraSources);
 

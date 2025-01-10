@@ -56,9 +56,23 @@ public static class CodeExtensions
 	/// Default references.
 	/// </summary>
 	public static IEnumerable<AssemblyReference> DefaultReferences
-		=>	_defaultReferences
-			.Select(r => new AssemblyReference { FileName = $"{r}.dll" })
-			.ToArray();
+		=> _defaultReferences.Select(r => new AssemblyReference { FileName = $"{r}.dll" });
+
+	private static readonly IEnumerable<string> _fsharpReferences =
+	[
+		"FSharp.Core",
+		"System.Runtime.Numerics",
+		"System.Numerics",
+		"System.Net.Requests",
+		"System.Net.WebClient",
+		"System.Private.Uri",
+	];
+
+	/// <summary>
+	/// F# references.
+	/// </summary>
+	public static IEnumerable<AssemblyReference> FSharpReferences
+		=> _fsharpReferences.Select(r => new AssemblyReference { FileName = $"{r}.dll" });
 
 	private static readonly CachedSynchronizedDictionary<string, ICodeReference> _projectReferences = new(StringComparer.InvariantCultureIgnoreCase);
 
