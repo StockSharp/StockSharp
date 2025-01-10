@@ -533,6 +533,7 @@
   "ChannelWidthDesc": "ความกว้างของช่องของ Bollinger Bands ค่าเริ่มต้นคือ 2",
   "ChargeFee": "ค่าธรรมเนียมการโอน",
   "Chart": "แผนภูมิ",
+  "Chart3D": "แผนภูมิ 3 มิติ",
   "ChartArea": "พื้นที่แผนภูมิ",
   "ChartAreaName": "ชื่อพื้นที่แผนภูมิ。",
   "ChartElements": "ส่วนประกอบของแผนภูมิ",

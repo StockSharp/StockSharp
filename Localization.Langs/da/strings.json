@@ -533,6 +533,7 @@
   "ChannelWidthDesc": "Kanalbredde for Bollinger Bands. Standardværdien er 2.",
   "ChargeFee": "Overførselsgebyr",
   "Chart": "Diagram",
+  "Chart3D": "3D Diagram",
   "ChartArea": "Diagramområde",
   "ChartAreaName": "Navn på diagramområde.",
   "ChartElements": "Diagram-elementer",

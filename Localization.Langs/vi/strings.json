@@ -533,6 +533,7 @@
   "ChannelWidthDesc": "Chiều rộng kênh của Bollinger Bands. Giá trị mặc định là 2.",
   "ChargeFee": "Phí chuyển khoản",
   "Chart": "Biểu đồ",
+  "Chart3D": "Biểu đồ 3D",
   "ChartArea": "Khu vực biểu đồ",
   "ChartAreaName": "Tên khu vực biểu đồ.",
   "ChartElements": "Các phần tử biểu đồ",

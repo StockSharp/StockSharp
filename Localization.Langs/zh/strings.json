@@ -533,6 +533,7 @@
   "ChannelWidthDesc": "布林带通道宽度。默认值为2。",
   "ChargeFee": "转账费",
   "Chart": "图表",
+  "Chart3D": "3D图表",
   "ChartArea": "图表区域",
   "ChartAreaName": "图表区域名称。",
   "ChartElements": "图表元素",

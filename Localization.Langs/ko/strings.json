@@ -533,6 +533,7 @@
   "ChannelWidthDesc": "볼린저 밴드의 채널 폭. 기본값은 2입니다.",
   "ChargeFee": "이체 수수료",
   "Chart": "차트",
+  "Chart3D": "3D 차트",
   "ChartArea": "차트 영역",
   "ChartAreaName": "차트 영역 이름.",
   "ChartElements": "차트 요소들",

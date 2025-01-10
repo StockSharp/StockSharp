@@ -533,6 +533,7 @@
   "ChannelWidthDesc": "ボリンジャーバンドのチャネル幅。デフォルト値は2です。",
   "ChargeFee": "振込手数料",
   "Chart": "チャート",
+  "Chart3D": "3Dチャート",
   "ChartArea": "チャートエリア",
   "ChartAreaName": "チャートエリアの名前。",
   "ChartElements": "チャートの要素",

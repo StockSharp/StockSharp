@@ -507,6 +507,7 @@
   "ChannelWidthDesc": "Bollinger Bands channel width. Default value equal to 2.",
   "ChargeFee": "Charge fee",
   "Chart": "Chart",
+  "Chart3D": "Chart 3D",
   "ChartArea": "Chart area",
   "ChartAreaName": "Chart area name.",
   "ChartElements": "Chart elements",

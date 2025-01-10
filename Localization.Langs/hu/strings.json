@@ -533,6 +533,7 @@
   "ChannelWidthDesc": "A Bollinger-szalagok csatorna szélessége. Az alapértelmezett érték 2.",
   "ChargeFee": "Átutalási díj",
   "Chart": "Diagram",
+  "Chart3D": "3D Grafikon",
   "ChartArea": "Diagram terület",
   "ChartAreaName": "A diagram területének neve.",
   "ChartElements": "A grafikon elemei",

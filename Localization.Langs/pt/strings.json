@@ -533,6 +533,7 @@
   "ChannelWidthDesc": "Largura do canal das Bandas de Bollinger. O valor padrão é 2.",
   "ChargeFee": "Taxa de transferência",
   "Chart": "Gráfico",
+  "Chart3D": "Gráfico 3D",
   "ChartArea": "Área do gráfico",
   "ChartAreaName": "Nome da área do gráfico.",
   "ChartElements": "Elementos do gráfico",

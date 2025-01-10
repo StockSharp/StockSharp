@@ -533,6 +533,7 @@
   "ChannelWidthDesc": "Kanalbreite der Bollinger-Bänder. Der Standardwert ist 2.",
   "ChargeFee": "Überweisungsgebühr",
   "Chart": "Diagramm",
+  "Chart3D": "3D-Diagramm",
   "ChartArea": "Diagrammbereich",
   "ChartAreaName": "Name des Diagrammbereichs.",
   "ChartElements": "Diagrammelemente",
