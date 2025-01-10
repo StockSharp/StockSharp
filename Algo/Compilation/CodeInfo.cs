@@ -105,7 +105,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	/// <summary>
 	/// Code language.
 	/// </summary>
-	public string Language { get; set; } = Paths.CsEx;
+	public string Language { get; set; } = FileExts.CSharp;
 
 	private readonly CachedSynchronizedSet<AssemblyReference> _assemblyReferences = new(CodeExtensions.DefaultReferences);
 

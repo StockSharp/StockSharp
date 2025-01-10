@@ -472,27 +472,7 @@ public static class Paths
 	/// <summary>
 	/// Default extension for settings file.
 	/// </summary>
-	public const string DefaultSettingsExt = JsonEx;
-
-	/// <summary>
-	/// Backup extension for settings file.
-	/// </summary>
-	public const string BackupExt = ".bak";
-
-	/// <summary>
-	/// CS file extension.
-	/// </summary>
-	public const string CsEx = ".cs";
-
-	/// <summary>
-	/// Assembly file extension.
-	/// </summary>
-	public const string DllEx = ".dll";
-
-	/// <summary>
-	/// JSON file extension.
-	/// </summary>
-	public const string JsonEx = ".json";
+	public const string DefaultSettingsExt = FileExts.Json;
 
 	/// <summary>
 	/// Returns an files with <see cref="DefaultSettingsExt"/> extension.
@@ -504,15 +484,15 @@ public static class Paths
 		=> Directory.EnumerateFiles(path, $"{filter}{DefaultSettingsExt}");
 
 	/// <summary>
-	/// Make the specified <paramref name="filePath"/> with <see cref="BackupExt"/> extension.
+	/// Make the specified <paramref name="filePath"/> with <see cref="FileExts.Backup"/> extension.
 	/// </summary>
 	/// <param name="filePath">File path.</param>
 	/// <returns>File path.</returns>
 	public static string MakeBackup(this string filePath)
-		=> $"{filePath}{BackupExt}";
+		=> $"{filePath}{FileExts.Backup}";
 
 	/// <summary>
-	/// Rename the specified file with <see cref="BackupExt"/> extension.
+	/// Rename the specified file with <see cref="FileExts.Backup"/> extension.
 	/// </summary>
 	/// <param name="filePath">File path.</param>
 	/// <param name="backupFilePath">Backup file path.</param>

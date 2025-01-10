@@ -4,8 +4,6 @@ using Ecng.Common;
 using Ecng.Collections;
 using Ecng.Compilation;
 
-using StockSharp.Configuration;
-
 /// <summary>
 /// Extension class.
 /// </summary>
@@ -116,14 +114,14 @@ public static class CodeExtensions
 	/// </summary>
 	/// <returns><see cref="ICompiler"/></returns>
 	public static ICompiler GetCSharpCompiler()
-		=> TryGetCSharpCompiler() ?? throw new InvalidOperationException($"No compiler for {Paths.CsEx}.");
+		=> TryGetCSharpCompiler() ?? throw new InvalidOperationException($"No compiler for {FileExts.CSharp}.");
 
 	/// <summary>
 	/// Try get C# compiler.
 	/// </summary>
 	/// <returns><see cref="ICompiler"/></returns>
 	public static ICompiler TryGetCSharpCompiler()
-		=> Paths.CsEx.TryGetCompiler();
+		=> FileExts.CSharp.TryGetCompiler();
 
 	/// <summary>
 	/// Try get compiler for the specified file extension.
@@ -172,6 +170,6 @@ public static class CodeExtensions
 		if (provider is not null)
 			return provider.ContainsKey(fileExt);
 		else
-			return fileExt.EqualsIgnoreCase(Paths.CsEx);
+			return fileExt.EqualsIgnoreCase(FileExts.CSharp);
 	}
 }
