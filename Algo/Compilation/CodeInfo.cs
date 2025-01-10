@@ -5,6 +5,8 @@ using Ecng.Reflection;
 
 using Nito.AsyncEx;
 
+using StockSharp.Configuration;
+
 /// <summary>
 /// Code info.
 /// </summary>
@@ -103,7 +105,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	/// <summary>
 	/// Code language.
 	/// </summary>
-	public CompilationLanguages Language { get; set; } = CompilationLanguages.CSharp;
+	public string Language { get; set; } = Paths.CsEx;
 
 	private readonly CachedSynchronizedSet<AssemblyReference> _assemblyReferences = new(CodeExtensions.DefaultReferences);
 

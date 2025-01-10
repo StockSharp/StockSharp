@@ -1,6 +1,10 @@
 namespace StockSharp.Algo.Compilation;
 
+using Ecng.Common;
+using Ecng.Collections;
 using Ecng.Compilation;
+
+using StockSharp.Configuration;
 
 /// <summary>
 /// Extension class.
@@ -112,29 +116,29 @@ public static class CodeExtensions
 	/// </summary>
 	/// <returns><see cref="ICompiler"/></returns>
 	public static ICompiler GetCSharpCompiler()
-		=> TryGetCSharpCompiler() ?? throw new InvalidOperationException($"No compiler for {CompilationLanguages.CSharp}.");
+		=> TryGetCSharpCompiler() ?? throw new InvalidOperationException($"No compiler for {Paths.CsEx}.");
 
 	/// <summary>
 	/// Try get C# compiler.
 	/// </summary>
 	/// <returns><see cref="ICompiler"/></returns>
 	public static ICompiler TryGetCSharpCompiler()
-		=> CompilationLanguages.CSharp.TryGetCompiler();
+		=> Paths.CsEx.TryGetCompiler();
+
+	/// <summary>
+	/// Try get compiler for the specified file extension.
+	/// </summary>
+	/// <param name="fileExt">File extension.</param>
+	/// <returns><see cref="ICompiler"/></returns>
+	public static ICompiler GetCompiler(this string fileExt)
+		=> TryGetCompiler(fileExt) ?? throw new InvalidOperationException($"No compiler for {fileExt}.");
 
 	/// <summary>
 	/// Try get compiler for the specified language.
 	/// </summary>
-	/// <param name="language"><see cref="CompilationLanguages"/></param>
+	/// <param name="fileExt">File extension.</param>
 	/// <returns><see cref="ICompiler"/></returns>
-	public static ICompiler GetCompiler(this CompilationLanguages language)
-		=> TryGetCompiler(language) ?? throw new InvalidOperationException($"No compiler for {language}.");
-
-	/// <summary>
-	/// Try get compiler for the specified language.
-	/// </summary>
-	/// <param name="language"><see cref="CompilationLanguages"/></param>
-	/// <returns><see cref="ICompiler"/></returns>
-	public static ICompiler TryGetCompiler(this CompilationLanguages language)
+	public static ICompiler TryGetCompiler(this string fileExt)
 	{
 		var provider = ServicesRegistry.TryCompilerProvider;
 
@@ -142,17 +146,32 @@ public static class CodeExtensions
 
 		if (provider is not null)
 		{
-			if (!provider.TryGetValue(language, out compiler))
+			if (!provider.TryGetValue(fileExt, out compiler))
 				return null;
 		}
 		else
 		{
 			compiler = ServicesRegistry.TryCompiler;
 
-			if (compiler?.Language != language)
+			if (compiler?.Extension.EqualsIgnoreCase(fileExt) != true)
 				return null;
 		}
 
 		return compiler;
+	}
+
+	/// <summary>
+	/// Determine whether the specified file extension is a code file.
+	/// </summary>
+	/// <param name="fileExt">File extension.</param>
+	/// <returns>Check result.</returns>
+	public static bool IsCodeExtension(this string fileExt)
+	{
+		var provider = ServicesRegistry.TryCompilerProvider;
+
+		if (provider is not null)
+			return provider.ContainsKey(fileExt);
+		else
+			return fileExt.EqualsIgnoreCase(Paths.CsEx);
 	}
 }
