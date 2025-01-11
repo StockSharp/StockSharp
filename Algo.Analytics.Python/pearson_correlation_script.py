@@ -1,5 +1,4 @@
 import clr
-import numpy as np  # Assuming use of NumSharp as a NumPy substitute
 
 # Add .NET references
 clr.AddReference("StockSharp.Algo.Analytics")

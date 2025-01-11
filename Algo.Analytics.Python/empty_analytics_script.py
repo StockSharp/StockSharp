@@ -1,5 +1,8 @@
 import clr
 
+# Add .NET references
+clr.AddReference("StockSharp.Algo.Analytics")
+
 from StockSharp.Algo.Analytics import IAnalyticsScript
 
 # The empty analytic strategy.

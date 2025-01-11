@@ -1,5 +1,8 @@
 import clr
 
+# Add .NET references
+clr.AddReference("StockSharp.Algo.Analytics")
+
 from StockSharp.Algo.Analytics import IAnalyticsScript
 
 # The analytic script, normalize securities close prices and shows on same chart.

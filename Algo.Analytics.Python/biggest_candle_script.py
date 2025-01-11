@@ -1,5 +1,8 @@
 import clr
 
+# Add .NET references
+clr.AddReference("StockSharp.Algo.Analytics")
+
 from StockSharp.Algo.Analytics import IAnalyticsScript
 
 # The analytic script, shows biggest candle (by volume and by length) for specified securities.

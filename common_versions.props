@@ -25,6 +25,8 @@
     <InterprocessVer>2.0.0-alpha176</InterprocessVer>
     <SharpPcapVer>6.*</SharpPcapVer>
     <GoogleProtobufVer>3.*</GoogleProtobufVer>
+    <PandasVer>0.6.*</PandasVer>
+    <NumpyVer>0.9.*</NumpyVer>
 
     <MicrosoftCodeAnalysisVer>4.12.0</MicrosoftCodeAnalysisVer>
     <MicrosoftCodeAnalysisAnalyzersVer>3.3.4</MicrosoftCodeAnalysisAnalyzersVer>
