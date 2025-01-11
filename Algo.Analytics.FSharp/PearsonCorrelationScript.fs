@@ -42,30 +42,23 @@ type PearsonCorrelationScript() =
                 Task.CompletedTask
             else
                 // A list of arrays, each array containing double-precision close prices for a single security
-                let closes = List<double[]>()
-
-                // Load closing prices for each security
-                for security in securities do
-                    // Stop if the user cancels the script
-                    if cancellationToken.IsCancellationRequested then
-                        ()
-                    else
-                        // Get candle storage
-                        let candleStorage = storage.GetTimeFrameCandleMessageStorage(security, timeFrame, drive, format)
-
-                        // Convert close prices to double
-                        let prices =
-                            candleStorage
-                                .Load(fromDate, toDate)
-                                .Select(fun c -> float c.ClosePrice)
-                                .ToArray()
-
-                        if prices.Length = 0 then
-                            logs.AddWarningLog("No data for {0}", security)
-                            // Возвращаем пустую задачу, как в исходном коде (при желании можно было бы продолжить без прерывания)
-                            Task.CompletedTask |> ignore
+                let closes =
+                    securities
+                    |> Seq.choose (fun security ->
+                        if cancellationToken.IsCancellationRequested then None
                         else
-                            closes.Add(prices)
+                            let candleStorage = storage.GetTimeFrameCandleMessageStorage(security, timeFrame, drive, format)
+                            let prices = 
+                                candleStorage.Load(fromDate, toDate) 
+                                |> Seq.map (fun c -> float c.ClosePrice)
+                                |> Seq.toArray
+                            if prices.Length = 0 then
+                                logs.AddWarningLog("No data for {0}", security)
+                                None
+                            else
+                                Some prices
+                    )
+                    |> Seq.toList
 
                 // Все массивы должны быть одинаковой длины. Если какие-то длиннее,
                 // обрезаем их до минимальной длины (minLen).
@@ -74,15 +67,14 @@ type PearsonCorrelationScript() =
                     |> Seq.map (fun arr -> arr.Length)
                     |> Seq.min
 
-                for i in 0..(closes.Count - 1) do
-                    let arr = closes.[i]
-                    if arr.Length > minLen then
-                        // Возьмём элементы с 0 по (minLen - 1)
-                        closes.[i] <- arr.[0..(minLen - 1)]
+                let truncatedCloses =
+                    closes
+                    |> List.map (fun arr ->
+                      if arr.Length > minLen then arr.[0..(minLen - 1)] else arr)
 
                 // Вычисляем матрицу корреляции
                 // Correlation.PearsonMatrix принимает последовательность массивов и возвращает матрицу
-                let matrix = Correlation.PearsonMatrix(closes :> seq<_>)
+                let matrix = Correlation.PearsonMatrix(truncatedCloses :> seq<_>)
 
                 // Получаем названия инструментов для осей heatmap
                 let ids =

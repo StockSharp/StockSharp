@@ -2,20 +2,9 @@ import clr
 import numpy as np  # Assuming use of NumSharp as a NumPy substitute
 
 # Add .NET references
-clr.AddReference("System")
-clr.AddReference("System.Core")
-clr.AddReference("System.Threading")
-clr.AddReference("System.Threading.Tasks")
-clr.AddReference("StockSharp.Algo")
 clr.AddReference("StockSharp.Algo.Analytics")
-clr.AddReference("StockSharp.BusinessEntities")
-clr.AddReference("StockSharp.Storages")
-clr.AddReference("StockSharp.Logging")
-clr.AddReference("StockSharp.Messages")
-clr.AddReference("NumSharp")  # Adding reference to the NumSharp library
+clr.AddReference("NumpyDotNet")
 
-from System import DateTime, TimeSpan
-from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
 
 # The analytic script, calculating Pearson correlation by specified securities.
@@ -33,7 +22,7 @@ class pearson_correlation_script(IAnalyticsScript):
         time_frame,
         cancellation_token
     ):
-        if not securities
+        if not securities:
             logs.AddWarningLog("No instruments.")
             return Task.CompletedTask
 

@@ -1,25 +1,11 @@
 import clr
 
-# Add .NET references
-clr.AddReference("System")
-clr.AddReference("System.Core")
-clr.AddReference("System.Threading")
-clr.AddReference("System.Threading.Tasks")
-clr.AddReference("StockSharp.Algo")
-clr.AddReference("StockSharp.Algo.Analytics")
-clr.AddReference("StockSharp.BusinessEntities")
-clr.AddReference("StockSharp.Storages")
-clr.AddReference("StockSharp.Logging")
-clr.AddReference("StockSharp.Messages")
-
-from System import DateTime, TimeSpan
-from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
 
 # The analytic script, normalize securities close prices and shows on same chart.
 class normalize_price_script(IAnalyticsScript):
     def Run(self, logs, panel, securities, from_date, to_date, storage, drive, format, time_frame, cancellation_token):
-        if not securities
+        if not securities:
             logs.AddWarningLog("No instruments.")
             return Task.CompletedTask
 

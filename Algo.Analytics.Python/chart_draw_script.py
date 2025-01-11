@@ -1,21 +1,6 @@
 import clr
 
-# Add .NET references
-clr.AddReference("System")
-clr.AddReference("System.Core")
-clr.AddReference("System.Threading")
-clr.AddReference("System.Threading.Tasks")
-clr.AddReference("StockSharp.Algo")
-clr.AddReference("StockSharp.Algo.Analytics")
-clr.AddReference("StockSharp.BusinessEntities")
-clr.AddReference("StockSharp.Storages")
-clr.AddReference("StockSharp.Logging")
-clr.AddReference("StockSharp.Messages")
-
-from System import DateTime, TimeSpan
-from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
-from Ecng.Drawing import DrawStyles
 
 # The analytic script, shows chart drawing possibilities.
 class chart_draw_script(IAnalyticsScript):

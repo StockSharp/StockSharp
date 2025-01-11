@@ -1,21 +1,5 @@
 import clr
 
-# Add .NET references
-clr.AddReference("System")
-clr.AddReference("System.Core")
-clr.AddReference("System.Linq")
-clr.AddReference("System.Threading")
-clr.AddReference("System.Threading.Tasks")
-clr.AddReference("StockSharp.Algo")
-clr.AddReference("StockSharp.Algo.Analytics")
-clr.AddReference("StockSharp.BusinessEntities")
-clr.AddReference("StockSharp.Storages")
-clr.AddReference("StockSharp.Logging")
-clr.AddReference("StockSharp.Messages")
-
-from System import DateTime, TimeSpan, Array, Double
-from System.Linq import Enumerable
-from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
 
 # The analytic script, calculating distribution of the biggest volume by hours and shows its in 3D chart.

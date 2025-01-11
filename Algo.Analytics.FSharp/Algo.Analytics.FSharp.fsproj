@@ -9,7 +9,7 @@
     <ProjectReference Include="..\Algo.Analytics\Algo.Analytics.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MathNet.Numerics" Version="$(MathNumVer)" />
+    <PackageReference Include="MathNet.Numerics.FSharp" Version="$(MathNumVer)" />
   </ItemGroup>
 	
   <ItemGroup>
