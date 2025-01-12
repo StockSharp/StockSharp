@@ -12,7 +12,6 @@ using StockSharp.Algo.Indicators;
 public class IndicatorProvider : IIndicatorProvider
 {
 	private readonly CachedSynchronizedSet<IndicatorType> _indicatorTypes = [];
-	private readonly CachedSynchronizedDictionary<IndicatorType, AssemblyLoadContextTracker> _asmContexts = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="IndicatorProvider"/>.
@@ -24,10 +23,7 @@ public class IndicatorProvider : IIndicatorProvider
 	/// <inheritdoc />
 	public virtual void Init()
 	{
-		_asmContexts.CachedValues.ForEach(c => c.Dispose());
-
 		_indicatorTypes.Clear();
-		_asmContexts.Clear();
 
 		var ns = typeof(IIndicator).Namespace;
 
@@ -56,8 +52,5 @@ public class IndicatorProvider : IIndicatorProvider
 			throw new ArgumentNullException(nameof(type));
 
 		_indicatorTypes.Remove(type);
-
-		if (_asmContexts.TryGetAndRemove(type, out var ctx))
-			ctx.Dispose();
 	}
 }
