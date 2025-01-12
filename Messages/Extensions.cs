@@ -1420,7 +1420,7 @@ public static partial class Extensions
 
 		var type = adapter.OrderConditionType;
 
-		return type != null && interfaceType.IsAssignableFrom(type);
+		return type != null && type.Is(interfaceType);
 	}
 
 	/// <summary>
