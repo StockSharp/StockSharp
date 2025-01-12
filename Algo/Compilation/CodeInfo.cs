@@ -1,7 +1,6 @@
 namespace StockSharp.Algo.Compilation;
 
 using Ecng.Compilation;
-using Ecng.Reflection;
 
 using Nito.AsyncEx;
 
@@ -10,26 +9,14 @@ using Nito.AsyncEx;
 /// </summary>
 public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 {
-	private readonly bool _ownContext;
+	private object _context;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CodeInfo"/>.
 	/// </summary>
 	public CodeInfo()
-		: this(new(), true)
 	{
 		_assemblyReferences.Changed += OnReferencesChanged;
-	}
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="CodeInfo"/>.
-	/// </summary>
-	/// <param name="context"><see cref="AssemblyLoadContextTracker"/></param>
-	/// <param name="ownContext">Own context.</param>
-	public CodeInfo(AssemblyLoadContextTracker context, bool ownContext)
-	{
-		Context = context ?? throw new ArgumentNullException(nameof(context));
-		_ownContext = ownContext;
 	}
 
 	/// <inheritdoc />
@@ -37,8 +24,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	{
 		_assemblyReferences.Changed -= OnReferencesChanged;
 
-		if (_ownContext)
-			Context.Dispose();
+		_context?.DoDispose();
 
 		GC.SuppressFinalize(this);
 	}
@@ -115,6 +101,9 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 
 			_language = value.ThrowIfEmpty(nameof(value));
 
+			if (_context is not null)
+				throw new InvalidOperationException("Language cannot be changed after compilation.");
+
 			if (value.EqualsIgnoreCase(FileExts.FSharp))
 				_assemblyReferences.AddRange(CodeExtensions.FSharpReferences);
 		}
@@ -144,7 +133,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	/// <summary>
 	/// Object type.
 	/// </summary>
-	public Type ObjectType { get; private set; }
+	public IType ObjectType { get; private set; }
 
 	/// <summary>
 	/// The code is compilable.
@@ -175,14 +164,9 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	public event Action Compiled;
 
 	/// <summary>
-	/// <see cref="AssemblyLoadContextTracker"/>
-	/// </summary>
-	public AssemblyLoadContextTracker Context { get; }
-
-	/// <summary>
 	/// Last built assembly.
 	/// </summary>
-	public byte[] Assembly { get; private set; }
+	public IAssembly Assembly { get; private set; }
 
 	/// <summary>
 	/// Compile code.
@@ -190,7 +174,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	/// <param name="isTypeCompatible">Is type compatible.</param>
 	/// <param name="typeName">Type name.</param>
 	/// <returns><see cref="CompilationResult"/></returns>
-	public CompilationResult Compile(Func<Type, bool> isTypeCompatible = default, string typeName = default)
+	public IEnumerable<CompilationError> Compile(Func<IType, bool> isTypeCompatible = default, string typeName = default)
 		=> AsyncContext.Run(() => CompileAsync(isTypeCompatible, typeName, default));
 
 	/// <summary>
@@ -200,7 +184,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	/// <param name="typeName">Type name.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns><see cref="CompilationResult"/></returns>
-	public async Task<CompilationResult> CompileAsync(Func<Type, bool> isTypeCompatible, string typeName, CancellationToken cancellationToken)
+	public async Task<IEnumerable<CompilationError>> CompileAsync(Func<IType, bool> isTypeCompatible, string typeName, CancellationToken cancellationToken)
 	{
 		IsCompilable = false;
 
@@ -219,33 +203,36 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		{
 			ex.LogError();
 
-			return new()
+			return [new CompilationError
 			{
-				Errors = [new CompilationError
-				{
-					Message = ex.Message,
-					Type = CompilationErrorTypes.Error,
-				}],
-			};
+				Message = ex.Message,
+				Type = CompilationErrorTypes.Error,
+			}];
 		}
 
-		byte[] asm = null;
+		IAssembly asm = null;
 		var errors = new List<CompilationError>();
 
-		var cache = ServicesRegistry.TryCompilerCache;
+		var compiler = Language.GetCompiler();
+
+		_context ??= compiler.CreateContext();
+
+		var cache = compiler.IsAssembly ? ServicesRegistry.TryCompilerCache : null;
 
 		if (cache?.TryGet(Language, sources, refs.Select(r => r.name), out asm) != true)
 		{
-			var result = await Language.GetCompiler().Compile("Strategy", sources, refs, cancellationToken);
+			var result = await compiler.Compile("Strategy", sources, refs, cancellationToken);
 
 			if (result.HasErrors())
-				return result;
+				return result.Errors;
 
 			errors.AddRange(result.Errors);
 
+			asm = result.Assembly;
+
 			try
 			{
-				cache?.Add(Language, sources, refs.Select(r => r.name), asm = result.Assembly);
+				cache?.Add(Language, sources, refs.Select(r => r.name), asm);
 			}
 			catch (Exception ex)
 			{
@@ -255,24 +242,23 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 
 		IsCompilable = true;
 
-		ObjectType = Context.LoadFromStream(asm).TryFindType(isTypeCompatible, typeName);
-
-		try
+		if (asm is not null)
 		{
-			Compiled?.Invoke();
+			Assembly = asm;
+
+			ObjectType = asm.GetExportTypes(_context).TryFindType(isTypeCompatible, typeName);
+
+			try
+			{
+				Compiled?.Invoke();
+			}
+			catch (Exception ex)
+			{
+				ex.LogError();
+			}
 		}
-		catch (Exception ex)
-		{
-			ex.LogError();
-		}
 
-		Assembly = asm;
-
-		return new()
-		{
-			Assembly = asm,
-			Errors = [.. errors],
-		};
+		return errors;
 	}
 
 	/// <inheritdoc />
