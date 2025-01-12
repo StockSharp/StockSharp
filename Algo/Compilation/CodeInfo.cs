@@ -9,8 +9,6 @@ using Nito.AsyncEx;
 /// </summary>
 public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 {
-	private object _context;
-
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CodeInfo"/>.
 	/// </summary>
@@ -24,7 +22,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	{
 		_assemblyReferences.Changed -= OnReferencesChanged;
 
-		_context?.DoDispose();
+		Context?.DoDispose();
 
 		GC.SuppressFinalize(this);
 	}
@@ -101,7 +99,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 
 			_language = value.ThrowIfEmpty(nameof(value));
 
-			if (_context is not null)
+			if (Context is not null)
 				throw new InvalidOperationException("Language cannot be changed after compilation.");
 
 			if (value.EqualsIgnoreCase(FileExts.FSharp))
@@ -164,6 +162,11 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	public event Action Compiled;
 
 	/// <summary>
+	/// <see cref="AssemblyLoadContextTracker"/>
+	/// </summary>
+	public object Context { get; private set; }
+
+	/// <summary>
 	/// Last built assembly.
 	/// </summary>
 	public IAssembly Assembly { get; private set; }
@@ -215,7 +218,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 
 		var compiler = Language.GetCompiler();
 
-		_context ??= compiler.CreateContext();
+		Context ??= compiler.CreateContext();
 
 		var cache = compiler.IsAssembly ? ServicesRegistry.TryCompilerCache : null;
 
@@ -246,7 +249,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		{
 			Assembly = asm;
 
-			ObjectType = asm.GetExportTypes(_context).TryFindType(isTypeCompatible, typeName);
+			ObjectType = asm.GetExportTypes(Context).TryFindType(isTypeCompatible, typeName);
 
 			try
 			{
