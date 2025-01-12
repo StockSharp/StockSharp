@@ -1575,36 +1575,6 @@ public static partial class TraderHelper
 	}
 
 	/// <summary>
-	/// Is type compatible.
-	/// </summary>
-	/// <typeparam name="T">Required type.</typeparam>
-	/// <param name="type">Type.</param>
-	/// <returns>Check result.</returns>
-	public static bool IsRequiredType<T>(this Type type)
-		=> IsRequiredType(type, typeof(T));
-
-	/// <summary>
-	/// Is type compatible.
-	/// </summary>
-	/// <param name="type">Type.</param>
-	/// <param name="required">Required type.</param>
-	/// <returns>Check result.</returns>
-	public static bool IsRequiredType(this Type type, Type required)
-	{
-		if (type is null)
-			throw new ArgumentNullException(nameof(type));
-
-		if (required is null)
-			throw new ArgumentNullException(nameof(required));
-
-		return !type.IsAbstract &&
-			type.IsPublic &&
-			!type.IsGenericTypeDefinition &&
-			required.IsAssignableFrom(type) &&
-			type.GetConstructor([]) is not null;
-	}
-
-	/// <summary>
 	/// Convert <see cref="ChannelStates"/> value to <see cref="ProcessStates"/>.
 	/// </summary>
 	/// <param name="state"><see cref="ChannelStates"/> value.</param>
