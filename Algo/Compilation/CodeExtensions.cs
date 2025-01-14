@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Compilation;
 
-using Ecng.Common;
-using Ecng.Collections;
 using Ecng.Compilation;
 
 /// <summary>
