@@ -84,7 +84,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		}
 	}
 
-	private string _language = FileExts.CSharp;
+	private string _language = CodeExtensions.DefaultLanguage;
 
 	/// <summary>
 	/// Code language.
@@ -284,7 +284,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	{
 		Id = storage.GetValue(nameof(Id), Id);
 		Name = storage.GetValue(nameof(Name), Name);
-		Language = storage.GetValue(nameof(Language), Language).ReplaceIgnoreCase("csharp", FileExts.CSharp);
+		Language = storage.GetValue(nameof(Language), Language);
 		Text = storage.GetValue(nameof(Text), storage.GetValue<string>("SourceCode"))?.Replace("ChartIndicatorDrawStyles", "DrawStyles");
 		ExtraSources = storage.GetValue(nameof(ExtraSources), ExtraSources);
 

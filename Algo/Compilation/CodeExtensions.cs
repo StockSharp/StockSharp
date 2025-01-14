@@ -124,18 +124,23 @@ public static class CodeExtensions
 		=> ci.CheckOnNull(nameof(ci)).AssemblyReferences.Add(new() { FileName = asmFile });
 
 	/// <summary>
+	/// Default language.
+	/// </summary>
+	public const string DefaultLanguage = FileExts.CSharp;
+
+	/// <summary>
 	/// Get C# compiler.
 	/// </summary>
 	/// <returns><see cref="ICompiler"/></returns>
 	public static ICompiler GetCSharpCompiler()
-		=> TryGetCSharpCompiler() ?? throw new InvalidOperationException($"No compiler for {FileExts.CSharp}.");
+		=> TryGetCSharpCompiler() ?? throw new InvalidOperationException($"No compiler for {DefaultLanguage}.");
 
 	/// <summary>
 	/// Try get C# compiler.
 	/// </summary>
 	/// <returns><see cref="ICompiler"/></returns>
 	public static ICompiler TryGetCSharpCompiler()
-		=> FileExts.CSharp.TryGetCompiler();
+		=> DefaultLanguage.TryGetCompiler();
 
 	/// <summary>
 	/// Try get compiler for the specified file extension.
@@ -184,6 +189,6 @@ public static class CodeExtensions
 		if (provider is not null)
 			return provider.ContainsKey(fileExt);
 		else
-			return fileExt.EqualsIgnoreCase(FileExts.CSharp);
+			return fileExt.EqualsIgnoreCase(DefaultLanguage);
 	}
 }
