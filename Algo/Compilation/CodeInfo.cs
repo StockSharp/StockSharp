@@ -249,7 +249,18 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		{
 			Assembly = asm;
 
-			ObjectType = asm.GetExportTypes(Context).TryFindType(isTypeCompatible, typeName);
+			try
+			{
+				ObjectType = asm.GetExportTypes(Context).TryFindType(isTypeCompatible, typeName);
+			}
+			catch (Exception ex)
+			{
+				errors.Add(new()
+				{
+					Message = ex.Message,
+					Type = CompilationErrorTypes.Error,
+				});
+			}
 
 			try
 			{
@@ -257,7 +268,11 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 			}
 			catch (Exception ex)
 			{
-				ex.LogError();
+				errors.Add(new()
+				{
+					Message = ex.Message,
+					Type = CompilationErrorTypes.Error,
+				});
 			}
 		}
 
