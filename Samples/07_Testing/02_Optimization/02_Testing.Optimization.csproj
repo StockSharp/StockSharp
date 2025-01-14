@@ -7,7 +7,7 @@
     <PackageReference Include="Ecng.Compilation.Roslyn" Version="$(EcngVer)" />
 
     <PackageReference Include="StockSharp.Xaml.Charting" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(SampleHistoryDataVersion)" />
+    <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(StockSharpVer)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj" />

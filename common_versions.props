@@ -3,7 +3,6 @@
     <LangVersion>12.0</LangVersion>
 
     <EcngVer>1.0.*</EcngVer>
-    <SampleHistoryDataVersion>1.*</SampleHistoryDataVersion>
     <StockSharpVer>5.*</StockSharpVer>
 
     <MathNumVer>5.0.0</MathNumVer>

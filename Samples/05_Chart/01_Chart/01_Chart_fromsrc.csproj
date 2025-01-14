@@ -5,6 +5,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.Compilation.Roslyn" Version="$(EcngVer)" />
-    <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(SampleHistoryDataVersion)" />
+    <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(StockSharpVer)" />
   </ItemGroup>
 </Project>
