@@ -12,65 +12,64 @@ public static class CodeExtensions
 	/// </summary>
 	public const string MsCorLib = "mscorlib";
 
-	private static readonly IEnumerable<string> _defaultReferences =
-	[
-		MsCorLib,
-
-		"netstandard",
-
-		"System",
-		"System.Core",
-		"System.Configuration",
-		"System.Xml",
-		"System.Runtime",
-		"System.Linq",
-		"System.Private.CoreLib",
-		"System.ObjectModel",
-		"System.ComponentModel.Primitives",
-		"System.ComponentModel.TypeConverter",
-		"System.ComponentModel.Annotations",
-		"System.Collections",
-		"System.Drawing.Primitives",
-
-		"Ecng.Common",
-		"Ecng.Collections",
-		"Ecng.ComponentModel",
-		"Ecng.Configuration",
-		"Ecng.Serialization",
-		"Ecng.Reflection",
-		"Ecng.Drawing",
-
-		"StockSharp.Algo",
-		"StockSharp.Messages",
-		"StockSharp.BusinessEntities",
-		"StockSharp.Logging",
-		"StockSharp.Localization",
-		"StockSharp.Diagram.Core",
-		"StockSharp.Charting.Interfaces",
-		"StockSharp.Alerts.Interfaces",
-	];
-
 	/// <summary>
 	/// Default references.
 	/// </summary>
 	public static IEnumerable<AssemblyReference> DefaultReferences
-		=> _defaultReferences.Select(r => new AssemblyReference { FileName = $"{r}.dll" });
+		=> CreateReferences(
+		[
+			MsCorLib,
 
-	private static readonly IEnumerable<string> _fsharpReferences =
-	[
-		"FSharp.Core",
-		"System.Runtime.Numerics",
-		"System.Numerics",
-		"System.Net.Requests",
-		"System.Net.WebClient",
-		"System.Private.Uri",
-	];
+			"netstandard",
+
+			"System",
+			"System.Core",
+			"System.Configuration",
+			"System.Xml",
+			"System.Runtime",
+			"System.Linq",
+			"System.Private.CoreLib",
+			"System.ObjectModel",
+			"System.ComponentModel.Primitives",
+			"System.ComponentModel.TypeConverter",
+			"System.ComponentModel.Annotations",
+			"System.Collections",
+			"System.Drawing.Primitives",
+
+			"Ecng.Common",
+			"Ecng.Collections",
+			"Ecng.ComponentModel",
+			"Ecng.Configuration",
+			"Ecng.Serialization",
+			"Ecng.Reflection",
+			"Ecng.Drawing",
+
+			"StockSharp.Algo",
+			"StockSharp.Messages",
+			"StockSharp.BusinessEntities",
+			"StockSharp.Logging",
+			"StockSharp.Localization",
+			"StockSharp.Diagram.Core",
+			"StockSharp.Charting.Interfaces",
+			"StockSharp.Alerts.Interfaces",
+		]);
 
 	/// <summary>
 	/// F# references.
 	/// </summary>
 	public static IEnumerable<AssemblyReference> FSharpReferences
-		=> _fsharpReferences.Select(r => new AssemblyReference { FileName = $"{r}.dll" });
+		=> CreateReferences(
+		[
+			"FSharp.Core",
+			"System.Runtime.Numerics",
+			"System.Numerics",
+			"System.Net.Requests",
+			"System.Net.WebClient",
+			"System.Private.Uri",
+		]);
+
+	private static IEnumerable<AssemblyReference> CreateReferences(IEnumerable<string> names)
+		=> names.Select(r => new AssemblyReference { FileName = $"{r}.dll" });
 
 	private static readonly CachedSynchronizedDictionary<string, ICodeReference> _projectReferences = new(StringComparer.InvariantCultureIgnoreCase);
 
