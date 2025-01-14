@@ -3,6 +3,6 @@
   <ItemGroup>
     <PackageReference Include="Ecng.Compilation.Roslyn" Version="$(EcngVer)" />
     <ProjectReference Include="$(RepoAppsPath)Xaml.Charting\Xaml.Charting.csproj" />
-    <PackageReference Include="StockSharp.Samples.HistoryData" Version="1.*" />
+    <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(StockSharpVer)" />
   </ItemGroup>
 </Project>

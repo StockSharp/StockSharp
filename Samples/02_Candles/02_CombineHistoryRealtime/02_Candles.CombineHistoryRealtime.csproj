@@ -3,6 +3,6 @@
   <Import Project="..\..\common_connectors.props" />
   <ItemGroup>
     <PackageReference Include="StockSharp.Xaml.Charting" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.Samples.HistoryData" Version="1.*" />
+    <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(StockSharpVer)" />
   </ItemGroup>
 </Project>

@@ -2,6 +2,6 @@
   <Import Project="..\..\common_samples_netwindows.props" />
   <ItemGroup>
     <ProjectReference Include="$(RepoAppsPath)Xaml\Xaml.csproj" />
-    <PackageReference Include="StockSharp.Samples.HistoryData" Version="1.*" />
+    <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(StockSharpVer)" />
   </ItemGroup>
 </Project>
