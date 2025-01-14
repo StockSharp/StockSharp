@@ -27,6 +27,7 @@
     <GoogleProtobufVer>3.*</GoogleProtobufVer>
     <PandasVer>0.6.*</PandasVer>
     <NumpyVer>0.9.*</NumpyVer>
+    <IronPythonVer>3.4.2</IronPythonVer>
 
     <MicrosoftCodeAnalysisVer>4.12.0</MicrosoftCodeAnalysisVer>
     <MicrosoftCodeAnalysisAnalyzersVer>3.3.4</MicrosoftCodeAnalysisAnalyzersVer>
