@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\common_samples_net.props" />
   <ItemGroup>
-    <PackageReference Include="Ecng.Compilation.Roslyn" Version="1.*" />
+    <PackageReference Include="Ecng.Compilation.Roslyn" Version="$(EcngVer)" />
     <ProjectReference Include="$(RepoGitHubPath)Algo\Algo.csproj" />
     <PackageReference Include="StockSharp.Samples.HistoryData" Version="1.*" />
   </ItemGroup>
