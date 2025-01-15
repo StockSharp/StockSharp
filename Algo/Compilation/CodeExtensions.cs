@@ -66,6 +66,7 @@ public static class CodeExtensions
 			"System.Net.Requests",
 			"System.Net.WebClient",
 			"System.Private.Uri",
+			"System.Threading",
 		]);
 
 	private static IEnumerable<AssemblyReference> CreateReferences(IEnumerable<string> names)
