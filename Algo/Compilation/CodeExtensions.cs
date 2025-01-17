@@ -181,12 +181,5 @@ public static class CodeExtensions
 	/// <param name="fileExt">File extension.</param>
 	/// <returns>Check result.</returns>
 	public static bool IsCodeExtension(this string fileExt)
-	{
-		var provider = ServicesRegistry.TryCompilerProvider;
-
-		if (provider is not null)
-			return provider.ContainsKey(fileExt);
-		else
-			return fileExt.EqualsIgnoreCase(DefaultLanguage);
-	}
+		=> fileExt.TryGetCompiler() is not null;
 }
