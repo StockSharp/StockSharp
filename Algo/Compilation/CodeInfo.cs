@@ -220,7 +220,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 
 		Context ??= compiler.CreateContext();
 
-		var cache = compiler.IsAssembly ? ServicesRegistry.TryCompilerCache : null;
+		var cache = compiler.IsAssemblyPersistable ? ServicesRegistry.TryCompilerCache : null;
 
 		if (cache?.TryGet(Language, sources, refs.Select(r => r.name), out asm) != true)
 		{
