@@ -23,7 +23,7 @@ public class Highest : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var high = input.ToCandle().HighPrice;
 
@@ -38,6 +38,6 @@ public class Highest : LengthIndicator<decimal>
 			lastValue = Buffer.Max.Value;
 		}
 
-		return new DecimalIndicatorValue(this, lastValue, input.Time);
+		return lastValue;
 	}
 }

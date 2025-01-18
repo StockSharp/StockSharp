@@ -22,19 +22,19 @@ public class DisparityIndex : SimpleMovingAverage
 	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
-		var smaValue = base.OnProcess(input);
+		var smaValue = base.OnProcessDecimal(input);
 
 		if (IsFormed)
 		{
 			var price = input.ToDecimal();
-			var sma = smaValue.ToDecimal();
+			var sma = smaValue.Value;
 			var disparityIndex = (price - sma) / sma * 100;
-			return new DecimalIndicatorValue(this, disparityIndex, input.Time);
+			return disparityIndex;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 }
 

@@ -57,7 +57,7 @@ public class AverageTrueRange : LengthIndicator<IIndicatorValue>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		// используем дополнительную переменную IsFormed,
 		// т.к. нужна задержка в один период для корректной инициализации скользящей средней
@@ -65,6 +65,6 @@ public class AverageTrueRange : LengthIndicator<IIndicatorValue>
 			IsFormed = true;
 
 		var val = MovingAverage.Process(TrueRange.Process(input));
-		return val.SetValue(this, val.ToDecimal());
+		return val.ToDecimal();
 	}
 }

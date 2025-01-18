@@ -35,7 +35,7 @@ public class Momentum : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var newValue = input.ToDecimal();
 
@@ -45,8 +45,8 @@ public class Momentum : LengthIndicator<decimal>
 		}
 
 		if (Buffer.Count == 0)
-			return new DecimalIndicatorValue(this, input.Time);
+			return null;
 
-		return new DecimalIndicatorValue(this, newValue - Buffer[0], input.Time);
+		return newValue - Buffer[0];
 	}
 }

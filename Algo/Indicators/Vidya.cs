@@ -39,7 +39,7 @@ public class Vidya : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var newValue = input.ToDecimal();
 
@@ -47,19 +47,19 @@ public class Vidya : LengthIndicator<decimal>
 		var cmoValue = _cmo.Process(input);
 
 		if (cmoValue.IsEmpty)
-			return new DecimalIndicatorValue(this, input.Time);
+			return null;
 
 		// calc Vidya
 		if (!IsFormed)
 		{
 			if (!input.IsFinal)
-				return new DecimalIndicatorValue(this, (Buffer.SumNoFirst + newValue) / Length, input.Time);
+				return (Buffer.SumNoFirst + newValue) / Length;
 
 			Buffer.PushBack(newValue);
 
 			_prevFinalValue = Buffer.Sum / Length;
 
-			return new DecimalIndicatorValue(this, _prevFinalValue, input.Time);
+			return _prevFinalValue;
 		}
 
 		var curValue = (newValue - _prevFinalValue) * _multiplier * Math.Abs(cmoValue.ToDecimal() / 100m) + _prevFinalValue;
@@ -67,6 +67,6 @@ public class Vidya : LengthIndicator<decimal>
 		if (input.IsFinal)
 			_prevFinalValue = curValue;
 
-		return new DecimalIndicatorValue(this, curValue, input.Time);
+		return curValue;
 	}
 }

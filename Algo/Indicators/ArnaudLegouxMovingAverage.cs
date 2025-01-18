@@ -70,7 +70,7 @@ public class ArnaudLegouxMovingAverage : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var price = input.ToDecimal();
 
@@ -94,10 +94,10 @@ public class ArnaudLegouxMovingAverage : LengthIndicator<decimal>
 				sum += weight * Buffer[Length - 1 - i];
 			}
 
-			return new DecimalIndicatorValue(this, sum / weightSum, input.Time);
+			return sum / weightSum;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />

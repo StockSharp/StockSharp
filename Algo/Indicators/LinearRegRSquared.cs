@@ -35,7 +35,7 @@ public class LinearRegRSquared : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var newValue = input.ToDecimal();
 
@@ -87,11 +87,11 @@ public class LinearRegRSquared : LengthIndicator<decimal>
 
 			//R-квадрат регресии
 			if (sumYAv2 == 0) 
-				return new DecimalIndicatorValue(this, 0, input.Time);
+				return 0;
 
-			return new DecimalIndicatorValue(this, (1 - sumErr2 / sumYAv2), input.Time);
+			return (1 - sumErr2 / sumYAv2);
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 }

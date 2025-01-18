@@ -157,13 +157,13 @@ public class KasePeakOscillator : BaseComplexIndicator
 public class KasePeakOscillatorPart : LengthIndicator<decimal>
 {
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var value = input.GetValue<decimal>();
 
 		if (input.IsFinal)
 			Buffer.PushBack(value);
 
-		return new DecimalIndicatorValue(this, value, input.Time);
+		return value;
 	}
 }

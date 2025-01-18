@@ -669,7 +669,7 @@ public class JurikMovingAverage : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var b = input.IsFinal ? _buf : _buf.Clone();
 
@@ -683,7 +683,7 @@ public class JurikMovingAverage : LengthIndicator<decimal>
 			Buffer.PushBack(newValue);
 		}
 
-		return new DecimalIndicatorValue(this, lastValue, input.Time);
+		return lastValue;
 	}
 
 	/// <inheritdoc />

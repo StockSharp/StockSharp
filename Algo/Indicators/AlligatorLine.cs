@@ -55,7 +55,7 @@ public class AlligatorLine : LengthIndicator<decimal>
 	protected override bool CalcIsFormed() => Buffer.Count > Shift;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var smaResult = _sma.Process(_medianPrice.Process(input));
 		if (_sma.IsFormed & input.IsFinal)
@@ -68,8 +68,8 @@ public class AlligatorLine : LengthIndicator<decimal>
 		}
 
 		return Buffer.Count > Shift
-			? new DecimalIndicatorValue(this, Buffer[input.IsFinal ? 0 : Math.Min(1, Buffer.Count - 1)], input.Time)
-			: new DecimalIndicatorValue(this, input.Time);
+			? Buffer[input.IsFinal ? 0 : Math.Min(1, Buffer.Count - 1)]
+			: null;
 	}
 
 	/// <inheritdoc />

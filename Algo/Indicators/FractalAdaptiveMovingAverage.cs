@@ -22,7 +22,7 @@ public class FractalAdaptiveMovingAverage : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var price = input.ToDecimal();
 
@@ -49,10 +49,10 @@ public class FractalAdaptiveMovingAverage : LengthIndicator<decimal>
 			if (input.IsFinal)
 				_prevFrama = newFrama;
 
-			return new DecimalIndicatorValue(this, newFrama, input.Time);
+			return newFrama;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />

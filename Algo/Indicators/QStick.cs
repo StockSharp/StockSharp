@@ -35,11 +35,11 @@ public class QStick : LengthIndicator<IIndicatorValue>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
 		var val = _sma.Process(input, candle.OpenPrice - candle.ClosePrice);
-		return val.SetValue(this, val.ToDecimal());
+		return val.ToDecimal();
 	}
 }

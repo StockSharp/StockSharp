@@ -32,7 +32,7 @@ public class SmoothedMovingAverage : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var newValue = input.ToDecimal();
 
@@ -44,10 +44,10 @@ public class SmoothedMovingAverage : LengthIndicator<decimal>
 
 				_prevFinalValue = Buffer.Sum / Length;
 
-				return new DecimalIndicatorValue(this, _prevFinalValue, input.Time);
+				return _prevFinalValue;
 			}
 
-			return new DecimalIndicatorValue(this, (Buffer.SumNoFirst + newValue) / Length, input.Time);
+			return (Buffer.SumNoFirst + newValue) / Length;
 		}
 
 		var curValue = (_prevFinalValue * (Length - 1) + newValue) / Length;
@@ -55,6 +55,6 @@ public class SmoothedMovingAverage : LengthIndicator<decimal>
 		if (input.IsFinal)
 			_prevFinalValue = curValue;
 
-		return new DecimalIndicatorValue(this, curValue, input.Time);
+		return curValue;
 	}
 }

@@ -50,7 +50,7 @@ public class T3MovingAverage : LengthIndicator<decimal>
 	public override int NumValuesToInitialize => base.NumValuesToInitialize + _warmUpPeriod;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var e1 = _emas[0].Process(input);
 		var e2 = _emas[1].Process(e1);
@@ -69,12 +69,12 @@ public class T3MovingAverage : LengthIndicator<decimal>
 			var t3 = c1 * e6.ToDecimal() + c2 * e5.ToDecimal() + c3 * e4.ToDecimal() + c4 * e3.ToDecimal();
 
 			if (_warmUpPeriod == 0)
-				return new DecimalIndicatorValue(this, t3, input.Time);
+				return t3;
 			else
 				_warmUpPeriod--;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />

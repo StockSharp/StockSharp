@@ -22,7 +22,7 @@ public class WilderMovingAverage : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var newValue = input.ToDecimal();
 
@@ -31,6 +31,6 @@ public class WilderMovingAverage : LengthIndicator<decimal>
 
 		var buffCount = input.IsFinal ? Buffer.Count : ((Buffer.Count - 1).Max(0) + 1);
 
-		return new DecimalIndicatorValue(this, (this.GetCurrentValue() * (buffCount - 1) + newValue) / buffCount, input.Time);
+		return (this.GetCurrentValue() * (buffCount - 1) + newValue) / buffCount;
 	}
 }

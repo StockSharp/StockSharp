@@ -24,8 +24,8 @@ public class OnBalanceVolumeMean : SimpleMovingAverage
 	public override IndicatorMeasures Measure => IndicatorMeasures.Volume;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		=> base.OnProcess(_obv.Process(input));
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
+		=> base.OnProcessDecimal(_obv.Process(input));
 
 	/// <inheritdoc />
 	public override void Reset()

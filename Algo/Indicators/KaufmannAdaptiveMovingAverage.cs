@@ -60,7 +60,7 @@ public class KaufmannAdaptiveMovingAverage : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var newValue = input.ToDecimal();
 		var lastValue = this.GetCurrentValue();
@@ -69,13 +69,13 @@ public class KaufmannAdaptiveMovingAverage : LengthIndicator<decimal>
 			Buffer.PushBack(newValue);
 
 		if (!IsFormed)
-			return new DecimalIndicatorValue(this, lastValue, input.Time);
+			return lastValue;
 
 		if (!_isInitialized && Buffer.Count == Length + 1)
 		{
 			_isInitialized = true;
 			// Начальное значение - последнее входное значение.
-			return new DecimalIndicatorValue(this, _prevFinalValue = newValue, input.Time);
+			return _prevFinalValue = newValue;
 		}
 
 		var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
@@ -103,7 +103,7 @@ public class KaufmannAdaptiveMovingAverage : LengthIndicator<decimal>
 		if (input.IsFinal)
 			_prevFinalValue = curValue;
 
-		return new DecimalIndicatorValue(this, curValue, input.Time);
+		return curValue;
 	}
 
 	/// <inheritdoc />

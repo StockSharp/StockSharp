@@ -36,15 +36,15 @@ public class DoubleExponentialMovingAverage : LengthIndicator<decimal>
 	protected override bool CalcIsFormed() => _ema1.IsFormed && _ema2.IsFormed;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var ema1Value = _ema1.Process(input);
 
 		if (!_ema1.IsFormed)
-			return new DecimalIndicatorValue(this, input.Time);
+			return null;
 
 		var ema2Value = _ema2.Process(ema1Value);
 
-		return new DecimalIndicatorValue(this, 2 * ema1Value.ToDecimal() - ema2Value.ToDecimal(), input.Time);
+		return 2 * ema1Value.ToDecimal() - ema2Value.ToDecimal();
 	}
 }

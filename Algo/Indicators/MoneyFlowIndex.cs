@@ -51,7 +51,7 @@ public class MoneyFlowIndex : LengthIndicator<decimal>
 	protected override bool CalcIsFormed() => _positiveFlow.IsFormed && _negativeFlow.IsFormed;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -64,13 +64,13 @@ public class MoneyFlowIndex : LengthIndicator<decimal>
 		_previousPrice = typicalPrice;
 		
 		if (negativeFlow == 0)
-			return new DecimalIndicatorValue(this, 100m, input.Time);
+			return 100m;
 		
 		if (positiveFlow / negativeFlow == 1)
-			return new DecimalIndicatorValue(this, 0m, input.Time);
+			return 0m;
 
 		return negativeFlow != 0 
-			? new DecimalIndicatorValue(this, 100m - 100m / (1m + positiveFlow / negativeFlow), input.Time)
-			: new DecimalIndicatorValue(this, input.Time);
+			? 100m - 100m / (1m + positiveFlow / negativeFlow)
+			: null;
 	}
 }

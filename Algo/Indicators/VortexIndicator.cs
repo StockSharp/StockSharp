@@ -138,7 +138,7 @@ public class VortexPart : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -151,7 +151,7 @@ public class VortexPart : LengthIndicator<decimal>
 				_prevClose = candle.ClosePrice;
 			}
 
-			return new DecimalIndicatorValue(this, input.Time);
+			return null;
 		}
 
 		var tr = Math.Max(Math.Max(candle.HighPrice - candle.LowPrice, Math.Abs(candle.HighPrice - _prevClose)), Math.Abs(candle.LowPrice - _prevClose));
@@ -177,7 +177,7 @@ public class VortexPart : LengthIndicator<decimal>
 			result = tempSumTr != 0 ? tempSumVm / tempSumTr : 0;
 		}
 
-		return new DecimalIndicatorValue(this, IsFormed ? result : 0, input.Time);
+		return IsFormed ? result : 0;
 	}
 
 	/// <inheritdoc />

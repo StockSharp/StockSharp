@@ -15,7 +15,7 @@ public class RelativeVigorIndexSignal : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var newValue = input.ToDecimal();
 
@@ -27,10 +27,10 @@ public class RelativeVigorIndexSignal : LengthIndicator<decimal>
 		if (IsFormed)
 		{
 			return input.IsFinal
-				? new DecimalIndicatorValue(this, (Buffer[0] + 2 * Buffer[1] + 2 * Buffer[2] + Buffer[3]) / 6m, input.Time)
-				: new DecimalIndicatorValue(this, (Buffer[1] + 2 * Buffer[2] + 2 * Buffer[3] + newValue) / 6m, input.Time);
+				? (Buffer[0] + 2 * Buffer[1] + 2 * Buffer[2] + Buffer[3]) / 6m
+				: (Buffer[1] + 2 * Buffer[2] + 2 * Buffer[3] + newValue) / 6m;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 }

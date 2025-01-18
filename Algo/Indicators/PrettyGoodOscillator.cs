@@ -30,7 +30,7 @@ public class PrettyGoodOscillator : LengthIndicator<decimal>
 	protected override bool CalcIsFormed() => _sma.IsFormed && _highest.IsFormed && _lowest.IsFormed;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -49,11 +49,11 @@ public class PrettyGoodOscillator : LengthIndicator<decimal>
 			if (diff != 0)
 			{
 				var pgo = (candle.ClosePrice - sma) / diff * 100;
-				return new DecimalIndicatorValue(this, pgo, input.Time);
+				return pgo;
 			}
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />

@@ -26,7 +26,7 @@ public class Sum : LengthIndicator<decimal>
 	public override IndicatorMeasures Measure => IndicatorMeasures.Volume;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var newValue = input.ToDecimal();
 
@@ -35,11 +35,11 @@ public class Sum : LengthIndicator<decimal>
 
 		if (input.IsFinal)
 		{
-			return new DecimalIndicatorValue(this, Buffer.Sum, input.Time);
+			return Buffer.Sum;
 		}
 		else
 		{
-			return new DecimalIndicatorValue(this, (Buffer.SumNoFirst + newValue), input.Time);
+			return (Buffer.SumNoFirst + newValue);
 		}
 	}
 }

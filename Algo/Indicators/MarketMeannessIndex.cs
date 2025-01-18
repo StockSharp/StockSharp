@@ -26,7 +26,7 @@ public class MarketMeannessIndex : LengthIndicator<decimal>
 	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var price = input.ToDecimal();
 
@@ -72,10 +72,10 @@ public class MarketMeannessIndex : LengthIndicator<decimal>
 				mmi = tempPriceChanges > 0 ? 100m * tempDirectionChanges / tempPriceChanges : 0;
 			}
 
-			return new DecimalIndicatorValue(this, mmi, input.Time);
+			return mmi;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	private void UpdateChanges(decimal prevPrice, decimal currentPrice, bool isRemoving)

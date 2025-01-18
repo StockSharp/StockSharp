@@ -28,7 +28,7 @@ public class GopalakrishnanRangeIndex : LengthIndicator<(decimal high, decimal l
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -46,10 +46,10 @@ public class GopalakrishnanRangeIndex : LengthIndicator<(decimal high, decimal l
 				? (decimal)Math.Log((double)((highestHigh - lowestLow) / currentRange)) / (decimal)Math.Log(Length)
 				: 0;
 
-			return new DecimalIndicatorValue(this, gapo, input.Time);
+			return gapo;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 }
 

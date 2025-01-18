@@ -28,14 +28,14 @@ public class ApprovalFlowIndex : LengthIndicator<decimal>
 	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
 		if (_prevClose == 0)
 		{
 			_prevClose = candle.ClosePrice;
-			return new DecimalIndicatorValue(this, input.Time);
+			return null;
 		}
 
 		if (_count < Length)
@@ -56,12 +56,12 @@ public class ApprovalFlowIndex : LengthIndicator<decimal>
 			if (totalVolume != 0)
 			{
 				var afi = 100m * (_totalUpVolume - _totalDownVolume) / totalVolume;
-				return new DecimalIndicatorValue(this, afi, input.Time);
+				return afi;
 			}
 		}
 
 		_prevClose = candle.ClosePrice;
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />

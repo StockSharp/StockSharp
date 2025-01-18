@@ -32,7 +32,7 @@ public class LinearReg : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var newValue = input.ToDecimal();
 
@@ -70,6 +70,6 @@ public class LinearReg : LengthIndicator<decimal>
 		var b = (sumY - _slope * sumX) / Length;
 
 		//прогноз последнего значения (его номер Length - 1)
-		return new DecimalIndicatorValue(this, _slope * (Length - 1) + b, input.Time);
+		return _slope * (Length - 1) + b;
 	}
 }

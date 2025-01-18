@@ -40,20 +40,20 @@ public class TripleExponentialMovingAverage : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var ema1Value = _ema1.Process(input);
 
 		if (!_ema1.IsFormed)
-			return new DecimalIndicatorValue(this, input.Time);
+			return null;
 
 		var ema2Value = _ema2.Process(ema1Value);
 
 		if (!_ema2.IsFormed)
-			return new DecimalIndicatorValue(this, input.Time);
+			return null;
 
 		var ema3Value = _ema3.Process(ema2Value);
 
-		return new DecimalIndicatorValue(this, 3 * ema1Value.ToDecimal() - 3 * ema2Value.ToDecimal() + ema3Value.ToDecimal(), input.Time);
+		return 3 * ema1Value.ToDecimal() - 3 * ema2Value.ToDecimal() + ema3Value.ToDecimal();
 	}
 }

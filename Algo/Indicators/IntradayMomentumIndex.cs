@@ -26,7 +26,7 @@ public class IntradayMomentumIndex : LengthIndicator<(decimal o, decimal c)>
 	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -74,10 +74,10 @@ public class IntradayMomentumIndex : LengthIndicator<(decimal o, decimal c)>
 		{
 			var den = sumUp + sumDown;
 			var imi = den != 0 ? 100m * (sumUp / den) : 0;
-			return new DecimalIndicatorValue(this, imi, input.Time);
+			return imi;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />

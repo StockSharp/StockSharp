@@ -23,7 +23,7 @@ public class BalanceOfMarketPower : SimpleMovingAverage
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -31,10 +31,10 @@ public class BalanceOfMarketPower : SimpleMovingAverage
 			? ((candle.ClosePrice - candle.OpenPrice) / (candle.HighPrice == candle.LowPrice ? 0.01m : candle.HighPrice - candle.LowPrice))
 			: 0;
 
-		var smaValue = base.OnProcess(input.SetValue(this, bmp));
+		var smaValue = base.OnProcessDecimal(input.SetValue(this, bmp));
 
 		return IsFormed
-			? new DecimalIndicatorValue(this, smaValue.ToDecimal(), input.Time)
-			: new DecimalIndicatorValue(this, input.Time);
+			? smaValue.Value
+			: null;
 	}
 }

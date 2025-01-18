@@ -49,7 +49,7 @@ public class VerticalHorizontalFilter : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -67,12 +67,12 @@ public class VerticalHorizontalFilter : LengthIndicator<decimal>
 			_previousClosePrice = candle.ClosePrice;
 
 		if (!IsFormed)
-			return new DecimalIndicatorValue(this, input.Time);
+			return null;
 
 		// Вычисляем значение индикатора
 		if (sumValue != 0)
-			return new DecimalIndicatorValue(this, ((maxValue - minValue) / sumValue), input.Time);
+			return (maxValue - minValue) / sumValue;
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 }

@@ -25,7 +25,7 @@ public class IntradayIntensityIndex : SimpleMovingAverage
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 		var cl = candle.GetLength();
@@ -37,6 +37,6 @@ public class IntradayIntensityIndex : SimpleMovingAverage
 			iii = 2 * ((candle.ClosePrice - candle.LowPrice) - (candle.HighPrice - candle.ClosePrice)) / den;
 		}
 
-		return base.OnProcess(input.SetValue(this, iii));
+		return base.OnProcessDecimal(input.SetValue(this, iii));
 	}
 }

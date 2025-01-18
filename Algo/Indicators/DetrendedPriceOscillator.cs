@@ -37,7 +37,7 @@ public class DetrendedPriceOscillator : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var smaValue = _sma.Process(input);
 
@@ -45,8 +45,8 @@ public class DetrendedPriceOscillator : LengthIndicator<decimal>
 			Buffer.PushBack(smaValue.ToDecimal());
 
 		if (!IsFormed)
-			return new DecimalIndicatorValue(this, input.Time);
+			return null;
 
-		return new DecimalIndicatorValue(this, input.ToDecimal() - Buffer[Math.Max(0, Buffer.Count - 1 - _lookBack)], input.Time);
+		return input.ToDecimal() - Buffer[Math.Max(0, Buffer.Count - 1 - _lookBack)];
 	}
 }

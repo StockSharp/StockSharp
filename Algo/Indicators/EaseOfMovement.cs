@@ -29,7 +29,7 @@ public class EaseOfMovement : LengthIndicator<decimal>
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 		var cl = candle.GetLength();
@@ -51,7 +51,7 @@ public class EaseOfMovement : LengthIndicator<decimal>
 				sum = Buffer.Sum + emv;
 
 			if (IsFormed)
-				return new DecimalIndicatorValue(this, sum / Length, input.Time);
+				return sum / Length;
 		}
 
 		if (input.IsFinal)
@@ -60,7 +60,7 @@ public class EaseOfMovement : LengthIndicator<decimal>
 			_prevLow = candle.LowPrice;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />

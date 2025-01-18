@@ -19,7 +19,7 @@ public class EndpointMovingAverage : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var price = input.ToDecimal();
 
@@ -34,9 +34,9 @@ public class EndpointMovingAverage : LengthIndicator<decimal>
 			var lastPoint = input.IsFinal ? Buffer.Back() : price;
 			var slope = (lastPoint - firstPoint) / (Length - 1);
 			var epma = firstPoint + slope * (Length - 1);
-			return new DecimalIndicatorValue(this, epma, input.Time);
+			return epma;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 }

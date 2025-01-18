@@ -39,7 +39,7 @@ public class VolumeWeightedMovingAverage : LengthIndicator<decimal>
 	protected override bool CalcIsFormed() => _nominator.IsFormed && _denominator.IsFormed;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -47,7 +47,7 @@ public class VolumeWeightedMovingAverage : LengthIndicator<decimal>
 		var znValue = _denominator.Process(input, candle.TotalVolume).ToDecimal();
 
 		return znValue != 0 
-			? new DecimalIndicatorValue(this, shValue / znValue, input.Time) 
-			: new DecimalIndicatorValue(this, input.Time);
+			? shValue / znValue 
+			: null;
 	}
 }

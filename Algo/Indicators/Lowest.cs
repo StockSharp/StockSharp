@@ -23,7 +23,7 @@ public class Lowest : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var low = input.ToCandle().LowPrice;
 
@@ -38,6 +38,6 @@ public class Lowest : LengthIndicator<decimal>
 			lastValue = Buffer.Min.Value;
 		}
 
-		return new DecimalIndicatorValue(this, lastValue, input.Time);
+		return lastValue;
 	}
 }

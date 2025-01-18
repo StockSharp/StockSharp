@@ -32,7 +32,7 @@ public class HighLowIndex : LengthIndicator<decimal>
 	protected override bool CalcIsFormed() => _highBuffer.Count == Length;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -58,13 +58,13 @@ public class HighLowIndex : LengthIndicator<decimal>
 			var range = highestHigh - lowestLow;
 
 			if (range == 0)
-				return new DecimalIndicatorValue(this, 50, input.Time);
+				return 50;
 
 			var result = (candle.HighPrice - lowestLow) / range * 100;
-			return new DecimalIndicatorValue(this, result, input.Time);
+			return result;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />

@@ -72,5 +72,21 @@ public abstract class LengthIndicator<TResult> : BaseIndicator
 	}
 
 	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{
+		var result = OnProcessDecimal(input);
+
+		return result is null ? new DecimalIndicatorValue(this, input.Time) : new DecimalIndicatorValue(this, result.Value, input.Time);
+	}
+
+	/// <summary>
+	/// To handle the input value.
+	/// </summary>
+	/// <param name="input">The input value.</param>
+	/// <returns>The new value of the indicator.</returns>
+	protected virtual decimal? OnProcessDecimal(IIndicatorValue input)
+		=> throw new NotSupportedException();
+
+	/// <inheritdoc />
 	public override string ToString() => base.ToString() + " " + Length;
 }

@@ -23,18 +23,18 @@ public class ForecastOscillator : LinearReg
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
-		var baseResult = base.OnProcess(input);
+		var baseResult = base.OnProcessDecimal(input);
 
 		if (IsFormed)
 		{
 			var price = input.ToDecimal();
-			var forecastValue = baseResult.ToDecimal();
+			var forecastValue = baseResult.Value;
 			var fosc = ((price - forecastValue) / price) * 100;
-			return new DecimalIndicatorValue(this, fosc, input.Time);
+			return fosc;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 }

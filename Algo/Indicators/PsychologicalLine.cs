@@ -25,7 +25,7 @@ public class PsychologicalLine : LengthIndicator<decimal>
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var price = input.ToDecimal();
 
@@ -64,10 +64,10 @@ public class PsychologicalLine : LengthIndicator<decimal>
 		if (IsFormed)
 		{
 			var pl = tempUpCount / Length;
-			return new DecimalIndicatorValue(this, pl, input.Time);
+			return pl;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />

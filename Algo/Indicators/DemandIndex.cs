@@ -27,7 +27,7 @@ public class DemandIndex : SimpleMovingAverage
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -39,14 +39,14 @@ public class DemandIndex : SimpleMovingAverage
 				_prevVolume = candle.TotalVolume;
 			}
 
-			return new DecimalIndicatorValue(this, input.Time);
+			return null;
 		}
 
 		var deltaP = candle.ClosePrice - _prevClose;
 		var deltaV = candle.TotalVolume - _prevVolume;
 
 		if (deltaP == 0 || deltaV == 0)
-			return new DecimalIndicatorValue(this, _prevValue, input.Time);
+			return _prevValue;
 
 		var logDeltaP = deltaP.Abs().Log();
 		var logDeltaV = deltaV.Abs().Log();
@@ -61,13 +61,13 @@ public class DemandIndex : SimpleMovingAverage
 
 		demandIndex *= Math.Sign(deltaP);
 
-		var result = base.OnProcess(new DecimalIndicatorValue(this, demandIndex, input.Time) { IsFinal = input.IsFinal });
+		var result = base.OnProcessDecimal(new DecimalIndicatorValue(this, demandIndex, input.Time) { IsFinal = input.IsFinal });
 
 		if (input.IsFinal)
 		{
 			_prevClose = candle.ClosePrice;
 			_prevVolume = candle.TotalVolume;
-			_prevValue = result.ToDecimal();
+			_prevValue = result.Value;
 		}
 
 		return result;

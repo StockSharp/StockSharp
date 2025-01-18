@@ -35,7 +35,7 @@ public class WeightedMovingAverage : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var newValue = input.ToDecimal();
 
@@ -47,6 +47,6 @@ public class WeightedMovingAverage : LengthIndicator<decimal>
 		var buff = input.IsFinal ? Buffer : Buffer.Skip(1).Append(newValue);
 
 		var w = 1;
-		return new DecimalIndicatorValue(this, buff.Sum(v => w++ * v) / _denominator, input.Time);
+		return buff.Sum(v => w++ * v) / _denominator;
 	}
 }

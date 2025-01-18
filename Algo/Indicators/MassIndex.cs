@@ -57,7 +57,7 @@ public class MassIndex : LengthIndicator<decimal>
 	protected override bool CalcIsFormed() => _sum.IsFormed;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 		var range = candle.GetLength();
@@ -71,10 +71,10 @@ public class MassIndex : LengthIndicator<decimal>
 			var sumValue = _sum.Process(input, emaRatio);
 
 			if (_sum.IsFormed)
-				return new DecimalIndicatorValue(this, sumValue.ToDecimal(), input.Time);
+				return sumValue.ToDecimal();
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />

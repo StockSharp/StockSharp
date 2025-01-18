@@ -45,23 +45,23 @@ public class MomentumOfMovingAverage : SimpleMovingAverage
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
-		var maValue = base.OnProcess(input);
+		var maValue = base.OnProcessDecimal(input);
 
 		if (IsFormed)
 		{
-			var ma = maValue.ToDecimal();
+			var ma = maValue.Value;
 			_maBuffer.PushBack(ma);
 
 			if (_maBuffer.IsFull && _maBuffer[0] != 0)
 			{
 				var momentum = (ma - _maBuffer[0]) / _maBuffer[0] * 100;
-				return new DecimalIndicatorValue(this, momentum, input.Time);
+				return momentum;
 			}
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />

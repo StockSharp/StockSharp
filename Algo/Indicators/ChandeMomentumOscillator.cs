@@ -43,7 +43,7 @@ public class ChandeMomentumOscillator : LengthIndicator<decimal>
 	protected override bool CalcIsFormed() => _cmoUp.IsFormed;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var newValue = input.ToDecimal();
 
@@ -55,7 +55,7 @@ public class ChandeMomentumOscillator : LengthIndicator<decimal>
 				_isInitialized = true;
 			}
 
-			return new DecimalIndicatorValue(this, input.Time);
+			return null;
 		}
 
 		var delta = newValue - _last;
@@ -68,6 +68,8 @@ public class ChandeMomentumOscillator : LengthIndicator<decimal>
 
 		var value = (upValue + downValue) == 0 ? 0 : 100m * (upValue - downValue) / (upValue + downValue);
 
-		return IsFormed ? new DecimalIndicatorValue(this, value, input.Time) : new DecimalIndicatorValue(this, input.Time);
+		return IsFormed
+			? value
+			: null;
 	}
 }

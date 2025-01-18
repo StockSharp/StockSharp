@@ -24,7 +24,7 @@ public class HarmonicOscillator : LengthIndicator<decimal>
 	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var price = input.ToDecimal();
 
@@ -45,10 +45,10 @@ public class HarmonicOscillator : LengthIndicator<decimal>
 			}
 
 			var result = sum / Length;
-			return new DecimalIndicatorValue(this, result, input.Time);
+			return result;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />

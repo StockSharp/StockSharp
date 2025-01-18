@@ -103,7 +103,7 @@ public class AroonUp : LengthIndicator<decimal>
 	private int _maxValueAge;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -165,10 +165,10 @@ public class AroonUp : LengthIndicator<decimal>
 		if (IsFormed)
 		{
 			var value = 100m * (Length - tempMaxValueAge) / Length;
-			return new DecimalIndicatorValue(this, value, input.Time);
+			return value;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />
@@ -191,7 +191,7 @@ public class AroonDown : LengthIndicator<decimal>
 	private int _minValueAge;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -253,10 +253,10 @@ public class AroonDown : LengthIndicator<decimal>
 		if (IsFormed)
 		{
 			var value = 100m * (Length - tempMinValueAge) / Length;
-			return new DecimalIndicatorValue(this, value, input.Time);
+			return value;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />

@@ -43,7 +43,7 @@ public class RelativeStrengthIndex : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var newValue = input.ToDecimal();
 
@@ -55,7 +55,7 @@ public class RelativeStrengthIndex : LengthIndicator<decimal>
 				_isInitialized = true;
 			}
 
-			return new DecimalIndicatorValue(this, input.Time);
+			return null;
 		}
 
 		var delta = newValue - _last;
@@ -67,11 +67,11 @@ public class RelativeStrengthIndex : LengthIndicator<decimal>
 			_last = newValue;
 
 		if (lossValue == 0)
-			return new DecimalIndicatorValue(this, 100m, input.Time);
+			return 100m;
 		
 		if (gainValue / lossValue == 1)
-			return new DecimalIndicatorValue(this, 0m, input.Time);
+			return 0m;
 
-		return new DecimalIndicatorValue(this, 100m - 100m / (1m + gainValue / lossValue), input.Time);
+		return 100m - 100m / (1m + gainValue / lossValue);
 	}
 }

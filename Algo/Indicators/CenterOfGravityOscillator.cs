@@ -35,7 +35,7 @@ public class CenterOfGravityOscillator : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var price = input.ToDecimal();
 
@@ -83,9 +83,9 @@ public class CenterOfGravityOscillator : LengthIndicator<decimal>
 		if (IsFormed)
 		{
 			var cgo = (sumWeightedPrice / sumPrice) - _part;
-			return new DecimalIndicatorValue(this, cgo, input.Time);
+			return cgo;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 }

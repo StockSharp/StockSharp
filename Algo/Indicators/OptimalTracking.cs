@@ -90,7 +90,7 @@ public sealed class OptimalTracking : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -106,6 +106,6 @@ public sealed class OptimalTracking : LengthIndicator<decimal>
 
 		var result = b.Calculate(this, buff, average, halfRange);
 
-		return new DecimalIndicatorValue(this, result, input.Time);
+		return result;
 	}
 }

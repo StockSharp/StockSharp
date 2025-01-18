@@ -26,7 +26,7 @@ public class MomentumPinball : LengthIndicator<decimal>
 	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var price = input.ToDecimal();
 
@@ -40,9 +40,9 @@ public class MomentumPinball : LengthIndicator<decimal>
 			var momentum = price - Buffer[0];
 			var range = Buffer.Max.Value - Buffer.Min.Value;
 			var result = range != 0 ? (momentum / range) * 100 : 0;
-			return new DecimalIndicatorValue(this, result, input.Time);
+			return result;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 }

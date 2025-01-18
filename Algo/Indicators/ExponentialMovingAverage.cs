@@ -34,7 +34,7 @@ public class ExponentialMovingAverage : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var newValue = input.ToDecimal();
 
@@ -49,11 +49,11 @@ public class ExponentialMovingAverage : LengthIndicator<decimal>
 
 				_prevFinalValue = Buffer.Sum / Length;
 
-				return new DecimalIndicatorValue(this, _prevFinalValue, input.Time);
+				return _prevFinalValue;
 			}
 			else
 			{
-				return new DecimalIndicatorValue(this, (Buffer.SumNoFirst + newValue) / Length, input.Time);
+				return (Buffer.SumNoFirst + newValue) / Length;
 			}
 		}
 		else
@@ -65,7 +65,7 @@ public class ExponentialMovingAverage : LengthIndicator<decimal>
 			if (input.IsFinal)
 				_prevFinalValue = curValue;
 
-			return new DecimalIndicatorValue(this, curValue, input.Time);
+			return curValue;
 		}
 	}
 }

@@ -53,7 +53,7 @@ public class RelativeMomentumIndex : LengthIndicator<decimal>
 	protected override bool CalcIsFormed() => _upMomentumSma.IsFormed && _downMomentumSma.IsFormed;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var price = input.ToDecimal();
 
@@ -81,12 +81,12 @@ public class RelativeMomentumIndex : LengthIndicator<decimal>
 				if (den != 0)
 				{
 					var rmi = 100m * up / den;
-					return new DecimalIndicatorValue(this, rmi, input.Time);
+					return rmi;
 				}
 			}
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />

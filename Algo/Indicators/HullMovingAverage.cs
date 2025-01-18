@@ -60,7 +60,7 @@ public class HullMovingAverage : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var slowVal = _wmaSlow.Process(input);
 		var fastVal = _wmaFast.Process(input);
@@ -71,7 +71,7 @@ public class HullMovingAverage : LengthIndicator<decimal>
 			_wmaResult.Process(diff, input.Time);
 		}
 
-		return new DecimalIndicatorValue(this, _wmaResult.GetCurrentValue(), input.Time);
+		return _wmaResult.GetCurrentValue();
 	}
 
 	/// <inheritdoc />

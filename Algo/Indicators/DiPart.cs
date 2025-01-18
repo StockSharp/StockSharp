@@ -33,7 +33,7 @@ public abstract class DiPart : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		decimal? result = null;
 
@@ -58,7 +58,7 @@ public abstract class DiPart : LengthIndicator<decimal>
 		if (input.IsFinal)
 			_lastCandle = candle;
 
-		return result == null ? new DecimalIndicatorValue(this, input.Time) : new DecimalIndicatorValue(this, result.Value, input.Time);
+		return result;
 	}
 
 	/// <summary>

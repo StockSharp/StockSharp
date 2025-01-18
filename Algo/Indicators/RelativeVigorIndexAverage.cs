@@ -30,7 +30,7 @@ public class RelativeVigorIndexAverage : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -73,12 +73,12 @@ public class RelativeVigorIndexAverage : LengthIndicator<decimal>
 						   (candle.HighPrice - candle.LowPrice)) / 6m;
 			}
 
-			return new DecimalIndicatorValue(this, valueDn == decimal.Zero 
-				? valueUp 
-				: valueUp / valueDn, input.Time);
+			return valueDn == decimal.Zero 
+				? valueUp
+				: valueUp / valueDn;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />

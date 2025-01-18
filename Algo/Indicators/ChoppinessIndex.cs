@@ -37,7 +37,7 @@ public class ChoppinessIndex : LengthIndicator<decimal>
 	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -77,10 +77,10 @@ public class ChoppinessIndex : LengthIndicator<decimal>
 		if (IsFormed && sumTrueRange != 0)
 		{
 			var ci = 100 * (decimal)Math.Log10((double)(sumTrueRange / sumHighLowRange)) / _part;
-			return new DecimalIndicatorValue(this, ci, input.Time);
+			return ci;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />

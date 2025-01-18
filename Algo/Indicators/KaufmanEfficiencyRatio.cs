@@ -22,7 +22,7 @@ public class KaufmanEfficiencyRatio : LengthIndicator<decimal>
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var price = input.ToDecimal();
 
@@ -42,10 +42,10 @@ public class KaufmanEfficiencyRatio : LengthIndicator<decimal>
 			}
 
 			var result = volatility != 0 ? change / volatility : 0;
-			return new DecimalIndicatorValue(this, result, input.Time);
+			return result;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />

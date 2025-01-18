@@ -40,7 +40,7 @@ public class WilliamsR : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -50,8 +50,8 @@ public class WilliamsR : LengthIndicator<decimal>
 		var diff = highValue - lowValue;
 
 		if (diff != 0)
-			return new DecimalIndicatorValue(this, -100m * (highValue - candle.ClosePrice) / diff, input.Time);
+			return -100m * (highValue - candle.ClosePrice) / diff;
 			
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 }

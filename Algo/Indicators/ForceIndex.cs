@@ -33,7 +33,7 @@ public class ForceIndex : ExponentialMovingAverage
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -42,12 +42,12 @@ public class ForceIndex : ExponentialMovingAverage
 			if (input.IsFinal)
 				_prevClosePrice = candle.ClosePrice;
 
-			return new DecimalIndicatorValue(this, input.Time);
+			return null;
 		}
 
 		var force = (candle.ClosePrice - _prevClosePrice) * candle.TotalVolume;
 
-		var emaValue = base.OnProcess(input.SetValue(this, force));
+		var emaValue = base.OnProcessDecimal(input.SetValue(this, force));
 
 		if (input.IsFinal)
 			_prevClosePrice = candle.ClosePrice;

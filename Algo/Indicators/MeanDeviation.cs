@@ -42,7 +42,7 @@ public class MeanDeviation : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var val = input.ToDecimal();
 
@@ -59,6 +59,6 @@ public class MeanDeviation : LengthIndicator<decimal>
 			? Buffer.Sum(t => Math.Abs(t - smaValue))
 			: Buffer.Skip(IsFormed ? 1 : 0).Sum(t => Math.Abs(t - smaValue)) + Math.Abs(val - smaValue);
 
-		return new DecimalIndicatorValue(this, md / Length, input.Time);
+		return md / Length;
 	}
 }

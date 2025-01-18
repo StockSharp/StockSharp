@@ -38,7 +38,7 @@ public class IchimokuSenkouALine : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		decimal? result = null;
 
@@ -51,6 +51,6 @@ public class IchimokuSenkouALine : LengthIndicator<decimal>
 				Buffer.PushBack((Tenkan.GetCurrentValue() + Kijun.GetCurrentValue()) / 2);
 		}
 
-		return result == null ? new DecimalIndicatorValue(this, input.Time) : new DecimalIndicatorValue(this, result.Value, input.Time);
+		return result;
 	}
 }

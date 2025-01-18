@@ -38,7 +38,7 @@ public class CommodityChannelIndex : LengthIndicator<decimal>
 	protected override bool CalcIsFormed() => _mean.IsFormed;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -47,8 +47,8 @@ public class CommodityChannelIndex : LengthIndicator<decimal>
 		var meanValue = _mean.Process(new DecimalIndicatorValue(this, aveP, input.Time) { IsFinal = input.IsFinal });
 
 		if (IsFormed && meanValue.ToDecimal() != 0)
-			return new DecimalIndicatorValue(this, ((aveP - _mean.Sma.GetCurrentValue()) / (0.015m * meanValue.ToDecimal())), input.Time);
+			return (aveP - _mean.Sma.GetCurrentValue()) / (0.015m * meanValue.ToDecimal());
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 }

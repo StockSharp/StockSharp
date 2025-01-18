@@ -32,7 +32,7 @@ public class IchimokuLine : LengthIndicator<decimal>
 	protected override bool CalcIsFormed() => _buffer.Count >= Length;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -45,13 +45,12 @@ public class IchimokuLine : LengthIndicator<decimal>
 
 		if (IsFormed)
 		{
-			// рассчитываем значение
 			var max = buff.Max(t => t.high);
 			var min = buff.Min(t => t.low);
 
-			return new DecimalIndicatorValue(this, (max + min) / 2, input.Time);
+			return (max + min) / 2;
 		}
-			
-		return new DecimalIndicatorValue(this, input.Time);
+
+		return null;
 	}
 }

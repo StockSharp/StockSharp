@@ -40,7 +40,7 @@ public class ChaikinMoneyFlow : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -80,9 +80,9 @@ public class ChaikinMoneyFlow : LengthIndicator<decimal>
 
 		if (IsFormed)
 		{
-			return new DecimalIndicatorValue(this, volumeSum != 0 ? moneyFlowVolumeSum / volumeSum : 0, input.Time);
+			return volumeSum != 0 ? moneyFlowVolumeSum / volumeSum : 0;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 }

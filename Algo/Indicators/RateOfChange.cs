@@ -24,13 +24,13 @@ public class RateOfChange : Momentum
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
-		var result = base.OnProcess(input);
+		var result = base.OnProcessDecimal(input);
 
 		if (Buffer.Count > 0 && Buffer[0] != 0)
-			return new DecimalIndicatorValue(this, result.ToDecimal() / Buffer[0] * 100, input.Time);
+			return result.Value / Buffer[0] * 100;
 		
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 }

@@ -25,7 +25,7 @@ public class LinearRegSlope : LengthIndicator<decimal>
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var newValue = input.ToDecimal();
 
@@ -54,8 +54,8 @@ public class LinearRegSlope : LengthIndicator<decimal>
 		//коэффициент при независимой переменной
 		var divisor = Length * sumX2 - sumX * sumX;
 		if (divisor == 0) 
-			return new DecimalIndicatorValue(this, input.Time);
+			return null;
 
-		return new DecimalIndicatorValue(this, (Length * sumXy - sumX * sumY) / divisor, input.Time);
+		return (Length * sumXy - sumX * sumY) / divisor;
 	}
 }

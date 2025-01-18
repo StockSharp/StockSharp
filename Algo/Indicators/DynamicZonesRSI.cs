@@ -84,7 +84,7 @@ public class DynamicZonesRSI : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var rsiValue = _rsi.Process(input);
 
@@ -119,11 +119,11 @@ public class DynamicZonesRSI : LengthIndicator<decimal>
 				else
 					dynamicRsi = (rsi - dynamicOversold) / (dynamicOverbought - dynamicOversold) * 100;
 
-				return new DecimalIndicatorValue(this, dynamicRsi, input.Time);
+				return dynamicRsi;
 			}
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />

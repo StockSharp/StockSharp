@@ -21,7 +21,7 @@ public class McGinleyDynamic : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var price = input.ToDecimal();
 
@@ -35,7 +35,7 @@ public class McGinleyDynamic : LengthIndicator<decimal>
 				{
 					_prevMd = Buffer.Average();
 
-					return new DecimalIndicatorValue(this, _prevMd, input.Time);
+					return _prevMd;
 				}
 			}
 		}
@@ -46,10 +46,10 @@ public class McGinleyDynamic : LengthIndicator<decimal>
 			if (input.IsFinal)
 				_prevMd = md;
 
-			return new DecimalIndicatorValue(this, md, input.Time);
+			return md;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />

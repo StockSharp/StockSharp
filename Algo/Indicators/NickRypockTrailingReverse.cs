@@ -142,7 +142,7 @@ public class NickRypockTrailingReverse : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var b = input.IsFinal ? _buf : _buf.Clone();
 
@@ -153,8 +153,7 @@ public class NickRypockTrailingReverse : LengthIndicator<decimal>
 			Buffer.PushBack(newValue);
 		}
 
-		// значение NickRypockTrailingReverse
-		return new DecimalIndicatorValue(this, newValue, input.Time);
+		return newValue;
 	}
 
 	/// <inheritdoc />

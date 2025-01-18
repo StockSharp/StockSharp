@@ -37,7 +37,7 @@ public class IchimokuSenkouBLine : LengthIndicator<decimal>
 	public IchimokuLine Kijun { get; }
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -65,6 +65,6 @@ public class IchimokuSenkouBLine : LengthIndicator<decimal>
 				Buffer.PopFront();
 		}
 
-		return result == null ? new DecimalIndicatorValue(this, input.Time) : new DecimalIndicatorValue(this, result.Value, input.Time);
+		return result;
 	}
 }

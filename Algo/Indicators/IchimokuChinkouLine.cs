@@ -15,13 +15,13 @@ public class IchimokuChinkouLine : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var close = input.ToCandle().ClosePrice;
 
 		if (input.IsFinal)
 			Buffer.PushBack(close);
 
-		return new DecimalIndicatorValue(this, close, input.Time);
+		return close;
 	}
 }

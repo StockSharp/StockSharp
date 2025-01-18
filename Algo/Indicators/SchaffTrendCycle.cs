@@ -95,7 +95,7 @@ public class SchaffTrendCycle : ExponentialMovingAverage
 	public override int NumValuesToInitialize => Macd.NumValuesToInitialize + StochasticK.NumValuesToInitialize + base.NumValuesToInitialize;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		if (input.IsFinal)
 			Buffer.PushBack(input.ToDecimal());
@@ -103,19 +103,19 @@ public class SchaffTrendCycle : ExponentialMovingAverage
 		var macdVal = (ComplexIndicatorValue)Macd.Process(input);
 
 		if (!Macd.IsFormed)
-			return new DecimalIndicatorValue(this, input.Time);
+			return null;
 
 		var macdHist = macdVal[Macd.Macd].ToDecimal() - macdVal[Macd.SignalMa].ToDecimal();
 		var den = Buffer.Max.Value - Buffer.Min.Value;
 		var stochK = den == 0 ? _prevStochK : StochasticK.Process(input, (macdHist - Buffer.Min.Value) / den).ToDecimal();
 
 		if (!StochasticK.IsFormed)
-			return new DecimalIndicatorValue(this, input.Time);
+			return null;
 
 		if (input.IsFinal)
 			_prevStochK = stochK;
 
-		return base.OnProcess(input.SetValue(this, stochK));
+		return base.OnProcessDecimal(input.SetValue(this, stochK));
 	}
 
 	/// <inheritdoc />

@@ -42,7 +42,7 @@ public class StochasticK : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
@@ -52,8 +52,8 @@ public class StochasticK : LengthIndicator<decimal>
 		var diff = highValue - lowValue;
 
 		if (diff == 0)
-			return new DecimalIndicatorValue(this, 0, input.Time);
+			return 0;
 
-		return new DecimalIndicatorValue(this, 100 * (candle.ClosePrice - lowValue) / diff, input.Time);
+		return 100 * (candle.ClosePrice - lowValue) / diff;
 	}
 }

@@ -35,7 +35,7 @@ public class TwiggsMoneyFlow : LengthIndicator<decimal>
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 		var cl = candle.GetLength();
@@ -67,8 +67,8 @@ public class TwiggsMoneyFlow : LengthIndicator<decimal>
 			_prevAd = ad;
 
 		return tmf == 0
-			? new DecimalIndicatorValue(this, input.Time)
-			: new DecimalIndicatorValue(this, tmf, input.Time);
+			? null
+			: tmf;
 	}
 
 	/// <inheritdoc />

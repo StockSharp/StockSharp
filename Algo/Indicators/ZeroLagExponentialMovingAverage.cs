@@ -25,7 +25,7 @@ public class ZeroLagExponentialMovingAverage : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var price = input.ToDecimal();
 
@@ -48,10 +48,10 @@ public class ZeroLagExponentialMovingAverage : LengthIndicator<decimal>
 				_isFormedEx = zlema >= Buffer.Min.Value;
 
 			if (_isFormedEx)
-				return new DecimalIndicatorValue(this, zlema, input.Time);
+				return zlema;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 
 	/// <inheritdoc />

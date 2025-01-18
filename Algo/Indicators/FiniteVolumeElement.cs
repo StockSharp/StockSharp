@@ -26,7 +26,7 @@ public class FiniteVolumeElement : LengthIndicator<decimal>
 	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
 	/// <inheritdoc />
-	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 		var cl = candle.GetLength();
@@ -48,9 +48,9 @@ public class FiniteVolumeElement : LengthIndicator<decimal>
 		if (IsFormed)
 		{
 			var result = (Buffer.Sum + (input.IsFinal ? 0 : fve - Buffer.Back())) / Length;
-			return new DecimalIndicatorValue(this, result * 100, input.Time);
+			return result * 100;
 		}
 
-		return new DecimalIndicatorValue(this, input.Time);
+		return null;
 	}
 }
