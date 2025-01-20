@@ -5,8 +5,6 @@ namespace StockSharp.Algo.Indicators;
 /// </summary>
 public class IndicatorType : Equatable<IndicatorType>, IDisposable
 {
-	private Type _indicator;
-
 	/// <summary>
 	/// Identifier.
 	/// </summary>
@@ -24,9 +22,14 @@ public class IndicatorType : Equatable<IndicatorType>, IDisposable
 
 	private void RefreshNameDesc(Type indicator)
 	{
+		if (indicator is null)
+			throw new ArgumentNullException(nameof(indicator));
+
 		Name = indicator.GetDisplayName();
 		Description = indicator.GetDescription();
 	}
+
+	private Type _indicator;
 
 	/// <summary>
 	/// Indicator type.
