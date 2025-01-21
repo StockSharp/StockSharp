@@ -23,11 +23,35 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	/// <inheritdoc />
 	public void Dispose()
 	{
-		_assemblyReferences.Changed -= OnReferencesChanged;
+		try
+		{
+			_assemblyReferences.Changed -= OnReferencesChanged;
 
-		_context?.Dispose();
+			var ctx = _context;
 
-		GC.SuppressFinalize(this);
+			if (ctx is null)
+				return;
+
+			ctx.Dispose();
+
+			_context = null;
+
+			var compiler = Language.TryGetCompiler();
+
+			if (compiler is null)
+				return;
+
+			var cache = compiler.IsAssemblyPersistable ? ServicesRegistry.TryCompilerCache : null;
+
+			if (cache is null)
+				return;
+
+			cache.Remove(Language, GetSources(), GetRefNames());
+		}
+		finally
+		{
+			GC.SuppressFinalize(this);
+		}
 	}
 
 	private void OnReferencesChanged()
@@ -189,6 +213,19 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	public IEnumerable<CompilationError> Compile(Func<Type, bool> isTypeCompatible = default, string typeName = default)
 		=> AsyncContext.Run(() => CompileAsync(isTypeCompatible, typeName, default));
 
+	private IEnumerable<string> GetSources()
+	{
+		var sources = new[] { Text };
+
+		if (ExtraSources is not null)
+			sources = sources.Concat(ExtraSources);
+
+		return sources;
+	}
+
+	private string[] GetRefNames()
+		=> _assemblyReferences.Cache.Concat(_projectReferences.Cache).Concat(_nugetReferences.Cache).Select(r => r.Name).ToArray();
+
 	/// <summary>
 	/// Compile code.
 	/// </summary>
@@ -200,28 +237,6 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	{
 		IsCompilable = false;
 
-		var sources = new[] { Text };
-
-		if (ExtraSources is not null)
-			sources = sources.Concat(ExtraSources);
-
-		(string name, byte[] body)[] refs = null;
-
-		try
-		{
-			refs = (await _assemblyReferences.Cache.Concat(_projectReferences.Cache).Concat(_nugetReferences.Cache).ToValidRefImages(cancellationToken)).ToArray();
-		}
-		catch (Exception ex)
-		{
-			ex.LogError();
-
-			return [new CompilationError
-			{
-				Message = ex.Message,
-				Type = CompilationErrorTypes.Error,
-			}];
-		}
-
 		Assembly asm = null;
 		var errors = new List<CompilationError>();
 
@@ -231,8 +246,24 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 
 		var cache = compiler.IsAssemblyPersistable ? ServicesRegistry.TryCompilerCache : null;
 
-		if (cache?.TryGet(Language, sources, refs.Select(r => r.name), out var asmBody) != true)
+		var sources = GetSources();
+		var refNames = GetRefNames();
+
+		if (cache?.TryGet(Language, sources, refNames, out var asmBody) != true)
 		{
+			(string name, byte[] body)[] refs;
+
+			try
+			{
+				refs = (await _assemblyReferences.Cache.Concat(_projectReferences.Cache).Concat(_nugetReferences.Cache).ToValidRefImages(cancellationToken)).ToArray();
+			}
+			catch (Exception ex)
+			{
+				ex.LogError();
+
+				return [ex.ToError()];
+			}
+
 			var result = await compiler.Compile(ModuleName, sources, refs, cancellationToken);
 
 			if (result.HasErrors())
@@ -256,7 +287,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 
 			try
 			{
-				cache?.Add(Language, sources, refs.Select(r => r.name), asmBody);
+				cache?.Add(Language, sources, refNames, asmBody);
 			}
 			catch (Exception ex)
 			{
