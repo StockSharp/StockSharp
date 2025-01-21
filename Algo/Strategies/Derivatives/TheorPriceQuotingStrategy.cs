@@ -16,7 +16,7 @@ public class TheorPriceQuotingStrategy : BestByPriceQuotingStrategy
 	public TheorPriceQuotingStrategy(Sides quotingDirection, decimal quotingVolume, Range<Unit> theorPriceOffset)
 		: base(quotingDirection, quotingVolume)
 	{
-		_theorPriceOffset = this.Param(nameof(TheorPriceOffset), theorPriceOffset);
+		_theorPriceOffset = Param(nameof(TheorPriceOffset), theorPriceOffset);
 	}
 
 	private readonly StrategyParam<Range<Unit>> _theorPriceOffset;

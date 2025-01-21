@@ -25,11 +25,11 @@ public abstract class QuotingStrategy : Strategy
 	{
 		CheckQuotingVolume(quotingVolume);
 
-		_quotingDirection = this.Param(nameof(QuotingDirection), quotingDirection);
-		_quotingVolume = this.Param(nameof(QuotingVolume), quotingVolume);
-		_timeOut = this.Param<TimeSpan>(nameof(TimeOut));
-		_useLastTradePrice = this.Param(nameof(UseLastTradePrice), true);
-		_isSupportAtomicReRegister = this.Param(nameof(IsSupportAtomicReRegister), true);
+		_quotingDirection = Param(nameof(QuotingDirection), quotingDirection);
+		_quotingVolume = Param(nameof(QuotingVolume), quotingVolume);
+		_timeOut = Param<TimeSpan>(nameof(TimeOut));
+		_useLastTradePrice = Param(nameof(UseLastTradePrice), true);
+		_isSupportAtomicReRegister = Param(nameof(IsSupportAtomicReRegister), true);
 
 		DisposeOnStop = true;
 	}

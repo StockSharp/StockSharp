@@ -21,8 +21,8 @@ public class MarketQuotingStrategy : BestByPriceQuotingStrategy
 	public MarketQuotingStrategy(Sides quotingDirection, decimal quotingVolume)
 		: base(quotingDirection, quotingVolume)
 	{
-		_priceType = this.Param(nameof(PriceType), MarketPriceTypes.Following);
-		_priceOffset = this.Param(nameof(PriceOffset), new Unit());
+		_priceType = Param(nameof(PriceType), MarketPriceTypes.Following);
+		_priceOffset = Param(nameof(PriceOffset), new Unit());
 	}
 
 	/// <summary>
@@ -35,8 +35,8 @@ public class MarketQuotingStrategy : BestByPriceQuotingStrategy
 	public MarketQuotingStrategy(Order order, Unit bestPriceOffset, Unit priceOffset)
 		: base(order, bestPriceOffset)
 	{
-		_priceType = this.Param(nameof(PriceType), MarketPriceTypes.Following);
-		_priceOffset = this.Param(nameof(PriceOffset), priceOffset);
+		_priceType = Param(nameof(PriceType), MarketPriceTypes.Following);
+		_priceOffset = Param(nameof(PriceOffset), priceOffset);
 
 		UseLastTradePrice = false;
 	}

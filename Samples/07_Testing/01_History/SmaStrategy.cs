@@ -19,14 +19,14 @@ namespace StockSharp.Samples.Testing.History
 
 		public SmaStrategy()
         {
-			_longSmaParam = this.Param(nameof(LongSma), 80);
-			_shortSmaParam = this.Param(nameof(ShortSma), 30);
-			_takeValue = this.Param(nameof(TakeValue), new Unit(0, UnitTypes.Absolute));
-			_stopValue = this.Param(nameof(StopValue), new Unit(2, UnitTypes.Percent));
-			_candleTypeParam = this.Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(1))).NotNull();
-			_candleTimeFrameParam = this.Param<TimeSpan?>(nameof(CandleTimeFrame));
-			_buildFromParam = this.Param<DataType>(nameof(BuildFrom));
-			_buildFieldParam = this.Param<Level1Fields?>(nameof(BuildField));
+			_longSmaParam = Param(nameof(LongSma), 80);
+			_shortSmaParam = Param(nameof(ShortSma), 30);
+			_takeValue = Param(nameof(TakeValue), new Unit(0, UnitTypes.Absolute));
+			_stopValue = Param(nameof(StopValue), new Unit(2, UnitTypes.Percent));
+			_candleTypeParam = Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(1))).NotNull();
+			_candleTimeFrameParam = Param<TimeSpan?>(nameof(CandleTimeFrame));
+			_buildFromParam = Param<DataType>(nameof(BuildFrom));
+			_buildFieldParam = Param<Level1Fields?>(nameof(BuildField));
 		}
 
 		private readonly StrategyParam<TimeSpan?> _candleTimeFrameParam;

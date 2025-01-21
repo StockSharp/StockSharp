@@ -27,8 +27,8 @@ public abstract class TimeFrameStrategy : Strategy
 	/// <param name="timeFrame">The strategy timeframe.</param>
 	protected TimeFrameStrategy(TimeSpan timeFrame)
 	{
-		_interval = this.Param(nameof(Interval), timeFrame);
-		_timeFrame = this.Param(nameof(TimeFrame), timeFrame);
+		_interval = Param(nameof(Interval), timeFrame);
+		_timeFrame = Param(nameof(TimeFrame), timeFrame);
 	}
 
 	private readonly StrategyParam<TimeSpan> _timeFrame;

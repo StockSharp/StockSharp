@@ -23,12 +23,12 @@ public abstract class ProtectiveStrategy : QuotingStrategy, IProtectiveStrategy
 	protected ProtectiveStrategy(Sides protectiveSide, decimal protectivePrice, decimal protectiveVolume, Unit protectiveLevel, bool isUpTrend)
 		: base(protectiveSide.Invert(), protectiveVolume)
 	{
-		_protectiveLevel = this.Param(nameof(ProtectiveLevel), new Unit());
-		_useQuoting = this.Param<bool>(nameof(UseQuoting));
-		_useMarketOrders = this.Param<bool>(nameof(UseMarketOrders));
-		_bestPriceOffset = this.Param(nameof(BestPriceOffset), new Unit());
-		_priceOffset = this.Param(nameof(PriceOffset), new Unit());
-		_isTrailing = this.Param<bool>(nameof(IsTrailing));
+		_protectiveLevel = Param(nameof(ProtectiveLevel), new Unit());
+		_useQuoting = Param<bool>(nameof(UseQuoting));
+		_useMarketOrders = Param<bool>(nameof(UseMarketOrders));
+		_bestPriceOffset = Param(nameof(BestPriceOffset), new Unit());
+		_priceOffset = Param(nameof(PriceOffset), new Unit());
+		_isTrailing = Param<bool>(nameof(IsTrailing));
 
 		_isUpTrend = isUpTrend;
 	

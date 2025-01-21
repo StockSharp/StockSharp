@@ -34,8 +34,8 @@ public abstract class HedgeStrategy : Strategy
 	{
 		BlackScholes = blackScholes ?? throw new ArgumentNullException(nameof(blackScholes));
 
-		_useQuoting = this.Param<bool>(nameof(UseQuoting));
-		_priceOffset = this.Param<Unit>(nameof(PriceOffset), new());
+		_useQuoting = Param<bool>(nameof(UseQuoting));
+		_priceOffset = Param<Unit>(nameof(PriceOffset), new());
 	}
 
 	/// <summary>

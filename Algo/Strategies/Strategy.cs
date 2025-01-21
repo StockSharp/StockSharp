@@ -355,23 +355,23 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		Parameters = new(this);
 
-		_id = this.Param(nameof(Id), base.Id);
-		_volume = this.Param<decimal>(nameof(Volume), 1).SetValidator(v => v > 0);
-		_name = this.Param(nameof(Name), new string(GetType().Name.Where(char.IsUpper).ToArray()));
-		_disposeOnStop = this.Param(nameof(DisposeOnStop), false).CanOptimize(false);
-		_waitRulesOnStop = this.Param(nameof(WaitRulesOnStop), true).CanOptimize(false);
-		_cancelOrdersWhenStopping = this.Param(nameof(CancelOrdersWhenStopping), true).CanOptimize(false);
-		_waitAllTrades = this.Param<bool>(nameof(WaitAllTrades)).CanOptimize(false);
-		_commentMode = this.Param<StrategyCommentModes>(nameof(CommentMode));
-		_ordersKeepTime = this.Param(nameof(OrdersKeepTime), TimeSpan.FromDays(1)).SetValidator(v => v >= TimeSpan.Zero);
-		_logLevel = this.Param(nameof(LogLevel), LogLevels.Inherit);
-		_stopOnChildStrategyErrors = this.Param(nameof(StopOnChildStrategyErrors), false).CanOptimize(false);
-		_restoreChildOrders = this.Param(nameof(RestoreChildOrders), false).CanOptimize(false);
-		_tradingMode = this.Param(nameof(TradingMode), StrategyTradingModes.Full);
-		_unsubscribeOnStop = this.Param(nameof(UnsubscribeOnStop), true).CanOptimize(false);
-		_workingTime = this.Param(nameof(WorkingTime), new WorkingTime()).NotNull();
-		_isOnlineStateIncludesChildren = this.Param(nameof(IsOnlineStateIncludesChildren), true).CanOptimize(false);
-		_historySize = this.Param<TimeSpan?>(nameof(HistorySize)).SetValidator(v => v is null || v >= TimeSpan.Zero);
+		_id = Param(nameof(Id), base.Id);
+		_volume = Param<decimal>(nameof(Volume), 1).SetValidator(v => v > 0);
+		_name = Param(nameof(Name), new string(GetType().Name.Where(char.IsUpper).ToArray()));
+		_disposeOnStop = Param(nameof(DisposeOnStop), false).SetCanOptimize(false);
+		_waitRulesOnStop = Param(nameof(WaitRulesOnStop), true).SetCanOptimize(false);
+		_cancelOrdersWhenStopping = Param(nameof(CancelOrdersWhenStopping), true).SetCanOptimize(false);
+		_waitAllTrades = Param<bool>(nameof(WaitAllTrades)).SetCanOptimize(false);
+		_commentMode = Param<StrategyCommentModes>(nameof(CommentMode));
+		_ordersKeepTime = Param(nameof(OrdersKeepTime), TimeSpan.FromDays(1)).SetValidator(v => v >= TimeSpan.Zero);
+		_logLevel = Param(nameof(LogLevel), LogLevels.Inherit);
+		_stopOnChildStrategyErrors = Param(nameof(StopOnChildStrategyErrors), false).SetCanOptimize(false);
+		_restoreChildOrders = Param(nameof(RestoreChildOrders), false).SetCanOptimize(false);
+		_tradingMode = Param(nameof(TradingMode), StrategyTradingModes.Full);
+		_unsubscribeOnStop = Param(nameof(UnsubscribeOnStop), true).SetCanOptimize(false);
+		_workingTime = Param(nameof(WorkingTime), new WorkingTime()).NotNull();
+		_isOnlineStateIncludesChildren = Param(nameof(IsOnlineStateIncludesChildren), true).SetCanOptimize(false);
+		_historySize = Param<TimeSpan?>(nameof(HistorySize)).SetValidator(v => v is null || v >= TimeSpan.Zero);
 
 		_systemParams =
 		[
@@ -785,6 +785,33 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// </summary>
 	[Browsable(false)]
 	public StrategyParameterDictionary Parameters { get; }
+
+	private StrategyParam<T> Param<T>(StrategyParam<T> p)
+	{
+		Parameters.Add(p ?? throw new ArgumentNullException(nameof(p)));
+		return p;
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
+	/// </summary>
+	/// <typeparam name="T">The type of the parameter value.</typeparam>
+	/// <param name="name">Parameter name.</param>
+	/// <param name="initialValue">The initial value.</param>
+	/// <returns>The strategy parameter.</returns>
+	public StrategyParam<T> Param<T>(string name, T initialValue = default)
+		=> Param(new StrategyParam<T>(name, initialValue));
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
+	/// </summary>
+	/// <typeparam name="T">The type of the parameter value.</typeparam>
+	/// <param name="id">Parameter identifier.</param>
+	/// <param name="name">Parameter name.</param>
+	/// <param name="initialValue">The initial value.</param>
+	/// <returns>The strategy parameter.</returns>
+	public StrategyParam<T> Param<T>(string id, string name, T initialValue = default)
+		=> Param(new StrategyParam<T>(id, name, initialValue));
 
 	/// <summary>
 	/// <see cref="Parameters"/> change event.

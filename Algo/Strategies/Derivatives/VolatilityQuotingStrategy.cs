@@ -17,7 +17,7 @@ public class VolatilityQuotingStrategy : BestByPriceQuotingStrategy
 	public VolatilityQuotingStrategy(Sides quotingDirection, decimal quotingVolume, Range<decimal> ivRange)
 		: base(quotingDirection, quotingVolume)
 	{
-		_ivRange = this.Param(nameof(IVRange), ivRange);
+		_ivRange = Param(nameof(IVRange), ivRange);
 	}
 
 	private readonly StrategyParam<Range<decimal>> _ivRange;

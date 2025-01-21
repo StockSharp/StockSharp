@@ -21,7 +21,7 @@ public class BestByPriceQuotingStrategy : QuotingStrategy
 	public BestByPriceQuotingStrategy(Sides quotingDirection, decimal quotingVolume)
 		: base(quotingDirection, quotingVolume)
 	{
-		_bestPriceOffset = this.Param(nameof(BestPriceOffset), new Unit());
+		_bestPriceOffset = Param(nameof(BestPriceOffset), new Unit());
 	}
 
 	/// <summary>
@@ -32,7 +32,7 @@ public class BestByPriceQuotingStrategy : QuotingStrategy
 	public BestByPriceQuotingStrategy(Order order, Unit bestPriceOffset)
 		: base(order)
 	{
-		_bestPriceOffset = this.Param(nameof(BestPriceOffset), bestPriceOffset);
+		_bestPriceOffset = Param(nameof(BestPriceOffset), bestPriceOffset);
 	}
 
 	private readonly StrategyParam<Unit> _bestPriceOffset;

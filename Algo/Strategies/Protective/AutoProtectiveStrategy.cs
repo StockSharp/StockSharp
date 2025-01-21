@@ -43,13 +43,13 @@ public class AutoProtectiveStrategy : Strategy
 	/// </summary>
 	public AutoProtectiveStrategy()
 	{
-		_takeProfitLevel = this.Param(nameof(TakeProfitLevel), new Unit());
-		_stopLossLevel = this.Param(nameof(StopLossLevel), new Unit());
-		_isTrailingStopLoss = this.Param<bool>(nameof(IsTrailingStopLoss));
-		_isTrailingTakeProfit = this.Param<bool>(nameof(IsTrailingTakeProfit));
-		_takeProfitTimeOut = this.Param<TimeSpan>(nameof(TakeProfitTimeOut));
-		_stopLossTimeOut = this.Param<TimeSpan>(nameof(StopLossTimeOut));
-		_useMarketOrders = this.Param<bool>(nameof(UseMarketOrders));
+		_takeProfitLevel = Param(nameof(TakeProfitLevel), new Unit());
+		_stopLossLevel = Param(nameof(StopLossLevel), new Unit());
+		_isTrailingStopLoss = Param<bool>(nameof(IsTrailingStopLoss));
+		_isTrailingTakeProfit = Param<bool>(nameof(IsTrailingTakeProfit));
+		_takeProfitTimeOut = Param<TimeSpan>(nameof(TakeProfitTimeOut));
+		_stopLossTimeOut = Param<TimeSpan>(nameof(StopLossTimeOut));
+		_useMarketOrders = Param<bool>(nameof(UseMarketOrders));
 	}
 
 	private readonly StrategyParam<Unit> _takeProfitLevel;

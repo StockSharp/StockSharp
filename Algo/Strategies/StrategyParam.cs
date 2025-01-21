@@ -169,6 +169,33 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <inheritdoc />
 	public object OptimizeStep { get; set; }
 
+	/// <summary>
+	/// Fill optimization parameters.
+	/// </summary>
+	/// <param name="optimizeFrom">The From value at optimization.</param>
+	/// <param name="optimizeTo">The To value at optimization.</param>
+	/// <param name="optimizeStep">The Increment value at optimization.</param>
+	/// <returns>The strategy parameter.</returns>
+	public StrategyParam<T> SetOptimize(T optimizeFrom = default, T optimizeTo = default, T optimizeStep = default)
+	{
+		OptimizeFrom = optimizeFrom;
+		OptimizeTo = optimizeTo;
+		OptimizeStep = optimizeStep;
+
+		return this;
+	}
+
+	/// <summary>
+	/// Set <see cref="StrategyParam{T}.CanOptimize"/> value.
+	/// </summary>
+	/// <param name="canOptimize">The value of <see cref="StrategyParam{T}.CanOptimize"/>.</param>
+	/// <returns>The strategy parameter.</returns>
+	public StrategyParam<T> SetCanOptimize(bool canOptimize)
+	{
+		CanOptimize = canOptimize;
+		return this;
+	}
+
 	private void OnValueInnerStateChanged(object sender, PropertyChangedEventArgs e)
 	{
 		NotifyChanged(nameof(Value));

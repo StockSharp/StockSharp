@@ -21,8 +21,8 @@ public class LevelQuotingStrategy : QuotingStrategy
 	public LevelQuotingStrategy(Sides quotingDirection, decimal quotingVolume)
 		: base(quotingDirection, quotingVolume)
 	{
-		_level = this.Param(nameof(Level), new Range<int>());
-		_ownLevel = this.Param<bool>(nameof(OwnLevel));
+		_level = Param(nameof(Level), new Range<int>());
+		_ownLevel = Param<bool>(nameof(OwnLevel));
 	}
 
 	private readonly StrategyParam<Range<int>> _level;

@@ -22,7 +22,7 @@ public class LimitQuotingStrategy : QuotingStrategy
 	public LimitQuotingStrategy(Sides quotingDirection, decimal quotingVolume, decimal limitPrice)
 		: base(quotingDirection, quotingVolume)
 	{
-		_limitPrice = this.Param(nameof(LimitPrice), limitPrice);
+		_limitPrice = Param(nameof(LimitPrice), limitPrice);
 	}
 
 	private readonly StrategyParam<decimal> _limitPrice;

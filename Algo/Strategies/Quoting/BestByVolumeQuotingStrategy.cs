@@ -21,7 +21,7 @@ public class BestByVolumeQuotingStrategy : QuotingStrategy
 	public BestByVolumeQuotingStrategy(Sides quotingDirection, decimal quotingVolume)
 		: base(quotingDirection, quotingVolume)
 	{
-		_volumeExchange = this.Param(nameof(VolumeExchange), new Unit());
+		_volumeExchange = Param(nameof(VolumeExchange), new Unit());
 	}
 
 	/// <summary>
@@ -33,7 +33,7 @@ public class BestByVolumeQuotingStrategy : QuotingStrategy
 	public BestByVolumeQuotingStrategy(Order order, Unit volumeExchange)
 		: base(order)
 	{
-		_volumeExchange = this.Param(nameof(VolumeExchange), volumeExchange);
+		_volumeExchange = Param(nameof(VolumeExchange), volumeExchange);
 	}
 
 	private readonly StrategyParam<Unit> _volumeExchange;

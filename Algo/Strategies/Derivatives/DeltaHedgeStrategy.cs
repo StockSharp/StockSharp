@@ -14,7 +14,7 @@ public class DeltaHedgeStrategy : HedgeStrategy
 	public DeltaHedgeStrategy(BasketBlackScholes blackScholes)
 		: base(blackScholes)
 	{
-		_positionOffset = this.Param<decimal>(nameof(PositionOffset));
+		_positionOffset = Param<decimal>(nameof(PositionOffset));
 	}
 
 	private readonly StrategyParam<decimal> _positionOffset;
