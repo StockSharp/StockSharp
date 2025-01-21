@@ -1,6 +1,7 @@
 namespace StockSharp.Algo.Compilation;
 
 using Ecng.Compilation;
+using Ecng.Reflection;
 
 using Nito.AsyncEx;
 
@@ -9,6 +10,8 @@ using Nito.AsyncEx;
 /// </summary>
 public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 {
+	private ICompilerContext _context;
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CodeInfo"/>.
 	/// </summary>
@@ -22,7 +25,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	{
 		_assemblyReferences.Changed -= OnReferencesChanged;
 
-		Context?.DoDispose();
+		_context?.Dispose();
 
 		GC.SuppressFinalize(this);
 	}
@@ -99,7 +102,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 
 			_language = value.ThrowIfEmpty(nameof(value));
 
-			if (Context is not null)
+			if (_context is not null)
 				throw new InvalidOperationException("Language cannot be changed after compilation.");
 
 			if (value.EqualsIgnoreCase(FileExts.FSharp))
@@ -131,7 +134,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	/// <summary>
 	/// Object type.
 	/// </summary>
-	public IType ObjectType { get; private set; }
+	public Type ObjectType { get; private set; }
 
 	/// <summary>
 	/// The code is compilable.
@@ -162,14 +165,9 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	public event Action Compiled;
 
 	/// <summary>
-	/// <see cref="AssemblyLoadContextTracker"/>
-	/// </summary>
-	public object Context { get; private set; }
-
-	/// <summary>
 	/// Last built assembly.
 	/// </summary>
-	public IAssembly Assembly { get; private set; }
+	public byte[] Assembly { get; private set; }
 
 	/// <summary>
 	/// Compile code.
@@ -177,7 +175,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	/// <param name="isTypeCompatible">Is type compatible.</param>
 	/// <param name="typeName">Type name.</param>
 	/// <returns><see cref="CompilationResult"/></returns>
-	public IEnumerable<CompilationError> Compile(Func<IType, bool> isTypeCompatible = default, string typeName = default)
+	public IEnumerable<CompilationError> Compile(Func<Type, bool> isTypeCompatible = default, string typeName = default)
 		=> AsyncContext.Run(() => CompileAsync(isTypeCompatible, typeName, default));
 
 	/// <summary>
@@ -187,7 +185,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	/// <param name="typeName">Type name.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns><see cref="CompilationResult"/></returns>
-	public async Task<IEnumerable<CompilationError>> CompileAsync(Func<IType, bool> isTypeCompatible, string typeName, CancellationToken cancellationToken)
+	public async Task<IEnumerable<CompilationError>> CompileAsync(Func<Type, bool> isTypeCompatible, string typeName, CancellationToken cancellationToken)
 	{
 		IsCompilable = false;
 
@@ -213,53 +211,59 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 			}];
 		}
 
-		IAssembly asm = null;
+		Assembly asm = null;
 		var errors = new List<CompilationError>();
 
 		var compiler = Language.GetCompiler();
 
-		Context ??= compiler.CreateContext();
+		_context ??= compiler.CreateContext();
 
 		var cache = compiler.IsAssemblyPersistable ? ServicesRegistry.TryCompilerCache : null;
 
-		if (cache?.TryGet(Language, sources, refs.Select(r => r.name), out asm) != true)
+		if (cache?.TryGet(Language, sources, refs.Select(r => r.name), out var asmBody) != true)
 		{
 			var result = await compiler.Compile("Strategy", sources, refs, cancellationToken);
 
 			if (result.HasErrors())
 				return result.Errors;
 
+			asmBody = ((AssemblyCompilationResult)result).AssemblyBody;
 			errors.AddRange(result.Errors);
-
-			asm = result.Assembly;
 
 			try
 			{
-				cache?.Add(Language, sources, refs.Select(r => r.name), asm);
+				asm = result.GetAssembly(_context);
+			}
+			catch (Exception ex)
+			{
+				errors.Add(ex.ToError());
+			}
+
+			try
+			{
+				cache?.Add(Language, sources, refs.Select(r => r.name), asmBody);
 			}
 			catch (Exception ex)
 			{
 				ex.LogError();
 			}
 		}
+		else
+			asm = _context.LoadFromBinary(asmBody);
+
+		Assembly = asmBody;
 
 		IsCompilable = true;
 
 		if (asm is not null)
 		{
-			Assembly = asm;
-
 			try
 			{
-				ObjectType = asm.GetExportTypes(Context).TryFindType(isTypeCompatible, typeName);
+				ObjectType = asm.GetExportedTypes().TryFindType(isTypeCompatible, typeName);
 			}
 			catch (Exception ex)
 			{
-				errors.Add(new()
-				{
-					Message = ex.Message,
-					Type = CompilationErrorTypes.Error,
-				});
+				errors.Add(ex.ToError());
 			}
 
 			try
@@ -268,11 +272,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 			}
 			catch (Exception ex)
 			{
-				errors.Add(new()
-				{
-					Message = ex.Message,
-					Type = CompilationErrorTypes.Error,
-				});
+				errors.Add(ex.ToError());
 			}
 		}
 
