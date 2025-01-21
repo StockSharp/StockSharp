@@ -159,6 +159,17 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		}
 	}
 
+	private string _moduleName = "Strategy";
+
+	/// <summary>
+	/// Module name.
+	/// </summary>
+	public string ModuleName
+	{
+		get => _moduleName;
+		set => _moduleName = value;
+	}
+
 	/// <summary>
 	/// Compiled event.
 	/// </summary>
@@ -222,7 +233,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 
 		if (cache?.TryGet(Language, sources, refs.Select(r => r.name), out var asmBody) != true)
 		{
-			var result = await compiler.Compile("Strategy", sources, refs, cancellationToken);
+			var result = await compiler.Compile(ModuleName, sources, refs, cancellationToken);
 
 			if (result.HasErrors())
 				return result.Errors;
@@ -291,6 +302,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		Language = storage.GetValue(nameof(Language), Language);
 		Text = storage.GetValue(nameof(Text), storage.GetValue<string>("SourceCode"))?.Replace("ChartIndicatorDrawStyles", "DrawStyles");
 		ExtraSources = storage.GetValue(nameof(ExtraSources), ExtraSources);
+		ModuleName = storage.GetValue(nameof(ModuleName), ModuleName);
 
 		_assemblyReferences.Clear();
 		_assemblyReferences.AddRange((storage.GetValue<IEnumerable<SettingsStorage>>(nameof(AssemblyReferences)) ?? storage.GetValue<IEnumerable<SettingsStorage>>("References")).Select(s => s.Load<AssemblyReference>()));
@@ -321,6 +333,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 			.Set(nameof(Language), Language)
 			.Set(nameof(ExtraSources), ExtraSources)
 			.Set(nameof(Text), Text)
+			.Set(nameof(ModuleName), ModuleName)
 			.Set(nameof(AssemblyReferences), _assemblyReferences.Cache.Select(r => r.Save()).ToArray())
 			.Set(nameof(NuGetReferences), _nugetReferences.Cache.Select(r => r.Save()).ToArray())
 			.Set(nameof(ProjectReferences), _projectReferences.Cache.Select(r => r.Id).ToArray())
