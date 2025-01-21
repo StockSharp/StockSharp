@@ -227,8 +227,12 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 			if (result.HasErrors())
 				return result.Errors;
 
-			asmBody = ((AssemblyCompilationResult)result).AssemblyBody;
 			errors.AddRange(result.Errors);
+
+			if (result is AssemblyCompilationResult asmRes)
+				asmBody = asmRes.AssemblyBody;
+			else
+				asmBody = null;
 
 			try
 			{
