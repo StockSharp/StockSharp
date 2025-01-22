@@ -237,7 +237,6 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	{
 		IsCompilable = false;
 
-		Assembly asm = null;
 		var errors = new List<CompilationError>();
 
 		var compiler = Language.GetCompiler();
@@ -249,7 +248,24 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		var sources = GetSources();
 		var refNames = GetRefNames();
 
-		if (cache?.TryGet(Language, sources, refNames, out var asmBody) != true)
+		Assembly asm = null;
+		byte[] asmBody = null;
+
+		if (cache?.TryGet(Language, sources, refNames, out asmBody) == true)
+		{
+			try
+			{
+				asm = _context.LoadFromBinary(asmBody);
+			}
+			catch (Exception ex)
+			{
+				ex.LogError();
+
+				cache.Remove(Language, sources, refNames);
+			}
+		}
+
+		if (asm is null)
 		{
 			(string name, byte[] body)[] refs;
 
@@ -294,15 +310,12 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 				ex.LogError();
 			}
 		}
-		else
-			asm = _context.LoadFromBinary(asmBody);
-
-		Assembly = asmBody;
-
-		IsCompilable = true;
 
 		if (asm is not null)
 		{
+			IsCompilable = true;
+			Assembly = asmBody;
+
 			try
 			{
 				ObjectType = asm.GetExportedTypes().TryFindType(isTypeCompatible, typeName);
