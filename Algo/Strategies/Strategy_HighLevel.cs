@@ -769,19 +769,25 @@ public partial class Strategy
 	protected void StartProtection(
 		Unit takeProfit, Unit stopLoss,
 		bool isStopTrailing = default,
-		TimeSpan takeTimeout = default,
-		TimeSpan stopTimeout = default,
+		TimeSpan? takeTimeout = default,
+		TimeSpan? stopTimeout = default,
 		bool useMarketOrders = default)
 	{
 		if (!takeProfit.IsSet() && !stopLoss.IsSet())
 			return;
 
+		if (takeTimeout < TimeSpan.Zero)
+			throw new ArgumentOutOfRangeException(nameof(takeTimeout), takeTimeout, LocalizedStrings.InvalidValue);
+
+		if (stopTimeout < TimeSpan.Zero)
+			throw new ArgumentOutOfRangeException(nameof(stopTimeout), stopTimeout, LocalizedStrings.InvalidValue);
+
 		_protectiveController = new();
 		_takeProfit = takeProfit;
 		_stopLoss = stopLoss;
 		_isStopTrailing = isStopTrailing;
-		_takeTimeout = takeTimeout;
-		_stopTimeout = stopTimeout;
+		_takeTimeout = takeTimeout ?? default;
+		_stopTimeout = stopTimeout ?? default;
 		_protectiveUseMarketOrders = useMarketOrders;
 	}
 }
