@@ -6,6 +6,85 @@ using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Strategies.Protective;
 using StockSharp.Charting;
 
+/// <summary>
+/// Subscription handler.
+/// </summary>
+/// <typeparam name="T">Market-data type.</typeparam>
+public interface ISubscriptionHandler<T>
+{
+	/// <summary>
+	/// <see cref="Subscription"/>.
+	/// </summary>
+	Subscription Subscription { get; }
+
+	/// <summary>
+	/// Start subscription.
+	/// </summary>
+	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
+	ISubscriptionHandler<T> Start();
+
+	/// <summary>
+	/// Bind the subscription.
+	/// </summary>
+	/// <param name="callback">Callback.</param>
+	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
+	ISubscriptionHandler<T> Bind(Action<T> callback);
+
+	/// <summary>
+	/// Bind indicator to the subscription.
+	/// </summary>
+	/// <param name="indicator">Indicator.</param>
+	/// <param name="callback">Callback.</param>
+	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
+	ISubscriptionHandler<T> Bind(IIndicator indicator, Action<T, decimal> callback);
+
+	/// <summary>
+	/// Bind indicator to the subscription.
+	/// </summary>
+	/// <param name="indicator">Indicator.</param>
+	/// <param name="callback">Callback.</param>
+	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
+	ISubscriptionHandler<T> BindEx(IIndicator indicator, Action<T, IIndicatorValue> callback);
+
+	/// <summary>
+	/// Bind indicator to the subscription.
+	/// </summary>
+	/// <param name="indicator1">Indicator.</param>
+	/// <param name="indicator2">Indicator.</param>
+	/// <param name="callback">Callback.</param>
+	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
+	ISubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, Action<T, decimal, decimal> callback);
+
+	/// <summary>
+	/// Bind indicators to the subscription.
+	/// </summary>
+	/// <param name="indicator1">Indicator.</param>
+	/// <param name="indicator2">Indicator.</param>
+	/// <param name="callback">Callback.</param>
+	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
+	ISubscriptionHandler<T> BindEx(IIndicator indicator1, IIndicator indicator2, Action<T, IIndicatorValue, IIndicatorValue> callback);
+
+	/// <summary>
+	/// Bind indicator to the subscription.
+	/// </summary>
+	/// <param name="indicator1">Indicator.</param>
+	/// <param name="indicator2">Indicator.</param>
+	/// <param name="indicator3">Indicator.</param>
+	/// <param name="callback">Callback.</param>
+	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
+	ISubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, Action<T, decimal, decimal, decimal> callback);
+
+	/// <summary>
+	/// Bind indicators to the subscription.
+	/// </summary>
+	/// <param name="indicator1">Indicator.</param>
+	/// <param name="indicator2">Indicator.</param>
+	/// <param name="indicator3">Indicator.</param>
+	/// <param name="callback">Callback.</param>
+	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
+	ISubscriptionHandler<T> BindEx(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, Action<T, IIndicatorValue, IIndicatorValue, IIndicatorValue> callback);
+}
+
 public partial class Strategy
 {
 	/// <summary>
@@ -95,12 +174,12 @@ public partial class Strategy
 	/// Subscription handler.
 	/// </summary>
 	/// <typeparam name="T">Market-data type.</typeparam>
-	protected class SubscriptionHandler<T>
+	private class SubscriptionHandler<T> : ISubscriptionHandler<T>
 	{
 		/// <summary>
 		/// Subscription binder with zero indicators.
 		/// </summary>
-		public class SubscriptionHandlerBinder0
+		private class SubscriptionHandlerBinder0
 		{
 			private readonly SubscriptionHandler<T> _parent;
 			private Action<T> _callback;
@@ -130,7 +209,7 @@ public partial class Strategy
 		/// <summary>
 		/// Subscription binder with single indicator.
 		/// </summary>
-		public class SubscriptionHandlerBinder1 : SubscriptionHandlerBinder0
+		private class SubscriptionHandlerBinder1 : SubscriptionHandlerBinder0
 		{
 			private Action<T, IIndicatorValue> _callback;
 
@@ -167,7 +246,7 @@ public partial class Strategy
 		/// <summary>
 		/// Subscription binder with two indicators.
 		/// </summary>
-		public class SubscriptionHandlerBinder2 : SubscriptionHandlerBinder1
+		private class SubscriptionHandlerBinder2 : SubscriptionHandlerBinder1
 		{
 			private Action<T, IIndicatorValue, IIndicatorValue> _callback;
 
@@ -205,7 +284,7 @@ public partial class Strategy
 		/// <summary>
 		/// Subscription binder with three indicators.
 		/// </summary>
-		public class SubscriptionHandlerBinder3 : SubscriptionHandlerBinder2
+		private class SubscriptionHandlerBinder3 : SubscriptionHandlerBinder2
 		{
 			private Action<T, IIndicatorValue, IIndicatorValue, IIndicatorValue> _callback;
 
@@ -398,106 +477,55 @@ public partial class Strategy
 			}
 		}
 
-		/// <summary>
-		/// Start subscription.
-		/// </summary>
-		/// <returns><see cref="SubscriptionHandler{T}"/></returns>
-		public SubscriptionHandler<T> Start()
+		public ISubscriptionHandler<T> Start()
 		{
 			_strategy.Subscribe(Subscription);
 			return this;
 		}
 
-		/// <summary>
-		/// Bind the subscription.
-		/// </summary>
-		/// <param name="callback">Callback.</param>
-		/// <returns><see cref="SubscriptionHandler{T}"/></returns>
-		public SubscriptionHandler<T> Bind(Action<T> callback)
+		public ISubscriptionHandler<T> Bind(Action<T> callback)
 		{
 			_binders.Add(new SubscriptionHandlerBinder0(this).SetCallback(callback));
 			return this;
 		}
 
-		/// <summary>
-		/// Bind indicator to the subscription.
-		/// </summary>
-		/// <param name="indicator">Indicator.</param>
-		/// <param name="callback">Callback.</param>
-		/// <returns><see cref="SubscriptionHandler{T}"/></returns>
-		public SubscriptionHandler<T> Bind(IIndicator indicator, Action<T, decimal> callback)
+		public ISubscriptionHandler<T> Bind(IIndicator indicator, Action<T, decimal> callback)
 		{
 			if (callback is null)
 				throw new ArgumentNullException(nameof(callback));
 
-			return Bind(indicator, (v, iv) => callback(v, iv.ToDecimal()));
+			return BindEx(indicator, (v, iv) => callback(v, iv.ToDecimal()));
 		}
 
-		/// <summary>
-		/// Bind indicator to the subscription.
-		/// </summary>
-		/// <param name="indicator">Indicator.</param>
-		/// <param name="callback">Callback.</param>
-		/// <returns><see cref="SubscriptionHandler{T}"/></returns>
-		public SubscriptionHandler<T> Bind(IIndicator indicator, Action<T, IIndicatorValue> callback)
+		public ISubscriptionHandler<T> BindEx(IIndicator indicator, Action<T, IIndicatorValue> callback)
 		{
 			_binders.Add(new SubscriptionHandlerBinder1(this, indicator).SetCallback(callback));
 			return this;
 		}
 
-		/// <summary>
-		/// Bind indicator to the subscription.
-		/// </summary>
-		/// <param name="indicator1">Indicator.</param>
-		/// <param name="indicator2">Indicator.</param>
-		/// <param name="callback">Callback.</param>
-		/// <returns><see cref="SubscriptionHandler{T}"/></returns>
-		public SubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, Action<T, decimal, decimal> callback)
+		public ISubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, Action<T, decimal, decimal> callback)
 		{
 			if (callback is null)
 				throw new ArgumentNullException(nameof(callback));
 
-			return Bind(indicator1, indicator2, (v, iv1, iv2) => callback(v, iv1.ToDecimal(), iv2.ToDecimal()));
+			return BindEx(indicator1, indicator2, (v, iv1, iv2) => callback(v, iv1.ToDecimal(), iv2.ToDecimal()));
 		}
 
-		/// <summary>
-		/// Bind indicators to the subscription.
-		/// </summary>
-		/// <param name="indicator1">Indicator.</param>
-		/// <param name="indicator2">Indicator.</param>
-		/// <param name="callback">Callback.</param>
-		/// <returns><see cref="SubscriptionHandler{T}"/></returns>
-		public SubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, Action<T, IIndicatorValue, IIndicatorValue> callback)
+		public ISubscriptionHandler<T> BindEx(IIndicator indicator1, IIndicator indicator2, Action<T, IIndicatorValue, IIndicatorValue> callback)
 		{
 			_binders.Add(new SubscriptionHandlerBinder2(this, indicator1, indicator2).SetCallback(callback));
 			return this;
 		}
 
-		/// <summary>
-		/// Bind indicator to the subscription.
-		/// </summary>
-		/// <param name="indicator1">Indicator.</param>
-		/// <param name="indicator2">Indicator.</param>
-		/// <param name="indicator3">Indicator.</param>
-		/// <param name="callback">Callback.</param>
-		/// <returns><see cref="SubscriptionHandler{T}"/></returns>
-		public SubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, Action<T, decimal, decimal, decimal> callback)
+		public ISubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, Action<T, decimal, decimal, decimal> callback)
 		{
 			if (callback is null)
 				throw new ArgumentNullException(nameof(callback));
 
-			return Bind(indicator1, indicator2, indicator3, (v, iv1, iv2, iv3) => callback(v, iv1.ToDecimal(), iv2.ToDecimal(), iv3.ToDecimal()));
+			return BindEx(indicator1, indicator2, indicator3, (v, iv1, iv2, iv3) => callback(v, iv1.ToDecimal(), iv2.ToDecimal(), iv3.ToDecimal()));
 		}
 
-		/// <summary>
-		/// Bind indicators to the subscription.
-		/// </summary>
-		/// <param name="indicator1">Indicator.</param>
-		/// <param name="indicator2">Indicator.</param>
-		/// <param name="indicator3">Indicator.</param>
-		/// <param name="callback">Callback.</param>
-		/// <returns><see cref="SubscriptionHandler{T}"/></returns>
-		public SubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, Action<T, IIndicatorValue, IIndicatorValue, IIndicatorValue> callback)
+		public ISubscriptionHandler<T> BindEx(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, Action<T, IIndicatorValue, IIndicatorValue, IIndicatorValue> callback)
 		{
 			_binders.Add(new SubscriptionHandlerBinder3(this, indicator1, indicator2, indicator3).SetCallback(callback));
 			return this;
@@ -517,7 +545,7 @@ public partial class Strategy
 	/// <param name="isFinishedOnly"><see cref="MarketDataMessage.IsFinishedOnly"/></param>
 	/// <param name="security"><see cref="BusinessEntities.Security"/>. If security is not passed, then <see cref="Security"/> value is used.</param>
 	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
-	protected SubscriptionHandler<ICandleMessage> SubscribeCandles(TimeSpan tf, bool isFinishedOnly = true, Security security = default)
+	protected ISubscriptionHandler<ICandleMessage> SubscribeCandles(TimeSpan tf, bool isFinishedOnly = true, Security security = default)
 		=> SubscribeCandles(DataType.TimeFrame(tf), isFinishedOnly, security);
 
 	/// <summary>
@@ -527,7 +555,7 @@ public partial class Strategy
 	/// <param name="isFinishedOnly"><see cref="MarketDataMessage.IsFinishedOnly"/></param>
 	/// <param name="security"><see cref="BusinessEntities.Security"/>. If security is not passed, then <see cref="Security"/> value is used.</param>
 	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
-	protected SubscriptionHandler<ICandleMessage> SubscribeCandles(DataType dt, bool isFinishedOnly = true, Security security = default)
+	protected ISubscriptionHandler<ICandleMessage> SubscribeCandles(DataType dt, bool isFinishedOnly = true, Security security = default)
 		=> SubscribeCandles(new(dt, security ?? Security)
 		{
 			MarketData =
@@ -541,15 +569,15 @@ public partial class Strategy
 	/// </summary>
 	/// <param name="subscription"><see cref="Subscription"/></param>
 	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
-	protected SubscriptionHandler<ICandleMessage> SubscribeCandles(Subscription subscription)
-		=> new(this, subscription);
+	protected ISubscriptionHandler<ICandleMessage> SubscribeCandles(Subscription subscription)
+		=> new SubscriptionHandler<ICandleMessage>(this, subscription);
 
 	/// <summary>
 	/// Subscribe to <see cref="DataType.Ticks"/>.
 	/// </summary>
 	/// <param name="security"><see cref="BusinessEntities.Security"/>. If security is not passed, then <see cref="Security"/> value is used.</param>
 	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
-	protected SubscriptionHandler<ITickTradeMessage> SubscribeTicks(Security security = null)
+	protected ISubscriptionHandler<ITickTradeMessage> SubscribeTicks(Security security = null)
 		=> SubscribeTicks(new Subscription(DataType.Ticks, security ?? Security));
 
 	/// <summary>
@@ -557,15 +585,15 @@ public partial class Strategy
 	/// </summary>
 	/// <param name="subscription"><see cref="Subscription"/></param>
 	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
-	protected SubscriptionHandler<ITickTradeMessage> SubscribeTicks(Subscription subscription)
-		=> new(this, subscription);
+	protected ISubscriptionHandler<ITickTradeMessage> SubscribeTicks(Subscription subscription)
+		=> new SubscriptionHandler<ITickTradeMessage>(this, subscription);
 
 	/// <summary>
 	/// Subscribe to <see cref="DataType.Level1"/>.
 	/// </summary>
 	/// <param name="security"><see cref="BusinessEntities.Security"/>. If security is not passed, then <see cref="Security"/> value is used.</param>
 	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
-	protected SubscriptionHandler<Level1ChangeMessage> SubscribeLevel1(Security security = null)
+	protected ISubscriptionHandler<Level1ChangeMessage> SubscribeLevel1(Security security = null)
 		=> SubscribeLevel1(new Subscription(DataType.Level1, security ?? Security));
 
 	/// <summary>
@@ -573,15 +601,15 @@ public partial class Strategy
 	/// </summary>
 	/// <param name="subscription"><see cref="Subscription"/></param>
 	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
-	protected SubscriptionHandler<Level1ChangeMessage> SubscribeLevel1(Subscription subscription)
-		=> new(this, subscription);
+	protected ISubscriptionHandler<Level1ChangeMessage> SubscribeLevel1(Subscription subscription)
+		=> new SubscriptionHandler<Level1ChangeMessage>(this, subscription);
 
 	/// <summary>
 	/// Subscribe to <see cref="DataType.MarketDepth"/>.
 	/// </summary>
 	/// <param name="security"><see cref="BusinessEntities.Security"/>. If security is not passed, then <see cref="Security"/> value is used.</param>
 	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
-	protected SubscriptionHandler<IOrderBookMessage> SubscribeOrderBook(Security security = null)
+	protected ISubscriptionHandler<IOrderBookMessage> SubscribeOrderBook(Security security = null)
 		=> SubscribeOrderBook(new Subscription(DataType.MarketDepth, security ?? Security));
 
 	/// <summary>
@@ -589,8 +617,8 @@ public partial class Strategy
 	/// </summary>
 	/// <param name="subscription"><see cref="Subscription"/></param>
 	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
-	protected SubscriptionHandler<IOrderBookMessage> SubscribeOrderBook(Subscription subscription)
-		=> new(this, subscription);
+	protected ISubscriptionHandler<IOrderBookMessage> SubscribeOrderBook(Subscription subscription)
+		=> new SubscriptionHandler<IOrderBookMessage>(this, subscription);
 
 	private IChart _chart;
 	private SynchronizedList<Order> _drawingOrders;
@@ -616,7 +644,7 @@ public partial class Strategy
 	/// <param name="area"><see cref="IChartArea"/></param>
 	/// <param name="subscription"><see cref="SubscriptionHandler{T}"/></param>
 	/// <returns><see cref="IChartCandleElement"/></returns>
-	protected IChartCandleElement DrawCandles<T>(IChartArea area, SubscriptionHandler<T> subscription)
+	protected IChartCandleElement DrawCandles<T>(IChartArea area, ISubscriptionHandler<T> subscription)
 		=> DrawCandles(area, subscription.Subscription);
 
 	/// <summary>
