@@ -297,13 +297,13 @@ public static class StorageHelper
 
 		if (firstInfo is null)
 		{
-			GlobalLogReceiver.Instance.AddWarningLog(LocalizedStrings.ElementNotFoundParams.Put(first));
+			LogManager.Instance?.Application.AddWarningLog(LocalizedStrings.ElementNotFoundParams.Put(first));
 			return null;
 		}
 
 		if (lastInfo is null)
 		{
-			GlobalLogReceiver.Instance.AddWarningLog(LocalizedStrings.ElementNotFoundParams.Put(last));
+			LogManager.Instance?.Application.AddWarningLog(LocalizedStrings.ElementNotFoundParams.Put(last));
 			return null;
 		}
 

@@ -1024,7 +1024,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 	private bool InternalSendInMessage(Message message)
 	{
-		this.AddDebugLog("In: {0}", message);
+		LogDebug("In: {0}", message);
 
 		if (message is ITransactionIdMessage transIdMsg && transIdMsg.TransactionId == 0)
 			throw new ArgumentException(message.ToString());
@@ -1080,7 +1080,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				Wrappers.ForEach(w =>
 				{
 					var u = GetUnderlyingAdapter(w);
-					this.AddInfoLog("Connecting '{0}'.", u);
+					LogInfo("Connecting '{0}'.", u);
 
 					w.SendInMessage(message);
 				});
@@ -1109,7 +1109,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 					var wrapper = a.Key;
 					var underlying = a.Value;
 
-					this.AddInfoLog("Disconnecting '{0}'.", underlying);
+					LogInfo("Disconnecting '{0}'.", underlying);
 					wrapper.SendInMessage(message);
 				}
 
@@ -1313,7 +1313,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		if (adapters.Length == 0)
 		{
-			this.AddInfoLog(LocalizedStrings.NoAdapterFoundFor.Put(message));
+			LogInfo(LocalizedStrings.NoAdapterFoundFor.Put(message));
 			//throw new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(message));
 		}
 
@@ -1442,7 +1442,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	{
 		// if the message was looped back via IsBack=true
 		_requestsById.TryAdd2(subscrMsg.TransactionId, Tuple.Create(subscrMsg, GetUnderlyingAdapter(adapter)));
-		this.AddDebugLog("Send to {0}: {1}", adapter, subscrMsg);
+		LogDebug("Send to {0}: {1}", adapter, subscrMsg);
 		adapter.SendInMessage((Message)subscrMsg);
 	}
 
@@ -1514,7 +1514,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 						}
 					}
 
-					this.AddInfoLog("Unsubscribe not found: {0}/{1}", originTransId, mdMsg);
+					LogInfo("Unsubscribe not found: {0}/{1}", originTransId, mdMsg);
 					return;
 				}
 
@@ -1540,7 +1540,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				if (isPending)
 					return;
 
-				this.AddDebugLog("No adapter for {0}", message);
+				LogDebug("No adapter for {0}", message);
 
 				SendOutMessage(message.CreateReply(new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(message))));
 				return;
@@ -1569,7 +1569,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		if (adapter is null || wrapper is null)
 		{
-			this.AddErrorLog(LocalizedStrings.UnknownTransactionId, originId);
+			LogError(LocalizedStrings.UnknownTransactionId, originId);
 
 			SendOutMessage(new ExecutionMessage
 			{
@@ -1612,7 +1612,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				if (isPended)
 					return;
 
-				this.AddDebugLog("No adapter for {0}", message);
+				LogDebug("No adapter for {0}", message);
 
 				SendOutMessage(message.CreateResponse(new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(message))));
 			}
@@ -1644,7 +1644,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				adapter = null;
 
 			if (adapter == null)
-				this.AddDebugLog("No adapter for {0}", message);
+				LogDebug("No adapter for {0}", message);
 			else
 				SendRequest(message, adapter);
 		}
@@ -1835,9 +1835,9 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		var error = message.Error;
 
 		if (error != null)
-			this.AddErrorLog(LocalizedStrings.ConnectionErrorFor, underlyingAdapter, error);
+			LogError(LocalizedStrings.ConnectionErrorFor, underlyingAdapter, error);
 		else
-			this.AddInfoLog("Connected to '{0}'.", underlyingAdapter);
+			LogInfo("Connected to '{0}'.", underlyingAdapter);
 
 		Message[] notSupportedMsgs = null;
 
@@ -1881,9 +1881,9 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		var error = message.Error;
 
 		if (error == null)
-			this.AddInfoLog("Disconnected from '{0}'.", underlyingAdapter);
+			LogInfo("Disconnected from '{0}'.", underlyingAdapter);
 		else
-			this.AddErrorLog(LocalizedStrings.ErrorDisconnectFor, underlyingAdapter, error);
+			LogError(LocalizedStrings.ErrorDisconnectFor, underlyingAdapter, error);
 
 		lock (_connectedResponseLock)
 		{
@@ -2136,7 +2136,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				}
 				catch (Exception e)
 				{
-					this.AddErrorLog(e);
+					LogError(e);
 				}
 			}
 

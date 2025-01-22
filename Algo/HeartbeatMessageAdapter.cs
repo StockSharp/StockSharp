@@ -103,7 +103,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 				if (isRestored)
 				{
-					this.AddInfoLog(LocalizedStrings.ConnectionRestored);
+					LogInfo(LocalizedStrings.ConnectionRestored);
 
 					if (SuppressReconnectingErrors)
 						RaiseNewOutMessage(new ConnectionRestoredMessage { IsResetState = true, Adapter = message.Adapter });
@@ -116,7 +116,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 						base.OnInnerAdapterNewOutMessage(message);
 					else if (isReconnectionStarted)
 					{
-						this.AddInfoLog(LocalizedStrings.Reconnecting);
+						LogInfo(LocalizedStrings.Reconnecting);
 						base.OnInnerAdapterNewOutMessage(new ConnectionLostMessage { IsResetState = true, Adapter = message.Adapter });
 					}
 				}
@@ -367,7 +367,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 					if (_prevState != _none)
 					{
-						this.AddInfoLog("RCM: Connecting AttemptError.");
+						LogInfo("RCM: Connecting AttemptError.");
 
 						lock (_timeSync)
 							_currState = _prevState;
@@ -379,7 +379,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 							lock (_timeSync)
 								_currState = ConnectionStates.Reconnecting;
 
-							this.AddInfoLog("RCM: To Reconnecting Attempts {0} Timeout {1}.", _connectingAttemptCount, _connectionTimeOut);
+							LogInfo("RCM: To Reconnecting Attempts {0} Timeout {1}.", _connectingAttemptCount, _connectionTimeOut);
 						}
 						else
 						{
@@ -410,7 +410,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 				if (_reConnectionSettings.WorkingTime.IsTradeTime(TimeHelper.Now, out _, out _))
 				{
-					this.AddInfoLog("RCM: To Connecting. CurrState {0} PrevState {1} Attempts {2}.", FormatState(_currState), FormatState(_prevState), _connectingAttemptCount);
+					LogInfo("RCM: To Connecting. CurrState {0} PrevState {1} Attempts {2}.", FormatState(_currState), FormatState(_prevState), _connectingAttemptCount);
 
 					if (_connectingAttemptCount != -1)
 						_connectingAttemptCount--;

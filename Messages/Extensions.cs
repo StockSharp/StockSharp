@@ -5484,7 +5484,7 @@ public static partial class Extensions
 		{
 			if (book.State != null)
 			{
-				var builder = builders.SafeAdd(book.SecurityId, key => new OrderBookIncrementBuilder(key) { Parent = logs ?? GlobalLogReceiver.Instance });
+				var builder = builders.SafeAdd(book.SecurityId, key => new OrderBookIncrementBuilder(key) { Parent = logs ?? LogManager.Instance?.Application });
 				var change = builder.TryApply(book);
 
 				if (change != null)

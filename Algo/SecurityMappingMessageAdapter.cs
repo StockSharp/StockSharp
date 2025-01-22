@@ -115,7 +115,7 @@ public class SecurityMappingMessageAdapter : MessageAdapterWrapper
 
 		if (adapterId != null)
 		{
-			this.AddInfoLog("{0}->{1}, {2}", stockSharpId, adapterId.Value, secMsg);
+			LogInfo("{0}->{1}, {2}", stockSharpId, adapterId.Value, secMsg);
 			secMsg.ReplaceSecurityId(adapterId.Value);
 		}
 	}

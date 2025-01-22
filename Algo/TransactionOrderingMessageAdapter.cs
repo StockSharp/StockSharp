@@ -260,7 +260,7 @@ public class TransactionOrderingMessageAdapter : MessageAdapterWrapper
 				{
 					if (execMsg.OrderId != null && !_orderIds.ContainsKey(execMsg.OrderId.Value) && (execMsg.OriginalTransactionId == 0 || !_secIds.ContainsKey(execMsg.OriginalTransactionId)))
 					{
-						this.AddInfoLog("{0} suspended.", execMsg);
+						LogInfo("{0} suspended.", execMsg);
 
 						lock (_nonAssociatedLock)
 							_nonAssociatedOrderIds.SafeAdd(execMsg.OrderId.Value).Add(execMsg.TypedClone());
@@ -269,7 +269,7 @@ public class TransactionOrderingMessageAdapter : MessageAdapterWrapper
 					}
 					else if (!execMsg.OrderStringId.IsEmpty() && !_orderStringIds.ContainsKey(execMsg.OrderStringId) && (execMsg.OriginalTransactionId == 0 || !_secIds.ContainsKey(execMsg.OriginalTransactionId)))
 					{
-						this.AddInfoLog("{0} suspended.", execMsg);
+						LogInfo("{0} suspended.", execMsg);
 
 						lock (_nonAssociatedLock)
 							_nonAssociatedStringOrderIds.SafeAdd(execMsg.OrderStringId).Add(execMsg.TypedClone());
@@ -370,7 +370,7 @@ public class TransactionOrderingMessageAdapter : MessageAdapterWrapper
 				return;
 		}
 
-		this.AddInfoLog("{0} resumed.", key);
+		LogInfo("{0} resumed.", key);
 
 		foreach (var trade in trades)
 			RaiseNewOutMessage(trade);

@@ -367,7 +367,7 @@ public class HistoryMessageAdapter : MessageAdapter
 			if (transactionId == 0)
 				throw new ArgumentNullException(nameof(transactionId));
 
-			this.AddInfoLog("Add storage: {0}/{1} {2}-{3}", storage.SecurityId, storage.DataType, storage.GetFromDate(), storage.GetToDate());
+			LogInfo("Add storage: {0}/{1} {2}-{3}", storage.SecurityId, storage.DataType, storage.GetFromDate(), storage.GetToDate());
 
 			_isChanged = true;
 			_actions.Add(Tuple.Create(storage, transactionId));
@@ -596,7 +596,7 @@ public class HistoryMessageAdapter : MessageAdapter
 						{
 							if (!checkDates || boards.Any(b => b.IsTradeDate(currentTime, true)))
 							{
-								this.AddInfoLog("Loading {0}", loadDateInUtc);
+								LogInfo("Loading {0}", loadDateInUtc);
 
 								IEnumerable<Message> messages;
 								bool noData;

@@ -1100,7 +1100,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 				}
 
 				updateProgress(i, secPaths.Length);
-				logs?.AddInfoLog("Sec {0} processed.", secId);
+				logs?.LogInfo("Sec {0} processed.", secId);
 			}
 		}
 
@@ -1109,7 +1109,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 		SaveIndex(index);
 
-		logs?.AddInfoLog("Index saved.");
+		logs?.LogInfo("Index saved.");
 
 		return Task.CompletedTask;
 	}

@@ -799,7 +799,7 @@ public class RiskOrderFreqRule : RiskRule
 
 				if (time == default)
 				{
-					this.AddWarningLog("Time is null. Msg={0}", message);
+					LogWarning("Time is null. Msg={0}", message);
 					return false;
 				}
 
@@ -808,7 +808,7 @@ public class RiskOrderFreqRule : RiskRule
 					_endTime = time + Interval;
 					_current = 1;
 
-					this.AddDebugLog("EndTime={0}", _endTime);
+					LogDebug("EndTime={0}", _endTime);
 					return false;
 				}
 
@@ -816,11 +816,11 @@ public class RiskOrderFreqRule : RiskRule
 				{
 					_current++;
 
-					this.AddDebugLog("Count={0} Msg={1}", _current, message);
+					LogDebug("Count={0} Msg={1}", _current, message);
 
 					if (_current >= Count)
 					{
-						this.AddInfoLog("Count={0} EndTime={1}", _current, _endTime);
+						LogInfo("Count={0} EndTime={1}", _current, _endTime);
 
 						_endTime = null;
 						return true;
@@ -831,7 +831,7 @@ public class RiskOrderFreqRule : RiskRule
 					_endTime = time + Interval;
 					_current = 1;
 
-					this.AddDebugLog("EndTime={0}", _endTime);
+					LogDebug("EndTime={0}", _endTime);
 				}
 
 				return false;
@@ -1179,7 +1179,7 @@ public class RiskTradeFreqRule : RiskRule
 
 		if (time == default)
 		{
-			this.AddWarningLog("Time is null. Msg={0}", message);
+			LogWarning("Time is null. Msg={0}", message);
 			return false;
 		}
 
@@ -1188,7 +1188,7 @@ public class RiskTradeFreqRule : RiskRule
 			_endTime = time + Interval;
 			_current = 1;
 
-			this.AddDebugLog("EndTime={0}", _endTime);
+			LogDebug("EndTime={0}", _endTime);
 			return false;
 		}
 
@@ -1196,11 +1196,11 @@ public class RiskTradeFreqRule : RiskRule
 		{
 			_current++;
 
-			this.AddDebugLog("Count={0} Msg={1}", _current, message);
+			LogDebug("Count={0} Msg={1}", _current, message);
 
 			if (_current >= Count)
 			{
-				this.AddInfoLog("Count={0} EndTime={1}", _current, _endTime);
+				LogInfo("Count={0} EndTime={1}", _current, _endTime);
 
 				_endTime = null;
 				return true;
@@ -1211,7 +1211,7 @@ public class RiskTradeFreqRule : RiskRule
 			_endTime = time + Interval;
 			_current = 1;
 
-			this.AddDebugLog("EndTime={0}", _endTime);
+			LogDebug("EndTime={0}", _endTime);
 		}
 
 		return false;

@@ -35,7 +35,7 @@ type NormalizePriceScript() =
             ) : Task =
 
             if securities.Length = 0 then
-                logs.AddWarningLog("No instruments.")
+                logs.LogWarning("No instruments.")
                 Task.CompletedTask
             else
                 // Create a chart for normalized close prices

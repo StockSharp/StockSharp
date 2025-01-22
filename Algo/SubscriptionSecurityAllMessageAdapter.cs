@@ -119,7 +119,7 @@ public class SubscriptionSecurityAllMessageAdapter : MessageAdapterWrapper
 							if (child.Suspended.Count > 0)
 								_toFlush.Add(child);
 
-							this.AddDebugLog("New ALL map (active): {0}/{1} TrId={2}", child.Origin.SecurityId, child.Origin.DataType2, mdMsg.TransactionId);
+							LogDebug("New ALL map (active): {0}/{1} TrId={2}", child.Origin.SecurityId, child.Origin.DataType2, mdMsg.TransactionId);
 							
 							_requests.Add(transId, Tuple.Create(parent, mdMsg.TypedClone()));
 
@@ -280,7 +280,7 @@ public class SubscriptionSecurityAllMessageAdapter : MessageAdapterWrapper
 					{
 						if (_parents.TryGetAndRemove(originId, out var parent))
 						{
-							this.AddErrorLog("Sec ALL {0} error.", parent.Origin.TransactionId);
+							LogError("Sec ALL {0} error.", parent.Origin.TransactionId);
 						
 							extra = [];
 
@@ -299,7 +299,7 @@ public class SubscriptionSecurityAllMessageAdapter : MessageAdapterWrapper
 						}
 						else if (_unsubscribes.TryGetAndRemove(originId, out parent))
 						{
-							this.AddErrorLog("Sec ALL {0} unsubscribe error.", parent.Origin.TransactionId);
+							LogError("Sec ALL {0} unsubscribe error.", parent.Origin.TransactionId);
 							_parents.Remove(parent.Origin.TransactionId);
 						}
 					}
@@ -308,7 +308,7 @@ public class SubscriptionSecurityAllMessageAdapter : MessageAdapterWrapper
 				{
 					if (_unsubscribes.TryGetAndRemove(originId, out var parent))
 					{
-						this.AddInfoLog("Sec ALL {0} unsubscribed.", parent.Origin.TransactionId);
+						LogInfo("Sec ALL {0} unsubscribed.", parent.Origin.TransactionId);
 						_parents.Remove(parent.Origin.TransactionId);
 					}
 				}
@@ -395,7 +395,7 @@ public class SubscriptionSecurityAllMessageAdapter : MessageAdapterWrapper
 				
 				foreach (var child in childs)
 				{
-					this.AddDebugLog("ALL flush: {0}/{1}, cnt={2}", child.Origin.SecurityId, child.Origin.DataType2, child.Suspended.Count);
+					LogDebug("ALL flush: {0}/{1}, cnt={2}", child.Origin.SecurityId, child.Origin.DataType2, child.Suspended.Count);
 
 					foreach (var msg in child.Suspended.CopyAndClear())
 					{
@@ -441,7 +441,7 @@ public class SubscriptionSecurityAllMessageAdapter : MessageAdapterWrapper
 							allMsg.LoopBack(this, MessageBackModes.Chain);
 							_pendingLoopbacks.Add(allMsg.TransactionId, RefTuple.Create(parentId, SubscriptionStates.Stopped));
 
-							this.AddDebugLog("New ALL map: {0}/{1} TrId={2}-{3}", child.Origin.SecurityId, child.Origin.DataType2, allMsg.ParentTransactionId, allMsg.TransactionId);
+							LogDebug("New ALL map: {0}/{1} TrId={2}-{3}", child.Origin.SecurityId, child.Origin.DataType2, allMsg.ParentTransactionId, allMsg.TransactionId);
 						}
 
 						if (!child.State.IsActive())
@@ -449,7 +449,7 @@ public class SubscriptionSecurityAllMessageAdapter : MessageAdapterWrapper
 							child.Suspended.Add(subscrMsg);
 							message = null;
 
-							this.AddDebugLog("ALL suspended: {0}/{1}, cnt={2}", child.Origin.SecurityId, child.Origin.DataType2, child.Suspended.Count);
+							LogDebug("ALL suspended: {0}/{1}, cnt={2}", child.Origin.SecurityId, child.Origin.DataType2, child.Suspended.Count);
 						}
 						else
 							ApplySubscriptionIds(subscrMsg, child);

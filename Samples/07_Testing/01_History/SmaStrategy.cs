@@ -167,7 +167,7 @@ namespace StockSharp.Samples.Testing.History
 
 		private void OnProcess(ICandleMessage candle, decimal longValue, decimal shortValue)
 		{
-			this.AddInfoLog(LocalizedStrings.SmaNewCandleLog, candle.OpenTime, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume, candle.SecurityId);
+			LogInfo(LocalizedStrings.SmaNewCandleLog, candle.OpenTime, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume, candle.SecurityId);
 
 			// in case we subscribed on non finished only candles
 			if (candle.State != CandleStates.Finished)

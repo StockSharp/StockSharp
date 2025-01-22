@@ -36,7 +36,7 @@ type Chart3DScript() =
             ) : Task =
 
             if securities.Length = 0 then
-                logs.AddWarningLog("No instruments.")
+                logs.LogWarning("No instruments.")
                 Task.CompletedTask
             else
                 // X and Y labels
@@ -69,7 +69,7 @@ type Chart3DScript() =
                         // get available dates for the specified period
                         let dates = candleStorage.GetDates(fromDate, toDate).ToArray()
                         if dates.Length = 0 then
-                            logs.AddWarningLog("no data")
+                            logs.LogWarning("no data")
                             doContinue <- false
                         else
                             // load all candles and group them by hour

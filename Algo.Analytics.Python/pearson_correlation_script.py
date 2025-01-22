@@ -22,7 +22,7 @@ class pearson_correlation_script(IAnalyticsScript):
         cancellation_token
     ):
         if not securities:
-            logs.AddWarningLog("No instruments.")
+            logs.LogWarning("No instruments.")
             return Task.CompletedTask
 
         closes = []
@@ -39,7 +39,7 @@ class pearson_correlation_script(IAnalyticsScript):
             prices = [float(c.ClosePrice) for c in candle_storage.Load(from_date, to_date)]
 
             if len(prices) == 0:
-                logs.AddWarningLog("No data for {0}", security)
+                logs.LogWarning("No data for {0}", security)
                 return Task.CompletedTask
 
             closes.append(prices)

@@ -55,7 +55,7 @@ partial class Strategy
 
 		if (position.StrategyId != EnsureGetId())
 		{
-			this.AddWarningLog("Position {0} has StrategyId '{1}' instead of '{2}'.", position, position.StrategyId, EnsureGetId());
+			LogWarning("Position {0} has StrategyId '{1}' instead of '{2}'.", position, position.StrategyId, EnsureGetId());
 			return;
 		}
 
@@ -75,7 +75,7 @@ partial class Strategy
 
 	private void RaisePositionChanged(DateTimeOffset time)
 	{
-		this.AddInfoLog(LocalizedStrings.NewPosition, _positions.CachedPairs.Select(pos => pos.Key + "=" + pos.Value.CurrentValue).JoinCommaSpace());
+		LogInfo(LocalizedStrings.NewPosition, _positions.CachedPairs.Select(pos => pos.Key + "=" + pos.Value.CurrentValue).JoinCommaSpace());
 
 		this.Notify(nameof(Position));
 		PositionChanged?.Invoke();
@@ -136,7 +136,7 @@ partial class Strategy
 					break;
 
 				case MessageTypes.PositionChange:
-					this.AddWarningLog("ignored: {0}", message);
+					LogWarning("ignored: {0}", message);
 					break;
 
 				default:
@@ -150,7 +150,7 @@ partial class Strategy
 
 			if (!result.Changes.TryGetValue(PositionChangeTypes.CurrentValue, out var curValue))
 			{
-				this.AddWarningLog("no changes for {0}/{1}", result.SecurityId, result.PortfolioName);
+				LogWarning("no changes for {0}/{1}", result.SecurityId, result.PortfolioName);
 				return result;
 			}
 

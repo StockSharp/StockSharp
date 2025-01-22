@@ -170,7 +170,7 @@ public class CandlePatternIndicator : BaseIndicator
 			throw new InvalidOperationException($"unable to load pattern '{patternName}'. candle pattern provider is not initialized.");
 
 		if(!_candlePatternProvider.TryFind(patternName, out var pattern))
-			LogManager.Instance?.Application.AddErrorLog($"pattern '{patternName}' not found");
+			LogManager.Instance?.Application.LogError($"pattern '{patternName}' not found");
 
 		Pattern = pattern;
 	}

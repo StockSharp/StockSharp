@@ -32,7 +32,7 @@ type EmptyAnalyticsScript() =
             ) : Task =
             
             if securities.Length = 0 then
-                logs.AddWarningLog("No instruments.")
+                logs.LogWarning("No instruments.")
                 Task.CompletedTask
             else
                 // !! add logic here

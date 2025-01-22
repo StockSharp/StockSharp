@@ -38,7 +38,7 @@ type PearsonCorrelationScript() =
 
             // If no securities are selected, log a warning and finish
             if securities.Length = 0 then
-                logs.AddWarningLog("No instruments.")
+                logs.LogWarning("No instruments.")
                 Task.CompletedTask
             else
                 // A list of arrays, each array containing double-precision close prices for a single security
@@ -53,7 +53,7 @@ type PearsonCorrelationScript() =
                                 |> Seq.map (fun c -> float c.ClosePrice)
                                 |> Seq.toArray
                             if prices.Length = 0 then
-                                logs.AddWarningLog("No data for {0}", security)
+                                logs.LogWarning("No data for {0}", security)
                                 None
                             else
                                 Some prices

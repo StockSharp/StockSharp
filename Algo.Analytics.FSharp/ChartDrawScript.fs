@@ -35,7 +35,7 @@ type ChartDrawScript() =
             ) : Task =
 
             if securities.Length = 0 then
-                logs.AddWarningLog("No instruments.")
+                logs.LogWarning("No instruments.")
                 Task.CompletedTask
             else
                 // Create two charts: lineChart and histogramChart

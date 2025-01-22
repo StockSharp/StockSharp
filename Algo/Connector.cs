@@ -436,13 +436,13 @@ public partial class Connector : BaseLogReceiver, IConnector, IMarketDataProvide
 	/// <inheritdoc />
 	public void Connect()
 	{
-		this.AddInfoLog(nameof(Connect));
+		LogInfo(nameof(Connect));
 
 		try
 		{
 			if (ConnectionState is not ConnectionStates.Disconnected and not ConnectionStates.Failed)
 			{
-				this.AddWarningLog(LocalizedStrings.CannotConnectReasonState, ConnectionState);
+				LogWarning(LocalizedStrings.CannotConnectReasonState, ConnectionState);
 				return;
 			}
 
@@ -473,11 +473,11 @@ public partial class Connector : BaseLogReceiver, IConnector, IMarketDataProvide
 	/// <inheritdoc />
 	public void Disconnect()
 	{
-		this.AddInfoLog(nameof(Disconnect));
+		LogInfo(nameof(Disconnect));
 
 		if (ConnectionState != ConnectionStates.Connected)
 		{
-			this.AddWarningLog(LocalizedStrings.CannotDisconnectReasonState, ConnectionState);
+			LogWarning(LocalizedStrings.CannotDisconnectReasonState, ConnectionState);
 			return;
 		}
 
@@ -602,7 +602,7 @@ public partial class Connector : BaseLogReceiver, IConnector, IMarketDataProvide
 			CheckOnNew(changes);
 
 			if (IsOrderEditable(order) != true)
-				this.AddWarningLog("Order {0} is not editable.", order.TransactionId);
+				LogWarning("Order {0} is not editable.", order.TransactionId);
 
 			var transactionId = TransactionIdGenerator.GetNextId();
 			_entityCache.AddOrderByEditionId(order, transactionId);
@@ -636,7 +636,7 @@ public partial class Connector : BaseLogReceiver, IConnector, IMarketDataProvide
 			CheckOnNew(newOrder);
 
 			if (IsOrderReplaceable(oldOrder) != true)
-				this.AddWarningLog("Order {0} is not replaceable.", oldOrder.TransactionId);
+				LogWarning("Order {0} is not replaceable.", oldOrder.TransactionId);
 
 			InitNewOrder(newOrder);
 			_entityCache.AddOrderByCancelationId(oldOrder, newOrder.TransactionId);

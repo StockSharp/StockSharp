@@ -22,7 +22,7 @@ class chart_draw_script(IAnalyticsScript):
     ):
         # Check if there are no instruments
         if not securities:
-            logs.AddWarningLog("No instruments.")
+            logs.LogWarning("No instruments.")
             return Task.CompletedTask
 
         # Create charts using the panel

@@ -22,7 +22,7 @@ class time_volume_script(IAnalyticsScript):
     ):
         # Check if there are no instruments
         if not securities:
-            logs.AddWarningLog("No instruments.")
+            logs.LogWarning("No instruments.")
             return Task.CompletedTask
 
         # Script can process only 1 instrument
@@ -35,7 +35,7 @@ class time_volume_script(IAnalyticsScript):
         dates = list(candle_storage.GetDates(from_date, to_date))
 
         if len(dates) == 0:
-            logs.AddWarningLog("no data")
+            logs.LogWarning("no data")
             return Task.CompletedTask
 
         # Grouping candles by opening time (hourly truncation) and summing their volumes

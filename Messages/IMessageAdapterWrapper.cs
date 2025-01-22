@@ -29,7 +29,7 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageChannel>, IMessa
 		_innerAdapterName = GetUnderlyingAdapter(InnerAdapter).Name;
 	}
 
-	private IMessageAdapter GetUnderlyingAdapter(IMessageAdapter adapter)
+	private static IMessageAdapter GetUnderlyingAdapter(IMessageAdapter adapter)
 	{
 		if (adapter == null)
 			throw new ArgumentNullException(nameof(adapter));
@@ -396,4 +396,24 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageChannel>, IMessa
 
 	/// <inheritdoc />
 	public override string ToString() => InnerAdapter.ToString();
+
+	/// <inheritdoc />
+	public void LogVerbose(string message, params object[] args)
+		=> this.AddVerboseLog(message, args);
+	
+	/// <inheritdoc />
+	public void LogDebug(string message, params object[] args)
+		=> this.AddDebugLog(message, args);
+
+	/// <inheritdoc />
+	public void LogInfo(string message, params object[] args)
+		=> this.AddInfoLog(message, args);
+	
+	/// <inheritdoc />
+	public void LogWarning(string message, params object[] args)
+		=> this.AddWarningLog(message, args);
+	
+	/// <inheritdoc />
+	public void LogError(string message, params object[] args)
+		=> this.AddErrorLog(message, args);
 }

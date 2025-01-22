@@ -144,13 +144,13 @@ partial class Connector
 		private void TryWriteLog(long id)
 		{
 			if (_notFound.Add(id))
-				_connector.AddWarningLog(LocalizedStrings.SubscriptionNonExist, id);
+				_connector.LogWarning(LocalizedStrings.SubscriptionNonExist, id);
 		}
 
 		private void Remove(long id)
 		{
 			_subscriptions.Remove(id);
-			_connector.AddInfoLog(LocalizedStrings.SubscriptionRemoved, id);
+			_connector.LogInfo(LocalizedStrings.SubscriptionRemoved, id);
 		}
 
 		private SubscriptionInfo TryGetInfo(long id, bool ignoreAll, bool remove, DateTimeOffset? time, bool addLog)
@@ -402,9 +402,9 @@ partial class Connector
 				_requests.Add(request.TransactionId, (request, subscription));
 
 			if(isAllExtension)
-				_connector.AddVerboseLog("(ALL+) " + (request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent), subscription.SecurityId, request);
+				_connector.LogVerbose("(ALL+) " + (request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent), subscription.SecurityId, request);
 			else
-				_connector.AddDebugLog(request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent, subscription.SecurityId, request);
+				_connector.LogDebug(request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent, subscription.SecurityId, request);
 
 			_connector.SendInMessage((Message)request);
 		}
@@ -433,7 +433,7 @@ partial class Connector
 				missingSubscriptionDataTypes.ForEach(dt =>
 				{
 					var sub = dt.ToSubscription();
-					_connector.AddVerboseLog($"adding default subscription {sub.SubscriptionMessage.Type}");
+					_connector.LogVerbose($"adding default subscription {sub.SubscriptionMessage.Type}");
 					AddSubscription(sub);
 				});
 				ReSubscribeAll();
@@ -444,7 +444,7 @@ partial class Connector
 				missingSubscriptionDataTypes.ForEach(dt =>
 				{
 					var sub = dt.ToSubscription();
-					_connector.AddVerboseLog($"subscribing default subscription {sub.SubscriptionMessage.Type}");
+					_connector.LogVerbose($"subscribing default subscription {sub.SubscriptionMessage.Type}");
 					Subscribe(sub);
 				});
 			}
@@ -452,7 +452,7 @@ partial class Connector
 
 		private void ReSubscribeAll()
 		{
-			_connector.AddInfoLog(nameof(ReSubscribeAll));
+			_connector.LogInfo(nameof(ReSubscribeAll));
 
 			var requests = new Dictionary<ISubscriptionMessage, SubscriptionInfo>();
 
@@ -490,7 +490,7 @@ partial class Connector
 
 		public void UnSubscribeAll()
 		{
-			_connector.AddInfoLog(nameof(UnSubscribeAll));
+			_connector.LogInfo(nameof(UnSubscribeAll));
 
 			var subscriptions = new List<Subscription>();
 

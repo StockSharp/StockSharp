@@ -62,7 +62,7 @@ public class CsvImporter : CsvParser
 			FlushBuffer(buffer);
 		}
 
-		this.AddInfoLog(LocalizedStrings.ImportOfType.Put(fileName, DataType.MessageType.Name));
+		LogInfo(LocalizedStrings.ImportOfType.Put(fileName, DataType.MessageType.Name));
 
 		try
 		{
@@ -96,7 +96,7 @@ public class CsvImporter : CsvParser
 					{
 						if (!UpdateDuplicateSecurities)
 						{
-							this.AddErrorLog(LocalizedStrings.HasDuplicates.Put(secMsg.SecurityId));
+							LogError(LocalizedStrings.HasDuplicates.Put(secMsg.SecurityId));
 							continue;
 						}
 
@@ -150,7 +150,7 @@ public class CsvImporter : CsvParser
 		};
 
 		_securityStorage.Save(security, false);
-		this.AddInfoLog(LocalizedStrings.CreatingSec.Put(securityId));
+		LogInfo(LocalizedStrings.CreatingSec.Put(securityId));
 
 		return securityId;
 	}

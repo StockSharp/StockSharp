@@ -86,7 +86,7 @@ public interface IMarketRule : IDisposable
 /// </summary>
 /// <typeparam name="TToken">The type of token.</typeparam>
 /// <typeparam name="TArg">The type of accepted argument.</typeparam>
-public abstract class MarketRule<TToken, TArg> : Disposable, IMarketRule
+public abstract class MarketRule<TToken, TArg> : BaseLogReceiver, IMarketRule
 {
 	private Func<TArg, object> _action = a => a;
 	private Action<object> _activatedHandler;
@@ -117,24 +117,6 @@ public abstract class MarketRule<TToken, TArg> : Disposable, IMarketRule
 	{
 		return _container is null || _container.ProcessState != ProcessStates.Started;
 	}
-
-	private string _name;
-
-	/// <inheritdoc />
-	public string Name
-	{
-		get => _name;
-		set
-		{
-			if (value.IsEmpty())
-				throw new ArgumentNullException(nameof(value));
-
-			_name = value;
-		}
-	}
-
-	/// <inheritdoc />
-	public virtual LogLevels LogLevel { get; set; } = LogLevels.Inherit;
 
 	private bool _isSuspended;
 

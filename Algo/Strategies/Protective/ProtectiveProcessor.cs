@@ -82,7 +82,7 @@ public class ProtectiveProcessor
 
 		if (isTimeOut())
 		{
-			_logs.AddDebugLog("Timeout.");
+			_logs.LogDebug("Timeout.");
 
 			if ((currentPrice ?? _prevCurrPrice) is not decimal closePrice)
 			{
@@ -95,7 +95,7 @@ public class ProtectiveProcessor
 
 		if (currentPrice is not decimal currPriceDec)
 		{
-			_logs.AddDebugLog("Current price is null.");
+			_logs.LogDebug("Current price is null.");
 			return null;
 		}
 
@@ -113,7 +113,7 @@ public class ProtectiveProcessor
 			if ((_isUpTrend && currPriceDec < activationPrice) || (!_isUpTrend && currPriceDec > activationPrice))
 				return null;
 
-			_logs.AddDebugLog("ActivationPrice={0} CurrPrice={1} ProtectLvl={2}", activationPrice, currPriceDec, _protectiveLevel);
+			_logs.LogDebug("ActivationPrice={0} CurrPrice={1} ProtectLvl={2}", activationPrice, currPriceDec, _protectiveLevel);
 
 			return getClosePosPrice(currPriceDec);
 		}

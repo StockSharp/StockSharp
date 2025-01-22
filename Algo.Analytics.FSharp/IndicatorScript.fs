@@ -36,7 +36,7 @@ type IndicatorScript() =
             ) : Task =
 
             if securities.Length = 0 then
-                logs.AddWarningLog("No instruments.")
+                logs.LogWarning("No instruments.")
                 Task.CompletedTask
             else
                 // create 2 panes for candles (close prices) and indicator (ROC) series

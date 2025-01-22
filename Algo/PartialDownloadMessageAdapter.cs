@@ -298,7 +298,7 @@ public class PartialDownloadMessageAdapter : MessageAdapterWrapper
 							info.IsDownloadingInProgress = true;
 						}
 
-						this.AddDebugLog("Downloading {0}/{1}: {2}-{3}", mdMsg.SecurityId, mdMsg.DataType2, mdMsg.From, mdMsg.To);
+						LogDebug("Downloading {0}/{1}: {2}-{3}", mdMsg.SecurityId, mdMsg.DataType2, mdMsg.From, mdMsg.To);
 					}
 					else
 					{
@@ -360,7 +360,7 @@ public class PartialDownloadMessageAdapter : MessageAdapterWrapper
 					message = mdMsg;
 				}
 
-				this.AddDebugLog("Downloading {0}/{1}: {2}-{3}", mdMsg.SecurityId, mdMsg.DataType2, mdMsg.From, mdMsg.To);
+				LogDebug("Downloading {0}/{1}: {2}-{3}", mdMsg.SecurityId, mdMsg.DataType2, mdMsg.From, mdMsg.To);
 
 				break;
 			}
@@ -469,7 +469,7 @@ public class PartialDownloadMessageAdapter : MessageAdapterWrapper
 					}
 					else if (_liveRequests.TryGetAndRemove(id, out _))
 					{
-						this.AddInfoLog("Downloading {0} is online.", id);
+						LogInfo("Downloading {0} is online.", id);
 					}
 				}
 
@@ -517,7 +517,7 @@ public class PartialDownloadMessageAdapter : MessageAdapterWrapper
 					}
 				}
 
-				this.AddInfoLog("Partial {0} finished.", id);
+				LogInfo("Partial {0} finished.", id);
 
 				break;
 			}

@@ -590,7 +590,7 @@ partial class TraderHelper
 			throw new ArgumentNullException(nameof(provider));
 
 		if (provider is ILogReceiver logs)
-			logs.AddDebugLog(nameof(SubscribeCandles));
+			logs.LogDebug(nameof(SubscribeCandles));
 
 		var subscription = new Subscription(series);
 

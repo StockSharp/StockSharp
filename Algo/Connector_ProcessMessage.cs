@@ -41,7 +41,7 @@ partial class Connector
 					}
 					catch (Exception ex)
 					{
-						this.AddErrorLog(ex);
+						LogError(ex);
 					}
 				})
 				.Interval(MarketTimeChangedInterval);
@@ -581,7 +581,7 @@ partial class Connector
 	protected virtual void OnProcessMessage(Message message)
 	{
 		if (message.Type is not MessageTypes.Time and not MessageTypes.QuoteChange)
-			this.AddVerboseLog("BP:{0}", message);
+			LogVerbose("BP:{0}", message);
 
 		ProcessTimeInterval(message);
 
@@ -1030,7 +1030,7 @@ partial class Connector
 
 		if (_existingPortfolios.TryAdd(portfolio))
 		{
-			this.AddInfoLog(LocalizedStrings.NewPortfolioCreated, portfolio.Name);
+			LogInfo(LocalizedStrings.NewPortfolioCreated, portfolio.Name);
 			RaiseNewPortfolio(portfolio);
 		}
 		else if (isChanged)
@@ -1409,7 +1409,7 @@ partial class Connector
 			{
 				if (change == EntityCache.OrderChangeInfo.NotExist)
 				{
-					this.AddWarningLog(LocalizedStrings.OrderNotFound, message.OrderId.To<string>() ?? message.OrderStringId);
+					LogWarning(LocalizedStrings.OrderNotFound, message.OrderId.To<string>() ?? message.OrderStringId);
 					continue;
 				}
 
@@ -1440,7 +1440,7 @@ partial class Connector
 		{
 			if (message.OriginalTransactionId == 0)
 			{
-				this.AddErrorLog("Unknown error response for order {0}: {1}.", o, message.Error);
+				LogError("Unknown error response for order {0}: {1}.", o, message.Error);
 				return;
 			}
 
@@ -1549,8 +1549,8 @@ partial class Connector
 		{
 			if (message.SecurityId == default)
 			{
-				this.AddWarningLog(LocalizedStrings.EmptySecId);
-				this.AddWarningLog(message.ToString());
+				LogWarning(LocalizedStrings.EmptySecId);
+				LogWarning(message.ToString());
 				return;
 			}
 
@@ -1562,7 +1562,7 @@ partial class Connector
 		else
 			security = order.Security;
 
-		this.AddDebugLog("Order '{0}': {1}", order?.TransactionId, message);
+		LogDebug("Order '{0}': {1}", order?.TransactionId, message);
 
 		var processed = false;
 

@@ -113,7 +113,7 @@ public class Level1DepthBuilderAdapter : MessageAdapterWrapper
 					mdMsg.DataType2 = DataType.Level1;
 					message = mdMsg;
 
-					this.AddDebugLog("L1->OB {0} added.", transId);
+					LogDebug("L1->OB {0} added.", transId);
 				}
 				else
 				{
@@ -158,7 +158,7 @@ public class Level1DepthBuilderAdapter : MessageAdapterWrapper
 				_byId.Add(ids[0], info);
 		}
 
-		this.AddDebugLog("L1->OB {0} removed.", id);
+		LogDebug("L1->OB {0} removed.", id);
 	}
 
 	/// <inheritdoc />

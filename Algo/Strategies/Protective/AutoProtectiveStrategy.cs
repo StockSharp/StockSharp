@@ -328,7 +328,7 @@ public class AutoProtectiveStrategy : Strategy
 
 		manager.ProcessMessage(trade.ToMessage());
 
-		this.AddInfoLog(LocalizedStrings.PrevPosNewPos, security.Id, prevPos, manager.Position);
+		LogInfo(LocalizedStrings.PrevPosNewPos, security.Id, prevPos, manager.Position);
 
 		if (prevPos == 0)
 		{
@@ -345,7 +345,7 @@ public class AutoProtectiveStrategy : Strategy
 			// переворот позы
 			if (manager.Position != 0)
 			{
-				this.AddInfoLog(LocalizedStrings.ReversePos);
+				LogInfo(LocalizedStrings.ReversePos);
 				Protect(manager, trade, manager.Position.Abs());
 			}
 		}
@@ -359,7 +359,7 @@ public class AutoProtectiveStrategy : Strategy
 			// увеличение позы
 			if (diffVolume > 0)
 			{
-				this.AddInfoLog(LocalizedStrings.PosIncreased, diffVolume);
+				LogInfo(LocalizedStrings.PosIncreased, diffVolume);
 				Protect(manager, trade, diffVolume);
 			}
 			// уменьшение позы
@@ -388,14 +388,14 @@ public class AutoProtectiveStrategy : Strategy
 
 		if (strategy != null)
 		{
-			this.AddInfoLog(LocalizedStrings.PosChanged, position);
+			LogInfo(LocalizedStrings.PosChanged, position);
 			ChildStrategies.Add((Strategy)strategy);
 		}
 	}
 
 	private void DecreasePosition(Security security, decimal diffVolume)
 	{
-		this.AddInfoLog(LocalizedStrings.PosDecreased, diffVolume);
+		LogInfo(LocalizedStrings.PosDecreased, diffVolume);
 
 		var groups = ChildStrategies
 			.Where(s => s.Security == security)
@@ -405,13 +405,13 @@ public class AutoProtectiveStrategy : Strategy
 
 		if (groups.Length == 0)
 		{
-			this.AddWarningLog(LocalizedStrings.StopsNotFound);
+			LogWarning(LocalizedStrings.StopsNotFound);
 			return;
 		}
 
 		foreach (var strategies in Sort(groups))
 		{
-			this.AddInfoLog(LocalizedStrings.StopsDecreased, diffVolume);
+			LogInfo(LocalizedStrings.StopsDecreased, diffVolume);
 
 			diffVolume = ChangeVolume([.. strategies], diffVolume);
 
@@ -431,7 +431,7 @@ public class AutoProtectiveStrategy : Strategy
 
 		if (strategy == null)
 		{
-			this.AddWarningLog(LocalizedStrings.NoProtectiveStrategies);
+			LogWarning(LocalizedStrings.NoProtectiveStrategies);
 			return;
 		}
 
@@ -441,8 +441,8 @@ public class AutoProtectiveStrategy : Strategy
 
 			positionManager.ProcessMessage(protectiveTrade.ToMessage());
 
-			this.AddInfoLog(protectiveTrade.ToString());
-			this.AddInfoLog(LocalizedStrings.PrevPosNewPos, protectiveTrade.Trade.Security.Id, prevPos, positionManager.Position);
+			LogInfo(protectiveTrade.ToString());
+			LogInfo(LocalizedStrings.PrevPosNewPos, protectiveTrade.Trade.Security.Id, prevPos, positionManager.Position);
 		};
 
 		ChildStrategies.Add(strategy);
@@ -461,7 +461,7 @@ public class AutoProtectiveStrategy : Strategy
 
 		if (newVolume == 0)
 		{
-			this.AddInfoLog(LocalizedStrings.Stop);
+			LogInfo(LocalizedStrings.Stop);
 
 			strategies.Cast<Strategy>().ForEach(s => s.Stop());
 		}

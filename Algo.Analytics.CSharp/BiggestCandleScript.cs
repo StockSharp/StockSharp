@@ -9,7 +9,7 @@
 		{
 			if (securities.Length == 0)
 			{
-				logs.AddWarningLog("No instruments.");
+				logs.LogWarning("No instruments.");
 				return Task.CompletedTask;
 			}
 

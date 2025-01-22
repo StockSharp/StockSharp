@@ -11,7 +11,7 @@
 		{
 			if (securities.Length == 0)
 			{
-				logs.AddWarningLog("No instruments.");
+				logs.LogWarning("No instruments.");
 				return Task.CompletedTask;
 			}
 
@@ -31,7 +31,7 @@
 
 				if (prices.Length == 0)
 				{
-					logs.AddWarningLog("No data for {0}", security);
+					logs.LogWarning("No data for {0}", security);
 					return Task.CompletedTask;
 				}
 

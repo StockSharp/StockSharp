@@ -54,7 +54,7 @@ public class BestByVolumeQuotingStrategy : QuotingStrategy
 
 		if (quotes == null || quotes.IsEmpty() && currentPrice == null)
 		{
-			this.AddWarningLog(LocalizedStrings.NoOrderBookInfo);
+			LogWarning(LocalizedStrings.NoOrderBookInfo);
 			return null;
 		}
 

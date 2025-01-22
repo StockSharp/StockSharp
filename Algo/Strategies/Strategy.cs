@@ -927,7 +927,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			if (_processState == value)
 				return;
 
-			this.AddDebugLog("State: {0}->{1}", _processState, value);
+			LogDebug("State: {0}->{1}", _processState, value);
 
 			if (_processState == ProcessStates.Stopped && value == ProcessStates.Stopping)
 				throw new InvalidOperationException(LocalizedStrings.StrategyAlreadyStopped.Put(Name, value));
@@ -997,7 +997,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			{
 				if (CancelOrdersWhenStopping)
 				{
-					this.AddInfoLog(LocalizedStrings.WaitingCancellingAllOrders);
+					LogInfo(LocalizedStrings.WaitingCancellingAllOrders);
 					ProcessCancelActiveOrders();
 				}
 
@@ -1030,7 +1030,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		};
 
 		var ps = ParentStrategy;
-		this.AddInfoLog("Strategy {0}. [{1},{2}]. Position {3}.", stateStr, ChildStrategies.Count, ps != null ? ps.ChildStrategies.Count : -1, Position);
+		LogInfo("Strategy {0}. [{1},{2}]. Position {3}.", stateStr, ChildStrategies.Count, ps != null ? ps.ChildStrategies.Count : -1, Position);
 	}
 
 	private Strategy ParentStrategy => Parent as Strategy;
@@ -1569,7 +1569,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			return;
 		}
 
-		this.AddInfoLog("Registration {0} (0x{5:X}) order for {1} with price {2} and volume {3}. {4}",
+		LogInfo("Registration {0} (0x{5:X}) order for {1} with price {2} and volume {3}. {4}",
 			order.Type, order.Side, order.Price, order.Volume, order.Comment, order.GetHashCode());
 
 		order.Security ??= Security;
@@ -1617,7 +1617,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// <inheritdoc />
 	public void EditOrder(Order order, Order changes)
 	{
-		this.AddInfoLog("EditOrder: {0}", order);
+		LogInfo("EditOrder: {0}", order);
 
 		if (!CanTrade(changes.Volume > 0 && order.Balance > changes.Volume, out var reason))
 		{
@@ -1640,7 +1640,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if (newOrder == null)
 			throw new ArgumentNullException(nameof(newOrder));
 
-		this.AddInfoLog("Reregistration {0} with price {1} to price {2}. {3}", oldOrder.TransactionId, oldOrder.Price, newOrder.Price, oldOrder.Comment);
+		LogInfo("Reregistration {0} with price {1} to price {2}. {3}", oldOrder.TransactionId, oldOrder.Price, newOrder.Price, oldOrder.Comment);
 
 		if (!CanTrade(newOrder.Volume > 0 && oldOrder.Balance > newOrder.Volume, out var reason))
 		{
@@ -1706,7 +1706,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		}
 		catch (Exception excp)
 		{
-			this.AddErrorLog(LocalizedStrings.ErrorRegOrder, nOrder.TransactionId, excp.Message);
+			LogError(LocalizedStrings.ErrorRegOrder, nOrder.TransactionId, excp.Message);
 
 			ProcessOrderFail(nOrder, excp, true);
 		}
@@ -1747,7 +1747,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		var successRule = order
 			.WhenCanceled(this)
 			.Or(matchedRule, order.WhenRegisterFailed(this))
-			.Do(() => this.AddInfoLog(LocalizedStrings.OrderNoLongerActive.Put(order.TransactionId)))
+			.Do(() => LogInfo(LocalizedStrings.OrderNoLongerActive.Put(order.TransactionId)))
 			.Until(() =>
 			{
 				if (order.State == OrderStates.Failed)
@@ -1755,7 +1755,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 				if (order.State != OrderStates.Done)
 				{
-					this.AddWarningLog(LocalizedStrings.OrderHasState, order.TransactionId, order.State);
+					LogWarning(LocalizedStrings.OrderHasState, order.TransactionId, order.State);
 					return false;
 				}
 
@@ -1764,7 +1764,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 				if (!_ordersInfo.TryGetValue(order, out var info))
 				{
-					this.AddWarningLog(LocalizedStrings.OrderNotFound, order.TransactionId);
+					LogWarning(LocalizedStrings.OrderNotFound, order.TransactionId);
 					return false;
 				}
 
@@ -1772,7 +1772,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 				if (leftVolume != 0)
 				{
-					this.AddDebugLog(LocalizedStrings.OrderHasBalance, order.TransactionId, leftVolume);
+					LogDebug(LocalizedStrings.OrderHasBalance, order.TransactionId, leftVolume);
 					return false;
 				}
 
@@ -1790,7 +1790,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 					return;
 
 				canFinish = true;
-				this.AddInfoLog(LocalizedStrings.ErrorCancellingOrder.Put(order.TransactionId, f.Error.Message));
+				LogInfo(LocalizedStrings.ErrorCancellingOrder.Put(order.TransactionId, f.Error.Message));
 			})
 			.Until(() => canFinish)
 			.Apply(this)
@@ -1802,7 +1802,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	{
 		if (ProcessState != ProcessStates.Started)
 		{
-			this.AddWarningLog(LocalizedStrings.StrategyInStateCannotCancelOrder, ProcessState);
+			LogWarning(LocalizedStrings.StrategyInStateCannotCancelOrder, ProcessState);
 			return;
 		}
 
@@ -1811,7 +1811,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		if (TradingMode == StrategyTradingModes.Disabled)
 		{
-			this.AddWarningLog(LocalizedStrings.TradingDisabled);
+			LogWarning(LocalizedStrings.TradingDisabled);
 			return;
 		}
 
@@ -1824,7 +1824,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 			if (info.IsCanceled)
 			{
-				this.AddWarningLog(LocalizedStrings.OrderAlreadySentCancel, order.TransactionId);
+				LogWarning(LocalizedStrings.OrderAlreadySentCancel, order.TransactionId);
 				return;
 			}
 
@@ -1839,7 +1839,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if (order == null)
 			throw new ArgumentNullException(nameof(order));
 
-		this.AddInfoLog(LocalizedStrings.OrderCancelling + " " + order.TransactionId);
+		LogInfo(LocalizedStrings.OrderCancelling + " " + order.TransactionId);
 
 		OnOrderCanceling(order);
 
@@ -1949,7 +1949,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 	private void AttachOrder(Order order, bool restored)
 	{
-		this.AddInfoLog("Order {0} attached.", order.TransactionId);
+		LogInfo("Order {0} attached.", order.TransactionId);
 
 		AddOrder(order, restored);
 
@@ -1966,7 +1966,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if (OrdersKeepTime == TimeSpan.Zero)
 			return;
 
-		this.AddInfoLog(nameof(RecycleOrders));
+		LogInfo(nameof(RecycleOrders));
 
 		var diff = _lastOrderTime - _firstOrderTime;
 
@@ -2032,7 +2032,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// <param name="error">Error.</param>
 	public void Stop(Exception error)
 	{
-		this.AddErrorLog(error);
+		LogError(error);
 
 		LastError = error ?? throw new ArgumentNullException(nameof(error));
 		Stop();
@@ -2059,7 +2059,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// </summary>
 	public void Reset()
 	{
-		this.AddInfoLog(LocalizedStrings.Reset);
+		LogInfo(LocalizedStrings.Reset);
 
 		ChildStrategies.ForEach(s => s.Reset());
 
@@ -2143,7 +2143,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	{
 		_rulesSuspendCount++;
 
-		this.AddDebugLog(LocalizedStrings.RulesSuspended, _rulesSuspendCount);
+		LogDebug(LocalizedStrings.RulesSuspended, _rulesSuspendCount);
 	}
 
 	void IMarketRuleContainer.ResumeRules()
@@ -2159,7 +2159,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			}
 		}
 
-		this.AddDebugLog(LocalizedStrings.RulesResume, _rulesSuspendCount);
+		LogDebug(LocalizedStrings.RulesResume, _rulesSuspendCount);
 	}
 
 	private void TryFinalStop()
@@ -2388,7 +2388,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 							if (ProcessState == ProcessStates.Started)
 								ProcessState = ProcessStates.Stopping;
 							else
-								this.AddDebugLog(LocalizedStrings.StrategyStopping, ProcessState);
+								LogDebug(LocalizedStrings.StrategyStopping, ProcessState);
 
 							break;
 						}
@@ -2397,7 +2397,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 							if (ProcessState == ProcessStates.Stopped)
 								ProcessState = ProcessStates.Started;
 							else
-								this.AddDebugLog(LocalizedStrings.StrategyStarting, ProcessState);
+								LogDebug(LocalizedStrings.StrategyStarting, ProcessState);
 
 							break;
 						}
@@ -2591,7 +2591,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		var isComChanged = false;
 		var isSlipChanged = false;
 
-		this.AddInfoLog("{0} trade {1} at price {2} for {3} orders {4}.",
+		LogInfo("{0} trade {1} at price {2} for {3} orders {4}.",
 			order.Side,
 			(tick.Id is null ? tick.StringId : tick.Id.To<string>()),
 			tick.Price, tick.Volume, order.TransactionId);
@@ -2825,11 +2825,11 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	{
 		if (ProcessState != ProcessStates.Started)
 		{
-			this.AddWarningLog(LocalizedStrings.StrategyInStateCannotCancelOrder, ProcessState);
+			LogWarning(LocalizedStrings.StrategyInStateCannotCancelOrder, ProcessState);
 			return;
 		}
 
-		this.AddInfoLog(LocalizedStrings.CancelAll);
+		LogInfo(LocalizedStrings.CancelAll);
 
 		ProcessCancelActiveOrders();
 	}
@@ -2849,7 +2849,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 			if (info.IsCanceled)
 			{
-				this.AddWarningLog(LocalizedStrings.OrderAlreadySentCancel, o.TransactionId);
+				LogWarning(LocalizedStrings.OrderAlreadySentCancel, o.TransactionId);
 				return;
 			}
 
@@ -2891,7 +2891,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			info.IsCanceled = false;
 		}
 
-		this.AddErrorLog(LocalizedStrings.ErrorCancellingOrder, order.TransactionId, fail.Error);
+		LogError(LocalizedStrings.ErrorCancellingOrder, order.TransactionId, fail.Error);
 
 		OrderCancelFailed?.Invoke(fail);
 
@@ -2912,7 +2912,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if (!StopOnChildStrategyErrors && !Equals(this, strategy))
 			return;
 
-		this.AddErrorLog(error.ToString());
+		LogError(error.ToString());
 	}
 
 	object ICloneable.Clone() => Clone();
@@ -2964,7 +2964,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		foreach (var rule in RiskManager.ProcessRules(getMessage()))
 		{
-			this.AddWarningLog(LocalizedStrings.ActivatingRiskRule,
+			LogWarning(LocalizedStrings.ActivatingRiskRule,
 				rule.Name, rule.Title, rule.Action);
 
 			switch (rule.Action)
@@ -3173,7 +3173,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			IsOnline = nowOnline;
 		}
 
-		this.AddInfoLog("IsOnline: {0} ==> {1}. state={2}, children({3})", wasOnline, nowOnline, ProcessState, IsOnlineStateIncludesChildren);
+		LogInfo("IsOnline: {0} ==> {1}. state={2}, children({3})", wasOnline, nowOnline, ProcessState, IsOnlineStateIncludesChildren);
 
 		IsOnlineChanged?.Invoke(this);
 	}

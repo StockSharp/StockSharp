@@ -271,7 +271,7 @@ public class SubscriptionMessageAdapter : MessageAdapterWrapper
 
 						_replaceId.Add(subscription.TransactionId, i.Subscription.TransactionId);
 
-						this.AddInfoLog("Re-map subscription: {0}->{1} for '{2}'.", i.Subscription.TransactionId, subscription.TransactionId, i.Subscription);
+						LogInfo("Re-map subscription: {0}->{1} for '{2}'.", i.Subscription.TransactionId, subscription.TransactionId, i.Subscription);
 
 						return (Message)subscription;
 					}));
@@ -423,9 +423,9 @@ public class SubscriptionMessageAdapter : MessageAdapterWrapper
 		if (sendInMsg != null)
 		{
 			if (isInfoLevel)
-				this.AddDebugLog("In: {0}", sendInMsg);
+				LogDebug("In: {0}", sendInMsg);
 			else
-				this.AddDebugLog("In: {0}", sendInMsg);
+				LogDebug("In: {0}", sendInMsg);
 
 			retVal = base.OnSendInMessage((Message)sendInMsg);
 		}
@@ -434,7 +434,7 @@ public class SubscriptionMessageAdapter : MessageAdapterWrapper
 		{
 			foreach (var sendOutMsg in sendOutMsgs)
 			{
-				this.AddDebugLog("Out: {0}", sendOutMsg);
+				LogDebug("Out: {0}", sendOutMsg);
 				RaiseNewOutMessage(sendOutMsg);	
 			}
 		}

@@ -52,7 +52,7 @@ public class OrderBookTruncateMessageAdapter : MessageAdapterWrapper
 
 								_depths.Add(mdMsg.TransactionId, actualDepth);
 
-								this.AddInfoLog("MD truncate {0}/{1} ({2}->{3}).", mdMsg.SecurityId, mdMsg.TransactionId, actualDepth, supportedDepth);
+								LogInfo("MD truncate {0}/{1} ({2}->{3}).", mdMsg.SecurityId, mdMsg.TransactionId, actualDepth, supportedDepth);
 							}
 						}
 					}
@@ -72,7 +72,7 @@ public class OrderBookTruncateMessageAdapter : MessageAdapterWrapper
 	private void RemoveSubscription(long id)
 	{
 		if (_depths.Remove(id))
-			this.AddInfoLog("Unsubscribed {0}.", id);
+			LogInfo("Unsubscribed {0}.", id);
 	}
 
 	/// <inheritdoc />

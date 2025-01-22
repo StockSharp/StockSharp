@@ -166,7 +166,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			if (message.Type is not MessageTypes.Time
 				and not MessageTypes.Level1Change
 				and not MessageTypes.QuoteChange)
-				this.AddDebugLog((isInput ? " --> {0}" : " <-- {0}"), message);
+				this.LogDebug((isInput ? " --> {0}" : " <-- {0}"), message);
 		}
 
 		public void Process(Message message, ICollection<Message> result)
@@ -199,7 +199,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 						if (_settings.Latency > TimeSpan.Zero)
 						{
-							this.AddInfoLog(LocalizedStrings.WaitingForOrder, execMsg.IsCancellation ? LocalizedStrings.Cancellation : LocalizedStrings.Registration, execMsg.TransactionId == 0 ? execMsg.OriginalTransactionId : execMsg.TransactionId);
+							LogInfo(LocalizedStrings.WaitingForOrder, execMsg.IsCancellation ? LocalizedStrings.Cancellation : LocalizedStrings.Registration, execMsg.TransactionId == 0 ? execMsg.OriginalTransactionId : execMsg.TransactionId);
 							_pendingExecutions.Add(execMsg.TypedClone(), _settings.Latency);
 						}
 						else
@@ -296,7 +296,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 								StrategyId = orderMsg.StrategyId,
 							});
 
-							this.AddErrorLog(LocalizedStrings.OrderForReplaceNotFound, orderMsg.OriginalTransactionId);
+							LogError(LocalizedStrings.OrderForReplaceNotFound, orderMsg.OriginalTransactionId);
 						}
 					}
 
@@ -1725,7 +1725,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			{
 				if (RandomGen.GetDouble() < (_settings.Failing / 100.0))
 				{
-					this.AddErrorLog(LocalizedStrings.ErrorForOrder, execution.IsCancellation ? LocalizedStrings.Cancellation : LocalizedStrings.Registration, execution.OriginalTransactionId == 0 ? execution.TransactionId : execution.OriginalTransactionId);
+					LogError(LocalizedStrings.ErrorForOrder, execution.IsCancellation ? LocalizedStrings.Cancellation : LocalizedStrings.Registration, execution.OriginalTransactionId == 0 ? execution.TransactionId : execution.OriginalTransactionId);
 
 					var replyMsg = CreateReply(execution, time, new InvalidOperationException(LocalizedStrings.Random));
 
@@ -1759,7 +1759,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 					result.Add(replyMsg);
 
-					this.AddInfoLog(LocalizedStrings.OrderCancelled, execution.OriginalTransactionId);
+					LogInfo(LocalizedStrings.OrderCancelled, execution.OriginalTransactionId);
 
 					replyMsg.Commission = _parent
 						.GetPortfolioInfo(execution.PortfolioName)
@@ -1769,7 +1769,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				{
 					result.Add(CreateReply(execution, time, new InvalidOperationException(LocalizedStrings.OrderNotFound.Put(execution.OriginalTransactionId))));
 
-					this.AddErrorLog(LocalizedStrings.OrderNotFound, execution.OriginalTransactionId);
+					LogError(LocalizedStrings.OrderNotFound, execution.OriginalTransactionId);
 				}
 			}
 			else
@@ -1781,7 +1781,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 				if (error is null)
 				{
-					this.AddInfoLog(LocalizedStrings.OrderRegistered, execution.TransactionId);
+					LogInfo(LocalizedStrings.OrderRegistered, execution.TransactionId);
 
 					// при восстановлении заявки у нее уже есть номер
 					if (execution.OrderId == null)
@@ -1849,7 +1849,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				}
 				else
 				{
-					this.AddInfoLog(LocalizedStrings.ErrorRegOrder, execution.TransactionId, error.Message);
+					LogInfo(LocalizedStrings.ErrorRegOrder, execution.TransactionId, error.Message);
 				}
 			}
 		}
@@ -2061,7 +2061,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					{
 						// матчинг идет о заявки с таким же портфелем
 						var matchError = LocalizedStrings.CrossTrades.Put(crossOrders.Select(o => o.TransactionId.To<string>()).JoinCommaSpace(), order.TransactionId);
-						this.AddErrorLog(matchError);
+						LogError(matchError);
 
 						break;
 					}
@@ -2206,7 +2206,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						if (leftBalance == 0)
 						{
 							order.OrderState = OrderStates.Done;
-							this.AddInfoLog(LocalizedStrings.OrderMatched, order.TransactionId);
+							LogInfo(LocalizedStrings.OrderMatched, order.TransactionId);
 						}
 
 						ProcessOrder(time, order, result);
@@ -2216,7 +2216,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					{
 						if (leftBalance > 0)
 						{
-							this.AddInfoLog(LocalizedStrings.OrderCancellingNotAllBalance, order.TransactionId, leftBalance);
+							LogInfo(LocalizedStrings.OrderCancellingNotAllBalance, order.TransactionId, leftBalance);
 
 							order.OrderState = OrderStates.Done;
 							ProcessOrder(time, order, result);
@@ -2231,7 +2231,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					if (leftBalance == 0)
 						order.Balance = 0;
 
-					this.AddInfoLog(LocalizedStrings.OrderFOKMatched, order.TransactionId);
+					LogInfo(LocalizedStrings.OrderFOKMatched, order.TransactionId);
 
 					order.OrderState = OrderStates.Done;
 					ProcessOrder(time, order, result);
@@ -2245,7 +2245,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 				case TimeInForce.CancelBalance:
 				{
-					this.AddInfoLog(LocalizedStrings.OrderIOCMatched, order.TransactionId);
+					LogInfo(LocalizedStrings.OrderIOCMatched, order.TransactionId);
 
 					order.Balance = leftBalance;
 					order.OrderState = OrderStates.Done;
@@ -2632,7 +2632,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			};
 			result.Add(tradeMsg);
 
-			this.AddInfoLog("Trade {0} of order {1} P={2} V={3}.", tradeMsg.TradeId, tradeMsg.OriginalTransactionId, price, volume);
+			LogInfo("Trade {0} of order {1} P={2} V={3}.", tradeMsg.TradeId, tradeMsg.OriginalTransactionId, price, volume);
 			var info = _parent.GetPortfolioInfo(order.PortfolioName);
 
 			info.ProcessTrade(order.Side, tradeMsg, result);

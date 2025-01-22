@@ -262,7 +262,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 			_suspendedInMessages.SafeAdd(securityId).Add((ISecurityIdMessage)((Message)message).Clone());
 		}
 
-		this.AddInfoLog("Suspended {0}.", message);
+		LogInfo("Suspended {0}.", message);
 		return null;
 	}
 

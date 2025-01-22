@@ -71,7 +71,7 @@ public class OrderLogMessageAdapter : MessageAdapterWrapper
 					message = message.TypedClone();
 					message.DataType2 = DataType.OrderLog;
 
-					this.AddInfoLog("OL->MD subscribed {0}/{1}.", message.SecurityId, message.TransactionId);
+					LogInfo("OL->MD subscribed {0}/{1}.", message.SecurityId, message.TransactionId);
 				}
 			}
 			else if (message.DataType2 == DataType.Ticks)
@@ -83,7 +83,7 @@ public class OrderLogMessageAdapter : MessageAdapterWrapper
 					message = message.TypedClone();
 					message.DataType2 = DataType.OrderLog;
 
-					this.AddInfoLog("OL->TICK subscribed {0}/{1}.", message.SecurityId, message.TransactionId);
+					LogInfo("OL->TICK subscribed {0}/{1}.", message.SecurityId, message.TransactionId);
 				}
 			}
 		}
@@ -98,7 +98,7 @@ public class OrderLogMessageAdapter : MessageAdapterWrapper
 		if (!_subscriptionIds.TryGetAndRemove(id, out info))
 			return false;
 
-		this.AddInfoLog("OL->{0} unsubscribed {1}/{2}.", info.IsTicks ? "MD" : "TICK", info.Origin.SecurityId, info.Origin.TransactionId);
+		LogInfo("OL->{0} unsubscribed {1}/{2}.", info.IsTicks ? "MD" : "TICK", info.Origin.SecurityId, info.Origin.TransactionId);
 		return true;
 	}
 
@@ -208,7 +208,7 @@ public class OrderLogMessageAdapter : MessageAdapterWrapper
 							depth = depth?.TypedClone();
 					}
 
-					this.AddDebugLog("OL->MD processing {0}={1}.", execMsg.SecurityId, depth != null);
+					LogDebug("OL->MD processing {0}={1}.", execMsg.SecurityId, depth != null);
 
 					if (depth != null)
 					{
@@ -225,7 +225,7 @@ public class OrderLogMessageAdapter : MessageAdapterWrapper
 			}
 			else
 			{
-				this.AddDebugLog("OL->TICK processing {0}.", execMsg.SecurityId);
+				LogDebug("OL->TICK processing {0}.", execMsg.SecurityId);
 				base.OnInnerAdapterNewOutMessage(execMsg.ToTick());
 			}
 		}

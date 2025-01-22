@@ -149,10 +149,10 @@ public class LookupTrackingMessageAdapter : MessageAdapterWrapper
 		finally
 		{
 			if (isEnqueue)
-				this.AddInfoLog("Lookup queued {0}.", message);
+				LogInfo("Lookup queued {0}.", message);
 
 			if (isStarted)
-				this.AddInfoLog("Lookup timeout {0} started for {1}.", TimeOut, transId);
+				LogInfo("Lookup timeout {0} started for {1}.", TimeOut, transId);
 		}
 	}
 
@@ -190,7 +190,7 @@ public class LookupTrackingMessageAdapter : MessageAdapterWrapper
 				{
 					if (_lookups.TryGetAndRemove(id, out var info))
 					{
-						this.AddInfoLog("Lookup response {0}.", id);
+						LogInfo("Lookup response {0}.", id);
 
 						nextLookup = TryInitNextLookup(info.Subscription.Type, info.Subscription.TransactionId);
 					}
@@ -253,7 +253,7 @@ public class LookupTrackingMessageAdapter : MessageAdapterWrapper
 					continue;
 
 				_lookups.Remove(transId);
-				this.AddInfoLog("Lookup timeout {0}.", transId);
+				LogInfo("Lookup timeout {0}.", transId);
 
 				base.OnInnerAdapterNewOutMessage(info.Subscription.CreateResult());
 

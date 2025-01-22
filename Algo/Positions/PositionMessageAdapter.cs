@@ -60,7 +60,7 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 				{
 					if (!lookupMsg.StrategyId.IsEmpty())
 					{
-						this.AddDebugLog("Subscription (strategy='{1}') {0} added.", lookupMsg.TransactionId, lookupMsg.StrategyId);
+						LogDebug("Subscription (strategy='{1}') {0} added.", lookupMsg.TransactionId, lookupMsg.StrategyId);
 						_strategyIdMap.Add(lookupMsg.TransactionId, lookupMsg.StrategyId);
 						_strategySubscriptions.SafeAdd(lookupMsg.StrategyId).Add(lookupMsg.TransactionId);
 						RaiseNewOutMessage(lookupMsg.CreateResult());
@@ -69,7 +69,7 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 
 					if (lookupMsg.To == null)
 					{
-						this.AddDebugLog("Subscription {0} added.", lookupMsg.TransactionId);
+						LogDebug("Subscription {0} added.", lookupMsg.TransactionId);
 						_subscriptions.Add(lookupMsg.TransactionId);
 
 						lock (_sync)
@@ -86,7 +86,7 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 				{
 					if (_subscriptions.Remove(lookupMsg.OriginalTransactionId))
 					{
-						this.AddDebugLog("Subscription {0} removed.", lookupMsg.OriginalTransactionId);
+						LogDebug("Subscription {0} removed.", lookupMsg.OriginalTransactionId);
 
 						lock (_sync)
 							_positionManager.ProcessMessage(message);
@@ -94,7 +94,7 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 					else if (_strategyIdMap.TryGetAndRemove(lookupMsg.OriginalTransactionId, out var strategyId))
 					{
 						_strategySubscriptions.TryGetValue(strategyId)?.Remove(lookupMsg.OriginalTransactionId);
-						this.AddDebugLog("Subscription (strategy='{1}') {0} removed.", lookupMsg.OriginalTransactionId, strategyId);
+						LogDebug("Subscription (strategy='{1}') {0} removed.", lookupMsg.OriginalTransactionId, strategyId);
 						return true;
 					}
 

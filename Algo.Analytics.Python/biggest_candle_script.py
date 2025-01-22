@@ -9,7 +9,7 @@ from StockSharp.Algo.Analytics import IAnalyticsScript
 class biggest_candle_script(IAnalyticsScript):
     def Run(self, logs, panel, securities, from_date, to_date, storage, drive, format, time_frame, cancellation_token):
         if not securities:
-            logs.AddWarningLog("No instruments.")
+            logs.LogWarning("No instruments.")
             return Task.CompletedTask
 
         price_chart = panel.CreateChart[object, object, object]()

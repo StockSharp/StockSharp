@@ -110,7 +110,7 @@ public abstract class QuotingStrategy : Strategy
 			if (value == QuotingVolume)
 				return;
 
-			this.AddInfoLog(LocalizedStrings.OldVolNewVol, QuotingVolume, value);
+			LogInfo(LocalizedStrings.OldVolNewVol, QuotingVolume, value);
 
 			CheckQuotingVolume(value);
 
@@ -289,7 +289,7 @@ public abstract class QuotingStrategy : Strategy
 		_filteredBook = default;
 		_lastTrade = default;
 
-		this.AddInfoLog(LocalizedStrings.QuotingForVolume, QuotingDirection, QuotingVolume);
+		LogInfo(LocalizedStrings.QuotingForVolume, QuotingDirection, QuotingVolume);
 
 		this.SuspendRules(() =>
 		{
@@ -312,7 +312,7 @@ public abstract class QuotingStrategy : Strategy
 				.Do(() =>
 				{
 					if (LeftVolume > 0)
-						this.AddWarningLog(LocalizedStrings.QuotingFinishedNotFull, LeftVolume);
+						LogWarning(LocalizedStrings.QuotingFinishedNotFull, LeftVolume);
 				})
 				.Once()
 				.Apply(this);
@@ -330,11 +330,11 @@ public abstract class QuotingStrategy : Strategy
 				.WhenPositionChanged()
 				.Do(() =>
 				{
-					this.AddInfoLog(LocalizedStrings.PrevPosNewPos, security, Position, LeftVolume);
+					LogInfo(LocalizedStrings.PrevPosNewPos, security, Position, LeftVolume);
 
 					if (NeedFinish())
 					{
-						this.AddInfoLog(LocalizedStrings.Stopped);
+						LogInfo(LocalizedStrings.Stopped);
 						Stop();
 					}
 				})
@@ -390,11 +390,11 @@ public abstract class QuotingStrategy : Strategy
 		if (o == _order)
 		{
 			_isRegistering = false;
-			this.AddInfoLog(LocalizedStrings.OrderAcceptedByExchange, o.TransactionId);
+			LogInfo(LocalizedStrings.OrderAcceptedByExchange, o.TransactionId);
 		}
 		else if (o == _reRegisteringOrder)
 		{
-			this.AddInfoLog(LocalizedStrings.OrderReplacedByNew, _order.TransactionId, _reRegisteringOrder.TransactionId);
+			LogInfo(LocalizedStrings.OrderReplacedByNew, _order.TransactionId, _reRegisteringOrder.TransactionId);
 
 			Rules.RemoveRulesByToken(_order, null);
 
@@ -402,7 +402,7 @@ public abstract class QuotingStrategy : Strategy
 			_reRegisteringOrder = null;
 		}
 		else
-			this.AddWarningLog(LocalizedStrings.OrderOutOfDate, o.TransactionId);
+			LogWarning(LocalizedStrings.OrderOutOfDate, o.TransactionId);
 
 		ProcessQuoting(o.ServerTime);
 	}
@@ -421,7 +421,7 @@ public abstract class QuotingStrategy : Strategy
 			{
 				var o = fail.Order;
 
-				this.AddErrorLog(LocalizedStrings.ErrorRegOrder, o.TransactionId, fail.Error.Message);
+				LogError(LocalizedStrings.ErrorRegOrder, o.TransactionId, fail.Error.Message);
 
 				var canProcess = false;
 
@@ -437,7 +437,7 @@ public abstract class QuotingStrategy : Strategy
 					_isReRegistedFailed = true;
 				}
 				else
-					this.AddWarningLog(LocalizedStrings.OrderOutOfDate, o.TransactionId);
+					LogWarning(LocalizedStrings.OrderOutOfDate, o.TransactionId);
 
 				if (canProcess)
 					ProcessQuoting(fail.ServerTime);
@@ -451,7 +451,7 @@ public abstract class QuotingStrategy : Strategy
 			.WhenMatched(this)
 			.Do((r, o) =>
 			{
-				this.AddInfoLog(LocalizedStrings.OrderMatchedRemainBalance, o.TransactionId, LeftVolume);
+				LogInfo(LocalizedStrings.OrderMatchedRemainBalance, o.TransactionId, LeftVolume);
 
 				Rules.RemoveRulesByToken(o, r);
 
@@ -464,7 +464,7 @@ public abstract class QuotingStrategy : Strategy
 				// http://stocksharp.com/forum/yaf_postst1708_MarketQuotingStrategy---Obiem-zaiavki-nie-mozhiet-byt--nulievym.aspx
 				if (NeedFinish())
 				{
-					this.AddInfoLog(LocalizedStrings.Stopped);
+					LogInfo(LocalizedStrings.Stopped);
 					Stop();
 				}
 				else
@@ -481,7 +481,7 @@ public abstract class QuotingStrategy : Strategy
 						ProcessQuoting(o.ServerTime);
 					}
 					else
-						this.AddWarningLog(LocalizedStrings.OrderOutOfDate, o.TransactionId);
+						LogWarning(LocalizedStrings.OrderOutOfDate, o.TransactionId);
 				}
 			})
 			.Once()
@@ -498,7 +498,7 @@ public abstract class QuotingStrategy : Strategy
 	{
 		if (ProcessState != ProcessStates.Started)
 		{
-			this.AddWarningLog(LocalizedStrings.StrategyInState, ProcessState);
+			LogWarning(LocalizedStrings.StrategyInState, ProcessState);
 			return;
 		}
 
@@ -506,27 +506,27 @@ public abstract class QuotingStrategy : Strategy
 		{
 			if (_isCanceling)
 			{
-				this.AddDebugLog(LocalizedStrings.OrderNRegistering, _order.TransactionId);
+				LogDebug(LocalizedStrings.OrderNRegistering, _order.TransactionId);
 				return;
 			}
 			else if (_isRegistering)
 			{
-				this.AddDebugLog(LocalizedStrings.OrderNReplacing, _order.TransactionId);
+				LogDebug(LocalizedStrings.OrderNReplacing, _order.TransactionId);
 				return;
 			}
 			else if (_editingChanges != null)
 			{
-				this.AddDebugLog(LocalizedStrings.OrderReplacingInto, _order.TransactionId, _editingChanges.TransactionId);
+				LogDebug(LocalizedStrings.OrderReplacingInto, _order.TransactionId, _editingChanges.TransactionId);
 				return;
 			}
 			else if (_reRegisteringOrder != null)
 			{
-				this.AddDebugLog(LocalizedStrings.OrderReplacingInto, _order.TransactionId, _reRegisteringOrder.TransactionId);
+				LogDebug(LocalizedStrings.OrderReplacingInto, _order.TransactionId, _reRegisteringOrder.TransactionId);
 				return;
 			}
 			else if (_isReRegistedFailed)
 			{
-				this.AddDebugLog(LocalizedStrings.ReplacingNotCompleteWaitingFor, _order.TransactionId);
+				LogDebug(LocalizedStrings.ReplacingNotCompleteWaitingFor, _order.TransactionId);
 				return;
 			}
 
@@ -552,12 +552,12 @@ public abstract class QuotingStrategy : Strategy
 
 		newPrice = Security.ShrinkPrice(newPrice.Value);
 
-		this.AddInfoLog(LocalizedStrings.CurrPriceBestPrice, _order?.Price ?? (object)"NULL", newPrice);
+		LogInfo(LocalizedStrings.CurrPriceBestPrice, _order?.Price ?? (object)"NULL", newPrice);
 
 		var bidPrice = _filteredBook?.Bids?.FirstOr()?.Price ?? GetSecurityValue<decimal?>(Level1Fields.BestBidPrice);
 		var askPrice = _filteredBook?.Asks?.FirstOr()?.Price ?? GetSecurityValue<decimal?>(Level1Fields.BestAskPrice);
 
-		this.AddInfoLog(LocalizedStrings.BestBidAsk, bidPrice ?? (object)"NULL", askPrice ?? (object)"NULL");
+		LogInfo(LocalizedStrings.BestBidAsk, bidPrice ?? (object)"NULL", askPrice ?? (object)"NULL");
 
 		if (_order == null)
 		{
@@ -572,13 +572,13 @@ public abstract class QuotingStrategy : Strategy
 		}
 		else
 		{
-			this.AddInfoLog("Quoting order {0} to {1} with price {2} volume {3}.", _order.TransactionId, _order.Side, _order.Price, _order.Volume);
+			LogInfo("Quoting order {0} to {1} with price {2} volume {3}.", _order.TransactionId, _order.Side, _order.Price, _order.Volume);
 
 			if (IsSupportAtomicReRegister && IsOrderReplaceable(_order) == true)
 			{
 				if (newPrice == 0)
 				{
-					this.AddWarningLog(LocalizedStrings.CannotChangePriceToZero);
+					LogWarning(LocalizedStrings.CannotChangePriceToZero);
 					return;
 				}
 
@@ -592,7 +592,7 @@ public abstract class QuotingStrategy : Strategy
 						.WhenEdited(this)
 						.Do(o =>
 						{
-							this.AddDebugLog("Order {0} edited.", o.TransactionId);
+							LogDebug("Order {0} edited.", o.TransactionId);
 
 							_editingChanges = null;
 							ProcessQuoting(o.ServerTime);
@@ -606,14 +606,14 @@ public abstract class QuotingStrategy : Strategy
 						{
 							var canProcess = false;
 
-							this.AddErrorLog("Order {0} edit failed: {1}", fail.Order.TransactionId, fail.Error.Message);
+							LogError("Order {0} edit failed: {1}", fail.Order.TransactionId, fail.Error.Message);
 
 							if (fail.Order == _order)
 							{
 								canProcess = true;
 							}
 							else
-								this.AddWarningLog(LocalizedStrings.OrderOutOfDate, fail.Order.TransactionId);
+								LogWarning(LocalizedStrings.OrderOutOfDate, fail.Order.TransactionId);
 
 							_editingChanges = null;
 
@@ -637,17 +637,17 @@ public abstract class QuotingStrategy : Strategy
 					ReRegisterOrder(_order, newOrder);
 				}
 
-				this.AddInfoLog("Requoting registered for order {0} with price {1} and volume {2}.", _order.TransactionId, newOrder.Price, newOrder.Volume);
+				LogInfo("Requoting registered for order {0} with price {1} and volume {2}.", _order.TransactionId, newOrder.Price, newOrder.Volume);
 			}
 			else
 			{
-				this.AddInfoLog(LocalizedStrings.CancellingOrderN, _order.TransactionId);
+				LogInfo(LocalizedStrings.CancellingOrderN, _order.TransactionId);
 
 				_order
 					.WhenCanceled(this)
 					.Do((r, o) =>
 					{
-						this.AddInfoLog(LocalizedStrings.OrderCancelledAt, o.TransactionId, o.ServerTime);
+						LogInfo(LocalizedStrings.OrderCancelledAt, o.TransactionId, o.ServerTime);
 
 						Rules.RemoveRulesByToken(o, r);
 
@@ -659,7 +659,7 @@ public abstract class QuotingStrategy : Strategy
 							ProcessQuoting(o.ServerTime);
 						}
 						else
-							this.AddWarningLog(LocalizedStrings.OrderOutOfDate, o.TransactionId);
+							LogWarning(LocalizedStrings.OrderOutOfDate, o.TransactionId);
 					})
 					.Once()
 					.Apply(this);
@@ -668,7 +668,7 @@ public abstract class QuotingStrategy : Strategy
 					.WhenCancelFailed(this)
 					.Do((r, f) =>
 					{
-						this.AddInfoLog(LocalizedStrings.ErrorCancellingOrder, f.Order.TransactionId, f.Error);
+						LogInfo(LocalizedStrings.ErrorCancellingOrder, f.Order.TransactionId, f.Error);
 						_isCanceling = false;
 					})
 					.Once()

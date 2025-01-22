@@ -14,6 +14,41 @@ public interface ILogReceiver : ILogSource
 	/// </summary>
 	/// <param name="message">A debug message.</param>
 	void AddLog(LogMessage message);
+
+	/// <summary>
+	/// To record a verbose message to the log.
+	/// </summary>
+	/// <param name="message">Text message.</param>
+	/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
+	void LogVerbose(string message, params object[] args);
+
+	/// <summary>
+	/// To record a debug message to the log.
+	/// </summary>
+	/// <param name="message">Text message.</param>
+	/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
+	void LogDebug(string message, params object[] args);
+
+	/// <summary>
+	/// To record a message to the log.
+	/// </summary>
+	/// <param name="message">Text message.</param>
+	/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
+	void LogInfo(string message, params object[] args);
+
+	/// <summary>
+	/// To record a warning to the log.
+	/// </summary>
+	/// <param name="message">Text message.</param>
+	/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
+	void LogWarning(string message, params object[] args);
+
+	/// <summary>
+	/// To record an error to the log.
+	/// </summary>
+	/// <param name="message">Text message.</param>
+	/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
+	void LogError(string message, params object[] args);
 }
 
 /// <summary>
@@ -32,94 +67,53 @@ public abstract class BaseLogReceiver : BaseLogSource, ILogReceiver
 	{
 		RaiseLog(message);
 	}
-}
-
-/// <summary>
-/// Global logs receiver.
-/// </summary>
-public class GlobalLogReceiver : ILogReceiver
-{
-	private ILogReceiver App => LogManager.Instance?.Application;
-
-	private GlobalLogReceiver()
-	{
-	}
 
 	/// <summary>
-	/// Instance.
+	/// To record a verbose message to the log.
 	/// </summary>
-	public static GlobalLogReceiver Instance { get; } = new GlobalLogReceiver();
+	/// <param name="message">Text message.</param>
+	/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
+	public void LogVerbose(string message, params object[] args)
+		=> this.AddVerboseLog(message, args);
 
-	Guid ILogSource.Id => App?.Id ?? default;
+	/// <summary>
+	/// To record a debug message to the log.
+	/// </summary>
+	/// <param name="message">Text message.</param>
+	/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
+	public void LogDebug(string message, params object[] args)
+		=> this.AddDebugLog(message, args);
 
-	string ILogSource.Name
-	{
-		get => App?.Name;
-		set { }
-	}
-	
-	ILogSource ILogSource.Parent
-	{
-		get => App?.Parent;
-		set => throw new NotSupportedException();
-	}
+	/// <summary>
+	/// To record a message to the log.
+	/// </summary>
+	/// <param name="message">Text message.</param>
+	/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
+	public void LogInfo(string message, params object[] args)
+		=> this.AddInfoLog(message, args);
 
-	/// <inheritdoc />
-	public event Action<ILogSource> ParentRemoved
-	{
-		add { }
-		remove { }
-	}
-	
-	LogLevels ILogSource.LogLevel
-	{
-		get => App?.LogLevel ?? default;
-		set
-		{
-			var app = App;
+	/// <summary>
+	/// To record a warning to the log.
+	/// </summary>
+	/// <param name="message">Text message.</param>
+	/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
+	public void LogWarning(string message, params object[] args)
+		=> this.AddWarningLog(message, args);
 
-			if (app == null)
-				return;
+	/// <summary>
+	/// To record an error to the log.
+	/// </summary>
+	/// <param name="message">Text message.</param>
+	/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
+	public void LogError(string message, params object[] args)
+		=> this.AddErrorLog(message, args);
 
-			app.LogLevel = value;
-		}
-	}
-
-	DateTimeOffset ILogSource.CurrentTime => App?.CurrentTime ?? default;
-
-	bool ILogSource.IsRoot => true;
-
-	event Action<LogMessage> ILogSource.Log
-	{
-		add
-		{
-			var app = App;
-
-			if (app == null)
-				return;
-
-			app.Log += value;
-		}
-		remove
-		{
-			var app = App;
-
-			if (app == null)
-				return;
-
-			app.Log -= value;
-		}
-	}
-
-	void ILogReceiver.AddLog(LogMessage message)
-	{
-		App?.AddLog(message);
-	}
-
-	void IDisposable.Dispose()
-	{
-		GC.SuppressFinalize(this);
-	}
+	/// <summary>
+	/// To record an error to the log.
+	/// </summary>
+	/// <param name="exception">Error details.</param>
+	public void LogError(Exception exception)
+		=> this.AddErrorLog(exception);
 }
 
 /// <summary>

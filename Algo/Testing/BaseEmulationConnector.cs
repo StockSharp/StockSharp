@@ -166,6 +166,6 @@ public abstract class BaseEmulationConnector : Connector
 		if (subscription != null)
 			UnSubscribe(subscription);
 		else
-			this.AddWarningLog(LocalizedStrings.SubscriptionNonExist, generator);
+			LogWarning(LocalizedStrings.SubscriptionNonExist, generator);
 	}
 }

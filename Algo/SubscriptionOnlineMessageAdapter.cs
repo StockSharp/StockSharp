@@ -140,7 +140,7 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 		if (!state.IsActive())
 		{
 			_subscriptionsByKey.RemoveByValue(info);
-			this.AddInfoLog(LocalizedStrings.SubscriptionRemoved, info.Subscription.TransactionId);
+			LogInfo(LocalizedStrings.SubscriptionRemoved, info.Subscription.TransactionId);
 		}
 
 		return true;
@@ -382,7 +382,7 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 
 					if (!_subscriptionsByKey.TryGetValue(key, out var info))
 					{
-						this.AddDebugLog("Subscription {0} ({1}/{2}) initial.", transId, dataType, secId);
+						LogDebug("Subscription {0} ({1}/{2}) initial.", transId, dataType, secId);
 
 						sendInMsg = message;
 
@@ -402,7 +402,7 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 						}
 						else
 						{
-							this.AddDebugLog("Subscription {0} joined to {1}.", transId, info.Subscription.TransactionId);
+							LogDebug("Subscription {0} joined to {1}.", transId, info.Subscription.TransactionId);
 
 							var resultMsg = message.CreateResult();
 
@@ -504,7 +504,7 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 			{
 				foreach (var sendOutMsg in sendOutMsgs)
 				{
-					this.AddInfoLog("Out: {0}", sendOutMsg);
+					LogInfo("Out: {0}", sendOutMsg);
 					RaiseNewOutMessage(sendOutMsg);
 				}
 			}
@@ -514,7 +514,7 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 
 		if (sendInMsg != null)
 		{
-			this.AddDebugLog("In: {0}", sendInMsg);
+			LogDebug("In: {0}", sendInMsg);
 			retVal = base.OnSendInMessage((Message)sendInMsg);
 		}
 

@@ -64,7 +64,7 @@ public class PositionManager : BaseLogReceiver, IPositionManager
 		OrderInfo EnsureGetInfo<TMessage>(TMessage msg, Sides side, decimal volume, decimal balance)
 			where TMessage : Message, ITransactionIdMessage, ISecurityIdMessage, IPortfolioNameMessage
 		{
-			this.AddDebugLog("{0} bal_new {1}/{2}.", msg.TransactionId, balance, volume);
+			this.LogDebug("{0} bal_new {1}/{2}.", msg.TransactionId, balance, volume);
 			return _ordersInfo.SafeAdd(msg.TransactionId, key => new OrderInfo(key, msg.SecurityId, msg.PortfolioName, side, volume, balance));
 		}
 
@@ -132,7 +132,7 @@ public class PositionManager : BaseLogReceiver, IPositionManager
 					{
 						// ReSharper disable once PossibleInvalidOperationException
 						info.Balance = execMsg.Balance.Value;
-						this.AddDebugLog("{0} bal_upd {1}/{2}.", info.TransactionId, info.Balance, info.Volume);
+						this.LogDebug("{0} bal_upd {1}/{2}.", info.TransactionId, info.Balance, info.Volume);
 					}
 				}
 

@@ -497,7 +497,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			{
 				if (s == strategy && s.ProcessState == ProcessStates.Started && !((ISubscriptionProvider)s).Subscriptions.Any(s => s.DataType.IsMarketData))
 				{
-					s.AddErrorLog("No any market data subscription.");
+					s.LogError("No any market data subscription.");
 					connector.Disconnect();
 				}
 			};

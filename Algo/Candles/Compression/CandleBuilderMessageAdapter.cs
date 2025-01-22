@@ -146,7 +146,7 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 							}
 
 							tuple.Second = SubscriptionStates.Active;
-							this.AddDebugLog("New ALL candle-map (active): {0}/{1} TrId={2}", mdMsg.SecurityId, tuple.Second, mdMsg.TransactionId);
+							LogDebug("New ALL candle-map (active): {0}/{1} TrId={2}", mdMsg.SecurityId, tuple.Second, mdMsg.TransactionId);
 
 							RaiseNewOutMessage(mdMsg.CreateResponse());
 							return true;
@@ -188,7 +188,7 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 
 						if (timeFrames.Contains(originalTf) || InnerAdapter.CheckTimeFrameByRequest)
 						{
-							this.AddDebugLog("Origin tf: {0}", originalTf);
+							LogDebug("Origin tf: {0}", originalTf);
 
 							var original = mdMsg.TypedClone();
 
@@ -230,7 +230,7 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 
 							if (smaller != null)
 							{
-								this.AddInfoLog("Smaller tf: {0}->{1}", originalTf, smaller);
+								LogInfo("Smaller tf: {0}->{1}", originalTf, smaller);
 
 								var original = mdMsg.TypedClone();
 
@@ -261,7 +261,7 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 					{
 						if (InnerAdapter.IsCandlesSupported(mdMsg))
 						{
-							this.AddInfoLog("Origin arg: {0}", mdMsg.GetArg());
+							LogInfo("Origin arg: {0}", mdMsg.GetArg());
 
 							var original = mdMsg.TypedClone();
 
@@ -349,7 +349,7 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 
 	private SeriesInfo TryRemoveSeries(long id)
 	{
-		this.AddDebugLog("Series removing {0}.", id);
+		LogDebug("Series removing {0}.", id);
 
 		lock (_syncObject)
 		{
@@ -387,7 +387,7 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 
 		original.CopyTo(current, false);
 
-		this.AddInfoLog("Build tf: {0}->{1}", buildFrom, original.GetArg());
+		LogInfo("Build tf: {0}->{1}", buildFrom, original.GetArg());
 
 		return current;
 	}
@@ -511,7 +511,7 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 				lock (_syncObject)
 				{
 					if (_series.ContainsKey(subscriptionId))
-						this.AddInfoLog("Series online {0}.", subscriptionId);
+						LogInfo("Series online {0}.", subscriptionId);
 
 					if (_replaceId.TryGetValue(subscriptionId, out var originalId))
 						onlineMsg.OriginalTransactionId = originalId;
@@ -722,7 +722,7 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 						lock (_syncObject)
 							_replaceId.Add(series.Current.TransactionId, series.Id);
 
-						this.AddInfoLog("Series smaller tf: ids {0}->{1}", original.TransactionId, newTransId);
+						LogInfo("Series smaller tf: ids {0}->{1}", original.TransactionId, newTransId);
 
 						// loopback
 						series.Current.LoopBack(this);
@@ -776,7 +776,7 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 		lock (_syncObject)
 			_replaceId.Add(current.TransactionId, series.Id);
 
-		this.AddInfoLog("Series compress: ids {0}->{1}", original.TransactionId, current.TransactionId);
+		LogInfo("Series compress: ids {0}->{1}", original.TransactionId, current.TransactionId);
 
 		series.Transform = CreateTransform(current);
 		series.Current = current;
@@ -863,7 +863,7 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 						allMsg.LoopBack(this, MessageBackModes.Chain);
 						_pendingLoopbacks.Add(allMsg.TransactionId, RefTuple.Create(allMsg.ParentTransactionId, SubscriptionStates.Stopped));
 
-						this.AddDebugLog("New ALL candle-map: {0}/{1} TrId={2}-{3}", key, series.Original.DataType2, allMsg.ParentTransactionId, allMsg.TransactionId);
+						LogDebug("New ALL candle-map: {0}/{1} TrId={2}-{3}", key, series.Original.DataType2, allMsg.ParentTransactionId, allMsg.TransactionId);
 
 						return new SeriesInfo(allMsg, allMsg)
 						{

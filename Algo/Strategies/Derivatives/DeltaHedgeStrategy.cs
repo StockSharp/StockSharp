@@ -44,7 +44,7 @@ public class DeltaHedgeStrategy : HedgeStrategy
 
 		var diff = futurePosition.Value.Round() + PositionOffset;
 
-		this.AddInfoLog("Delta total {0}, Futures position {1}, Directional position {2}, Difference in position {3}.", futurePosition, BlackScholes.UnderlyingAsset, PositionOffset, diff);
+		LogInfo("Delta total {0}, Futures position {1}, Directional position {2}, Difference in position {3}.", futurePosition, BlackScholes.UnderlyingAsset, PositionOffset, diff);
 
 		if (diff == 0)
 			return [];

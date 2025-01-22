@@ -233,7 +233,7 @@ public class CsvParser : BaseLogReceiver
 					if (secMsg.SecurityId.SecurityCode.IsEmpty() || secMsg.SecurityId.BoardCode.IsEmpty())
 					{
 						if (!IgnoreNonIdSecurities)
-							this.AddErrorLog(LocalizedStrings.LineNoSecurityId.Put(reader.CurrLine));
+							LogError(LocalizedStrings.LineNoSecurityId.Put(reader.CurrLine));
 
 						continue;
 					}

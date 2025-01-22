@@ -35,7 +35,7 @@ type BiggestCandleScript() =
             ) : Task =
 
             if securities.Length = 0 then
-                logs.AddWarningLog("No instruments.")
+                logs.LogWarning("No instruments.")
                 Task.CompletedTask
             else
                 // Create 2D/3D charts for biggest candle by price length and by volume

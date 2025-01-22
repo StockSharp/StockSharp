@@ -109,10 +109,10 @@ public abstract class HedgeStrategy : Strategy
 				_assetStrategy = new AssetStrategy(security);
 				ChildStrategies.Add(_assetStrategy);
 
-				this.AddInfoLog(LocalizedStrings.AssetStrategyCreated);
+				LogInfo(LocalizedStrings.AssetStrategyCreated);
 			}
 			else
-				this.AddInfoLog(LocalizedStrings.AssetStrategyFound.Put(_assetStrategy));
+				LogInfo(LocalizedStrings.AssetStrategyFound.Put(_assetStrategy));
 		}
 
 		_strategies.Add(security, _assetStrategy);
@@ -120,7 +120,7 @@ public abstract class HedgeStrategy : Strategy
 		if (BlackScholes.UnderlyingAsset == null)
 		{
 			BlackScholes.UnderlyingAsset = _assetStrategy.Security;
-			this.AddInfoLog(LocalizedStrings.AssetPosSpecified);
+			LogInfo(LocalizedStrings.AssetPosSpecified);
 		}
 
 		BlackScholes.InnerModels.Clear();
@@ -134,7 +134,7 @@ public abstract class HedgeStrategy : Strategy
 				BlackScholes.InnerModels.Add(new BlackScholes(childSec, this, this, BlackScholes.ExchangeInfoProvider));
 				_strategies.Add(childSec, strategy);
 
-				this.AddInfoLog(LocalizedStrings.StrikeStrategyFound.Put(strategy));
+				LogInfo(LocalizedStrings.StrikeStrategyFound.Put(strategy));
 			}
 		}
 
@@ -191,7 +191,7 @@ public abstract class HedgeStrategy : Strategy
 			.Or(order.WhenCanceled(this))
 			.Do((rule, o) =>
 			{
-				parentStrategy.AddInfoLog("Order {0} {1} in {2}.", o.TransactionId, o.IsMatched() ? LocalizedStrings.Done : LocalizedStrings.Cancelled, o.ServerTime);
+				parentStrategy.LogInfo("Order {0} {1} in {2}.", o.TransactionId, o.IsMatched() ? LocalizedStrings.Done : LocalizedStrings.Cancelled, o.ServerTime);
 
 				Rules.RemoveRulesByToken(o, rule);
 
@@ -202,7 +202,7 @@ public abstract class HedgeStrategy : Strategy
 
 		var regRule = order
 			.WhenRegistered(this)
-			.Do(o => parentStrategy.AddInfoLog("Order {0} registered with ID {1} in {2}.", o.TransactionId, o.Id, o.Time))
+			.Do(o => parentStrategy.LogInfo("Order {0} registered with ID {1} in {2}.", o.TransactionId, o.Id, o.Time))
 			.Once()
 			.Apply(parentStrategy);
 
@@ -210,7 +210,7 @@ public abstract class HedgeStrategy : Strategy
 			.WhenRegisterFailed(this)
 			.Do((rule, fail) =>
 			{
-				parentStrategy.AddErrorLog(LocalizedStrings.ErrorRegOrder, fail.Order.TransactionId, fail.Error);
+				parentStrategy.LogError(LocalizedStrings.ErrorRegOrder, fail.Order.TransactionId, fail.Error);
 
 				TryResumeMonitoring(order);
 				ReHedge(fail.ServerTime);
@@ -235,7 +235,7 @@ public abstract class HedgeStrategy : Strategy
 
 		foreach (var order in orders)
 		{
-			this.AddInfoLog("Rehedging with order {0} {1} volume {2} with price {3}.", order.Security, order.Side, order.Volume, order.Price);
+			LogInfo("Rehedging with order {0} {1} volume {2} with price {3}.", order.Security, order.Side, order.Volume, order.Price);
 
 			var strategy = _strategies.TryGetValue(order.Security);
 
@@ -279,7 +279,7 @@ public abstract class HedgeStrategy : Strategy
 
 		if (!_awaitingOrders.IsEmpty())
 		{
-			this.AddInfoLog(LocalizedStrings.ResumeSuspended, _awaitingOrders.Count);
+			LogInfo(LocalizedStrings.ResumeSuspended, _awaitingOrders.Count);
 			ReHedge(orders);
 		}
 	}
@@ -290,9 +290,9 @@ public abstract class HedgeStrategy : Strategy
 			return;
 
 		if (_awaitingOrders.IsEmpty())
-			this.AddInfoLog(LocalizedStrings.Resumed);
+			LogInfo(LocalizedStrings.Resumed);
 		else
-			this.AddInfoLog(LocalizedStrings.PartRulesResumes, _awaitingOrders.Count);
+			LogInfo(LocalizedStrings.PartRulesResumes, _awaitingOrders.Count);
 	}
 
 	/// <summary>

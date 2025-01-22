@@ -35,7 +35,7 @@ type TimeVolumeScript() =
             ) : Task =
 
             if securities.Length = 0 then
-                logs.AddWarningLog("No instruments.")
+                logs.LogWarning("No instruments.")
                 Task.CompletedTask
             else
                 // This script processes only the first instrument
@@ -48,7 +48,7 @@ type TimeVolumeScript() =
                 let dates = candleStorage.GetDates(fromDate, toDate).ToArray()
 
                 if dates.Length = 0 then
-                    logs.AddWarningLog("no data")
+                    logs.LogWarning("no data")
                     Task.CompletedTask
                 else
                     // Group candles by hour (truncate open time to 1 hour)

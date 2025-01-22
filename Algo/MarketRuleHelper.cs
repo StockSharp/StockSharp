@@ -553,13 +553,6 @@ public static partial class MarketRuleHelper
 			set => throw new NotSupportedException();
 		}
 
-		/// <inheritdoc />
-		public event Action<ILogSource> ParentRemoved
-		{
-			add { }
-			remove { }
-		}
-
 		LogLevels ILogSource.LogLevel
 		{
 			get => Container.LogLevel;

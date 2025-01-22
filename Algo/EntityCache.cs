@@ -457,7 +457,7 @@ class EntityCache : ISnapshotHolder
 
 				if (registeredInfo == null)
 				{
-					_logReceiver.AddDebugLog("Сancel '{0}': {1}", cancellationOrder.TransactionId, message);
+					_logReceiver.LogDebug("Сancel '{0}': {1}", cancellationOrder.TransactionId, message);
 
 					foreach (var i in cancelledInfo.ApplyChanges(message, OrderOperations.Cancel, o => UpdateOrderIds(o, securityData)))
 						yield return i;
@@ -469,7 +469,7 @@ class EntityCache : ISnapshotHolder
 
 				if ((newOrderState == OrderStates.Active || newOrderState == OrderStates.Done) && cancellationOrder.State != OrderStates.Done)
 				{
-					_logReceiver.AddDebugLog("Replace-cancel '{0}': {1}", cancellationOrder.TransactionId, message);
+					_logReceiver.LogDebug("Replace-cancel '{0}': {1}", cancellationOrder.TransactionId, message);
 
 					cancellationOrder.ApplyNewState(OrderStates.Done, _logReceiver);
 
@@ -489,7 +489,7 @@ class EntityCache : ISnapshotHolder
 					//}
 				}
 
-				_logReceiver.AddDebugLog("Replace-reg '{0}': {1}", registeredInfo.Order.TransactionId, message);
+				_logReceiver.LogDebug("Replace-reg '{0}': {1}", registeredInfo.Order.TransactionId, message);
 
 				foreach (var i in registeredInfo.ApplyChanges(message, OrderOperations.Register, o => UpdateOrderIds(o, securityData)))
 					yield return i;
@@ -499,7 +499,7 @@ class EntityCache : ISnapshotHolder
 
 			if (editedInfo != null)
 			{
-				_logReceiver.AddDebugLog("Edit '{0}': {1}", editedInfo.Order.TransactionId, message);
+				_logReceiver.LogDebug("Edit '{0}': {1}", editedInfo.Order.TransactionId, message);
 
 				if (message.Latency != null)
 					editedInfo.Order.LatencyEdition = message.Latency.Value;
@@ -543,7 +543,7 @@ class EntityCache : ISnapshotHolder
 				if (message.Balance != null)
 				{
 					if (message.Balance.Value < 0)
-						_logReceiver.AddErrorLog($"Order {transactionId}: balance {message.Balance.Value} < 0");
+						_logReceiver.LogError($"Order {transactionId}: balance {message.Balance.Value} < 0");
 
 					o.Balance = message.Balance.Value;
 				}

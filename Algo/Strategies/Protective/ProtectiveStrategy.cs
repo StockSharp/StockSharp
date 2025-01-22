@@ -183,7 +183,7 @@ public abstract class ProtectiveStrategy : QuotingStrategy, IProtectiveStrategy
 	{
 		base.OnStarted(time);
 
-		this.AddInfoLog("Position protection {0}/{1} with volume {2}. Level={3}, Trailing={4}, Market orders={5}, Quoting={6}, Slippage={7}",
+		LogInfo("Position protection {0}/{1} with volume {2}. Level={3}, Trailing={4}, Market orders={5}, Quoting={6}, Slippage={7}",
 			ProtectiveSide, ProtectivePrice, ProtectiveVolume, ProtectiveLevel, IsTrailing, UseMarketOrders, UseQuoting, PriceOffset);
 
 		this.SubscribeTrades(GetSecurity());
@@ -241,7 +241,7 @@ public abstract class ProtectiveStrategy : QuotingStrategy, IProtectiveStrategy
 		if (!UseQuoting)
 			return price;
 
-		this.AddInfoLog(LocalizedStrings.Reregistering);
+		LogInfo(LocalizedStrings.Reregistering);
 
 		_quotingStarted = true;
 
@@ -286,7 +286,7 @@ public abstract class ProtectiveStrategy : QuotingStrategy, IProtectiveStrategy
 
 	private void RaiseActivated(decimal price)
 	{
-		this.AddInfoLog(LocalizedStrings.ProtectionActivated, price == 0 ? LocalizedStrings.Market : price.To<string>());
+		LogInfo(LocalizedStrings.ProtectionActivated, price == 0 ? LocalizedStrings.Market : price.To<string>());
 
 		IsActivated = true;
 		Activated?.Invoke();

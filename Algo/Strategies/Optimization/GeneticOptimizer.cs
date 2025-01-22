@@ -237,7 +237,7 @@ public class GeneticOptimizer : BaseOptimizer
 			}
 			catch (ArithmeticException ex)
 			{
-				this.AddErrorLog(ex);
+				LogError(ex);
 				return decimal.MinValue;
 			}
 		};

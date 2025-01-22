@@ -88,7 +88,7 @@ public class OrderBookIncrementMessageAdapter : MessageAdapterWrapper
 							_byId.Add(transId, info);
 						}
 
-						this.AddInfoLog("OB incr subscribed {0}/{1}.", mdMsg.SecurityId, transId);
+						LogInfo("OB incr subscribed {0}/{1}.", mdMsg.SecurityId, transId);
 					}
 				}
 				else
@@ -134,7 +134,7 @@ public class OrderBookIncrementMessageAdapter : MessageAdapterWrapper
 				_byId.Add(ids[0], info);
 		}
 
-		this.AddInfoLog("Unsubscribed {0}.", id);
+		LogInfo("Unsubscribed {0}.", id);
 	}
 
 	/// <inheritdoc />

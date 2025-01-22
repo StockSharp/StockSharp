@@ -391,7 +391,7 @@ partial class Connector
 
 	private void RaiseNewMyTrade(MyTrade trade)
 	{
-		this.AddInfoLog("New own trade: {0}", trade);
+		LogInfo("New own trade: {0}", trade);
 
 		NewMyTrade?.Invoke(trade);
 		NewMyTrades?.Invoke([trade]);
@@ -411,7 +411,7 @@ partial class Connector
 
 	private void RaiseOrderEdited(long transactionId, Order order)
 	{
-		this.AddDebugLog("Order {0} edited by transaction {1}.", order, transactionId);
+		LogDebug("Order {0} edited by transaction {1}.", order, transactionId);
 		OrderEdited?.Invoke(transactionId, order);
 	}
 
@@ -575,7 +575,7 @@ partial class Connector
 		ConnectionState = ConnectionStates.Failed;
 		ConnectionError?.Invoke(exception);
 
-		this.AddErrorLog(exception);
+		LogError(exception);
 	}
 
 	/// <summary>
@@ -603,7 +603,7 @@ partial class Connector
 		ErrorCount++;
 		Error?.Invoke(exception);
 
-		this.AddErrorLog(exception);
+		LogError(exception);
 	}
 
 	/// <summary>
@@ -682,7 +682,7 @@ partial class Connector
 		if (message.From != null && message.To != null)
 			msg += LocalizedStrings.FromTill.Put(message.From.Value, message.To.Value);
 
-		this.AddDebugLog(msg + ".");
+		LogDebug(msg + ".");
 
 		MarketDataSubscriptionSucceeded?.Invoke(TryGetSecurity(securityId), message);
 
@@ -704,9 +704,9 @@ partial class Connector
 		var error = reply.Error ?? new NotSupportedException(LocalizedStrings.SubscriptionNotSupported.Put(origin));
 
 		if (reply.IsNotSupported())
-			this.AddWarningLog(LocalizedStrings.SubscriptionNotSupported, origin);
+			LogWarning(LocalizedStrings.SubscriptionNotSupported, origin);
 		else
-			this.AddErrorLog(LocalizedStrings.SubscribedError, securityId, origin.DataType2, error.Message);
+			LogError(LocalizedStrings.SubscribedError, securityId, origin.DataType2, error.Message);
 
 		var security = TryGetSecurity(securityId);
 
@@ -734,7 +734,7 @@ partial class Connector
 		if (message.From != null && message.To != null)
 			msg += LocalizedStrings.FromTill.Put(message.From.Value, message.To.Value);
 
-		this.AddDebugLog(msg + ".");
+		LogDebug(msg + ".");
 		MarketDataUnSubscriptionSucceeded?.Invoke(TryGetSecurity(securityId), message);
 
 		RaiseSubscriptionStopped(subscription, null);
@@ -757,7 +757,7 @@ partial class Connector
 		var securityId = subscription.SecurityId;
 		var error = reply.Error ?? new NotSupportedException();
 
-		this.AddErrorLog(LocalizedStrings.UnSubscribedError, securityId, origin.DataType2, error.Message);
+		LogError(LocalizedStrings.UnSubscribedError, securityId, origin.DataType2, error.Message);
 
 		var security = TryGetSecurity(securityId);
 		MarketDataUnSubscriptionFailed?.Invoke(security, origin, error);
@@ -776,7 +776,7 @@ partial class Connector
 
 		var securityId = subscription.SecurityId;
 
-		this.AddDebugLog(LocalizedStrings.SubscriptionFinished, securityId, message);
+		LogDebug(LocalizedStrings.SubscriptionFinished, securityId, message);
 		MarketDataSubscriptionFinished?.Invoke(TryGetSecurity(securityId), message);
 
 		RaiseSubscriptionStopped(subscription, null);
@@ -798,7 +798,7 @@ partial class Connector
 
 		var securityId = subscription.SecurityId;
 
-		this.AddErrorLog(LocalizedStrings.SubscriptionUnexpectedCancelled, securityId, message.DataType2, error.Message);
+		LogError(LocalizedStrings.SubscriptionUnexpectedCancelled, securityId, message.DataType2, error.Message);
 		MarketDataUnexpectedCancelled?.Invoke(TryGetSecurity(securityId), message, error);
 
 		RaiseSubscriptionStopped(subscription, error);
@@ -850,8 +850,8 @@ partial class Connector
 			throw new ArgumentNullException(nameof(subscription));
 
 		var securityId = subscription.SecurityId;
-		
-		this.AddDebugLog(LocalizedStrings.SubscriptionOnline, securityId, subscription.SubscriptionMessage);
+
+		LogDebug(LocalizedStrings.SubscriptionOnline, securityId, subscription.SubscriptionMessage);
 
 		if (subscription.SubscriptionMessage is MarketDataMessage mdMsg)
 			MarketDataSubscriptionOnline?.Invoke(TryGetSecurity(securityId), mdMsg);

@@ -332,7 +332,7 @@ public abstract class CandleBuilder<TCandleMessage> : BaseLogReceiver, ICandleBu
 		if (currentCandle == null || IsCandleFinishedBeforeChange(subscription, currentCandle, transform))
 		{
 			currentCandle = CreateCandle(subscription, transform);
-			this.AddDebugLog("NewCandle {0} ForValue {1}", currentCandle, transform);
+			LogDebug("NewCandle {0} ForValue {1}", currentCandle, transform);
 			return currentCandle;
 		}
 
