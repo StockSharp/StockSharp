@@ -270,7 +270,7 @@ public abstract class QuotingStrategy : Strategy
 	/// <returns>Rule list.</returns>
 	protected virtual IEnumerable<IMarketRule> GetNotificationRules()
 	{
-		yield return this.SubscribeFilteredMarketDepth(this.GetSecurity()).WhenOrderBookReceived(this);
+		yield return this.SubscribeFilteredMarketDepth(GetSecurity()).WhenOrderBookReceived(this);
 	}
 
 	/// <inheritdoc />
@@ -293,7 +293,7 @@ public abstract class QuotingStrategy : Strategy
 
 		this.SuspendRules(() =>
 		{
-			var security = this.GetSecurity();
+			var security = GetSecurity();
 
 			this
 				.SubscribeFilteredMarketDepth(security)
@@ -554,8 +554,8 @@ public abstract class QuotingStrategy : Strategy
 
 		this.AddInfoLog(LocalizedStrings.CurrPriceBestPrice, _order?.Price ?? (object)"NULL", newPrice);
 
-		var bidPrice = _filteredBook?.Bids?.FirstOr()?.Price ?? this.GetSecurityValue<decimal?>(Level1Fields.BestBidPrice);
-		var askPrice = _filteredBook?.Asks?.FirstOr()?.Price ?? this.GetSecurityValue<decimal?>(Level1Fields.BestAskPrice);
+		var bidPrice = _filteredBook?.Bids?.FirstOr()?.Price ?? GetSecurityValue<decimal?>(Level1Fields.BestBidPrice);
+		var askPrice = _filteredBook?.Asks?.FirstOr()?.Price ?? GetSecurityValue<decimal?>(Level1Fields.BestAskPrice);
 
 		this.AddInfoLog(LocalizedStrings.BestBidAsk, bidPrice ?? (object)"NULL", askPrice ?? (object)"NULL");
 
@@ -564,10 +564,10 @@ public abstract class QuotingStrategy : Strategy
 			//if (_manualReRegisterOrder != null)
 			//	return;
 
-			if (!this.IsFormedAndOnlineAndAllowTrading())
+			if (!IsFormedAndOnlineAndAllowTrading())
 				return;
 
-			_order = this.CreateOrder(QuotingDirection, newPrice.Value, newVolume);
+			_order = CreateOrder(QuotingDirection, newPrice.Value, newVolume);
 			RegisterQuotingOrder(_order);
 		}
 		else

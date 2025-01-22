@@ -97,7 +97,7 @@ public partial class Strategy
 	/// </remarks>
 	public Order BuyMarket(decimal? volume = null)
 	{
-		var order = this.CreateOrder(Sides.Buy, default, volume);
+		var order = CreateOrder(Sides.Buy, default, volume);
 		RegisterOrder(order);
 		return order;
 	}
@@ -112,7 +112,7 @@ public partial class Strategy
 	/// </remarks>
 	public Order SellMarket(decimal? volume = null)
 	{
-		var order = this.CreateOrder(Sides.Sell, default, volume);
+		var order = CreateOrder(Sides.Sell, default, volume);
 		RegisterOrder(order);
 		return order;
 	}
@@ -128,7 +128,7 @@ public partial class Strategy
 	/// </remarks>
 	public Order BuyLimit(decimal price, decimal? volume = null)
 	{
-		var order = this.CreateOrder(Sides.Buy, price, volume);
+		var order = CreateOrder(Sides.Buy, price, volume);
 		RegisterOrder(order);
 		return order;
 	}
@@ -144,7 +144,7 @@ public partial class Strategy
 	/// </remarks>
 	public Order SellLimit(decimal price, decimal? volume = null)
 	{
-		var order = this.CreateOrder(Sides.Sell, price, volume);
+		var order = CreateOrder(Sides.Sell, price, volume);
 		RegisterOrder(order);
 		return order;
 	}
@@ -535,7 +535,7 @@ public partial class Strategy
 	private void ActiveProtection((bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition) info)
 	{
 		// sending protection (=closing position) order as regular order
-		RegisterOrder(this.CreateOrder(info.side, info.price, info.volume));
+		RegisterOrder(CreateOrder(info.side, info.price, info.volume));
 	}
 
 	/// <summary>
@@ -634,7 +634,7 @@ public partial class Strategy
 	/// <returns><see cref="IChartArea"/></returns>
 	protected IChartArea CreateChartArea()
 	{
-		_chart ??= this.GetChart();
+		_chart ??= GetChart();
 		return _chart?.AddArea();
 	}
 

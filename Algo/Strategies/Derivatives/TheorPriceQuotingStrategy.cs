@@ -33,7 +33,7 @@ public class TheorPriceQuotingStrategy : BestByPriceQuotingStrategy
 	/// <inheritdoc />
 	protected override decimal? NeedQuoting(DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume)
 	{
-		var tp = this.GetSecurityValue<decimal?>(Level1Fields.TheorPrice);
+		var tp = GetSecurityValue<decimal?>(Level1Fields.TheorPrice);
 
 		if (tp == null)
 			return null;

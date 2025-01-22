@@ -1465,7 +1465,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		foreach (var parameter in Parameters.CachedValues)
 		{
 			if (parameter.Value is Unit unit && unit.GetTypeValue == null && (unit.Type == UnitTypes.Point || unit.Type == UnitTypes.Step))
-				unit.SetSecurity(this.GetSecurity());
+				unit.SetSecurity(GetSecurity());
 		}
 
 		ErrorState = LogLevels.Info;

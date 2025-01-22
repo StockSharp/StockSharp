@@ -174,7 +174,7 @@ public abstract class ProtectiveStrategy : QuotingStrategy, IProtectiveStrategy
 			yield return r;
 
 #pragma warning disable CS0618 // Type or member is obsolete
-		yield return this.GetSecurity().WhenNewTrade(this);
+		yield return GetSecurity().WhenNewTrade(this);
 #pragma warning restore CS0618 // Type or member is obsolete
 	}
 
@@ -186,7 +186,7 @@ public abstract class ProtectiveStrategy : QuotingStrategy, IProtectiveStrategy
 		this.AddInfoLog("Position protection {0}/{1} with volume {2}. Level={3}, Trailing={4}, Market orders={5}, Quoting={6}, Slippage={7}",
 			ProtectiveSide, ProtectivePrice, ProtectiveVolume, ProtectiveLevel, IsTrailing, UseMarketOrders, UseQuoting, PriceOffset);
 
-		this.SubscribeTrades(this.GetSecurity());
+		this.SubscribeTrades(GetSecurity());
 	}
 
 	/// <inheritdoc />

@@ -50,7 +50,7 @@ public class DeltaHedgeStrategy : HedgeStrategy
 			return [];
 
 		var side = diff > 0 ? Sides.Sell : Sides.Buy;
-		var security = this.GetSecurity();
+		var security = GetSecurity();
 
 		var price = security.GetCurrentPrice(this, side);
 

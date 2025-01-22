@@ -84,7 +84,7 @@ public abstract class HedgeStrategy : Strategy
 	protected virtual IEnumerable<IMarketRule> GetNotificationRules()
 	{
 #pragma warning disable CS0618 // Type or member is obsolete
-		yield return this.GetSecurity().WhenNewTrade(this);
+		yield return GetSecurity().WhenNewTrade(this);
 #pragma warning restore CS0618 // Type or member is obsolete
 	}
 
@@ -98,7 +98,7 @@ public abstract class HedgeStrategy : Strategy
 
 		_strategies.Clear();
 
-		var security = this.GetSecurity();
+		var security = GetSecurity();
 
 		if (_assetStrategy == null)
 		{

@@ -78,7 +78,7 @@ public class LevelQuotingStrategy : QuotingStrategy
 		if (to == null)
 		{
 			toPrice = OwnLevel
-				? (decimal)(from.Price + (QuotingDirection == Sides.Sell ? 1 : -1) * Level.Length.Pips(this.GetSecurity()))
+				? (decimal)(from.Price + (QuotingDirection == Sides.Sell ? 1 : -1) * Level.Length.Pips(GetSecurity()))
 				: quotes.Last().Price;
 		}
 		else
