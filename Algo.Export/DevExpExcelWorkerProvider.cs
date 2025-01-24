@@ -132,6 +132,8 @@ public class DevExpExcelWorkerProvider : IExcelWorkerProvider
 			_sheets.Clear();
 
 			_document.Dispose();
+
+			GC.SuppressFinalize(this);
 		}
 
 		IExcelWorker IExcelWorker.SetCell<T>(int col, int row, T value)

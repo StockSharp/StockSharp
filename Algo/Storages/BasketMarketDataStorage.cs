@@ -211,6 +211,8 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 			_actions.Clear();
 
 			_storage._enumerators.Remove(this);
+
+			GC.SuppressFinalize(this);
 		}
 
 		public void AddAction(ActionTypes type, IMarketDataStorage storage, long transactionId)

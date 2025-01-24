@@ -2295,6 +2295,8 @@ public static partial class Extensions
 			{
 				Current = null;
 				_level1Enumerator.Dispose();
+
+				GC.SuppressFinalize(this);
 			}
 		}
 
@@ -2454,6 +2456,8 @@ public static partial class Extensions
 			{
 				Current = null;
 				_level1Enumerator.Dispose();
+
+				GC.SuppressFinalize(this);
 			}
 		}
 
@@ -5321,6 +5325,8 @@ public static partial class Extensions
 			{
 				Current = null;
 				_itemsEnumerator.Dispose();
+
+				GC.SuppressFinalize(this);
 			}
 		}
 
@@ -5441,6 +5447,8 @@ public static partial class Extensions
 			{
 				Current = null;
 				_itemsEnumerator.Dispose();
+
+				GC.SuppressFinalize(this);
 			}
 		}
 

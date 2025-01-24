@@ -41,6 +41,8 @@ public static class StorageHelper
 			void IDisposable.Dispose()
 			{
 				Reset();
+
+				GC.SuppressFinalize(this);
 			}
 
 			bool IEnumerator.MoveNext()
