@@ -356,4 +356,388 @@ partial class Unit
 	/// <param name="d">Second object <see cref="double"/>.</param>
 	/// <returns>The result of division.</returns>
 	public static Unit operator /(Unit u, double d) => u / (Unit)d;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is greater than or equal to a <see cref="decimal"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="d">The <see cref="decimal"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is greater than or equal to the <see cref="decimal"/>, <see langword="false" />.</returns>
+	public static bool operator >=(Unit u, decimal d) => u >= (Unit)d;
+
+	/// <summary>
+	/// Check whether the <see cref="decimal"/> is greater than or equal to a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="d">The <see cref="decimal"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="decimal"/> is greater than or equal to the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator >=(decimal d, Unit u) => (Unit)d >= u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is greater than or equal to an <see cref="int"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="i">The <see cref="int"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is greater than or equal to the <see cref="int"/>, <see langword="false" />.</returns>
+	public static bool operator >=(Unit u, int i) => u >= (Unit)i;
+
+	/// <summary>
+	/// Check whether the <see cref="int"/> is greater than or equal to a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="i">The <see cref="int"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="int"/> is greater than or equal to the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator >=(int i, Unit u) => (Unit)i >= u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is greater than or equal to a <see cref="long"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="l">The <see cref="long"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is greater than or equal to the <see cref="long"/>, <see langword="false" />.</returns>
+	public static bool operator >=(Unit u, long l) => u >= (Unit)l;
+
+	/// <summary>
+	/// Check whether the <see cref="long"/> is greater than or equal to a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="l">The <see cref="long"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="long"/> is greater than or equal to the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator >=(long l, Unit u) => (Unit)l >= u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is greater than or equal to a <see cref="double"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="d">The <see cref="double"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is greater than or equal to the <see cref="double"/>, <see langword="false" />.</returns>
+	public static bool operator >=(Unit u, double d) => u >= (Unit)d;
+
+	/// <summary>
+	/// Check whether the <see cref="double"/> is greater than or equal to a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="d">The <see cref="double"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="double"/> is greater than or equal to the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator >=(double d, Unit u) => (Unit)d >= u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is greater than a <see cref="decimal"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="d">The <see cref="decimal"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is greater than the <see cref="decimal"/>, <see langword="false" />.</returns>
+	public static bool operator >(Unit u, decimal d) => u > (Unit)d;
+
+	/// <summary>
+	/// Check whether the <see cref="decimal"/> is greater than a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="d">The <see cref="decimal"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="decimal"/> is greater than the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator >(decimal d, Unit u) => (Unit)d > u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is greater than an <see cref="int"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="i">The <see cref="int"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is greater than the <see cref="int"/>, <see langword="false" />.</returns>
+	public static bool operator >(Unit u, int i) => u > (Unit)i;
+
+	/// <summary>
+	/// Check whether the <see cref="int"/> is greater than a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="i">The <see cref="int"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="int"/> is greater than the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator >(int i, Unit u) => (Unit)i > u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is greater than a <see cref="long"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="l">The <see cref="long"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is greater than the <see cref="long"/>, <see langword="false" />.</returns>
+	public static bool operator >(Unit u, long l) => u > (Unit)l;
+
+	/// <summary>
+	/// Check whether the <see cref="long"/> is greater than a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="l">The <see cref="long"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="long"/> is greater than the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator >(long l, Unit u) => (Unit)l > u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is greater than a <see cref="double"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="d">The <see cref="double"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is greater than the <see cref="double"/>, <see langword="false" />.</returns>
+	public static bool operator >(Unit u, double d) => u > (Unit)d;
+
+	/// <summary>
+	/// Check whether the <see cref="double"/> is greater than a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="d">The <see cref="double"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="double"/> is greater than the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator >(double d, Unit u) => (Unit)d > u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is less than a <see cref="decimal"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="d">The <see cref="decimal"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is less than the <see cref="decimal"/>, <see langword="false" />.</returns>
+	public static bool operator <(Unit u, decimal d) => u < (Unit)d;
+
+	/// <summary>
+	/// Check whether the <see cref="decimal"/> is less than a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="d">The <see cref="decimal"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="decimal"/> is less than the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator <(decimal d, Unit u) => (Unit)d < u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is less than an <see cref="int"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="i">The <see cref="int"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is less than the <see cref="int"/>, <see langword="false" />.</returns>
+	public static bool operator <(Unit u, int i) => u < (Unit)i;
+
+	/// <summary>
+	/// Check whether the <see cref="int"/> is less than a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="i">The <see cref="int"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="int"/> is less than the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator <(int i, Unit u) => (Unit)i < u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is less than a <see cref="long"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="l">The <see cref="long"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is less than the <see cref="long"/>, <see langword="false" />.</returns>
+	public static bool operator <(Unit u, long l) => u < (Unit)l;
+
+	/// <summary>
+	/// Check whether the <see cref="long"/> is less than a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="l">The <see cref="long"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="long"/> is less than the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator <(long l, Unit u) => (Unit)l < u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is less than a <see cref="double"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="d">The <see cref="double"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is less than the <see cref="double"/>, <see langword="false" />.</returns>
+	public static bool operator <(Unit u, double d) => u < (Unit)d;
+
+	/// <summary>
+	/// Check whether the <see cref="double"/> is less than a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="d">The <see cref="double"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="double"/> is less than the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator <(double d, Unit u) => (Unit)d < u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is less than or equal to a <see cref="decimal"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="d">The <see cref="decimal"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is less than or equal to the <see cref="decimal"/>, <see langword="false" />.</returns>
+	public static bool operator <=(Unit u, decimal d) => u <= (Unit)d;
+
+	/// <summary>
+	/// Check whether the <see cref="decimal"/> is less than or equal to a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="d">The <see cref="decimal"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="decimal"/> is less than or equal to the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator <=(decimal d, Unit u) => (Unit)d <= u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is less than or equal to an <see cref="int"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="i">The <see cref="int"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is less than or equal to the <see cref="int"/>, <see langword="false" />.</returns>
+	public static bool operator <=(Unit u, int i) => u <= (Unit)i;
+
+	/// <summary>
+	/// Check whether the <see cref="int"/> is less than or equal to a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="i">The <see cref="int"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="int"/> is less than or equal to the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator <=(int i, Unit u) => (Unit)i <= u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is less than or equal to a <see cref="long"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="l">The <see cref="long"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is less than or equal to the <see cref="long"/>, <see langword="false" />.</returns>
+	public static bool operator <=(Unit u, long l) => u <= (Unit)l;
+
+	/// <summary>
+	/// Check whether the <see cref="long"/> is less than or equal to a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="l">The <see cref="long"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="long"/> is less than or equal to the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator <=(long l, Unit u) => (Unit)l <= u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is less than or equal to a <see cref="double"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="d">The <see cref="double"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is less than or equal to the <see cref="double"/>, <see langword="false" />.</returns>
+	public static bool operator <=(Unit u, double d) => u <= (Unit)d;
+
+	/// <summary>
+	/// Check whether the <see cref="double"/> is less than or equal to a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="d">The <see cref="double"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="double"/> is less than or equal to the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator <=(double d, Unit u) => (Unit)d <= u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is equal to a <see cref="decimal"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="d">The <see cref="decimal"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is equal to the <see cref="decimal"/>, <see langword="false" />.</returns>
+	public static bool operator ==(Unit u, decimal d) => u == (Unit)d;
+
+	/// <summary>
+	/// Check whether the <see cref="decimal"/> is equal to a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="d">The <see cref="decimal"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="decimal"/> is equal to the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator ==(decimal d, Unit u) => (Unit)d == u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is equal to an <see cref="int"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="i">The <see cref="int"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is equal to the <see cref="int"/>, <see langword="false" />.</returns>
+	public static bool operator ==(Unit u, int i) => u == (Unit)i;
+
+	/// <summary>
+	/// Check whether the <see cref="int"/> is equal to a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="i">The <see cref="int"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="int"/> is equal to the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator ==(int i, Unit u) => (Unit)i == u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is equal to a <see cref="long"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="l">The <see cref="long"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is equal to the <see cref="long"/>, <see langword="false" />.</returns>
+	public static bool operator ==(Unit u, long l) => u == (Unit)l;
+
+	/// <summary>
+	/// Check whether the <see cref="long"/> is equal to a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="l">The <see cref="long"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="long"/> is equal to the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator ==(long l, Unit u) => (Unit)l == u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is equal to a <see cref="double"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="d">The <see cref="double"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is equal to the <see cref="double"/>, <see langword="false" />.</returns>
+	public static bool operator ==(Unit u, double d) => u == (Unit)d;
+
+	/// <summary>
+	/// Check whether the <see cref="double"/> is equal to a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="d">The <see cref="double"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="double"/> is equal to the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator ==(double d, Unit u) => (Unit)d == u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is not equal to a <see cref="decimal"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="d">The <see cref="decimal"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is not equal to the <see cref="decimal"/>, <see langword="false" />.</returns>
+	public static bool operator !=(Unit u, decimal d) => u != (Unit)d;
+
+	/// <summary>
+	/// Check whether the <see cref="decimal"/> is not equal to a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="d">The <see cref="decimal"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="decimal"/> is not equal to the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator !=(decimal d, Unit u) => (Unit)d != u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is not equal to an <see cref="int"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="i">The <see cref="int"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is not equal to the <see cref="int"/>, <see langword="false" />.</returns>
+	public static bool operator !=(Unit u, int i) => u != (Unit)i;
+
+	/// <summary>
+	/// Check whether the <see cref="int"/> is not equal to a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="i">The <see cref="int"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="int"/> is not equal to the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator !=(int i, Unit u) => (Unit)i != u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is not equal to a <see cref="long"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="l">The <see cref="long"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is not equal to the <see cref="long"/>, <see langword="false" />.</returns>
+	public static bool operator !=(Unit u, long l) => u != (Unit)l;
+
+	/// <summary>
+	/// Check whether the <see cref="long"/> is not equal to a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="l">The <see cref="long"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="long"/> is not equal to the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator !=(long l, Unit u) => (Unit)l != u;
+
+	/// <summary>
+	/// Check whether the <see cref="Unit"/> is not equal to a <see cref="double"/>.
+	/// </summary>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <param name="d">The <see cref="double"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="Unit"/> is not equal to the <see cref="double"/>, <see langword="false" />.</returns>
+	public static bool operator !=(Unit u, double d) => u != (Unit)d;
+
+	/// <summary>
+	/// Check whether the <see cref="double"/> is not equal to a <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="d">The <see cref="double"/> to compare.</param>
+	/// <param name="u">The <see cref="Unit"/> to compare.</param>
+	/// <returns><see langword="true" />, if the <see cref="double"/> is not equal to the <see cref="Unit"/>, <see langword="false" />.</returns>
+	public static bool operator !=(double d, Unit u) => (Unit)d != u;
 }
