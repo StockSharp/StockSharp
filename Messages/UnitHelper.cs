@@ -3,7 +3,7 @@
 /// <summary>
 /// Extension class for <see cref="Unit"/>.
 /// </summary>
-public static class UnitExtensions
+public static class UnitHelper
 {
 	/// <summary>
 	/// Convert the <see cref="int"/> to percents.
