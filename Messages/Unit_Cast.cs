@@ -100,7 +100,7 @@ partial class Unit
 	/// <param name="d">First object <see cref="decimal"/>.</param>
 	/// <param name="u">Second object <see cref="Unit"/>.</param>
 	/// <returns>The result of addition.</returns>
-	public static Unit operator +(decimal d, Unit u) => new Unit(d) + u;
+	public static Unit operator +(decimal d, Unit u) => (Unit)d + u;
 
 	/// <summary>
 	/// Add the two objects <see cref="Unit"/> and <see cref="decimal"/>.
@@ -108,7 +108,7 @@ partial class Unit
 	/// <param name="u">First object <see cref="Unit"/>.</param>
 	/// <param name="d">Second object <see cref="decimal"/>.</param>
 	/// <returns>The result of addition.</returns>
-	public static Unit operator +(Unit u, decimal d) => u + new Unit(d);
+	public static Unit operator +(Unit u, decimal d) => u + (Unit)d;
 
 	/// <summary>
 	/// Add the two objects <see cref="Unit"/> and <see cref="int"/>.
@@ -116,7 +116,7 @@ partial class Unit
 	/// <param name="i">First object <see cref="int"/>.</param>
 	/// <param name="u">Second object <see cref="Unit"/>.</param>
 	/// <returns>The result of addition.</returns>
-	public static Unit operator +(int i, Unit u) => new Unit(i) + u;
+	public static Unit operator +(int i, Unit u) => (Unit)i + u;
 
 	/// <summary>
 	/// Add the two objects <see cref="Unit"/> and <see cref="int"/>.
@@ -124,7 +124,7 @@ partial class Unit
 	/// <param name="u">First object <see cref="Unit"/>.</param>
 	/// <param name="i">Second object <see cref="int"/>.</param>
 	/// <returns>The result of addition.</returns>
-	public static Unit operator +(Unit u, int i) => u + new Unit(i);
+	public static Unit operator +(Unit u, int i) => u + (Unit)i;
 
 	/// <summary>
 	/// Subtract the <see cref="Unit"/> from a <see cref="decimal"/>.
@@ -132,7 +132,7 @@ partial class Unit
 	/// <param name="d">First object <see cref="decimal"/>.</param>
 	/// <param name="u">Second object <see cref="Unit"/>.</param>
 	/// <returns>The result of subtraction.</returns>
-	public static Unit operator -(decimal d, Unit u) => new Unit(d) - u;
+	public static Unit operator -(decimal d, Unit u) => (Unit)d - u;
 
 	/// <summary>
 	/// Subtract a <see cref="decimal"/> from a <see cref="Unit"/>.
@@ -140,7 +140,7 @@ partial class Unit
 	/// <param name="u">First object <see cref="Unit"/>.</param>
 	/// <param name="d">Second object <see cref="decimal"/>.</param>
 	/// <returns>The result of subtraction.</returns>
-	public static Unit operator -(Unit u, decimal d) => u - new Unit(d);
+	public static Unit operator -(Unit u, decimal d) => u - (Unit)d;
 
 	/// <summary>
 	/// Subtract the <see cref="Unit"/> from an <see cref="int"/>.
@@ -148,7 +148,7 @@ partial class Unit
 	/// <param name="i">First object <see cref="int"/>.</param>
 	/// <param name="u">Second object <see cref="Unit"/>.</param>
 	/// <returns>The result of subtraction.</returns>
-	public static Unit operator -(int i, Unit u) => new Unit(i) - u;
+	public static Unit operator -(int i, Unit u) => (Unit)i - u;
 
 	/// <summary>
 	/// Subtract an <see cref="int"/> from a <see cref="Unit"/>.
@@ -156,7 +156,7 @@ partial class Unit
 	/// <param name="u">First object <see cref="Unit"/>.</param>
 	/// <param name="i">Second object <see cref="int"/>.</param>
 	/// <returns>The result of subtraction.</returns>
-	public static Unit operator -(Unit u, int i) => u - new Unit(i);
+	public static Unit operator -(Unit u, int i) => u - (Unit)i;
 
 	/// <summary>
 	/// Multiply a <see cref="decimal"/> by a <see cref="Unit"/>.
@@ -164,7 +164,7 @@ partial class Unit
 	/// <param name="d">First object <see cref="decimal"/>.</param>
 	/// <param name="u">Second object <see cref="Unit"/>.</param>
 	/// <returns>The result of multiplication.</returns>
-	public static Unit operator *(decimal d, Unit u) => new Unit(d) * u;
+	public static Unit operator *(decimal d, Unit u) => (Unit)d * u;
 
 	/// <summary>
 	/// Multiply a <see cref="Unit"/> by a <see cref="decimal"/>.
@@ -172,7 +172,7 @@ partial class Unit
 	/// <param name="u">First object <see cref="Unit"/>.</param>
 	/// <param name="d">Second object <see cref="decimal"/>.</param>
 	/// <returns>The result of multiplication.</returns>
-	public static Unit operator *(Unit u, decimal d) => u * new Unit(d);
+	public static Unit operator *(Unit u, decimal d) => u * (Unit)d;
 
 	/// <summary>
 	/// Multiply an <see cref="int"/> by a <see cref="Unit"/>.
@@ -180,7 +180,7 @@ partial class Unit
 	/// <param name="i">First object <see cref="int"/>.</param>
 	/// <param name="u">Second object <see cref="Unit"/>.</param>
 	/// <returns>The result of multiplication.</returns>
-	public static Unit operator *(int i, Unit u) => new Unit(i) * u;
+	public static Unit operator *(int i, Unit u) => (Unit)i * u;
 
 	/// <summary>
 	/// Multiply a <see cref="Unit"/> by an <see cref="int"/>.
@@ -188,7 +188,7 @@ partial class Unit
 	/// <param name="u">First object <see cref="Unit"/>.</param>
 	/// <param name="i">Second object <see cref="int"/>.</param>
 	/// <returns>The result of multiplication.</returns>
-	public static Unit operator *(Unit u, int i) => u * new Unit(i);
+	public static Unit operator *(Unit u, int i) => u * (Unit)i;
 
 	/// <summary>
 	/// Divide a <see cref="decimal"/> by a <see cref="Unit"/>.
@@ -196,7 +196,7 @@ partial class Unit
 	/// <param name="d">First object <see cref="decimal"/>.</param>
 	/// <param name="u">Second object <see cref="Unit"/>.</param>
 	/// <returns>The result of division.</returns>
-	public static Unit operator /(decimal d, Unit u) => new Unit(d) / u;
+	public static Unit operator /(decimal d, Unit u) => (Unit)d / u;
 
 	/// <summary>
 	/// Divide a <see cref="Unit"/> by a <see cref="decimal"/>.
@@ -204,7 +204,7 @@ partial class Unit
 	/// <param name="u">First object <see cref="Unit"/>.</param>
 	/// <param name="d">Second object <see cref="decimal"/>.</param>
 	/// <returns>The result of division.</returns>
-	public static Unit operator /(Unit u, decimal d) => u / new Unit(d);
+	public static Unit operator /(Unit u, decimal d) => u / (Unit)d;
 
 	/// <summary>
 	/// Divide an <see cref="int"/> by a <see cref="Unit"/>.
@@ -212,7 +212,7 @@ partial class Unit
 	/// <param name="i">First object <see cref="int"/>.</param>
 	/// <param name="u">Second object <see cref="Unit"/>.</param>
 	/// <returns>The result of division.</returns>
-	public static Unit operator /(int i, Unit u) => new Unit(i) / u;
+	public static Unit operator /(int i, Unit u) => (Unit)i / u;
 
 	/// <summary>
 	/// Divide a <see cref="Unit"/> by an <see cref="int"/>.
@@ -220,5 +220,5 @@ partial class Unit
 	/// <param name="u">First object <see cref="Unit"/>.</param>
 	/// <param name="i">Second object <see cref="int"/>.</param>
 	/// <returns>The result of division.</returns>
-	public static Unit operator /(Unit u, int i) => u / new Unit(i);
+	public static Unit operator /(Unit u, int i) => u / (Unit)i;
 }
