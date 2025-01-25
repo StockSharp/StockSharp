@@ -5,11 +5,9 @@ clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.Algo.Analytics")
 
 from System import TimeSpan
-from System import Array
-from System import String
 from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
-from StockSharp.Messages import TimeFrameCandleMessage
+from storage_extensions import *
 
 # The analytic script, calculating Pearson correlation by specified securities.
 class pearson_correlation_script(IAnalyticsScript):
@@ -38,10 +36,10 @@ class pearson_correlation_script(IAnalyticsScript):
                 break
 
             # get candle storage
-            candle_storage = storage.GetTimeFrameCandleMessageStorage(security, time_frame, drive, format)
+            candle_storage = get_tf_candle_storage(storage, security, time_frame, drive, format)
 
             # get closing prices
-            prices = [float(c.ClosePrice) for c in candle_storage.Load(from_date, to_date)]
+            prices = [float(c.ClosePrice) for c in load_tf_candles(candle_storage, from_date, to_date)]
 
             if len(prices) == 0:
                 logs.LogWarning("No data for {0}", security)

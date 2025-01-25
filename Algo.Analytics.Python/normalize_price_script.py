@@ -5,11 +5,9 @@ clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.Algo.Analytics")
 
 from System import TimeSpan
-from System import Array
-from System import String
 from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
-from StockSharp.Messages import TimeFrameCandleMessage
+from storage_extensions import *
 
 # The analytic script, normalize securities close prices and shows on same chart.
 class normalize_price_script(IAnalyticsScript):
@@ -28,11 +26,11 @@ class normalize_price_script(IAnalyticsScript):
             series = {}
 
             # get candle storage
-            candle_storage = storage.GetTimeFrameCandleMessageStorage(security, time_frame, drive, format)
+            candle_storage = get_tf_candle_storage(storage, security, time_frame, drive, format)
 
             first_close = None
 
-            for candle in candle_storage.Load(from_date, to_date):
+            for candle in load_tf_candles(candle_storage, from_date, to_date):
                 if first_close is None:
                     first_close = candle.ClosePrice
 

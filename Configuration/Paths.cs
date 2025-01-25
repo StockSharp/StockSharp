@@ -32,6 +32,7 @@ public static class Paths
 		CompilerCacheDir = Path.Combine(AppDataPath, "compiler_cache");
 		LogsDir = Path.Combine(AppDataPath, "Logs");
 		ReportLogsPath = Path.Combine(AppDataPath, "BugReports");
+		PythonUtilsPath = Path.Combine(CompanyPath, "Python");
 		InstallerDir = Path.Combine(CompanyPath, "Installer");
 		InstallerInstallationsConfigPath = Path.Combine(InstallerDir, $"installer_apps_installed{DefaultSettingsExt}");
 
@@ -123,6 +124,11 @@ public static class Paths
 	/// The path to the settings directory.
 	/// </summary>
 	public static readonly string AppDataPath;
+
+	/// <summary>
+	/// The path to the Python utils directory.
+	/// </summary>
+	public static readonly string PythonUtilsPath;
 
 	/// <summary>
 	/// The path to the settings directory.

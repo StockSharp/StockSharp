@@ -5,11 +5,9 @@ clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.Algo.Analytics")
 
 from System import TimeSpan
-from System import Array
-from System import String
 from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
-from StockSharp.Messages import TimeFrameCandleMessage
+from storage_extensions import *
 
 # The analytic script, using indicator ROC.
 class indicator_script(IAnalyticsScript):
@@ -34,9 +32,9 @@ class indicator_script(IAnalyticsScript):
             roc = RateOfChange()
 
             # get candle storage
-            candle_storage = storage.GetTimeFrameCandleMessageStorage(security, time_frame, drive, format)
+            candle_storage = get_tf_candle_storage(storage, security, time_frame, drive, format)
 
-            for candle in candle_storage.Load(from_date, to_date):
+            for candle in load_tf_candles(candle_storage, from_date, to_date):
                 # fill series
                 candles_series[candle.OpenTime] = candle.ClosePrice
                 indicator_series[candle.OpenTime] = roc.Process(candle).ToDecimal()

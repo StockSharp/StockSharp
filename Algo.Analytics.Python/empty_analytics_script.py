@@ -5,11 +5,9 @@ clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.Algo.Analytics")
 
 from System import TimeSpan
-from System import Array
-from System import String
 from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
-from StockSharp.Messages import TimeFrameCandleMessage
+from storage_extensions import *
 
 # The empty analytic strategy.
 class empty_analytics_script(IAnalyticsScript):

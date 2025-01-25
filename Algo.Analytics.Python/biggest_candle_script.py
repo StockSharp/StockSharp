@@ -5,11 +5,9 @@ clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.Algo.Analytics")
 
 from System import TimeSpan
-from System import Array
-from System import String
 from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
-from StockSharp.Messages import TimeFrameCandleMessage
+from storage_extensions import *
 
 # The analytic script, shows biggest candle (by volume and by length) for specified securities.
 class biggest_candle_script(IAnalyticsScript):
@@ -30,8 +28,8 @@ class biggest_candle_script(IAnalyticsScript):
                 break
 
             # get candle storage
-            candle_storage = storage.GetTimeFrameCandleMessageStorage(security, time_frame, drive, format)
-            all_candles = list(candle_storage.Load(from_date, to_date))
+            candle_storage = get_tf_candle_storage(storage, security, time_frame, drive, format)
+            all_candles = load_tf_candles(candle_storage, from_date, to_date)
 
             if len(all_candles) > 0:
                 # first orders by volume desc will be our biggest candle

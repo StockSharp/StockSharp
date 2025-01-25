@@ -5,11 +5,9 @@ clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.Algo.Analytics")
 
 from System import TimeSpan
-from System import Array
-from System import String
 from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
-from StockSharp.Messages import TimeFrameCandleMessage
+from storage_extensions import *
 
 # The analytic script, calculating distribution of the volume by price levels.
 class price_volume_script(IAnalyticsScript):
@@ -35,17 +33,17 @@ class price_volume_script(IAnalyticsScript):
         security = securities[0]
 
         # Get candle storage
-        candle_storage = storage.GetTimeFrameCandleMessageStorage(security, time_frame, drive, format)
+        candle_storage = get_tf_candle_storage(storage, security, time_frame, drive, format)
 
         # Get available dates for the specified period
-        dates = list(candle_storage.GetDates(from_date, to_date))
+        dates = get_dates(candle_storage, from_date, to_date)
 
         if len(dates) == 0:
             logs.LogWarning("no data")
             return Task.CompletedTask
 
         # Grouping candles by middle price and summing their volumes
-        candles = list(candle_storage.Load(from_date, to_date))
+        candles = load_tf_candles(candle_storage, from_date, to_date)
         rows_dict = {}
         for candle in candles:
             # Calculate middle price of the candle

@@ -5,11 +5,9 @@ clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.Algo.Analytics")
 
 from System import TimeSpan
-from System import Array
-from System import String
 from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
-from StockSharp.Messages import TimeFrameCandleMessage
+from storage_extensions import *
 
 # The analytic script, calculating distribution of the biggest volume by hours and shows its in 3D chart.
 class chart3d_script(IAnalyticsScript):
@@ -39,7 +37,7 @@ class chart3d_script(IAnalyticsScript):
             y.append(str(h))
 
         # Create a 2D array for Z values with dimensions: (number of securities) x (number of hours)
-        z = Array.CreateInstance(Double, securities.Length, len(y))
+        z = [[0.0 for _ in range(len(y))] for _ in range(len(securities))]
 
         for i in range(securities.Length):
             # Stop calculation if user cancels script execution
@@ -52,17 +50,17 @@ class chart3d_script(IAnalyticsScript):
             x.append(security.ToStringId())
 
             # Get candle storage for current security
-            candle_storage = storage.GetTimeFrameCandleMessageStorage(security, time_frame, drive, format)
+            candle_storage = get_tf_candle_storage(storage, security, time_frame, drive, format)
 
             # Get available dates for the specified period
-            dates = list(candle_storage.GetDates(from_date, to_date))
+            dates = get_dates(candle_storage, from_date, to_date)
 
             if len(dates) == 0:
                 logs.LogWarning("no data")
                 return Task.CompletedTask
 
             # Grouping candles by opening time (truncated to the nearest hour) and summing volumes
-            candles = list(candle_storage.Load(from_date, to_date))
+            candles = load_tf_candles(candle_storage, from_date, to_date)
             by_hours = {}
             for candle in candles:
                 # Truncate TimeOfDay to the nearest hour
