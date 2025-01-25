@@ -26,7 +26,7 @@ class price_volume_script(IAnalyticsScript):
             return Task.CompletedTask
 
         # Script can process only 1 instrument
-        security = Enumerable.First(securities)
+        security = securities[0]
 
         # Get candle storage
         candle_storage = storage.GetTimeFrameCandleMessageStorage(security, time_frame, drive, format)
