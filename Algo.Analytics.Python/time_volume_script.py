@@ -2,8 +2,14 @@ import clr
 
 # Add .NET references
 clr.AddReference("StockSharp.Algo.Analytics")
+clr.AddReference("StockSharp.Messages")
 
+from System import TimeSpan
+from System import Array
+from System import String
+from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
+from StockSharp.Messages import TimeFrameCandleMessage
 
 # The analytic script, calculating distribution of the biggest volume by hours.
 class time_volume_script(IAnalyticsScript):

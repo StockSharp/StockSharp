@@ -1,9 +1,15 @@
 import clr
 
 # Add .NET references
+clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.Algo.Analytics")
 
+from System import TimeSpan
+from System import Array
+from System import String
+from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
+from StockSharp.Messages import TimeFrameCandleMessage
 
 # The analytic script, shows chart drawing possibilities.
 class chart_draw_script(IAnalyticsScript):
