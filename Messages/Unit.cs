@@ -447,11 +447,41 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 		return Convert(destinationType, GetTypeValue, throwException);
 	}
 
+	private decimal ToDecimal(Func<UnitTypes, decimal?> getTypeValue)
+	{
+		var value = Value;
+
+		switch (Type)
+		{
+			case UnitTypes.Limit:
+			case UnitTypes.Absolute:
+				return value;
+			case UnitTypes.Percent:
+				throw new InvalidOperationException(LocalizedStrings.PercentagesConvert);
+			case UnitTypes.Point:
+				var point = getTypeValue?.Invoke(Type) ?? throw new InvalidOperationException(LocalizedStrings.PriceStepNotSpecified);
+
+				if (point == 0)
+					throw new InvalidOperationException(LocalizedStrings.PriceStepIsZeroKey);
+
+				return value * point;
+			case UnitTypes.Step:
+				var step = getTypeValue?.Invoke(Type) ?? throw new InvalidOperationException(LocalizedStrings.PriceStepNotSpecified);
+
+				if (step == 0)
+					throw new InvalidOperationException(LocalizedStrings.PriceStepNotSpecified);
+
+				return value * step;
+			default:
+				throw new InvalidOperationException(Type.ToString());
+		}
+	}
+
 	/// <summary>
 	/// Cast the value to another type.
 	/// </summary>
 	/// <param name="destinationType">Destination value type.</param>
-	/// <param name="getTypeValue">The handler returns a value associated with <see cref="Unit.Type"/> (price or volume steps).</param>
+	/// <param name="getTypeValue">The handler returns a value associated with <see cref="Type"/> (price or volume steps).</param>
 	/// <param name="throwException">Throw exception in case of impossible conversion. Otherwise, returns <see langword="null"/>.</param>
 	/// <returns>Converted value.</returns>
 	public Unit Convert(UnitTypes destinationType, Func<UnitTypes, decimal?> getTypeValue, bool throwException = true)
@@ -462,15 +492,9 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 		if (Type == UnitTypes.Percent || destinationType == UnitTypes.Percent)
 			throw new InvalidOperationException(LocalizedStrings.PercentagesConvert);
 
-		var value = (decimal?)this;
+		getTypeValue ??= GetTypeValue;
 
-		if (value is null)
-		{
-			if (throwException)
-				throw new InvalidOperationException();
-
-			return null;
-		}
+		var value = ToDecimal(getTypeValue);
 
 		if (destinationType is UnitTypes.Point or UnitTypes.Step)
 		{
@@ -495,7 +519,7 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 						return null;
 					}
 
-					value = value.Value / point.Value;
+					value = value / point.Value;
 					break;
 				case UnitTypes.Step:
 					var step = getTypeValue(UnitTypes.Step);
@@ -508,12 +532,12 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 						return null;
 					}
 
-					value = value.Value / step.Value;
+					value = value / step.Value;
 					break;
 			}
 		}
 
-		return new Unit(value.Value, destinationType, getTypeValue);
+		return new(value, destinationType, getTypeValue);
 	}
 
 	private static bool? MoreThan(Unit u1, Unit u2)

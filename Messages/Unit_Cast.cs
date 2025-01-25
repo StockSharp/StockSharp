@@ -40,24 +40,7 @@ partial class Unit
 		if (unit is null)
 			throw new ArgumentNullException(nameof(unit));
 
-		switch (unit.Type)
-		{
-			case UnitTypes.Limit:
-			case UnitTypes.Absolute:
-				return unit.Value;
-			case UnitTypes.Percent:
-				throw new ArgumentException(LocalizedStrings.PercentagesConvert, nameof(unit));
-			case UnitTypes.Point:
-				var point = unit.GetTypeValue?.Invoke(unit.Type) ?? throw new InvalidOperationException(LocalizedStrings.PriceStepNotSpecified);
-
-				return unit.Value * point;
-			case UnitTypes.Step:
-				var step = unit.GetTypeValue?.Invoke(unit.Type) ?? throw new InvalidOperationException(LocalizedStrings.PriceStepNotSpecified);
-
-				return unit.Value * step;
-			default:
-				throw new ArgumentOutOfRangeException(nameof(unit), unit.Type, LocalizedStrings.InvalidValue);
-		}
+		return unit.ToDecimal(unit.GetTypeValue);
 	}
 
 	/// <summary>
