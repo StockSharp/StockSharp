@@ -613,6 +613,13 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 	Unit IOperable<Unit>.Divide(Unit other) => this / other;
 
 	/// <summary>
+	/// Make the value positive.
+	/// </summary>
+	/// <returns><see cref="Unit"/></returns>
+	public Unit Abs()
+		=> new() { Type = Type, Value = Value.Abs(), GetTypeValue = GetTypeValue };
+
+	/// <summary>
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
