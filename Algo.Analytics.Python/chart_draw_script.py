@@ -3,12 +3,15 @@ import clr
 # Add .NET references
 clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.Algo.Analytics")
+clr.AddReference("Ecng.Drawing")
 
+from Ecng.Drawing import DrawStyles
 from System import TimeSpan
 from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
 from storage_extensions import *
 from candle_extensions import *
+from chart_extensions import *
 
 # The analytic script, shows chart drawing possibilities.
 class chart_draw_script(IAnalyticsScript):
@@ -31,8 +34,8 @@ class chart_draw_script(IAnalyticsScript):
             return Task.CompletedTask
 
         # Create charts using the panel
-        line_chart = panel.CreateChart[object, object]()
-        histogram_chart = panel.CreateChart[object, object]()
+        line_chart = create_chart(panel, datetime, float)
+        histogram_chart = create_chart(panel, datetime, float)
 
         for security in securities:
             # Stop calculation if user cancels script execution

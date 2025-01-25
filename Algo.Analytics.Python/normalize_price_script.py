@@ -3,12 +3,15 @@ import clr
 # Add .NET references
 clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.Algo.Analytics")
+clr.AddReference("Ecng.Drawing")
 
+from Ecng.Drawing import DrawStyles
 from System import TimeSpan
 from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
 from storage_extensions import *
 from candle_extensions import *
+from chart_extensions import *
 
 # The analytic script, normalize securities close prices and shows on same chart.
 class normalize_price_script(IAnalyticsScript):
@@ -17,7 +20,7 @@ class normalize_price_script(IAnalyticsScript):
             logs.LogWarning("No instruments.")
             return Task.CompletedTask
 
-        chart = panel.CreateChart[object, object]()
+        chart = create_chart(panel, datetime, float)
 
         for security in securities:
             # stop calculation if user cancel script execution
@@ -39,6 +42,6 @@ class normalize_price_script(IAnalyticsScript):
                 series[candle.OpenTime] = candle.ClosePrice / first_close
 
             # draw series on chart
-            chart.Append(security.ToStringId(), list(series.keys()), list(series.values()))
+            chart.Append(to_string_id(security), list(series.keys()), list(series.values()))
 
         return Task.CompletedTask

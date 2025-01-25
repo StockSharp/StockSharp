@@ -3,12 +3,15 @@ import clr
 # Add .NET references
 clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.Algo.Analytics")
+clr.AddReference("Ecng.Drawing")
 
+from Ecng.Drawing import DrawStyles
 from System import TimeSpan
 from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
 from storage_extensions import *
 from candle_extensions import *
+from chart_extensions import *
 
 # The analytic script, using indicator ROC.
 class indicator_script(IAnalyticsScript):
@@ -18,8 +21,8 @@ class indicator_script(IAnalyticsScript):
             return Task.CompletedTask
 
         # creating 2 panes for candles and indicator series
-        candle_chart = panel.CreateChart[object, object]()
-        indicator_chart = panel.CreateChart[object, object]()
+        candle_chart = create_chart(panel, datetime, float)
+        indicator_chart = create_chart(panel, datetime, float)
 
         for security in securities:
             # stop calculation if user cancel script execution

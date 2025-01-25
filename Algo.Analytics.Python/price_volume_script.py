@@ -3,12 +3,15 @@ import clr
 # Add .NET references
 clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.Algo.Analytics")
+clr.AddReference("Ecng.Drawing")
 
+from Ecng.Drawing import DrawStyles
 from System import TimeSpan
 from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
 from storage_extensions import *
 from candle_extensions import *
+from chart_extensions import *
 
 # The analytic script, calculating distribution of the volume by price levels.
 class price_volume_script(IAnalyticsScript):
@@ -53,7 +56,7 @@ class price_volume_script(IAnalyticsScript):
             rows_dict[key] = rows_dict.get(key, 0) + candle.TotalVolume
 
         # Draw on chart
-        chart = panel.CreateChart[float, float]()
-        chart.Append(security.ToStringId(), list(rows_dict.keys()), list(rows_dict.values()), DrawStyles.Histogram)
+        chart = create_chart(panel, float, float)
+        chart.Append(to_string_id(security), list(rows_dict.keys()), list(rows_dict.values()), DrawStyles.Histogram)
 
         return Task.CompletedTask

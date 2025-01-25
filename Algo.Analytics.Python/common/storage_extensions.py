@@ -4,7 +4,16 @@ import clr
 clr.AddReference("StockSharp.Algo")
 
 from StockSharp.Algo.Storages import StorageHelper
+from StockSharp.Messages import Extensions
 from StockSharp.Messages import TimeFrameCandleMessage
+
+def to_string_id(security_id):
+    """
+    Convert SecurityId to a string representation.
+    :param security_id: The SecurityId object.
+    :return: String representation of the SecurityId.
+    """
+    return Extensions.ToStringId(security_id)
 
 def get_dates(storage, from_date, to_date):
     """

@@ -3,12 +3,15 @@ import clr
 # Add .NET references
 clr.AddReference("StockSharp.Algo.Analytics")
 clr.AddReference("StockSharp.Messages")
+clr.AddReference("Ecng.Drawing")
 
+from Ecng.Drawing import DrawStyles
 from System import TimeSpan
 from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
 from storage_extensions import *
 from candle_extensions import *
+from chart_extensions import *
 
 # The analytic script, calculating distribution of the biggest volume by hours.
 class time_volume_script(IAnalyticsScript):

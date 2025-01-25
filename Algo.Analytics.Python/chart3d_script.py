@@ -3,12 +3,15 @@ import clr
 # Add .NET references
 clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.Algo.Analytics")
+clr.AddReference("Ecng.Drawing")
 
+from Ecng.Drawing import DrawStyles
 from System import TimeSpan
 from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
 from storage_extensions import *
 from candle_extensions import *
+from chart_extensions import *
 
 # The analytic script, calculating distribution of the biggest volume by hours and shows its in 3D chart.
 class chart3d_script(IAnalyticsScript):
@@ -48,7 +51,7 @@ class chart3d_script(IAnalyticsScript):
             security = securities[i]
 
             # Fill X labels with security identifiers
-            x.append(security.ToStringId())
+            x.append(to_string_id(security))
 
             # Get candle storage for current security
             candle_storage = get_tf_candle_storage(storage, security, time_frame, drive, format)

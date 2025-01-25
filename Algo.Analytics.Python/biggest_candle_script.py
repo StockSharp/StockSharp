@@ -3,12 +3,15 @@ import clr
 # Add .NET references
 clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.Algo.Analytics")
+clr.AddReference("Ecng.Drawing")
 
+from Ecng.Drawing import DrawStyles
 from System import TimeSpan
 from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
 from storage_extensions import *
 from candle_extensions import *
+from chart_extensions import *
 
 # The analytic script, shows biggest candle (by volume and by length) for specified securities.
 class biggest_candle_script(IAnalyticsScript):
@@ -17,8 +20,8 @@ class biggest_candle_script(IAnalyticsScript):
             logs.LogWarning("No instruments.")
             return Task.CompletedTask
 
-        price_chart = panel.CreateChart[object, object, object]()
-        vol_chart = panel.CreateChart[object, object, object]()
+        price_chart = create_chart(panel, datetime, float, float)
+        vol_chart = create_chart(panel, datetime, float, float)
 
         big_price_candles = []
         big_vol_candles = []
@@ -47,14 +50,14 @@ class biggest_candle_script(IAnalyticsScript):
         price_chart.Append(
             "prices",
             [c.OpenTime for c in big_price_candles],
-            [c.GetMiddlePrice(None) for c in big_price_candles],
+            [get_middle_price(c) for c in big_price_candles],
             [get_length(c) for c in big_price_candles]
         )
 
         vol_chart.Append(
             "prices",
             [c.OpenTime for c in big_vol_candles],
-            [c.GetMiddlePrice(None) for c in big_price_candles],
+            [get_middle_price(c) for c in big_price_candles],
             [c.TotalVolume for c in big_vol_candles]
         )
 

@@ -3,12 +3,15 @@ import clr
 # Add .NET references
 clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.Algo.Analytics")
+clr.AddReference("Ecng.Drawing")
 
+from Ecng.Drawing import DrawStyles
 from System import TimeSpan
 from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
 from storage_extensions import *
 from candle_extensions import *
+from chart_extensions import *
 
 # The analytic script, calculating Pearson correlation by specified securities.
 class pearson_correlation_script(IAnalyticsScript):
@@ -57,7 +60,7 @@ class pearson_correlation_script(IAnalyticsScript):
         matrix = np.corrcoef(np_array)
 
         # displaying result into heatmap
-        ids = [s.ToStringId() for s in securities]
+        ids = [to_string_id(security) for s in securities]
         panel.DrawHeatmap(ids, ids, matrix.tolist())
 
         return Task.CompletedTask
