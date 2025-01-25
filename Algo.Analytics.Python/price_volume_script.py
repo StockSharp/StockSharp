@@ -8,6 +8,7 @@ from System import TimeSpan
 from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
 from storage_extensions import *
+from candle_extensions import *
 
 # The analytic script, calculating distribution of the volume by price levels.
 class price_volume_script(IAnalyticsScript):
@@ -47,7 +48,7 @@ class price_volume_script(IAnalyticsScript):
         rows_dict = {}
         for candle in candles:
             # Calculate middle price of the candle
-            key = candle.LowPrice + candle.GetLength() / 2
+            key = candle.LowPrice + get_length(candle) / 2
             # Sum volumes for same price level
             rows_dict[key] = rows_dict.get(key, 0) + candle.TotalVolume
 

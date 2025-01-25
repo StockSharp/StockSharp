@@ -8,6 +8,7 @@ from System import TimeSpan
 from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
 from storage_extensions import *
+from candle_extensions import *
 
 # The analytic script, using indicator ROC.
 class indicator_script(IAnalyticsScript):

@@ -8,6 +8,7 @@ from System import TimeSpan
 from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
 from storage_extensions import *
+from candle_extensions import *
 
 # The analytic script, shows biggest candle (by volume and by length) for specified securities.
 class biggest_candle_script(IAnalyticsScript):
@@ -33,7 +34,7 @@ class biggest_candle_script(IAnalyticsScript):
 
             if len(all_candles) > 0:
                 # first orders by volume desc will be our biggest candle
-                big_price_candle = max(all_candles, key=lambda c: c.GetLength())
+                big_price_candle = max(all_candles, key=lambda c: get_length(c))
                 big_vol_candle = max(all_candles, key=lambda c: c.TotalVolume)
 
                 if big_price_candle is not None:
@@ -47,7 +48,7 @@ class biggest_candle_script(IAnalyticsScript):
             "prices",
             [c.OpenTime for c in big_price_candles],
             [c.GetMiddlePrice(None) for c in big_price_candles],
-            [c.GetLength() for c in big_price_candles]
+            [get_length(c) for c in big_price_candles]
         )
 
         vol_chart.Append(
