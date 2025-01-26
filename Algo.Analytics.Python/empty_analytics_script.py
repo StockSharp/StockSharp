@@ -12,6 +12,7 @@ from StockSharp.Algo.Analytics import IAnalyticsScript
 from storage_extensions import *
 from candle_extensions import *
 from chart_extensions import *
+from indicator_extensions import *
 
 # The empty analytic strategy.
 class empty_analytics_script(IAnalyticsScript):

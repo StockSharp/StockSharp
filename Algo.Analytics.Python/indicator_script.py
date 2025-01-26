@@ -9,9 +9,11 @@ from Ecng.Drawing import DrawStyles
 from System import TimeSpan
 from System.Threading.Tasks import Task
 from StockSharp.Algo.Analytics import IAnalyticsScript
+from StockSharp.Algo.Indicators import ROC
 from storage_extensions import *
 from candle_extensions import *
 from chart_extensions import *
+from indicator_extensions import *
 
 # The analytic script, using indicator ROC.
 class indicator_script(IAnalyticsScript):
@@ -33,7 +35,7 @@ class indicator_script(IAnalyticsScript):
             indicator_series = {}
 
             # creating ROC
-            roc = RateOfChange()
+            roc = ROC()
 
             # get candle storage
             candle_storage = get_tf_candle_storage(storage, security, time_frame, drive, format)
@@ -41,7 +43,7 @@ class indicator_script(IAnalyticsScript):
             for candle in load_tf_candles(candle_storage, from_date, to_date):
                 # fill series
                 candles_series[candle.OpenTime] = candle.ClosePrice
-                indicator_series[candle.OpenTime] = roc.Process(candle).ToDecimal()
+                indicator_series[candle.OpenTime] = to_decimal(process_with_candle(roc, candle))
 
             # draw series on chart
             candle_chart.Append(

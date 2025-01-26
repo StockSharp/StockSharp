@@ -12,6 +12,7 @@ from StockSharp.Algo.Analytics import IAnalyticsScript
 from storage_extensions import *
 from candle_extensions import *
 from chart_extensions import *
+from indicator_extensions import *
 
 # The analytic script, calculating distribution of the biggest volume by hours and shows its in 3D chart.
 class chart3d_script(IAnalyticsScript):

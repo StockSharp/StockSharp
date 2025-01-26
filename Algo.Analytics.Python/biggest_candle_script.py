@@ -12,6 +12,7 @@ from StockSharp.Algo.Analytics import IAnalyticsScript
 from storage_extensions import *
 from candle_extensions import *
 from chart_extensions import *
+from indicator_extensions import *
 
 # The analytic script, shows biggest candle (by volume and by length) for specified securities.
 class biggest_candle_script(IAnalyticsScript):

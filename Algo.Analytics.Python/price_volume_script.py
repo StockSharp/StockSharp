@@ -12,6 +12,7 @@ from StockSharp.Algo.Analytics import IAnalyticsScript
 from storage_extensions import *
 from candle_extensions import *
 from chart_extensions import *
+from indicator_extensions import *
 
 # The analytic script, calculating distribution of the volume by price levels.
 class price_volume_script(IAnalyticsScript):
