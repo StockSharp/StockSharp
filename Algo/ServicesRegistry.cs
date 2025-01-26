@@ -276,4 +276,13 @@ public static class ServicesRegistry
 	/// </summary>
 	public static ICommissionRuleProvider CommissionRuleProvider => ConfigManager.GetService<ICommissionRuleProvider>();
 
+	/// <summary>
+	/// <see cref="ICustomTypeDescriptorProvider"/>
+	/// </summary>
+	public static ICustomTypeDescriptorProvider TryCustomTypeDescriptorProvider => ConfigManager.TryGetService<ICustomTypeDescriptorProvider>();
+
+	/// <summary>
+	/// <see cref="ICustomTypeDescriptorProvider"/>
+	/// </summary>
+	public static ICustomTypeDescriptorProvider CustomTypeDescriptorProvider => ConfigManager.GetService<ICustomTypeDescriptorProvider>();
 }
