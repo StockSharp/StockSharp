@@ -21,8 +21,8 @@ class biggest_candle_script(IAnalyticsScript):
             logs.LogWarning("No instruments.")
             return Task.CompletedTask
 
-        price_chart = create_chart(panel, datetime, float, float)
-        vol_chart = create_chart(panel, datetime, float, float)
+        price_chart = create_3d_chart(panel, datetime, float, float)
+        vol_chart = create_3d_chart(panel, datetime, float, float)
 
         big_price_candles = []
         big_vol_candles = []

@@ -12,7 +12,7 @@ from StockSharp.Algo.Analytics import IAnalyticsScript
 from storage_extensions import *
 from candle_extensions import *
 from chart_extensions import *
-from indicator_extensions import *
+from numpy_extensions import nx
 
 # The analytic script, calculating distribution of the biggest volume by hours and shows its in 3D chart.
 class chart3d_script(IAnalyticsScript):
@@ -79,10 +79,11 @@ class chart3d_script(IAnalyticsScript):
             for hour, volume in by_hours.items():
                 # Set volume at position [i, hour] in the 2D array
                 # Ensure hour is within the range of y labels
+                
                 if hour < len(y):
-                    z[i, hour] = float(volume)
-
+                    z[i][hour] = float(volume)
+                    
         # Draw the 3D chart using panel
-        panel.Draw3D(x, y, z, "Instruments", "Hours", "Volume")
+        panel.Draw3D(x, y, nx.to2darray(z), "Instruments", "Hours", "Volume")
 
         return Task.CompletedTask
