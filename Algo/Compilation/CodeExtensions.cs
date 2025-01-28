@@ -182,4 +182,20 @@ public static class CodeExtensions
 	/// <returns>Check result.</returns>
 	public static bool IsCodeExtension(this string fileExt)
 		=> fileExt.TryGetCompiler() is not null;
+
+	/// <summary>
+	/// Determine whether the specified code supports references.
+	/// </summary>
+	/// <param name="code"><see cref="CodeInfo"/></param>
+	/// <returns>Check result.</returns>
+	public static bool IsReferencesSupported(this CodeInfo code)
+		=> code.CheckOnNull(nameof(code)).Language.IsReferencesSupported();
+
+	/// <summary>
+	/// Determines whether the specified file extension supports references.
+	/// </summary>
+	/// <param name="langExt"><see cref="CodeInfo.Language"/></param>
+	/// <returns>Check result.</returns>
+	public static bool IsReferencesSupported(this string langExt)
+		=> langExt.ThrowIfEmpty(nameof(langExt)).TryGetCompiler()?.IsReferencesSupported == true;
 }
