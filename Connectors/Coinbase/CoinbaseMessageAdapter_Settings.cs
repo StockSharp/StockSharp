@@ -26,6 +26,7 @@ public partial class CoinbaseMessageAdapter : AsyncMessageAdapter, IKeySecretAda
 		Description = LocalizedStrings.KeyKey + LocalizedStrings.Dot,
 		GroupName = LocalizedStrings.ConnectionKey,
 		Order = 0)]
+	[BasicSetting]
 	public SecureString Key { get; set; }
 
 	/// <inheritdoc />
@@ -35,6 +36,7 @@ public partial class CoinbaseMessageAdapter : AsyncMessageAdapter, IKeySecretAda
 		Description = LocalizedStrings.SecretDescKey,
 		GroupName = LocalizedStrings.ConnectionKey,
 		Order = 1)]
+	[BasicSetting]
 	public SecureString Secret { get; set; }
 
 	/// <summary>
@@ -46,6 +48,7 @@ public partial class CoinbaseMessageAdapter : AsyncMessageAdapter, IKeySecretAda
 		Description = LocalizedStrings.PassphraseKey + LocalizedStrings.Dot,
 		GroupName = LocalizedStrings.ConnectionKey,
 		Order = 2)]
+	[BasicSetting]
 	public SecureString Passphrase { get; set; }
 
 	/// <inheritdoc />

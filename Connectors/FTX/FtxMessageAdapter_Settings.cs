@@ -32,6 +32,7 @@ public partial class FtxMessageAdapter : AsyncMessageAdapter, IKeySecretAdapter
 			Description = LocalizedStrings.KeyKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.ConnectionKey,
 			Order = 0)]
+	[BasicSetting]
 	public SecureString Key { get; set; }
 
 	/// <inheritdoc />
@@ -41,6 +42,7 @@ public partial class FtxMessageAdapter : AsyncMessageAdapter, IKeySecretAdapter
 			Description = LocalizedStrings.SecretDescKey,
 			GroupName = LocalizedStrings.ConnectionKey,
 			Order = 1)]
+	[BasicSetting]
 	public SecureString Secret { get; set; }
 	/// <summary>
 	/// SubAccount name from GUI
@@ -51,6 +53,7 @@ public partial class FtxMessageAdapter : AsyncMessageAdapter, IKeySecretAdapter
 		        Description = LocalizedStrings.SubAccKey,
 		        GroupName = LocalizedStrings.ConnectionKey,
 		        Order = 2)]
+	[BasicSetting]
 	public string SubaccountName { get; set; }
 
 	/// <inheritdoc />

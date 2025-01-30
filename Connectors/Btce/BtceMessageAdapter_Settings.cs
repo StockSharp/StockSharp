@@ -32,6 +32,7 @@ public partial class BtceMessageAdapter : AsyncMessageAdapter, IKeySecretAdapter
 			Description = LocalizedStrings.KeyKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.ConnectionKey,
 			Order = 0)]
+	[BasicSetting]
 	public SecureString Key { get; set; }
 
 	/// <inheritdoc />
@@ -41,6 +42,7 @@ public partial class BtceMessageAdapter : AsyncMessageAdapter, IKeySecretAdapter
 			Description = LocalizedStrings.SecretDescKey,
 			GroupName = LocalizedStrings.ConnectionKey,
 			Order = 1)]
+	[BasicSetting]
 	public SecureString Secret { get; set; }
 
 	private string _address = DefaultDomain;
@@ -52,6 +54,7 @@ public partial class BtceMessageAdapter : AsyncMessageAdapter, IKeySecretAdapter
 		Description = LocalizedStrings.DomainAddressDescKey,
 		GroupName = LocalizedStrings.ConnectionKey,
 		Order = 2)]
+	[BasicSetting]
 	public string Address
 	{
 		get => _address;

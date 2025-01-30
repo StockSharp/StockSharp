@@ -27,6 +27,7 @@ public partial class BitalongMessageAdapter : AsyncMessageAdapter, IKeySecretAda
 		Description = LocalizedStrings.KeyKey + LocalizedStrings.Dot,
 		GroupName = LocalizedStrings.ConnectionKey,
 		Order = 0)]
+	[BasicSetting]
 	public SecureString Key { get; set; }
 
 	/// <inheritdoc />
@@ -36,6 +37,7 @@ public partial class BitalongMessageAdapter : AsyncMessageAdapter, IKeySecretAda
 		Description = LocalizedStrings.SecretDescKey,
 		GroupName = LocalizedStrings.ConnectionKey,
 		Order = 1)]
+	[BasicSetting]
 	public SecureString Secret { get; set; }
 
 	private TimeSpan _balanceCheckInterval;
@@ -70,6 +72,7 @@ public partial class BitalongMessageAdapter : AsyncMessageAdapter, IKeySecretAda
 		Description = LocalizedStrings.DomainAddressDescKey,
 		GroupName = LocalizedStrings.ConnectionKey,
 		Order = 3)]
+	[BasicSetting]
 	public string Address
 	{
 		get => _address;

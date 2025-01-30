@@ -30,6 +30,7 @@ public partial class TinkoffMessageAdapter : AsyncMessageAdapter, ITokenAdapter,
 		Description = LocalizedStrings.TokenKey + LocalizedStrings.Dot,
 		GroupName = LocalizedStrings.ConnectionKey,
 		Order = 0)]
+	[BasicSetting]
 	public SecureString Token { get; set; }
 
 	/// <inheritdoc />
@@ -39,6 +40,7 @@ public partial class TinkoffMessageAdapter : AsyncMessageAdapter, ITokenAdapter,
 		Description = LocalizedStrings.DemoTradingConnectKey,
 		GroupName = LocalizedStrings.ConnectionKey,
 		Order = 3)]
+	[BasicSetting]
 	public bool IsDemo { get; set; }
 
 	/// <inheritdoc />

@@ -5580,68 +5580,6 @@ public static partial class Extensions
 			return ask is null;
 	}
 
-	private static readonly SynchronizedDictionary<Type, IEnumerable<PropertyInfo>> _basicSettingsCache = [];
-
-	/// <summary>
-	/// Find properties marked by <see cref="BasicSettingAttribute"/>.
-	/// </summary>
-	/// <param name="adapterType">Type.</param>
-	/// <returns>Properties marked by <see cref="BasicSettingAttribute"/>.</returns>
-	public static IEnumerable<PropertyInfo> GetBasicProperties(this Type adapterType)
-	{
-		if (adapterType is null)
-			throw new ArgumentNullException(nameof(adapterType));
-
-		return _basicSettingsCache.SafeAdd(adapterType, key =>
-		{
-			var props = new HashSet<PropertyInfo>();
-
-			void addProp(string propName)
-			{
-				var prop = adapterType.GetMember<PropertyInfo>(propName)
-					?? throw new ArgumentException(propName, nameof(propName));
-
-				props.Add(prop);
-			}
-
-			if (adapterType.Is<IKeySecretAdapter>())
-			{
-				addProp(nameof(IKeySecretAdapter.Key));
-				addProp(nameof(IKeySecretAdapter.Secret));
-			}
-
-			if (adapterType.Is<ILoginPasswordAdapter>())
-			{
-				addProp(nameof(ILoginPasswordAdapter.Login));
-				addProp(nameof(ILoginPasswordAdapter.Password));
-			}
-
-			if (adapterType.Is<IDemoAdapter>())
-				addProp(nameof(IDemoAdapter.IsDemo));
-
-			if (adapterType.Is<IPassphraseAdapter>())
-				addProp(nameof(IPassphraseAdapter.Passphrase));
-
-			if (adapterType.Is<ITokenAdapter>())
-				addProp(nameof(ITokenAdapter.Token));
-
-			if (adapterType.Is<ISenderTargetAdapter>())
-			{
-				addProp(nameof(ISenderTargetAdapter.SenderCompId));
-				addProp(nameof(ISenderTargetAdapter.TargetCompId));
-			}
-
-			if (adapterType.GetGenericType(typeof(IAddressAdapter<>)) is not null)
-				addProp(nameof(IAddressAdapter<int>.Address));
-
-			props.AddRange(adapterType
-				.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-				.Where(pi => pi.GetAttribute<BasicSettingAttribute>() is not null));
-
-			return props;
-		});
-	}
-
 	/// <summary>
 	/// Convert order changes to final snapshot.
 	/// </summary>
