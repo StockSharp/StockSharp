@@ -5,20 +5,12 @@
 /// </summary>
 public class StrategyParameterDictionary : CachedSynchronizedDictionary<string, IStrategyParam>, IDisposable
 {
-	private class SecurityParam : StrategyParam<Security>
+	private class SecurityParam(Strategy strategy) : StrategyParam<Security>(nameof(Security))
 	{
-		private readonly Strategy _strategy;
-
-		public SecurityParam(Strategy strategy)
-			: base(nameof(Security))
-		{
-			_strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
-		}
-
 		public override Security Value
 		{
-			get => _strategy.Security;
-			set => _strategy.Security = value;
+			get => strategy.Security;
+			set => strategy.Security = value;
 		}
 	}
 
