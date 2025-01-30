@@ -87,7 +87,7 @@ public enum StrategyTradingModes
 /// </summary>
 public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMarketRuleContainer,
     ICloneable<Strategy>, IMarketDataProvider, ISubscriptionProvider, ISecurityProvider,
-    ITransactionProvider, IScheduledTask
+    ITransactionProvider, IScheduledTask, ICustomTypeDescriptor
 {
 	private class StrategyChangeStateMessage(Strategy strategy, ProcessStates state)
 		: Message(ExtendedMessageTypes.StrategyChangeState)
@@ -346,32 +346,32 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// </summary>
 	public Strategy()
 	{
-		_childStrategies = new ChildStrategyList(this);
+		_childStrategies = new(this);
 
 		Rules = new StrategyRuleList(this);
 
-		NameGenerator = new StrategyNameGenerator(this);
+		NameGenerator = new(this);
 		NameGenerator.Changed += name => _name.Value = name;
 
 		Parameters = new(this);
 
-		_id = Param(nameof(Id), base.Id);
-		_volume = Param<decimal>(nameof(Volume), 1).SetValidator(v => v > 0);
-		_name = Param(nameof(Name), new string(GetType().Name.Where(char.IsUpper).ToArray()));
-		_disposeOnStop = Param(nameof(DisposeOnStop), false).SetCanOptimize(false);
-		_waitRulesOnStop = Param(nameof(WaitRulesOnStop), true).SetCanOptimize(false);
-		_cancelOrdersWhenStopping = Param(nameof(CancelOrdersWhenStopping), true).SetCanOptimize(false);
-		_waitAllTrades = Param<bool>(nameof(WaitAllTrades)).SetCanOptimize(false);
-		_commentMode = Param<StrategyCommentModes>(nameof(CommentMode));
-		_ordersKeepTime = Param(nameof(OrdersKeepTime), TimeSpan.FromDays(1)).SetValidator(v => v >= TimeSpan.Zero);
-		_logLevel = Param(nameof(LogLevel), LogLevels.Inherit);
-		_stopOnChildStrategyErrors = Param(nameof(StopOnChildStrategyErrors), false).SetCanOptimize(false);
-		_restoreChildOrders = Param(nameof(RestoreChildOrders), false).SetCanOptimize(false);
-		_tradingMode = Param(nameof(TradingMode), StrategyTradingModes.Full);
-		_unsubscribeOnStop = Param(nameof(UnsubscribeOnStop), true).SetCanOptimize(false);
-		_workingTime = Param(nameof(WorkingTime), new WorkingTime()).NotNull();
-		_isOnlineStateIncludesChildren = Param(nameof(IsOnlineStateIncludesChildren), true).SetCanOptimize(false);
-		_historySize = Param<TimeSpan?>(nameof(HistorySize)).SetValidator(v => v is null || v >= TimeSpan.Zero);
+		_id = Param(nameof(Id), base.Id).SetHidden().SetReadOnly();
+		_volume = Param<decimal>(nameof(Volume), 1).SetValidator(v => v > 0).SetDisplay(LocalizedStrings.Volume, LocalizedStrings.StrategyVolume, LocalizedStrings.General);
+		_name = Param(nameof(Name), new string(GetType().Name.Where(char.IsUpper).ToArray())).SetDisplay(LocalizedStrings.Name, LocalizedStrings.StrategyName, LocalizedStrings.General);
+		_disposeOnStop = Param(nameof(DisposeOnStop), false).SetCanOptimize(false).SetHidden();
+		_waitRulesOnStop = Param(nameof(WaitRulesOnStop), true).SetCanOptimize(false).SetHidden();
+		_cancelOrdersWhenStopping = Param(nameof(CancelOrdersWhenStopping), true).SetCanOptimize(false).SetHidden();
+		_waitAllTrades = Param<bool>(nameof(WaitAllTrades)).SetCanOptimize(false).SetHidden();
+		_commentMode = Param<StrategyCommentModes>(nameof(CommentMode)).SetDisplay(LocalizedStrings.Comment, LocalizedStrings.OrderComment, LocalizedStrings.General);
+		_ordersKeepTime = Param(nameof(OrdersKeepTime), TimeSpan.FromDays(1)).SetValidator(v => v >= TimeSpan.Zero).SetDisplay(LocalizedStrings.Orders, LocalizedStrings.OrdersKeepTime, LocalizedStrings.General);
+		_logLevel = Param(nameof(LogLevel), LogLevels.Inherit).SetDisplay(LocalizedStrings.LogLevel, LocalizedStrings.LogLevelKey, LocalizedStrings.Logging);
+		_stopOnChildStrategyErrors = Param(nameof(StopOnChildStrategyErrors), false).SetCanOptimize(false).SetHidden();
+		_restoreChildOrders = Param(nameof(RestoreChildOrders), false).SetCanOptimize(false).SetHidden();
+		_tradingMode = Param(nameof(TradingMode), StrategyTradingModes.Full).SetDisplay(LocalizedStrings.Trading, LocalizedStrings.AllowTrading, LocalizedStrings.General);
+		_unsubscribeOnStop = Param(nameof(UnsubscribeOnStop), true).SetCanOptimize(false).SetHidden();
+		_workingTime = Param(nameof(WorkingTime), new WorkingTime()).NotNull().SetDisplay(LocalizedStrings.WorkingTime, LocalizedStrings.WorkingHours, LocalizedStrings.General);
+		_isOnlineStateIncludesChildren = Param(nameof(IsOnlineStateIncludesChildren), true).SetCanOptimize(false).SetHidden();
+		_historySize = Param<TimeSpan?>(nameof(HistorySize)).SetValidator(v => v is null || v >= TimeSpan.Zero).SetDisplay(LocalizedStrings.DaysHistory, LocalizedStrings.DaysHistoryDesc, LocalizedStrings.Settings);
 
 		_systemParams =
 		[
@@ -800,7 +800,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// <param name="initialValue">The initial value.</param>
 	/// <returns>The strategy parameter.</returns>
 	public StrategyParam<T> Param<T>(string name, T initialValue = default)
-		=> Param(new StrategyParam<T>(name, initialValue));
+		=> Param(name, name, initialValue);
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
@@ -2786,12 +2786,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			parameters = parameters.Except(_systemParams).ToArray();
 
 		storage
-			.Set(nameof(Parameters), parameters.Select(p =>
-			{
-				var paramSettings = new SettingsStorage();
-				p.Save(paramSettings, !saveSystemParameters);
-				return paramSettings;
-			}).ToArray())
+			.Set(nameof(Parameters), parameters.Select(p => p.Save()).ToArray())
 			.Set(nameof(RiskManager), RiskManager.Save())
 		;
 

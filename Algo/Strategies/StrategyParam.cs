@@ -16,6 +16,26 @@ public interface IStrategyParam : IPersistable, INotifyPropertyChanged
 	string Name { get; }
 
 	/// <summary>
+	/// Is the parameter visible in the editor.
+	/// </summary>
+	bool IsBrowsable { get; }
+
+	/// <summary>
+	/// Is the parameter read-only.
+	/// </summary>
+	bool IsReadOnly { get; }
+
+	/// <summary>
+	/// Parameter description.
+	/// </summary>
+	string Description { get; }
+
+	/// <summary>
+	/// Parameter category.
+	/// </summary>
+	string Category { get; }
+
+	/// <summary>
 	/// The type of the parameter value.
 	/// </summary>
 	Type Type { get; }
@@ -44,13 +64,6 @@ public interface IStrategyParam : IPersistable, INotifyPropertyChanged
 	/// The Increment value at optimization.
 	/// </summary>
 	object OptimizeStep { get; set; }
-
-	/// <summary>
-	/// Save settings.
-	/// </summary>
-	/// <param name="storage"><see cref="SettingsStorage"/></param>
-	/// <param name="addDescription">Add description info.</param>
-	void Save(SettingsStorage storage, bool addDescription);
 }
 
 /// <summary>
@@ -66,27 +79,7 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// </summary>
 	/// <param name="name">Parameter name.</param>
 	public StrategyParam(string name)
-		: this(name, name)
-	{
-	}
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
-	/// </summary>
-	/// <param name="id">Parameter identifier.</param>
-	/// <param name="name">Parameter name.</param>
-	public StrategyParam(string id, string name)
-		: this(id, name, default)
-	{
-	}
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
-	/// </summary>
-	/// <param name="name">Parameter name.</param>
-	/// <param name="initialValue">The initial value.</param>
-	public StrategyParam(string name, T initialValue)
-		: this(name, name, initialValue)
+		: this(name, name, default)
 	{
 	}
 
@@ -111,6 +104,8 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 		CanOptimize = typeof(T).CanOptimize();
 
 		_comparer = EqualityComparer<T>.Default;
+
+		IsBrowsable = true;
 	}
 
 	/// <inheritdoc />
@@ -169,6 +164,18 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <inheritdoc />
 	public object OptimizeStep { get; set; }
 
+	/// <inheritdoc />
+	public string Description { get; set; }
+
+	/// <inheritdoc />
+	public string Category { get; set; }
+
+	/// <inheritdoc />
+	public bool IsBrowsable { get; set; }
+
+	/// <inheritdoc />
+	public bool IsReadOnly { get; set; }
+
 	/// <summary>
 	/// Fill optimization parameters.
 	/// </summary>
@@ -193,6 +200,44 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	public StrategyParam<T> SetCanOptimize(bool canOptimize)
 	{
 		CanOptimize = canOptimize;
+		return this;
+	}
+
+	/// <summary>
+	/// Set display settings.
+	/// </summary>
+	/// <param name="displayName">The display name.</param>
+	/// <param name="description">The description of the diagram element parameter.</param>
+	/// <param name="category">The category of the diagram element parameter.</param>
+	/// <returns><see cref="StrategyParam{T}"/></returns>
+	public StrategyParam<T> SetDisplay(string displayName, string description, string category)
+	{
+		Name = displayName;
+		Description = description;
+		Category = category;
+
+		return this;
+	}
+
+	/// <summary>
+	/// Set <see cref="IsBrowsable"/>.
+	/// </summary>
+	/// <param name="hidden">Is the parameter hidden in the editor.</param>
+	/// <returns><see cref="StrategyParam{T}"/></returns>
+	public StrategyParam<T> SetHidden(bool hidden = true)
+	{
+		IsBrowsable = !hidden;
+		return this;
+	}
+
+	/// <summary>
+	/// Set <see cref="IsReadOnly"/>.
+	/// </summary>
+	/// <param name="value">Value.</param>
+	/// <returns><see cref="StrategyParam{T}"/></returns>
+	public StrategyParam<T> SetReadOnly(bool value = true)
+	{
+		IsReadOnly = value;
 		return this;
 	}
 
@@ -231,32 +276,15 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <param name="storage">Settings storage.</param>
 	public void Save(SettingsStorage storage)
 	{
-		Save(storage, false);
-	}
-
-	/// <inheritdoc />
-	public void Save(SettingsStorage storage, bool addDescription)
-	{
 		storage
 			.Set(nameof(Id), Id)
 			.Set(nameof(Name), Name)
 			.Set(nameof(Value), Value)
+			.Set(nameof(CanOptimize), CanOptimize)
+			.Set(nameof(OptimizeFrom), OptimizeFrom?.ToStorage())
+			.Set(nameof(OptimizeTo), OptimizeTo?.ToStorage())
+			.Set(nameof(OptimizeStep), OptimizeStep?.ToStorage())
 		;
-
-		if (addDescription)
-		{
-			if (typeof(T).IsEnum)
-				storage.Set("Description", Enumerator.GetNames<T>().JoinPipe());
-		}
-		else
-		{
-			storage
-				.Set(nameof(CanOptimize), CanOptimize)
-				.Set(nameof(OptimizeFrom), OptimizeFrom?.ToStorage())
-				.Set(nameof(OptimizeTo), OptimizeTo?.ToStorage())
-				.Set(nameof(OptimizeStep), OptimizeStep?.ToStorage())
-			;
-		}
 	}
 
 	/// <inheritdoc />

@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Strategies;
 
+using Ecng.Reflection;
+
 /// <summary>
 /// The auxiliary class for <see cref="StrategyParam{T}"/>.
 /// </summary>
@@ -48,4 +50,35 @@ public static class StrategyParamHelper
 		param.Validator = validator;
 		return param;
 	}
+
+	private static StrategyParam<T> CreateParam<T>(string id, string name, string description, string category, bool browsable)
+	{
+		var strategyParam = new StrategyParam<T>(
+				id,
+				name,
+				default
+			).SetDisplay(
+				name,
+				description,
+				category
+			).SetHidden(!browsable)
+		;
+
+		return strategyParam;
+	}
+
+	private static readonly MethodInfo _createParamMethod = typeof(StrategyParamHelper).GetMethod(nameof(CreateParam), BindingFlags.Static | BindingFlags.NonPublic);
+
+	/// <summary>
+	/// Create parameter.
+	/// </summary>
+	/// <param name="type"><see cref="IStrategyParam.Type"/></param>
+	/// <param name="id"><see cref="IStrategyParam.Id"/></param>
+	/// <param name="name"><see cref="IStrategyParam.Name"/></param>
+	/// <param name="description"><see cref="IStrategyParam.Description"/></param>
+	/// <param name="category"><see cref="IStrategyParam.Category"/></param>
+	/// <param name="browsable"><see cref="IStrategyParam.IsBrowsable"/></param>
+	/// <returns><see cref="IStrategyParam"/></returns>
+	public static IStrategyParam CreateParam(Type type, string id, string name, string description, string category, bool browsable)
+		=> (IStrategyParam)_createParamMethod.Make(type).Invoke(null, [(object)id, name, description, category, browsable]);
 }
