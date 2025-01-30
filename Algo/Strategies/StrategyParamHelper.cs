@@ -51,20 +51,17 @@ public static class StrategyParamHelper
 		return param;
 	}
 
-	private static StrategyParam<T> CreateParam<T>(string id, string name, string description, string category, bool browsable)
+	private static StrategyParam<T> CreateParam<T>(string id, string name, string description, string category)
 	{
-		var strategyParam = new StrategyParam<T>(
-				id,
-				name,
-				default
-			).SetDisplay(
-				name,
-				description,
-				category
-			).SetHidden(!browsable)
-		;
-
-		return strategyParam;
+		return new StrategyParam<T>(
+			id,
+			name,
+			default
+		).SetDisplay(
+			name,
+			description,
+			category
+		);
 	}
 
 	private static readonly MethodInfo _createParamMethod = typeof(StrategyParamHelper).GetMethod(nameof(CreateParam), BindingFlags.Static | BindingFlags.NonPublic);
@@ -77,8 +74,26 @@ public static class StrategyParamHelper
 	/// <param name="name"><see cref="IStrategyParam.Name"/></param>
 	/// <param name="description"><see cref="IStrategyParam.Description"/></param>
 	/// <param name="category"><see cref="IStrategyParam.Category"/></param>
-	/// <param name="browsable"><see cref="IStrategyParam.IsBrowsable"/></param>
 	/// <returns><see cref="IStrategyParam"/></returns>
-	public static IStrategyParam CreateParam(Type type, string id, string name, string description, string category, bool browsable)
-		=> (IStrategyParam)_createParamMethod.Make(type).Invoke(null, [(object)id, name, description, category, browsable]);
+	public static IStrategyParam CreateParam(Type type, string id, string name, string description, string category)
+		=> (IStrategyParam)_createParamMethod.Make(type).Invoke(null, [(object)id, name, description, category]);
+
+	/// <summary>
+	/// Determines whether the parameter is read-only.
+	/// </summary>
+	/// <param name="param"><see cref="IStrategyParam"/></param>
+	/// <returns>Check result.</returns>
+	public static bool IsReadOnly(this IStrategyParam param)
+		=> param.Attrs<ReadOnlyAttribute>().Any(a => a.IsReadOnly);
+
+	/// <summary>
+	/// Determines whether the parameter is browsable.
+	/// </summary>
+	/// <param name="param"><see cref="IStrategyParam"/></param>
+	/// <returns>Check result.</returns>
+	public static bool IsBrowsable(this IStrategyParam param)
+		=> param.Attrs<BrowsableAttribute>().All(a => a.Browsable);
+
+	private static IEnumerable<TAttribute> Attrs<TAttribute>(this IStrategyParam param)
+		=> param.CheckOnNull(nameof(param)).Attributes.OfType<TAttribute>();
 }

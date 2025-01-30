@@ -16,14 +16,9 @@ public interface IStrategyParam : IPersistable, INotifyPropertyChanged
 	string Name { get; }
 
 	/// <summary>
-	/// Is the parameter visible in the editor.
+	/// Attributes.
 	/// </summary>
-	bool IsBrowsable { get; }
-
-	/// <summary>
-	/// Is the parameter read-only.
-	/// </summary>
-	bool IsReadOnly { get; }
+	IList<Attribute> Attributes { get; }
 
 	/// <summary>
 	/// Parameter description.
@@ -104,8 +99,6 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 		CanOptimize = typeof(T).CanOptimize();
 
 		_comparer = EqualityComparer<T>.Default;
-
-		IsBrowsable = true;
 	}
 
 	/// <inheritdoc />
@@ -171,10 +164,7 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	public string Category { get; set; }
 
 	/// <inheritdoc />
-	public bool IsBrowsable { get; set; }
-
-	/// <inheritdoc />
-	public bool IsReadOnly { get; set; }
+	public IList<Attribute> Attributes => [];
 
 	/// <summary>
 	/// Fill optimization parameters.
@@ -220,24 +210,32 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	}
 
 	/// <summary>
-	/// Set <see cref="IsBrowsable"/>.
+	/// Set <see cref="BrowsableAttribute"/>.
 	/// </summary>
 	/// <param name="hidden">Is the parameter hidden in the editor.</param>
 	/// <returns><see cref="StrategyParam{T}"/></returns>
 	public StrategyParam<T> SetHidden(bool hidden = true)
 	{
-		IsBrowsable = !hidden;
+		if (hidden)
+			Attributes.Add(new BrowsableAttribute(false));
+		else
+			Attributes.RemoveWhere(a => a is BrowsableAttribute);
+
 		return this;
 	}
 
 	/// <summary>
-	/// Set <see cref="IsReadOnly"/>.
+	/// Set <see cref="ReadOnlyAttribute"/>.
 	/// </summary>
 	/// <param name="value">Value.</param>
 	/// <returns><see cref="StrategyParam{T}"/></returns>
 	public StrategyParam<T> SetReadOnly(bool value = true)
 	{
-		IsReadOnly = value;
+		if (value)
+			Attributes.Add(new ReadOnlyAttribute(true));
+		else
+			Attributes.RemoveWhere(a => a is ReadOnlyAttribute);
+
 		return this;
 	}
 

@@ -2,7 +2,7 @@
 
 partial class Strategy
 {
-	private class StrategyParamPropDescriptor(IStrategyParam param) : PropertyDescriptor(param.Id, [])
+	private class StrategyParamPropDescriptor(IStrategyParam param) : PropertyDescriptor(param.Id, [.. param.Attributes])
 	{
 		public override Type ComponentType => typeof(Strategy);
 		public override bool IsReadOnly => false;
@@ -10,8 +10,6 @@ partial class Strategy
 		public override string DisplayName => param.Name;
 		public override string Description => param.Description;
 		public override string Category => param.Category;
-		public override bool IsBrowsable => param.IsBrowsable;
-		public override AttributeCollection Attributes { get; } = new(param.IsBrowsable ? [new BrowsableAttribute(true)] : []);
 
 		public override object GetValue(object component) => param.Value;
 		public override void SetValue(object component, object value) => param.Value = value;
