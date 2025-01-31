@@ -30,18 +30,10 @@ partial class Strategy
 	object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd) => this;
 
 	EventDescriptor ICustomTypeDescriptor.GetDefaultEvent() => TypeDescriptor.GetDefaultEvent(this, true);
-	EventDescriptorCollection ICustomTypeDescriptor.GetEvents() => new([]);
-	EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes) => new([]);
-	
-	PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty() => ((ICustomTypeDescriptor)this).GetProperties().Typed().FirstOrDefault();
+	EventDescriptorCollection ICustomTypeDescriptor.GetEvents() => TypeDescriptor.GetEvents(this, true);
+	EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes) => TypeDescriptor.GetEvents(this, attributes, true);
+
+	PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty() => ((ICustomTypeDescriptor)this).GetProperties().TryGetDefault(GetType());
 	PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties() => new(Parameters.CachedValues.Select(p => new StrategyParamPropDescriptor(p)).ToArray());
-	PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes)
-	{
-		var allProperties = ((ICustomTypeDescriptor)this).GetProperties();
-
-		if (attributes == null || attributes.Length == 0)
-			return allProperties;
-
-		return new(allProperties.Typed().Where(p => p.Attributes.Cast<Attribute>().Any(a => attributes.Any(attr => attr.Match(a)))).ToArray());
-	}
+	PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes) => this.GetFilteredProperties(attributes);
 }
