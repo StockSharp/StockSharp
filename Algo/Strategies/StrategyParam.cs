@@ -164,7 +164,7 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	public string Category { get; set; }
 
 	/// <inheritdoc />
-	public IList<Attribute> Attributes => [];
+	public IList<Attribute> Attributes { get; } = [];
 
 	/// <summary>
 	/// Fill optimization parameters.
@@ -215,14 +215,15 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <param name="hidden">Is the parameter hidden in the editor.</param>
 	/// <returns><see cref="StrategyParam{T}"/></returns>
 	public StrategyParam<T> SetHidden(bool hidden = true)
-	{
-		if (hidden)
-			Attributes.Add(new BrowsableAttribute(false));
-		else
-			Attributes.RemoveWhere(a => a is BrowsableAttribute);
+		=> ModifyAttributes(hidden, () => new BrowsableAttribute(false));
 
-		return this;
-	}
+	/// <summary>
+	/// Set <see cref="BasicSettingAttribute"/>.
+	/// </summary>
+	/// <param name="basic">Value.</param>
+	/// <returns><see cref="StrategyParam{T}"/></returns>
+	public StrategyParam<T> SetBasic(bool basic = true)
+		=> ModifyAttributes(basic, () => new BasicSettingAttribute());
 
 	/// <summary>
 	/// Set <see cref="ReadOnlyAttribute"/>.
@@ -230,11 +231,15 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <param name="value">Value.</param>
 	/// <returns><see cref="StrategyParam{T}"/></returns>
 	public StrategyParam<T> SetReadOnly(bool value = true)
+		=> ModifyAttributes(value, () => new ReadOnlyAttribute(true));
+
+	private StrategyParam<T> ModifyAttributes<TAttr>(bool add, Func<TAttr> create)
+		where TAttr : Attribute
 	{
-		if (value)
-			Attributes.Add(new ReadOnlyAttribute(true));
+		if (add)
+			Attributes.Add(create());
 		else
-			Attributes.RemoveWhere(a => a is ReadOnlyAttribute);
+			Attributes.RemoveWhere(a => a is TAttr);
 
 		return this;
 	}

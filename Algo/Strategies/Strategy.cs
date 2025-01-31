@@ -357,21 +357,21 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		_id = Param(nameof(Id), base.Id).SetHidden().SetReadOnly();
 		_volume = Param<decimal>(nameof(Volume), 1).SetValidator(v => v > 0).SetDisplay(LocalizedStrings.Volume, LocalizedStrings.StrategyVolume, LocalizedStrings.General);
-		_name = Param(nameof(Name), new string(GetType().Name.Where(char.IsUpper).ToArray())).SetDisplay(LocalizedStrings.Name, LocalizedStrings.StrategyName, LocalizedStrings.General);
+		_name = Param(nameof(Name), new string(GetType().Name.Where(char.IsUpper).ToArray())).SetDisplay(LocalizedStrings.Name, LocalizedStrings.StrategyName, LocalizedStrings.General).SetBasic(false);
 		_disposeOnStop = Param(nameof(DisposeOnStop), false).SetCanOptimize(false).SetHidden();
 		_waitRulesOnStop = Param(nameof(WaitRulesOnStop), true).SetCanOptimize(false).SetHidden();
 		_cancelOrdersWhenStopping = Param(nameof(CancelOrdersWhenStopping), true).SetCanOptimize(false).SetHidden();
 		_waitAllTrades = Param<bool>(nameof(WaitAllTrades)).SetCanOptimize(false).SetHidden();
-		_commentMode = Param<StrategyCommentModes>(nameof(CommentMode)).SetDisplay(LocalizedStrings.Comment, LocalizedStrings.OrderComment, LocalizedStrings.General);
-		_ordersKeepTime = Param(nameof(OrdersKeepTime), TimeSpan.FromDays(1)).SetValidator(v => v >= TimeSpan.Zero).SetDisplay(LocalizedStrings.Orders, LocalizedStrings.OrdersKeepTime, LocalizedStrings.General);
-		_logLevel = Param(nameof(LogLevel), LogLevels.Inherit).SetDisplay(LocalizedStrings.LogLevel, LocalizedStrings.LogLevelKey, LocalizedStrings.Logging);
+		_commentMode = Param<StrategyCommentModes>(nameof(CommentMode)).SetDisplay(LocalizedStrings.Comment, LocalizedStrings.OrderComment, LocalizedStrings.General).SetBasic(false);
+		_ordersKeepTime = Param(nameof(OrdersKeepTime), TimeSpan.FromDays(1)).SetValidator(v => v >= TimeSpan.Zero).SetDisplay(LocalizedStrings.Orders, LocalizedStrings.OrdersKeepTime, LocalizedStrings.General).SetBasic(false);
+		_logLevel = Param(nameof(LogLevel), LogLevels.Inherit).SetDisplay(LocalizedStrings.LogLevel, LocalizedStrings.LogLevelKey, LocalizedStrings.Logging).SetBasic(false);
 		_stopOnChildStrategyErrors = Param(nameof(StopOnChildStrategyErrors), false).SetCanOptimize(false).SetHidden();
 		_restoreChildOrders = Param(nameof(RestoreChildOrders), false).SetCanOptimize(false).SetHidden();
 		_tradingMode = Param(nameof(TradingMode), StrategyTradingModes.Full).SetDisplay(LocalizedStrings.Trading, LocalizedStrings.AllowTrading, LocalizedStrings.General);
 		_unsubscribeOnStop = Param(nameof(UnsubscribeOnStop), true).SetCanOptimize(false).SetHidden();
-		_workingTime = Param(nameof(WorkingTime), new WorkingTime()).NotNull().SetDisplay(LocalizedStrings.WorkingTime, LocalizedStrings.WorkingHours, LocalizedStrings.General);
+		_workingTime = Param(nameof(WorkingTime), new WorkingTime()).NotNull().SetDisplay(LocalizedStrings.WorkingTime, LocalizedStrings.WorkingHours, LocalizedStrings.General).SetBasic(false);
 		_isOnlineStateIncludesChildren = Param(nameof(IsOnlineStateIncludesChildren), true).SetCanOptimize(false).SetHidden();
-		_historySize = Param<TimeSpan?>(nameof(HistorySize)).SetValidator(v => v is null || v >= TimeSpan.Zero).SetDisplay(LocalizedStrings.DaysHistory, LocalizedStrings.DaysHistoryDesc, LocalizedStrings.Settings);
+		_historySize = Param<TimeSpan?>(nameof(HistorySize)).SetValidator(v => v is null || v >= TimeSpan.Zero).SetDisplay(LocalizedStrings.DaysHistory, LocalizedStrings.DaysHistoryDesc, LocalizedStrings.General).SetBasic(false);
 
 		_systemParams =
 		[
@@ -380,7 +380,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			_waitRulesOnStop,
 			_cancelOrdersWhenStopping,
 			_waitAllTrades,
-			_ordersKeepTime,
 			_ordersKeepTime,
 			_stopOnChildStrategyErrors,
 			_restoreChildOrders,
@@ -811,7 +810,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// <param name="initialValue">The initial value.</param>
 	/// <returns>The strategy parameter.</returns>
 	public StrategyParam<T> Param<T>(string id, string name, T initialValue = default)
-		=> Param(new StrategyParam<T>(id, name, initialValue));
+		=> Param(new StrategyParam<T>(id, name, initialValue)).SetBasic(true);
 
 	/// <summary>
 	/// <see cref="Parameters"/> change event.
@@ -3006,7 +3005,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// History to initialize the strategy on Live trading.
 	/// </summary>
 	[Display(ResourceType = typeof(LocalizedStrings),
-		GroupName = LocalizedStrings.SettingsKey,
+		GroupName = LocalizedStrings.GeneralKey,
 		Name = LocalizedStrings.DaysHistoryKey,
 		Description = LocalizedStrings.DaysHistoryDescKey,
 		Order = 20)]
