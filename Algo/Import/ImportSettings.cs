@@ -34,6 +34,7 @@ public class ImportSettings : NotifiableObject, IPersistable
 		Description = LocalizedStrings.DataTypeKey,
 		GroupName = LocalizedStrings.CommonKey,
 		Order = 0)]
+	[BasicSetting]
 	public DataType DataType
 	{
 		get => _dataType;
@@ -67,6 +68,7 @@ public class ImportSettings : NotifiableObject, IPersistable
 		GroupName = LocalizedStrings.CommonKey,
 		Order = 1)]
 	[Editor(typeof(IFileBrowserEditor), typeof(IFileBrowserEditor))]
+	[BasicSetting]
 	public string FileName
 	{
 		get => _fileName;
@@ -89,6 +91,7 @@ public class ImportSettings : NotifiableObject, IPersistable
 		GroupName = LocalizedStrings.CommonKey,
 		Order = 2)]
 	[Editor(typeof(IFolderBrowserEditor), typeof(IFolderBrowserEditor))]
+	[BasicSetting]
 	public string Directory
 	{
 		get => _directory;
@@ -155,6 +158,7 @@ public class ImportSettings : NotifiableObject, IPersistable
 		Description = LocalizedStrings.ColumnSeparatorDescKey,
 		GroupName = LocalizedStrings.CommonKey,
 		Order = 5)]
+	[BasicSetting]
 	public string ColumnSeparator
 	{
 		get => _columnSeparator;
@@ -179,6 +183,7 @@ public class ImportSettings : NotifiableObject, IPersistable
 		Description = LocalizedStrings.LineSeparatorKey,
 		GroupName = LocalizedStrings.CommonKey,
 		Order = 6)]
+	[BasicSetting]
 	public string LineSeparator
 	{
 		get => _lineSeparator;
@@ -203,6 +208,7 @@ public class ImportSettings : NotifiableObject, IPersistable
 		Description = LocalizedStrings.SkipLinesDescKey,
 		GroupName = LocalizedStrings.CommonKey,
 		Order = 6)]
+	[BasicSetting]
 	public int SkipFromHeader
 	{
 		get => _skipFromHeader;
@@ -227,6 +233,7 @@ public class ImportSettings : NotifiableObject, IPersistable
 		Description = LocalizedStrings.TimeZoneKey + LocalizedStrings.Dot,
 		GroupName = LocalizedStrings.CommonKey,
 		Order = 7)]
+	[BasicSetting]
 	public TimeZoneInfo TimeZone
 	{
 		get => _timeZone;

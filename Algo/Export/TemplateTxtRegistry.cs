@@ -33,6 +33,7 @@ public class TemplateTxtRegistry : IPersistable
 			Description = LocalizedStrings.TemplateTxtTickKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 1)]
+	[BasicSetting]
 	public string TemplateTxtTick { get; set; } = "{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{TradeId};{TradePrice};{TradeVolume};{OriginSide}";
 
 	/// <summary>
@@ -44,6 +45,7 @@ public class TemplateTxtRegistry : IPersistable
 			Description = LocalizedStrings.TemplateTxtCandleKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 2)]
+	[BasicSetting]
 	public string TemplateTxtCandle { get; set; } = "{OpenTime:default:yyyyMMdd};{OpenTime:default:HH:mm:ss};{OpenPrice};{HighPrice};{LowPrice};{ClosePrice};{TotalVolume}";
 
 	/// <summary>
@@ -55,6 +57,7 @@ public class TemplateTxtRegistry : IPersistable
 			Description = LocalizedStrings.TemplateTxtLevel1Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 3)]
+	[BasicSetting]
 	public string TemplateTxtLevel1 { get; set; } = "{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{Changes:{BestBidPrice};{BestBidVolume};{BestAskPrice};{BestAskVolume};{LastTradeTime};{LastTradePrice};{LastTradeVolume}}";
 
 	/// <summary>
@@ -155,7 +158,6 @@ public class TemplateTxtRegistry : IPersistable
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 11)]
 	public string TemplateTxtPositionChange { get; set; } = "{SecurityId.SecurityCode};{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{Changes:{CurrentValue};{BlockedValue};{RealizedPnL};{UnrealizedPnL};{AveragePrice};{Commission}}";
-
 
 	/// <summary>
 	/// Do not show again.
