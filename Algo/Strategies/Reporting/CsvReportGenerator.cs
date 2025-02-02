@@ -56,7 +56,7 @@ public class CsvReportGenerator : BaseReportGenerator
 
 		var parameters = strategy.Parameters.CachedValues;
 		WriteValues(LocalizedStrings.Parameters);
-		WriteValues(parameters.Select(p => (object)p.Name).ToArray());
+		WriteValues(parameters.Select(p => (object)p.GetName()).ToArray());
 		WriteValues(parameters.Select(p => p.Value is TimeSpan ts ? ts.Format() : p.Value).ToArray());
 
 		var statParameters = strategy.StatisticManager.Parameters;

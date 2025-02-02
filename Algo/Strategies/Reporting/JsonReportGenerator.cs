@@ -52,7 +52,7 @@ public class JsonReportGenerator : BaseReportGenerator
 			if (p.Value is WorkingTime)
 				continue;
 
-			WriteElementString(p.Name, p.Value);
+			WriteElementString(p.GetName(), p.Value);
 		}
 
 		WriteElementString("totalWorkingTime", strategy.TotalWorkingTime);

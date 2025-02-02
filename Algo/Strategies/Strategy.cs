@@ -795,22 +795,11 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
 	/// </summary>
 	/// <typeparam name="T">The type of the parameter value.</typeparam>
-	/// <param name="name">Parameter name.</param>
-	/// <param name="initialValue">The initial value.</param>
-	/// <returns>The strategy parameter.</returns>
-	public StrategyParam<T> Param<T>(string name, T initialValue = default)
-		=> Param(name, name, initialValue);
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
-	/// </summary>
-	/// <typeparam name="T">The type of the parameter value.</typeparam>
 	/// <param name="id">Parameter identifier.</param>
-	/// <param name="name">Parameter name.</param>
 	/// <param name="initialValue">The initial value.</param>
 	/// <returns>The strategy parameter.</returns>
-	public StrategyParam<T> Param<T>(string id, string name, T initialValue = default)
-		=> Param(new StrategyParam<T>(id, name, initialValue)).SetBasic(true);
+	public StrategyParam<T> Param<T>(string id, T initialValue = default)
+		=> Param(new StrategyParam<T>(id, initialValue)).SetBasic(true);
 
 	/// <summary>
 	/// <see cref="Parameters"/> change event.
@@ -2749,7 +2738,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			// в настройках могут быть дополнительные параметры, которые будут добавлены позже
 			foreach (var s in parameters)
 			{
-				if (Parameters.TryGetValue(s.GetValue<string>(nameof(IStrategyParam.Id)) ?? s.GetValue<string>(nameof(IStrategyParam.Name)), out var param))
+				if (Parameters.TryGetValue(s.GetValue<string>(nameof(IStrategyParam.Id)), out var param))
 					param.Load(s);
 			}
 		}

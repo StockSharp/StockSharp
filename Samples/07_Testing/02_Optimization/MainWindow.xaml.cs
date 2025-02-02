@@ -222,9 +222,9 @@ public partial class MainWindow
 
 					return ((Strategy)strategy, new IStrategyParam[]
 					{
-						strategy.Parameters.GetByName(nameof(strategy.ShortSma)),
-						strategy.Parameters.GetByName(nameof(strategy.LongSma)),
-						strategy.Parameters.GetByName(nameof(strategy.CandleTimeFrame)),
+						strategy.Parameters[nameof(strategy.ShortSma)],
+						strategy.Parameters[nameof(strategy.LongSma)],
+						strategy.Parameters[nameof(strategy.CandleTimeFrame)],
 					});
 				});
 
@@ -249,12 +249,12 @@ public partial class MainWindow
 			go.Settings.Apply((GeneticSettings)GeneticSettings.SelectedObject);
 			go.Start(startTime, stopTime, strategy,
 			[
-				(strategy.Parameters.GetByName(nameof(strategy.ShortSma)), shortRange.min, shortRange.max, shortRange.step, null),
-				(strategy.Parameters.GetByName(nameof(strategy.LongSma)), longRange.min, longRange.max, longRange.step, null),
+				(strategy.Parameters[nameof(strategy.ShortSma)], shortRange.min, shortRange.max, shortRange.step, null),
+				(strategy.Parameters[nameof(strategy.LongSma)], longRange.min, longRange.max, longRange.step, null),
 
 				// Specifing time frame range as exact 2 values (Min and Max).
 				// In that case generic will select from them only instead of random from range.
-				(strategy.Parameters.GetByName(nameof(strategy.CandleTimeFrame)), null, null, tfRange.step, new[] { tfRange.min, tfRange.max }),
+				(strategy.Parameters[nameof(strategy.CandleTimeFrame)], null, null, tfRange.step, new[] { tfRange.min, tfRange.max }),
 			]);
 		}
 	}

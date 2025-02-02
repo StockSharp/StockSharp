@@ -51,18 +51,7 @@ public static class StrategyParamHelper
 		return param;
 	}
 
-	private static StrategyParam<T> CreateParam<T>(string id, string name, string description, string category)
-	{
-		return new StrategyParam<T>(
-			id,
-			name,
-			default
-		).SetDisplay(
-			name,
-			description,
-			category
-		);
-	}
+	private static StrategyParam<T> CreateParam<T>(string id) => new(id);
 
 	private static readonly MethodInfo _createParamMethod = typeof(StrategyParamHelper).GetMethod(nameof(CreateParam), BindingFlags.Static | BindingFlags.NonPublic);
 
@@ -71,12 +60,9 @@ public static class StrategyParamHelper
 	/// </summary>
 	/// <param name="type"><see cref="IStrategyParam.Type"/></param>
 	/// <param name="id"><see cref="IStrategyParam.Id"/></param>
-	/// <param name="name"><see cref="IStrategyParam.Name"/></param>
-	/// <param name="description"><see cref="IStrategyParam.Description"/></param>
-	/// <param name="category"><see cref="IStrategyParam.Category"/></param>
 	/// <returns><see cref="IStrategyParam"/></returns>
-	public static IStrategyParam CreateParam(Type type, string id, string name, string description, string category)
-		=> (IStrategyParam)_createParamMethod.Make(type).Invoke(null, [(object)id, name, description, category]);
+	public static IStrategyParam CreateParam(Type type, string id)
+		=> (IStrategyParam)_createParamMethod.Make(type).Invoke(null, [id]);
 
 	/// <summary>
 	/// Determines whether the parameter is read-only.
@@ -96,4 +82,17 @@ public static class StrategyParamHelper
 
 	private static IEnumerable<TAttribute> Attrs<TAttribute>(this IStrategyParam param)
 		=> param.CheckOnNull(nameof(param)).Attributes.OfType<TAttribute>();
+
+	/// <summary>
+	/// Get the parameter name.
+	/// </summary>
+	/// <param name="param"><see cref="IStrategyParam"/></param>
+	/// <returns>Display name.</returns>
+	public static string GetName(this IStrategyParam param)
+	{
+		if (param is null)
+			throw new ArgumentNullException(nameof(param));
+
+		return (param.Attributes.OfType<DisplayAttribute>().FirstOrDefault()?.Name).IsEmpty(param.Id);
+	}
 }

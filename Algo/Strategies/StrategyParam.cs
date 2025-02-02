@@ -11,24 +11,9 @@ public interface IStrategyParam : IPersistable, INotifyPropertyChanged
 	string Id { get; }
 
 	/// <summary>
-	/// Parameter name.
-	/// </summary>
-	string Name { get; }
-
-	/// <summary>
 	/// Attributes.
 	/// </summary>
 	IList<Attribute> Attributes { get; }
-
-	/// <summary>
-	/// Parameter description.
-	/// </summary>
-	string Description { get; }
-
-	/// <summary>
-	/// Parameter category.
-	/// </summary>
-	string Category { get; }
 
 	/// <summary>
 	/// The type of the parameter value.
@@ -72,28 +57,14 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <summary>
 	/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
 	/// </summary>
-	/// <param name="name">Parameter name.</param>
-	public StrategyParam(string name)
-		: this(name, name, default)
-	{
-	}
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
-	/// </summary>
 	/// <param name="id">Parameter identifier.</param>
-	/// <param name="name">Parameter name.</param>
 	/// <param name="initialValue">The initial value.</param>
-	public StrategyParam(string id, string name, T initialValue)
+	public StrategyParam(string id, T initialValue = default)
 	{
 		if (id.IsEmpty())
 			throw new ArgumentNullException(nameof(id));
 
-		if (name.IsEmpty())
-			throw new ArgumentNullException(nameof(name));
-
 		Id = id;
-		Name = name;
 		_value = initialValue;
 
 		CanOptimize = typeof(T).CanOptimize();
@@ -103,9 +74,6 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 
 	/// <inheritdoc />
 	public string Id { get; private set; }
-
-	/// <inheritdoc />
-	public string Name { get; private set; }
 
 	private T _value;
 
@@ -158,12 +126,6 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	public object OptimizeStep { get; set; }
 
 	/// <inheritdoc />
-	public string Description { get; set; }
-
-	/// <inheritdoc />
-	public string Category { get; set; }
-
-	/// <inheritdoc />
 	public IList<Attribute> Attributes { get; } = [];
 
 	/// <summary>
@@ -201,13 +163,12 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <param name="category">The category of the diagram element parameter.</param>
 	/// <returns><see cref="StrategyParam{T}"/></returns>
 	public StrategyParam<T> SetDisplay(string displayName, string description, string category)
-	{
-		Name = displayName;
-		Description = description;
-		Category = category;
-
-		return this;
-	}
+		=> ModifyAttributes(true, () => new DisplayAttribute
+		{
+			Name = displayName,
+			Description = description,
+			GroupName = category,
+		});
 
 	/// <summary>
 	/// Set <see cref="BrowsableAttribute"/>.
@@ -236,10 +197,10 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	private StrategyParam<T> ModifyAttributes<TAttr>(bool add, Func<TAttr> create)
 		where TAttr : Attribute
 	{
+		Attributes.RemoveWhere(a => a is TAttr);
+
 		if (add)
 			Attributes.Add(create());
-		else
-			Attributes.RemoveWhere(a => a is TAttr);
 
 		return this;
 	}
@@ -256,7 +217,6 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	public void Load(SettingsStorage storage)
 	{
 		Id = storage.GetValue<string>(nameof(Id));
-		Name = storage.GetValue<string>(nameof(Name));
 
 		try
 		{
@@ -281,7 +241,6 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	{
 		storage
 			.Set(nameof(Id), Id)
-			.Set(nameof(Name), Name)
 			.Set(nameof(Value), Value)
 			.Set(nameof(CanOptimize), CanOptimize)
 			.Set(nameof(OptimizeFrom), OptimizeFrom?.ToStorage())
@@ -291,5 +250,5 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	}
 
 	/// <inheritdoc />
-	public override string ToString() => $"{Name}={Value}";
+	public override string ToString() => $"{this.GetName()}={Value}";
 }

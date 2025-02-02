@@ -50,7 +50,7 @@ public class XmlReportGenerator : BaseReportGenerator
 
 			WriteStartElement("parameter");
 
-			WriteAttributeString("name", p.Name);
+			WriteAttributeString("name", p.GetName());
 			WriteAttributeString("value", p.Value);
 
 			WriteEndElement();

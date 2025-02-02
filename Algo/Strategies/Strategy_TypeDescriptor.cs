@@ -7,9 +7,6 @@ partial class Strategy
 		public override Type ComponentType => typeof(Strategy);
 		public override bool IsReadOnly => false;
 		public override Type PropertyType => param.Type;
-		public override string DisplayName => param.Name;
-		public override string Description => param.Description;
-		public override string Category => param.Category;
 
 		public override object GetValue(object component) => param.Value;
 		public override void SetValue(object component, object value) => param.Value = value;

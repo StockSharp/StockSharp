@@ -29,26 +29,6 @@ public class StrategyParameterDictionary : CachedSynchronizedDictionary<string, 
 	}
 
 	/// <summary>
-	/// Get parameter by the specified name.
-	/// </summary>
-	/// <param name="name"><see cref="IStrategyParam.Name"/></param>
-	/// <param name="param"><see cref="IStrategyParam"/> or <see langword="null"/> if parameter not exist.</param>
-	/// <returns><see langword="true"/> if parameter exist.</returns>
-	public bool TryGetByName(string name, out IStrategyParam param)
-	{
-		param = CachedValues.FirstOrDefault(p => p.Name == name) ?? (name == _secParam.Name ? _secParam : null);
-		return param is not null;
-	}
-
-	/// <summary>
-	/// Try get parameter by the specified <see cref="IStrategyParam.Name"/>.
-	/// </summary>
-	/// <param name="name"><see cref="IStrategyParam.Name"/></param>
-	/// <returns><see cref="IStrategyParam"/></returns>
-	public IStrategyParam GetByName(string name)
-		=> TryGetByName(name, out var param) ? param : throw new ArgumentException($"Parameter {name} doesn't exist.");
-
-	/// <summary>
 	/// Try get parameter by the specified <see cref="IStrategyParam.Id"/>.
 	/// </summary>
 	/// <param name="id"><see cref="IStrategyParam.Id"/></param>
@@ -58,7 +38,7 @@ public class StrategyParameterDictionary : CachedSynchronizedDictionary<string, 
 	{
 		if (TryGetValue(id, out param))
 			return true;
-		else if (id == _secParam.Name)
+		else if (id == _secParam.Id)
 		{
 			param = _secParam;
 			return true;
@@ -126,6 +106,6 @@ public class StrategyParameterDictionary : CachedSynchronizedDictionary<string, 
 	private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
 	{
 		var p = (IStrategyParam)sender;
-		_strategy.RaiseParametersChanged(p.Name);
+		_strategy.RaiseParametersChanged(p.Id);
 	}
 }

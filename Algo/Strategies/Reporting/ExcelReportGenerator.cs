@@ -126,7 +126,7 @@ public class ExcelReportGenerator : BaseReportGenerator
 				value = dec.Round(Decimals);
 
 			worker
-				.SetCell(0, rowIndex, strategyParam.Name)
+				.SetCell(0, rowIndex, strategyParam.GetName())
 				.SetCell(1, rowIndex, value);
 
 			rowIndex++;

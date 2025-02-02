@@ -280,10 +280,8 @@ public class GeneticOptimizer : BaseOptimizer
 			if (values?.Any() == true)
 				return (param, () => RandomGen.GetElement(values));
 
-			var name = param.Name;
-
-			var from = t.from ?? throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(name, LocalizedStrings.From));
-			var to = t.to ?? throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(name, LocalizedStrings.Until));
+			var from = t.from ?? throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(param.Id, LocalizedStrings.From));
+			var to = t.to ?? throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(param.Id, LocalizedStrings.Until));
 			var step = t.step;
 
 			Func<object> getValue;
@@ -292,7 +290,7 @@ public class GeneticOptimizer : BaseOptimizer
 			type = type.IsNullable() ? type.GetUnderlyingType() : type;
 
 			if (step is null && type != typeof(bool))
-				throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(name, LocalizedStrings.Step));
+				throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(param.Id, LocalizedStrings.Step));
 
 			if (type == typeof(Unit))
 			{
