@@ -27,6 +27,7 @@ public class Trade : Cloneable<Trade>, ITickTradeMessage
 		Description = LocalizedStrings.TradeIdKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 0)]
+	[BasicSetting]
 	public long? Id { get; set; }
 
 	/// <inheritdoc />
@@ -42,6 +43,7 @@ public class Trade : Cloneable<Trade>, ITickTradeMessage
 	private SecurityId? _securityId;
 
 	/// <inheritdoc />
+	[BasicSetting]
 	SecurityId ISecurityIdMessage.SecurityId
 	{
 		get => _securityId ??= Security?.Id.ToSecurityId() ?? default;
@@ -63,6 +65,7 @@ public class Trade : Cloneable<Trade>, ITickTradeMessage
 		Description = LocalizedStrings.TradeTimeKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 3)]
+	[BasicSetting]
 	public DateTimeOffset ServerTime { get; set; }
 
 	/// <inheritdoc />
@@ -92,6 +95,7 @@ public class Trade : Cloneable<Trade>, ITickTradeMessage
 		Description = LocalizedStrings.TradeVolumeDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 4)]
+	[BasicSetting]
 	public decimal Volume { get; set; }
 
 	/// <inheritdoc />
@@ -102,6 +106,7 @@ public class Trade : Cloneable<Trade>, ITickTradeMessage
 		Description = LocalizedStrings.TradePriceDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 3)]
+	[BasicSetting]
 	public decimal Price { get; set; }
 
 	/// <inheritdoc />
@@ -112,6 +117,7 @@ public class Trade : Cloneable<Trade>, ITickTradeMessage
 		Description = LocalizedStrings.DirectionDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 5)]
+	[BasicSetting]
 	public Sides? OriginSide { get; set; }
 
 	/// <inheritdoc />

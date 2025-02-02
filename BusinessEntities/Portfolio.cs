@@ -32,6 +32,7 @@ public class Portfolio : Position
 		Name = LocalizedStrings.NameKey,
 		Description = LocalizedStrings.PortfolioNameKey,
 		GroupName = LocalizedStrings.GeneralKey)]
+	[BasicSetting]
 	public string Name
 	{
 		get => _name;

@@ -20,6 +20,7 @@ public class News : NotifiableObject
 		Name = LocalizedStrings.IdKey,
 		Description = LocalizedStrings.NewsIdKey,
 		GroupName = LocalizedStrings.GeneralKey)]
+	[BasicSetting]
 	public string Id { get; set; }
 
 	/// <summary>
@@ -64,6 +65,7 @@ public class News : NotifiableObject
 		Name = LocalizedStrings.HeaderKey,
 		Description = LocalizedStrings.HeaderKey + LocalizedStrings.Dot,
 		GroupName = LocalizedStrings.GeneralKey)]
+	[BasicSetting]
 	public string Headline { get; set; }
 
 	private string _story;
@@ -96,6 +98,7 @@ public class News : NotifiableObject
 		Name = LocalizedStrings.TimeKey,
 		Description = LocalizedStrings.NewsTimeKey,
 		GroupName = LocalizedStrings.GeneralKey)]
+	[BasicSetting]
 	public DateTimeOffset ServerTime { get; set; }
 
 	/// <summary>

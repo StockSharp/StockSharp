@@ -33,6 +33,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		Description = LocalizedStrings.SecurityIdKey + LocalizedStrings.Dot,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 0)]
+	[BasicSetting]
 	public string Id
 	{
 		get => _id;
@@ -59,6 +60,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 1)]
 	[Required(AllowEmptyStrings = false)]
+	[BasicSetting]
 	public virtual string Code
 	{
 		get => _code;
@@ -85,6 +87,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 2)]
 	[Required]
+	[BasicSetting]
 	public virtual ExchangeBoard Board
 	{
 		get => _board;
@@ -110,6 +113,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		Description = LocalizedStrings.SecurityTypeDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 3)]
+	[BasicSetting]
 	public virtual SecurityTypes? Type
 	{
 		get => _type;
@@ -259,6 +263,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		Order = 9)]
 	//[Nullable]
 	[NullOrMoreZero]
+	[BasicSetting]
 	public decimal? PriceStep
 	{
 		get => _priceStep;
@@ -288,6 +293,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 10)]
 	[NullOrMoreZero]
+	[BasicSetting]
 	public decimal? VolumeStep
 	{
 		get => _volumeStep;
@@ -317,6 +323,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 10)]
 	//[GreaterThanZero]
+	[BasicSetting]
 	public decimal? MinVolume
 	{
 		get => _minVolume;
@@ -374,6 +381,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		Description = LocalizedStrings.LotVolumeKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 12)]
+	[BasicSetting]
 	public decimal? Multiplier
 	{
 		get => _multiplier;
@@ -403,6 +411,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 13)]
 	[NullOrNotNegative]
+	[BasicSetting]
 	public int? Decimals
 	{
 		get => _decimals;
@@ -431,6 +440,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		Description = LocalizedStrings.ExpiryDateDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 14)]
+	[BasicSetting]
 	public DateTimeOffset? ExpiryDate
 	{
 		get => _expiryDate;
@@ -456,6 +466,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		Description = LocalizedStrings.SettlementDateForSecurityKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 15)]
+	[BasicSetting]
 	public DateTimeOffset? SettlementDate
 	{
 		get => _settlementDate;

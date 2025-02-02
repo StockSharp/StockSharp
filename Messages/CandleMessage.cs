@@ -43,6 +43,7 @@ public abstract class CandleMessage : Message, ISubscriptionIdMessage, ICandleMe
 		Name = LocalizedStrings.SecurityIdKey,
 		Description = LocalizedStrings.SecurityIdKey,
 		GroupName = LocalizedStrings.GeneralKey)]
+	[BasicSetting]
 	public SecurityId SecurityId { get; set; }
 
 	/// <inheritdoc />
@@ -52,6 +53,7 @@ public abstract class CandleMessage : Message, ISubscriptionIdMessage, ICandleMe
 		Name = LocalizedStrings.CandleOpenTimeKey,
 		Description = LocalizedStrings.CandleOpenTimeKey,
 		GroupName = LocalizedStrings.GeneralKey)]
+	[BasicSetting]
 	public DateTimeOffset OpenTime { get; set; }
 
 	/// <inheritdoc />
@@ -88,6 +90,7 @@ public abstract class CandleMessage : Message, ISubscriptionIdMessage, ICandleMe
 		Name = LocalizedStrings.OpenPriceKey,
 		Description = LocalizedStrings.CandleOpenPriceKey,
 		GroupName = LocalizedStrings.GeneralKey)]
+	[BasicSetting]
 	public decimal OpenPrice { get; set; }
 
 	/// <inheritdoc />
@@ -97,6 +100,7 @@ public abstract class CandleMessage : Message, ISubscriptionIdMessage, ICandleMe
 		Name = LocalizedStrings.HighestPriceKey,
 		Description = LocalizedStrings.HighPriceOfCandleKey,
 		GroupName = LocalizedStrings.GeneralKey)]
+	[BasicSetting]
 	public decimal HighPrice { get; set; }
 
 	/// <inheritdoc />
@@ -106,6 +110,7 @@ public abstract class CandleMessage : Message, ISubscriptionIdMessage, ICandleMe
 		Name = LocalizedStrings.LowestPriceKey,
 		Description = LocalizedStrings.LowPriceOfCandleKey,
 		GroupName = LocalizedStrings.GeneralKey)]
+	[BasicSetting]
 	public decimal LowPrice { get; set; }
 
 	/// <inheritdoc />
@@ -115,6 +120,7 @@ public abstract class CandleMessage : Message, ISubscriptionIdMessage, ICandleMe
 		Name = LocalizedStrings.ClosingPriceKey,
 		Description = LocalizedStrings.ClosePriceOfCandleKey,
 		GroupName = LocalizedStrings.GeneralKey)]
+	[BasicSetting]
 	public decimal ClosePrice { get; set; }
 
 	/// <inheritdoc />
@@ -156,6 +162,7 @@ public abstract class CandleMessage : Message, ISubscriptionIdMessage, ICandleMe
 		Name = LocalizedStrings.VolumeKey,
 		Description = LocalizedStrings.TotalCandleVolumeKey,
 		GroupName = LocalizedStrings.GeneralKey)]
+	[BasicSetting]
 	public decimal TotalVolume { get; set; }
 
 	/// <inheritdoc />

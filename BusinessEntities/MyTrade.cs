@@ -29,6 +29,7 @@ public class MyTrade : NotifiableObject
 		Description = LocalizedStrings.OwnTradeOrderKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 0)]
+	[BasicSetting]
 	public Order Order { get; set; }
 
 	/// <summary>
@@ -54,13 +55,19 @@ public class MyTrade : NotifiableObject
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.CommissionKey,
 		Description = LocalizedStrings.CommissionDescKey,
-		GroupName = LocalizedStrings.StatisticsKey,
-		Order = 0)]
+		GroupName = LocalizedStrings.CommissionKey,
+		Order = 100)]
 	public decimal? Commission { get; set; }
 
 	/// <summary>
 	/// Commission currency. Can be <see langword="null"/>.
 	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.CurrencyKey,
+		Description = LocalizedStrings.CurrencyKey + LocalizedStrings.Dot,
+		GroupName = LocalizedStrings.CommissionKey,
+		Order = 101)]
 	public string CommissionCurrency { get; set; }
 
 	/// <summary>
@@ -127,6 +134,12 @@ public class MyTrade : NotifiableObject
 	/// Yield.
 	/// </summary>
 	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.YieldKey,
+		Description = LocalizedStrings.YieldKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 4)]
 	public decimal? Yield { get; set; }
 
 	/// <inheritdoc />

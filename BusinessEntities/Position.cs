@@ -20,6 +20,7 @@ public class Position : NotifiableObject, ILocalTimeMessage, IServerTimeMessage
 	/// <summary>
 	/// Portfolio name.
 	/// </summary>
+	[Browsable(false)]
 	public virtual string PortfolioName => Portfolio?.Name;
 
 	/// <summary>
@@ -68,6 +69,7 @@ public class Position : NotifiableObject, ILocalTimeMessage, IServerTimeMessage
 		GroupName = LocalizedStrings.StatisticsKey)]
 	//[Nullable]
 	//[Browsable(false)]
+	[BasicSetting]
 	public decimal? CurrentValue
 	{
 		get => _currentValue;

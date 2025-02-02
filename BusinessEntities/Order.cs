@@ -20,6 +20,7 @@ public class Order : NotifiableObject, IOrderMessage
 
 	private SecurityId? _securityId;
 
+	[BasicSetting]
 	SecurityId ISecurityIdMessage.SecurityId
 	{
 		get => _securityId ??= Security?.Id.ToSecurityId() ?? default;
@@ -111,7 +112,9 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.IdentifierKey,
 		Description = LocalizedStrings.IdStringKey + LocalizedStrings.Dot,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 0)]
+	[BasicSetting]
 	public long? Id
 	{
 		get => _id;
@@ -135,7 +138,8 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.IdStringKey,
 		Description = LocalizedStrings.OrderIdStringDescKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 1)]
 	public string StringId
 	{
 		get => _stringId;
@@ -156,7 +160,8 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.OrderBoardIdKey,
 		Description = LocalizedStrings.OrderBoardIdDescKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 2)]
 	public string BoardId
 	{
 		get => _boardId;
@@ -177,7 +182,8 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.RegTimeKey,
 		Description = LocalizedStrings.RegTimeDescKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 3)]
 	public DateTimeOffset Time
 	{
 		get => _time;
@@ -199,7 +205,8 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.TransactionKey,
 		Description = LocalizedStrings.TransactionIdKey + LocalizedStrings.Dot,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 4)]
 	public long TransactionId { get; set; }
 
 	/// <summary>
@@ -210,7 +217,8 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.SecurityKey,
 		Description = LocalizedStrings.OrderSecurityKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 5)]
 	public Security Security { get; set; }
 
 	private OrderStates _state;
@@ -223,7 +231,9 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.StateKey,
 		Description = LocalizedStrings.OrderStateDescKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 6)]
+	[BasicSetting]
 	public OrderStates State
 	{
 		get => _state;
@@ -245,7 +255,8 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.PortfolioKey,
 		Description = LocalizedStrings.OrderPortfolioKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 7)]
 	public Portfolio Portfolio { get; set; }
 
 	private DateTimeOffset _serverTime;
@@ -256,7 +267,9 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ChangedKey,
 		Description = LocalizedStrings.OrderLastChangeTimeKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 8)]
+	[BasicSetting]
 	public DateTimeOffset ServerTime
 	{
 		get => _serverTime;
@@ -280,7 +293,8 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.CancelKey,
 		Description = LocalizedStrings.CancelledTimeKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 9)]
 	public DateTimeOffset? CancelledTime
 	{
 		get => _cancelledTime;
@@ -304,7 +318,8 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.MatchKey,
 		Description = LocalizedStrings.MatchedTimeKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 10)]
 	public DateTimeOffset? MatchedTime
 	{
 		get => _matchedTime;
@@ -339,7 +354,8 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.LocalTimeKey,
 		Description = LocalizedStrings.LocalTimeDescKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 11)]
 	public DateTimeOffset LocalTime
 	{
 		get => _localTime;
@@ -361,7 +377,9 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.PriceKey,
 		Description = LocalizedStrings.OrderPriceKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 12)]
+	[BasicSetting]
 	public decimal Price { get; set; }
 
 	/// <summary>
@@ -372,7 +390,9 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.VolumeKey,
 		Description = LocalizedStrings.OrderVolumeKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 13)]
+	[BasicSetting]
 	public decimal Volume { get; set; }
 
 	/// <summary>
@@ -383,7 +403,8 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.VisibleVolumeKey,
 		Description = LocalizedStrings.VisibleVolumeDescKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 14)]
 	public decimal? VisibleVolume { get; set; }
 
 	/// <inheritdoc/>
@@ -392,7 +413,9 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.DirectionKey,
 		Description = LocalizedStrings.OrderSideDescKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 14)]
+	[BasicSetting]
 	public Sides Side { get; set; }
 
 	/// <summary>
@@ -416,7 +439,9 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.BalanceKey,
 		Description = LocalizedStrings.OrderBalanceKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 15)]
+	[BasicSetting]
 	public decimal Balance
 	{
 		get => _balance;
@@ -460,7 +485,8 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.SystemKey,
 		Description = LocalizedStrings.IsSystemTradeKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 16)]
 	public bool? IsSystem
 	{
 		get => _isSystem;
@@ -482,7 +508,9 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.CommentKey,
 		Description = LocalizedStrings.OrderCommentKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 17)]
+	[BasicSetting]
 	public string Comment { get; set; }
 
 	/// <summary>
@@ -493,7 +521,9 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.OrderTypeKey,
 		Description = LocalizedStrings.OrderTypeDescKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 18)]
+	[BasicSetting]
 	public OrderTypes? Type { get; set; }
 
 	private DateTimeOffset? _expiryDate;
@@ -509,7 +539,9 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ExpirationKey,
 		Description = LocalizedStrings.OrderExpirationTimeKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 19)]
+	[BasicSetting]
 	public DateTimeOffset? ExpiryDate
 	{
 		get => _expiryDate;
@@ -531,7 +563,8 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ConditionKey,
 		Description = LocalizedStrings.OrderConditionDescKey,
-		GroupName = LocalizedStrings.ConditionalOrderKey)]
+		GroupName = LocalizedStrings.ConditionalOrderKey,
+		Order = 20)]
 	public OrderCondition Condition { get; set; }
 
 	/// <summary>
@@ -541,7 +574,9 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.TimeInForceKey,
 		Description = LocalizedStrings.LimitOrderTifKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 21)]
+	[BasicSetting]
 	public TimeInForce? TimeInForce { get; set; }
 
 	private Order _derivedOrder;
@@ -556,6 +591,7 @@ public class Order : NotifiableObject, IOrderMessage
 		Name = LocalizedStrings.LinkedOrderKey,
 		Description = LocalizedStrings.LinkedOrderDescKey,
 		GroupName = LocalizedStrings.ConditionalOrderKey)]
+	[Browsable(false)]
 	[Obsolete("No longer used.")]
 	public Order DerivedOrder
 	{
@@ -578,12 +614,19 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.CommissionKey,
 		Description = LocalizedStrings.CommissionDescKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.CommissionKey,
+		Order = 100)]
 	public decimal? Commission { get; set; }
 
 	/// <summary>
 	/// Commission currency. Can be <see langword="null"/>.
 	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.CurrencyKey,
+		Description = LocalizedStrings.CurrencyKey + LocalizedStrings.Dot,
+		GroupName = LocalizedStrings.CommissionKey,
+		Order = 101)]
 	public string CommissionCurrency { get; set; }
 
 	/// <summary>
@@ -594,13 +637,20 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.UserIdKey,
 		Description = LocalizedStrings.UserOrderIdKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 23)]
 	public string UserOrderId { get; set; }
 
 	/// <summary>
 	/// Strategy id.
 	/// </summary>
 	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.StrategyKey,
+		Description = LocalizedStrings.IdentifierKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 24)]
 	public string StrategyId { get; set; }
 
 	/// <summary>
@@ -611,7 +661,8 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.BrokerKey,
 		Description = LocalizedStrings.BrokerCodeKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 24)]
 	public string BrokerCode { get; set; }
 
 	/// <summary>
@@ -622,7 +673,8 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ClientCodeKey,
 		Description = LocalizedStrings.ClientCodeDescKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 25)]
 	public string ClientCode { get; set; }
 
 	/// <summary>
@@ -633,7 +685,8 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.CurrencyKey,
 		Description = LocalizedStrings.CurrencyDescKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 26)]
 	public CurrencyTypes? Currency { get; set; }
 
 	/// <summary>
@@ -644,7 +697,8 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.MarketMakerKey,
 		Description = LocalizedStrings.MarketMakerOrderKey + LocalizedStrings.Dot,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 27)]
 	public bool? IsMarketMaker { get; set; }
 
 	/// <summary>
@@ -655,7 +709,8 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.MarginKey,
 		Description = LocalizedStrings.MarginModeKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 28)]
 	public MarginModes? MarginMode { get; set; }
 
 	/// <summary>
@@ -666,7 +721,8 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.SlippageKey,
 		Description = LocalizedStrings.SlippageTradeKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 29)]
 	public decimal? Slippage { get; set; }
 
 	/// <summary>
@@ -677,37 +733,68 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ManualKey,
 		Description = LocalizedStrings.IsOrderManualKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 30)]
 	public bool? IsManual { get; set; }
 
 	/// <summary>
 	/// Average execution price.
 	/// </summary>
 	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.AveragePriceKey,
+		Description = LocalizedStrings.AveragePriceDescKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 31)]
 	public decimal? AveragePrice { get; set; }
 
 	/// <summary>
 	/// Yield.
 	/// </summary>
 	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.YieldKey,
+		Description = LocalizedStrings.YieldKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 32)]
 	public decimal? Yield { get; set; }
 
 	/// <summary>
 	/// Minimum quantity of an order to be executed.
 	/// </summary>
 	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.MinVolumeKey,
+		Description = LocalizedStrings.MinVolumeDescKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 33)]
 	public decimal? MinVolume { get; set; }
 
 	/// <summary>
 	/// Position effect.
 	/// </summary>
 	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.PositionEffectKey,
+		Description = LocalizedStrings.PositionEffectDescKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 34)]
 	public OrderPositionEffects? PositionEffect { get; set; }
 
 	/// <summary>
 	/// Post-only order.
 	/// </summary>
 	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.PostOnlyKey,
+		Description = LocalizedStrings.PostOnlyOrderKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 35)]
 	public bool? PostOnly { get; set; }
 
 	/// <summary>
@@ -715,6 +802,12 @@ public class Order : NotifiableObject, IOrderMessage
 	/// </summary>
 	/// <remarks>Zero means no information.</remarks>
 	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.SeqNumKey,
+		Description = LocalizedStrings.SequenceNumberKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 36)]
 	public long SeqNum { get; set; }
 
 	/// <summary>
@@ -725,7 +818,8 @@ public class Order : NotifiableObject, IOrderMessage
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.LeverageKey,
 		Description = LocalizedStrings.MarginLeverageKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 37)]
 	public int? Leverage { get; set; }
 
 	OrderStates? IOrderMessage.State => State;
