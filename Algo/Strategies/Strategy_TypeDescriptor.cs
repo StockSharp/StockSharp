@@ -2,7 +2,7 @@
 
 partial class Strategy
 {
-	private class StrategyParamPropDescriptor(IStrategyParam param) : PropertyDescriptor(param.Id, [.. param.Attributes])
+	private class StrategyParamPropDescriptor(IStrategyParam param) : NamedPropertyDescriptor(param.Id, [.. param.Attributes])
 	{
 		public override Type ComponentType => typeof(Strategy);
 		public override bool IsReadOnly => false;
@@ -14,8 +14,6 @@ partial class Strategy
 		public override bool CanResetValue(object component) => false;
 		public override void ResetValue(object component) => throw new NotSupportedException();
 		public override bool ShouldSerializeValue(object component) => false;
-
-		public override string ToString() => DisplayName;
 	}
 
 	AttributeCollection ICustomTypeDescriptor.GetAttributes() => TypeDescriptor.GetAttributes(this, true);

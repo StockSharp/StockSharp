@@ -65,25 +65,6 @@ public static class StrategyParamHelper
 		=> (IStrategyParam)_createParamMethod.Make(type).Invoke(null, [id]);
 
 	/// <summary>
-	/// Determines whether the parameter is read-only.
-	/// </summary>
-	/// <param name="param"><see cref="IStrategyParam"/></param>
-	/// <returns>Check result.</returns>
-	public static bool IsReadOnly(this IStrategyParam param)
-		=> param.Attrs<ReadOnlyAttribute>().Any(a => a.IsReadOnly);
-
-	/// <summary>
-	/// Determines whether the parameter is browsable.
-	/// </summary>
-	/// <param name="param"><see cref="IStrategyParam"/></param>
-	/// <returns>Check result.</returns>
-	public static bool IsBrowsable(this IStrategyParam param)
-		=> param.Attrs<BrowsableAttribute>().All(a => a.Browsable);
-
-	private static IEnumerable<TAttribute> Attrs<TAttribute>(this IStrategyParam param)
-		=> param.CheckOnNull(nameof(param)).Attributes.OfType<TAttribute>();
-
-	/// <summary>
 	/// Get the parameter name.
 	/// </summary>
 	/// <param name="param"><see cref="IStrategyParam"/></param>
@@ -93,6 +74,6 @@ public static class StrategyParamHelper
 		if (param is null)
 			throw new ArgumentNullException(nameof(param));
 
-		return (param.Attributes.OfType<DisplayAttribute>().FirstOrDefault()?.Name).IsEmpty(param.Id);
+		return param.GetDisplayName().IsEmpty(param.Id);
 	}
 }

@@ -3,17 +3,12 @@ namespace StockSharp.Algo.Strategies;
 /// <summary>
 /// The strategy parameter.
 /// </summary>
-public interface IStrategyParam : IPersistable, INotifyPropertyChanged
+public interface IStrategyParam : IPersistable, INotifyPropertyChanged, IAttributesEntity
 {
 	/// <summary>
 	/// Parameter identifier.
 	/// </summary>
 	string Id { get; }
-
-	/// <summary>
-	/// Attributes.
-	/// </summary>
-	IList<Attribute> Attributes { get; }
 
 	/// <summary>
 	/// The type of the parameter value.
