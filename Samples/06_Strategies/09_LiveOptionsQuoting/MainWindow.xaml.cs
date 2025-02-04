@@ -16,6 +16,7 @@ using Ecng.ComponentModel;
 using Ecng.Common;
 using Ecng.Serialization;
 using Ecng.Xaml;
+using Ecng.Logging;
 
 using StockSharp.Configuration;
 using StockSharp.Algo;
@@ -24,7 +25,6 @@ using StockSharp.Algo.Derivatives;
 using StockSharp.Algo.Storages;
 using StockSharp.Algo.Strategies.Derivatives;
 using StockSharp.Localization;
-using StockSharp.Logging;
 using StockSharp.Messages;
 using StockSharp.Xaml;
 using StockSharp.Xaml.Charting;

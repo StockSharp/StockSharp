@@ -7,12 +7,12 @@ using System.Windows;
 using Ecng.Common;
 using Ecng.Serialization;
 using Ecng.Xaml;
+using Ecng.Logging;
 
 using StockSharp.Configuration;
 using StockSharp.Algo;
 using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Strategies.Quoting;
-using StockSharp.Logging;
 using StockSharp.Xaml;
 
 public partial class StrategiesWindow

@@ -4,13 +4,13 @@ using System;
 using System.Windows;
 
 using Ecng.Common;
+using Ecng.Logging;
 
 using StockSharp.Algo.Storages;
 using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Testing;
 using StockSharp.BusinessEntities;
 using StockSharp.Configuration;
-using StockSharp.Logging;
 using StockSharp.Xaml;
 
 /// <summary>

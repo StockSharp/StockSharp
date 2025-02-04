@@ -5,8 +5,8 @@ using System.Diagnostics;
 using System.Windows;
 
 using Ecng.Common;
+using Ecng.Logging;
 
-using StockSharp.Logging;
 using StockSharp.Xaml;
 
 public partial class MainWindow
@@ -29,7 +29,7 @@ public partial class MainWindow
 		_logManager.Sources.Add(_testSource = new TestSource());
 
 		// set .NET Trace system based source
-		_logManager.Sources.Add(new StockSharp.Logging.TraceSource());
+		_logManager.Sources.Add(new Ecng.Logging.TraceSource());
 
 		// write logs into MainWindow
 		_logManager.Listeners.Add(new GuiLogListener(Monitor));

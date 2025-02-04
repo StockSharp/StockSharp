@@ -18,6 +18,7 @@ using Ecng.Xaml;
 using Ecng.Compilation;
 using Ecng.Compilation.Roslyn;
 using Ecng.Serialization;
+using Ecng.Logging;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Candles;
@@ -28,7 +29,6 @@ using StockSharp.Algo.Storages;
 using StockSharp.Algo.Testing;
 using StockSharp.BusinessEntities;
 using StockSharp.Localization;
-using StockSharp.Logging;
 using StockSharp.Messages;
 using StockSharp.Xaml;
 using StockSharp.Xaml.Charting;

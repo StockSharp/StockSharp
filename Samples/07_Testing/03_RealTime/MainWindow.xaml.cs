@@ -9,13 +9,13 @@ using Ecng.Common;
 using Ecng.Serialization;
 using Ecng.Xaml;
 using Ecng.Configuration;
+using Ecng.Logging;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Testing;
 using StockSharp.BusinessEntities;
 using StockSharp.Configuration;
 using StockSharp.Localization;
-using StockSharp.Logging;
 using StockSharp.Messages;
 using StockSharp.Xaml;
 using StockSharp.Charting;

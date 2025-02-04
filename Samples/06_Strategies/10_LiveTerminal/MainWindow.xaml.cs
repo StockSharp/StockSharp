@@ -10,11 +10,11 @@ using Ecng.Configuration;
 using Ecng.Serialization;
 using Ecng.Xaml;
 using Ecng.Collections;
+using Ecng.Logging;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Storages;
 using StockSharp.Algo.Storages.Csv;
-using StockSharp.Logging;
 using StockSharp.Configuration;
 using StockSharp.Localization;
 using StockSharp.Messages;

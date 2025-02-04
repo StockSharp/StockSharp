@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Ecng.Logging;
+
 using StockSharp.Algo;
 using StockSharp.Algo.Strategies;
 using StockSharp.BusinessEntities;
-using StockSharp.Logging;
 using StockSharp.Messages;
 
 public class ArbitrageStrategy : Strategy

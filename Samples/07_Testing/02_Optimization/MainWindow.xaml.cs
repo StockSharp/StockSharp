@@ -15,6 +15,7 @@ using Ecng.Configuration;
 using Ecng.Compilation.Roslyn;
 using Ecng.ComponentModel;
 using Ecng.Collections;
+using Ecng.Logging;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Storages;
@@ -22,7 +23,6 @@ using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Strategies.Optimization;
 using StockSharp.Algo.Commissions;
 using StockSharp.BusinessEntities;
-using StockSharp.Logging;
 using StockSharp.Messages;
 using StockSharp.Localization;
 using StockSharp.Configuration;

@@ -7,13 +7,13 @@ using System.Windows;
 using Ecng.Serialization;
 using Ecng.Configuration;
 using Ecng.Collections;
+using Ecng.Logging;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Candles;
 using StockSharp.Algo.Strategies;
 using StockSharp.BusinessEntities;
 using StockSharp.Configuration;
-using StockSharp.Logging;
 using StockSharp.Messages;
 using StockSharp.Xaml;
 

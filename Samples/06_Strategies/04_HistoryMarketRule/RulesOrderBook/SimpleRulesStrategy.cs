@@ -1,7 +1,9 @@
 ﻿using StockSharp.Algo;
 using StockSharp.Algo.Strategies;
-using StockSharp.Logging;
 using StockSharp.Messages;
+
+using Ecng.Logging;
+
 using System;
 
 namespace StockSharp.Samples.Strategies.HistoryMarketRule

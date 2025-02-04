@@ -8,8 +8,8 @@ open System.Collections.Generic
 
 open Ecng.Common
 open Ecng.Drawing
+open Ecng.Logging
 
-open StockSharp.Logging
 open StockSharp.Algo.Analytics
 open StockSharp.Algo.Storages
 open StockSharp.Algo.Candles

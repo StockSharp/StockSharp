@@ -8,6 +8,7 @@ global using global::Ecng.Common;
 global using global::Ecng.Collections;
 global using global::Ecng.Net;
 global using global::Ecng.Serialization;
+global using global::Ecng.Logging;
 
 global using global::Newtonsoft.Json;
 
@@ -15,6 +16,5 @@ global using global::RestSharp;
 
 global using global::StockSharp.Messages;
 global using global::StockSharp.Localization;
-global using global::StockSharp.Logging;
 global using global::StockSharp.BitStamp.Native;
 global using global::StockSharp.BitStamp.Native.Model;

@@ -2,10 +2,12 @@
 
 using System;
 using System.Windows;
+
 using Ecng.Common;
 using Ecng.Compilation;
 using Ecng.Configuration;
 using Ecng.Compilation.Roslyn;
+using Ecng.Logging;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Candles;
@@ -18,7 +20,6 @@ using StockSharp.Messages;
 using StockSharp.Xaml;
 using StockSharp.Xaml.Charting;
 using StockSharp.Charting;
-using StockSharp.Logging;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml

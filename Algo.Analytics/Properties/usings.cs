@@ -5,7 +5,7 @@ global using global::System.Threading.Tasks;
 global using global::System.Drawing;
 
 global using global::Ecng.Drawing;
+global using global::Ecng.Logging;
 
 global using global::StockSharp.Algo.Storages;
-global using global::StockSharp.Logging;
 global using global::StockSharp.Messages;

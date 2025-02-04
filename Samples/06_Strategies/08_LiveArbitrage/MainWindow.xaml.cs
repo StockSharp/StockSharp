@@ -7,11 +7,11 @@ using Ecng.Serialization;
 using Ecng.Xaml;
 using Ecng.Configuration;
 using Ecng.Collections;
+using Ecng.Logging;
 
 using StockSharp.Messages;
 using StockSharp.Algo;
 using StockSharp.Configuration;
-using StockSharp.Logging;
 using StockSharp.Xaml;
 
 /// <summary>

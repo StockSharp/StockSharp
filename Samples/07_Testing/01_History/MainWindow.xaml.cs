@@ -12,6 +12,7 @@ using Ecng.Xaml;
 using Ecng.Common;
 using Ecng.Collections;
 using Ecng.Drawing;
+using Ecng.Logging;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Commissions;
@@ -19,7 +20,6 @@ using StockSharp.Algo.Storages;
 using StockSharp.Algo.Testing;
 using StockSharp.Algo.Strategies;
 using StockSharp.BusinessEntities;
-using StockSharp.Logging;
 using StockSharp.Messages;
 using StockSharp.Charting;
 using StockSharp.Xaml.Charting;

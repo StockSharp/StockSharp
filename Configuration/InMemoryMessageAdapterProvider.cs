@@ -70,7 +70,6 @@ public class InMemoryMessageAdapterProvider : IMessageAdapterProvider
 		"StockSharp.Fix.Core",
 		"StockSharp.Licensing",
 		"StockSharp.Localization",
-		"StockSharp.Logging",
 		"StockSharp.Media",
 		"StockSharp.Messages",
 		"StockSharp.Xaml",

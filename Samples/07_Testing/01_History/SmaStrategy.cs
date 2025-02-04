@@ -4,11 +4,11 @@ namespace StockSharp.Samples.Testing.History
 	using System.Linq;
 
 	using Ecng.Common;
+	using Ecng.Logging;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Indicators;
 	using StockSharp.Algo.Strategies;
-	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;

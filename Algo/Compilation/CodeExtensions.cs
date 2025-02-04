@@ -43,11 +43,11 @@ public static class CodeExtensions
 			"Ecng.Serialization",
 			"Ecng.Reflection",
 			"Ecng.Drawing",
+			"Ecng.Logging",
 
 			"StockSharp.Algo",
 			"StockSharp.Messages",
 			"StockSharp.BusinessEntities",
-			"StockSharp.Logging",
 			"StockSharp.Localization",
 			"StockSharp.Diagram.Core",
 			"StockSharp.Charting.Interfaces",

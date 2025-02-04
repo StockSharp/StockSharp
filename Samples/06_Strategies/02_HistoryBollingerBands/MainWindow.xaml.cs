@@ -7,6 +7,7 @@ using System.Windows.Media;
 using Ecng.Collections;
 using Ecng.Common;
 using Ecng.Drawing;
+using Ecng.Logging;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Candles;
@@ -16,7 +17,6 @@ using StockSharp.Algo.Storages;
 using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Testing;
 using StockSharp.BusinessEntities;
-using StockSharp.Logging;
 using StockSharp.Messages;
 using StockSharp.Configuration;
 using StockSharp.Xaml;
