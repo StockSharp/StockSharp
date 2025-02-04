@@ -351,6 +351,14 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		_assemblyReferences.Clear();
 		_assemblyReferences.AddRange((storage.GetValue<IEnumerable<SettingsStorage>>(nameof(AssemblyReferences)) ?? storage.GetValue<IEnumerable<SettingsStorage>>("References")).Select(s => s.Load<AssemblyReference>()));
 
+		// TODO 2025-02-04 Remove 1 year later
+		var oldLogging = _assemblyReferences.Cache.FirstOrDefault(r => r.FileName.EqualsIgnoreCase("StockSharp.Logging.dll"));
+		if (oldLogging is not null)
+		{
+			_assemblyReferences.Remove(oldLogging);
+			_assemblyReferences.Add(new() { FileName = "Ecng.Logging.dll" });
+		}
+
 		_nugetReferences.Clear();
 
 		if (storage.ContainsKey(nameof(NuGetReferences)))
