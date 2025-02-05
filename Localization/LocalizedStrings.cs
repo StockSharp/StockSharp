@@ -18,10 +18,16 @@ using Ecng.Serialization;
 /// </summary>
 public static partial class LocalizedStrings
 {
+	private class EcngLocalizer : Ecng.Localization.ILocalizer
+	{
+		public string Localize(string enStr)
+			=> enStr.Translate();
+	}
+
 	private class Translation
 	{
-		private readonly Dictionary<string, string> _stringsById = new();
-		private readonly Dictionary<string, string> _idsByString = new();
+		private readonly Dictionary<string, string> _stringsById = [];
+		private readonly Dictionary<string, string> _idsByString = [];
 
 		public void Add(string id, string text)
 		{
@@ -33,7 +39,7 @@ public static partial class LocalizedStrings
 		public string GetIdByText(string text) => _idsByString.TryGetValue(text, out var id) ? id : null;
 	}
 
-	private static readonly List<Translation> _translations = new();
+	private static readonly List<Translation> _translations = [];
 	private static readonly Dictionary<string, int> _langIds = new(StringComparer.InvariantCultureIgnoreCase);
 
 	static LocalizedStrings()
@@ -65,6 +71,8 @@ public static partial class LocalizedStrings
 					Trace.WriteLine(ex);
 				}
 			}
+
+			Ecng.Localization.LocalizedStrings.Localizer = new EcngLocalizer();
 		}
 		catch (Exception ex)
 		{
@@ -251,9 +259,9 @@ public static partial class LocalizedStrings
 	/// <param name="from">Language of the <paramref name="text"/>.</param>
 	/// <param name="to">Destination language.</param>
 	/// <returns>Localized string.</returns>
-	public static string Translate(this string text, string from = null, string to = null)
+	public static string Translate(this string text, string from = EnCode, string to = null)
 	{
-		var langIdFrom = GetLangCode(from.IsEmpty(EnCode));
+		var langIdFrom = GetLangCode(from);
 		var langIdTo = GetLangCode(to.IsEmpty(ActiveLanguage));
 
 		if (langIdFrom < 0 || langIdTo < 0)
