@@ -78,7 +78,7 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 		get => _value;
 		set
 		{
-			if (Validator?.Invoke(value) == false)
+			if (!this.IsValid(value))
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 			if (_comparer.Equals(_value, value))
@@ -94,11 +94,6 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 				propChange2.PropertyChanged += OnValueInnerStateChanged;
 		}
 	}
-
-	/// <summary>
-	/// <see cref="Value"/> validator.
-	/// </summary>
-	public Func<T, bool> Validator { get; set; }
 
 	Type IStrategyParam.Type => typeof(T);
 

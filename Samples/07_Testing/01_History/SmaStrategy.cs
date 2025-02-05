@@ -4,9 +4,8 @@ namespace StockSharp.Samples.Testing.History
 	using System.Linq;
 
 	using Ecng.Common;
-	using Ecng.Logging;
+	using Ecng.ComponentModel;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.Indicators;
 	using StockSharp.Algo.Strategies;
 	using StockSharp.BusinessEntities;
@@ -23,7 +22,7 @@ namespace StockSharp.Samples.Testing.History
 			_shortSmaParam = Param(nameof(ShortSma), 30);
 			_takeValue = Param(nameof(TakeValue), new Unit(0, UnitTypes.Absolute));
 			_stopValue = Param(nameof(StopValue), new Unit(2, UnitTypes.Percent));
-			_candleTypeParam = Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(1))).NotNull();
+			_candleTypeParam = Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(1))).SetRequired();
 			_candleTimeFrameParam = Param<TimeSpan?>(nameof(CandleTimeFrame));
 			_buildFromParam = Param<DataType>(nameof(BuildFrom));
 			_buildFieldParam = Param<Level1Fields?>(nameof(BuildField));
