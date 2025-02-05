@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "Log masuk tidak ditentukan.",
   "LoginServerInterface": "Log masuk = {0} Pelayan = {1} Antaramuka = {2}",
   "LogLevel": "Tahap Log",
+  "LogLevelDesc": "Tahap pengelogan untuk sumber.",
   "Logo": "Logo",
   "Logout": "Log keluar",
   "LogoutQuestion": "Anda ingin keluar?",

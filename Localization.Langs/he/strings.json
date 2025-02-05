@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "הכניסה לא צוינה.",
   "LoginServerInterface": "התחברות = {0} שרת = {1} ממשק = {2}",
   "LogLevel": "רמת רישום",
+  "LogLevelDesc": "רמת הרישום ליומן עבור המקור.",
   "Logo": "לוגו",
   "Logout": "התנתק",
   "LogoutQuestion": "האם ברצונך להתנתק?",

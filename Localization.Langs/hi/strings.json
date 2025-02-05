@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "लॉगिन निर्दिष्ट नहीं किया गया है।",
   "LoginServerInterface": "लॉगिन = {0} सर्वर = {1} इंटरफ़ेस = {2}",
   "LogLevel": "लॉग स्तर",
+  "LogLevelDesc": "स्रोत के लिए लॉगिंग स्तर।",
   "Logo": "लोगो",
   "Logout": "लॉग आउट",
   "LogoutQuestion": "क्या आप बाहर जाना चाहते हैं?",

@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "Логін не вказано.",
   "LoginServerInterface": "Логін = {0} Сервер = {1} Інтерфейс = {2}",
   "LogLevel": "Рівень логування",
+  "LogLevelDesc": "Рівень журналювання для джерела.",
   "Logo": "Логотип",
   "Logout": "Вийти",
   "LogoutQuestion": "Ви хочете вийти?",

@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "No s'ha especificat el nom d'usuari.",
   "LoginServerInterface": "Nom d'usuari = {0} Servidor = {1} Interfície = {2}",
   "LogLevel": "Nivell de registre",
+  "LogLevelDesc": "El nivell de registre per a la font.",
   "Logo": "Logotip",
   "Logout": "Tancar sessió",
   "LogoutQuestion": "Vols tancar la sessió?",

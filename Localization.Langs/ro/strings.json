@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "Loginul nu este specificat.",
   "LoginServerInterface": "Logare = {0} Server = {1} Interfață = {2}",
   "LogLevel": "Nivel de logare",
+  "LogLevelDesc": "Nivelul de înregistrare pentru sursă.",
   "Logo": "Siglă",
   "Logout": "Deconectare",
   "LogoutQuestion": "Doriți să ieșiți?",

@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "Nie je zadané prihlásenie.",
   "LoginServerInterface": "Prihlásenie = {0} Server = {1} Rozhranie = {2}",
   "LogLevel": "Úroveň logovania",
+  "LogLevelDesc": "Úroveň záznamu pre zdroj.",
   "Logo": "Logo",
   "Logout": "Odhlásiť",
   "LogoutQuestion": "Chcete sa odhlásiť?",

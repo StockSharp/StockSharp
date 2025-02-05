@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "Inloggning är inte specificerad.",
   "LoginServerInterface": "Logga in = {0} Server = {1} Gränssnitt = {2}",
   "LogLevel": "Loggnivå",
+  "LogLevelDesc": "Loggningsnivån för källan.",
   "Logo": "Logotyp",
   "Logout": "Logga ut",
   "LogoutQuestion": "Vill du logga ut?",

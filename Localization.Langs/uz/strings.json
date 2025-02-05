@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "Login ko'rsatilmagan.",
   "LoginServerInterface": "Kirish = {0} Server = {1} Interfeys = {2}",
   "LogLevel": "Log darajasi",
+  "LogLevelDesc": "Manba uchun qayd qilish darajasi.",
   "Logo": "Логотип",
   "Logout": "Chiqish",
   "LogoutQuestion": "Chiqishni xohlaysizmi?",

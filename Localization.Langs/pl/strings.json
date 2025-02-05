@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "Nie określono loginu.",
   "LoginServerInterface": "Login = {0} Serwer = {1} Interfejs = {2}",
   "LogLevel": "Poziom logowania",
+  "LogLevelDesc": "Poziom logowania dla źródła.",
   "Logo": "Logo",
   "Logout": "Wyloguj",
   "LogoutQuestion": "Czy chcesz się wylogować?",

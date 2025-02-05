@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "Login non spécifié.",
   "LoginServerInterface": "Connexion = {0} Serveur = {1} Interface = {2}",
   "LogLevel": "Niveau de journalisation",
+  "LogLevelDesc": "Le niveau de journalisation pour la source.",
   "Logo": "Logo",
   "Logout": "Déconnexion",
   "LogoutQuestion": "Voulez-vous vous déconnecter ?",

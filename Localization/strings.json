@@ -1744,6 +1744,7 @@
   "LoginNotSpecified": "Login is not specified.",
   "LoginServerInterface": "Login = {0} Server = {1} Interface = {2}",
   "LogLevel": "Logging level",
+  "LogLevelDesc": "The logging level for the source.",
   "Logo": "Logo",
   "Logout": "Logout",
   "LogoutQuestion": "Do you want to logout?",

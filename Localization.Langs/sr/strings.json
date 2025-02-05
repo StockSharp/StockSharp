@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "Логин није наведен.",
   "LoginServerInterface": "Пријава = {0} Сервер = {1} Интерфејс = {2}",
   "LogLevel": "Ниво логовања",
+  "LogLevelDesc": "Ниво евидентирања за извор.",
   "Logo": "Лого",
   "Logout": "Излогуј се",
   "LogoutQuestion": "Да ли желите да се одјавите?",

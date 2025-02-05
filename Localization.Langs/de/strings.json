@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "Login nicht angegeben.",
   "LoginServerInterface": "Login = {0} Server = {1} Schnittstelle = {2}",
   "LogLevel": "Protokollierebene",
+  "LogLevelDesc": "Die Protokollierungsstufe für die Quelle.",
   "Logo": "Logo",
   "Logout": "Abmelden",
   "LogoutQuestion": "Möchten Sie sich abmelden?",

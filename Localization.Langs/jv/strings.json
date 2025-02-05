@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "Login ora dispesifikaké.",
   "LoginServerInterface": "Mlebu = {0} Server = {1} Antarmuka = {2}",
   "LogLevel": "Tingkat log",
+  "LogLevelDesc": "Level logging kanggo sumber.",
   "Logo": "Logo",
   "Logout": "Métu",
   "LogoutQuestion": "Apa sampeyan arep metu?",

@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "Giriş belirtilmemiş.",
   "LoginServerInterface": "Giriş = {0} Sunucu = {1} Arayüz = {2}",
   "LogLevel": "Günlük Seviyesi",
+  "LogLevelDesc": "Kaynak için günlük kaydı seviyesi.",
   "Logo": "Logo",
   "Logout": "Çıkış yap",
   "LogoutQuestion": "Çıkmak istiyor musun?",

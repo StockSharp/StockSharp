@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "Kirjautumista ei ole määritetty.",
   "LoginServerInterface": "Kirjaudu = {0} Palvelin = {1} Käyttöliittymä = {2}",
   "LogLevel": "Lokitaso",
+  "LogLevelDesc": "Lähteen lokitustaso.",
   "Logo": "Logo",
   "Logout": "Kirjaudu ulos",
   "LogoutQuestion": "Haluatko kirjautua ulos?",

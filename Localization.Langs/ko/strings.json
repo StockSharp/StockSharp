@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "로그인이 지정되지 않았습니다.",
   "LoginServerInterface": "로그인 = {0} 서버 = {1} 인터페이스 = {2}",
   "LogLevel": "로그 레벨",
+  "LogLevelDesc": "소스에 대한 로깅 수준.",
   "Logo": "로고",
   "Logout": "로그아웃",
   "LogoutQuestion": "로그아웃하시겠습니까?",

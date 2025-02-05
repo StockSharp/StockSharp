@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "ورود مشخص نشده است.",
   "LoginServerInterface": "ورود = {0} سرور = {1} رابط = {2}",
   "LogLevel": "سطح ورود",
+  "LogLevelDesc": "سطح ثبت وقایع برای منبع.",
   "Logo": "لوگو",
   "Logout": "خروج",
   "LogoutQuestion": "آیا می‌خواهید خارج شوید؟",

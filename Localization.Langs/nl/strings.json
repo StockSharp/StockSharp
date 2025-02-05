@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "Inloggen niet gespecificeerd.",
   "LoginServerInterface": "Login = {0} Server = {1} Interface = {2}",
   "LogLevel": "Logniveau",
+  "LogLevelDesc": "Het loggingniveau voor de bron.",
   "Logo": "Logo",
   "Logout": "Uitloggen",
   "LogoutQuestion": "Wilt u uitloggen?",

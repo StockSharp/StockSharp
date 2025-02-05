@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "لم يتم تحديد تسجيل الدخول.",
   "LoginServerInterface": "تسجيل الدخول = {0} الخادم = {1} الواجهة = {2}",
   "LogLevel": "مستوى التسجيل",
+  "LogLevelDesc": "مستوى التسجيل للمصدر.",
   "Logo": "شعار",
   "Logout": "تسجيل الخروج",
   "LogoutQuestion": "هل تريد الخروج؟",

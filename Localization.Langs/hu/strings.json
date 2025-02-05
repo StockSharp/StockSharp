@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "Bejelentkezés nincs megadva.",
   "LoginServerInterface": "Bejelentkezés = {0} Szerver = {1} Felület = {2}",
   "LogLevel": "Naplózási szint",
+  "LogLevelDesc": "A forrás naplózási szintje.",
   "Logo": "Logó",
   "Logout": "Kijelentkezés",
   "LogoutQuestion": "Ki akar lépni?",

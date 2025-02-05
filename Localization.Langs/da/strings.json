@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "Login er ikke specificeret.",
   "LoginServerInterface": "Login = {0} Server = {1} Interface = {2}",
   "LogLevel": "Logniveau",
+  "LogLevelDesc": "Logningsniveauet for kilden.",
   "Logo": "Logo",
   "Logout": "Log ud",
   "LogoutQuestion": "Vil du logge ud?",

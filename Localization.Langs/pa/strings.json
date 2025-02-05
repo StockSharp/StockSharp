@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "ਲਾਗਇਨ ਨਿਰਧਾਰਤ ਨਹੀਂ ਕੀਤਾ ਗਿਆ।",
   "LoginServerInterface": "ਲੌਗਿਨ = {0} ਸਰਵਰ = {1} ਇੰਟਰਫੇਸ = {2}",
   "LogLevel": "ਲੌਗ ਪੱਧਰ",
+  "LogLevelDesc": "ਸਰੋਤ ਲਈ ਲੌਗਿੰਗ ਪੱਧਰ।",
   "Logo": "ਲੋਗੋ",
   "Logout": "ਲੌਗ ਆਉਟ",
   "LogoutQuestion": "ਕੀ ਤੁਸੀਂ ਨਿਕਲਣਾ ਚਾਹੁੰਦੇ ਹੋ?",

@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "Login non specificato.",
   "LoginServerInterface": "Login = {0} Server = {1} Interfaccia = {2}",
   "LogLevel": "Livello di registrazione",
+  "LogLevelDesc": "Il livello di registrazione per la fonte.",
   "Logo": "Logo",
   "Logout": "Disconnetti",
   "LogoutQuestion": "Vuoi uscire?",

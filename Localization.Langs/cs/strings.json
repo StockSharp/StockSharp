@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "Přihlášení nebylo specifikováno.",
   "LoginServerInterface": "Přihlášení = {0} Server = {1} Rozhraní = {2}",
   "LogLevel": "Úroveň logování",
+  "LogLevelDesc": "Úroveň protokolování pro zdroj.",
   "Logo": "Logo",
   "Logout": "Odhlásit se",
   "LogoutQuestion": "Chcete se odhlásit?",

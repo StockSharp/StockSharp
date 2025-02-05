@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "ログインが指定されていません。",
   "LoginServerInterface": "ログイン = {0} サーバー = {1} インターフェース = {2}",
   "LogLevel": "ログレベル",
+  "LogLevelDesc": "ソースのロギングレベル。",
   "Logo": "ロゴ",
   "Logout": "ログアウト",
   "LogoutQuestion": "ログアウトしますか？",

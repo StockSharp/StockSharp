@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "Chưa chỉ định đăng nhập.",
   "LoginServerInterface": "Đăng nhập = {0} Máy chủ = {1} Giao diện = {2}",
   "LogLevel": "Mức độ log",
+  "LogLevelDesc": "Mức độ ghi nhật ký cho nguồn.",
   "Logo": "Logo",
   "Logout": "Đăng xuất",
   "LogoutQuestion": "Bạn có muốn đăng xuất không?",

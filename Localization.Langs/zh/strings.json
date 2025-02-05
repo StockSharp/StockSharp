@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "未指定登录名。",
   "LoginServerInterface": "登录 = {0} 服务器 = {1} 界面 = {2}",
   "LogLevel": "日志级别",
+  "LogLevelDesc": "源的日志记录级别。",
   "Logo": "标志",
   "Logout": "登出",
   "LogoutQuestion": "你想退出吗？",

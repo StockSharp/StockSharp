@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "No se ha especificado el login.",
   "LoginServerInterface": "Inicio = {0} Servidor = {1} Interfaz = {2}",
   "LogLevel": "Nivel de registro",
+  "LogLevelDesc": "El nivel de registro para la fuente.",
   "Logo": "Logotipo",
   "Logout": "Cerrar sesión",
   "LogoutQuestion": "¿Quieres salir?",

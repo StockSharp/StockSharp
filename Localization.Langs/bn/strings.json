@@ -1840,6 +1840,7 @@
   "LoginNotSpecified": "লগইন নির্দিষ্ট করা হয়নি।",
   "LoginServerInterface": "লগইন = {0} সার্ভার = {1} ইন্টারফেস = {2}",
   "LogLevel": "লগের স্তর",
+  "LogLevelDesc": "সোর্সের জন্য লগিং লেভেল।",
   "Logo": "লোগো",
   "Logout": "লগ আউট",
   "LogoutQuestion": "আপনি কি প্রস্থান করতে চান?",
