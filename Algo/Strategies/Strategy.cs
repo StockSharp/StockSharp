@@ -1450,7 +1450,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// </summary>
 	protected void InitStartValues()
 	{
-		foreach (var parameter in Parameters.CachedValues)
+		foreach (var parameter in GetParameters())
 		{
 			if (parameter.Value is Unit unit && unit.GetTypeValue == null && (unit.Type == UnitTypes.Point || unit.Type == UnitTypes.Step))
 				unit.SetSecurity(GetSecurity());
@@ -2768,7 +2768,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// <param name="savePortfolio">Save <see cref="Portfolio"/>.</param>
 	public void Save(SettingsStorage storage, bool saveStatistics, bool saveSystemParameters, bool saveSecurity, bool savePortfolio)
 	{
-		var parameters = Parameters.CachedValues;
+		var parameters = GetParameters();
 
 		if (!saveSystemParameters)
 			parameters = parameters.Except(_systemParams).ToArray();

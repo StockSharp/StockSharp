@@ -16,6 +16,12 @@ partial class Strategy
 		public override bool ShouldSerializeValue(object component) => false;
 	}
 
+	/// <summary>
+	/// Get parameters.
+	/// </summary>
+	/// <returns>Parameters.</returns>
+	public virtual IStrategyParam[] GetParameters() => Parameters.CachedValues;
+
 	AttributeCollection ICustomTypeDescriptor.GetAttributes() => TypeDescriptor.GetAttributes(this, true);
 
 	string ICustomTypeDescriptor.GetClassName() => TypeDescriptor.GetClassName(this, true);
@@ -29,6 +35,6 @@ partial class Strategy
 	EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes) => TypeDescriptor.GetEvents(this, attributes, true);
 
 	PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty() => ((ICustomTypeDescriptor)this).GetProperties().TryGetDefault(GetType());
-	PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties() => new(Parameters.CachedValues.Select(p => new StrategyParamPropDescriptor(p)).ToArray());
+	PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties() => new(GetParameters().Select(p => new StrategyParamPropDescriptor(p)).ToArray());
 	PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes) => this.GetFilteredProperties(attributes);
 }

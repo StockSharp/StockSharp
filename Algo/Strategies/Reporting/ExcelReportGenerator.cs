@@ -111,7 +111,7 @@ public class ExcelReportGenerator : BaseReportGenerator
 		worker.SetCell(0, rowIndex, LocalizedStrings.Parameters);
 		rowIndex++;
 
-		foreach (var strategyParam in strategy.Parameters.CachedValues)
+		foreach (var strategyParam in strategy.GetParameters())
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 

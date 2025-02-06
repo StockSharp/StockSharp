@@ -45,7 +45,7 @@ public class JsonReportGenerator : BaseReportGenerator
 		WriteElementString("security", strategy.Security?.Id);
 		WriteElementString("portfolio", strategy.Portfolio?.Name);
 
-		foreach (var p in strategy.Parameters.CachedValues)
+		foreach (var p in strategy.GetParameters())
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 

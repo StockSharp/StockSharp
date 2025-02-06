@@ -41,7 +41,7 @@ public class XmlReportGenerator : BaseReportGenerator
 
 		WriteStartElement("parameters");
 
-		foreach (var p in strategy.Parameters.CachedValues)
+		foreach (var p in strategy.GetParameters())
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 

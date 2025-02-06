@@ -54,7 +54,7 @@ public class CsvReportGenerator : BaseReportGenerator
 			strategy.Name, strategy.Security?.Id, strategy.Portfolio?.Name,
 			strategy.TotalWorkingTime, strategy.Position, strategy.PnL, strategy.Commission, strategy.Slippage, strategy.Latency);
 
-		var parameters = strategy.Parameters.CachedValues;
+		var parameters = strategy.GetParameters();
 		WriteValues(LocalizedStrings.Parameters);
 		WriteValues(parameters.Select(p => (object)p.GetName()).ToArray());
 		WriteValues(parameters.Select(p => p.Value is TimeSpan ts ? ts.Format() : p.Value).ToArray());
