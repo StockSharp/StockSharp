@@ -2900,23 +2900,40 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 	object ICloneable.Clone() => Clone();
 
-	/// <summary>
-	/// Create a copy of <see cref="Strategy"/>.
-	/// </summary>
-	/// <returns>Copy.</returns>
+	/// <inheritdoc />
 	public virtual Strategy Clone()
 	{
-		var clone = GetType().CreateInstance<Strategy>();
-		//clone.Connector = Connector;
-		clone.Security = Security;
-		clone.Portfolio = Portfolio;
-		clone.PortfolioProvider = PortfolioProvider;
-
-		var id = clone.Id;
-		clone.Load(this.Save());
-		clone.Id = id;
-
+		var clone = CreateClone();
+		CopyTo(clone);
 		return clone;
+	}
+
+	/// <summary>
+	/// Create clone object (non-initialized).
+	/// </summary>
+	/// <returns><see cref="Strategy"/></returns>
+	protected virtual Strategy CreateClone()
+		=> GetType().CreateInstance<Strategy>();
+
+	/// <summary>
+	/// Copy settings into <paramref name="copy"/>.
+	/// </summary>
+	/// <param name="copy"><see cref="Strategy"/></param>
+	protected virtual void CopyTo(Strategy copy)
+	{
+		if (copy is null)
+			throw new ArgumentNullException(nameof(copy));
+
+		//copy.Connector = Connector;
+		copy.Security = Security;
+		copy.Portfolio = Portfolio;
+		copy.PortfolioProvider = PortfolioProvider;
+
+		var id = copy.Id;
+		copy.Load(this.Save());
+		copy.Id = id;
+
+		copy.Environment.AddRange(Environment);
 	}
 
 	/// <summary>
