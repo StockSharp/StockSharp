@@ -262,7 +262,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 9)]
 	//[Nullable]
-	[NullOrMoreZero]
+	[DecimalNullOrMoreZero]
 	[BasicSetting]
 	public decimal? PriceStep
 	{
@@ -292,7 +292,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		Description = LocalizedStrings.MinVolStepKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 10)]
-	[NullOrMoreZero]
+	[DecimalNullOrMoreZero]
 	[BasicSetting]
 	public decimal? VolumeStep
 	{
@@ -410,7 +410,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		Description = LocalizedStrings.DecimalsDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 13)]
-	[NullOrNotNegative]
+	[DecimalNullOrNotNegative]
 	[BasicSetting]
 	public int? Decimals
 	{
