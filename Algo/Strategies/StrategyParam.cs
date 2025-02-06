@@ -88,7 +88,7 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 				propChange.PropertyChanged -= OnValueInnerStateChanged;
 
 			_value = value;
-			NotifyChanged(nameof(Value));
+			NotifyChanged();
 
 			if (_value is INotifyPropertyChanged propChange2)
 				propChange2.PropertyChanged += OnValueInnerStateChanged;
