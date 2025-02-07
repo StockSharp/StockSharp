@@ -78,11 +78,11 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 		get => _value;
 		set
 		{
-			if (!this.IsValid(value))
-				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
-
 			if (_comparer.Equals(_value, value))
 				return;
+
+			if (!this.IsValid(value))
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 			if (_value is INotifyPropertyChanged propChange)
 				propChange.PropertyChanged -= OnValueInnerStateChanged;
