@@ -3269,11 +3269,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	}
 
 	/// <summary>
-	/// Strategy debugger.
-	/// </summary>
-	public virtual IDebugger Debugger => null;
-
-	/// <summary>
 	/// Release resources.
 	/// </summary>
 	protected override void DisposeManaged()
