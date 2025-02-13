@@ -68,7 +68,7 @@ public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 		if (IsEmpty)
 			return;
 
-		CandleOpenTimes = values.Skip(1).Select(v => (DateTimeOffset)v.To<DateTime>().UtcKind()).ToArray();
+		CandleOpenTimes = [.. values.Skip(1).Select(v => (DateTimeOffset)v.To<DateTime>().UtcKind())];
 	}
 }
 

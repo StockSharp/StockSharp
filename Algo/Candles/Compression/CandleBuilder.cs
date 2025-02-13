@@ -280,17 +280,17 @@ public abstract class CandleBuilder<TCandleMessage> : BaseLogReceiver, ICandleBu
 						if (level.BuyVolumes != null)
 						{
 							if (currLevel.BuyVolumes == null)
-								currLevel.BuyVolumes = level.BuyVolumes.ToArray();
+								currLevel.BuyVolumes = [.. level.BuyVolumes];
 							else
-								currLevel.BuyVolumes = currLevel.BuyVolumes.Concat(level.BuyVolumes).ToArray();
+								currLevel.BuyVolumes = [.. currLevel.BuyVolumes, .. level.BuyVolumes];
 						}
 
 						if (currLevel.SellVolumes != null && level.SellVolumes != null)
 						{
 							if (currLevel.SellVolumes == null)
-								currLevel.SellVolumes = level.SellVolumes.ToArray();
+								currLevel.SellVolumes = [.. level.SellVolumes];
 							else
-								currLevel.SellVolumes = currLevel.SellVolumes.Concat(level.SellVolumes).ToArray();
+								currLevel.SellVolumes = [.. currLevel.SellVolumes, .. level.SellVolumes];
 						}
 					}
 					else

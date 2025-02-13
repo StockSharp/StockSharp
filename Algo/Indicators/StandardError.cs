@@ -44,7 +44,7 @@ public class StandardError : LengthIndicator<decimal>
 			Buffer.PushBack(newValue);
 		}
 
-		var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
+		var buff = input.IsFinal ? Buffer : (IList<decimal>)[.. Buffer.Skip(1), newValue];
 
 		// если значений хватает, считаем регрессию
 		if (IsFormed)

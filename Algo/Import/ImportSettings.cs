@@ -46,11 +46,11 @@ public class ImportSettings : NotifiableObject, IPersistable
 			_dataType = value ?? throw new ArgumentNullException(nameof(value));
 			
 			AllFields = FieldMappingRegistry.CreateFields(value);
-			SelectedFields = AllFields.Where(f => f.IsRequired).Select((f, i) =>
+			SelectedFields = [.. AllFields.Where(f => f.IsRequired).Select((f, i) =>
 			{
 				f.Order = i;
 				return f.GetOrClone();
-			}).ToArray();
+			})];
 
 			NotifyChanged();
 		}
@@ -288,8 +288,8 @@ public class ImportSettings : NotifiableObject, IPersistable
 			if (_extendedStorage == value)
 				return;
 
-			SelectedFields = SelectedFields.Except(ExtendedFields).ToArray();
-			AllFields = AllFields.Except(ExtendedFields).ToArray();
+			SelectedFields = [.. SelectedFields.Except(ExtendedFields)];
+			AllFields = [.. AllFields.Except(ExtendedFields)];
 
 			_extendedStorage = value;
 

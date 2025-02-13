@@ -22,7 +22,7 @@ public class FibonacciRetracement : BaseComplexIndicator
 		_highest = new();
 		_lowest = new();
 
-		Levels = new[] { 0.236m, 0.382m, 0.5m, 0.618m, 0.786m }.Select(l => new FibonacciLevel(l)).ToArray();
+		Levels = [.. new[] { 0.236m, 0.382m, 0.5m, 0.618m, 0.786m }.Select(l => new FibonacciLevel(l))];
 
 		foreach (var level in Levels)
 			AddInner(level);

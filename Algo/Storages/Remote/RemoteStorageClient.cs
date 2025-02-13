@@ -95,11 +95,10 @@ public class RemoteStorageClient : Disposable
 	/// Get all available instruments.
 	/// </summary>
 	public IEnumerable<SecurityId> AvailableSecurities
-		=>	Do<SecurityMessage>(
+		=> [.. Do<SecurityMessage>(
 				new SecurityLookupMessage { OnlySecurityId = true },
 				() => (typeof(SecurityLookupMessage), Extensions.LookupAllCriteriaMessage.ToString()),
-				out _).Select(s => s.SecurityId)
-		.ToArray();
+				out _).Select(s => s.SecurityId)];
 
 	/// <summary>
 	/// Download securities by the specified criteria.
@@ -245,7 +244,7 @@ public class RemoteStorageClient : Disposable
 	/// </summary>
 	/// <param name="securities">Securities.</param>
 	public void SaveSecurities(IEnumerable<SecurityMessage> securities)
-		=> Do(securities.ToArray());
+		=> Do([.. securities]);
 
 	/// <summary>
 	/// Get all available data types.
@@ -254,11 +253,11 @@ public class RemoteStorageClient : Disposable
 	/// <param name="format">Format type.</param>
 	/// <returns>Data types.</returns>
 	public IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
-		=> Do<AvailableDataInfoMessage>(new AvailableDataRequestMessage
+		=> [.. Do<AvailableDataInfoMessage>(new AvailableDataRequestMessage
 		{
 			SecurityId = securityId,
 			Format = (int)format,
-		}, () => (typeof(AvailableDataRequestMessage), securityId, format), out _).Select(t => t.FileDataType).Distinct().ToArray();
+		}, () => (typeof(AvailableDataRequestMessage), securityId, format), out _).Select(t => t.FileDataType).Distinct()];
 
 	/// <summary>
 	/// Verify.
@@ -274,13 +273,13 @@ public class RemoteStorageClient : Disposable
 	/// <param name="format">Storage format.</param>
 	/// <returns>Dates.</returns>
 	public IEnumerable<DateTime> GetDates(SecurityId securityId, DataType dataType, StorageFormats format)
-		=> Do<AvailableDataInfoMessage>(new AvailableDataRequestMessage
+		=> [.. Do<AvailableDataInfoMessage>(new AvailableDataRequestMessage
 		{
 			SecurityId = securityId,
 			RequestDataType = dataType,
 			Format = (int)format,
 			IncludeDates = true,
-		}, () => (typeof(AvailableDataRequestMessage), securityId, dataType, format), out _).SelectMany(i => i.Dates).OrderBy().Distinct().ToArray();
+		}, () => (typeof(AvailableDataRequestMessage), securityId, dataType, format), out _).SelectMany(i => i.Dates).OrderBy().Distinct()];
 
 	/// <summary>
 	/// To save data in the format of StockSharp storage.

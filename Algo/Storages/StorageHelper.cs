@@ -397,7 +397,7 @@ public static class StorageHelper
 		var formats = Enumerator.GetValues<StorageFormats>().ToArray();
 		var progress = 0;
 
-		var marketDataDrives = drives as IMarketDataDrive[] ?? drives.ToArray();
+		var marketDataDrives = drives as IMarketDataDrive[] ?? [.. drives];
 		var iterCount = marketDataDrives.Sum(d => d.AvailableSecurities.Count()); // кол-во сбросов кэша дат
 
 		updateProgress(progress, iterCount);
@@ -716,7 +716,7 @@ public static class StorageHelper
 			}
 		}
 
-		return args.OrderBy().ToArray();
+		return [.. args.OrderBy()];
 	}
 
 	/// <summary>

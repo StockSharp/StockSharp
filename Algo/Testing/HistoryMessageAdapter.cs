@@ -171,12 +171,11 @@ public class HistoryMessageAdapter : MessageAdapter
 
 				var dataTypes = drive.GetAvailableDataTypes(default, StorageFormat);
 
-				_supportedMarketDataTypes = dataTypes
+				_supportedMarketDataTypes = [.. dataTypes
 					//.Select(dt => dt.ToMarketDataType())
 					//.Where(t => t != null)
 					//.Select(t => t.Value)
-					.Distinct()
-					.ToArray();
+					.Distinct()];
 			}
 
 			return _supportedMarketDataTypes;
@@ -209,10 +208,9 @@ public class HistoryMessageAdapter : MessageAdapter
 		if (args.Length > 0)
 			return args;
 
-		args = _generators
+		args = [.. _generators
              .Where(t => t.Key.dataType.MessageType == candleType && (t.Key.secId == securityId || t.Key.secId == default))
-             .Select(s => s.Key.dataType.Arg)
-             .ToArray();
+             .Select(s => s.Key.dataType.Arg)];
 
 		if (args.Length > 0)
 			return args;
@@ -536,12 +534,11 @@ public class HistoryMessageAdapter : MessageAdapter
 	}
 
 	private BoardMessage[] GetBoard()
-		=> SecurityProvider
+		=> [.. SecurityProvider
 		.LookupAll()
 		.Select(s => s.Board)
 		.Distinct()
-		.Select(b => b.ToMessage())
-		.ToArray();
+		.Select(b => b.ToMessage())];
 
 	/// <summary>
 	/// Start data loading.

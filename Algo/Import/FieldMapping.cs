@@ -180,7 +180,7 @@ public abstract class FieldMapping : NotifiableObject, IPersistable, ICloneable
 	{
 		Name = storage.GetValue<string>(nameof(Name));
 		IsExtended = storage.GetValue<bool>(nameof(IsExtended));
-		Values = storage.GetValue<SettingsStorage[]>(nameof(Values)).Select(s => s.Load<FieldMappingValue>()).ToArray();
+		Values = [.. storage.GetValue<SettingsStorage[]>(nameof(Values)).Select(s => s.Load<FieldMappingValue>())];
 		DefaultValue = storage.GetValue<string>(nameof(DefaultValue));
 		Format = storage.GetValue<string>(nameof(Format));
 		ZeroAsNull = storage.GetValue<bool>(nameof(ZeroAsNull));

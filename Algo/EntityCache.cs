@@ -1090,7 +1090,7 @@ class EntityCache : ISnapshotHolder
 		else if (dataType == DataType.Transactions)
 		{
 			lock (_orders.SyncRoot)
-				return _orders.Keys.Select(o => o.ToMessage()).Where(m => m.IsMatch(m.Type, subscription)).ToArray();
+				return [.. _orders.Keys.Select(o => o.ToMessage()).Where(m => m.IsMatch(m.Type, subscription))];
 		}
 		else if (dataType == DataType.PositionChanges)
 		{
@@ -1099,7 +1099,7 @@ class EntityCache : ISnapshotHolder
 			if (subscription is PortfolioLookupMessage lookupMsg)
 				positions = positions.Filter(lookupMsg);
 
-			return positions.Select(p => p.ToChangeMessage()).ToArray();
+			return [.. positions.Select(p => p.ToChangeMessage())];
 		}
 
 		return [];

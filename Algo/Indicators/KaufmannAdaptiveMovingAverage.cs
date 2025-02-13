@@ -78,7 +78,7 @@ public class KaufmannAdaptiveMovingAverage : LengthIndicator<decimal>
 			return _prevFinalValue = newValue;
 		}
 
-		var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
+		var buff = input.IsFinal ? Buffer : (IList<decimal>)[.. Buffer.Skip(1), newValue];
 
 		var direction = newValue - buff[0];
 

@@ -477,7 +477,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 						for (var j = 0; j < typesLen; j++)
 						{
-							formatDict.Add(typesDict[reader.ReadInt()], ReadDates(reader).ToHashSet());
+							formatDict.Add(typesDict[reader.ReadInt()], [.. ReadDates(reader)]);
 						}
 					}
 				}
@@ -554,7 +554,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 						foreach (var (dt, dates) in typesDict)
 						{
 							writer.WriteInt(dtDict[dt]);
-							WriteDates(writer, dates.OrderBy().ToArray());
+							WriteDates(writer, [.. dates.OrderBy()]);
 						}
 					}
 				}
@@ -608,7 +608,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			lock (SyncRoot)
 			{
 				if (securityId == default)
-					return this.SelectMany(p => p.Value.TryGetValue(format, out var formatsDict) ? formatsDict.Keys : Enumerable.Empty<DataType>()).Distinct().ToArray();
+					return [.. this.SelectMany(p => p.Value.TryGetValue(format, out var formatsDict) ? formatsDict.Keys : Enumerable.Empty<DataType>()).Distinct()];
 
 				if (TryGetValue(securityId, out var formatsDict) && formatsDict.TryGetValue(format, out var typesDict))
 					return [.. typesDict.Keys];
@@ -624,7 +624,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 				if (TryGetValue(securityId, out var dict) &&
 					dict.TryGetValue(format, out var dict2) &&
 					dict2.TryGetValue(dataType, out var dates))
-					return dates.OrderBy().ToArray();
+					return [.. dates.OrderBy()];
 			}
 
 			return [];
@@ -756,7 +756,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 	public static IEnumerable<SecurityId> GetAvailableSecurities(string path)
 	{
 		using var drive = new LocalMarketDataDrive(path);
-		return drive.AvailableSecurities.ToArray();
+		return [.. drive.AvailableSecurities];
 	}
 
 	private static readonly SynchronizedDictionary<string, RefPair<HashSet<DataType>, bool>> _availableDataTypes = new(StringComparer.InvariantCultureIgnoreCase);
@@ -1090,11 +1090,10 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 					{
 						cancellationToken.ThrowIfCancellationRequested();
 
-						typesDict.Add(dt, dates
+						typesDict.Add(dt, [.. dates
 							.Where(p => p.Value.Contains(dt))
 							.Select(p => p.Key)
-							.OrderBy()
-							.ToHashSet()
+							.OrderBy()]
 						);
 					}
 				}

@@ -747,11 +747,11 @@ partial class Connector
 				if (originalMsg is OrderStatusMessage orderLookup)
 					RaiseOrderStatusFailed(orderLookup.TransactionId, error, replyMsg.LocalTime);
 				else if (originalMsg is SecurityLookupMessage secLookup)
-					RaiseLookupSecuritiesResult(secLookup, error, Securities.Filter(secLookup).ToArray(), []);
+					RaiseLookupSecuritiesResult(secLookup, error, [.. Securities.Filter(secLookup)], []);
 				else if (originalMsg is BoardLookupMessage boardLookup)
-					RaiseLookupBoardsResult(boardLookup, error, ExchangeBoards.Filter(boardLookup).ToArray(), []);
+					RaiseLookupBoardsResult(boardLookup, error, [.. ExchangeBoards.Filter(boardLookup)], []);
 				else if (originalMsg is PortfolioLookupMessage pfLookup)
-					RaiseLookupPortfoliosResult(pfLookup, error, Portfolios.Filter(pfLookup).ToArray(), []);
+					RaiseLookupPortfoliosResult(pfLookup, error, [.. Portfolios.Filter(pfLookup)], []);
 				else if (originalMsg is TimeFrameLookupMessage tfLookup)
 					RaiseLookupTimeFramesResult(tfLookup, error, [], []);
 			}
@@ -788,15 +788,15 @@ partial class Connector
 
 		if (subscription.SubscriptionMessage is SecurityLookupMessage secLookup)
 		{
-			RaiseLookupSecuritiesResult(secLookup, null, Securities.Filter(secLookup).ToArray(), Typed<Security>());
+			RaiseLookupSecuritiesResult(secLookup, null, [.. Securities.Filter(secLookup)], Typed<Security>());
 		}
 		else if (subscription.SubscriptionMessage is BoardLookupMessage boardLookup)
 		{
-			RaiseLookupBoardsResult(boardLookup, null, ExchangeBoards.Filter(boardLookup).ToArray(), Typed<ExchangeBoard>());
+			RaiseLookupBoardsResult(boardLookup, null, [.. ExchangeBoards.Filter(boardLookup)], Typed<ExchangeBoard>());
 		}
 		else if (subscription.SubscriptionMessage is PortfolioLookupMessage pfLookup)
 		{
-			RaiseLookupPortfoliosResult(pfLookup, null, Portfolios.Filter(pfLookup).ToArray(), Typed<Portfolio>());
+			RaiseLookupPortfoliosResult(pfLookup, null, [.. Portfolios.Filter(pfLookup)], Typed<Portfolio>());
 		}
 		else if (subscription.SubscriptionMessage is TimeFrameLookupMessage tfLookup)
 		{
@@ -829,7 +829,7 @@ partial class Connector
 		{
 			if (adapter == Adapter)
 			{
-				_subscriptionManager.HandleConnected(_lookupMessagesOnConnect.Cache.Where(mt => Adapter.IsMessageSupported(mt)).ToArray());
+				_subscriptionManager.HandleConnected([.. _lookupMessagesOnConnect.Cache.Where(mt => Adapter.IsMessageSupported(mt))]);
 
 				// raise event after re subscriptions cause handler on Connected event can send some subscriptions
 				RaiseConnected();

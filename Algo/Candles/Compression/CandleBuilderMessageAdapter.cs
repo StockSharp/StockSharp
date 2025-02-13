@@ -557,7 +557,7 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 							if (series == null)
 								continue;
 
-							newSubscriptionIds ??= new HashSet<long>(subscriptionIds);
+							newSubscriptionIds ??= [.. subscriptionIds];
 
 							newSubscriptionIds.Remove(subscriptionId);
 
@@ -626,7 +626,7 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 							if (series == null)
 								continue;
 
-							newSubscriptionIds ??= new HashSet<long>(subscriptionIds);
+							newSubscriptionIds ??= [.. subscriptionIds];
 
 							newSubscriptionIds.Remove(subscriptionId);
 
@@ -838,7 +838,7 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 				continue;
 
 			if (newSubscriptionIds == null)
-				newSubscriptionIds = new HashSet<long>(subsciptionIds);
+				newSubscriptionIds = [.. subsciptionIds];
 
 			newSubscriptionIds.Remove(id);
 

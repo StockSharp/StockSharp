@@ -486,7 +486,7 @@ partial class TraderHelper
 		};
 
 		if (states != null)
-			message.States = states.ToArray();
+			message.States = [.. states];
 
 		var subscription = new Subscription(message, (SecurityMessage)null);
 		provider.Subscribe(subscription);

@@ -141,7 +141,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>, 
 
 		if (metaInfo.Count == 0)
 		{
-			data = FilterNewData(data, metaInfo).ToArray();
+			data = [.. FilterNewData(data, metaInfo)];
 
 			if (data.IsEmpty())
 				return 0;
@@ -162,7 +162,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>, 
 		{
 			if (AppendOnlyNew)
 			{
-				data = FilterNewData(data, metaInfo).ToArray();
+				data = [.. FilterNewData(data, metaInfo)];
 
 				if (data.IsEmpty())
 					return 0;
@@ -300,7 +300,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>, 
 							stream = LoadStream(date, false);
 
 							Save(stream, Serializer.CreateMetaInfo(date),
-								loadedData.Values.SelectMany(l => l).ToArray(), true);
+								[.. loadedData.Values.SelectMany(l => l)], true);
 
 							stream.Dispose();
 							stream = null;

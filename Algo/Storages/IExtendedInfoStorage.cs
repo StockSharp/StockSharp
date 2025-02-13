@@ -129,7 +129,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 			if (fields == null)
 				throw new ArgumentNullException(nameof(fields));
 
-			_fields = fields.ToArray();
+			_fields = [.. fields];
 
 			if (_fields.IsEmpty())
 				throw new ArgumentOutOfRangeException(nameof(fields));
@@ -171,7 +171,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 							if (fields.Length != types.Length)
 								throw new InvalidOperationException($"{fields.Length} != {types.Length}");
 
-							_fields = fields.Select((f, i) => Tuple.Create(f, types[i])).ToArray();
+							_fields = [.. fields.Select((f, i) => Tuple.Create(f, types[i]))];
 						}
 
 						while (reader.NextLine())

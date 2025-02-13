@@ -109,9 +109,7 @@ partial class Connector
 			{
 				lock (_syncObject)
 				{
-					return _subscriptions
-					       .Select(p => p.Value.Subscription)
-					       .ToArray();
+					return [.. _subscriptions.Select(p => p.Value.Subscription)];
 				}
 			}
 		}

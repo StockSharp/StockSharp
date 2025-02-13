@@ -177,7 +177,7 @@ public class SnapshotRegistry : Disposable
 			{
 				lock (_snapshots.SyncRoot)
 				{
-					return _snapshots.Values.Where(m =>
+					return [.. _snapshots.Values.Where(m =>
 					{
 						if (from == null && to == null)
 							return true;
@@ -191,7 +191,7 @@ public class SnapshotRegistry : Disposable
 							return false;
 
 						return true;
-					}).Select(m => m.TypedClone()).ToArray();
+					}).Select(m => m.TypedClone())];
 				}
 			}
 

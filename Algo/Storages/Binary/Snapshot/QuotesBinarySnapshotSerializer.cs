@@ -79,8 +79,8 @@ public class QuotesBinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Qu
 
 		if (MaxDepth != null)
 		{
-			bids = bids.Take(MaxDepth.Value).ToArray();
-			asks = asks.Take(MaxDepth.Value).ToArray();
+			bids = [.. bids.Take(MaxDepth.Value)];
+			asks = [.. asks.Take(MaxDepth.Value)];
 		}
 
 		snapshot.BidCount = bids.Length;

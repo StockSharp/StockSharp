@@ -801,7 +801,7 @@ public class CsvEntityRegistry : IEntityRegistry
 				var str = reader.ReadString();
 
 				if (!str.IsEmpty())
-					message.Fields = str.SplitByComma().Select(s => (Level1Fields)s.To<int>()).ToArray();
+					message.Fields = [.. str.SplitByComma().Select(s => (Level1Fields)s.To<int>())];
 			}
 
 			if ((reader.ColumnCurr + 1) < reader.ColumnCount)

@@ -22,7 +22,7 @@ public class ExtendedInfoStorageMessageAdapter : MessageAdapterWrapper
 
 		_extendedInfoStorage = extendedInfoStorage ?? throw new ArgumentNullException(nameof(extendedInfoStorage));
 		_storageName = InnerAdapter.StorageName;
-		_fields = InnerAdapter.SecurityExtendedFields.ToArray();
+		_fields = [.. InnerAdapter.SecurityExtendedFields];
 	}
 
 	private readonly SyncObject _sync = new();

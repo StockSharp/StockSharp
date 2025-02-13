@@ -16,7 +16,7 @@ public class StatisticManager : IStatisticManager
 			get
 			{
 				lock (SyncRoot)
-					return _pnlParams ??= this.OfType<IPnLStatisticParameter>().ToArray();
+					return _pnlParams ??= [.. this.OfType<IPnLStatisticParameter>()];
 			}
 		}
 
@@ -27,7 +27,7 @@ public class StatisticManager : IStatisticManager
 			get
 			{
 				lock (SyncRoot)
-					return _tradeParams ??= this.OfType<ITradeStatisticParameter>().ToArray();
+					return _tradeParams ??= [.. this.OfType<ITradeStatisticParameter>()];
 			}
 		}
 
@@ -38,7 +38,7 @@ public class StatisticManager : IStatisticManager
 			get
 			{
 				lock (SyncRoot)
-					return _positionParams ??= this.OfType<IPositionStatisticParameter>().ToArray();
+					return _positionParams ??= [.. this.OfType<IPositionStatisticParameter>()];
 			}
 		}
 
@@ -49,7 +49,7 @@ public class StatisticManager : IStatisticManager
 			get
 			{
 				lock (SyncRoot)
-					return _orderParams ??= this.OfType<IOrderStatisticParameter>().ToArray();
+					return _orderParams ??= [.. this.OfType<IOrderStatisticParameter>()];
 			}
 		}
 

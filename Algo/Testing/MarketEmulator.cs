@@ -1874,7 +1874,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		{
 			return quotes.Count == 0
 				? []
-				: quotes.Select(p => p.Value.Second).ToArray();
+				: [.. quotes.Select(p => p.Value.Second)];
 		}
 
 		private void UpdateQuotes(ExecutionMessage message, ICollection<Message> result)
@@ -3064,7 +3064,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 		TransactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
 
-		((IMessageAdapter)this).SupportedInMessages = ((IMessageAdapter)this).PossibleSupportedMessages.Select(i => i.Type).ToArray();
+		((IMessageAdapter)this).SupportedInMessages = [.. ((IMessageAdapter)this).PossibleSupportedMessages.Select(i => i.Type)];
 	}
 
 	/// <inheritdoc />

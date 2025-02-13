@@ -34,7 +34,7 @@ public class LinearRegSlope : LengthIndicator<decimal>
 			Buffer.PushBack(newValue);
 		}
 
-		var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
+		var buff = input.IsFinal ? Buffer : (IList<decimal>)[.. Buffer.Skip(1), newValue];
 
 		//x - независимая переменная, номер значения в буфере
 		//y - зависимая переменная - значения из буфера

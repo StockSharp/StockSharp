@@ -747,7 +747,7 @@ public static partial class MarketRuleHelper
 	/// <returns>Combined rule.</returns>
 	public static IMarketRule And(this IEnumerable<IMarketRule> rules)
 	{
-		return new AndRule(rules.ToArray());
+		return new AndRule([.. rules]);
 	}
 
 	/// <summary>

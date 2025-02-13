@@ -59,7 +59,7 @@ public sealed class StrategyNameGenerator
 				Refresh();
 		};
 
-		ShortName = new string(_strategy.GetType().Name.Where(char.IsUpper).ToArray());
+		ShortName = new string([.. _strategy.GetType().Name.Where(char.IsUpper)]);
 
 		_formatter = Smart.CreateDefaultSmartFormat();
 		_formatter.SourceExtensions.Add(new Source(_formatter, new Dictionary<string, string>

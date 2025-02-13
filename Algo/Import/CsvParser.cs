@@ -42,7 +42,7 @@ public class CsvParser : BaseLogReceiver
 			throw new ArgumentException(nameof(dataType));
 
 		DataType = dataType;
-		Fields = fields.ToArray();
+		Fields = [.. fields];
 
 		if (Fields.IsEmpty())
 			throw new ArgumentException(nameof(fields));

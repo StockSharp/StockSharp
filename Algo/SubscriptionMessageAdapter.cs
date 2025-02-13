@@ -210,7 +210,7 @@ public class SubscriptionMessageAdapter : MessageAdapterWrapper
 							lock (_sync)
 							{
 								if (_replaceId.Count > 0)
-									subscrMsg.SetSubscriptionIds(ids.Select(id => _replaceId.TryGetValue2(id) ?? id).ToArray());
+									subscrMsg.SetSubscriptionIds([.. ids.Select(id => _replaceId.TryGetValue2(id) ?? id)]);
 							}
 						}
 

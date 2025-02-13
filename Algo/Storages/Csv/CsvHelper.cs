@@ -245,8 +245,8 @@ static class CsvHelper
 			}
 
 			time.Periods = deserialize<List<WorkingTimePeriod>>(reader.ReadString());
-			time.SpecialWorkingDays = deserialize<IEnumerable<DateTime>>(reader.ReadString()).ToArray();
-			time.SpecialHolidays = deserialize<IEnumerable<DateTime>>(reader.ReadString()).ToArray();
+			time.SpecialWorkingDays = [.. deserialize<IEnumerable<DateTime>>(reader.ReadString())];
+			time.SpecialHolidays = [.. deserialize<IEnumerable<DateTime>>(reader.ReadString())];
 		}
 		else
 		{

@@ -68,7 +68,7 @@ public class CandleCsvSerializer<TCandleMessage> : CsvMarketDataSerializer<TCand
 
 		public IEnumerable<TCandleMessage> Process(IEnumerable<TCandleMessage> messages)
 		{
-			messages = messages.ToArray();
+			messages = [.. messages];
 
 			if (messages.IsEmpty())
 				return [];

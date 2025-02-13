@@ -77,7 +77,7 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 	public IMessageChannel InChannel { get; }
 
 	/// <inheritdoc />
-	public override IEnumerable<MessageTypes> SupportedInMessages => InnerAdapter.SupportedInMessages.Concat(Emulator.SupportedInMessages).Distinct().ToArray();
+	public override IEnumerable<MessageTypes> SupportedInMessages => [.. InnerAdapter.SupportedInMessages.Concat(Emulator.SupportedInMessages).Distinct()];
 
 	/// <inheritdoc />
 	public override bool? IsPositionsEmulationRequired => Emulator.IsPositionsEmulationRequired;

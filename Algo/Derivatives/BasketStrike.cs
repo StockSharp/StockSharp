@@ -84,7 +84,7 @@ public class OffsetBasketStrike : BasketStrike
 		if (_strikeStep == 0)
 			_strikeStep = UnderlyingAsset.GetStrikeStep(SecurityProvider, ExpiryDate);
 
-		allStrikes = allStrikes.ToArray();
+		allStrikes = [.. allStrikes];
 
 		var centralStrike = UnderlyingAsset.GetCentralStrike(DataProvider, allStrikes);
 

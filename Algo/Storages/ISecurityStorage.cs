@@ -98,7 +98,7 @@ public class InMemorySecurityStorage : ISecurityStorage
 
 		lock (_inner.SyncRoot)
 		{
-			toDelete = _inner.Values.Filter(criteria).ToArray();
+			toDelete = [.. _inner.Values.Filter(criteria)];
 
 			foreach (var security in toDelete)
 				_inner.Remove(security.ToSecurityId());

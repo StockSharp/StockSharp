@@ -67,7 +67,7 @@ public class GeneticOptimizer : BaseOptimizer
 				parameters[i] = realParam;
 			}
 
-			var key = new DynamicTuple(parameters.Select(p => p.Value).ToArray());
+			var key = new DynamicTuple([.. parameters.Select(p => p.Value)]);
 
 			if (_cache.TryGetValue(key, out var fitVal))
 				return (double)fitVal;

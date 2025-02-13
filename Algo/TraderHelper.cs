@@ -378,9 +378,9 @@ public static partial class TraderHelper
 		if (securityProvider == null)
 			throw new ArgumentNullException(nameof(securityProvider));
 
-		return security.InnerSecurityIds.Select(id =>
+		return [.. security.InnerSecurityIds.Select(id =>
 			securityProvider.LookupById(id) ?? throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(id))
-		).ToArray();
+		)];
 	}
 
 	/// <summary>

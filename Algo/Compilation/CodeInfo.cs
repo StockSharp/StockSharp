@@ -134,7 +134,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		}
 	}
 
-	private readonly CachedSynchronizedSet<AssemblyReference> _assemblyReferences = new(CodeExtensions.DefaultReferences);
+	private readonly CachedSynchronizedSet<AssemblyReference> _assemblyReferences = [.. CodeExtensions.DefaultReferences];
 
 	/// <summary>
 	/// Assembly references.
@@ -224,7 +224,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	}
 
 	private string[] GetRefNames()
-		=> _assemblyReferences.Cache.Concat(_projectReferences.Cache).Concat(_nugetReferences.Cache).Select(r => r.Name).ToArray();
+		=> [.. _assemblyReferences.Cache.Concat(_projectReferences.Cache).Concat(_nugetReferences.Cache).Select(r => r.Name)];
 
 	/// <summary>
 	/// Compile code.
@@ -271,7 +271,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 
 			try
 			{
-				refs = (await _assemblyReferences.Cache.Concat(_projectReferences.Cache).Concat(_nugetReferences.Cache).ToValidRefImages(cancellationToken)).ToArray();
+				refs = [.. (await _assemblyReferences.Cache.Concat(_projectReferences.Cache).Concat(_nugetReferences.Cache).ToValidRefImages(cancellationToken))];
 			}
 			catch (Exception ex)
 			{

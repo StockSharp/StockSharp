@@ -195,7 +195,7 @@ public class InMemorySecurityMappingStorage : ISecurityMappingStorage
 			if (!removed)
 				return false;
 
-			all = mappings.Select(p => (SecurityIdMapping)p).ToArray();
+			all = [.. mappings.Select(p => (SecurityIdMapping)p)];
 		}
 
 		_changed?.Invoke(storageName, new SecurityIdMapping { StockSharpId = stockSharpId });

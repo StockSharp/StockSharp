@@ -32,7 +32,7 @@ public class FilteredMarketDepthAdapter : MessageAdapterWrapper
 
 		private QuoteChange[] Filter(Sides side, IEnumerable<QuoteChange> quotes)
 		{
-			return quotes
+			return [.. quotes
 				.Select(quote =>
 				{
 					if (_totals.TryGetValue((side, quote.Price), out var total))
@@ -40,8 +40,7 @@ public class FilteredMarketDepthAdapter : MessageAdapterWrapper
 
 					return quote;
 				})
-				.Where(q => q.Volume > 0)
-				.ToArray();
+				.Where(q => q.Volume > 0)];
 		}
 
 		private QuoteChangeMessage CreateFilteredBook()
@@ -535,7 +534,7 @@ public class FilteredMarketDepthAdapter : MessageAdapterWrapper
 						var book = info.Process(quoteMsg);
 
 						if (leftIds is null)
-							leftIds = new HashSet<long>(ids);
+							leftIds = [.. ids];
 
 						if (info.Online is null)
 							leftIds.Remove(id);
@@ -591,7 +590,7 @@ public class FilteredMarketDepthAdapter : MessageAdapterWrapper
 							continue;
 
 						if (leftIds is null)
-							leftIds = new HashSet<long>(ids);
+							leftIds = [.. ids];
 
 						if (info.Online is null)
 							leftIds.Remove(id);

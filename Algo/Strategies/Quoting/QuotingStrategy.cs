@@ -317,7 +317,7 @@ public abstract class QuotingStrategy : Strategy
 				.Once()
 				.Apply(this);
 
-			_notificationRules = GetNotificationRules().ToArray();
+			_notificationRules = [.. GetNotificationRules()];
 			if (!_notificationRules.IsEmpty())
 			{
 				_notificationRules

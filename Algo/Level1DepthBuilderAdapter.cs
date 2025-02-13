@@ -243,7 +243,7 @@ public class Level1DepthBuilderAdapter : MessageAdapterWrapper
 						books.Add(quoteMsg);
 
 						if (leftIds == null)
-							leftIds = new HashSet<long>(ids);
+							leftIds = [.. ids];
 
 						leftIds.RemoveRange(info.SubscriptionIds.Cache);
 					}

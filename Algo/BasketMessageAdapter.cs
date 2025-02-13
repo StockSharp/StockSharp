@@ -1276,11 +1276,11 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 					if (set != null)
 					{
-						adapters = adapters.Where(a => !set.Contains(GetUnderlyingAdapter(a))).ToArray();
+						adapters = [.. adapters.Where(a => !set.Contains(GetUnderlyingAdapter(a)))];
 					}
 					else if (mdMsg1.DataType2 == DataType.News && (mdMsg1.SecurityId == default || mdMsg1.SecurityId == SecurityId.News))
 					{
-						adapters = adapters.Where(a => !a.IsSecurityNewsOnly).ToArray();
+						adapters = [.. adapters.Where(a => !a.IsSecurityNewsOnly)];
 					}
 
 					if (adapters.Length == 0)
@@ -1291,7 +1291,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 					var isAll = ((SecurityLookupMessage)message).IsLookupAll();
 
 					if (isAll)
-						adapters = adapters.Where(a => a.IsSupportSecuritiesLookupAll()).ToArray();
+						adapters = [.. adapters.Where(a => a.IsSupportSecuritiesLookupAll())];
 				}
 			}
 

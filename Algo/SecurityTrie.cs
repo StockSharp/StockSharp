@@ -97,7 +97,7 @@ public class SecurityTrie : ICollection<Security>
 	public IEnumerable<Security> Retrieve(string filter)
 	{
 		lock (_sync)
-			return (filter.IsEmpty() ? _allSecurities.Values : _trie.Retrieve(filter.ToLowerInvariant())).ToArray();
+			return [.. (filter.IsEmpty() ? _allSecurities.Values : _trie.Retrieve(filter.ToLowerInvariant()))];
 	}
 
 	/// <summary>
@@ -137,7 +137,7 @@ public class SecurityTrie : ICollection<Security>
 		if (securities == null)
 			throw new ArgumentNullException(nameof(securities));
 
-		securities = securities.ToArray();
+		securities = [.. securities];
 
 		lock (_sync)
 		{

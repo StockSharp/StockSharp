@@ -100,7 +100,7 @@ public sealed class OptimalTracking : LengthIndicator<decimal>
 		if (input.IsFinal)
 			Buffer.PushBack(average);
 
-		var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(Buffer.Count >= Length ? 1 : 0).Append(average).ToArray();
+		var buff = input.IsFinal ? Buffer : (IList<decimal>)[.. Buffer.Skip(Buffer.Count >= Length ? 1 : 0), average];
 
 		var b = input.IsFinal ? _buf : _buf.Clone();
 

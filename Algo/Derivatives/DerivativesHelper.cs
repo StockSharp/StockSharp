@@ -360,7 +360,7 @@ public static class DerivativesHelper
 		if (underlyingAsset == null)
 			throw new ArgumentNullException(nameof(underlyingAsset));
 
-		allStrikes = allStrikes.ToArray();
+		allStrikes = [.. allStrikes];
 
 		var cs = underlyingAsset.GetCentralStrike(provider, allStrikes);
 
@@ -394,7 +394,7 @@ public static class DerivativesHelper
 		if (underlyingAsset == null)
 			throw new ArgumentNullException(nameof(underlyingAsset));
 
-		allStrikes = allStrikes.ToArray();
+		allStrikes = [.. allStrikes];
 
 		var cs = underlyingAsset.GetCentralStrike(provider, allStrikes);
 
@@ -428,7 +428,7 @@ public static class DerivativesHelper
 		if (underlyingAsset == null)
 			throw new ArgumentNullException(nameof(underlyingAsset));
 
-		allStrikes = allStrikes.ToArray();
+		allStrikes = [.. allStrikes];
 
 		var centralStrikes = new List<Security>();
 
@@ -651,8 +651,8 @@ public static class DerivativesHelper
 		{
 			ServerTime = depth.ServerTime,
 			SecurityId = depth.SecurityId,
-			Bids = depth.Bids.Select(Convert).ToArray(),
-			Asks = depth.Asks.Select(Convert).ToArray(),
+			Bids = [.. depth.Bids.Select(Convert)],
+			Asks = [.. depth.Asks.Select(Convert)],
 		};
 	}
 

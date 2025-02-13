@@ -19,7 +19,7 @@ public class T3MovingAverage : LengthIndicator<decimal>
 	/// </summary>
 	public T3MovingAverage()
 	{
-		_emas = Enumerable.Range(0, 6).Select(_ => new ExponentialMovingAverage()).ToArray();
+		_emas = [.. Enumerable.Range(0, 6).Select(_ => new ExponentialMovingAverage())];
 
 		Length = 5;
 		VolumeFactor = 0.7m;

@@ -94,7 +94,7 @@ public class CandleExpressionCondition : IPersistable
 		if (!_formula.Error.IsEmpty())
 			throw new InvalidOperationException(_formula.Error);
 
-		_variables = _formula.Variables.ToArray();
+		_variables = [.. _formula.Variables];
 		_varValues = new decimal[_variables.Length];
 
 		foreach (var varName in _variables)
@@ -215,7 +215,7 @@ public class ExpressionCandlePattern : ICandlePattern
 
 		/// <summary>
 		/// </summary>
-		public ConditionError(string message, IEnumerable<int> indexes) : base(message) => Indexes = indexes.ToArray();
+		public ConditionError(string message, IEnumerable<int> indexes) : base(message) => Indexes = [.. indexes];
 	}
 
 	/// <summary>
@@ -278,12 +278,12 @@ public class ExpressionCandlePattern : ICandlePattern
 
 		Name = storage.GetValue<string>(nameof(Name));
 
-		Conditions = storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Conditions)).Select(ss =>
+		Conditions = [.. storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Conditions)).Select(ss =>
 		{
 			var cond = new CandleExpressionCondition(null);
 			cond.Load(ss);
 			return cond;
-		}).ToArray();
+		})];
 	}
 
 	void IPersistable.Save(SettingsStorage storage)

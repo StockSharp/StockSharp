@@ -121,10 +121,10 @@ public class OrderBookTruncateMessageAdapter : MessageAdapterWrapper
 					clone.SetSubscriptionIds([.. group]);
 
 					if (clone.Bids.Length > maxDepth)
-						clone.Bids = clone.Bids.Take(maxDepth).ToArray();
+						clone.Bids = [.. clone.Bids.Take(maxDepth)];
 
 					if (clone.Asks.Length > maxDepth)
-						clone.Asks = clone.Asks.Take(maxDepth).ToArray();
+						clone.Asks = [.. clone.Asks.Take(maxDepth)];
 
 					clones.Add(clone);
 				}

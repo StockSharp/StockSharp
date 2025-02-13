@@ -357,7 +357,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		_id = Param(nameof(Id), base.Id).SetHidden().SetReadOnly();
 		_volume = Param<decimal>(nameof(Volume), 1).SetValidator(new DecimalGreaterThanZeroAttribute()).SetDisplay(LocalizedStrings.Volume, LocalizedStrings.StrategyVolume, LocalizedStrings.General);
-		_name = Param(nameof(Name), new string(GetType().Name.Where(char.IsUpper).ToArray())).SetDisplay(LocalizedStrings.Name, LocalizedStrings.StrategyName, LocalizedStrings.General).SetBasic(false);
+		_name = Param(nameof(Name), new string([.. GetType().Name.Where(char.IsUpper)])).SetDisplay(LocalizedStrings.Name, LocalizedStrings.StrategyName, LocalizedStrings.General).SetBasic(false);
 		_disposeOnStop = Param(nameof(DisposeOnStop), false).SetCanOptimize(false).SetHidden();
 		_waitRulesOnStop = Param(nameof(WaitRulesOnStop), true).SetCanOptimize(false).SetHidden();
 		_cancelOrdersWhenStopping = Param(nameof(CancelOrdersWhenStopping), true).SetCanOptimize(false).SetHidden();
@@ -2771,7 +2771,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		var parameters = GetParameters();
 
 		if (!saveSystemParameters)
-			parameters = parameters.Except(_systemParams).ToArray();
+			parameters = [.. parameters.Except(_systemParams)];
 
 		storage
 			.Set(nameof(Parameters), parameters.Select(p => p.Save()).ToArray())

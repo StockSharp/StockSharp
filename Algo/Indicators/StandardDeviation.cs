@@ -48,7 +48,7 @@ public class StandardDeviation : LengthIndicator<decimal>
 			Buffer.PushBack(newValue);
 		}
 
-		var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
+		var buff = input.IsFinal ? Buffer : (IList<decimal>)[.. Buffer.Skip(1), newValue];
 
 		//считаем значение отклонения в последней точке
 		var std = buff.Select(t1 => t1 - smaValue).Select(t => t * t).Sum();

@@ -338,7 +338,7 @@ class CandleBinarySerializer<TCandleMessage> : BinaryMarketDataSerializer<TCandl
 
 			if (priceLevels != null)
 			{
-				priceLevels = priceLevels.ToArray();
+				priceLevels = [.. priceLevels];
 
 				writer.WriteInt(priceLevels.Count());
 
@@ -372,7 +372,7 @@ class CandleBinarySerializer<TCandleMessage> : BinaryMarketDataSerializer<TCandl
 					{
 						writer.Write(true);
 
-						volumes = volumes.ToArray();
+						volumes = [.. volumes];
 
 						writer.WriteInt(volumes.Count());
 
@@ -390,7 +390,7 @@ class CandleBinarySerializer<TCandleMessage> : BinaryMarketDataSerializer<TCandl
 					{
 						writer.Write(true);
 
-						volumes = volumes.ToArray();
+						volumes = [.. volumes];
 
 						writer.WriteInt(volumes.Count());
 

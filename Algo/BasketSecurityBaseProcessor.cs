@@ -617,7 +617,7 @@ public abstract class IndexSecurityBaseProcessor<TBasketSecurity> : BasketSecuri
 		if (dict.Count != BasketLegs.Length)
 			yield break;
 
-		yield return convert(BasketLegs.Select(leg => dict[leg]).ToArray());
+		yield return convert([.. BasketLegs.Select(leg => dict[leg])]);
 		dict.Clear();
 	}
 

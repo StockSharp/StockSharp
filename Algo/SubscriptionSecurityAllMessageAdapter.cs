@@ -377,7 +377,7 @@ public class SubscriptionSecurityAllMessageAdapter : MessageAdapterWrapper
 		if (ids.Length == 1 && ids[0] == initialId)
 			subscrMsg.SetSubscriptionIds(newIds);
 		else
-			subscrMsg.SetSubscriptionIds(ids.Where(id => id != initialId).Concat(newIds).ToArray());
+			subscrMsg.SetSubscriptionIds([.. ids.Where(id => id != initialId), .. newIds]);
 	}
 
 	private void ApplySubscriptionIds(ISubscriptionIdMessage subscrMsg, ChildSubscription child)
