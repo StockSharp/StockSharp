@@ -3493,9 +3493,12 @@ public static partial class Extensions
 		var bestBid = depth.GetBestBid();
 		var bestAsk = depth.GetBestAsk();
 
-		var spreadQuotes = bestBid is null || bestAsk is null
+		long spreadMaxDepthLong = (long)(maxDepth - bids.Length) + (maxDepth - asks.Length);
+		var spreadMaxDepth = spreadMaxDepthLong > int.MaxValue ? int.MaxValue : (int)spreadMaxDepthLong;
+
+		var spreadQuotes = bestBid is null || bestAsk is null || spreadMaxDepth <= 0
 			? (bids: [], asks: [])
-			: bestBid.Value.Sparse(bestAsk.Value, priceRange, priceStep);
+			: bestBid.Value.Sparse(bestAsk.Value, priceRange, priceStep, spreadMaxDepth);
 
 		return new()
 		{
