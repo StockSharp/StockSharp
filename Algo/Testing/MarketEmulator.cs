@@ -2587,8 +2587,11 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			order.Balance = 0;
 			order.OrderState = OrderStates.Done;
 
-			ProcessOrder(time, order, result);
-			ProcessTrade(time, order, price, balance, result);
+			if (result is not null)
+			{
+				ProcessOrder(time, order, result);
+				ProcessTrade(time, order, price, balance, result);
+			}
 
 			return balance;
 		}
