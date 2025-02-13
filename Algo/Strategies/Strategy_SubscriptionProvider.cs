@@ -25,14 +25,6 @@ partial class Strategy
 	public event Action<Subscription, ExchangeBoard> BoardReceived;
 
 	/// <inheritdoc />
-	[Obsolete("Use OrderBookReceived event.")]
-	public event Action<Subscription, MarketDepth> MarketDepthReceived;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrderLogReceived event.")]
-	public event Action<Subscription, OrderLogItem> OrderLogItemReceived;
-
-	/// <inheritdoc />
 	public event Action<Subscription, News> NewsReceived;
 
 	/// <inheritdoc />

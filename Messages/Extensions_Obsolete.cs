@@ -121,4 +121,68 @@ partial class Extensions
 		else
 			throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.InvalidValue);
 	}
+
+	/// <summary>
+	/// To group the order book by the price range.
+	/// </summary>
+	/// <param name="depth">The order book to be grouped.</param>
+	/// <param name="priceRange">The price range, for which grouping shall be performed.</param>
+	/// <returns>The grouped order book.</returns>
+	[Obsolete("Use method with decimal priceRange parameter")]
+	public static QuoteChangeMessage Group(this IOrderBookMessage depth, Unit priceRange)
+		=> depth.Group(GetActualPriceRange(priceRange));
+
+	/// <summary>
+	/// Add the message type info <see cref="IMessageAdapter.SupportedInMessages"/>.
+	/// </summary>
+	/// <param name="adapter">Adapter.</param>
+	/// <param name="type">Message type.</param>
+	[Obsolete]
+	public static void AddSupportedMessage(this MessageAdapter adapter, MessageTypes type)
+	{
+		AddSupportedMessage(adapter, type, IsMarketData(type));
+	}
+
+	/// <summary>
+	/// </summary>
+	[Obsolete("Use method with decimal priceRange parameter")]
+	public static QuoteChangeMessage Sparse(this IOrderBookMessage depth, Unit priceRange, decimal? priceStep)
+		=> depth.Sparse(GetActualPriceRange(priceRange), priceStep);
+
+	/// <summary>
+	/// </summary>
+	[Obsolete("Use method with decimal priceRange parameter")]
+	public static (QuoteChange[] bids, QuoteChange[] asks) Sparse(this QuoteChange bid, QuoteChange ask, Unit priceRange, decimal? priceStep)
+		=> bid.Sparse(ask, GetActualPriceRange(priceRange), priceStep);
+
+	/// <summary>
+	/// To create the sparse collection of quotes from regular quotes.
+	/// </summary>
+	/// <remarks>
+	/// In sparsed collection shown quotes with no active orders. The volume of these quotes is 0.
+	/// </remarks>
+	/// <param name="quotes">Regular quotes. The collection shall contain quotes of the same direction (only bids or only offers).</param>
+	/// <param name="side">Side.</param>
+	/// <param name="priceRange">Minimum price step.</param>
+	/// <param name="priceStep">Security price step.</param>
+	/// <returns>The sparse collection of quotes.</returns>
+	[Obsolete("Use method with decimal priceRange parameter")]
+	public static QuoteChange[] Sparse(this QuoteChange[] quotes, Sides side, Unit priceRange, decimal? priceStep)
+	{
+		if (quotes is null)
+			throw new ArgumentNullException(nameof(quotes));
+
+		return quotes.Sparse(side, GetActualPriceRange(priceRange), priceStep);
+	}
+
+	/// <summary>
+	/// </summary>
+	[Obsolete("Use method with decimal priceRange")]
+	public static QuoteChange[] Group(this QuoteChange[] quotes, Sides side, Unit priceRange)
+	{
+		if (quotes is null)
+			throw new ArgumentNullException(nameof(quotes));
+
+		return quotes.Group(side, GetActualPriceRange(priceRange));
+	}
 }

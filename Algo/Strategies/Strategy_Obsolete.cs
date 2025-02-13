@@ -29,6 +29,74 @@ partial class Strategy
 		set => CommentMode = value ? StrategyCommentModes.Name : StrategyCommentModes.Disabled;
 	}
 
+	/// <summary>
+	/// The maximal number of errors, which strategy shall receive prior to stop operation.
+	/// </summary>
+	/// <remarks>
+	/// The default value is 1.
+	/// </remarks>
+	[Browsable(false)]
+	[Obsolete("Use RiskErrorRule rule.")]
+	public int MaxErrorCount { get; set; }
+
+	/// <summary>
+	/// The current number of errors.
+	/// </summary>
+	[Browsable(false)]
+	[Obsolete("Use RiskErrorRule rule.")]
+	public int ErrorCount { get; private set; }
+
+	/// <summary>
+	/// The maximum number of order registration errors above which the algorithm will be stopped.
+	/// </summary>
+	/// <remarks>
+	/// The default value is 10.
+	/// </remarks>
+	[Browsable(false)]
+	[Obsolete("Use RiskOrderErrorRule rule.")]
+	public int MaxOrderRegisterErrorCount { get; set; }
+
+	/// <summary>
+	/// Current number of order registration errors.
+	/// </summary>
+	[Browsable(false)]
+	[Obsolete("Use RiskOrderErrorRule rule.")]
+	public int OrderRegisterErrorCount { get; private set; }
+
+	/// <summary>
+	/// Current number of order changes.
+	/// </summary>
+	[Browsable(false)]
+	[Obsolete("Use RiskOrderFreqRule rule.")]
+	public int CurrentRegisterCount { get; private set; }
+
+	/// <summary>
+	/// The maximum number of orders above which the algorithm will be stopped.
+	/// </summary>
+	/// <remarks>
+	/// The default value is <see cref="int.MaxValue"/>.
+	/// </remarks>
+	[Browsable(false)]
+	[Obsolete("Use RiskOrderFreqRule rule.")]
+	public int MaxRegisterCount { get; set; }
+
+	/// <summary>
+	/// The order registration interval above which the new order would not be registered.
+	/// </summary>
+	/// <remarks>
+	/// By default, the interval is disabled and it is equal to <see cref="TimeSpan.Zero"/>.
+	/// </remarks>
+	[Browsable(false)]
+	[Obsolete("Use RiskOrderFreqRule rule.")]
+	public TimeSpan RegisterInterval { get; set; }
+
+	/// <summary>
+	/// Orders with errors, registered within the strategy.
+	/// </summary>
+	[Browsable(false)]
+	[Obsolete("Subscribe on OrderRegisterFailed event.")]
+	public IEnumerable<OrderFail> OrderFails => [];
+
 #pragma warning disable 67
 	/// <inheritdoc />
 	[Obsolete("Use OrderRegisterFailed event.")]
@@ -94,5 +162,161 @@ partial class Strategy
 			throw new ArgumentNullException(nameof(myTrades));
 
 		AttachOrder(order, true);
+	}
+
+	/// <inheritdoc />
+	[Obsolete("Use SubscriptionStarted event.")]
+	public event Action<Security, MarketDataMessage> MarketDataSubscriptionSucceeded
+	{
+		add => MarketDataProvider.MarketDataSubscriptionSucceeded += value;
+		remove => MarketDataProvider.MarketDataSubscriptionSucceeded -= value;
+	}
+
+	/// <inheritdoc />
+	[Obsolete("Use SubscriptionFailed event.")]
+	public event Action<Security, MarketDataMessage, Exception> MarketDataSubscriptionFailed
+	{
+		add => MarketDataProvider.MarketDataSubscriptionFailed += value;
+		remove => MarketDataProvider.MarketDataSubscriptionFailed -= value;
+	}
+
+	/// <inheritdoc />
+	[Obsolete("Use SubscriptionFailed event.")]
+	public event Action<Security, MarketDataMessage, SubscriptionResponseMessage> MarketDataSubscriptionFailed2
+	{
+		add => MarketDataProvider.MarketDataSubscriptionFailed2 += value;
+		remove => MarketDataProvider.MarketDataSubscriptionFailed2 -= value;
+	}
+
+	/// <inheritdoc />
+	[Obsolete("Use SubscriptionStopped event.")]
+	public event Action<Security, MarketDataMessage> MarketDataUnSubscriptionSucceeded
+	{
+		add => MarketDataProvider.MarketDataUnSubscriptionSucceeded += value;
+		remove => MarketDataProvider.MarketDataUnSubscriptionSucceeded -= value;
+	}
+
+	/// <inheritdoc />
+	[Obsolete("Use SubscriptionFailed event.")]
+	public event Action<Security, MarketDataMessage, Exception> MarketDataUnSubscriptionFailed
+	{
+		add => MarketDataProvider.MarketDataUnSubscriptionFailed += value;
+		remove => MarketDataProvider.MarketDataUnSubscriptionFailed -= value;
+	}
+
+	/// <inheritdoc />
+	[Obsolete("Use SubscriptionFailed event.")]
+	public event Action<Security, MarketDataMessage, SubscriptionResponseMessage> MarketDataUnSubscriptionFailed2
+	{
+		add => MarketDataProvider.MarketDataUnSubscriptionFailed2 += value;
+		remove => MarketDataProvider.MarketDataUnSubscriptionFailed2 -= value;
+	}
+
+	/// <inheritdoc />
+	[Obsolete("Use SubscriptionStopped event.")]
+	public event Action<Security, SubscriptionFinishedMessage> MarketDataSubscriptionFinished
+	{
+		add => MarketDataProvider.MarketDataSubscriptionFinished += value;
+		remove => MarketDataProvider.MarketDataSubscriptionFinished -= value;
+	}
+
+	/// <inheritdoc />
+	[Obsolete("Use SubscriptionFailed event.")]
+	public event Action<Security, MarketDataMessage, Exception> MarketDataUnexpectedCancelled
+	{
+		add => MarketDataProvider.MarketDataUnexpectedCancelled += value;
+		remove => MarketDataProvider.MarketDataUnexpectedCancelled -= value;
+	}
+
+	/// <inheritdoc />
+	[Obsolete("Use SubscriptionOnline event.")]
+	public event Action<Security, MarketDataMessage> MarketDataSubscriptionOnline
+	{
+		add => MarketDataProvider.MarketDataSubscriptionOnline += value;
+		remove => MarketDataProvider.MarketDataSubscriptionOnline -= value;
+	}
+
+	/// <inheritdoc />
+	[Obsolete("Use TickTradeReceived event.")]
+	public event Action<Trade> NewTrade
+	{
+		add => MarketDataProvider.NewTrade += value;
+		remove => MarketDataProvider.NewTrade -= value;
+	}
+
+	/// <inheritdoc />
+	[Obsolete("Use SecurityReceived event.")]
+	public event Action<Security> NewSecurity
+	{
+		add => MarketDataProvider.NewSecurity += value;
+		remove => MarketDataProvider.NewSecurity -= value;
+	}
+
+	/// <inheritdoc />
+	[Obsolete("Use SecurityReceived event.")]
+	public event Action<Security> SecurityChanged
+	{
+		add => MarketDataProvider.SecurityChanged += value;
+		remove => MarketDataProvider.SecurityChanged -= value;
+	}
+
+	/// <inheritdoc />
+	[Obsolete("Use OrderBookReceived event.")]
+	public event Action<MarketDepth> NewMarketDepth
+	{
+		add => MarketDataProvider.NewMarketDepth += value;
+		remove => MarketDataProvider.NewMarketDepth -= value;
+	}
+
+	/// <inheritdoc />
+	[Obsolete("Use OrderBookReceived event.")]
+	public event Action<MarketDepth> MarketDepthChanged
+	{
+		add => MarketDataProvider.MarketDepthChanged += value;
+		remove => MarketDataProvider.MarketDepthChanged -= value;
+	}
+
+	/// <inheritdoc />
+	[Obsolete("Use OrderLogItemReceived event.")]
+	public event Action<OrderLogItem> NewOrderLogItem
+	{
+		add => MarketDataProvider.NewOrderLogItem += value;
+		remove => MarketDataProvider.NewOrderLogItem -= value;
+	}
+
+	/// <inheritdoc />
+	[Obsolete("Use NewsReceived event.")]
+	public event Action<News> NewNews
+	{
+		add => MarketDataProvider.NewNews += value;
+		remove => MarketDataProvider.NewNews -= value;
+	}
+
+	/// <inheritdoc />
+	[Obsolete("Use NewsReceived event.")]
+	public event Action<News> NewsChanged
+	{
+		add => MarketDataProvider.NewsChanged += value;
+		remove => MarketDataProvider.NewsChanged -= value;
+	}
+
+	/// <inheritdoc />
+	[Obsolete("Use OrderBookReceived event.")]
+	public event Action<Subscription, MarketDepth> MarketDepthReceived;
+
+	/// <inheritdoc />
+	[Obsolete("Use OrderLogReceived event.")]
+	public event Action<Subscription, OrderLogItem> OrderLogItemReceived;
+
+	[Obsolete("Use Subscribe method.")]
+	void ITransactionProvider.RegisterPortfolio(Portfolio portfolio)
+	{
+		SafeGetConnector().RegisterPortfolio(portfolio);
+	}
+
+	[Obsolete("Use UnSubscribe method.")]
+	void ITransactionProvider.UnRegisterPortfolio(Portfolio portfolio)
+	{
+		SafeGetConnector().UnRegisterPortfolio(portfolio);
 	}
 }

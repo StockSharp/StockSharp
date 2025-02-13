@@ -822,67 +822,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	[Browsable(false)]
 	public SettingsStorage Environment { get; } = [];
 
-	/// <summary>
-	/// The maximal number of errors, which strategy shall receive prior to stop operation.
-	/// </summary>
-	/// <remarks>
-	/// The default value is 1.
-	/// </remarks>
-	[Browsable(false)]
-	[Obsolete("Use RiskErrorRule rule.")]
-	public int MaxErrorCount { get; set; }
-
-	/// <summary>
-	/// The current number of errors.
-	/// </summary>
-	[Browsable(false)]
-	[Obsolete("Use RiskErrorRule rule.")]
-	public int ErrorCount { get; private set; }
-
-	/// <summary>
-	/// The maximum number of order registration errors above which the algorithm will be stopped.
-	/// </summary>
-	/// <remarks>
-	/// The default value is 10.
-	/// </remarks>
-	[Browsable(false)]
-	[Obsolete("Use RiskOrderErrorRule rule.")]
-	public int MaxOrderRegisterErrorCount { get; set; }
-
-	/// <summary>
-	/// Current number of order registration errors.
-	/// </summary>
-	[Browsable(false)]
-	[Obsolete("Use RiskOrderErrorRule rule.")]
-	public int OrderRegisterErrorCount { get; private set; }
-
-	/// <summary>
-	/// Current number of order changes.
-	/// </summary>
-	[Browsable(false)]
-	[Obsolete("Use RiskOrderFreqRule rule.")]
-	public int CurrentRegisterCount { get; private set; }
-
-	/// <summary>
-	/// The maximum number of orders above which the algorithm will be stopped.
-	/// </summary>
-	/// <remarks>
-	/// The default value is <see cref="int.MaxValue"/>.
-	/// </remarks>
-	[Browsable(false)]
-	[Obsolete("Use RiskOrderFreqRule rule.")]
-	public int MaxRegisterCount { get; set; }
-
-	/// <summary>
-	/// The order registration interval above which the new order would not be registered.
-	/// </summary>
-	/// <remarks>
-	/// By default, the interval is disabled and it is equal to <see cref="TimeSpan.Zero"/>.
-	/// </remarks>
-	[Browsable(false)]
-	[Obsolete("Use RiskOrderFreqRule rule.")]
-	public TimeSpan RegisterInterval { get; set; }
-
 	bool IScheduledTask.CanStart => ProcessState == ProcessStates.Stopped;
 	bool IScheduledTask.CanStop => ProcessState == ProcessStates.Started;
 
@@ -1168,13 +1107,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// </summary>
 	[Browsable(false)]
 	public IEnumerable<MyTrade> MyTrades => _myTrades.Cache;
-
-	/// <summary>
-	/// Orders with errors, registered within the strategy.
-	/// </summary>
-	[Browsable(false)]
-	[Obsolete("Subscribe on OrderRegisterFailed event.")]
-	public IEnumerable<OrderFail> OrderFails => [];
 
 	private readonly StrategyParam<decimal> _volume;
 

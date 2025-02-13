@@ -319,24 +319,6 @@ partial class MarketRuleHelper
 	}
 
 	/// <summary>
-	/// </summary>
-	[Obsolete("Use overrloding with Subscription arg type.")]
-	public static MarketRule<Subscription, Candle> WhenCandlesStarted(this ISubscriptionProvider subscriptionProvider, CandleSeries candleSeries)
-		=> WhenCandlesStarted<Candle>(subscriptionProvider, GetSubscription(subscriptionProvider, candleSeries));
-
-	/// <summary>
-	/// </summary>
-	[Obsolete("Use overrloding with Subscription arg type.")]
-	public static MarketRule<Subscription, Candle> WhenCandlesChanged(this ISubscriptionProvider subscriptionProvider, CandleSeries candleSeries)
-		=> WhenCandlesChanged<Candle>(subscriptionProvider, GetSubscription(subscriptionProvider, candleSeries));
-
-	/// <summary>
-	/// </summary>
-	[Obsolete("Use overrloding with Subscription arg type.")]
-	public static MarketRule<Subscription, Candle> WhenCandlesFinished(this ISubscriptionProvider subscriptionProvider, CandleSeries candleSeries)
-		=> WhenCandlesFinished<Candle>(subscriptionProvider, GetSubscription(subscriptionProvider, candleSeries));
-
-	/// <summary>
 	/// To create a rule for the event of new candles occurrence.
 	/// </summary>
 	/// <param name="subscriptionProvider">The subscription manager.</param>
@@ -492,29 +474,5 @@ partial class MarketRuleHelper
 			return candle.State == CandleStates.Finished;
 			//throw new ArgumentOutOfRangeException(nameof(candle), candle.GetType(), LocalizedStrings.WrongCandleType);
 		}
-	}
-
-	/// <summary>
-	/// Backward compatibility.
-	/// </summary>
-	[Obsolete("Use ICandleMessage.")]
-	public static MarketRule<TToken, ICandleMessage> Do<TToken>(this MarketRule<TToken, ICandleMessage> rule, Action<Candle> action)
-	{
-		if (action is null)
-			throw new ArgumentNullException(nameof(action));
-
-		return rule.Do((ICandleMessage msg) => action((Candle)msg));
-	}
-
-	/// <summary>
-	/// Backward compatibility.
-	/// </summary>
-	[Obsolete("Use ICandleMessage.")]
-	public static MarketRule<TToken, ICandleMessage> Do<TToken, TResult>(this MarketRule<TToken, ICandleMessage> rule, Func<Candle, TResult> action)
-	{
-		if (action is null)
-			throw new ArgumentNullException(nameof(action));
-
-		return rule.Do((ICandleMessage msg) => action((Candle)msg));
 	}
 }
