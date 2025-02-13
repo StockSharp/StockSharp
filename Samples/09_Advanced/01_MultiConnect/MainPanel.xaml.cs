@@ -12,6 +12,8 @@ using Ecng.Xaml;
 using Ecng.Collections;
 using Ecng.Logging;
 
+using Nito.AsyncEx;
+
 using StockSharp.Algo;
 using StockSharp.Algo.Storages;
 using StockSharp.BusinessEntities;
@@ -119,10 +121,13 @@ public partial class MainPanel
 			if (!credProvider.TryLoad(out var credentials))
 			{
 				//var clientSvc = WebApiServicesRegistry.GetServiceAsAnonymous<IClientService>();
-				var isOk = this.GuiSync(() => CredentialsWindow.TryShow(this, ref credentials, out autoLogon));
+				var (c, a) = this.GuiSync(() => AsyncContext.Run(() => CredentialsWindow.TryShow(this, credentials)));
 
-				if (!isOk)
+				if (c is null)
 					return null;
+
+				credentials = c;
+				autoLogon = a;
 			}
 
 			var token = credentials.Token.UnSecure();
