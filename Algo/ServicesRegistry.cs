@@ -132,6 +132,11 @@ public static class ServicesRegistry
 	public static IEntityRegistry EntityRegistry => ConfigManager.GetService<IEntityRegistry>();
 
 	/// <summary>
+	/// The storage of trade objects.
+	/// </summary>
+	public static IEntityRegistry TryEntityRegistry => ConfigManager.TryGetService<IEntityRegistry>();
+
+	/// <summary>
 	/// Security native identifier storage.
 	/// </summary>
 	public static INativeIdStorage TryNativeIdStorage => ConfigManager.TryGetService<INativeIdStorage>();
@@ -225,6 +230,11 @@ public static class ServicesRegistry
 	/// The risks control manager.
 	/// </summary>
 	public static IRiskManager RiskManager => ConfigManager.GetService<IRiskManager>();
+
+	/// <summary>
+	/// The risks control manager.
+	/// </summary>
+	public static IRiskManager TryRiskManager => ConfigManager.TryGetService<IRiskManager>();
 
 	/// <summary>
 	/// <see cref="IReportGeneratorProvider"/>.
