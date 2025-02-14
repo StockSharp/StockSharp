@@ -315,7 +315,15 @@ public static class IndicatorHelper
 	/// <param name="type"><see cref="IndicatorType"/></param>
 	/// <returns><see cref="IIndicator"/></returns>
 	public static IIndicator CreateIndicator(this IndicatorType type)
-		=> type.CheckOnNull(nameof(type)).Indicator.CreateInstance<IIndicator>();
+		=> type.TryCreateIndicator() ?? throw new InvalidOperationException();
+
+	/// <summary>
+	/// Create indicator.
+	/// </summary>
+	/// <param name="type"><see cref="IndicatorType"/></param>
+	/// <returns><see cref="IIndicator"/></returns>
+	public static IIndicator TryCreateIndicator(this IndicatorType type)
+		=> type.CheckOnNull(nameof(type)).Indicator?.CreateInstance<IIndicator>();
 
 	/// <summary>
 	/// Exclude obsolete indicators.
