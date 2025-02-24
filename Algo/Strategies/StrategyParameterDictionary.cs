@@ -3,30 +3,13 @@
 /// <summary>
 /// <see cref="IStrategyParam"/> dictionary.
 /// </summary>
-public class StrategyParameterDictionary : CachedSynchronizedDictionary<string, IStrategyParam>, IDisposable
+/// <remarks>
+/// Initializes a new instance of the <see cref="StrategyParameterDictionary"/>.
+/// </remarks>
+/// <param name="strategy"><see cref="Strategy"/></param>
+public class StrategyParameterDictionary(Strategy strategy) : CachedSynchronizedDictionary<string, IStrategyParam>(StringComparer.InvariantCultureIgnoreCase), IDisposable
 {
-	private class SecurityParam(Strategy strategy) : StrategyParam<Security>(nameof(Security))
-	{
-		public override Security Value
-		{
-			get => strategy.Security;
-			set => strategy.Security = value;
-		}
-	}
-
-	private readonly Strategy _strategy;
-	private readonly SecurityParam _secParam;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="StrategyParameterDictionary"/>.
-	/// </summary>
-	/// <param name="strategy"><see cref="Strategy"/></param>
-	public StrategyParameterDictionary(Strategy strategy)
-		: base(StringComparer.InvariantCultureIgnoreCase)
-    {
-		_strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
-		_secParam = new(strategy);
-	}
+	private readonly Strategy _strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
 
 	/// <summary>
 	/// Try get parameter by the specified <see cref="IStrategyParam.Id"/>.
@@ -35,17 +18,7 @@ public class StrategyParameterDictionary : CachedSynchronizedDictionary<string, 
 	/// <param name="param"><see cref="IStrategyParam"/> or <see langword="null"/> if parameter not exist.</param>
 	/// <returns><see langword="true"/> if parameter exist.</returns>
 	public bool TryGetById(string id, out IStrategyParam param)
-	{
-		if (TryGetValue(id, out param))
-			return true;
-		else if (id == _secParam.Id)
-		{
-			param = _secParam;
-			return true;
-		}
-
-		return false;
-	}
+		=> TryGetValue(id, out param);
 
 	/// <inheritdoc/>
 	public override IStrategyParam this[string key]

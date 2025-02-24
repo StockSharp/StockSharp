@@ -42,8 +42,6 @@ public class JsonReportGenerator : BaseReportGenerator
 		WriteStartElement();
 
 		WriteElementString("name", strategy.Name);
-		WriteElementString("security", strategy.Security?.Id);
-		WriteElementString("portfolio", strategy.Portfolio?.Name);
 
 		foreach (var p in strategy.GetParameters())
 		{

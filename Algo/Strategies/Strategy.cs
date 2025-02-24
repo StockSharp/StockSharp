@@ -350,20 +350,17 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		Rules = new StrategyRuleList(this);
 
-		NameGenerator = new(this);
-		NameGenerator.Changed += name => _name.Value = name;
-
 		Parameters = new(this);
 
 		_id = Param(nameof(Id), base.Id).SetHidden().SetReadOnly();
-		_volume = Param<decimal>(nameof(Volume), 1).SetValidator(new DecimalGreaterThanZeroAttribute()).SetDisplay(LocalizedStrings.Volume, LocalizedStrings.StrategyVolume, LocalizedStrings.General);
+		_volume = Param(nameof(Volume), 1m).SetValidator(new DecimalGreaterThanZeroAttribute()).SetDisplay(LocalizedStrings.Volume, LocalizedStrings.StrategyVolume, LocalizedStrings.General);
 		_name = Param(nameof(Name), new string([.. GetType().Name.Where(char.IsUpper)])).SetDisplay(LocalizedStrings.Name, LocalizedStrings.StrategyName, LocalizedStrings.General).SetBasic(false);
 		_disposeOnStop = Param(nameof(DisposeOnStop), false).SetCanOptimize(false).SetHidden();
 		_waitRulesOnStop = Param(nameof(WaitRulesOnStop), true).SetCanOptimize(false).SetHidden();
 		_cancelOrdersWhenStopping = Param(nameof(CancelOrdersWhenStopping), true).SetCanOptimize(false).SetHidden();
-		_waitAllTrades = Param<bool>(nameof(WaitAllTrades)).SetCanOptimize(false).SetHidden();
-		_commentMode = Param<StrategyCommentModes>(nameof(CommentMode)).SetDisplay(LocalizedStrings.Comment, LocalizedStrings.OrderComment, LocalizedStrings.General).SetBasic(false);
-		_ordersKeepTime = Param(nameof(OrdersKeepTime), TimeSpan.FromDays(1)).SetValidator(new TimeSpanNotNegativeAttribute()).SetDisplay(LocalizedStrings.Orders, LocalizedStrings.OrdersKeepTime, LocalizedStrings.General).SetBasic(false);
+		_waitAllTrades = Param(nameof(WaitAllTrades), false).SetCanOptimize(false).SetHidden();
+		_commentMode = Param(nameof(CommentMode), StrategyCommentModes.Disabled).SetDisplay(LocalizedStrings.Comment, LocalizedStrings.OrderComment, LocalizedStrings.General).SetBasic(false);
+		_ordersKeepTime = Param(nameof(OrdersKeepTime), TimeSpan.FromDays(1)).SetValidator(new TimeSpanNotNegativeAttribute()).SetDisplay(LocalizedStrings.Orders, LocalizedStrings.OrdersKeepTime, LocalizedStrings.General).SetBasic(false).SetCanOptimize(false);
 		_logLevel = Param(nameof(LogLevel), LogLevels.Inherit).SetDisplay(LocalizedStrings.LogLevel, LocalizedStrings.LogLevelKey, LocalizedStrings.Logging).SetBasic(false);
 		_stopOnChildStrategyErrors = Param(nameof(StopOnChildStrategyErrors), false).SetCanOptimize(false).SetHidden();
 		_restoreChildOrders = Param(nameof(RestoreChildOrders), false).SetCanOptimize(false).SetHidden();
@@ -371,7 +368,9 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		_unsubscribeOnStop = Param(nameof(UnsubscribeOnStop), true).SetCanOptimize(false).SetHidden();
 		_workingTime = Param(nameof(WorkingTime), new WorkingTime()).SetRequired().SetDisplay(LocalizedStrings.WorkingTime, LocalizedStrings.WorkingHours, LocalizedStrings.General).SetBasic(false);
 		_isOnlineStateIncludesChildren = Param(nameof(IsOnlineStateIncludesChildren), true).SetCanOptimize(false).SetHidden();
-		_historySize = Param<TimeSpan?>(nameof(HistorySize)).SetValidator(new TimeSpanNullOrNotNegativeAttribute()).SetDisplay(LocalizedStrings.DaysHistory, LocalizedStrings.DaysHistoryDesc, LocalizedStrings.General).SetBasic(false);
+		_historySize = Param<TimeSpan?>(nameof(HistorySize)).SetValidator(new TimeSpanNullOrNotNegativeAttribute()).SetDisplay(LocalizedStrings.DaysHistory, LocalizedStrings.DaysHistoryDesc, LocalizedStrings.General).SetBasic(false).SetCanOptimize(false);
+		_security = Param<Security>(nameof(Security)).SetDisplay(LocalizedStrings.Security, LocalizedStrings.StrategySecurity, LocalizedStrings.General).SetNonBrowsable(HideSecurityAndPortfolioParameters);
+		_portfolio = Param<Portfolio>(nameof(Portfolio)).SetDisplay(LocalizedStrings.Portfolio, LocalizedStrings.StrategyPortfolio, LocalizedStrings.General).SetNonBrowsable(HideSecurityAndPortfolioParameters).SetCanOptimize(false);
 
 		_systemParams =
 		[
@@ -389,11 +388,12 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			_historySize,
 		];
 
-		_ordersKeepTime.CanOptimize = _historySize.CanOptimize = false;
+		NameGenerator = new(this);
+		NameGenerator.Changed += name => _name.Value = name;
 
 		_riskManager = new RiskManager { Parent = this };
 
-		_positionManager = new ChildStrategyPositionManager { Parent = this };
+		_positionManager = new() { Parent = this };
 
 		_indicators = new(this);
 	}
@@ -578,7 +578,12 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	public IConnector SafeGetConnector()
 		=> Connector ?? throw new InvalidOperationException(LocalizedStrings.ConnectionNotInit);
 
-	private Portfolio _portfolio;
+	/// <summary>
+	/// Make <see cref="Security"/> and <see cref="Portfolio"/> as non-browsable.
+	/// </summary>
+	public static bool HideSecurityAndPortfolioParameters { get; set; }
+
+	private readonly StrategyParam<Portfolio> _portfolio;
 
 	/// <summary>
 	/// Portfolio.
@@ -589,28 +594,13 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		Description = LocalizedStrings.StrategyPortfolioKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 1)]
-	public virtual Portfolio Portfolio
+	public Portfolio Portfolio
 	{
-		get => _portfolio;
-		set
-		{
-			if (_portfolio == value)
-				return;
-
-			_portfolio = value;
-
-			foreach (var strategy in ChildStrategies)
-			{
-				strategy.Portfolio ??= value;
-			}
-
-			RaiseParametersChanged();
-
-			this.Notify();
-		}
+		get => _portfolio.Value;
+		set => _portfolio.Value = value;
 	}
 
-	private Security _security;
+	private readonly StrategyParam<Security> _security;
 
 	/// <summary>
 	/// Security.
@@ -621,25 +611,10 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		Description = LocalizedStrings.StrategySecurityKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 2)]
-	public virtual Security Security
+	public Security Security
 	{
-		get => _security;
-		set
-		{
-			if (_security == value)
-				return;
-
-			_security = value;
-
-			foreach (var strategy in ChildStrategies)
-			{
-				strategy.Security ??= value;
-			}
-
-			RaiseParametersChanged();
-
-			this.Notify(nameof(Position));
-		}
+		get => _security.Value;
+		set => _security.Value = value;
 	}
 
 	/// <summary>
@@ -814,6 +789,23 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	{
 		ParametersChanged?.Invoke();
 		this.Notify(name);
+
+		if (name == nameof(Security))
+		{
+			var value = Security;
+
+			foreach (var strategy in ChildStrategies)
+				strategy.Security ??= value;
+
+			this.Notify(nameof(Position));
+		}
+		else if (name == nameof(Portfolio))
+		{
+			var value = Portfolio;
+
+			foreach (var strategy in ChildStrategies)
+				strategy.Portfolio ??= value;
+		}
 	}
 
 	/// <summary>
@@ -2687,7 +2679,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
 	{
-		Save(storage, KeepStatistics, true, false, false);
+		Save(storage, KeepStatistics, true);
 	}
 
 	/// <summary>
@@ -2696,9 +2688,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// <param name="storage"><see cref="SettingsStorage"/></param>
 	/// <param name="saveStatistics"><see cref="KeepStatistics"/></param>
 	/// <param name="saveSystemParameters">Save system parameters.</param>
-	/// <param name="saveSecurity">Save <see cref="Security"/>.</param>
-	/// <param name="savePortfolio">Save <see cref="Portfolio"/>.</param>
-	public void Save(SettingsStorage storage, bool saveStatistics, bool saveSystemParameters, bool saveSecurity, bool savePortfolio)
+	public void Save(SettingsStorage storage, bool saveStatistics, bool saveSystemParameters/*, bool saveSecurity, bool savePortfolio*/)
 	{
 		var parameters = GetParameters();
 
@@ -2717,12 +2707,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				.Set(nameof(StatisticManager), StatisticManager.Save())
 			;
 		}
-
-		if (saveSecurity)
-			storage.Set(nameof(Security), Security?.Id);
-
-		if (savePortfolio)
-			storage.Set(nameof(Portfolio), Portfolio?.Name);
 	}
 
 	/// <inheritdoc />

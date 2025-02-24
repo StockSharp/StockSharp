@@ -210,7 +210,23 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 
 		try
 		{
-			Value = storage.GetValue<T>(nameof(Value));
+			TValue getValue<TValue>()
+				=> storage.GetValue<TValue>(nameof(Value));
+
+			if (typeof(T).Is<Security>())
+			{
+				var secId = getValue<string>();
+				if (!secId.IsEmpty())
+					Value = (ServicesRegistry.TrySecurityProvider?.LookupById(secId)).To<T>();
+			}
+			else if (typeof(T).Is<Portfolio>())
+			{
+				var pfName = getValue<string>();
+				if (!pfName.IsEmpty())
+					Value = (ServicesRegistry.TryPortfolioProvider?.LookupByPortfolioName(pfName)).To<T>();
+			}
+			else
+				Value = getValue<T>();
 		}
 		catch (Exception ex)
 		{
@@ -229,9 +245,22 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <param name="storage">Settings storage.</param>
 	public void Save(SettingsStorage storage)
 	{
+		object saveValue()
+		{
+			var v = Value;
+
+			return v switch
+			{
+				IPersistable ps => ps.Save(),
+				Security s => s.Id,
+				Portfolio pf => pf.Name,
+				_ => v
+			};
+		}
+
 		storage
 			.Set(nameof(Id), Id)
-			.Set(nameof(Value), Value)
+			.Set(nameof(Value), saveValue())
 			.Set(nameof(CanOptimize), CanOptimize)
 			.Set(nameof(OptimizeFrom), OptimizeFrom?.ToStorage())
 			.Set(nameof(OptimizeTo), OptimizeTo?.ToStorage())

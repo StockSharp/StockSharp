@@ -30,8 +30,6 @@ public class XmlReportGenerator : BaseReportGenerator
 		WriteStartElement("strategy");
 
 		WriteAttributeString("name", strategy.Name);
-		WriteAttributeString("security", strategy.Security?.Id);
-		WriteAttributeString("portfolio", strategy.Portfolio?.Name);
 		WriteAttributeString("totalWorkingTime", strategy.TotalWorkingTime);
 		WriteAttributeString("commission", strategy.Commission);
 		WriteAttributeString("position", strategy.Position);

@@ -61,31 +61,25 @@ public class ExcelReportGenerator : BaseReportGenerator
 		worker
 			.SetCell(0, 0, LocalizedStrings.Info)
 
-			.SetCell(0, 1, LocalizedStrings.Security + ":")
-			.SetCell(1, 1, strategy.Security?.Id)
+			.SetCell(0, 1, LocalizedStrings.WorkingTime)
+			.SetCell(1, 1, strategy.TotalWorkingTime.Format())
 
-			.SetCell(0, 2, LocalizedStrings.Portfolio + ":")
-			.SetCell(1, 2, strategy.Portfolio?.Name)
+			.SetCell(0, 2, LocalizedStrings.Position + ":")
+			.SetCell(1, 2, strategy.Position)
 
-			.SetCell(0, 3, LocalizedStrings.WorkingTime)
-			.SetCell(1, 3, strategy.TotalWorkingTime.Format())
+			.SetCell(0, 3, LocalizedStrings.PnL + ":")
+			.SetCell(1, 3, strategy.PnL)
 
-			.SetCell(0, 5, LocalizedStrings.Position + ":")
-			.SetCell(1, 5, strategy.Position)
+			.SetCell(0, 4, LocalizedStrings.Commission + ":")
+			.SetCell(1, 4, strategy.Commission)
 
-			.SetCell(0, 6, LocalizedStrings.PnL + ":")
-			.SetCell(1, 6, strategy.PnL)
+			.SetCell(0, 5, LocalizedStrings.Slippage + ":")
+			.SetCell(1, 5, strategy.Slippage)
 
-			.SetCell(0, 7, LocalizedStrings.Commission + ":")
-			.SetCell(1, 7, strategy.Commission)
+			.SetCell(0, 6, LocalizedStrings.Latency + ":")
+			.SetCell(1, 6, strategy.Latency.Format());
 
-			.SetCell(0, 8, LocalizedStrings.Slippage + ":")
-			.SetCell(1, 8, strategy.Slippage)
-
-			.SetCell(0, 9, LocalizedStrings.Latency + ":")
-			.SetCell(1, 9, strategy.Latency.Format());
-
-		var rowIndex = 11;
+		var rowIndex = 7;
 
 		foreach (var parameter in strategy.StatisticManager.Parameters)
 		{

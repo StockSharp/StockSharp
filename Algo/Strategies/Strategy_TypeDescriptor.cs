@@ -20,7 +20,7 @@ partial class Strategy
 	/// Get parameters.
 	/// </summary>
 	/// <returns>Parameters.</returns>
-	public IStrategyParam[] GetParameters() => Parameters.CachedValues;
+	public virtual IStrategyParam[] GetParameters() => Parameters.CachedValues;
 
 	AttributeCollection ICustomTypeDescriptor.GetAttributes() => TypeDescriptor.GetAttributes(this, true);
 

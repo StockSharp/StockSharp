@@ -49,10 +49,8 @@ public class CsvReportGenerator : BaseReportGenerator
 			writer.WriteLine();
 		}
 
-		WriteValues(LocalizedStrings.Strategy, LocalizedStrings.Security, LocalizedStrings.Portfolio, LocalizedStrings.WorkingTime, LocalizedStrings.Position, LocalizedStrings.PnL, LocalizedStrings.Commission, LocalizedStrings.Slippage, LocalizedStrings.Latency);
-		WriteValues(
-			strategy.Name, strategy.Security?.Id, strategy.Portfolio?.Name,
-			strategy.TotalWorkingTime, strategy.Position, strategy.PnL, strategy.Commission, strategy.Slippage, strategy.Latency);
+		WriteValues(LocalizedStrings.Strategy, LocalizedStrings.WorkingTime, LocalizedStrings.Position, LocalizedStrings.PnL, LocalizedStrings.Commission, LocalizedStrings.Slippage, LocalizedStrings.Latency);
+		WriteValues(strategy.Name, strategy.TotalWorkingTime, strategy.Position, strategy.PnL, strategy.Commission, strategy.Slippage, strategy.Latency);
 
 		var parameters = strategy.GetParameters();
 		WriteValues(LocalizedStrings.Parameters);
