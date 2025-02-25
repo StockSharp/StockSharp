@@ -6,11 +6,12 @@ namespace StockSharp.Algo.Indicators;
 /// <remarks>
 /// https://doc.stocksharp.com/topics/IndicatorLinearRegRSquared.html
 /// </remarks>
-[Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.RSquaredKey,
-	Description = LocalizedStrings.LinearRegRSquaredKey)]
-[Doc("topics/IndicatorLinearRegRSquared.html")]
+//[Display(
+//	ResourceType = typeof(LocalizedStrings),
+//	Name = LocalizedStrings.RSquaredKey,
+//	Description = LocalizedStrings.LinearRegRSquaredKey)]
+//[Doc("topics/IndicatorLinearRegRSquared.html")]
+[Browsable(false)]
 public class LinearRegRSquared : LengthIndicator<decimal>
 {
 	// Коэффициент при независимой переменной, угол наклона прямой.

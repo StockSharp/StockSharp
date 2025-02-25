@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.WRKey,
 	Description = LocalizedStrings.WilliamsRKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/api/indicators/list_of_indicators/%r.html")]
+[Doc("topics/api/indicators/list_of_indicators/williams_r.html")]
 public class WilliamsR : LengthIndicator<decimal>
 {
 	private readonly Lowest _low;
