@@ -4,14 +4,14 @@
 /// Stochastic %K.
 /// </summary>
 /// <remarks>
-/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/stochastic_oscillator_k%.html
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/stochastic_oscillator_k.html
 /// </remarks>
 [Display(
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.StochasticKKey,
 	Description = LocalizedStrings.StochasticKDescKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/api/indicators/list_of_indicators/stochastic_oscillator_k%.html")]
+[Doc("topics/api/indicators/list_of_indicators/stochastic_oscillator_k.html")]
 public class StochasticK : LengthIndicator<decimal>
 {
 	// Минимальная цена за период.
