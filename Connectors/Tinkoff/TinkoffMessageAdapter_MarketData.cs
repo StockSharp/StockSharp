@@ -42,10 +42,10 @@ public partial class TinkoffMessageAdapter
 			{
 				try
 				{
-					currError = 0;
-
 					await foreach (var response in _mdStream.ResponseStream.ReadAllAsync(cancellationToken))
 					{
+						currError = 0;
+
 						if (response.Candle is Candle c)
 						{
 							var dt = DataType.TimeFrame(c.Interval.ToTimeFrame());

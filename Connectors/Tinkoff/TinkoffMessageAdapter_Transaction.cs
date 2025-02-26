@@ -350,10 +350,11 @@ public partial class TinkoffMessageAdapter
 					try
 					{
 						var statesStream = _service.OrdersStream.OrderStateStream(new(), cancellationToken: statesToken).ResponseStream;
-						currError = 0;
 
 						await foreach (var response in statesStream.ReadAllAsync(statesToken))
 						{
+							currError = 0;
+
 							var orderState = response.OrderState;
 
 							if (orderState is null)
@@ -502,10 +503,11 @@ public partial class TinkoffMessageAdapter
 					try
 					{
 						var pfStream = _service.OperationsStream.PortfolioStream(new() { Accounts = { _accountIds } }, cancellationToken: pfToken).ResponseStream;
-						currError = 0;
 
 						await foreach (var response in pfStream.ReadAllAsync(pfToken))
 						{
+							currError = 0;
+
 							if (response.Portfolio is PortfolioResponse portfolio)
 								processResponse(portfolio);
 						}
@@ -532,10 +534,11 @@ public partial class TinkoffMessageAdapter
 					try
 					{
 						var posStream = _service.OperationsStream.PositionsStream(new() { Accounts = { _accountIds } }, cancellationToken: pfToken).ResponseStream;
-						currError = 0;
 
 						await foreach (var response in posStream.ReadAllAsync(pfToken))
 						{
+							currError = 0;
+
 							if (response.Position is PositionData position)
 							{
 								var time = position.Date.ToDateTime();
