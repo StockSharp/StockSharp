@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.RMIKey,
 	Description = LocalizedStrings.RelativeMomentumIndexKey)]
-[Doc("topics/indicators/relative_momentum_index.html")]
+[Doc("topics/api/indicators/list_of_indicators/relative_momentum_index.html")]
 public class RelativeMomentumIndex : LengthIndicator<decimal>
 {
 	private readonly CircularBuffer<decimal> _prices = new(1);

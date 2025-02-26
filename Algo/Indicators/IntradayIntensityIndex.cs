@@ -10,7 +10,7 @@ using StockSharp.Algo.Candles;
 	Name = LocalizedStrings.IIIKey,
 	Description = LocalizedStrings.IntradayIntensityIndexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/intraday_intensity_index.html")]
+[Doc("topics/api/indicators/list_of_indicators/intraday_intensity_index.html")]
 public class IntradayIntensityIndex : SimpleMovingAverage
 {
 	/// <summary>

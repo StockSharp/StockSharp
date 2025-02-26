@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.BMPKey,
 	Description = LocalizedStrings.BalanceOfMarketPowerKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/balance_of_market_power.html")]
+[Doc("topics/api/indicators/list_of_indicators/balance_of_market_power.html")]
 public class BalanceOfMarketPower : SimpleMovingAverage
 {
 	/// <summary>

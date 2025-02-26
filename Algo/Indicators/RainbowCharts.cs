@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.RCKey,
 	Description = LocalizedStrings.RainbowChartsKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/rainbow_charts.html")]
+[Doc("topics/api/indicators/list_of_indicators/rainbow_charts.html")]
 public class RainbowCharts : BaseComplexIndicator
 {
 	/// <summary>

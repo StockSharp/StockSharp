@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.WCCIKey,
 	Description = LocalizedStrings.WoodiesCCIKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/woodies_cci.html")]
+[Doc("topics/api/indicators/list_of_indicators/woodies_cci.html")]
 public class WoodiesCCI : BaseComplexIndicator
 {
 	private readonly CommodityChannelIndex _cci;

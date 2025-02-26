@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.CRSIKey,
 	Description = LocalizedStrings.ConnorsRSIKey)]
-[Doc("topics/indicators/connors_rsi.html")]
+[Doc("topics/api/indicators/list_of_indicators/connors_rsi.html")]
 public class ConnorsRSI : BaseComplexIndicator
 {
 	private class CrsiLine : BaseIndicator

@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.CKSKey,
 	Description = LocalizedStrings.ChandeKrollStopKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/chande_kroll_stop.html")]
+[Doc("topics/api/indicators/list_of_indicators/chande_kroll_stop.html")]
 public class ChandeKrollStop : BaseComplexIndicator
 {
 	private readonly Highest _highest;

@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.KPOKey,
 	Description = LocalizedStrings.KasePeakOscillatorKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/kase_peak_oscillator.html")]
+[Doc("topics/api/indicators/list_of_indicators/kase_peak_oscillator.html")]
 public class KasePeakOscillator : BaseComplexIndicator
 {
 	private readonly AverageTrueRange _atr = new() { Length = 10 };

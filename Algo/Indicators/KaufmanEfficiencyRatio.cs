@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.KERKey,
 	Description = LocalizedStrings.KaufmanEfficiencyRatioKey)]
-[Doc("topics/indicators/kaufman_efficiency_ratio.html")]
+[Doc("topics/api/indicators/list_of_indicators/kaufman_efficiency_ratio.html")]
 public class KaufmanEfficiencyRatio : LengthIndicator<decimal>
 {
 	/// <summary>

@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.CMKey,
 	Description = LocalizedStrings.CompositeMomentumKey)]
-[Doc("topics/indicators/composite_momentum.html")]
+[Doc("topics/api/indicators/list_of_indicators/composite_momentum.html")]
 public class CompositeMomentum : BaseComplexIndicator
 {
 	private readonly RateOfChange _roc1;

@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.MCOKey,
 	Description = LocalizedStrings.McClellanOscillatorKey)]
-[Doc("topics/indicators/mcclellan_oscillator.html")]
+[Doc("topics/api/indicators/list_of_indicators/mcclellan_oscillator.html")]
 public class McClellanOscillator : BaseIndicator
 {
 	private readonly ExponentialMovingAverage _ema19;

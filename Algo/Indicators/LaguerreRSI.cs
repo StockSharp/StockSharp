@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.LRSIKey,
 	Description = LocalizedStrings.LaguerreRSIKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/laguerre_rsi.html")]
+[Doc("topics/api/indicators/list_of_indicators/laguerre_rsi.html")]
 public class LaguerreRSI : BaseIndicator
 {
 	private decimal _l0, _l1, _l2, _l3;

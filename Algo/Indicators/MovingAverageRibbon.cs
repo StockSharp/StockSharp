@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.MARKey,
 	Description = LocalizedStrings.MovingAverageRibbonKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/moving_average_ribbon.html")]
+[Doc("topics/api/indicators/list_of_indicators/moving_average_ribbon.html")]
 public class MovingAverageRibbon : BaseComplexIndicator
 {
 	/// <summary>

@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.NVIKey,
 	Description = LocalizedStrings.NegativeVolumeIndexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/negative_volume_index.html")]
+[Doc("topics/api/indicators/list_of_indicators/negative_volume_index.html")]
 public class NegativeVolumeIndex : BaseIndicator
 {
 	private decimal _prevClose;

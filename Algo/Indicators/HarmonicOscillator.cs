@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.HOKey,
 	Description = LocalizedStrings.HarmonicOscillatorKey)]
-[Doc("topics/indicators/harmonic_oscillator.html")]
+[Doc("topics/api/indicators/list_of_indicators/harmonic_oscillator.html")]
 public class HarmonicOscillator : LengthIndicator<decimal>
 {
 	private decimal[] _sinValues;

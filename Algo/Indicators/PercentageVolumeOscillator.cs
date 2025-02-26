@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.PVOKey,
 	Description = LocalizedStrings.PercentageVolumeOscillatorKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/percentage_volume_oscillator.html")]
+[Doc("topics/api/indicators/list_of_indicators/percentage_volume_oscillator.html")]
 public class PercentageVolumeOscillator : BaseComplexIndicator
 {
 	private readonly ExponentialMovingAverage _shortEma;

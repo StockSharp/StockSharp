@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.APZKey,
 	Description = LocalizedStrings.AdaptivePriceZoneKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/adaptive_price_zone.html")]
+[Doc("topics/api/indicators/list_of_indicators/adaptive_price_zone.html")]
 public class AdaptivePriceZone : BaseComplexIndicator
 {
 	private readonly LengthIndicator<decimal> _ma;

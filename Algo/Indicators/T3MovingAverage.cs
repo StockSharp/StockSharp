@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.T3MAKey,
 	Description = LocalizedStrings.T3MovingAverageKey)]
-[Doc("topics/indicators/t3_moving_average.html")]
+[Doc("topics/api/indicators/list_of_indicators/t3_moving_average.html")]
 public class T3MovingAverage : LengthIndicator<decimal>
 {
 	private readonly ExponentialMovingAverage[] _emas;

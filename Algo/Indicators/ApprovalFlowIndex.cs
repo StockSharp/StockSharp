@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.AFIKey,
 	Description = LocalizedStrings.ApprovalFlowIndexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/approval_flow_index.html")]
+[Doc("topics/api/indicators/list_of_indicators/approval_flow_index.html")]
 public class ApprovalFlowIndex : LengthIndicator<decimal>
 {
 	private decimal _totalUpVolume;

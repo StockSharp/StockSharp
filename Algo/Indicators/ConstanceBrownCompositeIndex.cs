@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.CBCIKey,
 	Description = LocalizedStrings.ConstanceBrownCompositeIndexKey)]
-[Doc("topics/indicators/constance_brown_composite_index.html")]
+[Doc("topics/api/indicators/list_of_indicators/constance_brown_composite_index.html")]
 public class ConstanceBrownCompositeIndex : BaseComplexIndicator
 {
 	private class CompositeIndexLine : BaseIndicator

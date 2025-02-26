@@ -10,7 +10,7 @@ using StockSharp.Algo.Candles;
 	Name = LocalizedStrings.FVEKey,
 	Description = LocalizedStrings.FiniteVolumeElementKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/finite_volume_element.html")]
+[Doc("topics/api/indicators/list_of_indicators/finite_volume_element.html")]
 public class FiniteVolumeElement : LengthIndicator<decimal>
 {
 	/// <summary>

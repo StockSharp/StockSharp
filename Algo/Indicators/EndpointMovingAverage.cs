@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.EPMAKey,
 	Description = LocalizedStrings.EndpointMovingAverageKey)]
-[Doc("topics/indicators/endpoint_moving_average.html")]
+[Doc("topics/api/indicators/list_of_indicators/endpoint_moving_average.html")]
 public class EndpointMovingAverage : LengthIndicator<decimal>
 {
 	/// <summary>

@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.DPIKey,
 	Description = LocalizedStrings.DisparityIndexKey)]
-[Doc("topics/indicators/disparity_index.html")]
+[Doc("topics/api/indicators/list_of_indicators/disparity_index.html")]
 public class DisparityIndex : SimpleMovingAverage
 {
 	/// <summary>

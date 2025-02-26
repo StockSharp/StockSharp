@@ -10,7 +10,7 @@ using StockSharp.Algo.Candles;
 	Name = LocalizedStrings.PPKey,
 	Description = LocalizedStrings.PivotPointsKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/pivot_points.html")]
+[Doc("topics/api/indicators/list_of_indicators/pivot_points.html")]
 public class PivotPoints : BaseComplexIndicator
 {
 	private readonly PivotPointPart _pivotPoint = new() { Name = "PivotPoint" };

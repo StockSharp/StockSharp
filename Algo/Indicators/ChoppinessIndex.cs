@@ -10,7 +10,7 @@ using StockSharp.Algo.Candles;
 	Name = LocalizedStrings.CHOPKey,
 	Description = LocalizedStrings.ChoppinessIndexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/choppiness_index.html")]
+[Doc("topics/api/indicators/list_of_indicators/choppiness_index.html")]
 public class ChoppinessIndex : LengthIndicator<decimal>
 {
 	private readonly CircularBuffer<decimal> _highLowRange;

@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.FRKey,
 	Description = LocalizedStrings.FibonacciRetracementKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/fibonacci_retracement.html")]
+[Doc("topics/api/indicators/list_of_indicators/fibonacci_retracement.html")]
 public class FibonacciRetracement : BaseComplexIndicator
 {
 	private readonly Highest _highest;

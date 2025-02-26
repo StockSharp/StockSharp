@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.HVRKey,
 	Description = LocalizedStrings.HistoricalVolatilityRatioKey)]
-[Doc("topics/indicators/historical_volatility_ratio.html")]
+[Doc("topics/api/indicators/list_of_indicators/historical_volatility_ratio.html")]
 public class HistoricalVolatilityRatio : BaseIndicator
 {
 	private readonly StandardDeviation _shortSd;

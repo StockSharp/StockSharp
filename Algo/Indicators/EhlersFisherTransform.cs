@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.EFTKey,
 	Description = LocalizedStrings.EhlersFisherTransformKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/ehlers_fisher_transform.html")]
+[Doc("topics/api/indicators/list_of_indicators/ehlers_fisher_transform.html")]
 public class EhlersFisherTransform : BaseComplexIndicator
 {
 	private readonly CircularBufferEx<decimal> _highBuffer;

@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.EWOKey,
 	Description = LocalizedStrings.ElliotWaveOscillatorKey)]
-[Doc("topics/indicators/elliot_wave_oscillator.html")]
+[Doc("topics/api/indicators/list_of_indicators/elliot_wave_oscillator.html")]
 public class ElliotWaveOscillator : BaseIndicator
 {
 	private readonly SimpleMovingAverage _shortSma;

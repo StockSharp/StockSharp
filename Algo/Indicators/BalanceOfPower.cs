@@ -10,7 +10,7 @@ using StockSharp.Algo.Candles;
 	Name = LocalizedStrings.BOPKey,
 	Description = LocalizedStrings.BalanceOfPowerKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/balance_of_power.html")]
+[Doc("topics/api/indicators/list_of_indicators/balance_of_power.html")]
 public class BalanceOfPower : BaseIndicator
 {
 	/// <inheritdoc />

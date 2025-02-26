@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.OMAKey,
 	Description = LocalizedStrings.OscillatorOfMovingAverageKey)]
-[Doc("topics/indicators/oscillator_of_moving_average.html")]
+[Doc("topics/api/indicators/list_of_indicators/oscillator_of_moving_average.html")]
 public class OscillatorOfMovingAverage : BaseIndicator
 {
 	private readonly SimpleMovingAverage _shortMa;

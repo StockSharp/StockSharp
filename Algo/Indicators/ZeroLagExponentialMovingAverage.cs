@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.ZLEMAKey,
 	Description = LocalizedStrings.ZeroLagExponentialMovingAverageKey)]
-[Doc("topics/indicators/zero_lag_exponential_moving_average.html")]
+[Doc("topics/api/indicators/list_of_indicators/zero_lag_exponential_moving_average.html")]
 public class ZeroLagExponentialMovingAverage : LengthIndicator<decimal>
 {
 	private decimal _prevZlema;

@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.IMIKey,
 	Description = LocalizedStrings.IntradayMomentumIndexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/intraday_momentum_index.html")]
+[Doc("topics/api/indicators/list_of_indicators/intraday_momentum_index.html")]
 public class IntradayMomentumIndex : LengthIndicator<(decimal o, decimal c)>
 {
 	private decimal _upSum;

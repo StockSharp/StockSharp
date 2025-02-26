@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.FRAMAKey,
 	Description = LocalizedStrings.FractalAdaptiveMovingAverageKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/fractal_adaptive_moving_average.html")]
+[Doc("topics/api/indicators/list_of_indicators/fractal_adaptive_moving_average.html")]
 public class FractalAdaptiveMovingAverage : LengthIndicator<decimal>
 {
 	private decimal _prevFrama;

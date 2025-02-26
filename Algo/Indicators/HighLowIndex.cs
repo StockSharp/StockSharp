@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.HLIKey,
 	Description = LocalizedStrings.HighLowIndexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/high_low_index.html")]
+[Doc("topics/api/indicators/list_of_indicators/high_low_index.html")]
 public class HighLowIndex : LengthIndicator<decimal>
 {
 	private readonly CircularBufferEx<decimal> _highBuffer;

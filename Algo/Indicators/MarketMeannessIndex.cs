@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.MMIKey,
 	Description = LocalizedStrings.MarketMeannessIndexKey)]
-[Doc("topics/indicators/market_meanness_index.html")]
+[Doc("topics/api/indicators/list_of_indicators/market_meanness_index.html")]
 public class MarketMeannessIndex : LengthIndicator<decimal>
 {
 	private int _priceChanges;

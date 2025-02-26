@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.SWKey,
 	Description = LocalizedStrings.SineWaveKey)]
-[Doc("topics/indicators/sine_wave.html")]
+[Doc("topics/api/indicators/list_of_indicators/sine_wave.html")]
 public class SineWave : BaseComplexIndicator
 {
 	private readonly SineWaveLine _lead = new();

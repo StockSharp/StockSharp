@@ -10,7 +10,7 @@ using StockSharp.Algo.Candles;
 	Name = LocalizedStrings.ADLKey,
 	Description = LocalizedStrings.AccumulationDistributionLineKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/accumulation_distribution_line.html")]
+[Doc("topics/api/indicators/list_of_indicators/accumulation_distribution_line.html")]
 public class AccumulationDistributionLine : BaseIndicator
 {
 	private decimal _adLine;

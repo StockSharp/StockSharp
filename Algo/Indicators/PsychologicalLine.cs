@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.PSYKey,
 	Description = LocalizedStrings.PsychologicalLineKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/psychological_line.html")]
+[Doc("topics/api/indicators/list_of_indicators/psychological_line.html")]
 public class PsychologicalLine : LengthIndicator<decimal>
 {
 	private int _upCount;

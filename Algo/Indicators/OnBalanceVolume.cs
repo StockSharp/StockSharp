@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.OBVKey,
 	Description = LocalizedStrings.OnBalanceVolumeKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/api/indicators/list_of_indicators/obv.html")]
+[Doc("topics/api/indicators/list_of_indicators/on_balance_volume.html")]
 public class OnBalanceVolume : BaseIndicator
 {
 	private decimal _prevClosePrice;

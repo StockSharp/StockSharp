@@ -10,7 +10,7 @@ using StockSharp.Algo.Candles;
 	Name = LocalizedStrings.EMVKey,
 	Description = LocalizedStrings.EaseOfMovementKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/ease_of_movement.html")]
+[Doc("topics/api/indicators/list_of_indicators/ease_of_movement.html")]
 public class EaseOfMovement : LengthIndicator<decimal>
 {
 	private decimal _prevHigh;

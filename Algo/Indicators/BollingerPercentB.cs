@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.BBPKey,
 	Description = LocalizedStrings.BollingerPercentBKey)]
-[Doc("topics/indicators/bollinger_percent_b.html")]
+[Doc("topics/api/indicators/list_of_indicators/bollinger_percent_b.html")]
 public class BollingerPercentB : BaseIndicator
 {
 	private readonly BollingerBands _bollingerBands;

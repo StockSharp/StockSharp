@@ -10,7 +10,7 @@ using StockSharp.Algo.Candles;
 	Name = LocalizedStrings.GAPOKey,
 	Description = LocalizedStrings.GopalakrishnanRangeIndexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/gopalakrishnan_range_index.html")]
+[Doc("topics/api/indicators/list_of_indicators/gopalakrishnan_range_index.html")]
 public class GopalakrishnanRangeIndex : LengthIndicator<(decimal high, decimal low)>
 {
 	/// <summary>

@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.WTOKey,
 	Description = LocalizedStrings.WaveTrendOscillatorKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/wave_trend_oscillator.html")]
+[Doc("topics/api/indicators/list_of_indicators/wave_trend_oscillator.html")]
 public class WaveTrendOscillator : BaseComplexIndicator
 {
 	private readonly ChannelAveragePriceOscillator _capo = new();

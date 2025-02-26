@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.MACKey,
 	Description = LocalizedStrings.MovingAverageCrossoverKey)]
-[Doc("topics/indicators/moving_average_crossover.html")]
+[Doc("topics/api/indicators/list_of_indicators/moving_average_crossover.html")]
 public class MovingAverageCrossover : BaseIndicator
 {
 	private readonly SimpleMovingAverage _fastMa;

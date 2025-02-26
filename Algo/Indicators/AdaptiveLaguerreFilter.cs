@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.ALFKey,
 	Description = LocalizedStrings.AdaptiveLaguerreFilterKey)]
-[Doc("topics/indicators/adaptive_laguerre_filter.html")]
+[Doc("topics/api/indicators/list_of_indicators/adaptive_laguerre_filter.html")]
 public class AdaptiveLaguerreFilter : BaseIndicator
 {
 	private decimal _l0;

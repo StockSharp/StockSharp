@@ -10,7 +10,7 @@ using StockSharp.Algo.Candles;
 	Name = LocalizedStrings.MIKey,
 	Description = LocalizedStrings.MassIndexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/mass_index.html")]
+[Doc("topics/api/indicators/list_of_indicators/mass_index.html")]
 public class MassIndex : LengthIndicator<decimal>
 {
 	private readonly ExponentialMovingAverage _singleEma;

@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.FOSCKey,
 	Description = LocalizedStrings.ForecastOscillatorKey)]
-[Doc("topics/indicators/forecast_oscillator.html")]
+[Doc("topics/api/indicators/list_of_indicators/forecast_oscillator.html")]
 public class ForecastOscillator : LinearReg
 {
 	/// <summary>

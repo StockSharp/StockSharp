@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.TWAPKey,
 	Description = LocalizedStrings.TimeWeightedAveragePriceKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/time_weighted_average_price.html")]
+[Doc("topics/api/indicators/list_of_indicators/time_weighted_average_price.html")]
 public class TimeWeightedAveragePrice : BaseIndicator
 {
 	private decimal _cumulativePrice;

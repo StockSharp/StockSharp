@@ -10,7 +10,7 @@ using StockSharp.Algo.Candles;
 	Name = LocalizedStrings.TMFKey,
 	Description = LocalizedStrings.TwiggsMoneyFlowKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/twiggs_money_flow.html")]
+[Doc("topics/api/indicators/list_of_indicators/twiggs_money_flow.html")]
 public class TwiggsMoneyFlow : LengthIndicator<decimal>
 {
 	private readonly ExponentialMovingAverage _adv = new();

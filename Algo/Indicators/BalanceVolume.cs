@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.BVKey,
 	Description = LocalizedStrings.BalanceVolumeKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/balance_volume.html")]
+[Doc("topics/api/indicators/list_of_indicators/balance_volume.html")]
 public class BalanceVolume : BaseIndicator
 {
 	private decimal _prevClose;

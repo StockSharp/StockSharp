@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.MOMAKey,
 	Description = LocalizedStrings.MomentumOfMovingAverageKey)]
-[Doc("topics/indicators/momentum_of_moving_average.html")]
+[Doc("topics/api/indicators/list_of_indicators/momentum_of_moving_average.html")]
 public class MomentumOfMovingAverage : SimpleMovingAverage
 {
 	private readonly CircularBuffer<decimal> _maBuffer = new(2);

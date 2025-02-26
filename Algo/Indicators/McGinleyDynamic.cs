@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.MGDKey,
 	Description = LocalizedStrings.McGinleyDynamicKey)]
-[Doc("topics/indicators/mcginley_dynamic.html")]
+[Doc("topics/api/indicators/list_of_indicators/mcginley_dynamic.html")]
 public class McGinleyDynamic : LengthIndicator<decimal>
 {
 	private decimal _prevMd;

@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.KSTKey,
 	Description = LocalizedStrings.KnowSureThingKey)]
-[Doc("topics/indicators/kst.html")]
+[Doc("topics/api/indicators/list_of_indicators/kst.html")]
 public class KnowSureThing : BaseComplexIndicator
 {
 	private readonly RateOfChange _roc1 = new() { Length = 10 };

@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.CGOKey,
 	Description = LocalizedStrings.CenterOfGravityOscillatorKey)]
-[Doc("topics/indicators/center_of_gravity_oscillator.html")]
+[Doc("topics/api/indicators/list_of_indicators/center_of_gravity_oscillator.html")]
 public class CenterOfGravityOscillator : LengthIndicator<decimal>
 {
 	private decimal _sumPrice;

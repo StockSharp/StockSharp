@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.DZRSIKey,
 	Description = LocalizedStrings.DynamicZonesRSIKey)]
-[Doc("topics/indicators/dynamic_zones_rsi.html")]
+[Doc("topics/api/indicators/list_of_indicators/dynamic_zones_rsi.html")]
 public class DynamicZonesRSI : LengthIndicator<decimal>
 {
 	private readonly RelativeStrengthIndex _rsi;

@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.PPOKey,
 	Description = LocalizedStrings.PercentagePriceOscillatorKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/percentage_price_oscillator.html")]
+[Doc("topics/api/indicators/list_of_indicators/percentage_price_oscillator.html")]
 public class PercentagePriceOscillator : BaseComplexIndicator
 {
 	private readonly ExponentialMovingAverage _shortEma;

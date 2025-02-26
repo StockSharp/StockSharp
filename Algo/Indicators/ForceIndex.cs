@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.FIKey,
 	Description = LocalizedStrings.ForceIndexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/force_index.html")]
+[Doc("topics/api/indicators/list_of_indicators/force_index.html")]
 public class ForceIndex : ExponentialMovingAverage
 {
 	private decimal _prevClosePrice;

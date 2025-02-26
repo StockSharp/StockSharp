@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.EISKey,
 	Description = LocalizedStrings.ElderImpulseSystemKey)]
-[Doc("topics/indicators/elder_impulse_system.html")]
+[Doc("topics/api/indicators/list_of_indicators/elder_impulse_system.html")]
 public class ElderImpulseSystem : BaseIndicator
 {
 	/// <summary>

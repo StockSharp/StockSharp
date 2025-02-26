@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.LPKey,
 	Description = LocalizedStrings.LunarPhaseKey)]
-[Doc("topics/indicators/lunar_phase.html")]
+[Doc("topics/api/indicators/list_of_indicators/lunar_phase.html")]
 public class LunarPhase : BaseIndicator
 {
 	/// <inheritdoc />

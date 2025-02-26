@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.ALMAKey,
 	Description = LocalizedStrings.ArnaudLegouxMovingAverageKey)]
-[Doc("topics/indicators/arnaud_legoux_moving_average.html")]
+[Doc("topics/api/indicators/list_of_indicators/arnaud_legoux_moving_average.html")]
 public class ArnaudLegouxMovingAverage : LengthIndicator<decimal>
 {
 	/// <summary>

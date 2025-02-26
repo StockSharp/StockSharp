@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.WADKey,
 	Description = LocalizedStrings.WilliamsAccumulationDistributionKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/williams_accumulation_distribution.html")]
+[Doc("topics/api/indicators/list_of_indicators/williams_accumulation_distribution.html")]
 public class WilliamsAccumulationDistribution : BaseIndicator
 {
 	private decimal _prevClose;

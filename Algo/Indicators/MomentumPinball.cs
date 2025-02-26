@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.MPKey,
 	Description = LocalizedStrings.MomentumPinballKey)]
-[Doc("topics/indicators/momentum_pinball.html")]
+[Doc("topics/api/indicators/list_of_indicators/momentum_pinball.html")]
 public class MomentumPinball : LengthIndicator<decimal>
 {
 	/// <summary>

@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.OBVMKey,
 	Description = LocalizedStrings.OnBalanceVolumeMeanKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/on_balance_volume_mean.html")]
+[Doc("topics/api/indicators/list_of_indicators/on_balance_volume_mean.html")]
 public class OnBalanceVolumeMean : SimpleMovingAverage
 {
 	private readonly OnBalanceVolume _obv = new();

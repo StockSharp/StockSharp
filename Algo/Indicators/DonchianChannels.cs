@@ -7,7 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.DCKey,
 	Description = LocalizedStrings.DonchianChannelsKey)]
-[Doc("topics/indicators/donchian_channels.html")]
+[Doc("topics/api/indicators/list_of_indicators/donchian_channels.html")]
 public class DonchianChannels : BaseComplexIndicator
 {
 	/// <summary>

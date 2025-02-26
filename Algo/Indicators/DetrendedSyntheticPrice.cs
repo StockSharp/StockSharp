@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.DSPKey,
 	Description = LocalizedStrings.DetrendedSyntheticPriceKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/detrended_synthetic_price.html")]
+[Doc("topics/api/indicators/list_of_indicators/detrended_synthetic_price.html")]
 public class DetrendedSyntheticPrice : BaseIndicator
 {
 	private readonly Highest _highest;

@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.KVOKey,
 	Description = LocalizedStrings.KlingerVolumeOscillatorKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/klinger_volume_oscillator.html")]
+[Doc("topics/api/indicators/list_of_indicators/klinger_volume_oscillator.html")]
 public class KlingerVolumeOscillator : BaseComplexIndicator
 {
 	private readonly ExponentialMovingAverage _shortEma;

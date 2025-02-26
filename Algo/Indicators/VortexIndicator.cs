@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.VIKey,
 	Description = LocalizedStrings.VortexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/vortex_indicator.html")]
+[Doc("topics/api/indicators/list_of_indicators/vortex_indicator.html")]
 public class VortexIndicator : BaseComplexIndicator
 {
 	private readonly VortexPart _plusVi;

@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.DIKey,
 	Description = LocalizedStrings.DemandIndexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/demand_index.html")]
+[Doc("topics/api/indicators/list_of_indicators/demand_index.html")]
 public class DemandIndex : SimpleMovingAverage
 {
 	private decimal _prevClose;
