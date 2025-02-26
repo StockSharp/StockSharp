@@ -1,5 +1,6 @@
 namespace StockSharp.Tinkoff;
 
+using Ecng.ComponentModel;
 using Ecng.Net;
 
 public partial class TinkoffMessageAdapter
@@ -8,6 +9,12 @@ public partial class TinkoffMessageAdapter
 	private InvestApiClient _service;
 	private AsyncDuplexStreamingCall<MarketDataRequest, MarketDataResponse> _mdStream;
 	private const string _domainAddr = "invest-public-api.tinkoff.ru";
+
+	private static readonly TimeSpan _baseDelay = TimeSpan.FromSeconds(1);
+	private static readonly TimeSpan _maxDelay = TimeSpan.FromMinutes(5);
+
+	private static TimeSpan GetCurrentDelay(TimeSpan currentDelay)
+		=> currentDelay.Multiply(2).Min(_maxDelay);
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="TinkoffMessageAdapter"/>.
@@ -84,6 +91,7 @@ public partial class TinkoffMessageAdapter
 			MaxRetryBufferPerCallSize = null,
 			MaxRetryBufferSize = null,
 			MaxRetryAttempts = null,
+			MaxSendMessageSize = null,
 		});
 		_service = new(_channel.CreateCallInvoker());
 
@@ -99,6 +107,59 @@ public partial class TinkoffMessageAdapter
 		_historyClient.SetBearer(Token);
 
 		SendOutMessage(new ConnectMessage());
+
+		async Task monitorConnection()
+		{
+			await Task.Yield();
+
+			var currState = ConnectivityState.Idle;
+			var isInFailure = false;
+
+			while (!cancellationToken.IsCancellationRequested)
+			{
+				try
+				{
+					if (currState != _channel.State)
+					{
+						currState = _channel.State;
+
+						switch (currState)
+						{
+							//case ConnectivityState.Idle:
+							//case ConnectivityState.Connecting:
+							//case ConnectivityState.Shutdown:
+							//	break;
+
+							case ConnectivityState.Ready:
+								if (isInFailure)
+								{
+									isInFailure = false;
+									SendOutConnectionState(ConnectionStates.Restored);
+								}
+
+								break;
+							case ConnectivityState.TransientFailure:
+								if (!isInFailure)
+								{
+									isInFailure = true;
+									SendOutConnectionState(ConnectionStates.Reconnecting);
+								}
+								
+								break;
+						}
+					}
+
+					await _baseDelay.Delay(cancellationToken);
+				}
+				catch (Exception ex)
+				{
+					if (!cancellationToken.IsCancellationRequested)
+						LogError(ex);
+				}
+			}
+		}
+
+		_ = monitorConnection();
 	}
 
 	/// <inheritdoc />
@@ -119,6 +180,7 @@ public partial class TinkoffMessageAdapter
 	public override ValueTask ResetAsync(ResetMessage msg, CancellationToken cancellationToken)
 	{
 		_mdTransIds.Clear();
+		_mdSubs.Clear();
 
 		if (_channel != null)
 		{

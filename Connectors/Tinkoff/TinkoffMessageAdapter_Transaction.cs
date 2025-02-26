@@ -343,7 +343,7 @@ public partial class TinkoffMessageAdapter
 
 			_ = Task.Run(async () =>
 			{
-				var currError = 0;
+				var currentDelay = _baseDelay;
 
 				while (!cancellationToken.IsCancellationRequested)
 				{
@@ -353,7 +353,7 @@ public partial class TinkoffMessageAdapter
 
 						await foreach (var response in statesStream.ReadAllAsync(statesToken))
 						{
-							currError = 0;
+							currentDelay = _baseDelay;
 
 							var orderState = response.OrderState;
 
@@ -403,8 +403,8 @@ public partial class TinkoffMessageAdapter
 
 						this.AddErrorLog(ex);
 
-						if (++currError >= 10)
-							break;
+						currentDelay = GetCurrentDelay(currentDelay);
+						await currentDelay.Delay(cancellationToken);
 					}
 				}
 			}, statesToken);
@@ -496,7 +496,7 @@ public partial class TinkoffMessageAdapter
 
 			_ = Task.Run(async () =>
 			{
-				var currError = 0;
+				var currentDelay = _baseDelay;
 
 				while (!cancellationToken.IsCancellationRequested)
 				{
@@ -506,7 +506,7 @@ public partial class TinkoffMessageAdapter
 
 						await foreach (var response in pfStream.ReadAllAsync(pfToken))
 						{
-							currError = 0;
+							currentDelay = _baseDelay;
 
 							if (response.Portfolio is PortfolioResponse portfolio)
 								processResponse(portfolio);
@@ -519,15 +519,15 @@ public partial class TinkoffMessageAdapter
 
 						this.AddErrorLog(ex);
 
-						if (++currError >= 10)
-							break;
+						currentDelay = GetCurrentDelay(currentDelay);
+						await currentDelay.Delay(cancellationToken);
 					}
 				}
 			}, pfToken);
 
 			_ = Task.Run(async () =>
 			{
-				var currError = 0;
+				var currentDelay = _baseDelay;
 
 				while (!cancellationToken.IsCancellationRequested)
 				{
@@ -537,7 +537,7 @@ public partial class TinkoffMessageAdapter
 
 						await foreach (var response in posStream.ReadAllAsync(pfToken))
 						{
-							currError = 0;
+							currentDelay = _baseDelay;
 
 							if (response.Position is PositionData position)
 							{
@@ -621,8 +621,8 @@ public partial class TinkoffMessageAdapter
 
 						this.AddErrorLog(ex);
 
-						if (++currError >= 10)
-							break;
+						currentDelay = GetCurrentDelay(currentDelay);
+						await currentDelay.Delay(cancellationToken);
 					}
 				}
 			}, pfToken);

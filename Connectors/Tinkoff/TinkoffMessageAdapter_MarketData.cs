@@ -10,7 +10,8 @@ using Google.Protobuf.Collections;
 
 public partial class TinkoffMessageAdapter
 {
-	private readonly SynchronizedPairSet<(DataType dt, string uid), long> _mdTransIds = [];
+	private readonly SynchronizedPairSet<long, (DataType dt, string uid)> _mdTransIds = [];
+	private readonly CachedSynchronizedPairSet<long, MarketDataMessage> _mdSubs = [];
 	private HttpClient _historyClient;
 
 	private void AddTransId(MarketDataMessage mdMsg)
@@ -18,17 +19,19 @@ public partial class TinkoffMessageAdapter
 		if (mdMsg is null)
 			throw new ArgumentNullException(nameof(mdMsg));
 
-		_mdTransIds.Add((mdMsg.DataType2, mdMsg.GetInstrumentId()), mdMsg.TransactionId);
+		_mdTransIds.Add(mdMsg.TransactionId, (mdMsg.DataType2, mdMsg.GetInstrumentId()));
+		_mdSubs.Add(mdMsg.TransactionId, mdMsg.TypedClone());
 	}
 
 	private bool TryGetTransId(DataType dt, string uid, out long transId)
-		=> _mdTransIds.TryGetValue((dt, uid), out transId);
+		=> _mdTransIds.TryGetKey((dt, uid), out transId);
 
 	private bool TryGetAndRemove(long transId, out (DataType dt, string uid) t)
 	{
-		if (!_mdTransIds.TryGetKeyAndRemove(transId, out t))
+		if (!_mdTransIds.TryGetAndRemove(transId, out t))
 			return false;
 
+		_mdSubs.Remove(transId);
 		return true;
 	}
 
@@ -36,7 +39,7 @@ public partial class TinkoffMessageAdapter
 	{
 		_ = Task.Run(async () =>
 		{
-			var currError = 0;
+			var currentDelay = _baseDelay;
 
 			while (!cancellationToken.IsCancellationRequested)
 			{
@@ -44,7 +47,7 @@ public partial class TinkoffMessageAdapter
 				{
 					await foreach (var response in _mdStream.ResponseStream.ReadAllAsync(cancellationToken))
 					{
-						currError = 0;
+						currentDelay = _baseDelay;
 
 						if (response.Candle is Candle c)
 						{
@@ -128,7 +131,8 @@ public partial class TinkoffMessageAdapter
 
 						void sendFailed(long transId, SubscriptionStatus status)
 						{
-							_mdTransIds.RemoveByValue(transId);
+							_mdTransIds.Remove(transId);
+							_mdSubs.Remove(transId);
 							SendSubscriptionReply(transId, new InvalidOperationException(status.ToString()));
 						}
 
@@ -184,16 +188,33 @@ public partial class TinkoffMessageAdapter
 					
 					this.AddErrorLog(ex);
 
-					if (++currError >= 10)
-						break;
-
 					try
 					{
 						_mdStream = _service.MarketDataStream.MarketDataStream(cancellationToken: cancellationToken);
+
+						foreach (var mdMsg in _mdSubs.CachedValues)
+						{
+							if (mdMsg.DataType2 == DataType.Ticks)
+								await SubscribeTicks(mdMsg, cancellationToken);
+							else if (mdMsg.DataType2 == DataType.MarketDepth)
+								await SubscribeMarketDepth(mdMsg, cancellationToken);
+							else if (mdMsg.DataType2 == DataType.Level1)
+								await SubscribeLevel1(mdMsg, cancellationToken);
+							else if (mdMsg.DataType2.IsTFCandles)
+								await SubscribeCandles(mdMsg, cancellationToken);
+							else
+								throw new InvalidOperationException(mdMsg.ToString());
+						}
 					}
 					catch (Exception ex1)
 					{
+						if (cancellationToken.IsCancellationRequested)
+							break;
+
 						this.AddErrorLog(ex1);
+
+						currentDelay = GetCurrentDelay(currentDelay);
+						await currentDelay.Delay(cancellationToken);
 					}
 				}
 			}
@@ -440,7 +461,6 @@ public partial class TinkoffMessageAdapter
 	protected override async ValueTask OnTFCandlesSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
 		var tf = mdMsg.GetTimeFrame();
-		var interval = tf.ToNative();
 
 		SendSubscriptionReply(mdMsg.TransactionId);
 
@@ -451,7 +471,7 @@ public partial class TinkoffMessageAdapter
 				var from = mdMsg.From.Value;
 				var to = mdMsg.To ?? CurrentTime;
 
-				if (interval == SubscriptionInterval.OneMinute && (to - from).TotalDays > 1)
+				if (tf.ToNative() == SubscriptionInterval.OneMinute && (to - from).TotalDays > 1)
 				{
 					var response = await _service.Instruments.GetInstrumentByAsync(new()
 					{
@@ -506,22 +526,7 @@ public partial class TinkoffMessageAdapter
 			{
 				AddTransId(mdMsg);
 
-				await _mdStream.RequestStream.WriteAsync(new()
-				{
-					SubscribeCandlesRequest = new()
-					{
-						Instruments =
-						{
-							new CandleInstrument
-							{
-								InstrumentId = mdMsg.GetInstrumentId(),
-								Interval = interval,
-							}
-						},
-						SubscriptionAction = SubscriptionAction.Subscribe,
-						WaitingClose = mdMsg.IsFinishedOnly,
-					},
-				}, cancellationToken);
+				await SubscribeCandles(mdMsg, cancellationToken);
 			}
 
 			SendSubscriptionResult(mdMsg);
@@ -540,7 +545,7 @@ public partial class TinkoffMessageAdapter
 						new CandleInstrument
 						{
 							InstrumentId = t.uid,
-							Interval = interval,
+							Interval = tf.ToNative(),
 						}
 					},
 					SubscriptionAction = SubscriptionAction.Unsubscribe,
@@ -548,6 +553,24 @@ public partial class TinkoffMessageAdapter
 			}, cancellationToken);
 		}
 	}
+
+	private Task SubscribeCandles(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		=> _mdStream.RequestStream.WriteAsync(new()
+		{
+			SubscribeCandlesRequest = new()
+			{
+				Instruments =
+				{
+					new CandleInstrument
+					{
+						InstrumentId = mdMsg.GetInstrumentId(),
+						Interval = mdMsg.GetTimeFrame().ToNative(),
+					}
+				},
+				SubscriptionAction = SubscriptionAction.Subscribe,
+				WaitingClose = mdMsg.IsFinishedOnly,
+			},
+		}, cancellationToken);
 
 	private async Task<DateTimeOffset> DownloadHistoryAsync(long transId, string figi, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellationToken)
 	{
@@ -634,27 +657,7 @@ public partial class TinkoffMessageAdapter
 			{
 				AddTransId(mdMsg);
 
-				await _mdStream.RequestStream.WriteAsync(new()
-				{
-					SubscribeOrderBookRequest = new()
-					{
-						Instruments =
-						{
-							new OrderBookInstrument
-							{
-								InstrumentId = mdMsg.GetInstrumentId(),
-								Depth = mdMsg.MaxDepth ?? _defBook,
-								OrderBookType = mdMsg.IsRegularTradingHours switch
-								{
-									null => OrderBookType.Unspecified,
-									false => OrderBookType.Dealer,
-									_ => OrderBookType.Exchange,
-								},
-							}
-						},
-						SubscriptionAction = SubscriptionAction.Subscribe,
-					}
-				}, cancellationToken);
+				await SubscribeMarketDepth(mdMsg, cancellationToken);
 			}
 
 			SendSubscriptionResult(mdMsg);
@@ -688,6 +691,29 @@ public partial class TinkoffMessageAdapter
 		}
 	}
 
+	private Task SubscribeMarketDepth(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		=> _mdStream.RequestStream.WriteAsync(new()
+		{
+			SubscribeOrderBookRequest = new()
+			{
+				Instruments =
+				{
+					new OrderBookInstrument
+					{
+						InstrumentId = mdMsg.GetInstrumentId(),
+						Depth = mdMsg.MaxDepth ?? _defBook,
+						OrderBookType = mdMsg.IsRegularTradingHours switch
+						{
+							null => OrderBookType.Unspecified,
+							false => OrderBookType.Dealer,
+							_ => OrderBookType.Exchange,
+						},
+					}
+				},
+				SubscriptionAction = SubscriptionAction.Subscribe,
+			}
+		}, cancellationToken);
+
 	/// <inheritdoc/>
 	protected override async ValueTask OnTicksSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
@@ -699,26 +725,7 @@ public partial class TinkoffMessageAdapter
 			{
 				AddTransId(mdMsg);
 
-				await _mdStream.RequestStream.WriteAsync(new()
-				{
-					SubscribeTradesRequest = new()
-					{
-						Instruments =
-						{
-							new TradeInstrument
-							{
-								InstrumentId = mdMsg.GetInstrumentId(),
-							}
-						},
-						SubscriptionAction = SubscriptionAction.Subscribe,
-						TradeType = mdMsg.IsRegularTradingHours switch
-						{
-							null => TradeSourceType.TradeSourceUnspecified,
-							false => TradeSourceType.TradeSourceAll,
-							_ => TradeSourceType.TradeSourceExchange,
-						}
-					}
-				}, cancellationToken);
+				await SubscribeTicks(mdMsg, cancellationToken);
 			}
 
 			SendSubscriptionResult(mdMsg);
@@ -751,6 +758,28 @@ public partial class TinkoffMessageAdapter
 		}
 	}
 
+	private Task SubscribeTicks(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		=> _mdStream.RequestStream.WriteAsync(new()
+		{
+			SubscribeTradesRequest = new()
+			{
+				Instruments =
+				{
+					new TradeInstrument
+					{
+						InstrumentId = mdMsg.GetInstrumentId(),
+					}
+				},
+				SubscriptionAction = SubscriptionAction.Subscribe,
+				TradeType = mdMsg.IsRegularTradingHours switch
+				{
+					null => TradeSourceType.TradeSourceUnspecified,
+					false => TradeSourceType.TradeSourceAll,
+					_ => TradeSourceType.TradeSourceExchange,
+				}
+			}
+		}, cancellationToken);
+
 	/// <inheritdoc/>
 	protected override async ValueTask OnLevel1SubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
@@ -762,31 +791,7 @@ public partial class TinkoffMessageAdapter
 			{
 				AddTransId(mdMsg);
 
-				await _mdStream.RequestStream.WriteAsync(new()
-				{
-					SubscribeLastPriceRequest = new()
-					{
-						Instruments =
-						{
-							new LastPriceInstrument
-							{
-								InstrumentId = mdMsg.GetInstrumentId(),
-							}
-						},
-						SubscriptionAction = SubscriptionAction.Subscribe,
-					},
-					SubscribeInfoRequest = new()
-					{
-						Instruments =
-						{
-							new InfoInstrument
-							{
-								InstrumentId = mdMsg.GetInstrumentId(),
-							}
-						},
-						SubscriptionAction = SubscriptionAction.Subscribe,
-					},
-				}, cancellationToken);
+				await SubscribeLevel1(mdMsg, cancellationToken);
 			}
 
 			SendSubscriptionResult(mdMsg);
@@ -823,4 +828,31 @@ public partial class TinkoffMessageAdapter
 			}, cancellationToken);
 		}
 	}
+
+	private Task SubscribeLevel1(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		=> _mdStream.RequestStream.WriteAsync(new()
+		{
+			SubscribeLastPriceRequest = new()
+			{
+				Instruments =
+				{
+					new LastPriceInstrument
+					{
+						InstrumentId = mdMsg.GetInstrumentId(),
+					}
+				},
+				SubscriptionAction = SubscriptionAction.Subscribe,
+			},
+			SubscribeInfoRequest = new()
+			{
+				Instruments =
+				{
+					new InfoInstrument
+					{
+						InstrumentId = mdMsg.GetInstrumentId(),
+					}
+				},
+				SubscriptionAction = SubscriptionAction.Subscribe,
+			},
+		}, cancellationToken);
 }
