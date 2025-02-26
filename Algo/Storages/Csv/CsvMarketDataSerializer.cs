@@ -177,7 +177,7 @@ public abstract class CsvMarketDataSerializer<TData> : IMarketDataSerializer<TDa
 			}
 			finally
 			{
-				writer.Writer.Flush();
+				writer.Flush();
 			}
 		});
 	}

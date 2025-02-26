@@ -339,7 +339,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 			_delayActionGroup.Add(writer =>
 			{
 				ResetCopy();
-				writer.Writer.Truncate();
+				writer.Truncate();
 			});
 		}
 	}
@@ -354,7 +354,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 		{
 			ResetCopy();
 
-			writer.Writer.Truncate();
+			writer.Truncate();
 
 			foreach (var item in state)
 				Write(writer, item);

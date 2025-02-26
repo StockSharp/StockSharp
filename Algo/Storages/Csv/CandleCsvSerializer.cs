@@ -129,7 +129,7 @@ public class CandleCsvSerializer<TCandleMessage> : CsvMarketDataSerializer<TCand
 			}
 			finally
 			{
-				writer.Writer.Flush();
+				writer.Flush();
 			}
 		});
 	}
