@@ -32,11 +32,6 @@ public class StairsCountertrendStrategy : Strategy
 		base.OnStarted(time);
 	}
 
-	private bool IsRealTime(ICandleMessage candle)
-	{
-		return (CurrentTime - candle.CloseTime).TotalSeconds < 40;
-	}
-
 	private void CandleManager_Processing(ICandleMessage candle)
 	{
 		if (candle.OpenPrice < candle.ClosePrice)
@@ -50,7 +45,7 @@ public class StairsCountertrendStrategy : Strategy
 			_bearLength++;
 		}
 
-		if (!IsBacktesting && !IsRealTime(candle)) return;
+		if (!IsFormedAndOnlineAndAllowTrading()) return;
 
 		if (_bullLength >= Length && Position >= 0)
 		{

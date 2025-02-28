@@ -21,11 +21,6 @@ namespace StockSharp.Samples.Strategies.HistorySMA
 			_subscription = new(series);
 		}
 
-		private bool IsRealTime(ICandleMessage candle)
-		{
-			return (CurrentTime - candle.CloseTime).TotalSeconds < 10;
-		}
-
 		protected override void OnStarted(DateTimeOffset time)
 		{
 			this.WhenCandlesFinished(_subscription).Do(ProcessCandle).Apply(this);
@@ -35,16 +30,13 @@ namespace StockSharp.Samples.Strategies.HistorySMA
 
 		private void ProcessCandle(ICandleMessage candle)
 		{
-			var longSmaIsFormedPrev = LongSma.IsFormed;
 			LongSma.Process(candle);
 			ShortSma.Process(candle);
 
-			if (!LongSma.IsFormed || !longSmaIsFormedPrev) return;
-			if (!IsBacktesting && !IsRealTime(candle)) return;
+			if (!IsFormedAndOnlineAndAllowTrading()) return;
 
 			var isShortLessThenLongCurrent = ShortSma.GetCurrentValue() < LongSma.GetCurrentValue();
 			var isShortLessThenLongPrevios = ShortSma.GetValue(1) < LongSma.GetValue(1);
-
 
 			if (isShortLessThenLongPrevios == isShortLessThenLongCurrent) return;
 

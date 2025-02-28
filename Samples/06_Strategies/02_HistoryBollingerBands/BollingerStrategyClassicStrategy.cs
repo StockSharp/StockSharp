@@ -25,17 +25,12 @@
 			Subscribe(_subscription);
 			base.OnStarted(time);
 		}
-		private bool IsRealTime(ICandleMessage candle)
-		{
-			return (CurrentTime - candle.CloseTime).TotalSeconds < 10;
-		}
 
 		private void ProcessCandle(ICandleMessage candle)
 		{
 			BollingerBands.Process(candle);
 
-			if (!BollingerBands.IsFormed) return;
-			if (!IsBacktesting && !IsRealTime(candle)) return;
+			if (!IsFormedAndOnlineAndAllowTrading()) return;
 
 			if (candle.ClosePrice >= BollingerBands.UpBand.GetCurrentValue() && Position >= 0)
 			{
