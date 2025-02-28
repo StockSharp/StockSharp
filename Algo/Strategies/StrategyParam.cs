@@ -73,7 +73,7 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	private T _value;
 
 	/// <inheritdoc />
-	public virtual T Value
+	public T Value
 	{
 		get => _value;
 		set
@@ -84,14 +84,8 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 			if (!this.IsValid(value))
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
-			if (_value is INotifyPropertyChanged propChange)
-				propChange.PropertyChanged -= OnValueInnerStateChanged;
-
 			_value = value;
 			NotifyChanged();
-
-			if (_value is INotifyPropertyChanged propChange2)
-				propChange2.PropertyChanged += OnValueInnerStateChanged;
 		}
 	}
 
@@ -193,11 +187,6 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 			Attributes.Add(create());
 
 		return this;
-	}
-
-	private void OnValueInnerStateChanged(object sender, PropertyChangedEventArgs e)
-	{
-		NotifyChanged(nameof(Value));
 	}
 
 	/// <summary>
