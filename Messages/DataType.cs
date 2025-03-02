@@ -333,7 +333,12 @@ public class DataType : Equatable<DataType>, IPersistable
 			var name = Name;
 
 			if (name.IsEmpty())
-				name = $"{MessageType.GetDisplayName()}: {Arg}";
+			{
+				name = $"{MessageType.GetDisplayName()}";
+
+				if (Arg is not null)
+					name += $": {Arg}";
+			}
 
 			return name;
 		}
