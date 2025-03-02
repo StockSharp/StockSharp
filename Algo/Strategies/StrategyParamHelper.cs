@@ -20,7 +20,7 @@ public static class StrategyParamHelper
 		if (type.IsNullable())
 			type = type.GetUnderlyingType();
 
-		return type.IsNumeric() && !type.IsEnum() || type == typeof(bool) || type == typeof(Unit) || type == typeof(TimeSpan);
+		return type.IsNumeric() && !type.IsEnum() || type == typeof(bool) || type == typeof(Unit) || type == typeof(TimeSpan) || type == typeof(DataType);
 	}
 
 	private static StrategyParam<T> CreateParam<T>(string id) => new(id);
