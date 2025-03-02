@@ -56,7 +56,6 @@ public partial class MainWindow
 
 	private void Start_Click(object sender, RoutedEventArgs e)
 	{
-
 		_security = new Security
 		{
 			Id = "SBER@TQBR",

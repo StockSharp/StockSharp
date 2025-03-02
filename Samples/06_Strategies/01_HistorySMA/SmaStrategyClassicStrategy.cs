@@ -1,51 +1,131 @@
-﻿using System;
+using System;
 using StockSharp.Algo;
 using StockSharp.Algo.Candles;
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Strategies;
-using StockSharp.Algo.Testing;
 using StockSharp.Messages;
 using StockSharp.BusinessEntities;
+using System.Collections.Generic;
+using Ecng.ComponentModel;
 
 namespace StockSharp.Samples.Strategies.HistorySMA
 {
 	public class SmaStrategyClassicStrategy : Strategy
 	{
-		private readonly Subscription _subscription;
+		private readonly StrategyParam<int> _longSmaLength;
+		private readonly StrategyParam<int> _shortSmaLength;
+		private readonly StrategyParam<DataType> _candleTypeParam;
 
-		public SimpleMovingAverage LongSma { get; set; }
-		public SimpleMovingAverage ShortSma { get; set; }
+		// Variables to store previous indicator values
+		private decimal _prevLongValue;
+		private decimal _prevShortValue;
+		private bool _isFirstValue = true;
 
-		public SmaStrategyClassicStrategy(CandleSeries candleSeries)
+		public int LongSmaLength
 		{
-			_subscription = new(candleSeries);
+			get => _longSmaLength.Value;
+			set => _longSmaLength.Value = value;
+		}
+
+		public int ShortSmaLength
+		{
+			get => _shortSmaLength.Value;
+			set => _shortSmaLength.Value = value;
+		}
+
+		public DataType CandleType
+		{
+			get => _candleTypeParam.Value;
+			set => _candleTypeParam.Value = value;
+		}
+
+		public SmaStrategyClassicStrategy()
+		{
+			_longSmaLength = Param(nameof(LongSmaLength), 20)
+							.SetValidator(new IntGreaterThanZeroAttribute())
+							.SetDisplay("Long SMA Length", "Length of the long SMA indicator", "Indicators")
+							.SetCanOptimize(true)
+							.SetOptimize(10, 50, 5);
+
+			_shortSmaLength = Param(nameof(ShortSmaLength), 10)
+							.SetValidator(new IntGreaterThanZeroAttribute())
+							.SetDisplay("Short SMA Length", "Length of the short SMA indicator", "Indicators")
+							.SetCanOptimize(true)
+							.SetOptimize(5, 25, 5);
+
+			_candleTypeParam = Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(5)))
+							  .SetDisplay("Candle Type", "Type of candles to use", "General");
+		}
+
+		public override IEnumerable<(Security sec, DataType dt)> GetWorkingSecurities()
+		{
+			return new[] { (Security, CandleType) };
 		}
 
 		protected override void OnStarted(DateTimeOffset time)
 		{
-			this
-				.WhenCandlesFinished(_subscription)
-				.Do(CandleManager_Processing)
-				.Apply(this);
-
-			Subscribe(_subscription);
 			base.OnStarted(time);
+
+			// Create the indicators
+			var longSma = new SimpleMovingAverage { Length = LongSmaLength };
+			var shortSma = new SimpleMovingAverage { Length = ShortSmaLength };
+
+			// Add indicators to the strategy's collection for automatic IsFormed tracking
+			Indicators.Add(longSma);
+			Indicators.Add(shortSma);
+
+			// Create subscription and bind indicators
+			var subscription = SubscribeCandles(CandleType);
+			subscription
+				.Bind(longSma, shortSma, ProcessCandle)
+				.Start();
+
+			// Setup chart visualization if available
+			var area = CreateChartArea();
+			if (area != null)
+			{
+				DrawCandles(area, subscription);
+				DrawIndicator(area, longSma, System.Drawing.Color.Blue);
+				DrawIndicator(area, shortSma, System.Drawing.Color.Red);
+				DrawOwnTrades(area);
+			}
 		}
 
-		private void CandleManager_Processing(ICandleMessage candle)
+		private void ProcessCandle(ICandleMessage candle, decimal longValue, decimal shortValue)
 		{
-			LongSma.Process(candle);
-			ShortSma.Process(candle);
+			// Skip unfinished candles
+			if (candle.State != CandleStates.Finished)
+				return;
 
-			if (!IsFormedAndOnlineAndAllowTrading()) return;
+			// Check if strategy is ready to trade
+			if (!IsFormedAndOnlineAndAllowTrading())
+				return;
 
-			var isShortLessCurrent = ShortSma.GetCurrentValue() < LongSma.GetCurrentValue();
-			var isShortLessPrev = ShortSma.GetValue(1) < LongSma.GetValue(1);
+			// For the first value, we just store it and don't generate signals
+			if (_isFirstValue)
+			{
+				_prevLongValue = longValue;
+				_prevShortValue = shortValue;
+				_isFirstValue = false;
+				return;
+			}
 
-			if (isShortLessCurrent == isShortLessPrev) return;
+			// Get current and previous indicator values comparison
+			var isShortLessCurrent = shortValue < longValue;
+			var isShortLessPrev = _prevShortValue < _prevLongValue;
 
+			// Store current values as previous for next candle
+			_prevLongValue = longValue;
+			_prevShortValue = shortValue;
+
+			// Check for crossover (signal)
+			if (isShortLessCurrent == isShortLessPrev)
+				return;
+
+			// Calculate position size (increase position with each trade)
 			var volume = Volume + Math.Abs(Position);
 
+			// Execute trades based on signal
 			if (isShortLessCurrent)
 				SellMarket(volume);
 			else
