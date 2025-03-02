@@ -5694,4 +5694,12 @@ public static partial class Extensions
 			ConnectionStates.Failed => new ConnectMessage { Error = new InvalidOperationException(LocalizedStrings.UnexpectedDisconnection) },
 			_ => throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.InvalidValue),
 		};
+
+	/// <summary>
+	/// Create instance of <see cref="CandleMessage"/>.
+	/// </summary>
+	/// <param name="messageType">The type of candle message.</param>
+	/// <returns>Instance of <see cref="CandleMessage"/>.</returns>
+	public static CandleMessage CreateCandleMessage(this Type messageType)
+		=> messageType.CreateInstance<CandleMessage>();
 }

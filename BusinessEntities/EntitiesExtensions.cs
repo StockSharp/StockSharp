@@ -392,7 +392,7 @@ public static class EntitiesExtensions
 		if (!_candleTypes.TryGetValue(candle.GetType(), out var messageType))
 			throw new ArgumentException(LocalizedStrings.UnknownCandleType.Put(candle.GetType()), nameof(candle));
 
-		var message = CreateCandleMessage(messageType);
+		var message = messageType.CreateCandleMessage();
 
 		message.LocalTime = candle.OpenTime;
 		message.SecurityId = candle.Security.ToSecurityId();
@@ -1403,23 +1403,6 @@ public static class EntitiesExtensions
 #pragma warning disable CS0618 // Type or member is obsolete
 	private static readonly SynchronizedDictionary<Type, Func<Candle>> _candleCreators = [];
 #pragma warning restore CS0618 // Type or member is obsolete
-	private static readonly SynchronizedDictionary<Type, Func<CandleMessage>> _candleMessageCreators = [];
-
-	/// <summary>
-	/// Create instance of <see cref="CandleMessage"/>.
-	/// </summary>
-	/// <param name="messageType">The type of candle message.</param>
-	/// <returns>Instance of <see cref="CandleMessage"/>.</returns>
-	public static CandleMessage CreateCandleMessage(this Type messageType)
-	{
-		if (messageType == null)
-			throw new ArgumentNullException(nameof(messageType));
-
-		if (!_candleMessageCreators.TryGetValue(messageType, out var creator))
-			throw new ArgumentException(LocalizedStrings.UnknownCandleType.Put(messageType), nameof(messageType));
-
-		return creator();
-	}
 
 	/// <summary>
 	/// Register new candle type.
@@ -1457,7 +1440,6 @@ public static class EntitiesExtensions
 
 		_candleTypes.Add(candleType, messageType);
 		_candleCreators.Add(candleType, candleCreator);
-		_candleMessageCreators.Add(messageType, candleMessageCreator);
 	}
 
 	/// <summary>
