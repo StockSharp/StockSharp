@@ -410,6 +410,49 @@ public class DataType : Equatable<DataType>, IPersistable
 	public static ISet<DataType> CandleSources { get; } = new HashSet<DataType>([Ticks, Level1, MarketDepth, OrderLog]);
 
 	/// <summary>
+	/// Serialize <see cref="DataType"/> to <see cref="string"/>.
+	/// </summary>
+	/// <returns>The string representation of <see cref="DataType"/>.</returns>
+	public string ToSerializableString()
+	{
+		var type = MessageType;
+		var arg = Arg;
+
+		return $"{type?.GetTypeName(false)}:{(type?.IsCandleMessage() == true ? type.DataTypeArgToString(arg) : $"{arg?.GetType().GetTypeName(false)}:{arg?.ToString()}")}";
+	}
+
+	/// <summary>
+	/// Deserialize <see cref="DataType"/> from <see cref="string"/>.
+	/// </summary>
+	/// <param name="value">The string representation of <see cref="DataType"/>.</param>
+	/// <returns><see cref="DataType"/></returns>
+	public static DataType FromSerializableString(string value)
+	{
+		if (value.IsEmpty())
+			return null;
+
+		var parts = value.SplitByColon(false);
+
+		var msgType = parts[0].To<Type>();
+
+		object arg;
+
+		if (msgType?.IsCandleMessage() == true)
+			arg = msgType.ToDataTypeArg(parts[1]);
+		else
+		{
+			var argType = parts[1].To<Type>();
+			arg = argType is null ? null : parts[2].To(argType);
+		}
+
+		return new()
+		{
+			MessageType = msgType,
+			Arg = arg,
+		};
+	}
+
+	/// <summary>
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
