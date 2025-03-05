@@ -37,6 +37,7 @@ partial class Connector
 	/// <summary>
 	/// List of all candles series, subscribed via <see cref="Subscribe"/>.
 	/// </summary>
+	[Obsolete("Use FindSubscriptions method.")]
 	public IEnumerable<CandleSeries> SubscribedCandleSeries => _subscriptionManager.SubscribedCandleSeries;
 
 	/// <inheritdoc />

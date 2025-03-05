@@ -159,7 +159,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 		base.OnClosing(e);
 	}
 
-	private void Chart_OnSubscribeCandleElement(IChartCandleElement el, CandleSeries ser)
+	private void Chart_OnSubscribeCandleElement(IChartCandleElement el, Subscription subscription)
 	{
 		CurrentCandle = null;
 		_historyLoaded = false;
@@ -169,10 +169,10 @@ public partial class MainWindow : ICandleBuilderSubscription
 
 		Chart.Reset(new[] {el});
 
-		LoadData((SecurityId)Securities.SelectedItem, ser.ToDataType());
+		LoadData((SecurityId)Securities.SelectedItem, subscription.DataType);
 	}
 
-	private void Chart_OnSubscribeIndicatorElement(IChartIndicatorElement element, CandleSeries series, IIndicator indicator)
+	private void Chart_OnSubscribeIndicatorElement(IChartIndicatorElement element, Subscription subscription, IIndicator indicator)
 	{
 		_dataThreadActions.Add(() =>
 		{
@@ -256,7 +256,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 
 			_candleElement = Chart.CreateCandleElement();
 			_candleElement.PriceStep = _security.PriceStep * 5;
-			Chart.AddElement(_areaComb, _candleElement, SeriesEditor.DataType.ToCandleSeries(_security));
+			Chart.AddElement(_areaComb, _candleElement, new Subscription(SeriesEditor.DataType, _security));
 		});
 	}
 

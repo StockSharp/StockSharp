@@ -16,6 +16,5 @@ global using Brush = Ecng.Drawing.Brush;
 global using StockSharp.Localization;
 global using StockSharp.BusinessEntities;
 global using StockSharp.Messages;
-global using StockSharp.Algo.Candles;
 global using StockSharp.Algo.Indicators;
 global using DataType = StockSharp.Messages.DataType;

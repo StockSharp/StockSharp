@@ -65,6 +65,7 @@ public static class CandleHelper
 	/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
 	/// <param name="subscriptionProvider">The subscription provider.</param>
 	/// <param name="series">Candles series.</param>
+	[Obsolete]
 	public static void Start<TCandle>(this ISubscriptionProvider subscriptionProvider, CandleSeries series)
 		where TCandle : ICandleMessage
 	{
@@ -86,6 +87,7 @@ public static class CandleHelper
 	/// <param name="security">The instrument by which trades should be filtered for the candles creation.</param>
 	/// <param name="arg">Candle arg.</param>
 	/// <returns>The candles series. <see langword="null" /> if this series is not registered.</returns>
+	[Obsolete]
 	public static CandleSeries GetSeries<TCandle>(this ISubscriptionProvider subscriptionProvider, Security security, object arg)
 		where TCandle : ICandleMessage
 	{
@@ -175,6 +177,7 @@ public static class CandleHelper
 	/// <param name="series">Candles series.</param>
 	/// <param name="candleBuilderProvider">Candle builders provider.</param>
 	/// <returns>Candles.</returns>
+	[Obsolete]
 	public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<ExecutionMessage> trades, CandleSeries series, CandleBuilderProvider candleBuilderProvider = null)
 	{
 		return trades.ToCandles(series.ToMarketDataMessage(true), candleBuilderProvider);
@@ -235,6 +238,7 @@ public static class CandleHelper
 	/// <param name="type">Type of candle depth based data.</param>
 	/// <param name="candleBuilderProvider">Candle builders provider.</param>
 	/// <returns>Candles.</returns>
+	[Obsolete]
 	public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<QuoteChangeMessage> depths, CandleSeries series, Level1Fields type = Level1Fields.SpreadMiddle, CandleBuilderProvider candleBuilderProvider = null)
 	{
 		return depths.ToCandles(series.ToMarketDataMessage(true), type, candleBuilderProvider);
@@ -754,6 +758,7 @@ public static class CandleHelper
 	/// <param name="security">The instrument for which the grouping is registered.</param>
 	/// <param name="arg">Candle arg.</param>
 	/// <returns><see langword="true" /> if registered. Otherwise, <see langword="false" />.</returns>
+	[Obsolete]
 	public static bool IsCandlesRegistered<TCandle>(this ISubscriptionProvider subscriptionProvider, Security security, object arg)
 		where TCandle : ICandleMessage
 	{

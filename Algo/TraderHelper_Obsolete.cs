@@ -580,7 +580,7 @@ partial class TraderHelper
 	/// <param name="skip">Skip count.</param>
 	/// <param name="fillGaps"><see cref="FillGapsDays"/></param>
 	/// <returns>Subscription.</returns>
-	//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
+	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription SubscribeCandles(this ISubscriptionProvider provider,
 		CandleSeries series, DateTimeOffset? from = default, DateTimeOffset? to = default,
 		long? count = default, long? transactionId = default, IMessageAdapter adapter = default,

@@ -368,22 +368,25 @@ partial class Connector
 	/// <summary>
 	/// A new value for processing occurrence event.
 	/// </summary>
+	[Obsolete("Use CandleReceived event.")]
 	public event Action<CandleSeries, ICandleMessage> CandleProcessing;
 
 	/// <summary>
 	/// A new value for processing occurrence event.
 	/// </summary>
-	[Obsolete("Use CandleProcessing event.")]
+	[Obsolete("Use CandleReceived event.")]
 	public event Action<CandleSeries, Candle> CandleSeriesProcessing;
 
 	/// <summary>
 	/// The series processing end event.
 	/// </summary>
+	[Obsolete("Use SubscriptionStopped event.")]
 	public event Action<CandleSeries> CandleSeriesStopped;
 
 	/// <summary>
 	/// The series error event.
 	/// </summary>
+	[Obsolete("Use SubscriptionStopped event.")]
 	public event Action<CandleSeries, SubscriptionResponseMessage> CandleSeriesError;
 
 	/// <inheritdoc />
@@ -715,8 +718,10 @@ partial class Connector
 
 		RaiseSubscriptionFailed(subscription, error, true);
 
+#pragma warning disable CS0612 // Type or member is obsolete
 		if (subscription.CandleSeries != null)
 			RaiseCandleSeriesError(subscription.CandleSeries, reply);
+#pragma warning restore CS0612 // Type or member is obsolete
 	}
 
 	private void RaiseMarketDataUnSubscriptionSucceeded(MarketDataMessage message, Subscription subscription)
@@ -739,8 +744,10 @@ partial class Connector
 
 		RaiseSubscriptionStopped(subscription, null);
 
+#pragma warning disable CS0612 // Type or member is obsolete
 		if (subscription.CandleSeries != null)
 			RaiseCandleSeriesStopped(subscription.CandleSeries);
+#pragma warning restore CS0612 // Type or member is obsolete
 	}
 
 	private void RaiseMarketDataUnSubscriptionFailed(MarketDataMessage origin, SubscriptionResponseMessage reply, Subscription subscription)
@@ -781,8 +788,10 @@ partial class Connector
 
 		RaiseSubscriptionStopped(subscription, null);
 
+#pragma warning disable CS0612 // Type or member is obsolete
 		if (subscription.CandleSeries != null)
 			RaiseCandleSeriesStopped(subscription.CandleSeries);
+#pragma warning restore CS0612 // Type or member is obsolete
 	}
 
 	private void RaiseMarketDataUnexpectedCancelled(MarketDataMessage message, Exception error, Subscription subscription)
@@ -803,8 +812,10 @@ partial class Connector
 
 		RaiseSubscriptionStopped(subscription, error);
 
+#pragma warning disable CS0612 // Type or member is obsolete
 		if (subscription.CandleSeries != null)
 			RaiseCandleSeriesStopped(subscription.CandleSeries);
+#pragma warning restore CS0612 // Type or member is obsolete
 	}
 
 	private void RaiseSubscriptionOnline(Subscription subscription)
@@ -892,21 +903,22 @@ partial class Connector
 		TimeOut?.Invoke();
 	}
 
+	[Obsolete]
 	private void RaiseCandleSeriesProcessing(CandleSeries series, ICandleMessage candle)
 	{
 		CandleProcessing?.Invoke(series, candle);
 
-#pragma warning disable CS0618 // Type or member is obsolete
 		if (candle is Candle entity)
 			CandleSeriesProcessing?.Invoke(series, entity);
-#pragma warning restore CS0618 // Type or member is obsolete
 	}
 
+	[Obsolete]
 	private void RaiseCandleSeriesStopped(CandleSeries series)
 	{
 		CandleSeriesStopped?.Invoke(series);
 	}
 
+	[Obsolete]
 	private void RaiseCandleSeriesError(CandleSeries series, SubscriptionResponseMessage reply)
 	{
 		CandleSeriesError?.Invoke(series, reply);

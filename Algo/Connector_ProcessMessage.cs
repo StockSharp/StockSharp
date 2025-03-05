@@ -1598,8 +1598,10 @@ partial class Connector
 	{
 		foreach (var (subscription, candle) in _subscriptionManager.UpdateCandles(message))
 		{
+#pragma warning disable CS0612 // Type or member is obsolete
 			if (subscription.CandleSeries != null)
 				RaiseCandleSeriesProcessing(subscription.CandleSeries, candle);
+#pragma warning restore CS0612 // Type or member is obsolete
 
 			CandleReceived?.Invoke(subscription, candle);
 			RaiseSubscriptionReceived(subscription, message);

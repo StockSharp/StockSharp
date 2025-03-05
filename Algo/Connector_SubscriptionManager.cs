@@ -137,6 +137,7 @@ partial class Connector
 
 		public IEnumerable<Portfolio> SubscribedPortfolios => Subscriptions.Select(s => s.Portfolio).Where(p => p != null);
 
+		[Obsolete]
 		public IEnumerable<CandleSeries> SubscribedCandleSeries => Subscriptions.Select(s => s.CandleSeries).Where(p => p != null);
 
 		private void TryWriteLog(long id)

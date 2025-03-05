@@ -2,13 +2,12 @@ namespace StockSharp.Algo.Candles;
 
 using System.Text.RegularExpressions;
 
-using Ecng.Configuration;
-
 using StockSharp.BusinessEntities;
 
 /// <summary>
 /// Candles series.
 /// </summary>
+[Obsolete("Use Subscription class.")]
 public class CandleSeries : NotifiableObject, IPersistable
 {
 	/// <summary>
@@ -26,10 +25,8 @@ public class CandleSeries : NotifiableObject, IPersistable
 	/// <param name="arg">The candle formation parameter. For example, for <see cref="TimeFrameCandle"/> this value is <see cref="TimeFrameCandle.TimeFrame"/>.</param>
 	public CandleSeries(Type candleType, Security security, object arg)
 	{
-#pragma warning disable CS0618 // Type or member is obsolete
 		if (!candleType.IsCandle())
 			throw new ArgumentOutOfRangeException(nameof(candleType), candleType, LocalizedStrings.WrongCandleType);
-#pragma warning restore CS0618 // Type or member is obsolete
 
 		_security = security ?? throw new ArgumentNullException(nameof(security));
 		_candleType = candleType ?? throw new ArgumentNullException(nameof(candleType));
@@ -256,7 +253,8 @@ public class CandleSeries : NotifiableObject, IPersistable
 	/// <param name="storage">Settings storage.</param>
 	public void Load(SettingsStorage storage)
 	{
-		var secProvider = ConfigManager.TryGetService<ISecurityProvider>();
+		var secProvider = EntitiesExtensions.TrySecurityProvider;
+
 		if (secProvider != null)
 		{
 			var securityId = storage.GetValue<string>(nameof(SecurityId));
@@ -289,10 +287,8 @@ public class CandleSeries : NotifiableObject, IPersistable
 
 		if (storage.ContainsKey(nameof(BuildCandlesFrom2)))
 			BuildCandlesFrom2 = storage.GetValue<SettingsStorage>(nameof(BuildCandlesFrom2)).Load<Messages.DataType>();
-#pragma warning disable CS0618 // Type or member is obsolete
 		else if (storage.ContainsKey(nameof(BuildCandlesFrom)))
 			BuildCandlesFrom = storage.GetValue(nameof(BuildCandlesFrom), BuildCandlesFrom);
-#pragma warning restore CS0618 // Type or member is obsolete
 
 		BuildCandlesField = storage.GetValue(nameof(BuildCandlesField), BuildCandlesField);
 		AllowBuildFromSmallerTimeFrame = storage.GetValue(nameof(AllowBuildFromSmallerTimeFrame), AllowBuildFromSmallerTimeFrame);
