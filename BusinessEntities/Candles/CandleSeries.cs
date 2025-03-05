@@ -182,12 +182,6 @@ public class CandleSeries : NotifiableObject, IPersistable
 	/// <summary>
 	/// Which market-data type is used as a source value.
 	/// </summary>
-	//[Display(
-	//	ResourceType = typeof(LocalizedStrings),
-	//	Name = LocalizedStrings.SourceKey,
-	//	Description = LocalizedStrings.CandlesBuildSourceKey,
-	//	GroupName = LocalizedStrings.BuildKey,
-	//	Order = 21)]
 	[Browsable(false)]
 	[Obsolete("Use BuildCandlesFrom2 property.")]
 	public MarketDataTypes? BuildCandlesFrom
@@ -232,13 +226,8 @@ public class CandleSeries : NotifiableObject, IPersistable
 	/// <summary>
 	/// Try fill gaps.
 	/// </summary>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.GapsKey,
-		Description = LocalizedStrings.FillGapsKey,
-		GroupName = LocalizedStrings.BuildKey,
-		Order = 24)]
 	[Obsolete("Use separate subscriptions.")]
+	[Browsable(false)]
 	public bool FillGaps { get; set; }
 
 	/// <inheritdoc />
