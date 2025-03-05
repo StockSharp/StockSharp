@@ -5,7 +5,7 @@ using StockSharp.Algo.Candles;
 /// <summary>
 /// Subscription.
 /// </summary>
-public class Subscription : SubscriptionBase
+public class Subscription : SubscriptionBase<Subscription>
 {
 	/// <summary>
 	/// Candles series.
@@ -78,4 +78,8 @@ public class Subscription : SubscriptionBase
 		: base(subscriptionMessage, security)
 	{
 	}
+
+	/// <inheritdoc />
+	public override Subscription Clone()
+		=> new(SubscriptionMessage.TypedClone(), (SecurityMessage)null);
 }

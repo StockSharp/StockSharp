@@ -3,7 +3,8 @@
 /// <summary>
 /// Subscription.
 /// </summary>
-public class SubscriptionBase
+public class SubscriptionBase<TSubscription> : Cloneable<TSubscription>
+	where TSubscription : SubscriptionBase<TSubscription>
 {
 	/// <summary>
 	/// Security ID.
@@ -55,7 +56,7 @@ public class SubscriptionBase
 	public SubscriptionStates State { get; set; }
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="SubscriptionBase"/>.
+	/// Initializes a new instance of the <see cref="SubscriptionBase{TSubscription}"/>.
 	/// </summary>
 	/// <param name="subscriptionMessage">Subscription message.</param>
 	/// <param name="security">Security.</param>
@@ -83,4 +84,7 @@ public class SubscriptionBase
 
 	/// <inheritdoc />
 	public override string ToString() => SubscriptionMessage.ToString();
+
+	/// <inheritdoc />
+	public override TSubscription Clone() => throw new NotSupportedException();
 }
