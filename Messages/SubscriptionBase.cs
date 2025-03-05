@@ -3,62 +3,76 @@
 /// <summary>
 /// Subscription.
 /// </summary>
-public class SubscriptionBase<TSubscription> : Cloneable<TSubscription>
-	where TSubscription : SubscriptionBase<TSubscription>, ISubscriptionMessage
+public abstract class SubscriptionBase<TSubscription> : Cloneable<TSubscription>, ISubscriptionMessage
+	where TSubscription : SubscriptionBase<TSubscription>
 {
 	/// <summary>
 	/// Security ID.
 	/// </summary>
 	public SecurityId? SecurityId => (SubscriptionMessage as ISecurityIdMessage)?.SecurityId;
 
-	/// <summary>
-	/// Data type info.
-	/// </summary>
+	/// <inheritdoc />
 	public DataType DataType => SubscriptionMessage.DataType;
 
-	/// <summary>
-	/// Start date, from which data needs to be retrieved.
-	/// </summary>
+	/// <inheritdoc />
 	public DateTimeOffset? From
 	{
 		get => SubscriptionMessage.From;
 		set => SubscriptionMessage.From = value;
 	}
 
-	/// <summary>
-	/// End date, until which data needs to be retrieved.
-	/// </summary>
+	/// <inheritdoc />
 	public DateTimeOffset? To
 	{
 		get => SubscriptionMessage.To;
 		set => SubscriptionMessage.To = value;
 	}
 
-	/// <summary>
-	/// Skip count.
-	/// </summary>
+	/// <inheritdoc />
 	public long? Skip
 	{
 		get => SubscriptionMessage.Skip;
 		set => SubscriptionMessage.Skip = value;
 	}
 
-	/// <summary>
-	/// Max count.
-	/// </summary>
+	/// <inheritdoc />
 	public long? Count
 	{
 		get => SubscriptionMessage.Count;
 		set => SubscriptionMessage.Count = value;
 	}
 
-	/// <summary>
-	/// <see cref="FillGapsDays"/>.
-	/// </summary>
+	/// <inheritdoc />
 	public FillGapsDays? FillGaps
 	{
 		get => SubscriptionMessage.FillGaps;
 		set => SubscriptionMessage.FillGaps = value;
+	}
+
+	/// <summary>
+	/// Request identifier.
+	/// </summary>
+	public long TransactionId
+	{
+		get => SubscriptionMessage.TransactionId;
+		set => SubscriptionMessage.TransactionId = value;
+	}
+
+	/// <inheritdoc />
+	public bool FilterEnabled => SubscriptionMessage.FilterEnabled;
+
+	/// <inheritdoc />
+	public bool IsSubscribe
+	{
+		get => SubscriptionMessage.IsSubscribe;
+		set => SubscriptionMessage.IsSubscribe = value;
+	}
+
+	/// <inheritdoc />
+	public long OriginalTransactionId
+	{
+		get => SubscriptionMessage.OriginalTransactionId;
+		set => SubscriptionMessage.OriginalTransactionId = value;
 	}
 
 	/// <summary>
@@ -85,15 +99,6 @@ public class SubscriptionBase<TSubscription> : Cloneable<TSubscription>
 	/// <see cref="OrderStatusMessage"/>
 	/// </summary>
 	public OrderStatusMessage OrderStatus => (OrderStatusMessage)SubscriptionMessage;
-
-	/// <summary>
-	/// Request identifier.
-	/// </summary>
-	public long TransactionId
-	{
-		get => SubscriptionMessage.TransactionId;
-		set => SubscriptionMessage.TransactionId = value;
-	}
 
 	/// <summary>
 	/// State.
@@ -130,6 +135,19 @@ public class SubscriptionBase<TSubscription> : Cloneable<TSubscription>
 	/// <inheritdoc />
 	public override string ToString() => SubscriptionMessage.ToString();
 
-	/// <inheritdoc />
-	public override TSubscription Clone() => throw new NotSupportedException();
+	MessageTypes IMessage.Type => SubscriptionMessage.Type;
+
+	IMessageAdapter IMessage.Adapter
+	{
+		get => SubscriptionMessage.Adapter;
+		set => SubscriptionMessage.Adapter = value;
+	}
+
+	MessageBackModes IMessage.BackMode
+	{
+		get => SubscriptionMessage.BackMode;
+		set => SubscriptionMessage.BackMode = value;
+	}
+
+	DateTimeOffset ILocalTimeMessage.LocalTime => SubscriptionMessage.LocalTime;
 }
