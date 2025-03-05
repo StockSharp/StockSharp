@@ -4,7 +4,7 @@
 /// Subscription.
 /// </summary>
 public class SubscriptionBase<TSubscription> : Cloneable<TSubscription>
-	where TSubscription : SubscriptionBase<TSubscription>
+	where TSubscription : SubscriptionBase<TSubscription>, ISubscriptionMessage
 {
 	/// <summary>
 	/// Security ID.
@@ -15,6 +15,51 @@ public class SubscriptionBase<TSubscription> : Cloneable<TSubscription>
 	/// Data type info.
 	/// </summary>
 	public DataType DataType => SubscriptionMessage.DataType;
+
+	/// <summary>
+	/// Start date, from which data needs to be retrieved.
+	/// </summary>
+	public DateTimeOffset? From
+	{
+		get => SubscriptionMessage.From;
+		set => SubscriptionMessage.From = value;
+	}
+
+	/// <summary>
+	/// End date, until which data needs to be retrieved.
+	/// </summary>
+	public DateTimeOffset? To
+	{
+		get => SubscriptionMessage.To;
+		set => SubscriptionMessage.To = value;
+	}
+
+	/// <summary>
+	/// Skip count.
+	/// </summary>
+	public long? Skip
+	{
+		get => SubscriptionMessage.Skip;
+		set => SubscriptionMessage.Skip = value;
+	}
+
+	/// <summary>
+	/// Max count.
+	/// </summary>
+	public long? Count
+	{
+		get => SubscriptionMessage.Count;
+		set => SubscriptionMessage.Count = value;
+	}
+
+	/// <summary>
+	/// <see cref="FillGapsDays"/>.
+	/// </summary>
+	public FillGapsDays? FillGaps
+	{
+		get => SubscriptionMessage.FillGaps;
+		set => SubscriptionMessage.FillGaps = value;
+	}
 
 	/// <summary>
 	/// Subscription message.

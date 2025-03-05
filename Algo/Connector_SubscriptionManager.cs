@@ -14,7 +14,7 @@ partial class Connector
 			Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
 			Parent = parent;
 
-			_last = subscription.SubscriptionMessage.From;
+			_last = subscription.From;
 
 			var type = subscription.DataType;
 
@@ -422,7 +422,7 @@ partial class Connector
 
 			var missingSubscriptionDataTypes = defaultSubscriptionMessageTypes
 				.Select(GetDataType)
-				.Where(dt => dt != null && !Subscriptions.Any(s => s.SubscriptionMessage.DataType == dt && s.SubscriptionMessage.To == null));
+				.Where(dt => dt != null && !Subscriptions.Any(s => s.DataType == dt && s.To == null));
 
 			if (_wasConnected)
 			{
@@ -432,7 +432,7 @@ partial class Connector
 				missingSubscriptionDataTypes.ForEach(dt =>
 				{
 					var sub = dt.ToSubscription();
-					_connector.LogVerbose($"adding default subscription {sub.SubscriptionMessage.Type}");
+					_connector.LogVerbose($"adding default subscription {sub.DataType}");
 					AddSubscription(sub);
 				});
 				ReSubscribeAll();
@@ -443,7 +443,7 @@ partial class Connector
 				missingSubscriptionDataTypes.ForEach(dt =>
 				{
 					var sub = dt.ToSubscription();
-					_connector.LogVerbose($"subscribing default subscription {sub.SubscriptionMessage.Type}");
+					_connector.LogVerbose($"subscribing default subscription {sub.DataType}");
 					Subscribe(sub);
 				});
 			}

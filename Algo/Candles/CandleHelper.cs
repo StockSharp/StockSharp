@@ -197,6 +197,21 @@ public static class CandleHelper
 	/// To create candles from the tick trades collection.
 	/// </summary>
 	/// <param name="executions">Tick data.</param>
+	/// <param name="subscription">Market data subscription.</param>
+	/// <param name="candleBuilderProvider">Candle builders provider.</param>
+	/// <returns>Candles.</returns>
+	public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<ExecutionMessage> executions, Subscription subscription, CandleBuilderProvider candleBuilderProvider = null)
+	{
+		if (subscription is null)
+			throw new ArgumentNullException(nameof(subscription));
+
+		return ToCandles(executions, subscription.MarketData, candleBuilderProvider);
+	}
+
+	/// <summary>
+	/// To create candles from the tick trades collection.
+	/// </summary>
+	/// <param name="executions">Tick data.</param>
 	/// <param name="mdMsg">Market data subscription.</param>
 	/// <param name="candleBuilderProvider">Candle builders provider.</param>
 	/// <returns>Candles.</returns>
@@ -242,6 +257,22 @@ public static class CandleHelper
 	public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<QuoteChangeMessage> depths, CandleSeries series, Level1Fields type = Level1Fields.SpreadMiddle, CandleBuilderProvider candleBuilderProvider = null)
 	{
 		return depths.ToCandles(series.ToMarketDataMessage(true), type, candleBuilderProvider);
+	}
+
+	/// <summary>
+	/// To create candles from the order books collection.
+	/// </summary>
+	/// <param name="depths">Market depths.</param>
+	/// <param name="subscription">Market data subscription.</param>
+	/// <param name="type">Type of candle depth based data.</param>
+	/// <param name="candleBuilderProvider">Candle builders provider.</param>
+	/// <returns>Candles.</returns>
+	public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<QuoteChangeMessage> depths, Subscription subscription, Level1Fields type = Level1Fields.SpreadMiddle, CandleBuilderProvider candleBuilderProvider = null)
+	{
+		if (subscription is null)
+			throw new ArgumentNullException(nameof(subscription));
+
+		return ToCandles(depths, subscription.MarketData, type, candleBuilderProvider);
 	}
 
 	/// <summary>

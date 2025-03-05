@@ -81,14 +81,12 @@ partial class Strategy
 
 			if (history > TimeSpan.Zero)
 			{
-				var subscrMsg = subscription.SubscriptionMessage;
-
-				if (subscrMsg.From is null)
+				if (subscription.From is null)
 				{
-					var dataType = subscrMsg.DataType;
+					var dataType = subscription.DataType;
 
 					if (dataType.IsMarketData && dataType.IsSecurityRequired)
-						subscrMsg.From = DateTimeOffset.Now - history;
+						subscription.From = DateTimeOffset.Now - history;
 				}
 			}
 		}

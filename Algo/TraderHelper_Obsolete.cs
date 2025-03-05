@@ -594,7 +594,7 @@ partial class TraderHelper
 
 		var subscription = new Subscription(series);
 
-		var mdMsg = (MarketDataMessage)subscription.SubscriptionMessage;
+		var mdMsg = subscription.MarketData;
 
 		if (from != null)
 			mdMsg.From = from.Value;
