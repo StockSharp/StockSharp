@@ -924,7 +924,7 @@ static partial class EntitiesExtensions
 	/// <returns>Candles series.</returns>
 	[Obsolete("Use Subscription class.")]
 	public static CandleSeries TimeFrame(this Security security, TimeSpan arg)
-		=> new(typeof(TimeFrameCandleMessage).ToCandleType(), security, arg);
+		=> DataType.TimeFrame(arg).ToCandleSeries(security);
 
 	/// <summary>
 	/// To create <see cref="CandleSeries"/> for <see cref="RangeCandle"/> candles.
@@ -934,7 +934,7 @@ static partial class EntitiesExtensions
 	/// <returns>Candles series.</returns>
 	[Obsolete("Use Subscription class.")]
 	public static CandleSeries Range(this Security security, Unit arg)
-		=> new(typeof(RangeCandleMessage).ToCandleType(), security, arg);
+		=> DataType.Range(arg).ToCandleSeries(security);
 
 	/// <summary>
 	/// To create <see cref="CandleSeries"/> for <see cref="VolumeCandle"/> candles.
@@ -944,7 +944,7 @@ static partial class EntitiesExtensions
 	/// <returns>Candles series.</returns>
 	[Obsolete("Use Subscription class.")]
 	public static CandleSeries Volume(this Security security, decimal arg)
-		=> new(typeof(VolumeCandleMessage).ToCandleType(), security, arg);
+		=> DataType.Volume(arg).ToCandleSeries(security);
 
 	/// <summary>
 	/// To create <see cref="CandleSeries"/> for <see cref="TickCandle"/> candles.
@@ -954,7 +954,7 @@ static partial class EntitiesExtensions
 	/// <returns>Candles series.</returns>
 	[Obsolete("Use Subscription class.")]
 	public static CandleSeries Tick(this Security security, int arg)
-		=> new(typeof(TickCandleMessage).ToCandleType(), security, arg);
+		=> DataType.Tick(arg).ToCandleSeries(security);
 
 	/// <summary>
 	/// To create <see cref="CandleSeries"/> for <see cref="PnFCandle"/> candles.
@@ -964,7 +964,7 @@ static partial class EntitiesExtensions
 	/// <returns>Candles series.</returns>
 	[Obsolete("Use Subscription class.")]
 	public static CandleSeries PnF(this Security security, PnFArg arg)
-		=> new(typeof(PnFCandleMessage).ToCandleType(), security, arg);
+		=> DataType.PnF(arg).ToCandleSeries(security);
 
 	/// <summary>
 	/// To create <see cref="CandleSeries"/> for <see cref="RenkoCandle"/> candles.
@@ -974,7 +974,7 @@ static partial class EntitiesExtensions
 	/// <returns>Candles series.</returns>
 	[Obsolete("Use Subscription class.")]
 	public static CandleSeries Renko(this Security security, Unit arg)
-		=> new(typeof(RenkoCandleMessage).ToCandleType(), security, arg);
+		=> DataType.Renko(arg).ToCandleSeries(security);
 
 	/// <summary>
 	/// Determines the specified candle series if time frame based.
