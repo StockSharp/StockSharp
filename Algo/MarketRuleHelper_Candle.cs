@@ -45,10 +45,10 @@ partial class MarketRuleHelper
 		private void OnProcessing(Subscription subscription, ICandleMessage candle)
 		{
 			if (Subscription != subscription &&
-#pragma warning disable CS0612 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete
 				// for backward compatibility (old code used CandleSeries rules)
 				Subscription.CandleSeries != subscription.CandleSeries
-#pragma warning restore CS0612 // Type or member is obsolete
+#pragma warning restore CS0618 // Type or member is obsolete
 			)
 				return;
 

@@ -48,7 +48,6 @@ partial class Connector
 	/// <inheritdoc />
 	public event Action<long, Exception, DateTimeOffset> OrderStatusFailed2;
 
-#pragma warning disable 67
 	/// <inheritdoc />
 	[Obsolete("Use NewOrders event.")]
 	public event Action<IEnumerable<Order>> NewStopOrders;
@@ -80,7 +79,6 @@ partial class Connector
 	/// <inheritdoc />
 	[Obsolete("Use OrdersCancelFailed event.")]
 	public event Action<IEnumerable<OrderFail>> StopOrdersCancelFailed;
-#pragma warning restore 67
 
 	/// <inheritdoc />
 	[Obsolete("Use SecurityReceived event.")]
@@ -719,8 +717,10 @@ partial class Connector
 		RaiseSubscriptionFailed(subscription, error, true);
 
 #pragma warning disable CS0612 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete
 		if (subscription.CandleSeries != null)
 			RaiseCandleSeriesError(subscription.CandleSeries, reply);
+#pragma warning restore CS0618 // Type or member is obsolete
 #pragma warning restore CS0612 // Type or member is obsolete
 	}
 
@@ -745,8 +745,10 @@ partial class Connector
 		RaiseSubscriptionStopped(subscription, null);
 
 #pragma warning disable CS0612 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete
 		if (subscription.CandleSeries != null)
 			RaiseCandleSeriesStopped(subscription.CandleSeries);
+#pragma warning restore CS0618 // Type or member is obsolete
 #pragma warning restore CS0612 // Type or member is obsolete
 	}
 
@@ -789,8 +791,10 @@ partial class Connector
 		RaiseSubscriptionStopped(subscription, null);
 
 #pragma warning disable CS0612 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete
 		if (subscription.CandleSeries != null)
 			RaiseCandleSeriesStopped(subscription.CandleSeries);
+#pragma warning restore CS0618 // Type or member is obsolete
 #pragma warning restore CS0612 // Type or member is obsolete
 	}
 
@@ -813,8 +817,10 @@ partial class Connector
 		RaiseSubscriptionStopped(subscription, error);
 
 #pragma warning disable CS0612 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete
 		if (subscription.CandleSeries != null)
 			RaiseCandleSeriesStopped(subscription.CandleSeries);
+#pragma warning restore CS0618 // Type or member is obsolete
 #pragma warning restore CS0612 // Type or member is obsolete
 	}
 

@@ -10,7 +10,7 @@ public class Subscription : SubscriptionBase<Subscription>
 	/// <summary>
 	/// Candles series.
 	/// </summary>
-	[Obsolete]
+	[Obsolete("Use Subscription class.")]
 	public CandleSeries CandleSeries { get; }
 
 	/// <summary>
@@ -42,7 +42,7 @@ public class Subscription : SubscriptionBase<Subscription>
 	/// Initializes a new instance of the <see cref="Subscription"/>.
 	/// </summary>
 	/// <param name="candleSeries">Candles series.</param>
-	[Obsolete]
+	[Obsolete("Use Subscription class.")]
 	public Subscription(CandleSeries candleSeries)
 		: this(candleSeries.ToMarketDataMessage(true), candleSeries.Security)
 	{
