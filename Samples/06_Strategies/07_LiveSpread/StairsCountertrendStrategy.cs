@@ -1,20 +1,15 @@
 ﻿namespace StockSharp.Samples.Strategies.LiveSpread;
 
 using System;
+
 using StockSharp.Algo;
-using StockSharp.Algo.Candles;
 using StockSharp.Algo.Strategies;
 using StockSharp.Messages;
 using StockSharp.BusinessEntities;
 
 public class StairsCountertrendStrategy : Strategy
 {
-	private readonly Subscription _subscription;
-
-	public StairsCountertrendStrategy(CandleSeries candleSeries)
-	{
-		_subscription = new(candleSeries);
-	}
+	public DataType CandleDataType { get; set; }
 
 	private int _bullLength;
 	private int _bearLength;
@@ -22,17 +17,19 @@ public class StairsCountertrendStrategy : Strategy
 
 	protected override void OnStarted(DateTimeOffset time)
 	{
+		var subscription = new Subscription(CandleDataType, Security);
+
 		this
-			.WhenCandlesFinished(_subscription)
-			.Do(CandleManager_Processing)
+			.WhenCandlesFinished(subscription)
+			.Do(Processing)
 			.Apply(this);
 
-		Subscribe(_subscription);
+		Subscribe(subscription);
 
 		base.OnStarted(time);
 	}
 
-	private void CandleManager_Processing(ICandleMessage candle)
+	private void Processing(ICandleMessage candle)
 	{
 		if (candle.OpenPrice < candle.ClosePrice)
 		{

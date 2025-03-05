@@ -10,24 +10,22 @@ using Ecng.Collections;
 using Ecng.Logging;
 
 using StockSharp.Algo;
-using StockSharp.Algo.Candles;
 using StockSharp.Algo.Strategies;
 using StockSharp.BusinessEntities;
 using StockSharp.Configuration;
 using StockSharp.Messages;
 using StockSharp.Xaml;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class MainWindow
 {
 	private Security _security;
-	private CandleSeries _candleSeries;
 	private Strategy _strategy;
+	
 	private readonly LogManager _logManager;
+	
 	private readonly Connector _connector = new();
 	private const string _connectorFile = "ConnectorFile.json";
+	
 	public MainWindow()
 	{
 		InitializeComponent();
@@ -69,19 +67,15 @@ public partial class MainWindow
 		if (SecurityEditor.SelectedSecurity == null) return;
 		_security = SecurityEditor.SelectedSecurity;
 
-		_candleSeries = CandleSettingsEditor.DataType.ToCandleSeries(_security);
-		_candleSeries.BuildCandlesMode = MarketDataBuildModes.Build;
-		_candleSeries.BuildCandlesFrom2 = DataType.Ticks;
-
 		// uncomment required strategy
-		//_strategy = new MqSpreadStrategy()
-		//_strategy = new MqStrategy()
-		_strategy = new StairsCountertrendStrategy(_candleSeries)
+		//_strategy = new MqSpreadStrategy
+		//_strategy = new MqStrategy
+		_strategy = new StairsCountertrendStrategy
 		{
 			Security = _security,
 			Connector = _connector,
 			Portfolio = PortfolioEditor.SelectedPortfolio,
-
+			CandleDataType = CandleSettingsEditor.DataType,
 		};
 		_logManager.Sources.Add(_strategy);
 		_strategy.NewMyTrade += MyTradeGrid.Trades.Add;

@@ -14,15 +14,14 @@ using StockSharp.Algo;
 using StockSharp.Configuration;
 using StockSharp.Xaml;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class MainWindow
 {
 	private ArbitrageStrategy _strategy;
 	private readonly LogManager _logManager;
+
 	private readonly Connector _connector = new();
 	private const string _connectorFile = "ConnectorFile.json";
+
 	public MainWindow()
 	{
 		InitializeComponent();

@@ -33,8 +33,8 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 	/// <summary>
 	/// Initializes a new instance of the <see cref="HistoryEmulationConnector"/>.
 	/// </summary>
-	/// <param name="securities">Instruments, which will be sent through the <see cref="IConnector.NewSecurities"/> event.</param>
-	/// <param name="portfolios">Portfolios, which will be sent through the <see cref="IConnector.NewPortfolios"/> event.</param>
+	/// <param name="securities">Instruments, which will be sent through the <see cref="Connector.SecurityReceived"/> event.</param>
+	/// <param name="portfolios">Portfolios, which will be sent through the <see cref="Connector.PortfolioReceived"/> event.</param>
 	public HistoryEmulationConnector(IEnumerable<Security> securities, IEnumerable<Portfolio> portfolios)
 		: this(securities, portfolios, new StorageRegistry())
 	{

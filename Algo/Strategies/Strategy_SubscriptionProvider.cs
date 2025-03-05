@@ -202,41 +202,13 @@ partial class Strategy
 	private void OnConnectorOrderBookReceived(Subscription subscription, IOrderBookMessage message)
 	{
 		if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
-		{
 			OrderBookReceived?.Invoke(subscription, message);
-
-			var legacy = MarketDepthReceived;
-
-			if (legacy is not null && subscription.SecurityId is not null)
-			{
-#pragma warning disable CS0618 // Type or member is obsolete
-				if (message is not MarketDepth md)
-					md = ((QuoteChangeMessage)message).ToMarketDepth(LookupById(subscription.SecurityId.Value));
-#pragma warning restore CS0618 // Type or member is obsolete
-
-				legacy(subscription, md);
-			}
-		}
 	}
 
 	private void OnConnectorOrderLogReceived(Subscription subscription, IOrderLogMessage message)
 	{
 		if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
-		{
 			OrderLogReceived?.Invoke(subscription, message);
-
-			var legacy = OrderLogItemReceived;
-
-			if (legacy is not null && subscription.SecurityId is not null)
-			{
-#pragma warning disable CS0618 // Type or member is obsolete
-				if (message is not OrderLogItem ol)
-					ol = ((ExecutionMessage)message).ToOrderLog(LookupById(subscription.SecurityId.Value));
-#pragma warning restore CS0618 // Type or member is obsolete
-
-				legacy(subscription, ol);
-			}
-		}
 	}
 
 	private void OnConnectorLevel1Received(Subscription subscription, Level1ChangeMessage message)

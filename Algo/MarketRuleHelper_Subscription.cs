@@ -250,7 +250,7 @@ partial class MarketRuleHelper
 	}
 
 	/// <summary>
-	/// To create a rule for the event of <see cref="ISubscriptionProvider.OrderLogItemReceived"/>.
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.OrderLogReceived"/>.
 	/// </summary>
 	/// <param name="subscription">Subscription.</param>
 	/// <param name="provider">Subscription provider.</param>
@@ -546,4 +546,86 @@ partial class MarketRuleHelper
 	{
 		return new PositionReceivedRule(subscription, provider);
 	}
+
+	private class ConditionOrderBookReceivedRule(Subscription subscription, ISubscriptionProvider provider, Func<IOrderBookMessage, bool> condition) : OrderBookReceivedRule(subscription, provider)
+	{
+		private readonly Func<IOrderBookMessage, bool> _condition = condition ?? throw new ArgumentNullException(nameof(condition));
+
+		protected override void Activate(IOrderBookMessage book)
+		{
+			if (_condition(book))
+				base.Activate(book);
+		}
+	}
+
+	/// <summary>
+	/// To create a rule for the event of excess of the best bid of specific level.
+	/// </summary>
+	/// <param name="subscription"><see cref="Subscription"/></param>
+	/// <param name="provider"><see cref="ISubscriptionProvider"/></param>
+	/// <param name="level">The level.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, IOrderBookMessage> WhenBestBidPriceMore(this Subscription subscription, ISubscriptionProvider provider, decimal level)
+		=> new ConditionOrderBookReceivedRule(subscription, provider, b => b.GetBestBid()?.Price > level);
+
+	/// <summary>
+	/// To create a rule for the event of dropping the best bid below the specific level.
+	/// </summary>
+	/// <param name="subscription"><see cref="Subscription"/></param>
+	/// <param name="provider"><see cref="ISubscriptionProvider"/></param>
+	/// <param name="level">The level.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, IOrderBookMessage> WhenBestBidPriceLess(this Subscription subscription, ISubscriptionProvider provider, decimal level)
+		=> new ConditionOrderBookReceivedRule(subscription, provider, b => b.GetBestBid()?.Price < level);
+
+	/// <summary>
+	/// To create a rule for the event of excess of the best offer of the specific level.
+	/// </summary>
+	/// <param name="subscription"><see cref="Subscription"/></param>
+	/// <param name="provider"><see cref="ISubscriptionProvider"/></param>
+	/// <param name="level">The level.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, IOrderBookMessage> WhenBestAskPriceMore(this Subscription subscription, ISubscriptionProvider provider, decimal level)
+		=> new ConditionOrderBookReceivedRule(subscription, provider, b => b.GetBestAsk()?.Price > level);
+
+	/// <summary>
+	/// To create a rule for the event of dropping the best offer below the specific level.
+	/// </summary>
+	/// <param name="subscription"><see cref="Subscription"/></param>
+	/// <param name="provider"><see cref="ISubscriptionProvider"/></param>
+	/// <param name="level">The level.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, IOrderBookMessage> WhenBestAskPriceLess(this Subscription subscription, ISubscriptionProvider provider, decimal level)
+		=> new ConditionOrderBookReceivedRule(subscription, provider, b => b.GetBestAsk()?.Price < level);
+
+	private class ConditionTickTradeReceivedRule(Subscription subscription, ISubscriptionProvider provider, Func<ITickTradeMessage, bool> condition) : TickTradeReceivedRule(subscription, provider)
+	{
+		private readonly Func<ITickTradeMessage, bool> _condition = condition ?? throw new ArgumentNullException(nameof(condition));
+
+		protected override void Activate(ITickTradeMessage tick)
+		{
+			if (_condition(tick))
+				base.Activate(tick);
+		}
+	}
+
+	/// <summary>
+	/// To create a rule for the event of increase of the last trade price above the specific level.
+	/// </summary>
+	/// <param name="subscription"><see cref="Subscription"/></param>
+	/// <param name="provider"><see cref="ISubscriptionProvider"/></param>
+	/// <param name="level">The level.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, ITickTradeMessage> WhenLastTradePriceMore(this Subscription subscription, ISubscriptionProvider provider, decimal level)
+		=> new ConditionTickTradeReceivedRule(subscription, provider, t => t.Price > level);
+
+	/// <summary>
+	/// To create a rule for the event of reduction of the last trade price below the specific level.
+	/// </summary>
+	/// <param name="subscription"><see cref="Subscription"/></param>
+	/// <param name="provider"><see cref="ISubscriptionProvider"/></param>
+	/// <param name="level">The level.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, ITickTradeMessage> WhenLastTradePriceLess(this Subscription subscription, ISubscriptionProvider provider, decimal level)
+		=> new ConditionTickTradeReceivedRule(subscription, provider, t => t.Price < level);
 }

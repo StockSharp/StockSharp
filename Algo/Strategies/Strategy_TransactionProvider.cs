@@ -4,14 +4,6 @@ partial class Strategy
 {
 	IdGenerator ITransactionProvider.TransactionIdGenerator => SafeGetConnector().TransactionIdGenerator;
 
-	private Action<Order> _newOrder;
-
-	event Action<Order> ITransactionProvider.NewOrder
-	{
-		add => _newOrder += value;
-		remove => _newOrder -= value;
-	}
-
 	event Action<long> ITransactionProvider.MassOrderCanceled
 	{
 		add { }
@@ -36,19 +28,7 @@ partial class Strategy
 		remove { }
 	}
 
-	event Action<long, Exception> ITransactionProvider.OrderStatusFailed
-	{
-		add { }
-		remove { }
-	}
-
 	event Action<long, Exception, DateTimeOffset> ITransactionProvider.OrderStatusFailed2
-	{
-		add { }
-		remove { }
-	}
-
-	event Action<Order> ITransactionProvider.NewStopOrder
 	{
 		add { }
 		remove { }
@@ -68,6 +48,6 @@ partial class Strategy
 
 	void ITransactionProvider.CancelOrders(bool? isStopOrder, Portfolio portfolio, Sides? direction, ExchangeBoard board, Security security, SecurityTypes? securityType, long? transactionId)
 	{
-		SafeGetConnector().CancelOrders(isStopOrder, portfolio, direction, board, security, securityType, transactionId);
+		CancelActiveOrders(isStopOrder, portfolio, direction, board, security, securityType, transactionId);
 	}
 }

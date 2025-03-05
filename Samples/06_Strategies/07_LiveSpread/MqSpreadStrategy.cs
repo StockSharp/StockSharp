@@ -8,6 +8,8 @@ using StockSharp.Messages;
 
 public class MqSpreadStrategy : Strategy
 {
+	public DataType CandleDataType { get; set; }
+
 	protected override void OnStarted(DateTimeOffset time)
 	{
 		Connector.MarketTimeChanged += Connector_MarketTimeChanged;

@@ -917,7 +917,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				if (CancelOrdersWhenStopping)
 				{
 					LogInfo(LocalizedStrings.WaitingCancellingAllOrders);
-					ProcessCancelActiveOrders();
+					ProcessCancelActiveOrders(default, default, default, default, default, default, default);
 				}
 
 				foreach (var rule in GetRules())
@@ -992,7 +992,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	private readonly StrategyParam<TimeSpan> _ordersKeepTime;
 
 	/// <summary>
-	/// The time for storing <see cref="Orders"/> and <see cref="StopOrders"/> orders in memory. By default it equals to 2 days. If value is set in <see cref="TimeSpan.Zero"/>, orders will not be deleted.
+	/// The time for storing <see cref="Orders"/> in memory. By default it equals to 2 days. If value is set in <see cref="TimeSpan.Zero"/>, orders will not be deleted.
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
@@ -1583,8 +1583,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	{
 		OnOrderRegistering(order);
 
-		_newOrder?.Invoke(order);
-
 		ProcessRisk(order);
 	}
 
@@ -1604,8 +1602,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		if (!order.State.IsFinal())
 			ApplyMonitorRules(order);
-
-		_newOrder?.Invoke(order);
 
 		return null;
 	}
@@ -2720,7 +2716,14 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// <summary>
 	/// To cancel all active orders (to stop and regular).
 	/// </summary>
-	public void CancelActiveOrders()
+	/// <param name="isStopOrder"><see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.</param>
+	/// <param name="portfolio">Portfolio. If the value is equal to <see langword="null" />, then the portfolio does not match the orders cancel filter.</param>
+	/// <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
+	/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
+	/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
+	/// <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
+	/// <param name="transactionId">Order cancellation transaction id.</param>
+	public void CancelActiveOrders(bool? isStopOrder = default, Portfolio portfolio = default, Sides? direction = default, ExchangeBoard board = default, Security security = default, SecurityTypes? securityType = default, long? transactionId = default)
 	{
 		if (ProcessState != ProcessStates.Started)
 		{
@@ -2730,13 +2733,10 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		LogInfo(LocalizedStrings.CancelAll);
 
-		ProcessCancelActiveOrders();
+		ProcessCancelActiveOrders(isStopOrder, portfolio, direction, board, security, securityType, transactionId);
 	}
 
-	/// <summary>
-	/// To cancel all active orders (to stop and regular).
-	/// </summary>
-	protected virtual void ProcessCancelActiveOrders()
+	private void ProcessCancelActiveOrders(bool? isStopOrder, Portfolio portfolio, Sides? direction, ExchangeBoard board, Security security, SecurityTypes? securityType, long? transactionId)
 	{
 		_ordersInfo.SyncGet(d => d.Keys.Filter(OrderStates.Active).ToArray()).ForEach(o =>
 		{
@@ -2744,6 +2744,27 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 			//заявка принадлежит дочерней статегии
 			if (!info.IsOwn)
+				return;
+
+			if (isStopOrder is not null && isStopOrder != (o.Type == OrderTypes.Conditional))
+				return;
+
+			if (portfolio is not null && o.Portfolio != portfolio)
+				return;
+
+			if (direction is not null && o.Side != direction)
+				return;
+
+			if (board is not null && o.Security.Board != board)
+				return;
+
+			if (security is not null && o.Security != security)
+				return;
+
+			if (securityType is not null && o.Security.Type != securityType)
+				return;
+
+			if (transactionId is not null && o.TransactionId != transactionId)
 				return;
 
 			if (info.IsCanceled)

@@ -13,18 +13,16 @@ using StockSharp.BusinessEntities;
 using StockSharp.Configuration;
 using StockSharp.Xaml;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class MainWindow
 {
 	private HistoryEmulationConnector _connector;
+	private static readonly string _pathHistory = Paths.HistoryDataPath;
 
 	private Security _security;
 	private Portfolio _portfolio;
-	private readonly LogManager _logManager;
 	private Strategy _strategy;
-	private readonly string _pathHistory = Paths.HistoryDataPath;
+	
+	private readonly LogManager _logManager;
 
 	public MainWindow()
 	{
@@ -82,13 +80,9 @@ public partial class MainWindow
 		//_logManager.Sources.Add(_connector);
 		_logManager.Sources.Add(_strategy);
 
-		_connector.Connected += Connector_Connected;
-		_connector.Connect();
-	}
-
-	private void Connector_Connected()
-	{
 		_strategy.Start();
+		
+		_connector.Connect();
 		_connector.Start();
 	}
 }

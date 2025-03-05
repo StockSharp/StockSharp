@@ -77,17 +77,6 @@ public abstract class HedgeStrategy : Strategy
 		set => _priceOffset.Value = value;
 	}
 
-	/// <summary>
-	/// To get a list of rules on which the rehedging will respond.
-	/// </summary>
-	/// <returns>Rule list.</returns>
-	protected virtual IEnumerable<IMarketRule> GetNotificationRules()
-	{
-#pragma warning disable CS0618 // Type or member is obsolete
-		yield return GetSecurity().WhenNewTrade(this);
-#pragma warning restore CS0618 // Type or member is obsolete
-	}
-
 	/// <inheritdoc />
 	protected override void OnStarted(DateTimeOffset time)
 	{
@@ -137,11 +126,6 @@ public abstract class HedgeStrategy : Strategy
 				LogInfo(LocalizedStrings.StrikeStrategyFound.Put(strategy));
 			}
 		}
-
-		this.SuspendRules(() =>
-			GetNotificationRules().Or()
-				.Do(() => ReHedge(CurrentTime))
-				.Apply(this));
 
 		if (!IsRulesSuspended)
 		{

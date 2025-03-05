@@ -1,4 +1,4 @@
-namespace StockSharp.Algo;
+namespace StockSharp.BusinessEntities;
 
 /// <summary>
 /// Subscription provider interface.
@@ -44,18 +44,6 @@ public interface ISubscriptionProvider
 	/// Board received.
 	/// </summary>
 	event Action<Subscription, ExchangeBoard> BoardReceived;
-
-	/// <summary>
-	/// Order book received.
-	/// </summary>
-	[Obsolete("Use OrderBookReceived event.")]
-	event Action<Subscription, MarketDepth> MarketDepthReceived;
-
-	/// <summary>
-	/// Order log received.
-	/// </summary>
-	[Obsolete("Use OrderLogReceived event.")]
-	event Action<Subscription, OrderLogItem> OrderLogItemReceived;
 
 	/// <summary>
 	/// News received.

@@ -2295,4 +2295,49 @@ public static partial class EntitiesExtensions
 
 		return provider.LookupById(secId);
 	}
+
+	/// <summary>
+	/// To get the weighted mean price of matching by own trades.
+	/// </summary>
+	/// <param name="trades">Trades, for which the weighted mean price of matching shall be got.</param>
+	/// <returns>The weighted mean price. If no trades, 0 is returned.</returns>
+	public static decimal GetAveragePrice(this IEnumerable<MyTrade> trades)
+	{
+		if (trades == null)
+			throw new ArgumentNullException(nameof(trades));
+
+		var numerator = 0m;
+		var denominator = 0m;
+		var currentAvgPrice = 0m;
+
+		foreach (var myTrade in trades)
+		{
+			var order = myTrade.Order;
+			var trade = myTrade.Trade;
+
+			var direction = (order.Side == Sides.Buy) ? 1m : -1m;
+
+			//Если открываемся или переворачиваемся
+			if (direction != denominator.Sign() && trade.Volume > denominator.Abs())
+			{
+				var newVolume = trade.Volume - denominator.Abs();
+				numerator = direction * trade.Price * newVolume;
+				denominator = direction * newVolume;
+			}
+			else
+			{
+				//Если добавляемся в сторону уже открытой позиции
+				if (direction == denominator.Sign())
+					numerator += direction * trade.Price * trade.Volume;
+				else
+					numerator += direction * currentAvgPrice * trade.Volume;
+
+				denominator += direction * trade.Volume;
+			}
+
+			currentAvgPrice = (denominator != 0) ? numerator / denominator : 0m;
+		}
+
+		return currentAvgPrice;
+	}
 }

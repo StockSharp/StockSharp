@@ -9,8 +9,6 @@ using Ecng.Common;
 using Ecng.Drawing;
 using Ecng.Logging;
 
-using StockSharp.Algo;
-using StockSharp.Algo.Candles;
 using StockSharp.Algo.Commissions;
 using StockSharp.Algo.Storages;
 using StockSharp.Algo.Strategies;
@@ -22,23 +20,20 @@ using StockSharp.Xaml;
 using StockSharp.Xaml.Charting;
 using StockSharp.Charting;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class MainWindow
 {
 	private HistoryEmulationConnector _connector;
-	private ChartCandleElement _candleElement;
-	private ChartTradeElement _tradesElem;
-	private CandleSeries _candleSeries;
+	private readonly string _pathHistory = Paths.HistoryDataPath;
+
 	private Security _security;
 	private Portfolio _portfolio;
-	private readonly LogManager _logManager;
 	private Strategy _strategy;
-	private readonly string _pathHistory = Paths.HistoryDataPath;
-	private ChartBandElement _pnl;
-	private ChartBandElement _unrealizedPnL;
-	private ChartBandElement _commissionCurve;
+	
+	private readonly LogManager _logManager;
+	
+	private IChartBandElement _pnl;
+	private IChartBandElement _unrealizedPnL;
+	private IChartBandElement _commissionCurve;
 
 	public MainWindow()
 	{
@@ -83,93 +78,58 @@ public partial class MainWindow
 
 		_logManager.Sources.Add(_connector);
 
-		_candleSeries = CandleSettingsEditor.DataType.ToCandleSeries(_security);
+		Chart.ClearAreas();
+		InitPnLChart();
+		OrderGrid.Orders.Clear();
+		MyTradeGrid.Trades.Clear();
 
-		// ready-to-use candles much faster than compression on fly mode
-		// turn off compression to boost optimizer (!!! make sure you have candles)
-		//_candleSeries.BuildCandlesMode = MarketDataBuildModes.Build;
-		//_candleSeries.BuildCandlesFrom2 = DataType.Ticks;
-
-		InitChart();
-
-		_connector.CandleProcessing += Connector_CandleSeriesProcessing;
 		_connector.OrderBookReceived += (s, b) => MarketDepthControl.UpdateDepth(b);
-		_connector.NewOrder += OrderGrid.Orders.Add;
+		_connector.OrderReceived += (s, o) => OrderGrid.Orders.Add(o);
 		_connector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
+		_connector.OwnTradeReceived += (s, t) => MyTradeGrid.Trades.Add(t);
 
 		//
 		// !!! IMPORTANT !!!
 		// Uncomment the desired strategy
 		//
-		_strategy = new OneCandleCountertrendStrategy(_candleSeries)
-		//_strategy = new OneCandleTrendStrategy(_candleSeries)
-		//_strategy = new StairsCountertrendStrategy(_candleSeries)
-		//_strategy = new StairsTrendStrategy(_candleSeries)
+		_strategy = new OneCandleCountertrendStrategy
+		//_strategy = new OneCandleTrendStrategy
+		//_strategy = new StairsCountertrendStrategy
+		//_strategy = new StairsTrendStrategy
 		{
 			Security = _security,
 			Connector = _connector,
 			Portfolio = _portfolio,
+			CandleDataType = CandleSettingsEditor.DataType,
 		};
 		_logManager.Sources.Add(_strategy);
-		_strategy.NewMyTrade += MyTradeGrid.Trades.Add;
-		_strategy.NewMyTrade += Strategy_NewMyTrade;
+
 		_strategy.PnLChanged += Strategy_PnLChanged;
+		_strategy.SetChart(Chart);
+
+		_strategy.Start();
 
 		StatisticParameterGrid.Parameters.AddRange(_strategy.StatisticManager.Parameters);
 
-		_connector.Connected += Connector_Connected;
 		_connector.Connect();
 		_connector.SendInMessage(new CommissionRuleMessage
 		{
 			Rule = new CommissionPerTradeRule { Value = 0.01m }
 		});
-	}
 
-	private void InitChart()
-	{
-		//-----------------Chart--------------------------------
-		Chart.ClearAreas();
-
-		var area = new ChartArea();
-		_candleElement = new ChartCandleElement();
-		_tradesElem = new ChartTradeElement { FullTitle = "Trade" };
-
-		Chart.AddArea(area);
-		Chart.AddElement(area, _candleElement);
-		Chart.AddElement(area, _tradesElem);
-
-		_pnl = (ChartBandElement)EquityCurveChart.CreateCurve("PNL", Colors.Green, DrawStyles.Area);
-		_unrealizedPnL = (ChartBandElement)EquityCurveChart.CreateCurve("unrealizedPnL", Colors.Black, DrawStyles.Line);
-		_commissionCurve = (ChartBandElement)EquityCurveChart.CreateCurve("commissionCurve", Colors.Red, DrawStyles.Line);
-	}
-
-	private void Connector_Connected()
-	{
-            _strategy.Start();
 		_connector.Start();
+	}
+
+	private void InitPnLChart()
+	{
+		_pnl = EquityCurveChart.CreateCurve("P&L", Colors.Green, DrawStyles.Area);
+		_unrealizedPnL = EquityCurveChart.CreateCurve("unrealized", Colors.Black, DrawStyles.Line);
+		_commissionCurve = EquityCurveChart.CreateCurve("commission", Colors.Red, DrawStyles.Line);
 	}
 
 	private void Strategy_PnLChanged()
 	{
-		var data = new ChartDrawData();
-		data.Group(_strategy.CurrentTime)
-			.Add(_pnl, _strategy.PnL)
-			.Add(_unrealizedPnL, _strategy.PnLManager.UnrealizedPnL)
-			.Add(_commissionCurve, _strategy.Commission ?? 0);
-		EquityCurveChart.Draw(data);
-	}
-
-	private void Strategy_NewMyTrade(MyTrade myTrade)
-	{
-		var data = new ChartDrawData();
-		data.Group(myTrade.Trade.ServerTime)
-			.Add(_tradesElem, myTrade);
-		Chart.Draw(data);
-	}
-
-	private void Connector_CandleSeriesProcessing(CandleSeries candleSeries, ICandleMessage candle)
-	{
-		Chart.Draw(_candleElement, candle);
+		EquityCurveChart.DrawPnL(_strategy, _pnl, _unrealizedPnL, _commissionCurve);
 	}
 }
 

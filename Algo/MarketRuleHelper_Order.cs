@@ -2,9 +2,9 @@
 
 partial class MarketRuleHelper
 {
-	private abstract class OrderRule<TArg> : MarketRule<Order, TArg>
+	private abstract class OrderRule<TProvider, TArg> : MarketRule<Order, TArg>
 	{
-		protected OrderRule(Order order, ITransactionProvider provider)
+		protected OrderRule(Order order, TProvider provider)
 			: base(order)
 		{
 			Order = order ?? throw new ArgumentNullException(nameof(order));
@@ -23,7 +23,7 @@ partial class MarketRuleHelper
 
 		protected Order Order { get; }
 
-		protected ITransactionProvider Provider { get; }
+		protected TProvider Provider { get; }
 
 		protected void TrySubscribe()
 		{
@@ -51,7 +51,7 @@ partial class MarketRuleHelper
 		}
 	}
 
-	private class RegisterFailedOrderRule : OrderRule<OrderFail>
+	private class RegisterFailedOrderRule : OrderRule<ITransactionProvider, OrderFail>
 	{
 		public RegisterFailedOrderRule(Order order, ITransactionProvider provider)
 			: base(order, provider)
@@ -77,7 +77,7 @@ partial class MarketRuleHelper
 		}
 	}
 
-	private class CancelFailedOrderRule : OrderRule<OrderFail>
+	private class CancelFailedOrderRule : OrderRule<ITransactionProvider, OrderFail>
 	{
 		public CancelFailedOrderRule(Order order, ITransactionProvider provider)
 			: base(order, provider)
@@ -103,17 +103,17 @@ partial class MarketRuleHelper
 		}
 	}
 
-	private class ChangedOrNewOrderRule : OrderRule<Order>
+	private class ChangedOrNewOrderRule : OrderRule<ISubscriptionProvider, Order>
 	{
 		private readonly Func<Order, bool> _condition;
 		private bool _activated;
 
-		public ChangedOrNewOrderRule(Order order, ITransactionProvider provider)
+		public ChangedOrNewOrderRule(Order order, ISubscriptionProvider provider)
 			: this(order, provider, o => true)
 		{
 		}
 
-		public ChangedOrNewOrderRule(Order order, ITransactionProvider provider, Func<Order, bool> condition)
+		public ChangedOrNewOrderRule(Order order, ISubscriptionProvider provider, Func<Order, bool> condition)
 			: base(order, provider)
 		{
 			_condition = condition ?? throw new ArgumentNullException(nameof(condition));
@@ -125,17 +125,15 @@ partial class MarketRuleHelper
 
 		protected override void Subscribe()
 		{
-			Provider.OrderChanged += OnOrderChanged;
-			Provider.NewOrder += OnOrderChanged;
+			Provider.OrderReceived += OnOrderReceived;
 		}
 
 		protected override void UnSubscribe()
 		{
-			Provider.OrderChanged -= OnOrderChanged;
-			Provider.NewOrder -= OnOrderChanged;
+			Provider.OrderReceived -= OnOrderReceived;
 		}
 
-		private void OnOrderChanged(Order order)
+		private void OnOrderReceived(Subscription subscription, Order order)
 		{
 			if (!_activated && order == Order && _condition(order))
 			{
@@ -145,7 +143,7 @@ partial class MarketRuleHelper
 		}
 	}
 
-	private class EditedOrderRule : OrderRule<Order>
+	private class EditedOrderRule : OrderRule<ITransactionProvider, Order>
 	{
 		public EditedOrderRule(Order order, ITransactionProvider provider)
 			: base(order, provider)
@@ -171,7 +169,7 @@ partial class MarketRuleHelper
 		}
 	}
 
-	private class EditFailedOrderRule : OrderRule<OrderFail>
+	private class EditFailedOrderRule : OrderRule<ITransactionProvider, OrderFail>
 	{
 		public EditFailedOrderRule(Order order, ITransactionProvider provider)
 			: base(order, provider)
@@ -197,13 +195,13 @@ partial class MarketRuleHelper
 		}
 	}
 
-	private class NewTradeOrderRule : OrderRule<MyTrade>
+	private class NewTradeOrderRule : OrderRule<ISubscriptionProvider, MyTrade>
 	{
 		private decimal _receivedVolume;
 
 		private bool AllTradesReceived => Order.State == OrderStates.Done && Order.GetMatchedVolume() == _receivedVolume;
 
-		public NewTradeOrderRule(Order order, ITransactionProvider provider)
+		public NewTradeOrderRule(Order order, ISubscriptionProvider provider)
 			: base(order, provider)
 		{
 			Name = LocalizedStrings.NewTrades;
@@ -212,12 +210,12 @@ partial class MarketRuleHelper
 
 		protected override void Subscribe()
 		{
-			Provider.NewMyTrade += OnNewMyTrade;
+			Provider.OwnTradeReceived += OnOwnTradeReceived;
 		}
 
 		protected override void UnSubscribe()
 		{
-			Provider.NewMyTrade -= OnNewMyTrade;
+			Provider.OwnTradeReceived -= OnOwnTradeReceived;
 		}
 
 		protected override bool CheckOrderState()
@@ -225,7 +223,7 @@ partial class MarketRuleHelper
 			return Order.State == OrderStates.Failed || AllTradesReceived;
 		}
 
-		private void OnNewMyTrade(MyTrade trade)
+		private void OnOwnTradeReceived(Subscription subscription, MyTrade trade)
 		{
 			if (trade.Order != Order /*&& (Order.Type != OrderTypes.Conditional || trade.Order != Order.DerivedOrder)*/)
 				return;
@@ -235,13 +233,13 @@ partial class MarketRuleHelper
 		}
 	}
 
-	private class AllTradesOrderRule : OrderRule<IEnumerable<MyTrade>>
+	private class AllTradesOrderRule : OrderRule<ISubscriptionProvider, IEnumerable<MyTrade>>
 	{
 		private decimal _receivedVolume;
 
 		private readonly CachedSynchronizedList<MyTrade> _trades = [];
 
-		public AllTradesOrderRule(Order order, ITransactionProvider provider)
+		public AllTradesOrderRule(Order order, ISubscriptionProvider provider)
 			: base(order, provider)
 		{
 			Name = LocalizedStrings.AllTradesForOrder;
@@ -252,21 +250,17 @@ partial class MarketRuleHelper
 
 		protected override void Subscribe()
 		{
-			Provider.OrderChanged += OnOrderChanged;
-			Provider.NewOrder += OnOrderChanged;
-
-			Provider.NewMyTrade += OnNewMyTrade;
+			Provider.OrderReceived += OnOrderReceived;
+			Provider.OwnTradeReceived += OnOwnTradeReceived;
 		}
 
 		protected override void UnSubscribe()
 		{
-			Provider.OrderChanged -= OnOrderChanged;
-			Provider.NewOrder -= OnOrderChanged;
-
-			Provider.NewMyTrade -= OnNewMyTrade;
+			Provider.OrderReceived -= OnOrderReceived;
+			Provider.OwnTradeReceived -= OnOwnTradeReceived;
 		}
 
-		private void OnOrderChanged(Order order)
+		private void OnOrderReceived(Subscription subscription, Order order)
 		{
 			if (order == Order)
 			{
@@ -274,7 +268,7 @@ partial class MarketRuleHelper
 			}
 		}
 
-		private void OnNewMyTrade(MyTrade trade)
+		private void OnOwnTradeReceived(Subscription subscription, MyTrade trade)
 		{
 			if (trade.Order != Order /*&& (Order.Type != OrderTypes.Conditional || trade.Order != Order.DerivedOrder)*/)
 				return;
@@ -300,7 +294,7 @@ partial class MarketRuleHelper
 	/// <param name="order">The order to be traced for the event of successful registration.</param>
 	/// <param name="provider">The transactional provider.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Order, Order> WhenRegistered(this Order order, ITransactionProvider provider)
+	public static MarketRule<Order, Order> WhenRegistered(this Order order, ISubscriptionProvider provider)
 	{
 		if (order == null)
 			throw new ArgumentNullException(nameof(order));
@@ -314,7 +308,7 @@ partial class MarketRuleHelper
 	/// <param name="order">The order to be traced for partial matching event.</param>
 	/// <param name="provider">The transactional provider.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Order, Order> WhenPartiallyMatched(this Order order, ITransactionProvider provider)
+	public static MarketRule<Order, Order> WhenPartiallyMatched(this Order order, ISubscriptionProvider provider)
 	{
 		if (order == null)
 			throw new ArgumentNullException(nameof(order));
@@ -368,7 +362,7 @@ partial class MarketRuleHelper
 	/// <param name="order">The order to be traced for cancelling event.</param>
 	/// <param name="provider">The transactional provider.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Order, Order> WhenCanceled(this Order order, ITransactionProvider provider)
+	public static MarketRule<Order, Order> WhenCanceled(this Order order, ISubscriptionProvider provider)
 	{
 		return new ChangedOrNewOrderRule(order, provider, o => o.IsCanceled()) { Name = LocalizedStrings.CancelOrders }.Once();
 	}
@@ -379,7 +373,7 @@ partial class MarketRuleHelper
 	/// <param name="order">The order to be traced for the fully matching event.</param>
 	/// <param name="provider">The transactional provider.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Order, Order> WhenMatched(this Order order, ITransactionProvider provider)
+	public static MarketRule<Order, Order> WhenMatched(this Order order, ISubscriptionProvider provider)
 	{
 		return new ChangedOrNewOrderRule(order, provider, o => o.IsMatched()) { Name = LocalizedStrings.Matching }.Once();
 	}
@@ -390,7 +384,7 @@ partial class MarketRuleHelper
 	/// <param name="order">The order to be traced for the change event.</param>
 	/// <param name="provider">The transactional provider.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Order, Order> WhenChanged(this Order order, ITransactionProvider provider)
+	public static MarketRule<Order, Order> WhenChanged(this Order order, ISubscriptionProvider provider)
 	{
 		return new ChangedOrNewOrderRule(order, provider);
 	}
@@ -423,7 +417,7 @@ partial class MarketRuleHelper
 	/// <param name="order">The order to be traced for trades occurrence events.</param>
 	/// <param name="provider">The transactional provider.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Order, MyTrade> WhenNewTrade(this Order order, ITransactionProvider provider)
+	public static MarketRule<Order, MyTrade> WhenNewTrade(this Order order, ISubscriptionProvider provider)
 	{
 		return new NewTradeOrderRule(order, provider);
 	}
@@ -434,7 +428,7 @@ partial class MarketRuleHelper
 	/// <param name="order">The order to be traced for all trades occurrence event.</param>
 	/// <param name="provider">The transactional provider.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Order, IEnumerable<MyTrade>> WhenAllTrades(this Order order, ITransactionProvider provider)
+	public static MarketRule<Order, IEnumerable<MyTrade>> WhenAllTrades(this Order order, ISubscriptionProvider provider)
 	{
 		return new AllTradesOrderRule(order, provider);
 	}

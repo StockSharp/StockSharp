@@ -5,35 +5,6 @@ using StockSharp.Algo.Candles;
 partial class Connector
 {
 	/// <inheritdoc />
-	public event Action<MyTrade> NewMyTrade;
-
-	/// <inheritdoc />
-	[Obsolete("Use NewMyTrade event.")]
-	public event Action<IEnumerable<MyTrade>> NewMyTrades;
-
-	/// <inheritdoc />
-	[Obsolete("Use TickTradeReceived event.")]
-	public event Action<Trade> NewTrade;
-
-	/// <inheritdoc />
-	[Obsolete("Use TickTradeReceived event.")]
-	public event Action<IEnumerable<Trade>> NewTrades;
-
-	/// <inheritdoc />
-	public event Action<Order> NewOrder;
-
-	/// <inheritdoc />
-	[Obsolete("Use single item event overload.")]
-	public event Action<IEnumerable<Order>> NewOrders;
-
-	/// <inheritdoc />
-	public event Action<Order> OrderChanged;
-
-	/// <inheritdoc />
-	[Obsolete("Use single item event overload.")]
-	public event Action<IEnumerable<Order>> OrdersChanged;
-
-	/// <inheritdoc />
 	public event Action<long, Order> OrderEdited;
 
 	/// <inheritdoc />
@@ -49,50 +20,6 @@ partial class Connector
 	public event Action<long, Exception, DateTimeOffset> OrderStatusFailed2;
 
 	/// <inheritdoc />
-	[Obsolete("Use NewOrders event.")]
-	public event Action<IEnumerable<Order>> NewStopOrders;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrdersChanged event.")]
-	public event Action<IEnumerable<Order>> StopOrdersChanged;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrderRegisterFailed event.")]
-	public event Action<OrderFail> StopOrderRegisterFailed;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrderCancelFailed event.")]
-	public event Action<OrderFail> StopOrderCancelFailed;
-
-	/// <inheritdoc />
-	[Obsolete("Use NewOrder event.")]
-	public event Action<Order> NewStopOrder;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrderChanged event.")]
-	public event Action<Order> StopOrderChanged;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrdersRegisterFailed event.")]
-	public event Action<IEnumerable<OrderFail>> StopOrdersRegisterFailed;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrdersCancelFailed event.")]
-	public event Action<IEnumerable<OrderFail>> StopOrdersCancelFailed;
-
-	/// <inheritdoc />
-	[Obsolete("Use SecurityReceived event.")]
-	public event Action<Security> NewSecurity;
-
-	/// <inheritdoc />
-	[Obsolete("Use single item event overload.")]
-	public event Action<IEnumerable<OrderFail>> OrdersRegisterFailed;
-
-	/// <inheritdoc />
-	[Obsolete("Use single item event overload.")]
-	public event Action<IEnumerable<OrderFail>> OrdersCancelFailed;
-
-	/// <inheritdoc />
 	public event Action<long> MassOrderCanceled;
 
 	/// <inheritdoc />
@@ -105,36 +32,12 @@ partial class Connector
 	public event Action<long, Exception, DateTimeOffset> MassOrderCancelFailed2;
 
 	/// <inheritdoc />
-	[Obsolete("Use SubscriptionFailed event.")]
-	public event Action<long, Exception> OrderStatusFailed;
-
-	/// <inheritdoc />
-	[Obsolete("Use SecurityReceived event.")]
-	public event Action<IEnumerable<Security>> NewSecurities;
-
-	/// <inheritdoc />
-	[Obsolete("Use SecurityReceived event.")]
-	public event Action<Security> SecurityChanged;
-
-	/// <inheritdoc />
-	[Obsolete("Use SecurityReceived event.")]
-	public event Action<IEnumerable<Security>> SecuritiesChanged;
-
-	/// <inheritdoc />
 	[Obsolete("Use PortfolioReceived event.")]
 	public event Action<Portfolio> NewPortfolio;
 
 	/// <inheritdoc />
 	[Obsolete("Use PortfolioReceived event.")]
-	public event Action<IEnumerable<Portfolio>> NewPortfolios;
-
-	/// <inheritdoc />
-	[Obsolete("Use PortfolioReceived event.")]
 	public event Action<Portfolio> PortfolioChanged;
-
-	/// <inheritdoc />
-	[Obsolete("Use PortfolioReceived event.")]
-	public event Action<IEnumerable<Portfolio>> PortfoliosChanged;
 
 	/// <inheritdoc />
 	[Obsolete("Use PositionReceived event.")]
@@ -142,47 +45,7 @@ partial class Connector
 
 	/// <inheritdoc />
 	[Obsolete("Use PositionReceived event.")]
-	public event Action<IEnumerable<Position>> NewPositions;
-
-	/// <inheritdoc />
-	[Obsolete("Use PositionReceived event.")]
 	public event Action<Position> PositionChanged;
-
-	/// <inheritdoc />
-	[Obsolete("Use PositionReceived event.")]
-	public event Action<IEnumerable<Position>> PositionsChanged;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrderBookReceived event.")]
-	public event Action<MarketDepth> NewMarketDepth;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrderBookReceived event.")]
-	public event Action<MarketDepth> MarketDepthChanged;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrderBookReceived event.")]
-	public event Action<IEnumerable<MarketDepth>> NewMarketDepths;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrderBookReceived event.")]
-	public event Action<IEnumerable<MarketDepth>> MarketDepthsChanged;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrderLogReceived event.")]
-	public event Action<OrderLogItem> NewOrderLogItem;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrderLogReceived event.")]
-	public event Action<IEnumerable<OrderLogItem>> NewOrderLogItems;
-
-	/// <inheritdoc />
-	[Obsolete("Use NewsReceived event.")]
-	public event Action<News> NewNews;
-
-	/// <inheritdoc />
-	[Obsolete("Use NewsReceived event.")]
-	public event Action<News> NewsChanged;
 
 	/// <inheritdoc />
 	public event Action<Message> NewMessage;
@@ -236,42 +99,6 @@ partial class Connector
 	public event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult2;
 
 	/// <inheritdoc />
-	[Obsolete("Use SubscriptionStarted event.")]
-	public event Action<Security, MarketDataMessage> MarketDataSubscriptionSucceeded;
-
-	/// <inheritdoc />
-	[Obsolete("Use SubscriptionFailed event.")]
-	public event Action<Security, MarketDataMessage, Exception> MarketDataSubscriptionFailed;
-
-	/// <inheritdoc />
-	[Obsolete("Use SubscriptionFailed event.")]
-	public event Action<Security, MarketDataMessage, SubscriptionResponseMessage> MarketDataSubscriptionFailed2;
-
-	/// <inheritdoc />
-	[Obsolete("Use SubscriptionStopped event.")]
-	public event Action<Security, MarketDataMessage> MarketDataUnSubscriptionSucceeded;
-
-	/// <inheritdoc />
-	[Obsolete("Use SubscriptionFailed event.")]
-	public event Action<Security, MarketDataMessage, Exception> MarketDataUnSubscriptionFailed;
-
-	/// <inheritdoc />
-	[Obsolete("Use SubscriptionFailed event.")]
-	public event Action<Security, MarketDataMessage, SubscriptionResponseMessage> MarketDataUnSubscriptionFailed2;
-
-	/// <inheritdoc />
-	[Obsolete("Use SubscriptionStopped event.")]
-	public event Action<Security, SubscriptionFinishedMessage> MarketDataSubscriptionFinished;
-
-	/// <inheritdoc />
-	[Obsolete("Use SubscriptionFailed event.")]
-	public event Action<Security, MarketDataMessage, Exception> MarketDataUnexpectedCancelled;
-
-	/// <inheritdoc />
-	[Obsolete("Use SubscriptionOnline event.")]
-	public event Action<Security, MarketDataMessage> MarketDataSubscriptionOnline;
-
-	/// <inheritdoc />
 	public event Action<ExchangeBoard, SessionStates> SessionStateChanged;
 
 	/// <inheritdoc />
@@ -294,14 +121,6 @@ partial class Connector
 
 	/// <inheritdoc />
 	public event Action<Subscription, ExchangeBoard> BoardReceived;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrderBookReceived event.")]
-	public event Action<Subscription, MarketDepth> MarketDepthReceived;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrderLogReceived event.")]
-	public event Action<Subscription, OrderLogItem> OrderLogItemReceived;
 
 	/// <inheritdoc />
 	public event Action<Subscription, News> NewsReceived;
@@ -357,58 +176,8 @@ partial class Connector
 	/// <inheritdoc />
 	public event Action<IMessageAdapter> ConnectionLost;
 
-	/// <summary>
-	/// Connection timed-out.
-	/// </summary>
-	[Obsolete("Use ConnectionError event.")]
-	public event Action TimeOut;
-
-	/// <summary>
-	/// A new value for processing occurrence event.
-	/// </summary>
-	[Obsolete("Use CandleReceived event.")]
-	public event Action<CandleSeries, ICandleMessage> CandleProcessing;
-
-	/// <summary>
-	/// A new value for processing occurrence event.
-	/// </summary>
-	[Obsolete("Use CandleReceived event.")]
-	public event Action<CandleSeries, Candle> CandleSeriesProcessing;
-
-	/// <summary>
-	/// The series processing end event.
-	/// </summary>
-	[Obsolete("Use SubscriptionStopped event.")]
-	public event Action<CandleSeries> CandleSeriesStopped;
-
-	/// <summary>
-	/// The series error event.
-	/// </summary>
-	[Obsolete("Use SubscriptionStopped event.")]
-	public event Action<CandleSeries, SubscriptionResponseMessage> CandleSeriesError;
-
 	/// <inheritdoc />
 	public event Action<long, Exception> ChangePasswordResult;
-
-	private void RaiseNewMyTrade(MyTrade trade)
-	{
-		LogInfo("New own trade: {0}", trade);
-
-		NewMyTrade?.Invoke(trade);
-		NewMyTrades?.Invoke([trade]);
-	}
-
-	private void RaiseNewOrder(Order order)
-	{
-		NewOrder?.Invoke(order);
-		NewOrders?.Invoke([order]);
-	}
-
-	private void RaiseOrderChanged(Order order)
-	{
-		OrderChanged?.Invoke(order);
-		OrdersChanged?.Invoke([order]);
-	}
 
 	private void RaiseOrderEdited(long transactionId, Order order)
 	{
@@ -425,13 +194,11 @@ partial class Connector
 	private void RaiseOrderRegisterFailed(long transactionId, OrderFail fail)
 	{
 		RaiseOrderFailed(nameof(OrderRegisterFailed), transactionId, fail, (id, f) => OrderRegisterFailed?.Invoke(f));
-		OrdersRegisterFailed?.Invoke([fail]);
 	}
 
 	private void RaiseOrderCancelFailed(long transactionId, OrderFail fail)
 	{
 		RaiseOrderFailed(nameof(OrderCancelFailed), transactionId, fail, (id, f) => OrderCancelFailed?.Invoke(f));
-		OrdersCancelFailed?.Invoke([fail]);
 	}
 
 	private void RaiseOrderEditFailed(long transactionId, OrderFail fail)
@@ -453,79 +220,27 @@ partial class Connector
 
 	private void RaiseOrderStatusFailed(long transactionId, Exception error, DateTimeOffset time)
 	{
-		OrderStatusFailed?.Invoke(transactionId, error);
 		OrderStatusFailed2?.Invoke(transactionId, error, time);
-	}
-
-	private void RaiseNewSecurity(Security security)
-	{
-		var arr = new[] { security };
-
-            _added?.Invoke(arr);
-
-		NewSecurity?.Invoke(security);
-		NewSecurities?.Invoke(arr);
-	}
-
-	private void RaiseSecuritiesChanged(Security[] securities)
-	{
-		SecuritiesChanged?.Invoke(securities);
-
-		var evt = SecurityChanged;
-
-		if (evt == null)
-			return;
-
-		foreach (var security in securities)
-			evt(security);
-	}
-
-	private void RaiseSecurityChanged(Security security)
-	{
-		SecurityChanged?.Invoke(security);
-		SecuritiesChanged?.Invoke([security]);
 	}
 
 	private void RaiseNewPortfolio(Portfolio portfolio)
 	{
 		NewPortfolio?.Invoke(portfolio);
-		NewPortfolios?.Invoke([portfolio]);
 	}
 
 	private void RaisePortfolioChanged(Portfolio portfolio)
 	{
 		PortfolioChanged?.Invoke(portfolio);
-		PortfoliosChanged?.Invoke([portfolio]);
 	}
 
 	private void RaiseNewPosition(Position position)
 	{
 		NewPosition?.Invoke(position);
-		NewPositions?.Invoke([position]);
 	}
 
 	private void RaisePositionChanged(Position position)
 	{
 		PositionChanged?.Invoke(position);
-		PositionsChanged?.Invoke([position]);
-	}
-
-	/// <summary>
-	/// To call the event <see cref="NewNews"/>.
-	/// </summary>
-	/// <param name="news">News.</param>
-	private void RaiseNewNews(News news)
-	{
-		NewNews?.Invoke(news);
-	}
-
-	/// <summary>
-	/// To call the event <see cref="NewsChanged"/>.
-	/// </summary>
-	/// <param name="news">News.</param>
-	private void RaiseNewsChanged(News news)
-	{
-		NewsChanged?.Invoke(news);
 	}
 
 	/// <summary>
@@ -685,8 +400,6 @@ partial class Connector
 
 		LogDebug(msg + ".");
 
-		MarketDataSubscriptionSucceeded?.Invoke(TryGetSecurity(securityId), message);
-
 		RaiseSubscriptionStarted(subscription);
 	}
 
@@ -709,19 +422,7 @@ partial class Connector
 		else
 			LogError(LocalizedStrings.SubscribedError, securityId, origin.DataType2, error.Message);
 
-		var security = TryGetSecurity(securityId);
-
-		MarketDataSubscriptionFailed?.Invoke(security, origin, error);
-		MarketDataSubscriptionFailed2?.Invoke(security, origin, reply);
-
 		RaiseSubscriptionFailed(subscription, error, true);
-
-#pragma warning disable CS0612 // Type or member is obsolete
-#pragma warning disable CS0618 // Type or member is obsolete
-		if (subscription.CandleSeries != null)
-			RaiseCandleSeriesError(subscription.CandleSeries, reply);
-#pragma warning restore CS0618 // Type or member is obsolete
-#pragma warning restore CS0612 // Type or member is obsolete
 	}
 
 	private void RaiseMarketDataUnSubscriptionSucceeded(MarketDataMessage message, Subscription subscription)
@@ -740,16 +441,8 @@ partial class Connector
 			msg += LocalizedStrings.FromTill.Put(message.From.Value, message.To.Value);
 
 		LogDebug(msg + ".");
-		MarketDataUnSubscriptionSucceeded?.Invoke(TryGetSecurity(securityId), message);
 
 		RaiseSubscriptionStopped(subscription, null);
-
-#pragma warning disable CS0612 // Type or member is obsolete
-#pragma warning disable CS0618 // Type or member is obsolete
-		if (subscription.CandleSeries != null)
-			RaiseCandleSeriesStopped(subscription.CandleSeries);
-#pragma warning restore CS0618 // Type or member is obsolete
-#pragma warning restore CS0612 // Type or member is obsolete
 	}
 
 	private void RaiseMarketDataUnSubscriptionFailed(MarketDataMessage origin, SubscriptionResponseMessage reply, Subscription subscription)
@@ -768,10 +461,6 @@ partial class Connector
 
 		LogError(LocalizedStrings.UnSubscribedError, securityId, origin.DataType2, error.Message);
 
-		var security = TryGetSecurity(securityId);
-		MarketDataUnSubscriptionFailed?.Invoke(security, origin, error);
-		MarketDataUnSubscriptionFailed2?.Invoke(security, origin, reply);
-
 		RaiseSubscriptionFailed(subscription, error, false);
 	}
 
@@ -786,16 +475,8 @@ partial class Connector
 		var securityId = subscription.SecurityId;
 
 		LogDebug(LocalizedStrings.SubscriptionFinished, securityId, message);
-		MarketDataSubscriptionFinished?.Invoke(TryGetSecurity(securityId), message);
 
 		RaiseSubscriptionStopped(subscription, null);
-
-#pragma warning disable CS0612 // Type or member is obsolete
-#pragma warning disable CS0618 // Type or member is obsolete
-		if (subscription.CandleSeries != null)
-			RaiseCandleSeriesStopped(subscription.CandleSeries);
-#pragma warning restore CS0618 // Type or member is obsolete
-#pragma warning restore CS0612 // Type or member is obsolete
 	}
 
 	private void RaiseMarketDataUnexpectedCancelled(MarketDataMessage message, Exception error, Subscription subscription)
@@ -812,16 +493,8 @@ partial class Connector
 		var securityId = subscription.SecurityId;
 
 		LogError(LocalizedStrings.SubscriptionUnexpectedCancelled, securityId, message.DataType2, error.Message);
-		MarketDataUnexpectedCancelled?.Invoke(TryGetSecurity(securityId), message, error);
 
 		RaiseSubscriptionStopped(subscription, error);
-
-#pragma warning disable CS0612 // Type or member is obsolete
-#pragma warning disable CS0618 // Type or member is obsolete
-		if (subscription.CandleSeries != null)
-			RaiseCandleSeriesStopped(subscription.CandleSeries);
-#pragma warning restore CS0618 // Type or member is obsolete
-#pragma warning restore CS0612 // Type or member is obsolete
 	}
 
 	private void RaiseSubscriptionOnline(Subscription subscription)
@@ -870,9 +543,6 @@ partial class Connector
 
 		LogDebug(LocalizedStrings.SubscriptionOnline, securityId, subscription.SubscriptionMessage);
 
-		if (subscription.SubscriptionMessage is MarketDataMessage mdMsg)
-			MarketDataSubscriptionOnline?.Invoke(TryGetSecurity(securityId), mdMsg);
-
 		RaiseSubscriptionOnline(subscription);
 	}
 
@@ -902,32 +572,6 @@ partial class Connector
 
 		if (adapter != null)
 			ConnectionRestored?.Invoke(adapter);
-	}
-
-	private void RaiseTimeOut()
-	{
-		TimeOut?.Invoke();
-	}
-
-	[Obsolete]
-	private void RaiseCandleSeriesProcessing(CandleSeries series, ICandleMessage candle)
-	{
-		CandleProcessing?.Invoke(series, candle);
-
-		if (candle is Candle entity)
-			CandleSeriesProcessing?.Invoke(series, entity);
-	}
-
-	[Obsolete]
-	private void RaiseCandleSeriesStopped(CandleSeries series)
-	{
-		CandleSeriesStopped?.Invoke(series);
-	}
-
-	[Obsolete]
-	private void RaiseCandleSeriesError(CandleSeries series, SubscriptionResponseMessage reply)
-	{
-		CandleSeriesError?.Invoke(series, reply);
 	}
 
 	private void RaiseSessionStateChanged(ExchangeBoard board, SessionStates state)

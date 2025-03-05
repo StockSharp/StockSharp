@@ -23,13 +23,13 @@ using StockSharp.Charting;
 public partial class MainWindow
 {
 	private HistoryEmulationConnector _connector;
+	private readonly string _pathHistory = Paths.HistoryDataPath;
 
 	private Security _security;
 	private Portfolio _portfolio;
 	private Strategy _strategy;
 
 	private readonly LogManager _logManager;
-	private readonly string _pathHistory = Paths.HistoryDataPath;
 
 	private IChartBandElement _pnl;
 	private IChartBandElement _unrealizedPnL;
@@ -80,10 +80,13 @@ public partial class MainWindow
 
 		Chart.ClearAreas();
 		InitPnLChart();
+		OrderGrid.Orders.Clear();
+		MyTradeGrid.Trades.Clear();
 
 		_connector.OrderBookReceived += (s, b) => MarketDepthControl.UpdateDepth(b);
-		_connector.NewOrder += OrderGrid.Orders.Add;
+		_connector.OrderReceived += (s, o) => OrderGrid.Orders.Add(o);
 		_connector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
+		_connector.OwnTradeReceived += (s, t) => MyTradeGrid.Trades.Add(t);
 
 		// uncomment required strategy
 		_strategy = new SmaStrategyClassicStrategy
@@ -97,9 +100,7 @@ public partial class MainWindow
 
 		_logManager.Sources.Add(_strategy);
 
-		_strategy.NewMyTrade += MyTradeGrid.Trades.Add;
 		_strategy.PnLChanged += Strategy_PnLChanged;
-
 		_strategy.SetChart(Chart);
 
 		StatisticParameterGrid.Parameters.AddRange(_strategy.StatisticManager.Parameters);
@@ -124,11 +125,6 @@ public partial class MainWindow
 
 	private void Strategy_PnLChanged()
 	{
-		var data = new ChartDrawData();
-		data.Group(_strategy.CurrentTime)
-			.Add(_pnl, _strategy.PnL)
-			.Add(_unrealizedPnL, _strategy.PnLManager.UnrealizedPnL)
-			.Add(_commissionCurve, _strategy.Commission ?? 0);
-		EquityCurveChart.Draw(data);
+		EquityCurveChart.DrawPnL(_strategy, _pnl, _unrealizedPnL, _commissionCurve);
 	}
 }

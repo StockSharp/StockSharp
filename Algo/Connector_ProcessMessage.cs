@@ -4,8 +4,6 @@ using StockSharp.Algo.Risk;
 
 partial class Connector
 {
-#pragma warning disable CS0618 // Type or member is obsolete
-
 	private readonly SyncObject _marketTimerSync = new();
 	private Timer _marketTimer;
 	private readonly TimeMessage _marketTimeMessage = new();
@@ -840,12 +838,7 @@ partial class Connector
 		else
 		{
 			if (adapter == Adapter)
-			{
 				RaiseConnectionError(error);
-
-				if (error is TimeoutException)
-					RaiseTimeOut();
-			}
 			else
 				RaiseConnectionErrorEx(adapter, error);
 		}
@@ -954,7 +947,6 @@ partial class Connector
 			security ??= EnsureGetSecurity(message);
 
 			security.ApplyChanges(message);
-			RaiseSecurityChanged(security);
 		}
 
 		if (ValuesChanged is not null)
@@ -1121,11 +1113,6 @@ partial class Connector
 
 		if (RaiseReceived(news.news, message, NewsReceived) == false)
 			return;
-
-		if (news.isNew)
-			RaiseNewNews(news.news);
-		else
-			RaiseNewsChanged(news.news);
 	}
 
 	private void ProcessQuotesMessage(QuoteChangeMessage message)
@@ -1133,36 +1120,15 @@ partial class Connector
 		if (RaiseReceived(message, message, OrderBookReceived) == false)
 			return;
 
-		Security security = null;
-		MarketDepth md = null;
-
-		if (MarketDepthReceived is not null)
-		{
-			security = EnsureGetSecurity(message);
-			md = message.ToMarketDepth(security);
-
-			if (RaiseReceived(md, message, MarketDepthReceived) == false)
-				return;
-		}
-
 		if (message.IsFiltered || message.State != null)
 			return;
-
-		if (NewMarketDepth is not null || NewMarketDepths is not null || MarketDepthChanged is not null || MarketDepthsChanged is not null)
-		{
-			security ??= EnsureGetSecurity(message);
-			md ??= message.ToMarketDepth(security);
-
-			NewMarketDepth?.Invoke(md);
-			NewMarketDepths?.Invoke([md]);
-			MarketDepthChanged?.Invoke(md);
-			MarketDepthsChanged?.Invoke([md]);
-		}
 
 		var bestBid = message.GetBestBid();
 		var bestAsk = message.GetBestAsk();
 		var fromLevel1 = message.BuildFrom == DataType.Level1;
 		var time = message.ServerTime;
+
+		Security security = null;
 
 		if (ValuesChanged is not null && !fromLevel1 && !Adapter.Level1Extend && (bestBid != null || bestAsk != null))
 		{
@@ -1228,8 +1194,6 @@ partial class Connector
 				security.LocalTime = message.LocalTime;
 				security.LastChangeTime = message.ServerTime;
 
-				RaiseSecurityChanged(security);
-
 				// стаканы по ALL обновляют BestXXX по конкретным инструментам
 				if (security.Board?.Code == SecurityId.AssociatedBoardCode)
 				{
@@ -1280,8 +1244,6 @@ partial class Connector
 						innerSecurity.LocalTime = message.LocalTime;
 						innerSecurity.LastChangeTime = message.ServerTime;
 					}
-
-					RaiseSecuritiesChanged([.. changedSecurities.Keys]);
 				}
 			}
 		}
@@ -1291,26 +1253,6 @@ partial class Connector
 	{
 		if (RaiseReceived(message, message, OrderLogReceived) == false)
 			return;
-
-		OrderLogItem entity = null;
-
-		OrderLogItem CreateEntity()
-		{
-			var security = EnsureGetSecurity(message);
-
-			return message.ToOrderLog(security);
-		}
-
-		if (OrderLogItemReceived is not null)
-			RaiseReceived(entity = CreateEntity(), message, OrderLogItemReceived);
-
-		if (NewOrderLogItem is not null || NewOrderLogItems is not null)
-		{
-			entity ??= CreateEntity();
-
-			NewOrderLogItem?.Invoke(entity);
-			NewOrderLogItems?.Invoke([entity]);
-		}
 	}
 
 	private void ProcessTradeMessage(ExecutionMessage message)
@@ -1319,18 +1261,6 @@ partial class Connector
 			return;
 
 		Security security = null;
-
-		if (NewTrade is not null || NewTrades is not null)
-		{
-			security = EnsureGetSecurity(message);
-
-			var trade = message.ToTrade(security);
-			trade.LocalTime = message.LocalTime;
-			trade.ServerTime = message.ServerTime;
-
-			NewTrade?.Invoke(trade);
-			NewTrades?.Invoke([trade]);
-		}
 
 		if (ValuesChanged is not null)
 		{
@@ -1396,8 +1326,6 @@ partial class Connector
 			security ??= EnsureGetSecurity(message);
 
 			security.LastTick = message;
-
-			RaiseSecurityChanged(security);
 		}
 	}
 
@@ -1420,14 +1348,10 @@ partial class Connector
 				if (change.IsNew)
 				{
 					this.AddOrderInfoLog(order, "New order");
-
-					RaiseNewOrder(order);
 				}
 				else if (change.IsChanged)
 				{
 					this.AddOrderInfoLog(order, "Order changed");
-
-					RaiseOrderChanged(order);
 
 					if (change.IsEdit)
 						RaiseOrderEdited(transactionId, order);
@@ -1489,9 +1413,6 @@ partial class Connector
 
 		if (trade == null)
 			return;
-
-		if (isNew)
-			RaiseNewMyTrade(trade);
 
 		//this.AddWarningLog("Duplicate own trade message: {0}", message);
 		RaiseReceived(trade, message, OwnTradeReceived);
@@ -1598,11 +1519,6 @@ partial class Connector
 	{
 		foreach (var (subscription, candle) in _subscriptionManager.UpdateCandles(message))
 		{
-#pragma warning disable CS0612 // Type or member is obsolete
-			if (subscription.CandleSeries != null)
-				RaiseCandleSeriesProcessing(subscription.CandleSeries, candle);
-#pragma warning restore CS0612 // Type or member is obsolete
-
 			CandleReceived?.Invoke(subscription, candle);
 			RaiseSubscriptionReceived(subscription, message);
 		}

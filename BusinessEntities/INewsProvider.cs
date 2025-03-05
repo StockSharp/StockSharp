@@ -6,7 +6,7 @@ namespace StockSharp.BusinessEntities;
 public interface INewsProvider
 {
 	/// <summary>
-	/// Request news <see cref="News.Story"/> body. After receiving the event <see cref="IMarketDataProvider.NewsChanged"/> will be triggered.
+	/// Request news <see cref="News.Story"/> body. After receiving the event <see cref="ISubscriptionProvider.NewsReceived"/> will be triggered.
 	/// </summary>
 	/// <param name="news">News.</param>
 	/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>

@@ -181,11 +181,9 @@ public partial class MainPanel
 		Connector.OrderLogReceived += (s, ol) => _orderLogWindow.OrderLogGrid.LogItems.Add(ol);
 		Connector.Level1Received += (s, l) => _level1Window.Level1Grid.Messages.Add(l);
 
-		Connector.NewOrder += Connector_OnNewOrder;
-		Connector.OrderChanged += Connector_OnOrderChanged;
+		Connector.OrderReceived += Connector_OnOrderReceived;
 		Connector.OrderEdited += Connector_OnOrderEdited;
-
-		Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
+		Connector.OwnTradeReceived += (s, t) => _myTradesWindow.TradeGrid.Trades.TryAdd(t);
 
 		Connector.PositionReceived += (sub, p) => _portfoliosWindow.PortfolioGrid.Positions.TryAdd(p);
 
@@ -257,14 +255,9 @@ public partial class MainPanel
 		}
 	}
 
-	private void Connector_OnNewOrder(Order order)
+	private void Connector_OnOrderReceived(Subscription subscription, Order order)
 	{
-		_ordersWindow.OrderGrid.Orders.Add(order);
-		_securitiesWindow.ProcessOrder(order);
-	}
-
-	private void Connector_OnOrderChanged(Order order)
-	{
+		_ordersWindow.OrderGrid.Orders.TryAdd(order);
 		_securitiesWindow.ProcessOrder(order);
 	}
 

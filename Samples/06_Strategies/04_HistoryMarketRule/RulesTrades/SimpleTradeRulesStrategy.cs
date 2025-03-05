@@ -13,13 +13,14 @@ namespace StockSharp.Samples.Strategies.HistoryMarketRule
 		{
 			var sub = this.SubscribeTrades(Security);
 
-			sub.WhenTickTradeReceived(this).Do(() =>
+			sub.WhenTickTradeReceived(this).Do(t =>
 			{
-				new IMarketRule[] { Security.WhenLastTradePriceMore(this, 2), Security.WhenLastTradePriceLess(this, 2) }
-					.Or() // or conditions (WhenLastTradePriceMore or WhenLastTradePriceLess)
-					.Do(() =>
+				sub
+					.WhenLastTradePriceMore(this, t.Price + 2)
+					.Or(sub.WhenLastTradePriceLess(this, t.Price - 2))
+					.Do(t =>
 					{
-						this.AddInfoLog($"The rule WhenLastTradePriceMore Or WhenLastTradePriceLess candle={Security.LastTick}");
+						this.AddInfoLog($"The rule WhenLastTradePriceMore Or WhenLastTradePriceLess tick={t}");
 					})
 					.Apply(this);
 			})

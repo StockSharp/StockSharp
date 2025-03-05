@@ -354,7 +354,7 @@ public partial class SecuritiesWindow
 
 	private Subscription FindSubscription(Security security, DataType dataType)
 	{
-		return Connector.FindSubscriptions(security, dataType).Where(s => s.SubscriptionMessage.To == null && s.State.IsActive()).FirstOrDefault();
+		return Connector.FindSubscriptions(security, dataType).Where(s => s.To == null && s.State.IsActive()).FirstOrDefault();
 	}
 
 	private void Level1Click(object sender, RoutedEventArgs e)

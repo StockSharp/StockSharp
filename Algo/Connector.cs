@@ -12,7 +12,7 @@ using StockSharp.Algo.Slippage;
 /// <summary>
 /// The class to create connections to trading systems.
 /// </summary>
-public partial class Connector : BaseLogReceiver, IConnector, IMarketDataProvider, ISubscriptionProvider
+public partial class Connector : BaseLogReceiver, IConnector
 {
 	private readonly EntityCache _entityCache;
 	private readonly SubscriptionManager _subscriptionManager;
@@ -996,7 +996,7 @@ public partial class Connector : BaseLogReceiver, IConnector, IMarketDataProvide
 	/// To get the instrument by the code. If the instrument is not found, then the <see cref="IEntityFactory.CreateSecurity"/> is called to create an instrument.
 	/// </summary>
 	/// <param name="id">Security ID.</param>
-	/// <param name="changeSecurity">The handler changing the instrument. It returns <see langword="true" /> if the instrument has been changed and the <see cref="IConnector.SecuritiesChanged"/> should be called.</param>
+	/// <param name="changeSecurity">The handler changing the instrument. It returns <see langword="true" /> if the instrument has been changed and the <see cref="SecurityReceived"/> should be called.</param>
 	/// <param name="isNew">Is newly created.</param>
 	/// <returns>Security.</returns>
 	private Security GetSecurity(SecurityId id, Func<Security, bool> changeSecurity, out bool isNew)
@@ -1025,12 +1025,7 @@ public partial class Connector : BaseLogReceiver, IConnector, IMarketDataProvide
 		if (isNew)
 			ExchangeInfoProvider.Save(security.Board);
 
-		var isChanged = changeSecurity(security);
-
-		if (_existingSecurities.TryAdd(security))
-			RaiseNewSecurity(security);
-		else if (isChanged)
-			RaiseSecurityChanged(security);
+		changeSecurity(security);
 
 		return security;
 	}

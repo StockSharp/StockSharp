@@ -11,21 +11,6 @@ public interface ITransactionProvider : IPortfolioProvider, IPositionProvider
 	IdGenerator TransactionIdGenerator { get; }
 
 	/// <summary>
-	/// Own trade received.
-	/// </summary>
-	event Action<MyTrade> NewMyTrade;
-
-	/// <summary>
-	/// Order received.
-	/// </summary>
-	event Action<Order> NewOrder;
-
-	/// <summary>
-	/// Order changed (cancelled, matched).
-	/// </summary>
-	event Action<Order> OrderChanged;
-
-	/// <summary>
 	/// <see cref="EditOrder"/> success result event.
 	/// </summary>
 	event Action<long, Order> OrderEdited;
@@ -68,38 +53,7 @@ public interface ITransactionProvider : IPortfolioProvider, IPositionProvider
 	/// <summary>
 	/// Failed order status request event.
 	/// </summary>
-	[Obsolete("Use SubscriptionFailed event.")]
-	event Action<long, Exception> OrderStatusFailed;
-
-	/// <summary>
-	/// Failed order status request event.
-	/// </summary>
-	[Obsolete("Use SubscriptionFailed event.")]
 	event Action<long, Exception, DateTimeOffset> OrderStatusFailed2;
-
-	/// <summary>
-	/// Stop-order registration error event.
-	/// </summary>
-	[Obsolete("Use OrderRegisterFailed event.")]
-	event Action<OrderFail> StopOrderRegisterFailed;
-
-	/// <summary>
-	/// Stop-order cancellation error event.
-	/// </summary>
-	[Obsolete("Use OrderCancelFailed event.")]
-	event Action<OrderFail> StopOrderCancelFailed;
-
-	/// <summary>
-	/// Stop-order received.
-	/// </summary>
-	[Obsolete("Use NewOrder event.")]
-	event Action<Order> NewStopOrder;
-
-	/// <summary>
-	/// Stop order state change event.
-	/// </summary>
-	[Obsolete("Use OrderChanged event.")]
-	event Action<Order> StopOrderChanged;
 
 	/// <summary>
 	/// Lookup result <see cref="PortfolioLookupMessage"/> received.
@@ -148,20 +102,6 @@ public interface ITransactionProvider : IPortfolioProvider, IPositionProvider
 	/// <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
 	/// <param name="transactionId">Order cancellation transaction id.</param>
 	void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null, long? transactionId = null);
-
-	/// <summary>
-	/// Subscribe on the portfolio changes.
-	/// </summary>
-	/// <param name="portfolio">Portfolio for subscription.</param>
-	[Obsolete("Use Subscribe method.")]
-	void RegisterPortfolio(Portfolio portfolio);
-
-	/// <summary>
-	/// Unsubscribe from the portfolio changes.
-	/// </summary>
-	/// <param name="portfolio">Portfolio for unsubscription.</param>
-	[Obsolete("Use UnSubscribe method.")]
-	void UnRegisterPortfolio(Portfolio portfolio);
 
 	/// <summary>
 	/// Determines the specified order can be edited by <see cref="EditOrder"/>.

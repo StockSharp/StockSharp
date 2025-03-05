@@ -14,8 +14,6 @@ public abstract class QuotingStrategy : Strategy
 	private IOrderBookMessage _filteredBook;
 	private ITickTradeMessage _lastTrade;
 
-	private IEnumerable<IMarketRule> _notificationRules;
-
 	/// <summary>
 	/// Initialize <see cref="QuotingStrategy"/>.
 	/// </summary>
@@ -264,15 +262,6 @@ public abstract class QuotingStrategy : Strategy
 		return side == Sides.Buy ? book.Bids : book.Asks;
 	}
 
-	/// <summary>
-	/// To get a list of rules on which the quoting will respond.
-	/// </summary>
-	/// <returns>Rule list.</returns>
-	protected virtual IEnumerable<IMarketRule> GetNotificationRules()
-	{
-		yield return this.SubscribeFilteredMarketDepth(GetSecurity()).WhenOrderBookReceived(this);
-	}
-
 	/// <inheritdoc />
 	protected override void OnStarted(DateTimeOffset time)
 	{
@@ -298,13 +287,21 @@ public abstract class QuotingStrategy : Strategy
 			this
 				.SubscribeFilteredMarketDepth(security)
 				.WhenOrderBookReceived(this)
-				.Do(book => _filteredBook = book)
+				.Do(book =>
+				{
+					_filteredBook = book;
+					ProcessQuoting(CurrentTime);
+				})
 				.Apply(this);
 
 			this
 				.SubscribeTrades(security)
 				.WhenTickTradeReceived(this)
-				.Do(t => _lastTrade = t)
+				.Do(t =>
+				{
+					_lastTrade = t;
+					ProcessQuoting(CurrentTime);
+				})
 				.Apply(this);
 
 			this
@@ -316,15 +313,6 @@ public abstract class QuotingStrategy : Strategy
 				})
 				.Once()
 				.Apply(this);
-
-			_notificationRules = [.. GetNotificationRules()];
-			if (!_notificationRules.IsEmpty())
-			{
-				_notificationRules
-					.Or()
-					.Do(() => ProcessQuoting(CurrentTime))
-					.Apply(this);
-			}
 
 			this
 				.WhenPositionChanged()
@@ -360,15 +348,6 @@ public abstract class QuotingStrategy : Strategy
 	protected virtual void ProcessTimeOut(DateTimeOffset currentTime)
 	{
 		Stop();
-	}
-
-	/// <inheritdoc />
-	protected override void OnStopping()
-	{
-		// an error may happen during startup. in that case rules will be null
-		_notificationRules?.ForEach(r => r.Suspend(true));
-
-		base.OnStopping();
 	}
 
 	/// <summary>

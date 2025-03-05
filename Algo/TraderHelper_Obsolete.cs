@@ -9,362 +9,8 @@ using StockSharp.Algo.Testing;
 
 partial class TraderHelper
 {
-	///// <summary>
-	///// To get the position by the order.
-	///// </summary>
-	///// <param name="order">The order, used for the position calculation. At buy the position is taken with positive sign, at sell - with negative.</param>
-	///// <param name="connector">The connection of interaction with trade systems.</param>
-	///// <returns>Position.</returns>
-	//public static decimal GetPosition(this Order order, IConnector connector)
-	//{
-	//	var volume = order.GetMatchedVolume(connector);
-
-	//	return order.Direction == Sides.Buy ? volume : -volume;
-	//}
-
-	///// <summary>
-	///// To get the position by the portfolio.
-	///// </summary>
-	///// <param name="portfolio">The portfolio, for which the position needs to be got.</param>
-	///// <param name="connector">The connection of interaction with trade systems.</param>
-	///// <returns>The position by the portfolio.</returns>
-	//public static decimal GetPosition(this Portfolio portfolio, IConnector connector)
-	//{
-	//	if (portfolio == null)
-	//		throw new ArgumentNullException(nameof(portfolio));
-
-	//	if (connector == null)
-	//		throw new ArgumentNullException(nameof(connector));
-
-	//	return connector.Positions.Filter(portfolio).Sum(p => p.CurrentValue);
-	//}
-
-	///// <summary>
-	///// To get the position by My trades.
-	///// </summary>
-	///// <param name="trades">My trades, used for the position calculation using the <see cref="GetPosition(StockSharp.BusinessEntities.MyTrade)"/> method.</param>
-	///// <returns>Position.</returns>
-	//public static decimal GetPosition(this IEnumerable<MyTrade> trades)
-	//{
-	//	return trades.Sum(t => t.GetPosition());
-	//}
-
-	///// <summary>
-	///// To get the trade volume, collatable with the position size.
-	///// </summary>
-	///// <param name="position">The position by the instrument.</param>
-	///// <returns>Order volume.</returns>
-	//public static decimal GetOrderVolume(this Position position)
-	//{
-	//	if (position == null)
-	//		throw new ArgumentNullException(nameof(position));
-
-	//	return (position.CurrentValue / position.Security.VolumeStep ?? 1m).Abs();
-	//}
-
-	///// <summary>
-	///// To group orders by instrument and portfolio.
-	///// </summary>
-	///// <param name="orders">Initial orders.</param>
-	///// <returns>Grouped orders.</returns>
-	///// <remarks>
-	///// Recommended to use to reduce trade costs.
-	///// </remarks>
-	//public static IEnumerable<Order> Join(this IEnumerable<Order> orders)
-	//{
-	//	if (orders == null)
-	//		throw new ArgumentNullException(nameof(orders));
-
-	//	return orders.GroupBy(o => Tuple.Create(o.Security, o.Portfolio)).Select(g =>
-	//	{
-	//		Order firstOrder = null;
-
-	//		foreach (var order in g)
-	//		{
-	//			if (firstOrder == null)
-	//			{
-	//				firstOrder = order;
-	//			}
-	//			else
-	//			{
-	//				var sameDir = firstOrder.Direction == order.Direction;
-
-	//				firstOrder.Volume += (sameDir ? 1 : -1) * order.Volume;
-
-	//				if (firstOrder.Volume < 0)
-	//				{
-	//					firstOrder.Direction = firstOrder.Direction.Invert();
-	//					firstOrder.Volume = firstOrder.Volume.Abs();
-	//				}
-
-	//				firstOrder.Price = sameDir ? firstOrder.Price.GetMiddle(order.Price) : order.Price;
-	//			}
-	//		}
-
-	//		if (firstOrder == null)
-	//			throw new InvalidOperationException();
-
-	//		if (firstOrder.Volume == 0)
-	//			return null;
-
-	//		firstOrder.ShrinkPrice();
-	//		return firstOrder;
-	//	})
-	//	.Where(o => o != null);
-	//}
-
-	///// <summary>
-	///// To calculate profit-loss based on trades.
-	///// </summary>
-	///// <param name="trades">Trades, for which the profit-loss shall be calculated.</param>
-	///// <returns>Profit-loss.</returns>
-	//public static decimal GetPnL(this IEnumerable<MyTrade> trades)
-	//{
-	//	return trades.Select(t => t.ToMessage()).GetPnL();
-	//}
-
-	///// <summary>
-	///// To calculate profit-loss based on trades.
-	///// </summary>
-	///// <param name="trades">Trades, for which the profit-loss shall be calculated.</param>
-	///// <returns>Profit-loss.</returns>
-	//public static decimal GetPnL(this IEnumerable<ExecutionMessage> trades)
-	//{
-	//	return trades.GroupBy(t => t.SecurityId).Sum(g =>
-	//	{
-	//		var queue = new PnLQueue(g.Key);
-
-	//		g.OrderBy(t => t.ServerTime).ForEach(t => queue.Process(t));
-
-	//		return queue.RealizedPnL + queue.UnrealizedPnL;
-	//	});
-	//}
-
-	///// <summary>
-	///// To calculate profit-loss for trade.
-	///// </summary>
-	///// <param name="trade">The trade for which the profit-loss shall be calculated.</param>
-	///// <param name="currentPrice">The current price of the instrument.</param>
-	///// <returns>Profit-loss.</returns>
-	//public static decimal GetPnL(this MyTrade trade, decimal currentPrice)
-	//{
-	//	if (trade == null)
-	//		throw new ArgumentNullException(nameof(trade));
-
-	//	return trade.ToMessage().GetPnL(currentPrice);
-	//}
-
-	///// <summary>
-	///// To calculate profit-loss for trade.
-	///// </summary>
-	///// <param name="trade">The trade for which the profit-loss shall be calculated.</param>
-	///// <param name="currentPrice">The current price of the instrument.</param>
-	///// <returns>Profit-loss.</returns>
-	//public static decimal GetPnL(this ExecutionMessage trade, decimal currentPrice)
-	//{
-	//	return GetPnL(trade.GetTradePrice(), trade.SafeGetVolume(), trade.Side, currentPrice);
-	//}
-
-	///// <summary>
-	///// To calculate the position cost.
-	///// </summary>
-	///// <param name="position">Position.</param>
-	///// <param name="currentPrice">The current price of the instrument.</param>
-	///// <returns>Position price.</returns>
-	//public static decimal GetPrice(this Position position, decimal currentPrice)
-	//{
-	//	if (position == null)
-	//		throw new ArgumentNullException(nameof(position));
-
-	//	var security = position.Security;
-
-	//	return currentPrice * position.CurrentValue * security.StepPrice / security.PriceStep ?? 1;
-	//}
-
-	///// <summary>
-	///// To calculate delay based on difference between the server and local time.
-	///// </summary>
-	///// <param name="security">Security.</param>
-	///// <param name="serverTime">Server time.</param>
-	///// <param name="localTime">Local time.</param>
-	///// <returns>Latency.</returns>
-	//public static TimeSpan GetLatency(this Security security, DateTimeOffset serverTime, DateTimeOffset localTime)
-	//{
-	//	return localTime - serverTime;
-	//}
-
-	///// <summary>
-	///// To calculate delay based on difference between the server and local time.
-	///// </summary>
-	///// <param name="securityId">Security ID.</param>
-	///// <param name="serverTime">Server time.</param>
-	///// <param name="localTime">Local time.</param>
-	///// <returns>Latency.</returns>
-	//public static TimeSpan GetLatency(this SecurityId securityId, DateTimeOffset serverTime, DateTimeOffset localTime)
-	//{
-	//	var board = ExchangeBoard.GetBoard(securityId.BoardCode);
-
-	//	if (board == null)
-	//		throw new ArgumentException(LocalizedStrings.BoardNotFound.Put(securityId.BoardCode), nameof(securityId));
-
-	//	return localTime - serverTime;
-	//}
-
-	///// <summary>
-	///// To get the size of clear funds in the portfolio.
-	///// </summary>
-	///// <param name="portfolio">Portfolio.</param>
-	///// <param name="useLeverage">Whether to use shoulder size for calculation.</param>
-	///// <returns>The size of clear funds.</returns>
-	//public static decimal GetFreeMoney(this Portfolio portfolio, bool useLeverage = false)
-	//{
-	//	if (portfolio == null)
-	//		throw new ArgumentNullException(nameof(portfolio));
-
-	//	var freeMoney = portfolio.Board == ExchangeBoard.Forts
-	//		? portfolio.BeginValue - portfolio.CurrentValue + portfolio.VariationMargin
-	//		: portfolio.CurrentValue;
-
-	//	return useLeverage ? freeMoney * portfolio.Leverage : freeMoney;
-	//}
-
-	//private sealed class CashPosition : Position, IDisposable
-	//{
-	//	private readonly Portfolio _portfolio;
-	//	private readonly IConnector _connector;
-
-	//	public CashPosition(Portfolio portfolio, IConnector connector)
-	//	{
-	//		if (portfolio == null)
-	//			throw new ArgumentNullException(nameof(portfolio));
-
-	//		if (connector == null)
-	//			throw new ArgumentNullException(nameof(connector));
-
-	//		_portfolio = portfolio;
-	//		_connector = connector;
-
-	//		Portfolio = _portfolio;
-	//		Security = new Security
-	//		{
-	//			Id = _portfolio.Name,
-	//			Name = _portfolio.Name,
-	//		};
-
-	//		UpdatePosition();
-
-	//		_connector.PortfoliosChanged += TraderOnPortfoliosChanged;
-	//	}
-
-	//	private void UpdatePosition()
-	//	{
-	//		BeginValue = _portfolio.BeginValue;
-	//		CurrentValue = _portfolio.CurrentValue;
-	//		BlockedValue = _portfolio.Commission;
-	//	}
-
-	//	private void TraderOnPortfoliosChanged(IEnumerable<Portfolio> portfolios)
-	//	{
-	//		if (portfolios.Contains(_portfolio))
-	//			UpdatePosition();
-	//	}
-
-	//	void IDisposable.Dispose()
-	//	{
-	//		_connector.PortfoliosChanged -= TraderOnPortfoliosChanged;
-	//	}
-	//}
-
-	///// <summary>
-	///// To convert portfolio into the monetary position.
-	///// </summary>
-	///// <param name="portfolio">Portfolio with trading account.</param>
-	///// <param name="connector">The connection of interaction with trading system.</param>
-	///// <returns>Money position.</returns>
-	//public static Position ToCashPosition(this Portfolio portfolio, IConnector connector)
-	//{
-	//	return new CashPosition(portfolio, connector);
-	//}
-
-	//private sealed class LookupSecurityUpdate : Disposable
-	//{
-	//	private readonly IConnector _connector;
-	//	private TimeSpan _timeOut;
-	//	private readonly SyncObject _syncRoot = new SyncObject();
-
-	//	private readonly SynchronizedList<Security> _securities;
-
-	//	public LookupSecurityUpdate(IConnector connector, Security criteria, TimeSpan timeOut)
-	//	{
-	//		if (connector == null)
-	//			throw new ArgumentNullException(nameof(connector));
-
-	//		if (criteria == null)
-	//			throw new ArgumentNullException(nameof(criteria));
-
-	//		_securities = new SynchronizedList<Security>();
-
-	//		_connector = connector;
-	//		_timeOut = timeOut;
-
-	//		_connector.LookupSecuritiesResult += OnLookupSecuritiesResult;
-	//		_connector.LookupSecurities(criteria);
-	//	}
-
-	//	public IEnumerable<Security> Wait()
-	//	{
-	//		while (true)
-	//		{
-	//			if (!_syncRoot.Wait(_timeOut))
-	//				break;
-	//		}
-
-	//		return _securities;
-	//	}
-
-	//	private void OnLookupSecuritiesResult(IEnumerable<Security> securities)
-	//	{
-	//		_securities.AddRange(securities);
-
-	//		_timeOut = securities.Any()
-	//			           ? TimeSpan.FromSeconds(10)
-	//			           : TimeSpan.Zero;
-
-	//		_syncRoot.Pulse();
-	//	}
-
-	//	protected override void DisposeManaged()
-	//	{
-	//		_connector.LookupSecuritiesResult -= OnLookupSecuritiesResult;
-	//	}
-	//}
-
-	///// <summary>
-	///// To perform blocking search of instruments, corresponding to the criteria filter.
-	///// </summary>
-	///// <param name="connector">The connection of interaction with trading system.</param>
-	///// <param name="criteria">Instruments search criteria.</param>
-	///// <returns>Found instruments.</returns>
-	//public static IEnumerable<Security> SyncLookupSecurities(this IConnector connector, Security criteria)
-	//{
-	//	if (connector == null)
-	//		throw new ArgumentNullException(nameof(connector));
-
-	//	if (criteria == null)
-	//		throw new ArgumentNullException(nameof(criteria));
-
-	//	using (var lsu = new LookupSecurityUpdate(connector, criteria, TimeSpan.FromSeconds(180)))
-	//	{
-	//		return lsu.Wait();
-	//	}
-	//}
-
 	/// <summary>
-	/// To get order trades.
 	/// </summary>
-	/// <param name="order">Orders.</param>
-	/// <param name="connector">The connection of interaction with trade systems.</param>
-	/// <returns>Trades.</returns>
 	[Obsolete]
 	public static IEnumerable<MyTrade> GetTrades(this Order order, IConnector connector)
 	{
@@ -374,15 +20,11 @@ partial class TraderHelper
 		if (connector == null)
 			throw new ArgumentNullException(nameof(connector));
 
-		return connector.MyTrades.Filter(order);
+		return [];
 	}
 
 	/// <summary>
-	/// To get weighted mean price of order matching.
 	/// </summary>
-	/// <param name="order">The order, for which the weighted mean matching price shall be got.</param>
-	/// <param name="connector">The connection of interaction with trade systems.</param>
-	/// <returns>The weighted mean price. If no order exists no trades, 0 is returned.</returns>
 	[Obsolete]
 	public static decimal GetAveragePrice(this Order order, IConnector connector)
 	{
@@ -390,11 +32,7 @@ partial class TraderHelper
 	}
 
 	/// <summary>
-	/// To calculate the implemented part of volume for order.
 	/// </summary>
-	/// <param name="order">The order, for which the implemented part of volume shall be calculated.</param>
-	/// <param name="connector">The connection of interaction with trade systems.</param>
-	/// <returns>The implemented part of volume.</returns>
 	[Obsolete]
 	public static decimal GetMatchedVolume(this Order order, IConnector connector)
 	{
@@ -408,11 +46,7 @@ partial class TraderHelper
 	}
 
 	/// <summary>
-	/// To get the position on own trade.
 	/// </summary>
-	/// <param name="message">Own trade, used for position calculation. At buy the trade volume <see cref="ExecutionMessage.TradeVolume"/> is taken with positive sign, at sell - with negative.</param>
-	/// <param name="byOrder">To check implemented volume by order balance (<see cref="ExecutionMessage.Balance"/>) or by received trades. The default is checked by the order.</param>
-	/// <returns>Position.</returns>
 	[Obsolete]
 	public static decimal? GetPosition(this ExecutionMessage message, bool byOrder)
 	{
@@ -446,10 +80,7 @@ partial class TraderHelper
 	}
 
 	/// <summary>
-	/// Convert the position object to the type <see cref="IPositionManager"/>.
 	/// </summary>
-	/// <param name="position">Position.</param>
-	/// <returns>Position calc manager.</returns>
 	[Obsolete]
 	public static IPositionManager ToPositionManager(this Position position)
 		=> new NativePositionManager(position);
@@ -549,13 +180,7 @@ partial class TraderHelper
 	}
 
 	/// <summary>
-	/// To find orders that match the filter <paramref name="criteria" />. Found orders will be passed through the event <see cref="ITransactionProvider.NewOrder"/>.
 	/// </summary>
-	/// <param name="provider">Subscription provider.</param>
-	/// <param name="criteria">The order which fields will be used as a filter.</param>
-	/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-	/// <param name="offlineMode">Offline mode handling message.</param>
-	/// <returns>Subscription.</returns>
 	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription LookupOrders(this ISubscriptionProvider provider, Order criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
 	{
@@ -568,18 +193,7 @@ partial class TraderHelper
 	}
 
 	/// <summary>
-	/// Subscribe to receive new candles.
 	/// </summary>
-	/// <param name="provider">Subscription provider.</param>
-	/// <param name="series">Candles series.</param>
-	/// <param name="from">The initial date from which you need to get data.</param>
-	/// <param name="to">The final date by which you need to get data.</param>
-	/// <param name="count">Candles count.</param>
-	/// <param name="transactionId">Transaction ID.</param>
-	/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-	/// <param name="skip">Skip count.</param>
-	/// <param name="fillGaps"><see cref="FillGapsDays"/></param>
-	/// <returns>Subscription.</returns>
 	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription SubscribeCandles(this ISubscriptionProvider provider,
 		CandleSeries series, DateTimeOffset? from = default, DateTimeOffset? to = default,
@@ -621,10 +235,7 @@ partial class TraderHelper
 	}
 
 	/// <summary>
-	/// To stop the candles receiving subscription, previously created by <see cref="SubscribeCandles"/>.
 	/// </summary>
-	/// <param name="provider">Subscription provider.</param>
-	/// <param name="series">Candles series.</param>
 	[Obsolete("Use ISubscriptionProvider.UnSubscribe method.")]
 	public static void UnSubscribeCandles(this ISubscriptionProvider provider, CandleSeries series)
 	{
@@ -663,10 +274,7 @@ partial class TraderHelper
 	}
 
 	/// <summary>
-	/// Unsubscribe from positions changes.
 	/// </summary>
-	/// <param name="provider">Subscription provider.</param>
-	/// <param name="originalTransactionId">ID of the original message <see cref="SubscribePositions(ISubscriptionProvider, PortfolioLookupMessage)"/> for which this message is a response.</param>
 	[Obsolete("Use ISubscriptionProvider.UnSubscribe method.")]
 	public static void UnSubscribePositions(this ISubscriptionProvider provider, long originalTransactionId = 0)
 	{
@@ -694,11 +302,7 @@ partial class TraderHelper
 	}
 
 	/// <summary>
-	/// To find time-frames that match the filter <paramref name="criteria" />. Found time-frames will be passed through the event <see cref="IMarketDataProvider.LookupTimeFramesResult"/>.
 	/// </summary>
-	/// <param name="provider">Subscription provider.</param>
-	/// <param name="criteria">The criterion which fields will be used as a filter.</param>
-	/// <returns>Subscription.</returns>
 	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription LookupTimeFrames(this ISubscriptionProvider provider, TimeFrameLookupMessage criteria)
 	{
@@ -711,11 +315,7 @@ partial class TraderHelper
 	}
 
 	/// <summary>
-	/// To find orders that match the filter <paramref name="criteria" />. Found orders will be passed through the event <see cref="ITransactionProvider.NewOrder"/>.
 	/// </summary>
-	/// <param name="provider">Subscription provider.</param>
-	/// <param name="criteria">The order which fields will be used as a filter.</param>
-	/// <returns>Subscription.</returns>
 	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription LookupOrders(this ISubscriptionProvider provider, OrderStatusMessage criteria)
 	{
@@ -723,13 +323,7 @@ partial class TraderHelper
 	}
 
 	/// <summary>
-	/// To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="ITransactionProvider.LookupPortfoliosResult"/>.
 	/// </summary>
-	/// <param name="provider">Subscription provider.</param>
-	/// <param name="criteria">The criterion which fields will be used as a filter.</param>
-	/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-	/// <param name="offlineMode">Offline mode handling message.</param>
-	/// <returns>Subscription.</returns>
 	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription LookupPortfolios(this ISubscriptionProvider provider, Portfolio criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
 	{
@@ -745,11 +339,7 @@ partial class TraderHelper
 	}
 
 	/// <summary>
-	/// To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="ITransactionProvider.LookupPortfoliosResult"/>.
 	/// </summary>
-	/// <param name="provider">Subscription provider.</param>
-	/// <param name="criteria">The criterion which fields will be used as a filter.</param>
-	/// <returns>Subscription.</returns>
 	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription LookupPortfolios(this ISubscriptionProvider provider, PortfolioLookupMessage criteria)
 	{
@@ -757,13 +347,7 @@ partial class TraderHelper
 	}
 
 	/// <summary>
-	/// To find boards that match the filter <paramref name="criteria" />. Found boards will be passed through the event <see cref="IMarketDataProvider.LookupBoardsResult"/>.
 	/// </summary>
-	/// <param name="provider">Subscription provider.</param>
-	/// <param name="criteria">The criterion which fields will be used as a filter.</param>
-	/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-	/// <param name="offlineMode">Offline mode handling message.</param>
-	/// <returns>Subscription.</returns>
 	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription LookupBoards(this ISubscriptionProvider provider, ExchangeBoard criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
 	{
@@ -781,11 +365,7 @@ partial class TraderHelper
 	}
 
 	/// <summary>
-	/// To find boards that match the filter <paramref name="criteria" />. Found boards will be passed through the event <see cref="IMarketDataProvider.LookupBoardsResult"/>.
 	/// </summary>
-	/// <param name="provider">Subscription provider.</param>
-	/// <param name="criteria">The criterion which fields will be used as a filter.</param>
-	/// <returns>Subscription.</returns>
 	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription LookupBoards(this ISubscriptionProvider provider, BoardLookupMessage criteria)
 	{
@@ -818,10 +398,7 @@ partial class TraderHelper
 	}
 
 	/// <summary>
-	/// Unsubscribe from the board changes.
 	/// </summary>
-	/// <param name="provider">Subscription provider.</param>
-	/// <param name="board">Board for unsubscription.</param>
 	[Obsolete("Use ISubscriptionProvider.UnSubscribe method.")]
 	public static void UnSubscribeBoard(this ISubscriptionProvider provider, ExchangeBoard board)
 	{
@@ -835,10 +412,7 @@ partial class TraderHelper
 	}
 
 	/// <summary>
-	/// Unsubscribe.
 	/// </summary>
-	/// <param name="provider">Subscription provider.</param>
-	/// <param name="subscriptionId">Subscription id.</param>
 	[Obsolete("Use ISubscriptionProvider.UnSubscribe method.")]
 	public static void UnSubscribe(this ISubscriptionProvider provider, long subscriptionId)
 	{
@@ -849,7 +423,7 @@ partial class TraderHelper
 	}
 
 	/// <summary>
-	/// To find orders that match the filter <paramref name="criteria" />. Found orders will be passed through the event <see cref="ITransactionProvider.NewOrder"/>.
+	/// To find orders that match the filter <paramref name="criteria" />. Found orders will be passed through the event <see cref="ISubscriptionProvider.OrderReceived"/>.
 	/// </summary>
 	/// <param name="provider">Subscription provider.</param>
 	/// <param name="criteria">The order which fields will be used as a filter.</param>
@@ -866,10 +440,7 @@ partial class TraderHelper
 	}
 
 	/// <summary>
-	/// Unsubscribe from orders changes.
 	/// </summary>
-	/// <param name="provider">Subscription provider.</param>
-	/// <param name="originalTransactionId">ID of the original message <see cref="SubscribeOrders(ISubscriptionProvider, OrderStatusMessage)"/> for which this message is a response.</param>
 	[Obsolete("Use ISubscriptionProvider.UnSubscribe method.")]
 	public static void UnSubscribeOrders(this ISubscriptionProvider provider, long originalTransactionId = 0)
 	{
@@ -880,7 +451,7 @@ partial class TraderHelper
 	}
 
 	/// <summary>
-	/// To start getting quotes (order book) by the instrument. Quotes values are available through the event <see cref="IMarketDataProvider.MarketDepthChanged"/>.
+	/// To start getting quotes (order book) by the instrument. Quotes values are available through the event <see cref="ISubscriptionProvider.OrderBookReceived"/>.
 	/// </summary>
 	/// <param name="provider">Subscription provider.</param>
 	/// <param name="security">The instrument by which quotes getting should be started.</param>
@@ -915,7 +486,7 @@ partial class TraderHelper
 	}
 
 	/// <summary>
-	/// To start getting trades (tick data) by the instrument. New trades will come through the event <see cref="IMarketDataProvider.NewTrade"/>.
+	/// To start getting trades (tick data) by the instrument. New trades will come through the event <see cref="ISubscriptionProvider.TickTradeReceived"/>.
 	/// </summary>
 	/// <param name="provider">Subscription provider.</param>
 	/// <param name="security">The instrument by which trades getting should be started.</param>
@@ -1399,52 +970,6 @@ partial class TraderHelper
 		A1();
 
 		depth.Update(bids, asks, depth.ServerTime);
-	}
-
-	/// <summary>
-	/// To get the weighted mean price of matching by own trades.
-	/// </summary>
-	/// <param name="trades">Trades, for which the weighted mean price of matching shall be got.</param>
-	/// <returns>The weighted mean price. If no trades, 0 is returned.</returns>
-	[Obsolete]
-	public static decimal GetAveragePrice(this IEnumerable<MyTrade> trades)
-	{
-		if (trades == null)
-			throw new ArgumentNullException(nameof(trades));
-
-		var numerator = 0m;
-		var denominator = 0m;
-		var currentAvgPrice = 0m;
-
-		foreach (var myTrade in trades)
-		{
-			var order = myTrade.Order;
-			var trade = myTrade.Trade;
-
-			var direction = (order.Side == Sides.Buy) ? 1m : -1m;
-
-			//≈сли открываемс€ или переворачиваемс€
-			if (direction != denominator.Sign() && trade.Volume > denominator.Abs())
-			{
-				var newVolume = trade.Volume - denominator.Abs();
-				numerator = direction * trade.Price * newVolume;
-				denominator = direction * newVolume;
-			}
-			else
-			{
-				//≈сли добавл€емс€ в сторону уже открытой позиции
-				if (direction == denominator.Sign())
-					numerator += direction * trade.Price * trade.Volume;
-				else
-					numerator += direction * currentAvgPrice * trade.Volume;
-
-				denominator += direction * trade.Volume;
-			}
-
-			currentAvgPrice = (denominator != 0) ? numerator / denominator : 0m;
-		}
-
-		return currentAvgPrice;
 	}
 
 	/// <summary>

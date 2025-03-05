@@ -4,43 +4,34 @@ using System;
 using System.Linq;
 
 using StockSharp.Algo;
-using StockSharp.Algo.Candles;
 using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Strategies.Quoting;
-using StockSharp.Messages;
 using StockSharp.BusinessEntities;
+using StockSharp.Messages;
 
 public class StairsCountertrendStrategy : Strategy
 {
-	private readonly Subscription _subscription;
-	public StairsCountertrendStrategy(CandleSeries candleSeries)
-	{
-		_subscription = new(candleSeries);
-	}
+	public DataType CandleDataType { get; set; }
 
 	private int _bullLength;
 	private int _bearLength;
 	public int Length { get; set; } = 3;
+
 	protected override void OnStarted(DateTimeOffset time)
 	{
-		// history connector disable filtered market depths for performance reason
-		Connector.SupportFilteredMarketDepth = true;
-
-		// for performance reason use candle data only by default
-		//this.SubscribeMarketDepth(Security);
-		//this.SubscribeLevel1(Security);
+		var subscription = new Subscription(CandleDataType, Security);
 
 		this
-			.WhenCandlesFinished(_subscription)
-			.Do(CandleManager_Processing)
+			.WhenCandlesFinished(subscription)
+			.Do(Processing)
 			.Apply(this);
 		
-		Subscribe(_subscription);
+		Subscribe(subscription);
 
 		base.OnStarted(time);
 	}
 
-	private void CandleManager_Processing(ICandleMessage candle)
+	private void Processing(ICandleMessage candle)
 	{
 		if (candle.State != CandleStates.Finished) return;
 

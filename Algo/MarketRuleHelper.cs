@@ -50,48 +50,6 @@ public static partial class MarketRuleHelper
 		protected ITransactionProvider Provider { get; }
 	}
 
-	private class NewMyTradeTraderRule : TransactionProviderRule<MyTrade>
-	{
-		public NewMyTradeTraderRule(ITransactionProvider provider)
-			: base(provider)
-		{
-			Name = LocalizedStrings.Trades;
-			Provider.NewMyTrade += OnNewMyTrade;
-		}
-
-		private void OnNewMyTrade(MyTrade trade)
-		{
-			Activate(trade);
-		}
-
-		protected override void DisposeManaged()
-		{
-			Provider.NewMyTrade -= OnNewMyTrade;
-			base.DisposeManaged();
-		}
-	}
-
-	private class NewOrderTraderRule : TransactionProviderRule<Order>
-	{
-		public NewOrderTraderRule(ITransactionProvider provider)
-			: base(provider)
-		{
-			Name = LocalizedStrings.Orders;
-			Provider.NewOrder += OnNewOrder;
-		}
-
-		private void OnNewOrder(Order order)
-		{
-			Activate(order);
-		}
-
-		protected override void DisposeManaged()
-		{
-			Provider.NewOrder -= OnNewOrder;
-			base.DisposeManaged();
-		}
-	}
-
 	private class ConnectedRule : ConnectorRule<IMessageAdapter>
 	{
 		public ConnectedRule(IConnector connector)
@@ -167,26 +125,6 @@ public static partial class MarketRuleHelper
 			throw new ArgumentNullException(nameof(connector));
 
 		return new IntervalTimeRule(connector, interval);
-	}
-
-	/// <summary>
-	/// To create a rule for the event of new trade occurrences.
-	/// </summary>
-	/// <param name="provider">The transactional provider.</param>
-	/// <returns>Rule.</returns>
-	public static MarketRule<ITransactionProvider, MyTrade> WhenNewMyTrade(this ITransactionProvider provider)
-	{
-		return new NewMyTradeTraderRule(provider);
-	}
-
-	/// <summary>
-	/// To create a rule for the event of new orders occurrences.
-	/// </summary>
-	/// <param name="provider">The transactional provider.</param>
-	/// <returns>Rule.</returns>
-	public static MarketRule<ITransactionProvider, Order> WhenNewOrder(this ITransactionProvider provider)
-	{
-		return new NewOrderTraderRule(provider);
 	}
 
 	/// <summary>
