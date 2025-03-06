@@ -2,62 +2,51 @@ namespace StockSharp.Algo.Strategies;
 
 partial class Strategy
 {
-	private IMarketDataProvider MarketDataProvider => SafeGetConnector();
-
-	/// <inheritdoc />
-	public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged
+	event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> IMarketDataProvider.ValuesChanged
 	{
-		add => MarketDataProvider.ValuesChanged += value;
-		remove => MarketDataProvider.ValuesChanged -= value;
+		add { }
+		remove { }
 	}
 
-	/// <inheritdoc />
-	public object GetSecurityValue(Security security, Level1Fields field)
-		=> MarketDataProvider.GetSecurityValue(security, field);
+	object IMarketDataProvider.GetSecurityValue(Security security, Level1Fields field)
+		=> default;
 
-	/// <inheritdoc />
-	public IEnumerable<Level1Fields> GetLevel1Fields(Security security)
-		=> MarketDataProvider.GetLevel1Fields(security);
+	IEnumerable<Level1Fields> IMarketDataProvider.GetLevel1Fields(Security security)
+		=> [];
 
-	/// <inheritdoc />
-	public event Action<SecurityLookupMessage, IEnumerable<Security>, Exception> LookupSecuritiesResult
+	event Action<SecurityLookupMessage, IEnumerable<Security>, Exception> IMarketDataProvider.LookupSecuritiesResult
 	{
-		add => MarketDataProvider.LookupSecuritiesResult += value;
-		remove => MarketDataProvider.LookupSecuritiesResult -= value;
+		add { }
+		remove { }
 	}
 
-	/// <inheritdoc />
-	public event Action<SecurityLookupMessage, IEnumerable<Security>, IEnumerable<Security>, Exception> LookupSecuritiesResult2
+	event Action<SecurityLookupMessage, IEnumerable<Security>, IEnumerable<Security>, Exception> IMarketDataProvider.LookupSecuritiesResult2
 	{
-		add => MarketDataProvider.LookupSecuritiesResult2 += value;
-		remove => MarketDataProvider.LookupSecuritiesResult2 -= value;
+		add { }
+		remove { }
 	}
 
-	/// <inheritdoc />
-	public event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult
+	event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, Exception> IMarketDataProvider.LookupBoardsResult
 	{
-		add => MarketDataProvider.LookupBoardsResult += value;
-		remove => MarketDataProvider.LookupBoardsResult -= value;
+		add { }
+		remove { }
 	}
 
-	/// <inheritdoc />
-	public event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult2
+	event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> IMarketDataProvider.LookupBoardsResult2
 	{
-		add => MarketDataProvider.LookupBoardsResult2 += value;
-		remove => MarketDataProvider.LookupBoardsResult2 -= value;
+		add { }
+		remove { }
 	}
 
-	/// <inheritdoc />
-	public event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult
+	event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, Exception> IMarketDataProvider.LookupTimeFramesResult
 	{
-		add => MarketDataProvider.LookupTimeFramesResult += value;
-		remove => MarketDataProvider.LookupTimeFramesResult -= value;
+		add { }
+		remove { }
 	}
 
-	/// <inheritdoc />
-	public event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult2
+	event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> IMarketDataProvider.LookupTimeFramesResult2
 	{
-		add => MarketDataProvider.LookupTimeFramesResult2 += value;
-		remove => MarketDataProvider.LookupTimeFramesResult2 -= value;
+		add { }
+		remove { }
 	}
 }
