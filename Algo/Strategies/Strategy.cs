@@ -1598,6 +1598,8 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	{
 		OnOrderRegistering(order);
 
+		_newOrder?.Invoke(order);
+
 		ProcessRisk(order);
 	}
 
@@ -1617,6 +1619,8 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		if (!order.State.IsFinal())
 			ApplyMonitorRules(order);
+
+		_newOrder?.Invoke(order);
 
 		return null;
 	}
