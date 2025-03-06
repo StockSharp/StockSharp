@@ -2,7 +2,7 @@ namespace StockSharp.Algo.Strategies;
 
 partial class Strategy
 {
-	private ISubscriptionProvider SubscriptionProvider => (ISubscriptionProvider)SafeGetConnector();
+	private ISubscriptionProvider SubscriptionProvider => SafeGetConnector();
 
 	IEnumerable<Subscription> ISubscriptionProvider.Subscriptions => _subscriptions.CachedKeys;
 
