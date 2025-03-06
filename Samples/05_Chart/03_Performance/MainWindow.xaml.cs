@@ -117,7 +117,7 @@ public partial class MainWindow
 		Chart.IsAutoRange = true;
 		Chart.IsAutoScroll = true;
 
-		var series = _security.TimeFrame(TimeSpan.FromMinutes(_timeframe));
+		var series = new Subscription(DataType.TimeFrame(TimeSpan.FromMinutes(_timeframe)), _security);
 
 		_indicatorElement = null;
 

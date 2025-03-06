@@ -69,13 +69,10 @@ static class Program
 			candles.Add((CandleMessage)candle);
 		};
 
-		connector.Subscribe(new(security.TimeFrame(TimeSpan.FromMinutes(15)))
+		connector.Subscribe(new(DataType.TimeFrame(TimeSpan.FromMinutes(15)), security)
 		{
-			MarketData =
-			{
-				From = DateTime.Now.AddDays(-3),
-				To = DateTime.Now.AddDays(-1),
-			},
+			From = DateTime.Now.AddDays(-3),
+			To = DateTime.Now.AddDays(-1),
 		});
 
 		Console.ReadLine();

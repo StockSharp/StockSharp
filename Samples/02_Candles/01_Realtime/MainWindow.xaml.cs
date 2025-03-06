@@ -9,16 +9,12 @@ using Ecng.Configuration;
 
 using StockSharp.Configuration;
 using StockSharp.Algo;
-using StockSharp.Algo.Candles;
 using StockSharp.BusinessEntities;
 using StockSharp.Xaml;
 using StockSharp.Messages;
 using StockSharp.Xaml.Charting;
 using StockSharp.Charting;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class MainWindow
 {
 	private Subscription _subscription;
@@ -52,7 +48,7 @@ public partial class MainWindow
 	private void Connect_Click(object sender, RoutedEventArgs e)
 	{
 		SecurityPicker.SecurityProvider = _connector;
-		_connector.CandleProcessing += Connector_CandleSeriesProcessing;
+		_connector.CandleReceived += Connector_CandleSeriesProcessing;
 		_connector.Connect();
 	}
 
@@ -63,44 +59,62 @@ public partial class MainWindow
 		if (_subscription != null) _connector.UnSubscribe(_subscription);
 		//----------------------------------Candles will be built from Trades-----------------------------------------------
 		//----------------------------------TimeFrameCandle-----------------------------------------------------------------
-		// _candleSeries = new CandleSeries(typeof(TimeFrameCandle), security, TimeSpan.FromMinutes(5))
-		// {
-		// 	BuildCandlesMode = MarketDataBuildModes.Build,
-		// 	BuildCandlesFrom = MarketDataTypes.Trades,
-		//  IsCalcVolumeProfile = true,
-		// };
+		//_subscription = new(DataType.TimeFrame(TimeSpan.FromMinutes(5)), security)
+		//{
+		//	MarketData =
+		//	{
+		//		BuildMode = MarketDataBuildModes.Build,
+		//		BuildFrom = DataType.Ticks,
+		//		IsCalcVolumeProfile = true,
+		//	}
+		//};
 		//----------------------------------VolumeCandle---------------------------------------------------------------------
-		//_candleSeries = new CandleSeries(typeof(VolumeCandle), security, 100m)
-		// {
-		// 	BuildCandlesMode = MarketDataBuildModes.Build,
-		// 	BuildCandlesFrom = MarketDataTypes.Trades,
-		// };
+		//_subscription = new(DataType.Volume(100), security)
+		//{
+		//	MarketData =
+		//	{
+		//		BuildMode = MarketDataBuildModes.Build,
+		//		BuildFrom = DataType.Ticks,
+		//	}
+		//};
 		//----------------------------------TickCandle------------------------------------------------------------------------
-		// _candleSeries = new CandleSeries(typeof(TickCandle), security, 100)
-		// {
-		// 	BuildCandlesMode = MarketDataBuildModes.Build,
-		// 	BuildCandlesFrom = MarketDataTypes.Trades,
-		// };
+		//_subscription = new(DataType.Tick(100), security)
+		//{
+		//	MarketData =
+		//	{
+		//		BuildMode = MarketDataBuildModes.Build,
+		//		BuildFrom = DataType.Ticks,
+		//	}
+		//};
 		//----------------------------------RangeCandle-----------------------------------------------------------------------
-		// _candleSeries = new CandleSeries(typeof(RangeCandle), security, new Unit(0.1m))
-		// {
-		// 	BuildCandlesMode = MarketDataBuildModes.Build,
-		// 	BuildCandlesFrom = MarketDataTypes.Trades,
-		// };
+		//_subscription = new(DataType.Range(0.1m), security)
+		//{
+		//	MarketData =
+		//	{
+		//		BuildMode = MarketDataBuildModes.Build,
+		//		BuildFrom = DataType.Ticks,
+		//	}
+		//};
 		//----------------------------------RenkoCandle-----------------------------------------------------------------------
-		// _candleSeries = new CandleSeries(typeof(RenkoCandle), security, new Unit(0.1m))
-		// {
-		// 	BuildCandlesMode = MarketDataBuildModes.Build,
-		// 	BuildCandlesFrom = MarketDataTypes.Trades,
-		// };
+		//_subscription = new(DataType.Renko(0.1m), security)
+		//{
+		//	MarketData =
+		//	{
+		//		BuildMode = MarketDataBuildModes.Build,
+		//		BuildFrom = DataType.Ticks,
+		//	}
+		//};
 		//----------------------------------PnFCandle--------------------------------------------------------------------------
-		// _candleSeries = new CandleSeries(typeof(PnFCandle), security, new PnFArg() { BoxSize = 0.1m, ReversalAmount =1})
-		// {
-		//   BuildCandlesMode = MarketDataBuildModes.Build,
-		//   BuildCandlesFrom = MarketDataTypes.Trades,
-		// };
+		//_subscription = new(DataType.PnF(new() { BoxSize = 0.1m, ReversalAmount = 1 }), security)
+		//{
+		//	MarketData =
+		//	{
+		//		BuildMode = MarketDataBuildModes.Build,
+		//		BuildFrom = DataType.Ticks,
+		//	}
+		//};
 		//----------------------------------Candles will be load and built the missing data from trades------------------------
-		_subscription = new(CandleSettingsEditor.DataType.ToCandleSeries(security))
+		_subscription = new(CandleSettingsEditor.DataType, security)
 		{
 			MarketData =
 			{
@@ -116,12 +130,12 @@ public partial class MainWindow
 		_candleElement = new ChartCandleElement();
 
 		Chart.AddArea(area);
-		Chart.AddElement(area, _candleElement, _subscription.CandleSeries);
+		Chart.AddElement(area, _candleElement, _subscription);
 
 		_connector.Subscribe(_subscription);
 	}
 
-	private void Connector_CandleSeriesProcessing(CandleSeries candleSeries, ICandleMessage candle)
+	private void Connector_CandleSeriesProcessing(Subscription subscription, ICandleMessage candle)
 	{
 		Chart.Draw(_candleElement, candle);
 	}

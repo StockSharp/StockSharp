@@ -10,7 +10,6 @@ using Ecng.Configuration;
 
 using StockSharp.Configuration;
 using StockSharp.Algo;
-using StockSharp.Algo.Candles;
 using StockSharp.Algo.Storages;
 using StockSharp.Algo.Storages.Csv;
 using StockSharp.BusinessEntities;
@@ -63,11 +62,11 @@ public partial class MainWindow
 	private void Connect_Click(object sender, RoutedEventArgs e)
 	{
 		SecurityPicker.SecurityProvider = _connector;
-		_connector.CandleProcessing += Connector_CandleSeriesProcessing;
+		_connector.CandleReceived += Connector_CandleSeriesProcessing;
 		_connector.Connect();
 	}
 
-	private void Connector_CandleSeriesProcessing(CandleSeries candleSeries, ICandleMessage candle)
+	private void Connector_CandleSeriesProcessing(Subscription subscription, ICandleMessage candle)
 	{
 		Chart.Draw(_candleElement, candle);
 	}
@@ -77,7 +76,7 @@ public partial class MainWindow
 		if (security == null) return;
 		if (_subscription != null) _connector.UnSubscribe(_subscription);
 
-		_subscription = new(CandleSettingsEditor.DataType.ToCandleSeries(security))
+		_subscription = new(CandleSettingsEditor.DataType, security)
 		{
 			MarketData =
 			{
@@ -93,7 +92,7 @@ public partial class MainWindow
 		_candleElement = new ChartCandleElement();
 
 		Chart.AddArea(area);
-		Chart.AddElement(area, _candleElement, _subscription.CandleSeries);
+		Chart.AddElement(area, _candleElement, _subscription);
 
 		_connector.Subscribe(_subscription);
 	}

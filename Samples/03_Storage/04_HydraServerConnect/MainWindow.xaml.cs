@@ -1,24 +1,20 @@
 ﻿namespace StockSharp.Samples.Storage.HydraServerConnect;
 
+using System;
+using System.IO;
+using System.Windows;
+
 using Ecng.Serialization;
 using Ecng.Configuration;
 
 using StockSharp.Configuration;
 using StockSharp.Algo;
-using StockSharp.Algo.Candles;
 using StockSharp.BusinessEntities;
 using StockSharp.Xaml;
 using StockSharp.Messages;
 using StockSharp.Xaml.Charting;
 using StockSharp.Charting;
 
-using System;
-using System.IO;
-using System.Windows;
-
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class MainWindow
 {
 	private readonly Connector _connector = new();
@@ -58,7 +54,7 @@ public partial class MainWindow
 		SecurityPicker.SecurityProvider = _connector;
 		SecurityPicker.MarketDataProvider = _connector;
 
-		_connector.CandleProcessing += Connector_CandleSeriesProcessing;
+		_connector.CandleReceived += Connector_CandleSeriesProcessing;
 		_connector.Connected += Connector_Connected;
 		_connector.Connect();
 	}
@@ -74,13 +70,10 @@ public partial class MainWindow
 		if (security == null) return;
 		if (_subscription != null) _connector.UnSubscribe(_subscription);
 
-		_subscription = new(CandleSettingsEditor.DataType.ToCandleSeries(security))
+		_subscription = new(CandleSettingsEditor.DataType, security)
 		{
-			MarketData =
-			{
-				From = DatePickerBegin.SelectedDate,
-				To = DatePickerEnd.SelectedDate,
-			}
+			From = DatePickerBegin.SelectedDate,
+			To = DatePickerEnd.SelectedDate,
 		};
 
 		if (BuildFromTicks.IsChecked == true)
@@ -98,11 +91,11 @@ public partial class MainWindow
 		Chart.AddArea(area);
 		_candleElement = new ChartCandleElement();
 
-		Chart.AddElement(area, _candleElement, _subscription.CandleSeries);
+		Chart.AddElement(area, _candleElement, _subscription);
 		_connector.Subscribe(_subscription);
 	}
 
-	private void Connector_CandleSeriesProcessing(CandleSeries candleSeries,ICandleMessage candle)
+	private void Connector_CandleSeriesProcessing(Subscription subscription, ICandleMessage candle)
 	{
 		Chart.Draw(_candleElement, candle);
 	}

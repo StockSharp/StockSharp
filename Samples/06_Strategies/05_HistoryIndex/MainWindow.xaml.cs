@@ -10,7 +10,6 @@ using Ecng.Compilation.Roslyn;
 using Ecng.Logging;
 
 using StockSharp.Algo;
-using StockSharp.Algo.Candles;
 using StockSharp.Algo.Expressions;
 using StockSharp.Algo.Storages;
 using StockSharp.Algo.Testing;
@@ -29,7 +28,7 @@ public partial class MainWindow
 	private HistoryEmulationConnector _connector;
 	private ChartCandleElement _candleElement;
 
-	private CandleSeries _candleSeries;
+	private Subscription _subscription;
 	private Security _security;
 	private Security _indexSecurity;
 	private Portfolio _portfolio;
@@ -87,29 +86,35 @@ public partial class MainWindow
 		_logManager.Sources.Add(_connector);
 		ConfigManager.RegisterService<ISecurityProvider>(_connector);
 
-		_candleSeries = CandleSettingsEditor.DataType.ToCandleSeries(_indexSecurity);
-		_candleSeries.BuildCandlesMode = MarketDataBuildModes.Build;
-		_candleSeries.BuildCandlesFrom2 = DataType.Ticks;
+		_subscription = new(CandleSettingsEditor.DataType, _indexSecurity)
+		{
+			MarketData =
+			{
+				BuildMode = MarketDataBuildModes.Build,
+				BuildFrom = DataType.Ticks,
+			}
+		};
 
 		InitCart();
 
-		_connector.CandleProcessing += Processing;
+		_connector.CandleReceived += Processing;
 
 		_connector.Connected += Connector_Connected;
 		_connector.Connect();
 	}
 
-
 	private void Connector_Connected()
 	{
 		_connector.SubscribeTrades(_security);
-		_connector.SubscribeCandles(_candleSeries);
+		_connector.Subscribe(_subscription);
 		_connector.Start();
 	}
 
-	private void Processing(CandleSeries candleSeries, ICandleMessage candle)
+	private void Processing(Subscription subscription, ICandleMessage candle)
 	{
-		if (candleSeries.Security != _indexSecurity) return;
+		if (subscription != _subscription)
+			return;
+
 		Chart.Draw(_candleElement, candle);
 	}
 
