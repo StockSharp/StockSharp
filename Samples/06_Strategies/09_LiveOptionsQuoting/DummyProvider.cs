@@ -59,58 +59,6 @@ class DummyProvider : CollectionSecurityProvider, IMarketDataProvider, IPosition
 		};
 	}
 
-	[Obsolete]
-	event Action<Trade> IMarketDataProvider.NewTrade
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
-	event Action<Security> IMarketDataProvider.NewSecurity
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
-	event Action<Security> IMarketDataProvider.SecurityChanged
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
-	[Obsolete]
-	event Action<MarketDepth> IMarketDataProvider.NewMarketDepth
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
-	[Obsolete]
-	event Action<MarketDepth> IMarketDataProvider.MarketDepthChanged
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
-	[Obsolete]
-	event Action<OrderLogItem> IMarketDataProvider.NewOrderLogItem
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
-	event Action<News> IMarketDataProvider.NewNews
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
-	event Action<News> IMarketDataProvider.NewsChanged
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
 	event Action<SecurityLookupMessage, IEnumerable<Security>, Exception> IMarketDataProvider.LookupSecuritiesResult
 	{
 		add => throw new NotSupportedException();
@@ -142,60 +90,6 @@ class DummyProvider : CollectionSecurityProvider, IMarketDataProvider, IPosition
 	}
 
 	event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> IMarketDataProvider.LookupTimeFramesResult2
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
-	event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionSucceeded
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
-	event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataSubscriptionFailed
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
-	event Action<Security, MarketDataMessage, SubscriptionResponseMessage> IMarketDataProvider.MarketDataSubscriptionFailed2
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
-	event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataUnSubscriptionSucceeded
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
-	event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataUnSubscriptionFailed
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
-	event Action<Security, MarketDataMessage, SubscriptionResponseMessage> IMarketDataProvider.MarketDataUnSubscriptionFailed2
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
-	event Action<Security, SubscriptionFinishedMessage> IMarketDataProvider.MarketDataSubscriptionFinished
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
-	event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataUnexpectedCancelled
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
-	event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionOnline
 	{
 		add => throw new NotSupportedException();
 		remove => throw new NotSupportedException();
