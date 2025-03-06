@@ -119,7 +119,7 @@ partial class TraderHelper
 		if (states != null)
 			message.States = [.. states];
 
-		var subscription = new Subscription(message, (SecurityMessage)null);
+		var subscription = new Subscription(message);
 		provider.Subscribe(subscription);
 		return subscription;
 	}
@@ -154,7 +154,7 @@ partial class TraderHelper
 			Count = count,
 			Skip = skip,
 			FillGaps = fillGaps,
-		}, (SecurityMessage)null);
+		});
 
 		provider.Subscribe(subscription);
 		return subscription;
@@ -278,7 +278,7 @@ partial class TraderHelper
 		if (provider is null)
 			throw new ArgumentNullException(nameof(provider));
 
-		var subscription = new Subscription(criteria, (SecurityMessage)null);
+		var subscription = new Subscription(criteria);
 		provider.Subscribe(subscription);
 		return subscription;
 	}
@@ -306,7 +306,7 @@ partial class TraderHelper
 		if (provider is null)
 			throw new ArgumentNullException(nameof(provider));
 
-		var subscription = new Subscription(criteria, (SecurityMessage)null);
+		var subscription = new Subscription(criteria);
 		provider.Subscribe(subscription);
 		return subscription;
 	}
@@ -319,7 +319,7 @@ partial class TraderHelper
 		if (provider is null)
 			throw new ArgumentNullException(nameof(provider));
 
-		var subscription = new Subscription(criteria, (SecurityMessage)null);
+		var subscription = new Subscription(criteria);
 		provider.Subscribe(subscription);
 		return subscription;
 	}
@@ -382,7 +382,7 @@ partial class TraderHelper
 		if (provider is null)
 			throw new ArgumentNullException(nameof(provider));
 
-		var subscription = new Subscription(criteria, (SecurityMessage)null);
+		var subscription = new Subscription(criteria);
 		provider.Subscribe(subscription);
 		return subscription;
 	}
@@ -444,7 +444,7 @@ partial class TraderHelper
 		if (provider is null)
 			throw new ArgumentNullException(nameof(provider));
 
-		var subscription = new Subscription(criteria, (SecurityMessage)null);
+		var subscription = new Subscription(criteria);
 		provider.Subscribe(subscription);
 		return subscription;
 	}

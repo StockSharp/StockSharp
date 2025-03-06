@@ -149,7 +149,7 @@ public abstract class BaseEmulationConnector : Connector
 			SecurityId = generator.SecurityId,
 			Generator = generator,
 			DataType2 = generator.DataType,
-		}, (SecurityMessage)null);
+		});
 
 		Subscribe(subscription);
 

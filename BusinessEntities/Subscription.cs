@@ -54,7 +54,7 @@ public class Subscription : SubscriptionBase<Subscription>
 	/// </summary>
 	/// <param name="portfolio">Portfolio, describing the trading account and the size of its generated commission.</param>
 	public Subscription(Portfolio portfolio)
-		: this(portfolio.ToMessage(), (SecurityMessage)null)
+		: this(portfolio.ToMessage())
 	{
 		Portfolio = portfolio;
 	}
@@ -64,7 +64,7 @@ public class Subscription : SubscriptionBase<Subscription>
 	/// </summary>
 	/// <param name="subscriptionMessage">Subscription message.</param>
 	/// <param name="security">Security.</param>
-	public Subscription(ISubscriptionMessage subscriptionMessage, Security security = null)
+	public Subscription(ISubscriptionMessage subscriptionMessage, Security security)
 		: this(subscriptionMessage, security?.ToMessage(copyExtendedId: true))
 	{
 	}
@@ -74,8 +74,17 @@ public class Subscription : SubscriptionBase<Subscription>
 	/// </summary>
 	/// <param name="subscriptionMessage">Subscription message.</param>
 	/// <param name="security">Security.</param>
-	public Subscription(ISubscriptionMessage subscriptionMessage, SecurityMessage security = null)
+	public Subscription(ISubscriptionMessage subscriptionMessage, SecurityMessage security)
 		: base(subscriptionMessage, security)
+	{
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="Subscription"/>.
+	/// </summary>
+	/// <param name="subscriptionMessage">Subscription message.</param>
+	public Subscription(ISubscriptionMessage subscriptionMessage)
+		: base(subscriptionMessage, null)
 	{
 	}
 
