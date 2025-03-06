@@ -85,19 +85,6 @@ public partial class Connector : BaseLogReceiver, IConnector
 	}
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="Connector"/>.
-	/// </summary>
-	/// <param name="entityRegistry">The storage of trade objects.</param>
-	/// <param name="storageRegistry">The storage of market data.</param>
-	/// <param name="snapshotRegistry">Snapshot storage registry.</param>
-	/// <param name="buffer">Storage buffer.</param>
-	[Obsolete]
-	public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry, StorageBuffer buffer = null)
-		: this(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry.CheckOnNull(nameof(storageRegistry)).ExchangeInfoProvider, storageRegistry, snapshotRegistry, buffer)
-	{
-	}
-
-	/// <summary>
 	/// Securities meta info storage.
 	/// </summary>
 	public ISecurityStorage SecurityStorage { get; }
@@ -152,18 +139,6 @@ public partial class Connector : BaseLogReceiver, IConnector
 	/// </summary>
 	/// <remarks>By default is <see langword="true"/>.</remarks>
 	public bool IsAutoPortfoliosSubscribe { get; set; } = true;
-
-	/// <summary>
-	/// Settings of the connection control <see cref="IConnector"/> to the trading system.
-	/// </summary>
-	[Obsolete("Use exact IMessageAdapter to set reconnecting settings.")]
-	public ReConnectionSettings ReConnectionSettings { get; } = new ReConnectionSettings();
-
-	/// <summary>
-	/// Number of tick trades for storage. The default is 100000. If the value is set to <see cref="int.MaxValue"/>, the trades will not be deleted. If the value is set to 0, then the trades will not be stored.
-	/// </summary>
-	[Obsolete("Do nothing.")]
-	public int TradesKeepCount { get; set; }
 
 	/// <summary>
 	/// The number of orders for storage. The default is 1000. If the value is set to <see cref="int.MaxValue"/>, then the orders will not be deleted. If the value is set to 0, then the orders will not be stored.
@@ -256,34 +231,6 @@ public partial class Connector : BaseLogReceiver, IConnector
 	public SessionStates? GetSessionState(ExchangeBoard board) => _entityCache.GetSessionState(board);
 
 	/// <inheritdoc />
-	[Obsolete("Use NewOrder event to collect data.")]
-	public IEnumerable<Order> Orders => _entityCache.Orders;
-
-	/// <inheritdoc />
-	[Obsolete("Use NewStopOrder event to collect data.")]
-	public IEnumerable<Order> StopOrders => Orders.Where(o => o.Type == OrderTypes.Conditional);
-
-	/// <inheritdoc />
-	[Obsolete("Use OrderRegisterFailed event to collect data.")]
-	public IEnumerable<OrderFail> OrderRegisterFails => _entityCache.OrderRegisterFails;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrderCancelFailed event to collect data.")]
-	public IEnumerable<OrderFail> OrderCancelFails => _entityCache.OrderCancelFails;
-
-	/// <inheritdoc />
-	[Obsolete("Use NewTrade event to collect data.")]
-	public IEnumerable<Trade> Trades => [];
-
-	/// <inheritdoc />
-	[Obsolete("Use NewMyTrade event to collect data.")]
-	public IEnumerable<MyTrade> MyTrades => _entityCache.MyTrades;
-
-	/// <inheritdoc />
-	[Obsolete("Use NewNews event to collect data.")]
-	public IEnumerable<News> News => _entityCache.News;
-
-	/// <inheritdoc />
 	public virtual IEnumerable<Portfolio> Portfolios => _existingPortfolios.Cache;
 
 	/// <inheritdoc />
@@ -344,18 +291,6 @@ public partial class Connector : BaseLogReceiver, IConnector
 	}
 
 	/// <summary>
-	/// Use orders log to create market depths. Disabled by default.
-	/// </summary>
-	[Obsolete("Use MarketDataMessage.BuildFrom=OrderLog instead.")]
-	public bool CreateDepthFromOrdersLog { get; set; }
-
-	/// <summary>
-	/// Use orders log to create ticks. Disabled by default.
-	/// </summary>
-	[Obsolete("Use MarketDataMessage.BuildFrom=OrderLog instead.")]
-	public bool CreateTradesFromOrdersLog { get; set; }
-
-	/// <summary>
 	/// To update <see cref="Security.LastTick"/>, <see cref="Security.BestBid"/>, <see cref="Security.BestAsk"/> at each update of order book and/or trades. By default is enabled.
 	/// </summary>
 	public bool UpdateSecurityLastQuotes { get; set; } = true;
@@ -374,26 +309,6 @@ public partial class Connector : BaseLogReceiver, IConnector
 	/// To update <see cref="Portfolio"/> fields when the <see cref="PositionChangeMessage"/> message appears. By default is enabled.
 	/// </summary>
 	public bool UpdatePortfolioByChange { get; set; } = true;
-
-	/// <summary>
-	/// To update the order book for the instrument when the <see cref="Level1ChangeMessage"/> message appears. By default is enabled.
-	/// </summary>
-	[Obsolete("Use SupportLevel1DepthBuilder property.")]
-	public bool CreateDepthFromLevel1
-	{
-		get => SupportLevel1DepthBuilder;
-		set => SupportLevel1DepthBuilder = value;
-	}
-
-	/// <summary>
-	/// Create a combined security for securities from different boards.
-	/// </summary>
-	[Obsolete("Use SupportAssociatedSecurity property.")]
-	public bool CreateAssociatedSecurity
-	{
-		get => SupportAssociatedSecurity;
-		set => SupportAssociatedSecurity = value;
-	}
 
 	/// <summary>
 	/// The number of errors passed through the <see cref="Error"/> event.
@@ -731,54 +646,6 @@ public partial class Connector : BaseLogReceiver, IConnector
 
 			SendOrderFailed(oldOrder, OrderOperations.Cancel, ex, transactionId);
 			SendOrderFailed(newOrder, OrderOperations.Register, ex, transactionId);
-		}
-	}
-
-	/// <summary>
-	/// Replace orders.
-	/// </summary>
-	/// <param name="oldOrder1">Cancelling order.</param>
-	/// <param name="newOrder1">New order to register.</param>
-	/// <param name="oldOrder2">Cancelling order.</param>
-	/// <param name="newOrder2">New order to register.</param>
-	[Obsolete("Use ReRegisterOrder method.")]
-	public void ReRegisterOrderPair(Order oldOrder1, Order newOrder1, Order oldOrder2, Order newOrder2)
-	{
-		if (oldOrder1 == null)
-			throw new ArgumentNullException(nameof(oldOrder1));
-
-		if (newOrder1 == null)
-			throw new ArgumentNullException(nameof(newOrder1));
-
-		if (oldOrder2 == null)
-			throw new ArgumentNullException(nameof(oldOrder2));
-
-		if (newOrder2 == null)
-			throw new ArgumentNullException(nameof(newOrder2));
-
-		try
-		{
-			if (oldOrder1.Security != newOrder1.Security)
-				throw new ArgumentException(LocalizedStrings.SecuritiesMismatch.Put(newOrder1.Security.Id, oldOrder1.Security.Id), nameof(newOrder1));
-
-			if (oldOrder2.Security != newOrder2.Security)
-				throw new ArgumentException(LocalizedStrings.SecuritiesMismatch.Put(newOrder2.Security.Id, oldOrder2.Security.Id), nameof(newOrder2));
-
-			ReRegisterOrder(oldOrder1, newOrder1);
-			ReRegisterOrder(oldOrder2, newOrder2);
-		}
-		catch (Exception ex)
-		{
-			var transactionId = newOrder1.TransactionId;
-
-			if (transactionId == 0)
-				transactionId = TransactionIdGenerator.GetNextId();
-
-			SendOrderFailed(oldOrder1, OrderOperations.Cancel, ex, transactionId);
-			SendOrderFailed(newOrder1, OrderOperations.Register, ex, transactionId);
-
-			SendOrderFailed(oldOrder2, OrderOperations.Cancel, ex, transactionId);
-			SendOrderFailed(newOrder2, OrderOperations.Register, ex, transactionId);
 		}
 	}
 
@@ -1291,37 +1158,14 @@ public partial class Connector : BaseLogReceiver, IConnector
 		remove => _stateChanged -= value;
 	}
 
-	void IMessageChannel.Open()
-	{
-		Connect();
-	}
+	void IMessageChannel.Open() => Connect();
+	void IMessageChannel.Close() => Disconnect();
+	void IMessageChannel.Suspend() { }
+	void IMessageChannel.Resume() { }
+	void IMessageChannel.Clear() { }
 
-	void IMessageChannel.Close()
-	{
-		Disconnect();
-	}
-
-	void IMessageChannel.Suspend()
-	{
-	}
-
-	void IMessageChannel.Resume()
-	{
-	}
-
-	void IMessageChannel.Clear()
-	{
-	}
-
-	IMessageChannel ICloneable<IMessageChannel>.Clone()
-	{
-		return this.Clone();
-	}
-
-	object ICloneable.Clone()
-	{
-		return this.Clone();
-	}
+	IMessageChannel ICloneable<IMessageChannel>.Clone() => this.Clone();
+	object ICloneable.Clone() => this.Clone();
 
 	#endregion
 }
