@@ -131,7 +131,7 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 
 		innerAdapter.Parent ??= this;
 
-		LookupMessagesOnConnect.Remove(MessageTypes.SecurityLookup);
+		SubscriptionsOnConnect.Remove(SecurityLookup);
 	}
 
 	/// <inheritdoc />

@@ -398,30 +398,21 @@ partial class Connector
 			_connector.SendInMessage((Message)request);
 		}
 
-		public void HandleConnected(MessageTypes[] defaultSubscriptionMessageTypes)
+		public void HandleConnected(Subscription[] subscriptions)
 		{
-			static DataType GetDataType(MessageTypes type) =>
-				type switch
-				{
-					MessageTypes.SecurityLookup     => DataType.Securities,
-					MessageTypes.PortfolioLookup    => DataType.PositionChanges,
-					MessageTypes.OrderStatus        => DataType.Transactions,
-					MessageTypes.TimeFrameLookup    => DataType.TimeFrames,
-					_                               => null
-				};
+			if (subscriptions is null)
+				throw new ArgumentNullException(nameof(subscriptions));
 
-			var missingSubscriptionDataTypes = defaultSubscriptionMessageTypes
-				.Select(GetDataType)
-				.Where(dt => dt != null && !Subscriptions.Any(s => s.DataType == dt && s.To == null));
+			var missingSubscriptions = subscriptions
+				.Where(sub => !Subscriptions.Any(s => s.DataType == sub.DataType && s.To == null));
 
 			if (_wasConnected)
 			{
 				if (!_connector.IsRestoreSubscriptionOnNormalReconnect)
 					return;
 
-				missingSubscriptionDataTypes.ForEach(dt =>
+				missingSubscriptions.ForEach(sub =>
 				{
-					var sub = dt.ToSubscription();
 					_connector.LogVerbose($"adding default subscription {sub.DataType}");
 					AddSubscription(sub);
 				});
@@ -430,9 +421,8 @@ partial class Connector
 			else
 			{
 				_wasConnected = true;
-				missingSubscriptionDataTypes.ForEach(dt =>
+				missingSubscriptions.ForEach(sub =>
 				{
-					var sub = dt.ToSubscription();
 					_connector.LogVerbose($"subscribing default subscription {sub.DataType}");
 					Subscribe(sub);
 				});
@@ -640,7 +630,7 @@ partial class Connector
 				BackMode = allMsg.BackMode,
 			};
 			allMsg.CopyTo(mdMsg);
-			Subscribe(new Subscription(mdMsg, (SecurityMessage)null), true);
+			Subscribe(new Subscription(mdMsg), true);
 		}
 	}
 }

@@ -6,6 +6,25 @@ partial class Strategy
 
 	IEnumerable<Subscription> ISubscriptionProvider.Subscriptions => _subscriptions.CachedKeys;
 
+	Subscription ISubscriptionProvider.SecurityLookup { get; }
+	Subscription ISubscriptionProvider.BoardLookup { get; }
+	Subscription ISubscriptionProvider.TimeFrameLookup { get; }
+
+	private Subscription ToSubscription<TLookupMessage>()
+		where TLookupMessage : IStrategyIdMessage, ISubscriptionMessage, new()
+		=> new(new TLookupMessage
+		{
+			StrategyId = EnsureGetId(),
+		});
+
+	private Subscription _portfolioLookup;
+	/// <inheritdoc />
+	public Subscription PortfolioLookup => _portfolioLookup ??= ToSubscription<PortfolioLookupMessage>();
+
+	private Subscription _orderLookup;
+	/// <inheritdoc />
+	public Subscription OrderLookup => _orderLookup ??= ToSubscription<OrderStatusMessage>();
+
 	/// <inheritdoc />
 	public event Action<Subscription, Level1ChangeMessage> Level1Received;
 

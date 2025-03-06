@@ -50,7 +50,7 @@ partial class Strategy
 
 	private void OnConnectorPositionReceived(Subscription subscription, Position position)
 	{
-		if (_pfSubscription != subscription || IsDisposeStarted)
+		if (PortfolioLookup != subscription || IsDisposeStarted)
 			return;
 
 		if (position.StrategyId != EnsureGetId())

@@ -208,8 +208,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	private readonly CachedSynchronizedDictionary<Subscription, bool> _subscriptions = [];
 	private readonly SynchronizedDictionary<long, Subscription> _subscriptionsById = [];
 	private readonly CachedSynchronizedSet<Subscription> _suspendSubscriptions = [];
-	private Subscription _pfSubscription;
-	private Subscription _orderSubscription;
 
 	private DateTimeOffset _firstOrderTime;
 	private DateTimeOffset _lastOrderTime;
@@ -339,9 +337,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		{
 			if (Connector == value)
 				return;
-
-			_pfSubscription = null;
-			_orderSubscription = null;
 
 			if (_connector != null)
 			{
@@ -1169,21 +1164,8 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	{
 		InitStartValues();
 
-		_pfSubscription = new(new PortfolioLookupMessage
-		{
-			IsSubscribe = true,
-			StrategyId = EnsureGetId(),
-		}, (SecurityMessage)null);
-
-		Subscribe(_pfSubscription, true);
-
-		_orderSubscription = new(new OrderStatusMessage
-		{
-			IsSubscribe = true,
-			StrategyId = EnsureGetId(),
-		}, (SecurityMessage)null);
-
-		Subscribe(_orderSubscription, true);
+		Subscribe(PortfolioLookup, true);
+		Subscribe(OrderLookup, true);
 	}
 
 	/// <summary>
@@ -2194,7 +2176,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 	private void OnConnectorOrderReceived(Subscription subscription, Order order)
 	{
-		if (_orderSubscription != subscription || IsDisposeStarted)
+		if (OrderLookup != subscription || IsDisposeStarted)
 			return;
 
 		if (!_ordersInfo.ContainsKey(order) && CanAttach(order))
@@ -2360,30 +2342,27 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		this.Notify(nameof(PnL));
 		PnLChanged?.Invoke();
 
-		if (_pfSubscription != null)
+		PnLReceived?.Invoke(PortfolioLookup);
+
+		var evt = PnLReceived2;
+		var pf = Portfolio;
+
+		if (evt is not null && pf is not null)
 		{
-			PnLReceived?.Invoke(_pfSubscription);
+			var manager = PnLManager;
+			evt(PortfolioLookup, pf, time, manager.RealizedPnL, manager.UnrealizedPnL, Commission);
 
-			var evt = PnLReceived2;
-			var pf = Portfolio;
-
-			if (evt is not null && pf is not null)
+			ProcessRisk(() => new PositionChangeMessage
 			{
-				var manager = PnLManager;
-				evt(_pfSubscription, pf, time, manager.RealizedPnL, manager.UnrealizedPnL, Commission);
-
-				ProcessRisk(() => new PositionChangeMessage
-				{
-					PortfolioName = pf.Name,
-					SecurityId = SecurityId.Money,
-					ServerTime = time,
-					OriginalTransactionId = _pfSubscription.TransactionId,
-				}
-				.TryAdd(PositionChangeTypes.RealizedPnL, manager.RealizedPnL)
-				.TryAdd(PositionChangeTypes.UnrealizedPnL, manager.UnrealizedPnL)
-				.TryAdd(PositionChangeTypes.Commission, Commission)
-				);
+				PortfolioName = pf.Name,
+				SecurityId = SecurityId.Money,
+				ServerTime = time,
+				OriginalTransactionId = PortfolioLookup.TransactionId,
 			}
+			.TryAdd(PositionChangeTypes.RealizedPnL, manager.RealizedPnL)
+			.TryAdd(PositionChangeTypes.UnrealizedPnL, manager.UnrealizedPnL)
+			.TryAdd(PositionChangeTypes.Commission, Commission)
+			);
 		}
 
 		StatisticManager.AddPnL(_lastPnlRefreshTime, PnL, Commission);

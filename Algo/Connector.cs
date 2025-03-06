@@ -74,6 +74,14 @@ public partial class Connector : BaseLogReceiver, IConnector
 				StorageSettings = { StorageRegistry = storageRegistry }
 			};
 		}
+
+#pragma warning disable CS0618 // Type or member is obsolete
+		LookupMessagesOnConnect = new LookupMessagesOnConnectSet(this);
+#pragma warning restore CS0618 // Type or member is obsolete
+
+		SubscriptionsOnConnect.Add(SecurityLookup);
+		SubscriptionsOnConnect.Add(PortfolioLookup);
+		SubscriptionsOnConnect.Add(OrderLookup);
 	}
 
 	/// <summary>
@@ -419,19 +427,90 @@ public partial class Connector : BaseLogReceiver, IConnector
 	/// </summary>
 	public bool KeepStrategiesPositions { get; set; }
 
-	private readonly CachedSynchronizedSet<MessageTypes> _lookupMessagesOnConnect = new(
-	[
-		MessageTypes.SecurityLookup,
-		MessageTypes.PortfolioLookup,
-		MessageTypes.OrderStatus,
-		MessageTypes.TimeFrameLookup,
-	]);
+	private static Subscription ToSubscription<TLookupMessage>()
+		where TLookupMessage : ISubscriptionMessage, new()
+		=> new(new TLookupMessage());
+
+	/// <inheritdoc />
+	public Subscription SecurityLookup { get; } = ToSubscription<SecurityLookupMessage>();
+	/// <inheritdoc />
+	public Subscription BoardLookup { get; } = ToSubscription<BoardLookupMessage>();
+	/// <inheritdoc />
+	public Subscription TimeFrameLookup { get; } = ToSubscription<TimeFrameLookupMessage>();
+	/// <inheritdoc />
+	public Subscription PortfolioLookup { get; } = ToSubscription<PortfolioLookupMessage>();
+	/// <inheritdoc />
+	public Subscription OrderLookup { get; } = ToSubscription<OrderStatusMessage>();
+
+	private readonly CachedSynchronizedSet<Subscription> _subscriptionsOnConnect = [];
 
 	/// <summary>
-	/// Send lookup messages on connect.
-	/// By default is <see cref="MessageTypes.SecurityLookup"/>, <see cref="MessageTypes.PortfolioLookup"/>, <see cref="MessageTypes.OrderStatus"/>, <see cref="MessageTypes.TimeFrameLookup"/>.
+	/// Send subscriptions on connect.
 	/// </summary>
-	public ISet<MessageTypes> LookupMessagesOnConnect => _lookupMessagesOnConnect;
+	public ISet<Subscription> SubscriptionsOnConnect => _subscriptionsOnConnect;
+
+	private class LookupMessagesOnConnectSet(Connector connector) : SynchronizedSet<MessageTypes>
+	{
+		protected override void OnAdded(MessageTypes item)
+		{
+			base.OnAdded(item);
+
+			switch (item)
+			{
+				case MessageTypes.SecurityLookup:
+					connector.SubscriptionsOnConnect.Add(connector.SecurityLookup);
+					break;
+				case MessageTypes.BoardLookup:
+					connector.SubscriptionsOnConnect.Add(connector.BoardLookup);
+					break;
+				case MessageTypes.TimeFrameLookup:
+					connector.SubscriptionsOnConnect.Add(connector.TimeFrameLookup);
+					break;
+				case MessageTypes.PortfolioLookup:
+					connector.SubscriptionsOnConnect.Add(connector.PortfolioLookup);
+					break;
+				case MessageTypes.OrderStatus:
+					connector.SubscriptionsOnConnect.Add(connector.OrderLookup);
+					break;
+			}
+		}
+
+		protected override void OnRemoved(MessageTypes item)
+		{
+			base.OnRemoved(item);
+
+			switch (item)
+			{
+				case MessageTypes.SecurityLookup:
+					connector.SubscriptionsOnConnect.Remove(connector.SecurityLookup);
+					break;
+				case MessageTypes.BoardLookup:
+					connector.SubscriptionsOnConnect.Remove(connector.BoardLookup);
+					break;
+				case MessageTypes.TimeFrameLookup:
+					connector.SubscriptionsOnConnect.Remove(connector.TimeFrameLookup);
+					break;
+				case MessageTypes.PortfolioLookup:
+					connector.SubscriptionsOnConnect.Remove(connector.PortfolioLookup);
+					break;
+				case MessageTypes.OrderStatus:
+					connector.SubscriptionsOnConnect.Remove(connector.OrderLookup);
+					break;
+			}
+		}
+
+		protected override void OnCleared()
+		{
+			base.OnCleared();
+
+			connector.SubscriptionsOnConnect.Clear();
+		}
+	}
+
+	/// <summary>
+	/// </summary>
+	[Obsolete("Use SubscriptionsOnConnect property.")]
+	public ISet<MessageTypes> LookupMessagesOnConnect { get; }
 
 	/// <inheritdoc />
 	public void Connect()
@@ -1131,16 +1210,20 @@ public partial class Connector : BaseLogReceiver, IConnector
 		MarketTimeChangedInterval = storage.GetValue<TimeSpan>(nameof(MarketTimeChangedInterval));
 		SupportAssociatedSecurity = storage.GetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
 
-		var lookupMessagesOnConnect = storage.GetValue<object>(nameof(LookupMessagesOnConnect));
-		if (lookupMessagesOnConnect is bool b)
+		var subscriptionsOnConnect = storage.GetValue<object>("LookupMessagesOnConnect") ?? storage.GetValue<object>(nameof(SubscriptionsOnConnect));
+		if (subscriptionsOnConnect is IEnumerable<SettingsStorage> subSettings)
 		{
-			if (!b)
-				LookupMessagesOnConnect.Clear();
+			SubscriptionsOnConnect.Clear();
+			SubscriptionsOnConnect.AddRange(subSettings.Select(s => s.Load<DataType>().ToSubscription()));
 		}
-		else if (lookupMessagesOnConnect is string str)
+		else if (subscriptionsOnConnect is string str)
 		{
+			SubscriptionsOnConnect.Clear();
+
+#pragma warning disable CS0618
 			LookupMessagesOnConnect.Clear();
 			LookupMessagesOnConnect.AddRange(str.SplitByComma(true).Select(s => s.To<MessageTypes>()));
+#pragma warning restore CS0618
 		}
 
 		IsRestoreSubscriptionOnNormalReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
@@ -1177,7 +1260,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 		storage.SetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);
 		storage.SetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
 
-		storage.SetValue(nameof(LookupMessagesOnConnect), _lookupMessagesOnConnect.Cache.Select(t => t.To<string>()).JoinComma());
+		storage.SetValue(nameof(SubscriptionsOnConnect), _subscriptionsOnConnect.Cache.Select(s => s.DataType.Save()).ToArray());
 		storage.SetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
 		storage.SetValue(nameof(IsAutoUnSubscribeOnDisconnect), IsAutoUnSubscribeOnDisconnect);
 		storage.SetValue(nameof(IsAutoPortfoliosSubscribe), IsAutoPortfoliosSubscribe);

@@ -39,7 +39,7 @@ static class Program
 		ConfigManager.RegisterService(webApiProvider.GetService<IInstrumentInfoService>(token));
 
 		var connector = new Connector();
-		connector.LookupMessagesOnConnect.Clear();
+		connector.SubscriptionsOnConnect.Clear();
 
 		var messageAdapter = new FinamMessageAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(messageAdapter);

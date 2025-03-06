@@ -758,42 +758,32 @@ public partial class MainWindow : ICandleBuilderSubscription
 
 		IEnumerable<Subscription> ISubscriptionProvider.Subscriptions => _l1Subscriptions;
 
+		Subscription ISubscriptionProvider.SecurityLookup => default;
+		Subscription ISubscriptionProvider.PortfolioLookup => default;
+		Subscription ISubscriptionProvider.BoardLookup => default;
+		Subscription ISubscriptionProvider.OrderLookup => default;
+		Subscription ISubscriptionProvider.TimeFrameLookup => default;
+
 		event Action<Subscription, object> ISubscriptionProvider.SubscriptionReceived { add { } remove { } }
 
 		event Action<Subscription, IOrderBookMessage> ISubscriptionProvider.OrderBookReceived { add { } remove { } }
-
 		event Action<Subscription, ITickTradeMessage> ISubscriptionProvider.TickTradeReceived { add { } remove { } }
-
 		event Action<Subscription, IOrderLogMessage> ISubscriptionProvider.OrderLogReceived { add { } remove { } }
-
 		event Action<Subscription, Security> ISubscriptionProvider.SecurityReceived { add { } remove { } }
-
 		event Action<Subscription, ExchangeBoard> ISubscriptionProvider.BoardReceived { add { } remove { } }
-
 		event Action<Subscription, News> ISubscriptionProvider.NewsReceived { add { } remove { } }
-
 		event Action<Subscription, ICandleMessage> ISubscriptionProvider.CandleReceived { add { } remove { } }
-
 		event Action<Subscription, MyTrade> ISubscriptionProvider.OwnTradeReceived { add { } remove { } }
-
 		event Action<Subscription, Order> ISubscriptionProvider.OrderReceived { add { } remove { } }
-
 		event Action<Subscription, OrderFail> ISubscriptionProvider.OrderRegisterFailReceived { add { } remove { } }
-
 		event Action<Subscription, OrderFail> ISubscriptionProvider.OrderCancelFailReceived { add { } remove { } }
-
 		event Action<Subscription, OrderFail> ISubscriptionProvider.OrderEditFailReceived { add { } remove { } }
-
 		event Action<Subscription, Portfolio> ISubscriptionProvider.PortfolioReceived { add { } remove { } }
-
 		event Action<Subscription, Position> ISubscriptionProvider.PositionReceived { add { } remove { } }
-
+		
 		event Action<Subscription> ISubscriptionProvider.SubscriptionOnline { add { } remove { } }
-
 		event Action<Subscription> ISubscriptionProvider.SubscriptionStarted { add { } remove { } }
-
 		event Action<Subscription, Exception> ISubscriptionProvider.SubscriptionStopped { add { } remove { } }
-
 		event Action<Subscription, Exception, bool> ISubscriptionProvider.SubscriptionFailed { add { } remove { } }
 
 		void ISubscriptionProvider.Subscribe(Subscription subscription)

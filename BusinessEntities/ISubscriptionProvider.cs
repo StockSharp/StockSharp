@@ -11,6 +11,31 @@ public interface ISubscriptionProvider
 	IEnumerable<Subscription> Subscriptions { get; }
 
 	/// <summary>
+	/// Get global subscription on <see cref="Security"/> lookup. Can be <see langword="null"/>.
+	/// </summary>
+	Subscription SecurityLookup { get; }
+
+	/// <summary>
+	/// Get global subscription on <see cref="Portfolio"/> lookup. Can be <see langword="null"/>.
+	/// </summary>
+	Subscription PortfolioLookup { get; }
+
+	/// <summary>
+	/// Get global subscription on <see cref="ExchangeBoard"/> lookup. Can be <see langword="null"/>.
+	/// </summary>
+	Subscription BoardLookup { get; }
+
+	/// <summary>
+	/// Get global subscription on <see cref="Order"/> lookup. Can be <see langword="null"/>.
+	/// </summary>
+	Subscription OrderLookup { get; }
+
+	/// <summary>
+	/// Get global subscription on <see cref="TimeFrameInfoMessage"/> lookup. Can be <see langword="null"/>.
+	/// </summary>
+	Subscription TimeFrameLookup { get; }
+
+	/// <summary>
 	/// Message received.
 	/// </summary>
 	event Action<Subscription, object> SubscriptionReceived;

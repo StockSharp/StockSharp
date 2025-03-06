@@ -827,7 +827,7 @@ partial class Connector
 		{
 			if (adapter == Adapter)
 			{
-				_subscriptionManager.HandleConnected([.. _lookupMessagesOnConnect.Cache.Where(mt => Adapter.IsMessageSupported(mt))]);
+				_subscriptionManager.HandleConnected([.. _subscriptionsOnConnect.Cache.Where(s => Adapter.IsMessageSupported(s.SubscriptionMessage.Type))]);
 
 				// raise event after re subscriptions cause handler on Connected event can send some subscriptions
 				RaiseConnected();
