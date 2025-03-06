@@ -8,5 +8,5 @@ public interface IStrategyIdMessage
 	/// <summary>
 	/// Strategy id.
 	/// </summary>
-	string StrategyId { get; }
+	string StrategyId { get; set; }
 }
