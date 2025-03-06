@@ -1348,10 +1348,14 @@ partial class Connector
 				if (change.IsNew)
 				{
 					this.AddOrderInfoLog(order, "New order");
+
+					RaiseNewOrder(order);
 				}
 				else if (change.IsChanged)
 				{
 					this.AddOrderInfoLog(order, "Order changed");
+
+					RaiseOrderChanged(order);
 
 					if (change.IsEdit)
 						RaiseOrderEdited(transactionId, order);
@@ -1413,6 +1417,9 @@ partial class Connector
 
 		if (trade == null)
 			return;
+
+		if (isNew)
+			RaiseNewMyTrade(trade);
 
 		//this.AddWarningLog("Duplicate own trade message: {0}", message);
 		RaiseReceived(trade, message, OwnTradeReceived);

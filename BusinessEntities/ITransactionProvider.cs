@@ -11,6 +11,24 @@ public interface ITransactionProvider : IPortfolioProvider, IPositionProvider
 	IdGenerator TransactionIdGenerator { get; }
 
 	/// <summary>
+	/// Own trade received.
+	/// </summary>
+	[Obsolete("Use ISubscriptionProvider.OwnTradeReceived event.")]
+	event Action<MyTrade> NewMyTrade;
+
+	/// <summary>
+	/// Order received.
+	/// </summary>
+	[Obsolete("Use ISubscriptionProvider.OrderReceived event.")]
+	event Action<Order> NewOrder;
+
+	/// <summary>
+	/// Order changed (cancelled, matched).
+	/// </summary>
+	[Obsolete("Use ISubscriptionProvider.OrderReceived event.")]
+	event Action<Order> OrderChanged;
+
+	/// <summary>
 	/// <see cref="EditOrder"/> success result event.
 	/// </summary>
 	event Action<long, Order> OrderEdited;

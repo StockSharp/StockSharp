@@ -1,22 +1,37 @@
 namespace StockSharp.Algo;
 
-using StockSharp.Algo.Candles;
-
 partial class Connector
 {
 	/// <inheritdoc />
+	[Obsolete("Use OwnTradeReceived event.")]
+	public event Action<MyTrade> NewMyTrade;
+
+	/// <inheritdoc />
+	[Obsolete("Use OrderReceived event.")]
+	public event Action<Order> NewOrder;
+
+	/// <inheritdoc />
+	[Obsolete("Use OrderReceived event.")]
+	public event Action<Order> OrderChanged;
+
+	/// <inheritdoc />
+	[Obsolete("Use OrderReceived event.")]
 	public event Action<long, Order> OrderEdited;
 
 	/// <inheritdoc />
+	[Obsolete("Use OrderRegisterFailReceived event.")]
 	public event Action<OrderFail> OrderRegisterFailed;
 
 	/// <inheritdoc />
+	[Obsolete("Use OrderCancelFailReceived event.")]
 	public event Action<OrderFail> OrderCancelFailed;
 
 	/// <inheritdoc />
+	[Obsolete("Use OrderEditFailReceived event.")]
 	public event Action<long, OrderFail> OrderEditFailed;
 
 	/// <inheritdoc />
+	[Obsolete("Use SubscriptionFailed event.")]
 	public event Action<long, Exception, DateTimeOffset> OrderStatusFailed2;
 
 	/// <inheritdoc />
@@ -75,21 +90,27 @@ partial class Connector
 	public event Action<Exception> Error;
 
 	/// <inheritdoc />
+	[Obsolete("Use SecurityReceived and SubscriptionStopped events.")]
 	public event Action<SecurityLookupMessage, IEnumerable<Security>, Exception> LookupSecuritiesResult;
 
 	/// <inheritdoc />
+	[Obsolete("Use PortfolioReceived and SubscriptionStopped events.")]
 	public event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, Exception> LookupPortfoliosResult;
 
 	/// <inheritdoc />
+	[Obsolete("Use BoardReceived and SubscriptionStopped events.")]
 	public event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult;
 
 	/// <inheritdoc />
+	[Obsolete("Use SecurityReceived and SubscriptionStopped events.")]
 	public event Action<SecurityLookupMessage, IEnumerable<Security>, IEnumerable<Security>, Exception> LookupSecuritiesResult2;
 
 	/// <inheritdoc />
+	[Obsolete("Use PortfolioReceived and SubscriptionStopped events.")]
 	public event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, IEnumerable<Portfolio>, Exception> LookupPortfoliosResult2;
 
 	/// <inheritdoc />
+	[Obsolete("Use BoardReceived and SubscriptionStopped events.")]
 	public event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult2;
 
 	/// <inheritdoc />
@@ -178,6 +199,23 @@ partial class Connector
 
 	/// <inheritdoc />
 	public event Action<long, Exception> ChangePasswordResult;
+
+	private void RaiseNewMyTrade(MyTrade trade)
+	{
+		LogInfo("New own trade: {0}", trade);
+
+		NewMyTrade?.Invoke(trade);
+	}
+
+	private void RaiseNewOrder(Order order)
+	{
+		NewOrder?.Invoke(order);
+	}
+
+	private void RaiseOrderChanged(Order order)
+	{
+		OrderChanged?.Invoke(order);
+	}
 
 	private void RaiseOrderEdited(long transactionId, Order order)
 	{
