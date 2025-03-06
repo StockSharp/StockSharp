@@ -185,12 +185,6 @@ partial class Connector
 	/// <inheritdoc />
 	public event Action<Subscription, object> SubscriptionReceived;
 
-	/// <summary>
-	/// Connection restored.
-	/// </summary>
-	[Obsolete("Use ConnectionRestored event.")]
-	public event Action Restored;
-
 	/// <inheritdoc />
 	public event Action<IMessageAdapter> ConnectionRestored;
 
@@ -606,10 +600,7 @@ partial class Connector
 
 	private void RaiseConnectionRestored(IMessageAdapter adapter)
 	{
-		Restored?.Invoke();
-
-		if (adapter != null)
-			ConnectionRestored?.Invoke(adapter);
+		ConnectionRestored?.Invoke(adapter);
 	}
 
 	private void RaiseSessionStateChanged(ExchangeBoard board, SessionStates state)
