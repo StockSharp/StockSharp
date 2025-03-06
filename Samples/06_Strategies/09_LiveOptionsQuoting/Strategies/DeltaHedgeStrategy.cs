@@ -1,6 +1,17 @@
-namespace StockSharp.Algo.Strategies.Derivatives;
+namespace StockSharp.Samples.Strategies.LiveOptionsQuoting;
 
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+using Ecng.Common;
+
+using StockSharp.Algo;
 using StockSharp.Algo.Derivatives;
+using StockSharp.Algo.Strategies;
+using StockSharp.BusinessEntities;
+using StockSharp.Localization;
+using StockSharp.Messages;
 
 /// <summary>
 /// The options delta hedging strategy.

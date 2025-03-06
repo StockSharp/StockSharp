@@ -22,8 +22,6 @@ using StockSharp.Configuration;
 using StockSharp.Algo;
 using StockSharp.BusinessEntities;
 using StockSharp.Algo.Derivatives;
-using StockSharp.Algo.Storages;
-using StockSharp.Algo.Strategies.Derivatives;
 using StockSharp.Localization;
 using StockSharp.Messages;
 using StockSharp.Xaml;

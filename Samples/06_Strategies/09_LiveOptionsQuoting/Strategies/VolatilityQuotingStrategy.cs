@@ -1,7 +1,13 @@
-namespace StockSharp.Algo.Strategies.Derivatives;
+namespace StockSharp.Samples.Strategies.LiveOptionsQuoting;
+
+using System;
+
+using Ecng.ComponentModel;
 
 using StockSharp.Algo.Derivatives;
+using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Strategies.Quoting;
+using StockSharp.Messages;
 
 /// <summary>
 /// Option volatility quoting.
@@ -36,8 +42,8 @@ public class VolatilityQuotingStrategy : BestByPriceQuotingStrategy
 	/// </summary>
 	public IBlackScholes Model { get; set; }
 
-        /// <inheritdoc />
-        protected override decimal? NeedQuoting(DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume)
+	/// <inheritdoc />
+	protected override decimal? NeedQuoting(DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume)
 	{
 		var model = Model;
 
