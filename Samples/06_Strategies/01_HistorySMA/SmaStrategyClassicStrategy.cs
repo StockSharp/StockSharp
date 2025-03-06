@@ -1,12 +1,12 @@
 using System;
-using StockSharp.Algo;
-using StockSharp.Algo.Candles;
+using System.Collections.Generic;
+
+using Ecng.ComponentModel;
+
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Strategies;
 using StockSharp.Messages;
 using StockSharp.BusinessEntities;
-using System.Collections.Generic;
-using Ecng.ComponentModel;
 
 namespace StockSharp.Samples.Strategies.HistorySMA
 {
