@@ -122,11 +122,13 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			item.Security ??= _parent.Security;
 
 			item.OrderRegistering += _parent.ProcessChildOrderRegistering;
+#pragma warning disable CS0618 // Type or member is obsolete
 			item.OrderRegistered += _parent.ProcessOrder;
 			item.OrderChanged += _parent.OnChildOrderChanged;
 			item.OrderRegisterFailed += _parent.OnChildOrderRegisterFailed;
 			item.OrderCancelFailed += _parent.OnChildOrderCancelFailed;
 			item.NewMyTrade += _parent.AddMyTrade;
+#pragma warning restore CS0618 // Type or member is obsolete
 			item.OwnTradeReceived += _parent.OnChildOwnTradeReceived;
 			item.OrderReRegistering += _parent.OnOrderReRegistering;
 			item.ProcessStateChanged += OnChildProcessStateChanged;
@@ -181,12 +183,14 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			//item.Parent = null;
 
 			item.OrderRegistering -= _parent.ProcessChildOrderRegistering;
+#pragma warning disable CS0618 // Type or member is obsolete
 			item.OrderRegistered -= _parent.ProcessOrder;
 			item.OrderChanged -= _parent.OnChildOrderChanged;
 			item.OrderRegisterFailed -= _parent.OnChildOrderRegisterFailed;
 			item.OrderCancelFailed -= _parent.OnChildOrderCancelFailed;
 			item.OrderCanceling -= _parent.OnOrderCanceling;
 			item.NewMyTrade -= _parent.AddMyTrade;
+#pragma warning restore CS0618 // Type or member is obsolete
 			item.OwnTradeReceived -= _parent.OnChildOwnTradeReceived;
 			item.OrderReRegistering -= _parent.OnOrderReRegistering;
 			item.ProcessStateChanged -= OnChildProcessStateChanged;
@@ -477,10 +481,12 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 				isp.OrderReceived             -= OnConnectorOrderReceived;
 				isp.OwnTradeReceived          -= OnConnectorOwnTradeReceived;
+#pragma warning disable CS0618 // Type or member is obsolete
 				con.OrderRegisterFailed       -= OnConnectorOrderRegisterFailed;
 				con.OrderCancelFailed         -= ProcessCancelOrderFail;
 				con.OrderEdited               -= OnConnectorOrderEdited;
 				con.OrderEditFailed           -= OnConnectorOrderEditFailed;
+#pragma warning restore CS0618 // Type or member is obsolete
 				con.NewMessage                -= OnConnectorNewMessage;
 				isp.PositionReceived          -= OnConnectorPositionReceived;
 				isp.Level1Received            -= OnConnectorLevel1Received;
@@ -515,10 +521,12 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 				isp.OrderReceived             += OnConnectorOrderReceived;
 				isp.OwnTradeReceived          += OnConnectorOwnTradeReceived;
+#pragma warning disable CS0618 // Type or member is obsolete
 				con.OrderRegisterFailed       += OnConnectorOrderRegisterFailed;
 				con.OrderCancelFailed         += ProcessCancelOrderFail;
 				con.OrderEdited               += OnConnectorOrderEdited;
 				con.OrderEditFailed           += OnConnectorOrderEditFailed;
+#pragma warning restore CS0618 // Type or member is obsolete
 				con.NewMessage                += OnConnectorNewMessage;
 				isp.PositionReceived          += OnConnectorPositionReceived;
 				isp.Level1Received            += OnConnectorLevel1Received;
@@ -1291,9 +1299,11 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// <summary>
 	/// The event of order successful registration.
 	/// </summary>
+	[Obsolete("Use OrderReceived event.")]
 	public event Action<Order> OrderRegistered;
 
 	/// <inheritdoc />
+	[Obsolete("Use OrderRegisterFailReceived event.")]
 	public event Action<OrderFail> OrderRegisterFailed;
 
 	/// <summary>
@@ -1302,6 +1312,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	public event Action<Order, Order> OrderReRegistering;
 
 	/// <inheritdoc />
+	[Obsolete("Use OrderCancelFailReceived event.")]
 	public event Action<OrderFail> OrderCancelFailed;
 
 	/// <summary>
@@ -1310,15 +1321,19 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	public event Action<Order> OrderCanceling;
 
 	/// <inheritdoc />
+	[Obsolete("Use OrderReceived event.")]
 	public event Action<Order> OrderChanged;
 
 	/// <inheritdoc />
+	[Obsolete("Use OrderReceived event.")]
 	public event Action<long, Order> OrderEdited;
 
 	/// <inheritdoc />
+	[Obsolete("Use OrderEditFailReceived event.")]
 	public event Action<long, OrderFail> OrderEditFailed;
 
 	/// <inheritdoc />
+	[Obsolete("Use OwnTradeReceived event.")]
 	public event Action<MyTrade> NewMyTrade;
 
 	/// <summary>

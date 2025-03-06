@@ -28,21 +28,25 @@ public interface IMarketDataProvider
 	/// <summary>
 	/// Lookup result <see cref="SecurityLookupMessage"/> received.
 	/// </summary>
+	[Obsolete("Use ISubscriptionProvider.SecurityReceived and ISubscriptionProvider.SubscriptionStopped events.")]
 	event Action<SecurityLookupMessage, IEnumerable<Security>, Exception> LookupSecuritiesResult;
 
 	/// <summary>
 	/// Lookup result <see cref="SecurityLookupMessage"/> received.
 	/// </summary>
+	[Obsolete("Use ISubscriptionProvider.SecurityReceived and ISubscriptionProvider.SubscriptionStopped events.")]
 	event Action<SecurityLookupMessage, IEnumerable<Security>, IEnumerable<Security>, Exception> LookupSecuritiesResult2;
 
 	/// <summary>
 	/// Lookup result <see cref="BoardLookupMessage"/> received.
 	/// </summary>
+	[Obsolete("Use ISubscriptionProvider.BoardReceived and ISubscriptionProvider.SubscriptionStopped events.")]
 	event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult;
 
 	/// <summary>
 	/// Lookup result <see cref="BoardLookupMessage"/> received.
 	/// </summary>
+	[Obsolete("Use ISubscriptionProvider.BoardReceived and ISubscriptionProvider.SubscriptionStopped events.")]
 	event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult2;
 
 	/// <summary>

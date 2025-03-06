@@ -31,21 +31,25 @@ public interface ITransactionProvider : IPortfolioProvider, IPositionProvider
 	/// <summary>
 	/// <see cref="EditOrder"/> success result event.
 	/// </summary>
+	[Obsolete("Use ISubscriptionProvider.OrderReceived event.")]
 	event Action<long, Order> OrderEdited;
 
 	/// <summary>
 	/// Order registration error event.
 	/// </summary>
+	[Obsolete("Use ISubscriptionProvider.OrderRegisterFailReceived event.")]
 	event Action<OrderFail> OrderRegisterFailed;
 
 	/// <summary>
 	/// Order cancellation error event.
 	/// </summary>
+	[Obsolete("Use ISubscriptionProvider.OrderCancelFailReceived event.")]
 	event Action<OrderFail> OrderCancelFailed;
 
 	/// <summary>
 	/// <see cref="EditOrder"/> error result event.
 	/// </summary>
+	[Obsolete("Use ISubscriptionProvider.OrderEditFailReceived event.")]
 	event Action<long, OrderFail> OrderEditFailed;
 
 	/// <summary>
@@ -71,16 +75,19 @@ public interface ITransactionProvider : IPortfolioProvider, IPositionProvider
 	/// <summary>
 	/// Failed order status request event.
 	/// </summary>
+	[Obsolete("Use ISubscriptionProvider.SubscriptionFailed event.")]
 	event Action<long, Exception, DateTimeOffset> OrderStatusFailed2;
 
 	/// <summary>
 	/// Lookup result <see cref="PortfolioLookupMessage"/> received.
 	/// </summary>
+	[Obsolete("Use ISubscriptionProvider.PortfolioReceived and ISubscriptionProvider.SubscriptionStopped events.")]
 	event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, Exception> LookupPortfoliosResult;
 
 	/// <summary>
 	/// Lookup result <see cref="PortfolioLookupMessage"/> received.
 	/// </summary>
+	[Obsolete("Use ISubscriptionProvider.PortfolioReceived and ISubscriptionProvider.SubscriptionStopped events.")]
 	event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, IEnumerable<Portfolio>, Exception> LookupPortfoliosResult2;
 
 	/// <summary>

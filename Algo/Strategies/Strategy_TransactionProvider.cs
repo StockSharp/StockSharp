@@ -4,6 +4,14 @@ partial class Strategy
 {
 	IdGenerator ITransactionProvider.TransactionIdGenerator => SafeGetConnector().TransactionIdGenerator;
 
+	private Action<Order> _newOrder;
+
+	event Action<Order> ITransactionProvider.NewOrder
+	{
+		add => _newOrder += value;
+		remove => _newOrder -= value;
+	}
+
 	event Action<long> ITransactionProvider.MassOrderCanceled
 	{
 		add { }
