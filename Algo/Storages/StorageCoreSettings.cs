@@ -42,24 +42,6 @@ public class StorageCoreSettings : IPersistable
 	/// </summary>
 	public StorageFormats Format { get; set; }
 
-	private TimeSpan _daysLoad;
-
-	/// <summary>
-	/// Max days to load stored data.
-	/// </summary>
-	[Obsolete("Use MarketDataMessage.From property.")]
-	public TimeSpan DaysLoad
-	{
-		get => _daysLoad;
-		set
-		{
-			if (value < TimeSpan.Zero)
-				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
-
-			_daysLoad = value;
-		}
-	}
-
 	/// <summary>
 	/// Storage mode.
 	/// </summary>
@@ -102,13 +84,11 @@ public class StorageCoreSettings : IPersistable
 	{
 		Mode = storage.GetValue(nameof(Mode), Mode);
 		Format = storage.GetValue(nameof(Format), Format);
-		//DaysLoad = storage.GetValue(nameof(DaysLoad), DaysLoad);
 	}
 
 	void IPersistable.Save(SettingsStorage storage)
 	{
 		storage.SetValue(nameof(Mode), Mode);
 		storage.SetValue(nameof(Format), Format);
-		//storage.SetValue(nameof(DaysLoad), DaysLoad);
 	}
 }

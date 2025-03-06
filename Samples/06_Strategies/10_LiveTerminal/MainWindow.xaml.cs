@@ -74,7 +74,6 @@ public partial class MainWindow
 			{
 				StorageSettings =
 				{
-					DaysLoad = TimeSpan.FromDays(3),
 					Mode = StorageModes.Snapshot,
 				}
 			},
