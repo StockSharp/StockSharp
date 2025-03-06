@@ -1,7 +1,5 @@
 namespace StockSharp.Algo;
 
-using StockSharp.Algo.Candles;
-
 partial class Connector
 {
 	/// <summary>
@@ -33,56 +31,6 @@ partial class Connector
 
 	/// <inheritdoc />
 	public IEnumerable<Portfolio> RegisteredPortfolios => _subscriptionManager.SubscribedPortfolios;
-
-	/// <summary>
-	/// List of all candles series, subscribed via <see cref="Subscribe"/>.
-	/// </summary>
-	[Obsolete("Use FindSubscriptions method.")]
-	public IEnumerable<CandleSeries> SubscribedCandleSeries => _subscriptionManager.SubscribedCandleSeries;
-
-	/// <inheritdoc />
-	[Obsolete("Use Subscribe method instead.")]
-	public void RegisterSecurity(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, IMessageAdapter adapter = null)
-		=> this.SubscribeLevel1(security, from, to, count, buildMode, buildFrom, adapter);
-
-	/// <inheritdoc />
-	[Obsolete("Use UnSubscribe method instead.")]
-	public void UnRegisterSecurity(Security security) => this.UnSubscribeLevel1(security);
-
-	/// <inheritdoc />
-	[Obsolete("Use Subscribe method instead.")]
-	public void RegisterMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, int? maxDepth = null, IMessageAdapter adapter = null)
-		=> this.SubscribeMarketDepth(security, from, to, count, buildMode, buildFrom, maxDepth, null, null, false, adapter);
-
-	/// <inheritdoc />
-	[Obsolete("Use UnSubscribeMarketDepth method instead.")]
-	public void UnRegisterMarketDepth(Security security) => this.UnSubscribeMarketDepth(security);
-
-	/// <inheritdoc />
-	[Obsolete("Use SubscribeTrades method instead.")]
-	public void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, IMessageAdapter adapter = null)
-		=> this.SubscribeTrades(security, from, to, count, buildMode, buildFrom, adapter);
-
-	/// <inheritdoc />
-	[Obsolete("Use UnSubscribeTrades method instead.")]
-	public void UnRegisterTrades(Security security)	=> this.UnSubscribeTrades(security);
-
-	/// <inheritdoc />
-	[Obsolete("Use SubscribeOrderLog method instead.")]
-	public void RegisterOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
-		=> this.SubscribeOrderLog(security, from, to, count, adapter);
-
-	/// <inheritdoc />
-	[Obsolete("Use UnSubscribeOrderLog method instead.")]
-	public void UnRegisterOrderLog(Security security) => this.UnSubscribeOrderLog(security);
-
-	/// <inheritdoc />
-	[Obsolete("Use SubscribeNews method instead.")]
-	public void RegisterNews(Security security = null, IMessageAdapter adapter = null) => this.SubscribeNews(security, adapter: adapter);
-
-	/// <inheritdoc />
-	[Obsolete("Use UnSubscribeNews method instead.")]
-	public void UnRegisterNews(Security security = null) => this.UnSubscribeNews(security);
 
 	/// <inheritdoc />
 	public void RegisterPortfolio(Portfolio portfolio) => _subscriptionManager.RegisterPortfolio(portfolio);
