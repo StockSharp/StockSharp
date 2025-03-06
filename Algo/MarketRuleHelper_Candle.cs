@@ -310,18 +310,6 @@ partial class MarketRuleHelper
 		};
 	}
 
-	[Obsolete]
-	private static Subscription GetSubscription(ISubscriptionProvider subscriptionProvider, CandleSeries candleSeries)
-	{
-		if (subscriptionProvider is null)
-			throw new ArgumentNullException(nameof(subscriptionProvider));
-
-		if (candleSeries is null)
-			throw new ArgumentNullException(nameof(candleSeries));
-
-		return subscriptionProvider.Subscriptions.FirstOrDefault(s => s.CandleSeries == candleSeries) ?? new(candleSeries);
-	}
-
 	/// <summary>
 	/// To create a rule for the event of new candles occurrence.
 	/// </summary>

@@ -42,7 +42,7 @@ public class Subscription : SubscriptionBase<Subscription>
 	/// Initializes a new instance of the <see cref="Subscription"/>.
 	/// </summary>
 	/// <param name="candleSeries">Candles series.</param>
-	[Obsolete("Use Subscription class.")]
+	[Obsolete("Use DataType overload.")]
 	public Subscription(CandleSeries candleSeries)
 		: this(candleSeries.ToMarketDataMessage(true), candleSeries.Security)
 	{

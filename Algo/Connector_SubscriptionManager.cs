@@ -85,7 +85,7 @@ partial class Connector
 		public override string ToString() => Subscription.ToString();
 	}
 
-	private class SubscriptionManager
+	private class SubscriptionManager(Connector connector)
 	{
 		private readonly SyncObject _syncObject = new();
 
@@ -95,13 +95,8 @@ partial class Connector
 		private readonly HashSet<long> _notFound = [];
 		private readonly Dictionary<long, long> _subscriptionAllMap = [];
 
-		private readonly Connector _connector;
+		private readonly Connector _connector = connector ?? throw new ArgumentNullException(nameof(connector));
 		private bool _wasConnected;
-
-		public SubscriptionManager(Connector connector)
-		{
-			_connector = connector ?? throw new ArgumentNullException(nameof(connector));
-		}
 
 		public IEnumerable<Subscription> Subscriptions
 		{
@@ -136,9 +131,6 @@ partial class Connector
 		}
 
 		public IEnumerable<Portfolio> SubscribedPortfolios => Subscriptions.Select(s => s.Portfolio).Where(p => p != null);
-
-		[Obsolete]
-		public IEnumerable<CandleSeries> SubscribedCandleSeries => Subscriptions.Select(s => s.CandleSeries).Where(p => p != null);
 
 		private void TryWriteLog(long id)
 		{
@@ -509,7 +501,7 @@ partial class Connector
 
 		public IEnumerable<Subscription> ProcessLookupResponse<T>(ISubscriptionIdMessage message, T item)
 		{
-			return ProcessLookupResponse(message, new[] { item });
+			return ProcessLookupResponse(message, [item]);
 		}
 
 		public IEnumerable<Subscription> ProcessLookupResponse<T>(ISubscriptionIdMessage message, T[] items)

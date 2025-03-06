@@ -200,13 +200,23 @@ partial class TraderHelper
 		long? count = default, long? transactionId = default, IMessageAdapter adapter = default,
 		long? skip = default, FillGapsDays? fillGaps = default)
 	{
+		return SubscribeCandles(provider, series.Security, series.ToDataType(), from, to, count, transactionId, adapter, skip, fillGaps);
+	}
+
+	/// <summary>
+	/// </summary>
+	public static Subscription SubscribeCandles(this ISubscriptionProvider provider,
+		Security security, DataType dataType, DateTimeOffset? from = default, DateTimeOffset? to = default,
+		long? count = default, long? transactionId = default, IMessageAdapter adapter = default,
+		long? skip = default, FillGapsDays? fillGaps = default)
+	{
 		if (provider is null)
 			throw new ArgumentNullException(nameof(provider));
 
 		if (provider is ILogReceiver logs)
 			logs.LogDebug(nameof(SubscribeCandles));
 
-		var subscription = new Subscription(series);
+		var subscription = new Subscription(dataType, security);
 
 		var mdMsg = subscription.MarketData;
 
