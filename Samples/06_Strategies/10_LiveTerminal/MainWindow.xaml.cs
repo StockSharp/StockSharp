@@ -130,19 +130,16 @@ public partial class MainWindow
 
 		Connector.SecurityReceived += (sub, s) => _securitiesWindow.SecurityPicker.Securities.Add(s);
 
-		Connector.NewOrder += order =>
+		Connector.OrderReceived += (s, order) =>
 		{
-			_ordersWindow.OrderGrid.Orders.Add(order);
+			_ordersWindow.OrderGrid.Orders.TryAdd(order);
 			_securitiesWindow.ProcessOrder(order);
 		};
 
-		// display order as own volume in quotes window
-		Connector.OrderChanged += _securitiesWindow.ProcessOrder;
-
 		// put the registration error into order's table
-		Connector.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
+		Connector.OrderRegisterFailReceived += (s, f) => _ordersWindow.OrderGrid.AddRegistrationFail(f);
 
-		Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
+		Connector.OwnTradeReceived += (s, t) => _myTradesWindow.TradeGrid.Trades.Add(t);
 
 		Connector.PositionReceived += (sub, p) => _portfoliosWindow.PortfolioGrid.Positions.TryAdd(p);
 

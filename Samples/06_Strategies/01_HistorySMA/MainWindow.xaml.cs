@@ -85,7 +85,7 @@ public partial class MainWindow
 
 		_connector.OrderBookReceived += (s, b) => MarketDepthControl.UpdateDepth(b);
 		_connector.OrderReceived += (s, o) => OrderGrid.Orders.Add(o);
-		_connector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
+		_connector.OrderRegisterFailReceived += (s, f) => OrderGrid.AddRegistrationFail(f);
 		_connector.OwnTradeReceived += (s, t) => MyTradeGrid.Trades.Add(t);
 
 		// uncomment required strategy

@@ -44,7 +44,7 @@ public partial class MainWindow
 		InitializeComponent();
 
 		CandleSettingsEditor.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
-		CandleSettingsEditor.DataTypeChanged += CandleSettingsChanged;
+		CandleSettingsEditor.EditValueChanged += CandleSettingsChanged;
 
 		_logManager = new LogManager();
 		_logManager.Listeners.Add(new GuiLogListener(Log));
@@ -70,9 +70,9 @@ public partial class MainWindow
 
 	private void InitRealConnector()
 	{
-		_realConnector.NewOrder += OrderGrid.Orders.Add;
-		_realConnector.NewMyTrade += TradeGrid.Trades.Add;
-		_realConnector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
+		_realConnector.OrderReceived += (s, o) => OrderGrid.Orders.Add(o);
+		_realConnector.OwnTradeReceived += (s, t) => TradeGrid.Trades.Add(t);
+		_realConnector.OrderRegisterFailReceived += (s, f) => OrderGrid.AddRegistrationFail(f);
 
 		_realConnector.MassOrderCancelFailed += (transId, error) =>
 			this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.ErrorCancelling));
@@ -146,12 +146,15 @@ public partial class MainWindow
 
 		_emuConnector.PositionReceived += (sub, p) => PortfolioGrid.Positions.TryAdd(p);
 
-		_emuConnector.NewOrder += OrderGrid.Orders.Add;
-		_emuConnector.NewMyTrade += TradeGrid.Trades.Add;
-		_emuConnector.OrderReceived += (s, o) => _bufferOrders.Add(o);
+		_emuConnector.OwnTradeReceived += (s, t) => TradeGrid.Trades.Add(t);
+		_emuConnector.OrderReceived += (s, o) =>
+		{
+			_bufferOrders.Add(o);
+			OrderGrid.Orders.Add(o);
+		};
 
 		// subscribe on error of order registration event
-		_emuConnector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
+		_emuConnector.OrderRegisterFailReceived += (s, f) => OrderGrid.AddRegistrationFail(f);
 
 		_emuConnector.CandleReceived += (s, candle) =>
 		{
@@ -176,7 +179,7 @@ public partial class MainWindow
 		};
 	}
 
-	private void CandleSettingsChanged()
+	private void CandleSettingsChanged(object sender, EditValueChangedEventArgs e)
 	{
 		if (_tempCandleSeries == CandleSettingsEditor.DataType || _candlesSubscription == null)
 			return;
@@ -273,8 +276,8 @@ public partial class MainWindow
 		_emuConnector.SubscribeLevel1(security);
 
 		_realConnector.SubscribeMarketDepth(security);
-
-		_candlesSubscription = _emuConnector.SubscribeCandles(CandleSettingsEditor.DataType.ToCandleSeries(security), from: DateTimeOffset.UtcNow - TimeSpan.FromDays(10));
+		
+		_candlesSubscription = _emuConnector.SubscribeCandles(security, CandleSettingsEditor.DataType, from: DateTimeOffset.UtcNow - TimeSpan.FromDays(10));
 	}
 
 	private void NewOrder_OnClick(object sender, RoutedEventArgs e)

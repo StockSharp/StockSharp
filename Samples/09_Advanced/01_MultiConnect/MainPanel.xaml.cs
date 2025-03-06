@@ -182,17 +182,15 @@ public partial class MainPanel
 		Connector.Level1Received += (s, l) => _level1Window.Level1Grid.Messages.Add(l);
 
 		Connector.OrderReceived += Connector_OnOrderReceived;
-		Connector.OrderEdited += Connector_OnOrderEdited;
 		Connector.OwnTradeReceived += (s, t) => _myTradesWindow.TradeGrid.Trades.TryAdd(t);
-
 		Connector.PositionReceived += (sub, p) => _portfoliosWindow.PortfolioGrid.Positions.TryAdd(p);
 
 		// subscribe on error of order registration event
-		Connector.OrderRegisterFailed += Connector_OnOrderRegisterFailed;
+		Connector.OrderRegisterFailReceived += (s, f) => Connector_OnOrderRegisterFailed(f);
 		// subscribe on error of order cancelling event
-		Connector.OrderCancelFailed += Connector_OnOrderCancelFailed;
+		Connector.OrderCancelFailReceived += (s, f) => Connector_OnOrderCancelFailed(f);
 		// subscribe on error of order edition event
-		Connector.OrderEditFailed += Connector_OnOrderEditFailed;
+		Connector.OrderEditFailReceived += (s, f) => Connector_OnOrderEditFailed(f);
 
 		// set market data provider
 		_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;
@@ -261,18 +259,13 @@ public partial class MainPanel
 		_securitiesWindow.ProcessOrder(order);
 	}
 
-	private void Connector_OnOrderEdited(long transactionId, Order order)
-	{
-		_securitiesWindow.ProcessOrder(order);
-	}
-
 	private void Connector_OnOrderRegisterFailed(OrderFail fail)
 	{
 		_ordersWindow.OrderGrid.AddRegistrationFail(fail);
 		_securitiesWindow.ProcessOrderFail(fail);
 	}
 
-	private void Connector_OnOrderEditFailed(long transactionId, OrderFail fail)
+	private void Connector_OnOrderEditFailed(OrderFail fail)
 	{
 		_securitiesWindow.ProcessOrderFail(fail);
 	}

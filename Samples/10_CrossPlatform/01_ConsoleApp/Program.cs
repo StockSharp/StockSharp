@@ -104,7 +104,7 @@ static class Program
 			Side = Sides.Buy,
 		};
 
-		connector.OrderChanged += Console.WriteLine;
+		connector.OrderReceived += (s, o) => Console.WriteLine(o);
 		connector.RegisterOrder(order);
 
 		Console.ReadLine();

@@ -99,9 +99,9 @@ public partial class MainWindow
 
 		};
 
-		_strategy.OrderRegistered += OrderGrid.Orders.Add;
-		_strategy.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
-		_strategy.NewMyTrade += MyTradeGrid.Trades.Add;
+		_strategy.OrderReceived += (s, o) => OrderGrid.Orders.Add(o);
+		_strategy.OrderRegisterFailReceived += (s, f) => OrderGrid.AddRegistrationFail(f);
+		_strategy.OwnTradeReceived += (s, t) => MyTradeGrid.Trades.Add(t);
 
 		_logManager.Sources.Add(_strategy);
 
