@@ -18,21 +18,6 @@ partial class Connector
 	}
 
 	/// <inheritdoc />
-	public IEnumerable<Security> RegisteredSecurities => _subscriptionManager.GetSubscribers(DataType.Level1);
-
-	/// <inheritdoc />
-	public IEnumerable<Security> RegisteredMarketDepths => _subscriptionManager.GetSubscribers(DataType.MarketDepth);
-
-	/// <inheritdoc />
-	public IEnumerable<Security> RegisteredTrades => _subscriptionManager.GetSubscribers(DataType.Ticks);
-
-	/// <inheritdoc />
-	public IEnumerable<Security> RegisteredOrderLogs => _subscriptionManager.GetSubscribers(DataType.OrderLog);
-
-	/// <inheritdoc />
-	public IEnumerable<Portfolio> RegisteredPortfolios => _subscriptionManager.SubscribedPortfolios;
-
-	/// <inheritdoc />
 	public void RegisterPortfolio(Portfolio portfolio) => _subscriptionManager.RegisterPortfolio(portfolio);
 
 	/// <inheritdoc />

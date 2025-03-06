@@ -130,8 +130,6 @@ partial class Connector
 				   .Where(s => s != null);
 		}
 
-		public IEnumerable<Portfolio> SubscribedPortfolios => Subscriptions.Select(s => s.Portfolio).Where(p => p != null);
-
 		private void TryWriteLog(long id)
 		{
 			if (_notFound.Add(id))
