@@ -11,6 +11,8 @@ using Ecng.Xaml;
 using Ecng.Configuration;
 using Ecng.Logging;
 
+using DevExpress.Xpf.Editors;
+
 using StockSharp.Algo;
 using StockSharp.Algo.Testing;
 using StockSharp.BusinessEntities;

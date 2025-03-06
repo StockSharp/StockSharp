@@ -12,9 +12,6 @@ using StockSharp.Configuration;
 using StockSharp.Messages;
 using StockSharp.Xaml;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class MainWindow
 {
 	private readonly Connector _connector = new();
@@ -46,10 +43,9 @@ public partial class MainWindow
 		SecurityEditor.SecurityProvider = _connector;
 		PortfolioEditor.Portfolios = new PortfolioDataSource(_connector);
 
-		_connector.NewOrder += OrderGrid.Orders.Add;
-		_connector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
-
-		_connector.NewMyTrade += MyTradeGrid.Trades.Add;
+		_connector.OrderReceived += (s, o) => OrderGrid.Orders.Add(o);
+		_connector.OrderRegisterFailReceived += (s, f) => OrderGrid.AddRegistrationFail(f);
+		_connector.OwnTradeReceived += (s, t) => MyTradeGrid.Trades.Add(t);
 
 		_connector.Connect();
 	}
