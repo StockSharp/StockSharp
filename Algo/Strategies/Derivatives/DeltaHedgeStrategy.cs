@@ -5,6 +5,7 @@ using StockSharp.Algo.Derivatives;
 /// <summary>
 /// The options delta hedging strategy.
 /// </summary>
+[Obsolete("Child strategies no longer supported.")]
 public class DeltaHedgeStrategy : HedgeStrategy
 {
 	/// <summary>

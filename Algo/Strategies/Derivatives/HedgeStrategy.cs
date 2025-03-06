@@ -6,6 +6,7 @@ using StockSharp.Algo.Strategies.Quoting;
 /// <summary>
 /// The base strategy of hedging.
 /// </summary>
+[Obsolete("Child strategies no longer supported.")]
 public abstract class HedgeStrategy : Strategy
 {
 	private sealed class AssetStrategy : Strategy

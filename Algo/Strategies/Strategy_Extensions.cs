@@ -153,6 +153,7 @@ partial class Strategy
 	/// To open the position via quoting.
 	/// </summary>
 	/// <param name="finishPosition">The position value that should be reached. A negative value means the short position.</param>
+	[Obsolete("Child strategies no longer supported.")]
 	public void OpenPositionByQuoting(decimal finishPosition)
 	{
 		var position = Position;
@@ -169,6 +170,7 @@ partial class Strategy
 	/// <summary>
 	/// To close the open position via quoting.
 	/// </summary>
+	[Obsolete("Child strategies no longer supported.")]
 	public void ClosePositionByQuoting()
 	{
 		var position = Position;

@@ -101,129 +101,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		}
 	}
 
-	private class ChildStrategyList(Strategy parent)
-		: SynchronizedSet<Strategy>(true), IStrategyChildStrategyList
-	{
-		private readonly Dictionary<Strategy, IMarketRule> _childStrategyRules = [];
-		private readonly Strategy _parent = parent ?? throw new ArgumentNullException(nameof(parent));
-
-		protected override void OnAdded(Strategy item)
-		{
-			//pyh: Нельзя использовать OnAdding тк логирование включается по событию Added которое вызовет base.OnAdded
-			base.OnAdded(item);
-
-			if (item.Parent != null)
-				throw new ArgumentException(LocalizedStrings.ParentAlreadySet.Put(item, item.Parent));
-
-			item.Parent = _parent;
-			item.Connector = _parent.Connector;
-
-			item.Portfolio ??= _parent.Portfolio;
-			item.Security ??= _parent.Security;
-
-			item.OrderRegistering += _parent.ProcessChildOrderRegistering;
-#pragma warning disable CS0618 // Type or member is obsolete
-			item.OrderRegistered += _parent.ProcessOrder;
-			item.OrderChanged += _parent.OnChildOrderChanged;
-			item.OrderRegisterFailed += _parent.OnChildOrderRegisterFailed;
-			item.OrderCancelFailed += _parent.OnChildOrderCancelFailed;
-			item.NewMyTrade += _parent.AddMyTrade;
-#pragma warning restore CS0618 // Type or member is obsolete
-			item.OwnTradeReceived += _parent.OnChildOwnTradeReceived;
-			item.OrderReRegistering += _parent.OnOrderReRegistering;
-			item.ProcessStateChanged += OnChildProcessStateChanged;
-			item.Error += _parent.OnError;
-			item.IsOnlineChanged += _parent.OnChildStrategyIsOnlineChanged;
-
-			item.Orders.ForEach(_parent.ProcessOrder);
-
-			if (!item.MyTrades.IsEmpty())
-				item.MyTrades.ForEach(_parent.AddMyTrade);
-
-			//_parent._orderFails.AddRange(item.OrderFails);
-
-			if (item.ProcessState == _parent.ProcessState && _parent.ProcessState == ProcessStates.Started)
-				OnChildProcessStateChanged(item);
-			else
-				item.ProcessState = _parent.ProcessState;
-
-			_parent.CheckRefreshOnlineState();
-		}
-
-		private void OnChildProcessStateChanged(Strategy child)
-		{
-			if (child.ProcessState == ProcessStates.Started)
-			{
-				// для предотвращения остановки родительской стратегии пока работают ее дочерние
-				var rule =
-					child
-						.WhenStopped()
-						.Do(() => _childStrategyRules.Remove(child))
-						.Once()
-						.Apply(_parent);
-
-				rule.UpdateName(rule.Name + $" ({nameof(ChildStrategyList)}.{nameof(OnChildProcessStateChanged)})");
-
-				_childStrategyRules.Add(child, rule);
-			}
-
-			_parent.CheckRefreshOnlineState();
-		}
-
-		protected override bool OnClearing()
-		{
-			foreach (var item in this.ToArray())
-				Remove(item);
-
-			return true;
-		}
-
-		protected override bool OnRemoving(Strategy item)
-		{
-			//item.Parent = null;
-
-			item.OrderRegistering -= _parent.ProcessChildOrderRegistering;
-#pragma warning disable CS0618 // Type or member is obsolete
-			item.OrderRegistered -= _parent.ProcessOrder;
-			item.OrderChanged -= _parent.OnChildOrderChanged;
-			item.OrderRegisterFailed -= _parent.OnChildOrderRegisterFailed;
-			item.OrderCancelFailed -= _parent.OnChildOrderCancelFailed;
-			item.OrderCanceling -= _parent.OnOrderCanceling;
-			item.NewMyTrade -= _parent.AddMyTrade;
-#pragma warning restore CS0618 // Type or member is obsolete
-			item.OwnTradeReceived -= _parent.OnChildOwnTradeReceived;
-			item.OrderReRegistering -= _parent.OnOrderReRegistering;
-			item.ProcessStateChanged -= OnChildProcessStateChanged;
-			item.Error -= _parent.OnError;
-			item.IsOnlineChanged -= _parent.OnChildStrategyIsOnlineChanged;
-
-			var rule = _childStrategyRules.TryGetValue(item);
-
-			if (rule != null)
-			{
-				// правило могло быть удалено при остановке дочерней стратегии, но перед ее удалением из коллекции у родителя
-				if (rule.IsReady)
-					_parent.TryRemoveRule(rule);
-
-				_childStrategyRules.Remove(item);
-			}
-
-			return base.OnRemoving(item);
-		}
-
-		protected override void OnRemoved(Strategy item)
-		{
-			base.OnRemoved(item);
-			_parent.CheckRefreshOnlineState();
-		}
-
-		public void TryRemoveStoppedRule(IMarketRule rule)
-		{
-			if (rule.Token is Strategy child)
-				_childStrategyRules.Remove(child);
-		}
-	}
-
 	private class StrategyRuleList(Strategy strategy)
 		: MarketRuleList(strategy)
 	{
@@ -350,8 +227,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// </summary>
 	public Strategy()
 	{
-		_childStrategies = new(this);
-
 		Rules = new StrategyRuleList(this);
 
 		Parameters = new(this);
@@ -366,12 +241,9 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		_commentMode = Param(nameof(CommentMode), StrategyCommentModes.Disabled).SetDisplay(LocalizedStrings.Comment, LocalizedStrings.OrderComment, LocalizedStrings.General).SetBasic(false);
 		_ordersKeepTime = Param(nameof(OrdersKeepTime), TimeSpan.FromDays(1)).SetValidator(new TimeSpanNotNegativeAttribute()).SetDisplay(LocalizedStrings.Orders, LocalizedStrings.OrdersKeepTime, LocalizedStrings.General).SetBasic(false).SetCanOptimize(false);
 		_logLevel = Param(nameof(LogLevel), LogLevels.Inherit).SetDisplay(LocalizedStrings.LogLevel, LocalizedStrings.LogLevelKey, LocalizedStrings.Logging).SetBasic(false);
-		_stopOnChildStrategyErrors = Param(nameof(StopOnChildStrategyErrors), false).SetCanOptimize(false).SetHidden();
-		_restoreChildOrders = Param(nameof(RestoreChildOrders), false).SetCanOptimize(false).SetHidden();
 		_tradingMode = Param(nameof(TradingMode), StrategyTradingModes.Full).SetDisplay(LocalizedStrings.Trading, LocalizedStrings.AllowTrading, LocalizedStrings.General).SetBasic(false);
 		_unsubscribeOnStop = Param(nameof(UnsubscribeOnStop), true).SetCanOptimize(false).SetHidden();
 		_workingTime = Param(nameof(WorkingTime), new WorkingTime()).SetRequired().SetDisplay(LocalizedStrings.WorkingTime, LocalizedStrings.WorkingHours, LocalizedStrings.General).SetBasic(false);
-		_isOnlineStateIncludesChildren = Param(nameof(IsOnlineStateIncludesChildren), true).SetCanOptimize(false).SetHidden();
 		_historySize = Param<TimeSpan?>(nameof(HistorySize)).SetValidator(new TimeSpanNullOrNotNegativeAttribute()).SetDisplay(LocalizedStrings.DaysHistory, LocalizedStrings.DaysHistoryDesc, LocalizedStrings.General).SetBasic(false).SetCanOptimize(false);
 		_security = Param<Security>(nameof(Security)).SetDisplay(LocalizedStrings.Security, LocalizedStrings.StrategySecurity, LocalizedStrings.General).SetNonBrowsable(HideSecurityAndPortfolioParameters);
 		_portfolio = Param<Portfolio>(nameof(Portfolio)).SetDisplay(LocalizedStrings.Portfolio, LocalizedStrings.StrategyPortfolio, LocalizedStrings.General).SetNonBrowsable(HideSecurityAndPortfolioParameters).SetCanOptimize(false);
@@ -384,11 +256,8 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			_cancelOrdersWhenStopping,
 			_waitAllTrades,
 			_ordersKeepTime,
-			_stopOnChildStrategyErrors,
-			_restoreChildOrders,
 			_unsubscribeOnStop,
 			_workingTime,
-			_isOnlineStateIncludesChildren,
 			_historySize,
 		];
 
@@ -547,9 +416,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				isp.SubscriptionStopped       += OnConnectorSubscriptionStopped;
 				isp.SubscriptionFailed        += OnConnectorSubscriptionFailed;
 			}
-
-			foreach (var strategy in ChildStrategies)
-				strategy.Connector = value;
 
 			ConnectorChanged?.Invoke();
 		}
@@ -798,21 +664,9 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		ParametersChanged?.Invoke();
 		this.Notify(name);
 
-		if (name == nameof(Security))
+		if (name == nameof(Security) || name == nameof(Portfolio))
 		{
-			var value = Security;
-
-			foreach (var strategy in ChildStrategies)
-				strategy.Security ??= value;
-
 			this.Notify(nameof(Position));
-		}
-		else if (name == nameof(Portfolio))
-		{
-			var value = Portfolio;
-
-			foreach (var strategy in ChildStrategies)
-				strategy.Portfolio ??= value;
 		}
 	}
 
@@ -863,13 +717,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 			try
 			{
-				var child = (IEnumerable<Strategy>)ChildStrategies;
-
-				if (ProcessState == ProcessStates.Stopping)
-					child = child.Where(s => s.ProcessState == ProcessStates.Started);
-
-				child.ToArray().ForEach(s => s.ProcessState = ProcessState);
-
 				switch (value)
 				{
 					case ProcessStates.Started:
@@ -931,7 +778,8 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				foreach (var rule in GetRules())
 				{
 					if (this.TryRemoveWithExclusive(rule))
-						_childStrategies.TryRemoveStoppedRule(rule);
+					{
+					}
 				}
 
 				try
@@ -956,11 +804,8 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			_ => throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.InvalidValue),
 		};
 
-		var ps = ParentStrategy;
-		LogInfo("Strategy {0}. [{1},{2}]. Position {3}.", stateStr, ChildStrategies.Count, ps != null ? ps.ChildStrategies.Count : -1, Position);
+		LogInfo("Strategy {0}. Position {1}.", stateStr, Position);
 	}
-
-	private Strategy ParentStrategy => Parent as Strategy;
 
 	/// <summary>
 	/// <see cref="ProcessState"/> change event.
@@ -1014,18 +859,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		set => _ordersKeepTime.Value = value;
 	}
 
-	private readonly StrategyParam<bool> _restoreChildOrders;
-
-	/// <summary>
-	/// Restore orders last time was registered by child strategies.
-	/// </summary>
-	[Browsable(false)]
-	public bool RestoreChildOrders
-	{
-		get => _restoreChildOrders.Value;
-		set => _restoreChildOrders.Value = value;
-	}
-
 	private readonly StrategyParam<StrategyTradingModes> _tradingMode;
 
 	/// <summary>
@@ -1046,7 +879,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	private bool _isOnline;
 
 	/// <summary>
-	/// True means that strategy is started and all of its subscriptions are in online state and all child strategies are online.
+	/// True means that strategy is started and all of its subscriptions are in online state.
 	/// </summary>
 	[Browsable(false)]
 	public bool IsOnline
@@ -1060,18 +893,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			_isOnline = value;
 			this.Notify();
 		}
-	}
-
-	private readonly StrategyParam<bool> _isOnlineStateIncludesChildren;
-
-	/// <summary>
-	/// If <see langword="true"/>, the strategy can only be <see cref="IsOnline"/> if all of its <see cref="ChildStrategies"/> are online as well.
-	/// </summary>
-	[Browsable(false)]
-	public bool IsOnlineStateIncludesChildren
-	{
-		get => _isOnlineStateIncludesChildren.Value;
-		set => _isOnlineStateIncludesChildren.Value = value;
 	}
 
 	/// <summary>
@@ -1144,13 +965,12 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		}
 	}
 
-	private readonly ChildStrategyList _childStrategies;
-
 	/// <summary>
 	/// Subsidiary trade strategies.
 	/// </summary>
 	[Browsable(false)]
-	public IStrategyChildStrategyList ChildStrategies => _childStrategies;
+	[Obsolete("Child strategies no longer supported.")]
+	public INotifyList<Strategy> ChildStrategies { get; } = new SynchronizedList<Strategy>();
 
 	private DateTimeOffset _startedTime;
 
@@ -1200,7 +1020,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	private readonly StrategyParam<bool> _disposeOnStop;
 
 	/// <summary>
-	/// Automatically to clear resources, used by the strategy, when it stops (state <see cref="ProcessState"/> becomes equal to <see cref="ProcessStates.Stopped"/>) and delete it from the parent strategy through <see cref="ChildStrategies"/>.
+	/// Automatically to clear resources, used by the strategy, when it stops (state <see cref="ProcessState"/> becomes equal to <see cref="ProcessStates.Stopped"/>).
 	/// </summary>
 	/// <remarks>
 	/// The mode is used only for one-time strategies, i.e. for those strategies, which will not be started again (for example, quoting). It is disabled by default.
@@ -1276,21 +1096,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	[Browsable(false)]
 	public bool IsRulesSuspended => _rulesSuspendCount > 0;
 
-	private readonly StrategyParam<bool> _stopOnChildStrategyErrors;
-
-	/// <summary>
-	/// Stop strategy when child strategies causes errors.
-	/// </summary>
-	/// <remarks>
-	/// It is disabled by default.
-	/// </remarks>
-	[Browsable(false)]
-	public bool StopOnChildStrategyErrors
-	{
-		get => _stopOnChildStrategyErrors.Value;
-		set => _stopOnChildStrategyErrors.Value = value;
-	}
-
 	/// <summary>
 	/// The event of sending order for registration.
 	/// </summary>
@@ -1364,18 +1169,15 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	{
 		InitStartValues();
 
-		if (IsRootStrategy)
+		_pfSubscription = new(new PortfolioLookupMessage
 		{
-			_pfSubscription = new Subscription(new PortfolioLookupMessage
-			{
-				IsSubscribe = true,
-				StrategyId = EnsureGetId(),
-			}, (SecurityMessage)null);
+			IsSubscribe = true,
+			StrategyId = EnsureGetId(),
+		}, (SecurityMessage)null);
 
-			Subscribe(_pfSubscription, true);
-		}
+		Subscribe(_pfSubscription, true);
 
-		_orderSubscription = new Subscription(new OrderStatusMessage
+		_orderSubscription = new(new OrderStatusMessage
 		{
 			IsSubscribe = true,
 			StrategyId = EnsureGetId(),
@@ -1594,15 +1396,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	private RiskActions? ProcessRisk(Order order)
 		=> ProcessRisk(() => order.CreateRegisterMessage());
 
-	private void ProcessChildOrderRegistering(Order order)
-	{
-		OnOrderRegistering(order);
-
-		_newOrder?.Invoke(order);
-
-		ProcessRisk(order);
-	}
-
 	private RiskActions? AddOrder(Order order, bool restored)
 	{
 		var action = ProcessRisk(order);
@@ -1615,7 +1408,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if (!restored)
 			order.UserOrderId = EnsureGetId();
 
-		order.StrategyId = EnsureGetRootId();
+		order.StrategyId = EnsureGetId();
 
 		if (!order.State.IsFinal())
 			ApplyMonitorRules(order);
@@ -1815,11 +1608,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			{
 				OnOrderRegistered(order);
 
-				PositionChangeMessage posChange = null;
-
-				if(!IsRootStrategy)
-					posChange = _positionManager.ProcessMessage(order.ToMessage());
-
 				StatisticManager.AddNewOrder(order);
 
 				if (order.Commission != null)
@@ -1827,8 +1615,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 					Commission += order.Commission;
 					RaiseCommissionChanged();
 				}
-
-				ProcessPositionChangeMessageImpl(posChange);
 			}
 
 			if (_firstOrderTime == default)
@@ -1862,15 +1648,9 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		}
 		else if (isChanging)
 		{
-			PositionChangeMessage posChange = null;
-			if(!IsRootStrategy)
-				posChange = _positionManager.ProcessMessage(order.ToMessage());
-
 			StatisticManager.AddChangedOrder(order);
 
 			OnOrderChanged(order);
-
-			ProcessPositionChangeMessageImpl(posChange);
 		}
 	}
 
@@ -1879,9 +1659,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		LogInfo("Order {0} attached.", order.TransactionId);
 
 		AddOrder(order, restored);
-
-		if(order.Type != OrderTypes.Conditional && !IsRootStrategy)
-			ProcessPositionChangeMessageImpl(_positionManager.ProcessMessage(order.ToMessage()));
 
 		ProcessOrder(order);
 
@@ -1987,8 +1764,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	public void Reset()
 	{
 		LogInfo(LocalizedStrings.Reset);
-
-		ChildStrategies.ForEach(s => s.Reset());
 
 		if (!KeepStatistics)
 		{
@@ -2113,8 +1888,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		if (DisposeOnStop)
 		{
-			ParentStrategy?.ChildStrategies.Remove(this);
-
 			Dispose();
 		}
 	}
@@ -2416,9 +2189,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if (order is null)
 			throw new ArgumentNullException(nameof(order));
 
-		var id = EnsureGetId();
-
-		return order.UserOrderId.EqualsIgnoreCase(id) || (RestoreChildOrders && order.StrategyId.EqualsIgnoreCase(id));
+		return order.UserOrderId.EqualsIgnoreCase(EnsureGetId());
 	}
 
 	private void OnConnectorOrderReceived(Subscription subscription, Order order)
@@ -2461,21 +2232,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	}
 
 	private string _idStr;
-	private string _rootIdStr;
-	private Strategy _rootStrategy;
-
-	private string EnsureGetId()     => _idStr     ??= Id.To<string>();
-	private string EnsureGetRootId() => _rootIdStr ??= RootStrategy.EnsureGetId();
-
-	/// <summary>
-	/// Root strategy.
-	/// </summary>
-	protected Strategy RootStrategy => _rootStrategy ??= IsRootStrategy ? this : ParentStrategy.RootStrategy;
-
-	/// <summary>
-	/// Whether this is a root strategy.
-	/// </summary>
-	protected bool IsRootStrategy => ParentStrategy == null;
+	private string EnsureGetId() => _idStr ??= Id.To<string>();
 
 	private void OnConnectorOrderRegisterFailed(OrderFail fail)
 	{
@@ -2485,13 +2242,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if (_ordersInfo.TryGetValue(fail.Order, out var info))
 			OnOrderRegisterFailed(fail, info.IsOwn);
 	}
-
-	private void OnChildOwnTradeReceived(Subscription subscription, MyTrade trade)
-	{
-		TryInvoke(() => OwnTradeReceived?.Invoke(subscription, trade));
-	}
-
-	private void AddMyTrade(MyTrade trade) => TryAddMyTrade(trade);
 
 	/// <summary>
 	/// Try add own trade.
@@ -2798,21 +2548,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		});
 	}
 
-	private void OnChildOrderChanged(Order order)
-	{
-		ProcessOrder(order, true);
-	}
-
-	private void OnChildOrderRegisterFailed(OrderFail fail)
-	{
-		TryInvoke(() => OrderRegisterFailed?.Invoke(fail));
-	}
-
-	private void OnChildOrderCancelFailed(OrderFail fail)
-	{
-		TryInvoke(() => OrderCancelFailed?.Invoke(fail));
-	}
-
 	private void ProcessCancelOrderFail(OrderFail fail)
 	{
 		if(IsDisposeStarted)
@@ -2847,9 +2582,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		ProcessRisk(() => error.ToErrorMessage());
 
 		Error?.Invoke(strategy, error);
-
-		if (!StopOnChildStrategyErrors && !Equals(this, strategy))
-			return;
 
 		LogError(error.ToString());
 	}
@@ -3099,12 +2831,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		}
 	}
 
-	private void OnChildStrategyIsOnlineChanged(Strategy _)
-	{
-		if(IsOnlineStateIncludesChildren)
-			CheckRefreshOnlineState();
-	}
-
 	private readonly object _onlineStateLock = new();
 
 	private void CheckRefreshOnlineState()
@@ -3120,25 +2846,16 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			if (nowOnline)
 				nowOnline = _subscriptions.SyncGet(d => d.CachedKeys.Where(s => !s.SubscriptionMessage.IsHistoryOnly()).All(s => s.State == SubscriptionStates.Online));
 
-			if (nowOnline && IsOnlineStateIncludesChildren)
-				nowOnline = _childStrategies.SyncGet(c => c.All(s => s.IsOnline));
-
-			if(nowOnline == wasOnline)
+			if (nowOnline == wasOnline)
 				return;
 
 			IsOnline = nowOnline;
 		}
 
-		LogInfo("IsOnline: {0} ==> {1}. state={2}, children({3})", wasOnline, nowOnline, ProcessState, IsOnlineStateIncludesChildren);
+		LogInfo("IsOnline: {0} ==> {1}. state={2}", wasOnline, nowOnline, ProcessState);
 
 		IsOnlineChanged?.Invoke(this);
 	}
-
-	//private bool IsChildOrder(Order order)
-	//{
-	//	var info = _ordersInfo.TryGetValue(order);
-	//	return info != null && !info.IsOwn;
-	//}
 
 	private void UnSubscribe(bool globalAndLocal)
 	{
@@ -3229,9 +2946,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// </summary>
 	protected override void DisposeManaged()
 	{
-		ChildStrategies.ForEach(s => s.Dispose());
-		ChildStrategies.Clear();
-
 		Connector = null;
 
 		Parameters.Dispose();

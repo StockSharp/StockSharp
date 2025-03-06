@@ -3,6 +3,7 @@ namespace StockSharp.Algo.Strategies;
 /// <summary>
 /// Conditions of subsidiary strategies operation end.
 /// </summary>
+[Obsolete("Child strategies no longer supported.")]
 public enum BasketStrategyFinishModes
 {
 	/// <summary>
@@ -24,6 +25,7 @@ public enum BasketStrategyFinishModes
 /// <summary>
 /// The batch strategy, containing subsidiary strategies, affecting each other by their execution.
 /// </summary>
+[Obsolete("Child strategies no longer supported.")]
 public class BasketStrategy : Strategy
 {
 	/// <summary>
