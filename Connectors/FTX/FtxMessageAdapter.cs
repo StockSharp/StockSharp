@@ -6,8 +6,11 @@ public partial class FtxMessageAdapter
 	private FtxWebSocketClient _wsClient;
 	private DateTimeOffset _lastStateUpdate;
 
-	private readonly TimeSpan[] _timeFrames = new[]
-	{
+	/// <summary>
+	/// All possible time frames.
+	/// </summary>
+	public static TimeSpan[] AllTimeFrames { get; } =
+	[
 		TimeSpan.FromSeconds(15),
 		TimeSpan.FromSeconds(60),
 		TimeSpan.FromSeconds(300),
@@ -15,7 +18,7 @@ public partial class FtxMessageAdapter
 		TimeSpan.FromSeconds(3600),
 		TimeSpan.FromSeconds(14400),
 		TimeSpan.FromSeconds(86400),
-	};
+	];
 
 	/// <inheritdoc />
 	public override IEnumerable<int> SupportedOrderBookDepths => new[] { 100 };
