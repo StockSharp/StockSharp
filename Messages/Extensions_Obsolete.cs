@@ -68,8 +68,8 @@ partial class Extensions
 			case MessageTypes.Execution:
 				return ((ExecutionTypes)arg).ToDataType();
 
-			case MessageTypes.TimeFrameInfo:
-				return DataType.TimeFrames;
+			case MessageTypes.DataTypeInfo:
+				return DataType.DataTypes;
 
 			case MessageTypes.UserInfo:
 				return DataType.Users;

@@ -50,12 +50,14 @@ public interface IMarketDataProvider
 	event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult2;
 
 	/// <summary>
-	/// Lookup result <see cref="TimeFrameLookupMessage"/> received.
+	/// Lookup result <see cref="DataTypeLookupMessage"/> received.
 	/// </summary>
-	event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult;
+	[Obsolete("Use ISubscriptionProvider.DataTypeReceived and ISubscriptionProvider.SubscriptionStopped events.")]
+	event Action<DataTypeLookupMessage, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult;
 
 	/// <summary>
-	/// Lookup result <see cref="TimeFrameLookupMessage"/> received.
+	/// Lookup result <see cref="DataTypeLookupMessage"/> received.
 	/// </summary>
-	event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult2;
+	[Obsolete("Use ISubscriptionProvider.DataTypeReceived and ISubscriptionProvider.SubscriptionStopped events.")]
+	event Action<DataTypeLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult2;
 }

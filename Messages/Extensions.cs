@@ -488,6 +488,23 @@ public static partial class Extensions
 	}
 
 	/// <summary>
+	/// Add time-frames into <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
+	/// </summary>
+	/// <param name="adapter">Adapter.</param>
+	/// <param name="timeFrames">Time-frames.</param>
+	public static void AddSupportedCandleTimeFrames(this MessageAdapter adapter, IEnumerable<TimeSpan> timeFrames)
+	{
+		if (adapter is null)
+			throw new ArgumentNullException(nameof(adapter));
+
+		if (timeFrames is null)
+			throw new ArgumentNullException(nameof(timeFrames));
+
+		foreach (var tf in timeFrames)
+			adapter.AddSupportedMarketDataType(DataType.TimeFrame(tf));
+	}
+
+	/// <summary>
 	/// Add market data type into <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
@@ -890,25 +907,7 @@ public static partial class Extensions
 	/// <param name="to">The final date by which you need to get data.</param>
 	/// <returns>Possible time-frames.</returns>
 	public static IEnumerable<TimeSpan> GetTimeFrames(this IMessageAdapter adapter, SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null)
-		=> adapter.GetCandleArgs<TimeSpan>(typeof(TimeFrameCandleMessage), securityId, from, to);
-
-	/// <summary>
-	/// Get possible args for the specified candle type and instrument.
-	/// </summary>
-	/// <typeparam name="TArg">Type of <see cref="DataType.Arg"/>.</typeparam>
-	/// <param name="adapter">Adapter.</param>
-	/// <param name="candleType">The type of the message <see cref="CandleMessage"/>.</param>
-	/// <param name="securityId">Security ID.</param>
-	/// <param name="from">The initial date from which you need to get data.</param>
-	/// <param name="to">The final date by which you need to get data.</param>
-	/// <returns>Possible args.</returns>
-	public static IEnumerable<TArg> GetCandleArgs<TArg>(this IMessageAdapter adapter, Type candleType, SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null)
-	{
-		if (adapter == null)
-			throw new ArgumentNullException(nameof(adapter));
-
-		return adapter.GetCandleArgs(candleType, securityId, from, to).Cast<TArg>();
-	}
+		=> adapter.GetCandleArgs(typeof(TimeFrameCandleMessage), securityId, from, to).Cast<TimeSpan>();
 
 	/// <summary>
 	/// Convert <see cref="string"/> to <see cref="DataType"/> value.
@@ -3334,8 +3333,8 @@ public static partial class Extensions
 			return MessageTypes.Security;
 		else if (type == DataType.SecurityLegs)
 			return MessageTypes.SecurityLegsInfo;
-		else if (type == DataType.TimeFrames)
-			return MessageTypes.TimeFrameInfo;
+		else if (type == DataType.DataTypes)
+			return MessageTypes.DataTypeInfo;
 		else if (type.IsCandles)
 			return type.MessageType.ToMessageType();
 		else
@@ -5675,7 +5674,7 @@ public static partial class Extensions
 			or MessageTypes.OrderStatus
 			or MessageTypes.SecurityLookup
 			or MessageTypes.BoardLookup
-			or MessageTypes.TimeFrameLookup;
+			or MessageTypes.DataTypeLookup;
 
 	/// <summary>
 	/// Convert <see cref="ConnectionStates"/> to <see cref="Message"/>.

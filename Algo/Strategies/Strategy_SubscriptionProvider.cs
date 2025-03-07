@@ -8,7 +8,7 @@ partial class Strategy
 
 	Subscription ISubscriptionProvider.SecurityLookup { get; }
 	Subscription ISubscriptionProvider.BoardLookup { get; }
-	Subscription ISubscriptionProvider.TimeFrameLookup { get; }
+	Subscription ISubscriptionProvider.DataTypeLookup { get; }
 
 	private Subscription ToSubscription<TLookupMessage>()
 		where TLookupMessage : IStrategyIdMessage, ISubscriptionMessage, new()
@@ -69,6 +69,9 @@ partial class Strategy
 
 	/// <inheritdoc />
 	public event Action<Subscription, Position> PositionReceived;
+
+	/// <inheritdoc />
+	public event Action<Subscription, DataType> DataTypeReceived;
 
 	/// <inheritdoc />
 	public event Action<Subscription, object> SubscriptionReceived;
@@ -186,6 +189,12 @@ partial class Strategy
 	{
 		if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 			SubscriptionReceived?.Invoke(subscription, arg);
+	}
+
+	private void OnConnectorDataTypeReceived(Subscription subscription, DataType dt)
+	{
+		if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
+			DataTypeReceived?.Invoke(subscription, dt);
 	}
 
 	private void OnConnectorCandleReceived(Subscription subscription, ICandleMessage candle)

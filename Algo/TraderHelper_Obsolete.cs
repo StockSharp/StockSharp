@@ -314,7 +314,7 @@ partial class TraderHelper
 	/// <summary>
 	/// </summary>
 	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
-	public static Subscription LookupTimeFrames(this ISubscriptionProvider provider, TimeFrameLookupMessage criteria)
+	public static Subscription LookupDataTypes(this ISubscriptionProvider provider, DataTypeLookupMessage criteria)
 	{
 		if (provider is null)
 			throw new ArgumentNullException(nameof(provider));

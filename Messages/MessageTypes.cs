@@ -247,14 +247,14 @@ public enum MessageTypes
 	UserRequest,
 
 	/// <summary>
-	/// <see cref="TimeFrameLookupMessage"/>.
+	/// <see cref="DataTypeLookupMessage"/>.
 	/// </summary>
-	TimeFrameLookup,
+	DataTypeLookup,
 
 	/// <summary>
-	/// <see cref="TimeFrameInfoMessage"/>.
+	/// <see cref="DataTypeInfoMessage"/>.
 	/// </summary>
-	TimeFrameInfo,
+	DataTypeInfo,
 
 	/// <summary>
 	/// 

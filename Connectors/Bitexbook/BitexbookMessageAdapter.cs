@@ -22,8 +22,8 @@ public partial class BitexbookMessageAdapter
 		this.RemoveSupportedMessage(MessageTypes.OrderReplace);
 		this.RemoveSupportedMessage(MessageTypes.OrderGroupCancel);
 
-		this.AddSupportedMarketDataType(DataType.CandleTimeFrame);
 		this.AddSupportedMarketDataType(DataType.OrderLog);
+		this.AddSupportedCandleTimeFrames(AllTimeFrames);
 
 		this.AddSupportedResultMessage(MessageTypes.SecurityLookup);
 		this.AddSupportedResultMessage(MessageTypes.PortfolioLookup);
@@ -33,9 +33,6 @@ public partial class BitexbookMessageAdapter
 	/// <inheritdoc />
 	public override bool IsAllDownloadingSupported(DataType dataType)
 		=> dataType == DataType.Securities || base.IsAllDownloadingSupported(dataType);
-
-	/// <inheritdoc />
-	protected override IEnumerable<TimeSpan> TimeFrames => AllTimeFrames;
 
 	/// <inheritdoc />
 	public override string[] AssociatedBoards { get; } = [BoardCodes.Bitexbook];

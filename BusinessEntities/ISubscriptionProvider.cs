@@ -31,9 +31,9 @@ public interface ISubscriptionProvider
 	Subscription OrderLookup { get; }
 
 	/// <summary>
-	/// Get global subscription on <see cref="TimeFrameInfoMessage"/> lookup. Can be <see langword="null"/>.
+	/// Get global subscription on <see cref="DataTypeInfoMessage"/> lookup. Can be <see langword="null"/>.
 	/// </summary>
-	Subscription TimeFrameLookup { get; }
+	Subscription DataTypeLookup { get; }
 
 	/// <summary>
 	/// Value received.
@@ -114,6 +114,11 @@ public interface ISubscriptionProvider
 	/// <see cref="Position"/> received.
 	/// </summary>
 	event Action<Subscription, Position> PositionReceived;
+
+	/// <summary>
+	/// <see cref="DataType"/> received.
+	/// </summary>
+	event Action<Subscription, DataType> DataTypeReceived;
 
 	/// <summary>
 	/// Subscription is online.

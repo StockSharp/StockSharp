@@ -83,13 +83,13 @@ class DummyProvider : CollectionSecurityProvider, IMarketDataProvider, IPosition
 		remove => throw new NotSupportedException();
 	}
 
-	event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, Exception> IMarketDataProvider.LookupTimeFramesResult
+	event Action<DataTypeLookupMessage, IEnumerable<TimeSpan>, Exception> IMarketDataProvider.LookupTimeFramesResult
 	{
 		add => throw new NotSupportedException();
 		remove => throw new NotSupportedException();
 	}
 
-	event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> IMarketDataProvider.LookupTimeFramesResult2
+	event Action<DataTypeLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> IMarketDataProvider.LookupTimeFramesResult2
 	{
 		add => throw new NotSupportedException();
 		remove => throw new NotSupportedException();

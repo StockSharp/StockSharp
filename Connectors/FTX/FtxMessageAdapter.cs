@@ -18,9 +18,6 @@ public partial class FtxMessageAdapter
 	};
 
 	/// <inheritdoc />
-	protected override IEnumerable<TimeSpan> TimeFrames => _timeFrames;
-
-	/// <inheritdoc />
 	public override IEnumerable<int> SupportedOrderBookDepths => new[] { 100 };
 
 	/// <summary>
@@ -37,11 +34,10 @@ public partial class FtxMessageAdapter
 		this.RemoveSupportedMessage(MessageTypes.Portfolio);
 		this.RemoveSupportedMessage(MessageTypes.OrderReplace);
 
-
 		this.AddSupportedMarketDataType(DataType.Ticks);
 		this.AddSupportedMarketDataType(DataType.MarketDepth);
 		this.AddSupportedMarketDataType(DataType.Level1);
-		this.AddSupportedMarketDataType(DataType.CandleTimeFrame);
+		this.AddSupportedCandleTimeFrames(AllTimeFrames);
 
 		this.AddSupportedResultMessage(MessageTypes.SecurityLookup);
 		this.AddSupportedResultMessage(MessageTypes.PortfolioLookup);

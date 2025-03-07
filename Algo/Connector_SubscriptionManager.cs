@@ -21,7 +21,7 @@ partial class Connector
 			if (type == DataType.PositionChanges ||
 				type == DataType.Securities ||
 				type == DataType.Board ||
-				type == DataType.TimeFrames)
+				type == DataType.DataTypes)
 			{
 				LookupItems = [];
 			}

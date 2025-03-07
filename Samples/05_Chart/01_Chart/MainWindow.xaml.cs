@@ -762,7 +762,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 		Subscription ISubscriptionProvider.PortfolioLookup => default;
 		Subscription ISubscriptionProvider.BoardLookup => default;
 		Subscription ISubscriptionProvider.OrderLookup => default;
-		Subscription ISubscriptionProvider.TimeFrameLookup => default;
+		Subscription ISubscriptionProvider.DataTypeLookup => default;
 
 		event Action<Subscription, object> ISubscriptionProvider.SubscriptionReceived { add { } remove { } }
 
@@ -780,6 +780,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 		event Action<Subscription, OrderFail> ISubscriptionProvider.OrderEditFailReceived { add { } remove { } }
 		event Action<Subscription, Portfolio> ISubscriptionProvider.PortfolioReceived { add { } remove { } }
 		event Action<Subscription, Position> ISubscriptionProvider.PositionReceived { add { } remove { } }
+		event Action<Subscription, DataType> ISubscriptionProvider.DataTypeReceived { add { } remove { } }
 		
 		event Action<Subscription> ISubscriptionProvider.SubscriptionOnline { add { } remove { } }
 		event Action<Subscription> ISubscriptionProvider.SubscriptionStarted { add { } remove { } }

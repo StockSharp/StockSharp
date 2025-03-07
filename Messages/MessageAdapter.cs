@@ -63,13 +63,13 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 		set => _supportedResultMessages = CheckDuplicate(value, nameof(SupportedResultMessages));
 	}
 
-	private IEnumerable<MessageTypeInfo> _possibleSupportedMessages = [];
+	private readonly CachedSynchronizedSet<MessageTypeInfo> _possibleSupportedMessages = [];
 
 	/// <inheritdoc />
 	[Browsable(false)]
 	public virtual IEnumerable<MessageTypeInfo> PossibleSupportedMessages
 	{
-		get => _possibleSupportedMessages;
+		get => _possibleSupportedMessages.Cache;
 		set
 		{
 			if (value == null)
@@ -79,20 +79,22 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 			if (duplicate != null)
 				throw new ArgumentException(LocalizedStrings.HasDuplicates.Put(duplicate.Key), nameof(value));
 
-			_possibleSupportedMessages = value;
+			_possibleSupportedMessages.Clear();
+			_possibleSupportedMessages.AddRange(value);
+
 			OnPropertyChanged();
 
 			SupportedInMessages = value.Select(t => t.Type).ToArray();
 		}
 	}
 
-	private IEnumerable<DataType> _supportedMarketDataTypes = [];
+	private readonly CachedSynchronizedSet<DataType> _supportedMarketDataTypes = [];
 
 	/// <inheritdoc />
 	[Browsable(false)]
 	public virtual IEnumerable<DataType> SupportedMarketDataTypes
 	{
-		get => _supportedMarketDataTypes;
+		get => _supportedMarketDataTypes.Cache;
 		set
 		{
 			if (value == null)
@@ -102,7 +104,9 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 			if (duplicate != null)
 				throw new ArgumentException(LocalizedStrings.HasDuplicates.Put(duplicate.Key), nameof(value));
 
-			_supportedMarketDataTypes = value.ToArray();
+			_supportedMarketDataTypes.Clear();
+			_supportedMarketDataTypes.AddRange(value);
+
 			OnPropertyChanged();
 		}
 	}
@@ -415,8 +419,8 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 
 		switch (message.Type)
 		{
-			case MessageTypes.TimeFrameInfo:
-				_timeFrames.AddRange(((TimeFrameInfoMessage)message).TimeFrames);
+			case MessageTypes.DataTypeInfo:
+				_dataTypes.AddRange(((DataTypeInfoMessage)message).DataTypes);
 				break;
 		}
 
@@ -542,29 +546,13 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 	public virtual IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 		=> new OrderLogMarketDepthBuilder(securityId);
 
-	private readonly HashSet<TimeSpan> _timeFrames = [];
-
-	/// <summary>
-	/// Get possible time-frames for the specified instrument.
-	/// </summary>
-	protected virtual IEnumerable<TimeSpan> TimeFrames => _timeFrames;
-
-	/// <summary>
-	/// Get possible time-frames for the specified instrument.
-	/// </summary>
-	/// <param name="securityId">Security ID.</param>
-	/// <param name="from">The initial date from which you need to get data.</param>
-	/// <param name="to">The final date by which you need to get data.</param>
-	/// <returns>Possible time-frames.</returns>
-	[Obsolete("Use GetCandleArgs method.")]
-	protected virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
-		=> _timeFrames;
+	private readonly HashSet<DataType> _dataTypes = [];
 
 	/// <inheritdoc />
 	public virtual IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
 	{
 		return candleType == typeof(TimeFrameCandleMessage)
-			? TimeFrames.Cast<object>()
+			? _dataTypes.Where(dt => dt.IsCandles).Select(dt => dt.Arg)
 			: [];
 	}
 

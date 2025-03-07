@@ -146,7 +146,7 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 			}
 
 			case MessageTypes.SecurityLookup:
-			case MessageTypes.TimeFrameLookup:
+			case MessageTypes.DataTypeLookup:
 			case MessageTypes.BoardLookup:
 			case MessageTypes.MarketData:
 			{

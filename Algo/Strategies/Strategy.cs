@@ -365,6 +365,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				isp.OrderCancelFailReceived   -= OnConnectorOrderCancelFailReceived;
 				isp.OrderEditFailReceived     -= OnConnectorOrderEditFailReceived;
 				isp.PortfolioReceived         -= OnConnectorPortfolioReceived;
+				isp.DataTypeReceived          -= OnConnectorDataTypeReceived;
 				isp.SubscriptionReceived      -= OnConnectorSubscriptionReceived;
 				isp.SubscriptionOnline        -= OnConnectorSubscriptionOnline;
 				isp.SubscriptionStarted       -= OnConnectorSubscriptionStarted;
@@ -405,6 +406,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				isp.OrderCancelFailReceived   += OnConnectorOrderCancelFailReceived;
 				isp.OrderEditFailReceived     += OnConnectorOrderEditFailReceived;
 				isp.PortfolioReceived         += OnConnectorPortfolioReceived;
+				isp.DataTypeReceived          += OnConnectorDataTypeReceived;
 				isp.SubscriptionReceived      += OnConnectorSubscriptionReceived;
 				isp.SubscriptionOnline        += OnConnectorSubscriptionOnline;
 				isp.SubscriptionStarted       += OnConnectorSubscriptionStarted;

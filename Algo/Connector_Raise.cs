@@ -114,10 +114,12 @@ partial class Connector
 	public event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult2;
 
 	/// <inheritdoc />
-	public event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult;
+	[Obsolete("Use DataTypeReceived and SubscriptionStopped events.")]
+	public event Action<DataTypeLookupMessage, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult;
 	
 	/// <inheritdoc />
-	public event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult2;
+	[Obsolete("Use DataTypeReceived and SubscriptionStopped events.")]
+	public event Action<DataTypeLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult2;
 
 	/// <inheritdoc />
 	public event Action<ExchangeBoard, SessionStates> SessionStateChanged;
@@ -169,6 +171,9 @@ partial class Connector
 
 	/// <inheritdoc />
 	public event Action<Subscription, Position> PositionReceived;
+
+	/// <inheritdoc />
+	public event Action<Subscription, DataType> DataTypeReceived;
 
 	/// <inheritdoc />
 	public event Action<Subscription> SubscriptionOnline;
@@ -394,10 +399,12 @@ partial class Connector
 	/// </summary>
 	/// <param name="message">Message.</param>
 	/// <param name="error">An error of lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
-	/// <param name="timeFrames">Found time-frames.</param>
-	/// <param name="newTimeFrames">Newly created.</param>
-	private void RaiseLookupTimeFramesResult(TimeFrameLookupMessage message, Exception error, TimeSpan[] timeFrames, TimeSpan[] newTimeFrames)
+	/// <param name="dataTypes">Found data types.</param>
+	/// <param name="newDataTypes">Newly created.</param>
+	private void RaiseLookupDataTypesResult(DataTypeLookupMessage message, Exception error, DataType[] dataTypes, DataType[] newDataTypes)
 	{
+		var timeFrames = dataTypes.FilterTimeFrames().ToArray();
+		var newTimeFrames = newDataTypes.FilterTimeFrames().ToArray();
 		LookupTimeFramesResult?.Invoke(message, timeFrames, error);
 		LookupTimeFramesResult2?.Invoke(message, timeFrames, newTimeFrames, error);
 	}

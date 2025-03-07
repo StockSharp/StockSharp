@@ -68,8 +68,8 @@ public static class SubscriptionExtensions
 			return new BoardLookupMessage();
 		else if (dataType == DataType.Users)
 			return new UserLookupMessage();
-		else if (dataType == DataType.TimeFrames)
-			return new TimeFrameLookupMessage();
+		else if (dataType == DataType.DataTypes)
+			return new DataTypeLookupMessage();
 		else if (dataType.IsMarketData)
 			return new MarketDataMessage { DataType2 = dataType };
 		else if (dataType == DataType.Transactions)

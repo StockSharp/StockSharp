@@ -621,8 +621,8 @@ partial class Connector
 					ProcessSecurityMessage((SecurityMessage)message);
 					break;
 
-				case MessageTypes.TimeFrameInfo:
-					ProcessTimeFrameInfoMessage((TimeFrameInfoMessage)message);
+				case MessageTypes.DataTypeInfo:
+					ProcessDataTypeInfoMessage((DataTypeInfoMessage)message);
 					break;
 
 				case MessageTypes.Level1Change:
@@ -750,8 +750,8 @@ partial class Connector
 					RaiseLookupBoardsResult(boardLookup, error, [.. ExchangeBoards.Filter(boardLookup)], []);
 				else if (originalMsg is PortfolioLookupMessage pfLookup)
 					RaiseLookupPortfoliosResult(pfLookup, error, [.. Portfolios.Filter(pfLookup)], []);
-				else if (originalMsg is TimeFrameLookupMessage tfLookup)
-					RaiseLookupTimeFramesResult(tfLookup, error, [], []);
+				else if (originalMsg is DataTypeLookupMessage tfLookup)
+					RaiseLookupDataTypesResult(tfLookup, error, [], []);
 			}
 		}
 	}
@@ -796,9 +796,9 @@ partial class Connector
 		{
 			RaiseLookupPortfoliosResult(pfLookup, null, [.. Portfolios.Filter(pfLookup)], Typed<Portfolio>());
 		}
-		else if (subscription.SubscriptionMessage is TimeFrameLookupMessage tfLookup)
+		else if (subscription.SubscriptionMessage is DataTypeLookupMessage tfLookup)
 		{
-			RaiseLookupTimeFramesResult(tfLookup, null, Typed<TimeSpan>(), Typed<TimeSpan>());
+			RaiseLookupDataTypesResult(tfLookup, null, Typed<DataType>(), Typed<DataType>());
 		}
 	}
 
@@ -922,12 +922,12 @@ partial class Connector
 		RaiseReceived(security, subscriptions, SecurityReceived);
 	}
 
-	private void ProcessTimeFrameInfoMessage(TimeFrameInfoMessage message)
+	private void ProcessDataTypeInfoMessage(DataTypeInfoMessage message)
 	{
-		_subscriptionManager.ProcessLookupResponse(message, message.TimeFrames);
+		_subscriptionManager.ProcessLookupResponse(message, message.DataTypes);
 
-		// TODO
-		//RaiseReceived(security, message, TimeFrameReceived);
+		foreach (var dt in message.DataTypes)
+			RaiseReceived(dt, message, DataTypeReceived);
 	}
 
 	private void ProcessLevel1ChangeMessage(Level1ChangeMessage message)

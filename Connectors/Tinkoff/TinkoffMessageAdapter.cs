@@ -32,7 +32,7 @@ public partial class TinkoffMessageAdapter
 
 		this.AddSupportedMarketDataType(DataType.MarketDepth);
 		this.AddSupportedMarketDataType(DataType.Level1);
-		this.AddSupportedMarketDataType(DataType.CandleTimeFrame);
+		this.AddSupportedCandleTimeFrames(AllTimeFrames);
 
 		this.AddSupportedResultMessage(MessageTypes.SecurityLookup);
 		this.AddSupportedResultMessage(MessageTypes.PortfolioLookup);
@@ -49,8 +49,10 @@ public partial class TinkoffMessageAdapter
 	public override bool IsAllDownloadingSupported(DataType dataType)
 		=> dataType == DataType.Securities || base.IsAllDownloadingSupported(dataType);
 
-	/// <inheritdoc />
-	protected override IEnumerable<TimeSpan> TimeFrames => TinkoffExtensions.TimeFrames;
+	/// <summary>
+	/// All possible time frames.
+	/// </summary>
+	public static IEnumerable<TimeSpan> AllTimeFrames => TinkoffExtensions.TimeFrames;
 
 	/// <inheritdoc />
 	public override bool IsSupportCandlesUpdates(MarketDataMessage subscription) => true;

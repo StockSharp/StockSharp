@@ -3392,7 +3392,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 			case MessageTypes.SecurityLookup:
 			case MessageTypes.BoardLookup:
-			case MessageTypes.TimeFrameLookup:
+			case MessageTypes.DataTypeLookup:
 			{
 				// result will be sends as a loopback from underlying market data adapter
 				break;
@@ -3610,7 +3610,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	IEnumerable<MessageTypeInfo> IMessageAdapter.PossibleSupportedMessages { get; } =
 	[
 		MessageTypes.SecurityLookup.ToInfo(),
-		MessageTypes.TimeFrameLookup.ToInfo(),
+		MessageTypes.DataTypeLookup.ToInfo(),
 		MessageTypes.BoardLookup.ToInfo(),
 		MessageTypes.MarketData.ToInfo(),
 		MessageTypes.PortfolioLookup.ToInfo(),
@@ -3635,7 +3635,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	[
 		MessageTypes.SecurityLookup,
 		MessageTypes.PortfolioLookup,
-		MessageTypes.TimeFrameLookup,
+		MessageTypes.DataTypeLookup,
 		MessageTypes.BoardLookup,
 	];
 	IEnumerable<DataType> IMessageAdapter.SupportedMarketDataTypes { get; } =

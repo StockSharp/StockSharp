@@ -27,7 +27,7 @@ public partial class CoinbaseMessageAdapter
 		this.AddSupportedMarketDataType(DataType.Ticks);
 		this.AddSupportedMarketDataType(DataType.MarketDepth);
 		this.AddSupportedMarketDataType(DataType.Level1);
-		this.AddSupportedMarketDataType(DataType.CandleTimeFrame);
+		this.AddSupportedCandleTimeFrames(AllTimeFrames);
 
 		this.AddSupportedResultMessage(MessageTypes.SecurityLookup);
 		this.AddSupportedResultMessage(MessageTypes.PortfolioLookup);
@@ -42,7 +42,7 @@ public partial class CoinbaseMessageAdapter
 	public override bool IsSupportOrderBookIncrements => true;
 
 	/// <inheritdoc />
-	protected override IEnumerable<TimeSpan> TimeFrames { get; } = [.. Extensions.TimeFrames.Keys];
+	public static IEnumerable<TimeSpan> AllTimeFrames => Extensions.TimeFrames.Keys;
 
 	private static readonly DataType _tf5min = DataType.TimeFrame(TimeSpan.FromMinutes(5));
 

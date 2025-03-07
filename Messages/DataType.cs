@@ -135,9 +135,9 @@ public class DataType : Equatable<DataType>, IPersistable
 	public static DataType Users { get; } = CreateImmutable<UserInfoMessage>();
 
 	/// <summary>
-	/// The candle time frames.
+	/// Data type info.
 	/// </summary>
-	public static DataType TimeFrames { get; } = CreateImmutable<TimeFrameInfoMessage>();
+	public static DataType DataTypes { get; } = CreateImmutable<DataTypeInfoMessage>();
 
 	/// <summary>
 	/// <see cref="TimeFrameCandleMessage"/> data type.
@@ -414,7 +414,7 @@ public class DataType : Equatable<DataType>, IPersistable
 		this == Board				||
 		this == BoardState			||
 		this == SecurityLegs		||
-		this == TimeFrames;
+		this == DataTypes;
 
 	private bool _isSecurityRequired;
 
@@ -438,7 +438,7 @@ public class DataType : Equatable<DataType>, IPersistable
 		this == News		||
 		this == Board		||
 		this == BoardState	||
-		this == TimeFrames;
+		this == DataTypes;
 
 	/// <summary>
 	/// Is the data type can be used as candles compression source.

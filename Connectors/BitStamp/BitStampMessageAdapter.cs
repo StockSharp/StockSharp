@@ -28,7 +28,7 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 		this.AddSupportedMarketDataType(DataType.MarketDepth);
 		//this.AddSupportedMarketDataType(DataType.Level1);
 		this.AddSupportedMarketDataType(DataType.OrderLog);
-		this.AddSupportedMarketDataType(DataType.CandleTimeFrame);
+		this.AddSupportedCandleTimeFrames(AllTimeFrames);
 
 		this.AddSupportedResultMessage(MessageTypes.SecurityLookup);
 		this.AddSupportedResultMessage(MessageTypes.PortfolioLookup);
@@ -42,8 +42,10 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 	/// <inheritdoc />
 	public override string[] AssociatedBoards { get; } = new[] { BoardCodes.BitStamp };
 
-	/// <inheritdoc />
-	protected override IEnumerable<TimeSpan> TimeFrames { get; } = new[]
+	/// <summary>
+	/// Possible time-frames.
+	/// </summary>
+	public static IEnumerable<TimeSpan> AllTimeFrames { get; } = new[]
 	{
 		TimeSpan.FromMinutes(1),
 		TimeSpan.FromMinutes(3),

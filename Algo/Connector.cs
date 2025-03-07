@@ -351,7 +351,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 	/// <inheritdoc />
 	public Subscription BoardLookup { get; } = ToSubscription<BoardLookupMessage>();
 	/// <inheritdoc />
-	public Subscription TimeFrameLookup { get; } = ToSubscription<TimeFrameLookupMessage>();
+	public Subscription DataTypeLookup { get; } = ToSubscription<DataTypeLookupMessage>();
 	/// <inheritdoc />
 	public Subscription PortfolioLookup { get; } = ToSubscription<PortfolioLookupMessage>();
 	/// <inheritdoc />
@@ -378,8 +378,8 @@ public partial class Connector : BaseLogReceiver, IConnector
 				case MessageTypes.BoardLookup:
 					connector.SubscriptionsOnConnect.Add(connector.BoardLookup);
 					break;
-				case MessageTypes.TimeFrameLookup:
-					connector.SubscriptionsOnConnect.Add(connector.TimeFrameLookup);
+				case MessageTypes.DataTypeLookup:
+					connector.SubscriptionsOnConnect.Add(connector.DataTypeLookup);
 					break;
 				case MessageTypes.PortfolioLookup:
 					connector.SubscriptionsOnConnect.Add(connector.PortfolioLookup);
@@ -402,8 +402,8 @@ public partial class Connector : BaseLogReceiver, IConnector
 				case MessageTypes.BoardLookup:
 					connector.SubscriptionsOnConnect.Remove(connector.BoardLookup);
 					break;
-				case MessageTypes.TimeFrameLookup:
-					connector.SubscriptionsOnConnect.Remove(connector.TimeFrameLookup);
+				case MessageTypes.DataTypeLookup:
+					connector.SubscriptionsOnConnect.Remove(connector.DataTypeLookup);
 					break;
 				case MessageTypes.PortfolioLookup:
 					connector.SubscriptionsOnConnect.Remove(connector.PortfolioLookup);
