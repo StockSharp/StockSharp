@@ -4,16 +4,10 @@ using StockSharp.Algo.Candles;
 
 partial class MarketRuleHelper
 {
-	private abstract class BaseCandleSeriesRule<TCandle> : MarketRule<Subscription, TCandle>
+	private abstract class BaseCandleSeriesRule<TCandle>(Subscription subscription) : MarketRule<Subscription, TCandle>(subscription)
 		where TCandle : ICandleMessage
 	{
-		protected BaseCandleSeriesRule(Subscription subscription)
-			: base(subscription)
-		{
-			Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
-		}
-
-		protected Subscription Subscription { get; }
+		protected Subscription Subscription { get; } = subscription ?? throw new ArgumentNullException(nameof(subscription));
 
 		protected void Activate(ICandleMessage candle)
 		{
@@ -22,9 +16,7 @@ partial class MarketRuleHelper
 			else
 			{
 #pragma warning disable CS0618 // Type or member is obsolete
-#pragma warning disable CS0612 // Type or member is obsolete
 				base.Activate(((CandleMessage)candle).ToCandle(Subscription.CandleSeries.Security).To<TCandle>());
-#pragma warning restore CS0612 // Type or member is obsolete
 #pragma warning restore CS0618 // Type or member is obsolete
 			}
 		}
@@ -92,15 +84,10 @@ partial class MarketRuleHelper
 		}
 	}
 
-	private class CandleStartedRule<TCandle> : CandleSeriesRule<TCandle>
+	private class CandleStartedRule<TCandle>(ISubscriptionProvider subscriptionProvider, Subscription subscription) : CandleSeriesRule<TCandle>(subscriptionProvider, subscription)
 		where TCandle : ICandleMessage
 	{
 		private ICandleMessage _currCandle;
-
-		public CandleStartedRule(ISubscriptionProvider subscriptionProvider, Subscription subscription)
-			: base(subscriptionProvider, subscription)
-		{
-		}
 
 		protected override void OnProcessCandle(ICandleMessage candle)
 		{
@@ -136,16 +123,10 @@ partial class MarketRuleHelper
 		}
 	}
 
-	private class CurrentCandleSeriesRule<TCandle> : CandleSeriesRule<TCandle>
+	private class CurrentCandleSeriesRule<TCandle>(ISubscriptionProvider subscriptionProvider, Subscription subscription, Func<ICandleMessage, bool> condition) : CandleSeriesRule<TCandle>(subscriptionProvider, subscription)
 		where TCandle : ICandleMessage
 	{
-		private readonly Func<ICandleMessage, bool> _condition;
-
-		public CurrentCandleSeriesRule(ISubscriptionProvider subscriptionProvider, Subscription subscription, Func<ICandleMessage, bool> condition)
-			: base(subscriptionProvider, subscription)
-		{
-			_condition = condition ?? throw new ArgumentNullException(nameof(condition));
-		}
+		private readonly Func<ICandleMessage, bool> _condition = condition ?? throw new ArgumentNullException(nameof(condition));
 
 		protected override void OnProcessCandle(ICandleMessage candle)
 		{
