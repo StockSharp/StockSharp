@@ -2,15 +2,8 @@
 
 partial class MarketRuleHelper
 {
-	private abstract class OrderRule<TProvider, TArg> : MarketRule<Order, TArg>
+	private abstract class OrderRule<TArg>(Order order) : MarketRule<Order, TArg>(order)
 	{
-		protected OrderRule(Order order, TProvider provider)
-			: base(order)
-		{
-			Order = order ?? throw new ArgumentNullException(nameof(order));
-			Provider = provider ?? throw new ArgumentNullException(nameof(provider));
-		}
-
 		protected override bool CanFinish()
 		{
 			return base.CanFinish() || CheckOrderState();
@@ -21,9 +14,7 @@ partial class MarketRuleHelper
 			return Order.State.IsFinal();
 		}
 
-		protected Order Order { get; }
-
-		protected TProvider Provider { get; }
+		protected Order Order { get; } = order ?? throw new ArgumentNullException(nameof(order));
 
 		protected void TrySubscribe()
 		{
@@ -51,35 +42,40 @@ partial class MarketRuleHelper
 		}
 	}
 
-	private class RegisterFailedOrderRule : OrderRule<ITransactionProvider, OrderFail>
+	private abstract class ProviderOrderRule<TArg>(Order order, ISubscriptionProvider provider) : OrderRule<TArg>(order)
 	{
-		public RegisterFailedOrderRule(Order order, ITransactionProvider provider)
+		protected ISubscriptionProvider Provider { get; } = provider ?? throw new ArgumentNullException(nameof(provider));
+	}
+
+	private class RegisterFailedOrderRule : ProviderOrderRule<OrderFail>
+	{
+		public RegisterFailedOrderRule(Order order, ISubscriptionProvider provider)
 			: base(order, provider)
 		{
-			Name = LocalizedStrings.ErrorRegistering + " ";
+			Name = LocalizedStrings.ErrorRegistering;
 			TrySubscribe();
 		}
 
 		protected override void Subscribe()
 		{
-			Provider.OrderRegisterFailed += OnOrderRegisterFailed;
+			Provider.OrderRegisterFailReceived += OnOrderRegisterFailReceived;
 		}
 
 		protected override void UnSubscribe()
 		{
-			Provider.OrderRegisterFailed -= OnOrderRegisterFailed;
+			Provider.OrderRegisterFailReceived -= OnOrderRegisterFailReceived;
 		}
 
-		private void OnOrderRegisterFailed(OrderFail fail)
+		private void OnOrderRegisterFailReceived(Subscription subscription, OrderFail fail)
 		{
 			if (fail.Order == Order)
 				Activate(fail);
 		}
 	}
 
-	private class CancelFailedOrderRule : OrderRule<ITransactionProvider, OrderFail>
+	private class CancelFailedOrderRule : ProviderOrderRule<OrderFail>
 	{
-		public CancelFailedOrderRule(Order order, ITransactionProvider provider)
+		public CancelFailedOrderRule(Order order, ISubscriptionProvider provider)
 			: base(order, provider)
 		{
 			Name = LocalizedStrings.ErrorCancelling;
@@ -88,22 +84,22 @@ partial class MarketRuleHelper
 
 		protected override void Subscribe()
 		{
-			Provider.OrderCancelFailed += OnOrderCancelFailed;
+			Provider.OrderCancelFailReceived += OnOrderCancelFailReceived;
 		}
 
 		protected override void UnSubscribe()
 		{
-			Provider.OrderCancelFailed -= OnOrderCancelFailed;
+			Provider.OrderCancelFailReceived -= OnOrderCancelFailReceived;
 		}
 
-		private void OnOrderCancelFailed(OrderFail fail)
+		private void OnOrderCancelFailReceived(Subscription subscription, OrderFail fail)
 		{
 			if (fail.Order == Order)
 				Activate(fail);
 		}
 	}
 
-	private class ChangedOrNewOrderRule : OrderRule<ISubscriptionProvider, Order>
+	private class ChangedOrNewOrderRule : ProviderOrderRule<Order>
 	{
 		private readonly Func<Order, bool> _condition;
 		private bool _activated;
@@ -143,23 +139,29 @@ partial class MarketRuleHelper
 		}
 	}
 
-	private class EditedOrderRule : OrderRule<ITransactionProvider, Order>
+	[Obsolete]
+	private class EditedOrderRule : OrderRule<Order>
 	{
+		private readonly ITransactionProvider _provider;
+
 		public EditedOrderRule(Order order, ITransactionProvider provider)
-			: base(order, provider)
+			: base(order)
 		{
 			Name = "Order edit";
+
+			_provider = provider ?? throw new ArgumentNullException(nameof(provider));
+
 			TrySubscribe();
 		}
 
 		protected override void Subscribe()
 		{
-			Provider.OrderEdited += OnOrderEdited;
+			_provider.OrderEdited += OnOrderEdited;
 		}
 
 		protected override void UnSubscribe()
 		{
-			Provider.OrderEdited -= OnOrderEdited;
+			_provider.OrderEdited -= OnOrderEdited;
 		}
 
 		private void OnOrderEdited(long transactionId, Order order)
@@ -169,33 +171,33 @@ partial class MarketRuleHelper
 		}
 	}
 
-	private class EditFailedOrderRule : OrderRule<ITransactionProvider, OrderFail>
+	private class EditFailedOrderRule : ProviderOrderRule<OrderFail>
 	{
-		public EditFailedOrderRule(Order order, ITransactionProvider provider)
+		public EditFailedOrderRule(Order order, ISubscriptionProvider provider)
 			: base(order, provider)
 		{
-			Name = "Order edit failed";
+			Name = nameof(ISubscriptionProvider.OrderEditFailReceived);
 			TrySubscribe();
 		}
 
 		protected override void Subscribe()
 		{
-			Provider.OrderEditFailed += OnOrderEditFailed;
+			Provider.OrderEditFailReceived += OnOrderEditFailedReceived;
 		}
 
 		protected override void UnSubscribe()
 		{
-			Provider.OrderEditFailed -= OnOrderEditFailed;
+			Provider.OrderEditFailReceived -= OnOrderEditFailedReceived;
 		}
 
-		private void OnOrderEditFailed(long transactionId, OrderFail fail)
+		private void OnOrderEditFailedReceived(Subscription subscription, OrderFail fail)
 		{
 			if (fail.Order == Order)
 				Activate(fail);
 		}
 	}
 
-	private class NewTradeOrderRule : OrderRule<ISubscriptionProvider, MyTrade>
+	private class NewTradeOrderRule : ProviderOrderRule<MyTrade>
 	{
 		private decimal _receivedVolume;
 
@@ -233,7 +235,7 @@ partial class MarketRuleHelper
 		}
 	}
 
-	private class AllTradesOrderRule : OrderRule<ISubscriptionProvider, IEnumerable<MyTrade>>
+	private class AllTradesOrderRule : ProviderOrderRule<IEnumerable<MyTrade>>
 	{
 		private decimal _receivedVolume;
 
@@ -340,7 +342,7 @@ partial class MarketRuleHelper
 	/// <param name="order">The order to be traced for unsuccessful registration event.</param>
 	/// <param name="provider">The transactional provider.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Order, OrderFail> WhenRegisterFailed(this Order order, ITransactionProvider provider)
+	public static MarketRule<Order, OrderFail> WhenRegisterFailed(this Order order, ISubscriptionProvider provider)
 	{
 		return new RegisterFailedOrderRule(order, provider).Once();
 	}
@@ -351,7 +353,7 @@ partial class MarketRuleHelper
 	/// <param name="order">The order to be traced for unsuccessful cancelling event.</param>
 	/// <param name="provider">The transactional provider.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Order, OrderFail> WhenCancelFailed(this Order order, ITransactionProvider provider)
+	public static MarketRule<Order, OrderFail> WhenCancelFailed(this Order order, ISubscriptionProvider provider)
 	{
 		return new CancelFailedOrderRule(order, provider);
 	}
@@ -395,18 +397,19 @@ partial class MarketRuleHelper
 	/// <param name="order">The order to be traced.</param>
 	/// <param name="provider">The transactional provider.</param>
 	/// <returns>Rule.</returns>
+	[Obsolete("Use WhenChanged rule.")]
 	public static MarketRule<Order, Order> WhenEdited(this Order order, ITransactionProvider provider)
 	{
 		return new EditedOrderRule(order, provider);
 	}
 
 	/// <summary>
-	/// To create a rule for the order <see cref="ITransactionProvider.OrderEditFailed"/> event.
+	/// To create a rule for the order <see cref="ISubscriptionProvider.OrderEditFailReceived"/> event.
 	/// </summary>
 	/// <param name="order">The order to be traced.</param>
 	/// <param name="provider">The transactional provider.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Order, OrderFail> WhenEditFailed(this Order order, ITransactionProvider provider)
+	public static MarketRule<Order, OrderFail> WhenEditFailed(this Order order, ISubscriptionProvider provider)
 	{
 		return new EditFailedOrderRule(order, provider);
 	}

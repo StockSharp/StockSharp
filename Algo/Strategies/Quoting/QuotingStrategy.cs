@@ -568,7 +568,7 @@ public abstract class QuotingStrategy : Strategy
 					_editingChanges = newOrder;
 
 					var editRule = _order
-						.WhenEdited(this)
+						.WhenChanged(this)
 						.Do(o =>
 						{
 							LogDebug("Order {0} edited.", o.TransactionId);

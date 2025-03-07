@@ -93,15 +93,9 @@ public static partial class StrategyHelper
 
 	#region Strategy rules
 
-	private abstract class StrategyRule<TArg> : MarketRule<Strategy, TArg>
+	private abstract class StrategyRule<TArg>(Strategy strategy) : MarketRule<Strategy, TArg>(strategy)
 	{
-		protected StrategyRule(Strategy strategy)
-			: base(strategy)
-		{
-			Strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
-		}
-
-		protected Strategy Strategy { get; }
+		protected Strategy Strategy { get; } = strategy ?? throw new ArgumentNullException(nameof(strategy));
 	}
 
 	private sealed class PnLManagerStrategyRule : StrategyRule<decimal>
@@ -166,6 +160,7 @@ public static partial class StrategyHelper
 		}
 	}
 
+	[Obsolete]
 	private sealed class NewMyTradeStrategyRule : StrategyRule<MyTrade>
 	{
 		public NewMyTradeStrategyRule(Strategy strategy)
@@ -187,6 +182,7 @@ public static partial class StrategyHelper
 		}
 	}
 
+	[Obsolete]
 	private sealed class OrderRegisteredStrategyRule : StrategyRule<Order>
 	{
 		public OrderRegisteredStrategyRule(Strategy strategy)
@@ -203,6 +199,7 @@ public static partial class StrategyHelper
 		}
 	}
 
+	[Obsolete]
 	private sealed class OrderChangedStrategyRule : StrategyRule<Order>
 	{
 		public OrderChangedStrategyRule(Strategy strategy)
@@ -302,6 +299,7 @@ public static partial class StrategyHelper
 	/// </summary>
 	/// <param name="strategy">The strategy, based on which trade occurrence will be traced.</param>
 	/// <returns>Rule.</returns>
+	[Obsolete("Use WhenOwnTradeReceived rule.")]
 	public static MarketRule<Strategy, MyTrade> WhenNewMyTrade(this Strategy strategy)
 	{
 		return new NewMyTradeStrategyRule(strategy);
@@ -312,6 +310,7 @@ public static partial class StrategyHelper
 	/// </summary>
 	/// <param name="strategy">The strategy, based on which order occurrence will be traced.</param>
 	/// <returns>Rule.</returns>
+	[Obsolete("Use ISubscriptionProvider overload.")]
 	public static MarketRule<Strategy, Order> WhenOrderRegistered(this Strategy strategy)
 	{
 		return new OrderRegisteredStrategyRule(strategy);
@@ -322,6 +321,7 @@ public static partial class StrategyHelper
 	/// </summary>
 	/// <param name="strategy">The strategy, based on which orders change will be traced.</param>
 	/// <returns>Rule.</returns>
+	[Obsolete("Use WhenOrderReceived rule.")]
 	public static MarketRule<Strategy, Order> WhenOrderChanged(this Strategy strategy)
 	{
 		return new OrderChangedStrategyRule(strategy);
