@@ -490,8 +490,7 @@ public static class StorageHelper
 		{
 			return _original.Drive.Drive
 				.GetAvailableDataTypes(_original.SecurityId, ((IMarketDataStorage<CandleMessage>)this).Serializer.Format)
-				.Where(t => t.IsTFCandles)
-				.Select(t => (TimeSpan)t.Arg)
+				.FilterTimeFrames()
 				.FilterSmallerTimeFrames(_timeFrame)
 				.OrderByDescending();
 		}
