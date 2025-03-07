@@ -36,82 +36,82 @@ public interface ISubscriptionProvider
 	Subscription TimeFrameLookup { get; }
 
 	/// <summary>
-	/// Message received.
+	/// Value received.
 	/// </summary>
 	event Action<Subscription, object> SubscriptionReceived;
 
 	/// <summary>
-	/// Level1 received.
+	/// <see cref="Level1ChangeMessage"/> received.
 	/// </summary>
 	event Action<Subscription, Level1ChangeMessage> Level1Received;
 
 	/// <summary>
-	/// Order book received.
+	/// <see cref="IOrderBookMessage"/> received.
 	/// </summary>
 	event Action<Subscription, IOrderBookMessage> OrderBookReceived;
 
 	/// <summary>
-	/// Tick trade received.
+	/// <see cref="ITickTradeMessage"/> received.
 	/// </summary>
 	event Action<Subscription, ITickTradeMessage> TickTradeReceived;
 
 	/// <summary>
-	/// Tick trade received.
+	/// <see cref="IOrderLogMessage"/> received.
 	/// </summary>
 	event Action<Subscription, IOrderLogMessage> OrderLogReceived;
 
 	/// <summary>
-	/// Security received.
+	/// <see cref="Security"/> received.
 	/// </summary>
 	event Action<Subscription, Security> SecurityReceived;
 
 	/// <summary>
-	/// Board received.
+	/// <see cref="ExchangeBoard"/> received.
 	/// </summary>
 	event Action<Subscription, ExchangeBoard> BoardReceived;
 
 	/// <summary>
-	/// News received.
+	/// <see cref="News"/> received.
 	/// </summary>
 	event Action<Subscription, News> NewsReceived;
 
 	/// <summary>
-	/// Candle received.
+	/// <see cref="ICandleMessage"/> received.
 	/// </summary>
 	event Action<Subscription, ICandleMessage> CandleReceived;
 
 	/// <summary>
-	/// Own trade received.
+	/// <see cref="MyTrade"/> received.
 	/// </summary>
 	event Action<Subscription, MyTrade> OwnTradeReceived;
 
 	/// <summary>
-	/// Order received.
+	/// <see cref="Order"/> received.
 	/// </summary>
 	event Action<Subscription, Order> OrderReceived;
 
 	/// <summary>
-	/// Order registration error event.
+	/// <see cref="OrderFail"/> registration event.
 	/// </summary>
 	event Action<Subscription, OrderFail> OrderRegisterFailReceived;
 
 	/// <summary>
-	/// Order cancellation error event.
+	/// <see cref="OrderFail"/> cancellation event.
 	/// </summary>
 	event Action<Subscription, OrderFail> OrderCancelFailReceived;
 
 	/// <summary>
-	/// Order edition error event.
+	/// <see cref="OrderFail"/> edition event.
 	/// </summary>
 	event Action<Subscription, OrderFail> OrderEditFailReceived;
 
 	/// <summary>
-	/// Portfolio received.
+	/// <see cref="Portfolio"/> received.
 	/// </summary>
 	event Action<Subscription, Portfolio> PortfolioReceived;
 
 	/// <summary>
-	/// Position received.
+	/// <see cref="Position"/> received.
 	/// </summary>
 	event Action<Subscription, Position> PositionReceived;
 
