@@ -404,6 +404,19 @@ partial class MarketRuleHelper
 		return new OwnTradeReceivedRule(subscription, provider);
 	}
 
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.OwnTradeReceived"/>.
+	/// </summary>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, MyTrade> WhenOwnTradeReceived(this ISubscriptionProvider provider)
+	{
+		if (provider is null)
+			throw new ArgumentNullException(nameof(provider));
+
+		return WhenOwnTradeReceived(provider.OrderLookup, provider);
+	}
+
 	private class OrderReceivedRule : SubscriptionRule<Order>
 	{
 		public OrderReceivedRule(Subscription subscription, ISubscriptionProvider provider)
@@ -435,6 +448,67 @@ partial class MarketRuleHelper
 	public static MarketRule<Subscription, Order> WhenOrderReceived(this Subscription subscription, ISubscriptionProvider provider)
 	{
 		return new OrderReceivedRule(subscription, provider);
+	}
+
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.OrderReceived"/>.
+	/// </summary>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, Order> WhenOrderReceived(this ISubscriptionProvider provider)
+	{
+		if (provider is null)
+			throw new ArgumentNullException(nameof(provider));
+
+		return WhenOrderReceived(provider.OrderLookup, provider);
+	}
+
+	private class OrderRegisteredRule : SubscriptionRule<Order>
+	{
+		private readonly HashSet<Order> _orders = [];
+
+		public OrderRegisteredRule(Subscription subscription, ISubscriptionProvider provider)
+			: base(subscription, provider)
+		{
+			Name = $"{subscription.TransactionId}/{subscription.DataType} OrderRegistered";
+			Provider.OrderReceived += ProviderOnOrderReceived;
+		}
+
+		private void ProviderOnOrderReceived(Subscription subscription, Order order)
+		{
+			if (Subscription == subscription && _orders.Add(order))
+				Activate(order);
+		}
+
+		protected override void DisposeManaged()
+		{
+			Provider.OrderReceived -= ProviderOnOrderReceived;
+			base.DisposeManaged();
+		}
+	}
+
+	/// <summary>
+	/// To create a rule for event of occurrence of new order.
+	/// </summary>
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, Order> WhenOrderRegistered(this Subscription subscription, ISubscriptionProvider provider)
+	{
+		return new OrderRegisteredRule(subscription, provider);
+	}
+
+	/// <summary>
+	/// To create a rule for event of occurrence of new order.
+	/// </summary>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, Order> WhenOrderRegistered(this ISubscriptionProvider provider)
+	{
+		if (provider is null)
+			throw new ArgumentNullException(nameof(provider));
+
+		return WhenOrderRegistered(provider.OrderLookup, provider);
 	}
 
 	private class OrderFailReceivedRule : SubscriptionRule<OrderFail>
@@ -545,6 +619,65 @@ partial class MarketRuleHelper
 	public static MarketRule<Subscription, Position> WhenPositionReceived(this Subscription subscription, ISubscriptionProvider provider)
 	{
 		return new PositionReceivedRule(subscription, provider);
+	}
+
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.PositionReceived"/>.
+	/// </summary>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, Position> WhenPositionReceived(this ISubscriptionProvider provider)
+	{
+		if (provider is null)
+			throw new ArgumentNullException(nameof(provider));
+
+		return WhenPositionReceived(provider.PortfolioLookup, provider);
+	}
+
+	private class PortfolioReceivedRule : SubscriptionRule<Portfolio>
+	{
+		public PortfolioReceivedRule(Subscription subscription, ISubscriptionProvider provider)
+			: base(subscription, provider)
+		{
+			Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.PortfolioReceived)}";
+			Provider.PortfolioReceived += ProviderOnPortfolioReceived;
+		}
+
+		private void ProviderOnPortfolioReceived(Subscription subscription, Portfolio portfolio)
+		{
+			if (Subscription == subscription)
+				Activate(portfolio);
+		}
+
+		protected override void DisposeManaged()
+		{
+			Provider.PortfolioReceived -= ProviderOnPortfolioReceived;
+			base.DisposeManaged();
+		}
+	}
+
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.PortfolioReceived"/>.
+	/// </summary>
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, Portfolio> WhenPortfolioReceived(this Subscription subscription, ISubscriptionProvider provider)
+	{
+		return new PortfolioReceivedRule(subscription, provider);
+	}
+
+	/// <summary>
+	/// To create a rule for the event of <see cref="ISubscriptionProvider.PortfolioReceived"/>.
+	/// </summary>
+	/// <param name="provider">Subscription provider.</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<Subscription, Portfolio> WhenPortfolioReceived(this ISubscriptionProvider provider)
+	{
+		if (provider is null)
+			throw new ArgumentNullException(nameof(provider));
+
+		return WhenPortfolioReceived(provider.PortfolioLookup, provider);
 	}
 
 	private class ConditionOrderBookReceivedRule(Subscription subscription, ISubscriptionProvider provider, Func<IOrderBookMessage, bool> condition) : OrderBookReceivedRule(subscription, provider)
