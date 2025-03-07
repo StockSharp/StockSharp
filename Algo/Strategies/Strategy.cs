@@ -1392,8 +1392,65 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		order.StrategyId = EnsureGetId();
 
-		if (!order.State.IsFinal())
-			ApplyMonitorRules(order);
+		if (!order.State.IsFinal() && CancelOrdersWhenStopping)
+		{
+			IMarketRule matchedRule = order.WhenMatched(this);
+
+			if (WaitAllTrades)
+				matchedRule = matchedRule.And(order.WhenAllTrades(this));
+
+			var successRule = order
+				.WhenCanceled(this)
+				.Or(matchedRule, order.WhenRegisterFailed(this))
+				.Do(() => LogInfo(LocalizedStrings.OrderNoLongerActive.Put(order.TransactionId)))
+				.Until(() =>
+				{
+					if (order.State == OrderStates.Failed)
+						return true;
+
+					if (order.State != OrderStates.Done)
+					{
+						LogWarning(LocalizedStrings.OrderHasState, order.TransactionId, order.State);
+						return false;
+					}
+
+					if (!WaitAllTrades)
+						return true;
+
+					if (!_ordersInfo.TryGetValue(order, out var info))
+					{
+						LogWarning(LocalizedStrings.OrderNotFound, order.TransactionId);
+						return false;
+					}
+
+					var leftVolume = order.GetMatchedVolume() - info.ReceivedVolume;
+
+					if (leftVolume != 0)
+					{
+						LogDebug(LocalizedStrings.OrderHasBalance, order.TransactionId, leftVolume);
+						return false;
+					}
+
+					return true;
+				})
+				.Apply(this);
+
+			var canFinish = false;
+
+			order
+				.WhenCancelFailed(this)
+				.Do(f =>
+				{
+					if (ProcessState != ProcessStates.Stopping)
+						return;
+
+					canFinish = true;
+					LogInfo(LocalizedStrings.ErrorCancellingOrder.Put(order.TransactionId, f.Error.Message));
+				})
+				.Until(() => canFinish)
+				.Apply(this)
+				.Exclusive(successRule);
+		}
 
 		_newOrder?.Invoke(order);
 
@@ -1434,69 +1491,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		OnOrderRegisterFailed(fail, canRisk && _ordersInfo.TryGetValue(order, out var info) && info.IsOwn);
 
 		Rules.RemoveRulesByToken(order, null);
-	}
-
-	private void ApplyMonitorRules(Order order)
-	{
-		if (!CancelOrdersWhenStopping)
-			return;
-
-		IMarketRule matchedRule = order.WhenMatched(this);
-
-		if (WaitAllTrades)
-			matchedRule = matchedRule.And(order.WhenAllTrades(this));
-
-		var successRule = order
-			.WhenCanceled(this)
-			.Or(matchedRule, order.WhenRegisterFailed(this))
-			.Do(() => LogInfo(LocalizedStrings.OrderNoLongerActive.Put(order.TransactionId)))
-			.Until(() =>
-			{
-				if (order.State == OrderStates.Failed)
-					return true;
-
-				if (order.State != OrderStates.Done)
-				{
-					LogWarning(LocalizedStrings.OrderHasState, order.TransactionId, order.State);
-					return false;
-				}
-
-				if (!WaitAllTrades)
-					return true;
-
-				if (!_ordersInfo.TryGetValue(order, out var info))
-				{
-					LogWarning(LocalizedStrings.OrderNotFound, order.TransactionId);
-					return false;
-				}
-
-				var leftVolume = order.GetMatchedVolume() - info.ReceivedVolume;
-
-				if (leftVolume != 0)
-				{
-					LogDebug(LocalizedStrings.OrderHasBalance, order.TransactionId, leftVolume);
-					return false;
-				}
-
-				return true;
-			})
-			.Apply(this);
-
-		var canFinish = false;
-
-		order
-			.WhenCancelFailed(this)
-			.Do(f =>
-			{
-				if (ProcessState != ProcessStates.Stopping)
-					return;
-
-				canFinish = true;
-				LogInfo(LocalizedStrings.ErrorCancellingOrder.Put(order.TransactionId, f.Error.Message));
-			})
-			.Until(() => canFinish)
-			.Apply(this)
-			.Exclusive(successRule);
 	}
 
 	/// <inheritdoc />
@@ -1543,18 +1537,9 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		LogInfo(LocalizedStrings.OrderCancelling + " " + order.TransactionId);
 
-		OnOrderCanceling(order);
+		OrderCanceling?.Invoke(order);
 
 		SafeGetConnector().CancelOrder(order);
-	}
-
-	/// <summary>
-	/// To add the order to the strategy.
-	/// </summary>
-	/// <param name="order">Order.</param>
-	private void ProcessOrder(Order order)
-	{
-		ProcessOrder(order, false);
 	}
 
 	/// <summary>
@@ -1632,7 +1617,8 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		{
 			StatisticManager.AddChangedOrder(order);
 
-			OnOrderChanged(order);
+			OrderChanged?.Invoke(order);
+			ChangeLatency(order.LatencyCancellation);
 		}
 	}
 
@@ -1642,7 +1628,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		AddOrder(order, restored);
 
-		ProcessOrder(order);
+		ProcessOrder(order, false);
 
 		OnOrderRegistering(order);
 	}
@@ -1916,15 +1902,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	}
 
 	/// <summary>
-	/// The method, called at occurrence of new strategy trade.
-	/// </summary>
-	/// <param name="trade">New trade of a strategy.</param>
-	protected virtual void OnNewMyTrade(MyTrade trade)
-	{
-		NewMyTrade?.Invoke(trade);
-	}
-
-	/// <summary>
 	/// To call the event <see cref="OrderRegistering"/>.
 	/// </summary>
 	/// <param name="order">Order.</param>
@@ -1945,15 +1922,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	}
 
 	/// <summary>
-	/// To call the event <see cref="OrderCanceling"/>.
-	/// </summary>
-	/// <param name="order">Order.</param>
-	protected virtual void OnOrderCanceling(Order order)
-	{
-		OrderCanceling?.Invoke(order);
-	}
-
-	/// <summary>
 	/// To call the event <see cref="OrderReRegistering"/>.
 	/// </summary>
 	/// <param name="oldOrder">Cancelling order.</param>
@@ -1963,16 +1931,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		TryAddChildOrder(newOrder);
 
 		OrderReRegistering?.Invoke(oldOrder, newOrder);
-	}
-
-	/// <summary>
-	/// The method, called at strategy order change.
-	/// </summary>
-	/// <param name="order">The changed order.</param>
-	protected virtual void OnOrderChanged(Order order)
-	{
-		OrderChanged?.Invoke(order);
-		ChangeLatency(order.LatencyCancellation);
 	}
 
 	/// <summary>
@@ -2302,7 +2260,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		trade.Position ??= GetPositionValue(tradeSec, order.Portfolio);
 
-		TryInvoke(() => OnNewMyTrade(trade));
+		TryInvoke(() => NewMyTrade?.Invoke(trade));
 
 		TryInvoke(() =>
 		{
@@ -2699,40 +2657,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// </summary>
 	[Browsable(false)]
 	public bool IsBacktesting => Connector is HistoryEmulationConnector;
-
-	private ISecurityProvider SecurityProvider => SafeGetConnector();
-
-	int ISecurityProvider.Count => SecurityProvider.Count;
-
-	event Action<IEnumerable<Security>> ISecurityProvider.Added
-	{
-		add => SecurityProvider.Added += value;
-		remove => SecurityProvider.Added -= value;
-	}
-
-	event Action<IEnumerable<Security>> ISecurityProvider.Removed
-	{
-		add => SecurityProvider.Removed += value;
-		remove => SecurityProvider.Removed -= value;
-	}
-
-	event Action ISecurityProvider.Cleared
-	{
-		add => SecurityProvider.Cleared += value;
-		remove => SecurityProvider.Cleared -= value;
-	}
-
-	/// <inheritdoc />
-	public Security LookupById(SecurityId id) => SecurityProvider.LookupById(id);
-
-	/// <inheritdoc />
-	public IEnumerable<Security> Lookup(SecurityLookupMessage criteria) => SecurityProvider.Lookup(criteria);
-
-	SecurityMessage ISecurityMessageProvider.LookupMessageById(SecurityId id)
-		=> SecurityProvider.LookupMessageById(id);
-
-	IEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessages(SecurityLookupMessage criteria)
-		=> SecurityProvider.LookupMessages(criteria);
 
 	/// <summary>
 	/// Apply incoming command.
