@@ -275,19 +275,19 @@ partial class MarketRuleHelper
 	/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
 	/// <param name="subscriptionProvider">The subscription manager.</param>
 	/// <param name="candle">The candle to be traced for the event of candle total volume excess above a specific level.</param>
-	/// <param name="volume">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+	/// <param name="diff">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<TCandle, TCandle> WhenTotalVolumeMore<TCandle>(this ISubscriptionProvider subscriptionProvider, TCandle candle, Unit volume)
+	public static MarketRule<TCandle, TCandle> WhenTotalVolumeMore<TCandle>(this ISubscriptionProvider subscriptionProvider, TCandle candle, Unit diff)
 		where TCandle : ICandleMessage
 	{
 		if (candle == null)
 			throw new ArgumentNullException(nameof(candle));
 
-		var finishVolume = volume.Type == UnitTypes.Limit ? volume : candle.TotalVolume + volume;
+		var finishVolume = diff.Type == UnitTypes.Limit ? diff : candle.TotalVolume + diff;
 
 		return new ChangedCandleRule<TCandle>(subscriptionProvider, candle, c => c.TotalVolume > finishVolume)
 		{
-			Name = $"({candle.SecurityId}) V > {volume}"
+			Name = $"({candle.SecurityId}) V > {finishVolume}"
 		};
 	}
 
