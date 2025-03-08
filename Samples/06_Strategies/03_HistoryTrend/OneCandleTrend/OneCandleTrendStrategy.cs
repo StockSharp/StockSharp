@@ -1,56 +1,72 @@
-﻿using System;
-using StockSharp.Algo;
-using StockSharp.Algo.Candles;
+using System;
+using System.Collections.Generic;
+
 using StockSharp.Algo.Strategies;
-using StockSharp.Messages;
 using StockSharp.BusinessEntities;
+using StockSharp.Messages;
 
 namespace StockSharp.Samples.Strategies.HistoryTrend
 {
 	public class OneCandleTrendStrategy : Strategy
 	{
-		private readonly CandleSeries _candleSeries;
-		private Subscription _subscription;
+		private readonly StrategyParam<DataType> _candleTypeParam;
 
-		public OneCandleTrendStrategy(CandleSeries candleSeries)
+		public DataType CandleType
 		{
-			_candleSeries = candleSeries;
+			get => _candleTypeParam.Value;
+			set => _candleTypeParam.Value = value;
+		}
+
+		public OneCandleTrendStrategy()
+		{
+			_candleTypeParam = Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(5)))
+							  .SetDisplay("Candle Type", "Type of candles to use", "General");
+		}
+
+		public override IEnumerable<(Security sec, DataType dt)> GetWorkingSecurities()
+		{
+			return new[] { (Security, CandleType) };
 		}
 
 		protected override void OnStarted(DateTimeOffset time)
 		{
-			CandleReceived += OnCandleReceived;
-			_subscription = this.SubscribeCandles(_candleSeries);
-
 			base.OnStarted(time);
-		}
 
-		protected override void OnStopped()
-		{
-			if (_subscription != null)
+			// Create subscription
+			var subscription = SubscribeCandles(CandleType);
+			
+			subscription
+				.Bind(ProcessCandle)
+				.Start();
+
+			// Setup chart visualization if available
+			var area = CreateChartArea();
+			if (area != null)
 			{
-				UnSubscribe(_subscription);
-				_subscription = null;
+				DrawCandles(area, subscription);
+				DrawOwnTrades(area);
 			}
-
-			base.OnStopped();
 		}
 
-		private void OnCandleReceived(Subscription subscription, ICandleMessage candle)
+		private void ProcessCandle(ICandleMessage candle)
 		{
-			if (subscription != _subscription)
+			// Check if candle is finished
+			if (candle.State != CandleStates.Finished)
 				return;
 
-			if (candle.State != CandleStates.Finished) return;
+			// Check if strategy is ready to trade
+			if (!IsFormedAndOnlineAndAllowTrading())
+				return;
 
+			// Trend following strategy: buy on bullish candle, sell on bearish candle
 			if (candle.OpenPrice < candle.ClosePrice && Position <= 0)
 			{
+				// Bullish candle - buy
 				BuyMarket(Volume + Math.Abs(Position));
 			}
-
-			else
-			if (candle.OpenPrice > candle.ClosePrice && Position >= 0)
+			else if (candle.OpenPrice > candle.ClosePrice && Position >= 0)
 			{
+				// Bearish candle - sell
 				SellMarket(Volume + Math.Abs(Position));
 			}
 		}

@@ -1,70 +1,107 @@
-﻿using System;
-using StockSharp.Algo;
-using StockSharp.Algo.Candles;
+using System;
+using System.Collections.Generic;
+
+using Ecng.ComponentModel;
+
 using StockSharp.Algo.Strategies;
-using StockSharp.Messages;
 using StockSharp.BusinessEntities;
+using StockSharp.Messages;
 
 namespace StockSharp.Samples.Strategies.HistoryTrend
 {
 	public class StairsCountertrendStrategy : Strategy
 	{
-		private readonly CandleSeries _candleSeries;
-		private Subscription _subscription;
-
-		public StairsCountertrendStrategy(CandleSeries candleSeries)
-		{
-			_candleSeries = candleSeries;
-		}
-
+		private readonly StrategyParam<int> _lengthParam;
+		private readonly StrategyParam<DataType> _candleTypeParam;
+		
 		private int _bullLength;
 		private int _bearLength;
-		private int Length { get; set; } = 3;
+		
+		public int Length
+		{
+			get => _lengthParam.Value;
+			set => _lengthParam.Value = value;
+		}
+
+		public DataType CandleType
+		{
+			get => _candleTypeParam.Value;
+			set => _candleTypeParam.Value = value;
+		}
+
+		public StairsCountertrendStrategy()
+		{
+			_lengthParam = Param(nameof(Length), 3)
+						   .SetValidator(new IntGreaterThanZeroAttribute())
+						   .SetDisplay("Length", "Number of consecutive candles to trigger signal", "Strategy")
+						   .SetCanOptimize(true)
+						   .SetOptimize(2, 10, 1);
+
+			_candleTypeParam = Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(5)))
+							  .SetDisplay("Candle Type", "Type of candles to use", "General");
+		}
+
+		public override IEnumerable<(Security sec, DataType dt)> GetWorkingSecurities()
+		{
+			return new[] { (Security, CandleType) };
+		}
+
 		protected override void OnStarted(DateTimeOffset time)
 		{
-			CandleReceived += OnCandleReceived;
-			_subscription = this.SubscribeCandles(_candleSeries);
-
 			base.OnStarted(time);
-		}
+			
+			// Reset counters
+			_bullLength = 0;
+			_bearLength = 0;
 
-		protected override void OnStopped()
-		{
-			if (_subscription != null)
+			// Create subscription
+			var subscription = SubscribeCandles(CandleType);
+			
+			subscription
+				.Bind(ProcessCandle)
+				.Start();
+
+			// Setup chart visualization if available
+			var area = CreateChartArea();
+			if (area != null)
 			{
-				UnSubscribe(_subscription);
-				_subscription = null;
+				DrawCandles(area, subscription);
+				DrawOwnTrades(area);
 			}
-
-			base.OnStopped();
 		}
 
-		private void OnCandleReceived(Subscription subscription, ICandleMessage candle)
+		private void ProcessCandle(ICandleMessage candle)
 		{
-			if (subscription != _subscription)
+			// Check if candle is finished
+			if (candle.State != CandleStates.Finished)
 				return;
 
-			if (candle.State != CandleStates.Finished) return;
+			// Check if strategy is ready to trade
+			if (!IsFormedAndOnlineAndAllowTrading())
+				return;
 
+			// Update counters based on candle direction
 			if (candle.OpenPrice < candle.ClosePrice)
 			{
+				// Bullish candle
 				_bullLength++;
 				_bearLength = 0;
 			}
-			else
-			if (candle.OpenPrice > candle.ClosePrice)
+			else if (candle.OpenPrice > candle.ClosePrice)
 			{
+				// Bearish candle
 				_bullLength = 0;
 				_bearLength++;
 			}
 
+			// Countertrend strategy: 
+			// Sell after Length consecutive bullish candles
 			if (_bullLength >= Length && Position >= 0)
 			{
 				SellMarket(Volume + Math.Abs(Position));
 			}
-
-			else
-			if (_bearLength >= Length && Position <= 0)
+			// Buy after Length consecutive bearish candles
+			else if (_bearLength >= Length && Position <= 0)
 			{
 				BuyMarket(Volume + Math.Abs(Position));
 			}

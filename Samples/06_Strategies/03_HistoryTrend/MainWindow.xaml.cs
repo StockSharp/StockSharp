@@ -100,7 +100,7 @@ public partial class MainWindow
 			Security = _security,
 			Connector = _connector,
 			Portfolio = _portfolio,
-			CandleDataType = CandleSettingsEditor.DataType,
+			CandleType = CandleSettingsEditor.DataType,
 		};
 		_logManager.Sources.Add(_strategy);
 
