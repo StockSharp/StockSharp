@@ -3,6 +3,7 @@ namespace StockSharp.Samples.Testing.RealTime;
 using System;
 using System.ComponentModel;
 using System.Windows;
+using System.Collections.Generic;
 
 using Ecng.Collections;
 using Ecng.Common;
@@ -26,6 +27,7 @@ public partial class MainWindow
 {
 	private readonly SynchronizedList<ICandleMessage> _buffer = new();
 	private readonly SynchronizedList<Order> _bufferOrders = new();
+	private readonly HashSet<Order> _fistTimeOrders = new();
 	private readonly IChartCandleElement _candlesElem;
 	private readonly IChartActiveOrdersElement _ordersElem;
 	private readonly LogManager _logManager;
@@ -72,8 +74,8 @@ public partial class MainWindow
 
 	private void InitRealConnector()
 	{
-		_realConnector.OrderReceived += (s, o) => OrderGrid.Orders.Add(o);
-		_realConnector.OwnTradeReceived += (s, t) => TradeGrid.Trades.Add(t);
+		_realConnector.OrderReceived += (s, o) => OrderGrid.Orders.TryAdd(o);
+		_realConnector.OwnTradeReceived += (s, t) => TradeGrid.Trades.TryAdd(t);
 		_realConnector.OrderRegisterFailReceived += (s, f) => OrderGrid.AddRegistrationFail(f);
 
 		_realConnector.MassOrderCancelFailed += (transId, error) =>
@@ -148,9 +150,12 @@ public partial class MainWindow
 
 		_emuConnector.PositionReceived += (sub, p) => PortfolioGrid.Positions.TryAdd(p);
 
-		_emuConnector.OwnTradeReceived += (s, t) => TradeGrid.Trades.Add(t);
+		_emuConnector.OwnTradeReceived += (s, t) => TradeGrid.Trades.TryAdd(t);
 		_emuConnector.OrderReceived += (s, o) =>
 		{
+			if (!_fistTimeOrders.Add(o))
+				return;
+
 			_bufferOrders.Add(o);
 			OrderGrid.Orders.Add(o);
 		};

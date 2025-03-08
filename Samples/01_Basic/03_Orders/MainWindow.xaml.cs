@@ -5,6 +5,7 @@ using System.IO;
 
 using Ecng.Serialization;
 using Ecng.Configuration;
+using Ecng.Collections;
 
 using StockSharp.Algo;
 using StockSharp.BusinessEntities;
@@ -43,9 +44,9 @@ public partial class MainWindow
 		SecurityEditor.SecurityProvider = _connector;
 		PortfolioEditor.Portfolios = new PortfolioDataSource(_connector);
 
-		_connector.OrderReceived += (s, o) => OrderGrid.Orders.Add(o);
+		_connector.OrderReceived += (s, o) => OrderGrid.Orders.TryAdd(o);
 		_connector.OrderRegisterFailReceived += (s, f) => OrderGrid.AddRegistrationFail(f);
-		_connector.OwnTradeReceived += (s, t) => MyTradeGrid.Trades.Add(t);
+		_connector.OwnTradeReceived += (s, t) => MyTradeGrid.Trades.TryAdd(t);
 
 		_connector.Connect();
 	}

@@ -78,8 +78,8 @@ public partial class MainWindow
 			CandleDataType = CandleSettingsEditor.DataType,
 		};
 		_logManager.Sources.Add(_strategy);
-		_strategy.OwnTradeReceived += (s, t) => MyTradeGrid.Trades.Add(t);
-		_strategy.OrderReceived += (s, o) => OrderGrid.Orders.Add(o);
+		_strategy.OwnTradeReceived += (s, t) => MyTradeGrid.Trades.TryAdd(t);
+		_strategy.OrderReceived += (s, o) => OrderGrid.Orders.TryAdd(o);
 
 		_strategy.Start();
 	}

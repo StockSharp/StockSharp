@@ -138,7 +138,7 @@ public partial class MainWindow
 		// put the registration error into order's table
 		Connector.OrderRegisterFailReceived += (s, f) => _ordersWindow.OrderGrid.AddRegistrationFail(f);
 
-		Connector.OwnTradeReceived += (s, t) => _myTradesWindow.TradeGrid.Trades.Add(t);
+		Connector.OwnTradeReceived += (s, t) => _myTradesWindow.TradeGrid.Trades.TryAdd(t);
 
 		Connector.PositionReceived += (sub, p) => _portfoliosWindow.PortfolioGrid.Positions.TryAdd(p);
 

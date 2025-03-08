@@ -88,9 +88,9 @@ public partial class MainWindow
 		MyTradeGrid.Trades.Clear();
 
 		_connector.OrderBookReceived += (s, b) => MarketDepthControl.UpdateDepth(b);
-		_connector.OrderReceived += (s, o) => OrderGrid.Orders.Add(o);
+		_connector.OrderReceived += (s, o) => OrderGrid.Orders.TryAdd(o);
 		_connector.OrderRegisterFailReceived += (s, f) => OrderGrid.AddRegistrationFail(f);
-		_connector.OwnTradeReceived += (s, t) => MyTradeGrid.Trades.Add(t);
+		_connector.OwnTradeReceived += (s, t) => MyTradeGrid.Trades.TryAdd(t);
 
 		_strategy = new StairsCountertrendStrategy
 		{
