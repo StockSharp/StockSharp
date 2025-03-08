@@ -122,7 +122,7 @@ public sealed class StrategyNameGenerator
 	/// </summary>
 	public string Value
 	{
-		get => _value ?? (_value = _strategy.Name);
+		get => _value ??= _strategy.Name;
 		set
 		{
 			if (AutoGenerateStrategyName)

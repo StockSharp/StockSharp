@@ -285,14 +285,9 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 		}
 	}
 
-	private class BasketMarketDataSerializer : IMarketDataSerializer<TMessage>
+	private class BasketMarketDataSerializer(BasketMarketDataStorage<TMessage> parent) : IMarketDataSerializer<TMessage>
 	{
-		private readonly BasketMarketDataStorage<TMessage> _parent;
-
-		public BasketMarketDataSerializer(BasketMarketDataStorage<TMessage> parent)
-		{
-			_parent = parent ?? throw new ArgumentNullException(nameof(parent));
-		}
+		private readonly BasketMarketDataStorage<TMessage> _parent = parent ?? throw new ArgumentNullException(nameof(parent));
 
 		StorageFormats IMarketDataSerializer.Format => _parent.InnerStorages.First().Serializer.Format;
 

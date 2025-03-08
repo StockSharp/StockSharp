@@ -7,7 +7,7 @@ enum OrderOperations
 	Edit,
 }
 
-class EntityCache : ISnapshotHolder
+class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSecurity, IExchangeInfoProvider exchangeInfoProvider, IPositionProvider positionProvider) : ISnapshotHolder
 {
 	public class OrderChangeInfo
 	{
@@ -31,19 +31,11 @@ class EntityCache : ISnapshotHolder
 		public static readonly OrderChangeInfo NotExist = new();
 	}
 
-	private class OrderInfo
+	private class OrderInfo(EntityCache parent, Order order, bool raiseNewOrder)
 	{
-		private readonly EntityCache _parent;
-		private bool _raiseNewOrder;
+		private readonly EntityCache _parent = parent ?? throw new ArgumentNullException(nameof(parent));
 
-		public OrderInfo(EntityCache parent, Order order, bool raiseNewOrder)
-		{
-			Order = order ?? throw new ArgumentNullException(nameof(order));
-			_parent = parent ?? throw new ArgumentNullException(nameof(parent));
-			_raiseNewOrder = raiseNewOrder;
-		}
-
-		public Order Order { get; }
+		public Order Order { get; } = order ?? throw new ArgumentNullException(nameof(order));
 
 		public IEnumerable<OrderChangeInfo> ApplyChanges(ExecutionMessage message, OrderOperations operation, Action<Order> process)
 		{
@@ -57,8 +49,8 @@ class EntityCache : ISnapshotHolder
 			if (order.State == OrderStates.Done)
 			{
 				// данные о заявке могут приходить из маркет-дата и транзакционного адаптеров
-				retVal = new OrderChangeInfo(order, _raiseNewOrder, false, false);
-				_raiseNewOrder = false;
+				retVal = new OrderChangeInfo(order, raiseNewOrder, false, false);
+				raiseNewOrder = false;
 				process(order);
 				yield return retVal;
 				//throw new InvalidOperationException("Изменение заявки в состоянии Done невозможно.");
@@ -106,7 +98,7 @@ class EntityCache : ISnapshotHolder
 			// для новых заявок используем серверное время,
 			// т.к. заявка получена первый раз и не менялась
 			// ServerTime для заявки - это время регистрации
-			order.ServerTime = _raiseNewOrder ? message.ServerTime : message.LocalTime;
+			order.ServerTime = raiseNewOrder ? message.ServerTime : message.LocalTime;
 			order.LocalTime = message.LocalTime;
 
 			if (message.OrderState == OrderStates.Done)
@@ -173,8 +165,8 @@ class EntityCache : ISnapshotHolder
 			if (message.Leverage != default)
 				order.Leverage = message.Leverage;
 
-			retVal = new OrderChangeInfo(order, _raiseNewOrder, true, operation == OrderOperations.Edit);
-			_raiseNewOrder = false;
+			retVal = new OrderChangeInfo(order, raiseNewOrder, true, operation == OrderOperations.Edit);
+			raiseNewOrder = false;
 			process(order);
 			yield return retVal;
 		}
@@ -243,7 +235,7 @@ class EntityCache : ISnapshotHolder
 	private readonly HashSet<long> _orderStatusTransactions = [];
 	private readonly HashSet<long> _massCancelationTransactions = [];
 
-	public IExchangeInfoProvider ExchangeInfoProvider { get; }
+	public IExchangeInfoProvider ExchangeInfoProvider { get; } = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
 	private readonly CachedSynchronizedDictionary<Order, IMessageAdapter> _orders = [];
 	public IEnumerable<Order> Orders => _orders.CachedKeys;
@@ -260,17 +252,9 @@ class EntityCache : ISnapshotHolder
 	private readonly SynchronizedList<OrderFail> _orderEditFails = [];
 	public IEnumerable<OrderFail> OrderEditFails => _orderEditFails.SyncGet(c => c.ToArray());
 
-	private readonly ILogReceiver _logReceiver;
-	private readonly Func<SecurityId?, Security> _tryGetSecurity;
-	private readonly IPositionProvider _positionProvider;
-
-	public EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSecurity, IExchangeInfoProvider exchangeInfoProvider, IPositionProvider positionProvider)
-	{
-		_logReceiver = logReceiver ?? throw new ArgumentNullException(nameof(logReceiver));
-		_tryGetSecurity = tryGetSecurity ?? throw new ArgumentNullException(nameof(tryGetSecurity));
-		ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
-		_positionProvider = positionProvider ?? throw new ArgumentNullException(nameof(positionProvider));
-	}
+	private readonly ILogReceiver _logReceiver = logReceiver ?? throw new ArgumentNullException(nameof(logReceiver));
+	private readonly Func<SecurityId?, Security> _tryGetSecurity = tryGetSecurity ?? throw new ArgumentNullException(nameof(tryGetSecurity));
+	private readonly IPositionProvider _positionProvider = positionProvider ?? throw new ArgumentNullException(nameof(positionProvider));
 
 	public void Clear()
 	{

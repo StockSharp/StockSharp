@@ -3,28 +3,22 @@ namespace StockSharp.Algo.PnL;
 /// <summary>
 /// The profit-loss manager, related for specified <see cref="PortfolioName"/>.
 /// </summary>
-public class PortfolioPnLManager : IPnLManager
+/// <remarks>
+/// Initializes a new instance of the <see cref="PortfolioPnLManager"/>.
+/// </remarks>
+/// <param name="portfolioName">Portfolio name.</param>
+/// <param name="getSecDefinition">Get security definition function.</param>
+public class PortfolioPnLManager(string portfolioName, Func<SecurityId, Level1ChangeMessage> getSecDefinition) : IPnLManager
 {
 	private readonly Dictionary<string, PnLInfo> _tradeByStringIdInfos = new(StringComparer.InvariantCultureIgnoreCase);
 	private readonly Dictionary<long, PnLInfo> _tradeByIdInfos = [];
 	private readonly CachedSynchronizedDictionary<SecurityId, PnLQueue> _securityPnLs = [];
-	private readonly Func<SecurityId, Level1ChangeMessage> _getSecDefinition;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="PortfolioPnLManager"/>.
-	/// </summary>
-	/// <param name="portfolioName">Portfolio name.</param>
-	/// <param name="getSecDefinition">Get security definition function.</param>
-	public PortfolioPnLManager(string portfolioName, Func<SecurityId, Level1ChangeMessage> getSecDefinition)
-	{
-		PortfolioName = portfolioName.ThrowIfEmpty(nameof(portfolioName));
-		_getSecDefinition = getSecDefinition ?? throw new ArgumentNullException(nameof(getSecDefinition));
-	}
+	private readonly Func<SecurityId, Level1ChangeMessage> _getSecDefinition = getSecDefinition ?? throw new ArgumentNullException(nameof(getSecDefinition));
 
 	/// <summary>
 	/// Portfolio name.
 	/// </summary>
-	public string PortfolioName { get; }
+	public string PortfolioName { get; } = portfolioName.ThrowIfEmpty(nameof(portfolioName));
 
 	/// <inheritdoc />
 	public decimal PnL => RealizedPnL + UnrealizedPnL;

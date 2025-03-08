@@ -28,20 +28,14 @@ public interface IMarketRuleList : INotifyList<IMarketRule>, ISynchronizedCollec
 /// <summary>
 /// Rule list.
 /// </summary>
-public class MarketRuleList : SynchronizedSet<IMarketRule>, IMarketRuleList
+/// <remarks>
+/// Initializes a new instance of the <see cref="MarketRuleList"/>.
+/// </remarks>
+/// <param name="container">The rules container.</param>
+public class MarketRuleList(IMarketRuleContainer container) : SynchronizedSet<IMarketRule>(true), IMarketRuleList
 {
-	private readonly IMarketRuleContainer _container;
-	private readonly Dictionary<object, HashSet<IMarketRule>> _rulesByToken = []; 
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="MarketRuleList"/>.
-	/// </summary>
-	/// <param name="container">The rules container.</param>
-	public MarketRuleList(IMarketRuleContainer container)
-		: base(true)
-	{
-		_container = container ?? throw new ArgumentNullException(nameof(container));
-	}
+	private readonly IMarketRuleContainer _container = container ?? throw new ArgumentNullException(nameof(container));
+	private readonly Dictionary<object, HashSet<IMarketRule>> _rulesByToken = [];
 
 	/// <summary>
 	/// Adding the element.

@@ -33,18 +33,13 @@ public abstract class TradeGenerator : MarketDataGenerator
 /// <summary>
 /// The trade generator based on normal distribution.
 /// </summary>
-public class RandomWalkTradeGenerator : TradeGenerator
+/// <remarks>
+/// Initializes a new instance of the <see cref="RandomWalkTradeGenerator"/>.
+/// </remarks>
+/// <param name="securityId">The identifier of the instrument, for which data shall be generated.</param>
+public class RandomWalkTradeGenerator(SecurityId securityId) : TradeGenerator(securityId)
 {
 	private decimal _lastTradePrice;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="RandomWalkTradeGenerator"/>.
-	/// </summary>
-	/// <param name="securityId">The identifier of the instrument, for which data shall be generated.</param>
-	public RandomWalkTradeGenerator(SecurityId securityId)
-		: base(securityId)
-	{
-	}
 
 	/// <inheritdoc />
 	public override void Init()

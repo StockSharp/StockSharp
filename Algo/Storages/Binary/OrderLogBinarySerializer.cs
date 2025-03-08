@@ -1,17 +1,10 @@
 namespace StockSharp.Algo.Storages.Binary;
 
-class OrderLogMetaInfo : BinaryMetaInfo
+class OrderLogMetaInfo(DateTime date) : BinaryMetaInfo(date)
 {
-	public OrderLogMetaInfo(DateTime date)
-		: base(date)
-	{
-		FirstOrderId = -1;
-		Portfolios = [];
-	}
-
 	public override object LastId => LastTransactionId;
 
-	public long FirstOrderId { get; set; }
+	public long FirstOrderId { get; set; } = -1;
 	public long LastOrderId { get; set; }
 
 	public long FirstTradeId { get; set; }
@@ -23,7 +16,7 @@ class OrderLogMetaInfo : BinaryMetaInfo
 	public decimal FirstOrderPrice { get; set; }
 	public decimal LastOrderPrice { get; set; }
 
-	public IList<string> Portfolios { get; }
+	public IList<string> Portfolios { get; } = [];
 
 	public override void Write(Stream stream)
 	{
@@ -151,13 +144,8 @@ class OrderLogMetaInfo : BinaryMetaInfo
 	}
 }
 
-class OrderLogBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, OrderLogMetaInfo>
+class OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<ExecutionMessage, OrderLogMetaInfo>(securityId, DataType.OrderLog, 200, MarketDataVersions.Version58, exchangeInfoProvider)
 {
-	public OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-		: base(securityId, DataType.OrderLog, 200, MarketDataVersions.Version58, exchangeInfoProvider)
-	{
-	}
-
 	protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, OrderLogMetaInfo metaInfo)
 	{
 		if (metaInfo.IsEmpty() && !messages.IsEmpty())

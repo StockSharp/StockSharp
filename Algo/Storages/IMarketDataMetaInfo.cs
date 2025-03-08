@@ -58,14 +58,9 @@ public interface IMarketDataMetaInfo
 	bool IsOverride { get; }
 }
 
-abstract class MetaInfo : IMarketDataMetaInfo
+abstract class MetaInfo(DateTime date) : IMarketDataMetaInfo
 {
-	protected MetaInfo(DateTime date)
-	{
-		Date = date;
-	}
-
-	public DateTime Date { get; }
+	public DateTime Date { get; } = date;
 	public int Count { get; set; }
 
 	public decimal PriceStep { get; set; } = 0.01m;

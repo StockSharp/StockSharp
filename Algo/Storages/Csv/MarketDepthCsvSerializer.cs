@@ -1,22 +1,13 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-class MarketDepthCsvSerializer : CsvMarketDataSerializer<QuoteChangeMessage>
+class MarketDepthCsvSerializer(SecurityId securityId) : CsvMarketDataSerializer<QuoteChangeMessage>(securityId)
 {
 	private class QuoteEnumerable : SimpleEnumerable<QuoteChangeMessage>
 	{
-		private class QuoteEnumerator : SimpleEnumerator<QuoteChangeMessage>
+		private class QuoteEnumerator(IEnumerator<NullableTimeQuoteChange> enumerator, SecurityId securityId) : SimpleEnumerator<QuoteChangeMessage>
 		{
-			private readonly IEnumerator<NullableTimeQuoteChange> _enumerator;
-			private readonly SecurityId _securityId;
-
 			private bool _resetCurrent = true;
 			private bool _needMoveNext = true;
-
-			public QuoteEnumerator(IEnumerator<NullableTimeQuoteChange> enumerator, SecurityId securityId)
-			{
-				_enumerator = enumerator;
-				_securityId = securityId;
-			}
 
 			public override bool MoveNext()
 			{
@@ -24,7 +15,7 @@ class MarketDepthCsvSerializer : CsvMarketDataSerializer<QuoteChangeMessage>
 				{
 					Current = null;
 
-					if (_needMoveNext && !_enumerator.MoveNext())
+					if (_needMoveNext && !enumerator.MoveNext())
 						return false;
 				}
 
@@ -46,7 +37,7 @@ class MarketDepthCsvSerializer : CsvMarketDataSerializer<QuoteChangeMessage>
 
 				do
 				{
-					var quote = _enumerator.Current;
+					var quote = enumerator.Current;
 
 					if (quote == null)
 						throw new InvalidOperationException("quote == null");
@@ -55,7 +46,7 @@ class MarketDepthCsvSerializer : CsvMarketDataSerializer<QuoteChangeMessage>
 					{
 						Current = new QuoteChangeMessage
 						{
-							SecurityId = _securityId,
+							SecurityId = securityId,
 							ServerTime = quote.ServerTime,
 							LocalTime = quote.LocalTime,
 							State = quote.State,
@@ -85,7 +76,7 @@ class MarketDepthCsvSerializer : CsvMarketDataSerializer<QuoteChangeMessage>
 						quotes.Add(new QuoteChange(qq.Price, qq.Volume, qq.OrdersCount, qq.Condition));
 					}
 				}
-				while (_enumerator.MoveNext());
+				while (enumerator.MoveNext());
 
 				if (Current == null)
 					return false;
@@ -99,7 +90,7 @@ class MarketDepthCsvSerializer : CsvMarketDataSerializer<QuoteChangeMessage>
 
 			public override void Reset()
 			{
-				_enumerator.Reset();
+				enumerator.Reset();
 
 				_resetCurrent = true;
 				_needMoveNext = true;
@@ -109,7 +100,7 @@ class MarketDepthCsvSerializer : CsvMarketDataSerializer<QuoteChangeMessage>
 
 			protected override void DisposeManaged()
 			{
-				_enumerator.Dispose();
+				enumerator.Dispose();
 				base.DisposeManaged();
 			}
 		}
@@ -122,13 +113,7 @@ class MarketDepthCsvSerializer : CsvMarketDataSerializer<QuoteChangeMessage>
 		}
 	}
 
-	private readonly CsvMarketDataSerializer<NullableTimeQuoteChange> _quoteSerializer;
-
-	public MarketDepthCsvSerializer(SecurityId securityId)
-		: base(securityId)
-	{
-		_quoteSerializer = new QuoteCsvSerializer(securityId);
-	}
+	private readonly CsvMarketDataSerializer<NullableTimeQuoteChange> _quoteSerializer = new QuoteCsvSerializer(securityId);
 
 	public override IMarketDataMetaInfo CreateMetaInfo(DateTime date)
 	{

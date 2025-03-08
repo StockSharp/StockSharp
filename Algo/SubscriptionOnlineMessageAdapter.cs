@@ -3,7 +3,11 @@
 /// <summary>
 /// Online subscription counter adapter.
 /// </summary>
-public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="SubscriptionOnlineMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">Inner message adapter.</param>
+public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
 	private class SubscriptionInfo
 	{
@@ -67,15 +71,6 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 	private readonly PairSet<(DataType, SecurityId), SubscriptionInfo> _subscriptionsByKey = [];
 	private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = [];
 	private readonly HashSet<long> _skipSubscriptions = [];
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="SubscriptionOnlineMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">Inner message adapter.</param>
-	public SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)

@@ -20,19 +20,14 @@ static class Helper
 /// <summary>
 /// The export into json.
 /// </summary>
-public class JsonExporter : BaseExporter
+/// <remarks>
+/// Initializes a new instance of the <see cref="JsonExporter"/>.
+/// </remarks>
+/// <param name="dataType">Data type info.</param>
+/// <param name="isCancelled">The processor, returning process interruption sign.</param>
+/// <param name="fileName">The path to file.</param>
+public class JsonExporter(DataType dataType, Func<int, bool> isCancelled, string fileName) : BaseExporter(dataType, isCancelled, fileName)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="JsonExporter"/>.
-	/// </summary>
-	/// <param name="dataType">Data type info.</param>
-	/// <param name="isCancelled">The processor, returning process interruption sign.</param>
-	/// <param name="fileName">The path to file.</param>
-	public JsonExporter(DataType dataType, Func<int, bool> isCancelled, string fileName)
-		: base(dataType, isCancelled, fileName)
-	{
-	}
-
 	/// <summary>
 	/// Gets or sets a value indicating whether to indent elements.
 	/// </summary>

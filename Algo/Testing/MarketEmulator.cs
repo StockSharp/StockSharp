@@ -92,18 +92,16 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			=> new (Sides?, decimal, decimal, DateTimeOffset)[4];
 	}
 
-	private sealed class SecurityMarketEmulator : BaseLogReceiver//, IMarketEmulator
+	private sealed class SecurityMarketEmulator(MarketEmulator parent, SecurityId securityId) : BaseLogReceiver//, IMarketEmulator
 	{
-		private readonly MarketEmulator _parent;
-		private readonly SecurityId _securityId;
-
+		private readonly MarketEmulator _parent = parent ?? throw new ArgumentNullException(nameof(parent));
 		private readonly Dictionary<ExecutionMessage, TimeSpan> _expirableOrders = [];
 		private readonly Dictionary<long, ExecutionMessage> _activeOrders = [];
 		private readonly QuotesDict _bids = new(new BackwardComparer<decimal>());
 		private readonly QuotesDict _asks = [];
 		private readonly Dictionary<ExecutionMessage, TimeSpan> _pendingExecutions = [];
 		private DateTimeOffset _prevTime;
-		private readonly MarketEmulatorSettings _settings;
+		private readonly MarketEmulatorSettings _settings = parent.Settings;
 		private readonly Random _volumeRandom = new(TimeHelper.Now.Millisecond);
 		private readonly Random _priceRandom = new(TimeHelper.Now.Millisecond);
 		private readonly RandomArray<bool> _isMatch = new(100);
@@ -145,14 +143,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		private OrderBookIncrementBuilder _bookBuilder;
 		private bool? _booksWithState;
-
-		public SecurityMarketEmulator(MarketEmulator parent, SecurityId securityId)
-		{
-			_parent = parent ?? throw new ArgumentNullException(nameof(parent));
-			_securityId = securityId;
-			_settings = parent.Settings;
-		}
-
 		private SecurityMessage _securityDefinition;
 		public SecurityMessage SecurityDefinition => _securityDefinition;
 
@@ -449,7 +439,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				OrderVolume = volume,
 				DataTypeEx = DataType.OrderLog,
 				IsCancellation = isCancelling,
-				SecurityId = _securityId,
+				SecurityId = securityId,
 				LocalTime = localTime,
 				ServerTime = serverTime,
 				TimeInForce = tif,
@@ -934,7 +924,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 										Side = side,
 										TradeVolume = tradeVolume,
 										DataTypeEx = DataType.Ticks,
-										SecurityId = _securityId,
+										SecurityId = securityId,
 										LocalTime = localTime,
 										ServerTime = serverTime,
 										TradePrice = quote.Price,
@@ -1088,7 +1078,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					case QuoteChangeStates.SnapshotBuilding:
 					case QuoteChangeStates.SnapshotComplete:
 					{
-						_bookBuilder ??= new(_securityId);
+						_bookBuilder ??= new(securityId);
 
 						canApply = message.State == QuoteChangeStates.SnapshotComplete;
 						message = _bookBuilder.TryApply(message);
@@ -2622,7 +2612,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			var tradeMsg = new ExecutionMessage
 			{
 				LocalTime = time,
-				SecurityId = _securityId,
+				SecurityId = securityId,
 				OrderId = order.OrderId,
 				OriginalTransactionId = order.TransactionId,
 				TradeId = _parent.TradeIdGenerator.GetNextId(),
@@ -2645,7 +2635,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				result.Add(new ExecutionMessage
 				{
 					LocalTime = time,
-					SecurityId = _securityId,
+					SecurityId = securityId,
 					TradeId = tradeMsg.TradeId,
 					TradePrice = tradeMsg.TradePrice,
 					TradeVolume = tradeMsg.TradeVolume,
@@ -2664,7 +2654,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 			if (destTimeZone == null)
 			{
-				var board = _parent._boardDefinitions.TryGetValue(_securityId.BoardCode);
+				var board = _parent._boardDefinitions.TryGetValue(securityId.BoardCode);
 
 				if (board != null)
 					destTimeZone = board.TimeZone;
@@ -2681,21 +2671,14 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		public decimal GetMarginPrice(Sides side)
 		{
 			var field = side == Sides.Buy ? Level1Fields.MarginBuy : Level1Fields.MarginSell;
-			return (decimal?)_parent._secStates.TryGetValue(_securityId)?.TryGetValue(field) ?? GetQuotes(side).FirstOr()?.Key ?? 0;
+			return (decimal?)_parent._secStates.TryGetValue(securityId)?.TryGetValue(field) ?? GetQuotes(side).FirstOr()?.Key ?? 0;
 		}
 	}
 
-	private sealed class PortfolioEmulator
+	private sealed class PortfolioEmulator(MarketEmulator parent, string name)
 	{
-		private class MoneyInfo
+		private class MoneyInfo(MarketEmulator.SecurityMarketEmulator secEmu)
 		{
-			private readonly SecurityMarketEmulator _secEmu;
-
-			public MoneyInfo(SecurityMarketEmulator secEmu)
-			{
-				_secEmu = secEmu;
-			}
-
 			public decimal PositionBeginValue;
 			public decimal PositionDiff;
 			public decimal PositionCurrentValue => PositionBeginValue + PositionDiff;
@@ -2721,8 +2704,8 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			{
 				var totalMoney = PositionPrice;
 
-				var buyOrderPrice = (TotalBidsVolume + buyVol) * _secEmu.GetMarginPrice(Sides.Buy);
-				var sellOrderPrice = (TotalAsksVolume + sellVol) * _secEmu.GetMarginPrice(Sides.Sell);
+				var buyOrderPrice = (TotalBidsVolume + buyVol) * secEmu.GetMarginPrice(Sides.Buy);
+				var sellOrderPrice = (TotalAsksVolume + sellVol) * secEmu.GetMarginPrice(Sides.Sell);
 
 				if (totalMoney != 0)
 				{
@@ -2749,8 +2732,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			public decimal TotalAsksVolume;
 		}
 
-		private readonly MarketEmulator _parent;
-		private readonly string _name;
 		private readonly Dictionary<SecurityId, MoneyInfo> _moneys = [];
 
 		private decimal _beginMoney;
@@ -2758,15 +2739,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		private decimal _totalBlockedMoney;
 
-		public PortfolioPnLManager PnLManager { get; }
-
-		public PortfolioEmulator(MarketEmulator parent, string name)
-		{
-			_parent = parent;
-			_name = name;
-
-			PnLManager = new PortfolioPnLManager(name, secId => null);
-		}
+		public PortfolioPnLManager PnLManager { get; } = new PortfolioPnLManager(name, secId => null);
 
 		public void RequestState(PortfolioLookupMessage pfMsg, ICollection<Message> result)
 		{
@@ -2783,7 +2756,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					{
 						LocalTime = time,
 						ServerTime = time,
-						PortfolioName = _name,
+						PortfolioName = name,
 						SecurityId = pair.Key,
 						OriginalTransactionId = pfMsg.TransactionId,
 						StrategyId = pfMsg.StrategyId,
@@ -2840,7 +2813,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					SecurityId = SecurityId.Money,
 					ServerTime = posMsg.ServerTime,
 					LocalTime = posMsg.LocalTime,
-					PortfolioName = _name,
+					PortfolioName = name,
 					StrategyId = posMsg.StrategyId,
 				}.Add(PositionChangeTypes.BlockedValue, _totalBlockedMoney)
 			);
@@ -2849,7 +2822,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		private MoneyInfo GetMoney(SecurityId securityId/*, DateTimeOffset time, ICollection<Message> result*/)
 		{
 			//bool isNew;
-			var money = _moneys.SafeAdd(securityId, k => new MoneyInfo(_parent.GetEmulator(securityId)));
+			var money = _moneys.SafeAdd(securityId, k => new MoneyInfo(parent.GetEmulator(securityId)));
 
 			//if (isNew)
 			//{
@@ -2889,7 +2862,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 			_totalBlockedMoney = _totalBlockedMoney - prevPrice + money.TotalPrice;
 
-			var commission = _parent._commissionManager.Process(orderMsg);
+			var commission = parent._commissionManager.Process(orderMsg);
 
 			AddPortfolioChangeMessage(orderMsg.ServerTime, result);
 
@@ -2901,7 +2874,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			var time = tradeMsg.ServerTime;
 
 			PnLManager.ProcessMyTrade(tradeMsg, out _);
-			tradeMsg.Commission = _parent._commissionManager.Process(tradeMsg);
+			tradeMsg.Commission = parent._commissionManager.Process(tradeMsg);
 
 			var position = tradeMsg.TradeVolume;
 
@@ -2941,7 +2914,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				{
 					LocalTime = time,
 					ServerTime = time,
-					PortfolioName = _name,
+					PortfolioName = name,
 					SecurityId = tradeMsg.SecurityId,
 					StrategyId = tradeMsg.StrategyId,
 				}
@@ -2970,7 +2943,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					SecurityId = SecurityId.Money,
 					ServerTime = time,
 					LocalTime = time,
-					PortfolioName = _name,
+					PortfolioName = name,
 				}.Add(PositionChangeTypes.BlockedValue, _totalBlockedMoney)
 			);
 		}
@@ -2979,7 +2952,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		{
 			var realizedPnL = PnLManager.RealizedPnL;
 			var unrealizedPnL = PnLManager.UnrealizedPnL;
-			var commission = _parent._commissionManager.Commission;
+			var commission = parent._commissionManager.Commission;
 			var totalPnL = PnLManager.PnL - commission;
 
 			try
@@ -2996,7 +2969,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				SecurityId = SecurityId.Money,
 				ServerTime = time,
 				LocalTime = time,
-				PortfolioName = _name,
+				PortfolioName = name,
 			}
 			.Add(PositionChangeTypes.RealizedPnL, realizedPnL)
 			.TryAdd(PositionChangeTypes.UnrealizedPnL, unrealizedPnL, true)
@@ -3008,7 +2981,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		public InvalidOperationException CheckRegistration(ExecutionMessage execMsg)
 		{
-			var settings = _parent.Settings;
+			var settings = parent.Settings;
 
 			if (settings.CheckMoney)
 			{
@@ -3026,7 +2999,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				}
 			}
 			else if (settings.CheckShortable && execMsg.Side == Sides.Sell &&
-					 _parent._securityEmulators.TryGetValue(execMsg.SecurityId, out var secEmu) &&
+					 parent._securityEmulators.TryGetValue(execMsg.SecurityId, out var secEmu) &&
 					 secEmu.SecurityDefinition?.Shortable == false)
 			{
 				var money = GetMoney(execMsg.SecurityId/*, execMsg.LocalTime, result*/);

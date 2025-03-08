@@ -1,12 +1,7 @@
 ﻿namespace StockSharp.Algo.Storages.Binary;
 
-class BoardStateMetaInfo : BinaryMetaInfo
+class BoardStateMetaInfo(DateTime date) : BinaryMetaInfo(date)
 {
-	public BoardStateMetaInfo(DateTime date)
-		: base(date)
-	{
-	}
-
 	public override void Read(Stream stream)
 	{
 		base.Read(stream);
@@ -26,13 +21,8 @@ class BoardStateMetaInfo : BinaryMetaInfo
 	}
 }
 
-class BoardStateBinarySerializer : BinaryMarketDataSerializer<BoardStateMessage, BoardStateMetaInfo>
+class BoardStateBinarySerializer(IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<BoardStateMessage, BoardStateMetaInfo>(default, DataType.BoardState, 200, MarketDataVersions.Version31, exchangeInfoProvider)
 {
-	public BoardStateBinarySerializer(IExchangeInfoProvider exchangeInfoProvider)
-		: base(default, DataType.BoardState, 200, MarketDataVersions.Version31, exchangeInfoProvider)
-	{
-	}
-
 	protected override void OnSave(BitArrayWriter writer, IEnumerable<BoardStateMessage> messages, BoardStateMetaInfo metaInfo)
 	{
 		var isMetaEmpty = metaInfo.IsEmpty();

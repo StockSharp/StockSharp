@@ -34,18 +34,13 @@ public interface IOrderStatisticParameter : IStatisticParameter
 /// The base statistic parameter, calculated based on orders.
 /// </summary>
 /// <typeparam name="TValue">The type of the parameter value.</typeparam>
-public abstract class BaseOrderStatisticParameter<TValue> : BaseStatisticParameter<TValue>, IOrderStatisticParameter
+/// <remarks>
+/// Initialize <see cref="BaseOrderStatisticParameter{T}"/>.
+/// </remarks>
+/// <param name="type"><see cref="IStatisticParameter.Type"/></param>
+public abstract class BaseOrderStatisticParameter<TValue>(StatisticParameterTypes type) : BaseStatisticParameter<TValue>(type), IOrderStatisticParameter
 	where TValue : IComparable<TValue>
 {
-	/// <summary>
-	/// Initialize <see cref="BaseOrderStatisticParameter{T}"/>.
-	/// </summary>
-	/// <param name="type"><see cref="IStatisticParameter.Type"/></param>
-	protected BaseOrderStatisticParameter(StatisticParameterTypes type)
-		: base(type)
-	{
-	}
-
 	/// <inheritdoc />
 	public virtual void New(Order order)
 	{

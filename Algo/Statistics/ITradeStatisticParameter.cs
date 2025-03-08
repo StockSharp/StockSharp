@@ -337,21 +337,16 @@ public class AverageLossTradeParameter : BaseStatisticParameter<decimal>, ITrade
 /// <summary>
 /// Average trades count per one base.
 /// </summary>
-public abstract class PerBaseTradeParameter : BaseStatisticParameter<decimal>, ITradeStatisticParameter
+/// <remarks>
+/// Initialize <see cref="PerMonthTradeParameter"/>.
+/// </remarks>
+/// <param name="type"><see cref="IStatisticParameter.Type"/></param>
+public abstract class PerBaseTradeParameter(StatisticParameterTypes type) : BaseStatisticParameter<decimal>(type), ITradeStatisticParameter
 {
 	private DateTime _currStart;
 	private int _currCount;
 
 	private int _periodsCount;
-
-	/// <summary>
-	/// Initialize <see cref="PerMonthTradeParameter"/>.
-	/// </summary>
-	/// <param name="type"><see cref="IStatisticParameter.Type"/></param>
-	protected PerBaseTradeParameter(StatisticParameterTypes type)
-		: base(type)
-	{
-	}
 
 	/// <inheritdoc />
 	public override void Reset()

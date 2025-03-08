@@ -5,30 +5,24 @@ using StockSharp.Algo.Candles.Compression;
 /// <summary>
 /// Storage processor.
 /// </summary>
-public class StorageProcessor
+/// <remarks>
+/// Initializes a new instance of the <see cref="StorageProcessor"/>.
+/// </remarks>
+/// <param name="settings">Storage settings.</param>
+/// <param name="candleBuilderProvider">Candle builders provider.</param>
+public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvider candleBuilderProvider)
 {
 	private readonly SynchronizedSet<long> _fullyProcessedSubscriptions = [];
-	
-	/// <summary>
-	/// Initializes a new instance of the <see cref="StorageProcessor"/>.
-	/// </summary>
-	/// <param name="settings">Storage settings.</param>
-	/// <param name="candleBuilderProvider">Candle builders provider.</param>
-	public StorageProcessor(StorageCoreSettings settings, CandleBuilderProvider candleBuilderProvider)
-	{
-		Settings = settings ?? throw new ArgumentNullException(nameof(settings));
-		CandleBuilderProvider = candleBuilderProvider ?? throw new ArgumentNullException(nameof(candleBuilderProvider));
-	}
 
 	/// <summary>
 	/// Storage settings.
 	/// </summary>
-	public StorageCoreSettings Settings { get; }
+	public StorageCoreSettings Settings { get; } = settings ?? throw new ArgumentNullException(nameof(settings));
 
 	/// <summary>
 	/// Candle builders provider.
 	/// </summary>
-	public CandleBuilderProvider CandleBuilderProvider { get; }
+	public CandleBuilderProvider CandleBuilderProvider { get; } = candleBuilderProvider ?? throw new ArgumentNullException(nameof(candleBuilderProvider));
 
 	/// <summary>
 	/// To reset the state.

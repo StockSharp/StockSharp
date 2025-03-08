@@ -3,14 +3,15 @@
 /// <summary>
 /// The messages adapter build order book from incremental updates <see cref="QuoteChangeStates.Increment"/>.
 /// </summary>
-public class OrderBookIncrementMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="OrderBookIncrementMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">Underlying adapter.</param>
+public class OrderBookIncrementMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
-	private class BookInfo
+	private class BookInfo(SecurityId securityId)
 	{
-		public BookInfo(SecurityId securityId)
-			=> Builder = new OrderBookIncrementBuilder(securityId);
-
-		public readonly OrderBookIncrementBuilder Builder;
+		public readonly OrderBookIncrementBuilder Builder = new OrderBookIncrementBuilder(securityId);
 		public readonly CachedSynchronizedSet<long> SubscriptionIds = [];
 	}
 
@@ -21,15 +22,6 @@ public class OrderBookIncrementMessageAdapter : MessageAdapterWrapper
 	private readonly HashSet<long> _passThrough = [];
 	private readonly CachedSynchronizedSet<long> _allSecSubscriptions = [];
 	private readonly CachedSynchronizedSet<long> _allSecSubscriptionsPassThrough = [];
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="OrderBookIncrementMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">Underlying adapter.</param>
-	public OrderBookIncrementMessageAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
@@ -215,8 +207,7 @@ public class OrderBookIncrementMessageAdapter : MessageAdapterWrapper
 						{
 							if (_passThrough.Contains(subscriptionId) || _allSecSubscriptionsPassThrough.Contains(subscriptionId))
 							{
-								if (passThrough is null)
-									passThrough = [];
+								passThrough ??= [];
 
 								passThrough.Add(subscriptionId);
 							}
@@ -235,8 +226,7 @@ public class OrderBookIncrementMessageAdapter : MessageAdapterWrapper
 					if (_allSecSubscriptions.Count > 0)
 						ids = ids.Concat(_allSecSubscriptions.Cache);
 
-					if (clones == null)
-						clones = [];
+					clones ??= [];
 
 					newQuoteMsg.SetSubscriptionIds(ids);
 					clones.Add(newQuoteMsg);

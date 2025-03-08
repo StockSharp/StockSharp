@@ -1,16 +1,10 @@
 namespace StockSharp.Algo.Storages.Binary;
 
-class TickMetaInfo : BinaryMetaInfo
+class TickMetaInfo(DateTime date) : BinaryMetaInfo(date)
 {
-	public TickMetaInfo(DateTime date)
-		: base(date)
-	{
-		FirstId = -1;
-	}
-
 	public override object LastId => PrevId;
 
-	public long FirstId { get; set; }
+	public long FirstId { get; set; } = -1;
 	public long PrevId { get; set; }
 
 	public override void Write(Stream stream)
@@ -84,13 +78,8 @@ class TickMetaInfo : BinaryMetaInfo
 	}
 }
 
-class TickBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TickMetaInfo>
+class TickBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<ExecutionMessage, TickMetaInfo>(securityId, DataType.Ticks, 50, MarketDataVersions.Version61, exchangeInfoProvider)
 {
-	public TickBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-		: base(securityId, DataType.Ticks, 50, MarketDataVersions.Version61, exchangeInfoProvider)
-	{
-	}
-
 	protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, TickMetaInfo metaInfo)
 	{
 		if (metaInfo.IsEmpty())

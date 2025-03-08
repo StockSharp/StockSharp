@@ -342,8 +342,7 @@ public static partial class Extensions
 	/// <returns><see cref="MessageTypeInfo"/> value.</returns>
 	public static MessageTypeInfo ToInfo(this MessageTypes type, bool? isMarketData = null)
 	{
-		if (isMarketData == null)
-			isMarketData = IsMarketData(type);
+		isMarketData ??= IsMarketData(type);
 
 		return new MessageTypeInfo(type, isMarketData);
 	}

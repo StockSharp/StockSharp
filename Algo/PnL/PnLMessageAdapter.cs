@@ -3,17 +3,12 @@ namespace StockSharp.Algo.PnL;
 /// <summary>
 /// The message adapter, automatically calculating profit-loss.
 /// </summary>
-public class PnLMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="PnLMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
+public class PnLMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="PnLMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-	public PnLMessageAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
-
 	private IPnLManager _pnLManager = new PnLManager();
 
 	/// <summary>

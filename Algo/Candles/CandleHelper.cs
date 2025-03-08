@@ -687,24 +687,16 @@ public static class CandleHelper
 	private class TradeEnumerable<TCandle> : SimpleEnumerable<ExecutionMessage>//, IEnumerableEx<ExecutionMessage>
 		where TCandle : ICandleMessage
 	{
-		private sealed class TradeEnumerator : IEnumerator<ExecutionMessage>
+		private sealed class TradeEnumerator(IEnumerable<TCandle> candles, decimal volumeStep) : IEnumerator<ExecutionMessage>
 		{
-			private readonly decimal _volumeStep;
-			private readonly IEnumerator<TCandle> _valuesEnumerator;
+			private readonly IEnumerator<TCandle> _valuesEnumerator = candles.GetEnumerator();
 			private IEnumerator<ExecutionMessage> _currCandleEnumerator;
-			private readonly int _decimals;
+			private readonly int _decimals = volumeStep.GetCachedDecimals();
 			private readonly (Sides? side, decimal price, decimal volume, DateTimeOffset time)[] _ticks = new (Sides?, decimal, decimal, DateTimeOffset)[4];
-
-			public TradeEnumerator(IEnumerable<TCandle> candles, decimal volumeStep)
-			{
-				_volumeStep = volumeStep;
-				_decimals = volumeStep.GetCachedDecimals();
-				_valuesEnumerator = candles.GetEnumerator();
-			}
 
 			private IEnumerable<ExecutionMessage> ToTicks(TCandle candleMsg)
 			{
-				candleMsg.ConvertToTrades(_volumeStep, _decimals, _ticks);
+				candleMsg.ConvertToTrades(volumeStep, _decimals, _ticks);
 
 				foreach (var t in _ticks)
 				{

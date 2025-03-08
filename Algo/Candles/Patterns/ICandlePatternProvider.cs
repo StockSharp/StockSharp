@@ -58,16 +58,13 @@ public interface ICandlePatternProvider
 /// <summary>
 /// In memory <see cref="ICandlePattern"/> provider.
 /// </summary>
-public class InMemoryCandlePatternProvider : ICandlePatternProvider
+/// <remarks>
+/// Initializes a new instance of the <see cref="InMemoryCandlePatternProvider"/>.
+/// </remarks>
+public class InMemoryCandlePatternProvider(IEnumerable<ICandlePattern> patterns = null) : ICandlePatternProvider
 {
 	private readonly CachedSynchronizedDictionary<string, ICandlePattern> _cache = [];
-	private readonly ICandlePattern[] _appendOnInit;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="InMemoryCandlePatternProvider"/>.
-	/// </summary>
-	public InMemoryCandlePatternProvider(IEnumerable<ICandlePattern> patterns = null)
-		=> _appendOnInit = patterns?.ToArray();
+	private readonly ICandlePattern[] _appendOnInit = patterns?.ToArray();
 
 	/// <inheritdoc/>
 	public event Action<ICandlePattern> PatternCreated;

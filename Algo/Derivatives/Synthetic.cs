@@ -3,21 +3,15 @@ namespace StockSharp.Algo.Derivatives;
 /// <summary>
 /// The synthetic positions builder.
 /// </summary>
-public class Synthetic
+/// <remarks>
+/// Initializes a new instance of the <see cref="Synthetic"/>.
+/// </remarks>
+/// <param name="security">The instrument (the option or the underlying asset).</param>
+/// <param name="provider">The provider of information about instruments.</param>
+public class Synthetic(Security security, ISecurityProvider provider)
 {
-	private readonly Security _security;
-	private readonly ISecurityProvider _provider;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="Synthetic"/>.
-	/// </summary>
-	/// <param name="security">The instrument (the option or the underlying asset).</param>
-	/// <param name="provider">The provider of information about instruments.</param>
-	public Synthetic(Security security, ISecurityProvider provider)
-	{
-		_security = security ?? throw new ArgumentNullException(nameof(security));
-		_provider = provider ?? throw new ArgumentNullException(nameof(provider));
-	}
+	private readonly Security _security = security ?? throw new ArgumentNullException(nameof(security));
+	private readonly ISecurityProvider _provider = provider ?? throw new ArgumentNullException(nameof(provider));
 
 	private Security Option
 	{

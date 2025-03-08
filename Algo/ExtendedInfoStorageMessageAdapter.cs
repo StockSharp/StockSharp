@@ -34,8 +34,7 @@ public class ExtendedInfoStorageMessageAdapter : MessageAdapterWrapper
 		{
 			lock (_sync)
 			{
-				if (_storage == null)
-					_storage = _extendedInfoStorage.Create(_storageName, _fields);
+				_storage ??= _extendedInfoStorage.Create(_storageName, _fields);
 			}	
 		}
 

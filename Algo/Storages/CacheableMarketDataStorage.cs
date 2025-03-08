@@ -3,21 +3,15 @@
 /// <summary>
 /// Cacheable <see cref="IMarketDataStorage"/>.
 /// </summary>
-public class CacheableMarketDataStorage : IMarketDataStorage
+/// <remarks>
+/// Initializes a new instance of the <see cref="CacheableMarketDataStorage"/>.
+/// </remarks>
+/// <param name="underlying">Underlying source.</param>
+/// <param name="cache"><see cref="MarketDataStorageCache"/>.</param>
+public class CacheableMarketDataStorage(IMarketDataStorage underlying, MarketDataStorageCache cache) : IMarketDataStorage
 {
-	private readonly IMarketDataStorage _underlying;
-	private readonly MarketDataStorageCache _cache;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="CacheableMarketDataStorage"/>.
-	/// </summary>
-	/// <param name="underlying">Underlying source.</param>
-	/// <param name="cache"><see cref="MarketDataStorageCache"/>.</param>
-	public CacheableMarketDataStorage(IMarketDataStorage underlying, MarketDataStorageCache cache)
-	{
-		_underlying = underlying ?? throw new ArgumentNullException(nameof(underlying));
-		_cache = cache ?? throw new ArgumentNullException(nameof(cache));
-	}
+	private readonly IMarketDataStorage _underlying = underlying ?? throw new ArgumentNullException(nameof(underlying));
+	private readonly MarketDataStorageCache _cache = cache ?? throw new ArgumentNullException(nameof(cache));
 
 	IMarketDataSerializer IMarketDataStorage.Serializer => _underlying.Serializer;
 	IEnumerable<DateTime> IMarketDataStorage.Dates => _underlying.Dates;

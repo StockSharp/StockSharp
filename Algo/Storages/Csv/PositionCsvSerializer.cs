@@ -3,20 +3,14 @@ namespace StockSharp.Algo.Storages.Csv;
 /// <summary>
 /// The position change serializer in the CSV format.
 /// </summary>
-public class PositionCsvSerializer : CsvMarketDataSerializer<PositionChangeMessage>
+/// <remarks>
+/// Initializes a new instance of the <see cref="PositionCsvSerializer"/>.
+/// </remarks>
+/// <param name="securityId">Security ID.</param>
+/// <param name="encoding">Encoding.</param>
+public class PositionCsvSerializer(SecurityId securityId, Encoding encoding = null) : CsvMarketDataSerializer<PositionChangeMessage>(securityId, encoding)
 {
 	private static readonly PositionChangeTypes[] _types = [.. Enumerator.GetValues<PositionChangeTypes>().OrderBy(t => (int)t)];
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="PositionCsvSerializer"/>.
-	/// </summary>
-	/// <param name="securityId">Security ID.</param>
-	/// <param name="encoding">Encoding.</param>
-	public PositionCsvSerializer(SecurityId securityId, Encoding encoding = null)
-		: base(securityId, encoding)
-	{
-	}
-
 	private static readonly string[] _reserved = new string[10];
 
 	/// <inheritdoc />

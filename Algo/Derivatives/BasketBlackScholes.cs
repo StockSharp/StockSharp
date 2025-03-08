@@ -18,14 +18,9 @@ public class BasketBlackScholes : BlackScholes
 		BlackScholes this[Security option] { get; }
 	}
 
-	private sealed class InnerModelList : CachedSynchronizedList<BlackScholes>, IInnerModelList
+	private sealed class InnerModelList(BasketBlackScholes parent) : CachedSynchronizedList<BlackScholes>, IInnerModelList
 	{
-		private readonly BasketBlackScholes _parent;
-
-		public InnerModelList(BasketBlackScholes parent)
-		{
-			_parent = parent ?? throw new ArgumentNullException(nameof(parent));
-		}
+		private readonly BasketBlackScholes _parent = parent ?? throw new ArgumentNullException(nameof(parent));
 
 		BlackScholes IInnerModelList.this[Security option]
 		{

@@ -3,7 +3,11 @@
 /// <summary>
 /// Message adapter that splits large market data requests on smaller.
 /// </summary>
-public class PartialDownloadMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="PartialDownloadMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">Underlying adapter.</param>
+public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
 	/// <summary>
 	/// Message for iterate action.
@@ -174,15 +178,6 @@ public class PartialDownloadMessageAdapter : MessageAdapterWrapper
 	private readonly Dictionary<long, DownloadInfo> _partialRequests = [];
 	private readonly Dictionary<long, bool> _liveRequests = [];
 	private readonly HashSet<long> _finished = [];
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="PartialDownloadMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">Underlying adapter.</param>
-	public PartialDownloadMessageAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)

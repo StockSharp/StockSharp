@@ -51,20 +51,13 @@ public interface ICandleBuilderValueTransform
 /// <summary>
 /// The base data source transformation for <see cref="ICandleBuilder"/>.
 /// </summary>
-public abstract class BaseCandleBuilderValueTransform : ICandleBuilderValueTransform
+/// <remarks>
+/// Initializes a new instance of the <see cref="BaseCandleBuilderValueTransform"/>.
+/// </remarks>
+/// <param name="buildFrom">Which market-data type is used as a source value.</param>
+public abstract class BaseCandleBuilderValueTransform(DataType buildFrom) : ICandleBuilderValueTransform
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="BaseCandleBuilderValueTransform"/>.
-	/// </summary>
-	/// <param name="buildFrom">Which market-data type is used as a source value.</param>
-	protected BaseCandleBuilderValueTransform(DataType buildFrom)
-	{
-		_buildFrom = buildFrom;
-	}
-
-	private readonly DataType _buildFrom;
-
-	DataType ICandleBuilderValueTransform.BuildFrom => _buildFrom;
+	DataType ICandleBuilderValueTransform.BuildFrom => buildFrom;
 
 	/// <inheritdoc />
 	public virtual bool Process(Message message)
@@ -152,24 +145,15 @@ public class TickCandleBuilderValueTransform : BaseCandleBuilderValueTransform
 /// <summary>
 /// The order book based data source transformation for <see cref="ICandleBuilder"/>.
 /// </summary>
-public class QuoteCandleBuilderValueTransform : BaseCandleBuilderValueTransform
+/// <remarks>
+/// Initializes a new instance of the <see cref="QuoteCandleBuilderValueTransform"/>.
+/// </remarks>
+/// <param name="priceStep"><see cref="SecurityMessage.PriceStep"/></param>
+/// <param name="volStep"><see cref="SecurityMessage.VolumeStep"/></param>
+public class QuoteCandleBuilderValueTransform(decimal? priceStep, decimal? volStep) : BaseCandleBuilderValueTransform(DataType.MarketDepth)
 {
-	private readonly decimal? _priceStep;
-	private readonly decimal? _volStep;
 	private decimal? _prevBidVol;
 	private decimal? _prevAskVol;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="QuoteCandleBuilderValueTransform"/>.
-	/// </summary>
-	/// <param name="priceStep"><see cref="SecurityMessage.PriceStep"/></param>
-	/// <param name="volStep"><see cref="SecurityMessage.VolumeStep"/></param>
-	public QuoteCandleBuilderValueTransform(decimal? priceStep, decimal? volStep)
-		: base(DataType.MarketDepth)
-	{
-		_priceStep = priceStep;
-		_volStep = volStep;
-	}
 
 	/// <summary>
 	/// Type of candle based data.
@@ -219,7 +203,7 @@ public class QuoteCandleBuilderValueTransform : BaseCandleBuilderValueTransform
 				var bestBid = md.GetBestBid();
 				var bestAsk = md.GetBestAsk();
 
-				var price = (bestBid?.Price).GetSpreadMiddle(bestAsk?.Price, _priceStep);
+				var price = (bestBid?.Price).GetSpreadMiddle(bestAsk?.Price, priceStep);
 
 				if (price is null)
 					return false;
@@ -231,7 +215,7 @@ public class QuoteCandleBuilderValueTransform : BaseCandleBuilderValueTransform
 
 				if (_prevBidVol is not null && _prevAskVol is not null)
 				{
-					spreadVol = _prevBidVol.Value.GetSpreadMiddle(_prevAskVol.Value, _volStep);
+					spreadVol = _prevBidVol.Value.GetSpreadMiddle(_prevAskVol.Value, volStep);
 				}
 
 				Update(md.ServerTime, price.Value, spreadVol, null, null, null);
@@ -247,26 +231,17 @@ public class QuoteCandleBuilderValueTransform : BaseCandleBuilderValueTransform
 /// <summary>
 /// The level1 based data source transformation for <see cref="ICandleBuilder"/>.
 /// </summary>
-public class Level1CandleBuilderValueTransform : BaseCandleBuilderValueTransform
+/// <remarks>
+/// Initializes a new instance of the <see cref="Level1CandleBuilderValueTransform"/>.
+/// </remarks>
+/// <param name="priceStep"><see cref="SecurityMessage.PriceStep"/></param>
+/// <param name="volStep"><see cref="SecurityMessage.VolumeStep"/></param>
+public class Level1CandleBuilderValueTransform(decimal? priceStep, decimal? volStep) : BaseCandleBuilderValueTransform(DataType.Level1)
 {
-	private readonly decimal? _priceStep;
-	private readonly decimal? _volStep;
 	private decimal? _prevBidPrice;
 	private decimal? _prevAskPrice;
 	private decimal? _prevBidVol;
 	private decimal? _prevAskVol;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="Level1CandleBuilderValueTransform"/>.
-	/// </summary>
-	/// <param name="priceStep"><see cref="SecurityMessage.PriceStep"/></param>
-	/// <param name="volStep"><see cref="SecurityMessage.VolumeStep"/></param>
-	public Level1CandleBuilderValueTransform(decimal? priceStep, decimal? volStep)
-		: base(DataType.Level1)
-	{
-		_priceStep = priceStep;
-		_volStep = volStep;
-	}
 
 	/// <summary>
 	/// Type of candle based data.
@@ -346,7 +321,7 @@ public class Level1CandleBuilderValueTransform : BaseCandleBuilderValueTransform
 					if (_prevBidPrice is null || _prevAskPrice is null)
 						return false;
 
-					spreadMiddle = _prevBidPrice.Value.GetSpreadMiddle(_prevAskPrice.Value, _priceStep);
+					spreadMiddle = _prevBidPrice.Value.GetSpreadMiddle(_prevAskPrice.Value, priceStep);
 				}
 
 				_prevBidVol = l1.TryGetDecimal(Level1Fields.BestBidVolume) ?? _prevBidVol;
@@ -356,7 +331,7 @@ public class Level1CandleBuilderValueTransform : BaseCandleBuilderValueTransform
 
 				if (_prevBidVol is not null && _prevAskVol is not null)
 				{
-					spreadVol = _prevBidVol.Value.GetSpreadMiddle(_prevAskVol.Value, _volStep);
+					spreadVol = _prevBidVol.Value.GetSpreadMiddle(_prevAskVol.Value, volStep);
 				}
 
 				Update(time, spreadMiddle.Value, spreadVol, null, null, null);

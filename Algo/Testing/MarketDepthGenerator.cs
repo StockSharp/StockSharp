@@ -3,17 +3,12 @@ namespace StockSharp.Algo.Testing;
 /// <summary>
 /// The order book generator using random method.
 /// </summary>
-public abstract class MarketDepthGenerator : MarketDataGenerator
+/// <remarks>
+/// Initialize <see cref="MarketDepthGenerator"/>.
+/// </remarks>
+/// <param name="securityId">The identifier of the instrument, for which data shall be generated.</param>
+public abstract class MarketDepthGenerator(SecurityId securityId) : MarketDataGenerator(securityId)
 {
-	/// <summary>
-	/// Initialize <see cref="MarketDepthGenerator"/>.
-	/// </summary>
-	/// <param name="securityId">The identifier of the instrument, for which data shall be generated.</param>
-	protected MarketDepthGenerator(SecurityId securityId)
-		: base(securityId)
-	{
-	}
-
 	/// <inheritdoc />
 	public override DataType DataType => DataType.MarketDepth;
 
@@ -178,7 +173,11 @@ public abstract class MarketDepthGenerator : MarketDataGenerator
 /// <summary>
 /// The order book generator, accounting for trades sequence.
 /// </summary>
-public class TrendMarketDepthGenerator : MarketDepthGenerator
+/// <remarks>
+/// Initializes a new instance of the <see cref="TrendMarketDepthGenerator"/>.
+/// </remarks>
+/// <param name="securityId">The identifier of the instrument, for which data shall be generated.</param>
+public class TrendMarketDepthGenerator(SecurityId securityId) : MarketDepthGenerator(securityId)
 {
 	private bool _newTrades;
 
@@ -191,15 +190,6 @@ public class TrendMarketDepthGenerator : MarketDepthGenerator
 	private decimal? _bestBidPrice;
 
 	private BoardMessage _boardDefinition;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="TrendMarketDepthGenerator"/>.
-	/// </summary>
-	/// <param name="securityId">The identifier of the instrument, for which data shall be generated.</param>
-	public TrendMarketDepthGenerator(SecurityId securityId)
-		: base(securityId)
-	{
-	}
 
 	/// <inheritdoc />
 	public override void Init()

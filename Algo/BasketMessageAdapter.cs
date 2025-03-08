@@ -34,15 +34,10 @@ public interface IInnerAdapterList : ISynchronizedCollection<IMessageAdapter>, I
 [Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BasketKey)]
 public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 {
-	private sealed class InnerAdapterList : CachedSynchronizedList<IMessageAdapter>, IInnerAdapterList
+	private sealed class InnerAdapterList(BasketMessageAdapter parent) : CachedSynchronizedList<IMessageAdapter>, IInnerAdapterList
 	{
-		private readonly BasketMessageAdapter _parent;
+		private readonly BasketMessageAdapter _parent = parent ?? throw new ArgumentNullException(nameof(parent));
 		private readonly Dictionary<IMessageAdapter, int> _enables = [];
-
-		public InnerAdapterList(BasketMessageAdapter parent)
-		{
-			_parent = parent ?? throw new ArgumentNullException(nameof(parent));
-		}
 
 		public IEnumerable<IMessageAdapter> SortedAdapters => Cache.Where(t => this[t] != -1).OrderBy(t => this[t]);
 
@@ -1031,10 +1026,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		if (message.IsBack())
 		{
-			var adapter = message.Adapter;
-
-			if (adapter == null)
-				throw new InvalidOperationException();
+			var adapter = message.Adapter ?? throw new InvalidOperationException();
 
 			if (adapter == this)
 			{
@@ -1264,8 +1256,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		lock (_connectedResponseLock)
 		{
-			if (adapters == null)
-				adapters = _messageTypeAdapters.TryGetValue(message.Type)?.Cache;
+			adapters ??= _messageTypeAdapters.TryGetValue(message.Type)?.Cache;
 
 			if (adapters != null)
 			{
@@ -1306,10 +1297,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			}
 		}
 
-		if (adapters == null)
-		{
-			adapters = [];
-		}
+		adapters ??= [];
 
 		if (adapters.Length == 0)
 		{
@@ -1666,12 +1654,8 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		{
 			isPended = false;
 
-			var a = _adapterWrappers.TryGetValue(adapter);
-
-			if (a == null)
-				throw new InvalidOperationException(LocalizedStrings.ConnectionIsNotConnected.Put(adapter));
-
-			return a;
+			return _adapterWrappers.TryGetValue(adapter)
+				?? throw new InvalidOperationException(LocalizedStrings.ConnectionIsNotConnected.Put(adapter));
 		}
 	}
 
@@ -1686,8 +1670,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		if (!message.IsBack())
 		{
-			if (message.Adapter == null)
-				message.Adapter = innerAdapter;
+			message.Adapter ??= innerAdapter;
 
 			switch (message.Type)
 			{
@@ -1821,8 +1804,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	/// <param name="message">Message.</param>
 	protected virtual void OnSendOutMessage(Message message)
 	{
-		if (message.Adapter == null)
-			message.Adapter = this;
+		message.Adapter ??= this;
 
 		NewOutMessage?.Invoke(message);
 	}

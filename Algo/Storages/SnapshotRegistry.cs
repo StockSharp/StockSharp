@@ -10,7 +10,11 @@ using StockSharp.Algo.Storages.Binary.Snapshot;
 /// <summary>
 /// Snapshot storage registry.
 /// </summary>
-public class SnapshotRegistry : Disposable
+/// <remarks>
+/// Initializes a new instance of the <see cref="SnapshotRegistry"/>.
+/// </remarks>
+/// <param name="path">Path to storage.</param>
+public class SnapshotRegistry(string path) : Disposable
 {
 	private abstract class SnapshotStorage : ISnapshotStorage
 	{
@@ -501,18 +505,8 @@ public class SnapshotRegistry : Disposable
 		}
 	}
 
-	private readonly string _path;
 	private readonly CachedSynchronizedDictionary<DataType, SnapshotStorage> _snapshotStorages = [];
 	private Timer _timer;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="SnapshotRegistry"/>.
-	/// </summary>
-	/// <param name="path">Path to storage.</param>
-	public SnapshotRegistry(string path)
-	{
-		_path = path;
-	}
 
 	/// <summary>
 	/// Initialize the storage.
@@ -578,17 +572,17 @@ public class SnapshotRegistry : Disposable
 			SnapshotStorage storage;
 
 			if (dataType == typeof(Level1ChangeMessage))
-				storage = new SnapshotStorage<SecurityId, Level1ChangeMessage>(_path, new Level1BinarySnapshotSerializer());
+				storage = new SnapshotStorage<SecurityId, Level1ChangeMessage>(path, new Level1BinarySnapshotSerializer());
 			else if (dataType == typeof(QuoteChangeMessage))
-				storage = new SnapshotStorage<SecurityId, QuoteChangeMessage>(_path, new QuotesBinarySnapshotSerializer());
+				storage = new SnapshotStorage<SecurityId, QuoteChangeMessage>(path, new QuotesBinarySnapshotSerializer());
 			else if (dataType == typeof(PositionChangeMessage))
-				storage = new SnapshotStorage<Tuple<SecurityId, string, string>, PositionChangeMessage>(_path, new PositionBinarySnapshotSerializer());
+				storage = new SnapshotStorage<Tuple<SecurityId, string, string>, PositionChangeMessage>(path, new PositionBinarySnapshotSerializer());
 			else if (dataType == typeof(ExecutionMessage))
 			{
 				switch ((ExecutionTypes)arg)
 				{
 					case ExecutionTypes.Transaction:
-						storage = new SnapshotStorage<string, ExecutionMessage>(_path, new TransactionBinarySnapshotSerializer());
+						storage = new SnapshotStorage<string, ExecutionMessage>(path, new TransactionBinarySnapshotSerializer());
 						break;
 					default:
 						throw new ArgumentOutOfRangeException(nameof(arg), arg, LocalizedStrings.InvalidValue);

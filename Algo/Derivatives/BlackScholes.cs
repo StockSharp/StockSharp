@@ -105,7 +105,7 @@ public class BlackScholes : IBlackScholes
 	/// </summary>
 	public virtual Security UnderlyingAsset
 	{
-		get => _underlyingAsset ?? (_underlyingAsset = Option.GetUnderlyingAsset(SecurityProvider));
+		get => _underlyingAsset ??= Option.GetUnderlyingAsset(SecurityProvider);
 		set => _underlyingAsset = value;
 	}
 

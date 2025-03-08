@@ -3,17 +3,13 @@ namespace StockSharp.Algo.Storages.Csv;
 /// <summary>
 /// The order log serializer in the CSV format.
 /// </summary>
-public class OrderLogCsvSerializer : CsvMarketDataSerializer<ExecutionMessage>
+/// <remarks>
+/// Initializes a new instance of the <see cref="OrderLogCsvSerializer"/>.
+/// </remarks>
+/// <param name="securityId">Security ID.</param>
+/// <param name="encoding">Encoding.</param>
+public class OrderLogCsvSerializer(SecurityId securityId, Encoding encoding = null) : CsvMarketDataSerializer<ExecutionMessage>(securityId, encoding)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="OrderLogCsvSerializer"/>.
-	/// </summary>
-	/// <param name="securityId">Security ID.</param>
-	/// <param name="encoding">Encoding.</param>
-	public OrderLogCsvSerializer(SecurityId securityId, Encoding encoding = null)
-		: base(securityId, encoding)
-	{
-	}
 
 	/// <inheritdoc />
 	public override IMarketDataMetaInfo CreateMetaInfo(DateTime date)

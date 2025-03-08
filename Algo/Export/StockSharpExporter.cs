@@ -3,28 +3,18 @@ namespace StockSharp.Algo.Export;
 /// <summary>
 /// The export into the StockSharp format.
 /// </summary>
-public class StockSharpExporter : BaseExporter
+/// <remarks>
+/// Initializes a new instance of the <see cref="StockSharpExporter"/>.
+/// </remarks>
+/// <param name="dataType">Data type info.</param>
+/// <param name="isCancelled">The processor, returning process interruption sign.</param>
+/// <param name="storageRegistry">The storage of market data.</param>
+/// <param name="drive">Storage.</param>
+/// <param name="format">Format type.</param>
+public class StockSharpExporter(DataType dataType, Func<int, bool> isCancelled, IStorageRegistry storageRegistry, IMarketDataDrive drive, StorageFormats format) : BaseExporter(dataType, isCancelled, drive.CheckOnNull(nameof(drive)).Path)
 {
-	private readonly IStorageRegistry _storageRegistry;
-	private readonly IMarketDataDrive _drive;
-	private readonly StorageFormats _format;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="StockSharpExporter"/>.
-	/// </summary>
-	/// <param name="dataType">Data type info.</param>
-	/// <param name="isCancelled">The processor, returning process interruption sign.</param>
-	/// <param name="storageRegistry">The storage of market data.</param>
-	/// <param name="drive">Storage.</param>
-	/// <param name="format">Format type.</param>
-	public StockSharpExporter(DataType dataType, Func<int, bool> isCancelled, IStorageRegistry storageRegistry, IMarketDataDrive drive, StorageFormats format)
-		: base(dataType, isCancelled, drive.CheckOnNull(nameof(drive)).Path)
-	{
-		_storageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
-		_drive = drive ?? throw new ArgumentNullException(nameof(drive));
-		_format = format;
-	}
-
+	private readonly IStorageRegistry _storageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
+	private readonly IMarketDataDrive _drive = drive ?? throw new ArgumentNullException(nameof(drive));
 	private int _batchSize = 50;
 
 	/// <summary>
@@ -53,7 +43,7 @@ public class StockSharpExporter : BaseExporter
 			{
 				var b = group.ToArray();
 
-				var storage = _storageRegistry.GetStorage(group.Key ?? default, DataType.MessageType, DataType.Arg, _drive, _format);
+				var storage = _storageRegistry.GetStorage(group.Key ?? default, DataType.MessageType, DataType.Arg, _drive, format);
 
 				if (!CanProcess(b.Length))
 					break;

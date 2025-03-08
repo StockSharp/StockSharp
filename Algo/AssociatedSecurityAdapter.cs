@@ -3,20 +3,15 @@ namespace StockSharp.Algo;
 /// <summary>
 /// Associated security adapter.
 /// </summary>
-public class AssociatedSecurityAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="AssociatedSecurityAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">Inner message adapter.</param>
+public class AssociatedSecurityAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
-	private sealed class QuoteChangeDepthBuilder
+	private sealed class QuoteChangeDepthBuilder(string securityCode, string boardCode)
 	{
 		private readonly Dictionary<SecurityId, QuoteChangeMessage> _feeds = [];
-
-		private readonly string _securityCode;
-		private readonly string _boardCode;
-
-		public QuoteChangeDepthBuilder(string securityCode, string boardCode)
-		{
-			_securityCode = securityCode;
-			_boardCode = boardCode;
-		}
 
 		public QuoteChangeMessage Process(QuoteChangeMessage message)
 		{
@@ -29,8 +24,8 @@ public class AssociatedSecurityAdapter : MessageAdapterWrapper
 			{
 				SecurityId = new SecurityId
 				{
-					SecurityCode = _securityCode,
-					BoardCode = _boardCode
+					SecurityCode = securityCode,
+					BoardCode = boardCode
 				},
 				ServerTime = message.ServerTime,
 				LocalTime = message.LocalTime,
@@ -41,15 +36,6 @@ public class AssociatedSecurityAdapter : MessageAdapterWrapper
 	}
 
 	private readonly SynchronizedDictionary<string, QuoteChangeDepthBuilder> _quoteChangeDepthBuilders = new(StringComparer.InvariantCultureIgnoreCase);
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="AssociatedSecurityAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">Inner message adapter.</param>
-	public AssociatedSecurityAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
 
 	/// <inheritdoc />
 	protected override void OnInnerAdapterNewOutMessage(Message message)

@@ -3,23 +3,17 @@ namespace StockSharp.Algo;
 /// <summary>
 /// Security identifier mappings message adapter.
 /// </summary>
-public class SecurityMappingMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="SecurityMappingMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
+/// <param name="storage">Security identifier mappings storage.</param>
+public class SecurityMappingMessageAdapter(IMessageAdapter innerAdapter, ISecurityMappingStorage storage) : MessageAdapterWrapper(innerAdapter)
 {
 	/// <summary>
 	/// Security identifier mappings storage.
 	/// </summary>
-	public ISecurityMappingStorage Storage { get; }
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="SecurityMappingMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-	/// <param name="storage">Security identifier mappings storage.</param>
-	public SecurityMappingMessageAdapter(IMessageAdapter innerAdapter, ISecurityMappingStorage storage)
-		: base(innerAdapter)
-	{
-		Storage = storage ?? throw new ArgumentNullException(nameof(storage));
-	}
+	public ISecurityMappingStorage Storage { get; } = storage ?? throw new ArgumentNullException(nameof(storage));
 
 	/// <inheritdoc />
 	protected override void OnInnerAdapterNewOutMessage(Message message)

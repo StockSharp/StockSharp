@@ -5,25 +5,18 @@ using Ecng.Interop;
 /// <summary>
 /// The export into Excel.
 /// </summary>
-public class ExcelExporter : BaseExporter
+/// <remarks>
+/// Initializes a new instance of the <see cref="ExcelExporter"/>.
+/// </remarks>
+/// <param name="provider">Excel provider.</param>
+/// <param name="dataType">Data type info.</param>
+/// <param name="isCancelled">The processor, returning process interruption sign.</param>
+/// <param name="fileName">The path to file.</param>
+/// <param name="breaked">The processor, which will be called if maximal value of strings is exceeded.</param>
+public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Func<int, bool> isCancelled, string fileName, Action breaked) : BaseExporter(dataType, isCancelled, fileName)
 {
-	private readonly IExcelWorkerProvider _provider;
-	private readonly Action _breaked;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="ExcelExporter"/>.
-	/// </summary>
-	/// <param name="provider">Excel provider.</param>
-	/// <param name="dataType">Data type info.</param>
-	/// <param name="isCancelled">The processor, returning process interruption sign.</param>
-	/// <param name="fileName">The path to file.</param>
-	/// <param name="breaked">The processor, which will be called if maximal value of strings is exceeded.</param>
-	public ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Func<int, bool> isCancelled, string fileName, Action breaked)
-		: base(dataType, isCancelled, fileName)
-	{
-		_provider = provider ?? throw new ArgumentNullException(nameof(provider));
-		_breaked = breaked ?? throw new ArgumentNullException(nameof(breaked));
-	}
+	private readonly IExcelWorkerProvider _provider = provider ?? throw new ArgumentNullException(nameof(provider));
+	private readonly Action _breaked = breaked ?? throw new ArgumentNullException(nameof(breaked));
 
 	/// <inheritdoc />
 	protected override (int, DateTimeOffset?) ExportOrderLog(IEnumerable<ExecutionMessage> messages)

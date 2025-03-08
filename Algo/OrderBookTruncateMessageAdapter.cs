@@ -3,18 +3,13 @@
 /// <summary>
 /// The messages adapter build order book from incremental updates <see cref="QuoteChangeStates.Increment"/>.
 /// </summary>
-public class OrderBookTruncateMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="OrderBookTruncateMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">Underlying adapter.</param>
+public class OrderBookTruncateMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
 	private readonly SynchronizedDictionary<long, int> _depths = [];
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="OrderBookTruncateMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">Underlying adapter.</param>
-	public OrderBookTruncateMessageAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
@@ -111,8 +106,7 @@ public class OrderBookTruncateMessageAdapter : MessageAdapterWrapper
 					if (group.Key == null)
 						continue;
 
-					if (clones == null)
-						clones = [];
+					clones ??= [];
 
 					var maxDepth = group.Key.Value;
 

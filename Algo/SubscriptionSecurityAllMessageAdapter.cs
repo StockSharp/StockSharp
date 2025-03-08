@@ -3,39 +3,27 @@
 /// <summary>
 /// Security ALL subscription counter adapter.
 /// </summary>
-public class SubscriptionSecurityAllMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="SubscriptionSecurityAllMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">Inner message adapter.</param>
+public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
-	private abstract class BaseSubscription
+	private abstract class BaseSubscription(MarketDataMessage origin)
 	{
-		protected BaseSubscription(MarketDataMessage origin)
-		{
-			Origin = origin ?? throw new ArgumentNullException(nameof(origin));
-		}
-
-		public MarketDataMessage Origin { get; }
+		public MarketDataMessage Origin { get; } = origin ?? throw new ArgumentNullException(nameof(origin));
 	}
 
-	private class ChildSubscription : BaseSubscription
+	private class ChildSubscription(SubscriptionSecurityAllMessageAdapter.ParentSubscription parent, MarketDataMessage origin) : BaseSubscription(origin)
 	{
-		public ChildSubscription(ParentSubscription parent, MarketDataMessage origin)
-			: base(origin)
-		{
-			Parent = parent ?? throw new ArgumentNullException(nameof(parent));
-		}
-
-		public ParentSubscription Parent { get; }
+		public ParentSubscription Parent { get; } = parent ?? throw new ArgumentNullException(nameof(parent));
 		public SubscriptionStates State { get; set; } = SubscriptionStates.Stopped;
 		public List<ISubscriptionIdMessage> Suspended { get; } = [];
 		public CachedSynchronizedDictionary<long, MarketDataMessage> Subscribers { get; } = [];
 	}
 
-	private class ParentSubscription : BaseSubscription
+	private class ParentSubscription(MarketDataMessage origin) : BaseSubscription(origin)
 	{
-		public ParentSubscription(MarketDataMessage origin)
-			: base(origin)
-		{
-		}
-
 		public CachedSynchronizedPairSet<long, MarketDataMessage> Alls = [];
 		public SynchronizedDictionary<SecurityId, CachedSynchronizedSet<long>> NonAlls = [];
 		public Dictionary<SecurityId, ChildSubscription> Child { get; } = [];
@@ -48,15 +36,6 @@ public class SubscriptionSecurityAllMessageAdapter : MessageAdapterWrapper
 	private readonly Dictionary<long, ParentSubscription> _unsubscribes = [];
 	private readonly Dictionary<long, Tuple<ParentSubscription, MarketDataMessage>> _requests = [];
 	private readonly List<ChildSubscription> _toFlush = [];
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="SubscriptionSecurityAllMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">Inner message adapter.</param>
-	public SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
 
 	private void ClearState()
 	{

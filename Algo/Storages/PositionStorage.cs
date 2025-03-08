@@ -1,13 +1,8 @@
 namespace StockSharp.Algo.Storages;
 
-class PositionStorage : IPositionStorage
+class PositionStorage(IEntityRegistry entityRegistry) : IPositionStorage
 {
-	private readonly IEntityRegistry _entityRegistry;
-
-	public PositionStorage(IEntityRegistry entityRegistry)
-	{
-		_entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
-	}
+	private readonly IEntityRegistry _entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
 
 	IEnumerable<Position> IPositionProvider.Positions => _entityRegistry.Positions.Cache;
 

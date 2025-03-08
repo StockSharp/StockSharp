@@ -375,8 +375,7 @@ public class RiskPositionTimeRule : RiskRule
 					if (diff < Time)
 						continue;
 
-					if (removingPos == null)
-						removingPos = [];
+					removingPos ??= [];
 
 					removingPos.Add(pair.Key);
 				}

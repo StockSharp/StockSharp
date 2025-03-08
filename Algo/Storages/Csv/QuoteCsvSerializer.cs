@@ -14,17 +14,13 @@ class NullableTimeQuoteChange
 /// <summary>
 /// The quote serializer in the CSV format.
 /// </summary>
-class QuoteCsvSerializer : CsvMarketDataSerializer<NullableTimeQuoteChange>
+/// <remarks>
+/// Initializes a new instance of the <see cref="QuoteCsvSerializer"/>.
+/// </remarks>
+/// <param name="securityId">Security ID.</param>
+/// <param name="encoding">Encoding.</param>
+class QuoteCsvSerializer(SecurityId securityId, Encoding encoding = null) : CsvMarketDataSerializer<NullableTimeQuoteChange>(securityId, encoding)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="QuoteCsvSerializer"/>.
-	/// </summary>
-	/// <param name="securityId">Security ID.</param>
-	/// <param name="encoding">Encoding.</param>
-	public QuoteCsvSerializer(SecurityId securityId, Encoding encoding = null)
-		: base(securityId, encoding)
-	{
-	}
 
 	/// <inheritdoc />
 	public override IMarketDataMetaInfo CreateMetaInfo(DateTime date)

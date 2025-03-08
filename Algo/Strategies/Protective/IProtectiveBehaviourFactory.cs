@@ -27,7 +27,11 @@ public interface IProtectiveBehaviourFactory
 /// <summary>
 /// <see cref="IProtectiveBehaviourFactory"/> uses server stop-orders.
 /// </summary>
-public class ServerProtectiveBehaviourFactory : IProtectiveBehaviourFactory
+/// <remarks>
+/// Initializes a new instance of the <see cref="ServerProtectiveBehaviourFactory"/>.
+/// </remarks>
+/// <param name="adapter"><see cref="IMessageAdapter"/> for creation server stop-orders.</param>
+public class ServerProtectiveBehaviourFactory(IMessageAdapter adapter) : IProtectiveBehaviourFactory
 {
 	private class ServerProtectiveBehaviour : BaseProtectiveBehaviour
 	{
@@ -87,16 +91,7 @@ public class ServerProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 		}
 	}
 
-	private readonly IMessageAdapter _adapter;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="ServerProtectiveBehaviourFactory"/>.
-	/// </summary>
-	/// <param name="adapter"><see cref="IMessageAdapter"/> for creation server stop-orders.</param>
-	public ServerProtectiveBehaviourFactory(IMessageAdapter adapter)
-	{
-		_adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
-	}
+	private readonly IMessageAdapter _adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
 
 	IProtectiveBehaviour IProtectiveBehaviourFactory.Create(Unit takeValue, Unit stopValue, bool isStopTrailing, TimeSpan takeTimeout, TimeSpan stopTimeout, bool useMarketOrders)
 		=> new ServerProtectiveBehaviour(_adapter, takeValue, stopValue, isStopTrailing, takeTimeout, stopTimeout, useMarketOrders);
@@ -105,13 +100,20 @@ public class ServerProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 /// <summary>
 /// <see cref="IProtectiveBehaviourFactory"/> uses local (=emulated) stop-orders.
 /// </summary>
-public class LocalProtectiveBehaviourFactory : IProtectiveBehaviourFactory
+/// <remarks>
+/// Initializes a new instance of the <see cref="LocalProtectiveBehaviourFactory"/>.
+/// </remarks>
+/// <param name="priceStep"><see cref="SecurityMessage.PriceStep"/></param>
+/// <param name="decimals"><see cref="SecurityMessage.Decimals"/></param>
+public class LocalProtectiveBehaviourFactory(decimal? priceStep, int? decimals) : IProtectiveBehaviourFactory
 {
-	private class LocalProtectiveBehaviour : BaseProtectiveBehaviour
+	private class LocalProtectiveBehaviour(
+		decimal? priceStep, int? decimals,
+		Unit takeValue, Unit stopValue,
+		bool isStopTrailing,
+		TimeSpan takeTimeout, TimeSpan stopTimeout,
+		bool useMarketOrders) : BaseProtectiveBehaviour(takeValue, stopValue, isStopTrailing, takeTimeout, stopTimeout, useMarketOrders)
 	{
-		private readonly decimal? _priceStep;
-		private readonly int? _decimals;
-
 		private ProtectiveProcessor _take;
 		private ProtectiveProcessor _stop;
 
@@ -121,18 +123,6 @@ public class LocalProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 		private decimal _totalVolume;
 		private decimal _weightedPriceSum;
 		private readonly LinkedList<(decimal price, decimal vol)> _trades = [];
-
-		public LocalProtectiveBehaviour(
-			decimal? priceStep, int? decimals,
-			Unit takeValue, Unit stopValue,
-			bool isStopTrailing,
-			TimeSpan takeTimeout, TimeSpan stopTimeout,
-			bool useMarketOrders)
-			: base(takeValue, stopValue, isStopTrailing, takeTimeout, stopTimeout, useMarketOrders)
-		{
-			_priceStep = priceStep;
-			_decimals = decimals;
-		}
 
 		public override decimal Position => _posValue;
 
@@ -240,8 +230,8 @@ public class LocalProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 
 					_posPrice = _weightedPriceSum / _totalVolume;
 
-					if (_priceStep is not null)
-						_posPrice = _posPrice.ShrinkPrice(_priceStep, _decimals);
+					if (priceStep is not null)
+						_posPrice = _posPrice.ShrinkPrice(priceStep, decimals);
 				}
 
 				var protectiveSide = _posValue > 0 ? Sides.Buy : Sides.Sell;
@@ -259,20 +249,6 @@ public class LocalProtectiveBehaviourFactory : IProtectiveBehaviourFactory
 		}
 	}
 
-	private readonly decimal? _priceStep;
-	private readonly int? _decimals;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="LocalProtectiveBehaviourFactory"/>.
-	/// </summary>
-	/// <param name="priceStep"><see cref="SecurityMessage.PriceStep"/></param>
-	/// <param name="decimals"><see cref="SecurityMessage.Decimals"/></param>
-	public LocalProtectiveBehaviourFactory(decimal? priceStep, int? decimals)
-    {
-		_priceStep = priceStep;
-		_decimals = decimals;
-	}
-
-    IProtectiveBehaviour IProtectiveBehaviourFactory.Create(Unit takeValue, Unit stopValue, bool isStopTrailing, TimeSpan takeTimeout, TimeSpan stopTimeout, bool useMarketOrders)
-		=> new LocalProtectiveBehaviour(_priceStep, _decimals, takeValue, stopValue, isStopTrailing, takeTimeout, stopTimeout, useMarketOrders);
+	IProtectiveBehaviour IProtectiveBehaviourFactory.Create(Unit takeValue, Unit stopValue, bool isStopTrailing, TimeSpan takeTimeout, TimeSpan stopTimeout, bool useMarketOrders)
+		=> new LocalProtectiveBehaviour(priceStep, decimals, takeValue, stopValue, isStopTrailing, takeTimeout, stopTimeout, useMarketOrders);
 }

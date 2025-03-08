@@ -3,26 +3,20 @@ namespace StockSharp.Algo.Positions;
 /// <summary>
 /// The position calculation manager.
 /// </summary>
-public class PositionManager : BaseLogReceiver, IPositionManager
+/// <remarks>
+/// Initializes a new instance of the <see cref="PositionManager"/>.
+/// </remarks>
+/// <param name="byOrders">To calculate the position on realized volume for orders (<see langword="true" />) or by trades (<see langword="false" />).</param>
+public class PositionManager(bool byOrders) : BaseLogReceiver, IPositionManager
 {
-	private class OrderInfo
+	private class OrderInfo(long transactionId, SecurityId securityId, string portfolioName, Sides side, decimal volume, decimal balance)
 	{
-		public OrderInfo(long transactionId, SecurityId securityId, string portfolioName, Sides side, decimal volume, decimal balance)
-		{
-			TransactionId = transactionId;
-			SecurityId = securityId;
-			PortfolioName = portfolioName;
-			Side = side;
-			Volume = volume;
-			Balance = balance;
-		}
-
-		public long TransactionId { get; }
-		public SecurityId SecurityId { get; }
-		public string PortfolioName { get; }
-		public Sides Side { get; }
-		public decimal Volume { get; }
-		public decimal Balance { get; set; }
+		public long TransactionId { get; } = transactionId;
+		public SecurityId SecurityId { get; } = securityId;
+		public string PortfolioName { get; } = portfolioName;
+		public Sides Side { get; } = side;
+		public decimal Volume { get; } = volume;
+		public decimal Balance { get; set; } = balance;
 
 		public override string ToString() => $"{TransactionId}: {Balance}/{Volume}";
 	}
@@ -38,18 +32,9 @@ public class PositionManager : BaseLogReceiver, IPositionManager
 	private readonly Dictionary<Tuple<SecurityId, string>, PositionInfo> _positions = [];
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="PositionManager"/>.
-	/// </summary>
-	/// <param name="byOrders">To calculate the position on realized volume for orders (<see langword="true" />) or by trades (<see langword="false" />).</param>
-	public PositionManager(bool byOrders)
-	{
-		ByOrders = byOrders;
-	}
-
-	/// <summary>
 	/// To calculate the position on realized volume for orders (<see langword="true" />) or by trades (<see langword="false" />).
 	/// </summary>
-	public bool ByOrders { get; }
+	public bool ByOrders { get; } = byOrders;
 
 	/// <inheritdoc />
 	public virtual PositionChangeMessage ProcessMessage(Message message)

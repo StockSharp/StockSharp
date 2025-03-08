@@ -1,6 +1,6 @@
 namespace StockSharp.Algo.Storages.Binary;
 
-class Level1MetaInfo : BinaryMetaInfo
+class Level1MetaInfo(DateTime date) : BinaryMetaInfo(date)
 {
 	public class DateInfo
 	{
@@ -40,109 +40,55 @@ class Level1MetaInfo : BinaryMetaInfo
 		}
 	}
 
-	public Level1MetaInfo(DateTime date)
-		: base(date)
-	{
-		Price = new RefPair<decimal, decimal>();
-		ImpliedVolatility = new RefPair<decimal, decimal>();
-		HistoricalVolatility = new RefPair<decimal, decimal>();
-		TheorPrice = new RefPair<decimal, decimal>();
-		StepPrice = new RefPair<decimal, decimal>();
-		Delta = new RefPair<decimal, decimal>();
-		Gamma = new RefPair<decimal, decimal>();
-		Vega = new RefPair<decimal, decimal>();
-		Theta = new RefPair<decimal, decimal>();
-		MarginBuy = new RefPair<decimal, decimal>();
-		MarginSell = new RefPair<decimal, decimal>();
-		Change = new RefPair<decimal, decimal>();
-		Rho = new RefPair<decimal, decimal>();
-		AccruedCouponIncome = new RefPair<decimal, decimal>();
-		Yield = new RefPair<decimal, decimal>();
-		VWAP = new RefPair<decimal, decimal>();
-		PriceEarnings = new RefPair<decimal, decimal>();
-		ForwardPriceEarnings = new RefPair<decimal, decimal>();
-		PriceEarningsGrowth = new RefPair<decimal, decimal>();
-		PriceSales = new RefPair<decimal, decimal>();
-		PriceBook = new RefPair<decimal, decimal>();
-		PriceCash = new RefPair<decimal, decimal>();
-		PriceFreeCash = new RefPair<decimal, decimal>();
-		Payout = new RefPair<decimal, decimal>();
-		SharesOutstanding = new RefPair<decimal, decimal>();
-		SharesFloat = new RefPair<decimal, decimal>();
-		FloatShort = new RefPair<decimal, decimal>();
-		ShortRatio = new RefPair<decimal, decimal>();
-		ReturnOnAssets = new RefPair<decimal, decimal>();
-		ReturnOnEquity = new RefPair<decimal, decimal>();
-		ReturnOnInvestment = new RefPair<decimal, decimal>();
-		CurrentRatio = new RefPair<decimal, decimal>();
-		QuickRatio = new RefPair<decimal, decimal>();
-		LongTermDebtEquity = new RefPair<decimal, decimal>();
-		TotalDebtEquity = new RefPair<decimal, decimal>();
-		GrossMargin = new RefPair<decimal, decimal>();
-		OperatingMargin = new RefPair<decimal, decimal>();
-		ProfitMargin = new RefPair<decimal, decimal>();
-		Beta = new RefPair<decimal, decimal>();
-		AverageTrueRange = new RefPair<decimal, decimal>();
-		HistoricalVolatilityWeek = new RefPair<decimal, decimal>();
-		HistoricalVolatilityMonth = new RefPair<decimal, decimal>();
-		AveragePrice = new RefPair<decimal, decimal>();
-		Turnover = new RefPair<decimal, decimal>();
-		IssueSize = new RefPair<decimal, decimal>();
-		Duration = new RefPair<decimal, decimal>();
-		BuyBackPrice = new RefPair<decimal, decimal>();
-		MinPrice = new RefPair<decimal, decimal>();
-		MaxPrice = new RefPair<decimal, decimal>();
-	}
-
-	public RefPair<decimal, decimal> Price { get; private set; }
-	public RefPair<decimal, decimal> ImpliedVolatility { get; private set; }
-	public RefPair<decimal, decimal> HistoricalVolatility { get; private set; }
-	public RefPair<decimal, decimal> TheorPrice { get; private set; }
-	public RefPair<decimal, decimal> StepPrice { get; private set; }
-	public RefPair<decimal, decimal> Delta { get; private set; }
-	public RefPair<decimal, decimal> Gamma { get; private set; }
-	public RefPair<decimal, decimal> Vega { get; private set; }
-	public RefPair<decimal, decimal> Theta { get; private set; }
-	public RefPair<decimal, decimal> MarginBuy { get; private set; }
-	public RefPair<decimal, decimal> MarginSell { get; private set; }
-	public RefPair<decimal, decimal> Change { get; private set; }
-	public RefPair<decimal, decimal> Rho { get; private set; }
-	public RefPair<decimal, decimal> AccruedCouponIncome { get; private set; }
-	public RefPair<decimal, decimal> Yield { get; private set; }
-	public RefPair<decimal, decimal> VWAP { get; private set; }
-	public RefPair<decimal, decimal> PriceEarnings { get; private set; }
-	public RefPair<decimal, decimal> ForwardPriceEarnings { get; private set; }
-	public RefPair<decimal, decimal> PriceEarningsGrowth { get; private set; }
-	public RefPair<decimal, decimal> PriceSales { get; private set; }
-	public RefPair<decimal, decimal> PriceBook { get; private set; }
-	public RefPair<decimal, decimal> PriceCash { get; private set; }
-	public RefPair<decimal, decimal> PriceFreeCash { get; private set; }
-	public RefPair<decimal, decimal> Payout { get; private set; }
-	public RefPair<decimal, decimal> SharesOutstanding { get; private set; }
-	public RefPair<decimal, decimal> SharesFloat { get; private set; }
-	public RefPair<decimal, decimal> FloatShort { get; private set; }
-	public RefPair<decimal, decimal> ShortRatio { get; private set; }
-	public RefPair<decimal, decimal> ReturnOnAssets { get; private set; }
-	public RefPair<decimal, decimal> ReturnOnEquity { get; private set; }
-	public RefPair<decimal, decimal> ReturnOnInvestment { get; private set; }
-	public RefPair<decimal, decimal> CurrentRatio { get; private set; }
-	public RefPair<decimal, decimal> QuickRatio { get; private set; }
-	public RefPair<decimal, decimal> LongTermDebtEquity { get; private set; }
-	public RefPair<decimal, decimal> TotalDebtEquity { get; private set; }
-	public RefPair<decimal, decimal> GrossMargin { get; private set; }
-	public RefPair<decimal, decimal> OperatingMargin { get; private set; }
-	public RefPair<decimal, decimal> ProfitMargin { get; private set; }
-	public RefPair<decimal, decimal> Beta { get; private set; }
-	public RefPair<decimal, decimal> AverageTrueRange { get; private set; }
-	public RefPair<decimal, decimal> HistoricalVolatilityWeek { get; private set; }
-	public RefPair<decimal, decimal> HistoricalVolatilityMonth { get; private set; }
-	public RefPair<decimal, decimal> AveragePrice { get; private set; }
-	public RefPair<decimal, decimal> Turnover { get; private set; }
-	public RefPair<decimal, decimal> IssueSize { get; private set; }
-	public RefPair<decimal, decimal> Duration { get; private set; }
-	public RefPair<decimal, decimal> BuyBackPrice { get; private set; }
-	public RefPair<decimal, decimal> MinPrice { get; private set; }
-	public RefPair<decimal, decimal> MaxPrice { get; private set; }
+	public RefPair<decimal, decimal> Price { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> ImpliedVolatility { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> HistoricalVolatility { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> TheorPrice { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> StepPrice { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> Delta { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> Gamma { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> Vega { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> Theta { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> MarginBuy { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> MarginSell { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> Change { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> Rho { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> AccruedCouponIncome { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> Yield { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> VWAP { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> PriceEarnings { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> ForwardPriceEarnings { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> PriceEarningsGrowth { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> PriceSales { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> PriceBook { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> PriceCash { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> PriceFreeCash { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> Payout { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> SharesOutstanding { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> SharesFloat { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> FloatShort { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> ShortRatio { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> ReturnOnAssets { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> ReturnOnEquity { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> ReturnOnInvestment { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> CurrentRatio { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> QuickRatio { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> LongTermDebtEquity { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> TotalDebtEquity { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> GrossMargin { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> OperatingMargin { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> ProfitMargin { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> Beta { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> AverageTrueRange { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> HistoricalVolatilityWeek { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> HistoricalVolatilityMonth { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> AveragePrice { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> Turnover { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> IssueSize { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> Duration { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> BuyBackPrice { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> MinPrice { get; private set; } = new RefPair<decimal, decimal>();
+	public RefPair<decimal, decimal> MaxPrice { get; private set; } = new RefPair<decimal, decimal>();
 
 	public DateTime FirstFieldTime { get; set; }
 	public DateTime LastFieldTime { get; set; }
@@ -495,7 +441,7 @@ class Level1MetaInfo : BinaryMetaInfo
 	}
 }
 
-class Level1BinarySerializer : BinaryMarketDataSerializer<Level1ChangeMessage, Level1MetaInfo>
+class Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<Level1ChangeMessage, Level1MetaInfo>(securityId, DataType.Level1, 50, MarketDataVersions.Version64, exchangeInfoProvider)
 {
 	private static readonly SynchronizedPairSet<Level1Fields, int> _oldMap = new()
 	{
@@ -528,11 +474,6 @@ class Level1BinarySerializer : BinaryMarketDataSerializer<Level1ChangeMessage, L
 		{ Level1Fields.PriceStep,				1 << 24 },
 		{ Level1Fields.VolumeStep,				1 << 25 },
 	};
-
-	public Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-		: base(securityId, DataType.Level1, 50, MarketDataVersions.Version64, exchangeInfoProvider)
-	{
-	}
 
 	private static int MapTo(Level1MetaInfo metaInfo, Level1Fields field)
 	{

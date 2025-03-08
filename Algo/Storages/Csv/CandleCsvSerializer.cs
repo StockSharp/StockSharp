@@ -4,27 +4,24 @@ namespace StockSharp.Algo.Storages.Csv;
 /// The candle serializer in the CSV format.
 /// </summary>
 /// <typeparam name="TCandleMessage"><see cref="CandleMessage"/> derived type.</typeparam>
-public class CandleCsvSerializer<TCandleMessage> : CsvMarketDataSerializer<TCandleMessage>
+/// <remarks>
+/// Initializes a new instance of the <see cref="CandleCsvSerializer{TCandleMessage}"/>.
+/// </remarks>
+/// <param name="securityId">Security ID.</param>
+/// <param name="dataType"><see cref="DataType"/>.</param>
+/// <param name="encoding">Encoding.</param>
+public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType dataType, Encoding encoding = null) : CsvMarketDataSerializer<TCandleMessage>(securityId, encoding)
 	where TCandleMessage : CandleMessage, new()
 {
-	private class CandleCsvMetaInfo : MetaInfo
+	private class CandleCsvMetaInfo(CandleCsvSerializer<TCandleMessage> serializer, DateTime date, Encoding encoding) : MetaInfo(date)
 		//where TCandleMessage : CandleMessage, new()
 	{
 		private readonly Dictionary<DateTime, TCandleMessage> _items = [];
-
-		private readonly CandleCsvSerializer<TCandleMessage> _serializer;
-		private readonly Encoding _encoding;
+		private readonly Encoding _encoding = encoding ?? throw new ArgumentNullException(nameof(encoding));
 
 		private bool _isOverride;
 
 		public override bool IsOverride => _isOverride;
-
-		public CandleCsvMetaInfo(CandleCsvSerializer<TCandleMessage> serializer, DateTime date, Encoding encoding)
-			: base(date)
-		{
-			_serializer = serializer;
-			_encoding = encoding ?? throw new ArgumentNullException(nameof(encoding));
-		}
 
 		public override object LastId { get; set; }
 
@@ -43,7 +40,7 @@ public class CandleCsvSerializer<TCandleMessage> : CsvMarketDataSerializer<TCand
 
 				while (reader.NextLine())
 				{
-					var message = _serializer.Read(reader, this);
+					var message = serializer.Read(reader, this);
 
 					var openTime = message.OpenTime.UtcDateTime;
 
@@ -89,19 +86,7 @@ public class CandleCsvSerializer<TCandleMessage> : CsvMarketDataSerializer<TCand
 		}
 	}
 
-	private readonly DataType _dataType;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="CandleCsvSerializer{TCandleMessage}"/>.
-	/// </summary>
-	/// <param name="securityId">Security ID.</param>
-	/// <param name="dataType"><see cref="DataType"/>.</param>
-	/// <param name="encoding">Encoding.</param>
-	public CandleCsvSerializer(SecurityId securityId, DataType dataType, Encoding encoding = null)
-		: base(securityId, encoding)
-	{
-		_dataType = dataType ?? throw new ArgumentNullException(nameof(dataType));
-	}
+	private readonly DataType _dataType = dataType ?? throw new ArgumentNullException(nameof(dataType));
 
 	/// <inheritdoc />
 	public override IMarketDataMetaInfo CreateMetaInfo(DateTime date)

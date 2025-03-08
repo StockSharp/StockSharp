@@ -3,18 +3,13 @@
 /// <summary>
 /// Volume profile.
 /// </summary>
-public class VolumeProfileBuilder
+/// <remarks>
+/// Initializes a new instance of the <see cref="VolumeProfileBuilder"/>.
+/// </remarks>
+/// <param name="levels">Price levels.</param>
+public class VolumeProfileBuilder(IList<CandlePriceLevel> levels)
 {
 	private readonly Dictionary<decimal, int> _volumeProfileInfo = [];
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="VolumeProfileBuilder"/>.
-	/// </summary>
-	/// <param name="levels">Price levels.</param>
-	public VolumeProfileBuilder(IList<CandlePriceLevel> levels)
-	{
-		_levels = levels ?? throw new ArgumentNullException(nameof(levels));
-	}
 
 	/// <summary>
 	/// The upper price level.
@@ -48,7 +43,7 @@ public class VolumeProfileBuilder
 		}
 	}
 
-	private readonly IList<CandlePriceLevel> _levels;
+	private readonly IList<CandlePriceLevel> _levels = levels ?? throw new ArgumentNullException(nameof(levels));
 
 	/// <summary>
 	/// Price levels.

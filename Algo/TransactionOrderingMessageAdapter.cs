@@ -3,18 +3,17 @@
 /// <summary>
 /// Transactional messages ordering adapter.
 /// </summary>
-public class TransactionOrderingMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="TransactionOrderingMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">Inner message adapter.</param>
+public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
-	private class SubscriptionInfo
+	private class SubscriptionInfo(OrderStatusMessage original)
 	{
-		public SubscriptionInfo(OrderStatusMessage original)
-		{
-			Original = original ?? throw new ArgumentNullException(nameof(original));
-		}
-
 		public SyncObject Sync { get; } = new SyncObject();
 
-		public OrderStatusMessage Original { get; }
+		public OrderStatusMessage Original { get; } = original ?? throw new ArgumentNullException(nameof(original));
 		public Dictionary<long, Tuple<List<ExecutionMessage>, List<ExecutionMessage>, long>> Transactions { get; } = [];
 	}
 
@@ -30,15 +29,6 @@ public class TransactionOrderingMessageAdapter : MessageAdapterWrapper
 	private readonly SyncObject _nonAssociatedLock = new();
 	private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedOrderIds = [];
 	private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedStringOrderIds = [];
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="TransactionOrderingMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">Inner message adapter.</param>
-	public TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
 
 	private void Reset()
 	{

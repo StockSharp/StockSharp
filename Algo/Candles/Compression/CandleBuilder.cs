@@ -4,25 +4,20 @@ namespace StockSharp.Algo.Candles.Compression;
 /// Candles builder.
 /// </summary>
 /// <typeparam name="TCandleMessage">The type of candle which the builder will create.</typeparam>
-public abstract class CandleBuilder<TCandleMessage> : BaseLogReceiver, ICandleBuilder
+/// <remarks>
+/// Initialize <see cref="CandleBuilder{TCandleMessage}"/>.
+/// </remarks>
+/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
+public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchangeInfoProvider) : BaseLogReceiver, ICandleBuilder
 	where TCandleMessage : CandleMessage
 {
 	/// <inheritdoc />
 	public virtual Type CandleType { get; } = typeof(TCandleMessage);
 
 	/// <summary>
-	/// Initialize <see cref="CandleBuilder{TCandleMessage}"/>.
-	/// </summary>
-	/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
-	protected CandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
-	{
-		ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
-	}
-
-	/// <summary>
 	/// The exchange boards provider.
 	/// </summary>
-	protected IExchangeInfoProvider ExchangeInfoProvider { get; }
+	protected IExchangeInfoProvider ExchangeInfoProvider { get; } = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
 	/// <inheritdoc />
 	public IEnumerable<CandleMessage> Process(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)
@@ -416,7 +411,11 @@ public abstract class CandleBuilder<TCandleMessage> : BaseLogReceiver, ICandleBu
 /// <summary>
 /// The builder of candles of <see cref="TimeFrameCandleMessage"/> type.
 /// </summary>
-public class TimeFrameCandleBuilder : CandleBuilder<TimeFrameCandleMessage>
+/// <remarks>
+/// Initializes a new instance of the <see cref="TimeFrameCandleBuilder"/>.
+/// </remarks>
+/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
+public class TimeFrameCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : CandleBuilder<TimeFrameCandleMessage>(exchangeInfoProvider)
 {
 	//private sealed class TimeoutInfo : Disposable
 	//{
@@ -513,7 +512,7 @@ public class TimeFrameCandleBuilder : CandleBuilder<TimeFrameCandleMessage>
 	/// <summary>
 	/// Whether to create empty candles (<see cref="CandleStates.None"/>) in the lack of trades. The default mode is enabled.
 	/// </summary>
-	public bool GenerateEmptyCandles { get; set; }
+	public bool GenerateEmptyCandles { get; set; } = true;
 
 	private Unit _timeout = UnitHelper.Percents(10);
 
@@ -533,16 +532,6 @@ public class TimeFrameCandleBuilder : CandleBuilder<TimeFrameCandleMessage>
 
 			_timeout = value;
 		}
-	}
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="TimeFrameCandleBuilder"/>.
-	/// </summary>
-	/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
-	public TimeFrameCandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
-		: base(exchangeInfoProvider)
-	{
-		GenerateEmptyCandles = true;
 	}
 
 	///// <summary>
@@ -590,16 +579,12 @@ public class TimeFrameCandleBuilder : CandleBuilder<TimeFrameCandleMessage>
 /// <summary>
 /// The builder of candles of <see cref="TickCandleMessage"/> type.
 /// </summary>
-public class TickCandleBuilder : CandleBuilder<TickCandleMessage>
+/// <remarks>
+/// Initializes a new instance of the <see cref="TickCandleBuilder"/>.
+/// </remarks>
+/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
+public class TickCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : CandleBuilder<TickCandleMessage>(exchangeInfoProvider)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="TickCandleBuilder"/>.
-	/// </summary>
-	/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
-	public TickCandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
-		: base(exchangeInfoProvider)
-	{
-	}
 
 	/// <inheritdoc />
 	protected override TickCandleMessage CreateCandle(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)
@@ -626,16 +611,12 @@ public class TickCandleBuilder : CandleBuilder<TickCandleMessage>
 /// <summary>
 /// The builder of candles of <see cref="VolumeCandleMessage"/> type.
 /// </summary>
-public class VolumeCandleBuilder : CandleBuilder<VolumeCandleMessage>
+/// <remarks>
+/// Initializes a new instance of the <see cref="VolumeCandleBuilder"/>.
+/// </remarks>
+/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
+public class VolumeCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : CandleBuilder<VolumeCandleMessage>(exchangeInfoProvider)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="VolumeCandleBuilder"/>.
-	/// </summary>
-	/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
-	public VolumeCandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
-		: base(exchangeInfoProvider)
-	{
-	}
 
 	/// <inheritdoc />
 	protected override VolumeCandleMessage CreateCandle(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)
@@ -662,16 +643,12 @@ public class VolumeCandleBuilder : CandleBuilder<VolumeCandleMessage>
 /// <summary>
 /// The builder of candles of <see cref="RangeCandleMessage"/> type.
 /// </summary>
-public class RangeCandleBuilder : CandleBuilder<RangeCandleMessage>
+/// <remarks>
+/// Initializes a new instance of the <see cref="RangeCandleBuilder"/>.
+/// </remarks>
+/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
+public class RangeCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : CandleBuilder<RangeCandleMessage>(exchangeInfoProvider)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="RangeCandleBuilder"/>.
-	/// </summary>
-	/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
-	public RangeCandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
-		: base(exchangeInfoProvider)
-	{
-	}
 
 	/// <inheritdoc />
 	protected override RangeCandleMessage CreateCandle(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)
@@ -698,16 +675,12 @@ public class RangeCandleBuilder : CandleBuilder<RangeCandleMessage>
 /// <summary>
 /// The builder of candles of <see cref="PnFCandleMessage"/> type.
 /// </summary>
-public class PnFCandleBuilder : CandleBuilder<PnFCandleMessage>
+/// <remarks>
+/// Initializes a new instance of the <see cref="PnFCandleBuilder"/>.
+/// </remarks>
+/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
+public class PnFCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : CandleBuilder<PnFCandleMessage>(exchangeInfoProvider)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="PnFCandleBuilder"/>.
-	/// </summary>
-	/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
-	public PnFCandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
-		: base(exchangeInfoProvider)
-	{
-	}
 
 	/// <inheritdoc />
 	protected override IEnumerable<PnFCandleMessage> OnProcess(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)
@@ -851,16 +824,12 @@ public class PnFCandleBuilder : CandleBuilder<PnFCandleMessage>
 /// <summary>
 /// The builder of candles of <see cref="RenkoCandleMessage"/> type.
 /// </summary>
-public class RenkoCandleBuilder : CandleBuilder<RenkoCandleMessage>
+/// <remarks>
+/// Initializes a new instance of the <see cref="RenkoCandleBuilder"/>.
+/// </remarks>
+/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
+public class RenkoCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : CandleBuilder<RenkoCandleMessage>(exchangeInfoProvider)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="RenkoCandleBuilder"/>.
-	/// </summary>
-	/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
-	public RenkoCandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
-		: base(exchangeInfoProvider)
-	{
-	}
 
 	/// <inheritdoc />
 	protected override IEnumerable<RenkoCandleMessage> OnProcess(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)
@@ -945,16 +914,12 @@ public class RenkoCandleBuilder : CandleBuilder<RenkoCandleMessage>
 /// <summary>
 /// The builder of candles of <see cref="HeikinAshiCandleBuilder"/> type.
 /// </summary>
-public class HeikinAshiCandleBuilder : CandleBuilder<HeikinAshiCandleMessage>
+/// <remarks>
+/// Initializes a new instance of the <see cref="HeikinAshiCandleBuilder"/>.
+/// </remarks>
+/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
+public class HeikinAshiCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : CandleBuilder<HeikinAshiCandleMessage>(exchangeInfoProvider)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="HeikinAshiCandleBuilder"/>.
-	/// </summary>
-	/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
-	public HeikinAshiCandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
-		: base(exchangeInfoProvider)
-	{
-	}
 
 	/// <inheritdoc />
 	protected override HeikinAshiCandleMessage CreateCandle(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)

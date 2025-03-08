@@ -7,21 +7,12 @@ using StockSharp.Algo.Candles;
 public static class IStorageRegistryObsoleteExtensions
 {
 	[Obsolete]
-	private class ConvertableStorage<TMessage, TEntity> : IEntityMarketDataStorage<TEntity, TMessage>, IMarketDataStorageInfo<TMessage>
+	private class ConvertableStorage<TMessage, TEntity>(Security security, IMarketDataStorage<TMessage> messageStorage, IExchangeInfoProvider exchangeInfoProvider, Func<TEntity, TMessage> toMessage) : IEntityMarketDataStorage<TEntity, TMessage>, IMarketDataStorageInfo<TMessage>
 		where TMessage : Message
 	{
-		private readonly Security _security;
-		private readonly IMarketDataStorage<TMessage> _messageStorage;
-		private readonly IExchangeInfoProvider _exchangeInfoProvider;
-		private readonly Func<TEntity, TMessage> _toMessage;
-
-		public ConvertableStorage(Security security, IMarketDataStorage<TMessage> messageStorage, IExchangeInfoProvider exchangeInfoProvider, Func<TEntity, TMessage> toMessage)
-		{
-			_security = security;
-			_messageStorage = messageStorage ?? throw new ArgumentNullException(nameof(messageStorage));
-			_exchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
-			_toMessage = toMessage ?? throw new ArgumentNullException(nameof(toMessage));
-		}
+		private readonly IMarketDataStorage<TMessage> _messageStorage = messageStorage ?? throw new ArgumentNullException(nameof(messageStorage));
+		private readonly IExchangeInfoProvider _exchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
+		private readonly Func<TEntity, TMessage> _toMessage = toMessage ?? throw new ArgumentNullException(nameof(toMessage));
 
 		IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date) => _messageStorage.GetMetaInfo(date);
 
@@ -85,7 +76,7 @@ public static class IStorageRegistryObsoleteExtensions
 
 		public IEnumerable<TEntity> Load(DateTime date)
 		{
-			return ((IMarketDataStorage<TMessage>)this).Load(date).ToEntities<TMessage, TEntity>(_security, _exchangeInfoProvider);
+			return ((IMarketDataStorage<TMessage>)this).Load(date).ToEntities<TMessage, TEntity>(security, _exchangeInfoProvider);
 		}
 
 		IEnumerable<TMessage> IMarketDataStorage<TMessage>.Load(DateTime date)

@@ -7,15 +7,9 @@ public static partial class MarketRuleHelper
 {
 	#region IConnector rules
 
-	private abstract class ConnectorRule<TArg> : MarketRule<IConnector, TArg>
+	private abstract class ConnectorRule<TArg>(IConnector connector) : MarketRule<IConnector, TArg>(connector)
 	{
-		protected ConnectorRule(IConnector connector)
-			: base(connector)
-		{
-			Connector = connector ?? throw new ArgumentNullException(nameof(connector));
-		}
-
-		protected IConnector Connector { get; }
+		protected IConnector Connector { get; } = connector ?? throw new ArgumentNullException(nameof(connector));
 	}
 
 	private class IntervalTimeRule : ConnectorRule<IConnector>
@@ -39,15 +33,9 @@ public static partial class MarketRuleHelper
 		}
 	}
 
-	private abstract class TransactionProviderRule<TArg> : MarketRule<ITransactionProvider, TArg>
+	private abstract class TransactionProviderRule<TArg>(ITransactionProvider provider) : MarketRule<ITransactionProvider, TArg>(provider)
 	{
-		protected TransactionProviderRule(ITransactionProvider provider)
-			: base(provider)
-		{
-			Provider = provider ?? throw new ArgumentNullException(nameof(provider));
-		}
-
-		protected ITransactionProvider Provider { get; }
+		protected ITransactionProvider Provider { get; } = provider ?? throw new ArgumentNullException(nameof(provider));
 	}
 
 	private class ConnectedRule : ConnectorRule<IMessageAdapter>
@@ -539,26 +527,16 @@ public static partial class MarketRuleHelper
 		}
 	}
 
-	private sealed class OrRule : BaseComplexRule<object, object>
+	private sealed class OrRule(IEnumerable<IMarketRule> innerRules) : BaseComplexRule<object, object>(innerRules)
 	{
-		public OrRule(IEnumerable<IMarketRule> innerRules)
-			: base(innerRules)
-		{
-		}
-
 		protected override IMarketRule Init(IMarketRule rule)
 		{
 			return rule.Do(arg => Activate(arg));
 		}
 	}
 
-	private sealed class OrRule<TToken, TArg> : BaseComplexRule<TToken, TArg>
+	private sealed class OrRule<TToken, TArg>(IEnumerable<MarketRule<TToken, TArg>> innerRules) : BaseComplexRule<TToken, TArg>(innerRules)
 	{
-		public OrRule(IEnumerable<MarketRule<TToken, TArg>> innerRules)
-			: base(innerRules)
-		{
-		}
-
 		protected override IMarketRule Init(IMarketRule rule)
 		{
 			return ((MarketRule<TToken, TArg>)rule).Do(a => Activate(a));

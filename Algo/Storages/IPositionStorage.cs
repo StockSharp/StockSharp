@@ -169,11 +169,9 @@ public class InMemoryPositionStorage : IPositionStorage
 		if (security is null)
 			throw new ArgumentNullException(nameof(security));
 
-		if (depoName is null)
-			depoName = string.Empty;
+		depoName ??= string.Empty;
 
-		if (clientCode is null)
-			clientCode = string.Empty;
+		clientCode ??= string.Empty;
 
 		return Tuple.Create(portfolio, security, strategyId?.ToLowerInvariant() ?? string.Empty, side, clientCode?.ToLowerInvariant() ?? string.Empty, depoName?.ToLowerInvariant() ?? string.Empty, limitType);
 	}

@@ -24,18 +24,13 @@ public interface ICandleBuilderSubscription
 /// <summary>
 /// Default implementation of <see cref="ICandleBuilderSubscription"/>.
 /// </summary>
-public class CandleBuilderSubscription : ICandleBuilderSubscription
+/// <remarks>
+/// Initializes a new instance of the <see cref="CandleBuilderSubscription"/>.
+/// </remarks>
+/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
+public class CandleBuilderSubscription(MarketDataMessage message) : ICandleBuilderSubscription
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="CandleBuilderSubscription"/>.
-	/// </summary>
-	/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
-	public CandleBuilderSubscription(MarketDataMessage message)
-	{
-		_message = message ?? throw new System.ArgumentNullException(nameof(message));
-	}
-
-	private readonly MarketDataMessage _message;
+	private readonly MarketDataMessage _message = message ?? throw new System.ArgumentNullException(nameof(message));
 	MarketDataMessage ICandleBuilderSubscription.Message => _message;
 
 	VolumeProfileBuilder ICandleBuilderSubscription.VolumeProfile { get; set; }

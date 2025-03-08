@@ -3,17 +3,12 @@ namespace StockSharp.Algo.Slippage;
 /// <summary>
 /// The message adapter, automatically calculating slippage.
 /// </summary>
-public class SlippageMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="SlippageMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
+public class SlippageMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="SlippageMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-	public SlippageMessageAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
-
 	private ISlippageManager _slippageManager = new SlippageManager();
 
 	/// <summary>
@@ -43,8 +38,7 @@ public class SlippageMessageAdapter : MessageAdapterWrapper
 			{
 				var execMsg = (ExecutionMessage)message;
 
-				if (execMsg.Slippage == null)
-					execMsg.Slippage = slippage;
+				execMsg.Slippage ??= slippage;
 			}
 		}
 

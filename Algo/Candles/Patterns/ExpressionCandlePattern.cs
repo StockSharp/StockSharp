@@ -12,35 +12,28 @@ public class CandleExpressionCondition : IPersistable
 {
 	/// <summary>
 	/// </summary>
-	public readonly struct Variable
+	/// <remarks>
+	/// Initializes a new instance of the <see cref="Variable"/>.
+	/// </remarks>
+	/// <param name="varName"><see cref="VarName"/></param>
+	/// <param name="description"><see cref="Description"/></param>
+	/// <param name="getter"><see cref="PartGetter"/></param>
+	public readonly struct Variable(string varName, string description, Func<ICandleMessage, decimal> getter)
 	{
 		/// <summary>
 		/// Name.
 		/// </summary>
-		public string VarName { get; }
+		public string VarName { get; } = varName;
 
 		/// <summary>
 		/// Description.
 		/// </summary>
-		public string Description { get; }
+		public string Description { get; } = description;
 
 		/// <summary>
 		/// Func to get the candle message part (open, high, low or close).
 		/// </summary>
-		public Func<ICandleMessage, decimal> PartGetter { get; }
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Variable"/>.
-		/// </summary>
-		/// <param name="varName"><see cref="VarName"/></param>
-		/// <param name="description"><see cref="Description"/></param>
-		/// <param name="getter"><see cref="PartGetter"/></param>
-		public Variable(string varName, string description, Func<ICandleMessage, decimal> getter)
-		{
-			VarName = varName;
-			Description = description;
-			PartGetter = getter;
-		}
+		public Func<ICandleMessage, decimal> PartGetter { get; } = getter;
 	}
 
 	private delegate decimal ValueGetterDelegate(ReadOnlySpan<ICandleMessage> candles, int idx);
@@ -207,15 +200,11 @@ public class ExpressionCandlePattern : ICandlePattern
 	/// <summary>
 	/// Condition error.
 	/// </summary>
-	public class ConditionError : Exception
+	public class ConditionError(string message, IEnumerable<int> indexes) : Exception(message)
 	{
 		/// <summary>
 		/// </summary>
-		public int[] Indexes { get; }
-
-		/// <summary>
-		/// </summary>
-		public ConditionError(string message, IEnumerable<int> indexes) : base(message) => Indexes = [.. indexes];
+		public int[] Indexes { get; } = [.. indexes];
 	}
 
 	/// <summary>

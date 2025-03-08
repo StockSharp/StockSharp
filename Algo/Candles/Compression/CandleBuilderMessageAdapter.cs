@@ -5,7 +5,12 @@ using StockSharp.Algo.Testing;
 /// <summary>
 /// Candle builder adapter.
 /// </summary>
-public class CandleBuilderMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="CandleBuilderMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">Inner message adapter.</param>
+/// <param name="candleBuilderProvider">Candle builders provider.</param>
+public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBuilderProvider candleBuilderProvider) : MessageAdapterWrapper(innerAdapter)
 {
 	private enum SeriesStates
 	{
@@ -61,22 +66,10 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 
 	private readonly Dictionary<long, SeriesInfo> _series = [];
 	private readonly Dictionary<long, long> _replaceId = [];
-	private readonly CandleBuilderProvider _candleBuilderProvider;
+	private readonly CandleBuilderProvider _candleBuilderProvider = candleBuilderProvider ?? throw new ArgumentNullException(nameof(candleBuilderProvider));
 	private readonly Dictionary<long, SeriesInfo> _allChilds = [];
 	private readonly Dictionary<long, RefPair<long, SubscriptionStates>> _pendingLoopbacks = [];
-	private readonly bool _isHistory;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="CandleBuilderMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">Inner message adapter.</param>
-	/// <param name="candleBuilderProvider">Candle builders provider.</param>
-	public CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBuilderProvider candleBuilderProvider)
-		: base(innerAdapter)
-	{
-		_candleBuilderProvider = candleBuilderProvider ?? throw new ArgumentNullException(nameof(candleBuilderProvider));
-		_isHistory = innerAdapter.FindAdapter<HistoryMessageAdapter>() is not null;
-	}
+	private readonly bool _isHistory = innerAdapter.FindAdapter<HistoryMessageAdapter>() is not null;
 
 	/// <summary>
 	/// Send out finished candles when they received.
@@ -837,8 +830,7 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 			if (series == null)
 				continue;
 
-			if (newSubscriptionIds == null)
-				newSubscriptionIds = [.. subsciptionIds];
+			newSubscriptionIds ??= [.. subsciptionIds];
 
 			newSubscriptionIds.Remove(id);
 

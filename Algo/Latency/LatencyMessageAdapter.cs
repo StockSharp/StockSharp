@@ -3,17 +3,12 @@ namespace StockSharp.Algo.Latency;
 /// <summary>
 /// The message adapter, automatically calculating network delays.
 /// </summary>
-public class LatencyMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="LatencyMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
+public class LatencyMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="LatencyMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-	public LatencyMessageAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
-
 	private ILatencyManager _latencyManager = new LatencyManager();
 
 	/// <summary>

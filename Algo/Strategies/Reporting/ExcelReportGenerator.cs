@@ -5,18 +5,13 @@ using Ecng.Interop;
 /// <summary>
 /// The report generator for the strategy in the Excel format.
 /// </summary>
-public class ExcelReportGenerator : BaseReportGenerator
+/// <remarks>
+/// Initializes a new instance of the <see cref="ExcelReportGenerator"/>.
+/// </remarks>
+/// <param name="provider"><see cref="IExcelWorkerProvider"/>.</param>
+public class ExcelReportGenerator(IExcelWorkerProvider provider) : BaseReportGenerator
 {
-	private readonly IExcelWorkerProvider _provider;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="ExcelReportGenerator"/>.
-	/// </summary>
-	/// <param name="provider"><see cref="IExcelWorkerProvider"/>.</param>
-	public ExcelReportGenerator(IExcelWorkerProvider provider)
-	{
-		_provider = provider ?? throw new ArgumentNullException(nameof(provider));
-	}
+	private readonly IExcelWorkerProvider _provider = provider ?? throw new ArgumentNullException(nameof(provider));
 
 	/// <summary>
 	/// The template file, to be copied into report and filled up with Strategy, Orders and Trades sheets.

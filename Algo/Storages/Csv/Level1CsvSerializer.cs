@@ -3,20 +3,14 @@ namespace StockSharp.Algo.Storages.Csv;
 /// <summary>
 /// The level 1 serializer in the CSV format.
 /// </summary>
-public class Level1CsvSerializer : CsvMarketDataSerializer<Level1ChangeMessage>
+/// <remarks>
+/// Initializes a new instance of the <see cref="Level1CsvSerializer"/>.
+/// </remarks>
+/// <param name="securityId">Security ID.</param>
+/// <param name="encoding">Encoding.</param>
+public class Level1CsvSerializer(SecurityId securityId, Encoding encoding = null) : CsvMarketDataSerializer<Level1ChangeMessage>(securityId, encoding)
 {
 	private static readonly Dictionary<Level1Fields, Type> _level1Fields = Enumerator.GetValues<Level1Fields>().ExcludeObsolete().OrderBy(l1 => (int)l1).ToDictionary(f => f, f => f.ToType());
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="Level1CsvSerializer"/>.
-	/// </summary>
-	/// <param name="securityId">Security ID.</param>
-	/// <param name="encoding">Encoding.</param>
-	public Level1CsvSerializer(SecurityId securityId, Encoding encoding = null)
-		: base(securityId, encoding)
-	{
-	}
-
 	private static readonly string[] _reserved = new string[9];
 
 	/// <inheritdoc />

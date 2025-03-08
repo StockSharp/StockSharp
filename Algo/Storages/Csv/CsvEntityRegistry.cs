@@ -10,13 +10,8 @@ public class CsvEntityRegistry : IEntityRegistry
 	[Obsolete("This property exists only for backward compatibility.")]
 	public object Storage => throw new NotSupportedException();
 
-	private class ExchangeCsvList : CsvEntityList<string, Exchange>
+	private class ExchangeCsvList(CsvEntityRegistry registry) : CsvEntityList<string, Exchange>(registry, "exchange.csv")
 	{
-		public ExchangeCsvList(CsvEntityRegistry registry)
-			: base(registry, "exchange.csv")
-		{
-		}
-
 		protected override string GetKey(Exchange item)
 		{
 			return item.Name;
@@ -55,13 +50,8 @@ public class CsvEntityRegistry : IEntityRegistry
 		}
 	}
 
-	private class ExchangeBoardCsvList : CsvEntityList<string, ExchangeBoard>
+	private class ExchangeBoardCsvList(CsvEntityRegistry registry) : CsvEntityList<string, ExchangeBoard>(registry, "exchangeboard.csv")
 	{
-		public ExchangeBoardCsvList(CsvEntityRegistry registry)
-			: base(registry, "exchangeboard.csv")
-		{
-		}
-
 		protected override string GetKey(ExchangeBoard item)
 		{
 			return item.Code;
@@ -473,13 +463,8 @@ public class CsvEntityRegistry : IEntityRegistry
 		#endregion
 	}
 
-	private class PortfolioCsvList : CsvEntityList<string, Portfolio>
+	private class PortfolioCsvList(CsvEntityRegistry registry) : CsvEntityList<string, Portfolio>(registry, "portfolio.csv")
 	{
-		public PortfolioCsvList(CsvEntityRegistry registry)
-			: base(registry, "portfolio.csv")
-		{
-		}
-
 		protected override string GetKey(Portfolio item)
 		{
 			return item.Name;
@@ -557,13 +542,8 @@ public class CsvEntityRegistry : IEntityRegistry
 		}
 	}
 
-	private class PositionCsvList : CsvEntityList<(Portfolio, Security, string, Sides?), Position>, IStoragePositionList
+	private class PositionCsvList(CsvEntityRegistry registry) : CsvEntityList<(Portfolio, Security, string, Sides?), Position>(registry, "position.csv"), IStoragePositionList
 	{
-		public PositionCsvList(CsvEntityRegistry registry)
-			: base(registry, "position.csv")
-		{
-		}
-
 		protected override (Portfolio, Security, string, Sides?) GetKey(Position item)
 			=> CreateKey(item.Portfolio, item.Security, item.StrategyId, item.Side);
 
@@ -693,13 +673,8 @@ public class CsvEntityRegistry : IEntityRegistry
 			=> (portfolio, security, strategyId?.ToLowerInvariant() ?? string.Empty, side);
 	}
 
-	private class SubscriptionCsvList : CsvEntityList<(SecurityId, DataType), MarketDataMessage>
+	private class SubscriptionCsvList(CsvEntityRegistry registry) : CsvEntityList<(SecurityId, DataType), MarketDataMessage>(registry, "subscription.csv")
 	{
-		public SubscriptionCsvList(CsvEntityRegistry registry)
-			: base(registry, "subscription.csv")
-		{
-		}
-
 		protected override (SecurityId, DataType) GetKey(MarketDataMessage item)
 			=> (item.SecurityId, item.DataType2);
 

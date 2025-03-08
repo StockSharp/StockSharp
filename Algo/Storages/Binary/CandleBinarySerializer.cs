@@ -1,12 +1,7 @@
 namespace StockSharp.Algo.Storages.Binary;
 
-class CandleMetaInfo : BinaryMetaInfo
+class CandleMetaInfo(DateTime date) : BinaryMetaInfo(date)
 {
-	public CandleMetaInfo(DateTime date)
-		: base(date)
-	{
-	}
-
 	public override void Write(Stream stream)
 	{
 		base.Write(stream);
@@ -68,14 +63,9 @@ class CandleMetaInfo : BinaryMetaInfo
 	}
 }
 
-class CandleBinarySerializer<TCandleMessage> : BinaryMarketDataSerializer<TCandleMessage, CandleMetaInfo>
+class CandleBinarySerializer<TCandleMessage>(SecurityId securityId, DataType dataType, IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<TCandleMessage, CandleMetaInfo>(securityId, dataType, 74, MarketDataVersions.Version62, exchangeInfoProvider)
 	where TCandleMessage : CandleMessage, new()
 {
-	public CandleBinarySerializer(SecurityId securityId, DataType dataType, IExchangeInfoProvider exchangeInfoProvider)
-		: base(securityId, dataType, 74, MarketDataVersions.Version62, exchangeInfoProvider)
-	{
-	}
-
 	protected override void OnSave(BitArrayWriter writer, IEnumerable<TCandleMessage> candles, CandleMetaInfo metaInfo)
 	{
 		if (metaInfo.IsEmpty())

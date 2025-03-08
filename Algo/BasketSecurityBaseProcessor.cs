@@ -61,17 +61,13 @@ public abstract class BasketSecurityBaseProcessor<TBasketSecurity> : IBasketSecu
 /// Base continuous securities processor.
 /// </summary>
 /// <typeparam name="TBasketSecurity">Basket security type.</typeparam>
-public abstract class ContinuousSecurityBaseProcessor<TBasketSecurity> : BasketSecurityBaseProcessor<TBasketSecurity>
+/// <remarks>
+/// Initializes a new instance of the <see cref="ContinuousSecurityBaseProcessor{TBasketSecurity}"/>.
+/// </remarks>
+/// <param name="security">Security.</param>
+public abstract class ContinuousSecurityBaseProcessor<TBasketSecurity>(Security security) : BasketSecurityBaseProcessor<TBasketSecurity>(security)
 	where TBasketSecurity : ContinuousSecurity, new()
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="ContinuousSecurityBaseProcessor{TBasketSecurity}"/>.
-	/// </summary>
-	/// <param name="security">Security.</param>
-	protected ContinuousSecurityBaseProcessor(Security security)
-		: base(security)
-	{
-	}
 
 	/// <inheritdoc />
 	public override IEnumerable<Message> Process(Message message)
@@ -269,7 +265,11 @@ public class ContinuousSecurityVolumeProcessor : ContinuousSecurityBaseProcessor
 /// Base index securities processor.
 /// </summary>
 /// <typeparam name="TBasketSecurity">Basket security type.</typeparam>
-public abstract class IndexSecurityBaseProcessor<TBasketSecurity> : BasketSecurityBaseProcessor<TBasketSecurity>
+/// <remarks>
+/// Initializes a new instance of the <see cref="IndexSecurityBaseProcessor{TBasketSecurity}"/>.
+/// </remarks>
+/// <param name="security">Security.</param>
+public abstract class IndexSecurityBaseProcessor<TBasketSecurity>(Security security) : BasketSecurityBaseProcessor<TBasketSecurity>(security)
 	where TBasketSecurity : IndexSecurity, new()
 {
 	private readonly SynchronizedDictionary<MessageTypes, object> _messages = [];
@@ -278,15 +278,6 @@ public abstract class IndexSecurityBaseProcessor<TBasketSecurity> : BasketSecuri
 	private readonly Dictionary<SecurityId, ExecutionMessage> _ol = [];
 
 	private readonly SortedDictionary<DateTimeOffset, Dictionary<SecurityId, CandleMessage>> _candles = [];
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="IndexSecurityBaseProcessor{TBasketSecurity}"/>.
-	/// </summary>
-	/// <param name="security">Security.</param>
-	protected IndexSecurityBaseProcessor(Security security)
-		: base(security)
-	{
-	}
 
 	/// <inheritdoc />
 	public override IEnumerable<Message> Process(Message message)
@@ -668,16 +659,12 @@ public abstract class IndexSecurityBaseProcessor<TBasketSecurity> : BasketSecuri
 /// <summary>
 /// Index securities processor for <see cref="WeightedIndexSecurity"/>.
 /// </summary>
-public class WeightedIndexSecurityProcessor : IndexSecurityBaseProcessor<WeightedIndexSecurity>
+/// <remarks>
+/// Initializes a new instance of the <see cref="WeightedIndexSecurityProcessor"/>.
+/// </remarks>
+/// <param name="security">Security.</param>
+public class WeightedIndexSecurityProcessor(Security security) : IndexSecurityBaseProcessor<WeightedIndexSecurity>(security)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="WeightedIndexSecurityProcessor"/>.
-	/// </summary>
-	/// <param name="security">Security.</param>
-	public WeightedIndexSecurityProcessor(Security security)
-		: base(security)
-	{
-	}
 
 	/// <inheritdoc />
 	protected override decimal OnCalculate(decimal[] values)

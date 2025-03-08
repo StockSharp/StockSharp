@@ -3,37 +3,24 @@
 /// <summary>
 /// Fill gaps by <see cref="IFillGapsBehaviour"/> message adapter.
 /// </summary>
-public class FillGapsMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="SecurityMappingMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
+/// <param name="behaviour"><see cref="IFillGapsBehaviour"/>.</param>
+public class FillGapsMessageAdapter(IMessageAdapter innerAdapter, IFillGapsBehaviour behaviour) : MessageAdapterWrapper(innerAdapter)
 {
-	private class FillGapInfo
+	private class FillGapInfo(ISubscriptionMessage original, SecurityId secId, FillGapsDays days)
 	{
-        public FillGapInfo(ISubscriptionMessage original, SecurityId secId, FillGapsDays days)
-        {
-			Original = original;
-			SecId = secId;
-			Days = days;
-		}
-
-		public ISubscriptionMessage Original { get; }
-		public SecurityId SecId { get; }
-		public FillGapsDays Days { get; }
+		public ISubscriptionMessage Original { get; } = original;
+		public SecurityId SecId { get; } = secId;
+		public FillGapsDays Days { get; } = days;
 		public ISubscriptionMessage Current { get; set; }
         public bool ResponseSent { get; set; }
     }
 
 	private readonly SynchronizedDictionary<long, FillGapInfo> _gapsRequests = [];
-	private readonly IFillGapsBehaviour _behaviour;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="SecurityMappingMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-	/// <param name="behaviour"><see cref="IFillGapsBehaviour"/>.</param>
-	public FillGapsMessageAdapter(IMessageAdapter innerAdapter, IFillGapsBehaviour behaviour)
-		: base(innerAdapter)
-	{
-		_behaviour = behaviour ?? throw new ArgumentNullException(nameof(behaviour));
-	}
+	private readonly IFillGapsBehaviour _behaviour = behaviour ?? throw new ArgumentNullException(nameof(behaviour));
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)

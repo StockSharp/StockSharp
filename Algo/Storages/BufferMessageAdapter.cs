@@ -3,7 +3,14 @@ namespace StockSharp.Algo.Storages;
 /// <summary>
 /// Buffered message adapter.
 /// </summary>
-public class BufferMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="BufferMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">Underlying adapter.</param>
+/// <param name="settings">Storage settings.</param>
+/// <param name="buffer">Storage buffer.</param>
+/// <param name="snapshotRegistry">Snapshot storage registry.</param>
+public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSettings settings, StorageBuffer buffer, SnapshotRegistry snapshotRegistry) : MessageAdapterWrapper(innerAdapter)
 {
 	private readonly SynchronizedSet<long> _orderStatusIds = [];
 	private readonly SynchronizedDictionary<long, long> _cancellationTransactions = [];
@@ -11,34 +18,19 @@ public class BufferMessageAdapter : MessageAdapterWrapper
 	private readonly SynchronizedDictionary<long, long> _replaceTransactionsByTransId = [];
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="BufferMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">Underlying adapter.</param>
-	/// <param name="settings">Storage settings.</param>
-	/// <param name="buffer">Storage buffer.</param>
-	/// <param name="snapshotRegistry">Snapshot storage registry.</param>
-	public BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSettings settings, StorageBuffer buffer, SnapshotRegistry snapshotRegistry)
-		: base(innerAdapter)
-	{
-		Settings = settings ?? throw new ArgumentNullException(nameof(settings));
-		Buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
-		SnapshotRegistry = snapshotRegistry;// ?? throw new ArgumentNullException(nameof(snapshotRegistry));
-	}
-
-	/// <summary>
 	/// Storage buffer.
 	/// </summary>
-	public StorageBuffer Buffer { get; }
+	public StorageBuffer Buffer { get; } = buffer ?? throw new ArgumentNullException(nameof(buffer));
 
 	/// <summary>
 	/// Snapshot storage registry.
 	/// </summary>
-	public SnapshotRegistry SnapshotRegistry { get; }
+	public SnapshotRegistry SnapshotRegistry { get; } = snapshotRegistry;// ?? throw new ArgumentNullException(nameof(snapshotRegistry));
 
 	/// <summary>
 	/// Storage settings.
 	/// </summary>
-	public StorageCoreSettings Settings { get; }
+	public StorageCoreSettings Settings { get; } = settings ?? throw new ArgumentNullException(nameof(settings));
 
 	/// <summary>
 	/// To reset the state.

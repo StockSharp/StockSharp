@@ -553,8 +553,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 					throw new ArgumentOutOfRangeException(nameof(order), order.Volume, LocalizedStrings.InvalidValue);
 			}
 
-			if (order.Type == null)
-				order.Type = order.Price > 0 ? OrderTypes.Limit : OrderTypes.Market;
+			order.Type ??= order.Price > 0 ? OrderTypes.Limit : OrderTypes.Market;
 
 			InitNewOrder(order);
 

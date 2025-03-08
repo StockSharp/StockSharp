@@ -3,21 +3,17 @@ namespace StockSharp.Algo;
 /// <summary>
 /// Message adapter that tracks multiple lookups requests and put them into single queue.
 /// </summary>
-public class LookupTrackingMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="LookupTrackingMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">Inner message adapter.</param>
+public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
-	private class LookupInfo
+	private class LookupInfo(ISubscriptionMessage subscription, TimeSpan left)
 	{
-		private readonly TimeSpan _initLeft;
-		private TimeSpan _left;
+		private TimeSpan _left = left;
 
-		public LookupInfo(ISubscriptionMessage subscription, TimeSpan left)
-		{
-			Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
-			_initLeft = left;
-			_left = left;
-		}
-
-		public ISubscriptionMessage Subscription { get; }
+		public ISubscriptionMessage Subscription { get; } = subscription ?? throw new ArgumentNullException(nameof(subscription));
 
 		public bool ProcessTime(TimeSpan diff)
 		{
@@ -42,23 +38,13 @@ public class LookupTrackingMessageAdapter : MessageAdapterWrapper
 
 		public void IncreaseTimeOut()
 		{
-			_left = _initLeft;
+			_left = left;
 		}
 	}
 
 	private readonly CachedSynchronizedDictionary<long, LookupInfo> _lookups = [];
 	private readonly Dictionary<MessageTypes, Dictionary<long, ISubscriptionMessage>> _queue = [];
 	private DateTimeOffset _prevTime;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="LookupTrackingMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">Inner message adapter.</param>
-	public LookupTrackingMessageAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
-
 	private static readonly TimeSpan _defaultTimeOut = TimeSpan.FromSeconds(10);
 
 	private TimeSpan? _timeOut;
@@ -257,8 +243,7 @@ public class LookupTrackingMessageAdapter : MessageAdapterWrapper
 
 				base.OnInnerAdapterNewOutMessage(info.Subscription.CreateResult());
 
-				if (nextLookups == null)
-					nextLookups = [];
+				nextLookups ??= [];
 
 				lock (_lookups.SyncRoot)
 				{

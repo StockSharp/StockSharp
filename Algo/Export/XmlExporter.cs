@@ -5,20 +5,15 @@ using System.Xml;
 /// <summary>
 /// The export into xml.
 /// </summary>
-public class XmlExporter : BaseExporter
+/// <remarks>
+/// Initializes a new instance of the <see cref="XmlExporter"/>.
+/// </remarks>
+/// <param name="dataType">Data type info.</param>
+/// <param name="isCancelled">The processor, returning process interruption sign.</param>
+/// <param name="fileName">The path to file.</param>
+public class XmlExporter(DataType dataType, Func<int, bool> isCancelled, string fileName) : BaseExporter(dataType, isCancelled, fileName)
 {
 	private const string _timeFormat = "yyyy-MM-dd HH:mm:ss.fff zzz";
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="XmlExporter"/>.
-	/// </summary>
-	/// <param name="dataType">Data type info.</param>
-	/// <param name="isCancelled">The processor, returning process interruption sign.</param>
-	/// <param name="fileName">The path to file.</param>
-	public XmlExporter(DataType dataType, Func<int, bool> isCancelled, string fileName)
-		: base(dataType, isCancelled, fileName)
-	{
-	}
 
 	/// <summary>
 	/// Gets or sets a value indicating whether to indent elements.

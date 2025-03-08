@@ -1,12 +1,7 @@
 ﻿namespace StockSharp.Algo.Storages.Binary;
 
-class NewsMetaInfo : BinaryMetaInfo
+class NewsMetaInfo(DateTime date) : BinaryMetaInfo(date)
 {
-	public NewsMetaInfo(DateTime date)
-		: base(date)
-	{
-	}
-
 	public override void Read(Stream stream)
 	{
 		base.Read(stream);
@@ -48,13 +43,8 @@ class NewsMetaInfo : BinaryMetaInfo
 	}
 }
 
-class NewsBinarySerializer : BinaryMarketDataSerializer<NewsMessage, NewsMetaInfo>
+class NewsBinarySerializer(IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<NewsMessage, NewsMetaInfo>(default, DataType.News, 200, MarketDataVersions.Version51, exchangeInfoProvider)
 {
-	public NewsBinarySerializer(IExchangeInfoProvider exchangeInfoProvider)
-		: base(default, DataType.News, 200, MarketDataVersions.Version51, exchangeInfoProvider)
-	{
-	}
-
 	protected override void OnSave(BitArrayWriter writer, IEnumerable<NewsMessage> messages, NewsMetaInfo metaInfo)
 	{
 		if (metaInfo.IsEmpty())

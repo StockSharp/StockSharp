@@ -3,30 +3,19 @@
 /// <summary>
 /// Messages importer from text file in CSV format into storage.
 /// </summary>
-public class CsvImporter : CsvParser
+/// <remarks>
+/// Initializes a new instance of the <see cref="CsvImporter"/>.
+/// </remarks>
+/// <param name="dataType">Data type info.</param>
+/// <param name="fields">Importing fields.</param>
+/// <param name="securityStorage">Securities meta info storage.</param>
+/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+/// <param name="storageFormat">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, ISecurityStorage securityStorage, IExchangeInfoProvider exchangeInfoProvider, IMarketDataDrive drive, StorageFormats storageFormat) : CsvParser(dataType, fields)
 {
-	private readonly ISecurityStorage _securityStorage;
-	private readonly IExchangeInfoProvider _exchangeInfoProvider;
-	private readonly IMarketDataDrive _drive;
-	private readonly StorageFormats _storageFormat;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="CsvImporter"/>.
-	/// </summary>
-	/// <param name="dataType">Data type info.</param>
-	/// <param name="fields">Importing fields.</param>
-	/// <param name="securityStorage">Securities meta info storage.</param>
-	/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-	/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
-	/// <param name="storageFormat">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
-	public CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, ISecurityStorage securityStorage, IExchangeInfoProvider exchangeInfoProvider, IMarketDataDrive drive, StorageFormats storageFormat)
-		: base(dataType, fields)
-	{
-		_securityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
-		_exchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
-		_drive = drive;
-		_storageFormat = storageFormat;
-	}
+	private readonly ISecurityStorage _securityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
+	private readonly IExchangeInfoProvider _exchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
 	/// <summary>
 	/// Update duplicate securities if they already exists.
@@ -161,7 +150,7 @@ public class CsvImporter : CsvParser
 
 		if (DataType.MessageType == typeof(NewsMessage))
 		{
-			registry.GetNewsMessageStorage(_drive, _storageFormat).Save(buffer);
+			registry.GetNewsMessageStorage(drive, storageFormat).Save(buffer);
 		}
 		else
 		{
@@ -206,17 +195,17 @@ public class CsvImporter : CsvParser
 						}
 
 						registry
-							.GetCandleMessageStorage(dataType, secId, DataType.Arg, _drive, _storageFormat)
+							.GetCandleMessageStorage(dataType, secId, DataType.Arg, drive, storageFormat)
 							.Save(candles.OrderBy(c => c.OpenTime));
 					}
 					else if (dataType == typeof(TimeQuoteChange))
 					{
-						var storage = registry.GetQuoteMessageStorage(secId, _drive, _storageFormat);
+						var storage = registry.GetQuoteMessageStorage(secId, drive, storageFormat);
 						storage.Save(secGroup.Cast<QuoteChangeMessage>().OrderBy(md => md.ServerTime));
 					}
 					else
 					{
-						var storage = registry.GetStorage(secId, dataType, DataType.Arg, _drive, _storageFormat);
+						var storage = registry.GetStorage(secId, dataType, DataType.Arg, drive, storageFormat);
 
 						if (dataType == typeof(ExecutionMessage))
 							((IMarketDataStorage<ExecutionMessage>)storage).Save(secGroup.Cast<ExecutionMessage>().OrderBy(m => m.ServerTime));

@@ -1,38 +1,19 @@
 namespace StockSharp.Algo.Storages.Binary;
 
-class TransactionSerializerMetaInfo : BinaryMetaInfo
+class TransactionSerializerMetaInfo(DateTime date) : BinaryMetaInfo(date)
 {
-	public TransactionSerializerMetaInfo(DateTime date)
-		: base(date)
-	{
-		FirstOrderId = -1;
-		FirstTransactionId = -1;
-		FirstOriginalTransactionId = -1;
-		FirstTradeId = -1;
-
-		Portfolios = [];
-		ClientCodes = [];
-		BrokerCodes = [];
-		DepoNames = [];
-		UserOrderIds = [];
-		StrategyIds = [];
-		Comments = [];
-		SystemComments = [];
-		Errors = [];
-	}
-
 	public override object LastId => LastTransactionId;
 
-	public long FirstOrderId { get; set; }
+	public long FirstOrderId { get; set; } = -1;
 	public long LastOrderId { get; set; }
 
-	public long FirstTradeId { get; set; }
+	public long FirstTradeId { get; set; } = -1;
 	public long LastTradeId { get; set; }
 
-	public long FirstTransactionId { get; set; }
+	public long FirstTransactionId { get; set; } = -1;
 	public long LastTransactionId { get; set; }
 
-	public long FirstOriginalTransactionId { get; set; }
+	public long FirstOriginalTransactionId { get; set; } = -1;
 	public long LastOriginalTransactionId { get; set; }
 
 	public decimal FirstCommission { get; set; }
@@ -47,18 +28,18 @@ class TransactionSerializerMetaInfo : BinaryMetaInfo
 	public decimal FirstSlippage { get; set; }
 	public decimal LastSlippage { get; set; }
 
-	public IList<string> Portfolios { get; }
-	public IList<string> ClientCodes { get; }
-	public IList<string> BrokerCodes { get; }
-	public IList<string> DepoNames { get; }
+	public IList<string> Portfolios { get; } = [];
+	public IList<string> ClientCodes { get; } = [];
+	public IList<string> BrokerCodes { get; } = [];
+	public IList<string> DepoNames { get; } = [];
 
-	public IList<string> UserOrderIds { get; }
-	public IList<string> StrategyIds { get; }
+	public IList<string> UserOrderIds { get; } = [];
+	public IList<string> StrategyIds { get; } = [];
 
-	public IList<string> Comments { get; }
-	public IList<string> SystemComments { get; }
+	public IList<string> Comments { get; } = [];
+	public IList<string> SystemComments { get; } = [];
 
-	public IList<string> Errors { get; }
+	public IList<string> Errors { get; } = [];
 
 	public override void Write(Stream stream)
 	{
@@ -228,13 +209,8 @@ class TransactionSerializerMetaInfo : BinaryMetaInfo
 	}
 }
 
-class TransactionBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TransactionSerializerMetaInfo>
+class TransactionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<ExecutionMessage, TransactionSerializerMetaInfo>(securityId, DataType.Transactions, 200, MarketDataVersions.Version70, exchangeInfoProvider)
 {
-	public TransactionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-		: base(securityId, DataType.Transactions, 200, MarketDataVersions.Version70, exchangeInfoProvider)
-	{
-	}
-
 	protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, TransactionSerializerMetaInfo metaInfo)
 	{
 		if (metaInfo.IsEmpty())

@@ -3,17 +3,12 @@ namespace StockSharp.Algo.Commissions;
 /// <summary>
 /// The message adapter, automatically calculating commission.
 /// </summary>
-public class CommissionMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="CommissionMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
+public class CommissionMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="CommissionMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-	public CommissionMessageAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
-
 	private ICommissionManager _commissionManager = new CommissionManager();
 
 	/// <summary>

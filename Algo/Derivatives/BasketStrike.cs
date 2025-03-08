@@ -3,35 +3,29 @@ namespace StockSharp.Algo.Derivatives;
 /// <summary>
 /// The virtual strike created from a combination of other strikes.
 /// </summary>
-public abstract class BasketStrike : BasketSecurity
+/// <remarks>
+/// Initialize <see cref="BasketStrike"/>.
+/// </remarks>
+/// <param name="underlyingAsset">Underlying asset.</param>
+/// <param name="securityProvider">The provider of information about instruments.</param>
+/// <param name="dataProvider">The market data provider.</param>
+public abstract class BasketStrike(Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider) : BasketSecurity
 {
-	/// <summary>
-	/// Initialize <see cref="BasketStrike"/>.
-	/// </summary>
-	/// <param name="underlyingAsset">Underlying asset.</param>
-	/// <param name="securityProvider">The provider of information about instruments.</param>
-	/// <param name="dataProvider">The market data provider.</param>
-	protected BasketStrike(Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
-	{
-		UnderlyingAsset = underlyingAsset ?? throw new ArgumentNullException(nameof(underlyingAsset));
-		SecurityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
-		DataProvider = dataProvider ?? throw new ArgumentNullException(nameof(dataProvider));
-	}
 
 	/// <summary>
 	/// The provider of information about instruments.
 	/// </summary>
-	public ISecurityProvider SecurityProvider { get; }
+	public ISecurityProvider SecurityProvider { get; } = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
 
 	/// <summary>
 	/// The market data provider.
 	/// </summary>
-	public virtual IMarketDataProvider DataProvider { get; }
+	public virtual IMarketDataProvider DataProvider { get; } = dataProvider ?? throw new ArgumentNullException(nameof(dataProvider));
 
 	/// <summary>
 	/// Underlying asset.
 	/// </summary>
-	public Security UnderlyingAsset { get; }
+	public Security UnderlyingAsset { get; } = underlyingAsset ?? throw new ArgumentNullException(nameof(underlyingAsset));
 
 	/// <inheritdoc />
 	public override IEnumerable<SecurityId> InnerSecurityIds
@@ -60,23 +54,17 @@ public abstract class BasketStrike : BasketSecurity
 /// <summary>
 /// The virtual strike including strikes of the specified shift boundary.
 /// </summary>
-public class OffsetBasketStrike : BasketStrike
+/// <remarks>
+/// Initializes a new instance of the <see cref="OffsetBasketStrike"/>.
+/// </remarks>
+/// <param name="underlyingSecurity">Underlying asset.</param>
+/// <param name="securityProvider">The provider of information about instruments.</param>
+/// <param name="dataProvider">The market data provider.</param>
+/// <param name="strikeOffset">Boundaries of shift from the main strike (a negative value specifies the shift to options in the money, a positive value - out of the money).</param>
+public class OffsetBasketStrike(Security underlyingSecurity, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, Range<int> strikeOffset) : BasketStrike(underlyingSecurity, securityProvider, dataProvider)
 {
-	private Range<int> _strikeOffset;
+	private Range<int> _strikeOffset = strikeOffset ?? throw new ArgumentNullException(nameof(strikeOffset));
 	private decimal _strikeStep;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="OffsetBasketStrike"/>.
-	/// </summary>
-	/// <param name="underlyingSecurity">Underlying asset.</param>
-	/// <param name="securityProvider">The provider of information about instruments.</param>
-	/// <param name="dataProvider">The market data provider.</param>
-	/// <param name="strikeOffset">Boundaries of shift from the main strike (a negative value specifies the shift to options in the money, a positive value - out of the money).</param>
-	public OffsetBasketStrike(Security underlyingSecurity, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, Range<int> strikeOffset)
-		: base(underlyingSecurity, securityProvider, dataProvider)
-	{
-		_strikeOffset = strikeOffset ?? throw new ArgumentNullException(nameof(strikeOffset));
-	}
 
 	/// <inheritdoc />
 	protected override IEnumerable<Security> FilterStrikes(IEnumerable<Security> allStrikes)
@@ -118,22 +106,16 @@ public class OffsetBasketStrike : BasketStrike
 /// <summary>
 /// The virtual strike including strikes of the specified volatility boundary.
 /// </summary>
-public class VolatilityBasketStrike : BasketStrike
+/// <remarks>
+/// Initializes a new instance of the <see cref="VolatilityBasketStrike"/>.
+/// </remarks>
+/// <param name="underlyingAsset">Underlying asset.</param>
+/// <param name="securityProvider">The provider of information about instruments.</param>
+/// <param name="dataProvider">The market data provider.</param>
+/// <param name="volatilityRange">Volatility range.</param>
+public class VolatilityBasketStrike(Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, Range<decimal> volatilityRange) : BasketStrike(underlyingAsset, securityProvider, dataProvider)
 {
-	private Range<decimal> _volatilityRange;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="VolatilityBasketStrike"/>.
-	/// </summary>
-	/// <param name="underlyingAsset">Underlying asset.</param>
-	/// <param name="securityProvider">The provider of information about instruments.</param>
-	/// <param name="dataProvider">The market data provider.</param>
-	/// <param name="volatilityRange">Volatility range.</param>
-	public VolatilityBasketStrike(Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, Range<decimal> volatilityRange)
-		: base(underlyingAsset, securityProvider, dataProvider)
-	{
-		_volatilityRange = volatilityRange ?? throw new ArgumentNullException(nameof(volatilityRange));
-	}
+	private Range<decimal> _volatilityRange = volatilityRange ?? throw new ArgumentNullException(nameof(volatilityRange));
 
 	/// <inheritdoc />
 	protected override IEnumerable<Security> FilterStrikes(IEnumerable<Security> allStrikes)

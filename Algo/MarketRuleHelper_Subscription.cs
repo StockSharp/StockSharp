@@ -2,17 +2,10 @@
 
 partial class MarketRuleHelper
 {
-	private abstract class SubscriptionRule<TArg> : MarketRule<Subscription, TArg>
+	private abstract class SubscriptionRule<TArg>(Subscription subscription, ISubscriptionProvider provider) : MarketRule<Subscription, TArg>(subscription)
 	{
-		protected SubscriptionRule(Subscription subscription, ISubscriptionProvider provider)
-			: base(subscription)
-		{
-			Provider = provider;
-			Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
-		}
-
-		protected ISubscriptionProvider Provider { get; }
-		protected Subscription Subscription { get; }
+		protected ISubscriptionProvider Provider { get; } = provider;
+		protected Subscription Subscription { get; } = subscription ?? throw new ArgumentNullException(nameof(subscription));
 	}
 
 	private class SubscriptionStartedRule : SubscriptionRule<Subscription>

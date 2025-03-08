@@ -148,14 +148,9 @@ public class GeneticOptimizer : BaseOptimizer
 		}
 	}
 
-	private class MaxIterationsTermination : TerminationBase
+	private class MaxIterationsTermination(GeneticOptimizer optimizer) : TerminationBase
 	{
-		private readonly GeneticOptimizer _optimizer;
-
-		public MaxIterationsTermination(GeneticOptimizer optimizer)
-        {
-			_optimizer = optimizer ?? throw new ArgumentNullException(nameof(optimizer));
-		}
+		private readonly GeneticOptimizer _optimizer = optimizer ?? throw new ArgumentNullException(nameof(optimizer));
 
 		protected override bool PerformHasReached(IGeneticAlgorithm geneticAlgorithm)
 		{

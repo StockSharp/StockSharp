@@ -3,17 +3,12 @@ namespace StockSharp.Algo.Risk;
 /// <summary>
 /// The message adapter, automatically controlling risk rules.
 /// </summary>
-public class RiskMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="RiskMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
+public class RiskMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="RiskMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-	public RiskMessageAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
-
 	private IRiskManager _riskManager = new RiskManager();
 
 	/// <summary>

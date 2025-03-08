@@ -3,16 +3,15 @@ namespace StockSharp.Algo;
 /// <summary>
 /// Subscription counter adapter.
 /// </summary>
-public class SubscriptionMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="SubscriptionMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">Inner message adapter.</param>
+public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
-	private class SubscriptionInfo
+	private class SubscriptionInfo(ISubscriptionMessage subscription)
 	{
-		public ISubscriptionMessage Subscription { get; }
-
-		public SubscriptionInfo(ISubscriptionMessage subscription)
-		{
-			Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
-		}
+		public ISubscriptionMessage Subscription { get; } = subscription ?? throw new ArgumentNullException(nameof(subscription));
 
 		public SubscriptionStates State { get; set; } = SubscriptionStates.Stopped;
 
@@ -26,15 +25,6 @@ public class SubscriptionMessageAdapter : MessageAdapterWrapper
 	private readonly PairSet<long, long> _replaceId = [];
 	private readonly HashSet<long> _allSecIdChilds = [];
 	private readonly List<Message> _reMapSubscriptions = [];
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="SubscriptionMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">Inner message adapter.</param>
-	public SubscriptionMessageAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
 
 	/// <summary>
 	/// Restore subscription on reconnect.

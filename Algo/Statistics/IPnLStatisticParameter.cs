@@ -18,18 +18,13 @@ public interface IPnLStatisticParameter : IStatisticParameter
 /// The base profit-loss statistics parameter.
 /// </summary>
 /// <typeparam name="TValue">The type of the parameter value.</typeparam>
-public abstract class BasePnLStatisticParameter<TValue> : BaseStatisticParameter<TValue>, IPnLStatisticParameter
+/// <remarks>
+/// Initialize <see cref="BasePnLStatisticParameter{TValue}"/>.
+/// </remarks>
+/// <param name="type"><see cref="IStatisticParameter.Type"/></param>
+public abstract class BasePnLStatisticParameter<TValue>(StatisticParameterTypes type) : BaseStatisticParameter<TValue>(type), IPnLStatisticParameter
 	where TValue : IComparable<TValue>
 {
-	/// <summary>
-	/// Initialize <see cref="BasePnLStatisticParameter{TValue}"/>.
-	/// </summary>
-	/// <param name="type"><see cref="IStatisticParameter.Type"/></param>
-	protected BasePnLStatisticParameter(StatisticParameterTypes type)
-		: base(type)
-        {
-        }
-
 	/// <inheritdoc />
 	public virtual void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		=> throw new NotSupportedException();
@@ -132,6 +127,10 @@ public class MaxProfitParameter : BasePnLStatisticParameter<decimal>
 /// <summary>
 /// Date of maximum profit value for the entire period.
 /// </summary>
+/// <remarks>
+/// Initialize <see cref="MaxProfitDateParameter"/>.
+/// </remarks>
+/// <param name="underlying"><see cref="MaxProfitParameter"/></param>
 [Display(
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.MaxProfitDateKey,
@@ -139,20 +138,10 @@ public class MaxProfitParameter : BasePnLStatisticParameter<decimal>
 	GroupName = LocalizedStrings.PnLKey,
 	Order = 3
 )]
-public class MaxProfitDateParameter : BasePnLStatisticParameter<DateTimeOffset>
+public class MaxProfitDateParameter(MaxProfitParameter underlying) : BasePnLStatisticParameter<DateTimeOffset>(StatisticParameterTypes.MaxProfitDate)
 {
-	private readonly MaxProfitParameter _underlying;
+	private readonly MaxProfitParameter _underlying = underlying ?? throw new ArgumentNullException(nameof(underlying));
 	private decimal _prevValue;
-
-	/// <summary>
-	/// Initialize <see cref="MaxProfitDateParameter"/>.
-	/// </summary>
-	/// <param name="underlying"><see cref="MaxProfitParameter"/></param>
-	public MaxProfitDateParameter(MaxProfitParameter underlying)
-		: base(StatisticParameterTypes.MaxProfitDate)
-	{
-		_underlying = underlying ?? throw new ArgumentNullException(nameof(underlying));
-	}
 
 	/// <inheritdoc />
 	public override void Reset()
@@ -240,6 +229,10 @@ public class MaxDrawdownParameter : BasePnLStatisticParameter<decimal>
 /// <summary>
 /// Maximum absolute drawdown during the whole period in percent.
 /// </summary>
+/// <remarks>
+/// Initialize <see cref="MaxDrawdownPercentParameter"/>.
+/// </remarks>
+/// <param name="underlying"><see cref="MaxDrawdownParameter"/></param>
 [Display(
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.MaxDrawdownPercentKey,
@@ -247,20 +240,10 @@ public class MaxDrawdownParameter : BasePnLStatisticParameter<decimal>
 	GroupName = LocalizedStrings.PnLKey,
 	Order = 5
 )]
-public class MaxDrawdownPercentParameter : BasePnLStatisticParameter<decimal>
+public class MaxDrawdownPercentParameter(MaxDrawdownParameter underlying) : BasePnLStatisticParameter<decimal>(StatisticParameterTypes.MaxDrawdownPercent)
 {
-	private readonly MaxDrawdownParameter _underlying;
+	private readonly MaxDrawdownParameter _underlying = underlying ?? throw new ArgumentNullException(nameof(underlying));
 	private decimal _beginValue;
-
-	/// <summary>
-	/// Initialize <see cref="MaxDrawdownPercentParameter"/>.
-	/// </summary>
-	/// <param name="underlying"><see cref="MaxDrawdownParameter"/></param>
-	public MaxDrawdownPercentParameter(MaxDrawdownParameter underlying)
-		: base(StatisticParameterTypes.MaxDrawdownPercent)
-	{
-		_underlying = underlying ?? throw new ArgumentNullException(nameof(underlying));
-	}
 
 	/// <inheritdoc />
 	public override void Init(decimal beginValue)
@@ -283,6 +266,10 @@ public class MaxDrawdownPercentParameter : BasePnLStatisticParameter<decimal>
 /// <summary>
 /// Date of maximum absolute drawdown during the whole period.
 /// </summary>
+/// <remarks>
+/// Initialize <see cref="MaxDrawdownDateParameter"/>.
+/// </remarks>
+/// <param name="underlying"><see cref="MaxDrawdownParameter"/></param>
 [Display(
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.MaxDrawdownDateKey,
@@ -290,20 +277,10 @@ public class MaxDrawdownPercentParameter : BasePnLStatisticParameter<decimal>
 	GroupName = LocalizedStrings.PnLKey,
 	Order = 6
 )]
-public class MaxDrawdownDateParameter : BasePnLStatisticParameter<DateTimeOffset>
+public class MaxDrawdownDateParameter(MaxDrawdownParameter underlying) : BasePnLStatisticParameter<DateTimeOffset>(StatisticParameterTypes.MaxDrawdownDate)
 {
-	private readonly MaxDrawdownParameter _underlying;
+	private readonly MaxDrawdownParameter _underlying = underlying ?? throw new ArgumentNullException(nameof(underlying));
 	private decimal _prevValue;
-
-	/// <summary>
-	/// Initialize <see cref="MaxDrawdownDateParameter"/>.
-	/// </summary>
-	/// <param name="underlying"><see cref="MaxDrawdownParameter"/></param>
-	public MaxDrawdownDateParameter(MaxDrawdownParameter underlying)
-		: base(StatisticParameterTypes.MaxDrawdownDate)
-        {
-		_underlying = underlying ?? throw new ArgumentNullException(nameof(underlying));
-	}
 
 	/// <inheritdoc />
 	public override void Reset()
@@ -446,6 +423,11 @@ public class ReturnParameter : BasePnLStatisticParameter<decimal>
 /// <summary>
 /// Recovery factor (net profit / maximum drawdown).
 /// </summary>
+/// <remarks>
+/// Initialize <see cref="RecoveryFactorParameter"/>.
+/// </remarks>
+/// <param name="maxDrawdown"><see cref="MaxDrawdownParameter"/></param>
+/// <param name="netProfit"><see cref="NetProfitParameter"/></param>
 [Display(
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.RecoveryFactorKey,
@@ -453,22 +435,10 @@ public class ReturnParameter : BasePnLStatisticParameter<decimal>
 	GroupName = LocalizedStrings.PnLKey,
 	Order = 9
 )]
-public class RecoveryFactorParameter : BasePnLStatisticParameter<decimal>
+public class RecoveryFactorParameter(MaxDrawdownParameter maxDrawdown, NetProfitParameter netProfit) : BasePnLStatisticParameter<decimal>(StatisticParameterTypes.RecoveryFactor)
 {
-	private readonly MaxDrawdownParameter _maxDrawdown;
-	private readonly NetProfitParameter _netProfit;
-
-	/// <summary>
-	/// Initialize <see cref="RecoveryFactorParameter"/>.
-	/// </summary>
-	/// <param name="maxDrawdown"><see cref="MaxDrawdownParameter"/></param>
-	/// <param name="netProfit"><see cref="NetProfitParameter"/></param>
-	public RecoveryFactorParameter(MaxDrawdownParameter maxDrawdown, NetProfitParameter netProfit)
-		: base(StatisticParameterTypes.RecoveryFactor)
-	{
-		_maxDrawdown = maxDrawdown ?? throw new ArgumentNullException(nameof(maxDrawdown));
-		_netProfit = netProfit ?? throw new ArgumentNullException(nameof(netProfit));
-	}
+	private readonly MaxDrawdownParameter _maxDrawdown = maxDrawdown ?? throw new ArgumentNullException(nameof(maxDrawdown));
+	private readonly NetProfitParameter _netProfit = netProfit ?? throw new ArgumentNullException(nameof(netProfit));
 
 	/// <inheritdoc />
 	public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)

@@ -3,18 +3,16 @@ namespace StockSharp.Algo;
 /// <summary>
 /// Level1 depth builder adapter.
 /// </summary>
-public class Level1DepthBuilderAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="Level1DepthBuilderAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">Inner message adapter.</param>
+public class Level1DepthBuilderAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
-	private sealed class Level1DepthBuilder
+	private sealed class Level1DepthBuilder(SecurityId securityId)
 	{
 		private decimal? _bidPrice, _askPrice, _bidVolume, _askVolume;
-
-		public Level1DepthBuilder(SecurityId securityId)
-		{
-			SecurityId = securityId;
-		}
-
-		public readonly SecurityId SecurityId;
+		public readonly SecurityId SecurityId = securityId;
 
 		public QuoteChangeMessage Process(Level1ChangeMessage message)
 		{
@@ -47,11 +45,9 @@ public class Level1DepthBuilderAdapter : MessageAdapterWrapper
 		}
 	}
 
-	private class BookInfo
+	private class BookInfo(Level1DepthBuilderAdapter.Level1DepthBuilder builder)
 	{
-		public BookInfo(Level1DepthBuilder builder) => Builder = builder;
-
-		public readonly Level1DepthBuilder Builder;
+		public readonly Level1DepthBuilder Builder = builder;
 		public readonly CachedSynchronizedSet<long> SubscriptionIds = [];
 	}
 
@@ -59,15 +55,6 @@ public class Level1DepthBuilderAdapter : MessageAdapterWrapper
 
 	private readonly Dictionary<long, BookInfo> _byId = [];
 	private readonly Dictionary<SecurityId, BookInfo> _online = [];
-	
-	/// <summary>
-	/// Initializes a new instance of the <see cref="Level1DepthBuilderAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">Inner message adapter.</param>
-	public Level1DepthBuilderAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
 
 	/// <inheritdoc />
 	public override bool SendInMessage(Message message)
@@ -237,13 +224,11 @@ public class Level1DepthBuilderAdapter : MessageAdapterWrapper
 						
 						quoteMsg.SetSubscriptionIds(info.SubscriptionIds.Cache);
 
-						if (books == null)
-							books = [];
+						books ??= [];
 
 						books.Add(quoteMsg);
 
-						if (leftIds == null)
-							leftIds = [.. ids];
+						leftIds ??= [.. ids];
 
 						leftIds.RemoveRange(info.SubscriptionIds.Cache);
 					}

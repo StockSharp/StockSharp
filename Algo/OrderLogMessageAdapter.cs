@@ -3,7 +3,11 @@
 /// <summary>
 /// The messages adapter build order book and tick data from order log flow.
 /// </summary>
-public class OrderLogMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="OrderLogMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">Underlying adapter.</param>
+public class OrderLogMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
 	private class SubscriptionInfo
 	{
@@ -24,15 +28,6 @@ public class OrderLogMessageAdapter : MessageAdapterWrapper
 	}
 
 	private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionIds = [];
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="OrderLogMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">Underlying adapter.</param>
-	public OrderLogMessageAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
@@ -182,8 +177,7 @@ public class OrderLogMessageAdapter : MessageAdapterWrapper
 		{
 			if (!_subscriptionIds.TryGetValue(subscriptionId, out var info))
 			{
-				if (nonBuilderIds == null)
-					nonBuilderIds = [];
+				nonBuilderIds ??= [];
 
 				nonBuilderIds.Add(subscriptionId);
 

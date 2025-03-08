@@ -3,19 +3,14 @@
 /// <summary>
 /// The messages adapter makes auto connection.
 /// </summary>
-public class AutoConnectMessageAdapter : OfflineMessageAdapter
+/// <remarks>
+/// Initializes a new instance of the <see cref="AutoConnectMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">Underlying adapter.</param>
+public class AutoConnectMessageAdapter(IMessageAdapter innerAdapter) : OfflineMessageAdapter(innerAdapter)
 {
 	private bool _isConnect;
 	private bool _wasConnected;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="AutoConnectMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">Underlying adapter.</param>
-	public AutoConnectMessageAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)

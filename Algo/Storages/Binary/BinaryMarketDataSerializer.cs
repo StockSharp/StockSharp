@@ -328,26 +328,17 @@ abstract class BinaryMetaInfo : MetaInfo
 abstract class BinaryMarketDataSerializer<TData, TMetaInfo> : IMarketDataSerializer<TData>
 	where TMetaInfo : BinaryMetaInfo
 {
-	public class MarketDataEnumerator : SimpleEnumerator<TData>
+	public class MarketDataEnumerator(BinaryMarketDataSerializer<TData, TMetaInfo> serializer, BitArrayReader reader, TMetaInfo metaInfo) : SimpleEnumerator<TData>
 	{
-		private readonly TMetaInfo _originalMetaInfo;
+		private readonly TMetaInfo _originalMetaInfo = metaInfo ?? throw new ArgumentNullException(nameof(metaInfo));
 
-		public MarketDataEnumerator(BinaryMarketDataSerializer<TData, TMetaInfo> serializer, BitArrayReader reader, TMetaInfo metaInfo)
-		{
-			Serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
-			Index = -1;
-			Reader = reader ?? throw new ArgumentNullException(nameof(reader));
-
-			_originalMetaInfo = metaInfo ?? throw new ArgumentNullException(nameof(metaInfo));
-		}
-
-		public BitArrayReader Reader { get; }
+		public BitArrayReader Reader { get; } = reader ?? throw new ArgumentNullException(nameof(reader));
 
 		public TMetaInfo MetaInfo { get; private set; }
 
-		public BinaryMarketDataSerializer<TData, TMetaInfo> Serializer { get; }
+		public BinaryMarketDataSerializer<TData, TMetaInfo> Serializer { get; } = serializer ?? throw new ArgumentNullException(nameof(serializer));
 
-		public int Index { get; private set; }
+		public int Index { get; private set; } = -1;
 
 		public int PartSize { get; private set; }
 

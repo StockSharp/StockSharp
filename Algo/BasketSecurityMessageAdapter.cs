@@ -3,19 +3,20 @@ namespace StockSharp.Algo;
 /// <summary>
 /// The messages adapter builds market data for basket securities.
 /// </summary>
-public class BasketSecurityMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="BasketSecurityMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">Underlying adapter.</param>
+/// <param name="securityProvider">The provider of information about instruments.</param>
+/// <param name="processorProvider">Basket security processors provider.</param>
+/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurityProvider securityProvider, IBasketSecurityProcessorProvider processorProvider, IExchangeInfoProvider exchangeInfoProvider) : MessageAdapterWrapper(innerAdapter)
 {
-	private class SubscriptionInfo
+	private class SubscriptionInfo(IBasketSecurityProcessor processor, long transactionId)
 	{
-		public IBasketSecurityProcessor Processor { get; }
-		public long TransactionId { get; }
+		public IBasketSecurityProcessor Processor { get; } = processor ?? throw new ArgumentNullException(nameof(processor));
+		public long TransactionId { get; } = transactionId;
 		public CachedSynchronizedDictionary<long, SubscriptionStates> LegsSubscriptions { get; } = [];
-
-		public SubscriptionInfo(IBasketSecurityProcessor processor, long transactionId)
-		{
-			Processor = processor ?? throw new ArgumentNullException(nameof(processor));
-			TransactionId = transactionId;
-		}
 
 		public SubscriptionStates State { get; set; } = SubscriptionStates.Stopped;
 	}
@@ -23,24 +24,9 @@ public class BasketSecurityMessageAdapter : MessageAdapterWrapper
 	private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionsByChildId = [];
 	private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionsByParentId = [];
 
-	private readonly ISecurityProvider _securityProvider;
-	private readonly IBasketSecurityProcessorProvider _processorProvider;
-	private readonly IExchangeInfoProvider _exchangeInfoProvider;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="BasketSecurityMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">Underlying adapter.</param>
-	/// <param name="securityProvider">The provider of information about instruments.</param>
-	/// <param name="processorProvider">Basket security processors provider.</param>
-	/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-	public BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurityProvider securityProvider, IBasketSecurityProcessorProvider processorProvider, IExchangeInfoProvider exchangeInfoProvider)
-		: base(innerAdapter)
-	{
-		_securityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
-		_processorProvider = processorProvider ?? throw new ArgumentNullException(nameof(processorProvider));
-		_exchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
-	}
+	private readonly ISecurityProvider _securityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
+	private readonly IBasketSecurityProcessorProvider _processorProvider = processorProvider ?? throw new ArgumentNullException(nameof(processorProvider));
+	private readonly IExchangeInfoProvider _exchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)

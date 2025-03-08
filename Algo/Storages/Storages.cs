@@ -2,13 +2,9 @@ namespace StockSharp.Algo.Storages;
 
 using Ecng.Reflection;
 
-class TradeStorage : MarketDataStorage<ExecutionMessage, DateTimeOffset>
+class TradeStorage(SecurityId securityId, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
+	: MarketDataStorage<ExecutionMessage, DateTimeOffset>(securityId, ExecutionTypes.Tick, trade => trade.ServerTime, trade => trade.SecurityId, trade => trade.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive, m => true)
 {
-	public TradeStorage(SecurityId securityId, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
-		: base(securityId, ExecutionTypes.Tick, trade => trade.ServerTime, trade => trade.SecurityId, trade => trade.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive, m => true)
-	{
-	}
-
 	protected override IEnumerable<ExecutionMessage> FilterNewData(IEnumerable<ExecutionMessage> data, IMarketDataMetaInfo metaInfo)
 	{
 		var prevId = (long?)metaInfo.LastId ?? 0;
@@ -38,21 +34,14 @@ class TradeStorage : MarketDataStorage<ExecutionMessage, DateTimeOffset>
 	}
 }
 
-class MarketDepthStorage : MarketDataStorage<QuoteChangeMessage, DateTimeOffset>
+class MarketDepthStorage(SecurityId securityId, IMarketDataStorageDrive drive, IMarketDataSerializer<QuoteChangeMessage> serializer)
+	: MarketDataStorage<QuoteChangeMessage, DateTimeOffset>(securityId, null, depth => depth.ServerTime, depth => depth.SecurityId, depth => depth.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive, m => true)
 {
-	public MarketDepthStorage(SecurityId securityId, IMarketDataStorageDrive drive, IMarketDataSerializer<QuoteChangeMessage> serializer)
-		: base(securityId, null, depth => depth.ServerTime, depth => depth.SecurityId, depth => depth.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive, m => true)
-	{
-	}
 }
 
-class OrderLogStorage : MarketDataStorage<ExecutionMessage, long>
+class OrderLogStorage(SecurityId securityId, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
+	: MarketDataStorage<ExecutionMessage, long>(securityId, ExecutionTypes.OrderLog, item => item.ServerTime, item => item.SecurityId, item => item.TransactionId, serializer, drive, m => true)
 {
-	public OrderLogStorage(SecurityId securityId, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
-		: base(securityId, ExecutionTypes.OrderLog, item => item.ServerTime, item => item.SecurityId, item => item.TransactionId, serializer, drive, m => true)
-	{
-	}
-
 	protected override IEnumerable<ExecutionMessage> FilterNewData(IEnumerable<ExecutionMessage> data, IMarketDataMetaInfo metaInfo)
 	{
 		var prevTransId = (long?)metaInfo.LastId ?? 0;
@@ -75,14 +64,9 @@ class CandleStorage<TCandleMessage> :
 	IMarketDataStorageInfo<CandleMessage>
 	where TCandleMessage : CandleMessage, new()
 {
-	private class CandleSerializer : IMarketDataSerializer<CandleMessage>
+	private class CandleSerializer(IMarketDataSerializer<TCandleMessage> serializer) : IMarketDataSerializer<CandleMessage>
 	{
-		private readonly IMarketDataSerializer<TCandleMessage> _serializer;
-
-		public CandleSerializer(IMarketDataSerializer<TCandleMessage> serializer)
-		{
-			_serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
-		}
+		private readonly IMarketDataSerializer<TCandleMessage> _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
 
 		StorageFormats IMarketDataSerializer.Format => _serializer.Format;
 
@@ -153,20 +137,14 @@ class CandleStorage<TCandleMessage> :
 	}
 }
 
-class Level1Storage : MarketDataStorage<Level1ChangeMessage, DateTimeOffset>
+class Level1Storage(SecurityId securityId, IMarketDataStorageDrive drive, IMarketDataSerializer<Level1ChangeMessage> serializer)
+	: MarketDataStorage<Level1ChangeMessage, DateTimeOffset>(securityId, null, value => value.ServerTime, value => value.SecurityId, value => value.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive, m => m.HasChanges())
 {
-	public Level1Storage(SecurityId securityId, IMarketDataStorageDrive drive, IMarketDataSerializer<Level1ChangeMessage> serializer)
-		: base(securityId, null, value => value.ServerTime, value => value.SecurityId, value => value.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive, m => m.HasChanges())
-	{
-	}
 }
 
-class PositionChangeStorage : MarketDataStorage<PositionChangeMessage, DateTimeOffset>
+class PositionChangeStorage(SecurityId securityId, IMarketDataStorageDrive drive, IMarketDataSerializer<PositionChangeMessage> serializer)
+	: MarketDataStorage<PositionChangeMessage, DateTimeOffset>(securityId, null, value => value.ServerTime, value => value.SecurityId, value => value.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive, m => m.HasChanges())
 {
-	public PositionChangeStorage(SecurityId securityId, IMarketDataStorageDrive drive, IMarketDataSerializer<PositionChangeMessage> serializer)
-		: base(securityId, null, value => value.ServerTime, value => value.SecurityId, value => value.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive, m => m.HasChanges())
-	{
-	}
 }
 
 class TransactionStorage : MarketDataStorage<ExecutionMessage, long>
@@ -178,18 +156,12 @@ class TransactionStorage : MarketDataStorage<ExecutionMessage, long>
 	}
 }
 
-class NewsStorage : MarketDataStorage<NewsMessage, VoidType>
+class NewsStorage(SecurityId securityId, IMarketDataSerializer<NewsMessage> serializer, IMarketDataStorageDrive drive)
+	: MarketDataStorage<NewsMessage, VoidType>(securityId, null, m => m.ServerTime, m => default, m => null, serializer, drive, m => true)
 {
-	public NewsStorage(SecurityId securityId, IMarketDataSerializer<NewsMessage> serializer, IMarketDataStorageDrive drive)
-		: base(securityId, null, m => m.ServerTime, m => default, m => null, serializer, drive, m => true)
-	{
-	}
 }
 
-class BoardStateStorage : MarketDataStorage<BoardStateMessage, VoidType>
+class BoardStateStorage(SecurityId securityId, IMarketDataSerializer<BoardStateMessage> serializer, IMarketDataStorageDrive drive)
+	: MarketDataStorage<BoardStateMessage, VoidType>(securityId, null, m => m.ServerTime, m => default, m => null, serializer, drive, m => true)
 {
-	public BoardStateStorage(SecurityId securityId, IMarketDataSerializer<BoardStateMessage> serializer, IMarketDataStorageDrive drive)
-		: base(securityId, null, m => m.ServerTime, m => default, m => null, serializer, drive, m => true)
-	{
-	}
 }

@@ -3,23 +3,17 @@
 /// <summary>
 /// The messages adapter keeping message until connection will be done.
 /// </summary>
-public class OfflineMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="OfflineMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">Underlying adapter.</param>
+public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
 	private bool _connected;
 	private readonly SyncObject _syncObject = new();
 	private readonly List<Message> _suspendedIn = [];
 	private readonly PairSet<long, ISubscriptionMessage> _pendingSubscriptions = [];
 	private readonly PairSet<long, OrderRegisterMessage> _pendingRegistration = [];
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="OfflineMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">Underlying adapter.</param>
-	public OfflineMessageAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
-
 	private int _maxMessageCount = 10000;
 
 	/// <summary>

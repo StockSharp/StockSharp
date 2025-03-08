@@ -5,24 +5,19 @@ using StockSharp.Algo.Positions;
 /// <summary>
 /// The position calculation manager.
 /// </summary>
-public class StrategyPositionManager : BaseLogReceiver, IPositionManager
+/// <remarks>
+/// Initializes a new instance of the <see cref="StrategyPositionManager"/>.
+/// </remarks>
+/// <param name="byOrders">To calculate the position on realized volume for orders (<see langword="true" />) or by trades (<see langword="false" />).</param>
+public class StrategyPositionManager(bool byOrders) : BaseLogReceiver, IPositionManager
 {
 	private readonly Dictionary<string, IPositionManager> _managersByStrategyId = new(StringComparer.InvariantCultureIgnoreCase);
 	private readonly Dictionary<long, Tuple<IPositionManager, string>> _managersByTransId = [];
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="StrategyPositionManager"/>.
-	/// </summary>
-	/// <param name="byOrders">To calculate the position on realized volume for orders (<see langword="true" />) or by trades (<see langword="false" />).</param>
-	public StrategyPositionManager(bool byOrders)
-	{
-		ByOrders = byOrders;
-	}
-
-	/// <summary>
 	/// To calculate the position on realized volume for orders (<see langword="true" />) or by trades (<see langword="false" />).
 	/// </summary>
-	public bool ByOrders { get; }
+	public bool ByOrders { get; } = byOrders;
 
 	/// <inheritdoc />
 	public PositionChangeMessage ProcessMessage(Message message)

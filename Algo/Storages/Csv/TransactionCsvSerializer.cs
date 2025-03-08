@@ -3,17 +3,13 @@ namespace StockSharp.Algo.Storages.Csv;
 /// <summary>
 /// The transaction serializer in the CSV format.
 /// </summary>
-public class TransactionCsvSerializer : CsvMarketDataSerializer<ExecutionMessage>
+/// <remarks>
+/// Initializes a new instance of the <see cref="TransactionCsvSerializer"/>.
+/// </remarks>
+/// <param name="securityId">Security ID.</param>
+/// <param name="encoding">Encoding.</param>
+public class TransactionCsvSerializer(SecurityId securityId, Encoding encoding = null) : CsvMarketDataSerializer<ExecutionMessage>(securityId, encoding)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="TransactionCsvSerializer"/>.
-	/// </summary>
-	/// <param name="securityId">Security ID.</param>
-	/// <param name="encoding">Encoding.</param>
-	public TransactionCsvSerializer(SecurityId securityId, Encoding encoding = null)
-		: base(securityId, encoding)
-	{
-	}
 
 	/// <inheritdoc />
 	protected override void Write(CsvFileWriter writer, ExecutionMessage data, IMarketDataMetaInfo metaInfo)

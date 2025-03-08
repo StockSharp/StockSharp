@@ -121,8 +121,7 @@ public class InMemorySecurityStorage : ISecurityStorage
 			{
 				if (!_inner.Remove(security.ToSecurityId()))
 				{
-					if (toDelete == null)
-						toDelete = securities.ToSet();
+					toDelete ??= securities.ToSet();
 
 					toDelete.Remove(security);
 				}

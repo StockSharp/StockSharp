@@ -1,13 +1,7 @@
 namespace StockSharp.Algo.Storages.Binary;
 
-class QuoteMetaInfo : BinaryMetaInfo
+class QuoteMetaInfo(DateTime date) : BinaryMetaInfo(date)
 {
-	public QuoteMetaInfo(DateTime date)
-		: base(date)
-	{
-		//FirstPrice = -1;
-	}
-
 	public bool IncrementalOnly { get; set; }
 
 	public bool HasSnapshot { get; set; }
@@ -104,15 +98,9 @@ class QuoteMetaInfo : BinaryMetaInfo
 	}
 }
 
-class QuoteBinarySerializer : BinaryMarketDataSerializer<QuoteChangeMessage, QuoteMetaInfo>
+class QuoteBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<QuoteChangeMessage, QuoteMetaInfo>(securityId, DataType.MarketDepth, 16 + 20 * 25, MarketDataVersions.Version62, exchangeInfoProvider)
 {
-	private readonly OrderBookIncrementBuilder _builder;
-
-	public QuoteBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-		: base(securityId, DataType.MarketDepth, 16 + 20 * 25, MarketDataVersions.Version62, exchangeInfoProvider)
-	{
-		_builder = new OrderBookIncrementBuilder(securityId);
-	}
+	private readonly OrderBookIncrementBuilder _builder = new OrderBookIncrementBuilder(securityId);
 
 	/// <summary>
 	/// Pass through incremental <see cref="QuoteChangeMessage"/>.

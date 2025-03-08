@@ -3,17 +3,13 @@ namespace StockSharp.Algo.Storages.Csv;
 /// <summary>
 /// The tick serializer in the CSV format.
 /// </summary>
-public class TickCsvSerializer : CsvMarketDataSerializer<ExecutionMessage>
+/// <remarks>
+/// Initializes a new instance of the <see cref="TickCsvSerializer"/>.
+/// </remarks>
+/// <param name="securityId">Security ID.</param>
+/// <param name="encoding">Encoding.</param>
+public class TickCsvSerializer(SecurityId securityId, Encoding encoding = null) : CsvMarketDataSerializer<ExecutionMessage>(securityId, encoding)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="TickCsvSerializer"/>.
-	/// </summary>
-	/// <param name="securityId">Security ID.</param>
-	/// <param name="encoding">Encoding.</param>
-	public TickCsvSerializer(SecurityId securityId, Encoding encoding = null)
-		: base(securityId, encoding)
-	{
-	}
 
 	/// <inheritdoc />
 	public override IMarketDataMetaInfo CreateMetaInfo(DateTime date)

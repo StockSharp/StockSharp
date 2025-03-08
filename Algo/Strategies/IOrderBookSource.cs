@@ -14,17 +14,12 @@ public interface IOrderBookSource
 /// <summary>
 /// Default implementation of <see cref="IOrderBookSource"/>.
 /// </summary>
-public class OrderBookSource : IOrderBookSource
+/// <remarks>
+/// Initializes a new instance of the <see cref="OrderBookSource"/>.
+/// </remarks>
+/// <param name="name"><see cref="IOrderBookSource.Name"/></param>
+public class OrderBookSource(string name) : IOrderBookSource
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="OrderBookSource"/>.
-	/// </summary>
-	/// <param name="name"><see cref="IOrderBookSource.Name"/></param>
-	public OrderBookSource(string name)
-    {
-		_name = name.ThrowIfEmpty(nameof(name));
-	}
-
-	private readonly string _name;
+	private readonly string _name = name.ThrowIfEmpty(nameof(name));
 	string IOrderBookSource.Name => _name;
 }

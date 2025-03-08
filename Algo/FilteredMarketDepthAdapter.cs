@@ -3,28 +3,24 @@ namespace StockSharp.Algo;
 /// <summary>
 /// Filtered market depth adapter.
 /// </summary>
-public class FilteredMarketDepthAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="FilteredMarketDepthAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">Inner message adapter.</param>
+public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
-	private class FilteredMarketDepthInfo
+	private class FilteredMarketDepthInfo(long subscribeId, Subscription bookSubscription, Subscription ordersSubscription)
 	{
 		private readonly Dictionary<ValueTuple<Sides, decimal>, decimal> _totals = [];
 		private readonly Dictionary<long, RefTriple<Sides, decimal, decimal?>> _ordersInfo = [];
 
 		private QuoteChangeMessage _lastSnapshot;
 
-		public FilteredMarketDepthInfo(long subscribeId, Subscription bookSubscription, Subscription ordersSubscription)
-		{
-			SubscribeId = subscribeId;
-
-			BookSubscription = bookSubscription ?? throw new ArgumentNullException(nameof(bookSubscription));
-			OrdersSubscription = ordersSubscription ?? throw new ArgumentNullException(nameof(ordersSubscription));
-		}
-
-		public long SubscribeId { get; }
+		public long SubscribeId { get; } = subscribeId;
 		public long UnSubscribeId { get; set; }
 
-		public Subscription BookSubscription { get; }
-		public Subscription OrdersSubscription { get; }
+		public Subscription BookSubscription { get; } = bookSubscription ?? throw new ArgumentNullException(nameof(bookSubscription));
+		public Subscription OrdersSubscription { get; } = ordersSubscription ?? throw new ArgumentNullException(nameof(ordersSubscription));
 
 		public OnlineInfo Online { get; set; }
 
@@ -217,15 +213,6 @@ public class FilteredMarketDepthAdapter : MessageAdapterWrapper
 	private readonly Dictionary<long, FilteredMarketDepthInfo> _byOrderStatusId = [];
 	private readonly Dictionary<SecurityId, OnlineInfo> _online = [];
 	private readonly Dictionary<long, Tuple<FilteredMarketDepthInfo, bool>> _unsubscribeRequests = [];
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="FilteredMarketDepthAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">Inner message adapter.</param>
-	public FilteredMarketDepthAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
@@ -533,22 +520,19 @@ public class FilteredMarketDepthAdapter : MessageAdapterWrapper
 
 						var book = info.Process(quoteMsg);
 
-						if (leftIds is null)
-							leftIds = [.. ids];
+						leftIds ??= [.. ids];
 
 						if (info.Online is null)
 							leftIds.Remove(id);
 						else
 						{
-							if (processed is null)
-								processed = [];
+							processed ??= [];
 
 							processed.AddRange(info.Online.BookSubscribers.Cache);
 							leftIds.RemoveRange(info.Online.BookSubscribers.Cache);
 						}
 
-						if (filtered == null)
-							filtered = [];
+						filtered ??= [];
 
 						filtered.Add(book);
 					}
@@ -589,22 +573,19 @@ public class FilteredMarketDepthAdapter : MessageAdapterWrapper
 						if (!_byOrderStatusId.TryGetValue(id, out var info))
 							continue;
 
-						if (leftIds is null)
-							leftIds = [.. ids];
+						leftIds ??= [.. ids];
 
 						if (info.Online is null)
 							leftIds.Remove(id);
 						else
 						{
-							if (processed is null)
-								processed = [];
+							processed ??= [];
 
 							processed.AddRange(info.Online.OrdersSubscribers.Cache);
 							leftIds.RemoveRange(info.Online.OrdersSubscribers.Cache);
 						}
 
-						if (filtered is null)
-							filtered = [];
+						filtered ??= [];
 
 						var book = info.Process(execMsg);
 

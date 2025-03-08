@@ -624,16 +624,9 @@ public static class StorageHelper
 
 		DateTimeOffset IMarketDataStorageInfo.GetTime(object data) => ((IMarketDataStorageInfo<CandleMessage>)_original).GetTime(data);
 
-		private class BuildableCandleInfo : IMarketDataMetaInfo
+		private class BuildableCandleInfo(IMarketDataMetaInfo info, TimeSpan tf) : IMarketDataMetaInfo
 		{
-			private readonly TimeSpan _tf;
-			private readonly IMarketDataMetaInfo _info;
-
-			public BuildableCandleInfo(IMarketDataMetaInfo info, TimeSpan tf)
-			{
-				_info = info ?? throw new ArgumentNullException(nameof(info));
-				_tf = tf;
-			}
+			private readonly IMarketDataMetaInfo _info = info ?? throw new ArgumentNullException(nameof(info));
 
 			public DateTime Date              => _info.Date;
 			public bool IsOverride            => _info.IsOverride;
@@ -646,13 +639,13 @@ public static class StorageHelper
 
 			public DateTime FirstTime
 			{
-				get => _tf.GetCandleBounds(_info.FirstTime).Min.UtcDateTime;
+				get => tf.GetCandleBounds(_info.FirstTime).Min.UtcDateTime;
 				set => throw new NotSupportedException();
 			}
 
 			public DateTime LastTime
 			{
-				get => _tf.GetCandleBounds(_info.LastTime).Max.UtcDateTime;
+				get => tf.GetCandleBounds(_info.LastTime).Max.UtcDateTime;
 				set => throw new NotSupportedException();
 			}
 

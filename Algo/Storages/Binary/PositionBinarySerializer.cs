@@ -1,46 +1,24 @@
 namespace StockSharp.Algo.Storages.Binary;
 
-class PositionMetaInfo : BinaryMetaInfo
+class PositionMetaInfo(DateTime date) : BinaryMetaInfo(date)
 {
-	public PositionMetaInfo(DateTime date)
-		: base(date)
-	{
-		BeginValue = new();
-		CurrentValue = new();
-		BlockedValue = new();
-		CurrentPrice = new();
-		AveragePrice = new();
-		UnrealizedPnL = new();
-		RealizedPnL = new();
-		VariationMargin = new();
-		Leverage = new();
-		Commission = new();
-		CurrentValueInLots = new();
-		SettlementPrice = new();
-		LiquidationPrice = new();
+	public RefPair<decimal, decimal> BeginValue { get; private set; } = new();
+	public RefPair<decimal, decimal> CurrentValue { get; private set; } = new();
+	public RefPair<decimal, decimal> BlockedValue { get; private set; } = new();
+	public RefPair<decimal, decimal> CurrentPrice { get; private set; } = new();
+	public RefPair<decimal, decimal> AveragePrice { get; private set; } = new();
+	public RefPair<decimal, decimal> UnrealizedPnL { get; private set; } = new();
+	public RefPair<decimal, decimal> RealizedPnL { get; private set; } = new();
+	public RefPair<decimal, decimal> VariationMargin { get; private set; } = new();
+	public RefPair<decimal, decimal> Leverage { get; private set; } = new();
+	public RefPair<decimal, decimal> Commission { get; private set; } = new();
+	public RefPair<decimal, decimal> CurrentValueInLots { get; private set; } = new();
+	public RefPair<decimal, decimal> SettlementPrice { get; private set; } = new();
+	public RefPair<decimal, decimal> LiquidationPrice { get; private set; } = new();
 
-		Portfolios = [];
-		ClientCodes = [];
-		DepoNames = [];
-	}
-
-	public RefPair<decimal, decimal> BeginValue { get; private set; }
-	public RefPair<decimal, decimal> CurrentValue { get; private set; }
-	public RefPair<decimal, decimal> BlockedValue { get; private set; }
-	public RefPair<decimal, decimal> CurrentPrice { get; private set; }
-	public RefPair<decimal, decimal> AveragePrice { get; private set; }
-	public RefPair<decimal, decimal> UnrealizedPnL { get; private set; }
-	public RefPair<decimal, decimal> RealizedPnL { get; private set; }
-	public RefPair<decimal, decimal> VariationMargin { get; private set; }
-	public RefPair<decimal, decimal> Leverage { get; private set; }
-	public RefPair<decimal, decimal> Commission { get; private set; }
-	public RefPair<decimal, decimal> CurrentValueInLots { get; private set; }
-	public RefPair<decimal, decimal> SettlementPrice { get; private set; }
-	public RefPair<decimal, decimal> LiquidationPrice { get; private set; }
-
-	public IList<string> Portfolios { get; }
-	public IList<string> ClientCodes { get; }
-	public IList<string> DepoNames { get; }
+	public IList<string> Portfolios { get; } = [];
+	public IList<string> ClientCodes { get; } = [];
+	public IList<string> DepoNames { get; } = [];
 
 	public DateTime FirstFieldTime { get; set; }
 	public DateTime LastFieldTime { get; set; }
@@ -177,13 +155,8 @@ class PositionMetaInfo : BinaryMetaInfo
 	}
 }
 
-class PositionBinarySerializer : BinaryMarketDataSerializer<PositionChangeMessage, PositionMetaInfo>
+class PositionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<PositionChangeMessage, PositionMetaInfo>(securityId, DataType.PositionChanges, 20, MarketDataVersions.Version40, exchangeInfoProvider)
 {
-	public PositionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-		: base(securityId, DataType.PositionChanges, 20, MarketDataVersions.Version40, exchangeInfoProvider)
-	{
-	}
-
 	protected override void OnSave(BitArrayWriter writer, IEnumerable<PositionChangeMessage> messages, PositionMetaInfo metaInfo)
 	{
 		if (metaInfo.IsEmpty())

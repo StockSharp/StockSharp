@@ -414,8 +414,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 
 		InitMessageLocalTime(message);
 
-		if (/*message.IsBack && */message.Adapter == null)
-			message.Adapter = this;
+		message.Adapter ??= this;
 
 		switch (message.Type)
 		{

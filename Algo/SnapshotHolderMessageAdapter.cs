@@ -16,23 +16,17 @@ public interface ISnapshotHolder
 /// <summary>
 /// The message adapter snapshots holder.
 /// </summary>
-public class SnapshotHolderMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="SnapshotHolderMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">Underlying adapter.</param>
+/// <param name="holder">Snapshot holder.</param>
+public class SnapshotHolderMessageAdapter(IMessageAdapter innerAdapter, ISnapshotHolder holder) : MessageAdapterWrapper(innerAdapter)
 {
 	private readonly SyncObject _sync = new();
 	private readonly SynchronizedDictionary<long, ISubscriptionMessage> _pending = [];
 
-	private readonly ISnapshotHolder _holder;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="SnapshotHolderMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">Underlying adapter.</param>
-	/// <param name="holder">Snapshot holder.</param>
-	public SnapshotHolderMessageAdapter(IMessageAdapter innerAdapter, ISnapshotHolder holder)
-		: base(innerAdapter)
-	{
-		_holder = holder ?? throw new ArgumentNullException(nameof(holder));
-	}
+	private readonly ISnapshotHolder _holder = holder ?? throw new ArgumentNullException(nameof(holder));
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)

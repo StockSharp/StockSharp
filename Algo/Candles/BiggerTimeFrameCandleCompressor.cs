@@ -5,7 +5,12 @@ using StockSharp.Algo.Candles.Compression;
 /// <summary>
 /// Compressor of candles from smaller time-frames to bigger.
 /// </summary>
-public class BiggerTimeFrameCandleCompressor : ICandleBuilderSubscription
+/// <remarks>
+/// Initializes a new instance of the <see cref="BiggerTimeFrameCandleCompressor"/>.
+/// </remarks>
+/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
+/// <param name="builder">The builder of candles of <see cref="TimeFrameCandleMessage"/> type.</param>
+public class BiggerTimeFrameCandleCompressor(MarketDataMessage message, ICandleBuilder builder) : ICandleBuilderSubscription
 {
 	private class PartCandleBuilderValueTransform : BaseCandleBuilderValueTransform
 	{
@@ -57,23 +62,11 @@ public class BiggerTimeFrameCandleCompressor : ICandleBuilderSubscription
 		}
 	}
 
-	private readonly PartCandleBuilderValueTransform _transform;
-	private readonly ICandleBuilder _builder;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="BiggerTimeFrameCandleCompressor"/>.
-	/// </summary>
-	/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
-	/// <param name="builder">The builder of candles of <see cref="TimeFrameCandleMessage"/> type.</param>
-	public BiggerTimeFrameCandleCompressor(MarketDataMessage message, ICandleBuilder builder)
-	{
-		Message = message ?? throw new ArgumentNullException(nameof(message));
-		_transform = new PartCandleBuilderValueTransform();
-		_builder = builder ?? throw new ArgumentNullException(nameof(builder));
-	}
+	private readonly PartCandleBuilderValueTransform _transform = new PartCandleBuilderValueTransform();
+	private readonly ICandleBuilder _builder = builder ?? throw new ArgumentNullException(nameof(builder));
 
 	/// <inheritdoc />
-	public MarketDataMessage Message { get; private set; }
+	public MarketDataMessage Message { get; private set; } = message ?? throw new ArgumentNullException(nameof(message));
 
 	/// <inheritdoc />
 	public VolumeProfileBuilder VolumeProfile { get; set; }

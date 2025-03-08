@@ -18,23 +18,17 @@ public class VolumeProfileIndicator : BaseIndicator
 	/// <summary>
 	/// The indicator value <see cref="VolumeProfileIndicator"/>, derived in result of calculation.
 	/// </summary>
-	public class VolumeProfileIndicatorValue : SingleIndicatorValue<IDictionary<decimal, decimal>>
+	/// <remarks>
+	/// Initializes a new instance of the <see cref="VolumeProfileIndicatorValue"/>.
+	/// </remarks>
+	/// <param name="indicator">Indicator.</param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public class VolumeProfileIndicatorValue(IIndicator indicator, DateTimeOffset time) : SingleIndicatorValue<IDictionary<decimal, decimal>>(indicator, time)
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="VolumeProfileIndicatorValue"/>.
-		/// </summary>
-		/// <param name="indicator">Indicator.</param>
-		/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-		public VolumeProfileIndicatorValue(IIndicator indicator, DateTimeOffset time)
-			: base(indicator, time)
-		{
-			Levels = new Dictionary<decimal, decimal>();
-		}
-
 		/// <summary>
 		/// Embedded values.
 		/// </summary>
-		public IDictionary<decimal, decimal> Levels { get; }
+		public IDictionary<decimal, decimal> Levels { get; } = new Dictionary<decimal, decimal>();
 
 		/// <inheritdoc />
 		public override T GetValue<T>(Level1Fields? field) => throw new NotSupportedException();

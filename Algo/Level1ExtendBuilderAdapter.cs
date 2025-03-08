@@ -3,9 +3,13 @@
 /// <summary>
 /// Level1 extend builder adapter.
 /// </summary>
-public class Level1ExtendBuilderAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="Level1ExtendBuilderAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">Inner message adapter.</param>
+public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
-	private class Level1Info
+	private class Level1Info(MarketDataMessage origin)
 	{
 		//public readonly HashSet<DataType> AllowedSources = new HashSet<DataType>
 		//{
@@ -14,24 +18,13 @@ public class Level1ExtendBuilderAdapter : MessageAdapterWrapper
 		//	DataType.CandleTimeFrame,
 		//};
 
-		public Level1Info(MarketDataMessage origin)
-			=> Origin = origin ?? throw new ArgumentNullException(nameof(origin));
 
-		public MarketDataMessage Origin { get; }
+		public MarketDataMessage Origin { get; } = origin ?? throw new ArgumentNullException(nameof(origin));
 		public SubscriptionStates State { get; set; }
 	}
 
 	private readonly SyncObject _syncObject = new();
 	private readonly Dictionary<long, Level1Info> _level1Subscriptions = [];
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="Level1ExtendBuilderAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">Inner message adapter.</param>
-	public Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
 
 	/// <inheritdoc />
 	public override bool SendInMessage(Message message)

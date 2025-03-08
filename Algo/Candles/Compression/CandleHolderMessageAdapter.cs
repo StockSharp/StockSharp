@@ -3,18 +3,13 @@ namespace StockSharp.Algo.Candles.Compression;
 /// <summary>
 /// Candle holder adapter.
 /// </summary>
-public class CandleHolderMessageAdapter : MessageAdapterWrapper
+/// <remarks>
+/// Initializes a new instance of the <see cref="CandleHolderMessageAdapter"/>.
+/// </remarks>
+/// <param name="innerAdapter">Inner message adapter.</param>
+public class CandleHolderMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
 	private readonly SynchronizedDictionary<long, CandleMessage> _infos = [];
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="CandleHolderMessageAdapter"/>.
-	/// </summary>
-	/// <param name="innerAdapter">Inner message adapter.</param>
-	public CandleHolderMessageAdapter(IMessageAdapter innerAdapter)
-		: base(innerAdapter)
-	{
-	}
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)

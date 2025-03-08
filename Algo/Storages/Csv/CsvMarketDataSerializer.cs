@@ -1,18 +1,8 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-class CsvMetaInfo : MetaInfo
+class CsvMetaInfo(DateTime date, Encoding encoding, Func<FastCsvReader, object> readId, Func<FastCsvReader, bool> readIncrementalOnly = null) : MetaInfo(date)
 {
-	private readonly Encoding _encoding;
-	private readonly Func<FastCsvReader, object> _readId;
-	private readonly Func<FastCsvReader, bool> _readIncrementalOnly;
-
-	public CsvMetaInfo(DateTime date, Encoding encoding, Func<FastCsvReader, object> readId, Func<FastCsvReader, bool> readIncrementalOnly = null)
-		: base(date)
-	{
-		_encoding = encoding ?? throw new ArgumentNullException(nameof(encoding));
-		_readId = readId;
-		_readIncrementalOnly = readIncrementalOnly;
-	}
+	private readonly Encoding _encoding = encoding ?? throw new ArgumentNullException(nameof(encoding));
 
 	//public override CsvMetaInfo Clone()
 	//{
@@ -74,8 +64,8 @@ class CsvMetaInfo : MetaInfo
 					throw new InvalidOperationException();
 
 				LastTime = reader.ReadTime(Date).UtcDateTime;
-				_lastId = _readId?.Invoke(reader);
-				IncrementalOnly = _readIncrementalOnly?.Invoke(reader);
+				_lastId = readId?.Invoke(reader);
+				IncrementalOnly = readIncrementalOnly?.Invoke(reader);
 			}
 
 			stream.Position = 0;
@@ -190,18 +180,11 @@ public abstract class CsvMarketDataSerializer<TData> : IMarketDataSerializer<TDa
 	/// <param name="metaInfo">Meta-information on data for one day.</param>
 	protected abstract void Write(CsvFileWriter writer, TData data, IMarketDataMetaInfo metaInfo);
 
-	private class CsvEnumerator : SimpleEnumerator<TData>
+	private class CsvEnumerator(CsvMarketDataSerializer<TData> serializer, FastCsvReader reader, IMarketDataMetaInfo metaInfo) : SimpleEnumerator<TData>
 	{
-		private readonly CsvMarketDataSerializer<TData> _serializer;
-		private readonly FastCsvReader _reader;
-		private readonly IMarketDataMetaInfo _metaInfo;
-
-		public CsvEnumerator(CsvMarketDataSerializer<TData> serializer, FastCsvReader reader, IMarketDataMetaInfo metaInfo)
-		{
-			_serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
-			_reader = reader ?? throw new ArgumentNullException(nameof(reader));
-			_metaInfo = metaInfo ?? throw new ArgumentNullException(nameof(metaInfo));
-		}
+		private readonly CsvMarketDataSerializer<TData> _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+		private readonly FastCsvReader _reader = reader ?? throw new ArgumentNullException(nameof(reader));
+		private readonly IMarketDataMetaInfo _metaInfo = metaInfo ?? throw new ArgumentNullException(nameof(metaInfo));
 
 		public override bool MoveNext()
 		{
