@@ -62,7 +62,7 @@ public class OrderBookIncrementBuilder : BaseLogReceiver
 				postfix = $" (sub={subscriptionId})";
 			}
 
-			this.AddWarningLog($"{currState}->{newState}{postfix}");
+			LogWarning($"{currState}->{newState}{postfix}");
 		}
 
 		bool CheckSwitch()

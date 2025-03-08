@@ -416,7 +416,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 					if (!_partialRequests.TryGetValue(originId, out var info))
 					{
 						if (_finished.Contains(originId))
-							this.AddWarningLog("Subscription {0} already finished.", originId);
+							LogWarning("Subscription {0} already finished.", originId);
 
 						break;
 					}
@@ -459,7 +459,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 				{
 					if (_partialRequests.TryGetValue(id, out var info))
 					{
-						this.AddWarningLog("Partial {0} ({1}) became online.", id, info.Origin.TransactionId);
+						LogWarning("Partial {0} ({1}) became online.", id, info.Origin.TransactionId);
 						message = null;
 					}
 					else if (_liveRequests.TryGetAndRemove(id, out _))
@@ -506,7 +506,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 					else
 					{
 						if (_finished.Contains(id))
-							this.AddWarningLog("Subscription {0} already finished.", id);
+							LogWarning("Subscription {0} already finished.", id);
 
 						break;
 					}

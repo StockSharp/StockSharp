@@ -1421,7 +1421,7 @@ partial class Connector
 		if (isNew)
 			RaiseNewMyTrade(trade);
 
-		//this.AddWarningLog("Duplicate own trade message: {0}", message);
+		//LogWarning("Duplicate own trade message: {0}", message);
 		RaiseReceived(trade, message, OwnTradeReceived);
 	}
 

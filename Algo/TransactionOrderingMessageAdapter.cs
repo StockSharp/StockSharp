@@ -158,7 +158,7 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 					//if (order.OrderState == OrderStates.Failed && !canProcessFailed)
 					//{
 					//	if (tuple.Item2.Count > 0)
-					//		this.AddWarningLog("Order {0} has failed state but contains {1} trades.", order.TransactionId, tuple.Item2.Count);
+					//		LogWarning("Order {0} has failed state but contains {1} trades.", order.TransactionId, tuple.Item2.Count);
 
 					//	continue;
 					//}
@@ -220,7 +220,7 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 				{
 					if (!execMsg.HasTradeInfo)
 					{
-						this.AddWarningLog("Order doesn't have origin trans id: {0}", execMsg);
+						LogWarning("Order doesn't have origin trans id: {0}", execMsg);
 						break;
 					}
 
@@ -230,7 +230,7 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 							execMsg.OriginalTransactionId = originId;
 						else
 						{
-							this.AddWarningLog("Trade doesn't have origin trans id: {0}", execMsg);
+							LogWarning("Trade doesn't have origin trans id: {0}", execMsg);
 							break;
 						}
 					}
@@ -240,7 +240,7 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 							execMsg.OriginalTransactionId = originId;
 						else
 						{
-							this.AddWarningLog("Trade doesn't have origin trans id: {0}", execMsg);
+							LogWarning("Trade doesn't have origin trans id: {0}", execMsg);
 							break;
 						}
 					}
@@ -290,7 +290,7 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 
 					if (transId == 0)
 					{
-						this.AddWarningLog("Message {0} do not contains transaction id.", execMsg);
+						LogWarning("Message {0} do not contains transaction id.", execMsg);
 						break;
 					}
 				}

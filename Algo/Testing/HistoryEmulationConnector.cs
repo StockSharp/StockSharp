@@ -509,6 +509,6 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		if (subscription != null)
 			UnSubscribe(subscription);
 		else
-			this.AddWarningLog(LocalizedStrings.SubscriptionNonExist, dataType);
+			LogWarning(LocalizedStrings.SubscriptionNonExist, dataType);
 	}
 }

@@ -308,7 +308,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 			statusInfo.Linked.Add(transactionId);
 		}
 		else if (warnOnDuplicate)
-			this.AddWarningLog("Order's transaction {0} was handled before.", transactionId);
+			LogWarning("Order's transaction {0} was handled before.", transactionId);
 	}
 
 	private void ClearState()
@@ -361,10 +361,10 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 						secId = secIdMsg.SecurityId;
 
 						if (secId == default && IsSecurityRequired(dataType))
-							this.AddWarningLog("Subscription {0} required security id.", dataType);
+							LogWarning("Subscription {0} required security id.", dataType);
 						else if (secId != default && !IsSecurityRequired(dataType))
 						{
-							//this.AddWarningLog("Subscription {0} doesn't required security id.", dataType);
+							//LogWarning("Subscription {0} doesn't required security id.", dataType);
 							extraFilter = true;
 							secId = default;
 						}
@@ -474,7 +474,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 								sendInMsg = MakeUnsubscribe(info.Subscription.TypedClone(), info.Subscription.TransactionId);
 							}
 							else
-								this.AddWarningLog(LocalizedStrings.SubscriptionInState, originId, info.State);
+								LogWarning(LocalizedStrings.SubscriptionInState, originId, info.State);
 						}
 						else
 						{

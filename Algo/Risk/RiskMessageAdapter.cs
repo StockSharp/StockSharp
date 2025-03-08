@@ -63,7 +63,7 @@ public class RiskMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWr
 	{
 		foreach (var rule in RiskManager.ProcessRules(message))
 		{
-			this.AddWarningLog(LocalizedStrings.ActivatingRiskRule,
+			LogWarning(LocalizedStrings.ActivatingRiskRule,
 				rule.GetType().GetDisplayName(), rule.Title, rule.Action);
 
 			switch (rule.Action)

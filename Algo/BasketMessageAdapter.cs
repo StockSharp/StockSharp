@@ -1999,7 +1999,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		if (error != null)
 		{
-			this.AddWarningLog("Subscription Error out: {0}", message);
+			LogWarning("Subscription Error out: {0}", message);
 			_subscription.Remove(originalTransactionId);
 			_requestsById.Remove(originalTransactionId);
 		}

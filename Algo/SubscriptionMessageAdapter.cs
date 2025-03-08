@@ -393,7 +393,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 						ChangeState(info, SubscriptionStates.Stopped);
 					}
 					else
-						this.AddWarningLog(LocalizedStrings.SubscriptionInState, originId, info.State);
+						LogWarning(LocalizedStrings.SubscriptionInState, originId, info.State);
 				}
 				else
 				{

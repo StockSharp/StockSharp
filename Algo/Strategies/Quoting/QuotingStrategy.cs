@@ -195,7 +195,7 @@ public abstract class QuotingStrategy : Strategy
 
 	    if (bestPrice == null)
 	    {
-			//this.AddWarningLog(LocalizedStrings.MarketDepthIsEmpty);
+			//LogWarning(LocalizedStrings.MarketDepthIsEmpty);
 		    return null;
 	    }
 
@@ -518,7 +518,7 @@ public abstract class QuotingStrategy : Strategy
 		//var priceRange = GetAcceptablePriceRange();
 		//if (priceRange == null)
 		//{
-		//	this.AddWarningLog(LocalizedStrings.MarketDepthIsEmpty);
+		//	LogWarning(LocalizedStrings.MarketDepthIsEmpty);
 		//	return;
 		//}
 

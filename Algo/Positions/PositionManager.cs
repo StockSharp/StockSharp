@@ -144,7 +144,7 @@ public class PositionManager(bool byOrders) : BaseLogReceiver, IPositionManager
 
 					if (tradeVol == 0)
 					{
-						this.AddWarningLog("Trade {0}/{1} of order {2} has zero volume.", execMsg.TradeId, execMsg.TradeStringId, execMsg.OriginalTransactionId);
+						LogWarning("Trade {0}/{1} of order {2} has zero volume.", execMsg.TradeId, execMsg.TradeStringId, execMsg.OriginalTransactionId);
 						break;
 					}
 

@@ -87,7 +87,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 							{
 								if (noNative != prevId.Value)
 								{
-									this.AddWarningLog(LocalizedStrings.DuplicateSystemId.Put(noNative, prevId.Value, nativeSecurityId));
+									LogWarning(LocalizedStrings.DuplicateSystemId.Put(noNative, prevId.Value, nativeSecurityId));
 
 									Storage.RemoveBySecurityId(storageName, prevId.Value);
 									Storage.TryAdd(storageName, noNative, nativeSecurityId, IsNativeIdentifiersPersistable);
@@ -95,7 +95,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 							}
 							else
 							{
-								this.AddWarningLog(LocalizedStrings.DuplicateSystemId.Put(Storage.TryGetBySecurityId(storageName, noNative), nativeSecurityId, noNative));
+								LogWarning(LocalizedStrings.DuplicateSystemId.Put(Storage.TryGetBySecurityId(storageName, noNative), nativeSecurityId, noNative));
 
 								Storage.RemoveByNativeId(storageName, nativeSecurityId);
 								Storage.TryAdd(storageName, noNative, nativeSecurityId, IsNativeIdentifiersPersistable);

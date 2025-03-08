@@ -315,7 +315,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 							// do not store cancellation commands into snapshot
 							if (message.IsCancellation)
 							{
-								this.AddWarningLog("Cancellation transaction: {0}", message);
+								LogWarning("Cancellation transaction: {0}", message);
 								continue;
 							}
 
@@ -345,7 +345,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 									var replaced = (ExecutionMessage)snapshotStorage.Get(replacedId.To<string>());
 
 									if (replaced == null)
-										this.AddWarningLog("Replaced order {0} not found.", replacedId);
+										LogWarning("Replaced order {0} not found.", replacedId);
 									else
 									{
 										if (replaced.OrderState != OrderStates.Done)

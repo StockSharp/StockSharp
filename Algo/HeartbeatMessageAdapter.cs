@@ -352,7 +352,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 				if (_connectionTimeOut <= TimeSpan.Zero)
 				{
-					this.AddWarningLog("RCM: Connecting Timeout Left {0}.", _connectionTimeOut);
+					LogWarning("RCM: Connecting Timeout Left {0}.", _connectionTimeOut);
 
 					switch (_currState)
 					{
@@ -395,7 +395,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 			{
 				if (_connectingAttemptCount == 0)
 				{
-					this.AddWarningLog("RCM: Reconnecting attempts {0} PrevState {1}.", _connectingAttemptCount, FormatState(_prevState));
+					LogWarning("RCM: Reconnecting attempts {0} PrevState {1}.", _connectingAttemptCount, FormatState(_prevState));
 
 					lock (_timeSync)
 						_currState = _none;
@@ -421,7 +421,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 				}
 				else
 				{
-					this.AddWarningLog("RCM: Out of trade time. CurrState {0}.", FormatState(_currState));
+					LogWarning("RCM: Out of trade time. CurrState {0}.", FormatState(_currState));
 					_connectionTimeOut = TimeSpan.FromMinutes(1);
 				}
 
