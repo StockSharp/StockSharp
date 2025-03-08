@@ -156,7 +156,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			if (message.Type is not MessageTypes.Time
 				and not MessageTypes.Level1Change
 				and not MessageTypes.QuoteChange)
-				this.LogDebug((isInput ? " --> {0}" : " <-- {0}"), message);
+				LogDebug((isInput ? " --> {0}" : " <-- {0}"), message);
 		}
 
 		public void Process(Message message, ICollection<Message> result)

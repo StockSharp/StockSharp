@@ -215,12 +215,12 @@ public class ArbitrageStrategy : Strategy
 
 	private (Order buy, Order sell) GenerateOrdersBackvardation()
 	{
-		var o1 = this.CreateOrder(Sides.Buy, FutureVolume);
+		var o1 = CreateOrder(Sides.Buy, FutureVolume);
 		o1.Portfolio = FuturePortfolio;
 		o1.Security = FutureSecurity;
 		o1.Type = OrderTypes.Market;
 
-		var o2 = this.CreateOrder(Sides.Sell, FutureVolume);
+		var o2 = CreateOrder(Sides.Sell, FutureVolume);
 		o2.Portfolio = StockPortfolio;
 		o2.Security = StockSecurity;
 		o2.Type = OrderTypes.Market;
@@ -229,12 +229,12 @@ public class ArbitrageStrategy : Strategy
 	}
 	private (Order sell, Order buy) GenerateOrdersContango()
 	{
-		var o1 = this.CreateOrder(Sides.Sell, FutureVolume);
+		var o1 = CreateOrder(Sides.Sell, FutureVolume);
 		o1.Portfolio = FuturePortfolio;
 		o1.Security = FutureSecurity;
 		o1.Type = OrderTypes.Market;
 
-		var o2 = this.CreateOrder(Sides.Buy, FutureVolume);
+		var o2 = CreateOrder(Sides.Buy, FutureVolume);
 		o2.Portfolio = StockPortfolio;
 		o2.Security = StockSecurity;
 		o2.Type = OrderTypes.Market;

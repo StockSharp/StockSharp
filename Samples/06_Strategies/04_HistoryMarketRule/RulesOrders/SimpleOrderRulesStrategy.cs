@@ -16,7 +16,8 @@ namespace StockSharp.Samples.Strategies.HistoryMarketRule
 
 			sub.WhenTickTradeReceived(this).Do(() =>
 			{
-				var order = this.CreateOrder(Sides.Buy, default, 1);
+				var order = CreateOrder(Sides.Buy, default, 1);
+
 				var ruleReg = order.WhenRegistered(this);
 				var ruleRegFailed = order.WhenRegisterFailed(this);
 
@@ -37,7 +38,8 @@ namespace StockSharp.Samples.Strategies.HistoryMarketRule
 
 			sub.WhenTickTradeReceived(this).Do(() =>
 			{
-				var order = this.CreateOrder(Sides.Buy, default, 10000000);
+				var order = CreateOrder(Sides.Buy, default, 10000000);
+
 				var ruleReg = order.WhenRegistered(this);
 				var ruleRegFailed = order.WhenRegisterFailed(this);
 
