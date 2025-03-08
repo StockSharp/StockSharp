@@ -11,6 +11,7 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 {
 	private class LookupInfo(ISubscriptionMessage subscription, TimeSpan left)
 	{
+		private readonly TimeSpan _initLeft = left;
 		private TimeSpan _left = left;
 
 		public ISubscriptionMessage Subscription { get; } = subscription ?? throw new ArgumentNullException(nameof(subscription));
@@ -38,7 +39,7 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 
 		public void IncreaseTimeOut()
 		{
-			_left = left;
+			_left = _initLeft;
 		}
 	}
 
