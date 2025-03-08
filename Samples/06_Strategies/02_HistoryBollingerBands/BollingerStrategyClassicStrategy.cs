@@ -14,7 +14,7 @@ namespace StockSharp.Samples.Strategies.HistoryBollingerBands
 	{
 		private readonly StrategyParam<int> _bollingerLength;
 		private readonly StrategyParam<decimal> _bollingerDeviation;
-		private readonly StrategyParam<DataType> _candleTypeParam;
+		private readonly StrategyParam<DataType> _candleType;
 
 		private BollingerBands _bollingerBands;
 
@@ -32,8 +32,8 @@ namespace StockSharp.Samples.Strategies.HistoryBollingerBands
 
 		public DataType CandleType
 		{
-			get => _candleTypeParam.Value;
-			set => _candleTypeParam.Value = value;
+			get => _candleType.Value;
+			set => _candleType.Value = value;
 		}
 
 		public BollingerStrategyClassicStrategy()
@@ -49,8 +49,8 @@ namespace StockSharp.Samples.Strategies.HistoryBollingerBands
 								 .SetCanOptimize(true)
 								 .SetOptimize(1.0m, 3.0m, 0.5m);
 
-			_candleTypeParam = Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(5)))
-							  .SetDisplay("Candle Type", "Type of candles to use", "General");
+			_candleType = Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(5)))
+						  .SetDisplay("Candle Type", "Type of candles to use", "General");
 		}
 
 		public override IEnumerable<(Security sec, DataType dt)> GetWorkingSecurities()

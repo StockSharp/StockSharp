@@ -9,7 +9,6 @@ using Ecng.Collections;
 using Ecng.Drawing;
 using Ecng.Logging;
 
-using StockSharp.Algo.Candles;
 using StockSharp.Algo.Commissions;
 using StockSharp.Algo.Storages;
 using StockSharp.Algo.Strategies;

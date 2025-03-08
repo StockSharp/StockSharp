@@ -19,20 +19,22 @@ protected override void OnStarted(DateTimeOffset time)
     };
     Subscribe(_subscription);
 
-    int i = 0;
+    var i = 0;
+    var diff = "10%".ToUnit();
 
-    this.WhenCandlesStarted(_subscription)
+    this.WhenCandlesStarted(subscription)
         .Do((candle) =>
         {
             i++;
 
             this
-				.WhenTotalVolumeMore(candle, new Unit(100000m))
+                .WhenTotalVolumeMore(candle, diff)
                 .Do((candle1) =>
                 {
-                    this.AddInfoLog($"The rule WhenPartiallyFinished and WhenTotalVolumeMore candle={candle1}");
-                    this.AddInfoLog($"The rule WhenPartiallyFinished and WhenTotalVolumeMore i={i}");
-                }).Apply(this);
+                    LogInfo($"The rule WhenCandlesStarted and WhenTotalVolumeMore candle={candle1}");
+                    LogInfo($"The rule WhenCandlesStarted and WhenTotalVolumeMore i={i}");
+                })
+                .Once().Apply(this);
 
         }).Apply(this);
 

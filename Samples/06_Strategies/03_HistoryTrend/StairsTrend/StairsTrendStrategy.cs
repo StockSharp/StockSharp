@@ -12,7 +12,7 @@ namespace StockSharp.Samples.Strategies.HistoryTrend
 	public class StairsTrendStrategy : Strategy
 	{
 		private readonly StrategyParam<int> _lengthParam;
-		private readonly StrategyParam<DataType> _candleTypeParam;
+		private readonly StrategyParam<DataType> _candleType;
 		
 		private int _bullLength;
 		private int _bearLength;
@@ -25,8 +25,8 @@ namespace StockSharp.Samples.Strategies.HistoryTrend
 
 		public DataType CandleType
 		{
-			get => _candleTypeParam.Value;
-			set => _candleTypeParam.Value = value;
+			get => _candleType.Value;
+			set => _candleType.Value = value;
 		}
 
 		public StairsTrendStrategy()
@@ -37,8 +37,8 @@ namespace StockSharp.Samples.Strategies.HistoryTrend
 						   .SetCanOptimize(true)
 						   .SetOptimize(2, 10, 1);
 
-			_candleTypeParam = Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(5)))
-							  .SetDisplay("Candle Type", "Type of candles to use", "General");
+			_candleType = Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(5)))
+						  .SetDisplay("Candle Type", "Type of candles to use", "General");
 		}
 
 		public override IEnumerable<(Security sec, DataType dt)> GetWorkingSecurities()

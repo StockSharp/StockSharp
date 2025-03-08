@@ -11,34 +11,34 @@ namespace StockSharp.Samples.Strategies.HistoryTrend
 {
 	public class StairsCountertrendStrategy : Strategy
 	{
-		private readonly StrategyParam<int> _lengthParam;
-		private readonly StrategyParam<DataType> _candleTypeParam;
+		private readonly StrategyParam<int> _length;
+		private readonly StrategyParam<DataType> _candleType;
 		
 		private int _bullLength;
 		private int _bearLength;
 		
 		public int Length
 		{
-			get => _lengthParam.Value;
-			set => _lengthParam.Value = value;
+			get => _length.Value;
+			set => _length.Value = value;
 		}
 
 		public DataType CandleType
 		{
-			get => _candleTypeParam.Value;
-			set => _candleTypeParam.Value = value;
+			get => _candleType.Value;
+			set => _candleType.Value = value;
 		}
 
 		public StairsCountertrendStrategy()
 		{
-			_lengthParam = Param(nameof(Length), 3)
-						   .SetValidator(new IntGreaterThanZeroAttribute())
-						   .SetDisplay("Length", "Number of consecutive candles to trigger signal", "Strategy")
-						   .SetCanOptimize(true)
-						   .SetOptimize(2, 10, 1);
+			_length = Param(nameof(Length), 3)
+					 .SetValidator(new IntGreaterThanZeroAttribute())
+					 .SetDisplay("Length", "Number of consecutive candles to trigger signal", "Strategy")
+					 .SetCanOptimize(true)
+					 .SetOptimize(2, 10, 1);
 
-			_candleTypeParam = Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(5)))
-							  .SetDisplay("Candle Type", "Type of candles to use", "General");
+			_candleType = Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(5)))
+						  .SetDisplay("Candle Type", "Type of candles to use", "General");
 		}
 
 		public override IEnumerable<(Security sec, DataType dt)> GetWorkingSecurities()

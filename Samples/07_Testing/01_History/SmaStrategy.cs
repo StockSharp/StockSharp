@@ -18,62 +18,62 @@ namespace StockSharp.Samples.Testing.History
 
 		public SmaStrategy()
         {
-			_longSmaParam = Param(nameof(LongSma), 80);
-			_shortSmaParam = Param(nameof(ShortSma), 30);
+			_longSma = Param(nameof(LongSma), 80);
+			_shortSma = Param(nameof(ShortSma), 30);
 			_takeValue = Param(nameof(TakeValue), new Unit(0, UnitTypes.Absolute));
 			_stopValue = Param(nameof(StopValue), new Unit(2, UnitTypes.Percent));
-			_candleTypeParam = Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(1))).SetRequired();
-			_candleTimeFrameParam = Param<TimeSpan?>(nameof(CandleTimeFrame));
-			_buildFromParam = Param<DataType>(nameof(BuildFrom));
-			_buildFieldParam = Param<Level1Fields?>(nameof(BuildField));
+			_candleType = Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(1))).SetRequired();
+			_candleTimeFrame = Param<TimeSpan?>(nameof(CandleTimeFrame));
+			_buildFrom = Param<DataType>(nameof(BuildFrom));
+			_buildField = Param<Level1Fields?>(nameof(BuildField));
 		}
 
-		private readonly StrategyParam<TimeSpan?> _candleTimeFrameParam;
+		private readonly StrategyParam<TimeSpan?> _candleTimeFrame;
 
 		public TimeSpan? CandleTimeFrame
 		{
-			get => _candleTimeFrameParam.Value;
-			set => _candleTimeFrameParam.Value = value;
+			get => _candleTimeFrame.Value;
+			set => _candleTimeFrame.Value = value;
 		}
 
-		private readonly StrategyParam<int> _longSmaParam;
+		private readonly StrategyParam<int> _longSma;
 
 		public int LongSma
 		{
-			get => _longSmaParam.Value;
-			set => _longSmaParam.Value = value;
+			get => _longSma.Value;
+			set => _longSma.Value = value;
 		}
 
-		private readonly StrategyParam<int> _shortSmaParam;
+		private readonly StrategyParam<int> _shortSma;
 
 		public int ShortSma
 		{
-			get => _shortSmaParam.Value;
-			set => _shortSmaParam.Value = value;
+			get => _shortSma.Value;
+			set => _shortSma.Value = value;
 		}
 
-		private readonly StrategyParam<DataType> _candleTypeParam;
+		private readonly StrategyParam<DataType> _candleType;
 
 		public DataType CandleType
 		{
-			get => _candleTypeParam.Value;
-			set => _candleTypeParam.Value = value;
+			get => _candleType.Value;
+			set => _candleType.Value = value;
 		}
 
-		private readonly StrategyParam<DataType> _buildFromParam;
+		private readonly StrategyParam<DataType> _buildFrom;
 
 		public DataType BuildFrom
 		{
-			get => _buildFromParam.Value;
-			set => _buildFromParam.Value = value;
+			get => _buildFrom.Value;
+			set => _buildFrom.Value = value;
 		}
 
-		private readonly StrategyParam<Level1Fields?> _buildFieldParam;
+		private readonly StrategyParam<Level1Fields?> _buildField;
 
 		public Level1Fields? BuildField
 		{
-			get => _buildFieldParam.Value;
-			set => _buildFieldParam.Value = value;
+			get => _buildField.Value;
+			set => _buildField.Value = value;
 		}
 
 		private readonly StrategyParam<Unit> _takeValue;

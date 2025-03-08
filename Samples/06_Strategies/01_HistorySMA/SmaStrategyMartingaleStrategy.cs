@@ -15,7 +15,7 @@ namespace StockSharp.Samples.Strategies.HistorySMA
 	{
 		private readonly StrategyParam<int> _longSmaLength;
 		private readonly StrategyParam<int> _shortSmaLength;
-		private readonly StrategyParam<DataType> _candleTypeParam;
+		private readonly StrategyParam<DataType> _candleType;
 
 		// Variables to store previous indicator values
 		private decimal _prevLongValue;
@@ -36,8 +36,8 @@ namespace StockSharp.Samples.Strategies.HistorySMA
 
 		public DataType CandleType
 		{
-			get => _candleTypeParam.Value;
-			set => _candleTypeParam.Value = value;
+			get => _candleType.Value;
+			set => _candleType.Value = value;
 		}
 
 		public SmaStrategyMartingaleStrategy()
@@ -54,8 +54,8 @@ namespace StockSharp.Samples.Strategies.HistorySMA
 							.SetCanOptimize(true)
 							.SetOptimize(10, 50, 5);
 
-			_candleTypeParam = Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(5)))
-							  .SetDisplay("Candle Type", "Type of candles to use", "General");
+			_candleType = Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(5)))
+						  .SetDisplay("Candle Type", "Type of candles to use", "General");
 		}
 
 		public override IEnumerable<(Security sec, DataType dt)> GetWorkingSecurities()
