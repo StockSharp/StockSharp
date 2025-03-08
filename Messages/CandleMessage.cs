@@ -32,9 +32,13 @@ public enum CandleStates
 /// <summary>
 /// The message contains information about the candle.
 /// </summary>
+/// <remarks>
+/// Initialize <see cref="CandleMessage"/>.
+/// </remarks>
+/// <param name="type">Message type.</param>
 [DataContract]
 [Serializable]
-public abstract class CandleMessage : Message, ISubscriptionIdMessage, ICandleMessage
+public abstract class CandleMessage(MessageTypes type) : Message(type), ISubscriptionIdMessage, ICandleMessage
 {
 	/// <inheritdoc />
 	[DataMember]
@@ -259,15 +263,6 @@ public abstract class CandleMessage : Message, ISubscriptionIdMessage, ICandleMe
 		set => _dataType = value;
 	}
 
-	/// <summary>
-	/// Initialize <see cref="CandleMessage"/>.
-	/// </summary>
-	/// <param name="type">Message type.</param>
-	protected CandleMessage(MessageTypes type)
-		: base(type)
-	{
-	}
-
 	/// <inheritdoc />
 	[DataMember]
 	public long OriginalTransactionId { get; set; }
@@ -353,20 +348,15 @@ public abstract class CandleMessage : Message, ISubscriptionIdMessage, ICandleMe
 /// Typed <see cref="CandleMessage"/>.
 /// </summary>
 /// <typeparam name="TArg"><see cref="TypedArg"/> type.</typeparam>
+/// <remarks>
+/// Initialize <see cref="CandleMessage"/>.
+/// </remarks>
+/// <param name="type">Message type.</param>
+/// <param name="arg"><see cref="TypedArg"/>.</param>
 [DataContract]
 [Serializable]
-public abstract class TypedCandleMessage<TArg> : CandleMessage
+public abstract class TypedCandleMessage<TArg>(MessageTypes type, TArg arg) : CandleMessage(type)
 {
-	/// <summary>
-	/// Initialize <see cref="CandleMessage"/>.
-	/// </summary>
-	/// <param name="type">Message type.</param>
-	/// <param name="arg"><see cref="TypedArg"/>.</param>
-	protected TypedCandleMessage(MessageTypes type, TArg arg)
-		: base(type)
-	{
-		TypedArg = arg;
-	}
 
 	/// <inheritdoc />
 	public override object Arg => TypedArg;
@@ -377,7 +367,7 @@ public abstract class TypedCandleMessage<TArg> : CandleMessage
 	/// <summary>
 	/// Candle arg.
 	/// </summary>
-	public TArg TypedArg { get; set; }
+	public TArg TypedArg { get; set; } = arg;
 
 	/// <summary>
 	/// Copy to candle.

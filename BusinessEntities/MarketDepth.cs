@@ -5,20 +5,15 @@ using System.Collections;
 /// <summary>
 /// Order book.
 /// </summary>
+/// <remarks>
+/// Create order book.
+/// </remarks>
+/// <param name="security">Security.</param>
 [System.Runtime.Serialization.DataContract]
 [Serializable]
 [Obsolete("Use IOrderBookMessage.")]
-public class MarketDepth : Cloneable<MarketDepth>, IEnumerable<QuoteChange>, IOrderBookMessage
+public class MarketDepth(Security security) : Cloneable<MarketDepth>, IEnumerable<QuoteChange>, IOrderBookMessage
 {
-	/// <summary>
-	/// Create order book.
-	/// </summary>
-	/// <param name="security">Security.</param>
-	public MarketDepth(Security security)
-	{
-		Security = security ?? throw new ArgumentNullException(nameof(security));
-	}
-
 	QuoteChangeStates? IOrderBookMessage.State { get => null; set => throw new NotSupportedException(); }
 
 	private SecurityId? _securityId;
@@ -32,7 +27,7 @@ public class MarketDepth : Cloneable<MarketDepth>, IEnumerable<QuoteChange>, IOr
 	/// <summary>
 	/// Security.
 	/// </summary>
-	public Security Security { get; }
+	public Security Security { get; } = security ?? throw new ArgumentNullException(nameof(security));
 
 	/// <summary>
 	/// Whether to use aggregated quotes <see cref="QuoteChange.InnerQuotes"/> at the join of the volumes with the same price.

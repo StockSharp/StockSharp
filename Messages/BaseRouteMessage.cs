@@ -4,19 +4,15 @@ namespace StockSharp.Messages;
 /// Base route response message.
 /// </summary>
 /// <typeparam name="TMessage">Message type.</typeparam>
+/// <remarks>
+/// Initialize <see cref="BaseRouteMessage{TMessage}"/>.
+/// </remarks>
+/// <param name="type">Message type.</param>
 [Serializable]
 [DataContract]
-public abstract class BaseRouteMessage<TMessage> : BaseSubscriptionIdMessage<TMessage>
+public abstract class BaseRouteMessage<TMessage>(MessageTypes type) : BaseSubscriptionIdMessage<TMessage>(type)
 	where TMessage : BaseRouteMessage<TMessage>, new()
 {
-	/// <summary>
-	/// Initialize <see cref="BaseRouteMessage{TMessage}"/>.
-	/// </summary>
-	/// <param name="type">Message type.</param>
-	protected BaseRouteMessage(MessageTypes type)
-		: base(type)
-	{
-	}
 
 	/// <summary>
 	/// Adapter identifier.

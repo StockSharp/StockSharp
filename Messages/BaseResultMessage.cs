@@ -4,19 +4,15 @@ namespace StockSharp.Messages;
 /// Base result message.
 /// </summary>
 /// <typeparam name="TMessage">Message type.</typeparam>
+/// <remarks>
+/// Initializes a new instance of the <see cref="BaseResultMessage{TMessage}"/>.
+/// </remarks>
+/// <param name="type">Message type.</param>
 [DataContract]
 [Serializable]
-public abstract class BaseResultMessage<TMessage> : Message, IOriginalTransactionIdMessage
+public abstract class BaseResultMessage<TMessage>(MessageTypes type) : Message(type), IOriginalTransactionIdMessage
 	where TMessage : BaseResultMessage<TMessage>, new()
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="BaseResultMessage{TMessage}"/>.
-	/// </summary>
-	/// <param name="type">Message type.</param>
-	protected BaseResultMessage(MessageTypes type)
-		: base(type)
-	{
-	}
 
 	/// <inheritdoc />
 	[DataMember]

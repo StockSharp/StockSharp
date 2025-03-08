@@ -3,14 +3,10 @@
 /// <summary>
 /// Insufficient fund exception.
 /// </summary>
-public class InsufficientFundException : InvalidOperationException
+/// <remarks>
+/// Initialize <see cref="InsufficientFundException"/>.
+/// </remarks>
+/// <param name="message"><see cref="Message"/></param>
+public class InsufficientFundException(string message) : InvalidOperationException(message)
 {
-	/// <summary>
-	/// Initialize <see cref="InsufficientFundException"/>.
-	/// </summary>
-	/// <param name="message"><see cref="Message"/></param>
-	public InsufficientFundException(string message)
-		: base(message)
-	{
-	}
 }

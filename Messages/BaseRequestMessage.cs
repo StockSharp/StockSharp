@@ -3,18 +3,14 @@
 /// <summary>
 /// Base implementation of <see cref="ISubscriptionMessage"/> interface with non-online mode.
 /// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="BaseRequestMessage"/>.
+/// </remarks>
+/// <param name="type">Message type.</param>
 [DataContract]
 [Serializable]
-public abstract class BaseRequestMessage : BaseSubscriptionMessage
+public abstract class BaseRequestMessage(MessageTypes type) : BaseSubscriptionMessage(type)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="BaseRequestMessage"/>.
-	/// </summary>
-	/// <param name="type">Message type.</param>
-	public BaseRequestMessage(MessageTypes type)
-		: base(type)
-	{
-	}
 
 	/// <inheritdoc />
 	[DataMember]

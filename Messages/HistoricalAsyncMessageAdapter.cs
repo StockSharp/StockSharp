@@ -3,16 +3,12 @@
 /// <summary>
 /// Historical <see cref="AsyncMessageAdapter"/>.
 /// </summary>
-public abstract class HistoricalAsyncMessageAdapter : AsyncMessageAdapter
+/// <remarks>
+/// Initialize <see cref="HistoricalAsyncMessageAdapter"/>.
+/// </remarks>
+/// <param name="transactionIdGenerator">Transaction id generator.</param>
+public abstract class HistoricalAsyncMessageAdapter(IdGenerator transactionIdGenerator) : AsyncMessageAdapter(transactionIdGenerator)
 {
-	/// <summary>
-	/// Initialize <see cref="HistoricalAsyncMessageAdapter"/>.
-	/// </summary>
-	/// <param name="transactionIdGenerator">Transaction id generator.</param>
-	protected HistoricalAsyncMessageAdapter(IdGenerator transactionIdGenerator)
-		: base(transactionIdGenerator)
-	{
-	}
 
 	/// <inheritdoc />
 	public override ValueTask MarketDataAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)

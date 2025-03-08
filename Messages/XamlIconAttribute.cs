@@ -3,14 +3,10 @@
 /// <summary>
 /// Attribute for the icon.
 /// </summary>
-public class XamlIconAttribute : IconAttribute
+/// <remarks>
+/// Initializes a new instance of the <see cref="XamlIconAttribute"/>.
+/// </remarks>
+/// <param name="icon">Icon.</param>
+public class XamlIconAttribute(string icon) : IconAttribute($"/StockSharp.Xaml;component/IconsSvg/{icon}.svg", true)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="XamlIconAttribute"/>.
-	/// </summary>
-	/// <param name="icon">Icon.</param>
-	public XamlIconAttribute(string icon)
-		: base($"/StockSharp.Xaml;component/IconsSvg/{icon}.svg", true)
-	{
-	}
 }

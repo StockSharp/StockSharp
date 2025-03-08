@@ -84,7 +84,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 
 			OnPropertyChanged();
 
-			SupportedInMessages = value.Select(t => t.Type).ToArray();
+			SupportedInMessages = [.. value.Select(t => t.Type)];
 		}
 	}
 
@@ -684,17 +684,12 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 /// <summary>
 /// Special adapter, which transmits directly to the output of all incoming messages.
 /// </summary>
-public class PassThroughMessageAdapter : MessageAdapter
+/// <remarks>
+/// Initializes a new instance of the <see cref="PassThroughMessageAdapter"/>.
+/// </remarks>
+/// <param name="transactionIdGenerator">Transaction id generator.</param>
+public class PassThroughMessageAdapter(IdGenerator transactionIdGenerator) : MessageAdapter(transactionIdGenerator)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="PassThroughMessageAdapter"/>.
-	/// </summary>
-	/// <param name="transactionIdGenerator">Transaction id generator.</param>
-	public PassThroughMessageAdapter(IdGenerator transactionIdGenerator)
-		: base(transactionIdGenerator)
-	{
-	}
-
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
 	{

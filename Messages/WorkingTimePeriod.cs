@@ -60,7 +60,7 @@ public class WorkingTimePeriod : Cloneable<WorkingTimePeriod>, IPersistable
 		return new WorkingTimePeriod
 		{
 			Till = Till,
-			Times = Times.Select(t => t.Clone()).ToList(),
+			Times = [.. Times.Select(t => t.Clone())],
 			SpecialDays = SpecialDays.ToDictionary(p => p.Key, p => p.Value.ToArray()),
 		};
 	}
@@ -71,12 +71,12 @@ public class WorkingTimePeriod : Cloneable<WorkingTimePeriod>, IPersistable
 	/// <param name="storage">Settings storage.</param>
 	public void Load(SettingsStorage storage)
 	{
-		Times = storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Times)).Select(s => s.ToRange<TimeSpan>()).ToList();
+		Times = [.. storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Times)).Select(s => s.ToRange<TimeSpan>())];
 		Till = storage.GetValue<DateTime>(nameof(Till));
 		SpecialDays = storage.GetValue<IEnumerable<SettingsStorage>>(nameof(SpecialDays)).Select(s =>
 			new KeyValuePair<DayOfWeek, Range<TimeSpan>[]>(
 				s.GetValue<DayOfWeek>("Day"),
-				s.GetValue<IEnumerable<SettingsStorage>>("Periods").Select(s1 => s1.ToRange<TimeSpan>()).ToArray()))
+				[.. s.GetValue<IEnumerable<SettingsStorage>>("Periods").Select(s1 => s1.ToRange<TimeSpan>())]))
 		.ToDictionary();
 	}
 

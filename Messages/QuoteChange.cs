@@ -51,32 +51,17 @@ public enum QuoteConditions : byte
 /// <summary>
 /// Market depth quote representing bid or ask.
 /// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="QuoteChange"/>.
+/// </remarks>
+/// <param name="price">Quote price.</param>
+/// <param name="volume">Quote volume.</param>
+/// <param name="ordersCount">Orders count.</param>
+/// <param name="condition">Quote condition.</param>
 [DataContract]
 [Serializable]
-public struct QuoteChange
+public struct QuoteChange(decimal price, decimal volume, int? ordersCount = null, QuoteConditions condition = default)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="QuoteChange"/>.
-	/// </summary>
-	/// <param name="price">Quote price.</param>
-	/// <param name="volume">Quote volume.</param>
-	/// <param name="ordersCount">Orders count.</param>
-	/// <param name="condition">Quote condition.</param>
-	public QuoteChange(decimal price, decimal volume, int? ordersCount = null, QuoteConditions condition = default)
-	{
-		Price = price;
-		Volume = volume;
-		OrdersCount = ordersCount;
-		Condition = condition;
-
-		StartPosition = null;
-		EndPosition = null;
-		Action = null;
-
-		BoardCode = null;
-
-		_innerQuotes = null;
-	}
 
 	/// <summary>
 	/// Quote price.
@@ -87,7 +72,7 @@ public struct QuoteChange
 		Name = LocalizedStrings.PriceKey,
 		Description = LocalizedStrings.QuotePriceKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public decimal Price { get; set; }
+	public decimal Price { get; set; } = price;
 
 	/// <summary>
 	/// Quote volume.
@@ -98,7 +83,7 @@ public struct QuoteChange
 		Name = LocalizedStrings.VolumeKey,
 		Description = LocalizedStrings.QuoteVolumeKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public decimal Volume { get; set; }
+	public decimal Volume { get; set; } = volume;
 
 	/// <summary>
 	/// Electronic board code.
@@ -109,39 +94,39 @@ public struct QuoteChange
 		Name = LocalizedStrings.BoardKey,
 		Description = LocalizedStrings.BoardCodeKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public string BoardCode { get; set; }
+	public string BoardCode { get; set; } = null;
 
 	/// <summary>
 	/// Orders count.
 	/// </summary>
 	[DataMember]
-	public int? OrdersCount { get; set; }
+	public int? OrdersCount { get; set; } = ordersCount;
 
 	/// <summary>
 	/// Start position, related for <see cref="Action"/>.
 	/// </summary>
 	[DataMember]
-	public int? StartPosition { get; set; }
+	public int? StartPosition { get; set; } = null;
 
 	/// <summary>
 	/// End position, related for <see cref="Action"/>.
 	/// </summary>
 	[DataMember]
-	public int? EndPosition { get; set; }
+	public int? EndPosition { get; set; } = null;
 
 	/// <summary>
 	/// Change action.
 	/// </summary>
 	[DataMember]
-	public QuoteChangeActions? Action { get; set; }
+	public QuoteChangeActions? Action { get; set; } = null;
 
 	/// <summary>
 	/// Quote condition.
 	/// </summary>
 	[DataMember]
-	public QuoteConditions Condition { get; set; }
+	public QuoteConditions Condition { get; set; } = condition;
 
-	private QuoteChange[] _innerQuotes;
+	private QuoteChange[] _innerQuotes = null;
 
 	/// <summary>
 	/// Collection of enclosed quotes, which are combined into a single quote.

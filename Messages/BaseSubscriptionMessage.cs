@@ -3,18 +3,14 @@
 /// <summary>
 /// Base implementation of <see cref="ISubscriptionMessage"/> interface.
 /// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="BaseSubscriptionMessage"/>.
+/// </remarks>
+/// <param name="type">Message type.</param>
 [DataContract]
 [Serializable]
-public abstract class BaseSubscriptionMessage : Message, ISubscriptionMessage
+public abstract class BaseSubscriptionMessage(MessageTypes type) : Message(type), ISubscriptionMessage
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="BaseSubscriptionMessage"/>.
-	/// </summary>
-	/// <param name="type">Message type.</param>
-	public BaseSubscriptionMessage(MessageTypes type)
-		: base(type)
-	{
-	}
 
 	/// <inheritdoc />
 	public virtual bool FilterEnabled => false;

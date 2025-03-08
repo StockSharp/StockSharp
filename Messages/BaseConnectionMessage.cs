@@ -3,18 +3,14 @@ namespace StockSharp.Messages;
 /// <summary>
 /// Base connect/disconnect message.
 /// </summary>
+/// <remarks>
+/// Initialize <see cref="BaseConnectionMessage"/>.
+/// </remarks>
+/// <param name="type">Message type.</param>
 [DataContract]
 [Serializable]
-public abstract class BaseConnectionMessage : Message, IErrorMessage
+public abstract class BaseConnectionMessage(MessageTypes type) : Message(type), IErrorMessage
 {
-	/// <summary>
-	/// Initialize <see cref="BaseConnectionMessage"/>.
-	/// </summary>
-	/// <param name="type">Message type.</param>
-	protected BaseConnectionMessage(MessageTypes type)
-		: base(type)
-	{
-	}
 
 	/// <inheritdoc />
 	[DataMember]

@@ -54,22 +54,16 @@ public interface IIndicatorValue : IComparable<IIndicatorValue>, IComparable
 /// <summary>
 /// The base class for the indicator value.
 /// </summary>
-public abstract class BaseIndicatorValue : IIndicatorValue
+/// <remarks>
+/// Initialize <see cref="BaseIndicatorValue"/>.
+/// </remarks>
+/// <param name="indicator">Indicator.</param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public abstract class BaseIndicatorValue(IIndicator indicator, DateTimeOffset time) : IIndicatorValue
 {
-	/// <summary>
-	/// Initialize <see cref="BaseIndicatorValue"/>.
-	/// </summary>
-	/// <param name="indicator">Indicator.</param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	protected BaseIndicatorValue(IIndicator indicator, DateTimeOffset time)
-	{
-		Indicator = indicator ?? throw new ArgumentNullException(nameof(indicator));
-		IsFormed = indicator.IsFormed;
-		Time = time;
-	}
 
 	/// <inheritdoc />
-	public IIndicator Indicator { get; }
+	public IIndicator Indicator { get; } = indicator ?? throw new ArgumentNullException(nameof(indicator));
 
 	/// <inheritdoc />
 	public abstract bool IsEmpty { get; set; }
@@ -78,10 +72,10 @@ public abstract class BaseIndicatorValue : IIndicatorValue
 	public abstract bool IsFinal { get; set; }
 
 	/// <inheritdoc />
-	public bool IsFormed { get; set; }
+	public bool IsFormed { get; set; } = indicator.IsFormed;
 
 	/// <inheritdoc />
-	public DateTimeOffset Time { get; }
+	public DateTimeOffset Time { get; } = time;
 
 	/// <inheritdoc />
 	public abstract T GetValue<T>(Level1Fields? field);
@@ -526,18 +520,13 @@ public class PairIndicatorValue<TValue> : SingleIndicatorValue<(TValue, TValue)>
 /// <summary>
 /// The complex value of the indicator <see cref="IComplexIndicator"/>, derived as result of calculation.
 /// </summary>
-public class ComplexIndicatorValue : BaseIndicatorValue
+/// <remarks>
+/// Initializes a new instance of the <see cref="ComplexIndicatorValue"/>.
+/// </remarks>
+/// <param name="indicator">Indicator.</param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class ComplexIndicatorValue(IComplexIndicator indicator, DateTimeOffset time) : BaseIndicatorValue(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="ComplexIndicatorValue"/>.
-	/// </summary>
-	/// <param name="indicator">Indicator.</param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public ComplexIndicatorValue(IComplexIndicator indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-		InnerValues = new Dictionary<IIndicator, IIndicatorValue>();
-	}
 
 	/// <inheritdoc />
 	public override bool IsEmpty { get; set; }
@@ -548,7 +537,7 @@ public class ComplexIndicatorValue : BaseIndicatorValue
 	/// <summary>
 	/// Embedded values.
 	/// </summary>
-	public IDictionary<IIndicator, IIndicatorValue> InnerValues { get; }
+	public IDictionary<IIndicator, IIndicatorValue> InnerValues { get; } = new Dictionary<IIndicator, IIndicatorValue>();
 
 	/// <summary>
 	/// Gets or sets a value of inner indicator.

@@ -3,9 +3,13 @@ namespace StockSharp.Messages;
 /// <summary>
 /// A message containing info about the order.
 /// </summary>
+/// <remarks>
+/// Initialize <see cref="OrderMessage"/>.
+/// </remarks>
+/// <param name="type">Message type.</param>
 [DataContract]
 [Serializable]
-public abstract class OrderMessage : SecurityMessage,
+public abstract class OrderMessage(MessageTypes type) : SecurityMessage(type),
 	ITransactionIdMessage, IPortfolioNameMessage, IStrategyIdMessage
 {
 	/// <inheritdoc />
@@ -123,15 +127,6 @@ public abstract class OrderMessage : SecurityMessage,
 		destination.Condition = Condition?.Clone();
 		destination.Comment = Comment;
 		destination.MarginMode = MarginMode;
-	}
-
-	/// <summary>
-	/// Initialize <see cref="OrderMessage"/>.
-	/// </summary>
-	/// <param name="type">Message type.</param>
-	protected OrderMessage(MessageTypes type)
-		: base(type)
-	{
 	}
 
 	/// <inheritdoc />

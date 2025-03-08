@@ -21,7 +21,6 @@ using Ecng.Serialization;
 using Ecng.Logging;
 
 using StockSharp.Algo;
-using StockSharp.Algo.Candles;
 using StockSharp.Algo.Candles.Compression;
 using StockSharp.Algo.Candles.Patterns;
 using StockSharp.Algo.Indicators;

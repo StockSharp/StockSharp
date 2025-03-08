@@ -457,7 +457,7 @@ public static partial class Extensions
 		var dict = adapter.PossibleSupportedMessages.ToDictionary(i => i.Type);
 		dict.TryAdd2(info.Type, info);
 
-		adapter.PossibleSupportedMessages = dict.Values.ToArray();
+		adapter.PossibleSupportedMessages = [.. dict.Values];
 	}
 
 	/// <summary>
@@ -470,7 +470,7 @@ public static partial class Extensions
 		if (adapter == null)
 			throw new ArgumentNullException(nameof(adapter));
 
-		adapter.PossibleSupportedMessages = adapter.PossibleSupportedMessages.Where(i => i.Type != type).ToArray();
+		adapter.PossibleSupportedMessages = [.. adapter.PossibleSupportedMessages.Where(i => i.Type != type)];
 	}
 
 	/// <summary>
@@ -514,7 +514,7 @@ public static partial class Extensions
 		if (adapter == null)
 			throw new ArgumentNullException(nameof(adapter));
 
-		adapter.SupportedMarketDataTypes = adapter.SupportedMarketDataTypes.Append(dataType).Distinct().ToArray();
+		adapter.SupportedMarketDataTypes = [.. adapter.SupportedMarketDataTypes.Append(dataType).Distinct()];
 	}
 
 	/// <summary>
@@ -527,7 +527,7 @@ public static partial class Extensions
 		if (adapter == null)
 			throw new ArgumentNullException(nameof(adapter));
 
-		adapter.SupportedMarketDataTypes = adapter.SupportedMarketDataTypes.Except([type]).ToArray();
+		adapter.SupportedMarketDataTypes = [.. adapter.SupportedMarketDataTypes.Except([type])];
 	}
 
 	/// <summary>
@@ -1307,19 +1307,19 @@ public static partial class Extensions
 				periods.Add(new WorkingTimePeriod
 				{
 					Till = parts[0].ToDateTime(_dateFormat),
-					Times = parts[1].SplitBySep("--").Select(s =>
+					Times = [.. parts[1].SplitBySep("--").Select(s =>
 					{
 						var parts2 = s.Split('-');
 						return new Range<TimeSpan>(parts2[0].ToTimeSpan(_timeFormat), parts2[1].ToTimeSpan(_timeFormat));
-					}).ToList(),
+					})],
 					SpecialDays = parts[2].SplitBySep("//").Select(s =>
 					{
 						var idx = s.IndexOf(':');
-						return new KeyValuePair<DayOfWeek, Range<TimeSpan>[]>(s.Substring(0, idx).To<DayOfWeek>(), s.Substring(idx + 1).SplitBySep("--").Select(s2 =>
+						return new KeyValuePair<DayOfWeek, Range<TimeSpan>[]>(s.Substring(0, idx).To<DayOfWeek>(), [.. s.Substring(idx + 1).SplitBySep("--").Select(s2 =>
 						{
 							var parts3 = s2.Split('-');
 							return new Range<TimeSpan>(parts3[0].ToTimeSpan(_timeFormat), parts3[1].ToTimeSpan(_timeFormat));
-						}).ToArray());
+						})]);
 					}).ToDictionary()
 				});
 			}
@@ -1359,11 +1359,11 @@ public static partial class Extensions
 			foreach (var str in input.SplitByComma())
 			{
 				var parts = str.Split('=');
-				specialDays[parts[0].ToDateTime(_dateFormat)] = parts[1].SplitBySep("--").Select(s =>
+				specialDays[parts[0].ToDateTime(_dateFormat)] = [.. parts[1].SplitBySep("--").Select(s =>
 				{
 					var parts2 = s.Split('-');
 					return new Range<TimeSpan>(parts2[0].ToTimeSpan(_timeFormat), parts2[1].ToTimeSpan(_timeFormat));
-				}).ToArray();
+				})];
 			}
 		}
 		catch (Exception ex)
@@ -2242,14 +2242,9 @@ public static partial class Extensions
 
 	private class TickEnumerable : SimpleEnumerable<ExecutionMessage>//, IEnumerableEx<ExecutionMessage>
 	{
-		private class TickEnumerator : IEnumerator<ExecutionMessage>
+		private class TickEnumerator(IEnumerator<Level1ChangeMessage> level1Enumerator) : IEnumerator<ExecutionMessage>
 		{
-			private readonly IEnumerator<Level1ChangeMessage> _level1Enumerator;
-
-			public TickEnumerator(IEnumerator<Level1ChangeMessage> level1Enumerator)
-			{
-				_level1Enumerator = level1Enumerator ?? throw new ArgumentNullException(nameof(level1Enumerator));
-			}
+			private readonly IEnumerator<Level1ChangeMessage> _level1Enumerator = level1Enumerator ?? throw new ArgumentNullException(nameof(level1Enumerator));
 
 			public ExecutionMessage Current { get; private set; }
 
@@ -2370,19 +2365,14 @@ public static partial class Extensions
 
 	private class OrderBookEnumerable : SimpleEnumerable<QuoteChangeMessage>//, IEnumerableEx<QuoteChangeMessage>
 	{
-		private class OrderBookEnumerator : IEnumerator<QuoteChangeMessage>
+		private class OrderBookEnumerator(IEnumerator<Level1ChangeMessage> level1Enumerator) : IEnumerator<QuoteChangeMessage>
 		{
-			private readonly IEnumerator<Level1ChangeMessage> _level1Enumerator;
+			private readonly IEnumerator<Level1ChangeMessage> _level1Enumerator = level1Enumerator ?? throw new ArgumentNullException(nameof(level1Enumerator));
 
 			private decimal? _prevBidPrice;
 			private decimal? _prevBidVolume;
 			private decimal? _prevAskPrice;
 			private decimal? _prevAskVolume;
-
-			public OrderBookEnumerator(IEnumerator<Level1ChangeMessage> level1Enumerator)
-			{
-				_level1Enumerator = level1Enumerator ?? throw new ArgumentNullException(nameof(level1Enumerator));
-			}
 
 			public QuoteChangeMessage Current { get; private set; }
 
@@ -3209,7 +3199,7 @@ public static partial class Extensions
 			throw new ArgumentNullException(nameof(securities));
 
 		if (criteria.IsLookupAll())
-			return securities.TryLimitByCount(criteria).ToArray();
+			return [.. securities.TryLimitByCount(criteria)];
 
 		var secTypes = criteria.GetSecurityTypes();
 
@@ -3221,7 +3211,7 @@ public static partial class Extensions
 		if (criteria.Count != null)
 			result = result.Take((int)criteria.Count.Value);
 
-		return result.ToArray();
+		return [.. result];
 	}
 
 	/// <summary>
@@ -3302,7 +3292,7 @@ public static partial class Extensions
 			? adapter.SupportedInMessages.Concat(types)
 			: adapter.SupportedInMessages.Except(types);
 
-		adapter.SupportedInMessages = supported.Distinct().ToArray();
+		adapter.SupportedInMessages = [.. supported.Distinct()];
 	}
 
 	private static readonly SynchronizedDictionary<DataType, MessageTypes> _messageTypes = [];
@@ -3455,8 +3445,8 @@ public static partial class Extensions
 		{
 			ServerTime = depth.ServerTime,
 			SecurityId = depth.SecurityId,
-			Bids = depth.Bids.Take(maxDepth).ToArray(),
-			Asks = depth.Asks.Take(maxDepth).ToArray(),
+			Bids = [.. depth.Bids.Take(maxDepth)],
+			Asks = [.. depth.Asks.Take(maxDepth)],
 		};
 	}
 
@@ -5472,8 +5462,8 @@ public static partial class Extensions
 			{
 				depth = builder.GetSnapshot(item.ServerTime); // cannot trim incremental book
 
-				depth.Bids = depth.Bids.Take(maxDepth).ToArray();
-				depth.Asks = depth.Asks.Take(maxDepth).ToArray();
+				depth.Bids = [.. depth.Bids.Take(maxDepth)];
+				depth.Asks = [.. depth.Asks.Take(maxDepth)];
 			}
 			else if (interval != default)
 			{

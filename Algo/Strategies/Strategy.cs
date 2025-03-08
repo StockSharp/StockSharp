@@ -2252,11 +2252,10 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			StatisticManager.AddMyTrade(tradeInfo);
 		}
 
-		if (trade.Slippage != null)
+		if (trade.Slippage is decimal slippage)
 		{
-			Slippage ??= 0;
+			Slippage = (Slippage ?? 0) + slippage;
 
-			Slippage += trade.Slippage.Value;
 			isSlipChanged = true;
 		}
 

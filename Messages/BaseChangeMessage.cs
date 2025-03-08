@@ -5,9 +5,13 @@ namespace StockSharp.Messages;
 /// </summary>
 /// <typeparam name="TMessage">Message type.</typeparam>
 /// <typeparam name="TField">Changes type.</typeparam>
+/// <remarks>
+/// Initialize <see cref="BaseChangeMessage{TMessage,TField}"/>.
+/// </remarks>
+/// <param name="type">Message type.</param>
 [DataContract]
 [Serializable]
-public abstract class BaseChangeMessage<TMessage, TField> :	BaseSubscriptionIdMessage<TMessage>,
+public abstract class BaseChangeMessage<TMessage, TField>(MessageTypes type) :	BaseSubscriptionIdMessage<TMessage>(type),
 	IServerTimeMessage, IGeneratedMessage
 	where TMessage : BaseChangeMessage<TMessage, TField>, new()
 {
@@ -31,15 +35,6 @@ public abstract class BaseChangeMessage<TMessage, TField> :	BaseSubscriptionIdMe
 	//[DataMember]
 	[XmlIgnore]
 	public IDictionary<TField, object> Changes { get; } = new Dictionary<TField, object>();
-
-	/// <summary>
-	/// Initialize <see cref="BaseChangeMessage{TMessage,TField}"/>.
-	/// </summary>
-	/// <param name="type">Message type.</param>
-	protected BaseChangeMessage(MessageTypes type)
-		: base(type)
-	{
-	}
 
 	/// <inheritdoc />
 	public override void CopyTo(TMessage destination)

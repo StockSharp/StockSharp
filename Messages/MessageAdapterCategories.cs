@@ -143,19 +143,14 @@ public enum MessageAdapterCategories
 /// <summary>
 /// Specifies a categories for message adapter.
 /// </summary>
-public class MessageAdapterCategoryAttribute : Attribute
+/// <remarks>
+/// Initializes a new instance of the <see cref="MessageAdapterCategoryAttribute"/>.
+/// </remarks>
+/// <param name="categories">Categories.</param>
+public class MessageAdapterCategoryAttribute(MessageAdapterCategories categories) : Attribute
 {
 	/// <summary>
 	/// Categories.
 	/// </summary>
-	public MessageAdapterCategories Categories { get; }
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="MessageAdapterCategoryAttribute"/>.
-	/// </summary>
-	/// <param name="categories">Categories.</param>
-	public MessageAdapterCategoryAttribute(MessageAdapterCategories categories)
-	{
-		Categories = categories;
-	}
+	public MessageAdapterCategories Categories { get; } = categories;
 }

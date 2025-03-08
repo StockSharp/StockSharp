@@ -4,9 +4,13 @@ namespace StockSharp.Messages;
 /// A message containing subscription identifiers.
 /// </summary>
 /// <typeparam name="TMessage">Message type.</typeparam>
+/// <remarks>
+/// Initialize <see cref="BaseSubscriptionIdMessage{TMessage}"/>.
+/// </remarks>
+/// <param name="type">Message type.</param>
 [DataContract]
 [Serializable]
-public abstract class BaseSubscriptionIdMessage<TMessage> : Message, ISubscriptionIdMessage
+public abstract class BaseSubscriptionIdMessage<TMessage>(MessageTypes type) : Message(type), ISubscriptionIdMessage
 	where TMessage : BaseSubscriptionIdMessage<TMessage>, new()
 {
 	/// <inheritdoc />
@@ -23,15 +27,6 @@ public abstract class BaseSubscriptionIdMessage<TMessage> : Message, ISubscripti
 
 	/// <inheritdoc />
 	public abstract DataType DataType { get; }
-
-	/// <summary>
-	/// Initialize <see cref="BaseSubscriptionIdMessage{TMessage}"/>.
-	/// </summary>
-	/// <param name="type">Message type.</param>
-	protected BaseSubscriptionIdMessage(MessageTypes type)
-		: base(type)
-	{
-	}
 
 	/// <summary>
 	/// Copy the message into the <paramref name="destination" />.

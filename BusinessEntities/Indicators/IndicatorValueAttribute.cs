@@ -29,33 +29,25 @@ public abstract class IndicatorValueAttribute : Attribute
 /// <summary>
 /// Attribute, applied to indicator, to provide information about type of input values <see cref="IIndicatorValue"/>.
 /// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="IndicatorInAttribute"/>.
+/// </remarks>
+/// <param name="type">Values type.</param>
 [AttributeUsage(AttributeTargets.Class)]
-public class IndicatorInAttribute : IndicatorValueAttribute
+public class IndicatorInAttribute(Type type) : IndicatorValueAttribute(type)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="IndicatorInAttribute"/>.
-	/// </summary>
-	/// <param name="type">Values type.</param>
-	public IndicatorInAttribute(Type type)
-		: base(type)
-	{
-	}
 }
 
 /// <summary>
 /// Attribute, applied to indicator, to provide information about type of output values <see cref="IIndicatorValue"/>.
 /// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="IndicatorOutAttribute"/>.
+/// </remarks>
+/// <param name="type">Values type.</param>
 [AttributeUsage(AttributeTargets.Class)]
-public class IndicatorOutAttribute : IndicatorValueAttribute
+public class IndicatorOutAttribute(Type type) : IndicatorValueAttribute(type)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="IndicatorOutAttribute"/>.
-	/// </summary>
-	/// <param name="type">Values type.</param>
-	public IndicatorOutAttribute(Type type)
-		: base(type)
-	{
-	}
 }
 
 /// <summary>

@@ -54,7 +54,7 @@ public class WorkingTime : IPersistable
 	[Browsable(false)]
 	public DateTime[] SpecialWorkingDays
 	{
-		get => _specialDays.Where(p => p.Value.Length > 0).Select(p => p.Key).ToArray();
+		get => [.. _specialDays.Where(p => p.Value.Length > 0).Select(p => p.Key)];
 		set
 		{
 			//_specialWorkingDays = CheckDates(value);
@@ -75,7 +75,7 @@ public class WorkingTime : IPersistable
 	[Browsable(false)]
 	public DateTime[] SpecialHolidays
 	{
-		get => _specialDays.Where(p => p.Value.Length == 0).Select(p => p.Key).ToArray();
+		get => [.. _specialDays.Where(p => p.Value.Length == 0).Select(p => p.Key)];
 		set
 		{
 			foreach (var day in CheckDates(value))
@@ -131,7 +131,7 @@ public class WorkingTime : IPersistable
 		try
 		{
 			IsEnabled = storage.GetValue(nameof(IsEnabled), IsEnabled);
-			Periods = storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Periods)).Select(s => s.Load<WorkingTimePeriod>()).ToList();
+			Periods = [.. storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Periods)).Select(s => s.Load<WorkingTimePeriod>())];
 
 			if (storage.ContainsKey(nameof(SpecialDays)))
 			{
@@ -141,7 +141,7 @@ public class WorkingTime : IPersistable
 					.Select(s => new KeyValuePair<DateTime, Range<TimeSpan>[]>
 					(
 						s.GetValue<DateTime>("Day"),
-						s.GetValue<IEnumerable<SettingsStorage>>("Periods").Select(s1 => s1.ToRange<TimeSpan>()).ToArray()
+						[.. s.GetValue<IEnumerable<SettingsStorage>>("Periods").Select(s1 => s1.ToRange<TimeSpan>())]
 					))
 				);
 			}
