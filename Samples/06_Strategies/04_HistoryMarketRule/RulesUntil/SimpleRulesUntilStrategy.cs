@@ -2,8 +2,6 @@
 using StockSharp.Algo.Strategies;
 using StockSharp.Messages;
 
-using Ecng.Logging;
-
 using System;
 
 namespace StockSharp.Samples.Strategies.HistoryMarketRule
@@ -20,8 +18,8 @@ namespace StockSharp.Samples.Strategies.HistoryMarketRule
 			mdSub.WhenOrderBookReceived(this).Do(depth =>
 			{
 				i++;
-				this.AddInfoLog($"The rule WhenOrderBookReceived BestBid={depth.GetBestBid()}, BestAsk={depth.GetBestAsk()}");
-				this.AddInfoLog($"The rule WhenOrderBookReceived i={i}");
+				LogInfo($"The rule WhenOrderBookReceived BestBid={depth.GetBestBid()}, BestAsk={depth.GetBestAsk()}");
+				LogInfo($"The rule WhenOrderBookReceived i={i}");
 			})
 			.Until(() => i >= 10)
 			.Apply(this);

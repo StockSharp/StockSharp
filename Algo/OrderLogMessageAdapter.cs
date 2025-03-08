@@ -182,7 +182,7 @@ public class OrderLogMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 				nonBuilderIds.Add(subscriptionId);
 
 				// can be non OL->MB subscription
-				//this.AddDebugLog("OL processing {0}/{1} not found.", execMsg.SecurityId, subscriptionId);
+				//LogDebug("OL processing {0}/{1} not found.", execMsg.SecurityId, subscriptionId);
 				continue;
 			}
 

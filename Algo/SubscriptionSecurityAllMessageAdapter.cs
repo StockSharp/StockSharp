@@ -145,7 +145,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 										message = mdMsg;
 									}
 
-									this.AddInfoLog("Sec ALL {0} subscribing.", transId);
+									LogInfo("Sec ALL {0} subscribing.", transId);
 								}
 								else
 								{
@@ -171,7 +171,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 						if (!_requests.TryGetAndRemove(originId, out var tuple))
 							break;
 
-						//this.AddDebugLog("Sec ALL child {0} unsubscribe.", originId);
+						//LogDebug("Sec ALL child {0} unsubscribe.", originId);
 
 						var parent = tuple.Item1;
 						var request = tuple.Item2;

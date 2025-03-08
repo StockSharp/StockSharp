@@ -32,7 +32,7 @@ void SetupRuleMethod1(IMarketDepthSubscription mdSub)
 {
     mdSub.WhenOrderBookReceived(Connector).Do((depth) =>
     {
-        this.AddInfoLog($"The rule WhenOrderBookReceived ¹1 BestBid={depth.GetBestBid()}, BestAsk={depth.GetBestAsk()}");
+        LogInfo($"The rule WhenOrderBookReceived ¹1 BestBid={depth.GetBestBid()}, BestAsk={depth.GetBestAsk()}");
     }).Once().Apply(this);
 }
 ```
@@ -46,7 +46,7 @@ void SetupRuleMethod2(IMarketDepthSubscription mdSub)
     var whenMarketDepthChanged = mdSub.WhenOrderBookReceived(Connector);
     whenMarketDepthChanged.Do((depth) =>
     {
-        this.AddInfoLog($"The rule WhenOrderBookReceived ¹2 BestBid={depth.GetBestBid()}, BestAsk={depth.GetBestAsk()}");
+        LogInfo($"The rule WhenOrderBookReceived ¹2 BestBid={depth.GetBestBid()}, BestAsk={depth.GetBestAsk()}");
     }).Once().Apply(this);
 }
 ```
@@ -59,12 +59,12 @@ void SetupNestedRule(IMarketDepthSubscription mdSub)
 {
     mdSub.WhenOrderBookReceived(Connector).Do((depth) =>
     {
-        this.AddInfoLog($"The rule WhenOrderBookReceived ¹3 BestBid={depth.GetBestBid()}, BestAsk={depth.GetBestAsk()}");
+        LogInfo($"The rule WhenOrderBookReceived ¹3 BestBid={depth.GetBestBid()}, BestAsk={depth.GetBestAsk()}");
 
         // Not a Once rule - this will continue to apply
         mdSub.WhenOrderBookReceived(Connector).Do((depth1) =>
         {
-            this.AddInfoLog($"The rule WhenOrderBookReceived ¹4 BestBid={depth1.GetBestBid()}, BestAsk={depth1.GetBestAsk()}");
+            LogInfo($"The rule WhenOrderBookReceived ¹4 BestBid={depth1.GetBestBid()}, BestAsk={depth1.GetBestAsk()}");
         }).Apply(this);
     }).Once().Apply(this);
 }

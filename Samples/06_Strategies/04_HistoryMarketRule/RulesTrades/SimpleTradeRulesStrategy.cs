@@ -1,8 +1,6 @@
 ﻿using StockSharp.Algo;
 using StockSharp.Algo.Strategies;
 
-using Ecng.Logging;
-
 using System;
 
 namespace StockSharp.Samples.Strategies.HistoryMarketRule
@@ -20,7 +18,7 @@ namespace StockSharp.Samples.Strategies.HistoryMarketRule
 					.Or(sub.WhenLastTradePriceLess(this, t.Price - 2))
 					.Do(t =>
 					{
-						this.AddInfoLog($"The rule WhenLastTradePriceMore Or WhenLastTradePriceLess tick={t}");
+						LogInfo($"The rule WhenLastTradePriceMore Or WhenLastTradePriceLess tick={t}");
 					})
 					.Apply(this);
 			})

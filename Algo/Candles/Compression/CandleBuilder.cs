@@ -334,7 +334,7 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 		UpdateCandle(subscription, currentCandle, transform);
 
 		// TODO performance
-		//this.AddDebugLog("UpdatedCandle {0} ForValue {1}", currentCandle, value);
+		//LogDebug("UpdatedCandle {0} ForValue {1}", currentCandle, value);
 
 		return currentCandle;
 	}

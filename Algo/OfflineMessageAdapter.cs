@@ -262,7 +262,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 
 		_suspendedIn.Add(message);
 
-		this.AddInfoLog("Message {0} stored in offline.", message);
+		LogInfo("Message {0} stored in offline.", message);
 	}
 
 	/// <inheritdoc />

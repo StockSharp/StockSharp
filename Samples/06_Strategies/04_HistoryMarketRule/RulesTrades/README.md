@@ -20,7 +20,7 @@ protected override void OnStarted(DateTimeOffset time)
             .Or() // or conditions (WhenLastTradePriceMore or WhenLastTradePriceLess)
             .Do(() =>
             {
-                this.AddInfoLog($"The rule WhenLastTradePriceMore Or WhenLastTradePriceLess candle={Security.LastTick}");
+                LogInfo($"The rule WhenLastTradePriceMore Or WhenLastTradePriceLess candle={Security.LastTick}");
             })
             .Apply(this);
     })

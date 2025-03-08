@@ -92,15 +92,15 @@ public class ArbitrageStrategy : Strategy
 			spread = contangoSpread;
 		}
 
-		this.AddInfoLog($"Current state {_currentState}, enter spread = {_enterSpread}");
-		this.AddInfoLog($"{ArbitrageState.Backvordation} spread = {backvordationSpread}");
-		this.AddInfoLog($"{ArbitrageState.Contango}        spread = {contangoSpread}");
-		this.AddInfoLog($"Entry from spread:{SpreadToGenerateSignal}. Exit from profit:{ProfitToExit}");
+		LogInfo($"Current state {_currentState}, enter spread = {_enterSpread}");
+		LogInfo($"{ArbitrageState.Backvordation} spread = {backvordationSpread}");
+		LogInfo($"{ArbitrageState.Contango}        spread = {contangoSpread}");
+		LogInfo($"Entry from spread:{SpreadToGenerateSignal}. Exit from profit:{ProfitToExit}");
 
 		if (_arbitragePnl != null)
 		{
 			_profit = _arbitragePnl();
-			this.AddInfoLog($"Profit: {_profit}");
+			LogInfo($"Profit: {_profit}");
 		}
 
 		if (_currentState == ArbitrageState.None && spread > SpreadToGenerateSignal)

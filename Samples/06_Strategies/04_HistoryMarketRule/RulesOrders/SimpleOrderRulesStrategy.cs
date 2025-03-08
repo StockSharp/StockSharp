@@ -2,8 +2,6 @@
 using StockSharp.Algo.Strategies;
 using StockSharp.Messages;
 
-using Ecng.Logging;
-
 using System;
 
 namespace StockSharp.Samples.Strategies.HistoryMarketRule
@@ -22,13 +20,13 @@ namespace StockSharp.Samples.Strategies.HistoryMarketRule
 				var ruleRegFailed = order.WhenRegisterFailed(this);
 
 				ruleReg
-					.Do(() => this.AddInfoLog("Order №1 Registered"))
+					.Do(() => LogInfo("Order №1 Registered"))
 					.Once()
 					.Apply(this)
 					.Exclusive(ruleRegFailed);
 
 				ruleRegFailed
-					.Do(() => this.AddInfoLog("Order №1 RegisterFailed"))
+					.Do(() => LogInfo("Order №1 RegisterFailed"))
 					.Once()
 					.Apply(this)
 					.Exclusive(ruleReg);
@@ -44,13 +42,13 @@ namespace StockSharp.Samples.Strategies.HistoryMarketRule
 				var ruleRegFailed = order.WhenRegisterFailed(this);
 
 				ruleReg
-					.Do(() => this.AddInfoLog("Order №2 Registered"))
+					.Do(() => LogInfo("Order №2 Registered"))
 					.Once()
 					.Apply(this)
 					.Exclusive(ruleRegFailed);
 
 				ruleRegFailed
-					.Do(() => this.AddInfoLog("Order №2 RegisterFailed"))
+					.Do(() => LogInfo("Order №2 RegisterFailed"))
 					.Once()
 					.Apply(this)
 					.Exclusive(ruleReg);

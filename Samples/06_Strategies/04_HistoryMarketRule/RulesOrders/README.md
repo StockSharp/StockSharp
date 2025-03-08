@@ -43,13 +43,13 @@ void SetupOrderRules(Order order, string orderName)
     var ruleRegFailed = order.WhenRegisterFailed(Connector);
 
     ruleReg
-        .Do(() => this.AddInfoLog($"{orderName} Registered"))
+        .Do(() => LogInfo($"{orderName} Registered"))
         .Once()
         .Apply(this)
         .Exclusive(ruleRegFailed);
 
     ruleRegFailed
-        .Do(() => this.AddInfoLog($"{orderName} RegisterFailed"))
+        .Do(() => LogInfo($"{orderName} RegisterFailed"))
         .Once()
         .Apply(this)
         .Exclusive(ruleReg);
