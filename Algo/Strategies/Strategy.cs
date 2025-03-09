@@ -1760,6 +1760,9 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		TotalWorkingTime = default;
 		StartedTime = default;
 
+		_portfolioLookup = default;
+		_orderLookup = default;
+
 		_boardMsg = default;
 		_firstOrderTime = _lastOrderTime = _lastPnlRefreshTime = _prevTradeDate = default;
 		_idStr = default;
