@@ -616,7 +616,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 					// TODO Remove few releases later 2024-07-20
 					i = i.Length > 1 && i[0] == 1564 ? i.Substring(1) : i;
 
-					return i.To<MessageTypes>();
+					return i.ToMessageType();
 				}).ToArray());
 		}
 

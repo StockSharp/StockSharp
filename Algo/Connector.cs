@@ -1088,7 +1088,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 
 #pragma warning disable CS0618
 			LookupMessagesOnConnect.Clear();
-			LookupMessagesOnConnect.AddRange(str.SplitByComma(true).Select(s => s.To<MessageTypes>()));
+			LookupMessagesOnConnect.AddRange(str.SplitByComma(true).Select(s => s.ToMessageType()));
 #pragma warning restore CS0618
 		}
 

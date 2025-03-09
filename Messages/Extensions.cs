@@ -5690,4 +5690,20 @@ public static partial class Extensions
 	/// <returns>Instance of <see cref="CandleMessage"/>.</returns>
 	public static CandleMessage CreateCandleMessage(this Type messageType)
 		=> messageType.CreateInstance<CandleMessage>();
+
+	/// <summary>
+	/// Convert <see cref="string"/> into <see cref="MessageTypes"/>.
+	/// </summary>
+	/// <param name="str"><see cref="string"/></param>
+	/// <returns><see cref="MessageTypes"/></returns>
+	public static MessageTypes ToMessageType(this string str)
+	{
+		// TODO 2025-03-09 Remove 1 year later
+		if (str == "TimeFrameInfo")
+			return MessageTypes.DataTypeInfo;
+		else if (str == "TimeFrameLookup")
+			return MessageTypes.DataTypeLookup;
+		else
+			return str.To<MessageTypes>();
+	}
 }
