@@ -26,6 +26,7 @@ using StockSharp.Localization;
 using StockSharp.Messages;
 using StockSharp.Xaml;
 using StockSharp.Xaml.Charting;
+using StockSharp.Algo.Strategies.Quoting;
 
 public partial class MainWindow
 {
@@ -524,9 +525,11 @@ public partial class MainWindow
 		};
 
 		// create option quoting for 20 contracts
-		var quoting = new VolatilityQuotingStrategy(Sides.Buy, 20,
-				new Range<decimal>((decimal?)ImpliedVolatilityMin.EditValue ?? 0, (decimal?)ImpliedVolatilityMax.EditValue ?? 100))
+		var quoting = new VolatilityQuotingStrategy
 		{
+			QuotingSide = Sides.Buy,
+			QuotingVolume = 20,
+			IVRange = new Range<decimal>((decimal?)ImpliedVolatilityMin.EditValue ?? 0, (decimal?)ImpliedVolatilityMax.EditValue ?? 100),
 			// working size is 1 contract
 			Volume = 1,
 			Security = option,

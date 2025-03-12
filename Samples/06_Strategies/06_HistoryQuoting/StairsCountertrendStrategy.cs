@@ -50,8 +50,10 @@ public class StairsCountertrendStrategy : Strategy
 		if (_bullLength >= Length && Position >= 0)
 		{
 			ChildStrategies.ToList().ForEach(s => s.Stop());
-			var strategy = new MarketQuotingStrategy(Sides.Sell, 1)
+			var strategy = new MarketQuotingStrategy
 			{
+				QuotingSide = Sides.Sell,
+				QuotingVolume = 1,
 				WaitAllTrades = true
 			};
 			ChildStrategies.Add(strategy);
@@ -61,8 +63,10 @@ public class StairsCountertrendStrategy : Strategy
 		if (_bearLength >= Length && Position <= 0)
 		{
 			ChildStrategies.ToList().ForEach(s => s.Stop());
-			var strategy = new MarketQuotingStrategy(Sides.Buy, 1)
+			var strategy = new MarketQuotingStrategy
 			{
+				QuotingSide = Sides.Buy,
+				QuotingVolume = 1,
 				WaitAllTrades = true
 			};
 			ChildStrategies.Add(strategy);

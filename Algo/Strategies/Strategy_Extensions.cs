@@ -163,8 +163,11 @@ partial class Strategy
 
 		var delta = (finishPosition - position).Abs();
 
-		var quoting = new MarketQuotingStrategy(finishPosition < position ? Sides.Sell : Sides.Buy, delta);
-		ChildStrategies.Add(quoting);
+		ChildStrategies.Add(new MarketQuotingStrategy()
+		{
+			QuotingSide = finishPosition < position ? Sides.Sell : Sides.Buy,
+			QuotingVolume = delta,
+		});
 	}
 
 	/// <summary>
@@ -178,7 +181,10 @@ partial class Strategy
 		if (position == 0)
 			return;
 
-		var quoting = new MarketQuotingStrategy(position > 0 ? Sides.Sell : Sides.Buy, position.Abs());
-		ChildStrategies.Add(quoting);
+		ChildStrategies.Add(new MarketQuotingStrategy
+		{
+			QuotingSide = position > 0 ? Sides.Sell : Sides.Buy,
+			QuotingVolume = position.Abs(),
+		});
 	}
 }

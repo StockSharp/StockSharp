@@ -3,26 +3,15 @@ namespace StockSharp.Algo.Strategies.Quoting;
 /// <summary>
 /// The strategy realizing volume quoting algorithm by the limited price.
 /// </summary>
+[Obsolete("Use QuotingProcessor.")]
 public class LimitQuotingStrategy : QuotingStrategy
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="LimitQuotingStrategy"/>.
 	/// </summary>
 	public LimitQuotingStrategy()
-		: this(Sides.Buy, 1, 0)
 	{
-	}
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="LimitQuotingStrategy"/>.
-	/// </summary>
-	/// <param name="quotingDirection">Quoting direction.</param>
-	/// <param name="quotingVolume">Total quoting volume.</param>
-	/// <param name="limitPrice">The limited price for quoted orders.</param>
-	public LimitQuotingStrategy(Sides quotingDirection, decimal quotingVolume, decimal limitPrice)
-		: base(quotingDirection, quotingVolume)
-	{
-		_limitPrice = Param(nameof(LimitPrice), limitPrice);
+		_limitPrice = Param(nameof(LimitPrice), 1m);
 	}
 
 	private readonly StrategyParam<decimal> _limitPrice;
@@ -36,6 +25,7 @@ public class LimitQuotingStrategy : QuotingStrategy
 		set => _limitPrice.Value = value;
 	}
 
-	/// <inheritdoc />
-	protected override decimal? BestPrice => LimitPrice;
+	/// <inheritdoc/>
+	protected override IQuotingBehavior CreateBehavior()
+		=> new LimitQuotingBehavior(LimitPrice);
 }

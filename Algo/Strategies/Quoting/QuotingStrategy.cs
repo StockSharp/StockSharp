@@ -3,93 +3,47 @@ namespace StockSharp.Algo.Strategies.Quoting;
 /// <summary>
 /// Base quoting strategy class.
 /// </summary>
+[Obsolete("Use QuotingProcessor.")]
 public abstract class QuotingStrategy : Strategy
 {
-	private Order _reRegisteringOrder;
-	private Order _editingChanges;
-	private bool _isCanceling;
-	private bool _isRegistering;
-	//private Order _manualReRegisterOrder;
-	private bool _isReRegistedFailed;
-	private IOrderBookMessage _filteredBook;
-	private ITickTradeMessage _lastTrade;
+	private QuotingProcessor _processor;
 
 	/// <summary>
 	/// Initialize <see cref="QuotingStrategy"/>.
 	/// </summary>
-	/// <param name="quotingDirection">Quoting direction.</param>
-	/// <param name="quotingVolume">Total quoting volume.</param>
-	protected QuotingStrategy(Sides quotingDirection, decimal quotingVolume)
+	protected QuotingStrategy()
 	{
-		CheckQuotingVolume(quotingVolume);
-
-		_quotingDirection = Param(nameof(QuotingDirection), quotingDirection);
-		_quotingVolume = Param(nameof(QuotingVolume), quotingVolume);
-		_timeOut = Param<TimeSpan>(nameof(TimeOut));
+		_quotingSide = Param(nameof(QuotingSide), Sides.Buy);
+		_quotingVolume = Param(nameof(QuotingVolume), 1m).SetValidator(new DecimalGreaterThanZeroAttribute());
+		_timeOut = Param<TimeSpan>(nameof(TimeOut)).SetValidator(new TimeSpanNotNegativeAttribute());
 		_useLastTradePrice = Param(nameof(UseLastTradePrice), true);
-		_isSupportAtomicReRegister = Param(nameof(IsSupportAtomicReRegister), true);
 
 		DisposeOnStop = true;
-	}
-
-	/// <summary>
-	/// Initialize <see cref="QuotingStrategy"/>.
-	/// </summary>
-	/// <param name="order">Quoting order.</param>
-	protected QuotingStrategy(Order order)
-		: this(order.Side, order.TransactionId == 0 ? order.Volume : order.Balance)
-	{
-		if (order == null)
-			throw new ArgumentNullException(nameof(order));
-
-		var isNew = order.TransactionId == 0;
-
-		// если была передана на котирование уже зарегистрированная заявка,
-		// то будем котировать именно её
-		if (!isNew)
-			_order = order;
-	}
-
-	private readonly StrategyParam<bool> _isSupportAtomicReRegister;
-
-	/// <summary>
-	/// Gets a value indicating whether the re-registration orders via the method <see cref="ITransactionProvider.ReRegisterOrder"/> as a single transaction. The default is enabled.
-	/// </summary>
-	public bool IsSupportAtomicReRegister
-	{
-		get => _isSupportAtomicReRegister.Value;
-		set => _isSupportAtomicReRegister.Value = value;
 	}
 
 	private readonly StrategyParam<bool> _useLastTradePrice;
 
 	/// <summary>
-	/// To use the last trade price, if the information in the order book is missed. The default is enabled.
+	/// To use the last trade price, if the information in the order book is missed.
 	/// </summary>
+	/// <remarks>
+	/// The default is enabled.
+	/// </remarks>
 	public bool UseLastTradePrice
 	{
 		get => _useLastTradePrice.Value;
 		set => _useLastTradePrice.Value = value;
 	}
 
-	private readonly StrategyParam<Sides> _quotingDirection;
+	private readonly StrategyParam<Sides> _quotingSide;
 
 	/// <summary>
 	/// Quoting direction.
 	/// </summary>
-	public Sides QuotingDirection
+	public Sides QuotingSide
 	{
-		get => _quotingDirection.Value;
-		set
-		{
-			if (value == QuotingDirection)
-				return;
-
-			if (Position != 0)
-				throw new InvalidOperationException("Pos != 0");
-
-			_quotingDirection.Value = value;
-		}
+		get => _quotingSide.Value;
+		set => _quotingSide.Value = value;
 	}
 
 	private readonly StrategyParam<decimal> _quotingVolume;
@@ -97,47 +51,11 @@ public abstract class QuotingStrategy : Strategy
 	/// <summary>
 	/// Total quoting volume.
 	/// </summary>
-	public virtual decimal QuotingVolume
+	public decimal QuotingVolume
 	{
 		get => _quotingVolume.Value;
-		set
-		{
-			if (ProcessState == ProcessStates.Started)
-				throw new InvalidOperationException("In process.");
-
-			if (value == QuotingVolume)
-				return;
-
-			LogInfo(LocalizedStrings.OldVolNewVol, QuotingVolume, value);
-
-			CheckQuotingVolume(value);
-
-			_quotingVolume.Value = value;
-		}
+		set => _quotingVolume.Value = value;
 	}
-
-	private static void CheckQuotingVolume(decimal quotingVolume)
-	{
-		if (quotingVolume <= 0)
-			throw new ArgumentOutOfRangeException(nameof(quotingVolume), quotingVolume, LocalizedStrings.InvalidValue);
-
-		//if (checkOnZero && quotingVolume == 0)
-		//	throw new ArgumentOutOfRangeException("quotingVolume", quotingVolume, "Котируемый объем не может быть нулевым.");
-	}
-
-	private Order _order;
-
-	/// <summary>
-	/// The order with which the quoting strategy is currently operating.
-	/// </summary>
-	[Browsable(false)]
-	public virtual Order Order => _order;
-
-	/// <summary>
-	/// The volume which is left to fulfill before the quoting end.
-	/// </summary>
-	[Browsable(false)]
-	public decimal LeftVolume => QuotingVolume - Position.Abs();
 
 	private readonly StrategyParam<TimeSpan> _timeOut;
 
@@ -150,512 +68,35 @@ public abstract class QuotingStrategy : Strategy
 	public TimeSpan TimeOut
 	{
 		get => _timeOut.Value;
-		set
-		{
-			if (value < TimeSpan.Zero)
-				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
-
-			_timeOut.Value = value;
-		}
+		set => _timeOut.Value = value;
 	}
 
 	/// <summary>
-	/// Is the <see cref="TimeOut"/> occurred.
+	/// Create <see cref="IQuotingBehavior"/>.
 	/// </summary>
-	/// <param name="currentTime">Current time.</param>
-	/// <returns>Check result.</returns>
-	protected bool IsTimeOut(DateTimeOffset currentTime) => (TimeOut != TimeSpan.Zero && (currentTime - StartedTime) >= TimeOut);
-
-	/// <summary>
-	/// Whether the quoting can be stopped.
-	/// </summary>
-	/// <returns><see langword="true" /> it is possible, otherwise, <see langword="false" />.</returns>
-	/// <remarks>
-	/// By default, the quoting is stopped when all contracts are fulfilled and <see cref="LeftVolume"/> is equal to 0.
-	/// </remarks>
-	protected virtual bool NeedFinish()
-	{
-		return LeftVolume <= 0;
-	}
-
-	/// <summary>
-	/// Should the order be quoted.
-	/// </summary>
-	/// <param name="currentTime">Current time.</param>
-	/// <param name="currentPrice">The current price. If the value is equal to <see langword="null" /> then the order is not registered yet.</param>
-	/// <param name="currentVolume">The current volume. If the value is equal to <see langword="null" /> then the order is not registered yet.</param>
-	/// <param name="newVolume">New volume.</param>
-	/// <returns>The price at which the order will be registered. If the value is equal to <see langword="null" /> then the quoting is not required.</returns>
-	protected virtual decimal? NeedQuoting(DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume/*, Range<decimal> acceptablePriceRange*/, decimal newVolume)
-	{
-		//if (acceptablePriceRange == null)
-		//	throw new ArgumentNullException(nameof(acceptablePriceRange));
-
-		var bestPrice = BestPrice;
-
-	    if (bestPrice == null)
-	    {
-			//LogWarning(LocalizedStrings.MarketDepthIsEmpty);
-		    return null;
-	    }
-
-		if (bestPrice != currentPrice || currentVolume != newVolume)
-			return bestPrice;
-
-		return null;
-	}
-
-	/// <summary>
-	/// To get the preferrable quoting price. If it is impossible to calculate the it at the moment, then <see langword="null" /> will be returned.
-	/// </summary>
-	protected virtual decimal? BestPrice
-	{
-		get
-		{
-			var quote = GetFilteredQuotes(QuotingDirection)?.FirstOr();
-
-			if (quote == null)
-			{
-				return UseLastTradePrice
-					? LastTradePrice
-					: null;
-			}
-
-			return quote.Value.Price;
-		}
-	}
-
-	/// <summary>
-	/// Last trade price.
-	/// </summary>
-	protected decimal? LastTradePrice => _lastTrade?.Price;
-
-	/// <summary>
-	/// To get a new volume for an order.
-	/// </summary>
-	/// <returns>The new volume for an order.</returns>
-	protected virtual decimal GetNewVolume()
-	{
-		if (Volume <= 0)
-			return LeftVolume;
-
-		var newVolume = Volume;
-
-		if (LeftVolume > 0)
-			newVolume = newVolume.Min(LeftVolume);
-
-		return newVolume;
-	}
-
-	/// <summary>
-	/// To get the order book filtered <see cref="DataType.FilteredMarketDepth"/>.
-	/// </summary>
-	/// <param name="side">The order book side (bids or offers).</param>
-	/// <returns>The filtered order book.</returns>
-	protected QuoteChange[] GetFilteredQuotes(Sides side)
-	{
-		var book = _filteredBook;
-
-		if (book == null)
-			return null;
-
-		return side == Sides.Buy ? book.Bids : book.Asks;
-	}
+	/// <returns><see cref="IQuotingBehavior"/></returns>
+	protected abstract IQuotingBehavior CreateBehavior();
 
 	/// <inheritdoc />
 	protected override void OnStarted(DateTimeOffset time)
 	{
 		base.OnStarted(time);
 
-		//CurrentBestPrice = default;
-		_editingChanges = default;
-		_isCanceling = default;
-		_isRegistering = default;
-		_reRegisteringOrder = default;
-		//_manualReRegisterOrder = default;
-		_isReRegistedFailed = default;
-		_order = default;
-		_filteredBook = default;
-		_lastTrade = default;
-
-		LogInfo(LocalizedStrings.QuotingForVolume, QuotingDirection, QuotingVolume);
-
-		this.SuspendRules(() =>
+		_processor = new(Security, Portfolio, QuotingSide, QuotingVolume, Volume, CreateBehavior(), TimeOut, this, this, this, this, this, GetPositionValue, IsFormedAndOnlineAndAllowTrading, UseLastTradePrice, Stop)
 		{
-			var security = GetSecurity();
+			Parent = this
+		};
 
-			this
-				.SubscribeFilteredMarketDepth(security)
-				.WhenOrderBookReceived(this)
-				.Do(book =>
-				{
-					_filteredBook = book;
-					ProcessQuoting(CurrentTime);
-				})
-				.Apply(this);
-
-			this
-				.SubscribeTrades(security)
-				.WhenTickTradeReceived(this)
-				.Do(t =>
-				{
-					_lastTrade = t;
-					ProcessQuoting(CurrentTime);
-				})
-				.Apply(this);
-
-			this
-				.WhenStopping()
-				.Do(() =>
-				{
-					if (LeftVolume > 0)
-						LogWarning(LocalizedStrings.QuotingFinishedNotFull, LeftVolume);
-				})
-				.Once()
-				.Apply(this);
-
-			this
-				.WhenPositionChanged()
-				.Do(() =>
-				{
-					LogInfo(LocalizedStrings.PrevPosNewPos, security, Position, LeftVolume);
-
-					if (NeedFinish())
-					{
-						LogInfo(LocalizedStrings.Stopped);
-						Stop();
-					}
-				})
-				.Apply(this);
-
-			if (TimeOut > TimeSpan.Zero)
+		this
+			.WhenStopping()
+			.Do(() =>
 			{
-				SafeGetConnector()
-					.WhenIntervalElapsed(TimeOut)
-					.Do(() => ProcessTimeOut(CurrentTime))
-					.Once()
-					.Apply(this);
-			}
-		});
-
-		if (!IsRulesSuspended)
-			ProcessQuoting(time);
-	}
-
-	/// <summary>
-	/// The <see cref="TimeOut"/> occurrence event handler.
-	/// </summary>
-	protected virtual void ProcessTimeOut(DateTimeOffset currentTime)
-	{
-		Stop();
-	}
-
-	/// <summary>
-	/// To register the quoted order.
-	/// </summary>
-	/// <param name="order">The quoted order.</param>
-	protected virtual void RegisterQuotingOrder(Order order)
-	{
-		AddOrderRules(order);
-
-		//_manualReRegisterOrder = default;
-
-		_isRegistering = true;
-		RegisterOrder(order);
-	}
-
-	private void ProcessRegisteredOrder(Order o)
-	{
-		if (o == _order)
-		{
-			_isRegistering = false;
-			LogInfo(LocalizedStrings.OrderAcceptedByExchange, o.TransactionId);
-		}
-		else if (o == _reRegisteringOrder)
-		{
-			LogInfo(LocalizedStrings.OrderReplacedByNew, _order.TransactionId, _reRegisteringOrder.TransactionId);
-
-			Rules.RemoveRulesByToken(_order, null);
-
-			_order = _reRegisteringOrder;
-			_reRegisteringOrder = null;
-		}
-		else
-			LogWarning(LocalizedStrings.OrderOutOfDate, o.TransactionId);
-
-		ProcessQuoting(o.ServerTime);
-	}
-
-	private void AddOrderRules(Order order)
-	{
-		var regRule = order
-			.WhenRegistered(this)
-			.Do(ProcessRegisteredOrder)
-			.Once()
-			.Apply(this);
-
-		var regFailRule = order
-			.WhenRegisterFailed(this)
-			.Do(fail =>
-			{
-				var o = fail.Order;
-
-				LogError(LocalizedStrings.ErrorRegOrder, o.TransactionId, fail.Error.Message);
-
-				var canProcess = false;
-
-				if (o == _order)
-				{
-					_order = null;
-					_isRegistering = false;
-					canProcess = true;
-				}
-				else if (o == _reRegisteringOrder)
-				{
-					_reRegisteringOrder = null;
-					_isReRegistedFailed = true;
-				}
-				else
-					LogWarning(LocalizedStrings.OrderOutOfDate, o.TransactionId);
-
-				if (canProcess)
-					ProcessQuoting(fail.ServerTime);
+				if (_processor.LeftVolume > 0)
+					LogWarning(LocalizedStrings.QuotingFinishedNotFull, _processor.LeftVolume);
 			})
 			.Once()
 			.Apply(this);
 
-		regRule.Exclusive(regFailRule);
-
-		var matchedRule = order
-			.WhenMatched(this)
-			.Do((r, o) =>
-			{
-				LogInfo(LocalizedStrings.OrderMatchedRemainBalance, o.TransactionId, LeftVolume);
-
-				Rules.RemoveRulesByToken(o, r);
-
-				// исполнилась заявка, которая сейчас в процессе регистрации
-				if (o == _reRegisteringOrder)
-				{
-					ProcessRegisteredOrder(o);
-				}
-
-				// http://stocksharp.com/forum/yaf_postst1708_MarketQuotingStrategy---Obiem-zaiavki-nie-mozhiet-byt--nulievym.aspx
-				if (NeedFinish())
-				{
-					LogInfo(LocalizedStrings.Stopped);
-					Stop();
-				}
-				else
-				{
-					if (_order == o)
-					{
-						//_manualReRegisterOrder = default;
-						_isCanceling = default;
-						_order = default;
-						_reRegisteringOrder = default;
-						_isReRegistedFailed = default;
-						_editingChanges = default;
-
-						ProcessQuoting(o.ServerTime);
-					}
-					else
-						LogWarning(LocalizedStrings.OrderOutOfDate, o.TransactionId);
-				}
-			})
-			.Once()
-			.Apply(this);
-
-		regFailRule.Exclusive(matchedRule);
-	}
-
-	/// <summary>
-	/// To initiate the quoting.
-	/// </summary>
-	/// <param name="currentTime">Current time.</param>
-	protected virtual void ProcessQuoting(DateTimeOffset currentTime)
-	{
-		if (ProcessState != ProcessStates.Started)
-		{
-			LogWarning(LocalizedStrings.StrategyInState, ProcessState);
-			return;
-		}
-
-		if (_order != null)
-		{
-			if (_isCanceling)
-			{
-				LogDebug(LocalizedStrings.OrderNRegistering, _order.TransactionId);
-				return;
-			}
-			else if (_isRegistering)
-			{
-				LogDebug(LocalizedStrings.OrderNReplacing, _order.TransactionId);
-				return;
-			}
-			else if (_editingChanges != null)
-			{
-				LogDebug(LocalizedStrings.OrderReplacingInto, _order.TransactionId, _editingChanges.TransactionId);
-				return;
-			}
-			else if (_reRegisteringOrder != null)
-			{
-				LogDebug(LocalizedStrings.OrderReplacingInto, _order.TransactionId, _reRegisteringOrder.TransactionId);
-				return;
-			}
-			else if (_isReRegistedFailed)
-			{
-				LogDebug(LocalizedStrings.ReplacingNotCompleteWaitingFor, _order.TransactionId);
-				return;
-			}
-
-			if (ProcessState != ProcessStates.Started)
-				return;
-		}
-
-		//// pyhta4og: При тестировании на истории - нормальная ситуация что нет стакана или последней сделки в начале тестирования.
-		////http://stocksharp.com/forum/yaf_postst779_Oshibka-zashchitnykh-stratieghii---kolliektsiia-kotirovok-pusta.aspx
-		//var priceRange = GetAcceptablePriceRange();
-		//if (priceRange == null)
-		//{
-		//	LogWarning(LocalizedStrings.MarketDepthIsEmpty);
-		//	return;
-		//}
-
-		var newVolume = GetNewVolume();
-
-		var newPrice = NeedQuoting(currentTime, _order?.Price, _order?.Balance, newVolume);
-
-		if (newPrice == null)
-			return;
-
-		newPrice = Security.ShrinkPrice(newPrice.Value);
-
-		LogInfo(LocalizedStrings.CurrPriceBestPrice, _order?.Price ?? (object)"NULL", newPrice);
-
-		var bidPrice = _filteredBook?.Bids?.FirstOr()?.Price ?? GetSecurityValue<decimal?>(Level1Fields.BestBidPrice);
-		var askPrice = _filteredBook?.Asks?.FirstOr()?.Price ?? GetSecurityValue<decimal?>(Level1Fields.BestAskPrice);
-
-		LogInfo(LocalizedStrings.BestBidAsk, bidPrice ?? (object)"NULL", askPrice ?? (object)"NULL");
-
-		if (_order == null)
-		{
-			//if (_manualReRegisterOrder != null)
-			//	return;
-
-			if (!IsFormedAndOnlineAndAllowTrading())
-				return;
-
-			_order = CreateOrder(QuotingDirection, newPrice.Value, newVolume);
-			RegisterQuotingOrder(_order);
-		}
-		else
-		{
-			LogInfo("Quoting order {0} to {1} with price {2} volume {3}.", _order.TransactionId, _order.Side, _order.Price, _order.Volume);
-
-			if (IsSupportAtomicReRegister && IsOrderReplaceable(_order) == true)
-			{
-				if (newPrice == 0)
-				{
-					LogWarning(LocalizedStrings.CannotChangePriceToZero);
-					return;
-				}
-
-				var newOrder = _order.ReRegisterClone(newPrice, _order.Balance);
-
-				if (IsOrderEditable(_order) == true)
-				{
-					_editingChanges = newOrder;
-
-					var editRule = _order
-						.WhenChanged(this)
-						.Do(o =>
-						{
-							LogDebug("Order {0} edited.", o.TransactionId);
-
-							_editingChanges = null;
-							ProcessQuoting(o.ServerTime);
-						})
-						.Once()
-						.Apply(this);
-
-					var editFailRule = _order
-						.WhenEditFailed(this)
-						.Do(fail =>
-						{
-							var canProcess = false;
-
-							LogError("Order {0} edit failed: {1}", fail.Order.TransactionId, fail.Error.Message);
-
-							if (fail.Order == _order)
-							{
-								canProcess = true;
-							}
-							else
-								LogWarning(LocalizedStrings.OrderOutOfDate, fail.Order.TransactionId);
-
-							_editingChanges = null;
-
-							if (canProcess)
-								ProcessQuoting(fail.ServerTime);
-						})
-						.Once()
-						.Apply(this);
-
-					editRule.Exclusive(editFailRule);
-
-					EditOrder(_order, newOrder);
-				}
-				else
-				{
-					AddOrderRules(newOrder);
-
-					_reRegisteringOrder = newOrder;
-					_isReRegistedFailed = false;
-
-					ReRegisterOrder(_order, newOrder);
-				}
-
-				LogInfo("Requoting registered for order {0} with price {1} and volume {2}.", _order.TransactionId, newOrder.Price, newOrder.Volume);
-			}
-			else
-			{
-				LogInfo(LocalizedStrings.CancellingOrderN, _order.TransactionId);
-
-				_order
-					.WhenCanceled(this)
-					.Do((r, o) =>
-					{
-						LogInfo(LocalizedStrings.OrderCancelledAt, o.TransactionId, o.ServerTime);
-
-						Rules.RemoveRulesByToken(o, r);
-
-						if (_order == o)
-						{
-							//_manualReRegisterOrder = _order;
-							_order = null;
-							_isCanceling = false;
-							ProcessQuoting(o.ServerTime);
-						}
-						else
-							LogWarning(LocalizedStrings.OrderOutOfDate, o.TransactionId);
-					})
-					.Once()
-					.Apply(this);
-
-				_order
-					.WhenCancelFailed(this)
-					.Do((r, f) =>
-					{
-						LogInfo(LocalizedStrings.ErrorCancellingOrder, f.Order.TransactionId, f.Error);
-						_isCanceling = false;
-					})
-					.Once()
-					.Apply(this);
-
-				_isCanceling = true;
-				CancelOrder(_order);
-			}
-		}
+		_processor.Init();
 	}
 }

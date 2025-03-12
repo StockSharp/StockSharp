@@ -236,10 +236,8 @@ public abstract class HedgeStrategy : Strategy
 		{
 			LogInfo("Rehedging with order {0} {1} volume {2} with price {3}.", order.Security, order.Side, order.Volume, order.Price);
 
-			var strategy = _strategies.TryGetValue(order.Security);
-
-			if (strategy == null)
-				throw new InvalidOperationException(LocalizedStrings.ForSecurityNoChildStrategy.Put(order.Security.Id));
+			var strategy = _strategies.TryGetValue(order.Security)
+				?? throw new InvalidOperationException(LocalizedStrings.ForSecurityNoChildStrategy.Put(order.Security.Id));
 
 			if (UseQuoting)
 			{
@@ -301,6 +299,14 @@ public abstract class HedgeStrategy : Strategy
 	/// <returns>The strategy of quoting.</returns>
 	protected virtual QuotingStrategy CreateQuoting(Order order)
 	{
-		return new MarketQuotingStrategy(order, new Unit(), new Unit()) { Volume = Volume };
+		if (order is null)
+			throw new ArgumentNullException(nameof(order));
+
+		return new MarketQuotingStrategy
+		{
+			QuotingSide = order.Side,
+			QuotingVolume = order.Balance,
+			Volume = Volume,
+		};
 	}
 }

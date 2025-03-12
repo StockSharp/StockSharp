@@ -3,25 +3,15 @@ namespace StockSharp.Algo.Strategies.Quoting;
 /// <summary>
 /// The quoting by specified level in the order book.
 /// </summary>
+[Obsolete("Use QuotingProcessor.")]
 public class LevelQuotingStrategy : QuotingStrategy
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="LevelQuotingStrategy"/>.
 	/// </summary>
 	public LevelQuotingStrategy()
-		: this(Sides.Buy, 1)
 	{
-	}
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="LevelQuotingStrategy"/>.
-	/// </summary>
-	/// <param name="quotingDirection">Quoting direction.</param>
-	/// <param name="quotingVolume">Total quoting volume.</param>
-	public LevelQuotingStrategy(Sides quotingDirection, decimal quotingVolume)
-		: base(quotingDirection, quotingVolume)
-	{
-		_level = Param(nameof(Level), new Range<int>());
+		_level = Param(nameof(Level), new Range<int>()).SetRequired();
 		_ownLevel = Param<bool>(nameof(OwnLevel));
 	}
 
@@ -33,19 +23,7 @@ public class LevelQuotingStrategy : QuotingStrategy
 	public Range<int> Level
 	{
 		get => _level.Value;
-		set
-		{
-			if (value == null)
-				throw new ArgumentNullException(nameof(value));
-
-			if (value.Contains(-1))
-				throw new ArgumentOutOfRangeException(nameof(value));
-
-			if (value == Level)
-				return;
-
-			_level.Value = value;
-		}
+		set => _level.Value = value;
 	}
 
 	private readonly StrategyParam<bool> _ownLevel;
@@ -59,45 +37,7 @@ public class LevelQuotingStrategy : QuotingStrategy
 		set => _ownLevel.Value = value;
 	}
 
-	/// <inheritdoc />
-	protected override decimal? NeedQuoting(DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume)
-	{
-		var quotes = GetFilteredQuotes(QuotingDirection);
-
-		var f = quotes?.ElementAtOr(Level.Min);
-
-		if (f == null)
-			return null;
-
-		var from = f.Value;
-
-		var to = quotes.ElementAtOr(Level.Max);
-
-		decimal toPrice;
-
-		if (to == null)
-		{
-			toPrice = OwnLevel
-				? (decimal)(from.Price + (QuotingDirection == Sides.Sell ? 1 : -1) * Level.Length.Pips(GetSecurity()))
-				: quotes.Last().Price;
-		}
-		else
-			toPrice = to.Value.Price;
-
-		if (QuotingDirection == Sides.Sell)
-		{
-			if (from.Price > currentPrice || currentPrice > toPrice)
-				return (from.Price + toPrice) / 2;
-		}
-		else
-		{
-			if (toPrice > currentPrice && currentPrice > from.Price)
-				return (toPrice + from.Price) / 2;
-		}
-
-		if (currentPrice != null && currentVolume != newVolume)
-			return currentPrice;
-
-		return null;
-	}
+	/// <inheritdoc/>
+	protected override IQuotingBehavior CreateBehavior()
+		=> new LevelQuotingBehavior(Level, OwnLevel);
 }

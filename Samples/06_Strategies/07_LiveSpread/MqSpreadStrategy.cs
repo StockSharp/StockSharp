@@ -12,35 +12,35 @@ public class MqSpreadStrategy : Strategy
 
 	protected override void OnStarted(DateTimeOffset time)
 	{
-		Connector.MarketTimeChanged += Connector_MarketTimeChanged;
-		Connector_MarketTimeChanged(new TimeSpan());
+		Connector.CurrentTimeChanged += Connector_CurrentTimeChanged;
+		Connector_CurrentTimeChanged(new TimeSpan());
 		base.OnStarted(time);
 	}
 
 	private MarketQuotingStrategy _strategyBuy;
 	private MarketQuotingStrategy _strategySell;
 
-	private void Connector_MarketTimeChanged(TimeSpan obj)
+	private void Connector_CurrentTimeChanged(TimeSpan obj)
 	{
 		if (Position != 0) return;
 		if (_strategyBuy != null && _strategyBuy.ProcessState != ProcessStates.Stopped) return;
 		if (_strategySell != null && _strategySell.ProcessState != ProcessStates.Stopped) return;
 
-		_strategyBuy = new MarketQuotingStrategy(Sides.Buy, Volume)
+		_strategyBuy = new MarketQuotingStrategy
 		{
+			QuotingSide = Sides.Buy,
 			Name = "buy " + CurrentTime,
 			Volume = 1,
 			PriceType = MarketPriceTypes.Following,
-			IsSupportAtomicReRegister = false
 		};
 		ChildStrategies.Add(_strategyBuy);
 
-		_strategySell = new MarketQuotingStrategy(Sides.Sell, Volume)
+		_strategySell = new MarketQuotingStrategy
 		{
+			QuotingSide = Sides.Sell,
 			Name = "sell " + CurrentTime,
 			Volume = 1,
 			PriceType = MarketPriceTypes.Following,
-			IsSupportAtomicReRegister = false
 		};
 		ChildStrategies.Add(_strategySell);
 	}
