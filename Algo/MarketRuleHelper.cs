@@ -12,27 +12,6 @@ public static partial class MarketRuleHelper
 		protected IConnector Connector { get; } = connector ?? throw new ArgumentNullException(nameof(connector));
 	}
 
-	private class IntervalTimeRule : ConnectorRule<IConnector>
-	{
-		private readonly MarketTimer _timer;
-
-		public IntervalTimeRule(IConnector connector, TimeSpan interval/*, bool firstTimeRun*/)
-			: base(connector)
-		{
-			Name = LocalizedStrings.Interval + " " + interval;
-
-			_timer = new MarketTimer(connector, () => Activate(connector))
-				.Interval(interval)
-				.Start();
-		}
-
-		protected override void DisposeManaged()
-		{
-			_timer.Dispose();
-			base.DisposeManaged();
-		}
-	}
-
 	private abstract class TransactionProviderRule<TArg>(ITransactionProvider provider) : MarketRule<ITransactionProvider, TArg>(provider)
 	{
 		protected ITransactionProvider Provider { get; } = provider ?? throw new ArgumentNullException(nameof(provider));
@@ -99,20 +78,6 @@ public static partial class MarketRuleHelper
 			Connector.ConnectionErrorEx -= OnConnectionErrorEx;
 			base.DisposeManaged();
 		}
-	}
-
-	/// <summary>
-	/// To create a rule for the event <see cref="IConnector.MarketTimeChanged"/>, activated after expiration of <paramref name="interval" />.
-	/// </summary>
-	/// <param name="connector">Connection to the trading system.</param>
-	/// <param name="interval">Interval.</param>
-	/// <returns>Rule.</returns>
-	public static MarketRule<IConnector, IConnector> WhenIntervalElapsed(this IConnector connector, TimeSpan interval)
-	{
-		if (connector == null)
-			throw new ArgumentNullException(nameof(connector));
-
-		return new IntervalTimeRule(connector, interval);
 	}
 
 	/// <summary>

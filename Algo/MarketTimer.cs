@@ -6,11 +6,11 @@ namespace StockSharp.Algo;
 /// <remarks>
 /// Initializes a new instance of the <see cref="MarketTimer"/>.
 /// </remarks>
-/// <param name="connector">The connection to trading system, from which event <see cref="IConnector.MarketTimeChanged"/> will be used.</param>
+/// <param name="provider"><see cref="ITimeProvider"/></param>
 /// <param name="activated">The timer processor.</param>
-public class MarketTimer(IConnector connector, Action activated) : Disposable
+public class MarketTimer(ITimeProvider provider, Action activated) : Disposable
 {
-	private readonly IConnector _connector = connector ?? throw new ArgumentNullException(nameof(connector));
+	private readonly ITimeProvider _provider = provider ?? throw new ArgumentNullException(nameof(provider));
 	private readonly Action _activated = activated ?? throw new ArgumentNullException(nameof(activated));
 	private bool _started;
 	private TimeSpan _interval;
@@ -50,7 +50,7 @@ public class MarketTimer(IConnector connector, Action activated) : Disposable
 			if (!_started)
 			{
 				_started = true;
-				_connector.MarketTimeChanged += OnMarketTimeChanged;
+				_provider.CurrentTimeChanged += OnCurrentTimeChanged;
 			}
 		}
 
@@ -68,14 +68,14 @@ public class MarketTimer(IConnector connector, Action activated) : Disposable
 			if (_started)
 			{
 				_started = false;
-				_connector.MarketTimeChanged -= OnMarketTimeChanged;
+				_provider.CurrentTimeChanged -= OnCurrentTimeChanged;
 			}	
 		}
 		
 		return this;
 	}
 
-	private void OnMarketTimeChanged(TimeSpan diff)
+	private void OnCurrentTimeChanged(TimeSpan diff)
 	{
 		lock (_syncLock)
 		{

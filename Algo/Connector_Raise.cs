@@ -66,7 +66,11 @@ partial class Connector
 	public event Action<Message> NewMessage;
 
 	/// <inheritdoc />
+	[Obsolete("Use CurrentTimeChanged event.")]
 	public event Action<TimeSpan> MarketTimeChanged;
+
+	/// <inheritdoc />
+	public event Action<TimeSpan> CurrentTimeChanged;
 
 	/// <inheritdoc />
 	public event Action Connected;
@@ -361,12 +365,13 @@ partial class Connector
 	}
 
 	/// <summary>
-	/// To call the event <see cref="MarketTimeChanged"/>.
+	/// To call the event <see cref="CurrentTimeChanged"/>.
 	/// </summary>
 	/// <param name="diff">The difference in the time since the last call of the event. The first time the event passes the <see cref="TimeSpan.Zero"/> value.</param>
-	private void RaiseMarketTimeChanged(TimeSpan diff)
+	private void RaiseCurrentTimeChanged(TimeSpan diff)
 	{
 		MarketTimeChanged?.Invoke(diff);
+		CurrentTimeChanged?.Invoke(diff);
 	}
 
 	/// <summary>

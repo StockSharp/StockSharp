@@ -87,7 +87,7 @@ public enum StrategyTradingModes
 /// </summary>
 public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMarketRuleContainer,
     ICloneable<Strategy>, IMarketDataProvider, ISubscriptionProvider, ISecurityProvider,
-    ITransactionProvider, IScheduledTask, ICustomTypeDescriptor
+    ITransactionProvider, IScheduledTask, ICustomTypeDescriptor, ITimeProvider
 {
 	private class StrategyChangeStateMessage(Strategy strategy, ProcessStates state)
 		: Message(ExtendedMessageTypes.StrategyChangeState)
@@ -352,6 +352,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				con.OrderEditFailed           -= OnConnectorOrderEditFailed;
 #pragma warning restore CS0618 // Type or member is obsolete
 				con.NewMessage                -= OnConnectorNewMessage;
+				con.CurrentTimeChanged        -= OnConnectorCurrentTimeChanged;
 				isp.PositionReceived          -= OnConnectorPositionReceived;
 				isp.Level1Received            -= OnConnectorLevel1Received;
 				isp.OrderBookReceived         -= OnConnectorOrderBookReceived;
@@ -393,6 +394,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				con.OrderEditFailed           += OnConnectorOrderEditFailed;
 #pragma warning restore CS0618 // Type or member is obsolete
 				con.NewMessage                += OnConnectorNewMessage;
+				con.CurrentTimeChanged        += OnConnectorCurrentTimeChanged;
 				isp.PositionReceived          += OnConnectorPositionReceived;
 				isp.Level1Received            += OnConnectorLevel1Received;
 				isp.OrderBookReceived         += OnConnectorOrderBookReceived;

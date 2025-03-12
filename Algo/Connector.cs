@@ -903,7 +903,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 			return;
 
 		_prevTime = currentTime;
-		RaiseMarketTimeChanged(diff);
+		RaiseCurrentTimeChanged(diff);
 	}
 
 	/// <inheritdoc />

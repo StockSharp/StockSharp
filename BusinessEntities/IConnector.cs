@@ -3,7 +3,7 @@ namespace StockSharp.BusinessEntities;
 /// <summary>
 /// The main interface providing the connection to the trading systems.
 /// </summary>
-public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ITransactionProvider, ISecurityProvider, INewsProvider, ISubscriptionProvider, IMessageChannel
+public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ITransactionProvider, ISecurityProvider, INewsProvider, ISubscriptionProvider, ITimeProvider, IMessageChannel
 {
 	/// <summary>
 	/// Message processed <see cref="Message"/>.
@@ -63,6 +63,7 @@ public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, I
 	/// <summary>
 	/// Server time changed <see cref="ILogSource.CurrentTime"/>. It passed the time difference since the last call of the event. The first time the event passes the value <see cref="TimeSpan.Zero"/>.
 	/// </summary>
+	[Obsolete("Use ITimeProvider.CurrentTimeChanged event.")]
 	event Action<TimeSpan> MarketTimeChanged;
 
 	/// <summary>
