@@ -122,6 +122,7 @@ partial class Connector
 	public event Action<DataTypeLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult2;
 
 	/// <inheritdoc />
+	[Obsolete("Use ISubscriptionProvider.BoardReceived event.")]
 	public event Action<ExchangeBoard, SessionStates> SessionStateChanged;
 
 	/// <inheritdoc />

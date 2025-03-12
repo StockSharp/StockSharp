@@ -61,21 +61,9 @@ public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, I
 	event Action<long, Exception> ChangePasswordResult;
 
 	/// <summary>
-	/// Server time changed <see cref="IConnector.ExchangeBoards"/>. It passed the time difference since the last call of the event. The first time the event passes the value <see cref="TimeSpan.Zero"/>.
+	/// Server time changed <see cref="ILogSource.CurrentTime"/>. It passed the time difference since the last call of the event. The first time the event passes the value <see cref="TimeSpan.Zero"/>.
 	/// </summary>
 	event Action<TimeSpan> MarketTimeChanged;
-
-	/// <summary>
-	/// Session changed.
-	/// </summary>
-	event Action<ExchangeBoard, SessionStates> SessionStateChanged;
-
-	/// <summary>
-	/// Get session state for required board.
-	/// </summary>
-	/// <param name="board">Electronic board.</param>
-	/// <returns>Session state. If the information about session state does not exist, then <see langword="null" /> will be returned.</returns>
-	SessionStates? GetSessionState(ExchangeBoard board);
 
 	/// <summary>
 	/// List of all exchange boards, for which instruments are loaded <see cref="Securities"/>.
