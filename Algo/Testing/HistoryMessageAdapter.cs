@@ -27,7 +27,7 @@ public class HistoryMessageAdapter : MessageAdapter
 	private int _postTradeMarketTimeChangedCount = 2;
 
 	/// <summary>
-	/// The number of the event <see cref="IConnector.MarketTimeChanged"/> calls after end of trading. By default it is equal to 2.
+	/// The number of the event <see cref="ITimeProvider.CurrentTimeChanged"/> calls after end of trading. By default it is equal to 2.
 	/// </summary>
 	/// <remarks>
 	/// It is required for activation of post-trade rules (rules, basing on events, occurring after end of trading).

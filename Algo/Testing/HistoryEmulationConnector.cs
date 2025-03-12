@@ -120,7 +120,7 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 
 		//MaxMessageCount = 1000;
 
-		MarketTimeChanged += OnMarketTimeChanged;
+		CurrentTimeChanged += OnCurrentTimeChanged;
 		Disconnected += OnDisconnected;
 
 		SupportFilteredMarketDepth = false;
@@ -282,7 +282,7 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 	private long _stepTicks;
 	private int _progress;
 
-	private void OnMarketTimeChanged(TimeSpan diff)
+	private void OnCurrentTimeChanged(TimeSpan diff)
 	{
 		if (_stepTicks == default)
 			return;
@@ -364,7 +364,7 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 	/// <inheritdoc />
 	protected override void DisposeManaged()
 	{
-		MarketTimeChanged -= OnMarketTimeChanged;
+		CurrentTimeChanged -= OnCurrentTimeChanged;
 		Disconnected -= OnDisconnected;
 
 		base.DisposeManaged();
