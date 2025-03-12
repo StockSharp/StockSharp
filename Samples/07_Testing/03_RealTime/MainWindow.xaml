@@ -36,7 +36,7 @@
 						<ColumnDefinition />
 					</Grid.ColumnDefinitions>
 
-					<charting:CandleSettingsEditor x:Name="CandleSettingsEditor" HorizontalAlignment="Left" />
+					<charting:CandleDataTypeEdit x:Name="CandleDataTypeEdit" HorizontalAlignment="Left" />
 				</Grid>
 				<!--End chart control grid-->
 

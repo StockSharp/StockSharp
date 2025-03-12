@@ -107,7 +107,7 @@
 					<TextBox x:Name="MaxDepth" Grid.Row="16" Grid.Column="0" IsEnabled="{Binding ElementName=GenDepthsCheckBox, Path=IsChecked}" TextAlignment="Right" ToolTip="{x:Static loc:LocalizedStrings.MaxDepthGeneration}">1</TextBox>
 					<TextBox x:Name="MaxVolume" Grid.Row="17" Grid.Column="0" IsEnabled="{Binding ElementName=GenDepthsCheckBox, Path=IsChecked}" TextAlignment="Right" ToolTip="{x:Static loc:LocalizedStrings.MaxVolForGeneration}">1</TextBox>
 
-					<charting:CandleSettingsEditor x:Name="CandleSettings" Grid.Row="18" Grid.Column="0" />
+					<charting:CandleDataTypeEdit x:Name="CandleSettings" Grid.Row="18" Grid.Column="0" />
 				</Grid>
 			</Grid>
 

@@ -47,8 +47,8 @@ public partial class MainWindow
 	{
 		InitializeComponent();
 
-		CandleSettingsEditor.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
-		CandleSettingsEditor.EditValueChanged += CandleSettingsChanged;
+		CandleDataTypeEdit.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
+		CandleDataTypeEdit.EditValueChanged += CandleSettingsChanged;
 
 		_logManager = new LogManager();
 		_logManager.Listeners.Add(new GuiLogListener(Log));
@@ -188,10 +188,10 @@ public partial class MainWindow
 
 	private void CandleSettingsChanged(object sender, EditValueChangedEventArgs e)
 	{
-		if (_tempCandleSeries == CandleSettingsEditor.DataType || _candlesSubscription == null)
+		if (_tempCandleSeries == CandleDataTypeEdit.DataType || _candlesSubscription == null)
 			return;
 
-		_tempCandleSeries = CandleSettingsEditor.DataType.Clone();
+		_tempCandleSeries = CandleDataTypeEdit.DataType.Clone();
 		SecurityPicker_OnSecuritySelected(SecurityPicker.SelectedSecurity);
 	}
 
@@ -284,7 +284,7 @@ public partial class MainWindow
 
 		_realConnector.SubscribeMarketDepth(security);
 		
-		_candlesSubscription = _emuConnector.SubscribeCandles(security, CandleSettingsEditor.DataType, from: DateTimeOffset.UtcNow - TimeSpan.FromDays(10));
+		_candlesSubscription = _emuConnector.SubscribeCandles(security, CandleDataTypeEdit.DataType, from: DateTimeOffset.UtcNow - TimeSpan.FromDays(10));
 	}
 
 	private void NewOrder_OnClick(object sender, RoutedEventArgs e)

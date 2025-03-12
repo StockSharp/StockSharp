@@ -45,7 +45,7 @@
 			</TabItem>
 		</TabControl>
 		<Button x:Name="Start" Content="Start" Click="Start_Click" Grid.Row="0" Grid.Column="5"/>
-		<xaml:CandleSettingsEditor x:Name="CandleSettingsEditor" Grid.Row="0" Grid.Column="4"/>
+		<xaml:CandleDataTypeEdit x:Name="CandleDataTypeEdit" Grid.Row="0" Grid.Column="4"/>
 		<Button Grid.Row="0" Grid.Column="0" x:Name="Setting" Content="Setting" Click="Setting_Click" />
 		<Button Grid.Row="0" Grid.Column="1" x:Name="Connect" Content="Connect" Click="Connect_Click" />
 		<xaml:PortfolioEditor x:Name="PortfolioEditor" Grid.Row="0" Grid.Column="3"/>

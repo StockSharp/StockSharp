@@ -40,7 +40,7 @@ public MainWindow()
     {
         _connector.Load(_connectorFile.Deserialize<SettingsStorage>());
     }
-    CandleSettingsEditor.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
+    CandleDataTypeEdit.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
 }
 ```
 
@@ -73,7 +73,7 @@ private void SecurityPicker_SecuritySelected(Security security)
     if (_subscription != null)
         _connector.UnSubscribe(_subscription);
 
-    _subscription = new Subscription(CandleSettingsEditor.DataType.ToCandleSeries(security))
+    _subscription = new Subscription(CandleDataTypeEdit.DataType.ToCandleSeries(security))
     {
         MarketData = 
         {

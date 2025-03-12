@@ -27,7 +27,7 @@
 		<DatePicker x:Name="DatePickerBegin" Grid.Row="0" Grid.Column="2"/>
 		<DatePicker x:Name="DatePickerEnd" Grid.Row="0" Grid.Column="3"/>
 		<CheckBox x:Name="BuildFromTicks" Grid.Row="0" Grid.Column="4" Content="Build from ticks" VerticalAlignment="Center" HorizontalAlignment="Center" />
-		<xaml:CandleSettingsEditor x:Name="CandleSettingsEditor" Grid.Row="0" Grid.Column="5"/>
+		<xaml:CandleDataTypeEdit x:Name="CandleDataTypeEdit" Grid.Row="0" Grid.Column="5"/>
 		
 		<xaml:SecurityPicker x:Name="SecurityPicker" Grid.ColumnSpan="7" Grid.Column="0" Grid.Row="1" SecuritySelected="SecurityPicker_SecuritySelected"/>
 		<xaml:Chart x:Name="Chart" Grid.ColumnSpan="7" Grid.Column="0" Grid.Row="2"/>

@@ -34,7 +34,7 @@ public partial class MainWindow
 		{
 			_connector.Load(_connectorFile.Deserialize<SettingsStorage>());
 		}
-		CandleSettingsEditor.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
+		CandleDataTypeEdit.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
 	}
 
 	private void Setting_Click(object sender, RoutedEventArgs e)
@@ -114,7 +114,7 @@ public partial class MainWindow
 		//	}
 		//};
 		//----------------------------------Candles will be load and built the missing data from trades------------------------
-		_subscription = new(CandleSettingsEditor.DataType, security)
+		_subscription = new(CandleDataTypeEdit.DataType, security)
 		{
 			MarketData =
 			{

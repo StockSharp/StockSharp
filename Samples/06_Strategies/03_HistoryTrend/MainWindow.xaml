@@ -56,7 +56,7 @@
 				</Grid>
 			</TabItem>
 		</TabControl>
-		<xaml:CandleSettingsEditor x:Name="CandleSettingsEditor" Grid.Row="0" Grid.Column="0"/>
+		<xaml:CandleDataTypeEdit x:Name="CandleDataTypeEdit" Grid.Row="0" Grid.Column="0"/>
 		<Button x:Name="Start" Content="Start" Click="Start_Click" Grid.Row="0" Grid.Column="3"/>
 
 		<DatePicker Grid.Row="0" Grid.Column="1" x:Name="DatePickerBegin"/>

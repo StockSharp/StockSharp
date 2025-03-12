@@ -19,7 +19,7 @@ public MainWindow()
     {
         _connector.Load(_connectorFile.Deserialize<SettingsStorage>());
     }
-    CandleSettingsEditor.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
+    CandleDataTypeEdit.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
     DatePickerBegin.SelectedDate = Paths.HistoryBeginDate;
     DatePickerEnd.SelectedDate = Paths.HistoryEndDate;
 }
@@ -55,7 +55,7 @@ private void SecurityPicker_SecuritySelected(Security security)
 {
     if (security == null) return;
     if (_subscription != null) _connector.UnSubscribe(_subscription);
-    _subscription = new(CandleSettingsEditor.DataType.ToCandleSeries(security))
+    _subscription = new(CandleDataTypeEdit.DataType.ToCandleSeries(security))
     {
         MarketData = { From = DatePickerBegin.SelectedDate, To = DatePickerEnd.SelectedDate, }
     };

@@ -31,7 +31,7 @@ public MainWindow()
     {
         _connector.Load(_connectorFile.Deserialize<SettingsStorage>());
     }
-    CandleSettingsEditor.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
+    CandleDataTypeEdit.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
 }
 ```
 

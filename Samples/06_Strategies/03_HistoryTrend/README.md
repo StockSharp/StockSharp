@@ -23,7 +23,7 @@ public MainWindow()
 	_logManager.Listeners.Add(new GuiLogListener(Monitor));
 	DatePickerBegin.SelectedDate = Paths.HistoryBeginDate;
 	DatePickerEnd.SelectedDate = Paths.HistoryEndDate;
-	CandleSettingsEditor.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
+	CandleDataTypeEdit.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
 }
 ```
 

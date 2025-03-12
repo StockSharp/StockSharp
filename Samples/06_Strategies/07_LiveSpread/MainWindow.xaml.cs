@@ -40,7 +40,7 @@ public partial class MainWindow
 		_logManager = new LogManager();
 		_logManager.Listeners.Add(new GuiLogListener(Monitor));
 
-		CandleSettingsEditor.DataType = DataType.TimeFrame(TimeSpan.FromSeconds(10));
+		CandleDataTypeEdit.DataType = DataType.TimeFrame(TimeSpan.FromSeconds(10));
 	}
 
 	private void Setting_Click(object sender, RoutedEventArgs e)
@@ -75,7 +75,7 @@ public partial class MainWindow
 			Security = _security,
 			Connector = _connector,
 			Portfolio = PortfolioEditor.SelectedPortfolio,
-			CandleDataType = CandleSettingsEditor.DataType,
+			CandleDataType = CandleDataTypeEdit.DataType,
 		};
 		_logManager.Sources.Add(_strategy);
 		_strategy.OwnTradeReceived += (s, t) => MyTradeGrid.Trades.TryAdd(t);

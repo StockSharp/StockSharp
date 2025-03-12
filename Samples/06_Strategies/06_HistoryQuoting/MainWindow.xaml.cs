@@ -46,7 +46,7 @@ public partial class MainWindow
 		DatePickerBegin.SelectedDate = Paths.HistoryBeginDate;
 		DatePickerEnd.SelectedDate = Paths.HistoryEndDate;
 
-		CandleSettingsEditor.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(1));
+		CandleDataTypeEdit.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(1));
 	}
 
 	private void Start_Click(object sender, RoutedEventArgs e)
@@ -96,7 +96,7 @@ public partial class MainWindow
 			Security = _security,
 			Connector = _connector,
 			Portfolio = _portfolio,
-			CandleDataType = CandleSettingsEditor.DataType,
+			CandleDataType = CandleDataTypeEdit.DataType,
 		};
 		_logManager.Sources.Add(_strategy);
 		

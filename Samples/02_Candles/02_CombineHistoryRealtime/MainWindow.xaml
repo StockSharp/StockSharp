@@ -25,7 +25,7 @@
 		<xaml:SecurityPicker x:Name="SecurityPicker" Grid.Row="1"  ShowCommonStatColumns="True" SecuritySelected="SecurityPicker_SecuritySelected" Grid.ColumnSpan="5"
 		                       Grid.Column="0" />
 		<xaml:Chart x:Name="Chart" Grid.ColumnSpan="5" Grid.Column="0" Grid.Row="2"/>
-		<xaml:CandleSettingsEditor x:Name="CandleSettingsEditor" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto"
+		<xaml:CandleDataTypeEdit x:Name="CandleDataTypeEdit" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto"
 		                             Grid.Row="0" Grid.Column="3"/>
 	</Grid>
 </Window>

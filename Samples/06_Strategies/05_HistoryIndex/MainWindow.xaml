@@ -23,7 +23,7 @@
 		<DatePicker x:Name="DatePickerBegin" Grid.Row="0" Grid.Column="1"/>
 		<DatePicker x:Name="DatePickerEnd" Grid.Row="0" Grid.Column="2"/>
 
-		<custom:CandleSettingsEditor Grid.Row="0" Grid.Column="0" x:Name="CandleSettingsEditor"/>
+		<custom:CandleDataTypeEdit Grid.Row="0" Grid.Column="0" x:Name="CandleDataTypeEdit"/>
 		<TabControl Grid.ColumnSpan="6" Grid.Column="0" Grid.Row="1">
 			<TabItem Header="Chart&amp;MarketDepth">
 				<Grid Background="#FFE5E5E5">

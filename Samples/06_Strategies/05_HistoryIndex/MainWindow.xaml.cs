@@ -44,7 +44,7 @@ public partial class MainWindow
 		_logManager.Listeners.Add(new FileLogListener("log.txt"));
 		_logManager.Listeners.Add(new GuiLogListener(Monitor));
 
-		CandleSettingsEditor.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
+		CandleDataTypeEdit.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
 
 		DatePickerBegin.SelectedDate = Paths.HistoryBeginDate;
 		DatePickerEnd.SelectedDate = Paths.HistoryEndDate;
@@ -86,7 +86,7 @@ public partial class MainWindow
 		_logManager.Sources.Add(_connector);
 		ConfigManager.RegisterService<ISecurityProvider>(_connector);
 
-		_subscription = new(CandleSettingsEditor.DataType, _indexSecurity)
+		_subscription = new(CandleDataTypeEdit.DataType, _indexSecurity)
 		{
 			MarketData =
 			{

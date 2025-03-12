@@ -35,7 +35,7 @@ public partial class MainWindow
 			_connector.Load(_connectorFile.Deserialize<SettingsStorage>());
 		}
 
-		CandleSettingsEditor.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
+		CandleDataTypeEdit.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
 
 		DatePickerBegin.SelectedDate = Paths.HistoryBeginDate;
 		DatePickerEnd.SelectedDate = Paths.HistoryEndDate;
@@ -70,7 +70,7 @@ public partial class MainWindow
 		if (security == null) return;
 		if (_subscription != null) _connector.UnSubscribe(_subscription);
 
-		_subscription = new(CandleSettingsEditor.DataType, security)
+		_subscription = new(CandleDataTypeEdit.DataType, security)
 		{
 			From = DatePickerBegin.SelectedDate,
 			To = DatePickerEnd.SelectedDate,

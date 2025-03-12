@@ -60,7 +60,7 @@
 
 		<DatePicker Grid.Row="0" Grid.Column="1" x:Name="DatePickerBegin"/>
 		<DatePicker x:Name="DatePickerEnd" Grid.Row="0" Grid.Column="2"/>
-		<xaml:CandleSettingsEditor x:Name="CandleSettingsEditor" Grid.Row="0" Grid.Column="0"/>
+		<xaml:CandleDataTypeEdit x:Name="CandleDataTypeEdit" Grid.Row="0" Grid.Column="0"/>
 
 	</Grid>
 </Window>
