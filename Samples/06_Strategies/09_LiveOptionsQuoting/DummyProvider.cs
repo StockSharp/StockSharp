@@ -25,8 +25,7 @@ class DummyProvider : CollectionSecurityProvider, IMarketDataProvider, IPosition
 	}
 
 	object IMarketDataProvider.GetSecurityValue(Security security, Level1Fields field)
-	{
-		return field switch
+		=> field switch
 		{
 			Level1Fields.OpenInterest => security.OpenInterest,
 			Level1Fields.ImpliedVolatility => security.ImpliedVolatility,
@@ -40,12 +39,10 @@ class DummyProvider : CollectionSecurityProvider, IMarketDataProvider, IPosition
 			Level1Fields.BestAskVolume => security.BestAsk?.Volume,
 			_ => null,
 		};
-	}
 
 	IEnumerable<Level1Fields> IMarketDataProvider.GetLevel1Fields(Security security)
-	{
-		return new[]
-		{
+		=>
+		[
 			Level1Fields.OpenInterest,
 			Level1Fields.ImpliedVolatility,
 			Level1Fields.HistoricalVolatility,
@@ -56,8 +53,10 @@ class DummyProvider : CollectionSecurityProvider, IMarketDataProvider, IPosition
 			Level1Fields.BestAskPrice,
 			Level1Fields.BestBidVolume,
 			Level1Fields.BestAskVolume
-		};
-	}
+		];
+
+	SessionStates? IMarketDataProvider.GetSessionState(ExchangeBoard board)
+		=> default;
 
 	event Action<SecurityLookupMessage, IEnumerable<Security>, Exception> IMarketDataProvider.LookupSecuritiesResult
 	{
@@ -90,6 +89,12 @@ class DummyProvider : CollectionSecurityProvider, IMarketDataProvider, IPosition
 	}
 
 	event Action<DataTypeLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> IMarketDataProvider.LookupTimeFramesResult2
+	{
+		add => throw new NotSupportedException();
+		remove => throw new NotSupportedException();
+	}
+
+	event Action<ExchangeBoard, SessionStates> IMarketDataProvider.SessionStateChanged
 	{
 		add => throw new NotSupportedException();
 		remove => throw new NotSupportedException();
