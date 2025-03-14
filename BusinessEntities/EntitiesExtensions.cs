@@ -2288,12 +2288,7 @@ public static partial class EntitiesExtensions
 		if (subscription.SecurityId is not SecurityId secId)
 			return null;
 
-		provider ??= TrySecurityProvider;
-
-		if (provider is null)
-			throw new ArgumentNullException(nameof(provider));
-
-		return provider.LookupById(secId);
+		return (provider ?? TrySecurityProvider)?.LookupById(secId);
 	}
 
 	/// <summary>
