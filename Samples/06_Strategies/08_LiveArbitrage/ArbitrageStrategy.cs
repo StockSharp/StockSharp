@@ -116,7 +116,6 @@ public class ArbitrageStrategy : Strategy
 
 	private ArbitrageState _currentState = ArbitrageState.None;
 	private decimal _enterSpread;
-	private Func<decimal> _arbitragePnl;
 	private decimal _profit;
 	private decimal _futBid;
 	private decimal _futAck;
@@ -125,6 +124,12 @@ public class ArbitrageStrategy : Strategy
 	private IOrderBookMessage _lastFut;
 	private IOrderBookMessage _lastSt;
 	private SecurityId _futId, _stockId;
+
+	// Trading prices tracking
+	private decimal _futureBuyPrice;
+	private decimal _futureExitPrice;
+	private decimal _stockBuyPrice;
+	private decimal _stockExitPrice;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ArbitrageStrategy"/>.
@@ -181,11 +186,70 @@ public class ArbitrageStrategy : Strategy
 		_futId = FutureSecurity.ToSecurityId();
 		_stockId = StockSecurity.ToSecurityId();
 
+		// Subscribe to market depth updates for both instruments
 		var futureDepthSubscription = this.SubscribeMarketDepth(FutureSecurity);
 		var stockDepthSubscription = this.SubscribeMarketDepth(StockSecurity);
 
 		futureDepthSubscription.WhenOrderBookReceived(this).Do(ProcessMarketDepth).Apply(this);
 		stockDepthSubscription.WhenOrderBookReceived(this).Do(ProcessMarketDepth).Apply(this);
+
+		// Subscribe to own trades to capture execution prices
+		this
+			.WhenOwnTradeReceived()
+			.Do(OnNewMyTrade)
+			.Apply(this);
+	}
+
+	/// <summary>
+	/// Handler for new trades to track execution prices.
+	/// </summary>
+	private void OnNewMyTrade(MyTrade trade)
+	{
+		// During position entry/exit, we need to track our execution prices
+		// to properly calculate P&L
+		if (_currentState == ArbitrageState.OrderRegistration)
+			return;
+
+		if (trade.Order.Security == FutureSecurity)
+		{
+			if (trade.Order.Side == Sides.Buy)
+				_futureBuyPrice = trade.Trade.Price;
+			else
+				_futureExitPrice = trade.Trade.Price;
+		}
+		else if (trade.Order.Security == StockSecurity)
+		{
+			if (trade.Order.Side == Sides.Buy)
+				_stockBuyPrice = trade.Trade.Price;
+			else
+				_stockExitPrice = trade.Trade.Price;
+		}
+
+		// Recalculate profit after each trade
+		CalculateProfit();
+	}
+
+	/// <summary>
+	/// Calculates current profit based on entry and exit prices.
+	/// </summary>
+	private void CalculateProfit()
+	{
+		switch (_currentState)
+		{
+			case ArbitrageState.Backvordation:
+				// Buy future, sell stock - profit when future price rises and stock price falls
+				_profit = (_stockExitPrice * StockMultiplicator - _stAsk) + (_futBid - _futureBuyPrice);
+				break;
+
+			case ArbitrageState.Contango:
+				// Sell future, buy stock - profit when future price falls and stock price rises
+				_profit = (_futureExitPrice - _futAck) + (_stBid - _stockBuyPrice * StockMultiplicator);
+				break;
+
+			default:
+				_profit = 0;
+				break;
+		}
 	}
 
 	/// <summary>
@@ -238,10 +302,10 @@ public class ArbitrageStrategy : Strategy
 		LogInfo($"{ArbitrageState.Contango}        spread = {contangoSpread}");
 		LogInfo($"Entry from spread:{SpreadToGenerateSignal}. Exit from profit:{ProfitToExit}");
 
-		// Calculate current profit if we have an open position
-		if (_arbitragePnl != null)
+		// Recalculate profit based on current market conditions
+		if (_currentState != ArbitrageState.None && _currentState != ArbitrageState.OrderRegistration)
 		{
-			_profit = _arbitragePnl();
+			CalculateProfit();
 			LogInfo($"Profit: {_profit}");
 		}
 
@@ -292,21 +356,13 @@ public class ArbitrageStrategy : Strategy
 		new IMarketRule[]
 		{
 			buy.WhenMatched(this),
-			sell.WhenMatched(this),
-			buy.WhenAllTrades(this),
-			sell.WhenAllTrades(this),
+			sell.WhenMatched(this)
 		}
 		.And()
 		.Do(() =>
 		{
-			var futurePrise = buy.GetTrades(Connector).GetAveragePrice();
-			var stockPrise = sell.GetTrades(Connector).GetAveragePrice() * StockMultiplicator;
-
-			_enterSpread = stockPrise - futurePrise;
-
-			_arbitragePnl = () => stockPrise - _stAsk + _futBid - futurePrise;
+			_enterSpread = _stockExitPrice * StockMultiplicator - _futureBuyPrice;
 			_currentState = ArbitrageState.Backvordation;
-
 		}).Once().Apply(this);
 
 		RegisterOrder(buy);
@@ -323,21 +379,13 @@ public class ArbitrageStrategy : Strategy
 		new IMarketRule[]
 		{
 			sell.WhenMatched(this),
-			buy.WhenMatched(this),
-			sell.WhenAllTrades(this),
-			buy.WhenAllTrades(this),
+			buy.WhenMatched(this)
 		}
 		.And()
 		.Do(() =>
 		{
-			var futurePrise = sell.GetTrades(Connector).GetAveragePrice();
-			var stockPrise = buy.GetTrades(Connector).GetAveragePrice() * StockMultiplicator;
-
-			_enterSpread = futurePrise - stockPrise;
-
-			_arbitragePnl = () => futurePrise - _futAck + _stBid - stockPrise;
+			_enterSpread = _futureExitPrice - _stockBuyPrice * StockMultiplicator;
 			_currentState = ArbitrageState.Contango;
-
 		}).Once().Apply(this);
 
 		RegisterOrder(sell);
@@ -360,8 +408,13 @@ public class ArbitrageStrategy : Strategy
 		.Do(() =>
 		{
 			_enterSpread = 0;
-			_arbitragePnl = null;
 			_currentState = ArbitrageState.None;
+
+			// Reset tracking prices
+			_futureBuyPrice = 0;
+			_futureExitPrice = 0;
+			_stockBuyPrice = 0;
+			_stockExitPrice = 0;
 		}).Once().Apply(this);
 
 		RegisterOrder(sell);
@@ -384,8 +437,13 @@ public class ArbitrageStrategy : Strategy
 		.Do(() =>
 		{
 			_enterSpread = 0;
-			_arbitragePnl = null;
 			_currentState = ArbitrageState.None;
+
+			// Reset tracking prices
+			_futureBuyPrice = 0;
+			_futureExitPrice = 0;
+			_stockBuyPrice = 0;
+			_stockExitPrice = 0;
 		}).Once().Apply(this);
 
 		RegisterOrder(buy);
