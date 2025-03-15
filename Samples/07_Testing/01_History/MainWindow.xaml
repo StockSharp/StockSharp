@@ -77,19 +77,19 @@
 						<CheckBox Content="{x:Static loc:LocalizedStrings.DebugLog}" VerticalAlignment="Center" Name="DebugLogCheckBox" Click="CheckBoxClick" />
 					</StackPanel>
 
-					<ProgressBar x:Name="TicksProgress" Grid.Column="1" Grid.Row="2" />
-					<ProgressBar x:Name="TicksAndDepthsProgress" Grid.Column="1" Grid.Row="3" />
-					<ProgressBar x:Name="DepthsProgress" Grid.Column="1" Grid.Row="4" />
-					<ProgressBar x:Name="CandlesProgress" Grid.Column="1" Grid.Row="5" />
+					<ProgressBar x:Name="CandlesProgress" Grid.Column="1" Grid.Row="2" />
+					<ProgressBar x:Name="TicksProgress" Grid.Column="1" Grid.Row="3" />
+					<ProgressBar x:Name="TicksAndDepthsProgress" Grid.Column="1" Grid.Row="4" />
+					<ProgressBar x:Name="DepthsProgress" Grid.Column="1" Grid.Row="5" />
 					<ProgressBar x:Name="CandlesAndDepthsProgress" Grid.Column="1" Grid.Row="6" />
 					<ProgressBar x:Name="OrderLogProgress" Grid.Column="1" Grid.Row="7" />
 					<ProgressBar x:Name="LastTradeProgress" Grid.Column="1" Grid.Row="8" />
 					<ProgressBar x:Name="SpreadProgress" Grid.Column="1" Grid.Row="9" />
 
-					<CheckBox Content="{x:Static loc:LocalizedStrings.Ticks}" Grid.Row="2" Grid.Column="0" Name="TicksCheckBox" Click="CheckBoxClick" />
-					<CheckBox Content="{x:Static loc:LocalizedStrings.TicksAndDepths}" Grid.Row="3" Grid.Column="0" Name="TicksAndDepthsCheckBox" Click="CheckBoxClick" />
-					<CheckBox Content="{x:Static loc:LocalizedStrings.MarketDepths}" Grid.Row="4" Grid.Column="0" Name="DepthsCheckBox" Click="CheckBoxClick" />
-					<CheckBox Content="{x:Static loc:LocalizedStrings.Candles}" Grid.Row="5" Grid.Column="0" Name="CandlesCheckBox" Click="CheckBoxClick" />
+					<CheckBox Content="{x:Static loc:LocalizedStrings.Candles}" Grid.Row="2" Grid.Column="0" Name="CandlesCheckBox" Click="CheckBoxClick" />
+					<CheckBox Content="{x:Static loc:LocalizedStrings.Ticks}" Grid.Row="3" Grid.Column="0" Name="TicksCheckBox" Click="CheckBoxClick" />
+					<CheckBox Content="{x:Static loc:LocalizedStrings.TicksAndDepths}" Grid.Row="4" Grid.Column="0" Name="TicksAndDepthsCheckBox" Click="CheckBoxClick" />
+					<CheckBox Content="{x:Static loc:LocalizedStrings.MarketDepths}" Grid.Row="5" Grid.Column="0" Name="DepthsCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.CandlesAndDepths}" Grid.Row="6" Grid.Column="0" Name="CandlesAndDepthsCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.OrderLog}" Grid.Row="7" Grid.Column="0" Name="OrderLogCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.LastTrade}" Grid.Row="8" Grid.Column="0" Name="LastTradeCheckBox" Click="CheckBoxClick" />
@@ -113,6 +113,22 @@
 
 			<Grid Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0">
 				<TabControl x:Name="TabControl" Visibility="Collapsed">
+					<TabItem Header="{x:Static loc:LocalizedStrings.Candles}" Visibility="{Binding Converter={StaticResource BoolToVisibilityConverter}, ElementName=CandlesCheckBox, Path=IsChecked}">
+						<TabControl>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Candles}">
+								<charting:ChartPanel x:Name="CandlesChart" ShowOverview="False" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
+								<charting:EquityCurveChart x:Name="CandlesEquity" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
+								<sx:StatisticParameterGrid x:Name="CandlesParameterGrid" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Position}">
+								<charting:EquityCurveChart x:Name="CandlesPosition" />
+							</TabItem>
+						</TabControl>
+					</TabItem>
 					<TabItem Header="{x:Static loc:LocalizedStrings.Ticks}" Visibility="{Binding Converter={StaticResource BoolToVisibilityConverter}, ElementName=TicksCheckBox, Path=IsChecked}">
 						<TabControl>
 							<TabItem Header="{x:Static loc:LocalizedStrings.Candles}">
@@ -158,22 +174,6 @@
 							</TabItem>
 							<TabItem Header="{x:Static loc:LocalizedStrings.Position}">
 								<charting:EquityCurveChart x:Name="DepthsPosition" />
-							</TabItem>
-						</TabControl>
-					</TabItem>
-					<TabItem Header="{x:Static loc:LocalizedStrings.Candles}" Visibility="{Binding Converter={StaticResource BoolToVisibilityConverter}, ElementName=CandlesCheckBox, Path=IsChecked}">
-						<TabControl>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Candles}">
-								<charting:ChartPanel x:Name="CandlesChart" ShowOverview="False" />
-							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
-								<charting:EquityCurveChart x:Name="CandlesEquity" />
-							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
-								<sx:StatisticParameterGrid x:Name="CandlesParameterGrid" />
-							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Position}">
-								<charting:EquityCurveChart x:Name="CandlesPosition" />
 							</TabItem>
 						</TabControl>
 					</TabItem>
