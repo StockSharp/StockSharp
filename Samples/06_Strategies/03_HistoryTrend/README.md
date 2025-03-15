@@ -39,7 +39,7 @@ When the user starts the simulation, the application configures the necessary co
 private void Start_Click(object sender, RoutedEventArgs e)
 {
 	// Setup security, portfolio, and storage for historical data
-	_security = new Security { Id = "SBER@TQBR", Code = "SBER", PriceStep = 0.01m, Board = ExchangeBoard.Micex };
+	_security = new Security { Id = "SBER@TQBR", PriceStep = 0.01m };
 	_portfolio = new Portfolio { Name = "test account", BeginValue = 1000000 };
 	var storageRegistry = new StorageRegistry { DefaultDrive = new LocalMarketDataDrive(_pathHistory) };
 

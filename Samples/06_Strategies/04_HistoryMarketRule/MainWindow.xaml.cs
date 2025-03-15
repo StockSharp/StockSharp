@@ -39,10 +39,8 @@ public partial class MainWindow
 	{
 		_security = new Security
 		{
-			Id = "SBER@TQBR",
-			Code = "SBER",
+			Id = Paths.HistoryDefaultSecurity,
 			PriceStep = 0.01m,
-			Board = ExchangeBoard.Micex
 		};
 		_portfolio = new Portfolio { Name = "test account", BeginValue = 1000000 };
 		var storageRegistry = new StorageRegistry

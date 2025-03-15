@@ -97,10 +97,7 @@ public partial class MainWindow
 		// create test security
 		var security = new Security
 		{
-			Id = "SBER@TQBR", // sec id has the same name as folder with historical data
-			Code = "SBER",
-			Name = "SBER",
-			Board = ExchangeBoard.Micex,
+			Id = Paths.HistoryDefaultSecurity, // sec id has the same name as folder with historical data
 			PriceStep = 0.01m,
 		};
 

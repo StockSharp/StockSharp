@@ -65,7 +65,7 @@ public partial class MainWindow
 
 		HistoryPath.Folder = Paths.HistoryDataPath;
 
-		SecId.Text = "SBER@TQBR";
+		SecId.Text = Paths.HistoryDefaultSecurity;
 
 		From.EditValue = Paths.HistoryBeginDate;
 		To.EditValue = Paths.HistoryEndDate;

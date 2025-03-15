@@ -461,6 +461,11 @@ public static class Paths
 	public static readonly string HistoryDataPath;
 
 	/// <summary>
+	/// Sample history data security.
+	/// </summary>
+	public const string HistoryDefaultSecurity = "SBER@TQBR";
+
+	/// <summary>
 	/// Begin date of <see cref="HistoryDataPath"/>.
 	/// </summary>
 	public static readonly DateTime HistoryBeginDate = new DateTime(2020, 4, 1).UtcKind();
