@@ -282,7 +282,7 @@ public class GeneticOptimizer : BaseOptimizer
 			Func<object> getValue;
 
 			var type = param.Type;
-			type = type.IsNullable() ? type.GetUnderlyingType() : type;
+			type = type.GetUnderlyingType() ?? type;
 
 			if (step is null && type != typeof(bool))
 				throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(param.Id, LocalizedStrings.Step));

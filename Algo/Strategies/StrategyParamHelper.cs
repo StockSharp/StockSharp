@@ -17,8 +17,7 @@ public static class StrategyParamHelper
 		if (type is null)
 			throw new ArgumentNullException(nameof(type));
 
-		if (type.IsNullable())
-			type = type.GetUnderlyingType();
+		type = type.GetUnderlyingType() ?? type;
 
 		return type.IsNumeric() && !type.IsEnum() || type == typeof(bool) || type == typeof(Unit) || type == typeof(TimeSpan) || type == typeof(DataType);
 	}
