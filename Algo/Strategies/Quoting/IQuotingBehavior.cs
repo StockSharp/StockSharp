@@ -86,8 +86,10 @@ public class MarketQuotingBehavior(Unit priceOffset, Unit bestPriceOffset, Marke
 				throw new InvalidOperationException(priceType.ToString());
 		}
 
+		basePrice ??= lastTradePrice;
+
 		if (basePrice == null)
-			return lastTradePrice;
+			return null;
 
 		// Apply price offset based on direction
 		return quotingDirection == Sides.Buy
@@ -124,7 +126,7 @@ public class BestByPriceQuotingBehavior(Unit bestPriceOffset) : IQuotingBehavior
 		decimal? lastTradePrice, QuoteChange[] bids, QuoteChange[] asks)
 	{
 		// Use the best price based on direction
-		return quotingDirection == Sides.Buy ? bestBidPrice : bestAskPrice;
+		return (quotingDirection == Sides.Buy ? bestBidPrice : bestAskPrice) ?? lastTradePrice;
 	}
 
 	decimal? IQuotingBehavior.NeedQuoting(Security security, IMarketDataProvider provider, decimal? currentPrice, decimal? currentVolume, decimal newVolume, decimal? bestPrice)
@@ -186,7 +188,8 @@ public class BestByVolumeQuotingBehavior(Unit volumeExchange) : IQuotingBehavior
 		decimal? lastTradePrice, QuoteChange[] bids, QuoteChange[] asks)
 	{
 		var quotes = quotingDirection == Sides.Buy ? bids : asks;
-		if (quotes == null || quotes.Length == 0)
+
+		if (quotes.Length == 0)
 			return lastTradePrice;
 
 		var volume = 0m;
@@ -243,7 +246,8 @@ public class LevelQuotingBehavior : IQuotingBehavior
 		decimal? lastTradePrice, QuoteChange[] bids, QuoteChange[] asks)
 	{
 		var quotes = quotingDirection == Sides.Buy ? bids : asks;
-		if (quotes == null || quotes.Length == 0)
+
+		if (quotes.Length == 0)
 			return lastTradePrice;
 
 		if (quotes.ElementAtOr(_level.Min) is not QuoteChange minQuote)
@@ -337,7 +341,7 @@ public class TheorPriceQuotingBehavior(Range<Unit> theorPriceOffset) : IQuotingB
 		decimal? lastTradePrice, QuoteChange[] bids, QuoteChange[] asks)
 	{
 		// Use the best price from the order book, as in BestByPriceQuotingStrategy
-		return quotingDirection == Sides.Buy ? bestBidPrice : bestAskPrice;
+		return (quotingDirection == Sides.Buy ? bestBidPrice : bestAskPrice) ?? lastTradePrice;
 	}
 
 	decimal? IQuotingBehavior.NeedQuoting(Security security, IMarketDataProvider provider, decimal? currentPrice, decimal? currentVolume, decimal newVolume, decimal? bestPrice)
@@ -376,7 +380,7 @@ public class VolatilityQuotingBehavior(Range<decimal> ivRange, IBlackScholes mod
 		decimal? lastTradePrice, QuoteChange[] bids, QuoteChange[] asks)
 	{
 		// Use the best price from the order book, as in BestByPriceQuotingStrategy
-		return quotingDirection == Sides.Buy ? bestBidPrice : bestAskPrice;
+		return (quotingDirection == Sides.Buy ? bestBidPrice : bestAskPrice) ?? lastTradePrice;
 	}
 
 	decimal? IQuotingBehavior.NeedQuoting(Security security, IMarketDataProvider provider, decimal? currentPrice, decimal? currentVolume, decimal newVolume, decimal? bestPrice)

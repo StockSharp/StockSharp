@@ -16,9 +16,24 @@ public abstract class QuotingStrategy : Strategy
 		_quotingSide = Param(nameof(QuotingSide), Sides.Buy);
 		_quotingVolume = Param(nameof(QuotingVolume), 1m).SetValidator(new DecimalGreaterThanZeroAttribute());
 		_timeOut = Param<TimeSpan>(nameof(TimeOut)).SetValidator(new TimeSpanNotNegativeAttribute());
+		_useBidAsk = Param(nameof(UseBidAsk), true);
 		_useLastTradePrice = Param(nameof(UseLastTradePrice), true);
 
 		DisposeOnStop = true;
+	}
+
+	private readonly StrategyParam<bool> _useBidAsk;
+
+	/// <summary>
+	/// To use the best bid and ask prices from the order book. If the information in the order book is missed, the processor will not recommend any actions.
+	/// </summary>
+	/// <remarks>
+	/// The default is enabled.
+	/// </remarks>
+	public bool UseBidAsk
+	{
+		get => _useBidAsk.Value;
+		set => _useBidAsk.Value = value;
 	}
 
 	private readonly StrategyParam<bool> _useLastTradePrice;
@@ -82,7 +97,7 @@ public abstract class QuotingStrategy : Strategy
 	{
 		base.OnStarted(time);
 
-		_processor = new(Security, Portfolio, QuotingSide, QuotingVolume, Volume, CreateBehavior(), TimeOut, this, this, this, this, this, GetPositionValue, IsFormedAndOnlineAndAllowTrading, UseLastTradePrice, Stop)
+		_processor = new(CreateBehavior(), Security, Portfolio, QuotingSide, QuotingVolume, Volume, TimeOut, this, this, this, this, this, IsFormedAndOnlineAndAllowTrading, UseBidAsk, UseLastTradePrice)
 		{
 			Parent = this
 		};
@@ -93,10 +108,16 @@ public abstract class QuotingStrategy : Strategy
 			{
 				if (_processor.LeftVolume > 0)
 					LogWarning(LocalizedStrings.QuotingFinishedNotFull, _processor.LeftVolume);
+
+				_processor.Finished -= OnProcessorFinished;
 			})
 			.Once()
 			.Apply(this);
 
-		_processor.Init();
+		_processor.Finished += OnProcessorFinished;
+
+		_processor.Start();
 	}
+
+	private void OnProcessorFinished(bool success) => Stop();
 }

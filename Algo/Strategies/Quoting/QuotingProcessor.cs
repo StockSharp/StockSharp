@@ -17,10 +17,13 @@ public class QuotingProcessor : BaseLogReceiver
 	private readonly IMarketRuleContainer _container;
 	private readonly ITransactionProvider _transProvider;
 	private readonly ITimeProvider _timeProvider;
-	private readonly Func<Security, Portfolio, decimal?> _getPosition;
 	private readonly Func<StrategyTradingModes, bool> _isAllowed;
-	private readonly bool _useLastTradePrice;
-	private readonly Action _stop;
+	private readonly List<Subscription> _subscriptions = [];
+	private readonly HashSet<IMarketRule> _rules = [];
+	private readonly bool _useBidAsk;
+	private readonly bool _useTicks;
+	private bool _finished;
+	private bool _pending;
 	private Order _currentOrder;
 	private IOrderBookMessage _filteredBook;
 	private ITickTradeMessage _lastTrade;
@@ -29,29 +32,30 @@ public class QuotingProcessor : BaseLogReceiver
 	/// <summary>
 	/// Initializes a new instance of the <see cref="QuotingProcessor"/> class.
 	/// </summary>
+	/// <param name="behavior">The behavior defining the quoting logic.</param>
 	/// <param name="security"><see cref="Security"/></param>
 	/// <param name="portfolio"><see cref="Portfolio"/></param>
 	/// <param name="quotingSide">The direction of quoting (Buy or Sell).</param>
 	/// <param name="quotingVolume">The total volume to be quoted.</param>
 	/// <param name="maxOrderVolume">Maximum volume of a single order. If the total volume of <paramref name="quotingVolume"/> is greater than this value, the processor will split the quoting into multiple orders.</param>
-	/// <param name="behavior">The behavior defining the quoting logic.</param>
 	/// <param name="timeOut">The time limit during which the quoting should be fulfilled. If the total volume of <paramref name="quotingVolume"/> will not be fulfilled by this time, the strategy will stop operating.</param>
 	/// <param name="subProvider"><see cref="ISubscriptionProvider"/></param>
 	/// <param name="container"><see cref="IMarketRuleContainer"/></param>
 	/// <param name="transProvider"><see cref="ITransactionProvider"/></param>
 	/// <param name="timeProvider"><see cref="ITimeProvider"/></param>
 	/// <param name="mdProvider"><see cref="IMarketDataProvider"/></param>
-	/// <param name="getPosition">Get the current position of the security.</param>
 	/// <param name="isAllowed">Is the strategy allowed to trade.</param>
-	/// <param name="useLastTradePrice">To use the last trade price, if the information in the order book is missed.</param>
-	/// <param name="stop">Stop action. The action is called when the quoting is finished.</param>
-	public QuotingProcessor(Security security, Portfolio portfolio,
+	/// <param name="useBidAsk">To use the best bid and ask prices from the order book. If the information in the order book is missed, the processor will not recommend any actions.</param>
+	/// <param name="useTicks">To use the last trade price, if the information in the order book is missed.</param>
+	public QuotingProcessor(
+		IQuotingBehavior behavior,
+		Security security, Portfolio portfolio,
 		Sides quotingSide, decimal quotingVolume, decimal maxOrderVolume,
-		IQuotingBehavior behavior, TimeSpan timeOut, ISubscriptionProvider subProvider,
+		TimeSpan timeOut, ISubscriptionProvider subProvider,
 		IMarketRuleContainer container, ITransactionProvider transProvider,
 		ITimeProvider timeProvider, IMarketDataProvider mdProvider,
-		Func<Security, Portfolio, decimal?> getPosition, Func<StrategyTradingModes, bool> isAllowed,
-		bool useLastTradePrice, Action stop)
+		Func<StrategyTradingModes, bool> isAllowed,
+		bool useBidAsk, bool useTicks)
 	{
 		if (quotingVolume <= 0)
 			throw new ArgumentOutOfRangeException(nameof(quotingVolume), quotingVolume, LocalizedStrings.InvalidValue);
@@ -71,13 +75,26 @@ public class QuotingProcessor : BaseLogReceiver
 		_transProvider = transProvider ?? throw new ArgumentNullException(nameof(transProvider));
 		_timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
 		_mdProvider = mdProvider ?? throw new ArgumentNullException(nameof(mdProvider));
-		_getPosition = getPosition ?? throw new ArgumentNullException(nameof(getPosition));
 		_isAllowed = isAllowed ?? throw new ArgumentNullException(nameof(isAllowed));
-		_useLastTradePrice = useLastTradePrice;
-		_stop = stop ?? throw new ArgumentNullException(nameof(stop));
+		_useBidAsk = useBidAsk;
+		_useTicks = useTicks;
+
+		_container.Rules.Removed += OnRulesRemoved;
 	}
 
-	private decimal Position => _getPosition(_security, _portfolio) ?? 0;
+	private void OnRulesRemoved(IMarketRule rule)
+		=> _rules.Remove(rule);
+
+	/// <inheritdoc />
+	protected override void DisposeManaged()
+	{
+		_container.Rules.Removed -= OnRulesRemoved;
+		Stop();
+
+		base.DisposeManaged();
+	}
+
+	private decimal Position { get; set; }
 
 	/// <summary>
 	/// Left volume.
@@ -85,60 +102,91 @@ public class QuotingProcessor : BaseLogReceiver
 	public decimal LeftVolume => _quotingVolume - Position.Abs();
 
 	private bool IsTimeOut(DateTimeOffset currentTime) => _timeOut != TimeSpan.Zero && (currentTime - _startedTime) >= _timeOut;
-	private bool NeedFinish() => LeftVolume <= 0;
+	private bool NeedFinish() => _finished || LeftVolume <= 0;
 
 	/// <summary>
-	/// Initializes the processor.
+	/// Occurs when an order is registered.
 	/// </summary>
-	public void Init()
+	public event Action<Order> OrderRegistered;
+
+	/// <summary>
+	/// Occurs when an order fails to be registered.
+	/// </summary>
+	public event Action<OrderFail> OrderFailed;
+
+	/// <summary>
+	/// Occurs when an own trade is received.
+	/// </summary>
+	public event Action<MyTrade> OwnTrade;
+
+	/// <summary>
+	/// Occurs when the processor is finished. The argument indicates whether the quoting was successful or by timeout.
+	/// </summary>
+	public event Action<bool> Finished;
+
+	/// <summary>
+	/// Start the processor.
+	/// </summary>
+	public void Start()
 	{
 		LogInfo(LocalizedStrings.QuotingForVolume, _quotingSide, _quotingVolume);
+
+		_currentOrder = default;
+		_pending = default;
+		_finished = default;
 
 		_startedTime = _timeProvider.CurrentTime;
 
 		_container.SuspendRules(() =>
 		{
-			_subProvider
-				.SubscribeFilteredMarketDepth(_security)
-				.WhenOrderBookReceived(_subProvider)
-				.Do(book =>
-				{
-					_filteredBook = book;
-					ProcessQuoting(book.ServerTime);
-				})
-				.Apply(_container);
+			Subscription addSub(Subscription subscription)
+			{
+				_subscriptions.Add(subscription);
+				return subscription;
+			}
 
-			_subProvider
-				.SubscribeTrades(_security)
-				.WhenTickTradeReceived(_subProvider)
-				.Do(t =>
-				{
-					_lastTrade = t;
-					ProcessQuoting(t.ServerTime);
-				})
-				.Apply(_container);
+			if (_useBidAsk)
+			{
+				AddRule(addSub(_subProvider.SubscribeFilteredMarketDepth(_security))
+					.WhenOrderBookReceived(_subProvider)
+					.Do(book =>
+					{
+						_filteredBook = book;
+						ProcessQuoting(book.ServerTime);
+					})
+					.Apply(_container));
+			}
 
-			_subProvider
+			if (_useTicks)
+			{
+				AddRule(addSub(_subProvider.SubscribeTrades(_security))
+					.WhenTickTradeReceived(_subProvider)
+					.Do(t =>
+					{
+						_lastTrade = t;
+						ProcessQuoting(t.ServerTime);
+					})
+					.Apply(_container));
+			}
+
+			AddRule(_subProvider
 				.WhenPositionReceived()
 				.Do(() =>
 				{
 					LogInfo(LocalizedStrings.PrevPosNewPos, _security, Position, LeftVolume);
 
 					if (NeedFinish())
-					{
-						LogInfo(LocalizedStrings.Stopped);
-						_stop();
-					}
+						RaiseSuccess();
 				})
-				.Apply(_container);
+				.Apply(_container));
 
 			if (_timeOut > TimeSpan.Zero)
 			{
-				_timeProvider
+				AddRule(_timeProvider
 					.WhenIntervalElapsed(_timeOut)
-					.Do(_stop)
+					.Do(RaiseTimeOut)
 					.Once()
-					.Apply(_container);
+					.Apply(_container));
 			}
 		});
 
@@ -146,25 +194,81 @@ public class QuotingProcessor : BaseLogReceiver
 			ProcessQuoting(_startedTime);
 	}
 
-	private void ProcessRegisteredOrder(Order o)
+	private void RaiseSuccess()
 	{
-		if (o == _currentOrder)
-			LogInfo(LocalizedStrings.OrderAcceptedByExchange, o.TransactionId);
-		else
-			LogWarning(LocalizedStrings.OrderOutOfDate, o.TransactionId);
+		LogInfo(LocalizedStrings.Stopped);
+		RaiseFinished(true);
+	}
 
-		ProcessQuoting(o.ServerTime);
+	private void RaiseTimeOut()
+	{
+		LogWarning(LocalizedStrings.TimeOut);
+		RaiseFinished(false);
+	}
+
+	private void RaiseFinished(bool res)
+	{
+		if (_finished)
+			return;
+
+		_finished = true;
+
+		foreach (var sub in _subscriptions.CopyAndClear())
+			_subProvider.UnSubscribe(sub);
+
+		foreach (var rule in _rules.CopyAndClear())
+			_container.TryRemoveRule(rule, false);
+
+		Finished?.Invoke(res);
+	}
+
+	private IMarketRule AddRule(IMarketRule rule)
+	{
+		if (rule is null)
+			throw new ArgumentNullException(nameof(rule));
+
+		_rules.Add(rule);
+
+		return rule;
+	}
+
+	/// <summary>
+	/// Stop the processor.
+	/// </summary>
+	public void Stop()
+	{
+		if (_pending || _currentOrder is null)
+			return;
+
+		_transProvider.CancelOrder(_currentOrder);
+		_currentOrder = null;
+	}
+
+	private void ProcessRegisteredOrder(Order order)
+	{
+		if (order == _currentOrder)
+		{
+			LogInfo(LocalizedStrings.OrderAcceptedByExchange, order.TransactionId);
+
+			_pending = default;
+
+			OrderRegistered?.Invoke(order);
+		}
+		else
+			LogWarning(LocalizedStrings.OrderOutOfDate, order.TransactionId);
+
+		ProcessQuoting(order.ServerTime);
 	}
 
 	private void AddOrderRules(Order order)
 	{
-		var regRule = order
+		var regRule = AddRule(order
 			.WhenRegistered(_subProvider)
 			.Do(ProcessRegisteredOrder)
 			.Once()
-			.Apply(_container);
+			.Apply(_container));
 
-		var regFailRule = order
+		var regFailRule = AddRule(order
 			.WhenRegisterFailed(_subProvider)
 			.Do(fail =>
 			{
@@ -176,8 +280,12 @@ public class QuotingProcessor : BaseLogReceiver
 
 				if (o == _currentOrder)
 				{
-					_currentOrder = null;
+					_currentOrder = default;
+					_pending = default;
+
 					canProcess = true;
+
+					OrderFailed?.Invoke(fail);
 				}
 				else
 					LogWarning(LocalizedStrings.OrderOutOfDate, o.TransactionId);
@@ -186,28 +294,26 @@ public class QuotingProcessor : BaseLogReceiver
 					ProcessQuoting(fail.ServerTime);
 			})
 			.Once()
-			.Apply(_container);
+			.Apply(_container));
 
 		regRule.Exclusive(regFailRule);
 
-		var matchedRule = order
+		var matchedRule = AddRule(order
 			.WhenMatched(_subProvider)
 			.Do((r, o) =>
 			{
 				LogInfo(LocalizedStrings.OrderMatchedRemainBalance, o.TransactionId, LeftVolume);
 
-				_container.Rules.RemoveRulesByToken(o, r);
-
 				if (NeedFinish())
 				{
-					LogInfo(LocalizedStrings.Stopped);
-					_stop();
+					RaiseSuccess();
 				}
 				else
 				{
 					if (_currentOrder == o)
 					{
 						_currentOrder = default;
+						_pending = default;
 
 						ProcessQuoting(o.ServerTime);
 					}
@@ -216,13 +322,74 @@ public class QuotingProcessor : BaseLogReceiver
 				}
 			})
 			.Once()
-			.Apply(_container);
+			.Apply(_container));
 
+		var cancelledRule = AddRule(order
+			.WhenCanceled(_subProvider)
+			.Do((r, o) =>
+			{
+				if (NeedFinish())
+				{
+					RaiseSuccess();
+				}
+				else
+				{
+					if (_currentOrder == o)
+					{
+						_currentOrder = default;
+						_pending = default;
+
+						ProcessQuoting(o.ServerTime);
+					}
+					else
+						LogWarning(LocalizedStrings.OrderOutOfDate, o.TransactionId);
+				}
+			})
+			.Once()
+			.Apply(_container));
+
+		var cancelFailRule = AddRule(order
+			.WhenCancelFailed(_subProvider)
+			.Do((r, f) =>
+			{
+				if (NeedFinish())
+				{
+					RaiseSuccess();
+				}
+				else
+				{
+					if (_currentOrder == f.Order)
+					{
+					}
+					else
+						LogWarning(LocalizedStrings.OrderOutOfDate, f.Order.TransactionId);
+				}
+			})
+			.Apply(_container));
+
+		var tradeRule = AddRule(order
+			.WhenNewTrade(_subProvider)
+			.Do((r, t) =>
+			{
+				Position += t.GetPosition();
+
+				if (_currentOrder == t.Order)
+					OwnTrade?.Invoke(t);
+				else
+					LogWarning(LocalizedStrings.OrderOutOfDate, t.Order.TransactionId);
+			})
+			.Apply(_container));
+
+		regFailRule.Exclusive(cancelledRule);
 		regFailRule.Exclusive(matchedRule);
+		regFailRule.Exclusive(tradeRule);
 	}
 
 	private void ProcessQuoting(DateTimeOffset currentTime)
 	{
+		if (_finished)
+			return;
+
 		if (_container.ProcessState != ProcessStates.Started)
 		{
 			LogWarning(LocalizedStrings.StrategyInState, _container.ProcessState);
@@ -231,16 +398,19 @@ public class QuotingProcessor : BaseLogReceiver
 
 		if (IsTimeOut(currentTime))
 		{
-			_stop();
+			RaiseTimeOut();
 			return;
 		}
 
-		var bestBidPrice = _filteredBook?.Bids?.FirstOr()?.Price;
-		var bestAskPrice = _filteredBook?.Asks?.FirstOr()?.Price;
-		var lastTradePrice = _useLastTradePrice ? _lastTrade?.Price : null;
+		if (_pending)
+			return;
+
 		var bids = _filteredBook?.Bids ?? [];
 		var asks = _filteredBook?.Asks ?? [];
-
+		var bestBidPrice = bids.FirstOr()?.Price;
+		var bestAskPrice = asks.FirstOr()?.Price;
+		var lastTradePrice = _lastTrade?.Price;
+		
 		var (isRegister, price, volume) = Process(
 			_currentOrder,
 			bestBidPrice,
@@ -272,6 +442,7 @@ public class QuotingProcessor : BaseLogReceiver
 					_currentOrder = order;
 					AddOrderRules(_currentOrder);
 
+					_pending = true;
 					_transProvider.RegisterOrder(_currentOrder);
 					LogInfo($"Registering order at price {price} with volume {volume}");
 				}
@@ -281,6 +452,7 @@ public class QuotingProcessor : BaseLogReceiver
 			case false:
 				if (_currentOrder != null && _isAllowed(StrategyTradingModes.CancelOrdersOnly))
 				{
+					_pending = true;
 					_transProvider.CancelOrder(_currentOrder);
 					LogInfo($"Cancelling order {_currentOrder.TransactionId}");
 				}
