@@ -488,6 +488,9 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				var lastVolume = quote.Value.Second.Volume;
 				var lastPrice = quote.Value.Second.Price;
 
+				if (lastVolume <= 0)
+					throw new InvalidOperationException($"lastVolume={lastVolume}<=0");
+
 				while (leftVolume > 0 && lastPrice != 0)
 				{
 					lastVolume *= 2;
@@ -952,7 +955,9 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						using var fromEnum = from.GetEnumerator();
 						using var toEnum = ((IEnumerable<QuoteChange>)to).GetEnumerator();
 
-						while (true)
+						var maxIter = 1000;
+
+						while (maxIter-- > 0)
 						{
 							if (canProcessFrom && currFrom == null)
 							{
@@ -1205,9 +1210,13 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						if (bestBid.Key < bestAsk.Key)
 							break;
 
+						var modified = false;
+
 						// сдвиг идет бидами (убираем аск)
 						if (message.Bids.Length > 0 && message.Bids[0].Volume > 0)
 						{
+							modified = true;
+
 							_asks.Remove(bestAsk.Key);
 
 							var levelOrders = bestAsk.Value.First;
@@ -1228,6 +1237,8 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						// сдвиг идет асками (убираем бид)
 						if (message.Asks.Length > 0 && message.Asks[0].Volume > 0)
 						{
+							modified = true;
+
 							_bids.Remove(bestBid.Key);
 
 							var levelOrders = bestBid.Value.First;
@@ -1244,6 +1255,9 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 							AddTotalVolume(Sides.Buy, -bestBid.Value.Second.Volume);
 						}
+
+						if (!modified)
+							break;
 					}
 
 #if EMU_DBG
