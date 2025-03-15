@@ -230,19 +230,19 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		Parameters = new(this);
 
 		_id = Param(nameof(Id), base.Id).SetHidden().SetReadOnly();
-		_volume = Param(nameof(Volume), 1m).SetValidator(new DecimalGreaterThanZeroAttribute()).SetDisplay(LocalizedStrings.Volume, LocalizedStrings.StrategyVolume, LocalizedStrings.General);
+		_volume = Param(nameof(Volume), 1m).SetGreaterThanZero().SetDisplay(LocalizedStrings.Volume, LocalizedStrings.StrategyVolume, LocalizedStrings.General);
 		_name = Param(nameof(Name), new string([.. GetType().Name.Where(char.IsUpper)])).SetDisplay(LocalizedStrings.Name, LocalizedStrings.StrategyName, LocalizedStrings.General).SetBasic(false);
 		_disposeOnStop = Param(nameof(DisposeOnStop), false).SetCanOptimize(false).SetHidden();
 		_waitRulesOnStop = Param(nameof(WaitRulesOnStop), true).SetCanOptimize(false).SetHidden();
 		_cancelOrdersWhenStopping = Param(nameof(CancelOrdersWhenStopping), true).SetCanOptimize(false).SetHidden();
 		_waitAllTrades = Param(nameof(WaitAllTrades), false).SetCanOptimize(false).SetHidden();
 		_commentMode = Param(nameof(CommentMode), StrategyCommentModes.Disabled).SetDisplay(LocalizedStrings.Comment, LocalizedStrings.OrderComment, LocalizedStrings.General).SetBasic(false);
-		_ordersKeepTime = Param(nameof(OrdersKeepTime), TimeSpan.FromDays(1)).SetValidator(new TimeSpanNotNegativeAttribute()).SetDisplay(LocalizedStrings.Orders, LocalizedStrings.OrdersKeepTime, LocalizedStrings.General).SetBasic(false).SetCanOptimize(false);
+		_ordersKeepTime = Param(nameof(OrdersKeepTime), TimeSpan.FromDays(1)).SetNotNegative().SetDisplay(LocalizedStrings.Orders, LocalizedStrings.OrdersKeepTime, LocalizedStrings.General).SetBasic(false).SetCanOptimize(false);
 		_logLevel = Param(nameof(LogLevel), LogLevels.Inherit).SetDisplay(LocalizedStrings.LogLevel, LocalizedStrings.LogLevelKey, LocalizedStrings.Logging).SetBasic(false);
 		_tradingMode = Param(nameof(TradingMode), StrategyTradingModes.Full).SetDisplay(LocalizedStrings.Trading, LocalizedStrings.AllowTrading, LocalizedStrings.General).SetBasic(false);
 		_unsubscribeOnStop = Param(nameof(UnsubscribeOnStop), true).SetCanOptimize(false).SetHidden();
 		_workingTime = Param(nameof(WorkingTime), new WorkingTime()).SetRequired().SetDisplay(LocalizedStrings.WorkingTime, LocalizedStrings.WorkingHours, LocalizedStrings.General).SetBasic(false);
-		_historySize = Param<TimeSpan?>(nameof(HistorySize)).SetValidator(new TimeSpanNullOrNotNegativeAttribute()).SetDisplay(LocalizedStrings.DaysHistory, LocalizedStrings.DaysHistoryDesc, LocalizedStrings.General).SetBasic(false).SetCanOptimize(false);
+		_historySize = Param<TimeSpan?>(nameof(HistorySize)).SetNullOrNotNegative().SetDisplay(LocalizedStrings.DaysHistory, LocalizedStrings.DaysHistoryDesc, LocalizedStrings.General).SetBasic(false).SetCanOptimize(false);
 		_security = Param<Security>(nameof(Security)).SetDisplay(LocalizedStrings.Security, LocalizedStrings.StrategySecurity, LocalizedStrings.General).SetNonBrowsable(HideSecurityAndPortfolioParameters);
 		_portfolio = Param<Portfolio>(nameof(Portfolio)).SetDisplay(LocalizedStrings.Portfolio, LocalizedStrings.StrategyPortfolio, LocalizedStrings.General).SetNonBrowsable(HideSecurityAndPortfolioParameters).SetCanOptimize(false);
 

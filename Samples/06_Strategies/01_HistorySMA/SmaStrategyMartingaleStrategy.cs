@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-using Ecng.ComponentModel;
-
 using StockSharp.Algo;
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Strategies;
@@ -43,13 +41,13 @@ namespace StockSharp.Samples.Strategies.HistorySMA
 		public SmaStrategyMartingaleStrategy()
 		{
 			_longSmaLength = Param(nameof(LongSmaLength), 80)
-							.SetValidator(new IntGreaterThanZeroAttribute())
+							.SetGreaterThanZero()
 							.SetDisplay("Long SMA Length", "Length of the long SMA indicator", "Indicators")
 							.SetCanOptimize(true)
 							.SetOptimize(40, 120, 10);
 
 			_shortSmaLength = Param(nameof(ShortSmaLength), 30)
-							.SetValidator(new IntGreaterThanZeroAttribute())
+							.SetGreaterThanZero()
 							.SetDisplay("Short SMA Length", "Length of the short SMA indicator", "Indicators")
 							.SetCanOptimize(true)
 							.SetOptimize(10, 50, 5);

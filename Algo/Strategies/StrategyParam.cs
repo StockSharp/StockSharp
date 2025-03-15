@@ -178,6 +178,114 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	public StrategyParam<T> SetReadOnly(bool value = true)
 		=> ModifyAttributes(value, () => new ReadOnlyAttribute(true));
 
+	/// <summary>
+	/// Set greater than zero validator.
+	/// </summary>
+	/// <returns><see cref="StrategyParam{T}"/></returns>
+	public StrategyParam<T> SetGreaterThanZero()
+	{
+		var type = typeof(T);
+
+		ValidationAttribute attr;
+
+		if (type == typeof(int))
+			attr = new IntGreaterThanZeroAttribute();
+		else if (type == typeof(decimal))
+			attr = new DecimalGreaterThanZeroAttribute();
+		else if (type == typeof(TimeSpan))
+			attr = new TimeSpanGreaterThanZeroAttribute();
+		else
+			throw new InvalidOperationException(type.Name);
+
+		return this.SetValidator(attr);
+	}
+
+	/// <summary>
+	/// Set <see langword="null"/> or more zero validator.
+	/// </summary>
+	/// <returns><see cref="StrategyParam{T}"/></returns>
+	public StrategyParam<T> SetNullOrMoreZero()
+	{
+		var type = typeof(T);
+
+		ValidationAttribute attr;
+
+		if (type == typeof(int))
+			attr = new IntNullOrMoreZeroAttribute();
+		else if (type == typeof(decimal))
+			attr = new DecimalNullOrMoreZeroAttribute();
+		else if (type == typeof(TimeSpan))
+			attr = new TimeSpanNullOrMoreZeroAttribute();
+		else
+			throw new InvalidOperationException(type.Name);
+
+		return this.SetValidator(attr);
+	}
+
+	/// <summary>
+	/// Set <see langword="null"/> or not negative validator.
+	/// </summary>
+	/// <returns><see cref="StrategyParam{T}"/></returns>
+	public StrategyParam<T> SetNullOrNotNegative()
+	{
+		var type = typeof(T);
+
+		ValidationAttribute attr;
+
+		if (type == typeof(int))
+			attr = new IntNullOrNotNegativeAttribute();
+		else if (type == typeof(decimal))
+			attr = new DecimalNullOrNotNegativeAttribute();
+		else if (type == typeof(TimeSpan))
+			attr = new TimeSpanNullOrNotNegativeAttribute();
+		else
+			throw new InvalidOperationException(type.Name);
+
+		return this.SetValidator(attr);
+	}
+
+	/// <summary>
+	/// Set not negative validator.
+	/// </summary>
+	/// <returns><see cref="StrategyParam{T}"/></returns>
+	public StrategyParam<T> SetNotNegative()
+	{
+		var type = typeof(T);
+
+		ValidationAttribute attr;
+
+		if (type == typeof(int))
+			attr = new IntNotNegativeAttribute();
+		else if (type == typeof(decimal))
+			attr = new DecimalNotNegativeAttribute();
+		else if (type == typeof(TimeSpan))
+			attr = new TimeSpanNotNegativeAttribute();
+		else
+			throw new InvalidOperationException(type.Name);
+
+		return this.SetValidator(attr);
+	}
+
+	/// <summary>
+	/// Set range validator.
+	/// </summary>
+	/// <param name="min">Minimum value.</param>
+	/// <param name="max">Maximum value.</param>
+	/// <returns><see cref="StrategyParam{T}"/></returns>
+	public StrategyParam<T> SetRange(T min, T max)
+	{
+		var type = typeof(T);
+
+		RangeAttribute attr;
+
+		if (type == typeof(int))
+			attr = new(min.To<int>(), max.To<int>());
+		else
+			attr = new(type, min.To<string>(), max.To<string>());
+
+		return this.SetValidator(attr);
+	}
+
 	private StrategyParam<T> ModifyAttributes<TAttr>(bool add, Func<TAttr> create)
 		where TAttr : Attribute
 	{

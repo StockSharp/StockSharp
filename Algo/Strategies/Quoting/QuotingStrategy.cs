@@ -14,8 +14,8 @@ public abstract class QuotingStrategy : Strategy
 	protected QuotingStrategy()
 	{
 		_quotingSide = Param(nameof(QuotingSide), Sides.Buy);
-		_quotingVolume = Param(nameof(QuotingVolume), 1m).SetValidator(new DecimalGreaterThanZeroAttribute());
-		_timeOut = Param<TimeSpan>(nameof(TimeOut)).SetValidator(new TimeSpanNotNegativeAttribute());
+		_quotingVolume = Param(nameof(QuotingVolume), 1m).SetGreaterThanZero();
+		_timeOut = Param<TimeSpan>(nameof(TimeOut)).SetNotNegative();
 		_useBidAsk = Param(nameof(UseBidAsk), true);
 		_useLastTradePrice = Param(nameof(UseLastTradePrice), true);
 

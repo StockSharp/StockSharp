@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-using Ecng.ComponentModel;
-
 using StockSharp.Algo.Strategies;
 using StockSharp.BusinessEntities;
 using StockSharp.Messages;
@@ -32,7 +30,7 @@ namespace StockSharp.Samples.Strategies.HistoryTrend
 		public StairsTrendStrategy()
 		{
 			_lengthParam = Param(nameof(Length), 3)
-						   .SetValidator(new IntGreaterThanZeroAttribute())
+						   .SetGreaterThanZero()
 						   .SetDisplay("Length", "Number of consecutive candles to trigger signal", "Strategy")
 						   .SetCanOptimize(true)
 						   .SetOptimize(2, 10, 1);

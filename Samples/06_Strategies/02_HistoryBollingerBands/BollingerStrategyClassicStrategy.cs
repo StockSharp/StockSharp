@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-using Ecng.ComponentModel;
-
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Strategies;
 using StockSharp.BusinessEntities;
@@ -39,7 +37,7 @@ namespace StockSharp.Samples.Strategies.HistoryBollingerBands
 		public BollingerStrategyClassicStrategy()
 		{
 			_bollingerLength = Param(nameof(BollingerLength), 20)
-							  .SetValidator(new IntGreaterThanZeroAttribute())
+							  .SetGreaterThanZero()
 							  .SetDisplay("Bollinger Length", "Length of the Bollinger Bands indicator", "Indicators")
 							  .SetCanOptimize(true)
 							  .SetOptimize(10, 50, 5);
