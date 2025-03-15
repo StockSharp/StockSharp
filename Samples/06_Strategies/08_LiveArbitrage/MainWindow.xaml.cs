@@ -58,15 +58,16 @@ public partial class MainWindow
 
 		_connector.SecurityReceived += (sub, security) =>
 		{
-			this.GuiSync(() =>
+			this.GuiAsync(() =>
 			{
-				if (security.Id == "SBER@QJSIM") SecurityEditor1.SelectedSecurity = security;
-				if (security.Id == "SBER@TQBR") SecurityEditor1.SelectedSecurity = security;
+				if (SecurityEditor1.SelectedSecurity is null)
+					SecurityEditor1.SelectedSecurity = security;
+				else if (SecurityEditor2.SelectedSecurity is null)
+					SecurityEditor2.SelectedSecurity = security;
 			});
 		};
 
 		_connector.PositionReceived += (sub, pos) => PortfolioGrid.Positions.TryAdd(pos);
-
 
 		_connector.Connect();
 	}
@@ -79,7 +80,7 @@ public partial class MainWindow
 		if (PortfolioEditor2.SelectedPortfolio == null) return;
 		if (SecurityEditor2.SelectedSecurity == null) return;
 
-		_strategy = new ArbitrageStrategy()
+		_strategy = new ArbitrageStrategy
 		{
 			Connector = _connector,
 			Security = SecurityEditor1.SelectedSecurity,
@@ -96,7 +97,6 @@ public partial class MainWindow
 			ProfitToExit = -0.05m,
 			SpreadToGenerateSignal = 0.03m,
 			StockMultiplicator = 1.26m
-
 		};
 
 		_strategy.OrderReceived += (s, o) => OrderGrid.Orders.TryAdd(o);

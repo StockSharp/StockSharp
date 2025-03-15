@@ -13,6 +13,14 @@ using StockSharp.Messages;
 
 public class ArbitrageStrategy : Strategy
 {
+	private enum ArbitrageState
+	{
+		Contango,
+		Backvordation,
+		None,
+		OrderRegistration,
+	}
+
 	public Security FutureSecurity { get; set; }
 	public Security StockSecurity { get; set; }
 
@@ -112,8 +120,11 @@ public class ArbitrageStrategy : Strategy
 
 				new IMarketRule[]
 				{
-					buy.WhenMatched(this), sell.WhenMatched(this),
-					buy.WhenAllTrades(this), sell.WhenAllTrades(this),
+					buy.WhenMatched(this),
+					sell.WhenMatched(this),
+
+					buy.WhenAllTrades(this),
+					sell.WhenAllTrades(this),
 				}
 				.And()
 				.Do(() =>
