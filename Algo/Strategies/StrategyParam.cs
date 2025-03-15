@@ -178,13 +178,19 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	public StrategyParam<T> SetReadOnly(bool value = true)
 		=> ModifyAttributes(value, () => new ReadOnlyAttribute(true));
 
+	private static Type GetValueType()
+	{
+		var type = typeof(T);
+		return type.GetUnderlyingType() ?? type;
+	}
+
 	/// <summary>
 	/// Set greater than zero validator.
 	/// </summary>
 	/// <returns><see cref="StrategyParam{T}"/></returns>
 	public StrategyParam<T> SetGreaterThanZero()
 	{
-		var type = typeof(T);
+		var type = GetValueType();
 
 		ValidationAttribute attr;
 
@@ -206,7 +212,7 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <returns><see cref="StrategyParam{T}"/></returns>
 	public StrategyParam<T> SetNullOrMoreZero()
 	{
-		var type = typeof(T);
+		var type = GetValueType();
 
 		ValidationAttribute attr;
 
@@ -228,7 +234,7 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <returns><see cref="StrategyParam{T}"/></returns>
 	public StrategyParam<T> SetNullOrNotNegative()
 	{
-		var type = typeof(T);
+		var type = GetValueType();
 
 		ValidationAttribute attr;
 
@@ -250,7 +256,7 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <returns><see cref="StrategyParam{T}"/></returns>
 	public StrategyParam<T> SetNotNegative()
 	{
-		var type = typeof(T);
+		var type = GetValueType();
 
 		ValidationAttribute attr;
 
@@ -274,7 +280,7 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <returns><see cref="StrategyParam{T}"/></returns>
 	public StrategyParam<T> SetRange(T min, T max)
 	{
-		var type = typeof(T);
+		var type = GetValueType();
 
 		RangeAttribute attr;
 
