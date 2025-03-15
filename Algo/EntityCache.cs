@@ -676,7 +676,8 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 				Error = error,
 				ServerTime = message.ServerTime,
 				LocalTime = message.LocalTime,
-				SeqNum = message.SeqNum
+				SeqNum = message.SeqNum,
+				TransactionId = message.OriginalTransactionId,
 			};
 			return (fail, operation);
 		});

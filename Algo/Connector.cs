@@ -680,7 +680,8 @@ public partial class Connector : BaseLogReceiver, IConnector
 		{
 			Order = order,
 			Error = error,
-			ServerTime = CurrentTime
+			ServerTime = CurrentTime,
+			TransactionId = originalTransactionId,
 		};
 
 		_entityCache.AddOrderFailById(fail, operation, originalTransactionId);

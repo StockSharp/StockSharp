@@ -5,7 +5,7 @@ namespace StockSharp.BusinessEntities;
 /// </summary>
 [Serializable]
 [DataContract]
-public class OrderFail : IErrorMessage, ILocalTimeMessage, IServerTimeMessage, ISeqNumMessage
+public class OrderFail : IErrorMessage, ILocalTimeMessage, IServerTimeMessage, ISeqNumMessage, ITransactionIdMessage
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="OrderFail"/>.
@@ -43,6 +43,9 @@ public class OrderFail : IErrorMessage, ILocalTimeMessage, IServerTimeMessage, I
 	/// <remarks>Zero means no information.</remarks>
 	[DataMember]
 	public long SeqNum { get; set; }
+
+	/// <inheritdoc/>
+	public long TransactionId { get; set; }
 
 	/// <inheritdoc />
 	public override string ToString()

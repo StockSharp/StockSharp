@@ -1490,6 +1490,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			Order = order,
 			Error = error,
 			ServerTime = CurrentTime,
+			TransactionId = order.TransactionId,
 		};
 
 		OnOrderRegisterFailed(fail, canRisk && _ordersInfo.TryGetValue(order, out var info) && info.IsOwn);
