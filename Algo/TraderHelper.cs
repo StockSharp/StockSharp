@@ -19,7 +19,7 @@ public static partial class TraderHelper
 	/// <param name="provider">The market data provider.</param>
 	/// <param name="direction">Order side.</param>
 	/// <returns>The current price. If information in order book is insufficient, then <see langword="null" /> will be returned.</returns>
-	public static Unit GetCurrentPrice(this Security security, IMarketDataProvider provider, Sides? direction = null)
+	public static decimal? GetCurrentPrice(this Security security, IMarketDataProvider provider, Sides? direction = null)
 	{
 		if (provider == null)
 			throw new ArgumentNullException(nameof(provider));
@@ -33,145 +33,8 @@ public static partial class TraderHelper
 		}
 
 		currentPrice ??= (decimal?)provider.GetSecurityValue(security, Level1Fields.LastTradePrice);
-		currentPrice ??= 0;
 
-		return new Unit((decimal)currentPrice).SetSecurity(security);
-	}
-
-	/// <summary>
-	/// To calculate the current price by the order book depending on the order direction.
-	/// </summary>
-	/// <param name="depth">The order book for the current price calculation.</param>
-	/// <param name="side">The order direction. If it is a buy, <see cref="MarketDepth.BestAsk"/> value is used, otherwise <see cref="MarketDepth.BestBid"/>.</param>
-	/// <param name="priceStep"><see cref="SecurityMessage.PriceStep"/></param>
-	/// <param name="priceType">The type of current price.</param>
-	/// <param name="orders">Orders to be ignored.</param>
-	/// <returns>The current price. If information in order book is insufficient, then <see langword="null" /> will be returned.</returns>
-	/// <remarks>
-	/// For correct operation of the method the order book export shall be launched.
-	/// </remarks>
-	public static Unit GetCurrentPrice(this IOrderBookMessage depth, Sides side, decimal? priceStep, MarketPriceTypes priceType = MarketPriceTypes.Following, IEnumerable<Order> orders = null)
-	{
-		if (depth == null)
-			throw new ArgumentNullException(nameof(depth));
-
-		if (orders != null)
-		{
-			var dict = new Dictionary<Tuple<Sides, decimal>, HashSet<Order>>();
-
-			foreach (var order in orders)
-			{
-				if (!dict.SafeAdd(Tuple.Create(order.Side, order.Price)).Add(order))
-					throw new InvalidOperationException(LocalizedStrings.HasDuplicates.Put(order));
-			}
-
-			var bids = depth.Bids.ToList();
-			var asks = depth.Asks.ToList();
-
-			for (var i = 0; i < bids.Count; i++)
-			{
-				var quote = bids[i];
-
-				if (dict.TryGetValue(Tuple.Create(Sides.Buy, quote.Price), out var bidOrders))
-				{
-					foreach (var order in bidOrders)
-					{
-						if (!orders.Contains(order))
-							quote.Volume -= order.Balance;
-					}
-
-					if (quote.Volume <= 0)
-					{
-						bids.RemoveAt(i);
-						i--;
-					}
-					else
-						bids[i] = quote;
-				}
-			}
-
-			for (var i = 0; i < asks.Count; i++)
-			{
-				var quote = asks[i];
-
-				if (dict.TryGetValue(Tuple.Create(Sides.Sell, quote.Price), out var asksOrders))
-				{
-					foreach (var order in asksOrders)
-					{
-						if (!orders.Contains(order))
-							quote.Volume -= order.Balance;
-					}
-
-					if (quote.Volume <= 0)
-					{
-						asks.RemoveAt(i);
-						i--;
-					}
-					else
-						asks[i] = quote;
-				}
-			}
-
-			depth = new QuoteChangeMessage
-			{
-				SecurityId = depth.SecurityId,
-				ServerTime = depth.ServerTime,
-				Bids = [.. bids],
-				Asks = [.. asks],
-			};
-		}
-
-		var (bid, ask) = depth.GetBestPair();
-		return new MarketDepthPair(bid, ask).GetCurrentPrice(side, priceStep, priceType);
-	}
-
-	/// <summary>
-	/// To calculate the current price based on the best pair of quotes, depending on the order direction.
-	/// </summary>
-	/// <param name="bestPair">The best pair of quotes, used for the current price calculation.</param>
-	/// <param name="side">The order direction. If it is a buy, <see cref="MarketDepthPair.Ask"/> value is used, otherwise <see cref="MarketDepthPair.Bid"/>.</param>
-	/// <param name="priceStep"><see cref="SecurityMessage.PriceStep"/></param>
-	/// <param name="priceType">The type of current price.</param>
-	/// <returns>The current price. If information in order book is insufficient, then <see langword="null" /> will be returned.</returns>
-	/// <remarks>
-	/// For correct operation of the method the order book export shall be launched.
-	/// </remarks>
-	public static Unit GetCurrentPrice(this MarketDepthPair bestPair, Sides side, decimal? priceStep, MarketPriceTypes priceType = MarketPriceTypes.Following)
-	{
-		if (bestPair == null)
-			throw new ArgumentNullException(nameof(bestPair));
-
-		decimal? currentPrice;
-
-		switch (priceType)
-		{
-			case MarketPriceTypes.Opposite:
-			{
-				var quote = side == Sides.Buy ? bestPair.Ask : bestPair.Bid;
-				currentPrice = quote?.Price;
-				break;
-			}
-			case MarketPriceTypes.Following:
-			{
-				var quote = side == Sides.Buy ? bestPair.Bid : bestPair.Ask;
-				currentPrice = quote?.Price;
-				break;
-			}
-			case MarketPriceTypes.Middle:
-			{
-				if (bestPair.IsFull)
-					currentPrice = bestPair.GetMiddlePrice(priceStep);
-				else
-					currentPrice = null;
-				break;
-			}
-			default:
-				throw new ArgumentOutOfRangeException(nameof(priceType), priceType, LocalizedStrings.InvalidValue);
-		}
-
-		return currentPrice == null
-			? null
-			: new Unit(currentPrice.Value);
+		return currentPrice;
 	}
 
 	/// <summary>
@@ -182,17 +45,8 @@ public static partial class TraderHelper
 	/// <param name="offset">Price shift.</param>
 	/// <param name="security">Security.</param>
 	/// <returns>New price.</returns>
-	public static decimal ApplyOffset(this Unit price, Sides side, Unit offset, Security security)
+	public static decimal ApplyOffset(this decimal price, Sides side, Unit offset, Security security)
 	{
-		if (price == null)
-			throw new ArgumentNullException(nameof(price));
-
-		if (price.GetTypeValue == null)
-			price.SetSecurity(security);
-
-		if (offset.GetTypeValue == null)
-			offset.SetSecurity(security);
-
 		return security.ShrinkPrice((decimal)(side == Sides.Buy ? price + offset : price - offset));
 	}
 
@@ -399,25 +253,6 @@ public static partial class TraderHelper
 
 		var basket = security as BasketSecurity;
 		return basket?.InnerSecurityIds.SelectMany(id => orders.Where(o => o.Security.ToSecurityId() == id)) ?? orders.Where(o => o.Security == security);
-	}
-
-	/// <summary>
-	/// To filter orders for the given instrument.
-	/// </summary>
-	/// <param name="trades">All trades, in which the required shall be searched for.</param>
-	/// <param name="security">The instrument, for which the trades shall be filtered.</param>
-	/// <returns>Filtered trades.</returns>
-	[Obsolete("Use ITickTradeMessage.")]
-	public static IEnumerable<Trade> Filter(this IEnumerable<Trade> trades, Security security)
-	{
-		if (trades == null)
-			throw new ArgumentNullException(nameof(trades));
-
-		if (security == null)
-			throw new ArgumentNullException(nameof(security));
-
-		var basket = security as BasketSecurity;
-		return basket?.InnerSecurityIds.SelectMany(id => trades.Where(o => o.Security.ToSecurityId() == id)) ?? trades.Where(t => t.Security == security);
 	}
 
 	/// <summary>
