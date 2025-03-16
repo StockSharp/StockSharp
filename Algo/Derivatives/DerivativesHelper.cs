@@ -85,10 +85,7 @@ public static class DerivativesHelper
 			{
 				var underlyingSecurity = provider.LookupById(key.UnderlyingSecurityId);
 
-				if (underlyingSecurity == null)
-					throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(key.UnderlyingSecurityId));
-
-				return underlyingSecurity;
+				return underlyingSecurity ?? throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(key.UnderlyingSecurityId));
 			});
 		}
 		else
@@ -176,10 +173,7 @@ public static class DerivativesHelper
 	{
 		var asset = provider.LookupById(derivative.UnderlyingSecurityId);
 
-		if (asset == null)
-			throw new ArgumentException(LocalizedStrings.UnderlyingAssentNotFound.Put(derivative));
-
-		return asset;
+		return asset ?? throw new ArgumentException(LocalizedStrings.UnderlyingAssentNotFound.Put(derivative));
 	}
 
 	/// <summary>
@@ -215,10 +209,7 @@ public static class DerivativesHelper
 			})
 			.FirstOrDefault();
 
-		if (oppositeOption == null)
-			throw new ArgumentException(LocalizedStrings.OppositeOptionNotFound.Put(option.Id), nameof(option));
-
-		return oppositeOption;
+		return oppositeOption ?? throw new ArgumentException(LocalizedStrings.OppositeOptionNotFound.Put(option.Id), nameof(option));
 	}
 
 	/// <summary>
@@ -274,10 +265,7 @@ public static class DerivativesHelper
 			})
 			.FirstOrDefault();
 
-		if (option == null)
-			throw new ArgumentException(LocalizedStrings.OptionNotFound.Put(future.Id), nameof(future));
-
-		return option;
+		return option ?? throw new ArgumentException(LocalizedStrings.OptionNotFound.Put(future.Id), nameof(future));
 	}
 
 	/// <summary>
@@ -285,31 +273,26 @@ public static class DerivativesHelper
 	/// </summary>
 	/// <param name="underlyingAsset">Underlying asset.</param>
 	/// <param name="securityProvider">The provider of information about instruments.</param>
-	/// <param name="dataProvider">The market data provider.</param>
 	/// <param name="expirationDate">The options expiration date.</param>
 	/// <param name="optionType">Option type.</param>
+	/// <param name="assetPrice">The current market price of the asset. It is used to calculate the main strike.</param>
 	/// <returns>The main strike.</returns>
-	public static Security GetCentralStrike(this Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, DateTimeOffset expirationDate, OptionTypes optionType)
+	public static Security GetCentralStrike(this Security underlyingAsset, ISecurityProvider securityProvider, DateTimeOffset expirationDate, OptionTypes optionType, decimal assetPrice)
 	{
-		return underlyingAsset.GetCentralStrike(dataProvider, underlyingAsset.GetDerivatives(securityProvider, expirationDate).Filter(optionType));
+		return underlyingAsset.GetDerivatives(securityProvider, expirationDate).Filter(optionType).GetCentralStrike(assetPrice);
 	}
 
 	/// <summary>
 	/// To get the main strike.
 	/// </summary>
-	/// <param name="underlyingAsset">Underlying asset.</param>
-	/// <param name="provider">The market data provider.</param>
 	/// <param name="allStrikes">All strikes.</param>
+	/// <param name="assetPrice">The current market price of the asset. It is used to calculate the main strike.</param>
 	/// <returns>The main strike. If it is impossible to get the current market price of the asset then the <see langword="null" /> will be returned.</returns>
-	public static Security GetCentralStrike(this Security underlyingAsset, IMarketDataProvider provider, IEnumerable<Security> allStrikes)
+	public static Security GetCentralStrike(this IEnumerable<Security> allStrikes, decimal assetPrice)
 	{
-		var assetPrice = underlyingAsset.GetCurrentPrice(provider);
-
-		return assetPrice == null
-			? null
-			: allStrikes
+		return allStrikes
 				.Where(s => s.Strike != null)
-				.OrderBy(s => Math.Abs((decimal)(s.Strike.Value - assetPrice)))
+				.OrderBy(s => Math.Abs(s.Strike.Value - assetPrice))
 				.FirstOrDefault();
 	}
 
@@ -327,10 +310,8 @@ public static class DerivativesHelper
 			.Filter(OptionTypes.Call)
 			.Where(s => s.Strike != null)
 			.GroupBy(s => s.ExpiryDate)
-			.FirstOrDefault();
-
-		if (group == null)
-			throw new InvalidOperationException(LocalizedStrings.CannotCalcStrikeStep);
+			.FirstOrDefault()
+		?? throw new InvalidOperationException(LocalizedStrings.CannotCalcStrikeStep);
 
 		var orderedStrikes = group.OrderBy(s => s.Strike).Take(2).ToArray();
 		return orderedStrikes[1].Strike.Value - orderedStrikes[0].Strike.Value;
@@ -341,28 +322,28 @@ public static class DerivativesHelper
 	/// </summary>
 	/// <param name="underlyingAsset">Underlying asset.</param>
 	/// <param name="securityProvider">The provider of information about instruments.</param>
-	/// <param name="dataProvider">The market data provider.</param>
+	/// <param name="assetPrice">The asset price.</param>
 	/// <returns>Out of the money options.</returns>
-	public static IEnumerable<Security> GetOutOfTheMoney(this Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
+	public static IEnumerable<Security> GetOutOfTheMoney(this Security underlyingAsset, ISecurityProvider securityProvider, decimal assetPrice)
 	{
-		return underlyingAsset.GetOutOfTheMoney(dataProvider, underlyingAsset.GetDerivatives(securityProvider));
+		return underlyingAsset.GetOutOfTheMoney(underlyingAsset.GetDerivatives(securityProvider), assetPrice);
 	}
 
 	/// <summary>
 	/// To get out of the money options (OTM).
 	/// </summary>
 	/// <param name="underlyingAsset">Underlying asset.</param>
-	/// <param name="provider">The market data provider.</param>
 	/// <param name="allStrikes">All strikes.</param>
+	/// <param name="assetPrice">The asset price.</param>
 	/// <returns>Out of the money options.</returns>
-	public static IEnumerable<Security> GetOutOfTheMoney(this Security underlyingAsset, IMarketDataProvider provider, IEnumerable<Security> allStrikes)
+	public static IEnumerable<Security> GetOutOfTheMoney(this Security underlyingAsset, IEnumerable<Security> allStrikes, decimal assetPrice)
 	{
 		if (underlyingAsset == null)
 			throw new ArgumentNullException(nameof(underlyingAsset));
 
 		allStrikes = [.. allStrikes];
 
-		var cs = underlyingAsset.GetCentralStrike(provider, allStrikes);
+		var cs = allStrikes.GetCentralStrike(assetPrice);
 
 		if (cs == null)
 			return [];
@@ -375,28 +356,28 @@ public static class DerivativesHelper
 	/// </summary>
 	/// <param name="underlyingAsset">Underlying asset.</param>
 	/// <param name="securityProvider">The provider of information about instruments.</param>
-	/// <param name="dataProvider">The market data provider.</param>
+	/// <param name="assetPrice">The asset price.</param>
 	/// <returns>In the money options.</returns>
-	public static IEnumerable<Security> GetInTheMoney(this Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
+	public static IEnumerable<Security> GetInTheMoney(this Security underlyingAsset, ISecurityProvider securityProvider, decimal assetPrice)
 	{
-		return underlyingAsset.GetInTheMoney(dataProvider, underlyingAsset.GetDerivatives(securityProvider));
+		return underlyingAsset.GetInTheMoney(underlyingAsset.GetDerivatives(securityProvider), assetPrice);
 	}
 
 	/// <summary>
 	/// To get in the money options (ITM).
 	/// </summary>
 	/// <param name="underlyingAsset">Underlying asset.</param>
-	/// <param name="provider">The market data provider.</param>
 	/// <param name="allStrikes">All strikes.</param>
+	/// <param name="assetPrice">The asset price.</param>
 	/// <returns>In the money options.</returns>
-	public static IEnumerable<Security> GetInTheMoney(this Security underlyingAsset, IMarketDataProvider provider, IEnumerable<Security> allStrikes)
+	public static IEnumerable<Security> GetInTheMoney(this Security underlyingAsset, IEnumerable<Security> allStrikes, decimal assetPrice)
 	{
 		if (underlyingAsset == null)
 			throw new ArgumentNullException(nameof(underlyingAsset));
 
 		allStrikes = [.. allStrikes];
 
-		var cs = underlyingAsset.GetCentralStrike(provider, allStrikes);
+		var cs = allStrikes.GetCentralStrike(assetPrice);
 
 		if (cs == null)
 			return [];
@@ -409,21 +390,21 @@ public static class DerivativesHelper
 	/// </summary>
 	/// <param name="underlyingAsset">Underlying asset.</param>
 	/// <param name="securityProvider">The provider of information about instruments.</param>
-	/// <param name="dataProvider">The market data provider.</param>
+	/// <param name="assetPrice">The asset price.</param>
 	/// <returns>At the money options.</returns>
-	public static IEnumerable<Security> GetAtTheMoney(this Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
+	public static IEnumerable<Security> GetAtTheMoney(this Security underlyingAsset, ISecurityProvider securityProvider, decimal assetPrice)
 	{
-		return underlyingAsset.GetAtTheMoney(dataProvider, underlyingAsset.GetDerivatives(securityProvider));
+		return underlyingAsset.GetAtTheMoney(underlyingAsset.GetDerivatives(securityProvider), assetPrice);
 	}
 
 	/// <summary>
 	/// To get at the money options (ATM).
 	/// </summary>
 	/// <param name="underlyingAsset">Underlying asset.</param>
-	/// <param name="provider">The market data provider.</param>
 	/// <param name="allStrikes">All strikes.</param>
+	/// <param name="assetPrice">The asset price.</param>
 	/// <returns>At the money options.</returns>
-	public static IEnumerable<Security> GetAtTheMoney(this Security underlyingAsset, IMarketDataProvider provider, IEnumerable<Security> allStrikes)
+	public static IEnumerable<Security> GetAtTheMoney(this Security underlyingAsset, IEnumerable<Security> allStrikes, decimal assetPrice)
 	{
 		if (underlyingAsset == null)
 			throw new ArgumentNullException(nameof(underlyingAsset));
@@ -432,12 +413,12 @@ public static class DerivativesHelper
 
 		var centralStrikes = new List<Security>();
 
-		var cs = underlyingAsset.GetCentralStrike(provider, allStrikes.Filter(OptionTypes.Call));
+		var cs = allStrikes.Filter(OptionTypes.Call).GetCentralStrike(assetPrice);
 
 		if (cs != null)
 			centralStrikes.Add(cs);
 
-		cs = underlyingAsset.GetCentralStrike(provider, allStrikes.Filter(OptionTypes.Put));
+		cs = allStrikes.Filter(OptionTypes.Put).GetCentralStrike(assetPrice);
 
 		if (cs != null)
 			centralStrikes.Add(cs);
@@ -449,48 +430,30 @@ public static class DerivativesHelper
 	/// To get the internal option value.
 	/// </summary>
 	/// <param name="option">Options contract.</param>
-	/// <param name="securityProvider">The provider of information about instruments.</param>
-	/// <param name="dataProvider">The market data provider.</param>
+	/// <param name="assetPrice">The underlying asset price.</param>
 	/// <returns>The internal value. If it is impossible to get the current market price of the asset then the <see langword="null" /> will be returned.</returns>
-	public static decimal? GetIntrinsicValue(this Security option, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
+	public static decimal GetIntrinsicValue(this Security option, decimal assetPrice)
 	{
-		if (securityProvider == null)
-			throw new ArgumentNullException(nameof(securityProvider));
-		
 		option.CheckOption();
 
-		if (option.Strike == null)
-			return null;
+		if (option.Strike is not decimal strike)
+			throw new ArgumentException(LocalizedStrings.InvalidValue, nameof(option));
 
-		var assetPrice = option.GetUnderlyingAsset(securityProvider).GetCurrentPrice(dataProvider);
-
-		if (assetPrice == null)
-			return null;
-
-		return ((decimal)(option.OptionType == OptionTypes.Call ? assetPrice - option.Strike : option.Strike - assetPrice)).Max(0);
+		return (option.OptionType == OptionTypes.Call ? assetPrice - strike : strike - assetPrice).Max(0);
 	}
 
 	/// <summary>
 	/// To get the timed option value.
 	/// </summary>
 	/// <param name="option">Options contract.</param>
-	/// <param name="securityProvider">The provider of information about instruments.</param>
-	/// <param name="dataProvider">The market data provider.</param>
-	/// <returns>The timed value. If it is impossible to get the current market price of the asset then the <see langword="null" /> will be returned.</returns>
-	public static decimal? GetTimeValue(this Security option, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
+	/// <param name="currentPrice">The contract price.</param>
+	/// <param name="assetPrice">The underlying asset price.</param>
+	/// <returns>The timed value.</returns>
+	public static decimal GetTimeValue(Security option, decimal currentPrice, decimal assetPrice)
 	{
-		if (securityProvider == null)
-			throw new ArgumentNullException(nameof(securityProvider));
-
 		option.CheckOption();
 
-		var price = option.GetCurrentPrice(dataProvider);
-		var intrinsic = option.GetIntrinsicValue(securityProvider, dataProvider);
-
-		if (price == null || intrinsic == null)
-			return null;
-
-		return (decimal)(price - intrinsic);
+		return currentPrice - option.GetIntrinsicValue(assetPrice);
 	}
 
 	internal static DateTimeOffset GetExpirationTime(this Security security, IExchangeInfoProvider provider)

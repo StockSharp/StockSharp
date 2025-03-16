@@ -11,7 +11,6 @@ namespace StockSharp.Algo.Derivatives;
 /// <param name="dataProvider">The market data provider.</param>
 public abstract class BasketStrike(Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider) : BasketSecurity
 {
-
 	/// <summary>
 	/// The provider of information about instruments.
 	/// </summary>
@@ -39,7 +38,10 @@ public abstract class BasketStrike(Security underlyingAsset, ISecurityProvider s
 			if (type != null)
 				derivatives = derivatives.Filter((OptionTypes)type);
 
-			return FilterStrikes(derivatives).Select(s => s.ToSecurityId());
+			if (UnderlyingAsset.GetCurrentPrice(DataProvider) is not decimal assetPrice)
+				return [];
+
+			return FilterStrikes(derivatives, assetPrice).Select(s => s.ToSecurityId());
 		}
 	}
 
@@ -47,8 +49,9 @@ public abstract class BasketStrike(Security underlyingAsset, ISecurityProvider s
 	/// To get filtered strikes.
 	/// </summary>
 	/// <param name="allStrikes">All strikes.</param>
+	/// <param name="assetPrice">The asset price.</param>
 	/// <returns>Filtered strikes.</returns>
-	protected abstract IEnumerable<Security> FilterStrikes(IEnumerable<Security> allStrikes);
+	protected abstract IEnumerable<Security> FilterStrikes(IEnumerable<Security> allStrikes, decimal assetPrice);
 }
 
 /// <summary>
@@ -67,14 +70,14 @@ public class OffsetBasketStrike(Security underlyingSecurity, ISecurityProvider s
 	private decimal _strikeStep;
 
 	/// <inheritdoc />
-	protected override IEnumerable<Security> FilterStrikes(IEnumerable<Security> allStrikes)
+	protected override IEnumerable<Security> FilterStrikes(IEnumerable<Security> allStrikes, decimal assetPrice)
 	{
 		if (_strikeStep == 0)
 			_strikeStep = UnderlyingAsset.GetStrikeStep(SecurityProvider, ExpiryDate);
 
 		allStrikes = [.. allStrikes];
 
-		var centralStrike = UnderlyingAsset.GetCentralStrike(DataProvider, allStrikes);
+		var centralStrike = allStrikes.GetCentralStrike(assetPrice);
 
 		var callStrikeFrom = centralStrike.Strike + _strikeOffset.Min * _strikeStep;
 		var callStrikeTo = centralStrike.Strike + _strikeOffset.Max * _strikeStep;
@@ -82,12 +85,13 @@ public class OffsetBasketStrike(Security underlyingSecurity, ISecurityProvider s
 		var putStrikeFrom = centralStrike.Strike - _strikeOffset.Max * _strikeStep;
 		var putStrikeTo = centralStrike.Strike - _strikeOffset.Min * _strikeStep;
 
-		return allStrikes.Where(s =>
-						(s.OptionType == OptionTypes.Call && s.Strike >= callStrikeFrom && s.Strike <= callStrikeTo)
-						||
-						(s.OptionType == OptionTypes.Put && s.Strike >= putStrikeFrom && s.Strike <= putStrikeTo)
-					)
-					.OrderBy(s => s.Strike);
+		return allStrikes
+			.Where(s =>
+				(s.OptionType == OptionTypes.Call && s.Strike >= callStrikeFrom && s.Strike <= callStrikeTo)
+				||
+				(s.OptionType == OptionTypes.Put && s.Strike >= putStrikeFrom && s.Strike <= putStrikeTo)
+			)
+			.OrderBy(s => s.Strike);
 	}
 
 	/// <inheritdoc />
@@ -118,7 +122,7 @@ public class VolatilityBasketStrike(Security underlyingAsset, ISecurityProvider 
 	private Range<decimal> _volatilityRange = volatilityRange ?? throw new ArgumentNullException(nameof(volatilityRange));
 
 	/// <inheritdoc />
-	protected override IEnumerable<Security> FilterStrikes(IEnumerable<Security> allStrikes)
+	protected override IEnumerable<Security> FilterStrikes(IEnumerable<Security> allStrikes, decimal assetPrice)
 	{
 		return allStrikes.Where(s =>
 		{
