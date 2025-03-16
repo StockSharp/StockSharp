@@ -5,52 +5,45 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-using Ecng.Collections;
-using Ecng.Common;
-using Ecng.ComponentModel;
-
 using StockSharp.Algo;
 using StockSharp.Algo.Derivatives;
 using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Strategies.Quoting;
 using StockSharp.BusinessEntities;
-using StockSharp.Localization;
 using StockSharp.Messages;
+using StockSharp.Localization;
 
 /// <summary>
-/// The base strategy of hedging.
+/// Base hedge strategy for derivatives.
 /// </summary>
-[Obsolete("Child strategies no longer supported.")]
 public abstract class HedgeStrategy : Strategy
 {
-	private sealed class AssetStrategy : Strategy
-	{
-		public AssetStrategy(Security asset)
-		{
-			if (asset == null)
-				throw new ArgumentNullException(nameof(asset));
-
-			Name = asset.Id;
-		}
-	}
-
-	private readonly SynchronizedDictionary<Security, Strategy> _strategies = [];
-	//private bool _isSuspended;
-	//private int _reHedgeOrders;
-	private Strategy _assetStrategy;
-	private readonly HashSet<Order> _awaitingOrders = [];
-	private readonly SyncObject _syncRoot = new();
+	private readonly Dictionary<Security, QuotingProcessor> _quotingProcessors = [];
+	private readonly Dictionary<Order, QuotingProcessor> _activeOrders = [];
+	private readonly HashSet<Order> _pendingOrders = [];
+	private bool _isRebalancing;
 
 	/// <summary>
-	/// Initialize <see cref="HedgeStrategy"/>.
+	/// Initializes a new instance of <see cref="HedgeStrategy"/>.
 	/// </summary>
-	/// <param name="blackScholes"><see cref="BasketBlackScholes"/>.</param>
+	/// <param name="blackScholes">The Black-Scholes model for derivatives.</param>
 	protected HedgeStrategy(BasketBlackScholes blackScholes)
 	{
 		BlackScholes = blackScholes ?? throw new ArgumentNullException(nameof(blackScholes));
 
-		_useQuoting = Param<bool>(nameof(UseQuoting));
-		_priceOffset = Param<Unit>(nameof(PriceOffset), new());
+		_useQuoting = Param(nameof(UseQuoting), true)
+			.SetDisplay("Use Quoting", "Whether to use quoting for orders instead of direct market orders", "Hedging");
+
+		_priceOffset = Param(nameof(PriceOffset), new Unit())
+			.SetDisplay("Price Offset", "The price offset from the market price when placing orders", "Hedging");
+
+		_hedgingThreshold = Param(nameof(HedgingThreshold), 1m)
+			.SetGreaterThanZero()
+			.SetDisplay("Hedging Threshold", "Minimum position change required to trigger rehedging", "Hedging");
+
+		_monitoringInterval = Param(nameof(MonitoringInterval), TimeSpan.FromMinutes(5))
+			.SetNotNegative()
+			.SetDisplay("Monitoring Interval", "Interval between portfolio delta recalculations", "Hedging");
 	}
 
 	/// <summary>
@@ -61,7 +54,7 @@ public abstract class HedgeStrategy : Strategy
 	private readonly StrategyParam<bool> _useQuoting;
 
 	/// <summary>
-	/// Whether to quote the registered order by the market price. The default mode is disabled.
+	/// Whether to use quoting for orders instead of direct market orders.
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
@@ -78,7 +71,7 @@ public abstract class HedgeStrategy : Strategy
 	private readonly StrategyParam<Unit> _priceOffset;
 
 	/// <summary>
-	/// The price shift for the registering order. It determines the amount of shift from the best quote (for the buy it is added to the price, for the sell it is subtracted).
+	/// The price offset from the market price when placing orders.
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
@@ -92,221 +85,290 @@ public abstract class HedgeStrategy : Strategy
 		set => _priceOffset.Value = value;
 	}
 
+	private readonly StrategyParam<decimal> _hedgingThreshold;
+
+	/// <summary>
+	/// Minimum position change required to trigger rehedging.
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = "Hedging Threshold",
+		Description = "Minimum position change required to trigger rehedging",
+		GroupName = LocalizedStrings.HedgingKey,
+		Order = 2)]
+	public decimal HedgingThreshold
+	{
+		get => _hedgingThreshold.Value;
+		set => _hedgingThreshold.Value = value;
+	}
+
+	private readonly StrategyParam<TimeSpan> _monitoringInterval;
+
+	/// <summary>
+	/// Interval between portfolio delta recalculations.
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = "Monitoring Interval",
+		Description = "Interval between portfolio delta recalculations",
+		GroupName = LocalizedStrings.HedgingKey,
+		Order = 3)]
+	public TimeSpan MonitoringInterval
+	{
+		get => _monitoringInterval.Value;
+		set => _monitoringInterval.Value = value;
+	}
+
 	/// <inheritdoc />
 	protected override void OnStarted(DateTimeOffset time)
 	{
 		base.OnStarted(time);
 
-		//_reHedgeOrders = 0;
-		_awaitingOrders.Clear();
-
-		_strategies.Clear();
-
-		var security = GetSecurity();
-
-		if (_assetStrategy == null)
-		{
-			_assetStrategy = ChildStrategies.FirstOrDefault(s => s.Security == Security);
-			
-			if (_assetStrategy == null)
-			{
-				_assetStrategy = new AssetStrategy(security);
-				ChildStrategies.Add(_assetStrategy);
-
-				LogInfo(LocalizedStrings.AssetStrategyCreated);
-			}
-			else
-				LogInfo(LocalizedStrings.AssetStrategyFound.Put(_assetStrategy));
-		}
-
-		_strategies.Add(security, _assetStrategy);
-
-		if (BlackScholes.UnderlyingAsset == null)
-		{
-			BlackScholes.UnderlyingAsset = _assetStrategy.Security;
-			LogInfo(LocalizedStrings.AssetPosSpecified);
-		}
-
 		BlackScholes.InnerModels.Clear();
 
-		foreach (var strategy in ChildStrategies)
+		// Initialize underlying asset
+		if (BlackScholes.UnderlyingAsset == null)
 		{
-			var childSec = strategy.GetSecurity();
+			BlackScholes.UnderlyingAsset = Security;
+			LogInfo("Underlying asset set to {0}", Security.Id);
+		}
 
-			if (childSec.Type == SecurityTypes.Option && childSec.GetAsset(this) == security)
+		// Find all option securities related to our underlying asset
+		foreach (var security in Connector.Securities)
+		{
+			if (security.Type == SecurityTypes.Option && security.GetAsset(this) == BlackScholes.UnderlyingAsset)
 			{
-				BlackScholes.InnerModels.Add(new BlackScholes(childSec, this, this, BlackScholes.ExchangeInfoProvider));
-				_strategies.Add(childSec, strategy);
-
-				LogInfo(LocalizedStrings.StrikeStrategyFound.Put(strategy));
+				BlackScholes.InnerModels.Add(new BlackScholes(security, this, this, BlackScholes.ExchangeInfoProvider));
+				LogInfo("Added option model for {0}", security.Id);
 			}
 		}
 
-		if (!IsRulesSuspended)
+		// Setup periodic rebalancing
+		if (MonitoringInterval > TimeSpan.Zero)
 		{
-			lock (_syncRoot)
-				ReHedge(time);
+			this.WhenIntervalElapsed(MonitoringInterval)
+				.Do(() =>
+				{
+					if (IsFormedAndOnlineAndAllowTrading())
+					{
+						LogInfo("Periodic rebalancing triggered");
+						RehedgePositions(CurrentTime);
+					}
+				})
+				.Apply(this);
+		}
+
+		// Subscribe to position changes for options and underlying asset
+		this.WhenPositionChanged()
+			.Do(() =>
+			{
+				if (IsFormedAndOnlineAndAllowTrading() && !_isRebalancing)
+				{
+					LogInfo("Position change detected - checking if rehedging is needed");
+					RehedgePositions(CurrentTime);
+				}
+			})
+			.Apply(this);
+
+		// Initial rebalancing
+		if (IsFormedAndOnlineAndAllowTrading())
+		{
+			RehedgePositions(time);
 		}
 	}
 
 	/// <summary>
-	/// To get a list of orders rehedging the option position.
+	/// Get orders required to rehedge the portfolio.
 	/// </summary>
-	/// <param name="currentTime">Current time.</param>
-	/// <returns>Rehedging orders.</returns>
+	/// <param name="currentTime">Current time for calculations.</param>
+	/// <returns>Enumeration of orders needed for rehedging.</returns>
 	protected abstract IEnumerable<Order> GetReHedgeOrders(DateTimeOffset currentTime);
 
 	/// <summary>
-	/// To add the rehedging strategy.
+	/// Rehedge positions based on current market conditions.
 	/// </summary>
-	/// <param name="parentStrategy">The parent strategy (by the strike or the underlying asset).</param>
-	/// <param name="order">The rehedging order.</param>
-	protected virtual void AddReHedgeQuoting(Strategy parentStrategy, Order order)
+	/// <param name="currentTime">Current time for calculations.</param>
+	protected virtual void RehedgePositions(DateTimeOffset currentTime)
 	{
-		if (parentStrategy == null)
-			throw new ArgumentNullException(nameof(parentStrategy));
+		// Skip if already rebalancing
+		if (_isRebalancing || !IsFormedAndOnlineAndAllowTrading())
+			return;
 
-		var quoting = CreateQuoting(order);
+		try
+		{
+			_isRebalancing = true;
+			LogInfo("Starting portfolio rebalancing");
 
-		quoting.Name = parentStrategy.Name + "_" + quoting.Name;
+			// Get required rehedging orders
+			var orders = GetReHedgeOrders(currentTime).ToList();
 
-		quoting
-			.WhenStopped()
-			.Do((rule, s) => TryResumeMonitoring(order))
-			.Once()
-			.Apply(parentStrategy);
+			if (orders.Count == 0)
+			{
+				LogInfo("No rehedging needed");
+				return;
+			}
 
-		parentStrategy.ChildStrategies.Add(quoting);
+			LogInfo("Creating {0} rehedging orders", orders.Count);
+
+			// Process each order
+			foreach (var order in orders)
+			{
+				if (UseQuoting)
+				{
+					// Create quoting processor for this order
+					CreateQuotingProcessor(order);
+				}
+				else
+				{
+					// Direct order registration with monitoring
+					RegisterRehedgeOrder(order);
+				}
+			}
+		}
+		finally
+		{
+			_isRebalancing = false;
+		}
 	}
 
 	/// <summary>
-	/// To add the rehedging order.
+	/// Create quoting processor for an order.
 	/// </summary>
-	/// <param name="parentStrategy">The parent strategy (by the strike or the underlying asset).</param>
-	/// <param name="order">The rehedging order.</param>
-	protected virtual void AddReHedgeOrder(Strategy parentStrategy, Order order)
+	/// <param name="order">Order to be quoted.</param>
+	protected virtual void CreateQuotingProcessor(Order order)
 	{
-		var doneRule = order.WhenMatched(this)
+		// Create appropriate quoting behavior
+		var behavior = new MarketQuotingBehavior(
+			PriceOffset,
+			new Unit(0.1m, UnitTypes.Percent), // Default price deviation
+			MarketPriceTypes.Following
+		);
+
+		// Create and configure the quoting processor
+		var processor = new QuotingProcessor(
+			behavior,
+			order.Security,
+			order.Portfolio,
+			order.Side,
+			order.Volume,
+			order.Volume, // No splitting
+			TimeSpan.Zero, // No timeout
+			this, // Strategy implements ISubscriptionProvider
+			this, // Strategy implements IMarketRuleContainer
+			this, // Strategy implements ITransactionProvider
+			this, // Strategy implements ITimeProvider
+			this, // Strategy implements IMarketDataProvider
+			IsFormedAndOnlineAndAllowTrading,
+			true, // Use order book
+			true  // Use last trade if no order book
+		)
+		{
+			Parent = this
+		};
+
+		// Set up event handlers
+		processor.OrderRegistered += o =>
+		{
+			_activeOrders[o] = processor;
+			LogInfo("Rehedge order {0} registered at price {1}", o.TransactionId, o.Price);
+		};
+
+		processor.OrderFailed += fail =>
+		{
+			LogError("Rehedge order failed: {0}", fail.Error.Message);
+		};
+
+		processor.OwnTrade += trade =>
+		{
+			LogInfo("Rehedge trade executed: {0} {1} @ {2}",
+				trade.Order.Side, trade.Trade.Volume, trade.Trade.Price);
+		};
+
+		processor.Finished += success =>
+		{
+			if (success)
+				LogInfo("Rehedging completed successfully");
+			else
+				LogWarning("Rehedging finished with incomplete volume");
+
+			// Remove processor
+			_quotingProcessors.Remove(order.Security);
+			processor.Dispose();
+		};
+
+		// Store and start the processor
+		_quotingProcessors[order.Security] = processor;
+		processor.Start();
+
+		LogInfo("Started quoting for {0} {1} {2} shares",
+			order.Security.Id, order.Side, order.Volume);
+	}
+
+	/// <summary>
+	/// Register a rehedge order directly.
+	/// </summary>
+	/// <param name="order">Order to register.</param>
+	protected virtual void RegisterRehedgeOrder(Order order)
+	{
+		if (_pendingOrders.Contains(order))
+			return;
+
+		_pendingOrders.Add(order);
+
+		// Setup order monitoring rules
+		order
+			.WhenRegistered(this)
+			.Do(o =>
+			{
+				LogInfo("Rehedge order {0} registered at price {1}", o.TransactionId, o.Price);
+			})
+			.Once()
+			.Apply(this);
+
+		order
+			.WhenRegisterFailed(this)
+			.Do(fail =>
+			{
+				LogError("Rehedge order failed: {0}", fail.Error.Message);
+				_pendingOrders.Remove(order);
+			})
+			.Once()
+			.Apply(this);
+
+		var completionRule = order
+			.WhenMatched(this)
 			.Or(order.WhenCanceled(this))
 			.Do((rule, o) =>
 			{
-				parentStrategy.LogInfo("Order {0} {1} in {2}.", o.TransactionId, o.IsMatched() ? LocalizedStrings.Done : LocalizedStrings.Cancelled, o.ServerTime);
+				if (o.State == OrderStates.Done)
+					LogInfo("Rehedge order {0} executed", o.TransactionId);
+				else
+					LogInfo("Rehedge order {0} canceled", o.TransactionId);
 
-				Rules.RemoveRulesByToken(o, rule);
-
-				TryResumeMonitoring(order);
+				_pendingOrders.Remove(order);
 			})
 			.Once()
-			.Apply(parentStrategy);
+			.Apply(this);
 
-		var regRule = order
-			.WhenRegistered(this)
-			.Do(o => parentStrategy.LogInfo("Order {0} registered with ID {1} in {2}.", o.TransactionId, o.Id, o.Time))
-			.Once()
-			.Apply(parentStrategy);
-
-		var regFailRule = order
-			.WhenRegisterFailed(this)
-			.Do((rule, fail) =>
-			{
-				parentStrategy.LogError(LocalizedStrings.ErrorRegOrder, fail.Order.TransactionId, fail.Error);
-
-				TryResumeMonitoring(order);
-				ReHedge(fail.ServerTime);
-			})
-			.Once()
-			.Apply(parentStrategy);
-
-		doneRule.Exclusive(regFailRule);
-		regRule.Exclusive(regFailRule);
-
-		parentStrategy.RegisterOrder(order);
+		// Register the order
+		RegisterOrder(order);
+		LogInfo("Registering rehedge order {0} {1} {2} @ {3}",
+			order.Security.Id, order.Side, order.Volume, order.Price);
 	}
 
-	/// <summary>
-	/// To start rehedging.
-	/// </summary>
-	/// <param name="orders">Rehedging orders.</param>
-	protected virtual void ReHedge(IEnumerable<Order> orders)
+	/// <inheritdoc />
+	protected override void OnStopped()
 	{
-		if (orders == null)
-			throw new ArgumentNullException(nameof(orders));
-
-		foreach (var order in orders)
+		// Dispose all quoting processors
+		foreach (var processor in _quotingProcessors.Values)
 		{
-			LogInfo("Rehedging with order {0} {1} volume {2} with price {3}.", order.Security, order.Side, order.Volume, order.Price);
-
-			var strategy = _strategies.TryGetValue(order.Security)
-				?? throw new InvalidOperationException(LocalizedStrings.ForSecurityNoChildStrategy.Put(order.Security.Id));
-
-			if (UseQuoting)
-			{
-				AddReHedgeQuoting(strategy, order);
-			}
-			else
-			{
-				AddReHedgeOrder(strategy, order);
-			}
-		}
-	}
-
-	/// <summary>
-	/// Whether the rehedging is paused.
-	/// </summary>
-	/// <returns><see langword="true" /> if paused, otherwise, <see langword="false" />.</returns>
-	protected virtual bool IsSuspended()
-	{
-		return !_awaitingOrders.IsEmpty();
-	}
-
-	private void ReHedge(DateTimeOffset currentTime)
-	{
-		if (IsSuspended())
-		{
-			//this.AddWarningLog("Рехеджирование уже запущено.");
-			return;
+			processor.Dispose();
 		}
 
-		//_isSuspended = false;
-		_awaitingOrders.Clear();
+		_quotingProcessors.Clear();
+		_activeOrders.Clear();
+		_pendingOrders.Clear();
 
-		var orders = GetReHedgeOrders(currentTime);
-
-		_awaitingOrders.AddRange(orders);
-
-		if (!_awaitingOrders.IsEmpty())
-		{
-			LogInfo(LocalizedStrings.ResumeSuspended, _awaitingOrders.Count);
-			ReHedge(orders);
-		}
-	}
-
-	private void TryResumeMonitoring(Order order)
-	{
-		if (!_awaitingOrders.Remove(order))
-			return;
-
-		if (_awaitingOrders.IsEmpty())
-			LogInfo(LocalizedStrings.Resumed);
-		else
-			LogInfo(LocalizedStrings.PartRulesResumes, _awaitingOrders.Count);
-	}
-
-	/// <summary>
-	/// To create a quoting strategy to change the position.
-	/// </summary>
-	/// <param name="order">Quoting order.</param>
-	/// <returns>The strategy of quoting.</returns>
-	protected virtual QuotingStrategy CreateQuoting(Order order)
-	{
-		if (order is null)
-			throw new ArgumentNullException(nameof(order));
-
-		return new MarketQuotingStrategy
-		{
-			QuotingSide = order.Side,
-			QuotingVolume = order.Balance,
-			Volume = Volume,
-		};
+		base.OnStopped();
 	}
 }
