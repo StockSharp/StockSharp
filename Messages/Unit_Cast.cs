@@ -40,7 +40,7 @@ partial class Unit
 		if (unit is null)
 			throw new ArgumentNullException(nameof(unit));
 
-		return unit.ToDecimal(unit.GetTypeValue);
+		return unit.ToDecimal();
 	}
 
 	/// <summary>

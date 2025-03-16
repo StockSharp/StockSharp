@@ -984,4 +984,67 @@ static partial class EntitiesExtensions
 	[Obsolete("Use Subscription class.")]
 	public static bool IsTimeFrame(this CandleSeries series)
 		=> series.CheckOnNull(nameof(series)).CandleType == typeof(TimeFrameCandle);
+
+	/// <summary>
+	/// Convert string to <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="str">String value of <see cref="Unit"/>.</param>
+	/// <param name="throwIfNull">Throw <see cref="ArgumentNullException"/> if the specified string is empty.</param>
+	/// <param name="security">Information about the instrument. Required when using <see cref="UnitTypes.Point"/> и <see cref="UnitTypes.Step"/>.</param>
+	/// <returns>Object <see cref="Unit"/>.</returns>
+	[Obsolete]
+	public static Unit ToUnit2(this string str, bool throwIfNull = true, Security security = null)
+	{
+		return str.ToUnit(throwIfNull);
+	}
+
+	/// <summary>
+	/// Cast the value to another type.
+	/// </summary>
+	/// <param name="unit">Source unit.</param>
+	/// <param name="destinationType">Destination value type.</param>
+	/// <param name="security">Information about the instrument. Required when using <see cref="UnitTypes.Point"/> и <see cref="UnitTypes.Step"/>.</param>
+	/// <returns>Converted value.</returns>
+	[Obsolete]
+	public static Unit Convert(this Unit unit, UnitTypes destinationType, Security security)
+	{
+		return unit.Convert(destinationType);
+	}
+
+	/// <summary>
+	/// To set the <see cref="Unit.GetTypeValue"/> property for the value.
+	/// </summary>
+	/// <param name="unit">Unit.</param>
+	/// <param name="security">Security.</param>
+	/// <returns>Unit.</returns>
+	[Obsolete("Unit.GetTypeValue obsolete.")]
+	public static Unit SetSecurity(this Unit unit, Security security)
+	{
+		if (unit is null)
+			throw new ArgumentNullException(nameof(unit));
+
+		unit.GetTypeValue = type => GetTypeValue(security, type);
+
+		return unit;
+	}
+
+	[Obsolete("Unit.GetTypeValue obsolete.")]
+	private static decimal? GetTypeValue(Security security, UnitTypes type)
+	{
+		switch (type)
+		{
+			case UnitTypes.Point:
+				if (security == null)
+					throw new ArgumentNullException(nameof(security));
+
+				return security.StepPrice;
+			case UnitTypes.Step:
+				if (security == null)
+					throw new ArgumentNullException(nameof(security));
+
+				return security.PriceStep;
+			default:
+				throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue);
+		}
+	}
 }

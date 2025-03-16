@@ -26,6 +26,7 @@ public enum UnitTypes
 	/// </summary>
 	[EnumMember]
 	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PointKey)]
+	[Obsolete("Use Absolute value.")]
 	Point,
 
 	/// <summary>
@@ -33,6 +34,7 @@ public enum UnitTypes
 	/// </summary>
 	[EnumMember]
 	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PriceStepKey)]
+	[Obsolete("Use Absolute value.")]
 	Step,
 
 	/// <summary>
@@ -92,8 +94,9 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 	/// <param name="value">Value.</param>
 	/// <param name="type">Measure unit.</param>
 	public Unit(decimal value, UnitTypes type)
-		: this(value, type, null)
 	{
+		Value = value;
+		Type = type;
 	}
 
 	/// <summary>
@@ -102,26 +105,30 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 	/// <param name="value">Value.</param>
 	/// <param name="type">Measure unit.</param>
 	/// <param name="getTypeValue">The handler returns a value associated with <see cref="Unit.Type"/> (price or volume steps).</param>
+	[Obsolete("GetTypeValue is obsolete.")]
 	public Unit(decimal value, UnitTypes type, Func<UnitTypes, decimal?> getTypeValue)
+		: this(value, type)
 	{
-		// mika current check should be do while arithmetics operations
-		//
-		//if (type == UnitTypes.Point || type == UnitTypes.Step)
-		//{
-		//    if (security is null)
-		//        throw new ArgumentException("Type has invalid value '{0}' while security is not set.".Put(type), "type");
-		//}
-
-		Value = value;
-		Type = type;
 		GetTypeValue = getTypeValue;
 	}
+
+	private UnitTypes _type;
 
 	/// <summary>
 	/// Measure unit.
 	/// </summary>
 	[DataMember]
-	public UnitTypes Type { get; set; }
+	public UnitTypes Type
+	{
+		get => _type;
+		set
+		{
+			if (value < UnitTypes.Absolute || value > UnitTypes.Limit)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			_type = value;
+		}
+	}
 
 	/// <summary>
 	/// Value.
@@ -133,9 +140,10 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 	private Func<UnitTypes, decimal?> _getTypeValue;
 
 	/// <summary>
-	/// The handler returns a value associated with <see cref="Unit.Type"/> (price or volume steps).
+	/// The handler returns a value associated with <see cref="Type"/> (price or volume steps).
 	/// </summary>
 	[XmlIgnore]
+	[Obsolete("Use absolute values.")]
 	public Func<UnitTypes, decimal?> GetTypeValue
 	{
 		get => _getTypeValue;
@@ -152,7 +160,6 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 		{
 			Type = Type,
 			Value = Value,
-			GetTypeValue = GetTypeValue,
 		};
 	}
 
@@ -172,6 +179,7 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 		return 1;
 	}
 
+	[Obsolete]
 	private decimal SafeGetTypeValue(Func<UnitTypes, decimal?> getTypeValue)
 	{
 		var func = (GetTypeValue ?? getTypeValue) ?? throw new InvalidOperationException(LocalizedStrings.UnitHandlerNotSet);
@@ -210,13 +218,9 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 		if (percentOperation is null)
 			throw new ArgumentNullException(nameof(percentOperation));
 
-		//if (u1.CheckGetTypeValue(false) != u2.CheckGetTypeValue(false))
-		//	throw new ArgumentException("One of the values has uninitialized value handler.");
-
 		var result = new Unit
 		{
 			Type = u1.Type,
-			GetTypeValue = u1.GetTypeValue ?? u2.GetTypeValue
 		};
 
 		if (u1.Type == u2.Type)
@@ -238,19 +242,8 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 			{
 				var value = operation((decimal)u1, (decimal)u2);
 
-				switch (result.Type)
-				{
-					case UnitTypes.Absolute:
-						break;
-					case UnitTypes.Point:
-						value /= u1.SafeGetTypeValue(result.GetTypeValue);
-						break;
-					case UnitTypes.Step:
-						value /= u1.SafeGetTypeValue(result.GetTypeValue);
-						break;
-					default:
+				if (result.Type != UnitTypes.Absolute)
 						throw new ArgumentOutOfRangeException(result.Type.ToString());
-				}
 
 				result.Value = value;
 			}
@@ -311,13 +304,6 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 
 	private bool? EqualsImpl(Unit other)
 	{
-		//var retVal = Type == other.Type && Value == other.Value;
-
-		//if (Type == UnitTypes.Percent || Type == UnitTypes.Absolute || Type == UnitTypes.Limit)
-		//	return retVal;
-
-		//return retVal && CheckGetTypeValue(true) == other.CheckGetTypeValue(true);
-
 		if (Type == other.Type)
 			return Value == other.Value;
 
@@ -327,27 +313,18 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 		if (Type == UnitTypes.Limit || other.Type == UnitTypes.Limit)
 			return false;
 
-		//if (GetTypeValue is null || other.GetTypeValue is null)
-		//	return false;
-
 		var curr = this;
-
-		if (curr.Type is UnitTypes.Point or UnitTypes.Step && curr.GetTypeValue is null)
-			return false;
-
-		if (other.Type is UnitTypes.Point or UnitTypes.Step && other.GetTypeValue is null)
-			return false;
 
 		if (other.Type == UnitTypes.Absolute)
 		{
-			curr = Convert(other.Type, false);
+			curr = Convert(other.Type);
 
 			if (curr is null)
 				return null;
 		}
 		else
 		{
-			other = other.Convert(Type, false);
+			other = other.Convert(Type);
 
 			if (other is null)
 				return null;
@@ -423,58 +400,48 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 	/// <param name="type">Measure unit.</param>
 	/// <returns>String suffix.</returns>
 	public static string GetTypeSuffix(UnitTypes type)
-	{
-		return type switch
+		=> type switch
 		{
 			UnitTypes.Percent	=> "%",
 			UnitTypes.Absolute	=> string.Empty,
-			UnitTypes.Step		=> "s",
-			UnitTypes.Point		=> "p",
 			UnitTypes.Limit		=> "l",
 
-			_ => throw new InvalidOperationException(LocalizedStrings.UnknownUnitMeasurement.Put(type)),
+#pragma warning disable CS0618 // Type or member is obsolete
+			UnitTypes.Step => "s",
+			UnitTypes.Point => "p",
+#pragma warning restore CS0618 // Type or member is obsolete
+
+			_ => throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue),
 		};
-	}
 
 	/// <summary>
 	/// Cast the value to another type.
 	/// </summary>
 	/// <param name="destinationType">Destination value type.</param>
-	/// <param name="throwException">Throw exception in case of impossible conversion. Otherwise, returns <see langword="null"/>.</param>
 	/// <returns>Converted value.</returns>
-	public Unit Convert(UnitTypes destinationType, bool throwException = true)
+	public Unit Convert(UnitTypes destinationType)
 	{
-		return Convert(destinationType, GetTypeValue, throwException);
+		if (Type == destinationType)
+			return Clone();
+
+		if (Type == UnitTypes.Percent || destinationType == UnitTypes.Percent)
+			throw new InvalidOperationException(LocalizedStrings.PercentagesConvert);
+
+		var value = ToDecimal();
+
+		return new(value, destinationType);
 	}
 
-	private decimal ToDecimal(Func<UnitTypes, decimal?> getTypeValue)
+	private decimal ToDecimal()
 	{
 		var value = Value;
 
-		switch (Type)
+		return Type switch
 		{
-			case UnitTypes.Limit:
-			case UnitTypes.Absolute:
-				return value;
-			case UnitTypes.Percent:
-				throw new InvalidOperationException(LocalizedStrings.PercentagesConvert);
-			case UnitTypes.Point:
-				var point = getTypeValue?.Invoke(Type) ?? throw new InvalidOperationException(LocalizedStrings.PriceStepNotSpecified);
-
-				if (point == 0)
-					throw new InvalidOperationException(LocalizedStrings.PriceStepIsZeroKey);
-
-				return value * point;
-			case UnitTypes.Step:
-				var step = getTypeValue?.Invoke(Type) ?? throw new InvalidOperationException(LocalizedStrings.PriceStepNotSpecified);
-
-				if (step == 0)
-					throw new InvalidOperationException(LocalizedStrings.PriceStepNotSpecified);
-
-				return value * step;
-			default:
-				throw new InvalidOperationException(Type.ToString());
-		}
+			UnitTypes.Limit or UnitTypes.Absolute => value,
+			UnitTypes.Percent => throw new InvalidOperationException(LocalizedStrings.PercentagesConvert),
+			_ => throw new InvalidOperationException(Type.ToString()),
+		};
 	}
 
 	/// <summary>
@@ -484,60 +451,10 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 	/// <param name="getTypeValue">The handler returns a value associated with <see cref="Type"/> (price or volume steps).</param>
 	/// <param name="throwException">Throw exception in case of impossible conversion. Otherwise, returns <see langword="null"/>.</param>
 	/// <returns>Converted value.</returns>
+	[Obsolete("GetTypeValue is obsolete.")]
 	public Unit Convert(UnitTypes destinationType, Func<UnitTypes, decimal?> getTypeValue, bool throwException = true)
 	{
-		if (Type == destinationType)
-			return Clone();
-
-		if (Type == UnitTypes.Percent || destinationType == UnitTypes.Percent)
-			throw new InvalidOperationException(LocalizedStrings.PercentagesConvert);
-
-		getTypeValue ??= GetTypeValue;
-
-		var value = ToDecimal(getTypeValue);
-
-		if (destinationType is UnitTypes.Point or UnitTypes.Step)
-		{
-			if (getTypeValue is null)
-			{
-				if (throwException)
-					throw new ArgumentException(LocalizedStrings.UnitHandlerNotSet, nameof(destinationType));
-
-				return null;
-			}
-
-			switch (destinationType)
-			{
-				case UnitTypes.Point:
-					var point = getTypeValue(UnitTypes.Point);
-
-					if (point is null or 0)
-					{
-						if (throwException)
-							throw new InvalidOperationException(LocalizedStrings.PriceStepIsZeroKey);
-
-						return null;
-					}
-
-					value = value / point.Value;
-					break;
-				case UnitTypes.Step:
-					var step = getTypeValue(UnitTypes.Step);
-
-					if (step is null or 0)
-					{
-						if (throwException)
-							throw new InvalidOperationException(LocalizedStrings.PriceStepNotSpecified);
-
-						return null;
-					}
-
-					value = value / step.Value;
-					break;
-			}
-		}
-
-		return new(value, destinationType, getTypeValue);
+		return Convert(destinationType);
 	}
 
 	private static bool? MoreThan(Unit u1, Unit u2)
@@ -547,12 +464,6 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 
 		if (u2 is null)
 			return null;
-
-		//if (u1.Type == UnitTypes.Limit || u2.Type == UnitTypes.Limit)
-		//	throw new ArgumentException("Limit value cannot be modified while arithmetics operations.");
-
-		//if (u1.CheckGetTypeValue(false) != u2.CheckGetTypeValue(false))
-		//	throw new ArgumentException("One of the values has uninitialized value handler.");
 
 		if (u1.Type != u2.Type)
 		{
@@ -564,14 +475,14 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 
 			if (u2.Type == UnitTypes.Absolute)
 			{
-				u1 = u1.Convert(u2.Type, false);
+				u1 = u1.Convert(u2.Type);
 
 				if (u1 is null)
 					return null;
 			}
 			else
 			{
-				u2 = u2.Convert(u1.Type, false);
+				u2 = u2.Convert(u1.Type);
 
 				if (u2 is null)
 					return null;
@@ -625,7 +536,6 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 
 		return new Unit
 		{
-			GetTypeValue = u.GetTypeValue,
 			Type = u.Type,
 			Value = -u.Value
 		};
@@ -641,7 +551,7 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 	/// </summary>
 	/// <returns><see cref="Unit"/></returns>
 	public Unit Abs()
-		=> new() { Type = Type, Value = Value.Abs(), GetTypeValue = GetTypeValue };
+		=> new() { Type = Type, Value = Value.Abs() };
 
 	/// <summary>
 	/// Load settings.

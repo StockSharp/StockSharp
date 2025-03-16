@@ -38,9 +38,8 @@ public static class UnitHelper
 	/// </summary>
 	/// <param name="str">String value of <see cref="Unit"/>.</param>
 	/// <param name="throwIfNull">Throw <see cref="ArgumentNullException"/> if the specified string is empty.</param>
-	/// <param name="getTypeValue">The handler returns a value associated with <see cref="Type"/> (price or volume steps).</param>
 	/// <returns>Object <see cref="Unit"/>.</returns>
-	public static Unit ToUnit(this string str, bool throwIfNull = true, Func<UnitTypes, decimal?> getTypeValue = null)
+	public static Unit ToUnit(this string str, bool throwIfNull = true)
 	{
 		if (str.IsEmpty())
 		{
@@ -53,40 +52,22 @@ public static class UnitHelper
 		var lastSymbol = str.Last();
 
 		if (char.IsDigit(lastSymbol))
-			return new Unit(str.To<decimal>(), UnitTypes.Absolute);
+			return new(str.To<decimal>(), UnitTypes.Absolute);
 
 		var value = str.Substring(0, str.Length - 1).To<decimal>();
 
-		UnitTypes type;
-
-		switch (char.ToLowerInvariant(lastSymbol))
+		var type = char.ToLowerInvariant(lastSymbol) switch
 		{
-			case 'ш':
-			case 's':
-				if (getTypeValue is null)
-					throw new ArgumentNullException(nameof(getTypeValue));
+			'%' => UnitTypes.Percent,
+			'л' or 'l' => UnitTypes.Limit,
+#pragma warning disable CS0618 // Type or member is obsolete
+			'ш' or 's' => UnitTypes.Step,
+			'п' or 'p' => UnitTypes.Point,
+#pragma warning restore CS0618 // Type or member is obsolete
+			_ => throw new ArgumentException(LocalizedStrings.UnknownUnitMeasurement.Put(lastSymbol), nameof(str)),
+		};
 
-				type = UnitTypes.Step;
-				break;
-			case 'п':
-			case 'p':
-				if (getTypeValue is null)
-					throw new ArgumentNullException(nameof(getTypeValue));
-
-				type = UnitTypes.Point;
-				break;
-			case '%':
-				type = UnitTypes.Percent;
-				break;
-			case 'л':
-			case 'l':
-				type = UnitTypes.Limit;
-				break;
-			default:
-				throw new ArgumentException(LocalizedStrings.UnknownUnitMeasurement.Put(lastSymbol), nameof(str));
-		}
-
-		return new Unit(value, type, getTypeValue);
+		return new(value, type);
 	}
 
 	/// <summary>
@@ -100,6 +81,6 @@ public static class UnitHelper
 		if (unit is null)
 			throw new ArgumentNullException(nameof(unit));
 
-		return new Unit(unit.Value * times, unit.Type, unit.GetTypeValue);
+		return new(unit.Value * times, unit.Type);
 	}
 }
