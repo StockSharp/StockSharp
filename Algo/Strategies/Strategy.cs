@@ -1177,12 +1177,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// </summary>
 	protected void InitStartValues()
 	{
-		foreach (var parameter in GetParameters())
-		{
-			if (parameter.Value is Unit unit && unit.GetTypeValue == null && (unit.Type == UnitTypes.Point || unit.Type == UnitTypes.Step))
-				unit.SetSecurity(GetSecurity());
-		}
-
 		ErrorState = LogLevels.Info;
 
 		if (Portfolio?.CurrentValue is not null)
