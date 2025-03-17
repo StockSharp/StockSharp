@@ -94,7 +94,8 @@ partial class Connector
 	public event Action<Exception> Error;
 
 	/// <inheritdoc />
-	[Obsolete("Use SecurityReceived and SubscriptionStopped events.")]
+	// TODO
+	//[Obsolete("Use SecurityReceived and SubscriptionStopped events.")]
 	public event Action<SecurityLookupMessage, IEnumerable<Security>, Exception> LookupSecuritiesResult;
 
 	/// <inheritdoc />
@@ -106,7 +107,8 @@ partial class Connector
 	public event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult;
 
 	/// <inheritdoc />
-	[Obsolete("Use SecurityReceived and SubscriptionStopped events.")]
+	// TODO
+	//[Obsolete("Use SecurityReceived and SubscriptionStopped events.")]
 	public event Action<SecurityLookupMessage, IEnumerable<Security>, IEnumerable<Security>, Exception> LookupSecuritiesResult2;
 
 	/// <inheritdoc />
