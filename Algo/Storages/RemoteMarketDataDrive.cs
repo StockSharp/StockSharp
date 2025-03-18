@@ -120,14 +120,19 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 		_createAdapter = createAdapter ?? throw new ArgumentNullException(nameof(createAdapter));
 	}
 
-	/// <inheritdoc />
-	protected override void DisposeManaged()
+	private void ResetClient()
 	{
 		lock (_clientSync)
 		{
 			_client?.Dispose();
 			_client = null;
 		}
+	}
+
+	/// <inheritdoc />
+	protected override void DisposeManaged()
+	{
+		ResetClient();
 
 		base.DisposeManaged();
 	}
@@ -286,6 +291,8 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 		TargetCompId = storage.GetValue(nameof(TargetCompId), TargetCompId);
 		SecurityBatchSize = storage.GetValue(nameof(SecurityBatchSize), SecurityBatchSize);
 		Timeout = storage.GetValue(nameof(Timeout), Timeout);
+
+		ResetClient();
 	}
 
 	/// <inheritdoc />
