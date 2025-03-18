@@ -253,11 +253,11 @@ public class RemoteStorageClient : Disposable
 	/// <param name="format">Format type.</param>
 	/// <returns>Data types.</returns>
 	public IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
-		=> [.. Do<AvailableDataInfoMessage>(new AvailableDataRequestMessage
+		=> [.. Do<DataTypeInfoMessage>(new DataTypeLookupMessage
 		{
 			SecurityId = securityId,
 			Format = (int)format,
-		}, () => (typeof(AvailableDataRequestMessage), securityId, format), out _).Select(t => t.FileDataType).Distinct()];
+		}, () => (typeof(DataTypeLookupMessage), securityId, format), out _).Select(t => t.FileDataType).Distinct()];
 
 	/// <summary>
 	/// Verify.
@@ -273,13 +273,13 @@ public class RemoteStorageClient : Disposable
 	/// <param name="format">Storage format.</param>
 	/// <returns>Dates.</returns>
 	public IEnumerable<DateTime> GetDates(SecurityId securityId, DataType dataType, StorageFormats format)
-		=> [.. Do<AvailableDataInfoMessage>(new AvailableDataRequestMessage
+		=> [.. Do<DataTypeInfoMessage>(new DataTypeLookupMessage
 		{
 			SecurityId = securityId,
 			RequestDataType = dataType,
 			Format = (int)format,
 			IncludeDates = true,
-		}, () => (typeof(AvailableDataRequestMessage), securityId, dataType, format), out _).SelectMany(i => i.Dates).OrderBy().Distinct()];
+		}, () => (typeof(DataTypeLookupMessage), securityId, dataType, format), out _).SelectMany(i => i.Dates).OrderBy().Distinct()];
 
 	/// <summary>
 	/// To save data in the format of StockSharp storage.

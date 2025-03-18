@@ -15,30 +15,49 @@ public class DataTypeInfoMessage : BaseSubscriptionIdMessage<DataTypeInfoMessage
 	{
 	}
 
-	private DataType[] _dataTypes = [];
+	/// <inheritdoc />
+	[DataMember]
+	public SecurityId SecurityId { get; set; }
 
 	/// <summary>
-	/// Possible data types.
+	/// Possible data type.
 	/// </summary>
 	[DataMember]
-	public DataType[] DataTypes
+	public DataType FileDataType { get; set; }
+
+	private DateTime[] _dates = [];
+
+	/// <summary>
+	/// Dates.
+	/// </summary>
+	[DataMember]
+	public DateTime[] Dates
 	{
-		get => _dataTypes;
-		set => _dataTypes = value ?? throw new ArgumentNullException(nameof(value));
+		get => _dates;
+		set => _dates = value ?? throw new ArgumentNullException(nameof(value));
 	}
 
+	/// <summary>
+	/// Storage format.
+	/// </summary>
+	[DataMember]
+	public int Format { get; set; }
+
 	/// <inheritdoc />
-	public override DataType DataType => DataType.DataTypes;
+	public override DataType DataType => DataType.DataTypeInfo;
 
 	/// <inheritdoc />
 	public override void CopyTo(DataTypeInfoMessage destination)
 	{
 		base.CopyTo(destination);
 
-		destination.DataTypes = DataTypes;
+		destination.SecurityId = SecurityId;
+		destination.FileDataType = FileDataType?.TypedClone();
+		destination.Dates = Dates?.ToArray();
+		destination.Format = Format;
 	}
 
 	/// <inheritdoc />
 	public override string ToString()
-		=> base.ToString() + $",DT={DataTypes.Select(t => t.Name).JoinCommaSpace()}";
+		=> base.ToString() + $",SecId={SecurityId},DT={FileDataType},DatesLen={Dates.Length},Fmt={Format}";
 }

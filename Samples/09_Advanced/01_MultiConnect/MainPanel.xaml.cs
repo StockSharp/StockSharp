@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Collections.Generic;
 
 using Ecng.Common;
 using Ecng.Configuration;
@@ -198,9 +199,15 @@ public partial class MainPanel
 		// set news provider
 		_newsWindow.NewsPanel.NewsProvider = Connector;
 
-		Connector.LookupTimeFramesResult += (message, timeFrames, error) =>
+		var timeFrames = new HashSet<TimeSpan>();
+		Connector.DataTypeReceived += (s, i) =>
 		{
-			if (error == null)
+			if (i.IsTFCandles && i.Arg is TimeSpan tf)
+				timeFrames.Add(tf);
+		};
+		Connector.SubscriptionStopped += (s, error) =>
+		{
+			if (error == null && s.DataType == DataType.DataTypeInfo)
 				this.GuiAsync(() => _securitiesWindow.UpdateTimeFrames(timeFrames));
 		};
 

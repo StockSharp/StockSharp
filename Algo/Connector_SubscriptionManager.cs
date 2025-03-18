@@ -21,7 +21,7 @@ partial class Connector
 			if (type == DataType.PositionChanges ||
 				type == DataType.Securities ||
 				type == DataType.Board ||
-				type == DataType.DataTypes)
+				type == DataType.DataTypeInfo)
 			{
 				LookupItems = [];
 			}
@@ -489,11 +489,6 @@ partial class Connector
 
 		public IEnumerable<Subscription> ProcessLookupResponse<T>(ISubscriptionIdMessage message, T item)
 		{
-			return ProcessLookupResponse(message, [item]);
-		}
-
-		public IEnumerable<Subscription> ProcessLookupResponse<T>(ISubscriptionIdMessage message, T[] items)
-		{
 			var subscriptions = new List<Subscription>();
 
 			foreach (var id in message.GetSubscriptionIds())
@@ -509,7 +504,7 @@ partial class Connector
 					continue;
 				}
 
-				info.LookupItems.AddRange(items.Cast<object>());
+				info.LookupItems.Add(item);
 				subscriptions.Add(info.Subscription);
 			}
 

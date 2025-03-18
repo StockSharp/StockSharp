@@ -3322,7 +3322,7 @@ public static partial class Extensions
 			return MessageTypes.Security;
 		else if (type == DataType.SecurityLegs)
 			return MessageTypes.SecurityLegsInfo;
-		else if (type == DataType.DataTypes)
+		else if (type == DataType.DataTypeInfo)
 			return MessageTypes.DataTypeInfo;
 		else if (type.IsCandles)
 			return type.MessageType.ToMessageType();

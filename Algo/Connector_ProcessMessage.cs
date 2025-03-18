@@ -924,10 +924,10 @@ partial class Connector
 
 	private void ProcessDataTypeInfoMessage(DataTypeInfoMessage message)
 	{
-		_subscriptionManager.ProcessLookupResponse(message, message.DataTypes);
+		var dt = message.FileDataType ?? throw new InvalidOperationException(LocalizedStrings.NoDataTypeSelected);
 
-		foreach (var dt in message.DataTypes)
-			RaiseReceived(dt, message, DataTypeReceived);
+		_subscriptionManager.ProcessLookupResponse(message, dt);
+		RaiseReceived(dt, message, DataTypeReceived);
 	}
 
 	private void ProcessLevel1ChangeMessage(Level1ChangeMessage message)

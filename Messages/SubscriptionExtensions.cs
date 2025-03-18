@@ -68,7 +68,7 @@ public static class SubscriptionExtensions
 			return new BoardLookupMessage();
 		else if (dataType == DataType.Users)
 			return new UserLookupMessage();
-		else if (dataType == DataType.DataTypes)
+		else if (dataType == DataType.DataTypeInfo)
 			return new DataTypeLookupMessage();
 		else if (dataType.IsMarketData)
 			return new MarketDataMessage { DataType2 = dataType };

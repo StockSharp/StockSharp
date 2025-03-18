@@ -416,12 +416,8 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 
 		message.Adapter ??= this;
 
-		switch (message.Type)
-		{
-			case MessageTypes.DataTypeInfo:
-				_dataTypes.AddRange(((DataTypeInfoMessage)message).DataTypes);
-				break;
-		}
+		if (message is DataTypeInfoMessage dtim && dtim.FileDataType is DataType dt)
+			_dataTypes.Add(dt);
 
 		NewOutMessage?.Invoke(message);
 	}

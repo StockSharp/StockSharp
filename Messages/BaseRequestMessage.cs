@@ -11,7 +11,6 @@
 [Serializable]
 public abstract class BaseRequestMessage(MessageTypes type) : BaseSubscriptionMessage(type)
 {
-
 	/// <inheritdoc />
 	[DataMember]
 	public override DateTimeOffset? From => null;

@@ -69,7 +69,7 @@ partial class Extensions
 				return ((ExecutionTypes)arg).ToDataType();
 
 			case MessageTypes.DataTypeInfo:
-				return DataType.DataTypes;
+				return DataType.DataTypeInfo;
 
 			case MessageTypes.UserInfo:
 				return DataType.Users;

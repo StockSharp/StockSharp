@@ -425,13 +425,15 @@ public enum MessageTypes
 	StrategyBacktestResult,
 
 	/// <summary>
-	/// <see cref="AvailableDataRequestMessage"/>.
+	/// 
 	/// </summary>
+	[Obsolete]
 	AvailableDataRequest,
 
 	/// <summary>
-	/// <see cref="AvailableDataInfoMessage"/>.
+	/// 
 	/// </summary>
+	[Obsolete]
 	AvailableDataInfo,
 
 	/// <summary>
