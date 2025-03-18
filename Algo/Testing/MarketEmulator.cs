@@ -3632,8 +3632,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		DataType.CandleTimeFrame,
 		DataType.MarketDepth,
 	];
-	IEnumerable<DataType> IMessageAdapter.GetSupportedDataTypes(SecurityId securityId)
-		=> ((IMessageAdapter)this).SupportedMarketDataTypes;
 
 	IEnumerable<Level1Fields> IMessageAdapter.CandlesBuildFrom => [];
 
@@ -3678,9 +3676,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 	IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 		=> new OrderLogMarketDepthBuilder(securityId);
-
-	IEnumerable<object> IMessageAdapter.GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
-		=> [];
 
 	TimeSpan IMessageAdapter.GetHistoryStepSize(SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)
 	{

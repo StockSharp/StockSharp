@@ -264,10 +264,6 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageChannel>, IMessa
 	public virtual IEnumerable<DataType> SupportedMarketDataTypes => InnerAdapter.SupportedMarketDataTypes;
 
 	/// <inheritdoc />
-	public virtual IEnumerable<DataType> GetSupportedDataTypes(SecurityId securityId)
-		=> InnerAdapter.GetSupportedDataTypes(securityId);
-
-	/// <inheritdoc />
 	public TimeSpan HeartbeatInterval
 	{
 		get => InnerAdapter.HeartbeatInterval;
@@ -360,10 +356,6 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageChannel>, IMessa
 
 	IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 		=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
-
-	/// <inheritdoc />
-	public virtual IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
-		=> InnerAdapter.GetCandleArgs(candleType, securityId, from, to);
 
 	/// <inheritdoc />
 	public virtual TimeSpan GetHistoryStepSize(SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)

@@ -33,13 +33,6 @@ public interface IMessageAdapter : IMessageChannel, IPersistable, ILogReceiver
 	IEnumerable<DataType> SupportedMarketDataTypes { get; }
 
 	/// <summary>
-	/// Get supported data types for the specified <see cref="SecurityId"/>.
-	/// </summary>
-	/// <param name="securityId"><see cref="SecurityId"/></param>
-	/// <returns>Supported data types.</returns>
-	IEnumerable<DataType> GetSupportedDataTypes(SecurityId securityId);
-
-	/// <summary>
 	/// Possible options for candles building.
 	/// </summary>
 	IEnumerable<Level1Fields> CandlesBuildFrom { get; }
@@ -201,16 +194,6 @@ public interface IMessageAdapter : IMessageChannel, IPersistable, ILogReceiver
 	/// <param name="securityId">Security ID.</param>
 	/// <returns>Order log to market depth builder.</returns>
 	IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId);
-
-	/// <summary>
-	/// Get possible args for the specified candle type and instrument.
-	/// </summary>
-	/// <param name="candleType">The type of the message <see cref="CandleMessage"/>.</param>
-	/// <param name="securityId">Security ID.</param>
-	/// <param name="from">The initial date from which you need to get data.</param>
-	/// <param name="to">The final date by which you need to get data.</param>
-	/// <returns>Possible args.</returns>
-	IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default, DateTimeOffset? from = default, DateTimeOffset? to = default);
 
 	/// <summary>
 	/// Get maximum size step allowed for historical download.

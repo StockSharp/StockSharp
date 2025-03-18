@@ -112,10 +112,6 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 	}
 
 	/// <inheritdoc />
-	public virtual IEnumerable<DataType> GetSupportedDataTypes(SecurityId securityId)
-		=> SupportedMarketDataTypes;
-
-	/// <inheritdoc />
 	[Browsable(false)]
 	public virtual IEnumerable<Level1Fields> CandlesBuildFrom => [];
 
@@ -416,9 +412,8 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 
 		message.Adapter ??= this;
 
-		if (message is DataTypeInfoMessage dtim && dtim.FileDataType is DataType dt)
-			_dataTypes.Add(dt);
-
+		if (message is DataTypeInfoMessage dtim && dtim.FileDataType is DataType dt && dt.IsMarketData)
+			this.AddSupportedMarketDataType(dt);
 		NewOutMessage?.Invoke(message);
 	}
 
@@ -540,16 +535,6 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 	/// <inheritdoc />
 	public virtual IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 		=> new OrderLogMarketDepthBuilder(securityId);
-
-	private readonly HashSet<DataType> _dataTypes = [];
-
-	/// <inheritdoc />
-	public virtual IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
-	{
-		return candleType == typeof(TimeFrameCandleMessage)
-			? _dataTypes.Where(dt => dt.IsCandles).Select(dt => dt.Arg)
-			: [];
-	}
 
 	/// <inheritdoc />
 	public virtual TimeSpan GetHistoryStepSize(SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)

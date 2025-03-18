@@ -886,15 +886,7 @@ public static partial class Extensions
 		if (subscription == null)
 			throw new ArgumentNullException(nameof(subscription));
 
-		if (!adapter.SupportedMarketDataTypes.Contains(subscription.DataType2))
-			return false;
-
-		var args = adapter.GetCandleArgs(subscription.DataType2.MessageType, subscription.SecurityId, subscription.From, subscription.To).ToArray();
-
-		if (args.IsEmpty())
-			return true;
-
-		return args.Contains(subscription.GetArg());
+		return adapter.SupportedMarketDataTypes.Contains(subscription.DataType2);
 	}
 
 	/// <summary>
@@ -906,7 +898,12 @@ public static partial class Extensions
 	/// <param name="to">The final date by which you need to get data.</param>
 	/// <returns>Possible time-frames.</returns>
 	public static IEnumerable<TimeSpan> GetTimeFrames(this IMessageAdapter adapter, SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null)
-		=> adapter.GetCandleArgs(typeof(TimeFrameCandleMessage), securityId, from, to).Cast<TimeSpan>();
+	{
+		if (adapter is null)
+			throw new ArgumentNullException(nameof(adapter));
+
+		return adapter.SupportedMarketDataTypes.Where(dt => dt.IsTFCandles).Select(dt => dt.Arg).OfType<TimeSpan>();
+	}
 
 	/// <summary>
 	/// Convert <see cref="string"/> to <see cref="DataType"/> value.
@@ -2178,30 +2175,22 @@ public static partial class Extensions
 
 		iterationInterval = adapter.IterationInterval;
 
-		if (dataType.IsCandles)
+		if (dataType.IsTFCandles)
 		{
-			var supportedCandles = adapter.GetSupportedDataTypes(securityId).FirstOrDefault(d => d.MessageType == dataType.MessageType);
-
-			if (supportedCandles == null)
+			if (!adapter.CheckTimeFrameByRequest && !adapter.SupportedMarketDataTypes.Contains(dataType))
 				return TimeSpan.Zero;
 
-			if (dataType.IsTFCandles)
+			var tf = dataType.GetTimeFrame();
+
+			if (tf.TotalDays <= 1)
 			{
-				var tf = (TimeSpan)dataType.Arg;
+				if (tf.TotalMinutes < 0.1)
+					return TimeSpan.FromHours(0.5);
 
-				if (!adapter.CheckTimeFrameByRequest && !adapter.GetTimeFrames().Contains(tf))
-					return TimeSpan.Zero;
-
-				if (tf.TotalDays <= 1)
-				{
-					if (tf.TotalMinutes < 0.1)
-						return TimeSpan.FromHours(0.5);
-
-					return TimeSpan.FromDays(30);
-				}
-
-				return TimeSpan.MaxValue;
+				return TimeSpan.FromDays(30);
 			}
+
+			return TimeSpan.MaxValue;
 		}
 
 		// by default adapter do not provide historical data except candles
@@ -3387,45 +3376,6 @@ public static partial class Extensions
 	/// <returns>Result value.</returns>
 	public static DateTimeOffset? EnsureToday(this DateTimeOffset? date, DateTimeOffset? todayValue)
 		=> date == null ? null : (date.IsToday() ? todayValue : date);
-
-	/// <summary>
-	/// Get supported y adapter data types.
-	/// </summary>
-	/// <param name="adapter">Adapter.</param>
-	/// <returns>Supported by adapter data types.</returns>
-	public static IEnumerable<DataType> GetSupportedDataTypes(this IMessageAdapter adapter)
-	{
-		if (adapter is null)
-			throw new ArgumentNullException(nameof(adapter));
-
-		var dataTypes = new HashSet<DataType>();
-
-		foreach (var dataType in adapter.SupportedMarketDataTypes)
-		{
-			if (dataType.IsCandles)
-			{
-				if (dataType.Arg is null)
-				{
-					foreach (var arg in adapter.GetCandleArgs(dataType.MessageType))
-					{
-						dataTypes.Add(DataType.Create(dataType.MessageType, arg));
-					}
-				}
-				else
-					dataTypes.Add(dataType);
-			}
-			else
-				dataTypes.Add(dataType);
-		}
-
-		if (adapter.IsTransactional())
-		{
-			dataTypes.Add(DataType.PositionChanges);
-			dataTypes.Add(DataType.Transactions);
-		}
-
-		return dataTypes;
-	}
 
 	/// <summary>
 	/// Truncate the specified order book by max depth value.

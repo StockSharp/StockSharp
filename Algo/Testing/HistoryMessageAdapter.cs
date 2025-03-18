@@ -158,24 +158,23 @@ public class HistoryMessageAdapter : MessageAdapter
 		base.DisposeManaged();
 	}
 
-	private IEnumerable<DataType> _supportedMarketDataTypes;
+	private readonly HashSet<DataType> _supportedMarketDataTypes = [];
 
 	/// <inheritdoc />
 	public override IEnumerable<DataType> SupportedMarketDataTypes
 	{
 		get
 		{
-			if (_supportedMarketDataTypes == null)
+			if (_supportedMarketDataTypes.IsEmpty())
 			{
 				var drive = DriveInternal;
 
-				var dataTypes = drive.GetAvailableDataTypes(default, StorageFormat);
+				if (drive == null)
+					return [];
 
-				_supportedMarketDataTypes = [.. dataTypes
-					//.Select(dt => dt.ToMarketDataType())
-					//.Where(t => t != null)
-					//.Select(t => t.Value)
-					.Distinct()];
+				_supportedMarketDataTypes.AddRange(drive.GetAvailableDataTypes(default, StorageFormat));
+				_supportedMarketDataTypes.AddRange(_historySources.Select(s => s.Key.dataType));
+				_supportedMarketDataTypes.AddRange(_generators.Select(t => t.Key.dataType));
 			}
 
 			return _supportedMarketDataTypes;
@@ -183,40 +182,10 @@ public class HistoryMessageAdapter : MessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override IEnumerable<DataType> GetSupportedDataTypes(SecurityId securityId)
-		=> DriveInternal.GetAvailableDataTypes(securityId, StorageFormat);
-
-	/// <inheritdoc />
 	public override bool IsFullCandlesOnly => false;
 
 	/// <inheritdoc />
 	public override bool IsSupportCandlesUpdates(MarketDataMessage subscription) => true;
-
-	/// <inheritdoc />
-	public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
-	{
-		var drive = DriveInternal;
-
-		if (drive == null)
-			return [];
-
-		var args = _historySources
-             .Where(t => t.Key.dataType.MessageType == candleType && (t.Key.secId == securityId || t.Key.secId == default))
-             .Select(s => s.Key.dataType.Arg)
-             .ToArray();
-
-		if (args.Length > 0)
-			return args;
-
-		args = [.. _generators
-             .Where(t => t.Key.dataType.MessageType == candleType && (t.Key.secId == securityId || t.Key.secId == default))
-             .Select(s => s.Key.dataType.Arg)];
-
-		if (args.Length > 0)
-			return args;
-
-		return drive.GetCandleArgs(StorageFormat, candleType, securityId, from, to);
-	}
 
 	/// <inheritdoc />
 	public override bool IsAllDownloadingSupported(DataType dataType)
@@ -232,8 +201,10 @@ public class HistoryMessageAdapter : MessageAdapter
 				_generators.Clear();
 				_historySources.Clear();
 
-                    _currentTime = default;
+				_currentTime = default;
 				_basketStorage.InnerStorages.Clear();
+
+				_supportedMarketDataTypes.Clear();
 
 				LoadedMessageCount = 0;
 

@@ -13,18 +13,21 @@ public class StorageMessageAdapter(IMessageAdapter innerAdapter, StorageProcesso
 	private readonly StorageProcessor _storageProcessor = storageProcessor ?? throw new ArgumentNullException(nameof(storageProcessor));
 
 	/// <inheritdoc />
-	public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
+	public override IEnumerable<DataType> SupportedMarketDataTypes
 	{
-		var args = base.GetCandleArgs(candleType, securityId, from, to);
+		get
+		{
+			var dataTypes = base.SupportedMarketDataTypes;
 
-		var settings = _storageProcessor.Settings;
+			var settings = _storageProcessor.Settings;
 
-		var drive = settings.Drive ?? settings.StorageRegistry.DefaultDrive;
+			var drive = settings.Drive ?? settings.StorageRegistry.DefaultDrive;
 
-		if (drive == null)
-			return args;
+			if (drive != null)
+				dataTypes = dataTypes.Concat(drive.GetAvailableDataTypes(default, settings.Format).Where(dt => dt.IsMarketData)).Distinct();
 
-		return args.Concat(drive.GetCandleArgs(settings.Format, candleType, securityId, from, to)).Distinct();
+			return dataTypes;
+		}
 	}
 
 	/// <inheritdoc />

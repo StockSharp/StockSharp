@@ -550,9 +550,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 	IEnumerable<DataType> IMessageAdapter.SupportedMarketDataTypes => GetSortedAdapters().SelectMany(a => a.SupportedMarketDataTypes).Distinct();
 
-	IEnumerable<DataType> IMessageAdapter.GetSupportedDataTypes(SecurityId securityId)
-		 => GetSortedAdapters().SelectMany(a => a.GetSupportedDataTypes(securityId)).Distinct();
-
 	IEnumerable<Level1Fields> IMessageAdapter.CandlesBuildFrom => GetSortedAdapters().SelectMany(a => a.CandlesBuildFrom).Distinct();
 
 	bool IMessageAdapter.CheckTimeFrameByRequest => false;
@@ -597,9 +594,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 	IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 		=> new OrderLogMarketDepthBuilder(securityId);
-
-	IEnumerable<object> IMessageAdapter.GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
-		=> GetSortedAdapters().SelectMany(a => a.GetCandleArgs(candleType, securityId, from, to)).Distinct().OrderBy();
 
 	TimeSpan IMessageAdapter.GetHistoryStepSize(SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)
 	{
