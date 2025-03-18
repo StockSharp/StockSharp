@@ -99,7 +99,8 @@ partial class Connector
 	public event Action<SecurityLookupMessage, IEnumerable<Security>, Exception> LookupSecuritiesResult;
 
 	/// <inheritdoc />
-	[Obsolete("Use PortfolioReceived and SubscriptionStopped events.")]
+	// TODO
+	//[Obsolete("Use PortfolioReceived and SubscriptionStopped events.")]
 	public event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, Exception> LookupPortfoliosResult;
 
 	/// <inheritdoc />
