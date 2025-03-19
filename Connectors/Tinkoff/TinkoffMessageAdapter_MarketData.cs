@@ -569,6 +569,12 @@ public partial class TinkoffMessageAdapter
 				},
 				SubscriptionAction = SubscriptionAction.Subscribe,
 				WaitingClose = mdMsg.IsFinishedOnly,
+				CandleSourceType = mdMsg.IsRegularTradingHours switch
+				{
+					null => GetCandlesRequest.Types.CandleSource.Unspecified,
+					false => GetCandlesRequest.Types.CandleSource.IncludeWeekend,
+					_ => GetCandlesRequest.Types.CandleSource.Exchange,
+				},
 			},
 		}, cancellationToken);
 
@@ -747,7 +753,7 @@ public partial class TinkoffMessageAdapter
 						}
 					},
 					SubscriptionAction = SubscriptionAction.Unsubscribe,
-					TradeType = mdMsg.IsRegularTradingHours switch
+					TradeSource = mdMsg.IsRegularTradingHours switch
 					{
 						null => TradeSourceType.TradeSourceUnspecified,
 						false => TradeSourceType.TradeSourceAll,
@@ -771,7 +777,7 @@ public partial class TinkoffMessageAdapter
 					}
 				},
 				SubscriptionAction = SubscriptionAction.Subscribe,
-				TradeType = mdMsg.IsRegularTradingHours switch
+				TradeSource = mdMsg.IsRegularTradingHours switch
 				{
 					null => TradeSourceType.TradeSourceUnspecified,
 					false => TradeSourceType.TradeSourceAll,
