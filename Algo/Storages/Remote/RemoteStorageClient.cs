@@ -81,7 +81,7 @@ public class RemoteStorageClient : Disposable
 			message is SubscriptionOnlineMessage ||
 			error is not null)
 		{
-			if (error is not null)
+			if (error is null)
 				t.messages.Add(message);
 
 			t.sync.PulseSignal(error);
