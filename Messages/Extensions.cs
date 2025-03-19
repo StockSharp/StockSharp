@@ -3066,7 +3066,24 @@ public static partial class Extensions
 
 		if (criteria.SecurityIds.Length > 0)
 		{
-			if (!criteria.SecurityIds.Contains(security.SecurityId))
+			var found = false;
+
+			foreach (var i in criteria.SecurityIds)
+			{
+				if (!i.SecurityCode.IsEmpty() && security.SecurityId.SecurityCode.ContainsIgnoreCase(i.SecurityCode))
+				{
+					found = true;
+					break;
+				}
+
+				if (!i.BoardCode.IsEmpty() && security.SecurityId.BoardCode.EqualsIgnoreCase(i.BoardCode))
+				{
+					found = true;
+					break;
+				}
+			}
+
+			if (!found)
 				return false;
 		}
 
