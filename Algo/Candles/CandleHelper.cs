@@ -91,7 +91,7 @@ public static class CandleHelper
 	public static CandleSeries GetSeries<TCandle>(this ISubscriptionProvider subscriptionProvider, Security security, object arg)
 		where TCandle : ICandleMessage
 	{
-		return subscriptionProvider.CheckOnNull(nameof(subscriptionProvider)).Subscriptions.Select(s => s.CandleSeries).Where(s => s is not null).FirstOrDefault(s => s.CandleType == typeof(TCandle) && s.Security == security && s.Arg.Equals(arg));
+		return subscriptionProvider.CheckOnNull(nameof(subscriptionProvider)).Subscriptions.Select(s => s.CandleSeries).WhereNotNull().FirstOrDefault(s => s.CandleType == typeof(TCandle) && s.Security == security && s.Arg.Equals(arg));
 	}
 
 	private static IEnumerable<CandleMessage> ToCandles<TSourceMessage>(this IEnumerable<TSourceMessage> messages, MarketDataMessage mdMsg, Func<TSourceMessage, ICandleBuilderValueTransform> createTransform, CandleBuilderProvider candleBuilderProvider = null)

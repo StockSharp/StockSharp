@@ -4885,7 +4885,7 @@ public static partial class Extensions
 
 		return period.Times
 					.Select(fromToRange.Intersect)
-					.Where(intersection => intersection != null)
+					.WhereNotNull()
 					.Sum(intersection => intersection.Length.Ticks / timeFrame.Ticks);
 	}
 

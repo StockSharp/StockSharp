@@ -127,7 +127,7 @@ partial class Connector
 			return Subscriptions
 			       .Where(s => s.DataType == dataType && s.State.IsActive())
 			       .Select(s => _connector.TryGetSecurity(s.SecurityId))
-				   .Where(s => s != null);
+				   .WhereNotNull();
 		}
 
 		private void TryWriteLog(long id)

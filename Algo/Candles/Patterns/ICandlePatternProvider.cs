@@ -180,7 +180,7 @@ public class CandlePatternFileStorage : ICandlePatternProvider
 					errors.Add(ex);
 					return null;
 				}
-			}).Where(p => p is not null).ForEach(p =>
+			}).WhereNotNull().ForEach(p =>
 			{
 				if (_inMemory.TryFind(p.Name, out var toReplace))
 					_inMemory.Remove(toReplace);

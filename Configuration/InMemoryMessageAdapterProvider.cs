@@ -36,7 +36,7 @@ public class InMemoryMessageAdapterProvider : IMessageAdapterProvider
 		_transportAdapter = transportAdapter;
 
 		var idGenerator = new IncrementalIdGenerator();
-		PossibleAdapters = GetAdapters().Select(t =>
+		PossibleAdapters = [.. GetAdapters().Select(t =>
 		{
 			try
 			{
@@ -47,7 +47,7 @@ public class InMemoryMessageAdapterProvider : IMessageAdapterProvider
 				ex.LogError();
 				return null;
 			}
-		}).Where(a => a != null).ToArray();
+		}).WhereNotNull()];
 	}
 
 	/// <inheritdoc />

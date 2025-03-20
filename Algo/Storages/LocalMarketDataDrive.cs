@@ -777,7 +777,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 					.Select(IOPath.GetFileNameWithoutExtension)
 					.Distinct()
 					.Select(GetDataType)
-					.Where(t => t != null)
+					.WhereNotNull()
 					.OrderBy(d =>
 					{
 						if (!d.IsCandles)
@@ -1078,7 +1078,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 									.GetFiles(dateDir, "*" + ext)
 									.Select(IOPath.GetFileNameWithoutExtension)
 									.Select(GetDataType)
-									.Where(t => t != null)
+									.WhereNotNull()
 									.ToHashSet()
 								;
 							}

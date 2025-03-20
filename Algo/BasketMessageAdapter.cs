@@ -1922,7 +1922,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 					if (allFailed)
 					{
-						var errors = _adapterStates.Select(v => v.Value.Item2).Where(e => e != null).ToArray();
+						var errors = _adapterStates.Select(v => v.Value.Item2).WhereNotNull().ToArray();
 						CreateConnectedMsg(ConnectionStates.Failed, errors.SingleOrAggr());
 					}
 				}
