@@ -338,3 +338,14 @@ public interface ISenderTargetAdapter
 	/// </summary>
 	string TargetCompId { get; set; }
 }
+
+/// <summary>
+/// Message adapter, provided <see cref="IsBinaryEnabled"/> property.
+/// </summary>
+public interface IBinaryAdapter
+{
+	/// <summary>
+	/// Enable binary mode.
+	/// </summary>
+	bool IsBinaryEnabled { get; set; }
+}
