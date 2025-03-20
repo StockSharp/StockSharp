@@ -262,8 +262,7 @@ public class RemoteStorageClient : Disposable
 	/// <summary>
 	/// Verify.
 	/// </summary>
-	public void Verify()
-		=> Do(new TimeMessage());
+	public void Verify() => Do<ConnectMessage>(new TimeMessage(), () => null, out _);
 
 	/// <summary>
 	/// To get all the dates for which market data are recorded.
@@ -351,7 +350,7 @@ public class RemoteStorageClient : Disposable
 	}
 
 	private IEnumerable<TResult> Do<TResult>(Message request, Func<object> getKey, out bool isFull)
-		where TResult : Message, IOriginalTransactionIdMessage
+		where TResult : Message//, IOriginalTransactionIdMessage
 	{
 		if (request is null)	throw new ArgumentNullException(nameof(request));
 		if (getKey is null)		throw new ArgumentNullException(nameof(getKey));
