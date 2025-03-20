@@ -22,7 +22,10 @@ var securityStorage = (ISecurityStorage)registry.Securities;
 ```csharp
 var remoteDrive = new RemoteMarketDataDrive(RemoteMarketDataDrive.DefaultAddress, new FixMessageAdapter(new IncrementalIdGenerator()))
 {
-    Credentials = { Email = "hydra_user", Password = "hydra_user".To<SecureString>() }
+    Credentials = { Email = "hydra_user", Password = "hydra_user".To<SecureString>() },
+
+    // uncomment to enable binary mode
+    //IsBinaryEnabled = true,
 };
 ```
 
