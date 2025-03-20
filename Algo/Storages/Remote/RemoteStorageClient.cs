@@ -61,10 +61,10 @@ public class RemoteStorageClient : Disposable
 		}
 
 		var connError = message is ConnectMessage cm ? cm.Error : null;
-		if (connError is not null || message is DisconnectMessage)
+		if (connError is not null || message is BaseConnectionMessage)
 		{
 			foreach (var (_, (sync, _)) in _pendings.CopyAndClear())
-				sync.PulseSignal(connError ?? new InvalidOperationException(LocalizedStrings.UnexpectedDisconnection));
+				sync.PulseSignal(connError ?? (message is ConnectMessage ? null : new InvalidOperationException(LocalizedStrings.UnexpectedDisconnection)));
 
 			return;
 		}
@@ -262,7 +262,7 @@ public class RemoteStorageClient : Disposable
 	/// <summary>
 	/// Verify.
 	/// </summary>
-	public void Verify() => Do<ConnectMessage>(new TimeMessage(), () => null, out _);
+	public void Verify() => Do<Message>(new TimeMessage(), () => null, out _);
 
 	/// <summary>
 	/// To get all the dates for which market data are recorded.
