@@ -1,7 +1,6 @@
 ﻿namespace StockSharp.Algo;
 
 using Ecng.Common;
-using Ecng.Compilation;
 using Ecng.Reflection;
 
 using StockSharp.Algo.Indicators;
