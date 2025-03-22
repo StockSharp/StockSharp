@@ -35,7 +35,6 @@ public static partial class Extensions
 	private static readonly StateChangeValidator<OrderStates> _orderStateValidator;
 	private static readonly StateChangeValidator<ChannelStates> _channelStateValidator;
 
-
 	static Extensions()
 	{
 		static string TimeSpanToString(TimeSpan arg) => arg.ToString().Replace(':', '-');
@@ -43,12 +42,12 @@ public static partial class Extensions
 
 		static bool validateUnit(Unit v) => v is not null && v.Value > 0;
 
-		RegisterCandleType(typeof(TimeFrameCandleMessage), MessageTypes.CandleTimeFrame, MarketDataTypes.CandleTimeFrame, typeof(TimeFrameCandleMessage).Name.Remove(nameof(Message)), StringToTimeSpan, TimeSpanToString, a => a > TimeSpan.Zero, false);
-		RegisterCandleType(typeof(TickCandleMessage), MessageTypes.CandleTick, MarketDataTypes.CandleTick, typeof(TickCandleMessage).Name.Remove(nameof(Message)), str => str.To<int>(), arg => arg.ToString(), a => a > 0);
-		RegisterCandleType(typeof(VolumeCandleMessage), MessageTypes.CandleVolume, MarketDataTypes.CandleVolume, typeof(VolumeCandleMessage).Name.Remove(nameof(Message)), str => str.To<decimal>(), arg => arg.ToString(), a => a > 0);
-		RegisterCandleType(typeof(RangeCandleMessage), MessageTypes.CandleRange, MarketDataTypes.CandleRange, typeof(RangeCandleMessage).Name.Remove(nameof(Message)), str => str.ToUnit(), arg => arg.ToString(), validateUnit);
-		RegisterCandleType(typeof(RenkoCandleMessage), MessageTypes.CandleRenko, MarketDataTypes.CandleRenko, typeof(RenkoCandleMessage).Name.Remove(nameof(Message)), str => str.ToUnit(), arg => arg.ToString(), validateUnit);
-		RegisterCandleType(typeof(PnFCandleMessage), MessageTypes.CandlePnF, MarketDataTypes.CandlePnF, typeof(PnFCandleMessage).Name.Remove(nameof(Message)), str =>
+		RegisterCandleType(typeof(TimeFrameCandleMessage), MessageTypes.CandleTimeFrame, typeof(TimeFrameCandleMessage).Name.Remove(nameof(Message)), StringToTimeSpan, TimeSpanToString, a => a > TimeSpan.Zero, false);
+		RegisterCandleType(typeof(TickCandleMessage), MessageTypes.CandleTick, typeof(TickCandleMessage).Name.Remove(nameof(Message)), str => str.To<int>(), arg => arg.ToString(), a => a > 0);
+		RegisterCandleType(typeof(VolumeCandleMessage), MessageTypes.CandleVolume, typeof(VolumeCandleMessage).Name.Remove(nameof(Message)), str => str.To<decimal>(), arg => arg.ToString(), a => a > 0);
+		RegisterCandleType(typeof(RangeCandleMessage), MessageTypes.CandleRange, typeof(RangeCandleMessage).Name.Remove(nameof(Message)), str => str.ToUnit(), arg => arg.ToString(), validateUnit);
+		RegisterCandleType(typeof(RenkoCandleMessage), MessageTypes.CandleRenko, typeof(RenkoCandleMessage).Name.Remove(nameof(Message)), str => str.ToUnit(), arg => arg.ToString(), validateUnit);
+		RegisterCandleType(typeof(PnFCandleMessage), MessageTypes.CandlePnF, typeof(PnFCandleMessage).Name.Remove(nameof(Message)), str =>
 		{
 			var parts = str.Split('_');
 
@@ -58,7 +57,7 @@ public static partial class Extensions
 				ReversalAmount = parts[1].To<int>()
 			};
 		}, pnf => $"{pnf.BoxSize}_{pnf.ReversalAmount}", a => a is not null && validateUnit(a.BoxSize) && a.ReversalAmount > 0);
-		RegisterCandleType(typeof(HeikinAshiCandleMessage), MessageTypes.CandleHeikinAshi, MarketDataTypes.CandleHeikinAshi, typeof(HeikinAshiCandleMessage).Name.Remove(nameof(Message)), StringToTimeSpan, TimeSpanToString, a => a > TimeSpan.Zero);
+		RegisterCandleType(typeof(HeikinAshiCandleMessage), MessageTypes.CandleHeikinAshi, typeof(HeikinAshiCandleMessage).Name.Remove(nameof(Message)), StringToTimeSpan, TimeSpanToString, a => a > TimeSpan.Zero);
 
 		_orderStateValidator = new(s => (int)s);
 
@@ -817,14 +816,13 @@ public static partial class Extensions
 	/// </summary>
 	/// <param name="messageType">The type of candle message.</param>
 	/// <param name="type">Message type.</param>
-	/// <param name="dataType">Candles type.</param>
 	/// <param name="fileName">File name.</param>
 	/// <param name="argParse"><see cref="string"/> to <typeparamref name="TArg"/> converter.</param>
 	/// <param name="argToString"><typeparamref name="TArg"/> to <see cref="string"/> converter.</param>
 	/// <param name="argValidator">Arg validator.</param>
 	/// <param name="isBuildOnly">The candle type can build only from underlying data.</param>
 	public static void RegisterCandleType<TArg>(
-		Type messageType, MessageTypes type, MarketDataTypes dataType, string fileName,
+		Type messageType, MessageTypes type, string fileName,
 		Func<string, TArg> argParse, Func<TArg, string> argToString,
 		Func<TArg, bool> argValidator, bool isBuildOnly = true)
 	{
@@ -844,10 +842,6 @@ public static partial class Extensions
 
 		object p1(string str) => Do(() => argParse(str));
 		string p2(object arg) => arg is string s ? s : Do(() => argToString((TArg)arg));
-
-#pragma warning disable CS0612 // Type or member is obsolete
-		_messageTypeMapOld.Add(dataType, (type, default));
-#pragma warning restore CS0612 // Type or member is obsolete
 
 		_candleDataTypes.Add(type, messageType);
 		_dataTypeArgConverters.Add(messageType, (p1, p2));
@@ -916,18 +910,8 @@ public static partial class Extensions
 		if (type.IsEmpty())
 			throw new ArgumentNullException(nameof(type));
 
-		if (type.Contains(','))
-		{
-			var messageType = type.To<Type>();
-			return DataType.Create(messageType, messageType.ToDataTypeArg(arg));
-		}
-		else
-		{
-#pragma warning disable CS0612 // Type or member is obsolete
-			var dataType = type.To<MarketDataTypes>();
-			return dataType.ToDataType(dataType.ToMessageType(out _).ToCandleMessage().ToDataTypeArg(arg));
-#pragma warning restore CS0612 // Type or member is obsolete
-		}
+		var messageType = type.To<Type>();
+		return DataType.Create(messageType, messageType.ToDataTypeArg(arg));
 	}
 
 	/// <summary>
