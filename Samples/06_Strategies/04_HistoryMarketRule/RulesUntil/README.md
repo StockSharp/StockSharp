@@ -12,8 +12,8 @@ When the strategy is initiated, it sets up subscriptions for trade ticks and mar
 ```csharp
 protected override void OnStarted(DateTimeOffset time)
 {
-    var tickSub = this.SubscribeTrades(Security); // Subscribe to trades, not used in the current setup.
-    var mdSub = this.SubscribeMarketDepth(Security); // Subscribe to market depth updates.
+    var tickSub = new Subscription(DataType.Ticks, Security);
+    var mdSub = new Subscription(DataType.MarketDepth, Security);
 
     var i = 0;
     mdSub.WhenOrderBookReceived(this).Do(depth =>
@@ -22,8 +22,12 @@ protected override void OnStarted(DateTimeOffset time)
         LogInfo($"The rule WhenOrderBookReceived BestBid={depth.GetBestBid()}, BestAsk={depth.GetBestAsk()}");
         LogInfo($"The rule WhenOrderBookReceived i={i}");
     })
-	.Until(() => i >= 10) // Continue executing until the counter reaches 10.
+    .Until(() => i >= 10) // Continue executing until the counter reaches 10.
     .Apply(this);
+
+    // Sending requests for subscribe to market data.
+    Subscribe(tickSub);
+    Subscribe(mdSub);
 	
     base.OnStarted(time);
 }

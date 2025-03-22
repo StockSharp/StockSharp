@@ -102,6 +102,6 @@ Handles the event when a security is selected from the security picker. It [subs
 private void SecurityPicker_SecuritySelected(Security security)
 {
     if (security == null) return;
-    _connector.SubscribeLevel1(security);
+    _connector.Subscribe(new(DataType.Level1, security));
 }
 ```

@@ -12,13 +12,17 @@ When the strategy starts, it subscribes to trade ticks and market depth for the 
 ```csharp
 protected override void OnStarted(DateTimeOffset time)
 {
-    var tickSub = Connector.SubscribeTrades(Security);
-    var mdSub = Connector.SubscribeMarketDepth(Security);
+    var tickSub = new Subscription(DataType.Ticks, Security);
+    var mdSub = new Subscription(DataType.MarketDepth, Security);
 
     // Rule setup using various methods
     SetupRuleMethod1(mdSub);
     SetupRuleMethod2(mdSub);
     SetupNestedRule(mdSub);
+
+    // Sending requests for subscribe to market data.
+    Subscribe(tickSub);
+    Subscribe(mdSub);
 
     base.OnStarted(time);
 }

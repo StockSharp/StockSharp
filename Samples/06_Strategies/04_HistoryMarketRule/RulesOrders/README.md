@@ -11,7 +11,9 @@ This strategy is designed to execute orders immediately upon receiving trade tic
 The strategy starts by subscribing to trade ticks for the specified security. This sets the foundation for triggering actions based on live market data:
 
 ```csharp
-var sub = Connector.SubscribeTrades(Security);
+var sub = new Subscription(DataType.Ticks, Security);
+
+Subscribe(sub);
 ```
 
 ### Order Execution and Rule Definition

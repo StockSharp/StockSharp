@@ -12,7 +12,7 @@ Upon starting, the strategy subscribes to trade ticks for the specified security
 ```csharp
 protected override void OnStarted(DateTimeOffset time)
 {
-    var sub = this.SubscribeTrades(Security);
+    var sub = new Subscription(DataType.Ticks, Security);
 
     sub.WhenTickTradeReceived(this).Do(() =>
     {
@@ -24,8 +24,11 @@ protected override void OnStarted(DateTimeOffset time)
             })
             .Apply(this);
     })
-	.Once() // call this rule only once
-	.Apply(this);
+    .Once() // call this rule only once
+    .Apply(this);
+
+    // Sending request for subscribe to market data.
+    Subscribe(sub);
 
     base.OnStarted(time);
 }

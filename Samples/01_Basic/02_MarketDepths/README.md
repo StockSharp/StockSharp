@@ -82,9 +82,16 @@ private void SecurityPicker_SecuritySelected(Security security)
     if (_selectedSecurityId == null)
         return;
 
-    _subscriptions.Add(_connector.SubscribeLevel1(security));
-    _subscriptions.Add(_connector.SubscribeTrades(security));
-    _subscriptions.Add(_connector.SubscribeMarketDepth(security));
+    void subscribe(DataType dt)
+    {
+        var sub = new Subscription(dt, security);
+        _subscriptions.Add(sub);
+        _connector.Subscribe(sub);
+    }
+
+    subscribe(DataType.Level1);
+    subscribe(DataType.Ticks);
+    subscribe(DataType.MarketDepth);
 }
 ```
 
