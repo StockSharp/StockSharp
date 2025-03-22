@@ -702,7 +702,7 @@ partial class Connector
 	{
 		var error = replyMsg.Error;
 
-		var subscription = _subscriptionManager.ProcessResponse(replyMsg, out var originalMsg, out var unexpectedCancelled);
+		var subscription = _subscriptionManager.ProcessResponse(replyMsg, out var originalMsg, out var unexpectedCancelled, out var items);
 
 		if (originalMsg == null)
 		{
@@ -742,16 +742,18 @@ partial class Connector
 			{
 				RaiseSubscriptionFailed(subscription, error, originalMsg.IsSubscribe);
 
+				T[] typed<T>() => items.Cast<T>().ToArray();
+
 				if (originalMsg is OrderStatusMessage orderLookup)
 					RaiseOrderStatusFailed(orderLookup.TransactionId, error, replyMsg.LocalTime);
 				else if (originalMsg is SecurityLookupMessage secLookup)
-					RaiseLookupSecuritiesResult(secLookup, error, [.. Securities.Filter(secLookup)], []);
+					RaiseLookupSecuritiesResult(secLookup, error, typed<Security>());
 				else if (originalMsg is BoardLookupMessage boardLookup)
-					RaiseLookupBoardsResult(boardLookup, error, [.. ExchangeBoards.Filter(boardLookup)], []);
+					RaiseLookupBoardsResult(boardLookup, error, typed<ExchangeBoard>());
 				else if (originalMsg is PortfolioLookupMessage pfLookup)
-					RaiseLookupPortfoliosResult(pfLookup, error, [.. Portfolios.Filter(pfLookup)], []);
+					RaiseLookupPortfoliosResult(pfLookup, error, typed<Portfolio>());
 				else if (originalMsg is DataTypeLookupMessage tfLookup)
-					RaiseLookupDataTypesResult(tfLookup, error, [], []);
+					RaiseLookupDataTypesResult(tfLookup, error, typed<DataType>());
 			}
 		}
 	}
@@ -782,23 +784,23 @@ partial class Connector
 
 	private void ProcessSubscriptionResult(Subscription subscription, object[] items)
 	{
-		T[] Typed<T>() => items.Cast<T>().ToArray();
+		T[] typed<T>() => items.Cast<T>().ToArray();
 
 		if (subscription.SubscriptionMessage is SecurityLookupMessage secLookup)
 		{
-			RaiseLookupSecuritiesResult(secLookup, null, [.. Securities.Filter(secLookup)], Typed<Security>());
+			RaiseLookupSecuritiesResult(secLookup, null, typed<Security>());
 		}
 		else if (subscription.SubscriptionMessage is BoardLookupMessage boardLookup)
 		{
-			RaiseLookupBoardsResult(boardLookup, null, [.. ExchangeBoards.Filter(boardLookup)], Typed<ExchangeBoard>());
+			RaiseLookupBoardsResult(boardLookup, null, typed<ExchangeBoard>());
 		}
 		else if (subscription.SubscriptionMessage is PortfolioLookupMessage pfLookup)
 		{
-			RaiseLookupPortfoliosResult(pfLookup, null, [.. Portfolios.Filter(pfLookup)], Typed<Portfolio>());
+			RaiseLookupPortfoliosResult(pfLookup, null, typed<Portfolio>());
 		}
 		else if (subscription.SubscriptionMessage is DataTypeLookupMessage tfLookup)
 		{
-			RaiseLookupDataTypesResult(tfLookup, null, Typed<DataType>(), Typed<DataType>());
+			RaiseLookupDataTypesResult(tfLookup, null, typed<DataType>());
 		}
 	}
 

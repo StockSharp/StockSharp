@@ -249,11 +249,13 @@ partial class Connector
 			subscription.State = subscription.State.ChangeSubscriptionState(state, subscription.TransactionId, _connector);
 		}
 
-		public Subscription ProcessResponse(SubscriptionResponseMessage response, out ISubscriptionMessage originalMsg, out bool unexpectedCancelled)
+		public Subscription ProcessResponse(SubscriptionResponseMessage response, out ISubscriptionMessage originalMsg, out bool unexpectedCancelled, out object[] items)
 		{
 			originalMsg = null;
 
 			SubscriptionInfo info = null;
+
+			items = [];
 
 			try
 			{
@@ -299,6 +301,9 @@ partial class Connector
 							unexpectedCancelled = subscription.State.IsActive();
 
 							_requests.Remove(response.OriginalTransactionId);
+
+							if (info.Parent == null)
+								items = info.LookupItems?.CopyAndClear() ?? [];
 						}
 					}
 					else

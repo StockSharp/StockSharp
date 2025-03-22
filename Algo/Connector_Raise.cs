@@ -109,7 +109,7 @@ partial class Connector
 
 	/// <inheritdoc />
 	// TODO
-	//[Obsolete("Use SecurityReceived and SubscriptionStopped events.")]
+	[Obsolete("Use SecurityReceived and SubscriptionStopped events.")]
 	public event Action<SecurityLookupMessage, IEnumerable<Security>, IEnumerable<Security>, Exception> LookupSecuritiesResult2;
 
 	/// <inheritdoc />
@@ -382,12 +382,11 @@ partial class Connector
 	/// </summary>
 	/// <param name="message">Message.</param>
 	/// <param name="error">An error of lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
-	/// <param name="securities">Found instruments.</param>
-	/// <param name="newSecurities">Newly created.</param>
-	private void RaiseLookupSecuritiesResult(SecurityLookupMessage message, Exception error, Security[] securities, Security[] newSecurities)
+	/// <param name="newSecurities">Found instruments.</param>
+	private void RaiseLookupSecuritiesResult(SecurityLookupMessage message, Exception error, Security[] newSecurities)
 	{
-		LookupSecuritiesResult?.Invoke(message, securities, error);
-		LookupSecuritiesResult2?.Invoke(message, securities, newSecurities, error);
+		LookupSecuritiesResult?.Invoke(message, newSecurities, error);
+		LookupSecuritiesResult2?.Invoke(message, [], newSecurities, error);
 	}
 
 	/// <summary>
@@ -395,12 +394,11 @@ partial class Connector
 	/// </summary>
 	/// <param name="message">Message.</param>
 	/// <param name="error">An error of lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
-	/// <param name="boards">Found boards.</param>
-	/// <param name="newBoards">Newly created.</param>
-	private void RaiseLookupBoardsResult(BoardLookupMessage message, Exception error, ExchangeBoard[] boards, ExchangeBoard[] newBoards)
+	/// <param name="newBoards">Found boards.</param>
+	private void RaiseLookupBoardsResult(BoardLookupMessage message, Exception error, ExchangeBoard[] newBoards)
 	{
-		LookupBoardsResult?.Invoke(message, boards, error);
-		LookupBoardsResult2?.Invoke(message, boards, newBoards, error);
+		LookupBoardsResult?.Invoke(message, newBoards, error);
+		LookupBoardsResult2?.Invoke(message, [], newBoards, error);
 	}
 
 	/// <summary>
@@ -408,14 +406,13 @@ partial class Connector
 	/// </summary>
 	/// <param name="message">Message.</param>
 	/// <param name="error">An error of lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
-	/// <param name="dataTypes">Found data types.</param>
-	/// <param name="newDataTypes">Newly created.</param>
-	private void RaiseLookupDataTypesResult(DataTypeLookupMessage message, Exception error, DataType[] dataTypes, DataType[] newDataTypes)
+	/// <param name="newDataTypes">Found data types.</param>
+	private void RaiseLookupDataTypesResult(DataTypeLookupMessage message, Exception error, DataType[] newDataTypes)
 	{
-		var timeFrames = dataTypes.FilterTimeFrames().ToArray();
 		var newTimeFrames = newDataTypes.FilterTimeFrames().ToArray();
-		LookupTimeFramesResult?.Invoke(message, timeFrames, error);
-		LookupTimeFramesResult2?.Invoke(message, timeFrames, newTimeFrames, error);
+
+		LookupTimeFramesResult?.Invoke(message, newTimeFrames, error);
+		LookupTimeFramesResult2?.Invoke(message, [], newTimeFrames, error);
 	}
 
 	/// <summary>
@@ -423,12 +420,11 @@ partial class Connector
 	/// </summary>
 	/// <param name="message">Message.</param>
 	/// <param name="error">An error of lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
-	/// <param name="portfolios">Found portfolios.</param>
-	/// <param name="newPortfolios">Newly created.</param>
-	private void RaiseLookupPortfoliosResult(PortfolioLookupMessage message, Exception error, Portfolio[] portfolios, Portfolio[] newPortfolios)
+	/// <param name="newPortfolios">Found portfolios.</param>
+	private void RaiseLookupPortfoliosResult(PortfolioLookupMessage message, Exception error, Portfolio[] newPortfolios)
 	{
-		LookupPortfoliosResult?.Invoke(message, portfolios, error);
-		LookupPortfoliosResult2?.Invoke(message, portfolios, newPortfolios, error);
+		LookupPortfoliosResult?.Invoke(message, newPortfolios, error);
+		LookupPortfoliosResult2?.Invoke(message, [], newPortfolios, error);
 	}
 
 	private void RaiseMarketDataSubscriptionSucceeded(MarketDataMessage message, Subscription subscription)
