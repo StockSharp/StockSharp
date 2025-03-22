@@ -90,7 +90,7 @@ Triggered when the connection is successfully established. It performs an initia
 private void Connector_Connected()
 {
     // try lookup all securities
-    _connector.LookupSecurities(StockSharp.Messages.Extensions.LookupAllCriteriaMessage);
+    _connector.Subscribe(new(StockSharp.Messages.Extensions.LookupAllCriteriaMessage));
 }
 ```
 
