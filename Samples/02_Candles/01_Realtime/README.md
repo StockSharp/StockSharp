@@ -55,13 +55,16 @@ private void SecurityPicker_SecuritySelected(Security security)
         _connector.UnSubscribe(_subscription);
 
     // Example of setting up a TimeFrame candle series
-    var candleSeries = new CandleSeries(typeof(TimeFrameCandle), security, TimeSpan.FromMinutes(5))
-    {
-        BuildCandlesMode = MarketDataBuildModes.Build,
-        BuildCandlesFrom = MarketDataTypes.Trades,
+    _subscription = new(CandleDataTypeEdit.DataType, security)
+	{
+        MarketData =
+        {
+            BuildMode = MarketDataBuildModes.LoadAndBuild,
+            From = DateTime.Today.Subtract(TimeSpan.FromDays(30)),
+        }
     };
 
-    _subscription = _connector.SubscribeCandles(candleSeries, DateTime.Today, DateTime.Now);
+    _connector.Subscribe(_subscription);
 }
 ```
 
@@ -70,14 +73,8 @@ private void SecurityPicker_SecuritySelected(Security security)
 Implementing an event handler for processing received candle data and [updating the chart](https://doc.stocksharp.com/topics/api/candles/chart.html):
 
 ```csharp
-private void Connector_CandleSeriesProcessing(CandleSeries series, Candle candle)
+private void Connector_CandleSeriesProcessing(Subscription subscription, Candle candle)
 {
-    if (_candleElement == null)
-    {
-        _candleElement = new ChartCandleElement();
-        Chart.AddElement(_candleElement, series);
-    }
-
     Chart.Draw(_candleElement, candle);
 }
 ```

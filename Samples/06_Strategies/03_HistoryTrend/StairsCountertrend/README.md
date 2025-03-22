@@ -6,72 +6,161 @@ This strategy operates on the principle of identifying sequences of consecutive 
 
 ## Key Components
 
-### Constructor
+### Strategy Parameters
 
-The strategy is initialized with a specific `CandleSeries`, setting the context for which securities and candle timeframe it will operate on:
+The strategy uses configurable parameters to allow for customization:
 
 ```csharp
-public StairsCountertrendStrategy(CandleSeries candleSeries)
+private readonly StrategyParam<int> _length;
+private readonly StrategyParam<DataType> _candleType;
+
+public int Length
 {
-    _candleSeries = candleSeries;
+    get => _length.Value;
+    set => _length.Value = value;
+}
+
+public DataType CandleType
+{
+    get => _candleType.Value;
+    set => _candleType.Value = value;
+}
+
+public StairsCountertrendStrategy()
+{
+    _length = Param(nameof(Length), 3)
+             .SetGreaterThanZero()
+             .SetDisplay("Length", "Number of consecutive candles to trigger signal", "Strategy")
+             .SetCanOptimize(true)
+             .SetOptimize(2, 10, 1);
+
+    _candleType = Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(5)))
+                  .SetDisplay("Candle Type", "Type of candles to use", "General");
 }
 ```
 
-### Strategy Start
+- **Length Parameter**: Defines how many consecutive candles in one direction will trigger a signal (default is 3).
+- **Candle Type Parameter**: Sets the timeframe for candles (default is 5-minute).
+- **Optimization Configuration**: The Length parameter is configured for optimization with a range from 2 to 10 with step 1.
 
-When the strategy starts, it subscribes to the `CandleProcessing` event and begins listening for candle updates to process:
+### Working Securities
+
+The strategy implements `GetWorkingSecurities` to clearly indicate which market data it requires:
+
+```csharp
+public override IEnumerable<(Security sec, DataType dt)> GetWorkingSecurities()
+{
+    return new[] { (Security, CandleType) };
+}
+```
+
+This enables platforms like Designer to correctly initialize the required data sources.
+
+### Strategy Initialization
+
+When the strategy starts, it initializes counters and sets up subscriptions:
 
 ```csharp
 protected override void OnStarted(DateTimeOffset time)
 {
-    Connector.CandleProcessing += CandleManager_Processing;
-    this.SubscribeCandles(_candleSeries);
     base.OnStarted(time);
+    
+    // Reset counters
+    _bullLength = 0;
+    _bearLength = 0;
+
+    // Create subscription
+    var subscription = SubscribeCandles(CandleType);
+    
+    subscription
+        .Bind(ProcessCandle)
+        .Start();
+
+    // Setup chart visualization if available
+    var area = CreateChartArea();
+    if (area != null)
+    {
+        DrawCandles(area, subscription);
+        DrawOwnTrades(area);
+    }
 }
 ```
 
+- **Counter Reset**: The bullish and bearish sequence counters are reset on startup.
+- **High-Level Subscription API**: Uses StockSharp's high-level API for candle subscriptions.
+- **Chart Visualization**: Automatically sets up visual elements if running in a graphical environment.
+
 ### Candle Processing
 
-The core of the strategy, where each candle's opening and closing prices are compared to determine its direction and count consecutive trends:
+The core logic processes each candle to detect patterns and execute trades:
 
 ```csharp
-private void CandleManager_Processing(CandleSeries candleSeries, ICandleMessage candle)
+private void ProcessCandle(ICandleMessage candle)
 {
-    if (candle.State != CandleStates.Finished) return;
+    // Check if candle is finished
+    if (candle.State != CandleStates.Finished)
+        return;
 
+    // Check if strategy is ready to trade
+    if (!IsFormedAndOnlineAndAllowTrading())
+        return;
+
+    // Update counters based on candle direction
     if (candle.OpenPrice < candle.ClosePrice)
     {
+        // Bullish candle
         _bullLength++;
         _bearLength = 0;
     }
     else if (candle.OpenPrice > candle.ClosePrice)
     {
+        // Bearish candle
         _bullLength = 0;
         _bearLength++;
     }
 
+    // Countertrend strategy: 
+    // Sell after Length consecutive bullish candles
     if (_bullLength >= Length && Position >= 0)
     {
-        RegisterOrder(this.SellAtMarket(Volume + Math.Abs(Position)));
+        SellMarket(Volume + Math.Abs(Position));
     }
+    // Buy after Length consecutive bearish candles
     else if (_bearLength >= Length && Position <= 0)
     {
-        RegisterOrder(this.BuyAtMarket(Volume + Math.Abs(Position)));
+        BuyMarket(Volume + Math.Abs(Position));
     }
 }
 ```
 
-- **Direction Assessment**: Increments count for bullish or bearish sequences based on candle closing higher or lower than the opening price.
-- **Trade Execution**:
-  - **Sell**: If there are at least `Length` consecutive bullish candles and the strategy's position is not short, it places a market sell order, anticipating a downtrend reversal.
-  - **Buy**: Conversely, if there are at least `Length` consecutive bearish candles and the position is not long, it places a market buy order, anticipating an uptrend reversal.
+- **Candle Validation**: Only processes finished candles.
+- **Strategy Readiness Check**: Ensures indicators are formed, system is online, and trading is allowed.
+- **Direction Tracking**: 
+  - Increments the bullish counter and resets the bearish counter for a bullish candle.
+  - Increments the bearish counter and resets the bullish counter for a bearish candle.
+- **Trading Logic**:
+  - **Sell Signal**: After `Length` consecutive bullish candles, if not already short.
+  - **Buy Signal**: After `Length` consecutive bearish candles, if not already long.
+- **Position Sizing**: Adjusts order volume to include current position size.
 
 ## Strategy Logic
 
-- The strategy monitors trends by counting consecutive candles moving in the same direction.
-- It assumes that after a certain number of movements in one direction (`Length`), the price is more likely to reverse, which triggers countertrend trades.
-- The `Length` property defines the sensitivity of the strategy, with higher values making the strategy slower to react (potentially safer but less responsive).
+The strategy's countertrend approach is based on the following principles:
+
+1. **Pattern Recognition**: The strategy identifies trends by counting consecutive candles moving in the same direction.
+2. **Mean Reversion Philosophy**: It assumes that after a certain number of movements in one direction, the price is more likely to revert.
+3. **Adaptive Sensitivity**: The `Length` parameter determines how sensitive the strategy is to trend changes, with higher values requiring stronger trends before triggering a countertrend trade.
+4. **Position Management**: The strategy can both enter new positions and add to existing ones when signals align with the current position.
 
 ## Conclusion
 
-The `StairsCountertrend` strategy is a straightforward implementation of a countertrend trading strategy that aims to capitalize on perceived overextensions in price movements. By monitoring consecutive bullish or bearish candles, it attempts to enter the market when a potential reversal is due, thus aiming to profit from the subsequent price corrections. This strategy is especially useful in markets where overextensions and retracements are common, but it requires careful tuning of the `Length` parameter to balance responsiveness with risk.
+The `StairsCountertrend` strategy is an implementation of a countertrend trading approach that seeks to profit from potential price reversals after consistent directional moves. Its simplicity makes it accessible while the parameterization allows for customization to different market conditions and instruments.
+
+Key advantages of this implementation include:
+- Clean integration with StockSharp's high-level APIs
+- Parameter-driven design with optimization support
+- Automatic chart visualization
+- Proper state management
+- Simple yet effective pattern recognition
+
+This strategy can be effective in range-bound or oscillating markets where price movements tend to revert after reaching extremes. However, it may underperform in strongly trending markets where countertrend signals can lead to premature entries against the dominant trend.
