@@ -14,7 +14,7 @@ This console application demonstrates the use of StockSharp, a trading and algor
 ## Installation
 
 1. Open the solution in your IDE.
-2. Find and add required connector via [NuGet package](https://stocksharp.com/products/nuget_manual/#privateserver)
+2. Find and add required connector via [NuGet package](https://doc.stocksharp.com/topics/api/setup.html#private-nuget-server)
 3. Modify the code lines for init connector. E.g. [Binance setup](https://doc.stocksharp.com/topics/api/connectors/crypto_exchanges/binance/adapter_initialization_binance.html)
 
 ## Configuration

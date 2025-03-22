@@ -26,6 +26,6 @@ Each example comes with a detailed explanation of the code and instructions on h
 
 ## Important Note
 
-Please note that the examples provided in this folder are not compatible with the Designer platform. They are intended for direct use and modification within C# projects and require a solid understanding of programming concepts and the .NET. Additionally, some examples may require adding a connector from StockSharp's private NuGet server. For more information on accessing and using this server, please visit [StockSharp's NuGet server manual](https://stocksharp.com/products/nuget_manual/#privateserver).
+Please note that the examples provided in this folder are not compatible with the Designer platform. They are intended for direct use and modification within C# projects and require a solid understanding of programming concepts and the .NET. Additionally, some examples may require adding a connector from StockSharp's private NuGet server. For more information on accessing and using this server, please visit [StockSharp's NuGet server manual](https://doc.stocksharp.com/topics/api/setup.html#private-nuget-server).
 
 By exploring and utilizing these examples, developers can gain a deeper understanding of how to implement robust trading solutions using the StockSharp API, paving the way for the development of sophisticated trading robots and analytical tools.

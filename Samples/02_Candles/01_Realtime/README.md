@@ -16,7 +16,7 @@ This documentation section explains how to handle and visualize real-time candle
 
 1. Clone the repository.
 2. Open the solution in Visual Studio.
-3. Find and add required connector via [NuGet package](https://stocksharp.com/products/nuget_manual/#privateserver)
+3. Find and add required connector via [NuGet package](https://doc.stocksharp.com/topics/api/setup.html#private-nuget-server)
 4. Build and run the application.
 
 ### Initialization and Configuration
