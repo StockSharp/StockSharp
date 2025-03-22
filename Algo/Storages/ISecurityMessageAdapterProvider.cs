@@ -209,19 +209,8 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 
 				var typeStr = reader.ReadString();
 
-				if (reader.ColumnCount == 4)
-				{
-					// TODO remove after few releases later
-					// 2020-05-04
-#pragma warning disable CS0612 // Type or member is obsolete
-					dataType = typeStr.IsEmpty() ? null : typeStr.To<MarketDataTypes>().ToDataType(null);
-#pragma warning restore CS0612 // Type or member is obsolete
-				}
-				else
-				{
-					var argStr = reader.ReadString();
-					dataType = typeStr.IsEmpty() ? null : typeStr.ToDataType(argStr);
-				}
+				var argStr = reader.ReadString();
+				dataType = typeStr.IsEmpty() ? null : typeStr.ToDataType(argStr);
 
 				var adapterId = reader.ReadString().To<Guid>();
 

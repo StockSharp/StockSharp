@@ -5,6 +5,7 @@ namespace StockSharp.Messages;
 /// </summary>
 [DataContract]
 [Serializable]
+[Obsolete("Use DataType class.")]
 public enum MarketDataTypes
 {
 	/// <summary>
@@ -183,15 +184,11 @@ public class MarketDataMessage : SecurityMessage, ISubscriptionMessage, IGenerat
 	/// </summary>
 	[Browsable(false)]
 	[DataMember]
-	//[Obsolete("Use DataType2 property.")]
+	[Obsolete("Use DataType2 property.")]
 	public new MarketDataTypes DataType
 	{
-#pragma warning disable CS0618 // Type or member is obsolete
-#pragma warning disable CS0612 // Type or member is obsolete
 		get => DataType2.ToMarketDataType();
 		set => DataType2 = value.ToDataType(Arg);
-#pragma warning restore CS0612 // Type or member is obsolete
-#pragma warning restore CS0618 // Type or member is obsolete
 	}
 
 	/// <summary>
