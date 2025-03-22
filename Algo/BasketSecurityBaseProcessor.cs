@@ -540,7 +540,7 @@ public abstract class IndexSecurityBaseProcessor<TBasketSecurity>(Security secur
 			return;
 		}
 
-		// если некоторые свечи имеют неполные данные, то и индекс будет таким же неполным
+		// РµСЃР»Рё РЅРµРєРѕС‚РѕСЂС‹Рµ СЃРІРµС‡Рё РёРјРµСЋС‚ РЅРµРїРѕР»РЅС‹Рµ РґР°РЅРЅС‹Рµ, С‚Рѕ Рё РёРЅРґРµРєСЃ Р±СѓРґРµС‚ С‚Р°РєРёРј Р¶Рµ РЅРµРїРѕР»РЅС‹Рј
 		if (indexCandle.OpenPrice == 0 || indexCandle.HighPrice == 0 || indexCandle.LowPrice == 0 || indexCandle.ClosePrice == 0)
 		{
 			var nonZeroPrice = indexCandle.OpenPrice;
