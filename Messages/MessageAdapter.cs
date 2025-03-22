@@ -414,6 +414,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 
 		if (message is DataTypeInfoMessage dtim && dtim.FileDataType is DataType dt && dt.IsMarketData)
 			this.AddSupportedMarketDataType(dt);
+
 		NewOutMessage?.Invoke(message);
 	}
 
