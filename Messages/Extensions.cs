@@ -2333,7 +2333,7 @@ public static partial class Extensions
 	}
 
 	/// <summary>
-	/// To check, are there <see cref="DataType.CandleTimeFrame"/> in the level1 data.
+	/// To check, are there <see cref="DataType.IsCandles"/> in the level1 data.
 	/// </summary>
 	/// <param name="level1">Level1 data.</param>
 	/// <returns>The test result.</returns>
