@@ -22,6 +22,15 @@ public class Subscription : SubscriptionBase<Subscription>
 	/// Initializes a new instance of the <see cref="Subscription"/>.
 	/// </summary>
 	/// <param name="dataType">Data type info.</param>
+	public Subscription(DataType dataType)
+		: this(dataType, (SecurityMessage)null)
+	{
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="Subscription"/>.
+	/// </summary>
+	/// <param name="dataType">Data type info.</param>
 	/// <param name="security">Security.</param>
 	public Subscription(DataType dataType, SecurityMessage security)
 		: this(dataType.ToSubscriptionMessage(), security)

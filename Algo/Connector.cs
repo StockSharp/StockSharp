@@ -1082,7 +1082,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 		if (subscriptionsOnConnect is IEnumerable<SettingsStorage> subSettings)
 		{
 			SubscriptionsOnConnect.Clear();
-			SubscriptionsOnConnect.AddRange(subSettings.Select(s => s.Load<DataType>().ToSubscription()));
+			SubscriptionsOnConnect.AddRange(subSettings.Select(s => new Subscription(s.Load<DataType>())));
 		}
 		else if (subscriptionsOnConnect is string str)
 		{

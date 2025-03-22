@@ -819,10 +819,10 @@ public static partial class TraderHelper
 		if (connector is null)
 			throw new ArgumentNullException(nameof(connector));
 
-		connector.Subscribe(DataType.Board.ToSubscription());
-		connector.Subscribe(DataType.Securities.ToSubscription());
-		connector.Subscribe(DataType.PositionChanges.ToSubscription());
-		connector.Subscribe(DataType.Transactions.ToSubscription());
+		connector.Subscribe(new(DataType.Board));
+		connector.Subscribe(new(DataType.Securities));
+		connector.Subscribe(new(DataType.PositionChanges));
+		connector.Subscribe(new(DataType.Transactions));
 	}
 
 	/// <summary>
@@ -1436,11 +1436,4 @@ public static partial class TraderHelper
 			ProcessStates.Started => ChannelStates.Started,
 			_ => throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.InvalidValue)
 		};
-
-	/// <summary>
-	/// Convert <see cref="DataType"/> to <see cref="Subscription"/> value.
-	/// </summary>
-	/// <param name="dataType">Data type info.</param>
-	/// <returns>Subscription.</returns>
-	public static Subscription ToSubscription(this DataType dataType) => new(dataType, (SecurityMessage)null);
 }
