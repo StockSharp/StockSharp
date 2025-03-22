@@ -105,7 +105,7 @@ public partial class MainWindow
 
 	private void Connector_Connected()
 	{
-		_connector.SubscribeTrades(_security);
+		_connector.Subscribe(new(DataType.Ticks, _security));
 		_connector.Subscribe(_subscription);
 		_connector.Start();
 	}

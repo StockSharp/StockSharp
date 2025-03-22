@@ -87,14 +87,21 @@ public partial class MainWindow
 		if (_selectedSecurityId == null)
 			return;
 
-		_subscriptions.Add(_connector.SubscribeLevel1(security));
+		void subscribe(DataType dt)
+		{
+			var sub = new Subscription(dt, security);
+			_subscriptions.Add(sub);
+			_connector.Subscribe(sub);
+		}
+
+		subscribe(DataType.Level1);
 
 		//-----------------TradeGrid-----------------------
-		_subscriptions.Add(_connector.SubscribeTrades(security));
+		subscribe(DataType.Ticks);
 
 		//-----------------MarketDepth--------------------------
 		MarketDepthControl.Clear();
 
-		_subscriptions.Add(_connector.SubscribeMarketDepth(security));
+		subscribe(DataType.MarketDepth);
 	}
 }

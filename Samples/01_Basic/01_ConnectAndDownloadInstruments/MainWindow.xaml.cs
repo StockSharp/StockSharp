@@ -52,12 +52,12 @@ public partial class MainWindow
 	private void Connector_Connected()
 	{
 		// try lookup all securities
-		_connector.LookupSecurities(StockSharp.Messages.Extensions.LookupAllCriteriaMessage);
+		_connector.Subscribe(new(StockSharp.Messages.Extensions.LookupAllCriteriaMessage));
 	}
 
 	private void SecurityPicker_SecuritySelected(Security security)
 	{
 		if (security == null) return;
-		_connector.SubscribeLevel1(security);
+		_connector.Subscribe(new(DataType.Level1, security));
 	}
 }

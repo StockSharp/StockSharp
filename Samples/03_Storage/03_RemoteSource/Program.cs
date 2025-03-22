@@ -54,7 +54,7 @@ static class Program
 				Console.WriteLine(security1);
 			}
 		};
-		connector.LookupSecurities(new Security() { Code = "SBER", Type = SecurityTypes.Stock });
+		connector.Subscribe(new(new SecurityLookupMessage() { SecurityId = new() { SecurityCode = "SBER" }, SecurityType = SecurityTypes.Stock }));
 		var secId = "SBER@TQBR".ToSecurityId();
 		var security = connector.GetSecurity(secId);
 

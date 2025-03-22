@@ -71,7 +71,7 @@ public partial class SecuritiesWindow
 			var window = _quotesWindows.SafeAdd(security.ToSecurityId(), s =>
 			{
 				// subscribe on order book flow
-				connector.SubscribeMarketDepth(security);
+				connector.Subscribe(new(DataType.MarketDepth, security));
 
 				// create order book window
 				var wnd = new QuotesWindow
@@ -98,7 +98,7 @@ public partial class SecuritiesWindow
 		}
 	}
 
-	private Subscription FindSubscription(Security security, DataType dataType)
+	private static Subscription FindSubscription(Security security, DataType dataType)
 	{
 		return Connector.FindSubscriptions(security, dataType).Where(s => s.SubscriptionMessage.To == null && s.State.IsActive()).FirstOrDefault();
 	}
@@ -114,7 +114,7 @@ public partial class SecuritiesWindow
 			if (subscription != null)
 				connector.UnSubscribe(subscription);
 			else
-				connector.SubscribeLevel1(security);
+				connector.Subscribe(new(DataType.Level1, security));
 		}
 	}
 
@@ -131,16 +131,19 @@ public partial class SecuritiesWindow
 		var wnd = new SecurityLookupWindow
 		{
 			ShowAllOption = Connector.Adapter.IsSupportSecuritiesLookupAll(),
-			Criteria = new Security
+			CriteriaMessage = new()
 			{
-				Code = "IS"
+				SecurityId = new()
+				{
+					BoardCode = "IS"
+				}
 			}
 		};
 
 		if (!wnd.ShowModal(this))
 			return;
 
-		Connector.LookupSecurities(wnd.Criteria);
+		Connector.Subscribe(new(wnd.CriteriaMessage));
 	}
 
 	public void ProcessOrder(Order order)

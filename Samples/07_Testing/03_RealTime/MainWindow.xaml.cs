@@ -278,13 +278,17 @@ public partial class MainWindow
 
 		Chart.OrderSettings.Security = security;
 
-		_emuConnector.SubscribeMarketDepth(security);
-		_emuConnector.SubscribeTrades(security);
-		_emuConnector.SubscribeLevel1(security);
+		_emuConnector.Subscribe(new(DataType.MarketDepth, security));
+		_emuConnector.Subscribe(new(DataType.Ticks, security));
+		_emuConnector.Subscribe(new(DataType.Level1, security));
 
-		_realConnector.SubscribeMarketDepth(security);
+		_realConnector.Subscribe(new(DataType.MarketDepth, security));
 		
-		_candlesSubscription = _emuConnector.SubscribeCandles(security, CandleDataTypeEdit.DataType, from: DateTimeOffset.UtcNow - TimeSpan.FromDays(10));
+		_candlesSubscription = new(CandleDataTypeEdit.DataType, security)
+		{
+			From = DateTimeOffset.UtcNow - TimeSpan.FromDays(10),
+		};
+		_emuConnector.Subscribe(_candlesSubscription);
 	}
 
 	private void NewOrder_OnClick(object sender, RoutedEventArgs e)
@@ -355,13 +359,13 @@ public partial class MainWindow
 		var wnd = new SecurityLookupWindow
 		{
 			ShowAllOption = _emuConnector.MarketDataAdapter.IsSupportSecuritiesLookupAll(),
-			Criteria = new Security { Code = "AAPL" }
+			CriteriaMessage = new() { SecurityId = new() { SecurityCode = "AAPL" } }
 		};
 
 		if (!wnd.ShowModal(this))
 			return;
 
-		_emuConnector.LookupSecurities(wnd.CriteriaMessage);
+		_emuConnector.Subscribe(new(wnd.CriteriaMessage));
 	}
 
 	private void Chart_RegisterOrder(IChartArea area, Order order)

@@ -187,8 +187,8 @@ public class ArbitrageStrategy : Strategy
 		_stockId = StockSecurity.ToSecurityId();
 
 		// Subscribe to market depth updates for both instruments
-		var futureDepthSubscription = this.SubscribeMarketDepth(FutureSecurity);
-		var stockDepthSubscription = this.SubscribeMarketDepth(StockSecurity);
+		var futureDepthSubscription = new Subscription(DataType.MarketDepth, FutureSecurity);
+		var stockDepthSubscription = new Subscription(DataType.MarketDepth, StockSecurity);
 
 		futureDepthSubscription.WhenOrderBookReceived(this).Do(ProcessMarketDepth).Apply(this);
 		stockDepthSubscription.WhenOrderBookReceived(this).Do(ProcessMarketDepth).Apply(this);
@@ -198,6 +198,10 @@ public class ArbitrageStrategy : Strategy
 			.WhenOwnTradeReceived()
 			.Do(OnNewMyTrade)
 			.Apply(this);
+
+		// Sending requests for subscribe to market data.
+		Subscribe(futureDepthSubscription);
+		Subscribe(stockDepthSubscription);
 	}
 
 	/// <summary>

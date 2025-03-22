@@ -439,7 +439,7 @@ public partial class MainWindow
 
 				if (emulationInfo.UseMarketDepth)
 				{
-					connector.SubscribeMarketDepth(security);
+					connector.Subscribe(new(DataType.MarketDepth, security));
 
 					if	(
 							// if order book will be generated
@@ -466,17 +466,17 @@ public partial class MainWindow
 
 				if (emulationInfo.UseOrderLog)
 				{
-					connector.SubscribeOrderLog(security);
+					connector.Subscribe(new(DataType.OrderLog, security));
 				}
 
 				if (emulationInfo.UseTicks)
 				{
-					connector.SubscribeTrades(security);
+					connector.Subscribe(new(DataType.Ticks, security));
 				}
 
 				if (emulationInfo.UseLevel1)
 				{
-					connector.SubscribeLevel1(security);
+					connector.Subscribe(new(DataType.Level1, security));
 				}
 			};
 

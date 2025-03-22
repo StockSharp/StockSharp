@@ -1,5 +1,6 @@
 ﻿using StockSharp.Algo;
 using StockSharp.Algo.Strategies;
+using StockSharp.BusinessEntities;
 using StockSharp.Messages;
 
 using System;
@@ -10,9 +11,8 @@ namespace StockSharp.Samples.Strategies.HistoryMarketRule
 	{
 		protected override void OnStarted(DateTimeOffset time)
 		{
-			var tickSub = this.SubscribeTrades(Security);
-
-			var mdSub = this.SubscribeMarketDepth(Security);
+			var tickSub = new Subscription(DataType.Ticks, Security);
+			var mdSub = new Subscription(DataType.MarketDepth, Security);
 
 			//-----------------------Create a rule. Method №1-----------------------------------
 			mdSub.WhenOrderBookReceived(this).Do((depth) =>
@@ -39,6 +39,10 @@ namespace StockSharp.Samples.Strategies.HistoryMarketRule
 					LogInfo($"The rule WhenOrderBookReceived №4 BestBid={depth1.GetBestBid()}, BestAsk={depth1.GetBestAsk()}");
 				}).Apply(this);
 			}).Once().Apply(this);
+
+			// Sending requests for subscribe to market data.
+			Subscribe(tickSub);
+			Subscribe(mdSub);
 
 			base.OnStarted(time);
 		}

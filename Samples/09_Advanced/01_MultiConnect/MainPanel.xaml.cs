@@ -153,7 +153,7 @@ public partial class MainPanel
 			if (Connector.Adapter.IsMarketDataTypeSupported(DataType.News) && !Connector.Adapter.IsSecurityNewsOnly)
 			{
 				if (Connector.Subscriptions.All(s => s.DataType != DataType.News))
-					Connector.SubscribeNews();
+					Connector.Subscribe(DataType.News.ToSubscription());
 			}
 		};
 

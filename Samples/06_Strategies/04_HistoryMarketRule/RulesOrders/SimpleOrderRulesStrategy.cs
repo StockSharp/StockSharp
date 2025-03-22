@@ -1,5 +1,6 @@
 ﻿using StockSharp.Algo;
 using StockSharp.Algo.Strategies;
+using StockSharp.BusinessEntities;
 using StockSharp.Messages;
 
 using System;
@@ -10,7 +11,7 @@ namespace StockSharp.Samples.Strategies.HistoryMarketRule
 	{
 		protected override void OnStarted(DateTimeOffset time)
 		{
-			var sub = this.SubscribeTrades(Security);
+			var sub = new Subscription(DataType.Ticks, Security);
 
 			sub.WhenTickTradeReceived(this).Do(() =>
 			{
@@ -55,6 +56,9 @@ namespace StockSharp.Samples.Strategies.HistoryMarketRule
 
 				RegisterOrder(order);
 			}).Once().Apply(this);
+
+			// Sending request for subscribe to market data.
+			Subscribe(sub);
 
 			base.OnStarted(time);
 		}

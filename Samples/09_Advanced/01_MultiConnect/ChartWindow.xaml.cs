@@ -41,7 +41,8 @@ partial class ChartWindow
 		area.Elements.Add(_candleElem);
 
 		_connector.CandleReceived += OnCandleReceived;
-		_subscription = _connector.SubscribeMarketData(mdMsg);
+		_subscription = new(mdMsg);
+		_connector.Subscribe(_subscription);
 	}
 
 	public bool SeriesInactive { get; set; }

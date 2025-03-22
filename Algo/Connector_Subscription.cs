@@ -29,14 +29,14 @@ partial class Connector
 		if (news is null)
 			throw new ArgumentNullException(nameof(news));
 
-		this.SubscribeMarketData(new MarketDataMessage
+		Subscribe(new Subscription(new MarketDataMessage
 		{
 			TransactionId = TransactionIdGenerator.GetNextId(),
 			DataType2 = DataType.News,
 			IsSubscribe = true,
 			NewsId = news.Id.To<string>(),
 			Adapter = adapter,
-		});
+		}));
 	}
 
 	/// <inheritdoc />

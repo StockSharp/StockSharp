@@ -119,25 +119,25 @@ partial class TraderHelper
 		switch (priceType)
 		{
 			case MarketPriceTypes.Opposite:
-				{
-					var quote = side == Sides.Buy ? bestPair.Ask : bestPair.Bid;
-					currentPrice = quote?.Price;
-					break;
-				}
+			{
+				var quote = side == Sides.Buy ? bestPair.Ask : bestPair.Bid;
+				currentPrice = quote?.Price;
+				break;
+			}
 			case MarketPriceTypes.Following:
-				{
-					var quote = side == Sides.Buy ? bestPair.Bid : bestPair.Ask;
-					currentPrice = quote?.Price;
-					break;
-				}
+			{
+				var quote = side == Sides.Buy ? bestPair.Bid : bestPair.Ask;
+				currentPrice = quote?.Price;
+				break;
+			}
 			case MarketPriceTypes.Middle:
-				{
-					if (bestPair.IsFull)
-						currentPrice = bestPair.GetMiddlePrice(priceStep);
-					else
-						currentPrice = null;
-					break;
-				}
+			{
+				if (bestPair.IsFull)
+					currentPrice = bestPair.GetMiddlePrice(priceStep);
+				else
+					currentPrice = null;
+				break;
+			}
 			default:
 				throw new ArgumentOutOfRangeException(nameof(priceType), priceType, LocalizedStrings.InvalidValue);
 		}
@@ -255,7 +255,7 @@ partial class TraderHelper
 	/// <param name="skip">Skip count.</param>
 	/// <param name="fillGaps"><see cref="FillGapsDays"/></param>
 	/// <returns>Subscription.</returns>
-	//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
+	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription SubscribeOrders(this ISubscriptionProvider provider, Security security = default, DateTimeOffset? from = default, DateTimeOffset? to = default, long? count = default, IEnumerable<OrderStates> states = default, IMessageAdapter adapter = default, long? skip = default, FillGapsDays? fillGaps = default)
 	{
 		if (provider is null)
@@ -294,7 +294,7 @@ partial class TraderHelper
 	/// <param name="skip">Skip count.</param>
 	/// <param name="fillGaps"><see cref="FillGapsDays"/></param>
 	/// <returns>Subscription.</returns>
-	//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
+	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription SubscribePositions(this ISubscriptionProvider provider, Security security = default, Portfolio portfolio = default, DateTimeOffset? from = default, DateTimeOffset? to = default, long? count = default, IMessageAdapter adapter = default, long? skip = default, FillGapsDays? fillGaps = default)
 	{
 		if (provider is null)
@@ -325,7 +325,7 @@ partial class TraderHelper
 	/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 	/// <param name="offlineMode">Offline mode handling message.</param>
 	/// <returns>Subscription.</returns>
-	//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
+	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription LookupSecurities(this ISubscriptionProvider provider, Security criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
 	{
 		var msg = criteria.ToLookupMessage();
@@ -362,6 +362,7 @@ partial class TraderHelper
 
 	/// <summary>
 	/// </summary>
+	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription SubscribeCandles(this ISubscriptionProvider provider,
 		Security security, DataType dataType, DateTimeOffset? from = default, DateTimeOffset? to = default,
 		long? count = default, long? transactionId = default, IMessageAdapter adapter = default,
@@ -429,7 +430,7 @@ partial class TraderHelper
 	/// <param name="provider">Subscription provider.</param>
 	/// <param name="criteria">The criterion which fields will be used as a filter.</param>
 	/// <returns>Subscription.</returns>
-	//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
+	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription SubscribePositions(this ISubscriptionProvider provider, PortfolioLookupMessage criteria)
 	{
 		if (provider is null)
@@ -457,7 +458,7 @@ partial class TraderHelper
 	/// <param name="provider">Subscription provider.</param>
 	/// <param name="criteria">The criterion which fields will be used as a filter.</param>
 	/// <returns>Subscription.</returns>
-	//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
+	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription LookupSecurities(this ISubscriptionProvider provider, SecurityLookupMessage criteria)
 	{
 		if (provider is null)
@@ -555,7 +556,7 @@ partial class TraderHelper
 	/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 	/// <param name="skip">Skip count.</param>
 	/// <returns>Subscription.</returns>
-	//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
+	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription SubscribeBoard(this ISubscriptionProvider provider, ExchangeBoard board, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null, long? skip = null)
 	{
 		if (board is null)
@@ -595,7 +596,7 @@ partial class TraderHelper
 	/// <param name="provider">Subscription provider.</param>
 	/// <param name="criteria">The order which fields will be used as a filter.</param>
 	/// <returns>Subscription.</returns>
-	//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
+	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription SubscribeOrders(this ISubscriptionProvider provider, OrderStatusMessage criteria)
 	{
 		if (provider is null)
@@ -635,7 +636,7 @@ partial class TraderHelper
 	/// <param name="skip">Skip count.</param>
 	/// <param name="fillGaps"><see cref="FillGapsDays"/></param>
 	/// <returns>Subscription.</returns>
-	//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
+	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription SubscribeMarketDepth(this ISubscriptionProvider provider, Security security, DateTimeOffset? from = default, DateTimeOffset? to = default, long? count = default, MarketDataBuildModes buildMode = default, DataType buildFrom = default, int? maxDepth = default, TimeSpan? refreshSpeed = default, IOrderLogMarketDepthBuilder depthBuilder = default, bool passThroughOrderBookIncrement = default, IMessageAdapter adapter = default, long? skip = default, FillGapsDays? fillGaps = default)
 	{
 		return provider.SubscribeMarketData(security, DataType.MarketDepth, from, to, count, buildMode, buildFrom, null, maxDepth, refreshSpeed, depthBuilder, passThroughOrderBookIncrement, adapter, skip: skip, fillGaps: fillGaps);
@@ -666,7 +667,7 @@ partial class TraderHelper
 	/// <param name="skip">Skip count.</param>
 	/// <param name="fillGaps"><see cref="FillGapsDays"/></param>
 	/// <returns>Subscription.</returns>
-	//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
+	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription SubscribeTrades(this ISubscriptionProvider provider, Security security, DateTimeOffset? from = default, DateTimeOffset? to = default, long? count = default, MarketDataBuildModes buildMode = default, DataType buildFrom = default, IMessageAdapter adapter = default, long? skip = default, FillGapsDays? fillGaps = default)
 	{
 		return provider.SubscribeMarketData(security, DataType.Ticks, from, to, count, buildMode, buildFrom, adapter: adapter, skip: skip, fillGaps: fillGaps);
@@ -697,7 +698,7 @@ partial class TraderHelper
 	/// <param name="skip">Skip count.</param>
 	/// <param name="fillGaps"><see cref="FillGapsDays"/></param>
 	/// <returns>Subscription.</returns>
-	//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
+	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription SubscribeLevel1(this ISubscriptionProvider provider, Security security, DateTimeOffset? from = default, DateTimeOffset? to = default, long? count = default, MarketDataBuildModes buildMode = default, DataType buildFrom = default, IMessageAdapter adapter = default, long? skip = default, FillGapsDays? fillGaps = default)
 	{
 		return provider.SubscribeMarketData(security, DataType.Level1, from, to, count, buildMode, buildFrom, adapter: adapter, skip: skip, fillGaps: fillGaps);
@@ -726,7 +727,7 @@ partial class TraderHelper
 	/// <returns>Subscription.</returns>
 	/// <param name="skip">Skip count.</param>
 	/// <param name="fillGaps"><see cref="FillGapsDays"/></param>
-	//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
+	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription SubscribeOrderLog(this ISubscriptionProvider provider, Security security, DateTimeOffset? from = default, DateTimeOffset? to = default, long? count = default, IMessageAdapter adapter = default, long? skip = default, FillGapsDays? fillGaps = default)
 	{
 		return provider.SubscribeMarketData(security, DataType.OrderLog, from, to, count, adapter: adapter, skip: skip, fillGaps: fillGaps);
@@ -754,7 +755,7 @@ partial class TraderHelper
 	/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 	/// <param name="skip">Skip count.</param>
 	/// <returns>Subscription.</returns>
-	//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
+	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription SubscribeNews(this ISubscriptionProvider provider, Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null, long? skip = null)
 	{
 		return provider.SubscribeMarketData(security ?? EntitiesExtensions.NewsSecurity, DataType.News, from, to, count, adapter: adapter, skip: skip);
@@ -778,7 +779,7 @@ partial class TraderHelper
 	/// <param name="security">The instrument by which new information getting should be started.</param>
 	/// <param name="message">The message that contain subscribe info.</param>
 	/// <returns>Subscription.</returns>
-	//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
+	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription SubscribeMarketData(this ISubscriptionProvider provider, Security security, MarketDataMessage message)
 	{
 		if (provider is null)
@@ -795,7 +796,7 @@ partial class TraderHelper
 	/// <param name="provider">Subscription provider.</param>
 	/// <param name="security">The instrument by which new information getting should be started.</param>
 	/// <param name="message">The message that contain unsubscribe info.</param>
-	//[Obsolete("Use ISubscriptionProvider.UnSubscribe method.")]
+	[Obsolete("Use ISubscriptionProvider.UnSubscribe method.")]
 	public static void UnSubscribeMarketData(this ISubscriptionProvider provider, Security security, MarketDataMessage message)
 	{
 		if (message == null)
@@ -813,7 +814,7 @@ partial class TraderHelper
 	/// <param name="provider">Subscription provider.</param>
 	/// <param name="message">The message that contain subscribe info.</param>
 	/// <returns>Subscription.</returns>
-	//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
+	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription SubscribeMarketData(this ISubscriptionProvider provider, MarketDataMessage message)
 	{
 		return provider.SubscribeMarketData(null, message);
@@ -824,7 +825,7 @@ partial class TraderHelper
 	/// </summary>
 	/// <param name="provider">Subscription provider.</param>
 	/// <param name="message">The message that contain unsubscribe info.</param>
-	//[Obsolete("Use ISubscriptionProvider.UnSubscribe method.")]
+	[Obsolete("Use ISubscriptionProvider.UnSubscribe method.")]
 	public static void UnSubscribeMarketData(this ISubscriptionProvider provider, MarketDataMessage message)
 	{
 		provider.UnSubscribeMarketData(null, message);
@@ -836,11 +837,13 @@ partial class TraderHelper
 	/// <param name="provider">Subscription provider.</param>
 	/// <param name="security">The instrument by which quotes getting should be started.</param>
 	/// <returns>Subscription.</returns>
+	[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 	public static Subscription SubscribeFilteredMarketDepth(this ISubscriptionProvider provider, Security security)
 	{
 		return provider.SubscribeMarketData(security, DataType.FilteredMarketDepth);
 	}
 
+	[Obsolete]
 	private static Subscription SubscribeMarketData(
 		this ISubscriptionProvider provider, Security security, DataType type,
 		DateTimeOffset? from = default, DateTimeOffset? to = default,
@@ -872,6 +875,7 @@ partial class TraderHelper
 		});
 	}
 
+	[Obsolete]
 	private static void UnSubscribeMarketData(this ISubscriptionProvider provider, Security security, DataType type)
 	{
 		provider.UnSubscribeMarketData(security, new MarketDataMessage

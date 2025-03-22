@@ -56,7 +56,7 @@ private void Connect_Click(object sender, RoutedEventArgs e)
     _connector.Connect();
 }
 
-private void Connector_CandleSeriesProcessing(CandleSeries candleSeries, ICandleMessage candle)
+private void Connector_CandleSeriesProcessing(Subscription subscription, ICandleMessage candle)
 {
     Chart.Draw(_candleElement, candle);
 }
@@ -86,7 +86,7 @@ private void SecurityPicker_SecuritySelected(Security security)
     var area = new ChartArea();
     _candleElement = new ChartCandleElement();
     Chart.AddArea(area);
-    Chart.AddElement(area, _candleElement, _subscription.CandleSeries);
+    Chart.AddElement(area, _candleElement, _subscription);
     _connector.Subscribe(_subscription);
 }
 ```

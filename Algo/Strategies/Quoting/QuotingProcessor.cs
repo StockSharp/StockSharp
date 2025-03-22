@@ -147,7 +147,9 @@ public class QuotingProcessor : BaseLogReceiver
 
 			if (_useBidAsk)
 			{
-				AddRule(addSub(_subProvider.SubscribeFilteredMarketDepth(_security))
+				var sub = new Subscription(DataType.FilteredMarketDepth, _security);
+
+				AddRule(addSub(sub)
 					.WhenOrderBookReceived(_subProvider)
 					.Do(book =>
 					{
@@ -155,11 +157,15 @@ public class QuotingProcessor : BaseLogReceiver
 						ProcessQuoting(book.ServerTime);
 					})
 					.Apply(_container));
+
+				_subProvider.Subscribe(sub);
 			}
 
 			if (_useTicks)
 			{
-				AddRule(addSub(_subProvider.SubscribeTrades(_security))
+				var sub = new Subscription(DataType.Ticks, _security);
+
+				AddRule(addSub(sub)
 					.WhenTickTradeReceived(_subProvider)
 					.Do(t =>
 					{
@@ -167,6 +173,8 @@ public class QuotingProcessor : BaseLogReceiver
 						ProcessQuoting(t.ServerTime);
 					})
 					.Apply(_container));
+
+				_subProvider.Subscribe(sub);
 			}
 
 			AddRule(_subProvider

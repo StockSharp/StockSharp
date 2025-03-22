@@ -296,9 +296,9 @@ public partial class SecuritiesWindow
 
 			//window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
 			window.Show();
-			
+
 			// subscribe on order book flow
-			var subscription = connector.SubscribeFilteredMarketDepth(security);
+			var subscription = new Subscription(DataType.FilteredMarketDepth, security);
 
 			_quotesWindowsBySubscription.Add(subscription, window);
 
@@ -310,6 +310,8 @@ public partial class SecuritiesWindow
 				if (subscription.State.IsActive())
 					connector.UnSubscribe(subscription);
 			};
+
+			connector.Subscribe(subscription);
 		}
 	}
 
@@ -333,11 +335,21 @@ public partial class SecuritiesWindow
 				MaxDepth = settings?.MaxDepth
 			};
 
-			//window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
 			window.Show();
 			
 			// subscribe on order book flow
-			var subscription = connector.SubscribeMarketDepth(security, settings?.From, settings?.To, buildMode: settings?.BuildMode ?? MarketDataBuildModes.LoadAndBuild, maxDepth: settings?.MaxDepth, buildFrom: settings?.BuildFrom);
+			var subscription = new Subscription(DataType.MarketDepth, security)
+			{
+				From = settings?.From,
+				To = settings?.To,
+				MarketData =
+				{
+					BuildMode = settings?.BuildMode ?? MarketDataBuildModes.LoadAndBuild,
+					MaxDepth = settings?.MaxDepth,
+					BuildFrom = settings?.BuildFrom,
+				}
+			};
+			connector.Subscribe(subscription);
 
 			_quotesWindows.SafeAdd(security.ToSecurityId()).Add(window);
 
@@ -352,7 +364,7 @@ public partial class SecuritiesWindow
 		}
 	}
 
-	private Subscription FindSubscription(Security security, DataType dataType)
+	private static Subscription FindSubscription(Security security, DataType dataType)
 	{
 		return Connector.FindSubscriptions(security, dataType).Where(s => s.To == null && s.State.IsActive()).FirstOrDefault();
 	}
@@ -368,7 +380,7 @@ public partial class SecuritiesWindow
 			if (subscription != null)
 				connector.UnSubscribe(subscription);
 			else
-				connector.SubscribeLevel1(security);
+				connector.Subscribe(new(DataType.Level1, security));
 		}
 	}
 
@@ -385,7 +397,7 @@ public partial class SecuritiesWindow
 
 		foreach (var security in SecurityPicker.SelectedSecurities)
 		{
-			connector.SubscribeMarketData(security, new MarketDataMessage
+			connector.Subscribe(new(new MarketDataMessage
 			{
 				DataType2 = DataType.Level1,
 				From = settings.From,
@@ -395,7 +407,7 @@ public partial class SecuritiesWindow
 				BuildMode = settings.BuildMode,
 				IsFinishedOnly = settings.IsFinishedOnly,
 				Fields = settings.Field is null ? null : new[] { settings.Field.Value },
-			});
+			}, security));
 		}
 	}
 
@@ -410,7 +422,7 @@ public partial class SecuritiesWindow
 			if (subscription != null)
 				connector.UnSubscribe(subscription);
 			else
-				connector.SubscribeTrades(security);
+				connector.Subscribe(new(DataType.Ticks, security));
 		}
 	}
 
@@ -427,7 +439,13 @@ public partial class SecuritiesWindow
 
 		foreach (var security in SecurityPicker.SelectedSecurities)
 		{
-			connector.SubscribeTrades(security, settings.From, settings.To, skip: settings.Skip, count: settings.Count);
+			connector.Subscribe(new(DataType.Ticks, security)
+			{
+				From = settings.From,
+				To = settings.To,
+				Skip = settings.Skip,
+				Count = settings.Count,
+			});
 		}
 	}
 
@@ -442,7 +460,7 @@ public partial class SecuritiesWindow
 			if (subscription != null)
 				connector.UnSubscribe(subscription);
 			else
-				connector.SubscribeOrderLog(security);
+				connector.Subscribe(new(DataType.OrderLog, security));
 		}
 	}
 
@@ -451,13 +469,18 @@ public partial class SecuritiesWindow
 		var wnd = new SecurityLookupWindow
 		{
 			ShowAllOption = Connector.Adapter.IsSupportSecuritiesLookupAll(),
-			Criteria = new Security { Code = "EUR"/*, Currency = CurrencyTypes.USD, Type = SecurityTypes.Currency*/, }
+			CriteriaMessage = new()
+			{
+				SecurityId = new() { SecurityCode = "EUR" },
+				//Currency = CurrencyTypes.USD,
+				//SecurityType = SecurityTypes.Currency,
+			}
 		};
 
 		if (!wnd.ShowModal(this))
 			return;
 
-		Connector.LookupSecurities(wnd.CriteriaMessage);
+		Connector.Subscribe(new(wnd.CriteriaMessage));
 	}
 
 	private void CandlesClick(object sender, RoutedEventArgs e)

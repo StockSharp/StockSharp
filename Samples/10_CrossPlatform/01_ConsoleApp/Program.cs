@@ -46,7 +46,7 @@ static class Program
 
 			security = securities.First();
 		};
-		connector.LookupSecurities(new Security() { Code = "BTCUSD_PERP" });
+		connector.Subscribe(new(new SecurityLookupMessage { SecurityId = new() { SecurityCode = "BTCUSD_PERP" } }));
 		Console.ReadLine();
 
 		//--------------------------Portfolio--------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ static class Program
 				connector.UnSubscribe(subscription);
 			};
 
-			connector.SubscribePositions(security);
+			connector.Subscribe(new(DataType.PositionChanges, security));
 		}
 		else
 		{
@@ -82,7 +82,7 @@ static class Program
 			lastDepth = depth;
 		};
 
-		connector.SubscribeMarketDepth(security);
+		connector.Subscribe(new(DataType.MarketDepth, security));
 		Console.ReadLine();
 
 		////--------------------------Order--------------------------------------------------------------------------------

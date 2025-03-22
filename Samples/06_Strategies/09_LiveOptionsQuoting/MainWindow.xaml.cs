@@ -432,22 +432,29 @@ public partial class MainWindow
 		_callLastSmile?.Clear();
 	}
 
-	private readonly List<Subscription> _prevLevel1 = new();
+	private readonly List<Subscription> _prevSubscriptions = new();
 
 	private void Assets_OnSelectionChanged(object sender, EditValueChangedEventArgs e)
 	{
-		foreach (var subscription in _prevLevel1)
+		foreach (var subscription in _prevSubscriptions)
 		{
 			Connector.UnSubscribe(subscription);
 		}
 
-		_prevLevel1.Clear();
+		_prevSubscriptions.Clear();
 
 		void Subscribe(Security security)
 		{
-			_prevLevel1.Add(Connector.SubscribeLevel1(security));
-			_prevLevel1.Add(Connector.SubscribeMarketDepth(security));
-			_prevLevel1.Add(Connector.SubscribeTrades(security));
+			void sub(DataType dt)
+			{
+				var s = new Subscription(dt, security);
+				_prevSubscriptions.Add(s);
+				Connector.Subscribe(s);
+			}
+
+			sub(DataType.Level1);
+			sub(DataType.MarketDepth);
+			sub(DataType.Ticks);
 		}
 
 		var asset = SelectedAsset;
