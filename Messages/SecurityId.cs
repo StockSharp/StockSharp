@@ -99,18 +99,6 @@ public struct SecurityId : IEquatable<SecurityId>, IPersistable
 		}
 	}
 
-	private SecurityTypes? _securityType;
-
-	/// <summary>
-	/// Security type.
-	/// </summary>
-	[Obsolete]
-	public SecurityTypes? SecurityType
-	{
-		get => _securityType;
-		set => _securityType = value;
-	}
-
 	/// <summary>
 	/// ID in SEDOL format (Stock Exchange Daily Official List).
 	/// </summary>

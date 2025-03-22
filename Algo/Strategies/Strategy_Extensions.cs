@@ -2,7 +2,6 @@
 
 using StockSharp.Charting;
 using StockSharp.Algo.Derivatives;
-using StockSharp.Algo.Strategies.Quoting;
 
 partial class Strategy
 {
@@ -147,44 +146,5 @@ partial class Strategy
 	public void SetOptionPositionChart(IOptionPositionChart chart)
 	{
 		Environment.SetValue(_keyOptionPositionChart, chart);
-	}
-
-	/// <summary>
-	/// To open the position via quoting.
-	/// </summary>
-	/// <param name="finishPosition">The position value that should be reached. A negative value means the short position.</param>
-	[Obsolete("Child strategies no longer supported.")]
-	public void OpenPositionByQuoting(decimal finishPosition)
-	{
-		var position = Position;
-
-		if (finishPosition == position)
-			return;
-
-		var delta = (finishPosition - position).Abs();
-
-		ChildStrategies.Add(new MarketQuotingStrategy()
-		{
-			QuotingSide = finishPosition < position ? Sides.Sell : Sides.Buy,
-			QuotingVolume = delta,
-		});
-	}
-
-	/// <summary>
-	/// To close the open position via quoting.
-	/// </summary>
-	[Obsolete("Child strategies no longer supported.")]
-	public void ClosePositionByQuoting()
-	{
-		var position = Position;
-
-		if (position == 0)
-			return;
-
-		ChildStrategies.Add(new MarketQuotingStrategy
-		{
-			QuotingSide = position > 0 ? Sides.Sell : Sides.Buy,
-			QuotingVolume = position.Abs(),
-		});
 	}
 }

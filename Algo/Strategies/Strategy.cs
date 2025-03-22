@@ -964,13 +964,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		}
 	}
 
-	/// <summary>
-	/// Subsidiary trade strategies.
-	/// </summary>
-	[Browsable(false)]
-	[Obsolete("Child strategies no longer supported.")]
-	public INotifyList<Strategy> ChildStrategies { get; } = new SynchronizedList<Strategy>();
-
 	private DateTimeOffset _startedTime;
 
 	/// <summary>
@@ -1101,44 +1094,14 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	public event Action<Order> OrderRegistering;
 
 	/// <summary>
-	/// The event of order successful registration.
-	/// </summary>
-	[Obsolete("Use OrderReceived event.")]
-	public event Action<Order> OrderRegistered;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrderRegisterFailReceived event.")]
-	public event Action<OrderFail> OrderRegisterFailed;
-
-	/// <summary>
 	/// The event of sending order for re-registration.
 	/// </summary>
 	public event Action<Order, Order> OrderReRegistering;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrderCancelFailReceived event.")]
-	public event Action<OrderFail> OrderCancelFailed;
 
 	/// <summary>
 	/// The event of sending order for cancelling.
 	/// </summary>
 	public event Action<Order> OrderCanceling;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrderReceived event.")]
-	public event Action<Order> OrderChanged;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrderReceived event.")]
-	public event Action<long, Order> OrderEdited;
-
-	/// <inheritdoc />
-	[Obsolete("Use OrderEditFailReceived event.")]
-	public event Action<long, OrderFail> OrderEditFailed;
-
-	/// <inheritdoc />
-	[Obsolete("Use OwnTradeReceived event.")]
-	public event Action<MyTrade> NewMyTrade;
 
 	/// <summary>
 	/// The event of strategy connection change.

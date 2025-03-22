@@ -1,7 +1,46 @@
 ﻿namespace StockSharp.Algo.Strategies;
 
+using StockSharp.Algo.Strategies.Quoting;
+
 partial class Strategy
 {
+	/// <summary>
+	/// Subsidiary trade strategies.
+	/// </summary>
+	[Browsable(false)]
+	[Obsolete("Child strategies no longer supported.")]
+	public INotifyList<Strategy> ChildStrategies { get; } = new SynchronizedList<Strategy>();
+
+	/// <summary>
+	/// The event of order successful registration.
+	/// </summary>
+	[Obsolete("Use OrderReceived event.")]
+	public event Action<Order> OrderRegistered;
+
+	/// <inheritdoc />
+	[Obsolete("Use OrderRegisterFailReceived event.")]
+	public event Action<OrderFail> OrderRegisterFailed;
+
+	/// <inheritdoc />
+	[Obsolete("Use OrderCancelFailReceived event.")]
+	public event Action<OrderFail> OrderCancelFailed;
+
+	/// <inheritdoc />
+	[Obsolete("Use OrderReceived event.")]
+	public event Action<Order> OrderChanged;
+
+	/// <inheritdoc />
+	[Obsolete("Use OrderReceived event.")]
+	public event Action<long, Order> OrderEdited;
+
+	/// <inheritdoc />
+	[Obsolete("Use OrderEditFailReceived event.")]
+	public event Action<long, OrderFail> OrderEditFailed;
+
+	/// <inheritdoc />
+	[Obsolete("Use OwnTradeReceived event.")]
+	public event Action<MyTrade> NewMyTrade;
+
 	/// <summary>
 	/// <see cref="PnL"/> change event.
 	/// </summary>
@@ -110,5 +149,44 @@ partial class Strategy
 			throw new ArgumentNullException(nameof(myTrades));
 
 		AttachOrder(order, true);
+	}
+
+	/// <summary>
+	/// To open the position via quoting.
+	/// </summary>
+	/// <param name="finishPosition">The position value that should be reached. A negative value means the short position.</param>
+	[Obsolete("Child strategies no longer supported.")]
+	public void OpenPositionByQuoting(decimal finishPosition)
+	{
+		var position = Position;
+
+		if (finishPosition == position)
+			return;
+
+		var delta = (finishPosition - position).Abs();
+
+		ChildStrategies.Add(new MarketQuotingStrategy()
+		{
+			QuotingSide = finishPosition < position ? Sides.Sell : Sides.Buy,
+			QuotingVolume = delta,
+		});
+	}
+
+	/// <summary>
+	/// To close the open position via quoting.
+	/// </summary>
+	[Obsolete("Child strategies no longer supported.")]
+	public void ClosePositionByQuoting()
+	{
+		var position = Position;
+
+		if (position == 0)
+			return;
+
+		ChildStrategies.Add(new MarketQuotingStrategy
+		{
+			QuotingSide = position > 0 ? Sides.Sell : Sides.Buy,
+			QuotingVolume = position.Abs(),
+		});
 	}
 }
