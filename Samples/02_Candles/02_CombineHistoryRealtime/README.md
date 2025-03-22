@@ -73,7 +73,7 @@ private void SecurityPicker_SecuritySelected(Security security)
     if (_subscription != null)
         _connector.UnSubscribe(_subscription);
 
-    _subscription = new Subscription(CandleDataTypeEdit.DataType.ToCandleSeries(security))
+    _subscription = new Subscription(CandleDataTypeEdit.DataType, security)
     {
         MarketData = 
         {
