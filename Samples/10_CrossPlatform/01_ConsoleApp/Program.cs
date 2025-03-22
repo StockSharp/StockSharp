@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 
 using Ecng.Common;
+using Ecng.Logging;
 
 using StockSharp.Algo;
 using StockSharp.BusinessEntities;
@@ -13,7 +14,11 @@ static class Program
 {
 	private static void Main()
 	{
+		var logger = new LogManager();
+		logger.Listeners.Add(new ConsoleLogListener());
+
 		var connector = new Connector();
+		logger.Sources.Add(connector);
 
 		//
 		// !!! IMPORTANT !!!
@@ -26,11 +31,15 @@ static class Program
 		{
 			Key = "<Your key>".Secure(),
 			Secret = "<Your secret>".Secure(),
-			IsDemo = true
+			//IsDemo = true
 		});
 
 		connector.ConnectionError += Console.WriteLine;
 		connector.Error += Console.WriteLine;
+
+		// clear all auto-subscriptions on connect
+		// and send necessary subscriptions manually from code
+		connector.SubscriptionsOnConnect.Clear();
 
 		connector.Connect();
 
@@ -46,7 +55,7 @@ static class Program
 
 			security = securities.First();
 		};
-		connector.Subscribe(new(new SecurityLookupMessage { SecurityId = new() { SecurityCode = "BTCUSD_PERP" } }));
+		connector.Subscribe(new(new SecurityLookupMessage { SecurityId = new() { SecurityCode = "BTCUSDT" }, SecurityType = SecurityTypes.Future }));
 		Console.ReadLine();
 
 		//--------------------------Portfolio--------------------------------------------------------------------------------

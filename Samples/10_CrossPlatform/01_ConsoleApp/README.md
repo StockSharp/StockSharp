@@ -22,13 +22,12 @@ This console application demonstrates the use of StockSharp, a trading and algor
 Before running the application, ensure you provide your Binance API key and secret in the code, as these are essential for authentication. Replace `<Your key>` and `<Your secret>` with your actual Binance credentials:
 
 ```csharp
-// var messageAdapter = new StockSharp.Binance.BinanceMessageAdapter(connector.TransactionIdGenerator)
-// {
-//     Key = "<Your key>".Secure(),
-//     Secret = "<Your secret>".Secure(),
-//     IsDemo = true
-// };
-// connector.Adapter.InnerAdapters.Add(messageAdapter);
+connector.Adapter.InnerAdapters.Add(new Binance.BinanceMessageAdapter(connector.TransactionIdGenerator)
+{
+    Key = "<Your key>".Secure(),
+    Secret = "<Your secret>".Secure(),
+    //IsDemo = true
+});
 ```
 
 ## Usage
@@ -43,11 +42,20 @@ Follow the on-screen instructions to interact with Binance through the StockShar
 
 ## Features
 
-- **Connection Handling**: Connects to Binance and handles reconnections and errors.
-- **Security Lookup**: Queries Binance for securities like BTCUSD_PERP.
-- **Portfolio Monitoring**: Monitors and displays portfolio updates.
-- **Market Depth Subscription**: Subscribes to and displays market depth for selected securities.
-- **Order Placement**: Handles order input and sends orders to Binance.
+- **Connection Handling**: Connects to Binance and handles connection errors.
+- **Security Lookup**: Queries Binance for securities. Default example uses "BTCUSDT" futures.
+- **Portfolio Monitoring**: Monitors and displays portfolio and position updates.
+- **Market Depth Subscription**: Subscribes to and displays market depth (best bid and ask) for selected securities.
+- **Order Placement**: Allows placing buy orders based on the current market depth.
+
+## Workflow
+
+The application follows this sequence:
+1. Connects to Binance
+2. Looks up the specified security (BTCUSDT futures)
+3. Displays portfolio information or subscribes to position updates if no portfolios are available
+4. Subscribes to market depth to get bid/ask information
+5. Prompts the user to place a buy order (either limit order based on the best bid price or market order)
 
 ## Limitations
 
