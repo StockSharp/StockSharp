@@ -95,7 +95,6 @@ public class HistoryMessageAdapter : MessageAdapter
 
 		StartDate = DateTimeOffset.MinValue;
 		StopDate = DateTimeOffset.MaxValue;
-		GenerateOrderBookFromLevel1 = false;
 
 		this.AddMarketDataSupport();
 		this.AddSupportedMessage(MessageTypes.EmulationState, null);

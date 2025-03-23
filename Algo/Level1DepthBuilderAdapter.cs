@@ -33,7 +33,7 @@ public class Level1DepthBuilderAdapter(IMessageAdapter innerAdapter) : MessageAd
 			_bidVolume = bidVolume;
 			_askVolume = askVolume;
 
-			return new QuoteChangeMessage
+			return new()
 			{
 				SecurityId = SecurityId,
 				ServerTime = message.ServerTime,
@@ -45,7 +45,7 @@ public class Level1DepthBuilderAdapter(IMessageAdapter innerAdapter) : MessageAd
 		}
 	}
 
-	private class BookInfo(Level1DepthBuilderAdapter.Level1DepthBuilder builder)
+	private class BookInfo(Level1DepthBuilder builder)
 	{
 		public readonly Level1DepthBuilder Builder = builder;
 		public readonly CachedSynchronizedSet<long> SubscriptionIds = [];
@@ -91,7 +91,7 @@ public class Level1DepthBuilderAdapter(IMessageAdapter innerAdapter) : MessageAd
 
 					lock (_syncObject)
 					{
-						var info = new BookInfo(new Level1DepthBuilder(mdMsg.SecurityId));
+						var info = new BookInfo(new(mdMsg.SecurityId));
 						info.SubscriptionIds.Add(transId);
 						_byId.Add(transId, info);
 					}

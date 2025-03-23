@@ -346,12 +346,6 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageChannel>, IMessa
 	/// <inheritdoc />
 	public virtual bool? IsPositionsEmulationRequired => InnerAdapter.IsPositionsEmulationRequired;
 
-	bool IMessageAdapter.GenerateOrderBookFromLevel1
-	{
-		get => InnerAdapter.GenerateOrderBookFromLevel1;
-		set => InnerAdapter.GenerateOrderBookFromLevel1 = value;
-	}
-
 	string[] IMessageAdapter.AssociatedBoards => InnerAdapter.AssociatedBoards;
 
 	IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)

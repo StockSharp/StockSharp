@@ -111,6 +111,7 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		Adapter.SupportLookupTracking = false;
 		Adapter.SupportOrderBookTruncate = false;
 		Adapter.ConnectDisconnectEventOnFirstAdapter = false;
+		Adapter.GenerateOrderBookFromLevel1 = false;
 
 		InMessageChannel = new PassThroughMessageChannel();
 		OutMessageChannel = new PassThroughMessageChannel();

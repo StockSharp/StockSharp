@@ -174,11 +174,6 @@ public interface IMessageAdapter : IMessageChannel, IPersistable, ILogReceiver
 	bool IsReplaceCommandEditCurrent { get; }
 
 	/// <summary>
-	/// Generate <see cref="QuoteChangeMessage"/> from <see cref="Level1ChangeMessage"/>.
-	/// </summary>
-	bool GenerateOrderBookFromLevel1 { get; set; }
-
-	/// <summary>
 	/// The adapter can process subscription only with instruments associated with the specified board.
 	/// </summary>
 	string[] AssociatedBoards { get; }

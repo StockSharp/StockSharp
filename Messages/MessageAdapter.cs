@@ -244,15 +244,6 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 	/// <inheritdoc />
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Level1Key,
-		Description = LocalizedStrings.Level1ToOrderBooksKey,
-		GroupName = LocalizedStrings.AdaptersKey,
-		Order = 302)]
-	public virtual bool GenerateOrderBookFromLevel1 { get; set; } = true;
-
-	/// <inheritdoc />
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ReConnectionSettingsKey,
 		Description = LocalizedStrings.ReConnectionDescKey,
 		GroupName = LocalizedStrings.ConnectionKey)]
@@ -606,7 +597,6 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 			ReConnectionSettings.Load(storage, nameof(ReConnectionSettings));
 
 		EnqueueSubscriptions = storage.GetValue(nameof(EnqueueSubscriptions), EnqueueSubscriptions);
-		GenerateOrderBookFromLevel1 = storage.GetValue(nameof(GenerateOrderBookFromLevel1), GenerateOrderBookFromLevel1);
 		UseChannels = storage.GetValue(nameof(UseChannels), UseChannels);
 		IterationInterval = storage.GetValue(nameof(IterationInterval), IterationInterval);
 
@@ -621,7 +611,6 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 		storage.SetValue(nameof(SupportedInMessages), Do.Invariant(() => SupportedInMessages.Select(t => t.To<string>()).ToArray()));
 		storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
 		storage.SetValue(nameof(EnqueueSubscriptions), EnqueueSubscriptions);
-		storage.SetValue(nameof(GenerateOrderBookFromLevel1), GenerateOrderBookFromLevel1);
 		storage.SetValue(nameof(UseChannels), UseChannels);
 		storage.SetValue(nameof(IterationInterval), IterationInterval);
 

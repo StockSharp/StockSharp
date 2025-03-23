@@ -3670,7 +3670,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	string[] IMessageAdapter.AssociatedBoards => [];
 	bool? IMessageAdapter.IsPositionsEmulationRequired => null;
 	bool IMessageAdapter.IsReplaceCommandEditCurrent => false;
-	bool IMessageAdapter.GenerateOrderBookFromLevel1 { get; set; }
 	TimeSpan? IMessageAdapter.LookupTimeout => null;
 	bool IMessageAdapter.ExtraSetup => false;
 

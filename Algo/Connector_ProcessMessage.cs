@@ -400,7 +400,7 @@ partial class Connector
 	/// <summary>
 	/// Use <see cref="Level1DepthBuilderAdapter"/>.
 	/// </summary>
-	[Obsolete("Use IMessageAdapter.GenerateOrderBookFromLevel1 property.")]
+	[Obsolete("Use MarketDataMessage.BuildFrom property.")]
 	public bool SupportLevel1DepthBuilder { get; set; }
 
 	/// <summary>

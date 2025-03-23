@@ -527,7 +527,10 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	/// <summary>
 	/// Storage settings.
 	/// </summary>
-	public StorageCoreSettings StorageSettings { get; } = new StorageCoreSettings();
+	public StorageCoreSettings StorageSettings { get; } = new();
+
+	/// <inheritdoc />
+	public bool GenerateOrderBookFromLevel1 { get; set; } = true;
 
 	private IdGenerator _transactionIdGenerator;
 
@@ -741,8 +744,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 	bool IMessageAdapter.IsReplaceCommandEditCurrent => false;
 
-	bool IMessageAdapter.GenerateOrderBookFromLevel1 { get; set; }
-
 	string[] IMessageAdapter.AssociatedBoards => [];
 
 	bool IMessageAdapter.ExtraSetup => false;
@@ -865,7 +866,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			adapter = ApplyOwnInner(new SubscriptionSecurityAllMessageAdapter(adapter));
 		}
 
-		if (adapter.GenerateOrderBookFromLevel1 && !adapter.SupportedMarketDataTypes.Contains(DataType.MarketDepth))
+		if (GenerateOrderBookFromLevel1 && adapter.SupportedMarketDataTypes.Contains(DataType.Level1) && !adapter.SupportedMarketDataTypes.Contains(DataType.MarketDepth))
 		{
 			adapter = ApplyOwnInner(new Level1DepthBuilderAdapter(adapter));
 		}
@@ -2177,6 +2178,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			IsSupportTransactionLog = IsSupportTransactionLog,
 			IsSupportPositionEmulation = IsSupportPositionEmulation,
 			FillGapsBehaviour = FillGapsBehaviour,
+			GenerateOrderBookFromLevel1 = GenerateOrderBookFromLevel1,
 		};
 
 		clone.Load(this.Save());
