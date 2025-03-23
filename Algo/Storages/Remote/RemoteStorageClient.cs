@@ -56,31 +56,38 @@ public class RemoteStorageClient : Disposable
 		}
 
 		var connError = message is ConnectMessage cm ? cm.Error : null;
-		if (connError is not null || message is BaseConnectionMessage)
+		if (connError is not null || message is DisconnectMessage)
 		{
 			foreach (var (_, (sync, _)) in _pendings.CopyAndClear())
-				sync.PulseSignal(connError ?? (message is ConnectMessage ? null : new InvalidOperationException(LocalizedStrings.UnexpectedDisconnection)));
+				sync.PulseSignal(connError ?? new InvalidOperationException(LocalizedStrings.UnexpectedDisconnection));
 
 			return;
 		}
 
-		if (message is not IOriginalTransactionIdMessage responseMsg)
+		long transId;
+
+		if (message is IOriginalTransactionIdMessage responseMsg)
+			transId = responseMsg.OriginalTransactionId;
+		else if (message is TimeMessage timeMsg && long.TryParse(timeMsg.OriginalTransactionId, out var pingId))
+			transId = pingId;
+		else
 			return;
 
-		if (!_pendings.TryGetValue(responseMsg.OriginalTransactionId, out var t))
+		if (!_pendings.TryGetValue(transId, out var t))
 			return;
 
 		var error = message is SubscriptionResponseMessage r ? r.Error : null;
 
 		if (message is SubscriptionFinishedMessage ||
 			message is SubscriptionOnlineMessage ||
+			message is TimeMessage ||
 			error is not null)
 		{
-			if (error is null)
+			if (error is null && message is not TimeMessage)
 				t.messages.Add(message);
 
 			t.sync.PulseSignal(error);
-			_pendings.Remove(responseMsg.OriginalTransactionId);
+			_pendings.Remove(transId);
 		}
 		else
 			t.messages.Add(message);
@@ -257,7 +264,7 @@ public class RemoteStorageClient : Disposable
 	/// <summary>
 	/// Verify.
 	/// </summary>
-	public void Verify() => Do<Message>(new TimeMessage(), () => null, out _);
+	public void Verify() => Do<Message>(new TimeMessage { OfflineMode = MessageOfflineModes.Ignore }, () => null, out _);
 
 	/// <summary>
 	/// To get all the dates for which market data are recorded.
@@ -344,7 +351,7 @@ public class RemoteStorageClient : Disposable
 			_adapter.SendInMessage(message);
 	}
 
-	private IEnumerable<TResult> Do<TResult>(Message request, Func<object> getKey, out bool isFull)
+	private IEnumerable<TResult> Do<TResult>(ITransactionIdMessage request, Func<object> getKey, out bool isFull)
 		where TResult : Message//, IOriginalTransactionIdMessage
 	{
 		if (request is null)	throw new ArgumentNullException(nameof(request));
@@ -367,7 +374,7 @@ public class RemoteStorageClient : Disposable
 			if (needCache && cache.TryGet(key, out cached))
 				return cached.Cast<TResult>();
 
-			var transId = ((ITransactionIdMessage)request).TransactionId = _adapter.TransactionIdGenerator.GetNextId();
+			var transId = request.TransactionId = _adapter.TransactionIdGenerator.GetNextId();
 
 			var requestSync = new SyncObject();
 			var messages = new List<Message>();
@@ -376,7 +383,7 @@ public class RemoteStorageClient : Disposable
 
 			System.Diagnostics.Debug.WriteLine($"Download: {str}");
 
-			if (!_adapter.SendInMessage(request))
+			if (!_adapter.SendInMessage((Message)request))
 				throw new NotSupportedException(request.ToString());
 
 			if (!requestSync.WaitSignal(_timeout, out var error))
