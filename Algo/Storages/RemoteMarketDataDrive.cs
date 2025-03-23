@@ -209,6 +209,11 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 	/// </summary>
 	public bool IsBinaryEnabled { get; set; }
 
+	/// <summary>
+	/// Logs.
+	/// </summary>
+	public ILogSource Logs { get; set; }
+
 	/// <inheritdoc />
 	public override string Path
 	{
@@ -252,7 +257,7 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 			ba.IsBinaryEnabled = IsBinaryEnabled;
 		}
 
-		adapter.Parent ??= ServicesRegistry.LogManager?.Application;
+		adapter.Parent ??= Logs ?? ServicesRegistry.LogManager?.Application;
 
 		return new(adapter, Cache, SecurityBatchSize, Timeout);
 	}
