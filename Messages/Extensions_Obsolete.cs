@@ -19,7 +19,7 @@ partial class Extensions
 	/// <param name="type">Market data type.</param>
 	/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
 	/// <returns>Message type.</returns>
-	[Obsolete]
+	[Obsolete("Use DataType class.")]
 	public static MessageTypes ToMessageType(this MarketDataTypes type, out object arg)
 	{
 		if (!_messageTypeMapOld.TryGetValue(type, out var tuple))
@@ -35,7 +35,7 @@ partial class Extensions
 	/// <param name="type">Market data type.</param>
 	/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
 	/// <returns>Data type info.</returns>
-	[Obsolete]
+	[Obsolete("Use DataType class.")]
 	public static DataType ToDataType(this MarketDataTypes type, object arg)
 	{
 		var msgType = type.ToMessageType(out var arg2);
@@ -79,7 +79,7 @@ partial class Extensions
 				if (msgType.IsCandle())
 					return DataType.Create(msgType.ToCandleMessage(), arg);
 
-				throw new ArgumentOutOfRangeException(nameof(msgType), msgType, LocalizedStrings.InvalidValue);
+				throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue);
 			}
 		}
 	}
@@ -89,7 +89,7 @@ partial class Extensions
 	/// </summary>
 	/// <param name="dataType">Data type info.</param>
 	/// <returns><see cref="MarketDataTypes"/> value or <see langword="null"/> if cannot be converted.</returns>
-	[Obsolete]
+	[Obsolete("Use DataType class.")]
 	public static MarketDataTypes ToMarketDataType(this DataType dataType)
 	{
 		if (dataType is null)
@@ -114,7 +114,7 @@ partial class Extensions
 			if (_messageTypeMapOld.TryGetKey((msgType, default), out var dataType2))
 				return dataType2;
 
-			throw new ArgumentOutOfRangeException(nameof(msgType), msgType, LocalizedStrings.InvalidValue);
+			throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.InvalidValue);
 		}
 		else if (dataType == DataType.FilteredMarketDepth)
 			return MarketDataTypes.MarketDepth;
@@ -131,17 +131,6 @@ partial class Extensions
 	[Obsolete("Use method with decimal priceRange parameter")]
 	public static QuoteChangeMessage Group(this IOrderBookMessage depth, Unit priceRange)
 		=> depth.Group(GetActualPriceRange(priceRange));
-
-	/// <summary>
-	/// Add the message type info <see cref="IMessageAdapter.SupportedInMessages"/>.
-	/// </summary>
-	/// <param name="adapter">Adapter.</param>
-	/// <param name="type">Message type.</param>
-	[Obsolete]
-	public static void AddSupportedMessage(this MessageAdapter adapter, MessageTypes type)
-	{
-		AddSupportedMessage(adapter, type, IsMarketData(type));
-	}
 
 	/// <summary>
 	/// </summary>
