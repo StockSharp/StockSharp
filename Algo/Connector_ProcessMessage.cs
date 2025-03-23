@@ -940,7 +940,7 @@ partial class Connector
 
 			s.ApplyChanges(message, ExchangeInfoProvider, OverrideSecurityData);
 			return true;
-		}, out var isNew);
+		});
 
 		var subscriptions = _subscriptionManager.ProcessLookupResponse(message, security);
 		RaiseReceived(security, subscriptions, SecurityReceived);

@@ -909,7 +909,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 
 	/// <inheritdoc />
 	public Security GetSecurity(SecurityId securityId)
-		=> GetSecurity(securityId, s => false, out _);
+		=> GetSecurity(securityId, s => false);
 
 	private Security TryGetSecurity(SecurityId? securityId)
 		=> securityId == null || securityId.Value == default ? null : GetSecurity(securityId.Value);
@@ -944,9 +944,8 @@ public partial class Connector : BaseLogReceiver, IConnector
 	/// </summary>
 	/// <param name="id">Security ID.</param>
 	/// <param name="changeSecurity">The handler changing the instrument. It returns <see langword="true" /> if the instrument has been changed and the <see cref="SecurityReceived"/> should be called.</param>
-	/// <param name="isNew">Is newly created.</param>
 	/// <returns>Security.</returns>
-	private Security GetSecurity(SecurityId id, Func<Security, bool> changeSecurity, out bool isNew)
+	private Security GetSecurity(SecurityId id, Func<Security, bool> changeSecurity)
 	{
 		if (id == default)
 			throw new ArgumentNullException(nameof(id));
@@ -967,7 +966,10 @@ public partial class Connector : BaseLogReceiver, IConnector
 				Code = code,
 				Board = board,
 			};
-		}, out isNew);
+		}, out var isNew);
+
+		if (_existingSecurities.TryAdd(security))
+			_added?.Invoke([security]);
 
 		if (isNew)
 			ExchangeInfoProvider.Save(security.Board);
