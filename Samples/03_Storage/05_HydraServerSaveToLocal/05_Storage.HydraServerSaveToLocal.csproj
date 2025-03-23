@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\common_samples_netwindows.props" />
+  <Import Project="..\..\common_samples_net.props" />
   <ItemGroup>
     <PackageReference Include="StockSharp.Algo" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Fix" Version="$(StockSharpVer)" />

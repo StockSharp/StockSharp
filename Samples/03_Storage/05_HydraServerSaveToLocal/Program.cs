@@ -3,9 +3,9 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Security;
 
 using Ecng.Common;
+using Ecng.Logging;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Storages;
@@ -18,6 +18,9 @@ static class Program
 {
 	static void Main()
 	{
+		var logger = new LogManager();
+		logger.Listeners.Add(new ConsoleLogListener());
+
 		var storageRegistry = new StorageRegistry();
 
 		var registry = new CsvEntityRegistry(Path.Combine(Directory.GetCurrentDirectory(), "Storage"));
@@ -25,15 +28,33 @@ static class Program
 
 		var remoteDrive = new RemoteMarketDataDrive(RemoteMarketDataDrive.DefaultAddress, new FixMessageAdapter(new IncrementalIdGenerator()))
 		{
-			Credentials = { Email = "hydra_user", Password = "hydra_user".To<SecureString>() },
+			Logs = logger.Application,
 
+			Credentials =
+			{
+				Email = "hydra_user",
+
+				//
+				// required for non anonymous access
+				//
+				//Password = "hydra_user".To<SecureString>()
+			},
+
+			//
 			// uncomment to enable binary mode
+			//
 			//IsBinaryEnabled = true,
+		};
+
+		var secId = new SecurityId
+		{
+			SecurityCode = "BTCUSDT",
+			BoardCode = BoardCodes.BinanceFut,
 		};
 
 		//----------------------------------Security------------------------------------------------------------------
 		var exchangeInfoProvider = new InMemoryExchangeInfoProvider();
-		remoteDrive.LookupSecurities(Extensions.LookupAllCriteriaMessage, registry.Securities,
+		remoteDrive.LookupSecurities(new() { SecurityId = secId }, registry.Securities,
 			s => securityStorage.Save(s.ToSecurity(exchangeInfoProvider), false), () => false,
 			(c, t) => Console.WriteLine($"Downloaded [{c}]/[{t}]"));
 
@@ -45,12 +66,6 @@ static class Program
 		}
 
 		Console.ReadLine();
-
-		var secId = new SecurityId
-		{
-			SecurityCode = "BTCUSD_PERP",
-			BoardCode = "BNBCN"
-		};
 
 		var startDate = DateTime.Now.AddDays(-30);
 		var endDate = DateTime.Now;
