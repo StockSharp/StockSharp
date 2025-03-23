@@ -11,7 +11,6 @@ namespace StockSharp.Messages;
 [Serializable]
 public abstract class BaseConnectionMessage(MessageTypes type) : Message(type), IErrorMessage
 {
-
 	/// <inheritdoc />
 	[DataMember]
 	[XmlIgnore]

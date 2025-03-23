@@ -13,7 +13,6 @@ namespace StockSharp.Messages;
 public abstract class BaseResultMessage<TMessage>(MessageTypes type) : Message(type), IOriginalTransactionIdMessage
 	where TMessage : BaseResultMessage<TMessage>, new()
 {
-
 	/// <inheritdoc />
 	[DataMember]
 	public long OriginalTransactionId { get; set; }

@@ -63,10 +63,10 @@ public class SecurityLookupMessage : SecurityMessage, ISubscriptionMessage
 	[DataMember]
 	public bool IncludeExpired { get; set; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SecurityLookupMessage"/>.
-        /// </summary>
-        public SecurityLookupMessage()
+	/// <summary>
+	/// Initializes a new instance of the <see cref="SecurityLookupMessage"/>.
+	/// </summary>
+	public SecurityLookupMessage()
 		: base(MessageTypes.SecurityLookup)
 	{
 	}

@@ -11,7 +11,6 @@
 [Serializable]
 public abstract class BaseSubscriptionMessage(MessageTypes type) : Message(type), ISubscriptionMessage
 {
-
 	/// <inheritdoc />
 	public virtual bool FilterEnabled => false;
 

@@ -13,7 +13,6 @@ namespace StockSharp.Messages;
 public abstract class BaseRouteMessage<TMessage>(MessageTypes type) : BaseSubscriptionIdMessage<TMessage>(type)
 	where TMessage : BaseRouteMessage<TMessage>, new()
 {
-
 	/// <summary>
 	/// Adapter identifier.
 	/// </summary>

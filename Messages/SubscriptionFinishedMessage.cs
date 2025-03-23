@@ -51,7 +51,7 @@ public class SubscriptionFinishedMessage : BaseResultMessage<SubscriptionFinishe
 			str += $",Next={NextFrom}";
 
 		if (Body.Length > 0)
-			str += $"BodyLen={Body.Length}";
+			str += $",BodyLen={Body.Length}";
 
 		return str;
 	}
