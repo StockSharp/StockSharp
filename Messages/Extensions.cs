@@ -3050,25 +3050,23 @@ public static partial class Extensions
 
 		if (criteria.SecurityIds.Length > 0)
 		{
-			var found = false;
-
 			foreach (var i in criteria.SecurityIds)
 			{
-				if (!i.SecurityCode.IsEmpty() && security.SecurityId.SecurityCode.ContainsIgnoreCase(i.SecurityCode))
-				{
-					found = true;
-					break;
-				}
+				if (!i.SecurityCode.IsEmpty() && !security.SecurityId.SecurityCode.ContainsIgnoreCase(i.SecurityCode))
+					continue;
 
-				if (!i.BoardCode.IsEmpty() && security.SecurityId.BoardCode.EqualsIgnoreCase(i.BoardCode))
+				if (!i.BoardCode.IsEmpty() && !security.SecurityId.BoardCode.EqualsIgnoreCase(i.BoardCode))
+					continue;
+
+				// sec + board codes means exact id
+				if (!i.SecurityCode.IsEmpty() && !i.BoardCode.IsEmpty())
 				{
-					found = true;
-					break;
+					if (security.SecurityId == i)
+						return true;
 				}
 			}
 
-			if (!found)
-				return false;
+			return false;
 		}
 
 		if (!secId.Bloomberg.IsEmptyOrWhiteSpace() && !security.SecurityId.Bloomberg.ContainsIgnoreCase(secId.Bloomberg))
