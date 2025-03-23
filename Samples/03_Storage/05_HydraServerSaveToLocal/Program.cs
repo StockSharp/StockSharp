@@ -18,6 +18,13 @@ static class Program
 {
 	static void Main()
 	{
+		const string pathHistory = "Storage";
+
+		if (Directory.Exists(pathHistory))
+			IOHelper.ClearDirectory(pathHistory);
+		else
+			Directory.CreateDirectory(pathHistory);
+
 		var logger = new LogManager();
 		logger.Listeners.Add(new ConsoleLogListener());
 
@@ -69,9 +76,6 @@ static class Program
 
 		var startDate = DateTime.Now.AddDays(-30);
 		var endDate = DateTime.Now;
-
-		const string pathHistory = "Storage";
-		pathHistory.SafeDeleteDir();
 
 		var localDrive = new LocalMarketDataDrive(pathHistory);
 
