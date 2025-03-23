@@ -4,16 +4,20 @@ using System;
 using System.IO;
 using System.Windows;
 
+using Ecng.Common;
 using Ecng.Serialization;
 using Ecng.Configuration;
+using Ecng.Xaml;
 
 using StockSharp.Configuration;
 using StockSharp.Algo;
+using StockSharp.Algo.Storages;
 using StockSharp.BusinessEntities;
-using StockSharp.Xaml;
 using StockSharp.Messages;
+using StockSharp.Xaml;
 using StockSharp.Xaml.Charting;
 using StockSharp.Charting;
+using StockSharp.Localization;
 
 public partial class MainWindow
 {
@@ -34,11 +38,52 @@ public partial class MainWindow
 		{
 			_connector.Load(_connectorFile.Deserialize<SettingsStorage>());
 		}
+		else
+		{
+			var adapter = new Fix.FixMessageAdapter(_connector.TransactionIdGenerator)
+			{
+				Address = RemoteMarketDataDrive.DefaultAddress,
+				TargetCompId = RemoteMarketDataDrive.DefaultTargetCompId,
+
+				SenderCompId = "hydra_user",
+
+				//
+				// required for non anonymous access
+				//
+				//Password = "hydra_user".To<SecureString>()
+
+				//
+				// uncomment to enable binary mode
+				//
+				//IsBinaryEnabled = true,
+			};
+
+			// turning off the support of the transactional messages
+			adapter.ChangeSupported(false, false);
+
+			_connector.Adapter.InnerAdapters.Add(adapter);
+
+			_connector.Save().Serialize(_connectorFile);
+		}
 
 		CandleDataTypeEdit.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
 
 		DatePickerBegin.SelectedDate = Paths.HistoryBeginDate;
 		DatePickerEnd.SelectedDate = Paths.HistoryEndDate;
+
+		SecurityPicker.SecurityProvider = _connector;
+		SecurityPicker.MarketDataProvider = _connector;
+
+		_connector.ConnectionError += Connector_ConnectionError;
+		_connector.CandleReceived += Connector_CandleSeriesProcessing;
+	}
+
+	private void Connector_ConnectionError(Exception error)
+	{
+		this.GuiAsync(() =>
+		{
+			MessageBox.Show(this.GetWindow(), error.ToString(), LocalizedStrings.ErrorConnection);
+		});
 	}
 
 	private void Setting_Click(object sender, RoutedEventArgs e)
@@ -51,18 +96,7 @@ public partial class MainWindow
 
 	private void Connect_Click(object sender, RoutedEventArgs e)
 	{
-		SecurityPicker.SecurityProvider = _connector;
-		SecurityPicker.MarketDataProvider = _connector;
-
-		_connector.CandleReceived += Connector_CandleSeriesProcessing;
-		_connector.Connected += Connector_Connected;
 		_connector.Connect();
-	}
-
-	private void Connector_Connected()
-	{
-		// try lookup all securities
-		_connector.Subscribe(new(StockSharp.Messages.Extensions.LookupAllCriteriaMessage));
 	}
 
 	private void SecurityPicker_SecuritySelected(Security security)
@@ -86,12 +120,11 @@ public partial class MainWindow
 		Chart.ClearAreas();
 
 		var area = new ChartArea();
-		_candleElement = new ChartCandleElement();
-
 		Chart.AddArea(area);
-		_candleElement = new ChartCandleElement();
 
+		_candleElement = new ChartCandleElement();
 		Chart.AddElement(area, _candleElement, _subscription);
+
 		_connector.Subscribe(_subscription);
 	}
 

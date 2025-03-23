@@ -2,5 +2,6 @@
   <Import Project="..\..\common_samples_netwindows.props" />
   <ItemGroup>
     <ProjectReference Include="$(RepoAppsPath)Xaml.Charting\Xaml.Charting.csproj" />
+    <ProjectReference Include="$(RepoAppsPath)Connectors\Fix\Fix.csproj" />
   </ItemGroup>
 </Project>
