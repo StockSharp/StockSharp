@@ -64,6 +64,12 @@ public class SecurityLookupMessage : SecurityMessage, ISubscriptionMessage
 	public bool IncludeExpired { get; set; }
 
 	/// <summary>
+	/// Disable translates the result of the request into the archive <see cref="SubscriptionFinishedMessage.Body"/>.
+	/// </summary>
+	[DataMember]
+	public bool DisableArchive { get; set; }
+
+	/// <summary>
 	/// Initializes a new instance of the <see cref="SecurityLookupMessage"/>.
 	/// </summary>
 	public SecurityLookupMessage()
@@ -115,6 +121,7 @@ public class SecurityLookupMessage : SecurityMessage, ISubscriptionMessage
 		destination.SecurityIds = [.. SecurityIds];
 		destination.FillGaps = FillGaps;
 		destination.IncludeExpired = IncludeExpired;
+		destination.DisableArchive = DisableArchive;
 
 		base.CopyTo(destination);
 	}
@@ -141,6 +148,9 @@ public class SecurityLookupMessage : SecurityMessage, ISubscriptionMessage
 
 		if (IncludeExpired)
 			str += $",expired={IncludeExpired}";
+
+		if (DisableArchive)
+			str += $",Archive={DisableArchive}";
 
 		return str;
 	}

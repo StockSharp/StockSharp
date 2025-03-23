@@ -765,6 +765,28 @@ partial class Connector
 		if (subscription == null)
 			return;
 
+		if (message.Body?.Length > 0)
+		{
+			if (subscription.DataType == DataType.Securities)
+			{
+				var secMsgs = message.Body.ExtractSecurities().ToArray();
+
+				foreach (var secMsg in secMsgs)
+					ProcessSecurityMessage(secMsg);
+
+				items = items.Concat(secMsgs);
+			}
+			else if (subscription.DataType == DataType.Board)
+			{
+				var boardMsgs = message.Body.ExtractBoards().ToArray();
+
+				foreach (var boardMsg in boardMsgs)
+					ProcessBoardMessage(boardMsg);
+
+				items = items.Concat(boardMsgs);
+			}
+		}
+
 		RaiseMarketDataSubscriptionFinished(message, subscription);
 
 		ProcessSubscriptionResult(subscription, items);

@@ -1,11 +1,6 @@
 namespace StockSharp.Algo.Storages.Remote;
 
-using System.IO.Compression;
-
-using Ecng.IO;
-
 using StockSharp.Algo.Storages;
-using StockSharp.Algo.Storages.Csv;
 
 /// <summary>
 /// The client for access to the history server.
@@ -396,35 +391,15 @@ public class RemoteStorageClient : Disposable
 			{
 				messages.Clear();
 
-				var secList = typeof(TResult) == typeof(SecurityMessage) ? new List<SecurityMessage>() : null;
-				var boardList = typeof(TResult) == typeof(BoardMessage) ? new List<BoardMessage>() : null;
-
-				if (secList is not null || boardList is not null)
+				if (typeof(TResult) == typeof(SecurityMessage))
 				{
-					var encoding = Encoding.UTF8;
-					var reader = archive.Uncompress<GZipStream>().To<Stream>().CreateCsvReader(encoding);
-
-					while (reader.NextLine())
-					{
-						if (secList is not null)
-						{
-							var security = reader.ReadSecurity();
-
-							if (security.IsAllSecurity())
-								continue;
-
-							secList.Add(security);
-						}
-						else
-							boardList.Add(reader.ReadBoard(encoding));
-					}
-
+					messages.AddRange(archive.ExtractSecurities());
 					isFull = true;
-
-					if (secList is not null)
-						messages.AddRange(secList);
-					else if (boardList is not null)
-						messages.AddRange(boardList);
+				}
+				else if (typeof(TResult) == typeof(BoardMessage))
+				{
+					messages.AddRange(archive.ExtractBoards());
+					isFull = true;
 				}
 			}
 			else

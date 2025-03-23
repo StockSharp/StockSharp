@@ -14,6 +14,12 @@ public class BoardLookupMessage : BaseSubscriptionMessage
 	public string Like { get; set; }
 
 	/// <summary>
+	/// Disable translates the result of the request into the archive <see cref="SubscriptionFinishedMessage.Body"/>.
+	/// </summary>
+	[DataMember]
+	public bool DisableArchive { get; set; }
+
+	/// <summary>
 	/// Initializes a new instance of the <see cref="BoardLookupMessage"/>.
 	/// </summary>
 	public BoardLookupMessage()
@@ -43,6 +49,7 @@ public class BoardLookupMessage : BaseSubscriptionMessage
 		base.CopyTo(destination);
 
 		destination.Like = Like;
+		destination.DisableArchive = DisableArchive;
 
 		return destination;
 	}
@@ -50,7 +57,15 @@ public class BoardLookupMessage : BaseSubscriptionMessage
 	/// <inheritdoc />
 	public override string ToString()
 	{
-		return base.ToString() + $",Like={Like}";
+		var str = base.ToString();
+
+		if (!Like.IsEmpty())
+			str += $",Like={Like}";
+
+		if (DisableArchive)
+			str += $",Archive={DisableArchive}";
+
+		return str;
 	}
 
 	/// <inheritdoc />

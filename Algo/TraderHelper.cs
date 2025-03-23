@@ -1,11 +1,15 @@
 namespace StockSharp.Algo;
 
+using System.IO.Compression;
+
 using Ecng.Compilation;
 using Ecng.Compilation.Expressions;
+using Ecng.IO;
 
 using Nito.AsyncEx;
 
 using StockSharp.Algo.Indicators;
+using StockSharp.Algo.Storages.Csv;
 
 /// <summary>
 /// The auxiliary class for provision of various algorithmic functionalities.
@@ -1443,4 +1447,50 @@ public static partial class TraderHelper
 			ProcessStates.Started => ChannelStates.Started,
 			_ => throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.InvalidValue)
 		};
+
+	private static FastCsvReader CreateReader(this byte[] archive, Encoding encoding)
+		=> archive.Uncompress<GZipStream>().To<Stream>().CreateCsvReader(encoding);
+
+	/// <summary>
+	/// Extract securities from the archive.
+	/// </summary>
+	/// <param name="archive">The archive.</param>
+	/// <returns>Securities.</returns>
+	public static IEnumerable<SecurityMessage> ExtractSecurities(this byte[] archive)
+	{
+		var encoding = Encoding.UTF8;
+		var reader = archive.CreateReader(encoding);
+
+		var retVal = new List<SecurityMessage>();
+
+		while (reader.NextLine())
+		{
+			var security = reader.ReadSecurity();
+
+			if (security.IsAllSecurity())
+				continue;
+
+			retVal.Add(security);
+		}
+
+		return retVal;
+	}
+
+	/// <summary>
+	/// Extract boards from the archive.
+	/// </summary>
+	/// <param name="archive">The archive.</param>
+	/// <returns>Boards.</returns>
+	public static IEnumerable<BoardMessage> ExtractBoards(this byte[] archive)
+	{
+		var encoding = Encoding.UTF8;
+		var reader = archive.CreateReader(encoding);
+
+		var retVal = new List<BoardMessage>();
+
+		while (reader.NextLine())
+			retVal.Add(reader.ReadBoard(encoding));
+
+		return retVal;
+	}
 }

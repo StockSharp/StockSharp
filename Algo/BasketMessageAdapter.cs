@@ -1978,7 +1978,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			return null;
 
 		_subscription.Remove(parentId.Value);
-		return new SubscriptionFinishedMessage { OriginalTransactionId = parentId.Value };
+		return new SubscriptionFinishedMessage { OriginalTransactionId = parentId.Value, Body = message.Body };
 	}
 
 	private Message ProcessSubscriptionResponse(IMessageAdapter adapter, SubscriptionResponseMessage message)
