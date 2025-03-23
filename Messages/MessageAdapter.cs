@@ -117,7 +117,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 
 	/// <inheritdoc />
 	[Browsable(false)]
-	public virtual bool CheckTimeFrameByRequest { get; set; }
+	public virtual bool CheckTimeFrameByRequest => false;
 
 	private TimeSpan _heartbeatInterval = TimeSpan.Zero;
 
