@@ -33,14 +33,16 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 	public EmulationMessageAdapter(IMessageAdapter innerAdapter, IMessageChannel inChannel, bool isEmulationOnly, ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IExchangeInfoProvider exchangeInfoProvider)
 		: base(innerAdapter)
 	{
+		var seed = DateTime.UtcNow.Ticks;
+
 		Emulator = new MarketEmulator(securityProvider, portfolioProvider, exchangeInfoProvider, TransactionIdGenerator)
 		{
 			Parent = this,
 			Settings =
 			{
 				ConvertTime = true,
-				InitialOrderId = DateTime.Now.Ticks,
-				InitialTradeId = DateTime.Now.Ticks,
+				InitialOrderId = seed,
+				InitialTradeId = seed,
 			}
 		};
 

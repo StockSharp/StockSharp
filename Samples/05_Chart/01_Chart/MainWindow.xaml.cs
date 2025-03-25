@@ -732,7 +732,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 			var msg = new Level1ChangeMessage
 			{
 				SecurityId = sec.ToSecurityId(),
-				ServerTime = DateTimeOffset.Now,
+				ServerTime = DateTimeOffset.UtcNow,
 			};
 
 			if (RandomGen.GetBool())

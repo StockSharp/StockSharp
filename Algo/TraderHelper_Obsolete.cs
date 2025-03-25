@@ -1164,8 +1164,9 @@ partial class TraderHelper
 		order = order.ReRegisterClone();
 		depth = depth.Clone();
 
-		order.ServerTime = depth.ServerTime = DateTimeOffset.Now;
-		order.LocalTime = depth.LocalTime = DateTime.Now;
+		var now = DateTimeOffset.UtcNow;
+		order.ServerTime = depth.ServerTime = now;
+		order.LocalTime = depth.LocalTime = now;
 
 		var testPf = Portfolio.CreateSimulator();
 		order.Portfolio = testPf;

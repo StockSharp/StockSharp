@@ -53,7 +53,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 					DataTypeEx = DataType.Transactions,
 					HasOrderInfo = true,
 					OriginalTransactionId = replaceMsg.OriginalTransactionId,
-					ServerTime = DateTimeOffset.Now,
+					ServerTime = DateTimeOffset.UtcNow,
 					OrderState = OrderStates.Done,
 					OrderType = originOrderMsg.OrderType,
 				});
@@ -138,7 +138,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 								DataTypeEx = DataType.Transactions,
 								HasOrderInfo = true,
 								OriginalTransactionId = cancelMsg.TransactionId,
-								ServerTime = DateTimeOffset.Now,
+								ServerTime = DateTimeOffset.UtcNow,
 								OrderState = OrderStates.Done,
 								OrderType = originOrderMsg.OrderType,
 							});

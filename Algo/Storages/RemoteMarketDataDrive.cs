@@ -43,11 +43,11 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 		{
 			get
 			{
-				if (_prevDatesSync == default || (DateTime.Now - _prevDatesSync).TotalSeconds > 3)
+				if (_prevDatesSync == default || (DateTime.UtcNow - _prevDatesSync).TotalSeconds > 3)
 				{
 					_dates = _parent.EnsureGetClient().GetDates(_securityId, _dataType, _format);
 
-					_prevDatesSync = DateTime.Now;
+					_prevDatesSync = DateTime.UtcNow;
 				}
 
 				return _dates;

@@ -391,7 +391,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 						{
 							// history+live must be processed anyway but without live part
 							var clone = message.TypedClone();
-							clone.To = DateTimeOffset.Now;
+							clone.To = DateTimeOffset.UtcNow;
 							info.HistLive.Add(transId);
 							sendInMsg = clone;
 						}

@@ -3346,7 +3346,7 @@ public static partial class Extensions
 	/// <returns><see langword="true"/> if the specified date is today, otherwise, <see langword="false"/>.</returns>
 	public static bool IsToday(this DateTimeOffset? date)
 	{
-		return date != null && date.Value.IsToday();
+		return date?.IsToday() == true;
 	}
 
 	/// <summary>
@@ -4114,7 +4114,7 @@ public static partial class Extensions
 
 		return new ExecutionMessage
 		{
-			ServerTime = DateTimeOffset.Now,
+			ServerTime = DateTimeOffset.UtcNow,
 			DataTypeEx = DataType.Transactions,
 			SecurityId = regMsg.SecurityId,
 			TransactionId = regMsg.TransactionId,
