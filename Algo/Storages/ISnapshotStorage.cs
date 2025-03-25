@@ -49,6 +49,7 @@ public interface ISnapshotStorage
 /// <typeparam name="TKey">Type of key value.</typeparam>
 /// <typeparam name="TMessage">Message type.</typeparam>
 public interface ISnapshotStorage<TKey, TMessage> : ISnapshotStorage
+	where TMessage : Message
 {
 	/// <summary>
 	/// Remove snapshot for the specified key.

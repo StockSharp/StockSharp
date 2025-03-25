@@ -232,15 +232,14 @@ public class SnapshotRegistry(string path) : Disposable
 
 				Debug.WriteLine($"Snapshot (Save): {_fileName}");
 
-				using (var stream = new TransactionFileStream(_fileName, FileMode.Create))
-				{
-					stream.WriteByte((byte)_version.Major);
-					stream.WriteByte((byte)_version.Minor);
+				using var stream = new TransactionFileStream(_fileName, FileMode.Create);
 
-					foreach (var buffer in buffers)
-					{
-						stream.WriteEx(buffer);
-					}
+				stream.WriteByte((byte)_version.Major);
+				stream.WriteByte((byte)_version.Minor);
+
+				foreach (var buffer in buffers)
+				{
+					stream.WriteEx(buffer);
 				}
 			}
 		}
@@ -402,22 +401,21 @@ public class SnapshotRegistry(string path) : Disposable
 			{
 				return Do.Invariant(() =>
 				{
-					using (var reader = new StreamReader(new FileStream(_datesPath, FileMode.Open, FileAccess.Read)))
+					using var reader = new StreamReader(new FileStream(_datesPath, FileMode.Open, FileAccess.Read));
+
+					var dates = new List<DateTime>();
+
+					while (true)
 					{
-						var dates = new List<DateTime>();
+						var line = reader.ReadLine();
 
-						while (true)
-						{
-							var line = reader.ReadLine();
+						if (line == null)
+							break;
 
-							if (line == null)
-								break;
-
-							dates.Add(LocalMarketDataDrive.GetDate(line));
-						}
-
-						return dates;
+						dates.Add(LocalMarketDataDrive.GetDate(line));
 					}
+
+					return dates;
 				});
 			}
 			catch (Exception ex)
@@ -576,7 +574,7 @@ public class SnapshotRegistry(string path) : Disposable
 			else if (dataType == typeof(QuoteChangeMessage))
 				storage = new SnapshotStorage<SecurityId, QuoteChangeMessage>(path, new QuotesBinarySnapshotSerializer());
 			else if (dataType == typeof(PositionChangeMessage))
-				storage = new SnapshotStorage<Tuple<SecurityId, string, string>, PositionChangeMessage>(path, new PositionBinarySnapshotSerializer());
+				storage = new SnapshotStorage<(SecurityId, string, string), PositionChangeMessage>(path, new PositionBinarySnapshotSerializer());
 			else if (dataType == typeof(ExecutionMessage))
 			{
 				switch ((ExecutionTypes)arg)

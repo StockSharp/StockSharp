@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 using Ecng.Interop;
 
-using Key = System.Tuple<Messages.SecurityId, string, string>;
+using Key = System.ValueTuple<Messages.SecurityId, string, string>;
 
 /// <summary>
 /// Implementation of <see cref="ISnapshotSerializer{TKey,TMessage}"/> in binary format for <see cref="PositionChangeMessage"/>.
@@ -251,7 +251,7 @@ public class PositionBinarySnapshotSerializer : ISnapshotSerializer<Key, Positio
 	}
 
 	Key ISnapshotSerializer<Key, PositionChangeMessage>.GetKey(PositionChangeMessage message)
-		=> Tuple.Create(message.SecurityId, message.PortfolioName, message.StrategyId ?? string.Empty);
+		=> (message.SecurityId, message.PortfolioName, message.StrategyId ?? string.Empty);
 
 	void ISnapshotSerializer<Key, PositionChangeMessage>.Update(PositionChangeMessage message, PositionChangeMessage changes)
 	{

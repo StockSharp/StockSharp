@@ -43,8 +43,13 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 		_replaceTransactionsByTransId.Clear();
 	}
 
-	private ISnapshotStorage GetSnapshotStorage(DataType dataType)
-		=> SnapshotRegistry.GetSnapshotStorage(dataType);
+	private ISnapshotStorage<TKey, TMessage> GetSnapshotStorage<TKey, TMessage>(DataType dataType)
+		where TMessage : Message
+		=> (ISnapshotStorage<TKey, TMessage>)SnapshotRegistry.GetSnapshotStorage(dataType);
+
+	private ISnapshotStorage<SecurityId, TMessage> GetSnapshotStorage<TMessage>(DataType dataType)
+		where TMessage : Message
+		=> GetSnapshotStorage<SecurityId, TMessage>(dataType);
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
@@ -136,16 +141,16 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 
 			if (message.DataType2 == DataType.Level1)
 			{
-				var l1Storage = GetSnapshotStorage(message.DataType2);
+				var l1Storage = GetSnapshotStorage<Level1ChangeMessage>(message.DataType2);
 
 				if (message.SecurityId == default)
 				{
-					foreach (Level1ChangeMessage msg in l1Storage.GetAll())
+					foreach (var msg in l1Storage.GetAll())
 						SendSnapshot(msg);
 				}
 				else
 				{
-					var level1Msg = (Level1ChangeMessage)l1Storage.Get(message.SecurityId);
+					var level1Msg = l1Storage.Get(message.SecurityId);
 
 					if (level1Msg != null)
 					{
@@ -156,16 +161,16 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 			}
 			else if (message.DataType2 == DataType.MarketDepth)
 			{
-				var	quotesStorage = GetSnapshotStorage(message.DataType2);
+				var	quotesStorage = GetSnapshotStorage<QuoteChangeMessage>(message.DataType2);
 
 				if (message.SecurityId == default)
 				{
-					foreach (QuoteChangeMessage msg in quotesStorage.GetAll())
+					foreach (var msg in quotesStorage.GetAll())
 						SendSnapshot(msg);
 				}
 				else
 				{
-					var quotesMsg = (QuoteChangeMessage)quotesStorage.Get(message.SecurityId);
+					var quotesMsg = quotesStorage.Get(message.SecurityId);
 
 					if (quotesMsg != null)
 					{
@@ -205,7 +210,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 
 				var ordersIds = new HashSet<long>();
 
-				var storage = (ISnapshotStorage<string, ExecutionMessage>)GetSnapshotStorage(DataType.Transactions);
+				var storage = GetSnapshotStorage<string, ExecutionMessage>(DataType.Transactions);
 
 				foreach (var snapshot in storage.GetAll(from, to))
 				{
@@ -308,7 +313,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 
 					if (snapshot)
 					{
-						var snapshotStorage = GetSnapshotStorage(DataType.Transactions);
+						var snapshotStorage = GetSnapshotStorage<string, ExecutionMessage>(DataType.Transactions);
 
 						foreach (var message in pair.Value)
 						{
@@ -374,7 +379,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 
 					if (snapshot)
 					{
-						var snapshotStorage = GetSnapshotStorage(DataType.MarketDepth);
+						var snapshotStorage = GetSnapshotStorage<QuoteChangeMessage>(DataType.MarketDepth);
 
 						foreach (var message in pair.Value)
 							snapshotStorage.Update(message);
@@ -390,7 +395,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 
 					if (Settings.IsMode(StorageModes.Snapshot))
 					{
-						var snapshotStorage = GetSnapshotStorage(DataType.Level1);
+						var snapshotStorage = GetSnapshotStorage<Level1ChangeMessage>(DataType.Level1);
 
 						foreach (var message in messages)
 							snapshotStorage.Update(message);
@@ -411,7 +416,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 
 					if (snapshot)
 					{
-						var snapshotStorage = GetSnapshotStorage(DataType.PositionChanges);
+						var snapshotStorage = GetSnapshotStorage<(SecurityId, string, string), PositionChangeMessage >(DataType.PositionChanges);
 
 						foreach (var message in messages)
 							snapshotStorage.Update(message);
