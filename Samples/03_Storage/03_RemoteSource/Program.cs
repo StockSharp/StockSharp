@@ -69,10 +69,12 @@ static class Program
 			candles.Add((CandleMessage)candle);
 		};
 
+		var now = DateTimeOffset.UtcNow;
+
 		connector.Subscribe(new(TimeSpan.FromMinutes(15).TimeFrame(), security)
 		{
-			From = DateTime.Now.AddDays(-3),
-			To = DateTime.Now.AddDays(-1),
+			From = now.AddDays(-3),
+			To = now.AddDays(-1),
 		});
 
 		Console.ReadLine();

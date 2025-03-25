@@ -73,9 +73,10 @@ static class Program
 		}
 
 		Console.ReadLine();
-
-		var startDate = DateTime.Now.AddDays(-30);
-		var endDate = DateTime.Now;
+		
+		var now = DateTimeOffset.UtcNow;
+		var startDate = now.AddDays(-30);
+		var endDate = now;
 
 		var localDrive = new LocalMarketDataDrive(pathHistory);
 
