@@ -52,7 +52,7 @@ namespace StockSharp.Samples.Strategies.HistorySMA
 							.SetCanOptimize(true)
 							.SetOptimize(10, 50, 5);
 
-			_candleType = Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(5)))
+			_candleType = Param(nameof(CandleType), TimeSpan.FromMinutes(5).TimeFrame())
 						  .SetDisplay("Candle Type", "Type of candles to use", "General");
 		}
 

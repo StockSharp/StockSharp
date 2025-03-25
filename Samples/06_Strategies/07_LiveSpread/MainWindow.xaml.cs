@@ -40,7 +40,7 @@ public partial class MainWindow
 		_logManager = new LogManager();
 		_logManager.Listeners.Add(new GuiLogListener(Monitor));
 
-		CandleDataTypeEdit.DataType = DataType.TimeFrame(TimeSpan.FromSeconds(10));
+		CandleDataTypeEdit.DataType = TimeSpan.FromSeconds(10).TimeFrame();
 	}
 
 	private void Setting_Click(object sender, RoutedEventArgs e)

@@ -28,7 +28,7 @@ public class StairsCountertrendStrategy : Strategy
 	/// </summary>
 	public StairsCountertrendStrategy()
 	{
-		_candleDataType = Param(nameof(CandleDataType), DataType.TimeFrame(TimeSpan.FromMinutes(1)))
+		_candleDataType = Param(nameof(CandleDataType), TimeSpan.FromMinutes(1).TimeFrame())
 			.SetDisplay("Candle Type", "Timeframe for strategy calculation", "Base settings");
 
 		_length = Param(nameof(Length), 5)

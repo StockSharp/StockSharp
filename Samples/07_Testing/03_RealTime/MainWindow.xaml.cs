@@ -47,7 +47,7 @@ public partial class MainWindow
 	{
 		InitializeComponent();
 
-		CandleDataTypeEdit.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
+		CandleDataTypeEdit.DataType = TimeSpan.FromMinutes(5).TimeFrame();
 		CandleDataTypeEdit.EditValueChanged += CandleSettingsChanged;
 
 		_logManager = new LogManager();

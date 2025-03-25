@@ -818,7 +818,7 @@ public partial class Strategy
 	/// <param name="security"><see cref="BusinessEntities.Security"/>. If security is not passed, then <see cref="Security"/> value is used.</param>
 	/// <returns><see cref="SubscriptionHandler{T}"/></returns>
 	protected ISubscriptionHandler<ICandleMessage> SubscribeCandles(TimeSpan tf, bool isFinishedOnly = true, Security security = default)
-		=> SubscribeCandles(DataType.TimeFrame(tf), isFinishedOnly, security);
+		=> SubscribeCandles(tf.TimeFrame(), isFinishedOnly, security);
 
 	/// <summary>
 	/// Subscribe to candles.

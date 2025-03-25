@@ -70,7 +70,7 @@ public partial class MainWindow
 		From.EditValue = Paths.HistoryBeginDate;
 		To.EditValue = Paths.HistoryEndDate;
 
-		CandleSettings.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(1));
+		CandleSettings.DataType = TimeSpan.FromMinutes(1).TimeFrame();
 
 		_progressBars.AddRange(new[]
 		{
@@ -395,9 +395,9 @@ public partial class MainWindow
 			{
 				strategy.CandleType = emulationInfo.UseCandle;
 
-				if (strategy.CandleType != DataType.TimeFrame(TimeSpan.FromMinutes(1)))
+				if (strategy.CandleType != TimeSpan.FromMinutes(1).TimeFrame())
 				{
-					strategy.BuildFrom = DataType.TimeFrame(TimeSpan.FromMinutes(1));
+					strategy.BuildFrom = TimeSpan.FromMinutes(1).TimeFrame();
 				}
 			}
 			else if (emulationInfo.UseTicks)

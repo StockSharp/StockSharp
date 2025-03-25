@@ -69,7 +69,7 @@ static class Program
 			candles.Add((CandleMessage)candle);
 		};
 
-		connector.Subscribe(new(DataType.TimeFrame(TimeSpan.FromMinutes(15)), security)
+		connector.Subscribe(new(TimeSpan.FromMinutes(15).TimeFrame(), security)
 		{
 			From = DateTime.Now.AddDays(-3),
 			To = DateTime.Now.AddDays(-1),

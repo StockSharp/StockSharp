@@ -499,7 +499,7 @@ public static partial class Extensions
 			throw new ArgumentNullException(nameof(timeFrames));
 
 		foreach (var tf in timeFrames)
-			adapter.AddSupportedMarketDataType(DataType.TimeFrame(tf));
+			adapter.AddSupportedMarketDataType(tf.TimeFrame());
 	}
 
 	/// <summary>
@@ -1746,12 +1746,69 @@ public static partial class Extensions
 		return (TimeSpan)dataType.Arg;
 	}
 
+	private static DataType CreateAndFreeze<TMessage>(object arg)
+		=> DataType.Create<TMessage>(arg).Immutable();
+
 	/// <summary>
 	/// Create data type info for <see cref="TimeFrameCandleMessage"/>.
 	/// </summary>
 	/// <param name="tf">Candle arg.</param>
 	/// <returns>Data type info.</returns>
-	public static DataType TimeFrame(this TimeSpan tf) => DataType.TimeFrame(tf).Immutable();
+	public static DataType TimeFrame(this TimeSpan tf)
+		=> CreateAndFreeze<TimeFrameCandleMessage>(tf);
+
+	/// <summary>
+	/// Create data type info for <see cref="RangeCandleMessage"/>.
+	/// </summary>
+	/// <param name="arg">Candle arg.</param>
+	/// <returns>Data type info.</returns>
+	public static DataType Range(this Unit arg)
+		=> CreateAndFreeze<RangeCandleMessage>(arg);
+
+	/// <summary>
+	/// Create data type info for <see cref="VolumeCandleMessage"/>.
+	/// </summary>
+	/// <param name="arg">Candle arg.</param>
+	/// <returns>Data type info.</returns>
+	public static DataType Volume(this decimal arg)
+		=> CreateAndFreeze<VolumeCandleMessage>(arg);
+
+	/// <summary>
+	/// Create data type info for <see cref="TickCandleMessage"/>.
+	/// </summary>
+	/// <param name="arg">Candle arg.</param>
+	/// <returns>Data type info.</returns>
+	public static DataType Tick(this int arg)
+		=> CreateAndFreeze<TickCandleMessage>(arg);
+
+	/// <summary>
+	/// Create data type info for <see cref="PnFCandleMessage"/>.
+	/// </summary>
+	/// <param name="arg">Candle arg.</param>
+	/// <returns>Data type info.</returns>
+	public static DataType PnF(this PnFArg arg)
+		=> CreateAndFreeze<PnFCandleMessage>(arg);
+
+	/// <summary>
+	/// Create data type info for <see cref="RenkoCandleMessage"/>.
+	/// </summary>
+	/// <param name="arg">Candle arg.</param>
+	/// <returns>Data type info.</returns>
+	public static DataType Renko(this Unit arg)
+		=> CreateAndFreeze<RenkoCandleMessage>(arg);
+
+	/// <summary>
+	/// Create data type info for <see cref="PortfolioMessage"/>.
+	/// </summary>
+	/// <param name="portfolioName">Portfolio name.</param>
+	/// <returns>Data type info.</returns>
+	public static DataType Portfolio(this string portfolioName)
+	{
+		if (portfolioName.IsEmpty())
+			throw new ArgumentNullException(nameof(portfolioName));
+
+		return CreateAndFreeze<PortfolioMessage>(portfolioName);
+	}
 
 	/// <summary>
 	/// Get typed argument.

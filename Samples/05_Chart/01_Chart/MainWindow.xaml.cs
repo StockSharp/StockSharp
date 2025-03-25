@@ -102,7 +102,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 			.Timer(OnDataTimer)
 			.Interval(TimeSpan.FromMilliseconds(1));
 
-		SeriesEditor.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(1));
+		SeriesEditor.DataType = TimeSpan.FromMinutes(1).TimeFrame();
 
 		ConfigManager.RegisterService<ISubscriptionProvider>(_testProvider);
 		ConfigManager.RegisterService<ISecurityProvider>(_securityProvider);

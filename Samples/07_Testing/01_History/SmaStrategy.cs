@@ -22,7 +22,7 @@ namespace StockSharp.Samples.Testing.History
 			_shortSma = Param(nameof(ShortSma), 30);
 			_takeValue = Param(nameof(TakeValue), new Unit(0, UnitTypes.Absolute));
 			_stopValue = Param(nameof(StopValue), new Unit(2, UnitTypes.Percent));
-			_candleType = Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(1))).SetRequired();
+			_candleType = Param(nameof(CandleType), TimeSpan.FromMinutes(1).TimeFrame()).SetRequired();
 			_candleTimeFrame = Param<TimeSpan?>(nameof(CandleTimeFrame));
 			_buildFrom = Param<DataType>(nameof(BuildFrom));
 			_buildField = Param<Level1Fields?>(nameof(BuildField));

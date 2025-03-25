@@ -189,67 +189,6 @@ public class DataType : Equatable<DataType>, IPersistable
 	/// </summary>
 	public static DataType SecurityMapping { get; } = CreateImmutable<SecurityMappingMessage>();
 
-	/// <summary>
-	/// Create data type info for <see cref="TimeFrameCandleMessage"/>.
-	/// </summary>
-	/// <param name="arg">Candle arg.</param>
-	/// <returns>Data type info.</returns>
-	public static DataType TimeFrame(TimeSpan arg)
-		=> Create<TimeFrameCandleMessage>(arg).Immutable();
-
-	/// <summary>
-	/// Create data type info for <see cref="RangeCandleMessage"/>.
-	/// </summary>
-	/// <param name="arg">Candle arg.</param>
-	/// <returns>Data type info.</returns>
-	public static DataType Range(Unit arg)
-		=> Create<RangeCandleMessage>(arg).Immutable();
-
-	/// <summary>
-	/// Create data type info for <see cref="VolumeCandleMessage"/>.
-	/// </summary>
-	/// <param name="arg">Candle arg.</param>
-	/// <returns>Data type info.</returns>
-	public static DataType Volume(decimal arg)
-		=> Create<VolumeCandleMessage>(arg);
-
-	/// <summary>
-	/// Create data type info for <see cref="TickCandleMessage"/>.
-	/// </summary>
-	/// <param name="arg">Candle arg.</param>
-	/// <returns>Data type info.</returns>
-	public static DataType Tick(int arg)
-		=> Create<TickCandleMessage>(arg);
-
-	/// <summary>
-	/// Create data type info for <see cref="PnFCandleMessage"/>.
-	/// </summary>
-	/// <param name="arg">Candle arg.</param>
-	/// <returns>Data type info.</returns>
-	public static DataType PnF(PnFArg arg)
-		=> Create<PnFCandleMessage>(arg);
-
-	/// <summary>
-	/// Create data type info for <see cref="RenkoCandleMessage"/>.
-	/// </summary>
-	/// <param name="arg">Candle arg.</param>
-	/// <returns>Data type info.</returns>
-	public static DataType Renko(Unit arg)
-		=> Create<RenkoCandleMessage>(arg);
-
-	/// <summary>
-	/// Create data type info for <see cref="PortfolioMessage"/>.
-	/// </summary>
-	/// <param name="portfolioName">Portfolio name.</param>
-	/// <returns>Data type info.</returns>
-	public static DataType Portfolio(string portfolioName)
-	{
-		if (portfolioName.IsEmpty())
-			throw new ArgumentNullException(nameof(portfolioName));
-
-		return Create<PortfolioMessage>(portfolioName).Immutable();
-	}
-
 	private Type _messageType;
 
 	/// <summary>

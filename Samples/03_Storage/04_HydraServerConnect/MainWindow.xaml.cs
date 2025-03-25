@@ -66,7 +66,7 @@ public partial class MainWindow
 			_connector.Save().Serialize(_connectorFile);
 		}
 
-		CandleDataTypeEdit.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
+		CandleDataTypeEdit.DataType = TimeSpan.FromMinutes(5).TimeFrame();
 
 		DatePickerBegin.SelectedDate = Paths.HistoryBeginDate;
 		DatePickerEnd.SelectedDate = Paths.HistoryEndDate;

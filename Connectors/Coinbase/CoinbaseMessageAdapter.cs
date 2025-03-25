@@ -44,7 +44,7 @@ public partial class CoinbaseMessageAdapter
 	/// <inheritdoc />
 	public static IEnumerable<TimeSpan> AllTimeFrames => Extensions.TimeFrames.Keys;
 
-	private static readonly DataType _tf5min = DataType.TimeFrame(TimeSpan.FromMinutes(5));
+	private static readonly DataType _tf5min = TimeSpan.FromMinutes(5).TimeFrame();
 
 	/// <inheritdoc />
 	public override bool IsSupportCandlesUpdates(MarketDataMessage subscription)

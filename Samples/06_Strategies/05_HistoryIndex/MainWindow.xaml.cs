@@ -44,7 +44,7 @@ public partial class MainWindow
 		_logManager.Listeners.Add(new FileLogListener("log.txt"));
 		_logManager.Listeners.Add(new GuiLogListener(Monitor));
 
-		CandleDataTypeEdit.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
+		CandleDataTypeEdit.DataType = TimeSpan.FromMinutes(5).TimeFrame();
 
 		DatePickerBegin.SelectedDate = Paths.HistoryBeginDate;
 		DatePickerEnd.SelectedDate = Paths.HistoryEndDate;

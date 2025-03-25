@@ -133,7 +133,7 @@ public class PortfolioMessage : BaseSubscriptionIdMessage<PortfolioMessage>,
 	}
 
 	/// <inheritdoc />
-	public override DataType DataType => DataType.Portfolio(PortfolioName);
+	public override DataType DataType => PortfolioName.Portfolio();
 
 	bool ISubscriptionMessage.FilterEnabled
 		=>

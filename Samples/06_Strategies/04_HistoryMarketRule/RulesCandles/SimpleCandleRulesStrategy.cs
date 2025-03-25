@@ -13,7 +13,7 @@ namespace StockSharp.Samples.Strategies.HistoryMarketRule
 	{
 		protected override void OnStarted(DateTimeOffset time)
 		{
-			var subscription = new Subscription(DataType.TimeFrame(TimeSpan.FromMinutes(5)), Security)
+			var subscription = new Subscription(TimeSpan.FromMinutes(5).TimeFrame(), Security)
 			{
 				// ready-to-use candles much faster than compression on fly mode
 				// turn off compression to boost optimizer (!!! make sure you have candles)

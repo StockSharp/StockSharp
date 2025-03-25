@@ -51,7 +51,7 @@ public partial class TinkoffMessageAdapter
 
 						if (response.Candle is Candle c)
 						{
-							var dt = DataType.TimeFrame(c.Interval.ToTimeFrame());
+							var dt = c.Interval.ToTimeFrame().TimeFrame();
 
 							if (TryGetTransId(dt, c.InstrumentUid, out var transId))
 							{
@@ -140,7 +140,7 @@ public partial class TinkoffMessageAdapter
 						{
 							foreach (var sub in rc.CandlesSubscriptions)
 							{
-								if (sub.SubscriptionStatus == SubscriptionStatus.Success || !TryGetTransId(DataType.TimeFrame(sub.Interval.ToTimeFrame()), sub.InstrumentUid, out var transId))
+								if (sub.SubscriptionStatus == SubscriptionStatus.Success || !TryGetTransId(sub.Interval.ToTimeFrame().TimeFrame(), sub.InstrumentUid, out var transId))
 									continue;
 
 								sendFailed(transId, sub.SubscriptionStatus);

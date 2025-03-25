@@ -46,7 +46,7 @@ public partial class MainWindow
 		DatePickerBegin.SelectedDate = Paths.HistoryBeginDate;
 		DatePickerEnd.SelectedDate = Paths.HistoryEndDate;
 
-		CandleDataTypeEdit.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(1));
+		CandleDataTypeEdit.DataType = TimeSpan.FromMinutes(1).TimeFrame();
 	}
 
 	private void Start_Click(object sender, RoutedEventArgs e)
