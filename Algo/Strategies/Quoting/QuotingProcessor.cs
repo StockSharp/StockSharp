@@ -498,7 +498,7 @@ public class QuotingProcessor : BaseLogReceiver
 		// Delegate quoting necessity check to the behavior
 		var currentPrice = currentOrder?.Price;
 		var currentVolume = currentOrder?.Balance;
-		var quotingPrice = _behavior.NeedQuoting(_security, _mdProvider, currentPrice, currentVolume, newVolume, bestPrice);
+		var quotingPrice = _behavior.NeedQuoting(_security, _mdProvider, _timeProvider.CurrentTime, currentPrice, currentVolume, newVolume, bestPrice);
 
 		if (quotingPrice == null)
 			return default;
