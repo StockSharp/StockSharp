@@ -181,41 +181,48 @@ public partial class TinkoffMessageAdapter
 	/// <inheritdoc />
 	public override ValueTask ResetAsync(ResetMessage msg, CancellationToken cancellationToken)
 	{
-		_mdTransIds.Clear();
-		_mdSubs.Clear();
-
-		if (_channel != null)
+		try
 		{
-			try
+			_mdTransIds.Clear();
+			_mdSubs.Clear();
+
+			if (_channel != null)
 			{
-				_channel.Dispose();
-			}
-			catch (Exception ex)
-			{
-				SendOutError(ex);
+				try
+				{
+					_channel.Dispose();
+				}
+				catch (Exception ex)
+				{
+					SendOutError(ex);
+				}
+
+				_channel = null;
 			}
 
-			_channel = null;
+			static void reset(SynchronizedDictionary<long, CancellationTokenSource> dict)
+			{
+				foreach (var (_, cts) in dict.CopyAndClear())
+					cts.Cancel();
+			}
+
+			reset(_ordersCts);
+			reset(_pfCts);
+
+			_service = default;
+			_accountIds.Clear();
+
+			_orderUids.Clear();
+
+			_historyClient?.Dispose();
+			_historyClient = null;
+
+			SendOutMessage(new ResetMessage());
 		}
-
-		static void reset(SynchronizedDictionary<long, CancellationTokenSource> dict)
+		catch (Exception ex)
 		{
-			foreach (var (_, cts) in dict.CopyAndClear())
-				cts.Cancel();
+			SendOutError(ex);
 		}
-
-		reset(_ordersCts);
-		reset(_pfCts);
-
-		_service = default;
-		_accountIds.Clear();
-
-		_orderUids.Clear();
-
-		_historyClient.Dispose();
-		_historyClient = null;
-
-		SendOutMessage(new ResetMessage());
 
 		return default;
 	}
