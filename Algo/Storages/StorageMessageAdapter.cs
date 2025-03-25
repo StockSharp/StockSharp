@@ -40,18 +40,12 @@ public class StorageMessageAdapter(IMessageAdapter innerAdapter, StorageProcesso
 				return base.OnSendInMessage(message);
 
 			case MessageTypes.MarketData:
-				return ProcessMarketData((MarketDataMessage)message);
+				message = _storageProcessor.ProcessMarketData((MarketDataMessage)message, RaiseStorageMessage);
+				return message == null || base.OnSendInMessage(message);
 
 			default:
 				return base.OnSendInMessage(message);
 		}
-	}
-
-	private bool ProcessMarketData(MarketDataMessage message)
-	{
-		message = _storageProcessor.ProcessMarketData(message, RaiseStorageMessage);
-
-		return message == null || base.OnSendInMessage(message);
 	}
 
 	private void RaiseStorageMessage(Message message)
