@@ -72,14 +72,18 @@ public class StorageBuffer : IPersistable
 	public bool DisableStorageTimer { get; set; }
 
 	/// <summary>
-	/// Ignore market-data messages with <see cref="IGeneratedMessage.BuildFrom"/> is not <see langword="null"/>.
+	/// Ignore messages with <see cref="IGeneratedMessage.BuildFrom"/> is not <see langword="null"/>.
 	/// </summary>
-	public bool IgnoreGeneratedMarketData { get; set; } = true;
-
-	/// <summary>
-	/// Ignore transactional messages with <see cref="IGeneratedMessage.BuildFrom"/> is not <see langword="null"/>.
-	/// </summary>
-	public bool IgnoreGeneratedTransactional { get; set; } = true;
+	public ISet<DataType> IgnoreGenerated { get; } = new HashSet<DataType>
+	{
+		DataType.PositionChanges,
+		DataType.Transactions,
+		DataType.Ticks,
+		DataType.Level1,
+		DataType.MarketDepth,
+		DataType.FilteredMarketDepth,
+		DataType.OrderLog,
+	};
 
 	/// <summary>
 	/// Get accumulated <see cref="DataType.Ticks"/>.
@@ -175,13 +179,13 @@ public class StorageBuffer : IPersistable
 		{
 			case MessageTypes.Portfolio:
 			case MessageTypes.PositionChange:
-				return CanStore(message, EnabledPositions, IgnoreGeneratedTransactional);
+				return CanStore(message, EnabledPositions, IgnoreGenerated.Contains(DataType.PositionChanges));
 
 			case MessageTypes.OrderRegister:
 			case MessageTypes.OrderReplace:
 			case MessageTypes.OrderCancel:
 			case MessageTypes.OrderGroupCancel:
-				return CanStore(message, EnabledTransactions, IgnoreGeneratedTransactional);
+				return CanStore(message, EnabledTransactions, IgnoreGenerated.Contains(DataType.Transactions));
 
 			case MessageTypes.Execution:
 			{
@@ -197,12 +201,12 @@ public class StorageBuffer : IPersistable
 				if (IsFailed(execMsg))
 					return false;
 
-				return CanStore(message, EnabledTransactions, IgnoreGeneratedTransactional);
+				return CanStore(message, EnabledTransactions, IgnoreGenerated.Contains(DataType.Transactions));
 			}
 		}
 
 		if (message is ISubscriptionIdMessage subscrMsg)
-			return CanStore(message, subscrMsg.GetSubscriptionIds().Any(_subscriptionsById.ContainsKey), IgnoreGeneratedMarketData);
+			return CanStore(message, subscrMsg.GetSubscriptionIds().Any(_subscriptionsById.ContainsKey), IgnoreGenerated.Contains(subscrMsg.DataType) || (message is CandleMessage candleMsg && IgnoreGenerated.Contains(DataType.Create(candleMsg.GetType(), default))));
 
 		return false;
 	}
@@ -412,8 +416,7 @@ public class StorageBuffer : IPersistable
 		storage.SetValue(nameof(EnabledTransactions), EnabledTransactions);
 		storage.SetValue(nameof(FilterSubscription), FilterSubscription);
 		storage.SetValue(nameof(DisableStorageTimer), DisableStorageTimer);
-		storage.SetValue(nameof(IgnoreGeneratedMarketData), IgnoreGeneratedMarketData);
-		storage.SetValue(nameof(IgnoreGeneratedTransactional), IgnoreGeneratedTransactional);
+		storage.SetValue(nameof(IgnoreGenerated), IgnoreGenerated.Select(dt => dt.Save()).ToArray());
 	}
 
 	void IPersistable.Load(SettingsStorage storage)
@@ -425,7 +428,8 @@ public class StorageBuffer : IPersistable
 		EnabledTransactions = storage.GetValue(nameof(EnabledTransactions), EnabledTransactions);
 		FilterSubscription = storage.GetValue(nameof(FilterSubscription), FilterSubscription);
 		DisableStorageTimer = storage.GetValue(nameof(DisableStorageTimer), DisableStorageTimer);
-		IgnoreGeneratedMarketData = storage.GetValue(nameof(IgnoreGeneratedMarketData), IgnoreGeneratedMarketData);
-		IgnoreGeneratedTransactional = storage.GetValue(nameof(IgnoreGeneratedTransactional), IgnoreGeneratedTransactional);
+
+		IgnoreGenerated.Clear();
+		IgnoreGenerated.AddRange((storage.GetValue<IEnumerable<SettingsStorage>>(nameof(IgnoreGenerated)) ?? []).Select(s => s.LoadEntire<DataType>()));
 	}
 }
