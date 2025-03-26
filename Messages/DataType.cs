@@ -14,17 +14,8 @@ public class DataType : Equatable<DataType>, IPersistable
 	/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
 	/// <param name="isSecurityRequired">Is the data type required security info.</param>
 	/// <returns>Data type info.</returns>
-	public static DataType Create<TMessage>(object arg = default, bool isSecurityRequired = default)
+	public static DataType Create<TMessage>(object arg = default, bool? isSecurityRequired = default)
 		=> Create(typeof(TMessage), arg, isSecurityRequired);
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="DataType"/>.
-	/// </summary>
-	/// <param name="messageType">Message type.</param>
-	/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
-	/// <returns>Data type info.</returns>
-	public static DataType Create(Type messageType, object arg)
-		=> Create(messageType, arg, false);
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="DataType"/>.
@@ -33,14 +24,8 @@ public class DataType : Equatable<DataType>, IPersistable
 	/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
 	/// <param name="isSecurityRequired">Is the data type required security info.</param>
 	/// <returns>Data type info.</returns>
-	public static DataType Create(Type messageType, object arg, bool isSecurityRequired)
+	public static DataType Create(Type messageType, object arg, bool? isSecurityRequired = default)
 	{
-		if (!isSecurityRequired && arg is not null && messageType.IsCandleMessage())
-		{
-			if (!messageType.ValidateCandleArg(arg))
-				throw new ArgumentOutOfRangeException(nameof(arg), arg, LocalizedStrings.InvalidValue);
-		}
-
 		return new()
 		{
 			MessageType = messageType,
@@ -67,12 +52,7 @@ public class DataType : Equatable<DataType>, IPersistable
 			throw new InvalidOperationException(LocalizedStrings.CannotBeModified);
 	}
 
-	private static DataType CreateImmutable<T>(object arg = default)
-		=> new DataType
-		{
-			MessageType = typeof(T),
-			Arg = arg,
-		}.Immutable();
+	private static DataType CreateImmutable<T>(object arg = default) => Create<T>(arg).Immutable();
 
 	/// <summary>
 	/// Level1.
@@ -198,7 +178,7 @@ public class DataType : Equatable<DataType>, IPersistable
 	public Type MessageType
 	{
 		get => _messageType;
-		set
+		private set
 		{
 			CheckImmutable();
 
@@ -216,7 +196,7 @@ public class DataType : Equatable<DataType>, IPersistable
 	public object Arg
 	{
 		get => _arg;
-		set
+		private set
 		{
 			CheckImmutable();
 
@@ -258,12 +238,17 @@ public class DataType : Equatable<DataType>, IPersistable
 	/// <returns>Copy.</returns>
 	public override DataType Clone()
 	{
-		return new()
+		var clone = new DataType
 		{
-			MessageType = MessageType,
-			Arg = Arg,
+			_messageType = MessageType,
+			_arg = Arg,
 			_isSecurityRequired = _isSecurityRequired,
+			_isCandles = _isCandles,
+			_isMarketData = _isMarketData,
+			_isNonSecurity = _isNonSecurity,
 		};
+		clone.ReInitHashCode();
+		return clone;
 	}
 
 	/// <summary>
@@ -319,10 +304,12 @@ public class DataType : Equatable<DataType>, IPersistable
 		}
 	}
 
+	private bool? _isCandles;
+
 	/// <summary>
 	/// Determines whether the <see cref="MessageType"/> is derived from <see cref="CandleMessage"/>.
 	/// </summary>
-	public bool IsCandles => MessageType?.IsCandleMessage() == true;
+	public bool IsCandles => _isCandles ??= MessageType.IsCandleMessage();
 
 	/// <summary>
 	/// Determines whether the <see cref="MessageType"/> is <see cref="TimeFrameCandleMessage"/>.
@@ -334,45 +321,51 @@ public class DataType : Equatable<DataType>, IPersistable
 	/// </summary>
 	public bool IsPortfolio => MessageType == typeof(PortfolioMessage);
 
+	private bool? _isMarketData;
+
 	/// <summary>
 	/// Determines whether the specified message type is market-data.
 	/// </summary>
-	public bool IsMarketData =>
-		IsCandles					||
-		this == MarketDepth			||
-		this == FilteredMarketDepth	||
-		this == Level1				||
-		this == Ticks				||
-		this == OrderLog			||
-		this == News				||
-		this == Board				||
-		this == BoardState			||
-		this == SecurityLegs		||
-		this == DataTypeInfo;
+	public bool IsMarketData => _isMarketData ??=
+	(
+		IsCandles ||
+		MessageType == typeof(QuoteChangeMessage) ||
+		MessageType == typeof(Level1ChangeMessage) ||
+		(MessageType == typeof(ExecutionMessage) && Arg is ExecutionTypes type && type != ExecutionTypes.Transaction) ||
+		MessageType == typeof(NewsMessage) ||
+		MessageType == typeof(BoardMessage) ||
+		MessageType == typeof(BoardStateMessage) ||
+		MessageType == typeof(SecurityLegsInfoMessage) ||
+		MessageType == typeof(SecurityMappingMessage) ||
+		MessageType == typeof(DataTypeInfoMessage)
+	);
 
-	private bool _isSecurityRequired;
+	private bool? _isSecurityRequired;
 
 	/// <summary>
 	/// Is the data type required security info.
 	/// </summary>
-	public bool IsSecurityRequired =>
-		_isSecurityRequired			||
-		IsCandles					||
-		this == MarketDepth			||
-		this == FilteredMarketDepth ||
-		this == Level1				||
-		this == Ticks				||
-		this == OrderLog;
+	public bool IsSecurityRequired => _isSecurityRequired ??=
+	(
+		IsCandles ||
+		MessageType == typeof(QuoteChangeMessage) ||
+		MessageType == typeof(Level1ChangeMessage) ||
+		(MessageType == typeof(ExecutionMessage) && Arg is ExecutionTypes t1 && t1 != ExecutionTypes.Transaction)
+	);
+
+	private bool? _isNonSecurity;
 
 	/// <summary>
 	/// Is the data type never associated with security.
 	/// </summary>
-	public bool IsNonSecurity =>
-		this == Securities	||
-		this == News		||
-		this == Board		||
-		this == BoardState	||
-		this == DataTypeInfo;
+	public bool IsNonSecurity => _isNonSecurity ??=
+	(
+		MessageType == typeof(SecurityMessage) ||
+		MessageType == typeof(NewsMessage) ||
+		MessageType == typeof(BoardMessage) ||
+		MessageType == typeof(BoardStateMessage) ||
+		MessageType == typeof(DataTypeInfoMessage)
+	);
 
 	/// <summary>
 	/// Is the data type can be used as candles compression source.
@@ -497,7 +490,7 @@ public class DataType : Equatable<DataType>, IPersistable
 			storage.SetValue(nameof(Arg), ss);
 		}
 
-		if (_isSecurityRequired)
+		if (_isSecurityRequired == true)
 			storage.SetValue(nameof(IsSecurityRequired), true);
 	}
 }
