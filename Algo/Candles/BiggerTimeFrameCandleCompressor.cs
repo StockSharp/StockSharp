@@ -10,15 +10,11 @@ using StockSharp.Algo.Candles.Compression;
 /// </remarks>
 /// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 /// <param name="builder">The builder of candles of <see cref="TimeFrameCandleMessage"/> type.</param>
-public class BiggerTimeFrameCandleCompressor(MarketDataMessage message, ICandleBuilder builder) : ICandleBuilderSubscription
+/// <param name="buildFrom">Which market-data type is used as a source value.</param>
+public class BiggerTimeFrameCandleCompressor(MarketDataMessage message, ICandleBuilder builder, DataType buildFrom) : ICandleBuilderSubscription
 {
-	private class PartCandleBuilderValueTransform : BaseCandleBuilderValueTransform
+	private class PartCandleBuilderValueTransform(DataType dt) : BaseCandleBuilderValueTransform(dt)
 	{
-		public PartCandleBuilderValueTransform()
-			: base(DataType.Ticks)
-		{
-		}
-
 		public Level1Fields Part { get; set; }
 
 		public override bool Process(Message message)
@@ -62,11 +58,11 @@ public class BiggerTimeFrameCandleCompressor(MarketDataMessage message, ICandleB
 		}
 	}
 
-	private readonly PartCandleBuilderValueTransform _transform = new PartCandleBuilderValueTransform();
+	private readonly PartCandleBuilderValueTransform _transform = new(buildFrom);
 	private readonly ICandleBuilder _builder = builder ?? throw new ArgumentNullException(nameof(builder));
 
 	/// <inheritdoc />
-	public MarketDataMessage Message { get; private set; } = message ?? throw new ArgumentNullException(nameof(message));
+	public MarketDataMessage Message { get; } = message ?? throw new ArgumentNullException(nameof(message));
 
 	/// <inheritdoc />
 	public VolumeProfileBuilder VolumeProfile { get; set; }

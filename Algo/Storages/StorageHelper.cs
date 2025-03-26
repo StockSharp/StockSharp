@@ -476,12 +476,14 @@ public static class StorageHelper
 
 			_timeFrame = timeFrame;
 
+			var origin = timeFrame.TimeFrame();
+
 			_compressors = GetSmallerTimeFrames().ToDictionary(tf => tf, tf => new BiggerTimeFrameCandleCompressor(new MarketDataMessage
 			{
 				SecurityId = securityId,
-				DataType2 = timeFrame.TimeFrame(),
+				DataType2 = origin,
 				IsSubscribe = true,
-			}, provider.Get(typeof(TimeFrameCandleMessage))));
+			}, provider.Get(typeof(TimeFrameCandleMessage)), tf.TimeFrame()));
 
 			_dataType = DataType.Create<TimeFrameCandleMessage>(_original.DataType.Arg);
 		}

@@ -1825,22 +1825,6 @@ public static partial class Extensions
 	}
 
 	/// <summary>
-	/// Set typed argument.
-	/// </summary>
-	/// <typeparam name="TArg">Arg type.</typeparam>
-	/// <param name="mdMsg">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
-	/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
-	/// <returns>Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</returns>
-	public static MarketDataMessage SetArg<TArg>(this MarketDataMessage mdMsg, TArg arg)
-	{
-		if (mdMsg is null)
-			throw new ArgumentNullException(nameof(mdMsg));
-
-		mdMsg.DataType2.Arg = arg;
-		return mdMsg;
-	}
-
-	/// <summary>
 	/// Get time-frame from the specified market-data message.
 	/// </summary>
 	/// <param name="mdMsg">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>

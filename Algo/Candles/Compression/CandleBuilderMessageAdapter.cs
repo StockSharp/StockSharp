@@ -219,23 +219,24 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 							var smaller = timeFrames
 							    .FilterSmallerTimeFrames(originalTf)
 							    .OrderByDescending()
-							    .FirstOr();
+							    .FirstOr()?
+								.TimeFrame();
 
-							if (smaller != null)
+							if (smaller is DataType s)
 							{
-								LogInfo("Smaller tf: {0}->{1}", originalTf, smaller);
+								LogInfo("Smaller tf: {0}->{1}", originalTf, s.Arg);
 
 								var original = mdMsg.TypedClone();
 
 								var current = original.TypedClone();
-								current.SetArg(smaller);
+								current.DataType2 = s;
 
 								lock (_syncObject)
 								{
 									_series.Add(transactionId, new SeriesInfo(original, current)
 									{
 										State = SeriesStates.SmallTimeFrame,
-										BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, _candleBuilderProvider.Get(typeof(TimeFrameCandleMessage))),
+										BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, _candleBuilderProvider.Get(typeof(TimeFrameCandleMessage)), s),
 										LastTime = original.From,
 										Count = original.Count,
 									});
@@ -698,28 +699,29 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 						.GetTimeFrames(original.SecurityId, series.LastTime, original.To)
 					    .FilterSmallerTimeFrames(original.GetTimeFrame())
 					    .OrderByDescending()
-					    .FirstOr();
+					    .FirstOr()?
+						.TimeFrame();
 
-					if (smaller != null)
+					if (smaller is DataType s)
 					{
 						var newTransId = TransactionIdGenerator.GetNextId();
 
-						series.Current = original.TypedClone();
-						series.Current.SetArg(smaller);
-						series.Current.TransactionId = newTransId;
+						var curr = series.Current = original.TypedClone();
+						curr.DataType2 = s;
+						curr.TransactionId = newTransId;
 
-						series.BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, _candleBuilderProvider.Get(typeof(TimeFrameCandleMessage)));
+						series.BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, _candleBuilderProvider.Get(typeof(TimeFrameCandleMessage)), s);
 						series.State = SeriesStates.SmallTimeFrame;
 						series.NonFinishedCandle = null;
 
 						lock (_syncObject)
-							_replaceId.Add(series.Current.TransactionId, series.Id);
+							_replaceId.Add(curr.TransactionId, series.Id);
 
 						LogInfo("Series smaller tf: ids {0}->{1}", original.TransactionId, newTransId);
 
 						// loopback
-						series.Current.LoopBack(this);
-						RaiseNewOutMessage(series.Current);
+						curr.LoopBack(this);
+						RaiseNewOutMessage(curr);
 
 						return;
 					}
