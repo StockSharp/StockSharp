@@ -577,7 +577,7 @@ public partial class Strategy
 			}
 			else if (type.Is<ITickTradeMessage>())
 			{
-				var dt = DataType.Create(typeof(TickCandleMessage), 1);
+				var dt = 1.Tick();
 
 				Subscription
 					.WhenTickTradeReceived(_strategy)
@@ -605,7 +605,7 @@ public partial class Strategy
 			}
 			else if (type.Is<IOrderBookMessage>())
 			{
-				var dt = DataType.Create(typeof(TickCandleMessage), 1);
+				var dt = 1.Tick();
 				var field = Subscription.MarketData?.BuildField ?? Level1Fields.SpreadMiddle;
 
 				Subscription
@@ -644,7 +644,7 @@ public partial class Strategy
 			}
 			else if (type.Is<Level1ChangeMessage>())
 			{
-				var dt = DataType.Create(typeof(TickCandleMessage), 1);
+				var dt = 1.Tick();
 				var field = Subscription.MarketData?.BuildField ?? Level1Fields.LastTradePrice;
 
 				Subscription
