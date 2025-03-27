@@ -234,7 +234,10 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 				if (from >= to)
 					return null;
 
-				message.From = from;
+				// do not fill From field to avoid muptiple requests
+				// in SubscriptionOnlineMessageAdapter
+				//
+				//message.From = from;
 			}
 			else if (Settings.IsMode(StorageModes.Incremental))
 			{
