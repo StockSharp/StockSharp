@@ -5,7 +5,7 @@
 /// </summary>
 public static class CandlePatternRegistry
 {
-	private static ExpressionCandlePattern Create(string name, params string[] expressions) => new(name, expressions.Select(e => new CandleExpressionCondition(e))) { IsRegistry = true };
+	private static ExpressionCandlePattern Create(string name, params string[] expressions) => new(name, expressions.Select(e => new CandleExpressionCondition(e)));
 
 	/// <summary>
 	/// Flat candle pattern.

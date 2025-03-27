@@ -190,8 +190,6 @@ public class ExpressionCandlePattern : ICandlePattern
 	/// <inheritdoc />
 	public string Name { get; private set; }
 
-	internal bool IsRegistry { get; init; }
-
 	/// <summary>
 	/// Create instance.
 	/// </summary>

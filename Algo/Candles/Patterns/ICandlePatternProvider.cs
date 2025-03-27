@@ -61,10 +61,9 @@ public interface ICandlePatternProvider
 /// <remarks>
 /// Initializes a new instance of the <see cref="InMemoryCandlePatternProvider"/>.
 /// </remarks>
-public class InMemoryCandlePatternProvider(IEnumerable<ICandlePattern> patterns = null) : ICandlePatternProvider
+public class InMemoryCandlePatternProvider : ICandlePatternProvider
 {
 	private readonly CachedSynchronizedDictionary<string, ICandlePattern> _cache = [];
-	private readonly ICandlePattern[] _appendOnInit = patterns?.ToArray();
 
 	/// <inheritdoc/>
 	public event Action<ICandlePattern> PatternCreated;
@@ -77,14 +76,16 @@ public class InMemoryCandlePatternProvider(IEnumerable<ICandlePattern> patterns 
 
 	void ICandlePatternProvider.Init()
 	{
-		_cache.CachedValues.ForEach(p => ((ICandlePatternProvider)this).Remove(p));
-		_appendOnInit?.ForEach(p => ((ICandlePatternProvider)this).Save(p));
+		CandlePatternRegistry.All.ForEach(p => ((ICandlePatternProvider)this).Save(p));
 	}
 
 	IEnumerable<ICandlePattern> ICandlePatternProvider.Patterns => _cache.CachedValues;
 
 	bool ICandlePatternProvider.Remove(ICandlePattern pattern)
 	{
+		if (pattern is null)
+			throw new ArgumentNullException(nameof(pattern));
+
 		if (!_cache.Remove(pattern.Name))
 			return false;
 
@@ -94,6 +95,9 @@ public class InMemoryCandlePatternProvider(IEnumerable<ICandlePattern> patterns 
 
 	void ICandlePatternProvider.Save(ICandlePattern pattern)
 	{
+		if (pattern is null)
+			throw new ArgumentNullException(nameof(pattern));
+
 		ICandlePattern oldPattern = null;
 
 		_cache.SyncDo(_ =>
@@ -115,31 +119,15 @@ public class InMemoryCandlePatternProvider(IEnumerable<ICandlePattern> patterns 
 /// <summary>
 /// CSV <see cref="ICandlePattern"/> storage.
 /// </summary>
-public class CandlePatternFileStorage : ICandlePatternProvider
+/// <remarks>
+/// Initializes a new instance of the <see cref="CandlePatternFileStorage"/>.
+/// </remarks>
+/// <param name="fileName">File name.</param>
+public class CandlePatternFileStorage(string fileName) : ICandlePatternProvider
 {
-	private readonly ICandlePatternProvider _inMemory;
-
-	private readonly string _fileName;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="CandlePatternFileStorage"/>.
-	/// </summary>
-	/// <param name="fileName">File name.</param>
-	/// <param name="patterns">Patterns.</param>
-	public CandlePatternFileStorage(string fileName, IEnumerable<ICandlePattern> patterns = null)
-    {
-		if (fileName.IsEmpty())
-			throw new ArgumentNullException(nameof(fileName));
-
-		_inMemory = new InMemoryCandlePatternProvider(patterns);
-		_fileName = fileName;
-
-		_inMemory.PatternCreated  += p        => PatternCreated?.Invoke(p);
-		_inMemory.PatternReplaced += (op, np) => PatternReplaced?.Invoke(op, np);
-		_inMemory.PatternDeleted  += p        => PatternDeleted?.Invoke(p);
-
-		_delayAction = new(ex => ex.LogError());
-	}
+	private readonly ICandlePatternProvider _inMemory = new InMemoryCandlePatternProvider();
+	private readonly CachedSynchronizedDictionary<string, ICandlePattern> _cache = [];
+	private readonly string _fileName = fileName.ThrowIfEmpty(nameof(fileName));
 
 	/// <inheritdoc/>
 	public event Action<ICandlePattern> PatternCreated;
@@ -150,7 +138,7 @@ public class CandlePatternFileStorage : ICandlePatternProvider
 	/// <inheritdoc/>
 	public event Action<ICandlePattern> PatternDeleted;
 
-	private DelayAction _delayAction;
+	private DelayAction _delayAction = new(ex => ex.LogError());
 
 	/// <summary>
 	/// The time delayed action.
@@ -180,54 +168,60 @@ public class CandlePatternFileStorage : ICandlePatternProvider
 					errors.Add(ex);
 					return null;
 				}
-			}).WhereNotNull().ForEach(p =>
-			{
-				if (_inMemory.TryFind(p.Name, out var toReplace))
-					_inMemory.Remove(toReplace);
-
-				_inMemory.Save(p);
-			}));
+			}).WhereNotNull().ForEach(Save));
 		}
 
 		if (errors.Count > 0)
 			throw errors.SingleOrAggr();
 	}
 
-	IEnumerable<ICandlePattern> ICandlePatternProvider.Patterns => _inMemory.Patterns;
+	IEnumerable<ICandlePattern> ICandlePatternProvider.Patterns => _cache.CachedValues.Concat(_inMemory.Patterns);
 
 	bool ICandlePatternProvider.Remove(ICandlePattern pattern)
 	{
-		if (!_inMemory.Remove(pattern))
+		if (pattern is null)
+			throw new ArgumentNullException(nameof(pattern));
+
+		if (!_cache.Remove(pattern.Name))
 			return false;
 
+		PatternDeleted?.Invoke(pattern);
 		Save();
+
 		return true;
 	}
 
-	void ICandlePatternProvider.Save(ICandlePattern pattern)
+	/// <inheritdoc />
+	public void Save(ICandlePattern pattern)
 	{
-		_inMemory.Save(pattern);
+		if (pattern is null)
+			throw new ArgumentNullException(nameof(pattern));
+
+		ICandlePattern oldPattern = null;
+
+		_cache.SyncDo(_ =>
+		{
+			oldPattern = _cache.TryGetValue(pattern.Name);
+			_cache[pattern.Name] = pattern;
+		});
+
+		if (oldPattern == null)
+			PatternCreated?.Invoke(pattern);
+		else
+			PatternReplaced?.Invoke(oldPattern, pattern);
+
 		Save();
 	}
 
 	private void Save()
 	{
-		void dosave()
-		{
-			var serialized = _inMemory.Patterns.Where(p => (p as ExpressionCandlePattern)?.IsRegistry != true).Select(i => i.SaveEntire(false)).ToArray();
-
-			if(serialized.Length > 0)
-				serialized.Serialize(_fileName);
-			else if(File.Exists(_fileName))
-				File.Delete(_fileName);
-		}
-
-		if (DelayAction is null)
-			dosave();
-		else
-			DelayAction.DefaultGroup.Add(dosave);
+		DelayAction.DefaultGroup.Add(() =>
+			_cache
+				.CachedValues
+				.Select(i => i.SaveEntire(false))
+				.Serialize(_fileName));
 	}
 
 	bool ICandlePatternProvider.TryFind(string name, out ICandlePattern pattern)
-		=> _inMemory.TryFind(name, out pattern);
+		=> _inMemory.TryFind(name, out pattern) || _cache.TryGetValue(name, out pattern);
 }
