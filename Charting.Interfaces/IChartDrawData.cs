@@ -112,8 +112,8 @@ public interface IChartDrawData
 	/// </summary>
 	/// <param name="element">The chart element representing an annotation.</param>
 	/// <param name="data">Annotation draw data.</param>
-	/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-	void Add(IChartAnnotation element, IAnnotationData data);
+	/// <returns><see cref="IChartDrawData"/> instance.</returns>
+	IChartDrawData Add(IChartAnnotation element, IAnnotationData data);
 
 	/// <summary>
 	/// Put the active order data.
