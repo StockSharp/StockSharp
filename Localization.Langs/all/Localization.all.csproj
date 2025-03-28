@@ -24,6 +24,7 @@
     <ProjectReference Include="..\jv\Localization.jv.csproj" />
     <ProjectReference Include="..\ko\Localization.ko.csproj" />
     <ProjectReference Include="..\ms\Localization.ms.csproj" />
+    <ProjectReference Include="..\my\Localization.my.csproj" />
     <ProjectReference Include="..\nl\Localization.nl.csproj" />
     <ProjectReference Include="..\no\Localization.no.csproj" />
     <ProjectReference Include="..\pa\Localization.pa.csproj" />
@@ -36,6 +37,7 @@
     <ProjectReference Include="..\sv\Localization.sv.csproj" />
     <ProjectReference Include="..\ta\Localization.ta.csproj" />
     <ProjectReference Include="..\th\Localization.th.csproj" />
+    <ProjectReference Include="..\tl\Localization.tl.csproj" />
     <ProjectReference Include="..\tr\Localization.tr.csproj" />
     <ProjectReference Include="..\uk\Localization.uk.csproj" />
     <ProjectReference Include="..\uz\Localization.uz.csproj" />
