@@ -65,7 +65,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 	private DateTime _lastRealtimeUpdateTime;
 	private DateTime _lastDrawTime;
 
-	private IChartAnnotation _annotation;
+	private IChartAnnotationElement _annotation;
 	private ChartDrawData.AnnotationData _annotationData;
 	private int _annotationId;
 
@@ -698,21 +698,21 @@ public partial class MainWindow : ICandleBuilderSubscription
 		ModifyAnnotation(false);
 	}
 
-	private void ChartOnAnnotationCreated(IChartAnnotation ann) => _annotation = ann;
+	private void ChartOnAnnotationCreated(IChartAnnotationElement ann) => _annotation = ann;
 
-	private void ChartOnAnnotationSelected(IChartAnnotation ann, ChartDrawData.AnnotationData data)
+	private void ChartOnAnnotationSelected(IChartAnnotationElement ann, ChartDrawData.AnnotationData data)
 	{
 		_annotation = ann;
 		_annotationData = data;
 	}
 
-	private void ChartOnAnnotationModified(IChartAnnotation ann, ChartDrawData.AnnotationData data)
+	private void ChartOnAnnotationModified(IChartAnnotationElement ann, ChartDrawData.AnnotationData data)
 	{
 		_annotation = ann;
 		_annotationData = data;
 	}
 
-	private void ChartOnAnnotationDeleted(IChartAnnotation ann)
+	private void ChartOnAnnotationDeleted(IChartAnnotationElement ann)
 	{
 		if (_annotation == ann)
 		{

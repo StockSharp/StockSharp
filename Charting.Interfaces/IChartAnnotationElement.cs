@@ -3,7 +3,7 @@
 /// <summary>
 /// Annotation.
 /// </summary>
-public interface IChartAnnotation : IChartElement
+public interface IChartAnnotationElement : IChartElement
 {
 	/// <summary>
 	/// Annotation type.

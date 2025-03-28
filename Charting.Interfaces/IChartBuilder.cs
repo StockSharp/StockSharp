@@ -36,10 +36,10 @@ public interface IChartBuilder
 	IChartActiveOrdersElement CreateActiveOrdersElement();
 
 	/// <summary>
-	/// Create <see cref="IChartAnnotation"/> instance.
+	/// Create <see cref="IChartAnnotationElement"/> instance.
 	/// </summary>
-	/// <returns><see cref="IChartAnnotation"/> instance.</returns>
-	IChartAnnotation CreateAnnotation();
+	/// <returns><see cref="IChartAnnotationElement"/> instance.</returns>
+	IChartAnnotationElement CreateAnnotation();
 
 	/// <summary>
 	/// Create <see cref="IChartBandElement"/> instance.

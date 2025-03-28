@@ -90,7 +90,7 @@ public class DummyChartBuilder : IChartBuilder
 		}
 	}
 
-	private class DummyAnnotation : DummyElement, IChartAnnotation
+	private class DummyAnnotationElement : DummyElement, IChartAnnotationElement
 	{
 		public ChartAnnotationTypes Type { get; set; }
 
@@ -343,7 +343,7 @@ public class DummyChartBuilder : IChartBuilder
 	}
 
 	IChartActiveOrdersElement IChartBuilder.CreateActiveOrdersElement() => new DummyActiveOrdersElement();
-	IChartAnnotation IChartBuilder.CreateAnnotation() => new DummyAnnotation();
+	IChartAnnotationElement IChartBuilder.CreateAnnotation() => new DummyAnnotationElement();
 	IChartArea IChartBuilder.CreateArea() => new DummyArea();
 	IChartAxis IChartBuilder.CreateAxis() => new DummyAxis();
 	IChartBandElement IChartBuilder.CreateBandElement() => new DummyBandElement();
