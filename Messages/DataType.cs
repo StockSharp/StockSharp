@@ -169,6 +169,14 @@ public class DataType : Equatable<DataType>, IPersistable
 	/// </summary>
 	public static DataType SecurityMapping { get; } = CreateImmutable<SecurityMappingMessage>();
 
+	/// <summary>
+	/// Create data type info for <see cref="TimeFrameCandleMessage"/>.
+	/// </summary>
+	/// <param name="arg">Candle arg.</param>
+	/// <returns>Data type info.</returns>
+	[Obsolete("Use Extensions.TimeFrame method instead.")]
+	public static DataType TimeFrame(TimeSpan arg) => arg.TimeFrame();
+
 	private Type _messageType;
 
 	/// <summary>
