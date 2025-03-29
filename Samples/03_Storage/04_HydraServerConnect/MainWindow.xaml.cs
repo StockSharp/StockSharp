@@ -75,7 +75,7 @@ public partial class MainWindow
 		SecurityPicker.MarketDataProvider = _connector;
 
 		_connector.ConnectionError += Connector_ConnectionError;
-		_connector.CandleReceived += Connector_CandleSeriesProcessing;
+		_connector.CandleReceived += Connector_CandleReceived;
 	}
 
 	private void Connector_ConnectionError(Exception error)
@@ -128,7 +128,7 @@ public partial class MainWindow
 		_connector.Subscribe(_subscription);
 	}
 
-	private void Connector_CandleSeriesProcessing(Subscription subscription, ICandleMessage candle)
+	private void Connector_CandleReceived(Subscription subscription, ICandleMessage candle)
 	{
 		Chart.Draw(_candleElement, candle);
 	}

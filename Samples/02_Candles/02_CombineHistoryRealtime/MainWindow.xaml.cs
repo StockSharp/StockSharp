@@ -62,11 +62,11 @@ public partial class MainWindow
 	private void Connect_Click(object sender, RoutedEventArgs e)
 	{
 		SecurityPicker.SecurityProvider = _connector;
-		_connector.CandleReceived += Connector_CandleSeriesProcessing;
+		_connector.CandleReceived += Connector_CandleReceived;
 		_connector.Connect();
 	}
 
-	private void Connector_CandleSeriesProcessing(Subscription subscription, ICandleMessage candle)
+	private void Connector_CandleReceived(Subscription subscription, ICandleMessage candle)
 	{
 		Chart.Draw(_candleElement, candle);
 	}

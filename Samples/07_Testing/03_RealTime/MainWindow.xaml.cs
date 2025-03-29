@@ -37,7 +37,7 @@ public partial class MainWindow
 	private bool _isConnected;
 	private Security _security;
 	private SecurityId _securityId;
-	private DataType _tempCandleSeries; // used to determine if chart settings have changed and new chart is needed
+	private DataType _tempCandleSub; // used to determine if chart settings have changed and new chart is needed
 
 	private static readonly string _settingsFile = $"connection{Paths.DefaultSettingsExt}";
 
@@ -188,10 +188,10 @@ public partial class MainWindow
 
 	private void CandleSettingsChanged(object sender, EditValueChangedEventArgs e)
 	{
-		if (_tempCandleSeries == CandleDataTypeEdit.DataType || _candlesSubscription == null)
+		if (_tempCandleSub == CandleDataTypeEdit.DataType || _candlesSubscription == null)
 			return;
 
-		_tempCandleSeries = CandleDataTypeEdit.DataType.Clone();
+		_tempCandleSub = CandleDataTypeEdit.DataType.Clone();
 		SecurityPicker_OnSecuritySelected(SecurityPicker.SelectedSecurity);
 	}
 
