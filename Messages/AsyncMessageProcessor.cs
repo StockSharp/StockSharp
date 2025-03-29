@@ -44,9 +44,9 @@ class AsyncMessageProcessor : Disposable
 		public override string ToString() => Message.ToString();
 	}
 
-	private readonly SynchronizedList<MessageQueueItem> _messages = new();
-	private readonly SynchronizedDictionary<MessageQueueItem, Task> _childTasks = new();
-	private readonly SynchronizedDictionary<long, MessageQueueItem> _subscriptionItems = new();
+	private readonly SynchronizedList<MessageQueueItem> _messages = [];
+	private readonly SynchronizedDictionary<MessageQueueItem, Task> _childTasks = [];
+	private readonly SynchronizedDictionary<long, MessageQueueItem> _subscriptionItems = [];
 
 	private readonly AsyncManualResetEvent _processMessageEvt = new(false);
 	private CancellationTokenSource _globalCts = new();
@@ -360,6 +360,7 @@ class AsyncMessageProcessor : Disposable
 			while (true)
 			{
 				await _processMessageEvt.WaitAsync();
+
 				if (IsDisposeStarted)
 					break;
 
