@@ -76,7 +76,7 @@ public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 /// Indicator, based on <see cref="ICandlePattern"/>.
 /// </summary>
 /// <remarks>
-/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/pattern.html
+/// https://doc.stocksharp.com/topics/api/patterns.html
 /// </remarks>
 [Display(
 	ResourceType = typeof(LocalizedStrings),
@@ -84,7 +84,7 @@ public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 	Description = LocalizedStrings.PatternKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [IndicatorOut(typeof(CandlePatternIndicatorValue))]
-[Doc("topics/api/indicators/list_of_indicators/pattern.html")]
+[Doc("topics/api/patterns.html")]
 public class CandlePatternIndicator : BaseIndicator
 {
 	private ICandlePatternProvider _candlePatternProvider;
