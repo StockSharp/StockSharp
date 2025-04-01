@@ -430,6 +430,6 @@ public class StorageBuffer : IPersistable
 		DisableStorageTimer = storage.GetValue(nameof(DisableStorageTimer), DisableStorageTimer);
 
 		IgnoreGenerated.Clear();
-		IgnoreGenerated.AddRange((storage.GetValue<IEnumerable<SettingsStorage>>(nameof(IgnoreGenerated)) ?? []).Select(s => s.LoadEntire<DataType>()));
+		IgnoreGenerated.AddRange((storage.GetValue<IEnumerable<SettingsStorage>>(nameof(IgnoreGenerated)) ?? []).Select(s => s.Load<DataType>()));
 	}
 }
