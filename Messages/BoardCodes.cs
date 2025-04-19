@@ -1239,4 +1239,9 @@ public static class BoardCodes
 	/// <see cref="BitgetFut"/>
 	/// </summary>
 	public const string BitgetFut = "BTGTFT";
+
+	/// <summary>
+	/// <see cref="Imex"/>
+	/// </summary>
+	public const string Imex = "IMEX";
 }
