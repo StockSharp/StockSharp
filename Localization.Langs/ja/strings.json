@@ -827,6 +827,8 @@
   "DataDirectory": "データディレクトリ",
   "DataDirectoryDesc": "データディレクトリ、最終ファイルは StockSharp 形式で保存されます。",
   "DataFormat": "データ形式。",
+  "Datagram": "UDPデータグラムサイズ",
+  "DatagramSize": "バイト単位のUDPデータグラムパケットの最大サイズ",
   "DataProcessError": "データ処理エラー",
   "DataServer": "データサーバー",
   "DataType": "データタイプ",

@@ -827,6 +827,8 @@
   "DataDirectory": "Directorio de datos",
   "DataDirectoryDesc": "Directorio de datos, donde se guardarán los archivos finales en formato StockSharp.",
   "DataFormat": "Formato de los datos.",
+  "Datagram": "Tamaño de datagrama UDP",
+  "DatagramSize": "Tamaño máximo de paquetes de datagrama UDP en bytes",
   "DataProcessError": "Error en el procesamiento de datos",
   "DataServer": "Servidor de datos",
   "DataType": "Tipo de datos",

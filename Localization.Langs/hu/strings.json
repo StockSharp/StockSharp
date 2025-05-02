@@ -827,6 +827,8 @@
   "DataDirectory": "Adatkönyvtár",
   "DataDirectoryDesc": "Adatkönyvtár, ahol a végső fájlok StockSharp formátumban lesznek mentve.",
   "DataFormat": "Adatformátum.",
+  "Datagram": "UDP datagram mérete",
+  "DatagramSize": "UDP datagram csomagok maximális mérete bájtokban",
   "DataProcessError": "Adatfeldolgozási hiba",
   "DataServer": "Adatszerver",
   "DataType": "Adattípus",

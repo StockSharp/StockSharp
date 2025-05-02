@@ -827,6 +827,8 @@
   "DataDirectory": "Datakatalog",
   "DataDirectoryDesc": "Datakatalogen, där de slutliga filerna kommer att sparas i StockSharp-formatet.",
   "DataFormat": "Dataformat.",
+  "Datagram": "UDP-datagramstorlek",
+  "DatagramSize": "Maximal storlek på UDP-datagrampaket i bytes",
   "DataProcessError": "Databehandlingsfel",
   "DataServer": "Dataserver",
   "DataType": "Datatyp",

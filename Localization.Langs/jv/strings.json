@@ -827,6 +827,8 @@
   "DataDirectory": "Direktori data",
   "DataDirectoryDesc": "Direktori data, ing ngendi file pungkasan bakal disimpen format StockSharp.",
   "DataFormat": "Format data.",
+  "Datagram": "Ukuran Datagram UDP",
+  "DatagramSize": "Ukuran maksimal paket datagram UDP ing bita",
   "DataProcessError": "Kesalahan Pengolahan Data",
   "DataServer": "Server Data",
   "DataType": "Tipe Data",

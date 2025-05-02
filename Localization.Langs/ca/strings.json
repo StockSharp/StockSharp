@@ -827,6 +827,8 @@
   "DataDirectory": "Directori de dades",
   "DataDirectoryDesc": "Directori de dades on es guardaran els fitxers finals en format StockSharp.",
   "DataFormat": "Format de dades",
+  "Datagram": "Mida del datagrama UDP",
+  "DatagramSize": "Mida màxima dels paquets de datagrama UDP en bytes",
   "DataProcessError": "Error de processament de dades",
   "DataServer": "Servidor de dades",
   "DataType": "Tip de dades",

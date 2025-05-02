@@ -827,6 +827,8 @@
   "DataDirectory": "Datový adresář",
   "DataDirectoryDesc": "Adresář s daty, kde budou uloženy konečné soubory ve formátu StockSharp.",
   "DataFormat": "Formát dat.",
+  "Datagram": "Velikost UDP datagramu",
+  "DatagramSize": "Maximální velikost paketů UDP datagramu v bajtech",
   "DataProcessError": "Chyba zpracování dat",
   "DataServer": "Datový server",
   "DataType": "Typ dat",

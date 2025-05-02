@@ -830,6 +830,8 @@
   "DataDirectory": "ဒေတာလမ်းညွှန်",
   "DataDirectoryDesc": "StockSharp ပုံစံတွင် ရလဒ်ဖိုင်များကို သိမ်းဆည်းမည့် ဒေတာလမ်းညွှန်။",
   "DataFormat": "ဒေတာပုံစံ။",
+  "Datagram": "UDP ဒေတာဂရမ် အရွယ်အစား",
+  "DatagramSize": "ဘိုက်များဖြင့် UDP ဒေတာဂရမ် ပက်ကေ့ဂျ်များ၏ အများဆုံး အရွယ်အစား",
   "DataProcessError": "ဒေတာအပ်လုပ်အမှား",
   "DataServer": "Hydra ဆာဗာ",
   "DataType": "ဒေတာအမျိုးအစား",

@@ -827,6 +827,8 @@
   "DataDirectory": "Veri Dizini",
   "DataDirectoryDesc": "Veri dizini, son dosyaların StockSharp formatında kaydedileceği yer.",
   "DataFormat": "Veri formatı.",
+  "Datagram": "UDP Datagram Boyutu",
+  "DatagramSize": "UDP datagram paketlerinin bayt cinsinden maksimum boyutu",
   "DataProcessError": "Veri İşleme Hatası",
   "DataServer": "Veri sunucusu",
   "DataType": "Veri Türü",

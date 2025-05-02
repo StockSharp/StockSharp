@@ -827,6 +827,8 @@
   "DataDirectory": "מדריך נתונים",
   "DataDirectoryDesc": "תיקיית הנתונים, שם יישמרו הקבצים הסופיים בפורמט StockSharp.",
   "DataFormat": "פורמט נתונים.",
+  "Datagram": "גודל דטגרמת UDP",
+  "DatagramSize": "גודל מקסימלי של חבילות דטגרמת UDP בבתים",
   "DataProcessError": "שגיאת עיבוד נתונים",
   "DataServer": "שרת נתונים",
   "DataType": "סוג הנתונים",

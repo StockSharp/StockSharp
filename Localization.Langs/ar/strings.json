@@ -827,6 +827,8 @@
   "DataDirectory": "دليل البيانات",
   "DataDirectoryDesc": "دليل البيانات، حيث سيتم حفظ الملفات النهائية بتنسيق StockSharp.",
   "DataFormat": "تنسيق البيانات.",
+  "Datagram": "حجم رزمة بيانات UDP",
+  "DatagramSize": "الحجم الأقصى لحزم بيانات UDP بالبايت",
   "DataProcessError": "خطأ في معالجة البيانات",
   "DataServer": "خادم البيانات",
   "DataType": "نوع البيانات",

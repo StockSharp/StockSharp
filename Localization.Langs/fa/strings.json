@@ -827,6 +827,8 @@
   "DataDirectory": "دایرکتوری داده‌ها",
   "DataDirectoryDesc": "دایرکتوری داده‌ها، جایی که فایل‌های نهایی در قالب StockSharp ذخیره می‌شوند.",
   "DataFormat": "قالب داده‌ها.",
+  "Datagram": "اندازه دیتاگرام UDP",
+  "DatagramSize": "حداکثر اندازه بسته‌های دیتاگرام UDP به بایت",
   "DataProcessError": "خطای پردازش داده‌ها",
   "DataServer": "سرور داده",
   "DataType": "نوع داده",

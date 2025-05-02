@@ -827,6 +827,8 @@
   "DataDirectory": "Gegevensdirectory",
   "DataDirectoryDesc": "Datadirectory, waar de eindbestanden in StockSharp-formaat worden opgeslagen.",
   "DataFormat": "Gegevensformaat.",
+  "Datagram": "UDP-datagramgrootte",
+  "DatagramSize": "Maximumgrootte van UDP-datagrampakketten in bytes",
   "DataProcessError": "Fout bij gegevensverwerking",
   "DataServer": "Dataserver",
   "DataType": "Gegevenstype",

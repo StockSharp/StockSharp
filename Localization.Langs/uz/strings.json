@@ -827,6 +827,8 @@
   "DataDirectory": "Ma'lumotlar katalogi",
   "DataDirectoryDesc": "Ma'lumotlar katalogi, oxirgi fayllar StockSharp formatida saqlanadigan joy.",
   "DataFormat": "Ma'lumotlar formati.",
+  "Datagram": "UDP datagramma hajmi",
+  "DatagramSize": "UDP datagramma paketlarining baytlardagi maksimal hajmi",
   "DataProcessError": "Ma'lumotlarni qayta ishlash xatosi",
   "DataServer": "Ma'lumotlar serveri",
   "DataType": "Ma'lumot turi",

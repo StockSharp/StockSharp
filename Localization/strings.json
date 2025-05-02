@@ -830,6 +830,8 @@
   "DataDirectory": "Data directory",
   "DataDirectoryDesc": "Data directory where resulting files in the StockSharp format will be saved.",
   "DataFormat": "Data format.",
+  "Datagram": "UDP Datagram Size",
+  "DatagramSize": "Maximum size of UDP datagram packets in bytes",
   "DataProcessError": "Data processing error",
   "DataServer": "Hydra Server",
   "DataType": "Data Type",

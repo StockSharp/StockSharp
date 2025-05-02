@@ -827,6 +827,8 @@
   "DataDirectory": "Director de date",
   "DataDirectoryDesc": "Directorul de date, unde fișierele finale vor fi salvate în formatul StockSharp.",
   "DataFormat": "Formatul datelor.",
+  "Datagram": "Dimensiunea datagramei UDP",
+  "DatagramSize": "Dimensiunea maximă a pachetelor datagramei UDP în octeți",
   "DataProcessError": "Eroare de prelucrare a datelor",
   "DataServer": "Server de date",
   "DataType": "Tip de date",

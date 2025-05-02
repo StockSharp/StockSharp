@@ -827,6 +827,8 @@
   "DataDirectory": "தரவுக் கோப்புறை",
   "DataDirectoryDesc": "டேட்டா டைரக்டரி, இங்கு இறுதி கோப்புகள் StockSharp வடிவமைப்பில் சேமிக்கப்படும்.",
   "DataFormat": "தரவு வடிவம்.",
+  "Datagram": "UDP தரவுத்தொகுப்பு அளவு",
+  "DatagramSize": "பைட்டுகளில் UDP தரவுத்தொகுப்பு தொகுப்புகளின் அதிகபட்ச அளவு",
   "DataProcessError": "தரவு செயலாக்க பிழை",
   "DataServer": "தரவு சேவையகம்",
   "DataType": "தரவு வகை",

@@ -827,6 +827,8 @@
   "DataDirectory": "Директория с данными",
   "DataDirectoryDesc": "Директория с данными, куда будут сохраняться конечные файлы в формате StockSharp.",
   "DataFormat": "Формат данных.",
+  "Datagram": "Размер UDP датаграммы",
+  "DatagramSize": "Максимальный размер UDP датаграмм в байтах",
   "DataProcessError": "Ошибка обработки данных",
   "DataServer": "Гидра сервер",
   "DataType": "Тип данных",

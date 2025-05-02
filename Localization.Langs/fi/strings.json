@@ -827,6 +827,8 @@
   "DataDirectory": "Tietohakemisto",
   "DataDirectoryDesc": "Tietohakemisto, johon lopulliset tiedostot tallennetaan StockSharp-muodossa.",
   "DataFormat": "Tietomuoto.",
+  "Datagram": "UDP-datagrammin koko",
+  "DatagramSize": "UDP-datagrammipakettien enimmäiskoko tavuina",
   "DataProcessError": "Tietojenkäsittelyvirhe",
   "DataServer": "Tietopalvelin",
   "DataType": "Tietotyyppi",

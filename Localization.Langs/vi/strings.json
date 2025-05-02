@@ -827,6 +827,8 @@
   "DataDirectory": "Thư mục dữ liệu",
   "DataDirectoryDesc": "Thư mục dữ liệu, nơi các tập tin cuối cùng sẽ được lưu ở định dạng StockSharp.",
   "DataFormat": "Định dạng dữ liệu.",
+  "Datagram": "Kích thước datagram UDP",
+  "DatagramSize": "Kích thước tối đa của các gói datagram UDP tính bằng byte",
   "DataProcessError": "Lỗi xử lý dữ liệu",
   "DataServer": "Máy chủ dữ liệu",
   "DataType": "Kiểu dữ liệu",

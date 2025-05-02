@@ -827,6 +827,8 @@
   "DataDirectory": "Adresár s údajmi",
   "DataDirectoryDesc": "Adresár s údajmi, kam budú uložené konečné súbory vo formáte StockSharp.",
   "DataFormat": "Formát údajov.",
+  "Datagram": "Veľkosť UDP datagramu",
+  "DatagramSize": "Maximálna veľkosť paketov UDP datagramu v bajtoch",
   "DataProcessError": "Chyba spracovania údajov",
   "DataServer": "Hydra server",
   "DataType": "Typ údajov",
