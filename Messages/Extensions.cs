@@ -2538,6 +2538,8 @@ public static partial class Extensions
 		};
 	}
 
+	private static readonly SynchronizedSet<string> _ignoreCurrs = [];
+
 	/// <summary>
 	/// To convert the currency name in the MICEX format into <see cref="CurrencyTypes"/>.
 	/// </summary>
@@ -2546,36 +2548,23 @@ public static partial class Extensions
 	/// <returns>Currency type. If the value is empty, <see langword="null" /> will be returned.</returns>
 	public static CurrencyTypes? FromMicexCurrencyName(this string name, Action<Exception> errorHandler = null)
 	{
-		if (name.IsEmpty())
+		if (name.IsEmpty() || _ignoreCurrs.Contains(name))
 			return null;
 
-		switch (name)
+		try
 		{
-			case "SUR":
-			case "RUR":
-				return CurrencyTypes.RUB;
-			case "PLD":
-			case "PLT":
-			case "GLD":
-			case "SLV":
-			case "PCT": // проценты https://www.moex.com/n12293
-				return null;
-			default:
-			{
-				try
-				{
-					return name.To<CurrencyTypes>();
-				}
-				catch (Exception ex)
-				{
-					if (errorHandler == null)
-						ex.LogError();
-					else
-						errorHandler.Invoke(ex);
+			return name.To<CurrencyTypes>();
+		}
+		catch (Exception ex)
+		{
+			_ignoreCurrs.Add(name);
 
-					return null;
-				}
-			}
+			if (errorHandler == null)
+				ex.LogError();
+			else
+				errorHandler.Invoke(ex);
+
+			return null;
 		}
 	}
 
