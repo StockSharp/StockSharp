@@ -1442,12 +1442,12 @@ public static partial class Extensions
 	}
 
 	/// <summary>
-	/// Initialize <see cref="SecurityLookupMessage.SecurityTypes"/>.
+	/// Initialize <see cref="ISecurityTypesMessage.SecurityTypes"/>.
 	/// </summary>
 	/// <param name="message">Message security lookup for specified criteria.</param>
 	/// <param name="type">Security type.</param>
 	/// <param name="types">Securities types.</param>
-	public static void SetSecurityTypes(this SecurityLookupMessage message, SecurityTypes? type, IEnumerable<SecurityTypes> types = null)
+	public static void SetSecurityTypes(this ISecurityTypesMessage message, SecurityTypes? type, IEnumerable<SecurityTypes> types = null)
 	{
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
@@ -1469,11 +1469,11 @@ public static partial class Extensions
 	}
 
 	/// <summary>
-	/// Get <see cref="SecurityLookupMessage.SecurityTypes"/>.
+	/// Get <see cref="ISecurityTypesMessage.SecurityTypes"/>.
 	/// </summary>
 	/// <param name="message">Message security lookup for specified criteria.</param>
 	/// <returns>Securities types.</returns>
-	public static HashSet<SecurityTypes> GetSecurityTypes(this SecurityLookupMessage message)
+	public static HashSet<SecurityTypes> GetSecurityTypes(this ISecurityTypesMessage message)
 	{
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));

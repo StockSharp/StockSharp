@@ -5,7 +5,7 @@ namespace StockSharp.Messages;
 /// </summary>
 [DataContract]
 [Serializable]
-public class OrderGroupCancelMessage : OrderMessage
+public class OrderGroupCancelMessage : OrderMessage, ISecurityTypesMessage
 {
 	/// <summary>
 	/// <see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.
@@ -28,6 +28,17 @@ public class OrderGroupCancelMessage : OrderMessage
 		Description = LocalizedStrings.CancelOrdersSideKey,
 		GroupName = LocalizedStrings.GeneralKey)]
 	public Sides? Side { get; set; }
+
+	/// <summary>
+	/// Securities types.
+	/// </summary>
+	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TypeKey,
+		Description = LocalizedStrings.SecurityTypeDescKey,
+		GroupName = LocalizedStrings.OptionsKey)]
+	public SecurityTypes[] SecurityTypes { get; set; }
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="OrderGroupCancelMessage"/>.
@@ -66,5 +77,6 @@ public class OrderGroupCancelMessage : OrderMessage
 
 		destination.IsStop = IsStop;
 		destination.Side = Side;
+		destination.SecurityTypes = SecurityTypes?.ToArray();
 	}
 }
