@@ -46,11 +46,6 @@ public interface IStatisticParameter : IPersistable, INotifyPropertyChanged
 	int Order { get; }
 
 	/// <summary>
-	/// <see cref="Value"/> change event.
-	/// </summary>
-	event Action ValueChanged;
-
-	/// <summary>
 	/// To reset the parameter value.
 	/// </summary>
 	void Reset();
@@ -147,7 +142,7 @@ public abstract class BaseStatisticParameter<TValue> : NotifiableObject, IStatis
 				return;
 
 			_value = value;
-			RaiseValueChanged();
+			this.Notify(nameof(Value));
 		}
 	}
 
@@ -175,24 +170,12 @@ public abstract class BaseStatisticParameter<TValue> : NotifiableObject, IStatis
 	public Type ValueType => typeof(TValue);
 
 	/// <inheritdoc />
-	public event Action ValueChanged;
-
-	/// <inheritdoc />
 	public virtual void Reset() => Value = default;
 
 	void IStatisticParameter.Init(object beginValue) => Init((TValue)beginValue);
 
 	/// <inheritdoc/>
 	public virtual void Init(TValue beginValue) { }
-
-	/// <summary>
-	/// To call the event <see cref="ValueChanged"/>.
-	/// </summary>
-	private void RaiseValueChanged()
-	{
-		ValueChanged?.Invoke();
-		this.Notify(nameof(Value));
-	}
 
 	/// <summary>
 	/// To load the state of statistic parameter.
