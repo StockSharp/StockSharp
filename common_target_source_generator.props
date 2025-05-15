@@ -5,6 +5,7 @@
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <IsPackable>false</IsPackable>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    <RootNamespace>$([System.Text.RegularExpressions.Regex]::Replace('$(SSProjectName)', '\.Generator$', ''))</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
