@@ -22,6 +22,7 @@
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <FileVersion>$(Version)</FileVersion>
     <Copyright>Copyright @ $(Company) 2010 - $([System.DateTime]::Now.ToString(yyyy))</Copyright>
+    <InformationalVersion>$([System.DateTime]::UtcNow.ToString("yyyyMMddHHmmss"))</InformationalVersion>
   </PropertyGroup>
   
   <!-- workaround for https://github.com/dotnet/wpf/issues/5711 -->
