@@ -3,7 +3,4 @@
   <ItemGroup>
     <PackageReference Include="Ecng.Net.SocketIO" Version="$(EcngVer)" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="$(RepoGitHubPath)Messages\Messages.csproj" />
-  </ItemGroup>
 </Project>
