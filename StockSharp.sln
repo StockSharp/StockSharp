@@ -60,73 +60,73 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "09_Advanced", "09_Advanced"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "10_CrossPlatform", "10_CrossPlatform", "{F61BC84B-4D73-4F77-975A-DB92638363EA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_BasicConnectAndDownloadInstruments", "Samples\01_Basic\01_ConnectAndDownloadInstruments\01_Basic.ConnectAndDownloadInstruments.csproj", "{1C120F54-A8F4-4145-9945-85475F456C9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_Basic.ConnectAndDownloadInstruments", "Samples\01_Basic\01_ConnectAndDownloadInstruments\01_Basic.ConnectAndDownloadInstruments.csproj", "{1C120F54-A8F4-4145-9945-85475F456C9F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_BasicMarketDepths", "Samples\01_Basic\02_MarketDepths\02_Basic.MarketDepths.csproj", "{C2A44D54-1CC2-47D6-AFEC-BE7D9930F3A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_Basic.MarketDepths", "Samples\01_Basic\02_MarketDepths\02_Basic.MarketDepths.csproj", "{C2A44D54-1CC2-47D6-AFEC-BE7D9930F3A2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03_BasicOrders", "Samples\01_Basic\03_Orders\03_Basic.Orders.csproj", "{8C615127-B3D5-4071-9741-BD75D5468E3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03_Basic.Orders", "Samples\01_Basic\03_Orders\03_Basic.Orders.csproj", "{8C615127-B3D5-4071-9741-BD75D5468E3E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_CandlesRealtime", "Samples\02_Candles\01_Realtime\01_Candles.Realtime.csproj", "{87FF015E-2617-4BA5-B826-C7CB8E246923}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_Candles.Realtime", "Samples\02_Candles\01_Realtime\01_Candles.Realtime.csproj", "{87FF015E-2617-4BA5-B826-C7CB8E246923}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_CandlesCombineHistoryRealtime", "Samples\02_Candles\02_CombineHistoryRealtime\02_Candles.CombineHistoryRealtime.csproj", "{FF01294A-23EC-406F-A3E9-FBBAE7B83102}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_Candles.CombineHistoryRealtime", "Samples\02_Candles\02_CombineHistoryRealtime\02_Candles.CombineHistoryRealtime.csproj", "{FF01294A-23EC-406F-A3E9-FBBAE7B83102}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_StorageRandom", "Samples\03_Storage\01_Random\01_Storage.Random.csproj", "{C9E204CB-9EB6-46E3-B4E7-B77DB462F48A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_Storage.Random", "Samples\03_Storage\01_Random\01_Storage.Random.csproj", "{C9E204CB-9EB6-46E3-B4E7-B77DB462F48A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_StorageLocal", "Samples\03_Storage\02_Local\02_Storage.Local.csproj", "{C08F223B-7298-4D88-91B0-C6C9A70CEC3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_Storage.Local", "Samples\03_Storage\02_Local\02_Storage.Local.csproj", "{C08F223B-7298-4D88-91B0-C6C9A70CEC3B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03_StorageRemoteSource", "Samples\03_Storage\03_RemoteSource\03_Storage.RemoteSource.csproj", "{7CAC9F26-8C9A-4DA8-A879-27B3230565C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03_Storage.RemoteSource", "Samples\03_Storage\03_RemoteSource\03_Storage.RemoteSource.csproj", "{7CAC9F26-8C9A-4DA8-A879-27B3230565C6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "04_StorageHydraServerConnect", "Samples\03_Storage\04_HydraServerConnect\04_Storage.HydraServerConnect.csproj", "{70A2A693-7FFD-4C8F-95E3-8155CE775448}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "04_Storage.HydraServerConnect", "Samples\03_Storage\04_HydraServerConnect\04_Storage.HydraServerConnect.csproj", "{70A2A693-7FFD-4C8F-95E3-8155CE775448}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "05_StorageHydraServerSaveToLocal", "Samples\03_Storage\05_HydraServerSaveToLocal\05_Storage.HydraServerSaveToLocal.csproj", "{5A387DA7-8199-4198-BCF4-40CB8F76B7B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "05_Storage.HydraServerSaveToLocal", "Samples\03_Storage\05_HydraServerSaveToLocal\05_Storage.HydraServerSaveToLocal.csproj", "{5A387DA7-8199-4198-BCF4-40CB8F76B7B9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_IndicatorsSimpleSMA", "Samples\04_Indicators\01_SimpleSMA\01_Indicators.SimpleSMA.csproj", "{F8ED6F51-8188-4130-985D-E3B3FC39B8FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_Indicators.SimpleSMA", "Samples\04_Indicators\01_SimpleSMA\01_Indicators.SimpleSMA.csproj", "{F8ED6F51-8188-4130-985D-E3B3FC39B8FF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_IndicatorsComplexBollinger", "Samples\04_Indicators\02_ComplexBollinger\02_Indicators.ComplexBollinger.csproj", "{4DB00AE4-4F48-4595-AC3A-2C53C910D641}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_Indicators.ComplexBollinger", "Samples\04_Indicators\02_ComplexBollinger\02_Indicators.ComplexBollinger.csproj", "{4DB00AE4-4F48-4595-AC3A-2C53C910D641}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03_IndicatorsCreateOwn", "Samples\04_Indicators\03_CreateOwn\03_Indicators.CreateOwn.csproj", "{22EE0261-A029-4A21-9F5B-654E71FE5D69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03_Indicators.CreateOwn", "Samples\04_Indicators\03_CreateOwn\03_Indicators.CreateOwn.csproj", "{22EE0261-A029-4A21-9F5B-654E71FE5D69}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_Chart", "Samples\05_Chart\01_Chart\01_Chart.csproj", "{EE16FA9B-514A-4DAB-874D-8B863079CCCB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_ChartActiveOrders", "Samples\05_Chart\02_ActiveOrders\02_Chart.ActiveOrders.csproj", "{75339D9E-53A4-4308-8F66-F000B0C534CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_Chart.ActiveOrders", "Samples\05_Chart\02_ActiveOrders\02_Chart.ActiveOrders.csproj", "{75339D9E-53A4-4308-8F66-F000B0C534CF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03_ChartPerformance", "Samples\05_Chart\03_Performance\03_Chart.Performance.csproj", "{27229D4D-1026-4A79-9393-7F4B5BAF2960}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03_Chart.Performance", "Samples\05_Chart\03_Performance\03_Chart.Performance.csproj", "{27229D4D-1026-4A79-9393-7F4B5BAF2960}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_StrategiesHistorySMA", "Samples\06_Strategies\01_HistorySMA\01_Strategies.HistorySMA.csproj", "{34AADF0F-8548-4687-8BA5-4AD1DD37F60C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_Strategies.HistorySMA", "Samples\06_Strategies\01_HistorySMA\01_Strategies.HistorySMA.csproj", "{34AADF0F-8548-4687-8BA5-4AD1DD37F60C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_StrategiesHistoryBollingerBands", "Samples\06_Strategies\02_HistoryBollingerBands\02_Strategies.HistoryBollingerBands.csproj", "{1356A2E5-F09C-4389-AF66-DB5CE7BCC7C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_Strategies.HistoryBollingerBands", "Samples\06_Strategies\02_HistoryBollingerBands\02_Strategies.HistoryBollingerBands.csproj", "{1356A2E5-F09C-4389-AF66-DB5CE7BCC7C8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03_StrategiesHistoryTrend", "Samples\06_Strategies\03_HistoryTrend\03_Strategies.HistoryTrend.csproj", "{D49CD309-6E26-4AEA-B757-6AD9F4F1569B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03_Strategies.HistoryTrend", "Samples\06_Strategies\03_HistoryTrend\03_Strategies.HistoryTrend.csproj", "{D49CD309-6E26-4AEA-B757-6AD9F4F1569B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "04_StrategiesHistoryMarketRule", "Samples\06_Strategies\04_HistoryMarketRule\04_Strategies.HistoryMarketRule.csproj", "{227BFAFA-DAC7-4495-B9DE-B9C70B725433}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "04_Strategies.HistoryMarketRule", "Samples\06_Strategies\04_HistoryMarketRule\04_Strategies.HistoryMarketRule.csproj", "{227BFAFA-DAC7-4495-B9DE-B9C70B725433}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "06_StrategiesHistoryQuoting", "Samples\06_Strategies\06_HistoryQuoting\06_Strategies.HistoryQuoting.csproj", "{C9A8199D-5A9F-4FB7-8B86-9C2A531333DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "06_Strategies.HistoryQuoting", "Samples\06_Strategies\06_HistoryQuoting\06_Strategies.HistoryQuoting.csproj", "{C9A8199D-5A9F-4FB7-8B86-9C2A531333DB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "05_StrategiesHistoryIndex", "Samples\06_Strategies\05_HistoryIndex\05_Strategies.HistoryIndex.csproj", "{C556AF54-299F-4B97-A831-1BD9B0D443BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "05_Strategies.HistoryIndex", "Samples\06_Strategies\05_HistoryIndex\05_Strategies.HistoryIndex.csproj", "{C556AF54-299F-4B97-A831-1BD9B0D443BB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "07_StrategiesLiveSpread", "Samples\06_Strategies\07_LiveSpread\07_Strategies.LiveSpread.csproj", "{04625072-0BAD-40A5-88E7-BEF434A869E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "07_Strategies.LiveSpread", "Samples\06_Strategies\07_LiveSpread\07_Strategies.LiveSpread.csproj", "{04625072-0BAD-40A5-88E7-BEF434A869E9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "08_StrategiesLiveArbitrage", "Samples\06_Strategies\08_LiveArbitrage\08_Strategies.LiveArbitrage.csproj", "{6A8DDE44-14EC-43B0-A36F-D3EFFED012D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "08_Strategies.LiveArbitrage", "Samples\06_Strategies\08_LiveArbitrage\08_Strategies.LiveArbitrage.csproj", "{6A8DDE44-14EC-43B0-A36F-D3EFFED012D7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "09_StrategiesLiveOptionsQuoting", "Samples\06_Strategies\09_LiveOptionsQuoting\09_Strategies.LiveOptionsQuoting.csproj", "{A9767BAB-BC1E-4071-9934-F11FD7436D65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "09_Strategies.LiveOptionsQuoting", "Samples\06_Strategies\09_LiveOptionsQuoting\09_Strategies.LiveOptionsQuoting.csproj", "{A9767BAB-BC1E-4071-9934-F11FD7436D65}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "10_StrategiesLiveTerminal", "Samples\06_Strategies\10_LiveTerminal\10_Strategies.LiveTerminal.csproj", "{480FC862-E6A0-47E8-B60F-FB50227A13D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "10_Strategies.LiveTerminal", "Samples\06_Strategies\10_LiveTerminal\10_Strategies.LiveTerminal.csproj", "{480FC862-E6A0-47E8-B60F-FB50227A13D5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_TestingHistory", "Samples\07_Testing\01_History\01_Testing.History.csproj", "{8657BB3E-DE21-4D4D-84CA-6F0DDD36D4ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_Testing.History", "Samples\07_Testing\01_History\01_Testing.History.csproj", "{8657BB3E-DE21-4D4D-84CA-6F0DDD36D4ED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_TestingOptimization", "Samples\07_Testing\02_Optimization\02_Testing.Optimization.csproj", "{C382FBE2-5233-40FD-8AD8-9ADB5F88F460}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_Testing.Optimization", "Samples\07_Testing\02_Optimization\02_Testing.Optimization.csproj", "{C382FBE2-5233-40FD-8AD8-9ADB5F88F460}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03_TestingRealTime", "Samples\07_Testing\03_RealTime\03_Testing.RealTime.csproj", "{0328B2C2-BDFD-419F-A370-A91211BFD4EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03_Testing.RealTime", "Samples\07_Testing\03_RealTime\03_Testing.RealTime.csproj", "{0328B2C2-BDFD-419F-A370-A91211BFD4EF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_MiscLogging", "Samples\08_Misc\01_Logging\01_Misc.Logging.csproj", "{1E0A20C7-90C1-4FF0-A679-12B4CBCB38E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_Misc.Logging", "Samples\08_Misc\01_Logging\01_Misc.Logging.csproj", "{1E0A20C7-90C1-4FF0-A679-12B4CBCB38E7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_MiscUnit", "Samples\08_Misc\02_Unit\02_Misc.Unit.csproj", "{BE08241E-C2A2-447F-8339-90A0E64C8640}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_Misc.Unit", "Samples\08_Misc\02_Unit\02_Misc.Unit.csproj", "{BE08241E-C2A2-447F-8339-90A0E64C8640}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_AdvancedMultiConnect", "Samples\09_Advanced\01_MultiConnect\01_Advanced.MultiConnect.csproj", "{B1D02982-5D4A-469E-AEDB-E425DA8DA7DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_Advanced.MultiConnect", "Samples\09_Advanced\01_MultiConnect\01_Advanced.MultiConnect.csproj", "{B1D02982-5D4A-469E-AEDB-E425DA8DA7DE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_AdvancedSaveDataLocal", "Samples\09_Advanced\02_StoreDataLocal\02_Advanced.SaveDataLocal.csproj", "{FD782CA5-503A-40DF-838A-FA66FDC1FBB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_Advanced.SaveDataLocal", "Samples\09_Advanced\02_StoreDataLocal\02_Advanced.SaveDataLocal.csproj", "{FD782CA5-503A-40DF-838A-FA66FDC1FBB0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_CrossPlatformConsoleApp", "Samples\10_CrossPlatform\01_ConsoleApp\01_CrossPlatform.ConsoleApp.csproj", "{BA8ACDEB-5A53-40F6-A462-03477517F20C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_CrossPlatform.ConsoleApp", "Samples\10_CrossPlatform\01_ConsoleApp\01_CrossPlatform.ConsoleApp.csproj", "{BA8ACDEB-5A53-40F6-A462-03477517F20C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Media.Generator", "Media.Generator\Media.Generator.csproj", "{4D8BFC44-4D93-D017-B54E-5039C4CD59DB}"
 EndProject
