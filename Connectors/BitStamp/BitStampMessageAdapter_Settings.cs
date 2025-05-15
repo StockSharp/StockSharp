@@ -8,7 +8,7 @@ using Ecng.ComponentModel;
 /// <summary>
 /// The message adapter for <see cref="BitStamp"/>.
 /// </summary>
-[MediaIcon("BitStamp_logo.svg")]
+[MediaIcon(Media.MediaNames.bitstamp)]
 [Doc("topics/api/connectors/crypto_exchanges/bitstamp.html")]
 [Display(
 	ResourceType = typeof(LocalizedStrings),

@@ -8,7 +8,7 @@ using Ecng.ComponentModel;
 /// <summary>
 /// The messages adapter for BTC-e.
 /// </summary>
-[MediaIcon("Btce_logo.png")]
+[MediaIcon(Media.MediaNames.btce)]
 [Doc("topics/api/connectors/crypto_exchanges/wex_btc_e.html")]
 [Display(
 	ResourceType = typeof(LocalizedStrings),

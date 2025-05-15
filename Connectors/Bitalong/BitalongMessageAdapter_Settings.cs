@@ -8,7 +8,7 @@ using Ecng.ComponentModel;
 /// <summary>
 /// The message adapter for <see cref="Bitalong"/>.
 /// </summary>
-[MediaIcon("Bitalong_logo.svg")]
+[MediaIcon(Media.MediaNames.bitalong)]
 [Doc("topics/api/connectors/crypto_exchanges/bitalong.html")]
 [Display(
 	ResourceType = typeof(LocalizedStrings),

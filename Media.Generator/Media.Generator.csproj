@@ -1,0 +1,6 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\common_target_source_generator.props" />
+  <ItemGroup>
+    <AdditionalFiles Include="Analyzers\AnalyzerReleases.Shipped.md" />
+  </ItemGroup>
+</Project>

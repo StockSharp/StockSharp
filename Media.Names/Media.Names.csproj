@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\common_target_standard.props" />
+  <PropertyGroup>
+    <RootNamespace>StockSharp.Media</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="..\Media\logos\*.png" />
+    <AdditionalFiles Include="..\Media\logos\*.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Media.Generator\Media.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+</Project>

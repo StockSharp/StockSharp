@@ -9,5 +9,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="$(RepoGitHubPath)Messages\Messages.csproj" />
+    <ProjectReference Include="$(RepoGitHubPath)Media.Names\Media.Names.csproj" />
   </ItemGroup>
 </Project>

@@ -9,7 +9,7 @@ using Ecng.Serialization;
 /// <summary>
 /// The message adapter for <see cref="Tinkoff"/>.
 /// </summary>
-[MediaIcon("Tinkoff_logo.svg")]
+[MediaIcon(Media.MediaNames.tinkoff)]
 [Doc("topics/api/connectors/russia/tinkoff.html")]
 [Display(
 	ResourceType = typeof(LocalizedStrings),

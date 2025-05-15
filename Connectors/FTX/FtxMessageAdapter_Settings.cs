@@ -8,8 +8,8 @@ using Ecng.ComponentModel;
 /// <summary>
 /// The message adapter for <see cref="FTX"/>.
 /// </summary>
-[MediaIcon("ftx_logo.svg")]
-[Doc("topics/ftx.html")]
+[MediaIcon(Media.MediaNames.ftx)]
+[Doc("topics/api/connectors/crypto_exchanges/ftx.html")]
 [Display(
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.FTXKey,

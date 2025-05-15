@@ -8,7 +8,7 @@ using Ecng.ComponentModel;
 /// <summary>
 /// The message adapter for <see cref="Coinbase"/>.
 /// </summary>
-[MediaIcon("Coinbase_logo.svg")]
+[MediaIcon(Media.MediaNames.coinbase)]
 [Doc("topics/api/connectors/crypto_exchanges/coinbase.html")]
 [Display(
 	ResourceType = typeof(LocalizedStrings),

@@ -128,6 +128,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_AdvancedSaveDataLocal", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_CrossPlatformConsoleApp", "Samples\10_CrossPlatform\01_ConsoleApp\01_CrossPlatform.ConsoleApp.csproj", "{BA8ACDEB-5A53-40F6-A462-03477517F20C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Media.Generator", "Media.Generator\Media.Generator.csproj", "{4D8BFC44-4D93-D017-B54E-5039C4CD59DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Media.Names", "Media.Names\Media.Names.csproj", "{B30C294B-0418-EA8E-93A7-40A2B5EE9167}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -338,6 +342,14 @@ Global
 		{BA8ACDEB-5A53-40F6-A462-03477517F20C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA8ACDEB-5A53-40F6-A462-03477517F20C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA8ACDEB-5A53-40F6-A462-03477517F20C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D8BFC44-4D93-D017-B54E-5039C4CD59DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D8BFC44-4D93-D017-B54E-5039C4CD59DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D8BFC44-4D93-D017-B54E-5039C4CD59DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D8BFC44-4D93-D017-B54E-5039C4CD59DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B30C294B-0418-EA8E-93A7-40A2B5EE9167}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B30C294B-0418-EA8E-93A7-40A2B5EE9167}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B30C294B-0418-EA8E-93A7-40A2B5EE9167}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B30C294B-0418-EA8E-93A7-40A2B5EE9167}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

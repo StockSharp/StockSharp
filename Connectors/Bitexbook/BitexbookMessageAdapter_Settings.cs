@@ -8,7 +8,7 @@ using Ecng.ComponentModel;
 /// <summary>
 /// The message adapter for <see cref="Bitexbook"/>.
 /// </summary>
-[MediaIcon("Bitexbook_logo.svg")]
+[MediaIcon(Media.MediaNames.bitexbook)]
 [Doc("topics/api/connectors/crypto_exchanges/bitexbook.html")]
 [Display(
 	ResourceType = typeof(LocalizedStrings),
