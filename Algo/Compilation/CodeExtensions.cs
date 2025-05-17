@@ -16,7 +16,7 @@ public static class CodeExtensions
 	/// Default references.
 	/// </summary>
 	public static IEnumerable<AssemblyReference> DefaultReferences
-		=> CreateReferences(
+		=> CreateAssemblyReferences(
 		[
 			MsCorLib,
 
@@ -58,7 +58,7 @@ public static class CodeExtensions
 	/// F# references.
 	/// </summary>
 	public static IEnumerable<AssemblyReference> FSharpReferences
-		=> CreateReferences(
+		=> CreateAssemblyReferences(
 		[
 			"FSharp.Core",
 			"System.Runtime.Numerics",
@@ -69,7 +69,12 @@ public static class CodeExtensions
 			"System.Threading",
 		]);
 
-	private static IEnumerable<AssemblyReference> CreateReferences(IEnumerable<string> names)
+	/// <summary>
+	/// Create assembly references.
+	/// </summary>
+	/// <param name="names">Assembly names.</param>
+	/// <returns>List of <see cref="AssemblyReference"/>.</returns>
+	public static IEnumerable<AssemblyReference> CreateAssemblyReferences(this IEnumerable<string> names)
 		=> names.Select(r => new AssemblyReference { FileName = $"{r}.dll" });
 
 	private static readonly CachedSynchronizedDictionary<string, ICodeReference> _projectReferences = new(StringComparer.InvariantCultureIgnoreCase);
