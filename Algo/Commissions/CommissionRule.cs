@@ -573,7 +573,7 @@ public class CommissionTurnOverRule : CommissionRule
 	/// <inheritdoc />
 	public override void Reset()
 	{
-		_turnOver = 0;
+		_currentTurnOver = 0;
 		base.Reset();
 	}
 
