@@ -21,7 +21,7 @@ public class RangeActionVerificationIndex : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override int NumValuesToInitialize => Math.Max(LongSma.NumValuesToInitialize, ShortSma.NumValuesToInitialize);
+	public override int NumValuesToInitialize => LongSma.NumValuesToInitialize.Max(ShortSma.NumValuesToInitialize);
 
 	/// <inheritdoc />
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;

@@ -36,7 +36,7 @@ public class MovingAverageConvergenceDivergence : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override int NumValuesToInitialize => Math.Max(LongMa.NumValuesToInitialize, ShortMa.NumValuesToInitialize);
+	public override int NumValuesToInitialize => LongMa.NumValuesToInitialize.Max(ShortMa.NumValuesToInitialize);
 
 	/// <inheritdoc />
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;

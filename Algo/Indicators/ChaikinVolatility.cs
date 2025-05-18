@@ -26,7 +26,7 @@ public class ChaikinVolatility : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override int NumValuesToInitialize => Math.Max(Ema.NumValuesToInitialize, Roc.NumValuesToInitialize);
+	public override int NumValuesToInitialize => Ema.NumValuesToInitialize.Max(Roc.NumValuesToInitialize);
 
 	/// <inheritdoc />
 	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;

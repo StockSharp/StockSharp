@@ -33,8 +33,8 @@ public class KaufmanEfficiencyRatio : LengthIndicator<decimal>
 
 		if (IsFormed)
 		{
-			var change = Math.Abs(price - Buffer[0]);
-			var volatility = Buffer.Skip(Math.Max(0, Buffer.Count - Length)).Zip(Buffer.Skip(Math.Max(0, Buffer.Count - Length + 1)), (a, b) => Math.Abs(a - b)).Sum();
+			var change = (price - Buffer[0]).Abs();
+			var volatility = Buffer.Skip(0.Max(Buffer.Count - Length)).Zip(Buffer.Skip(0.Max(Buffer.Count - Length + 1)), (a, b) => (a - b).Abs()).Sum();
 
 			if (!input.IsFinal)
 			{

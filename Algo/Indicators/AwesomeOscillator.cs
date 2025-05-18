@@ -22,7 +22,7 @@ public class AwesomeOscillator : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override int NumValuesToInitialize => Math.Max(LongMa.NumValuesToInitialize, Math.Max(ShortMa.NumValuesToInitialize, MedianPrice.NumValuesToInitialize));
+	public override int NumValuesToInitialize => LongMa.NumValuesToInitialize.Max(ShortMa.NumValuesToInitialize.Max(MedianPrice.NumValuesToInitialize));
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="AwesomeOscillator"/>.

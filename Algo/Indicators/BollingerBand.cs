@@ -20,7 +20,7 @@ public class BollingerBand : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override int NumValuesToInitialize => Math.Max(_ma.NumValuesToInitialize, _dev.NumValuesToInitialize);
+	public override int NumValuesToInitialize => _ma.NumValuesToInitialize.Max(_dev.NumValuesToInitialize);
 
 	/// <summary>
 	/// Channel width.

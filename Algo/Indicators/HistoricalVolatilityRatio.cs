@@ -26,7 +26,7 @@ public class HistoricalVolatilityRatio : BaseIndicator
 	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
 	/// <inheritdoc />
-	public override int NumValuesToInitialize => Math.Max(_shortSd.NumValuesToInitialize, _longSd.NumValuesToInitialize);
+	public override int NumValuesToInitialize => _shortSd.NumValuesToInitialize.Max(_longSd.NumValuesToInitialize);
 
 	/// <summary>
 	/// Short period.

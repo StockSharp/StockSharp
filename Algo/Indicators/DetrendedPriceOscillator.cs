@@ -47,6 +47,6 @@ public class DetrendedPriceOscillator : LengthIndicator<decimal>
 		if (!IsFormed)
 			return null;
 
-		return input.ToDecimal() - Buffer[Math.Max(0, Buffer.Count - 1 - _lookBack)];
+		return input.ToDecimal() - Buffer[0.Max(Buffer.Count - 1 - _lookBack)];
 	}
 }

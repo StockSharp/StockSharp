@@ -22,7 +22,7 @@ public class Acceleration : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override int NumValuesToInitialize => Math.Max(Ao.NumValuesToInitialize, Sma.NumValuesToInitialize);
+	public override int NumValuesToInitialize => Ao.NumValuesToInitialize.Max(Sma.NumValuesToInitialize);
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Acceleration"/>.

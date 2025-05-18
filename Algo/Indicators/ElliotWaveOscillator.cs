@@ -62,7 +62,7 @@ public class ElliotWaveOscillator : BaseIndicator
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 	/// <inheritdoc />
-	public override int NumValuesToInitialize => Math.Max(_shortSma.NumValuesToInitialize, _longSma.NumValuesToInitialize);
+	public override int NumValuesToInitialize => _shortSma.NumValuesToInitialize.Max(_longSma.NumValuesToInitialize);
 
 	/// <inheritdoc />
 	protected override bool CalcIsFormed() => _shortSma.IsFormed && _longSma.IsFormed;

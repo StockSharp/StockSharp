@@ -10,7 +10,7 @@ public class GatorHistogram : BaseIndicator
 	private readonly bool _isNegative;
 
 	/// <inheritdoc />
-	public override int NumValuesToInitialize => Math.Max(_line1.NumValuesToInitialize, _line2.NumValuesToInitialize);
+	public override int NumValuesToInitialize => _line1.NumValuesToInitialize.Max(_line2.NumValuesToInitialize);
 
 	internal GatorHistogram(AlligatorLine line1, AlligatorLine line2, bool isNegative)
 	{
