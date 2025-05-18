@@ -400,8 +400,20 @@ public class CommissionSecurityIdRule : CommissionRule
 	{
 		base.Load(storage);
 
-		if (storage.Contains(nameof(Security)) && ServicesRegistry.TrySecurityProvider is not null)
-			Security = ServicesRegistry.SecurityProvider.LookupById(storage.GetValue<string>(nameof(Security)));
+		Security = null;
+
+		if (storage.Contains(nameof(Security)))
+		{
+			var secId = storage.GetValue<string>(nameof(Security));
+			_securityId = secId.ToSecurityId();
+
+			var secProvider = ServicesRegistry.TrySecurityProvider;
+
+			if (secProvider is not null)
+				_security = secProvider.LookupById(secId);
+
+			UpdateTitle();
+		}
 	}
 }
 
@@ -415,6 +427,8 @@ public class CommissionSecurityIdRule : CommissionRule
 	GroupName = LocalizedStrings.SecuritiesKey)]
 public class CommissionSecurityTypeRule : CommissionRule
 {
+	private readonly Dictionary<SecurityId, SecurityTypes?> _secTypes = [];
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CommissionSecurityTypeRule"/>.
 	/// </summary>
@@ -447,11 +461,26 @@ public class CommissionSecurityTypeRule : CommissionRule
 	protected override string GetTitle() => _securityType.ToString();
 
 	/// <inheritdoc />
+	public override void Reset()
+	{
+		base.Reset();
+
+		_secTypes.Clear();
+	}
+
+	/// <inheritdoc />
 	public override decimal? Process(ExecutionMessage message)
 	{
-		// TODO
-		//if (message.HasTradeInfo() && message.SecurityId.SecurityType == SecurityType)
-		//	return GetValue(message.TradePrice);
+		SecurityTypes? getSecType(SecurityId secId)
+		{
+			if (secId.IsAllSecurity())
+				return null;
+
+			return _secTypes.SafeAdd(secId, key => ServicesRegistry.TrySecurityProvider?.LookupById(key)?.Type);
+		}
+
+		if (message.HasTradeInfo() && getSecType(message.SecurityId) == SecurityType)
+			return GetValue(message.TradePrice);
 
 		return null;
 	}
