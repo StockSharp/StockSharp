@@ -512,6 +512,7 @@ public class CommissionSecurityTypeRule : CommissionRule
 	GroupName = LocalizedStrings.BoardKey)]
 public class CommissionBoardCodeRule : CommissionRule
 {
+	private string _boardCode;
 	private ExchangeBoard _board;
 
 	/// <summary>
@@ -528,6 +529,7 @@ public class CommissionBoardCodeRule : CommissionRule
 		set
 		{
 			_board = value;
+			_boardCode = _board?.Code;
 			UpdateTitle();
 		}
 	}
@@ -538,7 +540,7 @@ public class CommissionBoardCodeRule : CommissionRule
 	/// <inheritdoc />
 	public override decimal? Process(ExecutionMessage message)
 	{
-		if (message.HasTradeInfo() && Board != null && message.SecurityId.BoardCode.EqualsIgnoreCase(Board.Code))
+		if (message.HasTradeInfo() && message.SecurityId.BoardCode.EqualsIgnoreCase(_boardCode))
 			return GetValue(message.TradePrice);
 
 		return null;
@@ -558,10 +560,15 @@ public class CommissionBoardCodeRule : CommissionRule
 	{
 		base.Load(storage);
 
-		var boardCode = storage.GetValue<string>(nameof(Board));
+		Board = null;
 
-		if (!boardCode.IsEmpty())
-			Board = ServicesRegistry.TryExchangeInfoProvider?.TryGetExchangeBoard(boardCode);
+		_boardCode = storage.GetValue<string>(nameof(Board));
+
+		if (!_boardCode.IsEmpty())
+		{
+			_board = ServicesRegistry.TryExchangeInfoProvider?.TryGetExchangeBoard(_boardCode);
+			UpdateTitle();
+		}
 	}
 }
 
