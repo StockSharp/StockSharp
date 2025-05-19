@@ -33,11 +33,7 @@ public class MaxLongPositionParameter : BaseStatisticParameter<decimal>, IPositi
 	{
 	}
 
-	/// <summary>
-	/// To add the new position value to the parameter.
-	/// </summary>
-	/// <param name="marketTime">The exchange time.</param>
-	/// <param name="position">The new position value.</param>
+	/// <inheritdoc/>
 	public void Add(DateTimeOffset marketTime, decimal position)
 	{
 		if (position > 0 && position > Value)
@@ -65,11 +61,7 @@ public class MaxShortPositionParameter : BaseStatisticParameter<decimal>, IPosit
 	{
 	}
 
-	/// <summary>
-	/// To add the new position value to the parameter.
-	/// </summary>
-	/// <param name="marketTime">The exchange time.</param>
-	/// <param name="position">The new position value.</param>
+	/// <inheritdoc/>
 	public void Add(DateTimeOffset marketTime, decimal position)
 	{
 		if (position < 0 && position.Abs() > Value)
