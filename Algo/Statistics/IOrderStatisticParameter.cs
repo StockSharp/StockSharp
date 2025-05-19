@@ -85,8 +85,8 @@ public class MaxLatencyRegistrationParameter : BaseOrderStatisticParameter<TimeS
 	/// <inheritdoc />
 	public override void New(Order order)
 	{
-		if (order.LatencyRegistration is not null)
-			Value = Value.Max(order.LatencyRegistration.Value);
+		if (order.LatencyRegistration is TimeSpan latency)
+			Value = Value == default ? latency : Value.Max(latency);
 	}
 }
 
@@ -113,8 +113,8 @@ public class MaxLatencyCancellationParameter : BaseOrderStatisticParameter<TimeS
 	/// <inheritdoc />
 	public override void Changed(Order order)
 	{
-		if (order.LatencyCancellation is not null)
-			Value = Value.Max(order.LatencyCancellation.Value);
+		if (order.LatencyCancellation is TimeSpan latency)
+			Value = Value == default ? latency : Value.Max(latency);
 	}
 }
 
@@ -141,8 +141,8 @@ public class MinLatencyRegistrationParameter : BaseOrderStatisticParameter<TimeS
 	/// <inheritdoc />
 	public override void New(Order order)
 	{
-		if (order.LatencyRegistration is not null)
-			Value = Value.Min(order.LatencyRegistration.Value);
+		if (order.LatencyRegistration is TimeSpan latency)
+			Value = Value == default ? latency : Value.Min(latency);
 	}
 }
 
@@ -169,8 +169,8 @@ public class MinLatencyCancellationParameter : BaseOrderStatisticParameter<TimeS
 	/// <inheritdoc />
 	public override void Changed(Order order)
 	{
-		if (order.LatencyCancellation is not null)
-			Value = Value.Min(order.LatencyCancellation.Value);
+		if (order.LatencyCancellation is TimeSpan latency)
+			Value = Value == default ? latency : Value.Min(latency);
 	}
 }
 
