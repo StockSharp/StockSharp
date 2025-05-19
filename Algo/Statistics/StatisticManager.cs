@@ -7,7 +7,7 @@ using StockSharp.Algo.PnL;
 /// </summary>
 public class StatisticManager : IStatisticManager
 {
-	private sealed class EquityParameterList : CachedSynchronizedSet<IStatisticParameter>
+	private class EquityParameterList : CachedSynchronizedSet<IStatisticParameter>
 	{
 		private IPnLStatisticParameter[] _pnlParams;
 
@@ -95,48 +95,10 @@ public class StatisticManager : IStatisticManager
 	/// </summary>
 	public StatisticManager()
 	{
-		var maxPf = new MaxProfitParameter();
-		var maxDd = new MaxDrawdownParameter();
-		var netPf = new NetProfitParameter();
-
-		_parameters = new()
-		{
-			maxPf,
-			new MaxProfitDateParameter(maxPf),
-			maxDd,
-			new MaxDrawdownDateParameter(maxDd),
-			new MaxRelativeDrawdownParameter(),
-			new MaxDrawdownPercentParameter(maxDd),
-			new ReturnParameter(),
-			netPf,
-			new NetProfitPercentParameter(),
-			new RecoveryFactorParameter(maxDd, netPf),
-			new CommissionParameter(),
-
-			new WinningTradesParameter(),
-			new AverageWinTradeParameter(),
-			new LossingTradesParameter(),
-			new AverageLossTradeParameter(),
-			new PerMonthTradeParameter(),
-			new PerDayTradeParameter(),
-			new RoundtripCountParameter(),
-			new AverageTradeProfitParameter(),
-			new TradeCountParameter(),
-
-			new MaxLongPositionParameter(),
-			new MaxShortPositionParameter(),
-
-			new MaxLatencyRegistrationParameter(),
-			new MinLatencyRegistrationParameter(),
-			new MaxLatencyCancellationParameter(),
-			new MinLatencyCancellationParameter(),
-			new OrderCountParameter(),
-			new OrderErrorCountParameter(),
-			new OrderInsufficientFundErrorCountParameter(),
-		};
+		_parameters.AddRange(StatisticParameterRegistry.CreateAll());
 	}
 
-	private readonly EquityParameterList _parameters;
+	private readonly EquityParameterList _parameters = [];
 
 	/// <inheritdoc />
 	public IStatisticParameter[] Parameters => _parameters.Cache;

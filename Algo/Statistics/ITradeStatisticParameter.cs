@@ -565,6 +565,7 @@ public class ExpectancyParameter : BaseStatisticParameter<decimal>, ITradeStatis
 		}
 
 		var total = _winCount + _lossCount;
+
 		if (total == 0)
 		{
 			Value = 0;

@@ -699,11 +699,11 @@ public class SortinoRatioParameter : RiskAdjustedRatioParameter
 	/// <inheritdoc />
 	protected override void AddRiskSample(decimal ret)
 	{
-		if (ret < 0)
-		{
-			_downsideSumSq += ret * ret;
-			_downsideCount++;
-		}
+		if (ret >= 0)
+			return;
+
+		_downsideSumSq += ret * ret;
+		_downsideCount++;
 	}
 
 	/// <inheritdoc />
@@ -769,7 +769,6 @@ public class CalmarRatioParameter(NetProfitParameter profit, MaxDrawdownParamete
 	/// <inheritdoc />
 	public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 	{
-		// Annualized profit can be calculated if your NetProfitParameter stores profit per year.
 		var annualizedProfit = _profit.Value;
 		var maxDrawdown = _maxDrawdown.Value;
 
@@ -859,13 +858,16 @@ public class AverageDrawdownParameter : BasePnLStatisticParameter<decimal>
 			if (_inDrawdown)
 			{
 				var drawdown = _drawdownStart - _lastEquity;
+
 				if (drawdown > 0)
 				{
 					_drawdownSum += drawdown;
 					_drawdownCount++;
 				}
+
 				_inDrawdown = false;
 			}
+
 			_maxEquity = equity;
 			_drawdownStart = equity;
 		}

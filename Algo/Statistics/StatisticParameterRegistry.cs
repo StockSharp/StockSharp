@@ -5,15 +5,17 @@
 /// </summary>
 public static class StatisticParameterRegistry
 {
-	private static readonly Dictionary<StatisticParameterTypes, IStatisticParameter> _dict = [];
-
-	static StatisticParameterRegistry()
-    {
+	/// <summary>
+	/// Create all available <see cref="IStatisticParameter"/>.
+	/// </summary>
+	/// <returns>All available <see cref="IStatisticParameter"/>.</returns>
+	public static IStatisticParameter[] CreateAll()
+	{
 		var maxPf = new MaxProfitParameter();
 		var maxDd = new MaxDrawdownParameter();
 		var netPf = new NetProfitParameter();
 
-		All =
+		return
 		[
 			maxPf,
 			new MaxProfitDateParameter(maxPf),
@@ -48,6 +50,13 @@ public static class StatisticParameterRegistry
 			new OrderErrorCountParameter(),
 			new OrderInsufficientFundErrorCountParameter(),
 		];
+	}
+
+	private static readonly Dictionary<StatisticParameterTypes, IStatisticParameter> _dict = [];
+
+	static StatisticParameterRegistry()
+    {
+		All = CreateAll();
 
 		foreach (var p in All)
 			_dict.Add(p.Type, p);
