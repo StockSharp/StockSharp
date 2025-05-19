@@ -882,7 +882,22 @@ public class AverageDrawdownParameter : BasePnLStatisticParameter<decimal>
 
 		_lastEquity = equity;
 
-		Value = _drawdownCount > 0 ? (_drawdownSum / _drawdownCount) : 0;
+		// Compute average including current unfinished drawdown if any
+		var tempSum = _drawdownSum;
+		var tempCount = _drawdownCount;
+
+		if (_inDrawdown)
+		{
+			var currDrawdown = _drawdownStart - _lastEquity;
+
+			if (currDrawdown > 0)
+			{
+				tempSum += currDrawdown;
+				tempCount++;
+			}
+		}
+
+		Value = tempCount > 0 ? (tempSum / tempCount) : 0;
 	}
 
 	/// <inheritdoc/>
