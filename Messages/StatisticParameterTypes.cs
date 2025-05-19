@@ -149,4 +149,39 @@ public enum StatisticParameterTypes
 	/// Net profit for whole time period in percent.
 	/// </summary>
 	NetProfitPercent,
+
+	/// <summary>
+	/// Sharpe ratio (annualized return - risk-free rate / annualized standard deviation).
+	/// </summary>
+	SharpeRatio,
+
+	/// <summary>
+	/// Sortino ratio (annualized return - risk-free rate / annualized downside deviation).
+	/// </summary>
+	SortinoRatio,
+
+	/// <summary>
+	/// The ratio of the average profit of winning trades to the average loss of losing trades.
+	/// </summary>
+	ProfitFactor,
+
+	/// <summary>
+	/// The average profit of winning trades minus the average loss of losing trades.
+	/// </summary>
+	Expectancy,
+
+	/// <summary>
+	/// Calmar ratio (annualized net profit / max drawdown).
+	/// </summary>
+	CalmarRatio,
+
+	/// <summary>
+	/// Sterling ratio (annualized net profit / average drawdown).
+	/// </summary>
+	SterlingRatio,
+
+	/// <summary>
+	/// Average drawdown during the whole period.
+	/// </summary>
+	AverageDrawdown,
 }

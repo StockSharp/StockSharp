@@ -31,11 +31,11 @@ public class WinningTradesParameter : BaseStatisticParameter<int>, ITradeStatist
 	/// </summary>
 	public WinningTradesParameter()
 		: base(StatisticParameterTypes.WinningTrades)
-        {
-        }
+	{
+	}
 
-        /// <inheritdoc />
-        public void Add(PnLInfo info)
+	/// <inheritdoc />
+	public void Add(PnLInfo info)
 	{
 		if (info == null)
 			throw new ArgumentNullException(nameof(info));
@@ -182,8 +182,8 @@ public class AverageTradeProfitParameter : BaseStatisticParameter<decimal>, ITra
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
 	{
-		storage.SetValue("Sum", _sum);
-		storage.SetValue("Count", _count);
+		storage.Set("Sum", _sum);
+		storage.Set("Count", _count);
 
 		base.Save(storage);
 	}
@@ -250,8 +250,8 @@ public class AverageWinTradeParameter : BaseStatisticParameter<decimal>, ITradeS
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
 	{
-		storage.SetValue("Sum", _sum);
-		storage.SetValue("Count", _count);
+		storage.Set("Sum", _sum);
+		storage.Set("Count", _count);
 
 		base.Save(storage);
 	}
@@ -318,8 +318,8 @@ public class AverageLossTradeParameter : BaseStatisticParameter<decimal>, ITrade
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
 	{
-		storage.SetValue("Sum", _sum);
-		storage.SetValue("Count", _count);
+		storage.Set("Sum", _sum);
+		storage.Set("Count", _count);
 
 		base.Save(storage);
 	}
@@ -435,8 +435,8 @@ public class PerMonthTradeParameter : PerBaseTradeParameter
 	/// </summary>
 	public PerMonthTradeParameter()
 		: base(StatisticParameterTypes.PerMonthTrades)
-        {
-        }
+	{
+	}
 
 	/// <inheritdoc/>
 	protected override DateTime Align(DateTime date) => new(date.Year, date.Month, 1);
@@ -463,4 +463,153 @@ public class PerDayTradeParameter : PerBaseTradeParameter
 
 	/// <inheritdoc/>
 	protected override DateTime Align(DateTime date) => date.Date;
+}
+
+/// <summary>
+/// The ratio of the average profit of winning trades to the average loss of losing trades.
+/// </summary>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.ProfitFactorKey,
+	Description = LocalizedStrings.ProfitFactorDescKey,
+	GroupName = LocalizedStrings.TradesKey,
+	Order = 109)]
+public class ProfitFactorParameter : BaseStatisticParameter<decimal>, ITradeStatisticParameter
+{
+	private decimal _grossProfit;
+	private decimal _grossLoss;
+
+	/// <summary>
+	/// Initialize <see cref="ProfitFactorParameter"/>.
+	/// </summary>
+	public ProfitFactorParameter()
+		: base(StatisticParameterTypes.ProfitFactor)
+	{
+	}
+
+	/// <inheritdoc/>
+	public void Add(PnLInfo info)
+	{
+		if (info.PnL > 0)
+			_grossProfit += info.PnL;
+		else if (info.PnL < 0)
+			_grossLoss += Math.Abs(info.PnL);
+
+		Value = _grossLoss > 0 ? _grossProfit / _grossLoss : 0;
+	}
+
+	/// <inheritdoc/>
+	public override void Reset()
+	{
+		_grossProfit = 0;
+		_grossLoss = 0;
+
+		base.Reset();
+	}
+
+	/// <inheritdoc/>
+	public override void Save(SettingsStorage storage)
+	{
+		storage.Set("GrossProfit", _grossProfit);
+		storage.Set("GrossLoss", _grossLoss);
+
+		base.Save(storage);
+	}
+
+	/// <inheritdoc/>
+	public override void Load(SettingsStorage storage)
+	{
+		_grossProfit = storage.GetValue<decimal>("GrossProfit");
+		_grossLoss = storage.GetValue<decimal>("GrossLoss");
+
+		base.Load(storage);
+	}
+}
+
+/// <summary>
+/// The average profit of winning trades minus the average loss of losing trades.
+/// </summary>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.ExpectancyKey,
+	Description = LocalizedStrings.ExpectancyDescKey,
+	GroupName = LocalizedStrings.TradesKey,
+	Order = 110)]
+public class ExpectancyParameter : BaseStatisticParameter<decimal>, ITradeStatisticParameter
+{
+	private int _winCount;
+	private int _lossCount;
+	private decimal _winSum;
+	private decimal _lossSum;
+
+	/// <summary>
+	/// Initialize <see cref="ExpectancyParameter"/>.
+	/// </summary>
+	public ExpectancyParameter()
+		: base(StatisticParameterTypes.Expectancy)
+	{
+	}
+
+	/// <inheritdoc/>
+	public void Add(PnLInfo info)
+	{
+		if (info.PnL > 0)
+		{
+			_winCount++;
+			_winSum += info.PnL;
+		}
+		else if (info.PnL < 0)
+		{
+			_lossCount++;
+			_lossSum += info.PnL;
+		}
+
+		var total = _winCount + _lossCount;
+		if (total == 0)
+		{
+			Value = 0;
+			return;
+		}
+
+		var probWin = (decimal)_winCount / total;
+		var probLoss = (decimal)_lossCount / total;
+
+		var avgWin = _winCount > 0 ? _winSum / _winCount : 0;
+		var avgLoss = _lossCount > 0 ? _lossSum / _lossCount : 0;
+
+		Value = probWin * avgWin + probLoss * avgLoss;
+	}
+
+	/// <inheritdoc/>
+	public override void Reset()
+	{
+		_winCount = 0;
+		_lossCount = 0;
+		_winSum = 0;
+		_lossSum = 0;
+
+		base.Reset();
+	}
+
+	/// <inheritdoc/>
+	public override void Save(SettingsStorage storage)
+	{
+		storage.Set("WinCount", _winCount);
+		storage.Set("LossCount", _lossCount);
+		storage.Set("WinSum", _winSum);
+		storage.Set("LossSum", _lossSum);
+
+		base.Save(storage);
+	}
+
+	/// <inheritdoc/>
+	public override void Load(SettingsStorage storage)
+	{
+		_winCount = storage.GetValue<int>("WinCount");
+		_lossCount = storage.GetValue<int>("LossCount");
+		_winSum = storage.GetValue<decimal>("WinSum");
+		_lossSum = storage.GetValue<decimal>("LossSum");
+
+		base.Load(storage);
+	}
 }

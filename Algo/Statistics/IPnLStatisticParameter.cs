@@ -163,7 +163,7 @@ public class MaxProfitDateParameter(MaxProfitParameter underlying) : BasePnLStat
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
 	{
-		storage.SetValue("PrevValue", _prevValue);
+		storage.Set("PrevValue", _prevValue);
 		base.Save(storage);
 	}
 
@@ -195,33 +195,33 @@ public class MaxDrawdownParameter : BasePnLStatisticParameter<decimal>
 	{
 	}
 
-	private decimal _maxEquity = decimal.MinValue;
+	internal decimal MaxEquity = decimal.MinValue;
 
 	/// <inheritdoc />
 	public override void Reset()
 	{
-		_maxEquity = decimal.MinValue;
+		MaxEquity = decimal.MinValue;
 		base.Reset();
 	}
 
 	/// <inheritdoc />
 	public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 	{
-		_maxEquity = Math.Max(_maxEquity, pnl);
-		Value = Math.Max(Value, _maxEquity - pnl);
+		MaxEquity = Math.Max(MaxEquity, pnl);
+		Value = Math.Max(Value, MaxEquity - pnl);
 	}
 
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
 	{
-		storage.SetValue("MaxEquity", _maxEquity);
+		storage.Set("MaxEquity", MaxEquity);
 		base.Save(storage);
 	}
 
 	/// <inheritdoc />
 	public override void Load(SettingsStorage storage)
 	{
-		_maxEquity = storage.GetValue<decimal>("MaxEquity");
+		MaxEquity = storage.GetValue<decimal>("MaxEquity");
 		base.Load(storage);
 	}
 }
@@ -243,23 +243,13 @@ public class MaxDrawdownParameter : BasePnLStatisticParameter<decimal>
 public class MaxDrawdownPercentParameter(MaxDrawdownParameter underlying) : BasePnLStatisticParameter<decimal>(StatisticParameterTypes.MaxDrawdownPercent)
 {
 	private readonly MaxDrawdownParameter _underlying = underlying ?? throw new ArgumentNullException(nameof(underlying));
-	private decimal _beginValue;
-
-	/// <inheritdoc />
-	public override void Init(decimal beginValue)
-	{
-		base.Init(beginValue);
-
-		_beginValue = beginValue;
-	}
 
 	/// <inheritdoc />
 	public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 	{
-		if (pnl == 0 || _beginValue == 0)
-			return;
+		var maxEquity = _underlying.MaxEquity;
 
-		Value = _underlying.Value * 100m / _beginValue;
+		Value = maxEquity != 0 ? (_underlying.Value * 100m / maxEquity) : 0;
 	}
 }
 
@@ -302,7 +292,7 @@ public class MaxDrawdownDateParameter(MaxDrawdownParameter underlying) : BasePnL
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
 	{
-		storage.SetValue("PrevValue", _prevValue);
+		storage.Set("PrevValue", _prevValue);
 		base.Save(storage);
 	}
 
@@ -355,7 +345,7 @@ public class MaxRelativeDrawdownParameter : BasePnLStatisticParameter<decimal>
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
 	{
-		storage.SetValue("MaxEquity", _maxEquity);
+		storage.Set("MaxEquity", _maxEquity);
 		base.Save(storage);
 	}
 
@@ -408,7 +398,7 @@ public class ReturnParameter : BasePnLStatisticParameter<decimal>
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
 	{
-		storage.SetValue("MinEquity", _minEquity);
+		storage.Set("MinEquity", _minEquity);
 		base.Save(storage);
 	}
 
@@ -473,5 +463,451 @@ public class CommissionParameter : BasePnLStatisticParameter<decimal>
 	{
 		if (commission is not null)
 			Value = commission.Value;
+	}
+}
+
+/// <summary>
+/// Base class for risk-adjusted ratios (Sharpe/Sortino).
+/// </summary>
+public abstract class RiskAdjustedRatioParameter : BasePnLStatisticParameter<decimal>
+{
+	private decimal? _previousPnL;
+	private double _periodsPerYear;
+
+	private decimal _sumReturn; // Sum of all returns
+	private int _count;         // Number of returns
+
+	private decimal _riskFreeRate;
+	private TimeSpan _period;
+
+	/// <summary>
+	/// Annual risk-free rate (e.g., 0.03 = 3%).
+	/// </summary>
+	public decimal RiskFreeRate
+	{
+		get => _riskFreeRate;
+		set
+		{
+			if (value < 0)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+			_riskFreeRate = value;
+		}
+	}
+
+	/// <summary>
+	/// Return calculation period.
+	/// </summary>
+	public TimeSpan Period
+	{
+		get => _period;
+		set
+		{
+			if (value <= TimeSpan.Zero)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			_period = value;
+			_periodsPerYear = 1.0 / (value.TotalDays / 365.25);
+		}
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="RiskAdjustedRatioParameter"/> class.
+	/// </summary>
+	/// <param name="type"><see cref="IStatisticParameter.Type"/></param>
+	protected RiskAdjustedRatioParameter(StatisticParameterTypes type)
+		: base(type)
+	{
+		Period = TimeSpan.FromDays(1);
+	}
+
+	/// <inheritdoc />
+	public override void Reset()
+	{
+		_previousPnL = null;
+		_sumReturn = 0;
+		_count = 0;
+
+		base.Reset();
+	}
+
+	/// <inheritdoc />
+	public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+	{
+		if (_previousPnL != null)
+		{
+			var ret = pnl - _previousPnL.Value;
+
+			_sumReturn += ret;
+			_count++;
+
+			AddRiskSample(ret);
+		}
+
+		_previousPnL = pnl;
+
+		if (_count < 2 || !HasEnoughRiskSamples(_count))
+		{
+			Value = 0;
+			return;
+		}
+
+		var avgReturn = _sumReturn / _count;
+		var annualizedReturn = avgReturn * (decimal)_periodsPerYear;
+		var risk = GetRisk(_count, _sumReturn);
+		var annualizedRisk = risk * (decimal)Math.Sqrt(_periodsPerYear);
+
+		Value = annualizedRisk != 0
+			? (annualizedReturn - RiskFreeRate) / annualizedRisk
+			: 0;
+	}
+
+	/// <summary>
+	/// Adds a new sample to the risk accumulator.
+	/// </summary>
+	/// <param name="ret">The return value.</param>
+	protected abstract void AddRiskSample(decimal ret);
+
+	/// <summary>
+	/// Gets the risk value (e.g., stddev or downside deviation).
+	/// </summary>
+	/// <param name="count">Count of samples.</param>
+	/// <param name="sumReturn">Sum of all returns.</param>
+	/// <returns>Risk value.</returns>
+	protected abstract decimal GetRisk(int count, decimal sumReturn);
+
+	/// <summary>
+	/// Checks if enough risk samples accumulated for calculation.
+	/// </summary>
+	/// <param name="count">Count of samples.</param>
+	/// <returns>Check result.</returns>
+	protected abstract bool HasEnoughRiskSamples(int count);
+
+	/// <inheritdoc />
+	public override void Save(SettingsStorage storage)
+	{
+		storage.SetValue("PreviousPnL", _previousPnL);
+		storage.SetValue("RiskFreeRate", RiskFreeRate);
+		storage.SetValue("Period", Period);
+		storage.SetValue("SumReturn", _sumReturn);
+		storage.SetValue("Count", _count);
+
+		base.Save(storage);
+	}
+
+	/// <inheritdoc />
+	public override void Load(SettingsStorage storage)
+	{
+		RiskFreeRate = storage.GetValue<decimal>("RiskFreeRate");
+		Period = storage.GetValue<TimeSpan>("Period");
+		_previousPnL = storage.GetValue<decimal?>("PreviousPnL");
+		_sumReturn = storage.GetValue<decimal>("SumReturn");
+		_count = storage.GetValue<int>("Count");
+
+		base.Load(storage);
+	}
+}
+
+/// <summary>
+/// Sharpe ratio (annualized return - risk-free rate / annualized standard deviation).
+/// </summary>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.SharpeRatioKey,
+	Description = LocalizedStrings.SharpeRatioDescKey,
+	GroupName = LocalizedStrings.PnLKey,
+	Order = 11
+)]
+public class SharpeRatioParameter : RiskAdjustedRatioParameter
+{
+	private decimal _sumSq; // Sum of squared returns
+
+	/// <summary>
+	/// Initialize a new instance of the <see cref="SharpeRatioParameter"/> class.
+	/// </summary>
+	public SharpeRatioParameter()
+		: base(StatisticParameterTypes.SharpeRatio)
+	{
+	}
+
+	/// <inheritdoc />
+	protected override void AddRiskSample(decimal ret)
+	{
+		_sumSq += ret * ret;
+	}
+
+	/// <inheritdoc />
+	protected override decimal GetRisk(int count, decimal sumReturn)
+	{
+		if (count < 2)
+			return 0;
+
+		var avg = sumReturn / count;
+		return (decimal)Math.Sqrt((double)((_sumSq - avg * avg * count) / (count - 1)));
+	}
+
+	/// <inheritdoc />
+	protected override bool HasEnoughRiskSamples(int count)
+		=> count >= 2;
+
+	/// <inheritdoc />
+	public override void Reset()
+	{
+		_sumSq = 0;
+		base.Reset();
+	}
+
+	/// <inheritdoc />
+	public override void Save(SettingsStorage storage)
+	{
+		base.Save(storage);
+
+		storage.SetValue("SumSq", _sumSq);
+	}
+
+	/// <inheritdoc />
+	public override void Load(SettingsStorage storage)
+	{
+		base.Load(storage);
+
+		_sumSq = storage.GetValue<decimal>("SumSq");
+	}
+}
+
+/// <summary>
+/// Sortino ratio (annualized return - risk-free rate / annualized downside deviation).
+/// </summary>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.SortinoRatioKey,
+	Description = LocalizedStrings.SortinoRatioDescKey,
+	GroupName = LocalizedStrings.PnLKey,
+	Order = 12
+)]
+public class SortinoRatioParameter : RiskAdjustedRatioParameter
+{
+	private decimal _downsideSumSq;
+	private int _downsideCount;
+
+	/// <summary>
+	/// Initialize a new instance of the <see cref="SortinoRatioParameter"/> class.
+	/// </summary>
+	public SortinoRatioParameter()
+		: base(StatisticParameterTypes.SortinoRatio)
+	{
+	}
+
+	/// <inheritdoc />
+	protected override void AddRiskSample(decimal ret)
+	{
+		if (ret < 0)
+		{
+			_downsideSumSq += ret * ret;
+			_downsideCount++;
+		}
+	}
+
+	/// <inheritdoc />
+	protected override decimal GetRisk(int count, decimal sumReturn)
+	{
+		return _downsideCount > 0
+			? (decimal)Math.Sqrt((double)(_downsideSumSq / _downsideCount))
+			: 0;
+	}
+
+	/// <inheritdoc />
+	protected override bool HasEnoughRiskSamples(int count)
+		=> _downsideCount > 0;
+
+	/// <inheritdoc />
+	public override void Reset()
+	{
+		base.Reset();
+
+		_downsideSumSq = 0;
+		_downsideCount = 0;
+	}
+
+	/// <inheritdoc />
+	public override void Save(SettingsStorage storage)
+	{
+		base.Save(storage);
+
+		storage.Set("DownsideSumSq", _downsideSumSq);
+		storage.Set("DownsideCount", _downsideCount);
+	}
+
+	/// <inheritdoc />
+	public override void Load(SettingsStorage storage)
+	{
+		base.Load(storage);
+
+		_downsideSumSq = storage.GetValue<decimal>("DownsideSumSq");
+		_downsideCount = storage.GetValue<int>("DownsideCount");
+	}
+}
+
+/// <summary>
+/// Calmar ratio (annualized net profit / max drawdown).
+/// </summary>
+/// <remarks>
+/// Initialize <see cref="CalmarRatioParameter"/>.
+/// </remarks>
+/// <param name="profit"><see cref="NetProfitParameter"/></param>
+/// <param name="maxDrawdown"><see cref="MaxDrawdownParameter"/></param>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.CalmarRatioKey,
+	Description = LocalizedStrings.CalmarRatioDescKey,
+	GroupName = LocalizedStrings.PnLKey,
+	Order = 13
+)]
+public class CalmarRatioParameter(NetProfitParameter profit, MaxDrawdownParameter maxDrawdown) : BasePnLStatisticParameter<decimal>(StatisticParameterTypes.CalmarRatio)
+{
+	private readonly NetProfitParameter _profit = profit ?? throw new ArgumentNullException(nameof(profit));
+	private readonly MaxDrawdownParameter _maxDrawdown = maxDrawdown ?? throw new ArgumentNullException(nameof(maxDrawdown));
+
+	/// <inheritdoc />
+	public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+	{
+		// Annualized profit can be calculated if your NetProfitParameter stores profit per year.
+		var annualizedProfit = _profit.Value;
+		var maxDrawdown = _maxDrawdown.Value;
+
+		Value = maxDrawdown != 0 ? annualizedProfit / Math.Abs(maxDrawdown) : 0;
+	}
+}
+
+/// <summary>
+/// Sterling ratio (annualized net profit / average drawdown).
+/// </summary>
+/// <remarks>
+/// Initialize <see cref="SterlingRatioParameter"/>.
+/// </remarks>
+/// <param name="profit"><see cref="NetProfitParameter"/></param>
+/// <param name="avgDrawdown"><see cref="AverageDrawdownParameter"/></param>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.CalmarRatioKey,
+	Description = LocalizedStrings.CalmarRatioDescKey,
+	GroupName = LocalizedStrings.PnLKey,
+	Order = 14
+)]
+public class SterlingRatioParameter(NetProfitParameter profit, AverageDrawdownParameter avgDrawdown) : BasePnLStatisticParameter<decimal>(StatisticParameterTypes.SterlingRatio)
+{
+	private readonly NetProfitParameter _profit = profit ?? throw new ArgumentNullException(nameof(profit));
+	private readonly AverageDrawdownParameter _avgDrawdown = avgDrawdown ?? throw new ArgumentNullException(nameof(avgDrawdown));
+
+	/// <inheritdoc />
+	public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+	{
+		var annualizedProfit = _profit.Value;
+		var avgDrawdown = _avgDrawdown.Value;
+
+		Value = avgDrawdown != 0 ? annualizedProfit / Math.Abs(avgDrawdown) : 0;
+	}
+}
+
+/// <summary>
+/// Average drawdown during the whole period.
+/// </summary>
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.AverageDrawdownKey,
+	Description = LocalizedStrings.AverageDrawdownDescKey,
+	GroupName = LocalizedStrings.PnLKey,
+	Order = 15
+)]
+public class AverageDrawdownParameter : BasePnLStatisticParameter<decimal>
+{
+	private decimal _lastEquity;
+	private decimal _maxEquity = decimal.MinValue;
+	private decimal _drawdownStart;
+	private bool _inDrawdown;
+
+	private int _drawdownCount;
+	private decimal _drawdownSum;
+
+	/// <summary>
+	/// Initialize a new instance of the <see cref="AverageDrawdownParameter"/> class.
+	/// </summary>
+	public AverageDrawdownParameter()
+		: base(StatisticParameterTypes.AverageDrawdown)
+	{
+	}
+
+	/// <inheritdoc/>
+	public override void Reset()
+	{
+		_lastEquity = 0;
+		_maxEquity = decimal.MinValue;
+		_drawdownStart = 0;
+		_inDrawdown = false;
+
+		_drawdownCount = 0;
+		_drawdownSum = 0;
+
+		base.Reset();
+	}
+
+	/// <inheritdoc/>
+	public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+	{
+		var equity = pnl;
+
+		if (equity > _maxEquity)
+		{
+			if (_inDrawdown)
+			{
+				var drawdown = _drawdownStart - _lastEquity;
+				if (drawdown > 0)
+				{
+					_drawdownSum += drawdown;
+					_drawdownCount++;
+				}
+				_inDrawdown = false;
+			}
+			_maxEquity = equity;
+			_drawdownStart = equity;
+		}
+		else if (equity < _maxEquity)
+		{
+			if (!_inDrawdown)
+			{
+				_drawdownStart = _maxEquity;
+				_inDrawdown = true;
+			}
+		}
+
+		_lastEquity = equity;
+
+		Value = _drawdownCount > 0 ? (_drawdownSum / _drawdownCount) : 0;
+	}
+
+	/// <inheritdoc/>
+	public override void Save(SettingsStorage storage)
+	{
+		storage
+			.Set("LastEquity", _lastEquity)
+			.Set("MaxEquity", _maxEquity)
+			.Set("DrawdownStart", _drawdownStart)
+			.Set("InDrawdown", _inDrawdown)
+			.Set("DrawdownSum", _drawdownSum)
+			.Set("DrawdownCount", _drawdownCount)
+		;
+
+		base.Save(storage);
+	}
+
+	/// <inheritdoc/>
+	public override void Load(SettingsStorage storage)
+	{
+		_lastEquity = storage.GetValue<decimal>("LastEquity");
+		_maxEquity = storage.GetValue<decimal>("MaxEquity");
+		_drawdownStart = storage.GetValue<decimal>("DrawdownStart");
+		_inDrawdown = storage.GetValue<bool>("InDrawdown");
+		_drawdownSum = storage.GetValue<decimal>("DrawdownSum");
+		_drawdownCount = storage.GetValue<int>("DrawdownCount");
+
+		base.Load(storage);
 	}
 }
