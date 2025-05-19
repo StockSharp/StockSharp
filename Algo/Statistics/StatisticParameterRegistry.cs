@@ -14,6 +14,7 @@ public static class StatisticParameterRegistry
 		var maxPf = new MaxProfitParameter();
 		var maxDd = new MaxDrawdownParameter();
 		var netPf = new NetProfitParameter();
+		var avgDd = new AverageDrawdownParameter();
 
 		return
 		[
@@ -28,6 +29,11 @@ public static class StatisticParameterRegistry
 			new NetProfitPercentParameter(),
 			new RecoveryFactorParameter(maxDd, netPf),
 			new CommissionParameter(),
+			new SharpeRatioParameter(),
+			new SortinoRatioParameter(),
+			new CalmarRatioParameter(netPf, maxDd),
+			new SterlingRatioParameter(netPf, avgDd),
+			avgDd,
 
 			new WinningTradesParameter(),
 			new AverageWinTradeParameter(),
@@ -38,6 +44,8 @@ public static class StatisticParameterRegistry
 			new RoundtripCountParameter(),
 			new AverageTradeProfitParameter(),
 			new TradeCountParameter(),
+			new ProfitFactorParameter(),
+			new ExpectancyParameter(),
 
 			new MaxLongPositionParameter(),
 			new MaxShortPositionParameter(),

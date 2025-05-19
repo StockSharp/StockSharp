@@ -786,8 +786,8 @@ public class CalmarRatioParameter(NetProfitParameter profit, MaxDrawdownParamete
 /// <param name="avgDrawdown"><see cref="AverageDrawdownParameter"/></param>
 [Display(
 	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.CalmarRatioKey,
-	Description = LocalizedStrings.CalmarRatioDescKey,
+	Name = LocalizedStrings.SterlingRatioKey,
+	Description = LocalizedStrings.SterlingRatioDescKey,
 	GroupName = LocalizedStrings.PnLKey,
 	Order = 14
 )]
