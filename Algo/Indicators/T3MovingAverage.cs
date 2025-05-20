@@ -38,7 +38,7 @@ public class T3MovingAverage : LengthIndicator<decimal>
 		get => _volumeFactor;
 		set
 		{
-			if (value < 0 || value > 1)
+			if (value <= 0 || value > 1)
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 			_volumeFactor = value;
@@ -96,4 +96,20 @@ public class T3MovingAverage : LengthIndicator<decimal>
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" VF={VolumeFactor}";
+
+	/// <inheritdoc />
+	public override void Save(SettingsStorage storage)
+	{
+		base.Save(storage);
+
+		storage.SetValue(nameof(VolumeFactor), VolumeFactor);
+	}
+
+	/// <inheritdoc />
+	public override void Load(SettingsStorage storage)
+	{
+		base.Load(storage);
+
+		VolumeFactor = storage.GetValue<decimal>(nameof(VolumeFactor));
+	}
 }
