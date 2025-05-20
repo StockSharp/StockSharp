@@ -108,7 +108,7 @@ public partial class MainWindow
 		_connector.Connect();
 		_connector.SendInMessage(new CommissionRuleMessage
 		{
-			Rule = new CommissionPerTradeRule { Value = 0.01m }
+			Rule = new CommissionTradeRule { Value = 0.01m }
 		});
 
 		_connector.Start();

@@ -123,7 +123,7 @@ public partial class MainWindow
 		// 1 cent commission for trade
 		settings.CommissionRules = new ICommissionRule[]
 		{
-			new CommissionPerTradeRule { Value = 0.01m },
+			new CommissionTradeRule { Value = 0.01m },
 		};
 
 		// count of parallel testing strategies
