@@ -50,6 +50,7 @@ public class OrderLogMarketDepthBuilder : IOrderLogMarketDepthBuilder
 	{
 		_depth = depth ?? throw new ArgumentNullException(nameof(depth));
 		_depth.State = QuoteChangeStates.SnapshotComplete;
+		_depth.BuildFrom = DataType.OrderLog;
 
 		foreach (var bid in depth.Bids)
 			_bids.Add(bid.Price, bid);
