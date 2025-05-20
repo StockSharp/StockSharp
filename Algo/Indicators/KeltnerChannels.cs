@@ -126,6 +126,24 @@ public class KeltnerChannels : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" L={Length},M={Multiplier}";
+
+	/// <inheritdoc />
+	public override void Save(SettingsStorage storage)
+	{
+		base.Save(storage);
+
+		storage.SetValue(nameof(Length), Length);
+		storage.SetValue(nameof(Multiplier), Multiplier);
+	}
+
+	/// <inheritdoc />
+	public override void Load(SettingsStorage storage)
+	{
+		base.Load(storage);
+
+		Length = storage.GetValue<int>(nameof(Length));
+		Multiplier = storage.GetValue<decimal>(nameof(Multiplier));
+	}
 }
 
 /// <summary>
