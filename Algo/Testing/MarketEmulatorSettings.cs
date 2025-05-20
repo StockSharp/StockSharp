@@ -524,6 +524,15 @@ public class MarketEmulatorSettings : NotifiableObject, IPersistable
 
 		var commRules = storage.GetValue<SettingsStorage[]>(nameof(CommissionRules));
 		if (commRules is not null)
-			CommissionRules = [.. commRules.Select(i => i.LoadEntire<ICommissionRule>())];
+		{
+			try
+			{
+				CommissionRules = [.. commRules.Select(i => i.LoadEntire<ICommissionRule>())];
+			}
+			catch (Exception ex)
+			{
+				ex.LogError();
+			}
+		}
 	}
 }
