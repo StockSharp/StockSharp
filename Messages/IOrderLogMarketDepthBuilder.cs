@@ -77,7 +77,7 @@ public class OrderLogMarketDepthBuilder : IOrderLogMarketDepthBuilder
 			throw new ArgumentNullException(nameof(item));
 
 		if (item.DataType != DataType.OrderLog)
-			throw new ArgumentException(nameof(item));
+			throw new ArgumentException(item.ToString());
 
 		if (item.OrderPrice == 0)
 			return null;

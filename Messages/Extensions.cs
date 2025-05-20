@@ -4190,7 +4190,7 @@ public static partial class Extensions
 			throw new ArgumentNullException(nameof(message));
 
 		if (!message.IsSubscribe)
-			throw new ArgumentException(nameof(message));
+			throw new ArgumentException(message.ToString());
 
 		return message.To != null || message.Count != null;
 	}
