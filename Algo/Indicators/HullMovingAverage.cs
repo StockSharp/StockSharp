@@ -43,6 +43,8 @@ public class HullMovingAverage : LengthIndicator<decimal>
 		{
 			_sqrtPeriod = value;
 			_wmaResult.Length = value == 0 ? (int)Math.Sqrt(Length) : value;
+
+			Reset();
 		}
 	}
 
