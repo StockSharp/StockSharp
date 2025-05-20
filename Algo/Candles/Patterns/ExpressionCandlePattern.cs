@@ -125,7 +125,11 @@ public class CandleExpressionCondition : IPersistable
 	}
 
 	/// <summary>
+	/// Check if the condition is met for the given candles.
 	/// </summary>
+	/// <param name="candles">The candles to check the condition against.</param>
+	/// <param name="candleIndex">The index of the candle in the candles array.</param>
+	/// <returns>Check result.</returns>
 	public bool CheckCondition(ReadOnlySpan<ICandleMessage> candles, int candleIndex)
 	{
 		if(_formula == null)
@@ -171,6 +175,9 @@ public class CandleExpressionCondition : IPersistable
 
 	/// <inheritdoc />
 	public void Save(SettingsStorage storage) => storage.SetValue(nameof(Expression), Expression);
+
+	/// <inheritdoc />
+	public override string ToString() => Expression.IsEmpty(LocalizedStrings.Empty);
 }
 
 
