@@ -3036,6 +3036,8 @@
   "RisingThreeMethods": "שלוש שיטות עולות",
   "RiskCommission": "כלל סיכון המעקב אחר גודל העמלה.",
   "RiskError": "כלל סיכון העוקב אחר מספר השגיאות.",
+  "RiskFreeRate": "ריבית חסרת סיכון",
+  "RiskFreeRateDesc": "שיעור תשואה חסר סיכון המשמש בחישובים פיננסיים",
   "RiskIntervalDesc": "הפרק הזמני בו ייעקב כמות ההזמנות.",
   "RiskManagement": "ניהול סיכונים",
   "RiskOrderCommission": "סיכון עמלת הזמנה",

@@ -3036,6 +3036,8 @@
   "RisingThreeMethods": "上升三法",
   "RiskCommission": "风险规则，跟踪佣金大小。",
   "RiskError": "风险规则，跟踪错误的数量。",
+  "RiskFreeRate": "无风险利率",
+  "RiskFreeRateDesc": "在金融计算中使用的无风险收益率",
   "RiskIntervalDesc": "用于跟踪订单数量的时间间隔。",
   "RiskManagement": "风险管理",
   "RiskOrderCommission": "订单佣金风险",

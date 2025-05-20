@@ -3036,6 +3036,8 @@
   "RisingThreeMethods": "Tiga Kaedah Menaik",
   "RiskCommission": "Peraturan risiko yang mengesan saiz komisen.",
   "RiskError": "Peraturan risiko yang mengesan bilangan kesilapan.",
+  "RiskFreeRate": "Kadar Bebas Risiko",
+  "RiskFreeRateDesc": "Kadar pulangan bebas risiko yang digunakan dalam pengiraan kewangan",
   "RiskIntervalDesc": "Selang waktu yang jumlah pesanannya akan dipantau.",
   "RiskManagement": "Pengurusan risiko",
   "RiskOrderCommission": "Risiko Komisen Pesanan",

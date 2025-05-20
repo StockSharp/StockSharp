@@ -3036,6 +3036,8 @@
   "RisingThreeMethods": "Három Emelkedő Metódus",
   "RiskCommission": "Kockázati szabály, amely követi a jutalék méretét.",
   "RiskError": "Kockázati szabály, amely nyomon követi a hibák számát.",
+  "RiskFreeRate": "Kockázatmentes kamatláb",
+  "RiskFreeRateDesc": "Kockázatmentes megtérülési ráta, amelyet pénzügyi számításokban használnak",
   "RiskIntervalDesc": "Az az időszak, amely alatt nyomon követik a rendelések számát.",
   "RiskManagement": "Kockázatkezelés",
   "RiskOrderCommission": "Megbízási jutalék kockázat",

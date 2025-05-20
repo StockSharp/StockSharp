@@ -3036,6 +3036,8 @@
   "RisingThreeMethods": "Ba Phương Pháp Tăng",
   "RiskCommission": "Quy tắc rủi ro theo dõi kích thước của hoa hồng.",
   "RiskError": "Quy tắc rủi ro theo dõi số lỗi.",
+  "RiskFreeRate": "Lãi suất phi rủi ro",
+  "RiskFreeRateDesc": "Tỷ suất sinh lời phi rủi ro được sử dụng trong tính toán tài chính",
   "RiskIntervalDesc": "Khoảng thời gian trong đó số lượng đơn hàng sẽ được theo dõi.",
   "RiskManagement": "Quản lý rủi ro",
   "RiskOrderCommission": "Rủi ro hoa hồng lệnh",

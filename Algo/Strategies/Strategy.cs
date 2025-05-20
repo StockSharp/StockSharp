@@ -245,6 +245,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		_historySize = Param<TimeSpan?>(nameof(HistorySize)).SetNullOrNotNegative().SetDisplay(LocalizedStrings.DaysHistory, LocalizedStrings.DaysHistoryDesc, LocalizedStrings.General).SetBasic(false).SetCanOptimize(false);
 		_security = Param<Security>(nameof(Security)).SetDisplay(LocalizedStrings.Security, LocalizedStrings.StrategySecurity, LocalizedStrings.General).SetNonBrowsable(HideSecurityAndPortfolioParameters);
 		_portfolio = Param<Portfolio>(nameof(Portfolio)).SetDisplay(LocalizedStrings.Portfolio, LocalizedStrings.StrategyPortfolio, LocalizedStrings.General).SetNonBrowsable(HideSecurityAndPortfolioParameters).SetCanOptimize(false);
+		_riskFreeRate = Param<decimal>(nameof(RiskFreeRate)).SetDisplay(LocalizedStrings.RiskFreeRate, LocalizedStrings.RiskFreeRateDesc, LocalizedStrings.General).SetCanOptimize(false);
 
 		_systemParams =
 		[
@@ -1071,6 +1072,23 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		set => _commentMode.Value = value;
 	}
 
+	private readonly StrategyParam<decimal> _riskFreeRate;
+
+	/// <summary>
+	/// Annual risk-free rate (e.g., 0.03 = 3%).
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.RiskFreeRateKey,
+		Description = LocalizedStrings.RiskFreeRateDescKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 11)]
+	public decimal RiskFreeRate
+	{
+		get => _riskFreeRate.Value;
+		set => _riskFreeRate.Value = value;
+	}
+
 	/// <inheritdoc />
 	[Browsable(false)]
 	public IMarketRuleList Rules { get; }
@@ -1142,8 +1160,16 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	{
 		ErrorState = LogLevels.Info;
 
-		if (Portfolio?.CurrentValue is not null)
-			StatisticManager.Init<IPnLStatisticParameter, decimal>(Portfolio.CurrentValue.Value);
+		var manager = StatisticManager;
+
+		if (Portfolio?.CurrentValue is decimal beginValue)
+		{
+			foreach (var p in manager.Parameters.OfType<IBeginValueStatisticParameter>())
+				p.BeginValue = beginValue;
+		}
+
+		foreach (var p in manager.Parameters.OfType<IRiskFreeRateStatisticParameter>())
+			p.RiskFreeRate = RiskFreeRate;
 
 		_maxOrdersKeepTime = TimeSpan.FromTicks((long)(OrdersKeepTime.Ticks * 1.5));
 	}

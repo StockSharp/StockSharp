@@ -3036,6 +3036,8 @@
   "RisingThreeMethods": "Drie Stijgende Methoden",
   "RiskCommission": "Risicoregel die de omvang van de commissie volgt.",
   "RiskError": "Risicoregel die het aantal fouten bijhoudt.",
+  "RiskFreeRate": "Risicovrije rente",
+  "RiskFreeRateDesc": "Risicovrije rendement gebruikt in financiële berekeningen",
   "RiskIntervalDesc": "Interval waarbinnen het aantal bestellingen wordt bijgehouden.",
   "RiskManagement": "Risicobeheer",
   "RiskOrderCommission": "Ordercommissie risico",

@@ -3036,6 +3036,8 @@
   "RisingThreeMethods": "상승 삼 메소드",
   "RiskCommission": "수수료 크기를 추적하는 위험 규칙.",
   "RiskError": "오류 수를 추적하는 위험 규칙입니다.",
+  "RiskFreeRate": "무위험 이자율",
+  "RiskFreeRateDesc": "금융 계산에 사용되는 무위험 수익률",
   "RiskIntervalDesc": "주문 수를 추적할 간격입니다.",
   "RiskManagement": "위험 관리",
   "RiskOrderCommission": "주문 수수료 위험",

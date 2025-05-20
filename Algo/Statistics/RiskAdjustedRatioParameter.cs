@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Statistics;
 /// <summary>
 /// Base class for risk-adjusted ratios (Sharpe/Sortino).
 /// </summary>
-public abstract class RiskAdjustedRatioParameter : BasePnLStatisticParameter<decimal>
+public abstract class RiskAdjustedRatioParameter : BasePnLStatisticParameter<decimal>, IRiskFreeRateStatisticParameter
 {
 	private decimal? _previousPnL;
 	private double _periodsPerYear;
@@ -14,9 +14,7 @@ public abstract class RiskAdjustedRatioParameter : BasePnLStatisticParameter<dec
 	private decimal _riskFreeRate;
 	private TimeSpan _period;
 
-	/// <summary>
-	/// Annual risk-free rate (e.g., 0.03 = 3%).
-	/// </summary>
+	/// <inheritdoc />
 	public decimal RiskFreeRate
 	{
 		get => _riskFreeRate;
@@ -24,6 +22,7 @@ public abstract class RiskAdjustedRatioParameter : BasePnLStatisticParameter<dec
 		{
 			if (value < 0)
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
 			_riskFreeRate = value;
 		}
 	}

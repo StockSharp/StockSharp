@@ -3036,6 +3036,8 @@
   "RisingThreeMethods": "Tři Rostoucí Metody",
   "RiskCommission": "Pravidlo rizika sledující velikost provize.",
   "RiskError": "Rizikové pravidlo sledující počet chyb.",
+  "RiskFreeRate": "Bezriziková sazba",
+  "RiskFreeRateDesc": "Bezriziková míra výnosu používaná ve finančních výpočtech",
   "RiskIntervalDesc": "Interval, ve kterém bude sledován počet objednávek.",
   "RiskManagement": "Řízení rizik",
   "RiskOrderCommission": "Riziko provize z příkazů",

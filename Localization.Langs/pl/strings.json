@@ -3036,6 +3036,8 @@
   "RisingThreeMethods": "Trzy Metody Wzrostu",
   "RiskCommission": "Zasada ryzyka, która śledzi wielkość prowizji.",
   "RiskError": "Reguła ryzyka śledząca liczbę błędów.",
+  "RiskFreeRate": "Stopa wolna od ryzyka",
+  "RiskFreeRateDesc": "Stopa zwrotu wolna od ryzyka używana w obliczeniach finansowych",
   "RiskIntervalDesc": "Przedział czasowy, w którym będzie monitorowana liczba zamówień.",
   "RiskManagement": "Zarządzanie ryzykiem",
   "RiskOrderCommission": "Ryzyko prowizji za zlecenie",

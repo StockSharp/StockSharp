@@ -3036,6 +3036,8 @@
   "RisingThreeMethods": "Tre Stigande Metoder",
   "RiskCommission": "Riskregel som spårar storleken på provisionen.",
   "RiskError": "Riskregel som spårar antalet fel.",
+  "RiskFreeRate": "Riskfri ränta",
+  "RiskFreeRateDesc": "Riskfri avkastningsgrad som används i finansiella beräkningar",
   "RiskIntervalDesc": "Intervallet inom vilket antalet beställningar kommer att övervakas.",
   "RiskManagement": "Riskhantering",
   "RiskOrderCommission": "Orderkommissionsrisk",

@@ -3036,6 +3036,8 @@
   "RisingThreeMethods": "سه روش صعودی",
   "RiskCommission": "قانون خطر که اندازه کمیسیون را پیگیری می‌کند.",
   "RiskError": "قانون خطر که تعداد خطاها را ردیابی می‌کند.",
+  "RiskFreeRate": "نرخ بدون ریسک",
+  "RiskFreeRateDesc": "نرخ بازده بدون ریسک مورد استفاده در محاسبات مالی",
   "RiskIntervalDesc": "فاصله زمانی که در آن تعداد سفارشات ردیابی می‌شود.",
   "RiskManagement": "مدیریت ریسک",
   "RiskOrderCommission": "ریسک کمیسیون سفارشات",

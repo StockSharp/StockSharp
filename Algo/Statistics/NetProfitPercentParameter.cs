@@ -10,10 +10,8 @@ namespace StockSharp.Algo.Statistics;
 	GroupName = LocalizedStrings.PnLKey,
 	Order = 1
 )]
-public class NetProfitPercentParameter : BasePnLStatisticParameter<decimal>
+public class NetProfitPercentParameter : BasePnLStatisticParameter<decimal>, IBeginValueStatisticParameter
 {
-	private decimal _beginValue;
-
 	/// <summary>
 	/// Initialize <see cref="NetProfitPercentParameter"/>.
 	/// </summary>
@@ -23,19 +21,14 @@ public class NetProfitPercentParameter : BasePnLStatisticParameter<decimal>
 	}
 
 	/// <inheritdoc />
-	public override void Init(decimal beginValue)
-	{
-		base.Init(beginValue);
-
-		_beginValue = beginValue;
-	}
+	public decimal BeginValue { get; set; }
 
 	/// <inheritdoc />
 	public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 	{
-		if (_beginValue == 0)
+		if (BeginValue == 0)
 			return;
 
-		Value = pnl * 100m / _beginValue;
+		Value = pnl * 100m / BeginValue;
 	}
 }

@@ -3041,6 +3041,8 @@
   "RisingThreeMethods": "Rising Three Methods",
   "RiskCommission": "Risk-rule, sinusubaybayan ang laki ng komisyon.",
   "RiskError": "Risk-rule, sinusubaybayan ang bilang ng mga error ng order.",
+  "RiskFreeRate": "Risk-Free Rate",
+  "RiskFreeRateDesc": "Risk-free rate ng pagbabalik na ginagamit sa mga pagkalkula sa pananalapi",
   "RiskIntervalDesc": "Interval, kung saan ang dami ng order ay susundan.",
   "RiskManagement": "Pamamahala ng panganib",
   "RiskOrderCommission": "Order Commission Risk",

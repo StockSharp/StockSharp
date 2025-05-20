@@ -3036,6 +3036,8 @@
   "RisingThreeMethods": "Ascens de tres mètodes",
   "RiskCommission": "Regla de risc, que segueix la mida de la comissió.",
   "RiskError": "Regla de risc, que segueix el nombre d'errors.",
+  "RiskFreeRate": "Taxa Lliure de Risc",
+  "RiskFreeRateDesc": "Taxa de rendiment lliure de risc utilitzada en càlculs financers",
   "RiskIntervalDesc": "Interval en què es seguirà el nombre de sol·licituds.",
   "RiskManagement": "Gestió de riscos",
   "RiskOrderCommission": "Risc de Comissió d'Ordre",

@@ -3036,6 +3036,8 @@
   "RisingThreeMethods": "Drei aufsteigende Methoden",
   "RiskCommission": "Risiko-Regel, die die Größe der Provision verfolgt.",
   "RiskError": "Risikoregel, die die Anzahl der Fehler verfolgt.",
+  "RiskFreeRate": "Risikofreier Zinssatz",
+  "RiskFreeRateDesc": "Risikofreie Rendite, die bei Finanzberechnungen verwendet wird",
   "RiskIntervalDesc": "Intervall, innerhalb dessen die Anzahl der Aufträge verfolgt wird.",
   "RiskManagement": "Risikomanagement",
   "RiskOrderCommission": "Auftragskommissions-Risiko",

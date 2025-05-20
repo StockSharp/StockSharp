@@ -3036,6 +3036,8 @@
   "RisingThreeMethods": "Üç Yöntemin Yükselişi",
   "RiskCommission": "Komisyon büyüklüğünü takip eden risk kuralı.",
   "RiskError": "Hataların sayısını takip eden risk kuralı.",
+  "RiskFreeRate": "Risksiz Oran",
+  "RiskFreeRateDesc": "Finansal hesaplamalarda kullanılan risksiz getiri oranı",
   "RiskIntervalDesc": "Emir sayısının izleneceği aralık.",
   "RiskManagement": "Risk Yönetimi",
   "RiskOrderCommission": "Emir Komisyonu Riski",

@@ -3036,6 +3036,8 @@
   "RisingThreeMethods": "Telung Metode Munggah",
   "RiskCommission": "Aturan resiko sing nglacak ukuran komisi.",
   "RiskError": "Aturan risiko sing nglacak jumlah kesalahan.",
+  "RiskFreeRate": "Tingkat Bebas Resiko",
+  "RiskFreeRateDesc": "Tingkat pengembaliyan bebas resiko sing digunakake nang perhitungan finansial",
   "RiskIntervalDesc": "Rentang wektu kanggo ngawasi jumlah pesenan.",
   "RiskManagement": "Manajemen risiko",
   "RiskOrderCommission": "Risiko Komisi Pesenan",

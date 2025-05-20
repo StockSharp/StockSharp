@@ -3036,6 +3036,8 @@
   "RisingThreeMethods": "Uch Usulning O'sishi",
   "RiskCommission": "Komissiya hajmini kuzatib boruvchi xavf qoidasi.",
   "RiskError": "Xatolarni kuzatib boradigan xavf qoidasi.",
+  "RiskFreeRate": "Risksiz stavka",
+  "RiskFreeRateDesc": "Moliyaviy hisobotlarda foydalaniladigan risksiz qaytish stavkasi",
   "RiskIntervalDesc": "Buyurtmalar soni kuzatiladigan vaqt oralig‘i.",
   "RiskManagement": "Xatarlarni boshqarish",
   "RiskOrderCommission": "Buyurtma komissiyasi xavfi",

@@ -3036,6 +3036,8 @@
   "RisingThreeMethods": "Kolme Nousevaa Menetelmää",
   "RiskCommission": "Riskisääntö, joka seuraa palkkion suuruutta.",
   "RiskError": "Riskisääntö, joka seuraa virheiden määrää.",
+  "RiskFreeRate": "Riskitön korko",
+  "RiskFreeRateDesc": "Riskitön tuottoprosentti, jota käytetään taloudellisissa laskelmissa",
   "RiskIntervalDesc": "Aikaväli, jonka aikana tilausten määrää seurataan.",
   "RiskManagement": "Riskienhallinta",
   "RiskOrderCommission": "Tilauskomission riski",

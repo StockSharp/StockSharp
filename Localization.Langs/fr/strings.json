@@ -3036,6 +3036,8 @@
   "RisingThreeMethods": "Trois Méthodes de Montée",
   "RiskCommission": "Règle de risque suivant la taille de la commission.",
   "RiskError": "Règle de risque qui suit le nombre d'erreurs.",
+  "RiskFreeRate": "Taux Sans Risque",
+  "RiskFreeRateDesc": "Taux de rendement sans risque utilisé dans les calculs financiers",
   "RiskIntervalDesc": "Intervalle pendant lequel le nombre de commandes sera suivi.",
   "RiskManagement": "Gestion des risques",
   "RiskOrderCommission": "Risque de Commission d'Ordre",

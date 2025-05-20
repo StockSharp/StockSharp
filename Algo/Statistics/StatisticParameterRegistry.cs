@@ -75,27 +75,11 @@ public static class StatisticParameterRegistry
 	/// </summary>
 	/// <param name="type"><see cref="StatisticParameterTypes"/></param>
 	/// <returns><see cref="IStatisticParameter"/></returns>
-	public static IStatisticParameter GetByType(StatisticParameterTypes type)
+	public static IStatisticParameter ToParameter(this StatisticParameterTypes type)
 		=> _dict[type];
 
 	/// <summary>
 	/// Return all available parameters.
 	/// </summary>
 	public static IStatisticParameter[] All { get; }
-
-	/// <summary>
-	/// Init by initial value.
-	/// </summary>
-	/// <typeparam name="TParam">Type of <see cref="IStatisticManager.Parameters"/>.</typeparam>
-	/// <typeparam name="TValue">Type of <see cref="IStatisticParameter.ValueType"/>.</typeparam>
-	/// <param name="manager"><see cref="IStatisticManager"/></param>
-	/// <param name="beginValue">Initial value.</param>
-	public static void Init<TParam, TValue>(this IStatisticManager manager, TValue beginValue)
-		where TParam : IStatisticParameter
-	{
-		if (manager is null)
-			throw new ArgumentNullException(nameof(manager));
-
-		manager.Parameters.OfType<TParam>().Where(p => p.ValueType == typeof(TValue)).ForEach(p => p.Init(beginValue));
-	}
 }

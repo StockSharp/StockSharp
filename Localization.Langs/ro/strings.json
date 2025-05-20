@@ -3036,6 +3036,8 @@
   "RisingThreeMethods": "Trei Metode de Creștere",
   "RiskCommission": "Regula de risc care urmărește dimensiunea comisiei.",
   "RiskError": "Regula de risc care urmărește numărul de erori.",
+  "RiskFreeRate": "Rata Fără Risc",
+  "RiskFreeRateDesc": "Rata de rentabilitate fără risc utilizată în calcule financiare",
   "RiskIntervalDesc": "Intervalul în care se va monitoriza numărul de comenzi.",
   "RiskManagement": "Managementul riscului",
   "RiskOrderCommission": "Risc Comision Comandă",

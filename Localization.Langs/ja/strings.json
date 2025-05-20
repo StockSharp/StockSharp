@@ -3036,6 +3036,8 @@
   "RisingThreeMethods": "上昇三法",
   "RiskCommission": "手数料のサイズを追跡するリスクルール。",
   "RiskError": "エラーの数を追跡するリスクルール。",
+  "RiskFreeRate": "リスクフリーレート",
+  "RiskFreeRateDesc": "財務計算で使用されるリスクフリーリターン率",
   "RiskIntervalDesc": "注文数を追跡する間隔。",
   "RiskManagement": "リスク管理",
   "RiskOrderCommission": "注文手数料リスク",

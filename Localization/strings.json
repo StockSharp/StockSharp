@@ -3042,6 +3042,8 @@
   "RisingThreeMethods": "Rising Three Methods",
   "RiskCommission": "Risk-rule, tracking commission size.",
   "RiskError": "Risk-rule, tracking orders error count.",
+  "RiskFreeRate": "Risk-Free Rate",
+  "RiskFreeRateDesc": "Risk-free rate of return used in financial calculations",
   "RiskIntervalDesc": "Interval, during which orders quantity will be monitored.",
   "RiskManagement": "Risk management",
   "RiskOrderCommission": "Order Commission Risk",
