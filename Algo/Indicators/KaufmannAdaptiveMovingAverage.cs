@@ -25,6 +25,8 @@ public class KaufmannAdaptiveMovingAverage : LengthIndicator<decimal>
 		SlowSCPeriod = 30;
 	}
 
+	private int _fastSCPeriod;
+
 	/// <summary>
 	/// 'Rapid' EMA period. The default value is 2.
 	/// </summary>
@@ -33,7 +35,21 @@ public class KaufmannAdaptiveMovingAverage : LengthIndicator<decimal>
 		Name = LocalizedStrings.FastMaKey,
 		Description = LocalizedStrings.FastMaDescKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public int FastSCPeriod { get; set; }
+	public int FastSCPeriod
+	{
+		get => _fastSCPeriod;
+		set
+		{
+			if (value < 1)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			_fastSCPeriod = value;
+
+			Reset();
+		}
+	}
+
+	private int _slowSCPeriod;
 
 	/// <summary>
 	/// 'Slow' EMA period. The default value is 30.
@@ -43,7 +59,19 @@ public class KaufmannAdaptiveMovingAverage : LengthIndicator<decimal>
 		Name = LocalizedStrings.SlowMaKey,
 		Description = LocalizedStrings.SlowMaDescKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public int SlowSCPeriod { get; set; }
+	public int SlowSCPeriod
+	{
+		get => _slowSCPeriod;
+		set
+		{
+			if (value < 1)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			_slowSCPeriod = value;
+
+			Reset();
+		}
+	}
 
 	/// <inheritdoc />
 	protected override bool CalcIsFormed() => Buffer.Count > Length;
@@ -74,7 +102,6 @@ public class KaufmannAdaptiveMovingAverage : LengthIndicator<decimal>
 		if (!_isInitialized && Buffer.Count == Length + 1)
 		{
 			_isInitialized = true;
-			// Начальное значение - последнее входное значение.
 			return _prevFinalValue = newValue;
 		}
 
@@ -82,7 +109,7 @@ public class KaufmannAdaptiveMovingAverage : LengthIndicator<decimal>
 
 		var direction = newValue - buff[0];
 
-		decimal volatility = 0;
+		var volatility = 0m;
 
 		for (var i = 1; i < buff.Count; i++)
 		{
@@ -112,7 +139,7 @@ public class KaufmannAdaptiveMovingAverage : LengthIndicator<decimal>
 		base.Load(storage);
 
 		FastSCPeriod = storage.GetValue(nameof(FastSCPeriod), FastSCPeriod);
-		FastSCPeriod = storage.GetValue(nameof(FastSCPeriod), FastSCPeriod);
+		SlowSCPeriod = storage.GetValue(nameof(SlowSCPeriod), SlowSCPeriod);
 	}
 
 	/// <inheritdoc />
