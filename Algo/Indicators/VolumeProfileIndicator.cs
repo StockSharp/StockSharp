@@ -74,15 +74,40 @@ public class VolumeProfileIndicator : BaseIndicator
 		Step = 1;
 	}
 
+	private decimal _step;
+
 	/// <summary>
 	/// The grouping increment.
 	/// </summary>
-	public decimal Step { get; set; }
+	public decimal Step
+	{
+		get => _step;
+		set
+		{
+			if (value <= 0)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			_step = value;
+
+			Reset();
+		}
+	}
+
+	private bool _useTotalVolume;
 
 	/// <summary>
 	/// To use aggregate volume in calculations (when candles do not contain VolumeProfile).
 	/// </summary>
-	public bool UseTotalVolume { get; set; }
+	public bool UseTotalVolume
+	{
+		get => _useTotalVolume;
+		set
+		{
+			_useTotalVolume = value;
+
+			Reset();
+		}
+	}
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
@@ -121,5 +146,23 @@ public class VolumeProfileIndicator : BaseIndicator
 		var currentValue = _levels.TryGetValue(level);
 
 		_levels[level] = currentValue + volume;
+	}
+
+	/// <inheritdoc />
+	public override void Save(SettingsStorage storage)
+	{
+		base.Save(storage);
+
+		storage.SetValue(nameof(Step), Step);
+		storage.SetValue(nameof(UseTotalVolume), UseTotalVolume);
+	}
+
+	/// <inheritdoc />
+	public override void Load(SettingsStorage storage)
+	{
+		base.Load(storage);
+
+		Step = storage.GetValue<decimal>(nameof(Step));
+		UseTotalVolume = storage.GetValue<bool>(nameof(UseTotalVolume));
 	}
 }
