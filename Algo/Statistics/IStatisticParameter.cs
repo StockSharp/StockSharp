@@ -49,12 +49,28 @@ public interface IStatisticParameter : IPersistable, INotifyPropertyChanged
 	/// To reset the parameter value.
 	/// </summary>
 	void Reset();
+}
 
+/// <summary>
+/// The interface, describing statistic parameter with initial value.
+/// </summary>
+public interface IBeginValueStatisticParameter
+{
 	/// <summary>
-	/// Init by initial value.
+	/// The initial value of the parameter.
 	/// </summary>
-	/// <param name="beginValue">Initial value.</param>
-	void Init(object beginValue);
+	decimal BeginValue { get; set; }	
+}
+
+/// <summary>
+/// The interface, describing statistic parameter with risk-free rate.
+/// </summary>
+public interface IRiskFreeRateStatisticParameter
+{
+	/// <summary>
+	/// Annual risk-free rate (e.g., 0.03 = 3%).
+	/// </summary>
+	decimal RiskFreeRate { get; set; }
 }
 
 /// <summary>
@@ -67,12 +83,6 @@ public interface IStatisticParameter<TValue> : IStatisticParameter
 	/// The current value of the parameter.
 	/// </summary>
 	new TValue Value { get; }
-
-	/// <summary>
-	/// Init by initial value.
-	/// </summary>
-	/// <param name="beginValue">Initial value.</param>
-	void Init(TValue beginValue);
 }
 
 /// <summary>
@@ -171,11 +181,6 @@ public abstract class BaseStatisticParameter<TValue> : NotifiableObject, IStatis
 
 	/// <inheritdoc />
 	public virtual void Reset() => Value = default;
-
-	void IStatisticParameter.Init(object beginValue) => Init((TValue)beginValue);
-
-	/// <inheritdoc/>
-	public virtual void Init(TValue beginValue) { }
 
 	/// <summary>
 	/// To load the state of statistic parameter.
