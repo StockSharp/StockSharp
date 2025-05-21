@@ -905,7 +905,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 					{
 						try
 						{
-							priceStep = File.ReadAllBytes(firstDataFile).Range(6, 16).To<decimal>();
+							priceStep = File.ReadAllBytes(firstDataFile).AsSpan().Slice(6, 16).ToArray().To<decimal>();
 						}
 						catch (Exception ex)
 						{
