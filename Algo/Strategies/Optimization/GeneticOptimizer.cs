@@ -50,7 +50,7 @@ public class GeneticOptimizer : BaseOptimizer
 
 			Strategy strategy;
 
-			using (new Scope<CloneHelper.CloneWithoutUI>())
+			using (new Scope<StrategyContext>(new() { ExcludeUI = true }))
 				strategy = _strategy.Clone();
 
 			strategy.Security = _strategy.Security;
