@@ -33,11 +33,6 @@ static class Extensions
 		};
 	}
 
-	//public static DateTime ToTime(this long timeStamp)
-	//{
-	//	return Converter.GregorianStart + TimeSpan.FromMilliseconds(timeStamp);
-	//}
-
 	public static string ToCurrency(this SecurityId securityId)
 	{
 		return securityId.SecurityCode.Replace('/', '_').ToLowerInvariant();

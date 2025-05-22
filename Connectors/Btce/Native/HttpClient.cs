@@ -72,7 +72,6 @@ class HttpClient : BaseLogReceiver
 
 	public async Task<MyTradesReply> GetMyTrades(long fromId, CancellationToken cancellationToken)
 	{
-		//var unixtime = (long)(since - Converter.GregorianStart).TotalSeconds;
 		var args = $"method=TradeHistory&from_id={fromId}";
 		var res = await MakePrivateRequest<MyTradesReply>(args, cancellationToken);
 		

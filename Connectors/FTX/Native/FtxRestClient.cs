@@ -99,7 +99,7 @@ class FtxRestClient : BaseLogReceiver
 
 	private static long GetMillisecondsFromEpochStart(DateTime time)
 	{
-		if(time <= TimeHelper.GregorianStart)
+		if(time <= DateTime.UnixEpoch)
 			return 0;
 
 		return (long)time.ToUnix(false);
@@ -107,7 +107,7 @@ class FtxRestClient : BaseLogReceiver
 
 	private static long GetSecondsFromEpochStart(DateTime time)
 	{
-		if(time <= TimeHelper.GregorianStart)
+		if(time <= DateTime.UnixEpoch)
 			return 0;
 
 		return (long)time.ToUnix();
