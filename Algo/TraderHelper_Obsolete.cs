@@ -1335,4 +1335,32 @@ partial class TraderHelper
 
 		return ticks.Select(m => m.ToTrade(first.Order.Security));
 	}
+
+	/// <summary>
+	/// Is MICEX board.
+	/// </summary>
+	/// <param name="board">Board to check.</param>
+	/// <returns>Check result.</returns>
+	[Obsolete]
+	public static bool IsMicex(this ExchangeBoard board)
+	{
+		if (board == null)
+			throw new ArgumentNullException(nameof(board));
+
+		return board.Exchange == Exchange.Moex && board != ExchangeBoard.Forts;
+	}
+
+	/// <summary>
+	/// Is the UX exchange stock market board.
+	/// </summary>
+	/// <param name="board">Board to check.</param>
+	/// <returns>Check result.</returns>
+	[Obsolete]
+	public static bool IsUxStock(this ExchangeBoard board)
+	{
+		if (board == null)
+			throw new ArgumentNullException(nameof(board));
+
+		return board.Exchange == Exchange.Ux && board != ExchangeBoard.Ux;
+	}
 }

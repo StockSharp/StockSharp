@@ -702,32 +702,6 @@ public static partial class TraderHelper
 	}
 
 	/// <summary>
-	/// Is MICEX board.
-	/// </summary>
-	/// <param name="board">Board to check.</param>
-	/// <returns>Check result.</returns>
-	public static bool IsMicex(this ExchangeBoard board)
-	{
-		if (board == null)
-			throw new ArgumentNullException(nameof(board));
-
-		return board.Exchange == Exchange.Moex && board != ExchangeBoard.Forts;
-	}
-
-	/// <summary>
-	/// Is the UX exchange stock market board.
-	/// </summary>
-	/// <param name="board">Board to check.</param>
-	/// <returns>Check result.</returns>
-	public static bool IsUxStock(this ExchangeBoard board)
-	{
-		if (board == null)
-			throw new ArgumentNullException(nameof(board));
-
-		return board.Exchange == Exchange.Ux && board != ExchangeBoard.Ux;
-	}
-
-	/// <summary>
 	/// Find <see cref="EntitiesExtensions.AllSecurity"/> instance in the specified provider.
 	/// </summary>
 	/// <param name="provider">The provider of information about instruments.</param>
