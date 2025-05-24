@@ -159,7 +159,7 @@ public class LocalProtectiveBehaviourFactory(decimal? priceStep, int? decimals) 
 		public override (bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)? Update(decimal price, decimal value)
 		{
 			if (price <= 0)
-				return null;
+				throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.InvalidValue);
 
 			if (value == default)
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
