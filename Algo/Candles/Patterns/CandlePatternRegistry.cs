@@ -35,37 +35,37 @@ public static class CandlePatternRegistry
 	/// <summary>
 	/// Spinning top candle pattern.
 	/// </summary>
-	public static readonly ICandlePattern SpinningTop = Create(LocalizedStrings.SpinningTop, "(LEN != B) && (BS == TS)");
+	public static readonly ICandlePattern SpinningTop = Create(LocalizedStrings.SpinningTop, "(B < LEN * 0.5m) && (ABS(BS - TS) <= LEN * 0.1m)");
 
 	/// <summary>
 	/// Hammer candle pattern.
 	/// </summary>
-	public static readonly ICandlePattern Hammer = Create(LocalizedStrings.Hammer, "(O < C) && (LEN != B) && (TS == 0)");
+	public static readonly ICandlePattern Hammer = Create(LocalizedStrings.Hammer, "(B <= BS) && (TS <= LEN * 0.2m)");
 
 	/// <summary>
 	/// Inverted hummer candle pattern.
 	/// </summary>
-	public static readonly ICandlePattern InvertedHammer = Create(LocalizedStrings.InvertedHammer, "(O < C) && (LEN != B) && (BS == 0)");
+	public static readonly ICandlePattern InvertedHammer = Create(LocalizedStrings.InvertedHammer, "(B <= TS) && (BS <= LEN * 0.2m)");
 
 	/// <summary>
 	/// Dragonfly candle pattern.
 	/// </summary>
-	public static readonly ICandlePattern Dragonfly = Create(LocalizedStrings.Dragonfly, "(O == C) && (TS == 0)");
+	public static readonly ICandlePattern Dragonfly = Create(LocalizedStrings.Dragonfly, "(ABS(O - C) <= LEN * 0.1m) && (TS <= LEN * 0.1m)");
 
 	/// <summary>
 	/// Gravestone candle pattern.
 	/// </summary>
-	public static readonly ICandlePattern Gravestone = Create(LocalizedStrings.Gravestone, "(O == C) && (BS == 0)");
+	public static readonly ICandlePattern Gravestone = Create(LocalizedStrings.Gravestone, "(ABS(O - C) <= LEN * 0.1m) && (BS <= LEN * 0.1m)");
 
 	/// <summary>
 	/// Bullish candle pattern.
 	/// </summary>
-	public static readonly ICandlePattern Bullish = Create(LocalizedStrings.BullishCandle, "(O < C) && (BS >= B)");
+	public static readonly ICandlePattern Bullish = Create(LocalizedStrings.BullishCandle, "(O < C)");
 
 	/// <summary>
 	/// Bearish candle pattern.
 	/// </summary>
-	public static readonly ICandlePattern Bearish = Create(LocalizedStrings.BearishCandle, "(O > C) && (TS >= B)");
+	public static readonly ICandlePattern Bearish = Create(LocalizedStrings.BearishCandle, "(O > C)");
 
 	/// <summary>
 	/// Piercing candle pattern.
@@ -85,12 +85,12 @@ public static class CandlePatternRegistry
 	/// <summary>
 	/// Morning Star candle pattern.
 	/// </summary>
-	public static readonly ICandlePattern MorningStar = Create(LocalizedStrings.MorningStar, "O > C", "(O < C) && (LEN > B * 3)", "O < C");
+	public static readonly ICandlePattern MorningStar = Create(LocalizedStrings.MorningStar, "O > C", "(B < pB * 0.5m)", "O < C");
 
 	/// <summary>
 	/// Evening Star candle pattern.
 	/// </summary>
-	public static readonly ICandlePattern EveningStar = Create(LocalizedStrings.EveningStar, "O < C", "(O > C) && (LEN > B * 3)", "(O > C) && (LEN > pLEN * 3)");
+	public static readonly ICandlePattern EveningStar = Create(LocalizedStrings.EveningStar, "O < C", "(B < pB * 0.5m)", "(O > C) && (B > pB * 2)");
 
 	/// <summary>
 	/// Three White Soldiers candle pattern.
@@ -115,7 +115,7 @@ public static class CandlePatternRegistry
 	/// <summary>
 	/// Three Outside Up candle pattern.
 	/// </summary>
-	public static readonly ICandlePattern ThreeOutsideUp = Create(LocalizedStrings.ThreeOutsideUp, "O > C", "(O < C) && (O < pC) && (C > pO)", "(O < C) && (O > pO) && (C > pC)");
+	public static readonly ICandlePattern ThreeOutsideUp = Create(LocalizedStrings.ThreeOutsideUp, "O > C", "(O < C) && (O <= pC) && (C >= pO)", "(O < C) && (C > pC)");
 
 	/// <summary>
 	/// Three Outside Down candle pattern.
@@ -135,37 +135,37 @@ public static class CandlePatternRegistry
 	/// <summary>
 	/// On-Neck candle pattern.
 	/// </summary>
-	public static readonly ICandlePattern OnNeck = Create(LocalizedStrings.OnNeck, "O > C", "(C > O) && (pL == H)");
+	public static readonly ICandlePattern OnNeck = Create(LocalizedStrings.OnNeck, "O > C", "(C > O) && (ABS(pL - C) <= 1)");
 
 	/// <summary>
 	/// Hanging man candle pattern.
 	/// </summary>
-	public static readonly ICandlePattern HangingMan = Create(LocalizedStrings.HangingMan, "(O > C) && (LEN != B) && (TS == 0)");
+	public static readonly ICandlePattern HangingMan = Create(LocalizedStrings.HangingMan, "(B < BS * 0.5m) && (TS <= LEN * 0.2m)");
 
 	/// <summary>
 	/// Shooting Star candle pattern.
 	/// </summary>
-	public static readonly ICandlePattern ShootingStar = Create(LocalizedStrings.ShootingStar, "(O > C) && (LEN != B) && (BS == 0)");
+	public static readonly ICandlePattern ShootingStar = Create(LocalizedStrings.ShootingStar, "(B < TS * 0.5m) && (BS <= LEN * 0.2m)");
 
 	/// <summary>
 	/// Tweezer Top candle pattern.
 	/// </summary>
-	public static readonly ICandlePattern TweezerTop = Create(LocalizedStrings.TweezerTop, "O < C", "(O > C) && (H == pH) && (B > (pB * 3))");
+	public static readonly ICandlePattern TweezerTop = Create(LocalizedStrings.TweezerTop, "O < C", "(O > C) && (H == pH)");
 
 	/// <summary>
 	/// Tweezer Bottom candle pattern.
 	/// </summary>
-	public static readonly ICandlePattern TweezerBottom = Create(LocalizedStrings.TweezerBottom, "O > C", "(O < C) && (BS == 0) && (TS > B)");
+	public static readonly ICandlePattern TweezerBottom = Create(LocalizedStrings.TweezerBottom, "O > C", "(O < C) && (L == pL)");
 
 	/// <summary>
 	/// Falling Three Methods candle pattern.
 	/// </summary>
-	public static readonly ICandlePattern FallingThreeMethods = Create(LocalizedStrings.FallingThreeMethods, "O > C", "(O < C) && (B * 3 < pB)", "(O < C) && (B == pB)", "(O < C) && (B == pB)", "(O > C) && (B > pB * 3)");
+	public static readonly ICandlePattern FallingThreeMethods = Create(LocalizedStrings.FallingThreeMethods, "O > C", "(O < C) && (B < pB * 0.5m)", "(O < C) && (B < ppB * 0.5m)", "(O < C) && (B < pppB * 0.5m)", "(O > C) && (B > pB * 2)");
 
 	/// <summary>
 	/// Rising Three Methods candle pattern.
 	/// </summary>
-	public static readonly ICandlePattern RisingThreeMethods = Create(LocalizedStrings.RisingThreeMethods, "O < C", "(O > C) && (B * 3 < pB)", "(O > C) && (B == pB)", "(O > C) && (B == pB)", "(O < C) && (B > pB * 3)");
+	public static readonly ICandlePattern RisingThreeMethods = Create(LocalizedStrings.RisingThreeMethods, "O < C", "(O > C) && (B < pB * 0.5m)", "(O > C) && (B < ppB * 0.5m)", "(O > C) && (B < pppB * 0.5m)", "(O < C) && (B > pB * 2)");
 
 	/// <summary>
 	/// All patterns.
