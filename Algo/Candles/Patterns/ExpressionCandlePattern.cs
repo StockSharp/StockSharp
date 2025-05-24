@@ -67,7 +67,7 @@ public class CandleExpressionCondition : IPersistable
 		Init();
 	}
 
-	private static readonly Regex _varNamePattern = new(@"^([a-zA-Z]+)(\d*)$", RegexOptions.Compiled);
+	private static readonly Regex _varNamePattern = new(@"^(p+)?([a-zA-Z]+)(\d*)$", RegexOptions.Compiled);
 
 	private void Init()
 	{
@@ -96,13 +96,23 @@ public class CandleExpressionCondition : IPersistable
 			if(!m.Success)
 				throw new InvalidOperationException($"invalid variable '{varName}'");
 
-			var name = m.Groups[1].Value;
-			var idx = m.Groups[2].Value.IsEmptyOrWhiteSpace() ? 0 : m.Groups[2].Value.To<int>();
+			var prev = m.Groups[1].Value;
+			var name = m.Groups[2].Value;
+			var idx = m.Groups[3].Value.IsEmptyOrWhiteSpace() ? 0 : m.Groups[3].Value.To<int>();
 
-			if(name.StartsWithIgnoreCase("p"))
+			if (!prev.IsEmpty())
 			{
-				idx = -idx - 1;
-				name = name[1..];
+				var pLen = prev.Length;
+
+				if (pLen > 1)
+				{
+					if (idx > 0)
+						throw new InvalidOperationException($"cannot use more than 1 'p' prefix with index in variable '{varName}'");
+
+					idx = -pLen;
+				}
+				else
+					idx = -idx - 1;
 			}
 
 			MinIndex = MinIndex.Min(idx);
