@@ -59,7 +59,7 @@ public class ServerProtectiveBehaviourFactory(IMessageAdapter adapter) : IProtec
 		public override (bool, Sides, decimal, decimal, OrderCondition)? TryActivate(decimal price, DateTimeOffset time)
 			=> default;
 
-		public override (bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)? Update(decimal price, decimal value)
+		public override (bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)? Update(decimal price, decimal value, DateTimeOffset time)
 		{
 			var condition = _adapter.CreateOrderCondition() ?? throw new NotSupportedException();
 
@@ -156,7 +156,7 @@ public class LocalProtectiveBehaviourFactory(decimal? priceStep, int? decimals) 
 			return info.Value;
 		}
 
-		public override (bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)? Update(decimal price, decimal value)
+		public override (bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)? Update(decimal price, decimal value, DateTimeOffset time)
 		{
 			if (price <= 0)
 				throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.InvalidValue);
@@ -236,8 +236,8 @@ public class LocalProtectiveBehaviourFactory(decimal? priceStep, int? decimals) 
 
 				var protectiveSide = _posValue > 0 ? Sides.Buy : Sides.Sell;
 
-				_take = TakeValue.IsSet() ? new(protectiveSide, _posPrice, protectiveSide == Sides.Buy, false, TakeValue, UseMarketOrders, new(), TakeTimeout, this) : null;
-				_stop = StopValue.IsSet() ? new(protectiveSide, _posPrice, protectiveSide == Sides.Sell, IsStopTrailing, StopValue, UseMarketOrders, new(), StopTimeout, this) : null;
+				_take = TakeValue.IsSet() ? new(protectiveSide, _posPrice, protectiveSide == Sides.Buy, false, TakeValue, UseMarketOrders, new(), TakeTimeout, time, this) : null;
+				_stop = StopValue.IsSet() ? new(protectiveSide, _posPrice, protectiveSide == Sides.Sell, IsStopTrailing, StopValue, UseMarketOrders, new(), StopTimeout, time, this) : null;
 			}
 
 			return null;

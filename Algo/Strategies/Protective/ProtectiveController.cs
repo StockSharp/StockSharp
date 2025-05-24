@@ -32,8 +32,8 @@ public class ProtectiveController : BaseLogReceiver
 
 		public decimal Position => _behaviour.Position;
 
-		public (bool, Sides, decimal, decimal, OrderCondition)? Update(decimal price, decimal value)
-			=> _behaviour.Update(price, value);
+		public (bool, Sides, decimal, decimal, OrderCondition)? Update(decimal price, decimal value, DateTimeOffset time)
+			=> _behaviour.Update(price, value, time);
 
 		public (bool, Sides, decimal, decimal, OrderCondition)? TryActivate(decimal price, DateTimeOffset time)
 			=> _behaviour.TryActivate(price, time);

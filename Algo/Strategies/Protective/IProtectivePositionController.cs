@@ -25,9 +25,10 @@ public interface IProtectivePositionController
 	/// </summary>
 	/// <param name="price">Position difference price.</param>
 	/// <param name="value">Position difference value.</param>
+	/// <param name="time">Current time.</param>
 	/// <returns>Registration order info.</returns>
 	(bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)?
-		Update(decimal price, decimal value);
+		Update(decimal price, decimal value, DateTimeOffset time);
 
 	/// <summary>
 	/// Try activate local stop orders.

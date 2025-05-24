@@ -2103,7 +2103,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				new LocalProtectiveBehaviourFactory(security.PriceStep, security.Decimals),
 				_takeProfit, _stopLoss, _isStopTrailing, _takeTimeout, _stopTimeout, _protectiveUseMarketOrders);
 
-			var info = _posController?.Update(trade.Trade.Price, trade.GetPosition());
+			var info = _posController?.Update(trade.Trade.Price, trade.GetPosition(), trade.Trade.ServerTime);
 
 			if (info is not null)
 				ActiveProtection(info.Value);
