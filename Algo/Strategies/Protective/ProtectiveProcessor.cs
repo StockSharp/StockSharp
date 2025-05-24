@@ -29,7 +29,7 @@ public class ProtectiveProcessor
 	/// <param name="useMarketOrders">Whether to use <see cref="OrderTypes.Market"/> for protection.</param>
 	/// <param name="priceOffset">The price shift for the registering order. It determines the amount of shift from the best quote (for the buy it is added to the price, for the sell it is subtracted).</param>
 	/// <param name="timeout">Time limit. If protection has not worked by this time, the position will be closed on the market.</param>
-	/// <param name="startedTime">Current time.</param>
+	/// <param name="startedTime">The time when the protective strategy was started.</param>
 	/// <param name="logs">The log source.</param>
 	public ProtectiveProcessor(Sides protectiveSide, decimal protectivePrice, bool isUpTrend, bool isTrailing, Unit protectiveLevel, bool useMarketOrders, Unit priceOffset, TimeSpan timeout, DateTimeOffset startedTime, ILogReceiver logs)
 	{
@@ -55,7 +55,9 @@ public class ProtectiveProcessor
 	/// <summary>
 	/// The absolute value of the price when the one is reached the protective strategy is activated.
 	/// </summary>
-	/// <remarks>If the price is equal to <see langword="null" /> then the activation is not required.</remarks>
+	/// <param name="currentPrice">The current price of the security. If the price is equal to <see langword="null" />, then the activation is not required.</param>
+	/// <param name="currentTime">The current time.</param>
+	/// <returns>If the price is equal to <see langword="null" /> then the activation is not required.</returns>
 	public decimal? GetActivationPrice(decimal? currentPrice, DateTimeOffset currentTime)
 	{
 		if (currentPrice is decimal currPriceDec2)
@@ -115,13 +117,16 @@ public class ProtectiveProcessor
 			return getClosePosPrice(currPriceDec);
 		}
 
-		if (_isTrailing)
+		if (_prevBestPrice == currPriceDec)
+		{
+		}
+		else if (_isTrailing)
 		{
 			//_logs.AddDebugLog("PrevPrice={0} CurrPrice={1}", _prevBestPrice, currPriceDec);
 
-			if (_isUpTrend)
+			if (_protectiveSide == Sides.Buy)
 			{
-				if (_prevBestPrice > currPriceDec)
+				if (_prevBestPrice < currPriceDec)
 					_prevBestPrice = currPriceDec;
 				else
 				{
@@ -131,7 +136,7 @@ public class ProtectiveProcessor
 			}
 			else
 			{
-				if (_prevBestPrice < currPriceDec)
+				if (_prevBestPrice > currPriceDec)
 					_prevBestPrice = currPriceDec;
 				else
 				{

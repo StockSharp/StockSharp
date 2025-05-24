@@ -1023,7 +1023,7 @@ public partial class Strategy
 	}
 
 	private Unit _takeProfit, _stopLoss;
-	private bool _isStopTrailing;
+	private bool _isTrailing;
 	private TimeSpan _takeTimeout, _stopTimeout;
 	private bool _protectiveUseMarketOrders;
 	private ProtectiveController _protectiveController;
@@ -1034,13 +1034,13 @@ public partial class Strategy
 	/// </summary>
 	/// <param name="takeProfit">Take offset.</param>
 	/// <param name="stopLoss">Stop offset.</param>
-	/// <param name="isStopTrailing">Whether to use a trailing technique.</param>
+	/// <param name="isTrailing">Whether to use a trailing technique.</param>
 	/// <param name="takeTimeout">Time limit. If protection has not worked by this time, the position will be closed on the market.</param>
 	/// <param name="stopTimeout">Time limit. If protection has not worked by this time, the position will be closed on the market.</param>
 	/// <param name="useMarketOrders">Whether to use market orders.</param>
 	protected void StartProtection(
 		Unit takeProfit, Unit stopLoss,
-		bool isStopTrailing = default,
+		bool isTrailing = default,
 		TimeSpan? takeTimeout = default,
 		TimeSpan? stopTimeout = default,
 		bool useMarketOrders = default)
@@ -1057,7 +1057,7 @@ public partial class Strategy
 		_protectiveController = new();
 		_takeProfit = takeProfit;
 		_stopLoss = stopLoss;
-		_isStopTrailing = isStopTrailing;
+		_isTrailing = isTrailing;
 		_takeTimeout = takeTimeout ?? default;
 		_stopTimeout = stopTimeout ?? default;
 		_protectiveUseMarketOrders = useMarketOrders;

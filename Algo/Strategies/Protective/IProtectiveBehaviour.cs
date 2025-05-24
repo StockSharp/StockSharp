@@ -40,13 +40,13 @@ public abstract class BaseProtectiveBehaviour : BaseLogReceiver, IProtectiveBeha
 	/// </summary>
 	/// <param name="takeValue">Take offset.</param>
 	/// <param name="stopValue">Stop offset.</param>
-	/// <param name="isStopTrailing">Whether to use a trailing technique.</param>
+	/// <param name="isTrailing">Whether to use a trailing technique.</param>
 	/// <param name="takeTimeout">Time limit. If protection has not worked by this time, the position will be closed on the market.</param>
 	/// <param name="stopTimeout">Time limit. If protection has not worked by this time, the position will be closed on the market.</param>
 	/// <param name="useMarketOrders">Whether to use market orders.</param>
 	protected BaseProtectiveBehaviour(
 		Unit takeValue, Unit stopValue,
-		bool isStopTrailing,
+		bool isTrailing,
 		TimeSpan takeTimeout, TimeSpan stopTimeout,
 		bool useMarketOrders)
     {
@@ -58,7 +58,7 @@ public abstract class BaseProtectiveBehaviour : BaseLogReceiver, IProtectiveBeha
 
 		TakeValue = takeValue ?? throw new ArgumentNullException(nameof(takeValue));
 		StopValue = stopValue ?? throw new ArgumentNullException(nameof(stopValue));
-		IsStopTrailing = isStopTrailing;
+		IsTrailing = isTrailing;
 		TakeTimeout = takeTimeout;
 		StopTimeout = stopTimeout;
 		UseMarketOrders = useMarketOrders;
@@ -77,7 +77,7 @@ public abstract class BaseProtectiveBehaviour : BaseLogReceiver, IProtectiveBeha
 	/// <summary>
 	/// Whether to use a trailing technique.
 	/// </summary>
-	protected bool IsStopTrailing { get; }
+	protected bool IsTrailing { get; }
 
 	/// <summary>
 	/// Time limit. If protection has not worked by this time, the position will be closed on the market.
