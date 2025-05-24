@@ -103,7 +103,7 @@ public class ProtectiveProcessor
 		{
 			var activationPrice = _protectiveLevel.Type == UnitTypes.Limit
 				? _protectiveLevel.Value
-				: (_isUpTrend ? _prevBestPrice + _protectiveLevel.Value : _prevBestPrice - _protectiveLevel.Value);
+				: (_isUpTrend ? _prevBestPrice + _protectiveLevel : _prevBestPrice - _protectiveLevel);
 
 			// protectiveLevel may has extra big value.
 			// In that case activationPrice may less that zero.
