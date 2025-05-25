@@ -63,7 +63,7 @@ public class ProtectiveProcessor
 		if (currentPrice is decimal currPriceDec2)
 			_prevCurrPrice = currPriceDec2;
 
-		decimal? getClosePosPrice(decimal closePrice)
+		decimal getClosePosPrice(decimal closePrice)
 		{
 			if (_useMarketOrders)
 				return 0;
@@ -98,7 +98,7 @@ public class ProtectiveProcessor
 			return null;
 		}
 
-		decimal? isActivation()
+		decimal? tryActivate()
 		{
 			var activationPrice = _protectiveLevel.Type == UnitTypes.Limit
 				? _protectiveLevel.Value
@@ -130,7 +130,7 @@ public class ProtectiveProcessor
 					_prevBestPrice = currPriceDec;
 				else
 				{
-					if (isActivation() is decimal closePrice)
+					if (tryActivate() is decimal closePrice)
 						return closePrice;
 				}
 			}
@@ -140,14 +140,14 @@ public class ProtectiveProcessor
 					_prevBestPrice = currPriceDec;
 				else
 				{
-					if (isActivation() is decimal closePrice)
+					if (tryActivate() is decimal closePrice)
 						return closePrice;
 				}
 			}
 		}
 		else
 		{
-			if (isActivation() is decimal closePrice)
+			if (tryActivate() is decimal closePrice)
 				return closePrice;
 		}
 

@@ -148,12 +148,10 @@ public class LocalProtectiveBehaviourFactory(decimal? priceStep, int? decimals) 
 
 			var info = tryActivate(_take, true) ?? tryActivate(_stop, false);
 
-			if (info is null)
-				return null;
+			if (info is not null)
+				ResetProcessors();
 
-			ResetProcessors();
-
-			return info.Value;
+			return info;
 		}
 
 		public override (bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)? Update(decimal price, decimal value, DateTimeOffset time)
