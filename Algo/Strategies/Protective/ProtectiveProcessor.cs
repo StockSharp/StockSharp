@@ -98,6 +98,9 @@ public class ProtectiveProcessor
 			return null;
 		}
 
+		if (_prevBestPrice == currPriceDec)
+			return null;
+
 		decimal? tryActivate()
 		{
 			var activationPrice = _protectiveLevel.Type == UnitTypes.Limit
@@ -117,40 +120,22 @@ public class ProtectiveProcessor
 			return getClosePosPrice(currPriceDec);
 		}
 
-		if (_prevBestPrice == currPriceDec)
-		{
-		}
-		else if (_isTrailing)
+		if (_isTrailing)
 		{
 			//_logs.AddDebugLog("PrevPrice={0} CurrPrice={1}", _prevBestPrice, currPriceDec);
 
-			if (_protectiveSide == Sides.Buy)
+			var isLong = _protectiveSide == Sides.Buy;
+
+			if	(
+					(isLong && _prevBestPrice < currPriceDec) ||
+					(!isLong && _prevBestPrice > currPriceDec)
+				)
 			{
-				if (_prevBestPrice < currPriceDec)
-					_prevBestPrice = currPriceDec;
-				else
-				{
-					if (tryActivate() is decimal closePrice)
-						return closePrice;
-				}
+				_prevBestPrice = currPriceDec;
+				return null;
 			}
-			else
-			{
-				if (_prevBestPrice > currPriceDec)
-					_prevBestPrice = currPriceDec;
-				else
-				{
-					if (tryActivate() is decimal closePrice)
-						return closePrice;
-				}
-			}
-		}
-		else
-		{
-			if (tryActivate() is decimal closePrice)
-				return closePrice;
 		}
 
-		return null;
+		return tryActivate();
 	}
 }
