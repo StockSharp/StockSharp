@@ -107,12 +107,7 @@ public class ServerProtectiveBehaviourFactory(IMessageAdapter adapter) : IProtec
 /// <param name="decimals"><see cref="SecurityMessage.Decimals"/></param>
 public class LocalProtectiveBehaviourFactory(decimal? priceStep, int? decimals) : IProtectiveBehaviourFactory
 {
-	private class LocalProtectiveBehaviour(
-		decimal? priceStep, int? decimals,
-		Unit takeValue, Unit stopValue,
-		bool isStopTrailing,
-		TimeSpan takeTimeout, TimeSpan stopTimeout,
-		bool useMarketOrders) : BaseProtectiveBehaviour(takeValue, stopValue, isStopTrailing, takeTimeout, stopTimeout, useMarketOrders)
+	private class LocalProtectiveBehaviour : BaseProtectiveBehaviour
 	{
 		private ProtectiveProcessor _take;
 		private ProtectiveProcessor _stop;
@@ -123,6 +118,23 @@ public class LocalProtectiveBehaviourFactory(decimal? priceStep, int? decimals) 
 		private decimal _totalVolume;
 		private decimal _weightedPriceSum;
 		private readonly LinkedList<(decimal price, decimal vol)> _trades = [];
+		private readonly decimal? _priceStep;
+		private readonly int? _decimals;
+
+		public LocalProtectiveBehaviour(
+			decimal? priceStep, int? decimals,
+			Unit takeValue, Unit stopValue,
+			bool isStopTrailing,
+			TimeSpan takeTimeout, TimeSpan stopTimeout,
+			bool useMarketOrders)
+			: base(takeValue, stopValue, isStopTrailing, takeTimeout, stopTimeout, useMarketOrders)
+		{
+			_priceStep = priceStep;
+			_decimals = decimals;
+
+			if (isStopTrailing && stopValue?.Type == UnitTypes.Limit)
+				throw new ArgumentException(LocalizedStrings.TrailingNotSupportLimitProtectiveLevel, nameof(stopValue));
+		}
 
 		public override decimal Position => _posValue;
 
@@ -228,8 +240,8 @@ public class LocalProtectiveBehaviourFactory(decimal? priceStep, int? decimals) 
 
 					_posPrice = _weightedPriceSum / _totalVolume;
 
-					if (priceStep is not null)
-						_posPrice = _posPrice.ShrinkPrice(priceStep, decimals);
+					if (_priceStep is not null)
+						_posPrice = _posPrice.ShrinkPrice(_priceStep, _decimals);
 				}
 
 				var protectiveSide = _posValue > 0 ? Sides.Buy : Sides.Sell;

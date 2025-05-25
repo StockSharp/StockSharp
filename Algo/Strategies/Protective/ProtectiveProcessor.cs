@@ -48,6 +48,9 @@ public class ProtectiveProcessor
 		_timeout = timeout;
 		_logs = logs ?? throw new ArgumentNullException(nameof(logs));
 
+		if (_isTrailing && _protectiveLevel.Type == UnitTypes.Limit)
+			throw new ArgumentException(LocalizedStrings.TrailingNotSupportLimitProtectiveLevel, nameof(protectiveLevel));
+
 		_startedTime = startedTime;
 		_prevBestPrice = protectivePrice;
 	}
