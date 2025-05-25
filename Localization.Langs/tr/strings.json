@@ -3839,6 +3839,7 @@
   "Trailing": "Takip eden",
   "TrailingCannotUse": "Sınırlı seviyede izleme mekanizması kullanılamaz.",
   "TrailingDelta": "İzleyen Delta",
+  "TrailingNotSupportLimitProtectiveLevel": "Trailing stop, limit koruyucu seviyeyi desteklemiyor",
   "TrailingReferencePrice": "Takip Referans Fiyatı",
   "TrailingStopLimit": "Takip Eden Durdurma Sınır",
   "TrailingStopLoss": "takip eden zarar durdur",

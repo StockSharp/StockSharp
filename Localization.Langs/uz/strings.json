@@ -3839,6 +3839,7 @@
   "Trailing": "Izlab",
   "TrailingCannotUse": "Cheklangan darajada siljish mexanizmi ishlatib bo'lmaydi.",
   "TrailingDelta": "Izlash deltası",
+  "TrailingNotSupportLimitProtectiveLevel": "Trailing stop limit himoya darajasini qo'llab-quvvatlamaydi",
   "TrailingReferencePrice": "Izlash narxi manbai",
   "TrailingStopLimit": "Tajriba stop limiti",
   "TrailingStopLoss": "harakatchan stop-loss",

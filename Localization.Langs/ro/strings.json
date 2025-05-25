@@ -3839,6 +3839,7 @@
   "Trailing": "Trailing",
   "TrailingCannotUse": "Mecanismul de urmărire nu poate fi utilizat la un nivel limitat.",
   "TrailingDelta": "Delta de urmărire",
+  "TrailingNotSupportLimitProtectiveLevel": "Stop-ul urmăritor nu suportă nivelul protector limită",
   "TrailingReferencePrice": "Prețul de referință urmărit",
   "TrailingStopLimit": "Limita de oprire urmărire",
   "TrailingStopLoss": "stop loss dinamic",

@@ -3839,6 +3839,7 @@
   "Trailing": "ট্রেলিং",
   "TrailingCannotUse": "সীমিত স্তরে ট্রেইলিং মেকানিজম ব্যবহার করা যাবে না।",
   "TrailingDelta": "ট্রেইলিং ডেল্টা",
+  "TrailingNotSupportLimitProtectiveLevel": "ট্রেইলিং স্টপ লিমিট প্রতিরক্ষামূলক স্তর সমর্থন করে না",
   "TrailingReferencePrice": "ট্রেইলিং রেফারেন্স প্রাইস",
   "TrailingStopLimit": "ট্রেইলিং স্টপ লিমিট",
   "TrailingStopLoss": "ট্রেইলিং স্টপ লস",

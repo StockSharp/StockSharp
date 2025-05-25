@@ -3839,6 +3839,7 @@
   "Trailing": "ตามรอย",
   "TrailingCannotUse": "ไม่สามารถใช้กลไกเทรลลิ่งได้ที่ระดับที่จำกัด。",
   "TrailingDelta": "เดลต้าตามติด",
+  "TrailingNotSupportLimitProtectiveLevel": "Trailing stop ไม่รองรับระดับป้องกันแบบ limit",
   "TrailingReferencePrice": "ราคาอ้างอิงตาม",
   "TrailingStopLimit": "ลิมิตตามราคา",
   "TrailingStopLoss": "ตั้งจุดหยุดขาดทุนแบบเคลื่อนที่",

@@ -3839,6 +3839,7 @@
   "Trailing": "Поточний",
   "TrailingCannotUse": "Механізм прослідковування не може бути використаний на обмеженому рівні.",
   "TrailingDelta": "Слідкова дельта",
+  "TrailingNotSupportLimitProtectiveLevel": "Ковзний стоп не підтримує лімітний захисний рівень",
   "TrailingReferencePrice": "Ціна активації переслідування",
   "TrailingStopLimit": "Слідкуючий стоп-ліміт",
   "TrailingStopLoss": "плаваючий стоп-лос",

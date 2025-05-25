@@ -3839,6 +3839,7 @@
   "Trailing": "ट्रेलिंग",
   "TrailingCannotUse": "सीमित स्तर पर ट्रेलिंग मेकेनिज़्म का उपयोग नहीं किया जा सकता।",
   "TrailingDelta": "ट्रेलिंग डेल्टा",
+  "TrailingNotSupportLimitProtectiveLevel": "ट्रेलिंग स्टॉप सीमित सुरक्षा स्तर का समर्थन नहीं करता",
   "TrailingReferencePrice": "ट्रेलिंग रेफरेंस प्राइस",
   "TrailingStopLimit": "ट्रेलिंग स्टॉप लिमिट",
   "TrailingStopLoss": "पिछला स्टॉप लॉस",

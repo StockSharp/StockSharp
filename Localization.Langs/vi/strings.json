@@ -3839,6 +3839,7 @@
   "Trailing": "theo dõi",
   "TrailingCannotUse": "Cơ chế theo dõi không thể được sử dụng ở mức giới hạn.",
   "TrailingDelta": "Biên độ trượt",
+  "TrailingNotSupportLimitProtectiveLevel": "Trailing stop không hỗ trợ mức bảo vệ giới hạn",
   "TrailingReferencePrice": "Giá Tham Chiếu Di Động",
   "TrailingStopLimit": "Giới hạn dừng lỗ động",
   "TrailingStopLoss": "dừng lỗ kéo dài",

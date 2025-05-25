@@ -3846,6 +3846,7 @@
   "Trailing": "Trailing",
   "TrailingCannotUse": "Hindi magagamit ang trailing mechanism sa limitadong antas.",
   "TrailingDelta": "Trailing delta",
+  "TrailingNotSupportLimitProtectiveLevel": "Ang trailing stop ay hindi sumusuporta sa limit protective level",
   "TrailingReferencePrice": "Trailing reference price",
   "TrailingStopLimit": "Trailing stop-limit",
   "TrailingStopLoss": "Trailing stop-loss",

@@ -3839,6 +3839,7 @@
   "Trailing": "Liukuvan",
   "TrailingCannotUse": "Trailaava mekanismi ei voi käyttää rajatulla tasolla.",
   "TrailingDelta": "Viivästyvä delta",
+  "TrailingNotSupportLimitProtectiveLevel": "Trailing stop ei tue rajallista suojatasoa",
   "TrailingReferencePrice": "Viitehinta",
   "TrailingStopLimit": "Jäljittelevä stop-loss raja",
   "TrailingStopLoss": "liukuva stop-loss",

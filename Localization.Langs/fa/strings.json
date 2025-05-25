@@ -3839,6 +3839,7 @@
   "Trailing": "دنباله دار",
   "TrailingCannotUse": "مکانیزم ردیابی نمی‌تواند در سطح محدود استفاده شود.",
   "TrailingDelta": "دلتای ردیابی",
+  "TrailingNotSupportLimitProtectiveLevel": "توقف دنباله‌ای از سطح محافظ محدود پشتیبانی نمی‌کند",
   "TrailingReferencePrice": "قیمت مرجع ردیابی",
   "TrailingStopLimit": "محدودیت توقف پیگیری",
   "TrailingStopLoss": "توقف زیان دنباله دار",

@@ -3839,6 +3839,7 @@
   "Trailing": "المتتبع",
   "TrailingCannotUse": "لا يمكن استخدام آلية التتبع عند مستوى محدود.",
   "TrailingDelta": "دلتا المتابعة",
+  "TrailingNotSupportLimitProtectiveLevel": "الإيقاف المتحرك لا يدعم مستوى الحماية المحدود",
   "TrailingReferencePrice": "سعر الإشارة المتتبع",
   "TrailingStopLimit": "الحد من توقف الخسارة المتحرك",
   "TrailingStopLoss": "وقف الخسارة المتحرك",

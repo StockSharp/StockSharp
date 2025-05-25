@@ -3839,6 +3839,7 @@
   "Trailing": "Seguimiento",
   "TrailingCannotUse": "El mecanismo de seguimiento no puede usarse en un nivel limitado.",
   "TrailingDelta": "Delta de seguimiento",
+  "TrailingNotSupportLimitProtectiveLevel": "El stop móvil no soporta nivel protector límite",
   "TrailingReferencePrice": "Precio de referencia deslizante",
   "TrailingStopLimit": "Límite de parada móvil",
   "TrailingStopLoss": "stop loss dinámico",

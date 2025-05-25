@@ -3839,6 +3839,7 @@
   "Trailing": "Śledzenie",
   "TrailingCannotUse": "Mechanizm śledzenia nie może być używany na ograniczonym poziomie.",
   "TrailingDelta": "Delta śledzenia",
+  "TrailingNotSupportLimitProtectiveLevel": "Trailing stop nie obsługuje poziomu ochrony limit",
   "TrailingReferencePrice": "Cena referencyjna śledzenia",
   "TrailingStopLimit": "Limit zlecenia przesuwnego",
   "TrailingStopLoss": "ruchomy stop loss",

@@ -3839,6 +3839,7 @@
   "Trailing": "שוחף",
   "TrailingCannotUse": "מנגנון ההידבקות לא יכול להיעשות בשימוש ברמה מוגבלת.",
   "TrailingDelta": "דלתה מובילה",
+  "TrailingNotSupportLimitProtectiveLevel": "עצירה נגררת לא תומכת ברמת הגנה מוגבלת",
   "TrailingReferencePrice": "מחיר התייחסות מוביל",
   "TrailingStopLimit": "הגבלת עצירה מרחפת",
   "TrailingStopLoss": "סטופ לוס נע",

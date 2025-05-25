@@ -3839,6 +3839,7 @@
   "Trailing": "Arrossegament",
   "TrailingCannotUse": "El mecanisme d'arrossegament no pot ser utilitzat a un nivell limitat.",
   "TrailingDelta": "Delta d'arrossegament",
+  "TrailingNotSupportLimitProtectiveLevel": "L'stop dinàmic no suporta nivell protector límit",
   "TrailingReferencePrice": "Preu de referència d'arrossegament",
   "TrailingStopLimit": "Stop-límit d'arrossegament",
   "TrailingStopLoss": "Stop-loss d'arrossegament",

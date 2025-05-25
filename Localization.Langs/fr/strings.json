@@ -3839,6 +3839,7 @@
   "Trailing": "Traçant",
   "TrailingCannotUse": "Le mécanisme de suivi ne peut pas être utilisé à un niveau limité.",
   "TrailingDelta": "Delta de traînage",
+  "TrailingNotSupportLimitProtectiveLevel": "Le stop suiveur ne prend pas en charge le niveau de protection limite",
   "TrailingReferencePrice": "Prix de référence suivi",
   "TrailingStopLimit": "Limite de suivi d'arrêt",
   "TrailingStopLoss": "stop suiveur",

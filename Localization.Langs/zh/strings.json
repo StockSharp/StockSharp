@@ -3839,6 +3839,7 @@
   "Trailing": "追踪",
   "TrailingCannotUse": "在限制水平时不能使用滑动机制。",
   "TrailingDelta": "滑动增量",
+  "TrailingNotSupportLimitProtectiveLevel": "追踪止损不支持限价保护水平",
   "TrailingReferencePrice": "滑动触发价格",
   "TrailingStopLimit": "跟踪止损限价",
   "TrailingStopLoss": "移动止损",

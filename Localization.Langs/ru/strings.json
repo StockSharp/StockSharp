@@ -3839,6 +3839,7 @@
   "Trailing": "Скользящий",
   "TrailingCannotUse": "Механизм скольжения не может быть использован при лимитированном уровне.",
   "TrailingDelta": "Дельта скольжения",
+  "TrailingNotSupportLimitProtectiveLevel": "Скользящий стоп не поддерживает лимитный защитный уровень",
   "TrailingReferencePrice": "Цена активации скольжения",
   "TrailingStopLimit": "Скользящий стоп-лимит",
   "TrailingStopLoss": "Скользящий стоп-лосс",

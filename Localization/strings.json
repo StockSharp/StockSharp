@@ -3848,6 +3848,7 @@
   "Trailing": "Trailing",
   "TrailingCannotUse": "Trailing mechanism cannot be used at a limited level.",
   "TrailingDelta": "Trailing delta",
+  "TrailingNotSupportLimitProtectiveLevel": "Trailing stop does not support limit protective level",
   "TrailingReferencePrice": "Trailing reference price",
   "TrailingStopLimit": "Trailing stop-limit",
   "TrailingStopLoss": "Trailing stop-loss",

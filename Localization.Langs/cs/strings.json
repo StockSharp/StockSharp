@@ -3839,6 +3839,7 @@
   "Trailing": "Trailing",
   "TrailingCannotUse": "Posuvný mechanismus nelze použít na omezené úrovni.",
   "TrailingDelta": "Zaostávající delta",
+  "TrailingNotSupportLimitProtectiveLevel": "Trailing stop nepodporuje limitní ochrannou úroveň",
   "TrailingReferencePrice": "Klouzavá referenční cena",
   "TrailingStopLimit": "Klouzavý stop limit",
   "TrailingStopLoss": "posuvný stop-loss",

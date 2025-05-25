@@ -3839,6 +3839,7 @@
   "Trailing": "Plynúci",
   "TrailingCannotUse": "Mechanizmus sledovania nemôže byť použitý pri limitovanom úrovni.",
   "TrailingDelta": "Delta sledovania",
+  "TrailingNotSupportLimitProtectiveLevel": "Trailing stop nepodporuje limitnú ochrannú úroveň",
   "TrailingReferencePrice": "Referenčná cena pre sledovanie",
   "TrailingStopLimit": "Plynúci stop-limit",
   "TrailingStopLoss": "Plynúci stop-loss",

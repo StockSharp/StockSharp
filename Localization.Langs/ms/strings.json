@@ -3839,6 +3839,7 @@
   "Trailing": "Menjejak",
   "TrailingCannotUse": "Mekanisme menjejak tidak boleh digunakan pada tahap terhad.",
   "TrailingDelta": "Delta Menjejak",
+  "TrailingNotSupportLimitProtectiveLevel": "Trailing stop tidak menyokong tahap perlindungan had",
   "TrailingReferencePrice": "Harga Rujukan Berjejari",
   "TrailingStopLimit": "Had Terhenti Mengikut",
   "TrailingStopLoss": "henti rugi terapung",

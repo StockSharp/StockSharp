@@ -3839,6 +3839,7 @@
   "Trailing": "Volgend",
   "TrailingCannotUse": "Het volgmechanisme kan niet worden gebruikt op een beperkt niveau.",
   "TrailingDelta": "Volgende delta",
+  "TrailingNotSupportLimitProtectiveLevel": "Trailing stop ondersteunt geen limit beschermingsniveau",
   "TrailingReferencePrice": "Glijdende Referentieprijs",
   "TrailingStopLimit": "Trailing stoplimiet",
   "TrailingStopLoss": "doorlopend stopverlies",

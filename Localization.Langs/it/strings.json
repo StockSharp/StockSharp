@@ -3839,6 +3839,7 @@
   "Trailing": "Trailing",
   "TrailingCannotUse": "Il meccanismo di trascinamento non può essere utilizzato su un livello limitato.",
   "TrailingDelta": "Delta di tracciamento",
+  "TrailingNotSupportLimitProtectiveLevel": "Lo stop trailing non supporta il livello protettivo limite",
   "TrailingReferencePrice": "Prezzo di riferimento a scorrimento",
   "TrailingStopLimit": "Limite di stop seguente",
   "TrailingStopLoss": "stop loss dinamico",

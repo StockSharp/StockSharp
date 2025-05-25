@@ -3845,6 +3845,7 @@
   "Trailing": "နောက်ကလိုက်သော",
   "TrailingCannotUse": "ကန့်သတ် အဆင့်တွင် နောက်ကလိုက်ယန္တရားကို အသုံးပြု၍ မရပါ။",
   "TrailingDelta": "နောက်ကလိုက် ဒယ်လ်တာ",
+  "TrailingNotSupportLimitProtectiveLevel": "Trailing stop သည် limit protective level ကို မပံ့ပိုးပါ",
   "TrailingReferencePrice": "နောက်ကလိုက် အကိုးအကားစျေး",
   "TrailingStopLimit": "နောက်ကလိုက် ရပ်တန့်-ကန့်သတ်",
   "TrailingStopLoss": "နောက်ကလိုက် အရှုံးရပ်",

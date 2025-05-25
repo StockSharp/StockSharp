@@ -3839,6 +3839,7 @@
   "Trailing": "Trailing",
   "TrailingCannotUse": "Die Nachlaufmechanismus kann bei einem begrenzten Niveau nicht verwendet werden.",
   "TrailingDelta": "Nachlaufende Delta",
+  "TrailingNotSupportLimitProtectiveLevel": "Trailing Stop unterstützt kein Limit-Schutzniveau",
   "TrailingReferencePrice": "Nachführender Referenzpreis",
   "TrailingStopLimit": "Trailing-Stop-Limit",
   "TrailingStopLoss": "nachziehender Stop-Loss",

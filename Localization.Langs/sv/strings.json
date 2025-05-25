@@ -3839,6 +3839,7 @@
   "Trailing": "Efterföljande",
   "TrailingCannotUse": "Spårmekanismen kan inte användas på en begränsad nivå.",
   "TrailingDelta": "Efterföljande delta",
+  "TrailingNotSupportLimitProtectiveLevel": "Trailing stop stöder inte gräns skyddsnivå",
   "TrailingReferencePrice": "Glidande referenspris",
   "TrailingStopLimit": "Trailing stop limit",
   "TrailingStopLoss": "rörlig stoppförlust",

@@ -3839,6 +3839,7 @@
   "Trailing": "トレーリング",
   "TrailingCannotUse": "限定レベルではトレーリングメカニズムを使用できません。",
   "TrailingDelta": "追跡デルタ",
+  "TrailingNotSupportLimitProtectiveLevel": "トレーリングストップはリミット保護レベルをサポートしていません",
   "TrailingReferencePrice": "トレーリング参照価格",
   "TrailingStopLimit": "トレーリングストップリミット",
   "TrailingStopLoss": "トレーリングストップロス",

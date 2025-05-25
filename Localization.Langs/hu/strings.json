@@ -3839,6 +3839,7 @@
   "Trailing": "Csúszó",
   "TrailingCannotUse": "A csúszó mechanizmus nem használható korlátozott szinten.",
   "TrailingDelta": "Követő delta",
+  "TrailingNotSupportLimitProtectiveLevel": "A trailing stop nem támogatja a limit védő szintet",
   "TrailingReferencePrice": "Csúsztatási referenciaár",
   "TrailingStopLimit": "Csúszó stop limit",
   "TrailingStopLoss": "mozgó stop-loss",

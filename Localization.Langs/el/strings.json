@@ -3839,6 +3839,7 @@
   "Trailing": "Ελκυστική",
   "TrailingCannotUse": "Ο μηχανισμός παρακολούθησης δεν μπορεί να χρησιμοποιηθεί σε περιορισμένο επίπεδο.",
   "TrailingDelta": "Δέλτα καταδίωξης",
+  "TrailingNotSupportLimitProtectiveLevel": "Το trailing stop δεν υποστηρίζει προστατευτικό επίπεδο ορίου",
   "TrailingReferencePrice": "Τιμή αναφοράς καταδίωξης",
   "TrailingStopLimit": "Οριο παρακολούθησης",
   "TrailingStopLoss": "κινητή απώλεια στοπ",

@@ -3839,6 +3839,7 @@
   "Trailing": "Trailing",
   "TrailingCannotUse": "Mecanismo de arrasto não pode ser usado em um nível limitado.",
   "TrailingDelta": "Delta de rastreamento",
+  "TrailingNotSupportLimitProtectiveLevel": "Stop móvel não suporta nível protetor limite",
   "TrailingReferencePrice": "Preço de Referência de Acompanhamento",
   "TrailingStopLimit": "Limite de parada móvel",
   "TrailingStopLoss": "stop loss móvel",

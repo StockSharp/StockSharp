@@ -3839,6 +3839,7 @@
   "Trailing": "трејлинг",
   "TrailingCannotUse": "Механизам за праћење не може се користити на ограниченом нивоу.",
   "TrailingDelta": "Пратећа делта",
+  "TrailingNotSupportLimitProtectiveLevel": "Трејлинг стоп не подржава гранични заштитни ниво",
   "TrailingReferencePrice": "Цена референце за праћење",
   "TrailingStopLimit": "Праћење стоп-лимита",
   "TrailingStopLoss": "прилагођени стоп лос",

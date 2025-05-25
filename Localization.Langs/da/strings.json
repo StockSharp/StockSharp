@@ -3839,6 +3839,7 @@
   "Trailing": "Slingrende",
   "TrailingCannotUse": "Trækmekanismen kan ikke anvendes på et begrænset niveau.",
   "TrailingDelta": "Efterslæbende delta",
+  "TrailingNotSupportLimitProtectiveLevel": "Trailing stop understøtter ikke limit beskyttelsesniveau",
   "TrailingReferencePrice": "Glidende referencepris",
   "TrailingStopLimit": "Trailing stop grænse",
   "TrailingStopLoss": "gledende stop tab",

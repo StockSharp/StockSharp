@@ -3839,6 +3839,7 @@
   "Trailing": "트레일링",
   "TrailingCannotUse": "제한된 수준에서는 트레일링 메커니즘을 사용할 수 없습니다.",
   "TrailingDelta": "추적 델타",
+  "TrailingNotSupportLimitProtectiveLevel": "트레일링 스탑은 지정가 보호 수준을 지원하지 않습니다",
   "TrailingReferencePrice": "트레일링 기준 가격",
   "TrailingStopLimit": "트레일링 스탑 리밋",
   "TrailingStopLoss": "트레일링 스톱 로스",
