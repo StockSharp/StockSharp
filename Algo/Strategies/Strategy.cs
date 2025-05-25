@@ -1786,7 +1786,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		_posController = default;
 		_takeProfit = default;
 		_stopLoss = default;
-		_isTrailing = default;
+		_isStopTrailing = default;
 		_takeTimeout = default;
 		_stopTimeout = default;
 		_protectiveUseMarketOrders = default;
@@ -2101,7 +2101,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				security.ToSecurityId(),
 				portfolio.Name,
 				new LocalProtectiveBehaviourFactory(security.PriceStep, security.Decimals),
-				_takeProfit, _stopLoss, _isTrailing, _takeTimeout, _stopTimeout, _protectiveUseMarketOrders);
+				_takeProfit, _stopLoss, _isStopTrailing, _takeTimeout, _stopTimeout, _protectiveUseMarketOrders);
 
 			var info = _posController?.Update(trade.Trade.Price, trade.GetPosition(), trade.Trade.ServerTime);
 

@@ -74,7 +74,7 @@ public class ServerProtectiveBehaviourFactory(IMessageAdapter adapter) : IProtec
 
 			if (StopValue.IsSet() && condition is IStopLossOrderCondition stop)
 			{
-				stop.IsTrailing = IsTrailing;
+				stop.IsTrailing = IsStopTrailing;
 				stop.ActivationPrice = (decimal)(protectiveSide == Sides.Buy ? protectivePrice - StopValue : protectivePrice + StopValue);
 				stop.ClosePositionPrice = UseMarketOrders ? null : stop.ActivationPrice;
 			}
@@ -234,8 +234,8 @@ public class LocalProtectiveBehaviourFactory(decimal? priceStep, int? decimals) 
 
 				var protectiveSide = _posValue > 0 ? Sides.Buy : Sides.Sell;
 
-				_take = TakeValue.IsSet() ? new(protectiveSide, _posPrice, protectiveSide == Sides.Buy, IsTrailing, TakeValue, UseMarketOrders, new(), TakeTimeout, time, this) : null;
-				_stop = StopValue.IsSet() ? new(protectiveSide, _posPrice, protectiveSide == Sides.Sell, IsTrailing, StopValue, UseMarketOrders, new(), StopTimeout, time, this) : null;
+				_take = TakeValue.IsSet() ? new(protectiveSide, _posPrice, protectiveSide == Sides.Buy, false, TakeValue, UseMarketOrders, new(), TakeTimeout, time, this) : null;
+				_stop = StopValue.IsSet() ? new(protectiveSide, _posPrice, protectiveSide == Sides.Sell, IsStopTrailing, StopValue, UseMarketOrders, new(), StopTimeout, time, this) : null;
 			}
 
 			return null;

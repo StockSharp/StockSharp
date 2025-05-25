@@ -13,7 +13,7 @@ public class ProtectiveController : BaseLogReceiver
 			SecurityId securityId, string portfolioName,
 			IProtectiveBehaviourFactory factory,
 			Unit takeValue, Unit stopValue,
-			bool isTrailing,
+			bool isStopTrailing,
 			TimeSpan takeTimeout, TimeSpan stopTimeout,
 			bool useMarketOrders)
 		{
@@ -23,7 +23,7 @@ public class ProtectiveController : BaseLogReceiver
 			SecurityId = securityId;
 			PortfolioName = portfolioName;
 
-			_behaviour = factory.Create(takeValue, stopValue, isTrailing, takeTimeout, stopTimeout, useMarketOrders);
+			_behaviour = factory.Create(takeValue, stopValue, isStopTrailing, takeTimeout, stopTimeout, useMarketOrders);
 			_behaviour.Parent = this;
 		}
 
@@ -49,7 +49,7 @@ public class ProtectiveController : BaseLogReceiver
 	/// <param name="factory"><see cref="IProtectiveBehaviourFactory"/></param>
 	/// <param name="takeValue">Take offset.</param>
 	/// <param name="stopValue">Stop offset.</param>
-	/// <param name="isTrailing">Whether to use a trailing technique.</param>
+	/// <param name="isStopTrailing">Whether to use a trailing technique.</param>
 	/// <param name="takeTimeout">Time limit. If protection has not worked by this time, the position will be closed on the market.</param>
 	/// <param name="stopTimeout">Time limit. If protection has not worked by this time, the position will be closed on the market.</param>
 	/// <param name="useMarketOrders">Whether to use market orders.</param>
@@ -58,7 +58,7 @@ public class ProtectiveController : BaseLogReceiver
 		SecurityId securityId, string portfolioName,
 		IProtectiveBehaviourFactory factory,
 		Unit takeValue, Unit stopValue,
-		bool isTrailing,
+		bool isStopTrailing,
 		TimeSpan takeTimeout, TimeSpan stopTimeout,
 		bool useMarketOrders)
 		=> _contollers.SafeAdd(securityId, key => new(StringComparer.InvariantCultureIgnoreCase)).SafeAdd(portfolioName.ThrowIfEmpty(nameof(portfolioName)),
@@ -66,7 +66,7 @@ public class ProtectiveController : BaseLogReceiver
 				securityId, portfolioName,
 				factory,
 				takeValue, stopValue,
-				isTrailing,
+				isStopTrailing,
 				takeTimeout, stopTimeout,
 				useMarketOrders
 			) { Parent = this });
