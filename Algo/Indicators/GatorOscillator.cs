@@ -20,23 +20,11 @@ public class GatorOscillator : BaseComplexIndicator
 	/// </summary>
 	public GatorOscillator()
 	{
-		_alligator = new Alligator();
+		_alligator = new();
+		AddResetTracking(_alligator);
+
 		AddInner(Histogram1 = new(_alligator.Jaw, _alligator.Lips, false));
 		AddInner(Histogram2 = new(_alligator.Lips, _alligator.Teeth, true));
-	}
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="GatorOscillator"/>.
-	/// </summary>
-	/// <param name="alligator">Alligator.</param>
-	/// <param name="histogram1">Top histogram.</param>
-	/// <param name="histogram2">Lower histogram.</param>
-	public GatorOscillator(Alligator alligator, GatorHistogram histogram1, GatorHistogram histogram2)
-		: base(histogram1, histogram2)
-	{
-		_alligator = alligator ?? throw new ArgumentNullException(nameof(alligator));
-		Histogram1 = histogram1;
-		Histogram2 = histogram2;
 	}
 
 	/// <inheritdoc />

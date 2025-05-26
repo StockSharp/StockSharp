@@ -21,9 +21,6 @@ public class AwesomeOscillator : BaseIndicator
 	{
 	}
 
-	/// <inheritdoc />
-	public override int NumValuesToInitialize => LongMa.NumValuesToInitialize.Max(ShortMa.NumValuesToInitialize.Max(MedianPrice.NumValuesToInitialize));
-
 	/// <summary>
 	/// Initializes a new instance of the <see cref="AwesomeOscillator"/>.
 	/// </summary>
@@ -33,11 +30,12 @@ public class AwesomeOscillator : BaseIndicator
 	{
 		ShortMa = shortSma ?? throw new ArgumentNullException(nameof(shortSma));
 		LongMa = longSma ?? throw new ArgumentNullException(nameof(longSma));
-		MedianPrice = new MedianPrice();
-	}
+		MedianPrice = new();
 
-	/// <inheritdoc />
-	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
+		AddResetTracking(ShortMa);
+		AddResetTracking(LongMa);
+		AddResetTracking(MedianPrice);
+	}
 
 	/// <summary>
 	/// Long moving average.
@@ -71,6 +69,12 @@ public class AwesomeOscillator : BaseIndicator
 		Description = LocalizedStrings.MedianPriceKey,
 		GroupName = LocalizedStrings.GeneralKey)]
 	public MedianPrice MedianPrice { get; }
+
+	/// <inheritdoc />
+	public override int NumValuesToInitialize => LongMa.NumValuesToInitialize.Max(ShortMa.NumValuesToInitialize.Max(MedianPrice.NumValuesToInitialize));
+
+	/// <inheritdoc />
+	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 	/// <inheritdoc />
 	protected override bool CalcIsFormed() => LongMa.IsFormed;

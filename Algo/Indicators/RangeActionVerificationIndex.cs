@@ -16,8 +16,11 @@ public class RangeActionVerificationIndex : BaseIndicator
 	/// </summary>
 	public RangeActionVerificationIndex()
 	{
-		ShortSma = new SimpleMovingAverage { Length = 7 };
-		LongSma = new SimpleMovingAverage { Length = 65 };
+		ShortSma = new() { Length = 7 };
+		LongSma = new() { Length = 65 };
+
+		AddResetTracking(ShortSma);
+		AddResetTracking(LongSma);
 	}
 
 	/// <inheritdoc />

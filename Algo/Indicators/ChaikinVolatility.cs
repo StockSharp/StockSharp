@@ -21,8 +21,11 @@ public class ChaikinVolatility : BaseIndicator
 	/// </summary>
 	public ChaikinVolatility()
 	{
-		Ema = new ExponentialMovingAverage();
-		Roc = new RateOfChange();
+		Ema = new();
+		Roc = new();
+
+		AddResetTracking(Ema);
+		AddResetTracking(Roc);
 	}
 
 	/// <inheritdoc />
