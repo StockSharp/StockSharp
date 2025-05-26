@@ -82,7 +82,7 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 	public override int NumValuesToInitialize =>
 		Mode == ComplexIndicatorModes.Parallel
 			? InnerIndicators.Select(i => i.NumValuesToInitialize).Max()
-			: InnerIndicators.Select(i => i.NumValuesToInitialize).Sum();
+			: InnerIndicators.Select(i => i.NumValuesToInitialize).Sum() - (InnerIndicators.Count - 1);
 
 	/// <inheritdoc />
 	protected override bool CalcIsFormed() => InnerIndicators.All(i => i.IsFormed);

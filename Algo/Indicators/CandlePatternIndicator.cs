@@ -132,12 +132,6 @@ public class CandlePatternIndicator : BaseIndicator
 	}
 
 	/// <summary>
-	/// Number of candles in the pattern.
-	/// </summary>
-	[Browsable(false)]
-	public int CandlesCount => Pattern?.CandlesCount ?? 0;
-
-	/// <summary>
 	/// Initializes a new instance of the <see cref="CandlePatternIndicator"/>.
 	/// </summary>
 	public CandlePatternIndicator()
@@ -145,6 +139,9 @@ public class CandlePatternIndicator : BaseIndicator
 		EnsureProvider();
 		Reset();
 	}
+
+	/// <inheritdoc />
+	public override int NumValuesToInitialize => Pattern?.CandlesCount ?? 0;
 
 	/// <inheritdoc />
 	public sealed override void Reset()
@@ -187,7 +184,7 @@ public class CandlePatternIndicator : BaseIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var candlesCount = CandlesCount;
+		var candlesCount = NumValuesToInitialize;
 
 		if (candlesCount == 0)
 		{
