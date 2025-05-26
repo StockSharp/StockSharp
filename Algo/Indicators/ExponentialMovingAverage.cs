@@ -29,6 +29,7 @@ public class ExponentialMovingAverage : LengthIndicator<decimal>
 	public override void Reset()
 	{
 		base.Reset();
+
 		_multiplier = 2m / (Length + 1);
 		_prevFinalValue = 0;
 	}

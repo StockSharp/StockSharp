@@ -665,7 +665,6 @@ public abstract class IndexSecurityBaseProcessor<TBasketSecurity>(Security secur
 /// <param name="security">Security.</param>
 public class WeightedIndexSecurityProcessor(Security security) : IndexSecurityBaseProcessor<WeightedIndexSecurity>(security)
 {
-
 	/// <inheritdoc />
 	protected override decimal OnCalculate(decimal[] values)
 	{
