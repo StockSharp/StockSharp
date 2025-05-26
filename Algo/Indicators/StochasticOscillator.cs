@@ -6,8 +6,10 @@
 /// <remarks>
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/stochastic_oscillator.html
 /// </remarks>
-[DisplayName("Stochastic Oscillator")]
-[Description("Stochastic Oscillator")]
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.STOCHKey,
+	Description = LocalizedStrings.StochasticOscillatorKey)]
 [Doc("topics/api/indicators/list_of_indicators/stochastic_oscillator.html")]
 public class StochasticOscillator : BaseComplexIndicator
 {

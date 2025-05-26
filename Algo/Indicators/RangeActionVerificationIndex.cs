@@ -6,8 +6,10 @@
 /// <remarks>
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/ravi.html
 /// </remarks>
-[DisplayName("RAVI")]
-[Description("Range Action Verification Index.")]
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.RAVIKey,
+	Description = LocalizedStrings.RangeActionVerificationIndexKey)]
 [Doc("topics/api/indicators/list_of_indicators/ravi.html")]
 public class RangeActionVerificationIndex : BaseIndicator
 {

@@ -6,8 +6,10 @@
 /// <remarks>
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/optimal_tracking.html
 /// </remarks>
-[DisplayName("OptimalTracking")]
-[Description("Optimal Tracking Filter published by John Ehlers")]
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.OptimalTrackingKey,
+	Description = LocalizedStrings.OptimalTrackingDescKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/optimal_tracking.html")]
 public sealed class OptimalTracking : LengthIndicator<decimal>

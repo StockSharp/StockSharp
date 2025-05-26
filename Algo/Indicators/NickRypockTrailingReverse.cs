@@ -6,8 +6,10 @@
 /// <remarks>
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/nrtr.html
 /// </remarks>
-[DisplayName("NRTR")]
-[Description("Nick Rypock Trailing reverse.")]
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.NRTRKey,
+	Description = LocalizedStrings.NickRypockTrailingReverseKey)]
 [Doc("topics/api/indicators/list_of_indicators/nrtr.html")]
 public class NickRypockTrailingReverse : LengthIndicator<decimal>
 {

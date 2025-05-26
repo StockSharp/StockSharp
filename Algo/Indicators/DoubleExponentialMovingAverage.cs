@@ -6,8 +6,10 @@
 /// <remarks>
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/dema.html
 /// </remarks>
-[DisplayName("DEMA")]
-[Description("Double Exponential Moving Average")]
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.DEMAKey,
+	Description = LocalizedStrings.DoubleExponentialMovingAverageKey)]
 [Doc("topics/api/indicators/list_of_indicators/dema.html")]
 public class DoubleExponentialMovingAverage : LengthIndicator<decimal>
 {
