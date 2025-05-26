@@ -16,10 +16,6 @@ public enum ComplexIndicatorModes
 	Parallel,
 }
 
-class InnerIndicatorResetScope
-{
-}
-
 /// <summary>
 /// The base indicator, built in form of several indicators combination.
 /// </summary>
@@ -46,14 +42,6 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 	[Browsable(false)]
 	public ComplexIndicatorModes Mode { get; protected set; }
 
-	private void InnerReseted()
-	{
-		if (Scope<InnerIndicatorResetScope>.IsDefined)
-			return;
-
-		Reset();
-	}
-
 	/// <summary>
 	/// Add to <see cref="InnerIndicators"/>.
 	/// </summary>
@@ -61,7 +49,7 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 	protected void AddInner(IIndicator inner)
 	{
 		_innerIndicators.Add(inner ?? throw new ArgumentNullException(nameof(inner)));
-		inner.Reseted += InnerReseted;
+		AddResetTracking(inner);
 	}
 
 	/// <summary>
@@ -71,7 +59,7 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 	protected void RemoveInner(IIndicator inner)
 	{
 		_innerIndicators.Remove(inner ?? throw new ArgumentNullException(nameof(inner)));
-		inner.Reseted -= InnerReseted;
+		RemoveResetTracking(inner);
 	}
 
 	/// <summary>
@@ -150,15 +138,6 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 		}
 
 		return value;
-	}
-
-	/// <inheritdoc />
-	public override void Reset()
-	{
-		base.Reset();
-
-		using (new InnerIndicatorResetScope().ToScope())
-			InnerIndicators.ForEach(i => i.Reset());
 	}
 
 	/// <inheritdoc />

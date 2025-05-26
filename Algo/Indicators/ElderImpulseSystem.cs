@@ -28,8 +28,8 @@ public class ElderImpulseSystem : BaseIndicator
 		Ema = ema ?? throw new ArgumentNullException(nameof(ema));
 		Macd = macd ?? throw new ArgumentNullException(nameof(macd));
 
-		Ema.Reseted += Reset;
-		Macd.Reseted += Reset;
+		AddResetTracking(Ema);
+		AddResetTracking(Macd);
 	}
 
 	/// <summary>

@@ -33,6 +33,9 @@ public class Acceleration : BaseIndicator
 	{
 		Ao = ao ?? throw new ArgumentNullException(nameof(ao));
 		Sma = sma ?? throw new ArgumentNullException(nameof(sma));
+
+		AddResetTracking(Ao);
+		AddResetTracking(Sma);
 	}
 
 	/// <inheritdoc />

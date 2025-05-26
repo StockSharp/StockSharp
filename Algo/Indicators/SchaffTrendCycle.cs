@@ -33,8 +33,8 @@ public class SchaffTrendCycle : ExponentialMovingAverage
 
 		StochasticK = new() { Length = 5 };
 
-		Macd.Reseted += InnerReseted;
-		StochasticK.Reseted += InnerReseted;
+		AddResetTracking(Macd);
+		AddResetTracking(StochasticK);
 
 		Buffer.MaxComparer = Buffer.MinComparer = Comparer<decimal>.Default;
 
@@ -66,24 +66,10 @@ public class SchaffTrendCycle : ExponentialMovingAverage
 		GroupName = LocalizedStrings.GeneralKey)]
 	public StochasticK StochasticK { get; }
 
-	private void InnerReseted()
-	{
-		if (Scope<InnerIndicatorResetScope>.IsDefined)
-			return;
-
-		Reset();
-	}
-
 	/// <inheritdoc />
 	public override void Reset()
 	{
 		base.Reset();
-
-		using (new InnerIndicatorResetScope().ToScope())
-		{
-			Macd?.Reset();
-			StochasticK?.Reset();
-		}
 
 		_prevStochK = default;
 	}

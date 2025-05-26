@@ -9,6 +9,12 @@ using Ecng.Drawing;
 /// </summary>
 public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 {
+	private class InnerIndicatorResetScope
+	{
+	}
+
+	private readonly List<IIndicator> _resetTrackings = [];
+
 	/// <summary>
 	/// Initialize <see cref="BaseIndicator"/>.
 	/// </summary>
@@ -61,6 +67,47 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 		_isFormed = false;
 		Container.ClearValues();
 		Reseted?.Invoke();
+
+		if (_resetTrackings.Count > 0)
+		{
+			using (new InnerIndicatorResetScope().ToScope())
+			{
+				foreach (var inner in _resetTrackings)
+					inner.Reset();
+			}
+		}
+	}
+
+	private void InnerReseted()
+	{
+		if (Scope<InnerIndicatorResetScope>.IsDefined)
+			return;
+
+		Reset();
+	}
+
+	/// <summary>
+	/// To add inner indicator for tracking the <see cref="IIndicator.Reseted"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="IIndicator"/></param>
+	protected void AddResetTracking(IIndicator indicator)
+	{
+		ArgumentNullException.ThrowIfNull(indicator);
+
+		indicator.Reseted += InnerReseted;
+		_resetTrackings.Add(indicator);
+	}
+
+	/// <summary>
+	/// To remove indicator from tracking the <see cref="IIndicator.Reseted"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="IIndicator"/></param>
+	protected void RemoveResetTracking(IIndicator indicator)
+	{
+		ArgumentNullException.ThrowIfNull(indicator);
+
+		indicator.Reseted -= InnerReseted;
+		_resetTrackings.Remove(indicator);
 	}
 
 	/// <summary>
