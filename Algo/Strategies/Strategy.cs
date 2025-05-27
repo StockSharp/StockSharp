@@ -87,7 +87,8 @@ public enum StrategyTradingModes
 /// </summary>
 public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMarketRuleContainer,
     ICloneable<Strategy>, IMarketDataProvider, ISubscriptionProvider, ISecurityProvider,
-    ITransactionProvider, IScheduledTask, ICustomTypeDescriptor, ITimeProvider
+    ITransactionProvider, IScheduledTask, ICustomTypeDescriptor, ITimeProvider,
+	IPortfolioProvider, IPositionProvider
 {
 	private class StrategyChangeStateMessage(Strategy strategy, ProcessStates state)
 		: Message(ExtendedMessageTypes.StrategyChangeState)

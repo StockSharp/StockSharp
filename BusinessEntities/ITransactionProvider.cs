@@ -3,7 +3,7 @@ namespace StockSharp.BusinessEntities;
 /// <summary>
 /// Transactional operations provider interface.
 /// </summary>
-public interface ITransactionProvider : IPortfolioProvider, IPositionProvider
+public interface ITransactionProvider
 {
 	/// <summary>
 	/// Transaction id generator.
