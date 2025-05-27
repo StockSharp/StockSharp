@@ -13,6 +13,7 @@
 [Doc("topics/api/indicators/list_of_indicators/schaff_trend_cycle.html")]
 public class SchaffTrendCycle : ExponentialMovingAverage
 {
+	private readonly CircularBufferEx<decimal> _buffer = new(10);
 	private decimal _prevStochK;
 
 	/// <summary>
@@ -20,6 +21,8 @@ public class SchaffTrendCycle : ExponentialMovingAverage
 	/// </summary>
 	public SchaffTrendCycle()
 	{
+		_buffer.MaxComparer = _buffer.MinComparer = Comparer<decimal>.Default;
+
 		Macd = new()
 		{
 			Macd =
@@ -35,10 +38,8 @@ public class SchaffTrendCycle : ExponentialMovingAverage
 
 		AddResetTracking(Macd);
 		AddResetTracking(StochasticK);
-
-		Buffer.MaxComparer = Buffer.MinComparer = Comparer<decimal>.Default;
-
-		Length = 10;
+		
+		Length = _buffer.Capacity;
 	}
 
 	/// <inheritdoc />
@@ -71,6 +72,7 @@ public class SchaffTrendCycle : ExponentialMovingAverage
 	{
 		base.Reset();
 
+		_buffer.Capacity = Length;
 		_prevStochK = default;
 	}
 
@@ -78,13 +80,13 @@ public class SchaffTrendCycle : ExponentialMovingAverage
 	protected override bool CalcIsFormed() => Macd.IsFormed && StochasticK.IsFormed && base.CalcIsFormed();
 
 	/// <inheritdoc />
-	public override int NumValuesToInitialize => Macd.NumValuesToInitialize + StochasticK.NumValuesToInitialize + base.NumValuesToInitialize;
+	public override int NumValuesToInitialize => Macd.NumValuesToInitialize + StochasticK.NumValuesToInitialize + base.NumValuesToInitialize - 2;
 
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		if (input.IsFinal)
-			Buffer.PushBack(input.ToDecimal());
+			_buffer.PushBack(input.ToDecimal());
 
 		var macdVal = (ComplexIndicatorValue)Macd.Process(input);
 
@@ -92,8 +94,8 @@ public class SchaffTrendCycle : ExponentialMovingAverage
 			return null;
 
 		var macdHist = macdVal[Macd.Macd].ToDecimal() - macdVal[Macd.SignalMa].ToDecimal();
-		var den = Buffer.Max.Value - Buffer.Min.Value;
-		var stochK = den == 0 ? _prevStochK : StochasticK.Process(input, (macdHist - Buffer.Min.Value) / den).ToDecimal();
+		var den = _buffer.Max.Value - _buffer.Min.Value;
+		var stochK = den == 0 ? _prevStochK : StochasticK.Process(input, (macdHist - _buffer.Min.Value) / den).ToDecimal();
 
 		if (!StochasticK.IsFormed)
 			return null;

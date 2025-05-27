@@ -85,7 +85,7 @@ public class WaveTrendOscillator : BaseComplexIndicator
 	}
 
 	/// <inheritdoc />
-	public override int NumValuesToInitialize => _capo.NumValuesToInitialize.Max(_esa.NumValuesToInitialize) + _d.NumValuesToInitialize + base.NumValuesToInitialize;
+	public override int NumValuesToInitialize => _esa.NumValuesToInitialize + _d.NumValuesToInitialize - 1;
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
