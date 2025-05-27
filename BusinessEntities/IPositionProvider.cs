@@ -3,7 +3,7 @@ namespace StockSharp.BusinessEntities;
 /// <summary>
 /// The position provider interface.
 /// </summary>
-public interface IPositionProvider : IPortfolioProvider
+public interface IPositionProvider
 {
 	/// <summary>
 	/// Get all positions.

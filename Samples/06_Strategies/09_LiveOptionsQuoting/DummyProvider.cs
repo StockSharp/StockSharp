@@ -4,20 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using Ecng.Common;
-
 using StockSharp.Algo;
 using StockSharp.BusinessEntities;
 using StockSharp.Messages;
 
-class DummyProvider : CollectionSecurityProvider, IMarketDataProvider, IPositionProvider
+class DummyProvider(IEnumerable<Security> securities, IEnumerable<Position> positions) : CollectionSecurityProvider(securities), IMarketDataProvider, IPositionProvider
 {
-	public DummyProvider(IEnumerable<Security> securities, IEnumerable<Position> positions)
-		: base(securities)
-	{
-		_positions = positions ?? throw new ArgumentNullException(nameof(positions));
-	}
-
 	event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> IMarketDataProvider.ValuesChanged
 	{
 		add { }
@@ -99,12 +91,10 @@ class DummyProvider : CollectionSecurityProvider, IMarketDataProvider, IPosition
 		add => throw new NotSupportedException();
 		remove => throw new NotSupportedException();
 	}
-
-	private readonly IEnumerable<Position> _positions;
-
+	
+	private readonly IEnumerable<Position> _positions = positions ?? throw new ArgumentNullException(nameof(positions));
+	
 	IEnumerable<Position> IPositionProvider.Positions => _positions;
-
-	IEnumerable<Portfolio> IPortfolioProvider.Portfolios => _positions.OfType<Portfolio>();
 
 	event Action<Position> IPositionProvider.NewPosition
 	{
@@ -118,25 +108,8 @@ class DummyProvider : CollectionSecurityProvider, IMarketDataProvider, IPosition
 		remove { }
 	}
 
-	event Action<Portfolio> IPortfolioProvider.NewPortfolio
-	{
-		add { }
-		remove { }
-	}
-
-	event Action<Portfolio> IPortfolioProvider.PortfolioChanged
-	{
-		add { }
-		remove { }
-	}
-
 	Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string strategyId, Sides? side, string clientCode, string depoName, TPlusLimits? limit)
 	{
 		return _positions.FirstOrDefault(p => p.Security == security && p.Portfolio == portfolio);
-	}
-
-	Portfolio IPortfolioProvider.LookupByPortfolioName(string name)
-	{
-		return _positions.OfType<Portfolio>().FirstOrDefault(p => p.Name.EqualsIgnoreCase(name));
 	}
 }

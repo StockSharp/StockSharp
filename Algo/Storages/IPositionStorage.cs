@@ -1,11 +1,11 @@
 ﻿namespace StockSharp.Algo.Storages;
 
-using Key = System.Tuple<BusinessEntities.Portfolio, BusinessEntities.Security, string, Messages.Sides?, string, string, Messages.TPlusLimits?>;
+using Key = ValueTuple<Portfolio, Security, string, Sides?, string, string, TPlusLimits?>;
 
 /// <summary>
 /// The interface for access to the position storage.
 /// </summary>
-public interface IPositionStorage : IPositionProvider
+public interface IPositionStorage : IPositionProvider, IPortfolioProvider
 {
 	/// <summary>
 	/// Sync object.
@@ -153,7 +153,7 @@ public class InMemoryPositionStorage : IPositionStorage
 		(isNew ? NewPosition : PositionChanged)?.Invoke(position);
 	}
 
-	private Key CreateKey(Position position)
+	private static Key CreateKey(Position position)
 	{
 		if (position is null)
 			throw new ArgumentNullException(nameof(position));
@@ -161,7 +161,7 @@ public class InMemoryPositionStorage : IPositionStorage
 		return CreateKey(position.Portfolio, position.Security, position.StrategyId, position.Side, position.ClientCode, position.DepoName, position.LimitType);
 	}
 
-	private Key CreateKey(Portfolio portfolio, Security security, string strategyId, Sides? side, string clientCode, string depoName, TPlusLimits? limitType)
+	private static Key CreateKey(Portfolio portfolio, Security security, string strategyId, Sides? side, string clientCode, string depoName, TPlusLimits? limitType)
 	{
 		if (portfolio is null)
 			throw new ArgumentNullException(nameof(portfolio));
@@ -173,6 +173,6 @@ public class InMemoryPositionStorage : IPositionStorage
 
 		clientCode ??= string.Empty;
 
-		return Tuple.Create(portfolio, security, strategyId?.ToLowerInvariant() ?? string.Empty, side, clientCode?.ToLowerInvariant() ?? string.Empty, depoName?.ToLowerInvariant() ?? string.Empty, limitType);
+		return (portfolio, security, strategyId?.ToLowerInvariant() ?? string.Empty, side, clientCode?.ToLowerInvariant() ?? string.Empty, depoName?.ToLowerInvariant() ?? string.Empty, limitType);
 	}
 }
