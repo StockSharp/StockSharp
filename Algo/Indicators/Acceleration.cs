@@ -21,9 +21,6 @@ public class Acceleration : BaseIndicator
 	{
 	}
 
-	/// <inheritdoc />
-	public override int NumValuesToInitialize => Ao.NumValuesToInitialize.Max(Sma.NumValuesToInitialize);
-
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Acceleration"/>.
 	/// </summary>
@@ -64,6 +61,9 @@ public class Acceleration : BaseIndicator
 	public AwesomeOscillator Ao { get; }
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize => Ao.NumValuesToInitialize + Sma.NumValuesToInitialize - 1;
+
+	/// <inheritdoc />
 	protected override bool CalcIsFormed() => Sma.IsFormed;
 
 	/// <inheritdoc />
@@ -71,10 +71,12 @@ public class Acceleration : BaseIndicator
 	{
 		var aoValue = Ao.Process(input);
 
-		if (Ao.IsFormed)
-			return new DecimalIndicatorValue(this, aoValue.ToDecimal() - Sma.Process(aoValue).ToDecimal(), input.Time);
+		var aoDec = aoValue.ToDecimal();
 
-		return new DecimalIndicatorValue(this, aoValue.ToDecimal(), input.Time);
+		if (Ao.IsFormed)
+			return new DecimalIndicatorValue(this, aoDec - Sma.Process(aoValue).ToDecimal(), input.Time);
+
+		return new DecimalIndicatorValue(this, aoDec, input.Time);
 	}
 
 	/// <inheritdoc />
