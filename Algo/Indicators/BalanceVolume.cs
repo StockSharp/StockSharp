@@ -31,7 +31,9 @@ public class BalanceVolume : BaseIndicator
 
 		if (_prevClose == 0)
 		{
-			_prevClose = candle.ClosePrice;
+			if (input.IsFinal)
+				_prevClose = candle.ClosePrice;
+
 			return new DecimalIndicatorValue(this, input.Time);
 		}
 
@@ -55,8 +57,9 @@ public class BalanceVolume : BaseIndicator
 	/// <inheritdoc />
 	public override void Reset()
 	{
-		_prevClose = 0;
-		_cumulativeBalanceVolume = 0;
+		_prevClose = default;
+		_cumulativeBalanceVolume = default;
+
 		base.Reset();
 	}
 }
