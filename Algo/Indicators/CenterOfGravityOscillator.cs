@@ -67,6 +67,9 @@ public class CenterOfGravityOscillator : LengthIndicator<decimal>
 		}
 		else
 		{
+			if (Buffer.Count == 0)
+				return null;
+
 			sumPrice = _sumPrice - Buffer.Front() + price;
 
 			var i = 1;
