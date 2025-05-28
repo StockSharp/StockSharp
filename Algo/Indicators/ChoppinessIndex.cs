@@ -70,6 +70,9 @@ public class ChoppinessIndex : LengthIndicator<decimal>
 		}
 		else
 		{
+			if (_highLowRange.Count == 0 || _trueRange.Count == 0)
+				return null;
+
 			sumTrueRange = _sumTrueRange - _trueRange.Front() + trueRange;
 			sumHighLowRange = _sumHighLowRange - _highLowRange.Front() + highLowRange;
 		}
