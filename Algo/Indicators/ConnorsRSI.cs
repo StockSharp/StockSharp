@@ -103,11 +103,14 @@ public class ConnorsRSI : BaseComplexIndicator
 		var updownRsiValue = _updownRsi.Process(input, streak);
 
 		var rocValue = _roc.Process(input);
-		var rocRsiValue = _rocRsi.Process(rocValue);
+
+		var rocRsiValue = rocValue.IsEmpty
+			? new DecimalIndicatorValue(_rocRsi, input.Time)
+			: _rocRsi.Process(rocValue);
 
 		var result = new ComplexIndicatorValue(this, input.Time);
 
-		if (_rsi.IsFormed && _updownRsi.IsFormed && _rocRsi.IsFormed && _roc.IsFormed)
+		if (!rocValue.IsEmpty && _rsi.IsFormed && _updownRsi.IsFormed && _rocRsi.IsFormed && _roc.IsFormed)
 		{
 			IsFormed = true;
 
