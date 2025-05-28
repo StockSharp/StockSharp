@@ -49,6 +49,9 @@ public class HighLowIndex : LengthIndicator<decimal>
 		}
 		else
 		{
+			if (_highBuffer.Count == 0 || _lowBuffer.Count == 0)
+				return null;
+
 			highestHigh = _highBuffer.Max.Value.Max(candle.HighPrice);
 			lowestLow = _lowBuffer.Min.Value.Min(candle.LowPrice);
 		}
