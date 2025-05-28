@@ -59,23 +59,13 @@ public class Aroon : BaseComplexIndicator
 	/// <summary>
 	/// Aroon Up.
 	/// </summary>
-	[TypeConverter(typeof(ExpandableObjectConverter))]
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.UpKey,
-		Description = LocalizedStrings.AroonUpKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+	[Browsable(false)]
 	public AroonUp Up { get; }
 
 	/// <summary>
 	/// Aroon Down.
 	/// </summary>
-	[TypeConverter(typeof(ExpandableObjectConverter))]
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.DownKey,
-		Description = LocalizedStrings.AroonDownKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+	[Browsable(false)]
 	public AroonDown Down { get; }
 
 	/// <inheritdoc />

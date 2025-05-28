@@ -14,7 +14,7 @@ public class ElderImpulseSystem : BaseIndicator
 	/// Initializes a new instance of the <see cref="ElderImpulseSystem"/>.
 	/// </summary>
 	public ElderImpulseSystem()
-		: this(new ExponentialMovingAverage { Length = 13 }, new MovingAverageConvergenceDivergence())
+		: this(new() { Length = 13 }, new())
 	{
 	}
 
@@ -90,5 +90,25 @@ public class ElderImpulseSystem : BaseIndicator
 		}
 
 		return new DecimalIndicatorValue(this, input.Time);
+	}
+
+	/// <inheritdoc />
+	public override void Save(SettingsStorage storage)
+	{
+		base.Save(storage);
+
+		storage
+			.Set(nameof(Ema), Ema.Save())
+			.Set(nameof(Macd), Macd.Save())
+		;
+	}
+
+	/// <inheritdoc />
+	public override void Load(SettingsStorage storage)
+	{
+		base.Load(storage);
+
+		Ema.Load(storage, nameof(Ema));
+		Macd.Load(storage, nameof(Macd));
 	}
 }

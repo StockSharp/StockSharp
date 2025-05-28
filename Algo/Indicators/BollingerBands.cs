@@ -100,9 +100,6 @@ public class BollingerBands : BaseComplexIndicator
 	{
 		base.Reset();
 		_dev.Reset();
-		//MovingAverage.Reset();
-		//UpBand.Reset();
-		//LowBand.Reset();
 	}
 
 	/// <inheritdoc />

@@ -46,23 +46,13 @@ public class DirectionalIndex : BaseComplexIndicator
 	/// <summary>
 	/// DI+.
 	/// </summary>
-	[TypeConverter(typeof(ExpandableObjectConverter))]
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.DiPlusKey,
-		Description = LocalizedStrings.DiPlusLineKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+	[Browsable(false)]
 	public DiPlus Plus { get; }
 
 	/// <summary>
 	/// DI-.
 	/// </summary>
-	[TypeConverter(typeof(ExpandableObjectConverter))]
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.DiMinusKey,
-		Description = LocalizedStrings.DiMinusLineKey,
-		GroupName = LocalizedStrings.GeneralKey)]
+	[Browsable(false)]
 	public DiMinus Minus { get; }
 
 	/// <inheritdoc />

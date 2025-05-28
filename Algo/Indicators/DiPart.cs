@@ -7,7 +7,7 @@
 public abstract class DiPart : LengthIndicator<decimal>
 {
 	private readonly AverageTrueRange _averageTrueRange;
-	private readonly LengthIndicator<decimal> _movingAverage;
+	private readonly WilderMovingAverage _movingAverage;
 	private ICandleMessage _lastCandle;
 
 	/// <summary>
@@ -15,8 +15,8 @@ public abstract class DiPart : LengthIndicator<decimal>
 	/// </summary>
 	protected DiPart()
 	{
-		_averageTrueRange = new AverageTrueRange(new WilderMovingAverage(), new TrueRange());
-		_movingAverage = new WilderMovingAverage();
+		_averageTrueRange = new();
+		_movingAverage = new();
 
 		Length = 5;
 	}
@@ -33,6 +33,9 @@ public abstract class DiPart : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize => base.NumValuesToInitialize + 1;
+
+	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		decimal? result = null;
@@ -43,16 +46,15 @@ public abstract class DiPart : LengthIndicator<decimal>
 		if (_averageTrueRange.IsFormed && _movingAverage.IsFormed)
 			IsFormed = true;
 
-		_averageTrueRange.Process(input);
+		var trValue = _averageTrueRange.Process(input);
 
 		if (_lastCandle != null)
 		{
-			var trValue = _averageTrueRange.GetCurrentValue();
-
+			var trValueDec = trValue.ToDecimal();
 			var maValue = _movingAverage.Process(new DecimalIndicatorValue(this, GetValue(candle, _lastCandle), input.Time) { IsFinal = input.IsFinal });
 
 			if (!maValue.IsEmpty)
-				result = trValue != 0m ? 100m * maValue.ToDecimal() / trValue : 0m;
+				result = trValueDec != 0m ? 100m * maValue.ToDecimal() / trValueDec : 0m;
 		}
 
 		if (input.IsFinal)
