@@ -21,18 +21,22 @@ public class AccumulationDistributionLine : BaseIndicator
 		var candle = input.ToCandle();
 
 		var cl = candle.GetLength();
+		var adLine = _adLine;
 
 		if (cl != 0)
 		{
 			var mfm = ((candle.ClosePrice - candle.LowPrice) - (candle.HighPrice - candle.ClosePrice)) / cl;
 			var mfv = mfm * candle.TotalVolume;
-			_adLine += mfv;
+			adLine += mfv;
 		}
 
 		if (input.IsFinal)
+		{
 			IsFormed = true;
+			_adLine = adLine;
+		}
 
-		return new DecimalIndicatorValue(this, _adLine, input.Time);
+		return new DecimalIndicatorValue(this, adLine, input.Time);
 	}
 
 	/// <inheritdoc />
