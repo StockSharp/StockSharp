@@ -28,29 +28,41 @@ public class ApprovalFlowIndex : LengthIndicator<decimal>
 	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize => base.NumValuesToInitialize + 1;
+
+	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
-		if (_prevClose == 0)
+		if (input.IsFinal)
 		{
-			_prevClose = candle.ClosePrice;
-			return null;
-		}
+			if (_prevClose == 0)
+			{
+				_prevClose = candle.ClosePrice;
+				return null;
+			}
 
-		if (_count < Length)
-			_count++;
+			if (!IsFormed)
+			{
+				_count++;
+
+				if (_count == Length)
+					IsFormed = true;
+			}
+		}
 
 		var upVolume = candle.ClosePrice > _prevClose ? candle.TotalVolume : 0;
 		var downVolume = candle.ClosePrice < _prevClose ? candle.TotalVolume : 0;
 
-		_totalUpVolume += upVolume;
-		_totalDownVolume += downVolume;
-
-		if (_count == Length)
+		if (input.IsFinal)
 		{
-			IsFormed = true;
+			_totalUpVolume += upVolume;
+			_totalDownVolume += downVolume;
+		}
 
+		if (IsFormed)
+		{
 			var totalVolume = _totalUpVolume + _totalDownVolume;
 
 			if (totalVolume != 0)
@@ -60,17 +72,20 @@ public class ApprovalFlowIndex : LengthIndicator<decimal>
 			}
 		}
 
-		_prevClose = candle.ClosePrice;
+		if (input.IsFinal)
+			_prevClose = candle.ClosePrice;
+
 		return null;
 	}
 
 	/// <inheritdoc />
 	public override void Reset()
 	{
-		_totalUpVolume = 0;
-		_totalDownVolume = 0;
-		_count = 0;
-		_prevClose = 0;
+		_totalUpVolume = default;
+		_totalDownVolume = default;
+		_count = default;
+		_prevClose = default;
+
 		base.Reset();
 	}
 }
