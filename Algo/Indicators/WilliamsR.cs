@@ -22,12 +22,17 @@ public class WilliamsR : LengthIndicator<decimal>
 	/// </summary>
 	public WilliamsR()
 	{
-		_low = new Lowest();
-		_high = new Highest();
+		_low = new();
+		_high = new();
+
+		Length = 5;
 	}
 
 	/// <inheritdoc />
 	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
+
+	/// <inheritdoc />
+	public override int NumValuesToInitialize => _low.NumValuesToInitialize;
 
 	/// <inheritdoc />
 	protected override bool CalcIsFormed() => _low.IsFormed;
