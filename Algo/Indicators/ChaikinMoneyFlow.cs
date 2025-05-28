@@ -74,8 +74,13 @@ public class ChaikinMoneyFlow : LengthIndicator<decimal>
 		}
 		else
 		{
-			moneyFlowVolumeSum = _moneyFlowVolumeSum - Buffer.Front() + moneyFlowVolume;
-			volumeSum = _volumeSum - Buffer.Front() + candle.TotalVolume;
+			if (Buffer.Count == 0)
+				return null;
+
+			var front = Buffer.Front();
+
+			moneyFlowVolumeSum = _moneyFlowVolumeSum - front + moneyFlowVolume;
+			volumeSum = _volumeSum - front + candle.TotalVolume;
 		}
 
 		if (IsFormed)
