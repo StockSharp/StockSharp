@@ -35,8 +35,8 @@ public class ArnaudLegouxMovingAverage : LengthIndicator<decimal>
 		get => _offset;
 		set
 		{
-			if (Offset == value)
-				return;
+			if (value <= 0 || value >= 1)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 			_offset = value;
 			Reset();
@@ -58,10 +58,7 @@ public class ArnaudLegouxMovingAverage : LengthIndicator<decimal>
 		get => _sigma;
 		set
 		{
-			if (Sigma == value)
-				return;
-
-			if (value == 0)
+			if (value < 1)
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 			_sigma = value;
@@ -94,7 +91,10 @@ public class ArnaudLegouxMovingAverage : LengthIndicator<decimal>
 				sum += weight * Buffer[Length - 1 - i];
 			}
 
-			return sum / weightSum;
+			if (weightSum != 0)
+				sum /= weightSum;
+
+			return sum;
 		}
 
 		return null;
