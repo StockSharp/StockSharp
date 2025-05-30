@@ -103,7 +103,8 @@ public class ChandeKrollStop : BaseComplexIndicator
 
 		if (_highest.IsFormed && _lowest.IsFormed)
 		{
-			IsFormed = true;
+			if (input.IsFinal)
+				IsFormed = true;
 
 			var highest = highestValue.ToDecimal();
 			var lowest = lowestValue.ToDecimal();
