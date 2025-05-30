@@ -109,8 +109,8 @@ public class WaveTrendOscillator : BaseComplexIndicator
 				var wt1 = ci;
 				var wt2 = _sma.Process(input, ci).ToDecimal();
 
-				result.Add(_wt1, _wt1.Process(wt1, input.Time));
-				result.Add(_wt2, _wt2.Process(wt2, input.Time));
+				result.Add(_wt1, _wt1.Process(wt1, input.Time, input.IsFinal));
+				result.Add(_wt2, _wt2.Process(wt2, input.Time, input.IsFinal));
 
 				if (input.IsFinal)
 					IsFormed = true;
