@@ -39,6 +39,10 @@ public class Vidya : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize
+		=> _cmo.NumValuesToInitialize + base.NumValuesToInitialize - 1;
+
+	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var newValue = input.ToDecimal();
