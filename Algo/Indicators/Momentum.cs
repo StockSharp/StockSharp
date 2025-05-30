@@ -28,11 +28,7 @@ public class Momentum : LengthIndicator<decimal>
 	protected override bool CalcIsFormed() => Buffer.Count > Length;
 
 	/// <inheritdoc />
-	public override void Reset()
-	{
-		base.Reset();
-		Buffer.Capacity = Length + 1;
-	}
+	protected override int GetCapacity() => Length + 1;
 
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)

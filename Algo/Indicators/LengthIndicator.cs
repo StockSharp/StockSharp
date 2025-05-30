@@ -14,10 +14,16 @@ public abstract class LengthIndicator<TResult> : BaseIndicator
 		Buffer = new(Length);
 	}
 
+	/// <summary>
+	/// Gets the capacity of the buffer for data storage.
+	/// </summary>
+	/// <returns>The capacity of the buffer. By default, it is equal to <see cref="Length"/>.</returns>
+	protected virtual int GetCapacity() => Length;
+
 	/// <inheritdoc />
 	public override void Reset()
 	{
-		Buffer.Capacity = Length;
+		Buffer.Capacity = GetCapacity();
 		base.Reset();
 	}
 

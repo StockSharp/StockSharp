@@ -77,14 +77,15 @@ public class KaufmannAdaptiveMovingAverage : LengthIndicator<decimal>
 	protected override bool CalcIsFormed() => Buffer.Count > Length;
 
 	/// <inheritdoc />
+	protected override int GetCapacity() => Length + 1;
+
+	/// <inheritdoc />
 	public override void Reset()
 	{
 		_prevFinalValue = 0;
 		_isInitialized = false;
 
 		base.Reset();
-
-		Buffer.Capacity = Length + 1;
 	}
 
 	/// <inheritdoc />
