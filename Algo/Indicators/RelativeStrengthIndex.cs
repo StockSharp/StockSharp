@@ -23,8 +23,8 @@ public class RelativeStrengthIndex : LengthIndicator<decimal>
 	/// </summary>
 	public RelativeStrengthIndex()
 	{
-		_gain = new SmoothedMovingAverage();
-		_loss = new SmoothedMovingAverage();
+		_gain = new();
+		_loss = new();
 
 		Length = 15;
 	}
@@ -33,11 +33,16 @@ public class RelativeStrengthIndex : LengthIndicator<decimal>
 	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize => base.NumValuesToInitialize + 1;
+
+	/// <inheritdoc />
 	protected override bool CalcIsFormed() => _gain.IsFormed;
 
 	/// <inheritdoc />
 	public override void Reset()
 	{
+		_last = default;
+		_isInitialized = default;
 		_loss.Length = _gain.Length = Length;
 		base.Reset();
 	}
