@@ -13,7 +13,8 @@ public class PassThroughIndicator : BaseIndicator
 	/// <inheritdoc/>
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		IsFormed |= !input.IsEmpty;
+		if (input.IsFinal)
+			IsFormed |= !input.IsEmpty;
 
 		return input.IsEmpty
 			? new DecimalIndicatorValue(this, input.Time)
