@@ -56,7 +56,28 @@ public class CompositeMomentum : BaseComplexIndicator
 	}
 
 	/// <inheritdoc />
+	public override void Reset()
+	{
+		_roc1.Reset();
+		_roc2.Reset();
+		_rsi.Reset();
+		_emaFast.Reset();
+		_emaSlow.Reset();
+
+		base.Reset();
+	}
+
+	/// <inheritdoc />
 	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
+
+	/// <inheritdoc />
+	public override int NumValuesToInitialize
+		=> _roc1.NumValuesToInitialize
+		.Max(_roc2.NumValuesToInitialize)
+		.Max(_rsi.NumValuesToInitialize)
+		.Max(_emaFast.NumValuesToInitialize)
+		.Max(_emaSlow.NumValuesToInitialize) +
+		_sma.NumValuesToInitialize;
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
@@ -71,9 +92,6 @@ public class CompositeMomentum : BaseComplexIndicator
 
 		if (_roc1.IsFormed && _roc2.IsFormed && _rsi.IsFormed && _emaFast.IsFormed && _emaSlow.IsFormed)
 		{
-			if (input.IsFinal)
-				IsFormed = true;
-
 			var normalizedShortRoc = shortRocValue.ToDecimal() / 100m;
 			var normalizedLongRoc = longRocValue.ToDecimal() / 100m;
 			var normalizedRsi = (rsiValue.ToDecimal() - 50m) / 50m;
@@ -83,9 +101,12 @@ public class CompositeMomentum : BaseComplexIndicator
 			var compMomentum = (normalizedShortRoc + normalizedLongRoc + normalizedRsi + macdLine) / 4m;
 			compMomentum *= 100m;
 
-			var compositeValue = new DecimalIndicatorValue(this, compMomentum, input.Time) { IsFinal = input.IsFinal };
+			var compositeValue = _compositeLine.Process(compMomentum, input.Time, input.IsFinal);
 			result.Add(_compositeLine, compositeValue);
 			result.Add(_sma, _sma.Process(compositeValue));
+
+			if (input.IsFinal && _sma.IsFormed)
+				IsFormed = true;
 		}
 
 		return result;
