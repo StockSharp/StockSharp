@@ -34,10 +34,11 @@ public class KnowSureThing : BaseComplexIndicator
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 	/// <inheritdoc />
-	public override int NumValuesToInitialize => _roc4.Length + _sma4.Length + _signal.Length;
+	public override int NumValuesToInitialize
+		=> _roc4.NumValuesToInitialize + _sma4.NumValuesToInitialize + _signal.NumValuesToInitialize - 2;
 
 	/// <inheritdoc />
-	protected override bool CalcIsFormed() => _kstLine.IsFormed && _signal.IsFormed;
+	protected override bool CalcIsFormed() => _signal.IsFormed;
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
@@ -49,7 +50,7 @@ public class KnowSureThing : BaseComplexIndicator
 		var roc3Value = _roc3.Process(input);
 		var roc4Value = _roc4.Process(input);
 
-		if (!_roc1.IsFormed)
+		if (!_roc4.IsFormed)
 			return result;
 
 		var sma1Value = _sma1.Process(roc1Value);
@@ -57,14 +58,13 @@ public class KnowSureThing : BaseComplexIndicator
 		var sma3Value = _sma3.Process(roc3Value);
 		var sma4Value = _sma4.Process(roc4Value);
 
-		if (!_sma1.IsFormed)
+		if (!_sma4.IsFormed)
 			return result;
 
 		var kst = sma1Value.ToDecimal() + 2 * sma2Value.ToDecimal() + 3 * sma3Value.ToDecimal() + 4 * sma4Value.ToDecimal();
-		var signalValue = _signal.Process(kst, input.Time, input.IsFinal);
 
-		result.Add(this, new DecimalIndicatorValue(this, kst, input.Time));
-		result.Add(_signal, signalValue);
+		result.Add(_kstLine, _kstLine.Process(kst, input.Time, input.IsFinal));
+		result.Add(_signal, _signal.Process(kst, input.Time, input.IsFinal));
 
 		return result;
 	}
