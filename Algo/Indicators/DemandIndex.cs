@@ -27,6 +27,9 @@ public class DemandIndex : SimpleMovingAverage
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize => base.NumValuesToInitialize + 1;
+
+	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
