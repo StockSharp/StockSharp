@@ -54,7 +54,7 @@ public class ChaikinVolatility : BaseIndicator
 	protected override bool CalcIsFormed() => Roc.IsFormed;
 
 	/// <inheritdoc />
-	public override int NumValuesToInitialize => Ema.NumValuesToInitialize + Roc.NumValuesToInitialize;
+	public override int NumValuesToInitialize => Ema.NumValuesToInitialize + Roc.NumValuesToInitialize - 1;
 
 	/// <inheritdoc />
 	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
