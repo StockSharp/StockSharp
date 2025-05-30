@@ -74,6 +74,10 @@ public class KasePeakOscillator : BaseComplexIndicator
 	public KasePeakOscillatorPart LongTerm => _longTerm;
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize
+		=> _atr.NumValuesToInitialize + base.NumValuesToInitialize - 1;
+
+	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
