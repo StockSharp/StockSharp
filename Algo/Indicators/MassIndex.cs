@@ -48,7 +48,8 @@ public class MassIndex : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	public override int NumValuesToInitialize => _singleEma.NumValuesToInitialize.Max(_doubleEma.NumValuesToInitialize).Max(_sum.NumValuesToInitialize);
+	public override int NumValuesToInitialize
+		=> _singleEma.NumValuesToInitialize + _sum.NumValuesToInitialize - 1;
 
 	/// <inheritdoc />
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
