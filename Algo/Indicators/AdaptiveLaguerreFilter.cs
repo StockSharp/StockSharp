@@ -70,8 +70,8 @@ public class AdaptiveLaguerreFilter : BaseIndicator
 			_l2 = l2;
 			_l3 = l3;
 
-			if (!IsFormed)
-				IsFormed = filteredValue >= price;
+			if (!IsFormed && filteredValue >= price)
+				IsFormed = true;
 		}
 
 		return new DecimalIndicatorValue(this, filteredValue, input.Time);
