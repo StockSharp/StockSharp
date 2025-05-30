@@ -72,5 +72,8 @@ public class Alligator : BaseComplexIndicator
 	protected override bool CalcIsFormed() => Jaw.IsFormed;
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize => Jaw.NumValuesToInitialize;
+
+	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" J={Jaw.Length} T={Teeth.Length} L={Lips.Length}";
 }

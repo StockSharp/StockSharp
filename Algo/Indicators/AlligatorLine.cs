@@ -7,7 +7,6 @@
 public class AlligatorLine : LengthIndicator<decimal>
 {
 	private readonly MedianPrice _medianPrice;
-
 	private readonly SmoothedMovingAverage _sma;
 
 	/// <summary>
@@ -15,9 +14,8 @@ public class AlligatorLine : LengthIndicator<decimal>
 	/// </summary>
 	public AlligatorLine()
 	{
-		_medianPrice = new MedianPrice();
-		_sma = new SmoothedMovingAverage();
-		//_sma = new SimpleMovingAverage();
+		_medianPrice = new();
+		_sma = new();
 	}
 
 	private int _shift;
@@ -35,14 +33,18 @@ public class AlligatorLine : LengthIndicator<decimal>
 		get => _shift;
 		set
 		{
+			if (value < 1)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
 			_shift = value;
 			Reset();
 		}
 	}
 
-	/// <summary>
-	/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
-	/// </summary>
+	/// <inheritdoc />
+	protected override int GetCapacity() => Shift + 1;
+
+	/// <inheritdoc />
 	public override void Reset()
 	{
 		_sma.Length = Length;
@@ -55,9 +57,13 @@ public class AlligatorLine : LengthIndicator<decimal>
 	protected override bool CalcIsFormed() => Buffer.Count > Shift;
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize => base.NumValuesToInitialize + Shift;
+
+	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var smaResult = _sma.Process(_medianPrice.Process(input));
+
 		if (_sma.IsFormed & input.IsFinal)
 		{
 			//если кол-во в буфере больше Shift, то первое значение отдали в прошлый раз, удалим его.
@@ -85,4 +91,7 @@ public class AlligatorLine : LengthIndicator<decimal>
 		base.Save(storage);
 		storage.SetValue(nameof(Shift), Shift);
 	}
+
+	/// <inheritdoc />
+	public override string ToString() => $"{base.ToString()}, Shift={Shift}";
 }
