@@ -71,7 +71,8 @@ public class CompositeMomentum : BaseComplexIndicator
 
 		if (_roc1.IsFormed && _roc2.IsFormed && _rsi.IsFormed && _emaFast.IsFormed && _emaSlow.IsFormed)
 		{
-			IsFormed = true;
+			if (input.IsFinal)
+				IsFormed = true;
 
 			var normalizedShortRoc = shortRocValue.ToDecimal() / 100m;
 			var normalizedLongRoc = longRocValue.ToDecimal() / 100m;
