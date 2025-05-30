@@ -23,7 +23,7 @@ public class BalanceOfPower : BaseIndicator
 
 		var cl = candle.GetLength();
 
-		if (cl != 0)
+		if (input.IsFinal && cl != 0)
 		{
 			IsFormed = true;
 
