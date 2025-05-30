@@ -30,7 +30,8 @@ public class BollingerBand : BaseIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		IsFormed = _ma.IsFormed && _dev.IsFormed;
+		if (input.IsFinal && _ma.IsFormed && _dev.IsFormed)
+			IsFormed = true;
 
 		return new DecimalIndicatorValue(this, _ma.GetCurrentValue() + (Width * _dev.GetCurrentValue()), input.Time);
 	}
