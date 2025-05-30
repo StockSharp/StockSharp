@@ -43,6 +43,9 @@ public class ChandeMomentumOscillator : LengthIndicator<decimal>
 	protected override bool CalcIsFormed() => _cmoUp.IsFormed;
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize => base.NumValuesToInitialize + 1;
+
+	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var newValue = input.ToDecimal();
