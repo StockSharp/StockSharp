@@ -39,6 +39,9 @@ public class SineWave : BaseComplexIndicator
 		get => _length;
 		set
 		{
+			if (value < 1)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
 			_length = value;
 			Reset();
 		}
@@ -46,6 +49,9 @@ public class SineWave : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
+
+	/// <inheritdoc />
+	public override int NumValuesToInitialize => Length;
 
 	/// <inheritdoc />
 	public override void Reset()
