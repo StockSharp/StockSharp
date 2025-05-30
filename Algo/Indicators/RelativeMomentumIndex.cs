@@ -38,7 +38,7 @@ public class RelativeMomentumIndex : LengthIndicator<decimal>
 		get => _momentumPeriod;
 		set
 		{
-			if (value <= 0)
+			if (value < 1)
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 			_momentumPeriod = value;
@@ -50,7 +50,10 @@ public class RelativeMomentumIndex : LengthIndicator<decimal>
 	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
 	/// <inheritdoc />
-	protected override bool CalcIsFormed() => _upMomentumSma.IsFormed && _downMomentumSma.IsFormed;
+	protected override bool CalcIsFormed() => _upMomentumSma.IsFormed;
+
+	/// <inheritdoc />
+	public override int NumValuesToInitialize => base.NumValuesToInitialize + MomentumPeriod;
 
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
@@ -93,9 +96,6 @@ public class RelativeMomentumIndex : LengthIndicator<decimal>
 	public override void Reset()
 	{
 		_prices.Clear();
-		_upMomentumSma.Reset();
-		_downMomentumSma.Reset();
-
 		_downMomentumSma.Length = _upMomentumSma.Length = Length;
 		_prices.Capacity = Length + MomentumPeriod;
 
