@@ -61,7 +61,7 @@ public class KnowSureThing : BaseComplexIndicator
 			return result;
 
 		var kst = sma1Value.ToDecimal() + 2 * sma2Value.ToDecimal() + 3 * sma3Value.ToDecimal() + 4 * sma4Value.ToDecimal();
-		var signalValue = _signal.Process(kst, input.Time);
+		var signalValue = _signal.Process(kst, input.Time, input.IsFinal);
 
 		result.Add(this, new DecimalIndicatorValue(this, kst, input.Time));
 		result.Add(_signal, signalValue);
