@@ -23,9 +23,6 @@ public class DynamicZonesRSI : LengthIndicator<decimal>
 		Buffer.MinComparer = Comparer<decimal>.Default;
 	}
 
-	/// <inheritdoc />
-	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
-
 	private decimal _oversoldLevel = 20;
 
 	/// <summary>
@@ -82,6 +79,13 @@ public class DynamicZonesRSI : LengthIndicator<decimal>
 			_rsi.Length = value;
 		}
 	}
+
+	/// <inheritdoc />
+	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
+
+	/// <inheritdoc />
+	public override int NumValuesToInitialize
+		=> _rsi.NumValuesToInitialize + base.NumValuesToInitialize - 1;
 
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
