@@ -21,8 +21,8 @@ public class DoubleExponentialMovingAverage : LengthIndicator<decimal>
 	/// </summary>
 	public DoubleExponentialMovingAverage()
 	{
-		_ema1 = new ExponentialMovingAverage();
-		_ema2 = new ExponentialMovingAverage();
+		_ema1 = new();
+		_ema2 = new();
 
 		Length = 32;
 	}
@@ -35,7 +35,10 @@ public class DoubleExponentialMovingAverage : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override bool CalcIsFormed() => _ema1.IsFormed && _ema2.IsFormed;
+	protected override bool CalcIsFormed() => _ema2.IsFormed;
+
+	/// <inheritdoc />
+	public override int NumValuesToInitialize => _ema1.NumValuesToInitialize + _ema2.NumValuesToInitialize - 1;
 
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
