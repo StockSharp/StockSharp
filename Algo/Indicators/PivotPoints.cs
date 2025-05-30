@@ -41,11 +41,11 @@ public class PivotPoints : BaseComplexIndicator
 
 		var pivotPoint = (candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 3;
 
-		result.Add(_pivotPoint, _pivotPoint.Process(pivotPoint, input.Time));
-		result.Add(_r1, _r1.Process(2 * pivotPoint - candle.LowPrice, input.Time));
-		result.Add(_r2, _r2.Process(pivotPoint + cl, input.Time));
-		result.Add(_s1, _s1.Process(2 * pivotPoint - candle.HighPrice, input.Time));
-		result.Add(_s2, _s2.Process(pivotPoint - cl, input.Time));
+		result.Add(_pivotPoint, _pivotPoint.Process(pivotPoint, input.Time, input.IsFinal));
+		result.Add(_r1, _r1.Process(2 * pivotPoint - candle.LowPrice, input.Time, input.IsFinal));
+		result.Add(_r2, _r2.Process(pivotPoint + cl, input.Time, input.IsFinal));
+		result.Add(_s1, _s1.Process(2 * pivotPoint - candle.HighPrice, input.Time, input.IsFinal));
+		result.Add(_s2, _s2.Process(pivotPoint - cl, input.Time, input.IsFinal));
 
 		return result;
 	}
