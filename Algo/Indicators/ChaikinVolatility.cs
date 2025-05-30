@@ -28,12 +28,6 @@ public class ChaikinVolatility : BaseIndicator
 		AddResetTracking(Roc);
 	}
 
-	/// <inheritdoc />
-	public override int NumValuesToInitialize => Ema.NumValuesToInitialize.Max(Roc.NumValuesToInitialize);
-
-	/// <inheritdoc />
-	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
-
 	/// <summary>
 	/// Moving Average.
 	/// </summary>
@@ -58,6 +52,12 @@ public class ChaikinVolatility : BaseIndicator
 
 	/// <inheritdoc />
 	protected override bool CalcIsFormed() => Roc.IsFormed;
+
+	/// <inheritdoc />
+	public override int NumValuesToInitialize => Ema.NumValuesToInitialize + Roc.NumValuesToInitialize;
+
+	/// <inheritdoc />
+	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
