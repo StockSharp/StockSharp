@@ -52,6 +52,9 @@ public class HullMovingAverage : LengthIndicator<decimal>
 	protected override bool CalcIsFormed() => _wmaResult.IsFormed;
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize => base.NumValuesToInitialize + _wmaResult.NumValuesToInitialize - 1;
+
+	/// <inheritdoc />
 	public override void Reset()
 	{
 		base.Reset();
