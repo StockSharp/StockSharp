@@ -107,7 +107,8 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator
 
 		if (_rsi.IsFormed && _stoch.IsFormed)
 		{
-			IsFormed = true;
+			if (input.IsFinal)
+				IsFormed = true;
 
 			var rsi = rsiValue.ToDecimal();
 			var stochK = stochValue[_stoch.K].ToDecimal();
