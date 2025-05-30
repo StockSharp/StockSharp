@@ -58,6 +58,10 @@ public class ElderImpulseSystem : BaseIndicator
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize
+		=> Ema.NumValuesToInitialize.Max(Macd.NumValuesToInitialize);
+
+	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
 		var prevEma = Ema.GetCurrentValue();
