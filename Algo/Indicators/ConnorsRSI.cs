@@ -112,7 +112,8 @@ public class ConnorsRSI : BaseComplexIndicator
 
 		if (!rocValue.IsEmpty && _rsi.IsFormed && _updownRsi.IsFormed && _rocRsi.IsFormed && _roc.IsFormed)
 		{
-			IsFormed = true;
+			if (input.IsFinal)
+				IsFormed = true;
 
 			var rsi = rsiValue.ToDecimal();
 			var updownRsi = updownRsiValue.ToDecimal();
