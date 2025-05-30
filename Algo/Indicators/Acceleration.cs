@@ -74,7 +74,7 @@ public class Acceleration : BaseIndicator
 		var aoDec = aoValue.ToDecimal();
 
 		if (Ao.IsFormed)
-			return new DecimalIndicatorValue(this, aoDec - Sma.Process(aoValue).ToDecimal(), input.Time);
+			aoDec -= Sma.Process(aoValue).ToDecimal();
 
 		return new DecimalIndicatorValue(this, aoDec, input.Time);
 	}

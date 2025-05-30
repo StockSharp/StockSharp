@@ -104,7 +104,7 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 		var cv = (ComplexIndicatorValue)output;
 
 		foreach (var inner in InnerIndicators)
-			cv.InnerValues.TryAdd(inner, CreateEmpty(inner, input.Time));
+			cv.InnerValues.SafeAdd(inner, key => CreateEmpty(key, input.Time));
 
 		return output;
 	}

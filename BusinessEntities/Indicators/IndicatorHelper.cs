@@ -157,7 +157,7 @@ public static class IndicatorHelper
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
 	/// <param name="isFinal">Is the value final (the indicator finally forms its value and will not be changed in this point of time anymore). Default is <see langword="true" />.</param>
 	/// <returns>The new value of the indicator.</returns>
-	public static IIndicatorValue Process(this IIndicator indicator, decimal value, DateTimeOffset time, bool isFinal = true)
+	public static IIndicatorValue Process(this IIndicator indicator, decimal value, DateTimeOffset time, bool isFinal)
 		=> indicator.Process(new DecimalIndicatorValue(indicator, value, time) { IsFinal = isFinal });
 
 	/// <summary>
@@ -169,7 +169,7 @@ public static class IndicatorHelper
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
 	/// <param name="isFinal">If the pair final (the indicator finally forms its value and will not be changed in this point of time anymore). Default is <see langword="true" />.</param>
 	/// <returns>The new value of the indicator.</returns>
-	public static IIndicatorValue Process<TValue>(this IIndicator indicator, (TValue, TValue) value, DateTimeOffset time, bool isFinal = true)
+	public static IIndicatorValue Process<TValue>(this IIndicator indicator, (TValue, TValue) value, DateTimeOffset time, bool isFinal)
 		=> indicator.Process(new PairIndicatorValue<TValue>(indicator, value, time) { IsFinal = isFinal });
 
 	/// <summary>
