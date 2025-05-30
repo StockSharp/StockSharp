@@ -30,9 +30,9 @@ public class Ichimoku : BaseComplexIndicator
 	{
 		AddInner(Tenkan = tenkan ?? throw new ArgumentNullException(nameof(tenkan)));
 		AddInner(Kijun = kijun ?? throw new ArgumentNullException(nameof(kijun)));
-		AddInner(SenkouA = new IchimokuSenkouALine(Tenkan, Kijun));
-		AddInner(SenkouB = new IchimokuSenkouBLine(Kijun) { Length = 52 });
-		AddInner(Chinkou = new IchimokuChinkouLine { Length = kijun.Length });
+		AddInner(SenkouA = new(Tenkan, Kijun));
+		AddInner(SenkouB = new(Kijun) { Length = 52 });
+		AddInner(Chinkou = new() { Length = kijun.Length });
 	}
 
 	/// <summary>
@@ -89,6 +89,10 @@ public class Ichimoku : BaseComplexIndicator
 		Description = LocalizedStrings.ChinkouLineKey,
 		GroupName = LocalizedStrings.GeneralKey)]
 	public IchimokuChinkouLine Chinkou { get; }
+
+	/// <inheritdoc />
+	public override int NumValuesToInitialize
+		=> Tenkan.NumValuesToInitialize.Max(Kijun.NumValuesToInitialize) + SenkouA.NumValuesToInitialize.Max(SenkouB.NumValuesToInitialize).Max(Chinkou.NumValuesToInitialize) - 1;
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" T={Tenkan.Length} K={Kijun.Length} A={SenkouA.Length} B={SenkouB.Length} C={Chinkou.Length}";
