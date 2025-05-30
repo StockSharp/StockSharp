@@ -93,6 +93,13 @@ public class ConnorsRSI : BaseComplexIndicator
 	}
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize
+		=> _rsi.NumValuesToInitialize
+		.Max(_updownRsi.NumValuesToInitialize)
+		.Max(_roc.NumValuesToInitialize)
+		.Max(_rocRsi.NumValuesToInitialize);
+
+	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
@@ -159,8 +166,9 @@ public class ConnorsRSI : BaseComplexIndicator
 	/// <inheritdoc />
 	public override void Reset()
 	{
-		base.Reset();
-
+		_roc.Reset();
 		_streakBuffer.Clear();
+
+		base.Reset();
 	}
 }
