@@ -21,18 +21,22 @@ public class DetrendedPriceOscillator : LengthIndicator<decimal>
 	/// </summary>
 	public DetrendedPriceOscillator()
 	{
-		_sma = new SimpleMovingAverage();
+		_sma = new();
 		Length = 3;
 	}
 
 	/// <inheritdoc />
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
+	
+	/// <inheritdoc />
+	public override int NumValuesToInitialize => _sma.NumValuesToInitialize + base.NumValuesToInitialize - 1;
 
 	/// <inheritdoc />
 	public override void Reset()
 	{
 		_sma.Length = Length;
 		_lookBack = Length / 2 + 1;
+
 		base.Reset();
 	}
 
