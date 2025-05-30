@@ -61,6 +61,9 @@ public class BollingerPercentB : BaseIndicator
 	}
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize => _bollingerBands.NumValuesToInitialize;
+
+	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
 		var bbValue = (ComplexIndicatorValue)_bollingerBands.Process(input);
