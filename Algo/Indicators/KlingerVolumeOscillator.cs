@@ -88,7 +88,9 @@ public class KlingerVolumeOscillator : BaseComplexIndicator
 		if (input.IsFinal)
 		{
 			_prevHlc = hlc;
-			IsFormed = _shortEma.IsFormed && _longEma.IsFormed;
+
+			if (!IsFormed && _shortEma.IsFormed && _longEma.IsFormed)
+				IsFormed = true;
 		}
 
 		return result;
