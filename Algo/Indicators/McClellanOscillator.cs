@@ -37,7 +37,10 @@ public class McClellanOscillator : BaseIndicator
 		if (_ema19.IsFormed && _ema39.IsFormed)
 		{
 			var oscillator = ema19Value.ToDecimal() - ema39Value.ToDecimal();
-			IsFormed = true;
+
+			if (input.IsFinal)
+				IsFormed = true;
+
 			return new DecimalIndicatorValue(this, oscillator, input.Time);
 		}
 
