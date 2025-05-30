@@ -66,7 +66,8 @@ public class ChoppinessIndex : LengthIndicator<decimal>
 			sumTrueRange = _sumTrueRange;
 			sumHighLowRange = _sumHighLowRange;
 
-			IsFormed = _highLowRange.Count == Length;
+			if (!IsFormed && _highLowRange.Count == Length)
+				IsFormed = true;
 		}
 		else
 		{
