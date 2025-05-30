@@ -73,6 +73,10 @@ public class Trix : LengthIndicator<IIndicatorValue>
 	protected override bool CalcIsFormed() => _roc.IsFormed;
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize
+		=> _ema1.NumValuesToInitialize + _ema2.NumValuesToInitialize + _ema3.NumValuesToInitialize + _roc.NumValuesToInitialize - 3;
+
+	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var ema1Value = _ema1.Process(input);
