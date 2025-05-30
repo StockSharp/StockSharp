@@ -22,9 +22,6 @@ public class DirectionalIndex : BaseComplexIndicator
 		AddInner(Minus = new());
 	}
 
-	/// <inheritdoc />
-	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
-
 	/// <summary>
 	/// Period length.
 	/// </summary>
@@ -54,6 +51,12 @@ public class DirectionalIndex : BaseComplexIndicator
 	/// </summary>
 	[Browsable(false)]
 	public DiMinus Minus { get; }
+
+	/// <inheritdoc />
+	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
+
+	/// <inheritdoc />
+	public override int NumValuesToInitialize => Plus.NumValuesToInitialize;
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
