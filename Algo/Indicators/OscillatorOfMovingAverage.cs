@@ -65,6 +65,9 @@ public class OscillatorOfMovingAverage : BaseIndicator
 	protected override bool CalcIsFormed() => _shortMa.IsFormed && _longMa.IsFormed;
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize => _shortMa.NumValuesToInitialize.Max(_longMa.NumValuesToInitialize);
+
+	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
 		var shortValue = _shortMa.Process(input);
