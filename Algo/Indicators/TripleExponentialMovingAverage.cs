@@ -30,7 +30,11 @@ public class TripleExponentialMovingAverage : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	protected override bool CalcIsFormed() => _ema1.IsFormed && _ema2.IsFormed && _ema3.IsFormed;
+	protected override bool CalcIsFormed() => _ema3.IsFormed;
+
+	/// <inheritdoc />
+	public override int NumValuesToInitialize
+		=> _ema1.NumValuesToInitialize + _ema2.NumValuesToInitialize + _ema3.NumValuesToInitialize - 2;
 
 	/// <inheritdoc />
 	public override void Reset()
