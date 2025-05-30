@@ -76,8 +76,8 @@ public class CompositeMomentum : BaseComplexIndicator
 		.Max(_roc2.NumValuesToInitialize)
 		.Max(_rsi.NumValuesToInitialize)
 		.Max(_emaFast.NumValuesToInitialize)
-		.Max(_emaSlow.NumValuesToInitialize) +
-		_sma.NumValuesToInitialize;
+		.Max(_emaSlow.NumValuesToInitialize)
+		+ _sma.NumValuesToInitialize - 1;
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
