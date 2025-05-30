@@ -68,7 +68,8 @@ public class ElderImpulseSystem : BaseIndicator
 
 		if (Ema.IsFormed && Macd.IsFormed)
 		{
-			IsFormed = true;
+			if (input.IsFinal)
+				IsFormed = true;
 
 			var ema = emaValue.ToDecimal();
 			var macd = macdValue.ToDecimal();
