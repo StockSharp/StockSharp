@@ -621,8 +621,6 @@ public class JurikMovingAverage : LengthIndicator<decimal>
 
 	private readonly CalcBuffer _buf = new();
 
-	#region Свойства
-
 	private int _phase;
 
 	/// <summary>
@@ -638,18 +636,13 @@ public class JurikMovingAverage : LengthIndicator<decimal>
 		get => _phase;
 		set
 		{
+			if (value < -100 || value > 100)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
 			_phase = value;
-
-			if (_phase > 100)
-				_phase = 100;
-			else if (_phase < -100)
-				_phase = -100;
-
 			Reset();
 		}
 	}
-
-	#endregion
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="JurikMovingAverage"/>.
@@ -657,15 +650,6 @@ public class JurikMovingAverage : LengthIndicator<decimal>
 	public JurikMovingAverage()
 	{
 		Length = 20;
-		Initialize();
-	}
-
-	/// <summary>
-	/// Variables initial initialization.
-	/// </summary>
-	public void Initialize()
-	{
-		_buf.Init();
 	}
 
 	/// <inheritdoc />
@@ -689,7 +673,7 @@ public class JurikMovingAverage : LengthIndicator<decimal>
 	/// <inheritdoc />
 	public override void Reset()
 	{
-		Initialize();
+		_buf.Init();
 		base.Reset();
 	}
 

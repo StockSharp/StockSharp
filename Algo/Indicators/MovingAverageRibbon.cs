@@ -84,7 +84,7 @@ public class MovingAverageRibbon : BaseComplexIndicator
 		get => _ribbonCount;
 		set
 		{
-			if (value < 1)
+			if (value < 2)
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 			_ribbonCount = value;
