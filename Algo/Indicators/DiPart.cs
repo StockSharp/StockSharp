@@ -33,7 +33,7 @@ public abstract class DiPart : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
-	public override int NumValuesToInitialize => base.NumValuesToInitialize + 1;
+	public override int NumValuesToInitialize => base.NumValuesToInitialize + 2;
 
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
@@ -43,7 +43,7 @@ public abstract class DiPart : LengthIndicator<decimal>
 		var candle = input.ToCandle();
 
 		// 1 period delay
-		if (_averageTrueRange.IsFormed && _movingAverage.IsFormed)
+		if (input.IsFinal && _averageTrueRange.IsFormed && _movingAverage.IsFormed)
 			IsFormed = true;
 
 		var trValue = _averageTrueRange.Process(input);
