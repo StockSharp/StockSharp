@@ -51,13 +51,20 @@ public class EhlersFisherTransform : BaseComplexIndicator
 		get => _length;
 		set
 		{
+			if (value < 1)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
 			_length = value;
+
 			Reset();
 		}
 	}
 
 	/// <inheritdoc />
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
+
+	/// <inheritdoc />
+	public override int NumValuesToInitialize => base.NumValuesToInitialize + Length - 1;
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
@@ -69,6 +76,8 @@ public class EhlersFisherTransform : BaseComplexIndicator
 			_highBuffer.PushBack(candle.HighPrice);
 			_lowBuffer.PushBack(candle.LowPrice);
 		}
+
+		var result = new ComplexIndicatorValue(this, input.Time);
 
 		if (_highBuffer.Count >= Length)
 		{
@@ -82,7 +91,6 @@ public class EhlersFisherTransform : BaseComplexIndicator
 
 			var fisherTransform = 0.5m * (decimal)Math.Log((double)((1 + value) / (1 - value)));
 
-			var result = new ComplexIndicatorValue(this, input.Time);
 			result.Add(_mainLine, _mainLine.Process(input, fisherTransform));
 			result.Add(_triggerLine, _triggerLine.Process(input, _currValue));
 
@@ -91,11 +99,9 @@ public class EhlersFisherTransform : BaseComplexIndicator
 				_currValue = fisherTransform;
 				_prevValue = value;
 			}
-
-			return result;
 		}
 
-		return new ComplexIndicatorValue(this, input.Time);
+		return result;
 	}
 
 	/// <inheritdoc />
