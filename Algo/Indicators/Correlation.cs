@@ -48,8 +48,8 @@ public class Correlation : Covariance
 
 		var value = input.GetValue<(decimal, decimal)>();
 
-		var sourceDev = _source.Process(value.Item1, input.Time);
-		var otherDev = _other.Process(value.Item2, input.Time);
+		var sourceDev = _source.Process(value.Item1, input.Time, input.IsFinal);
+		var otherDev = _other.Process(value.Item2, input.Time, input.IsFinal);
 
 		var v = sourceDev.ToDecimal() * otherDev.ToDecimal();
 
