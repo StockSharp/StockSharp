@@ -26,6 +26,9 @@ public class ForceIndex : ExponentialMovingAverage
 	public override IndicatorMeasures Measure => IndicatorMeasures.Volume;
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize => base.NumValuesToInitialize + 1;
+
+	/// <inheritdoc />
 	public override void Reset()
 	{
 		_prevClosePrice = 0;
