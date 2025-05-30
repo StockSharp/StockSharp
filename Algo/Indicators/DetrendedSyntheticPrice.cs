@@ -46,6 +46,9 @@ public class DetrendedSyntheticPrice : BaseIndicator
 	}
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize => _highest.NumValuesToInitialize;
+
+	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
