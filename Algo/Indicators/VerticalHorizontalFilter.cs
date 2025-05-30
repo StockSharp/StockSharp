@@ -41,6 +41,9 @@ public class VerticalHorizontalFilter : LengthIndicator<decimal>
 	protected override bool CalcIsFormed() => _sum.IsFormed && _max.IsFormed && _min.IsFormed;
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize => base.NumValuesToInitialize + 1;
+
+	/// <inheritdoc />
 	public override void Reset()
 	{
 		_sum.Length = _min.Length = _max.Length = Length;
