@@ -64,7 +64,7 @@ public class FibonacciRetracement : BaseComplexIndicator
 		var highValue = _highest.Process(input, candle.HighPrice);
 		var lowValue = _lowest.Process(input, candle.LowPrice);
 
-		if (_highest.IsFormed && _lowest.IsFormed)
+		if (input.IsFinal && _highest.IsFormed && _lowest.IsFormed)
 			IsFormed = true;
 
 		var result = new ComplexIndicatorValue(this, input.Time);
