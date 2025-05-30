@@ -25,6 +25,9 @@ public class WilliamsAccumulationDistribution : BaseIndicator
 	public override IndicatorMeasures Measure => IndicatorMeasures.Volume;
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize => 2;
+
+	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
