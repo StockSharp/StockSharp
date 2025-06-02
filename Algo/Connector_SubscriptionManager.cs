@@ -409,7 +409,7 @@ partial class Connector
 				throw new ArgumentNullException(nameof(subscriptions));
 
 			var missingSubscriptions = subscriptions
-				.Where(sub => !Subscriptions.Any(s => s.DataType == sub.DataType && s.To == null));
+				.Where(sub => !_subscriptions.ContainsKey(sub.TransactionId) && !Subscriptions.Any(s => s.DataType == sub.DataType && s.To == null));
 
 			if (_wasConnected)
 			{
@@ -421,11 +421,13 @@ partial class Connector
 					_connector.LogVerbose($"adding default subscription {sub.DataType}");
 					AddSubscription(sub);
 				});
+
 				ReSubscribeAll();
 			}
 			else
 			{
 				_wasConnected = true;
+
 				missingSubscriptions.ForEach(sub =>
 				{
 					_connector.LogVerbose($"subscribing default subscription {sub.DataType}");
