@@ -91,9 +91,5 @@ public class Ichimoku : BaseComplexIndicator
 	public IchimokuChinkouLine Chinkou { get; }
 
 	/// <inheritdoc />
-	public override int NumValuesToInitialize
-		=> Tenkan.NumValuesToInitialize.Max(Kijun.NumValuesToInitialize) + SenkouA.NumValuesToInitialize.Max(SenkouB.NumValuesToInitialize).Max(Chinkou.NumValuesToInitialize) - 1;
-
-	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" T={Tenkan.Length} K={Kijun.Length} A={SenkouA.Length} B={SenkouB.Length} C={Chinkou.Length}";
 }

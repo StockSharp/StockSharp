@@ -30,6 +30,9 @@ public class IchimokuSenkouBLine : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override bool CalcIsFormed() => _buffer.Count >= Length && Buffer.Count >= Kijun.Length;
 
+	/// <inheritdoc />
+	public override int NumValuesToInitialize => Kijun.NumValuesToInitialize + base.NumValuesToInitialize - 1;
+
 	/// <summary>
 	/// Kijun line.
 	/// </summary>

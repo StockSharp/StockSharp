@@ -38,6 +38,10 @@ public class IchimokuSenkouALine : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize
+		=> Tenkan.NumValuesToInitialize.Max(Kijun.NumValuesToInitialize) + base.NumValuesToInitialize - 1;
+
+	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		decimal? result = null;
