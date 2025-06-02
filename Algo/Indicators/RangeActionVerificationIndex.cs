@@ -62,6 +62,9 @@ public class RangeActionVerificationIndex : BaseIndicator
 		var shortValue = ShortSma.Process(input).ToDecimal();
 		var longValue = LongSma.Process(input).ToDecimal();
 
+		if (longValue == 0)
+			return new DecimalIndicatorValue(this, input.Time);
+
 		return new DecimalIndicatorValue(this, Math.Abs(100m * (shortValue - longValue) / longValue), input.Time);
 	}
 

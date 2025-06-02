@@ -187,6 +187,11 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	/// <inheritdoc />
 	public virtual IIndicatorValue Process(IIndicatorValue input)
 	{
+		ArgumentNullException.ThrowIfNull(input);
+
+		if (input.IsEmpty)
+			return CreateValue(input.Time, []);
+
 		var result = OnProcess(input);
 
 		if(result.Indicator != this)
