@@ -17,12 +17,11 @@
     <MsExtensionsVer>8.*</MsExtensionsVer>
     <NuGetApiVer>6.14.0</NuGetApiVer>
     <MicrosoftDataSqlClientVer>5.2.2</MicrosoftDataSqlClientVer>
-    <SBEVer>1.23.1.1</SBEVer>
     <SpectreVer>0.48.0</SpectreVer>
     <AWSSDKVer>4.*</AWSSDKVer>
     <GeneticSharpVer>3.1.4</GeneticSharpVer>
     <InterprocessVer>2.0.0-alpha176</InterprocessVer>
-    <SharpPcapVer>6.*</SharpPcapVer>
+    <SharpPcapVer>6.3.0</SharpPcapVer>
     <GoogleProtobufVer>3.*</GoogleProtobufVer>
     <PandasVer>0.6.*</PandasVer>
     <NumpyVer>0.9.*</NumpyVer>
