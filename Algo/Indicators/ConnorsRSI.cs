@@ -171,4 +171,26 @@ public class ConnorsRSI : BaseComplexIndicator
 
 		base.Reset();
 	}
+
+	/// <inheritdoc />
+	public override void Save(SettingsStorage storage)
+	{
+		base.Save(storage);
+
+		storage
+			.Set(nameof(RSIPeriod), RSIPeriod)
+			.Set(nameof(StreakRSIPeriod), StreakRSIPeriod)
+			.Set(nameof(ROCRSIPeriod), ROCRSIPeriod)
+		;
+	}
+
+	/// <inheritdoc />
+	public override void Load(SettingsStorage storage)
+	{
+		base.Load(storage);
+
+		RSIPeriod = storage.GetValue<int>(nameof(RSIPeriod));
+		StreakRSIPeriod = storage.GetValue<int>(nameof(StreakRSIPeriod));
+		ROCRSIPeriod = storage.GetValue<int>(nameof(ROCRSIPeriod));
+	}
 }
