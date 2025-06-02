@@ -42,16 +42,18 @@ public class IchimokuSenkouBLine : LengthIndicator<decimal>
 		var candle = input.ToCandle();
 
 		decimal? result = null;
-		IList<(decimal high, decimal low)> buff = _buffer;
+		IEnumerable<(decimal high, decimal low)> buff;
 
 		if (input.IsFinal)
-			_buffer.PushBack((candle.HighPrice, candle.LowPrice));
-		else
-			buff = _buffer.Skip(1).Append((candle.HighPrice, candle.LowPrice)).ToList();
-
-		if (buff.Count >= Length)
 		{
-			// рассчитываем значение
+			_buffer.PushBack((candle.HighPrice, candle.LowPrice));
+			buff = _buffer;
+		}
+		else
+			buff = _buffer.Skip(1).Append((candle.HighPrice, candle.LowPrice));
+
+		if (_buffer.Count >= Length)
+		{
 			var max = buff.Max(t => t.high);
 			var min = buff.Min(t => t.low);
 

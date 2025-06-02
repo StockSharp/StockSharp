@@ -36,12 +36,15 @@ public class IchimokuLine : LengthIndicator<decimal>
 	{
 		var candle = input.ToCandle();
 
-		IList<(decimal high, decimal low)> buff = _buffer;
+		IEnumerable<(decimal high, decimal low)> buff;
 
 		if (input.IsFinal)
+		{
 			_buffer.PushBack((candle.HighPrice, candle.LowPrice));
+			buff = _buffer;
+		}
 		else
-			buff = _buffer.Skip(1).Append((candle.HighPrice, candle.LowPrice)).ToList();
+			buff = _buffer.Skip(1).Append((candle.HighPrice, candle.LowPrice));
 
 		if (IsFormed)
 		{
