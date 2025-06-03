@@ -9,13 +9,7 @@ partial class Strategy
 		if (Connector.KeepStrategiesPositions)
 			return;
 
-		if (message.StrategyId == EnsureGetId())
-			ProcessPositionChangeMessageImpl(message);
-	}
-
-	private void ProcessPositionChangeMessageImpl(PositionChangeMessage message)
-	{
-		if(message == null)
+		if (message.StrategyId != EnsureGetId())
 			return;
 
 		ProcessRisk(() => message);
