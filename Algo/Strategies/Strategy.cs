@@ -1258,7 +1258,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if (order is null)
 			throw new ArgumentNullException(nameof(order));
 
-		var pos = _positions.TryGetValue((order.Security, order.Portfolio))?.CurrentValue;
+		var pos = _positions.TryGetValue(CreatePositionKey(order.Security, order.Portfolio))?.CurrentValue;
 
 		if (!CanTrade(pos > 0 && pos.Value.GetDirection() == order.Side.Invert() && pos.Value.Abs() >= order.Volume, out var reason))
 		{

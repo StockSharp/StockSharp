@@ -13,13 +13,10 @@ partial class Strategy
 
 		var connector = SafeGetConnector();
 
-		var security = connector.LookupById(message.SecurityId);
-		var portfolio = connector.LookupByPortfolioName(message.PortfolioName);
-
-		var position = _positions.SafeAdd(CreatePositionKey(security, portfolio), _ => new Position
+		var position = _positions.SafeAdd(CreatePositionKey(message.SecurityId, message.PortfolioName), key => new()
 		{
-			Security = security,
-			Portfolio = portfolio,
+			Security = connector.LookupById(key.secId),
+			Portfolio = connector.LookupByPortfolioName(key.pfName),
 			StrategyId = message.StrategyId,
 		}, out var isNew);
 
@@ -50,10 +47,13 @@ partial class Strategy
 		StatisticManager.AddPnL(time, PnL, Commission);
 	}
 
-	private readonly CachedSynchronizedDictionary<(Security, Portfolio), Position> _positions = [];
+	private readonly CachedSynchronizedDictionary<(SecurityId secId, string pfName), Position> _positions = [];
 
-	private static (Security, Portfolio) CreatePositionKey(Security security, Portfolio portfolio)
-		=> (security ?? throw new ArgumentNullException(nameof(security)), portfolio ?? throw new ArgumentNullException(nameof(portfolio)));
+	private static (SecurityId secId, string pfName) CreatePositionKey(SecurityId security, string portfolioName)
+		=> (security, portfolioName.ThrowIfEmpty(nameof(portfolioName)).ToLowerInvariant());
+
+	private static (SecurityId secId, string pfName) CreatePositionKey(Security security, Portfolio portfolio)
+		=> CreatePositionKey(security.ToSecurityId(), portfolio.CheckOnNull(nameof(portfolio)).Name);
 
 	/// <summary>
 	/// Get position.
@@ -170,7 +170,7 @@ partial class Strategy
 	}
 
 	Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string strategyId, Sides? side, string clientCode, string depoName, TPlusLimits? limitType)
-		=> _positions.TryGetValue((security, portfolio));
+		=> _positions.TryGetValue(CreatePositionKey(security, portfolio));
 
 	Portfolio IPortfolioProvider.LookupByPortfolioName(string name)
 		=> SafeGetConnector().LookupByPortfolioName(name);
