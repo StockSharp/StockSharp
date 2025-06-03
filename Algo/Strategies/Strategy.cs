@@ -424,25 +424,25 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 	private void OnConnectorPortfolioReceived(Subscription subscription, Portfolio portfolio)
 	{
-		if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
+		if (CanProcess(subscription))
 			PortfolioReceived?.Invoke(subscription, portfolio);
 	}
 
 	private void OnConnectorOrderEditFailReceived(Subscription subscription, OrderFail fail)
 	{
-		if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
+		if (CanProcess(subscription))
 			OrderEditFailReceived?.Invoke(subscription, fail);
 	}
 
 	private void OnConnectorOrderCancelFailReceived(Subscription subscription, OrderFail fail)
 	{
-		if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
+		if (CanProcess(subscription))
 			OrderCancelFailReceived?.Invoke(subscription, fail);
 	}
 
 	private void OnConnectorOrderRegisterFailReceived(Subscription subscription, OrderFail fail)
 	{
-		if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
+		if (CanProcess(subscription))
 			OrderRegisterFailReceived?.Invoke(subscription, fail);
 	}
 
@@ -2126,7 +2126,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 	private void OnConnectorOrderReceived(Subscription subscription, Order order)
 	{
-		if (OrderLookup != subscription || IsDisposeStarted)
+		if (!CanProcess(subscription))
 			return;
 
 		if (!_ordersInfo.ContainsKey(order) && CanAttach(order))

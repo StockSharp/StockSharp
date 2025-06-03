@@ -152,7 +152,7 @@ partial class Strategy
 
 	private void OnConnectorSubscriptionFailed(Subscription subscription, Exception error, bool isSubscribe)
 	{
-		if (IsDisposeStarted || !_subscriptions.ContainsKey(subscription))
+		if (!CanProcess(subscription))
 			return;
 
 		SubscriptionFailed?.Invoke(subscription, error, isSubscribe);
@@ -161,7 +161,7 @@ partial class Strategy
 
 	private void OnConnectorSubscriptionStopped(Subscription subscription, Exception error)
 	{
-		if (IsDisposeStarted || !_subscriptions.ContainsKey(subscription))
+		if (!CanProcess(subscription))
 			return;
 
 		SubscriptionStopped?.Invoke(subscription, error);
@@ -170,7 +170,7 @@ partial class Strategy
 
 	private void OnConnectorSubscriptionStarted(Subscription subscription)
 	{
-		if (IsDisposeStarted || !_subscriptions.ContainsKey(subscription))
+		if (!CanProcess(subscription))
 			return;
 
 		SubscriptionStarted?.Invoke(subscription);
@@ -178,7 +178,7 @@ partial class Strategy
 
 	private void OnConnectorSubscriptionOnline(Subscription subscription)
 	{
-		if (IsDisposeStarted || !_subscriptions.ContainsKey(subscription))
+		if (!CanProcess(subscription))
 			return;
 
 		SubscriptionOnline?.Invoke(subscription);
@@ -187,61 +187,64 @@ partial class Strategy
 
 	private void OnConnectorSubscriptionReceived(Subscription subscription, object arg)
 	{
-		if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
+		if (CanProcess(subscription))
 			SubscriptionReceived?.Invoke(subscription, arg);
 	}
 
 	private void OnConnectorDataTypeReceived(Subscription subscription, DataType dt)
 	{
-		if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
+		if (CanProcess(subscription))
 			DataTypeReceived?.Invoke(subscription, dt);
 	}
 
 	private void OnConnectorCandleReceived(Subscription subscription, ICandleMessage candle)
 	{
-		if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
+		if (CanProcess(subscription))
 			CandleReceived?.Invoke(subscription, candle);
 	}
 
 	private void OnConnectorNewsReceived(Subscription subscription, News news)
 	{
-		if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
+		if (CanProcess(subscription))
 			NewsReceived?.Invoke(subscription, news);
 	}
 
 	private void OnConnectorBoardReceived(Subscription subscription, ExchangeBoard board)
 	{
-		if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
+		if (CanProcess(subscription))
 			BoardReceived?.Invoke(subscription, board);
 	}
 
 	private void OnConnectorSecurityReceived(Subscription subscription, Security security)
 	{
-		if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
+		if (CanProcess(subscription))
 			SecurityReceived?.Invoke(subscription, security);
 	}
 
 	private void OnConnectorTickTradeReceived(Subscription subscription, ITickTradeMessage trade)
 	{
-		if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
+		if (CanProcess(subscription))
 			TickTradeReceived?.Invoke(subscription, trade);
 	}
 
 	private void OnConnectorOrderBookReceived(Subscription subscription, IOrderBookMessage message)
 	{
-		if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
+		if (CanProcess(subscription))
 			OrderBookReceived?.Invoke(subscription, message);
 	}
 
 	private void OnConnectorOrderLogReceived(Subscription subscription, IOrderLogMessage message)
 	{
-		if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
+		if (CanProcess(subscription))
 			OrderLogReceived?.Invoke(subscription, message);
 	}
 
 	private void OnConnectorLevel1Received(Subscription subscription, Level1ChangeMessage message)
 	{
-		if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
+		if (CanProcess(subscription))
 			Level1Received?.Invoke(subscription, message);
 	}
+
+	private bool CanProcess(Subscription subscription)
+		=> !IsDisposeStarted && _subscriptions.ContainsKey(subscription);
 }
