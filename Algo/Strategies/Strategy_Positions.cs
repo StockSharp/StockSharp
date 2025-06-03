@@ -39,31 +39,6 @@ partial class Strategy
 		}
 	}
 
-	private void OnConnectorPositionReceived(Subscription subscription, Position position)
-	{
-		if (!CanProcess(subscription))
-			return;
-
-		if (position.StrategyId != EnsureGetId())
-		{
-			LogWarning("Position {0} has StrategyId '{1}' instead of '{2}'.", position, position.StrategyId, EnsureGetId());
-			return;
-		}
-
-		ProcessRisk(() => position.ToChangeMessage());
-
-		_positions.SafeAdd(CreatePositionKey(position.Security, position.Portfolio), k => position, out var isNew);
-
-		if (isNew)
-			_newPosition?.Invoke(position);
-		else
-			_positionChanged?.Invoke(position);
-
-		RaisePositionChanged(position.LocalTime);
-
-		PositionReceived?.Invoke(subscription, position);
-	}
-
 	private void RaisePositionChanged(DateTimeOffset time)
 	{
 		LogInfo(LocalizedStrings.NewPosition, _positions.CachedPairs.Select(pos => pos.Key + "=" + pos.Value.CurrentValue).JoinCommaSpace());

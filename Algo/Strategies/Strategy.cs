@@ -355,7 +355,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 #pragma warning restore CS0618 // Type or member is obsolete
 				con.NewMessage                -= OnConnectorNewMessage;
 				con.CurrentTimeChanged        -= OnConnectorCurrentTimeChanged;
-				isp.PositionReceived          -= OnConnectorPositionReceived;
 				isp.Level1Received            -= OnConnectorLevel1Received;
 				isp.OrderBookReceived         -= OnConnectorOrderBookReceived;
 				isp.TickTradeReceived         -= OnConnectorTickTradeReceived;
@@ -397,7 +396,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 #pragma warning restore CS0618 // Type or member is obsolete
 				con.NewMessage                += OnConnectorNewMessage;
 				con.CurrentTimeChanged        += OnConnectorCurrentTimeChanged;
-				isp.PositionReceived          += OnConnectorPositionReceived;
 				isp.Level1Received            += OnConnectorLevel1Received;
 				isp.OrderBookReceived         += OnConnectorOrderBookReceived;
 				isp.TickTradeReceived         += OnConnectorTickTradeReceived;
