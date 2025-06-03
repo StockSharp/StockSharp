@@ -6,9 +6,6 @@ partial class Strategy
 {
 	private void ProcessPositionChangeMessage(PositionChangeMessage message)
 	{
-		if (Connector.KeepStrategiesPositions)
-			return;
-
 		if (message.StrategyId != EnsureGetId())
 			return;
 

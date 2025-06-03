@@ -1086,7 +1086,7 @@ partial class Connector
 
 	private void ProcessPositionChangeMessage(PositionChangeMessage message)
 	{
-		if (!KeepStrategiesPositions && !message.StrategyId.IsEmpty())
+		if (!message.StrategyId.IsEmpty())
 			return;
 
 		Portfolio portfolio;

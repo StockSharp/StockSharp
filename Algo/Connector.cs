@@ -341,6 +341,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 	/// <summary>
 	/// Process strategies positions and store it into <see cref="Positions"/>.
 	/// </summary>
+	[Obsolete]
 	public bool KeepStrategiesPositions { get; set; }
 
 	private static Subscription ToSubscription<TLookupMessage>()
@@ -1070,7 +1071,6 @@ public partial class Connector : BaseLogReceiver, IConnector
 		//ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
 		OverrideSecurityData = storage.GetValue(nameof(OverrideSecurityData), OverrideSecurityData);
 		CheckSteps = storage.GetValue(nameof(CheckSteps), CheckSteps);
-		KeepStrategiesPositions = storage.GetValue(nameof(KeepStrategiesPositions), KeepStrategiesPositions);
 
 		if (storage.ContainsKey(nameof(RiskManager)))
 			RiskManager = storage.GetValue<SettingsStorage>(nameof(RiskManager)).LoadEntire<IRiskManager>();
@@ -1120,7 +1120,6 @@ public partial class Connector : BaseLogReceiver, IConnector
 		//storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
 		storage.SetValue(nameof(OverrideSecurityData), OverrideSecurityData);
 		storage.SetValue(nameof(CheckSteps), CheckSteps);
-		storage.SetValue(nameof(KeepStrategiesPositions), KeepStrategiesPositions);
 
 		if (RiskManager != null)
 			storage.SetValue(nameof(RiskManager), RiskManager.SaveEntire(false));
