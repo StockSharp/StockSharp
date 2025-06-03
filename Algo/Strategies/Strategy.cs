@@ -2083,7 +2083,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 	private void OnConnectorOwnTradeReceived(Subscription subscription, MyTrade trade)
 	{
-		if (IsDisposeStarted || !IsOwnOrder(trade.Order) || !TryAddMyTrade(trade))
+		if (!CanProcess(subscription) || !IsOwnOrder(trade.Order) || !TryAddMyTrade(trade))
 			return;
 
 		TryInvoke(() =>
