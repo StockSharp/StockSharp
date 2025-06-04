@@ -197,7 +197,7 @@ public partial class MainPanel
 		_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;
 
 		// set news provider
-		_newsWindow.NewsPanel.NewsProvider = Connector;
+		_newsWindow.NewsPanel.SubscriptionProvider = Connector;
 
 		var timeFrames = new HashSet<TimeSpan>();
 		Connector.DataTypeReceived += (s, i) =>
