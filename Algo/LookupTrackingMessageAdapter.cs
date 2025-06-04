@@ -123,7 +123,7 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 						}
 					}
 
-					if (!this.IsResultMessageNotSupported(message.Type) && TimeOut > TimeSpan.Zero)
+					if (this.IsResultMessageNotSupported(message.Type) && TimeOut > TimeSpan.Zero)
 					{
 						_lookups.Add(transId, new LookupInfo(message.TypedClone(), TimeOut));
 						isStarted = true;
