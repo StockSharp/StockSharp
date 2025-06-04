@@ -34,7 +34,7 @@ partial class Connector
 							_isMarketTimeHandled = false;
 						}
 
-						_marketTimeMessage.LocalTime = TimeHelper.NowWithOffset;
+						_marketTimeMessage.LocalTime = DateTimeOffset.Now;
 						SendOutMessage(_marketTimeMessage);
 					}
 					catch (Exception ex)

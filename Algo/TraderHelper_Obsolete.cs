@@ -921,7 +921,7 @@ partial class TraderHelper
 	[Obsolete]
 	public static Level1ChangeMessage GetFortsYesterdayEndOfDay(this string securityName)
 	{
-		var time = TimeHelper.Now;
+		var time = DateTime.Now;
 		time -= TimeSpan.FromDays(1);
 		return GetFortsEndOfDay(securityName, time, time).FirstOrDefault();
 	}

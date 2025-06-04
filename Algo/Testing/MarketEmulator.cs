@@ -102,8 +102,8 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		private readonly Dictionary<ExecutionMessage, TimeSpan> _pendingExecutions = [];
 		private DateTimeOffset _prevTime;
 		private readonly MarketEmulatorSettings _settings = parent.Settings;
-		private readonly Random _volumeRandom = new(TimeHelper.Now.Millisecond);
-		private readonly Random _priceRandom = new(TimeHelper.Now.Millisecond);
+		private readonly Random _volumeRandom = new(DateTime.Now.Millisecond);
+		private readonly Random _priceRandom = new(DateTime.Now.Millisecond);
 		private readonly RandomArray<bool> _isMatch = new(100);
 		private int _volumeDecimals;
 		private readonly SortedDictionary<DateTimeOffset, List<(CandleMessage candle, (Sides? side, decimal price, decimal vol, DateTimeOffset time)[] ticks)>> _candleInfo = [];
