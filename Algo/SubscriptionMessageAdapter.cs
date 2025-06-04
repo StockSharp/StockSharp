@@ -317,10 +317,12 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 				}
 				else
 				{
-					if (message.From > DateTimeOffset.UtcNow)
+					var now = CurrentTime;
+
+					if (message.From > now)
 					{
 						message = message.TypedClone();
-						message.From = DateTimeOffset.UtcNow;
+						message.From = now;
 					}
 
 					if (message.From >= message.To)

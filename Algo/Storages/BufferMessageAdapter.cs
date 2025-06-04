@@ -201,7 +201,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 
 		if (!message.HasOrderId() && message.OriginalTransactionId == 0 /*&& Settings.DaysLoad > TimeSpan.Zero*/)
 		{
-			var from = message.From ?? DateTime.UtcNow.Date/* - Settings.DaysLoad*/;
+			var from = message.From ?? CurrentTime.UtcDateTime.Date/* - Settings.DaysLoad*/;
 			var to = message.To;
 
 			if (Settings.IsMode(StorageModes.Snapshot))

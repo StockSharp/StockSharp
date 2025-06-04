@@ -358,7 +358,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			{
 				if (!message.HasOrderId() && message.OriginalTransactionId == 0/* && _adapter.StorageSettings.DaysLoad > TimeSpan.Zero*/)
 				{
-					var from = message.From ?? DateTime.UtcNow.Date/* - _adapter.StorageSettings.DaysLoad*/;
+					var from = message.From ?? _connector.CurrentTime.UtcDateTime.Date/* - _adapter.StorageSettings.DaysLoad*/;
 					var to = message.To;
 
 					var storage = (ISnapshotStorage<string, ExecutionMessage>)_connector.SnapshotRegistry.GetSnapshotStorage(DataType.Transactions);

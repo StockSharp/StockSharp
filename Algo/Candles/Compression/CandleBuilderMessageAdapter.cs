@@ -191,7 +191,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 								!InnerAdapter.IsSupportCandlesUpdates(mdMsg) &&
 								InnerAdapter.TryGetCandlesBuildFrom(original, _candleBuilderProvider) != null)
 							{
-								mdMsg.To = DateTimeOffset.UtcNow;
+								mdMsg.To = CurrentTime;
 							}
 
 							lock (_syncObject)

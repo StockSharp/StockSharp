@@ -94,7 +94,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 			_step = step;
 			_iterationInterval = iterationInterval;
 
-			_to = origin.To ?? DateTimeOffset.UtcNow;
+			_to = origin.To ?? _adapter.CurrentTime;
 			_currFrom = origin.From ?? _to - (IsStepMax ? TimeSpan.FromDays(1) : step);
 
 			_firstIteration = true;

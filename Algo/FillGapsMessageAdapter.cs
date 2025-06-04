@@ -44,7 +44,7 @@ public class FillGapsMessageAdapter(IMessageAdapter innerAdapter, IFillGapsBehav
 							subscrMsg is ISecurityIdMessage secIdMsg &&
 							!secIdMsg.IsAllSecurity())
 						{
-							var (gapsStart, gapsEnd) = _behaviour.TryGetNextGap(secIdMsg.SecurityId, subscrMsg.DataType, from.UtcDateTime, subscrMsg.To?.UtcDateTime ?? DateTime.UtcNow, days);
+							var (gapsStart, gapsEnd) = _behaviour.TryGetNextGap(secIdMsg.SecurityId, subscrMsg.DataType, from.UtcDateTime, (subscrMsg.To ?? CurrentTime).UtcDateTime, days);
 
 							if (gapsStart is null)
 								break;
@@ -87,7 +87,7 @@ public class FillGapsMessageAdapter(IMessageAdapter innerAdapter, IFillGapsBehav
 
 				var current = info.Current;
 
-				var (gapsStart, gapsEnd) = _behaviour.TryGetNextGap(info.SecId, info.Original.DataType, current.To.Value.AddDays(1).UtcDateTime, info.Original.To?.UtcDateTime ?? DateTime.UtcNow, info.Days);
+				var (gapsStart, gapsEnd) = _behaviour.TryGetNextGap(info.SecId, info.Original.DataType, current.To.Value.AddDays(1).UtcDateTime, (info.Original.To ?? CurrentTime).UtcDateTime, info.Days);
 
 				if (gapsStart is null)
 				{

@@ -27,10 +27,11 @@ public interface IDesktopPopupService : ILogSource
 	/// <summary>
 	/// Show desktop popup.
 	/// </summary>
+	/// <param name="time">Time.</param>
 	/// <param name="caption">Signal header.</param>
 	/// <param name="message">Alert text.</param>
 	/// <param name="iconKey">Icon to show with notification.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>Task result is true if user has clicked the notification.</returns>
-	ValueTask<bool> NotifyAsync(string caption, string message, string iconKey, CancellationToken cancellationToken);
+	ValueTask<bool> NotifyAsync(DateTimeOffset time, string caption, string message, string iconKey, CancellationToken cancellationToken);
 }
