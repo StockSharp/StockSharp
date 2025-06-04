@@ -5,7 +5,7 @@ namespace StockSharp.BusinessEntities;
 /// </summary>
 public interface IConnector : IMessageChannel, IPersistable, ILogReceiver,
 	IMarketDataProvider, ITransactionProvider, ISecurityProvider,
-	INewsProvider, ISubscriptionProvider, ITimeProvider,
+	ISubscriptionProvider, ITimeProvider,
 	IPortfolioProvider, IPositionProvider
 {
 	/// <summary>

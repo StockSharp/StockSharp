@@ -222,11 +222,6 @@ public static class ServicesRegistry
 	public static SnapshotRegistry SnapshotRegistry => ConfigManager.GetService<SnapshotRegistry>();
 
 	/// <summary>
-	/// News provider.
-	/// </summary>
-	public static INewsProvider NewsProvider => ConfigManager.GetService<INewsProvider>();
-
-	/// <summary>
 	/// The risks control manager.
 	/// </summary>
 	public static IRiskManager RiskManager => ConfigManager.GetService<IRiskManager>();

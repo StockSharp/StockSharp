@@ -2279,4 +2279,55 @@ public static partial class EntitiesExtensions
 
 		return currentAvgPrice;
 	}
+
+	/// <summary>
+	/// Find subscriptions for the specified security and data type.
+	/// </summary>
+	/// <param name="provider">Subscription provider.</param>
+	/// <param name="security">Security.</param>
+	/// <param name="dataType">Data type info.</param>
+	/// <returns>Subscriptions.</returns>
+	public static IEnumerable<Subscription> FindSubscriptions(this ISubscriptionProvider provider, Security security, DataType dataType)
+	{
+		if (provider is null)
+			throw new ArgumentNullException(nameof(provider));
+
+		return provider.FindSubscriptions(security.ToSecurityId(), dataType);
+	}
+
+	/// <summary>
+	/// Find subscriptions for the specified security and data type.
+	/// </summary>
+	/// <param name="provider">Subscription provider.</param>
+	/// <param name="securityId"><see cref="SecurityId"/></param>
+	/// <param name="dataType">Data type info.</param>
+	/// <returns>Subscriptions.</returns>
+	public static IEnumerable<Subscription> FindSubscriptions(this ISubscriptionProvider provider, SecurityId securityId, DataType dataType)
+	{
+		if (provider is null)
+			throw new ArgumentNullException(nameof(provider));
+
+		if (dataType is null)
+			throw new ArgumentNullException(nameof(dataType));
+
+		return provider.Subscriptions.Where(s => s.DataType == dataType && s.SecurityId == securityId);
+	}
+
+	/// <summary>
+	/// Request news story subscription.
+	/// </summary>
+	/// <param name="provider">Subscription provider.</param>
+	/// <param name="news">News item to subscribe to.</param>
+	public static void RequestNewsStory(this ISubscriptionProvider provider, News news)
+	{
+		if (news is null)
+			throw new ArgumentNullException(nameof(news));
+
+		provider.Subscribe(new(new MarketDataMessage
+		{
+			DataType2 = DataType.News,
+			IsSubscribe = true,
+			NewsId = news.Id.To<string>(),
+		}));
+	}
 }

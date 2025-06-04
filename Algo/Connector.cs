@@ -921,7 +921,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 		{
 			var subscrSecId = message
 				.GetSubscriptionIds()
-				.Select(id => TryGetSubscriptionById(id)?.SecurityId)
+				.Select(id => _subscriptionManager.TryGetSubscription(id, true, false, null)?.Subscription.SecurityId)
 				.Where(id => id != null && id.Value != default)
 				.FirstOrDefault();
 
