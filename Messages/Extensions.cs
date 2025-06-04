@@ -529,43 +529,43 @@ public static partial class Extensions
 	}
 
 	/// <summary>
-	/// Add the message type info <see cref="IMessageAdapter.SupportedResultMessages"/>.
+	/// Add the message type info <see cref="IMessageAdapter.NotSupportedResultMessages"/>.
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
 	/// <param name="type">Message type.</param>
-	public static void AddSupportedResultMessage(this MessageAdapter adapter, MessageTypes type)
+	public static void AddNotSupportedResultMessage(this MessageAdapter adapter, MessageTypes type)
 	{
 		if (adapter == null)
 			throw new ArgumentNullException(nameof(adapter));
 
-		adapter.SupportedResultMessages = adapter.SupportedResultMessages.Append(type).Distinct();
+		adapter.NotSupportedResultMessages = adapter.NotSupportedResultMessages.Append(type).Distinct();
 	}
 
 	/// <summary>
-	/// Remove the message type from <see cref="IMessageAdapter.SupportedResultMessages"/>.
+	/// Remove the message type from <see cref="IMessageAdapter.NotSupportedResultMessages"/>.
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
 	/// <param name="type">Message type.</param>
-	public static void RemoveSupportedResultMessage(this MessageAdapter adapter, MessageTypes type)
+	public static void RemoveNotSupportedResultMessage(this MessageAdapter adapter, MessageTypes type)
 	{
 		if (adapter == null)
 			throw new ArgumentNullException(nameof(adapter));
 
-		adapter.SupportedResultMessages = adapter.SupportedResultMessages.Where(t => t != type);
+		adapter.NotSupportedResultMessages = adapter.NotSupportedResultMessages.Where(t => t != type);
 	}
 
 	/// <summary>
-	/// Determines whether the specified message type is contained in <see cref="IMessageAdapter.SupportedResultMessages"/>..
+	/// Determines whether the specified message type is contained in <see cref="IMessageAdapter.NotSupportedResultMessages"/>..
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
 	/// <param name="type">Message type.</param>
 	/// <returns><see langword="true"/> if the specified message type is supported, otherwise, <see langword="false"/>.</returns>
-	public static bool IsResultMessageSupported(this IMessageAdapter adapter, MessageTypes type)
+	public static bool IsResultMessageNotSupported(this IMessageAdapter adapter, MessageTypes type)
 	{
 		if (adapter == null)
 			throw new ArgumentNullException(nameof(adapter));
 
-		return adapter.SupportedResultMessages.Contains(type);
+		return adapter.NotSupportedResultMessages.Contains(type);
 	}
 
 	private static readonly SynchronizedDictionary<Type, Type> _candleArgTypes = [];

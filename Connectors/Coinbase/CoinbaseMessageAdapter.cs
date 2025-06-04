@@ -28,10 +28,6 @@ public partial class CoinbaseMessageAdapter
 		this.AddSupportedMarketDataType(DataType.MarketDepth);
 		this.AddSupportedMarketDataType(DataType.Level1);
 		this.AddSupportedCandleTimeFrames(AllTimeFrames);
-
-		this.AddSupportedResultMessage(MessageTypes.SecurityLookup);
-		this.AddSupportedResultMessage(MessageTypes.PortfolioLookup);
-		this.AddSupportedResultMessage(MessageTypes.OrderStatus);
 	}
 
 	/// <inheritdoc />

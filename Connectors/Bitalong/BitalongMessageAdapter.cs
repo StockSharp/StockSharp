@@ -23,10 +23,6 @@ public partial class BitalongMessageAdapter
 		this.AddSupportedMarketDataType(DataType.Ticks);
 		this.AddSupportedMarketDataType(DataType.MarketDepth);
 		this.AddSupportedMarketDataType(DataType.Level1);
-
-		this.AddSupportedResultMessage(MessageTypes.SecurityLookup);
-		this.AddSupportedResultMessage(MessageTypes.PortfolioLookup);
-		this.AddSupportedResultMessage(MessageTypes.OrderStatus);
 	}
 
 	/// <inheritdoc />

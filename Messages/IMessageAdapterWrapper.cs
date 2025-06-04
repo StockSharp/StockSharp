@@ -258,7 +258,7 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageChannel>, IMessa
 	}
 
 	/// <inheritdoc />
-	public virtual IEnumerable<MessageTypes> SupportedResultMessages => InnerAdapter.SupportedResultMessages;
+	public virtual IEnumerable<MessageTypes> NotSupportedResultMessages => InnerAdapter.NotSupportedResultMessages;
 
 	/// <inheritdoc />
 	public virtual IEnumerable<DataType> SupportedMarketDataTypes => InnerAdapter.SupportedMarketDataTypes;

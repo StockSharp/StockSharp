@@ -41,9 +41,6 @@ public partial class FtxMessageAdapter
 		this.AddSupportedMarketDataType(DataType.MarketDepth);
 		this.AddSupportedMarketDataType(DataType.Level1);
 		this.AddSupportedCandleTimeFrames(AllTimeFrames);
-
-		this.AddSupportedResultMessage(MessageTypes.SecurityLookup);
-		this.AddSupportedResultMessage(MessageTypes.PortfolioLookup);
 	}
 
 	/// <inheritdoc />

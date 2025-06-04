@@ -34,10 +34,6 @@ public partial class TinkoffMessageAdapter
 		this.AddSupportedMarketDataType(DataType.Level1);
 		this.AddSupportedMarketDataType(DataType.Ticks);
 		this.AddSupportedCandleTimeFrames(AllTimeFrames);
-
-		this.AddSupportedResultMessage(MessageTypes.SecurityLookup);
-		this.AddSupportedResultMessage(MessageTypes.PortfolioLookup);
-		this.AddSupportedResultMessage(MessageTypes.OrderStatus);
 	}
 
 	/// <inheritdoc />

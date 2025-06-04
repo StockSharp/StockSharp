@@ -23,9 +23,9 @@ public interface IMessageAdapter : IMessageChannel, IPersistable, ILogReceiver
 	IEnumerable<MessageTypes> SupportedInMessages { get; set; }
 
 	/// <summary>
-	/// Supported by adapter result message types.
+	/// Not supported by adapter result message types.
 	/// </summary>
-	IEnumerable<MessageTypes> SupportedResultMessages { get; }
+	IEnumerable<MessageTypes> NotSupportedResultMessages { get; }
 
 	/// <summary>
 	/// Supported by adapter market data types.

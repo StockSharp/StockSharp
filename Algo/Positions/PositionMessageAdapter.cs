@@ -33,8 +33,8 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 		=> InnerAdapter.PossibleSupportedMessages.Concat(IsEmulate ? [MessageTypes.PortfolioLookup.ToInfo()] : []).Distinct();
 
 	/// <inheritdoc />
-	public override IEnumerable<MessageTypes> SupportedResultMessages
-		=> InnerAdapter.SupportedResultMessages.Concat(IsEmulate ? [MessageTypes.PortfolioLookup] : []).Distinct();
+	public override IEnumerable<MessageTypes> NotSupportedResultMessages
+		=> InnerAdapter.NotSupportedResultMessages.Concat(IsEmulate ? [MessageTypes.PortfolioLookup] : []).Distinct();
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)

@@ -3618,13 +3618,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		//ExtendedMessageTypes.Clearing.ToInfo(),
 	];
 	IEnumerable<MessageTypes> IMessageAdapter.SupportedInMessages { get; set; }
-	IEnumerable<MessageTypes> IMessageAdapter.SupportedResultMessages { get; } =
-	[
-		MessageTypes.SecurityLookup,
-		MessageTypes.PortfolioLookup,
-		MessageTypes.DataTypeLookup,
-		MessageTypes.BoardLookup,
-	];
+	IEnumerable<MessageTypes> IMessageAdapter.NotSupportedResultMessages { get; } = [];
 	IEnumerable<DataType> IMessageAdapter.SupportedMarketDataTypes { get; } =
 	[
 		DataType.OrderLog,

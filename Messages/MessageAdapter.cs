@@ -50,17 +50,14 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 		set => _supportedInMessages = CheckDuplicate(value, nameof(SupportedInMessages));
 	}
 
-	private IEnumerable<MessageTypes> _supportedResultMessages =
-	[
-		MessageTypes.MarketData, MessageTypes.Portfolio,
-	];
+	private IEnumerable<MessageTypes> _notSupportedResultMessages = [];
 
 	/// <inheritdoc />
 	[Browsable(false)]
-	public virtual IEnumerable<MessageTypes> SupportedResultMessages
+	public virtual IEnumerable<MessageTypes> NotSupportedResultMessages
 	{
-		get => _supportedResultMessages;
-		set => _supportedResultMessages = CheckDuplicate(value, nameof(SupportedResultMessages));
+		get => _notSupportedResultMessages;
+		set => _notSupportedResultMessages = CheckDuplicate(value, nameof(NotSupportedResultMessages));
 	}
 
 	private readonly CachedSynchronizedSet<MessageTypeInfo> _possibleSupportedMessages = [];

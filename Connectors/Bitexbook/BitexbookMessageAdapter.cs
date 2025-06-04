@@ -24,10 +24,6 @@ public partial class BitexbookMessageAdapter
 
 		this.AddSupportedMarketDataType(DataType.OrderLog);
 		this.AddSupportedCandleTimeFrames(AllTimeFrames);
-
-		this.AddSupportedResultMessage(MessageTypes.SecurityLookup);
-		this.AddSupportedResultMessage(MessageTypes.PortfolioLookup);
-		this.AddSupportedResultMessage(MessageTypes.OrderStatus);
 	}
 
 	/// <inheritdoc />
