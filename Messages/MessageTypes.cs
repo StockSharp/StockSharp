@@ -26,7 +26,6 @@ public enum MessageTypes
 	OrderReplace,
 
 	/// <summary>
-	/// <see cref="OrderPairReplaceMessage"/>.
 	/// </summary>
 	[Obsolete]
 	OrderPairReplace,
