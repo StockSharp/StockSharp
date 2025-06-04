@@ -218,10 +218,18 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				_childToParentIds.Clear();
 		}
 
-		public long? TryGetParent(long childId)
+		public bool TryGetParent(long childId, out long parentId)
 		{
+			parentId = default;
+
 			lock (_syncObject)
-				return _childToParentIds.TryGetValue(childId)?.First;
+			{
+				if (!_childToParentIds.TryGetValue(childId, out var t))
+					return false;
+
+				parentId = t.First;
+				return true;
+			}
 		}
 	}
 
@@ -1758,9 +1766,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		for (var i = 0; i < ids.Length; i++)
 		{
-			var parentId = _parentChildMap.TryGetParent(ids[i]);
-
-			if (parentId == null)
+			if (!_parentChildMap.TryGetParent(ids[i], out var parentId))
 				continue;
 
 			if (!changed)
@@ -1770,9 +1776,9 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			}
 
 			if (msg.OriginalTransactionId == ids[i])
-				msg.OriginalTransactionId = parentId.Value;
+				msg.OriginalTransactionId = parentId;
 
-			ids[i] = parentId.Value;
+			ids[i] = parentId;
 		}
 
 		if (changed)

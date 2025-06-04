@@ -797,10 +797,10 @@ public static partial class TraderHelper
 		if (connector is null)
 			throw new ArgumentNullException(nameof(connector));
 
-		connector.Subscribe(new(DataType.Board));
-		connector.Subscribe(new(DataType.Securities));
-		connector.Subscribe(new(DataType.PositionChanges));
-		connector.Subscribe(new(DataType.Transactions));
+		connector.Subscribe(connector.BoardLookup);
+		connector.Subscribe(connector.SecurityLookup);
+		connector.Subscribe(connector.PortfolioLookup);
+		connector.Subscribe(connector.OrderLookup);
 	}
 
 	/// <summary>
