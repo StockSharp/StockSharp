@@ -324,11 +324,6 @@ public class DataType : Equatable<DataType>, IPersistable
 	/// </summary>
 	public bool IsTFCandles => MessageType == typeof(TimeFrameCandleMessage);
 
-	/// <summary>
-	/// Determines whether the specified message type is derived from <see cref="PortfolioMessage"/>.
-	/// </summary>
-	public bool IsPortfolio => MessageType == typeof(PortfolioMessage);
-
 	private bool? _isMarketData;
 
 	/// <summary>

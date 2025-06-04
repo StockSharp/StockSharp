@@ -18,12 +18,6 @@ partial class Connector
 	}
 
 	/// <inheritdoc />
-	public void RegisterPortfolio(Portfolio portfolio) => _subscriptionManager.RegisterPortfolio(portfolio);
-
-	/// <inheritdoc />
-	public void UnRegisterPortfolio(Portfolio portfolio) => _subscriptionManager.UnRegisterPortfolio(portfolio);
-
-	/// <inheritdoc />
 	public void RequestNewsStory(News news, IMessageAdapter adapter = null)
 	{
 		if (news is null)

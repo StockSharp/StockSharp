@@ -27,8 +27,7 @@ public enum PortfolioStates
 /// </summary>
 [DataContract]
 [Serializable]
-public class PortfolioMessage : BaseSubscriptionIdMessage<PortfolioMessage>,
-	ISubscriptionMessage, IPortfolioNameMessage
+public class PortfolioMessage : BaseSubscriptionIdMessage<PortfolioMessage>, IPortfolioNameMessage
 {
 	/// <inheritdoc />
 	[DataMember]
@@ -72,52 +71,6 @@ public class PortfolioMessage : BaseSubscriptionIdMessage<PortfolioMessage>,
 		GroupName = LocalizedStrings.GeneralKey)]
 	public string ClientCode { get; set; }
 
-	/// <inheritdoc />
-	[DataMember]
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.TransactionKey,
-		Description = LocalizedStrings.TransactionIdKey,
-		GroupName = LocalizedStrings.GeneralKey)]
-	public long TransactionId { get; set; }
-
-	/// <inheritdoc />
-	[DataMember]
-	public bool IsSubscribe { get; set; }
-
-	/// <inheritdoc />
-	[DataMember]
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.FromKey,
-		Description = LocalizedStrings.StartDateDescKey,
-		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset? From { get; set; }
-
-	/// <inheritdoc />
-	[DataMember]
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.UntilKey,
-		Description = LocalizedStrings.ToDateDescKey,
-		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset? To { get; set; }
-
-	/// <inheritdoc />
-	[DataMember]
-	public long? Skip { get; set; }
-
-	/// <inheritdoc />
-	[DataMember]
-	public long? Count { get; set; }
-
-	/// <inheritdoc />
-	[DataMember]
-	public FillGapsDays? FillGaps { get; set; }
-
-	/// <inheritdoc />
-	public virtual bool SpecificItemRequest => false;
-
 	/// <summary>
 	/// Initializes a new instance of the <see cref="PortfolioMessage"/>.
 	/// </summary>
@@ -138,42 +91,16 @@ public class PortfolioMessage : BaseSubscriptionIdMessage<PortfolioMessage>,
 	/// <inheritdoc />
 	public override DataType DataType => PortfolioName.Portfolio();
 
-	bool ISubscriptionMessage.FilterEnabled
-		=>
-		!PortfolioName.IsEmpty() || Currency != null ||
-		!BoardCode.IsEmpty() || !ClientCode.IsEmpty();
-
 	/// <inheritdoc />
 	public override string ToString()
 	{
 		var str = base.ToString() + $",Name={PortfolioName}";
-
-		if (TransactionId > 0)
-			str += $",TransId={TransactionId}";
 
 		if (Currency != default)
 			str += $",Curr={Currency}";
 
 		if (!BoardCode.IsEmpty())
 			str += $",Board={BoardCode}";
-
-		if (IsSubscribe)
-			str += $",IsSubscribe={IsSubscribe}";
-
-		if (From != default)
-			str += $",From={From}";
-
-		if (To != default)
-			str += $",To={To}";
-
-		if (Skip != default)
-			str += $",Skip={Skip}";
-
-		if (Count != default)
-			str += $",Count={Count}";
-
-		if (FillGaps != default)
-			str += $",Gaps={FillGaps}";
 
 		return str;
 	}
@@ -186,14 +113,6 @@ public class PortfolioMessage : BaseSubscriptionIdMessage<PortfolioMessage>,
 		destination.PortfolioName = PortfolioName;
 		destination.Currency = Currency;
 		destination.BoardCode = BoardCode;
-		destination.IsSubscribe = IsSubscribe;
-		//destination.State = State;
-		destination.TransactionId = TransactionId;
 		destination.ClientCode = ClientCode;
-		destination.From = From;
-		destination.To = To;
-		destination.Skip = Skip;
-		destination.Count = Count;
-		destination.FillGaps = FillGaps;
 	}
 }

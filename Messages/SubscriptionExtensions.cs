@@ -76,8 +76,6 @@ public static class SubscriptionExtensions
 			return new OrderStatusMessage();
 		else if (dataType == DataType.PositionChanges)
 			return new PortfolioLookupMessage();
-		else if (dataType.IsPortfolio)
-			return new PortfolioMessage();
 		else if (dataType == DataType.SecurityLegs)
 			return new SecurityLegsRequestMessage();
 		else if (dataType == DataType.Command)

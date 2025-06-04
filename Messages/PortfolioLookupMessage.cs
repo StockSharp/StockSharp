@@ -5,7 +5,7 @@ namespace StockSharp.Messages;
 /// </summary>
 [DataContract]
 [Serializable]
-public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessage, IStrategyIdMessage
+public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessage, IStrategyIdMessage, ISubscriptionMessage
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="PortfolioLookupMessage"/>.
@@ -14,6 +14,49 @@ public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessa
 		: base(MessageTypes.PortfolioLookup)
 	{
 	}
+
+	/// <inheritdoc />
+	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TransactionKey,
+		Description = LocalizedStrings.TransactionIdKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public long TransactionId { get; set; }
+
+	/// <inheritdoc />
+	[DataMember]
+	public bool IsSubscribe { get; set; }
+
+	/// <inheritdoc />
+	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.FromKey,
+		Description = LocalizedStrings.StartDateDescKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public DateTimeOffset? From { get; set; }
+
+	/// <inheritdoc />
+	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.UntilKey,
+		Description = LocalizedStrings.ToDateDescKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public DateTimeOffset? To { get; set; }
+
+	/// <inheritdoc />
+	[DataMember]
+	public long? Skip { get; set; }
+
+	/// <inheritdoc />
+	[DataMember]
+	public long? Count { get; set; }
+
+	/// <inheritdoc />
+	[DataMember]
+	public FillGapsDays? FillGaps { get; set; }
 
 	/// <inheritdoc />
 	[DataMember]
@@ -32,8 +75,13 @@ public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessa
 	[TypeConverter(typeof(StringToSecurityIdTypeConverter))]
 	public SecurityId? SecurityId { get; set; }
 
+	bool ISubscriptionMessage.FilterEnabled
+		=>
+		!PortfolioName.IsEmpty() || Currency != null ||
+		!BoardCode.IsEmpty() || !ClientCode.IsEmpty();
+
 	/// <inheritdoc />
-	public override bool SpecificItemRequest => !StrategyId.IsEmpty();
+	public bool SpecificItemRequest => !StrategyId.IsEmpty();
 
 	/// <summary>
 	/// Create a copy of <see cref="PortfolioLookupMessage"/>.
@@ -54,15 +102,25 @@ public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessa
 	{
 		base.CopyTo(destination);
 
+		destination.TransactionId = TransactionId;
 		destination.SecurityId = SecurityId;
 		destination.StrategyId = StrategyId;
 		destination.Side = Side;
+		destination.IsSubscribe = IsSubscribe;
+		destination.From = From;
+		destination.To = To;
+		destination.Skip = Skip;
+		destination.Count = Count;
+		destination.FillGaps = FillGaps;
 	}
 
 	/// <inheritdoc />
 	public override string ToString()
 	{
 		var str = base.ToString();
+
+		if (TransactionId > 0)
+			str += $",TransId={TransactionId}";
 
 		if (!IsSubscribe)
 			str += $",IsSubscribe={IsSubscribe}";
@@ -75,6 +133,21 @@ public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessa
 
 		if (Side != null)
 			str += $",Side={Side.Value}";
+
+		if (From != default)
+			str += $",From={From}";
+
+		if (To != default)
+			str += $",To={To}";
+
+		if (Skip != default)
+			str += $",Skip={Skip}";
+
+		if (Count != default)
+			str += $",Count={Count}";
+
+		if (FillGaps != default)
+			str += $",Gaps={FillGaps}";
 
 		return str;
 	}

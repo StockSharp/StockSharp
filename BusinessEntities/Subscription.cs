@@ -14,11 +14,6 @@ public class Subscription : SubscriptionBase<Subscription>
 	public CandleSeries CandleSeries { get; }
 
 	/// <summary>
-	/// Portfolio, describing the trading account and the size of its generated commission.
-	/// </summary>
-	public Portfolio Portfolio { get; }
-
-	/// <summary>
 	/// Initializes a new instance of the <see cref="Subscription"/>.
 	/// </summary>
 	/// <param name="dataType">Data type info.</param>
@@ -56,16 +51,6 @@ public class Subscription : SubscriptionBase<Subscription>
 		: this(candleSeries.ToMarketDataMessage(true), candleSeries.Security)
 	{
 		CandleSeries = candleSeries;
-	}
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="Subscription"/>.
-	/// </summary>
-	/// <param name="portfolio">Portfolio, describing the trading account and the size of its generated commission.</param>
-	public Subscription(Portfolio portfolio)
-		: this(portfolio.ToMessage())
-	{
-		Portfolio = portfolio;
 	}
 
 	/// <summary>

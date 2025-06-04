@@ -1111,12 +1111,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				break;
 			}
 
-			case MessageTypes.Portfolio:
-			{
-				ProcessPortfolioMessage((PortfolioMessage)message);
-				break;
-			}
-
 			case MessageTypes.OrderRegister:
 			{
 				var ordMsg = (OrderMessage)message;
@@ -1587,55 +1581,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	/// <returns>Found <see cref="IMessageAdapter"/>.</returns>
 	public bool TryGetAdapter(string porfolioName, out IMessageAdapter adapter)
 		=> _portfolioAdapters.TryGetValue(porfolioName, out adapter);
-
-	private void ProcessPortfolioMessage(PortfolioMessage message)
-	{
-		if (message.IsSubscribe)
-		{
-			var adapter = GetAdapter(message.PortfolioName, message, out var isPended);
-
-			if (adapter == null)
-			{
-				if (isPended)
-					return;
-
-				LogDebug("No adapter for {0}", message);
-
-				SendOutMessage(message.CreateResponse(new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(message))));
-			}
-			else
-			{
-				_portfolioAdapters.TryAdd2(message.PortfolioName, GetUnderlyingAdapter(adapter));
-				SendRequest(message.TypedClone(), adapter);
-			}
-		}
-		else
-		{
-			var originTransId = message.OriginalTransactionId;
-
-			IMessageAdapter adapter;
-
-			if (originTransId == 0)
-				adapter = _portfolioAdapters.TryGetValue(message.PortfolioName);
-			else if (_requestsById.TryGetValue(originTransId, out var tuple))
-			{
-				adapter = tuple.Item2;
-
-				var transId = message.TransactionId;
-				message = message.TypedClone();
-				((PortfolioMessage)tuple.Item1).CopyTo(message);
-				message.IsSubscribe = false;
-				message.TransactionId = transId;
-			}
-			else
-				adapter = null;
-
-			if (adapter == null)
-				LogDebug("No adapter for {0}", message);
-			else
-				SendRequest(message, adapter);
-		}
-	}
 
 	private IMessageAdapter GetAdapter(string portfolioName, Message message, out bool isPended)
 	{

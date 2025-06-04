@@ -2048,14 +2048,6 @@ public static partial class Extensions
 	}
 
 	/// <summary>
-	/// Support portfolio subscriptions.
-	/// </summary>
-	/// <param name="adapter">Adapter.</param>
-	/// <returns>Check result.</returns>
-	public static bool IsSupportSubscriptionByPortfolio(this IMessageAdapter adapter)
-		=> adapter.IsMessageSupported(MessageTypes.Portfolio);
-
-	/// <summary>
 	/// Check if the specified id is money id.
 	/// </summary>
 	/// <param name="secId">The message contains information about the position changes.</param>

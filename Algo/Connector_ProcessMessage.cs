@@ -1055,17 +1055,6 @@ partial class Connector
 		return portfolio;
 	}
 
-	private void TrySubscribePortfolio(Portfolio portfolio, IMessageAdapter adapter)
-	{
-		if (!IsAutoPortfoliosSubscribe || adapter?.IsSupportSubscriptionByPortfolio() != true)
-			return;
-
-		var subscription = _subscriptionManager.TryGetSubscription(portfolio);
-
-		if (subscription == null)
-			RegisterPortfolio(portfolio);
-	}
-
 	private void ProcessPortfolioMessage(PortfolioMessage message)
 	{
 		var portfolio = GetPortfolio(message.PortfolioName, p =>
@@ -1081,7 +1070,6 @@ partial class Connector
 			_subscriptionManager.ProcessLookupResponse(message, portfolio);
 
 		RaiseReceived(portfolio, message, PortfolioReceived);
-		TrySubscribePortfolio(portfolio, message.Adapter);
 	}
 
 	private void ProcessPositionChangeMessage(PositionChangeMessage message)
@@ -1125,8 +1113,6 @@ partial class Connector
 
 		RaisePositionChanged(position);
 		RaiseReceived(position, message, PositionReceived);
-
-		TrySubscribePortfolio(portfolio, message.Adapter);
 	}
 
 	private void ProcessNewsMessage(NewsMessage message)

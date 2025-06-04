@@ -135,12 +135,6 @@ public partial class Connector : BaseLogReceiver, IConnector
 	public bool IsAutoUnSubscribeOnDisconnect { get; set; } = true;
 
 	/// <summary>
-	/// Subscribe for new portfolios.
-	/// </summary>
-	/// <remarks>By default is <see langword="true"/>.</remarks>
-	public bool IsAutoPortfoliosSubscribe { get; set; } = true;
-
-	/// <summary>
 	/// The number of orders for storage. The default is 1000. If the value is set to <see cref="int.MaxValue"/>, then the orders will not be deleted. If the value is set to 0, then the orders will not be stored.
 	/// </summary>
 	public int OrdersKeepCount
@@ -1098,7 +1092,6 @@ public partial class Connector : BaseLogReceiver, IConnector
 
 		IsRestoreSubscriptionOnNormalReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
 		IsAutoUnSubscribeOnDisconnect = storage.GetValue(nameof(IsAutoUnSubscribeOnDisconnect), IsAutoUnSubscribeOnDisconnect);
-		IsAutoPortfoliosSubscribe = storage.GetValue(nameof(IsAutoPortfoliosSubscribe), IsAutoPortfoliosSubscribe);
 
 		if (Buffer != null && storage.ContainsKey(nameof(Buffer)))
 			Buffer.Load(storage, nameof(Buffer));
@@ -1132,7 +1125,6 @@ public partial class Connector : BaseLogReceiver, IConnector
 		storage.SetValue(nameof(SubscriptionsOnConnect), _subscriptionsOnConnect.Cache.Select(s => s.DataType.Save()).ToArray());
 		storage.SetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
 		storage.SetValue(nameof(IsAutoUnSubscribeOnDisconnect), IsAutoUnSubscribeOnDisconnect);
-		storage.SetValue(nameof(IsAutoPortfoliosSubscribe), IsAutoPortfoliosSubscribe);
 
 		if (Buffer != null)
 			storage.SetValue(nameof(Buffer), Buffer.Save());

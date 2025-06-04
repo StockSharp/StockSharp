@@ -214,35 +214,6 @@ partial class Connector
 			return TryGetInfo(id, ignoreAll, remove, time, true);
 		}
 
-		public void RegisterPortfolio(Portfolio portfolio)
-		{
-			if (portfolio == null)
-				throw new ArgumentNullException(nameof(portfolio));
-
-			if (portfolio is BasketPortfolio basketPortfolio)
-				basketPortfolio.InnerPortfolios.ForEach(_connector.RegisterPortfolio);
-			else
-				Subscribe(new Subscription(portfolio));
-		}
-
-		public void UnRegisterPortfolio(Portfolio portfolio)
-		{
-			if (portfolio == null)
-				throw new ArgumentNullException(nameof(portfolio));
-
-			if (portfolio is BasketPortfolio basketPortfolio)
-				basketPortfolio.InnerPortfolios.ForEach(_connector.UnRegisterPortfolio);
-			else
-			{
-				var subscription = Subscriptions.FirstOrDefault(s => s.Portfolio == portfolio);
-
-				if (subscription == null)
-					_connector.AddWarningLog(LocalizedStrings.SubscriptionNonExist, portfolio);
-				else
-					UnSubscribe(subscription);
-			}
-		}
-
 		private void ChangeState(SubscriptionInfo info, SubscriptionStates state)
 		{
 			var subscription = info.Subscription;
@@ -611,14 +582,6 @@ partial class Connector
 
 				yield return (info.Subscription, candle);
 			}
-		}
-
-		public Subscription TryGetSubscription(Portfolio portfolio)
-		{
-			if (portfolio == null)
-				throw new ArgumentNullException(nameof(portfolio));
-
-			return Subscriptions.FirstOrDefault(s => s.Portfolio == portfolio);
 		}
 
 		public void SubscribeAll(SubscriptionSecurityAllMessage allMsg)
