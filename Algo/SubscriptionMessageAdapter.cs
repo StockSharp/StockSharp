@@ -42,9 +42,6 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 			case MessageTypes.Reset:
 				return ProcessReset(message);
 
-			case MessageTypes.OrderStatus:
-				return ProcessOrderStatusMessage((OrderStatusMessage)message);
-
 			case MessageTypes.ProcessSuspended:
 			{
 				Message[] reMapSubscriptions;
@@ -297,29 +294,12 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 		base.InnerAdapterNewOutMessage(message);
 	}
 
-	private bool ProcessOrderStatusMessage(OrderStatusMessage message)
-	{
-		if (message.HasOrderId())
-			return base.OnSendInMessage(message);
-
-		return ProcessInSubscriptionMessage(message);
-	}
-
 	private bool ProcessInSubscriptionMessage(ISubscriptionMessage message)
-	{
-		return ProcessInSubscriptionMessage(message, message.DataType);
-	}
-
-	private bool ProcessInSubscriptionMessage(ISubscriptionMessage message, DataType dataType)
 	{
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
 
-		if (dataType == null)
-			throw new ArgumentNullException(nameof(dataType));
-
 		var transId = message.TransactionId;
-
 		var isSubscribe = message.IsSubscribe;
 
 		ISubscriptionMessage sendInMsg = null;
@@ -331,35 +311,42 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 		{
 			if (isSubscribe)
 			{
-				if (message.From > DateTimeOffset.UtcNow)
+				if (message.SpecificItemRequest)
 				{
-					message = message.TypedClone();
-					message.From = DateTimeOffset.UtcNow;
-				}
-
-				if (message.From >= message.To)
-				{
-					sendOutMsgs = [message.CreateResult()];
+					sendInMsg = message;
 				}
 				else
 				{
-					if (_replaceId.ContainsKey(transId))
+					if (message.From > DateTimeOffset.UtcNow)
 					{
-						sendInMsg = message;
+						message = message.TypedClone();
+						message.From = DateTimeOffset.UtcNow;
+					}
+
+					if (message.From >= message.To)
+					{
+						sendOutMsgs = [message.CreateResult()];
 					}
 					else
 					{
-						var clone = message.TypedClone();
-
-						if (message.IsHistoryOnly())
-							_historicalRequests.Add(transId, clone);
+						if (_replaceId.ContainsKey(transId))
+						{
+							sendInMsg = message;
+						}
 						else
-							_subscriptionsById.Add(transId, new SubscriptionInfo(clone));
+						{
+							var clone = message.TypedClone();
 
-						sendInMsg = message;
+							if (message.IsHistoryOnly())
+								_historicalRequests.Add(transId, clone);
+							else
+								_subscriptionsById.Add(transId, new SubscriptionInfo(clone));
+
+							sendInMsg = message;
+						}
+
+						isInfoLevel = !_allSecIdChilds.Contains(transId);
 					}
-
-					isInfoLevel = !_allSecIdChilds.Contains(transId);
 				}
 			}
 			else

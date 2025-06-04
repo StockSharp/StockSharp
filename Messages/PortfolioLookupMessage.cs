@@ -32,6 +32,9 @@ public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessa
 	[TypeConverter(typeof(StringToSecurityIdTypeConverter))]
 	public SecurityId? SecurityId { get; set; }
 
+	/// <inheritdoc />
+	public override bool SpecificItemRequest => !StrategyId.IsEmpty();
+
 	/// <summary>
 	/// Create a copy of <see cref="PortfolioLookupMessage"/>.
 	/// </summary>

@@ -59,6 +59,8 @@ public class OrderStatusMessage : OrderCancelMessage, ISubscriptionMessage
 		!PortfolioName.IsEmpty() || Side != null ||
 		Volume != null || !StrategyId.IsEmpty();
 
+	bool ISubscriptionMessage.SpecificItemRequest => this.HasOrderId();
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="OrderStatusMessage"/>.
 	/// </summary>

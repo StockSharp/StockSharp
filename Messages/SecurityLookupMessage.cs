@@ -69,6 +69,8 @@ public class SecurityLookupMessage : SecurityMessage, ISubscriptionMessage, ISec
 	[DataMember]
 	public bool DisableArchive { get; set; }
 
+	bool ISubscriptionMessage.SpecificItemRequest => false;
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="SecurityLookupMessage"/>.
 	/// </summary>

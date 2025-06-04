@@ -15,6 +15,9 @@ public abstract class BaseSubscriptionMessage(MessageTypes type) : Message(type)
 	public virtual bool FilterEnabled => false;
 
 	/// <inheritdoc />
+	public virtual bool SpecificItemRequest => false;
+
+	/// <inheritdoc />
 	[DataMember]
 	public virtual DateTimeOffset? From { get; set; }
 	

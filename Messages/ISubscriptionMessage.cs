@@ -35,6 +35,11 @@ public interface ISubscriptionMessage : ITransactionIdMessage, IOriginalTransact
 	bool FilterEnabled { get; }
 
 	/// <summary>
+	/// Determine whether the message is a request for a specific item (e.g. order, position, etc.) or not.
+	/// </summary>
+	bool SpecificItemRequest { get; }
+
+	/// <summary>
 	/// Start date, from which data needs to be retrieved.
 	/// </summary>
 	DateTimeOffset? From { get; set; }

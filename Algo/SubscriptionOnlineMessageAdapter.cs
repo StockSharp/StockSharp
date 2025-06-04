@@ -104,16 +104,6 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 				return base.OnSendInMessage(message);
 			}
 
-			case MessageTypes.OrderStatus:
-			{
-				var statusMsg = (OrderStatusMessage)message;
-
-				if (statusMsg.HasOrderId())
-					return base.OnSendInMessage(message);
-
-				return ProcessInSubscriptionMessage(statusMsg);
-			}
-
 			default:
 			{
 				if (message is ISubscriptionMessage subscrMsg)
@@ -334,7 +324,6 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 			throw new ArgumentNullException(nameof(message));
 
 		var transId = message.TransactionId;
-
 		var isSubscribe = message.IsSubscribe;
 
 		ISubscriptionMessage sendInMsg = null;
@@ -344,9 +333,9 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 		{
 			if (isSubscribe)
 			{
-				if (message is PortfolioLookupMessage posMsg && !posMsg.StrategyId.IsEmpty())
+				if (message.SpecificItemRequest)
 				{
-					_skipSubscriptions.Add(posMsg.TransactionId);
+					_skipSubscriptions.Add(message.TransactionId);
 					sendInMsg = message;
 				}
 				else if (!message.IsHistoryOnly())

@@ -28,7 +28,7 @@ public enum PortfolioStates
 [DataContract]
 [Serializable]
 public class PortfolioMessage : BaseSubscriptionIdMessage<PortfolioMessage>,
-        ISubscriptionMessage, IPortfolioNameMessage
+	ISubscriptionMessage, IPortfolioNameMessage
 {
 	/// <inheritdoc />
 	[DataMember]
@@ -114,6 +114,9 @@ public class PortfolioMessage : BaseSubscriptionIdMessage<PortfolioMessage>,
 	/// <inheritdoc />
 	[DataMember]
 	public FillGapsDays? FillGaps { get; set; }
+
+	/// <inheritdoc />
+	public virtual bool SpecificItemRequest => false;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="PortfolioMessage"/>.

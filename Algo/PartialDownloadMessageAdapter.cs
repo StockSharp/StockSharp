@@ -205,7 +205,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 
 				if (subscriptionMsg.IsSubscribe)
 				{
-					if (subscriptionMsg is OrderStatusMessage statusMsg && statusMsg.HasOrderId())
+					if (subscriptionMsg.SpecificItemRequest)
 						break;
 
 					var from = subscriptionMsg.From;
