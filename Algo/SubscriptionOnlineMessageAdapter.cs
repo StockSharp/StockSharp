@@ -390,18 +390,11 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 
 							var resultMsg = message.CreateResult();
 
-							if (message.Type == MessageTypes.MarketData)
-							{
-								sendOutMsgs =
-								[
-									message.CreateResponse(),
-									resultMsg,
-								];
-							}
-							else
-							{
-								sendOutMsgs = [resultMsg];
-							}
+							sendOutMsgs =
+							[
+								message.CreateResponse(),
+								resultMsg,
+							];
 
 							info.OnlineSubscribers.Add(transId);
 						}
