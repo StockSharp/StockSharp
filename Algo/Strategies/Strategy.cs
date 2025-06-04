@@ -1720,6 +1720,8 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	{
 		LogInfo(LocalizedStrings.Reset);
 
+		Position[] positions = null;
+
 		if (!KeepStatistics)
 		{
 			StatisticManager.Reset();
@@ -1735,6 +1737,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			_myTrades.Clear();
 			_ordersInfo.Clear();
 
+			positions = _positions.CachedValues;
 			_positions.Clear();
 			_positionManager.Reset();
 		}
@@ -1769,8 +1772,15 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			RaisePnLChanged(time);
 			RaiseCommissionChanged();
 			RaiseLatencyChanged();
-			RaisePositionChanged(time);
 			RaiseSlippageChanged();
+
+			foreach (var position in positions)
+			{
+				position.CurrentValue = 0;
+				_positionChanged?.Invoke(position);
+			}
+
+			RaisePositionChanged(time);
 		}
 	}
 

@@ -144,18 +144,21 @@ public static partial class StrategyHelper
 		{
 			_changed = changed ?? throw new ArgumentNullException(nameof(changed));
 
-			Strategy.PositionChanged += OnPositionChanged;
+			((IPositionProvider)Strategy).PositionChanged += OnPositionChanged;
 		}
 
-		private void OnPositionChanged()
+		private void OnPositionChanged(Position position)
 		{
-			if (_changed(Strategy.Position))
+			if (Strategy.Security != position.Security || Strategy.Portfolio != position.Portfolio)
+				return;
+
+			if (_changed(position.CurrentValue ?? 0))
 				Activate(Strategy.Position);
 		}
 
 		protected override void DisposeManaged()
 		{
-			Strategy.PositionChanged -= OnPositionChanged;
+			((IPositionProvider)Strategy).PositionChanged -= OnPositionChanged;
 			base.DisposeManaged();
 		}
 	}

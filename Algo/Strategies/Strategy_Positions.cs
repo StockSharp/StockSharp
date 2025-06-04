@@ -21,6 +21,7 @@ partial class Strategy
 		}, out var isNew);
 
 		position.ApplyChanges(message);
+		LogInfo(LocalizedStrings.NewPosition, $"{message.SecurityId}/{message.PortfolioName}={position.CurrentValue}");
 
 		if (isNew)
 			_newPosition?.Invoke(position);
@@ -38,8 +39,6 @@ partial class Strategy
 
 	private void RaisePositionChanged(DateTimeOffset time)
 	{
-		LogInfo(LocalizedStrings.NewPosition, _positions.CachedPairs.Select(pos => pos.Key + "=" + pos.Value.CurrentValue).JoinCommaSpace());
-
 		this.Notify(nameof(Position));
 		PositionChanged?.Invoke();
 
@@ -140,13 +139,14 @@ partial class Strategy
 	public decimal Position
 	{
 		get => Security == null || Portfolio == null ? 0m : GetPositionValue(Security, Portfolio) ?? 0;
-		[Obsolete]
-		set	{ }
+		[Obsolete("Use SetPositionValue method.")]
+		set { }
 	}
 
 	/// <summary>
 	/// <see cref="Position"/> change event.
 	/// </summary>
+	[Obsolete("Use IPositionProvider.PositionChanged instead.")]
 	public event Action PositionChanged;
 
 	/// <inheritdoc />
