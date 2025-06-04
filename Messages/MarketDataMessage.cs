@@ -306,6 +306,7 @@ public class MarketDataMessage : SecurityMessage, ISubscriptionMessage, IGenerat
 	public bool DoNotBuildOrderBookIncrement { get; set; }
 
 	bool ISubscriptionMessage.FilterEnabled => false;
+	bool ISubscriptionMessage.SpecificItemRequest => false;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MarketDataMessage"/>.

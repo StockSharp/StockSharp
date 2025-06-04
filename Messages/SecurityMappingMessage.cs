@@ -35,6 +35,7 @@ public class SecurityMappingMessage : Message, ISubscriptionMessage
 	FillGapsDays? ISubscriptionMessage.FillGaps { get; set; }
 
 	bool ISubscriptionMessage.FilterEnabled => false;
+	bool ISubscriptionMessage.SpecificItemRequest => false;
 
 	DateTimeOffset? ISubscriptionMessage.From
 	{

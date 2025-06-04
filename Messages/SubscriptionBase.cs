@@ -62,6 +62,9 @@ public abstract class SubscriptionBase<TSubscription> : Cloneable<TSubscription>
 	public bool FilterEnabled => SubscriptionMessage.FilterEnabled;
 
 	/// <inheritdoc />
+	public bool SpecificItemRequest => SubscriptionMessage.SpecificItemRequest;
+
+	/// <inheritdoc />
 	public bool IsSubscribe
 	{
 		get => SubscriptionMessage.IsSubscribe;
