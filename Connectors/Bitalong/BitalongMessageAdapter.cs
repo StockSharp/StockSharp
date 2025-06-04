@@ -17,7 +17,6 @@ public partial class BitalongMessageAdapter
 
 		this.AddMarketDataSupport();
 		this.AddTransactionalSupport();
-		this.RemoveSupportedMessage(MessageTypes.Portfolio);
 		this.RemoveSupportedMessage(MessageTypes.OrderReplace);
 
 		this.AddSupportedMarketDataType(DataType.Ticks);

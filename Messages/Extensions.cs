@@ -353,10 +353,6 @@ public static partial class Extensions
 		MessageTypes.OrderStatus,
 		MessageTypes.OrderGroupCancel,
 		MessageTypes.OrderReplace,
-#pragma warning disable CS0612 // Type or member is obsolete
-		MessageTypes.OrderPairReplace,
-#pragma warning restore CS0612 // Type or member is obsolete
-		MessageTypes.Portfolio,
 		MessageTypes.PortfolioLookup
 	]);
 
