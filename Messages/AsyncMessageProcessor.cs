@@ -70,7 +70,11 @@ class AsyncMessageProcessor : Disposable
 	protected override void DisposeManaged()
 	{
 		base.DisposeManaged();
+
 		_processMessageEvt.Set();
+
+		_globalCts?.Cancel();
+		_globalCts?.Dispose();
 	}
 
 	/// <summary>
