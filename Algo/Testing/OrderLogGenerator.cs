@@ -160,37 +160,30 @@ public class OrderLogGenerator : MarketDataGenerator
 		{
 			var activeOrder = _activeOrders.Peek();
 
-			item = activeOrder.TypedClone();
-			item.ServerTime = time;
-
-			var isMatched = action == 5;
-
 			ExecutionMessage trade = null;
 
+			var isMatched = action == 5;
 			if (isMatched)
 				trade = (ExecutionMessage)TradeGenerator.Process(message);
 
-			if (isMatched && trade != null)
+			if (trade != null)
 			{
-				item.OrderVolume = RandomGen.GetInt(1, (int)activeOrder.SafeGetVolume());
+				item = activeOrder.TypedClone();
+				item.ServerTime = time;
+
+				item.TradeVolume = RandomGen.GetInt(1, (int)activeOrder.SafeGetVolume());
 
 				item.TradeId = trade.TradeId;
 				item.TradePrice = trade.TradePrice;
 				item.TradeStatus = trade.TradeStatus;
 
-				// TODO
-				//quote.Trade = TradeGenerator.Generate(time);
-				//item.Volume = activeOrder.Volume;
+				activeOrder.OrderVolume -= item.TradeVolume;
 
-				//if (item.Side == Sides.Buy && quote.Trade.Price > quote.Order.Price)
-				//	item.TradePrice = item.Price;
-				//else if (item.Side == Sides.Sell && quote.Trade.Price < quote.Order.Price)
-				//	item.TradePrice = item.Price;
-
-				activeOrder.OrderVolume -= item.OrderVolume;
-
-				if (activeOrder.OrderVolume == 0)
+				if (activeOrder.OrderVolume <= 0)
 				{
+					if (activeOrder.OrderVolume < 0)
+						item.TradeVolume += activeOrder.OrderVolume;
+
 					item.OrderState = OrderStates.Done;
 					_activeOrders.Dequeue();
 				}
@@ -198,10 +191,7 @@ public class OrderLogGenerator : MarketDataGenerator
 					item.OrderState = OrderStates.Active;
 			}
 			else
-			{
-				item.OrderState = OrderStates.Done;
-				_activeOrders.Dequeue();
-			}
+				item = null;
 		}
 
 		LastGenerationTime = time;
