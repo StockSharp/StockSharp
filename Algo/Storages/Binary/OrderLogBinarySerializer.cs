@@ -144,7 +144,7 @@ class OrderLogMetaInfo(DateTime date) : BinaryMetaInfo(date)
 	}
 }
 
-class OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<ExecutionMessage, OrderLogMetaInfo>(securityId, DataType.OrderLog, 200, MarketDataVersions.Version58, exchangeInfoProvider)
+class OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<ExecutionMessage, OrderLogMetaInfo>(securityId, DataType.OrderLog, 200, MarketDataVersions.Version59, exchangeInfoProvider)
 {
 	protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, OrderLogMetaInfo metaInfo)
 	{
@@ -170,6 +170,7 @@ class OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exch
 		var useLong = metaInfo.Version >= MarketDataVersions.Version57;
 		var largeDecimal = metaInfo.Version >= MarketDataVersions.Version57;
 		var stringId = metaInfo.Version >= MarketDataVersions.Version58;
+		var splitVol = metaInfo.Version >= MarketDataVersions.Version59;
 
 		foreach (var message in messages)
 		{
@@ -190,10 +191,6 @@ class OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exch
 			// ticks for spreads may be a zero cost or less than zero
 			//if (item.Price < 0)
 			//	throw new ArgumentOutOfRangeException();
-
-			var volume = message.SafeGetVolume();
-			if (volume <= 0 && message.OrderState != OrderStates.Done)
-				throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.WrongOrderVolume.Put(message.TransactionId));
 
 			long? tradeId = null;
 
@@ -242,8 +239,33 @@ class OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exch
 				}
 			}
 
-			writer.WriteVolume(volume, metaInfo, largeDecimal);
+			if (splitVol)
+			{
+				if (message.OrderVolume is decimal ov)
+				{
+					writer.Write(true);
+					writer.WriteVolume(ov, metaInfo, largeDecimal);
+				}
+				else
+					writer.Write(false);
 
+				if (message.TradeVolume is decimal tv)
+				{
+					writer.Write(true);
+					writer.WriteVolume(tv, metaInfo, largeDecimal);
+				}
+				else
+					writer.Write(false);
+			}
+			else
+			{
+				var volume = message.SafeGetVolume();
+				if (volume <= 0 && message.OrderState != OrderStates.Done)
+					throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.WrongOrderVolume.Put(message.TransactionId));
+
+				writer.WriteVolume(volume, metaInfo, largeDecimal);
+			}
+			
 			writer.Write(message.Side == Sides.Buy);
 
 			var lastOffset = metaInfo.LastServerOffset;
@@ -428,6 +450,7 @@ class OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exch
 		var useLong = metaInfo.Version >= MarketDataVersions.Version57;
 		var largeDecimal = metaInfo.Version >= MarketDataVersions.Version57;
 		var stringId = metaInfo.Version >= MarketDataVersions.Version58;
+		var splitVol = metaInfo.Version >= MarketDataVersions.Version59;
 
 		metaInfo.FirstOrderId += reader.ReadLong();
 
@@ -449,7 +472,21 @@ class OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exch
 				price = metaInfo.FirstFractionalPrice = reader.ReadDecimal(metaInfo.FirstFractionalPrice);
 		}
 
-		var volume = reader.ReadVolume(metaInfo, largeDecimal);
+		decimal? orderVolume = null;
+		decimal? tradeVolume = null;
+
+		if (splitVol)
+		{
+			if (reader.Read())
+				orderVolume = reader.ReadVolume(metaInfo, largeDecimal);
+
+			if (reader.Read())
+				tradeVolume = reader.ReadVolume(metaInfo, largeDecimal);
+		}
+		else
+		{
+			orderVolume = reader.ReadVolume(metaInfo, largeDecimal);
+		}
 
 		var orderDirection = reader.Read() ? Sides.Buy : Sides.Sell;
 
@@ -465,7 +502,8 @@ class OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exch
 			DataTypeEx = DataType.OrderLog,
 			SecurityId = SecurityId,
 			OrderId = metaInfo.FirstOrderId,
-			OrderVolume = volume,
+			OrderVolume = orderVolume,
+			TradeVolume = tradeVolume,
 			Side = orderDirection,
 			ServerTime = serverTime,
 			OrderPrice = price,

@@ -10,7 +10,6 @@ namespace StockSharp.Algo.Storages.Csv;
 /// <param name="encoding">Encoding.</param>
 public class OrderLogCsvSerializer(SecurityId securityId, Encoding encoding = null) : CsvMarketDataSerializer<ExecutionMessage>(securityId, encoding)
 {
-
 	/// <inheritdoc />
 	public override IMarketDataMetaInfo CreateMetaInfo(DateTime date)
 	{
@@ -46,6 +45,7 @@ public class OrderLogCsvSerializer(SecurityId securityId, Encoding encoding = nu
 			data.TradeStatus.ToString(),
 			data.OpenInterest.ToString(),
 			data.OriginSide.To<int?>().ToString(),
+			data.TradeVolume.ToString()
 		]);
 
 		metaInfo.LastTime = data.ServerTime.UtcDateTime;
@@ -93,6 +93,9 @@ public class OrderLogCsvSerializer(SecurityId securityId, Encoding encoding = nu
 			ol.OpenInterest = reader.ReadNullableDecimal();
 			ol.OriginSide = reader.ReadNullableEnum<Sides>();
 		}
+
+		if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+			ol.TradeVolume = reader.ReadNullableDecimal();
 
 		return ol;
 	}
