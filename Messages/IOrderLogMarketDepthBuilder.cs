@@ -119,37 +119,34 @@ public class OrderLogMarketDepthBuilder : IOrderLogMarketDepthBuilder
 		}
 		else if (item.IsOrderLogMatched())
 		{
-			var volume = item.TradeVolume ?? item.OrderVolume;
+			var volume = item.TradeVolume.Value;
 
-			if (volume != null)
+			QuoteChange? ProcessMatched<T>(T id, Dictionary<T, decimal> orders)
 			{
-				QuoteChange? ProcessMatched<T>(T id, Dictionary<T, decimal> orders)
+				if (orders.TryGetValue(id, out var prevVolume))
 				{
-					if (orders.TryGetValue(id, out var prevVolume))
+					orders[id] = prevVolume - volume;
+
+					if (quotes.TryGetValue(item.OrderPrice, out var quote))
 					{
-						orders[id] = prevVolume - volume.Value;
+						quote.Volume -= volume;
 
-						if (quotes.TryGetValue(item.OrderPrice, out var quote))
-						{
-							quote.Volume -= volume.Value;
+						if (quote.Volume <= 0)
+							quotes.Remove(item.OrderPrice);
+						else
+							quotes[item.OrderPrice] = quote;
 
-							if (quote.Volume <= 0)
-								quotes.Remove(item.OrderPrice);
-							else
-								quotes[item.OrderPrice] = quote;
-
-							return quote;
-						}
+						return quote;
 					}
-
-					return null;
 				}
 
-				if (item.OrderId != null)
-					changedQuote = ProcessMatched(item.OrderId.Value, _ordersByNum);
-				else if (!item.OrderStringId.IsEmpty())
-					changedQuote = ProcessMatched(item.OrderStringId, _ordersByString);
+				return null;
 			}
+
+			if (item.OrderId != null)
+				changedQuote = ProcessMatched(item.OrderId.Value, _ordersByNum);
+			else if (!item.OrderStringId.IsEmpty())
+				changedQuote = ProcessMatched(item.OrderStringId, _ordersByString);
 		}
 		else if (item.IsOrderLogCanceled())
 		{
