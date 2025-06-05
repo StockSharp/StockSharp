@@ -18,7 +18,7 @@ public interface IFillGapsBehaviour
 }
 
 /// <summary>
-/// Implementation is <see cref="IFillGapsBehaviour"/> uses storage information.
+/// Implementation of <see cref="IFillGapsBehaviour"/> that uses storage information.
 /// </summary>
 /// <remarks>
 /// Initializes a new instance of the <see cref="StorageFillGapsBehaviour"/>.
