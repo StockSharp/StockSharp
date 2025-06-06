@@ -539,13 +539,12 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 	public virtual bool IsSecurityRequired(DataType dataType) => dataType.IsSecurityRequired;
 
 	/// <inheritdoc />
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.ChannelsKey,
-		Description = LocalizedStrings.UseChannelsKey,
-		GroupName = LocalizedStrings.AdaptersKey,
-		Order = 303)]
-	public virtual bool UseChannels { get; set; }
+	[Browsable(false)]
+	public virtual bool UseInChannel => false;
+
+	/// <inheritdoc />
+	[Browsable(false)]
+	public virtual bool UseOutChannel => true;
 
 	/// <inheritdoc />
 	[Display(
@@ -594,7 +593,6 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 			ReConnectionSettings.Load(storage, nameof(ReConnectionSettings));
 
 		EnqueueSubscriptions = storage.GetValue(nameof(EnqueueSubscriptions), EnqueueSubscriptions);
-		UseChannels = storage.GetValue(nameof(UseChannels), UseChannels);
 		IterationInterval = storage.GetValue(nameof(IterationInterval), IterationInterval);
 
 		base.Load(storage);
@@ -608,7 +606,6 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 		storage.SetValue(nameof(SupportedInMessages), Do.Invariant(() => SupportedInMessages.Select(t => t.To<string>()).ToArray()));
 		storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
 		storage.SetValue(nameof(EnqueueSubscriptions), EnqueueSubscriptions);
-		storage.SetValue(nameof(UseChannels), UseChannels);
 		storage.SetValue(nameof(IterationInterval), IterationInterval);
 
 		base.Save(storage);

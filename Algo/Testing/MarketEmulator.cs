@@ -3658,7 +3658,8 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	bool IMessageAdapter.IsAutoReplyOnTransactonalUnsubscription => true;
 	bool IMessageAdapter.EnqueueSubscriptions { get; set; }
 	bool IMessageAdapter.IsSupportTransactionLog => false;
-	bool IMessageAdapter.UseChannels => false;
+	bool IMessageAdapter.UseInChannel => false;
+	bool IMessageAdapter.UseOutChannel => false;
 	TimeSpan IMessageAdapter.IterationInterval => default;
 	string IMessageAdapter.FeatureName => string.Empty;
 	string[] IMessageAdapter.AssociatedBoards => [];

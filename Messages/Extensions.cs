@@ -5673,4 +5673,17 @@ public static partial class Extensions
 		else
 			return str.To<MessageTypes>();
 	}
+
+	/// <summary>
+	/// To check, whether the message adapter uses channels.
+	/// </summary>
+	/// <param name="adapter"><see cref="IMessageAdapter"/></param>
+	/// <returns>Check result.</returns>
+	public static bool UseChannels(this IMessageAdapter adapter)
+	{
+		if (adapter is null)
+			throw new ArgumentNullException(nameof(adapter));
+
+		return adapter.UseInChannel || adapter.UseOutChannel;
+	}
 }

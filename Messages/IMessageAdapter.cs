@@ -223,7 +223,12 @@ public interface IMessageAdapter : IMessageChannel, IPersistable, ILogReceiver
 	/// <summary>
 	/// Use channels for in and out messages.
 	/// </summary>
-	bool UseChannels { get; }
+	bool UseInChannel { get; }
+
+	/// <summary>
+	/// Use channels for in and out messages.
+	/// </summary>
+	bool UseOutChannel { get; }
 
 	/// <summary>
 	/// Feature name.

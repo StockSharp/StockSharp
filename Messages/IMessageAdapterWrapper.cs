@@ -333,7 +333,8 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageChannel>, IMessa
 		set => InnerAdapter.EnqueueSubscriptions = value;
 	}
 
-	bool IMessageAdapter.UseChannels => InnerAdapter.UseChannels;
+	bool IMessageAdapter.UseInChannel => InnerAdapter.UseInChannel;
+	bool IMessageAdapter.UseOutChannel => InnerAdapter.UseOutChannel;
 
 	TimeSpan IMessageAdapter.IterationInterval => InnerAdapter.IterationInterval;
 

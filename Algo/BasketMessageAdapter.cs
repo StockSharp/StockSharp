@@ -735,7 +735,10 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	public StorageProcessor StorageProcessor { get; }
 
 	/// <inheritdoc />
-	public bool UseChannels { get; set; } = true;
+	public bool UseInChannel { get; set; } = true;
+
+	/// <inheritdoc />
+	public bool UseOutChannel { get; set; } = true;
 
 	/// <summary>
 	/// <see cref="IFillGapsBehaviour"/>
@@ -822,11 +825,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		if (IgnoreExtraAdapters)
 			return adapter;
 
-		if (UseChannels && adapter.UseChannels)
+		if (this.UseChannels() && adapter.UseChannels())
 		{
 			adapter = ApplyOwnInner(new ChannelMessageAdapter(adapter,
-				new InMemoryMessageChannel(new MessageByOrderQueue(), $"{adapter} In", SendOutError),
-				new InMemoryMessageChannel(new MessageByOrderQueue(), $"{adapter} Out", SendOutError)));
+				adapter.UseInChannel ? new InMemoryMessageChannel(new MessageByOrderQueue(), $"{adapter} In", SendOutError) : new PassThroughMessageChannel(),
+				adapter.UseOutChannel ? new InMemoryMessageChannel(new MessageByOrderQueue(), $"{adapter} Out", SendOutError) : new PassThroughMessageChannel()
+			));
 		}
 
 		if (LatencyManager != null)
@@ -2121,7 +2125,8 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			IgnoreExtraAdapters = IgnoreExtraAdapters,
 			NativeIdStorage = NativeIdStorage,
 			ConnectDisconnectEventOnFirstAdapter = ConnectDisconnectEventOnFirstAdapter,
-			UseChannels = UseChannels,
+			UseInChannel = UseInChannel,
+			UseOutChannel = UseOutChannel,
 			IsSupportTransactionLog = IsSupportTransactionLog,
 			IsSupportPositionEmulation = IsSupportPositionEmulation,
 			FillGapsBehaviour = FillGapsBehaviour,
