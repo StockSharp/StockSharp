@@ -117,7 +117,7 @@ partial class Connector
 			if (_inMessageChannel != null)
 			{
 				_inMessageChannel.NewOutMessage -= InMessageChannelOnNewOutMessage;
-				_inMessageChannel?.Dispose();
+				_inMessageChannel.Dispose();
 			}
 
 			_inMessageChannel = value;
@@ -143,7 +143,7 @@ partial class Connector
 			if (_outMessageChannel != null)
 			{
 				_outMessageChannel.NewOutMessage -= OutMessageChannelOnNewOutMessage;
-				_outMessageChannel?.Dispose();
+				_outMessageChannel.Dispose();
 			}
 
 			_outMessageChannel = value;
