@@ -3,6 +3,7 @@
 /// <summary>
 /// Subscription.
 /// </summary>
+/// <typeparam name="TSubscription">The type of the subscription message. It must implement <see cref="ISubscriptionMessage"/> interface.</typeparam>
 public abstract class SubscriptionBase<TSubscription> : Cloneable<TSubscription>, ISubscriptionMessage
 	where TSubscription : SubscriptionBase<TSubscription>
 {
