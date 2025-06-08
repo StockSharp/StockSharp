@@ -17,7 +17,7 @@ public static class AsmInit
 		ConfigManager.RegisterService<ISecurityProvider>(new CollectionSecurityProvider());
 		ConfigManager.RegisterService<IExchangeInfoProvider>(new InMemoryExchangeInfoProvider());
 
-		AsyncContext.Run(() => CompilationExtensions.Init(Helper.LogManager.Application, [("designer_extensions.py", File.ReadAllText("../../../../Algo.Compilation/designer_extensions.py"))], default));
+		AsyncContext.Run(() => CompilationExtensions.Init(Helper.LogManager.Application, [("designer_extensions.py", File.ReadAllText("../../../../Diagram.Core/python/designer_extensions.py"))], default));
 
 		Helper.ClearTemp();
 	}
