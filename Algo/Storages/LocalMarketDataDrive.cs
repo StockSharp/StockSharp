@@ -177,7 +177,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		{
 			try
 			{
-				var reader = new BitArrayReader(File.ReadAllBytes(_datesPath).To<Stream>());
+				var reader = new BitArrayReader(File.ReadAllBytes(_datesPath));
 				
 				// version
 				reader.ReadInt();
@@ -404,13 +404,13 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			{ DataType.CandleRange, _candlesCode + 5 },
 		};
 
-		public void Load(Stream stream)
+		public void Load(byte[] data)
 		{
 			lock (SyncRoot)
 			{
 				Clear();
 
-				var reader = new BitArrayReader(stream);
+				var reader = new BitArrayReader(data);
 
 				var ver = new Version(reader.ReadInt(), reader.ReadInt());
 
@@ -703,7 +703,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			try
 			{
 				index = new();
-				index.Load(File.ReadAllBytes(IndexFullPath).To<Stream>());
+				index.Load(File.ReadAllBytes(IndexFullPath));
 
 				_index = index;
 			}

@@ -459,8 +459,7 @@ abstract class BinaryMarketDataSerializer<TData, TMetaInfo> : IMarketDataSeriali
 		var typedInfo = (TMetaInfo)metaInfo;
 		CheckVersion(typedInfo, "Load");
 
-		var data = new MemoryStream();
-		stream.CopyTo(data);
+		var data = stream.To<byte[]>();
 		stream.Dispose();
 
 		return new SimpleEnumerable<TData>(() => new MarketDataEnumerator(this, new BitArrayReader(data), typedInfo));
