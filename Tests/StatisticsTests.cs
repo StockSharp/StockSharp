@@ -1169,6 +1169,78 @@ public class StatisticsTests
 	}
 
 	[TestMethod]
+	public void AverageDrawdown_ComplexCases()
+	{
+		var parameter = new AverageDrawdownParameter();
+		var t = DateTimeOffset.UtcNow;
+
+		// Case 1: Standard drawdown and recovery
+		parameter.Add(t, 1000m, null); // New peak
+		parameter.Add(t, 900m, null);  // Start of drawdown (down 100)
+		parameter.Add(t, 950m, null);  // Partial recovery
+		parameter.Add(t, 1000m, null); // Full recovery to previous peak (drawdown fixed)
+
+		// Expect: Only one drawdown of 100
+		parameter.Value.AreEqual(100m);
+
+		parameter.Reset();
+
+		// Case 2: Minimum inside drawdown is lower than last value before recovery
+		parameter.Add(t, 1000m, null); // Peak
+		parameter.Add(t, 800m, null);  // Deepest value in drawdown
+		parameter.Add(t, 900m, null);  // Recovery, but not to peak
+		parameter.Add(t, 950m, null);  // More recovery
+		parameter.Add(t, 1000m, null); // Full recovery (drawdown should be from 1000 to 800)
+
+		// If your logic only captures the last value, result will be 1000-950=50,
+		// but the canonical logic expects 200 (1000-800).
+		parameter.Value.AreEqual(200m);
+
+		parameter.Reset();
+
+		// Case 3: Two separate drawdowns
+		parameter.Add(t, 1000m, null); // Peak
+		parameter.Add(t, 900m, null);  // First drawdown
+		parameter.Add(t, 1000m, null); // Recovery
+		parameter.Add(t, 800m, null);  // Second drawdown
+		parameter.Add(t, 1000m, null); // Recovery
+
+		// Expect: Average of 100 (first) and 200 (second) = 150
+		parameter.Value.AreEqual(150m);
+
+		parameter.Reset();
+
+		// Case 4: Drawdown not yet recovered (unfinished)
+		parameter.Add(t, 1000m, null); // Peak
+		parameter.Add(t, 900m, null);  // Start drawdown
+		parameter.Add(t, 800m, null);  // Gets deeper
+		parameter.Add(t, 850m, null);  // Partial recovery, but not to peak
+
+		// Expect: Current unfinished drawdown is from 1000 to 800 (200)
+		parameter.Value.AreEqual(200m);
+
+		parameter.Reset();
+
+		// Case 5: Multiple peaks, no drawdown
+		parameter.Add(t, 1000m, null);
+		parameter.Add(t, 1000m, null);
+		parameter.Add(t, 1000m, null);
+
+		// Expect: No drawdown, average is zero
+		parameter.Value.AreEqual(0m);
+
+		parameter.Reset();
+
+		// Case 6: Sharp drop, then immediate new peak
+		parameter.Add(t, 1000m, null);
+		parameter.Add(t, 700m, null);   // Drop
+		parameter.Add(t, 1200m, null);  // New peak right after
+
+		// Expect: Drawdown from 1000 to 700 = 300
+		parameter.Value.AreEqual(300m);
+	}
+
+	[TestMethod]
 	public void Expectancy()
 	{
 		// Arrange

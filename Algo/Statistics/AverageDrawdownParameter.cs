@@ -17,6 +17,7 @@ public class AverageDrawdownParameter : BasePnLStatisticParameter<decimal>
 	private decimal _drawdownStart;
 	private bool _inDrawdown;
 
+	private decimal _minEquityDuringDrawdown;
 	private int _drawdownCount;
 	private decimal _drawdownSum;
 
@@ -36,6 +37,7 @@ public class AverageDrawdownParameter : BasePnLStatisticParameter<decimal>
 		_drawdownStart = 0;
 		_inDrawdown = false;
 
+		_minEquityDuringDrawdown = decimal.MaxValue;
 		_drawdownCount = 0;
 		_drawdownSum = 0;
 
@@ -51,39 +53,58 @@ public class AverageDrawdownParameter : BasePnLStatisticParameter<decimal>
 		{
 			if (_inDrawdown)
 			{
-				var drawdown = _drawdownStart - _lastEquity;
-
+				var drawdown = _drawdownStart - _minEquityDuringDrawdown;
 				if (drawdown > 0)
 				{
 					_drawdownSum += drawdown;
 					_drawdownCount++;
 				}
-
 				_inDrawdown = false;
 			}
-
 			_maxEquity = equity;
 			_drawdownStart = equity;
+			_minEquityDuringDrawdown = equity;
 		}
 		else if (equity < _maxEquity)
 		{
 			if (!_inDrawdown)
 			{
 				_drawdownStart = _maxEquity;
+				_minEquityDuringDrawdown = equity;
 				_inDrawdown = true;
 			}
+			else
+			{
+				if (equity < _minEquityDuringDrawdown)
+					_minEquityDuringDrawdown = equity;
+			}
+		}
+		else
+		{
+			// equity == _maxEquity: if we were in a drawdown, it ends here
+			if (_inDrawdown)
+			{
+				var drawdown = _drawdownStart - _minEquityDuringDrawdown;
+				if (drawdown > 0)
+				{
+					_drawdownSum += drawdown;
+					_drawdownCount++;
+				}
+				_inDrawdown = false;
+			}
+			_drawdownStart = equity;
+			_minEquityDuringDrawdown = equity;
 		}
 
 		_lastEquity = equity;
 
-		// Compute average including current unfinished drawdown if any
+		// For current value: include unfinished drawdown if any
 		var tempSum = _drawdownSum;
 		var tempCount = _drawdownCount;
 
 		if (_inDrawdown)
 		{
-			var currDrawdown = _drawdownStart - _lastEquity;
-
+			var currDrawdown = _drawdownStart - _minEquityDuringDrawdown;
 			if (currDrawdown > 0)
 			{
 				tempSum += currDrawdown;
@@ -102,9 +123,10 @@ public class AverageDrawdownParameter : BasePnLStatisticParameter<decimal>
 			.Set("MaxEquity", _maxEquity)
 			.Set("DrawdownStart", _drawdownStart)
 			.Set("InDrawdown", _inDrawdown)
+			.Set("MinEquityDuringDrawdown", _minEquityDuringDrawdown)
 			.Set("DrawdownSum", _drawdownSum)
 			.Set("DrawdownCount", _drawdownCount)
-		;
+			;
 
 		base.Save(storage);
 	}
@@ -116,6 +138,7 @@ public class AverageDrawdownParameter : BasePnLStatisticParameter<decimal>
 		_maxEquity = storage.GetValue<decimal>("MaxEquity");
 		_drawdownStart = storage.GetValue<decimal>("DrawdownStart");
 		_inDrawdown = storage.GetValue<bool>("InDrawdown");
+		_minEquityDuringDrawdown = storage.GetValue<decimal>("MinEquityDuringDrawdown");
 		_drawdownSum = storage.GetValue<decimal>("DrawdownSum");
 		_drawdownCount = storage.GetValue<int>("DrawdownCount");
 
