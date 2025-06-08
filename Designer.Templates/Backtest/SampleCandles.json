@@ -1,0 +1,149 @@
+﻿{
+  "Id": "%NEW_ID%",
+  "Description": "Simple strategy for drawing candles.",
+  "Content": {
+    "Type": "Schema",
+    "Value": {
+      "Version": "1.0",
+      "Type": "Regular",
+      "Scheme": {
+        "SchemaVersion": 1,
+        "Category": "",
+        "DocUrl": "",
+        "Composition": {
+          "Id": "%NEW_ID%",
+          "CanAutoName": true,
+          "Parameters": {
+            "Name": {
+              "Value": "Sample candles"
+            },
+            "d38d579f-a7e2-4e85-81e4-5905b5e95286Value": {}
+          },
+          "TypeId": "d2d7aeb2-ca92-4a88-9f2b-dccb72949af1",
+          "Type": "Regular",
+          "Revision": 1
+        },
+        "Model": {
+          "Nodes": [
+            {
+              "Key": "3",
+              "X": 420.0,
+              "Y": 370.0,
+              "Figure": "Procedure",
+              "TypeId": "3d773273-0cee-4d40-8eef-acded2d07ab8",
+              "Settings": {
+                "Id": "78f8d89d-185a-4b00-b269-2f507cf25848",
+                "CanAutoName": true,
+                "Parameters": {
+                  "Name": {
+                    "Value": "TimeFrameCandle__00-05-00"
+                  },
+                  "Series": {
+                    "Value": {
+                      "type": "StockSharp.Messages.DataType, StockSharp.Messages",
+                      "settings": {
+                        "MessageType": "StockSharp.Messages.TimeFrameCandleMessage, StockSharp.Messages",
+                        "Arg": {
+                          "type": "System.TimeSpan, mscorlib",
+                          "value": "00-05-00"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "Key": "5",
+              "X": 190.0,
+              "Y": 370.0,
+              "Figure": "Procedure",
+              "TypeId": "95b3aefe-23fd-4cee-b49e-09764f2ab2e2",
+              "Settings": {
+                "Id": "d38d579f-a7e2-4e85-81e4-5905b5e95286",
+                "CanAutoName": true,
+                "Parameters": {
+                  "Name": {
+                    "Value": "Security"
+                  },
+                  "Type": {
+                    "Value": {
+                      "Type": "StockSharp.BusinessEntities.Security, StockSharp.BusinessEntities"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "Key": "2",
+              "X": 700.0,
+              "Y": 370.0,
+              "Figure": "Procedure",
+              "TypeId": "1926c40e-aaa3-4948-98e6-fba4b38b580e",
+              "Settings": {
+                "Id": "429b2e9a-0cb1-4f26-b0a1-456f7c30bafd",
+                "CanAutoName": true,
+                "Parameters": {
+                  "Name": {
+                    "Value": "Chart panel"
+                  },
+                  "ElementName": {
+                    "Value": "Chart panel"
+                  },
+                  "AreaName": {
+                    "Value": "Chart panel"
+                  },
+                  "ShowNonFormedIndicators": {
+                    "Value": false
+                  }
+                },
+                "CandleElements": [
+                  {
+                    "Id": "3500d9cf-9731-4d18-8ee5-e00ecf2d707b",
+                    "XAxisId": "X",
+                    "YAxisId": "Y"
+                  }
+                ],
+                "IndicatorElements": [],
+                "OrderElements": [],
+                "TradeElements": [],
+                "XAxes": [
+                  {
+                    "Id": "X",
+                    "Title": "X",
+                    "Group": "CategoryDateTimeX",
+                    "AutoRange": false,
+                    "AxisType": "CategoryDateTime"
+                  }
+                ],
+                "YAxes": [
+                  {
+                    "Id": "Y",
+                    "Title": "Y",
+                    "Group": "NumericY2",
+                    "AutoRange": true,
+                    "AxisType": "Numeric"
+                  }
+                ]
+              }
+            }
+          ],
+          "Links": [
+            {
+              "From": "5",
+              "FromPort": "Output",
+              "To": "3",
+              "ToPort": "Security"
+            },
+            {
+              "From": "3",
+              "FromPort": "Output",
+              "To": "2",
+              "ToPort": "dynsock_3500d9cf97314d188ee5e00ecf2d707b"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

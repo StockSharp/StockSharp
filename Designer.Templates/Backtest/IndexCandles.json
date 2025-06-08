@@ -1,0 +1,392 @@
+﻿{
+  "Id": "%NEW_ID%",
+  "Description": "Sample index candles",
+  "Content": {
+    "Type": "Schema",
+    "Value": {
+      "Version": "1.0",
+      "Type": "Regular",
+      "Scheme": {
+        "SchemaVersion": 1,
+        "Category": "",
+        "DocUrl": "",
+        "Composition": {
+          "Id": "%NEW_ID%",
+          "CanAutoName": true,
+          "Parameters": {
+            "Name": {
+              "Value": "Index candles"
+            },
+            "16eb01be-cda9-43c1-986b-e298de47fe5eValue": {
+              "Value": "RIZ6@FORTS"
+            },
+            "8bc10769-f344-478a-ba67-a7ec8441e55aValue": {
+              "Value": "SIZ6@FORTS"
+            }
+          },
+          "TypeId": "ccdca5d5-ac70-4a96-9129-9908257fd84d",
+          "Type": "Regular",
+          "Revision": 1
+        },
+        "Model": {
+          "Nodes": [
+            {
+              "Key": "4",
+              "X": -140.0,
+              "Y": -180.0,
+              "Figure": "Procedure",
+              "TypeId": "d9f4dd6f-2676-4a3f-a279-1e7acfd44117",
+              "Settings": {
+                "Id": "d212bc8a-e35a-4efb-b458-e9207b7ff798",
+                "CanAutoName": true,
+                "Parameters": {
+                  "Name": {
+                    "Value": "Index"
+                  },
+                  "ElementName": {
+                    "Value": "Index"
+                  },
+                  "Index": {
+                    "Value": "RIZ6@FORTS / SIZ6@FORTS"
+                  },
+                  "CalculateExtended": {
+                    "Value": false
+                  }
+                }
+              }
+            },
+            {
+              "Key": "2",
+              "X": 90.0,
+              "Y": -180.0,
+              "Figure": "Procedure",
+              "TypeId": "3d773273-0cee-4d40-8eef-acded2d07ab8",
+              "Settings": {
+                "Id": "4df4b601-a7c8-4947-928e-8ba89ffea4c5",
+                "CanAutoName": true,
+                "Parameters": {
+                  "Name": {
+                    "Value": "TimeFrameCandle__00-05-00"
+                  },
+                  "Series": {
+                    "Value": {
+                      "type": "StockSharp.Messages.DataType, StockSharp.Messages",
+                      "settings": {
+                        "MessageType": "StockSharp.Messages.TimeFrameCandleMessage, StockSharp.Messages",
+                        "Arg": {
+                          "type": "System.TimeSpan, mscorlib",
+                          "value": "00-05-00"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "Key": "5",
+              "X": 90.0,
+              "Y": -360.0,
+              "Figure": "Procedure",
+              "TypeId": "3d773273-0cee-4d40-8eef-acded2d07ab8",
+              "Settings": {
+                "Id": "d3a89f4e-f2ad-42b7-9385-69a51fe91c88",
+                "CanAutoName": true,
+                "Parameters": {
+                  "Name": {
+                    "Value": "TimeFrameCandle__00-05-00"
+                  },
+                  "Series": {
+                    "Value": {
+                      "type": "StockSharp.Messages.DataType, StockSharp.Messages",
+                      "settings": {
+                        "MessageType": "StockSharp.Messages.TimeFrameCandleMessage, StockSharp.Messages",
+                        "Arg": {
+                          "type": "System.TimeSpan, mscorlib",
+                          "value": "00-05-00"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "Key": "6",
+              "X": -160.0,
+              "Y": -360.0,
+              "Figure": "Procedure",
+              "TypeId": "95b3aefe-23fd-4cee-b49e-09764f2ab2e2",
+              "Settings": {
+                "Id": "16eb01be-cda9-43c1-986b-e298de47fe5e",
+                "CanAutoName": true,
+                "Parameters": {
+                  "Name": {
+                    "Value": "RIZ6@FORTS"
+                  },
+                  "Type": {
+                    "Value": {
+                      "Type": "StockSharp.BusinessEntities.Security, StockSharp.BusinessEntities"
+                    }
+                  },
+                  "Value": {
+                    "Value": "RIZ6@FORTS"
+                  }
+                }
+              }
+            },
+            {
+              "Key": "7",
+              "X": -160.0,
+              "Y": -270.0,
+              "Figure": "Procedure",
+              "TypeId": "95b3aefe-23fd-4cee-b49e-09764f2ab2e2",
+              "Settings": {
+                "Id": "8bc10769-f344-478a-ba67-a7ec8441e55a",
+                "CanAutoName": true,
+                "Parameters": {
+                  "Name": {
+                    "Value": "SIZ6@FORTS"
+                  },
+                  "Type": {
+                    "Value": {
+                      "Type": "StockSharp.BusinessEntities.Security, StockSharp.BusinessEntities"
+                    }
+                  },
+                  "Value": {
+                    "Value": "SIZ6@FORTS"
+                  }
+                }
+              }
+            },
+            {
+              "Key": "8",
+              "X": 90.0,
+              "Y": -270.0,
+              "Figure": "Procedure",
+              "TypeId": "3d773273-0cee-4d40-8eef-acded2d07ab8",
+              "Settings": {
+                "Id": "a9c1c039-f396-46eb-bc97-5f4a581154bf",
+                "CanAutoName": true,
+                "Parameters": {
+                  "Name": {
+                    "Value": "TimeFrameCandle__00-05-00"
+                  },
+                  "Series": {
+                    "Value": {
+                      "type": "StockSharp.Messages.DataType, StockSharp.Messages",
+                      "settings": {
+                        "MessageType": "StockSharp.Messages.TimeFrameCandleMessage, StockSharp.Messages",
+                        "Arg": {
+                          "type": "System.TimeSpan, mscorlib",
+                          "value": "00-05-00"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "Key": "3",
+              "X": 380.0,
+              "Y": -360.0,
+              "Figure": "Procedure",
+              "TypeId": "1926c40e-aaa3-4948-98e6-fba4b38b580e",
+              "Settings": {
+                "Id": "7e678194-b935-413f-83d6-0140094243a2",
+                "CanAutoName": true,
+                "Parameters": {
+                  "Name": {
+                    "Value": "Chart panel"
+                  },
+                  "ElementName": {
+                    "Value": "Chart panel"
+                  },
+                  "AreaName": {
+                    "Value": "Chart panel"
+                  },
+                  "ShowNonFormedIndicators": {
+                    "Value": false
+                  }
+                },
+                "CandleElements": [
+                  {
+                    "Id": "252cf5f8-78e3-4dcd-ba4b-6a810a6b560c",
+                    "XAxisId": "X",
+                    "YAxisId": "Y"
+                  }
+                ],
+                "IndicatorElements": [],
+                "OrderElements": [],
+                "TradeElements": [],
+                "XAxes": [
+                  {
+                    "Id": "X",
+                    "Title": "X",
+                    "Group": "CategoryDateTimeX",
+                    "AutoRange": true,
+                    "AxisType": "CategoryDateTime"
+                  }
+                ],
+                "YAxes": [
+                  {
+                    "Id": "Y",
+                    "Title": "Y",
+                    "Group": "NumericY2",
+                    "AutoRange": true,
+                    "AxisType": "Numeric"
+                  }
+                ]
+              }
+            },
+            {
+              "Key": "9",
+              "X": 380.0,
+              "Y": -270.0,
+              "Figure": "Procedure",
+              "TypeId": "1926c40e-aaa3-4948-98e6-fba4b38b580e",
+              "Settings": {
+                "Id": "6f48e435-5bd0-47fd-8b1b-70aee4dd936f",
+                "CanAutoName": true,
+                "Parameters": {
+                  "Name": {
+                    "Value": "Chart panel"
+                  },
+                  "ElementName": {
+                    "Value": "Chart panel"
+                  },
+                  "AreaName": {
+                    "Value": "Chart panel"
+                  },
+                  "ShowNonFormedIndicators": {
+                    "Value": false
+                  }
+                },
+                "CandleElements": [
+                  {
+                    "Id": "da87cc8b-5a06-47f1-aecc-2e1c76a48122",
+                    "XAxisId": "X",
+                    "YAxisId": "Y"
+                  }
+                ],
+                "IndicatorElements": [],
+                "OrderElements": [],
+                "TradeElements": [],
+                "XAxes": [
+                  {
+                    "Id": "X",
+                    "Title": "X",
+                    "Group": "CategoryDateTimeX",
+                    "AutoRange": true,
+                    "AxisType": "CategoryDateTime"
+                  }
+                ],
+                "YAxes": [
+                  {
+                    "Id": "Y",
+                    "Title": "Y",
+                    "Group": "NumericY2",
+                    "AutoRange": true,
+                    "AxisType": "Numeric"
+                  }
+                ]
+              }
+            },
+            {
+              "Key": "10",
+              "X": 380.0,
+              "Y": -180.0,
+              "Figure": "Procedure",
+              "TypeId": "1926c40e-aaa3-4948-98e6-fba4b38b580e",
+              "Settings": {
+                "Id": "e178a1bf-9023-466f-9690-60f20ed12d43",
+                "CanAutoName": true,
+                "Parameters": {
+                  "Name": {
+                    "Value": "Chart panel"
+                  },
+                  "ElementName": {
+                    "Value": "Chart panel"
+                  },
+                  "AreaName": {
+                    "Value": "Chart panel"
+                  },
+                  "ShowNonFormedIndicators": {
+                    "Value": false
+                  }
+                },
+                "CandleElements": [
+                  {
+                    "Id": "aa07d8e3-936c-4694-a7ff-10fe9f30abc4",
+                    "XAxisId": "X",
+                    "YAxisId": "Y"
+                  }
+                ],
+                "IndicatorElements": [],
+                "OrderElements": [],
+                "TradeElements": [],
+                "XAxes": [
+                  {
+                    "Id": "X",
+                    "Title": "X",
+                    "Group": "CategoryDateTimeX",
+                    "AutoRange": true,
+                    "AxisType": "CategoryDateTime"
+                  }
+                ],
+                "YAxes": [
+                  {
+                    "Id": "Y",
+                    "Title": "Y",
+                    "Group": "NumericY2",
+                    "AutoRange": true,
+                    "AxisType": "Numeric"
+                  }
+                ]
+              }
+            }
+          ],
+          "Links": [
+            {
+              "From": "4",
+              "FromPort": "Security",
+              "To": "2",
+              "ToPort": "Security"
+            },
+            {
+              "From": "6",
+              "FromPort": "Output",
+              "To": "5",
+              "ToPort": "Security"
+            },
+            {
+              "From": "7",
+              "FromPort": "Output",
+              "To": "8",
+              "ToPort": "Security"
+            },
+            {
+              "From": "2",
+              "FromPort": "Output",
+              "To": "10",
+              "ToPort": "dynsock_aa07d8e3936c4694a7ff10fe9f30abc4"
+            },
+            {
+              "From": "8",
+              "FromPort": "Output",
+              "To": "9",
+              "ToPort": "dynsock_da87cc8b5a0647f1aecc2e1c76a48122"
+            },
+            {
+              "From": "5",
+              "FromPort": "Output",
+              "To": "3",
+              "ToPort": "dynsock_252cf5f878e34dcdba4b6a810a6b560c"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
