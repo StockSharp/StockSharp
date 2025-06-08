@@ -244,7 +244,7 @@ public class GeneticSettings : NotifiableObject, IPersistable
 			if (_mutationProbability == value)
 				return;
 
-			_mutationProbability = value > 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+			_mutationProbability = value >= 0 && value <= 1 ? value : throw new ArgumentOutOfRangeException(nameof(value));
 			NotifyChanged();
 		}
 	}
@@ -268,7 +268,7 @@ public class GeneticSettings : NotifiableObject, IPersistable
 			if (_crossoverProbability == value)
 				return;
 
-			_crossoverProbability = value > 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+			_crossoverProbability = value >= 0 && value <= 1 ? value : throw new ArgumentOutOfRangeException(nameof(value));
 			NotifyChanged();
 		}
 	}
