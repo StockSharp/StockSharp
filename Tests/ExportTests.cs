@@ -113,6 +113,6 @@ public class ExportTests
 		Do("txt", f => new TextExporter(dataType, i => false, f, txtTemplate, null));
 		Do("xml", f => new XmlExporter(dataType, i => false, f));
 		Do("json", f => new JsonExporter(dataType, i => false, f));
-		Do("xlsx", f => new ExcelExporter(new DevExpExcelWorkerProvider(), dataType, i => false, f, () => { }));
+		Do("xlsx", f => new ExcelExporter(ServicesRegistry.ExcelProvider, dataType, i => false, f, () => { }));
 	}
 }
