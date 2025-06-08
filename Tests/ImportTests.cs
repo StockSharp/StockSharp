@@ -1,12 +1,7 @@
 namespace StockSharp.Tests;
 
-using Ecng.Common;
-using Ecng.Configuration;
-using StockSharp.Algo;
 using StockSharp.Algo.Export;
 using StockSharp.Algo.Import;
-using StockSharp.Algo.Storages;
-using StockSharp.Messages;
 
 [TestClass]
 public class ImportTests
@@ -23,13 +18,12 @@ public class ImportTests
         for (var i = 0; i < fields.Length; i++)
             fields[i].Order = i;
 
-        var template = string.Join(";", fields.Select(BuildTemplate));
+        var template = fields.Select(BuildTemplate).JoinDotComma();
         var fileName = Helper.GetSubTemp($"{dataType.MessageType.Name}_import.csv");
 
         new TextExporter(dataType, _ => false, fileName, template, null).Export(arr);
 
         var storage = Helper.GetStorage(Helper.GetSubTemp($"{dataType.MessageType.Name}_storage"));
-        ConfigManager.RegisterService<IStorageRegistry>(storage);
 
         var importer = new CsvImporter(dataType, fields, new InMemorySecurityStorage(), ServicesRegistry.EnsureGetExchangeInfoProvider(), storage.DefaultDrive, StorageFormats.Csv);
         var (count, _) = importer.Import(fileName, null, () => false);
@@ -84,9 +78,9 @@ public class ImportTests
         var security = Helper.CreateStorageSecurity();
         var candles = CandleTests.GenerateCandles(security.RandomTicks(100, true), security, CandleTests.PriceRange.Pips(security), CandleTests.TotalTicks, CandleTests.TimeFrame, CandleTests.VolumeRange, CandleTests.BoxSize, CandleTests.PnF(security), true);
 
-        foreach (var group in candles.GroupBy(c => Tuple.Create(c.GetType(), c.Arg)))
+        foreach (var group in candles.GroupBy(c => (type: c.GetType(), arg: c.Arg)))
         {
-            Import(DataType.Create(group.Key.Item1, group.Key.Item2), group.ToArray());
+            Import(DataType.Create(group.Key.type, group.Key.arg), group.ToArray());
         }
     }
 }
