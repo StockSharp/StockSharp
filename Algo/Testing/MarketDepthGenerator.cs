@@ -321,7 +321,7 @@ public class TrendMarketDepthGenerator(SecurityId securityId) : MarketDepthGener
 		if (!canProcess)
 			return null;
 
-		_currGenerations = MaxGenerations;
+		var wasNewTrade = _newTrades;
 
 		var depth = new QuoteChangeMessage
 		{
@@ -402,11 +402,15 @@ public class TrendMarketDepthGenerator(SecurityId securityId) : MarketDepthGener
 		depth.Asks = [.. asks];
 
 		_newTrades = false;
+		LastGenerationTime = time;
 
-		_currGenerations--;
+		if (wasNewTrade)
+			_currGenerations = MaxGenerations;
+		else
+			_currGenerations--;
 
 		return depth;
-	}
+}
 
 	//private static bool IsTickMessage(Message message)
 	//{
