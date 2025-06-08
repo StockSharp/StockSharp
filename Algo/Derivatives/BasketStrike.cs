@@ -79,6 +79,9 @@ public class OffsetBasketStrike(Security underlyingSecurity, ISecurityProvider s
 
 		var centralStrike = allStrikes.GetCentralStrike(assetPrice);
 
+		if (centralStrike == null)
+			return [];
+
 		var callStrikeFrom = centralStrike.Strike + _strikeOffset.Min * _strikeStep;
 		var callStrikeTo = centralStrike.Strike + _strikeOffset.Max * _strikeStep;
 
