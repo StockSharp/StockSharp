@@ -11,7 +11,7 @@ public class ExportTests
 		var security = Helper.CreateStorageSecurity();
 		var ticks = security.RandomTicks(1000, true);
 
-		Export(Messages.DataType.Ticks, ticks, "tick_export", new TemplateTxtRegistry().TemplateTxtTick);
+		Export(DataType.Ticks, ticks, "tick_export", new TemplateTxtRegistry().TemplateTxtTick);
 	}
 
 	[TestMethod]
@@ -20,7 +20,7 @@ public class ExportTests
 		var security = Helper.CreateStorageSecurity();
 		var depths = security.RandomDepths(100, ordersCount: true);
 
-		Export(Messages.DataType.MarketDepth, depths, "depth_export", new TemplateTxtRegistry().TemplateTxtDepth);
+		Export(DataType.MarketDepth, depths, "depth_export", new TemplateTxtRegistry().TemplateTxtDepth);
 	}
 
 	[TestMethod]
@@ -29,7 +29,7 @@ public class ExportTests
 		var security = Helper.CreateStorageSecurity();
 		var ol = security.RandomOrderLog(1000);
 
-		Export(Messages.DataType.OrderLog, ol, "ol_export", new TemplateTxtRegistry().TemplateTxtOrderLog);
+		Export(DataType.OrderLog, ol, "ol_export", new TemplateTxtRegistry().TemplateTxtOrderLog);
 	}
 
 	[TestMethod]
@@ -38,7 +38,7 @@ public class ExportTests
 		var security = Helper.CreateStorageSecurity();
 		var pos = security.RandomPositionChanges(false, 1000);
 
-		Export(Messages.DataType.PositionChanges, pos, "pos_export", new TemplateTxtRegistry().TemplateTxtPositionChange);
+		Export(DataType.PositionChanges, pos, "pos_export", new TemplateTxtRegistry().TemplateTxtPositionChange);
 	}
 
 	[TestMethod]
@@ -46,7 +46,7 @@ public class ExportTests
 	{
 		var news = Helper.RandomNews(false);
 
-		Export(Messages.DataType.News, news, "news_export", new TemplateTxtRegistry().TemplateTxtNews);
+		Export(DataType.News, news, "news_export", new TemplateTxtRegistry().TemplateTxtNews);
 	}
 
 	[TestMethod]
@@ -55,7 +55,7 @@ public class ExportTests
 		var security = Helper.CreateStorageSecurity();
 		var level1 = security.RandomLevel1(count: 1000);
 
-		Export(Messages.DataType.Level1, level1, "level1_export", new TemplateTxtRegistry().TemplateTxtLevel1);
+		Export(DataType.Level1, level1, "level1_export", new TemplateTxtRegistry().TemplateTxtLevel1);
 	}
 
 	[TestMethod]
@@ -68,7 +68,7 @@ public class ExportTests
 		foreach (var group in candles.GroupBy(c => Tuple.Create(c.GetType(), c.Arg)))
 		{
 			var name = $"candles_{group.Key.Item1.Name}_{group.Key.Item2}_export".Replace(":", "_");
-			Export(Messages.DataType.Create(group.Key.Item1, group.Key.Item2), group.ToArray(), name, new TemplateTxtRegistry().TemplateTxtCandle);
+			Export(DataType.Create(group.Key.Item1, group.Key.Item2), group.ToArray(), name, new TemplateTxtRegistry().TemplateTxtCandle);
 		}
 	}
 
@@ -97,7 +97,7 @@ public class ExportTests
 	}
 
 	private static void Export<TValue>(
-		Messages.DataType dataType, IEnumerable<TValue> values,
+		DataType dataType, IEnumerable<TValue> values,
 		string fileNameNoExt, string txtTemplate)
 		where TValue : class
 	{
