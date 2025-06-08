@@ -51,7 +51,7 @@ public interface IChartActiveOrdersElement : IChartElement
 	Color ForegroundColor { get; set; }
 
 	/// <summary>
-	/// Show chart element.
+	/// Whether animation is enabled.
 	/// </summary>
 	bool IsAnimationEnabled { get; set; }
 }

@@ -53,7 +53,7 @@ public interface IChartCandleElement : IChartElement
 	Color? AreaColor { get; set; }
 
 	/// <summary>
-	/// Show Y-axis market.
+	/// Show Y-axis marker.
 	/// </summary>
 	bool ShowAxisMarker { get; set; }
 

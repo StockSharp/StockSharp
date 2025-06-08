@@ -31,7 +31,7 @@ public interface IChartLineElement : IChartElement
 	DrawStyles Style { get; set; }
 
 	/// <summary>
-	/// Show Y-axis market.
+	/// Show Y-axis marker.
 	/// </summary>
 	bool ShowAxisMarker { get; set; }
 }

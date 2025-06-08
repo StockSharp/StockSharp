@@ -1,7 +1,7 @@
 namespace StockSharp.Charting;
 
 /// <summary>
-/// The interface for work with the chart.
+/// Interface for working with charts.
 /// </summary>
 public interface IChart : IChartBuilder, IThemeableChart
 {

@@ -44,5 +44,5 @@ public interface IChartElement : IChartPart<IChartElement>
 	/// <summary>
 	/// The chart area on which the element is drawn.
 	/// </summary>
-	IChartArea PersistantChartArea { get; }
+	IChartArea PersistentChartArea { get; }
 }

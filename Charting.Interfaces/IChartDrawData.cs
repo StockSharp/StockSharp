@@ -42,7 +42,7 @@ public interface IChartDrawData
 		IChartDrawDataItem Add(IChartIndicatorElement element, IIndicatorValue value);
 
 		/// <summary>
-		/// Put the trade data.
+		/// Put the order data.
 		/// </summary>
 		/// <param name="element">The chart element representing orders.</param>
 		/// <param name="orderId">Order ID.</param>
@@ -122,7 +122,7 @@ public interface IChartDrawData
 	/// <param name="order">The order. Can be null to draw just error animation without data.</param>
 	/// <param name="isFrozen">Do not allow user to edit the order from chart.</param>
 	/// <param name="autoRemoveFromChart">Auto remove this order from chart when its state is final (<see cref="OrderStates.Done"/>, <see cref="OrderStates.Failed"/>).</param>
-	/// <param name="isHidden">Whether an order operation has failed.</param>
+	/// <param name="isHidden">Whether the order element should be hidden.</param>
 	/// <param name="isError">Whether an order operation has failed.</param>
 	/// <param name="price">Order price.</param>
 	/// <param name="balance">Balance.</param>

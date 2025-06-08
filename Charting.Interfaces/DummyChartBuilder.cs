@@ -267,7 +267,6 @@ public class DummyChartBuilder : IChartBuilder
 			LineColor = storage.GetValue<int?>(nameof(LineColor))?.ToColor();
 			AreaColor = storage.GetValue<int?>(nameof(AreaColor))?.ToColor();
 
-			DrawStyle = storage.GetValue<ChartCandleDrawStyles>(nameof(DrawStyle));
 			StrokeThickness = storage.GetValue<int>(nameof(StrokeThickness));
 			AntiAliasing = storage.GetValue<bool>(nameof(AntiAliasing));
 			ShowAxisMarker = storage.GetValue<bool>(nameof(ShowAxisMarker));
