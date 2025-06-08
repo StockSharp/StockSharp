@@ -87,7 +87,7 @@ public abstract class MarketDataGenerator : Cloneable<MarketDataGenerator>
 	private int _minVolume;
 
 	/// <summary>
-	/// The maximal volume. The volume will be selected randomly from <see cref="MinVolume"/> to <see cref="MaxVolume"/>.
+	/// The minimal volume. The volume will be selected randomly from <see cref="MinVolume"/> to <see cref="MaxVolume"/>.
 	/// </summary>
 	/// <remarks>
 	/// The default value is 1.

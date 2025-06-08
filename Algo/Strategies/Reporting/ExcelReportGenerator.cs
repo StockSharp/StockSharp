@@ -9,14 +9,14 @@ using Ecng.Interop;
 /// Initializes a new instance of the <see cref="ExcelReportGenerator"/>.
 /// </remarks>
 /// <param name="provider"><see cref="IExcelWorkerProvider"/>.</param>
-public class ExcelReportGenerator(IExcelWorkerProvider provider) : BaseReportGenerator
+public class ExcelReportGenerator(IExcelWorkerProvider provider, string template = null) : BaseReportGenerator
 {
 	private readonly IExcelWorkerProvider _provider = provider ?? throw new ArgumentNullException(nameof(provider));
 
 	/// <summary>
 	/// The template file, to be copied into report and filled up with Strategy, Orders and Trades sheets.
 	/// </summary>
-	public string Template { get; }
+	public string Template { get; } = template;
 
 	/// <summary>
 	/// The number of decimal places. By default, it equals to 2.
@@ -27,7 +27,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider) : BaseReportGen
 	public override string Name => "EXCEL";
 
 	/// <inheritdoc />
-	public override string Extension => "xslx";
+	public override string Extension => "xlsx";
 
 	/// <inheritdoc />
 	public override ValueTask Generate(Strategy strategy, string fileName, CancellationToken cancellationToken)
@@ -37,7 +37,8 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider) : BaseReportGen
 		if (hasTemplate)
 			File.Copy(Template, fileName);
 
-		using var stream = new FileStream(fileName, FileMode.Create, FileAccess.Write);
+		var mode = hasTemplate ? FileMode.Open : FileMode.Create;
+		using var stream = new FileStream(fileName, mode, FileAccess.ReadWrite);
 		using var worker = hasTemplate ? _provider.OpenExist(stream) : _provider.CreateNew(stream);
 
 		if (Template.IsEmpty())
@@ -138,8 +139,8 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider) : BaseReportGen
 				.SetCell(columnShift + 7, 1, LocalizedStrings.Order).SetStyle(columnShift + 7, typeof(long))
 				.SetCell(columnShift + 8, 1, LocalizedStrings.Slippage).SetStyle(columnShift + 8, typeof(decimal))
 				.SetCell(columnShift + 9, 1, LocalizedStrings.Comment)
-				.SetCell(columnShift + 10, 1, LocalizedStrings.PnL).SetStyle(columnShift + 11, typeof(decimal))
-				.SetCell(columnShift + 14, 1, LocalizedStrings.Position).SetStyle(columnShift + 15, typeof(decimal));
+				.SetCell(columnShift + 10, 1, LocalizedStrings.PnL).SetStyle(columnShift + 10, typeof(decimal))
+				.SetCell(columnShift + 14, 1, LocalizedStrings.Position).SetStyle(columnShift + 14, typeof(decimal));
 
 			//worker
 			//	.SetConditionalFormatting(columnShift + 10, ComparisonOperator.Less, "0", null, Colors.Red)
@@ -200,7 +201,8 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider) : BaseReportGen
 				.SetCell(columnShift + 11, 1, LocalizedStrings.Type)
 				.SetCell(columnShift + 12, 1, LocalizedStrings.LatencyReg)
 				.SetCell(columnShift + 13, 1, LocalizedStrings.LatencyCancel)
-				.SetCell(columnShift + 14, 1, LocalizedStrings.Comment);
+				.SetCell(columnShift + 14, 1, LocalizedStrings.EditionLatency)
+				.SetCell(columnShift + 15, 1, LocalizedStrings.Comment);
 
 			//worker
 			//	.SetConditionalFormatting(columnShift + 8, ComparisonOperator.Equal, "\"{0}\"".Put(LocalizedStrings.Cancelled), null, Colors.Green)
@@ -224,9 +226,12 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider) : BaseReportGen
 					.SetCell(columnShift + 9, rowIndex, order.Balance)
 					.SetCell(columnShift + 10, rowIndex, order.Volume)
 					.SetCell(columnShift + 11, rowIndex, order.Type.GetDisplayName())
-					.SetCell(columnShift + 14, rowIndex, order.Comment);
+					.SetCell(columnShift + 12, rowIndex, order.LatencyRegistration.Format())
+					.SetCell(columnShift + 13, rowIndex, order.LatencyCancellation.Format())
+					.SetCell(columnShift + 14, rowIndex, order.LatencyEdition.Format())
+					.SetCell(columnShift + 15, rowIndex, order.Comment);
 
-				rowIndex++;
+					rowIndex++;
 			}
 		}
 
