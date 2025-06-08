@@ -197,7 +197,6 @@ public class DatabaseExporter : BaseExporter
 			.Property(m => m.CloseTime)
 			.Property(m => m.HighTime)
 			.Property(m => m.LowTime)
-			.Property(m => m.CloseTime)
 			.Property(m => m.OpenPrice).HasScale(priceScale)
 			.Property(m => m.HighPrice).HasScale(priceScale)
 			.Property(m => m.LowPrice).HasScale(priceScale)
@@ -408,7 +407,7 @@ public class DatabaseExporter : BaseExporter
 
 			.Property(m => m.TradeId).HasLength(32)
 			.Property(m => m.TradePrice).HasScale(priceScale)
-			.Property(m => m.TradeVolume).HasScale(priceScale)
+			.Property(m => m.TradeVolume).HasScale(volScale)
 			.Property(m => m.OpenInterest).HasScale(volScale)
 			.Property(m => m.OriginSide)
 			.Property(m => m.TradeStatus)
