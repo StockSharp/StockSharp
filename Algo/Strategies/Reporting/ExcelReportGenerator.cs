@@ -9,6 +9,7 @@ using Ecng.Interop;
 /// Initializes a new instance of the <see cref="ExcelReportGenerator"/>.
 /// </remarks>
 /// <param name="provider"><see cref="IExcelWorkerProvider"/>.</param>
+/// <param name="template"><see cref="Template"/></param>
 public class ExcelReportGenerator(IExcelWorkerProvider provider, string template = null) : BaseReportGenerator
 {
 	private readonly IExcelWorkerProvider _provider = provider ?? throw new ArgumentNullException(nameof(provider));

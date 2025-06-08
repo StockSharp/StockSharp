@@ -46,7 +46,7 @@ public class DummyChartBuilder : IChartBuilder
 		Func<IComparable, Color?> IChartElement.Colorer { get; set; }
 
 		public IChartArea ChartArea { get; set; }
-		IChartArea IChartElement.PersistantChartArea => throw new NotSupportedException();
+		IChartArea IChartElement.PersistentChartArea => throw new NotSupportedException();
 
 		public override void Load(SettingsStorage storage)
 		{
