@@ -175,7 +175,8 @@ public class CandlePatternFileStorage(string fileName) : ICandlePatternProvider
 			throw errors.SingleOrAggr();
 	}
 
-	IEnumerable<ICandlePattern> ICandlePatternProvider.Patterns => _cache.CachedValues.Concat(_inMemory.Patterns);
+	IEnumerable<ICandlePattern> ICandlePatternProvider.Patterns
+		=> _cache.CachedValues.Concat(_inMemory.Patterns.Where(p => !_cache.ContainsKey(p.Name)));
 
 	bool ICandlePatternProvider.Remove(ICandlePattern pattern)
 	{
@@ -223,5 +224,5 @@ public class CandlePatternFileStorage(string fileName) : ICandlePatternProvider
 	}
 
 	bool ICandlePatternProvider.TryFind(string name, out ICandlePattern pattern)
-		=> _inMemory.TryFind(name, out pattern) || _cache.TryGetValue(name, out pattern);
+		=> _cache.TryGetValue(name, out pattern) || _inMemory.TryFind(name, out pattern);
 }
