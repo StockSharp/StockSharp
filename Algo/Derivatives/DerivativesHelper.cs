@@ -386,7 +386,7 @@ public static class DerivativesHelper
 		if (cs == null)
 			return [];
 
-		return allStrikes.Where(s => s.Strike != null && s.OptionType == OptionTypes.Call ? s.Strike < cs.Strike : s.Strike > cs.Strike);
+		return allStrikes.Where(s => s.Strike != null && (s.OptionType == OptionTypes.Call ? s.Strike < cs.Strike : s.Strike > cs.Strike));
 	}
 
 	/// <summary>
@@ -562,10 +562,13 @@ public static class DerivativesHelper
 
 		var optionMatch = _optionCodeRegex.Match(optionCode);
 
+		if (!optionMatch.Success)
+			return null;
+
 		return new SecurityMessage
 		{
 			//Name = groups["code"].Value,
-			SecurityId = new SecurityId
+			SecurityId = new()
 			{
 				SecurityCode = optionMatch.Groups["code"].Value + _futureMonthCodes[month] + yearStr.Last(),
 			},
