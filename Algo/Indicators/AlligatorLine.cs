@@ -18,7 +18,7 @@ public class AlligatorLine : LengthIndicator<decimal>
 		_sma = new();
 	}
 
-	private int _shift;
+	private int _shift = 1;
 
 	/// <summary>
 	/// Shift to the future.
