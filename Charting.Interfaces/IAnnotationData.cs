@@ -45,7 +45,7 @@ public interface IAnnotationData
 	/// <summary>Brush to fill background.</summary>
 	Brush Fill { get; set; }
 
-	/// <summary>Brush to fill background.</summary>
+	/// <summary>Text color.</summary>
 	Brush Foreground { get; set; }
 
 	/// <summary>Line thickness.</summary>
