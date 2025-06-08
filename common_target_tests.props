@@ -1,0 +1,7 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="common_target_net.props" />
+  <PropertyGroup>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+  </PropertyGroup>
+</Project>
