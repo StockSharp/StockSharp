@@ -314,6 +314,10 @@ public static class DerivativesHelper
 		?? throw new InvalidOperationException(LocalizedStrings.CannotCalcStrikeStep);
 
 		var orderedStrikes = group.OrderBy(s => s.Strike).Take(2).ToArray();
+
+		if (orderedStrikes.Length < 2)
+			throw new InvalidOperationException(LocalizedStrings.CannotCalcStrikeStep);
+
 		return orderedStrikes[1].Strike.Value - orderedStrikes[0].Strike.Value;
 	}
 
@@ -348,7 +352,7 @@ public static class DerivativesHelper
 		if (cs == null)
 			return [];
 
-		return allStrikes.Where(s => s.Strike != null && s.OptionType == OptionTypes.Call ? s.Strike > cs.Strike : s.Strike < cs.Strike);
+		return allStrikes.Where(s => s.Strike != null && (s.OptionType == OptionTypes.Call ? s.Strike > cs.Strike : s.Strike < cs.Strike));
 	}
 
 	/// <summary>
