@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\common_target_net.props" />
+
+  <ItemGroup>
+    <PackageReference Include="Ecng.Compilation.FSharp" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.Compilation.Python" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.Compilation.Roslyn" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.Configuration" Version="$(EcngVer)" />
+	  
+    <PackageReference Include="IronPython.StdLib" Version="$(IronPythonVer)" />
+    <PackageReference Include="MathNet.Numerics.FSharp" Version="$(MathNumVer)" />
+    <PackageReference Include="NumpyDotNet" Version="$(NumpyVer)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Configuration\Configuration.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\Algo.Analytics.Python\common\**\*.py" Link="python_common\%(RecursiveDir)%(FileName)%(Extension)" />
+  </ItemGroup>
+</Project>
