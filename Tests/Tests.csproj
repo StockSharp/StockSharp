@@ -1,9 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\common_target_tests.props" />
-
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="$(MsExtensionsVer)" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Algo.Analytics\Algo.Analytics.csproj" />
     <ProjectReference Include="..\Algo.Compilation\Algo.Compilation.csproj" />
+    <ProjectReference Include="..\Algo.Export\Algo.Export.csproj" />
     <ProjectReference Include="..\Diagram.Core\Diagram.Core.csproj" />
   </ItemGroup>
 </Project>
