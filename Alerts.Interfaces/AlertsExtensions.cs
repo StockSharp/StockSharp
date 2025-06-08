@@ -13,5 +13,7 @@ public static class AlertsExtensions
 	/// <param name="channelId">Channel id.</param>
 	/// <returns>Channel.</returns>
 	public static ITelegramChannel TryFindChannel(this long channelId)
-		=> ConfigManager.TryGetService<IEnumerable<ITelegramChannel>>().FirstOrDefault(c => c.Id == channelId);
+		=> ConfigManager
+		.TryGetService<IEnumerable<ITelegramChannel>>()?
+		.FirstOrDefault(c => c.Id == channelId);
 }
