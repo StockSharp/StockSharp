@@ -177,7 +177,7 @@ partial class MarketRuleHelper
 
 		return new PositionRule(position, provider, pf => pf.CurrentValue > finishPosition)
 		{
-			Name = $"Pos {position} < {value}"
+			Name = $"Pos {position} > {value}"
 		};
 	}
 

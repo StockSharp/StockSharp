@@ -548,7 +548,7 @@ public static partial class TraderHelper
 			throw new ArgumentNullException(nameof(storage));
 
 		if (id == default)
-			throw new ArgumentNullException(nameof(storage));
+			throw new ArgumentNullException(nameof(id));
 
 		if (creator is null)
 			throw new ArgumentNullException(nameof(creator));

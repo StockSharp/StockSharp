@@ -61,10 +61,10 @@ public static class IConnectorAsyncExtensions
 
 		var tcs = AsyncHelper.CreateTaskCompletionSource<ConnectionStates>();
 
-		using var _ = cancellationToken.Register(tcs.SetCanceled);
+		using var _ = cancellationToken.Register(() => tcs.TrySetCanceled());
 
-		void OnDisconnected() => tcs.SetResult(ConnectionStates.Disconnected);
-		void OnConnectionError(Exception ex) => tcs.SetException(ex);
+		void OnDisconnected() => tcs.TrySetResult(ConnectionStates.Disconnected);
+		void OnConnectionError(Exception ex) => tcs.TrySetException(ex);
 
 		connector.Disconnected += OnDisconnected;
 		connector.ConnectionError += OnConnectionError;
