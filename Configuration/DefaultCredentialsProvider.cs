@@ -66,6 +66,8 @@ public class DefaultCredentialsProvider : ICredentialsProvider
 		{
 			if (File.Exists(fileName))
 				File.Delete(fileName);
+
+			_credentials = null;
 		}
 	}
 }
