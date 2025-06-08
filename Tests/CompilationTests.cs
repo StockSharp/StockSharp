@@ -9,8 +9,11 @@ using Ecng.Reflection;
 
 using IronPython.Runtime.Types;
 
+using Microsoft.FSharp.Control;
+
 using StockSharp.Algo.Analytics;
 using StockSharp.Algo.Compilation;
+using StockSharp.Diagram;
 
 [TestClass]
 public class CompilationTests
@@ -224,7 +227,7 @@ public class CompilationTests
 		}
 	}
 
-	private static readonly string _designerFolder = "../../../../Designer/Designer/Templates/";
+	private static readonly string _designerFolder = "../../../../Designer.Templates/";
 
 	private static void Validate(CompilationResult res)
 	{
@@ -263,6 +266,64 @@ public class CompilationTests
 		return browsableProperties;
 	}
 
+	private void InvokeDiagramElem(Type type, DiagramExternalElement instance)
+	{
+		var evts = type.GetEvents().ToArray();
+		evts.Any().AssertTrue();
+
+		var raisedCnt = 0;
+
+		foreach (var evt in evts)
+		{
+			var handlerType = evt.EventHandlerType;
+			var isFSharp = handlerType.IsFSharpHandler();
+
+			if (handlerType != typeof(Action<Unit>) && !isFSharp)
+				continue;
+
+			var evtAttrs = evt.GetAttributes().ToArray();
+			evtAttrs.Any(a => a is DiagramExternalAttribute).AssertTrue();
+
+			Delegate dlg;
+
+			if (isFSharp)
+			{
+				FSharpHandler<Unit> handler = (s, value) => raisedCnt++;
+				dlg = handler;
+			}
+			else
+			{
+				Action<Unit> handler = value => raisedCnt++;
+				dlg = handler;
+			}
+
+			evt.AddEventHandler(instance, dlg);
+			evt.RemoveEventHandler(instance, dlg);
+
+			evt.AddEventHandler(instance, dlg);
+			evt.AddEventHandler(instance, dlg);
+		}
+
+		var methods = type.GetMethods().ToArray();
+		methods.Any().AssertTrue();
+
+		foreach (var method in methods)
+		{
+			if (method.Name != "Process")
+				continue;
+
+			var methodAttrs = method.GetAttributes().ToArray();
+
+			method.Invoke(instance,
+			[
+				new TimeFrameCandleMessage { ClosePrice = 100 },
+			(Unit)10,
+		]);
+		}
+
+		raisedCnt.AssertEqual(2);
+	}
+
 	[TestMethod]
 	public Task CSharpEmptyStrategy()
 		=> CSharpCompile<Strategy>("Backtest/EmptyStrategy.cs");
@@ -274,6 +335,10 @@ public class CompilationTests
 	[TestMethod]
 	public Task CSharpIndicator()
 		=> CSharpCompile<IIndicator>("Indicator/EmptyIndicator.cs");
+
+	[TestMethod]
+	public Task CSharpDiagramElem()
+		=> CSharpCompile<DiagramExternalElement>("Custom/EmptyDiagramElement.cs", InvokeDiagramElem);
 
 	private static async Task CSharpCompile<T>(string fileName, Action<Type, T> custom = null)
 		where T : IPersistable
@@ -307,6 +372,10 @@ public class CompilationTests
 	[TestMethod]
 	public Task FSharpIndicator()
 		=> FSharpCompile<IIndicator>("Indicator/EmptyIndicator.fs");
+
+	[TestMethod]
+	public Task FSharpDiagramElem()
+		=> FSharpCompile<DiagramExternalElement>("Custom/EmptyDiagramElement.fs", InvokeDiagramElem);
 
 	private static async Task FSharpCompile<T>(string fileName, Action<Type, T> custom = null)
 		where T : IPersistable
@@ -342,6 +411,10 @@ public class CompilationTests
 	[TestMethod]
 	public Task PythonIndicator()
 		=> PythonCompile<IIndicator>("Indicator/empty_indicator.py");
+
+	[TestMethod]
+	public Task PythonDiagramElem()
+		=> PythonCompile<DiagramExternalElement>("Custom/empty_diagram_element.py", InvokeDiagramElem);
 
 	private static async Task PythonCompile<T>(string fileName, Action<Type, T> custom = null)
 		where T : IPersistable

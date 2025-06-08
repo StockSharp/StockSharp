@@ -136,6 +136,8 @@ public class BasketSecurityTests
 
 		var start = securities.First().ExpiryDate?.Subtract(TimeSpan.FromHours(5)) ?? DateTimeOffset.UtcNow;
 
+		// TODO Implement tests to support all types of messages and data
+
 		//// Проверка глубины
 		//var depths = securities.ToDictionary(s => s, s => s.RandomDepths(1000, start: start));
 		//var allDepths = depths.Values.SelectMany(d => d).OrderBy(d => d.ServerTime).ToArray();

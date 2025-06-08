@@ -399,7 +399,7 @@ public class CommissionTests
 		var tradeMsg = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
-			SecurityId = new() { SecurityCode = "AAPL", BoardCode = BoardCodes.Nasdaq },
+			SecurityId = Helper.CreateSecurityId(),
 			TradePrice = 150m,
 			ServerTime = Inc(ref now)
 		};
