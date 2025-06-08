@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\common_target_net.props" />
+  <PropertyGroup>
+    <RootNamespace>StockSharp.Diagram</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Alerts.Interfaces\Alerts.Interfaces.csproj" />
+    <ProjectReference Include="..\Algo\Algo.csproj" />
+  </ItemGroup>
+</Project>
