@@ -236,6 +236,7 @@
   "AxisIsNotSet": "Element axis is not set.",
   "AxisLabels": "Axis labels",
   "AxisTypeCantBeSet": "Axis type must be set before adding any elements.",
+  "Azure": "Azure",
   "BackgroundColor": "Background color",
   "BackStep": "Minimum number of candles between local maximums, minimums.",
   "Backtest": "Backtest",
