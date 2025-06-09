@@ -101,51 +101,46 @@ static class Helper
 			if (totalIterations-- < 0)
 				throw new InvalidOperationException();
 
-			try
-			{
-				var msg = (ExecutionMessage)tradeGenerator.Process(new TimeMessage { ServerTime = dt });
+			dt = dt.AddTicks(RandomGen.GetInt((int)tradeGenerator.Interval.Ticks));
 
-				if (msg == null)
-					continue;
+			var msg = (ExecutionMessage)tradeGenerator.Process(new TimeMessage { ServerTime = dt });
 
-				if (RandomGen.GetBool())
-					msg.TradeId = ++i;
-				else
-					msg.TradeId = null;
+			if (msg == null)
+				continue;
 
-				if (RandomGen.GetBool())
-					msg.SeqNum = i;
+			if (RandomGen.GetBool())
+				msg.TradeId = ++i;
+			else
+				msg.TradeId = null;
 
-				if (RandomGen.GetBool())
-					msg.BuildFrom = DataType.OrderLog;
+			if (RandomGen.GetBool())
+				msg.SeqNum = i;
 
-				if (RandomGen.GetBool())
-					msg.OrderBuyId = RandomGen.GetInt(100, 10000);
+			if (RandomGen.GetBool())
+				msg.BuildFrom = DataType.OrderLog;
 
-				if (RandomGen.GetBool())
-					msg.OrderSellId = RandomGen.GetInt(100, 10000);
+			if (RandomGen.GetBool())
+				msg.OrderBuyId = RandomGen.GetInt(100, 10000);
 
-				if (RandomGen.GetBool())
-					msg.TradeStringId = Guid.NewGuid().To<string>();
+			if (RandomGen.GetBool())
+				msg.OrderSellId = RandomGen.GetInt(100, 10000);
 
-				if (RandomGen.GetBool())
-					msg.Yield = RandomGen.GetDecimal();
+			if (RandomGen.GetBool())
+				msg.TradeStringId = Guid.NewGuid().To<string>();
 
-				if (RandomGen.GetBool())
-					msg.IsUpTick = RandomGen.GetBool();
+			if (RandomGen.GetBool())
+				msg.Yield = RandomGen.GetDecimal();
 
-				if (RandomGen.GetBool())
-					msg.OriginSide = RandomGen.GetEnum<Sides>();
+			if (RandomGen.GetBool())
+				msg.IsUpTick = RandomGen.GetBool();
 
-				if (RandomGen.GetBool())
-					msg.TradeStatus = RandomGen.GetLong();
+			if (RandomGen.GetBool())
+				msg.OriginSide = RandomGen.GetEnum<Sides>();
 
-				trades.Add(msg);
-			}
-			finally
-			{
-				dt = dt.AddTicks(RandomGen.GetInt((int)tradeGenerator.Interval.Ticks));
-			}
+			if (RandomGen.GetBool())
+				msg.TradeStatus = RandomGen.GetLong();
+
+			trades.Add(msg);
 		}
 
 		trades.Count.AssertEqual(count);
@@ -273,8 +268,15 @@ static class Helper
 
 		var dt = start ?? DateTimeOffset.UtcNow;
 
-		for (var i = 0; i < count; i++)
+		var totalIterations = count * 100;
+		var i = 0;
+		while (depths.Count < count)
 		{
+			if (totalIterations-- < 0)
+				throw new InvalidOperationException();
+
+			dt = dt.AddTicks(RandomGen.GetInt((int)depthGenerator.Interval.Ticks));
+
 			var msg = (QuoteChangeMessage)depthGenerator.Process(new ExecutionMessage
 			{
 				DataTypeEx = DataType.Ticks,
@@ -282,9 +284,10 @@ static class Helper
 				TradePrice = RandomGen.GetInt(100, 120),
 				TradeVolume = RandomGen.GetInt(1, 20),
 				ServerTime = dt,
-			}) ?? throw new InvalidOperationException();
+			});
 
-			dt = dt.AddTicks(RandomGen.GetInt((int)depthGenerator.Interval.Ticks));
+			if (msg is null)
+				continue;
 
 			if (RandomGen.GetBool())
 				msg.SeqNum = i;
