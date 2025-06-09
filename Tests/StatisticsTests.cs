@@ -693,19 +693,19 @@ public class StatisticsTests
 
 		// Act & Assert
 		// Profitable trade
-		parameter.Add(new PnLInfo(serverTime, 10, 100));
+		parameter.Add(new(serverTime, 10, 100));
 		parameter.Value.AssertEqual(1);
 
 		// Another profitable trade
-		parameter.Add(new PnLInfo(serverTime, 5, 50));
+		parameter.Add(new(serverTime, 5, 50));
 		parameter.Value.AssertEqual(2);
 
 		// Losing trade - should not increment
-		parameter.Add(new PnLInfo(serverTime, 15, -30));
+		parameter.Add(new(serverTime, 15, -30));
 		parameter.Value.AssertEqual(2);
 
 		// Break-even trade - should not increment
-		parameter.Add(new PnLInfo(serverTime, 8, 0));
+		parameter.Add(new(serverTime, 8, 0));
 		parameter.Value.AssertEqual(2);
 	}
 
@@ -718,23 +718,23 @@ public class StatisticsTests
 
 		// Act & Assert
 		// Losing trade with closed volume
-		parameter.Add(new PnLInfo(serverTime, 10, -50));
+		parameter.Add(new(serverTime, 10, -50));
 		parameter.Value.AssertEqual(1);
 
 		// Another losing trade with closed volume
-		parameter.Add(new PnLInfo(serverTime, 5, -30));
+		parameter.Add(new(serverTime, 5, -30));
 		parameter.Value.AssertEqual(2);
 
 		// Break-even trade with closed volume - should increment
-		parameter.Add(new PnLInfo(serverTime, 15, 0));
+		parameter.Add(new(serverTime, 15, 0));
 		parameter.Value.AssertEqual(3);
 
 		// Profitable trade - should not increment
-		parameter.Add(new PnLInfo(serverTime, 20, 100));
+		parameter.Add(new(serverTime, 20, 100));
 		parameter.Value.AssertEqual(3);
 
 		// Losing trade with no closed volume - should not increment
-		parameter.Add(new PnLInfo(serverTime, 0, -40));
+		parameter.Add(new(serverTime, 0, -40));
 		parameter.Value.AssertEqual(3);
 	}
 
@@ -747,15 +747,15 @@ public class StatisticsTests
 
 		// Act & Assert
 		// Profitable trade
-		parameter.Add(new PnLInfo(serverTime, 10, 100));
+		parameter.Add(new(serverTime, 10, 100));
 		parameter.Value.AssertEqual(1);
 
 		// Losing trade
-		parameter.Add(new PnLInfo(serverTime, 5, -50));
+		parameter.Add(new(serverTime, 5, -50));
 		parameter.Value.AssertEqual(2);
 
 		// Break-even trade
-		parameter.Add(new PnLInfo(serverTime, 8, 0));
+		parameter.Add(new(serverTime, 8, 0));
 		parameter.Value.AssertEqual(3);
 	}
 
@@ -768,15 +768,15 @@ public class StatisticsTests
 
 		// Act & Assert
 		// Trade with closed volume
-		parameter.Add(new PnLInfo(serverTime, 10, 100));
+		parameter.Add(new(serverTime, 10, 100));
 		parameter.Value.AssertEqual(1);
 
 		// Another trade with closed volume
-		parameter.Add(new PnLInfo(serverTime, 5, -20));
+		parameter.Add(new(serverTime, 5, -20));
 		parameter.Value.AssertEqual(2);
 
 		// Trade with no closed volume - should not increment
-		parameter.Add(new PnLInfo(serverTime, 0, 50));
+		parameter.Add(new(serverTime, 0, 50));
 		parameter.Value.AssertEqual(2);
 	}
 
@@ -789,19 +789,19 @@ public class StatisticsTests
 
 		// Act & Assert
 		// First trade
-		parameter.Add(new PnLInfo(serverTime, 10, 100));
+		parameter.Add(new(serverTime, 10, 100));
 		parameter.Value.AssertEqual(100m);
 
 		// Second trade - average should be (100 + 50) / 2 = 75
-		parameter.Add(new PnLInfo(serverTime, 5, 50));
+		parameter.Add(new(serverTime, 5, 50));
 		parameter.Value.AssertEqual(75m);
 
 		// Third trade - average should be (100 + 50 - 30) / 3 = 40
-		parameter.Add(new PnLInfo(serverTime, 15, -30));
+		parameter.Add(new(serverTime, 15, -30));
 		parameter.Value.AssertEqual(40m);
 
 		// Trade with no closed volume - should not affect average
-		parameter.Add(new PnLInfo(serverTime, 0, 200));
+		parameter.Add(new(serverTime, 0, 200));
 		parameter.Value.AssertEqual(40m);
 	}
 
@@ -814,27 +814,27 @@ public class StatisticsTests
 
 		// Act & Assert
 		// First winning trade
-		parameter.Add(new PnLInfo(serverTime, 10, 100));
+		parameter.Add(new(serverTime, 10, 100));
 		parameter.Value.AssertEqual(100m);
 
 		// Second winning trade - average should be (100 + 80) / 2 = 90
-		parameter.Add(new PnLInfo(serverTime, 5, 80));
+		parameter.Add(new(serverTime, 5, 80));
 		parameter.Value.AssertEqual(90m);
 
 		// Losing trade - should not affect winning average
-		parameter.Add(new PnLInfo(serverTime, 15, -50));
+		parameter.Add(new(serverTime, 15, -50));
 		parameter.Value.AssertEqual(90m);
 
 		// Break-even trade - should not affect winning average
-		parameter.Add(new PnLInfo(serverTime, 20, 0));
+		parameter.Add(new(serverTime, 20, 0));
 		parameter.Value.AssertEqual(90m);
 
 		// Third winning trade - average should be (100 + 80 + 60) / 3 = 80
-		parameter.Add(new PnLInfo(serverTime, 8, 60));
+		parameter.Add(new(serverTime, 8, 60));
 		parameter.Value.AssertEqual(80m);
 
 		// Trade with no closed volume - should not affect average
-		parameter.Add(new PnLInfo(serverTime, 0, 200));
+		parameter.Add(new(serverTime, 0, 200));
 		parameter.Value.AssertEqual(80m);
 	}
 
@@ -847,27 +847,27 @@ public class StatisticsTests
 
 		// Act & Assert
 		// First losing trade
-		parameter.Add(new PnLInfo(serverTime, 10, -50));
+		parameter.Add(new(serverTime, 10, -50));
 		parameter.Value.AssertEqual(-50m);
 
 		// Second losing trade - average should be (-50 + -30) / 2 = -40
-		parameter.Add(new PnLInfo(serverTime, 5, -30));
+		parameter.Add(new(serverTime, 5, -30));
 		parameter.Value.AssertEqual(-40m);
 
 		// Break-even trade - should affect losing average
-		parameter.Add(new PnLInfo(serverTime, 15, 0));
+		parameter.Add(new(serverTime, 15, 0));
 		parameter.Value.AssertInRange(-26.67m, -26.66m);
 
 		// Winning trade - should not affect losing average
-		parameter.Add(new PnLInfo(serverTime, 20, 100));
+		parameter.Add(new(serverTime, 20, 100));
 		parameter.Value.AssertInRange(-26.67m, -26.66m);
 
 		// Third losing trade - average should be (-50 + -30 + 0 + -20) / 4 = -25
-		parameter.Add(new PnLInfo(serverTime, 8, -20));
+		parameter.Add(new(serverTime, 8, -20));
 		parameter.Value.AssertEqual(-25m);
 
 		// Trade with no closed volume - should not affect average
-		parameter.Add(new PnLInfo(serverTime, 0, -100));
+		parameter.Add(new(serverTime, 0, -100));
 		parameter.Value.AssertEqual(-25m);
 	}
 
@@ -880,23 +880,23 @@ public class StatisticsTests
 
 		// Act & Assert
 		// First trade in January
-		parameter.Add(new PnLInfo(baseTime, 10, 100));
+		parameter.Add(new(baseTime, 10, 100));
 		parameter.Value.AssertEqual(1m);
 
 		// Second trade in same month
-		parameter.Add(new PnLInfo(baseTime.AddDays(10), 5, 50));
+		parameter.Add(new(baseTime.AddDays(10), 5, 50));
 		parameter.Value.AssertEqual(2m);
 
 		// First trade in February - average becomes (2 + 1) / 2 = 1.5
-		parameter.Add(new PnLInfo(baseTime.AddMonths(1), 8, -30));
+		parameter.Add(new(baseTime.AddMonths(1), 8, -30));
 		parameter.Value.AssertEqual(1.5m);
 
 		// Second trade in February - average becomes (2 + 2) / 2 = 2
-		parameter.Add(new PnLInfo(baseTime.AddMonths(1).AddDays(5), 12, 75));
+		parameter.Add(new(baseTime.AddMonths(1).AddDays(5), 12, 75));
 		parameter.Value.AssertEqual(2m);
 
 		// First trade in March - average becomes (2 + 2 + 1) / 3 = 1.67
-		parameter.Add(new PnLInfo(baseTime.AddMonths(2), 6, 25));
+		parameter.Add(new(baseTime.AddMonths(2), 6, 25));
 		parameter.Value.AssertInRange(1.66m, 1.67m);
 	}
 
@@ -909,23 +909,23 @@ public class StatisticsTests
 
 		// Act & Assert
 		// First trade on day 1
-		parameter.Add(new PnLInfo(baseTime, 10, 100));
+		parameter.Add(new(baseTime, 10, 100));
 		parameter.Value.AssertEqual(1m);
 
 		// Second trade on same day
-		parameter.Add(new PnLInfo(baseTime.AddHours(2), 5, 50));
+		parameter.Add(new(baseTime.AddHours(2), 5, 50));
 		parameter.Value.AssertEqual(2m);
 
 		// First trade on day 2 - average becomes (2 + 1) / 2 = 1.5
-		parameter.Add(new PnLInfo(baseTime.AddDays(1), 8, -30));
+		parameter.Add(new(baseTime.AddDays(1), 8, -30));
 		parameter.Value.AssertEqual(1.5m);
 
 		// Second trade on day 2 - average becomes (2 + 2) / 2 = 2
-		parameter.Add(new PnLInfo(baseTime.AddDays(1).AddHours(3), 12, 75));
+		parameter.Add(new(baseTime.AddDays(1).AddHours(3), 12, 75));
 		parameter.Value.AssertEqual(2m);
 
 		// First trade on day 3 - average becomes (2 + 2 + 1) / 3 = 1.67
-		parameter.Add(new PnLInfo(baseTime.AddDays(2), 6, 25));
+		parameter.Add(new(baseTime.AddDays(2), 6, 25));
 		parameter.Value.AssertInRange(1.66m, 1.67m);
 	}
 
@@ -1021,9 +1021,9 @@ public class StatisticsTests
 		var baseTime = new DateTime(2023, 1, 15);
 
 		// Add some trades
-		parameter.Add(new PnLInfo(baseTime, 10, 100));
-		parameter.Add(new PnLInfo(baseTime.AddDays(10), 5, 50));
-		parameter.Add(new PnLInfo(baseTime.AddMonths(1), 8, -30));
+		parameter.Add(new(baseTime, 10, 100));
+		parameter.Add(new(baseTime.AddDays(10), 5, 50));
+		parameter.Add(new(baseTime.AddMonths(1), 8, -30));
 
 		// Act - save state
 		var storage = parameter.Save();
@@ -1037,8 +1037,8 @@ public class StatisticsTests
 
 		// Add new trade and verify behavior is consistent
 		var nextTradeTime = baseTime.AddMonths(1).AddDays(5);
-		parameter.Add(new PnLInfo(nextTradeTime, 12, 75));
-		newParameter.Add(new PnLInfo(nextTradeTime, 12, 75));
+		parameter.Add(new(nextTradeTime, 12, 75));
+		newParameter.Add(new(nextTradeTime, 12, 75));
 
 		parameter.Value.AssertEqual(newParameter.Value);
 	}
@@ -1085,7 +1085,7 @@ public class StatisticsTests
 		parameter.Add(t, 0.0m, null);
 		parameter.Add(t, 0.0m, null);
 
-		(parameter.Value == 0).AssertTrue();
+		parameter.Value.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -1101,7 +1101,7 @@ public class StatisticsTests
 		parameter.Add(t, 0.4m, null);
 
 		// Если нет отрицательных возвратов, downside deviation = 0, коэффициент не определён (Value = 0)
-		(parameter.Value == 0).AssertTrue();
+		parameter.Value.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -1147,7 +1147,7 @@ public class StatisticsTests
 		parameter.Add(t, 0.6m, null);
 
 		// Downside deviation = 0, коэффициент = 0 (по текущей реализации)
-		(parameter.Value == 0).AssertTrue();
+		parameter.Value.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -1275,6 +1275,27 @@ public class StatisticsTests
 	}
 
 	[TestMethod]
+	public void ProfitFactor2()
+	{
+		// Arrange
+		var parameter = new ProfitFactorParameter();
+		var marketTime = DateTimeOffset.UtcNow;
+
+		// Act - add some trades: win 100, loss -50, win 50, loss -25
+		parameter.Add(new(marketTime, 1, 100m));
+		parameter.Add(new(marketTime, 1, -50m));
+		parameter.Add(new(marketTime, 1, 0m));
+		parameter.Add(new(marketTime, 1, 200m));
+		parameter.Add(new(marketTime, 1, -100m));
+		parameter.Add(new(marketTime, 1, 50m));
+
+		// total win = 100 + 200 + 50 = 350
+		// total loss = 50 + 100 = 150
+		// The ratio should be win/loss
+		((Math.Abs(parameter.Value - (350m / 150m)) < 1e-10m)).AssertTrue();
+	}
+
+	[TestMethod]
 	public void CalmarRatio()
 	{
 		// Arrange
@@ -1317,5 +1338,93 @@ public class StatisticsTests
 		}
 
 		(parameter.Value > 0).AssertTrue();
+	}
+
+	[TestMethod]
+	public void AverageDrawdown_MultipleDrawdownsAndUnfinished()
+	{
+		var parameter = new AverageDrawdownParameter();
+		var t = DateTimeOffset.UtcNow;
+
+		// Peak → deep drawdown → partial recovery → new peak (fix first drawdown)
+		parameter.Add(t, 1000m, null);
+		parameter.Add(t, 800m, null);   // drawdown to 800
+		parameter.Add(t, 900m, null);   // partial recovery
+		parameter.Add(t, 1100m, null);  // new peak, drawdown fixed (1100-800=300)
+
+		// Start new drawdown but do not recover fully yet
+		parameter.Add(t, 900m, null);   // start new drawdown
+		parameter.Add(t, 950m, null);   // partial recovery, still in drawdown
+
+		parameter.Value.AssertEqual(200);
+	}
+
+	[TestMethod]
+	public void MaxDrawdown_HandlesMultipleMinimas()
+	{
+		var parameter = new MaxDrawdownParameter();
+		var t = DateTimeOffset.UtcNow;
+
+		// Simulate two drawdowns, second is deeper
+		parameter.Add(t, 1000m, null); // first peak
+		parameter.Add(t, 900m, null);  // drawdown to 900
+		parameter.Add(t, 950m, null);  // partial recovery
+		parameter.Add(t, 800m, null);  // new deeper minimum
+		parameter.Add(t, 1000m, null); // recovery
+
+		// MaxDrawdown should report the largest drop (1000-800=200)
+		parameter.Value.AssertEqual(200m);
+	}
+
+	[TestMethod]
+	public void ProfitFactor_NegativeAndZeroTrades()
+	{
+		var parameter = new ProfitFactorParameter();
+		var t = DateTimeOffset.UtcNow;
+
+		// 3 wins, 2 losses, 1 zero
+		parameter.Add(new(t, 1, 100m));   // win
+		parameter.Add(new(t, 1, -50m));   // loss
+		parameter.Add(new(t, 1, 0m));     // zero (should be ignored)
+		parameter.Add(new(t, 1, 200m));   // win
+		parameter.Add(new(t, 1, -100m));  // loss
+		parameter.Add(new(t, 1, 50m));    // win
+
+		// total win = 100 + 200 + 50 = 350
+		// total loss = 50 + 100 = 150
+		// The ratio should be win/loss
+		parameter.Value.AssertEqual(350m / 150m);
+	}
+
+	[TestMethod]
+	public void RecoveryFactor_MultipleDrawdownsAndProfits()
+	{
+		var maxDrawdown = new MaxDrawdownParameter();
+		var netProfit = new NetProfitParameter();
+		var parameter = new RecoveryFactorParameter(maxDrawdown, netProfit);
+		var t = DateTimeOffset.UtcNow;
+
+		// Two drawdowns, two recoveries
+		maxDrawdown.Add(t, 1000m, null);
+		netProfit.Add(t, 1000m, null);
+		parameter.Add(t, 1000m, null);
+
+		maxDrawdown.Add(t, 700m, null);   // first drawdown
+		netProfit.Add(t, 700m, null);
+		parameter.Add(t, 700m, null);
+
+		maxDrawdown.Add(t, 1100m, null);  // recovery and new peak
+		netProfit.Add(t, 1100m, null);
+		parameter.Add(t, 1100m, null);
+
+		maxDrawdown.Add(t, 800m, null);   // second drawdown
+		netProfit.Add(t, 800m, null);
+		parameter.Add(t, 800m, null);
+
+		maxDrawdown.Add(t, 1200m, null);  // recovery and new peak
+		netProfit.Add(t, 1200m, null);
+		parameter.Add(t, 1200m, null);
+
+		parameter.Value.AssertEqual(4);
 	}
 }
