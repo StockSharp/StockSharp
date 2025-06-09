@@ -61,8 +61,6 @@ public abstract class BaseExporter
 				return Export((IEnumerable<NewsMessage>)values);
 			else if (DataType == DataType.Securities)
 				return Export((IEnumerable<SecurityMessage>)values);
-			else if (DataType == DataType.Securities)
-				return Export((IEnumerable<SecurityMessage>)values);
 			else if (DataType == DataType.PositionChanges)
 				return Export((IEnumerable<PositionChangeMessage>)values);
 			else if (DataType == TraderHelper.IndicatorValue)
