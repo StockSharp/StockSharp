@@ -8,7 +8,6 @@ class DiagramElementParamPropertyDescriptor : NamedPropertyDescriptor
 		: base(param.CheckOnNull(nameof(param)).Name, [.. param.Attributes])
 	{
 		_param = param;
-		_param = param;
 	}
 
 	public override bool CanResetValue(object component)

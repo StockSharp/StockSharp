@@ -104,7 +104,7 @@ public static class VirtualPropertyRegistry
 		}
 
 		propType = null;
-		return true;
+		return false;
 	}
 
 	/// <summary>
