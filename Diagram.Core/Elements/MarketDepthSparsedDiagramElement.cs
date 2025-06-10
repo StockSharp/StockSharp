@@ -56,7 +56,7 @@ public class MarketDepthSparsedDiagramElement : DiagramElement
 
 		var security = Strategy.LookupById(depth.SecurityId);
 
-		var result = depth.Sparse(PriceRange, security.PriceStep);
+		var result = depth.Sparse(PriceRange, security?.PriceStep);
 
 		RaiseProcessOutput(_outputSocket, value.Time, result, value);
 	}

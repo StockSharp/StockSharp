@@ -1594,6 +1594,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				if (volume > 0)
 				{
 					_securityDefinition.VolumeStep = volume.Value.GetDecimalInfo().EffectiveScale.GetPriceStep();
+					_volumeDecimals = GetVolumeStep().GetCachedDecimals();
 					_volumeStepUpdated = true;
 				}
 			}
@@ -1612,7 +1613,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			if (_securityDefinition.VolumeStep != null)
 			{
 				_volumeStepUpdated = true;
-				_priceStepExplicit = true;
+				_volumeStepExplicit = true;
 			}
 		}
 
