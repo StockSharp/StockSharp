@@ -451,4 +451,185 @@ public class CandleTests
 
 		finished.TotalPrice.AssertEqual(310m);
 	}
+
+	[TestMethod]
+	public void PriceLevels()
+	{
+		var provider = new InMemoryExchangeInfoProvider();
+		var builders = new CandleBuilderProvider(provider);
+		var builder = (TimeFrameCandleBuilder)builders.Get(typeof(TimeFrameCandleMessage));
+
+		var md = new MarketDataMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			DataType2 = TimeSpan.FromMinutes(2).TimeFrame(),
+			IsCalcVolumeProfile = true
+		};
+
+		var compressor = new BiggerTimeFrameCandleCompressor(md, builder, TimeSpan.FromMinutes(1).TimeFrame());
+
+		var candle1 = new TimeFrameCandleMessage
+		{
+			OpenTime = new(2020, 1, 1, 0, 0, 0, TimeSpan.Zero),
+			CloseTime = new(2020, 1, 1, 0, 1, 0, TimeSpan.Zero),
+			HighTime = new(2020, 1, 1, 0, 0, 0, TimeSpan.Zero),
+			LowTime = new(2020, 1, 1, 0, 0, 0, TimeSpan.Zero),
+			OpenPrice = 100m,
+			HighPrice = 101m,
+			LowPrice = 100m,
+			ClosePrice = 100m,
+			TotalVolume = 1m,
+			PriceLevels =
+			[
+				new() { Price = 100m, BuyVolume = 1m, BuyCount = 1, TotalVolume = 1m }
+			]
+		};
+
+		var bigCandle = compressor.Process(candle1).Cast<TimeFrameCandleMessage>().Single();
+		bigCandle.AssertNotNull();
+
+		var candle2 = new TimeFrameCandleMessage
+		{
+			OpenTime = new(2020, 1, 1, 0, 1, 0, TimeSpan.Zero),
+			CloseTime = new(2020, 1, 1, 0, 2, 0, TimeSpan.Zero),
+			HighTime = new(2020, 1, 1, 0, 1, 0, TimeSpan.Zero),
+			LowTime = new(2020, 1, 1, 0, 1, 0, TimeSpan.Zero),
+			OpenPrice = 102m,
+			HighPrice = 103m,
+			LowPrice = 102m,
+			ClosePrice = 103m,
+			TotalVolume = 2m,
+			PriceLevels =
+			[
+				new() { Price = 100m, BuyVolume = 2m, BuyCount = 2, TotalVolume = 2m }
+			]
+		};
+
+		var results = compressor.Process(candle2).Cast<TimeFrameCandleMessage>().ToArray();
+		var big = results.Single();
+
+		var level = big.PriceLevels.First(l => l.Price == 100m);
+		level.BuyVolume.AssertEqual(3m);
+		level.BuyCount.AssertEqual(3);
+	}
+
+	[TestMethod]
+	public void VolumeProfile_CreatesAndUpdatesLevel()
+	{
+		var builder = new VolumeProfileBuilder();
+
+		builder.Update(100m, 1m, Sides.Buy);
+		builder.Update(100m, 2m, Sides.Sell);
+
+		var level = builder.PriceLevels.Single();
+
+		level.Price.AreEqual(100m);
+		level.BuyVolume.AreEqual(1m);
+		level.SellVolume.AreEqual(2m);
+		level.BuyCount.AreEqual(1);
+		level.SellCount.AreEqual(1);
+		level.TotalVolume.AreEqual(3m);
+	}
+
+	[TestMethod]
+	public void VolumeProfile_MergesVolumes()
+	{
+		var builder = new VolumeProfileBuilder();
+
+		builder.Update(new CandlePriceLevel
+		{
+			Price = 101m,
+			BuyVolume = 1m,
+			BuyCount = 1,
+			BuyVolumes = [1m]
+		});
+
+		builder.Update(new CandlePriceLevel
+		{
+			Price = 101m,
+			SellVolume = 2m,
+			SellCount = 1,
+			SellVolumes = [2m]
+		});
+
+		var merged = builder.PriceLevels.Single();
+		merged.Price.AreEqual(101m);
+		merged.BuyVolume.AreEqual(1m);
+		merged.SellVolume.AreEqual(2m);
+		merged.BuyCount.AreEqual(1);
+		merged.SellCount.AreEqual(1);
+		CollectionAssert.AreEqual(new[] { 1m }, merged.BuyVolumes.ToArray());
+		CollectionAssert.AreEqual(new[] { 2m }, merged.SellVolumes.ToArray());
+	}
+
+	[TestMethod]
+	public void VolumeProfile_SetsPocAndArea()
+	{
+		var levels = new List<CandlePriceLevel>
+		{
+			new() { Price = 99m, TotalVolume = 1m, BuyVolume = 0.5m, SellVolume = 0.5m },
+			new() { Price = 100m, TotalVolume = 3m, BuyVolume = 2m, SellVolume = 1m },
+			new() { Price = 101m, TotalVolume = 2m, BuyVolume = 1m, SellVolume = 1m }
+		};
+
+		var builder = new VolumeProfileBuilder();
+
+		foreach (var level in levels)
+			builder.Update(level);
+
+		builder.Calculate();
+
+		builder.PoC.Price.AreEqual(100m);
+		builder.High.Price.AreEqual(101m);
+		builder.Low.Price.AreEqual(99m);
+	}
+
+	[TestMethod]
+	public void VolumeProfile_MultiLevel()
+	{
+		var levels = new List<CandlePriceLevel>
+		{
+			new() { Price = 10m, TotalVolume = 2m, BuyVolume = 1m, SellVolume = 1m },
+			new() { Price = 11m, TotalVolume = 5m, BuyVolume = 3m, SellVolume = 2m },
+			new() { Price = 12m, TotalVolume = 8m, BuyVolume = 4m, SellVolume = 4m, BuyCount = 1, SellCount = 1 },
+			new() { Price = 13m, TotalVolume = 3m, BuyVolume = 2m, SellVolume = 1m },
+			new() { Price = 14m, TotalVolume = 1m, BuyVolume = 0.5m, SellVolume = 0.5m }
+		};
+
+		var builder = new VolumeProfileBuilder();
+
+		foreach (var level in levels)
+			builder.Update(level);
+
+		builder.Calculate();
+
+		builder.PoC.Price.AreEqual(12m);
+
+		(builder.High.Price > builder.PoC.Price || builder.High.Price == builder.PoC.Price).AssertTrue();
+		(builder.Low.Price < builder.PoC.Price || builder.Low.Price == builder.PoC.Price).AssertTrue();
+
+		builder.Update(15m, 2m, Sides.Buy);
+		
+		builder.PriceLevels.Any(l => l.Price == 15m).AssertTrue();
+
+		var lvl15 = builder.PriceLevels.First(l => l.Price == 15m);
+		lvl15.BuyVolume.AreEqual(2m);
+		lvl15.TotalVolume.AreEqual(2m);
+		lvl15.BuyCount.AreEqual(1);
+		lvl15.SellCount.AreEqual(0);
+
+		var update = new CandlePriceLevel { Price = 12m, BuyVolume = 1m, SellVolume = 2m, BuyCount = 1, SellCount = 1, TotalVolume = 3m };
+		builder.Update(update);
+		var lvl12 = builder.PriceLevels.First(l => l.Price == 12m);
+		lvl12.BuyVolume.AreEqual(5m); // 4+1
+		lvl12.SellVolume.AreEqual(6m); // 4+2
+		lvl12.TotalVolume.AreEqual(8m+3m); // 8+3
+		lvl12.BuyCount.AreEqual(2); // +1
+		lvl12.SellCount.AreEqual(2); // +1
+
+		builder.VolumePercent = 90;
+		builder.Calculate();
+		builder.High.AssertNotEqual(default);
+		builder.Low.AssertNotEqual(default);
+	}
 }

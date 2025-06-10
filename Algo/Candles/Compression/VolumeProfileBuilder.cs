@@ -3,11 +3,7 @@
 /// <summary>
 /// Volume profile.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="VolumeProfileBuilder"/>.
-/// </remarks>
-/// <param name="levels">Price levels.</param>
-public class VolumeProfileBuilder(IList<CandlePriceLevel> levels)
+public class VolumeProfileBuilder
 {
 	private readonly Dictionary<decimal, int> _volumeProfileInfo = [];
 
@@ -43,7 +39,14 @@ public class VolumeProfileBuilder(IList<CandlePriceLevel> levels)
 		}
 	}
 
-	private readonly IList<CandlePriceLevel> _levels = levels ?? throw new ArgumentNullException(nameof(levels));
+	/// <summary>
+	/// Initializes a new instance of the <see cref="VolumeProfileBuilder"/>.
+	/// </summary>
+	public VolumeProfileBuilder()
+	{
+	}
+
+	private readonly List<CandlePriceLevel> _levels = [];
 
 	/// <summary>
 	/// Price levels.
@@ -84,11 +87,21 @@ public class VolumeProfileBuilder(IList<CandlePriceLevel> levels)
 
 		level.TotalVolume += priceLevel.TotalVolume;
 
-		if (priceLevel.BuyVolumes is ICollection<decimal> buys)
-			buys.AddRange(priceLevel.BuyVolumes);
+		if (priceLevel.BuyVolumes != null)
+		{
+			if (level.BuyVolumes is null)
+				level.BuyVolumes = [.. priceLevel.BuyVolumes];
+			else
+				level.BuyVolumes = [.. level.BuyVolumes, .. priceLevel.BuyVolumes];
+		}
 
-		if (priceLevel.SellVolumes is ICollection<decimal> sells)
-			sells.AddRange(priceLevel.SellVolumes);
+		if (priceLevel.SellVolumes != null)
+		{
+			if (level.SellVolumes is null)
+				level.SellVolumes = [.. priceLevel.SellVolumes];
+			else
+				level.SellVolumes = [.. level.SellVolumes, .. priceLevel.SellVolumes];
+		}
 
 		_levels[idx] = level;
 	}
@@ -111,13 +124,12 @@ public class VolumeProfileBuilder(IList<CandlePriceLevel> levels)
 			};
 
 			_levels.Add(level);
-
 		}
 
 		return index;
 	}
 
-	private void UpdatePriceLevel(ref CandlePriceLevel level, decimal? volume, Sides? side)
+	private static void UpdatePriceLevel(ref CandlePriceLevel level, decimal? volume, Sides? side)
 	{
 		if (level.Price == default)
 			throw new ArgumentNullException(nameof(level));
@@ -157,6 +169,9 @@ public class VolumeProfileBuilder(IList<CandlePriceLevel> levels)
 	/// </summary>
 	public void Calculate()
 	{
+		if (_levels.Count == 0)
+			return;
+
 		// Основная суть:
 		// Есть POC Vol от него выше и ниже берется по два значения(объемы)
 		// Суммируются и сравниваются, те что в сумме больше, складываются в общий объем, в котором изначально лежит POC Vol.
@@ -221,7 +236,7 @@ public class VolumeProfileBuilder(IList<CandlePriceLevel> levels)
 			var abovePocNode = abovePoc.First;
 			var belowPocNode = belowePoc.First;
 
-			while (true)
+			while (abovePocNode != null && belowPocNode != null)
 			{
 				var aboveVol = abovePocNode.Value.BuyVolume + abovePocNode.Value.SellVolume;
 				var belowVol = belowPocNode.Value.BuyVolume + belowPocNode.Value.SellVolume;
@@ -256,41 +271,39 @@ public class VolumeProfileBuilder(IList<CandlePriceLevel> levels)
 
 	private static LinkedList<CandlePriceLevel> Combine(IEnumerable<CandlePriceLevel> prices)
 	{
-		using (var enumerator = prices.GetEnumerator())
+		using var enumerator = prices.GetEnumerator();
+
+		var list = new LinkedList<CandlePriceLevel>();
+
+		while (true)
 		{
-			var list = new LinkedList<CandlePriceLevel>();
+			if (!enumerator.MoveNext())
+				break;
 
-			while (true)
+			var pl = enumerator.Current;
+
+			if (!enumerator.MoveNext())
 			{
-				if (!enumerator.MoveNext())
-					break;
-
-				var pl = enumerator.Current;
-
-				if (!enumerator.MoveNext())
-				{
-					list.AddLast(pl);
-					break;
-				}
-
-				var curr = enumerator.Current;
-
-				var buyVolumes = curr.BuyVolumes.Concat(pl.BuyVolumes).ToArray();
-				var sellVolumes = curr.SellVolumes.Concat(pl.SellVolumes).ToArray();
-
-				list.AddLast(new CandlePriceLevel
-				{
-					Price = enumerator.Current.Price,
-					BuyCount = buyVolumes.Length,
-					SellCount = sellVolumes.Length,
-					BuyVolumes = buyVolumes,
-					SellVolumes = sellVolumes,
-					BuyVolume = buyVolumes.Sum(),
-					SellVolume = sellVolumes.Sum()
-				});
+				list.AddLast(pl);
+				break;
 			}
 
-			return list;
+			var curr = enumerator.Current;
+
+			var combined = curr.Join(pl);
+			list.AddLast(new CandlePriceLevel
+			{
+				Price = curr.Price,
+				BuyVolumes = combined.BuyVolumes?.ToArray(),
+				SellVolumes = combined.SellVolumes?.ToArray(),
+				BuyVolume = combined.BuyVolume,
+				SellVolume = combined.SellVolume,
+				TotalVolume = combined.TotalVolume,
+				BuyCount = combined.BuyCount,
+				SellCount = combined.SellCount
+			});
 		}
+
+		return list;
 	}
 }

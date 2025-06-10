@@ -713,7 +713,7 @@ public static partial class CandleHelper
 	public static VolumeProfileBuilder GetValueArea<TCandle>(this IEnumerable<TCandle> candles)
 		where TCandle : ICandleMessage
 	{
-		var area = new VolumeProfileBuilder([]);
+		var area = new VolumeProfileBuilder();
 
 		foreach (var candle in candles)
 		{

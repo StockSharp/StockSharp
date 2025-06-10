@@ -131,12 +131,10 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 
 			if (subscription.Message.IsCalcVolumeProfile)
 			{
-				var levels = new List<CandlePriceLevel>();
-
-				subscription.VolumeProfile = volumeProfile = new VolumeProfileBuilder(levels);
+				subscription.VolumeProfile = volumeProfile = new();
 				volumeProfile.Update(transform);
 
-				candle.PriceLevels = levels;
+				candle.PriceLevels = subscription.VolumeProfile.PriceLevels;
 			}
 
 			candle.State = CandleStates.Active;
@@ -200,6 +198,9 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 
 		AddVolume(candle, volume, transform.Side);
 
+		if (subscription.Message.IsCalcVolumeProfile && transform.PriceLevels != null)
+			UpdatePriceLevels(candle, transform);
+
 		candle.OpenInterest = transform.OpenInterest;
 		candle.PriceLevels = transform.PriceLevels;
 
@@ -257,49 +258,54 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 
 		candle.OpenInterest = transform.OpenInterest;
 
-		if (transform.PriceLevels != null)
-		{
-			if (candle.PriceLevels == null)
-				candle.PriceLevels = transform.PriceLevels;
-			else
-			{
-				var dict = candle.PriceLevels.ToDictionary(l => l.Price);
-
-				foreach (var level in transform.PriceLevels)
-				{
-					if (dict.TryGetValue(level.Price, out var currLevel))
-					{
-						currLevel.BuyCount += level.BuyCount;
-						currLevel.SellCount += level.SellCount;
-						currLevel.BuyVolume += level.BuyVolume;
-						currLevel.SellVolume += level.SellVolume;
-						currLevel.TotalVolume += level.TotalVolume;
-
-						if (level.BuyVolumes != null)
-						{
-							if (currLevel.BuyVolumes == null)
-								currLevel.BuyVolumes = [.. level.BuyVolumes];
-							else
-								currLevel.BuyVolumes = [.. currLevel.BuyVolumes, .. level.BuyVolumes];
-						}
-
-						if (currLevel.SellVolumes != null && level.SellVolumes != null)
-						{
-							if (currLevel.SellVolumes == null)
-								currLevel.SellVolumes = [.. level.SellVolumes];
-							else
-								currLevel.SellVolumes = [.. currLevel.SellVolumes, .. level.SellVolumes];
-						}
-					}
-					else
-						dict.Add(level.Price, level);
-				}
-
-				candle.PriceLevels = [.. dict.Values];
-			}
-		}
+		if (subscription.Message.IsCalcVolumeProfile && transform.PriceLevels != null)
+			UpdatePriceLevels(candle, transform);
 
 		IncrementTicks(candle);
+	}
+
+	private static void UpdatePriceLevels(CandleMessage candle, ICandleBuilderValueTransform transform)
+	{
+		if (candle.PriceLevels == null)
+			candle.PriceLevels = transform.PriceLevels;
+		else
+		{
+			var dict = candle.PriceLevels.ToDictionary(l => l.Price);
+
+			foreach (var level in transform.PriceLevels)
+			{
+				if (dict.TryGetValue(level.Price, out var currLevel))
+				{
+					currLevel.BuyCount += level.BuyCount;
+					currLevel.SellCount += level.SellCount;
+					currLevel.BuyVolume += level.BuyVolume;
+					currLevel.SellVolume += level.SellVolume;
+					currLevel.TotalVolume += level.TotalVolume;
+
+					if (level.BuyVolumes != null)
+					{
+						if (currLevel.BuyVolumes == null)
+							currLevel.BuyVolumes = [.. level.BuyVolumes];
+						else
+							currLevel.BuyVolumes = [.. currLevel.BuyVolumes, .. level.BuyVolumes];
+					}
+
+					if (level.SellVolumes != null)
+					{
+						if (currLevel.SellVolumes == null)
+							currLevel.SellVolumes = [.. level.SellVolumes];
+						else
+							currLevel.SellVolumes = [.. currLevel.SellVolumes, .. level.SellVolumes];
+					}
+
+					dict[level.Price] = currLevel;
+				}
+				else
+					dict.Add(level.Price, level);
+			}
+
+			candle.PriceLevels = [.. dict.Values];
+		}
 	}
 
 	/// <summary>
@@ -813,9 +819,8 @@ public class PnFCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Cand
 
 		if (subscription.Message.IsCalcVolumeProfile)
 		{
-			var levels = new List<CandlePriceLevel>();
-			subscription.VolumeProfile = new(levels);
-			candle.PriceLevels = levels;
+			subscription.VolumeProfile = new();
+			candle.PriceLevels = subscription.VolumeProfile.PriceLevels;
 		}
 
 		UpdateCandle(candle, price, volume, time, side, oi, subscription.VolumeProfile);
@@ -863,9 +868,8 @@ public class RenkoCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Ca
 
 			if (subscription.Message.IsCalcVolumeProfile)
 			{
-				var levels = new List<CandlePriceLevel>();
-				subscription.VolumeProfile = new(levels);
-				candle.PriceLevels = levels;
+				subscription.VolumeProfile = new();
+				candle.PriceLevels = subscription.VolumeProfile.PriceLevels;
 			}
 
 			return candle;
