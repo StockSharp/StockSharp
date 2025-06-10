@@ -594,7 +594,6 @@ public class TimeFrameCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) 
 /// <param name="exchangeInfoProvider">The exchange boards provider.</param>
 public class TickCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : CandleBuilder<TickCandleMessage>(exchangeInfoProvider)
 {
-
 	/// <inheritdoc />
 	protected override TickCandleMessage CreateCandle(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)
 	{
@@ -626,7 +625,6 @@ public class TickCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Can
 /// <param name="exchangeInfoProvider">The exchange boards provider.</param>
 public class VolumeCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : CandleBuilder<VolumeCandleMessage>(exchangeInfoProvider)
 {
-
 	/// <inheritdoc />
 	protected override VolumeCandleMessage CreateCandle(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)
 	{
@@ -658,7 +656,6 @@ public class VolumeCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : C
 /// <param name="exchangeInfoProvider">The exchange boards provider.</param>
 public class RangeCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : CandleBuilder<RangeCandleMessage>(exchangeInfoProvider)
 {
-
 	/// <inheritdoc />
 	protected override RangeCandleMessage CreateCandle(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)
 	{
@@ -690,7 +687,6 @@ public class RangeCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Ca
 /// <param name="exchangeInfoProvider">The exchange boards provider.</param>
 public class PnFCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : CandleBuilder<PnFCandleMessage>(exchangeInfoProvider)
 {
-
 	/// <inheritdoc />
 	protected override IEnumerable<PnFCandleMessage> OnProcess(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)
 	{
@@ -838,7 +834,6 @@ public class PnFCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Cand
 /// <param name="exchangeInfoProvider">The exchange boards provider.</param>
 public class RenkoCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : CandleBuilder<RenkoCandleMessage>(exchangeInfoProvider)
 {
-
 	/// <inheritdoc />
 	protected override IEnumerable<RenkoCandleMessage> OnProcess(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)
 	{
@@ -927,7 +922,6 @@ public class RenkoCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Ca
 /// <param name="exchangeInfoProvider">The exchange boards provider.</param>
 public class HeikinAshiCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : CandleBuilder<HeikinAshiCandleMessage>(exchangeInfoProvider)
 {
-
 	/// <inheritdoc />
 	protected override HeikinAshiCandleMessage CreateCandle(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)
 	{
