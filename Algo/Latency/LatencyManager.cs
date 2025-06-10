@@ -50,7 +50,7 @@ public class LatencyManager : ILatencyManager
 
 				lock (_syncObject)
 				{
-					AddCancel(replaceMsg.TransactionId, replaceMsg.LocalTime);
+					AddCancel(replaceMsg.OriginalTransactionId, replaceMsg.LocalTime);
 					AddRegister(replaceMsg.TransactionId, replaceMsg.LocalTime);
 				}
 
@@ -88,7 +88,9 @@ public class LatencyManager : ILatencyManager
 							if (execMsg.OrderState == OrderStates.Failed)
 								break;
 
-							return execMsg.LocalTime - time;
+							var latency = execMsg.LocalTime - time;
+							LatencyCancellation += latency;
+							return latency;
 						}
 					}
 					else
@@ -98,7 +100,9 @@ public class LatencyManager : ILatencyManager
 						if (execMsg.OrderState == OrderStates.Failed)
 							break;
 
-						return execMsg.LocalTime - time;
+						var latency = execMsg.LocalTime - time;
+						LatencyRegistration += latency;
+						return latency;
 					}
 				}
 
@@ -140,7 +144,10 @@ public class LatencyManager : ILatencyManager
 	/// <inheritdoc />
 	public virtual void Reset()
 	{
-		LatencyRegistration = LatencyCancellation = TimeSpan.Zero;
+		LatencyRegistration = LatencyCancellation = default;
+
+		_register.Clear();
+		_cancel.Clear();
 	}
 
 	/// <summary>
