@@ -12,6 +12,12 @@ public class ExpressionIndexSecurityProcessor(Security basketSecurity) : IndexSe
 	/// <inheritdoc />
 	protected override decimal OnCalculate(decimal[] values)
 	{
+		if (values is null)
+			throw new ArgumentNullException(nameof(values));
+
+		if (values.Length != BasketLegs.Length)
+			throw new ArgumentOutOfRangeException(nameof(values));
+
 		return BasketSecurity.Formula.Calculate(values);
 	}
 }
