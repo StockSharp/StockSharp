@@ -99,7 +99,7 @@ public class QuotingProcessor : BaseLogReceiver
 	/// <summary>
 	/// Left volume.
 	/// </summary>
-	public decimal LeftVolume => _quotingVolume - Position.Abs();
+	public decimal LeftVolume => GetLeftVolume(Position);
 
 	private bool IsTimeOut(DateTimeOffset currentTime) => _timeOut != TimeSpan.Zero && (currentTime - _startedTime) >= _timeOut;
 	private bool NeedFinish() => _finished || LeftVolume <= 0;
@@ -472,6 +472,12 @@ public class QuotingProcessor : BaseLogReceiver
 		}
 	}
 
+	private decimal GetLeftVolume(decimal position)
+	{
+		var sign = _quotingSide == Sides.Buy ? 1 : -1;
+		return (_quotingVolume - position * sign).Max(0);
+	}
+
 	private (bool? isRegister, decimal? price, decimal? volume) Process(
 		Order currentOrder,
 		decimal? bestBidPrice,
@@ -482,7 +488,7 @@ public class QuotingProcessor : BaseLogReceiver
 		decimal currentPosition)
 	{
 		// Calculate the desired volume based on the current position
-		var newVolume = _quotingVolume - currentPosition.Abs();
+		var newVolume = GetLeftVolume(currentPosition);
 		if (newVolume <= 0)
 			return default;
 
