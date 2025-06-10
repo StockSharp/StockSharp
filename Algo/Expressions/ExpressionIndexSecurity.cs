@@ -22,10 +22,20 @@ public class ExpressionIndexSecurity : IndexSecurity
 	{
 	}
 
+	private ExpressionFormula<decimal> _formula = ExpressionFormula<decimal>.CreateError(LocalizedStrings.ExpressionNotSet);
+
 	/// <summary>
 	/// Compiled mathematical formula.
 	/// </summary>
-	public ExpressionFormula<decimal> Formula { get; private set; } = ExpressionFormula<decimal>.CreateError(LocalizedStrings.ExpressionNotSet);
+	public ExpressionFormula<decimal> Formula
+	{
+		get => _formula;
+		private set
+		{
+			_formula = value ?? throw new ArgumentNullException(nameof(value));
+			_innerSecurityIds.Clear();
+		}
+	}
 
 	/// <summary>
 	/// The mathematical formula of index.
@@ -46,8 +56,6 @@ public class ExpressionIndexSecurity : IndexSecurity
 			if (CodeExtensions.TryGetCSharpCompiler() is not null)
 			{
 				Formula = value.Compile(_context);
-
-				_innerSecurityIds.Clear();
 
 				if (Formula.Error.IsEmpty())
 				{
