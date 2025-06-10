@@ -383,4 +383,72 @@ public class CandleTests
 		(prevMessage5?.State == CandleStates.Active).AssertTrue();
 		CompareMessages((TimeFrameCandleMessage)prevMessage5, (TimeFrameCandleMessage)candles5FromTicks.Last());
 	}
+
+	[TestMethod]
+	public void TotalPrice()
+	{
+		var provider = new InMemoryExchangeInfoProvider();
+		var builders = new CandleBuilderProvider(provider);
+		var builder = (TimeFrameCandleBuilder)builders.Get(typeof(TimeFrameCandleMessage));
+
+		var md = new MarketDataMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+		};
+
+		var sub = new CandleBuilderSubscription(md);
+		var transform = new TickCandleBuilderValueTransform();
+
+		var now = DateTimeOffset.Now;
+
+		var tick1 = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = md.SecurityId,
+			ServerTime = now,
+			TradePrice = 100m,
+			TradeVolume = 1m,
+			OriginSide = Sides.Buy
+		};
+
+		transform.Process(tick1);
+		var candle1 = builder.Process(sub, transform).Cast<TimeFrameCandleMessage>().Single();
+
+		var tick2 = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = md.SecurityId,
+			ServerTime = now.AddSeconds(1),
+			TradePrice = 105m,
+			TradeVolume = 2m,
+			OriginSide = Sides.Sell
+		};
+
+		transform.Process(tick2);
+		var candle2 = builder.Process(sub, transform).Cast<TimeFrameCandleMessage>().Single();
+
+		candle1.AssertSame(candle2);
+
+		var tick3 = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = md.SecurityId,
+			ServerTime = now.AddMinutes(1),
+			TradePrice = 106m,
+			TradeVolume = 1m,
+			OriginSide = Sides.Buy
+		};
+
+		transform.Process(tick3);
+		var candles = builder.Process(sub, transform).Cast<TimeFrameCandleMessage>().ToArray();
+		
+		candles.Length.AssertEqual(2);
+
+		var finished = candles.First();
+
+		candle1.AssertSame(finished);
+
+		finished.TotalPrice.AssertEqual(310m);
+	}
 }

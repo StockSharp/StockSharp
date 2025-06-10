@@ -195,6 +195,9 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 		candle.LowVolume = volume;
 		candle.HighVolume = volume;
 
+		if (volume != null)
+			candle.TotalPrice = price * volume.Value;
+
 		AddVolume(candle, volume, transform.Side);
 
 		candle.OpenInterest = transform.OpenInterest;
