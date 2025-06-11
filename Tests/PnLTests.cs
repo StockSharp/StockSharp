@@ -330,4 +330,80 @@ public class PnLTests
 		manager.RealizedPnL.AssertEqual(0);
 		manager.GetPnL().AssertEqual(0);
 	}
+
+	[TestMethod]
+	public void UnrealizedPnL_ByDataType()
+	{
+		var secId = Helper.CreateSecurityId();
+
+		IPnLManager manager = new PnLManager
+		{
+			UseTick = true,
+			UseOrderLog = true,
+			UseOrderBook = true,
+			UseLevel1 = true,
+			UseCandles = true
+		};
+
+		var reg = new OrderRegisterMessage
+		{
+			PortfolioName = Helper.CreatePortfolio().Name,
+			SecurityId = secId,
+			TransactionId = 1,
+		};
+		manager.ProcessMessage(reg);
+
+		var buy = new ExecutionMessage
+		{
+			OriginalTransactionId = reg.TransactionId,
+			DataTypeEx = DataType.Transactions,
+			SecurityId = secId,
+			TradeId = 1,
+			TradePrice = 100m,
+			TradeVolume = 1m,
+			Side = Sides.Buy,
+			ServerTime = DateTimeOffset.UtcNow
+		};
+		manager.ProcessMessage(buy);
+
+		// --- Tick ---
+		var tick = new ExecutionMessage { DataTypeEx = DataType.Ticks, SecurityId = secId, TradePrice = 110m };
+		manager.ProcessMessage(tick);
+		manager.UnrealizedPnL.AssertEqual(10m);
+
+		// --- OrderLog ---
+		var orderLog = new ExecutionMessage { DataTypeEx = DataType.OrderLog, SecurityId = secId, TradePrice = 120m };
+		manager.ProcessMessage(orderLog);
+		manager.UnrealizedPnL.AssertEqual(20m);
+
+		// --- OrderBook ---
+		var quote = new QuoteChangeMessage
+		{
+			SecurityId = secId,
+			Bids = [new(130m, 1)],
+			Asks = [new(131m, 1)]
+		};
+		manager.ProcessMessage(quote);
+		manager.UnrealizedPnL.AssertEqual(30m);
+
+		// --- Level1 ---
+		var l1 = new Level1ChangeMessage { SecurityId = secId }.Add(Level1Fields.LastTradePrice, 140m);
+		manager.ProcessMessage(l1);
+		manager.UnrealizedPnL.AssertEqual(40m);
+
+		// --- Candle ---
+		var candle = new TimeFrameCandleMessage
+		{
+			SecurityId = secId,
+			OpenTime = DateTimeOffset.Now,
+			CloseTime = DateTimeOffset.Now,
+			OpenPrice = 100,
+			HighPrice = 150,
+			LowPrice = 90,
+			ClosePrice = 150,
+			TotalVolume = 1
+		};
+		manager.ProcessMessage(candle);
+		manager.UnrealizedPnL.AssertEqual(50m);
+	}
 }

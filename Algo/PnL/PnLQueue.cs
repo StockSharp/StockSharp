@@ -243,6 +243,8 @@ public class PnLQueue
 			&& _lastPrice != lastPrice)
 		{
 			_lastPrice = lastPrice;
+			_bidPrice = default;
+			_askPrice = default;
 			_unrealizedPnL = default;
 		}
 
@@ -250,6 +252,7 @@ public class PnLQueue
 			&& _bidPrice != bidPrice)
 		{
 			_bidPrice = bidPrice;
+			_lastPrice = default;
 			_unrealizedPnL = default;
 		}
 
@@ -257,6 +260,7 @@ public class PnLQueue
 			&& _askPrice != askPrice)
 		{
 			_askPrice = askPrice;
+			_lastPrice = default;
 			_unrealizedPnL = default;
 		}
 	}

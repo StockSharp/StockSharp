@@ -122,7 +122,7 @@ public class PortfolioPnLManager(string portfolioName, Func<SecurityId, Level1Ch
 			{
 				var execMsg = (ExecutionMessage)message;
 
-				if (execMsg.DataType != DataType.Ticks)
+				if (execMsg.DataType != DataType.Ticks && execMsg.DataType != DataType.OrderLog)
 					break;
 
 				if (!TryGetQueue(execMsg, out var queue))
