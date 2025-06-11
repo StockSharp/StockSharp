@@ -230,6 +230,11 @@ public class PnLManager : IPnLManager
 	/// <param name="storage">Storage.</param>
 	public void Load(SettingsStorage storage)
 	{
+		UseCandles = storage.GetValue(nameof(UseCandles), UseCandles);
+		UseLevel1 = storage.GetValue(nameof(UseLevel1), UseLevel1);
+		UseOrderBook = storage.GetValue(nameof(UseOrderBook), UseOrderBook);
+		UseOrderLog = storage.GetValue(nameof(UseOrderLog), UseOrderLog);
+		UseTick = storage.GetValue(nameof(UseTick), UseTick);
 	}
 
 	/// <summary>
@@ -238,5 +243,10 @@ public class PnLManager : IPnLManager
 	/// <param name="storage">Storage.</param>
 	public void Save(SettingsStorage storage)
 	{
+		storage.Set(nameof(UseCandles), UseCandles);
+		storage.Set(nameof(UseLevel1), UseLevel1);
+		storage.Set(nameof(UseOrderBook), UseOrderBook);
+		storage.Set(nameof(UseOrderLog), UseOrderLog);
+		storage.Set(nameof(UseTick), UseTick);
 	}
 }

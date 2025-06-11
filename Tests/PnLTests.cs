@@ -406,4 +406,18 @@ public class PnLTests
 		manager.ProcessMessage(candle);
 		manager.UnrealizedPnL.AssertEqual(50m);
 	}
+
+	[TestMethod]
+	public void SaveLoad()
+	{
+		var manager = new PnLManager { UseLevel1 = true };
+		
+		var storage = manager.Save();
+
+		var manager2 = new PnLManager();
+		
+		manager2.UseLevel1.AssertFalse();
+		manager2.Load(storage);
+		manager2.UseLevel1.AssertTrue();
+	}
 }
