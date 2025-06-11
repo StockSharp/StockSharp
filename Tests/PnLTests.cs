@@ -207,7 +207,7 @@ public class PnLTests
 	}
 
 	[TestMethod]
-	public void Reset_ClearsAll()
+	public void Reset()
 	{
 		IPnLManager manager = new PnLManager();
 
@@ -244,7 +244,7 @@ public class PnLTests
 	}
 
 	[TestMethod]
-	public void MultiPortfolio_SeparatePnL()
+	public void MultiPortfolio()
 	{
 		IPnLManager manager = new PnLManager();
 
