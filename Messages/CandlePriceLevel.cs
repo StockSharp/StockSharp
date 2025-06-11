@@ -62,10 +62,15 @@ public struct CandlePriceLevel// : ICloneable<CandlePriceLevel>
 	/// <returns>Joined <see cref="CandlePriceLevel"/>.</returns>
 	public CandlePriceLevel Join(CandlePriceLevel other)
 	{
+		var totalVol = other.TotalVolume;
+
+		if (totalVol == 0)
+			totalVol = other.BuyVolume + other.SellVolume;
+
 		return new()
 		{
 			Price = Price,
-			TotalVolume = TotalVolume + other.TotalVolume,
+			TotalVolume = TotalVolume + totalVol,
 			BuyVolume = BuyVolume + other.BuyVolume,
 			SellVolume = SellVolume + other.SellVolume,
 			BuyCount = BuyCount + other.BuyCount,

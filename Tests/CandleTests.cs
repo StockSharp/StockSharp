@@ -479,14 +479,25 @@ public class CandleTests
 			LowPrice = 100m,
 			ClosePrice = 100m,
 			TotalVolume = 1m,
-			PriceLevels =
-			[
-				new() { Price = 100m, BuyVolume = 1m, BuyCount = 1, TotalVolume = 1m }
-			]
 		};
 
 		var bigCandle = compressor.Process(candle1).Cast<TimeFrameCandleMessage>().Single();
 		bigCandle.AssertNotNull();
+
+		var lvlBig = bigCandle.PriceLevels.ToArray();
+		lvlBig.Length.AreEqual(2);
+
+		var lvlBig1 = lvlBig[0];
+		lvlBig1.Price.AreEqual(100m);
+		lvlBig1.BuyVolume.AreEqual(0m);
+		lvlBig1.BuyCount.AreEqual(0);
+		lvlBig1.TotalVolume.AreEqual(1m);
+
+		var lvlBig2 = lvlBig[1];
+		lvlBig2.Price.AreEqual(101m);
+		lvlBig2.BuyVolume.AreEqual(0m);
+		lvlBig2.BuyCount.AreEqual(0);
+		lvlBig2.TotalVolume.AreEqual(0m);
 
 		var candle2 = new TimeFrameCandleMessage
 		{
@@ -499,18 +510,11 @@ public class CandleTests
 			LowPrice = 102m,
 			ClosePrice = 103m,
 			TotalVolume = 2m,
-			PriceLevels =
-			[
-				new() { Price = 100m, BuyVolume = 2m, BuyCount = 2, TotalVolume = 2m }
-			]
 		};
 
 		var results = compressor.Process(candle2).Cast<TimeFrameCandleMessage>().ToArray();
 		var big = results.Single();
-
-		var level = big.PriceLevels.First(l => l.Price == 100m);
-		level.BuyVolume.AssertEqual(3m);
-		level.BuyCount.AssertEqual(3);
+		big.PriceLevels.Count().AssertEqual(4);
 	}
 
 	[TestMethod]
@@ -519,16 +523,24 @@ public class CandleTests
 		var builder = new VolumeProfileBuilder();
 
 		builder.Update(100m, 1m, Sides.Buy);
+
+		var level1 = builder.PriceLevels.Single();
+		level1.Price.AreEqual(100m);
+		level1.BuyVolume.AreEqual(1m);
+		level1.BuyCount.AreEqual(1);
+		level1.SellVolume.AreEqual(0m);
+		level1.SellCount.AreEqual(0);
+		level1.TotalVolume.AreEqual(1m);
+
 		builder.Update(100m, 2m, Sides.Sell);
 
-		var level = builder.PriceLevels.Single();
-
-		level.Price.AreEqual(100m);
-		level.BuyVolume.AreEqual(1m);
-		level.SellVolume.AreEqual(2m);
-		level.BuyCount.AreEqual(1);
-		level.SellCount.AreEqual(1);
-		level.TotalVolume.AreEqual(3m);
+		var level2 = builder.PriceLevels.Single();
+		level2.Price.AreEqual(100m);
+		level2.BuyVolume.AreEqual(1m);
+		level2.BuyCount.AreEqual(1);
+		level2.SellVolume.AreEqual(2m);
+		level2.SellCount.AreEqual(1);
+		level2.TotalVolume.AreEqual(3m);
 	}
 
 	[TestMethod]
@@ -544,6 +556,14 @@ public class CandleTests
 			BuyVolumes = [1m]
 		});
 
+		var afterBuy = builder.PriceLevels.Single();
+		afterBuy.Price.AreEqual(101m);
+		afterBuy.BuyVolume.AreEqual(1m);
+		afterBuy.BuyCount.AreEqual(1);
+		afterBuy.SellVolume.AreEqual(0m);
+		afterBuy.SellCount.AreEqual(0);
+		afterBuy.TotalVolume.AreEqual(1m);
+
 		builder.Update(new CandlePriceLevel
 		{
 			Price = 101m,
@@ -552,14 +572,15 @@ public class CandleTests
 			SellVolumes = [2m]
 		});
 
-		var merged = builder.PriceLevels.Single();
-		merged.Price.AreEqual(101m);
-		merged.BuyVolume.AreEqual(1m);
-		merged.SellVolume.AreEqual(2m);
-		merged.BuyCount.AreEqual(1);
-		merged.SellCount.AreEqual(1);
-		CollectionAssert.AreEqual(new[] { 1m }, merged.BuyVolumes.ToArray());
-		CollectionAssert.AreEqual(new[] { 2m }, merged.SellVolumes.ToArray());
+		var afterSell = builder.PriceLevels.Single();
+		afterSell.Price.AreEqual(101m);
+		afterSell.BuyVolume.AreEqual(1m);
+		afterSell.BuyCount.AreEqual(1);
+		afterSell.SellVolume.AreEqual(2m);
+		afterSell.SellCount.AreEqual(1);
+		afterSell.TotalVolume.AreEqual(3m);
+		afterSell.BuyVolumes.ToArray().AssertEqual([1m]);
+		afterSell.SellVolumes.ToArray().AssertEqual([2m]);
 	}
 
 	[TestMethod]
@@ -578,6 +599,14 @@ public class CandleTests
 			builder.Update(level);
 
 		builder.Calculate();
+
+		var levelsArr = builder.PriceLevels.OrderBy(l => l.Price).ToArray();
+		levelsArr[0].Price.AreEqual(99m);
+		levelsArr[0].TotalVolume.AreEqual(1m);
+		levelsArr[1].Price.AreEqual(100m);
+		levelsArr[1].TotalVolume.AreEqual(3m);
+		levelsArr[2].Price.AreEqual(101m);
+		levelsArr[2].TotalVolume.AreEqual(2m);
 
 		builder.PoC.Price.AreEqual(100m);
 		builder.High.Price.AreEqual(101m);
@@ -599,9 +628,24 @@ public class CandleTests
 		var builder = new VolumeProfileBuilder();
 
 		foreach (var level in levels)
+		{
 			builder.Update(level);
 
+			var l = builder.PriceLevels.First(x => x.Price == level.Price);
+			l.Price.AreEqual(level.Price);
+			l.BuyVolume.AreEqual(level.BuyVolume);
+			l.SellVolume.AreEqual(level.SellVolume);
+			l.TotalVolume.AreEqual(level.TotalVolume);
+		}
+
 		builder.Calculate();
+
+		var arr = builder.PriceLevels.OrderBy(x => x.Price).ToArray();
+		arr[0].Price.AreEqual(10m);
+		arr[1].Price.AreEqual(11m);
+		arr[2].Price.AreEqual(12m);
+		arr[3].Price.AreEqual(13m);
+		arr[4].Price.AreEqual(14m);
 
 		builder.PoC.Price.AreEqual(12m);
 
@@ -609,9 +653,7 @@ public class CandleTests
 		(builder.Low.Price < builder.PoC.Price || builder.Low.Price == builder.PoC.Price).AssertTrue();
 
 		builder.Update(15m, 2m, Sides.Buy);
-		
 		builder.PriceLevels.Any(l => l.Price == 15m).AssertTrue();
-
 		var lvl15 = builder.PriceLevels.First(l => l.Price == 15m);
 		lvl15.BuyVolume.AreEqual(2m);
 		lvl15.TotalVolume.AreEqual(2m);

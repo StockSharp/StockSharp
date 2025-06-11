@@ -61,106 +61,51 @@ public class VolumeProfileBuilder
 	/// <param name="side">Side.</param>
 	public void Update(decimal price, decimal? volume, Sides? side)
 	{
-		//if (value.OrderDirection == null)
-		//	return;
+		var level = new CandlePriceLevel { Price = price };
+		
+		if (volume is decimal v)
+		{
+			level.TotalVolume = v;
 
-		var idx = GetPriceLevelIdx(price);
-		var level = _levels[idx];
-		UpdatePriceLevel(ref level, volume, side);
-		_levels[idx] = level;
+			if (side == Sides.Buy)
+			{
+				level.BuyVolume = v;
+				level.BuyCount = 1;
+			}
+			else if (side == Sides.Sell)
+			{
+				level.SellVolume = v;
+				level.SellCount = 1;
+			}
+		}
+
+		Update(level);
 	}
 
 	/// <summary>
 	/// To update the profile with new value.
 	/// </summary>
-	/// <param name="priceLevel">Value.</param>
-	public void Update(CandlePriceLevel priceLevel)
+	/// <param name="level">Value.</param>
+	public void Update(CandlePriceLevel level)
 	{
-		var idx = GetPriceLevelIdx(priceLevel.Price);
+		var price = level.Price;
 
-		var level = _levels[idx];
-
-		level.BuyVolume += priceLevel.BuyVolume;
-		level.BuyCount += priceLevel.BuyCount;
-		level.SellVolume += priceLevel.SellVolume;
-		level.SellCount += priceLevel.SellCount;
-
-		level.TotalVolume += priceLevel.TotalVolume;
-
-		if (priceLevel.BuyVolumes != null)
-		{
-			if (level.BuyVolumes is null)
-				level.BuyVolumes = [.. priceLevel.BuyVolumes];
-			else
-				level.BuyVolumes = [.. level.BuyVolumes, .. priceLevel.BuyVolumes];
-		}
-
-		if (priceLevel.SellVolumes != null)
-		{
-			if (level.SellVolumes is null)
-				level.SellVolumes = [.. priceLevel.SellVolumes];
-			else
-				level.SellVolumes = [.. level.SellVolumes, .. priceLevel.SellVolumes];
-		}
-
-		_levels[idx] = level;
-	}
-
-	private int GetPriceLevelIdx(decimal price)
-	{
 		if (price == 0)
-			throw new ArgumentOutOfRangeException(nameof(price));
+			throw new ArgumentOutOfRangeException(nameof(level));
 
-		if (!_volumeProfileInfo.TryGetValue(price, out var index))
+		if (!_volumeProfileInfo.TryGetValue(price, out var idx))
 		{
-			index = _levels.Count;
-			_volumeProfileInfo.Add(price, index);
-			
-			var level = new CandlePriceLevel
-			{
-				Price = price,
-				//BuyVolumes = new List<decimal>(),
-				//SellVolumes = new List<decimal>()
-			};
+			idx = _levels.Count;
+			_volumeProfileInfo.Add(price, idx);
+
+			if (level.TotalVolume == 0)
+				level.TotalVolume = level.BuyVolume + level.SellVolume;
 
 			_levels.Add(level);
 		}
-
-		return index;
-	}
-
-	private static void UpdatePriceLevel(ref CandlePriceLevel level, decimal? volume, Sides? side)
-	{
-		if (level.Price == default)
-			throw new ArgumentNullException(nameof(level));
-
-		//var side = value.OrderDirection;
-
-		//if (side == null)
-		//	throw new ArgumentException(nameof(value));
-
-		if (volume == null)
-			return;
-
-		var v = volume.Value;
-
-		level.TotalVolume += v;
-
-		if (side == Sides.Buy)
+		else
 		{
-			level.BuyVolume += v;
-			level.BuyCount++;
-
-			if (level.BuyVolumes is ICollection<decimal> vols)
-				vols.Add(v);
-		}
-		else if (side == Sides.Sell)
-		{
-			level.SellVolume += v;
-			level.SellCount++;
-
-			if (level.SellVolumes is ICollection<decimal> vols)
-				vols.Add(v);
+			_levels[idx] = _levels[idx].Join(level);
 		}
 	}
 
@@ -271,6 +216,8 @@ public class VolumeProfileBuilder
 
 	private static LinkedList<CandlePriceLevel> Combine(IEnumerable<CandlePriceLevel> prices)
 	{
+		ArgumentNullException.ThrowIfNull(prices);
+
 		using var enumerator = prices.GetEnumerator();
 
 		var list = new LinkedList<CandlePriceLevel>();
@@ -291,7 +238,8 @@ public class VolumeProfileBuilder
 			var curr = enumerator.Current;
 
 			var combined = curr.Join(pl);
-			list.AddLast(new CandlePriceLevel
+
+			var level = new CandlePriceLevel
 			{
 				Price = curr.Price,
 				BuyVolumes = combined.BuyVolumes?.ToArray(),
@@ -301,7 +249,12 @@ public class VolumeProfileBuilder
 				TotalVolume = combined.TotalVolume,
 				BuyCount = combined.BuyCount,
 				SellCount = combined.SellCount
-			});
+			};
+
+			if (level.TotalVolume == 0)
+				level.TotalVolume = level.BuyVolume + level.SellVolume;
+
+			list.AddLast(level);
 		}
 
 		return list;

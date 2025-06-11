@@ -63,22 +63,22 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 	/// <summary>
 	/// Add volume to <see cref="CandleMessage.TotalVolume"/>, <see cref="CandleMessage.BuyVolume"/>, <see cref="CandleMessage.SellVolume"/>, <see cref="CandleMessage.RelativeVolume"/>.
 	/// </summary>
-	protected static void AddVolume(TCandleMessage candle, decimal? volume, Sides? volSide)
+	/// <param name="candle"><see cref="CandleMessage"/></param>
+	/// <param name="volume">The volume to be added to the candle.</param>
+	/// <param name="volSide">The side of the volume to be added to the candle.</param>
+	protected static void AddVolume(TCandleMessage candle, decimal volume, Sides? volSide)
 	{
-		if (volume == null)
-			return;
-
-		candle.TotalVolume += volume.Value;
+		candle.TotalVolume += volume;
 
 		switch (volSide)
 		{
 			case Sides.Buy:
-				candle.BuyVolume       = (candle.BuyVolume ?? 0)      + volume.Value;
-				candle.RelativeVolume  = (candle.RelativeVolume ?? 0) + volume.Value;
+				candle.BuyVolume       = (candle.BuyVolume ?? 0)      + volume;
+				candle.RelativeVolume  = (candle.RelativeVolume ?? 0) + volume;
 				break;
 			case Sides.Sell:
-				candle.SellVolume      = (candle.SellVolume ?? 0)     + volume.Value;
-				candle.RelativeVolume  = (candle.RelativeVolume ?? 0) - volume.Value;
+				candle.SellVolume      = (candle.SellVolume ?? 0)     + volume;
+				candle.RelativeVolume  = (candle.RelativeVolume ?? 0) - volume;
 				break;
 		}
 	}
@@ -186,23 +186,19 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 		candle.ClosePrice = price;
 		candle.LowPrice = price;
 		candle.HighPrice = price;
-		//candle.TotalPrice = price;
 
 		candle.OpenVolume = volume;
 		candle.CloseVolume = volume;
 		candle.LowVolume = volume;
 		candle.HighVolume = volume;
 
-		if (volume != null)
-			candle.TotalPrice = price * volume.Value;
-
-		AddVolume(candle, volume, transform.Side);
-
-		if (subscription.Message.IsCalcVolumeProfile && transform.PriceLevels != null)
-			UpdatePriceLevels(candle, transform);
+		if (volume is decimal v)
+		{
+			candle.TotalPrice = price * v;
+			AddVolume(candle, v, transform.Side);
+		}
 
 		candle.OpenInterest = transform.OpenInterest;
-		candle.PriceLevels = transform.PriceLevels;
 
 		candle.TotalTicks = 1;
 
@@ -243,13 +239,11 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 
 		candle.ClosePrice = price;
 
-		if (volume != null)
+		if (volume is decimal v)
 		{
-			var v = volume.Value;
+			candle.CloseVolume = v;
 
 			candle.TotalPrice += price * v;
-
-			candle.CloseVolume = v;
 
 			AddVolume(candle, v, transform.Side);
 		}
@@ -258,54 +252,7 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 
 		candle.OpenInterest = transform.OpenInterest;
 
-		if (subscription.Message.IsCalcVolumeProfile && transform.PriceLevels != null)
-			UpdatePriceLevels(candle, transform);
-
 		IncrementTicks(candle);
-	}
-
-	private static void UpdatePriceLevels(CandleMessage candle, ICandleBuilderValueTransform transform)
-	{
-		if (candle.PriceLevels == null)
-			candle.PriceLevels = transform.PriceLevels;
-		else
-		{
-			var dict = candle.PriceLevels.ToDictionary(l => l.Price);
-
-			foreach (var level in transform.PriceLevels)
-			{
-				if (dict.TryGetValue(level.Price, out var currLevel))
-				{
-					currLevel.BuyCount += level.BuyCount;
-					currLevel.SellCount += level.SellCount;
-					currLevel.BuyVolume += level.BuyVolume;
-					currLevel.SellVolume += level.SellVolume;
-					currLevel.TotalVolume += level.TotalVolume;
-
-					if (level.BuyVolumes != null)
-					{
-						if (currLevel.BuyVolumes == null)
-							currLevel.BuyVolumes = [.. level.BuyVolumes];
-						else
-							currLevel.BuyVolumes = [.. currLevel.BuyVolumes, .. level.BuyVolumes];
-					}
-
-					if (level.SellVolumes != null)
-					{
-						if (currLevel.SellVolumes == null)
-							currLevel.SellVolumes = [.. level.SellVolumes];
-						else
-							currLevel.SellVolumes = [.. currLevel.SellVolumes, .. level.SellVolumes];
-					}
-
-					dict[level.Price] = currLevel;
-				}
-				else
-					dict.Add(level.Price, level);
-			}
-
-			candle.PriceLevels = [.. dict.Values];
-		}
 	}
 
 	/// <summary>
@@ -773,10 +720,8 @@ public class PnFCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Cand
 	{
 		IncrementTicks(currentPnFCandle);
 
-		if (volume != null)
+		if (volume is decimal v)
 		{
-			var v = volume.Value;
-
 			currentPnFCandle.TotalPrice += v * price;
 
 			AddVolume(currentPnFCandle, v, side);
@@ -902,10 +847,10 @@ public class RenkoCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Ca
 		currentCandle.HighPrice = currentCandle.HighPrice.Max(price);
 		currentCandle.LowPrice = currentCandle.LowPrice.Min(price);
 
-		if (volume != null)
+		if (volume is decimal v)
 		{
-			currentCandle.TotalPrice += volume.Value * price;
-			AddVolume(currentCandle, volume.Value, side);
+			currentCandle.TotalPrice += v * price;
+			AddVolume(currentCandle, v, side);
 		}
 
 		subscription.VolumeProfile?.Update(price, volume, side);
