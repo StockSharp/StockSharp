@@ -272,6 +272,7 @@ public class PositionProtectDiagramElement : DiagramElement
 			_posSecurity = trade.Order.Security;
 			_posPortfolio = trade.Order.Portfolio;
 			_posClientCode = trade.Order.ClientCode;
+			_posBrokerCode = trade.Order.BrokerCode;
 		}
 		else
 		{

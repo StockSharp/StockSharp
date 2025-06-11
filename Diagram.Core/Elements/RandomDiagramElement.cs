@@ -24,7 +24,7 @@ public class RandomDiagramElement : DiagramElement
 	private readonly DiagramElementParam<decimal> _min;
 
 	/// <summary>
-	/// Minumum.
+	/// Minimum.
 	/// </summary>
 	public decimal Min
 	{
@@ -35,7 +35,7 @@ public class RandomDiagramElement : DiagramElement
 	private readonly DiagramElementParam<decimal> _max;
 
 	/// <summary>
-	/// Minumum.
+	/// Maximum.
 	/// </summary>
 	public decimal Max
 	{

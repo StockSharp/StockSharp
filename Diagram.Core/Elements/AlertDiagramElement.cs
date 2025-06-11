@@ -111,7 +111,12 @@ public sealed class AlertDiagramElement : DiagramElement
 
 	private void OnProcess(DiagramSocketValue value)
 	{
-		if (value.GetValue<bool>())
-			_ = AlertServicesRegistry.NotificationService.NotifyAsync(Type, TelegramChannel?.Id, LogLevel, Caption, Message, value.Time, default);
+		if (!value.GetValue<bool>())
+			return;
+
+		var svc = AlertServicesRegistry.TryNotificationService;
+
+		if (svc != null)
+			_ = svc.NotifyAsync(Type, TelegramChannel?.Id, LogLevel, Caption, Message, value.Time, default);
 	}
 }
