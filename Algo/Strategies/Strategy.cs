@@ -531,7 +531,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		Order = 100)]
 	[ReadOnly(true)]
 	[Browsable(false)]
-	public decimal PnL => PnLManager.PnL;
+	public decimal PnL => PnLManager.GetPnL();
 
 	/// <summary>
 	/// <see cref="PnL"/> change event.

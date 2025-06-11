@@ -2968,7 +2968,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			var realizedPnL = PnLManager.RealizedPnL;
 			var unrealizedPnL = PnLManager.UnrealizedPnL;
 			var commission = parent._commissionManager.Commission;
-			var totalPnL = PnLManager.PnL - commission;
+			var totalPnL = PnLManager.GetPnL() - commission;
 
 			try
 			{

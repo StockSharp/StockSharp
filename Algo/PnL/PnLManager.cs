@@ -44,9 +44,6 @@ public class PnLManager : IPnLManager
 	public bool UseCandles { get; set; } = true;
 
 	/// <inheritdoc />
-	public decimal PnL => RealizedPnL + UnrealizedPnL;
-
-	/// <inheritdoc />
 	public decimal RealizedPnL { get; private set; }
 
 	/// <inheritdoc />

@@ -86,7 +86,7 @@ public class PnLTests
 
 		manager.RealizedPnL.AssertEqual(5m);
 		manager.UnrealizedPnL.AssertEqual(0m);
-		manager.PnL.AssertEqual(5m);
+		manager.GetPnL().AssertEqual(5m);
 	}
 
 	[TestMethod]
@@ -140,7 +140,7 @@ public class PnLTests
 
 		// Realized PnL = (110-100)*10 = 100
 		manager.RealizedPnL.AssertEqual(100);
-		manager.PnL.AssertEqual(100);
+		manager.UnrealizedPnL.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -188,20 +188,22 @@ public class PnLTests
 
 		// Realized PnL = (110-100)*4 = 40
 		manager.RealizedPnL.AssertEqual(40);
+		manager.UnrealizedPnL.AssertEqual(0);
 
 		// Update last market price for remaining position (unrealized PnL)
-		manager.UpdateSecurity(new Level1ChangeMessage
+		manager.ProcessMessage(new ExecutionMessage
 		{
-			SecurityId = regMsg.SecurityId,
-			Changes = 
-			{
-				{ Level1Fields.LastTradePrice, 120m },
-			}
+			DataTypeEx = DataType.Ticks,
+			SecurityId = secId,
+			TradePrice = 120m,
+			ServerTime = DateTimeOffset.Now,
 		});
 
 		// Unrealized PnL = (120-100)*6 = 120
 		// Total PnL = 40 + 120 = 160
-		(Math.Abs(manager.PnL - 160m) < 1e-8m).AssertTrue();
+		manager.UnrealizedPnL.AssertEqual(120);
+		manager.RealizedPnL.AssertEqual(40);
+		manager.GetPnL().AssertEqual(160);
 	}
 
 	[TestMethod]
@@ -236,7 +238,7 @@ public class PnLTests
 		// Reset PnL
 		manager.ProcessMessage(new ResetMessage());
 
-		manager.PnL.AssertEqual(0);
+		manager.GetPnL().AssertEqual(0);
 		manager.RealizedPnL.AssertEqual(0);
 		manager.UnrealizedPnL.AssertEqual(0);
 	}
@@ -326,6 +328,6 @@ public class PnLTests
 		// Portfolio B: (180-200)*5 = -100
 		// Net: 0
 		manager.RealizedPnL.AssertEqual(0);
-		manager.PnL.AssertEqual(0);
+		manager.GetPnL().AssertEqual(0);
 	}
 }

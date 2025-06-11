@@ -6,11 +6,6 @@ namespace StockSharp.Algo.PnL;
 public interface IPnLManager : IPersistable
 {
 	/// <summary>
-	/// Total profit-loss.
-	/// </summary>
-	decimal PnL { get; }
-
-	/// <summary>
 	/// The value of realized profit-loss.
 	/// </summary>
 	decimal RealizedPnL { get; }

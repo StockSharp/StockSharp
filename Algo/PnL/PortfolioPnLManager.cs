@@ -21,9 +21,6 @@ public class PortfolioPnLManager(string portfolioName, Func<SecurityId, Level1Ch
 	public string PortfolioName { get; } = portfolioName.ThrowIfEmpty(nameof(portfolioName));
 
 	/// <inheritdoc />
-	public decimal PnL => RealizedPnL + UnrealizedPnL;
-
-	/// <inheritdoc />
 	public decimal RealizedPnL { get; private set; }
 
 	/// <inheritdoc />

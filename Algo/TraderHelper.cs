@@ -9,6 +9,7 @@ using Ecng.IO;
 using Nito.AsyncEx;
 
 using StockSharp.Algo.Indicators;
+using StockSharp.Algo.PnL;
 using StockSharp.Algo.Storages.Csv;
 
 /// <summary>
@@ -1466,5 +1467,16 @@ public static partial class TraderHelper
 			retVal.Add(reader.ReadBoard(encoding));
 
 		return retVal;
+	}
+
+	/// <summary>
+	/// Get the total profit and loss (PnL) value.
+	/// </summary>
+	/// <param name="manager"><see cref="IPnLManager"/></param>
+	/// <returns>Total profit and loss (PnL) value, which is the sum of unrealized and realized PnL.</returns>
+	public static decimal GetPnL(this IPnLManager manager)
+	{
+		ArgumentNullException.ThrowIfNull(manager);
+		return manager.UnrealizedPnL + manager.RealizedPnL;
 	}
 }
