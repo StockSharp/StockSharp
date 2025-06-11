@@ -79,8 +79,8 @@ public class SlippageTests
 		mgr.ProcessMessage(new QuoteChangeMessage
 		{
 			SecurityId = _secId,
-			Bids = [new QuoteChange(50m, 1)],
-			Asks = [new QuoteChange(55m, 1)]
+			Bids = [new(50m, 1)],
+			Asks = [new(55m, 1)]
 		});
 
 		mgr.ProcessMessage(new OrderRegisterMessage
@@ -243,17 +243,21 @@ public class SlippageTests
 	[TestMethod]
 	public void SaveLoadSettings()
 	{
-		var mgr = new SlippageManager();
-		mgr.CalculateNegative = false;
+		var mgr = new SlippageManager
+		{
+			CalculateNegative = false
+		};
 
 		var storage = new SettingsStorage();
 		mgr.Save(storage);
 
-		var mgr2 = new SlippageManager();
-		mgr2.CalculateNegative = true; // дефолтное значение true
+		var mgr2 = new SlippageManager
+		{
+			CalculateNegative = true
+		};
 
 		mgr2.Load(storage);
 
-		mgr2.CalculateNegative.AssertFalse(); // должно быть false после Load
+		mgr2.CalculateNegative.AssertFalse();
 	}
 }
