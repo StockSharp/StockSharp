@@ -30,14 +30,14 @@ public class SlippageTests
 		// исполнили заявку с ценой хуже (больше) на 2 пункта
 		var slip = mgr.ProcessMessage(new ExecutionMessage
 		{
+			DataTypeEx = DataType.Transactions,
 			SecurityId = _secId,
 			OriginalTransactionId = 1,
 			TradePrice = 104m,
 			Side = Sides.Buy
 		});
 
-		slip.AssertNotNull();
-		slip.Value.AssertEqual(2m); // 104 - 102 (ask при регистрации)
+		slip.AssertEqual(2m); // 104 - 102 (ask при регистрации)
 	}
 
 	[TestMethod]
@@ -61,14 +61,14 @@ public class SlippageTests
 
 		var slip = mgr.ProcessMessage(new ExecutionMessage
 		{
+			DataTypeEx = DataType.Transactions,
 			SecurityId = _secId,
 			OriginalTransactionId = 1,
 			TradePrice = 100m,
 			Side = Sides.Sell
 		});
 
-		slip.AssertNotNull();
-		slip.Value.AssertEqual(1m); // 101 - 100 (bid при регистрации)
+		slip.AssertEqual(1m); // 101 - 100 (bid при регистрации)
 	}
 
 	[TestMethod]
@@ -92,14 +92,14 @@ public class SlippageTests
 
 		var slip = mgr.ProcessMessage(new ExecutionMessage
 		{
+			DataTypeEx = DataType.Transactions,
 			SecurityId = _secId,
 			OriginalTransactionId = 77,
 			TradePrice = 60m,
 			Side = Sides.Buy
 		});
 
-		slip.AssertNotNull();
-		slip.Value.AssertEqual(5m); // 60 - 55
+		slip.AssertEqual(5m); // 60 - 55
 	}
 
 	[TestMethod]
@@ -124,28 +124,28 @@ public class SlippageTests
 		// исполнение ЛУЧШЕ ask — отрицательное проскальзывание
 		var slip = mgr.ProcessMessage(new ExecutionMessage
 		{
+			DataTypeEx = DataType.Transactions,
 			SecurityId = _secId,
 			OriginalTransactionId = 123,
 			TradePrice = 100m,
 			Side = Sides.Buy
 		});
 
-		slip.AssertNotNull();
-		slip.Value.AssertEqual(-1m); // 100 - 101
+		slip.AssertEqual(-1m); // 100 - 101
 
 		// Отключить отрицательное проскальзывание
 		mgr.CalculateNegative = false;
 
 		var slip2 = mgr.ProcessMessage(new ExecutionMessage
 		{
+			DataTypeEx = DataType.Transactions,
 			SecurityId = _secId,
 			OriginalTransactionId = 123,
 			TradePrice = 100m,
 			Side = Sides.Buy
 		});
 
-		slip2.AssertNotNull();
-		slip2.Value.AssertEqual(0m); // не может быть <0
+		slip2.AssertEqual(0m); // не может быть <0
 	}
 
 	[TestMethod]
@@ -164,6 +164,7 @@ public class SlippageTests
 		// Исполнение должно вернуть null (нет plannedPrice)
 		var slip = mgr.ProcessMessage(new ExecutionMessage
 		{
+			DataTypeEx = DataType.Transactions,
 			SecurityId = _secId,
 			OriginalTransactionId = 404,
 			TradePrice = 88,
@@ -188,6 +189,7 @@ public class SlippageTests
 		// Без регистрации заявки, сразу Execution — plannedPrice не будет
 		var slip = mgr.ProcessMessage(new ExecutionMessage
 		{
+			DataTypeEx = DataType.Transactions,
 			SecurityId = _secId,
 			OriginalTransactionId = 999,
 			TradePrice = 91m,
@@ -218,12 +220,13 @@ public class SlippageTests
 
 		var slip = mgr.ProcessMessage(new ExecutionMessage
 		{
+			DataTypeEx = DataType.Transactions,
 			SecurityId = _secId,
 			OriginalTransactionId = 12,
 			TradePrice = 3m,
 			Side = Sides.Buy
 		});
-		slip.AssertNotNull();
+		slip.AssertEqual(1);
 
 		// сброс
 		mgr.ProcessMessage(new ResetMessage());
@@ -231,12 +234,12 @@ public class SlippageTests
 		// Данные должны быть очищены, следующий Execution уже не найдет plannedPrice
 		var slip2 = mgr.ProcessMessage(new ExecutionMessage
 		{
+			DataTypeEx = DataType.Transactions,
 			SecurityId = _secId,
 			OriginalTransactionId = 12,
 			TradePrice = 3m,
 			Side = Sides.Buy
 		});
-
 		slip2.AssertNull();
 	}
 
