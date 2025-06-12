@@ -6,7 +6,7 @@ namespace StockSharp.Algo.Slippage;
 public class SlippageManager : ISlippageManager
 {
 	private readonly SynchronizedDictionary<SecurityId, RefPair<decimal, decimal>> _bestPrices = [];
-	private readonly SynchronizedDictionary<long, Tuple<Sides, decimal>> _plannedPrices = [];
+	private readonly SynchronizedDictionary<long, (Sides side, decimal price)> _plannedPrices = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="SlippageManager"/>.
@@ -90,7 +90,7 @@ public class SlippageManager : ISlippageManager
 					var price = regMsg.Side == Sides.Buy ? prices.Second : prices.First;
 
 					if (price != 0)
-						_plannedPrices.Add(regMsg.TransactionId, Tuple.Create(regMsg.Side, price));
+						_plannedPrices.Add(regMsg.TransactionId, (regMsg.Side, price));
 				}
 
 				break;
@@ -102,13 +102,11 @@ public class SlippageManager : ISlippageManager
 				
 				if (execMsg.HasTradeInfo())
 				{
-					var plannedPrice = _plannedPrices.TryGetValue(execMsg.OriginalTransactionId);
-
-					if (plannedPrice != null)
+					if (_plannedPrices.TryGetValue(execMsg.OriginalTransactionId, out var t))
 					{
-						var slippage = execMsg.TradePrice - plannedPrice.Item2;
+						var slippage = execMsg.TradePrice - t.price;
 
-						if (plannedPrice.Item1 == Sides.Sell)
+						if (t.side == Sides.Sell)
 							slippage = -slippage;
 
 						if (slippage < 0 && !CalculateNegative)
