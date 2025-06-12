@@ -71,6 +71,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 	private readonly PairSet<(DataType, SecurityId), SubscriptionInfo> _subscriptionsByKey = [];
 	private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = [];
 	private readonly HashSet<long> _skipSubscriptions = [];
+	private readonly HashSet<long> _unsubscribeRequests = [];
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
@@ -159,7 +160,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 					{
 						if (_subscriptionsById.TryGetValue(originTransId, out var info))
 						{
-							if (!ChangeState(info, originTransId, SubscriptionStates.Active))
+							if (!ChangeState(info, originTransId, _unsubscribeRequests.Contains(originTransId) ? SubscriptionStates.Stopped : SubscriptionStates.Active))
 								return;
 						}
 					}
@@ -219,7 +220,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 					{
 						if (!ChangeState(info, originTransId, SubscriptionStates.Finished))
 						{
-							info.OnlineSubscribers.Add(originTransId);
+							info.OnlineSubscribers.Remove(originTransId);
 							return;
 						}
 					}
@@ -308,6 +309,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 			_subscriptionsByKey.Clear();
 			_subscriptionsById.Clear();
 			_skipSubscriptions.Clear();
+			_unsubscribeRequests.Clear();
 		}
 	}
 
@@ -437,6 +439,8 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 					}
 					else
 					{
+						info.OnlineSubscribers.Remove(originId);
+
 						info.ExtraFilters.Remove(originId);
 
 						if (info.Linked.Count > 0)
@@ -452,6 +456,8 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 
 							if (info.State.IsActive())
 							{
+								_unsubscribeRequests.Add(originId);
+
 								// copy full subscription's details into unsubscribe request
 								sendInMsg = MakeUnsubscribe(info.Subscription.TypedClone(), info.Subscription.TransactionId);
 							}
