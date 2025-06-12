@@ -1,5 +1,7 @@
 ﻿namespace StockSharp.Diagram;
 
+using StockSharp.Alerts;
+
 /// <summary>
 /// Loading context.
 /// </summary>
@@ -13,4 +15,9 @@ public class CompositionLoadingContext(bool allowCode)
 	/// Allow <see cref="DiagramElement.IsExternalCode"/> elements.
 	/// </summary>
 	public bool AllowCode { get; } = allowCode;
+
+	/// <summary>
+	/// Allow alerts for the diagram.
+	/// </summary>
+	public ISet<AlertNotifications> AllowAlerts { get; } = new HashSet<AlertNotifications>();
 }

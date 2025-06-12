@@ -64,11 +64,15 @@ public sealed class AlertDiagramElement : DiagramElement
 		set => _message.Value = value;
 	}
 
+	private readonly ISet<AlertNotifications> _alertAlerts;
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="AlertDiagramElement"/>.
 	/// </summary>
 	public AlertDiagramElement()
 	{
+		_alertAlerts = Scope<CompositionLoadingContext>.Current?.Value.AllowAlerts;
+
 		AddInput(StaticSocketIds.Flag, LocalizedStrings.Flag, DiagramSocketType.Bool, OnProcess);
 
 		_type = AddParam(nameof(Type), AlertNotifications.Popup)
@@ -109,9 +113,22 @@ public sealed class AlertDiagramElement : DiagramElement
 			.SetDisplay(LocalizedStrings.Alerts, LocalizedStrings.Message, LocalizedStrings.SignalText, 40);
 	}
 
+	private bool _canProcess;
+
+	/// <inheritdoc />
+	protected override void OnStart(DateTimeOffset time)
+	{
+		base.OnStart(time);
+
+		if (Strategy.IsBacktesting)
+			_canProcess = Type == AlertNotifications.Log;
+		else
+			_canProcess = _alertAlerts?.Contains(Type) != false;
+	}
+
 	private void OnProcess(DiagramSocketValue value)
 	{
-		if (!value.GetValue<bool>())
+		if (!_canProcess || !value.GetValue<bool>())
 			return;
 
 		var svc = AlertServicesRegistry.TryNotificationService;
