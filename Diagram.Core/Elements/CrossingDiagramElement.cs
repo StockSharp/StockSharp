@@ -22,12 +22,24 @@ public class CrossingDiagramElement : DiagramElement
 
 	private class ValuePair
 	{
-		public Unit Value1 { get; set; }
-		public Unit Value2 { get; set; }
+		public Unit Value1 { get; private set; }
+		public Unit Value2 { get; private set; }
 
 		public bool IsFilled => Value1 is not null && Value2 is not null;
 
-		public bool? IsUp => Value1 is null || Value2 is null ? null : Value1 >= Value2;
+		public bool IsUp
+		{
+			get
+			{
+				var v1 = Value1;
+				var v2 = Value2;
+
+				if (v1 is null || v2 is null)
+					throw new InvalidOperationException();
+
+				return v1 >= v2;
+			}
+		}
 
 		public void Set(Unit val, bool isFirst)
 		{
@@ -99,13 +111,13 @@ public class CrossingDiagramElement : DiagramElement
 			return;
 		}
 
-		var newValue = _currentValues.IsUp == true && _previousValues.IsUp == false;
-		var oldValue = _outputSocket.Value as bool?;
+		var isCurrUp = _currentValues.IsUp;
+		var isCrossing = isCurrUp == !_previousValues.IsUp;
 
 		shift();
 
-		if (newValue != oldValue)
-			RaiseProcessOutput(_outputSocket, sock.Time, newValue, sock);
+		if (isCrossing)
+			RaiseProcessOutput(_outputSocket, sock.Time, isCurrUp, sock);
 	}
 
 	/// <inheritdoc />
