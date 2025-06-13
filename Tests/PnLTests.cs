@@ -109,7 +109,7 @@ public class PnLTests
 		var buyMsg = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
-			TransactionId = 1,
+			OriginalTransactionId = 1,
 			SecurityId = regMsg.SecurityId,
 			PortfolioName = regMsg.PortfolioName,
 			Side = Sides.Buy,
@@ -127,7 +127,7 @@ public class PnLTests
 		var sellMsg = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
-			TransactionId = 1,
+			OriginalTransactionId = 1,
 			SecurityId = regMsg.SecurityId,
 			PortfolioName = regMsg.PortfolioName,
 			Side = Sides.Sell,
@@ -162,7 +162,7 @@ public class PnLTests
 		manager.ProcessMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
-			TransactionId = 1,
+			OriginalTransactionId = 1,
 			SecurityId = regMsg.SecurityId,
 			PortfolioName = regMsg.PortfolioName,
 			Side = Sides.Buy,
@@ -176,7 +176,7 @@ public class PnLTests
 		manager.ProcessMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
-			TransactionId = 1,
+			OriginalTransactionId = 1,
 			SecurityId = regMsg.SecurityId,
 			PortfolioName = regMsg.PortfolioName,
 			Side = Sides.Sell,
@@ -225,7 +225,7 @@ public class PnLTests
 		manager.ProcessMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
-			TransactionId = 1,
+			OriginalTransactionId = 1,
 			SecurityId = regMsg.SecurityId,
 			PortfolioName = regMsg.PortfolioName,
 			Side = Sides.Buy,
@@ -272,7 +272,7 @@ public class PnLTests
 		manager.ProcessMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
-			TransactionId = 1,
+			OriginalTransactionId = 1,
 			SecurityId = regA.SecurityId,
 			PortfolioName = regA.PortfolioName,
 			Side = Sides.Buy,
@@ -286,7 +286,7 @@ public class PnLTests
 		manager.ProcessMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
-			TransactionId = 2,
+			OriginalTransactionId = 2,
 			SecurityId = regB.SecurityId,
 			PortfolioName = regB.PortfolioName,
 			Side = Sides.Buy,
@@ -300,7 +300,7 @@ public class PnLTests
 		manager.ProcessMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
-			TransactionId = 1,
+			OriginalTransactionId = 1,
 			SecurityId = regA.SecurityId,
 			PortfolioName = regA.PortfolioName,
 			Side = Sides.Sell,
@@ -314,7 +314,7 @@ public class PnLTests
 		manager.ProcessMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
-			TransactionId = 2,
+			OriginalTransactionId = 2,
 			SecurityId = regB.SecurityId,
 			PortfolioName = regB.PortfolioName,
 			Side = Sides.Sell,

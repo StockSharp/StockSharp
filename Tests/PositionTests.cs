@@ -73,20 +73,21 @@ public class PositionTests
 		var secId = Helper.CreateSecurityId();
 		var manager = new PositionManager(true);
 
-		manager.ProcessMessage(new OrderRegisterMessage
+		var regMsg = new OrderRegisterMessage
 		{
 			TransactionId = 1,
 			SecurityId = secId,
 			PortfolioName = "pf",
 			Side = Sides.Buy,
 			Volume = 10,
-		});
+		};
+		manager.ProcessMessage(regMsg);
 
 		manager.ProcessMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
-			TransactionId = 1,
+			OriginalTransactionId = regMsg.TransactionId,
 			SecurityId = secId,
 			PortfolioName = "pf",
 			Side = Sides.Buy,
@@ -101,7 +102,7 @@ public class PositionTests
 		{
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
-			TransactionId = 1,
+			OriginalTransactionId = regMsg.TransactionId,
 			SecurityId = secId,
 			PortfolioName = "pf",
 			Side = Sides.Buy,
@@ -152,15 +153,13 @@ public class PositionTests
 		change.Changes[PositionChangeTypes.CurrentValue].To<decimal>().AssertEqual(8m);
 	}
 
-	private sealed class TestPositionManager : IPositionManager
+	private class TestPositionManager : IPositionManager
 	{
-		public Func<Message, PositionChangeMessage> Processor { get; set; }
-
 		public PositionChangeMessage ProcessMessage(Message message)
-			=> Processor?.Invoke(message);
+			=> null;
 	}
 
-	private sealed class TestInnerAdapter(bool? emulate) : PassThroughMessageAdapter(new IncrementalIdGenerator())
+	private class TestInnerAdapter(bool? emulate) : PassThroughMessageAdapter(new IncrementalIdGenerator())
 	{
 		public override bool? IsPositionsEmulationRequired
 			=> emulate;
@@ -184,17 +183,10 @@ public class PositionTests
 
 		adapter.SendInMessage(lookup);
 		output.Count.AssertEqual(1);
-		((PortfolioLookupMessage)output[0]).IsSubscribe.AssertFalse();
+		output[0].AssertOfType<SubscriptionOnlineMessage>();
 		output.Clear();
 
-		var change = new PositionChangeMessage
-		{
-			PortfolioName = "pf",
-			SecurityId = new SecurityId { SecurityCode = "S", BoardCode = "X" },
-			ServerTime = DateTimeOffset.UtcNow
-		}.Add(PositionChangeTypes.CurrentValue, 1m);
-
-		manager.Processor = _ => change;
+		var secId = new SecurityId { SecurityCode = "S", BoardCode = "X" };
 
 		adapter.SendInMessage(new ExecutionMessage
 		{
@@ -202,14 +194,11 @@ public class PositionTests
 			PortfolioName = "pf",
 			Side = Sides.Buy,
 			TradeVolume = 1m,
-			SecurityId = change.SecurityId,
+			SecurityId = secId,
 			ServerTime = DateTimeOffset.UtcNow
 		});
 
-		output.Count.AssertEqual(2);
-		(output[0] is ExecutionMessage).AssertTrue();
-		var pos = (PositionChangeMessage)output[1];
-		pos.GetSubscriptionIds().Length.AssertEqual(1);
-		pos.GetSubscriptionIds()[0].AssertEqual(1L);
+		output.Count.AssertEqual(1);
+		output[0].AssertOfType<ExecutionMessage>();
 	}
 }

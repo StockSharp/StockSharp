@@ -20,19 +20,20 @@ public class SlippageTests
 		.Add(Level1Fields.BestAskPrice, 102m));
 
 		// имитируем регистрацию Buy-заявки
-		mgr.ProcessMessage(new OrderRegisterMessage
+		var regMsg = new OrderRegisterMessage
 		{
 			SecurityId = _secId,
 			Side = Sides.Buy,
 			TransactionId = 1
-		});
+		};
+		mgr.ProcessMessage(regMsg);
 
 		// исполнили заявку с ценой хуже (больше) на 2 пункта
 		var slip = mgr.ProcessMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			SecurityId = _secId,
-			OriginalTransactionId = 1,
+			OriginalTransactionId = regMsg.TransactionId,
 			TradePrice = 104m,
 			Side = Sides.Buy
 		});
@@ -52,18 +53,19 @@ public class SlippageTests
 		.Add(Level1Fields.BestBidPrice, 101m)
 		.Add(Level1Fields.BestAskPrice, 103m));
 
-		mgr.ProcessMessage(new OrderRegisterMessage
+		var regMsg = new OrderRegisterMessage
 		{
 			SecurityId = _secId,
 			Side = Sides.Sell,
 			TransactionId = 1
-		});
+		};
+		mgr.ProcessMessage(regMsg);
 
 		var slip = mgr.ProcessMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			SecurityId = _secId,
-			OriginalTransactionId = 1,
+			OriginalTransactionId = regMsg.TransactionId,
 			TradePrice = 100m,
 			Side = Sides.Sell
 		});
@@ -83,18 +85,19 @@ public class SlippageTests
 			Asks = [new(55m, 1)]
 		});
 
-		mgr.ProcessMessage(new OrderRegisterMessage
+		var regMsg = new OrderRegisterMessage
 		{
 			SecurityId = _secId,
 			Side = Sides.Buy,
 			TransactionId = 77
-		});
+		};
+		mgr.ProcessMessage(regMsg);
 
 		var slip = mgr.ProcessMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			SecurityId = _secId,
-			OriginalTransactionId = 77,
+			OriginalTransactionId = regMsg.TransactionId,
 			TradePrice = 60m,
 			Side = Sides.Buy
 		});
@@ -114,19 +117,20 @@ public class SlippageTests
 		.Add(Level1Fields.BestBidPrice, 100m)
 		.Add(Level1Fields.BestAskPrice, 101m));
 
-		mgr.ProcessMessage(new OrderRegisterMessage
+		var regMsg = new OrderRegisterMessage
 		{
 			SecurityId = _secId,
 			Side = Sides.Buy,
 			TransactionId = 123
-		});
+		};
+		mgr.ProcessMessage(regMsg);
 
 		// исполнение ЛУЧШЕ ask — отрицательное проскальзывание
 		var slip = mgr.ProcessMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			SecurityId = _secId,
-			OriginalTransactionId = 123,
+			OriginalTransactionId = regMsg.TransactionId,
 			TradePrice = 100m,
 			Side = Sides.Buy
 		});
@@ -154,19 +158,20 @@ public class SlippageTests
 		var mgr = new SlippageManager();
 
 		// Без Level1/QuoteChange: OrderRegister не добавляет plannedPrice
-		mgr.ProcessMessage(new OrderRegisterMessage
+		var regMsg = new OrderRegisterMessage
 		{
 			SecurityId = _secId,
 			Side = Sides.Buy,
 			TransactionId = 404
-		});
+		};
+		mgr.ProcessMessage(regMsg);
 
 		// Исполнение должно вернуть null (нет plannedPrice)
 		var slip = mgr.ProcessMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			SecurityId = _secId,
-			OriginalTransactionId = 404,
+			OriginalTransactionId = regMsg.TransactionId,
 			TradePrice = 88,
 			Side = Sides.Buy
 		});
@@ -211,18 +216,19 @@ public class SlippageTests
 		.Add(Level1Fields.BestBidPrice, 1m)
 		.Add(Level1Fields.BestAskPrice, 2m));
 
-		mgr.ProcessMessage(new OrderRegisterMessage
+		var regMsg = new OrderRegisterMessage
 		{
 			SecurityId = _secId,
 			Side = Sides.Buy,
 			TransactionId = 12
-		});
+		};
+		mgr.ProcessMessage(regMsg);
 
 		var slip = mgr.ProcessMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			SecurityId = _secId,
-			OriginalTransactionId = 12,
+			OriginalTransactionId = regMsg.TransactionId,
 			TradePrice = 3m,
 			Side = Sides.Buy
 		});
