@@ -29,6 +29,77 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
+	public void OrderMatcher()
+	{
+		static ExecutionMessage CreateQuote(Sides side, decimal price, decimal volume, SecurityId secId)
+		{
+			return new ExecutionMessage
+			{
+				LocalTime = DateTimeOffset.UtcNow,
+				SecurityId = secId,
+				Side = side,
+				OrderPrice = price,
+				OrderVolume = volume,
+				DataTypeEx = DataType.OrderLog,
+			};
+		}
+
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+
+		emu.SendInMessage(CreateQuote(Sides.Buy, 90, 1, id));
+		emu.SendInMessage(CreateQuote(Sides.Buy, 91, 1, id));
+		emu.SendInMessage(CreateQuote(Sides.Buy, 92, 1, id));
+		emu.SendInMessage(CreateQuote(Sides.Buy, 93, 1, id));
+		emu.SendInMessage(CreateQuote(Sides.Buy, 94, 1, id));
+
+		emu.SendInMessage(CreateQuote(Sides.Sell, 96, 1, id));
+		emu.SendInMessage(CreateQuote(Sides.Sell, 97, 1, id));
+		emu.SendInMessage(CreateQuote(Sides.Sell, 98, 1, id));
+		emu.SendInMessage(CreateQuote(Sides.Sell, 99, 1, id));
+		emu.SendInMessage(CreateQuote(Sides.Sell, 100, 1, id));
+
+		emu.SendInMessage(new ExecutionMessage
+		{
+			LocalTime = DateTimeOffset.UtcNow,
+			SecurityId = id,
+			Side = Sides.Buy,
+			TransactionId = 1,
+			OrderPrice = 96,
+			OrderVolume = 2,
+			PortfolioName = "test",
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+		});
+
+		res.Count.AssertEqual(6);
+
+		emu.SendInMessage(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			PortfolioName = "test",
+			LocalTime = DateTimeOffset.UtcNow,
+		}
+		.Add(PositionChangeTypes.BeginValue, 100000000m)
+		.Add(PositionChangeTypes.CurrentValue, 100000000m));
+
+		emu.SendInMessage(new ExecutionMessage
+		{
+			LocalTime = DateTimeOffset.UtcNow,
+			SecurityId = id,
+			Side = Sides.Buy,
+			TransactionId = 2,
+			OrderPrice = 96,
+			OrderVolume = 2,
+			PortfolioName = "test",
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+		});
+
+		res.Count.AssertEqual(9);
+	}
+
+	[TestMethod]
 	public void LimitBuyPutInQueueOrderBook()
 	{
 		var id = Helper.CreateSecurityId();
