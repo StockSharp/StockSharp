@@ -456,7 +456,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 
 							if (info.State.IsActive())
 							{
-								_unsubscribeRequests.Add(originId);
+								_unsubscribeRequests.Add(transId);
 
 								// copy full subscription's details into unsubscribe request
 								sendInMsg = MakeUnsubscribe(info.Subscription.TypedClone(), info.Subscription.TransactionId);
