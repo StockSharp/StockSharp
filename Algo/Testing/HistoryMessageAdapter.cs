@@ -147,6 +147,9 @@ public class HistoryMessageAdapter : MessageAdapter
 	/// <inheritdoc />
 	public override DateTimeOffset CurrentTime => _currentTime;
 
+	/// <inheritdoc />
+	public override bool UseOutChannel => false;
+
 	/// <summary>
 	/// Release resources.
 	/// </summary>
