@@ -219,7 +219,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 
 	/// <inheritdoc />
 	[Browsable(false)]
-	public virtual bool IsAutoReplyOnTransactonalUnsubscription => true;
+	public virtual bool IsAutoReplyOnTransactonalUnsubscription => false;
 
 	/// <inheritdoc />
 	[Display(

@@ -36,9 +36,6 @@ public partial class TinkoffMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override bool IsAutoReplyOnTransactonalUnsubscription => false;
-
-	/// <inheritdoc />
 	public override bool IsReplaceCommandEditCurrent => true;
 
 	/// <inheritdoc />
