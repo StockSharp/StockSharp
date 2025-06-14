@@ -67,7 +67,7 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 						return true;
 					}
 
-					if (lookupMsg.To == null)
+					if (!lookupMsg.IsHistoryOnly())
 					{
 						LogDebug("Subscription {0} added.", lookupMsg.TransactionId);
 						_subscriptions.Add(lookupMsg.TransactionId);
