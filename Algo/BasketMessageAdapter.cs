@@ -8,7 +8,6 @@ using StockSharp.Algo.PnL;
 using StockSharp.Algo.Slippage;
 using StockSharp.Algo.Testing;
 using StockSharp.Algo.Positions;
-using StockSharp.Algo.Strategies;
 
 /// <summary>
 /// The interface describing the list of adapters to trading systems with which the aggregator operates.
@@ -230,188 +229,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				parentId = t.First;
 				return true;
 			}
-		}
-	}
-
-	private class EmulationPositionManager : BaseLogReceiver, IPositionManager
-	{
-		private readonly IPositionManager _nonStrategyManager;
-		private readonly IPositionManager _strategyManager;
-
-		private readonly Dictionary<long, IPositionManager> _managersByTransId = [];
-
-		private readonly BasketMessageAdapter _adapter;
-		private readonly Connector _connector;
-
-		private bool _posLookupProcessed;
-		private bool _transLookupProcessed;
-
-		public EmulationPositionManager(bool? isPositionsEmulationRequired, BasketMessageAdapter adapter)
-		{
-			if (isPositionsEmulationRequired != null)
-				_nonStrategyManager = new PositionManager(isPositionsEmulationRequired.Value) { Parent = this };
-
-			_strategyManager = new StrategyPositionManager(isPositionsEmulationRequired ?? true) { Parent = this };
-
-			_adapter = adapter;
-			_connector = (Connector)_adapter.Parent;
-		}
-
-		PositionChangeMessage IPositionManager.ProcessMessage(Message message)
-		{
-			switch (message.Type)
-			{
-				case MessageTypes.Reset:
-				{
-					_nonStrategyManager?.ProcessMessage(message);
-					_strategyManager.ProcessMessage(message);
-
-					_managersByTransId.Clear();
-
-					_posLookupProcessed = false;
-					_transLookupProcessed = false;
-
-					break;
-				}
-				case MessageTypes.PortfolioLookup:
-				{
-					ProcessPortfolioLookup((PortfolioLookupMessage)message);
-					break;
-				}
-				case MessageTypes.OrderStatus:
-				{
-					ProcessOrderStatus((OrderStatusMessage)message);
-					break;
-				}
-				default:
-				{
-					if (message is IStrategyIdMessage stratMsg)
-					{
-						if (message is ExecutionMessage execMsg)
-						{
-							if (execMsg.IsMarketData())
-								break;
-
-							var transId = execMsg.TransactionId;
-
-							if (transId == 0)
-							{
-								if (_managersByTransId.TryGetValue(execMsg.OriginalTransactionId, out var manager))
-									return manager.ProcessMessage(message);
-							}
-							else
-							{
-								if (_managersByTransId.TryGetValue(transId, out var manager))
-									return manager.ProcessMessage(message);
-								else
-								{
-									manager = GetManager(execMsg.StrategyId);
-
-									if (manager == null)
-										break;
-
-									_managersByTransId[transId] = manager;
-									return manager.ProcessMessage(message);
-								}
-							}
-						}
-						else
-						{
-							var manager = GetManager(stratMsg.StrategyId);
-
-							if (manager == null)
-								break;
-
-							switch (message.Type)
-							{
-								case MessageTypes.OrderRegister:
-								case MessageTypes.OrderReplace:
-								{
-									var regMsg = (OrderRegisterMessage)message;
-
-									_managersByTransId[regMsg.TransactionId] = manager;
-
-									break;
-								}
-							}
-
-							return manager.ProcessMessage(message);
-						}
-					}
-
-					break;
-				}
-			}
-
-			return null;
-		}
-
-		private void ProcessOrderStatus(OrderStatusMessage message)
-		{
-			if (message is null)
-				throw new ArgumentNullException(nameof(message));
-
-			if (!message.IsSubscribe || (message.Adapter != null && message.Adapter != this))
-				return;
-
-			if (_transLookupProcessed)
-				return;
-
-			_transLookupProcessed = true;
-
-			var buffer = _connector.Buffer;
-			var snapshotRegistry = _connector.SnapshotRegistry;
-
-			if (snapshotRegistry != null && buffer?.EnabledTransactions == true)
-			{
-				if (!message.HasOrderId() && message.OriginalTransactionId == 0/* && _adapter.StorageSettings.DaysLoad > TimeSpan.Zero*/)
-				{
-					var from = message.From ?? _connector.CurrentTime.UtcDateTime.Date/* - _adapter.StorageSettings.DaysLoad*/;
-					var to = message.To;
-
-					var storage = (ISnapshotStorage<string, ExecutionMessage>)_connector.SnapshotRegistry.GetSnapshotStorage(DataType.Transactions);
-
-					foreach (var snapshot in storage.GetAll(from, to))
-					{
-						if (snapshot.OrderState == OrderStates.Active || snapshot.HasTradeInfo)
-						{
-							var manager = GetManager(snapshot.StrategyId);
-
-							if (manager == null)
-								continue;
-
-							if (snapshot.HasOrderInfo)
-								_managersByTransId[snapshot.TransactionId] = manager;
-
-							manager.ProcessMessage(snapshot);
-						}
-					}
-				}
-			}
-		}
-
-		private void ProcessPortfolioLookup(PortfolioLookupMessage message)
-		{
-			if (message is null)
-				throw new ArgumentNullException(nameof(message));
-
-			if (!message.IsSubscribe || (message.Adapter != null && message.Adapter != this))
-				return;
-
-			if (_posLookupProcessed)
-				return;
-
-			_posLookupProcessed = true;
-
-			foreach (var position in _connector.PositionStorage.Positions.Filter(message))
-			{
-				GetManager(position.StrategyId)?.ProcessMessage(position.ToChangeMessage());
-			}
-		}
-
-		private IPositionManager GetManager(string strategyId)
-		{
-			return strategyId.IsEmpty()	? _nonStrategyManager : _strategyManager;
 		}
 	}
 
@@ -720,11 +537,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	public bool IsSupportTransactionLog { get; set; } = true;
 
 	/// <summary>
-	/// Use <see cref="PositionMessageAdapter"/>.
-	/// </summary>
-	public bool IsSupportPositionEmulation { get; set; }
-
-	/// <summary>
 	/// To call the <see cref="ConnectMessage"/> event when the first adapter connects to <see cref="InnerAdapters"/>.
 	/// </summary>
 	public bool ConnectDisconnectEventOnFirstAdapter { get; set; } = true;
@@ -863,14 +675,14 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			adapter = ApplyOwnInner(new TransactionOrderingMessageAdapter(adapter));
 		}
 
+		if (adapter.IsPositionsEmulationRequired is bool isPosEmu)
+		{
+			adapter = ApplyOwnInner(new PositionMessageAdapter(adapter, new PositionManager(isPosEmu)));
+		}
+
 		if (adapter.IsSupportSubscriptions)
 		{
 			adapter = ApplyOwnInner(new SubscriptionOnlineMessageAdapter(adapter));
-		}
-
-		if (IsSupportPositionEmulation || adapter.IsPositionsEmulationRequired != null)
-		{
-			adapter = ApplyOwnInner(new PositionMessageAdapter(adapter, new EmulationPositionManager(adapter.IsPositionsEmulationRequired, this)));
 		}
 
 		if (SupportSecurityAll)
@@ -2128,7 +1940,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			UseInChannel = UseInChannel,
 			UseOutChannel = UseOutChannel,
 			IsSupportTransactionLog = IsSupportTransactionLog,
-			IsSupportPositionEmulation = IsSupportPositionEmulation,
 			FillGapsBehaviour = FillGapsBehaviour,
 			GenerateOrderBookFromLevel1 = GenerateOrderBookFromLevel1,
 		};

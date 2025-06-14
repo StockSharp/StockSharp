@@ -42,10 +42,6 @@ public class PositionManager(bool byOrders) : BaseLogReceiver, IPositionManager
 		static (SecurityId, string) CreateKey(SecurityId secId, string pf)
 			=> (secId, pf.ToLowerInvariant());
 
-		static (SecurityId, string) CreateKey2<TMessage>(TMessage message)
-			where TMessage : Message, ISecurityIdMessage, IPortfolioNameMessage
-			=> CreateKey(message.SecurityId, message.PortfolioName);
-
 		OrderInfo EnsureGetInfo<TMessage>(TMessage msg, Sides side, decimal volume, decimal balance)
 			where TMessage : Message, ITransactionIdMessage, ISecurityIdMessage, IPortfolioNameMessage
 		{

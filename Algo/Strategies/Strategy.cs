@@ -115,14 +115,9 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 	private class OrderInfo
 	{
-		public OrderInfo()
-		{
-			PrevState = OrderStates.None;
-		}
-
 		public bool IsCanceled { get; set; }
 		public decimal ReceivedVolume { get; set; }
-		public OrderStates PrevState { get; set; }
+		public OrderStates PrevState { get; set; } = OrderStates.None;
 	}
 
 	private class IndicatorList(Strategy strategy)
@@ -264,8 +259,8 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		NameGenerator.Changed += name => _name.Value = name;
 
 		_riskManager = new RiskManager { Parent = this };
-
 		_indicators = new(this);
+		_posManager = new(this);
 	}
 
 	private readonly StrategyParam<Guid> _id;
@@ -1255,7 +1250,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if (order is null)
 			throw new ArgumentNullException(nameof(order));
 
-		var pos = _positions.TryGetValue(CreatePositionKey(order.Security, order.Portfolio))?.CurrentValue;
+		var pos = GetPositionValue(order.Security, order.Portfolio);
 
 		if (!CanTrade(pos > 0 && pos.Value.GetDirection() == order.Side.Invert() && pos.Value.Abs() >= order.Volume, out var reason))
 		{
@@ -1728,8 +1723,8 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			_myTrades.Clear();
 			_ordersInfo.Clear();
 
-			positions = _positions.CachedValues;
-			_positions.Clear();
+			positions = _posManager.Positions;
+			_posManager.Reset();
 		}
 
 		ProcessState = ProcessStates.Stopped;
@@ -1981,10 +1976,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				break;
 			}
 
-			case MessageTypes.PositionChange:
-				ProcessPositionChangeMessage((PositionChangeMessage)message);
-				break;
-
 			case MessageTypes.Time:
 			{
 				var timeMsg = (TimeMessage)message;
@@ -2127,6 +2118,8 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		{
 			OrderReceived?.Invoke(subscription, order);
 
+			_posManager.ProcessOrder(order);
+
 			_drawingOrders?.Add(order);
 		});
 	}
@@ -2160,7 +2153,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if(IsDisposeStarted)
 			return;
 
-		if (_ordersInfo.TryGetValue(fail.Order, out var info))
+		if (_ordersInfo.ContainsKey(fail.Order))
 			OnOrderRegisterFailed(fail, true);
 	}
 

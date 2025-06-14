@@ -9,8 +9,6 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 	private readonly IPositionManager _positionManager;
 
 	private readonly CachedSynchronizedSet<long> _subscriptions = [];
-	private readonly SynchronizedDictionary<string, CachedSynchronizedSet<long>> _strategySubscriptions = new(StringComparer.InvariantCultureIgnoreCase);
-	private readonly SynchronizedDictionary<long, string> _strategyIdMap = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="PositionMessageAdapter"/>.
@@ -26,15 +24,13 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 			source.Parent = this;
 	}
 
-	private bool IsEmulate => InnerAdapter.IsPositionsEmulationRequired != null;
-
 	/// <inheritdoc />
 	public override IEnumerable<MessageTypeInfo> PossibleSupportedMessages
-		=> InnerAdapter.PossibleSupportedMessages.Concat(IsEmulate ? [MessageTypes.PortfolioLookup.ToInfo()] : []).Distinct();
+		=> InnerAdapter.PossibleSupportedMessages.Concat([MessageTypes.PortfolioLookup.ToInfo()]).Distinct();
 
 	/// <inheritdoc />
 	public override IEnumerable<MessageTypes> NotSupportedResultMessages
-		=> InnerAdapter.NotSupportedResultMessages.Concat(IsEmulate ? [MessageTypes.PortfolioLookup] : []).Distinct();
+		=> InnerAdapter.NotSupportedResultMessages.Concat([MessageTypes.PortfolioLookup]).Distinct();
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
@@ -44,8 +40,6 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 			case MessageTypes.Reset:
 			{
 				_subscriptions.Clear();
-				_strategyIdMap.Clear();
-				_strategySubscriptions.Clear();
 
 				lock (_sync)
 					_positionManager.ProcessMessage(message);
@@ -58,19 +52,6 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 
 				if (lookupMsg.IsSubscribe)
 				{
-					if (!lookupMsg.StrategyId.IsEmpty())
-					{
-						if (!lookupMsg.IsHistoryOnly())
-						{
-							LogDebug("Subscription (strategy='{1}') {0} added.", lookupMsg.TransactionId, lookupMsg.StrategyId);
-							_strategyIdMap.Add(lookupMsg.TransactionId, lookupMsg.StrategyId);
-							_strategySubscriptions.SafeAdd(lookupMsg.StrategyId).Add(lookupMsg.TransactionId);
-						}
-							
-						RaiseNewOutMessage(lookupMsg.CreateResult());
-						return true;
-					}
-
 					if (!lookupMsg.IsHistoryOnly())
 					{
 						LogDebug("Subscription {0} added.", lookupMsg.TransactionId);
@@ -80,11 +61,7 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 							_positionManager.ProcessMessage(message);
 					}
 
-					if (IsEmulate)
-					{
-						RaiseNewOutMessage(lookupMsg.CreateResult());
-						return true;
-					}
+					RaiseNewOutMessage(lookupMsg.CreateResult());
 				}
 				else
 				{
@@ -95,21 +72,11 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 						lock (_sync)
 							_positionManager.ProcessMessage(message);
 					}
-					else if (_strategyIdMap.TryGetAndRemove(lookupMsg.OriginalTransactionId, out var strategyId))
-					{
-						_strategySubscriptions.TryGetValue(strategyId)?.Remove(lookupMsg.OriginalTransactionId);
-						LogDebug("Subscription (strategy='{1}') {0} removed.", lookupMsg.OriginalTransactionId, strategyId);
-						return true;
-					}
 
-					if (IsEmulate)
-					{
-						RaiseNewOutMessage(lookupMsg.CreateResponse());
-						return true;
-					}
+					RaiseNewOutMessage(lookupMsg.CreateResponse());
 				}
 
-				break;
+				return true;
 			}
 
 			default:
@@ -140,10 +107,7 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 
 		if (change != null)
 		{
-			var subscriptions = change.StrategyId.IsEmpty() ? _subscriptions.Cache : _strategySubscriptions.TryGetValue(change.StrategyId)?.Cache;
-
-			if (subscriptions?.Length > 0)
-				change.SetSubscriptionIds(subscriptions);
+			change.SetSubscriptionIds(_subscriptions.Cache);
 
 			base.OnInnerAdapterNewOutMessage(change);
 		}
