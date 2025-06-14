@@ -157,6 +157,9 @@ public class PositionTests
 	{
 		public PositionChangeMessage ProcessMessage(Message message)
 			=> null;
+
+		void IPersistable.Load(SettingsStorage storage) { }
+		void IPersistable.Save(SettingsStorage storage) { }
 	}
 
 	private class TestInnerAdapter(bool? emulate) : PassThroughMessageAdapter(new IncrementalIdGenerator())

@@ -7,23 +7,15 @@ namespace StockSharp.Algo.PnL;
 /// Initializes a new instance of the <see cref="PnLMessageAdapter"/>.
 /// </remarks>
 /// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-public class PnLMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
+/// <param name="pnlManager">The profit-loss manager.</param>
+public class PnLMessageAdapter(IMessageAdapter innerAdapter, IPnLManager pnlManager) : MessageAdapterWrapper(innerAdapter)
 {
-	private IPnLManager _pnLManager = new PnLManager();
-
-	/// <summary>
-	/// The profit-loss manager.
-	/// </summary>
-	public IPnLManager PnLManager
-	{
-		get => _pnLManager;
-		set => _pnLManager = value ?? throw new ArgumentNullException(nameof(value));
-	}
+	private readonly IPnLManager _pnlManager = pnlManager ?? throw new ArgumentNullException(nameof(pnlManager));
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
 	{
-		PnLManager.ProcessMessage(message);
+		_pnlManager.ProcessMessage(message);
 		return base.OnSendInMessage(message);
 	}
 
@@ -33,7 +25,7 @@ public class PnLMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWra
 		if (message.Type != MessageTypes.Reset)
 		{
 			var list = new List<PortfolioPnLManager>();
-			var info = PnLManager.ProcessMessage(message, list);
+			var info = _pnlManager.ProcessMessage(message, list);
 
 			if (info != null && info.PnL != 0)
 				((ExecutionMessage)message).PnL = info.PnL;
@@ -61,6 +53,6 @@ public class PnLMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWra
 	/// <returns>Copy.</returns>
 	public override IMessageChannel Clone()
 	{
-		return new PnLMessageAdapter(InnerAdapter.TypedClone());
+		return new PnLMessageAdapter(InnerAdapter.TypedClone(), _pnlManager.Clone());
 	}
 }

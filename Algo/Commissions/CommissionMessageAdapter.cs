@@ -7,23 +7,15 @@ namespace StockSharp.Algo.Commissions;
 /// Initializes a new instance of the <see cref="CommissionMessageAdapter"/>.
 /// </remarks>
 /// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-public class CommissionMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
+/// <param name="commissionManager">The commission calculating manager.</param>
+public class CommissionMessageAdapter(IMessageAdapter innerAdapter, ICommissionManager commissionManager) : MessageAdapterWrapper(innerAdapter)
 {
-	private ICommissionManager _commissionManager = new CommissionManager();
-
-	/// <summary>
-	/// The commission calculating manager.
-	/// </summary>
-	public ICommissionManager CommissionManager
-	{
-		get => _commissionManager;
-		set => _commissionManager = value ?? throw new ArgumentNullException(nameof(value));
-	}
+	private readonly ICommissionManager _commissionManager = commissionManager ?? throw new ArgumentNullException(nameof(commissionManager));
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
 	{
-		CommissionManager.Process(message);
+		_commissionManager.Process(message);
 		return base.OnSendInMessage(message);
 	}
 
@@ -31,7 +23,7 @@ public class CommissionMessageAdapter(IMessageAdapter innerAdapter) : MessageAda
 	protected override void OnInnerAdapterNewOutMessage(Message message)
 	{
 		if (message is ExecutionMessage execMsg && execMsg.DataType == DataType.Transactions && execMsg.Commission == null)
-			execMsg.Commission = CommissionManager.Process(execMsg);
+			execMsg.Commission = _commissionManager.Process(execMsg);
 
 		base.OnInnerAdapterNewOutMessage(message);
 	}
@@ -42,6 +34,6 @@ public class CommissionMessageAdapter(IMessageAdapter innerAdapter) : MessageAda
 	/// <returns>Copy.</returns>
 	public override IMessageChannel Clone()
 	{
-		return new CommissionMessageAdapter(InnerAdapter.TypedClone());
+		return new CommissionMessageAdapter(InnerAdapter.TypedClone(), _commissionManager.Clone());
 	}
 }

@@ -234,6 +234,9 @@ partial class TraderHelper
 		}
 
 		PositionChangeMessage IPositionManager.ProcessMessage(Message message) => null;
+
+		void IPersistable.Load(SettingsStorage storage) { }
+		void IPersistable.Save(SettingsStorage storage) { }
 	}
 
 	/// <summary>

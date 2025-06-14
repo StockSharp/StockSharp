@@ -278,7 +278,7 @@ partial class Connector
 				//};
 
 				if (RiskManager != null)
-					_inAdapter = new RiskMessageAdapter(_inAdapter) { RiskManager = RiskManager, OwnInnerAdapter = true };
+					_inAdapter = new RiskMessageAdapter(_inAdapter, RiskManager) { OwnInnerAdapter = true };
 
 				if (SecurityStorage != null && StorageRegistry != null)
 				{

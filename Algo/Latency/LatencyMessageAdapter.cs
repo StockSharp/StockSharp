@@ -7,25 +7,17 @@ namespace StockSharp.Algo.Latency;
 /// Initializes a new instance of the <see cref="LatencyMessageAdapter"/>.
 /// </remarks>
 /// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-public class LatencyMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
+/// <param name="latencyManager">Orders registration delay calculation manager.</param>
+public class LatencyMessageAdapter(IMessageAdapter innerAdapter, ILatencyManager latencyManager) : MessageAdapterWrapper(innerAdapter)
 {
-	private ILatencyManager _latencyManager = new LatencyManager();
-
-	/// <summary>
-	/// Orders registration delay calculation manager.
-	/// </summary>
-	public ILatencyManager LatencyManager
-	{
-		get => _latencyManager;
-		set => _latencyManager = value ?? throw new ArgumentNullException(nameof(value));
-	}
+	private readonly ILatencyManager _latencyManager = latencyManager ?? throw new ArgumentNullException(nameof(latencyManager));
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
 	{
 		message.TryInitLocalTime(this);
 
-		LatencyManager.ProcessMessage(message);
+		_latencyManager.ProcessMessage(message);
 
 		return base.OnSendInMessage(message);
 	}
@@ -39,7 +31,7 @@ public class LatencyMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 
 			if (execMsg.HasOrderInfo())
 			{
-				var latency = LatencyManager.ProcessMessage(execMsg);
+				var latency = _latencyManager.ProcessMessage(execMsg);
 
 				if (latency != null)
 					execMsg.Latency = latency;
@@ -55,6 +47,6 @@ public class LatencyMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 	/// <returns>Copy.</returns>
 	public override IMessageChannel Clone()
 	{
-		return new LatencyMessageAdapter(InnerAdapter.TypedClone());
+		return new LatencyMessageAdapter(InnerAdapter.TypedClone(), _latencyManager.Clone());
 	}
 }

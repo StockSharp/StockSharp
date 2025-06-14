@@ -3,27 +3,22 @@ namespace StockSharp.Algo.Risk;
 /// <summary>
 /// The message adapter, automatically controlling risk rules.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="RiskMessageAdapter"/>.
-/// </remarks>
-/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-public class RiskMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
+public class RiskMessageAdapter : MessageAdapterWrapper
 {
-	private IRiskManager _riskManager = new RiskManager();
+	private readonly IRiskManager _riskManager;
 
 	/// <summary>
-	/// Risk control manager.
+	/// Initializes a new instance of the <see cref="RiskMessageAdapter"/>.
 	/// </summary>
-	public IRiskManager RiskManager
+	/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
+	/// <param name="riskManager">Risk control manager.</param>
+	public RiskMessageAdapter(IMessageAdapter innerAdapter, IRiskManager riskManager)
+		: base(innerAdapter)
 	{
-		get => _riskManager;
-		set
-		{
-			_riskManager = value ?? throw new ArgumentNullException(nameof(value));
+		_riskManager = riskManager ?? throw new ArgumentNullException(nameof(riskManager));
 
-			if (_riskManager.Parent != null)
-				_riskManager.Parent = this;
-		}
+		if (_riskManager.Parent != null)
+			_riskManager.Parent = this;
 	}
 
 	/// <inheritdoc />
@@ -61,7 +56,7 @@ public class RiskMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWr
 
 	private void ProcessRisk(Message message)
 	{
-		foreach (var rule in RiskManager.ProcessRules(message))
+		foreach (var rule in _riskManager.ProcessRules(message))
 		{
 			LogWarning(LocalizedStrings.ActivatingRiskRule,
 				rule.GetType().GetDisplayName(), rule.Title, rule.Action);
@@ -90,9 +85,6 @@ public class RiskMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWr
 	/// <returns>Copy.</returns>
 	public override IMessageChannel Clone()
 	{
-		return new RiskMessageAdapter(InnerAdapter.TypedClone())
-		{
-			RiskManager = RiskManager.Clone(),
-		};
+		return new RiskMessageAdapter(InnerAdapter.TypedClone(), _riskManager.Clone());
 	}
 }

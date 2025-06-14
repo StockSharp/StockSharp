@@ -647,12 +647,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		if (LatencyManager != null)
 		{
-			adapter = ApplyOwnInner(new LatencyMessageAdapter(adapter) { LatencyManager = LatencyManager.Clone() });
+			adapter = ApplyOwnInner(new LatencyMessageAdapter(adapter, LatencyManager.Clone()));
 		}
 
 		if (SlippageManager != null)
 		{
-			adapter = ApplyOwnInner(new SlippageMessageAdapter(adapter) { SlippageManager = SlippageManager.Clone() });
+			adapter = ApplyOwnInner(new SlippageMessageAdapter(adapter, SlippageManager.Clone()));
 		}
 
 		if (adapter.IsNativeIdentifiers)
@@ -702,12 +702,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		if (PnLManager != null && !adapter.IsSupportExecutionsPnL)
 		{
-			adapter = ApplyOwnInner(new PnLMessageAdapter(adapter) { PnLManager = PnLManager.Clone() });
+			adapter = ApplyOwnInner(new PnLMessageAdapter(adapter, PnLManager.Clone()));
 		}
 
 		if (CommissionManager != null)
 		{
-			adapter = ApplyOwnInner(new CommissionMessageAdapter(adapter) { CommissionManager = CommissionManager.Clone() });
+			adapter = ApplyOwnInner(new CommissionMessageAdapter(adapter, CommissionManager.Clone()));
 		}
 
 		if (SupportPartialDownload && adapter.IsSupportPartialDownloading)

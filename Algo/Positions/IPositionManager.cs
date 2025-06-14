@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Positions;
 /// <summary>
 /// The interface for the position calculation manager.
 /// </summary>
-public interface IPositionManager
+public interface IPositionManager : IPersistable
 {
 	/// <summary>
 	/// To calculate position.

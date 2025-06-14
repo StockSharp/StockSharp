@@ -7,23 +7,15 @@ namespace StockSharp.Algo.Slippage;
 /// Initializes a new instance of the <see cref="SlippageMessageAdapter"/>.
 /// </remarks>
 /// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-public class SlippageMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
+/// <param name="slippageManager">Slippage manager.</param>
+public class SlippageMessageAdapter(IMessageAdapter innerAdapter, ISlippageManager slippageManager) : MessageAdapterWrapper(innerAdapter)
 {
-	private ISlippageManager _slippageManager = new SlippageManager();
-
-	/// <summary>
-	/// Slippage manager.
-	/// </summary>
-	public ISlippageManager SlippageManager
-	{
-		get => _slippageManager;
-		set => _slippageManager = value ?? throw new ArgumentNullException(nameof(value));
-	}
+	private readonly ISlippageManager _slippageManager = slippageManager ?? throw new ArgumentNullException(nameof(slippageManager));
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
 	{
-		SlippageManager.ProcessMessage(message);
+		_slippageManager.ProcessMessage(message);
 		return base.OnSendInMessage(message);
 	}
 
@@ -32,7 +24,7 @@ public class SlippageMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 	{
 		if (message.Type != MessageTypes.Reset)
 		{
-			var slippage = SlippageManager.ProcessMessage(message);
+			var slippage = _slippageManager.ProcessMessage(message);
 
 			if (slippage != null)
 			{
@@ -51,6 +43,6 @@ public class SlippageMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 	/// <returns>Copy.</returns>
 	public override IMessageChannel Clone()
 	{
-		return new SlippageMessageAdapter(InnerAdapter.TypedClone());
+		return new SlippageMessageAdapter(InnerAdapter.TypedClone(), _slippageManager.Clone());
 	}
 }
