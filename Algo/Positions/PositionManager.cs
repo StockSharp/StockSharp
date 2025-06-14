@@ -29,7 +29,7 @@ public class PositionManager(bool byOrders) : BaseLogReceiver, IPositionManager
 	}
 
 	private readonly Dictionary<long, OrderInfo> _ordersInfo = [];
-	private readonly Dictionary<Tuple<SecurityId, string>, PositionInfo> _positions = [];
+	private readonly Dictionary<(SecurityId, string), PositionInfo> _positions = [];
 
 	/// <summary>
 	/// To calculate the position on realized volume for orders (<see langword="true" />) or by trades (<see langword="false" />).
@@ -39,10 +39,10 @@ public class PositionManager(bool byOrders) : BaseLogReceiver, IPositionManager
 	/// <inheritdoc />
 	public virtual PositionChangeMessage ProcessMessage(Message message)
 	{
-		static Tuple<SecurityId, string> CreateKey(SecurityId secId, string pf)
-			=> Tuple.Create(secId, pf.ToLowerInvariant());
+		static (SecurityId, string) CreateKey(SecurityId secId, string pf)
+			=> (secId, pf.ToLowerInvariant());
 
-		static Tuple<SecurityId, string> CreateKey2<TMessage>(TMessage message)
+		static (SecurityId, string) CreateKey2<TMessage>(TMessage message)
 			where TMessage : Message, ISecurityIdMessage, IPortfolioNameMessage
 			=> CreateKey(message.SecurityId, message.PortfolioName);
 
