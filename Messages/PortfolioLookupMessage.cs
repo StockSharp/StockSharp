@@ -80,8 +80,7 @@ public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessa
 		!PortfolioName.IsEmpty() || Currency != null ||
 		!BoardCode.IsEmpty() || !ClientCode.IsEmpty();
 
-	/// <inheritdoc />
-	public bool SpecificItemRequest => !StrategyId.IsEmpty();
+	bool ISubscriptionMessage.SpecificItemRequest => false;
 
 	/// <summary>
 	/// Create a copy of <see cref="PortfolioLookupMessage"/>.

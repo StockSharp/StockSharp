@@ -863,14 +863,14 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			adapter = ApplyOwnInner(new TransactionOrderingMessageAdapter(adapter));
 		}
 
-		if (IsSupportPositionEmulation || adapter.IsPositionsEmulationRequired != null)
-		{
-			adapter = ApplyOwnInner(new PositionMessageAdapter(adapter, new EmulationPositionManager(adapter.IsPositionsEmulationRequired, this)));
-		}
-
 		if (adapter.IsSupportSubscriptions)
 		{
 			adapter = ApplyOwnInner(new SubscriptionOnlineMessageAdapter(adapter));
+		}
+
+		if (IsSupportPositionEmulation || adapter.IsPositionsEmulationRequired != null)
+		{
+			adapter = ApplyOwnInner(new PositionMessageAdapter(adapter, new EmulationPositionManager(adapter.IsPositionsEmulationRequired, this)));
 		}
 
 		if (SupportSecurityAll)
