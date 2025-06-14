@@ -268,7 +268,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 								Error = new InvalidOperationException(error),
 								ServerTime = serverTime,
 								HasOrderInfo = true,
-								StrategyId = orderMsg.StrategyId,
 							});
 
 							// registration error
@@ -283,7 +282,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 								Error = new InvalidOperationException(error),
 								ServerTime = serverTime,
 								HasOrderInfo = true,
-								StrategyId = orderMsg.StrategyId,
 							});
 
 							LogError(LocalizedStrings.OrderForReplaceNotFound, orderMsg.OriginalTransactionId);
@@ -528,7 +526,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						PortfolioName = regMsg.PortfolioName,
 						OrderType = regMsg.OrderType,
 						UserOrderId = regMsg.UserOrderId,
-						StrategyId = regMsg.StrategyId,
 					};
 
 					yield break;
@@ -556,7 +553,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						TransactionId = replaceMsg.TransactionId,
 						PortfolioName = replaceMsg.PortfolioName,
 						OrderType = replaceMsg.OrderType,
-						StrategyId = replaceMsg.StrategyId,
 						// для старой заявки пользовательский идентификатор менять не надо
 						//UserOrderId = replaceMsg.UserOrderId
 					};
@@ -575,7 +571,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						PortfolioName = replaceMsg.PortfolioName,
 						OrderType = replaceMsg.OrderType,
 						UserOrderId = replaceMsg.UserOrderId,
-						StrategyId = replaceMsg.StrategyId,
 					};
 
 					yield break;
@@ -597,7 +592,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						LocalTime = cancelMsg.LocalTime,
 						ServerTime = serverTime,
 						OrderType = cancelMsg.OrderType,
-						StrategyId = cancelMsg.StrategyId,
 						// при отмене заявки пользовательский идентификатор не меняется
 						//UserOrderId = cancelMsg.UserOrderId
 					};
@@ -1715,7 +1709,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				LocalTime = time,
 				OriginalTransactionId = original.TransactionId,
 				Error = error,
-				StrategyId = original.StrategyId
 			};
 
 			if (error != null)
@@ -2615,7 +2608,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				DataTypeEx = DataType.Transactions,
 				HasOrderInfo = true,
 				ServerTime = GetServerTime(time),
-				StrategyId = message.StrategyId,
 			});
 		}
 
@@ -2636,7 +2628,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				DataTypeEx = DataType.Transactions,
 				ServerTime = GetServerTime(time),
 				Side = order.Side,
-				StrategyId = order.StrategyId,
 			};
 			result.Add(tradeMsg);
 
@@ -2761,25 +2752,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			var time = pfMsg.LocalTime;
 
 			AddPortfolioChangeMessage(time, result);
-
-			foreach (var pair in _positions)
-			{
-				var pos = pair.Value;
-
-				result.Add(
-					new PositionChangeMessage
-					{
-						LocalTime = time,
-						ServerTime = time,
-						PortfolioName = name,
-						SecurityId = pair.Key,
-						OriginalTransactionId = pfMsg.TransactionId,
-						StrategyId = pfMsg.StrategyId,
-					}
-					.Add(PositionChangeTypes.CurrentValue, pos.CurrentValue)
-					.TryAdd(PositionChangeTypes.AveragePrice, pos.AveragePrice)
-				);
-			}
 		}
 
 		public void ProcessPositionChange(PositionChangeMessage posMsg, ICollection<Message> result)
@@ -2815,7 +2787,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					ServerTime = posMsg.ServerTime,
 					LocalTime = posMsg.LocalTime,
 					PortfolioName = name,
-					StrategyId = posMsg.StrategyId,
 				}.Add(PositionChangeTypes.BlockedValue, _totalBlockedMoney)
 			);
 		}
@@ -3127,7 +3098,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 								LocalTime = orderMsg.LocalTime,
 								OriginalTransactionId = orderMsg.TransactionId,
 								OrderState = OrderStates.Failed,
-								StrategyId = orderMsg.StrategyId,
 								Error = new InvalidOperationException(LocalizedStrings.SessionStopped.Put(secId.BoardCode, state.Value)),
 							});
 
@@ -3429,7 +3399,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 	private PortfolioEmulator GetPortfolioInfo(string portfolioName)
 	{
-		return _portfolios.SafeAdd(portfolioName, key => new PortfolioEmulator(this, key));
+		return _portfolios.SafeAdd(portfolioName, key => new(this, key));
 	}
 
 	private void UpdateLevel1Info(Level1ChangeMessage level1Msg, ICollection<Message> retVal, bool addToResult)
@@ -3634,7 +3604,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	TimeSpan IMessageAdapter.IterationInterval => default;
 	string IMessageAdapter.FeatureName => string.Empty;
 	string[] IMessageAdapter.AssociatedBoards => [];
-	bool? IMessageAdapter.IsPositionsEmulationRequired => null;
+	bool? IMessageAdapter.IsPositionsEmulationRequired => true;
 	bool IMessageAdapter.IsReplaceCommandEditCurrent => false;
 	TimeSpan? IMessageAdapter.LookupTimeout => null;
 	bool IMessageAdapter.ExtraSetup => false;

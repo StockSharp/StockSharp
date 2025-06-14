@@ -1,7 +1,6 @@
 namespace StockSharp.Algo.Testing;
 
 using StockSharp.Algo.Positions;
-using StockSharp.Algo.Strategies;
 
 /// <summary>
 /// The interface of the real time market data adapter.
@@ -49,7 +48,10 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 		InChannel = inChannel;
 
 		_inAdapter = new SubscriptionOnlineMessageAdapter(Emulator);
-		_inAdapter = new PositionMessageAdapter(_inAdapter, new StrategyPositionManager(Emulator.IsPositionsEmulationRequired ?? true));
+		
+		if (Emulator.IsPositionsEmulationRequired is bool isPosEmu)
+			_inAdapter = new PositionMessageAdapter(_inAdapter, new PositionManager(isPosEmu));
+
 		_inAdapter = new ChannelMessageAdapter(_inAdapter, inChannel, new PassThroughMessageChannel());
 		_inAdapter.NewOutMessage += RaiseNewOutMessage;
 
