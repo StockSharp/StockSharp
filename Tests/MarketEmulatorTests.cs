@@ -107,7 +107,7 @@ public class MarketEmulatorTests
 		var now = DateTimeOffset.UtcNow;
 		AddBook(emu, id, now);
 
-		emu.SendInMessage(new OrderRegisterMessage
+		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -118,9 +118,10 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			TimeInForce = TimeInForce.PutInQueue,
 			PortfolioName = _pfName,
-		});
+		};
+		emu.SendInMessage(reg);
 
-		var m = res.Find(x => x is ExecutionMessage em && em.TransactionId == 1);
+		var m = res.Find(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 		((ExecutionMessage)m).OrderState.AssertEqual(OrderStates.Active);
 	}
@@ -133,7 +134,7 @@ public class MarketEmulatorTests
 		var now = DateTimeOffset.UtcNow;
 		AddBook(emu, id, now);
 
-		emu.SendInMessage(new OrderRegisterMessage
+		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -144,9 +145,10 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			TimeInForce = TimeInForce.PutInQueue,
 			PortfolioName = _pfName,
-		});
+		};
+		emu.SendInMessage(reg);
 
-		var m = res.Find(x => x is ExecutionMessage em && em.TransactionId == 2);
+		var m = res.Find(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 		((ExecutionMessage)m).OrderState.AssertEqual(OrderStates.Active);
 	}
@@ -159,7 +161,7 @@ public class MarketEmulatorTests
 		var now = DateTimeOffset.UtcNow;
 		AddBook(emu, id, now);
 
-		emu.SendInMessage(new OrderRegisterMessage
+		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -170,9 +172,10 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			TimeInForce = TimeInForce.MatchOrCancel,
 			PortfolioName = _pfName,
-		});
+		};
+		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.TransactionId == 3);
+		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 		(((ExecutionMessage)m).OrderState == OrderStates.Done || ((ExecutionMessage)m).IsCanceled()).AssertTrue();
 	}
@@ -185,7 +188,7 @@ public class MarketEmulatorTests
 		var now = DateTimeOffset.UtcNow;
 		AddBook(emu, id, now);
 
-		emu.SendInMessage(new OrderRegisterMessage
+		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -196,9 +199,10 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			TimeInForce = TimeInForce.MatchOrCancel,
 			PortfolioName = _pfName,
-		});
+		};
+		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.TransactionId == 4);
+		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 		(((ExecutionMessage)m).OrderState == OrderStates.Done || ((ExecutionMessage)m).IsCanceled()).AssertTrue();
 	}
@@ -211,7 +215,7 @@ public class MarketEmulatorTests
 		var now = DateTimeOffset.UtcNow;
 		AddBook(emu, id, now);
 
-		emu.SendInMessage(new OrderRegisterMessage
+		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -222,9 +226,10 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PostOnly = true,
 			PortfolioName = _pfName,
-		});
+		};
+		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.TransactionId == 5);
+		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 		((ExecutionMessage)m).OrderState.AssertEqual(OrderStates.Active);
 	}
@@ -237,7 +242,7 @@ public class MarketEmulatorTests
 		var now = DateTimeOffset.UtcNow;
 		AddBook(emu, id, now);
 
-		emu.SendInMessage(new OrderRegisterMessage
+		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -248,9 +253,10 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PostOnly = true,
 			PortfolioName = _pfName,
-		});
+		};
+		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.TransactionId == 6);
+		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 		((ExecutionMessage)m).OrderState.AssertEqual(OrderStates.Active);
 	}
@@ -263,7 +269,7 @@ public class MarketEmulatorTests
 		var now = DateTimeOffset.UtcNow;
 		AddBook(emu, id, now);
 
-		emu.SendInMessage(new OrderRegisterMessage
+		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -273,9 +279,10 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Market,
 			TimeInForce = TimeInForce.PutInQueue,
 			PortfolioName = _pfName,
-		});
+		};
+		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.TransactionId == 7);
+		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 		((ExecutionMessage)m).OrderState.AssertEqual(OrderStates.Done);
 	}
@@ -288,7 +295,7 @@ public class MarketEmulatorTests
 		var now = DateTimeOffset.UtcNow;
 		AddBook(emu, id, now);
 
-		emu.SendInMessage(new OrderRegisterMessage
+		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -298,9 +305,10 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Market,
 			TimeInForce = TimeInForce.PutInQueue,
 			PortfolioName = _pfName,
-		});
+		};
+		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.TransactionId == 8);
+		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 		((ExecutionMessage)m).OrderState.AssertEqual(OrderStates.Done);
 	}
@@ -313,7 +321,7 @@ public class MarketEmulatorTests
 		var now = DateTimeOffset.UtcNow;
 		var expiry = DateTime.UtcNow.AddDays(1);
 
-		emu.SendInMessage(new OrderRegisterMessage
+		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -322,13 +330,28 @@ public class MarketEmulatorTests
 			Price = 100,
 			Volume = 1,
 			OrderType = OrderTypes.Limit,
-			ExpiryDate = expiry,
+			TillDate = expiry,
 			PortfolioName = _pfName,
-		});
+		};
+		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.TransactionId == 9);
+		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
-		((ExecutionMessage)m).ExpiryDate.AssertEqual(expiry);
+		((ExecutionMessage)m).OrderState.AssertEqual(OrderStates.Active);
+
+		res.Clear();
+		emu.SendInMessage(new ExecutionMessage
+		{
+			SecurityId = id,
+			LocalTime = expiry.AddSeconds(1),
+			ServerTime = expiry.AddSeconds(1),
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 105,
+			TradeVolume = 2
+		});
+		m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		m.AssertNotNull();
+		((ExecutionMessage)m).OrderState.AssertEqual(OrderStates.Done);
 	}
 
 	[TestMethod]
@@ -339,7 +362,7 @@ public class MarketEmulatorTests
 		var now = DateTimeOffset.UtcNow;
 		AddBook(emu, id, now);
 
-		emu.SendInMessage(new OrderRegisterMessage
+		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -349,21 +372,23 @@ public class MarketEmulatorTests
 			Volume = 1,
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
-		});
-		emu.SendInMessage(new OrderReplaceMessage
+		};
+		emu.SendInMessage(reg);
+		var replace = new OrderReplaceMessage
 		{
 			SecurityId = id,
 			LocalTime = now.AddSeconds(1),
 			TransactionId = 11,
-			OriginalTransactionId = 10,
+			OriginalTransactionId = reg.TransactionId,
 			OldOrderId = 1,
 			Side = Sides.Buy,
 			Price = 101,
 			Volume = 2,
 			OrderType = OrderTypes.Limit
-		});
+		};
+		emu.SendInMessage(replace);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.TransactionId == 11);
+		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == replace.TransactionId);
 		m.AssertNotNull();
 	}
 
@@ -375,7 +400,7 @@ public class MarketEmulatorTests
 		var now = DateTimeOffset.UtcNow;
 		AddBook(emu, id, now);
 
-		emu.SendInMessage(new OrderRegisterMessage
+		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -385,17 +410,19 @@ public class MarketEmulatorTests
 			Volume = 1,
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
-		});
+		};
+		emu.SendInMessage(reg);
 		emu.SendInMessage(new OrderCancelMessage
 		{
 			SecurityId = id,
 			LocalTime = now.AddSeconds(1),
 			TransactionId = 13,
 			OrderId = 1,
-			OriginalTransactionId = 12
+			OriginalTransactionId = reg.TransactionId,
+			PortfolioName = _pfName,
 		});
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.TransactionId == 13);
+		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 		((ExecutionMessage)m).OrderState.AssertEqual(OrderStates.Done);
 	}
@@ -418,7 +445,7 @@ public class MarketEmulatorTests
 			ClosePrice = 104,
 			TotalVolume = 100
 		});
-		emu.SendInMessage(new OrderRegisterMessage
+		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -428,9 +455,10 @@ public class MarketEmulatorTests
 			Volume = 10,
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
-		});
+		};
+		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.TransactionId == 14);
+		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 	}
 
@@ -450,7 +478,7 @@ public class MarketEmulatorTests
 			TradePrice = 105,
 			TradeVolume = 2
 		});
-		emu.SendInMessage(new OrderRegisterMessage
+		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -460,9 +488,10 @@ public class MarketEmulatorTests
 			Volume = 2,
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
-		});
+		};
+		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.TransactionId == 15);
+		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 	}
 
@@ -484,7 +513,7 @@ public class MarketEmulatorTests
 		.Add(Level1Fields.BestBidVolume, 1m)
 		.Add(Level1Fields.BestAskVolume, 2m));
 
-		emu.SendInMessage(new OrderRegisterMessage
+		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -494,9 +523,10 @@ public class MarketEmulatorTests
 			Volume = 2,
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
-		});
+		};
+		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.TransactionId == 16);
+		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 	}
 
@@ -517,7 +547,7 @@ public class MarketEmulatorTests
 			OrderVolume = 4,
 			Side = Sides.Buy
 		});
-		emu.SendInMessage(new OrderRegisterMessage
+		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -527,9 +557,10 @@ public class MarketEmulatorTests
 			Volume = 4,
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
-		});
+		};
+		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.TransactionId == 17);
+		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 	}
 
@@ -549,7 +580,7 @@ public class MarketEmulatorTests
 			TradePrice = 107,
 			TradeVolume = 1
 		});
-		emu.SendInMessage(new OrderRegisterMessage
+		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -558,9 +589,10 @@ public class MarketEmulatorTests
 			Volume = 1,
 			OrderType = OrderTypes.Market,
 			PortfolioName = _pfName,
-		});
+		};
+		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.TransactionId == 18);
+		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 	}
 
@@ -581,7 +613,7 @@ public class MarketEmulatorTests
 			OrderVolume = 2,
 			Side = Sides.Sell
 		});
-		emu.SendInMessage(new OrderRegisterMessage
+		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -590,9 +622,10 @@ public class MarketEmulatorTests
 			Volume = 2,
 			OrderType = OrderTypes.Market,
 			PortfolioName = _pfName,
-		});
+		};
+		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.TransactionId == 19);
+		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 	}
 }

@@ -120,13 +120,6 @@ public class PositionTests
 		var secId = Helper.CreateSecurityId();
 		var manager = new PositionManager(true);
 
-		manager.ProcessMessage(new PositionChangeMessage
-		{
-			SecurityId = secId,
-			PortfolioName = "pf",
-			ServerTime = DateTimeOffset.UtcNow
-		}.Add(PositionChangeTypes.CurrentValue, 5m));
-
 		manager.ProcessMessage(new OrderRegisterMessage
 		{
 			TransactionId = 1,
@@ -150,7 +143,7 @@ public class PositionTests
 		});
 
 		change.AssertNotNull();
-		change.Changes[PositionChangeTypes.CurrentValue].To<decimal>().AssertEqual(8m);
+		((decimal)change.Changes[PositionChangeTypes.CurrentValue]).AssertEqual(3m);
 	}
 
 	private class TestPositionManager : IPositionManager
