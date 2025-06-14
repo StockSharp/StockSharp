@@ -60,9 +60,13 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 				{
 					if (!lookupMsg.StrategyId.IsEmpty())
 					{
-						LogDebug("Subscription (strategy='{1}') {0} added.", lookupMsg.TransactionId, lookupMsg.StrategyId);
-						_strategyIdMap.Add(lookupMsg.TransactionId, lookupMsg.StrategyId);
-						_strategySubscriptions.SafeAdd(lookupMsg.StrategyId).Add(lookupMsg.TransactionId);
+						if (!lookupMsg.IsHistoryOnly())
+						{
+							LogDebug("Subscription (strategy='{1}') {0} added.", lookupMsg.TransactionId, lookupMsg.StrategyId);
+							_strategyIdMap.Add(lookupMsg.TransactionId, lookupMsg.StrategyId);
+							_strategySubscriptions.SafeAdd(lookupMsg.StrategyId).Add(lookupMsg.TransactionId);
+						}
+							
 						RaiseNewOutMessage(lookupMsg.CreateResult());
 						return true;
 					}
@@ -125,7 +129,8 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 	{
 		PositionChangeMessage change = null;
 
-		if (message.Type is not MessageTypes.Reset and
+		if (message.Type is
+			not MessageTypes.Reset and
 			not MessageTypes.Connect and
 			not MessageTypes.Disconnect)
 		{

@@ -159,16 +159,6 @@ public class PositionManager(bool byOrders) : BaseLogReceiver, IPositionManager
 
 				break;
 			}
-
-			case MessageTypes.PositionChange:
-			{
-				var posMsg = (PositionChangeMessage)message;
-
-				if (posMsg.Changes.TryGetValue(PositionChangeTypes.CurrentValue, out var curr))
-					_positions.SafeAdd(CreateKey2(posMsg)).Value = (decimal)curr;
-
-				break;
-			}
 		}
 
 		return null;
