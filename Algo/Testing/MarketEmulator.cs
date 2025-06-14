@@ -526,6 +526,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						PortfolioName = regMsg.PortfolioName,
 						OrderType = regMsg.OrderType,
 						UserOrderId = regMsg.UserOrderId,
+						ExpiryDate = regMsg.TillDate,
 					};
 
 					yield break;
@@ -571,6 +572,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						PortfolioName = replaceMsg.PortfolioName,
 						OrderType = replaceMsg.OrderType,
 						UserOrderId = replaceMsg.UserOrderId,
+						ExpiryDate = replaceMsg.TillDate,
 					};
 
 					yield break;
@@ -1281,8 +1283,13 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		{
 			_activeOrders.Add(orderMsg.TransactionId, orderMsg);
 
-			if (orderMsg.ExpiryDate != null)
-				_expirableOrders.Add(orderMsg, orderMsg.ExpiryDate.Value.EndOfDay() - time);
+			if (orderMsg.ExpiryDate is DateTimeOffset expiry)
+			{
+				var left = expiry - time;
+
+				if (left > TimeSpan.Zero)
+					_expirableOrders.Add(orderMsg, left);
+			}
 		}
 
 		private bool TryRemoveActiveOrder(long transId, out ExecutionMessage orderMsg)
