@@ -28,7 +28,7 @@ public struct SecurityId : IEquatable<SecurityId>, IPersistable
 		GroupName = LocalizedStrings.GeneralKey)]
 	public string SecurityCode
 	{
-		get => _securityCode;
+		readonly get => _securityCode;
 		set
 		{
 			CheckImmutable();
@@ -50,7 +50,7 @@ public struct SecurityId : IEquatable<SecurityId>, IPersistable
 		GroupName = LocalizedStrings.GeneralKey)]
 	public string BoardCode
 	{
-		get => _boardCode;
+		readonly get => _boardCode;
 		set
 		{
 			CheckImmutable();
@@ -66,7 +66,7 @@ public struct SecurityId : IEquatable<SecurityId>, IPersistable
 	/// </summary>
 	public object Native
 	{
-		get => _nativeAsInt != 0 ? _nativeAsInt : _native;
+		readonly get => _nativeAsInt != 0 ? _nativeAsInt : _native;
 		set
 		{
 			CheckImmutable();
@@ -89,7 +89,7 @@ public struct SecurityId : IEquatable<SecurityId>, IPersistable
 	/// </summary>
 	public long NativeAsInt
 	{
-		get => _nativeAsInt;
+		readonly get => _nativeAsInt;
 		set
 		{
 			CheckImmutable();
@@ -257,7 +257,7 @@ public struct SecurityId : IEquatable<SecurityId>, IPersistable
 	}
 
 	/// <inheritdoc />
-	public override string ToString()
+	public override readonly string ToString()
 	{
 		var id = $"{SecurityCode}@{BoardCode}";
 
@@ -293,7 +293,7 @@ public struct SecurityId : IEquatable<SecurityId>, IPersistable
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	public readonly void Save(SettingsStorage storage)
 	{
 		storage.SetValue(nameof(SecurityCode), SecurityCode);
 		storage.SetValue(nameof(BoardCode), BoardCode);
@@ -355,7 +355,7 @@ public struct SecurityId : IEquatable<SecurityId>, IPersistable
 		return this;
 	}
 
-	private void CheckImmutable()
+	private readonly void CheckImmutable()
 	{
 		if (_immutable)
 			throw new InvalidOperationException(LocalizedStrings.CannotBeModified);

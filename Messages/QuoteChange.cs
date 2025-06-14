@@ -133,7 +133,7 @@ public struct QuoteChange(decimal price, decimal volume, int? ordersCount = null
 	/// </summary>
 	public QuoteChange[] InnerQuotes
 	{
-		get => _innerQuotes;
+		readonly get => _innerQuotes;
 		set
 		{
 			var wasNonNull = _innerQuotes != null;
@@ -168,5 +168,5 @@ public struct QuoteChange(decimal price, decimal volume, int? ordersCount = null
 	}
 
 	/// <inheritdoc />
-	public override string ToString() => $"{Price} {Volume}";
+	public override readonly string ToString() => $"{Price} {Volume}";
 }
