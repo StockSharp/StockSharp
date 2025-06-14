@@ -121,9 +121,11 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		var m = res.Find(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.Find(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
-		((ExecutionMessage)m).OrderState.AssertEqual(OrderStates.Active);
+		m.OrderState.AssertEqual(OrderStates.Active);
+		m.Balance.AssertNotNull();
+		m.Balance.AssertEqual(m.OrderVolume);
 	}
 
 	[TestMethod]
@@ -148,9 +150,11 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		var m = res.Find(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.Find(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
-		((ExecutionMessage)m).OrderState.AssertEqual(OrderStates.Active);
+		m.OrderState.AssertEqual(OrderStates.Active);
+		m.Balance.AssertNotNull();
+		m.Balance.AssertEqual(m.OrderVolume);
 	}
 
 	[TestMethod]
@@ -175,9 +179,11 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
-		(((ExecutionMessage)m).OrderState == OrderStates.Done || ((ExecutionMessage)m).IsCanceled()).AssertTrue();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertNotNull();
+		m.Balance.AssertEqual(m.OrderVolume);
 	}
 
 	[TestMethod]
@@ -202,9 +208,11 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
-		(((ExecutionMessage)m).OrderState == OrderStates.Done || ((ExecutionMessage)m).IsCanceled()).AssertTrue();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertNotNull();
+		m.Balance.AssertEqual(m.OrderVolume);
 	}
 
 	[TestMethod]
@@ -229,9 +237,33 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
-		((ExecutionMessage)m).OrderState.AssertEqual(OrderStates.Active);
+		m.OrderState.AssertEqual(OrderStates.Active);
+		m.Balance.AssertNotNull();
+		m.Balance.AssertEqual(m.OrderVolume);
+
+		res.Clear();
+
+		reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = 6,
+			Side = Sides.Buy,
+			Price = 101,
+			Volume = 1,
+			OrderType = OrderTypes.Limit,
+			PostOnly = true,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg);
+
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertNotNull();
+		m.Balance.AssertEqual(m.OrderVolume);
 	}
 
 	[TestMethod]
@@ -256,9 +288,33 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
-		((ExecutionMessage)m).OrderState.AssertEqual(OrderStates.Active);
+		m.OrderState.AssertEqual(OrderStates.Active);
+		m.Balance.AssertNotNull();
+		m.Balance.AssertEqual(m.OrderVolume);
+
+		res.Clear();
+
+		reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = 7,
+			Side = Sides.Sell,
+			Price = 100,
+			Volume = 1,
+			OrderType = OrderTypes.Limit,
+			PostOnly = true,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg);
+
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertNotNull();
+		m.Balance.AssertEqual(m.OrderVolume);
 	}
 
 	[TestMethod]
@@ -282,9 +338,10 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
-		((ExecutionMessage)m).OrderState.AssertEqual(OrderStates.Done);
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -308,9 +365,10 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m =	(ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
-		((ExecutionMessage)m).OrderState.AssertEqual(OrderStates.Done);
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -335,9 +393,9 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
-		((ExecutionMessage)m).OrderState.AssertEqual(OrderStates.Active);
+		m.OrderState.AssertEqual(OrderStates.Active);
 
 		res.Clear();
 		emu.SendInMessage(new ExecutionMessage
@@ -349,9 +407,11 @@ public class MarketEmulatorTests
 			TradePrice = 105,
 			TradeVolume = 2
 		});
-		m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
-		((ExecutionMessage)m).OrderState.AssertEqual(OrderStates.Done);
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertNotNull();
+		m.Balance.AssertEqual(m.OrderVolume);
 	}
 
 	[TestMethod]
@@ -376,9 +436,11 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
-		((ExecutionMessage)m).OrderState.AssertEqual(OrderStates.Done);
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertNotNull();
+		m.Balance.AssertEqual(m.OrderVolume);
 	}
 
 	[TestMethod]
@@ -401,6 +463,13 @@ public class MarketEmulatorTests
 			PortfolioName = _pfName,
 		};
 		emu.SendInMessage(reg);
+
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Active);
+		m.Balance.AssertNotNull();
+		m.Balance.AssertEqual(m.OrderVolume);
+
 		var replace = new OrderReplaceMessage
 		{
 			SecurityId = id,
@@ -411,12 +480,25 @@ public class MarketEmulatorTests
 			Side = Sides.Buy,
 			Price = 101,
 			Volume = 2,
-			OrderType = OrderTypes.Limit
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
 		};
+
+		res.Clear();
+
 		emu.SendInMessage(replace);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == replace.TransactionId);
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertNotNull();
+		m.Balance.AssertEqual(m.OrderVolume);
+
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == replace.TransactionId);
+		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Active);
+		m.Balance.AssertNotNull();
+		m.Balance.AssertEqual(m.OrderVolume);
 	}
 
 	[TestMethod]
@@ -439,6 +521,13 @@ public class MarketEmulatorTests
 			PortfolioName = _pfName,
 		};
 		emu.SendInMessage(reg);
+
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Active);
+
+		res.Clear();
+
 		emu.SendInMessage(new OrderCancelMessage
 		{
 			SecurityId = id,
@@ -449,9 +538,11 @@ public class MarketEmulatorTests
 			PortfolioName = _pfName,
 		});
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
-		((ExecutionMessage)m).OrderState.AssertEqual(OrderStates.Done);
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertNotNull();
+		m.Balance.AssertEqual(m.OrderVolume);
 	}
 
 	[TestMethod]
@@ -485,8 +576,10 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -518,8 +611,10 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -553,8 +648,10 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -587,8 +684,10 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -619,8 +718,10 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -652,7 +753,9 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertEqual(0);
 	}
 }
