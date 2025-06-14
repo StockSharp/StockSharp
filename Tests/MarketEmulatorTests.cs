@@ -355,6 +355,33 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
+	public void ExpiryDateInvalidLimitOrder()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTimeOffset.UtcNow.AddDays(1);
+		var expiry = DateTime.UtcNow;
+
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = 9,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 1,
+			OrderType = OrderTypes.Limit,
+			TillDate = expiry,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg);
+
+		var m = res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		m.AssertNotNull();
+		((ExecutionMessage)m).OrderState.AssertEqual(OrderStates.Done);
+	}
+
+	[TestMethod]
 	public void ReplaceOrder()
 	{
 		var id = Helper.CreateSecurityId();

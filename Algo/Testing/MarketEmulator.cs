@@ -1279,7 +1279,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			ProcessTick(tick.SecurityId, tick.LocalTime, (tick.OriginSide, tick.GetTradePrice(), tick.TradeVolume ?? 1, tick.ServerTime), result);
 		}
 
-		private void AddActiveOrder(ExecutionMessage orderMsg, DateTimeOffset time)
+		private bool AddActiveOrder(ExecutionMessage orderMsg, DateTimeOffset time)
 		{
 			_activeOrders.Add(orderMsg.TransactionId, orderMsg);
 
@@ -1289,7 +1289,11 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 				if (left > TimeSpan.Zero)
 					_expirableOrders.Add(orderMsg, left);
+				else
+					return false;
 			}
+
+			return true;
 		}
 
 		private bool TryRemoveActiveOrder(long transId, out ExecutionMessage orderMsg)
@@ -1826,9 +1830,13 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 					if (execution.OrderState == OrderStates.Active)
 					{
-						replyMsg.OrderState = OrderStates.Active;
+						if (!AddActiveOrder(execution, time))
+						{
+							replyMsg.OrderState = OrderStates.Done;
+							return;
+						}
 
-						AddActiveOrder(execution, time);
+						replyMsg.OrderState = OrderStates.Active;
 
 						if (!matchByCandles)
 						{
