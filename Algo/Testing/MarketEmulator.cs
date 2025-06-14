@@ -1765,6 +1765,8 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 					//replyMsg.OriginalTransactionId = execution.OriginalTransactionId;
 					replyMsg.OrderState = OrderStates.Done;
+					replyMsg.Balance = order.Balance;
+					replyMsg.OrderVolume = order.OrderVolume;
 
 					result.Add(replyMsg);
 
@@ -1833,6 +1835,8 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						if (!AddActiveOrder(execution, time))
 						{
 							replyMsg.OrderState = OrderStates.Done;
+							replyMsg.Balance = execution.Balance;
+							replyMsg.OrderVolume = execution.OrderVolume;
 							return;
 						}
 
@@ -2402,10 +2406,9 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 			var diff = message.LocalTime - _prevTime;
 
-			foreach (var pair in _expirableOrders.ToArray())
+			foreach (var (orderMsg, l) in _expirableOrders.ToArray())
 			{
-				var orderMsg = pair.Key;
-				var left = pair.Value;
+				var left = l;
 				left -= diff;
 
 				if (left <= TimeSpan.Zero)
@@ -2618,6 +2621,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				OrderId = message.OrderId,
 				OriginalTransactionId = message.TransactionId,
 				Balance = message.Balance,
+				OrderVolume = message.OrderVolume,
 				OrderState = message.OrderState,
 				PortfolioName = message.PortfolioName,
 				DataTypeEx = DataType.Transactions,
