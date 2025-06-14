@@ -2690,26 +2690,26 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		}
 	}
 
-	private sealed class PortfolioEmulator(MarketEmulator parent, string name)
+	private class PortfolioEmulator(MarketEmulator parent, string name)
 	{
-		private class MoneyInfo(MarketEmulator.SecurityMarketEmulator secEmu)
+		private class PositionInfo(SecurityMarketEmulator secEmu)
 		{
-			public decimal PositionBeginValue;
-			public decimal PositionDiff;
-			public decimal PositionCurrentValue => PositionBeginValue + PositionDiff;
+			public decimal BeginValue;
+			public decimal Diff;
+			public decimal CurrentValue => BeginValue + Diff;
 
-			public decimal PositionAveragePrice;
+			public decimal AveragePrice;
 
-			public decimal PositionPrice
+			public decimal Price
 			{
 				get
 				{
-					var pos = PositionCurrentValue;
+					var pos = CurrentValue;
 
 					if (pos == 0)
 						return 0;
 
-					return pos.Abs() * PositionAveragePrice;
+					return pos.Abs() * AveragePrice;
 				}
 			}
 
@@ -2717,37 +2717,37 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 			public decimal GetPrice(decimal buyVol, decimal sellVol)
 			{
-				var totalMoney = PositionPrice;
+				var price = Price;
 
 				var buyOrderPrice = (TotalBidsVolume + buyVol) * secEmu.GetMarginPrice(Sides.Buy);
 				var sellOrderPrice = (TotalAsksVolume + sellVol) * secEmu.GetMarginPrice(Sides.Sell);
 
-				if (totalMoney != 0)
+				if (price != 0)
 				{
-					if (PositionCurrentValue > 0)
+					if (CurrentValue > 0)
 					{
-						totalMoney += buyOrderPrice;
-						totalMoney = totalMoney.Max(sellOrderPrice);
+						price += buyOrderPrice;
+						price = price.Max(sellOrderPrice);
 					}
 					else
 					{
-						totalMoney += sellOrderPrice;
-						totalMoney = totalMoney.Max(buyOrderPrice);
+						price += sellOrderPrice;
+						price = price.Max(buyOrderPrice);
 					}
 				}
 				else
 				{
-					totalMoney = buyOrderPrice + sellOrderPrice;
+					price = buyOrderPrice + sellOrderPrice;
 				}
 
-				return totalMoney;
+				return price;
 			}
 
 			public decimal TotalBidsVolume;
 			public decimal TotalAsksVolume;
 		}
 
-		private readonly Dictionary<SecurityId, MoneyInfo> _moneys = [];
+		private readonly Dictionary<SecurityId, PositionInfo> _positions = [];
 
 		private decimal _beginMoney;
 		private decimal _currentMoney;
@@ -2762,9 +2762,9 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 			AddPortfolioChangeMessage(time, result);
 
-			foreach (var pair in _moneys)
+			foreach (var pair in _positions)
 			{
-				var money = pair.Value;
+				var pos = pair.Value;
 
 				result.Add(
 					new PositionChangeMessage
@@ -2776,8 +2776,8 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						OriginalTransactionId = pfMsg.TransactionId,
 						StrategyId = pfMsg.StrategyId,
 					}
-					.Add(PositionChangeTypes.CurrentValue, money.PositionCurrentValue)
-					.TryAdd(PositionChangeTypes.AveragePrice, money.PositionAveragePrice)
+					.Add(PositionChangeTypes.CurrentValue, pos.CurrentValue)
+					.TryAdd(PositionChangeTypes.AveragePrice, pos.AveragePrice)
 				);
 			}
 		}
@@ -2797,30 +2797,16 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				return;
 			}
 
-			//if (!_moneys.ContainsKey(posMsg.SecurityId))
-			//{
-			//	result.Add(new PositionMessage
-			//	{
-			//		SecurityId = posMsg.SecurityId,
-			//		PortfolioName = posMsg.PortfolioName,
-			//		DepoName = posMsg.DepoName,
-			//		LocalTime = posMsg.LocalTime
-			//	});
-			//}
+			var pos = GetPosition(posMsg.SecurityId);
 
-			var money = GetMoney(posMsg.SecurityId/*, posMsg.LocalTime, result*/);
+			var prevPrice = pos.Price;
 
-			var prevPrice = money.PositionPrice;
-
-			money.PositionBeginValue = beginValue ?? 0L;
-			money.PositionAveragePrice = posMsg.Changes.TryGetValue(PositionChangeTypes.AveragePrice).To<decimal?>() ?? money.PositionAveragePrice;
-
-			//if (beginValue == 0m)
-			//	return;
+			pos.BeginValue = beginValue ?? 0L;
+			pos.AveragePrice = (decimal?)posMsg.Changes.TryGetValue(PositionChangeTypes.AveragePrice) ?? pos.AveragePrice;
 
 			result.Add(posMsg.Clone());
 
-			_totalBlockedMoney = _totalBlockedMoney - prevPrice + money.PositionPrice;
+			_totalBlockedMoney = _totalBlockedMoney - prevPrice + pos.Price;
 
 			result.Add(
 				new PositionChangeMessage
@@ -2834,48 +2820,33 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			);
 		}
 
-		private MoneyInfo GetMoney(SecurityId securityId/*, DateTimeOffset time, ICollection<Message> result*/)
-		{
-			//bool isNew;
-			var money = _moneys.SafeAdd(securityId, k => new MoneyInfo(parent.GetEmulator(securityId)));
-
-			//if (isNew)
-			//{
-			//	result.Add(new PositionMessage
-			//	{
-			//		LocalTime = time,
-			//		PortfolioName = _name,
-			//		SecurityId = securityId,
-			//	});
-			//}
-
-			return money;
-		}
+		private PositionInfo GetPosition(SecurityId securityId)
+			=> _positions.SafeAdd(securityId, k => new(parent.GetEmulator(securityId)));
 
 		public decimal? ProcessOrder(ExecutionMessage orderMsg, decimal? cancelBalance, ICollection<Message> result)
 		{
-			var money = GetMoney(orderMsg.SecurityId/*, orderMsg.LocalTime, result*/);
+			var pos = GetPosition(orderMsg.SecurityId/*, orderMsg.LocalTime, result*/);
 
-			var prevPrice = money.TotalPrice;
+			var prevPrice = pos.TotalPrice;
 
 			if (cancelBalance == null)
 			{
 				var balance = orderMsg.SafeGetVolume();
 
 				if (orderMsg.Side == Sides.Buy)
-					money.TotalBidsVolume += balance;
+					pos.TotalBidsVolume += balance;
 				else
-					money.TotalAsksVolume += balance;
+					pos.TotalAsksVolume += balance;
 			}
 			else
 			{
 				if (orderMsg.Side == Sides.Buy)
-					money.TotalBidsVolume -= cancelBalance.Value;
+					pos.TotalBidsVolume -= cancelBalance.Value;
 				else
-					money.TotalAsksVolume -= cancelBalance.Value;
+					pos.TotalAsksVolume -= cancelBalance.Value;
 			}
 
-			_totalBlockedMoney = _totalBlockedMoney - prevPrice + money.TotalPrice;
+			_totalBlockedMoney = _totalBlockedMoney - prevPrice + pos.TotalPrice;
 
 			var commission = parent._commissionManager.Process(orderMsg);
 
@@ -2899,30 +2870,30 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			if (side == Sides.Sell)
 				position *= -1;
 
-			var money = GetMoney(tradeMsg.SecurityId/*, time, result*/);
+			var pos = GetPosition(tradeMsg.SecurityId);
 
-			var prevPrice = money.TotalPrice;
+			var prevPrice = pos.TotalPrice;
 
 			var tradeVol = tradeMsg.TradeVolume.Value;
 
 			if (tradeMsg.Side == Sides.Buy)
-				money.TotalBidsVolume -= tradeVol;
+				pos.TotalBidsVolume -= tradeVol;
 			else
-				money.TotalAsksVolume -= tradeVol;
+				pos.TotalAsksVolume -= tradeVol;
 
-			var prevPos = money.PositionCurrentValue;
+			var prevPos = pos.CurrentValue;
 
-			money.PositionDiff += position.Value;
+			pos.Diff += position.Value;
 
 			var tradePrice = tradeMsg.TradePrice.Value;
-			var currPos = money.PositionCurrentValue;
+			var currPos = pos.CurrentValue;
 
 			if (prevPos.Sign() == currPos.Sign())
-				money.PositionAveragePrice = (money.PositionAveragePrice * prevPos + position.Value * tradePrice) / currPos;
+				pos.AveragePrice = (pos.AveragePrice * prevPos + position.Value * tradePrice) / currPos;
 			else
-				money.PositionAveragePrice = currPos == 0 ? 0 : tradePrice;
+				pos.AveragePrice = currPos == 0 ? 0 : tradePrice;
 
-			_totalBlockedMoney = _totalBlockedMoney - prevPrice + money.TotalPrice;
+			_totalBlockedMoney = _totalBlockedMoney - prevPrice + pos.TotalPrice;
 
 			result.Add(
 				new PositionChangeMessage
@@ -2930,11 +2901,10 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					LocalTime = time,
 					ServerTime = time,
 					PortfolioName = name,
-					SecurityId = tradeMsg.SecurityId,
-					StrategyId = tradeMsg.StrategyId,
+					SecurityId = SecurityId.Money,
 				}
-				.Add(PositionChangeTypes.CurrentValue, money.PositionCurrentValue)
-				.TryAdd(PositionChangeTypes.AveragePrice, money.PositionAveragePrice)
+				.Add(PositionChangeTypes.CurrentValue, pos.CurrentValue)
+				.TryAdd(PositionChangeTypes.AveragePrice, pos.AveragePrice)
 			);
 
 			AddPortfolioChangeMessage(time, result);
@@ -2942,14 +2912,14 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		public void ProcessMarginChange(DateTimeOffset time, SecurityId securityId, ICollection<Message> result)
 		{
-			var money = _moneys.TryGetValue(securityId);
+			var money = _positions.TryGetValue(securityId);
 
 			if (money == null)
 				return;
 
 			_totalBlockedMoney = 0;
 
-			foreach (var pair in _moneys)
+			foreach (var pair in _positions)
 				_totalBlockedMoney += pair.Value.TotalPrice;
 
 			result.Add(
@@ -3003,28 +2973,28 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				// если задан баланс, то проверям по нему (для частично исполненных заявок)
 				var volume = execMsg.Balance ?? execMsg.SafeGetVolume();
 
-				var money = GetMoney(execMsg.SecurityId/*, execMsg.LocalTime, result*/);
+				var pos = GetPosition(execMsg.SecurityId);
 
-				var needBlock = money.GetPrice(execMsg.Side == Sides.Buy ? volume : 0, execMsg.Side == Sides.Sell ? volume : 0);
+				var needBlock = pos.GetPrice(execMsg.Side == Sides.Buy ? volume : 0, execMsg.Side == Sides.Sell ? volume : 0);
 
 				if (_currentMoney < needBlock)
 				{
 					return new InsufficientFundException(LocalizedStrings.InsufficientBalance
-						.Put(execMsg.PortfolioName, execMsg.TransactionId, needBlock, _currentMoney, money.TotalPrice));
+						.Put(execMsg.PortfolioName, execMsg.TransactionId, needBlock, _currentMoney, pos.TotalPrice));
 				}
 			}
 			else if (settings.CheckShortable && execMsg.Side == Sides.Sell &&
 					 parent._securityEmulators.TryGetValue(execMsg.SecurityId, out var secEmu) &&
 					 secEmu.SecurityDefinition?.Shortable == false)
 			{
-				var money = GetMoney(execMsg.SecurityId/*, execMsg.LocalTime, result*/);
+				var pos = GetPosition(execMsg.SecurityId);
 
-				var potentialPosition = money.PositionCurrentValue - execMsg.OrderVolume;
+				var potentialPosition = pos.CurrentValue - execMsg.OrderVolume;
 
 				if (potentialPosition < 0)
 				{
 					return new(LocalizedStrings.CannotShortPosition
-						.Put(execMsg.PortfolioName, execMsg.TransactionId, money.PositionCurrentValue, execMsg.OrderVolume));
+						.Put(execMsg.PortfolioName, execMsg.TransactionId, pos.CurrentValue, execMsg.OrderVolume));
 				}
 			}
 
