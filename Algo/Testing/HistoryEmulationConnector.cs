@@ -103,7 +103,6 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		Adapter.PnLManager = null;
 		Adapter.SlippageManager = null;
 		Adapter.SupportSecurityAll = false;
-		Adapter.IsSupportPositionEmulation = false;
 		Adapter.SendFinishedCandlesImmediatelly = true;
 		//Adapter.SupportCandlesCompression = false;
 		Adapter.SupportBuildingFromOrderLog = false;

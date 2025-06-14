@@ -722,7 +722,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	/// <summary>
 	/// Use <see cref="PositionMessageAdapter"/>.
 	/// </summary>
-	public bool IsSupportPositionEmulation { get; set; } = true;
+	public bool IsSupportPositionEmulation { get; set; }
 
 	/// <summary>
 	/// To call the <see cref="ConnectMessage"/> event when the first adapter connects to <see cref="InnerAdapters"/>.
@@ -863,7 +863,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			adapter = ApplyOwnInner(new TransactionOrderingMessageAdapter(adapter));
 		}
 
-		if (IsSupportPositionEmulation)
+		if (IsSupportPositionEmulation || adapter.IsPositionsEmulationRequired != null)
 		{
 			adapter = ApplyOwnInner(new PositionMessageAdapter(adapter, new EmulationPositionManager(adapter.IsPositionsEmulationRequired, this)));
 		}
