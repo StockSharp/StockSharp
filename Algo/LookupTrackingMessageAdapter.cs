@@ -94,9 +94,6 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
 
-		if (message.SpecificItemRequest)
-			return true;
-
 		var transId = message.TransactionId;
 
 		var isEnqueue = false;

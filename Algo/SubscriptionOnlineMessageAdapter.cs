@@ -335,12 +335,12 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 		{
 			if (isSubscribe)
 			{
-				if (message.SpecificItemRequest)
+				if (message.SpecificItemRequest || message.IsHistoryOnly())
 				{
 					_skipSubscriptions.Add(message.TransactionId);
 					sendInMsg = message;
 				}
-				else if (!message.IsHistoryOnly())
+				else
 				{
 					var dataType = message.DataType;
 					var secId = default(SecurityId);
@@ -408,11 +408,6 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 
 					if (extraFilter)
 						info.ExtraFilters.Add(transId);
-				}
-				else
-				{
-					_skipSubscriptions.Add(message.TransactionId);
-					sendInMsg = message;
 				}
 			}
 			else
