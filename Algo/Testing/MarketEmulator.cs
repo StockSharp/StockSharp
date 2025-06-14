@@ -527,6 +527,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						OrderType = regMsg.OrderType,
 						UserOrderId = regMsg.UserOrderId,
 						ExpiryDate = regMsg.TillDate,
+						PostOnly = regMsg.PostOnly,
 					};
 
 					yield break;
@@ -573,6 +574,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						OrderType = replaceMsg.OrderType,
 						UserOrderId = replaceMsg.UserOrderId,
 						ExpiryDate = replaceMsg.TillDate,
+						PostOnly = replaceMsg.PostOnly,
 					};
 
 					yield break;
@@ -1792,6 +1794,22 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 				if (error is null)
 				{
+					if (execution.PostOnly == true)
+					{
+						var quotes = GetQuotes(execution.Side.Invert());
+
+						var quote = quotes.FirstOrDefault();
+						var sign = execution.Side == Sides.Buy ? 1 : -1;
+
+						if (quote.Value != null && quote.Key * sign <= execution.OrderPrice * sign)
+						{
+							replyMsg.Balance = execution.OrderVolume;
+							replyMsg.OrderVolume = execution.OrderVolume;
+							replyMsg.OrderState = OrderStates.Done;
+							return;
+						}
+					}
+
 					LogInfo(LocalizedStrings.OrderRegistered, execution.TransactionId);
 
 					// при восстановлении заявки у нее уже есть номер
