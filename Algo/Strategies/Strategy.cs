@@ -120,7 +120,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			PrevState = OrderStates.None;
 		}
 
-		public bool IsOwn { get; set; }
 		public bool IsCanceled { get; set; }
 		public decimal ReceivedVolume { get; set; }
 		public OrderStates PrevState { get; set; }
@@ -265,8 +264,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		NameGenerator.Changed += name => _name.Value = name;
 
 		_riskManager = new RiskManager { Parent = this };
-
-		_positionManager = new() { Parent = this };
 
 		_indicators = new(this);
 	}
@@ -1371,7 +1368,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if (action is not null)
 			return action;
 
-		_ordersInfo.Add(order, new() { IsOwn = true });
+		_ordersInfo.Add(order, new());
 
 		if (!restored)
 			order.UserOrderId = EnsureGetId();
@@ -1475,7 +1472,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			TransactionId = order.TransactionId,
 		};
 
-		OnOrderRegisterFailed(fail, canRisk && _ordersInfo.TryGetValue(order, out var info) && info.IsOwn);
+		OnOrderRegisterFailed(fail, canRisk && _ordersInfo.ContainsKey(order));
 
 		Rules.RemoveRulesByToken(order, null);
 	}
@@ -1500,9 +1497,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		lock (_ordersInfo.SyncRoot)
 		{
-			var info = _ordersInfo.TryGetValue(order);
-
-			if (info == null || !info.IsOwn)
+			if (!_ordersInfo.TryGetValue(order, out var info))
 				throw new ArgumentException(LocalizedStrings.OrderNotFromStrategy.Put(order.TransactionId, Name));
 
 			if (info.IsCanceled)
@@ -1541,10 +1536,9 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		var info = _ordersInfo.TryGetValue(order);
 
-		var isRegistered = (info != null && !info.IsOwn && !isChanging) || //иначе не добавляются заявки дочерних стратегий
-		                   info != null && info.IsOwn && info.PrevState == OrderStates.Pending && (order.State == OrderStates.Active || order.State == OrderStates.Done);
+		var isRegistered = info != null && info.PrevState == OrderStates.Pending && (order.State == OrderStates.Active || order.State == OrderStates.Done);
 
-		if (info != null && info.IsOwn)
+		if (info != null)
 			info.PrevState = order.State;
 
 		if(IsDisposeStarted)
@@ -1584,10 +1578,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			{
 				lock (_ordersInfo.SyncRoot)
 				{
-					//var info = _ordersInfo.TryGetValue(order);
-
-					// заявка принадлежит дочерней стратегии
-					if (info == null || !info.IsOwn)
+					if (info == null)
 						return;
 
 					// для заявки уже был послан сигнал на снятие
@@ -1739,7 +1730,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 			positions = _positions.CachedValues;
 			_positions.Clear();
-			_positionManager.Reset();
 		}
 
 		ProcessState = ProcessStates.Stopped;
@@ -1907,8 +1897,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// <param name="order">Order.</param>
 	protected virtual void OnOrderRegistering(Order order)
 	{
-		TryAddChildOrder(order);
-
 		OrderRegistering?.Invoke(order);
 	}
 
@@ -1928,8 +1916,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// <param name="newOrder">New order to register.</param>
 	protected virtual void OnOrderReRegistering(Order oldOrder, Order newOrder)
 	{
-		TryAddChildOrder(newOrder);
-
 		OrderReRegistering?.Invoke(oldOrder, newOrder);
 	}
 
@@ -1945,11 +1931,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		if (calcRisk)
 			ProcessRisk(() => fail.ToMessage(fail.Order.TransactionId));
-	}
-
-	private void TryAddChildOrder(Order order)
-	{
-		_ordersInfo.SafeAdd(order, key => new() { IsOwn = false });
 	}
 
 	private void OnConnectorNewMessage(Message message)
@@ -2091,7 +2072,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 	private void OnConnectorOwnTradeReceived(Subscription subscription, MyTrade trade)
 	{
-		if (!CanProcess(subscription) || !IsOwnOrder(trade.Order) || !TryAddMyTrade(trade))
+		if (!CanProcess(subscription) || !_ordersInfo.ContainsKey(trade.Order) || !TryAddMyTrade(trade))
 			return;
 
 		TryInvoke(() =>
@@ -2139,7 +2120,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		if (!_ordersInfo.ContainsKey(order) && CanAttach(order))
 			AttachOrder(order, true);
-		else if (IsOwnOrder(order))
+		else if (_ordersInfo.ContainsKey(order))
 			TryInvoke(() => ProcessOrder(order, true));
 
 		TryInvoke(() =>
@@ -2155,7 +2136,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if(IsDisposeStarted)
 			return;
 
-		if (IsOwnOrder(fail.Order))
+		if (_ordersInfo.ContainsKey(fail.Order))
 			OrderEditFailed?.Invoke(transactionId, fail);
 	}
 
@@ -2164,7 +2145,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if(IsDisposeStarted)
 			return;
 
-		if (IsOwnOrder(order))
+		if (_ordersInfo.ContainsKey(order))
 		{
 			OrderEdited?.Invoke(transactionId, order);
 			ChangeLatency(order.LatencyEdition);
@@ -2180,7 +2161,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			return;
 
 		if (_ordersInfo.TryGetValue(fail.Order, out var info))
-			OnOrderRegisterFailed(fail, info.IsOwn);
+			OnOrderRegisterFailed(fail, true);
 	}
 
 	/// <summary>
@@ -2200,7 +2181,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		{
 			lock (_ordersInfo.SyncRoot)
 			{
-				if (_ordersInfo.TryGetValue(order, out var info) && info.IsOwn)
+				if (_ordersInfo.TryGetValue(order, out var info))
 					info.ReceivedVolume += tick.Volume;
 			}
 		}
@@ -2350,7 +2331,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// <returns>Orders, belonging to the strategy.</returns>
 	protected virtual IEnumerable<Order> ProcessNewOrders(IEnumerable<Order> newOrders)
 	{
-		return _ordersInfo.SyncGet(d => newOrders.Where(IsOwnOrder).ToArray());
+		return _ordersInfo.SyncGet(d => newOrders.Where(_ordersInfo.ContainsKey).ToArray());
 	}
 
 	/// <inheritdoc />
@@ -2447,10 +2428,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		{
 			var info = _ordersInfo.TryGetValue(o);
 
-			//заявка принадлежит дочерней статегии
-			if (!info.IsOwn)
-				return;
-
 			if (isStopOrder is not null && isStopOrder != (o.Type == OrderTypes.Conditional))
 				return;
 
@@ -2493,9 +2470,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		lock (_ordersInfo.SyncRoot)
 		{
-			var info = _ordersInfo.TryGetValue(order);
-
-			if (info == null || !info.IsOwn)
+			if (!_ordersInfo.TryGetValue(order, out var info))
 				return;
 
 			info.IsCanceled = false;
@@ -2566,16 +2541,10 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	[Browsable(false)]
 	public IPortfolioProvider PortfolioProvider { get; set; }
 
-        private void TryInvoke(Action handler)
+	private void TryInvoke(Action handler)
 	{
 		if (!IsDisposeStarted)
 			handler();
-	}
-
-	private bool IsOwnOrder(Order order)
-	{
-		var info = _ordersInfo.TryGetValue(order);
-		return info != null && info.IsOwn;
 	}
 
 	private RiskActions? ProcessRisk(Func<Message> getMessage)

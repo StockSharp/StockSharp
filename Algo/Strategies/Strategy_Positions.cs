@@ -77,61 +77,6 @@ partial class Strategy
 			StrategyId = EnsureGetId(),
 		}).CurrentValue = value;
 
-	// All strategy orders are sent with StrategyId=rootStrategy.StrategyId
-	// Also, child strategies do not subscribe for positions
-	// So, child strategies do not recieve and position updates.
-	// This manager allows child strategies to track their own position based on order state/balance.
-	private class ChildStrategyPositionManager : BaseLogReceiver, IPositionManager
-	{
-		readonly StrategyPositionManager _inner;
-		readonly CachedSynchronizedDictionary<(SecurityId secId, string portName), decimal> _positions = [];
-
-		public ChildStrategyPositionManager() => _inner = new StrategyPositionManager(true) { Parent = this };
-
-		public decimal? GetPositionValue(SecurityId securityId, string portfolioName) => _positions.TryGetValue((securityId, portfolioName));
-
-		public PositionChangeMessage ProcessMessage(Message message)
-		{
-			PositionChangeMessage result = null;
-
-			switch (message.Type)
-			{
-				case MessageTypes.Reset:
-					_positions.Clear();
-					break;
-
-				case MessageTypes.PositionChange:
-					LogWarning("ignored: {0}", message);
-					break;
-
-				default:
-					result = _inner.ProcessMessage(message);
-					break;
-			}
-
-
-			if (result == null)
-				return null;
-
-			if (!result.Changes.TryGetValue(PositionChangeTypes.CurrentValue, out var curValue))
-			{
-				LogWarning("no changes for {0}/{1}", result.SecurityId, result.PortfolioName);
-				return result;
-			}
-
-			var key = (result.SecurityId, result.PortfolioName);
-
-			lock(_positions.SyncRoot)
-				_positions[key] = (decimal)curValue;
-
-			return result;
-		}
-
-		public void Reset() => ProcessMessage(new ResetMessage());
-	}
-
-	private readonly ChildStrategyPositionManager _positionManager;
-
 	/// <summary>
 	/// The position aggregate value.
 	/// </summary>
