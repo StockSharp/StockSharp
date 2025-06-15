@@ -4,7 +4,7 @@ using StockSharp.Algo.Commissions;
 using StockSharp.Algo.PnL;
 using StockSharp.Algo.Candles;
 
-using QuotesDict = System.Collections.Generic.SortedDictionary<decimal, Ecng.Common.RefPair<LevelOrders, Messages.QuoteChange>>;
+using QuotesDict = SortedDictionary<decimal, RefPair<LevelOrders, QuoteChange>>;
 
 class LevelOrders : IEnumerable<ExecutionMessage>
 {
@@ -526,6 +526,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						UserOrderId = regMsg.UserOrderId,
 						ExpiryDate = regMsg.TillDate,
 						PostOnly = regMsg.PostOnly,
+						TimeInForce = regMsg.TimeInForce,
 					};
 
 					yield break;
@@ -573,6 +574,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						UserOrderId = replaceMsg.UserOrderId,
 						ExpiryDate = replaceMsg.TillDate,
 						PostOnly = replaceMsg.PostOnly,
+						TimeInForce = replaceMsg.TimeInForce,
 					};
 
 					yield break;
@@ -1968,8 +1970,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			if (leftBalance > 0 && order.TimeInForce == TimeInForce.MatchOrCancel)
 				return;
 
-			var isMarket = order.OrderType == OrderTypes.Market;
-
 			decimal execPrice;
 
 			if (order.OrderType == OrderTypes.Market)
@@ -2010,7 +2010,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		{
 			Verify();
 
-			//string matchError = null;
 			var isCrossTrade = false;
 
 			var quotesSide = order.Side.Invert();
@@ -2025,11 +2024,42 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			var orderPrice = order.OrderPrice;
 			var isMarket = order.OrderType == OrderTypes.Market;
 
-			foreach (var pair in quotes)
+			if (!isMarket && order.TimeInForce == TimeInForce.MatchOrCancel)
 			{
-				var price = pair.Key;
-				var levelOrders = pair.Value.First;
-				var qc = pair.Value.Second;
+				var leftBalance2 = leftBalance;
+
+				foreach (var (price, pair) in quotes)
+				{
+					if (sign * price > sign * orderPrice)
+						break;
+
+					if (price == orderPrice && !_settings.MatchOnTouch)
+						break;
+
+					var qc = pair.Second;
+
+					leftBalance2 -= qc.Volume;
+
+					if (leftBalance2 <= 0)
+						break;
+				}
+
+				if (leftBalance2 > 0)
+				{
+					if (result != null)
+					{
+						order.OrderState = OrderStates.Done;
+						ProcessOrder(time, order, result);
+					}
+
+					return;
+				}
+			}
+
+			foreach (var (price, pair) in quotes)
+			{
+				var levelOrders = pair.First;
+				var qc = pair.Second;
 
 				// для старых заявок, когда стакан пробивает уровень заявки,
 				// матчим по цене ранее выставленной заявки.
@@ -2103,7 +2133,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					var requiredVol = leftBalance;
 
 					qc.Volume -= leftBalance;
-					pair.Value.Second = qc;
+					pair.Second = qc;
 
 					AddTotalVolume(quotesSide, -leftBalance);
 
