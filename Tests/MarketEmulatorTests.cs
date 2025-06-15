@@ -856,7 +856,13 @@ public class MarketEmulatorTests
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTimeOffset.UtcNow;
-
+		emu.SendInMessage(new MarketDataMessage
+		{
+			TransactionId = _idGenerator.GetNextId(),
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+		});
 		emu.SendInMessage(new TimeFrameCandleMessage
 		{
 			SecurityId = id,
@@ -881,10 +887,14 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
 		m.OrderState.AssertEqual(OrderStates.Done);
 		m.Balance.AssertEqual(0);
+
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		m.AssertNotNull();
+		m.TradeVolume.AssertEqual(reg.Volume);
 	}
 
 	[TestMethod]
