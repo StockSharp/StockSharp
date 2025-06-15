@@ -2494,8 +2494,8 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 						_messagePool.Free(order);
 
-						if (level.Count == 0)
-							quotes.Remove(message.OrderPrice);
+						if (quote.Volume <= 0)
+							quotes.Remove(quote.Price);
 					}
 				}					
 			}
