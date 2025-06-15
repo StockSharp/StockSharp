@@ -580,8 +580,6 @@ public class OrderLogTests
 	[TestMethod]
 	public void CheckSnapshotNotEmpty()
 	{
-		// https://stocksharp.myjetbrains.com/youtrack/issue/SS-230
-
 		var (sec, registry, date) = Init();
 
 		var secId = sec.Id.ToSecurityId();
@@ -599,8 +597,6 @@ public class OrderLogTests
 	[TestMethod]
 	public void CheckBuildWithInterval()
 	{
-		// https://stocksharp.myjetbrains.com/youtrack/issue/SS-230
-
 		var (sec, registry, date) = Init();
 
 		using var culture = ThreadingHelper.WithInvariantCulture();
