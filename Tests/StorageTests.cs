@@ -551,23 +551,11 @@ public class StorageTests
 		TickSameTime(StorageFormats.Csv);
 	}
 
-	private static void LoadTradesAndCompare(IMarketDataStorage<ExecutionMessage> tradeStorage, IList<ExecutionMessage> trades, StorageFormats format)
+	private static void LoadTradesAndCompare(IMarketDataStorage<ExecutionMessage> tradeStorage, ExecutionMessage[] trades, StorageFormats format)
 	{
 		var loadedTrades = tradeStorage.Load(trades.First().ServerTime, trades.Last().ServerTime).ToArray();
 
-		loadedTrades.Length.AssertEqual(trades.Count);
-
-		var isMls = format.IsMls();
-
-		for (var i = 0; i < trades.Count; i++)
-		{
-			var t1 = trades[i];
-			t1.ServerTime = t1.ServerTime.TruncateTime(isMls);
-
-			var t2 = loadedTrades.ElementAt(i);
-
-			Helper.CheckEqual(t1, t2, isMls);
-		}
+		loadedTrades.CompareMessages(trades, format);
 	}
 
 	private static void DepthAdaptivePriceStep(StorageFormats format)
@@ -1462,17 +1450,7 @@ public class StorageTests
 
 		var loadedDepths = depthStorage.Load(depths.First().ServerTime.TruncateTime(isMls), (depths.Last().ServerTime + _csvAccuracy).TruncateTime(isMls)).ToArray();
 
-		loadedDepths.Length.AssertEqual(depths.Count);
-
-		for (var i = 0; i < depths.Count; i++)
-		{
-			var d1 = depths[i];
-			d1.ServerTime = d1.ServerTime.TruncateTime(isMls);
-
-			var d2 = loadedDepths.ElementAt(i);
-
-			Helper.CheckEqual(d1, d2, isMls);
-		}
+		loadedDepths.CompareMessages(depths, isMls);
 	}
 
 	private static void DepthRandomLessMaxDepth(StorageFormats format)
@@ -1495,19 +1473,7 @@ public class StorageTests
 		depthStorage.Save(depths);
 		var loadedDepths = depthStorage.Load(depths.First().ServerTime, depths.Last().ServerTime).ToArray();
 
-		loadedDepths.Length.AssertEqual(depths.Count);
-
-		var isMls = format.IsMls();
-
-		for (var i = 0; i < depths.Count; i++)
-		{
-			var d1 = depths[i];
-			var d2 = loadedDepths.ElementAt(i);
-
-			d1.ServerTime = d1.ServerTime.TruncateTime(isMls);
-
-			Helper.CheckEqual(d1, d2, isMls);
-		}
+		loadedDepths.CompareMessages(depths, format);
 
 		depthStorage.Delete(depths.First().ServerTime, depths.Last().ServerTime);
 		loadedDepths = [.. depthStorage.Load(depths.First().ServerTime, depths.Last().ServerTime)];
@@ -1537,19 +1503,7 @@ public class StorageTests
 		depthStorage.Save(depths);
 		var loadedDepths = depthStorage.Load(depths.First().ServerTime, depths.Last().ServerTime).ToArray();
 
-		loadedDepths.Length.AssertEqual(depths.Count);
-
-		var isMls = format.IsMls();
-
-		for (var i = 0; i < depths.Count; i++)
-		{
-			var d1 = depths[i];
-			var d2 = loadedDepths.ElementAt(i);
-
-			d1.ServerTime = d1.ServerTime.TruncateTime(isMls);
-
-			Helper.CheckEqual(d1, d2, isMls);
-		}
+		loadedDepths.CompareMessages(depths, format);
 
 		depthStorage.Delete(depths.First().ServerTime, depths.Last().ServerTime);
 		loadedDepths = [.. depthStorage.Load(depths.First().ServerTime, depths.Last().ServerTime)];
@@ -1616,19 +1570,7 @@ public class StorageTests
 	{
 		var loadedDepths = depthStorage.Load(depths.First().ServerTime, depths.Last().ServerTime).ToArray();
 
-		loadedDepths.Length.AssertEqual(depths.Count);
-
-		var isMls = format.IsMls();
-
-		for (var i = 0; i < depths.Count; i++)
-		{
-			var d1 = depths[i];
-			d1.ServerTime = d1.ServerTime.TruncateTime(isMls);
-
-			var d2 = loadedDepths.ElementAt(i);
-
-			Helper.CheckEqual(d1, d2, isMls);
-		}
+		loadedDepths.CompareMessages(depths, format);
 	}
 
 	[TestMethod]
@@ -2771,30 +2713,7 @@ public class StorageTests
 	private static void LoadOrderLogAndCompare(IMarketDataStorage<ExecutionMessage> storage, IList<ExecutionMessage> items, StorageFormats format)
 	{
 		var loadedItems = storage.Load(items.First().ServerTime, items.Last().ServerTime).ToArray();
-		loadedItems.Length.AssertEqual(items.Count);
-
-		var isMls = format.IsMls();
-
-		for (var i = 0; i < items.Count; i++)
-		{
-			var t1 = items[i];
-			//var o1 = t1.Order;
-			//o1.LastChangeTime = o1.Time = o1.Time.TruncateTime(isMls);
-
-			var t2 = loadedItems.ElementAt(i);
-			//var o2 = t2.Order;
-
-			//o2.Portfolio = Portfolio.AnonymousPortfolio;
-
-			//// хранилище не сохраняет состояние заявки для исполненных заявок
-			//if (t2.Trade != null)
-			//{
-			//	o2.State = o1.State;
-			//	t1.Trade.Time = t1.Trade.Time.TruncateTime(isMls);
-			//}
-
-			Helper.CheckEqual(t1, t2, isMls);
-		}
+		loadedItems.CompareMessages(items, format);
 	}
 
 	private static void News(StorageFormats format)
@@ -2808,12 +2727,7 @@ public class StorageTests
 
 		var loaded = newsStorage.Load(news.First().ServerTime, news.Last().ServerTime).ToArray();
 
-		loaded.Length.AssertEqual(news.Length);
-
-		for (var i = 0; i < news.Length; i++)
-		{
-			Helper.CheckEqual(news[i], loaded[i], isMls);
-		}
+		loaded.CompareMessages(news, isMls);
 
 		newsStorage.DeleteWithCheck();
 	}
@@ -2850,12 +2764,7 @@ public class StorageTests
 
 		var loaded = storage.Load(data.First().ServerTime, data.Last().ServerTime).ToArray();
 
-		loaded.Length.AssertEqual(data.Length);
-
-		for (var i = 0; i < data.Length; i++)
-		{
-			Helper.CheckEqual(data[i], loaded[i], isMls);
-		}
+		loaded.CompareMessages(data, isMls);
 
 		storage.DeleteWithCheck();
 	}
@@ -2877,22 +2786,11 @@ public class StorageTests
 		var l1Storage = GetStorageRegistry().GetLevel1MessageStorage(securityId, null, format);
 
 		l1Storage.Save(testValues);
-		var loaded = l1Storage.Load();
+		var loaded = l1Storage.Load().ToArray();
+		loaded.CompareMessages(testValues, format);
 
 		var loadedItems = l1Storage.Load(testValues.First().ServerTime, testValues.Last().ServerTime).ToArray();
-		loaded.Count().AssertEqual(testValues.Count);
-
-		var isMls = format.IsMls();
-
-		for (var i = 0; i < testValues.Count; i++)
-		{
-			var t1 = testValues[i];
-			t1.ServerTime = t1.ServerTime.TruncateTime(isMls);
-
-			var t2 = loadedItems.ElementAt(i);
-
-			Helper.CheckEqual(t1, t2, isMls);
-		}
+		loadedItems.CompareMessages(testValues, format);
 
 		l1Storage.DeleteWithCheck();
 	}
@@ -3011,22 +2909,11 @@ public class StorageTests
 		var l1Storage = GetStorageRegistry().GetLevel1MessageStorage(securityId, null, format);
 
 		l1Storage.Save(testValues);
-		var loaded = l1Storage.Load();
+		var loaded = l1Storage.Load().ToArray();
+		loaded.CompareMessages(testValues, format);
 
 		var loadedItems = l1Storage.Load(testValues.First().ServerTime, testValues.Last().ServerTime).ToArray();
-		loaded.Count().AssertEqual(testValues.Count);
-
-		var isMls = format.IsMls();
-
-		for (var i = 0; i < testValues.Count; i++)
-		{
-			var t1 = testValues[i];
-			t1.ServerTime = t1.ServerTime.TruncateTime(isMls);
-
-			var t2 = loadedItems.ElementAt(i);
-
-			Helper.CheckEqual(t1, t2, isMls);
-		}
+		loadedItems.CompareMessages(testValues, format);
 
 		l1Storage.DeleteWithCheck();
 	}
@@ -3078,25 +2965,13 @@ public class StorageTests
 	//	var l1Storage = GetStorageRegistry().GetLevel1MessageStorage(securityId, null, format);
 
 	//	l1Storage.Save(testValues);
-	//	var loaded = l1Storage.Load();
+	//	var loaded = l1Storage.Load().ToArray();
 
 	//	testValues.RemoveAt(0);
 	//	testValues[1].Changes.Remove(Level1Fields.LastTradePrice);
 
 	//	var loadedItems = l1Storage.Load(testValues.First().ServerTime, testValues.Last().ServerTime).ToArray();
-	//	loaded.Count().AssertEqual(testValues.Count);
-
-	//	var isMls = format.IsMls();
-
-	//	for (var i = 0; i < testValues.Count; i++)
-	//	{
-	//		var t1 = testValues[i];
-	//		t1.ServerTime = t1.ServerTime.TruncateTime(isMls);
-
-	//		var t2 = loadedItems.ElementAt(i);
-
-	//		Helper.CheckEntity(t1, t2, isMls);
-	//	}
+	//	loaded.CompareMessages(testValues, format);
 
 	//	l1Storage.DeleteWithCheck();
 	//}
@@ -3108,7 +2983,8 @@ public class StorageTests
 	//	Level1Duplicates(StorageFormats.Binary);
 	//}
 
-	private static void SecurityTest(StorageFormats format)
+	[TestMethod]
+	public void Securities()
 	{
 		var securities = new List<Security>();
 
@@ -3152,27 +3028,13 @@ public class StorageTests
 
 		loaded.Length.AssertEqual(securities.Count);
 
-		var isMls = format.IsMls();
-
 		for (var i = 0; i < loaded.Length; i++)
 		{
-			Helper.CheckEqual(securities[i], loaded[i], isMls);
+			Helper.CheckEqual(securities[i], loaded[i]);
 		}
 
 		storage.DeleteAll();
 		storage.LookupAll().Count().AssertEqual(0);
-	}
-
-	[TestMethod]
-	public void SecurityBinary()
-	{
-		SecurityTest(StorageFormats.Binary);
-	}
-
-	[TestMethod]
-	public void SecurityCsv()
-	{
-		SecurityTest(StorageFormats.Csv);
 	}
 
 	private static void TransactionTest(StorageFormats format)
@@ -3192,16 +3054,7 @@ public class StorageTests
 		storage.Save(transactions);
 		var loaded = storage.Load().ToArray();
 
-		loaded.Length.AssertEqual(transactions.Count);
-
-		var isMls = format.IsMls();
-
-		for (var i = 0; i < loaded.Length; i++)
-		{
-			Helper.CheckEqual(transactions[i], loaded[i], isMls);
-
-			loaded[i].LocalTime.TruncateTime(isMls).AssertEqual(transactions[i].LocalTime.TruncateTime(isMls));
-		}
+		loaded.CompareMessages(transactions, format);
 
 		storage.Delete();
 		storage.Load().Count().AssertEqual(0);
@@ -3234,17 +3087,7 @@ public class StorageTests
 
 		testValues = [.. testValues.Where(t => t.HasChanges())];
 
-		loaded.Length.AssertEqual(testValues.Count);
-
-		for (var i = 0; i < loaded.Length; i++)
-		{
-			var t1 = testValues[i];
-			t1.ServerTime = t1.ServerTime.TruncateTime(isMls);
-
-			var t2 = loaded.ElementAt(i);
-
-			Helper.CheckEqual(t1, t2, isMls);
-		}
+		loaded.CompareMessages(testValues, isMls);
 
 		storage.Delete();
 		storage.Load().Count().AssertEqual(0);

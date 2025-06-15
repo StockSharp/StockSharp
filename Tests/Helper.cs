@@ -1195,6 +1195,26 @@ static class Helper
 			actual.AssertEqual(expected);
 	}
 
+	public static void CompareMessages<T>(this IList<T> actual, IList<T> expected, StorageFormats format)
+		where T : IServerTimeMessage
+		=> CompareMessages(actual, expected, format.IsMls());
+
+	public static void CompareMessages<T>(this IList<T> actual, IList<T> expected, bool isMls)
+		where T : IServerTimeMessage
+	{
+		actual.Count.AssertEqual(expected.Count);
+
+		for (var i = 0; i < expected.Count; i++)
+		{
+			var d1 = expected[i];
+			d1.ServerTime = d1.ServerTime.TruncateTime(isMls);
+
+			var d2 = actual.ElementAt(i);
+
+			CheckEqual(d1, d2, isMls);
+		}
+	}
+
 	public static void CompareCandles<T>(this T[] actualCandles, T[] expectedCandles, StorageFormats format)
 		where T : ICandleMessage
 	{
