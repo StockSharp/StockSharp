@@ -1,5 +1,3 @@
-//#define EMU_DBG
-
 namespace StockSharp.Algo.Testing;
 
 using StockSharp.Algo.Commissions;
@@ -690,9 +688,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						AddQuote(_asks, _l1AskPrice.Value, _totalAskVolume = _l1AskVol.Value);
 					}
 
-#if EMU_DBG
 					Verify();
-#endif
 				}
 				else
 				{
@@ -703,9 +699,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					{
 						var quotesSide = orderSide.Invert();
 
-#if EMU_DBG
 						Verify();
-#endif
 
 						var sign = orderSide == Sides.Buy ? -1 : 1;
 						var hasQuotes = false;
@@ -770,9 +764,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 							AddTotalVolume(quotesSide, -totalVolumeDiff);
 
-#if EMU_DBG
 							Verify();
-#endif
 						}
 
 						// если собрали все котировки, то оставляем заявку в стакане по цене котировки
@@ -780,9 +772,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						{
 							UpdateQuote(CreateMessage(localTime, serverTime, quotesSide, price, volume), true);
 
-#if EMU_DBG
 							Verify();
-#endif
 						}
 					}
 
@@ -816,9 +806,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 					CancelWorst(localTime, serverTime);
 
-#if EMU_DBG
 					Verify();
-#endif
 				}
 
 				if (_depthSubscription is not null)
@@ -897,9 +885,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 					_currSpreadPrice = bestBidPrice.GetSpreadMiddle(bestAskPrice, null) ?? 0;
 
-#if EMU_DBG
 					Verify();
-#endif
 				}
 				else
 				{
@@ -1258,9 +1244,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 							break;
 					}
 
-#if EMU_DBG
 					Verify();
-#endif
 				}
 			}
 
@@ -1339,9 +1323,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				{
 					UpdateQuote(CreateMessage(localTime, serverTime, quotesSide, oppositePrice, tradeVolume), true);
 
-#if EMU_DBG
 					Verify();
-#endif
 				}
 			}
 
@@ -1357,9 +1339,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				var quotesSide = orderSide.Invert();
 				var quotes = GetQuotes(quotesSide);
 
-#if EMU_DBG
 				Verify();
-#endif
 
 				var sign = orderSide == Sides.Buy ? -1 : 1;
 				var hasQuotes = false;
@@ -1423,9 +1403,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 					AddTotalVolume(quotesSide, -totalVolumeDiff);
 
-#if EMU_DBG
 					Verify();
-#endif
 				}
 
 				// если собрали все котировки, то оставляем заявку в стакане по цене сделки
@@ -1433,9 +1411,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				{
 					UpdateQuote(CreateMessage(localTime, serverTime, quotesSide, tradePrice, tradeVolume), true);
 
-#if EMU_DBG
 					Verify();
-#endif
 				}
 			}
 
@@ -1826,9 +1802,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						.GetPortfolioInfo(execution.PortfolioName)
 						.ProcessOrder(execution, null, result);
 
-#if EMU_DBG
 					Verify();
-#endif
 
 					var matchByCandles = _candlesSubscription is not null;
 
@@ -1844,9 +1818,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					else
 						MatchOrder(execution.LocalTime, execution, result, true);
 
-#if EMU_DBG
 					Verify();
-#endif
 
 					if (execution.OrderState == OrderStates.Active)
 					{
@@ -1891,9 +1863,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		private QuoteChangeMessage CreateQuoteMessage(SecurityId securityId, DateTimeOffset timeStamp, DateTimeOffset time)
 		{
-#if EMU_DBG
 			Verify();
-#endif
 
 			return new QuoteChangeMessage
 			{
@@ -1987,9 +1957,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		private void MatchOrderByCandle(DateTimeOffset time, ExecutionMessage order, CandleMessage candle, ICollection<Message> result)
 		{
-#if EMU_DBG
 			Verify();
-#endif
 
 			var balance = order.GetBalance();
 
@@ -2035,16 +2003,12 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 			MatchOrderPostProcess(time, order, executions, leftBalance, false, result);
 
-#if EMU_DBG
 			Verify();
-#endif
 		}
 
 		private void MatchOrder(DateTimeOffset time, ExecutionMessage order, ICollection<Message> result, bool isNewOrder)
 		{
-#if EMU_DBG
 			Verify();
-#endif
 
 			//string matchError = null;
 			var isCrossTrade = false;
@@ -2191,9 +2155,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					leftBalance = 0;
 				}
 
-#if EMU_DBG
 				Verify();
-#endif
 
 				if (leftBalance == 0)
 					break;
@@ -2201,9 +2163,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 			if (toRemove != null)
 			{
-#if EMU_DBG
 				Verify();
-#endif
 
 				foreach (var qc in toRemove)
 				{
@@ -2212,19 +2172,14 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					AddTotalVolume(quotesSide, -qc.Volume);
 				}
 
-#if EMU_DBG
 				Verify();
-#endif
 			}
 
 			// если это не пользовательская заявка
 			if (result == null)
-			{
 				order.Balance = leftBalance;
-				return;
-			}
-
-			MatchOrderPostProcess(time, order, executions, leftBalance, isCrossTrade, result);
+			else
+				MatchOrderPostProcess(time, order, executions, leftBalance, isCrossTrade, result);
 		}
 
 		private void MatchOrderPostProcess(DateTimeOffset time, ExecutionMessage order, List<(decimal price, decimal volume)> executions, decimal leftBalance, bool isCrossTrade, ICollection<Message> result)
@@ -2455,9 +2410,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		private void UpdateQuote(ExecutionMessage message, bool register, bool byVolume = true)
 		{
-#if EMU_DBG
 			Verify();
-#endif
 
 			var quotes = GetQuotes(message.Side);
 
@@ -2547,9 +2500,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				}					
 			}
 
-#if EMU_DBG
 			Verify();
-#endif
 		}
 
 		private void AddTotalVolume(Sides side, decimal diff)
@@ -2565,9 +2516,11 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			return side == Sides.Buy ? _totalBidVolume : _totalAskVolume;
 		}
 
-#if EMU_DBG
 		private void Verify()
 		{
+			if (!_parent.VerifyMode)
+				return;
+
 			static void Verify(QuotesDict quotes, decimal totalVolume)
 			{
 				if (totalVolume < 0)
@@ -2589,7 +2542,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			if (_bids.First().Key >= _asks.First().Key)
 				throw new InvalidOperationException();
 		}
-#endif
 
 		private void ProcessPendingExecutions(Message message, ICollection<Message> result)
 		{
@@ -3686,8 +3638,13 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		remove { }
 	}
 
+	/// <summary>
+	/// Extended verification mode.
+	/// </summary>
+	public bool VerifyMode { get; set; }
+
 	IMessageChannel ICloneable<IMessageChannel>.Clone()
-		=> new MarketEmulator(SecurityProvider, PortfolioProvider, ExchangeInfoProvider, TransactionIdGenerator);
+		=> new MarketEmulator(SecurityProvider, PortfolioProvider, ExchangeInfoProvider, TransactionIdGenerator) { VerifyMode = VerifyMode };
 
 	object ICloneable.Clone() => ((ICloneable<IMessageChannel>)this).Clone();
 }

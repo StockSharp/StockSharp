@@ -7,7 +7,7 @@ public class MarketEmulatorTests
 {
 	private static IMarketEmulator CreateEmuWithEvents(SecurityId secId, out List<Message> result)
 	{
-		var emu = new MarketEmulator(new CollectionSecurityProvider([new() { Id = secId.ToStringId() }]), new CollectionPortfolioProvider([Portfolio.CreateSimulator()]), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator());
+		var emu = new MarketEmulator(new CollectionSecurityProvider([new() { Id = secId.ToStringId() }]), new CollectionPortfolioProvider([Portfolio.CreateSimulator()]), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator()) { VerifyMode = true };
 		var result2 = new List<Message>();
 		emu.NewOutMessage += result2.Add;
 		result = result2;
