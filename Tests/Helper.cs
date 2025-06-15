@@ -1195,6 +1195,15 @@ static class Helper
 			actual.AssertEqual(expected);
 	}
 
+	public static void CompareCandles<T>(this T[] actualCandles, T[] expectedCandles, StorageFormats format)
+		where T : ICandleMessage
+	{
+		var checkExtended = format != StorageFormats.Csv;
+		var isMls = format.IsMls();
+
+		CompareCandles(actualCandles, expectedCandles, checkExtended, isMls);
+	}
+
 	public static void CompareCandles<T>(this T[] actualCandles, T[] expectedCandles, bool checkExtended = true, bool isMls = false)
 		where T : ICandleMessage
 	{

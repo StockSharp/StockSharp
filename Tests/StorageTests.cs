@@ -1848,7 +1848,7 @@ public class StorageTests
 		candleStorage.Save(candles);
 
 		var loadedCandles = candleStorage.Load(candles.First().OpenTime, candles.Last().OpenTime).ToArray();
-		loadedCandles.CompareCandles([.. candles.Where(c => c.State != CandleStates.Active)], format != StorageFormats.Csv, format == StorageFormats.Csv);
+		loadedCandles.CompareCandles([.. candles.Where(c => c.State != CandleStates.Active)], format);
 		candleStorage.Delete(loadedCandles);
 
 		foreach (var candle in candles)
@@ -1857,7 +1857,7 @@ public class StorageTests
 		}
 
 		loadedCandles = [.. candleStorage.Load(candles.First().OpenTime, candles.Last().OpenTime)];
-		loadedCandles.CompareCandles([.. candles.Where(c => c.State != CandleStates.Active)], format != StorageFormats.Csv, format == StorageFormats.Csv);
+		loadedCandles.CompareCandles([.. candles.Where(c => c.State != CandleStates.Active)], format);
 		candleStorage.Delete(loadedCandles);
 	}
 
@@ -1907,7 +1907,7 @@ public class StorageTests
 		candleStorage.Save(candles);
 
 		var loadedCandles = candleStorage.Load(candles.First().OpenTime, candles.Last().OpenTime).ToArray();
-		loadedCandles.CompareCandles([.. candles.Take(1)], format != StorageFormats.Csv, format == StorageFormats.Csv);
+		loadedCandles.CompareCandles([.. candles.Take(1)], format);
 		candleStorage.Delete(loadedCandles);
 
 		foreach (var candle in candles)
@@ -1916,7 +1916,7 @@ public class StorageTests
 		}
 
 		loadedCandles = [.. candleStorage.Load(candles.First().OpenTime, candles.Last().OpenTime)];
-		loadedCandles.CompareCandles([.. candles.Take(1)], format != StorageFormats.Csv, format == StorageFormats.Csv);
+		loadedCandles.CompareCandles([.. candles.Take(1)], format);
 		candleStorage.Delete(loadedCandles);
 	}
 
@@ -2086,7 +2086,7 @@ public class StorageTests
 
 			candleStorage.Save(typedCandle);
 			var loadedCandles = candleStorage.Load(typedCandle.First().OpenTime, typedCandle.Last().OpenTime).ToArray();
-			loadedCandles.CompareCandles([.. typedCandle.Where(c => c.State != CandleStates.Active)], format != StorageFormats.Csv, format == StorageFormats.Csv);
+			loadedCandles.CompareCandles([.. typedCandle.Where(c => c.State != CandleStates.Active)], format);
 			candleStorage.Delete(loadedCandles);
 		}
 	}
@@ -2234,7 +2234,7 @@ public class StorageTests
 			tfStorage.Save(candles);
 
 			var loaded = tfStorage.Load().Cast<TimeFrameCandleMessage>().ToArray();
-			loaded.CompareCandles(candles, format != StorageFormats.Csv, format == StorageFormats.Csv);
+			loaded.CompareCandles(candles, format);
 		}
 		finally
 		{
@@ -2299,7 +2299,7 @@ public class StorageTests
 		try
 		{
 			tfStorage.Save(candles);
-			tfStorage.Load().ToArray().CompareCandles(candles, format != StorageFormats.Csv, format == StorageFormats.Csv);
+			tfStorage.Load().ToArray().CompareCandles(candles, format);
 		}
 		finally
 		{
@@ -2392,7 +2392,7 @@ public class StorageTests
 		try
 		{
 			tfStorage.Save(candles);
-			tfStorage.Load().ToArray().CompareCandles(candles, format != StorageFormats.Csv, format == StorageFormats.Csv);
+			tfStorage.Load().ToArray().CompareCandles(candles, format);
 		}
 		finally
 		{
@@ -2488,7 +2488,7 @@ public class StorageTests
 				tfStorage.Save([candle]);
 			}
 
-			tfStorage.Load().ToArray().CompareCandles(candles, format != StorageFormats.Csv, format == StorageFormats.Csv);
+			tfStorage.Load().ToArray().CompareCandles(candles, format);
 		}
 		finally
 		{
@@ -2580,7 +2580,7 @@ public class StorageTests
 				tfStorage.Save([candle]);
 			}
 
-			tfStorage.Load().ToArray().CompareCandles(candles, format != StorageFormats.Csv, format == StorageFormats.Csv);
+			tfStorage.Load().ToArray().CompareCandles(candles, format);
 		}
 		finally
 		{

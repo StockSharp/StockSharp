@@ -15,6 +15,7 @@ public class MarketEmulatorTests
 	}
 
 	private const string _pfName = Messages.Extensions.SimulatorPortfolioName;
+	private static readonly IdGenerator _idGenerator = new IncrementalIdGenerator();
 
 	private static void AddBook(IMarketEmulator emu, SecurityId secId, DateTimeOffset now, decimal bid = 100, decimal ask = 101)
 	{
@@ -64,7 +65,7 @@ public class MarketEmulatorTests
 			LocalTime = DateTimeOffset.UtcNow,
 			SecurityId = id,
 			Side = Sides.Buy,
-			TransactionId = 1,
+			TransactionId = _idGenerator.GetNextId(),
 			OrderPrice = 96,
 			OrderVolume = 2,
 			PortfolioName = "test",
@@ -88,7 +89,7 @@ public class MarketEmulatorTests
 			LocalTime = DateTimeOffset.UtcNow,
 			SecurityId = id,
 			Side = Sides.Buy,
-			TransactionId = 2,
+			TransactionId = _idGenerator.GetNextId(),
 			OrderPrice = 96,
 			OrderVolume = 2,
 			PortfolioName = "test",
@@ -111,7 +112,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 1,
+			TransactionId = _idGenerator.GetNextId(),
 			Side = Sides.Buy,
 			Price = 100,
 			Volume = 5,
@@ -138,7 +139,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 2,
+			TransactionId = _idGenerator.GetNextId(),
 			Side = Sides.Sell,
 			Price = 101,
 			Volume = 5,
@@ -154,6 +155,153 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
+	public void LimitBuyFOKOrderBook()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTimeOffset.UtcNow;
+		AddBook(emu, id, now);
+
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 5,
+			OrderType = OrderTypes.Limit,
+			TimeInForce = TimeInForce.MatchOrCancel,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg);
+
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertNotNull();
+		m.Balance.AssertEqual(m.OrderVolume);
+
+		res.Clear();
+
+		reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Price = 101,
+			Volume = 15,
+			OrderType = OrderTypes.Limit,
+			TimeInForce = TimeInForce.MatchOrCancel,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg);
+
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertNotNull();
+		m.Balance.AssertEqual(m.OrderVolume);
+
+		res.Clear();
+
+		reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Price = 102,
+			Volume = 5,
+			OrderType = OrderTypes.Limit,
+			TimeInForce = TimeInForce.MatchOrCancel,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg);
+
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
+		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertEqual(0);
+
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		m.AssertNotNull();
+		m.TradeVolume.AssertEqual(reg.Volume);
+	}
+
+	[TestMethod]
+	public void LimitSellFOKOrderBook()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTimeOffset.UtcNow;
+		AddBook(emu, id, now);
+
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Sell,
+			Price = 101,
+			Volume = 5,
+			OrderType = OrderTypes.Limit,
+			TimeInForce = TimeInForce.MatchOrCancel,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg);
+
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertNotNull();
+		m.Balance.AssertEqual(m.OrderVolume);
+
+		res.Clear();
+
+		reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Sell,
+			Price = 100,
+			Volume = 15,
+			OrderType = OrderTypes.Limit,
+			TimeInForce = TimeInForce.MatchOrCancel,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg);
+
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
+		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertNotNull();
+		m.Balance.AssertEqual(m.OrderVolume);
+
+		res.Clear();
+
+		reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Sell,
+			Price = 98,
+			Volume = 5,
+			OrderType = OrderTypes.Limit,
+			TimeInForce = TimeInForce.MatchOrCancel,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg);
+
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		m.AssertNotNull();
+		m.TradeVolume.AssertEqual(reg.Volume);
+	}
+
+	[TestMethod]
 	public void LimitBuyIOCOrderBook()
 	{
 		var id = Helper.CreateSecurityId();
@@ -165,7 +313,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 3,
+			TransactionId = _idGenerator.GetNextId(),
 			Side = Sides.Buy,
 			Price = 101,
 			Volume = 5,
@@ -194,7 +342,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 4,
+			TransactionId = _idGenerator.GetNextId(),
 			Side = Sides.Sell,
 			Price = 100,
 			Volume = 5,
@@ -223,7 +371,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 5,
+			TransactionId = _idGenerator.GetNextId(),
 			Side = Sides.Buy,
 			Price = 99,
 			Volume = 1,
@@ -243,7 +391,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 6,
+			TransactionId = _idGenerator.GetNextId(),
 			Side = Sides.Buy,
 			Price = 101,
 			Volume = 1,
@@ -272,7 +420,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 6,
+			TransactionId = _idGenerator.GetNextId(),
 			Side = Sides.Sell,
 			Price = 102,
 			Volume = 1,
@@ -292,7 +440,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 7,
+			TransactionId = _idGenerator.GetNextId(),
 			Side = Sides.Sell,
 			Price = 100,
 			Volume = 1,
@@ -321,7 +469,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 7,
+			TransactionId = _idGenerator.GetNextId(),
 			Side = Sides.Buy,
 			Volume = 1,
 			OrderType = OrderTypes.Market,
@@ -352,7 +500,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 8,
+			TransactionId = _idGenerator.GetNextId(),
 			Side = Sides.Sell,
 			Volume = 1,
 			OrderType = OrderTypes.Market,
@@ -383,7 +531,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 9,
+			TransactionId = _idGenerator.GetNextId(),
 			Side = Sides.Buy,
 			Price = 100,
 			Volume = 1,
@@ -426,7 +574,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 9,
+			TransactionId = _idGenerator.GetNextId(),
 			Side = Sides.Buy,
 			Price = 100,
 			Volume = 1,
@@ -455,7 +603,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 10,
+			TransactionId = _idGenerator.GetNextId(),
 			Side = Sides.Buy,
 			Price = 100,
 			Volume = 1,
@@ -472,7 +620,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now.AddSeconds(1),
-			TransactionId = 11,
+			TransactionId = _idGenerator.GetNextId(),
 			OriginalTransactionId = reg.TransactionId,
 			OldOrderId = 1,
 			Side = Sides.Buy,
@@ -509,7 +657,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 10,
+			TransactionId = _idGenerator.GetNextId(),
 			Side = Sides.Buy,
 			Price = 100,
 			Volume = 1,
@@ -526,7 +674,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now.AddSeconds(1),
-			TransactionId = 11,
+			TransactionId = _idGenerator.GetNextId(),
 			OriginalTransactionId = reg.TransactionId,
 			OldOrderId = 1,
 			Side = Sides.Buy,
@@ -568,7 +716,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 12,
+			TransactionId = _idGenerator.GetNextId(),
 			Side = Sides.Buy,
 			Price = 100,
 			Volume = 1,
@@ -587,7 +735,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now.AddSeconds(1),
-			TransactionId = 13,
+			TransactionId = _idGenerator.GetNextId(),
 			OrderId = 1,
 			OriginalTransactionId = reg.TransactionId,
 			PortfolioName = _pfName,
@@ -622,7 +770,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 14,
+			TransactionId = _idGenerator.GetNextId(),
 			Side = Sides.Buy,
 			Price = 104,
 			Volume = 10,
@@ -657,7 +805,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 15,
+			TransactionId = _idGenerator.GetNextId(),
 			Side = Sides.Buy,
 			Price = 105,
 			Volume = 2,
@@ -666,10 +814,14 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
 		m.OrderState.AssertEqual(OrderStates.Done);
 		m.Balance.AssertEqual(0);
+
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		m.AssertNotNull();
+		m.TradeVolume.AssertEqual(reg.Volume);
 	}
 
 	[TestMethod]
@@ -694,7 +846,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 16,
+			TransactionId = _idGenerator.GetNextId(),
 			Side = Sides.Buy,
 			Price = 105,
 			Volume = 2,
@@ -703,10 +855,14 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
 		m.OrderState.AssertEqual(OrderStates.Done);
 		m.Balance.AssertEqual(0);
+
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		m.AssertNotNull();
+		m.TradeVolume.AssertEqual(reg.Volume);
 	}
 
 	[TestMethod]
@@ -730,19 +886,23 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 17,
-			Side = Sides.Buy,
-			Price = 106,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Sell,
+			Price = 105,
 			Volume = 4,
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
 		emu.SendInMessage(reg);
 
-		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
 		m.OrderState.AssertEqual(OrderStates.Done);
 		m.Balance.AssertEqual(0);
+
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		m.AssertNotNull();
+		m.TradeVolume.AssertEqual(reg.Volume);
 	}
 
 	[TestMethod]
@@ -765,7 +925,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 18,
+			TransactionId = _idGenerator.GetNextId(),
 			Side = Sides.Buy,
 			Volume = 1,
 			OrderType = OrderTypes.Market,
@@ -804,7 +964,7 @@ public class MarketEmulatorTests
 		{
 			SecurityId = id,
 			LocalTime = now,
-			TransactionId = 19,
+			TransactionId = _idGenerator.GetNextId(),
 			Side = Sides.Sell,
 			Volume = 2,
 			OrderType = OrderTypes.Market,
@@ -813,6 +973,28 @@ public class MarketEmulatorTests
 		emu.SendInMessage(reg);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
+		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertEqual(2);
+
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		m.AssertNull();
+
+		res.Clear();
+
+		reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Volume = 2,
+			OrderType = OrderTypes.Market,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg);
+
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
 		m.OrderState.AssertEqual(OrderStates.Done);
 		m.Balance.AssertEqual(0);
