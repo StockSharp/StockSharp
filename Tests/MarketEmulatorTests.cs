@@ -155,7 +155,7 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void LimitBuyFOKOrderBook()
+	public void LimitBuyFOKFull()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
@@ -181,32 +181,17 @@ public class MarketEmulatorTests
 		m.OrderState.AssertEqual(OrderStates.Done);
 		m.Balance.AssertNotNull();
 		m.Balance.AssertEqual(m.OrderVolume);
+	}
 
-		res.Clear();
+	[TestMethod]
+	public void LimitBuyFOKNone()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTimeOffset.UtcNow;
+		AddBook(emu, id, now);
 
-		reg = new OrderRegisterMessage
-		{
-			SecurityId = id,
-			LocalTime = now,
-			TransactionId = _idGenerator.GetNextId(),
-			Side = Sides.Buy,
-			Price = 101,
-			Volume = 15,
-			OrderType = OrderTypes.Limit,
-			TimeInForce = TimeInForce.MatchOrCancel,
-			PortfolioName = _pfName,
-		};
-		emu.SendInMessage(reg);
-
-		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
-		m.AssertNotNull();
-		m.OrderState.AssertEqual(OrderStates.Done);
-		m.Balance.AssertNotNull();
-		m.Balance.AssertEqual(m.OrderVolume);
-
-		res.Clear();
-
-		reg = new OrderRegisterMessage
+		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -220,7 +205,7 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
 		m.OrderState.AssertEqual(OrderStates.Done);
 		m.Balance.AssertEqual(0);
@@ -231,7 +216,7 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void LimitSellFOKOrderBook()
+	public void LimitSellFOKFull()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
@@ -257,32 +242,17 @@ public class MarketEmulatorTests
 		m.OrderState.AssertEqual(OrderStates.Done);
 		m.Balance.AssertNotNull();
 		m.Balance.AssertEqual(m.OrderVolume);
+	}
 
-		res.Clear();
+	[TestMethod]
+	public void LimitSellFOKNone()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTimeOffset.UtcNow;
+		AddBook(emu, id, now);
 
-		reg = new OrderRegisterMessage
-		{
-			SecurityId = id,
-			LocalTime = now,
-			TransactionId = _idGenerator.GetNextId(),
-			Side = Sides.Sell,
-			Price = 100,
-			Volume = 15,
-			OrderType = OrderTypes.Limit,
-			TimeInForce = TimeInForce.MatchOrCancel,
-			PortfolioName = _pfName,
-		};
-		emu.SendInMessage(reg);
-
-		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
-		m.AssertNotNull();
-		m.OrderState.AssertEqual(OrderStates.Done);
-		m.Balance.AssertNotNull();
-		m.Balance.AssertEqual(m.OrderVolume);
-
-		res.Clear();
-
-		reg = new OrderRegisterMessage
+		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -296,13 +266,13 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg);
 
-		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
 		m.AssertNotNull();
 		m.TradeVolume.AssertEqual(reg.Volume);
 	}
 
 	[TestMethod]
-	public void LimitBuyIOCOrderBook()
+	public void LimitBuyIOCFull()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
@@ -318,20 +288,86 @@ public class MarketEmulatorTests
 			Price = 101,
 			Volume = 5,
 			OrderType = OrderTypes.Limit,
-			TimeInForce = TimeInForce.MatchOrCancel,
+			TimeInForce = TimeInForce.CancelBalance,
 			PortfolioName = _pfName,
 		};
 		emu.SendInMessage(reg);
 
-		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
 		m.OrderState.AssertEqual(OrderStates.Done);
-		m.Balance.AssertNotNull();
-		m.Balance.AssertEqual(m.OrderVolume);
+		m.Balance.AssertEqual(0);
+
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		m.AssertNotNull();
+		m.TradeVolume.AssertEqual(reg.Volume);
 	}
 
 	[TestMethod]
-	public void LimitSellIOCOrderBook()
+	public void LimitBuyIOCPartial()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTimeOffset.UtcNow;
+		AddBook(emu, id, now);
+
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Price = 101,
+			Volume = 15,
+			OrderType = OrderTypes.Limit,
+			TimeInForce = TimeInForce.CancelBalance,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg);
+
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
+		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertEqual(5);
+
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		m.AssertNotNull();
+		m.TradeVolume.AssertEqual(10);
+	}
+
+	[TestMethod]
+	public void LimitBuyIOCNone()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTimeOffset.UtcNow;
+		AddBook(emu, id, now);
+
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 15,
+			OrderType = OrderTypes.Limit,
+			TimeInForce = TimeInForce.CancelBalance,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg);
+
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
+		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertEqual(15);
+
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		m.AssertNull();
+	}
+
+	[TestMethod]
+	public void LimitSellIOCFull()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
@@ -347,16 +383,82 @@ public class MarketEmulatorTests
 			Price = 100,
 			Volume = 5,
 			OrderType = OrderTypes.Limit,
-			TimeInForce = TimeInForce.MatchOrCancel,
+			TimeInForce = TimeInForce.CancelBalance,
 			PortfolioName = _pfName,
 		};
 		emu.SendInMessage(reg);
 
-		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
 		m.OrderState.AssertEqual(OrderStates.Done);
-		m.Balance.AssertNotNull();
-		m.Balance.AssertEqual(m.OrderVolume);
+		m.Balance.AssertEqual(0);
+
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		m.AssertNotNull();
+		m.TradeVolume.AssertEqual(reg.Volume);
+	}
+
+	[TestMethod]
+	public void LimitSellIOCPartial()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTimeOffset.UtcNow;
+		AddBook(emu, id, now);
+
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Sell,
+			Price = 100,
+			Volume = 15,
+			OrderType = OrderTypes.Limit,
+			TimeInForce = TimeInForce.CancelBalance,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg);
+
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
+		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertEqual(5);
+
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		m.AssertNotNull();
+		m.TradeVolume.AssertEqual(10);
+	}
+
+	[TestMethod]
+	public void LimitSellIOCNone()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTimeOffset.UtcNow;
+		AddBook(emu, id, now);
+
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Sell,
+			Price = 101,
+			Volume = 15,
+			OrderType = OrderTypes.Limit,
+			TimeInForce = TimeInForce.CancelBalance,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg);
+
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
+		m.AssertNotNull();
+		m.OrderState.AssertEqual(OrderStates.Done);
+		m.Balance.AssertEqual(15);
+
+		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		m.AssertNull();
 	}
 
 	[TestMethod]
