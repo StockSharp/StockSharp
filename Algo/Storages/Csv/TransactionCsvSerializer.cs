@@ -16,7 +16,7 @@ public class TransactionCsvSerializer(SecurityId securityId, Encoding encoding =
 	{
 		var row = new[]
 		{
-			data.ServerTime.WriteTimeMls(),
+			data.ServerTime.WriteTime(),
 			data.ServerTime.ToString("zzz"),
 			data.TransactionId.ToString(),
 			data.OriginalTransactionId.ToString(),
@@ -61,9 +61,9 @@ public class TransactionCsvSerializer(SecurityId securityId, Encoding encoding =
 			data.Latency?.Ticks.ToString(),
 			data.Error?.Message,
 			data.ExpiryDate?.WriteDate(),
-			data.ExpiryDate?.WriteTimeMls(),
+			data.ExpiryDate?.WriteTime(),
 			data.ExpiryDate?.ToString("zzz"),
-			data.LocalTime.WriteTimeMls(),
+			data.LocalTime.WriteTime(),
 			data.LocalTime.ToString("zzz"),
 			data.IsMarketMaker.To<int?>().ToString(),
 			data.CommissionCurrency,

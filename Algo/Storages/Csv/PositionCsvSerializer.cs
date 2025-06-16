@@ -20,7 +20,7 @@ public class PositionCsvSerializer(SecurityId securityId, Encoding encoding = nu
 
 		row.AddRange(
 		[
-			data.ServerTime.WriteTimeMls(),
+			data.ServerTime.WriteTime(),
 			data.ServerTime.ToString("zzz"),
 			data.PortfolioName,
 			data.ClientCode,
@@ -44,7 +44,7 @@ public class PositionCsvSerializer(SecurityId securityId, Encoding encoding = nu
 			if (type == PositionChangeTypes.ExpirationDate)
 			{
 				var date = (DateTimeOffset?)value;
-				row.AddRange([date?.WriteDate(), date?.WriteTimeMls(), date?.ToString("zzz")]);
+				row.AddRange([date?.WriteDate(), date?.WriteTime(), date?.ToString("zzz")]);
 			}
 			else
 				row.Add(value?.ToString());

@@ -18,7 +18,7 @@ public class Level1CsvSerializer(SecurityId securityId, Encoding encoding = null
 	{
 		var row = new List<string>();
 
-		row.AddRange([data.ServerTime.WriteTimeMls(), data.ServerTime.ToString("zzz")]);
+		row.AddRange([data.ServerTime.WriteTime(), data.ServerTime.ToString("zzz")]);
 
 		row.AddRange(data.BuildFrom.ToCsv());
 
@@ -35,7 +35,7 @@ public class Level1CsvSerializer(SecurityId securityId, Encoding encoding = null
 			if (pair.Value == typeof(DateTimeOffset))
 			{
 				var date = (DateTimeOffset?)data.TryGet(field);
-				row.AddRange([date?.WriteDate(), date?.WriteTimeMls(), date?.ToString("zzz")]);
+				row.AddRange([date?.WriteDate(), date?.WriteTime(), date?.ToString("zzz")]);
 			}
 			else
 			{

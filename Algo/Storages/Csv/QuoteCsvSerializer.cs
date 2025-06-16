@@ -42,7 +42,7 @@ class QuoteCsvSerializer(SecurityId securityId, Encoding encoding = null) : CsvM
 
 		writer.WriteRow(new[]
 		{
-			data.ServerTime.WriteTimeMls(),
+			data.ServerTime.WriteTime(),
 			data.ServerTime.ToString("zzz"),
 			quote?.Price.To<string>(),
 			quote?.Volume.To<string>(),

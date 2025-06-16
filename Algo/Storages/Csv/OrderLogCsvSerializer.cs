@@ -21,7 +21,7 @@ public class OrderLogCsvSerializer(SecurityId securityId, Encoding encoding = nu
 	{
 		writer.WriteRow(
 		[
-			data.ServerTime.WriteTimeMls(),
+			data.ServerTime.WriteTime(),
 			data.ServerTime.ToString("zzz"),
 			data.TransactionId.ToString(),
 			data.OrderId.ToString(),

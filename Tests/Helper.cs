@@ -1237,9 +1237,9 @@ static class Helper
 		}
 	}
 
-	public static bool IsMls(this StorageFormats format)
+	public static bool IsMls(this StorageFormats _)
 	{
-		return format == StorageFormats.Csv;
+		return false;
 	}
 
 	public static DateTimeOffset TruncateTime(this DateTimeOffset dt, bool isMls)

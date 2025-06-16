@@ -127,7 +127,7 @@ public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType
 
 		writer.WriteRow(new[]
 		{
-			data.OpenTime.WriteTimeMls(),
+			data.OpenTime.WriteTime(),
 			data.OpenTime.ToString("zzz"),
 			data.OpenPrice.ToString(),
 			data.HighPrice.ToString(),

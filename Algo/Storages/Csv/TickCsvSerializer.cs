@@ -22,7 +22,7 @@ public class TickCsvSerializer(SecurityId securityId, Encoding encoding = null) 
 	{
 		writer.WriteRow(new[]
 		{
-			data.ServerTime.WriteTimeMls(),
+			data.ServerTime.WriteTime(),
 			data.ServerTime.ToString("zzz"),
 			data.TradeId.ToString(),
 			data.TradePrice.ToString(),

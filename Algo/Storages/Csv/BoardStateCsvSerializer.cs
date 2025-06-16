@@ -10,7 +10,7 @@ public class BoardStateCsvSerializer : CsvMarketDataSerializer<BoardStateMessage
 	{
 		writer.WriteRow(
 		[
-			data.ServerTime.WriteTimeMls(),
+			data.ServerTime.WriteTime(),
 			data.ServerTime.ToString("zzz"),
 			data.BoardCode,
 			((int)data.State).To<string>(),

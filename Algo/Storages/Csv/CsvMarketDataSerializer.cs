@@ -124,7 +124,7 @@ public abstract class CsvMarketDataSerializer<TData> : IMarketDataSerializer<TDa
 	/// <summary>
 	/// Time precision.
 	/// </summary>
-	public TimeSpan TimePrecision { get; } = TimeSpan.FromMilliseconds(1);
+	public TimeSpan TimePrecision { get; } = TimeSpan.FromTicks(1);
 
 	/// <summary>
 	/// To create empty meta-information.

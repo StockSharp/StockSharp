@@ -12,7 +12,7 @@ public class NewsCsvSerializer : CsvMarketDataSerializer<NewsMessage>
 	{
 		writer.WriteRow(
 		[
-			data.ServerTime.WriteTimeMls(),
+			data.ServerTime.WriteTime(),
 			data.ServerTime.ToString("zzz"),
 			data.Headline,
 			data.Source,
