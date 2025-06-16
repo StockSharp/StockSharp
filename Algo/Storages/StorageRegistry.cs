@@ -239,7 +239,7 @@ public class StorageRegistry : Disposable, IStorageRegistry
 			var serializer = format switch
 			{
 				StorageFormats.Binary => typeof(CandleBinarySerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(key.Item1, dataType, ExchangeInfoProvider),
-				StorageFormats.Csv => typeof(CandleCsvSerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(key.Item1, dataType, null),
+				StorageFormats.Csv => typeof(CandleCsvSerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(key.Item1, dataType, _utf8),
 				_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue),
 			};
 
