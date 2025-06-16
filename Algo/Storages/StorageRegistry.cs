@@ -8,6 +8,8 @@ using StockSharp.Algo.Storages.Csv;
 /// </summary>
 public class StorageRegistry : Disposable, IStorageRegistry
 {
+	private static readonly UTF8Encoding _utf8 = new(false);
+
 	private readonly SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<QuoteChangeMessage>> _depthStorages = [];
 	private readonly SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<Level1ChangeMessage>> _level1Storages = [];
 	private readonly SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<PositionChangeMessage>> _positionStorages = [];
@@ -16,7 +18,7 @@ public class StorageRegistry : Disposable, IStorageRegistry
 	private readonly SynchronizedDictionary<IMarketDataStorageDrive, IMarketDataStorage<NewsMessage>> _newsStorages = [];
 	private readonly SynchronizedDictionary<IMarketDataStorageDrive, IMarketDataStorage<BoardStateMessage>> _boardStateStorages = [];
 	//private readonly SynchronizedDictionary<IMarketDataDrive, ISecurityStorage> _securityStorages = new SynchronizedDictionary<IMarketDataDrive, ISecurityStorage>();
-	
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="StorageRegistry"/>.
 	/// </summary>
@@ -151,7 +153,7 @@ public class StorageRegistry : Disposable, IStorageRegistry
 			IMarketDataSerializer<QuoteChangeMessage> serializer = format switch
 			{
 				StorageFormats.Binary => new QuoteBinarySerializer(key.Item1, ExchangeInfoProvider) { PassThroughOrderBookIncrement = passThroughOrderBookIncrement },
-				StorageFormats.Csv => new MarketDepthCsvSerializer(key.Item1),
+				StorageFormats.Csv => new MarketDepthCsvSerializer(key.Item1, _utf8),
 				_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue),
 			};
 
@@ -185,7 +187,7 @@ public class StorageRegistry : Disposable, IStorageRegistry
 			IMarketDataSerializer<Level1ChangeMessage> serializer = format switch
 			{
 				StorageFormats.Binary => new Level1BinarySerializer(key.Item1, ExchangeInfoProvider),
-				StorageFormats.Csv => new Level1CsvSerializer(key.Item1),
+				StorageFormats.Csv => new Level1CsvSerializer(key.Item1, _utf8),
 				_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue),
 			};
 
@@ -207,7 +209,7 @@ public class StorageRegistry : Disposable, IStorageRegistry
 			IMarketDataSerializer<PositionChangeMessage> serializer = format switch
 			{
 				StorageFormats.Binary => new PositionBinarySerializer(key.Item1, ExchangeInfoProvider),
-				StorageFormats.Csv => new PositionCsvSerializer(key.Item1),
+				StorageFormats.Csv => new PositionCsvSerializer(key.Item1, _utf8),
 				_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue),
 			};
 
@@ -263,7 +265,7 @@ public class StorageRegistry : Disposable, IStorageRegistry
 					IMarketDataSerializer<ExecutionMessage> serializer = format switch
 					{
 						StorageFormats.Binary => new TickBinarySerializer(key.Item1, ExchangeInfoProvider),
-						StorageFormats.Csv => new TickCsvSerializer(key.Item1),
+						StorageFormats.Csv => new TickCsvSerializer(key.Item1, _utf8),
 						_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue),
 					};
 
@@ -274,7 +276,7 @@ public class StorageRegistry : Disposable, IStorageRegistry
 					IMarketDataSerializer<ExecutionMessage> serializer = format switch
 					{
 						StorageFormats.Binary => new TransactionBinarySerializer(secId, ExchangeInfoProvider),
-						StorageFormats.Csv => new TransactionCsvSerializer(secId),
+						StorageFormats.Csv => new TransactionCsvSerializer(secId, _utf8),
 						_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue),
 					};
 
@@ -285,7 +287,7 @@ public class StorageRegistry : Disposable, IStorageRegistry
 					IMarketDataSerializer<ExecutionMessage> serializer = format switch
 					{
 						StorageFormats.Binary => new OrderLogBinarySerializer(secId, ExchangeInfoProvider),
-						StorageFormats.Csv => new OrderLogCsvSerializer(secId),
+						StorageFormats.Csv => new OrderLogCsvSerializer(secId, _utf8),
 						_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue),
 					};
 
@@ -343,7 +345,7 @@ public class StorageRegistry : Disposable, IStorageRegistry
 			IMarketDataSerializer<NewsMessage> serializer = format switch
 			{
 				StorageFormats.Binary => new NewsBinarySerializer(ExchangeInfoProvider),
-				StorageFormats.Csv => new NewsCsvSerializer(),
+				StorageFormats.Csv => new NewsCsvSerializer(_utf8),
 				_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue),
 			};
 
@@ -359,7 +361,7 @@ public class StorageRegistry : Disposable, IStorageRegistry
 			IMarketDataSerializer<BoardStateMessage> serializer = format switch
 			{
 				StorageFormats.Binary => new BoardStateBinarySerializer(ExchangeInfoProvider),
-				StorageFormats.Csv => new BoardStateCsvSerializer(),
+				StorageFormats.Csv => new BoardStateCsvSerializer(_utf8),
 				_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue),
 			};
 

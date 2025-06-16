@@ -3,7 +3,11 @@ namespace StockSharp.Algo.Storages.Csv;
 /// <summary>
 /// The board state serializer in the CSV format.
 /// </summary>
-public class BoardStateCsvSerializer : CsvMarketDataSerializer<BoardStateMessage>
+/// <remarks>
+/// Initializes a new instance of the <see cref="BoardStateCsvSerializer"/>.
+/// </remarks>
+/// <param name="encoding">Encoding.</param>
+public class BoardStateCsvSerializer(Encoding encoding) : CsvMarketDataSerializer<BoardStateMessage>(encoding)
 {
 	/// <inheritdoc />
 	protected override void Write(CsvFileWriter writer, BoardStateMessage data, IMarketDataMetaInfo metaInfo)

@@ -10,7 +10,7 @@ namespace StockSharp.Algo.Storages.Csv;
 /// <param name="securityId">Security ID.</param>
 /// <param name="dataType"><see cref="DataType"/>.</param>
 /// <param name="encoding">Encoding.</param>
-public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType dataType, Encoding encoding = null) : CsvMarketDataSerializer<TCandleMessage>(securityId, encoding)
+public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType dataType, Encoding encoding) : CsvMarketDataSerializer<TCandleMessage>(securityId, encoding)
 	where TCandleMessage : CandleMessage, new()
 {
 	private class CandleCsvMetaInfo(CandleCsvSerializer<TCandleMessage> serializer, DateTime date, Encoding encoding) : MetaInfo(date)

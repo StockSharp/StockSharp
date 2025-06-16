@@ -8,7 +8,7 @@ namespace StockSharp.Algo.Storages.Csv;
 /// </remarks>
 /// <param name="securityId">Security ID.</param>
 /// <param name="encoding">Encoding.</param>
-public class PositionCsvSerializer(SecurityId securityId, Encoding encoding = null) : CsvMarketDataSerializer<PositionChangeMessage>(securityId, encoding)
+public class PositionCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMarketDataSerializer<PositionChangeMessage>(securityId, encoding)
 {
 	private static readonly PositionChangeTypes[] _types = [.. Enumerator.GetValues<PositionChangeTypes>().OrderBy(t => (int)t)];
 	private static readonly string[] _reserved = new string[10];

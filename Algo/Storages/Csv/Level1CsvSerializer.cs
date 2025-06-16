@@ -8,7 +8,7 @@ namespace StockSharp.Algo.Storages.Csv;
 /// </remarks>
 /// <param name="securityId">Security ID.</param>
 /// <param name="encoding">Encoding.</param>
-public class Level1CsvSerializer(SecurityId securityId, Encoding encoding = null) : CsvMarketDataSerializer<Level1ChangeMessage>(securityId, encoding)
+public class Level1CsvSerializer(SecurityId securityId, Encoding encoding) : CsvMarketDataSerializer<Level1ChangeMessage>(securityId, encoding)
 {
 	private static readonly Dictionary<Level1Fields, Type> _level1Fields = Enumerator.GetValues<Level1Fields>().ExcludeObsolete().OrderBy(l1 => (int)l1).ToDictionary(f => f, f => f.ToType());
 	private static readonly string[] _reserved = new string[9];
