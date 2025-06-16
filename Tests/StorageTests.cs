@@ -16,8 +16,6 @@ public class StorageTests
 	private static IStorageRegistry GetStorageRegistry()
 		=> Helper.GetStorage(Helper.GetSubTemp(Guid.NewGuid().ToString("N")));
 
-	private static readonly TimeSpan _csvAccuracy = TimeSpan.FromSeconds(1); // csv saves time with small accuracy
-
 	private static IMarketDataStorage<ExecutionMessage> GetTradeStorage(SecurityId security, StorageFormats format)
 	{
 		return GetStorageRegistry().GetTickMessageStorage(security, null, format);
@@ -351,7 +349,7 @@ public class StorageTests
 		{
 			var storage = GetTradeStorage(secId, format);
 			storage.Save(trades);
-			LoadTradesAndCompare(storage, trades, format);
+			LoadTradesAndCompare(storage, trades);
 			storage.DeleteWithCheck();
 		}
 
@@ -371,12 +369,12 @@ public class StorageTests
 		var tradeStorage = GetTradeStorage(secId, format);
 
 		tradeStorage.Save(trades.Take(halfTicks));
-		LoadTradesAndCompare(tradeStorage, [.. trades.Take(halfTicks)], format);
+		LoadTradesAndCompare(tradeStorage, [.. trades.Take(halfTicks)]);
 
 		tradeStorage.Save([.. trades.Skip(halfTicks)]);
-		LoadTradesAndCompare(tradeStorage, [.. trades.Skip(halfTicks)], format);
+		LoadTradesAndCompare(tradeStorage, [.. trades.Skip(halfTicks)]);
 
-		LoadTradesAndCompare(tradeStorage, trades, format);
+		LoadTradesAndCompare(tradeStorage, trades);
 		tradeStorage.DeleteWithCheck();
 	}
 
@@ -406,7 +404,7 @@ public class StorageTests
 		var randomDeleteTrades = trades.Select(t => RandomGen.GetInt(5) == 2 ? null : t).WhereNotNull().ToList();
 		tradeStorage.Delete(randomDeleteTrades);
 
-		LoadTradesAndCompare(tradeStorage, [.. trades.Except(randomDeleteTrades)], format);
+		LoadTradesAndCompare(tradeStorage, [.. trades.Except(randomDeleteTrades)]);
 		tradeStorage.DeleteWithCheck();
 	}
 
@@ -440,7 +438,7 @@ public class StorageTests
 
 		tradeStorage.Save(trades);
 
-		LoadTradesAndCompare(tradeStorage, trades, format);
+		LoadTradesAndCompare(tradeStorage, trades);
 
 		tradeStorage.Delete(trades);
 
@@ -498,7 +496,7 @@ public class StorageTests
 			var to = maxTime - third;
 			tradeStorage.Delete(from, to);
 
-			LoadTradesAndCompare(tradeStorage, [.. trades.Where(t => t.ServerTime < from || t.ServerTime > to)], format);
+			LoadTradesAndCompare(tradeStorage, [.. trades.Where(t => t.ServerTime < from || t.ServerTime > to)]);
 
 			tradeStorage.DeleteWithCheck();
 		}
@@ -540,7 +538,7 @@ public class StorageTests
 		tradeStorage.Save([trades[0]]);
 		tradeStorage.Save([trades[1]]);
 
-		LoadTradesAndCompare(tradeStorage, trades, format);
+		LoadTradesAndCompare(tradeStorage, trades);
 		tradeStorage.DeleteWithCheck();
 	}
 
@@ -551,11 +549,11 @@ public class StorageTests
 		TickSameTime(StorageFormats.Csv);
 	}
 
-	private static void LoadTradesAndCompare(IMarketDataStorage<ExecutionMessage> tradeStorage, ExecutionMessage[] trades, StorageFormats format)
+	private static void LoadTradesAndCompare(IMarketDataStorage<ExecutionMessage> tradeStorage, ExecutionMessage[] trades)
 	{
 		var loadedTrades = tradeStorage.Load(trades.First().ServerTime, trades.Last().ServerTime).ToArray();
 
-		loadedTrades.CompareMessages(trades, format);
+		loadedTrades.CompareMessages(trades);
 	}
 
 	private static void DepthAdaptivePriceStep(StorageFormats format)
@@ -571,7 +569,7 @@ public class StorageTests
 		var storage = GetStorageRegistry().GetQuoteMessageStorage(secId, null, format);
 
 		storage.Save(depths);
-		LoadDepthsAndCompare(storage, depths, format);
+		LoadDepthsAndCompare(storage, depths);
 
 		storage.DeleteWithCheck();
 	}
@@ -600,7 +598,7 @@ public class StorageTests
 		var storage = GetStorageRegistry().GetQuoteMessageStorage(secId, null, format: format);
 
 		storage.Save(depths);
-		LoadDepthsAndCompare(storage, depths, format);
+		LoadDepthsAndCompare(storage, depths);
 
 		storage.DeleteWithCheck();
 	}
@@ -773,10 +771,10 @@ public class StorageTests
 
 		var depthStorage = GetDepthStorage(secId, format);
 		depthStorage.Save([depth2]);
-		LoadDepthsAndCompare(depthStorage, [depth2], format);
+		LoadDepthsAndCompare(depthStorage, [depth2]);
 
 		depthStorage.Save([depth1]);
-		LoadDepthsAndCompare(depthStorage, [depth2], format);
+		LoadDepthsAndCompare(depthStorage, [depth2]);
 		depthStorage.DeleteWithCheck();
 	}
 
@@ -810,7 +808,7 @@ public class StorageTests
 		var depthStorage = GetDepthStorage(secId, format);
 		depthStorage.AppendOnlyNew = false;
 		depthStorage.Save([depth2]);
-		LoadDepthsAndCompare(depthStorage, [depth2], format);
+		LoadDepthsAndCompare(depthStorage, [depth2]);
 
 		try
 		{
@@ -850,7 +848,7 @@ public class StorageTests
 
 			var storage = GetDepthStorage(secId, format);
 			storage.Save(depths);
-			LoadDepthsAndCompare(storage, depths, format);
+			LoadDepthsAndCompare(storage, depths);
 		}
 
 		Do(StorageFormats.Binary);
@@ -884,7 +882,7 @@ public class StorageTests
 
 		var depthStorage = GetDepthStorage(secId, format);
 		depthStorage.Save([depth1, depth2, depth3]);
-		LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3], format);
+		LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
 
 		depthStorage.DeleteWithCheck();
 	}
@@ -923,7 +921,7 @@ public class StorageTests
 
 		var depthStorage = GetDepthStorage(secId, format);
 		depthStorage.Save([depth1, depth2, depth3]);
-		LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3], format);
+		LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
 
 		depthStorage.DeleteWithCheck();
 	}
@@ -965,7 +963,7 @@ public class StorageTests
 
 		var depthStorage = GetDepthStorage(secId, format);
 		depthStorage.Save([depth1, depth2, depth3]);
-		LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3], format);
+		LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
 
 		depthStorage.DeleteWithCheck();
 	}
@@ -1007,7 +1005,7 @@ public class StorageTests
 
 		var depthStorage = GetDepthStorage(secId, format);
 		depthStorage.Save([depth1, depth2, depth3]);
-		LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3], format);
+		LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
 
 		depthStorage.DeleteWithCheck();
 	}
@@ -1030,7 +1028,7 @@ public class StorageTests
 
 		var depthStorage = GetDepthStorage(secId, format);
 		depthStorage.Save([depth1, depth2, depth3]);
-		LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3], format);
+		LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
 
 		depthStorage.DeleteWithCheck();
 	}
@@ -1052,12 +1050,12 @@ public class StorageTests
 		var depthStorage = GetDepthStorage(secId, format);
 
 		depthStorage.Save(depths.Take(500));
-		LoadDepthsAndCompare(depthStorage, [.. depths.Take(500)], format);
+		LoadDepthsAndCompare(depthStorage, [.. depths.Take(500)]);
 
 		depthStorage.Save([.. depths.Skip(500)]);
-		LoadDepthsAndCompare(depthStorage, [.. depths.Skip(000)], format);
+		LoadDepthsAndCompare(depthStorage, [.. depths.Skip(000)]);
 
-		LoadDepthsAndCompare(depthStorage, depths, format);
+		LoadDepthsAndCompare(depthStorage, depths);
 
 		depthStorage.DeleteWithCheck();
 	}
@@ -1111,7 +1109,7 @@ public class StorageTests
 
 		depthStorage.Save(depths);
 
-		LoadDepthsAndCompare(depthStorage, depths, format);
+		LoadDepthsAndCompare(depthStorage, depths);
 
 		var from = time;
 		var to = from.AddDays(count + 1);
@@ -1292,7 +1290,7 @@ public class StorageTests
 		depthStorage.Save([depths[0]]);
 		depthStorage.Save([depths[1]]);
 
-		LoadDepthsAndCompare(depthStorage, depths, format);
+		LoadDepthsAndCompare(depthStorage, depths);
 		depthStorage.DeleteWithCheck();
 	}
 
@@ -1348,7 +1346,7 @@ public class StorageTests
 
 			var depthStorage = GetDepthStorage(secId, format);
 			depthStorage.Save(depths);
-			LoadDepthsAndCompare(depthStorage, depths, format);
+			LoadDepthsAndCompare(depthStorage, depths);
 			depthStorage.DeleteWithCheck();
 		}
 	}
@@ -1367,7 +1365,7 @@ public class StorageTests
 		var randomDeleteDepths = depths.Select(d => RandomGen.GetInt(5) == 2 ? null : d).WhereNotNull().ToList();
 		depthStorage.Delete(randomDeleteDepths);
 
-		LoadDepthsAndCompare(depthStorage, [.. depths.Except(randomDeleteDepths).OrderBy(d => d.ServerTime)], format);
+		LoadDepthsAndCompare(depthStorage, [.. depths.Except(randomDeleteDepths).OrderBy(d => d.ServerTime)]);
 
 		depthStorage.DeleteWithCheck();
 	}
@@ -1390,7 +1388,7 @@ public class StorageTests
 
 		depthStorage.Save(depths);
 
-		LoadDepthsAndCompare(depthStorage, depths, format);
+		LoadDepthsAndCompare(depthStorage, depths);
 
 		depthStorage.Delete(depths.First().ServerTime, depths.Last().ServerTime);
 
@@ -1399,7 +1397,7 @@ public class StorageTests
 
 		depthStorage.Save(depths);
 
-		LoadDepthsAndCompare(depthStorage, depths, format);
+		LoadDepthsAndCompare(depthStorage, depths);
 
 		depthStorage.Delete(depths);
 
@@ -1432,7 +1430,7 @@ public class StorageTests
 		var to = DateTime.Today + TimeSpan.FromMinutes(3 * _depthCount3 / 2);
 		depthStorage.Delete(from, to);
 
-		LoadDepthsAndCompare(depthStorage, [.. depths.Where(d => d.ServerTime < from || d.ServerTime > to).OrderBy(d => d.ServerTime)], format);
+		LoadDepthsAndCompare(depthStorage, [.. depths.Where(d => d.ServerTime < from || d.ServerTime > to).OrderBy(d => d.ServerTime)]);
 
 		depthStorage.DeleteWithCheck();
 	}
@@ -1444,13 +1442,11 @@ public class StorageTests
 		DepthRandomDateDelete(StorageFormats.Csv);
 	}
 
-	private static void LoadDepthsAndCompare(IMarketDataStorage<QuoteChangeMessage> depthStorage, IList<QuoteChangeMessage> depths, StorageFormats format)
+	private static void LoadDepthsAndCompare(IMarketDataStorage<QuoteChangeMessage> depthStorage, IList<QuoteChangeMessage> depths)
 	{
-		var isMls = format.IsMls();
+		var loadedDepths = depthStorage.Load(depths.First().ServerTime, depths.Last().ServerTime).ToArray();
 
-		var loadedDepths = depthStorage.Load(depths.First().ServerTime.TruncateTime(isMls), (depths.Last().ServerTime + _csvAccuracy).TruncateTime(isMls)).ToArray();
-
-		loadedDepths.CompareMessages(depths, isMls);
+		loadedDepths.CompareMessages(depths);
 	}
 
 	private static void DepthRandomLessMaxDepth(StorageFormats format)
@@ -1473,7 +1469,7 @@ public class StorageTests
 		depthStorage.Save(depths);
 		var loadedDepths = depthStorage.Load(depths.First().ServerTime, depths.Last().ServerTime).ToArray();
 
-		loadedDepths.CompareMessages(depths, format);
+		loadedDepths.CompareMessages(depths);
 
 		depthStorage.Delete(depths.First().ServerTime, depths.Last().ServerTime);
 		loadedDepths = [.. depthStorage.Load(depths.First().ServerTime, depths.Last().ServerTime)];
@@ -1503,7 +1499,7 @@ public class StorageTests
 		depthStorage.Save(depths);
 		var loadedDepths = depthStorage.Load(depths.First().ServerTime, depths.Last().ServerTime).ToArray();
 
-		loadedDepths.CompareMessages(depths, format);
+		loadedDepths.CompareMessages(depths);
 
 		depthStorage.Delete(depths.First().ServerTime, depths.Last().ServerTime);
 		loadedDepths = [.. depthStorage.Load(depths.First().ServerTime, depths.Last().ServerTime)];
@@ -1562,15 +1558,15 @@ public class StorageTests
 
 		var depthStorage = GetDepthStorage(secId, format);
 		depthStorage.Save(diffQuotes);
-		LoadQuotesAndCompare(depthStorage, diffQuotes, format);
+		LoadQuotesAndCompare(depthStorage, diffQuotes);
 		depthStorage.DeleteWithCheck();
 	}
 
-	private static void LoadQuotesAndCompare(IMarketDataStorage<QuoteChangeMessage> depthStorage, IList<QuoteChangeMessage> depths, StorageFormats format)
+	private static void LoadQuotesAndCompare(IMarketDataStorage<QuoteChangeMessage> depthStorage, IList<QuoteChangeMessage> depths)
 	{
 		var loadedDepths = depthStorage.Load(depths.First().ServerTime, depths.Last().ServerTime).ToArray();
 
-		loadedDepths.CompareMessages(depths, format);
+		loadedDepths.CompareMessages(depths);
 	}
 
 	[TestMethod]
@@ -1622,7 +1618,7 @@ public class StorageTests
 
 		var depthStorage = GetDepthStorage(secId, format);
 		depthStorage.Save(depths);
-		LoadQuotesAndCompare(depthStorage, depths, format);
+		LoadQuotesAndCompare(depthStorage, depths);
 		depthStorage.DeleteWithCheck();
 	}
 
@@ -2227,12 +2223,10 @@ public class StorageTests
 			},
 		};
 
-		var isMls = format.IsMls();
-
 		foreach (var candle in candles)
 		{
-			candle.OpenTime = candle.OpenTime.TruncateTime(isMls);
-			candle.CloseTime = candle.CloseTime.TruncateTime(isMls);
+			candle.OpenTime = candle.OpenTime;
+			candle.CloseTime = candle.CloseTime;
 
 			candle.LowTime = candle.OpenTime;
 			candle.HighTime = candle.CloseTime;
@@ -2318,10 +2312,8 @@ public class StorageTests
 			SecurityId = secId
 		};
 
-		var isMls = format.IsMls();
-
-		candle.OpenTime = candle.OpenTime.TruncateTime(isMls);
-		candle.CloseTime = candle.CloseTime.TruncateTime(isMls);
+		candle.OpenTime = candle.OpenTime;
+		candle.CloseTime = candle.CloseTime;
 
 		if (initHighLow)
 		{
@@ -2407,14 +2399,12 @@ public class StorageTests
 			},
 		};
 
-		var isMls = format.IsMls();
-
 		foreach (var candle in candles)
 		{
 			candle.CloseTime = candle.CloseTime.AddTicks(-1);
 
-			candle.OpenTime = candle.OpenTime.TruncateTime(isMls);
-			candle.CloseTime = candle.CloseTime.TruncateTime(isMls);
+			candle.OpenTime = candle.OpenTime;
+			candle.CloseTime = candle.CloseTime;
 
 			if (initHighLow)
 			{
@@ -2499,14 +2489,12 @@ public class StorageTests
 			},
 		};
 
-		var isMls = format.IsMls();
-
 		foreach (var candle in candles)
 		{
 			candle.CloseTime = candle.CloseTime.AddTicks(-1);
 
-			candle.OpenTime = candle.OpenTime.TruncateTime(isMls);
-			candle.CloseTime = candle.CloseTime.TruncateTime(isMls);
+			candle.OpenTime = candle.OpenTime;
+			candle.CloseTime = candle.CloseTime;
 
 			if (initHighLow)
 			{
@@ -2627,7 +2615,7 @@ public class StorageTests
 
 		var logStorage = storage.GetOrderLogMessageStorage(secId, null, format);
 		logStorage.Save(quotes);
-		LoadOrderLogAndCompare(logStorage, quotes, format);
+		LoadOrderLogAndCompare(logStorage, quotes);
 		logStorage.DeleteWithCheck();
 	}
 
@@ -2679,7 +2667,7 @@ public class StorageTests
 		olStorage.Save([ol[0]]);
 		olStorage.Save([ol[1]]);
 
-		LoadOrderLogAndCompare(olStorage, ol, format);
+		LoadOrderLogAndCompare(olStorage, ol);
 		olStorage.DeleteWithCheck();
 	}
 
@@ -2705,29 +2693,28 @@ public class StorageTests
 
 			var logStorage = storage.GetOrderLogMessageStorage(secId, null, format);
 			logStorage.Save(items);
-			LoadOrderLogAndCompare(logStorage, items, format);
+			LoadOrderLogAndCompare(logStorage, items);
 			logStorage.DeleteWithCheck();
 		}
 	}
 
-	private static void LoadOrderLogAndCompare(IMarketDataStorage<ExecutionMessage> storage, IList<ExecutionMessage> items, StorageFormats format)
+	private static void LoadOrderLogAndCompare(IMarketDataStorage<ExecutionMessage> storage, IList<ExecutionMessage> items)
 	{
 		var loadedItems = storage.Load(items.First().ServerTime, items.Last().ServerTime).ToArray();
-		loadedItems.CompareMessages(items, format);
+		loadedItems.CompareMessages(items);
 	}
 
 	private static void News(StorageFormats format)
 	{
 		var newsStorage = GetStorageRegistry().GetNewsMessageStorage(null, format);
-		var isMls = format.IsMls();
 
-		var news = Helper.RandomNews(isMls);
+		var news = Helper.RandomNews();
 
 		newsStorage.Save(news);
 
 		var loaded = newsStorage.Load(news.First().ServerTime, news.Last().ServerTime).ToArray();
 
-		loaded.CompareMessages(news, isMls);
+		loaded.CompareMessages(news);
 
 		newsStorage.DeleteWithCheck();
 	}
@@ -2742,7 +2729,6 @@ public class StorageTests
 	private static void BoardState(StorageFormats format)
 	{
 		var storage = GetStorageRegistry().GetBoardStateMessageStorage(null, format);
-		var isMls = format.IsMls();
 
 		var data = new[]
 		{
@@ -2750,13 +2736,13 @@ public class StorageTests
 			{
 				State = SessionStates.Active,
 				BoardCode = ExchangeBoard.Forts.Code,
-				ServerTime = DateTimeOffset.UtcNow.TruncateTime(isMls)
+				ServerTime = DateTimeOffset.UtcNow,
 			},
 
 			new BoardStateMessage
 			{
 				State = SessionStates.Paused,
-				ServerTime = DateTimeOffset.UtcNow.TruncateTime(isMls)
+				ServerTime = DateTimeOffset.UtcNow,
 			},
 		};
 
@@ -2764,7 +2750,7 @@ public class StorageTests
 
 		var loaded = storage.Load(data.First().ServerTime, data.Last().ServerTime).ToArray();
 
-		loaded.CompareMessages(data, isMls);
+		loaded.CompareMessages(data);
 
 		storage.DeleteWithCheck();
 	}
@@ -2787,10 +2773,10 @@ public class StorageTests
 
 		l1Storage.Save(testValues);
 		var loaded = l1Storage.Load().ToArray();
-		loaded.CompareMessages(testValues, format);
+		loaded.CompareMessages(testValues);
 
 		var loadedItems = l1Storage.Load(testValues.First().ServerTime, testValues.Last().ServerTime).ToArray();
-		loadedItems.CompareMessages(testValues, format);
+		loadedItems.CompareMessages(testValues);
 
 		l1Storage.DeleteWithCheck();
 	}
@@ -2910,10 +2896,10 @@ public class StorageTests
 
 		l1Storage.Save(testValues);
 		var loaded = l1Storage.Load().ToArray();
-		loaded.CompareMessages(testValues, format);
+		loaded.CompareMessages(testValues);
 
 		var loadedItems = l1Storage.Load(testValues.First().ServerTime, testValues.Last().ServerTime).ToArray();
-		loadedItems.CompareMessages(testValues, format);
+		loadedItems.CompareMessages(testValues);
 
 		l1Storage.DeleteWithCheck();
 	}
@@ -3054,7 +3040,7 @@ public class StorageTests
 		storage.Save(transactions);
 		var loaded = storage.Load().ToArray();
 
-		loaded.CompareMessages(transactions, format);
+		loaded.CompareMessages(transactions);
 
 		storage.Delete();
 		storage.Load().Count().AssertEqual(0);
@@ -3074,9 +3060,8 @@ public class StorageTests
 
 	private static void PositionTest(StorageFormats format)
 	{
-		var isMls = format.IsMls();
 		var security = Helper.CreateSecurity();
-		var testValues = security.RandomPositionChanges(isMls);
+		var testValues = security.RandomPositionChanges();
 
 		var secId = security.ToSecurityId();
 
@@ -3087,7 +3072,7 @@ public class StorageTests
 
 		testValues = [.. testValues.Where(t => t.HasChanges())];
 
-		loaded.CompareMessages(testValues, isMls);
+		loaded.CompareMessages(testValues);
 
 		storage.Delete();
 		storage.Load().Count().AssertEqual(0);
@@ -3248,7 +3233,7 @@ public class StorageTests
 
 		for (var i = 0; i < 100; i++)
 		{
-			Check(new PositionBinarySnapshotSerializer(), Helper.RandomPositionChange(secId, false));
+			Check(new PositionBinarySnapshotSerializer(), Helper.RandomPositionChange(secId));
 		}
 
 		for (var i = 0; i < 100; i++)

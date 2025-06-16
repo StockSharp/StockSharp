@@ -36,7 +36,7 @@ public class ExportTests
 	public void Positions()
 	{
 		var security = Helper.CreateStorageSecurity();
-		var pos = security.RandomPositionChanges(false, 1000);
+		var pos = security.RandomPositionChanges(1000);
 
 		Export(DataType.PositionChanges, pos, "pos_export", new TemplateTxtRegistry().TemplateTxtPositionChange);
 	}
@@ -44,7 +44,7 @@ public class ExportTests
 	[TestMethod]
 	public void News()
 	{
-		var news = Helper.RandomNews(false);
+		var news = Helper.RandomNews();
 
 		Export(DataType.News, news, "news_export", new TemplateTxtRegistry().TemplateTxtNews);
 	}

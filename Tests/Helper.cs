@@ -1195,11 +1195,7 @@ static class Helper
 			actual.AssertEqual(expected);
 	}
 
-	public static void CompareMessages<T>(this IList<T> actual, IList<T> expected, StorageFormats format)
-		where T : IServerTimeMessage
-		=> CompareMessages(actual, expected, format.IsMls());
-
-	public static void CompareMessages<T>(this IList<T> actual, IList<T> expected, bool isMls)
+	public static void CompareMessages<T>(this IList<T> actual, IList<T> expected)
 		where T : IServerTimeMessage
 	{
 		actual.Count.AssertEqual(expected.Count);
@@ -1207,11 +1203,9 @@ static class Helper
 		for (var i = 0; i < expected.Count; i++)
 		{
 			var d1 = expected[i];
-			d1.ServerTime = d1.ServerTime.TruncateTime(isMls);
-
 			var d2 = actual.ElementAt(i);
 
-			CheckEqual(d1, d2, isMls);
+			CheckEqual(d1, d2);
 		}
 	}
 
@@ -1219,12 +1213,11 @@ static class Helper
 		where T : ICandleMessage
 	{
 		var checkExtended = format != StorageFormats.Csv;
-		var isMls = format.IsMls();
 
-		CompareCandles(actualCandles, expectedCandles, checkExtended, isMls);
+		CompareCandles(actualCandles, expectedCandles, checkExtended);
 	}
 
-	public static void CompareCandles<T>(this T[] actualCandles, T[] expectedCandles, bool checkExtended = true, bool isMls = false)
+	public static void CompareCandles<T>(this T[] actualCandles, T[] expectedCandles, bool checkExtended = true)
 		where T : ICandleMessage
 	{
 		actualCandles.Length.AssertEqual(expectedCandles.Length);
@@ -1233,13 +1226,8 @@ static class Helper
 		foreach (var c1 in actualCandles)
 		{
 			var c2 = expectedCandles[i++];
-			CheckEqual(c2, c1, isMls, checkExtended: checkExtended);
+			CheckEqual(c2, c1, checkExtended: checkExtended);
 		}
-	}
-
-	public static bool IsMls(this StorageFormats _)
-	{
-		return false;
 	}
 
 	public static DateTimeOffset TruncateTime(this DateTimeOffset dt, bool isMls)
@@ -1371,7 +1359,7 @@ static class Helper
 			.GetValues<PositionChangeTypes>()
 			.Where(t => t != PositionChangeTypes.Currency && t != PositionChangeTypes.State && !t.IsObsolete())];
 
-	public static PositionChangeMessage RandomPositionChange(SecurityId secId, bool isMls)
+	public static PositionChangeMessage RandomPositionChange(SecurityId secId)
 	{
 		var posMsg = new PositionChangeMessage
 		{
@@ -1407,7 +1395,7 @@ static class Helper
 			var time = posMsg.ServerTime.AddMilliseconds(RandomGen.GetInt(-10, 10));
 
 			time = time.AddDays(RandomGen.GetInt(-10, 10));
-			time = time.ConvertToEst().TruncateTime(isMls);
+			time = time.ConvertToEst();
 
 			posMsg.Add(type, time);
 		}
@@ -1493,7 +1481,7 @@ static class Helper
 		return msg;
 	}
 
-	public static List<PositionChangeMessage> RandomPositionChanges(this Security security, bool isMls, int count = 10000)
+	public static List<PositionChangeMessage> RandomPositionChanges(this Security security, int count = 10000)
 	{
 		var testValues = new List<PositionChangeMessage>();
 
@@ -1501,13 +1489,13 @@ static class Helper
 
 		for (var i = 0; i < count; i++)
 		{
-			testValues.Add(RandomPositionChange(secId, isMls));
+			testValues.Add(RandomPositionChange(secId));
 		}
 
 		return testValues;
 	}
 
-	public static NewsMessage[] RandomNews(bool isMls)
+	public static NewsMessage[] RandomNews()
 	{
 		return
 		[
@@ -1516,7 +1504,7 @@ static class Helper
 				Headline = "Headline 1",
 				Source = "reuters",
 				BoardCode = BoardCodes.Forts,
-				ServerTime = DateTimeOffset.UtcNow.TruncateTime(isMls),
+				ServerTime = DateTimeOffset.UtcNow,
 				SeqNum = RandomGen.GetInt(0, 100),
 			},
 
@@ -1525,15 +1513,15 @@ static class Helper
 				Headline = "Headline 2",
 				Url = "http://google.com",
 				SecurityId = "AAPL@NASDAQ".ToSecurityId(),
-				ServerTime = DateTimeOffset.UtcNow.TruncateTime(isMls)
+				ServerTime = DateTimeOffset.UtcNow,
 			},
 
 			new NewsMessage
 			{
 				Headline = "Headline 3",
 				Priority = NewsPriorities.High,
-				ServerTime = DateTimeOffset.UtcNow.TruncateTime(isMls),
-				ExpiryDate = DateTimeOffset.UtcNow.TruncateTime(isMls),
+				ServerTime = DateTimeOffset.UtcNow,
+				ExpiryDate = DateTimeOffset.UtcNow,
 				SeqNum = RandomGen.GetInt(0, 100),
 			},
 
@@ -1541,7 +1529,7 @@ static class Helper
 			{
 				Headline = "Headline 4",
 				Language = "FR",
-				ServerTime = DateTimeOffset.UtcNow.TruncateTime(isMls)
+				ServerTime = DateTimeOffset.UtcNow,
 			},
 		];
 	}

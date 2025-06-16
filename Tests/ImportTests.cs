@@ -56,13 +56,13 @@ public class ImportTests
     public void Positions()
     {
         var security = Helper.CreateStorageSecurity();
-        Import(DataType.PositionChanges, security.RandomPositionChanges(false, 100));
+        Import(DataType.PositionChanges, security.RandomPositionChanges(100));
     }
 
     [TestMethod]
     public void News()
     {
-        Import(DataType.News, Helper.RandomNews(false));
+        Import(DataType.News, Helper.RandomNews());
     }
 
     [TestMethod]
