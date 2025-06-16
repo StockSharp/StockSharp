@@ -21,7 +21,7 @@ public class NewsCsvSerializer : CsvMarketDataSerializer<NewsMessage>
 			data.Priority?.To<string>(),
 			data.Language,
 			data.SecurityId?.BoardCode,
-			data.ExpiryDate?.WriteDateTime(),
+			data.ExpiryDate?.WriteDateTimeEx(),
 			data.SeqNum.DefaultAsNull().ToString(),
 		]);
 
@@ -65,7 +65,7 @@ public class NewsCsvSerializer : CsvMarketDataSerializer<NewsMessage>
 		}
 
 		if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-			news.ExpiryDate = reader.ReadNullableDateTime();
+			news.ExpiryDate = reader.ReadNullableDateTimeEx();
 
 		if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 			news.SeqNum = reader.ReadNullableLong() ?? 0L;

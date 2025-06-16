@@ -6,13 +6,15 @@ static class CsvHelper
 	private const string _tsFormat = "hhmmss";
 	private const string _timeMlsFormat = _tsFormat + "fff";
 	private const string _timeFormat = _timeMlsFormat + "ffff";
-	private const string _dateTimeFormat = "yyyyMMddHHmmssfffffff";
+	private const string _dateTimeFormat = "yyyyMMddHHmmss";
+	private const string _dateTimeFormatEx = "yyyyMMddHHmmssfffffff";
 
 	private static readonly FastDateTimeParser _dateParser = new(_dateFormat);
 	private static readonly FastTimeSpanParser _tsParser = new(_tsFormat);
 	private static readonly FastTimeSpanParser _timeMlsParser = new(_timeMlsFormat);
 	private static readonly FastTimeSpanParser _timeParser = new(_timeFormat);
 	private static readonly FastDateTimeParser _dateTimeParser = new(_dateTimeFormat);
+	private static readonly FastDateTimeParser _dateTimeParserEx = new(_dateTimeFormatEx);
 
 	public static DateTimeOffset ReadTime(this FastCsvReader reader, DateTime date)
 	{
@@ -91,11 +93,24 @@ static class CsvHelper
 		return _dateTimeParser.Parse(str).UtcKind();
 	}
 
+	public static DateTimeOffset? ReadNullableDateTimeEx(this FastCsvReader reader)
+	{
+		var str = reader.ReadString();
+
+		if (str.IsEmpty())
+			return null;
+
+		return _dateTimeParserEx.Parse(str).UtcKind();
+	}
+
 	public static DateTimeOffset ReadDateTime(this FastCsvReader reader)
 		=> reader.ReadNullableDateTime().Value;
 
 	public static string WriteDateTime(this DateTimeOffset dto)
 		=> dto.UtcDateTime.ToString(_dateTimeFormat);
+
+	public static string WriteDateTimeEx(this DateTimeOffset dto)
+		=> dto.UtcDateTime.ToString(_dateTimeFormatEx);
 
 	public static FastCsvReader CreateCsvReader(this Stream stream, Encoding encoding)
 		=> new(stream, encoding, StringHelper.RN);
