@@ -5,8 +5,6 @@ namespace StockSharp.Algo.Storages.Csv;
 /// </summary>
 public class NewsCsvSerializer : CsvMarketDataSerializer<NewsMessage>
 {
-	private const string _expiryFormat = "yyyyMMddHHmmssfff zzz";
-
 	/// <inheritdoc />
 	protected override void Write(CsvFileWriter writer, NewsMessage data, IMarketDataMetaInfo metaInfo)
 	{
@@ -23,7 +21,7 @@ public class NewsCsvSerializer : CsvMarketDataSerializer<NewsMessage>
 			data.Priority?.To<string>(),
 			data.Language,
 			data.SecurityId?.BoardCode,
-			data.ExpiryDate?.ToString(_expiryFormat),
+			data.ExpiryDate?.WriteDateTime(),
 			data.SeqNum.DefaultAsNull().ToString(),
 		]);
 
@@ -67,7 +65,7 @@ public class NewsCsvSerializer : CsvMarketDataSerializer<NewsMessage>
 		}
 
 		if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-			news.ExpiryDate = reader.ReadString().TryToDateTimeOffset(_expiryFormat);
+			news.ExpiryDate = reader.ReadNullableDateTime();
 
 		if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 			news.SeqNum = reader.ReadNullableLong() ?? 0L;

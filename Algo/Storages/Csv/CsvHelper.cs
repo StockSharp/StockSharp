@@ -6,11 +6,13 @@ static class CsvHelper
 	private const string _tsFormat = "hhmmss";
 	private const string _timeMlsFormat = _tsFormat + "fff";
 	private const string _timeFormat = _timeMlsFormat + "ffff";
+	private const string _dateTimeFormat = "yyyyMMddHHmmssfffffff";
 
 	private static readonly FastDateTimeParser _dateParser = new(_dateFormat);
 	private static readonly FastTimeSpanParser _tsParser = new(_tsFormat);
 	private static readonly FastTimeSpanParser _timeMlsParser = new(_timeMlsFormat);
 	private static readonly FastTimeSpanParser _timeParser = new(_timeFormat);
+	private static readonly FastDateTimeParser _dateTimeParser = new(_dateTimeFormat);
 
 	public static DateTimeOffset ReadTime(this FastCsvReader reader, DateTime date)
 	{
@@ -79,9 +81,6 @@ static class CsvHelper
 		return str.To<int>().ToDataType(reader.ReadLong(), reader.ReadDecimal(), reader.ReadInt());
 	}
 
-	private const string _dateTimeFormat = "yyyyMMddHHmmss";
-	private static readonly FastDateTimeParser _dateTimeParser = new(_dateTimeFormat);
-
 	public static DateTimeOffset? ReadNullableDateTime(this FastCsvReader reader)
 	{
 		var str = reader.ReadString();
@@ -94,9 +93,6 @@ static class CsvHelper
 
 	public static DateTimeOffset ReadDateTime(this FastCsvReader reader)
 		=> reader.ReadNullableDateTime().Value;
-
-	public static string WriteNullableDateTime(this DateTimeOffset? dto)
-		=> dto?.WriteDateTime();
 
 	public static string WriteDateTime(this DateTimeOffset dto)
 		=> dto.UtcDateTime.ToString(_dateTimeFormat);

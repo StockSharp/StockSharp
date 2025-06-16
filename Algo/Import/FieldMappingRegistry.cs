@@ -12,11 +12,11 @@ public static class FieldMappingRegistry
 	/// <returns>Importing fields.</returns>
 	public static IEnumerable<FieldMapping> CreateFields(DataType dataType)
 	{
-		var secCodeDescr = () => LocalizedStrings.SecCodeDescription;
-		var boardCodeDescr = () => LocalizedStrings.BoardCodeDescription;
+		string secCodeDescr() => LocalizedStrings.SecCodeDescription;
+		string boardCodeDescr() => LocalizedStrings.BoardCodeDescription;
 
-		var dateDescr = () => LocalizedStrings.DateDescription;
-		var timeDescr = () => LocalizedStrings.TimeDescription;
+		string dateDescr() => LocalizedStrings.DateDescription;
+		string timeDescr() => LocalizedStrings.TimeDescription;
 
 		var fields = new List<FieldMapping>();
 		var msgType = dataType.MessageType;
