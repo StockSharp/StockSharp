@@ -14,14 +14,7 @@ public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType
 	where TCandleMessage : CandleMessage, new()
 {
 	private class CandleCsvMetaInfo(CandleCsvSerializer<TCandleMessage> serializer, DateTime date) : MetaInfo(date)
-		//where TCandleMessage : CandleMessage, new()
 	{
-		private readonly Dictionary<DateTime, TCandleMessage> _items = [];
-
-		private bool _isOverride;
-
-		public override bool IsOverride => _isOverride;
-
 		public override object LastId { get; set; }
 
 		public override void Write(Stream stream)
@@ -42,8 +35,6 @@ public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType
 					var message = serializer.Read(reader, this);
 
 					var openTime = message.OpenTime.UtcDateTime;
-
-					_items[openTime] = message;
 
 					if (!firstTimeRead)
 					{
@@ -66,22 +57,14 @@ public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType
 		{
 			messages = [.. messages];
 
-			if (messages.IsEmpty())
-				return [];
-
 			foreach (var message in messages)
 			{
 				var openTime = message.OpenTime.UtcDateTime;
 
-				if (!_isOverride)
-					_isOverride = _items.ContainsKey(openTime) || openTime <= LastTime;
-
-				_items[openTime] = message;
-
 				LastTime = openTime;
 			}
 
-			return _isOverride ? _items.Values : messages;
+			return messages;
 		}
 	}
 

@@ -1946,9 +1946,7 @@ public class StorageTests
 
 		var storage = GetStorageRegistry();
 
-		var onlyBinary = new[] { StorageFormats.Binary };
-		var allFormats = Enumerator.GetValues<StorageFormats>().ToArray();
-		var formats = isCalcVolumeProfile ? onlyBinary : allFormats;
+		var formats = isCalcVolumeProfile ? [StorageFormats.Binary] : Enumerator.GetValues<StorageFormats>().ToArray();
 
 		if (resetPriceStep)
 			security.PriceStep = 1;
@@ -1959,10 +1957,7 @@ public class StorageTests
 		CheckCandles<VolumeCandleMessage, decimal>(storage, secId, candles, volumeRange, formats, diffOffset);
 		CheckCandles<TickCandleMessage, int>(storage, secId, candles, ticksArg, formats, diffOffset);
 		CheckCandles<RangeCandleMessage, Unit>(storage, secId, candles, rangeArg, formats, diffOffset);
-
-		// renko candles cannot be saved to CSV https://stocksharp.myjetbrains.com/youtrack/issue/SS-136
-		CheckCandles<RenkoCandleMessage, Unit>(storage, secId, candles, renkoArg, onlyBinary, diffOffset);
-
+		CheckCandles<RenkoCandleMessage, Unit>(storage, secId, candles, renkoArg, formats, diffOffset);
 		CheckCandles<PnFCandleMessage, PnFArg>(storage, secId, candles, pnfArg, formats, diffOffset);
 	}
 
