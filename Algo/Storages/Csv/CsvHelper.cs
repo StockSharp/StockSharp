@@ -112,9 +112,6 @@ static class CsvHelper
 	public static string WriteDateTimeEx(this DateTimeOffset dto)
 		=> dto.UtcDateTime.ToString(_dateTimeFormatEx);
 
-	public static FastCsvReader CreateCsvReader(this Stream stream, Encoding encoding)
-		=> new(stream, encoding, StringHelper.RN);
-
 	public static SecurityMessage ReadSecurity(this FastCsvReader reader)
 	{
 		var secId = reader.ReadString().ToSecurityId();

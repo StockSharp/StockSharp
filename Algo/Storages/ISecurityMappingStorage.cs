@@ -344,7 +344,7 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 
 			using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
 			{
-				var reader = new FastCsvReader(stream, Encoding.UTF8, StringHelper.RN);
+				var reader = stream.CreateCsvReader(Encoding.UTF8);
 
 				reader.NextLine();
 

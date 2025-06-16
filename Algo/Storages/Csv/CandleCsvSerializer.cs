@@ -36,7 +36,7 @@ public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType
 				var count = 0;
 				var firstTimeRead = false;
 
-				var reader = new FastCsvReader(stream, _encoding, StringHelper.RN);
+				var reader = stream.CreateCsvReader(_encoding);
 
 				while (reader.NextLine())
 				{

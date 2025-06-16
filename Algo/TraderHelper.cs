@@ -1479,4 +1479,7 @@ public static partial class TraderHelper
 		ArgumentNullException.ThrowIfNull(manager);
 		return manager.UnrealizedPnL + manager.RealizedPnL;
 	}
+
+	internal static FastCsvReader CreateCsvReader(this Stream stream, Encoding encoding)
+		=> new(stream, encoding, StringHelper.RN);
 }

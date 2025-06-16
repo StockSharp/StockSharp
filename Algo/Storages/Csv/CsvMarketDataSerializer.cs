@@ -39,7 +39,7 @@ class CsvMetaInfo(DateTime date, Encoding encoding, Func<FastCsvReader, object> 
 			var firstTimeRead = false;
 			string lastLine = null;
 
-			var reader = new FastCsvReader(stream, _encoding, StringHelper.RN);
+			var reader = stream.CreateCsvReader(_encoding);
 
 			while (reader.NextLine())
 			{
@@ -216,7 +216,7 @@ public abstract class CsvMarketDataSerializer<TData> : IMarketDataSerializer<TDa
 		//	new CsvReader(copy, _encoding, SecurityId, metaInfo.Date.Date, _executionType, _candleArg, _members))
 		//	.ToEx(metaInfo.Count);
 
-		return new SimpleEnumerable<TData>(() => new CsvEnumerator(this, new FastCsvReader(copy, Encoding, StringHelper.RN), metaInfo));
+		return new SimpleEnumerable<TData>(() => new CsvEnumerator(this, copy.CreateCsvReader(Encoding), metaInfo));
 	}
 
 	/// <summary>
