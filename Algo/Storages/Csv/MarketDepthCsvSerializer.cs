@@ -1,6 +1,6 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-class MarketDepthCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMarketDataSerializer<QuoteChangeMessage>(securityId)
+class MarketDepthCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMarketDataSerializer<QuoteChangeMessage>(securityId, encoding)
 {
 	private class QuoteEnumerable : SimpleEnumerable<QuoteChangeMessage>
 	{
