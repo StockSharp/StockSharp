@@ -13,11 +13,10 @@ namespace StockSharp.Algo.Storages.Csv;
 public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType dataType, Encoding encoding) : CsvMarketDataSerializer<TCandleMessage>(securityId, encoding)
 	where TCandleMessage : CandleMessage, new()
 {
-	private class CandleCsvMetaInfo(CandleCsvSerializer<TCandleMessage> serializer, DateTime date, Encoding encoding) : MetaInfo(date)
+	private class CandleCsvMetaInfo(CandleCsvSerializer<TCandleMessage> serializer, DateTime date) : MetaInfo(date)
 		//where TCandleMessage : CandleMessage, new()
 	{
 		private readonly Dictionary<DateTime, TCandleMessage> _items = [];
-		private readonly Encoding _encoding = encoding ?? throw new ArgumentNullException(nameof(encoding));
 
 		private bool _isOverride;
 
@@ -36,7 +35,7 @@ public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType
 				var count = 0;
 				var firstTimeRead = false;
 
-				var reader = stream.CreateCsvReader(_encoding);
+				var reader = stream.CreateCsvReader(serializer.Encoding);
 
 				while (reader.NextLine())
 				{
@@ -91,7 +90,7 @@ public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType
 	/// <inheritdoc />
 	public override IMarketDataMetaInfo CreateMetaInfo(DateTime date)
 	{
-		return new CandleCsvMetaInfo(this, date, Encoding);
+		return new CandleCsvMetaInfo(this, date);
 	}
 
 	/// <inheritdoc />
