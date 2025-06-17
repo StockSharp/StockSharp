@@ -396,7 +396,10 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>, 
 		date = date.Date;
 
 		lock (GetSync(date))
+		{
 			Drive.Delete(date);
+			_dateMetaInfos.Remove(date);
+		}
 	}
 
 	IEnumerable<Message> IMarketDataStorage.Load(DateTime date)
