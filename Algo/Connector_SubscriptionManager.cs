@@ -435,13 +435,13 @@ partial class Connector
 				_keeped.Clear();
 				_subscriptions.Clear();
 
-				foreach (var pair in requests)
-					_subscriptions.Add(pair.Value.Subscription.TransactionId, pair.Value);
+				foreach (var (subMsg, info) in requests)
+					_subscriptions.Add(info.Subscription.TransactionId, info);
 			}
 
-			foreach (var pair in requests)
+			foreach (var (subMsg, info) in requests)
 			{
-				SendRequest(pair.Key, pair.Value.Subscription, false);
+				SendRequest(subMsg, info.Subscription, false);
 			}
 		}
 
