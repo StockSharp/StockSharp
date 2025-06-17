@@ -65,6 +65,8 @@ public abstract class BaseExporter
 				return Export((IEnumerable<PositionChangeMessage>)values);
 			else if (DataType == TraderHelper.IndicatorValue)
 				return Export((IEnumerable<IndicatorValue>)values);
+			else if (DataType == DataType.BoardState)
+				return Export((IEnumerable<BoardStateMessage>)values);
 			else
 				throw new ArgumentOutOfRangeException(nameof(DataType), DataType, LocalizedStrings.InvalidValue);
 		});
@@ -149,4 +151,11 @@ public abstract class BaseExporter
 	/// <param name="values">Values.</param>
 	/// <returns>Count and last time.</returns>
 	protected abstract (int, DateTimeOffset?) Export(IEnumerable<IndicatorValue> values);
+
+	/// <summary>
+	/// To export <see cref="BoardStateMessage"/>.
+	/// </summary>
+	/// <param name="messages">Messages.</param>
+	/// <returns>Count and last time.</returns>
+	protected abstract (int, DateTimeOffset?) Export(IEnumerable<BoardStateMessage> messages);
 }

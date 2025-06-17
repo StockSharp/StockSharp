@@ -498,6 +498,19 @@ public class XmlExporter(DataType dataType, Func<int, bool> isCancelled, string 
 		});
 	}
 
+	/// <inheritdoc />
+	protected override (int, DateTimeOffset?) Export(IEnumerable<BoardStateMessage> messages)
+	{
+		return Do(messages, "boardStates", (writer, msg) =>
+		{
+			writer.WriteStartElement("boardState");
+			writer.WriteAttribute("serverTime", msg.ServerTime.ToString(_timeFormat));
+			writer.WriteAttribute("boardCode", msg.BoardCode);
+			writer.WriteAttribute("state", msg.State.ToString());
+			writer.WriteEndElement();
+		});
+	}
+
 	private (int, DateTimeOffset?) Do<TValue>(IEnumerable<TValue> values, string rootElem, Action<XmlWriter, TValue> action)
 	{
 		var count = 0;

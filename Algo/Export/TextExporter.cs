@@ -69,6 +69,10 @@ public class TextExporter : BaseExporter
 	protected override (int, DateTimeOffset?) Export(IEnumerable<IndicatorValue> values)
 		=> Do(values);
 
+	/// <inheritdoc />
+	protected override (int, DateTimeOffset?) Export(IEnumerable<BoardStateMessage> messages)
+		=> Do(messages);
+
 	private (int, DateTimeOffset?) Do<TValue>(IEnumerable<TValue> values)
 	{
 		var count = 0;
