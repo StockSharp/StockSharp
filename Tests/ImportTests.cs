@@ -141,25 +141,24 @@ public class ImportTests
 		Import(DataType.News, Helper.RandomNews(), fields);
 	}
 
-	//[TestMethod]
-	//public void Level1()
-	//{
-	//	var security = Helper.CreateStorageSecurity();
-	//	var allFields = FieldMappingRegistry.CreateFields(DataType.Level1).ToArray();
-	//	var fields = new[]
-	//	{
-	//		allFields.First(f => f.Name == "ServerTime.Date"),
-	//		allFields.First(f => f.Name == "ServerTime.TimeOfDay"),
-	//		allFields.First(f => f.Name == "Changes[BestBidPrice]"),
-	//		allFields.First(f => f.Name == "Changes[BestBidVolume]"),
-	//		allFields.First(f => f.Name == "Changes[BestAskPrice]"),
-	//		allFields.First(f => f.Name == "Changes[BestAskVolume]"),
-	//		allFields.First(f => f.Name == "Changes[LastTradeTime]"),
-	//		allFields.First(f => f.Name == "Changes[LastTradePrice]"),
-	//		allFields.First(f => f.Name == "Changes[LastTradeVolume]"),
-	//	};
-	//	Import(DataType.Level1, security.RandomLevel1(count: 100), fields);
-	//}
+	[TestMethod]
+	public void Level1()
+	{
+		var security = Helper.CreateStorageSecurity();
+		var allFields = FieldMappingRegistry.CreateFields(DataType.Level1).ToArray();
+		var fields = new[]
+		{
+			allFields.First(f => f.Name == "ServerTime.Date"),
+			allFields.First(f => f.Name == "ServerTime.TimeOfDay"),
+			allFields.First(f => f.Name == "Changes[BestBidPrice]"),
+			allFields.First(f => f.Name == "Changes[BestBidVolume]"),
+			allFields.First(f => f.Name == "Changes[BestAskPrice]"),
+			allFields.First(f => f.Name == "Changes[BestAskVolume]"),
+			allFields.First(f => f.Name == "Changes[LastTradePrice]"),
+			allFields.First(f => f.Name == "Changes[LastTradeVolume]"),
+		};
+		Import(DataType.Level1, security.RandomLevel1(count: 100), fields);
+	}
 
 	[TestMethod]
 	public void Candles()
