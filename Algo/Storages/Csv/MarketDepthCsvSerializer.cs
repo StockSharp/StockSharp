@@ -147,12 +147,12 @@ class MarketDepthCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMa
 				if (incOnly.Value)
 				{
 					if (d.State == null)
-						throw new InvalidOperationException(LocalizedStrings.StorageRequiredIncremental.Put(true));
+						throw new ArgumentException(LocalizedStrings.StorageRequiredIncremental.Put(true), nameof(data));
 				}
 				else
 				{
 					if (d.State != null)
-						throw new InvalidOperationException(LocalizedStrings.StorageRequiredIncremental.Put(false));
+						throw new ArgumentException(LocalizedStrings.StorageRequiredIncremental.Put(false), nameof(data));
 				}
 			}
 
