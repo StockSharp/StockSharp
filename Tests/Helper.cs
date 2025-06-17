@@ -1171,6 +1171,20 @@ static class Helper
 		return posMsg;
 	}
 
+	public static ExecutionMessage[] RandomTransactions(this Security security, int count)
+	{
+		var transactions = new List<ExecutionMessage>();
+
+		var secId = security.ToSecurityId();
+
+		for (var i = 0; i < count; i++)
+		{
+			transactions.Add(RandomTransaction(secId, i));
+		}
+
+		return [.. transactions];
+	}
+
 	public static ExecutionMessage RandomTransaction(SecurityId secId, int i)
 	{
 		var msg = new ExecutionMessage
@@ -1317,4 +1331,23 @@ static class Helper
 		=> [.. type
 			.GetProperties(BindingFlags.Instance | BindingFlags.Public)
 			.Where(p => p.IsModifiable())];
+
+	public static BoardStateMessage[] RandomBoardStates()
+	{
+		return
+		[
+			new BoardStateMessage
+			{
+				State = SessionStates.Active,
+				BoardCode = ExchangeBoard.Forts.Code,
+				ServerTime = DateTimeOffset.UtcNow,
+			},
+
+			new BoardStateMessage
+			{
+				State = SessionStates.Paused,
+				ServerTime = DateTimeOffset.UtcNow,
+			},
+		];
+	}
 }

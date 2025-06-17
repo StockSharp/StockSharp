@@ -91,7 +91,7 @@ public class TemplateTxtRegistry : IPersistable
 			Description = LocalizedStrings.TemplateTxtTransactionKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 6)]
-	public string TemplateTxtTransaction { get; set; } = "{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{PortfolioName};{TransactionId};{OrderId};{OrderPrice};{OrderVolume};{Balance};{Side};{OrderType};{OrderState};{TradeId};{TradePrice};{TradeVolume};{HasOrderInfo};{HasTradeInfo}";
+	public string TemplateTxtTransaction { get; set; } = "{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{PortfolioName};{TransactionId};{OrderId};{OrderPrice};{OrderVolume};{Balance};{Side};{OrderType};{OrderState};{TradeId};{TradePrice};{TradeVolume}";
 
 	/// <summary>
 	/// Security txt export template.

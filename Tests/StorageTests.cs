@@ -2445,21 +2445,7 @@ public class StorageTests
 	{
 		var storage = GetStorageRegistry().GetBoardStateMessageStorage(null, format);
 
-		var data = new[]
-		{
-			new BoardStateMessage
-			{
-				State = SessionStates.Active,
-				BoardCode = ExchangeBoard.Forts.Code,
-				ServerTime = DateTimeOffset.UtcNow,
-			},
-
-			new BoardStateMessage
-			{
-				State = SessionStates.Paused,
-				ServerTime = DateTimeOffset.UtcNow,
-			},
-		};
+		var data = Helper.RandomBoardStates();
 
 		storage.Save(data);
 
@@ -2701,14 +2687,10 @@ public class StorageTests
 	public void Transaction(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
-		var transactions = new List<ExecutionMessage>();
 
 		var secId = security.ToSecurityId();
 
-		for (var i = 0; i < 10000; i++)
-		{
-			transactions.Add(Helper.RandomTransaction(secId, i));
-		}
+		var transactions = security.RandomTransactions(1000);
 
 		var storage = GetStorageRegistry().GetTransactionStorage(secId, null, format);
 

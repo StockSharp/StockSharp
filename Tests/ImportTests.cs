@@ -22,6 +22,10 @@ public class ImportTests
 			return registry.TemplateTxtNews;
 		else if (dataType == DataType.Level1)
 			return registry.TemplateTxtLevel1;
+		else if (dataType == DataType.BoardState)
+			return registry.TemplateTxtBoardState;
+		else if (dataType == DataType.Transactions)
+			return registry.TemplateTxtTransaction;
 		else if (dataType.IsCandles)
 			return registry.TemplateTxtCandle;
 		else
@@ -182,5 +186,45 @@ public class ImportTests
 			};
 			Import(dataType, group.ToArray(), fields);
 		}
+	}
+
+	[TestMethod]
+	public void BoardState()
+	{
+		var allFields = FieldMappingRegistry.CreateFields(DataType.BoardState).ToArray();
+		var fields = new[]
+		{
+			allFields.First(f => f.Name == "ServerTime.Date"),
+			allFields.First(f => f.Name == "ServerTime.TimeOfDay"),
+			allFields.First(f => f.Name == "BoardCode"),
+			allFields.First(f => f.Name == "State"),
+		};
+		Import(DataType.BoardState, Helper.RandomBoardStates(), fields);
+	}
+
+	[TestMethod]
+	public void Transactions()
+	{
+		var security = Helper.CreateStorageSecurity();
+		var allFields = FieldMappingRegistry.CreateFields(DataType.Transactions).ToArray();
+
+		var fields = new[]
+		{
+			allFields.First(f => f.Name == "ServerTime.Date"),
+			allFields.First(f => f.Name == "ServerTime.TimeOfDay"),
+			allFields.First(f => f.Name == "PortfolioName"),
+			allFields.First(f => f.Name == "TransactionId"),
+			allFields.First(f => f.Name == "OrderId"),
+			allFields.First(f => f.Name == "OrderPrice"),
+			allFields.First(f => f.Name == "OrderVolume"),
+			allFields.First(f => f.Name == "Balance"),
+			allFields.First(f => f.Name == "Side"),
+			allFields.First(f => f.Name == "OrderType"),
+			allFields.First(f => f.Name == "OrderState"),
+			allFields.First(f => f.Name == "TradeId"),
+			allFields.First(f => f.Name == "TradePrice"),
+			allFields.First(f => f.Name == "TradeVolume"),
+		};
+		Import(DataType.Transactions, security.RandomTransactions(10), fields);
 	}
 }
