@@ -70,7 +70,7 @@ static class BinaryHelper
 			if (priceStepChanged)
 				WriteDecimal(writer, info.LastPriceStep, 0);
 
-			if (info.FirstFractionalPrice == 0)
+			if (!info.IsFirstFractionalPriceSet)
 				info.FirstFractionalPrice = info.LastFractionalPrice = price;
 
 			var stepCount = (long)((price - info.LastFractionalPrice) / info.LastPriceStep);
@@ -164,7 +164,7 @@ static class BinaryHelper
 
 			if (isAligned)
 			{
-				if (info.FirstPrice == 0)
+				if (!info.IsFirstPriceSet)
 					info.FirstPrice = info.LastPrice = price;
 
 				var prevPrice = info.LastPrice;
@@ -173,7 +173,7 @@ static class BinaryHelper
 			}
 			else
 			{
-				if (info.FirstFractionalPrice == 0)
+				if (!info.IsFirstFractionalPriceSet)
 					info.FirstFractionalPrice = info.LastFractionalPrice = price;
 
 				info.LastFractionalPrice = writer.WriteDecimal(price, info.LastFractionalPrice);
@@ -445,7 +445,7 @@ static class BinaryHelper
 			}
 			else
 			{
-				if (info.FirstFractionalVolume == 0)
+				if (!info.IsFirstFractionalVolumeSet)
 					info.FirstFractionalVolume = info.LastFractionalVolume = volume;
 
 				info.LastFractionalVolume = writer.WriteDecimal(volume, info.LastFractionalVolume);

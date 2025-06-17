@@ -232,7 +232,7 @@ class OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exch
 				}
 				else
 				{
-					if (metaInfo.FirstFractionalPrice == 0)
+					if (!metaInfo.IsFirstFractionalPriceSet)
 						metaInfo.FirstFractionalPrice = metaInfo.LastFractionalPrice = orderPrice;
 
 					metaInfo.LastFractionalPrice = writer.WriteDecimal(orderPrice, metaInfo.LastFractionalPrice);

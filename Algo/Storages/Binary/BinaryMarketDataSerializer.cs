@@ -59,13 +59,45 @@ abstract class BinaryMetaInfo : MetaInfo
 	public TimeSpan ServerOffset { get; set; }
 
 	// сериализация и десериализация их полей сделана в дочерних классах
-	public decimal FirstPrice { get; set; }
+	private decimal _firstPrice;
+	public decimal FirstPrice
+	{
+		get => _firstPrice;
+		set
+		{
+			_firstPrice = value;
+			IsFirstPriceSet = true;
+		}
+	}
 	public decimal LastPrice { get; set; }
-	public decimal FirstFractionalPrice { get; set; }
+
+	private decimal _firstFractionalPrice;
+	public decimal FirstFractionalPrice
+	{
+		get => _firstFractionalPrice;
+		set
+		{
+			_firstFractionalPrice = value;
+			IsFirstFractionalPriceSet = true;
+		}
+	}
 	public decimal LastFractionalPrice { get; set; }
-	
-	public decimal FirstFractionalVolume { get; set; }
+
+	private decimal _firstFractionalVolume;
+	public decimal FirstFractionalVolume
+	{
+		get => _firstFractionalVolume;
+		set
+		{
+			_firstFractionalVolume = value;
+			IsFirstFractionalVolumeSet = true;
+		}
+	}
 	public decimal LastFractionalVolume { get; set; }
+
+	public bool IsFirstPriceSet { get; private set; }
+	public bool IsFirstFractionalPriceSet { get; private set; }
+	public bool IsFirstFractionalVolumeSet { get; private set; }
 
 	public DateTime FirstLocalTime { get; set; }
 	public DateTime LastLocalTime { get; set; }
