@@ -1,7 +1,7 @@
 <img src="./Media/SLogo.png" align="right" />
 
 # [StockSharp - trading platform][1] 
-## [Doc][2] | [Download][3] | [Chat][7]
+## [![Docs](https://img.shields.io/badge/Docs-online-blue)](https://doc.stocksharp.com) [![Download](https://img.shields.io/badge/Download-installer-brightgreen)](https://stocksharp.com/products/download/) [![Chat](https://img.shields.io/badge/Chat-telegram-blueviolet)](https://t.me/stocksharpchat/361) [![YouTube](https://img.shields.io/badge/YouTube-channel-red)](https://www.youtube.com/@stocksharp)
 
 ## Introduction ##
 
@@ -210,12 +210,9 @@ public class SimpleStrategy : Strategy
 |<img src="./Media/logos/Oanda_logo.svg" height="30" /> |Oanda | <a href="//doc.stocksharp.com/topics/api/connectors/forex/oanda.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/api/connectors/forex/oanda.html" target="_blank">Ru</a> |
 
   [1]: https://stocksharp.com
-  [2]: https://doc.stocksharp.com
-  [3]: https://stocksharp.com/products/download/
   [4]: https://stocksharp.com/edu/
   [5]: https://stocksharp.com/forum/
   [6]: https://stocksharp.com/broker/
-  [7]: https://t.me/stocksharpchat/361
   [8]: https://stocksharp.com/store/strategy-designer/
   [9]: https://stocksharp.com/store/market-data-downloader/
   [10]: https://stocksharp.com/store/trading-terminal/
