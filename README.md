@@ -1,7 +1,7 @@
 <img src="./Media/SLogo.png" align="right" />
 
 # [StockSharp - trading platform][1] 
-## [![Docs](https://img.shields.io/badge/Docs-online-blue)](https://doc.stocksharp.com) [![Download](https://img.shields.io/badge/Download-installer-brightgreen)](https://stocksharp.com/products/download/) [![Chat](https://img.shields.io/badge/Chat-telegram-blueviolet)](https://t.me/stocksharpchat/361) [![YouTube](https://img.shields.io/badge/YouTube-channel-red)](https://www.youtube.com/@stocksharp)
+## [<img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4d6.svg" alt="Docs" height="40"/>](https://doc.stocksharp.com) [<img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/2b07.svg" alt="Download" height="40"/>](https://stocksharp.com/products/download/) [<img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4ac.svg" alt="Chat" height="40"/>](https://t.me/stocksharpchat/361) [<img src="https://raw.githubusercontent.com/simple-icons/simple-icons/master/icons/youtube.svg" alt="YouTube" height="40"/>](https://www.youtube.com/@stocksharp)
 
 ## Introduction ##
 
