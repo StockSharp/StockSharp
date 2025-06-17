@@ -21,7 +21,11 @@ public class StorageTests
 		return GetStorageRegistry().GetTickMessageStorage(security, null, format);
 	}
 
-	private static void TickNegativePrice(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	//[ExpectedException(typeof(ArgumentOutOfRangeException), "Неправильная цена сделки.")]
+	public void TickNegativePrice(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -37,57 +41,15 @@ public class StorageTests
 		}]);
 	}
 
-	[TestMethod]
-	//[ExpectedException(typeof(ArgumentOutOfRangeException), "Неправильная цена сделки.")]
-	public void TickNegativePriceBinary()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void TickEmptySecurityBinary(StorageFormats format)
 	{
-		TickNegativePrice(StorageFormats.Binary);
-	}
+		var security = Helper.CreateSecurity();
+		var secId = security.ToSecurityId();
 
-	[TestMethod]
-	//[ExpectedException(typeof(ArgumentOutOfRangeException), "Неправильная цена сделки.")]
-	public void TickNegativePriceCsv()
-	{
-		TickNegativePrice(StorageFormats.Csv);
-	}
-
-	// нулевые номер сделок имеют индексы
-	//[TestMethod]
-	//[ExpectedException(typeof(ArgumentOutOfRangeException), "Неправильный идентификатор сделки.")]
-	//public void TickInvalidId()
-	//{
-	//    var security = Helper.CreateSecurity();
-	//    Helper.GetDatabaseStorage().GetTradeStorage(security).Save(new[] { new Trade
-	//    {
-	//        Price = 10,
-	//        Security = security,
-	//        Volume = 10
-	//    }});
-	//}
-
-	// http://stocksharp.com/forum/yaf_postsm6450_Oshibka-pri-importie-instrumientov-s-Finama.aspx#post6450
-	//[TestMethod]
-	//[ExpectedException(typeof(ArgumentOutOfRangeException), "Неправильный объем сделки.")]
-	//public void TickInvalidVolume()
-	//{
-	//    var security = Helper.CreateSecurity();
-	//    Helper.GetDatabaseStorage().GetTradeStorage(security).Save(new[] { new Trade
-	//    {
-	//        Id = 1,
-	//        Price = 10,
-	//        Security = security,
-	//    }});
-	//}
-
-	[TestMethod]
-	public void TickEmptySecurityBinary()
-	{
-		static void TickEmptySecurity(StorageFormats format)
-		{
-			var security = Helper.CreateSecurity();
-			var secId = security.ToSecurityId();
-
-			GetTradeStorage(secId, format).Save([ new ExecutionMessage
+		GetTradeStorage(secId, format).Save([ new ExecutionMessage
 			{
 				DataTypeEx = DataType.Ticks,
 				TradeId = 1,
@@ -95,13 +57,13 @@ public class StorageTests
 				TradeVolume = 10,
 				ServerTime = DateTimeOffset.UtcNow,
 			}]);
-		}
-
-		TickEmptySecurity(StorageFormats.Binary);
-		TickEmptySecurity(StorageFormats.Csv);
 	}
 
-	private static void TickInvalidSecurity2(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	[ExpectedException(typeof(ArgumentException), "Инструмент для Trade равен , а должен быть TestId.")]
+	public void TickInvalidSecurity2(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -120,21 +82,11 @@ public class StorageTests
 		]);
 	}
 
-	[TestMethod]
-	[ExpectedException(typeof(ArgumentException), "Инструмент для Trade равен , а должен быть TestId.")]
-	public void TickInvalidSecurity2Binary()
-	{
-		TickInvalidSecurity2(StorageFormats.Binary);
-	}
-
-	[TestMethod]
-	[ExpectedException(typeof(ArgumentException), "Инструмент для Trade равен , а должен быть TestId.")]
-	public void TickInvalidSecurity2Csv()
-	{
-		TickInvalidSecurity2(StorageFormats.Csv);
-	}
-
-	private static void TickInvalidSecurity3(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	[ExpectedException(typeof(ArgumentException), "Инструмент TestId2 имеет нулевой шаг цены.")]
+	public void TickInvalidSecurity3(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -149,30 +101,20 @@ public class StorageTests
 		}]);
 	}
 
-	[TestMethod]
-	[ExpectedException(typeof(ArgumentException), "Инструмент TestId2 имеет нулевой шаг цены.")]
-	public void TickInvalidSecurity3Binary()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void TickRandom(StorageFormats format)
 	{
-		TickInvalidSecurity3(StorageFormats.Binary);
+		TickRandomSaveLoad(format, _tickCount);
 	}
 
-	[TestMethod]
-	[ExpectedException(typeof(ArgumentException), "Инструмент TestId2 имеет нулевой шаг цены.")]
-	public void TickInvalidSecurity3Csv()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void TickStringId(StorageFormats format)
 	{
-		TickInvalidSecurity3(StorageFormats.Csv);
-	}
-
-	[TestMethod]
-	public void TickRandom()
-	{
-		TickRandomSaveLoad(_tickCount);
-	}
-
-	[TestMethod]
-	public void TickStringId()
-	{
-		TickRandomSaveLoad(_tickCount, trades =>
+		TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			foreach (var trade in trades)
 			{
@@ -187,10 +129,12 @@ public class StorageTests
 		});
 	}
 
-	[TestMethod]
-	public void TickRandomLocalTime()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void TickRandomLocalTime(StorageFormats format)
 	{
-		TickRandomSaveLoad(_tickCount, trades =>
+		TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			foreach (var trade in trades)
 			{
@@ -200,16 +144,20 @@ public class StorageTests
 		});
 	}
 
-	[TestMethod]
-	public void TickNanosec()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void TickNanosec(StorageFormats format)
 	{
-		TickRandomSaveLoad(_tickCount, interval: TimeSpan.FromTicks(16546));
+		TickRandomSaveLoad(format, _tickCount, interval: TimeSpan.FromTicks(16546));
 	}
 
-	[TestMethod]
-	public void TickHighPrice()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void TickHighPrice(StorageFormats format)
 	{
-		TickRandomSaveLoad(_tickCount, trades =>
+		TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			for (var i = 0; i < trades.Length; i++)
 			{
@@ -218,10 +166,12 @@ public class StorageTests
 		});
 	}
 
-	[TestMethod]
-	public void TickLowPrice()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void TickLowPrice(StorageFormats format)
 	{
-		TickRandomSaveLoad(_tickCount, trades =>
+		TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			var priceStep = /*trades.First().Security.PriceStep = */0.00001m;
 
@@ -232,10 +182,12 @@ public class StorageTests
 		});
 	}
 
-	[TestMethod]
-	public void TickExtremePrice()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void TickExtremePrice(StorageFormats format)
 	{
-		TickRandomSaveLoad(_tickCount, trades =>
+		TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			//trades.First().Security.PriceStep = 0.0001m;
 
@@ -246,10 +198,12 @@ public class StorageTests
 		});
 	}
 
-	[TestMethod]
-	public void TickExtremePrice2()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void TickExtremePrice2(StorageFormats format)
 	{
-		TickRandomSaveLoad(_tickCount, trades =>
+		TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			//trades.First().Security.PriceStep = 0.0001m;
 
@@ -260,10 +214,12 @@ public class StorageTests
 		});
 	}
 
-	[TestMethod]
-	public void TickExtremeVolume()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void TickExtremeVolume(StorageFormats format)
 	{
-		TickRandomSaveLoad(_tickCount, trades =>
+		TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			//trades.First().Security.VolumeStep = 0.0001m;
 
@@ -274,10 +230,12 @@ public class StorageTests
 		});
 	}
 
-	[TestMethod]
-	public void TickExtremeVolume2()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void TickExtremeVolume2(StorageFormats format)
 	{
-		TickRandomSaveLoad(_tickCount, trades =>
+		TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			//trades.First().Security.VolumeStep = 0.0001m;
 
@@ -286,10 +244,12 @@ public class StorageTests
 		});
 	}
 
-	[TestMethod]
-	public void TickNonSystem()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void TickNonSystem(StorageFormats format)
 	{
-		TickRandomSaveLoad(_tickCount, trades =>
+		TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			for (var i = 0; i < trades.Length; i++)
 			{
@@ -302,10 +262,12 @@ public class StorageTests
 		});
 	}
 
-	[TestMethod]
-	public void TickFractionalVolume()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void TickFractionalVolume(StorageFormats format)
 	{
-		TickRandomSaveLoad(_tickCount, trades =>
+		TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			var volumeStep = /*trades.First().Security.VolumeStep = */0.00001m;
 
@@ -316,10 +278,12 @@ public class StorageTests
 		});
 	}
 
-	[TestMethod]
-	public void TickFractionalVolume2()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void TickFractionalVolume2(StorageFormats format)
 	{
-		TickRandomSaveLoad(_tickCount, trades =>
+		TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			var volumeStep = /*trades.First().Security.VolumeStep = */0.00001m;
 
@@ -330,14 +294,7 @@ public class StorageTests
 		});
 	}
 
-	//[TestMethod]
-	//public void TickPerformance()
-	//{
-	//	var time = Watch.Do(() => TickRandomSaveLoad(1000000));
-	//	(time < TimeSpan.FromMinutes(1)).AssertTrue();
-	//}
-
-	private static void TickRandomSaveLoad(int count, Action<ExecutionMessage[]> modify = null, TimeSpan? interval = null)
+	private static void TickRandomSaveLoad(StorageFormats format, int count, Action<ExecutionMessage[]> modify = null, TimeSpan? interval = null)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var trades = security.RandomTicks(count, false, interval);
@@ -345,19 +302,16 @@ public class StorageTests
 
 		modify?.Invoke(trades);
 
-		void SaveAndLoad(StorageFormats format)
-		{
-			var storage = GetTradeStorage(secId, format);
-			storage.Save(trades);
-			LoadTradesAndCompare(storage, trades);
-			storage.DeleteWithCheck();
-		}
-
-		SaveAndLoad(StorageFormats.Binary);
-		SaveAndLoad(StorageFormats.Csv);
+		var storage = GetTradeStorage(secId, format);
+		storage.Save(trades);
+		LoadTradesAndCompare(storage, trades);
+		storage.DeleteWithCheck();
 	}
 
-	private static void TickPartSave(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void TickPartSave(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
@@ -378,19 +332,10 @@ public class StorageTests
 		tradeStorage.DeleteWithCheck();
 	}
 
-	[TestMethod]
-	public void TickPartSaveBinary()
-	{
-		TickPartSave(StorageFormats.Binary);
-	}
-
-	[TestMethod]
-	public void TickPartSaveCsv()
-	{
-		TickPartSave(StorageFormats.Csv);
-	}
-
-	private static void TickRandomDelete(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void TickRandomDelete(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
@@ -408,19 +353,10 @@ public class StorageTests
 		tradeStorage.DeleteWithCheck();
 	}
 
-	[TestMethod]
-	public void TickRandomDeleteBinary()
-	{
-		TickRandomDelete(StorageFormats.Binary);
-	}
-
-	[TestMethod]
-	public void TickRandomDeleteCsv()
-	{
-		TickRandomDelete(StorageFormats.Csv);
-	}
-
-	private static void TickFullDelete(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void TickFullDelete(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
@@ -449,63 +385,56 @@ public class StorageTests
 		loadedTrades.Length.AssertEqual(0);
 	}
 
-	[TestMethod]
-	public void TickFullDelete()
-	{
-		TickFullDelete(StorageFormats.Binary);
-		TickFullDelete(StorageFormats.Csv);
-	}
-
-	[TestMethod]
-	public void TickWrongDateDelete()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void TickWrongDateDelete(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
 
-		GetTradeStorage(secId, StorageFormats.Binary).Delete(new DateTime(2005, 1, 1), new DateTime(2005, 1, 10));
-		GetTradeStorage(secId, StorageFormats.Csv).Delete(new DateTime(2005, 1, 1), new DateTime(2005, 1, 10));
+		GetTradeStorage(secId, format).Delete(new DateTime(2005, 1, 1), new DateTime(2005, 1, 10));
 	}
 
-	[TestMethod]
-	public void TickRandomDateDelete()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void TickRandomDateDelete(StorageFormats format)
 	{
-		static void delete(StorageFormats format)
+		var security = Helper.CreateStorageSecurity();
+		var secId = security.ToSecurityId();
+
+		var trades = security.RandomTicks(_tickCount, false);
+
+		var tradeStorage = GetTradeStorage(secId, format);
+
+		tradeStorage.Save(trades);
+
+		var minTime = DateTimeOffset.MaxValue;
+		var maxTime = DateTimeOffset.MinValue;
+
+		foreach (var t in trades)
 		{
-			var security = Helper.CreateStorageSecurity();
-			var secId = security.ToSecurityId();
-
-			var trades = security.RandomTicks(_tickCount, false);
-
-			var tradeStorage = GetTradeStorage(secId, format);
-
-			tradeStorage.Save(trades);
-
-			var minTime = DateTimeOffset.MaxValue;
-			var maxTime = DateTimeOffset.MinValue;
-
-			foreach (var t in trades)
-			{
-				minTime = t.ServerTime < minTime ? t.ServerTime : minTime;
-				maxTime = t.ServerTime > maxTime ? t.ServerTime : maxTime;
-			}
-
-			var diff = maxTime - minTime;
-			var third = TimeSpan.FromTicks(diff.Ticks / 3);
-
-			var from = minTime + third;
-			var to = maxTime - third;
-			tradeStorage.Delete(from, to);
-
-			LoadTradesAndCompare(tradeStorage, [.. trades.Where(t => t.ServerTime < from || t.ServerTime > to)]);
-
-			tradeStorage.DeleteWithCheck();
+			minTime = t.ServerTime < minTime ? t.ServerTime : minTime;
+			maxTime = t.ServerTime > maxTime ? t.ServerTime : maxTime;
 		}
 
-		delete(StorageFormats.Binary);
-		delete(StorageFormats.Csv);
+		var diff = maxTime - minTime;
+		var third = TimeSpan.FromTicks(diff.Ticks / 3);
+
+		var from = minTime + third;
+		var to = maxTime - third;
+		tradeStorage.Delete(from, to);
+
+		LoadTradesAndCompare(tradeStorage, [.. trades.Where(t => t.ServerTime < from || t.ServerTime > to)]);
+
+		tradeStorage.DeleteWithCheck();
 	}
 
-	private static void TickSameTime(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void TickSameTime(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -542,13 +471,6 @@ public class StorageTests
 		tradeStorage.DeleteWithCheck();
 	}
 
-	[TestMethod]
-	public void TickSameTime()
-	{
-		TickSameTime(StorageFormats.Binary);
-		TickSameTime(StorageFormats.Csv);
-	}
-
 	private static void LoadTradesAndCompare(IMarketDataStorage<ExecutionMessage> tradeStorage, ExecutionMessage[] trades)
 	{
 		var loadedTrades = tradeStorage.Load(trades.First().ServerTime, trades.Last().ServerTime).ToArray();
@@ -556,7 +478,10 @@ public class StorageTests
 		loadedTrades.CompareMessages(trades);
 	}
 
-	private static void DepthAdaptivePriceStep(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthAdaptivePriceStep(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -574,19 +499,10 @@ public class StorageTests
 		storage.DeleteWithCheck();
 	}
 
-	[TestMethod]
-	public void DepthAdaptivePriceStepBinary()
-	{
-		DepthAdaptivePriceStep(StorageFormats.Binary);
-	}
-
-	[TestMethod]
-	public void DepthAdaptivePriceStepCsv()
-	{
-		DepthAdaptivePriceStep(StorageFormats.Csv);
-	}
-
-	private static void DepthLowPriceStep(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthLowPriceStep(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		security.PriceStep = 0.00000001m;
@@ -603,58 +519,16 @@ public class StorageTests
 		storage.DeleteWithCheck();
 	}
 
-	[TestMethod]
-	public void DepthLowPriceStepBinary()
-	{
-		DepthLowPriceStep(StorageFormats.Binary);
-	}
-
-	[TestMethod]
-	public void DepthLowPriceStepCsv()
-	{
-		DepthLowPriceStep(StorageFormats.Csv);
-	}
-
 	private static IMarketDataStorage<QuoteChangeMessage> GetDepthStorage(SecurityId security, StorageFormats format)
 	{
 		return GetStorageRegistry().GetQuoteMessageStorage(security, null, format);
 	}
 
-	//[TestMethod]
-	//[ExpectedException(typeof(ArgumentOutOfRangeException), "Неправильная цена котировки.")]
-	//public void DepthInvalidPriceBin()
-	//{
-	//	var security = Helper.CreateSecurity();
-
-	//	var depth = new MarketDepth(security);
-	//	depth.AddQuote(new Quote
-	//	{
-	//		Volume = 1,
-	//		Price = -1,
-	//	});
-
-	//	GetDepthStorage(security, StorageFormats.Binary).Save(new[] { depth });
-	//}
-
-	//[TestMethod]
-	//[ExpectedException(typeof(ArgumentOutOfRangeException), "Неправильная цена котировки.")]
-	//public void DepthInvalidPriceCsv()
-	//{
-	//	var security = Helper.CreateSecurity();
-
-	//	var depth = new MarketDepth(security);
-	//	depth.AddQuote(new Quote
-	//	{
-	//		Volume = 1,
-	//		Price = -1,
-	//	});
-
-	//	GetDepthStorage(security, StorageFormats.Csv).Save(new[] { depth });
-	//}
-
-	[TestMethod]
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
 	[ExpectedException(typeof(ArgumentOutOfRangeException), "Неправильный объем котировки.")]
-	public void DepthInvalidVolumeBin()
+	public void DepthInvalidVolume(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -666,29 +540,14 @@ public class StorageTests
 			Bids = [new QuoteChange(1, -1)],
 		};
 
-		GetDepthStorage(secId, StorageFormats.Binary).Save([depth]);
+		GetDepthStorage(secId, format).Save([depth]);
 	}
 
-	[TestMethod]
-	[ExpectedException(typeof(ArgumentOutOfRangeException), "Неправильный объем котировки.")]
-	public void DepthInvalidVolumeCsv()
-	{
-		var security = Helper.CreateSecurity();
-		var secId = security.ToSecurityId();
-
-		var depth = new QuoteChangeMessage
-		{
-			ServerTime = DateTimeOffset.UtcNow,
-			SecurityId = secId,
-			Bids = [new QuoteChange(1, -1)],
-		};
-
-		GetDepthStorage(secId, StorageFormats.Csv).Save([depth]);
-	}
-
-	[TestMethod]
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
 	[ExpectedException(typeof(ArgumentException), "Инструмент для MarketDepth равен , а должен быть TestId.")]
-	public void DepthInvalidSecurityBin()
+	public void DepthInvalidSecurity(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -699,28 +558,14 @@ public class StorageTests
 			Bids = [new QuoteChange(1, 1)],
 		};
 
-		GetDepthStorage(secId, StorageFormats.Binary).Save([depth]);
+		GetDepthStorage(secId, format).Save([depth]);
 	}
 
-	[TestMethod]
-	[ExpectedException(typeof(ArgumentException), "Инструмент для MarketDepth равен , а должен быть TestId.")]
-	public void DepthInvalidSecurityCsv()
-	{
-		var security = Helper.CreateSecurity();
-		var secId = security.ToSecurityId();
-
-		var depth = new QuoteChangeMessage
-		{
-			SecurityId = new() { SecurityCode = "another", BoardCode = BoardCodes.Ux },
-			Bids = [new QuoteChange(1, 1)],
-		};
-
-		GetDepthStorage(secId, StorageFormats.Csv).Save([depth]);
-	}
-
-	[TestMethod]
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
 	//[ExpectedException(typeof(ArgumentException), "Попытка записать неупорядоченные стаканы.")]
-	public void DepthInvalidOrder()
+	public void DepthInvalidOrder(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -739,18 +584,17 @@ public class StorageTests
 			Bids = [new QuoteChange(1, 1)],
 		};
 
-		var binStorage = GetDepthStorage(secId, StorageFormats.Binary);
-		binStorage.AppendOnlyNew = false;
-		binStorage.Save([depth2]);
-		binStorage.Save([depth1]);
-
-		var csvStorage = GetDepthStorage(secId, StorageFormats.Csv);
-		csvStorage.AppendOnlyNew = false;
-		csvStorage.Save([depth2]);
-		csvStorage.Save([depth1]);
+		var storage = GetDepthStorage(secId, format);
+		storage.AppendOnlyNew = false;
+		storage.Save([depth2]);
+		storage.Save([depth1]);
 	}
 
-	private static void DepthInvalidOrder2(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	//[ExpectedException(typeof(ArgumentException), "Попытка записать неупорядоченные стаканы.")]
+	public void DepthInvalidOrder2(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -778,15 +622,11 @@ public class StorageTests
 		depthStorage.DeleteWithCheck();
 	}
 
-	[TestMethod]
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
 	//[ExpectedException(typeof(ArgumentException), "Попытка записать неупорядоченные стаканы.")]
-	public void DepthInvalidOrder2()
-	{
-		DepthInvalidOrder2(StorageFormats.Binary);
-		DepthInvalidOrder2(StorageFormats.Csv);
-	}
-
-	private static void DepthInvalidOrder3(StorageFormats format)
+	public void DepthInvalidOrder3(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -821,41 +661,33 @@ public class StorageTests
 		}
 	}
 
-	[TestMethod]
-	//[ExpectedException(typeof(ArgumentException), "Попытка записать неупорядоченные стаканы.")]
-	public void DepthInvalidOrder3()
-	{
-		DepthInvalidOrder3(StorageFormats.Binary);
-		DepthInvalidOrder3(StorageFormats.Csv);
-	}
-
-	[TestMethod]
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
 	//[ExpectedException(typeof(ArgumentException), "Все переданные стаканы является пустыми.")]
-	public void DepthInvalidEmpty()
+	public void DepthInvalidEmpty(StorageFormats format)
 	{
-		static void Do(StorageFormats format)
+		var security = Helper.CreateSecurity();
+		var secId = security.ToSecurityId();
+
+		var depth = new QuoteChangeMessage
 		{
-			var security = Helper.CreateSecurity();
-			var secId = security.ToSecurityId();
+			ServerTime = DateTimeOffset.UtcNow,
+			SecurityId = secId,
+		};
 
-			var depth = new QuoteChangeMessage
-			{
-				ServerTime = DateTimeOffset.UtcNow,
-				SecurityId = secId,
-			};
+		var depths = new[] { depth };
 
-			var depths = new[] { depth };
-
-			var storage = GetDepthStorage(secId, format);
-			storage.Save(depths);
-			LoadDepthsAndCompare(storage, depths);
-		}
-
-		Do(StorageFormats.Binary);
-		Do(StorageFormats.Csv);
+		var storage = GetDepthStorage(secId, format);
+		storage.Save(depths);
+		LoadDepthsAndCompare(storage, depths);
 	}
 
-	private static void DepthEmpty(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	//[ExpectedException(typeof(ArgumentException), "Переданный стакан является пустым.")]
+	public void DepthEmpty(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -887,53 +719,10 @@ public class StorageTests
 		depthStorage.DeleteWithCheck();
 	}
 
-	[TestMethod]
-	//[ExpectedException(typeof(ArgumentException), "Переданный стакан является пустым.")]
-	public void DepthEmpty()
-	{
-		DepthEmpty(StorageFormats.Binary);
-		DepthEmpty(StorageFormats.Csv);
-	}
-
-	private static void DepthEmpty2(StorageFormats format)
-	{
-		var security = Helper.CreateSecurity();
-		var secId = security.ToSecurityId();
-
-		var depth1 = new QuoteChangeMessage
-		{
-			ServerTime = new DateTime(2005, 1, 1, 0, 0, 0, 0),
-			SecurityId = secId,
-		};
-
-		var depth2 = new QuoteChangeMessage
-		{
-			ServerTime = new DateTime(2005, 1, 1, 0, 0, 0, 1),
-			SecurityId = secId,
-			Bids = [new QuoteChange(1, 1)],
-		};
-
-		var depth3 = new QuoteChangeMessage
-		{
-			ServerTime = new DateTime(2005, 1, 1, 0, 0, 0, 2),
-			SecurityId = secId,
-		};
-
-		var depthStorage = GetDepthStorage(secId, format);
-		depthStorage.Save([depth1, depth2, depth3]);
-		LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
-
-		depthStorage.DeleteWithCheck();
-	}
-
-	[TestMethod]
-	public void DepthNegativePrices()
-	{
-		DepthNegativePrices(StorageFormats.Binary);
-		DepthNegativePrices(StorageFormats.Csv);
-	}
-
-	private static void DepthNegativePrices(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthNegativePrices(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -968,14 +757,10 @@ public class StorageTests
 		depthStorage.DeleteWithCheck();
 	}
 
-	[TestMethod]
-	public void DepthZeroPrices()
-	{
-		DepthZeroPrices(StorageFormats.Binary);
-		DepthZeroPrices(StorageFormats.Csv);
-	}
-
-	private static void DepthZeroPrices(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthZeroPrices(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -1010,14 +795,44 @@ public class StorageTests
 		depthStorage.DeleteWithCheck();
 	}
 
-	[TestMethod]
-	public void DepthEmpty2()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthEmpty2(StorageFormats format)
 	{
-		DepthEmpty2(StorageFormats.Binary);
-		DepthEmpty2(StorageFormats.Csv);
+		var security = Helper.CreateSecurity();
+		var secId = security.ToSecurityId();
+
+		var depth1 = new QuoteChangeMessage
+		{
+			ServerTime = new DateTime(2005, 1, 1, 0, 0, 0, 0),
+			SecurityId = secId,
+		};
+
+		var depth2 = new QuoteChangeMessage
+		{
+			ServerTime = new DateTime(2005, 1, 1, 0, 0, 0, 1),
+			SecurityId = secId,
+			Bids = [new QuoteChange(1, 1)],
+		};
+
+		var depth3 = new QuoteChangeMessage
+		{
+			ServerTime = new DateTime(2005, 1, 1, 0, 0, 0, 2),
+			SecurityId = secId,
+		};
+
+		var depthStorage = GetDepthStorage(secId, format);
+		depthStorage.Save([depth1, depth2, depth3]);
+		LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
+
+		depthStorage.DeleteWithCheck();
 	}
 
-	private static void DepthEmpty3(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthEmpty3(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -1033,14 +848,10 @@ public class StorageTests
 		depthStorage.DeleteWithCheck();
 	}
 
-	[TestMethod]
-	public void DepthEmpty3()
-	{
-		DepthEmpty3(StorageFormats.Binary);
-		DepthEmpty3(StorageFormats.Csv);
-	}
-
-	private static void DepthPartSave(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthPartSave(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
@@ -1058,13 +869,6 @@ public class StorageTests
 		LoadDepthsAndCompare(depthStorage, depths);
 
 		depthStorage.DeleteWithCheck();
-	}
-
-	[TestMethod]
-	public void DepthPartSave()
-	{
-		DepthPartSave(StorageFormats.Binary);
-		DepthPartSave(StorageFormats.Csv);
 	}
 
 	private static void DepthHalfFilled(StorageFormats format, int count)
@@ -1120,35 +924,44 @@ public class StorageTests
 		loadedDepths.Length.AssertEqual(0);
 	}
 
-	[TestMethod]
-	public void DepthHalfFilled()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthHalfFilled(StorageFormats format)
 	{
-		DepthHalfFilled(StorageFormats.Binary, _depthCount1);
-		DepthHalfFilled(StorageFormats.Csv, _depthCount1);
+		DepthHalfFilled(format, _depthCount1);
 	}
 
-	[TestMethod]
-	public void DepthRandom()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthRandom(StorageFormats format)
 	{
-		DepthRandom(_depthCount3);
+		DepthRandom(format, _depthCount3);
 	}
 
-	[TestMethod]
-	public void DepthRandomOrdersCount()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthRandomOrdersCount(StorageFormats format)
 	{
-		DepthRandom(_depthCount3, ordersCount: true);
+		DepthRandom(format, _depthCount3, ordersCount: true);
 	}
 
-	[TestMethod]
-	public void DepthRandomConditions()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthRandomConditions(StorageFormats format)
 	{
-		DepthRandom(_depthCount3, conditions: true);
+		DepthRandom(format, _depthCount3, conditions: true);
 	}
 
-	[TestMethod]
-	public void DepthExtremePrice()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthExtremePrice(StorageFormats format)
 	{
-		DepthRandom(_depthCount3, depths =>
+		DepthRandom(format, _depthCount3, depths =>
 		{
 			//depths.First().Security.PriceStep = 0.0001m;
 
@@ -1182,10 +995,12 @@ public class StorageTests
 		});
 	}
 
-	[TestMethod]
-	public void DepthExtremeVolume()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthExtremeVolume(StorageFormats format)
 	{
-		DepthRandom(_depthCount3, depths =>
+		DepthRandom(format, _depthCount3, depths =>
 		{
 			//depths.First().Security.VolumeStep = 0.0001m;
 
@@ -1200,10 +1015,12 @@ public class StorageTests
 		});
 	}
 
-	[TestMethod]
-	public void DepthExtremeVolume2()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthExtremeVolume2(StorageFormats format)
 	{
-		DepthRandom(_depthCount3, depths =>
+		DepthRandom(format, _depthCount3, depths =>
 		{
 			//depths.First().Security.VolumeStep = 0.0001m;
 
@@ -1218,16 +1035,20 @@ public class StorageTests
 		});
 	}
 
-	[TestMethod]
-	public void DepthRandomNanosec()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthRandomNanosec(StorageFormats format)
 	{
-		DepthRandom(_depthCount3, interval: TimeSpan.FromTicks(14465));
+		DepthRandom(format, _depthCount3, interval: TimeSpan.FromTicks(14465));
 	}
 
-	[TestMethod]
-	public void DepthFractionalVolume()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthFractionalVolume(StorageFormats format)
 	{
-		DepthRandom(_depthCount3, depths =>
+		DepthRandom(format, _depthCount3, depths =>
 		{
 			var volumeStep = /*depths.First().Security.VolumeStep = */0.00001m;
 
@@ -1242,10 +1063,12 @@ public class StorageTests
 		});
 	}
 
-	[TestMethod]
-	public void DepthFractionalVolume2()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthFractionalVolume2(StorageFormats format)
 	{
-		DepthRandom(_depthCount3, depths =>
+		DepthRandom(format, _depthCount3, depths =>
 		{
 			var volumeStep = /*depths.First().Security.VolumeStep = */0.00001m;
 
@@ -1262,7 +1085,10 @@ public class StorageTests
 		});
 	}
 
-	private static void DepthSameTime(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthSameTime(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -1294,64 +1120,50 @@ public class StorageTests
 		depthStorage.DeleteWithCheck();
 	}
 
-	[TestMethod]
-	public void DepthSameTime()
+	private static void DepthRandom(StorageFormats format, int count, Action<List<QuoteChangeMessage>> modify = null, TimeSpan? interval = null, bool ordersCount = false, bool conditions = false)
 	{
-		DepthSameTime(StorageFormats.Binary);
-		DepthSameTime(StorageFormats.Csv);
-	}
+		var security = Helper.CreateStorageSecurity();
+		var secId = security.ToSecurityId();
 
-	//[TestMethod]
-	//public void DepthPerformance()
-	//{
-	//	var time = Watch.Do(() => DepthRandom(1000000));
-	//	(time < TimeSpan.FromMinutes(1)).AssertTrue();
-	//}
+		var depths = security.RandomDepths(count, interval, null, ordersCount);
 
-	private static void DepthRandom(int count, Action<List<QuoteChangeMessage>> modify = null, TimeSpan? interval = null, bool ordersCount = false, bool conditions = false)
-	{
-		foreach (var format in Enumerator.GetValues<StorageFormats>())
+		if (conditions)
 		{
-			var security = Helper.CreateStorageSecurity();
-			var secId = security.ToSecurityId();
-
-			var depths = security.RandomDepths(count, interval, null, ordersCount);
-
-			if (conditions)
+			foreach (var depth in depths)
 			{
-				foreach (var depth in depths)
+				if (!RandomGen.GetBool())
+					continue;
+
+				if (depth.Bids.Length > 0 && RandomGen.GetBool())
 				{
-					if (!RandomGen.GetBool())
-						continue;
+					var idx = RandomGen.GetInt(depth.Bids.Length - 1);
+					var q = depth.Bids[idx];
+					q.Condition = QuoteConditions.Indicative;
+					depth.Bids[idx] = q;
+				}
 
-					if (depth.Bids.Length > 0 && RandomGen.GetBool())
-					{
-						var idx = RandomGen.GetInt(depth.Bids.Length - 1);
-						var q = depth.Bids[idx];
-						q.Condition = QuoteConditions.Indicative;
-						depth.Bids[idx] = q;
-					}
-
-					if (depth.Asks.Length > 0 && RandomGen.GetBool())
-					{
-						var idx = RandomGen.GetInt(depth.Asks.Length - 1);
-						var q = depth.Asks[idx];
-						q.Condition = QuoteConditions.Indicative;
-						depth.Asks[idx] = q;
-					}
+				if (depth.Asks.Length > 0 && RandomGen.GetBool())
+				{
+					var idx = RandomGen.GetInt(depth.Asks.Length - 1);
+					var q = depth.Asks[idx];
+					q.Condition = QuoteConditions.Indicative;
+					depth.Asks[idx] = q;
 				}
 			}
-
-			modify?.Invoke(depths);
-
-			var depthStorage = GetDepthStorage(secId, format);
-			depthStorage.Save(depths);
-			LoadDepthsAndCompare(depthStorage, depths);
-			depthStorage.DeleteWithCheck();
 		}
+
+		modify?.Invoke(depths);
+
+		var depthStorage = GetDepthStorage(secId, format);
+		depthStorage.Save(depths);
+		LoadDepthsAndCompare(depthStorage, depths);
+		depthStorage.DeleteWithCheck();
 	}
 
-	private static void DepthRandomDelete(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthRandomDelete(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
@@ -1370,14 +1182,10 @@ public class StorageTests
 		depthStorage.DeleteWithCheck();
 	}
 
-	[TestMethod]
-	public void DepthRandomDelete()
-	{
-		DepthRandomDelete(StorageFormats.Binary);
-		DepthRandomDelete(StorageFormats.Csv);
-	}
-
-	private static void DepthFullDelete(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthFullDelete(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
@@ -1408,14 +1216,10 @@ public class StorageTests
 		loadedDepths.Length.AssertEqual(0);
 	}
 
-	[TestMethod]
-	public void DepthFullDelete()
-	{
-		DepthFullDelete(StorageFormats.Binary);
-		DepthFullDelete(StorageFormats.Csv);
-	}
-
-	private static void DepthRandomDateDelete(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthRandomDateDelete(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
@@ -1435,13 +1239,6 @@ public class StorageTests
 		depthStorage.DeleteWithCheck();
 	}
 
-	[TestMethod]
-	public void DepthRandomDateDelete()
-	{
-		DepthRandomDateDelete(StorageFormats.Binary);
-		DepthRandomDateDelete(StorageFormats.Csv);
-	}
-
 	private static void LoadDepthsAndCompare(IMarketDataStorage<QuoteChangeMessage> depthStorage, IList<QuoteChangeMessage> depths)
 	{
 		var loadedDepths = depthStorage.Load(depths.First().ServerTime, depths.Last().ServerTime).ToArray();
@@ -1449,7 +1246,10 @@ public class StorageTests
 		loadedDepths.CompareMessages(depths);
 	}
 
-	private static void DepthRandomLessMaxDepth(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthRandomLessMaxDepth(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
@@ -1478,14 +1278,10 @@ public class StorageTests
 		depthStorage.DeleteWithCheck();
 	}
 
-	[TestMethod]
-	public void DepthRandomLessMaxDepth()
-	{
-		DepthRandomLessMaxDepth(StorageFormats.Binary);
-		DepthRandomLessMaxDepth(StorageFormats.Csv);
-	}
-
-	private static void DepthRandomMoreMaxDepth(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthRandomMoreMaxDepth(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
@@ -1506,13 +1302,6 @@ public class StorageTests
 		loadedDepths.Length.AssertEqual(0);
 
 		depthStorage.DeleteWithCheck();
-	}
-
-	[TestMethod]
-	public void DepthRandomMoreMaxDepth()
-	{
-		DepthRandomMoreMaxDepth(StorageFormats.Binary);
-		DepthRandomMoreMaxDepth(StorageFormats.Csv);
 	}
 
 	private static void DepthRandomIncrement(StorageFormats format, bool ordersCount, bool conditions)
@@ -1569,25 +1358,28 @@ public class StorageTests
 		loadedDepths.CompareMessages(depths);
 	}
 
-	[TestMethod]
-	public void DepthRandomIncrement()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthRandomIncrement(StorageFormats format)
 	{
-		DepthRandomIncrement(StorageFormats.Binary, false, false);
-		DepthRandomIncrement(StorageFormats.Csv, false, false);
+		DepthRandomIncrement(format, false, false);
 	}
 
-	[TestMethod]
-	public void DepthRandomIncrementOrders()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthRandomIncrementOrders(StorageFormats format)
 	{
-		DepthRandomIncrement(StorageFormats.Binary, true, false);
-		DepthRandomIncrement(StorageFormats.Csv, true, false);
+		DepthRandomIncrement(format, true, false);
 	}
 
-	[TestMethod]
-	public void DepthRandomIncrementOrdersConditions()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void DepthRandomIncrementOrdersConditions(StorageFormats format)
 	{
-		DepthRandomIncrement(StorageFormats.Binary, true, true);
-		DepthRandomIncrement(StorageFormats.Csv, true, true);
+		DepthRandomIncrement(format, true, true);
 	}
 
 	private static void DepthRandomIncrementNonIncrement(StorageFormats format, bool isStateFirst)
@@ -1622,7 +1414,29 @@ public class StorageTests
 		depthStorage.DeleteWithCheck();
 	}
 
-	private static void DepthRandomIncrementNonIncrement3(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	[ExpectedException(typeof(InvalidOperationException))]
+	public void DepthRandomIncrementNonIncrement(StorageFormats format)
+	{
+		DepthRandomIncrementNonIncrement(format, true);
+	}
+
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	[ExpectedException(typeof(InvalidOperationException))]
+	public void DepthRandomIncrementNonIncrement2(StorageFormats format)
+	{
+		DepthRandomIncrementNonIncrement(format, false);
+	}
+
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	[ExpectedException(typeof(ArgumentException))]
+	public void DepthRandomIncrementNonIncrement3(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
@@ -1653,50 +1467,10 @@ public class StorageTests
 		depthStorage.Save(depths.Skip(1));
 	}
 
-	[TestMethod]
-	[ExpectedException(typeof(InvalidOperationException))]
-	public void DepthRandomIncrementNonIncrementBinary()
-	{
-		DepthRandomIncrementNonIncrement(StorageFormats.Binary, true);
-	}
-
-	[TestMethod]
-	[ExpectedException(typeof(InvalidOperationException))]
-	public void DepthRandomIncrementNonIncrementCsv()
-	{
-		DepthRandomIncrementNonIncrement(StorageFormats.Csv, true);
-	}
-
-	[TestMethod]
-	[ExpectedException(typeof(InvalidOperationException))]
-	public void DepthRandomIncrementNonIncrementBinary2()
-	{
-		DepthRandomIncrementNonIncrement(StorageFormats.Binary, false);
-	}
-
-	[TestMethod]
-	[ExpectedException(typeof(InvalidOperationException))]
-	public void DepthRandomIncrementNonIncrementCsv2()
-	{
-		DepthRandomIncrementNonIncrement(StorageFormats.Csv, false);
-	}
-
-	[TestMethod]
-	[ExpectedException(typeof(ArgumentException))]
-	public void DepthRandomIncrementNonIncrementBinary3()
-	{
-		DepthRandomIncrementNonIncrement3(StorageFormats.Binary);
-	}
-
-	[TestMethod]
-	[ExpectedException(typeof(InvalidOperationException))]
-	public void DepthRandomIncrementNonIncrementCsv3()
-	{
-		DepthRandomIncrementNonIncrement3(StorageFormats.Csv);
-	}
-
-	[TestMethod]
-	public void CandlesExtremePrices()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void CandlesExtremePrices(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity(100);
 
@@ -1708,33 +1482,33 @@ public class StorageTests
 			trade.TradeVolume = RandomGen.GetDecimal();
 		}
 
-		CandlesRandom(trades, security, false);
+		CandlesRandom(format, trades, security, false);
 	}
 
-	[TestMethod]
-	public void CandlesNoProfile()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void CandlesNoProfile(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity(100);
 
-		CandlesRandom(security.RandomTicks(_tickCount, false), security, false);
+		CandlesRandom(format, security.RandomTicks(_tickCount, false), security, false);
 	}
 
-	[TestMethod]
-	public void CandlesWithProfile()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	//[DataRow(StorageFormats.Csv)]
+	public void CandlesWithProfile(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity(100);
 
-		CandlesRandom(security.RandomTicks(_tickCount, true), security, true);
+		CandlesRandom(format, security.RandomTicks(_tickCount, true), security, true);
 	}
 
-	[TestMethod]
-	public void CandlesActive()
-	{
-		CandlesActive(StorageFormats.Binary);
-		CandlesActive(StorageFormats.Csv);
-	}
-
-	private static void CandlesActive(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void CandlesActive(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity(100);
 		var secId = security.ToSecurityId();
@@ -1799,14 +1573,10 @@ public class StorageTests
 		candleStorage.Delete(loadedCandles);
 	}
 
-	[TestMethod]
-	public void CandlesDuplicate()
-	{
-		CandlesDuplicate(StorageFormats.Binary);
-		CandlesDuplicate(StorageFormats.Csv);
-	}
-
-	private static void CandlesDuplicate(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void CandlesDuplicate(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity(100);
 		var secId = security.ToSecurityId();
@@ -1889,25 +1659,31 @@ public class StorageTests
 		return [.. trades];
 	}
 
-	[TestMethod]
-	public void CandlesFractionalVolume()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void CandlesFractionalVolume(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity(100);
 		security.VolumeStep = 0.00001m;
 
-		CandlesRandom(GenerateFactalVolumeTrades(security, 1), security, false, volumeRange: 0.0003m, boxSize: 0.0003m);
+		CandlesRandom(format, GenerateFactalVolumeTrades(security, 1), security, false, volumeRange: 0.0003m, boxSize: 0.0003m);
 	}
 
-	[TestMethod]
-	public void CandlesFractionalVolume2()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void CandlesFractionalVolume2(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity(100);
 		security.VolumeStep = 0.00001m;
 
-		CandlesRandom(GenerateFactalVolumeTrades(security, 0.1m), security, false, volumeRange: 0.0003m, boxSize: 0.0003m);
+		CandlesRandom(format, GenerateFactalVolumeTrades(security, 0.1m), security, false, volumeRange: 0.0003m, boxSize: 0.0003m);
 	}
 
-	private static void CandlesRandom(ExecutionMessage[] trades,
+	private static void CandlesRandom(
+		StorageFormats format,
+		ExecutionMessage[] trades,
 		Security security, bool isCalcVolumeProfile,
 		bool resetPriceStep = false,
 		decimal volumeRange = CandleTests.VolumeRange,
@@ -1946,94 +1722,91 @@ public class StorageTests
 
 		var storage = GetStorageRegistry();
 
-		var formats = isCalcVolumeProfile ? [StorageFormats.Binary] : Enumerator.GetValues<StorageFormats>().ToArray();
-
 		if (resetPriceStep)
 			security.PriceStep = 1;
 
 		var secId = security.ToSecurityId();
 
-		CheckCandles<TimeFrameCandleMessage, TimeSpan>(storage, secId, candles, tfArg, formats, diffOffset);
-		CheckCandles<VolumeCandleMessage, decimal>(storage, secId, candles, volumeRange, formats, diffOffset);
-		CheckCandles<TickCandleMessage, int>(storage, secId, candles, ticksArg, formats, diffOffset);
-		CheckCandles<RangeCandleMessage, Unit>(storage, secId, candles, rangeArg, formats, diffOffset);
-		CheckCandles<RenkoCandleMessage, Unit>(storage, secId, candles, renkoArg, formats, diffOffset);
-		CheckCandles<PnFCandleMessage, PnFArg>(storage, secId, candles, pnfArg, formats, diffOffset);
+		CheckCandles<TimeFrameCandleMessage, TimeSpan>(storage, secId, candles, tfArg, format, diffOffset);
+		CheckCandles<VolumeCandleMessage, decimal>(storage, secId, candles, volumeRange, format, diffOffset);
+		CheckCandles<TickCandleMessage, int>(storage, secId, candles, ticksArg, format, diffOffset);
+		CheckCandles<RangeCandleMessage, Unit>(storage, secId, candles, rangeArg, format, diffOffset);
+		CheckCandles<RenkoCandleMessage, Unit>(storage, secId, candles, renkoArg, format, diffOffset);
+		CheckCandles<PnFCandleMessage, PnFArg>(storage, secId, candles, pnfArg, format, diffOffset);
 	}
 
-	private static void CheckCandles<TCandle, TArg>(IStorageRegistry storage, SecurityId security, IEnumerable<CandleMessage> candles, TArg arg, IEnumerable<StorageFormats> formats, bool diffOffset)
+	private static void CheckCandles<TCandle, TArg>(IStorageRegistry storage, SecurityId security, IEnumerable<CandleMessage> candles, TArg arg, StorageFormats format, bool diffOffset)
 		where TCandle : CandleMessage
 	{
-		foreach (var format in formats)
+		var candleStorage = storage.GetCandleMessageStorage(typeof(TCandle), security, arg, null, format);
+		var typedCandle = candles.OfType<TCandle>().ToArray();
+
+		if (diffOffset)
 		{
-			var candleStorage = storage.GetCandleMessageStorage(typeof(TCandle), security, arg, null, format);
-			var typedCandle = candles.OfType<TCandle>().ToArray();
-
-			if (diffOffset)
+			foreach (var candle in typedCandle)
 			{
-				foreach (var candle in typedCandle)
+				TimeZoneInfo tz;
+
+				switch (RandomGen.GetInt(4))
 				{
-					TimeZoneInfo tz;
+					case 0:
+						continue;
 
-					switch (RandomGen.GetInt(4))
-					{
-						case 0:
-							continue;
+					case 1:
+						tz = TimeHelper.Cst;
+						break;
 
-						case 1:
-							tz = TimeHelper.Cst;
-							break;
+					case 2:
+						tz = TimeHelper.Est;
+						break;
 
-						case 2:
-							tz = TimeHelper.Est;
-							break;
+					default:
+						tz = TimeZoneInfo.Utc;
+						break;
+				}
 
-						default:
-							tz = TimeZoneInfo.Utc;
-							break;
-					}
+				switch (RandomGen.GetInt(4))
+				{
+					case 0:
+						break;
 
-					switch (RandomGen.GetInt(4))
-					{
-						case 0:
-							break;
+					case 1:
+						candle.OpenTime = candle.OpenTime.Convert(tz);
+						break;
 
-						case 1:
-							candle.OpenTime = candle.OpenTime.Convert(tz);
-							break;
+					case 2:
+						candle.CloseTime = candle.CloseTime.Convert(tz);
+						break;
 
-						case 2:
-							candle.CloseTime = candle.CloseTime.Convert(tz);
-							break;
+					case 3:
+						candle.HighTime = candle.HighTime.Convert(tz);
+						break;
 
-						case 3:
-							candle.HighTime = candle.HighTime.Convert(tz);
-							break;
-
-						default:
-							candle.LowTime = candle.LowTime.Convert(tz);
-							break;
-					}
+					default:
+						candle.LowTime = candle.LowTime.Convert(tz);
+						break;
 				}
 			}
-
-			candleStorage.Save(typedCandle);
-			var loadedCandles = candleStorage.Load(typedCandle.First().OpenTime, typedCandle.Last().OpenTime).ToArray();
-			loadedCandles.CompareCandles([.. typedCandle.Where(c => c.State != CandleStates.Active)], format);
-			candleStorage.Delete(loadedCandles);
 		}
+
+		candleStorage.Save(typedCandle);
+		var loadedCandles = candleStorage.Load(typedCandle.First().OpenTime, typedCandle.Last().OpenTime).ToArray();
+		loadedCandles.CompareCandles([.. typedCandle.Where(c => c.State != CandleStates.Active)], format);
+		candleStorage.Delete(loadedCandles);
 	}
 
-	[TestMethod]
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
 	[ExpectedException(typeof(ArgumentException), "Неправильный параметр свечи.")]
-	public void CandlesInvalid()
+	public void CandlesInvalid(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
 
 		var storage = GetStorageRegistry();
 
-		var tfStorage = storage.GetTimeFrameCandleMessageStorage(secId, TimeSpan.FromMinutes(5));
+		var tfStorage = storage.GetTimeFrameCandleMessageStorage(secId, TimeSpan.FromMinutes(5), null, format);
 
 		var candles = new[] { new TimeFrameCandleMessage { TypedArg = TimeSpan.FromMinutes(1), SecurityId = secId } };
 
@@ -2047,16 +1820,18 @@ public class StorageTests
 		}
 	}
 
-	[TestMethod]
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
 	[ExpectedException(typeof(ArgumentException), "Неправильный параметр свечи.")]
-	public void CandlesInvalid2()
+	public void CandlesInvalid2(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
 
 		var storage = GetStorageRegistry();
 
-		var tfStorage = storage.GetTimeFrameCandleMessageStorage(secId, TimeSpan.FromMinutes(5));
+		var tfStorage = storage.GetTimeFrameCandleMessageStorage(secId, TimeSpan.FromMinutes(5), null, format);
 
 		var candles = new[]
 		{
@@ -2074,54 +1849,18 @@ public class StorageTests
 		}
 	}
 
-	//[TestMethod]
-	//[ExpectedException(typeof(ArgumentException), "Неправильный параметр свечи.")]
-	//public void CandlesInvalid3()
-	//{
-	//	var security = Helper.CreateSecurity();
-
-	//	var storage = GetStorageRegistry();
-
-	//	var tfStorage = storage.GetCandleStorage<TimeFrameCandle, TimeSpan>(security, TimeSpan.FromMinutes(5));
-
-	//	var candles = new[]
-	//	{
-	//		new TimeFrameCandle
-	//		{
-	//			TimeFrame = TimeSpan.FromMinutes(5),
-	//			Security = security,
-	//			OpenTime = new DateTime(2005, 01, 01, 00, 01, 00),
-	//			CloseTime = new DateTime(2005, 01, 01, 00, 06, 00)
-	//		},
-	//		new TimeFrameCandle
-	//		{
-	//			TimeFrame = TimeSpan.FromMinutes(5),
-	//			Security = security,
-	//			OpenTime = new DateTime(2005, 01, 01, 00, 02, 00),
-	//			CloseTime = new DateTime(2005, 01, 01, 00, 07, 00)
-	//		}
-	//	};
-
-	//	try
-	//	{
-	//		tfStorage.Save(candles);
-	//	}
-	//	finally
-	//	{
-	//		tfStorage.Delete(candles);
-	//	}
-	//}
-
-	[TestMethod]
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
 	[ExpectedException(typeof(ArgumentNullException), "Неправильный параметр свечи.")]
-	public void CandlesInvalid4()
+	public void CandlesInvalid4(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
 
 		var storage = GetStorageRegistry();
 
-		var tfStorage = storage.GetTimeFrameCandleMessageStorage(secId, TimeSpan.FromMinutes(0));
+		var tfStorage = storage.GetTimeFrameCandleMessageStorage(secId, TimeSpan.FromMinutes(0), null, format);
 
 		var candles = new[] { new TimeFrameCandleMessage { TypedArg = TimeSpan.FromMinutes(0), OpenTime = DateTimeOffset.UtcNow, SecurityId = secId } };
 
@@ -2135,7 +1874,10 @@ public class StorageTests
 		}
 	}
 
-	private static void CandlesSameTime(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void CandlesSameTime(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -2173,13 +1915,6 @@ public class StorageTests
 		{
 			tfStorage.Delete(candles);
 		}
-	}
-
-	[TestMethod]
-	public void CandlesSameTime()
-	{
-		CandlesSameTime(StorageFormats.Binary);
-		CandlesSameTime(StorageFormats.Csv);
 	}
 
 	private static void CandlesTimeFrame(StorageFormats format, TimeSpan tf, DateTimeOffset? time = null)
@@ -2238,49 +1973,53 @@ public class StorageTests
 		}
 	}
 
-	[TestMethod]
-	public void CandlesMiniTimeFrame()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void CandlesMiniTimeFrame(StorageFormats format)
 	{
-		CandlesTimeFrame(StorageFormats.Binary, TimeSpan.FromMilliseconds(100));
-		CandlesTimeFrame(StorageFormats.Csv, TimeSpan.FromMilliseconds(100));
+		CandlesTimeFrame(format, TimeSpan.FromMilliseconds(100));
 	}
 
-	[TestMethod]
-	public void CandlesMiniTimeFrame2()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void CandlesMiniTimeFrame2(StorageFormats format)
 	{
-		CandlesTimeFrame(StorageFormats.Binary, TimeSpan.FromMinutes(1.0456));
-		CandlesTimeFrame(StorageFormats.Csv, TimeSpan.FromMinutes(1.0456));
+		CandlesTimeFrame(format, TimeSpan.FromMinutes(1.0456));
 	}
 
-	[TestMethod]
-	public void CandlesBigTimeFrame()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void CandlesBigTimeFrame(StorageFormats format)
 	{
-		CandlesTimeFrame(StorageFormats.Binary, TimeSpan.FromHours(100));
-		CandlesTimeFrame(StorageFormats.Csv, TimeSpan.FromHours(100));
+		CandlesTimeFrame(format, TimeSpan.FromHours(100));
 	}
 
-	[TestMethod]
-	public void CandlesBigTimeFrame2()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void CandlesBigTimeFrame2(StorageFormats format)
 	{
-		CandlesTimeFrame(StorageFormats.Binary, TimeSpan.FromHours(100.4570456));
-		CandlesTimeFrame(StorageFormats.Csv, TimeSpan.FromHours(100.4570456));
+		CandlesTimeFrame(format, TimeSpan.FromHours(100.4570456));
 	}
 
-	[TestMethod]
-	public void CandlesDiffDates()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void CandlesDiffDates(StorageFormats format)
 	{
-		CandlesTimeFrame(StorageFormats.Binary, TimeSpan.FromHours(3), new DateTime(2019, 1, 1, 20, 00, 00).UtcKind());
-		CandlesTimeFrame(StorageFormats.Csv, TimeSpan.FromHours(3), new DateTime(2019, 1, 1, 20, 00, 00).UtcKind());
+		CandlesTimeFrame(format, TimeSpan.FromHours(3), new DateTime(2019, 1, 1, 20, 00, 00).UtcKind());
 	}
 
-	[TestMethod]
-	public void CandlesDiffDaysOffsets()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void CandlesDiffDaysOffsets(StorageFormats format)
 	{
-		CandlesDiffDaysOffsets(StorageFormats.Binary, false);
-		CandlesDiffDaysOffsets(StorageFormats.Csv, false);
-
-		CandlesDiffDaysOffsets(StorageFormats.Binary, true);
-		CandlesDiffDaysOffsets(StorageFormats.Csv, true);
+		CandlesDiffDaysOffsets(format, false);
+		CandlesDiffDaysOffsets(format, true);
 	}
 
 	private static void CandlesDiffDaysOffsets(StorageFormats format, bool initHighLow)
@@ -2329,18 +2068,20 @@ public class StorageTests
 		}
 	}
 
-	[TestMethod]
-	public void CandlesDiffOffsets()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void CandlesDiffOffsets(StorageFormats format)
 	{
-		CandlesDiffOffsets(StorageFormats.Binary, false);
-		CandlesDiffOffsets(StorageFormats.Csv, false);
+		CandlesDiffOffsets(format, false);
 	}
 
-	[TestMethod]
-	public void CandlesDiffOffsetsIntraday()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void CandlesDiffOffsetsIntraday(StorageFormats format)
 	{
-		CandlesDiffOffsets(StorageFormats.Binary, true);
-		CandlesDiffOffsets(StorageFormats.Csv, true);
+		CandlesDiffOffsets(format, true);
 	}
 
 	private static void CandlesDiffOffsets(StorageFormats format, bool initHighLow)
@@ -2423,14 +2164,13 @@ public class StorageTests
 		}
 	}
 
-	[TestMethod]
-	public void CandlesDiffOffsets2()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void CandlesDiffOffsets2(StorageFormats format)
 	{
-		CandlesDiffOffsets2(StorageFormats.Binary, true);
-		CandlesDiffOffsets2(StorageFormats.Csv, true);
-
-		CandlesDiffOffsets2(StorageFormats.Binary, false);
-		CandlesDiffOffsets2(StorageFormats.Csv, false);
+		CandlesDiffOffsets2(format, true);
+		CandlesDiffOffsets2(format, false);
 	}
 
 	private static void CandlesDiffOffsets2(StorageFormats format, bool initHighLow)
@@ -2513,24 +2253,30 @@ public class StorageTests
 		}
 	}
 
-	[TestMethod]
-	public void CandlesDiffOffsets3()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void CandlesDiffOffsets3(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity(100);
 
-		CandlesRandom(security.RandomTicks(_depthCount3, false), security, false, diffOffset: true);
+		CandlesRandom(format, security.RandomTicks(_depthCount3, false), security, false, diffOffset: true);
 	}
 
-	[TestMethod]
-	public void OrderLogRandom()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void OrderLogRandom(StorageFormats format)
 	{
-		OrderLogRandomSaveLoad(_depthCount3);
+		OrderLogRandomSaveLoad(format, _depthCount3);
 	}
 
-	[TestMethod]
-	public void OrderLogFractionalVolume()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void OrderLogFractionalVolume(StorageFormats format)
 	{
-		OrderLogRandomSaveLoad(_depthCount3, items =>
+		OrderLogRandomSaveLoad(format, _depthCount3, items =>
 		{
 			var volumeStep = /*items.First().Order.Security.VolumeStep = */0.00001m;
 
@@ -2544,10 +2290,12 @@ public class StorageTests
 		});
 	}
 
-	[TestMethod]
-	public void OrderLogFractionalVolume2()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void OrderLogFractionalVolume2(StorageFormats format)
 	{
-		OrderLogRandomSaveLoad(_depthCount3, items =>
+		OrderLogRandomSaveLoad(format, _depthCount3, items =>
 		{
 			var volumeStep = /*items.First().Order.Security.VolumeStep = */0.00001m;
 
@@ -2561,10 +2309,12 @@ public class StorageTests
 		});
 	}
 
-	[TestMethod]
-	public void OrderLogExtreme()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void OrderLogExtreme(StorageFormats format)
 	{
-		OrderLogRandomSaveLoad(_depthCount3, items =>
+		OrderLogRandomSaveLoad(format, _depthCount3, items =>
 		{
 			foreach (var item in items)
 			{
@@ -2580,7 +2330,10 @@ public class StorageTests
 		});
 	}
 
-	private static void OrderLogNonSystem(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void OrderLogNonSystem(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
@@ -2614,14 +2367,10 @@ public class StorageTests
 		logStorage.DeleteWithCheck();
 	}
 
-	[TestMethod]
-	public void OrderLogNonSystem()
-	{
-		OrderLogNonSystem(StorageFormats.Binary);
-		OrderLogNonSystem(StorageFormats.Csv);
-	}
-
-	private static void OrderLogSameTime(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void OrderLogSameTime(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -2666,14 +2415,7 @@ public class StorageTests
 		olStorage.DeleteWithCheck();
 	}
 
-	[TestMethod]
-	public void OrderLogSameTime()
-	{
-		OrderLogSameTime(StorageFormats.Binary);
-		OrderLogSameTime(StorageFormats.Csv);
-	}
-
-	private static void OrderLogRandomSaveLoad(int count, Action<IEnumerable<ExecutionMessage>> modify = null)
+	private static void OrderLogRandomSaveLoad(StorageFormats format, int count, Action<IEnumerable<ExecutionMessage>> modify = null)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
@@ -2682,15 +2424,12 @@ public class StorageTests
 
 		modify?.Invoke(items);
 
-		foreach (var format in Enumerator.GetValues<StorageFormats>())
-		{
-			var storage = GetStorageRegistry();
+		var storage = GetStorageRegistry();
 
-			var logStorage = storage.GetOrderLogMessageStorage(secId, null, format);
-			logStorage.Save(items);
-			LoadOrderLogAndCompare(logStorage, items);
-			logStorage.DeleteWithCheck();
-		}
+		var logStorage = storage.GetOrderLogMessageStorage(secId, null, format);
+		logStorage.Save(items);
+		LoadOrderLogAndCompare(logStorage, items);
+		logStorage.DeleteWithCheck();
 	}
 
 	private static void LoadOrderLogAndCompare(IMarketDataStorage<ExecutionMessage> storage, IList<ExecutionMessage> items)
@@ -2699,7 +2438,10 @@ public class StorageTests
 		loadedItems.CompareMessages(items);
 	}
 
-	private static void News(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void News(StorageFormats format)
 	{
 		var newsStorage = GetStorageRegistry().GetNewsMessageStorage(null, format);
 
@@ -2714,14 +2456,10 @@ public class StorageTests
 		newsStorage.DeleteWithCheck();
 	}
 
-	[TestMethod]
-	public void News()
-	{
-		News(StorageFormats.Binary);
-		News(StorageFormats.Csv);
-	}
-
-	private static void BoardState(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void BoardState(StorageFormats format)
 	{
 		var storage = GetStorageRegistry().GetBoardStateMessageStorage(null, format);
 
@@ -2750,13 +2488,6 @@ public class StorageTests
 		storage.DeleteWithCheck();
 	}
 
-	[TestMethod]
-	public void BoardState()
-	{
-		BoardState(StorageFormats.Binary);
-		BoardState(StorageFormats.Csv);
-	}
-
 	private static void Level1(StorageFormats format, bool isFractional, bool diffTimeZones = false, bool diffDays = false)
 	{
 		var security = Helper.CreateSecurity();
@@ -2776,19 +2507,18 @@ public class StorageTests
 		l1Storage.DeleteWithCheck();
 	}
 
-	[TestMethod]
-	public void Level1Binary()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void Level1(StorageFormats format)
 	{
-		Level1(StorageFormats.Binary, false);
+		Level1(format, false);
 	}
 
-	[TestMethod]
-	public void Level1Csv()
-	{
-		Level1(StorageFormats.Csv, false);
-	}
-
-	private static void Level1Empty(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void Level1Empty(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var securityId = security.ToSecurityId();
@@ -2812,55 +2542,34 @@ public class StorageTests
 		l1Storage.DeleteWithCheck();
 	}
 
-	[TestMethod]
-	public void Level1EmptyBinary()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void Level1DiffOffset(StorageFormats format)
 	{
-		Level1Empty(StorageFormats.Binary);
+		Level1(format, false, true);
 	}
 
-	[TestMethod]
-	public void Level1EmptyCsv()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void Level1DiffDays(StorageFormats format)
 	{
-		Level1Empty(StorageFormats.Csv);
+		Level1(format, false, true, true);
 	}
 
-	[TestMethod]
-	public void Level1BinaryDiffOffset()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void Level1Fractional(StorageFormats format)
 	{
-		Level1(StorageFormats.Binary, false, true);
+		Level1(format, true);
 	}
 
-	[TestMethod]
-	public void Level1CsvDiffOffset()
-	{
-		Level1(StorageFormats.Csv, false, true);
-	}
-
-	// [TestMethod]
-	// public void Level1BinaryDiffDays()
-	// {
-	// 	Level1(StorageFormats.Binary, false, true, true);
-	// }
-
-	[TestMethod]
-	public void Level1CsvDiffDays()
-	{
-		Level1(StorageFormats.Csv, false, true, true);
-	}
-
-	[TestMethod]
-	public void Level1BinaryFractional()
-	{
-		Level1(StorageFormats.Binary, true);
-	}
-
-	[TestMethod]
-	public void Level1CsvFractional()
-	{
-		Level1(StorageFormats.Csv, true);
-	}
-
-	private static void Level1MinMax(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void Level1MinMax(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 
@@ -2899,19 +2608,10 @@ public class StorageTests
 		l1Storage.DeleteWithCheck();
 	}
 
-	[TestMethod]
-	public void Level1BinaryMinMax()
-	{
-		Level1MinMax(StorageFormats.Binary);
-	}
-
-	[TestMethod]
-	public void Level1CsvMinMax()
-	{
-		Level1MinMax(StorageFormats.Csv);
-	}
-
-	//private void Level1Duplicates(StorageFormats format)
+	//[DataTestMethod]
+	//[DataRow(StorageFormats.Binary)]
+	//[DataRow(StorageFormats.Csv)]
+	//public void Level1Duplicates(StorageFormats format)
 	//{
 	//	var security = Helper.CreateSecurity();
 
@@ -2940,8 +2640,10 @@ public class StorageTests
 	//	{
 	//		SecurityId = securityId,
 	//		ServerTime = serverTime,
-	//	}.TryAdd(Level1Fields.LastTradePrice, 1000m)
-	//	 .TryAdd(Level1Fields.BestBidPrice, 999m));
+	//	}
+	//	.TryAdd(Level1Fields.LastTradePrice, 1000m)
+	//	.TryAdd(Level1Fields.BestBidPrice, 999m)
+	//	);
 
 	//	var l1Storage = GetStorageRegistry().GetLevel1MessageStorage(securityId, null, format);
 
@@ -2952,16 +2654,9 @@ public class StorageTests
 	//	testValues[1].Changes.Remove(Level1Fields.LastTradePrice);
 
 	//	var loadedItems = l1Storage.Load(testValues.First().ServerTime, testValues.Last().ServerTime).ToArray();
-	//	loaded.CompareMessages(testValues, format);
+	//	loaded.CompareMessages(testValues);
 
 	//	l1Storage.DeleteWithCheck();
-	//}
-
-	//[TestMethod]
-	//public void Level1Duplicates()
-	//{
-	//	Level1Duplicates(StorageFormats.Csv);
-	//	Level1Duplicates(StorageFormats.Binary);
 	//}
 
 	[TestMethod]
@@ -3018,7 +2713,10 @@ public class StorageTests
 		storage.LookupAll().Count().AssertEqual(0);
 	}
 
-	private static void TransactionTest(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void Transaction(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var transactions = new List<ExecutionMessage>();
@@ -3041,19 +2739,10 @@ public class StorageTests
 		storage.Load().Count().AssertEqual(0);
 	}
 
-	[TestMethod]
-	public void TransactionBinary()
-	{
-		TransactionTest(StorageFormats.Binary);
-	}
-
-	[TestMethod]
-	public void TransactionCsv()
-	{
-		TransactionTest(StorageFormats.Csv);
-	}
-
-	private static void PositionTest(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void Position(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var testValues = security.RandomPositionChanges();
@@ -3073,19 +2762,10 @@ public class StorageTests
 		storage.Load().Count().AssertEqual(0);
 	}
 
-	[TestMethod]
-	public void PositionBinary()
-	{
-		PositionTest(StorageFormats.Binary);
-	}
-
-	[TestMethod]
-	public void PositionCsv()
-	{
-		PositionTest(StorageFormats.Csv);
-	}
-
-	private static void PositionEmptyTest(StorageFormats format)
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void PositionEmpty(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -3108,18 +2788,6 @@ public class StorageTests
 
 		storage.Delete();
 		storage.Load().Count().AssertEqual(0);
-	}
-
-	[TestMethod]
-	public void PositionEmptyBinary()
-	{
-		PositionEmptyTest(StorageFormats.Binary);
-	}
-
-	[TestMethod]
-	public void PositionEmptyCsv()
-	{
-		PositionEmptyTest(StorageFormats.Csv);
 	}
 
 	[TestMethod]
@@ -3168,13 +2836,15 @@ public class StorageTests
 		}
 	}
 
-	[TestMethod]
-	public void Bounds()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void Bounds(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
 
-		var storage = GetStorageRegistry().GetTickMessageStorage(secId, null, StorageFormats.Binary);
+		var storage = GetStorageRegistry().GetTickMessageStorage(secId, null, format);
 
 		var now = DateTimeOffset.UtcNow;
 
@@ -3272,8 +2942,10 @@ public class StorageTests
 		}
 	}
 
-	[TestMethod]
-	public void RegressionBuildFromSmallerTimeframes()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void RegressionBuildFromSmallerTimeframes(StorageFormats format)
 	{
 		// https://stocksharp.myjetbrains.com/youtrack/issue/hydra-10
 		// build daily candles from smaller timeframes
@@ -3286,7 +2958,7 @@ public class StorageTests
 		var eiProv = ServicesRegistry.EnsureGetExchangeInfoProvider();
 		var cbProv = new CandleBuilderProvider(eiProv);
 
-		var buildableStorage = cbProv.GetCandleMessageBuildableStorage(reg, secId, tf);
+		var buildableStorage = cbProv.GetCandleMessageBuildableStorage(reg, secId, tf, null, format);
 
 		var from = DateTimeOffset.ParseExact("01/12/2021 +03:00", "dd/MM/yyyy zzz", CultureInfo.InvariantCulture);
 		var to = DateTimeOffset.ParseExact("01/01/2022 +03:00", "dd/MM/yyyy zzz", CultureInfo.InvariantCulture);
@@ -3300,8 +2972,10 @@ public class StorageTests
 		candles.Length.AssertEqual(expectedDates.Count);
 	}
 
-	[TestMethod]
-	public void RegressionBuildFromSmallerTimeframesCandleOrder()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void RegressionBuildFromSmallerTimeframesCandleOrder(StorageFormats format)
 	{
 		// https://stocksharp.myjetbrains.com/youtrack/issue/hydra-10
 		// build daily candles from smaller timeframes using original issue data, ensure candle updates are ordered in time and not doubled
@@ -3314,7 +2988,7 @@ public class StorageTests
 		var eiProv = ServicesRegistry.EnsureGetExchangeInfoProvider();
 		var cbProv = new CandleBuilderProvider(eiProv);
 
-		var buildableStorage = cbProv.GetCandleMessageBuildableStorage(reg, secId, tf);
+		var buildableStorage = cbProv.GetCandleMessageBuildableStorage(reg, secId, tf, null, format);
 
 		var from = DateTimeOffset.ParseExact("01/12/2021 +03:00", "dd/MM/yyyy zzz", CultureInfo.InvariantCulture);
 		var to = DateTimeOffset.ParseExact("01/01/2022 +03:00", "dd/MM/yyyy zzz", CultureInfo.InvariantCulture);
@@ -3338,8 +3012,10 @@ public class StorageTests
 		}
 	}
 
-	[TestMethod]
-	public void RegressionBuildableRange()
+	[DataTestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public void RegressionBuildableRange(StorageFormats format)
 	{
 		// https://stocksharp.myjetbrains.com/youtrack/issue/SS-192
 
@@ -3351,7 +3027,7 @@ public class StorageTests
 		var eiProv = ServicesRegistry.EnsureGetExchangeInfoProvider();
 		var cbProv = new CandleBuilderProvider(eiProv);
 
-		var buildableStorage = cbProv.GetCandleMessageBuildableStorage(reg, secId, tf);
+		var buildableStorage = cbProv.GetCandleMessageBuildableStorage(reg, secId, tf, null, format);
 
 		var from = DateTimeOffset.ParseExact("01/12/2021 +03:00", "dd/MM/yyyy zzz", CultureInfo.InvariantCulture);
 		var to = DateTimeOffset.ParseExact("01/01/2022 +03:00", "dd/MM/yyyy zzz", CultureInfo.InvariantCulture);
