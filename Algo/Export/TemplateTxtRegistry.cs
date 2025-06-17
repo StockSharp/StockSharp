@@ -58,7 +58,7 @@ public class TemplateTxtRegistry : IPersistable
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 3)]
 	[BasicSetting]
-	public string TemplateTxtLevel1 { get; set; } = "{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{Changes:{BestBidPrice};{BestBidVolume};{BestAskPrice};{BestAskVolume};{LastTradeTime};{LastTradePrice};{LastTradeVolume}}";
+	public string TemplateTxtLevel1 { get; set; } = "{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{Changes:{BestBidPrice};{BestBidVolume};{BestAskPrice};{BestAskVolume};{LastTradePrice};{LastTradeVolume}}";
 
 	/// <summary>
 	/// Options greeks txt export template.
