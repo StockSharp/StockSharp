@@ -52,8 +52,8 @@ public class OrderLogTests
 		var initialDepth = new QuoteChangeMessage
 		{
 			SecurityId = securityId,
-			Bids = [new QuoteChange(95m, 5m), new QuoteChange(94m, 3m)],
-			Asks = [new QuoteChange(105m, 4m), new QuoteChange(106m, 6m)]
+			Bids = [new(95m, 5m), new(94m, 3m)],
+			Asks = [new(105m, 4m), new(106m, 6m)]
 		};
 
 		IOrderLogMarketDepthBuilder builder = new OrderLogMarketDepthBuilder(initialDepth);

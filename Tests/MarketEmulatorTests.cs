@@ -24,8 +24,8 @@ public class MarketEmulatorTests
 			SecurityId = secId,
 			LocalTime = now,
 			ServerTime = now,
-			Bids = [new QuoteChange(bid, 10)],
-			Asks = [new QuoteChange(ask, 10)]
+			Bids = [new(bid, 10)],
+			Asks = [new(ask, 10)]
 		});
 	}
 
