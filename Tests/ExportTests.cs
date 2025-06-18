@@ -105,6 +105,13 @@ public class ExportTests
 		Export(DataType.BoardState, boardStates, "boardstate_export", _txtReg.TemplateTxtBoardState);
 	}
 
+	[TestMethod]
+	public void Security()
+	{
+		var securities = Helper.RandomSecurities();
+		Export(DataType.Securities, securities, "security_export", _txtReg.TemplateTxtSecurity);
+	}
+
 	private static void Export<TValue>(
 		DataType dataType, IEnumerable<TValue> values,
 		string fileNameNoExt, string txtTemplate)
