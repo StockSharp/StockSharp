@@ -504,9 +504,27 @@ public class XmlExporter(DataType dataType, Func<int, bool> isCancelled, string 
 		return Do(messages, "boardStates", (writer, msg) =>
 		{
 			writer.WriteStartElement("boardState");
+
 			writer.WriteAttribute("serverTime", msg.ServerTime.ToString(_timeFormat));
 			writer.WriteAttribute("boardCode", msg.BoardCode);
 			writer.WriteAttribute("state", msg.State.ToString());
+
+			writer.WriteEndElement();
+		});
+	}
+
+	/// <inheritdoc />
+	protected override (int, DateTimeOffset?) Export(IEnumerable<BoardMessage> messages)
+	{
+		return Do(messages, "boards", (writer, msg) =>
+		{
+			writer.WriteStartElement("board");
+
+			writer.WriteAttribute("code", msg.Code);
+			writer.WriteAttribute("exchangeCode", msg.ExchangeCode);
+			writer.WriteAttribute("expiryTime", msg.ExpiryTime.ToString());
+			writer.WriteAttribute("timeZone", msg.TimeZone?.Id);
+
 			writer.WriteEndElement();
 		});
 	}

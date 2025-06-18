@@ -611,6 +611,37 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 		});
 	}
 
+	/// <inheritdoc />
+	protected override (int, DateTimeOffset?) Export(IEnumerable<BoardMessage> messages)
+	{
+		return Do(worker =>
+		{
+			var row = 0;
+			worker
+				.SetCell(0, row, LocalizedStrings.Code).SetStyle(0, typeof(string))
+				.SetCell(1, row, LocalizedStrings.Exchange).SetStyle(1, typeof(string))
+				.SetCell(2, row, LocalizedStrings.ExpiryDate).SetStyle(2, typeof(string))
+				.SetCell(3, row, LocalizedStrings.TimeZone).SetStyle(3, typeof(string));
+
+			row++;
+			var lastTime = default(DateTimeOffset?);
+
+			foreach (var msg in messages)
+			{
+				worker
+					.SetCell(0, row, msg.Code)
+					.SetCell(1, row, msg.ExchangeCode)
+					.SetCell(2, row, msg.ExpiryTime.ToString())
+					.SetCell(3, row, msg.TimeZone?.Id);
+
+				if (!Check(++row))
+					break;
+			}
+
+			return (row - 1, lastTime);
+		});
+	}
+
 	private (int, DateTimeOffset?) Do(Func<IExcelWorker, (int, DateTimeOffset?)> action)
 	{
 		if (action is null)

@@ -634,6 +634,30 @@ static class Helper
 		return [.. securities];
 	}
 
+	public static BoardMessage[] RandomBoards(int count = 10000)
+	{
+		var boards = new List<BoardMessage>();
+		var timeZones = TimeZoneInfo.GetSystemTimeZones();
+
+		for (var i = 0; i < count; i++)
+		{
+			var b = new BoardMessage
+			{
+				Code = "TestBoard" + Guid.NewGuid().GetFileNameWithoutExtension(null),
+				ExchangeCode = "TestBoardName",
+				ExpiryTime = RandomGen.GetBool() ? new TimeSpan(RandomGen.GetInt(0, 18), 0, 0) : default,
+				TimeZone = RandomGen.GetElement(timeZones),
+				WorkingTime = new()
+				{
+					IsEnabled = RandomGen.GetBool(),
+				},
+			};
+			boards.Add(b);
+		}
+
+		return [.. boards];
+	}
+
 	public static void DeleteWithCheck<T>(this IMarketDataStorage<T> storage)
 		where T : Message
 	{

@@ -99,6 +99,13 @@ public class ExportTests
 	}
 
 	[TestMethod]
+	public void Board()
+	{
+		var boards = Helper.RandomBoards(100);
+		Export(DataType.Board, boards, "board_export", _txtReg.TemplateTxtBoard);
+	}
+
+	[TestMethod]
 	public void BoardState()
 	{
 		var boardStates = Helper.RandomBoardStates();
@@ -108,7 +115,7 @@ public class ExportTests
 	[TestMethod]
 	public void Security()
 	{
-		var securities = Helper.RandomSecurities();
+		var securities = Helper.RandomSecurities(100);
 		Export(DataType.Securities, securities, "security_export", _txtReg.TemplateTxtSecurity);
 	}
 

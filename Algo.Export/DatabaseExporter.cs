@@ -115,6 +115,10 @@ public class DatabaseExporter : BaseExporter
 	protected override (int, DateTimeOffset?) Export(IEnumerable<BoardStateMessage> messages)
 		=> Do(messages, CreateBoardStateTable);
 
+	/// <inheritdoc />
+	protected override (int, DateTimeOffset?) Export(IEnumerable<BoardMessage> messages)
+		=> Do(messages, CreateBoardTable);
+
 	private (int, DateTimeOffset?) Do<TValue>(IEnumerable<TValue> values, Action<string, FluentMappingBuilder> createTable)
 		where TValue : class
 	{
@@ -462,6 +466,18 @@ public class DatabaseExporter : BaseExporter
 			.Property(m => m.ServerTime)
 			.Property(m => m.BoardCode).HasLength(256)
 			.Property(m => m.State);
+	}
+
+	private void CreateBoardTable(string tableName, FluentMappingBuilder builder)
+	{
+		builder
+			.Entity<BoardMessage>()
+			.HasTableName(tableName)
+			.IsColumnRequired()
+			.Property(m => m.Code).HasLength(256)
+			.Property(m => m.ExchangeCode).HasLength(256)
+			.Property(m => m.ExpiryTime)
+			.Property(m => m.TimeZone);
 	}
 
 	private static void SetValue<T>(T _, string _1, object _2)

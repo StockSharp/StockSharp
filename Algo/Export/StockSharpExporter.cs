@@ -101,4 +101,8 @@ public class StockSharpExporter(DataType dataType, Func<int, bool> isCancelled, 
 	/// <inheritdoc />
 	protected override (int, DateTimeOffset?) Export(IEnumerable<BoardStateMessage> messages)
 		=> Export(messages);
+
+	/// <inheritdoc />
+	protected override (int, DateTimeOffset?) Export(IEnumerable<BoardMessage> messages)
+		=> Export(messages);
 }

@@ -472,6 +472,18 @@ public class JsonExporter(DataType dataType, Func<int, bool> isCancelled, string
 		});
 	}
 
+	/// <inheritdoc />
+	protected override (int, DateTimeOffset?) Export(IEnumerable<BoardMessage> messages)
+	{
+		return Do(messages, (writer, msg) =>
+		{
+			WriteProperty(writer, "code", msg.Code);
+			WriteProperty(writer, "exchangeCode", msg.ExchangeCode);
+			WriteProperty(writer, "expiryTime", msg.ExpiryTime.ToString());
+			WriteProperty(writer, "timeZone", msg.TimeZone?.Id);
+		});
+	}
+
 	private (int, DateTimeOffset?) Do<TValue>(IEnumerable<TValue> values, Action<JsonTextWriter, TValue> action)
 	{
 		var count = 0;
