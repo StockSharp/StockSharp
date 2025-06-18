@@ -14,10 +14,8 @@
 [Doc("topics/api/indicators/list_of_indicators/parabolic_sar.html")]
 public class ParabolicSar : BaseIndicator
 {
-	private class CalcBuffer
+	private class CalcBuffer(ParabolicSar parent)
 	{
-		private readonly ParabolicSar _ind;
-
 		private decimal _prevValue;
 		private bool _longPosition;
 		private decimal _xp; // Extreme Price
@@ -29,11 +27,9 @@ public class ParabolicSar : BaseIndicator
 		private decimal _prevSar;
 		private decimal _todaySar;
 
-		private IList<ICandleMessage> Candles => _ind._candles;
+		private List<ICandleMessage> Candles => parent._candles;
 
-		public CalcBuffer(ParabolicSar parent) => _ind = parent;
-
-		public CalcBuffer Clone() => (CalcBuffer) MemberwiseClone();
+		public CalcBuffer Clone() => (CalcBuffer)MemberwiseClone();
 
 		public decimal Calculate(bool isFinal, ICandleMessage candle)
 		{
@@ -43,20 +39,20 @@ public class ParabolicSar : BaseIndicator
 			if (isFinal)
 				Candles.Add(candle);
 			else
-				Candles[Candles.Count - 1] = candle;
+				Candles[^1] = candle;
 
-			_prevValue = _ind.GetCurrentValue();
+			_prevValue = parent.GetCurrentValue();
 
 			if (Candles.Count < 3)
 				return _prevValue;
 
 			if (Candles.Count == 3)
 			{
-				_longPosition = Candles[Candles.Count - 1].HighPrice > Candles[Candles.Count - 2].HighPrice;
+				_longPosition = Candles[^1].HighPrice > Candles[^2].HighPrice;
 				var max = Candles.Max(t => t.HighPrice);
 				var min = Candles.Min(t => t.LowPrice);
 				_xp = _longPosition ? max : min;
-				_af = _ind.Acceleration;
+				_af = parent.Acceleration;
 				return _xp + (_longPosition ? -1 : 1) * (max - min) * _af;
 			}
 
@@ -85,15 +81,15 @@ public class ParabolicSar : BaseIndicator
 					}
 				}
 
-				if ((_longPosition && (Candles[Candles.Count - 1].LowPrice < _todaySar || Candles[Candles.Count - 2].LowPrice < _todaySar))
-						|| (!_longPosition && (Candles[Candles.Count - 1].HighPrice > _todaySar || Candles[Candles.Count - 2].HighPrice > _todaySar)))
+				if ((_longPosition && (Candles[^1].LowPrice < _todaySar || Candles[^2].LowPrice < _todaySar))
+						|| (!_longPosition && (Candles[^1].HighPrice > _todaySar || Candles[^2].HighPrice > _todaySar)))
 				{
 					return Reverse();
 				}
 
 				if (_longPosition)
 				{
-					if (_prevBar != Candles.Count || Candles[Candles.Count - 1].LowPrice < _prevSar)
+					if (_prevBar != Candles.Count || Candles[^1].LowPrice < _prevSar)
 					{
 						value = _todaySar;
 						_prevSar = _todaySar;
@@ -101,15 +97,15 @@ public class ParabolicSar : BaseIndicator
 					else
 						value = _prevSar;
 
-					if (Candles[Candles.Count - 1].HighPrice > _xp)
+					if (Candles[^1].HighPrice > _xp)
 					{
-						_xp = Candles[Candles.Count - 1].HighPrice;
+						_xp = Candles[^1].HighPrice;
 						AfIncrease();
 					}
 				}
 				else if (!_longPosition)
 				{
-					if (_prevBar != Candles.Count || Candles[Candles.Count - 1].HighPrice > _prevSar)
+					if (_prevBar != Candles.Count || Candles[^1].HighPrice > _prevSar)
 					{
 						value = _todaySar;
 						_prevSar = _todaySar;
@@ -117,9 +113,9 @@ public class ParabolicSar : BaseIndicator
 					else
 						value = _prevSar;
 
-					if (Candles[Candles.Count - 1].LowPrice < _xp)
+					if (Candles[^1].LowPrice < _xp)
 					{
-						_xp = Candles[Candles.Count - 1].LowPrice;
+						_xp = Candles[^1].LowPrice;
 						AfIncrease();
 					}
 				}
@@ -127,15 +123,15 @@ public class ParabolicSar : BaseIndicator
 			}
 			else
 			{
-				if (_longPosition && Candles[Candles.Count - 1].HighPrice > _xp)
-					_xp = Candles[Candles.Count - 1].HighPrice;
-				else if (!_longPosition && Candles[Candles.Count - 1].LowPrice < _xp)
-					_xp = Candles[Candles.Count - 1].LowPrice;
+				if (_longPosition && Candles[^1].HighPrice > _xp)
+					_xp = Candles[^1].HighPrice;
+				else if (!_longPosition && Candles[^1].LowPrice < _xp)
+					_xp = Candles[^1].LowPrice;
 
 				value = _prevSar;
 
-				_todaySar = TodaySar(_longPosition ? Math.Min(_reverseValue, Candles[Candles.Count - 1].LowPrice) :
-					Math.Max(_reverseValue, Candles[Candles.Count - 1].HighPrice));
+				_todaySar = TodaySar(_longPosition ? Math.Min(_reverseValue, Candles[^1].LowPrice) :
+					Math.Max(_reverseValue, Candles[^1].HighPrice));
 			}
 
 			_prevBar = Candles.Count;
@@ -147,13 +143,13 @@ public class ParabolicSar : BaseIndicator
 		{
 			if (_longPosition)
 			{
-				var lowestSar = Math.Min(Math.Min(todaySar, Candles[Candles.Count - 1].LowPrice), Candles[Candles.Count - 2].LowPrice);
-				todaySar = Candles[Candles.Count - 1].LowPrice > lowestSar ? lowestSar : Reverse();
+				var lowestSar = Math.Min(Math.Min(todaySar, Candles[^1].LowPrice), Candles[^2].LowPrice);
+				todaySar = Candles[^1].LowPrice > lowestSar ? lowestSar : Reverse();
 			}
 			else
 			{
-				var highestSar = Math.Max(Math.Max(todaySar, Candles[Candles.Count - 1].HighPrice), Candles[Candles.Count - 2].HighPrice);
-				todaySar = Candles[Candles.Count - 1].HighPrice < highestSar ? highestSar : Reverse();
+				var highestSar = Math.Max(Math.Max(todaySar, Candles[^1].HighPrice), Candles[^2].HighPrice);
+				todaySar = Candles[^1].HighPrice < highestSar ? highestSar : Reverse();
 			}
 
 			return todaySar;
@@ -163,14 +159,14 @@ public class ParabolicSar : BaseIndicator
 		{
 			var todaySar = _xp;
 
-			if ((_longPosition && _prevSar > Candles[Candles.Count - 1].LowPrice) ||
-				(!_longPosition && _prevSar < Candles[Candles.Count - 1].HighPrice) || _prevBar != Candles.Count)
+			if ((_longPosition && _prevSar > Candles[^1].LowPrice) ||
+				(!_longPosition && _prevSar < Candles[^1].HighPrice) || _prevBar != Candles.Count)
 			{
 				_longPosition = !_longPosition;
 				_reverseBar = Candles.Count;
 				_reverseValue = _xp;
-				_af = _ind.Acceleration;
-				_xp = _longPosition ? Candles[Candles.Count - 1].HighPrice : Candles[Candles.Count - 1].LowPrice;
+				_af = parent.Acceleration;
+				_xp = _longPosition ? Candles[^1].HighPrice : Candles[^1].LowPrice;
 				_prevSar = todaySar;
 			}
 			else
@@ -184,7 +180,7 @@ public class ParabolicSar : BaseIndicator
 			if (_afIncreased)
 				return;
 
-			_af = Math.Min(_ind.AccelerationMax, _af + _ind.AccelerationStep);
+			_af = Math.Min(parent.AccelerationMax, _af + parent.AccelerationStep);
 			_afIncreased = true;
 		}
 
