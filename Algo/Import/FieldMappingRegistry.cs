@@ -291,6 +291,11 @@ public static class FieldMappingRegistry
 			fields.Add(new FieldMapping<NewsMessage, NewsPriorities>(nameof(NewsMessage.Priority), () => LocalizedStrings.Priority, () => LocalizedStrings.NewsPriority, (i, v) => i.Priority = v));
 			fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Language), () => LocalizedStrings.Language, () => LocalizedStrings.Language, (i, v) => i.Language = v));
 		}
+		else if (msgType == typeof(BoardMessage))
+		{
+			fields.Add(new FieldMapping<BoardMessage, string>(nameof(BoardMessage.Code), () => LocalizedStrings.Board, () => LocalizedStrings.BoardCode, (i, v) => i.Code = v) { IsRequired = true });
+			fields.Add(new FieldMapping<BoardMessage, string>(nameof(BoardMessage.ExchangeCode), () => LocalizedStrings.Exchange, () => LocalizedStrings.ExchangeBoardDesc, (i, v) => i.ExchangeCode = v) { IsRequired = true });
+		}
 		else if (msgType == typeof(BoardStateMessage))
 		{
 			fields.Add(new FieldMapping<BoardStateMessage, DateTimeOffset>(GetDateField(nameof(BoardStateMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });

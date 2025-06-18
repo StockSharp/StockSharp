@@ -22,12 +22,16 @@ public class ImportTests
 			return registry.TemplateTxtNews;
 		else if (dataType == DataType.Level1)
 			return registry.TemplateTxtLevel1;
+		else if (dataType == DataType.Board)
+			return registry.TemplateTxtBoard;
 		else if (dataType == DataType.BoardState)
 			return registry.TemplateTxtBoardState;
 		else if (dataType == DataType.Transactions)
 			return registry.TemplateTxtTransaction;
 		else if (dataType.IsCandles)
 			return registry.TemplateTxtCandle;
+		else if (dataType == DataType.Securities)
+			return registry.TemplateTxtSecurity;
 		else
 			throw new ArgumentOutOfRangeException(nameof(dataType), dataType, "Unsupported data type for import test.");
 	}
@@ -226,5 +230,36 @@ public class ImportTests
 			allFields.First(f => f.Name == "TradeVolume"),
 		};
 		Import(DataType.Transactions, security.RandomTransactions(10), fields);
+	}
+
+	[TestMethod]
+	public void Securities()
+	{
+		var allFields = FieldMappingRegistry.CreateFields(DataType.Securities).ToArray();
+		var fields = new[]
+		{
+			allFields.First(f => f.Name == "SecurityId.SecurityCode"),
+			allFields.First(f => f.Name == "SecurityId.BoardCode"),
+			allFields.First(f => f.Name == "PriceStep"),
+			allFields.First(f => f.Name == "SecurityType"),
+			allFields.First(f => f.Name == "VolumeStep"),
+			allFields.First(f => f.Name == "Multiplier"),
+			allFields.First(f => f.Name == "Decimals"),
+		};
+		Import(DataType.Securities, Helper.RandomSecurities(10), fields);
+	}
+
+	[TestMethod]
+	public void Boards()
+	{
+		var allFields = FieldMappingRegistry.CreateFields(DataType.Board).ToArray();
+		var fields = new[]
+		{
+			allFields.First(f => f.Name == "ExchangeCode"),
+			allFields.First(f => f.Name == "Code"),
+			//allFields.First(f => f.Name == "ExpiryTime"),
+			//allFields.First(f => f.Name == "TimeZone"),
+		};
+		Import(DataType.Board, Helper.RandomBoards(10), fields);
 	}
 }
