@@ -106,7 +106,7 @@ public class ConnorsRSI : BaseComplexIndicator
 
 		var rsiValue = _rsi.Process(input);
 
-		var streak = CalculateStreak(candle.ClosePrice);
+		var streak = CalculateStreak(candle.ClosePrice, input.IsFinal);
 		var updownRsiValue = _updownRsi.Process(input, streak);
 
 		var rocValue = _roc.Process(input);
@@ -138,7 +138,7 @@ public class ConnorsRSI : BaseComplexIndicator
 		return result;
 	}
 
-	private decimal CalculateStreak(decimal currentPrice)
+	private decimal CalculateStreak(decimal currentPrice, bool isFinal)
 	{
 		var streak = 1m;
 
@@ -154,11 +154,15 @@ public class ConnorsRSI : BaseComplexIndicator
 			else
 				streak = 0;
 
-			_streakBuffer.PopFront();
+			if (isFinal)
+				_streakBuffer.PopFront();
 		}
 
-		_streakBuffer.PushBack(streak);
-		_streakBuffer.PushBack(currentPrice);
+		if (isFinal)
+		{
+			_streakBuffer.PushBack(streak);
+			_streakBuffer.PushBack(currentPrice);
+		}
 
 		return streak;
 	}
