@@ -60,11 +60,6 @@ public class IndicatorTests
 
 		foreach (var type in GetIndicatorTypes())
 		{
-			if	(
-				type.Indicator == typeof(ParabolicSar)
-				)
-				continue;
-
 			var indicator = type.CreateIndicator();
 			indicator.IsFormed.AssertFalse();
 
