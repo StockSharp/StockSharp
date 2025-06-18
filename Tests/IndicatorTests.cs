@@ -44,55 +44,33 @@ public class IndicatorTests
 			throw new InvalidOperationException(input.ToString());
 	}
 
-	[TestMethod]
-	public void StateNonFinalInput()
+	private static IEnumerable<IndicatorType> GetIndicatorTypes()
 	{
 		IIndicatorProvider provider = new IndicatorProvider();
 		provider.Init();
+		return provider.All.Where(t => t.Indicator != typeof(CandlePatternIndicator));
+	}
 
+	[TestMethod]
+	public void StateNonFinalInput()
+	{
 		var now = DateTimeOffset.UtcNow;
 		var secId = Helper.CreateSecurityId();
 		var tf = TimeSpan.FromDays(1);
 
-		foreach (var type in provider.All)
+		foreach (var type in GetIndicatorTypes())
 		{
-			if (type.Indicator == typeof(CandlePatternIndicator) ||
-
-				// TODO
-				type.Indicator == typeof(BollingerBands) ||
-				type.Indicator == typeof(BollingerPercentB) ||
-				type.Indicator == typeof(DonchianChannels) ||
-				type.Indicator == typeof(Fractals) ||
-				type.Indicator == typeof(Alligator) ||
-				type.Indicator == typeof(GatorOscillator) ||
-				type.Indicator == typeof(Ichimoku) ||
-				type.Indicator == typeof(VortexIndicator))
+			if	(
+				type.Indicator == typeof(NickRypockTrailingReverse) ||
+				type.Indicator == typeof(ParabolicSar) ||
+				type.Indicator == typeof(OptimalTracking)
+				)
 				continue;
 
 			var indicator = type.CreateIndicator();
 			indicator.IsFormed.AssertFalse();
 
-			object CloneIndicatorState(IIndicator ind)
-			{
-				var type = ind.GetType();
-				var clone = Activator.CreateInstance(type);
-
-				foreach (var field in type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
-				{
-					var value = field.GetValue(ind);
-
-					if (value is IIndicator nestedInd)
-						field.SetValue(clone, CloneIndicatorState(nestedInd));
-					else if (value is ICloneable cl)
-						field.SetValue(clone, cl.Clone());
-					else
-						field.SetValue(clone, value);
-				}
-
-				return clone;
-			}
-
-			void StateEquals(object a, object b)
+			static void stateEquals(object a, object b)
 			{
 				if (a == null && b == null)
 					return;
@@ -107,7 +85,7 @@ public class IndicatorTests
 						var va = field.GetValue(indA);
 						var vb = field.GetValue(indB);
 
-						StateEquals(va, vb);
+						stateEquals(va, vb);
 					}
 
 					return;
@@ -122,7 +100,7 @@ public class IndicatorTests
 
 					for (var i = 0; i < enumA.Length; i++)
 					{
-						StateEquals(enumA[i], enumB[i]);
+						stateEquals(enumA[i], enumB[i]);
 					}
 
 					return;
@@ -131,15 +109,16 @@ public class IndicatorTests
 				a.AssertEqual(b);
 			}
 
+			var before = indicator.TypedClone();
+
 			for (var i = 0; i < 100; i++)
 			{
 				var value = CreateValue(type, indicator, secId, now, i, tf, false, RandomGen.GetBool());
 
-				var before = CloneIndicatorState(indicator);
 				indicator.Process(value).ValidateValue();
 				indicator.IsFormed.AssertFalse();
 
-				StateEquals(before, indicator);
+				stateEquals(before, indicator);
 			}
 		}
 	}
@@ -147,18 +126,14 @@ public class IndicatorTests
 	[TestMethod]
 	public void NumValuesToInitialize()
 	{
-		IIndicatorProvider provider = new IndicatorProvider();
-		provider.Init();
-
 		var now = DateTimeOffset.UtcNow;
 		var secId = Helper.CreateSecurityId();
 		var tf = TimeSpan.FromDays(1);
 
-		foreach (var type in provider.All)
+		foreach (var type in GetIndicatorTypes())
 		{
 			// non deterministic indicators
-			if (type.Indicator == typeof(CandlePatternIndicator) ||
-				type.Indicator == typeof(AdaptiveLaguerreFilter) ||
+			if (type.Indicator == typeof(AdaptiveLaguerreFilter) ||
 				type.Indicator == typeof(DemandIndex))
 				continue;
 
@@ -395,9 +370,6 @@ public class IndicatorTests
 	[TestMethod]
 	public void SaveLoad()
 	{
-		IIndicatorProvider provider = new IndicatorProvider();
-		provider.Init();
-
 		var reseted = false;
 		void OnReseted() => reseted = true;
 
@@ -429,11 +401,8 @@ public class IndicatorTests
 			}
 		}
 
-		foreach (var type in provider.All)
+		foreach (var type in GetIndicatorTypes())
 		{
-			if (type.Indicator == typeof(CandlePatternIndicator))
-				continue;
-
 			var indicator = type.CreateIndicator();
 			indicator.Reseted += OnReseted;
 
@@ -455,9 +424,6 @@ public class IndicatorTests
 	[TestMethod]
 	public void Process()
 	{
-		IIndicatorProvider provider = new IndicatorProvider();
-		provider.Init();
-
 		var time = new DateTimeOffset(2000, 1, 1, 0, 0, 0, TimeSpan.Zero);
 		var tf = TimeSpan.FromDays(1);
 		var secId = Helper.CreateSecurity().ToSecurityId();
@@ -482,11 +448,8 @@ public class IndicatorTests
 			};
 		}).ToArray());
 
-		foreach (var type in provider.All)
+		foreach (var type in GetIndicatorTypes())
 		{
-			if (type.Indicator == typeof(CandlePatternIndicator))
-				continue;
-
 			var indicator = type.CreateIndicator();
 			var inputType = type.InputValue;
 
