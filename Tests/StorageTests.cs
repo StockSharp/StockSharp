@@ -1121,7 +1121,7 @@ public class StorageTests
 		depthStorage.DeleteWithCheck();
 	}
 
-	private static void DepthRandom(StorageFormats format, int count, Action<List<QuoteChangeMessage>> modify = null, TimeSpan? interval = null, bool ordersCount = false, bool conditions = false)
+	private static void DepthRandom(StorageFormats format, int count, Action<QuoteChangeMessage[]> modify = null, TimeSpan? interval = null, bool ordersCount = false, bool conditions = false)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
@@ -1339,7 +1339,7 @@ public class StorageTests
 
 		var diffQuotes = new List<QuoteChangeMessage>();
 
-		for (var i = depths.Count - 1; i > 0; i--)
+		for (var i = depths.Length - 1; i > 0; i--)
 		{
 			diffQuotes.Add(depths[i - 1].GetDelta(depths[i]));
 		}
@@ -2322,7 +2322,7 @@ public class StorageTests
 
 		var quotes = security.RandomOrderLog(_depthCount3);
 
-		for (var i = 0; i < quotes.Count; i++)
+		for (var i = 0; i < quotes.Length; i++)
 		{
 			if (i > 0 && RandomGen.GetInt(1000) % 10 == 0)
 			{
@@ -2630,33 +2630,7 @@ public class StorageTests
 	[TestMethod]
 	public void Securities()
 	{
-		var securities = new List<Security>();
-
-		for (var i = 0; i < 10000; i++)
-		{
-			var s = new Security
-			{
-				Code = "TestSecurity" + Guid.NewGuid().GetFileNameWithoutExtension(null),
-				Name = "TestName",
-				PriceStep = RandomGen.GetBool() ? (decimal)RandomGen.GetInt(1, 100) / RandomGen.GetInt(1, 100) : null,
-				Volume = RandomGen.GetBool() ? (decimal)RandomGen.GetInt(1, 100) / RandomGen.GetInt(1, 100) : null,
-				Decimals = RandomGen.GetBool() ? RandomGen.GetInt(1, 100) : null,
-				Multiplier = RandomGen.GetBool() ? (decimal)RandomGen.GetInt(1, 100) / RandomGen.GetInt(1, 100) : null,
-				Type = RandomGen.GetBool() ? RandomGen.GetEnum<SecurityTypes>() : null,
-				Currency = RandomGen.GetBool() ? RandomGen.GetEnum<CurrencyTypes>() : null,
-				Board = ExchangeBoard.Test
-			};
-
-			s.Id = s.Code + "@Test";
-
-			if (s.Type == SecurityTypes.Option)
-			{
-				s.OptionType = RandomGen.GetEnum<OptionTypes>();
-				s.Strike = (decimal)RandomGen.GetInt(1, 100) / RandomGen.GetInt(1, 100);
-			}
-
-			securities.Add(s);
-		}
+		var securities = Helper.RandomSecurities();
 
 		var registry = Helper.GetEntityRegistry();
 
@@ -2670,7 +2644,7 @@ public class StorageTests
 		storage = registry.Securities;
 		var loaded = storage.LookupAll().ToArray();
 
-		loaded.Length.AssertEqual(securities.Count);
+		loaded.Length.AssertEqual(securities.Length);
 
 		for (var i = 0; i < loaded.Length; i++)
 		{

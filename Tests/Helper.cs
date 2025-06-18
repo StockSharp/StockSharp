@@ -122,7 +122,7 @@ static class Helper
 		return [.. trades];
 	}
 
-	public static List<ExecutionMessage> RandomOrderLog(this Security security, int count, DateTimeOffset? start = null)
+	public static ExecutionMessage[] RandomOrderLog(this Security security, int count, DateTimeOffset? start = null)
 	{
 		var items = new List<ExecutionMessage>();
 
@@ -213,10 +213,10 @@ static class Helper
 
 		items.Count.AssertEqual(count);
 
-		return items;
+		return [.. items];
 	}
 
-	public static List<QuoteChangeMessage> RandomDepths(this Security security, int count, TimeSpan? interval = null, DateTimeOffset? start = null, bool ordersCount = false)
+	public static QuoteChangeMessage[] RandomDepths(this Security security, int count, TimeSpan? interval = null, DateTimeOffset? start = null, bool ordersCount = false)
 	{
 		var generator = new TrendMarketDepthGenerator(security.ToSecurityId())
 		{
@@ -229,7 +229,7 @@ static class Helper
 		return security.RandomDepths(count, generator, start);
 	}
 
-	public static List<QuoteChangeMessage> RandomDepths(this Security security, int count, TrendMarketDepthGenerator depthGenerator, DateTimeOffset? start = null)
+	public static QuoteChangeMessage[] RandomDepths(this Security security, int count, TrendMarketDepthGenerator depthGenerator, DateTimeOffset? start = null)
 	{
 		depthGenerator.Init();
 
@@ -274,7 +274,367 @@ static class Helper
 
 		depths.Count.AssertEqual(count);
 
-		return depths;
+		return [.. depths];
+	}
+
+	private static readonly IEnumerable<Level1Fields> _l1Fields = [.. Enumerator.GetValues<Level1Fields>().ExcludeObsolete()];
+
+	public static Level1ChangeMessage RandomLevel1(Security security, SecurityId secId, DateTimeOffset serverTime, bool isFractional, bool diffDays, bool diffTimeZones, Func<decimal> getTickPrice)
+	{
+		var msg = new Level1ChangeMessage
+		{
+			SecurityId = secId,
+			ServerTime = serverTime,
+		};
+
+		foreach (var field in _l1Fields)
+		{
+			if (!RandomGen.GetBool())
+				continue;
+
+			var type = field.ToType();
+
+			if (type == null)
+				continue;
+
+			if (field == Level1Fields.PriceStep)
+			{
+				msg.Add(field, security.PriceStep ?? 0.01m);
+				continue;
+			}
+			else if (field == Level1Fields.VolumeStep)
+			{
+				msg.Add(field, security.VolumeStep ?? 1);
+				continue;
+			}
+
+			if (type == typeof(int))
+				msg.Add(field, RandomGen.GetInt());
+			else if (type == typeof(long))
+				msg.Add(field, (long)RandomGen.GetInt());
+			else if (type == typeof(bool))
+				msg.Add(field, RandomGen.GetBool());
+			else if (type == typeof(decimal))
+			{
+				var price = getTickPrice();
+
+				if (RandomGen.GetBool())
+				{
+					price *= 10m.Pow(RandomGen.GetInt(1, 5));
+				}
+
+				if (isFractional)
+					price /= 10m.Pow(RandomGen.GetInt(1, 5));
+
+				msg.Add(field, price);
+			}
+			else if (type == typeof(DateTimeOffset))
+			{
+				var time = serverTime.AddMilliseconds(RandomGen.GetInt(-10, 10));
+
+				if (diffDays)
+					time = time.AddDays(RandomGen.GetInt(-10, 10));
+
+				if (diffTimeZones)
+					time = time.ConvertToEst();
+
+				msg.Add(field, time);
+			}
+			else if (type.IsEnum)
+			{
+				var values = type.GetValues().ToArray();
+				msg.Add(field, values[RandomGen.GetInt(values.Length - 1)]);
+			}
+			else if (type == typeof(string))
+				msg.Add(field, Guid.NewGuid().To<string>());
+		}
+
+		return msg;
+	}
+
+	public static Level1ChangeMessage[] RandomLevel1(this Security security, bool isFractional = true, bool diffTimeZones = false, bool diffDays = false, int count = 100000)
+	{
+		var serverTime = DateTimeOffset.UtcNow;
+		var securityId = security.ToSecurityId();
+
+		var ticks = security.RandomTicks(count, false);
+
+		var testValues = new List<Level1ChangeMessage>();
+
+		var ticksIndex = 0;
+
+		for (var i = 0; i < count; i++)
+		{
+			var msg = RandomLevel1(security, securityId, serverTime, isFractional, diffDays, diffTimeZones, () =>
+			{
+				var price = ticks[ticksIndex].TradePrice.Value;
+
+				ticksIndex++;
+
+				if (ticksIndex >= ticks.Length)
+					ticksIndex = 0;
+
+				return price;
+			});
+
+			testValues.Add(msg);
+
+			if (RandomGen.GetBool())
+				msg.SeqNum = i;
+
+			if (RandomGen.GetBool())
+				msg.BuildFrom = DataType.OrderLog;
+
+			serverTime = serverTime.AddMilliseconds(RandomGen.GetInt(100000));
+		}
+
+		return [.. testValues];
+	}
+
+	private static readonly PositionChangeTypes[] _posFields =
+		[.. Enumerator
+			.GetValues<PositionChangeTypes>()
+			.Where(t => t != PositionChangeTypes.Currency && t != PositionChangeTypes.State && !t.IsObsolete())];
+
+	public static PositionChangeMessage RandomPositionChange(SecurityId secId)
+	{
+		var posMsg = new PositionChangeMessage
+		{
+			SecurityId = secId,
+			ServerTime = DateTimeOffset.UtcNow,
+			LocalTime = DateTimeOffset.UtcNow,
+			PortfolioName = $"Pf{RandomGen.GetInt(2)}",
+			ClientCode = RandomGen.GetBool() ? $"ClCode{RandomGen.GetInt(2)}" : null,
+			DepoName = RandomGen.GetBool() ? $"Depo{RandomGen.GetInt(2)}" : null,
+			LimitType = RandomGen.GetBool() ? (TPlusLimits)RandomGen.GetInt(365) : null,
+			StrategyId = RandomGen.GetBool() ? Guid.NewGuid().To<string>() : null,
+			BuildFrom = RandomGen.GetBool() ? DataType.Transactions : null,
+			Side = RandomGen.GetBool() ? RandomGen.GetEnum<Sides>() : null,
+		};
+
+		if (RandomGen.GetBool())
+			posMsg.Add(PositionChangeTypes.Currency, RandomGen.GetEnum<CurrencyTypes>());
+
+		if (RandomGen.GetBool())
+			posMsg.Add(PositionChangeTypes.State, RandomGen.GetEnum<PortfolioStates>());
+
+		var type = _posFields[RandomGen.GetInt(_posFields.Length - 1)];
+
+		var tt = type.ToType();
+
+		if (tt == typeof(decimal))
+		{
+			var value = (decimal)RandomGen.GetInt(100, 1000) / RandomGen.GetInt(100, 1000);
+			posMsg.Add(type, value.Round(5));
+		}
+		else if (tt == typeof(DateTimeOffset))
+		{
+			var time = posMsg.ServerTime.AddMilliseconds(RandomGen.GetInt(-10, 10));
+
+			time = time.AddDays(RandomGen.GetInt(-10, 10));
+			time = time.ConvertToEst();
+
+			posMsg.Add(type, time);
+		}
+
+		return posMsg;
+	}
+
+	public static ExecutionMessage[] RandomTransactions(this Security security, int count)
+	{
+		var transactions = new List<ExecutionMessage>();
+
+		var secId = security.ToSecurityId();
+
+		for (var i = 0; i < count; i++)
+		{
+			transactions.Add(RandomTransaction(secId, i));
+		}
+
+		return [.. transactions];
+	}
+
+	public static ExecutionMessage RandomTransaction(SecurityId secId, int i)
+	{
+		var msg = new ExecutionMessage
+		{
+			SecurityId = secId,
+			Currency = RandomGen.GetBool() ? RandomGen.GetEnum<CurrencyTypes>() : null,
+			Commission = RandomGen.GetBool() ? RandomGen.GetInt(10) : null,
+			IsSystem = RandomGen.GetBool() ? RandomGen.GetBool() : null,
+			//IsUpTick = RandomGen.GetBool() ? RandomGen.GetBool() : (bool?)null,
+			TransactionId = RandomGen.GetInt(),
+			OriginalTransactionId = RandomGen.GetInt(),
+			Error = RandomGen.GetInt(10) == 5 ? new InvalidOperationException("Test error") : null,
+			Latency = RandomGen.GetBool() ? ((long)RandomGen.GetInt()).To<TimeSpan>() : null,
+			DataTypeEx = DataType.Transactions,
+			ServerTime = DateTimeOffset.UtcNow,
+			LocalTime = DateTimeOffset.UtcNow,
+			HasOrderInfo = RandomGen.GetBool(),
+		};
+
+		if (msg.HasOrderInfo)
+		{
+			msg.OrderPrice = RandomGen.GetInt(10);
+			msg.OrderState = RandomGen.GetBool() ? RandomGen.GetEnum<OrderStates>() : null;
+			msg.OrderStatus = RandomGen.GetBool() ? RandomGen.GetInt(-1000, 1000) : null;
+			msg.TimeInForce = RandomGen.GetBool() ? RandomGen.GetEnum<TimeInForce>() : null;
+			msg.Balance = RandomGen.GetBool() ? RandomGen.GetInt(10) : null;
+			msg.OrderVolume = RandomGen.GetBool() ? RandomGen.GetInt(1, 10) : null;
+			msg.Side = RandomGen.GetBool() ? Sides.Buy : Sides.Sell;
+			msg.UserOrderId = RandomGen.GetBool() ? "test user id" + i : null;
+			msg.ClientCode = RandomGen.GetBool() ? "test 'code'" + i : null;
+			msg.PortfolioName = RandomGen.GetBool() ? "test pf" + i : null;
+			msg.DepoName = RandomGen.GetBool() ? "test ;depo" + i : null;
+			msg.OrderType = RandomGen.GetBool() ? RandomGen.GetEnum<OrderTypes>() : null;
+			msg.VisibleVolume = RandomGen.GetBool() ? RandomGen.GetInt(10) : null;
+			msg.Comment = RandomGen.GetBool() ? "test comment" + i : null;
+			msg.SystemComment = RandomGen.GetBool() ? @"test
+																comment" + i : null;
+			msg.OrderBoardId = RandomGen.GetBool() ? "test board id" + i : null;
+			msg.ExpiryDate = RandomGen.GetBool() ? DateTimeOffset.UtcNow : null;
+
+			if (RandomGen.GetBool())
+				msg.OrderId = RandomGen.GetInt();
+			else
+				msg.OrderStringId = RandomGen.GetBool() ? "test order id" + i : null;
+
+			msg.IsMarketMaker = RandomGen.GetBool() ? RandomGen.GetBool() : null;
+			msg.MarginMode = RandomGen.GetBool() ? RandomGen.GetEnum<MarginModes>() : null;
+			msg.IsManual = RandomGen.GetBool() ? RandomGen.GetBool() : null;
+
+			msg.MinVolume = RandomGen.GetBool() ? RandomGen.GetInt(1, 10) : null;
+			msg.PositionEffect = RandomGen.GetBool() ? RandomGen.GetEnum<OrderPositionEffects>() : null;
+
+			msg.Initiator = RandomGen.GetBool() ? RandomGen.GetBool() : null;
+
+			msg.StrategyId = RandomGen.GetBool() ? Guid.NewGuid().To<string>() : null;
+			msg.SeqNum = RandomGen.GetBool() ? RandomGen.GetInt(1, 10) : 0;
+		}
+
+		if (RandomGen.GetBool())
+		{
+			msg.TradeVolume = RandomGen.GetBool() ? RandomGen.GetInt(1, 10) : null;
+			msg.TradePrice = RandomGen.GetInt(1, 10);
+			msg.TradeStatus = RandomGen.GetBool() ? RandomGen.GetInt(10) : null;
+			msg.OriginSide = RandomGen.GetBool() ? (RandomGen.GetBool() ? Sides.Buy : Sides.Sell) : null;
+			msg.OpenInterest = RandomGen.GetBool() ? RandomGen.GetInt(10000) : null;
+			msg.PnL = RandomGen.GetBool() ? RandomGen.GetInt(10) : null;
+			msg.Position = RandomGen.GetBool() ? RandomGen.GetInt(10) : null;
+			msg.Slippage = RandomGen.GetBool() ? RandomGen.GetInt(10) : null;
+
+			if (RandomGen.GetBool())
+				msg.TradeId = RandomGen.GetInt();
+			else
+				msg.TradeStringId = RandomGen.GetBool() ? "test trade id" + i : null;
+		}
+
+		return msg;
+	}
+
+	public static PositionChangeMessage[] RandomPositionChanges(this Security security, int count = 10000)
+	{
+		var testValues = new List<PositionChangeMessage>();
+
+		var secId = security.ToSecurityId();
+
+		for (var i = 0; i < count; i++)
+		{
+			testValues.Add(RandomPositionChange(secId));
+		}
+
+		return [.. testValues];
+	}
+
+	public static NewsMessage[] RandomNews()
+	{
+		return
+		[
+			new NewsMessage
+			{
+				Headline = "Headline 1",
+				Source = "reuters",
+				BoardCode = BoardCodes.Forts,
+				ServerTime = DateTimeOffset.UtcNow,
+				SeqNum = RandomGen.GetInt(0, 100),
+			},
+
+			new NewsMessage
+			{
+				Headline = "Headline 2",
+				Url = "http://google.com",
+				SecurityId = "AAPL@NASDAQ".ToSecurityId(),
+				ServerTime = DateTimeOffset.UtcNow,
+			},
+
+			new NewsMessage
+			{
+				Headline = "Headline 3",
+				Priority = NewsPriorities.High,
+				ServerTime = DateTimeOffset.UtcNow,
+				ExpiryDate = DateTimeOffset.UtcNow,
+				SeqNum = RandomGen.GetInt(0, 100),
+			},
+
+			new NewsMessage
+			{
+				Headline = "Headline 4",
+				Language = "FR",
+				ServerTime = DateTimeOffset.UtcNow,
+			},
+		];
+	}
+
+	public static BoardStateMessage[] RandomBoardStates()
+	{
+		return
+		[
+			new BoardStateMessage
+			{
+				State = SessionStates.Active,
+				BoardCode = ExchangeBoard.Forts.Code,
+				ServerTime = DateTimeOffset.UtcNow,
+			},
+
+			new BoardStateMessage
+			{
+				State = SessionStates.Paused,
+				ServerTime = DateTimeOffset.UtcNow,
+			},
+		];
+	}
+
+	public static Security[] RandomSecurities(int count = 10000)
+	{
+		var securities = new List<Security>();
+
+		for (var i = 0; i < count; i++)
+		{
+			var s = new Security
+			{
+				Code = "TestSecurity" + Guid.NewGuid().GetFileNameWithoutExtension(null),
+				Name = "TestName",
+				PriceStep = RandomGen.GetBool() ? (decimal)RandomGen.GetInt(1, 100) / RandomGen.GetInt(1, 100) : null,
+				Volume = RandomGen.GetBool() ? (decimal)RandomGen.GetInt(1, 100) / RandomGen.GetInt(1, 100) : null,
+				Decimals = RandomGen.GetBool() ? RandomGen.GetInt(1, 100) : null,
+				Multiplier = RandomGen.GetBool() ? (decimal)RandomGen.GetInt(1, 100) / RandomGen.GetInt(1, 100) : null,
+				Type = RandomGen.GetBool() ? RandomGen.GetEnum<SecurityTypes>() : null,
+				Currency = RandomGen.GetBool() ? RandomGen.GetEnum<CurrencyTypes>() : null,
+				Board = ExchangeBoard.Test
+			};
+
+			s.Id = s.Code + "@Test";
+
+			if (s.Type == SecurityTypes.Option)
+			{
+				s.OptionType = RandomGen.GetEnum<OptionTypes>();
+				s.Strike = (decimal)RandomGen.GetInt(1, 100) / RandomGen.GetInt(1, 100);
+			}
+
+			securities.Add(s);
+		}
+
+		return [.. securities];
 	}
 
 	public static void DeleteWithCheck<T>(this IMarketDataStorage<T> storage)
@@ -1008,314 +1368,6 @@ static class Helper
 		return new InMemoryNativeIdStorage();
 	}
 
-	private static readonly IEnumerable<Level1Fields> _l1Fields = [.. Enumerator.GetValues<Level1Fields>().ExcludeObsolete()];
-
-	public static Level1ChangeMessage RandomLevel1(Security security, SecurityId secId, DateTimeOffset serverTime, bool isFractional, bool diffDays, bool diffTimeZones, Func<decimal> getTickPrice)
-	{
-		var msg = new Level1ChangeMessage
-		{
-			SecurityId = secId,
-			ServerTime = serverTime,
-		};
-
-		foreach (var field in _l1Fields)
-		{
-			if (!RandomGen.GetBool())
-				continue;
-
-			var type = field.ToType();
-
-			if (type == null)
-				continue;
-
-			if (field == Level1Fields.PriceStep)
-			{
-				msg.Add(field, security.PriceStep ?? 0.01m);
-				continue;
-			}
-			else if (field == Level1Fields.VolumeStep)
-			{
-				msg.Add(field, security.VolumeStep ?? 1);
-				continue;
-			}
-
-			if (type == typeof(int))
-				msg.Add(field, RandomGen.GetInt());
-			else if (type == typeof(long))
-				msg.Add(field, (long)RandomGen.GetInt());
-			else if (type == typeof(bool))
-				msg.Add(field, RandomGen.GetBool());
-			else if (type == typeof(decimal))
-			{
-				var price = getTickPrice();
-
-				if (RandomGen.GetBool())
-				{
-					price *= 10m.Pow(RandomGen.GetInt(1, 5));
-				}
-
-				if (isFractional)
-					price /= 10m.Pow(RandomGen.GetInt(1, 5));
-
-				msg.Add(field, price);
-			}
-			else if (type == typeof(DateTimeOffset))
-			{
-				var time = serverTime.AddMilliseconds(RandomGen.GetInt(-10, 10));
-
-				if (diffDays)
-					time = time.AddDays(RandomGen.GetInt(-10, 10));
-
-				if (diffTimeZones)
-					time = time.ConvertToEst();
-
-				msg.Add(field, time);
-			}
-			else if (type.IsEnum)
-			{
-				var values = type.GetValues().ToArray();
-				msg.Add(field, values[RandomGen.GetInt(values.Length - 1)]);
-			}
-			else if (type == typeof(string))
-				msg.Add(field, Guid.NewGuid().To<string>());
-		}
-
-		return msg;
-	}
-
-	public static List<Level1ChangeMessage> RandomLevel1(this Security security, bool isFractional = true, bool diffTimeZones = false, bool diffDays = false, int count = 100000)
-	{
-		var serverTime = DateTimeOffset.UtcNow;
-		var securityId = security.ToSecurityId();
-
-		var ticks = security.RandomTicks(count, false);
-
-		var testValues = new List<Level1ChangeMessage>();
-
-		var ticksIndex = 0;
-
-		for (var i = 0; i < count; i++)
-		{
-			var msg = RandomLevel1(security, securityId, serverTime, isFractional, diffDays, diffTimeZones, () =>
-			{
-				var price = ticks[ticksIndex].TradePrice.Value;
-
-				ticksIndex++;
-
-				if (ticksIndex >= ticks.Length)
-					ticksIndex = 0;
-
-				return price;
-			});
-
-			testValues.Add(msg);
-
-			if (RandomGen.GetBool())
-				msg.SeqNum = i;
-
-			if (RandomGen.GetBool())
-				msg.BuildFrom = DataType.OrderLog;
-
-			serverTime = serverTime.AddMilliseconds(RandomGen.GetInt(100000));
-		}
-
-		return testValues;
-	}
-
-	private static readonly PositionChangeTypes[] _posFields =
-		[.. Enumerator
-			.GetValues<PositionChangeTypes>()
-			.Where(t => t != PositionChangeTypes.Currency && t != PositionChangeTypes.State && !t.IsObsolete())];
-
-	public static PositionChangeMessage RandomPositionChange(SecurityId secId)
-	{
-		var posMsg = new PositionChangeMessage
-		{
-			SecurityId = secId,
-			ServerTime = DateTimeOffset.UtcNow,
-			LocalTime = DateTimeOffset.UtcNow,
-			PortfolioName = $"Pf{RandomGen.GetInt(2)}",
-			ClientCode = RandomGen.GetBool() ? $"ClCode{RandomGen.GetInt(2)}" : null,
-			DepoName = RandomGen.GetBool() ? $"Depo{RandomGen.GetInt(2)}" : null,
-			LimitType = RandomGen.GetBool() ? (TPlusLimits)RandomGen.GetInt(365) : null,
-			StrategyId = RandomGen.GetBool() ? Guid.NewGuid().To<string>() : null,
-			BuildFrom = RandomGen.GetBool() ? DataType.Transactions : null,
-			Side = RandomGen.GetBool() ? RandomGen.GetEnum<Sides>() : null,
-		};
-
-		if (RandomGen.GetBool())
-			posMsg.Add(PositionChangeTypes.Currency, RandomGen.GetEnum<CurrencyTypes>());
-
-		if (RandomGen.GetBool())
-			posMsg.Add(PositionChangeTypes.State, RandomGen.GetEnum<PortfolioStates>());
-
-		var type = _posFields[RandomGen.GetInt(_posFields.Length - 1)];
-
-		var tt = type.ToType();
-
-		if (tt == typeof(decimal))
-		{
-			var value = (decimal)RandomGen.GetInt(100, 1000) / RandomGen.GetInt(100, 1000);
-			posMsg.Add(type, value.Round(5));
-		}
-		else if (tt == typeof(DateTimeOffset))
-		{
-			var time = posMsg.ServerTime.AddMilliseconds(RandomGen.GetInt(-10, 10));
-
-			time = time.AddDays(RandomGen.GetInt(-10, 10));
-			time = time.ConvertToEst();
-
-			posMsg.Add(type, time);
-		}
-
-		return posMsg;
-	}
-
-	public static ExecutionMessage[] RandomTransactions(this Security security, int count)
-	{
-		var transactions = new List<ExecutionMessage>();
-
-		var secId = security.ToSecurityId();
-
-		for (var i = 0; i < count; i++)
-		{
-			transactions.Add(RandomTransaction(secId, i));
-		}
-
-		return [.. transactions];
-	}
-
-	public static ExecutionMessage RandomTransaction(SecurityId secId, int i)
-	{
-		var msg = new ExecutionMessage
-		{
-			SecurityId = secId,
-			Currency = RandomGen.GetBool() ? RandomGen.GetEnum<CurrencyTypes>() : null,
-			Commission = RandomGen.GetBool() ? RandomGen.GetInt(10) : null,
-			IsSystem = RandomGen.GetBool() ? RandomGen.GetBool() : null,
-			//IsUpTick = RandomGen.GetBool() ? RandomGen.GetBool() : (bool?)null,
-			TransactionId = RandomGen.GetInt(),
-			OriginalTransactionId = RandomGen.GetInt(),
-			Error = RandomGen.GetInt(10) == 5 ? new InvalidOperationException("Test error") : null,
-			Latency = RandomGen.GetBool() ? ((long)RandomGen.GetInt()).To<TimeSpan>() : null,
-			DataTypeEx = DataType.Transactions,
-			ServerTime = DateTimeOffset.UtcNow,
-			LocalTime = DateTimeOffset.UtcNow,
-			HasOrderInfo = RandomGen.GetBool(),
-		};
-
-		if (msg.HasOrderInfo)
-		{
-			msg.OrderPrice = RandomGen.GetInt(10);
-			msg.OrderState = RandomGen.GetBool() ? RandomGen.GetEnum<OrderStates>() : null;
-			msg.OrderStatus = RandomGen.GetBool() ? RandomGen.GetInt(-1000, 1000) : null;
-			msg.TimeInForce = RandomGen.GetBool() ? RandomGen.GetEnum<TimeInForce>() : null;
-			msg.Balance = RandomGen.GetBool() ? RandomGen.GetInt(10) : null;
-			msg.OrderVolume = RandomGen.GetBool() ? RandomGen.GetInt(1, 10) : null;
-			msg.Side = RandomGen.GetBool() ? Sides.Buy : Sides.Sell;
-			msg.UserOrderId = RandomGen.GetBool() ? "test user id" + i : null;
-			msg.ClientCode = RandomGen.GetBool() ? "test 'code'" + i : null;
-			msg.PortfolioName = RandomGen.GetBool() ? "test pf" + i : null;
-			msg.DepoName = RandomGen.GetBool() ? "test ;depo" + i : null;
-			msg.OrderType = RandomGen.GetBool() ? RandomGen.GetEnum<OrderTypes>() : null;
-			msg.VisibleVolume = RandomGen.GetBool() ? RandomGen.GetInt(10) : null;
-			msg.Comment = RandomGen.GetBool() ? "test comment" + i : null;
-			msg.SystemComment = RandomGen.GetBool() ? @"test
-																comment" + i : null;
-			msg.OrderBoardId = RandomGen.GetBool() ? "test board id" + i : null;
-			msg.ExpiryDate = RandomGen.GetBool() ? DateTimeOffset.UtcNow : null;
-
-			if (RandomGen.GetBool())
-				msg.OrderId = RandomGen.GetInt();
-			else
-				msg.OrderStringId = RandomGen.GetBool() ? "test order id" + i : null;
-
-			msg.IsMarketMaker = RandomGen.GetBool() ? RandomGen.GetBool() : null;
-			msg.MarginMode = RandomGen.GetBool() ? RandomGen.GetEnum<MarginModes>() : null;
-			msg.IsManual = RandomGen.GetBool() ? RandomGen.GetBool() : null;
-
-			msg.MinVolume = RandomGen.GetBool() ? RandomGen.GetInt(1, 10) : null;
-			msg.PositionEffect = RandomGen.GetBool() ? RandomGen.GetEnum<OrderPositionEffects>() : null;
-
-			msg.Initiator = RandomGen.GetBool() ? RandomGen.GetBool() : null;
-
-			msg.StrategyId = RandomGen.GetBool() ? Guid.NewGuid().To<string>() : null;
-			msg.SeqNum = RandomGen.GetBool() ? RandomGen.GetInt(1, 10) : 0;
-		}
-
-		if (RandomGen.GetBool())
-		{
-			msg.TradeVolume = RandomGen.GetBool() ? RandomGen.GetInt(1, 10) : null;
-			msg.TradePrice = RandomGen.GetInt(1, 10);
-			msg.TradeStatus = RandomGen.GetBool() ? RandomGen.GetInt(10) : null;
-			msg.OriginSide = RandomGen.GetBool() ? (RandomGen.GetBool() ? Sides.Buy : Sides.Sell) : null;
-			msg.OpenInterest = RandomGen.GetBool() ? RandomGen.GetInt(10000) : null;
-			msg.PnL = RandomGen.GetBool() ? RandomGen.GetInt(10) : null;
-			msg.Position = RandomGen.GetBool() ? RandomGen.GetInt(10) : null;
-			msg.Slippage = RandomGen.GetBool() ? RandomGen.GetInt(10) : null;
-
-			if (RandomGen.GetBool())
-				msg.TradeId = RandomGen.GetInt();
-			else
-				msg.TradeStringId = RandomGen.GetBool() ? "test trade id" + i : null;
-		}
-
-		return msg;
-	}
-
-	public static List<PositionChangeMessage> RandomPositionChanges(this Security security, int count = 10000)
-	{
-		var testValues = new List<PositionChangeMessage>();
-
-		var secId = security.ToSecurityId();
-
-		for (var i = 0; i < count; i++)
-		{
-			testValues.Add(RandomPositionChange(secId));
-		}
-
-		return testValues;
-	}
-
-	public static NewsMessage[] RandomNews()
-	{
-		return
-		[
-			new NewsMessage
-			{
-				Headline = "Headline 1",
-				Source = "reuters",
-				BoardCode = BoardCodes.Forts,
-				ServerTime = DateTimeOffset.UtcNow,
-				SeqNum = RandomGen.GetInt(0, 100),
-			},
-
-			new NewsMessage
-			{
-				Headline = "Headline 2",
-				Url = "http://google.com",
-				SecurityId = "AAPL@NASDAQ".ToSecurityId(),
-				ServerTime = DateTimeOffset.UtcNow,
-			},
-
-			new NewsMessage
-			{
-				Headline = "Headline 3",
-				Priority = NewsPriorities.High,
-				ServerTime = DateTimeOffset.UtcNow,
-				ExpiryDate = DateTimeOffset.UtcNow,
-				SeqNum = RandomGen.GetInt(0, 100),
-			},
-
-			new NewsMessage
-			{
-				Headline = "Headline 4",
-				Language = "FR",
-				ServerTime = DateTimeOffset.UtcNow,
-			},
-		];
-	}
-
 	public static IEnumerable<TCandle> IsAllFinished<TCandle>(this IEnumerable<TCandle> candles)
 		where TCandle : CandleMessage
 	{
@@ -1331,23 +1383,4 @@ static class Helper
 		=> [.. type
 			.GetProperties(BindingFlags.Instance | BindingFlags.Public)
 			.Where(p => p.IsModifiable())];
-
-	public static BoardStateMessage[] RandomBoardStates()
-	{
-		return
-		[
-			new BoardStateMessage
-			{
-				State = SessionStates.Active,
-				BoardCode = ExchangeBoard.Forts.Code,
-				ServerTime = DateTimeOffset.UtcNow,
-			},
-
-			new BoardStateMessage
-			{
-				State = SessionStates.Paused,
-				ServerTime = DateTimeOffset.UtcNow,
-			},
-		];
-	}
 }
