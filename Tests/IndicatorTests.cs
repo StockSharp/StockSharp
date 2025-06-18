@@ -61,9 +61,7 @@ public class IndicatorTests
 		foreach (var type in GetIndicatorTypes())
 		{
 			if	(
-				type.Indicator == typeof(NickRypockTrailingReverse) ||
-				type.Indicator == typeof(ParabolicSar) ||
-				type.Indicator == typeof(OptimalTracking)
+				type.Indicator == typeof(ParabolicSar)
 				)
 				continue;
 

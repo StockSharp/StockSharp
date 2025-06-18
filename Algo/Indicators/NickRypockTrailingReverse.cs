@@ -13,7 +13,7 @@
 [Doc("topics/api/indicators/list_of_indicators/nrtr.html")]
 public class NickRypockTrailingReverse : LengthIndicator<decimal>
 {
-	private class CalcBuffer
+	private struct CalcBuffer
 	{
 		private bool _isInitialized;
 
@@ -23,13 +23,7 @@ public class NickRypockTrailingReverse : LengthIndicator<decimal>
 		private decimal _highPrice;
 		private decimal _lowPrice;
 		private int _newTrend;
-
-		/// <summary>
-		/// The trend direction.
-		/// </summary>
 		private int _trend;
-
-		public CalcBuffer Clone() => (CalcBuffer)MemberwiseClone();
 
 		public decimal Calculate(NickRypockTrailingReverse ind, IIndicatorValue input)
 		{
@@ -91,22 +85,9 @@ public class NickRypockTrailingReverse : LengthIndicator<decimal>
 
 			return _reverse;
 		}
-
-		public void Reset()
-		{
-			_isInitialized = false;
-
-			_k = 0;
-			_reverse = 0;
-			_price = 0;
-			_highPrice = 0;
-			_lowPrice = 0;
-			_trend = 0;
-			_newTrend = 0;
-		}
 	}
 
-	private readonly CalcBuffer _buf = new();
+	private CalcBuffer _buf;
 
 	private decimal _multiple;
 
@@ -146,12 +127,13 @@ public class NickRypockTrailingReverse : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
-		var b = input.IsFinal ? _buf : _buf.Clone();
+		var b = _buf;
 
 		var newValue = b.Calculate(this, input);
 
 		if (input.IsFinal)
 		{
+			_buf = b;
 			Buffer.PushBack(newValue);
 		}
 
@@ -162,7 +144,8 @@ public class NickRypockTrailingReverse : LengthIndicator<decimal>
 	public override void Reset()
 	{
 		base.Reset();
-		_buf.Reset();
+
+		_buf = default;
 	}
 
 	/// <inheritdoc />

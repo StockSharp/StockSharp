@@ -17,7 +17,7 @@ public sealed class OptimalTracking : LengthIndicator<decimal>
 	private static readonly decimal _smoothConstant1 = (decimal)Math.Exp(-0.25);
 	private static readonly decimal _smoothConstant = 1 - _smoothConstant1;
 
-	private class CalcBuffer
+	private struct CalcBuffer
 	{
 		private decimal _lambda;
 		private decimal _alpha;
@@ -25,8 +25,6 @@ public sealed class OptimalTracking : LengthIndicator<decimal>
 		private decimal _value1Old;
 		private decimal _value2Old;
 		private decimal _resultOld;
-
-		public CalcBuffer Clone() => (CalcBuffer)MemberwiseClone();
 
 		public decimal Calculate(OptimalTracking ind, IList<decimal> buff, decimal average, decimal halfRange)
 		{
@@ -62,19 +60,9 @@ public sealed class OptimalTracking : LengthIndicator<decimal>
 
 			return _resultOld;
 		}
-
-		public void Reset()
-		{
-			_value1Old = 0;
-			_value2Old = 0;
-			_resultOld = 0;
-
-			_lambda = 0;
-			_alpha = 0;
-		}
 	}
 
-	private readonly CalcBuffer _buf = new();
+	private CalcBuffer _buf;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="OptimalTracking"/>.
@@ -88,7 +76,8 @@ public sealed class OptimalTracking : LengthIndicator<decimal>
 	public override void Reset()
 	{
 		base.Reset();
-		_buf.Reset();
+
+		_buf = default;
 	}
 
 	/// <inheritdoc />
@@ -104,9 +93,12 @@ public sealed class OptimalTracking : LengthIndicator<decimal>
 
 		var buff = input.IsFinal ? Buffer : (IList<decimal>)[.. Buffer.Skip(Buffer.Count >= Length ? 1 : 0), average];
 
-		var b = input.IsFinal ? _buf : _buf.Clone();
+		var b = _buf;
 
 		var result = b.Calculate(this, buff, average, halfRange);
+
+		if (input.IsFinal)
+			_buf = b;
 
 		return result;
 	}
