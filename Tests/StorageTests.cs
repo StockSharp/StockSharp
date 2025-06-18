@@ -2630,7 +2630,8 @@ public class StorageTests
 	[TestMethod]
 	public void Securities()
 	{
-		var securities = Helper.RandomSecurities();
+		var exchangeProvider = ServicesRegistry.ExchangeInfoProvider;
+		var securities = Helper.RandomSecurities().Select(s => s.ToSecurity(exchangeProvider)).ToArray();
 
 		var registry = Helper.GetEntityRegistry();
 

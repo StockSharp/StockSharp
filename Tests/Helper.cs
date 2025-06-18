@@ -604,28 +604,25 @@ static class Helper
 		];
 	}
 
-	public static Security[] RandomSecurities(int count = 10000)
+	public static SecurityMessage[] RandomSecurities(int count = 10000)
 	{
-		var securities = new List<Security>();
+		var securities = new List<SecurityMessage>();
 
 		for (var i = 0; i < count; i++)
 		{
-			var s = new Security
+			var s = new SecurityMessage
 			{
-				Code = "TestSecurity" + Guid.NewGuid().GetFileNameWithoutExtension(null),
+				SecurityId = CreateSecurityId(),
 				Name = "TestName",
-				PriceStep = RandomGen.GetBool() ? (decimal)RandomGen.GetInt(1, 100) / RandomGen.GetInt(1, 100) : null,
-				Volume = RandomGen.GetBool() ? (decimal)RandomGen.GetInt(1, 100) / RandomGen.GetInt(1, 100) : null,
-				Decimals = RandomGen.GetBool() ? RandomGen.GetInt(1, 100) : null,
-				Multiplier = RandomGen.GetBool() ? (decimal)RandomGen.GetInt(1, 100) / RandomGen.GetInt(1, 100) : null,
-				Type = RandomGen.GetBool() ? RandomGen.GetEnum<SecurityTypes>() : null,
+				PriceStep = RandomGen.GetBool() ? RandomGen.GetDecimal(5, 5) : null,
+				VolumeStep = RandomGen.GetBool() ? RandomGen.GetDecimal(5, 5) : null,
+				Decimals = RandomGen.GetBool() ? RandomGen.GetInt(1, 10) : null,
+				Multiplier = RandomGen.GetBool() ? RandomGen.GetDecimal(5, 5) : null,
+				SecurityType = RandomGen.GetBool() ? RandomGen.GetEnum<SecurityTypes>() : null,
 				Currency = RandomGen.GetBool() ? RandomGen.GetEnum<CurrencyTypes>() : null,
-				Board = ExchangeBoard.Test
 			};
 
-			s.Id = s.Code + "@Test";
-
-			if (s.Type == SecurityTypes.Option)
+			if (s.SecurityType == SecurityTypes.Option)
 			{
 				s.OptionType = RandomGen.GetEnum<OptionTypes>();
 				s.Strike = (decimal)RandomGen.GetInt(1, 100) / RandomGen.GetInt(1, 100);
@@ -646,7 +643,7 @@ static class Helper
 
 	public static SecurityId CreateSecurityId()
 	{
-		return new SecurityId { SecurityCode = "TestSecurity" + Guid.NewGuid().GetFileNameWithoutExtension(null), BoardCode = "Test" };
+		return new() { SecurityCode = "TestSecurity" + Guid.NewGuid().GetFileNameWithoutExtension(null), BoardCode = BoardCodes.Test };
 	}
 
 	public static Security CreateSecurity(decimal lastTickPrice = default)
