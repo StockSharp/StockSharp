@@ -14,7 +14,7 @@
 [Doc("topics/api/indicators/list_of_indicators/parabolic_sar.html")]
 public class ParabolicSar : BaseIndicator
 {
-	private class CalcBuffer(ParabolicSar parent)
+	private struct CalcBuffer
 	{
 		private decimal _prevValue;
 		private bool _longPosition;
@@ -27,9 +27,7 @@ public class ParabolicSar : BaseIndicator
 		private decimal _prevSar;
 		private decimal _todaySar;
 
-		public CalcBuffer Clone() => (CalcBuffer)MemberwiseClone();
-
-		public decimal Calculate(List<ICandleMessage> candles, bool isFinal, ICandleMessage candle)
+		public decimal Calculate(List<ICandleMessage> candles, decimal currentValue, decimal acceleration, decimal accelerationMax, decimal accelerationStep, bool isFinal, ICandleMessage candle)
 		{
 			if (candles.Count == 0)
 				candles.Add(candle);
@@ -39,7 +37,7 @@ public class ParabolicSar : BaseIndicator
 			else
 				candles[^1] = candle;
 
-			_prevValue = parent.GetCurrentValue();
+			_prevValue = currentValue;
 
 			if (candles.Count < 3)
 				return _prevValue;
@@ -50,7 +48,7 @@ public class ParabolicSar : BaseIndicator
 				var max = candles.Max(t => t.HighPrice);
 				var min = candles.Min(t => t.LowPrice);
 				_xp = _longPosition ? max : min;
-				_af = parent.Acceleration;
+				_af = acceleration;
 				return _xp + (_longPosition ? -1 : 1) * (max - min) * _af;
 			}
 
@@ -61,7 +59,7 @@ public class ParabolicSar : BaseIndicator
 
 			if (_reverseBar != candles.Count)
 			{
-				_todaySar = TodaySar(candles, _prevValue + _af * (_xp - _prevValue));
+				_todaySar = TodaySar(candles, _prevValue + _af * (_xp - _prevValue), acceleration);
 
 				for (var x = 1; x <= 2; x++)
 				{
@@ -82,7 +80,7 @@ public class ParabolicSar : BaseIndicator
 				if ((_longPosition && (candles[^1].LowPrice < _todaySar || candles[^2].LowPrice < _todaySar))
 						|| (!_longPosition && (candles[^1].HighPrice > _todaySar || candles[^2].HighPrice > _todaySar)))
 				{
-					return Reverse(candles);
+					return Reverse(candles, acceleration);
 				}
 
 				if (_longPosition)
@@ -98,7 +96,7 @@ public class ParabolicSar : BaseIndicator
 					if (candles[^1].HighPrice > _xp)
 					{
 						_xp = candles[^1].HighPrice;
-						AfIncrease();
+						AfIncrease(accelerationMax, accelerationStep);
 					}
 				}
 				else if (!_longPosition)
@@ -114,7 +112,7 @@ public class ParabolicSar : BaseIndicator
 					if (candles[^1].LowPrice < _xp)
 					{
 						_xp = candles[^1].LowPrice;
-						AfIncrease();
+						AfIncrease(accelerationMax, accelerationStep);
 					}
 				}
 
@@ -129,7 +127,7 @@ public class ParabolicSar : BaseIndicator
 				value = _prevSar;
 
 				_todaySar = TodaySar(candles, _longPosition ? Math.Min(_reverseValue, candles[^1].LowPrice) :
-					Math.Max(_reverseValue, candles[^1].HighPrice));
+					Math.Max(_reverseValue, candles[^1].HighPrice), acceleration);
 			}
 
 			_prevBar = candles.Count;
@@ -137,23 +135,23 @@ public class ParabolicSar : BaseIndicator
 			return value;
 		}
 
-		private decimal TodaySar(List<ICandleMessage> candles, decimal todaySar)
+		private decimal TodaySar(List<ICandleMessage> candles, decimal todaySar, decimal acceleration)
 		{
 			if (_longPosition)
 			{
 				var lowestSar = Math.Min(Math.Min(todaySar, candles[^1].LowPrice), candles[^2].LowPrice);
-				todaySar = candles[^1].LowPrice > lowestSar ? lowestSar : Reverse(candles);
+				todaySar = candles[^1].LowPrice > lowestSar ? lowestSar : Reverse(candles, acceleration);
 			}
 			else
 			{
 				var highestSar = Math.Max(Math.Max(todaySar, candles[^1].HighPrice), candles[^2].HighPrice);
-				todaySar = candles[^1].HighPrice < highestSar ? highestSar : Reverse(candles);
+				todaySar = candles[^1].HighPrice < highestSar ? highestSar : Reverse(candles, acceleration);
 			}
 
 			return todaySar;
 		}
 
-		private decimal Reverse(List<ICandleMessage> candles)
+		private decimal Reverse(List<ICandleMessage> candles, decimal acceleration)
 		{
 			var todaySar = _xp;
 
@@ -163,7 +161,7 @@ public class ParabolicSar : BaseIndicator
 				_longPosition = !_longPosition;
 				_reverseBar = candles.Count;
 				_reverseValue = _xp;
-				_af = parent.Acceleration;
+				_af = acceleration;
 				_xp = _longPosition ? candles[^1].HighPrice : candles[^1].LowPrice;
 				_prevSar = todaySar;
 			}
@@ -173,12 +171,12 @@ public class ParabolicSar : BaseIndicator
 			return todaySar;
 		}
 
-		private void AfIncrease()
+		private void AfIncrease(decimal accelerationMax, decimal accelerationStep)
 		{
 			if (_afIncreased)
 				return;
 
-			_af = Math.Min(parent.AccelerationMax, _af + parent.AccelerationStep);
+			_af = Math.Min(accelerationMax, _af + accelerationStep);
 			_afIncreased = true;
 		}
 
@@ -197,7 +195,7 @@ public class ParabolicSar : BaseIndicator
 		}
 	}
 
-	private readonly CalcBuffer _buf;
+	private CalcBuffer _buf;
 	private readonly List<ICandleMessage> _candles = [];
 	private decimal _acceleration;
 	private decimal _accelerationStep;
@@ -208,7 +206,6 @@ public class ParabolicSar : BaseIndicator
 	/// </summary>
 	public ParabolicSar()
 	{
-		_buf = new CalcBuffer(this);
 		Acceleration = 0.02M;
 		AccelerationStep = 0.02M;
 		AccelerationMax = 0.2M;
@@ -274,8 +271,11 @@ public class ParabolicSar : BaseIndicator
 		if (input.IsFinal)
 			IsFormed = true;
 
-		var b = input.IsFinal ? _buf : _buf.Clone();
-		var val = b.Calculate(_candles, input.IsFinal, input.ToCandle());
+		var b = _buf;
+		var val = b.Calculate(_candles, this.GetCurrentValue(), Acceleration, AccelerationMax, AccelerationStep, input.IsFinal, input.ToCandle());
+
+		if (input.IsFinal)
+			_buf = b;
 
 		return val == 0 ? new DecimalIndicatorValue(this, input.Time) : new DecimalIndicatorValue(this, val, input.Time);
 	}
@@ -285,7 +285,7 @@ public class ParabolicSar : BaseIndicator
 	{
 		base.Reset();
 		_candles.Clear();
-		_buf.Reset();
+		_buf = default;
 	}
 
 	/// <inheritdoc />
