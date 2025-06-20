@@ -38,7 +38,7 @@ public static partial class CandleHelper
 		if (buildFrom is not null && !DataType.CandleSources.Contains(buildFrom))
 			buildFrom = null;
 
-		buildFrom ??= adapter.SupportedMarketDataTypes.Intersect(DataType.CandleSources).OrderBy(t =>
+		buildFrom ??= adapter.GetSupportedMarketDataTypes(subscription.SecurityId, subscription.From, subscription.To).Intersect(DataType.CandleSources).OrderBy(t =>
 		{
 			// by priority
 			if (t == DataType.Ticks)
@@ -53,7 +53,7 @@ public static partial class CandleHelper
 				return 4;
 		}).FirstOrDefault();
 
-		if (buildFrom == null || !adapter.SupportedMarketDataTypes.Contains(buildFrom))
+		if (buildFrom == null || !adapter.GetSupportedMarketDataTypes(subscription.SecurityId, subscription.From, subscription.To).Contains(buildFrom))
 			return null;
 
 		return buildFrom;

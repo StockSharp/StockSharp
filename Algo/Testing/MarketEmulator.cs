@@ -3579,7 +3579,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	];
 	IEnumerable<MessageTypes> IMessageAdapter.SupportedInMessages { get; set; }
 	IEnumerable<MessageTypes> IMessageAdapter.NotSupportedResultMessages { get; } = [];
-	IEnumerable<DataType> IMessageAdapter.SupportedMarketDataTypes { get; } =
+	IEnumerable<DataType> IMessageAdapter.GetSupportedMarketDataTypes(SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to) =>
 	[
 		DataType.OrderLog,
 		DataType.Ticks,

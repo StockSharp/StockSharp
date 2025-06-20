@@ -28,9 +28,13 @@ public interface IMessageAdapter : IMessageChannel, IPersistable, ILogReceiver
 	IEnumerable<MessageTypes> NotSupportedResultMessages { get; }
 
 	/// <summary>
-	/// Supported by adapter market data types.
+	/// Get supported by adapter message types.
 	/// </summary>
-	IEnumerable<DataType> SupportedMarketDataTypes { get; }
+	/// <param name="securityId"><see cref="SecurityId"/></param>
+	/// <param name="from">Start date for request. If <see langword="null"/>, then all available messages will be returned.</param>
+	/// <param name="to">End date for request. If <see langword="null"/>, then all available messages will be returned.</param>
+	/// <returns>Supported by adapter market data types.</returns>
+	IEnumerable<DataType> GetSupportedMarketDataTypes(SecurityId securityId = default, DateTimeOffset? from = default, DateTimeOffset? to = default);
 
 	/// <summary>
 	/// Possible options for candles building.

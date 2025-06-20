@@ -376,7 +376,8 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 	IEnumerable<MessageTypes> IMessageAdapter.NotSupportedResultMessages => GetSortedAdapters().SelectMany(a => a.NotSupportedResultMessages).Distinct();
 
-	IEnumerable<DataType> IMessageAdapter.SupportedMarketDataTypes => GetSortedAdapters().SelectMany(a => a.SupportedMarketDataTypes).Distinct();
+	IEnumerable<DataType> IMessageAdapter.GetSupportedMarketDataTypes(SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
+		=> GetSortedAdapters().SelectMany(a => a.GetSupportedMarketDataTypes(securityId, from, to)).Distinct();
 
 	IEnumerable<Level1Fields> IMessageAdapter.CandlesBuildFrom => GetSortedAdapters().SelectMany(a => a.CandlesBuildFrom).Distinct();
 
@@ -690,12 +691,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			adapter = ApplyOwnInner(new SubscriptionSecurityAllMessageAdapter(adapter));
 		}
 
-		if (GenerateOrderBookFromLevel1 && adapter.SupportedMarketDataTypes.Contains(DataType.Level1) && !adapter.SupportedMarketDataTypes.Contains(DataType.MarketDepth))
+		if (GenerateOrderBookFromLevel1 && adapter.GetSupportedMarketDataTypes().Contains(DataType.Level1) && !adapter.GetSupportedMarketDataTypes().Contains(DataType.MarketDepth))
 		{
 			adapter = ApplyOwnInner(new Level1DepthBuilderAdapter(adapter));
 		}
 
-		if (Level1Extend && !adapter.SupportedMarketDataTypes.Contains(DataType.Level1))
+		if (Level1Extend && !adapter.GetSupportedMarketDataTypes().Contains(DataType.Level1))
 		{
 			adapter = ApplyOwnInner(new Level1ExtendBuilderAdapter(adapter));
 		}

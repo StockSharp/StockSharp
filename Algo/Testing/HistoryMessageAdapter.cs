@@ -160,27 +160,26 @@ public class HistoryMessageAdapter : MessageAdapter
 		base.DisposeManaged();
 	}
 
-	private readonly HashSet<DataType> _supportedMarketDataTypes = [];
+	private readonly Dictionary<SecurityId, HashSet<DataType>> _supportedMarketDataTypes = [];
 
 	/// <inheritdoc />
-	public override IEnumerable<DataType> SupportedMarketDataTypes
+	public override IEnumerable<DataType> GetSupportedMarketDataTypes(SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
 	{
-		get
+		return _supportedMarketDataTypes.SafeAdd(securityId, key =>
 		{
-			if (_supportedMarketDataTypes.IsEmpty())
-			{
-				var drive = DriveInternal;
+			var drive = DriveInternal;
 
-				if (drive == null)
-					return [];
+			if (drive == null)
+				return [];
 
-				_supportedMarketDataTypes.AddRange(drive.GetAvailableDataTypes(default, StorageFormat));
-				_supportedMarketDataTypes.AddRange(_historySources.Select(s => s.Key.dataType));
-				_supportedMarketDataTypes.AddRange(_generators.Select(t => t.Key.dataType));
-			}
+			var dataTypes = new HashSet<DataType>();
+			
+			dataTypes.AddRange(drive.GetAvailableDataTypes(securityId, StorageFormat));
+			dataTypes.AddRange(_historySources.Select(s => s.Key.dataType));
+			dataTypes.AddRange(_generators.Select(t => t.Key.dataType));
 
-			return _supportedMarketDataTypes;
-		}
+			return dataTypes;
+		});
 	}
 
 	/// <inheritdoc />

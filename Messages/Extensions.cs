@@ -482,7 +482,7 @@ public static partial class Extensions
 	}
 
 	/// <summary>
-	/// Add time-frames into <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
+	/// Add time-frames into <see cref="IMessageAdapter.GetSupportedMarketDataTypes"/>.
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
 	/// <param name="timeFrames">Time-frames.</param>
@@ -499,7 +499,7 @@ public static partial class Extensions
 	}
 
 	/// <summary>
-	/// Add market data type into <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
+	/// Add market data type into <see cref="IMessageAdapter.GetSupportedMarketDataTypes"/>.
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
 	/// <param name="dataType">Data type info.</param>
@@ -512,7 +512,7 @@ public static partial class Extensions
 	}
 
 	/// <summary>
-	/// Remove market data type from <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
+	/// Remove market data type from <see cref="IMessageAdapter.GetSupportedMarketDataTypes"/>.
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
 	/// <param name="type">Market data type.</param>
@@ -876,7 +876,7 @@ public static partial class Extensions
 		if (subscription == null)
 			throw new ArgumentNullException(nameof(subscription));
 
-		return adapter.SupportedMarketDataTypes.Contains(subscription.DataType2);
+		return adapter.GetSupportedMarketDataTypes(subscription.SecurityId, subscription.From, subscription.To).Contains(subscription.DataType2);
 	}
 
 	/// <summary>
@@ -892,7 +892,7 @@ public static partial class Extensions
 		if (adapter is null)
 			throw new ArgumentNullException(nameof(adapter));
 
-		return adapter.SupportedMarketDataTypes.Where(dt => dt.IsTFCandles).Select(dt => dt.Arg).OfType<TimeSpan>();
+		return adapter.GetSupportedMarketDataTypes(securityId, from, to).Where(dt => dt.IsTFCandles).Select(dt => dt.Arg).OfType<TimeSpan>();
 	}
 
 	/// <summary>
@@ -969,11 +969,11 @@ public static partial class Extensions
 		if (adapter == null)
 			throw new ArgumentNullException(nameof(adapter));
 
-		return adapter.SupportedMarketDataTypes.Contains(type);
+		return adapter.GetSupportedMarketDataTypes().Contains(type);
 	}
 
 	/// <summary>
-	/// Remove all market data types from <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
+	/// Remove all market data types from <see cref="IMessageAdapter.GetSupportedMarketDataTypes"/>.
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
 	public static void RemoveSupportedAllMarketDataTypes(this MessageAdapter adapter)
@@ -981,7 +981,7 @@ public static partial class Extensions
 		if (adapter == null)
 			throw new ArgumentNullException(nameof(adapter));
 
-		adapter.SupportedMarketDataTypes = Array.Empty<DataType>();
+		adapter.SupportedMarketDataTypes = [];
 	}
 
 	/// <summary>
@@ -2190,7 +2190,7 @@ public static partial class Extensions
 
 		if (dataType.IsTFCandles)
 		{
-			if (!adapter.CheckTimeFrameByRequest && !adapter.SupportedMarketDataTypes.Contains(dataType))
+			if (!adapter.CheckTimeFrameByRequest && !adapter.GetSupportedMarketDataTypes(securityId).Contains(dataType))
 				return TimeSpan.Zero;
 
 			var tf = dataType.GetTimeFrame();

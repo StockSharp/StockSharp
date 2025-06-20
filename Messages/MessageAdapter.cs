@@ -89,7 +89,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 
 	/// <inheritdoc />
 	[Browsable(false)]
-	public virtual IEnumerable<DataType> SupportedMarketDataTypes
+	internal IEnumerable<DataType> SupportedMarketDataTypes
 	{
 		get => _supportedMarketDataTypes.Cache;
 		set
@@ -107,6 +107,10 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 			OnPropertyChanged();
 		}
 	}
+
+	/// <inheritdoc />
+	public virtual IEnumerable<DataType> GetSupportedMarketDataTypes(SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
+		=> SupportedMarketDataTypes;
 
 	/// <inheritdoc />
 	[Browsable(false)]
