@@ -500,14 +500,14 @@ abstract class BinaryMarketDataSerializer<TData, TMetaInfo> : IMarketDataSeriali
 	protected abstract void OnSave(BitArrayWriter writer, IEnumerable<TData> data, TMetaInfo metaInfo);
 	public abstract TData MoveNext(MarketDataEnumerator enumerator);
 
-	protected void WriteItemLocalTime(BitArrayWriter writer, TMetaInfo metaInfo, Message message, bool isTickPrecision)
+	protected static void WriteItemLocalTime(BitArrayWriter writer, TMetaInfo metaInfo, Message message, bool isTickPrecision)
 	{
 		var lastLocalOffset = metaInfo.LastItemLocalOffset;
 		metaInfo.LastItemLocalTime = writer.WriteTime(message.LocalTime, metaInfo.LastItemLocalTime, "local time", true, true, metaInfo.LocalOffset, true, isTickPrecision, ref lastLocalOffset, true);
 		metaInfo.LastItemLocalOffset = lastLocalOffset;
 	}
 
-	protected DateTimeOffset ReadItemLocalTime(BitArrayReader reader, TMetaInfo metaInfo, bool isTickPrecision)
+	protected static DateTimeOffset ReadItemLocalTime(BitArrayReader reader, TMetaInfo metaInfo, bool isTickPrecision)
 	{
 		var prevTsTime = metaInfo.FirstItemLocalTime;
 		var lastOffset = metaInfo.FirstItemLocalOffset;
