@@ -495,6 +495,8 @@ abstract class BinaryMarketDataSerializer<TData, TMetaInfo> : IMarketDataSeriali
 		stream.CopyTo(data);
 		stream.Dispose();
 
+		data.Position = 0;
+
 		return new SimpleEnumerable<TData>(() => new MarketDataEnumerator(this, new BitArrayReader(data), typedInfo));
 	}
 
