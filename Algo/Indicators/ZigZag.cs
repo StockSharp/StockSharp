@@ -186,4 +186,7 @@ public class ZigZag : BaseIndicator
 
 		storage.SetValue(nameof(Deviation), Deviation);
 	}
+
+	/// <inheritdoc />
+	public override string ToString() => base.ToString() + $" D={Deviation}";
 }

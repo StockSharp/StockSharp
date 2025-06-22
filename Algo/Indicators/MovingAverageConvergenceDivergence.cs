@@ -91,4 +91,7 @@ public class MovingAverageConvergenceDivergence : BaseIndicator
 		storage.SetValue(nameof(LongMa), LongMa.Save());
 		storage.SetValue(nameof(ShortMa), ShortMa.Save());
 	}
+
+	/// <inheritdoc />
+	public override string ToString() => $"{base.ToString()}, L={LongMa}, S={ShortMa}";
 }

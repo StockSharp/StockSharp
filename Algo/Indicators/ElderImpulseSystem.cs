@@ -116,4 +116,7 @@ public class ElderImpulseSystem : BaseIndicator
 		Ema.Load(storage, nameof(Ema));
 		Macd.Load(storage, nameof(Macd));
 	}
+
+	/// <inheritdoc />
+	public override string ToString() => $"{base.ToString()}, EMA={Ema}, MACD={Macd}";
 }

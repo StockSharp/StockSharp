@@ -124,4 +124,7 @@ public class FractalPart : LengthIndicator<decimal>
 
 		return new FractalPartIndicatorValue(this, midValue, _numCenter, input.Time);
 	}
+
+	/// <inheritdoc />
+	public override string ToString() => base.ToString() + $" L={Length} {(IsUp ? "Up" : "Down")}";
 }

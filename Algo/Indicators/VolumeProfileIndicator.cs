@@ -165,4 +165,7 @@ public class VolumeProfileIndicator : BaseIndicator
 		Step = storage.GetValue<decimal>(nameof(Step));
 		UseTotalVolume = storage.GetValue<bool>(nameof(UseTotalVolume));
 	}
+
+	/// <inheritdoc />
+	public override string ToString() => $"{base.ToString()}, S={Step}, V={UseTotalVolume}";
 }

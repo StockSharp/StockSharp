@@ -92,4 +92,7 @@ public class ChaikinVolatility : BaseIndicator
 		storage.SetValue(nameof(Ema), Ema.Save());
 		storage.SetValue(nameof(Roc), Roc.Save());
 	}
+
+	/// <inheritdoc />
+	public override string ToString() => $"{base.ToString()}, Ema={Ema}, Roc={Roc}";
 }

@@ -152,6 +152,9 @@ public class KasePeakOscillator : BaseComplexIndicator
 
 		base.Reset();
 	}
+
+	/// <inheritdoc />
+	public override string ToString() => base.ToString() + $" S={ShortPeriod} L={LongPeriod}";
 }
 
 /// <summary>

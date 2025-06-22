@@ -85,4 +85,7 @@ public class RangeActionVerificationIndex : BaseIndicator
 		storage.SetValue(nameof(ShortSma), ShortSma.Save());
 		storage.SetValue(nameof(LongSma), LongSma.Save());
 	}
+
+	/// <inheritdoc />
+	public override string ToString() => $"{base.ToString()}, S={ShortSma.Length} L={LongSma.Length}";
 }

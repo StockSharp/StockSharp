@@ -62,4 +62,7 @@ public class GatorOscillator : BaseComplexIndicator
 
 		return base.OnProcess(input);
 	}
+
+	/// <inheritdoc />
+	public override string ToString() => $"{base.ToString()}, H1={Histogram1}, H2={Histogram2}";
 }
