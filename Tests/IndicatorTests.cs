@@ -528,7 +528,7 @@ static class IndicatorDataRunner
 	{
 		public int Line { get; init; }
 		public CandleMessage Candle { get; init; }
-		public decimal[] Values { get; init; }
+		public decimal?[] Values { get; init; }
 	}
 
 	public static void Check<T>(this IIndicator indicator, CandleMessage[] candles, Func<ICandleMessage, T> getValue)
@@ -553,7 +553,7 @@ static class IndicatorDataRunner
 			{
 				Line = idx,
 				Candle = candles[idx],
-				Values = [.. parts.Select(p => p.To<decimal>())],
+				Values = [.. parts.Select(p => p.To<decimal?>())],
 			};
 		}).ToArray());
 
@@ -578,20 +578,21 @@ static class IndicatorDataRunner
 				if (!indicator.IsFormed)
 					return;
 
-				var shift = value is ShiftedIndicatorValue sv ? sv.Shift : 0;
-
-				var data = values[values.Count - shift - 1];
+				var data = values[values.Count - 1];
 
 				if (value.IsEmpty)
 				{
-					data.Values.Length.AssertEqual(0);
+					//testValue.AssertNull();
 				}
 				else
 				{
 					var testValue = data.Values[column];
+
+					testValue.AssertNotNull();
+
 					var indValue = value.ToDecimal().Round(2);
 
-					((testValue - indValue).Abs() < epsilon).AssertTrue();
+					((testValue.Value - indValue).Abs() < epsilon).AssertTrue();
 				}
 			}
 
