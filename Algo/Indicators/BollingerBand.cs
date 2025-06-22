@@ -7,6 +7,7 @@ public class BollingerBand : BaseIndicator
 {
 	private readonly LengthIndicator<decimal> _ma;
 	private readonly StandardDeviation _dev;
+	private decimal _width;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BollingerBand"/>.
@@ -25,7 +26,15 @@ public class BollingerBand : BaseIndicator
 	/// <summary>
 	/// Channel width.
 	/// </summary>
-	public decimal Width { get; set; }
+	public decimal Width
+	{
+		get => _width;
+		set
+		{
+			_width = value;
+			Reset();
+		}
+	}
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
@@ -49,4 +58,7 @@ public class BollingerBand : BaseIndicator
 		base.Save(storage);
 		storage.SetValue(nameof(Width), Width);
 	}
+
+	/// <inheritdoc />
+	public override string ToString() => base.ToString() + $" W={Width}";
 }

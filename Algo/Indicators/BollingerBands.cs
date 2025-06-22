@@ -67,7 +67,7 @@ public class BollingerBands : BaseComplexIndicator
 		get => MovingAverage.Length;
 		set
 		{
-			_dev.Length = MovingAverage.Length = value;
+			MovingAverage.Length = value;
 			Reset();
 		}
 	}
@@ -99,7 +99,8 @@ public class BollingerBands : BaseComplexIndicator
 	public override void Reset()
 	{
 		base.Reset();
-		_dev.Reset();
+
+		_dev.Length = MovingAverage.Length;
 	}
 
 	/// <inheritdoc />
