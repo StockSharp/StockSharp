@@ -40,20 +40,24 @@ public class OnBalanceVolume : BaseIndicator
 	{
 		var candle = input.ToCandle();
 
+		var currentValue = _currentValue;
+
 		if (_prevClosePrice != 0)
 		{
 			if (candle.ClosePrice > _prevClosePrice)
-				_currentValue += candle.TotalVolume;
+				currentValue += candle.TotalVolume;
 			else if (candle.ClosePrice < _prevClosePrice)
-				_currentValue -= candle.TotalVolume;
+				currentValue -= candle.TotalVolume;
 		}
 
 		if (input.IsFinal)
 		{
 			_prevClosePrice = candle.ClosePrice;
+			_currentValue = currentValue;
+
 			IsFormed = true;
 		}
 
-		return new DecimalIndicatorValue(this, _currentValue, input.Time);
+		return new DecimalIndicatorValue(this, currentValue, input.Time);
 	}
 }

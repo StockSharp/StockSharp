@@ -68,7 +68,10 @@ public class T3MovingAverage : LengthIndicator<decimal>
 			if (_warmUpPeriod == 0)
 				return t3;
 			else
-				_warmUpPeriod--;
+			{
+				if (input.IsFinal)
+					_warmUpPeriod--;
+			}
 		}
 
 		return null;

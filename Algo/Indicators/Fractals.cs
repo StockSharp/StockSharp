@@ -23,12 +23,12 @@ public class FractalsIndicatorValue : ComplexIndicatorValue
 	/// <summary>
 	/// Has up.
 	/// </summary>
-	public bool HasUp { get; set; }
+	public bool HasUp { get; private set; }
 
 	/// <summary>
 	/// Has down.
 	/// </summary>
-	public bool HasDown { get; set; }
+	public bool HasDown { get; private set; }
 
 	/// <summary>
 	/// Cast object from <see cref="FractalsIndicatorValue"/> to <see cref="bool"/>.
@@ -44,7 +44,7 @@ public class FractalsIndicatorValue : ComplexIndicatorValue
 		if (indicator is null)	throw new ArgumentNullException(nameof(indicator));
 		if (value is null)		throw new ArgumentNullException(nameof(value));
 
-		if (!value.IsEmpty)
+		if (!value.IsEmpty && !value.IsFinal)
 		{
 			HasPattern = true;
 

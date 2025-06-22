@@ -52,7 +52,9 @@ public class MomentumOfMovingAverage : SimpleMovingAverage
 		if (IsFormed)
 		{
 			var ma = maValue.Value;
-			_maBuffer.PushBack(ma);
+
+			if (input.IsFinal)
+				_maBuffer.PushBack(ma);
 
 			if (_maBuffer.IsFull && _maBuffer[0] != 0)
 			{

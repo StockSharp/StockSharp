@@ -31,12 +31,15 @@ public class NegativeVolumeIndex : BaseIndicator
 	{
 		var candle = input.ToCandle();
 
+		var nvi = _nvi;
+
 		if (_prevClose != 0 && _prevVolume != 0 && candle.TotalVolume != 0)
 		{
 			if (candle.TotalVolume < _prevVolume)
 			{
 				var priceChangePercent = (candle.ClosePrice - _prevClose) / _prevClose;
-				_nvi += _nvi * priceChangePercent;
+
+				nvi += nvi * priceChangePercent;
 			}
 		}
 
@@ -44,10 +47,12 @@ public class NegativeVolumeIndex : BaseIndicator
 		{
 			_prevClose = candle.ClosePrice;
 			_prevVolume = candle.TotalVolume;
+			_nvi = nvi;
+
 			IsFormed = true;
 		}
 
-		return new DecimalIndicatorValue(this, _nvi, input.Time);
+		return new DecimalIndicatorValue(this, nvi, input.Time);
 	}
 
 	/// <inheritdoc />

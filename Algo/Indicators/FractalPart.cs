@@ -97,7 +97,12 @@ public class FractalPart : LengthIndicator<decimal>
 
 		Buffer.PushBack(IsUp ? candle.HighPrice : candle.LowPrice);
 
-		if (++_counter < Length)
+		var counter = _counter + 1;
+
+		if (input.IsFinal)
+			_counter = counter;
+
+		if (counter < Length)
 			return new FractalPartIndicatorValue(this, input.Time);
 
 		var midValue = Buffer[_numCenter];
@@ -114,7 +119,9 @@ public class FractalPart : LengthIndicator<decimal>
 				return new FractalPartIndicatorValue(this, input.Time);
 		}
 
-		_counter = default;
+		if (input.IsFinal)
+			_counter = default;
+
 		return new FractalPartIndicatorValue(this, midValue, _numCenter, input.Time);
 	}
 }
