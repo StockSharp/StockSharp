@@ -363,9 +363,6 @@ public class IndicatorTests
 	[TestMethod]
 	public void SaveLoad()
 	{
-		var reseted = false;
-		void OnReseted() => reseted = true;
-
 		void ComparePropsRecursive(IIndicator obj1, IIndicator obj2)
 		{
 			ArgumentNullException.ThrowIfNull(obj1);
@@ -396,21 +393,27 @@ public class IndicatorTests
 
 		foreach (var type in GetIndicatorTypes())
 		{
-			var indicator = type.CreateIndicator();
-			indicator.Reseted += OnReseted;
-
-			SetRandom(indicator, () =>
+			for (var i = 0; i < 100; i++)
 			{
-				reseted.AssertTrue();
-				reseted = false;
-			});
+				var reseted = false;
+				void OnReseted() => reseted = true;
 
-			var storage = indicator.Save();
+				var indicator = type.CreateIndicator();
+				indicator.Reseted += OnReseted;
 
-			var restoredIndicator = type.CreateIndicator();
-			restoredIndicator.Load(storage);
+				SetRandom(indicator, () =>
+				{
+					reseted.AssertTrue();
+					reseted = false;
+				});
 
-			ComparePropsRecursive(indicator, restoredIndicator);
+				var storage = indicator.Save();
+
+				var restoredIndicator = type.CreateIndicator();
+				restoredIndicator.Load(storage);
+
+				ComparePropsRecursive(indicator, restoredIndicator);
+			}
 		}
 	}
 
@@ -462,7 +465,7 @@ static class IndicatorDataRunner
 	{
 		private readonly TInner _value;
 
-		public TestIndicatorValue(IIndicator indicator, TInner value, TInner initFrom = default)
+		public TestIndicatorValue(IIndicator indicator, DateTimeOffset time, TInner value, TInner initFrom = default)
 		{
 			Indicator = indicator ?? throw new ArgumentNullException(nameof(indicator));
 			_value = value is ICloneable cl ? (TInner)cl.Clone() : value;
@@ -472,11 +475,13 @@ static class IndicatorDataRunner
 				candle.OpenTime = initCandle.OpenTime;
 				candle.CloseTime = initCandle.CloseTime;
 			}
+
+			Time = time;
 		}
 
 		public IIndicator Indicator { get; }
 		public bool IsFinal { get; set; }
-		DateTimeOffset IIndicatorValue.Time { get; }
+		public DateTimeOffset Time { get; }
 		bool IIndicatorValue.IsFormed { get; set; }
 		bool IIndicatorValue.IsEmpty => false;
 
@@ -523,11 +528,7 @@ static class IndicatorDataRunner
 	{
 		public int Line { get; init; }
 		public CandleMessage Candle { get; init; }
-		public decimal Value { get; init; }
-		public decimal Value2 { get; init; }
-		public decimal Value3 { get; init; }
-		public decimal Value4 { get; init; }
-		public decimal Value5 { get; init; }
+		public decimal[] Values { get; init; }
 	}
 
 	public static void Check<T>(this IIndicator indicator, CandleMessage[] candles, Func<ICandleMessage, T> getValue)
@@ -552,11 +553,7 @@ static class IndicatorDataRunner
 			{
 				Line = idx,
 				Candle = candles[idx],
-				Value = parts.Length > 0 ? parts[0].To<decimal>() : 0,
-				Value2 = parts.Length > 1 ? parts[1].To<decimal>() : 0,
-				Value3 = parts.Length > 2 ? parts[2].To<decimal>() : 0,
-				Value4 = parts.Length > 3 ? parts[3].To<decimal>() : 0,
-				Value5 = parts.Length > 4 ? parts[4].To<decimal>() : 0,
+				Values = [.. parts.Select(p => p.To<decimal>())],
 			};
 		}).ToArray());
 
@@ -566,14 +563,14 @@ static class IndicatorDataRunner
 
 			var inputValues = new List<TestIndicatorValue<T>>
 			{
-				new(indicator, getValue(data[i].Candle)) { IsFinal = true }
+				new(indicator, data[i].Candle.OpenTime, getValue(data[i].Candle)) { IsFinal = true }
 			};
 
 			var numNonFinals = RandomGen.GetInt(10);
 			for (var j = 0; j < numNonFinals; ++j)
 			{
 				var i2 = Math.Max(0, Math.Min(data.Length - 1, i + RandomGen.GetInt(-5, 5)));
-				inputValues.Add(new(indicator, getValue(data[i2].Candle), i < data.Length - 1 ? getValue(data[i+1].Candle) : default) { IsFinal = false });
+				inputValues.Add(new(indicator, data[i2].Candle.OpenTime, getValue(data[i2].Candle), i < data.Length - 1 ? getValue(data[i+1].Candle) : default) { IsFinal = false });
 			}
 
 			void CheckValue(IIndicatorValue value, int column)
@@ -584,18 +581,18 @@ static class IndicatorDataRunner
 				var shift = value is ShiftedIndicatorValue sv ? sv.Shift : 0;
 
 				var data = values[values.Count - shift - 1];
-				var testValue = column switch
-				{
-					0 => data.Value,
-					1 => data.Value2,
-					2 => data.Value3,
-					3 => data.Value4,
-					4 => data.Value5,
-					_ => throw new ArgumentOutOfRangeException(column.ToString())
-				};
-				var indValue = value.IsEmpty ? 0 : value.ToDecimal().Round(2);
 
-				((testValue - indValue).Abs() < epsilon).AssertTrue();
+				if (value.IsEmpty)
+				{
+					data.Values.Length.AssertEqual(0);
+				}
+				else
+				{
+					var testValue = data.Values[column];
+					var indValue = value.ToDecimal().Round(2);
+
+					((testValue - indValue).Abs() < epsilon).AssertTrue();
+				}
 			}
 
 			foreach (var inputValue in inputValues)
