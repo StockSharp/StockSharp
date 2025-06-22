@@ -47,7 +47,4 @@ public class KaufmanEfficiencyRatio : LengthIndicator<decimal>
 
 		return null;
 	}
-
-	/// <inheritdoc />
-	public override string ToString() => base.ToString() + $" {Length}";
 }

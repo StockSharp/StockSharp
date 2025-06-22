@@ -154,4 +154,7 @@ public class KaufmannAdaptiveMovingAverage : LengthIndicator<decimal>
 		storage.SetValue(nameof(FastSCPeriod), FastSCPeriod);
 		storage.SetValue(nameof(SlowSCPeriod), SlowSCPeriod);
 	}
+
+	/// <inheritdoc />
+	public override string ToString() => base.ToString() + $" F={FastSCPeriod}, S={SlowSCPeriod}";
 }

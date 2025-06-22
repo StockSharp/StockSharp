@@ -112,4 +112,7 @@ public class BollingerPercentB : BaseIndicator
 
 		_bollingerBands.LoadIfNotNull(storage, nameof(BollingerBands));
 	}
+
+	/// <inheritdoc />
+	public override string ToString() => base.ToString() + $" LEN={Length} STD={StdDevMultiplier}";
 }
