@@ -44,7 +44,7 @@ public class FractalsIndicatorValue : ComplexIndicatorValue
 		if (indicator is null)	throw new ArgumentNullException(nameof(indicator));
 		if (value is null)		throw new ArgumentNullException(nameof(value));
 
-		if (!value.IsEmpty && !value.IsFinal)
+		if (!value.IsEmpty)
 		{
 			HasPattern = true;
 
