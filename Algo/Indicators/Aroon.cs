@@ -81,6 +81,9 @@ public class Aroon : BaseComplexIndicator
 		base.Load(storage);
 		Length = storage.GetValue<int>(nameof(Length));
 	}
+
+	/// <inheritdoc />
+	public override string ToString() => base.ToString() + $" L={Length}";
 }
 
 /// <summary>

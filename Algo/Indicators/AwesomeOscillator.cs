@@ -109,4 +109,7 @@ public class AwesomeOscillator : BaseIndicator
 		storage.SetValue(nameof(ShortMa), ShortMa.Save());
 		storage.SetValue(nameof(MedianPrice), MedianPrice.Save());
 	}
+
+	/// <inheritdoc />
+	public override string ToString() => $"{base.ToString()}, L={LongMa}, S={ShortMa}, M={MedianPrice}";
 }

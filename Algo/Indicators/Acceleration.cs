@@ -96,4 +96,7 @@ public class Acceleration : BaseIndicator
 		storage.SetValue(nameof(Sma), Sma.Save());
 		storage.SetValue(nameof(Ao), Ao.Save());
 	}
+
+	/// <inheritdoc />
+	public override string ToString() => $"{base.ToString()}, Sma={Sma}, Ao={Ao}";
 }
