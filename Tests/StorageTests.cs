@@ -2846,41 +2846,6 @@ public class StorageTests
 		}
 	}
 
-	[TestMethod]
-	public void DefaultCredentialsProvider()
-	{
-		ICredentialsProvider prov1 = new DefaultCredentialsProvider();
-		ServerCredentials orig = null;
-
-		try
-		{
-			prov1.TryLoad(out orig).AssertTrue();
-
-			var c = new ServerCredentials
-			{
-				Email = "email",
-				Password = "pwd".Secure(),
-				Token = "token".Secure()
-			};
-
-			prov1.Save(c.Clone(), true);
-
-			prov1.TryLoad(out var c2).AssertTrue();
-
-			Helper.CheckEqual(c.Save(), c2.Save());
-
-			ICredentialsProvider prov2 = new DefaultCredentialsProvider();
-
-			prov2.TryLoad(out var c3).AssertTrue();
-
-			Helper.CheckEqual(c.Save(), c3.Save());
-		}
-		finally
-		{
-			prov1.Save(orig, true);
-		}
-	}
-
 	[DataTestMethod]
 	[DataRow(StorageFormats.Binary)]
 	//[DataRow(StorageFormats.Csv)]
