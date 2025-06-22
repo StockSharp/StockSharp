@@ -118,48 +118,55 @@ public class ZigZag : BaseIndicator
 		if (input.IsFinal)
 			_buffer.PushBack(price);
 
-		if (!IsFormed || !input.IsFinal)
+		if (!IsFormed)
 			return new ZigZagIndicatorValue(this, input.Time);
 
-		_lastExtremum ??= price;
-		_isUpTrend ??= price >= _buffer[^2];
+		var lastExtremum = _lastExtremum ?? price;
+		var isUpTrend = _isUpTrend ?? price >= _buffer[^2];
 
-		if (_isUpTrend is null)
-			return new ZigZagIndicatorValue(this, input.Time);
-
-		var threshold = _lastExtremum * Deviation;
+		var threshold = lastExtremum * Deviation;
 		var changeTrend = false;
 
-		if (_isUpTrend.Value)
+		if (isUpTrend)
 		{
-			if (_lastExtremum < price)
-				_lastExtremum = price;
+			if (lastExtremum < price)
+				lastExtremum = price;
 			else
-				changeTrend = price <= (_lastExtremum - threshold);
+				changeTrend = price <= (lastExtremum - threshold);
 		}
 		else
 		{
-			if (_lastExtremum > price)
-				_lastExtremum = price;
+			if (lastExtremum > price)
+				lastExtremum = price;
 			else
-				changeTrend = price >= (_lastExtremum + threshold);
+				changeTrend = price >= (lastExtremum + threshold);
 		}
 
 		if (changeTrend)
 		{
 			try
 			{
-				return new ZigZagIndicatorValue(this, _lastExtremum.Value, _shift, input.Time, _isUpTrend.Value);
+				return new ZigZagIndicatorValue(this, lastExtremum, _shift, input.Time, isUpTrend);
 			}
 			finally
 			{
-				_isUpTrend = !_isUpTrend.Value;
-				_lastExtremum = price;
-				_shift = 1;
+				if (input.IsFinal)
+				{
+					_isUpTrend = !isUpTrend;
+					_lastExtremum = price;
+					_shift = 1;
+				}
 			}
 		}
 		else
-			_shift++;
+		{
+			if (input.IsFinal)
+			{
+				_lastExtremum = lastExtremum;
+				_isUpTrend = isUpTrend;
+				_shift++;
+			}
+		}
 
 		return new ZigZagIndicatorValue(this, input.Time);
 	}
