@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\common_samples_netwindows.props" />
-  <Import Project="..\..\common_connectors.props" />
   <ItemGroup>
     <PackageReference Include="StockSharp.Xaml.Charting" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Fix" Version="$(StockSharpVer)" />
