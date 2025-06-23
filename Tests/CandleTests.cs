@@ -225,12 +225,12 @@ public class CandleTests
 			CheckCandle(candle);
 		}
 
-		(rangeCandles.Length > 2000).AssertTrue();
-		(tickCandles.Length == 1000).AssertTrue();
-		(volumeCandles.Length > 9000).AssertTrue();
-		(timeFrameCandles.Length > 100).AssertTrue();
-		(renkoCandles.Length > 200000).AssertTrue();
-		(pnfCandles.Length > 40000).AssertTrue();
+		(rangeCandles.Length > 2000).AssertTrue($"CNT={rangeCandles.Length}");
+		(tickCandles.Length == 1000).AssertTrue($"CNT={tickCandles.Length}");
+		(volumeCandles.Length > 9000).AssertTrue($"CNT={volumeCandles.Length}");
+		(timeFrameCandles.Length > 100).AssertTrue($"CNT={timeFrameCandles.Length}");
+		(renkoCandles.Length > 200000).AssertTrue($"CNT={renkoCandles.Length}");
+		(pnfCandles.Length > 40000).AssertTrue($"CNT={pnfCandles.Length}");
 	}
 
 	[TestMethod]
