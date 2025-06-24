@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Diagram;
+﻿namespace StockSharp.Algo;
 
 /// <summary>
 /// <see cref="OrderTypes.Conditional"/> settings.
