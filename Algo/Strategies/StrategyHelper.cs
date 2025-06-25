@@ -572,4 +572,81 @@ public static partial class StrategyHelper
 
 		return strategy;
 	}
+
+	/// <summary>
+	/// Execute strategy.
+	/// </summary>
+	/// <param name="strategy"><see cref="Strategy"/>.</param>
+	/// <param name="extra">Extra action.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	/// <returns><see cref="ValueTask"/>.</returns>
+	public static async ValueTask<(bool completed, Exception error)> ExecAsync(this Strategy strategy, Action extra, CancellationToken cancellationToken)
+	{
+		if (strategy is null)
+			throw new ArgumentNullException(nameof(strategy));
+
+		if (strategy.ProcessState != ProcessStates.Stopped)
+			throw new ArgumentException($"State is {strategy.ProcessState}.", nameof(strategy));
+
+		var tcs = AsyncHelper.CreateTaskCompletionSource<int>();
+
+		const int canceled = 1;
+		const int completed = 2;
+		const int error = 3;
+
+		var finalResult = 0;
+
+		using var registration = cancellationToken.Register(() =>
+		{
+			if (Interlocked.CompareExchange(ref finalResult, canceled, 0) == 0)
+				tcs.TrySetResult(canceled);
+		});
+
+		void OnProcessStateChanged(Strategy s)
+		{
+			if (s != strategy)
+				return;
+
+			if (s.ProcessState == ProcessStates.Stopped)
+			{
+				if (finalResult != 0)
+					return;
+
+				var result = s.LastError is null ? completed : error;
+
+				if (Interlocked.CompareExchange(ref finalResult, result, 0) == 0)
+					tcs.TrySetResult(result);
+			}
+			else if (s.ProcessState == ProcessStates.Started)
+			{
+				if (!((ISubscriptionProvider)strategy).Subscriptions.Any(s => s.DataType.IsMarketData))
+				{
+					s.AddErrorLog("No any market data subscription.");
+					s.Stop();
+				}
+			}
+		}
+
+		strategy.ProcessStateChanged += OnProcessStateChanged;
+
+		try
+		{
+			await Task.Yield();
+
+			strategy.Start();
+
+			extra?.Invoke();
+
+			var res = await tcs.Task;
+
+			return (res == completed, strategy.LastError);
+		}
+		finally
+		{
+			strategy.ProcessStateChanged -= OnProcessStateChanged;
+
+			if (finalResult == canceled)
+				strategy.Stop();
+		}
+	}
 }
