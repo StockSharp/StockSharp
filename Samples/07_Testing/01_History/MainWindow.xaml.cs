@@ -39,8 +39,8 @@ public partial class MainWindow
 		public string StrategyName { get; set; }
 		public bool UseOrderLog { get; set; }
 		public bool UseLevel1 { get; set; }
-            public Level1Fields? BuildField { get; set; }
-            public Func<IdGenerator, IMessageAdapter> CustomHistoryAdapter { get; set; }
+		public Level1Fields? BuildField { get; set; }
+		public Func<IdGenerator, IMessageAdapter> CustomHistoryAdapter { get; set; }
 		public MarketDataStorageCache Cache { get; set; } = new();
 	}
 
