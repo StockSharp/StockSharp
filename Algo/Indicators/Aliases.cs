@@ -229,10 +229,10 @@ public class ICH : Ichimoku
 }
 
 /// <summary>
-/// <see cref="KaufmannAdaptiveMovingAverage"/> alias.
+/// <see cref="KaufmanAdaptiveMovingAverage"/> alias.
 /// </summary>
 [Browsable(false)]
-public class KAMA : KaufmannAdaptiveMovingAverage
+public class KAMA : KaufmanAdaptiveMovingAverage
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="KAMA"/>.

@@ -11,15 +11,15 @@
 	Name = LocalizedStrings.KAMAKey,
 	Description = LocalizedStrings.KaufmannAdaptiveMovingAverageKey)]
 [Doc("topics/api/indicators/list_of_indicators/kama.html")]
-public class KaufmannAdaptiveMovingAverage : LengthIndicator<decimal>
+public class KaufmanAdaptiveMovingAverage : LengthIndicator<decimal>
 {
 	private decimal _prevFinalValue;
 	private bool _isInitialized;
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="KaufmannAdaptiveMovingAverage"/>.
+	/// Initializes a new instance of the <see cref="KaufmanAdaptiveMovingAverage"/>.
 	/// </summary>
-	public KaufmannAdaptiveMovingAverage()
+	public KaufmanAdaptiveMovingAverage()
 	{
 		FastSCPeriod = 2;
 		SlowSCPeriod = 30;

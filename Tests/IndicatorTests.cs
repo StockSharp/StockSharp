@@ -251,7 +251,7 @@ public class IndicatorTests
 			ravi.LongSma.Length = RandomGen.GetInt(20, 50);
 			check();
 		}
-		else if (indicator is KaufmannAdaptiveMovingAverage kama)
+		else if (indicator is KaufmanAdaptiveMovingAverage kama)
 		{
 			kama.FastSCPeriod = RandomGen.GetInt(5, 20);
 			kama.SlowSCPeriod = RandomGen.GetInt(20, 50);
