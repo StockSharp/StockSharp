@@ -11,6 +11,7 @@
 	Name = LocalizedStrings.SuperTrendKey,
 	Description = LocalizedStrings.SuperTrendDescKey)]
 [Doc("topics/api/indicators/list_of_indicators/supertrend.html")]
+[IndicatorIn(typeof(CandleIndicatorValue))]
 public class SuperTrend : BaseIndicator
 {
 	private decimal? _prevSupertrend;
