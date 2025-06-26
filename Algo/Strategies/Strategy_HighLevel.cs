@@ -155,13 +155,18 @@ public partial class Strategy
 	/// To create initialized object of buy order at market price.
 	/// </summary>
 	/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Volume"/> value is used.</param>
+	/// <param name="security">The security. If <see langword="null" /> value is passed, then <see cref="Security"/> value is used.</param>
 	/// <returns>The initialized order object.</returns>
 	/// <remarks>
 	/// The order is not registered, only the object is created.
 	/// </remarks>
-	public Order BuyMarket(decimal? volume = null)
+	public Order BuyMarket(decimal? volume = null, Security security = null)
 	{
 		var order = CreateOrder(Sides.Buy, default, volume);
+
+		if (security != null)
+			order.Security = security;
+
 		RegisterOrder(order);
 		return order;
 	}
@@ -170,13 +175,18 @@ public partial class Strategy
 	/// To create the initialized order object of sell order at market price.
 	/// </summary>
 	/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Volume"/> value is used.</param>
+	/// <param name="security">The security. If <see langword="null" /> value is passed, then <see cref="Security"/> value is used.</param>
 	/// <returns>The initialized order object.</returns>
 	/// <remarks>
 	/// The order is not registered, only the object is created.
 	/// </remarks>
-	public Order SellMarket(decimal? volume = null)
+	public Order SellMarket(decimal? volume = null, Security security = null)
 	{
 		var order = CreateOrder(Sides.Sell, default, volume);
+
+		if (security != null)
+			order.Security = security;
+
 		RegisterOrder(order);
 		return order;
 	}
@@ -186,13 +196,18 @@ public partial class Strategy
 	/// </summary>
 	/// <param name="price">Price.</param>
 	/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
+	/// <param name="security">The security. If <see langword="null" /> value is passed, then <see cref="Security"/> value is used.</param>
 	/// <returns>The initialized order object.</returns>
 	/// <remarks>
 	/// The order is not registered, only the object is created.
 	/// </remarks>
-	public Order BuyLimit(decimal price, decimal? volume = null)
+	public Order BuyLimit(decimal price, decimal? volume = null, Security security = null)
 	{
 		var order = CreateOrder(Sides.Buy, price, volume);
+
+		if (security != null)
+			order.Security = security;
+
 		RegisterOrder(order);
 		return order;
 	}
@@ -202,13 +217,18 @@ public partial class Strategy
 	/// </summary>
 	/// <param name="price">Price.</param>
 	/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
+	/// <param name="security">The security. If <see langword="null" /> value is passed, then <see cref="Security"/> value is used.</param>
 	/// <returns>The initialized order object.</returns>
 	/// <remarks>
 	/// The order is not registered, only the object is created.
 	/// </remarks>
-	public Order SellLimit(decimal price, decimal? volume = null)
+	public Order SellLimit(decimal price, decimal? volume = null, Security security = null)
 	{
 		var order = CreateOrder(Sides.Sell, price, volume);
+
+		if (security != null)
+			order.Security = security;
+
 		RegisterOrder(order);
 		return order;
 	}
