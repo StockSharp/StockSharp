@@ -73,7 +73,7 @@ public class KalmanFilter : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
-		var value = input.GetValue<decimal>();
+		var value = input.ToDecimal();
 
 		if (_lastEstimate == null)
 		{

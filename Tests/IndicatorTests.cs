@@ -626,7 +626,7 @@ static class IndicatorDataRunner
 			if (v.IsEmpty)
 				return;
 
-			var dec = v.GetValue<decimal>();
+			var dec = v.ToDecimal();
 			var range = _validators.SafeAdd(v.Indicator.Measure);
 			range.Contains(dec).AssertTrue();
 		});

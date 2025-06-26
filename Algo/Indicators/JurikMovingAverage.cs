@@ -52,7 +52,7 @@ public class JurikMovingAverage : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
-		var price = input.GetValue<decimal>();
+		var price = input.ToDecimal();
 
 		if (!IsFormed && input.IsFinal)
 		{

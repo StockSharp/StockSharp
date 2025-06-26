@@ -166,7 +166,7 @@ public class KasePeakOscillatorPart : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
-		var value = input.GetValue<decimal>();
+		var value = input.ToDecimal();
 
 		if (input.IsFinal)
 			Buffer.PushBack(value);
