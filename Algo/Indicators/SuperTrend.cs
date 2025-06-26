@@ -150,6 +150,8 @@ public class SuperTrend : BaseIndicator
 		_prevSupertrend = null;
 		_prevClose = null;
 		_trend = 1;
+		_prevUpperBand = null;
+		_prevLowerBand = null;
 
 		_atr.Reset();
 
