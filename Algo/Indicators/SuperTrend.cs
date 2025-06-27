@@ -1,6 +1,58 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
 /// <summary>
+/// The value for the SuperTrend indicator, including trend direction.
+/// </summary>
+public class SuperTrendIndicatorValue : DecimalIndicatorValue
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="SuperTrendIndicatorValue"/> class.
+	/// </summary>
+	/// <param name="indicator">Indicator.</param>
+	/// <param name="time">Value time.</param>
+	public SuperTrendIndicatorValue(IIndicator indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="SuperTrendIndicatorValue"/> class.
+	/// </summary>
+	/// <param name="indicator">Indicator.</param>
+	/// <param name="value">SuperTrend line value.</param>
+	/// <param name="isUpTrend">Trend direction.</param>
+	/// <param name="time">Value time.</param>
+	public SuperTrendIndicatorValue(IIndicator indicator, decimal value, bool isUpTrend, DateTimeOffset time)
+		: base(indicator, value, time)
+	{
+		IsUpTrend = isUpTrend;
+	}
+
+	/// <summary>
+	/// Trend direction.
+	/// </summary>
+	public bool IsUpTrend { get; private set; }
+
+	/// <inheritdoc />
+	public override IEnumerable<object> ToValues()
+	{
+		foreach (var v in base.ToValues())
+			yield return v;
+
+		yield return IsUpTrend;
+	}
+
+	/// <inheritdoc />
+	public override void FromValues(object[] values)
+	{
+		base.FromValues(values);
+
+		if (!IsEmpty)
+			IsUpTrend = values[1].To<bool>();
+	}
+}
+
+/// <summary>
 /// SuperTrend indicator.
 /// </summary>
 /// <remarks>
@@ -12,6 +64,7 @@
 	Description = LocalizedStrings.SuperTrendDescKey)]
 [Doc("topics/api/indicators/list_of_indicators/supertrend.html")]
 [IndicatorIn(typeof(CandleIndicatorValue))]
+[IndicatorOut(typeof(SuperTrendIndicatorValue))]
 public class SuperTrend : BaseIndicator
 {
 	private decimal? _prevSupertrend;
@@ -22,7 +75,7 @@ public class SuperTrend : BaseIndicator
 	private readonly AverageTrueRange _atr;
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="SuperTrend"/>.
+	/// Initializes a new instance of the <see cref="SuperTrend"/> class.
 	/// </summary>
 	public SuperTrend()
 		: this(new())
@@ -32,7 +85,7 @@ public class SuperTrend : BaseIndicator
 	}
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="SuperTrend"/>.
+	/// Initializes a new instance of the <see cref="SuperTrend"/> class.
 	/// </summary>
 	/// <param name="atr"><see cref="AverageTrueRange"/></param>
 	public SuperTrend(AverageTrueRange atr)
@@ -92,7 +145,7 @@ public class SuperTrend : BaseIndicator
 		var atrValue = _atr.Process(input);
 
 		if (!atrValue.IsFormed)
-			return new DecimalIndicatorValue(this, input.Time);
+			return new SuperTrendIndicatorValue(this, input.Time);
 
 		var atr = atrValue.ToDecimal();
 		var close = candle.ClosePrice;
@@ -142,7 +195,7 @@ public class SuperTrend : BaseIndicator
 			_trend = trend;
 		}
 
-		return new DecimalIndicatorValue(this, supertrend, input.Time);
+		return new SuperTrendIndicatorValue(this, supertrend, trend == 1, input.Time);
 	}
 
 	/// <inheritdoc />
