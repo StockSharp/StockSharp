@@ -23,7 +23,7 @@ public class CommissionParameter : BasePnLStatisticParameter<decimal>
 	/// <inheritdoc />
 	public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 	{
-		if (commission is not null)
-			Value = commission.Value;
+		if (commission is decimal c)
+			Value += c;
 	}
 }

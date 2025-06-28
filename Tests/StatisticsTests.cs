@@ -196,7 +196,7 @@ public class StatisticsTests
 		parameter.Add(marketTime, 1200m, 30m);
 
 		// Assert - should track latest commission
-		parameter.Value.AssertEqual(30m);
+		parameter.Value.AssertEqual(55m);
 	}
 
 	[TestMethod]
