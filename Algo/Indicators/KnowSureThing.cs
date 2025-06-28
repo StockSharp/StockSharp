@@ -4,12 +4,12 @@
 /// Know Sure Thing (KST) indicator.
 /// </summary>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.KSTKey,
-		Description = LocalizedStrings.KnowSureThingKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.KSTKey,
+	Description = LocalizedStrings.KnowSureThingKey)]
 [Doc("topics/api/indicators/list_of_indicators/kst.html")]
 [IndicatorOut(typeof(KnowSureThingValue))]
-public class KnowSureThing : BaseComplexIndicator
+public class KnowSureThing : BaseComplexIndicator<KnowSureThingValue>
 {
 	private readonly RateOfChange _roc1 = new() { Length = 10 };
 	private readonly RateOfChange _roc2 = new() { Length = 15 };
@@ -19,6 +19,7 @@ public class KnowSureThing : BaseComplexIndicator
 	private readonly SimpleMovingAverage _sma2 = new() { Length = 10 };
 	private readonly SimpleMovingAverage _sma3 = new() { Length = 10 };
 	private readonly SimpleMovingAverage _sma4 = new() { Length = 15 };
+
 	/// <summary>
 	/// Signal line.
 	/// </summary>
@@ -93,6 +94,10 @@ public class KnowSureThing : BaseComplexIndicator
 
 		base.Reset();
 	}
+
+	/// <inheritdoc />
+	protected override KnowSureThingValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -109,9 +114,6 @@ public class KnowSureThingLine : BaseIndicator
 
 		return input;
 	}
-	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new KnowSureThingValue(this, time);
 }
 
 /// <summary>
@@ -132,10 +134,10 @@ public class KnowSureThingValue : ComplexIndicatorValue<KnowSureThing>
 	/// <summary>
 	/// Gets the KST line value.
 	/// </summary>
-	public decimal KstLine => InnerValues[Indicator.KstLine].ToDecimal();
+	public decimal KstLine => InnerValues[TypedIndicator.KstLine].ToDecimal();
 
 	/// <summary>
 	/// Gets the signal line value.
 	/// </summary>
-	public decimal Signal => InnerValues[Indicator.Signal].ToDecimal();
+	public decimal Signal => InnerValues[TypedIndicator.Signal].ToDecimal();
 }

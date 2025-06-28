@@ -1,16 +1,15 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
 /// <summary>
-/// Envelope.
+/// Envelope indicator.
 /// </summary>
-/// <remarks>
-/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/envelope.html
-/// </remarks>
-[Display(ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.EnvelopeKey)]
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.EnvelopeKey,
+	Description = LocalizedStrings.EnvelopeDescKey)]
 [Doc("topics/api/indicators/list_of_indicators/envelope.html")]
 [IndicatorOut(typeof(EnvelopeValue))]
-public class Envelope : BaseComplexIndicator
+public class Envelope : BaseComplexIndicator<EnvelopeValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Envelope"/>.
@@ -99,13 +98,13 @@ public class Envelope : BaseComplexIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var value = (ComplexIndicatorValue)base.OnProcess(input);
+		var value = (EnvelopeValue)base.OnProcess(input);
 
 		var upper = value[Upper];
-		value[Upper] = upper.SetValue(Upper, upper.ToDecimal() * (1 + Shift));
+		value[Upper] = upper.SetValue(Upper, value.Upper * (1 + Shift));
 
 		var lower = value[Lower];
-		value[Lower] = lower.SetValue(Lower, lower.ToDecimal() * (1 - Shift));
+		value[Lower] = lower.SetValue(Lower, value.Lower * (1 - Shift));
 
 		return value;
 	}
@@ -126,9 +125,10 @@ public class Envelope : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + " " + Length;
+
 	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new EnvelopeValue(this, time);
+	protected override EnvelopeValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -149,15 +149,15 @@ public class EnvelopeValue : ComplexIndicatorValue<Envelope>
 	/// <summary>
 	/// Gets the <see cref="Envelope.Middle"/> value.
 	/// </summary>
-	public decimal Middle => InnerValues[Indicator.Middle].ToDecimal();
+	public decimal Middle => InnerValues[TypedIndicator.Middle].ToDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="Envelope.Upper"/> value.
 	/// </summary>
-	public decimal Upper => InnerValues[Indicator.Upper].ToDecimal();
+	public decimal Upper => InnerValues[TypedIndicator.Upper].ToDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="Envelope.Lower"/> value.
 	/// </summary>
-	public decimal Lower => InnerValues[Indicator.Lower].ToDecimal();
+	public decimal Lower => InnerValues[TypedIndicator.Lower].ToDecimal();
 }

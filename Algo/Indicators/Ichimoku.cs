@@ -7,12 +7,12 @@
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/ichimoku.html
 /// </remarks>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.IchimokuKey,
-		Description = LocalizedStrings.IchimokuKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.IchimokuKey,
+	Description = LocalizedStrings.IchimokuKey)]
 [Doc("topics/api/indicators/list_of_indicators/ichimoku.html")]
 [IndicatorOut(typeof(IchimokuValue))]
-public class Ichimoku : BaseComplexIndicator
+public class Ichimoku : BaseComplexIndicator<IchimokuValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Ichimoku"/>.
@@ -93,9 +93,10 @@ public class Ichimoku : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" T={Tenkan.Length} K={Kijun.Length} A={SenkouA.Length} B={SenkouB.Length} C={Chinkou.Length}";
+
 	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new IchimokuValue(this, time);
+	protected override IchimokuValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -116,25 +117,25 @@ public class IchimokuValue : ComplexIndicatorValue<Ichimoku>
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.Tenkan"/> value.
 	/// </summary>
-	public decimal Tenkan => InnerValues[Indicator.Tenkan].ToDecimal();
+	public decimal Tenkan => InnerValues[TypedIndicator.Tenkan].ToDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.Kijun"/> value.
 	/// </summary>
-	public decimal Kijun => InnerValues[Indicator.Kijun].ToDecimal();
+	public decimal Kijun => InnerValues[TypedIndicator.Kijun].ToDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.SenkouA"/> value.
 	/// </summary>
-	public decimal SenkouA => InnerValues[Indicator.SenkouA].ToDecimal();
+	public decimal SenkouA => InnerValues[TypedIndicator.SenkouA].ToDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.SenkouB"/> value.
 	/// </summary>
-	public decimal SenkouB => InnerValues[Indicator.SenkouB].ToDecimal();
+	public decimal SenkouB => InnerValues[TypedIndicator.SenkouB].ToDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.Chinkou"/> value.
 	/// </summary>
-	public decimal Chinkou => InnerValues[Indicator.Chinkou].ToDecimal();
+	public decimal Chinkou => InnerValues[TypedIndicator.Chinkou].ToDecimal();
 }

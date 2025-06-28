@@ -6,13 +6,13 @@ using StockSharp.Algo.Candles;
 /// Pivot Points indicator.
 /// </summary>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.PPKey,
-		Description = LocalizedStrings.PivotPointsKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.PPKey,
+	Description = LocalizedStrings.PivotPointsKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/pivot_points.html")]
 [IndicatorOut(typeof(PivotPointsValue))]
-public class PivotPoints : BaseComplexIndicator
+public class PivotPoints : BaseComplexIndicator<PivotPointsValue>
 {
 	/// <summary>
 	/// Pivot point.
@@ -74,6 +74,10 @@ public class PivotPoints : BaseComplexIndicator
 
 		return result;
 	}
+
+	/// <inheritdoc />
+	protected override PivotPointsValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -90,9 +94,6 @@ public class PivotPointPart : BaseIndicator
 		
 		return input;
 	}
-	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new PivotPointsValue(this, time);
 }
 
 /// <summary>
@@ -113,25 +114,25 @@ public class PivotPointsValue : ComplexIndicatorValue<PivotPoints>
 	/// <summary>
 	/// Gets the Pivot Point value.
 	/// </summary>
-	public decimal PivotPoint => InnerValues[Indicator.PivotPoint].ToDecimal();
+	public decimal PivotPoint => InnerValues[TypedIndicator.PivotPoint].ToDecimal();
 
 	/// <summary>
 	/// Gets the R1 value.
 	/// </summary>
-	public decimal R1 => InnerValues[Indicator.R1].ToDecimal();
+	public decimal R1 => InnerValues[TypedIndicator.R1].ToDecimal();
 
 	/// <summary>
 	/// Gets the R2 value.
 	/// </summary>
-	public decimal R2 => InnerValues[Indicator.R2].ToDecimal();
+	public decimal R2 => InnerValues[TypedIndicator.R2].ToDecimal();
 
 	/// <summary>
 	/// Gets the S1 value.
 	/// </summary>
-	public decimal S1 => InnerValues[Indicator.S1].ToDecimal();
+	public decimal S1 => InnerValues[TypedIndicator.S1].ToDecimal();
 
 	/// <summary>
 	/// Gets the S2 value.
 	/// </summary>
-	public decimal S2 => InnerValues[Indicator.S2].ToDecimal();
+	public decimal S2 => InnerValues[TypedIndicator.S2].ToDecimal();
 }

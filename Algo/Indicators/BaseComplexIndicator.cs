@@ -8,21 +8,23 @@ public enum ComplexIndicatorModes
 	/// <summary>
 	/// In-series. The result of the previous indicator execution is passed to the next one,.
 	/// </summary>
-		Sequence,
+	Sequence,
 
 	/// <summary>
 	/// In parallel. Results of indicators execution for not depend on each other.
 	/// </summary>
-		Parallel,
+	Parallel,
 }
 
 /// <summary>
 /// The base indicator, built in form of several indicators combination.
 /// </summary>
-public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
+/// <typeparam name="TValue">Type of the value.</typeparam>
+public abstract class BaseComplexIndicator<TValue> : BaseIndicator, IComplexIndicator
+	where TValue : IComplexIndicatorValue
 {
 	/// <summary>
-	/// Initializes a new instance of the <see cref="BaseComplexIndicator"/>.
+	/// Initializes a new instance of the <see cref="BaseComplexIndicator{TValue}"/>.
 	/// </summary>
 	/// <param name="innerIndicators">Embedded indicators.</param>
 	protected BaseComplexIndicator(params IIndicator[] innerIndicators)
@@ -93,7 +95,7 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 	/// <param name="indicator"><see cref="IIndicator"/></param>
 	/// <param name="time">Time</param>
 	/// <returns>Empty value.</returns>
-	protected virtual IIndicatorValue CreateEmpty(IIndicator indicator, DateTimeOffset time)
+	protected virtual IIndicatorValue CreateInnerEmpty(IIndicator indicator, DateTimeOffset time)
 		=> new DecimalIndicatorValue(indicator, time);
 
 	/// <inheritdoc />
@@ -101,20 +103,20 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 	{
 		var output = base.Process(input);
 
-		var cv = (ComplexIndicatorValue)output;
+		var cv = (TValue)output;
 
 		foreach (var inner in InnerIndicators)
-			cv.InnerValues.SafeAdd(inner, key => CreateEmpty(key, input.Time));
+			cv.InnerValues.SafeAdd(inner, key => CreateInnerEmpty(key, input.Time));
 
 		return output;
 	}
 
 	/// <summary>
-	/// Create <see cref="ComplexIndicatorValue"/>.
+	/// Create <typeparamref name="TValue"/>.
 	/// </summary>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	/// <returns><see cref="ComplexIndicatorValue"/></returns>
-	protected abstract ComplexIndicatorValue CreateValue(DateTimeOffset time);
+	/// <returns><typeparamref name="TValue"/></returns>
+	protected abstract TValue CreateValue(DateTimeOffset time);
 	
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)

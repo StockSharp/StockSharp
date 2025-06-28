@@ -13,7 +13,7 @@
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/aroon.html")]
 [IndicatorOut(typeof(AroonValue))]
-public class Aroon : BaseComplexIndicator
+public class Aroon : BaseComplexIndicator<AroonValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Aroon"/>.
@@ -85,6 +85,10 @@ public class Aroon : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" L={Length}";
+
+	/// <inheritdoc />
+	protected override AroonValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -261,9 +265,6 @@ public class AroonDown : LengthIndicator<decimal>
 
 		base.Reset();
 	}
-	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new AroonValue(this, time);
 }
 
 /// <summary>
@@ -284,10 +285,10 @@ public class AroonValue : ComplexIndicatorValue<Aroon>
 	/// <summary>
 	/// Gets the <see cref="Aroon.Up"/> value.
 	/// </summary>
-	public decimal Up => InnerValues[Indicator.Up].ToDecimal();
+	public decimal Up => InnerValues[TypedIndicator.Up].ToDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="Aroon.Down"/> value.
 	/// </summary>
-	public decimal Down => InnerValues[Indicator.Down].ToDecimal();
+	public decimal Down => InnerValues[TypedIndicator.Down].ToDecimal();
 }

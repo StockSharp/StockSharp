@@ -4,13 +4,13 @@
 /// Percentage Price Oscillator (PPO).
 /// </summary>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.PPOKey,
-		Description = LocalizedStrings.PercentagePriceOscillatorKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.PPOKey,
+	Description = LocalizedStrings.PercentagePriceOscillatorKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/percentage_price_oscillator.html")]
 [IndicatorOut(typeof(PercentagePriceOscillatorValue))]
-public class PercentagePriceOscillator : BaseComplexIndicator
+public class PercentagePriceOscillator : BaseComplexIndicator<PercentagePriceOscillatorValue>
 {
 	/// <summary>
 	/// Short EMA.
@@ -93,9 +93,9 @@ public class PercentagePriceOscillator : BaseComplexIndicator
 
 		if (IsFormed)
 		{
-		var den = longValue.ToDecimal();
-		var ppo = den == 0 ? 0 : ((shortValue.ToDecimal() - den) / den) * 100;
-		result.Add(this, new DecimalIndicatorValue(this, ppo, input.Time));
+			var den = longValue.ToDecimal();
+			var ppo = den == 0 ? 0 : ((shortValue.ToDecimal() - den) / den) * 100;
+			result.Add(this, new DecimalIndicatorValue(this, ppo, input.Time));
 		}
 
 		return result;
@@ -121,9 +121,10 @@ public class PercentagePriceOscillator : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" S={ShortPeriod},L={LongPeriod}";
+
 	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new PercentagePriceOscillatorValue(this, time);
+	protected override PercentagePriceOscillatorValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -144,10 +145,10 @@ public class PercentagePriceOscillatorValue : ComplexIndicatorValue<PercentagePr
 	/// <summary>
 	/// Gets the short EMA value.
 	/// </summary>
-	public decimal ShortEma => InnerValues[Indicator.ShortEma].ToDecimal();
+	public decimal ShortEma => InnerValues[TypedIndicator.ShortEma].ToDecimal();
 
 	/// <summary>
 	/// Gets the long EMA value.
 	/// </summary>
-	public decimal LongEma => InnerValues[Indicator.LongEma].ToDecimal();
+	public decimal LongEma => InnerValues[TypedIndicator.LongEma].ToDecimal();
 }

@@ -4,13 +4,13 @@
 /// Fibonacci Retracement.
 /// </summary>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.FRKey,
-		Description = LocalizedStrings.FibonacciRetracementKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.FRKey,
+	Description = LocalizedStrings.FibonacciRetracementKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/fibonacci_retracement.html")]
 [IndicatorOut(typeof(FibonacciRetracementValue))]
-public class FibonacciRetracement : BaseComplexIndicator
+public class FibonacciRetracement : BaseComplexIndicator<FibonacciRetracementValue>
 {
 	private readonly Highest _highest;
 	private readonly Lowest _lowest;
@@ -107,6 +107,10 @@ public class FibonacciRetracement : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + " " + Length;
+
+	/// <inheritdoc />
+	protected override FibonacciRetracementValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -137,9 +141,6 @@ public class FibonacciLevel : BaseIndicator
 
 		return input;
 	}
-	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new FibonacciRetracementValue(this, time);
 }
 
 /// <summary>
@@ -160,5 +161,5 @@ public class FibonacciRetracementValue : ComplexIndicatorValue<FibonacciRetracem
 	/// <summary>
 	/// Gets all level values.
 	/// </summary>
-	public decimal[] Levels => Indicator.Levels.Select(l => InnerValues[l].ToDecimal()).ToArray();
+	public decimal[] Levels => TypedIndicator.Levels.Select(l => InnerValues[l].ToDecimal()).ToArray();
 }

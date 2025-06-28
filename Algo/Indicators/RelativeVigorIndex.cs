@@ -7,12 +7,12 @@
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/rvi.html
 /// </remarks>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.RVIKey,
-		Description = LocalizedStrings.RelativeVigorIndexKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.RVIKey,
+	Description = LocalizedStrings.RelativeVigorIndexKey)]
 [Doc("topics/api/indicators/list_of_indicators/rvi.html")]
 [IndicatorOut(typeof(RelativeVigorIndexValue))]
-public class RelativeVigorIndex : BaseComplexIndicator
+public class RelativeVigorIndex : BaseComplexIndicator<RelativeVigorIndexValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RelativeVigorIndex"/>.
@@ -63,9 +63,10 @@ public class RelativeVigorIndex : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" A={Average.Length} S={Signal.Length}";
+
 	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new RelativeVigorIndexValue(this, time);
+	protected override RelativeVigorIndexValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -86,10 +87,10 @@ public class RelativeVigorIndexValue : ComplexIndicatorValue<RelativeVigorIndex>
 	/// <summary>
 	/// Gets the <see cref="RelativeVigorIndex.Average"/> value.
 	/// </summary>
-	public decimal Average => InnerValues[Indicator.Average].ToDecimal();
+	public decimal Average => InnerValues[TypedIndicator.Average].ToDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="RelativeVigorIndex.Signal"/> value.
 	/// </summary>
-	public decimal Signal => InnerValues[Indicator.Signal].ToDecimal();
+	public decimal Signal => InnerValues[TypedIndicator.Signal].ToDecimal();
 }

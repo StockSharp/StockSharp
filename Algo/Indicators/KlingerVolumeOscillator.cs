@@ -4,13 +4,13 @@
 /// Klinger Volume Oscillator.
 /// </summary>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.KVOKey,
-		Description = LocalizedStrings.KlingerVolumeOscillatorKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.KVOKey,
+	Description = LocalizedStrings.KlingerVolumeOscillatorKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/klinger_volume_oscillator.html")]
 [IndicatorOut(typeof(KlingerVolumeOscillatorValue))]
-public class KlingerVolumeOscillator : BaseComplexIndicator
+public class KlingerVolumeOscillator : BaseComplexIndicator<KlingerVolumeOscillatorValue>
 {
 	/// <summary>
 	/// Short EMA.
@@ -99,7 +99,7 @@ public class KlingerVolumeOscillator : BaseComplexIndicator
 		{
 			_prevHlc = hlc;
 
-		if (!IsFormed && ShortEma.IsFormed && LongEma.IsFormed)
+			if (!IsFormed && ShortEma.IsFormed && LongEma.IsFormed)
 				IsFormed = true;
 		}
 
@@ -116,9 +116,10 @@ public class KlingerVolumeOscillator : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" S={ShortPeriod},L={LongPeriod}";
+
 	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new KlingerVolumeOscillatorValue(this, time);
+	protected override KlingerVolumeOscillatorValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -139,15 +140,15 @@ public class KlingerVolumeOscillatorValue : ComplexIndicatorValue<KlingerVolumeO
 	/// <summary>
 	/// Gets the short EMA value.
 	/// </summary>
-	public decimal ShortEma => InnerValues[Indicator.ShortEma].ToDecimal();
+	public decimal ShortEma => InnerValues[TypedIndicator.ShortEma].ToDecimal();
 
 	/// <summary>
 	/// Gets the long EMA value.
 	/// </summary>
-	public decimal LongEma => InnerValues[Indicator.LongEma].ToDecimal();
+	public decimal LongEma => InnerValues[TypedIndicator.LongEma].ToDecimal();
 
 	/// <summary>
 	/// Gets the oscillator value.
 	/// </summary>
-	public decimal Oscillator => InnerValues[Indicator].ToDecimal();
+	public decimal Oscillator => InnerValues[TypedIndicator].ToDecimal();
 }

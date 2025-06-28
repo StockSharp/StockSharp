@@ -7,12 +7,12 @@
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/stochastic_oscillator.html
 /// </remarks>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.STOCHKey,
-		Description = LocalizedStrings.StochasticOscillatorKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.STOCHKey,
+	Description = LocalizedStrings.StochasticOscillatorKey)]
 [Doc("topics/api/indicators/list_of_indicators/stochastic_oscillator.html")]
 [IndicatorOut(typeof(StochasticOscillatorValue))]
-public class StochasticOscillator : BaseComplexIndicator
+public class StochasticOscillator : BaseComplexIndicator<StochasticOscillatorValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="StochasticOscillator"/>.
@@ -52,9 +52,10 @@ public class StochasticOscillator : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" %K={K.Length} %D={D.Length}";
+
 	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new StochasticOscillatorValue(this, time);
+	protected override StochasticOscillatorValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -75,10 +76,10 @@ public class StochasticOscillatorValue : ComplexIndicatorValue<StochasticOscilla
 	/// <summary>
 	/// Gets the %K value.
 	/// </summary>
-	public decimal KValue => InnerValues[Indicator.K].ToDecimal();
+	public decimal KValue => InnerValues[TypedIndicator.K].ToDecimal();
 
 	/// <summary>
 	/// Gets the %D value.
 	/// </summary>
-	public decimal DValue => InnerValues[Indicator.D].ToDecimal();
+	public decimal DValue => InnerValues[TypedIndicator.D].ToDecimal();
 }

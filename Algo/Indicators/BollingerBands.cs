@@ -7,12 +7,12 @@
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/bollinger_bands.html
 /// </remarks>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.BollingerKey,
-		Description = LocalizedStrings.BollingerBandsKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.BollingerKey,
+	Description = LocalizedStrings.BollingerBandsKey)]
 [Doc("topics/api/indicators/list_of_indicators/bollinger_bands.html")]
 [IndicatorOut(typeof(BollingerBandsValue))]
-public class BollingerBands : BaseComplexIndicator
+public class BollingerBands : BaseComplexIndicator<BollingerBandsValue>
 {
 	private readonly StandardDeviation _dev = new();
 
@@ -125,9 +125,10 @@ public class BollingerBands : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + " " + Length;
+
 	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new BollingerBandsValue(this, time);
+	protected override BollingerBandsValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -148,15 +149,15 @@ public class BollingerBandsValue : ComplexIndicatorValue<BollingerBands>
 	/// <summary>
 	/// Gets the <see cref="BollingerBands.MovingAverage"/> value.
 	/// </summary>
-	public decimal MovingAverage => InnerValues[Indicator.MovingAverage].ToDecimal();
+	public decimal MovingAverage => InnerValues[TypedIndicator.MovingAverage].ToDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="BollingerBands.UpBand"/> value.
 	/// </summary>
-	public decimal UpBand => InnerValues[Indicator.UpBand].ToDecimal();
+	public decimal UpBand => InnerValues[TypedIndicator.UpBand].ToDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="BollingerBands.LowBand"/> value.
 	/// </summary>
-	public decimal LowBand => InnerValues[Indicator.LowBand].ToDecimal();
+	public decimal LowBand => InnerValues[TypedIndicator.LowBand].ToDecimal();
 }

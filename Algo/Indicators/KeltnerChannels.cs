@@ -7,13 +7,13 @@
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/keltner_channels.html
 /// </remarks>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.KCKey,
-		Description = LocalizedStrings.KeltnerChannelsKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.KCKey,
+	Description = LocalizedStrings.KeltnerChannelsKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/keltner_channels.html")]
 [IndicatorOut(typeof(KeltnerChannelsValue))]
-public class KeltnerChannels : BaseComplexIndicator
+public class KeltnerChannels : BaseComplexIndicator<KeltnerChannelsValue>
 {
 	private readonly AverageTrueRange _atr;
 
@@ -145,6 +145,10 @@ public class KeltnerChannels : BaseComplexIndicator
 		Length = storage.GetValue<int>(nameof(Length));
 		Multiplier = storage.GetValue<decimal>(nameof(Multiplier));
 	}
+
+	/// <inheritdoc />
+	protected override KeltnerChannelsValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -169,9 +173,6 @@ public class KeltnerChannelBand : LengthIndicator<decimal>
 
 		return input;
 	}
-	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new KeltnerChannelsValue(this, time);
 }
 
 /// <summary>
@@ -192,15 +193,15 @@ public class KeltnerChannelsValue : ComplexIndicatorValue<KeltnerChannels>
 	/// <summary>
 	/// Gets the <see cref="KeltnerChannels.Middle"/> value.
 	/// </summary>
-	public decimal Middle => InnerValues[Indicator.Middle].ToDecimal();
+	public decimal Middle => InnerValues[TypedIndicator.Middle].ToDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="KeltnerChannels.Upper"/> value.
 	/// </summary>
-	public decimal Upper => InnerValues[Indicator.Upper].ToDecimal();
+	public decimal Upper => InnerValues[TypedIndicator.Upper].ToDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="KeltnerChannels.Lower"/> value.
 	/// </summary>
-	public decimal Lower => InnerValues[Indicator.Lower].ToDecimal();
+	public decimal Lower => InnerValues[TypedIndicator.Lower].ToDecimal();
 }

@@ -7,12 +7,12 @@
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/macd_with_signal_line.html
 /// </remarks>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.MACDSignalKey,
-		Description = LocalizedStrings.MACDSignalDescKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.MACDSignalKey,
+	Description = LocalizedStrings.MACDSignalDescKey)]
 [Doc("topics/api/indicators/list_of_indicators/macd_with_signal_line.html")]
 [IndicatorOut(typeof(MovingAverageConvergenceDivergenceSignalValue))]
-public class MovingAverageConvergenceDivergenceSignal : BaseComplexIndicator
+public class MovingAverageConvergenceDivergenceSignal : BaseComplexIndicator<MovingAverageConvergenceDivergenceSignalValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MovingAverageConvergenceDivergenceSignal"/>.
@@ -62,9 +62,10 @@ public class MovingAverageConvergenceDivergenceSignal : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" L={Macd.LongMa.Length} S={Macd.ShortMa.Length} Sig={SignalMa.Length}";
+
 	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new MovingAverageConvergenceDivergenceSignalValue(this, time);
+	protected override MovingAverageConvergenceDivergenceSignalValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -85,10 +86,10 @@ public class MovingAverageConvergenceDivergenceSignalValue : ComplexIndicatorVal
 	/// <summary>
 	/// Gets the MACD value.
 	/// </summary>
-	public decimal Macd => InnerValues[Indicator.Macd].ToDecimal();
+	public decimal Macd => InnerValues[TypedIndicator.Macd].ToDecimal();
 
 	/// <summary>
 	/// Gets the signal line value.
 	/// </summary>
-	public decimal Signal => InnerValues[Indicator.SignalMa].ToDecimal();
+	public decimal Signal => InnerValues[TypedIndicator.SignalMa].ToDecimal();
 }

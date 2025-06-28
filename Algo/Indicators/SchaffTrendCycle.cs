@@ -88,12 +88,12 @@ public class SchaffTrendCycle : ExponentialMovingAverage
 		if (input.IsFinal)
 			_buffer.PushBack(input.ToDecimal());
 
-		var macdVal = (ComplexIndicatorValue)Macd.Process(input);
+		var macdVal = (MovingAverageConvergenceDivergenceSignalValue)Macd.Process(input);
 
 		if (!Macd.IsFormed)
 			return null;
 
-		var macdHist = macdVal[Macd.Macd].ToDecimal() - macdVal[Macd.SignalMa].ToDecimal();
+		var macdHist = macdVal.Macd - macdVal.Signal;
 		var den = _buffer.Max.Value - _buffer.Min.Value;
 		var stochK = den == 0 ? _prevStochK : StochasticK.Process(input, (macdHist - _buffer.Min.Value) / den).ToDecimal();
 

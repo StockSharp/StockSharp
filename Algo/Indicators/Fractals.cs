@@ -3,14 +3,14 @@
 /// <summary>
 /// <see cref="Fractals"/> indicator value.
 /// </summary>
-public class FractalsIndicatorValue : ComplexIndicatorValue
+public class FractalsValue : ComplexIndicatorValue<Fractals>
 {
 	/// <summary>
-	/// Initializes a new instance of the <see cref="FractalsIndicatorValue"/>.
+	/// Initializes a new instance of the <see cref="FractalsValue"/>.
 	/// </summary>
 	/// <param name="fractals"><see cref="Fractals"/></param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public FractalsIndicatorValue(Fractals fractals, DateTimeOffset time)
+	public FractalsValue(Fractals fractals, DateTimeOffset time)
 		: base(fractals, time)
 	{
 	}
@@ -31,11 +31,21 @@ public class FractalsIndicatorValue : ComplexIndicatorValue
 	public bool HasDown { get; private set; }
 
 	/// <summary>
-	/// Cast object from <see cref="FractalsIndicatorValue"/> to <see cref="bool"/>.
+	/// Gets the <see cref="Fractals.Up"/> value.
 	/// </summary>
-	/// <param name="value">Object <see cref="FractalsIndicatorValue"/>.</param>
+	public decimal Up => InnerValues[TypedIndicator.Up].ToDecimal();
+
+	/// <summary>
+	/// Gets the <see cref="Fractals.Down"/> value.
+	/// </summary>
+	public decimal Down => InnerValues[TypedIndicator.Down].ToDecimal();
+
+	/// <summary>
+	/// Cast object from <see cref="FractalsValue"/> to <see cref="bool"/>.
+	/// </summary>
+	/// <param name="value">Object <see cref="FractalsValue"/>.</param>
 	/// <returns><see cref="bool"/> value.</returns>
-	public static explicit operator bool(FractalsIndicatorValue value)
+	public static explicit operator bool(FractalsValue value)
 		=> value.CheckOnNull(nameof(value)).HasPattern;
 
 	/// <inheritdoc />
@@ -65,14 +75,13 @@ public class FractalsIndicatorValue : ComplexIndicatorValue
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/fractals.html
 /// </remarks>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.FractalsKey,
-		Description = LocalizedStrings.FractalsKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.FractalsKey,
+	Description = LocalizedStrings.FractalsKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[IndicatorOut(typeof(FractalsIndicatorValue))]
-[Doc("topics/api/indicators/list_of_indicators/fractals.html")]
 [IndicatorOut(typeof(FractalsValue))]
-public class Fractals : BaseComplexIndicator
+[Doc("topics/api/indicators/list_of_indicators/fractals.html")]
+public class Fractals : BaseComplexIndicator<FractalsValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Fractals"/>.
@@ -139,30 +148,9 @@ public class Fractals : BaseComplexIndicator
 	public FractalPart Down { get; }
 
 	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new FractalsIndicatorValue(this, time);
+	protected override FractalsValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + " " + Length;
-	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new FractalsValue(this, time);
-}
-
-public class FractalsValue : ComplexIndicatorValue<Fractals>
-{
-	public FractalsValue(Fractals indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
-	/// <summary>
-	/// Gets the <see cref="Fractals.Up"/> value.
-	/// </summary>
-	public decimal Up => InnerValues[Indicator.Up].ToDecimal();
-
-	/// <summary>
-	/// Gets the <see cref="Fractals.Down"/> value.
-	/// </summary>
-	public decimal Down => InnerValues[Indicator.Down].ToDecimal();
 }

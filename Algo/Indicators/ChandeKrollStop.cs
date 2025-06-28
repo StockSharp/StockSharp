@@ -4,13 +4,13 @@
 /// Chande Kroll Stop indicator.
 /// </summary>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.CKSKey,
-		Description = LocalizedStrings.ChandeKrollStopKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.CKSKey,
+	Description = LocalizedStrings.ChandeKrollStopKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/chande_kroll_stop.html")]
 [IndicatorOut(typeof(ChandeKrollStopValue))]
-public class ChandeKrollStop : BaseComplexIndicator
+public class ChandeKrollStop : BaseComplexIndicator<ChandeKrollStopValue>
 {
 	private readonly SimpleMovingAverage _smaHigh;
 	private readonly SimpleMovingAverage _smaLow;
@@ -58,8 +58,8 @@ public class ChandeKrollStop : BaseComplexIndicator
 		get => Highest.Length;
 		set
 		{
-		Highest.Length = value;
-		Lowest.Length = value;
+			Highest.Length = value;
+			Lowest.Length = value;
 		}
 	}
 
@@ -125,8 +125,8 @@ public class ChandeKrollStop : BaseComplexIndicator
 			var stopLong = highest - highLowDiff * Multiplier;
 			var stopShort = lowest + highLowDiff * Multiplier;
 
-		result.Add(Highest, _smaHigh.Process(input, stopLong));
-		result.Add(Lowest, _smaLow.Process(input, stopShort));
+			result.Add(Highest, _smaHigh.Process(input, stopLong));
+			result.Add(Lowest, _smaLow.Process(input, stopShort));
 		}
 
 		return result;
@@ -135,8 +135,8 @@ public class ChandeKrollStop : BaseComplexIndicator
 	/// <inheritdoc />
 	public override void Reset()
 	{
-		Highest.Reset();
-		Lowest.Reset();
+		//Highest.Reset();
+		//Lowest.Reset();
 		_smaHigh.Reset();
 		_smaLow.Reset();
 
@@ -162,9 +162,10 @@ public class ChandeKrollStop : BaseComplexIndicator
 		Multiplier = storage.GetValue<decimal>(nameof(Multiplier));
 		StopPeriod = storage.GetValue<int>(nameof(StopPeriod));
 	}
+
 	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new ChandeKrollStopValue(this, time);
+	protected override ChandeKrollStopValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -185,10 +186,10 @@ public class ChandeKrollStopValue : ComplexIndicatorValue<ChandeKrollStop>
 	/// <summary>
 	/// Gets the highest stop line.
 	/// </summary>
-	public decimal Highest => InnerValues[Indicator.Highest].ToDecimal();
+	public decimal Highest => InnerValues[TypedIndicator.Highest].ToDecimal();
 
 	/// <summary>
 	/// Gets the lowest stop line.
 	/// </summary>
-	public decimal Lowest => InnerValues[Indicator.Lowest].ToDecimal();
+	public decimal Lowest => InnerValues[TypedIndicator.Lowest].ToDecimal();
 }

@@ -4,12 +4,12 @@
 /// Sine Wave indicator.
 /// </summary>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.SWKey,
-		Description = LocalizedStrings.SineWaveKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.SWKey,
+	Description = LocalizedStrings.SineWaveKey)]
 [Doc("topics/api/indicators/list_of_indicators/sine_wave.html")]
 [IndicatorOut(typeof(SineWaveValue))]
-public class SineWave : BaseComplexIndicator
+public class SineWave : BaseComplexIndicator<SineWaveValue>
 {
 	/// <summary>
 	/// Lead line.
@@ -106,6 +106,10 @@ public class SineWave : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" L={Length}";
+
+	/// <inheritdoc />
+	protected override SineWaveValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -122,9 +126,6 @@ public class SineWaveLine : BaseIndicator
 
 		return input;
 	}
-	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new SineWaveValue(this, time);
 }
 
 /// <summary>
@@ -145,10 +146,10 @@ public class SineWaveValue : ComplexIndicatorValue<SineWave>
 	/// <summary>
 	/// Gets the main line value.
 	/// </summary>
-	public decimal Main => InnerValues[Indicator.Main].ToDecimal();
+	public decimal Main => InnerValues[TypedIndicator.Main].ToDecimal();
 
 	/// <summary>
 	/// Gets the lead line value.
 	/// </summary>
-	public decimal Lead => InnerValues[Indicator.Lead].ToDecimal();
+	public decimal Lead => InnerValues[TypedIndicator.Lead].ToDecimal();
 }

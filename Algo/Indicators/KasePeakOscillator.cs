@@ -4,13 +4,13 @@
 /// Kase Peak Oscillator indicator.
 /// </summary>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.KPOKey,
-		Description = LocalizedStrings.KasePeakOscillatorKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.KPOKey,
+	Description = LocalizedStrings.KasePeakOscillatorKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/kase_peak_oscillator.html")]
 [IndicatorOut(typeof(KasePeakOscillatorValue))]
-public class KasePeakOscillator : BaseComplexIndicator
+public class KasePeakOscillator : BaseComplexIndicator<KasePeakOscillatorValue>
 {
 	private readonly AverageTrueRange _atr = new() { Length = 10 };
 	private readonly CircularBufferEx<decimal> _peakBuffer = new(2) { MaxComparer = Comparer<decimal>.Default };
@@ -156,6 +156,10 @@ public class KasePeakOscillator : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" S={ShortPeriod} L={LongPeriod}";
+
+	/// <inheritdoc />
+	protected override KasePeakOscillatorValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -174,9 +178,6 @@ public class KasePeakOscillatorPart : LengthIndicator<decimal>
 
 		return value;
 	}
-	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new KasePeakOscillatorValue(this, time);
 }
 
 /// <summary>
@@ -197,10 +198,10 @@ public class KasePeakOscillatorValue : ComplexIndicatorValue<KasePeakOscillator>
 	/// <summary>
 	/// Gets the <see cref="KasePeakOscillator.ShortTerm"/> value.
 	/// </summary>
-	public decimal ShortTerm => InnerValues[Indicator.ShortTerm].ToDecimal();
+	public decimal ShortTerm => InnerValues[TypedIndicator.ShortTerm].ToDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="KasePeakOscillator.LongTerm"/> value.
 	/// </summary>
-	public decimal LongTerm => InnerValues[Indicator.LongTerm].ToDecimal();
+	public decimal LongTerm => InnerValues[TypedIndicator.LongTerm].ToDecimal();
 }

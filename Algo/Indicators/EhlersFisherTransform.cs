@@ -4,13 +4,13 @@
 /// Ehlers Fisher Transform indicator.
 /// </summary>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.EFTKey,
-		Description = LocalizedStrings.EhlersFisherTransformKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.EFTKey,
+	Description = LocalizedStrings.EhlersFisherTransformKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/ehlers_fisher_transform.html")]
 [IndicatorOut(typeof(EhlersFisherTransformValue))]
-public class EhlersFisherTransform : BaseComplexIndicator
+public class EhlersFisherTransform : BaseComplexIndicator<EhlersFisherTransformValue>
 {
 	private readonly CircularBufferEx<decimal> _highBuffer;
 	private readonly CircularBufferEx<decimal> _lowBuffer;
@@ -101,8 +101,8 @@ public class EhlersFisherTransform : BaseComplexIndicator
 
 			var fisherTransform = 0.5m * (decimal)Math.Log((double)((1 + value) / (1 - value)));
 
-		result.Add(MainLine, MainLine.Process(input, fisherTransform));
-		result.Add(TriggerLine, TriggerLine.Process(input, _currValue));
+			result.Add(MainLine, MainLine.Process(input, fisherTransform));
+			result.Add(TriggerLine, TriggerLine.Process(input, _currValue));
 
 			if (input.IsFinal)
 			{
@@ -141,6 +141,10 @@ public class EhlersFisherTransform : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + " " + Length;
+
+	/// <inheritdoc />
+	protected override EhlersFisherTransformValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -157,9 +161,6 @@ public class EhlersFisherTransformLine : BaseIndicator
 
 		return input;
 	}
-	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new EhlersFisherTransformValue(this, time);
 }
 
 /// <summary>
@@ -180,10 +181,10 @@ public class EhlersFisherTransformValue : ComplexIndicatorValue<EhlersFisherTran
 	/// <summary>
 	/// Gets the main line value.
 	/// </summary>
-	public decimal MainLine => InnerValues[Indicator.MainLine].ToDecimal();
+	public decimal MainLine => InnerValues[TypedIndicator.MainLine].ToDecimal();
 
 	/// <summary>
 	/// Gets the trigger line value.
 	/// </summary>
-	public decimal TriggerLine => InnerValues[Indicator.TriggerLine].ToDecimal();
+	public decimal TriggerLine => InnerValues[TypedIndicator.TriggerLine].ToDecimal();
 }

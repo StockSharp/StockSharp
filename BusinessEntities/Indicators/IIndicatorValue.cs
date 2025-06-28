@@ -520,45 +520,26 @@ public class PairIndicatorValue<TValue> : SingleIndicatorValue<(TValue, TValue)>
 /// <summary>
 /// The complex value of the indicator <see cref="IComplexIndicator"/>, derived as result of calculation.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="ComplexIndicatorValue"/>.
-/// </remarks>
-/// <param name="indicator">Indicator.</param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public abstract class ComplexIndicatorValue<TIndicator>(TIndicator indicator, DateTimeOffset time) : BaseIndicatorValue(indicator, time)
-    where TIndicator : class, IComplexIndicator
+public interface IComplexIndicatorValue : IIndicatorValue
 {
-
-    public new TIndicator Indicator { get; } = indicator;
-	/// <inheritdoc />
-	public override bool IsEmpty { get; set; }
-
-	/// <inheritdoc />
-	public override bool IsFinal { get; set; }
-
 	/// <summary>
 	/// Embedded values.
 	/// </summary>
-	public IDictionary<IIndicator, IIndicatorValue> InnerValues { get; } = new Dictionary<IIndicator, IIndicatorValue>();
+	IDictionary<IIndicator, IIndicatorValue> InnerValues { get; }
 
 	/// <summary>
 	/// Gets or sets a value of inner indicator.
 	/// </summary>
 	/// <param name="indicator"><see cref="IIndicator"/></param>
 	/// <returns><see cref="IIndicatorValue"/></returns>
-	public IIndicatorValue this[IIndicator indicator]
-	{
-		get => InnerValues[indicator];
-		set => InnerValues[indicator] = value ?? throw new ArgumentNullException(nameof(value));
-	}
+	IIndicatorValue this[IIndicator indicator] { get; set; }
 
 	/// <summary>
 	/// Add a value of inner indicator.
 	/// </summary>
 	/// <param name="indicator"><see cref="IIndicator"/></param>
 	/// <param name="value"><see cref="IIndicatorValue"/></param>
-	public virtual void Add(IIndicator indicator, IIndicatorValue value)
-		=> InnerValues.Add(indicator, value);
+	void Add(IIndicator indicator, IIndicatorValue value);
 
 	/// <summary>
 	/// Try get a value of inner indicator.
@@ -566,13 +547,54 @@ public abstract class ComplexIndicatorValue<TIndicator>(TIndicator indicator, Da
 	/// <param name="indicator"><see cref="IIndicator"/></param>
 	/// <param name="value"><see cref="IIndicatorValue"/></param>
 	/// <returns>Operation result.</returns>
+	bool TryGet(IIndicator indicator, out IIndicatorValue value);
+}
+
+/// <summary>
+/// The complex value of the indicator <see cref="IComplexIndicator"/>, derived as result of calculation.
+/// </summary>
+/// <typeparam name="TIndicator">Type of the complex indicator.</typeparam>
+/// <remarks>
+/// Initializes a new instance of the <see cref="ComplexIndicatorValue{TIndicator}"/>.
+/// </remarks>
+/// <param name="indicator">Indicator.</param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public abstract class ComplexIndicatorValue<TIndicator>(TIndicator indicator, DateTimeOffset time) : BaseIndicatorValue(indicator, time), IComplexIndicatorValue
+	where TIndicator : class, IComplexIndicator
+{
+	/// <summary>
+	/// The complex indicator, based on which the value is calculated.
+	/// </summary>
+	public TIndicator TypedIndicator => (TIndicator)Indicator;
+
+	/// <inheritdoc />
+	public override bool IsEmpty { get; set; }
+
+	/// <inheritdoc />
+	public override bool IsFinal { get; set; }
+
+	/// <inheritdoc />
+	public IDictionary<IIndicator, IIndicatorValue> InnerValues { get; } = new Dictionary<IIndicator, IIndicatorValue>();
+
+	/// <inheritdoc />
+	public IIndicatorValue this[IIndicator indicator]
+	{
+		get => InnerValues[indicator];
+		set => InnerValues[indicator] = value ?? throw new ArgumentNullException(nameof(value));
+	}
+
+	/// <inheritdoc />
+	public virtual void Add(IIndicator indicator, IIndicatorValue value)
+		=> InnerValues.Add(indicator, value);
+
+	/// <inheritdoc />
 	public bool TryGet(IIndicator indicator, out IIndicatorValue value)
 		=> InnerValues.TryGetValue(indicator, out value);
 
 	/// <inheritdoc />
 	public override T GetValue<T>(Level1Fields? field)
 	{
-		if (InnerValues.TryGetValue(Indicator, out var value))
+		if (InnerValues.TryGetValue(TypedIndicator, out var value))
 			return value.GetValue<T>(field);
 
 		throw new NotSupportedException();
@@ -587,7 +609,7 @@ public abstract class ComplexIndicatorValue<TIndicator>(TIndicator indicator, Da
 		if (IsEmpty)
 			yield break;
 
-		foreach (var inner in Indicator.InnerIndicators)
+		foreach (var inner in TypedIndicator.InnerIndicators)
 			yield return InnerValues[inner].ToValues();
 	}
 
@@ -606,15 +628,7 @@ public abstract class ComplexIndicatorValue<TIndicator>(TIndicator indicator, Da
 
 		var idx = 0;
 
-		foreach (var inner in Indicator.InnerIndicators)
+		foreach (var inner in TypedIndicator.InnerIndicators)
 			InnerValues.Add(inner, inner.CreateValue(Time, values[idx++].To<object[]>()));
 	}
-}
-
-public abstract class ComplexIndicatorValue : ComplexIndicatorValue<IComplexIndicator>
-{
-        protected ComplexIndicatorValue(IComplexIndicator indicator, DateTimeOffset time)
-                : base(indicator, time)
-        {
-        }
 }

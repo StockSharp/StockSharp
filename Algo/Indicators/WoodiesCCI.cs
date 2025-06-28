@@ -4,13 +4,13 @@
 /// Woodies CCI.
 /// </summary>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.WCCIKey,
-		Description = LocalizedStrings.WoodiesCCIKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.WCCIKey,
+	Description = LocalizedStrings.WoodiesCCIKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/woodies_cci.html")]
 [IndicatorOut(typeof(WoodiesCCIValue))]
-public class WoodiesCCI : BaseComplexIndicator
+public class WoodiesCCI : BaseComplexIndicator<WoodiesCCIValue>
 {
 	/// <summary>
 	/// CCI line.
@@ -71,9 +71,10 @@ public class WoodiesCCI : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" CCI({Length}), SMA({SMALength})";
+
 	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new WoodiesCCIValue(this, time);
+	protected override WoodiesCCIValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -94,10 +95,10 @@ public class WoodiesCCIValue : ComplexIndicatorValue<WoodiesCCI>
 	/// <summary>
 	/// Gets the CCI value.
 	/// </summary>
-	public decimal Cci => InnerValues[Indicator.Cci].ToDecimal();
+	public decimal Cci => InnerValues[TypedIndicator.Cci].ToDecimal();
 
 	/// <summary>
 	/// Gets the SMA value.
 	/// </summary>
-	public decimal Sma => InnerValues[Indicator.Sma].ToDecimal();
+	public decimal Sma => InnerValues[TypedIndicator.Sma].ToDecimal();
 }

@@ -7,17 +7,18 @@
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/macd_histogram.html
 /// </remarks>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.MACDHistogramKey,
-		Description = LocalizedStrings.HistogramDescKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.MACDHistogramKey,
+	Description = LocalizedStrings.HistogramDescKey)]
 [Doc("topics/api/indicators/list_of_indicators/macd_histogram.html")]
 [IndicatorOut(typeof(MovingAverageConvergenceDivergenceHistogramValue))]
-public class MovingAverageConvergenceDivergenceHistogram : MovingAverageConvergenceDivergenceSignal
+public class MovingAverageConvergenceDivergenceHistogram : BaseComplexIndicator<MovingAverageConvergenceDivergenceHistogramValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MovingAverageConvergenceDivergenceHistogram"/>.
 	/// </summary>
 	public MovingAverageConvergenceDivergenceHistogram()
+		: this(new(), new() { Length = 9 })
 	{
 	}
 
@@ -29,7 +30,35 @@ public class MovingAverageConvergenceDivergenceHistogram : MovingAverageConverge
 	public MovingAverageConvergenceDivergenceHistogram(MovingAverageConvergenceDivergence macd, ExponentialMovingAverage signalMa)
 		: base(macd, signalMa)
 	{
+		Macd = macd;
+		SignalMa = signalMa;
+		Mode = ComplexIndicatorModes.Sequence;
 	}
+
+	/// <summary>
+	/// Convergence/divergence of moving averages.
+	/// </summary>
+	[TypeConverter(typeof(ExpandableObjectConverter))]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.MACDKey,
+		Description = LocalizedStrings.MACDDescKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public MovingAverageConvergenceDivergence Macd { get; }
+
+	/// <summary>
+	/// Signaling Moving Average.
+	/// </summary>
+	[TypeConverter(typeof(ExpandableObjectConverter))]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.SignalMaKey,
+		Description = LocalizedStrings.SignalMaDescKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public ExponentialMovingAverage SignalMa { get; }
+
+	/// <inheritdoc />
+	public override string ToString() => base.ToString() + $" L={Macd.LongMa.Length} S={Macd.ShortMa.Length} Sig={SignalMa.Length}";
 
 	/// <inheritdoc />
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
@@ -45,9 +74,10 @@ public class MovingAverageConvergenceDivergenceHistogram : MovingAverageConverge
 		value.Add(SignalMa, signalValue);
 		return value;
 	}
+
 	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new MovingAverageConvergenceDivergenceHistogramValue(this, time);
+	protected override MovingAverageConvergenceDivergenceHistogramValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -68,10 +98,10 @@ public class MovingAverageConvergenceDivergenceHistogramValue : ComplexIndicator
 	/// <summary>
 	/// Gets the MACD value.
 	/// </summary>
-	public decimal Macd => InnerValues[Indicator.Macd].ToDecimal();
+	public decimal Macd => InnerValues[TypedIndicator.Macd].ToDecimal();
 
 	/// <summary>
 	/// Gets the signal line value.
 	/// </summary>
-	public decimal Signal => InnerValues[Indicator.SignalMa].ToDecimal();
+	public decimal Signal => InnerValues[TypedIndicator.SignalMa].ToDecimal();
 }

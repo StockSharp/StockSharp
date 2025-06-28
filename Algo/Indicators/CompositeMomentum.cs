@@ -4,32 +4,30 @@
 /// Composite Momentum indicator.
 /// </summary>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.CMKey,
-		Description = LocalizedStrings.CompositeMomentumKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.CMKey,
+	Description = LocalizedStrings.CompositeMomentumKey)]
 [Doc("topics/api/indicators/list_of_indicators/composite_momentum.html")]
 [IndicatorOut(typeof(CompositeMomentumValue))]
-public class CompositeMomentum : BaseComplexIndicator
+public class CompositeMomentum : BaseComplexIndicator<CompositeMomentumValue>
 {
 	private readonly RateOfChange _roc1;
 	private readonly RateOfChange _roc2;
 	private readonly RelativeStrengthIndex _rsi;
 	private readonly ExponentialMovingAverage _emaFast;
 	private readonly ExponentialMovingAverage _emaSlow;
-	private readonly SimpleMovingAverage _sma;
-	private readonly CompositeMomentumLine _compositeLine;
 
 	/// <summary>
 	/// SMA used for final smoothing.
 	/// </summary>
 	[Browsable(false)]
-	public SimpleMovingAverage Sma => _sma;
+	public SimpleMovingAverage Sma { get; }
 
 	/// <summary>
 	/// Composite momentum line.
 	/// </summary>
 	[Browsable(false)]
-	public CompositeMomentumLine CompositeLine => _compositeLine;
+	public CompositeMomentumLine CompositeLine { get; }
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CompositeMomentum"/>.
@@ -61,8 +59,8 @@ public class CompositeMomentum : BaseComplexIndicator
 		_rsi = rsi ?? throw new ArgumentNullException(nameof(rsi));
 		_emaFast = emaFast ?? throw new ArgumentNullException(nameof(emaFast));
 		_emaSlow = emaSlow ?? throw new ArgumentNullException(nameof(emaSlow));
-		_sma = sma ?? throw new ArgumentNullException(nameof(sma));
-		_compositeLine = new();
+		Sma = sma ?? throw new ArgumentNullException(nameof(sma));
+		CompositeLine = new();
 
 		AddInner(Sma);
 		AddInner(CompositeLine);
@@ -114,34 +112,36 @@ public class CompositeMomentum : BaseComplexIndicator
 			var compMomentum = (normalizedShortRoc + normalizedLongRoc + normalizedRsi + macdLine) / 4m;
 			compMomentum *= 100m;
 
-		var compositeValue = CompositeLine.Process(compMomentum, input.Time, input.IsFinal);
-		result.Add(_compositeLine, compositeValue);
-		result.Add(Sma, Sma.Process(compositeValue));
+			var compositeValue = CompositeLine.Process(compMomentum, input.Time, input.IsFinal);
+			result.Add(CompositeLine, compositeValue);
+			result.Add(Sma, Sma.Process(compositeValue));
 
-		if (input.IsFinal && Sma.IsFormed)
+			if (input.IsFinal && Sma.IsFormed)
 				IsFormed = true;
 		}
 
 		return result;
 	}
 
-	/// <summary>
-	/// Composite line for the main <see cref="CompositeMomentum"/> value.
-	/// </summary>
-	private class CompositeMomentumLine : BaseIndicator
-	{
-		/// <inheritdoc />
-		protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		{
-			if (input.IsFinal)
-				IsFormed = true;
-
-			return input;
-		}
-	}
 	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new CompositeMomentumValue(this, time);
+	protected override CompositeMomentumValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
+}
+
+/// <summary>
+/// Composite line for the main <see cref="CompositeMomentum"/> value.
+/// </summary>
+[IndicatorHidden]
+public class CompositeMomentumLine : BaseIndicator
+{
+	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{
+		if (input.IsFinal)
+			IsFormed = true;
+
+		return input;
+	}
 }
 
 /// <summary>
@@ -162,10 +162,10 @@ public class CompositeMomentumValue : ComplexIndicatorValue<CompositeMomentum>
 	/// <summary>
 	/// Gets the SMA value.
 	/// </summary>
-	public decimal Sma => InnerValues[Indicator.Sma].ToDecimal();
+	public decimal Sma => InnerValues[TypedIndicator.Sma].ToDecimal();
 
 	/// <summary>
 	/// Gets the composite momentum line.
 	/// </summary>
-	public decimal CompositeLine => InnerValues[Indicator.CompositeLine].ToDecimal();
+	public decimal CompositeLine => InnerValues[TypedIndicator.CompositeLine].ToDecimal();
 }

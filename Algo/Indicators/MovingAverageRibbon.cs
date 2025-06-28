@@ -4,13 +4,13 @@
 /// Moving Average Ribbon indicator.
 /// </summary>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.MARKey,
-		Description = LocalizedStrings.MovingAverageRibbonKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.MARKey,
+	Description = LocalizedStrings.MovingAverageRibbonKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/moving_average_ribbon.html")]
 [IndicatorOut(typeof(MovingAverageRibbonValue))]
-public class MovingAverageRibbon : BaseComplexIndicator
+public class MovingAverageRibbon : BaseComplexIndicator<MovingAverageRibbonValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MovingAverageRibbon"/>.
@@ -130,9 +130,10 @@ public class MovingAverageRibbon : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" S={ShortPeriod} L={LongPeriod} C={RibbonCount}";
+
 	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new MovingAverageRibbonValue(this, time);
+	protected override MovingAverageRibbonValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -153,5 +154,5 @@ public class MovingAverageRibbonValue : ComplexIndicatorValue<MovingAverageRibbo
 	/// <summary>
 	/// Gets all moving average values.
 	/// </summary>
-	public decimal[] Averages => Indicator.InnerIndicators.Select(i => InnerValues[i].ToDecimal()).ToArray();
+	public decimal[] Averages => TypedIndicator.InnerIndicators.Select(i => InnerValues[i].ToDecimal()).ToArray();
 }

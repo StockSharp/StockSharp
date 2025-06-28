@@ -7,12 +7,12 @@
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/adx.html
 /// </remarks>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.AdxKey,
-		Description = LocalizedStrings.AverageDirectionalIndexKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.AdxKey,
+	Description = LocalizedStrings.AverageDirectionalIndexKey)]
 [Doc("topics/api/indicators/list_of_indicators/adx.html")]
 [IndicatorOut(typeof(AverageDirectionalIndexValue))]
-public class AverageDirectionalIndex : BaseComplexIndicator
+public class AverageDirectionalIndex : BaseComplexIndicator<AverageDirectionalIndexValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="AverageDirectionalIndex"/>.
@@ -74,7 +74,7 @@ public class AverageDirectionalIndex : BaseComplexIndicator
 		base.Load(storage);
 		Length = storage.GetValue<int>(nameof(Length));
 	}
-	
+
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
 	{
@@ -86,10 +86,9 @@ public class AverageDirectionalIndex : BaseComplexIndicator
 	public override string ToString() => base.ToString() + " " + Length;
 
 	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new AverageDirectionalIndexValue(this, time);
-	}
-
+	protected override AverageDirectionalIndexValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
+}
 
 /// <summary>
 /// <see cref="AverageDirectionalIndex"/> indicator value.
@@ -109,10 +108,10 @@ public class AverageDirectionalIndexValue : ComplexIndicatorValue<AverageDirecti
 	/// <summary>
 	/// Gets the <see cref="AverageDirectionalIndex.Dx"/> value.
 	/// </summary>
-	public DirectionalIndexValue Dx => (DirectionalIndexValue)InnerValues[Indicator.Dx];
+	public DirectionalIndexValue Dx => (DirectionalIndexValue)InnerValues[TypedIndicator.Dx];
 	
 	/// <summary>
 	/// Gets the <see cref="AverageDirectionalIndex.MovingAverage"/> value.
 	/// </summary>
-	public decimal MovingAverage => InnerValues[Indicator.MovingAverage].ToDecimal();
+	public decimal MovingAverage => InnerValues[TypedIndicator.MovingAverage].ToDecimal();
 }

@@ -288,7 +288,7 @@ public class ConverterDiagramElement : TypedDiagramElement<ConverterDiagramEleme
 		object getPropValue(object entity, string propName)
 			=> entity.GetPropValue(propName, (v, n) => v.TryGetVirtualValue(n, out var pv) ? pv : null, valuesByName);
 
-		if (nextValue is ComplexIndicatorValue complex)
+		if (nextValue is IComplexIndicatorValue complex)
 		{
 			object getIndicatorValue()
 			{
@@ -299,7 +299,7 @@ public class ConverterDiagramElement : TypedDiagramElement<ConverterDiagramEleme
 
 				for (var i = 0; i < parts.Length; ++i)
 				{
-					if (value is not ComplexIndicatorValue currComplex)
+					if (value is not IComplexIndicatorValue currComplex)
 					{
 						if (i == parts.Length - 1)
 							break;

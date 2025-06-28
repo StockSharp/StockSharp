@@ -7,12 +7,12 @@
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/dmi.html
 /// </remarks>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.DMIKey,
-		Description = LocalizedStrings.WellesWilderDirectionalMovementIndexKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.DMIKey,
+	Description = LocalizedStrings.WellesWilderDirectionalMovementIndexKey)]
 [Doc("topics/api/indicators/list_of_indicators/dmi.html")]
 [IndicatorOut(typeof(DirectionalIndexValue))]
-public class DirectionalIndex : BaseComplexIndicator
+public class DirectionalIndex : BaseComplexIndicator<DirectionalIndexValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="DirectionalIndex"/>.
@@ -100,11 +100,11 @@ var value = new DirectionalIndexValue(this, input.Time) { IsFinal = input.IsFina
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + " " + Length;
-	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new DirectionalIndexValue(this, time);
-}
 
+	/// <inheritdoc />
+	protected override DirectionalIndexValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
+}
 
 /// <summary>
 /// <see cref="DirectionalIndex"/> indicator value.
@@ -124,10 +124,10 @@ public class DirectionalIndexValue : ComplexIndicatorValue<DirectionalIndex>
 	/// <summary>
 	/// Gets the <see cref="DirectionalIndex.Plus"/> value.
 	/// </summary>
-	public decimal Plus => InnerValues[Indicator.Plus].ToDecimal();
+	public decimal Plus => InnerValues[TypedIndicator.Plus].ToDecimal();
 	
 	/// <summary>
 	/// Gets the <see cref="DirectionalIndex.Minus"/> value.
 	/// </summary>
-	public decimal Minus => InnerValues[Indicator.Minus].ToDecimal();
+	public decimal Minus => InnerValues[TypedIndicator.Minus].ToDecimal();
 }

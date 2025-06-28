@@ -4,12 +4,12 @@
 /// Donchian Channels indicator.
 /// </summary>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.DCKey,
-		Description = LocalizedStrings.DonchianChannelsKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.DCKey,
+	Description = LocalizedStrings.DonchianChannelsKey)]
 [Doc("topics/api/indicators/list_of_indicators/donchian_channels.html")]
 [IndicatorOut(typeof(DonchianChannelsValue))]
-public class DonchianChannels : BaseComplexIndicator
+public class DonchianChannels : BaseComplexIndicator<DonchianChannelsValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="DonchianChannels"/>.
@@ -77,6 +77,10 @@ public class DonchianChannels : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" {Length}";
+
+	/// <inheritdoc />
+	protected override DonchianChannelsValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -117,9 +121,6 @@ public class DonchianMiddle : BaseIndicator
 
 		return new DecimalIndicatorValue(this, (upperValue + lowerValue) / 2, input.Time);
 	}
-	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new DonchianChannelsValue(this, time);
 }
 
 /// <summary>
@@ -140,15 +141,15 @@ public class DonchianChannelsValue : ComplexIndicatorValue<DonchianChannels>
 	/// <summary>
 	/// Gets the <see cref="DonchianChannels.UpperBand"/> value.
 	/// </summary>
-	public decimal UpperBand => InnerValues[Indicator.UpperBand].ToDecimal();
+	public decimal UpperBand => InnerValues[TypedIndicator.UpperBand].ToDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="DonchianChannels.LowerBand"/> value.
 	/// </summary>
-	public decimal LowerBand => InnerValues[Indicator.LowerBand].ToDecimal();
+	public decimal LowerBand => InnerValues[TypedIndicator.LowerBand].ToDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="DonchianChannels.Middle"/> value.
 	/// </summary>
-	public decimal Middle => InnerValues[Indicator.Middle].ToDecimal();
+	public decimal Middle => InnerValues[TypedIndicator.Middle].ToDecimal();
 }

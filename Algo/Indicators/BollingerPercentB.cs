@@ -66,15 +66,15 @@ public class BollingerPercentB : BaseIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var bbValue = (ComplexIndicatorValue)_bollingerBands.Process(input);
+		var bbValue = (BollingerBandsValue)_bollingerBands.Process(input);
 
 		if (_bollingerBands.IsFormed)
 		{
 			if (input.IsFinal)
 				IsFormed = true;
 
-			var upperBand = bbValue[_bollingerBands.UpBand].ToDecimal();
-			var lowerBand = bbValue[_bollingerBands.LowBand].ToDecimal();
+			var upperBand = bbValue.UpBand;
+			var lowerBand = bbValue.LowBand;
 			
 			var bandWidth = upperBand - lowerBand;
 

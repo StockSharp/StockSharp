@@ -10,7 +10,7 @@
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/percentage_volume_oscillator.html")]
 [IndicatorOut(typeof(PercentageVolumeOscillatorValue))]
-public class PercentageVolumeOscillator : BaseComplexIndicator
+public class PercentageVolumeOscillator : BaseComplexIndicator<PercentageVolumeOscillatorValue>
 {
 	/// <summary>
 	/// Short EMA.
@@ -126,9 +126,10 @@ public class PercentageVolumeOscillator : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" S={ShortPeriod},L={LongPeriod}";
+
 	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new PercentageVolumeOscillatorValue(this, time);
+	protected override PercentageVolumeOscillatorValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -149,10 +150,10 @@ public class PercentageVolumeOscillatorValue : ComplexIndicatorValue<PercentageV
 	/// <summary>
 	/// Gets the short EMA value.
 	/// </summary>
-	public decimal ShortEma => InnerValues[Indicator.ShortEma].ToDecimal();
+	public decimal ShortEma => InnerValues[TypedIndicator.ShortEma].ToDecimal();
 
 	/// <summary>
 	/// Gets the long EMA value.
 	/// </summary>
-	public decimal LongEma => InnerValues[Indicator.LongEma].ToDecimal();
+	public decimal LongEma => InnerValues[TypedIndicator.LongEma].ToDecimal();
 }

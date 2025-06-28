@@ -4,13 +4,13 @@
 /// Adaptive Price Zone (APZ) indicator.
 /// </summary>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.APZKey,
-		Description = LocalizedStrings.AdaptivePriceZoneKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.APZKey,
+	Description = LocalizedStrings.AdaptivePriceZoneKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/adaptive_price_zone.html")]
 [IndicatorOut(typeof(AdaptivePriceZoneValue))]
-public class AdaptivePriceZone : BaseComplexIndicator
+public class AdaptivePriceZone : BaseComplexIndicator<AdaptivePriceZoneValue>
 {
 	private readonly StandardDeviation _stdDev;
 
@@ -38,7 +38,6 @@ public class AdaptivePriceZone : BaseComplexIndicator
 	public AdaptivePriceZone()
 		: this(new ExponentialMovingAverage())
 	{
-
 	}
 
 	/// <summary>
@@ -73,8 +72,8 @@ public class AdaptivePriceZone : BaseComplexIndicator
 	{
 		get => Ma.Length;
 		set
-	{
-		Ma.Length = value;
+		{
+			Ma.Length = value;
 			_stdDev.Length = value;
 		}
 	}
@@ -115,9 +114,9 @@ public class AdaptivePriceZone : BaseComplexIndicator
 			var upperBand = ma + BandPercentage * stdDev;
 			var lowerBand = ma - BandPercentage * stdDev;
 
-		result.Add(Ma, new DecimalIndicatorValue(this, ma, input.Time));
-		result.Add(UpperBand, UpperBand.Process(upperBand, input.Time, input.IsFinal));
-		result.Add(LowerBand, LowerBand.Process(lowerBand, input.Time, input.IsFinal));
+			result.Add(Ma, new DecimalIndicatorValue(this, ma, input.Time));
+			result.Add(UpperBand, UpperBand.Process(upperBand, input.Time, input.IsFinal));
+			result.Add(LowerBand, LowerBand.Process(lowerBand, input.Time, input.IsFinal));
 		}
 
 		return result;
@@ -148,6 +147,10 @@ public class AdaptivePriceZone : BaseComplexIndicator
 		Period = storage.GetValue<int>(nameof(Period));
 		BandPercentage = storage.GetValue<decimal>(nameof(BandPercentage));
 	}
+
+	/// <inheritdoc />
+	protected override AdaptivePriceZoneValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -164,9 +167,6 @@ public class AdaptivePriceZoneBand : BaseIndicator
 
 		return input;
 	}
-	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new AdaptivePriceZoneValue(this, time);
 }
 
 /// <summary>
@@ -187,15 +187,15 @@ public class AdaptivePriceZoneValue : ComplexIndicatorValue<AdaptivePriceZone>
 	/// <summary>
 	/// Gets the moving average value.
 	/// </summary>
-	public decimal MovingAverage => InnerValues[Indicator.Ma].ToDecimal();
+	public decimal MovingAverage => InnerValues[TypedIndicator.Ma].ToDecimal();
 
 	/// <summary>
 	/// Gets the upper band value.
 	/// </summary>
-	public decimal UpperBand => InnerValues[Indicator.UpperBand].ToDecimal();
+	public decimal UpperBand => InnerValues[TypedIndicator.UpperBand].ToDecimal();
 
 	/// <summary>
 	/// Gets the lower band value.
 	/// </summary>
-	public decimal LowerBand => InnerValues[Indicator.LowerBand].ToDecimal();
+	public decimal LowerBand => InnerValues[TypedIndicator.LowerBand].ToDecimal();
 }

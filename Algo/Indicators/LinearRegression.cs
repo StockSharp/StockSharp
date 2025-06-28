@@ -4,11 +4,11 @@ namespace StockSharp.Algo.Indicators;
 /// The full class of linear regression, calculates LinearReg, LinearRegSlope, RSquared and StandardError at the same time.
 /// </summary>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.LinearRegressionKey,
-		Description = LocalizedStrings.LinearRegressionDescKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.LinearRegressionKey,
+	Description = LocalizedStrings.LinearRegressionDescKey)]
 [Browsable(false)]
-public class LinearRegression : BaseComplexIndicator
+public class LinearRegression : BaseComplexIndicator<LinearRegressionValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="LinearRegression"/>.
@@ -115,9 +115,10 @@ public class LinearRegression : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + " " + Length;
+
 	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new LinearRegressionValue(this, time);
+	protected override LinearRegressionValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -138,20 +139,20 @@ public class LinearRegressionValue : ComplexIndicatorValue<LinearRegression>
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.LinearReg"/> value.
 	/// </summary>
-	public decimal LinearReg => InnerValues[Indicator.LinearReg].ToDecimal();
+	public decimal LinearReg => InnerValues[TypedIndicator.LinearReg].ToDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.RSquared"/> value.
 	/// </summary>
-	public decimal RSquared => InnerValues[Indicator.RSquared].ToDecimal();
+	public decimal RSquared => InnerValues[TypedIndicator.RSquared].ToDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.LinearRegSlope"/> value.
 	/// </summary>
-	public decimal LinearRegSlope => InnerValues[Indicator.LinearRegSlope].ToDecimal();
+	public decimal LinearRegSlope => InnerValues[TypedIndicator.LinearRegSlope].ToDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.StandardError"/> value.
 	/// </summary>
-	public decimal StandardError => InnerValues[Indicator.StandardError].ToDecimal();
+	public decimal StandardError => InnerValues[TypedIndicator.StandardError].ToDecimal();
 }

@@ -4,13 +4,13 @@
 /// Rainbow Charts.
 /// </summary>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.RCKey,
-		Description = LocalizedStrings.RainbowChartsKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.RCKey,
+	Description = LocalizedStrings.RainbowChartsKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/rainbow_charts.html")]
 [IndicatorOut(typeof(RainbowChartsValue))]
-public class RainbowCharts : BaseComplexIndicator
+public class RainbowCharts : BaseComplexIndicator<RainbowChartsValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RainbowCharts"/>.
@@ -69,9 +69,10 @@ public class RainbowCharts : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => $"{base.ToString()} L={Lines}";
+
 	/// <inheritdoc />
-	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new RainbowChartsValue(this, time);
+	protected override RainbowChartsValue CreateValue(DateTimeOffset time)
+		=> new(this, time);
 }
 
 /// <summary>
@@ -92,5 +93,5 @@ public class RainbowChartsValue : ComplexIndicatorValue<RainbowCharts>
 	/// <summary>
 	/// Gets values of all moving averages.
 	/// </summary>
-	public decimal[] Averages => Indicator.InnerIndicators.Select(i => InnerValues[i].ToDecimal()).ToArray();
+	public decimal[] Averages => TypedIndicator.InnerIndicators.Select(i => InnerValues[i].ToDecimal()).ToArray();
 }

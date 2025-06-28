@@ -84,7 +84,7 @@ public class IndicatorValue : IServerTimeMessage, ISecurityIdMessage
 		{
 			values.Add(value.IsEmpty ? null : value.ToDecimal());
 		}
-		else if (value is ComplexIndicatorValue complexValue)
+		else if (value is IComplexIndicatorValue complexValue)
 		{
 			foreach (var innerIndicator in ((IComplexIndicator)value.Indicator).InnerIndicators)
 			{

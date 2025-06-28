@@ -208,7 +208,7 @@ public class IndicatorTests
 	[
 		nameof(IIndicator.Name),
 		nameof(IIndicator.Container),
-		nameof(BaseComplexIndicator.InnerIndicators),
+		nameof(IComplexIndicator.InnerIndicators),
 	];
 
 	private static IEnumerable<PropertyInfo> GetProps(Type type)
@@ -634,7 +634,7 @@ static class IndicatorDataRunner
 
 	public static IEnumerable<IIndicatorValue> Plain(this IIndicatorValue val)
 	{
-		if (val is not ComplexIndicatorValue civ)
+		if (val is not IComplexIndicatorValue civ)
 		{
 			yield return val;
 		}

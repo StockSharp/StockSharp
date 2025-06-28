@@ -472,7 +472,7 @@ public partial class Strategy
 
 			internal override IEnumerable<IIndicatorValue> Invoke(T typed, DateTimeOffset time)
 			{
-				var v = (ComplexIndicatorValue)Indicator.Process(typed, time, true);
+				var v = (IComplexIndicatorValue)Indicator.Process(typed, time, true);
 				var values = v.InnerValues.Values.ToArray();
 
 				if (values.Length != 2)
@@ -502,7 +502,7 @@ public partial class Strategy
 
 			internal override IEnumerable<IIndicatorValue> Invoke(T typed, DateTimeOffset time)
 			{
-				var v = (ComplexIndicatorValue)Indicator.Process(typed, time, true);
+				var v = (IComplexIndicatorValue)Indicator.Process(typed, time, true);
 				
 				var values = v.InnerValues.Values.ToArray();
 
@@ -533,7 +533,7 @@ public partial class Strategy
 
 			internal override IEnumerable<IIndicatorValue> Invoke(T typed, DateTimeOffset time)
 			{
-				var v = (ComplexIndicatorValue)Indicator.Process(typed, time, true);
+				var v = (IComplexIndicatorValue)Indicator.Process(typed, time, true);
 				var values = v.InnerValues.Values.ToArray();
 
 				_callback(typed, values);
