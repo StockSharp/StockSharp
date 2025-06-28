@@ -117,6 +117,13 @@ public class IndicatorTests
 	}
 
 	[TestMethod]
+	public void ComplexValues()
+	{
+		foreach (var type in GetIndicatorTypes())
+			type.OutputValue.Is<IComplexIndicatorValue>().AssertEqual(type.IsComplex);
+	}
+
+	[TestMethod]
 	public void NumValuesToInitialize()
 	{
 		var now = DateTimeOffset.UtcNow;
