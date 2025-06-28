@@ -4,27 +4,37 @@
 /// Wave Trend Oscillator.
 /// </summary>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.WTOKey,
-	Description = LocalizedStrings.WaveTrendOscillatorKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.WTOKey,
+		Description = LocalizedStrings.WaveTrendOscillatorKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/wave_trend_oscillator.html")]
+[IndicatorOut(typeof(WaveTrendOscillatorValue))]
 public class WaveTrendOscillator : BaseComplexIndicator
 {
 	private readonly ChannelAveragePriceOscillator _capo = new();
 	private readonly ExponentialMovingAverage _esa = new() { Length = 10 };
 	private readonly ExponentialMovingAverage _d = new() { Length = 14 };
 	private readonly SimpleMovingAverage _sma = new() { Length = 3 };
-	private readonly WaveTrendLine _wt1 = new() { Name = "WT1" };
-	private readonly WaveTrendLine _wt2 = new() { Name = "WT1" };
+	/// <summary>
+	/// WT1 line.
+	/// </summary>
+	[Browsable(false)]
+	public WaveTrendLine Wt1 { get; } = new() { Name = "WT1" };
+
+	/// <summary>
+	/// WT2 line.
+	/// </summary>
+	[Browsable(false)]
+	public WaveTrendLine Wt2 { get; } = new() { Name = "WT1" };
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="WaveTrendOscillator"/>.
 	/// </summary>
 	public WaveTrendOscillator()
 	{
-		AddInner(_wt1);
-		AddInner(_wt2);
+		AddInner(Wt1);
+		AddInner(Wt2);
 	}
 
 	/// <inheritdoc />
@@ -93,7 +103,7 @@ public class WaveTrendOscillator : BaseComplexIndicator
 		var capoValue = _capo.Process(input);
 		var esaValue = _esa.Process(capoValue);
 
-		var result = new ComplexIndicatorValue(this, input.Time);
+		var result = new WaveTrendOscillatorValue(this, input.Time);
 
 		if (_esa.IsFormed)
 		{
@@ -109,8 +119,8 @@ public class WaveTrendOscillator : BaseComplexIndicator
 				var wt1 = ci;
 				var wt2 = _sma.Process(input, ci).ToDecimal();
 
-				result.Add(_wt1, _wt1.Process(wt1, input.Time, input.IsFinal));
-				result.Add(_wt2, _wt2.Process(wt2, input.Time, input.IsFinal));
+		result.Add(Wt1, Wt1.Process(wt1, input.Time, input.IsFinal));
+		result.Add(Wt2, Wt2.Process(wt2, input.Time, input.IsFinal));
 
 				if (input.IsFinal)
 					IsFormed = true;
@@ -187,4 +197,33 @@ public class WaveTrendLine : BaseIndicator
 
 		return input;
 	}
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new WaveTrendOscillatorValue(this, time);
+}
+
+/// <summary>
+/// <see cref="WaveTrendOscillator"/> indicator value.
+/// </summary>
+public class WaveTrendOscillatorValue : ComplexIndicatorValue<WaveTrendOscillator>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="WaveTrendOscillatorValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="WaveTrendOscillator"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public WaveTrendOscillatorValue(WaveTrendOscillator indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the first Wavetrend line value.
+	/// </summary>
+	public decimal Wt1 => InnerValues[Indicator.Wt1].ToDecimal();
+
+	/// <summary>
+	/// Gets the second Wavetrend line value.
+	/// </summary>
+	public decimal Wt2 => InnerValues[Indicator.Wt2].ToDecimal();
 }

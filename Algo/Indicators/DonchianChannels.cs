@@ -4,10 +4,11 @@
 /// Donchian Channels indicator.
 /// </summary>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.DCKey,
-	Description = LocalizedStrings.DonchianChannelsKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.DCKey,
+		Description = LocalizedStrings.DonchianChannelsKey)]
 [Doc("topics/api/indicators/list_of_indicators/donchian_channels.html")]
+[IndicatorOut(typeof(DonchianChannelsValue))]
 public class DonchianChannels : BaseComplexIndicator
 {
 	/// <summary>
@@ -95,10 +96,10 @@ public class DonchianMiddle : BaseIndicator
 		LowerBand = lowerBand ?? throw new ArgumentNullException(nameof(lowerBand));
 	}
 
-    /// <summary>
-    /// Upper band indicator.
-    /// </summary>
-    public Highest UpperBand { get; }
+	/// <summary>
+	/// Upper band indicator.
+	/// </summary>
+	public Highest UpperBand { get; }
 
 	/// <summary>
 	/// Lower band indicator.
@@ -116,4 +117,38 @@ public class DonchianMiddle : BaseIndicator
 
 		return new DecimalIndicatorValue(this, (upperValue + lowerValue) / 2, input.Time);
 	}
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new DonchianChannelsValue(this, time);
+}
+
+/// <summary>
+/// <see cref="DonchianChannels"/> indicator value.
+/// </summary>
+public class DonchianChannelsValue : ComplexIndicatorValue<DonchianChannels>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="DonchianChannelsValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="DonchianChannels"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public DonchianChannelsValue(DonchianChannels indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the <see cref="DonchianChannels.UpperBand"/> value.
+	/// </summary>
+	public decimal UpperBand => InnerValues[Indicator.UpperBand].ToDecimal();
+
+	/// <summary>
+	/// Gets the <see cref="DonchianChannels.LowerBand"/> value.
+	/// </summary>
+	public decimal LowerBand => InnerValues[Indicator.LowerBand].ToDecimal();
+
+	/// <summary>
+	/// Gets the <see cref="DonchianChannels.Middle"/> value.
+	/// </summary>
+	public decimal Middle => InnerValues[Indicator.Middle].ToDecimal();
 }

@@ -4,10 +4,11 @@
 /// Connors RSI (CRSI) indicator.
 /// </summary>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.CRSIKey,
-	Description = LocalizedStrings.ConnorsRSIKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.CRSIKey,
+		Description = LocalizedStrings.ConnorsRSIKey)]
 [Doc("topics/api/indicators/list_of_indicators/connors_rsi.html")]
+[IndicatorOut(typeof(ConnorsRSIValue))]
 public class ConnorsRSI : BaseComplexIndicator
 {
 	private class CrsiLine : BaseIndicator
@@ -21,22 +22,42 @@ public class ConnorsRSI : BaseComplexIndicator
 		}
 	}
 
-	private readonly RelativeStrengthIndex _rsi = new();
-	private readonly RelativeStrengthIndex _updownRsi = new();
-	private readonly RelativeStrengthIndex _rocRsi = new();
 	private readonly RateOfChange _roc = new();
 	private readonly CircularBuffer<decimal> _streakBuffer = new(2);
-	private readonly CrsiLine _crsiLine = new();
+
+	/// <summary>
+	/// RSI indicator.
+	/// </summary>
+	[Browsable(false)]
+	public RelativeStrengthIndex Rsi { get; } = new();
+
+	/// <summary>
+	/// Up/down RSI indicator.
+	/// </summary>
+	[Browsable(false)]
+	public RelativeStrengthIndex UpDownRsi { get; } = new();
+
+	/// <summary>
+	/// ROC RSI indicator.
+	/// </summary>
+	[Browsable(false)]
+	public RelativeStrengthIndex RocRsi { get; } = new();
+
+	/// <summary>
+	/// Composite RSI line.
+	/// </summary>
+	[Browsable(false)]
+	public CrsiLine CrsiLine { get; } = new();
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ConnorsRSI"/>.
 	/// </summary>
 	public ConnorsRSI()
 	{
-		AddInner(_rsi);
-		AddInner(_updownRsi);
-		AddInner(_rocRsi);
-		AddInner(_crsiLine);
+		AddInner(Rsi);
+		AddInner(UpDownRsi);
+		AddInner(RocRsi);
+		AddInner(CrsiLine);
 
 		RSIPeriod = 3;
 		StreakRSIPeriod = 2;
@@ -56,8 +77,8 @@ public class ConnorsRSI : BaseComplexIndicator
 		GroupName = LocalizedStrings.GeneralKey)]
 	public int RSIPeriod
 	{
-		get => _rsi.Length;
-		set => _rsi.Length = value;
+		get => Rsi.Length;
+		set => Rsi.Length = value;
 	}
 
 	/// <summary>
@@ -70,8 +91,8 @@ public class ConnorsRSI : BaseComplexIndicator
 		GroupName = LocalizedStrings.GeneralKey)]
 	public int StreakRSIPeriod
 	{
-		get => _updownRsi.Length;
-		set => _updownRsi.Length = value;
+		get => UpDownRsi.Length;
+		set => UpDownRsi.Length = value;
 	}
 
 	/// <summary>
@@ -84,40 +105,40 @@ public class ConnorsRSI : BaseComplexIndicator
 		GroupName = LocalizedStrings.GeneralKey)]
 	public int ROCRSIPeriod
 	{
-		get => _rocRsi.Length;
+		get => RocRsi.Length;
 		set
 		{
-			_rocRsi.Length = value;
+		RocRsi.Length = value;
 			_roc.Length = value;
 		}
 	}
 
 	/// <inheritdoc />
 	public override int NumValuesToInitialize
-		=> _rsi.NumValuesToInitialize
-		.Max(_updownRsi.NumValuesToInitialize)
+		=> Rsi.NumValuesToInitialize
+		.Max(UpDownRsi.NumValuesToInitialize)
 		.Max(_roc.NumValuesToInitialize)
-		.Max(_rocRsi.NumValuesToInitialize);
+		.Max(RocRsi.NumValuesToInitialize);
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
 
-		var rsiValue = _rsi.Process(input);
+		var rsiValue = Rsi.Process(input);
 
 		var streak = CalculateStreak(candle.ClosePrice, input.IsFinal);
-		var updownRsiValue = _updownRsi.Process(input, streak);
+		var updownRsiValue = UpDownRsi.Process(input, streak);
 
 		var rocValue = _roc.Process(input);
 
 		var rocRsiValue = rocValue.IsEmpty
-			? new DecimalIndicatorValue(_rocRsi, input.Time)
-			: _rocRsi.Process(rocValue);
+		? new DecimalIndicatorValue(RocRsi, input.Time)
+		: RocRsi.Process(rocValue);
 
-		var result = new ComplexIndicatorValue(this, input.Time);
+		var result = new ConnorsRSIValue(this, input.Time);
 
-		if (!rocValue.IsEmpty && _rsi.IsFormed && _updownRsi.IsFormed && _rocRsi.IsFormed && _roc.IsFormed)
+		if (!rocValue.IsEmpty && Rsi.IsFormed && UpDownRsi.IsFormed && RocRsi.IsFormed && _roc.IsFormed)
 		{
 			if (input.IsFinal)
 				IsFormed = true;
@@ -127,12 +148,12 @@ public class ConnorsRSI : BaseComplexIndicator
 			var rocRsi = rocRsiValue.ToDecimal();
 
 			var crsi = (rsi + updownRsi + rocRsi) / 3;
-			var crsiValue = _crsiLine.Process(input, crsi);
+		var crsiValue = CrsiLine.Process(input, crsi);
 
-			result.Add(_rsi, rsiValue);
-			result.Add(_updownRsi, updownRsiValue);
-			result.Add(_rocRsi, rocRsiValue);
-			result.Add(_crsiLine, crsiValue);
+		result.Add(Rsi, rsiValue);
+		result.Add(UpDownRsi, updownRsiValue);
+		result.Add(RocRsi, rocRsiValue);
+		result.Add(CrsiLine, crsiValue);
 		}
 
 		return result;
@@ -197,4 +218,43 @@ public class ConnorsRSI : BaseComplexIndicator
 		StreakRSIPeriod = storage.GetValue<int>(nameof(StreakRSIPeriod));
 		ROCRSIPeriod = storage.GetValue<int>(nameof(ROCRSIPeriod));
 	}
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new ConnorsRSIValue(this, time);
+}
+
+/// <summary>
+/// <see cref="ConnorsRSI"/> indicator value.
+/// </summary>
+public class ConnorsRSIValue : ComplexIndicatorValue<ConnorsRSI>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ConnorsRSIValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="ConnorsRSI"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public ConnorsRSIValue(ConnorsRSI indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the RSI component.
+	/// </summary>
+	public decimal Rsi => InnerValues[Indicator.Rsi].ToDecimal();
+
+	/// <summary>
+	/// Gets the UpDown RSI component.
+	/// </summary>
+	public decimal UpDownRsi => InnerValues[Indicator.UpDownRsi].ToDecimal();
+
+	/// <summary>
+	/// Gets the ROC RSI component.
+	/// </summary>
+	public decimal RocRsi => InnerValues[Indicator.RocRsi].ToDecimal();
+
+	/// <summary>
+	/// Gets the composite RSI line.
+	/// </summary>
+	public decimal CrsiLine => InnerValues[Indicator.CrsiLine].ToDecimal();
 }

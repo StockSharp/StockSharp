@@ -7,10 +7,11 @@
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/adx.html
 /// </remarks>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.AdxKey,
-	Description = LocalizedStrings.AverageDirectionalIndexKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.AdxKey,
+		Description = LocalizedStrings.AverageDirectionalIndexKey)]
 [Doc("topics/api/indicators/list_of_indicators/adx.html")]
+[IndicatorOut(typeof(AverageDirectionalIndexValue))]
 public class AverageDirectionalIndex : BaseComplexIndicator
 {
 	/// <summary>
@@ -73,7 +74,7 @@ public class AverageDirectionalIndex : BaseComplexIndicator
 		base.Load(storage);
 		Length = storage.GetValue<int>(nameof(Length));
 	}
-
+	
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
 	{
@@ -83,4 +84,35 @@ public class AverageDirectionalIndex : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + " " + Length;
+
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new AverageDirectionalIndexValue(this, time);
+	}
+
+
+/// <summary>
+/// <see cref="AverageDirectionalIndex"/> indicator value.
+/// </summary>
+public class AverageDirectionalIndexValue : ComplexIndicatorValue<AverageDirectionalIndex>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="AverageDirectionalIndexValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="AverageDirectionalIndex"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public AverageDirectionalIndexValue(AverageDirectionalIndex indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+	
+	/// <summary>
+	/// Gets the <see cref="AverageDirectionalIndex.Dx"/> value.
+	/// </summary>
+	public DirectionalIndexValue Dx => (DirectionalIndexValue)InnerValues[Indicator.Dx];
+	
+	/// <summary>
+	/// Gets the <see cref="AverageDirectionalIndex.MovingAverage"/> value.
+	/// </summary>
+	public decimal MovingAverage => InnerValues[Indicator.MovingAverage].ToDecimal();
 }

@@ -4,17 +4,33 @@
 /// Adaptive Price Zone (APZ) indicator.
 /// </summary>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.APZKey,
-	Description = LocalizedStrings.AdaptivePriceZoneKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.APZKey,
+		Description = LocalizedStrings.AdaptivePriceZoneKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/adaptive_price_zone.html")]
+[IndicatorOut(typeof(AdaptivePriceZoneValue))]
 public class AdaptivePriceZone : BaseComplexIndicator
 {
-	private readonly LengthIndicator<decimal> _ma;
 	private readonly StandardDeviation _stdDev;
-	private readonly AdaptivePriceZoneBand _upperBand;
-	private readonly AdaptivePriceZoneBand _lowerBand;
+
+	/// <summary>
+	/// Moving average.
+	/// </summary>
+	[Browsable(false)]
+	public LengthIndicator<decimal> Ma { get; }
+
+	/// <summary>
+	/// Upper band.
+	/// </summary>
+	[Browsable(false)]
+	public AdaptivePriceZoneBand UpperBand { get; }
+
+	/// <summary>
+	/// Lower band.
+	/// </summary>
+	[Browsable(false)]
+	public AdaptivePriceZoneBand LowerBand { get; }
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="AdaptivePriceZone"/>.
@@ -31,15 +47,15 @@ public class AdaptivePriceZone : BaseComplexIndicator
 	/// <param name="ma">Moving Average.</param>
 	public AdaptivePriceZone(LengthIndicator<decimal> ma)
 	{
-		_ma = ma ?? throw new ArgumentNullException(nameof(ma));
+		Ma = ma ?? throw new ArgumentNullException(nameof(ma));
 		_stdDev = new();
 
-		_upperBand = new();
-		_lowerBand = new();
+		UpperBand = new();
+		LowerBand = new();
 
-		AddInner(_ma);
-		AddInner(_upperBand);
-		AddInner(_lowerBand);
+		AddInner(Ma);
+		AddInner(UpperBand);
+		AddInner(LowerBand);
 
 		Period = 5;
 		BandPercentage = 2;
@@ -55,10 +71,10 @@ public class AdaptivePriceZone : BaseComplexIndicator
 		GroupName = LocalizedStrings.GeneralKey)]
 	public int Period
 	{
-		get => _ma.Length;
+		get => Ma.Length;
 		set
-		{
-			_ma.Length = value;
+	{
+		Ma.Length = value;
 			_stdDev.Length = value;
 		}
 	}
@@ -86,12 +102,12 @@ public class AdaptivePriceZone : BaseComplexIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var maValue = _ma.Process(input);
+		var maValue = Ma.Process(input);
 		var stdDevValue = _stdDev.Process(input);
 
-		var result = new ComplexIndicatorValue(this, input.Time);
+		var result = new AdaptivePriceZoneValue(this, input.Time);
 
-		if (_ma.IsFormed && _stdDev.IsFormed)
+		if (Ma.IsFormed && _stdDev.IsFormed)
 		{
 			var ma = maValue.ToDecimal();
 			var stdDev = stdDevValue.ToDecimal();
@@ -99,9 +115,9 @@ public class AdaptivePriceZone : BaseComplexIndicator
 			var upperBand = ma + BandPercentage * stdDev;
 			var lowerBand = ma - BandPercentage * stdDev;
 
-			result.Add(_ma, new DecimalIndicatorValue(this, ma, input.Time));
-			result.Add(_upperBand, _upperBand.Process(upperBand, input.Time, input.IsFinal));
-			result.Add(_lowerBand, _lowerBand.Process(lowerBand, input.Time, input.IsFinal));
+		result.Add(Ma, new DecimalIndicatorValue(this, ma, input.Time));
+		result.Add(UpperBand, UpperBand.Process(upperBand, input.Time, input.IsFinal));
+		result.Add(LowerBand, LowerBand.Process(lowerBand, input.Time, input.IsFinal));
 		}
 
 		return result;
@@ -148,4 +164,38 @@ public class AdaptivePriceZoneBand : BaseIndicator
 
 		return input;
 	}
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new AdaptivePriceZoneValue(this, time);
+}
+
+/// <summary>
+/// <see cref="AdaptivePriceZone"/> indicator value.
+/// </summary>
+public class AdaptivePriceZoneValue : ComplexIndicatorValue<AdaptivePriceZone>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="AdaptivePriceZoneValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="AdaptivePriceZone"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public AdaptivePriceZoneValue(AdaptivePriceZone indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the moving average value.
+	/// </summary>
+	public decimal MovingAverage => InnerValues[Indicator.Ma].ToDecimal();
+
+	/// <summary>
+	/// Gets the upper band value.
+	/// </summary>
+	public decimal UpperBand => InnerValues[Indicator.UpperBand].ToDecimal();
+
+	/// <summary>
+	/// Gets the lower band value.
+	/// </summary>
+	public decimal LowerBand => InnerValues[Indicator.LowerBand].ToDecimal();
 }

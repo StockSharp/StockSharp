@@ -4,11 +4,12 @@
 /// Ehlers Fisher Transform indicator.
 /// </summary>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.EFTKey,
-	Description = LocalizedStrings.EhlersFisherTransformKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.EFTKey,
+		Description = LocalizedStrings.EhlersFisherTransformKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/ehlers_fisher_transform.html")]
+[IndicatorOut(typeof(EhlersFisherTransformValue))]
 public class EhlersFisherTransform : BaseComplexIndicator
 {
 	private readonly CircularBufferEx<decimal> _highBuffer;
@@ -16,8 +17,17 @@ public class EhlersFisherTransform : BaseComplexIndicator
 	private decimal _prevValue;
 	private decimal _currValue;
 
-	private readonly EhlersFisherTransformLine _mainLine;
-	private readonly EhlersFisherTransformLine _triggerLine;
+	/// <summary>
+	/// Main line.
+	/// </summary>
+	[Browsable(false)]
+	public EhlersFisherTransformLine MainLine { get; }
+
+	/// <summary>
+	/// Trigger line.
+	/// </summary>
+	[Browsable(false)]
+	public EhlersFisherTransformLine TriggerLine { get; }
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="EhlersFisherTransform"/>.
@@ -27,11 +37,11 @@ public class EhlersFisherTransform : BaseComplexIndicator
 		_highBuffer = new(1) { MaxComparer = Comparer<decimal>.Default };
 		_lowBuffer = new(1) { MinComparer = Comparer<decimal>.Default };
 
-		_mainLine = new();
-		_triggerLine = new();
+		MainLine = new();
+		TriggerLine = new();
 
-		AddInner(_mainLine);
-		AddInner(_triggerLine);
+		AddInner(MainLine);
+		AddInner(TriggerLine);
 
 		Length = 10;
 	}
@@ -77,7 +87,7 @@ public class EhlersFisherTransform : BaseComplexIndicator
 			_lowBuffer.PushBack(candle.LowPrice);
 		}
 
-		var result = new ComplexIndicatorValue(this, input.Time);
+		var result = new EhlersFisherTransformValue(this, input.Time);
 
 		if (_highBuffer.Count >= Length)
 		{
@@ -91,8 +101,8 @@ public class EhlersFisherTransform : BaseComplexIndicator
 
 			var fisherTransform = 0.5m * (decimal)Math.Log((double)((1 + value) / (1 - value)));
 
-			result.Add(_mainLine, _mainLine.Process(input, fisherTransform));
-			result.Add(_triggerLine, _triggerLine.Process(input, _currValue));
+		result.Add(MainLine, MainLine.Process(input, fisherTransform));
+		result.Add(TriggerLine, TriggerLine.Process(input, _currValue));
 
 			if (input.IsFinal)
 			{
@@ -147,4 +157,33 @@ public class EhlersFisherTransformLine : BaseIndicator
 
 		return input;
 	}
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new EhlersFisherTransformValue(this, time);
+}
+
+/// <summary>
+/// <see cref="EhlersFisherTransform"/> indicator value.
+/// </summary>
+public class EhlersFisherTransformValue : ComplexIndicatorValue<EhlersFisherTransform>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="EhlersFisherTransformValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="EhlersFisherTransform"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public EhlersFisherTransformValue(EhlersFisherTransform indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the main line value.
+	/// </summary>
+	public decimal MainLine => InnerValues[Indicator.MainLine].ToDecimal();
+
+	/// <summary>
+	/// Gets the trigger line value.
+	/// </summary>
+	public decimal TriggerLine => InnerValues[Indicator.TriggerLine].ToDecimal();
 }

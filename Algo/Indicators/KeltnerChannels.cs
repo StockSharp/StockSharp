@@ -7,11 +7,12 @@
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/keltner_channels.html
 /// </remarks>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.KCKey,
-	Description = LocalizedStrings.KeltnerChannelsKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.KCKey,
+		Description = LocalizedStrings.KeltnerChannelsKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/keltner_channels.html")]
+[IndicatorOut(typeof(KeltnerChannelsValue))]
 public class KeltnerChannels : BaseComplexIndicator
 {
 	private readonly AverageTrueRange _atr;
@@ -105,7 +106,7 @@ public class KeltnerChannels : BaseComplexIndicator
 		var middleValue = Middle.Process(input);
 		var atrValue = _atr.Process(input);
 
-		var result = new ComplexIndicatorValue(this, input.Time);
+		var result = new KeltnerChannelsValue(this, input.Time);
 
 		if (IsFormed)
 		{
@@ -168,4 +169,38 @@ public class KeltnerChannelBand : LengthIndicator<decimal>
 
 		return input;
 	}
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new KeltnerChannelsValue(this, time);
+}
+
+/// <summary>
+/// <see cref="KeltnerChannels"/> indicator value.
+/// </summary>
+public class KeltnerChannelsValue : ComplexIndicatorValue<KeltnerChannels>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="KeltnerChannelsValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="KeltnerChannels"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public KeltnerChannelsValue(KeltnerChannels indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the <see cref="KeltnerChannels.Middle"/> value.
+	/// </summary>
+	public decimal Middle => InnerValues[Indicator.Middle].ToDecimal();
+
+	/// <summary>
+	/// Gets the <see cref="KeltnerChannels.Upper"/> value.
+	/// </summary>
+	public decimal Upper => InnerValues[Indicator.Upper].ToDecimal();
+
+	/// <summary>
+	/// Gets the <see cref="KeltnerChannels.Lower"/> value.
+	/// </summary>
+	public decimal Lower => InnerValues[Indicator.Lower].ToDecimal();
 }

@@ -4,15 +4,25 @@
 /// Percentage Volume Oscillator (PVO).
 /// </summary>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.PVOKey,
-	Description = LocalizedStrings.PercentageVolumeOscillatorKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.PVOKey,
+		Description = LocalizedStrings.PercentageVolumeOscillatorKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/percentage_volume_oscillator.html")]
+[IndicatorOut(typeof(PercentageVolumeOscillatorValue))]
 public class PercentageVolumeOscillator : BaseComplexIndicator
 {
-	private readonly ExponentialMovingAverage _shortEma;
-	private readonly ExponentialMovingAverage _longEma;
+	/// <summary>
+	/// Short EMA.
+	/// </summary>
+	[Browsable(false)]
+	public ExponentialMovingAverage ShortEma { get; }
+
+	/// <summary>
+	/// Long EMA.
+	/// </summary>
+	[Browsable(false)]
+	public ExponentialMovingAverage LongEma { get; }
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="PercentageVolumeOscillator"/>.
@@ -32,8 +42,8 @@ public class PercentageVolumeOscillator : BaseComplexIndicator
 	public PercentageVolumeOscillator(ExponentialMovingAverage shortEma, ExponentialMovingAverage longEma)
 		: base(shortEma, longEma)
 	{
-		_shortEma = shortEma;
-		_longEma = longEma;
+		ShortEma = shortEma;
+		LongEma = longEma;
 	}
 
 	/// <summary>
@@ -46,8 +56,8 @@ public class PercentageVolumeOscillator : BaseComplexIndicator
 		GroupName = LocalizedStrings.GeneralKey)]
 	public int ShortPeriod
 	{
-		get => _shortEma.Length;
-		set => _shortEma.Length = value;
+		get => ShortEma.Length;
+		set => ShortEma.Length = value;
 	}
 
 	/// <summary>
@@ -60,33 +70,33 @@ public class PercentageVolumeOscillator : BaseComplexIndicator
 		GroupName = LocalizedStrings.GeneralKey)]
 	public int LongPeriod
 	{
-		get => _longEma.Length;
-		set => _longEma.Length = value;
+		get => LongEma.Length;
+		set => LongEma.Length = value;
 	}
 
 	/// <inheritdoc />
 	public override IndicatorMeasures Measure => IndicatorMeasures.Volume;
 
 	/// <inheritdoc />
-	public override int NumValuesToInitialize => _shortEma.NumValuesToInitialize.Max(_longEma.NumValuesToInitialize);
+	public override int NumValuesToInitialize => ShortEma.NumValuesToInitialize.Max(LongEma.NumValuesToInitialize);
 
 	/// <inheritdoc />
-	protected override bool CalcIsFormed() => _shortEma.IsFormed && _longEma.IsFormed;
+	protected override bool CalcIsFormed() => ShortEma.IsFormed && LongEma.IsFormed;
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
 		var volume = input.ToCandle().TotalVolume;
 
-		var result = new ComplexIndicatorValue(this, input.Time);
+		var result = new PercentageVolumeOscillatorValue(this, input.Time);
 
-		var shortValue = _shortEma.Process(input, volume);
-		var longValue = _longEma.Process(input, volume);
+		var shortValue = ShortEma.Process(input, volume);
+		var longValue = LongEma.Process(input, volume);
 
-		result.Add(_shortEma, shortValue);
-		result.Add(_longEma, longValue);
+		result.Add(ShortEma, shortValue);
+		result.Add(LongEma, longValue);
 
-		if (_longEma.IsFormed)
+		if (LongEma.IsFormed)
 		{
 			var den = longValue.ToDecimal();
 			var pvo = den == 0 ? 0 : ((shortValue.ToDecimal() - den) / den) * 100;
@@ -116,4 +126,33 @@ public class PercentageVolumeOscillator : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" S={ShortPeriod},L={LongPeriod}";
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new PercentageVolumeOscillatorValue(this, time);
+}
+
+/// <summary>
+/// <see cref="PercentageVolumeOscillator"/> indicator value.
+/// </summary>
+public class PercentageVolumeOscillatorValue : ComplexIndicatorValue<PercentageVolumeOscillator>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="PercentageVolumeOscillatorValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="PercentageVolumeOscillator"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public PercentageVolumeOscillatorValue(PercentageVolumeOscillator indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the short EMA value.
+	/// </summary>
+	public decimal ShortEma => InnerValues[Indicator.ShortEma].ToDecimal();
+
+	/// <summary>
+	/// Gets the long EMA value.
+	/// </summary>
+	public decimal LongEma => InnerValues[Indicator.LongEma].ToDecimal();
 }

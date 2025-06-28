@@ -7,10 +7,11 @@
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/stochastic_oscillator.html
 /// </remarks>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.STOCHKey,
-	Description = LocalizedStrings.StochasticOscillatorKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.STOCHKey,
+		Description = LocalizedStrings.StochasticOscillatorKey)]
 [Doc("topics/api/indicators/list_of_indicators/stochastic_oscillator.html")]
+[IndicatorOut(typeof(StochasticOscillatorValue))]
 public class StochasticOscillator : BaseComplexIndicator
 {
 	/// <summary>
@@ -51,4 +52,33 @@ public class StochasticOscillator : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" %K={K.Length} %D={D.Length}";
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new StochasticOscillatorValue(this, time);
+}
+
+/// <summary>
+/// <see cref="StochasticOscillator"/> indicator value.
+/// </summary>
+public class StochasticOscillatorValue : ComplexIndicatorValue<StochasticOscillator>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="StochasticOscillatorValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="StochasticOscillator"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public StochasticOscillatorValue(StochasticOscillator indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the %K value.
+	/// </summary>
+	public decimal KValue => InnerValues[Indicator.K].ToDecimal();
+
+	/// <summary>
+	/// Gets the %D value.
+	/// </summary>
+	public decimal DValue => InnerValues[Indicator.D].ToDecimal();
 }
