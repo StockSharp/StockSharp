@@ -237,7 +237,14 @@ public static class IndicatorHelper
 	/// <param name="indicatorType"><see cref="IComplexIndicator"/></param>
 	/// <returns>Type.</returns>
 	public static Type GetDefaultIndicatorOutput(this Type indicatorType)
-		=> indicatorType.CheckOnNull(nameof(indicatorType)).Is<IComplexIndicator>() ? typeof(ComplexIndicatorValue) : typeof(DecimalIndicatorValue);
+	{
+		ArgumentNullException.ThrowIfNull(indicatorType);
+
+		if (indicatorType.Is<IComplexIndicator>())
+			throw new ArgumentException(LocalizedStrings.InvalidValue, nameof(indicatorType));
+
+		return typeof(DecimalIndicatorValue);
+	}
 
 	/// <summary>
 	/// Get value type for specified indicator.
