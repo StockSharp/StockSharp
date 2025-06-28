@@ -7,10 +7,11 @@
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/rvi.html
 /// </remarks>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.RVIKey,
-	Description = LocalizedStrings.RelativeVigorIndexKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.RVIKey,
+		Description = LocalizedStrings.RelativeVigorIndexKey)]
 [Doc("topics/api/indicators/list_of_indicators/rvi.html")]
+[IndicatorOut(typeof(RelativeVigorIndexValue))]
 public class RelativeVigorIndex : BaseComplexIndicator
 {
 	/// <summary>
@@ -62,4 +63,33 @@ public class RelativeVigorIndex : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" A={Average.Length} S={Signal.Length}";
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new RelativeVigorIndexValue(this, time);
+}
+
+/// <summary>
+/// <see cref="RelativeVigorIndex"/> indicator value.
+/// </summary>
+public class RelativeVigorIndexValue : ComplexIndicatorValue<RelativeVigorIndex>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="RelativeVigorIndexValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="RelativeVigorIndex"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public RelativeVigorIndexValue(RelativeVigorIndex indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the <see cref="RelativeVigorIndex.Average"/> value.
+	/// </summary>
+	public decimal Average => InnerValues[Indicator.Average].ToDecimal();
+
+	/// <summary>
+	/// Gets the <see cref="RelativeVigorIndex.Signal"/> value.
+	/// </summary>
+	public decimal Signal => InnerValues[Indicator.Signal].ToDecimal();
 }

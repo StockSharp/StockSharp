@@ -7,11 +7,12 @@
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/aroon.html
 /// </remarks>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.AroonKey,
-	Description = LocalizedStrings.AroonDescriptionKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.AroonKey,
+		Description = LocalizedStrings.AroonDescriptionKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/aroon.html")]
+[IndicatorOut(typeof(AroonValue))]
 public class Aroon : BaseComplexIndicator
 {
 	/// <summary>
@@ -260,4 +261,33 @@ public class AroonDown : LengthIndicator<decimal>
 
 		base.Reset();
 	}
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new AroonValue(this, time);
+}
+
+/// <summary>
+/// <see cref="Aroon"/> indicator value.
+/// </summary>
+public class AroonValue : ComplexIndicatorValue<Aroon>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="AroonValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="Aroon"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public AroonValue(Aroon indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the <see cref="Aroon.Up"/> value.
+	/// </summary>
+	public decimal Up => InnerValues[Indicator.Up].ToDecimal();
+
+	/// <summary>
+	/// Gets the <see cref="Aroon.Down"/> value.
+	/// </summary>
+	public decimal Down => InnerValues[Indicator.Down].ToDecimal();
 }

@@ -4,30 +4,41 @@
 /// Chande Kroll Stop indicator.
 /// </summary>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.CKSKey,
-	Description = LocalizedStrings.ChandeKrollStopKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.CKSKey,
+		Description = LocalizedStrings.ChandeKrollStopKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/chande_kroll_stop.html")]
+[IndicatorOut(typeof(ChandeKrollStopValue))]
 public class ChandeKrollStop : BaseComplexIndicator
 {
-	private readonly Highest _highest;
-	private readonly Lowest _lowest;
 	private readonly SimpleMovingAverage _smaHigh;
 	private readonly SimpleMovingAverage _smaLow;
+
+	/// <summary>
+	/// Highest line.
+	/// </summary>
+	[Browsable(false)]
+	public Highest Highest { get; }
+
+	/// <summary>
+	/// Lowest line.
+	/// </summary>
+	[Browsable(false)]
+	public Lowest Lowest { get; }
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ChandeKrollStop"/>.
 	/// </summary>
 	public ChandeKrollStop()
 	{
-		_highest = new();
-		_lowest = new();
+		Highest = new();
+		Lowest = new();
 		_smaHigh = new();
 		_smaLow = new();
 
-		AddInner(_highest);
-		AddInner(_lowest);
+		AddInner(Highest);
+		AddInner(Lowest);
 
 		Period = 10;
 		Multiplier = 1.5m;
@@ -44,11 +55,11 @@ public class ChandeKrollStop : BaseComplexIndicator
 		GroupName = LocalizedStrings.GeneralKey)]
 	public int Period
 	{
-		get => _highest.Length;
+		get => Highest.Length;
 		set
 		{
-			_highest.Length = value;
-			_lowest.Length = value;
+		Highest.Length = value;
+		Lowest.Length = value;
 		}
 	}
 
@@ -96,12 +107,12 @@ public class ChandeKrollStop : BaseComplexIndicator
 	{
 		var candle = input.ToCandle();
 
-		var highestValue = _highest.Process(input, candle.HighPrice);
-		var lowestValue = _lowest.Process(input, candle.LowPrice);
+		var highestValue = Highest.Process(input, candle.HighPrice);
+		var lowestValue = Lowest.Process(input, candle.LowPrice);
 
-		var result = new ComplexIndicatorValue(this, input.Time);
+		var result = new ChandeKrollStopValue(this, input.Time);
 
-		if (_highest.IsFormed && _lowest.IsFormed)
+		if (Highest.IsFormed && Lowest.IsFormed)
 		{
 			if (input.IsFinal)
 				IsFormed = true;
@@ -114,8 +125,8 @@ public class ChandeKrollStop : BaseComplexIndicator
 			var stopLong = highest - highLowDiff * Multiplier;
 			var stopShort = lowest + highLowDiff * Multiplier;
 
-			result.Add(_highest, _smaHigh.Process(input, stopLong));
-			result.Add(_lowest, _smaLow.Process(input, stopShort));
+		result.Add(Highest, _smaHigh.Process(input, stopLong));
+		result.Add(Lowest, _smaLow.Process(input, stopShort));
 		}
 
 		return result;
@@ -124,8 +135,8 @@ public class ChandeKrollStop : BaseComplexIndicator
 	/// <inheritdoc />
 	public override void Reset()
 	{
-		//_highest.Reset();
-		//_lowest.Reset();
+		Highest.Reset();
+		Lowest.Reset();
 		_smaHigh.Reset();
 		_smaLow.Reset();
 
@@ -151,4 +162,33 @@ public class ChandeKrollStop : BaseComplexIndicator
 		Multiplier = storage.GetValue<decimal>(nameof(Multiplier));
 		StopPeriod = storage.GetValue<int>(nameof(StopPeriod));
 	}
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new ChandeKrollStopValue(this, time);
+}
+
+/// <summary>
+/// <see cref="ChandeKrollStop"/> indicator value.
+/// </summary>
+public class ChandeKrollStopValue : ComplexIndicatorValue<ChandeKrollStop>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ChandeKrollStopValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="ChandeKrollStop"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public ChandeKrollStopValue(ChandeKrollStop indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the highest stop line.
+	/// </summary>
+	public decimal Highest => InnerValues[Indicator.Highest].ToDecimal();
+
+	/// <summary>
+	/// Gets the lowest stop line.
+	/// </summary>
+	public decimal Lowest => InnerValues[Indicator.Lowest].ToDecimal();
 }

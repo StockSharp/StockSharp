@@ -4,11 +4,12 @@
 /// Fibonacci Retracement.
 /// </summary>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.FRKey,
-	Description = LocalizedStrings.FibonacciRetracementKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.FRKey,
+		Description = LocalizedStrings.FibonacciRetracementKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/fibonacci_retracement.html")]
+[IndicatorOut(typeof(FibonacciRetracementValue))]
 public class FibonacciRetracement : BaseComplexIndicator
 {
 	private readonly Highest _highest;
@@ -67,7 +68,7 @@ public class FibonacciRetracement : BaseComplexIndicator
 		if (input.IsFinal && _highest.IsFormed && _lowest.IsFormed)
 			IsFormed = true;
 
-		var result = new ComplexIndicatorValue(this, input.Time);
+		var result = new FibonacciRetracementValue(this, input.Time);
 
 		var highestHigh = highValue.ToDecimal();
 		var lowestLow = lowValue.ToDecimal();
@@ -119,14 +120,14 @@ public class FibonacciLevel : BaseIndicator
 	/// </summary>
 	/// <param name="level"><see cref="Level"/></param>
 	public FibonacciLevel(decimal level)
-    {
+	{
 		Level = level;
-    }
+	}
 
-    /// <summary>
-    /// The retracement level.
-    /// </summary>
-    public decimal Level { get; }
+	/// <summary>
+	/// The retracement level.
+	/// </summary>
+	public decimal Level { get; }
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
@@ -136,4 +137,28 @@ public class FibonacciLevel : BaseIndicator
 
 		return input;
 	}
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new FibonacciRetracementValue(this, time);
+}
+
+/// <summary>
+/// <see cref="FibonacciRetracement"/> indicator value.
+/// </summary>
+public class FibonacciRetracementValue : ComplexIndicatorValue<FibonacciRetracement>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="FibonacciRetracementValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="FibonacciRetracement"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public FibonacciRetracementValue(FibonacciRetracement indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets all level values.
+	/// </summary>
+	public decimal[] Levels => Indicator.Levels.Select(l => InnerValues[l].ToDecimal()).ToArray();
 }

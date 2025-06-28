@@ -4,10 +4,11 @@
 /// Know Sure Thing (KST) indicator.
 /// </summary>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.KSTKey,
-	Description = LocalizedStrings.KnowSureThingKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.KSTKey,
+		Description = LocalizedStrings.KnowSureThingKey)]
 [Doc("topics/api/indicators/list_of_indicators/kst.html")]
+[IndicatorOut(typeof(KnowSureThingValue))]
 public class KnowSureThing : BaseComplexIndicator
 {
 	private readonly RateOfChange _roc1 = new() { Length = 10 };
@@ -18,16 +19,25 @@ public class KnowSureThing : BaseComplexIndicator
 	private readonly SimpleMovingAverage _sma2 = new() { Length = 10 };
 	private readonly SimpleMovingAverage _sma3 = new() { Length = 10 };
 	private readonly SimpleMovingAverage _sma4 = new() { Length = 15 };
-	private readonly SimpleMovingAverage _signal = new() { Length = 9 };
-	private readonly KnowSureThingLine _kstLine = new();
+	/// <summary>
+	/// Signal line.
+	/// </summary>
+	[Browsable(false)]
+	public SimpleMovingAverage Signal { get; } = new() { Length = 9 };
+
+	/// <summary>
+	/// KST line.
+	/// </summary>
+	[Browsable(false)]
+	public KnowSureThingLine KstLine { get; } = new();
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="KnowSureThing"/>.
 	/// </summary>
 	public KnowSureThing()
 	{
-		AddInner(_kstLine);
-		AddInner(_signal);
+		AddInner(KstLine);
+		AddInner(Signal);
 	}
 
 	/// <inheritdoc />
@@ -35,15 +45,15 @@ public class KnowSureThing : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override int NumValuesToInitialize
-		=> _roc4.NumValuesToInitialize + _sma4.NumValuesToInitialize + _signal.NumValuesToInitialize - 2;
+		=> _roc4.NumValuesToInitialize + _sma4.NumValuesToInitialize + Signal.NumValuesToInitialize - 2;
 
 	/// <inheritdoc />
-	protected override bool CalcIsFormed() => _signal.IsFormed;
+	protected override bool CalcIsFormed() => Signal.IsFormed;
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var result = new ComplexIndicatorValue(this, input.Time);
+		var result = new KnowSureThingValue(this, input.Time);
 
 		var roc1Value = _roc1.Process(input);
 		var roc2Value = _roc2.Process(input);
@@ -63,8 +73,8 @@ public class KnowSureThing : BaseComplexIndicator
 
 		var kst = sma1Value.ToDecimal() + 2 * sma2Value.ToDecimal() + 3 * sma3Value.ToDecimal() + 4 * sma4Value.ToDecimal();
 
-		result.Add(_kstLine, _kstLine.Process(kst, input.Time, input.IsFinal));
-		result.Add(_signal, _signal.Process(kst, input.Time, input.IsFinal));
+		result.Add(KstLine, KstLine.Process(kst, input.Time, input.IsFinal));
+		result.Add(Signal, Signal.Process(kst, input.Time, input.IsFinal));
 
 		return result;
 	}
@@ -99,4 +109,33 @@ public class KnowSureThingLine : BaseIndicator
 
 		return input;
 	}
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new KnowSureThingValue(this, time);
+}
+
+/// <summary>
+/// <see cref="KnowSureThing"/> indicator value.
+/// </summary>
+public class KnowSureThingValue : ComplexIndicatorValue<KnowSureThing>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="KnowSureThingValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="KnowSureThing"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public KnowSureThingValue(KnowSureThing indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the KST line value.
+	/// </summary>
+	public decimal KstLine => InnerValues[Indicator.KstLine].ToDecimal();
+
+	/// <summary>
+	/// Gets the signal line value.
+	/// </summary>
+	public decimal Signal => InnerValues[Indicator.Signal].ToDecimal();
 }

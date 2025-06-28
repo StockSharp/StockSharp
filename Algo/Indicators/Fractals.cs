@@ -65,12 +65,13 @@ public class FractalsIndicatorValue : ComplexIndicatorValue
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/fractals.html
 /// </remarks>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.FractalsKey,
-	Description = LocalizedStrings.FractalsKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.FractalsKey,
+		Description = LocalizedStrings.FractalsKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [IndicatorOut(typeof(FractalsIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/fractals.html")]
+[IndicatorOut(typeof(FractalsValue))]
 public class Fractals : BaseComplexIndicator
 {
 	/// <summary>
@@ -143,4 +144,25 @@ public class Fractals : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + " " + Length;
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new FractalsValue(this, time);
+}
+
+public class FractalsValue : ComplexIndicatorValue<Fractals>
+{
+	public FractalsValue(Fractals indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the <see cref="Fractals.Up"/> value.
+	/// </summary>
+	public decimal Up => InnerValues[Indicator.Up].ToDecimal();
+
+	/// <summary>
+	/// Gets the <see cref="Fractals.Down"/> value.
+	/// </summary>
+	public decimal Down => InnerValues[Indicator.Down].ToDecimal();
 }

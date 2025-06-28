@@ -525,9 +525,11 @@ public class PairIndicatorValue<TValue> : SingleIndicatorValue<(TValue, TValue)>
 /// </remarks>
 /// <param name="indicator">Indicator.</param>
 /// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class ComplexIndicatorValue(IComplexIndicator indicator, DateTimeOffset time) : BaseIndicatorValue(indicator, time)
+public abstract class ComplexIndicatorValue<TIndicator>(TIndicator indicator, DateTimeOffset time) : BaseIndicatorValue(indicator, time)
+    where TIndicator : class, IComplexIndicator
 {
 
+    public new TIndicator Indicator { get; } = indicator;
 	/// <inheritdoc />
 	public override bool IsEmpty { get; set; }
 
@@ -585,7 +587,7 @@ public class ComplexIndicatorValue(IComplexIndicator indicator, DateTimeOffset t
 		if (IsEmpty)
 			yield break;
 
-		foreach (var inner in ((IComplexIndicator)Indicator).InnerIndicators)
+		foreach (var inner in Indicator.InnerIndicators)
 			yield return InnerValues[inner].ToValues();
 	}
 
@@ -604,7 +606,15 @@ public class ComplexIndicatorValue(IComplexIndicator indicator, DateTimeOffset t
 
 		var idx = 0;
 
-		foreach (var inner in ((IComplexIndicator)Indicator).InnerIndicators)
+		foreach (var inner in Indicator.InnerIndicators)
 			InnerValues.Add(inner, inner.CreateValue(Time, values[idx++].To<object[]>()));
 	}
+}
+
+public abstract class ComplexIndicatorValue : ComplexIndicatorValue<IComplexIndicator>
+{
+        protected ComplexIndicatorValue(IComplexIndicator indicator, DateTimeOffset time)
+                : base(indicator, time)
+        {
+        }
 }

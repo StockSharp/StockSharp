@@ -4,11 +4,12 @@
 /// Moving Average Ribbon indicator.
 /// </summary>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.MARKey,
-	Description = LocalizedStrings.MovingAverageRibbonKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.MARKey,
+		Description = LocalizedStrings.MovingAverageRibbonKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/moving_average_ribbon.html")]
+[IndicatorOut(typeof(MovingAverageRibbonValue))]
 public class MovingAverageRibbon : BaseComplexIndicator
 {
 	/// <summary>
@@ -129,4 +130,28 @@ public class MovingAverageRibbon : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" S={ShortPeriod} L={LongPeriod} C={RibbonCount}";
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new MovingAverageRibbonValue(this, time);
+}
+
+/// <summary>
+/// <see cref="MovingAverageRibbon"/> indicator value.
+/// </summary>
+public class MovingAverageRibbonValue : ComplexIndicatorValue<MovingAverageRibbon>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="MovingAverageRibbonValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="MovingAverageRibbon"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public MovingAverageRibbonValue(MovingAverageRibbon indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets all moving average values.
+	/// </summary>
+	public decimal[] Averages => Indicator.InnerIndicators.Select(i => InnerValues[i].ToDecimal()).ToArray();
 }

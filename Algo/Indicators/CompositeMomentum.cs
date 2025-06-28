@@ -4,10 +4,11 @@
 /// Composite Momentum indicator.
 /// </summary>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.CMKey,
-	Description = LocalizedStrings.CompositeMomentumKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.CMKey,
+		Description = LocalizedStrings.CompositeMomentumKey)]
 [Doc("topics/api/indicators/list_of_indicators/composite_momentum.html")]
+[IndicatorOut(typeof(CompositeMomentumValue))]
 public class CompositeMomentum : BaseComplexIndicator
 {
 	private readonly RateOfChange _roc1;
@@ -17,6 +18,18 @@ public class CompositeMomentum : BaseComplexIndicator
 	private readonly ExponentialMovingAverage _emaSlow;
 	private readonly SimpleMovingAverage _sma;
 	private readonly CompositeMomentumLine _compositeLine;
+
+	/// <summary>
+	/// SMA used for final smoothing.
+	/// </summary>
+	[Browsable(false)]
+	public SimpleMovingAverage Sma => _sma;
+
+	/// <summary>
+	/// Composite momentum line.
+	/// </summary>
+	[Browsable(false)]
+	public CompositeMomentumLine CompositeLine => _compositeLine;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CompositeMomentum"/>.
@@ -51,8 +64,8 @@ public class CompositeMomentum : BaseComplexIndicator
 		_sma = sma ?? throw new ArgumentNullException(nameof(sma));
 		_compositeLine = new();
 
-		AddInner(_sma);
-		AddInner(_compositeLine);
+		AddInner(Sma);
+		AddInner(CompositeLine);
 	}
 
 	/// <inheritdoc />
@@ -77,12 +90,12 @@ public class CompositeMomentum : BaseComplexIndicator
 		.Max(_rsi.NumValuesToInitialize)
 		.Max(_emaFast.NumValuesToInitialize)
 		.Max(_emaSlow.NumValuesToInitialize)
-		+ _sma.NumValuesToInitialize - 1;
+		+ Sma.NumValuesToInitialize - 1;
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var result = new ComplexIndicatorValue(this, input.Time);
+		var result = new CompositeMomentumValue(this, input.Time);
 
 		var shortRocValue = _roc1.Process(input);
 		var longRocValue = _roc2.Process(input);
@@ -101,11 +114,11 @@ public class CompositeMomentum : BaseComplexIndicator
 			var compMomentum = (normalizedShortRoc + normalizedLongRoc + normalizedRsi + macdLine) / 4m;
 			compMomentum *= 100m;
 
-			var compositeValue = _compositeLine.Process(compMomentum, input.Time, input.IsFinal);
-			result.Add(_compositeLine, compositeValue);
-			result.Add(_sma, _sma.Process(compositeValue));
+		var compositeValue = CompositeLine.Process(compMomentum, input.Time, input.IsFinal);
+		result.Add(_compositeLine, compositeValue);
+		result.Add(Sma, Sma.Process(compositeValue));
 
-			if (input.IsFinal && _sma.IsFormed)
+		if (input.IsFinal && Sma.IsFormed)
 				IsFormed = true;
 		}
 
@@ -126,4 +139,33 @@ public class CompositeMomentum : BaseComplexIndicator
 			return input;
 		}
 	}
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new CompositeMomentumValue(this, time);
+}
+
+/// <summary>
+/// <see cref="CompositeMomentum"/> indicator value.
+/// </summary>
+public class CompositeMomentumValue : ComplexIndicatorValue<CompositeMomentum>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="CompositeMomentumValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="CompositeMomentum"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public CompositeMomentumValue(CompositeMomentum indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the SMA value.
+	/// </summary>
+	public decimal Sma => InnerValues[Indicator.Sma].ToDecimal();
+
+	/// <summary>
+	/// Gets the composite momentum line.
+	/// </summary>
+	public decimal CompositeLine => InnerValues[Indicator.CompositeLine].ToDecimal();
 }

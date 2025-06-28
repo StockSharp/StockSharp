@@ -7,10 +7,11 @@
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/alligator.html
 /// </remarks>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.AlligatorKey,
-	Description = LocalizedStrings.AlligatorKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.AlligatorKey,
+		Description = LocalizedStrings.AlligatorKey)]
 [Doc("topics/api/indicators/list_of_indicators/alligator.html")]
+[IndicatorOut(typeof(AlligatorValue))]
 public class Alligator : BaseComplexIndicator
 {
 	/// <summary>
@@ -76,4 +77,39 @@ public class Alligator : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" J={Jaw.Length} T={Teeth.Length} L={Lips.Length}";
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new AlligatorValue(this, time);
+}
+
+
+/// <summary>
+/// <see cref="Alligator"/> indicator value.
+/// </summary>
+public class AlligatorValue : ComplexIndicatorValue<Alligator>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="AlligatorValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="Alligator"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public AlligatorValue(Alligator indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the <see cref="Alligator.Jaw"/> value.
+	/// </summary>
+	public decimal Jaw => InnerValues[Indicator.Jaw].ToDecimal();
+
+	/// <summary>
+	/// Gets the <see cref="Alligator.Teeth"/> value.
+	/// </summary>
+	public decimal Teeth => InnerValues[Indicator.Teeth].ToDecimal();
+
+	/// <summary>
+	/// Gets the <see cref="Alligator.Lips"/> value.
+	/// </summary>
+	public decimal Lips => InnerValues[Indicator.Lips].ToDecimal();
 }

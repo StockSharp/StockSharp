@@ -4,11 +4,12 @@
 /// Vortex Indicator.
 /// </summary>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.VIKey,
-	Description = LocalizedStrings.VortexKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.VIKey,
+		Description = LocalizedStrings.VortexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/vortex_indicator.html")]
+[IndicatorOut(typeof(VortexIndicatorValue))]
 public class VortexIndicator : BaseComplexIndicator
 {
 	private readonly VortexPart _plusVi;
@@ -185,4 +186,33 @@ public class VortexPart : LengthIndicator<decimal>
 
 	/// <inheritdoc />
 	protected override bool CalcIsFormed() => _trBuffer.Count >= Length;
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new VortexIndicatorValue(this, time);
+}
+
+/// <summary>
+/// <see cref="VortexIndicator"/> indicator value.
+/// </summary>
+public class VortexIndicatorValue : ComplexIndicatorValue<VortexIndicator>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="VortexIndicatorValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="VortexIndicator"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public VortexIndicatorValue(VortexIndicator indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the <see cref="VortexIndicator.PlusVi"/> value.
+	/// </summary>
+	public decimal PlusVi => InnerValues[Indicator.PlusVi].ToDecimal();
+
+	/// <summary>
+	/// Gets the <see cref="VortexIndicator.MinusVi"/> value.
+	/// </summary>
+	public decimal MinusVi => InnerValues[Indicator.MinusVi].ToDecimal();
 }

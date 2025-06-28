@@ -7,10 +7,11 @@
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/macd_with_signal_line.html
 /// </remarks>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.MACDSignalKey,
-	Description = LocalizedStrings.MACDSignalDescKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.MACDSignalKey,
+		Description = LocalizedStrings.MACDSignalDescKey)]
 [Doc("topics/api/indicators/list_of_indicators/macd_with_signal_line.html")]
+[IndicatorOut(typeof(MovingAverageConvergenceDivergenceSignalValue))]
 public class MovingAverageConvergenceDivergenceSignal : BaseComplexIndicator
 {
 	/// <summary>
@@ -61,4 +62,33 @@ public class MovingAverageConvergenceDivergenceSignal : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" L={Macd.LongMa.Length} S={Macd.ShortMa.Length} Sig={SignalMa.Length}";
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new MovingAverageConvergenceDivergenceSignalValue(this, time);
+}
+
+/// <summary>
+/// <see cref="MovingAverageConvergenceDivergenceSignal"/> indicator value.
+/// </summary>
+public class MovingAverageConvergenceDivergenceSignalValue : ComplexIndicatorValue<MovingAverageConvergenceDivergenceSignal>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="MovingAverageConvergenceDivergenceSignalValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="MovingAverageConvergenceDivergenceSignal"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public MovingAverageConvergenceDivergenceSignalValue(MovingAverageConvergenceDivergenceSignal indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the MACD value.
+	/// </summary>
+	public decimal Macd => InnerValues[Indicator.Macd].ToDecimal();
+
+	/// <summary>
+	/// Gets the signal line value.
+	/// </summary>
+	public decimal Signal => InnerValues[Indicator.SignalMa].ToDecimal();
 }
