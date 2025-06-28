@@ -1081,6 +1081,7 @@
   "EnterLogin": "Indtast login",
   "EnterPassword": "Indtast adgangskode",
   "Envelope": "Kuvert",
+  "EnvelopeDesc": "Skaber øvre og nedre bånd omkring et glidende gennemsnit for at identificere potentielle støtte- og modstandsniveauer",
   "EPMA": "EPMA",
   "Equal": "Lige",
   "EqualityOperator": "Sammenligningsoperator.",

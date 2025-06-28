@@ -1081,6 +1081,7 @@
   "EnterLogin": "Ange inloggning",
   "EnterPassword": "Ange lösenord",
   "Envelope": "Kuvert",
+  "EnvelopeDesc": "Skapar övre och nedre band runt ett glidande medelvärde för att identifiera potentiella stöd- och motståndsnivåer",
   "EPMA": "EPMA",
   "Equal": "Lika",
   "EqualityOperator": "Jämförelseoperator.",

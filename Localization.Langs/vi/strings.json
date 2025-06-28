@@ -1081,6 +1081,7 @@
   "EnterLogin": "Nhập đăng nhập",
   "EnterPassword": "Nhập mật khẩu",
   "Envelope": "Phong bì",
+  "EnvelopeDesc": "Tạo các dải trên và dưới xung quanh đường trung bình động để xác định các mức hỗ trợ và kháng cự tiềm năng",
   "EPMA": "EPMA",
   "Equal": "Bằng nhau",
   "EqualityOperator": "Toán tử so sánh.",

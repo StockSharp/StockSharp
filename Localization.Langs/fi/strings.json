@@ -1081,6 +1081,7 @@
   "EnterLogin": "Syötä kirjautumistunnus",
   "EnterPassword": "Syötä salasana",
   "Envelope": "Kuori",
+  "EnvelopeDesc": "Luo ylä- ja alakaistat liukuvan keskiarvon ympärille mahdollisten tuki- ja vastustustasojen tunnistamiseksi",
   "EPMA": "EPMA",
   "Equal": "Tasa-arvoinen",
   "EqualityOperator": "Vertailuoperaattori.",

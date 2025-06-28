@@ -1081,6 +1081,7 @@
   "EnterLogin": "로그인 입력",
   "EnterPassword": "비밀번호를 입력하세요",
   "Envelope": "봉투",
+  "EnvelopeDesc": "이동평균 주위에 상단 및 하단 밴드를 생성하여 잠재적인 지지 및 저항 수준을 식별합니다",
   "EPMA": "EPMA",
   "Equal": "동등하다",
   "EqualityOperator": "비교 연산자.",

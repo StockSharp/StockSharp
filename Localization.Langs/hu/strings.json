@@ -1081,6 +1081,7 @@
   "EnterLogin": "Írja be a bejelentkezési nevet",
   "EnterPassword": "Írja be a jelszót",
   "Envelope": "Boríték",
+  "EnvelopeDesc": "Felső és alsó sávokat hoz létre a mozgóátlag körül a potenciális támogatási és ellenállási szintek azonosításához",
   "EPMA": "EPMA",
   "Equal": "Egyenlő",
   "EqualityOperator": "Összehasonlító operátor.",

@@ -1081,6 +1081,7 @@
   "EnterLogin": "输入登录名",
   "EnterPassword": "输入密码",
   "Envelope": "信封",
+  "EnvelopeDesc": "在移动平均线周围创建上下轨道以识别潜在的支撑和阻力水平",
   "EPMA": "EPMA",
   "Equal": "相等",
   "EqualityOperator": "比较运算符。",

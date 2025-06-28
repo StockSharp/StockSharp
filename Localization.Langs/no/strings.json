@@ -1081,6 +1081,7 @@
   "EnterLogin": "Oppgi innlogging",
   "EnterPassword": "Skriv inn passord",
   "Envelope": "Konvolutt",
+  "EnvelopeDesc": "Lager øvre og nedre bånd rundt et glidende gjennomsnitt for å identifisere potensielle støtte- og motstandsnivåer",
   "EPMA": "EPMA",
   "Equal": "Lik",
   "EqualityOperator": "Sammenligningsoperator.",

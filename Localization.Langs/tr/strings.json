@@ -1081,6 +1081,7 @@
   "EnterLogin": "Giriş yapınız",
   "EnterPassword": "Şifre giriniz",
   "Envelope": "Zarf",
+  "EnvelopeDesc": "Potansiyel destek ve direnç seviyelerini belirlemek için hareketli ortalama etrafında üst ve alt bantlar oluşturur",
   "EPMA": "EPMA",
   "Equal": "Eşit",
   "EqualityOperator": "Karşılaştırma operatörü.",

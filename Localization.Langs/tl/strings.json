@@ -1085,6 +1085,7 @@
   "EnterLogin": "I-enter ang login",
   "EnterPassword": "I-enter ang password",
   "Envelope": "Envelope",
+  "EnvelopeDesc": "Lumilikha ng mga pang-itaas at pang-ibabang banda sa paligid ng moving average upang matukoy ang mga potensyal na support at resistance levels",
   "EPMA": "EPMA",
   "Equal": "Kapantay",
   "EqualityOperator": "Equality operator.",

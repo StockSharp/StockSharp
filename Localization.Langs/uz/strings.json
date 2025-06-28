@@ -1081,6 +1081,7 @@
   "EnterLogin": "Login kiriting",
   "EnterPassword": "Parolni kiriting",
   "Envelope": "Konvert",
+  "EnvelopeDesc": "Potentsial qo'llab-quvvatlash va qarshilik darajalarini aniqlash uchun harakatlanuvchi o'rtacha atrofida yuqori va pastki chiziqlar yaratadi",
   "EPMA": "EPMA",
   "Equal": "Teng",
   "EqualityOperator": "Taqqoslash operatori.",

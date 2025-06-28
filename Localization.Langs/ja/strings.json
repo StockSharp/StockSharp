@@ -1081,6 +1081,7 @@
   "EnterLogin": "ログインを入力してください",
   "EnterPassword": "パスワードを入力してください",
   "Envelope": "封筒",
+  "EnvelopeDesc": "移動平均の周りに上下のバンドを作成し、潜在的なサポートとレジスタンスレベルを特定します",
   "EPMA": "EPMA",
   "Equal": "等しい",
   "EqualityOperator": "比較演算子。",

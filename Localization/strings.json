@@ -1086,6 +1086,7 @@
   "EnterLogin": "Enter login",
   "EnterPassword": "Enter password",
   "Envelope": "Envelope",
+  "EnvelopeDesc": "Creates upper and lower bands around a moving average to identify potential support and resistance levels",
   "EPMA": "EPMA",
   "Equal": "Equal",
   "EqualityOperator": "Equality operator.",

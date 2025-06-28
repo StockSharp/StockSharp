@@ -1081,6 +1081,7 @@
   "EnterLogin": "Login eingeben",
   "EnterPassword": "Passwort eingeben",
   "Envelope": "Umschlag",
+  "EnvelopeDesc": "Erstellt obere und untere Bänder um einen gleitenden Durchschnitt zur Identifizierung potenzieller Unterstützungs- und Widerstandsniveaus",
   "EPMA": "EPMA",
   "Equal": "Gleich",
   "EqualityOperator": "Vergleichsoperator.",

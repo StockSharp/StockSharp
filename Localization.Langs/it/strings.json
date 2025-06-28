@@ -1081,6 +1081,7 @@
   "EnterLogin": "Inserisci il login",
   "EnterPassword": "Inserisci la password",
   "Envelope": "Busta",
+  "EnvelopeDesc": "Crea bande superiori e inferiori attorno a una media mobile per identificare potenziali livelli di supporto e resistenza",
   "EPMA": "EPMA",
   "Equal": "Uguale",
   "EqualityOperator": "Operatore di confronto.",

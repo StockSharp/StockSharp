@@ -1081,6 +1081,7 @@
   "EnterLogin": "Zadajte prihlasovacie meno",
   "EnterPassword": "Zadajte heslo",
   "Envelope": "Obálka",
+  "EnvelopeDesc": "Vytvára horné a dolné pásma okolo kĺzavého priemeru na identifikáciu potenciálnych úrovní podpory a odporu",
   "EPMA": "EPMA",
   "Equal": "Rovnaké",
   "EqualityOperator": "Operátor rovnosti.",

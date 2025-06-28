@@ -1081,6 +1081,7 @@
   "EnterLogin": "Wprowadź login",
   "EnterPassword": "Wprowadź hasło",
   "Envelope": "Koperta",
+  "EnvelopeDesc": "Tworzy górne i dolne pasma wokół średniej ruchomej w celu identyfikacji potencjalnych poziomów wsparcia i oporu",
   "EPMA": "EPMA",
   "Equal": "Równy",
   "EqualityOperator": "Operator porównania.",

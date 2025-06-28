@@ -1081,6 +1081,7 @@
   "EnterLogin": "Ingrese nombre de usuario",
   "EnterPassword": "Introduzca la contraseña",
   "Envelope": "Sobre",
+  "EnvelopeDesc": "Crea bandas superiores e inferiores alrededor de una media móvil para identificar niveles potenciales de soporte y resistencia",
   "EPMA": "EPMA",
   "Equal": "Igual",
   "EqualityOperator": "Operador de comparación.",

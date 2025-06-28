@@ -1081,6 +1081,7 @@
   "EnterLogin": "Entrez le login",
   "EnterPassword": "Entrez le mot de passe",
   "Envelope": "Enveloppe",
+  "EnvelopeDesc": "Crée des bandes supérieures et inférieures autour d'une moyenne mobile pour identifier les niveaux potentiels de support et de résistance",
   "EPMA": "EPMA",
   "Equal": "Égal",
   "EqualityOperator": "Opérateur de comparaison.",

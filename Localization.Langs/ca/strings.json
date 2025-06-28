@@ -1081,6 +1081,7 @@
   "EnterLogin": "Introduïu el nom d'usuari",
   "EnterPassword": "Introduïu la contrasenya",
   "Envelope": "Sobre",
+  "EnvelopeDesc": "Crea bandes superiors i inferiors al voltant d'una mitjana mòbil per identificar nivells potencials de suport i resistència",
   "EPMA": "EPMA",
   "Equal": "Igual",
   "EqualityOperator": "Operador de comparació",
