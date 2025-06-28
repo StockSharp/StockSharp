@@ -7,10 +7,11 @@
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/gator_oscillator.html
 /// </remarks>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.GatorKey,
-	Description = LocalizedStrings.GatorOscillatorKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.GatorKey,
+		Description = LocalizedStrings.GatorOscillatorKey)]
 [Doc("topics/api/indicators/list_of_indicators/gator_oscillator.html")]
+[IndicatorOut(typeof(GatorOscillatorValue))]
 public class GatorOscillator : BaseComplexIndicator
 {
 	private readonly Alligator _alligator;
@@ -65,4 +66,33 @@ public class GatorOscillator : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => $"{base.ToString()}, H1={Histogram1}, H2={Histogram2}";
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new GatorOscillatorValue(this, time);
+}
+
+/// <summary>
+/// <see cref="GatorOscillator"/> indicator value.
+/// </summary>
+public class GatorOscillatorValue : ComplexIndicatorValue<GatorOscillator>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="GatorOscillatorValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="GatorOscillator"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public GatorOscillatorValue(GatorOscillator indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the <see cref="GatorOscillator.Histogram1"/> value.
+	/// </summary>
+	public decimal Histogram1 => InnerValues[Indicator.Histogram1].ToDecimal();
+
+	/// <summary>
+	/// Gets the <see cref="GatorOscillator.Histogram2"/> value.
+	/// </summary>
+	public decimal Histogram2 => InnerValues[Indicator.Histogram2].ToDecimal();
 }

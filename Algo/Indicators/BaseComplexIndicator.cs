@@ -8,12 +8,12 @@ public enum ComplexIndicatorModes
 	/// <summary>
 	/// In-series. The result of the previous indicator execution is passed to the next one,.
 	/// </summary>
-	Sequence,
+		Sequence,
 
 	/// <summary>
 	/// In parallel. Results of indicators execution for not depend on each other.
 	/// </summary>
-	Parallel,
+		Parallel,
 }
 
 /// <summary>
@@ -114,9 +114,8 @@ public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 	/// </summary>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
 	/// <returns><see cref="ComplexIndicatorValue"/></returns>
-	protected virtual ComplexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
-
+	protected abstract ComplexIndicatorValue CreateValue(DateTimeOffset time);
+	
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{

@@ -4,15 +4,25 @@
 /// Klinger Volume Oscillator.
 /// </summary>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.KVOKey,
-	Description = LocalizedStrings.KlingerVolumeOscillatorKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.KVOKey,
+		Description = LocalizedStrings.KlingerVolumeOscillatorKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/klinger_volume_oscillator.html")]
+[IndicatorOut(typeof(KlingerVolumeOscillatorValue))]
 public class KlingerVolumeOscillator : BaseComplexIndicator
 {
-	private readonly ExponentialMovingAverage _shortEma;
-	private readonly ExponentialMovingAverage _longEma;
+	/// <summary>
+	/// Short EMA.
+	/// </summary>
+	[Browsable(false)]
+	public ExponentialMovingAverage ShortEma { get; }
+
+	/// <summary>
+	/// Long EMA.
+	/// </summary>
+	[Browsable(false)]
+	public ExponentialMovingAverage LongEma { get; }
 	private decimal _prevHlc;
 
 	/// <summary>
@@ -31,8 +41,8 @@ public class KlingerVolumeOscillator : BaseComplexIndicator
 	public KlingerVolumeOscillator(ExponentialMovingAverage shortEma, ExponentialMovingAverage longEma)
 		: base(shortEma, longEma)
 	{
-		_shortEma = shortEma ?? throw new ArgumentNullException(nameof(shortEma));
-		_longEma = longEma ?? throw new ArgumentNullException(nameof(longEma));
+		ShortEma = shortEma ?? throw new ArgumentNullException(nameof(shortEma));
+		LongEma = longEma ?? throw new ArgumentNullException(nameof(longEma));
 	}
 
 	/// <summary>
@@ -45,8 +55,8 @@ public class KlingerVolumeOscillator : BaseComplexIndicator
 		GroupName = LocalizedStrings.GeneralKey)]
 	public int ShortPeriod
 	{
-		get => _shortEma.Length;
-		set => _shortEma.Length = value;
+		get => ShortEma.Length;
+		set => ShortEma.Length = value;
 	}
 
 	/// <summary>
@@ -59,8 +69,8 @@ public class KlingerVolumeOscillator : BaseComplexIndicator
 		GroupName = LocalizedStrings.GeneralKey)]
 	public int LongPeriod
 	{
-		get => _longEma.Length;
-		set => _longEma.Length = value;
+		get => LongEma.Length;
+		set => LongEma.Length = value;
 	}
 
 	/// <inheritdoc />
@@ -71,15 +81,15 @@ public class KlingerVolumeOscillator : BaseComplexIndicator
 		var hlc = (candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 3;
 		var sv = candle.TotalVolume * (hlc > _prevHlc ? 1 : -1);
 
-		var result = new ComplexIndicatorValue(this, input.Time);
+		var result = new KlingerVolumeOscillatorValue(this, input.Time);
 
-		var shortValue = _shortEma.Process(input, sv);
-		var longValue = _longEma.Process(input, sv);
+		var shortValue = ShortEma.Process(input, sv);
+		var longValue = LongEma.Process(input, sv);
 
-		result.Add(_shortEma, shortValue);
-		result.Add(_longEma, longValue);
+		result.Add(ShortEma, shortValue);
+		result.Add(LongEma, longValue);
 
-		if (_longEma.IsFormed)
+		if (LongEma.IsFormed)
 		{
 			var kvo = shortValue.ToDecimal() - longValue.ToDecimal();
 			result.Add(this, new DecimalIndicatorValue(this, kvo, input.Time));
@@ -89,7 +99,7 @@ public class KlingerVolumeOscillator : BaseComplexIndicator
 		{
 			_prevHlc = hlc;
 
-			if (!IsFormed && _shortEma.IsFormed && _longEma.IsFormed)
+		if (!IsFormed && ShortEma.IsFormed && LongEma.IsFormed)
 				IsFormed = true;
 		}
 
@@ -106,4 +116,38 @@ public class KlingerVolumeOscillator : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" S={ShortPeriod},L={LongPeriod}";
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new KlingerVolumeOscillatorValue(this, time);
+}
+
+/// <summary>
+/// <see cref="KlingerVolumeOscillator"/> indicator value.
+/// </summary>
+public class KlingerVolumeOscillatorValue : ComplexIndicatorValue<KlingerVolumeOscillator>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="KlingerVolumeOscillatorValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="KlingerVolumeOscillator"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public KlingerVolumeOscillatorValue(KlingerVolumeOscillator indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the short EMA value.
+	/// </summary>
+	public decimal ShortEma => InnerValues[Indicator.ShortEma].ToDecimal();
+
+	/// <summary>
+	/// Gets the long EMA value.
+	/// </summary>
+	public decimal LongEma => InnerValues[Indicator.LongEma].ToDecimal();
+
+	/// <summary>
+	/// Gets the oscillator value.
+	/// </summary>
+	public decimal Oscillator => InnerValues[Indicator].ToDecimal();
 }

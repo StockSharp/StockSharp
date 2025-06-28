@@ -4,14 +4,24 @@
 /// Sine Wave indicator.
 /// </summary>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.SWKey,
-	Description = LocalizedStrings.SineWaveKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.SWKey,
+		Description = LocalizedStrings.SineWaveKey)]
 [Doc("topics/api/indicators/list_of_indicators/sine_wave.html")]
+[IndicatorOut(typeof(SineWaveValue))]
 public class SineWave : BaseComplexIndicator
 {
-	private readonly SineWaveLine _lead = new();
-	private readonly SineWaveLine _main = new();
+	/// <summary>
+	/// Lead line.
+	/// </summary>
+	[Browsable(false)]
+	public SineWaveLine Lead { get; } = new();
+
+	/// <summary>
+	/// Main line.
+	/// </summary>
+	[Browsable(false)]
+	public SineWaveLine Main { get; } = new();
 	private int _currentBar;
 
 	/// <summary>
@@ -19,8 +29,8 @@ public class SineWave : BaseComplexIndicator
 	/// </summary>
 	public SineWave()
 	{
-		AddInner(_main);
-		AddInner(_lead);
+		AddInner(Main);
+		AddInner(Lead);
 		Length = 14;
 	}
 
@@ -63,13 +73,13 @@ public class SineWave : BaseComplexIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var result = new ComplexIndicatorValue(this, input.Time);
+		var result = new SineWaveValue(this, input.Time);
 
 		var sineValue = (decimal)Math.Sin(2 * Math.PI * _currentBar / Length);
 		var leadSineValue = (decimal)Math.Sin(2 * Math.PI * (_currentBar + 0.5) / Length);
 
-		result.Add(_main, _main.Process(input, sineValue));
-		result.Add(_lead, _lead.Process(input, leadSineValue));
+		result.Add(Main, Main.Process(input, sineValue));
+		result.Add(Lead, Lead.Process(input, leadSineValue));
 
 		if (input.IsFinal)
 			_currentBar++;
@@ -112,4 +122,33 @@ public class SineWaveLine : BaseIndicator
 
 		return input;
 	}
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new SineWaveValue(this, time);
+}
+
+/// <summary>
+/// <see cref="SineWave"/> indicator value.
+/// </summary>
+public class SineWaveValue : ComplexIndicatorValue<SineWave>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="SineWaveValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="SineWave"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public SineWaveValue(SineWave indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the main line value.
+	/// </summary>
+	public decimal Main => InnerValues[Indicator.Main].ToDecimal();
+
+	/// <summary>
+	/// Gets the lead line value.
+	/// </summary>
+	public decimal Lead => InnerValues[Indicator.Lead].ToDecimal();
 }

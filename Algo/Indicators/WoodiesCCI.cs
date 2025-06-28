@@ -4,26 +4,36 @@
 /// Woodies CCI.
 /// </summary>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.WCCIKey,
-	Description = LocalizedStrings.WoodiesCCIKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.WCCIKey,
+		Description = LocalizedStrings.WoodiesCCIKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/woodies_cci.html")]
+[IndicatorOut(typeof(WoodiesCCIValue))]
 public class WoodiesCCI : BaseComplexIndicator
 {
-	private readonly CommodityChannelIndex _cci;
-	private readonly SimpleMovingAverage _sma;
+	/// <summary>
+	/// CCI line.
+	/// </summary>
+	[Browsable(false)]
+	public CommodityChannelIndex Cci { get; }
+
+	/// <summary>
+	/// SMA line.
+	/// </summary>
+	[Browsable(false)]
+	public SimpleMovingAverage Sma { get; }
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="WoodiesCCI"/>.
 	/// </summary>
 	public WoodiesCCI()
 	{
-		_cci = new() { Length = 14 };
-		_sma = new() { Length = 6 };
+		Cci = new() { Length = 14 };
+		Sma = new() { Length = 6 };
 
-		AddInner(_cci);
-		AddInner(_sma);
+		AddInner(Cci);
+		AddInner(Sma);
 
 		Mode = ComplexIndicatorModes.Sequence;
 	}
@@ -41,8 +51,8 @@ public class WoodiesCCI : BaseComplexIndicator
 		GroupName = LocalizedStrings.GeneralKey)]
 	public int Length
 	{
-		get => _cci.Length;
-		set => _cci.Length = value;
+		get => Cci.Length;
+		set => Cci.Length = value;
 	}
 
 	/// <summary>
@@ -55,10 +65,39 @@ public class WoodiesCCI : BaseComplexIndicator
 		GroupName = LocalizedStrings.GeneralKey)]
 	public int SMALength
 	{
-		get => _sma.Length;
-		set => _sma.Length = value;
+		get => Sma.Length;
+		set => Sma.Length = value;
 	}
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" CCI({Length}), SMA({SMALength})";
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new WoodiesCCIValue(this, time);
+}
+
+/// <summary>
+/// <see cref="WoodiesCCI"/> indicator value.
+/// </summary>
+public class WoodiesCCIValue : ComplexIndicatorValue<WoodiesCCI>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="WoodiesCCIValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="WoodiesCCI"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public WoodiesCCIValue(WoodiesCCI indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the CCI value.
+	/// </summary>
+	public decimal Cci => InnerValues[Indicator.Cci].ToDecimal();
+
+	/// <summary>
+	/// Gets the SMA value.
+	/// </summary>
+	public decimal Sma => InnerValues[Indicator.Sma].ToDecimal();
 }

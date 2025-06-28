@@ -4,10 +4,11 @@
 /// Constance Brown Composite Index indicator.
 /// </summary>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.CBCIKey,
-	Description = LocalizedStrings.ConstanceBrownCompositeIndexKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.CBCIKey,
+		Description = LocalizedStrings.ConstanceBrownCompositeIndexKey)]
 [Doc("topics/api/indicators/list_of_indicators/constance_brown_composite_index.html")]
+[IndicatorOut(typeof(ConstanceBrownCompositeIndexValue))]
 public class ConstanceBrownCompositeIndex : BaseComplexIndicator
 {
 	private class CompositeIndexLine : BaseIndicator
@@ -21,9 +22,25 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator
 		}
 	}
 
-	private readonly RelativeStrengthIndex _rsi;
-	private readonly StochasticOscillator _stoch;
+	/// <summary>
+	/// RSI part.
+	/// </summary>
+	[Browsable(false)]
+	public RelativeStrengthIndex Rsi { get; }
+
+	/// <summary>
+	/// Stochastic oscillator part.
+	/// </summary>
+	[Browsable(false)]
+	public StochasticOscillator Stoch { get; }
+
 	private readonly CompositeIndexLine _compositeIndexLine;
+
+	/// <summary>
+	/// Composite index line.
+	/// </summary>
+	[Browsable(false)]
+	public CompositeIndexLine CompositeIndexLine => _compositeIndexLine;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ConstanceBrownCompositeIndex"/>.
@@ -40,13 +57,13 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator
 	/// <param name="stoch">Stochastic Oscillator.</param>
 	public ConstanceBrownCompositeIndex(RelativeStrengthIndex rsi, StochasticOscillator stoch)
 	{
-		_rsi = rsi ?? throw new ArgumentNullException(nameof(rsi));
-		_stoch = stoch ?? throw new ArgumentNullException(nameof(stoch));
+		Rsi = rsi ?? throw new ArgumentNullException(nameof(rsi));
+		Stoch = stoch ?? throw new ArgumentNullException(nameof(stoch));
 		_compositeIndexLine = new();
 
-		AddInner(_rsi);
-		AddInner(_stoch);
-		AddInner(_compositeIndexLine);
+		AddInner(Rsi);
+		AddInner(Stoch);
+		AddInner(CompositeIndexLine);
 	}
 
 	/// <inheritdoc />
@@ -62,8 +79,8 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator
 		GroupName = LocalizedStrings.GeneralKey)]
 	public int Length
 	{
-		get => _rsi.Length;
-		set => _rsi.Length = value;
+		get => Rsi.Length;
+		set => Rsi.Length = value;
 	}
 
 	/// <summary>
@@ -76,8 +93,8 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator
 		GroupName = LocalizedStrings.GeneralKey)]
 	public int StochasticKPeriod
 	{
-		get => _stoch.K.Length;
-		set => _stoch.K.Length = value;
+		get => Stoch.K.Length;
+		set => Stoch.K.Length = value;
 	}
 
 	/// <summary>
@@ -90,36 +107,70 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator
 		GroupName = LocalizedStrings.GeneralKey)]
 	public int StochasticDPeriod
 	{
-		get => _stoch.D.Length;
-		set => _stoch.D.Length = value;
+		get => Stoch.D.Length;
+		set => Stoch.D.Length = value;
 	}
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var result = new ComplexIndicatorValue(this, input.Time);
+		var result = new ConstanceBrownCompositeIndexValue(this, input.Time);
 
-		var rsiValue = _rsi.Process(input);
-		var stochValue = (ComplexIndicatorValue)_stoch.Process(input);
+		var rsiValue = Rsi.Process(input);
+		var stochValue = (ComplexIndicatorValue)Stoch.Process(input);
 
-		result.Add(_rsi, rsiValue);
-		result.Add(_stoch, stochValue[_stoch.K]);
+		result.Add(Rsi, rsiValue);
+		result.Add(Stoch, stochValue[Stoch.K]);
 
-		if (_rsi.IsFormed && _stoch.IsFormed)
+		if (Rsi.IsFormed && Stoch.IsFormed)
 		{
 			if (input.IsFinal)
 				IsFormed = true;
 
 			var rsi = rsiValue.ToDecimal();
-			var stochK = stochValue[_stoch.K].ToDecimal();
-			var stochD = stochValue[_stoch.D].ToDecimal();
+		var stochK = stochValue[Stoch.K].ToDecimal();
+		var stochD = stochValue[Stoch.D].ToDecimal();
 
 			var cbci = (rsi + stochK + stochD) / 3;
 
-			var compositeValue = _compositeIndexLine.Process(input, cbci);
-			result.Add(_compositeIndexLine, compositeValue);
+		var compositeValue = CompositeIndexLine.Process(input, cbci);
+		result.Add(_compositeIndexLine, compositeValue);
 		}
 
 		return result;
 	}
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new ConstanceBrownCompositeIndexValue(this, time);
+}
+
+/// <summary>
+/// <see cref="ConstanceBrownCompositeIndex"/> indicator value.
+/// </summary>
+public class ConstanceBrownCompositeIndexValue : ComplexIndicatorValue<ConstanceBrownCompositeIndex>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ConstanceBrownCompositeIndexValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="ConstanceBrownCompositeIndex"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public ConstanceBrownCompositeIndexValue(ConstanceBrownCompositeIndex indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the RSI component.
+	/// </summary>
+	public decimal Rsi => InnerValues[Indicator.Rsi].ToDecimal();
+
+	/// <summary>
+	/// Gets the stochastic component.
+	/// </summary>
+	public decimal Stoch => InnerValues[Indicator.Stoch].ToDecimal();
+
+	/// <summary>
+	/// Gets the composite index line.
+	/// </summary>
+	public decimal CompositeIndexLine => InnerValues[Indicator.CompositeIndexLine].ToDecimal();
 }

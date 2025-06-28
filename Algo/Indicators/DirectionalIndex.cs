@@ -7,10 +7,11 @@
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/dmi.html
 /// </remarks>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.DMIKey,
-	Description = LocalizedStrings.WellesWilderDirectionalMovementIndexKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.DMIKey,
+		Description = LocalizedStrings.WellesWilderDirectionalMovementIndexKey)]
 [Doc("topics/api/indicators/list_of_indicators/dmi.html")]
+[IndicatorOut(typeof(DirectionalIndexValue))]
 public class DirectionalIndex : BaseComplexIndicator
 {
 	/// <summary>
@@ -61,7 +62,7 @@ public class DirectionalIndex : BaseComplexIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var value = new ComplexIndicatorValue(this, input.Time) { IsFinal = input.IsFinal };
+var value = new DirectionalIndexValue(this, input.Time) { IsFinal = input.IsFinal };
 
 		var plusValue = Plus.Process(input);
 		var minusValue = Minus.Process(input);
@@ -99,4 +100,34 @@ public class DirectionalIndex : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + " " + Length;
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new DirectionalIndexValue(this, time);
+}
+
+
+/// <summary>
+/// <see cref="DirectionalIndex"/> indicator value.
+/// </summary>
+public class DirectionalIndexValue : ComplexIndicatorValue<DirectionalIndex>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="DirectionalIndexValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="DirectionalIndex"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public DirectionalIndexValue(DirectionalIndex indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+	
+	/// <summary>
+	/// Gets the <see cref="DirectionalIndex.Plus"/> value.
+	/// </summary>
+	public decimal Plus => InnerValues[Indicator.Plus].ToDecimal();
+	
+	/// <summary>
+	/// Gets the <see cref="DirectionalIndex.Minus"/> value.
+	/// </summary>
+	public decimal Minus => InnerValues[Indicator.Minus].ToDecimal();
 }

@@ -4,9 +4,9 @@ namespace StockSharp.Algo.Indicators;
 /// The full class of linear regression, calculates LinearReg, LinearRegSlope, RSquared and StandardError at the same time.
 /// </summary>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.LinearRegressionKey,
-	Description = LocalizedStrings.LinearRegressionDescKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.LinearRegressionKey,
+		Description = LocalizedStrings.LinearRegressionDescKey)]
 [Browsable(false)]
 public class LinearRegression : BaseComplexIndicator
 {
@@ -115,4 +115,43 @@ public class LinearRegression : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + " " + Length;
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new LinearRegressionValue(this, time);
+}
+
+/// <summary>
+/// <see cref="LinearRegression"/> indicator value.
+/// </summary>
+public class LinearRegressionValue : ComplexIndicatorValue<LinearRegression>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="LinearRegressionValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="LinearRegression"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public LinearRegressionValue(LinearRegression indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the <see cref="LinearRegression.LinearReg"/> value.
+	/// </summary>
+	public decimal LinearReg => InnerValues[Indicator.LinearReg].ToDecimal();
+
+	/// <summary>
+	/// Gets the <see cref="LinearRegression.RSquared"/> value.
+	/// </summary>
+	public decimal RSquared => InnerValues[Indicator.RSquared].ToDecimal();
+
+	/// <summary>
+	/// Gets the <see cref="LinearRegression.LinearRegSlope"/> value.
+	/// </summary>
+	public decimal LinearRegSlope => InnerValues[Indicator.LinearRegSlope].ToDecimal();
+
+	/// <summary>
+	/// Gets the <see cref="LinearRegression.StandardError"/> value.
+	/// </summary>
+	public decimal StandardError => InnerValues[Indicator.StandardError].ToDecimal();
 }

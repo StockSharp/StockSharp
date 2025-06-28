@@ -4,15 +4,25 @@
 /// Percentage Price Oscillator (PPO).
 /// </summary>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.PPOKey,
-	Description = LocalizedStrings.PercentagePriceOscillatorKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.PPOKey,
+		Description = LocalizedStrings.PercentagePriceOscillatorKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/percentage_price_oscillator.html")]
+[IndicatorOut(typeof(PercentagePriceOscillatorValue))]
 public class PercentagePriceOscillator : BaseComplexIndicator
 {
-	private readonly ExponentialMovingAverage _shortEma;
-	private readonly ExponentialMovingAverage _longEma;
+	/// <summary>
+	/// Short EMA.
+	/// </summary>
+	[Browsable(false)]
+	public ExponentialMovingAverage ShortEma { get; }
+
+	/// <summary>
+	/// Long EMA.
+	/// </summary>
+	[Browsable(false)]
+	public ExponentialMovingAverage LongEma { get; }
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="PercentagePriceOscillator"/>.
@@ -32,8 +42,8 @@ public class PercentagePriceOscillator : BaseComplexIndicator
 	public PercentagePriceOscillator(ExponentialMovingAverage shortEma, ExponentialMovingAverage longEma)
 		: base(shortEma, longEma)
 	{
-		_shortEma = shortEma;
-		_longEma = longEma;
+		ShortEma = shortEma;
+		LongEma = longEma;
 	}
 
 	/// <summary>
@@ -46,8 +56,8 @@ public class PercentagePriceOscillator : BaseComplexIndicator
 		GroupName = LocalizedStrings.GeneralKey)]
 	public int ShortPeriod
 	{
-		get => _shortEma.Length;
-		set => _shortEma.Length = value;
+		get => ShortEma.Length;
+		set => ShortEma.Length = value;
 	}
 
 	/// <summary>
@@ -60,32 +70,32 @@ public class PercentagePriceOscillator : BaseComplexIndicator
 		GroupName = LocalizedStrings.GeneralKey)]
 	public int LongPeriod
 	{
-		get => _longEma.Length;
-		set => _longEma.Length = value;
+		get => LongEma.Length;
+		set => LongEma.Length = value;
 	}
 
 	/// <inheritdoc />
-	public override int NumValuesToInitialize => _shortEma.NumValuesToInitialize.Max(_longEma.NumValuesToInitialize);
+	public override int NumValuesToInitialize => ShortEma.NumValuesToInitialize.Max(LongEma.NumValuesToInitialize);
 
 	/// <inheritdoc />
-	protected override bool CalcIsFormed() => _shortEma.IsFormed && _longEma.IsFormed;
+	protected override bool CalcIsFormed() => ShortEma.IsFormed && LongEma.IsFormed;
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var result = new ComplexIndicatorValue(this, input.Time);
+		var result = new PercentagePriceOscillatorValue(this, input.Time);
 
-		var shortValue = _shortEma.Process(input);
-		var longValue = _longEma.Process(input);
+		var shortValue = ShortEma.Process(input);
+		var longValue = LongEma.Process(input);
 
-		result.Add(_shortEma, shortValue);
-		result.Add(_longEma, longValue);
+		result.Add(ShortEma, shortValue);
+		result.Add(LongEma, longValue);
 
 		if (IsFormed)
 		{
-			var den = longValue.ToDecimal();
-			var ppo = den == 0 ? 0 : ((shortValue.ToDecimal() - den) / den) * 100;
-			result.Add(this, new DecimalIndicatorValue(this, ppo, input.Time));
+		var den = longValue.ToDecimal();
+		var ppo = den == 0 ? 0 : ((shortValue.ToDecimal() - den) / den) * 100;
+		result.Add(this, new DecimalIndicatorValue(this, ppo, input.Time));
 		}
 
 		return result;
@@ -111,4 +121,33 @@ public class PercentagePriceOscillator : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" S={ShortPeriod},L={LongPeriod}";
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new PercentagePriceOscillatorValue(this, time);
+}
+
+/// <summary>
+/// <see cref="PercentagePriceOscillator"/> indicator value.
+/// </summary>
+public class PercentagePriceOscillatorValue : ComplexIndicatorValue<PercentagePriceOscillator>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="PercentagePriceOscillatorValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="PercentagePriceOscillator"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public PercentagePriceOscillatorValue(PercentagePriceOscillator indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the short EMA value.
+	/// </summary>
+	public decimal ShortEma => InnerValues[Indicator.ShortEma].ToDecimal();
+
+	/// <summary>
+	/// Gets the long EMA value.
+	/// </summary>
+	public decimal LongEma => InnerValues[Indicator.LongEma].ToDecimal();
 }

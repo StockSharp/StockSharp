@@ -7,8 +7,9 @@
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/envelope.html
 /// </remarks>
 [Display(ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.EnvelopeKey)]
+		Name = LocalizedStrings.EnvelopeKey)]
 [Doc("topics/api/indicators/list_of_indicators/envelope.html")]
+[IndicatorOut(typeof(EnvelopeValue))]
 public class Envelope : BaseComplexIndicator
 {
 	/// <summary>
@@ -125,4 +126,38 @@ public class Envelope : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + " " + Length;
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new EnvelopeValue(this, time);
+}
+
+/// <summary>
+/// <see cref="Envelope"/> indicator value.
+/// </summary>
+public class EnvelopeValue : ComplexIndicatorValue<Envelope>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="EnvelopeValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="Envelope"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public EnvelopeValue(Envelope indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the <see cref="Envelope.Middle"/> value.
+	/// </summary>
+	public decimal Middle => InnerValues[Indicator.Middle].ToDecimal();
+
+	/// <summary>
+	/// Gets the <see cref="Envelope.Upper"/> value.
+	/// </summary>
+	public decimal Upper => InnerValues[Indicator.Upper].ToDecimal();
+
+	/// <summary>
+	/// Gets the <see cref="Envelope.Lower"/> value.
+	/// </summary>
+	public decimal Lower => InnerValues[Indicator.Lower].ToDecimal();
 }

@@ -7,10 +7,11 @@
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/bollinger_bands.html
 /// </remarks>
 [Display(
-	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.BollingerKey,
-	Description = LocalizedStrings.BollingerBandsKey)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.BollingerKey,
+		Description = LocalizedStrings.BollingerBandsKey)]
 [Doc("topics/api/indicators/list_of_indicators/bollinger_bands.html")]
+[IndicatorOut(typeof(BollingerBandsValue))]
 public class BollingerBands : BaseComplexIndicator
 {
 	private readonly StandardDeviation _dev = new();
@@ -113,7 +114,7 @@ public class BollingerBands : BaseComplexIndicator
 
 		var maValue = MovingAverage.Process(input);
 
-		var value = new ComplexIndicatorValue(this, input.Time);
+		var value = new BollingerBandsValue(this, input.Time);
 
 		value.Add(MovingAverage, maValue);
 		value.Add(UpBand, UpBand.Process(input));
@@ -124,4 +125,38 @@ public class BollingerBands : BaseComplexIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + " " + Length;
+	/// <inheritdoc />
+	protected override ComplexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new BollingerBandsValue(this, time);
+}
+
+/// <summary>
+/// <see cref="BollingerBands"/> indicator value.
+/// </summary>
+public class BollingerBandsValue : ComplexIndicatorValue<BollingerBands>
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="BollingerBandsValue"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="BollingerBands"/></param>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	public BollingerBandsValue(BollingerBands indicator, DateTimeOffset time)
+		: base(indicator, time)
+	{
+	}
+
+	/// <summary>
+	/// Gets the <see cref="BollingerBands.MovingAverage"/> value.
+	/// </summary>
+	public decimal MovingAverage => InnerValues[Indicator.MovingAverage].ToDecimal();
+
+	/// <summary>
+	/// Gets the <see cref="BollingerBands.UpBand"/> value.
+	/// </summary>
+	public decimal UpBand => InnerValues[Indicator.UpBand].ToDecimal();
+
+	/// <summary>
+	/// Gets the <see cref="BollingerBands.LowBand"/> value.
+	/// </summary>
+	public decimal LowBand => InnerValues[Indicator.LowBand].ToDecimal();
 }
