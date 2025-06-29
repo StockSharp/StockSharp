@@ -124,10 +124,10 @@ public class DirectionalIndexValue : ComplexIndicatorValue<DirectionalIndex>
 	/// <summary>
 	/// Gets the <see cref="DirectionalIndex.Plus"/> value.
 	/// </summary>
-	public decimal Plus => InnerValues[TypedIndicator.Plus].ToDecimal();
+	public decimal Plus => GetInnerDecimal(TypedIndicator.Plus);
 	
 	/// <summary>
 	/// Gets the <see cref="DirectionalIndex.Minus"/> value.
 	/// </summary>
-	public decimal Minus => InnerValues[TypedIndicator.Minus].ToDecimal();
+	public decimal Minus => GetInnerDecimal(TypedIndicator.Minus);
 }

@@ -86,10 +86,10 @@ public class MovingAverageConvergenceDivergenceSignalValue : ComplexIndicatorVal
 	/// <summary>
 	/// Gets the MACD value.
 	/// </summary>
-	public decimal Macd => InnerValues[TypedIndicator.Macd].ToDecimal();
+	public decimal Macd => GetInnerDecimal(TypedIndicator.Macd);
 
 	/// <summary>
 	/// Gets the signal line value.
 	/// </summary>
-	public decimal Signal => InnerValues[TypedIndicator.SignalMa].ToDecimal();
+	public decimal Signal => GetInnerDecimal(TypedIndicator.SignalMa);
 }

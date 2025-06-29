@@ -161,5 +161,5 @@ public class FibonacciRetracementValue : ComplexIndicatorValue<FibonacciRetracem
 	/// <summary>
 	/// Gets all level values.
 	/// </summary>
-	public decimal[] Levels => TypedIndicator.Levels.Select(l => InnerValues[l].ToDecimal()).ToArray();
+	public decimal[] Levels => TypedIndicator.Levels.Select(l => GetInnerDecimal(l)).ToArray();
 }

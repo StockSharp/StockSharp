@@ -134,10 +134,10 @@ public class KnowSureThingValue : ComplexIndicatorValue<KnowSureThing>
 	/// <summary>
 	/// Gets the KST line value.
 	/// </summary>
-	public decimal KstLine => InnerValues[TypedIndicator.KstLine].ToDecimal();
+	public decimal KstLine => GetInnerDecimal(TypedIndicator.KstLine);
 
 	/// <summary>
 	/// Gets the signal line value.
 	/// </summary>
-	public decimal Signal => InnerValues[TypedIndicator.Signal].ToDecimal();
+	public decimal Signal => GetInnerDecimal(TypedIndicator.Signal);
 }

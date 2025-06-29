@@ -193,15 +193,15 @@ public class KeltnerChannelsValue : ComplexIndicatorValue<KeltnerChannels>
 	/// <summary>
 	/// Gets the <see cref="KeltnerChannels.Middle"/> value.
 	/// </summary>
-	public decimal Middle => InnerValues[TypedIndicator.Middle].ToDecimal();
+	public decimal Middle => GetInnerDecimal(TypedIndicator.Middle);
 
 	/// <summary>
 	/// Gets the <see cref="KeltnerChannels.Upper"/> value.
 	/// </summary>
-	public decimal Upper => InnerValues[TypedIndicator.Upper].ToDecimal();
+	public decimal Upper => GetInnerDecimal(TypedIndicator.Upper);
 
 	/// <summary>
 	/// Gets the <see cref="KeltnerChannels.Lower"/> value.
 	/// </summary>
-	public decimal Lower => InnerValues[TypedIndicator.Lower].ToDecimal();
+	public decimal Lower => GetInnerDecimal(TypedIndicator.Lower);
 }

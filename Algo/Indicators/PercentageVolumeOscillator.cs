@@ -150,10 +150,10 @@ public class PercentageVolumeOscillatorValue : ComplexIndicatorValue<PercentageV
 	/// <summary>
 	/// Gets the short EMA value.
 	/// </summary>
-	public decimal ShortEma => InnerValues[TypedIndicator.ShortEma].ToDecimal();
+	public decimal ShortEma => GetInnerDecimal(TypedIndicator.ShortEma);
 
 	/// <summary>
 	/// Gets the long EMA value.
 	/// </summary>
-	public decimal LongEma => InnerValues[TypedIndicator.LongEma].ToDecimal();
+	public decimal LongEma => GetInnerDecimal(TypedIndicator.LongEma);
 }

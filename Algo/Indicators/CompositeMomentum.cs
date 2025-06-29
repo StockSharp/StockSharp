@@ -162,10 +162,10 @@ public class CompositeMomentumValue : ComplexIndicatorValue<CompositeMomentum>
 	/// <summary>
 	/// Gets the SMA value.
 	/// </summary>
-	public decimal Sma => InnerValues[TypedIndicator.Sma].ToDecimal();
+	public decimal Sma => GetInnerDecimal(TypedIndicator.Sma);
 
 	/// <summary>
 	/// Gets the composite momentum line.
 	/// </summary>
-	public decimal CompositeLine => InnerValues[TypedIndicator.CompositeLine].ToDecimal();
+	public decimal CompositeLine => GetInnerDecimal(TypedIndicator.CompositeLine);
 }

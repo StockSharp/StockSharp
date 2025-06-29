@@ -93,5 +93,5 @@ public class RainbowChartsValue : ComplexIndicatorValue<RainbowCharts>
 	/// <summary>
 	/// Gets values of all moving averages.
 	/// </summary>
-	public decimal[] Averages => TypedIndicator.InnerIndicators.Select(i => InnerValues[i].ToDecimal()).ToArray();
+	public decimal[] Averages => TypedIndicator.InnerIndicators.Select(i => GetInnerDecimal(i)).ToArray();
 }

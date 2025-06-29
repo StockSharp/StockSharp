@@ -117,25 +117,25 @@ public class IchimokuValue : ComplexIndicatorValue<Ichimoku>
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.Tenkan"/> value.
 	/// </summary>
-	public decimal Tenkan => InnerValues[TypedIndicator.Tenkan].ToDecimal();
+	public decimal Tenkan => GetInnerDecimal(TypedIndicator.Tenkan);
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.Kijun"/> value.
 	/// </summary>
-	public decimal Kijun => InnerValues[TypedIndicator.Kijun].ToDecimal();
+	public decimal Kijun => GetInnerDecimal(TypedIndicator.Kijun);
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.SenkouA"/> value.
 	/// </summary>
-	public decimal SenkouA => InnerValues[TypedIndicator.SenkouA].ToDecimal();
+	public decimal SenkouA => GetInnerDecimal(TypedIndicator.SenkouA);
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.SenkouB"/> value.
 	/// </summary>
-	public decimal SenkouB => InnerValues[TypedIndicator.SenkouB].ToDecimal();
+	public decimal SenkouB => GetInnerDecimal(TypedIndicator.SenkouB);
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.Chinkou"/> value.
 	/// </summary>
-	public decimal Chinkou => InnerValues[TypedIndicator.Chinkou].ToDecimal();
+	public decimal Chinkou => GetInnerDecimal(TypedIndicator.Chinkou);
 }

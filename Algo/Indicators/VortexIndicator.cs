@@ -210,10 +210,10 @@ public class VortexIndicatorValue : ComplexIndicatorValue<VortexIndicator>
 	/// <summary>
 	/// Gets the <see cref="VortexIndicator.PlusVi"/> value.
 	/// </summary>
-	public decimal PlusVi => InnerValues[TypedIndicator.PlusVi].ToDecimal();
+	public decimal PlusVi => GetInnerDecimal(TypedIndicator.PlusVi);
 
 	/// <summary>
 	/// Gets the <see cref="VortexIndicator.MinusVi"/> value.
 	/// </summary>
-	public decimal MinusVi => InnerValues[TypedIndicator.MinusVi].ToDecimal();
+	public decimal MinusVi => GetInnerDecimal(TypedIndicator.MinusVi);
 }

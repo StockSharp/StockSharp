@@ -187,15 +187,15 @@ public class AdaptivePriceZoneValue : ComplexIndicatorValue<AdaptivePriceZone>
 	/// <summary>
 	/// Gets the moving average value.
 	/// </summary>
-	public decimal MovingAverage => InnerValues[TypedIndicator.Ma].ToDecimal();
+	public decimal MovingAverage => GetInnerDecimal(TypedIndicator.Ma);
 
 	/// <summary>
 	/// Gets the upper band value.
 	/// </summary>
-	public decimal UpperBand => InnerValues[TypedIndicator.UpperBand].ToDecimal();
+	public decimal UpperBand => GetInnerDecimal(TypedIndicator.UpperBand);
 
 	/// <summary>
 	/// Gets the lower band value.
 	/// </summary>
-	public decimal LowerBand => InnerValues[TypedIndicator.LowerBand].ToDecimal();
+	public decimal LowerBand => GetInnerDecimal(TypedIndicator.LowerBand);
 }

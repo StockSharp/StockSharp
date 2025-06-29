@@ -186,10 +186,10 @@ public class ChandeKrollStopValue : ComplexIndicatorValue<ChandeKrollStop>
 	/// <summary>
 	/// Gets the highest stop line.
 	/// </summary>
-	public decimal Highest => InnerValues[TypedIndicator.Highest].ToDecimal();
+	public decimal Highest => GetInnerDecimal(TypedIndicator.Highest);
 
 	/// <summary>
 	/// Gets the lowest stop line.
 	/// </summary>
-	public decimal Lowest => InnerValues[TypedIndicator.Lowest].ToDecimal();
+	public decimal Lowest => GetInnerDecimal(TypedIndicator.Lowest);
 }

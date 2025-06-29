@@ -222,10 +222,10 @@ public class WaveTrendOscillatorValue : ComplexIndicatorValue<WaveTrendOscillato
 	/// <summary>
 	/// Gets the first Wavetrend line value.
 	/// </summary>
-	public decimal Wt1 => InnerValues[TypedIndicator.Wt1].ToDecimal();
+	public decimal Wt1 => GetInnerDecimal(TypedIndicator.Wt1);
 
 	/// <summary>
 	/// Gets the second Wavetrend line value.
 	/// </summary>
-	public decimal Wt2 => InnerValues[TypedIndicator.Wt2].ToDecimal();
+	public decimal Wt2 => GetInnerDecimal(TypedIndicator.Wt2);
 }

@@ -141,15 +141,15 @@ public class DonchianChannelsValue : ComplexIndicatorValue<DonchianChannels>
 	/// <summary>
 	/// Gets the <see cref="DonchianChannels.UpperBand"/> value.
 	/// </summary>
-	public decimal UpperBand => InnerValues[TypedIndicator.UpperBand].ToDecimal();
+	public decimal UpperBand => GetInnerDecimal(TypedIndicator.UpperBand);
 
 	/// <summary>
 	/// Gets the <see cref="DonchianChannels.LowerBand"/> value.
 	/// </summary>
-	public decimal LowerBand => InnerValues[TypedIndicator.LowerBand].ToDecimal();
+	public decimal LowerBand => GetInnerDecimal(TypedIndicator.LowerBand);
 
 	/// <summary>
 	/// Gets the <see cref="DonchianChannels.Middle"/> value.
 	/// </summary>
-	public decimal Middle => InnerValues[TypedIndicator.Middle].ToDecimal();
+	public decimal Middle => GetInnerDecimal(TypedIndicator.Middle);
 }

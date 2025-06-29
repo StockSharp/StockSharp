@@ -146,10 +146,10 @@ public class SineWaveValue : ComplexIndicatorValue<SineWave>
 	/// <summary>
 	/// Gets the main line value.
 	/// </summary>
-	public decimal Main => InnerValues[TypedIndicator.Main].ToDecimal();
+	public decimal Main => GetInnerDecimal(TypedIndicator.Main);
 
 	/// <summary>
 	/// Gets the lead line value.
 	/// </summary>
-	public decimal Lead => InnerValues[TypedIndicator.Lead].ToDecimal();
+	public decimal Lead => GetInnerDecimal(TypedIndicator.Lead);
 }

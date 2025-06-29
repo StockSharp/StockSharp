@@ -114,25 +114,25 @@ public class PivotPointsValue : ComplexIndicatorValue<PivotPoints>
 	/// <summary>
 	/// Gets the Pivot Point value.
 	/// </summary>
-	public decimal PivotPoint => InnerValues[TypedIndicator.PivotPoint].ToDecimal();
+	public decimal PivotPoint => GetInnerDecimal(TypedIndicator.PivotPoint);
 
 	/// <summary>
 	/// Gets the R1 value.
 	/// </summary>
-	public decimal R1 => InnerValues[TypedIndicator.R1].ToDecimal();
+	public decimal R1 => GetInnerDecimal(TypedIndicator.R1);
 
 	/// <summary>
 	/// Gets the R2 value.
 	/// </summary>
-	public decimal R2 => InnerValues[TypedIndicator.R2].ToDecimal();
+	public decimal R2 => GetInnerDecimal(TypedIndicator.R2);
 
 	/// <summary>
 	/// Gets the S1 value.
 	/// </summary>
-	public decimal S1 => InnerValues[TypedIndicator.S1].ToDecimal();
+	public decimal S1 => GetInnerDecimal(TypedIndicator.S1);
 
 	/// <summary>
 	/// Gets the S2 value.
 	/// </summary>
-	public decimal S2 => InnerValues[TypedIndicator.S2].ToDecimal();
+	public decimal S2 => GetInnerDecimal(TypedIndicator.S2);
 }

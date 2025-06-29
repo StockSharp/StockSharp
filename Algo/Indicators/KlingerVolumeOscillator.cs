@@ -140,15 +140,15 @@ public class KlingerVolumeOscillatorValue : ComplexIndicatorValue<KlingerVolumeO
 	/// <summary>
 	/// Gets the short EMA value.
 	/// </summary>
-	public decimal ShortEma => InnerValues[TypedIndicator.ShortEma].ToDecimal();
+	public decimal ShortEma => GetInnerDecimal(TypedIndicator.ShortEma);
 
 	/// <summary>
 	/// Gets the long EMA value.
 	/// </summary>
-	public decimal LongEma => InnerValues[TypedIndicator.LongEma].ToDecimal();
+	public decimal LongEma => GetInnerDecimal(TypedIndicator.LongEma);
 
 	/// <summary>
 	/// Gets the oscillator value.
 	/// </summary>
-	public decimal Oscillator => InnerValues[TypedIndicator].ToDecimal();
+	public decimal Oscillator => GetInnerDecimal(TypedIndicator);
 }
