@@ -1236,12 +1236,42 @@ public static class BoardCodes
 	public const string Bitget = "BTGT";
 
 	/// <summary>
-	/// <see cref="BitgetFut"/>
+	/// <see cref="BitgetFutCoin"/>
 	/// </summary>
-	public const string BitgetFut = "BTGTFT";
+	public const string BitgetFutCoin = "BTGTC";
+
+	/// <summary>
+	/// <see cref="BitgetFutUsdt"/>
+	/// </summary>
+	public const string BitgetFutUsdt = "BTGTUT";
+
+	/// <summary>
+	/// <see cref="BitgetFutUsdc"/>
+	/// </summary>
+	public const string BitgetFutUsdc = "BTGTUC";
 
 	/// <summary>
 	/// <see cref="Imex"/>
 	/// </summary>
 	public const string Imex = "IMEX";
+
+	/// <summary>
+	/// <see cref="Mexc"/>
+	/// </summary>
+	public const string Mexc = "MEXC";
+
+	/// <summary>
+	/// <see cref="MexcFutures"/>
+	/// </summary>
+	public const string MexcFutures = "MEXCF";
+
+	/// <summary>
+	/// <see cref="BingX"/>
+	/// </summary>
+	public const string BingX = "BNGX";
+
+	/// <summary>
+	/// <see cref="BingXFut"/>
+	/// </summary>
+	public const string BingXFut = "BNGXF";
 }
