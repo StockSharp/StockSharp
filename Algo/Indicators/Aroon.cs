@@ -285,10 +285,10 @@ public class AroonValue : ComplexIndicatorValue<Aroon>
 	/// <summary>
 	/// Gets the <see cref="Aroon.Up"/> value.
 	/// </summary>
-	public decimal Up => InnerValues[TypedIndicator.Up].ToDecimal();
+	public decimal Up => GetInnerDecimal(TypedIndicator.Up);
 
 	/// <summary>
 	/// Gets the <see cref="Aroon.Down"/> value.
 	/// </summary>
-	public decimal Down => InnerValues[TypedIndicator.Down].ToDecimal();
+	public decimal Down => GetInnerDecimal(TypedIndicator.Down);
 }

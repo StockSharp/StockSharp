@@ -560,7 +560,7 @@ public interface IComplexIndicatorValue : IIndicatorValue
 /// <param name="indicator">Indicator.</param>
 /// <param name="time"><see cref="IIndicatorValue.Time"/></param>
 public abstract class ComplexIndicatorValue<TIndicator>(TIndicator indicator, DateTimeOffset time) : BaseIndicatorValue(indicator, time), IComplexIndicatorValue
-	where TIndicator : class, IComplexIndicator
+	where TIndicator : IComplexIndicator
 {
 	/// <summary>
 	/// The complex indicator, based on which the value is calculated.
@@ -631,4 +631,12 @@ public abstract class ComplexIndicatorValue<TIndicator>(TIndicator indicator, Da
 		foreach (var inner in TypedIndicator.InnerIndicators)
 			InnerValues.Add(inner, inner.CreateValue(Time, values[idx++].To<object[]>()));
 	}
+
+	/// <summary>
+	/// Get the inner value of the indicator as <see cref="decimal"/>.
+	/// </summary>
+	/// <param name="indicator">Inner indicator, for which the value is requested.</param>
+	/// <returns>Inner value of the indicator as <see cref="decimal"/>.</returns>
+	protected decimal GetInnerDecimal(IIndicator indicator)
+		=> InnerValues[indicator].ToDecimal();
 }
