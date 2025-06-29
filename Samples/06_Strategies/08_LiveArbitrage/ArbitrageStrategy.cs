@@ -329,7 +329,7 @@ public class ArbitrageStrategy : Strategy
 
 			if (arbitrageSignal == ArbitrageState.Backvordation)
 			{
-				ExecuteBackvardation();
+				ExecuteBackwardation();
 			}
 			else
 			{
@@ -340,7 +340,7 @@ public class ArbitrageStrategy : Strategy
 		else if (_currentState == ArbitrageState.Backvordation && _profit >= ProfitToExit)
 		{
 			_currentState = ArbitrageState.OrderRegistration;
-			CloseBackvardationPosition();
+			CloseBackwardationPosition();
 		}
 		// Exit Contango position when profit threshold is reached
 		else if (_currentState == ArbitrageState.Contango && _profit >= ProfitToExit)
@@ -353,9 +353,9 @@ public class ArbitrageStrategy : Strategy
 	/// <summary>
 	/// Executes Backvordation strategy (buy future, sell stock).
 	/// </summary>
-	private void ExecuteBackvardation()
+	private void ExecuteBackwardation()
 	{
-		var (buy, sell) = GenerateOrdersBackvardation();
+		var (buy, sell) = GenerateOrdersBackwardation();
 
 		new IMarketRule[]
 		{
@@ -399,7 +399,7 @@ public class ArbitrageStrategy : Strategy
 	/// <summary>
 	/// Closes a Backvordation position.
 	/// </summary>
-	private void CloseBackvardationPosition()
+	private void CloseBackwardationPosition()
 	{
 		var (sell, buy) = GenerateOrdersContango();
 
@@ -430,7 +430,7 @@ public class ArbitrageStrategy : Strategy
 	/// </summary>
 	private void CloseContangoPosition()
 	{
-		var (buy, sell) = GenerateOrdersBackvardation();
+		var (buy, sell) = GenerateOrdersBackwardation();
 
 		new IMarketRule[]
 		{
@@ -457,7 +457,7 @@ public class ArbitrageStrategy : Strategy
 	/// <summary>
 	/// Generates orders for Backvordation strategy.
 	/// </summary>
-	private (Order buy, Order sell) GenerateOrdersBackvardation()
+	private (Order buy, Order sell) GenerateOrdersBackwardation()
 	{
 		var futureBuy = CreateOrder(Sides.Buy, FutureVolume);
 		futureBuy.Portfolio = FuturePortfolio;
