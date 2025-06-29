@@ -594,7 +594,7 @@ public abstract class ComplexIndicatorValue<TIndicator>(TIndicator indicator, Da
 	/// <inheritdoc />
 	public override T GetValue<T>(Level1Fields? field)
 	{
-		if (InnerValues.TryGetValue(TypedIndicator, out var value))
+		if (TryGet(TypedIndicator, out var value))
 			return value.GetValue<T>(field);
 
 		throw new NotSupportedException();
