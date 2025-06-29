@@ -154,5 +154,5 @@ public class MovingAverageRibbonValue : ComplexIndicatorValue<MovingAverageRibbo
 	/// <summary>
 	/// Gets all moving average values.
 	/// </summary>
-	public decimal[] Averages => TypedIndicator.InnerIndicators.Select(i => InnerValues[i].ToDecimal()).ToArray();
+	public decimal[] Averages => TypedIndicator.InnerIndicators.Select(i => GetInnerDecimal(i)).ToArray();
 }

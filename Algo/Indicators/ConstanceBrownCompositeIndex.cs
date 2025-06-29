@@ -167,15 +167,15 @@ public class ConstanceBrownCompositeIndexValue : ComplexIndicatorValue<Constance
 	/// <summary>
 	/// Gets the RSI component.
 	/// </summary>
-	public decimal Rsi => InnerValues[TypedIndicator.Rsi].ToDecimal();
+	public decimal Rsi => GetInnerDecimal(TypedIndicator.Rsi);
 
 	/// <summary>
 	/// Gets the stochastic component.
 	/// </summary>
-	public decimal Stoch => InnerValues[TypedIndicator.Stoch].ToDecimal();
+	public decimal Stoch => GetInnerDecimal(TypedIndicator.Stoch);
 
 	/// <summary>
 	/// Gets the composite index line.
 	/// </summary>
-	public decimal CompositeIndexLine => InnerValues[TypedIndicator.CompositeIndexLine].ToDecimal();
+	public decimal CompositeIndexLine => GetInnerDecimal(TypedIndicator.CompositeIndexLine);
 }

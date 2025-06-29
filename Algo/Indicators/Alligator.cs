@@ -100,15 +100,15 @@ public class AlligatorValue : ComplexIndicatorValue<Alligator>
 	/// <summary>
 	/// Gets the <see cref="Alligator.Jaw"/> value.
 	/// </summary>
-	public decimal Jaw => InnerValues[TypedIndicator.Jaw].ToDecimal();
+	public decimal Jaw => GetInnerDecimal(TypedIndicator.Jaw);
 
 	/// <summary>
 	/// Gets the <see cref="Alligator.Teeth"/> value.
 	/// </summary>
-	public decimal Teeth => InnerValues[TypedIndicator.Teeth].ToDecimal();
+	public decimal Teeth => GetInnerDecimal(TypedIndicator.Teeth);
 
 	/// <summary>
 	/// Gets the <see cref="Alligator.Lips"/> value.
 	/// </summary>
-	public decimal Lips => InnerValues[TypedIndicator.Lips].ToDecimal();
+	public decimal Lips => GetInnerDecimal(TypedIndicator.Lips);
 }

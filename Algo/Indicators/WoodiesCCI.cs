@@ -95,10 +95,10 @@ public class WoodiesCCIValue : ComplexIndicatorValue<WoodiesCCI>
 	/// <summary>
 	/// Gets the CCI value.
 	/// </summary>
-	public decimal Cci => InnerValues[TypedIndicator.Cci].ToDecimal();
+	public decimal Cci => GetInnerDecimal(TypedIndicator.Cci);
 
 	/// <summary>
 	/// Gets the SMA value.
 	/// </summary>
-	public decimal Sma => InnerValues[TypedIndicator.Sma].ToDecimal();
+	public decimal Sma => GetInnerDecimal(TypedIndicator.Sma);
 }

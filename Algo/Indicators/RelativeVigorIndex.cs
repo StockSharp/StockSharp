@@ -87,10 +87,10 @@ public class RelativeVigorIndexValue : ComplexIndicatorValue<RelativeVigorIndex>
 	/// <summary>
 	/// Gets the <see cref="RelativeVigorIndex.Average"/> value.
 	/// </summary>
-	public decimal Average => InnerValues[TypedIndicator.Average].ToDecimal();
+	public decimal Average => GetInnerDecimal(TypedIndicator.Average);
 
 	/// <summary>
 	/// Gets the <see cref="RelativeVigorIndex.Signal"/> value.
 	/// </summary>
-	public decimal Signal => InnerValues[TypedIndicator.Signal].ToDecimal();
+	public decimal Signal => GetInnerDecimal(TypedIndicator.Signal);
 }

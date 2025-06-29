@@ -149,15 +149,15 @@ public class BollingerBandsValue : ComplexIndicatorValue<BollingerBands>
 	/// <summary>
 	/// Gets the <see cref="BollingerBands.MovingAverage"/> value.
 	/// </summary>
-	public decimal MovingAverage => InnerValues[TypedIndicator.MovingAverage].ToDecimal();
+	public decimal MovingAverage => GetInnerDecimal(TypedIndicator.MovingAverage);
 
 	/// <summary>
 	/// Gets the <see cref="BollingerBands.UpBand"/> value.
 	/// </summary>
-	public decimal UpBand => InnerValues[TypedIndicator.UpBand].ToDecimal();
+	public decimal UpBand => GetInnerDecimal(TypedIndicator.UpBand);
 
 	/// <summary>
 	/// Gets the <see cref="BollingerBands.LowBand"/> value.
 	/// </summary>
-	public decimal LowBand => InnerValues[TypedIndicator.LowBand].ToDecimal();
+	public decimal LowBand => GetInnerDecimal(TypedIndicator.LowBand);
 }

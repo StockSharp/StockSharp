@@ -90,10 +90,10 @@ public class GatorOscillatorValue : ComplexIndicatorValue<GatorOscillator>
 	/// <summary>
 	/// Gets the <see cref="GatorOscillator.Histogram1"/> value.
 	/// </summary>
-	public decimal Histogram1 => InnerValues[TypedIndicator.Histogram1].ToDecimal();
+	public decimal Histogram1 => GetInnerDecimal(TypedIndicator.Histogram1);
 
 	/// <summary>
 	/// Gets the <see cref="GatorOscillator.Histogram2"/> value.
 	/// </summary>
-	public decimal Histogram2 => InnerValues[TypedIndicator.Histogram2].ToDecimal();
+	public decimal Histogram2 => GetInnerDecimal(TypedIndicator.Histogram2);
 }

@@ -247,20 +247,20 @@ public class ConnorsRSIValue : ComplexIndicatorValue<ConnorsRSI>
 	/// <summary>
 	/// Gets the RSI component.
 	/// </summary>
-	public decimal Rsi => InnerValues[TypedIndicator.Rsi].ToDecimal();
+	public decimal Rsi => GetInnerDecimal(TypedIndicator.Rsi);
 
 	/// <summary>
 	/// Gets the UpDown RSI component.
 	/// </summary>
-	public decimal UpDownRsi => InnerValues[TypedIndicator.UpDownRsi].ToDecimal();
+	public decimal UpDownRsi => GetInnerDecimal(TypedIndicator.UpDownRsi);
 
 	/// <summary>
 	/// Gets the ROC RSI component.
 	/// </summary>
-	public decimal RocRsi => InnerValues[TypedIndicator.RocRsi].ToDecimal();
+	public decimal RocRsi => GetInnerDecimal(TypedIndicator.RocRsi);
 
 	/// <summary>
 	/// Gets the composite RSI line.
 	/// </summary>
-	public decimal CrsiLine => InnerValues[TypedIndicator.CrsiLine].ToDecimal();
+	public decimal CrsiLine => GetInnerDecimal(TypedIndicator.CrsiLine);
 }

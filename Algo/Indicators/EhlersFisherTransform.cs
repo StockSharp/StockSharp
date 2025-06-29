@@ -181,10 +181,10 @@ public class EhlersFisherTransformValue : ComplexIndicatorValue<EhlersFisherTran
 	/// <summary>
 	/// Gets the main line value.
 	/// </summary>
-	public decimal MainLine => InnerValues[TypedIndicator.MainLine].ToDecimal();
+	public decimal MainLine => GetInnerDecimal(TypedIndicator.MainLine);
 
 	/// <summary>
 	/// Gets the trigger line value.
 	/// </summary>
-	public decimal TriggerLine => InnerValues[TypedIndicator.TriggerLine].ToDecimal();
+	public decimal TriggerLine => GetInnerDecimal(TypedIndicator.TriggerLine);
 }

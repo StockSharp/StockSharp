@@ -33,12 +33,12 @@ public class FractalsValue : ComplexIndicatorValue<Fractals>
 	/// <summary>
 	/// Gets the <see cref="Fractals.Up"/> value.
 	/// </summary>
-	public decimal Up => InnerValues[TypedIndicator.Up].ToDecimal();
+	public decimal Up => GetInnerDecimal(TypedIndicator.Up);
 
 	/// <summary>
 	/// Gets the <see cref="Fractals.Down"/> value.
 	/// </summary>
-	public decimal Down => InnerValues[TypedIndicator.Down].ToDecimal();
+	public decimal Down => GetInnerDecimal(TypedIndicator.Down);
 
 	/// <summary>
 	/// Cast object from <see cref="FractalsValue"/> to <see cref="bool"/>.

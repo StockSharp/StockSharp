@@ -139,20 +139,20 @@ public class LinearRegressionValue : ComplexIndicatorValue<LinearRegression>
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.LinearReg"/> value.
 	/// </summary>
-	public decimal LinearReg => InnerValues[TypedIndicator.LinearReg].ToDecimal();
+	public decimal LinearReg => GetInnerDecimal(TypedIndicator.LinearReg);
 
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.RSquared"/> value.
 	/// </summary>
-	public decimal RSquared => InnerValues[TypedIndicator.RSquared].ToDecimal();
+	public decimal RSquared => GetInnerDecimal(TypedIndicator.RSquared);
 
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.LinearRegSlope"/> value.
 	/// </summary>
-	public decimal LinearRegSlope => InnerValues[TypedIndicator.LinearRegSlope].ToDecimal();
+	public decimal LinearRegSlope => GetInnerDecimal(TypedIndicator.LinearRegSlope);
 
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.StandardError"/> value.
 	/// </summary>
-	public decimal StandardError => InnerValues[TypedIndicator.StandardError].ToDecimal();
+	public decimal StandardError => GetInnerDecimal(TypedIndicator.StandardError);
 }

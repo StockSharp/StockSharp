@@ -113,5 +113,5 @@ public class AverageDirectionalIndexValue : ComplexIndicatorValue<AverageDirecti
 	/// <summary>
 	/// Gets the <see cref="AverageDirectionalIndex.MovingAverage"/> value.
 	/// </summary>
-	public decimal MovingAverage => InnerValues[TypedIndicator.MovingAverage].ToDecimal();
+	public decimal MovingAverage => GetInnerDecimal(TypedIndicator.MovingAverage);
 }

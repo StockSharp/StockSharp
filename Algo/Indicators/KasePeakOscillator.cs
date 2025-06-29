@@ -198,10 +198,10 @@ public class KasePeakOscillatorValue : ComplexIndicatorValue<KasePeakOscillator>
 	/// <summary>
 	/// Gets the <see cref="KasePeakOscillator.ShortTerm"/> value.
 	/// </summary>
-	public decimal ShortTerm => InnerValues[TypedIndicator.ShortTerm].ToDecimal();
+	public decimal ShortTerm => GetInnerDecimal(TypedIndicator.ShortTerm);
 
 	/// <summary>
 	/// Gets the <see cref="KasePeakOscillator.LongTerm"/> value.
 	/// </summary>
-	public decimal LongTerm => InnerValues[TypedIndicator.LongTerm].ToDecimal();
+	public decimal LongTerm => GetInnerDecimal(TypedIndicator.LongTerm);
 }
