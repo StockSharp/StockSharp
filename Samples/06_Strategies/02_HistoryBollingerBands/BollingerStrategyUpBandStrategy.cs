@@ -70,7 +70,7 @@ namespace StockSharp.Samples.Strategies.HistoryBollingerBands
 			// Create subscription and bind indicator
 			var subscription = SubscribeCandles(CandleType);
 			subscription
-				.Bind(_bollingerBands, ProcessCandle)
+				.BindEx(_bollingerBands, ProcessCandle)
 				.Start();
 
 			// Setup chart visualization if available
@@ -83,7 +83,7 @@ namespace StockSharp.Samples.Strategies.HistoryBollingerBands
 			}
 		}
 
-		private void ProcessCandle(ICandleMessage candle, decimal middleBand, decimal upperBand, decimal lowerBand)
+		private void ProcessCandle(ICandleMessage candle, IIndicatorValue bollingerValue)
 		{
 			// Skip unfinished candles
 			if (candle.State != CandleStates.Finished)
@@ -93,14 +93,16 @@ namespace StockSharp.Samples.Strategies.HistoryBollingerBands
 			if (!IsFormedAndOnlineAndAllowTrading())
 				return;
 
+			var typed = (BollingerBandsValue)bollingerValue;
+
 			// Trading logic:
 			// Buy when price touches the upper band (only when no position)
-			if (candle.ClosePrice >= upperBand && Position == 0)
+			if (candle.ClosePrice >= typed.UpBand && Position == 0)
 			{
 				BuyMarket(Volume);
 			}
 			// Sell to close position when price reaches the middle band (only when long)
-			else if (candle.ClosePrice <= middleBand && Position > 0)
+			else if (candle.ClosePrice <= typed.MovingAverage && Position > 0)
 			{
 				SellMarket(Math.Abs(Position));
 			}
