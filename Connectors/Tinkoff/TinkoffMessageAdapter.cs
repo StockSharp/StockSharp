@@ -3,6 +3,8 @@ namespace StockSharp.Tinkoff;
 using Ecng.ComponentModel;
 using Ecng.Net;
 
+using Nito.AsyncEx;
+
 public partial class TinkoffMessageAdapter
 {
 	private GrpcChannel _channel;
@@ -15,6 +17,8 @@ public partial class TinkoffMessageAdapter
 
 	private static TimeSpan GetCurrentDelay(TimeSpan currentDelay)
 		=> currentDelay.Multiply(2).Min(_maxDelay);
+
+	private readonly AsyncLock _lock = new();
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="TinkoffMessageAdapter"/>.

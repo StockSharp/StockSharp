@@ -536,7 +536,7 @@ public partial class TinkoffMessageAdapter
 			if (!TryGetAndRemove(mdMsg.OriginalTransactionId, out var t))
 				return;
 
-			await _mdStream.RequestStream.WriteAsync(new()
+			await WriteMdRequest(new()
 			{
 				SubscribeCandlesRequest = new()
 				{
@@ -555,7 +555,7 @@ public partial class TinkoffMessageAdapter
 	}
 
 	private Task SubscribeCandles(MarketDataMessage mdMsg, CancellationToken cancellationToken)
-		=> _mdStream.RequestStream.WriteAsync(new()
+		=> WriteMdRequest(new()
 		{
 			SubscribeCandlesRequest = new()
 			{
@@ -673,7 +673,7 @@ public partial class TinkoffMessageAdapter
 			if (!TryGetAndRemove(mdMsg.OriginalTransactionId, out var t))
 				return;
 
-			await _mdStream.RequestStream.WriteAsync(new()
+			await WriteMdRequest(new()
 			{
 				SubscribeOrderBookRequest = new()
 				{
@@ -698,7 +698,7 @@ public partial class TinkoffMessageAdapter
 	}
 
 	private Task SubscribeMarketDepth(MarketDataMessage mdMsg, CancellationToken cancellationToken)
-		=> _mdStream.RequestStream.WriteAsync(new()
+		=> WriteMdRequest(new()
 		{
 			SubscribeOrderBookRequest = new()
 			{
@@ -741,7 +741,7 @@ public partial class TinkoffMessageAdapter
 			if (!TryGetAndRemove(mdMsg.OriginalTransactionId, out var t))
 				return;
 
-			await _mdStream.RequestStream.WriteAsync(new()
+			await WriteMdRequest(new()
 			{
 				SubscribeTradesRequest = new()
 				{
@@ -765,7 +765,7 @@ public partial class TinkoffMessageAdapter
 	}
 
 	private Task SubscribeTicks(MarketDataMessage mdMsg, CancellationToken cancellationToken)
-		=> _mdStream.RequestStream.WriteAsync(new()
+		=> WriteMdRequest(new()
 		{
 			SubscribeTradesRequest = new()
 			{
@@ -807,7 +807,7 @@ public partial class TinkoffMessageAdapter
 			if (!TryGetAndRemove(mdMsg.OriginalTransactionId, out var t))
 				return;
 
-			await _mdStream.RequestStream.WriteAsync(new()
+			await WriteMdRequest(new()
 			{
 				SubscribeLastPriceRequest = new()
 				{
@@ -836,7 +836,7 @@ public partial class TinkoffMessageAdapter
 	}
 
 	private Task SubscribeLevel1(MarketDataMessage mdMsg, CancellationToken cancellationToken)
-		=> _mdStream.RequestStream.WriteAsync(new()
+		=> WriteMdRequest(new()
 		{
 			SubscribeLastPriceRequest = new()
 			{
@@ -861,4 +861,10 @@ public partial class TinkoffMessageAdapter
 				SubscriptionAction = SubscriptionAction.Subscribe,
 			},
 		}, cancellationToken);
+
+	private async Task WriteMdRequest(MarketDataRequest message, CancellationToken cancellationToken)
+	{
+		using var _ = await _lock.LockAsync(cancellationToken);
+		await _mdStream.RequestStream.WriteAsync(message, cancellationToken);
+	}
 }
