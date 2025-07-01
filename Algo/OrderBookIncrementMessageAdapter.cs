@@ -11,7 +11,7 @@ public class OrderBookIncrementMessageAdapter(IMessageAdapter innerAdapter) : Me
 {
 	private class BookInfo(SecurityId securityId)
 	{
-		public readonly OrderBookIncrementBuilder Builder = new OrderBookIncrementBuilder(securityId);
+		public readonly OrderBookIncrementBuilder Builder = new(securityId);
 		public readonly CachedSynchronizedSet<long> SubscriptionIds = [];
 	}
 

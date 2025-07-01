@@ -100,7 +100,7 @@ class QuoteMetaInfo(DateTime date) : BinaryMetaInfo(date)
 
 class QuoteBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<QuoteChangeMessage, QuoteMetaInfo>(securityId, DataType.MarketDepth, 16 + 20 * 25, MarketDataVersions.Version62, exchangeInfoProvider)
 {
-	private readonly OrderBookIncrementBuilder _builder = new OrderBookIncrementBuilder(securityId);
+	private readonly OrderBookIncrementBuilder _builder = new(securityId);
 
 	/// <summary>
 	/// Pass through incremental <see cref="QuoteChangeMessage"/>.
