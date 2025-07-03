@@ -19,7 +19,7 @@ public class SlippageTests
 		.Add(Level1Fields.BestBidPrice, 100m)
 		.Add(Level1Fields.BestAskPrice, 102m));
 
-		// имитируем регистрацию Buy-заявки
+		// Simulate Buy order registration
 		var regMsg = new OrderRegisterMessage
 		{
 			SecurityId = _secId,
@@ -28,7 +28,7 @@ public class SlippageTests
 		};
 		mgr.ProcessMessage(regMsg);
 
-		// исполнили заявку с ценой хуже (больше) на 2 пункта
+		// Order executed with price 2 points worse (higher)
 		var slip = mgr.ProcessMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
@@ -38,7 +38,8 @@ public class SlippageTests
 			Side = Sides.Buy
 		});
 
-		slip.AssertEqual(2m); // 104 - 102 (ask при регистрации)
+		slip.AssertEqual(2m); // 104 - 102 (ask at registration)
+		mgr.Slippage.AssertEqual(2m); // Check total slippage
 	}
 
 	[TestMethod]
@@ -70,7 +71,8 @@ public class SlippageTests
 			Side = Sides.Sell
 		});
 
-		slip.AssertEqual(1m); // 101 - 100 (bid при регистрации)
+		slip.AssertEqual(1m); // 101 - 100 (bid at registration)
+		mgr.Slippage.AssertEqual(1m); // Check total slippage
 	}
 
 	[TestMethod]
@@ -103,6 +105,7 @@ public class SlippageTests
 		});
 
 		slip.AssertEqual(5m); // 60 - 55
+		mgr.Slippage.AssertEqual(5m); // Check total slippage
 	}
 
 	[TestMethod]
@@ -125,7 +128,7 @@ public class SlippageTests
 		};
 		mgr.ProcessMessage(regMsg);
 
-		// исполнение ЛУЧШЕ ask — отрицательное проскальзывание
+		// Execution BETTER than ask — negative slippage
 		var slip = mgr.ProcessMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
@@ -136,8 +139,9 @@ public class SlippageTests
 		});
 
 		slip.AssertEqual(-1m); // 100 - 101
+		mgr.Slippage.AssertEqual(-1m); // Check total slippage
 
-		// Отключить отрицательное проскальзывание
+		// Disable negative slippage
 		mgr.CalculateNegative = false;
 
 		var slip2 = mgr.ProcessMessage(new ExecutionMessage
@@ -149,7 +153,8 @@ public class SlippageTests
 			Side = Sides.Buy
 		});
 
-		slip2.AssertEqual(0m); // не может быть <0
+		slip2.AssertEqual(0m); // cannot be < 0
+		mgr.Slippage.AssertEqual(-1m); // Total slippage remains unchanged
 	}
 
 	[TestMethod]
@@ -157,7 +162,7 @@ public class SlippageTests
 	{
 		var mgr = new SlippageManager();
 
-		// Без Level1/QuoteChange: OrderRegister не добавляет plannedPrice
+		// Without Level1/QuoteChange: OrderRegister doesn't add plannedPrice
 		var regMsg = new OrderRegisterMessage
 		{
 			SecurityId = _secId,
@@ -166,7 +171,7 @@ public class SlippageTests
 		};
 		mgr.ProcessMessage(regMsg);
 
-		// Исполнение должно вернуть null (нет plannedPrice)
+		// Execution should return null (no plannedPrice)
 		var slip = mgr.ProcessMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
@@ -177,6 +182,7 @@ public class SlippageTests
 		});
 
 		slip.AssertNull();
+		mgr.Slippage.AssertEqual(0m); // Total slippage remains 0
 	}
 
 	[TestMethod]
@@ -191,7 +197,7 @@ public class SlippageTests
 		.Add(Level1Fields.BestBidPrice, 90m)
 		.Add(Level1Fields.BestAskPrice, 92m));
 
-		// Без регистрации заявки, сразу Execution — plannedPrice не будет
+		// Without order registration, direct Execution — no plannedPrice
 		var slip = mgr.ProcessMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
@@ -202,6 +208,7 @@ public class SlippageTests
 		});
 
 		slip.AssertNull();
+		mgr.Slippage.AssertEqual(0m); // Total slippage remains 0
 	}
 
 	[TestMethod]
@@ -233,11 +240,13 @@ public class SlippageTests
 			Side = Sides.Buy
 		});
 		slip.AssertEqual(1);
+		mgr.Slippage.AssertEqual(1m); // Check total slippage before reset
 
-		// сброс
+		// Reset
 		mgr.ProcessMessage(new ResetMessage());
+		mgr.Slippage.AssertEqual(0m); // Check slippage is reset
 
-		// Данные должны быть очищены, следующий Execution уже не найдет plannedPrice
+		// Data should be cleared, next Execution won't find plannedPrice
 		var slip2 = mgr.ProcessMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
@@ -247,6 +256,7 @@ public class SlippageTests
 			Side = Sides.Buy
 		});
 		slip2.AssertNull();
+		mgr.Slippage.AssertEqual(0m); // Total slippage remains 0
 	}
 
 	[TestMethod]
@@ -268,5 +278,81 @@ public class SlippageTests
 		mgr2.Load(storage);
 
 		mgr2.CalculateNegative.AssertFalse();
+	}
+
+	[TestMethod]
+	public void MultipleExecutionsSlippageSum()
+	{
+		var mgr = new SlippageManager();
+
+		mgr.ProcessMessage(new Level1ChangeMessage
+		{
+			SecurityId = _secId
+		}
+		.Add(Level1Fields.BestBidPrice, 100m)
+		.Add(Level1Fields.BestAskPrice, 102m));
+
+		// First order
+		var regMsg1 = new OrderRegisterMessage
+		{
+			SecurityId = _secId,
+			Side = Sides.Buy,
+			TransactionId = 1
+		};
+		mgr.ProcessMessage(regMsg1);
+
+		var slip1 = mgr.ProcessMessage(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = _secId,
+			OriginalTransactionId = regMsg1.TransactionId,
+			TradePrice = 104m,
+			Side = Sides.Buy
+		});
+
+		slip1.AssertEqual(2m); // 104 - 102
+		mgr.Slippage.AssertEqual(2m); // Total slippage: 2
+
+		// Second order
+		var regMsg2 = new OrderRegisterMessage
+		{
+			SecurityId = _secId,
+			Side = Sides.Sell,
+			TransactionId = 2
+		};
+		mgr.ProcessMessage(regMsg2);
+
+		var slip2 = mgr.ProcessMessage(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = _secId,
+			OriginalTransactionId = regMsg2.TransactionId,
+			TradePrice = 99m,
+			Side = Sides.Sell
+		});
+
+		slip2.AssertEqual(1m); // 100 - 99
+		mgr.Slippage.AssertEqual(3m); // Total slippage: 2 + 1 = 3
+
+		// Third order with negative slippage
+		var regMsg3 = new OrderRegisterMessage
+		{
+			SecurityId = _secId,
+			Side = Sides.Buy,
+			TransactionId = 3
+		};
+		mgr.ProcessMessage(regMsg3);
+
+		var slip3 = mgr.ProcessMessage(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = _secId,
+			OriginalTransactionId = regMsg3.TransactionId,
+			TradePrice = 101m,
+			Side = Sides.Buy
+		});
+
+		slip3.AssertEqual(-1m); // 101 - 102
+		mgr.Slippage.AssertEqual(2m); // Total slippage: 3 + (-1) = 2
 	}
 }

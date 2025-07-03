@@ -112,6 +112,9 @@ public class SlippageManager : ISlippageManager
 						if (slippage < 0 && !CalculateNegative)
 							slippage = 0;
 
+						if (slippage is decimal s)
+							Slippage += s;
+
 						return slippage;
 					}
 				}
