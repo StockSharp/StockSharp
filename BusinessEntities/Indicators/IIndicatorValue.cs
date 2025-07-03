@@ -61,7 +61,6 @@ public interface IIndicatorValue : IComparable<IIndicatorValue>, IComparable
 /// <param name="time"><see cref="IIndicatorValue.Time"/></param>
 public abstract class BaseIndicatorValue(IIndicator indicator, DateTimeOffset time) : IIndicatorValue
 {
-
 	/// <inheritdoc />
 	public IIndicator Indicator { get; } = indicator ?? throw new ArgumentNullException(nameof(indicator));
 
@@ -86,12 +85,10 @@ public abstract class BaseIndicatorValue(IIndicator indicator, DateTimeOffset ti
 	/// <inheritdoc />
 	int IComparable.CompareTo(object other)
 	{
-		var value = other as IIndicatorValue;
-
-		if (other == null)
+		if (other is not IIndicatorValue v)
 			throw new ArgumentOutOfRangeException(nameof(other), other, LocalizedStrings.InvalidValue);
 
-		return CompareTo(value);
+		return CompareTo(v);
 	}
 
 	/// <inheritdoc />
