@@ -467,7 +467,7 @@ public partial class Strategy
 
 						tryActivateProtection(v.Price, _strategy.CurrentTime);
 
-						handle(v, v.ServerTime, () =>	new TickCandleMessage
+						handle(v, v.ServerTime, () => new TickCandleMessage
 						{
 							DataType = dt,
 							OpenTime = v.ServerTime,
