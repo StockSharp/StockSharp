@@ -76,10 +76,10 @@ public class StochasticOscillatorValue : ComplexIndicatorValue<StochasticOscilla
 	/// <summary>
 	/// Gets the %K value.
 	/// </summary>
-	public decimal KValue => GetInnerDecimal(TypedIndicator.K);
+	public decimal K => GetInnerDecimal(TypedIndicator.K);
 
 	/// <summary>
 	/// Gets the %D value.
 	/// </summary>
-	public decimal DValue => GetInnerDecimal(TypedIndicator.D);
+	public decimal D => GetInnerDecimal(TypedIndicator.D);
 }

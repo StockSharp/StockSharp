@@ -117,8 +117,8 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator<ConstanceBrownC
 				IsFormed = true;
 
 			var rsi = rsiValue.ToDecimal();
-			var stochK = stochValue.KValue;
-			var stochD = stochValue.DValue;
+			var stochK = stochValue.K;
+			var stochD = stochValue.D;
 
 			var cbci = (rsi + stochK + stochD) / 3;
 
