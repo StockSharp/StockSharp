@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "Media móvil adaptativa fractal.",
   "FractalChaosBands": "Bandas de caos fractal.",
+  "FractalDimension": "Dimensión Fractal",
+  "FractalDimensionDesc": "Mide la complejidad y rugosidad de los movimientos de precios utilizando principios de geometría fractal",
   "FractalDown": "Fractal hacia abajo",
   "Fractals": "Fractales",
   "FractalUp": "Fractal hacia arriba",

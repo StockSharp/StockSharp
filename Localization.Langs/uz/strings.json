@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "Fraktal moslashuvchan harakatlanuvchi o'rtacha.",
   "FractalChaosBands": "Fraktal Chaos Bantlari.",
+  "FractalDimension": "Fraktal o'lchov",
+  "FractalDimensionDesc": "Fraktal geometriya tamoyillaridan foydalanib narx harakatlarining murakkablik va qo'polligi o'lchaydi",
   "FractalDown": "Fraktal pastga",
   "Fractals": "Fraktallar",
   "FractalUp": "Fraktal yuqoriga",

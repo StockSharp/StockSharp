@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "Mitjana mòbil adaptativa fractal.",
   "FractalChaosBands": "Bandes de caos fractal.",
+  "FractalDimension": "Dimensió Fractal",
+  "FractalDimensionDesc": "Mesura la complexitat i rugositat dels moviments de preus utilitzant principis de geometria fractal",
   "FractalDown": "Fractal cap avall",
   "Fractals": "Fractals",
   "FractalUp": "Fractal cap amunt",

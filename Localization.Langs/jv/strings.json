@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "Rata-rata Pindhah Adaptif Fractal.",
   "FractalChaosBands": "Fractal Chaos Bands.",
+  "FractalDimension": "Dimensi Fraktal",
+  "FractalDimensionDesc": "Ngukur kerumitan lan kekasaran gerakan rega nggunakake prinsip geometri fraktal",
   "FractalDown": "Fraktal mudhun",
   "Fractals": "Fraktal",
   "FractalUp": "Fraktal munggah",

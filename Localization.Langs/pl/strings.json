@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "Fraktalna adaptacyjna średnia krocząca.",
   "FractalChaosBands": "Pasmo chaosu fraktalnego.",
+  "FractalDimension": "Wymiar fraktalny",
+  "FractalDimensionDesc": "Mierzy złożoność i szorstkość ruchów cen używając zasad geometrii fraktalnej",
   "FractalDown": "Fraktal w dół",
   "Fractals": "Fraktale",
   "FractalUp": "Fraktal w górę",

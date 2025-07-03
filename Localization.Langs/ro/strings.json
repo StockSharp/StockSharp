@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "Media mobilă adaptativă fractală.",
   "FractalChaosBands": "Benzi de haos fractal.",
+  "FractalDimension": "Dimensiunea Fractală",
+  "FractalDimensionDesc": "Măsoară complexitatea și rugozitatea mișcărilor de preț folosind principiile geometriei fractale",
   "FractalDown": "Fractal în jos",
   "Fractals": "Fractali",
   "FractalUp": "Fractal în sus",

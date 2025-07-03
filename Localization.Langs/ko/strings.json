@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "프랙탈 적응 이동 평균.",
   "FractalChaosBands": "프랙탈 혼돈 밴드.",
+  "FractalDimension": "프랙털 차원",
+  "FractalDimensionDesc": "프랙털 기하학 원리를 사용하여 가격 움직임의 복잡성과 거칠기를 측정합니다",
   "FractalDown": "프랙털 다운",
   "Fractals": "프랙탈",
   "FractalUp": "프랙탈 업",

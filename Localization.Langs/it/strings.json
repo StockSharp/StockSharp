@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "Media mobile adattiva frattale.",
   "FractalChaosBands": "Bande di caos frattale.",
+  "FractalDimension": "Dimensione Frattale",
+  "FractalDimensionDesc": "Misura la complessità e la rugosità dei movimenti dei prezzi utilizzando i principi della geometria frattale",
   "FractalDown": "Frattale verso il basso",
   "Fractals": "Frattali",
   "FractalUp": "Frattale su",

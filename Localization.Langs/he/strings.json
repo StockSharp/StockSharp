@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "ממוצע נע אדפטיבי פרקטלי.",
   "FractalChaosBands": "רצועות כאוס פרקטליות.",
+  "FractalDimension": "מימד פרקטלי",
+  "FractalDimensionDesc": "מודד את המורכבות והחספוס של תנועות מחירים באמצעות עקרונות גיאומטריה פרקטלית",
   "FractalDown": "פרקטל למטה",
   "Fractals": "פרקטלים",
   "FractalUp": "פרקטל למעלה",

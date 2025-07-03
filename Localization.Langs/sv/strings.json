@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "Fraktal adaptiv glidande medelvärde.",
   "FractalChaosBands": "Fraktal Chaos-bands.",
+  "FractalDimension": "Fraktal Dimension",
+  "FractalDimensionDesc": "Mäter komplexiteten och ojämnheten av prisrörelser med hjälp av fraktal geometriprinciper",
   "FractalDown": "Fraktal neråt",
   "Fractals": "Fraktaler",
   "FractalUp": "Fraktal upp",

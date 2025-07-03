@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "Fraktaalinen mukautuva liukuva keskiarvo.",
   "FractalChaosBands": "Fraktaalinen kaaosvyö.",
+  "FractalDimension": "Fraktaalidimensio",
+  "FractalDimensionDesc": "Mittaa hintaliikkeiden monimutkaisuutta ja karkeutta fraktaaligeometrian periaatteita käyttäen",
   "FractalDown": "Fraktaali alas",
   "Fractals": "Fraktaalit",
   "FractalUp": "Fraktaali ylös",

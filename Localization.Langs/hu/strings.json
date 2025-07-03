@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "Fraktál adaptív mozgóátlag.",
   "FractalChaosBands": "Fraktális káoszsávok.",
+  "FractalDimension": "Fraktál dimenzió",
+  "FractalDimensionDesc": "A fraktálgeometria elveit használva méri az ármozgások összetettségét és érdesességét",
   "FractalDown": "Fraktál le",
   "Fractals": "Fraktálok",
   "FractalUp": "Fraktál fel",

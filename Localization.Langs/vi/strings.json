@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "Trung bình Động Thích ứng Fractal.",
   "FractalChaosBands": "Ban nhạc hỗn loạn Fractal.",
+  "FractalDimension": "Chiều Fractal",
+  "FractalDimensionDesc": "Đo độ phức tạp và độ thô ráp của chuyển động giá bằng cách sử dụng các nguyên lý hình học fractal",
   "FractalDown": "Phân thức xuống",
   "Fractals": "Phân thức",
   "FractalUp": "Phân dạng lên",

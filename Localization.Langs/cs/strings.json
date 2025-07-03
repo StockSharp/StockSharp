@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "Fraktální adaptivní klouzavý průměr.",
   "FractalChaosBands": "Fraktální chaos kapely.",
+  "FractalDimension": "Fraktální dimenze",
+  "FractalDimensionDesc": "Měří složitost a hrubost cenových pohybů pomocí principů fraktální geometrie",
   "FractalDown": "Fraktál dolů",
   "Fractals": "Fraktály",
   "FractalUp": "Fraktál nahoru",

@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "分形自适应移动平均线。",
   "FractalChaosBands": "分形混沌带。",
+  "FractalDimension": "分形维数",
+  "FractalDimensionDesc": "使用分形几何原理测量价格运动的复杂性和粗糙度",
   "FractalDown": "向下分形",
   "Fractals": "分形",
   "FractalUp": "分形向上",

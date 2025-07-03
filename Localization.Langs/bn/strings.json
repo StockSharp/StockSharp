@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "Fractal Adaptive Moving Average।",
   "FractalChaosBands": "ফ্র্যাক্টাল ক্যাওস ব্যান্ড।",
+  "FractalDimension": "ফ্র্যাক্টাল ডাইমেনশন",
+  "FractalDimensionDesc": "ফ্র্যাক্টাল জ্যামিতি নীতি ব্যবহার করে মূল্য গতিবিধির জটিলতা এবং রুক্ষতা পরিমাপ করে",
   "FractalDown": "নিচে ফ্র্যাক্টাল",
   "Fractals": "ফ্র্যাক্টাল",
   "FractalUp": "ফ্র্যাক্টাল উপরে",

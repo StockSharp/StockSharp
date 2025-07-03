@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "Purata Bergerak Adaptif Fraktal.",
   "FractalChaosBands": "Jalur Kekacauan Fraktal.",
+  "FractalDimension": "Dimensi Fraktal",
+  "FractalDimensionDesc": "Mengukur kerumitan dan kekasaran pergerakan harga menggunakan prinsip geometri fraktal",
   "FractalDown": "Fraktal ke bawah",
   "Fractals": "Fraktal",
   "FractalUp": "Fraktal ke atas",

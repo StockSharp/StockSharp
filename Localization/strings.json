@@ -1318,6 +1318,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "Fractal Adaptive Moving Average.",
   "FractalChaosBands": "Fractal Chaos Bands.",
+  "FractalDimension": "Fractal Dimension",
+  "FractalDimensionDesc": "Measures the complexity and roughness of price movements using fractal geometry principles",
   "FractalDown": "Fractal down",
   "Fractals": "Fractals",
   "FractalUp": "Fractal up",

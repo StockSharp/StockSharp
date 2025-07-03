@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "フラクタル適応移動平均。",
   "FractalChaosBands": "フラクタルカオスバンド。",
+  "FractalDimension": "フラクタル次元",
+  "FractalDimensionDesc": "フラクタル幾何学の原理を使用して価格変動の複雑さと粗さを測定します",
   "FractalDown": "下向きフラクタル",
   "Fractals": "フラクタル",
   "FractalUp": "フラクタルアップ",

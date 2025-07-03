@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "Фрактална прилагодљива покретна просечна вредност.",
   "FractalChaosBands": "Фракталне хаос траке.",
+  "FractalDimension": "Фрактална димензија",
+  "FractalDimensionDesc": "Мери сложеност и храпавост кретања цена користећи принципе фракталне геометрије",
   "FractalDown": "Фрактал надоле",
   "Fractals": "Фрактали",
   "FractalUp": "Фрактал нагоре",

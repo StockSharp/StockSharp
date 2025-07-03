@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "ค่าเฉลี่ยเคลื่อนที่ปรับแบบเฟร็กทัล",
   "FractalChaosBands": "แถบความโกลาหลของเศษส่วน",
+  "FractalDimension": "มิติแฟร็กทัล",
+  "FractalDimensionDesc": "วัดความซับซ้อนและความหยาบกร้านของการเคลื่อนไหวของราคาโดยใช้หลักการเรขาคณิตแฟร็กทัล",
   "FractalDown": "แฟรคทัลลง",
   "Fractals": "แฟร็กทัล",
   "FractalUp": "แฟร็กตัลขึ้น",

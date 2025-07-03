@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "Фрактальна адаптивна ковзна середня.",
   "FractalChaosBands": "Смуги фрактального хаосу.",
+  "FractalDimension": "Фрактальна розмірність",
+  "FractalDimensionDesc": "Вимірює складність та шорсткість цінових рухів, використовуючи принципи фрактальної геометрії",
   "FractalDown": "Фрактал вниз",
   "Fractals": "Фрактали",
   "FractalUp": "Фрактал вгору",

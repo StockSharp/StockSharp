@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "میانگین متحرک تطبیقی ​​فراکتال.",
   "FractalChaosBands": "باندهای هرج و مرج فراکتال.",
+  "FractalDimension": "بُعد فراکتال",
+  "FractalDimensionDesc": "پیچیدگی و زبری حرکات قیمت را با استفاده از اصول هندسه فراکتال اندازه‌گیری می‌کند",
   "FractalDown": "فرکتال پایین",
   "Fractals": "فرکتال‌ها",
   "FractalUp": "فراکتال به بالا",

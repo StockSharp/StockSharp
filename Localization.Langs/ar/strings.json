@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "المتوسط ​​المتحرك التكيفي الكسوري.",
   "FractalChaosBands": "فرق الفوضى الكسورية.",
+  "FractalDimension": "البعد الكسري",
+  "FractalDimensionDesc": "يقيس تعقيد وخشونة حركات الأسعار باستخدام مبادئ الهندسة الكسرية",
   "FractalDown": "فركتال للأسفل",
   "Fractals": "الكسوريات",
   "FractalUp": "الفركتل لأعلى",

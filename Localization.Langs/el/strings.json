@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "Κινητός Μέσος Όρος Προσαρμοστικής Fractal.",
   "FractalChaosBands": "Ζώνες φρακταλικού χάους.",
+  "FractalDimension": "Φρακταλική Διάσταση",
+  "FractalDimensionDesc": "Μετρά την πολυπλοκότητα και την τραχύτητα των κινήσεων τιμών χρησιμοποιώντας αρχές φρακταλικής γεωμετρίας",
   "FractalDown": "Φράκταλ προς τα κάτω",
   "Fractals": "Φράκταλ",
   "FractalUp": "Φράκταλ προς τα επάνω",

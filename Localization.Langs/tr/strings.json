@@ -1313,6 +1313,8 @@
   "FR": "FR",
   "FractalAdaptiveMovingAverage": "Fraktal Uyarlanabilir Hareketli Ortalama.",
   "FractalChaosBands": "Fraktal Kaos Bantları.",
+  "FractalDimension": "Fraktal Boyut",
+  "FractalDimensionDesc": "Fraktal geometri ilkelerini kullanarak fiyat hareketlerinin karmaşıklığını ve pürüzlülüğünü ölçer",
   "FractalDown": "Aşağı Fraktal",
   "Fractals": "Fraktallar",
   "FractalUp": "Fraktal yukarı",
