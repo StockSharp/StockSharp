@@ -26,6 +26,6 @@ public class SterlingRatioParameter(NetProfitParameter profit, AverageDrawdownPa
 		var annualizedProfit = _profit.Value;
 		var avgDrawdown = _avgDrawdown.Value;
 
-		Value = avgDrawdown != 0 ? annualizedProfit / Math.Abs(avgDrawdown) : 0;
+		Value = avgDrawdown != 0 ? annualizedProfit / avgDrawdown : 0;
 	}
 }

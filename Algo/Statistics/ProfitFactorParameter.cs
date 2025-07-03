@@ -30,7 +30,7 @@ public class ProfitFactorParameter : BaseStatisticParameter<decimal>, ITradeStat
 		if (info.PnL > 0)
 			_grossProfit += info.PnL;
 		else if (info.PnL < 0)
-			_grossLoss += Math.Abs(info.PnL);
+			_grossLoss -= info.PnL;
 
 		Value = _grossLoss > 0 ? _grossProfit / _grossLoss : 0;
 	}

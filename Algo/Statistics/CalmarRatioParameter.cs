@@ -26,6 +26,6 @@ public class CalmarRatioParameter(NetProfitParameter profit, MaxDrawdownParamete
 		var annualizedProfit = _profit.Value;
 		var maxDrawdown = _maxDrawdown.Value;
 
-		Value = maxDrawdown != 0 ? annualizedProfit / Math.Abs(maxDrawdown) : 0;
+		Value = maxDrawdown != 0 ? annualizedProfit / maxDrawdown : 0;
 	}
 }
