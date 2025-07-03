@@ -266,6 +266,38 @@ public class StatisticsTests
 	}
 
 	[TestMethod]
+	public void Return_WithNegativePnL()
+	{
+		// Arrange
+		var parameter = new ReturnParameter();
+		var marketTime = DateTimeOffset.UtcNow;
+
+		// Act & Assert
+		// Start with loss
+		parameter.Add(marketTime, -1000m, null);
+		parameter.Value.AssertEqual(0m); // No return yet
+
+		// Deeper loss creates new minimum
+		parameter.Add(marketTime, -1500m, null);
+		parameter.Value.AssertEqual(0m); // Still no return calculated
+
+		// Recovery from minimum should show positive return
+		parameter.Add(marketTime, -1000m, null);
+		// Expected: (-1000 - (-1500)) / abs(-1500) = 500 / 1500 = 0.333...
+		parameter.Value.Round(3).AssertEqual(0.333m);
+
+		// Full recovery to break-even
+		parameter.Add(marketTime, 0m, null);
+		// Expected: (0 - (-1500)) / abs(-1500) = 1500 / 1500 = 1.0
+		parameter.Value.AssertEqual(1.0m);
+
+		// Profit after recovery
+		parameter.Add(marketTime, 500m, null);
+		// Expected: (500 - (-1500)) / abs(-1500) = 2000 / 1500 = 1.333...
+		parameter.Value.Round(3).AssertEqual(1.333m);
+	}
+
+	[TestMethod]
 	public void MaxLatencyRegistration()
 	{
 		// Arrange

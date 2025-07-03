@@ -35,7 +35,8 @@ public class ReturnParameter : BasePnLStatisticParameter<decimal>
 		_minEquity = Math.Min(_minEquity, pnl);
 
 		var profit = pnl - _minEquity;
-		Value = Math.Max(Value, _minEquity != 0 ? profit / _minEquity : 0);
+		var denom = Math.Abs(_minEquity);
+		Value = Math.Max(Value, denom != 0 ? profit / denom : 0);
 	}
 
 	/// <inheritdoc />
