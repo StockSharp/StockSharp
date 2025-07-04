@@ -47,7 +47,7 @@ public interface ISubscriptionHandler<T>
 	ISubscriptionHandler<T> BindEx(IIndicator indicator, Action<T, IIndicatorValue> callback);
 
 	/// <summary>
-	/// Bind indicator to the subscription.
+	/// Bind indicators to the subscription.
 	/// </summary>
 	/// <param name="indicator1">Indicator.</param>
 	/// <param name="indicator2">Indicator.</param>
@@ -65,7 +65,7 @@ public interface ISubscriptionHandler<T>
 	ISubscriptionHandler<T> BindEx(IIndicator indicator1, IIndicator indicator2, Action<T, IIndicatorValue, IIndicatorValue> callback);
 
 	/// <summary>
-	/// Bind indicator to the subscription.
+	/// Bind indicators to the subscription.
 	/// </summary>
 	/// <param name="indicator1">Indicator.</param>
 	/// <param name="indicator2">Indicator.</param>
@@ -83,6 +83,17 @@ public interface ISubscriptionHandler<T>
 	/// <param name="callback">Callback.</param>
 	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
 	ISubscriptionHandler<T> BindEx(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, Action<T, IIndicatorValue, IIndicatorValue, IIndicatorValue> callback);
+
+	/// <summary>
+	/// Bind indicators to the subscription.
+	/// </summary>
+	/// <param name="indicator1">Indicator.</param>
+	/// <param name="indicator2">Indicator.</param>
+	/// <param name="indicator3">Indicator.</param>
+	/// <param name="indicator4">Indicator.</param>
+	/// <param name="callback">Callback.</param>
+	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
+	ISubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, IIndicator indicator4, Action<T, decimal, decimal, decimal, decimal> callback);
 
 	/// <summary>
 	/// Bind indicators to the subscription.
@@ -489,6 +500,14 @@ public partial class Strategy
 				throw new ArgumentNullException(nameof(callback));
 
 			return BindEx(indicator1, indicator2, indicator3, (v, iv1, iv2, iv3) => callback(v, iv1.ToDecimal(), iv2.ToDecimal(), iv3.ToDecimal()));
+		}
+
+		public ISubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, IIndicator indicator4, Action<T, decimal, decimal, decimal, decimal> callback)
+		{
+			if (callback is null)
+				throw new ArgumentNullException(nameof(callback));
+
+			return BindEx(indicator1, indicator2, indicator3, indicator4, (v, iv1, iv2, iv3, iv4) => callback(v, iv1.ToDecimal(), iv2.ToDecimal(), iv3.ToDecimal(), iv4.ToDecimal()));
 		}
 
 		public ISubscriptionHandler<T> Bind(IIndicator[] indicators, Action<T, decimal[]> callback)
