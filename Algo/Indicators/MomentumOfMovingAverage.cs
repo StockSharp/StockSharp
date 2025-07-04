@@ -10,8 +10,6 @@
 [Doc("topics/api/indicators/list_of_indicators/momentum_of_moving_average.html")]
 public class MomentumOfMovingAverage : SimpleMovingAverage
 {
-	private readonly CircularBuffer<decimal> _maBuffer = new(2);
-
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MomentumOfMovingAverage"/>.
 	/// </summary>
@@ -53,25 +51,26 @@ public class MomentumOfMovingAverage : SimpleMovingAverage
 		{
 			var ma = maValue.Value;
 
-			if (input.IsFinal)
-				_maBuffer.PushBack(ma);
+			decimal firstBuffer;
 
-			if (_maBuffer.IsFull && _maBuffer[0] != 0)
+			if (input.IsFinal)
 			{
-				var momentum = (ma - _maBuffer[0]) / _maBuffer[0] * 100;
+				Buffer.PushBack(ma);
+				firstBuffer = Buffer[0];
+			}
+			else
+			{
+				firstBuffer = Buffer[1];
+			}
+
+			if (IsFormed && firstBuffer != 0)
+			{
+				var momentum = (ma - firstBuffer) / firstBuffer * 100;
 				return momentum;
 			}
 		}
 
 		return null;
-	}
-
-	/// <inheritdoc />
-	public override void Reset()
-	{
-		_maBuffer.Clear();
-
-		base.Reset();
 	}
 
 	/// <inheritdoc />
