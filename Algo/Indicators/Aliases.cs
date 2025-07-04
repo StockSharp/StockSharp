@@ -1415,3 +1415,15 @@ public class WTO : WaveTrendOscillator
 	/// </summary>
 	public WTO() { }
 }
+
+/// <summary>
+/// <see cref="PositiveVolumeIndex"/> alias.
+/// </summary>
+[Browsable(false)]
+public class PVI : PositiveVolumeIndex
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="PVI"/>.
+	/// </summary>
+	public PVI() { }
+}
