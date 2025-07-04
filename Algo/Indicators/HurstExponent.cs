@@ -27,13 +27,18 @@ public class HurstExponent : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
+		var value = input.ToDecimal();
+
 		if (input.IsFinal)
-			Buffer.PushBack(input.ToDecimal());
+			Buffer.PushBack(value);
 
 		if (!IsFormed)
 			return null;
 
-		var values = Buffer.Select(x => x).ToArray();
+		var values = (input.IsFinal
+			? Buffer
+			: Buffer.Skip(1).Concat([value])
+		).ToArray();
 
 		var n = values.Length;
 
