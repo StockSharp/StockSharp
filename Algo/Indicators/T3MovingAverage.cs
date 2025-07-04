@@ -13,6 +13,7 @@ public class T3MovingAverage : LengthIndicator<decimal>
 	private readonly ExponentialMovingAverage[] _emas;
 	private decimal _volumeFactor;
 	private int _warmUpPeriod;
+	private const int _defaultWarmUpPeriod = 10;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="T3MovingAverage"/>.
@@ -47,6 +48,9 @@ public class T3MovingAverage : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
+	public override int NumValuesToInitialize => base.NumValuesToInitialize + _defaultWarmUpPeriod - 1;
+
+	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var e1 = _emas[0].Process(input);
@@ -56,6 +60,15 @@ public class T3MovingAverage : LengthIndicator<decimal>
 		var e5 = _emas[4].Process(e4);
 		var e6 = _emas[5].Process(e5);
 
+		if (input.IsFinal)
+		{
+			if (_warmUpPeriod > 0)
+			{
+				if (_emas.All(ema => ema.IsFormed))
+					_warmUpPeriod--;
+			}
+		}
+
 		if (IsFormed)
 		{
 			var c1 = -_volumeFactor * _volumeFactor * _volumeFactor;
@@ -63,22 +76,14 @@ public class T3MovingAverage : LengthIndicator<decimal>
 			var c3 = -6 * _volumeFactor * _volumeFactor - 3 * _volumeFactor - 3 * _volumeFactor * _volumeFactor * _volumeFactor;
 			var c4 = 1 + 3 * _volumeFactor + _volumeFactor * _volumeFactor * _volumeFactor + 3 * _volumeFactor * _volumeFactor;
 
-			var t3 = c1 * e6.ToDecimal() + c2 * e5.ToDecimal() + c3 * e4.ToDecimal() + c4 * e3.ToDecimal();
-
-			if (_warmUpPeriod == 0)
-				return t3;
-			else
-			{
-				if (input.IsFinal)
-					_warmUpPeriod--;
-			}
+			return c1 * e6.ToDecimal() + c2 * e5.ToDecimal() + c3 * e4.ToDecimal() + c4 * e3.ToDecimal();
 		}
 
 		return null;
 	}
 
 	/// <inheritdoc />
-	protected override bool CalcIsFormed() => _emas.All(ema => ema.IsFormed);
+	protected override bool CalcIsFormed() => _emas.All(ema => ema.IsFormed) && _warmUpPeriod == 0;
 
 	/// <inheritdoc />
 	public override void Reset()
@@ -89,7 +94,7 @@ public class T3MovingAverage : LengthIndicator<decimal>
 			ema.Reset();
 		}
 
-		_warmUpPeriod = 10;
+		_warmUpPeriod = _defaultWarmUpPeriod;
 
 		base.Reset();
 	}
