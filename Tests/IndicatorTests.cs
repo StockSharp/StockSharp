@@ -255,7 +255,7 @@ public class IndicatorTests
 				}
 			}
 
-			wasChanged.AssertTrue();
+			wasChanged.AssertTrue(indicator.ToString());
 		}
 	}
 
