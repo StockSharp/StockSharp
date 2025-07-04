@@ -35,12 +35,11 @@ public class HurstExponent : LengthIndicator<decimal>
 		if (!IsFormed)
 			return null;
 
-		var values = (input.IsFinal
+		IList<decimal> values = input.IsFinal
 			? Buffer
-			: Buffer.Skip(1).Concat([value])
-		).ToArray();
+			: [..Buffer.Skip(1), value];
 
-		var n = values.Length;
+		var n = values.Count;
 
 		var mean = values.Average();
 
