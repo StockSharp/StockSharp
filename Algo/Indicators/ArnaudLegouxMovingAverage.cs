@@ -84,17 +84,29 @@ public class ArnaudLegouxMovingAverage : LengthIndicator<decimal>
 			var weightSum = 0m;
 			var sum = 0m;
 
-			for (int i = 0; i < Length; i++)
+			for (var i = 0; i < Length; i++)
 			{
 				var weight = (decimal)Math.Exp(-Math.Pow((double)((i - m) / s), 2) / 2);
 				weightSum += weight;
-				sum += weight * Buffer[Length - 1 - i];
+
+				decimal value;
+
+				if (input.IsFinal)
+				{
+					value = Buffer[Length - 1 - i];
+				}
+				else
+				{
+					if (i == 0)
+						value = price;
+					else
+						value = Buffer[Length - i];
+				}
+
+				sum += weight * value;
 			}
 
-			if (weightSum != 0)
-				sum /= weightSum;
-
-			return sum;
+			return sum / weightSum;
 		}
 
 		return null;
