@@ -13,7 +13,6 @@ public class ZeroLagExponentialMovingAverage : LengthIndicator<decimal>
 	private decimal _prevZlema;
 	private decimal _ema;
 	private int _lag;
-	private bool _isFormedEx;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ZeroLagExponentialMovingAverage"/>.
@@ -29,14 +28,21 @@ public class ZeroLagExponentialMovingAverage : LengthIndicator<decimal>
 	{
 		var price = input.ToDecimal();
 
+		IList<decimal> buffer;
+
 		if (input.IsFinal)
 		{
 			Buffer.PushBack(price);
+			buffer = Buffer;
+		}
+		else
+		{
+			buffer = [.. Buffer.Skip(1), price];
 		}
 
 		if (IsFormed)
 		{
-			var lagPrice = input.IsFinal ? Buffer[_lag] : (Buffer.Count > _lag ? Buffer[_lag] : price);
+			var lagPrice = input.IsFinal ? buffer[_lag] : (buffer.Count > _lag ? buffer[_lag] : price);
 			var zlema = _ema * (2 * price - lagPrice) + (1 - _ema) * _prevZlema;
 
 			if (input.IsFinal)
@@ -44,11 +50,7 @@ public class ZeroLagExponentialMovingAverage : LengthIndicator<decimal>
 				_prevZlema = zlema;
 			}
 
-			if (!_isFormedEx)
-				_isFormedEx = zlema >= Buffer.Min.Value;
-
-			if (_isFormedEx)
-				return zlema;
+			return zlema;
 		}
 
 		return null;
@@ -60,7 +62,6 @@ public class ZeroLagExponentialMovingAverage : LengthIndicator<decimal>
 		_prevZlema = 0;
 		_ema = 2.0m / (Length + 1);
 		_lag = (Length - 1) / 2;
-		_isFormedEx = false;
 
 		base.Reset();
 	}
