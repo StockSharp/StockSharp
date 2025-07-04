@@ -27,17 +27,12 @@ public class Highest : LengthIndicator<decimal>
 	{
 		var high = input.ToCandle().HighPrice;
 
-		var lastValue = Buffer.Count == 0 ? high : this.GetCurrentValue();
-
-		if (high > lastValue)
-			lastValue = high;
-
 		if (input.IsFinal)
 		{
 			Buffer.PushBack(high);
-			lastValue = Buffer.Max.Value;
+			return Buffer.Max.Value;
 		}
-
-		return lastValue;
+		else
+			return high.Max(Buffer.Count == 0 ? high : Buffer.Max.Value);
 	}
 }

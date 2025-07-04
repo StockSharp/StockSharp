@@ -27,17 +27,12 @@ public class Lowest : LengthIndicator<decimal>
 	{
 		var low = input.ToCandle().LowPrice;
 
-		var lastValue = Buffer.Count == 0 ? low : this.GetCurrentValue();
-
-		if (low < lastValue)
-			lastValue = low;
-
 		if (input.IsFinal)
 		{
 			Buffer.PushBack(low);
-			lastValue = Buffer.Min.Value;
+			return Buffer.Min.Value;
 		}
-
-		return lastValue;
+		else
+			return low.Min(Buffer.Count == 0 ? low : Buffer.Min.Value);
 	}
 }
