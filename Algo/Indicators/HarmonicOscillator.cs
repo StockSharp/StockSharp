@@ -28,19 +28,26 @@ public class HarmonicOscillator : LengthIndicator<decimal>
 	{
 		var price = input.ToDecimal();
 
+		IList<decimal> buffer;
+
 		if (input.IsFinal)
 		{
 			Buffer.PushBack(price);
+			buffer = Buffer;
+		}
+		else
+		{
+			buffer = [.. Buffer.Skip(1), price];
 		}
 
 		if (IsFormed)
 		{
 			var sum = 0m;
-			var count = Buffer.Count.Min(Length);
+			var count = buffer.Count.Min(Length);
 
 			for (var i = 0; i < count; i++)
 			{
-				var value = (i == 0 && !input.IsFinal) ? price : Buffer[Buffer.Count - 1 - i];
+				var value = (i == 0 && !input.IsFinal) ? price : buffer[buffer.Count - 1 - i];
 				sum += value * _sinValues[i];
 			}
 
