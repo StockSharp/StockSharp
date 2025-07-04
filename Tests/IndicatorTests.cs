@@ -230,11 +230,15 @@ public class IndicatorTests
 			IIndicatorValue lastFinal = null;
 
 			var i = 0;
+			var extra = 10;
 
-			while (!indicator.IsFormed)
+			while (!indicator.IsFormed || extra > 0)
 			{
 				var value = CreateValue(type, indicator, secId, now, i++, tf, true, false);
 				lastFinal = indicator.Process(value);
+
+				if (indicator.IsFormed)
+					extra--;
 			}
 
 			var wasChanged = false;

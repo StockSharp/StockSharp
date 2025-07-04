@@ -271,8 +271,9 @@ public class ParabolicSar : BaseIndicator
 		if (input.IsFinal)
 			IsFormed = true;
 
+		var candle = input.ToCandle();
 		var b = _buf;
-		var val = b.Calculate(input.IsFinal ? _candles : [.. _candles], this.GetCurrentValue(), Acceleration, AccelerationMax, AccelerationStep, input.IsFinal, input.ToCandle());
+		var val = b.Calculate(input.IsFinal ? _candles : [.. _candles.Skip(1), candle], this.GetCurrentValue(), Acceleration, AccelerationMax, AccelerationStep, input.IsFinal, candle);
 
 		if (input.IsFinal)
 			_buf = b;
