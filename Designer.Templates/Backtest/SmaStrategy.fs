@@ -143,8 +143,8 @@ type SmaStrategy() as this =
     member private this.OnProcess
         (
             candle: ICandleMessage,
-            longValue: decimal,
-            shortValue: decimal
+            longValue: Nullable<decimal>,
+            shortValue: Nullable<decimal>
         ) =
         // Log candle information
         this.LogInfo(
@@ -163,7 +163,11 @@ type SmaStrategy() as this =
             ()
         else
             // Determine if short SMA is less than long SMA
-            let shortLess = shortValue < longValue
+            let shortLess = 
+                if shortValue.HasValue && longValue.HasValue then
+                    shortValue.Value < longValue.Value
+                else
+                    false
 
             match isShortLessThenLong with
             | None ->

@@ -290,6 +290,19 @@ public static class IndicatorHelper
 	}
 
 	/// <summary>
+	/// Convert <see cref="IIndicatorValue"/> to <see cref="decimal"/> or <see langword="null"/> if the value is empty..
+	/// </summary>
+	/// <param name="value"><see cref="IIndicatorValue"/></param>
+	/// <returns><see cref="decimal"/> or <see langword="null"/> if the value is empty.</returns>
+	public static decimal? ToNullableDecimal(this IIndicatorValue value)
+	{
+		if (value is null)
+			throw new ArgumentNullException(nameof(value));
+
+		return value.IsEmpty ? null : value.ToDecimal();
+	}
+
+	/// <summary>
 	/// Convert <see cref="IIndicatorValue"/> to <see cref="ICandleMessage"/>.
 	/// </summary>
 	/// <param name="value"><see cref="IIndicatorValue"/></param>

@@ -164,12 +164,12 @@ namespace StockSharp.Samples.Testing.History
 			// ----------------------------------------
 		}
 
-		private void OnProcess(ICandleMessage candle, decimal longValue, decimal shortValue)
+		private void OnProcess(ICandleMessage candle, decimal? longValue, decimal? shortValue)
 		{
 			LogInfo(LocalizedStrings.SmaNewCandleLog, candle.OpenTime, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume, candle.SecurityId);
 
 			// in case we subscribed on non finished only candles
-			if (candle.State != CandleStates.Finished)
+			if (candle.State != CandleStates.Finished || shortValue is null || longValue is null)
 				return;
 
 			// calc new values for short and long
