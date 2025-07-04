@@ -115,14 +115,23 @@ public class ZigZag : BaseIndicator
 	/// <inheritdoc />
 	protected ZigZagIndicatorValue CalcZigZag(IIndicatorValue input, decimal price)
 	{
+		IList<decimal> buffer;
+
 		if (input.IsFinal)
+		{
 			_buffer.PushBack(price);
+			buffer = _buffer;
+		}
+		else
+		{
+			buffer = [.. _buffer.Skip(1), price];
+		}
 
 		if (!IsFormed)
 			return new ZigZagIndicatorValue(this, input.Time);
 
 		var lastExtremum = _lastExtremum ?? price;
-		var isUpTrend = _isUpTrend ?? price >= _buffer[^2];
+		var isUpTrend = _isUpTrend ?? price >= buffer[^2];
 
 		var threshold = lastExtremum * Deviation;
 		var changeTrend = false;
