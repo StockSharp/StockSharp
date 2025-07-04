@@ -71,17 +71,29 @@ public class ChoppinessIndex : LengthIndicator<decimal>
 		}
 		else
 		{
-			if (_highLowRange.Count == 0 || _trueRange.Count == 0)
+			if (_highLowRange.Count == 0)
 				return null;
 
-			sumTrueRange = _sumTrueRange - _trueRange.Front() + trueRange;
-			sumHighLowRange = _sumHighLowRange - _highLowRange.Front() + highLowRange;
+			if (IsFormed)
+			{
+				sumTrueRange = _sumTrueRange - _trueRange.Front() + trueRange;
+				sumHighLowRange = _sumHighLowRange - _highLowRange.Front() + highLowRange;
+			}
+			else
+			{
+				sumTrueRange = _sumTrueRange + trueRange;
+				sumHighLowRange = _sumHighLowRange + highLowRange;
+			}
 		}
 
-		if (IsFormed && sumTrueRange != 0)
+		if (IsFormed && sumTrueRange > 0 && sumHighLowRange > 0)
 		{
-			var ci = 100 * (decimal)Math.Log10((double)(sumTrueRange / sumHighLowRange)) / _part;
-			return ci;
+			var ratio = sumTrueRange / sumHighLowRange;
+			if (ratio > 0)
+			{
+				var ci = 100 * (decimal)Math.Log10((double)ratio) / _part;
+				return ci;
+			}
 		}
 
 		return null;
