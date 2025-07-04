@@ -5,18 +5,21 @@ using Ecng.Reflection;
 [TestClass]
 public class IndicatorTests
 {
-	private static IIndicatorValue CreateValue(IndicatorType type, IIndicator indicator, SecurityId secId, DateTimeOffset now, int idx, TimeSpan tf, bool isFinal, bool isEmpty)
+	private static IIndicatorValue CreateValue(IndicatorType type, IIndicator indicator, SecurityId secId, DateTimeOffset now, int idx, TimeSpan tf, bool isFinal, bool isEmpty, int diffLimit = 10)
 	{
 		var time = now + tf.Multiply(idx);
+
+		int getRnd()
+			=> diffLimit > 0 ? RandomGen.GetInt(1, diffLimit) : RandomGen.GetInt(diffLimit, 0);
 
 		ICandleMessage createCandle()
 		{
 			var candle = new TimeFrameCandleMessage
 			{
-				OpenPrice = 100 + RandomGen.GetInt(1, 10),
-				HighPrice = 101 + RandomGen.GetInt(1, 10),
-				LowPrice = 99 - RandomGen.GetInt(1, 10),
-				ClosePrice = 100.5m + RandomGen.GetInt(1, 10),
+				OpenPrice = (100 + getRnd()).Max(1),
+				HighPrice = (101 + getRnd()).Max(1),
+				LowPrice = (99 - getRnd()).Max(1),
+				ClosePrice = (100.5m + getRnd()).Max(1),
 				OpenTime = time,
 				CloseTime = time + tf,
 				TotalVolume = RandomGen.GetInt(1, 1000),
@@ -37,7 +40,7 @@ public class IndicatorTests
 		var input = type.InputValue;
 
 		if (input == typeof(DecimalIndicatorValue))
-			return isEmpty ? new DecimalIndicatorValue(indicator, time) : new DecimalIndicatorValue(indicator, 100 + RandomGen.GetInt(1, 10), time) { IsFinal = isFinal };
+			return isEmpty ? new DecimalIndicatorValue(indicator, time) : new DecimalIndicatorValue(indicator, (100 + getRnd()).Max(1), time) { IsFinal = isFinal };
 		else if (input == typeof(CandleIndicatorValue))
 			return isEmpty ? new CandleIndicatorValue(indicator, time) : new CandleIndicatorValue(indicator, createCandle()) { IsFinal = isFinal };
 		else
@@ -208,6 +211,47 @@ public class IndicatorTests
 					indicator.Reset();
 			}
 			while (++k < 5);
+		}
+	}
+
+	[TestMethod]
+	public void NonFinalValueChanges()
+	{
+		var now = DateTimeOffset.UtcNow;
+		var secId = Helper.CreateSecurityId();
+		var tf = TimeSpan.FromDays(1);
+
+		var invalid = new List<Type>();
+
+		foreach (var type in GetIndicatorTypes().Where(t => t.Indicator != typeof(VolumeProfileIndicator)))
+		{
+			var indicator = type.CreateIndicator();
+
+			IIndicatorValue lastFinal = null;
+
+			var i = 0;
+
+			while (!indicator.IsFormed)
+			{
+				var value = CreateValue(type, indicator, secId, now, i++, tf, true, false);
+				lastFinal = indicator.Process(value);
+			}
+
+			var wasChanged = false;
+
+			for (int k = 0; k < 200; k++)
+			{
+				var nonFinalValue = CreateValue(type, indicator, secId, now, i + k * 1000, tf, false, false, k % 2 == 0 ? -1000 : 1000);
+				var nonFinalResult = indicator.Process(nonFinalValue);
+
+				if (!lastFinal.ToValues().SequenceEqual(nonFinalResult.ToValues()))
+				{
+					wasChanged = true;
+					break;
+				}
+			}
+
+			wasChanged.AssertTrue();
 		}
 	}
 
