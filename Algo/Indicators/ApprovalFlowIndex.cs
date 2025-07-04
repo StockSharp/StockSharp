@@ -55,19 +55,22 @@ public class ApprovalFlowIndex : LengthIndicator<decimal>
 		var upVolume = candle.ClosePrice > _prevClose ? candle.TotalVolume : 0;
 		var downVolume = candle.ClosePrice < _prevClose ? candle.TotalVolume : 0;
 
+		var totalUpVolume = _totalUpVolume + upVolume;
+		var totalDownVolume = _totalDownVolume + downVolume;
+
 		if (input.IsFinal)
 		{
-			_totalUpVolume += upVolume;
-			_totalDownVolume += downVolume;
+			_totalUpVolume = totalUpVolume;
+			_totalDownVolume = totalDownVolume;
 		}
 
 		if (IsFormed)
 		{
-			var totalVolume = _totalUpVolume + _totalDownVolume;
+			var totalVolume = totalUpVolume + totalDownVolume;
 
 			if (totalVolume != 0)
 			{
-				var afi = 100m * (_totalUpVolume - _totalDownVolume) / totalVolume;
+				var afi = 100m * (totalUpVolume - totalDownVolume) / totalVolume;
 				return afi;
 			}
 		}
