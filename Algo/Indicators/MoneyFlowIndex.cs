@@ -8,7 +8,7 @@
 /// </remarks>
 [Display(
 	ResourceType = typeof(LocalizedStrings),
-	Name = LocalizedStrings.MFIKey,
+	Name = LocalizedStrings.MNFIKey,
 	Description = LocalizedStrings.MoneyFlowIndexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/money_flow_index.html")]

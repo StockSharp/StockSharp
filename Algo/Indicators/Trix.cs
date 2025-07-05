@@ -1,7 +1,7 @@
 ﻿namespace StockSharp.Algo.Indicators;
 
 /// <summary>
-/// Triple Exponential Moving Average.
+/// Trix (Triple Exponential Average Oscillator).
 /// </summary>
 /// <remarks>
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/trix.html
@@ -9,7 +9,7 @@
 [Display(
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.TrixKey,
-	Description = LocalizedStrings.TripleExponentialMovingAverageKey)]
+	Description = LocalizedStrings.TrixOscillatorKey)]
 [Doc("topics/api/indicators/list_of_indicators/trix.html")]
 public class Trix : LengthIndicator<IIndicatorValue>
 {

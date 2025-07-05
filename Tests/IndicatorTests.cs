@@ -512,6 +512,53 @@ public class IndicatorTests
 				throw new InvalidOperationException(inputType.To<string>());
 		}
 	}
+
+	[TestMethod]
+	public void DocUrlUnique()
+	{
+		var duplicates = GetIndicatorTypes()
+			.Select(t => t.DocUrl)
+			.Where(url => !url.IsEmpty())
+			.Select(url => url.ToLowerInvariant())
+			.GroupBy(x => x)
+			.Where(g => g.Count() > 1)
+			.Select(g => g.Key)
+			.ToArray();
+
+		if (duplicates.Any())
+			Assert.Fail($"Duplicate DocUrl(s) found: {duplicates.JoinCommaSpace()}");
+	}
+
+	[TestMethod]
+	public void NameUnique()
+	{
+		var duplicates = GetIndicatorTypes()
+			.Select(t => t.Name)
+			.Select(n => n.ToLowerInvariant())
+			.GroupBy(x => x)
+			.Where(g => g.Count() > 1)
+			.Select(g => g.Key)
+			.ToArray();
+
+		if (duplicates.Any())
+			Assert.Fail($"Duplicate Names(s) found: {duplicates.JoinCommaSpace()}");
+	}
+
+	[TestMethod]
+	public void DescriptionUnique()
+	{
+		var duplicates = GetIndicatorTypes()
+			.Select(t => t.Description)
+			.Where(n => !n.IsEmpty())
+			.Select(n => n.ToLowerInvariant())
+			.GroupBy(x => x)
+			.Where(g => g.Count() > 1)
+			.Select(g => g.Key)
+			.ToArray();
+
+		if (duplicates.Any())
+			Assert.Fail($"Duplicate Descriptions(s) found: {duplicates.JoinCommaSpace()}");
+	}
 }
 
 static class IndicatorDataRunner
