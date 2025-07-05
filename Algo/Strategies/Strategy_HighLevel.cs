@@ -544,6 +544,12 @@ public partial class Strategy
 			if (callback is null)
 				throw new ArgumentNullException(nameof(callback));
 
+			if (indicator is null)
+				throw new ArgumentNullException(nameof(indicator));
+
+			if (indicator is IComplexIndicator)
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicator));
+
 			return BindEx(indicator, (v, iv) => callback(v, iv.ToNullableDecimal()), true);
 		}
 
@@ -552,17 +558,22 @@ public partial class Strategy
 			if (callback is null)
 				throw new ArgumentNullException(nameof(callback));
 
-			return BindEx(indicator, (v, iv) =>
-			{
-				if (iv.ToNullableDecimal() is decimal d1)
-					callback(v, d1);
-			}, false);
+			if (indicator is IComplexIndicator)
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicator));
+
+			return BindEx(indicator, (v, iv) => callback(v, iv.ToDecimal()), false);
 		}
 
 		public ISubscriptionHandler<T> BindWithEmpty(IIndicator indicator1, IIndicator indicator2, Action<T, decimal?, decimal?> callback)
 		{
 			if (callback is null)
 				throw new ArgumentNullException(nameof(callback));
+
+			if (indicator1 is IComplexIndicator)
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicator1));
+
+			if (indicator2 is IComplexIndicator)
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicator2));
 
 			return BindEx(indicator1, indicator2, (v, iv1, iv2) => callback(v, iv1.ToNullableDecimal(), iv2.ToNullableDecimal()), true);
 		}
@@ -572,20 +583,28 @@ public partial class Strategy
 			if (callback is null)
 				throw new ArgumentNullException(nameof(callback));
 
-			return BindEx(indicator1, indicator2, (v, iv1, iv2) =>
-			{
-				if (
-					iv1.ToNullableDecimal() is decimal d1 &&
-					iv2.ToNullableDecimal() is decimal d2
-				)
-					callback(v, d1, d2);
-			}, false);
+			if (indicator1 is IComplexIndicator)
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicator1));
+
+			if (indicator2 is IComplexIndicator)
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicator2));
+
+			return BindEx(indicator1, indicator2, (v, iv1, iv2) => callback(v, iv1.ToDecimal(), iv2.ToDecimal()), false);
 		}
 
 		public ISubscriptionHandler<T> BindWithEmpty(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, Action<T, decimal?, decimal?, decimal?> callback)
 		{
 			if (callback is null)
 				throw new ArgumentNullException(nameof(callback));
+
+			if (indicator1 is IComplexIndicator)
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicator1));
+
+			if (indicator2 is IComplexIndicator)
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicator2));
+
+			if (indicator3 is IComplexIndicator)
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicator3));
 
 			return BindEx(indicator1, indicator2, indicator3, (v, iv1, iv2, iv3) => callback(v, iv1.ToNullableDecimal(), iv2.ToNullableDecimal(), iv3.ToNullableDecimal()), true);
 		}
@@ -595,6 +614,15 @@ public partial class Strategy
 			if (callback is null)
 				throw new ArgumentNullException(nameof(callback));
 
+			if (indicator1 is IComplexIndicator)
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicator1));
+
+			if (indicator2 is IComplexIndicator)
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicator2));
+
+			if (indicator3 is IComplexIndicator)
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicator3));
+
 			return BindEx(indicator1, indicator2, indicator3, (v, iv1, iv2, iv3) => callback(v, iv1.ToDecimal(), iv2.ToDecimal(), iv3.ToDecimal()), false);
 		}
 
@@ -602,6 +630,18 @@ public partial class Strategy
 		{
 			if (callback is null)
 				throw new ArgumentNullException(nameof(callback));
+
+			if (indicator1 is IComplexIndicator)
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicator1));
+
+			if (indicator2 is IComplexIndicator)
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicator2));
+
+			if (indicator3 is IComplexIndicator)
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicator3));
+
+			if (indicator4 is IComplexIndicator)
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicator4));
 
 			return BindEx(indicator1, indicator2, indicator3, indicator4, (v, iv1, iv2, iv3, iv4) => callback(v, iv1.ToNullableDecimal(), iv2.ToNullableDecimal(), iv3.ToNullableDecimal(), iv4.ToNullableDecimal()), true);
 		}
@@ -611,6 +651,18 @@ public partial class Strategy
 			if (callback is null)
 				throw new ArgumentNullException(nameof(callback));
 
+			if (indicator1 is IComplexIndicator)
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicator1));
+
+			if (indicator2 is IComplexIndicator)
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicator2));
+
+			if (indicator3 is IComplexIndicator)
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicator3));
+
+			if (indicator4 is IComplexIndicator)
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicator4));
+
 			return BindEx(indicator1, indicator2, indicator3, indicator4, (v, iv1, iv2, iv3, iv4) => callback(v, iv1.ToDecimal(), iv2.ToDecimal(), iv3.ToDecimal(), iv4.ToDecimal()), false);
 		}
 
@@ -619,6 +671,12 @@ public partial class Strategy
 			if (callback is null)
 				throw new ArgumentNullException(nameof(callback));
 
+			if (indicators is null)
+				throw new ArgumentNullException(nameof(indicators));
+
+			if (indicators.Any(i => i is IComplexIndicator))
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicators));
+
 			return BindEx(indicators, (v, ivs) => callback(v, [.. ivs.Select(i => i.ToDecimal())]), false);
 		}
 
@@ -626,6 +684,12 @@ public partial class Strategy
 		{
 			if (callback is null)
 				throw new ArgumentNullException(nameof(callback));
+
+			if (indicators is null)
+				throw new ArgumentNullException(nameof(indicators));
+
+			if (indicators.Any(i => i is IComplexIndicator))
+				throw new ArgumentException(LocalizedStrings.IndicatorNotComposite, nameof(indicators));
 
 			return BindEx(indicators, (v, ivs) => callback(v, [.. ivs.Select(i => i.ToNullableDecimal())]), true);
 		}

@@ -31,7 +31,7 @@ static class Program
 
 		Console.ReadLine();
 
-		var secId = "SBER@TQBR".ToSecurityId();
+		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
 
 		var storageRegistry = new StorageRegistry()
 		{
@@ -88,7 +88,7 @@ static class Program
 		{
 			Id = "IndexInstr@TQBR",
 			Board = ExchangeBoard.MicexTqbr,
-			BasketExpression = "SBER@TQBR + 987654321",
+			BasketExpression = $"{secId} + 987654321",
 		};
 
 		var innerCandleList = new List<IEnumerable<CandleMessage>>();

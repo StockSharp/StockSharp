@@ -29,7 +29,7 @@ Here, the program lists all [securities](https://doc.stocksharp.com/topics/api/i
 ### Loading and Displaying Candle Data
 
 ```csharp
-var secId = "SBER@TQBR".ToSecurityId();
+var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
 var candleStorage = storageRegistry.GetTimeFrameCandleMessageStorage(secId, TimeSpan.FromMinutes(1), format: StorageFormats.Binary);
 var candles = candleStorage.Load(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2));
 foreach (var candle in candles)
@@ -38,7 +38,7 @@ foreach (var candle in candles)
 }
 Console.ReadLine();
 ```
-This code loads [candle data](https://doc.stocksharp.com/topics/api/candles.html) for the security `SBER@TQBR` using a one-minute timeframe, from April 1, 2020, to April 2, 2020. Each candle is then printed to the console.
+This code loads [candle data](https://doc.stocksharp.com/topics/api/candles.html) for the security `secId` using a one-minute timeframe, from April 1, 2020, to April 2, 2020. Each candle is then printed to the console.
 
 ### Loading and Displaying Trade Data
 
@@ -87,7 +87,7 @@ var basketSecurity = new ExpressionIndexSecurity
 {
     Id = "IndexInstr@TQBR",
     Board = ExchangeBoard.MicexTqbr,
-    BasketExpression = "SBER@TQBR + 987654321",
+    BasketExpression = $"{secId} + 987654321",
 };
 ```
 This configures an [expression-based index](https://doc.stocksharp.com/topics/api/instruments/index.html) which is calculated using the specified formula. This demonstrates how to extend the application to handle composite securities based on expressions.
