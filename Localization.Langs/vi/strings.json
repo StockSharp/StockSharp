@@ -1536,6 +1536,7 @@
   "IndicatorElem": "Yếu tố chỉ báo.",
   "IndicatorElementDescription": "Phần tử này được sử dụng để tính toán các giá trị của chỉ số.",
   "IndicatorName": "Tên chỉ báo.",
+  "IndicatorNotComposite": "Chỉ báo không thể là hỗn hợp.",
   "IndicatorNotFound": "Không tìm thấy chỉ báo cho phần tử {0}.",
   "IndicatorNotWorkWithType": "Chỉ báo không hỗ trợ làm việc với kiểu dữ liệu '{0}'.",
   "IndicatorPeriod": "Chu kỳ chỉ báo.",

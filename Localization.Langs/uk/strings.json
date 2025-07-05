@@ -1536,6 +1536,7 @@
   "IndicatorElem": "Елемент індикатора.",
   "IndicatorElementDescription": "Цей елемент використовується для розрахунку значень індикаторів.",
   "IndicatorName": "Назва індикатора.",
+  "IndicatorNotComposite": "Індикатор не може бути складеним.",
   "IndicatorNotFound": "Індикатор для елемента {0} не знайдено.",
   "IndicatorNotWorkWithType": "Індикатор не працює з типом даних '{0}'.",
   "IndicatorPeriod": "Період індикатора.",

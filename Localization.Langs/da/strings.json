@@ -1536,6 +1536,7 @@
   "IndicatorElem": "Indikatorelement.",
   "IndicatorElementDescription": "Dette element bruges til at beregne værdier af indikatorer.",
   "IndicatorName": "Indikatornavn.",
+  "IndicatorNotComposite": "Indikator kan ikke være sammensat.",
   "IndicatorNotFound": "Indikator for element {0} ikke fundet.",
   "IndicatorNotWorkWithType": "Indikatoren understøtter ikke datatypen '{0}'.",
   "IndicatorPeriod": "Indikatorperiode.",

@@ -1536,6 +1536,7 @@
   "IndicatorElem": "指标元素。",
   "IndicatorElementDescription": "此元素用于计算指标值。",
   "IndicatorName": "指标名称。",
+  "IndicatorNotComposite": "指标不能是复合的。",
   "IndicatorNotFound": "未找到元素 {0} 的指标。",
   "IndicatorNotWorkWithType": "指标不支持与数据类型“{0}”一起工作。",
   "IndicatorPeriod": "指标周期。",

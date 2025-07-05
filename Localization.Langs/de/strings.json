@@ -1536,6 +1536,7 @@
   "IndicatorElem": "Indikatorelement.",
   "IndicatorElementDescription": "Dieses Element wird zur Berechnung der Indikatorwerte verwendet.",
   "IndicatorName": "Name des Indikators.",
+  "IndicatorNotComposite": "Indikator kann nicht zusammengesetzt sein.",
   "IndicatorNotFound": "Indikator für Element {0} nicht gefunden.",
   "IndicatorNotWorkWithType": "Der Indikator unterstützt nicht den Datentyp '{0}'.",
   "IndicatorPeriod": "Indikatorperiode.",

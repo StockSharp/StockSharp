@@ -1536,6 +1536,7 @@
   "IndicatorElem": "องค์ประกอบของตัวชี้วัด",
   "IndicatorElementDescription": "ส่วนประกอบนี้ใช้สำหรับคำนวณค่าของตัวชี้วัด",
   "IndicatorName": "ชื่อตัวชี้วัด。",
+  "IndicatorNotComposite": "ตัวชี้วัดไม่สามารถเป็นแบบผสมได้",
   "IndicatorNotFound": "ไม่พบตัวบ่งชี้สำหรับองค์ประกอบ {0}",
   "IndicatorNotWorkWithType": "ตัวบ่งชี้ไม่สามารถทำงานกับประเภทข้อมูล '{0}'",
   "IndicatorPeriod": "ระยะเวลาของตัวบ่งชี้。",

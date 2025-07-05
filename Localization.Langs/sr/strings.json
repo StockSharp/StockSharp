@@ -1536,6 +1536,7 @@
   "IndicatorElem": "Елемент индикатора.",
   "IndicatorElementDescription": "Овај елемент се користи за израчунавање вредности индикатора.",
   "IndicatorName": "Назив индикатора.",
+  "IndicatorNotComposite": "Индикатор не може бити сложен.",
   "IndicatorNotFound": "Индикатор за елемент {0} није пронађен.",
   "IndicatorNotWorkWithType": "Индикатор не ради са типом података '{0}'.",
   "IndicatorPeriod": "Период индикатора.",

@@ -1536,6 +1536,7 @@
   "IndicatorElem": "Elementul indicatorului.",
   "IndicatorElementDescription": "Acest element este folosit pentru calcularea valorilor indicatoarelor.",
   "IndicatorName": "Numele indicatorului.",
+  "IndicatorNotComposite": "Indicatorul nu poate fi compus.",
   "IndicatorNotFound": "Indicatorul pentru elementul {0} nu a fost găsit.",
   "IndicatorNotWorkWithType": "Indicatorul nu funcționează cu tipul de date '{0}'.",
   "IndicatorPeriod": "Perioada indicatorului.",

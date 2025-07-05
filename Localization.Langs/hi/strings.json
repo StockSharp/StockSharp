@@ -1536,6 +1536,7 @@
   "IndicatorElem": "संकेतक तत्व।",
   "IndicatorElementDescription": "इस तत्व का उपयोग संकेतक मानों की गणना के लिए किया जाता है।",
   "IndicatorName": "संकेतक का नाम।",
+  "IndicatorNotComposite": "संकेतक यौगिक नहीं हो सकता।",
   "IndicatorNotFound": "{0} के लिए संकेतक नहीं मिला।",
   "IndicatorNotWorkWithType": "संकेतक डेटा प्रकार '{0}' के साथ काम नहीं करता।",
   "IndicatorPeriod": "संकेतक की अवधि।",

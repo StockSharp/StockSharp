@@ -1536,6 +1536,7 @@
   "IndicatorElem": "ইন্ডিকেটর এলিমেন্ট।",
   "IndicatorElementDescription": "এই উপাদানটি সূচক মানগুলি গণনা করার জন্য ব্যবহৃত হয়।",
   "IndicatorName": "সূচকের নাম।",
+  "IndicatorNotComposite": "ইন্ডিকেটর যৌগিক হতে পারে না।",
   "IndicatorNotFound": "{0} উপাদানের জন্য ইন্ডিকেটর পাওয়া যায়নি।",
   "IndicatorNotWorkWithType": "ইন্ডিকেটর ডেটা টাইপ '{0}' এর সাথে কাজ করে না।",
   "IndicatorPeriod": "সূচকের পিরিয়ড।",

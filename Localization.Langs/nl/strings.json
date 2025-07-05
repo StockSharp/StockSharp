@@ -1536,6 +1536,7 @@
   "IndicatorElem": "Indicator element.",
   "IndicatorElementDescription": "Dit element wordt gebruikt om indicatorwaarden te berekenen.",
   "IndicatorName": "Naam van de indicator.",
+  "IndicatorNotComposite": "Indicator kan niet samengesteld zijn.",
   "IndicatorNotFound": "Indicator voor element {0} niet gevonden.",
   "IndicatorNotWorkWithType": "De indicator werkt niet met het gegevenstype '{0}'.",
   "IndicatorPeriod": "Periode van de indicator.",

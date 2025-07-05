@@ -1536,6 +1536,7 @@
   "IndicatorElem": "Στοιχείο δείκτη.",
   "IndicatorElementDescription": "Αυτό το στοιχείο χρησιμοποιείται για τον υπολογισμό τιμών δεικτών.",
   "IndicatorName": "Όνομα δείκτη.",
+  "IndicatorNotComposite": "Ο δείκτης δεν μπορεί να είναι σύνθετος.",
   "IndicatorNotFound": "Ο δείκτης για το στοιχείο {0} δεν βρέθηκε.",
   "IndicatorNotWorkWithType": "Ο δείκτης δεν λειτουργεί με τον τύπο δεδομένων '{0}'.",
   "IndicatorPeriod": "Περίοδος δείκτη.",

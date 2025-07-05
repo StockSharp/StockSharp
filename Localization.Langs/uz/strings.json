@@ -1536,6 +1536,7 @@
   "IndicatorElem": "Ko'rsatkich elementi.",
   "IndicatorElementDescription": "Ushbu element ko'rsatkich qiymatlari hisoblanishida ishlatiladi.",
   "IndicatorName": "Indikator nomi.",
+  "IndicatorNotComposite": "Ko'rsatkich murakkab bo'la olmaydi.",
   "IndicatorNotFound": "{0} elementi uchun ko'rsatkich topilmadi.",
   "IndicatorNotWorkWithType": "Ko'rsatkich '{0}' ma'lumot turi bilan ishlamaydi.",
   "IndicatorPeriod": "Ko'rsatkich davri.",

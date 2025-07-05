@@ -1536,6 +1536,7 @@
   "IndicatorElem": "عنصر المؤشر.",
   "IndicatorElementDescription": "يتم استخدام هذا العنصر لحساب قيم المؤشرات.",
   "IndicatorName": "اسم المؤشر.",
+  "IndicatorNotComposite": "لا يمكن أن يكون المؤشر مركباً.",
   "IndicatorNotFound": "لم يتم العثور على المؤشر للعنصر {0}.",
   "IndicatorNotWorkWithType": "المؤشر لا يعمل مع نوع البيانات '{0}'.",
   "IndicatorPeriod": "فترة المؤشر.",

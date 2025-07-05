@@ -1536,6 +1536,7 @@
   "IndicatorElem": "지표 요소.",
   "IndicatorElementDescription": "이 요소는 지표 값을 계산하는 데 사용됩니다.",
   "IndicatorName": "지표 이름.",
+  "IndicatorNotComposite": "지표는 복합형일 수 없습니다.",
   "IndicatorNotFound": "항목 {0}에 대한 지표를 찾을 수 없습니다.",
   "IndicatorNotWorkWithType": "지표는 데이터 유형 '{0}'과(와) 함께 작동하지 않습니다.",
   "IndicatorPeriod": "지표 기간。",

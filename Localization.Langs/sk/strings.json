@@ -1536,6 +1536,7 @@
   "IndicatorElem": "Prvok indikátora.",
   "IndicatorElementDescription": "Tento prvok sa používa na výpočet hodnôt indikátorov.",
   "IndicatorName": "Názov indikátora.",
+  "IndicatorNotComposite": "Indikátor nemôže byť zložený.",
   "IndicatorNotFound": "Indikátor pre prvok {0} nebol nájdený.",
   "IndicatorNotWorkWithType": "Indikátor nepodporuje prácu s typom údajov '{0}'.",
   "IndicatorPeriod": "Obdobie indikátora.",

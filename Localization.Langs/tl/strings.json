@@ -1541,6 +1541,7 @@
   "IndicatorElem": "Indicator element.",
   "IndicatorElementDescription": "Ang element na ito ay ginagamit upang i-calculate ang mga halaga ng indicator.",
   "IndicatorName": "Pangalan ng indicator.",
+  "IndicatorNotComposite": "Ang tagapagpahiwatig ay hindi maaaring maging composite.",
   "IndicatorNotFound": "Hindi natagpuan ang indicator para sa element na {0}.",
   "IndicatorNotWorkWithType": "Hindi gumagana ang indicator sa uri ng data '{0}'.",
   "IndicatorPeriod": "Period ng indicator.",

@@ -1536,6 +1536,7 @@
   "IndicatorElem": "Indikaattorielementti.",
   "IndicatorElementDescription": "Tätä elementtiä käytetään indikaattoriarvojen laskemiseen.",
   "IndicatorName": "Indikaattorin nimi.",
+  "IndicatorNotComposite": "Indikaattori ei voi olla yhdistelmä.",
   "IndicatorNotFound": "Indikaattoria elementille {0} ei löydy.",
   "IndicatorNotWorkWithType": "Indikaattori ei tue tietotyyppiä '{0}'.",
   "IndicatorPeriod": "Indikaattorin jakso.",

@@ -1536,6 +1536,7 @@
   "IndicatorElem": "Elemen penunjuk.",
   "IndicatorElementDescription": "Elemen ini digunakan untuk mengira nilai indikator.",
   "IndicatorName": "Nama penunjuk.",
+  "IndicatorNotComposite": "Penunjuk tidak boleh menjadi komposit.",
   "IndicatorNotFound": "Penunjuk untuk elemen {0} tidak ditemui.",
   "IndicatorNotWorkWithType": "Penunjuk tidak berfungsi dengan jenis data '{0}'.",
   "IndicatorPeriod": "Tempoh penunjuk.",

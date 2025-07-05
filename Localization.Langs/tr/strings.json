@@ -1536,6 +1536,7 @@
   "IndicatorElem": "Gösterge elemanı.",
   "IndicatorElementDescription": "Bu öğe, gösterge değerlerinin hesaplanması için kullanılır.",
   "IndicatorName": "Göstergenin adı.",
+  "IndicatorNotComposite": "Gösterge bileşik olamaz.",
   "IndicatorNotFound": "Öge {0} için gösterge bulunamadı.",
   "IndicatorNotWorkWithType": "Gösterge '{0}' veri türüyle çalışmaz.",
   "IndicatorPeriod": "Göstergenin periyodu.",

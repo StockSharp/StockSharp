@@ -1536,6 +1536,7 @@
   "IndicatorElem": "ਸੂਚਕ ਤੱਤ।",
   "IndicatorElementDescription": "ਇਸ ਤਤਵ ਦੀ ਵਰਤੋਂ ਸੰਦਿਸ਼ਾਂਕਾਂ ਦੀਆਂ ਕੀਮਤਾਂ ਦਾ ਗਣਨਾ ਕਰਨ ਲਈ ਕੀਤੀ ਜਾਂਦੀ ਹੈ।",
   "IndicatorName": "ਸੂਚਕ ਦਾ ਨਾਮ।",
+  "IndicatorNotComposite": "ਸੰਕੇਤਕ ਮਿਸ਼ਰਿਤ ਨਹੀਂ ਹੋ ਸਕਦਾ।",
   "IndicatorNotFound": "ਤੱਤ {0} ਲਈ ਇੰਡੀਕੇਟਰ ਨਹੀਂ ਮਿਲਿਆ।",
   "IndicatorNotWorkWithType": "ਇੰਡੀਕੇਟਰ ਦਾਤਾ ਦੀ ਕਿਸਮ '{0}' ਨਾਲ ਕੰਮ ਨਹੀਂ ਕਰਦਾ।",
   "IndicatorPeriod": "ਸੂਚਕ ਦੀ ਮਿਆਦ।",

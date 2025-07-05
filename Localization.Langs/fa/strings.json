@@ -1536,6 +1536,7 @@
   "IndicatorElem": "عنصر نشانگر.",
   "IndicatorElementDescription": "این المان برای محاسبه مقادیر نشانگر استفاده می شود.",
   "IndicatorName": "نام شاخص.",
+  "IndicatorNotComposite": "شاخص نمی‌تواند ترکیبی باشد.",
   "IndicatorNotFound": "نشانگر برای عنصر {0} پیدا نشد.",
   "IndicatorNotWorkWithType": "شاخص با نوع داده '{0}' کار نمی‌کند.",
   "IndicatorPeriod": "دوره نشانگر.",

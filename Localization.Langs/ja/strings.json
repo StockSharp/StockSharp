@@ -1536,6 +1536,7 @@
   "IndicatorElem": "インジケータ要素。",
   "IndicatorElementDescription": "この要素は、指標の値を計算するために使用されます。",
   "IndicatorName": "インジケーター名。",
+  "IndicatorNotComposite": "インジケーターは複合にできません。",
   "IndicatorNotFound": "要素 {0} のインジケーターが見つかりません。",
   "IndicatorNotWorkWithType": "インジケーターはデータタイプ「{0}」に対応していません。",
   "IndicatorPeriod": "インジケーターの期間。",

@@ -1536,6 +1536,7 @@
   "IndicatorElem": "Element wskaźnika.",
   "IndicatorElementDescription": "Ten element służy do obliczania wartości wskaźników.",
   "IndicatorName": "Nazwa wskaźnika.",
+  "IndicatorNotComposite": "Wskaźnik nie może być złożony.",
   "IndicatorNotFound": "Nie znaleziono wskaźnika dla elementu {0}.",
   "IndicatorNotWorkWithType": "Wskaźnik nie współpracuje z typem danych '{0}'.",
   "IndicatorPeriod": "Okres wskaźnika.",

@@ -1536,6 +1536,7 @@
   "IndicatorElem": "אלמנט מחוונים.",
   "IndicatorElementDescription": "אלמנט זה משמש לחישוב ערכים של מחוונים.",
   "IndicatorName": "שם האינדיקטור.",
+  "IndicatorNotComposite": "המחוון לא יכול להיות מורכב.",
   "IndicatorNotFound": "המחוון לאלמנט {0} לא נמצא.",
   "IndicatorNotWorkWithType": "המחוון אינו פועל עם סוג הנתונים '{0}'.",
   "IndicatorPeriod": "תקופת המחוון.",

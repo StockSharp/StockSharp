@@ -1536,6 +1536,7 @@
   "IndicatorElem": "Elemen indikator.",
   "IndicatorElementDescription": "Unsur iki digunakake kanggo ngitung nila indikator.",
   "IndicatorName": "Jeneng indikator.",
+  "IndicatorNotComposite": "Indikator ora bisa dadi gabungan.",
   "IndicatorNotFound": "Indikator kanggo unsur {0} ora ketemu.",
   "IndicatorNotWorkWithType": "Indikator ora bisa karo tipe data '{0}'.",
   "IndicatorPeriod": "Periode indikator.",

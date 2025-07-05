@@ -1536,6 +1536,7 @@
   "IndicatorElem": "Jelzőelem.",
   "IndicatorElementDescription": "Ezt az elemet az indikátor értékek számításához használják.",
   "IndicatorName": "Az indikátor neve.",
+  "IndicatorNotComposite": "Az indikátor nem lehet összetett.",
   "IndicatorNotFound": "Az {0} elemhez nincs megtalálható indikátor.",
   "IndicatorNotWorkWithType": "Az indikátor nem működik '{0}' adattípussal.",
   "IndicatorPeriod": "Az indikátor időszaka.",
