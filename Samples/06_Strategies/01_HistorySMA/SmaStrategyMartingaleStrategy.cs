@@ -90,10 +90,10 @@ namespace StockSharp.Samples.Strategies.HistorySMA
 			}
 		}
 
-		private void ProcessCandle(ICandleMessage candle, decimal? longValue, decimal? shortValue)
+		private void ProcessCandle(ICandleMessage candle, decimal longValue, decimal shortValue)
 		{
 			// Skip unfinished candles
-			if (candle.State != CandleStates.Finished || shortValue is null || longValue is null)
+			if (candle.State != CandleStates.Finished)
 				return;
 
 			// Check if strategy is ready to trade
@@ -103,8 +103,8 @@ namespace StockSharp.Samples.Strategies.HistorySMA
 			// For the first value, we just store it and don't generate signals
 			if (_isFirstValue)
 			{
-				_prevLongValue = longValue.Value;
-				_prevShortValue = shortValue.Value;
+				_prevLongValue = longValue;
+				_prevShortValue = shortValue;
 				_isFirstValue = false;
 				return;
 			}
@@ -114,8 +114,8 @@ namespace StockSharp.Samples.Strategies.HistorySMA
 			var isShortLessThenLongPrevious = _prevShortValue < _prevLongValue;
 
 			// Store current values as previous for next candle
-			_prevLongValue = longValue.Value;
-			_prevShortValue = shortValue.Value;
+			_prevLongValue = longValue;
+			_prevShortValue = shortValue;
 
 			// Check for crossover (signal)
 			if (isShortLessThenLongPrevious == isShortLessThenLongCurrent)
@@ -131,7 +131,7 @@ namespace StockSharp.Samples.Strategies.HistorySMA
 			var volume = Volume + Math.Abs(Position);
 
 			// Create and register the order with appropriate price
-			var price = Security.ShrinkPrice(shortValue.Value);
+			var price = Security.ShrinkPrice(shortValue);
 			RegisterOrder(CreateOrder(direction, price, volume));
 		}
 	}
