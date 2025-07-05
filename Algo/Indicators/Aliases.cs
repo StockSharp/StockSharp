@@ -1427,3 +1427,99 @@ public class PVI : PositiveVolumeIndex
 	/// </summary>
 	public PVI() { }
 }
+
+/// <summary>
+/// <see cref="VolumeWeightedAveragePrice"/> alias.
+/// </summary>
+[Browsable(false)]
+public class VWAP : VolumeWeightedAveragePrice
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="VWAP"/>.
+	/// </summary>
+	public VWAP() { }
+}
+
+/// <summary>
+/// <see cref="ElderForceIndex"/> alias.
+/// </summary>
+[Browsable(false)]
+public class EFI : ElderForceIndex
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="EFI"/>.
+	/// </summary>
+	public EFI() { }
+}
+
+/// <summary>
+/// <see cref="PriceChannels"/> alias.
+/// </summary>
+[Browsable(false)]
+public class PC : PriceChannels
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="PC"/>.
+	/// </summary>
+	public PC() { }
+}
+
+/// <summary>
+/// <see cref="LinearRegressionForecast"/> alias.
+/// </summary>
+[Browsable(false)]
+public class LRF : LinearRegressionForecast
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="LRF"/>.
+	/// </summary>
+	public LRF() { }
+}
+
+/// <summary>
+/// <see cref="TypicalPrice"/> alias.
+/// </summary>
+[Browsable(false)]
+public class TP : TypicalPrice
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="TP"/>.
+	/// </summary>
+	public TP() { }
+}
+
+/// <summary>
+/// <see cref="WeightedClosePrice"/> alias.
+/// </summary>
+[Browsable(false)]
+public class WCP : WeightedClosePrice
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="WCP"/>.
+	/// </summary>
+	public WCP() { }
+}
+
+/// <summary>
+/// <see cref="VariableMovingAverage"/> alias.
+/// </summary>
+[Browsable(false)]
+public class VMA : VariableMovingAverage
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="VMA"/>.
+	/// </summary>
+	public VMA() { }
+}
+
+/// <summary>
+/// <see cref="PriceVolumeTrend"/> alias.
+/// </summary>
+[Browsable(false)]
+public class PVT : PriceVolumeTrend
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="PVT"/>.
+	/// </summary>
+	public PVT() { }
+}
