@@ -93,18 +93,13 @@ public class AverageDirectionalIndex : BaseComplexIndicator<AverageDirectionalIn
 /// <summary>
 /// <see cref="AverageDirectionalIndex"/> indicator value.
 /// </summary>
-public class AverageDirectionalIndexValue : ComplexIndicatorValue<AverageDirectionalIndex>
+/// <remarks>
+/// Initializes a new instance of the <see cref="AverageDirectionalIndexValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="AverageDirectionalIndex"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class AverageDirectionalIndexValue(AverageDirectionalIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<AverageDirectionalIndex>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="AverageDirectionalIndexValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="AverageDirectionalIndex"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public AverageDirectionalIndexValue(AverageDirectionalIndex indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-	
 	/// <summary>
 	/// Gets the <see cref="AverageDirectionalIndex.Dx"/> value.
 	/// </summary>

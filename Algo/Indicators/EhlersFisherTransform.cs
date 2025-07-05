@@ -166,18 +166,13 @@ public class EhlersFisherTransformLine : BaseIndicator
 /// <summary>
 /// <see cref="EhlersFisherTransform"/> indicator value.
 /// </summary>
-public class EhlersFisherTransformValue : ComplexIndicatorValue<EhlersFisherTransform>
+/// <remarks>
+/// Initializes a new instance of the <see cref="EhlersFisherTransformValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="EhlersFisherTransform"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class EhlersFisherTransformValue(EhlersFisherTransform indicator, DateTimeOffset time) : ComplexIndicatorValue<EhlersFisherTransform>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="EhlersFisherTransformValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="EhlersFisherTransform"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public EhlersFisherTransformValue(EhlersFisherTransform indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets the main line value.
 	/// </summary>

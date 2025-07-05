@@ -75,18 +75,13 @@ public class GatorOscillator : BaseComplexIndicator<GatorOscillatorValue>
 /// <summary>
 /// <see cref="GatorOscillator"/> indicator value.
 /// </summary>
-public class GatorOscillatorValue : ComplexIndicatorValue<GatorOscillator>
+/// <remarks>
+/// Initializes a new instance of the <see cref="GatorOscillatorValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="GatorOscillator"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class GatorOscillatorValue(GatorOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<GatorOscillator>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="GatorOscillatorValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="GatorOscillator"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public GatorOscillatorValue(GatorOscillator indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets the <see cref="GatorOscillator.Histogram1"/> value.
 	/// </summary>

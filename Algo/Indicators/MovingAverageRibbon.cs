@@ -139,20 +139,15 @@ public class MovingAverageRibbon : BaseComplexIndicator<MovingAverageRibbonValue
 /// <summary>
 /// <see cref="MovingAverageRibbon"/> indicator value.
 /// </summary>
-public class MovingAverageRibbonValue : ComplexIndicatorValue<MovingAverageRibbon>
+/// <remarks>
+/// Initializes a new instance of the <see cref="MovingAverageRibbonValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="MovingAverageRibbon"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class MovingAverageRibbonValue(MovingAverageRibbon indicator, DateTimeOffset time) : ComplexIndicatorValue<MovingAverageRibbon>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="MovingAverageRibbonValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="MovingAverageRibbon"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public MovingAverageRibbonValue(MovingAverageRibbon indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets all moving average values.
 	/// </summary>
-	public decimal[] Averages => TypedIndicator.InnerIndicators.Select(i => GetInnerDecimal(i)).ToArray();
+	public decimal[] Averages => [.. TypedIndicator.InnerIndicators.Select(GetInnerDecimal)];
 }

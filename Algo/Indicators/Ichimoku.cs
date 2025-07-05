@@ -102,18 +102,13 @@ public class Ichimoku : BaseComplexIndicator<IchimokuValue>
 /// <summary>
 /// <see cref="Ichimoku"/> indicator value.
 /// </summary>
-public class IchimokuValue : ComplexIndicatorValue<Ichimoku>
+/// <remarks>
+/// Initializes a new instance of the <see cref="IchimokuValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="Ichimoku"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class IchimokuValue(Ichimoku indicator, DateTimeOffset time) : ComplexIndicatorValue<Ichimoku>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="IchimokuValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="Ichimoku"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public IchimokuValue(Ichimoku indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.Tenkan"/> value.
 	/// </summary>

@@ -30,20 +30,15 @@ public class GuppyMultipleMovingAverage : BaseComplexIndicator<GuppyMultipleMovi
 /// <summary>
 /// <see cref="GuppyMultipleMovingAverage"/> indicator value.
 /// </summary>
-public class GuppyMultipleMovingAverageValue : ComplexIndicatorValue<GuppyMultipleMovingAverage>
+/// <remarks>
+/// Initializes a new instance of the <see cref="GuppyMultipleMovingAverageValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="GuppyMultipleMovingAverage"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class GuppyMultipleMovingAverageValue(GuppyMultipleMovingAverage indicator, DateTimeOffset time) : ComplexIndicatorValue<GuppyMultipleMovingAverage>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="GuppyMultipleMovingAverageValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="GuppyMultipleMovingAverage"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public GuppyMultipleMovingAverageValue(GuppyMultipleMovingAverage indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets values of all moving averages.
 	/// </summary>
-	public decimal[] Averages => [.. TypedIndicator.InnerIndicators.Select(i => GetInnerDecimal(i))];
+	public decimal[] Averages => [.. TypedIndicator.InnerIndicators.Select(GetInnerDecimal)];
 }

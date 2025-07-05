@@ -172,18 +172,13 @@ public class AdaptivePriceZoneBand : BaseIndicator
 /// <summary>
 /// <see cref="AdaptivePriceZone"/> indicator value.
 /// </summary>
-public class AdaptivePriceZoneValue : ComplexIndicatorValue<AdaptivePriceZone>
+/// <remarks>
+/// Initializes a new instance of the <see cref="AdaptivePriceZoneValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="AdaptivePriceZone"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class AdaptivePriceZoneValue(AdaptivePriceZone indicator, DateTimeOffset time) : ComplexIndicatorValue<AdaptivePriceZone>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="AdaptivePriceZoneValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="AdaptivePriceZone"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public AdaptivePriceZoneValue(AdaptivePriceZone indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets the moving average value.
 	/// </summary>

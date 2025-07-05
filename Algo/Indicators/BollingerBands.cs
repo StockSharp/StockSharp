@@ -134,18 +134,13 @@ public class BollingerBands : BaseComplexIndicator<BollingerBandsValue>
 /// <summary>
 /// <see cref="BollingerBands"/> indicator value.
 /// </summary>
-public class BollingerBandsValue : ComplexIndicatorValue<BollingerBands>
+/// <remarks>
+/// Initializes a new instance of the <see cref="BollingerBandsValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="BollingerBands"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class BollingerBandsValue(BollingerBands indicator, DateTimeOffset time) : ComplexIndicatorValue<BollingerBands>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="BollingerBandsValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="BollingerBands"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public BollingerBandsValue(BollingerBands indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets the <see cref="BollingerBands.MovingAverage"/> value.
 	/// </summary>

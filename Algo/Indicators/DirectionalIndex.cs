@@ -109,18 +109,13 @@ var value = new DirectionalIndexValue(this, input.Time) { IsFinal = input.IsFina
 /// <summary>
 /// <see cref="DirectionalIndex"/> indicator value.
 /// </summary>
-public class DirectionalIndexValue : ComplexIndicatorValue<DirectionalIndex>
+/// <remarks>
+/// Initializes a new instance of the <see cref="DirectionalIndexValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="DirectionalIndex"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class DirectionalIndexValue(DirectionalIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<DirectionalIndex>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="DirectionalIndexValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="DirectionalIndex"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public DirectionalIndexValue(DirectionalIndex indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-	
 	/// <summary>
 	/// Gets the <see cref="DirectionalIndex.Plus"/> value.
 	/// </summary>

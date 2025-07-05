@@ -78,20 +78,15 @@ public class RainbowCharts : BaseComplexIndicator<RainbowChartsValue>
 /// <summary>
 /// <see cref="RainbowCharts"/> indicator value.
 /// </summary>
-public class RainbowChartsValue : ComplexIndicatorValue<RainbowCharts>
+/// <remarks>
+/// Initializes a new instance of the <see cref="RainbowChartsValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="RainbowCharts"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class RainbowChartsValue(RainbowCharts indicator, DateTimeOffset time) : ComplexIndicatorValue<RainbowCharts>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="RainbowChartsValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="RainbowCharts"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public RainbowChartsValue(RainbowCharts indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets values of all moving averages.
 	/// </summary>
-	public decimal[] Averages => TypedIndicator.InnerIndicators.Select(i => GetInnerDecimal(i)).ToArray();
+	public decimal[] Averages => [.. TypedIndicator.InnerIndicators.Select(GetInnerDecimal)];
 }

@@ -171,18 +171,13 @@ public class ChandeKrollStop : BaseComplexIndicator<ChandeKrollStopValue>
 /// <summary>
 /// <see cref="ChandeKrollStop"/> indicator value.
 /// </summary>
-public class ChandeKrollStopValue : ComplexIndicatorValue<ChandeKrollStop>
+/// <remarks>
+/// Initializes a new instance of the <see cref="ChandeKrollStopValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="ChandeKrollStop"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class ChandeKrollStopValue(ChandeKrollStop indicator, DateTimeOffset time) : ComplexIndicatorValue<ChandeKrollStop>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="ChandeKrollStopValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="ChandeKrollStop"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public ChandeKrollStopValue(ChandeKrollStop indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets the highest stop line.
 	/// </summary>

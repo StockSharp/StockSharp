@@ -270,18 +270,13 @@ public class AroonDown : LengthIndicator<decimal>
 /// <summary>
 /// <see cref="Aroon"/> indicator value.
 /// </summary>
-public class AroonValue : ComplexIndicatorValue<Aroon>
+/// <remarks>
+/// Initializes a new instance of the <see cref="AroonValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="Aroon"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class AroonValue(Aroon indicator, DateTimeOffset time) : ComplexIndicatorValue<Aroon>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="AroonValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="Aroon"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public AroonValue(Aroon indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets the <see cref="Aroon.Up"/> value.
 	/// </summary>

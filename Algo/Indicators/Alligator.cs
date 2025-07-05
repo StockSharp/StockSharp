@@ -85,18 +85,13 @@ public class Alligator : BaseComplexIndicator<AlligatorValue>
 /// <summary>
 /// <see cref="Alligator"/> indicator value.
 /// </summary>
-public class AlligatorValue : ComplexIndicatorValue<Alligator>
+/// <remarks>
+/// Initializes a new instance of the <see cref="AlligatorValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="Alligator"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class AlligatorValue(Alligator indicator, DateTimeOffset time) : ComplexIndicatorValue<Alligator>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="AlligatorValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="Alligator"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public AlligatorValue(Alligator indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets the <see cref="Alligator.Jaw"/> value.
 	/// </summary>

@@ -232,18 +232,13 @@ public class CrsiLine : BaseIndicator
 /// <summary>
 /// <see cref="ConnorsRSI"/> indicator value.
 /// </summary>
-public class ConnorsRSIValue : ComplexIndicatorValue<ConnorsRSI>
+/// <remarks>
+/// Initializes a new instance of the <see cref="ConnorsRSIValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="ConnorsRSI"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class ConnorsRSIValue(ConnorsRSI indicator, DateTimeOffset time) : ComplexIndicatorValue<ConnorsRSI>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="ConnorsRSIValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="ConnorsRSI"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public ConnorsRSIValue(ConnorsRSI indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets the RSI component.
 	/// </summary>

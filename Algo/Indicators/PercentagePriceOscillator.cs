@@ -130,18 +130,13 @@ public class PercentagePriceOscillator : BaseComplexIndicator<PercentagePriceOsc
 /// <summary>
 /// <see cref="PercentagePriceOscillator"/> indicator value.
 /// </summary>
-public class PercentagePriceOscillatorValue : ComplexIndicatorValue<PercentagePriceOscillator>
+/// <remarks>
+/// Initializes a new instance of the <see cref="PercentagePriceOscillatorValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="PercentagePriceOscillator"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class PercentagePriceOscillatorValue(PercentagePriceOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<PercentagePriceOscillator>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="PercentagePriceOscillatorValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="PercentagePriceOscillator"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public PercentagePriceOscillatorValue(PercentagePriceOscillator indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets the short EMA value.
 	/// </summary>

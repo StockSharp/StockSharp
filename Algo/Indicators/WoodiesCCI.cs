@@ -80,18 +80,13 @@ public class WoodiesCCI : BaseComplexIndicator<WoodiesCCIValue>
 /// <summary>
 /// <see cref="WoodiesCCI"/> indicator value.
 /// </summary>
-public class WoodiesCCIValue : ComplexIndicatorValue<WoodiesCCI>
+/// <remarks>
+/// Initializes a new instance of the <see cref="WoodiesCCIValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="WoodiesCCI"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class WoodiesCCIValue(WoodiesCCI indicator, DateTimeOffset time) : ComplexIndicatorValue<WoodiesCCI>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="WoodiesCCIValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="WoodiesCCI"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public WoodiesCCIValue(WoodiesCCI indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets the CCI value.
 	/// </summary>

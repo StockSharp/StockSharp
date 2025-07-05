@@ -126,18 +126,13 @@ public class DonchianMiddle : BaseIndicator
 /// <summary>
 /// <see cref="DonchianChannels"/> indicator value.
 /// </summary>
-public class DonchianChannelsValue : ComplexIndicatorValue<DonchianChannels>
+/// <remarks>
+/// Initializes a new instance of the <see cref="DonchianChannelsValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="DonchianChannels"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class DonchianChannelsValue(DonchianChannels indicator, DateTimeOffset time) : ComplexIndicatorValue<DonchianChannels>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="DonchianChannelsValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="DonchianChannels"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public DonchianChannelsValue(DonchianChannels indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets the <see cref="DonchianChannels.UpperBand"/> value.
 	/// </summary>

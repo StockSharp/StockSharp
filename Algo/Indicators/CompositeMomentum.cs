@@ -147,18 +147,13 @@ public class CompositeMomentumLine : BaseIndicator
 /// <summary>
 /// <see cref="CompositeMomentum"/> indicator value.
 /// </summary>
-public class CompositeMomentumValue : ComplexIndicatorValue<CompositeMomentum>
+/// <remarks>
+/// Initializes a new instance of the <see cref="CompositeMomentumValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="CompositeMomentum"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class CompositeMomentumValue(CompositeMomentum indicator, DateTimeOffset time) : ComplexIndicatorValue<CompositeMomentum>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="CompositeMomentumValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="CompositeMomentum"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public CompositeMomentumValue(CompositeMomentum indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets the SMA value.
 	/// </summary>

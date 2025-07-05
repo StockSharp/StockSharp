@@ -99,18 +99,13 @@ public class PivotPointPart : BaseIndicator
 /// <summary>
 /// <see cref="PivotPoints"/> indicator value.
 /// </summary>
-public class PivotPointsValue : ComplexIndicatorValue<PivotPoints>
+/// <remarks>
+/// Initializes a new instance of the <see cref="PivotPointsValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="PivotPoints"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class PivotPointsValue(PivotPoints indicator, DateTimeOffset time) : ComplexIndicatorValue<PivotPoints>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="PivotPointsValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="PivotPoints"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public PivotPointsValue(PivotPoints indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets the Pivot Point value.
 	/// </summary>

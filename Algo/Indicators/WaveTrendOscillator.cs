@@ -207,18 +207,13 @@ public class WaveTrendLine : BaseIndicator
 /// <summary>
 /// <see cref="WaveTrendOscillator"/> indicator value.
 /// </summary>
-public class WaveTrendOscillatorValue : ComplexIndicatorValue<WaveTrendOscillator>
+/// <remarks>
+/// Initializes a new instance of the <see cref="WaveTrendOscillatorValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="WaveTrendOscillator"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class WaveTrendOscillatorValue(WaveTrendOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<WaveTrendOscillator>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="WaveTrendOscillatorValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="WaveTrendOscillator"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public WaveTrendOscillatorValue(WaveTrendOscillator indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets the first Wavetrend line value.
 	/// </summary>

@@ -71,18 +71,13 @@ public class MovingAverageConvergenceDivergenceSignal : BaseComplexIndicator<Mov
 /// <summary>
 /// <see cref="MovingAverageConvergenceDivergenceSignal"/> indicator value.
 /// </summary>
-public class MovingAverageConvergenceDivergenceSignalValue : ComplexIndicatorValue<MovingAverageConvergenceDivergenceSignal>
+/// <remarks>
+/// Initializes a new instance of the <see cref="MovingAverageConvergenceDivergenceSignalValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="MovingAverageConvergenceDivergenceSignal"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class MovingAverageConvergenceDivergenceSignalValue(MovingAverageConvergenceDivergenceSignal indicator, DateTimeOffset time) : ComplexIndicatorValue<MovingAverageConvergenceDivergenceSignal>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="MovingAverageConvergenceDivergenceSignalValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="MovingAverageConvergenceDivergenceSignal"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public MovingAverageConvergenceDivergenceSignalValue(MovingAverageConvergenceDivergenceSignal indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets the MACD value.
 	/// </summary>

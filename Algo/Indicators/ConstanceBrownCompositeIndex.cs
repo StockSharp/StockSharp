@@ -152,18 +152,13 @@ public class CompositeIndexLine : BaseIndicator
 /// <summary>
 /// <see cref="ConstanceBrownCompositeIndex"/> indicator value.
 /// </summary>
-public class ConstanceBrownCompositeIndexValue : ComplexIndicatorValue<ConstanceBrownCompositeIndex>
+/// <remarks>
+/// Initializes a new instance of the <see cref="ConstanceBrownCompositeIndexValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="ConstanceBrownCompositeIndex"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class ConstanceBrownCompositeIndexValue(ConstanceBrownCompositeIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<ConstanceBrownCompositeIndex>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="ConstanceBrownCompositeIndexValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="ConstanceBrownCompositeIndex"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public ConstanceBrownCompositeIndexValue(ConstanceBrownCompositeIndex indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets the RSI component.
 	/// </summary>

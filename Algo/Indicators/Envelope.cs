@@ -134,18 +134,13 @@ public class Envelope : BaseComplexIndicator<EnvelopeValue>
 /// <summary>
 /// <see cref="Envelope"/> indicator value.
 /// </summary>
-public class EnvelopeValue : ComplexIndicatorValue<Envelope>
+/// <remarks>
+/// Initializes a new instance of the <see cref="EnvelopeValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="Envelope"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class EnvelopeValue(Envelope indicator, DateTimeOffset time) : ComplexIndicatorValue<Envelope>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="EnvelopeValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="Envelope"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public EnvelopeValue(Envelope indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets the <see cref="Envelope.Middle"/> value.
 	/// </summary>

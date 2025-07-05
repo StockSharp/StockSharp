@@ -131,18 +131,13 @@ public class SineWaveLine : BaseIndicator
 /// <summary>
 /// <see cref="SineWave"/> indicator value.
 /// </summary>
-public class SineWaveValue : ComplexIndicatorValue<SineWave>
+/// <remarks>
+/// Initializes a new instance of the <see cref="SineWaveValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="SineWave"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class SineWaveValue(SineWave indicator, DateTimeOffset time) : ComplexIndicatorValue<SineWave>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="SineWaveValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="SineWave"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public SineWaveValue(SineWave indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets the main line value.
 	/// </summary>

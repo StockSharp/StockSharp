@@ -135,18 +135,13 @@ public class PercentageVolumeOscillator : BaseComplexIndicator<PercentageVolumeO
 /// <summary>
 /// <see cref="PercentageVolumeOscillator"/> indicator value.
 /// </summary>
-public class PercentageVolumeOscillatorValue : ComplexIndicatorValue<PercentageVolumeOscillator>
+/// <remarks>
+/// Initializes a new instance of the <see cref="PercentageVolumeOscillatorValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="PercentageVolumeOscillator"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class PercentageVolumeOscillatorValue(PercentageVolumeOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<PercentageVolumeOscillator>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="PercentageVolumeOscillatorValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="PercentageVolumeOscillator"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public PercentageVolumeOscillatorValue(PercentageVolumeOscillator indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets the short EMA value.
 	/// </summary>

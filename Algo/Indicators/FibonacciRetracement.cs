@@ -116,22 +116,17 @@ public class FibonacciRetracement : BaseComplexIndicator<FibonacciRetracementVal
 /// <summary>
 /// Represents a Fibonacci retracement level.
 /// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="FibonacciLevel"/>.
+/// </remarks>
+/// <param name="level"><see cref="Level"/></param>
 [IndicatorHidden]
-public class FibonacciLevel : BaseIndicator
+public class FibonacciLevel(decimal level) : BaseIndicator
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="FibonacciLevel"/>.
-	/// </summary>
-	/// <param name="level"><see cref="Level"/></param>
-	public FibonacciLevel(decimal level)
-	{
-		Level = level;
-	}
-
 	/// <summary>
 	/// The retracement level.
 	/// </summary>
-	public decimal Level { get; }
+	public decimal Level { get; } = level;
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
@@ -146,20 +141,15 @@ public class FibonacciLevel : BaseIndicator
 /// <summary>
 /// <see cref="FibonacciRetracement"/> indicator value.
 /// </summary>
-public class FibonacciRetracementValue : ComplexIndicatorValue<FibonacciRetracement>
+/// <remarks>
+/// Initializes a new instance of the <see cref="FibonacciRetracementValue"/>.
+/// </remarks>
+/// <param name="indicator"><see cref="FibonacciRetracement"/></param>
+/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+public class FibonacciRetracementValue(FibonacciRetracement indicator, DateTimeOffset time) : ComplexIndicatorValue<FibonacciRetracement>(indicator, time)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="FibonacciRetracementValue"/>.
-	/// </summary>
-	/// <param name="indicator"><see cref="FibonacciRetracement"/></param>
-	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public FibonacciRetracementValue(FibonacciRetracement indicator, DateTimeOffset time)
-		: base(indicator, time)
-	{
-	}
-
 	/// <summary>
 	/// Gets all level values.
 	/// </summary>
-	public decimal[] Levels => TypedIndicator.Levels.Select(l => GetInnerDecimal(l)).ToArray();
+	public decimal[] Levels => [.. TypedIndicator.Levels.Select(GetInnerDecimal)];
 }
