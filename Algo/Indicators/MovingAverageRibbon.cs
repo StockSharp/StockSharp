@@ -149,5 +149,5 @@ public class MovingAverageRibbonValue(MovingAverageRibbon indicator, DateTimeOff
 	/// <summary>
 	/// Gets all moving average values.
 	/// </summary>
-	public decimal[] Averages => [.. TypedIndicator.InnerIndicators.Select(GetInnerDecimal)];
+	public decimal?[] Averages => [.. TypedIndicator.InnerIndicators.Select(GetInnerDecimal)];
 }

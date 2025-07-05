@@ -633,7 +633,18 @@ public abstract class ComplexIndicatorValue<TIndicator>(TIndicator indicator, Da
 	/// Get the inner value of the indicator as <see cref="decimal"/>.
 	/// </summary>
 	/// <param name="indicator">Inner indicator, for which the value is requested.</param>
-	/// <returns>Inner value of the indicator as <see cref="decimal"/>.</returns>
-	protected decimal GetInnerDecimal(IIndicator indicator)
-		=> InnerValues[indicator].ToDecimal();
+	/// <returns>Inner value of the indicator as <see cref="decimal"/> or <see langword="null"/> if the value is empty.</returns>
+	public decimal? GetInnerDecimal(IIndicator indicator)
+		=> InnerValues[indicator].ToNullableDecimal();
+
+	/// <summary>
+	/// Set the inner value of the indicator as <see cref="decimal"/>.
+	/// </summary>
+	/// <param name="indicator">Inner indicator, for which the value is set.</param>
+	/// <param name="time">Time of the value, which is set.</param>
+	/// <param name="value">Value of the indicator as <see cref="decimal"/> or <see langword="null"/> if the value is empty.</param>
+	public void SetInnerDecimal(IIndicator indicator, DateTimeOffset time, decimal? value)
+		=> InnerValues[indicator] = value is not decimal v
+		? new DecimalIndicatorValue(indicator, time)
+		: new DecimalIndicatorValue(indicator, v, time);
 }

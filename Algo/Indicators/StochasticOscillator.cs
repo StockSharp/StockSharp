@@ -71,10 +71,10 @@ public class StochasticOscillatorValue(StochasticOscillator indicator, DateTimeO
 	/// <summary>
 	/// Gets the %K value.
 	/// </summary>
-	public decimal K => GetInnerDecimal(TypedIndicator.K);
+	public decimal? K => GetInnerDecimal(TypedIndicator.K);
 
 	/// <summary>
 	/// Gets the %D value.
 	/// </summary>
-	public decimal D => GetInnerDecimal(TypedIndicator.D);
+	public decimal? D => GetInnerDecimal(TypedIndicator.D);
 }

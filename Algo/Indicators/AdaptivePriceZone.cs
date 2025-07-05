@@ -182,15 +182,15 @@ public class AdaptivePriceZoneValue(AdaptivePriceZone indicator, DateTimeOffset 
 	/// <summary>
 	/// Gets the moving average value.
 	/// </summary>
-	public decimal MovingAverage => GetInnerDecimal(TypedIndicator.Ma);
+	public decimal? MovingAverage => GetInnerDecimal(TypedIndicator.Ma);
 
 	/// <summary>
 	/// Gets the upper band value.
 	/// </summary>
-	public decimal UpperBand => GetInnerDecimal(TypedIndicator.UpperBand);
+	public decimal? UpperBand => GetInnerDecimal(TypedIndicator.UpperBand);
 
 	/// <summary>
 	/// Gets the lower band value.
 	/// </summary>
-	public decimal LowerBand => GetInnerDecimal(TypedIndicator.LowerBand);
+	public decimal? LowerBand => GetInnerDecimal(TypedIndicator.LowerBand);
 }

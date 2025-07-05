@@ -100,11 +100,8 @@ public class Envelope : BaseComplexIndicator<EnvelopeValue>
 	{
 		var value = (EnvelopeValue)base.OnProcess(input);
 
-		var upper = value[Upper];
-		value[Upper] = upper.SetValue(Upper, value.Upper * (1 + Shift));
-
-		var lower = value[Lower];
-		value[Lower] = lower.SetValue(Lower, value.Lower * (1 - Shift));
+		value.SetInnerDecimal(Upper, input.Time, value.Upper * (1 + Shift));
+		value.SetInnerDecimal(Lower, input.Time, value.Lower * (1 - Shift));
 
 		return value;
 	}
@@ -144,15 +141,15 @@ public class EnvelopeValue(Envelope indicator, DateTimeOffset time) : ComplexInd
 	/// <summary>
 	/// Gets the <see cref="Envelope.Middle"/> value.
 	/// </summary>
-	public decimal Middle => GetInnerDecimal(TypedIndicator.Middle);
+	public decimal? Middle => GetInnerDecimal(TypedIndicator.Middle);
 
 	/// <summary>
 	/// Gets the <see cref="Envelope.Upper"/> value.
 	/// </summary>
-	public decimal Upper => GetInnerDecimal(TypedIndicator.Upper);
+	public decimal? Upper => GetInnerDecimal(TypedIndicator.Upper);
 
 	/// <summary>
 	/// Gets the <see cref="Envelope.Lower"/> value.
 	/// </summary>
-	public decimal Lower => GetInnerDecimal(TypedIndicator.Lower);
+	public decimal? Lower => GetInnerDecimal(TypedIndicator.Lower);
 }

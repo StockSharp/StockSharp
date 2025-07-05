@@ -151,5 +151,5 @@ public class FibonacciRetracementValue(FibonacciRetracement indicator, DateTimeO
 	/// <summary>
 	/// Gets all level values.
 	/// </summary>
-	public decimal[] Levels => [.. TypedIndicator.Levels.Select(GetInnerDecimal)];
+	public decimal?[] Levels => [.. TypedIndicator.Levels.Select(GetInnerDecimal)];
 }

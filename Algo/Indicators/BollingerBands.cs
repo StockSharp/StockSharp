@@ -144,15 +144,15 @@ public class BollingerBandsValue(BollingerBands indicator, DateTimeOffset time) 
 	/// <summary>
 	/// Gets the <see cref="BollingerBands.MovingAverage"/> value.
 	/// </summary>
-	public decimal MovingAverage => GetInnerDecimal(TypedIndicator.MovingAverage);
+	public decimal? MovingAverage => GetInnerDecimal(TypedIndicator.MovingAverage);
 
 	/// <summary>
 	/// Gets the <see cref="BollingerBands.UpBand"/> value.
 	/// </summary>
-	public decimal UpBand => GetInnerDecimal(TypedIndicator.UpBand);
+	public decimal? UpBand => GetInnerDecimal(TypedIndicator.UpBand);
 
 	/// <summary>
 	/// Gets the <see cref="BollingerBands.LowBand"/> value.
 	/// </summary>
-	public decimal LowBand => GetInnerDecimal(TypedIndicator.LowBand);
+	public decimal? LowBand => GetInnerDecimal(TypedIndicator.LowBand);
 }

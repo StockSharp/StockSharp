@@ -205,10 +205,10 @@ public class VortexIndicatorValue(VortexIndicator indicator, DateTimeOffset time
 	/// <summary>
 	/// Gets the <see cref="VortexIndicator.PlusVi"/> value.
 	/// </summary>
-	public decimal PlusVi => GetInnerDecimal(TypedIndicator.PlusVi);
+	public decimal? PlusVi => GetInnerDecimal(TypedIndicator.PlusVi);
 
 	/// <summary>
 	/// Gets the <see cref="VortexIndicator.MinusVi"/> value.
 	/// </summary>
-	public decimal MinusVi => GetInnerDecimal(TypedIndicator.MinusVi);
+	public decimal? MinusVi => GetInnerDecimal(TypedIndicator.MinusVi);
 }

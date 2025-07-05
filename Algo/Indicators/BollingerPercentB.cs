@@ -73,9 +73,12 @@ public class BollingerPercentB : BaseIndicator
 			if (input.IsFinal)
 				IsFormed = true;
 
-			var upperBand = bbValue.UpBand;
-			var lowerBand = bbValue.LowBand;
-			
+			if (bbValue.UpBand is not decimal upperBand)
+				return new DecimalIndicatorValue(this, input.Time);
+
+			if (bbValue.LowBand is not decimal lowerBand)
+				return new DecimalIndicatorValue(this, input.Time);
+
 			var bandWidth = upperBand - lowerBand;
 
 			if (bandWidth != 0)

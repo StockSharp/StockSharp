@@ -93,10 +93,10 @@ public class MovingAverageConvergenceDivergenceHistogramValue(MovingAverageConve
 	/// <summary>
 	/// Gets the MACD value.
 	/// </summary>
-	public decimal Macd => GetInnerDecimal(TypedIndicator.Macd);
+	public decimal? Macd => GetInnerDecimal(TypedIndicator.Macd);
 
 	/// <summary>
 	/// Gets the signal line value.
 	/// </summary>
-	public decimal Signal => GetInnerDecimal(TypedIndicator.SignalMa);
+	public decimal? Signal => GetInnerDecimal(TypedIndicator.SignalMa);
 }

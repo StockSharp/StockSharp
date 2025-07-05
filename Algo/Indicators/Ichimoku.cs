@@ -112,25 +112,25 @@ public class IchimokuValue(Ichimoku indicator, DateTimeOffset time) : ComplexInd
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.Tenkan"/> value.
 	/// </summary>
-	public decimal Tenkan => GetInnerDecimal(TypedIndicator.Tenkan);
+	public decimal? Tenkan => GetInnerDecimal(TypedIndicator.Tenkan);
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.Kijun"/> value.
 	/// </summary>
-	public decimal Kijun => GetInnerDecimal(TypedIndicator.Kijun);
+	public decimal? Kijun => GetInnerDecimal(TypedIndicator.Kijun);
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.SenkouA"/> value.
 	/// </summary>
-	public decimal SenkouA => GetInnerDecimal(TypedIndicator.SenkouA);
+	public decimal? SenkouA => GetInnerDecimal(TypedIndicator.SenkouA);
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.SenkouB"/> value.
 	/// </summary>
-	public decimal SenkouB => GetInnerDecimal(TypedIndicator.SenkouB);
+	public decimal? SenkouB => GetInnerDecimal(TypedIndicator.SenkouB);
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.Chinkou"/> value.
 	/// </summary>
-	public decimal Chinkou => GetInnerDecimal(TypedIndicator.Chinkou);
+	public decimal? Chinkou => GetInnerDecimal(TypedIndicator.Chinkou);
 }

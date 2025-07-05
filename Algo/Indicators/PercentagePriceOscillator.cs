@@ -140,10 +140,10 @@ public class PercentagePriceOscillatorValue(PercentagePriceOscillator indicator,
 	/// <summary>
 	/// Gets the short EMA value.
 	/// </summary>
-	public decimal ShortEma => GetInnerDecimal(TypedIndicator.ShortEma);
+	public decimal? ShortEma => GetInnerDecimal(TypedIndicator.ShortEma);
 
 	/// <summary>
 	/// Gets the long EMA value.
 	/// </summary>
-	public decimal LongEma => GetInnerDecimal(TypedIndicator.LongEma);
+	public decimal? LongEma => GetInnerDecimal(TypedIndicator.LongEma);
 }

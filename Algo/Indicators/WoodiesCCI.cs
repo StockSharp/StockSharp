@@ -90,10 +90,10 @@ public class WoodiesCCIValue(WoodiesCCI indicator, DateTimeOffset time) : Comple
 	/// <summary>
 	/// Gets the CCI value.
 	/// </summary>
-	public decimal Cci => GetInnerDecimal(TypedIndicator.Cci);
+	public decimal? Cci => GetInnerDecimal(TypedIndicator.Cci);
 
 	/// <summary>
 	/// Gets the SMA value.
 	/// </summary>
-	public decimal Sma => GetInnerDecimal(TypedIndicator.Sma);
+	public decimal? Sma => GetInnerDecimal(TypedIndicator.Sma);
 }

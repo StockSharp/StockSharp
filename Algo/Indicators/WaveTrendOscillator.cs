@@ -217,10 +217,10 @@ public class WaveTrendOscillatorValue(WaveTrendOscillator indicator, DateTimeOff
 	/// <summary>
 	/// Gets the first Wavetrend line value.
 	/// </summary>
-	public decimal Wt1 => GetInnerDecimal(TypedIndicator.Wt1);
+	public decimal? Wt1 => GetInnerDecimal(TypedIndicator.Wt1);
 
 	/// <summary>
 	/// Gets the second Wavetrend line value.
 	/// </summary>
-	public decimal Wt2 => GetInnerDecimal(TypedIndicator.Wt2);
+	public decimal? Wt2 => GetInnerDecimal(TypedIndicator.Wt2);
 }

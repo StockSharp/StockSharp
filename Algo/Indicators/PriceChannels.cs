@@ -110,10 +110,10 @@ public class PriceChannelsValue(PriceChannels indicator, DateTimeOffset time) : 
 	/// <summary>
 	/// Gets the upper channel value.
 	/// </summary>
-	public decimal UpperChannel => GetInnerDecimal(TypedIndicator.UpperChannel);
+	public decimal? UpperChannel => GetInnerDecimal(TypedIndicator.UpperChannel);
 
 	/// <summary>
 	/// Gets the lower channel value.
 	/// </summary>
-	public decimal LowerChannel => GetInnerDecimal(TypedIndicator.LowerChannel);
+	public decimal? LowerChannel => GetInnerDecimal(TypedIndicator.LowerChannel);
 }

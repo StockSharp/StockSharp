@@ -134,20 +134,20 @@ public class LinearRegressionValue(LinearRegression indicator, DateTimeOffset ti
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.LinearReg"/> value.
 	/// </summary>
-	public decimal LinearReg => GetInnerDecimal(TypedIndicator.LinearReg);
+	public decimal? LinearReg => GetInnerDecimal(TypedIndicator.LinearReg);
 
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.RSquared"/> value.
 	/// </summary>
-	public decimal RSquared => GetInnerDecimal(TypedIndicator.RSquared);
+	public decimal? RSquared => GetInnerDecimal(TypedIndicator.RSquared);
 
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.LinearRegSlope"/> value.
 	/// </summary>
-	public decimal LinearRegSlope => GetInnerDecimal(TypedIndicator.LinearRegSlope);
+	public decimal? LinearRegSlope => GetInnerDecimal(TypedIndicator.LinearRegSlope);
 
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.StandardError"/> value.
 	/// </summary>
-	public decimal StandardError => GetInnerDecimal(TypedIndicator.StandardError);
+	public decimal? StandardError => GetInnerDecimal(TypedIndicator.StandardError);
 }

@@ -117,8 +117,10 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator<ConstanceBrownC
 				IsFormed = true;
 
 			var rsi = rsiValue.ToDecimal();
-			var stochK = stochValue.K;
-			var stochD = stochValue.D;
+
+			if (stochValue.K is not decimal stochK ||
+				stochValue.D is not decimal stochD)
+				return result;
 
 			var cbci = (rsi + stochK + stochD) / 3;
 
@@ -162,15 +164,15 @@ public class ConstanceBrownCompositeIndexValue(ConstanceBrownCompositeIndex indi
 	/// <summary>
 	/// Gets the RSI component.
 	/// </summary>
-	public decimal Rsi => GetInnerDecimal(TypedIndicator.Rsi);
+	public decimal? Rsi => GetInnerDecimal(TypedIndicator.Rsi);
 
 	/// <summary>
 	/// Gets the stochastic component.
 	/// </summary>
-	public decimal Stoch => GetInnerDecimal(TypedIndicator.Stoch);
+	public decimal? Stoch => GetInnerDecimal(TypedIndicator.Stoch);
 
 	/// <summary>
 	/// Gets the composite index line.
 	/// </summary>
-	public decimal CompositeIndexLine => GetInnerDecimal(TypedIndicator.CompositeIndexLine);
+	public decimal? CompositeIndexLine => GetInnerDecimal(TypedIndicator.CompositeIndexLine);
 }

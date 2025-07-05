@@ -90,10 +90,11 @@ public class SchaffTrendCycle : ExponentialMovingAverage
 
 		var macdVal = (MovingAverageConvergenceDivergenceSignalValue)Macd.Process(input);
 
-		if (!Macd.IsFormed)
+		if (!Macd.IsFormed || macdVal.Macd is not decimal macd || macdVal.Signal is not decimal signal)
 			return null;
 
-		var macdHist = macdVal.Macd - macdVal.Signal;
+		var macdHist = macd - signal;
+
 		var den = _buffer.Max.Value - _buffer.Min.Value;
 		var stochK = den == 0 ? _prevStochK : StochasticK.Process(input, (macdHist - _buffer.Min.Value) / den).ToDecimal();
 

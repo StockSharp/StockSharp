@@ -40,5 +40,5 @@ public class GuppyMultipleMovingAverageValue(GuppyMultipleMovingAverage indicato
 	/// <summary>
 	/// Gets values of all moving averages.
 	/// </summary>
-	public decimal[] Averages => [.. TypedIndicator.InnerIndicators.Select(GetInnerDecimal)];
+	public decimal?[] Averages => [.. TypedIndicator.InnerIndicators.Select(GetInnerDecimal)];
 }

@@ -108,5 +108,5 @@ public class AverageDirectionalIndexValue(AverageDirectionalIndex indicator, Dat
 	/// <summary>
 	/// Gets the <see cref="AverageDirectionalIndex.MovingAverage"/> value.
 	/// </summary>
-	public decimal MovingAverage => GetInnerDecimal(TypedIndicator.MovingAverage);
+	public decimal? MovingAverage => GetInnerDecimal(TypedIndicator.MovingAverage);
 }

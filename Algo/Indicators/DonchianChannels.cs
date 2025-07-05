@@ -136,15 +136,15 @@ public class DonchianChannelsValue(DonchianChannels indicator, DateTimeOffset ti
 	/// <summary>
 	/// Gets the <see cref="DonchianChannels.UpperBand"/> value.
 	/// </summary>
-	public decimal UpperBand => GetInnerDecimal(TypedIndicator.UpperBand);
+	public decimal? UpperBand => GetInnerDecimal(TypedIndicator.UpperBand);
 
 	/// <summary>
 	/// Gets the <see cref="DonchianChannels.LowerBand"/> value.
 	/// </summary>
-	public decimal LowerBand => GetInnerDecimal(TypedIndicator.LowerBand);
+	public decimal? LowerBand => GetInnerDecimal(TypedIndicator.LowerBand);
 
 	/// <summary>
 	/// Gets the <see cref="DonchianChannels.Middle"/> value.
 	/// </summary>
-	public decimal Middle => GetInnerDecimal(TypedIndicator.Middle);
+	public decimal? Middle => GetInnerDecimal(TypedIndicator.Middle);
 }

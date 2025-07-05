@@ -242,20 +242,20 @@ public class ConnorsRSIValue(ConnorsRSI indicator, DateTimeOffset time) : Comple
 	/// <summary>
 	/// Gets the RSI component.
 	/// </summary>
-	public decimal Rsi => GetInnerDecimal(TypedIndicator.Rsi);
+	public decimal? Rsi => GetInnerDecimal(TypedIndicator.Rsi);
 
 	/// <summary>
 	/// Gets the UpDown RSI component.
 	/// </summary>
-	public decimal UpDownRsi => GetInnerDecimal(TypedIndicator.UpDownRsi);
+	public decimal? UpDownRsi => GetInnerDecimal(TypedIndicator.UpDownRsi);
 
 	/// <summary>
 	/// Gets the ROC RSI component.
 	/// </summary>
-	public decimal RocRsi => GetInnerDecimal(TypedIndicator.RocRsi);
+	public decimal? RocRsi => GetInnerDecimal(TypedIndicator.RocRsi);
 
 	/// <summary>
 	/// Gets the composite RSI line.
 	/// </summary>
-	public decimal CrsiLine => GetInnerDecimal(TypedIndicator.CrsiLine);
+	public decimal? CrsiLine => GetInnerDecimal(TypedIndicator.CrsiLine);
 }
