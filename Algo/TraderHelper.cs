@@ -1226,6 +1226,33 @@ public static partial class TraderHelper
 	}
 
 	/// <summary>
+	/// To get order book (depth of market).
+	/// </summary>
+	/// <param name="adapter">Adapter.</param>
+	/// <param name="timeout">Timeout.</param>
+	/// <param name="securityId">Security ID.</param>
+	/// <param name="beginDate">Start date.</param>
+	/// <param name="endDate">End date.</param>
+	/// <param name="maxCount"><see cref="MarketDataMessage.Count"/></param>
+	/// <param name="secType"><see cref="SecurityMessage.SecurityType"/>.</param>
+	/// <returns>Order book (depth of market).</returns>
+	public static IEnumerable<QuoteChangeMessage> GetOrderBook(this IMessageAdapter adapter, TimeSpan timeout, SecurityId securityId, DateTime beginDate, DateTime endDate, int? maxCount = default, SecurityTypes? secType = default)
+	{
+		var mdMsg = new MarketDataMessage
+		{
+			SecurityId = securityId,
+			IsSubscribe = true,
+			DataType2 = DataType.MarketDepth,
+			From = beginDate,
+			To = endDate,
+			SecurityType = secType,
+			Count = maxCount,
+		};
+
+		return adapter.Download<QuoteChangeMessage>(mdMsg, timeout, out _);
+	}
+
+	/// <summary>
 	/// Download all securities.
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>

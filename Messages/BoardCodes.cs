@@ -871,6 +871,11 @@ public static class BoardCodes
 	public const string BinanceFut = "BNBFT";
 
 	/// <summary>
+	/// <see cref="BinanceOpt"/>.
+	/// </summary>
+	public const string BinanceOpt = "BNBOT";
+
+	/// <summary>
 	/// <see cref="Bitexbook"/>.
 	/// </summary>
 	public const string Bitexbook = "BTXB";
