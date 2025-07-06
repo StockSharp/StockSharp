@@ -1089,15 +1089,14 @@ public static partial class TraderHelper
 	/// <typeparam name="TResult">Result message.</typeparam>
 	/// <param name="adapter">Adapter.</param>
 	/// <param name="request">Request.</param>
+	/// <param name="receiver">Downloaded data receiver.</param>
 	/// <param name="timeout">Timeout.</param>
 	/// <param name="archive">Result data was sent as archive.</param>
-	/// <returns>Downloaded data.</returns>
-	public static IEnumerable<TResult> Download<TResult>(this IMessageAdapter adapter, Message request, TimeSpan timeout, out byte[] archive)
+	public static void Download<TResult>(this IMessageAdapter adapter, Message request, Action<TResult> receiver, TimeSpan timeout, out byte[] archive)
 		where TResult : Message
 	{
+		ArgumentNullException.ThrowIfNull(receiver);
 		var archiveLocal = Array.Empty<byte>();
-
-		var retVal = new List<TResult>();
 
 		var transIdMsg = request as ITransactionIdMessage;
 		var resultIsConnect = typeof(TResult) == typeof(ConnectMessage);
@@ -1109,7 +1108,7 @@ public static partial class TraderHelper
 				return false;
 
 			if (resp is TResult resMsg)
-				retVal.Add(resMsg);
+				receiver(resMsg);
 
 			var err = (resp as SubscriptionResponseMessage)?.Error ??
 			          (resp as ErrorMessage)?.Error;
@@ -1127,7 +1126,7 @@ public static partial class TraderHelper
 		bool OtherMessageHandler(Message msg)
 		{
 			if (msg is TResult resMsg)
-				retVal.Add(resMsg);
+				receiver(resMsg);
 
 			if (msg is IErrorMessage errMsg && !errMsg.IsOk())
 				throw errMsg.Error;
@@ -1139,13 +1138,13 @@ public static partial class TraderHelper
 			msg => transIdMsg != null && resultIsOrigIdMsg ? msg is IOriginalTransactionIdMessage origIdMsg && TransactionMessageHandler(transIdMsg, origIdMsg) : OtherMessageHandler(msg));
 
 		archive = archiveLocal;
-		return retVal;
 	}
 
 	/// <summary>
 	/// To get level1 market data.
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
+	/// <param name="receiver">Downloaded data receiver.</param>
 	/// <param name="timeout">Timeout.</param>
 	/// <param name="securityId">Security ID.</param>
 	/// <param name="beginDate">Start date.</param>
@@ -1153,8 +1152,7 @@ public static partial class TraderHelper
 	/// <param name="maxCount"><see cref="MarketDataMessage.Count"/></param>
 	/// <param name="fields">Market data fields.</param>
 	/// <param name="secType"><see cref="SecurityMessage.SecurityType"/>.</param>
-	/// <returns>Level1 market data.</returns>
-	public static IEnumerable<Level1ChangeMessage> GetLevel1(this IMessageAdapter adapter, TimeSpan timeout, SecurityId securityId, DateTime beginDate, DateTime endDate, int? maxCount = default, IEnumerable<Level1Fields> fields = default, SecurityTypes? secType = default)
+	public static void DownloadLevel1(this IMessageAdapter adapter, Action<Level1ChangeMessage> receiver, TimeSpan timeout, SecurityId securityId, DateTime beginDate, DateTime endDate, int? maxCount = default, IEnumerable<Level1Fields> fields = default, SecurityTypes? secType = default)
 	{
 		var mdMsg = new MarketDataMessage
 		{
@@ -1168,21 +1166,21 @@ public static partial class TraderHelper
 			Count = maxCount,
 		};
 
-		return adapter.Download<Level1ChangeMessage>(mdMsg, timeout, out _);
+		adapter.Download(mdMsg, receiver, timeout, out _);
 	}
 
 	/// <summary>
 	/// To get tick data.
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
+	/// <param name="receiver">Downloaded data receiver.</param>
 	/// <param name="timeout">Timeout.</param>
 	/// <param name="securityId">Security ID.</param>
 	/// <param name="beginDate">Start date.</param>
 	/// <param name="endDate">End date.</param>
 	/// <param name="maxCount"><see cref="MarketDataMessage.Count"/></param>
 	/// <param name="secType"><see cref="SecurityMessage.SecurityType"/>.</param>
-	/// <returns>Tick data.</returns>
-	public static IEnumerable<ExecutionMessage> GetTicks(this IMessageAdapter adapter, TimeSpan timeout, SecurityId securityId, DateTime beginDate, DateTime endDate, int? maxCount = default, SecurityTypes? secType = default)
+	public static void DownloadTicks(this IMessageAdapter adapter, Action<ExecutionMessage> receiver, TimeSpan timeout, SecurityId securityId, DateTime beginDate, DateTime endDate, int? maxCount = default, SecurityTypes? secType = default)
 	{
 		var mdMsg = new MarketDataMessage
 		{
@@ -1195,21 +1193,21 @@ public static partial class TraderHelper
 			Count = maxCount,
 		};
 
-		return adapter.Download<ExecutionMessage>(mdMsg, timeout, out _);
+		adapter.Download(mdMsg, receiver, timeout, out _);
 	}
 
 	/// <summary>
 	/// To get order log.
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
+	/// <param name="receiver">Downloaded data receiver.</param>
 	/// <param name="timeout">Timeout.</param>
 	/// <param name="securityId">Security ID.</param>
 	/// <param name="beginDate">Start date.</param>
 	/// <param name="endDate">End date.</param>
 	/// <param name="maxCount"><see cref="MarketDataMessage.Count"/></param>
 	/// <param name="secType"><see cref="SecurityMessage.SecurityType"/>.</param>
-	/// <returns>Order log.</returns>
-	public static IEnumerable<ExecutionMessage> GetOrderLog(this IMessageAdapter adapter, TimeSpan timeout, SecurityId securityId, DateTime beginDate, DateTime endDate, int? maxCount = default, SecurityTypes? secType = default)
+	public static void DownloadOrderLog(this IMessageAdapter adapter, Action<ExecutionMessage> receiver, TimeSpan timeout, SecurityId securityId, DateTime beginDate, DateTime endDate, int? maxCount = default, SecurityTypes? secType = default)
 	{
 		var mdMsg = new MarketDataMessage
 		{
@@ -1222,13 +1220,14 @@ public static partial class TraderHelper
 			Count = maxCount,
 		};
 
-		return adapter.Download<ExecutionMessage>(mdMsg, timeout, out _);
+		adapter.Download(mdMsg, receiver, timeout, out _);
 	}
 
 	/// <summary>
 	/// To get order book (depth of market).
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
+	/// <param name="receiver">Downloaded data receiver.</param>
 	/// <param name="timeout">Timeout.</param>
 	/// <param name="securityId">Security ID.</param>
 	/// <param name="beginDate">Start date.</param>
@@ -1236,7 +1235,7 @@ public static partial class TraderHelper
 	/// <param name="maxCount"><see cref="MarketDataMessage.Count"/></param>
 	/// <param name="secType"><see cref="SecurityMessage.SecurityType"/>.</param>
 	/// <returns>Order book (depth of market).</returns>
-	public static IEnumerable<QuoteChangeMessage> GetOrderBook(this IMessageAdapter adapter, TimeSpan timeout, SecurityId securityId, DateTime beginDate, DateTime endDate, int? maxCount = default, SecurityTypes? secType = default)
+	public static void DownloadOrderBook(this IMessageAdapter adapter, Action<QuoteChangeMessage> receiver, TimeSpan timeout, SecurityId securityId, DateTime beginDate, DateTime endDate, int? maxCount = default, SecurityTypes? secType = default)
 	{
 		var mdMsg = new MarketDataMessage
 		{
@@ -1249,25 +1248,27 @@ public static partial class TraderHelper
 			Count = maxCount,
 		};
 
-		return adapter.Download<QuoteChangeMessage>(mdMsg, timeout, out _);
+		adapter.Download(mdMsg, receiver, timeout, out _);
 	}
 
 	/// <summary>
 	/// Download all securities.
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
+	/// <param name="receiver">Downloaded data receiver.</param>
 	/// <param name="timeout">Timeout.</param>
 	/// <param name="lookupMsg">Message security lookup for specified criteria.</param>
 	/// <returns>All securities.</returns>
-	public static IEnumerable<SecurityMessage> GetSecurities(this IMessageAdapter adapter, TimeSpan timeout, SecurityLookupMessage lookupMsg)
+	public static void DownloadSecurities(this IMessageAdapter adapter, Action<SecurityMessage> receiver, TimeSpan timeout, SecurityLookupMessage lookupMsg)
 	{
-		return adapter.Download<SecurityMessage>(lookupMsg, timeout, out _);
+		adapter.Download(lookupMsg, receiver, timeout, out _);
 	}
 
 	/// <summary>
 	/// To download candles.
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
+	/// <param name="receiver">Downloaded data receiver.</param>
 	/// <param name="timeout">Timeout.</param>
 	/// <param name="securityId">Security ID.</param>
 	/// <param name="timeFrame">Time-frame.</param>
@@ -1277,7 +1278,7 @@ public static partial class TraderHelper
 	/// <param name="buildField">Extra info for the <see cref="MarketDataMessage.BuildFrom"/>.</param>
 	/// <param name="secType"><see cref="SecurityMessage.SecurityType"/>.</param>
 	/// <returns>Downloaded candles.</returns>
-	public static IEnumerable<TimeFrameCandleMessage> GetCandles(this IMessageAdapter adapter, TimeSpan timeout, SecurityId securityId, TimeSpan timeFrame, DateTimeOffset from, DateTimeOffset to, long? count = null, Level1Fields? buildField = null, SecurityTypes? secType = default)
+	public static void DownloadCandles(this IMessageAdapter adapter, Action<TimeFrameCandleMessage> receiver, TimeSpan timeout, SecurityId securityId, TimeSpan timeFrame, DateTimeOffset from, DateTimeOffset to, long? count = null, Level1Fields? buildField = null, SecurityTypes? secType = default)
 	{
 		var mdMsg = new MarketDataMessage
 		{
@@ -1291,7 +1292,7 @@ public static partial class TraderHelper
 			SecurityType = secType,
 		};
 
-		return adapter.Download<TimeFrameCandleMessage>(mdMsg, timeout, out _);
+		adapter.Download(mdMsg, receiver, timeout, out _);
 	}
 
 	/// <summary>
