@@ -451,11 +451,16 @@ public class CsvEntityRegistry : IEntityRegistry
 
 		public override void Save(Security entity, bool forced)
 		{
-			lock (Registry.Exchanges.SyncRoot)
-				Registry.Exchanges.TryAdd(entity.Board.Exchange);
+			var board = entity.Board;
 
-			lock (Registry.ExchangeBoards.SyncRoot)
-				Registry.ExchangeBoards.TryAdd(entity.Board);
+			if (board is not null)
+			{
+				lock (Registry.Exchanges.SyncRoot)
+					Registry.Exchanges.TryAdd(board.Exchange);
+
+				lock (Registry.ExchangeBoards.SyncRoot)
+					Registry.ExchangeBoards.TryAdd(board);
+			}
 
 			base.Save(entity, forced);
 		}
