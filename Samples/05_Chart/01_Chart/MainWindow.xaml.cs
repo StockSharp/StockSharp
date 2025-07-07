@@ -238,12 +238,6 @@ public partial class MainWindow : ICandleBuilderSubscription
 			_security = new Security
 			{
 				Id = id.ToStringId(),
-				Code = id.SecurityCode,
-				Type = SecurityTypes.Future,
-				PriceStep = id.SecurityCode.StartsWithIgnoreCase("RI") ? 10 :
-					id.SecurityCode.Contains("ES") ? 0.25m :
-					0.01m,
-				Board = ExchangeBoard.Associated
 			};
 
 			_securityProvider.Clear();
@@ -254,7 +248,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 			_tradeGenerator.Process(_security.ToMessage());
 
 			_candleElement = Chart.CreateCandleElement();
-			_candleElement.PriceStep = _security.PriceStep * 5;
+			_candleElement.PriceStep = 20;
 			Chart.AddElement(_areaComb, _candleElement, new Subscription(SeriesEditor.DataType, _security));
 		});
 	}

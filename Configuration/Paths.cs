@@ -463,17 +463,22 @@ public static class Paths
 	/// <summary>
 	/// Sample history data security.
 	/// </summary>
-	public const string HistoryDefaultSecurity = "SBER@TQBR";
+	public const string HistoryDefaultSecurity = "BTCUSDT@BNBFT";
+
+	/// <summary>
+	/// Sample history data security.
+	/// </summary>
+	public const string HistoryDefaultSecurity2 = "TONUSDT@BNBFT";
 
 	/// <summary>
 	/// Begin date of <see cref="HistoryDataPath"/>.
 	/// </summary>
-	public static readonly DateTime HistoryBeginDate = new DateTime(2020, 4, 1).UtcKind();
+	public static readonly DateTime HistoryBeginDate = new DateTime(2024, 3, 1).UtcKind();
 
 	/// <summary>
 	/// End date of <see cref="HistoryDataPath"/>.
 	/// </summary>
-	public static readonly DateTime HistoryEndDate = new DateTime(2020, 4, 30).UtcKind();
+	public static readonly DateTime HistoryEndDate = new DateTime(2024, 3, 31).UtcKind();
 
 	/// <summary>
 	/// Birthday.
