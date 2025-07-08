@@ -228,7 +228,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		_volume = Param(nameof(Volume), 1m).SetGreaterThanZero().SetDisplay(LocalizedStrings.Volume, LocalizedStrings.StrategyVolume, LocalizedStrings.General);
 		_name = Param(nameof(Name), new string([.. GetType().Name.Where(char.IsUpper)])).SetDisplay(LocalizedStrings.Name, LocalizedStrings.StrategyName, LocalizedStrings.General).SetBasic(false);
 		_disposeOnStop = Param(nameof(DisposeOnStop), false).SetCanOptimize(false).SetHidden();
-		_waitRulesOnStop = Param(nameof(WaitRulesOnStop), true).SetCanOptimize(false).SetHidden();
+		_waitRulesOnStop = Param(nameof(WaitRulesOnStop), false).SetCanOptimize(false).SetHidden();
 		_cancelOrdersWhenStopping = Param(nameof(CancelOrdersWhenStopping), true).SetCanOptimize(false).SetHidden();
 		_waitAllTrades = Param(nameof(WaitAllTrades), false).SetCanOptimize(false).SetHidden();
 		_commentMode = Param(nameof(CommentMode), StrategyCommentModes.Disabled).SetDisplay(LocalizedStrings.Comment, LocalizedStrings.OrderComment, LocalizedStrings.General).SetBasic(false);
