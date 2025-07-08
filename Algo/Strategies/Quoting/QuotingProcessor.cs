@@ -28,6 +28,8 @@ public class QuotingProcessor : BaseLogReceiver
 	private IOrderBookMessage _filteredBook;
 	private ITickTradeMessage _lastTrade;
 	private DateTimeOffset _startedTime;
+	private QuotingEngine _engine;
+	private decimal _position;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="QuotingProcessor"/> class.
@@ -80,6 +82,10 @@ public class QuotingProcessor : BaseLogReceiver
 		_useTicks = useTicks;
 
 		_container.Rules.Removed += OnRulesRemoved;
+
+		_engine = new(
+			behavior, security, portfolio, quotingSide, quotingVolume,
+			maxOrderVolume, timeOut, mdProvider, _timeProvider.CurrentTime);
 	}
 
 	private void OnRulesRemoved(IMarketRule rule)
@@ -94,15 +100,10 @@ public class QuotingProcessor : BaseLogReceiver
 		base.DisposeManaged();
 	}
 
-	private decimal Position { get; set; }
-
 	/// <summary>
 	/// Left volume.
 	/// </summary>
-	public decimal LeftVolume => GetLeftVolume(Position);
-
-	private bool IsTimeOut(DateTimeOffset currentTime) => _timeOut != TimeSpan.Zero && (currentTime - _startedTime) >= _timeOut;
-	private bool NeedFinish() => _finished || LeftVolume <= 0;
+	public decimal LeftVolume => _engine?.GetLeftVolume(_position) ?? 0;
 
 	/// <summary>
 	/// Occurs when an order is registered.
@@ -137,97 +138,323 @@ public class QuotingProcessor : BaseLogReceiver
 
 		_startedTime = _timeProvider.CurrentTime;
 
+		_engine = new QuotingEngine(
+			_behavior, _security, _portfolio, _quotingSide, _quotingVolume,
+			_maxOrderVolume, _timeOut, _mdProvider, _startedTime);
+
 		_container.SuspendRules(() =>
 		{
-			Subscription addSub(Subscription subscription)
-			{
-				_subscriptions.Add(subscription);
-				return subscription;
-			}
-
-			if (_useBidAsk)
-			{
-				var sub = new Subscription(DataType.FilteredMarketDepth, _security);
-
-				AddRule(addSub(sub)
-					.WhenOrderBookReceived(_subProvider)
-					.Do(book =>
-					{
-						_filteredBook = book;
-						ProcessQuoting(book.ServerTime);
-					})
-					.Apply(_container));
-
-				_subProvider.Subscribe(sub);
-			}
-
-			if (_useTicks)
-			{
-				var sub = new Subscription(DataType.Ticks, _security);
-
-				AddRule(addSub(sub)
-					.WhenTickTradeReceived(_subProvider)
-					.Do(t =>
-					{
-						_lastTrade = t;
-						ProcessQuoting(t.ServerTime);
-					})
-					.Apply(_container));
-
-				_subProvider.Subscribe(sub);
-			}
-
-			AddRule(_subProvider
-				.WhenPositionReceived()
-				.Do(() =>
-				{
-					LogInfo(LocalizedStrings.PrevPosNewPos, _security, Position, LeftVolume);
-
-					if (NeedFinish())
-						RaiseSuccess();
-				})
-				.Apply(_container));
-
-			if (_timeOut > TimeSpan.Zero)
-			{
-				AddRule(_timeProvider
-					.WhenIntervalElapsed(_timeOut)
-					.Do(RaiseTimeOut)
-					.Once()
-					.Apply(_container));
-			}
+			SetupSubscriptions();
+			SetupTimeoutRule();
+			SetupPositionRule();
 		});
 
 		if (!_container.IsRulesSuspended)
-			ProcessQuoting(_startedTime);
+			ProcessQuoting();
 	}
 
-	private void RaiseSuccess()
+	/// <summary>
+	/// Stop the processor.
+	/// </summary>
+	public void Stop()
 	{
-		LogInfo(LocalizedStrings.Stopped);
-		RaiseFinished(true);
-	}
+		if (_currentOrder != null && !_pending)
+		{
+			_transProvider.CancelOrder(_currentOrder);
+		}
 
-	private void RaiseTimeOut()
-	{
-		LogWarning(LocalizedStrings.TimeOut);
 		RaiseFinished(false);
 	}
 
-	private void RaiseFinished(bool res)
+	private void SetupSubscriptions()
+	{
+		if (_useBidAsk)
+		{
+			var sub = new Subscription(DataType.FilteredMarketDepth, _security);
+			AddSubscription(sub);
+
+			AddRule(sub
+				.WhenOrderBookReceived(_subProvider)
+				.Do(book =>
+				{
+					_filteredBook = book;
+					ProcessQuoting();
+				})
+				.Apply(_container));
+
+			_subProvider.Subscribe(sub);
+		}
+
+		if (_useTicks)
+		{
+			var sub = new Subscription(DataType.Ticks, _security);
+			AddSubscription(sub);
+
+			AddRule(sub
+				.WhenTickTradeReceived(_subProvider)
+				.Do(trade =>
+				{
+					_lastTrade = trade;
+					ProcessQuoting();
+				})
+				.Apply(_container));
+
+			_subProvider.Subscribe(sub);
+		}
+	}
+
+	private void SetupPositionRule()
+	{
+		AddRule(_subProvider
+			.WhenPositionReceived()
+			.Do(pos =>
+			{
+				if (pos.Security != _security || pos.Portfolio != _portfolio)
+					return;
+
+				_position = pos.CurrentValue ?? 0;
+
+				LogInfo(LocalizedStrings.PrevPosNewPos, _security, _position, LeftVolume);
+				ProcessQuoting();
+			})
+			.Apply(_container));
+	}
+
+	private void SetupTimeoutRule()
+	{
+		if (_timeOut > TimeSpan.Zero)
+		{
+			AddRule(_timeProvider
+				.WhenIntervalElapsed(_timeOut)
+				.Do(() => RaiseFinished(false))
+				.Once()
+				.Apply(_container));
+		}
+	}
+
+	private void ProcessQuoting()
+	{
+		if (_finished || _engine == null)
+			return;
+
+		// Get action from engine
+		var action = _engine.ProcessQuoting(CreateInput());
+
+		// Execute the action
+		ExecuteAction(action);
+	}
+
+	private void ExecuteAction(QuotingAction action)
+	{
+		switch (action.ActionType)
+		{
+			case QuotingActionType.None:
+				if (!string.IsNullOrEmpty(action.Reason))
+					LogDebug($"No action: {action.Reason}");
+				break;
+
+			case QuotingActionType.Register:
+				RegisterNewOrder(action);
+				break;
+
+			case QuotingActionType.Cancel:
+				CancelCurrentOrder(action.Reason);
+				break;
+
+			case QuotingActionType.Modify:
+				// For simplicity, treat modify as cancel (will trigger re-registration)
+				CancelCurrentOrder("Modifying order");
+				break;
+
+			case QuotingActionType.Finish:
+				RaiseFinished(action.IsSuccess);
+				break;
+		}
+	}
+
+	private void RegisterNewOrder(QuotingAction action)
+	{
+		if (_currentOrder != null || _pending)
+		{
+			LogWarning("Cannot register order - order already exists or pending");
+			return;
+		}
+
+		var order = new Order
+		{
+			Portfolio = _portfolio,
+			Security = _security,
+			Side = _quotingSide,
+			Volume = action.Volume.Value,
+			Type = action.OrderType.Value
+		};
+
+		if (action.Price.HasValue)
+			order.Price = action.Price.Value;
+
+		_currentOrder = order;
+		_pending = true;
+
+		SetupOrderRules(order);
+		_transProvider.RegisterOrder(order);
+
+		LogInfo($"Registering order: {action.Reason}");
+	}
+
+	private void CancelCurrentOrder(string reason)
+	{
+		if (_currentOrder == null || _pending)
+		{
+			LogWarning("Cannot cancel order - no order exists or already pending");
+			return;
+		}
+
+		_pending = true;
+		_transProvider.CancelOrder(_currentOrder);
+		LogInfo($"Cancelling order: {reason}");
+	}
+
+	private void SetupOrderRules(Order order)
+	{
+		var regRule = AddRule(order
+			.WhenRegistered(_subProvider)
+			.Do(() =>
+			{
+				LogInfo(LocalizedStrings.OrderAcceptedByExchange, order.TransactionId);
+				_pending = false;
+				OrderRegistered?.Invoke(order);
+
+				var action = _engine.ProcessOrderResult(true, CreateInput());
+				ExecuteAction(action);
+			})
+			.Once()
+			.Apply(_container));
+
+		var regFailRule = AddRule(order
+			.WhenRegisterFailed(_subProvider)
+			.Do(fail =>
+			{
+				LogError(LocalizedStrings.ErrorRegOrder, order.TransactionId, fail.Error.Message);
+				_currentOrder = null;
+				_pending = false;
+				OrderFailed?.Invoke(fail);
+
+				var action = _engine.ProcessOrderResult(false, CreateInput());
+				ExecuteAction(action);
+			})
+			.Once()
+			.Apply(_container));
+
+		var matchedRule = AddRule(order
+			.WhenMatched(_subProvider)
+			.Do(() =>
+			{
+				LogInfo(LocalizedStrings.OrderMatchedRemainBalance, order.TransactionId, LeftVolume);
+
+				if (order.State == OrderStates.Done)
+				{
+					_currentOrder = null;
+					_pending = false;
+				}
+
+				ProcessQuoting();
+			})
+			.Apply(_container));
+
+		var cancelledRule = AddRule(order
+			.WhenCanceled(_subProvider)
+			.Do(() =>
+			{
+				LogInfo($"Order {order.TransactionId} cancelled");
+				_currentOrder = null;
+				_pending = false;
+
+				var action = _engine.ProcessCancellationResult(true, CreateInput());
+				ExecuteAction(action);
+			})
+			.Once()
+			.Apply(_container));
+
+		var cancelFailRule = AddRule(order
+			.WhenCancelFailed(_subProvider)
+			.Do(fail =>
+			{
+				LogWarning($"Order cancellation failed: {fail.Error.Message}");
+				_pending = false;
+
+				var action = _engine.ProcessCancellationResult(false, CreateInput());
+				ExecuteAction(action);
+			})
+			.Once()
+			.Apply(_container));
+
+		var tradeRule = AddRule(order
+			.WhenNewTrade(_subProvider)
+			.Do(trade =>
+			{
+				_position += trade.GetPosition();
+				LogInfo($"Trade executed: {trade.Trade.Volume} at {trade.Trade.Price}");
+				OwnTrade?.Invoke(trade);
+
+				var action = _engine.ProcessTrade(trade.Trade.Volume, CreateInput());
+				ExecuteAction(action);
+			})
+			.Apply(_container));
+
+		regRule.Exclusive(regFailRule);
+		regFailRule.Exclusive(cancelledRule);
+		regFailRule.Exclusive(matchedRule);
+		regFailRule.Exclusive(tradeRule);
+	}
+
+	private QuotingInput CreateInput()
+	{
+		return new()
+		{
+			CurrentTime = _timeProvider.CurrentTime,
+			Position = _position,
+			BestBidPrice = _filteredBook?.Bids?.FirstOr()?.Price,
+			BestAskPrice = _filteredBook?.Asks?.FirstOr()?.Price,
+			LastTradePrice = _lastTrade?.Price,
+			Bids = _filteredBook?.Bids ?? [],
+			Asks = _filteredBook?.Asks ?? [],
+			CurrentOrder = _currentOrder != null ? new()
+			{
+				Price = _currentOrder.Price,
+				Volume = _currentOrder.Balance,
+				Side = _currentOrder.Side,
+				Type = _currentOrder.Type,
+				IsPending = _pending
+			} : null,
+			IsTradingAllowed = _isAllowed(StrategyTradingModes.Full),
+			IsCancellationAllowed = _isAllowed(StrategyTradingModes.CancelOrdersOnly)
+		};
+	}
+
+	private void RaiseFinished(bool success)
 	{
 		if (_finished)
 			return;
 
 		_finished = true;
 
+		LogInfo($"Quoting finished with success: {success}");
+
+		// Clean up subscriptions
 		foreach (var sub in _subscriptions.CopyAndClear())
 			_subProvider.UnSubscribe(sub);
 
+		// Clean up rules
 		foreach (var rule in _rules.CopyAndClear())
 			_container.TryRemoveRule(rule, false);
 
-		Finished?.Invoke(res);
+		Finished?.Invoke(success);
+	}
+
+	private Subscription AddSubscription(Subscription subscription)
+	{
+		_subscriptions.Add(subscription);
+		return subscription;
 	}
 
 	private IMarketRule AddRule(IMarketRule rule)
@@ -236,291 +463,6 @@ public class QuotingProcessor : BaseLogReceiver
 			throw new ArgumentNullException(nameof(rule));
 
 		_rules.Add(rule);
-
 		return rule;
-	}
-
-	/// <summary>
-	/// Stop the processor.
-	/// </summary>
-	public void Stop()
-	{
-		if (_pending || _currentOrder is null)
-			return;
-
-		_transProvider.CancelOrder(_currentOrder);
-		_currentOrder = null;
-	}
-
-	private void ProcessRegisteredOrder(Order order)
-	{
-		if (order == _currentOrder)
-		{
-			LogInfo(LocalizedStrings.OrderAcceptedByExchange, order.TransactionId);
-
-			_pending = default;
-
-			OrderRegistered?.Invoke(order);
-		}
-		else
-			LogWarning(LocalizedStrings.OrderOutOfDate, order.TransactionId);
-
-		ProcessQuoting(order.ServerTime);
-	}
-
-	private void AddOrderRules(Order order)
-	{
-		var regRule = AddRule(order
-			.WhenRegistered(_subProvider)
-			.Do(ProcessRegisteredOrder)
-			.Once()
-			.Apply(_container));
-
-		var regFailRule = AddRule(order
-			.WhenRegisterFailed(_subProvider)
-			.Do(fail =>
-			{
-				var o = fail.Order;
-
-				LogError(LocalizedStrings.ErrorRegOrder, o.TransactionId, fail.Error.Message);
-
-				var canProcess = false;
-
-				if (o == _currentOrder)
-				{
-					_currentOrder = default;
-					_pending = default;
-
-					canProcess = true;
-
-					OrderFailed?.Invoke(fail);
-				}
-				else
-					LogWarning(LocalizedStrings.OrderOutOfDate, o.TransactionId);
-
-				if (canProcess)
-					ProcessQuoting(fail.ServerTime);
-			})
-			.Once()
-			.Apply(_container));
-
-		regRule.Exclusive(regFailRule);
-
-		var matchedRule = AddRule(order
-			.WhenMatched(_subProvider)
-			.Do((r, o) =>
-			{
-				LogInfo(LocalizedStrings.OrderMatchedRemainBalance, o.TransactionId, LeftVolume);
-
-				if (NeedFinish())
-				{
-					RaiseSuccess();
-				}
-				else
-				{
-					if (_currentOrder == o)
-					{
-						_currentOrder = default;
-						_pending = default;
-
-						ProcessQuoting(o.ServerTime);
-					}
-					else
-						LogWarning(LocalizedStrings.OrderOutOfDate, o.TransactionId);
-				}
-			})
-			.Once()
-			.Apply(_container));
-
-		var cancelledRule = AddRule(order
-			.WhenCanceled(_subProvider)
-			.Do((r, o) =>
-			{
-				if (NeedFinish())
-				{
-					RaiseSuccess();
-				}
-				else
-				{
-					if (_currentOrder == o)
-					{
-						_currentOrder = default;
-						_pending = default;
-
-						ProcessQuoting(o.ServerTime);
-					}
-					else
-						LogWarning(LocalizedStrings.OrderOutOfDate, o.TransactionId);
-				}
-			})
-			.Once()
-			.Apply(_container));
-
-		var cancelFailRule = AddRule(order
-			.WhenCancelFailed(_subProvider)
-			.Do((r, f) =>
-			{
-				if (NeedFinish())
-				{
-					RaiseSuccess();
-				}
-				else
-				{
-					if (_currentOrder == f.Order)
-					{
-					}
-					else
-						LogWarning(LocalizedStrings.OrderOutOfDate, f.Order.TransactionId);
-				}
-			})
-			.Apply(_container));
-
-		var tradeRule = AddRule(order
-			.WhenNewTrade(_subProvider)
-			.Do((r, t) =>
-			{
-				Position += t.GetPosition();
-
-				if (_currentOrder == t.Order)
-					OwnTrade?.Invoke(t);
-				else
-					LogWarning(LocalizedStrings.OrderOutOfDate, t.Order.TransactionId);
-			})
-			.Apply(_container));
-
-		regFailRule.Exclusive(cancelledRule);
-		regFailRule.Exclusive(matchedRule);
-		regFailRule.Exclusive(tradeRule);
-	}
-
-	private void ProcessQuoting(DateTimeOffset currentTime)
-	{
-		if (_finished)
-			return;
-
-		if (_container.ProcessState != ProcessStates.Started)
-		{
-			LogWarning(LocalizedStrings.StrategyInState, _container.ProcessState);
-			return;
-		}
-
-		if (IsTimeOut(currentTime))
-		{
-			RaiseTimeOut();
-			return;
-		}
-
-		if (_pending)
-			return;
-
-		var bids = _filteredBook?.Bids ?? [];
-		var asks = _filteredBook?.Asks ?? [];
-		var bestBidPrice = bids.FirstOr()?.Price;
-		var bestAskPrice = asks.FirstOr()?.Price;
-		var lastTradePrice = _lastTrade?.Price;
-		
-		var (isRegister, price, volume) = Process(
-			_currentOrder,
-			bestBidPrice,
-			bestAskPrice,
-			lastTradePrice,
-			bids,
-			asks,
-			Position
-		);
-
-		switch (isRegister)
-		{
-			case true:
-				if (_currentOrder == null && _isAllowed(StrategyTradingModes.Full))
-				{
-					var order = new Order
-					{
-						Portfolio = _portfolio,
-						Security = _security,
-						Side = _quotingSide,
-						Volume = volume.Value,
-					};
-
-					if (price is null)
-						order.Type = OrderTypes.Market;
-					else
-						order.Price = price.Value;
-
-					_currentOrder = order;
-					AddOrderRules(_currentOrder);
-
-					_pending = true;
-					_transProvider.RegisterOrder(_currentOrder);
-					LogInfo($"Registering order at price {price} with volume {volume}");
-				}
-
-				break;
-
-			case false:
-				if (_currentOrder != null && _isAllowed(StrategyTradingModes.CancelOrdersOnly))
-				{
-					_pending = true;
-					_transProvider.CancelOrder(_currentOrder);
-					LogInfo($"Cancelling order {_currentOrder.TransactionId}");
-				}
-
-				break;
-
-			case null:
-				break;
-		}
-	}
-
-	private decimal GetLeftVolume(decimal position)
-	{
-		var sign = _quotingSide == Sides.Buy ? 1 : -1;
-		return (_quotingVolume - position * sign).Max(0);
-	}
-
-	private (bool? isRegister, decimal? price, decimal? volume) Process(
-		Order currentOrder,
-		decimal? bestBidPrice,
-		decimal? bestAskPrice,
-		decimal? lastTradePrice,
-		QuoteChange[] bids,
-		QuoteChange[] asks,
-		decimal currentPosition)
-	{
-		// Calculate the desired volume based on the current position
-		var newVolume = GetLeftVolume(currentPosition);
-		if (newVolume <= 0)
-			return default;
-
-		newVolume = _maxOrderVolume.Min(newVolume);
-
-		// Delegate best price calculation to the behavior
-		var bestPrice = _behavior.CalculateBestPrice(
-			_security, _mdProvider, _quotingSide, bestBidPrice, bestAskPrice, lastTradePrice, bids, asks);
-
-		if (bestPrice == null)
-			return default;
-
-		// Delegate quoting necessity check to the behavior
-		var currentPrice = currentOrder?.Price;
-		var currentVolume = currentOrder?.Balance;
-		var quotingPrice = _behavior.NeedQuoting(_security, _mdProvider, _timeProvider.CurrentTime, currentPrice, currentVolume, newVolume, bestPrice);
-
-		if (quotingPrice == null)
-			return default;
-
-		if (currentOrder == null)
-		{
-			// If no order exists, recommend registration
-			return new(true, quotingPrice, newVolume);
-		}
-		else
-		{
-			// If an order exists, check if it needs to be canceled
-			if (currentPrice != quotingPrice || currentVolume != newVolume)
-				return new(false, default, default);
-
-			return default;
-		}
 	}
 }

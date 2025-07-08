@@ -256,13 +256,13 @@ public class LevelQuotingBehavior : IQuotingBehavior
 			return null;
 
 		var fromPrice = minQuote.Price;
+		var pip = security.PriceStep ?? 0.01m; // Default to 0.01 if PriceStep is null
 
 		decimal toPrice;
 		if (quotes.ElementAtOr(_level.Max) is not QuoteChange maxQuote)
 		{
 			if (_ownLevel)
 			{
-				var pip = security.PriceStep ?? 0.01m; // Default to 0.01 if PriceStep is null
 				toPrice = fromPrice + (quotingDirection == Sides.Sell ? 1 : -1) * _level.Length * pip;
 			}
 			else
@@ -275,7 +275,7 @@ public class LevelQuotingBehavior : IQuotingBehavior
 			toPrice = maxQuote.Price;
 		}
 
-		return (fromPrice + toPrice) / 2m; // Return the midpoint between min and max levels
+		return ((fromPrice + toPrice) / 2m).Round(pip, null); // Return the midpoint between min and max levels
 	}
 
 	decimal? IQuotingBehavior.NeedQuoting(Security security, IMarketDataProvider provider, DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume, decimal? bestPrice)
