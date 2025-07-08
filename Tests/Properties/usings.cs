@@ -17,6 +17,8 @@ global using global::Ecng.UnitTesting;
 
 global using global::Microsoft.VisualStudio.TestTools.UnitTesting;
 
+global using global::Moq;
+
 global using global::StockSharp.BusinessEntities;
 global using global::StockSharp.Messages;
 global using global::StockSharp.Configuration;

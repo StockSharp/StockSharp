@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\common_target_tests.props" />
   <ItemGroup>
+    <PackageReference Include="Moq" Version="$(MoqVer)" />
     <PackageReference Include="System.Drawing.Common" Version="$(MsExtensionsVer)" />
   </ItemGroup>
   <ItemGroup>
