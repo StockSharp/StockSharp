@@ -6,18 +6,18 @@ using StockSharp.Algo.Strategies.Quoting;
 [TestClass]
 public class QuotingTests
 {
-	private Mock<IMarketDataProvider> _mdProvider;
-	private Mock<IBlackScholes> _blackScholes;
-	private Mock<IQuotingBehavior> _behavior;
-	private Security _security;
-	private Portfolio _portfolio;
-	private QuoteChange[] _bids;
-	private QuoteChange[] _asks;
+	private static Mock<IMarketDataProvider> _mdProvider;
+	private static Mock<IBlackScholes> _blackScholes;
+	private static Mock<IQuotingBehavior> _behavior;
+	private static Security _security;
+	private static Portfolio _portfolio;
+	private static QuoteChange[] _bids;
+	private static QuoteChange[] _asks;
 	private const decimal _lastTradePrice = 100.50m;
-	private QuotingEngine _engine;
+	private static QuotingEngine _engine;
 
-	[TestInitialize]
-	public void Setup()
+	[ClassInitialize]
+	public static void Setup(TestContext _)
 	{
 		_mdProvider = new Mock<IMarketDataProvider>();
 		_blackScholes = new Mock<IBlackScholes>();
