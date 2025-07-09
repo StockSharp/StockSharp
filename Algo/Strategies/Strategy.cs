@@ -1172,6 +1172,9 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	{
 		if (UnsubscribeOnStop)
 			UnSubscribe(false);
+
+		UnSubscribe(PortfolioLookup);
+		UnSubscribe(OrderLookup);
 	}
 
 	/// <summary>

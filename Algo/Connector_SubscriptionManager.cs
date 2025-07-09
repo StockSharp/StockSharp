@@ -1,6 +1,7 @@
 namespace StockSharp.Algo;
 
 using StockSharp.Algo.Candles;
+using StockSharp.Algo.Testing;
 
 partial class Connector
 {
@@ -358,7 +359,16 @@ partial class Connector
 			if (unsubscribe.IsSubscribe)
 				return;
 
-			SendRequest(unsubscribe, subscription, false);
+			if (subscription.SubscriptionMessage is OrderStatusMessage)
+				_connector._entityCache.RemoveOrderStatusTransactionId(subscription.TransactionId);
+
+			if (_connector is HistoryEmulationConnector && _connector.ConnectionState != ConnectionStates.Connected)
+			{
+				_subscriptions.Remove(subscription.TransactionId);
+				_requests.Remove(subscription.TransactionId);
+			}
+			else
+				SendRequest(unsubscribe, subscription, false);
 		}
 
 		private void SendRequest(ISubscriptionMessage request, Subscription subscription, bool isAllExtension)

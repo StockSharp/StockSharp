@@ -138,7 +138,13 @@ partial class Strategy
 	public void UnSubscribe(Subscription subscription)
 	{
 		if (ProcessState != ProcessStates.Started && IsBacktesting)
+		{
+			_subscriptions.Remove(subscription);
+			_subscriptionsById.Remove(subscription.TransactionId);
+
+			SubscriptionProvider.UnSubscribe(subscription);
 			return;
+		}
 
 		if (_rulesSuspendCount > 0 && _suspendSubscriptions.Remove(subscription))
 		{
