@@ -7,6 +7,8 @@ using Ecng.Drawing;
 /// <summary>
 /// The base Indicator.
 /// </summary>
+[IndicatorIn(typeof(DecimalIndicatorValue))]
+[IndicatorOut(typeof(DecimalIndicatorValue))]
 public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 {
 	private class InnerIndicatorResetScope

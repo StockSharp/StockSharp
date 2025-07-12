@@ -241,7 +241,7 @@ public class ConverterDiagramElement : TypedDiagramElement<ConverterDiagramEleme
 	{
 		if (!propName.IsEmpty())
 		{
-			if (_indicatorType?.IsCustomOutputValue() == true)
+			if (_indicatorType?.IsNonDecimalOutputValue() == true)
 			{
 				var prop = _indicatorType.GetValueType(false).GetProperty(propName);
 

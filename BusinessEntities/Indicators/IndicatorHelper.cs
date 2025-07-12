@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Indicators;
 
+using Ecng.Reflection;
+
 /// <summary>
 /// Extension class for indicators.
 /// </summary>
@@ -232,21 +234,6 @@ public static class IndicatorHelper
 	}
 
 	/// <summary>
-	/// Get default output type for indicator.
-	/// </summary>
-	/// <param name="indicatorType"><see cref="IComplexIndicator"/></param>
-	/// <returns>Type.</returns>
-	public static Type GetDefaultIndicatorOutput(this Type indicatorType)
-	{
-		ArgumentNullException.ThrowIfNull(indicatorType);
-
-		if (indicatorType.Is<IComplexIndicator>())
-			throw new ArgumentException(LocalizedStrings.InvalidValue, nameof(indicatorType));
-
-		return typeof(DecimalIndicatorValue);
-	}
-
-	/// <summary>
 	/// Get value type for specified indicator.
 	/// </summary>
 	/// <param name="indicatorType">Indicator type.</param>
@@ -260,20 +247,15 @@ public static class IndicatorHelper
 		if (!indicatorType.Is<IIndicator>())
 			throw new ArgumentException(LocalizedStrings.TypeNotImplemented.Put(indicatorType.Name, nameof(IIndicator)), nameof(indicatorType));
 
-		var retVal = (isInput
-			? (IndicatorValueAttribute)indicatorType.GetAttribute<IndicatorInAttribute>()
+		IndicatorValueAttribute attr = isInput
+			? indicatorType.GetAttribute<IndicatorInAttribute>()
 			: indicatorType.GetAttribute<IndicatorOutAttribute>()
-		)?.Type;
+		;
 
-		if (retVal is null)
-		{
-			if (isInput)
-				retVal = typeof(DecimalIndicatorValue);
-			else
-				retVal = indicatorType.GetDefaultIndicatorOutput();
-		}
+		if (attr is null)
+			throw new ArgumentException(LocalizedStrings.TypeNotImplemented.Put(indicatorType.Name, isInput ? nameof(IndicatorInAttribute) : nameof(IndicatorOutAttribute)), nameof(indicatorType));
 
-		return retVal;
+		return attr.Type;
 	}
 
 	/// <summary>
@@ -372,15 +354,15 @@ public static class IndicatorHelper
 		=> provider.CheckOnNull(nameof(provider)).All.FirstOrDefault(it => it.Indicator == type);
 
 	/// <summary>
-	/// Determines whether the indicator is a custom output value.
+	/// Determines whether the indicator is a non-decimal output value.
 	/// </summary>
 	/// <param name="indicator">Indicator type.</param>
 	/// <returns>Check result.</returns>
-	public static bool IsCustomOutputValue(this Type indicator)
+	public static bool IsNonDecimalOutputValue(this Type indicator)
 	{
 		if (indicator is null)
 			throw new ArgumentNullException(nameof(indicator));
 
-		return indicator.GetValueType(false) != indicator.GetDefaultIndicatorOutput();
+		return indicator.GetValueType(false) != typeof(DecimalIndicatorValue);
 	}
 }
