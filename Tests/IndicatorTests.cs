@@ -559,6 +559,38 @@ public class IndicatorTests
 		if (duplicates.Any())
 			Assert.Fail($"Duplicate Descriptions(s) found: {duplicates.JoinCommaSpace()}");
 	}
+
+	[TestMethod]
+	public void RequiredAttributes()
+	{
+		foreach (var type in GetIndicatorTypes())
+		{
+			var indicatorType = type.Indicator;
+
+			// Check [IndicatorIn]
+			var inAttr = indicatorType.GetAttribute<IndicatorInAttribute>();
+			inAttr.AssertNotNull($"Indicator {indicatorType.Name} missing [IndicatorIn] attribute.");
+
+			// Check [IndicatorOut]
+			var outAttr = indicatorType.GetAttribute<IndicatorOutAttribute>();
+			outAttr.AssertNotNull($"Indicator {indicatorType.Name} missing [IndicatorOut] attribute.");
+
+			// Check [Doc]
+			var docAttr = indicatorType.GetAttribute<DocAttribute>();
+			docAttr.AssertNotNull($"Indicator {indicatorType.Name} missing [Doc] attribute.");
+		}
+	}
+
+	[TestMethod]
+	public void ComplexIndicatorValues()
+	{
+		foreach (var type in GetIndicatorTypes().Where(t => t.IsComplex))
+		{
+			var genArg = type.OutputValue.GetGenericType(typeof(ComplexIndicatorValue<>)).GetGenericArguments().Single();
+
+			genArg.AssertEqual(type.Indicator);
+		}
+	}
 }
 
 static class IndicatorDataRunner

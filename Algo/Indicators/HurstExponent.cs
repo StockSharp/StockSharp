@@ -11,6 +11,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.HurstExponentKey,
 	Description = LocalizedStrings.HurstExponentDescKey)]
+[Doc("topics/api/indicators/list_of_indicators/hurst_exponent.html")]
 public class HurstExponent : LengthIndicator<decimal>
 {
 	/// <summary>

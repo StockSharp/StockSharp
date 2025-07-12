@@ -10,7 +10,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.KalmanFilterKey,
 	Description = LocalizedStrings.KalmanFilterDescKey)]
-[IndicatorIn(typeof(DecimalIndicatorValue))]
+[Doc("topics/api/indicators/list_of_indicators/kalman_filter.html")]
 public class KalmanFilter : LengthIndicator<decimal>
 {
 	private decimal? _lastEstimate;
