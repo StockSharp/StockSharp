@@ -4,6 +4,7 @@ using StockSharp.Algo.Derivatives;
 using StockSharp.Algo.Strategies.Quoting;
 
 [TestClass]
+[DoNotParallelize]
 public class QuotingTests
 {
 	private static Mock<IMarketDataProvider> _mdProvider;
