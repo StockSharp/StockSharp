@@ -24,8 +24,12 @@ jobs:
             8.0.x
             9.0.x
 
-      - name: Restore dependencies
-        run: dotnet restore
+      - name: Restore StockSharp.sln (Windows only)
+        if: matrix.os == 'windows-latest'
+        run: dotnet restore StockSharp.sln
+
+      - name: Restore StockSharp_Tests.sln
+        run: dotnet restore StockSharp_Tests.sln
 
       - name: Build StockSharp.sln (Windows only)
         if: matrix.os == 'windows-latest'
