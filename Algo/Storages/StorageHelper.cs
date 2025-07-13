@@ -557,7 +557,7 @@ public static class StorageHelper
 				if (s == _original)
 					return data;
 
-				var compressor = _compressors.TryGetValue((TimeSpan)s.DataType.Arg);
+				var compressor = _compressors.TryGetValue(s.DataType.GetTimeFrame());
 
 				if (compressor == null)
 					return [];

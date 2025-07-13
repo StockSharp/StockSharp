@@ -2724,7 +2724,7 @@ public static partial class Extensions
 	/// <param name="dataTypes">Data types.</param>
 	/// <returns>Possible time-frames.</returns>
 	public static IEnumerable<TimeSpan> FilterTimeFrames(this IEnumerable<DataType> dataTypes)
-		=> dataTypes.Where(t => t.IsTFCandles && t.Arg != null).Select(t => (TimeSpan)t.Arg);
+		=> dataTypes.Where(t => t.IsTFCandles && t.Arg != null).Select(t => t.GetTimeFrame());
 
 	/// <summary>
 	/// To determine whether the order book is in the right state.
@@ -4319,7 +4319,7 @@ public static partial class Extensions
 		if (dt == null)
 			throw new ArgumentNullException(nameof(dt));
 
-		var tf = (TimeSpan)dt.Arg;
+		var tf = dt.GetTimeFrame();
 
 		var str = string.Empty;
 

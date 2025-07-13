@@ -784,7 +784,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 							return 0;
 
 						return d.IsTFCandles
-							? ((TimeSpan)d.Arg).Ticks : long.MaxValue;
+							? d.GetTimeFrame().Ticks : long.MaxValue;
 					});
 		}
 
