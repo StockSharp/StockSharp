@@ -370,6 +370,7 @@ public static class CompositionHelper
 		{
 			ICandleMessage c => c.State == CandleStates.Finished,
 			IIndicatorValue v => v.IsFinal,
+			IOrderBookMessage b => b.IsFinal(),
 
 			_ => null,
 		};

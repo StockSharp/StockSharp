@@ -3416,15 +3416,23 @@ public static partial class Extensions
 		};
 	}
 
-	private static void CheckIsSnapshot(this IOrderBookMessage depth)
+	/// <summary>
+	/// Determine whether the order book is final.
+	/// </summary>
+	/// <param name="depth">Order book message.</param>
+	/// <returns><see langword="true"/>, if the order book is final, otherwise <see langword="false"/>.</returns>
+	public static bool IsFinal(this IOrderBookMessage depth)
 	{
 		if (depth is null)
 			throw new ArgumentNullException(nameof(depth));
 
-		if (depth.State is null or QuoteChangeStates.SnapshotComplete)
-			return;
+		return depth.State is null or QuoteChangeStates.SnapshotComplete;
+	}
 
-		throw new ArgumentException($"State={depth.State}", nameof(depth));
+	private static void CheckIsSnapshot(this IOrderBookMessage depth)
+	{
+		if (!depth.IsFinal())
+			throw new ArgumentException($"State={depth.State}", nameof(depth));
 	}
 
 	/// <summary>
