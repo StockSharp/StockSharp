@@ -213,8 +213,6 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 	/// <inheritdoc />
 	protected override DiagramSocket CreateSocketInstance(DiagramSocketDirection dir, string socketId = null) => new ChartElementSocket(this, dir, socketId);
 
-	private static readonly Lazy<Dictionary<Type, IndicatorType>> _indicatorTypes = new(() => IChartExtensions.IndicatorProvider.All.Where(it => it.Indicator is not null).ToDictionary(it => it.Indicator));
-
 	private readonly IChartBuilder _chartBuilder;
 	private readonly IChartArea _area;
 	private readonly SortedDictionary<DateTimeOffset, Dictionary<IChartElement, object>> _chartValues = [];
