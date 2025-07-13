@@ -246,7 +246,16 @@ public class ConverterDiagramElement : TypedDiagramElement<ConverterDiagramEleme
 				var prop = _indicatorType.GetValueType(false).GetProperty(propName);
 
 				if (prop is not null)
-					return prop.PropertyType.ToDiagramType();
+				{
+					var propType = prop.PropertyType;
+
+					propType = propType.GetUnderlyingType() ?? propType;
+
+					if (propType == typeof(decimal))
+						propType = typeof(Unit);
+
+					return propType.ToDiagramType();
+				}
 			}
 		}
 
@@ -299,7 +308,7 @@ public class ConverterDiagramElement : TypedDiagramElement<ConverterDiagramEleme
 
 				for (var i = 0; i < parts.Length; ++i)
 				{
-					if (value is not IComplexIndicatorValue currComplex)
+					if (value is not IComplexIndicatorValue complexValue)
 					{
 						if (i == parts.Length - 1)
 							break;
@@ -307,17 +316,7 @@ public class ConverterDiagramElement : TypedDiagramElement<ConverterDiagramEleme
 						throw new InvalidOperationException($"unexpected indicator value type. name='{name}', i={i}, type='{value?.GetType()}'");
 					}
 
-					var obj = getPropValue(currComplex, parts[i]);
-
-					if (obj is null)
-					{
-						var innerInd = (IIndicator)getPropValue(currComplex.Indicator, parts[i]);
-
-						if (!currComplex.TryGet(innerInd, out var innerValue))
-							return null;
-
-						obj = innerValue;
-					}
+					var obj = getPropValue(complexValue, parts[i]);
 
 					if (obj is null)
 						return null;
