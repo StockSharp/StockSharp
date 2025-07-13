@@ -232,7 +232,7 @@ public class IndicatorTests
 			typeof(ParabolicSar),
 		};
 
-		foreach (var type in GetIndicatorTypes().Where(t => skipTypes.Contains(t.Indicator)))
+		foreach (var type in GetIndicatorTypes().Where(t => !skipTypes.Contains(t.Indicator)))
 		{
 			var indicator = type.CreateIndicator();
 
