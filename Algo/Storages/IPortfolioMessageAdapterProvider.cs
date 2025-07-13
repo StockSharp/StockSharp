@@ -180,25 +180,24 @@ public class CsvPortfolioMessageAdapterProvider : IPortfolioMessageAdapterProvid
 			var appendHeader = overwrite || !File.Exists(_fileName) || new FileInfo(_fileName).Length == 0;
 			var mode = overwrite ? FileMode.Create : FileMode.Append;
 
-			using (var writer = new CsvFileWriter(new TransactionFileStream(_fileName, mode)))
-			{
-				if (appendHeader)
-				{
-					writer.WriteRow(
-					[
-						"Portfolio",
-						"Adapter"
-					]);
-				}
+			using var writer = new TransactionFileStream(_fileName, mode).CreateCsvWriter();
 
-				foreach (var pair in adapters)
-				{
-					writer.WriteRow(
-					[
-						pair.Key,
-						pair.Value.To<string>()
-					]);
-				}
+			if (appendHeader)
+			{
+				writer.WriteRow(
+				[
+					"Portfolio",
+					"Adapter",
+				]);
+			}
+
+			foreach (var pair in adapters)
+			{
+				writer.WriteRow(
+				[
+					pair.Key,
+					pair.Value.To<string>(),
+				]);
 			}
 		});
 	}

@@ -205,12 +205,12 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 			if (items.Length == 0)
 				return;
 
-			using var writer = new CsvFileWriter(new TransactionFileStream(fileName, FileMode.Append));
+			using var writer = new TransactionFileStream(fileName, FileMode.Append).CreateCsvWriter();
 
-			WriteHeader(writer, items.FirstOrDefault().Item2);
+			WriteHeader(writer, items.FirstOrDefault().nativeId);
 
-			foreach (var item in items)
-				WriteItem(writer, item.Item1, item.Item2);
+			foreach (var (secId, nativeId) in items)
+				WriteItem(writer, secId, nativeId);
 		});
 	}
 
@@ -302,7 +302,7 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 
 			var appendHeader = !File.Exists(fileName) || new FileInfo(fileName).Length == 0;
 
-			using var writer = new CsvFileWriter(new TransactionFileStream(fileName, FileMode.Append));
+			using var writer = new TransactionFileStream(fileName, FileMode.Append).CreateCsvWriter();
 
 			if (appendHeader)
 				WriteHeader(writer, nativeId);

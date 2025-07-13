@@ -85,7 +85,7 @@ public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType
 
 		Do.Invariant(() =>
 		{
-			var writer = new CsvFileWriter(stream, Encoding);
+			var writer = stream.CreateCsvWriter(Encoding);
 
 			try
 			{

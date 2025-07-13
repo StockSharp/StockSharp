@@ -209,15 +209,14 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 			if (values == null)
 				throw new ArgumentNullException(nameof(values));
 
-			using (var writer = new CsvFileWriter(new TransactionFileStream(_fileName, FileMode.Create)))
-			{
-				writer.WriteRow(new[] { nameof(SecurityId) }.Concat(_fields.Select(f => f.Item1)));
-				writer.WriteRow(new[] { typeof(string) }.Concat(_fields.Select(f => f.Item2)).Select(t => t.TryGetCSharpAlias() ?? t.GetTypeName(false)));
+			using var writer = new TransactionFileStream(_fileName, FileMode.Create).CreateCsvWriter();
 
-				foreach (var pair in values)
-				{
-					writer.WriteRow(new[] { pair.Item1.ToStringId() }.Concat(_fields.Select(f => pair.Item2.TryGetValue(f.Item1)?.To<string>())));
-				}
+			writer.WriteRow(new[] { nameof(SecurityId) }.Concat(_fields.Select(f => f.Item1)));
+			writer.WriteRow(new[] { typeof(string) }.Concat(_fields.Select(f => f.Item2)).Select(t => t.TryGetCSharpAlias() ?? t.GetTypeName(false)));
+
+			foreach (var pair in values)
+			{
+				writer.WriteRow(new[] { pair.Item1.ToStringId() }.Concat(_fields.Select(f => pair.Item2.TryGetValue(f.Item1)?.To<string>())));
 			}
 		}
 

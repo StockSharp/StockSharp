@@ -146,7 +146,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 				{
 					var stream = new TransactionFileStream(FileName, FileMode.OpenOrCreate);
 					stream.Seek(0, SeekOrigin.End);
-					return new CsvFileWriter(stream, Registry.Encoding);
+					return stream.CreateCsvWriter(Registry.Encoding);
 				});
 			}
 		}
@@ -431,7 +431,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 				{
 					stream.SetLength(0);
 
-					using var writer = new CsvFileWriter(stream, Registry.Encoding);
+					using var writer = stream.CreateCsvWriter(Registry.Encoding);
 
 					foreach (var item in InnerCollection)
 						Write(writer, item);

@@ -1,6 +1,6 @@
 namespace StockSharp.Algo.Storages;
 
-using Key = System.Tuple<Messages.SecurityId, Messages.DataType>;
+using Key = Tuple<SecurityId, DataType>;
 
 /// <summary>
 /// The security based message adapter's provider interface.
@@ -191,31 +191,30 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 
 	private void Load()
 	{
-		using (var stream = new FileStream(_fileName, FileMode.Open, FileAccess.Read))
+		using var stream = new FileStream(_fileName, FileMode.Open, FileAccess.Read);
+
+		var reader = stream.CreateCsvReader(Encoding.UTF8);
+
+		reader.NextLine();
+
+		while (reader.NextLine())
 		{
-			var reader = stream.CreateCsvReader(Encoding.UTF8);
-
-			reader.NextLine();
-
-			while (reader.NextLine())
+			var securityId = new SecurityId
 			{
-				var securityId = new SecurityId
-				{
-					SecurityCode = reader.ReadString(),
-					BoardCode = reader.ReadString()
-				};
+				SecurityCode = reader.ReadString(),
+				BoardCode = reader.ReadString()
+			};
 
-				DataType dataType;
+			DataType dataType;
 
-				var typeStr = reader.ReadString();
+			var typeStr = reader.ReadString();
 
-				var argStr = reader.ReadString();
-				dataType = typeStr.IsEmpty() ? null : typeStr.ToDataType(argStr);
+			var argStr = reader.ReadString();
+			dataType = typeStr.IsEmpty() ? null : typeStr.ToDataType(argStr);
 
-				var adapterId = reader.ReadString().To<Guid>();
+			var adapterId = reader.ReadString().To<Guid>();
 
-				_inMemory.SetAdapter(securityId, dataType, adapterId);
-			}
+			_inMemory.SetAdapter(securityId, dataType, adapterId);
 		}
 	}
 
@@ -226,33 +225,32 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 			var appendHeader = overwrite || !File.Exists(_fileName) || new FileInfo(_fileName).Length == 0;
 			var mode = overwrite ? FileMode.Create : FileMode.Append;
 
-			using (var writer = new CsvFileWriter(new TransactionFileStream(_fileName, mode)))
+			using var writer = new TransactionFileStream(_fileName, mode).CreateCsvWriter();
+
+			if (appendHeader)
 			{
-				if (appendHeader)
-				{
-					writer.WriteRow(
-					[
-						"Symbol",
-						"Board",
-						"MessageType",
-						"Arg",
-						"Adapter"
-					]);
-				}
+				writer.WriteRow(
+				[
+					"Symbol",
+					"Board",
+					"MessageType",
+					"Arg",
+					"Adapter",
+				]);
+			}
 
-				foreach (var pair in adapters)
-				{
-					var dataType = pair.Key.Item2?.FormatToString();
+			foreach (var pair in adapters)
+			{
+				var dataType = pair.Key.Item2?.FormatToString();
 
-					writer.WriteRow(
-					[
-						pair.Key.Item1.SecurityCode,
-						pair.Key.Item1.BoardCode,
-						dataType?.type,
-						dataType?.arg,
-						pair.Value.To<string>()
-					]);
-				}
+				writer.WriteRow(
+				[
+					pair.Key.Item1.SecurityCode,
+					pair.Key.Item1.BoardCode,
+					dataType?.type,
+					dataType?.arg,
+					pair.Value.To<string>()
+				]);
 			}
 		});
 	}

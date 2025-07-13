@@ -378,21 +378,28 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 			var appendHeader = overwrite || !File.Exists(fileName) || new FileInfo(fileName).Length == 0;
 			var mode = overwrite ? FileMode.Create : FileMode.Append;
 
-			using (var writer = new CsvFileWriter(new TransactionFileStream(fileName, mode)))
-			{
-				if (appendHeader)
-					writer.WriteRow(["SecurityCode", "BoardCode", "AdapterCode", "AdapterBoard"]);
+			using var writer = new TransactionFileStream(fileName, mode).CreateCsvWriter();
 
-				foreach (var mapping in mappings)
-				{
-					writer.WriteRow(
-					[
-						mapping.StockSharpId.SecurityCode,
-						mapping.StockSharpId.BoardCode,
-						mapping.AdapterId.SecurityCode,
-						mapping.AdapterId.BoardCode
-					]);
-				}
+			if (appendHeader)
+			{
+				writer.WriteRow(
+				[
+					"SecurityCode",
+					"BoardCode",
+					"AdapterCode",
+					"AdapterBoard",
+				]);
+			}
+
+			foreach (var mapping in mappings)
+			{
+				writer.WriteRow(
+				[
+					mapping.StockSharpId.SecurityCode,
+					mapping.StockSharpId.BoardCode,
+					mapping.AdapterId.SecurityCode,
+					mapping.AdapterId.BoardCode,
+				]);
 			}
 		});
 	}

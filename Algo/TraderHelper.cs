@@ -1510,4 +1510,7 @@ public static partial class TraderHelper
 
 	internal static FastCsvReader CreateCsvReader(this Stream stream, Encoding encoding)
 		=> new(stream, encoding, StringHelper.RN);
+
+	internal static CsvFileWriter CreateCsvWriter(this Stream stream, Encoding encoding = null)
+		=> new(stream, encoding) { LineSeparator = StringHelper.RN };
 }
