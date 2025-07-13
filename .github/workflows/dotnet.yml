@@ -27,8 +27,12 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
+      - name: Build StockSharp.sln (Windows only)
+        if: matrix.os == 'windows-latest'
+        run: dotnet build StockSharp.sln --no-restore --configuration Release
+
       - name: Build
         run: dotnet build --no-restore --configuration Release
 
       - name: Run tests
-        run: dotnet test StockSharp.sln --no-build --configuration Release
+        run: dotnet test StockSharp_Tests.sln --no-build --configuration Release

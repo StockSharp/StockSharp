@@ -142,6 +142,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Algo.Analytics.FSharp", "Al
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{9CF47860-2CEA-F379-09D8-9AEF27965D12}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algo.Analytics", "Algo.Analytics\Algo.Analytics.csproj", "{5D10DF74-5E91-CCF8-9F7A-6862074F0A80}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -380,6 +382,10 @@ Global
 		{9CF47860-2CEA-F379-09D8-9AEF27965D12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CF47860-2CEA-F379-09D8-9AEF27965D12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CF47860-2CEA-F379-09D8-9AEF27965D12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D10DF74-5E91-CCF8-9F7A-6862074F0A80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D10DF74-5E91-CCF8-9F7A-6862074F0A80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D10DF74-5E91-CCF8-9F7A-6862074F0A80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D10DF74-5E91-CCF8-9F7A-6862074F0A80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
