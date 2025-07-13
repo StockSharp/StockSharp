@@ -24,19 +24,12 @@ jobs:
             8.0.x
             9.0.x
 
-      - name: Restore StockSharp.sln (Windows only)
-        if: matrix.os == 'windows-latest'
-        run: dotnet restore StockSharp.sln
-
-      - name: Restore StockSharp_Tests.sln
-        run: dotnet restore StockSharp_Tests.sln
-
       - name: Build StockSharp.sln (Windows only)
         if: matrix.os == 'windows-latest'
-        run: dotnet build StockSharp.sln --no-restore --configuration Release
+        run: dotnet build StockSharp.sln --configuration Release
 
       - name: Build
-        run: dotnet build --no-restore --configuration Release
+        run: dotnet build StockSharp_Tests.sln --configuration Release
 
       - name: Run tests
         run: dotnet test StockSharp_Tests.sln --no-build --configuration Release
