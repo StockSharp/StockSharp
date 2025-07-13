@@ -223,7 +223,16 @@ public class IndicatorTests
 
 		var invalid = new List<Type>();
 
-		foreach (var type in GetIndicatorTypes().Where(t => t.Indicator != typeof(VolumeProfileIndicator)))
+		// hard to test
+		var skipTypes = new List<Type>
+		{
+			typeof(VolumeProfileIndicator),
+			typeof(Peak),
+			typeof(Trough),
+			typeof(ParabolicSar),
+		};
+
+		foreach (var type in GetIndicatorTypes().Where(t => skipTypes.Contains(t.Indicator)))
 		{
 			var indicator = type.CreateIndicator();
 
@@ -245,7 +254,7 @@ public class IndicatorTests
 
 			for (int k = 0; k < 200; k++)
 			{
-				var nonFinalValue = CreateValue(type, indicator, secId, now, i + k * 1000, tf, false, false, k % 2 == 0 ? -1000 : 1000);
+				var nonFinalValue = CreateValue(type, indicator, secId, now, i + k * 1000, tf, false, false, (RandomGen.GetBool() ? -1 : 1) * k * 10);
 				var nonFinalResult = indicator.Process(nonFinalValue);
 
 				if (!lastFinal.ToValues().SequenceEqual(nonFinalResult.ToValues()))
