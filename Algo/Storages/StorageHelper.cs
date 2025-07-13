@@ -568,20 +568,22 @@ public static class StorageHelper
 			if (enumerators.Count == 0)
 				yield break;
 
-			var tf = (TimeSpan)_dataType.Arg;
+			var tf = _dataType.GetTimeFrame();
 			var toRemove = new List<IEnumerator<CandleMessage>>(enumerators.Count);
 
 			while (true)
 			{
 				foreach (var enumerator in enumerators)
 				{
-					while (enumerator.Current == null || enumerator.Current.OpenTime < _nextCandleMinTime)
+					while (true)
 					{
 						if (!enumerator.MoveNext())
 						{
 							toRemove.Add(enumerator);
 							break;
 						}
+						else if (enumerator.Current.OpenTime >= _nextCandleMinTime)
+							break;
 					}
 				}
 
@@ -596,10 +598,10 @@ public static class StorageHelper
 				if (enumerators.Count == 0)
 					yield break;
 
-				var nextCandleCompressor = enumerators.OrderBy(e => e.Current!.OpenTime).First();
+				var nextCandleCompressor = enumerators.OrderBy(e => e.Current.OpenTime).First();
 				var candle = nextCandleCompressor.Current;
 
-				while ((candle!.OpenTime < _nextCandleMinTime || candle.State != CandleStates.Finished) && nextCandleCompressor.MoveNext())
+				while ((candle.OpenTime < _nextCandleMinTime || candle.State != CandleStates.Finished) && nextCandleCompressor.MoveNext())
 				{
 					/* compress until candle is finished OR no more data */
 					candle = nextCandleCompressor.Current;
