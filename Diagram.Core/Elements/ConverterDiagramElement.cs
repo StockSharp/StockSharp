@@ -84,7 +84,7 @@ public class ConverterDiagramElement : TypedDiagramElement<ConverterDiagramEleme
 				{
 					if (Type == DiagramSocketType.IndicatorValue)
 					{
-						clearVarSockets(GetOutputType(v));
+						clearVarSockets(DiagramSocketType.IndicatorValue);
 					}
 					else
 					{
@@ -234,32 +234,7 @@ public class ConverterDiagramElement : TypedDiagramElement<ConverterDiagramEleme
 		if (changed)
 			TypeChanged();
 		else
-			OutputSockets.First().Type = GetOutputType(Property);
-	}
-
-	private DiagramSocketType GetOutputType(string propName)
-	{
-		if (!propName.IsEmpty())
-		{
-			if (_indicatorType?.IsNonDecimalOutputValue() == true)
-			{
-				var prop = _indicatorType.GetValueType(false).GetProperty(propName);
-
-				if (prop is not null)
-				{
-					var propType = prop.PropertyType;
-
-					propType = propType.GetUnderlyingType() ?? propType;
-
-					if (propType == typeof(decimal))
-						propType = typeof(Unit);
-
-					return propType.ToDiagramType();
-				}
-			}
-		}
-
-		return DiagramSocketType.IndicatorValue;
+			OutputSockets.First().Type = DiagramSocketType.IndicatorValue;
 	}
 
 	/// <inheritdoc />
