@@ -234,7 +234,10 @@ public class CompilationTests
 		ArgumentNullException.ThrowIfNull(res);
 
 		foreach (var e in res.Errors)
-			e.Type.AssertNotEqual(CompilationErrorTypes.Error);
+		{
+			if (e.Type == CompilationErrorTypes.Error)
+				throw new InvalidOperationException(e.ToString());
+		}
 	}
 
 	private static List<PropertyDescriptor> GetBrowsableProperties(ICustomTypeDescriptor customTypeDescriptor)

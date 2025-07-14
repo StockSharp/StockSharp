@@ -103,13 +103,7 @@ public class AverageDirectionalIndexValue(AverageDirectionalIndex indicator, Dat
 	/// <summary>
 	/// Gets the <see cref="AverageDirectionalIndex.Dx"/> value.
 	/// </summary>
-	public IIndicatorValue DxValue => this[TypedIndicator.Dx];
-
-	/// <summary>
-	/// Gets the <see cref="AverageDirectionalIndex.Dx"/> value.
-	/// </summary>
-	[Browsable(false)]
-	public DirectionalIndexValue Dx => (DirectionalIndexValue)DxValue;
+	public DirectionalIndexValue Dx => (DirectionalIndexValue)this[TypedIndicator.Dx];
 	
 	/// <summary>
 	/// Gets the <see cref="AverageDirectionalIndex.MovingAverage"/> value.
