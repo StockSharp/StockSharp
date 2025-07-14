@@ -525,11 +525,11 @@ public interface IComplexIndicatorValue : IIndicatorValue
 	IDictionary<IIndicator, IIndicatorValue> InnerValues { get; }
 
 	/// <summary>
-	/// Gets or sets a value of inner indicator.
+	/// Gets a value of inner indicator.
 	/// </summary>
 	/// <param name="indicator"><see cref="IIndicator"/></param>
 	/// <returns><see cref="IIndicatorValue"/></returns>
-	IIndicatorValue this[IIndicator indicator] { get; set; }
+	IIndicatorValue this[IIndicator indicator] { get; }
 
 	/// <summary>
 	/// Add a value of inner indicator.
@@ -574,11 +574,7 @@ public abstract class ComplexIndicatorValue<TIndicator>(TIndicator indicator, Da
 	public IDictionary<IIndicator, IIndicatorValue> InnerValues { get; } = new Dictionary<IIndicator, IIndicatorValue>();
 
 	/// <inheritdoc />
-	public IIndicatorValue this[IIndicator indicator]
-	{
-		get => InnerValues[indicator];
-		set => InnerValues[indicator] = value ?? throw new ArgumentNullException(nameof(value));
-	}
+	public IIndicatorValue this[IIndicator indicator] => InnerValues[indicator];
 
 	/// <inheritdoc />
 	public virtual void Add(IIndicator indicator, IIndicatorValue value)
