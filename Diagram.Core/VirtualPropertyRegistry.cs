@@ -10,26 +10,11 @@ public static class VirtualPropertyRegistry
 
 	static VirtualPropertyRegistry()
 	{
-		AddProperty(new()
-		{
-			Name = "SpreadMiddle",
-			DisplayName = "SpreadMiddle",
-			Description = LocalizedStrings.SpreadMiddle,
-		}, (IOrderBookMessage b) => b.GetSpreadMiddle(default));
+		AddProperty(new("SpreadMiddle", "SpreadMiddle", LocalizedStrings.SpreadMiddle, typeof(decimal?), null), (IOrderBookMessage b) => b.GetSpreadMiddle(default));
 
-		AddProperty(new()
-		{
-			Name = "BestBid",
-			DisplayName = "BestBid",
-			Description = LocalizedStrings.BestBidDesc,
-		}, (IOrderBookMessage b) => b.GetBestBid());
+		AddProperty(new("BestBid", "BestBid", LocalizedStrings.BestBidDesc, typeof(QuoteChange?), null), (IOrderBookMessage b) => b.GetBestBid());
 
-		AddProperty(new()
-		{
-			Name = "BestAsk",
-			DisplayName = "BestAsk",
-			Description = LocalizedStrings.BestAskDesc,
-		}, (IOrderBookMessage b) => b.GetBestAsk());
+		AddProperty(new("BestAsk", "BestAsk", LocalizedStrings.BestAskDesc, typeof(QuoteChange?), null), (IOrderBookMessage b) => b.GetBestAsk());
 
 		static void AddInterface<T1, T2>()
 			where T1 : T2
