@@ -18,7 +18,7 @@ public class AdaptivePriceZone : BaseComplexIndicator<AdaptivePriceZoneValue>
 	/// Moving average.
 	/// </summary>
 	[Browsable(false)]
-	public LengthIndicator<decimal> Ma { get; }
+	public LengthIndicator<decimal> MovingAverage { get; }
 
 	/// <summary>
 	/// Upper band.
@@ -46,13 +46,13 @@ public class AdaptivePriceZone : BaseComplexIndicator<AdaptivePriceZoneValue>
 	/// <param name="ma">Moving Average.</param>
 	public AdaptivePriceZone(LengthIndicator<decimal> ma)
 	{
-		Ma = ma ?? throw new ArgumentNullException(nameof(ma));
+		MovingAverage = ma ?? throw new ArgumentNullException(nameof(ma));
 		_stdDev = new();
 
 		UpperBand = new();
 		LowerBand = new();
 
-		AddInner(Ma);
+		AddInner(MovingAverage);
 		AddInner(UpperBand);
 		AddInner(LowerBand);
 
@@ -70,10 +70,10 @@ public class AdaptivePriceZone : BaseComplexIndicator<AdaptivePriceZoneValue>
 		GroupName = LocalizedStrings.GeneralKey)]
 	public int Period
 	{
-		get => Ma.Length;
+		get => MovingAverage.Length;
 		set
 		{
-			Ma.Length = value;
+			MovingAverage.Length = value;
 			_stdDev.Length = value;
 		}
 	}
@@ -101,12 +101,12 @@ public class AdaptivePriceZone : BaseComplexIndicator<AdaptivePriceZoneValue>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var maValue = Ma.Process(input);
+		var maValue = MovingAverage.Process(input);
 		var stdDevValue = _stdDev.Process(input);
 
 		var result = new AdaptivePriceZoneValue(this, input.Time);
 
-		if (Ma.IsFormed && _stdDev.IsFormed)
+		if (MovingAverage.IsFormed && _stdDev.IsFormed)
 		{
 			var ma = maValue.ToDecimal();
 			var stdDev = stdDevValue.ToDecimal();
@@ -114,7 +114,7 @@ public class AdaptivePriceZone : BaseComplexIndicator<AdaptivePriceZoneValue>
 			var upperBand = ma + BandPercentage * stdDev;
 			var lowerBand = ma - BandPercentage * stdDev;
 
-			result.Add(Ma, new DecimalIndicatorValue(this, ma, input.Time));
+			result.Add(MovingAverage, new DecimalIndicatorValue(this, ma, input.Time) { IsFinal = input.IsFinal });
 			result.Add(UpperBand, UpperBand.Process(upperBand, input.Time, input.IsFinal));
 			result.Add(LowerBand, LowerBand.Process(lowerBand, input.Time, input.IsFinal));
 		}
@@ -182,7 +182,7 @@ public class AdaptivePriceZoneValue(AdaptivePriceZone indicator, DateTimeOffset 
 	/// <summary>
 	/// Gets the moving average value.
 	/// </summary>
-	public decimal? MovingAverage => GetInnerDecimal(TypedIndicator.Ma);
+	public decimal? MovingAverage => GetInnerDecimal(TypedIndicator.MovingAverage);
 
 	/// <summary>
 	/// Gets the upper band value.

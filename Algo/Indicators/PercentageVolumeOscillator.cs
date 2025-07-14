@@ -100,7 +100,7 @@ public class PercentageVolumeOscillator : BaseComplexIndicator<PercentageVolumeO
 		{
 			var den = longValue.ToDecimal();
 			var pvo = den == 0 ? 0 : ((shortValue.ToDecimal() - den) / den) * 100;
-			result.Add(this, new DecimalIndicatorValue(this, pvo, input.Time));
+			result.Add(this, new DecimalIndicatorValue(this, pvo, input.Time) { IsFinal = input.IsFinal });
 		}
 
 		return result;

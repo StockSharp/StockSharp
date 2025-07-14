@@ -643,8 +643,9 @@ public abstract class ComplexIndicatorValue<TIndicator>(TIndicator indicator, Da
 	/// <param name="indicator">Inner indicator, for which the value is set.</param>
 	/// <param name="time">Time of the value, which is set.</param>
 	/// <param name="value">Value of the indicator as <see cref="decimal"/> or <see langword="null"/> if the value is empty.</param>
-	public void SetInnerDecimal(IIndicator indicator, DateTimeOffset time, decimal? value)
+	/// <param name="isFinal"><see cref="IIndicatorValue.IsFinal"/></param>
+	public void SetInnerDecimal(IIndicator indicator, DateTimeOffset time, decimal? value, bool isFinal)
 		=> InnerValues[indicator] = value is not decimal v
-		? new DecimalIndicatorValue(indicator, time)
-		: new DecimalIndicatorValue(indicator, v, time);
+		? new DecimalIndicatorValue(indicator, time) { IsFinal = isFinal }
+		: new DecimalIndicatorValue(indicator, v, time) { IsFinal = isFinal };
 }

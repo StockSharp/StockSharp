@@ -95,7 +95,7 @@ public class PercentagePriceOscillator : BaseComplexIndicator<PercentagePriceOsc
 		{
 			var den = longValue.ToDecimal();
 			var ppo = den == 0 ? 0 : ((shortValue.ToDecimal() - den) / den) * 100;
-			result.Add(this, new DecimalIndicatorValue(this, ppo, input.Time));
+			result.Add(this, new DecimalIndicatorValue(this, ppo, input.Time) { IsFinal = input.IsFinal });
 		}
 
 		return result;

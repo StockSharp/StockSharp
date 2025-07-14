@@ -100,8 +100,8 @@ public class Envelope : BaseComplexIndicator<EnvelopeValue>
 	{
 		var value = (EnvelopeValue)base.OnProcess(input);
 
-		value.SetInnerDecimal(Upper, input.Time, value.Upper * (1 + Shift));
-		value.SetInnerDecimal(Lower, input.Time, value.Lower * (1 - Shift));
+		value.SetInnerDecimal(Upper, input.Time, value.Upper * (1 + Shift), input.IsFinal);
+		value.SetInnerDecimal(Lower, input.Time, value.Lower * (1 - Shift), input.IsFinal);
 
 		return value;
 	}

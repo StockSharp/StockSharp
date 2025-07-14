@@ -89,15 +89,6 @@ public abstract class BaseComplexIndicator<TValue> : BaseIndicator, IComplexIndi
 	/// <inheritdoc />
 	protected override bool CalcIsFormed() => InnerIndicators.All(i => i.IsFormed);
 
-	/// <summary>
-	/// Create empty value.
-	/// </summary>
-	/// <param name="indicator"><see cref="IIndicator"/></param>
-	/// <param name="time">Time</param>
-	/// <returns>Empty value.</returns>
-	protected virtual IIndicatorValue CreateInnerEmpty(IIndicator indicator, DateTimeOffset time)
-		=> new DecimalIndicatorValue(indicator, time);
-
 	/// <inheritdoc />
 	public override IIndicatorValue Process(IIndicatorValue input)
 	{
@@ -106,7 +97,14 @@ public abstract class BaseComplexIndicator<TValue> : BaseIndicator, IComplexIndi
 		var cv = (TValue)output;
 
 		foreach (var inner in InnerIndicators)
-			cv.InnerValues.SafeAdd(inner, key => CreateInnerEmpty(key, input.Time));
+		{
+			cv.InnerValues.SafeAdd(inner, key =>
+			{
+				var v = key.CreateEmptyValue(input.Time);
+				v.IsFinal = input.IsFinal;
+				return v;
+			});
+		}
 
 		return output;
 	}

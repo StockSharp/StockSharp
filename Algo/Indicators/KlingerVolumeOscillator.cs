@@ -92,7 +92,7 @@ public class KlingerVolumeOscillator : BaseComplexIndicator<KlingerVolumeOscilla
 		if (LongEma.IsFormed)
 		{
 			var kvo = shortValue.ToDecimal() - longValue.ToDecimal();
-			result.Add(this, new DecimalIndicatorValue(this, kvo, input.Time));
+			result.Add(this, new DecimalIndicatorValue(this, kvo, input.Time) { IsFinal = input.IsFinal });
 		}
 
 		if (input.IsFinal)

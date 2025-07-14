@@ -245,6 +245,7 @@ public class IndicatorTests
 			{
 				var value = CreateValue(type, indicator, secId, now, i++, tf, true, false);
 				lastFinal = indicator.Process(value);
+				lastFinal.ValidateValue();
 
 				if (indicator.IsFormed)
 					extra--;
@@ -256,6 +257,7 @@ public class IndicatorTests
 			{
 				var nonFinalValue = CreateValue(type, indicator, secId, now, i + k * 1000, tf, false, false, (RandomGen.GetBool() ? -1 : 1) * k * 10);
 				var nonFinalResult = indicator.Process(nonFinalValue);
+				nonFinalResult.ValidateValue();
 
 				if (!lastFinal.ToValues().SequenceEqual(nonFinalResult.ToValues()))
 				{
@@ -763,6 +765,15 @@ static class IndicatorDataRunner
 	public static void ValidateValue(this IIndicatorValue value)
 	{
 		ArgumentNullException.ThrowIfNull(value);
+
+		if (value is IComplexIndicatorValue complex)
+		{
+			if (complex.InnerValues.Count > 0)
+			{
+				var allFinal = complex.InnerValues.Values.All(v => v.IsFinal);
+				complex.IsFinal.AssertEqual(allFinal, $"IComplexIndicatorValue.IsFinal={complex.IsFinal}, but inner values: [{complex.InnerValues.Values.Select(v => v.IsFinal.ToString()).JoinCommaSpace()}]");
+			}
+		}
 
 		value.Plain().ForEach(v =>
 		{

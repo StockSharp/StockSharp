@@ -67,7 +67,7 @@ public class MovingAverageConvergenceDivergenceHistogram : BaseComplexIndicator<
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
 		var macdValue = Macd.Process(input);
-		var signalValue = Macd.IsFormed ? SignalMa.Process(macdValue) : new DecimalIndicatorValue(SignalMa, 0, input.Time);
+		var signalValue = Macd.IsFormed ? SignalMa.Process(macdValue) : new DecimalIndicatorValue(SignalMa, 0, input.Time) { IsFinal = input.IsFinal };
 
 		var value = new MovingAverageConvergenceDivergenceHistogramValue(this, input.Time);
 		value.Add(Macd, macdValue);
