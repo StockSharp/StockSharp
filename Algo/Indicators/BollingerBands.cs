@@ -149,6 +149,7 @@ public class BollingerBandsValue(BollingerBands indicator, DateTimeOffset time) 
 	/// <summary>
 	/// Gets the <see cref="BollingerBands.MovingAverage"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? MovingAverage => MovingAverageValue.ToNullableDecimal();
 
 	/// <summary>
@@ -159,6 +160,7 @@ public class BollingerBandsValue(BollingerBands indicator, DateTimeOffset time) 
 	/// <summary>
 	/// Gets the <see cref="BollingerBands.UpBand"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? UpBand => UpBandValue.ToNullableDecimal();
 
 	/// <summary>
@@ -169,5 +171,6 @@ public class BollingerBandsValue(BollingerBands indicator, DateTimeOffset time) 
 	/// <summary>
 	/// Gets the <see cref="BollingerBands.LowBand"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? LowBand => LowBandValue.ToNullableDecimal();
 }

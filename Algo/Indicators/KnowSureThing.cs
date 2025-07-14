@@ -134,6 +134,7 @@ public class KnowSureThingValue(KnowSureThing indicator, DateTimeOffset time) : 
 	/// <summary>
 	/// Gets the KST line value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? KstLine => KstLineValue.ToNullableDecimal();
 
 	/// <summary>
@@ -144,5 +145,6 @@ public class KnowSureThingValue(KnowSureThing indicator, DateTimeOffset time) : 
 	/// <summary>
 	/// Gets the signal line value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Signal => SignalValue.ToNullableDecimal();
 }

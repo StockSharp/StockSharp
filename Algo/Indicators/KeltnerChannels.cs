@@ -193,6 +193,7 @@ public class KeltnerChannelsValue(KeltnerChannels indicator, DateTimeOffset time
 	/// <summary>
 	/// Gets the <see cref="KeltnerChannels.Middle"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Middle => MiddleValue.ToNullableDecimal();
 
 	/// <summary>
@@ -203,6 +204,7 @@ public class KeltnerChannelsValue(KeltnerChannels indicator, DateTimeOffset time
 	/// <summary>
 	/// Gets the <see cref="KeltnerChannels.Upper"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Upper => UpperValue.ToNullableDecimal();
 
 	/// <summary>
@@ -213,5 +215,6 @@ public class KeltnerChannelsValue(KeltnerChannels indicator, DateTimeOffset time
 	/// <summary>
 	/// Gets the <see cref="KeltnerChannels.Lower"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Lower => LowerValue.ToNullableDecimal();
 }

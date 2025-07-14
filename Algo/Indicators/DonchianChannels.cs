@@ -141,6 +141,7 @@ public class DonchianChannelsValue(DonchianChannels indicator, DateTimeOffset ti
 	/// <summary>
 	/// Gets the <see cref="DonchianChannels.UpperBand"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? UpperBand => UpperBandValue.ToNullableDecimal();
 
 	/// <summary>
@@ -151,6 +152,7 @@ public class DonchianChannelsValue(DonchianChannels indicator, DateTimeOffset ti
 	/// <summary>
 	/// Gets the <see cref="DonchianChannels.LowerBand"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? LowerBand => LowerBandValue.ToNullableDecimal();
 
 	/// <summary>
@@ -161,5 +163,6 @@ public class DonchianChannelsValue(DonchianChannels indicator, DateTimeOffset ti
 	/// <summary>
 	/// Gets the <see cref="DonchianChannels.Middle"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Middle => MiddleValue.ToNullableDecimal();
 }

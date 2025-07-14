@@ -186,6 +186,7 @@ public class ChandeKrollStopValue(ChandeKrollStop indicator, DateTimeOffset time
 	/// <summary>
 	/// Gets the highest stop line.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Highest => HighestValue.ToNullableDecimal();
 
 	/// <summary>
@@ -196,5 +197,6 @@ public class ChandeKrollStopValue(ChandeKrollStop indicator, DateTimeOffset time
 	/// <summary>
 	/// Gets the lowest stop line.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Lowest => LowestValue.ToNullableDecimal();
 }

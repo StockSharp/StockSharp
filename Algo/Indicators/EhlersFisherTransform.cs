@@ -181,6 +181,7 @@ public class EhlersFisherTransformValue(EhlersFisherTransform indicator, DateTim
 	/// <summary>
 	/// Gets the main line value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? MainLine => MainLineValue.ToNullableDecimal();
 
 	/// <summary>
@@ -191,5 +192,6 @@ public class EhlersFisherTransformValue(EhlersFisherTransform indicator, DateTim
 	/// <summary>
 	/// Gets the trigger line value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? TriggerLine => TriggerLineValue.ToNullableDecimal();
 }
