@@ -280,10 +280,20 @@ public class AroonValue(Aroon indicator, DateTimeOffset time) : ComplexIndicator
 	/// <summary>
 	/// Gets the <see cref="Aroon.Up"/> value.
 	/// </summary>
-	public decimal? Up => GetInnerDecimal(TypedIndicator.Up);
+	public IIndicatorValue UpValue => this[TypedIndicator.Up];
+
+	/// <summary>
+	/// Gets the <see cref="Aroon.Up"/> value.
+	/// </summary>
+	public decimal? Up => UpValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="Aroon.Down"/> value.
 	/// </summary>
-	public decimal? Down => GetInnerDecimal(TypedIndicator.Down);
+	public IIndicatorValue DownValue => this[TypedIndicator.Down];
+
+	/// <summary>
+	/// Gets the <see cref="Aroon.Down"/> value.
+	/// </summary>
+	public decimal? Down => DownValue.ToNullableDecimal();
 }

@@ -188,15 +188,30 @@ public class KeltnerChannelsValue(KeltnerChannels indicator, DateTimeOffset time
 	/// <summary>
 	/// Gets the <see cref="KeltnerChannels.Middle"/> value.
 	/// </summary>
-	public decimal? Middle => GetInnerDecimal(TypedIndicator.Middle);
+	public IIndicatorValue MiddleValue => this[TypedIndicator.Middle];
+
+	/// <summary>
+	/// Gets the <see cref="KeltnerChannels.Middle"/> value.
+	/// </summary>
+	public decimal? Middle => MiddleValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="KeltnerChannels.Upper"/> value.
 	/// </summary>
-	public decimal? Upper => GetInnerDecimal(TypedIndicator.Upper);
+	public IIndicatorValue UpperValue => this[TypedIndicator.Upper];
+
+	/// <summary>
+	/// Gets the <see cref="KeltnerChannels.Upper"/> value.
+	/// </summary>
+	public decimal? Upper => UpperValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="KeltnerChannels.Lower"/> value.
 	/// </summary>
-	public decimal? Lower => GetInnerDecimal(TypedIndicator.Lower);
+	public IIndicatorValue LowerValue => this[TypedIndicator.Lower];
+
+	/// <summary>
+	/// Gets the <see cref="KeltnerChannels.Lower"/> value.
+	/// </summary>
+	public decimal? Lower => LowerValue.ToNullableDecimal();
 }

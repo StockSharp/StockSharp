@@ -129,10 +129,20 @@ public class KnowSureThingValue(KnowSureThing indicator, DateTimeOffset time) : 
 	/// <summary>
 	/// Gets the KST line value.
 	/// </summary>
-	public decimal? KstLine => GetInnerDecimal(TypedIndicator.KstLine);
+	public IIndicatorValue KstLineValue => this[TypedIndicator.KstLine];
+
+	/// <summary>
+	/// Gets the KST line value.
+	/// </summary>
+	public decimal? KstLine => KstLineValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the signal line value.
 	/// </summary>
-	public decimal? Signal => GetInnerDecimal(TypedIndicator.Signal);
+	public IIndicatorValue SignalValue => this[TypedIndicator.Signal];
+
+	/// <summary>
+	/// Gets the signal line value.
+	/// </summary>
+	public decimal? Signal => SignalValue.ToNullableDecimal();
 }

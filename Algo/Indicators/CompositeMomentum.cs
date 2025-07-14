@@ -157,10 +157,20 @@ public class CompositeMomentumValue(CompositeMomentum indicator, DateTimeOffset 
 	/// <summary>
 	/// Gets the SMA value.
 	/// </summary>
-	public decimal? Sma => GetInnerDecimal(TypedIndicator.Sma);
+	public IIndicatorValue SmaValue => this[TypedIndicator.Sma];
+
+	/// <summary>
+	/// Gets the SMA value.
+	/// </summary>
+	public decimal? Sma => SmaValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the composite momentum line.
 	/// </summary>
-	public decimal? CompositeLine => GetInnerDecimal(TypedIndicator.CompositeLine);
+	public IIndicatorValue CompositeLineValue => this[TypedIndicator.CompositeLine];
+
+	/// <summary>
+	/// Gets the composite momentum line.
+	/// </summary>
+	public decimal? CompositeLine => CompositeLineValue.ToNullableDecimal();
 }

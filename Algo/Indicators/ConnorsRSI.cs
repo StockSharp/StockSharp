@@ -242,20 +242,40 @@ public class ConnorsRSIValue(ConnorsRSI indicator, DateTimeOffset time) : Comple
 	/// <summary>
 	/// Gets the RSI component.
 	/// </summary>
-	public decimal? Rsi => GetInnerDecimal(TypedIndicator.Rsi);
+	public IIndicatorValue RsiValue => this[TypedIndicator.Rsi];
+
+	/// <summary>
+	/// Gets the RSI component.
+	/// </summary>
+	public decimal? Rsi => RsiValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the UpDown RSI component.
 	/// </summary>
-	public decimal? UpDownRsi => GetInnerDecimal(TypedIndicator.UpDownRsi);
+	public IIndicatorValue UpDownRsiValue => this[TypedIndicator.UpDownRsi];
+
+	/// <summary>
+	/// Gets the UpDown RSI component.
+	/// </summary>
+	public decimal? UpDownRsi => UpDownRsiValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the ROC RSI component.
 	/// </summary>
-	public decimal? RocRsi => GetInnerDecimal(TypedIndicator.RocRsi);
+	public IIndicatorValue RocRsiValue => this[TypedIndicator.RocRsi];
+
+	/// <summary>
+	/// Gets the ROC RSI component.
+	/// </summary>
+	public decimal? RocRsi => RocRsiValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the composite RSI line.
 	/// </summary>
-	public decimal? CrsiLine => GetInnerDecimal(TypedIndicator.CrsiLine);
+	public IIndicatorValue CrsiLineValue => this[TypedIndicator.CrsiLine];
+
+	/// <summary>
+	/// Gets the composite RSI line.
+	/// </summary>
+	public decimal? CrsiLine => CrsiLineValue.ToNullableDecimal();
 }

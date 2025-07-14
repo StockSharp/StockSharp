@@ -88,5 +88,10 @@ public class RainbowChartsValue(RainbowCharts indicator, DateTimeOffset time) : 
 	/// <summary>
 	/// Gets values of all moving averages.
 	/// </summary>
-	public decimal?[] Averages => [.. TypedIndicator.InnerIndicators.Select(GetInnerDecimal)];
+	public IIndicatorValue[] AveragesValues => [.. TypedIndicator.InnerIndicators.Select(ind => this[ind])];
+
+	/// <summary>
+	/// Gets values of all moving averages.
+	/// </summary>
+	public decimal?[] Averages => [.. AveragesValues.Select(v => v.ToNullableDecimal())];
 }

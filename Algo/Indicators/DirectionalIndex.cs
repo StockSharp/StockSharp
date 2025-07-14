@@ -119,10 +119,20 @@ public class DirectionalIndexValue(DirectionalIndex indicator, DateTimeOffset ti
 	/// <summary>
 	/// Gets the <see cref="DirectionalIndex.Plus"/> value.
 	/// </summary>
-	public decimal? Plus => GetInnerDecimal(TypedIndicator.Plus);
+	public IIndicatorValue PlusValue => this[TypedIndicator.Plus];
+
+	/// <summary>
+	/// Gets the <see cref="DirectionalIndex.Plus"/> value.
+	/// </summary>
+	public decimal? Plus => PlusValue.ToNullableDecimal();
 	
 	/// <summary>
 	/// Gets the <see cref="DirectionalIndex.Minus"/> value.
 	/// </summary>
-	public decimal? Minus => GetInnerDecimal(TypedIndicator.Minus);
+	public IIndicatorValue MinusValue => this[TypedIndicator.Minus];
+
+	/// <summary>
+	/// Gets the <see cref="DirectionalIndex.Minus"/> value.
+	/// </summary>
+	public decimal? Minus => MinusValue.ToNullableDecimal();
 }

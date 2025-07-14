@@ -95,15 +95,30 @@ public class AlligatorValue(Alligator indicator, DateTimeOffset time) : ComplexI
 	/// <summary>
 	/// Gets the <see cref="Alligator.Jaw"/> value.
 	/// </summary>
-	public decimal? Jaw => GetInnerDecimal(TypedIndicator.Jaw);
+	public IIndicatorValue JawValue => this[TypedIndicator.Jaw];
+
+	/// <summary>
+	/// Gets the <see cref="Alligator.Jaw"/> value.
+	/// </summary>
+	public decimal? Jaw => JawValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="Alligator.Teeth"/> value.
 	/// </summary>
-	public decimal? Teeth => GetInnerDecimal(TypedIndicator.Teeth);
+	public IIndicatorValue TeethValue => this[TypedIndicator.Teeth];
+
+	/// <summary>
+	/// Gets the <see cref="Alligator.Teeth"/> value.
+	/// </summary>
+	public decimal? Teeth => TeethValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="Alligator.Lips"/> value.
 	/// </summary>
-	public decimal? Lips => GetInnerDecimal(TypedIndicator.Lips);
+	public IIndicatorValue LipsValue => this[TypedIndicator.Lips];
+
+	/// <summary>
+	/// Gets the <see cref="Alligator.Lips"/> value.
+	/// </summary>
+	public decimal? Lips => LipsValue.ToNullableDecimal();
 }

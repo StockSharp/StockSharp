@@ -81,10 +81,20 @@ public class MovingAverageConvergenceDivergenceSignalValue(MovingAverageConverge
 	/// <summary>
 	/// Gets the MACD value.
 	/// </summary>
-	public decimal? Macd => GetInnerDecimal(TypedIndicator.Macd);
+	public IIndicatorValue MacdValue => this[TypedIndicator.Macd];
+
+	/// <summary>
+	/// Gets the MACD value.
+	/// </summary>
+	public decimal? Macd => MacdValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the signal line value.
 	/// </summary>
-	public decimal? Signal => GetInnerDecimal(TypedIndicator.SignalMa);
+	public IIndicatorValue SignalValue => this[TypedIndicator.SignalMa];
+
+	/// <summary>
+	/// Gets the signal line value.
+	/// </summary>
+	public decimal? Signal => SignalValue.ToNullableDecimal();
 }
