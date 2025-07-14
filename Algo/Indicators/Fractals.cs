@@ -13,16 +13,19 @@ public class FractalsValue(Fractals fractals, DateTimeOffset time) : ComplexIndi
 	/// <summary>
 	/// Has pattern.
 	/// </summary>
+	[Browsable(false)]
 	public bool HasPattern { get; private set; }
 
 	/// <summary>
 	/// Has up.
 	/// </summary>
+	[Browsable(false)]
 	public bool HasUp { get; private set; }
 
 	/// <summary>
 	/// Has down.
 	/// </summary>
+	[Browsable(false)]
 	public bool HasDown { get; private set; }
 
 	/// <summary>
@@ -33,6 +36,7 @@ public class FractalsValue(Fractals fractals, DateTimeOffset time) : ComplexIndi
 	/// <summary>
 	/// Gets the <see cref="Fractals.Up"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Up => UpValue.ToNullableDecimal();
 
 	/// <summary>
@@ -43,6 +47,7 @@ public class FractalsValue(Fractals fractals, DateTimeOffset time) : ComplexIndi
 	/// <summary>
 	/// Gets the <see cref="Fractals.Down"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Down => DownValue.ToNullableDecimal();
 
 	/// <summary>

@@ -98,6 +98,7 @@ public class MovingAverageConvergenceDivergenceHistogramValue(MovingAverageConve
 	/// <summary>
 	/// Gets the MACD value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Macd => MacdValue.ToNullableDecimal();
 
 	/// <summary>
@@ -108,5 +109,6 @@ public class MovingAverageConvergenceDivergenceHistogramValue(MovingAverageConve
 	/// <summary>
 	/// Gets the signal line value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Signal => SignalValue.ToNullableDecimal();
 }

@@ -146,6 +146,7 @@ public class EnvelopeValue(Envelope indicator, DateTimeOffset time) : ComplexInd
 	/// <summary>
 	/// Gets the <see cref="Envelope.Middle"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Middle => MiddleValue.ToNullableDecimal();
 
 	/// <summary>
@@ -156,6 +157,7 @@ public class EnvelopeValue(Envelope indicator, DateTimeOffset time) : ComplexInd
 	/// <summary>
 	/// Gets the <see cref="Envelope.Upper"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Upper => UpperValue.ToNullableDecimal();
 
 	/// <summary>
@@ -166,5 +168,6 @@ public class EnvelopeValue(Envelope indicator, DateTimeOffset time) : ComplexInd
 	/// <summary>
 	/// Gets the <see cref="Envelope.Lower"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Lower => LowerValue.ToNullableDecimal();
 }

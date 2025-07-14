@@ -90,6 +90,7 @@ public class GatorOscillatorValue(GatorOscillator indicator, DateTimeOffset time
 	/// <summary>
 	/// Gets the <see cref="GatorOscillator.Histogram1"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Histogram1 => Histogram1Value.ToNullableDecimal();
 
 	/// <summary>
@@ -100,5 +101,6 @@ public class GatorOscillatorValue(GatorOscillator indicator, DateTimeOffset time
 	/// <summary>
 	/// Gets the <see cref="GatorOscillator.Histogram2"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Histogram2 => Histogram2Value.ToNullableDecimal();
 }

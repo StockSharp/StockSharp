@@ -117,6 +117,7 @@ public class IchimokuValue(Ichimoku indicator, DateTimeOffset time) : ComplexInd
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.Tenkan"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Tenkan => TenkanValue.ToNullableDecimal();
 
 	/// <summary>
@@ -127,6 +128,7 @@ public class IchimokuValue(Ichimoku indicator, DateTimeOffset time) : ComplexInd
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.Kijun"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Kijun => KijunValue.ToNullableDecimal();
 
 	/// <summary>
@@ -137,6 +139,7 @@ public class IchimokuValue(Ichimoku indicator, DateTimeOffset time) : ComplexInd
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.SenkouA"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? SenkouA => SenkouAValue.ToNullableDecimal();
 
 	/// <summary>
@@ -147,6 +150,7 @@ public class IchimokuValue(Ichimoku indicator, DateTimeOffset time) : ComplexInd
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.SenkouB"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? SenkouB => SenkouBValue.ToNullableDecimal();
 
 	/// <summary>
@@ -157,5 +161,6 @@ public class IchimokuValue(Ichimoku indicator, DateTimeOffset time) : ComplexInd
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.Chinkou"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Chinkou => ChinkouValue.ToNullableDecimal();
 }

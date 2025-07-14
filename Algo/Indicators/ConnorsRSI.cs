@@ -247,6 +247,7 @@ public class ConnorsRSIValue(ConnorsRSI indicator, DateTimeOffset time) : Comple
 	/// <summary>
 	/// Gets the RSI component.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Rsi => RsiValue.ToNullableDecimal();
 
 	/// <summary>
@@ -257,6 +258,7 @@ public class ConnorsRSIValue(ConnorsRSI indicator, DateTimeOffset time) : Comple
 	/// <summary>
 	/// Gets the UpDown RSI component.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? UpDownRsi => UpDownRsiValue.ToNullableDecimal();
 
 	/// <summary>
@@ -267,6 +269,7 @@ public class ConnorsRSIValue(ConnorsRSI indicator, DateTimeOffset time) : Comple
 	/// <summary>
 	/// Gets the ROC RSI component.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? RocRsi => RocRsiValue.ToNullableDecimal();
 
 	/// <summary>
@@ -277,5 +280,6 @@ public class ConnorsRSIValue(ConnorsRSI indicator, DateTimeOffset time) : Comple
 	/// <summary>
 	/// Gets the composite RSI line.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? CrsiLine => CrsiLineValue.ToNullableDecimal();
 }

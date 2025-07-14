@@ -124,6 +124,7 @@ public class DirectionalIndexValue(DirectionalIndex indicator, DateTimeOffset ti
 	/// <summary>
 	/// Gets the <see cref="DirectionalIndex.Plus"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Plus => PlusValue.ToNullableDecimal();
 	
 	/// <summary>
@@ -134,5 +135,6 @@ public class DirectionalIndexValue(DirectionalIndex indicator, DateTimeOffset ti
 	/// <summary>
 	/// Gets the <see cref="DirectionalIndex.Minus"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Minus => MinusValue.ToNullableDecimal();
 }

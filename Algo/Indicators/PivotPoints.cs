@@ -114,6 +114,7 @@ public class PivotPointsValue(PivotPoints indicator, DateTimeOffset time) : Comp
 	/// <summary>
 	/// Gets the Pivot Point value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? PivotPoint => PivotPointValue.ToNullableDecimal();
 
 	/// <summary>
@@ -124,6 +125,7 @@ public class PivotPointsValue(PivotPoints indicator, DateTimeOffset time) : Comp
 	/// <summary>
 	/// Gets the R1 value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? R1 => R1Value.ToNullableDecimal();
 
 	/// <summary>
@@ -134,6 +136,7 @@ public class PivotPointsValue(PivotPoints indicator, DateTimeOffset time) : Comp
 	/// <summary>
 	/// Gets the R2 value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? R2 => R2Value.ToNullableDecimal();
 
 	/// <summary>
@@ -144,6 +147,7 @@ public class PivotPointsValue(PivotPoints indicator, DateTimeOffset time) : Comp
 	/// <summary>
 	/// Gets the S1 value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? S1 => S1Value.ToNullableDecimal();
 
 	/// <summary>
@@ -154,5 +158,6 @@ public class PivotPointsValue(PivotPoints indicator, DateTimeOffset time) : Comp
 	/// <summary>
 	/// Gets the S2 value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? S2 => S2Value.ToNullableDecimal();
 }

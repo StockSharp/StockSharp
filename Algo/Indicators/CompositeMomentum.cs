@@ -162,6 +162,7 @@ public class CompositeMomentumValue(CompositeMomentum indicator, DateTimeOffset 
 	/// <summary>
 	/// Gets the SMA value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Sma => SmaValue.ToNullableDecimal();
 
 	/// <summary>
@@ -172,5 +173,6 @@ public class CompositeMomentumValue(CompositeMomentum indicator, DateTimeOffset 
 	/// <summary>
 	/// Gets the composite momentum line.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? CompositeLine => CompositeLineValue.ToNullableDecimal();
 }

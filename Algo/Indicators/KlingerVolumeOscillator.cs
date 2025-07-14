@@ -140,6 +140,7 @@ public class KlingerVolumeOscillatorValue(KlingerVolumeOscillator indicator, Dat
 	/// <summary>
 	/// Gets the short EMA value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? ShortEma => ShortEmaValue.ToNullableDecimal();
 
 	/// <summary>
@@ -150,6 +151,7 @@ public class KlingerVolumeOscillatorValue(KlingerVolumeOscillator indicator, Dat
 	/// <summary>
 	/// Gets the long EMA value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? LongEma => LongEmaValue.ToNullableDecimal();
 
 	/// <summary>
@@ -160,5 +162,6 @@ public class KlingerVolumeOscillatorValue(KlingerVolumeOscillator indicator, Dat
 	/// <summary>
 	/// Gets the oscillator value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Oscillator => OscillatorValue.ToNullableDecimal();
 }

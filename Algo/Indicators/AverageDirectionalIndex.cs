@@ -108,6 +108,7 @@ public class AverageDirectionalIndexValue(AverageDirectionalIndex indicator, Dat
 	/// <summary>
 	/// Gets the <see cref="AverageDirectionalIndex.Dx"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public DirectionalIndexValue Dx => (DirectionalIndexValue)DxValue;
 	
 	/// <summary>
@@ -118,5 +119,6 @@ public class AverageDirectionalIndexValue(AverageDirectionalIndex indicator, Dat
 	/// <summary>
 	/// Gets the <see cref="AverageDirectionalIndex.MovingAverage"/> value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? MovingAverage => MovingAverageValue.ToNullableDecimal();
 }

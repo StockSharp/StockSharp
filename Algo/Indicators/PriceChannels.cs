@@ -115,6 +115,7 @@ public class PriceChannelsValue(PriceChannels indicator, DateTimeOffset time) : 
 	/// <summary>
 	/// Gets the upper channel value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? UpperChannel => UpperChannelValue.ToNullableDecimal();
 
 	/// <summary>
@@ -125,5 +126,6 @@ public class PriceChannelsValue(PriceChannels indicator, DateTimeOffset time) : 
 	/// <summary>
 	/// Gets the lower channel value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? LowerChannel => LowerChannelValue.ToNullableDecimal();
 }

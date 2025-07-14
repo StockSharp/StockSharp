@@ -76,6 +76,7 @@ public class StochasticOscillatorValue(StochasticOscillator indicator, DateTimeO
 	/// <summary>
 	/// Gets the %K value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? K => KValue.ToNullableDecimal();
 
 	/// <summary>
@@ -86,5 +87,6 @@ public class StochasticOscillatorValue(StochasticOscillator indicator, DateTimeO
 	/// <summary>
 	/// Gets the %D value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? D => DValue.ToNullableDecimal();
 }

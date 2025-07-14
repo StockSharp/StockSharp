@@ -150,6 +150,7 @@ public class PercentageVolumeOscillatorValue(PercentageVolumeOscillator indicato
 	/// <summary>
 	/// Gets the short EMA value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? ShortEma => ShortEmaValue.ToNullableDecimal();
 
 	/// <summary>
@@ -160,5 +161,6 @@ public class PercentageVolumeOscillatorValue(PercentageVolumeOscillator indicato
 	/// <summary>
 	/// Gets the long EMA value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? LongEma => LongEmaValue.ToNullableDecimal();
 }

@@ -222,6 +222,7 @@ public class WaveTrendOscillatorValue(WaveTrendOscillator indicator, DateTimeOff
 	/// <summary>
 	/// Gets the first Wavetrend line value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Wt1 => Wt1Value.ToNullableDecimal();
 
 	/// <summary>
@@ -232,5 +233,6 @@ public class WaveTrendOscillatorValue(WaveTrendOscillator indicator, DateTimeOff
 	/// <summary>
 	/// Gets the second Wavetrend line value.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Wt2 => Wt2Value.ToNullableDecimal();
 }
