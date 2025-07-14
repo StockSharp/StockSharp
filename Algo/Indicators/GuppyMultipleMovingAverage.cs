@@ -40,7 +40,6 @@ public class GuppyMultipleMovingAverageValue(GuppyMultipleMovingAverage indicato
 	/// <summary>
 	/// Gets values of all moving averages.
 	/// </summary>
-	[Browsable(false)]
 	public IIndicatorValue[] AveragesValues => [.. TypedIndicator.InnerIndicators.Select(ind => this[ind])];
 
 	/// <summary>

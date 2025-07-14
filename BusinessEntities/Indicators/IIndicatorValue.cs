@@ -626,14 +626,6 @@ public abstract class ComplexIndicatorValue<TIndicator>(TIndicator indicator, Da
 	}
 
 	/// <summary>
-	/// Get the inner value of the indicator as <see cref="decimal"/>.
-	/// </summary>
-	/// <param name="indicator">Inner indicator, for which the value is requested.</param>
-	/// <returns>Inner value of the indicator as <see cref="decimal"/> or <see langword="null"/> if the value is empty.</returns>
-	public decimal? GetInnerDecimal(IIndicator indicator)
-		=> InnerValues[indicator].ToNullableDecimal();
-
-	/// <summary>
 	/// Set the inner value of the indicator as <see cref="decimal"/>.
 	/// </summary>
 	/// <param name="indicator">Inner indicator, for which the value is set.</param>
