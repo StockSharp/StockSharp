@@ -48,7 +48,7 @@ public class MarketDepthDiagramElement : SubscriptionDiagramElement
 	/// <inheritdoc />
 	protected override Subscription OnCreateSubscription(Security security)
 	{
-		var subscription = new Subscription(Messages.DataType.MarketDepth, security);
+		var subscription = new Subscription(DataType.MarketDepth, security);
 
 		subscription
 			 .WhenOrderBookReceived(Strategy)
