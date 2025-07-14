@@ -176,10 +176,20 @@ public class EhlersFisherTransformValue(EhlersFisherTransform indicator, DateTim
 	/// <summary>
 	/// Gets the main line value.
 	/// </summary>
-	public decimal? MainLine => GetInnerDecimal(TypedIndicator.MainLine);
+	public IIndicatorValue MainLineValue => this[TypedIndicator.MainLine];
+
+	/// <summary>
+	/// Gets the main line value.
+	/// </summary>
+	public decimal? MainLine => MainLineValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the trigger line value.
 	/// </summary>
-	public decimal? TriggerLine => GetInnerDecimal(TypedIndicator.TriggerLine);
+	public IIndicatorValue TriggerLineValue => this[TypedIndicator.TriggerLine];
+
+	/// <summary>
+	/// Gets the trigger line value.
+	/// </summary>
+	public decimal? TriggerLine => TriggerLineValue.ToNullableDecimal();
 }

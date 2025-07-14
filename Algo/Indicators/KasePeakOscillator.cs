@@ -193,10 +193,20 @@ public class KasePeakOscillatorValue(KasePeakOscillator indicator, DateTimeOffse
 	/// <summary>
 	/// Gets the <see cref="KasePeakOscillator.ShortTerm"/> value.
 	/// </summary>
-	public decimal? ShortTerm => GetInnerDecimal(TypedIndicator.ShortTerm);
+	public IIndicatorValue ShortTermValue => this[TypedIndicator.ShortTerm];
+
+	/// <summary>
+	/// Gets the <see cref="KasePeakOscillator.ShortTerm"/> value.
+	/// </summary>
+	public decimal? ShortTerm => ShortTermValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="KasePeakOscillator.LongTerm"/> value.
 	/// </summary>
-	public decimal? LongTerm => GetInnerDecimal(TypedIndicator.LongTerm);
+	public IIndicatorValue LongTermValue => this[TypedIndicator.LongTerm];
+
+	/// <summary>
+	/// Gets the <see cref="KasePeakOscillator.LongTerm"/> value.
+	/// </summary>
+	public decimal? LongTerm => LongTermValue.ToNullableDecimal();
 }

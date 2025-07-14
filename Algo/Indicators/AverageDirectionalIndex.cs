@@ -103,10 +103,20 @@ public class AverageDirectionalIndexValue(AverageDirectionalIndex indicator, Dat
 	/// <summary>
 	/// Gets the <see cref="AverageDirectionalIndex.Dx"/> value.
 	/// </summary>
-	public DirectionalIndexValue Dx => (DirectionalIndexValue)InnerValues[TypedIndicator.Dx];
+	public IIndicatorValue DxValue => this[TypedIndicator.Dx];
+
+	/// <summary>
+	/// Gets the <see cref="AverageDirectionalIndex.Dx"/> value.
+	/// </summary>
+	public DirectionalIndexValue Dx => (DirectionalIndexValue)DxValue;
 	
 	/// <summary>
 	/// Gets the <see cref="AverageDirectionalIndex.MovingAverage"/> value.
 	/// </summary>
-	public decimal? MovingAverage => GetInnerDecimal(TypedIndicator.MovingAverage);
+	public IIndicatorValue MovingAverageValue => this[TypedIndicator.MovingAverage];
+
+	/// <summary>
+	/// Gets the <see cref="AverageDirectionalIndex.MovingAverage"/> value.
+	/// </summary>
+	public decimal? MovingAverage => MovingAverageValue.ToNullableDecimal();
 }

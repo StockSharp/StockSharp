@@ -141,10 +141,20 @@ public class SineWaveValue(SineWave indicator, DateTimeOffset time) : ComplexInd
 	/// <summary>
 	/// Gets the main line value.
 	/// </summary>
-	public decimal? Main => GetInnerDecimal(TypedIndicator.Main);
+	public IIndicatorValue MainValue => this[TypedIndicator.Main];
+
+	/// <summary>
+	/// Gets the main line value.
+	/// </summary>
+	public decimal? Main => MainValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the lead line value.
 	/// </summary>
-	public decimal? Lead => GetInnerDecimal(TypedIndicator.Lead);
+	public IIndicatorValue LeadValue => this[TypedIndicator.Lead];
+
+	/// <summary>
+	/// Gets the lead line value.
+	/// </summary>
+	public decimal? Lead => LeadValue.ToNullableDecimal();
 }

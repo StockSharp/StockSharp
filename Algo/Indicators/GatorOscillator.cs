@@ -85,10 +85,20 @@ public class GatorOscillatorValue(GatorOscillator indicator, DateTimeOffset time
 	/// <summary>
 	/// Gets the <see cref="GatorOscillator.Histogram1"/> value.
 	/// </summary>
-	public decimal? Histogram1 => GetInnerDecimal(TypedIndicator.Histogram1);
+	public IIndicatorValue Histogram1Value => this[TypedIndicator.Histogram1];
+
+	/// <summary>
+	/// Gets the <see cref="GatorOscillator.Histogram1"/> value.
+	/// </summary>
+	public decimal? Histogram1 => Histogram1Value.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="GatorOscillator.Histogram2"/> value.
 	/// </summary>
-	public decimal? Histogram2 => GetInnerDecimal(TypedIndicator.Histogram2);
+	public IIndicatorValue Histogram2Value => this[TypedIndicator.Histogram2];
+
+	/// <summary>
+	/// Gets the <see cref="GatorOscillator.Histogram2"/> value.
+	/// </summary>
+	public decimal? Histogram2 => Histogram2Value.ToNullableDecimal();
 }

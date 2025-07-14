@@ -109,25 +109,50 @@ public class PivotPointsValue(PivotPoints indicator, DateTimeOffset time) : Comp
 	/// <summary>
 	/// Gets the Pivot Point value.
 	/// </summary>
-	public decimal? PivotPoint => GetInnerDecimal(TypedIndicator.PivotPoint);
+	public IIndicatorValue PivotPointValue => this[TypedIndicator.PivotPoint];
+
+	/// <summary>
+	/// Gets the Pivot Point value.
+	/// </summary>
+	public decimal? PivotPoint => PivotPointValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the R1 value.
 	/// </summary>
-	public decimal? R1 => GetInnerDecimal(TypedIndicator.R1);
+	public IIndicatorValue R1Value => this[TypedIndicator.R1];
+
+	/// <summary>
+	/// Gets the R1 value.
+	/// </summary>
+	public decimal? R1 => R1Value.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the R2 value.
 	/// </summary>
-	public decimal? R2 => GetInnerDecimal(TypedIndicator.R2);
+	public IIndicatorValue R2Value => this[TypedIndicator.R2];
+
+	/// <summary>
+	/// Gets the R2 value.
+	/// </summary>
+	public decimal? R2 => R2Value.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the S1 value.
 	/// </summary>
-	public decimal? S1 => GetInnerDecimal(TypedIndicator.S1);
+	public IIndicatorValue S1Value => this[TypedIndicator.S1];
+
+	/// <summary>
+	/// Gets the S1 value.
+	/// </summary>
+	public decimal? S1 => S1Value.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the S2 value.
 	/// </summary>
-	public decimal? S2 => GetInnerDecimal(TypedIndicator.S2);
+	public IIndicatorValue S2Value => this[TypedIndicator.S2];
+
+	/// <summary>
+	/// Gets the S2 value.
+	/// </summary>
+	public decimal? S2 => S2Value.ToNullableDecimal();
 }

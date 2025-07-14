@@ -112,25 +112,50 @@ public class IchimokuValue(Ichimoku indicator, DateTimeOffset time) : ComplexInd
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.Tenkan"/> value.
 	/// </summary>
-	public decimal? Tenkan => GetInnerDecimal(TypedIndicator.Tenkan);
+	public IIndicatorValue TenkanValue => this[TypedIndicator.Tenkan];
+
+	/// <summary>
+	/// Gets the <see cref="Ichimoku.Tenkan"/> value.
+	/// </summary>
+	public decimal? Tenkan => TenkanValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.Kijun"/> value.
 	/// </summary>
-	public decimal? Kijun => GetInnerDecimal(TypedIndicator.Kijun);
+	public IIndicatorValue KijunValue => this[TypedIndicator.Kijun];
+
+	/// <summary>
+	/// Gets the <see cref="Ichimoku.Kijun"/> value.
+	/// </summary>
+	public decimal? Kijun => KijunValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.SenkouA"/> value.
 	/// </summary>
-	public decimal? SenkouA => GetInnerDecimal(TypedIndicator.SenkouA);
+	public IIndicatorValue SenkouAValue => this[TypedIndicator.SenkouA];
+
+	/// <summary>
+	/// Gets the <see cref="Ichimoku.SenkouA"/> value.
+	/// </summary>
+	public decimal? SenkouA => SenkouAValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.SenkouB"/> value.
 	/// </summary>
-	public decimal? SenkouB => GetInnerDecimal(TypedIndicator.SenkouB);
+	public IIndicatorValue SenkouBValue => this[TypedIndicator.SenkouB];
+
+	/// <summary>
+	/// Gets the <see cref="Ichimoku.SenkouB"/> value.
+	/// </summary>
+	public decimal? SenkouB => SenkouBValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.Chinkou"/> value.
 	/// </summary>
-	public decimal? Chinkou => GetInnerDecimal(TypedIndicator.Chinkou);
+	public IIndicatorValue ChinkouValue => this[TypedIndicator.Chinkou];
+
+	/// <summary>
+	/// Gets the <see cref="Ichimoku.Chinkou"/> value.
+	/// </summary>
+	public decimal? Chinkou => ChinkouValue.ToNullableDecimal();
 }

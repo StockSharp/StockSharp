@@ -135,15 +135,30 @@ public class KlingerVolumeOscillatorValue(KlingerVolumeOscillator indicator, Dat
 	/// <summary>
 	/// Gets the short EMA value.
 	/// </summary>
-	public decimal? ShortEma => GetInnerDecimal(TypedIndicator.ShortEma);
+	public IIndicatorValue ShortEmaValue => this[TypedIndicator.ShortEma];
+
+	/// <summary>
+	/// Gets the short EMA value.
+	/// </summary>
+	public decimal? ShortEma => ShortEmaValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the long EMA value.
 	/// </summary>
-	public decimal? LongEma => GetInnerDecimal(TypedIndicator.LongEma);
+	public IIndicatorValue LongEmaValue => this[TypedIndicator.LongEma];
+
+	/// <summary>
+	/// Gets the long EMA value.
+	/// </summary>
+	public decimal? LongEma => LongEmaValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the oscillator value.
 	/// </summary>
-	public decimal? Oscillator => GetInnerDecimal(TypedIndicator);
+	public IIndicatorValue OscillatorValue => this[TypedIndicator];
+
+	/// <summary>
+	/// Gets the oscillator value.
+	/// </summary>
+	public decimal? Oscillator => OscillatorValue.ToNullableDecimal();
 }

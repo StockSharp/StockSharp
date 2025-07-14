@@ -82,10 +82,20 @@ public class RelativeVigorIndexValue(RelativeVigorIndex indicator, DateTimeOffse
 	/// <summary>
 	/// Gets the <see cref="RelativeVigorIndex.Average"/> value.
 	/// </summary>
-	public decimal? Average => GetInnerDecimal(TypedIndicator.Average);
+	public IIndicatorValue AverageValue => this[TypedIndicator.Average];
+
+	/// <summary>
+	/// Gets the <see cref="RelativeVigorIndex.Average"/> value.
+	/// </summary>
+	public decimal? Average => AverageValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="RelativeVigorIndex.Signal"/> value.
 	/// </summary>
-	public decimal? Signal => GetInnerDecimal(TypedIndicator.Signal);
+	public IIndicatorValue SignalValue => this[TypedIndicator.Signal];
+
+	/// <summary>
+	/// Gets the <see cref="RelativeVigorIndex.Signal"/> value.
+	/// </summary>
+	public decimal? Signal => SignalValue.ToNullableDecimal();
 }

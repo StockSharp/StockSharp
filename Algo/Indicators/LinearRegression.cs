@@ -134,20 +134,40 @@ public class LinearRegressionValue(LinearRegression indicator, DateTimeOffset ti
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.LinearReg"/> value.
 	/// </summary>
-	public decimal? LinearReg => GetInnerDecimal(TypedIndicator.LinearReg);
+	public IIndicatorValue LinearRegValue => this[TypedIndicator.LinearReg];
+
+	/// <summary>
+	/// Gets the <see cref="LinearRegression.LinearReg"/> value.
+	/// </summary>
+	public decimal? LinearReg => LinearRegValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.RSquared"/> value.
 	/// </summary>
-	public decimal? RSquared => GetInnerDecimal(TypedIndicator.RSquared);
+	public IIndicatorValue RSquaredValue => this[TypedIndicator.RSquared];
+
+	/// <summary>
+	/// Gets the <see cref="LinearRegression.RSquared"/> value.
+	/// </summary>
+	public decimal? RSquared => RSquaredValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.LinearRegSlope"/> value.
 	/// </summary>
-	public decimal? LinearRegSlope => GetInnerDecimal(TypedIndicator.LinearRegSlope);
+	public IIndicatorValue LinearRegSlopeValue => this[TypedIndicator.LinearRegSlope];
+
+	/// <summary>
+	/// Gets the <see cref="LinearRegression.LinearRegSlope"/> value.
+	/// </summary>
+	public decimal? LinearRegSlope => LinearRegSlopeValue.ToNullableDecimal();
 
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.StandardError"/> value.
 	/// </summary>
-	public decimal? StandardError => GetInnerDecimal(TypedIndicator.StandardError);
+	public IIndicatorValue StandardErrorValue => this[TypedIndicator.StandardError];
+
+	/// <summary>
+	/// Gets the <see cref="LinearRegression.StandardError"/> value.
+	/// </summary>
+	public decimal? StandardError => StandardErrorValue.ToNullableDecimal();
 }
