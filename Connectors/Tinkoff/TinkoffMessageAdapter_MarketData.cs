@@ -116,7 +116,7 @@ public partial class TinkoffMessageAdapter
 							if (TryGetTransId(DataType.MarketDepth, b.InstrumentUid, out var transId))
 							{
 								static QuoteChange[] convert(RepeatedField<Order> quotes)
-									=> quotes.Select(p => new QuoteChange(p.Price?.ToDecimal() ?? default, p.Quantity)).ToArray();
+									=> [.. quotes.Select(p => new QuoteChange(p.Price?.ToDecimal() ?? default, p.Quantity))];
 
 								SendOutMessage(new QuoteChangeMessage
 								{

@@ -60,7 +60,7 @@ public partial class TinkoffMessageAdapter
 
 			if (IsDemo)
 			{
-				response = await _service.Sandbox.PostSandboxOrderAsync(new()
+				response = await _service.Sandbox.PostSandboxOrderAsync(new PostOrderRequest
 				{
 					AccountId = regMsg.PortfolioName,
 					Direction = regMsg.Side.ToNative(),
