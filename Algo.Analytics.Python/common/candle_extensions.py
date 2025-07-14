@@ -1,7 +1,6 @@
 import clr
 
 # Add references to required assemblies
-clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.Algo")
 
 from StockSharp.Algo.Candles import CandleHelper

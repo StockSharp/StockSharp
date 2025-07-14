@@ -2,6 +2,7 @@ import clr
 
 # Add .NET references
 clr.AddReference("StockSharp.Messages")
+clr.AddReference("StockSharp.Algo")
 clr.AddReference("StockSharp.Algo.Analytics")
 clr.AddReference("Ecng.Drawing")
 

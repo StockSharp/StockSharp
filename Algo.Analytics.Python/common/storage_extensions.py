@@ -1,6 +1,6 @@
 import clr
 
-# Add reference to StockSharp.Algo
+clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.Algo")
 
 from StockSharp.Algo.Storages import StorageHelper
