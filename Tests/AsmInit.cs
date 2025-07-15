@@ -4,8 +4,6 @@ using Ecng.Compilation;
 using Ecng.Compilation.Roslyn;
 using Ecng.Interop;
 
-using Nito.AsyncEx;
-
 using StockSharp.Algo.Compilation;
 using StockSharp.Algo.Export;
 
@@ -13,14 +11,14 @@ using StockSharp.Algo.Export;
 public static class AsmInit
 {
 	[AssemblyInitialize]
-	public static void Init(TestContext _)
+	public static async Task Init(TestContext _)
 	{
 		ConfigManager.RegisterService<ICompiler>(new CSharpCompiler());
 		ConfigManager.RegisterService<ISecurityProvider>(new CollectionSecurityProvider());
 		ConfigManager.RegisterService<IExchangeInfoProvider>(new InMemoryExchangeInfoProvider());
 		ConfigManager.RegisterService<IExcelWorkerProvider>(new DevExpExcelWorkerProvider());
 
-		AsyncContext.Run(() => CompilationExtensions.Init(Helper.LogManager.Application, [("designer_extensions.py", File.ReadAllText("../../../../Diagram.Core/python/designer_extensions.py"))], default));
+		await CompilationExtensions.Init(Helper.LogManager.Application, [("designer_extensions.py", File.ReadAllText("../../../../Diagram.Core/python/designer_extensions.py"))], default);
 
 		Helper.ClearTemp();
 	}
