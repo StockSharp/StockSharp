@@ -86,6 +86,14 @@ def to_decimal(indicator_value):
     """
     return IndicatorHelper.ToDecimal(indicator_value)
 
+def to_float(indicator_value):
+    """
+    Convert IIndicatorValue to Python float.
+    :param indicator_value: The indicator value (IIndicatorValue).
+    :return: The value as Python float.
+    """
+    return float(to_decimal(indicator_value))
+
 def to_candle(indicator_value):
     """
     Convert IIndicatorValue to ICandleMessage.

@@ -196,8 +196,14 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 
 		if (type == typeof(int))
 			attr = new IntGreaterThanZeroAttribute();
+		else if (type == typeof(long))
+			attr = new LongGreaterThanZeroAttribute();
 		else if (type == typeof(decimal))
 			attr = new DecimalGreaterThanZeroAttribute();
+		else if (type == typeof(double))
+			attr = new DoubleGreaterThanZeroAttribute();
+		else if (type == typeof(float))
+			attr = new FloatGreaterThanZeroAttribute();
 		else if (type == typeof(TimeSpan))
 			attr = new TimeSpanGreaterThanZeroAttribute();
 		else
@@ -218,8 +224,14 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 
 		if (type == typeof(int))
 			attr = new IntNullOrMoreZeroAttribute();
+		else if (type == typeof(long))
+			attr = new LongNullOrMoreZeroAttribute();
 		else if (type == typeof(decimal))
 			attr = new DecimalNullOrMoreZeroAttribute();
+		else if (type == typeof(double))
+			attr = new DoubleNullOrMoreZeroAttribute();
+		else if (type == typeof(float))
+			attr = new FloatNullOrMoreZeroAttribute();
 		else if (type == typeof(TimeSpan))
 			attr = new TimeSpanNullOrMoreZeroAttribute();
 		else
@@ -240,8 +252,14 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 
 		if (type == typeof(int))
 			attr = new IntNullOrNotNegativeAttribute();
+		else if (type == typeof(long))
+			attr = new LongNullOrNotNegativeAttribute();
 		else if (type == typeof(decimal))
 			attr = new DecimalNullOrNotNegativeAttribute();
+		else if (type == typeof(double))
+			attr = new DoubleNullOrNotNegativeAttribute();
+		else if (type == typeof(float))
+			attr = new FloatNullOrNotNegativeAttribute();
 		else if (type == typeof(TimeSpan))
 			attr = new TimeSpanNullOrNotNegativeAttribute();
 		else
@@ -262,8 +280,14 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 
 		if (type == typeof(int))
 			attr = new IntNotNegativeAttribute();
+		else if (type == typeof(long))
+			attr = new LongNotNegativeAttribute();
 		else if (type == typeof(decimal))
 			attr = new DecimalNotNegativeAttribute();
+		else if (type == typeof(double))
+			attr = new DoubleNotNegativeAttribute();
+		else if (type == typeof(float))
+			attr = new FloatNotNegativeAttribute();
 		else if (type == typeof(TimeSpan))
 			attr = new TimeSpanNotNegativeAttribute();
 		else
