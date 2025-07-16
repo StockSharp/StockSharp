@@ -110,3 +110,24 @@ def create_empty_value(indicator, time):
     :return: The empty indicator value (IIndicatorValue).
     """
     return IndicatorHelper.CreateEmptyValue(indicator, time)
+
+def process_float(indicator, value, time, is_final=True):
+    """
+    Process the indicator with a numeric value.
+    :param indicator: The indicator (IIndicator).
+    :param value: The numeric value (Decimal).
+    :param time: The time of the value (DateTimeOffset).
+    :param is_final: Whether the value is final (default is True).
+    :return: The new value of the indicator (IIndicatorValue).
+    """
+    decimal_value = Decimal(value)
+    return IndicatorHelper.Process(indicator, decimal_value, time, is_final)
+
+def process_candle(indicator, candle):
+    """
+    Process the indicator with a candle.
+    :param indicator: The indicator (IIndicator).
+    :param candle: The candle (ICandleMessage).
+    :return: The new value of the indicator (IIndicatorValue).
+    """
+    return IndicatorHelper.Process(indicator, candle)
