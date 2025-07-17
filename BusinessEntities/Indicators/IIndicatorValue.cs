@@ -237,6 +237,14 @@ public class DecimalIndicatorValue : SingleIndicatorValue<decimal>
 	/// <returns><see cref="decimal"/> value.</returns>
 	public static explicit operator decimal(DecimalIndicatorValue value)
 		=> value.Value;
+
+	/// <summary>
+	/// Cast object from <see cref="DecimalIndicatorValue"/> to <see cref="double"/>.
+	/// </summary>
+	/// <param name="value">Object <see cref="DecimalIndicatorValue"/>.</param>
+	/// <returns><see cref="double"/> value.</returns>
+	public static explicit operator double(DecimalIndicatorValue value)
+		=> (double)value.Value;
 }
 
 /// <summary>
