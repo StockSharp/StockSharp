@@ -328,6 +328,15 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	}
 
 	/// <summary>
+	/// Set required validator.
+	/// </summary>
+	/// <returns><see cref="StrategyParam{T}"/></returns>
+	public StrategyParam<T> SetRequired()
+	{
+		return Ecng.ComponentModel.Extensions.SetRequired(this);
+	}
+
+	/// <summary>
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
