@@ -44,7 +44,7 @@ class indicator_script(IAnalyticsScript):
             for candle in load_tf_candles(candle_storage, from_date, to_date):
                 # fill series
                 candles_series[candle.OpenTime] = candle.ClosePrice
-                indicator_series[candle.OpenTime] = to_decimal(process_with_candle(roc, candle))
+                indicator_series[candle.OpenTime] = to_decimal(process_candle(roc, candle))
 
             # draw series on chart
             candle_chart.Append(

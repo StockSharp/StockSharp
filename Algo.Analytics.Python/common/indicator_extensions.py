@@ -58,7 +58,7 @@ def get_nullable_value(indicator, index):
     """
     return IndicatorHelper.GetNullableValue(indicator, index)
 
-def process_with_value(indicator, value, time, is_final=True):
+def process_value(indicator, value, time, is_final=True):
     """
     Process the indicator with a numeric value.
     :param indicator: The indicator (IIndicator).
@@ -69,7 +69,7 @@ def process_with_value(indicator, value, time, is_final=True):
     """
     return IndicatorHelper.Process(indicator, value, time, is_final)
 
-def process_with_candle(indicator, candle):
+def process_candle(indicator, candle):
     """
     Process the indicator with a candle.
     :param indicator: The indicator (IIndicator).
@@ -85,14 +85,6 @@ def to_decimal(indicator_value):
     :return: The value as Decimal.
     """
     return IndicatorHelper.ToDecimal(indicator_value)
-
-def to_float(indicator_value):
-    """
-    Convert IIndicatorValue to Python float.
-    :param indicator_value: The indicator value (IIndicatorValue).
-    :return: The value as Python float.
-    """
-    return float(to_decimal(indicator_value))
 
 def to_candle(indicator_value):
     """
@@ -120,14 +112,4 @@ def process_float(indicator, value, time, is_final=True):
     :param is_final: Whether the value is final (default is True).
     :return: The new value of the indicator (IIndicatorValue).
     """
-    decimal_value = Decimal(value)
-    return IndicatorHelper.Process(indicator, decimal_value, time, is_final)
-
-def process_candle(indicator, candle):
-    """
-    Process the indicator with a candle.
-    :param indicator: The indicator (IIndicator).
-    :param candle: The candle (ICandleMessage).
-    :return: The new value of the indicator (IIndicatorValue).
-    """
-    return IndicatorHelper.Process(indicator, candle)
+    return process_value(indicator, Decimal(value), time, is_final)
