@@ -90,7 +90,20 @@ partial class Strategy
 		RaisePositionChanged(position.LocalTime);
 
 		foreach (var subscription in _subscriptionsById.SyncGet(p => p.Values.Where(s => s.SubscriptionMessage is PortfolioLookupMessage).ToArray()))
+		{
 			PositionReceived?.Invoke(subscription, position);
+
+			if (subscription == PortfolioLookup)
+				OnPositionReceived(position);
+		}
+	}
+
+	/// <summary>
+	/// Position received.
+	/// </summary>
+	/// <param name="position"><see cref="Position"/></param>
+	protected virtual void OnPositionReceived(Position position)
+	{
 	}
 
 	private void RaisePositionChanged(DateTimeOffset time)

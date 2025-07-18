@@ -2073,7 +2073,11 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		{
 			OwnTradeReceived?.Invoke(subscription, trade);
 
-			_drawingTrades?.Add(trade);
+			if (subscription == OrderLookup)
+			{
+				OnOwnTradeReceived(trade);
+				_drawingTrades?.Add(trade);
+			}
 
 			if (_protectiveController is null)
 				return;
@@ -2123,8 +2127,28 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 			_posManager.ProcessOrder(order);
 
-			_drawingOrders?.Add(order);
+			if (subscription == OrderLookup)
+			{
+				OnOrderReceived(order);
+				_drawingOrders?.Add(order);
+			}
 		});
+	}
+
+	/// <summary>
+	/// Order received.
+	/// </summary>
+	/// <param name="order"><see cref="Order"/></param>
+	protected virtual void OnOrderReceived(Order order)
+	{
+	}
+
+	/// <summary>
+	/// Own trade received.
+	/// </summary>
+	/// <param name="trade"><see cref="MyTrade"/></param>
+	protected virtual void OnOwnTradeReceived(MyTrade trade)
+	{
 	}
 
 	private void OnConnectorOrderEditFailed(long transactionId, OrderFail fail)
