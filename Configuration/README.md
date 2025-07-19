@@ -106,22 +106,6 @@ The assembly is titled **S#.Configuration** and described as "Configuration comp
   【F:Configuration/InMemoryMessageAdapterProvider.cs†L5-L51】
 - **Utility helpers** – the `Paths` class also exposes methods for serialization, backup management and building links to StockSharp documentation and store pages.
 
-## Building
-
-`Configuration` targets `netstandard2.0` and is referenced by other StockSharp projects. The project references `NuGet.Configuration` and `Ecng.Configuration` packages and depends on the `Messages` project:
-```xml
-<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\common_target_standard.props" />
-  <ItemGroup>
-    <ProjectReference Include="..\Messages\Messages.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="NuGet.Configuration" Version="$(NuGetApiVer)" />
-    <PackageReference Include="Ecng.Configuration" Version="$(EcngVer)" />
-  </ItemGroup>
-</Project>
-```
-【F:Configuration/Configuration.csproj†L1-L13】
 
 ## Usage
 

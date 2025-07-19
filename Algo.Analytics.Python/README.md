@@ -2,6 +2,8 @@
 
 This folder contains sample analytics scripts for the [StockSharp](https://stocksharp.com) trading platform written in **IronPython**. Each script implements the `IAnalyticsScript` interface and can be executed inside StockSharp Designer or any application that supports analytics scripts.
 
+These examples illustrate the Hydra analytics feature. See the [Hydra documentation](https://doc.stocksharp.com/topics/hydra/analytics.html) for usage details.
+
 The examples demonstrate how to analyse market data and visualize the results using StockSharp API. They can be used as a starting point for developing your own analytics tools or trading algorithms in Python.
 
 ## Requirements
@@ -71,9 +73,8 @@ Analyses when the largest trading volume occurs by grouping candles by hour and 
 
 ## Running Scripts
 
-1. Build the `StockSharp` solution or install the required NuGet packages.
-2. Ensure IronPython 3 is available on your `PATH`.
-3. Launch StockSharp Designer or your own host application.
-4. Load any of the `.py` files and execute the script. Most scripts expect candle data to be available in your storage; adjust the date range and security identifiers as needed.
+1. Ensure IronPython 3 is available on your `PATH`.
+2. Launch StockSharp Designer or your own host application.
+3. Load any of the `.py` files and execute the script. Most scripts expect candle data to be available in your storage; adjust the date range and security identifiers as needed.
 
 

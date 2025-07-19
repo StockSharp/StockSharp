@@ -20,13 +20,6 @@ These components are designed to work with StockSharp message types (`ExecutionM
 
 ## Installation
 
-The project targets **.NET 6** and can be built as part of the `StockSharp.sln` solution:
-
-```bash
-# from the repository root
-dotnet build StockSharp.sln -c Release
-```
-
 Alternatively, reference `StockSharp.Alerts.Interfaces` from your own project by adding the corresponding project or NuGet package reference.
 
 ## Usage Example

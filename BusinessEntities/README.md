@@ -73,9 +73,4 @@ public static IEnumerable<Exchange> EnumerateExchanges()
 ### Example
 A code fragment for subscribing to an instrument and receiving market data can be found in `Samples/01_Basic/01_ConnectAndDownloadInstruments`.
 
-## Build
-The library is part of the `StockSharp.sln` solution and is built with:
-```bash
-dotnet build StockSharp.sln
-```
 

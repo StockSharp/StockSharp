@@ -47,12 +47,4 @@ connector.SubscribeMarketData(new MarketDataMessage
 
 Trading operations are performed by sending `OrderRegisterMessage` and `OrderCancelMessage` objects.
 
-## Building
-
-The project is part of the StockSharp solution and targets .NET. It references `Ecng.Net.SocketIO`, `RestSharp`, and the `StockSharp.Messages` library. Build it with the root solution:
-
-```bash
-dotnet build StockSharp.sln
-```
-
 For more information about StockSharp connectors see the [documentation](https://doc.stocksharp.com/topics/api/connectors/crypto_exchanges/bitstamp.html).

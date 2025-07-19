@@ -48,12 +48,5 @@ if (!errors.Any())
 
 `CodeInfo` manages assembly, project, and NuGet references. It also caches compiled assemblies when the compiler supports it.
 
-## Building
-
-```
-dotnet build Algo.Compilation/Algo.Compilation.csproj
-```
-
-By default the project targets **.NET 6.0** (see `common_target_net.props`).
 
 
