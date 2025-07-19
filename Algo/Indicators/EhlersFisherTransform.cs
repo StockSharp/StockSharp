@@ -194,4 +194,7 @@ public class EhlersFisherTransformValue(EhlersFisherTransform indicator, DateTim
 	/// </summary>
 	[Browsable(false)]
 	public decimal? TriggerLine => TriggerLineValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"MainLine={MainLine}, TriggerLine={TriggerLine}";
 }

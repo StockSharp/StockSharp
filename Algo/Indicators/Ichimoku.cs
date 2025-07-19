@@ -163,4 +163,7 @@ public class IchimokuValue(Ichimoku indicator, DateTimeOffset time) : ComplexInd
 	/// </summary>
 	[Browsable(false)]
 	public decimal? Chinkou => ChinkouValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"Tenkan={Tenkan}, Kijun={Kijun}, SenkouA={SenkouA}, SenkouB={SenkouB}, Chinkou={Chinkou}";
 }

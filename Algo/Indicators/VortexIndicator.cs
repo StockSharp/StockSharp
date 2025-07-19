@@ -223,4 +223,7 @@ public class VortexIndicatorValue(VortexIndicator indicator, DateTimeOffset time
 	/// </summary>
 	[Browsable(false)]
 	public decimal? MinusVi => MinusViValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"PlusVi={PlusVi}, MinusVi={MinusVi}";
 }

@@ -193,4 +193,7 @@ public class ConstanceBrownCompositeIndexValue(ConstanceBrownCompositeIndex indi
 	/// </summary>
 	[Browsable(false)]
 	public decimal? CompositeIndexLine => CompositeIndexLineValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"Rsi={Rsi}, Stoch={Stoch}, CompositeIndexLine={CompositeIndexLine}";
 }

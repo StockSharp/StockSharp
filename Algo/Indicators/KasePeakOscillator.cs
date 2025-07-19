@@ -211,4 +211,7 @@ public class KasePeakOscillatorValue(KasePeakOscillator indicator, DateTimeOffse
 	/// </summary>
 	[Browsable(false)]
 	public decimal? LongTerm => LongTermValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"ShortTerm={ShortTerm}, LongTerm={LongTerm}";
 }

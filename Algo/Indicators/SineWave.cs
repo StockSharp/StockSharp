@@ -159,4 +159,7 @@ public class SineWaveValue(SineWave indicator, DateTimeOffset time) : ComplexInd
 	/// </summary>
 	[Browsable(false)]
 	public decimal? Lead => LeadValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"Main={Main}, Lead={Lead}";
 }

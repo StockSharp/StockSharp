@@ -235,4 +235,7 @@ public class WaveTrendOscillatorValue(WaveTrendOscillator indicator, DateTimeOff
 	/// </summary>
 	[Browsable(false)]
 	public decimal? Wt2 => Wt2Value.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"Wt1={Wt1}, Wt2={Wt2}";
 }

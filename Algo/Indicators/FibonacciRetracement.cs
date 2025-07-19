@@ -158,4 +158,7 @@ public class FibonacciRetracementValue(FibonacciRetracement indicator, DateTimeO
 	/// </summary>
 	[Browsable(false)]
 	public decimal?[] Levels => [.. LevelsValues.Select(v => v.ToNullableDecimal())];
+
+	/// <inheritdoc />
+	public override string ToString() => $"Levels=[{string.Join(", ", Levels)}]";
 }

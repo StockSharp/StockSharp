@@ -170,4 +170,7 @@ public class EnvelopeValue(Envelope indicator, DateTimeOffset time) : ComplexInd
 	/// </summary>
 	[Browsable(false)]
 	public decimal? Lower => LowerValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"Middle={Middle}, Upper={Upper}, Lower={Lower}";
 }

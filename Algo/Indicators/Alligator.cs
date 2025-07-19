@@ -124,4 +124,7 @@ public class AlligatorValue(Alligator indicator, DateTimeOffset time) : ComplexI
 	/// </summary>
 	[Browsable(false)]
 	public decimal? Lips => LipsValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"Jaw={Jaw}, Teeth={Teeth}, Lips={Lips}";
 }

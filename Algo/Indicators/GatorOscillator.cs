@@ -103,4 +103,7 @@ public class GatorOscillatorValue(GatorOscillator indicator, DateTimeOffset time
 	/// </summary>
 	[Browsable(false)]
 	public decimal? Histogram2 => Histogram2Value.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"Histogram1={Histogram1}, Histogram2={Histogram2}";
 }

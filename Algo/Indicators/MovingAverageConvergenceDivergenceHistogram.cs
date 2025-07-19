@@ -111,4 +111,7 @@ public class MovingAverageConvergenceDivergenceHistogramValue(MovingAverageConve
 	/// </summary>
 	[Browsable(false)]
 	public decimal? Signal => SignalValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"Macd={Macd}, Signal={Signal}";
 }

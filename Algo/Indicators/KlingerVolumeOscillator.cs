@@ -164,4 +164,7 @@ public class KlingerVolumeOscillatorValue(KlingerVolumeOscillator indicator, Dat
 	/// </summary>
 	[Browsable(false)]
 	public decimal? Oscillator => OscillatorValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"ShortEma={ShortEma}, LongEma={LongEma}, Oscillator={Oscillator}";
 }

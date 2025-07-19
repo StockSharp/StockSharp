@@ -100,4 +100,7 @@ public class RelativeVigorIndexValue(RelativeVigorIndex indicator, DateTimeOffse
 	/// </summary>
 	[Browsable(false)]
 	public decimal? Signal => SignalValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"Average={Average}, Signal={Signal}";
 }

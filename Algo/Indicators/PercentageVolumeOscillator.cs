@@ -163,4 +163,7 @@ public class PercentageVolumeOscillatorValue(PercentageVolumeOscillator indicato
 	/// </summary>
 	[Browsable(false)]
 	public decimal? LongEma => LongEmaValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"ShortEma={ShortEma}, LongEma={LongEma}";
 }

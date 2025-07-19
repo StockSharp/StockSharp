@@ -282,4 +282,7 @@ public class ConnorsRSIValue(ConnorsRSI indicator, DateTimeOffset time) : Comple
 	/// </summary>
 	[Browsable(false)]
 	public decimal? CrsiLine => CrsiLineValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"Rsi={Rsi}, UpDownRsi={UpDownRsi}, RocRsi={RocRsi}, CrsiLine={CrsiLine}";
 }

@@ -175,4 +175,7 @@ public class CompositeMomentumValue(CompositeMomentum indicator, DateTimeOffset 
 	/// </summary>
 	[Browsable(false)]
 	public decimal? CompositeLine => CompositeLineValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"Sma={Sma}, CompositeLine={CompositeLine}";
 }
