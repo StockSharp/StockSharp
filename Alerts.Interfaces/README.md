@@ -56,7 +56,4 @@ AlertServicesRegistry.ProcessingService.Register(schema);
 
 When the `IAlertProcessingService` receives an `ExecutionMessage` that satisfies the rule, the configured notification service will deliver a message to the selected channel.
 
-## License
-
-This project is distributed under the [Apache 2.0 License](../LICENSE). See the LICENSE file for more information.
 

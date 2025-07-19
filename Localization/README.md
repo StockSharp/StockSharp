@@ -51,6 +51,3 @@ Languages can also be loaded dynamically using `AddLanguage(string langCode, Str
 
 During the build process `Localization.Generator` reads `strings.json` and emits a partial class `LocalizedStrings_Items.cs`. This file exposes constants for resource keys and cached properties for quick access. `ResetCache()` can be called when the active language changes to invalidate cached values.
 
-## License
-
-`StockSharp.Localization` is distributed under the [Apache 2.0](../LICENSE) license.

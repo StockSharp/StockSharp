@@ -50,9 +50,6 @@ A full‑fledged application will include market data subscriptions, order regis
 
 Comprehensive documentation for the API and subsystems is available at the [StockSharp documentation website](https://doc.stocksharp.com/).
 
-## License
-
-StockSharp.Algo is distributed under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0).
 
 ## Support
 

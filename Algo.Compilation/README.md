@@ -56,7 +56,4 @@ dotnet build Algo.Compilation/Algo.Compilation.csproj
 
 By default the project targets **.NET 6.0** (see `common_target_net.props`).
 
-## License
-
-This project is licensed under the same terms as the rest of StockSharp. See the root [LICENSE](../LICENSE) file for details.
 

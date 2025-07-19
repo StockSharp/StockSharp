@@ -32,6 +32,3 @@ The build will restore the `Media.Generator` project, execute the source generat
 1. Place the `.png` or `.svg` file into the [`Media/logos`](../Media/logos) directory of the repository.
 2. Build the solution. The `MediaNamesGenerator` will pick up the new file and add a corresponding constant to `MediaNames`.
 
-## License
-
-This project is distributed under the [Apache 2.0 License](../LICENSE).

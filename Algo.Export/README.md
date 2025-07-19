@@ -40,7 +40,4 @@ Other exporters (`ExcelExporter`, `XmlExporter`, `TextExporter`, `DatabaseExport
 
 `TemplateTxtRegistry` defines a set of default string templates which can be customized. They describe how message fields are converted to text. For instance, `TemplateTxtTick` controls how each trade is written to a text file. See the source for the full list of templates and examples.
 
-## License
-
-This project is distributed under the terms of the [StockSharp license](../../LICENSE).
 

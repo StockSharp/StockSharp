@@ -55,8 +55,4 @@ The project is part of the StockSharp solution and targets .NET. It references `
 dotnet build StockSharp.sln
 ```
 
-## License
-
-This connector is distributed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license.
-
 For more information about StockSharp connectors see the [documentation](https://doc.stocksharp.com/topics/api/connectors/crypto_exchanges/bitstamp.html).

@@ -34,6 +34,3 @@ To use the icons in your own project:
 
 After referencing you can load any image via `MediaNames` constants as shown above.
 
-## License
-
-StockSharp is distributed under the Apache 2.0 license. All icons are provided for use with StockSharp products. Some logos may be trademarks of their respective companies.

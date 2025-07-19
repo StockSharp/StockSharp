@@ -76,7 +76,4 @@ Analyses when the largest trading volume occurs by grouping candles by hour and 
 3. Launch StockSharp Designer or your own host application.
 4. Load any of the `.py` files and execute the script. Most scripts expect candle data to be available in your storage; adjust the date range and security identifiers as needed.
 
-## License
-
-This project is licensed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license. See the main repository [LICENSE](../LICENSE) file for details.
 
