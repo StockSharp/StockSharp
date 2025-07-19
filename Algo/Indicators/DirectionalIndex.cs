@@ -137,4 +137,7 @@ public class DirectionalIndexValue(DirectionalIndex indicator, DateTimeOffset ti
 	/// </summary>
 	[Browsable(false)]
 	public decimal? Minus => MinusValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"Plus={Plus}, Minus={Minus}";
 }

@@ -128,4 +128,7 @@ public class PriceChannelsValue(PriceChannels indicator, DateTimeOffset time) : 
 	/// </summary>
 	[Browsable(false)]
 	public decimal? LowerChannel => LowerChannelValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"UpperChannel={UpperChannel}, LowerChannel={LowerChannel}";
 }

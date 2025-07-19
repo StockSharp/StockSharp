@@ -160,4 +160,7 @@ public class PivotPointsValue(PivotPoints indicator, DateTimeOffset time) : Comp
 	/// </summary>
 	[Browsable(false)]
 	public decimal? S2 => S2Value.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"PivotPoint={PivotPoint}, R1={R1}, R2={R2}, S1={S1}, S2={S2}";
 }

@@ -108,4 +108,7 @@ public class WoodiesCCIValue(WoodiesCCI indicator, DateTimeOffset time) : Comple
 	/// </summary>
 	[Browsable(false)]
 	public decimal? Sma => SmaValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"Cci={Cci}, Sma={Sma}";
 }

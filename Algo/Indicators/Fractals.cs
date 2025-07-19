@@ -74,8 +74,11 @@ public class FractalsValue(Fractals fractals, DateTimeOffset time) : ComplexIndi
 				HasDown = true;
 		}
 
-		base.Add(indicator, value);
+	        base.Add(indicator, value);
 	}
+
+	/// <inheritdoc />
+	public override string ToString() => $"HasPattern={HasPattern}, HasUp={HasUp}, HasDown={HasDown}, Up={Up}, Down={Down}";
 }
 
 /// <summary>

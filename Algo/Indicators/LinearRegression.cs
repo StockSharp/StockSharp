@@ -174,4 +174,7 @@ public class LinearRegressionValue(LinearRegression indicator, DateTimeOffset ti
 	/// </summary>
 	[Browsable(false)]
 	public decimal? StandardError => StandardErrorValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"LinearReg={LinearReg}, RSquared={RSquared}, LinearRegSlope={LinearRegSlope}, StandardError={StandardError}";
 }

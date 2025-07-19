@@ -211,4 +211,7 @@ public class AdaptivePriceZoneValue(AdaptivePriceZone indicator, DateTimeOffset 
 	/// </summary>
 	[Browsable(false)]
 	public decimal? LowerBand => LowerBandValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"MovingAverage={MovingAverage}, UpperBand={UpperBand}, LowerBand={LowerBand}";
 }

@@ -147,4 +147,7 @@ public class KnowSureThingValue(KnowSureThing indicator, DateTimeOffset time) : 
 	/// </summary>
 	[Browsable(false)]
 	public decimal? Signal => SignalValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"KstLine={KstLine}, Signal={Signal}";
 }

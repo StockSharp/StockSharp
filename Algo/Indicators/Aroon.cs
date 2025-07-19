@@ -298,4 +298,7 @@ public class AroonValue(Aroon indicator, DateTimeOffset time) : ComplexIndicator
 	/// </summary>
 	[Browsable(false)]
 	public decimal? Down => DownValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"Up={Up}, Down={Down}";
 }

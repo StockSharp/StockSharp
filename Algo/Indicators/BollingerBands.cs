@@ -173,4 +173,7 @@ public class BollingerBandsValue(BollingerBands indicator, DateTimeOffset time) 
 	/// </summary>
 	[Browsable(false)]
 	public decimal? LowBand => LowBandValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"MovingAverage={MovingAverage}, UpBand={UpBand}, LowBand={LowBand}";
 }

@@ -89,4 +89,7 @@ public class StochasticOscillatorValue(StochasticOscillator indicator, DateTimeO
 	/// </summary>
 	[Browsable(false)]
 	public decimal? D => DValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"K={K}, D={D}";
 }

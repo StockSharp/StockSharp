@@ -115,4 +115,7 @@ public class AverageDirectionalIndexValue(AverageDirectionalIndex indicator, Dat
 	/// </summary>
 	[Browsable(false)]
 	public decimal? MovingAverage => MovingAverageValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"Dx={Dx}, MovingAverage={MovingAverage}";
 }

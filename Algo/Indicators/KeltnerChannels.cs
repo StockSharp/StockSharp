@@ -217,4 +217,7 @@ public class KeltnerChannelsValue(KeltnerChannels indicator, DateTimeOffset time
 	/// </summary>
 	[Browsable(false)]
 	public decimal? Lower => LowerValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"Middle={Middle}, Upper={Upper}, Lower={Lower}";
 }

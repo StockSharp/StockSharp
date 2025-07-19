@@ -158,4 +158,7 @@ public class PercentagePriceOscillatorValue(PercentagePriceOscillator indicator,
 	/// </summary>
 	[Browsable(false)]
 	public decimal? LongEma => LongEmaValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"ShortEma={ShortEma}, LongEma={LongEma}";
 }

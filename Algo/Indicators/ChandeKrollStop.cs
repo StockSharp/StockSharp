@@ -199,4 +199,7 @@ public class ChandeKrollStopValue(ChandeKrollStop indicator, DateTimeOffset time
 	/// </summary>
 	[Browsable(false)]
 	public decimal? Lowest => LowestValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"Highest={Highest}, Lowest={Lowest}";
 }

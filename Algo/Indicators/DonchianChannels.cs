@@ -165,4 +165,7 @@ public class DonchianChannelsValue(DonchianChannels indicator, DateTimeOffset ti
 	/// </summary>
 	[Browsable(false)]
 	public decimal? Middle => MiddleValue.ToNullableDecimal();
+
+	/// <inheritdoc />
+	public override string ToString() => $"UpperBand={UpperBand}, LowerBand={LowerBand}, Middle={Middle}";
 }

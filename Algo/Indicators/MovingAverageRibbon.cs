@@ -156,4 +156,7 @@ public class MovingAverageRibbonValue(MovingAverageRibbon indicator, DateTimeOff
 	/// </summary>
 	[Browsable(false)]
 	public decimal?[] Averages => [.. AveragesValues.Select(v => v.ToNullableDecimal())];
+
+	/// <inheritdoc />
+	public override string ToString() => $"Averages=[{string.Join(", ", Averages)}]";
 }
