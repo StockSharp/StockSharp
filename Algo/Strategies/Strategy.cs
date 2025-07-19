@@ -1472,6 +1472,9 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		OnOrderRegisterFailed(fail, canRisk && _ordersInfo.ContainsKey(order));
 
+		foreach (var subscription in _subscriptions.CachedKeys.Where(s => s.SubscriptionMessage.Type == MessageTypes.OrderStatus))
+			OrderRegisterFailReceived?.Invoke(subscription, fail);
+
 		Rules.RemoveRulesByToken(order, null);
 	}
 
