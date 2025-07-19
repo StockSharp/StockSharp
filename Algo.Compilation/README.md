@@ -1,6 +1,6 @@
 # StockSharp Algo.Compilation
 
-**Algo.Compilation** provides runtime code compilation services for the [StockSharp](../README.md) trading platform. It enables you to compile trading algorithms and analytics scripts written in different languages, including C#, Visual Basic, F#, and Python, directly from your application.
+**Algo.Compilation** provides runtime code compilation services for the StockSharp trading platform. It enables you to compile trading algorithms and analytics scripts written in different languages, including C#, Visual Basic, F#, and Python, directly from your application.
 
 ## Features
 
@@ -55,11 +55,6 @@ dotnet build Algo.Compilation/Algo.Compilation.csproj
 ```
 
 By default the project targets **.NET 6.0** (see `common_target_net.props`).
-
-## Related Projects
-
-- [Algo.Analytics.Python](../Algo.Analytics.Python) – contains Python examples and utilities that are embedded into this package.
-- [Configuration](../Configuration) – provides `Paths` used to locate the Python utilities folder.
 
 ## License
 
