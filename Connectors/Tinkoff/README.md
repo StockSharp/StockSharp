@@ -26,15 +26,6 @@ The source code can be used as a reference for building custom integrations or i
 - [.NET 6.0](https://dotnet.microsoft.com/) or newer
 - Access to the Tinkoff Invest API and a valid API token
 
-## Building
-
-To compile only the connector project run:
-
-```bash
-dotnet build Connectors/Tinkoff/Tinkoff.csproj
-```
-
-It is also included in the main `StockSharp.sln` solution and will be built automatically when that solution is compiled.
 
 ## Usage Example
 

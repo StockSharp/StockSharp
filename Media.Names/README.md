@@ -17,18 +17,8 @@ public class BinanceMessageAdapter { /* ... */ }
 
 Because the constants are generated automatically, you never need to edit the file manually when new logos are added.
 
-## Building
-
-Media.Names targets **.NET Standard 2.0** and has no runtime dependencies aside from the generated source. To build the project locally run:
-
-```bash
-dotnet build Media.Names/Media.Names.csproj
-```
-
-The build will restore the `Media.Generator` project, execute the source generator, and produce `StockSharp.Media.Names.dll` along with an XML documentation file.
 
 ## Adding New Icons
 
 1. Place the `.png` or `.svg` file into the `Media/logos` directory of the repository.
-2. Build the solution. The `MediaNamesGenerator` will pick up the new file and add a corresponding constant to `MediaNames`.
 

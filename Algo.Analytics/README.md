@@ -8,6 +8,8 @@ The library is a part of the main StockSharp repository and can be found in the 
 - `Algo.Analytics.FSharp` – F# examples
 - `Algo.Analytics.Python` – Python examples together with helper modules for .NET interoperability
 
+These example scripts showcase the Hydra analytics feature. See the [Hydra documentation](https://doc.stocksharp.com/topics/hydra/analytics.html) for details on executing analytics scripts inside the platform.
+
 ## Interfaces
 
 ### `IAnalyticsScript`
@@ -40,15 +42,4 @@ The example folders contain several ready‑to‑use scripts demonstrating how t
 
 Python examples include a set of helper modules under `common` that simplify working with .NET types from Python code (for example `chart_extensions.py` and `storage_extensions.py`).
 
-## Building and running
-
-To compile analytics scripts or run unit tests you need a .NET SDK that supports the target framework used in the repository (currently `net9.0`). The test project (`Tests/CompilationTests.cs`) shows how to compile scripts programmatically using `StockSharp.Algo.Compilation` and then execute them with a test implementation of `IAnalyticsPanel`.
-
-Typical steps:
-
-1. Build the solution `StockSharp.sln` with the required .NET SDK.
-2. Implement `IAnalyticsScript` in your preferred language.
-3. Compile the script using the StockSharp compiler service or your own tooling and run `script.Run` providing market data storage and an implementation of `IAnalyticsPanel`.
-
-The provided examples can be used as templates for custom analytics modules.
 

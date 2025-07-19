@@ -16,13 +16,6 @@ The project demonstrates how to integrate StockSharp with Bitexbook in order to 
 - Handles subscriptions for Level1, order log, and candle data.
 - Implements deposit and withdrawal operations via a custom order condition.
 
-## Building
-
-The connector targets **.NET 6.0** and depends on other StockSharp projects. To build it as part of the whole solution:
-
-1. Clone the repository and open `StockSharp.sln` in Visual Studio or run `dotnet build` from the command line.
-2. The project file is `Bitexbook.csproj`, which imports common build settings from `common_connectors_websocket.props`.
-3. After a successful build you can reference the resulting assembly from your trading application.
 
 ## Usage
 

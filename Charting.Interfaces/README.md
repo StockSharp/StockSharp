@@ -11,16 +11,6 @@ Charting.Interfaces contains a set of interface definitions and helper classes u
 - Interfaces for specialized chart elements such as orders, trades, indicators, bands, and annotations.
 - Support for persistent settings via `IPersistable` so that chart layouts can be saved and restored.
 
-## Building the project
-
-Charting.Interfaces is a .NET class library. To restore dependencies and build it separately from the rest of the StockSharp solution, run:
-
-```bash
-dotnet restore Charting.Interfaces/Charting.Interfaces.csproj
-dotnet build Charting.Interfaces/Charting.Interfaces.csproj -c Release
-```
-
-Note that building the entire StockSharp solution may require a newer .NET SDK than the one installed in your environment.
 
 ## Usage
 

@@ -10,13 +10,6 @@ This directory contains the source code for the **Bitalong** connector used by t
 - Portfolio and balance updates with configurable check interval.
 - Automatic conversion between StockSharp data types and Bitalong REST API types located in the `Native` subfolder.
 
-## Building
-
-The project is a standard .NET class library targeting **.NET 6.0**. To include the connector in your solution, add `Bitalong.csproj` to your build or reference the compiled assembly. The project file imports common build settings from `common_connectors_websocket.props`.
-
-```
-dotnet build Connectors/Bitalong/Bitalong.csproj
-```
 
 ## Configuration
 

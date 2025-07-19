@@ -31,12 +31,4 @@ def diagram_external(func):
 
 The above decorator adds the `DiagramExternalAttribute` to Python functions so they can be used in the Designer.
 
-## Building
-
-The project targets **.NET 6** and is included in `StockSharp.sln`. It can be built with Visual Studio or the `dotnet` CLI:
-
-```bash
-cd ..
-dotnet build StockSharp.sln
-```
 

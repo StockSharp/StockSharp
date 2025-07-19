@@ -20,14 +20,6 @@ StockSharp.Algo is the core algorithmic trading library used throughout the Stoc
 - [.NET SDK 6.0](https://dotnet.microsoft.com/) or later.
 - Visual Studio 2022 or any compatible IDE.
 
-### Building
-
-1. Clone the repository and open `StockSharp.sln` or `Algo/Algo.csproj` in your IDE.
-2. Restore NuGet packages and build the project:
-   ```bash
-   dotnet build Algo/Algo.csproj -c Release
-   ```
-
 ### Basic Usage
 
 The typical entry point for working with the library is the `Connector` class. Below is a very simplified example that demonstrates how to run a custom strategy using historical data:

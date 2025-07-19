@@ -12,14 +12,6 @@
 - **StockSharp storage**: `StockSharpExporter` writes messages to the native persistent storage using `IStorageRegistry` and `IMarketDataDrive`.
 - **Progress control**: every exporter accepts a `Func<int,bool>` delegate used to report element count and abort processing if required.
 
-## Building
-
-The project targets **.NET 6** and is included in the main `StockSharp.sln` solution. It depends on `Ecng.Data.Linq2db`, `Ecng.DXRefs` and the core `StockSharp.Algo` project. To build from the command line run:
-
-```bash
-dotnet build StockSharp.sln
-```
-
 ## Usage
 
 Below is a simplified example of exporting trades to JSON:
