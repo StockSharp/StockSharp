@@ -25,9 +25,6 @@ Each script reads candles from `IStorageRegistry` using a specified `IMarketData
 3. Load this DLL into your application or the [S# Designer](https://doc.stocksharp.com/topics/designer.html) to run individual scripts.
 4. Provide the securities, time range and storage parameters required by each script. The output will be displayed through the analytics panel implementation used (e.g., charts or tables in the Designer).
 
-## License
-
-This project is licensed under the [Apache 2.0 License](../LICENSE).
 
 ## Support
 

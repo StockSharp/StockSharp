@@ -131,6 +131,3 @@ The assembly is titled **S#.Configuration** and described as "Configuration comp
 4. Use `InvariantCultureSerializer` when you need stable serialization irrespective of system locale.
 5. Create an instance of `InMemoryMessageAdapterProvider` to dynamically discover available message adapters.
 
-## License
-
-This project is distributed under the [Apache 2.0 License](../LICENSE).

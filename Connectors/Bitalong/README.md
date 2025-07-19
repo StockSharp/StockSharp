@@ -48,7 +48,4 @@ The adapter can then be registered in your `Connector` or passed directly to S# 
 - `BitalongOrderCondition.cs` – custom order condition for withdrawal operations.
 - `Native` – lightweight wrappers for the exchange REST API including request helpers and model classes.
 
-## License
-
-This connector is distributed under the **Apache 2.0** license. See the repository [LICENSE](../../LICENSE) file for details.
 

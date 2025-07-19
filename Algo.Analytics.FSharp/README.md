@@ -54,6 +54,3 @@ Loads candles for each security and identifies the candle with the greatest rang
 2. Open `StockSharp.sln` in Visual Studio or run `dotnet build` from the repository root. The project `Algo.Analytics.FSharp` will be built as a class library.
 3. To run a script, reference it from your application or load it through the **S# Designer** analytics module, which provides an implementation of `IAnalyticsPanel` for displaying charts and tables.
 
-## License
-
-This project is released under the [Apache 2.0 License](../LICENSE).

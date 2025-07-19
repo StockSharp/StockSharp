@@ -50,6 +50,3 @@ Once connected you can subscribe to market data or register/cancel orders via th
 
 Detailed instructions for creating custom connectors and using StockSharp can be found in the [official documentation](https://doc.stocksharp.com/topics/api/connectors/crypto_exchanges/bitexbook.html).
 
-## License
-
-This project is distributed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license. See the root `LICENSE` file for details.

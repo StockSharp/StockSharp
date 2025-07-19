@@ -48,6 +48,3 @@ Such messages are passed to an adapter, which forwards them to the broker or dat
 
 Further details on messages and architecture can be found in the [StockSharp documentation](https://doc.stocksharp.com/topics/api/messages.html).
 
-## License
-
-Distributed under the [Apache 2.0 License](../LICENSE).

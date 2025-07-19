@@ -79,5 +79,3 @@ The library is part of the `StockSharp.sln` solution and is built with:
 dotnet build StockSharp.sln
 ```
 
-## License
-Distributed under the MIT license. See `LICENSE` for details.

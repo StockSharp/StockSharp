@@ -40,6 +40,3 @@ cd ..
 dotnet build StockSharp.sln
 ```
 
-## License
-
-Diagram.Core is part of the StockSharp project and is distributed under the [Apache 2.0 License](../LICENSE).

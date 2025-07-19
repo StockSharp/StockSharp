@@ -30,7 +30,4 @@ The library provides only interfaces and helper types, so it can be referenced f
 
 Detailed documentation for StockSharp, including charting APIs, is available at [https://doc.stocksharp.com](https://doc.stocksharp.com).
 
-## License
-
-Charting.Interfaces is part of the StockSharp project and is distributed under the terms of the MIT license. See the repository root for the full license text.
 
