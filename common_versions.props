@@ -27,7 +27,7 @@
     <IronPythonVer>3.4.2</IronPythonVer>
     <MoqVer>4.*</MoqVer>
 
-    <MicrosoftCodeAnalysisVer>4.12.0</MicrosoftCodeAnalysisVer>
-    <MicrosoftCodeAnalysisAnalyzersVer>3.3.4</MicrosoftCodeAnalysisAnalyzersVer>
+    <MicrosoftCodeAnalysisVer>4.14.0</MicrosoftCodeAnalysisVer>
+    <MicrosoftCodeAnalysisAnalyzersVer>4.14.0</MicrosoftCodeAnalysisAnalyzersVer>
   </PropertyGroup>
 </Project>
