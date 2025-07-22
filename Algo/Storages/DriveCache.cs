@@ -53,7 +53,12 @@ public class DriveCache : Disposable, IPersistable
 	/// <summary>
 	/// The storage used by default.
 	/// </summary>
-	public IMarketDataDrive DefaultDrive => Drives.OfType<LocalMarketDataDrive>().First();
+	public IMarketDataDrive TryDefaultDrive => Drives.OfType<LocalMarketDataDrive>().FirstOrDefault();
+
+	/// <summary>
+	/// The storage used by default.
+	/// </summary>
+	public IMarketDataDrive DefaultDrive => TryDefaultDrive ?? throw new NotImplementedException();
 
 	/// <summary>
 	/// New storage created event.
@@ -96,7 +101,7 @@ public class DriveCache : Disposable, IPersistable
 	public IMarketDataDrive GetDrive(string path)
 	{
 		if (path.IsEmpty())
-			return DefaultDrive;
+			return TryDefaultDrive;
 
 		var pair = CreatePair(path);
 
