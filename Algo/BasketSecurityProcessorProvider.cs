@@ -7,7 +7,7 @@ using StockSharp.Algo.Expressions;
 /// </summary>
 public class BasketSecurityProcessorProvider : IBasketSecurityProcessorProvider
 {
-	private readonly SynchronizedDictionary<string, Tuple<Type, Type>> _processors = new(StringComparer.InvariantCultureIgnoreCase);
+	private readonly SynchronizedDictionary<string, (Type processor, Type security)> _processors = new(StringComparer.InvariantCultureIgnoreCase);
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BasketSecurityProcessorProvider"/>.
@@ -28,26 +28,16 @@ public class BasketSecurityProcessorProvider : IBasketSecurityProcessorProvider
 		if (securityType == null)
 			throw new ArgumentNullException(nameof(securityType));
 
-		var attr = securityType.GetAttribute<BasketCodeAttribute>();
+		var attr = securityType.GetAttribute<BasketCodeAttribute>()
+			?? throw new ArgumentException(securityType.ToString(), nameof(securityType));
 
-		if (attr == null)
-			throw new ArgumentException(nameof(securityType));
-
-		_processors.Add(attr.Code, Tuple.Create(processorType, securityType));
-	}
-
-	private static void Validate(string basketCode)
-	{
-		if (basketCode.IsEmpty())
-			throw new ArgumentNullException(nameof(basketCode));
-
-		if (basketCode.Length != 2)
-			throw new ArgumentOutOfRangeException(nameof(basketCode));
+		_processors.Add(attr.Code, (processorType, securityType));
 	}
 
 	void IBasketSecurityProcessorProvider.Register(string basketCode, Type processorType, Type securityType)
 	{
-		Validate(basketCode);
+		if (basketCode.IsEmpty())
+			throw new ArgumentNullException(nameof(basketCode));
 
 		if (processorType == null)
 			throw new ArgumentNullException(nameof(processorType));
@@ -55,19 +45,21 @@ public class BasketSecurityProcessorProvider : IBasketSecurityProcessorProvider
 		if (securityType == null)
 			throw new ArgumentNullException(nameof(securityType));
 
-		_processors.Add(basketCode, Tuple.Create(processorType, securityType));
+		_processors.Add(basketCode, (processorType, securityType));
 	}
 
 	void IBasketSecurityProcessorProvider.UnRegister(string basketCode)
 	{
-		Validate(basketCode);
+		if (basketCode.IsEmpty())
+			throw new ArgumentNullException(nameof(basketCode));
 
 		_processors.Remove(basketCode);
 	}
 
-	private Tuple<Type, Type> GetInfo(string basketCode)
+	private (Type processor, Type security) GetInfo(string basketCode)
 	{
-		Validate(basketCode);
+		if (basketCode.IsEmpty())
+			throw new ArgumentNullException(nameof(basketCode));
 
 		if (_processors.TryGetValue(basketCode, out var processor))
 			return processor;
@@ -76,12 +68,8 @@ public class BasketSecurityProcessorProvider : IBasketSecurityProcessorProvider
 	}
 
 	Type IBasketSecurityProcessorProvider.GetProcessorType(string basketCode)
-	{
-		return GetInfo(basketCode).Item1;
-	}
+		=> GetInfo(basketCode).processor;
 
 	Type IBasketSecurityProcessorProvider.GetSecurityType(string basketCode)
-	{
-		return GetInfo(basketCode).Item2;
-	}
+		=> GetInfo(basketCode).security;
 }
