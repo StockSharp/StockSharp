@@ -2347,16 +2347,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		RaiseLatencyChanged();
 	}
 
-	/// <summary>
-	/// To process orders, received for the connection <see cref="Connector"/>, and find among them those, belonging to the strategy.
-	/// </summary>
-	/// <param name="newOrders">New orders.</param>
-	/// <returns>Orders, belonging to the strategy.</returns>
-	protected virtual IEnumerable<Order> ProcessNewOrders(IEnumerable<Order> newOrders)
-	{
-		return _ordersInfo.SyncGet(d => newOrders.Where(_ordersInfo.ContainsKey).ToArray());
-	}
-
 	/// <inheritdoc />
 	public override void Load(SettingsStorage storage)
 	{
