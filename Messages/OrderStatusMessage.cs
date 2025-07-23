@@ -56,8 +56,7 @@ public class OrderStatusMessage : OrderCancelMessage, ISubscriptionMessage
 	bool ISubscriptionMessage.FilterEnabled
 		=>
 		States.Length != 0 || SecurityId != default ||
-		!PortfolioName.IsEmpty() || Side != null ||
-		Volume != null || !StrategyId.IsEmpty();
+		!PortfolioName.IsEmpty() || Side != null || Volume != null;
 
 	bool ISubscriptionMessage.SpecificItemRequest => this.HasOrderId();
 
