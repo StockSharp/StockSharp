@@ -199,6 +199,7 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 		}
 
 		candle.OpenInterest = transform.OpenInterest;
+		candle.LocalTime = transform.Time;
 
 		candle.TotalTicks = 1;
 
@@ -251,6 +252,7 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 		candle.CloseTime = time;
 
 		candle.OpenInterest = transform.OpenInterest;
+		candle.LocalTime = transform.Time;
 
 		IncrementTicks(candle);
 	}
