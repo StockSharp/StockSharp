@@ -392,7 +392,7 @@ partial class Connector
 			Subscription[] missingSubscriptions;
 
 			lock (_syncObject)
-				missingSubscriptions = [.. subscriptions.Where(sub => (!_wasConnected || !_connector.SubscriptionsOnConnect.Contains(sub)) && !_subscriptions.ContainsKey(sub.TransactionId) && !Subscriptions.Any(s => s.DataType == sub.DataType && s.To == null))];
+				missingSubscriptions = [.. subscriptions.Where(sub => (!_wasConnected || !_connector.SubscriptionsOnConnect.Contains(sub)) && !_subscriptions.ContainsKey(sub.TransactionId))];
 
 			if (_wasConnected)
 			{
