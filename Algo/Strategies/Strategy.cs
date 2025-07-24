@@ -2092,7 +2092,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				security.ToSecurityId(),
 				portfolio.Name,
 				new LocalProtectiveBehaviourFactory(security.PriceStep, security.Decimals),
-				_takeProfit, _stopLoss, _isStopTrailing, _takeTimeout, _stopTimeout, _protectiveUseMarketOrders);
+				_takeProfit ?? new(), _stopLoss ?? new(), _isStopTrailing, _takeTimeout, _stopTimeout, _protectiveUseMarketOrders);
 
 			var info = _posController?.Update(trade.Trade.Price, trade.GetPosition(), trade.Trade.ServerTime);
 

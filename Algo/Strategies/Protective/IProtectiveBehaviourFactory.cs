@@ -132,7 +132,7 @@ public class LocalProtectiveBehaviourFactory(decimal? priceStep, int? decimals) 
 			_priceStep = priceStep;
 			_decimals = decimals;
 
-			if (isStopTrailing && stopValue?.Type == UnitTypes.Limit)
+			if (isStopTrailing && stopValue.Type == UnitTypes.Limit)
 				throw new ArgumentException(LocalizedStrings.TrailingNotSupportLimitProtectiveLevel, nameof(stopValue));
 		}
 
