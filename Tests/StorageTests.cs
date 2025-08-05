@@ -22,7 +22,7 @@ public class StorageTests
 		return GetStorageRegistry().GetTickMessageStorage(security, null, format);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	//[ExpectedException(typeof(ArgumentOutOfRangeException), "Неправильная цена сделки.")]
@@ -42,7 +42,7 @@ public class StorageTests
 		}]);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickEmptySecurityBinary(StorageFormats format)
@@ -60,7 +60,7 @@ public class StorageTests
 		}]);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickInvalidSecurity2(StorageFormats format)
@@ -83,7 +83,7 @@ public class StorageTests
 		]));
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickInvalidSecurity3(StorageFormats format)
@@ -102,7 +102,7 @@ public class StorageTests
 		}]));
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickRandom(StorageFormats format)
@@ -110,7 +110,7 @@ public class StorageTests
 		TickRandomSaveLoad(format, _tickCount);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickStringId(StorageFormats format)
@@ -130,7 +130,7 @@ public class StorageTests
 		});
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickRandomLocalTime(StorageFormats format)
@@ -145,7 +145,7 @@ public class StorageTests
 		});
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickNanosec(StorageFormats format)
@@ -153,7 +153,7 @@ public class StorageTests
 		TickRandomSaveLoad(format, _tickCount, interval: TimeSpan.FromTicks(16546));
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickHighPrice(StorageFormats format)
@@ -167,7 +167,7 @@ public class StorageTests
 		});
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickLowPrice(StorageFormats format)
@@ -183,7 +183,7 @@ public class StorageTests
 		});
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickExtremePrice(StorageFormats format)
@@ -199,7 +199,7 @@ public class StorageTests
 		});
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickExtremePrice2(StorageFormats format)
@@ -215,7 +215,7 @@ public class StorageTests
 		});
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickExtremeVolume(StorageFormats format)
@@ -231,7 +231,7 @@ public class StorageTests
 		});
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickExtremeVolume2(StorageFormats format)
@@ -245,7 +245,7 @@ public class StorageTests
 		});
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickNonSystem(StorageFormats format)
@@ -263,7 +263,7 @@ public class StorageTests
 		});
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickFractionalVolume(StorageFormats format)
@@ -279,7 +279,7 @@ public class StorageTests
 		});
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickFractionalVolume2(StorageFormats format)
@@ -309,7 +309,7 @@ public class StorageTests
 		storage.DeleteWithCheck();
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickPartSave(StorageFormats format)
@@ -333,7 +333,7 @@ public class StorageTests
 		tradeStorage.DeleteWithCheck();
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickRandomDelete(StorageFormats format)
@@ -354,7 +354,7 @@ public class StorageTests
 		tradeStorage.DeleteWithCheck();
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickFullDelete(StorageFormats format)
@@ -386,7 +386,7 @@ public class StorageTests
 		loadedTrades.Length.AssertEqual(0);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickWrongDateDelete(StorageFormats format)
@@ -397,7 +397,7 @@ public class StorageTests
 		GetTradeStorage(secId, format).Delete(new DateTime(2005, 1, 1), new DateTime(2005, 1, 10));
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickRandomDateDelete(StorageFormats format)
@@ -432,7 +432,7 @@ public class StorageTests
 		tradeStorage.DeleteWithCheck();
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickSameTime(StorageFormats format)
@@ -479,7 +479,7 @@ public class StorageTests
 		loadedTrades.CompareMessages(trades);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthAdaptivePriceStep(StorageFormats format)
@@ -500,7 +500,7 @@ public class StorageTests
 		storage.DeleteWithCheck();
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthLowPriceStep(StorageFormats format)
@@ -525,7 +525,7 @@ public class StorageTests
 		return GetStorageRegistry().GetQuoteMessageStorage(security, null, format);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthInvalidVolume(StorageFormats format)
@@ -544,7 +544,7 @@ public class StorageTests
 		Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => storage.Save([depth]));
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthInvalidSecurity(StorageFormats format)
@@ -562,7 +562,7 @@ public class StorageTests
 		Assert.ThrowsExactly<ArgumentException>(() => storage.Save([depth]));
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	//[ExpectedException(typeof(ArgumentException), "Попытка записать неупорядоченные стаканы.")]
@@ -591,7 +591,7 @@ public class StorageTests
 		storage.Save([depth1]);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	//[ExpectedException(typeof(ArgumentException), "Попытка записать неупорядоченные стаканы.")]
@@ -623,7 +623,7 @@ public class StorageTests
 		depthStorage.DeleteWithCheck();
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	//[ExpectedException(typeof(ArgumentException), "Попытка записать неупорядоченные стаканы.")]
@@ -662,7 +662,7 @@ public class StorageTests
 		}
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	//[ExpectedException(typeof(ArgumentException), "Все переданные стаканы является пустыми.")]
@@ -684,7 +684,7 @@ public class StorageTests
 		LoadDepthsAndCompare(storage, depths);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	//[ExpectedException(typeof(ArgumentException), "Переданный стакан является пустым.")]
@@ -720,7 +720,7 @@ public class StorageTests
 		depthStorage.DeleteWithCheck();
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthNegativePrices(StorageFormats format)
@@ -758,7 +758,7 @@ public class StorageTests
 		depthStorage.DeleteWithCheck();
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthZeroPrices(StorageFormats format)
@@ -796,7 +796,7 @@ public class StorageTests
 		depthStorage.DeleteWithCheck();
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthEmpty2(StorageFormats format)
@@ -830,7 +830,7 @@ public class StorageTests
 		depthStorage.DeleteWithCheck();
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthEmpty3(StorageFormats format)
@@ -849,7 +849,7 @@ public class StorageTests
 		depthStorage.DeleteWithCheck();
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthPartSave(StorageFormats format)
@@ -925,7 +925,7 @@ public class StorageTests
 		loadedDepths.Length.AssertEqual(0);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthHalfFilled(StorageFormats format)
@@ -933,7 +933,7 @@ public class StorageTests
 		DepthHalfFilled(format, _depthCount1);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthRandom(StorageFormats format)
@@ -941,7 +941,7 @@ public class StorageTests
 		DepthRandom(format, _depthCount3);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthRandomOrdersCount(StorageFormats format)
@@ -949,7 +949,7 @@ public class StorageTests
 		DepthRandom(format, _depthCount3, ordersCount: true);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthRandomConditions(StorageFormats format)
@@ -957,7 +957,7 @@ public class StorageTests
 		DepthRandom(format, _depthCount3, conditions: true);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthExtremePrice(StorageFormats format)
@@ -996,7 +996,7 @@ public class StorageTests
 		});
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthExtremeVolume(StorageFormats format)
@@ -1016,7 +1016,7 @@ public class StorageTests
 		});
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthExtremeVolume2(StorageFormats format)
@@ -1036,7 +1036,7 @@ public class StorageTests
 		});
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthRandomNanosec(StorageFormats format)
@@ -1044,7 +1044,7 @@ public class StorageTests
 		DepthRandom(format, _depthCount3, interval: TimeSpan.FromTicks(14465));
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthFractionalVolume(StorageFormats format)
@@ -1064,7 +1064,7 @@ public class StorageTests
 		});
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthFractionalVolume2(StorageFormats format)
@@ -1086,7 +1086,7 @@ public class StorageTests
 		});
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthSameTime(StorageFormats format)
@@ -1161,7 +1161,7 @@ public class StorageTests
 		depthStorage.DeleteWithCheck();
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthRandomDelete(StorageFormats format)
@@ -1183,7 +1183,7 @@ public class StorageTests
 		depthStorage.DeleteWithCheck();
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthFullDelete(StorageFormats format)
@@ -1217,7 +1217,7 @@ public class StorageTests
 		loadedDepths.Length.AssertEqual(0);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthRandomDateDelete(StorageFormats format)
@@ -1247,7 +1247,7 @@ public class StorageTests
 		loadedDepths.CompareMessages(depths);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthRandomLessMaxDepth(StorageFormats format)
@@ -1279,7 +1279,7 @@ public class StorageTests
 		depthStorage.DeleteWithCheck();
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthRandomMoreMaxDepth(StorageFormats format)
@@ -1359,7 +1359,7 @@ public class StorageTests
 		loadedDepths.CompareMessages(depths);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthRandomIncrement(StorageFormats format)
@@ -1367,7 +1367,7 @@ public class StorageTests
 		DepthRandomIncrement(format, false, false);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthRandomIncrementOrders(StorageFormats format)
@@ -1375,7 +1375,7 @@ public class StorageTests
 		DepthRandomIncrement(format, true, false);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthRandomIncrementOrdersConditions(StorageFormats format)
@@ -1413,7 +1413,7 @@ public class StorageTests
 		Assert.ThrowsExactly<InvalidOperationException>(() => depthStorage.Save(depths));
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthRandomIncrementNonIncrement(StorageFormats format)
@@ -1421,7 +1421,7 @@ public class StorageTests
 		DepthRandomIncrementNonIncrement(format, true);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthRandomIncrementNonIncrement2(StorageFormats format)
@@ -1429,7 +1429,7 @@ public class StorageTests
 		DepthRandomIncrementNonIncrement(format, false);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthRandomIncrementNonIncrement3(StorageFormats format)
@@ -1463,7 +1463,7 @@ public class StorageTests
 		Assert.ThrowsExactly<ArgumentException>(() => depthStorage.Save(depths.Skip(1)));
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesExtremePrices(StorageFormats format)
@@ -1481,7 +1481,7 @@ public class StorageTests
 		CandlesRandom(format, trades, security, false);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesNoProfile(StorageFormats format)
@@ -1491,7 +1491,7 @@ public class StorageTests
 		CandlesRandom(format, security.RandomTicks(_tickCount, false), security, false);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	//[DataRow(StorageFormats.Csv)]
 	public void CandlesWithProfile(StorageFormats format)
@@ -1501,7 +1501,7 @@ public class StorageTests
 		CandlesRandom(format, security.RandomTicks(_tickCount, true), security, true);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesActive(StorageFormats format)
@@ -1569,7 +1569,7 @@ public class StorageTests
 		candleStorage.Delete(loadedCandles);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesDuplicate(StorageFormats format)
@@ -1655,7 +1655,7 @@ public class StorageTests
 		return [.. trades];
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesFractionalVolume(StorageFormats format)
@@ -1666,7 +1666,7 @@ public class StorageTests
 		CandlesRandom(format, GenerateFactalVolumeTrades(security, 1), security, false, volumeRange: 0.0003m, boxSize: 0.0003m);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesFractionalVolume2(StorageFormats format)
@@ -1791,7 +1791,7 @@ public class StorageTests
 		candleStorage.Delete(loadedCandles);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesInvalid(StorageFormats format)
@@ -1815,7 +1815,7 @@ public class StorageTests
 		}
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesInvalid2(StorageFormats format)
@@ -1843,7 +1843,7 @@ public class StorageTests
 		}
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesInvalid4(StorageFormats format)
@@ -1856,7 +1856,7 @@ public class StorageTests
 		Assert.ThrowsExactly<ArgumentNullException>(() => storage.GetTimeFrameCandleMessageStorage(secId, TimeSpan.FromMinutes(0), null, format));
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesSameTime(StorageFormats format)
@@ -1955,7 +1955,7 @@ public class StorageTests
 		}
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesMiniTimeFrame(StorageFormats format)
@@ -1963,7 +1963,7 @@ public class StorageTests
 		CandlesTimeFrame(format, TimeSpan.FromMilliseconds(100));
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesMiniTimeFrame2(StorageFormats format)
@@ -1971,7 +1971,7 @@ public class StorageTests
 		CandlesTimeFrame(format, TimeSpan.FromMinutes(1.0456));
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesBigTimeFrame(StorageFormats format)
@@ -1979,7 +1979,7 @@ public class StorageTests
 		CandlesTimeFrame(format, TimeSpan.FromHours(100));
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesBigTimeFrame2(StorageFormats format)
@@ -1987,7 +1987,7 @@ public class StorageTests
 		CandlesTimeFrame(format, TimeSpan.FromHours(100.4570456));
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesDiffDates(StorageFormats format)
@@ -1995,7 +1995,7 @@ public class StorageTests
 		CandlesTimeFrame(format, TimeSpan.FromHours(3), new DateTime(2019, 1, 1, 20, 00, 00).UtcKind());
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesDiffDaysOffsets(StorageFormats format)
@@ -2050,7 +2050,7 @@ public class StorageTests
 		}
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesDiffOffsets(StorageFormats format)
@@ -2058,7 +2058,7 @@ public class StorageTests
 		CandlesDiffOffsets(format, false);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesDiffOffsetsIntraday(StorageFormats format)
@@ -2146,7 +2146,7 @@ public class StorageTests
 		}
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesDiffOffsets2(StorageFormats format)
@@ -2235,7 +2235,7 @@ public class StorageTests
 		}
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesDiffOffsets3(StorageFormats format)
@@ -2245,7 +2245,7 @@ public class StorageTests
 		CandlesRandom(format, security.RandomTicks(_depthCount3, false), security, false, diffOffset: true);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void OrderLogRandom(StorageFormats format)
@@ -2253,7 +2253,7 @@ public class StorageTests
 		OrderLogRandomSaveLoad(format, _depthCount3);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void OrderLogFractionalVolume(StorageFormats format)
@@ -2272,7 +2272,7 @@ public class StorageTests
 		});
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void OrderLogFractionalVolume2(StorageFormats format)
@@ -2291,7 +2291,7 @@ public class StorageTests
 		});
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void OrderLogExtreme(StorageFormats format)
@@ -2312,7 +2312,7 @@ public class StorageTests
 		});
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void OrderLogNonSystem(StorageFormats format)
@@ -2349,7 +2349,7 @@ public class StorageTests
 		logStorage.DeleteWithCheck();
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void OrderLogSameTime(StorageFormats format)
@@ -2420,7 +2420,7 @@ public class StorageTests
 		loadedItems.CompareMessages(items);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void News(StorageFormats format)
@@ -2438,7 +2438,7 @@ public class StorageTests
 		newsStorage.DeleteWithCheck();
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void BoardState(StorageFormats format)
@@ -2475,7 +2475,7 @@ public class StorageTests
 		l1Storage.DeleteWithCheck();
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void Level1(StorageFormats format)
@@ -2483,7 +2483,7 @@ public class StorageTests
 		Level1(format, false);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void Level1Empty(StorageFormats format)
@@ -2510,7 +2510,7 @@ public class StorageTests
 		l1Storage.DeleteWithCheck();
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void Level1DiffOffset(StorageFormats format)
@@ -2518,7 +2518,7 @@ public class StorageTests
 		Level1(format, false, true);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	//[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void Level1DiffDays(StorageFormats format)
@@ -2526,7 +2526,7 @@ public class StorageTests
 		Level1(format, false, true, true);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void Level1Fractional(StorageFormats format)
@@ -2534,7 +2534,7 @@ public class StorageTests
 		Level1(format, true);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void Level1MinMax(StorageFormats format)
@@ -2656,7 +2656,7 @@ public class StorageTests
 		storage.LookupAll().Count().AssertEqual(0);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void Transaction(StorageFormats format)
@@ -2678,7 +2678,7 @@ public class StorageTests
 		storage.Load().Count().AssertEqual(0);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void Position(StorageFormats format)
@@ -2701,7 +2701,7 @@ public class StorageTests
 		storage.Load().Count().AssertEqual(0);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void PositionEmpty(StorageFormats format)
@@ -2775,7 +2775,7 @@ public class StorageTests
 		}
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void Bounds(StorageFormats format)
@@ -2846,7 +2846,7 @@ public class StorageTests
 		}
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	//[DataRow(StorageFormats.Csv)]
 	public void RegressionBuildFromSmallerTimeframes(StorageFormats format)
@@ -2876,7 +2876,7 @@ public class StorageTests
 		candles.Length.AssertEqual(expectedDates.Count);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	//[DataRow(StorageFormats.Csv)]
 	public void RegressionBuildFromSmallerTimeframesCandleOrder(StorageFormats format)
@@ -2916,7 +2916,7 @@ public class StorageTests
 		}
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	//[DataRow(StorageFormats.Csv)]
 	public void RegressionBuildableRange(StorageFormats format)
@@ -2942,7 +2942,7 @@ public class StorageTests
 		range.Max.UtcDateTime.AssertEqual(range.Max.UtcDateTime.Date);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void TickZeroValues(StorageFormats format)
@@ -2983,7 +2983,7 @@ public class StorageTests
 		}
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void OrderLogZeroValues(StorageFormats format)
@@ -3026,7 +3026,7 @@ public class StorageTests
 		}
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void Level1ZeroValues(StorageFormats format)
@@ -3059,7 +3059,7 @@ public class StorageTests
 		}
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void CandlesZeroValues(StorageFormats format)
@@ -3138,7 +3138,7 @@ public class StorageTests
 		}
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void DepthZeroValues(StorageFormats format)
