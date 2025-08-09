@@ -118,10 +118,15 @@ partial class Strategy
 
 	private void Subscribe(Subscription subscription, bool isGlobal)
 	{
+		var connector = Connector;
+
+		if (connector is null)
+			return;
+
 		_subscriptions.Add(subscription, isGlobal);
 
 		if (subscription.TransactionId == default)
-			subscription.TransactionId = Connector.TransactionIdGenerator.GetNextId();
+			subscription.TransactionId = connector.TransactionIdGenerator.GetNextId();
 
 		_subscriptionsById.Add(subscription.TransactionId, subscription);
 
@@ -131,18 +136,23 @@ partial class Strategy
 			return;
 		}
 
-		SubscriptionProvider.Subscribe(subscription);
+		connector.Subscribe(subscription);
 	}
 
 	/// <inheritdoc />
 	public void UnSubscribe(Subscription subscription)
 	{
+		var connector = Connector;
+
+		if (connector is null)
+			return;
+
 		if (ProcessState != ProcessStates.Started && IsBacktesting)
 		{
 			_subscriptions.Remove(subscription);
 			_subscriptionsById.Remove(subscription.TransactionId);
 
-			SubscriptionProvider.UnSubscribe(subscription);
+			connector.UnSubscribe(subscription);
 			return;
 		}
 
@@ -153,7 +163,7 @@ partial class Strategy
 			return;
 		}
 
-		SubscriptionProvider.UnSubscribe(subscription);
+		connector.UnSubscribe(subscription);
 	}
 
 	private void OnConnectorSubscriptionFailed(Subscription subscription, Exception error, bool isSubscribe)
