@@ -181,7 +181,7 @@ public static class CompositionHelper
 		DiagramSocketType.Any, DiagramSocketType.Bool, DiagramSocketType.Unit,
 		DiagramSocketType.Date, DiagramSocketType.Time,
 		DiagramSocketType.Side, DiagramSocketType.CandleStates, DiagramSocketType.OrderState,
-		DiagramSocketType.Security, DiagramSocketType.Portfolio,
+		DiagramSocketType.Security, DiagramSocketType.Portfolio, DiagramSocketType.String,
 	]);
 
 	/// <summary>

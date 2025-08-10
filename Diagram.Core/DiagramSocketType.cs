@@ -281,6 +281,11 @@ public class DiagramSocketType : Equatable<DiagramSocketType>, INotifyPropertyCh
 	public static readonly DiagramSocketType BasketBlackScholes = RegisterType<BasketBlackScholes>(LocalizedStrings.Basket, Color.Tan);
 
 	/// <summary>
+	/// Text string.
+	/// </summary>
+	public static readonly DiagramSocketType String = RegisterType<string>(LocalizedStrings.Text, Color.Purple);
+
+	/// <summary>
 	/// Get <see cref="DiagramSocketType"/> for <see cref="System.Type"/>.
 	/// </summary>
 	/// <param name="parameterType">Type.</param>
@@ -292,6 +297,9 @@ public class DiagramSocketType : Equatable<DiagramSocketType>, INotifyPropertyCh
 
 		if (parameterType == typeof(bool))
 			return Bool;
+
+		if (parameterType == typeof(string))
+			return String;
 
 		if (parameterType.Is<Security>())
 			return Security;
