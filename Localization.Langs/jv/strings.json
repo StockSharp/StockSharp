@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "Geser tengen (luwih gedhe) saka pukulan tengah. Yen ora ditemtokake, mula kabeh pukulan karo nilai luwih gedhe saka tengah bakal digunakake.",
   "Strikes": "Pukulan",
   "StrikeStrategyFound": "Strategi serangan {0} ketemu.",
+  "StringConcat": "Panggabungan",
+  "StringConcatDesc": "Unsur panggabungan lan pamormatan string",
   "StringDescription": "Setelan string sambungan database.",
   "StringId": "Nomer (baris)",
   "StringLenMustBeAtLeastParams": "Mangga ketik setidaknya {0} karakter kanggo nglakukan penggolèkan.",

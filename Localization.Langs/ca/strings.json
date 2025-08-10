@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "Desplaçament a la dreta (més) del vaga central. Si no s'especifica, s'utilitzaran tots els vagues amb valor major que el central.",
   "Strikes": "Vagues",
   "StrikeStrategyFound": "S'ha trobat l'estratègia de vaga {0}.",
+  "StringConcat": "Concatenació",
+  "StringConcatDesc": "Element de concatenació i formatació de cadenes",
   "StringDescription": "Configuracions de la cadena de connexió a la base de dades.",
   "StringId": "Número (cadena)",
   "StringLenMustBeAtLeastParams": "Introduïu com a mínim {0} caràcters per realitzar la cerca.",

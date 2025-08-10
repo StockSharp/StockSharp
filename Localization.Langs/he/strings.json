@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "הזזה ימינה (יותר) מהסטרייק המרכזי. אם לא מוגדר, כל הסטרייקים עם ערך גבוה מהמרכזי ישמשו.",
   "Strikes": "סטרייקים",
   "StrikeStrategyFound": "נמצאה אסטרטגיית הסטרייק {0}.",
+  "StringConcat": "שרשור",
+  "StringConcatDesc": "רכיב שרשור ועיצוב מחרוזות",
   "StringDescription": "הגדרות מחרוזת החיבור למסד הנתונים.",
   "StringId": "מספר (שורה)",
   "StringLenMustBeAtLeastParams": "הזן לפחות {0} תווים כדי לבצע חיפוש.",

@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "Deplasare la dreapta (mai mare) de la strike-ul central. Dacă nu este setat, vor fi utilizate toate strike-urile cu o valoare mai mare decât cea centrală.",
   "Strikes": "Grevă",
   "StrikeStrategyFound": "Strategia de strike {0} a fost găsită.",
+  "StringConcat": "Concatenare",
+  "StringConcatDesc": "Element de concatenare și formatare șiruri",
   "StringDescription": "Setările șirului de conectare la baza de date.",
   "StringId": "Număr (linie)",
   "StringLenMustBeAtLeastParams": "Introduceți cel puțin {0} caractere pentru a efectua căutarea.",

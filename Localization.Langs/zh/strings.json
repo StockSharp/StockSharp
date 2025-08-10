@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "从中心行使价向右偏移（更多）。如果未设置，则将使用所有大于中心行使价的行使价。",
   "Strikes": "罢工",
   "StrikeStrategyFound": "找到 {0} 条攻击策略。",
+  "StringConcat": "连接",
+  "StringConcatDesc": "字符串连接和格式化元素",
   "StringDescription": "数据库连接字符串的设置。",
   "StringId": "编号（行）",
   "StringLenMustBeAtLeastParams": "请输入至少{0}个字符以进行搜索。",

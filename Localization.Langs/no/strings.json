@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "Forskyvning til høyre (større) fra det sentrale strike. Hvis det ikke er angitt, vil alle strikes med høyere verdi enn det sentrale bli brukt.",
   "Strikes": "Streiker",
   "StrikeStrategyFound": "Strike-strategi {0} funnet.",
+  "StringConcat": "Sammenkjeding",
+  "StringConcatDesc": "Element for strengsammenkjeding og formatering",
   "StringDescription": "Innstillinger for databasetilkoblingsstreng.",
   "StringId": "Nummer (linje)",
   "StringLenMustBeAtLeastParams": "Skriv inn minst {0} tegn for å utføre søket.",

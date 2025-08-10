@@ -3606,6 +3606,8 @@
   "StrikeRightOffset": "Offset papunta sa kanan (mas marami) mula sa gitnang strike. Kung hindi nakatakda, lahat ng mas marami kaysa sa gitnang strike ay kokolektahin.",
   "Strikes": "Mga strike",
   "StrikeStrategyFound": "Nahanap ang strike strategy {0}.",
+  "StringConcat": "Pagsasama",
+  "StringConcatDesc": "Element ng pagsasama at pag-format ng string",
   "StringDescription": "Mga setting ng database connection string.",
   "StringId": "Numero (string)",
   "StringLenMustBeAtLeastParams": "Mangyaring maglagay ng hindi bababa sa {0} character upang magsagawa ng paghahanap.",

@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "Décalage à droite (plus grand) du strike central. Si non défini, tous les strikes ayant une valeur supérieure au central seront utilisés.",
   "Strikes": "Grèves",
   "StrikeStrategyFound": "Stratégie de frappe {0} trouvée.",
+  "StringConcat": "Concaténation",
+  "StringConcatDesc": "Élément de concaténation et de formatage de chaînes",
   "StringDescription": "Paramètres de la chaîne de connexion à la base de données.",
   "StringId": "Numéro (ligne)",
   "StringLenMustBeAtLeastParams": "Veuillez entrer au moins {0} caractères pour effectuer une recherche.",

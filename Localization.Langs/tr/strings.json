@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "Merkezi grevden sağa (büyük) kayma. Ayarlanmamışsa, merkezi grev değeri daha büyük olan tüm grevler kullanılacaktır.",
   "Strikes": "Grevler",
   "StrikeStrategyFound": "{0} vuruş stratejisi bulundu.",
+  "StringConcat": "Birleştirme",
+  "StringConcatDesc": "Dize birleştirme ve biçimlendirme öğesi",
   "StringDescription": "Veritabanı bağlantı dizesi ayarları.",
   "StringId": "Numara (satır)",
   "StringLenMustBeAtLeastParams": "Arama yapmak için en az {0} karakter girin.",

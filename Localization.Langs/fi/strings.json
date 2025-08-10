@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "Siirtymä oikealle (suurempi) keskeisestä lyöntihinnasta. Jos asetusta ei ole määritetty, käytetään kaikkia keskeistä suurempia lyöntihintoja.",
   "Strikes": "Lakot",
   "StrikeStrategyFound": "Iskustrategia {0} löydetty.",
+  "StringConcat": "Yhdistäminen",
+  "StringConcatDesc": "Merkkijonojen yhdistämis- ja muotoiluelementti",
   "StringDescription": "Tietokantayhteysmerkkijonon asetukset.",
   "StringId": "Numero (rivi)",
   "StringLenMustBeAtLeastParams": "Anna vähintään {0} merkkiä suorittaaksesi haun.",

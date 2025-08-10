@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "Rechtsverschiebung (größer) vom zentralen Strike. Wenn nicht festgelegt, werden alle Strikes mit einem höheren Wert als der zentrale verwendet.",
   "Strikes": "Streiks",
   "StrikeStrategyFound": "Strike-Strategie {0} gefunden.",
+  "StringConcat": "Verkettung",
+  "StringConcatDesc": "Element für Zeichenkettenverkettung und -formatierung",
   "StringDescription": "Einstellungen für die Datenbankverbindungszeichenfolge.",
   "StringId": "Nummer (Zeile)",
   "StringLenMustBeAtLeastParams": "Bitte geben Sie mindestens {0} Zeichen zur Suche ein.",

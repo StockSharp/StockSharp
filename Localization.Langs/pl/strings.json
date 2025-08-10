@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "Przesunięcie w prawo (większe) od centralnego strajku. Jeśli nie jest ustawione, zostaną użyte wszystkie strajki o wartości większej niż centralna.",
   "Strikes": "Strajki",
   "StrikeStrategyFound": "Znaleziono strategię strike {0}.",
+  "StringConcat": "Łączenie",
+  "StringConcatDesc": "Element łączenia i formatowania ciągów",
   "StringDescription": "Ustawienia ciągu połączenia z bazą danych.",
   "StringId": "Numer (wiersz)",
   "StringLenMustBeAtLeastParams": "Wpisz co najmniej {0} znaków, aby wyszukać.",

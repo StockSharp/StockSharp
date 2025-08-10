@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "Eltolás jobbra (nagyobb) a központi strike-tól. Ha nincs beállítva, akkor az összes központinál magasabb értékű strike kerül felhasználásra.",
   "Strikes": "Sztrájkok",
   "StrikeStrategyFound": "{0} strike stratégia megtalálva.",
+  "StringConcat": "Összefűzés",
+  "StringConcatDesc": "Karakterlánc összefűzési és formázási elem",
   "StringDescription": "Adatbázis-csatlakozási karakterlánc beállításai.",
   "StringId": "Szám (sor)",
   "StringLenMustBeAtLeastParams": "Adjon meg legalább {0} karaktert a kereséshez.",

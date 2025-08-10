@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "Markaziy strake o'ngga (ko'proq) siljish. Agar belgilanmagan bo'lsa, markaziy strakedan kattaroq barcha strakelar ishlatiladi.",
   "Strikes": "Zarba urish",
   "StrikeStrategyFound": "{0} zarba strategiyasi topildi.",
+  "StringConcat": "Birlashma",
+  "StringConcatDesc": "Matn birlashma va formatlash elementi",
   "StringDescription": "Ma'lumotlar bazasiga ulanish qatori sozlamalari.",
   "StringId": "Raqam (qator)",
   "StringLenMustBeAtLeastParams": "Qidiruv o'tkazish uchun kamida {0} belgi kiriting.",

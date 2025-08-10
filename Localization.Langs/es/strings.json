@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "Desplazamiento a la derecha (mayor) del strike central. Si no se establece, se utilizarán todos los strikes con un valor mayor al central.",
   "Strikes": "Huelgas",
   "StrikeStrategyFound": "Estrategia de strike {0} encontrada.",
+  "StringConcat": "Concatenación",
+  "StringConcatDesc": "Elemento de concatenación y formato de cadenas",
   "StringDescription": "Configuración del string de conexión a la base de datos.",
   "StringId": "Número (fila)",
   "StringLenMustBeAtLeastParams": "Introduzca al menos {0} caracteres para realizar la búsqueda.",

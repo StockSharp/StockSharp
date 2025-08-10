@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "Posun vpravo (vyššie) od centrálného strike. Ak nie je nastavené, všetky strike s vyššou hodnotou ako centrálny budú použité.",
   "Strikes": "Strikes",
   "StrikeStrategyFound": "Nájdená strike stratégia {0}.",
+  "StringConcat": "Spojenie",
+  "StringConcatDesc": "Prvok spojenia a formátovania reťazcov",
   "StringDescription": "Nastavenia reťazca pripojenia k databáze.",
   "StringId": "Číslo (reťazec)",
   "StringLenMustBeAtLeastParams": "Pre vykonanie vyhľadávania zadajte minimálne {0} znakov.",

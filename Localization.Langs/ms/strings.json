@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "Anjakan ke kanan (lebih besar) dari mogok tengah. Jika tidak ditetapkan, semua mogok dengan nilai tengah yang lebih besar akan digunakan.",
   "Strikes": "Mogok",
   "StrikeStrategyFound": "Strategi strike {0} ditemukan.",
+  "StringConcat": "Penggabungan",
+  "StringConcatDesc": "Elemen penggabungan dan pemformatan rentetan",
   "StringDescription": "Tetapan rentetan sambungan pangkalan data.",
   "StringId": "Nombor (baris)",
   "StringLenMustBeAtLeastParams": "Masukkan sekurang-kurangnya {0} aksara untuk melakukan carian.",

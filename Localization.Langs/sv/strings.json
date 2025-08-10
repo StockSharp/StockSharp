@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "Förskjutning åt höger (större) från den centrala strejken. Om det inte är inställt kommer alla strejker med ett högre värde än det centrala att användas.",
   "Strikes": "Slag",
   "StrikeStrategyFound": "Strikestrategi {0} funnen.",
+  "StringConcat": "Sammanlänkning",
+  "StringConcatDesc": "Element för strängsammanlänkning och formatering",
   "StringDescription": "Inställningar för anslutningssträng till databasen.",
   "StringId": "Nummer (rad)",
   "StringLenMustBeAtLeastParams": "Ange minst {0} tecken för att utföra sökningen.",

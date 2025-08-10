@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "Deslocamento para a direita (maior) do strike central. Se não definido, todos os strikes com valor superior ao central serão usados.",
   "Strikes": "Greves",
   "StrikeStrategyFound": "Estratégia de strike {0} encontrada.",
+  "StringConcat": "Concatenação",
+  "StringConcatDesc": "Elemento de concatenação e formatação de strings",
   "StringDescription": "Configurações de string de conexão com o banco de dados.",
   "StringId": "Número (linha)",
   "StringLenMustBeAtLeastParams": "Digite pelo menos {0} caracteres para fazer a pesquisa.",

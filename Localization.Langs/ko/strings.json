@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "중심 스트라이크에서 오른쪽으로의 오프셋(더 큰). 설정되지 않은 경우, 중심 값보다 큰 모든 스트라이크가 사용됩니다.",
   "Strikes": "스트라이크",
   "StrikeStrategyFound": "{0} 스트라이크 전략을 찾았습니다.",
+  "StringConcat": "연결",
+  "StringConcatDesc": "문자열 연결 및 서식 요소",
   "StringDescription": "데이터베이스 연결 문자열 설정입니다.",
   "StringId": "번호 (행)",
   "StringLenMustBeAtLeastParams": "검색을 위해 적어도 {0}자를 입력하세요.",

@@ -3609,6 +3609,8 @@
   "StrikeRightOffset": "Offset to the right (more) from central strike. If not set, all more then central strikes will be collected.",
   "Strikes": "Strikes",
   "StrikeStrategyFound": "Strike strategy {0} found.",
+  "StringConcat": "Concatenation",
+  "StringConcatDesc": "String concatenation and formatting element",
   "StringDescription": "Database connection string settings.",
   "StringId": "Number (string)",
   "StringLenMustBeAtLeastParams": "Please enter at least {0} characters to perform a search.",

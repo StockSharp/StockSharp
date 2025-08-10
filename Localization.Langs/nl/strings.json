@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "Verschuiving naar rechts (meer) van de centrale strike. Indien niet ingesteld, zullen alle strikes met een hogere waarde dan de centrale worden gebruikt.",
   "Strikes": "Strikes",
   "StrikeStrategyFound": "Strike strategie {0} gevonden.",
+  "StringConcat": "Samenvoegen",
+  "StringConcatDesc": "Element voor tekenreeks samenvoeging en opmaak",
   "StringDescription": "Instellingen voor de databaseverbindingstekenreeks.",
   "StringId": "Nummer (rij)",
   "StringLenMustBeAtLeastParams": "Voer ten minste {0} tekens in om te zoeken.",

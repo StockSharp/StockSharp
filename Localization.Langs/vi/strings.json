@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "Dịch chuyển sang phải (nhiều hơn) từ strike trung tâm. Nếu không được thiết lập, tất cả các strike có giá trị lớn hơn trung tâm sẽ được sử dụng.",
   "Strikes": "Cuộc đình công",
   "StrikeStrategyFound": "Đã tìm thấy chiến lược strike {0}.",
+  "StringConcat": "Nối chuỗi",
+  "StringConcatDesc": "Phần tử nối chuỗi và định dạng",
   "StringDescription": "Cài đặt chuỗi kết nối cơ sở dữ liệu.",
   "StringId": "Số (dòng)",
   "StringLenMustBeAtLeastParams": "Hãy nhập ít nhất {0} ký tự để tìm kiếm.",

@@ -3601,6 +3601,8 @@
   "StrikeRightOffset": "Spostamento a destra (maggiore) dallo strike centrale. Se non impostato, verranno utilizzati tutti gli strike con un valore superiore al centrale.",
   "Strikes": "Scioperi",
   "StrikeStrategyFound": "Strategia di strike {0} trovata.",
+  "StringConcat": "Concatenazione",
+  "StringConcatDesc": "Elemento di concatenazione e formattazione stringhe",
   "StringDescription": "Impostazioni della stringa di connessione al database.",
   "StringId": "Numero (riga)",
   "StringLenMustBeAtLeastParams": "Inserisci almeno {0} caratteri per effettuare la ricerca.",
