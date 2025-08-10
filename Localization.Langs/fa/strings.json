@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "استراتژی استرایک {0} پیدا شد.",
   "StringConcat": "الحاق رشته",
   "StringConcatDesc": "عنصر الحاق و قالب‌بندی رشته",
+  "StringConcatFormatTemplate": "الگوی الحاق و قالب‌بندی رشته",
   "StringDescription": "تنظیمات رشته اتصال به پایگاه داده.",
   "StringFormatTemplate": "الگوی قالب‌بندی رشته با استفاده از نحو (مثل 'قیمت: {value}، زمان: {time:yyyy-MM-dd}')",
   "StringFormatter": "قالب‌بند رشته",

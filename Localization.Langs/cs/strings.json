@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "Byla nalezena strike strategie {0}.",
   "StringConcat": "Spojování",
   "StringConcatDesc": "Element spojování a formátování řetězců",
+  "StringConcatFormatTemplate": "Šablona spojování a formátování řetězců",
   "StringDescription": "Nastavení řetězce připojení k databázi.",
   "StringFormatTemplate": "Šablona formátování řetězců pomocí syntaxe (např. 'Cena: {value}, Čas: {time:yyyy-MM-dd}')",
   "StringFormatter": "Formátovač řetězců",

@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "Strategia de strike {0} a fost găsită.",
   "StringConcat": "Concatenare",
   "StringConcatDesc": "Element de concatenare și formatare șiruri",
+  "StringConcatFormatTemplate": "Șablon de concatenare și formatare șiruri",
   "StringDescription": "Setările șirului de conectare la baza de date.",
   "StringFormatTemplate": "Șablon de formatare șiruri folosind sintaxa (ex. 'Preț: {value}, Timp: {time:yyyy-MM-dd}')",
   "StringFormatter": "Formatator șiruri",

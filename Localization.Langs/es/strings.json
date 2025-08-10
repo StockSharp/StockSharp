@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "Estrategia de strike {0} encontrada.",
   "StringConcat": "Concatenación",
   "StringConcatDesc": "Elemento de concatenación y formato de cadenas",
+  "StringConcatFormatTemplate": "Plantilla de concatenación y formato de cadenas",
   "StringDescription": "Configuración del string de conexión a la base de datos.",
   "StringFormatTemplate": "Plantilla de formato de cadenas usando sintaxis (ej. 'Precio: {value}, Hora: {time:yyyy-MM-dd}')",
   "StringFormatter": "Formateador de cadenas",

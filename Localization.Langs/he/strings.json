@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "נמצאה אסטרטגיית הסטרייק {0}.",
   "StringConcat": "שרשור",
   "StringConcatDesc": "רכיב שרשור ועיצוב מחרוזות",
+  "StringConcatFormatTemplate": "תבנית שרשור ועיצוב מחרוזות",
   "StringDescription": "הגדרות מחרוזת החיבור למסד הנתונים.",
   "StringFormatTemplate": "תבנית עיצוב מחרוזות עם תחביר (למשל 'מחיר: {value}, זמן: {time:yyyy-MM-dd}')",
   "StringFormatter": "מעצב מחרוזות",

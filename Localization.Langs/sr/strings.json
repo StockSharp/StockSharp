@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "Пронађена стратегија удара {0}.",
   "StringConcat": "Спајање",
   "StringConcatDesc": "Елемент спајања и форматирања стрингова",
+  "StringConcatFormatTemplate": "Шаблон спајања и форматирања стрингова",
   "StringDescription": "Подешавања стринга за повезивање с базом података.",
   "StringFormatTemplate": "Шаблон форматирања стрингова користећи синтаксу (нпр. 'Цена: {value}, Време: {time:yyyy-MM-dd}')",
   "StringFormatter": "Форматер стрингова",

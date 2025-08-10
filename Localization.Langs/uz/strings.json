@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "{0} zarba strategiyasi topildi.",
   "StringConcat": "Birlashma",
   "StringConcatDesc": "Matn birlashma va formatlash elementi",
+  "StringConcatFormatTemplate": "Matn birlashma va formatlash andozasi",
   "StringDescription": "Ma'lumotlar bazasiga ulanish qatori sozlamalari.",
   "StringFormatTemplate": "Sintaksis ishlatuvchi matn formatlash andozasi (masalan 'Narx: {value}, Vaqt: {time:yyyy-MM-dd}')",
   "StringFormatter": "Matn formatlash vositasi",

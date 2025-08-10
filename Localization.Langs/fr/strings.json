@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "Stratégie de frappe {0} trouvée.",
   "StringConcat": "Concaténation",
   "StringConcatDesc": "Élément de concaténation et de formatage de chaînes",
+  "StringConcatFormatTemplate": "Modèle de concaténation et formatage de chaînes",
   "StringDescription": "Paramètres de la chaîne de connexion à la base de données.",
   "StringFormatTemplate": "Modèle de formatage de chaînes avec syntaxe (ex. 'Prix: {value}, Heure: {time:yyyy-MM-dd}')",
   "StringFormatter": "Formateur de chaînes",

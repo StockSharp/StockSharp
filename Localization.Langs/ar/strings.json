@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "تم العثور على استراتيجية الضربة {0}.",
   "StringConcat": "ربط النصوص",
   "StringConcatDesc": "عنصر ربط النصوص والتنسيق",
+  "StringConcatFormatTemplate": "قالب ربط وتنسيق النصوص",
   "StringDescription": "إعدادات سلسلة الاتصال بقاعدة البيانات.",
   "StringFormatTemplate": "قالب تنسيق النص باستخدام الصيغة (مثل 'السعر: {value}، الوقت: {time:yyyy-MM-dd}')",
   "StringFormatter": "منسق النصوص",

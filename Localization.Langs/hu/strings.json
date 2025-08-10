@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "{0} strike stratégia megtalálva.",
   "StringConcat": "Összefűzés",
   "StringConcatDesc": "Karakterlánc összefűzési és formázási elem",
+  "StringConcatFormatTemplate": "Karakterlánc összefűzési és formázási sablon",
   "StringDescription": "Adatbázis-csatlakozási karakterlánc beállításai.",
   "StringFormatTemplate": "Karakterlánc formázási sablon szintaxis használatával (pl. 'Ár: {value}, Idő: {time:yyyy-MM-dd}')",
   "StringFormatter": "Karakterlánc formázó",

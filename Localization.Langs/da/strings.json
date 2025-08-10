@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "Strike strategi {0} fundet.",
   "StringConcat": "Sammenkædning",
   "StringConcatDesc": "Element til strengsammenkædning og formatering",
+  "StringConcatFormatTemplate": "Skabelon til strengsammenkædning og formatering",
   "StringDescription": "Indstillinger for databaseforbindelsesstreng.",
   "StringFormatTemplate": "Strengformateringsskabelon med syntaks (f.eks. 'Pris: {value}, Tid: {time:yyyy-MM-dd}')",
   "StringFormatter": "Strengformater",

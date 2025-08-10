@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "{0} ਸਟਰਾਈਕ ਰਣਨੀਤੀ ਲੱਭੀ ਗਈ।",
   "StringConcat": "ਜੋੜਨਾ",
   "StringConcatDesc": "ਸਟਰਿੰਗ ਜੋੜਨ ਅਤੇ ਫਾਰਮੈਟਿੰਗ ਤੱਤ",
+  "StringConcatFormatTemplate": "ਸਟਰਿੰਗ ਜੋੜਨ ਅਤੇ ਫਾਰਮੈਟਿੰਗ ਟੈਂਪਲੇਟ",
   "StringDescription": "ਡਾਟਾਬੇਸ ਕਨੈਕਸ਼ਨ ਸਟਰਿੰਗ ਦੀਆਂ ਸੈਟਿੰਗਾਂ।",
   "StringFormatTemplate": "ਸਿੰਟੈਕਸ ਵਰਤ ਕੇ ਸਟਰਿੰਗ ਫਾਰਮੈਟਿੰਗ ਟੈਂਪਲੇਟ (ਜਿਵੇਂ 'ਕੀਮਤ: {value}, ਸਮਾਂ: {time:yyyy-MM-dd}')",
   "StringFormatter": "ਸਟਰਿੰਗ ਫਾਰਮੈਟਰ",

@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "Strike-Strategie {0} gefunden.",
   "StringConcat": "Verkettung",
   "StringConcatDesc": "Element für Zeichenkettenverkettung und -formatierung",
+  "StringConcatFormatTemplate": "Vorlage für Zeichenkettenverkettung und -formatierung",
   "StringDescription": "Einstellungen für die Datenbankverbindungszeichenfolge.",
   "StringFormatTemplate": "Zeichenkette-Formatierungsvorlage mit Syntax (z.B. 'Preis: {value}, Zeit: {time:yyyy-MM-dd}')",
   "StringFormatter": "Zeichenkett-Formatierer",

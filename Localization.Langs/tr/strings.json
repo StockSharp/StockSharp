@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "{0} vuruş stratejisi bulundu.",
   "StringConcat": "Birleştirme",
   "StringConcatDesc": "Dize birleştirme ve biçimlendirme öğesi",
+  "StringConcatFormatTemplate": "Dize birleştirme ve biçimlendirme şablonu",
   "StringDescription": "Veritabanı bağlantı dizesi ayarları.",
   "StringFormatTemplate": "Sözdizimi kullanarak dize biçimlendirme şablonu (örn. 'Fiyat: {value}, Zaman: {time:yyyy-MM-dd}')",
   "StringFormatter": "Dize Biçimlendiricisi",

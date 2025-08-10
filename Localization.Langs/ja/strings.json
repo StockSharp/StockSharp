@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "{0} のストライク戦略が見つかりました。",
   "StringConcat": "連結",
   "StringConcatDesc": "文字列連結およびフォーマット要素",
+  "StringConcatFormatTemplate": "文字列連結およびフォーマットテンプレート",
   "StringDescription": "データベース接続文字列の設定。",
   "StringFormatTemplate": "構文を使用した文字列フォーマットテンプレート (例: 'Price: {value}, Time: {time:yyyy-MM-dd}')",
   "StringFormatter": "文字列フォーマッター",

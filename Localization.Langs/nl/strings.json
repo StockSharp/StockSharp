@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "Strike strategie {0} gevonden.",
   "StringConcat": "Samenvoegen",
   "StringConcatDesc": "Element voor tekenreeks samenvoeging en opmaak",
+  "StringConcatFormatTemplate": "Sjabloon voor tekenreeks samenvoeging en opmaak",
   "StringDescription": "Instellingen voor de databaseverbindingstekenreeks.",
   "StringFormatTemplate": "Tekenreeks formatsjabloon met syntaxis (bijv. 'Prijs: {value}, Tijd: {time:yyyy-MM-dd}')",
   "StringFormatter": "Tekenreeks formatter",

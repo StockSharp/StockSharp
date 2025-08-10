@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "{0} ஸ்டிரைக் வியூகம் கண்டறியப்பட்டது.",
   "StringConcat": "இணைத்தல்",
   "StringConcatDesc": "சரம் இணைத்தல் மற்றும் வடிவமைப்பு உறுப்பு",
+  "StringConcatFormatTemplate": "சரம் இணைத்தல் மற்றும் வடிவமைப்பு வார்ப்புரு",
   "StringDescription": "தரவுத்தளம் இணைப்புச் சரம் அமைப்புகள்.",
   "StringFormatTemplate": "தொடரியல் பயன்படுத்தும் சரம் வடிவமைப்பு வார்ப்புரு (எ.கா. 'விலை: {value}, நேரம்: {time:yyyy-MM-dd}')",
   "StringFormatter": "சரம் வடிவமைப்பாளர்",

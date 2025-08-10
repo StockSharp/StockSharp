@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "Найдена страйк стратегия {0}.",
   "StringConcat": "Конкатенация",
   "StringConcatDesc": "Элемент конкатенации и форматирования строк",
+  "StringConcatFormatTemplate": "Шаблон конкатенации и форматирования строк",
   "StringDescription": "Настройки строки подключения к базе данных.",
   "StringFormatTemplate": "Шаблон форматирования строк с использованием синтаксиса (напр. 'Цена: {value}, Время: {time:yyyy-MM-dd}')",
   "StringFormatter": "Форматировщик строк",

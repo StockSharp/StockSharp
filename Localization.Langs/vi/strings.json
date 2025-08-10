@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "Đã tìm thấy chiến lược strike {0}.",
   "StringConcat": "Nối chuỗi",
   "StringConcatDesc": "Phần tử nối chuỗi và định dạng",
+  "StringConcatFormatTemplate": "Mẫu nối chuỗi và định dạng",
   "StringDescription": "Cài đặt chuỗi kết nối cơ sở dữ liệu.",
   "StringFormatTemplate": "Mẫu định dạng chuỗi sử dụng cú pháp (ví dụ 'Giá: {value}, Thời gian: {time:yyyy-MM-dd}')",
   "StringFormatter": "Bộ định dạng chuỗi",

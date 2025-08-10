@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "S'ha trobat l'estratègia de vaga {0}.",
   "StringConcat": "Concatenació",
   "StringConcatDesc": "Element de concatenació i formatació de cadenes",
+  "StringConcatFormatTemplate": "Plantilla de concatenació i formatació de cadenes",
   "StringDescription": "Configuracions de la cadena de connexió a la base de dades.",
   "StringFormatTemplate": "Plantilla de formatació de cadenes amb sintaxi (p.ex. 'Preu: {value}, Hora: {time:yyyy-MM-dd}')",
   "StringFormatter": "Formatador de cadenes",

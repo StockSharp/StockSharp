@@ -3607,6 +3607,7 @@
   "StrikeStrategyFound": "သတ်မှတ်စျေး မဟာဗျူဟာ {0} ကို တွေ့ရှိသည်။",
   "StringConcat": "ပေါင်းစပ်ခြင်း",
   "StringConcatDesc": "စာကြောင်းပေါင်းစပ်ခြင်းနှင့် ပုံစံပြင်ခြင်း အစိတ်အပိုင်း",
+  "StringConcatFormatTemplate": "စာကြောင်းပေါင်းစပ်ခြင်းနှင့် ပုံစံပြင်ခြင်း ပုံစံ",
   "StringDescription": "ဒေတာဘေ့စ် ချိတ်ဆက်ကြိုး ဆက်တင်များ။",
   "StringFormatTemplate": "စာရေးပုံစနစ်သုံး၍ စာကြောင်းပုံစံပြင်ပုံစံ (ဥပမာ 'Price: {value}, Time: {time:yyyy-MM-dd}')",
   "StringFormatter": "စာကြောင်းပုံစံပြင်ကိရိယာ",

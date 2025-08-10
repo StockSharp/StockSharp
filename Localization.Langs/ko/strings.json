@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "{0} 스트라이크 전략을 찾았습니다.",
   "StringConcat": "연결",
   "StringConcatDesc": "문자열 연결 및 서식 요소",
+  "StringConcatFormatTemplate": "문자열 연결 및 서식 템플릿",
   "StringDescription": "데이터베이스 연결 문자열 설정입니다.",
   "StringFormatTemplate": "구문을 사용한 문자열 서식 템플릿 (예: '가격: {value}, 시간: {time:yyyy-MM-dd}')",
   "StringFormatter": "문자열 포매터",

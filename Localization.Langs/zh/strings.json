@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "找到 {0} 条攻击策略。",
   "StringConcat": "连接",
   "StringConcatDesc": "字符串连接和格式化元素",
+  "StringConcatFormatTemplate": "字符串连接和格式化模板",
   "StringDescription": "数据库连接字符串的设置。",
   "StringFormatTemplate": "使用语法的字符串格式化模板 (例如 '价格: {value}, 时间: {time:yyyy-MM-dd}')",
   "StringFormatter": "字符串格式化器",

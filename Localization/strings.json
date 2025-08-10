@@ -3611,6 +3611,7 @@
   "StrikeStrategyFound": "Strike strategy {0} found.",
   "StringConcat": "Concatenation",
   "StringConcatDesc": "String concatenation and formatting element",
+  "StringConcatFormatTemplate": "String concatenation and formatting template",
   "StringDescription": "Database connection string settings.",
   "StringFormatTemplate": "String formatting template using syntax (e.g. 'Price: {value}, Time: {time:yyyy-MM-dd}')",
   "StringFormatter": "String Formatter",

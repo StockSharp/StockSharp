@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "Iskustrategia {0} löydetty.",
   "StringConcat": "Yhdistäminen",
   "StringConcatDesc": "Merkkijonojen yhdistämis- ja muotoiluelementti",
+  "StringConcatFormatTemplate": "Merkkijonojen yhdistämis- ja muotoilumalli",
   "StringDescription": "Tietokantayhteysmerkkijonon asetukset.",
   "StringFormatTemplate": "Merkkijonomuotoilumalli syntaksin avulla (esim. 'Hinta: {value}, Aika: {time:yyyy-MM-dd}')",
   "StringFormatter": "Merkkijono-muotoilija",

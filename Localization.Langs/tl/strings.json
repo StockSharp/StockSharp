@@ -3608,6 +3608,7 @@
   "StrikeStrategyFound": "Nahanap ang strike strategy {0}.",
   "StringConcat": "Pagsasama",
   "StringConcatDesc": "Element ng pagsasama at pag-format ng string",
+  "StringConcatFormatTemplate": "Template ng pagsasama at pag-format ng string",
   "StringDescription": "Mga setting ng database connection string.",
   "StringFormatTemplate": "Template ng pag-format ng string gamit ang syntax (hal. 'Presyo: {value}, Oras: {time:yyyy-MM-dd}')",
   "StringFormatter": "String Formatter",

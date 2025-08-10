@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "{0} স্ট্রাইক কৌশল পাওয়া গেছে।",
   "StringConcat": "সংযুক্তকরণ",
   "StringConcatDesc": "স্ট্রিং সংযুক্তকরণ এবং ফরম্যাটিং উপাদান",
+  "StringConcatFormatTemplate": "স্ট্রিং সংযুক্তকরণ এবং ফরম্যাটিং টেমপ্লেট",
   "StringDescription": "ডাটাবেস সংযোগ স্ট্রিং সেটিংস।",
   "StringFormatTemplate": "সিনট্যাক্স ব্যবহার করে স্ট্রিং ফরম্যাটিং টেমপ্লেট (যেমন 'Price: {value}, Time: {time:yyyy-MM-dd}')",
   "StringFormatter": "স্ট্রিং ফরম্যাটার",

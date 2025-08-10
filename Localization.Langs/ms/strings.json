@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "Strategi strike {0} ditemukan.",
   "StringConcat": "Penggabungan",
   "StringConcatDesc": "Elemen penggabungan dan pemformatan rentetan",
+  "StringConcatFormatTemplate": "Templat penggabungan dan pemformatan rentetan",
   "StringDescription": "Tetapan rentetan sambungan pangkalan data.",
   "StringFormatTemplate": "Templat pemformatan rentetan menggunakan sintaks (cth. 'Harga: {value}, Masa: {time:yyyy-MM-dd}')",
   "StringFormatter": "Pemformat Rentetan",

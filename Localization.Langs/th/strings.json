@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "พบกลยุทธ์สไตรค์ {0} แล้ว",
   "StringConcat": "การเชื่อมต่อ",
   "StringConcatDesc": "องค์ประกอบการเชื่อมต่อและจัดรูปแบบสตริง",
+  "StringConcatFormatTemplate": "เทมเพลตการเชื่อมต่อและจัดรูปแบบสตริง",
   "StringDescription": "การตั้งค่าสายเชื่อมต่อฐานข้อมูล。",
   "StringFormatTemplate": "เทมเพลตการจัดรูปแบบสตริงใช้ไวยากรณ์ (เช่น 'ราคา: {value}, เวลา: {time:yyyy-MM-dd}')",
   "StringFormatter": "ตัวจัดรูปแบบสตริง",

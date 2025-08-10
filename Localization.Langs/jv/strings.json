@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "Strategi serangan {0} ketemu.",
   "StringConcat": "Panggabungan",
   "StringConcatDesc": "Unsur panggabungan lan pamormatan string",
+  "StringConcatFormatTemplate": "Cetakan panggabungan lan pamormatan string",
   "StringDescription": "Setelan string sambungan database.",
   "StringFormatTemplate": "Cetakan pamormatan string nggunakake sintaks (conto 'Rega: {value}, Wektu: {time:yyyy-MM-dd}')",
   "StringFormatter": "Pamformat String",

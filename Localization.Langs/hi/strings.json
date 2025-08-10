@@ -3603,6 +3603,7 @@
   "StrikeStrategyFound": "{0} स्ट्राइक रणनीति पाई गई।",
   "StringConcat": "संयोजन",
   "StringConcatDesc": "स्ट्रिंग संयोजन और फॉर्मेटिंग तत्व",
+  "StringConcatFormatTemplate": "स्ट्रिंग संयोजन और फॉर्मेटिंग टेम्प्लेट",
   "StringDescription": "डेटाबेस से कनेक्ट करने के लिए स्ट्रिंग सेटिंग्स।",
   "StringFormatTemplate": "सिंटैक्स का उपयोग करके स्ट्रिंग फॉर्मेटिंग टेम्प्लेट (जैसे 'मूल्य: {value}, समय: {time:yyyy-MM-dd}')",
   "StringFormatter": "स्ट्रिंग फॉर्मेटर",
