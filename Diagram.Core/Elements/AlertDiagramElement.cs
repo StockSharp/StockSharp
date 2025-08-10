@@ -64,18 +64,19 @@ public sealed class AlertDiagramElement : DiagramElement
 		set => _message.Value = value;
 	}
 
-	private readonly ISet<AlertNotifications> _alertAlerts;
+	private readonly ISet<AlertNotifications> _allowAlerts;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="AlertDiagramElement"/>.
 	/// </summary>
 	public AlertDiagramElement()
 	{
-		_alertAlerts = Scope<CompositionLoadingContext>.Current?.Value.AllowAlerts;
+		_allowAlerts = Scope<CompositionLoadingContext>.Current?.Value.AllowAlerts;
 
-		AddInput(StaticSocketIds.Flag, LocalizedStrings.Flag, DiagramSocketType.Bool, OnProcess);
+		AddInput(StaticSocketIds.Trigger, LocalizedStrings.Trigger, DiagramSocketType.Any, OnProcessTrigger, int.MaxValue);
+		AddInput(StaticSocketIds.Input, LocalizedStrings.Message, DiagramSocketType.Any, OnProcessMessage);
 
-		_type = AddParam(nameof(Type), AlertNotifications.Popup)
+		_type = AddParam(nameof(Type), AlertNotifications.Log)
 			.SetBasic(true)
 			.SetDisplay(LocalizedStrings.Alerts, LocalizedStrings.Type, LocalizedStrings.SignalType, 10)
 			.SetOnValueChangedHandler(value =>
@@ -104,11 +105,11 @@ public sealed class AlertDiagramElement : DiagramElement
 			.SetEditor(new EditorAttribute(typeof(ITelegramChannelEditor), typeof(ITelegramChannelEditor)))
 			;
 
-		_caption = AddParam(nameof(Caption), string.Empty)
+		_caption = AddParam(nameof(Caption), LocalizedStrings.Test)
 			.SetBasic(true)
 			.SetDisplay(LocalizedStrings.Alerts, LocalizedStrings.Header, LocalizedStrings.SignalHeader, 30);
 
-		_message = AddParam(nameof(Message), string.Empty)
+		_message = AddParam(nameof(Message), LocalizedStrings.Test)
 			.SetBasic(true)
 			.SetDisplay(LocalizedStrings.Alerts, LocalizedStrings.Message, LocalizedStrings.SignalText, 40);
 	}
@@ -123,17 +124,28 @@ public sealed class AlertDiagramElement : DiagramElement
 		if (Strategy.IsBacktesting)
 			_canProcess = Type == AlertNotifications.Log;
 		else
-			_canProcess = _alertAlerts?.Contains(Type) != false;
+			_canProcess = _allowAlerts?.Contains(Type) != false;
 	}
 
-	private void OnProcess(DiagramSocketValue value)
+	private void OnProcessTrigger(DiagramSocketValue value)
 	{
-		if (!_canProcess || !value.GetValue<bool>())
+		if (value.GetValue<bool?>() != false)
+			SendNotification(value.Time, Message);
+	}
+
+	private void OnProcessMessage(DiagramSocketValue value)
+	{
+		SendNotification(value.Time, value.Value?.ToString());
+	}
+
+	private void SendNotification(DateTimeOffset time, string message)
+	{
+		if (!_canProcess || message.IsEmpty())
 			return;
 
 		var svc = AlertServicesRegistry.TryNotificationService;
 
 		if (svc != null)
-			_ = svc.NotifyAsync(Type, TelegramChannel?.Id, LogLevel, Caption, Message, value.Time, default);
+			_ = svc.NotifyAsync(Type, TelegramChannel?.Id, LogLevel, Caption, message, time, default);
 	}
 }
