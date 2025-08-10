@@ -53,17 +53,6 @@ public sealed class AlertDiagramElement : DiagramElement
 		set => _caption.Value = value;
 	}
 
-	private readonly DiagramElementParam<string> _message;
-
-	/// <summary>
-	/// Alert text.
-	/// </summary>
-	public string Message
-	{
-		get => _message.Value;
-		set => _message.Value = value;
-	}
-
 	private readonly ISet<AlertNotifications> _allowAlerts;
 
 	/// <summary>
@@ -73,7 +62,6 @@ public sealed class AlertDiagramElement : DiagramElement
 	{
 		_allowAlerts = Scope<CompositionLoadingContext>.Current?.Value.AllowAlerts;
 
-		AddInput(StaticSocketIds.Trigger, LocalizedStrings.Trigger, DiagramSocketType.Any, OnProcessTrigger, int.MaxValue);
 		AddInput(StaticSocketIds.Input, LocalizedStrings.Message, DiagramSocketType.Any, OnProcessMessage);
 
 		_type = AddParam(nameof(Type), AlertNotifications.Log)
@@ -108,10 +96,6 @@ public sealed class AlertDiagramElement : DiagramElement
 		_caption = AddParam(nameof(Caption), LocalizedStrings.Test)
 			.SetBasic(true)
 			.SetDisplay(LocalizedStrings.Alerts, LocalizedStrings.Header, LocalizedStrings.SignalHeader, 30);
-
-		_message = AddParam(nameof(Message), LocalizedStrings.Test)
-			.SetBasic(true)
-			.SetDisplay(LocalizedStrings.Alerts, LocalizedStrings.Message, LocalizedStrings.SignalText, 40);
 	}
 
 	private bool _canProcess;
@@ -127,25 +111,27 @@ public sealed class AlertDiagramElement : DiagramElement
 			_canProcess = _allowAlerts?.Contains(Type) != false;
 	}
 
-	private void OnProcessTrigger(DiagramSocketValue value)
-	{
-		if (value.GetValue<bool?>() != false)
-			SendNotification(value.Time, Message);
-	}
-
 	private void OnProcessMessage(DiagramSocketValue value)
 	{
-		SendNotification(value.Time, value.Value?.ToString());
-	}
+		if (!_canProcess)
+			return;
 
-	private void SendNotification(DateTimeOffset time, string message)
-	{
-		if (!_canProcess || message.IsEmpty())
+		var message = value.Value?.ToString();
+
+		if (message.IsEmpty())
 			return;
 
 		var svc = AlertServicesRegistry.TryNotificationService;
 
-		if (svc != null)
-			_ = svc.NotifyAsync(Type, TelegramChannel?.Id, LogLevel, Caption, message, time, default);
+		if (svc is null)
+			return;
+
+		var type = Type;
+		var channelId = TelegramChannel?.Id;
+		var time = value.Time;
+		var caption = Caption;
+		var lvl = LogLevel;
+
+		_ = svc.NotifyAsync(type, channelId, lvl, caption, message, time, default);
 	}
 }
