@@ -12,6 +12,7 @@ using Ecng.Serialization;
 using Ecng.Xaml;
 using Ecng.Collections;
 using Ecng.Logging;
+using Ecng.ComponentModel;
 
 using Nito.AsyncEx;
 
@@ -73,6 +74,8 @@ public partial class MainPanel
 
 		Connector = CreateConnector?.Invoke(_defaultDataPath) ?? new Connector();
 		logManager.Sources.Add(Connector);
+
+		ConfigManager.RegisterService<ILastDirSelector>(new InMemoryLastDirSelector());
 
 		InitWeb();
 		InitConnector();
