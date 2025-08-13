@@ -62,35 +62,35 @@
 
 ## [API][12]
 API is a **free** C# library for programmers who use Visual Studio. S#.API lets you create any trading strategy, from long-timeframe positional strategies to high frequency strategies (HFT) with direct access to the exchange (DMA). [More info...][12]
-### Strategy example
+### Connector example
 ```C#
-public class SimpleStrategy : Strategy
+var connector = new Connector();
+var security = connector.LookupById("AAPL@NASDAQ");
+
+var subscription = new Subscription(DataType.TimeFrame(TimeSpan.FromMinutes(1)), security);
+
+connector.CandleReceived += (sub, candle) =>
 {
-	[Display(Name = "CandleSeries",
-		 GroupName = "Base settings")]
-	public CandleSeries CandleSeries { get; set; }
-	public SimpleStrategy(){}
+        if (sub != subscription || candle.State != CandleStates.Finished)
+                return;
 
-	protected override void OnStarted()
-	{
-		var connector = (Connector)Connector;
-		connector.WhenCandlesFinished(CandleSeries).Do(CandlesFinished).Apply(this);
-		connector.SubscribeCandles(CandleSeries);
-		base.OnStarted();
-	}
+        // determine candle color
+        var isGreen = candle.ClosePrice > candle.OpenPrice;
 
-	private void CandlesFinished(Candle candle)
-	{
-		if (candle.OpenPrice < candle.ClosePrice && Position <= 0)
-		{
-			RegisterOrder(this.BuyAtMarket(Volume + Math.Abs(Position)));
-		}
-		else if (candle.OpenPrice > candle.ClosePrice && Position >= 0)
-		{
-			RegisterOrder(this.SellAtMarket(Volume + Math.Abs(Position)));
-		}
-	}
-}
+        // register market order depending on candle color
+        var order = new Order
+        {
+                Security = security,
+                Type = OrderTypes.Market,
+                Side = isGreen ? Sides.Buy : Sides.Sell,
+                Volume = 1
+        };
+
+        connector.RegisterOrder(order);
+};
+
+connector.Subscribe(subscription);
+connector.Connect();
 ```
 
 ## Crypto exchanges
