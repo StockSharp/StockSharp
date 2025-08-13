@@ -21,7 +21,7 @@
   - All world platforms
   - Schema sharing with own team
 
-## [Data][9]
+## [Hydra][9]
 <img src="./Media/Hydra500.gif" align="right" />
 
 **Hydra** - **free** software to automatically load and store market data:
@@ -32,7 +32,7 @@
   - Export to csv, excel, xml or database
   - Import from csv
   - Scheduled tasks
-  - Auto-sync over the Internet between several running programs S#.Data
+  - Auto-sync over the Internet between several Hydra instances
 
 ## [Terminal][10]
 <img src="./Media/Terminal500.gif" align="left" />
@@ -52,7 +52,7 @@
 **Shell** - the ready-made graphical framework with the ability to quickly change to your needs and with fully open source code in C#:
   - Complete source code
   - Support for all StockSharp platform connections
-  - Support for S#.Designer schemas
+  - Support for Designer schemas
   - Flexible user interface
   - Strategy testing (statistics, equity, reports)
   - Save and load strategy settings
@@ -61,7 +61,7 @@
   - Launch strategies on schedule
 
 ## [API][12]
-API is a **free** C# library for programmers who use Visual Studio. S#.API lets you create any trading strategy, from long-timeframe positional strategies to high frequency strategies (HFT) with direct access to the exchange (DMA). [More info...][12]
+API is a **free** C# library for programmers who use Visual Studio. The API lets you create any trading strategy, from long-timeframe positional strategies to high frequency strategies (HFT) with direct access to the exchange (DMA). [More info...][12]
 ### Connector example
 ```C#
 var connector = new Connector();
