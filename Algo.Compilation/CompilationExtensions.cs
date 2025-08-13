@@ -151,7 +151,16 @@ public static class CompilationExtensions
 		pyIO.SetErrorOutput(outputStream, Encoding.UTF8);
 
 		foreach (var (name, body) in extraPythonCommon.Concat(GetPythonCommon()))
-			await File.WriteAllTextAsync(Path.Combine(Paths.PythonUtilsPath, name), body, cancellationToken);
+		{
+			try
+			{
+				await File.WriteAllTextAsync(Path.Combine(Paths.PythonUtilsPath, name), body, cancellationToken);
+			}
+			catch (Exception ex)
+			{
+				logs.AddErrorLog(ex);
+			}
+		}
 
 		ConfigManager.RegisterService(new CompilerProvider
 		{
