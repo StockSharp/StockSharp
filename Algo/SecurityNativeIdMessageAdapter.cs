@@ -8,6 +8,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 	private readonly PairSet<object, SecurityId> _securityIds = [];
 	private readonly Dictionary<SecurityId, List<ISecurityIdMessage>> _suspendedInMessages = [];
 	private readonly Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>> _suspendedOutMessages = [];
+	private readonly Dictionary<long, SecurityId> _transToSec = [];
 	private readonly SyncObject _syncRoot = new();
 
 	/// <summary>
@@ -140,6 +141,33 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 			case MessageTypes.Execution:
 			{
 				var execMsg = (ExecutionMessage)message;
+				
+				var secId = execMsg.SecurityId;
+				if (execMsg.TransactionId != 0 && secId != default && (!secId.SecurityCode.IsEmpty() || secId.Native != null))
+				{
+					lock (_syncRoot)
+						_transToSec[execMsg.TransactionId] = secId;
+				}
+
+				var noSecInfo = secId == default || (secId.SecurityCode.IsEmpty() && secId.Native == null);
+				if (noSecInfo && execMsg.TransactionId == 0 && execMsg.OriginalTransactionId != 0)
+				{
+					lock (_syncRoot)
+					{
+						if (
+							_transToSec.TryGetValue(execMsg.OriginalTransactionId, out var suspendedSecId) &&
+
+							// If original is suspended, suspend this related message to the same SecurityId key
+							_suspendedOutMessages.TryGetValue(suspendedSecId, out var tuple)
+						)
+						{
+							tuple.First ??= [];
+							tuple.First.Add(execMsg.Clone());
+							return;
+						}
+					}
+				}
+
 				ProcessMessage(execMsg, null);
 				break;
 			}
@@ -204,6 +232,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 					_securityIds.Clear();
 					_suspendedOutMessages.Clear();
 					_suspendedInMessages.Clear();
+					_transToSec.Clear();
 				}
 
 				break;
@@ -416,6 +445,12 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 				if (_suspendedOutMessages.TryGetAndRemove(tempId, out var messages2))
 					processOut(messages2);
 			}
+
+			foreach (var m in outMsgs)
+			{
+				if (m is ExecutionMessage em && em.TransactionId != 0)
+					_transToSec.Remove(em.TransactionId);
+			}
 		}
 
 		foreach (var msg in inMsgs)
@@ -531,6 +566,15 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 					msgs = GetMessages(value);
 				else
 					msgs.AddRange(GetMessages(value));
+			}
+
+			if (msgs != null)
+			{
+				foreach (var m in msgs)
+				{
+					if (m is ExecutionMessage em && em.TransactionId != 0)
+						_transToSec.Remove(em.TransactionId);
+				}
 			}
 		}
 
