@@ -1363,9 +1363,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				adapter = GetAdapter(ordMsg.PortfolioName, message, out _);
 		}
 
-		var wrapper = _adapterWrappers.TryGetValue(adapter);
-
-		if (adapter is null || wrapper is null)
+		void sendUnkTrans()
 		{
 			LogError(LocalizedStrings.UnknownTransactionId, originId);
 
@@ -1376,15 +1374,23 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				OriginalTransactionId = transId,
 				Error = new InvalidOperationException(LocalizedStrings.UnknownTransactionId.Put(originId)),
 			});
+		}
 
+		if (adapter is null)
+		{
+			sendUnkTrans();
 			return;
 		}
-		else
+
+		if (!_adapterWrappers.TryGetValue(adapter, out var wrapper))
 		{
-			if (message is OrderReplaceMessage replace)
-			{
-				TryAddOrderAdapter(replace.TransactionId, adapter);
-			}
+			sendUnkTrans();
+			return;
+		}
+
+		if (message is OrderReplaceMessage replace)
+		{
+			TryAddOrderAdapter(replace.TransactionId, adapter);
 		}
 
 		wrapper.SendInMessage(message);
