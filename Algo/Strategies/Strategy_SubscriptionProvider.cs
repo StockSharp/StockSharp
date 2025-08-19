@@ -142,6 +142,11 @@ partial class Strategy
 	/// <inheritdoc />
 	public void UnSubscribe(Subscription subscription)
 	{
+		ArgumentNullException.ThrowIfNull(subscription);
+
+		if (subscription.TransactionId == 0)
+			return;
+
 		var connector = Connector;
 
 		if (connector is null)
