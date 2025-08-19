@@ -209,18 +209,18 @@ public class DiagramStrategy : Strategy, INotifyPropertiesChanged
 
 		composition.SuspendUndoManager();
 
-		try
-		{
-			TrySetParameters(composition);
-		}
-		catch
-		{
-			TryResetParameters();
-			throw;
-		}
-
 		using (new Scope<IgnoreRefresh>())
 		{
+			try
+			{
+				TrySetParameters(composition);
+			}
+			catch
+			{
+				TryResetParameters();
+				throw;
+			}
+
 			foreach (var param in GetOptimizedParams(composition))
 			{
 				if (!Parameters.TryGetValue(param.Name, out var sParam) ||
