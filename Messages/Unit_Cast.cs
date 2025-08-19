@@ -10,6 +10,13 @@ partial class Unit
 	public static implicit operator Unit(decimal value) => new(value);
 
 	/// <summary>
+	/// Cast <see cref="short"/> object to the type <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="value"><see cref="short"/> value.</param>
+	/// <returns>Object <see cref="Unit"/>.</returns>
+	public static implicit operator Unit(short value) => new(value);
+
+	/// <summary>
 	/// Cast <see cref="int"/> object to the type <see cref="Unit"/>.
 	/// </summary>
 	/// <param name="value"><see cref="int"/> value.</param>
@@ -24,11 +31,122 @@ partial class Unit
 	public static implicit operator Unit(long value) => new(value);
 
 	/// <summary>
+	/// Cast <see cref="float"/> object to the type <see cref="Unit"/>.
+	/// </summary>
+	/// <param name="value"><see cref="float"/> value.</param>
+	/// <returns>Object <see cref="Unit"/>.</returns>
+	public static implicit operator Unit(float value) => (decimal)value;
+
+	/// <summary>
 	/// Cast <see cref="double"/> object to the type <see cref="Unit"/>.
 	/// </summary>
 	/// <param name="value"><see cref="double"/> value.</param>
 	/// <returns>Object <see cref="Unit"/>.</returns>
 	public static implicit operator Unit(double value) => (decimal)value;
+
+	/// <summary>
+	/// Cast object from <see cref="Unit"/> to <see cref="short"/>.
+	/// </summary>
+	/// <param name="unit">Object <see cref="Unit"/>.</param>
+	/// <returns><see cref="short"/> value.</returns>
+	public static explicit operator short(Unit unit)
+	{
+		if (unit is null)
+			throw new ArgumentNullException(nameof(unit));
+
+		return (short)(decimal)unit;
+	}
+
+	/// <summary>
+	/// Cast object from <see cref="Unit"/> to nullable <see cref="short"/>.
+	/// </summary>
+	/// <param name="unit">Object <see cref="Unit"/>.</param>
+	/// <returns><see cref="short"/> value.</returns>
+	public static explicit operator short?(Unit unit)
+	{
+		if (unit is null)
+			return null;
+
+		return (short)unit;
+	}
+
+	/// <summary>
+	/// Cast object from <see cref="Unit"/> to <see cref="int"/>.
+	/// </summary>
+	/// <param name="unit">Object <see cref="Unit"/>.</param>
+	/// <returns><see cref="int"/> value.</returns>
+	public static explicit operator int(Unit unit)
+	{
+		if (unit is null)
+			throw new ArgumentNullException(nameof(unit));
+
+		return (int)(decimal)unit;
+	}
+
+	/// <summary>
+	/// Cast object from <see cref="Unit"/> to nullable <see cref="int"/>.
+	/// </summary>
+	/// <param name="unit">Object <see cref="Unit"/>.</param>
+	/// <returns><see cref="int"/> value.</returns>
+	public static explicit operator int?(Unit unit)
+	{
+		if (unit is null)
+			return null;
+
+		return (int)unit;
+	}
+
+	/// <summary>
+	/// Cast object from <see cref="Unit"/> to <see cref="long"/>.
+	/// </summary>
+	/// <param name="unit">Object <see cref="Unit"/>.</param>
+	/// <returns><see cref="long"/> value.</returns>
+	public static explicit operator long(Unit unit)
+	{
+		if (unit is null)
+			throw new ArgumentNullException(nameof(unit));
+
+		return (long)(decimal)unit;
+	}
+
+	/// <summary>
+	/// Cast object from <see cref="Unit"/> to nullable <see cref="long"/>.
+	/// </summary>
+	/// <param name="unit">Object <see cref="Unit"/>.</param>
+	/// <returns><see cref="long"/> value.</returns>
+	public static explicit operator long?(Unit unit)
+	{
+		if (unit is null)
+			return null;
+
+		return (long)unit;
+	}
+
+	/// <summary>
+	/// Cast object from <see cref="Unit"/> to <see cref="float"/>.
+	/// </summary>
+	/// <param name="unit">Object <see cref="Unit"/>.</param>
+	/// <returns><see cref="float"/> value.</returns>
+	public static explicit operator float(Unit unit)
+	{
+		if (unit is null)
+			throw new ArgumentNullException(nameof(unit));
+
+		return (float)(decimal)unit;
+	}
+
+	/// <summary>
+	/// Cast object from <see cref="Unit"/> to nullable <see cref="float"/>.
+	/// </summary>
+	/// <param name="unit">Object <see cref="Unit"/>.</param>
+	/// <returns><see cref="float"/> value.</returns>
+	public static explicit operator float?(Unit unit)
+	{
+		if (unit is null)
+			return null;
+
+		return (float)unit;
+	}
 
 	/// <summary>
 	/// Cast object from <see cref="Unit"/> to <see cref="decimal"/>.
