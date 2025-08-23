@@ -2331,6 +2331,7 @@
   "OK": "확인",
   "Okcoin": "OKCoin",
   "Okex": "OKEx",
+  "OkexHistory": "OKX 히스토리",
   "OldVolNewVol": "견적을 위한 볼륨 변경. 이전 볼륨 {0}, 새 볼륨 {1}.",
   "OLFromOrder": "{0} 주문 {1}",
   "OLFromTrade": "거래 {0}",

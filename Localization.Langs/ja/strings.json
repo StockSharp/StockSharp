@@ -2331,6 +2331,7 @@
   "OK": "OK",
   "Okcoin": "OKCoin",
   "Okex": "OKEx",
+  "OkexHistory": "OKX履歴",
   "OldVolNewVol": "見積もりのためのボリューム変更。古いボリューム{0}、新しいボリューム{1}。",
   "OLFromOrder": "{0} の注文 {1}",
   "OLFromTrade": "取引 {0} で",

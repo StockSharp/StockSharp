@@ -2331,6 +2331,7 @@
   "OK": "OK",
   "Okcoin": "OKCoin",
   "Okex": "OKEx",
+  "OkexHistory": "Historial de OKX",
   "OldVolNewVol": "Cambio de volumen para cotización. Volumen antiguo {0}, volumen nuevo {1}.",
   "OLFromOrder": "{0} pedidos {1}",
   "OLFromTrade": "en la operación {0}",

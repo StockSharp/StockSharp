@@ -2331,6 +2331,7 @@
   "OK": "OK",
   "Okcoin": "OKCoin",
   "Okex": "OKEx",
+  "OkexHistory": "Historia OKX",
   "OldVolNewVol": "Zmiana wolumenu do wyceny. Stary wolumen {0}, nowy wolumen {1}.",
   "OLFromOrder": "{0} zamówienia {1}",
   "OLFromTrade": "z transakcji {0}",

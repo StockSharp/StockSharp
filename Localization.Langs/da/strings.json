@@ -2331,6 +2331,7 @@
   "OK": "OK",
   "Okcoin": "OKCoin",
   "Okex": "OKEx",
+  "OkexHistory": "OKX Historik",
   "OldVolNewVol": "Ændring af volumen for tilbudsgivning. Gammelt volumen {0}, nyt volumen {1}.",
   "OLFromOrder": "{0} ordrer {1}",
   "OLFromTrade": "fra handlen {0}",

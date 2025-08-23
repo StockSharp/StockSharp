@@ -2331,6 +2331,7 @@
   "OK": "باشه",
   "Okcoin": "OKCoin",
   "Okex": "OKEx",
+  "OkexHistory": "تاریخچه OKX",
   "OldVolNewVol": "تغییر حجم برای نقل قول. حجم قدیمی {0}، حجم جدید {1}.",
   "OLFromOrder": "{0} سفارشات {1}",
   "OLFromTrade": "از معامله {0}",

@@ -2336,6 +2336,7 @@
   "OK": "OK",
   "Okcoin": "OKCoin",
   "Okex": "OKEx",
+  "OkexHistory": "Kasaysayan ng OKX",
   "OldVolNewVol": "Pagbabago ng volume ng quoting. Ang lumang volume ay {0}, ang bagong volume ay {1}.",
   "OLFromOrder": "{0} order {1}",
   "OLFromTrade": "kada trade {0}",

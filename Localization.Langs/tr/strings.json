@@ -2331,6 +2331,7 @@
   "OK": "Tamam",
   "Okcoin": "OKCoin",
   "Okex": "OKEx",
+  "OkexHistory": "OKX Geçmişi",
   "OldVolNewVol": "Kotasyon için hacim değişikliği. Eski hacim {0}, yeni hacim {1}.",
   "OLFromOrder": "{0} sipariş {1}",
   "OLFromTrade": "işlemden {0}",

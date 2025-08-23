@@ -2331,6 +2331,7 @@
   "OK": "ОК",
   "Okcoin": "OKCoin",
   "Okex": "OKEx",
+  "OkexHistory": "История OKX",
   "OldVolNewVol": "Изменение объема для котирования. Старый объем {0}, новый объем {1}.",
   "OLFromOrder": "{0} заявки {1}",
   "OLFromTrade": "на сделку {0}",

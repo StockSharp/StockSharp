@@ -2331,6 +2331,7 @@
   "OK": "Đồng ý",
   "Okcoin": "OKCoin",
   "Okex": "OKEx",
+  "OkexHistory": "Lịch sử OKX",
   "OldVolNewVol": "Thay đổi khối lượng để báo giá. Khối lượng cũ {0}, khối lượng mới {1}.",
   "OLFromOrder": "{0} đơn đặt hàng {1}",
   "OLFromTrade": "trong giao dịch {0}",
