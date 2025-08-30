@@ -818,6 +818,52 @@ public class CommissionTests
 		}
 	}
 
+	[TestMethod]
+	public void PerOrderCountRulePartialFill()
+	{
+		var now = DateTimeOffset.UtcNow;
+		var rule = new CommissionOrderCountRule
+		{
+			Value = 10m,
+			Count = 1
+		};
+
+		var orderId = 123L;
+
+		// Order registration (order info only)
+		rule.Process(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			OrderId = orderId,
+			OrderPrice = 100m,
+			OrderVolume = 10m,
+			ServerTime = Inc(ref now)
+		}).AssertEqual(10m);
+
+		// First partial fill (own trade message with order info present)
+		rule.Process(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			OrderId = orderId,
+			TradePrice = 100m,
+			TradeVolume = 3m,
+			ServerTime = Inc(ref now)
+		}).AssertNull();
+
+		// Second partial fill for the same order
+		rule.Process(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			OrderId = orderId,
+			TradePrice = 101m,
+			TradeVolume = 7m,
+			ServerTime = Inc(ref now)
+		}).AssertNull();
+	}
+
 	// A custom rule class for testing
 	private class CustomCommissionRule : CommissionRule
 	{

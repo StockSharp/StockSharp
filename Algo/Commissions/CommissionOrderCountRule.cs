@@ -47,7 +47,9 @@ public class CommissionOrderCountRule : CommissionRule
 	/// <inheritdoc />
 	public override decimal? Process(ExecutionMessage message)
 	{
-		if (!message.HasOrderInfo())
+		// Count only pure order messages. Own trades (partial fills) also carry order info,
+		// but must not increase orders counter.
+		if (!message.HasOrderInfo() || message.HasTradeInfo())
 			return null;
 
 		if (++_currentCount < Count)
