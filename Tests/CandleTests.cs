@@ -674,4 +674,32 @@ public class CandleTests
 		builder.High.AssertNotEqual(default);
 		builder.Low.AssertNotEqual(default);
 	}
+
+	[TestMethod]
+	public void VolumeProfile_ResetsHighLowOnRecalculate()
+	{
+		var levels = new List<CandlePriceLevel>
+		{
+			new() { Price = 10m, TotalVolume = 2m, BuyVolume = 1m, SellVolume = 1m },
+			new() { Price = 11m, TotalVolume = 5m, BuyVolume = 3m, SellVolume = 2m },
+			new() { Price = 12m, TotalVolume = 8m, BuyVolume = 4m, SellVolume = 4m },
+			new() { Price = 13m, TotalVolume = 3m, BuyVolume = 2m, SellVolume = 1m },
+			new() { Price = 14m, TotalVolume = 1m, BuyVolume = 0.5m, SellVolume = 0.5m },
+		};
+
+		var builder = new VolumeProfileBuilder();
+		foreach (var level in levels)
+			builder.Update(level);
+
+		builder.Calculate();
+
+		builder.High.AssertNotEqual(default);
+		builder.Low.AssertNotEqual(default);
+
+		builder.VolumePercent = 100m;
+		builder.Calculate();
+
+		builder.High.AssertEqual(default);
+		builder.Low.AssertEqual(default);
+	}
 }
