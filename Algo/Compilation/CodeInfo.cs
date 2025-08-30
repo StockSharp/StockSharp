@@ -124,10 +124,10 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 			if (_language.EqualsIgnoreCase(value))
 				return;
 
-			_language = value.ThrowIfEmpty(nameof(value));
-
 			if (_context is not null)
 				throw new InvalidOperationException("Language cannot be changed after compilation.");
+
+			_language = value.ThrowIfEmpty(nameof(value));
 
 			if (value.EqualsIgnoreCase(FileExts.FSharp))
 				_assemblyReferences.AddRange(CodeExtensions.FSharpReferences);
