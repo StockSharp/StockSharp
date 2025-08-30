@@ -143,7 +143,7 @@ public static class CodeExtensions
 	/// </summary>
 	/// <returns><see cref="ICompiler"/></returns>
 	public static ICompiler TryGetCSharpCompiler()
-		=> DefaultLanguage.TryGetCompiler();
+		=> TryGetCompiler(DefaultLanguage);
 
 	/// <summary>
 	/// Try get compiler for the specified file extension.
@@ -160,6 +160,9 @@ public static class CodeExtensions
 	/// <returns><see cref="ICompiler"/></returns>
 	public static ICompiler TryGetCompiler(this string fileExt)
 	{
+		if (fileExt.IsEmpty())
+			throw new ArgumentNullException(nameof(fileExt));
+
 		var provider = ServicesRegistry.TryCompilerProvider;
 
 		ICompiler compiler;
@@ -186,7 +189,7 @@ public static class CodeExtensions
 	/// <param name="fileExt">File extension.</param>
 	/// <returns>Check result.</returns>
 	public static bool IsCodeExtension(this string fileExt)
-		=> fileExt.TryGetCompiler() is not null;
+		=> TryGetCompiler(fileExt) is not null;
 
 	/// <summary>
 	/// Determine whether the specified code supports references.
@@ -202,5 +205,5 @@ public static class CodeExtensions
 	/// <param name="langExt"><see cref="CodeInfo.Language"/></param>
 	/// <returns>Check result.</returns>
 	public static bool IsReferencesSupported(this string langExt)
-		=> langExt.ThrowIfEmpty(nameof(langExt)).TryGetCompiler()?.IsReferencesSupported == true;
+		=> TryGetCompiler(langExt)?.IsReferencesSupported == true;
 }
