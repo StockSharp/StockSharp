@@ -401,4 +401,74 @@ public class SlippageTests
 		result.AssertNull();
 		mgr.Slippage.AssertEqual(0m);
 	}
+
+	[TestMethod]
+	public void PlannedPriceRemoved()
+	{
+		var mgr = new SlippageManager();
+
+		mgr.ProcessMessage(new Level1ChangeMessage
+		{
+			SecurityId = _secId
+		}
+		.Add(Level1Fields.BestBidPrice, 100m)
+		.Add(Level1Fields.BestAskPrice, 102m));
+
+		var regMsg = new OrderRegisterMessage
+		{
+			SecurityId = _secId,
+			Side = Sides.Buy,
+			TransactionId = 600
+		};
+		mgr.ProcessMessage(regMsg);
+
+		var first = mgr.ProcessMessage(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = _secId,
+			OriginalTransactionId = regMsg.TransactionId,
+			TradePrice = 103m,
+			TradeVolume = 1m,
+			Side = Sides.Buy
+		});
+		first.AssertEqual(1m);
+		mgr.Slippage.AssertEqual(1m);
+
+		// Second partial execution should accumulate slippage (planned price still present)
+		var second = mgr.ProcessMessage(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = _secId,
+			OriginalTransactionId = regMsg.TransactionId,
+			TradePrice = 105m,
+			TradeVolume = 1m,
+			Side = Sides.Buy
+		});
+		second.AssertEqual(3m); // (105 - 102) * 1
+		mgr.Slippage.AssertEqual(4m);
+
+		// Now mark order as completed -> planned price should be removed
+		mgr.ProcessMessage(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = _secId,
+			OriginalTransactionId = regMsg.TransactionId,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Done,
+			Side = Sides.Buy
+		});
+
+		// Further executions should not use (or find) planned price
+		var afterDone = mgr.ProcessMessage(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = _secId,
+			OriginalTransactionId = regMsg.TransactionId,
+			TradePrice = 106m,
+			TradeVolume = 1m,
+			Side = Sides.Buy
+		});
+		afterDone.AssertNull();
+		mgr.Slippage.AssertEqual(4m);
+	}
 }

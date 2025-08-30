@@ -99,6 +99,18 @@ public class SlippageManager : ISlippageManager
 			case MessageTypes.Execution:
 			{
 				var execMsg = (ExecutionMessage)message;
+
+				// remove on order complete messages (no trade info) if possible
+				if (!execMsg.HasTradeInfo() && execMsg.HasOrderInfo())
+				{
+					if (_plannedPrices.ContainsKey(execMsg.OriginalTransactionId))
+					{
+						if (execMsg.OrderState == OrderStates.Done || execMsg.Balance == 0)
+							_plannedPrices.Remove(execMsg.OriginalTransactionId);
+					}
+
+					break;
+				}
 				
 				if (execMsg.HasTradeInfo())
 				{
@@ -118,8 +130,12 @@ public class SlippageManager : ISlippageManager
 						if (!CalculateNegative && weighted < 0)
 							weighted = 0;
 
-
 						Slippage += weighted;
+
+						// cleanup only when order is completed (if such info present)
+						if (execMsg.HasOrderInfo() && (execMsg.OrderState == OrderStates.Done || execMsg.Balance == 0))
+							_plannedPrices.Remove(execMsg.OriginalTransactionId);
+
 						return weighted;
 					}
 				}
