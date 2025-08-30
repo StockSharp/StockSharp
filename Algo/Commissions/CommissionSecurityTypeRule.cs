@@ -59,7 +59,12 @@ public class CommissionSecurityTypeRule : CommissionRule
 			if (secId.IsAllSecurity())
 				return null;
 
-			return _secTypes.SafeAdd(secId, key => ServicesRegistry.TrySecurityProvider?.LookupById(key)?.Type);
+			var provider = ServicesRegistry.TrySecurityProvider;
+
+			if (provider is null)
+				return null;
+
+			return _secTypes.SafeAdd(secId, key => provider.LookupById(key)?.Type);
 		}
 
 		if (message.HasTradeInfo() && getSecType(message.SecurityId) == SecurityType)

@@ -11,7 +11,7 @@ namespace StockSharp.Algo.Commissions;
 public class CommissionOrderCountRule : CommissionRule
 {
 	private int _currentCount;
-	private int _count;
+	private int _count = 1;
 
 	/// <summary>
 	/// Order count.
@@ -26,6 +26,9 @@ public class CommissionOrderCountRule : CommissionRule
 		get => _count;
 		set
 		{
+			if (value < 1)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
 			_count = value;
 			UpdateTitle();
 		}

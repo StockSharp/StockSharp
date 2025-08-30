@@ -33,7 +33,7 @@ public class CommissionSecurityIdRule : CommissionRule
 	}
 
 	/// <inheritdoc />
-	protected override string GetTitle() => _securityId?.ToStringId();
+	protected override string GetTitle() => (_securityId?.ToStringId()).IsEmpty(LocalizedStrings.NoSecurities);
 
 	/// <inheritdoc />
 	public override decimal? Process(ExecutionMessage message)
