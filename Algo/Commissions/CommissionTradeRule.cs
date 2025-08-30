@@ -14,7 +14,7 @@ public class CommissionTradeRule : CommissionRule
 	public override decimal? Process(ExecutionMessage message)
 	{
 		if (message.HasTradeInfo())
-			return GetValue(message.TradePrice);
+			return GetValue(message.TradePrice, message.TradeVolume);
 
 		return null;
 	}

@@ -68,7 +68,7 @@ public class CommissionSecurityTypeRule : CommissionRule
 		}
 
 		if (message.HasTradeInfo() && getSecType(message.SecurityId) == SecurityType)
-			return GetValue(message.TradePrice);
+			return GetValue(message.TradePrice, message.TradeVolume);
 
 		return null;
 	}

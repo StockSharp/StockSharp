@@ -39,7 +39,7 @@ public class CommissionSecurityIdRule : CommissionRule
 	public override decimal? Process(ExecutionMessage message)
 	{
 		if (message.HasTradeInfo() && message.SecurityId == _securityId)
-			return GetValue(message.TradePrice);
+			return GetValue(message.TradePrice, message.TradeVolume);
 
 		return null;
 	}

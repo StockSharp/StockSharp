@@ -39,7 +39,7 @@ public class CommissionBoardCodeRule : CommissionRule
 	public override decimal? Process(ExecutionMessage message)
 	{
 		if (message.HasTradeInfo() && message.SecurityId.BoardCode.EqualsIgnoreCase(_boardCode))
-			return GetValue(message.TradePrice);
+			return GetValue(message.TradePrice, message.TradeVolume);
 
 		return null;
 	}

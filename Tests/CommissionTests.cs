@@ -58,7 +58,7 @@ public class CommissionTests
 		// Test percent-based commission
 		rule.Value = new Unit { Value = 5m, Type = UnitTypes.Percent };
 		result = rule.Process(orderMsg);
-		result.AssertEqual(5m); // 5% of 100 = 5
+		result.AssertEqual(50m); // 5% of 100 * 10 = 50
 	}
 
 	[TestMethod]
@@ -85,7 +85,7 @@ public class CommissionTests
 		// Test percent-based commission
 		rule.Value = new Unit { Value = 2.5m, Type = UnitTypes.Percent };
 		result = rule.Process(tradeMsg);
-		result.AssertEqual(5m); // 2.5% of 200 = 5
+		result.AssertEqual(25m); // 2.5% of 200 * 5 = 25
 	}
 
 	[TestMethod]
@@ -256,6 +256,7 @@ public class CommissionTests
 			DataTypeEx = DataType.Transactions,
 			SecurityId = securityId,
 			TradePrice = 150m,
+			TradeVolume = 2,
 			ServerTime = Inc(ref now)
 		};
 
@@ -277,7 +278,7 @@ public class CommissionTests
 		// Test percent-based commission
 		rule.Value = new Unit { Value = 1m, Type = UnitTypes.Percent };
 		result = rule.Process(tradeMsg);
-		result.AssertEqual(1.5m); // 1% of 150 = 1.5
+		result.AssertEqual(3m); // 1% of (150 * 2) = 3
 
 		// Test null when not trade info
 		var orderMsg = new ExecutionMessage
@@ -313,7 +314,8 @@ public class CommissionTests
 			DataTypeEx = DataType.Transactions,
 			SecurityId = new() { BoardCode = BoardCodes.Nasdaq },
 			TradePrice = 200m,
-			ServerTime = Inc(ref now)
+			TradeVolume = 2,
+			ServerTime = Inc(ref now),
 		};
 
 		var result = rule.Process(tradeMsg);
@@ -334,7 +336,7 @@ public class CommissionTests
 		// Test percent-based commission
 		rule.Value = new() { Value = 2m, Type = UnitTypes.Percent };
 		result = rule.Process(tradeMsg);
-		result.AssertEqual(4m); // 2% of 200 = 4
+		result.AssertEqual(8m); // 2% of (200 * 2) = 8
 
 		// Test null when not trade info
 		var orderMsg = new ExecutionMessage
@@ -401,6 +403,7 @@ public class CommissionTests
 			DataTypeEx = DataType.Transactions,
 			SecurityId = Helper.CreateSecurityId(),
 			TradePrice = 150m,
+			TradeVolume = 2,
 			ServerTime = Inc(ref now)
 		};
 
@@ -431,6 +434,7 @@ public class CommissionTests
 			DataTypeEx = DataType.Transactions,
 			SecurityId = secId,
 			TradePrice = 150m,
+			TradeVolume = 2,
 			ServerTime = Inc(ref now)
 		};
 
@@ -862,6 +866,31 @@ public class CommissionTests
 			TradeVolume = 7m,
 			ServerTime = Inc(ref now)
 		}).AssertNull();
+	}
+
+	[TestMethod]
+	public void PerOrderTradeTurnover()
+	{
+		var now = DateTimeOffset.UtcNow;
+		var rule = new CommissionOrderRule
+		{
+			Value = new Unit { Value = 1m, Type = UnitTypes.Percent }
+		};
+
+		var msg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			OrderType = OrderTypes.Market,
+			OrderPrice = 0m,
+			OrderVolume = 4m,
+			// actual execution info
+			TradePrice = 120m,
+			TradeVolume = 4m,
+			ServerTime = Inc(ref now)
+		};
+
+		rule.Process(msg).AssertEqual(4.8m);
 	}
 
 	// A custom rule class for testing

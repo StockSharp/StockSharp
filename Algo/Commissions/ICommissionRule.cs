@@ -112,18 +112,22 @@ public abstract class CommissionRule : NotifiableObject, ICommissionRule
 	}
 
 	/// <summary>
-	/// Get result value.
+	/// Get commission value using price and volume. For percent units, uses turnover (price * volume).
+	/// Absolute units return the absolute value.
 	/// </summary>
-	/// <param name="baseValue">Base value.</param>
-	/// <returns>Result value.</returns>
-	protected decimal? GetValue(decimal? baseValue)
+	/// <param name="price">Price base (order or trade).</param>
+	/// <param name="volume">Volume base (order or trade).</param>
+	/// <returns>Commission value or null if cannot be calculated.</returns>
+	protected decimal? GetValue(decimal? price, decimal? volume)
 	{
-		if (baseValue == null)
+		if (Value.Type != UnitTypes.Percent)
+			return (decimal)Value;
+
+		if (price == null)
 			return null;
 
-		if (Value.Type == UnitTypes.Percent)
-			return (baseValue.Value * Value.Value) / 100m;
-
-		return (decimal)Value;
+		var vol = volume ?? 1m;
+		var turnover = price.Value * vol;
+		return (turnover * Value.Value) / 100m;
 	}
 }

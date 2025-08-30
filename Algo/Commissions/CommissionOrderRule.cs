@@ -13,9 +13,12 @@ public class CommissionOrderRule : CommissionRule
 	/// <inheritdoc />
 	public override decimal? Process(ExecutionMessage message)
 	{
-		if (message.HasOrderInfo())
-			return GetValue(message.OrderPrice);
+		if (!message.HasOrderInfo())
+			return null;
 
-		return null;
+		var price = message.HasTradeInfo() ? message.TradePrice : message.OrderPrice;
+		var volume = message.HasTradeInfo() ? message.TradeVolume : message.OrderVolume;
+
+		return GetValue(price, volume);
 	}
 }
