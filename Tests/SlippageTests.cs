@@ -35,11 +35,12 @@ public class SlippageTests
 			SecurityId = _secId,
 			OriginalTransactionId = regMsg.TransactionId,
 			TradePrice = 104m,
+			TradeVolume = 3m,
 			Side = Sides.Buy
 		});
 
-		slip.AssertEqual(2m); // 104 - 102 (ask at registration)
-		mgr.Slippage.AssertEqual(2m); // Check total slippage
+		slip.AssertEqual(6m); // (104 - 102) * 3
+		mgr.Slippage.AssertEqual(6m); // Check total slippage
 	}
 
 	[TestMethod]
@@ -68,11 +69,12 @@ public class SlippageTests
 			SecurityId = _secId,
 			OriginalTransactionId = regMsg.TransactionId,
 			TradePrice = 100m,
+			TradeVolume = 2m,
 			Side = Sides.Sell
 		});
 
-		slip.AssertEqual(1m); // 101 - 100 (bid at registration)
-		mgr.Slippage.AssertEqual(1m); // Check total slippage
+		slip.AssertEqual(2m); // (101 - 100) * 2
+		mgr.Slippage.AssertEqual(2m); // Check total slippage
 	}
 
 	[TestMethod]
@@ -101,11 +103,12 @@ public class SlippageTests
 			SecurityId = _secId,
 			OriginalTransactionId = regMsg.TransactionId,
 			TradePrice = 60m,
+			TradeVolume = 4m,
 			Side = Sides.Buy
 		});
 
-		slip.AssertEqual(5m); // 60 - 55
-		mgr.Slippage.AssertEqual(5m); // Check total slippage
+		slip.AssertEqual(20m); // (60 - 55) * 4
+		mgr.Slippage.AssertEqual(20m); // Check total slippage
 	}
 
 	[TestMethod]
@@ -135,11 +138,12 @@ public class SlippageTests
 			SecurityId = _secId,
 			OriginalTransactionId = regMsg.TransactionId,
 			TradePrice = 100m,
+			TradeVolume = 2m,
 			Side = Sides.Buy
 		});
 
-		slip.AssertEqual(-1m); // 100 - 101
-		mgr.Slippage.AssertEqual(-1m); // Check total slippage
+		slip.AssertEqual(-2m); // (100 - 101) * 2
+		mgr.Slippage.AssertEqual(-2m); // Check total slippage
 
 		// Disable negative slippage
 		mgr.CalculateNegative = false;
@@ -150,11 +154,12 @@ public class SlippageTests
 			SecurityId = _secId,
 			OriginalTransactionId = 123,
 			TradePrice = 100m,
+			TradeVolume = 2m,
 			Side = Sides.Buy
 		});
 
 		slip2.AssertEqual(0m); // cannot be < 0
-		mgr.Slippage.AssertEqual(-1m); // Total slippage remains unchanged
+		mgr.Slippage.AssertEqual(-2m); // Total slippage remains unchanged
 	}
 
 	[TestMethod]
@@ -178,6 +183,7 @@ public class SlippageTests
 			SecurityId = _secId,
 			OriginalTransactionId = regMsg.TransactionId,
 			TradePrice = 88,
+			TradeVolume = 5m,
 			Side = Sides.Buy
 		});
 
@@ -204,6 +210,7 @@ public class SlippageTests
 			SecurityId = _secId,
 			OriginalTransactionId = 999,
 			TradePrice = 91m,
+			TradeVolume = 10m,
 			Side = Sides.Buy
 		});
 
@@ -237,6 +244,7 @@ public class SlippageTests
 			SecurityId = _secId,
 			OriginalTransactionId = regMsg.TransactionId,
 			TradePrice = 3m,
+			TradeVolume = 1m,
 			Side = Sides.Buy
 		});
 		slip.AssertEqual(1);
@@ -253,6 +261,7 @@ public class SlippageTests
 			SecurityId = _secId,
 			OriginalTransactionId = 12,
 			TradePrice = 3m,
+			TradeVolume = 1m,
 			Side = Sides.Buy
 		});
 		slip2.AssertNull();
@@ -307,11 +316,12 @@ public class SlippageTests
 			SecurityId = _secId,
 			OriginalTransactionId = regMsg1.TransactionId,
 			TradePrice = 104m,
+			TradeVolume = 2m,
 			Side = Sides.Buy
 		});
 
-		slip1.AssertEqual(2m); // 104 - 102
-		mgr.Slippage.AssertEqual(2m); // Total slippage: 2
+		slip1.AssertEqual(4m); // (104 - 102) * 2
+		mgr.Slippage.AssertEqual(4m); // Total slippage: 4
 
 		// Second order
 		var regMsg2 = new OrderRegisterMessage
@@ -328,11 +338,12 @@ public class SlippageTests
 			SecurityId = _secId,
 			OriginalTransactionId = regMsg2.TransactionId,
 			TradePrice = 99m,
+			TradeVolume = 1m,
 			Side = Sides.Sell
 		});
 
-		slip2.AssertEqual(1m); // 100 - 99
-		mgr.Slippage.AssertEqual(3m); // Total slippage: 2 + 1 = 3
+		slip2.AssertEqual(1m); // (100 - 99) * 1
+		mgr.Slippage.AssertEqual(5m); // Total slippage: 4 + 1 = 5
 
 		// Third order with negative slippage
 		var regMsg3 = new OrderRegisterMessage
@@ -349,10 +360,45 @@ public class SlippageTests
 			SecurityId = _secId,
 			OriginalTransactionId = regMsg3.TransactionId,
 			TradePrice = 101m,
+			TradeVolume = 3m,
 			Side = Sides.Buy
 		});
 
-		slip3.AssertEqual(-1m); // 101 - 102
-		mgr.Slippage.AssertEqual(2m); // Total slippage: 3 + (-1) = 2
+		slip3.AssertEqual(-3m); // (101 - 102) * 3
+		mgr.Slippage.AssertEqual(2m); // Total slippage: 4 + 1 - 3 = 2
+	}
+
+	[TestMethod]
+	public void MissingTradePrice()
+	{
+		var mgr = new SlippageManager();
+
+		mgr.ProcessMessage(new Level1ChangeMessage
+		{
+			SecurityId = _secId
+		}
+		.Add(Level1Fields.BestBidPrice, 100m)
+		.Add(Level1Fields.BestAskPrice, 102m));
+
+		var regMsg = new OrderRegisterMessage
+		{
+			SecurityId = _secId,
+			Side = Sides.Buy,
+			TransactionId = 500
+		};
+		mgr.ProcessMessage(regMsg);
+
+		// No TradePrice, only TradeVolume provided
+		var result = mgr.ProcessMessage(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = _secId,
+			OriginalTransactionId = regMsg.TransactionId,
+			TradeVolume = 5m,
+			Side = Sides.Buy
+		});
+
+		result.AssertNull();
+		mgr.Slippage.AssertEqual(0m);
 	}
 }

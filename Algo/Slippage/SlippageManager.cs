@@ -90,7 +90,7 @@ public class SlippageManager : ISlippageManager
 					var price = regMsg.Side == Sides.Buy ? prices.Second : prices.First;
 
 					if (price != 0)
-						_plannedPrices.Add(regMsg.TransactionId, (regMsg.Side, price));
+						_plannedPrices[regMsg.TransactionId] = (regMsg.Side, price);
 				}
 
 				break;
@@ -104,18 +104,23 @@ public class SlippageManager : ISlippageManager
 				{
 					if (_plannedPrices.TryGetValue(execMsg.OriginalTransactionId, out var t))
 					{
-						var slippage = execMsg.TradePrice - t.price;
+						// If there is no trade price, cannot compute slippage; keep planned price for future executions.
+						if (execMsg.TradePrice == null)
+							return null;
 
-						if (t.side == Sides.Sell)
-							slippage = -slippage;
+						var diff = t.side == Sides.Buy
+							? execMsg.TradePrice.Value - t.price
+							: t.price - execMsg.TradePrice.Value;
 
-						if (slippage < 0 && !CalculateNegative)
-							slippage = 0;
+						var volume = execMsg.TradeVolume ?? 1m;
+						var weighted = diff * volume;
 
-						if (slippage is decimal s)
-							Slippage += s;
+						if (!CalculateNegative && weighted < 0)
+							weighted = 0;
 
-						return slippage;
+
+						Slippage += weighted;
+						return weighted;
 					}
 				}
 
