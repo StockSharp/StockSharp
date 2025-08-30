@@ -33,7 +33,7 @@ public class CommissionBoardCodeRule : CommissionRule
 	}
 
 	/// <inheritdoc />
-	protected override string GetTitle() => _board?.Code;
+	protected override string GetTitle() => _boardCode;
 
 	/// <inheritdoc />
 	public override decimal? Process(ExecutionMessage message)
