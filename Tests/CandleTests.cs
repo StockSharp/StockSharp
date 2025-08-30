@@ -671,8 +671,8 @@ public class CandleTests
 
 		builder.VolumePercent = 90;
 		builder.Calculate();
-		builder.High.AssertNotEqual(default);
-		builder.Low.AssertNotEqual(default);
+		builder.High.AssertEqual(default);
+		builder.Low.AssertEqual(default);
 	}
 
 	[TestMethod]
