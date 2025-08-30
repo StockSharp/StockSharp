@@ -186,7 +186,7 @@ public class DatabaseExporter : BaseExporter
 	}
 
 	private int GetPriceScale() => (PriceStep ?? 1m).GetCachedDecimals();
-	private int GetVolumeScale() => VolumeStep?.GetCachedDecimals() ?? 1;
+	private int GetVolumeScale() => (VolumeStep ?? 1m).GetCachedDecimals();
 
 	private void CreateCandleTable(string tableName, FluentMappingBuilder builder)
 	{
