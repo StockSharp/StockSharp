@@ -349,7 +349,10 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		ModuleName = storage.GetValue(nameof(ModuleName), ModuleName);
 
 		_assemblyReferences.Clear();
-		_assemblyReferences.AddRange((storage.GetValue<IEnumerable<SettingsStorage>>(nameof(AssemblyReferences)) ?? storage.GetValue<IEnumerable<SettingsStorage>>("References")).Select(s => s.Load<AssemblyReference>()));
+
+		var asmRefs = storage.GetValue<IEnumerable<SettingsStorage>>(nameof(AssemblyReferences)) ?? storage.GetValue<IEnumerable<SettingsStorage>>("References");
+		if (asmRefs is not null)
+			_assemblyReferences.AddRange(asmRefs.Select(s => s.Load<AssemblyReference>()));
 
 		// TODO 2025-02-04 Remove 1 year later
 		var oldLogging = _assemblyReferences.Cache.FirstOrDefault(r => r.FileName.EqualsIgnoreCase("StockSharp.Logging.dll"));
