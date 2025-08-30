@@ -30,25 +30,20 @@ public interface ICommissionRuleProvider
 /// </summary>
 public class InMemoryCommissionRuleProvider : ICommissionRuleProvider
 {
-	private readonly List<Type> _rules = [];
+	private readonly CachedSynchronizedSet<Type> _rules = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="InMemoryCommissionRuleProvider"/>.
 	/// </summary>
 	public InMemoryCommissionRuleProvider()
-    {
-		_rules.AddRange(GetType().Assembly.FindImplementations<ICommissionRule>(extraFilter: t => t.GetConstructor(Type.EmptyTypes) != null));
-	}
+		=> _rules.AddRange(GetType().Assembly.FindImplementations<ICommissionRule>(extraFilter: t => t.GetConstructor(Type.EmptyTypes) != null));
 
-    IEnumerable<Type> ICommissionRuleProvider.Rules => _rules;
+    IEnumerable<Type> ICommissionRuleProvider.Rules
+		=> _rules.Cache;
 
 	void ICommissionRuleProvider.AddRule(Type rule)
-	{
-		_rules.Add(rule);
-	}
+		=> _rules.Add(rule);
 
 	void ICommissionRuleProvider.RemoveRule(Type rule)
-	{
-		_rules.Remove(rule);
-	}
+		=> _rules.Remove(rule);
 }
