@@ -58,17 +58,17 @@ public class AlertRule : IPersistable
 	/// <param name="storage">Settings storage.</param>
 	public void Save(SettingsStorage storage)
 	{
-		storage.SetValue(nameof(Field), Field.Save());
-		storage.SetValue(nameof(Operator), Operator);
+		storage.Set(nameof(Field), Field.Save());
+		storage.Set(nameof(Operator), Operator);
 
 		if (Value is Security security)
-			storage.SetValue(nameof(Value), security.Id);
+			storage.Set(nameof(Value), security.Id);
 		else if (Value is Portfolio portfolio)
 		{
-			storage.SetValue(nameof(Portfolio), true);
-			storage.SetValue(nameof(Value), portfolio.Name);
+			storage.Set(nameof(Portfolio), true);
+			storage.Set(nameof(Value), portfolio.Name);
 		}
 		else
-			storage.SetValue(nameof(Value), Value.ToString());
+			storage.Set(nameof(Value), Value?.ToString());
 	}
 }

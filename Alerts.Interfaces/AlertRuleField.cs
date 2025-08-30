@@ -79,15 +79,7 @@ public class AlertRuleField : Equatable<AlertRuleField>, IPersistable
 				Property = parts[0].To<Type>().GetMember<PropertyInfo>(parts[1]);
 		}
 
-		try
-		{
-			ExtraField = storage.GetValue<SettingsStorage>(nameof(ExtraField))?.FromStorage();
-		}
-		catch (Exception)
-		{
-			// 2022-08-08 remove 1 year later
-			ExtraField = storage.GetValue<string>(nameof(ExtraField)).To(Property.PropertyType.GetGenericArguments()[0]);
-		}
+		ExtraField = storage.GetValue<SettingsStorage>(nameof(ExtraField))?.FromStorage();
 
 		UpdateState();
 	}

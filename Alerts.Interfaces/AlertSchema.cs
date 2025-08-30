@@ -96,14 +96,16 @@ public class AlertSchema : IPersistable
 	/// <param name="storage">Settings storage.</param>
 	public void Save(SettingsStorage storage)
 	{
-		storage.SetValue(nameof(Rules), Rules.Select(r => r.Save()).ToArray());
-		storage.SetValue(nameof(AlertType), AlertType.To<string>());
-		storage.SetValue(nameof(ExternalId), ExternalId);
-		storage.SetValue(nameof(Caption), Caption);
-		storage.SetValue(nameof(Message), Message);
-		storage.SetValue(nameof(IsEnabled), IsEnabled);
-		storage.SetValue(nameof(Id), Id);
-		storage.SetValue(nameof(MessageType), MessageType.GetTypeName(false));
-		storage.SetValue(nameof(LogLevel), LogLevel);
+		storage
+			.Set(nameof(Rules), Rules.Select(r => r.Save()).ToArray())
+			.Set(nameof(AlertType), AlertType.To<string>())
+			.Set(nameof(ExternalId), ExternalId)
+			.Set(nameof(Caption), Caption)
+			.Set(nameof(Message), Message)
+			.Set(nameof(IsEnabled), IsEnabled)
+			.Set(nameof(Id), Id)
+			.Set(nameof(MessageType), MessageType?.GetTypeName(false))
+			.Set(nameof(LogLevel), LogLevel)
+		;
 	}
 }
