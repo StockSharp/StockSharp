@@ -70,6 +70,7 @@ public class CommissionManager : ICommissionManager
 	/// <param name="storage">Storage.</param>
 	public void Load(SettingsStorage storage)
 	{
+		Rules.Clear();
 		Rules.AddRange(storage.GetValue<SettingsStorage[]>(nameof(Rules)).Select(s => s.LoadEntire<ICommissionRule>()));
 	}
 
