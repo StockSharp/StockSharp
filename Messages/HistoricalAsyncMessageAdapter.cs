@@ -9,7 +9,6 @@
 /// <param name="transactionIdGenerator">Transaction id generator.</param>
 public abstract class HistoricalAsyncMessageAdapter(IdGenerator transactionIdGenerator) : AsyncMessageAdapter(transactionIdGenerator)
 {
-
 	/// <inheritdoc />
 	public override ValueTask MarketDataAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
