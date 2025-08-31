@@ -208,7 +208,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 
 				lastTime = message.ServerTime;
 
-				rowIndex += 5;
+				rowIndex += 6; // 1 header + 2 (bids/asks price rows) + 1 volume + 1 ordersCount + 1 condition = 6
 
 				if (!Check(rowIndex))
 					break;
@@ -247,16 +247,6 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 			worker
 				.SetCell(0, 0, LocalizedStrings.Time).SetStyle(0, "yyyy-MM-dd HH:mm:ss.fff");
 
-			//foreach (var pair in columns)
-			//{
-			//	var field = pair.Key;
-			//	var columnIndex = pair.Value;
-
-			//	worker.SetCell(columnIndex, 0, field.GetDisplayName());
-
-			//	ApplyCellStyle(worker, field, columnIndex);
-			//}
-
 			var row = 1;
 			var lastTime = default(DateTimeOffset?);
 
@@ -270,7 +260,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 
 					if (!columns.TryGetValue(field, out var columnIndex))
 					{
-						columnIndex = columns.Count;
+						columnIndex = columns.Count + 1; // reserve column 0 for time
 						columns.Add(field, columnIndex);
 
 						worker.SetCell(columnIndex, 0, field.GetDisplayName());
@@ -321,7 +311,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 
 					if (!columns.TryGetValue(type, out var columnIndex))
 					{
-						columnIndex = columns.Count;
+						columnIndex = columns.Count + 1; // reserve column 0 for time
 						columns.Add(type, columnIndex);
 
 						worker.SetCell(columnIndex, 0, type.GetDisplayName());
@@ -444,7 +434,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 				.SetCell(4, row, LocalizedStrings.Header).SetStyle(4, typeof(string))
 				.SetCell(5, row, LocalizedStrings.Text).SetStyle(5, typeof(string))
 				.SetCell(6, row, LocalizedStrings.Source).SetStyle(6, typeof(string))
-				.SetCell(7, row, LocalizedStrings.Link).SetStyle(6, typeof(string));
+				.SetCell(7, row, LocalizedStrings.Link).SetStyle(7, typeof(string));
 
 			row++;
 
@@ -567,7 +557,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 					.SetCell(colIndex++, rowIndex, security.SecurityId.Isin)
 					.SetCell(colIndex++, rowIndex, security.SecurityId.Plaza)
 					.SetCell(colIndex++, rowIndex, security.SecurityId.Ric)
-					.SetCell(colIndex, rowIndex, security.SecurityId.Sedol);
+					.SetCell(colIndex++, rowIndex, security.SecurityId.Sedol);
 
 				rowIndex++;
 
