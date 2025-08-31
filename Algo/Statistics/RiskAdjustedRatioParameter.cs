@@ -8,7 +8,7 @@ public abstract class RiskAdjustedRatioParameter : BasePnLStatisticParameter<dec
 	private decimal? _previousPnL;
 	private double _periodsPerYear;
 
-	private decimal _sumReturn; // Sum of all returns
+	private decimal _sumReturn; // Sum of normalized returns
 	private int _count;         // Number of returns
 
 	private decimal _riskFreeRate;
@@ -68,7 +68,20 @@ public abstract class RiskAdjustedRatioParameter : BasePnLStatisticParameter<dec
 	{
 		if (_previousPnL != null)
 		{
-			var ret = pnl - _previousPnL.Value;
+			// Normalize return by the scale of capital to make ratios scale-invariant and dimensionally consistent.
+			var delta = pnl - _previousPnL.Value;
+			var scale = _previousPnL.Value.Abs().Max(pnl.Abs());
+
+			decimal ret;
+
+			if (scale == 0)
+			{
+				ret = 0; // both previous and current are zero
+			}
+			else
+			{
+				ret = delta / scale;
+			}
 
 			_sumReturn += ret;
 			_count++;

@@ -1531,4 +1531,48 @@ public class StatisticsTests
 		parameter.Add(t, -1200m, null);
 		(parameter.Value >= 1200m).AssertTrue();
 	}
+
+	[TestMethod]
+	public void SharpeRatio_ScaledPnL()
+	{
+		// Arrange
+		var s1 = new SharpeRatioParameter { RiskFreeRate = 0.05m }; // 5% RF
+		var s2 = new SharpeRatioParameter { RiskFreeRate = 0.05m };
+		var t = DateTimeOffset.UtcNow;
+
+		// Baseline equity series (currency units)
+		decimal[] a = [1000m, 1100m, 1050m, 1200m]; // returns: +100, -50, +150
+		// Scaled by factor 10
+		decimal[] b = [10000m, 11000m, 10500m, 12000m]; // returns: +1000, -500, +1500
+
+		foreach (var v in a)
+			s1.Add(t, v, null);
+
+		foreach (var v in b)
+			s2.Add(t, v, null);
+
+		Math.Abs(s1.Value - s2.Value).AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void SortinoRatio_ScaledPnL()
+	{
+		// Arrange
+		var r1 = new SortinoRatioParameter { RiskFreeRate = 0.05m };
+		var r2 = new SortinoRatioParameter { RiskFreeRate = 0.05m };
+		var t = DateTimeOffset.UtcNow;
+
+		// Baseline equity series (currency units) with negative period to ensure downside samples
+		decimal[] a = [1000m, 900m, 950m, 1100m]; // returns: -100, +50, +150 (has downside)
+		// Scaled by factor 10
+		decimal[] b = [10000m, 9000m, 9500m, 11000m]; // returns: -1000, +500, +1500
+
+		foreach (var v in a)
+			r1.Add(t, v, null);
+
+		foreach (var v in b)
+			r2.Add(t, v, null);
+
+		Math.Abs(r1.Value - r2.Value).AssertEqual(0m);
+	}
 }
