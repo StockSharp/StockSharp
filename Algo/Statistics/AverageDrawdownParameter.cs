@@ -12,7 +12,6 @@ namespace StockSharp.Algo.Statistics;
 )]
 public class AverageDrawdownParameter : BasePnLStatisticParameter<decimal>
 {
-	private decimal _lastEquity;
 	private decimal _maxEquity = decimal.MinValue;
 	private decimal _drawdownStart;
 	private bool _inDrawdown;
@@ -32,7 +31,6 @@ public class AverageDrawdownParameter : BasePnLStatisticParameter<decimal>
 	/// <inheritdoc/>
 	public override void Reset()
 	{
-		_lastEquity = 0;
 		_maxEquity = decimal.MinValue;
 		_drawdownStart = 0;
 		_inDrawdown = false;
@@ -96,8 +94,6 @@ public class AverageDrawdownParameter : BasePnLStatisticParameter<decimal>
 			_minEquityDuringDrawdown = equity;
 		}
 
-		_lastEquity = equity;
-
 		// For current value: include unfinished drawdown if any
 		var tempSum = _drawdownSum;
 		var tempCount = _drawdownCount;
@@ -119,7 +115,6 @@ public class AverageDrawdownParameter : BasePnLStatisticParameter<decimal>
 	public override void Save(SettingsStorage storage)
 	{
 		storage
-			.Set("LastEquity", _lastEquity)
 			.Set("MaxEquity", _maxEquity)
 			.Set("DrawdownStart", _drawdownStart)
 			.Set("InDrawdown", _inDrawdown)
@@ -134,7 +129,6 @@ public class AverageDrawdownParameter : BasePnLStatisticParameter<decimal>
 	/// <inheritdoc/>
 	public override void Load(SettingsStorage storage)
 	{
-		_lastEquity = storage.GetValue<decimal>("LastEquity");
 		_maxEquity = storage.GetValue<decimal>("MaxEquity");
 		_drawdownStart = storage.GetValue<decimal>("DrawdownStart");
 		_inDrawdown = storage.GetValue<bool>("InDrawdown");
