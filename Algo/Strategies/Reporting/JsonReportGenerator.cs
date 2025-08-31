@@ -36,7 +36,70 @@ public class JsonReportGenerator : BaseReportGenerator
 		void WriteElementString(string name, object value)
 		{
 			WritePropertyName(name);
-			writer.WriteValue(value?.To<string>());
+
+			if (value is null)
+			{
+				writer.WriteNull();
+				return;
+			}
+
+			switch (value)
+			{
+				case string s:
+					writer.WriteValue(s);
+					break;
+				case bool b:
+					writer.WriteValue(b);
+					break;
+				case sbyte sb:
+					writer.WriteValue(sb);
+					break;
+				case byte by:
+					writer.WriteValue(by);
+					break;
+				case short sh:
+					writer.WriteValue(sh);
+					break;
+				case ushort ush:
+					writer.WriteValue(ush);
+					break;
+				case int i:
+					writer.WriteValue(i);
+					break;
+				case uint ui:
+					writer.WriteValue(ui);
+					break;
+				case long l:
+					writer.WriteValue(l);
+					break;
+				case ulong ul:
+					writer.WriteValue(ul);
+					break;
+				case float f:
+					writer.WriteValue(f);
+					break;
+				case double d:
+					writer.WriteValue(d);
+					break;
+				case decimal m:
+					writer.WriteValue(m);
+					break;
+				case DateTime dt:
+					writer.WriteValue(dt);
+					break;
+				case DateTimeOffset dto:
+					writer.WriteValue(dto);
+					break;
+				case TimeSpan ts:
+					writer.WriteValue(ts);
+					break;
+				case Guid g:
+					writer.WriteValue(g);
+					break;
+				default:
+					writer.WriteValue(value.To<string>());
+					break;
+			}
 		}
 
 		WriteStartElement();
@@ -116,7 +179,7 @@ public class JsonReportGenerator : BaseReportGenerator
 				WriteElementString("price", t.Trade.Price);
 				WriteElementString("volume", t.Trade.Volume);
 				WriteElementString("order", t.Order.Id);
-				WriteElementString("PnL", strategy.PnLManager.ProcessMessage(t.ToMessage())?.PnL);
+				WriteElementString("PnL", t.PnL);
 				WriteElementString("slippage", t.Slippage);
 
 				WriteEndElement();

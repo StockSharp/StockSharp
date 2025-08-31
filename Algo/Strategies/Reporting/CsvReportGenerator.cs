@@ -86,7 +86,7 @@ public class CsvReportGenerator : BaseReportGenerator
 			foreach (var trade in strategy.MyTrades)
 			{
 				WriteValues(trade.Trade.Id, trade.Order.TransactionId, trade.Trade.ServerTime.Format(), trade.Trade.Price, trade.Trade.Volume,
-					trade.Order.Side.GetDisplayName(), trade.Order.Id, strategy.PnLManager.ProcessMessage(trade.ToMessage())?.PnL, trade.Slippage);
+					trade.Order.Side.GetDisplayName(), trade.Order.Id, trade.PnL, trade.Slippage);
 			}
 		}
 

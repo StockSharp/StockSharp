@@ -157,7 +157,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, string template
 			{
 				cancellationToken.ThrowIfCancellationRequested();
 
-				var pnl = strategy.PnLManager.ProcessMessage(trade.ToMessage())?.PnL ?? 0;
+				var pnl = trade.PnL ?? 0;
 
 				totalPnL += pnl;
 				position += trade.Position ?? 0;
@@ -197,8 +197,8 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, string template
 				.SetCell(columnShift + 6, 1, LocalizedStrings.Price).SetStyle(columnShift + 6, typeof(decimal))
 				.SetCell(columnShift + 7, 1, LocalizedStrings.Status)
 				.SetCell(columnShift + 8, 1, LocalizedStrings.State)
-				.SetCell(columnShift + 9, 1, LocalizedStrings.Balance).SetStyle(columnShift + 10, typeof(decimal))
-				.SetCell(columnShift + 10, 1, LocalizedStrings.Volume).SetStyle(columnShift + 11, typeof(decimal))
+				.SetCell(columnShift + 9, 1, LocalizedStrings.Balance).SetStyle(columnShift + 9, typeof(decimal))
+				.SetCell(columnShift + 10, 1, LocalizedStrings.Volume).SetStyle(columnShift + 10, typeof(decimal))
 				.SetCell(columnShift + 11, 1, LocalizedStrings.Type)
 				.SetCell(columnShift + 12, 1, LocalizedStrings.LatencyReg)
 				.SetCell(columnShift + 13, 1, LocalizedStrings.LatencyCancel)

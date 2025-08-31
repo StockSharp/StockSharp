@@ -115,7 +115,7 @@ public class XmlReportGenerator : BaseReportGenerator
 				WriteAttributeString("price", t.Trade.Price);
 				WriteAttributeString("volume", t.Trade.Volume);
 				WriteAttributeString("order", t.Order.Id);
-				WriteAttributeString("PnL", strategy.PnLManager.ProcessMessage(t.ToMessage())?.PnL);
+				WriteAttributeString("PnL", t.PnL);
 				WriteAttributeString("slippage", t.Slippage);
 
 				WriteEndElement();
