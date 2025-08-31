@@ -12,7 +12,7 @@ namespace StockSharp.Algo.Statistics;
 )]
 public class AverageDrawdownParameter : BasePnLStatisticParameter<decimal>
 {
-	private decimal _maxEquity = decimal.MinValue;
+	private decimal _maxEquity;
 	private decimal _drawdownStart;
 	private bool _inDrawdown;
 
@@ -31,7 +31,7 @@ public class AverageDrawdownParameter : BasePnLStatisticParameter<decimal>
 	/// <inheritdoc/>
 	public override void Reset()
 	{
-		_maxEquity = decimal.MinValue;
+		_maxEquity = 0m;
 		_drawdownStart = 0;
 		_inDrawdown = false;
 
@@ -105,6 +105,16 @@ public class AverageDrawdownParameter : BasePnLStatisticParameter<decimal>
 			{
 				tempSum += currDrawdown;
 				tempCount++;
+			}
+		}
+		else if (_maxEquity == 0m && equity < 0)
+		{
+			// Special case: starting in negative zone, treat baseline as zero
+			var currDrawdown = 0m - equity;
+			if (currDrawdown > 0)
+			{
+				tempSum += currDrawdown;
+				tempCount = Math.Max(1, tempCount + 1);
 			}
 		}
 

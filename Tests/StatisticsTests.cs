@@ -1420,11 +1420,11 @@ public class StatisticsTests
 		// Simulate two drawdowns, second is deeper
 		parameter.Add(t, 1000m, null); // first peak
 		parameter.Add(t, 900m, null);  // drawdown to 900
-		parameter.Add(t, 950m, null);  // partial recovery
-		parameter.Add(t, 800m, null);  // new deeper minimum
+		parameter.Add(t, 1000m, null); // recovery
+		parameter.Add(t, 800m, null);  // second drawdown
 		parameter.Add(t, 1000m, null); // recovery
 
-		// MaxDrawdown should report the largest drop (1000-800=200)
+		// Expect: Maximum of 100 (first) and 200 (second) = 200
 		parameter.Value.AssertEqual(200m);
 	}
 
@@ -1478,5 +1478,57 @@ public class StatisticsTests
 		parameter.Add(t, 1200m, null);
 
 		parameter.Value.AssertEqual(4);
+	}
+
+	[TestMethod]
+	public void MaxDrawdown_InitialNegative()
+	{
+		// Arrange
+		var parameter = new MaxDrawdownParameter();
+		var t = DateTimeOffset.UtcNow;
+
+		// Act: first value is negative
+		parameter.Add(t, -1000m, null);
+		// Expect drawdown counted from zero baseline
+		parameter.Value.AssertEqual(1000m);
+
+		// Deeper negative should increase drawdown from zero
+		parameter.Add(t, -1500m, null);
+		parameter.Value.AssertEqual(1500m);
+	}
+
+	[TestMethod]
+	public void MaxRelativeDrawdown_InitialNegative()
+	{
+		// Arrange
+		var parameter = new MaxRelativeDrawdownParameter();
+		var t = DateTimeOffset.UtcNow;
+
+		// Act: first negative point
+		parameter.Add(t, -1000m, null);
+		// With zero baseline this is undefined, but after second point we can check behavior
+		parameter.Value.AssertEqual(0m);
+
+		// Second, deeper negative
+		parameter.Add(t, -1500m, null);
+		// Expect relative drawdown to be positive (500/1000 = 0.5)
+		parameter.Value.AssertEqual(0.5m);
+	}
+
+	[TestMethod]
+	public void AverageDrawdown_InitialNegative()
+	{
+		// Arrange
+		var parameter = new AverageDrawdownParameter();
+		var t = DateTimeOffset.UtcNow;
+
+		// Act: first value is negative
+		parameter.Add(t, -1000m, null);
+		// Expect unfinished drawdown from zero baseline to be reflected
+		(parameter.Value > 0).AssertTrue();
+
+		// Deeper negative increases unfinished drawdown
+		parameter.Add(t, -1200m, null);
+		(parameter.Value >= 1200m).AssertTrue();
 	}
 }
