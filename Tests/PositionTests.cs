@@ -146,6 +146,52 @@ public class PositionTests
 		((decimal)change.Changes[PositionChangeTypes.CurrentValue]).AssertEqual(3m);
 	}
 
+	[TestMethod]
+	public void IgnoreFurtherOrderUpdates()
+	{
+		var secId = Helper.CreateSecurityId();
+		var manager = new PositionManager(true);
+
+		var reg = new OrderRegisterMessage
+		{
+			TransactionId = 1001,
+			SecurityId = secId,
+			PortfolioName = "pf",
+			Side = Sides.Buy,
+			Volume = 10,
+		};
+		manager.ProcessMessage(reg);
+
+		// full fill -> position increases by 10
+		var first = manager.ProcessMessage(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			TransactionId = reg.TransactionId,
+			SecurityId = secId,
+			PortfolioName = reg.PortfolioName,
+			Side = reg.Side,
+			OrderVolume = reg.Volume,
+			Balance = 0,
+			OrderState = OrderStates.Done,
+			ServerTime = DateTimeOffset.UtcNow,
+		});
+		first.AssertNotNull();
+		first.Changes[PositionChangeTypes.CurrentValue].To<decimal>().AssertEqual(10m);
+
+		// any later "update" for that order must be ignored
+		var afterComplete = manager.ProcessMessage(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			OriginalTransactionId = reg.TransactionId,
+			Balance = 1, // bogus balance after completion
+			ServerTime = DateTimeOffset.UtcNow,
+		});
+
+		afterComplete.AssertNull();
+	}
+
 	private class TestPositionManager : IPositionManager
 	{
 		public PositionChangeMessage ProcessMessage(Message message)

@@ -115,6 +115,9 @@ public class PositionManager(bool byOrders) : BaseLogReceiver, IPositionManager
 						info.Balance = execMsg.Balance.Value;
 						LogDebug("{0} bal_upd {1}/{2}.", info.TransactionId, info.Balance, info.Volume);
 					}
+
+					if (execMsg.OrderState?.IsFinal() == true)
+						_ordersInfo.Remove(info.TransactionId);
 				}
 
 				if (ByOrders)
