@@ -759,6 +759,10 @@ public class StatisticsTests
 		// Break-even trade - should not increment
 		parameter.Add(new(serverTime, 8, 0));
 		parameter.Value.AssertEqual(2);
+
+		// No closed volume - should not increment even if PnL > 0
+		parameter.Add(new(serverTime, 0, 200));
+		parameter.Value.AssertEqual(2);
 	}
 
 	[TestMethod]
@@ -808,6 +812,10 @@ public class StatisticsTests
 
 		// Break-even trade
 		parameter.Add(new(serverTime, 8, 0));
+		parameter.Value.AssertEqual(3);
+
+		// No closed volume - should NOT increment
+		parameter.Add(new(serverTime, 0, 999));
 		parameter.Value.AssertEqual(3);
 	}
 
@@ -1446,6 +1454,12 @@ public class StatisticsTests
 		// total loss = 50 + 100 = 150
 		// The ratio should be win/loss
 		parameter.Value.AssertEqual(350m / 150m);
+
+		// No closed volume samples must be ignored
+		var before = parameter.Value;
+		parameter.Add(new(t, 0, 500m));   // should be ignored
+		parameter.Add(new(t, 0, -500m));  // should be ignored
+		parameter.Value.AssertEqual(before);
 	}
 
 	[TestMethod]

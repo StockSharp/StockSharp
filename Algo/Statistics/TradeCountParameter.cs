@@ -25,6 +25,9 @@ public class TradeCountParameter : BaseStatisticParameter<int>, ITradeStatisticP
 	/// <inheritdoc />
 	public void Add(PnLInfo info)
 	{
-		Value++;
+		ArgumentNullException.ThrowIfNull(info);
+
+		if (info.ClosedVolume > 0)
+			Value++;
 	}
 }

@@ -27,6 +27,11 @@ public class ProfitFactorParameter : BaseStatisticParameter<decimal>, ITradeStat
 	/// <inheritdoc/>
 	public void Add(PnLInfo info)
 	{
+		ArgumentNullException.ThrowIfNull(info);
+
+		if (info.ClosedVolume == 0)
+			return;
+
 		if (info.PnL > 0)
 			_grossProfit += info.PnL;
 		else if (info.PnL < 0)

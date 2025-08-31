@@ -28,9 +28,7 @@ public class WinningTradesParameter : BaseStatisticParameter<int>, ITradeStatist
 		if (info == null)
 			throw new ArgumentNullException(nameof(info));
 
-		if (info.PnL <= 0)
-			return;
-
-		Value++;
+		if (info.ClosedVolume > 0 && info.PnL > 0)
+			Value++;
 	}
 }
