@@ -17,7 +17,7 @@ public class SlippageManager : ISlippageManager
 	}
 
 	/// <inheritdoc />
-	public virtual decimal Slippage { get; private set; }
+	public decimal Slippage { get; private set; }
 
 	/// <summary>
 	/// To calculate negative slippage. By default, the calculation is enabled.
@@ -25,7 +25,7 @@ public class SlippageManager : ISlippageManager
 	public bool CalculateNegative { get; set; }
 
 	/// <inheritdoc />
-	public virtual void Reset()
+	public void Reset()
 	{
 		Slippage = 0;
 		_bestPrices.Clear();

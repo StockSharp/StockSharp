@@ -17,10 +17,10 @@ public class LatencyManager : ILatencyManager
 	}
 
 	/// <inheritdoc />
-	public virtual TimeSpan LatencyRegistration { get; private set; }
+	public TimeSpan LatencyRegistration { get; private set; }
 
 	/// <inheritdoc />
-	public virtual TimeSpan LatencyCancellation { get; private set; }
+	public TimeSpan LatencyCancellation { get; private set; }
 
 	/// <inheritdoc />
 	public TimeSpan? ProcessMessage(Message message)
@@ -129,8 +129,8 @@ public class LatencyManager : ILatencyManager
 
 	private void AddCancel(long transactionId, DateTimeOffset localTime)
 	{
-		if (transactionId == 0)
-			throw new ArgumentNullException(nameof(transactionId));
+		if (transactionId <= 0)
+			throw new ArgumentOutOfRangeException(nameof(transactionId), transactionId, LocalizedStrings.InvalidValue);
 
 		if (localTime == default)
 			throw new ArgumentNullException(nameof(localTime));
@@ -142,12 +142,15 @@ public class LatencyManager : ILatencyManager
 	}
 
 	/// <inheritdoc />
-	public virtual void Reset()
+	public void Reset()
 	{
-		LatencyRegistration = LatencyCancellation = default;
+		lock (_syncObject)
+		{
+			LatencyRegistration = LatencyCancellation = default;
 
-		_register.Clear();
-		_cancel.Clear();
+			_register.Clear();
+			_cancel.Clear();
+		}
 	}
 
 	/// <summary>

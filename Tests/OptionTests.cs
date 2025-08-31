@@ -15,26 +15,24 @@ public class OptionTests
 		const decimal dividend = 0m;
 		const decimal strike = 195000;
 
-		var timeToExp = DerivativesHelper.GetExpirationTimeLine(new DateTime(2011, 07, 15, 18, 45, 0), new DateTime(2011, 07, 08, 13, 0, 0));
+		var timeToExp = DerivativesHelper.GetExpirationTimeLine(new DateTime(2011, 07, 15, 18, 45, 0), new DateTime(2011, 07, 08, 13, 0, 0))
+			?? throw new InvalidOperationException();
 
-		if (timeToExp == null)
-			throw new InvalidOperationException();
-
-		var d1 = DerivativesHelper.D1(assetPrice, strike, riskFree, dividend, volatility, timeToExp.Value);
+		var d1 = DerivativesHelper.D1(assetPrice, strike, riskFree, dividend, volatility, timeToExp);
 
 		DerivativesHelper.Delta(OptionTypes.Call, assetPrice, d1).Round(2).AssertEqual(0.64m);
-		DerivativesHelper.Gamma(assetPrice, volatility, timeToExp.Value, d1).Round(5).AssertEqual(0.00007m);
-		DerivativesHelper.Theta(OptionTypes.Call, strike, assetPrice, riskFree, volatility, timeToExp.Value, d1).Round(2).AssertEqual(-145.80m);
-		DerivativesHelper.Vega(assetPrice, timeToExp.Value, d1).Round(2).AssertEqual(103.64m);
-		DerivativesHelper.Rho(OptionTypes.Call, strike, assetPrice, riskFree, volatility, timeToExp.Value, d1).Round(2).AssertEqual(24.39m);
+		DerivativesHelper.Gamma(assetPrice, volatility, timeToExp, d1).Round(5).AssertEqual(0.00007m);
+		DerivativesHelper.Theta(OptionTypes.Call, strike, assetPrice, riskFree, volatility, timeToExp, d1).Round(2).AssertEqual(-145.80m);
+		DerivativesHelper.Vega(assetPrice, timeToExp, d1).Round(2).AssertEqual(103.64m);
+		DerivativesHelper.Rho(OptionTypes.Call, strike, assetPrice, riskFree, volatility, timeToExp, d1).Round(2).AssertEqual(24.39m);
 
 		riskFree = 0.1m;
-		d1 = DerivativesHelper.D1(assetPrice, strike, riskFree, dividend, volatility, timeToExp.Value);
+		d1 = DerivativesHelper.D1(assetPrice, strike, riskFree, dividend, volatility, timeToExp);
 
 		DerivativesHelper.Delta(OptionTypes.Call, assetPrice, d1).Round(2).AssertEqual(0.67m);
-		DerivativesHelper.Gamma(assetPrice, volatility, timeToExp.Value, d1).Round(5).AssertEqual(0.00006m);
-		DerivativesHelper.Theta(OptionTypes.Call, strike, assetPrice, riskFree, volatility, timeToExp.Value, d1).Round(2).AssertEqual(-176.86m);
-		DerivativesHelper.Vega(assetPrice, timeToExp.Value, d1).Round(2).AssertEqual(100.83m);
-		DerivativesHelper.Rho(OptionTypes.Call, strike, assetPrice, riskFree, volatility, timeToExp.Value, d1).Round(2).AssertEqual(25.34m);
+		DerivativesHelper.Gamma(assetPrice, volatility, timeToExp, d1).Round(5).AssertEqual(0.00006m);
+		DerivativesHelper.Theta(OptionTypes.Call, strike, assetPrice, riskFree, volatility, timeToExp, d1).Round(2).AssertEqual(-176.86m);
+		DerivativesHelper.Vega(assetPrice, timeToExp, d1).Round(2).AssertEqual(100.83m);
+		DerivativesHelper.Rho(OptionTypes.Call, strike, assetPrice, riskFree, volatility, timeToExp, d1).Round(2).AssertEqual(25.34m);
 	}
 }
