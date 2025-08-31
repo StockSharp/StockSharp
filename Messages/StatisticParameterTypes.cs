@@ -106,7 +106,7 @@ public enum StatisticParameterTypes
 	OrderCount,
 
 	/// <summary>
-	/// Total number of error orders.
+	/// Total number of errors during order registration.
 	/// </summary>
 	OrderErrorCount,
 
@@ -184,4 +184,9 @@ public enum StatisticParameterTypes
 	/// Average drawdown during the whole period.
 	/// </summary>
 	AverageDrawdown,
+
+	/// <summary>
+	/// Total number of errors during order cancellation.
+	/// </summary>
+	OrderCancelErrorCount,
 }

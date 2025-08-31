@@ -472,7 +472,7 @@ public class StatisticsTests
 	public void OrderErrorCount()
 	{
 		// Arrange
-		var parameter = new OrderErrorCountParameter();
+		var parameter = new OrderRegisterErrorCountParameter();
 
 		// Act & Assert
 		parameter.Value.AssertEqual(0);
@@ -481,6 +481,22 @@ public class StatisticsTests
 		parameter.Value.AssertEqual(1);
 
 		parameter.RegisterFailed(new OrderFail { Error = new Exception("Another error") });
+		parameter.Value.AssertEqual(2);
+	}
+
+	[TestMethod]
+	public void OrderCancelErrorCount()
+	{
+		// Arrange
+		var parameter = new OrderCancelErrorCountParameter();
+
+		// Act & Assert
+		parameter.Value.AssertEqual(0);
+
+		parameter.CancelFailed(new OrderFail { Error = new Exception("Cancel error") });
+		parameter.Value.AssertEqual(1);
+
+		parameter.CancelFailed(new OrderFail { Error = new Exception("Another cancel error") });
 		parameter.Value.AssertEqual(2);
 	}
 
@@ -525,22 +541,26 @@ public class StatisticsTests
 	{
 		// Arrange
 		var orderCount = new OrderCountParameter();
-		var orderErrorCount = new OrderErrorCountParameter();
+		var orderErrorCount = new OrderRegisterErrorCountParameter();
+		var cancelErrorCount = new OrderCancelErrorCountParameter();
 		var maxLatency = new MaxLatencyRegistrationParameter();
 
 		// Add some values
 		orderCount.New(new Order());
 		orderErrorCount.RegisterFailed(new OrderFail { Error = new Exception() });
+		cancelErrorCount.CancelFailed(new OrderFail { Error = new Exception() });
 		maxLatency.New(new Order { LatencyRegistration = TimeSpan.FromMilliseconds(100) });
 
 		// Act
 		orderCount.Reset();
 		orderErrorCount.Reset();
+		cancelErrorCount.Reset();
 		maxLatency.Reset();
 
 		// Assert
 		orderCount.Value.AssertEqual(0);
 		orderErrorCount.Value.AssertEqual(0);
+		cancelErrorCount.Value.AssertEqual(0);
 		maxLatency.Value.AssertEqual(default);
 	}
 

@@ -71,7 +71,8 @@ public class GeneticSettings : NotifiableObject, IPersistable
 			(StatisticParameterTypes.MinLatencyRegistration,            "MinLatReg"),
 			(StatisticParameterTypes.MinLatencyCancellation,            "MinLatCan"),
 			(StatisticParameterTypes.OrderCount,                        "OrdCount"),
-			(StatisticParameterTypes.OrderErrorCount,                   "OrdErrCount"),
+			(StatisticParameterTypes.OrderErrorCount,                   "OrdRegErrCount"),
+			(StatisticParameterTypes.OrderCancelErrorCount,             "OrdCancelErrCount"),
 			(StatisticParameterTypes.OrderInsufficientFundErrorCount,   "OrdFundErrCount"),
 		];
 

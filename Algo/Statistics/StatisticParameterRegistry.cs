@@ -55,7 +55,8 @@ public static class StatisticParameterRegistry
 			new MaxLatencyCancellationParameter(),
 			new MinLatencyCancellationParameter(),
 			new OrderCountParameter(),
-			new OrderErrorCountParameter(),
+			new OrderRegisterErrorCountParameter(),
+			new OrderCancelErrorCountParameter(),
 			new OrderInsufficientFundErrorCountParameter(),
 		];
 	}
