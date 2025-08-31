@@ -105,7 +105,7 @@ public class SlippageManager : ISlippageManager
 				{
 					if (_plannedPrices.ContainsKey(execMsg.OriginalTransactionId))
 					{
-						if (execMsg.OrderState == OrderStates.Done || execMsg.Balance == 0)
+						if (execMsg.OrderState?.IsFinal() == true)
 							_plannedPrices.Remove(execMsg.OriginalTransactionId);
 					}
 
