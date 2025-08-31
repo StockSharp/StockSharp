@@ -154,7 +154,7 @@ public class QuotingProcessor : BaseLogReceiver
 	/// </summary>
 	public void Stop()
 	{
-		if (_currentOrder != null && !_pending)
+		if (_currentOrder != null && !_currentOrder.State.IsFinal())
 		{
 			_transProvider.CancelOrder(_currentOrder);
 		}

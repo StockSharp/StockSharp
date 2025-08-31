@@ -114,11 +114,11 @@ public class QuotingEngine
 		var currentPrice = input.CurrentOrder?.Price;
 		var currentVolume = input.CurrentOrder?.Volume ?? 0;
 
-		var quotingPrice = _behavior.NeedQuoting(
+		var qp = _behavior.NeedQuoting(
 			_security, _mdProvider, input.CurrentTime,
 			currentPrice, currentVolume, newVolume, bestPrice);
 
-		if (quotingPrice == null)
+		if (qp is not decimal quotingPrice)
 		{
 			return QuotingAction.None("No quoting needed");
 		}
@@ -132,9 +132,9 @@ public class QuotingEngine
 				return QuotingAction.None("Trading not allowed");
 			}
 
-			var orderType = quotingPrice == null ? OrderTypes.Market : OrderTypes.Limit;
+			var orderType = quotingPrice == 0 ? OrderTypes.Market : OrderTypes.Limit;
 			return QuotingAction.Register(quotingPrice, newVolume, orderType,
-				$"Registering {_quotingSide} order for {newVolume} at {quotingPrice?.ToString() ?? "market"}");
+				$"Registering {_quotingSide} order for {newVolume} at {quotingPrice.ToString() ?? "market"}");
 		}
 		else
 		{
