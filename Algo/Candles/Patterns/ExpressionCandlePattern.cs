@@ -276,16 +276,8 @@ public class ExpressionCandlePattern : ICandlePattern
 		return true;
 	}
 
-	private void EnsureEmpty()
-	{
-		if(Name != null || Conditions.Length > 0)
-			throw new InvalidOperationException($"cannot change initialized pattern (name='{Name}', {Conditions.Length} conditions)");
-	}
-
 	void IPersistable.Load(SettingsStorage storage)
 	{
-		EnsureEmpty();
-
 		Name = storage.GetValue<string>(nameof(Name));
 
 		Conditions = [.. storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Conditions)).Select(ss =>
@@ -298,8 +290,10 @@ public class ExpressionCandlePattern : ICandlePattern
 
 	void IPersistable.Save(SettingsStorage storage)
 	{
-		storage.Set(nameof(Name), Name);
-		storage.Set(nameof(Conditions), Conditions.Select(c => c.Save()).ToArray());
+		storage
+			.Set(nameof(Name), Name)
+			.Set(nameof(Conditions), Conditions.Select(c => c.Save()).ToArray())
+		;
 	}
 
 	/// <inheritdoc />
