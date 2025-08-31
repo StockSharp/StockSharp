@@ -777,17 +777,17 @@ public class StatisticsTests
 		parameter.Add(new(serverTime, 5, -30));
 		parameter.Value.AssertEqual(2);
 
-		// Break-even trade with closed volume - should increment
+		// Break-even trade with closed volume - should NOT increment (neutral)
 		parameter.Add(new(serverTime, 15, 0));
-		parameter.Value.AssertEqual(3);
+		parameter.Value.AssertEqual(2);
 
 		// Profitable trade - should not increment
 		parameter.Add(new(serverTime, 20, 100));
-		parameter.Value.AssertEqual(3);
+		parameter.Value.AssertEqual(2);
 
 		// Losing trade with no closed volume - should not increment
 		parameter.Add(new(serverTime, 0, -40));
-		parameter.Value.AssertEqual(3);
+		parameter.Value.AssertEqual(2);
 	}
 
 	[TestMethod]
@@ -906,21 +906,21 @@ public class StatisticsTests
 		parameter.Add(new(serverTime, 5, -30));
 		parameter.Value.AssertEqual(-40m);
 
-		// Break-even trade - should affect losing average
+		// Break-even trade - should be ignored (neutral)
 		parameter.Add(new(serverTime, 15, 0));
-		parameter.Value.AssertInRange(-26.67m, -26.66m);
+		parameter.Value.AssertEqual(-40m);
 
 		// Winning trade - should not affect losing average
 		parameter.Add(new(serverTime, 20, 100));
-		parameter.Value.AssertInRange(-26.67m, -26.66m);
+		parameter.Value.AssertEqual(-40m);
 
-		// Third losing trade - average should be (-50 + -30 + 0 + -20) / 4 = -25
+		// Third losing trade - average should be (-50 + -30 + -20) / 3 = -33.333...
 		parameter.Add(new(serverTime, 8, -20));
-		parameter.Value.AssertEqual(-25m);
+		parameter.Value.Round(3).AssertEqual(-33.333m);
 
 		// Trade with no closed volume - should not affect average
 		parameter.Add(new(serverTime, 0, -100));
-		parameter.Value.AssertEqual(-25m);
+		parameter.Value.Round(3).AssertEqual(-33.333m);
 	}
 
 	[TestMethod]

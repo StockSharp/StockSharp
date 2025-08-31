@@ -42,7 +42,7 @@ public class AverageLossTradeParameter : BaseStatisticParameter<decimal>, ITrade
 		if (info.ClosedVolume == 0)
 			return;
 
-		if (info.PnL <= 0)
+		if (info.PnL < 0)
 		{
 			_sum += info.PnL;
 			_count++;

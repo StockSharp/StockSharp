@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Statistics;
 using StockSharp.Algo.PnL;
 
 /// <summary>
-/// Number of trades lost with zero profit (whose profit is less than or equal to 0).
+/// Number of trades lost with negative profit.
 /// </summary>
 [Display(
 	ResourceType = typeof(LocalizedStrings),
@@ -28,7 +28,7 @@ public class LossingTradesParameter : BaseStatisticParameter<int>, ITradeStatist
 		if (info == null)
 			throw new ArgumentNullException(nameof(info));
 
-		if (info.ClosedVolume > 0 && info.PnL <= 0)
+		if (info.ClosedVolume > 0 && info.PnL < 0)
 			Value++;
 	}
 }
