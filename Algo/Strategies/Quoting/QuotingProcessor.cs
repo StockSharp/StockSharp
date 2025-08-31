@@ -82,10 +82,6 @@ public class QuotingProcessor : BaseLogReceiver
 		_useTicks = useTicks;
 
 		_container.Rules.Removed += OnRulesRemoved;
-
-		_engine = new(
-			behavior, security, portfolio, quotingSide, quotingVolume,
-			maxOrderVolume, timeOut, mdProvider, _timeProvider.CurrentTime);
 	}
 
 	private void OnRulesRemoved(IMarketRule rule)
