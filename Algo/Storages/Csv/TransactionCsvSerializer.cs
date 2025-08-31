@@ -176,10 +176,10 @@ public class TransactionCsvSerializer(SecurityId securityId, Encoding encoding) 
 		}
 
 		if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-			msg.BuildFrom = reader.ReadBuildFrom();
+			msg.Leverage = reader.ReadNullableInt();
 
 		if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-			msg.Leverage = reader.ReadNullableInt();
+			msg.BuildFrom = reader.ReadBuildFrom();
 
 		return msg;
 	}
