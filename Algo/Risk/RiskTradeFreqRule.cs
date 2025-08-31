@@ -16,7 +16,7 @@ public class RiskTradeFreqRule : RiskRule
 	/// <inheritdoc />
 	protected override string GetTitle() => Count + " -> " + Interval;
 
-	private int _count;
+	private int _count = 10;
 
 	/// <summary>
 	/// Number of trades.
@@ -35,7 +35,7 @@ public class RiskTradeFreqRule : RiskRule
 			if (_count == value)
 				return;
 
-			if (value < 0)
+			if (value < 1)
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 			_count = value;
