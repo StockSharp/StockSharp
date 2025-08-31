@@ -173,6 +173,8 @@ public class CsvParser : BaseLogReceiver
 				if (isCancelled?.Invoke() == true)
 					break;
 
+				lineIndex++;
+
 				if (skipLines > 0)
 				{
 					skipLines--;

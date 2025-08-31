@@ -110,6 +110,14 @@ public class VolumeProfileIndicator : BaseIndicator
 	}
 
 	/// <inheritdoc />
+	public override void Reset()
+	{
+		base.Reset();
+
+		_levels.Clear();
+	}
+
+	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
 		var result = new VolumeProfileIndicatorValue(this, input.Time);

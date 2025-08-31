@@ -38,6 +38,9 @@ public class AdaptiveLaguerreFilter : BaseIndicator
 		get => _gamma;
 		set
 		{
+			if (value <= 0 || value >= 1)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
 			_gamma = value;
 			Reset();
 		}

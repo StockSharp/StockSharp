@@ -445,6 +445,8 @@ public class ImportSettings : NotifiableObject, IPersistable
 
 	private IEnumerable<FieldMapping> LoadSelectedFields(IEnumerable<SettingsStorage> storages)
 	{
+		ArgumentNullException.ThrowIfNull(storages);
+
 		var selectedFields = new List<FieldMapping>();
 
 		foreach (var fieldSettings in storages)
