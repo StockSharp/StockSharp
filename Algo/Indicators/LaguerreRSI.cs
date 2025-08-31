@@ -35,6 +35,7 @@ public class LaguerreRSI : BaseIndicator
 		Name = LocalizedStrings.GammaKey,
 		Description = LocalizedStrings.GammaDescriptionKey,
 		GroupName = LocalizedStrings.GeneralKey)]
+	[Range(0.000001, 0.999999)]
 	public decimal Gamma
 	{
 		get => _gamma;

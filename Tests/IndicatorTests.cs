@@ -1,5 +1,7 @@
 ﻿namespace StockSharp.Tests;
 
+using System.ComponentModel.DataAnnotations;
+
 using Ecng.Reflection;
 
 [TestClass]
@@ -379,28 +381,74 @@ public class IndicatorTests
 					f.Length = 39;
 					continue;
 				}
-				else if (indicator is LaguerreRSI lrsi && prop.Name == nameof(lrsi.Gamma))
-				{
-					lrsi.Gamma = RandomGen.GetDecimal(0.01m, 0.99m, 2);
-					continue;
-				}
-				else if (indicator is ZigZag zz && prop.Name == nameof(zz.Deviation))
-				{
-					zz.Deviation = RandomGen.GetDecimal(0.01m, 0.99m, 2);
-					continue;
-				}
-				else if (indicator is T3MovingAverage t3ma && prop.Name == nameof(t3ma.VolumeFactor))
-				{
-					t3ma.VolumeFactor = RandomGen.GetDecimal(0.01m, 0.99m, 2);
-					continue;
-				}
-				else if (indicator is ArnaudLegouxMovingAverage alma && prop.Name == nameof(alma.Offset))
-				{
-					alma.Offset = RandomGen.GetDecimal(0.01m, 0.99m, 2);
-					continue;
-				}
 				else
 				{
+					var rangeAttr = prop.GetAttribute<RangeAttribute>();
+
+					if (rangeAttr is not null)
+					{
+						var minObj = rangeAttr.Minimum;
+						var maxObj = rangeAttr.Maximum;
+
+						// convert to target type
+						var min = minObj.To(propType);
+						var max = maxObj.To(propType);
+
+						// choose random within [min; max]
+						if (propType == typeof(int) || propType == typeof(short) || propType == typeof(sbyte) || propType == typeof(byte) || propType == typeof(ushort) || propType == typeof(uint))
+						{
+							var minI = Convert.ToInt32(min);
+							var maxI = Convert.ToInt32(max);
+							value = RandomGen.GetInt(minI, maxI).To(propType);
+						}
+						else if (propType == typeof(long))
+						{
+							var minL = Convert.ToInt64(min);
+							var maxL = Convert.ToInt64(max);
+							var rnd = RandomGen.GetDouble();
+							var v = minL + (long)Math.Round((maxL - minL) * rnd);
+							value = v;
+						}
+						else if (propType == typeof(double))
+						{
+							var minD = Convert.ToDouble(min);
+							var maxD = Convert.ToDouble(max);
+							value = minD + (maxD - minD) * RandomGen.GetDouble();
+						}
+						else if (propType == typeof(float))
+						{
+							var minF = Convert.ToSingle(min);
+							var maxF = Convert.ToSingle(max);
+							value = (float)(minF + (maxF - minF) * RandomGen.GetDouble());
+						}
+						else if (propType == typeof(decimal))
+						{
+							var minM = Convert.ToDecimal(min);
+							var maxM = Convert.ToDecimal(max);
+							value = minM + (decimal)RandomGen.GetDouble() * (maxM - minM);
+						}
+						else
+						{
+							// fallback to numeric conversion if possible
+							if (propType.IsNumeric())
+							{
+								var minD = Convert.ToDouble(min);
+								var maxD = Convert.ToDouble(max);
+								var d = minD + (maxD - minD) * RandomGen.GetDouble();
+								value = d.To(propType);
+							}
+							else
+							{
+								// if not numeric, skip
+								continue;
+							}
+						}
+
+						prop.SetValue(indicator, value);
+						check();
+						continue;
+					}
+
 					if (propType == typeof(int))
 						value = RandomGen.GetInt(10, 100);
 					else if (propType == typeof(decimal))

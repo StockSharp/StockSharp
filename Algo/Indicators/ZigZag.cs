@@ -75,12 +75,13 @@ public class ZigZag : BaseIndicator
 		Name = LocalizedStrings.PercentageChangeKey,
 		Description = LocalizedStrings.PercentageChangeDescKey,
 		GroupName = LocalizedStrings.GeneralKey)]
+	[Range(0.000001, 0.999999)]
 	public decimal Deviation
 	{
 		get => _deviation;
 		set
 		{
-			if (value <= 0 || value > 1)
+			if (value <= 0 || value >= 1)
 				throw new ArgumentOutOfRangeException(nameof(value));
 
 			if (_deviation == value)

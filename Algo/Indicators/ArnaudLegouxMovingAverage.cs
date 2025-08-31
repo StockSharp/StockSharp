@@ -30,6 +30,7 @@ public class ArnaudLegouxMovingAverage : LengthIndicator<decimal>
 		Name = LocalizedStrings.OffsetKey,
 		Description = LocalizedStrings.OffsetKey,
 		GroupName = LocalizedStrings.GeneralKey)]
+	[Range(0.000001, 0.999999)]
 	public decimal Offset
 	{
 		get => _offset;
