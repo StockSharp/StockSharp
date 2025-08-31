@@ -218,47 +218,53 @@ public class ExpressionCandlePattern : ICandlePattern
 	public class ConditionError(string message, IEnumerable<int> indexes) : Exception(message)
 	{
 		/// <summary>
+		/// Indexes of conditions with errors (1-based).
 		/// </summary>
 		public int[] Indexes { get; } = [.. indexes];
 	}
 
 	/// <summary>
-	/// Create instance.
+	/// Initializes a new instance of the <see cref="ExpressionCandlePattern"/>.
 	/// </summary>
 	/// <param name="name"><see cref="Name"/></param>
 	/// <param name="conditions"><see cref="Conditions"/></param>
 	public ExpressionCandlePattern(string name, IEnumerable<CandleExpressionCondition> conditions)
 	{
-		Conditions = conditions?.ToArray() ?? throw new ArgumentNullException(nameof(conditions));
-
-		if(Conditions.IsEmpty())
-			return; // for Load to work
+		ArgumentNullException.ThrowIfNull(conditions);
 
 		Name = name;
-
-		var invalidRangeIds = new List<int>();
-
-		for (var i = 0; i < Conditions.Length; ++i)
-		{
-			var cond = Conditions[i];
-			if(i + cond.MinIndex < 0 || i + cond.MaxIndex >= Conditions.Length)
-				invalidRangeIds.Add(i);
-		}
-
-		if(invalidRangeIds.Count > 0)
-			throw new ConditionError($"patterns ({invalidRangeIds.Select(i => (i+1).ToString()).JoinComma()}) use invalid var indexes which go outside of the pattern range", invalidRangeIds);
-
-		if(Conditions.All(cf => cf.IsEmpty))
-			throw new InvalidOperationException("all candle formulas are empty");
-
-		if (CodeExtensions.TryGetCSharpCompiler() is null)
-			throw new InvalidOperationException(LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler)));
+		Conditions = [.. conditions];
 	}
+
+	private bool _validated;
 
 	bool ICandlePattern.Recognize(ReadOnlySpan<ICandleMessage> candles)
 	{
-		if(Conditions.Length == 0)
-			throw new InvalidOperationException("no conditions");
+		if (!_validated)
+		{
+			_validated = true;
+
+			var invalidRangeIds = new List<int>();
+
+			for (var i = 0; i < Conditions.Length; ++i)
+			{
+				var cond = Conditions[i];
+				if (i + cond.MinIndex < 0 || i + cond.MaxIndex >= Conditions.Length)
+					invalidRangeIds.Add(i);
+			}
+
+			if (invalidRangeIds.Count > 0)
+				throw new ConditionError($"patterns ({invalidRangeIds.Select(i => (i + 1).ToString()).JoinComma()}) use invalid var indexes which go outside of the pattern range", invalidRangeIds);
+
+			if (Conditions.Length == 0)
+				throw new InvalidOperationException("no conditions");
+
+			if (Conditions.All(cf => cf.IsEmpty))
+				throw new InvalidOperationException("all candle formulas are empty");
+
+			if (CodeExtensions.TryGetCSharpCompiler() is null)
+				throw new InvalidOperationException(LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler)));
+		}
 
 		if(candles.Length != CandlesCount)
 			throw new ArgumentException($"unexpected candles count. expected {CandlesCount}, got {candles.Length}");
