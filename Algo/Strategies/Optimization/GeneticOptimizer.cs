@@ -35,17 +35,6 @@ public class GeneticOptimizer : BaseOptimizer
 
 		double IFitness.Evaluate(IChromosome chromosome)
 		{
-			if (_optimizer._leftIterations is not null)
-			{
-				lock (_optimizer._leftIterLock)
-				{
-					_optimizer._leftIterations = _optimizer._leftIterations.Value - 1;
-
-					if (_optimizer._leftIterations < 0)
-						return double.MinValue;
-				}
-			}
-
 			var spc = (StrategyParametersChromosome)chromosome;
 
 			Strategy strategy;
@@ -71,6 +60,17 @@ public class GeneticOptimizer : BaseOptimizer
 
 			if (_cache.TryGetValue(key, out var fitVal))
 				return (double)fitVal;
+
+			if (_optimizer._leftIterations is not null)
+			{
+				lock (_optimizer._leftIterLock)
+				{
+					_optimizer._leftIterations = _optimizer._leftIterations.Value - 1;
+
+					if (_optimizer._leftIterations < 0)
+						return double.MinValue;
+				}
+			}
 
 			using var wait = new ManualResetEvent(false);
 
