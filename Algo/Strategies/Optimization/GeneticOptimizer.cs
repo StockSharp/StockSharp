@@ -444,12 +444,12 @@ public class GeneticOptimizer : BaseOptimizer
 	}
 
 	/// <inheritdoc />
-	protected override int GetProgress()
+	protected override int? GetProgress()
 	{
 		var max = Settings.GenerationsMax;
 		var ga = _ga;
 
-		return max > 0 && ga is not null ? (int)(ga.GenerationsNumber * 100.0 / max) : -1;
+		return max > 0 && ga is not null ? (int)(ga.GenerationsNumber * 100.0 / max) : null;
 	}
 
 	private void OnTerminationReached(object sender, EventArgs e)

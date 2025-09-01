@@ -510,8 +510,8 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	}
 
 	/// <summary>
-	/// Get progress value.
+	/// Get progress value. 0..100 or <see langword="null"/> if progress is unknown.
 	/// </summary>
 	/// <returns>Operation result.</returns>
-	protected abstract int GetProgress();
+	protected abstract int? GetProgress();
 }

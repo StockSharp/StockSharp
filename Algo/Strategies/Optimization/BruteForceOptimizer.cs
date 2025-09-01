@@ -126,6 +126,6 @@ public class BruteForceOptimizer : BaseOptimizer
 	}
 
 	/// <inheritdoc />
-	protected override int GetProgress()
-		=> _itersCount == int.MaxValue ? -1 : (int)(++_itersDone * 100.0 / _itersCount);
+	protected override int? GetProgress()
+		=> _itersCount == int.MaxValue ? null : (int)(++_itersDone * 100.0 / _itersCount);
 }
