@@ -702,4 +702,86 @@ public class CandleTests
 		builder.High.AssertEqual(default);
 		builder.Low.AssertEqual(default);
 	}
+
+	[TestMethod]
+	public void VolumeProfile_StopsAtThreshold_OnlyBelow()
+	{
+		var builder = new VolumeProfileBuilder();
+
+		// PoC at 100 with volume 50
+		builder.Update(new CandlePriceLevel { Price = 100m, BuyVolume = 25m, SellVolume = 25m });
+		// below PoC levels: 99 (10), 97 (15) will be combined into a single node (25) with price 97
+		builder.Update(new CandlePriceLevel { Price = 99m, BuyVolume = 10m });
+		builder.Update(new CandlePriceLevel { Price = 97m, BuyVolume = 15m });
+		// another below level, which should NOT be included once threshold reached
+		builder.Update(new CandlePriceLevel { Price = 95m, BuyVolume = 5m });
+
+		// total sum = 80, threshold = 56; first combined node already exceeds threshold
+		builder.Calculate();
+
+		builder.High.Price.AssertEqual(100m);
+		builder.Low.Price.AssertEqual(97m);
+	}
+
+	[TestMethod]
+	public void VolumeProfile_StopsAtThreshold_OnlyAbove()
+	{
+		var builder = new VolumeProfileBuilder();
+
+		// PoC at 100 with volume 50
+		builder.Update(new CandlePriceLevel { Price = 100m, BuyVolume = 50m });
+		// above PoC levels: 101 (20), 102 (10) will be combined into a single node (30) with price 102
+		builder.Update(new CandlePriceLevel { Price = 101m, BuyVolume = 20m });
+		builder.Update(new CandlePriceLevel { Price = 102m, BuyVolume = 10m });
+		// another above level, which should NOT be selected once threshold reached
+		builder.Update(new CandlePriceLevel { Price = 103m, BuyVolume = 1m });
+
+		// total sum = 81, threshold = 56; first combined node already exceeds threshold
+		builder.Calculate();
+
+		builder.Low.Price.AssertEqual(100m);
+		builder.High.Price.AssertEqual(102m);
+	}
+
+	[TestMethod]
+	public void VolumeProfile_OnlyBelow()
+	{
+		var builder = new VolumeProfileBuilder();
+
+		// Make PoC the maximum volume
+		builder.Update(new() { Price = 100m, BuyVolume = 1500m });
+		// Below-only side with two combined nodes each exceeding the remaining threshold part
+		builder.Update(new() { Price = 99m, BuyVolume = 400m });
+		builder.Update(new() { Price = 98m, BuyVolume = 400m });
+		builder.Update(new() { Price = 97m, BuyVolume = 400m });
+		builder.Update(new() { Price = 96m, BuyVolume = 400m });
+
+		// Total = 1500 + 400 + 400 + 400 + 400 = 3100
+		// Threshold = round(3100 * 0.7) = 2170; currVolume = 1500; need > 670
+		// Combined nodes below: (99+98)=800 at 98, (97+96)=800 at 96 -> both exceed
+		builder.Calculate();
+
+		builder.High.Price.AssertEqual(100m);
+		builder.Low.Price.AssertEqual(98m);
+	}
+
+	[TestMethod]
+	public void VolumeProfile_OnlyAbove()
+	{
+		var builder = new VolumeProfileBuilder();
+
+		// Make PoC the maximum volume
+		builder.Update(new() { Price = 100m, BuyVolume = 1500m });
+		// Above-only side with two combined nodes each exceeding the remaining threshold part
+		builder.Update(new() { Price = 101m, BuyVolume = 400m });
+		builder.Update(new() { Price = 102m, BuyVolume = 400m });
+		builder.Update(new() { Price = 103m, BuyVolume = 400m });
+		builder.Update(new() { Price = 104m, BuyVolume = 400m });
+
+		// Total = 3100; threshold ~ 2170; remaining > 670; combined nodes: (101+102)=800 at 102, (103+104)=800 at 104
+		builder.Calculate();
+
+		builder.Low.Price.AssertEqual(100m);
+		builder.High.Price.AssertEqual(102m);
+	}
 }

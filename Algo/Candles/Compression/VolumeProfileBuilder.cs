@@ -126,8 +126,8 @@ public class VolumeProfileBuilder
 
 		PoC = _levels.FirstOrDefault(p => p.BuyVolume + p.SellVolume == currVolume);
 
-		var abovePoc = Combine(_levels.Where(p => p.Price > PoC.Price).OrderBy(p => p.Price));
-		var belowePoc = Combine(_levels.Where(p => p.Price < PoC.Price).OrderByDescending(p => p.Price));
+		var abovePoc = Combine(_levels.Where(p => p.Price > PoC.Price).OrderBy(p => p.Price), true);
+		var belowePoc = Combine(_levels.Where(p => p.Price < PoC.Price).OrderByDescending(p => p.Price), false);
 
 		if (abovePoc.Count == 0)
 		{
@@ -141,6 +141,7 @@ public class VolumeProfileBuilder
 				{
 					High = PoC;
 					Low = node.Value;
+					break;
 				}
 				else
 				{
@@ -160,6 +161,7 @@ public class VolumeProfileBuilder
 				{
 					High = node.Value;
 					Low = PoC;
+					break;
 				}
 				else
 				{
@@ -205,7 +207,7 @@ public class VolumeProfileBuilder
 		}
 	}
 
-	private static LinkedList<CandlePriceLevel> Combine(IEnumerable<CandlePriceLevel> prices)
+	private static LinkedList<CandlePriceLevel> Combine(IEnumerable<CandlePriceLevel> prices, bool isAbovePoC)
 	{
 		ArgumentNullException.ThrowIfNull(prices);
 
@@ -232,7 +234,9 @@ public class VolumeProfileBuilder
 
 			var level = new CandlePriceLevel
 			{
-				Price = curr.Price,
+				Price = isAbovePoC
+					? Math.Max(curr.Price, pl.Price)
+					: Math.Min(curr.Price, pl.Price),
 				BuyVolumes = combined.BuyVolumes?.ToArray(),
 				SellVolumes = combined.SellVolumes?.ToArray(),
 				BuyVolume = combined.BuyVolume,
