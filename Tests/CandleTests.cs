@@ -784,4 +784,92 @@ public class CandleTests
 		builder.Low.Price.AssertEqual(100m);
 		builder.High.Price.AssertEqual(102m);
 	}
+
+	[TestMethod]
+	public void VolumeProfile_CombineAboveLevels()
+	{
+		var builder = new VolumeProfileBuilder();
+
+		// Simple case with PoC and two levels above
+		builder.Update(new() { Price = 100m, BuyVolume = 1000m }); // PoC
+		builder.Update(new() { Price = 101m, BuyVolume = 10m });
+		builder.Update(new() { Price = 102m, BuyVolume = 10m });
+
+		// Set low threshold so combined level definitely exceeds it
+		builder.VolumePercent = 50; // 50% of 1020 = 510, already exceeded by PoC (1000)
+
+		builder.Calculate();
+
+		// Expect combined levels (101+102) to give price 102 (farther from PoC)
+		builder.High.Price.AssertEqual(102m);
+		builder.Low.Price.AssertEqual(100m);
+	}
+
+	[TestMethod]
+	public void VolumeProfile_CombineBelowLevels()
+	{
+		var builder = new VolumeProfileBuilder();
+
+		// Simple case with PoC and two levels below
+		builder.Update(new() { Price = 100m, BuyVolume = 1000m }); // PoC
+		builder.Update(new() { Price = 99m, BuyVolume = 10m });
+		builder.Update(new() { Price = 98m, BuyVolume = 10m });
+
+		// Set low threshold so combined level definitely exceeds it
+		builder.VolumePercent = 50; // 50% of 1020 = 510, already exceeded by PoC (1000)
+
+		builder.Calculate();
+
+		// Expect combined levels (99+98) to give price 98 (closer to PoC from sorted pair)
+		builder.Low.Price.AssertEqual(98m);
+		builder.High.Price.AssertEqual(100m);
+	}
+
+	[TestMethod]
+	public void VolumeProfile_MultipleAbovePairs()
+	{
+		var builder = new VolumeProfileBuilder();
+
+		// PoC + four levels above (form two pairs after combining)
+		builder.Update(new() { Price = 100m, BuyVolume = 50m }); // PoC
+		builder.Update(new() { Price = 101m, BuyVolume = 5m });
+		builder.Update(new() { Price = 102m, BuyVolume = 5m }); // First pair: volume = 10
+		builder.Update(new() { Price = 103m, BuyVolume = 20m });
+		builder.Update(new() { Price = 104m, BuyVolume = 20m }); // Second pair: volume = 40
+
+		// Total = 100, threshold = 70, currVolume after PoC = 50
+		// First pair (10) doesn't exceed: 50 + 10 = 60 < 70
+		// Second pair (40) exceeds: 60 + 40 = 100 > 70
+		builder.VolumePercent = 70;
+
+		builder.Calculate();
+
+		// Should stop at second pair (103+104) with price 104 (farther from PoC)
+		builder.High.Price.AssertEqual(104m);
+		builder.Low.Price.AssertEqual(100m);
+	}
+
+	[TestMethod]
+	public void VolumeProfile_MultipleBelowPairs()
+	{
+		var builder = new VolumeProfileBuilder();
+
+		// PoC + four levels below (form two pairs after combining)
+		builder.Update(new() { Price = 100m, BuyVolume = 50m }); // PoC
+		builder.Update(new() { Price = 99m, BuyVolume = 5m });
+		builder.Update(new() { Price = 98m, BuyVolume = 5m }); // First pair: volume = 10
+		builder.Update(new() { Price = 97m, BuyVolume = 20m });
+		builder.Update(new() { Price = 96m, BuyVolume = 20m }); // Second pair: volume = 40
+
+		// Total = 100, threshold = 70, currVolume after PoC = 50
+		// First pair (10) doesn't exceed: 50 + 10 = 60 < 70
+		// Second pair (40) exceeds: 60 + 40 = 100 > 70
+		builder.VolumePercent = 70;
+
+		builder.Calculate();
+
+		// Should stop at second pair (97+96) with price 96 (closer to PoC from sorted pair)
+		builder.Low.Price.AssertEqual(96m);
+		builder.High.Price.AssertEqual(100m);
+	}
 }
