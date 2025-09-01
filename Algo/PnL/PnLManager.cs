@@ -86,7 +86,7 @@ public class PnLManager : IPnLManager
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
 
-		PortfolioPnLManager createManager(SecurityId secId, string pfName)
+		PortfolioPnLManager createManager(string pfName)
 			=> new(pfName, secId =>
 			{
 				lock (_managersByPf.SyncRoot)
@@ -107,7 +107,7 @@ public class PnLManager : IPnLManager
 
 				lock (_managersByPf.SyncRoot)
 				{
-					var manager = _managersByPf.SafeAdd(regMsg.PortfolioName, pf => createManager(regMsg.SecurityId, pf));
+					var manager = _managersByPf.SafeAdd(regMsg.PortfolioName, createManager);
 					_managersByTransId.Add(regMsg.TransactionId, manager);
 				}
 
@@ -133,7 +133,7 @@ public class PnLManager : IPnLManager
 							if (!_managersByTransId.TryGetValue(transId, out manager))
 							{
 								if (!execMsg.PortfolioName.IsEmpty())
-									manager = _managersByPf.SafeAdd(execMsg.PortfolioName, key => createManager(execMsg.SecurityId, key));
+									manager = _managersByPf.SafeAdd(execMsg.PortfolioName, createManager);
 								else if (execMsg.OrderId != null)
 									manager = _managersByOrderId.TryGetValue(execMsg.OrderId.Value);
 								else if (!execMsg.OrderStringId.IsEmpty())
