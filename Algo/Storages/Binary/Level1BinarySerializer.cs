@@ -93,8 +93,12 @@ class Level1MetaInfo(DateTime date) : BinaryMetaInfo(date)
 	public DateTime FirstFieldTime { get; set; }
 	public DateTime LastFieldTime { get; set; }
 
-	public DateInfo BuyBackInfo { get; private set; } = new DateInfo();
-	public DateInfo CouponInfo { get; private set; } = new DateInfo();
+	public DateInfo BestBidTimeInfo { get; private set; } = new();
+	public DateInfo BestAskTimeInfo { get; private set; } = new();
+	public DateInfo LastTradeTimeInfo { get; private set; } = new();
+
+	public DateInfo BuyBackInfo { get; private set; } = new();
+	public DateInfo CouponInfo { get; private set; } = new();
 
 	public Level1Fields MaxKnownType { get; set; }
 
@@ -134,8 +138,17 @@ class Level1MetaInfo(DateTime date) : BinaryMetaInfo(date)
 		Write(stream, AccruedCouponIncome);
 		Write(stream, Yield);
 
-		stream.WriteEx(FirstFieldTime);
-		stream.WriteEx(LastFieldTime);
+		if (Version < MarketDataVersions.Version65)
+		{
+			stream.WriteEx(FirstFieldTime);
+			stream.WriteEx(LastFieldTime);
+		}
+		else
+		{
+			BestBidTimeInfo.Write(stream);
+			BestAskTimeInfo.Write(stream);
+			LastTradeTimeInfo.Write(stream);
+		}
 
 		if (Version < MarketDataVersions.Version47)
 			return;
@@ -266,8 +279,17 @@ class Level1MetaInfo(DateTime date) : BinaryMetaInfo(date)
 		AccruedCouponIncome = ReadInfo(stream);
 		Yield = ReadInfo(stream);
 
-		FirstFieldTime = stream.Read<DateTime>().UtcKind();
-		LastFieldTime = stream.Read<DateTime>().UtcKind();
+		if (Version < MarketDataVersions.Version65)
+		{
+			FirstFieldTime = stream.Read<DateTime>().UtcKind();
+			LastFieldTime = stream.Read<DateTime>().UtcKind();
+		}
+		else
+		{
+			BestBidTimeInfo.Read(stream);
+			BestAskTimeInfo.Read(stream);
+			LastTradeTimeInfo.Read(stream);
+		}
 
 		if (Version < MarketDataVersions.Version47)
 			return;
@@ -396,6 +418,9 @@ class Level1MetaInfo(DateTime date) : BinaryMetaInfo(date)
 		Yield = Clone(l1Info.Yield);
 		FirstFieldTime = l1Info.FirstFieldTime;
 		LastFieldTime = l1Info.LastFieldTime;
+		BestBidTimeInfo = l1Info.BestBidTimeInfo.Clone();
+		BestAskTimeInfo = l1Info.BestAskTimeInfo.Clone();
+		LastTradeTimeInfo = l1Info.LastTradeTimeInfo.Clone();
 		VWAP = Clone(l1Info.VWAP);
 		PriceEarnings = Clone(l1Info.PriceEarnings);
 		ForwardPriceEarnings = Clone(l1Info.ForwardPriceEarnings);
@@ -441,7 +466,7 @@ class Level1MetaInfo(DateTime date) : BinaryMetaInfo(date)
 	}
 }
 
-class Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<Level1ChangeMessage, Level1MetaInfo>(securityId, DataType.Level1, 50, MarketDataVersions.Version64, exchangeInfoProvider)
+class Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<Level1ChangeMessage, Level1MetaInfo>(securityId, DataType.Level1, 50, MarketDataVersions.Version65, exchangeInfoProvider)
 {
 	private static readonly SynchronizedPairSet<Level1Fields, int> _oldMap = new()
 	{
@@ -526,6 +551,7 @@ class Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchan
 		var buildFrom = metaInfo.Version >= MarketDataVersions.Version62;
 		var seqNum = metaInfo.Version >= MarketDataVersions.Version63;
 		var largeDecimal = metaInfo.Version >= MarketDataVersions.Version64;
+		var splitFieldTimes = metaInfo.Version >= MarketDataVersions.Version65;
 
 		foreach (var message in messages)
 		{
@@ -829,17 +855,37 @@ class Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchan
 					{
 						var timeValue = (DateTimeOffset)value;
 
-						if (metaInfo.FirstFieldTime == default)
+						if (splitFieldTimes)
 						{
-							if (!isTickPrecision)
-								timeValue = timeValue.StorageBinaryOldTruncate();
+							var info = field == Level1Fields.LastTradeTime ? metaInfo.LastTradeTimeInfo : field == Level1Fields.BestBidTime ? metaInfo.BestBidTimeInfo : metaInfo.BestAskTimeInfo;
 
-							metaInfo.FirstFieldTime = metaInfo.LastFieldTime = isUtc ? timeValue.UtcDateTime : timeValue.LocalDateTime;
+							if (info.FirstDateTime == default)
+							{
+								if (!isTickPrecision)
+									timeValue = timeValue.StorageBinaryOldTruncate();
+
+								info.FirstDateTime = info.LastDateTime = isUtc ? timeValue.UtcDateTime : timeValue.LocalDateTime;
+							}
+
+							var lastOffset = info.LastDateOffset;
+							info.LastDateTime = writer.WriteTime(timeValue, info.LastDateTime, LocalizedStrings.LastTradeTime, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
+							info.LastDateOffset = lastOffset;
+						}
+						else
+						{
+							if (metaInfo.FirstFieldTime == default)
+							{
+								if (!isTickPrecision)
+									timeValue = timeValue.StorageBinaryOldTruncate();
+
+								metaInfo.FirstFieldTime = metaInfo.LastFieldTime = isUtc ? timeValue.UtcDateTime : timeValue.LocalDateTime;
+							}
+
+							var lastOffset = metaInfo.LastServerOffset;
+							metaInfo.LastFieldTime = writer.WriteTime(timeValue, metaInfo.LastFieldTime, LocalizedStrings.LastTradeTime, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
+							metaInfo.LastServerOffset = lastOffset;
 						}
 
-						var lastOffset = metaInfo.LastServerOffset;
-						metaInfo.LastFieldTime = writer.WriteTime(timeValue, metaInfo.LastFieldTime, LocalizedStrings.LastTradeTime, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
-						metaInfo.LastServerOffset = lastOffset;
 						break;
 					}
 					case Level1Fields.BidsCount:
@@ -1113,6 +1159,7 @@ class Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchan
 		var buildFrom = metaInfo.Version >= MarketDataVersions.Version62;
 		var seqNum = metaInfo.Version >= MarketDataVersions.Version63;
 		var largeDecimal = metaInfo.Version >= MarketDataVersions.Version64;
+		var splitFieldTimes = metaInfo.Version >= MarketDataVersions.Version65;
 
 		var l1Msg = new Level1ChangeMessage { SecurityId = SecurityId };
 
@@ -1428,11 +1475,28 @@ class Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchan
 				case Level1Fields.BestBidTime:
 				case Level1Fields.BestAskTime:
 				{
-					var prevTime = metaInfo.FirstFieldTime;
-					var lastOffset = metaInfo.FirstServerOffset;
-					l1Msg.Add(field, reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider), allowDiffOffsets, isTickPrecision, ref lastOffset));
-					metaInfo.FirstFieldTime = prevTime;
-					metaInfo.FirstServerOffset = lastOffset;
+					if (splitFieldTimes)
+					{
+						var info = field == Level1Fields.LastTradeTime ? metaInfo.LastTradeTimeInfo : field == Level1Fields.BestBidTime ? metaInfo.BestBidTimeInfo : metaInfo.BestAskTimeInfo;
+						var prevTime = info.FirstDateTime;
+						var lastOffset = info.FirstDateOffset;
+
+						l1Msg.Add(field, reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider), allowDiffOffsets, isTickPrecision, ref lastOffset));
+
+						info.FirstDateTime = prevTime;
+						info.FirstDateOffset = lastOffset;
+					}
+					else
+					{
+						var prevTime = metaInfo.FirstFieldTime;
+						var lastOffset = metaInfo.FirstServerOffset;
+
+						l1Msg.Add(field, reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider), allowDiffOffsets, isTickPrecision, ref lastOffset));
+						
+						metaInfo.FirstFieldTime = prevTime;
+						metaInfo.FirstServerOffset = lastOffset;
+					}
+
 					break;
 				}
 				case Level1Fields.BidsCount:
