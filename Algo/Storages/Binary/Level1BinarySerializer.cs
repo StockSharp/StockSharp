@@ -914,6 +914,7 @@ class Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchan
 						break;
 					}
 					case Level1Fields.LastTradeUpDown:
+					case Level1Fields.IsSystem:
 					{
 						writer.Write((bool)value);
 						break;
@@ -1051,11 +1052,6 @@ class Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchan
 					case Level1Fields.HistoricalVolatilityMonth:
 					{
 						SerializeChange(writer, metaInfo.HistoricalVolatilityMonth, (decimal)value);
-						break;
-					}
-					case Level1Fields.IsSystem:
-					{
-						writer.Write((bool)value);
 						break;
 					}
 					case Level1Fields.Turnover:
@@ -1521,6 +1517,7 @@ class Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchan
 					break;
 				}
 				case Level1Fields.LastTradeUpDown:
+				case Level1Fields.IsSystem:
 				{
 					l1Msg.Add(field, reader.Read());
 					break;
@@ -1658,11 +1655,6 @@ class Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchan
 				case Level1Fields.HistoricalVolatilityMonth:
 				{
 					l1Msg.Add(field, DeserializeChange(reader, metaInfo.HistoricalVolatilityMonth));
-					break;
-				}
-				case Level1Fields.IsSystem:
-				{
-					l1Msg.Add(field, reader.Read());
 					break;
 				}
 				case Level1Fields.Turnover:

@@ -1292,16 +1292,16 @@ partial class Connector
 			info.SetValue(time, Level1Fields.LastTradeTime, message.ServerTime);
 			info.SetValue(time, Level1Fields.LastTradePrice, price);
 
-			if (message.IsSystem != null)
+			if (message.IsSystem is bool isSystem)
 			{
-				info.SetValue(time, Level1Fields.IsSystem, message.IsSystem.Value);
-				changes.Add(new(Level1Fields.IsSystem, message.IsSystem.Value));
+				info.SetValue(time, Level1Fields.IsSystem, isSystem);
+				changes.Add(new(Level1Fields.IsSystem, isSystem));
 			}
 
-			if (message.TradeId != null)
+			if (message.TradeId is long tradeId)
 			{
-				info.SetValue(time, Level1Fields.LastTradeId, message.TradeId.Value);
-				changes.Add(new(Level1Fields.LastTradeId, message.TradeId.Value));
+				info.SetValue(time, Level1Fields.LastTradeId, tradeId);
+				changes.Add(new(Level1Fields.LastTradeId, tradeId));
 			}
 
 			if (!message.TradeStringId.IsEmpty())
@@ -1310,22 +1310,22 @@ partial class Connector
 				changes.Add(new(Level1Fields.LastTradeStringId, message.TradeStringId));
 			}
 
-			if (message.TradeVolume != null)
+			if (message.TradeVolume is decimal tradeVol)
 			{
-				info.SetValue(time, Level1Fields.LastTradeVolume, message.TradeVolume.Value);
-				changes.Add(new(Level1Fields.LastTradeVolume, message.TradeVolume.Value));
+				info.SetValue(time, Level1Fields.LastTradeVolume, tradeVol);
+				changes.Add(new(Level1Fields.LastTradeVolume, tradeVol));
 			}
 
-			if (message.OriginSide != null)
+			if (message.OriginSide is Sides side)
 			{
-				info.SetValue(time, Level1Fields.LastTradeOrigin, message.OriginSide.Value);
-				changes.Add(new(Level1Fields.LastTradeOrigin, message.OriginSide.Value));
+				info.SetValue(time, Level1Fields.LastTradeOrigin, side);
+				changes.Add(new(Level1Fields.LastTradeOrigin, side));
 			}
 
-			if (message.IsUpTick != null)
+			if (message.IsUpTick is bool isUpTick)
 			{
-				info.SetValue(time, Level1Fields.LastTradeUpDown, message.IsUpTick.Value);
-				changes.Add(new(Level1Fields.LastTradeUpDown, message.IsUpTick.Value));
+				info.SetValue(time, Level1Fields.LastTradeUpDown, isUpTick);
+				changes.Add(new(Level1Fields.LastTradeUpDown, isUpTick));
 			}
 
 			RaiseValuesChanged(security, changes, message.ServerTime, message.LocalTime);
