@@ -22,6 +22,9 @@ public static partial class LocalizedStrings
 	{
 		public string Localize(string enStr)
 			=> enStr.Translate();
+
+		public string LocalizeByKey(string key)
+			=> GetString(key);
 	}
 
 	private class Translation
@@ -240,7 +243,7 @@ public static partial class LocalizedStrings
 		var langId = GetLangCode(language.IsEmpty(ActiveLanguage));
 		if (langId < 0)
 		{
-			Missing?.Invoke(resourceId, false);
+			RaiseMissing(resourceId, false);
 			return resourceId;
 		}
 
@@ -248,7 +251,7 @@ public static partial class LocalizedStrings
 		if (result != null)
 			return result;
 
-		Missing?.Invoke(resourceId, false);
+		RaiseMissing(resourceId, false);
 		return resourceId;
 	}
 
@@ -266,7 +269,7 @@ public static partial class LocalizedStrings
 
 		if (langIdFrom < 0 || langIdTo < 0)
 		{
-			Missing?.Invoke(text, true);
+			RaiseMissing(text, true);
 			return text;
 		}
 		else if (langIdFrom == langIdTo)
@@ -275,17 +278,20 @@ public static partial class LocalizedStrings
 		var id = _translations[langIdFrom].GetIdByText(text);
 		if (id.IsEmpty())
 		{
-			Missing?.Invoke(text, true);
+			RaiseMissing(text, true);
 			return text;
 		}
 
 		var result = _translations[langIdTo].GetTextById(id);
 		if (result.IsEmpty())
 		{
-			Missing?.Invoke(text, true);
+			RaiseMissing(text, true);
 			return text;
 		}
 
 		return result;
 	}
+
+	private static void RaiseMissing(string text, bool isText)
+		=> Missing?.Invoke(text, isText);
 }
