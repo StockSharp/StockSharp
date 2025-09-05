@@ -3,6 +3,16 @@
 # [StockSharp - trading platform][1] 
 ## <a href="https://doc.stocksharp.com" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4d6.svg" alt="Docs" height="40"/> Docs</a> <a href="https://stocksharp.com/products/download/" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4be.svg" alt="Download" height="40"/> Download</a> <a href="https://t.me/stocksharpchat/361" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4ac.svg" alt="Chat" height="40"/> Chat</a> <a href="https://www.youtube.com/@stocksharp"><img src="https://raw.githubusercontent.com/edent/SuperTinyIcons/master/images/svg/youtube.svg" alt="YouTube" height="40"/> YouTube</a>
 
+<!-- Keep these links. Translations will automatically update with the README. -->
+[Deutsch](https://zdoc.app/de/StockSharp/StockSharp) | 
+[Español](https://zdoc.app/es/StockSharp/StockSharp) | 
+[français](https://zdoc.app/fr/StockSharp/StockSharp) | 
+[日本語](https://zdoc.app/ja/StockSharp/StockSharp) | 
+[한국어](https://zdoc.app/ko/StockSharp/StockSharp) | 
+[Português](https://zdoc.app/pt/StockSharp/StockSharp) | 
+[Русский](https://zdoc.app/ru/StockSharp/StockSharp) | 
+[中文](https://zdoc.app/zh/StockSharp/StockSharp)
+
 ## Introduction ##
 
 **StockSharp** (shortly **S#**) – are **free** platform for trading at any markets of the world (crypto exchanges, American, European, Asian, Russian, stocks, futures, options, Bitcoins, forex, etc.). You will be able to trade manually or automated trading (algorithmic trading robots, conventional or HFT).
