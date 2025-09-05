@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "Garis Pengumpulan/Pengagihan (Garis A/D).",
   "Action": "Tindakan",
   "ActionInstallApplication": "Pemasangan Aplikasi",
+  "ActionIsNotSupportedBy": "Tindakan {0} tidak disokong oleh {1}",
   "ActionRemoveApplication": "Buang aplikasi",
   "ActionRepairApplication": "Pemasangan semula aplikasi",
   "ActionUpdateApplication": "Kemas kini Aplikasi",

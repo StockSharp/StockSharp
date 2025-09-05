@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "Γραμμή Συσσώρευσης/Διανομής (Γραμμή A/D).",
   "Action": "Δράση",
   "ActionInstallApplication": "Εγκατάσταση εφαρμογής",
+  "ActionIsNotSupportedBy": "Η ενέργεια {0} δεν υποστηρίζεται από {1}",
   "ActionRemoveApplication": "Αφαίρεση εφαρμογής",
   "ActionRepairApplication": "Επανεγκατάσταση της εφαρμογής",
   "ActionUpdateApplication": "Ενημέρωση εφαρμογής",

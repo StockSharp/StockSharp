@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "累积/分布线 (A/D 线)。",
   "Action": "行动",
   "ActionInstallApplication": "安装应用程序",
+  "ActionIsNotSupportedBy": "操作 {0} 不被 {1} 支持",
   "ActionRemoveApplication": "删除应用程序",
   "ActionRepairApplication": "重新安装应用程序",
   "ActionUpdateApplication": "更新应用程序",

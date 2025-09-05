@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "ਅਕੂਮੂਲੇਸ਼ਨ/ਡਿਸਟ੍ਰੀਬਿਊਸ਼ਨ ਲਾਈਨ (ਏ/ਡੀ ਲਾਈਨ)।",
   "Action": "ਕਾਰਵਾਈ",
   "ActionInstallApplication": "ਐਪਲੀਕੇਸ਼ਨ ਇੰਸਟਾਲ ਕਰਨਾ",
+  "ActionIsNotSupportedBy": "ਕਿਰਿਆ {0} {1} ਦੁਆਰਾ ਸਮਰਥਿਤ ਨਹੀਂ ਹੈ",
   "ActionRemoveApplication": "ਐਪਲੀਕੇਸ਼ਨ ਨੂੰ ਹਟਾਉਣਾ",
   "ActionRepairApplication": "ਐਪਲੀਕੇਸ਼ਨ ਮੁੜ-ਇੰਸਟਾਲੇਸ਼ਨ",
   "ActionUpdateApplication": "ਐਪਲੀਕੇਸ਼ਨ ਅੱਪਡੇਟ",

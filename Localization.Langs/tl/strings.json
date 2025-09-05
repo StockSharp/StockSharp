@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "Linya ng Akumulasyon/Distribusyon (Linya ng A/D).",
   "Action": "Aksyon",
   "ActionInstallApplication": "Pag-install ng aplikasyon",
+  "ActionIsNotSupportedBy": "Ang aksyon {0} ay hindi sinusuportahan ng {1}",
   "ActionRemoveApplication": "Pag-aalis ng aplikasyon",
   "ActionRepairApplication": "Pag-reinstall ng aplikasyon",
   "ActionUpdateApplication": "Pag-update ng aplikasyon",

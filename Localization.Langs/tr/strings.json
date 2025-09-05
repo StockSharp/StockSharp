@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "Birikim/Dağıtım Hattı (A/D Hattı).",
   "Action": "Eylem",
   "ActionInstallApplication": "Uygulama Yüklemesi",
+  "ActionIsNotSupportedBy": "{0} eylemi {1} tarafından desteklenmiyor",
   "ActionRemoveApplication": "Uygulamayı kaldır",
   "ActionRepairApplication": "Uygulamanın Yeniden Kurulması",
   "ActionUpdateApplication": "Uygulamayı Güncelle",

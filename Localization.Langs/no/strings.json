@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "Akkumulerings-/distribusjonslinje (A/D-linje).",
   "Action": "Handling",
   "ActionInstallApplication": "Installasjon av applikasjonen",
+  "ActionIsNotSupportedBy": "Handlingen {0} støttes ikke av {1}",
   "ActionRemoveApplication": "Fjern applikasjonen",
   "ActionRepairApplication": "Reinstallasjon av applikasjonen",
   "ActionUpdateApplication": "Oppdater applikasjonen",

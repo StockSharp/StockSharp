@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "Linka akumulácie/rozloženia (linka A/D).",
   "Action": "Akcia",
   "ActionInstallApplication": "Inštalácia aplikácie",
+  "ActionIsNotSupportedBy": "Akcia {0} nie je podporovaná {1}",
   "ActionRemoveApplication": "Odstránenie aplikácie",
   "ActionRepairApplication": "Reinštalácia aplikácie",
   "ActionUpdateApplication": "Aktualizácia aplikácie",

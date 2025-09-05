@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "เส้นสะสม/แจกจ่าย (A/D Line)",
   "Action": "การกระทำ",
   "ActionInstallApplication": "การติดตั้งแอพพลิเคชัน",
+  "ActionIsNotSupportedBy": "การกระทำ {0} ไม่ได้รับการสนับสนุนโดย {1}",
   "ActionRemoveApplication": "ลบแอปพลิเคชัน",
   "ActionRepairApplication": "การติดตั้งแอปพลิเคชันใหม่",
   "ActionUpdateApplication": "อัปเดตแอปพลิเคชัน",

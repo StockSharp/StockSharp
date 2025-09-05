@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "خط التراكم / التوزيع (خط A / D).",
   "Action": "العمل",
   "ActionInstallApplication": "تثبيت التطبيق",
+  "ActionIsNotSupportedBy": "الإجراء {0} غير مدعوم من قبل {1}",
   "ActionRemoveApplication": "إزالة التطبيق",
   "ActionRepairApplication": "إعادة تثبيت التطبيق",
   "ActionUpdateApplication": "تحديث التطبيق",

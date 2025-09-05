@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "Yig'ish/Taqsimlash chizig'i (A/D chizig'i).",
   "Action": "Harakat",
   "ActionInstallApplication": "Ilova o'rnatish",
+  "ActionIsNotSupportedBy": "{0} harakati {1} tomonidan qo'llab-quvvatlanmaydi",
   "ActionRemoveApplication": "Ilovani olib tashlash",
   "ActionRepairApplication": "Ilovani qayta o'rnatish",
   "ActionUpdateApplication": "Ilovaning yangilanishi",

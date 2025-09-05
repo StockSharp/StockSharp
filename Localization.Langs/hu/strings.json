@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "Felhalmozási/eladási vonal (A/D vonal).",
   "Action": "Akció",
   "ActionInstallApplication": "Alkalmazás telepítése",
+  "ActionIsNotSupportedBy": "A {0} műveletet nem támogatja {1}",
   "ActionRemoveApplication": "Alkalmazás eltávolítása",
   "ActionRepairApplication": "Alkalmazás újratelepítése",
   "ActionUpdateApplication": "Alkalmazás frissítése",

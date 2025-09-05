@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "קו הצטברות/חלוקה (קו A/D).",
   "Action": "פעולה",
   "ActionInstallApplication": "התקנת האפליקציה",
+  "ActionIsNotSupportedBy": "הפעולה {0} אינה נתמכת על ידי {1}",
   "ActionRemoveApplication": "הסרת היישום",
   "ActionRepairApplication": "התקנת היישום מחדש",
   "ActionUpdateApplication": "עדכון היישום",

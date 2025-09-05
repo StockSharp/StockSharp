@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "Linia akumulacji/dystrybucji (linia A/D).",
   "Action": "Akcja",
   "ActionInstallApplication": "Instalacja aplikacji",
+  "ActionIsNotSupportedBy": "Akcja {0} nie jest obsługiwana przez {1}",
   "ActionRemoveApplication": "Usuń aplikację",
   "ActionRepairApplication": "Ponowna instalacja aplikacji",
   "ActionUpdateApplication": "Aktualizacja aplikacji",

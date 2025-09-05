@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "সংগ্রহ/বন্টন লাইন (A/D লাইন)।",
   "Action": "কার্যকলাপ",
   "ActionInstallApplication": "অ্যাপ্লিকেশন ইনস্টল করুন",
+  "ActionIsNotSupportedBy": "কর্ম {0} {1} দ্বারা সমর্থিত নয়",
   "ActionRemoveApplication": "অ্যাপ্লিকেশন মুছে ফেলা",
   "ActionRepairApplication": "অ্যাপ্লিকেশন পুনরায় ইনস্টলেশন",
   "ActionUpdateApplication": "অ্যাপ্লিকেশন আপডেট",

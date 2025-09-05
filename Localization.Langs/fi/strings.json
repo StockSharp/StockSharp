@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "Kertyminen/jakeluviiva (A/D-linja).",
   "Action": "Toiminta",
   "ActionInstallApplication": "Sovelluksen asennus",
+  "ActionIsNotSupportedBy": "Toiminto {0} ei ole tuettu {1}:ssa",
   "ActionRemoveApplication": "Poista sovellus",
   "ActionRepairApplication": "Sovelluksen uudelleenasennus",
   "ActionUpdateApplication": "Päivitä sovellus",

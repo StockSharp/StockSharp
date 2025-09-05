@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "Línia d'acumulació/distribució (línia A/D).",
   "Action": "Acció",
   "ActionInstallApplication": "Instal·lació de l'aplicació",
+  "ActionIsNotSupportedBy": "L'acció {0} no és compatible amb {1}",
   "ActionRemoveApplication": "Eliminació de l'aplicació",
   "ActionRepairApplication": "Reinstal·lació de l'aplicació",
   "ActionUpdateApplication": "Actualització de l'aplicació",

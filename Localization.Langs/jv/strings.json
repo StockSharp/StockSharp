@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "Garis Akumulasi/Distribusi (Garis A/D).",
   "Action": "Tumindak",
   "ActionInstallApplication": "Pasang aplikasi",
+  "ActionIsNotSupportedBy": "Tumindak {0} ora didhukung dening {1}",
   "ActionRemoveApplication": "Mbusek aplikasi",
   "ActionRepairApplication": "Penginstalan maneh aplikasi",
   "ActionUpdateApplication": "Nganyari Aplikasi",

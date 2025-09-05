@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "စုဆောင်းမှု/ဖြန့်ဖြူးမှု လိုင်း (A/D Line)။",
   "Action": "လုပ်ဆောင်ချက်",
   "ActionInstallApplication": "အက်ပလီကေးရှင်း တပ်ဆင်ခြင်း",
+  "ActionIsNotSupportedBy": "လုပ်ဆောင်ချက် {0} ကို {1} မှ ပံ့ပိုးမထားပါ",
   "ActionRemoveApplication": "အက်ပလီကေးရှင်း ဖယ်ရှားခြင်း",
   "ActionRepairApplication": "အက်ပလီကေးရှင်း ပြန်လည်တပ်ဆင်ခြင်း",
   "ActionUpdateApplication": "အက်ပလီကေးရှင်း အပ်ဒိတ်လုပ်ခြင်း",

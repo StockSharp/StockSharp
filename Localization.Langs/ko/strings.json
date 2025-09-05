@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "축적/분배 라인(A/D 라인).",
   "Action": "행동",
   "ActionInstallApplication": "애플리케이션 설치",
+  "ActionIsNotSupportedBy": "작업 {0}은(는) {1}에서 지원되지 않습니다",
   "ActionRemoveApplication": "애플리케이션 제거",
   "ActionRepairApplication": "응용 프로그램 재설치",
   "ActionUpdateApplication": "애플리케이션 업데이트",

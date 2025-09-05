@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "خط انباشت / توزیع (خط A / D).",
   "Action": "عمل",
   "ActionInstallApplication": "نصب برنامه",
+  "ActionIsNotSupportedBy": "عمل {0} توسط {1} پشتیبانی نمی‌شود",
   "ActionRemoveApplication": "حذف برنامه",
   "ActionRepairApplication": "نصب مجدد برنامه",
   "ActionUpdateApplication": "بروزرسانی برنامه",

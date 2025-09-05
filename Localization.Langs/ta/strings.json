@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "சேர்ப்பு/விநியோகம் கோடு (A/D கோடு).",
   "Action": "செயல்",
   "ActionInstallApplication": "பயன்பாட்டை நிறுவுதல்",
+  "ActionIsNotSupportedBy": "செயல் {0} {1} ஆல் ஆதரிக்கப்படவில்லை",
   "ActionRemoveApplication": "பயன்பாட்டை நீக்குதல்",
   "ActionRepairApplication": "பயன்பாட்டை மீளமைத்தல்",
   "ActionUpdateApplication": "பயன்பாட்டை புதுப்பிக்கவும்",

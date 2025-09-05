@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "Čára akumulace/rozdělení (čára A/D).",
   "Action": "Akce",
   "ActionInstallApplication": "Instalace aplikace",
+  "ActionIsNotSupportedBy": "Akce {0} není podporována {1}",
   "ActionRemoveApplication": "Odstranění aplikace",
   "ActionRepairApplication": "Přeinstalování aplikace",
   "ActionUpdateApplication": "Aktualizace aplikace",

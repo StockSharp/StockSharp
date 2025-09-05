@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "蓄積/分配ライン (A/D ライン)。",
   "Action": "アクション",
   "ActionInstallApplication": "アプリケーションのインストール",
+  "ActionIsNotSupportedBy": "アクション {0} は {1} でサポートされていません",
   "ActionRemoveApplication": "アプリケーションの削除",
   "ActionRepairApplication": "アプリケーションの再インストール",
   "ActionUpdateApplication": "アプリケーションの更新",

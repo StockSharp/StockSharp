@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "Линия накопления/распределения (линия A/D).",
   "Action": "Действие",
   "ActionInstallApplication": "Установка приложения",
+  "ActionIsNotSupportedBy": "Действие {0} не поддерживается {1}",
   "ActionRemoveApplication": "Удаление приложения",
   "ActionRepairApplication": "Переустановка приложения",
   "ActionUpdateApplication": "Обновление приложения",

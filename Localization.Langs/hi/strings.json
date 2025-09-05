@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "अक्युमुलेशन/डिस्ट्रीब्यूशन लाइन (ए/डी लाइन)।",
   "Action": "कार्रवाई",
   "ActionInstallApplication": "ऐप्लिकेशन इंस्टॉल करें",
+  "ActionIsNotSupportedBy": "क्रिया {0} {1} द्वारा समर्थित नहीं है",
   "ActionRemoveApplication": "ऐप्लिकेशन हटाएं",
   "ActionRepairApplication": "एप्लिकेशन पुनर्स्थापित करना",
   "ActionUpdateApplication": "एप्लिकेशन अपडेट करें",

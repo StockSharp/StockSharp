@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "Dòng tích lũy/Phân phối (Dòng A/D).",
   "Action": "Hành động",
   "ActionInstallApplication": "Cài đặt ứng dụng",
+  "ActionIsNotSupportedBy": "Hành động {0} không được hỗ trợ bởi {1}",
   "ActionRemoveApplication": "Xóa ứng dụng",
   "ActionRepairApplication": "Cài đặt lại ứng dụng",
   "ActionUpdateApplication": "Cập nhật ứng dụng",

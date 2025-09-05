@@ -13,6 +13,7 @@
   "AccumulationDistributionLine": "Linie de acumulare/distribuție (linia A/D).",
   "Action": "Acțiune",
   "ActionInstallApplication": "Instalarea aplicației",
+  "ActionIsNotSupportedBy": "Acțiunea {0} nu este suportată de {1}",
   "ActionRemoveApplication": "Ștergere aplicație",
   "ActionRepairApplication": "Reinstalarea aplicației",
   "ActionUpdateApplication": "Actualizare aplicație",
