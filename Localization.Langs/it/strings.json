@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "Lo strumento '{0}' è composto.",
   "SecurityIsUsedInRunningStrategy": "Lo strumento è utilizzato nella strategia in esecuzione.",
   "SecurityIsUsedInSomeStrategies": "Lo strumento è utilizzato in alcune strategie. Eliminare?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Mappatura Titoli",
   "SecurityMustBe": "Lo strumento deve essere '{0}'.",
   "SecurityName": "Nome dello strumento.",
   "SecurityNoFound": "Strumento {0} non trovato.",

@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "הכלי '{0}' הוא מורכב.",
   "SecurityIsUsedInRunningStrategy": "הכלי משמש באסטרטגיה הרצה.",
   "SecurityIsUsedInSomeStrategies": "הכלי בשימוש בכמה אסטרטגיות. למחוק?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "מיפוי ניירות ערך",
   "SecurityMustBe": "הכלי צריך להיות '{0}'.",
   "SecurityName": "שם הכלי.",
   "SecurityNoFound": "הכלי {0} לא נמצא.",

@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "الأداة '{0}' مركبة.",
   "SecurityIsUsedInRunningStrategy": "الأداة مستخدمة في الاستراتيجية الجارية.",
   "SecurityIsUsedInSomeStrategies": "يُستخدم الأداة في بعض الاستراتيجيات. هل تريد الحذف؟",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "ربط الأوراق المالية",
   "SecurityMustBe": "يجب أن يكون الأداة '{0}'",
   "SecurityName": "اسم الأداة.",
   "SecurityNoFound": "الأداة {0} غير موجودة.",

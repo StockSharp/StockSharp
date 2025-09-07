@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "கருவி '{0}' ஒரு கலவையாகும்.",
   "SecurityIsUsedInRunningStrategy": "கருவி இயக்கம் செய்யப்படும் முறையில் பயன்படுகிறது.",
   "SecurityIsUsedInSomeStrategies": "இந்த கருவி சில முறைகளில் பயன்படுகிறது. நீக்கவா?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "பாதுகாப்பு மேப்பிங்",
   "SecurityMustBe": "கருவி '{0}' ஆக இருக்க வேண்டும்.",
   "SecurityName": "கருவியின் பெயர்.",
   "SecurityNoFound": "{0} கருவி காணப்படவில்லை.",

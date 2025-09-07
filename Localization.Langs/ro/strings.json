@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "Instrumentul '{0}' este compus.",
   "SecurityIsUsedInRunningStrategy": "Instrumentul este folosit în strategia care este în desfășurare.",
   "SecurityIsUsedInSomeStrategies": "Instrumentul este folosit în unele strategii. Ștergeți?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Maparea Titlurilor",
   "SecurityMustBe": "Instrumentul trebuie să fie '{0}'.",
   "SecurityName": "Numele instrumentului.",
   "SecurityNoFound": "Instrumentul {0} nu a fost găsit.",

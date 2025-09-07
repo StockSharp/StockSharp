@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "Araç '{0}' kompozittir.",
   "SecurityIsUsedInRunningStrategy": "Araç yürütülen stratejide kullanılmaktadır.",
   "SecurityIsUsedInSomeStrategies": "Bu araç bazı stratejilerde kullanılmaktadır. Silinsin mi?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Menkul Kıymet Eşleştirme",
   "SecurityMustBe": "Alet '{0}' olmalıdır.",
   "SecurityName": "Enstrüman adı.",
   "SecurityNoFound": "Araç {0} bulunamadı.",

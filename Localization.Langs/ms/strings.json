@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "Alat '{0}' adalah komposit.",
   "SecurityIsUsedInRunningStrategy": "Instrumen digunakan dalam strategi yang sedang berjalan.",
   "SecurityIsUsedInSomeStrategies": "Instrumen ini digunakan dalam beberapa strategi. Padam?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Pemetaan Sekuriti",
   "SecurityMustBe": "Alat haruslah '{0}'.",
   "SecurityName": "Nama instrumen.",
   "SecurityNoFound": "Instrumen {0} tidak ditemui.",

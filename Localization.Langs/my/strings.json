@@ -3196,7 +3196,7 @@
   "SecurityIsComposite": "ငွေချေးသက်သေခံ '{0}' သည် ပေါင်းစပ်ထားသည်။",
   "SecurityIsUsedInRunningStrategy": "ဤငွေချေးသက်သေခံကို လုပ်ဆောင်နေသော မဟာဗျူဟာတွင် အသုံးပြုနေသည်။",
   "SecurityIsUsedInSomeStrategies": "ငွေချေးသက်သေခံကို မဟာဗျူဟာအချို့တွင် အသုံးပြုနေသည်။ ဖယ်ရှားမှာလား?",
-  "SecurityMapping": "ငွေချေးသက်သေခံ mapping",
+  "SecurityMapping": "လုံခြုံရေး မြေပုံဆွဲခြင်း",
   "SecurityMustBe": "ငွေချေးသက်သေခံသည် '{0}' ဖြစ်ရမည်။",
   "SecurityName": "ငွေချေးသက်သေခံအမည်",
   "SecurityNoFound": "ငွေချေးသက်သေခံ {0} ကို မတွေ့ရှိပါ။",

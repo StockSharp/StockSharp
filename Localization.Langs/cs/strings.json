@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "Nástroj '{0}' je kompozitní.",
   "SecurityIsUsedInRunningStrategy": "Nástroj se používá v běžící strategii.",
   "SecurityIsUsedInSomeStrategies": "Nástroj je používán v některých strategiích. Odstranit?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Mapování Cenných Papírů",
   "SecurityMustBe": "Nástroj musí být '{0}'.",
   "SecurityName": "Název nástroje.",
   "SecurityNoFound": "Nástroj {0} nebyl nalezen.",

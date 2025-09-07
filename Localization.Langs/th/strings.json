@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "เครื่องมือ '{0}' เป็นส่วนประกอบ",
   "SecurityIsUsedInRunningStrategy": "เครื่องมือถูกใช้ในกลยุทธ์ที่กำลังทำงานอยู่。",
   "SecurityIsUsedInSomeStrategies": "เครื่องมือนี้ถูกใช้ในกลยุทธ์บางประการ ลบหรือไม่?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "การแมปหลักทรัพย์",
   "SecurityMustBe": "เครื่องมือจะต้องเป็น '{0}'",
   "SecurityName": "ชื่อเครื่องมือ",
   "SecurityNoFound": "ไม่พบเครื่องมือ {0}。",

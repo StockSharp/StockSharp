@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "Narzędzie '{0}' jest złożone.",
   "SecurityIsUsedInRunningStrategy": "Narzędzie jest używane w uruchomionej strategii.",
   "SecurityIsUsedInSomeStrategies": "Instrument ten jest używany w niektórych strategiach. Usunąć?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Mapowanie Papierów Wartościowych",
   "SecurityMustBe": "Narzędzie musi być '{0}'.",
   "SecurityName": "Nazwa instrumentu.",
   "SecurityNoFound": "Nie znaleziono instrumentu {0}.",

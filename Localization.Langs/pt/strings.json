@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "O instrumento '{0}' é composto.",
   "SecurityIsUsedInRunningStrategy": "O instrumento é utilizado na estratégia em execução.",
   "SecurityIsUsedInSomeStrategies": "O instrumento é utilizado em algumas estratégias. Excluir?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Mapeamento de Títulos",
   "SecurityMustBe": "O instrumento deve ser '{0}'.",
   "SecurityName": "Nome do instrumento.",
   "SecurityNoFound": "Instrumento {0} não encontrado.",

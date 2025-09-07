@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "Инструмент '{0}' је композитан.",
   "SecurityIsUsedInRunningStrategy": "Instrument se koristi u pokrenutoj strategiji.",
   "SecurityIsUsedInSomeStrategies": "Instrument se koristi u nekim strategijama. Obriši?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Мапирање Хартија од Вредности",
   "SecurityMustBe": "Инструмент мора бити '{0}'.",
   "SecurityName": "Назив инструмента.",
   "SecurityNoFound": "Инструмент {0} није пронађен.",

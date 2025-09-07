@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "ツール '{0}' は複合です。",
   "SecurityIsUsedInRunningStrategy": "そのツールは実行中の戦略で使用されます。",
   "SecurityIsUsedInSomeStrategies": "このツールはいくつかの戦略で使用されています。削除しますか？",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "証券マッピング",
   "SecurityMustBe": "ツールは '{0}' でなければなりません。",
   "SecurityName": "証券名。",
   "SecurityNoFound": "インストゥルメント{0}が見つかりません。",

@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "Værktøjet '{0}' er sammensat.",
   "SecurityIsUsedInRunningStrategy": "Instrumentet bruges i den kørende strategi.",
   "SecurityIsUsedInSomeStrategies": "Værktøjet anvendes i nogle strategier. Slet?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Værdipapir Mapping",
   "SecurityMustBe": "Værktøjet skal være '{0}'.",
   "SecurityName": "Instrumentnavn.",
   "SecurityNoFound": "Instrumentet {0} blev ikke fundet.",

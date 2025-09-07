@@ -3197,7 +3197,7 @@
   "SecurityIsComposite": "Ang security '{0}' ay composite.",
   "SecurityIsUsedInRunningStrategy": "Ang security ay ginagamit sa tumatakbong strategy.",
   "SecurityIsUsedInSomeStrategies": "Ang security ay ginagamit sa ilang mga strategy. Tanggalin pa rin?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Pagmamapa ng Security",
   "SecurityMustBe": "Ang security ay dapat '{0}'.",
   "SecurityName": "Pangalan ng security.",
   "SecurityNoFound": "Hindi natagpuan ang security {0}.",

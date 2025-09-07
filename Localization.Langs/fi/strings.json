@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "Työkalu '{0}' on yhdistelmä.",
   "SecurityIsUsedInRunningStrategy": "Työkalua käytetään käynnissä olevassa strategiassa.",
   "SecurityIsUsedInSomeStrategies": "Työkalua käytetään joissakin strategioissa. Poistetaanko?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Arvopaperi Kartoitus",
   "SecurityMustBe": "Työkalun tulee olla '{0}'.",
   "SecurityName": "Instrumentin nimi.",
   "SecurityNoFound": "Työkalua {0} ei löydy.",

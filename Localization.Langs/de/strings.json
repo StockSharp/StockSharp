@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "Das Instrument '{0}' ist zusammengesetzt.",
   "SecurityIsUsedInRunningStrategy": "Das Instrument wird in der laufenden Strategie verwendet.",
   "SecurityIsUsedInSomeStrategies": "Das Instrument wird in einigen Strategien verwendet. Löschen?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Wertpapier-Zuordnung",
   "SecurityMustBe": "Das Instrument muss '{0}' sein.",
   "SecurityName": "Name des Instruments.",
   "SecurityNoFound": "Instrument {0} nicht gefunden.",

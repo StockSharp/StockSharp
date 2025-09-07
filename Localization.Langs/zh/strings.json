@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "工具 '{0}' 是复合的。",
   "SecurityIsUsedInRunningStrategy": "该工具用于正在运行的策略中。",
   "SecurityIsUsedInSomeStrategies": "该工具在某些策略中使用。删除吗？",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "证券映射",
   "SecurityMustBe": "工具必须是'{0}'。",
   "SecurityName": "证券名称。",
   "SecurityNoFound": "找不到工具 {0}。",

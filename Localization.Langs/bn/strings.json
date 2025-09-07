@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "টুল '{0}' একটি কম্পোজিট।",
   "SecurityIsUsedInRunningStrategy": "যন্ত্রটি চলমান কৌশলে ব্যবহৃত হচ্ছে।",
   "SecurityIsUsedInSomeStrategies": "এই সরঞ্জামটি কিছু কৌশলে ব্যবহৃত হয়। মুছে ফেলবেন?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "সিকিউরিটি ম্যাপিং",
   "SecurityMustBe": "যন্ত্রটি '{0}' হতে হবে।",
   "SecurityName": "যন্ত্রের নাম।",
   "SecurityNoFound": "{0} যন্ত্রটি পাওয়া যায়নি।",

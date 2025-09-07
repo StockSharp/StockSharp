@@ -3199,7 +3199,7 @@
   "SecurityIsComposite": "Security '{0}' is composite.",
   "SecurityIsUsedInRunningStrategy": "The security is used in the running strategy.",
   "SecurityIsUsedInSomeStrategies": "The security is used in some strategies. Remove anyway?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Security Mapping",
   "SecurityMustBe": "Security must be '{0}'.",
   "SecurityName": "Security name.",
   "SecurityNoFound": "Security {0} not found.",

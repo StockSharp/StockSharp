@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "L'instrument '{0}' és compost.",
   "SecurityIsUsedInRunningStrategy": "L'instrument s'utilitza en una estratègia en execució.",
   "SecurityIsUsedInSomeStrategies": "L'instrument s'utilitza en algunes estratègies. Eliminar?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Mapatge de Valors",
   "SecurityMustBe": "L'instrument ha de ser '{0}'.",
   "SecurityName": "Nom de l'instrument.",
   "SecurityNoFound": "No s'ha trobat l'instrument {0}.",

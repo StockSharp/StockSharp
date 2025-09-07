@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "Asbob '{0}' bir birlashmadir.",
   "SecurityIsUsedInRunningStrategy": "Asbob yurgizilayotgan strategiyada ishlatiladi.",
   "SecurityIsUsedInSomeStrategies": "Ushbu asbob ba'zi strategiyalarda qo'llaniladi. O'chirilsinmi?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Qimmatli Qog'ozlar Xaritasi",
   "SecurityMustBe": "Asbob '{0}' bo'lishi kerak.",
   "SecurityName": "Asbob nomi.",
   "SecurityNoFound": "{0} asbob topilmadi.",

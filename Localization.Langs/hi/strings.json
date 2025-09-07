@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "उपकरण '{0}' सम्मिश्र है।",
   "SecurityIsUsedInRunningStrategy": "उपकरण चल रही रणनीति में उपयोग किया जाता है।",
   "SecurityIsUsedInSomeStrategies": "यह उपकरण कुछ रणनीतियों में इस्तेमाल किया जाता है। हटाएं?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "सिक्योरिटी मैपिंग",
   "SecurityMustBe": "उपकरण '{0}' होना चाहिए।",
   "SecurityName": "उपकरण का नाम।",
   "SecurityNoFound": "{0} उपकरण नहीं मिला।",

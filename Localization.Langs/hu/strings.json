@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "Az eszköz '{0}' összetett.",
   "SecurityIsUsedInRunningStrategy": "Az eszközt a futtatott stratégiában használják.",
   "SecurityIsUsedInSomeStrategies": "Az eszközt néhány stratégiában használják. Törölni?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Értékpapír Leképezés",
   "SecurityMustBe": "Az eszköznek '{0}' kell lennie.",
   "SecurityName": "Az eszköz neve.",
   "SecurityNoFound": "{0} eszköz nem található.",

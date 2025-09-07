@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "ابزار '{0}' مرکب است.",
   "SecurityIsUsedInRunningStrategy": "ابزار در استراتژی در حال اجرا استفاده می‌شود.",
   "SecurityIsUsedInSomeStrategies": "این ابزار در برخی استراتژی‌ها استفاده می‌شود. حذف کنم؟",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "نگاشت اوراق بهادار",
   "SecurityMustBe": "ابزار باید '{0}' باشد.",
   "SecurityName": "نام ابزار.",
   "SecurityNoFound": "ابزار {0} یافت نشد.",

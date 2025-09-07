@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "Verktyget '{0}' är sammansatt.",
   "SecurityIsUsedInRunningStrategy": "Instrumentet används i den körande strategin.",
   "SecurityIsUsedInSomeStrategies": "Instrumentet används i vissa strategier. Ta bort?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Värdepappersmappning",
   "SecurityMustBe": "Verktyget måste vara '{0}'.",
   "SecurityName": "Instrumentnamn.",
   "SecurityNoFound": "Instrumentet {0} hittades inte.",

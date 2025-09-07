@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "Alat '{0}' minangka komposit.",
   "SecurityIsUsedInRunningStrategy": "Alat iki digunakaké ing strategi sing lagi dijalanaké.",
   "SecurityIsUsedInSomeStrategies": "Instrumen iki digunakake ing sawetara strategi. Busak?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Pemetaan Sekuritas",
   "SecurityMustBe": "Piranti kudu '{0}'.",
   "SecurityName": "Jeneng instrumen.",
   "SecurityNoFound": "Alat {0} ora ketemu.",

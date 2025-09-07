@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "Το εργαλείο '{0}' είναι σύνθετο.",
   "SecurityIsUsedInRunningStrategy": "Το εργαλείο χρησιμοποιείται στη δρομολογημένη στρατηγική.",
   "SecurityIsUsedInSomeStrategies": "Το εργαλείο χρησιμοποιείται σε κάποιες στρατηγικές. Να διαγραφεί;",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Αντιστοίχιση Τίτλων",
   "SecurityMustBe": "Το εργαλείο πρέπει να είναι '{0}'.",
   "SecurityName": "Όνομα οργάνου.",
   "SecurityNoFound": "Το εργαλείο {0} δεν βρέθηκε.",

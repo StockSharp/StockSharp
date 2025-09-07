@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "Інструмент '{0}' є складним.",
   "SecurityIsUsedInRunningStrategy": "Інструмент використовується у запущеній стратегії.",
   "SecurityIsUsedInSomeStrategies": "Інструмент використовується в деяких стратегіях. Видалити?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Зіставлення Цінних Паперів",
   "SecurityMustBe": "Інструмент повинен бути '{0}'.",
   "SecurityName": "Назва інструменту.",
   "SecurityNoFound": "Інструмент {0} не знайдений.",

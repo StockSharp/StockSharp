@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "Het instrument '{0}' is samengesteld.",
   "SecurityIsUsedInRunningStrategy": "Het instrument wordt gebruikt in de lopende strategie.",
   "SecurityIsUsedInSomeStrategies": "Het instrument wordt in sommige strategieën gebruikt. Verwijderen?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Waardepapiermapping",
   "SecurityMustBe": "Het instrument moet '{0}' zijn.",
   "SecurityName": "Naam van het instrument.",
   "SecurityNoFound": "Instrument {0} niet gevonden.",

@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "도구 '{0}'는 복합체입니다.",
   "SecurityIsUsedInRunningStrategy": "그 도구는 실행 중인 전략에서 사용됩니다.",
   "SecurityIsUsedInSomeStrategies": "이 도구는 일부 전략에서 사용됩니다. 삭제하시겠습니까?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "증권 매핑",
   "SecurityMustBe": "도구는 '{0}'이어야 합니다.",
   "SecurityName": "악기 이름.",
   "SecurityNoFound": "도구 {0}을(를) 찾을 수 없습니다.",

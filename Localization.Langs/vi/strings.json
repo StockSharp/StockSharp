@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "Công cụ '{0}' là hợp chất.",
   "SecurityIsUsedInRunningStrategy": "Công cụ được sử dụng trong chiến lược đang chạy.",
   "SecurityIsUsedInSomeStrategies": "Công cụ này được sử dụng trong một số chiến lược. Xóa?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Ánh Xạ Chứng Khoán",
   "SecurityMustBe": "Công cụ phải là '{0}'.",
   "SecurityName": "Tên công cụ.",
   "SecurityNoFound": "Không tìm thấy công cụ {0}.",

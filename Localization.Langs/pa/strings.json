@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "ਟੂਲ '{0}' ਇੱਕ ਕੰਪੋਜ਼ਿਟ ਹੈ।",
   "SecurityIsUsedInRunningStrategy": "ਸੰਦ ਚੱਲ ਰਹੀ ਰਣਨੀਤੀ ਵਿੱਚ ਵਰਤਿਆ ਜਾਂਦਾ ਹੈ।",
   "SecurityIsUsedInSomeStrategies": "ਇਹ ਟੂਲ ਕੁਝ ਰਣਨੀਤੀਆਂ ਵਿੱਚ ਵਰਤਿਆ ਜਾਂਦਾ ਹੈ। ਮਿਟਾਉਣਾ ਹੈ?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "ਸਿਕਿਉਰਿਟੀ ਮੈਪਿੰਗ",
   "SecurityMustBe": "ਉਪਕਰਣ '{0}' ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ।",
   "SecurityName": "ਸਾਧਨ ਦਾ ਨਾਮ।",
   "SecurityNoFound": "ਉਪਕਰਣ {0} ਨਹੀਂ ਮਿਲਿਆ।",

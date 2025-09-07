@@ -3192,7 +3192,7 @@
   "SecurityIsComposite": "Инструмент '{0}' являются составным.",
   "SecurityIsUsedInRunningStrategy": "Инструмент используется в запущенной стратегии.",
   "SecurityIsUsedInSomeStrategies": "Инструмент используется в некоторых стратегиях. Удалить?",
-  "SecurityMapping": "Security mapping",
+  "SecurityMapping": "Сопоставление Инструментов",
   "SecurityMustBe": "Инструмент должен быть '{0}'.",
   "SecurityName": "Название инструмента.",
   "SecurityNoFound": "Инструмент {0} не найден.",
