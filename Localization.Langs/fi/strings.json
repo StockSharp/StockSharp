@@ -436,7 +436,7 @@
   "CancelledTime": "Peruutusaika.",
   "Cancelling": "Peruuttaminen",
   "CancellingOrderN": "Perutaan tilaus {0}.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "Peruuta Yhteyden Katketessa",
   "CancelOnDisconnectDesc": "Palvelimelle ilmoitettava toiminnan väliaika. Käytetään Katkaise yhteydessä -tilassa.",
   "CancelOperationQuestion": "Peruuta toiminto?",
   "CancelOrders": "Peru tilaukset",

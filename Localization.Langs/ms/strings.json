@@ -436,7 +436,7 @@
   "CancelledTime": "Waktu dibatalkan.",
   "Cancelling": "Membatalkan",
   "CancellingOrderN": "Membatalkan pesanan {0}.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "Batal semasa Putus Sambungan",
   "CancelOnDisconnectDesc": "Selang pemberitahuan aktiviti ke pelayan. Digunakan dalam mod Batal Semasa Terputus.",
   "CancelOperationQuestion": "Batalkan operasi?",
   "CancelOrders": "Batalkan Pesanan",

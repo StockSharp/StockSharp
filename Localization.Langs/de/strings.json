@@ -436,7 +436,7 @@
   "CancelledTime": "Stornierungszeit.",
   "Cancelling": "Stornierung",
   "CancellingOrderN": "Bestellung {0} wird storniert.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "Bei Trennung Abbrechen",
   "CancelOnDisconnectDesc": "Intervall der Aktivitätsbenachrichtigung an den Server. Wird im Modus Abbrechen bei Trennung verwendet.",
   "CancelOperationQuestion": "Vorgang abbrechen?",
   "CancelOrders": "Bestellungen stornieren",

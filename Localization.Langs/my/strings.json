@@ -438,7 +438,7 @@
   "CancelledTime": "ပယ်ဖျက်သည့်အချိန်။",
   "Cancelling": "ပယ်ဖျက်နေသည်",
   "CancellingOrderN": "အမိန့် {0} ကို ပယ်ဖျက်နေသည်။",
-  "CancelOnDisconnect": "ချိတ်ဆက်မှုပြတ်တောက်ချိန်တွင် ပယ်ဖျက်ရန်",
+  "CancelOnDisconnect": "ဆက်သွယ်မှု ပြတ်တောက်သောအခါ ပယ်ဖျက်ပါ",
   "CancelOnDisconnectDesc": "နှလုံးခုန်နှုန်း ကြားကာလ။ Cancel On Disconnect မုဒ်တွင် အသုံးပြုသည်။",
   "CancelOperationQuestion": "လုပ်ဆောင်မှုကို ပယ်ဖျက်မည်လား?",
   "CancelOrders": "အမိန့်များ ပယ်ဖျက်ရန်",

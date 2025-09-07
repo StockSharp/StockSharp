@@ -436,7 +436,7 @@
   "CancelledTime": "זמן ביטול.",
   "Cancelling": "ביטול",
   "CancellingOrderN": "ביטול הזמנה {0}.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "בטל בעת ניתוק",
   "CancelOnDisconnectDesc": "המרווח להודעות פעילות אל השרת. משמש במצב ביטול בהתנתקות.",
   "CancelOperationQuestion": "לבטל את הפעולה?",
   "CancelOrders": "ביטול הזמנות",

@@ -436,7 +436,7 @@
   "CancelledTime": "தவிர்க்கப்பட்ட நேரம்.",
   "Cancelling": "ரத்துசெய்தல்",
   "CancellingOrderN": "ஆர்டர் {0} ரத்து செய்யப்படுகிறது.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "துண்டிக்கும்போது ரத்து செய்",
   "CancelOnDisconnectDesc": "செயல்பாட்டு அறிவிப்பு இடைவெளி சேவையகத்துக்கானது. துண்டிக்கப்பட்ட நிலையில் ரத்துசெய் முறையில் பயன்படுத்தப்படுகிறது.",
   "CancelOperationQuestion": "செயல்பாட்டை ரத்து செய்யவா?",
   "CancelOrders": "ஆர்டர்களை ரத்து செய்",

@@ -436,7 +436,7 @@
   "CancelledTime": "Annuleringstijd.",
   "Cancelling": "Annuleren",
   "CancellingOrderN": "Bestelling {0} annuleren.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "Annuleren bij Verbinding Verbreken",
   "CancelOnDisconnectDesc": "Interval voor activiteitnotificatie aan de server. Gebruikt in de Modus Annuleren bij Verbinding Verbreken.",
   "CancelOperationQuestion": "Operatie annuleren?",
   "CancelOrders": "Bestellingen annuleren",

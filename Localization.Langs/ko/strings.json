@@ -436,7 +436,7 @@
   "CancelledTime": "취소 시간.",
   "Cancelling": "취소 중",
   "CancellingOrderN": "주문 {0}을(를) 취소 중입니다.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "연결 해제 시 취소",
   "CancelOnDisconnectDesc": "서버에 활동을 알리는 간격입니다. 연결 해제 시 취소 모드에서 사용됩니다.",
   "CancelOperationQuestion": "작업을 취소하시겠습니까?",
   "CancelOrders": "주문 취소",

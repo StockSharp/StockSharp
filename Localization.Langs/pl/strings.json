@@ -436,7 +436,7 @@
   "CancelledTime": "Czas anulowania.",
   "Cancelling": "Anulowanie",
   "CancellingOrderN": "Anulowanie zamówienia {0}.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "Anuluj przy Rozłączeniu",
   "CancelOnDisconnectDesc": "Interwał powiadamiania serwera o aktywności. Używany w trybie Anuluj po rozłączeniu.",
   "CancelOperationQuestion": "Anulować operację?",
   "CancelOrders": "Anuluj zamówienia",

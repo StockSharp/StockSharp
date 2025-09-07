@@ -436,7 +436,7 @@
   "CancelledTime": "Timpul anulat.",
   "Cancelling": "Anulare",
   "CancellingOrderN": "Anularea comenzii {0}.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "Anulează la Deconectare",
   "CancelOnDisconnectDesc": "Intervalul de notificare a activității către server. Utilizat în modul Anulare la Deconectare.",
   "CancelOperationQuestion": "Anulați operațiunea?",
   "CancelOrders": "Anulați comenzi",

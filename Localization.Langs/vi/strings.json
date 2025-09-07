@@ -436,7 +436,7 @@
   "CancelledTime": "Thời gian hủy bỏ.",
   "Cancelling": "Hủy bỏ",
   "CancellingOrderN": "Đang hủy đơn hàng {0}.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "Hủy khi Ngắt Kết Nối",
   "CancelOnDisconnectDesc": "Khoảng thời gian thông báo hoạt động tới máy chủ. Được sử dụng trong chế độ Hủy khi Ngắt kết nối.",
   "CancelOperationQuestion": "Hủy bỏ hoạt động?",
   "CancelOrders": "Hủy đơn hàng",

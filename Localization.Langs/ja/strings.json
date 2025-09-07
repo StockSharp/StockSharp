@@ -436,7 +436,7 @@
   "CancelledTime": "キャンセル時間。",
   "Cancelling": "キャンセル",
   "CancellingOrderN": "注文{0}をキャンセルしています。",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "切断時にキャンセル",
   "CancelOnDisconnectDesc": "サーバーへの活動通知の間隔。ディスコネクト時キャンセルモードで使用されます。",
   "CancelOperationQuestion": "操作をキャンセルしますか？",
   "CancelOrders": "注文をキャンセルする",

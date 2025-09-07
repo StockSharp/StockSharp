@@ -436,7 +436,7 @@
   "CancelledTime": "Avbokningstid.",
   "Cancelling": "Avbokning",
   "CancellingOrderN": "Avbryter order {0}.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "Avbryt vid Frånkoppling",
   "CancelOnDisconnectDesc": "Intervall för aktivitetsmeddelande till servern. Används i Läget Avbryt vid Frånkoppling.",
   "CancelOperationQuestion": "Avbryt operationen?",
   "CancelOrders": "Avbryt beställningar",

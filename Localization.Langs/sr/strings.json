@@ -436,7 +436,7 @@
   "CancelledTime": "Време отказа.",
   "Cancelling": "Отказивање",
   "CancellingOrderN": "Отказивање наруџбине {0}.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "Откажи при Прекиду Везе",
   "CancelOnDisconnectDesc": "Интервал обавештавања сервера о активности. Користи се у моду Откази при дисконекцији.",
   "CancelOperationQuestion": "Отказати операцију?",
   "CancelOrders": "Откажи наруџбине",

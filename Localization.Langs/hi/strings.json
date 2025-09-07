@@ -436,7 +436,7 @@
   "CancelledTime": "रद्द करने का समय।",
   "Cancelling": "रद्द करना",
   "CancellingOrderN": "ऑर्डर {0} रद्द कर रहे हैं।",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "डिस्कनेक्ट पर रद्द करें",
   "CancelOnDisconnectDesc": "सर्वर को गतिविधि की सूचना देने का अंतराल। डिस्कनेक्ट पर कैंसल मोड में प्रयुक्त होता है।",
   "CancelOperationQuestion": "कार्रवाई रद्द करें?",
   "CancelOrders": "ऑर्डर रद्द करें",

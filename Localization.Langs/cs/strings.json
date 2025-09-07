@@ -436,7 +436,7 @@
   "CancelledTime": "Čas zrušení.",
   "Cancelling": "Zrušení",
   "CancellingOrderN": "Rušení objednávky {0}.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "Zrušit při Odpojení",
   "CancelOnDisconnectDesc": "Interval upozornění serveru na aktivitu. Používá se v režimu Zrušit při odpojení.",
   "CancelOperationQuestion": "Zrušit operaci?",
   "CancelOrders": "Zrušit objednávky",

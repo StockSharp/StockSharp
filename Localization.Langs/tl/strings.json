@@ -438,7 +438,7 @@
   "CancelledTime": "Cancelled time.",
   "Cancelling": "Kinakansela",
   "CancellingOrderN": "Kinakansela ang order {0}.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "Kanselahin sa Pagkakaputol",
   "CancelOnDisconnectDesc": "Heartbeat interval. Ginagamit sa Cancel On Disconnect mode.",
   "CancelOperationQuestion": "Kanselahin ang operasyon?",
   "CancelOrders": "Kanselahin ang mga order",

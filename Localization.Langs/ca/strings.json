@@ -436,7 +436,7 @@
   "CancelledTime": "Hora de cancelación",
   "Cancelling": "Cancelando",
   "CancellingOrderN": "Cancelando la orden {0}",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "Cancel·lar en Desconnectar",
   "CancelOnDisconnectDesc": "Intervalo de notificación al servidor de actividad. Usado en modo Cancelar al desconectar",
   "CancelOperationQuestion": "¿Cancelar la operación?",
   "CancelOrders": "Cancelar órdenes",

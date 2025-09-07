@@ -436,7 +436,7 @@
   "CancelledTime": "Χρόνος ακύρωσης.",
   "Cancelling": "Ακύρωση",
   "CancellingOrderN": "Ακύρωση παραγγελίας {0}.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "Ακύρωση κατά την Αποσύνδεση",
   "CancelOnDisconnectDesc": "Διάστημα ειδοποίησης δραστηριότητας στον διακομιστή. Χρησιμοποιείται στη λειτουργία Ακύρωσης κατά την αποσύνδεση.",
   "CancelOperationQuestion": "Ακύρωση λειτουργίας;",
   "CancelOrders": "Ακύρωση παραγγελιών",

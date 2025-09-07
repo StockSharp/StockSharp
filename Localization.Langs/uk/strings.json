@@ -436,7 +436,7 @@
   "CancelledTime": "Час скасування.",
   "Cancelling": "Скасування",
   "CancellingOrderN": "Скасування замовлення {0}.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "Скасувати при Від'єднанні",
   "CancelOnDisconnectDesc": "Інтервал сповіщення сервера про активність. Використовується в режимі Скасування при відключенні.",
   "CancelOperationQuestion": "Скасувати операцію?",
   "CancelOrders": "Скасувати замовлення",

@@ -436,7 +436,7 @@
   "CancelledTime": "Aflysningstidspunkt.",
   "Cancelling": "Annullering",
   "CancellingOrderN": "Afbestilling af ordre {0}.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "Annuller ved Afbrydelse",
   "CancelOnDisconnectDesc": "Interval for aktivitetsnotifikation til serveren. Bruges i tilstand Afbryd ved frakobling.",
   "CancelOperationQuestion": "Annullér operationen?",
   "CancelOrders": "Annuller ordrer",

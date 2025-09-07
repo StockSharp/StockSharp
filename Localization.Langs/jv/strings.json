@@ -436,7 +436,7 @@
   "CancelledTime": "Wektu dibatalake.",
   "Cancelling": "Mbatalkake",
   "CancellingOrderN": "Ngalakoni pesenan {0}.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "Batal nalika Putus Sambungan",
   "CancelOnDisconnectDesc": "Interval notifikasi aktivitas menyang server. Digunakake ing mode Batal nalika Diskonek.",
   "CancelOperationQuestion": "Batalake operasi?",
   "CancelOrders": "Batalake pesenan",

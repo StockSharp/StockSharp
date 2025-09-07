@@ -436,7 +436,7 @@
   "CancelledTime": "বাতিলের সময়।",
   "Cancelling": "বাতিল",
   "CancellingOrderN": "অর্ডার {0} বাতিল করা হচ্ছে।",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "সংযোগ বিচ্ছিন্নে বাতিল",
   "CancelOnDisconnectDesc": "সার্ভারে অ্যাক্টিভিটি নোটিফিকেশনের ইন্টারভ্যাল। কানেক্ট বাতিল মোডে ব্যবহৃত হয়।",
   "CancelOperationQuestion": "অপারেশন বাতিল করবেন?",
   "CancelOrders": "অর্ডার বাতিল করুন",

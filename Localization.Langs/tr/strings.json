@@ -436,7 +436,7 @@
   "CancelledTime": "İptal zamanı.",
   "Cancelling": "İptal Ediliyor",
   "CancellingOrderN": "Sipariş {0} iptal ediliyor.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "Bağlantı Kesildiğinde İptal Et",
   "CancelOnDisconnectDesc": "Sunucuya aktivite bildirim aralığı. Bağlantı Kesildiğinde İptal modunda kullanılır.",
   "CancelOperationQuestion": "İşlem iptal edilsin mi?",
   "CancelOrders": "Emirleri İptal Et",

@@ -436,7 +436,7 @@
   "CancelledTime": "Törlés ideje.",
   "Cancelling": "Megszüntetés",
   "CancellingOrderN": "Megrendelés {0} törlése.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "Megszakítás Lekapcsoláskor",
   "CancelOnDisconnectDesc": "Az aktivitási értesítési intervallum a szerver számára. A Megszakítás esetén Törlés módban használják.",
   "CancelOperationQuestion": "Művelet megszakítása?",
   "CancelOrders": "Megrendelések törlése",

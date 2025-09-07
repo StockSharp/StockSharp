@@ -436,7 +436,7 @@
   "CancelledTime": "取消时间。",
   "Cancelling": "取消",
   "CancellingOrderN": "取消订单 {0}。",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "断开连接时取消",
   "CancelOnDisconnectDesc": "通知服务器活动的间隔。用于断开取消模式。",
   "CancelOperationQuestion": "取消操作？",
   "CancelOrders": "取消订单",

@@ -436,7 +436,7 @@
   "CancelledTime": "زمان لغو.",
   "Cancelling": "لغو",
   "CancellingOrderN": "در حال لغو سفارش {0}.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "لغو در هنگام قطع اتصال",
   "CancelOnDisconnectDesc": "فاصله زمانی اطلاع‌رسانی فعالیت به سرور. در حالت لغو در قطع اتصال استفاده می‌شود.",
   "CancelOperationQuestion": "عملیات لغو شود؟",
   "CancelOrders": "لغو سفارشات",

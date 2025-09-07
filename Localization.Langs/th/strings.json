@@ -436,7 +436,7 @@
   "CancelledTime": "เวลาที่ถูกยกเลิก",
   "Cancelling": "การยกเลิก",
   "CancellingOrderN": "กำลังยกเลิกคำสั่งซื้อ {0}",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "ยกเลิกเมื่อตัดการเชื่อมต่อ",
   "CancelOnDisconnectDesc": "ช่วงเวลาในการแจ้งเตือนกิจกรรมให้กับเซิร์ฟเวอร์ ใช้ในโหมดยกเลิกเมื่อตัดการเชื่อมต่อ",
   "CancelOperationQuestion": "ยกเลิกการดำเนินการ?",
   "CancelOrders": "ยกเลิกคำสั่งซื้อ",

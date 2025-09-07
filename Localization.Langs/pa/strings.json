@@ -436,7 +436,7 @@
   "CancelledTime": "منسوخ ہونے دا ویلہ۔",
   "Cancelling": "ਰੱਦ ਕਰਨਾ",
   "CancellingOrderN": "ਆਰਡਰ {0} ਨੂੰ ਰੱਦ ਕਰ ਰਿਹਾ ਹੈ।",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "ਡਿਸਕਨੈਕਟ 'ਤੇ ਰੱਦ ਕਰੋ",
   "CancelOnDisconnectDesc": "ਸਰਵਰ ਨੂੰ ਸਰਗਰਮੀ ਦੀ ਚੇਤਾਵਨੀ ਦਾ ਅੰਤਰਾਲ। ਡਿਸਕਨੈਕਟ ਤੇ ਕੈਂਸਲ ਮੋਡ ਵਿੱਚ ਵਰਤਿਆ ਗਿਆ।",
   "CancelOperationQuestion": "ਕਾਰਵਾਈ ਰੱਦ ਕਰਨੀ ਹੈ?",
   "CancelOrders": "ਆਰਡਰ ਰੱਦ ਕਰੋ",

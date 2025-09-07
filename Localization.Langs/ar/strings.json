@@ -436,7 +436,7 @@
   "CancelledTime": "وقت الإلغاء.",
   "Cancelling": "إلغاء",
   "CancellingOrderN": "إلغاء الطلب {0}.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "إلغاء عند قطع الاتصال",
   "CancelOnDisconnectDesc": "فاصل إعلام الخادم بالنشاطات. يُستخدم في وضع الإلغاء عند قطع الاتصال.",
   "CancelOperationQuestion": "إلغاء العملية؟",
   "CancelOrders": "إلغاء الطلبات",

@@ -436,7 +436,7 @@
   "CancelledTime": "Bekor qilingan vaqt.",
   "Cancelling": "Bekor qilish",
   "CancellingOrderN": "Buyurtma {0} bekor qilinmoqda.",
-  "CancelOnDisconnect": "Cancel On Disconnect",
+  "CancelOnDisconnect": "Aloqa Uzilganda Bekor Qilish",
   "CancelOnDisconnectDesc": "Serverga faoliyatni bildirish oralig'i. Aloqa uzilganda bekor qilish rejimida ishlatiladi.",
   "CancelOperationQuestion": "Operatsiyani bekor qilish?",
   "CancelOrders": "Buyurtmalarni bekor qilish",
