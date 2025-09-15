@@ -1278,6 +1278,8 @@
   "Flag": "Bendera",
   "FlagElement": "Elemen Bendera. Dinaikkan dan diatur semula berdasarkan soket yang datang. Nilai output hanya dipindahkan pada pengaturan awal bendera.",
   "FlatCandle": "Lilin rata",
+  "FlatFiles": "Fail rata",
+  "FlatFilesDesc": "Bahagian instrumen (jenis sekuriti) untuk fail rata Polygon. Jika kosong, mod fail rata dimatikan.",
   "FlipCoords": "Balikkan koordinat",
   "FlushOneTime": "Keluarkan (sekali)",
   "FODepth20": "Futur dan Opsyen: buku pesanan dengan kedalaman 20 sebut harga",

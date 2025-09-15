@@ -1282,6 +1282,8 @@
   "Flag": "Flag",
   "FlagElement": "Isang diagram element sa anyo ng flag. Nakatakda at nai-reset batay sa mga papasok na socket. Ang output value ay ipinapadala lamang sa paunang setting ng flag.",
   "FlatCandle": "Patag",
+  "FlatFiles": "Mga flat file",
+  "FlatFilesDesc": "Mga seksyon ng instrumento (uri ng securities) para sa mga flat file ng Polygon. Kung walang laman, naka-off ang flat-files mode.",
   "FlipCoords": "I-flip ang mga coordinate",
   "FlushOneTime": "I-flush (isang beses)",
   "FODepth20": "Futures at options: 20 quotes deep market depth",

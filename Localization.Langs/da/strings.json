@@ -1278,6 +1278,8 @@
   "Flag": "Flag",
   "FlagElement": "Diagram-element i form af et flag. Sættes og nulstilles baseret på indgående stik. Udgangsværdien overføres kun ved den indledende opsætning af flaget.",
   "FlatCandle": "Flad lysestage",
+  "FlatFiles": "Flade filer",
+  "FlatFilesDesc": "Instrumentsektioner (værdipapirtyper) til Polygon flade filer. Hvis tom, er flade filer-tilstand slået fra.",
   "FlipCoords": "Vend koordinaterne",
   "FlushOneTime": "Udbetal (én gang)",
   "FODepth20": "Futures og optioner: ordrebog med en dybde på 20 noteringer",

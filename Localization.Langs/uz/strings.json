@@ -1278,6 +1278,8 @@
   "Flag": "Bayroq",
   "FlagElement": "Bayroq elementi. Kelayotgan soketlar asosida ko'tariladi va qayta o'rnatiladi. Chiqish qiymati faqat bayroqning dastlabki sozlamasida o'tkaziladi.",
   "FlatCandle": "Tekis shamdon",
+  "FlatFiles": "Tekis fayllar",
+  "FlatFilesDesc": "Polygon tekis fayllari uchun instrument bo'limlari (qimmatli qog'ozlar turlari). Agar bo'sh bo'lsa, tekis fayllar rejimi o'chirilgan.",
   "FlipCoords": "Koordinatalarni teskari burish",
   "FlushOneTime": "Bir martalik chiqarish",
   "FODepth20": "Fyuchers va opsiyonlar: 20 ta kotirovka chuqurlikdagi buyurtma kitobi",

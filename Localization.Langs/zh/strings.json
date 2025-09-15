@@ -1278,6 +1278,8 @@
   "Flag": "旗帜",
   "FlagElement": "标志元素。基于进入的插口进行升高和清除。只在旗帜首次设置时传递输出值。",
   "FlatCandle": "平面蜡烛",
+  "FlatFiles": "平面文件",
+  "FlatFilesDesc": "Polygon平面文件的工具部分（证券类型）。如果为空，平面文件模式将关闭。",
   "FlipCoords": "翻转坐标",
   "FlushOneTime": "一次性提现",
   "FODepth20": "期权和期货：20档深度挂单",

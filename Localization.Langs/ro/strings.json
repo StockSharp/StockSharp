@@ -1278,6 +1278,8 @@
   "Flag": "Drapel",
   "FlagElement": "Elementul stegulet. Se ridică și se resetează în funcție de soclurile de intrare. Valoarea de ieșire este transmisă doar la setarea inițială a steagului.",
   "FlatCandle": "Candela plată",
+  "FlatFiles": "Fișiere plate",
+  "FlatFilesDesc": "Secțiuni de instrumente (tipuri de titluri de valoare) pentru fișierele plate Polygon. Dacă este gol, modul fișiere plate este dezactivat.",
   "FlipCoords": "Inversați coordonatele",
   "FlushOneTime": "Retrage (o singură dată)",
   "FODepth20": "Futures și opțiuni: registru de comenzi cu adâncime de 20 de cotații",

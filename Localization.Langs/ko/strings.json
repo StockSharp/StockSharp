@@ -1278,6 +1278,8 @@
   "Flag": "깃발",
   "FlagElement": "플래그 요소. 들어오는 소켓을 기반으로 상승하고 떨어집니다. 출력 값은 플래그가 처음 설정될 때만 전달됩니다。",
   "FlatCandle": "플랫 캔들",
+  "FlatFiles": "플랫 파일",
+  "FlatFilesDesc": "Polygon 플랫 파일용 인스트루먼트 섹션(증권 유형). 비어있으면 플랫 파일 모드가 꺼집니다.",
   "FlipCoords": "좌표 뒤집기",
   "FlushOneTime": "일회성 출금",
   "FODepth20": "선물 및 옵션: 20 견적 깊이의 주문서",

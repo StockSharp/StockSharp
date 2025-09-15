@@ -1283,6 +1283,8 @@
   "Flag": "Flag",
   "FlagElement": "A diagram element in the form of a flag. It is set and reset based on the incoming sockets. The output value is transmitted only in the initial setting of the flag.",
   "FlatCandle": "Flat",
+  "FlatFiles": "Flat files",
+  "FlatFilesDesc": "Instrument sections (security types) for Polygon flat-files. If empty, flat-files mode is off.",
   "FlipCoords": "Flip coordinates",
   "FlushOneTime": "Flush (one time)",
   "FODepth20": "Futures and options: 20 quotes deep market depth",

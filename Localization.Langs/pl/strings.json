@@ -1278,6 +1278,8 @@
   "Flag": "Flaga",
   "FlagElement": "Element flagi. Podnosi się i resetuje na podstawie przychodzących gniazd. Wartość wyjściowa jest przekazywana tylko przy początkowym ustawieniu flagi.",
   "FlatCandle": "Płaska świeca",
+  "FlatFiles": "Pliki płaskie",
+  "FlatFilesDesc": "Sekcje instrumentów (typy papierów wartościowych) dla plików płaskich Polygon. Jeśli puste, tryb plików płaskich jest wyłączony.",
   "FlipCoords": "Odwróć współrzędne",
   "FlushOneTime": "Wypłać (jednorazowo)",
   "FODepth20": "Kontrakty terminowe i opcje: księga zleceń o głębokości 20 kwotowań",

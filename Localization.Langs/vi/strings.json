@@ -1278,6 +1278,8 @@
   "Flag": "Cờ",
   "FlagElement": "Phần tử cờ. Được đưa lên và thiết lập dựa trên các ổ cắm đến. Giá trị xuất chỉ được truyền khi cờ được thiết lập lần đầu tiên.",
   "FlatCandle": "Nến phẳng",
+  "FlatFiles": "Tệp phẳng",
+  "FlatFilesDesc": "Các phần công cụ (loại chứng khoán) cho tệp phẳng Polygon. Nếu để trống, chế độ tệp phẳng sẽ tắt.",
   "FlipCoords": "Lật tọa độ",
   "FlushOneTime": "Rút (một lần)",
   "FODepth20": "Hợp đồng tương lai và quyền chọn: sổ lệnh sâu 20 báo giá",

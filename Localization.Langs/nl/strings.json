@@ -1278,6 +1278,8 @@
   "Flag": "Vlag",
   "FlagElement": "Diagramelement in de vorm van een vlag. Wordt geactiveerd en gereset op basis van inkomende sockets. De uitvoerwaarde wordt alleen doorgegeven bij de eerste instelling van de vlag.",
   "FlatCandle": "Platte kaars",
+  "FlatFiles": "Platte bestanden",
+  "FlatFilesDesc": "Instrumentsecties (effectentypes) voor Polygon platte bestanden. Indien leeg, is de platte bestanden modus uitgeschakeld.",
   "FlipCoords": "Coördinaten omkeren",
   "FlushOneTime": "Uitbetalen (eenmaal)",
   "FODepth20": "Futures en opties: orderboek met een diepte van 20 noteringen",

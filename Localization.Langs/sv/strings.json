@@ -1278,6 +1278,8 @@
   "Flag": "Flagga",
   "FlagElement": "Diagrammets flaggelement. Sätts och återställs baserat på inkommande uttag. Utdata värdet överförs bara vid den ursprungliga installationen av flaggan.",
   "FlatCandle": "Platt ljus",
+  "FlatFiles": "Platta filer",
+  "FlatFilesDesc": "Instrumentsektioner (värdepapperstyper) för Polygon platta filer. Om tom, är platta filer-läget avstängt.",
   "FlipCoords": "Vänd på koordinaterna",
   "FlushOneTime": "Utbetalning (en gång)",
   "FODepth20": "Terminer och optioner: orderbok med 20 citats djup",

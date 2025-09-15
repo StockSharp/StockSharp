@@ -1278,6 +1278,8 @@
   "Flag": "Vlajka",
   "FlagElement": "Prvek diagramu ve tvaru vlajky. Nastavuje se a resetuje na základě vstupních soketů. Výstupní hodnota se přenáší pouze při počátečním nastavení vlajky.",
   "FlatCandle": "Plochá svíčka",
+  "FlatFiles": "Ploché soubory",
+  "FlatFilesDesc": "Sekce nástrojů (typy cenných papírů) pro ploché soubory Polygon. Pokud je prázdné, režim plochých souborů je vypnutý.",
   "FlipCoords": "Překlopit souřadnice",
   "FlushOneTime": "Vyplatit (jednou)",
   "FODepth20": "Futures a opce: kniha příkazů s hloubkou 20 kotací",

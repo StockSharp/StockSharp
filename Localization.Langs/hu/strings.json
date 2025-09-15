@@ -1278,6 +1278,8 @@
   "Flag": "Zászló",
   "FlagElement": "Zászlóelem. Feláll és alaphelyzetbe áll az érkező aljzatok alapján. A kimeneti érték csak a zászló kezdeti beállításánál kerül továbbításra.",
   "FlatCandle": "Lapos gyertya",
+  "FlatFiles": "Lapos fájlok",
+  "FlatFilesDesc": "Eszközszekciók (értékpapírtípusok) a Polygon lapos fájlokhoz. Ha üres, a lapos fájlok mód ki van kapcsolva.",
   "FlipCoords": "Koordináták megfordítása",
   "FlushOneTime": "Kifizetés (egyszeri)",
   "FODepth20": "Jövőbeli opciók és opciók: 20 árajánlat mélységű rendelési könyv",

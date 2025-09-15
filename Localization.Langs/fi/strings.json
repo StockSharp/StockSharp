@@ -1278,6 +1278,8 @@
   "Flag": "Lippu",
   "FlagElement": "Lippuelementti kaaviossa. Aktivoituu ja nollautuu tulevien liitäntöjen perusteella. Lähtöarvo välitetään vain lipun ensimmäisessä asetuksessa.",
   "FlatCandle": "Litteä kynttilä",
+  "FlatFiles": "Litteät tiedostot",
+  "FlatFilesDesc": "Instrumenttiosiot (arvopaperitypit) Polygon-litteille tiedostoille. Jos tyhjä, litteät tiedostot -tila on pois päältä.",
   "FlipCoords": "Käännä koordinaatit",
   "FlushOneTime": "Kertaluonteinen nosto",
   "FODepth20": "Futuurit ja optiot: 20 tarjouksen syvyinen tilauskirja",

@@ -1278,6 +1278,8 @@
   "Flag": "Bandera",
   "FlagElement": "Element de diagrama en forma de bandera. S'activa i es desactiva basant-se en els senyals d'entrada. El valor de sortida es transmet només en establir-se la bandera inicialment.",
   "FlatCandle": "Plana",
+  "FlatFiles": "Fitxers plans",
+  "FlatFilesDesc": "Seccions d'instruments (tipus de valors) per a fitxers plans de Polygon. Si està buit, el mode de fitxers plans està desactivat.",
   "FlipCoords": "Invertir coordenades",
   "FlushOneTime": "Desplegar (una vegada)",
   "FODepth20": "Futurs i opcions: profunditat del llibre d'ordres de 20 cotitzacions",

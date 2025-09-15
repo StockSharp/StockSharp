@@ -1278,6 +1278,8 @@
   "Flag": "Bayrak",
   "FlagElement": "Bayrak Elementi. Gelen soketlere dayanarak kaldırılır ve sıfırlanır. Çıkış değeri sadece bayrağın ilk kurulumunda aktarılır.",
   "FlatCandle": "Düz mum",
+  "FlatFiles": "Düz dosyalar",
+  "FlatFilesDesc": "Polygon düz dosyaları için enstrüman bölümleri (menkul kıymet türleri). Boşsa, düz dosyalar modu kapalıdır.",
   "FlipCoords": "Koordinatları Ters Çevir",
   "FlushOneTime": "Bir Kez Çekin",
   "FODepth20": "Vadeli İşlemler ve Opsiyonlar: 20 kotasyon derinliğinde sipariş defteri",

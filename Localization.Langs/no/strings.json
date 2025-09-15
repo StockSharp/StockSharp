@@ -1278,6 +1278,8 @@
   "Flag": "Flagg",
   "FlagElement": "Diagram element i form av et flagg. Heises og resettes basert på inngangssokler. Utgangsverdien sendes bare ved den første innstillingen av flagget.",
   "FlatCandle": "Flat lys",
+  "FlatFiles": "Flate filer",
+  "FlatFilesDesc": "Instrumentseksjoner (verdipapirtyper) for Polygon flate filer. Hvis tom, er flate filer-modus av.",
   "FlipCoords": "Vend koordinatene",
   "FlushOneTime": "Utbetaling (én gang)",
   "FODepth20": "Futures og opsjoner: ordrebok med 20 tilbudsdybde",

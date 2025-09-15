@@ -1278,6 +1278,8 @@
   "Flag": "Bandeira",
   "FlagElement": "Elemento de bandeira. É levantado e baixado com base nos soquetes de entrada. O valor de saída é passado apenas na configuração inicial da bandeira.",
   "FlatCandle": "Vela plana",
+  "FlatFiles": "Arquivos simples",
+  "FlatFilesDesc": "Seções de instrumentos (tipos de títulos) para arquivos simples do Polygon. Se vazio, o modo de arquivos simples está desativado.",
   "FlipCoords": "Inverter coordenadas",
   "FlushOneTime": "Sacar (uma vez)",
   "FODepth20": "Futuros e Opções: livro de ordens com profundidade de 20 cotações",

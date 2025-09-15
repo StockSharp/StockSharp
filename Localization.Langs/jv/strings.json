@@ -1278,6 +1278,8 @@
   "Flag": "Bendera",
   "FlagElement": "Elemen Bendera. Diturunake lan disetel adhedhasar socket sing mlebu. Nilai output mung dialihake nalika pengaturan awal bendera.",
   "FlatCandle": "Lilin datar",
+  "FlatFiles": "File rata",
+  "FlatFilesDesc": "Bagean instrumen (jinis sekuritas) kanggo file rata Polygon. Yen kosong, mode file rata mati.",
   "FlipCoords": "Ngurangke koordinat",
   "FlushOneTime": "Cairake (sekali)",
   "FODepth20": "Futures lan Opsi: buku pesenan kanthi jero 20 kutipan",

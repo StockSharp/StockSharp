@@ -1278,6 +1278,8 @@
   "Flag": "Drapeau",
   "FlagElement": "Élément de drapeau. Il est levé et réinitialisé en fonction des prises entrantes. La valeur de sortie n'est transmise qu'au moment de la configuration initiale du drapeau.",
   "FlatCandle": "Bougie plate",
+  "FlatFiles": "Fichiers plats",
+  "FlatFilesDesc": "Sections d'instruments (types de titres) pour les fichiers plats Polygon. Si vide, le mode fichiers plats est désactivé.",
   "FlipCoords": "Inverser les coordonnées",
   "FlushOneTime": "Retirer (une fois)",
   "FODepth20": "Futures et options : carnet d'ordres de 20 cotations de profondeur",

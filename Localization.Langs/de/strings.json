@@ -1278,6 +1278,8 @@
   "Flag": "Flagge",
   "FlagElement": "Flaggenelement. Es wird auf der Grundlage von eingehenden Sockets gesetzt und zurückgesetzt. Der Ausgabewert wird nur bei der ersten Einrichtung der Flagge übergeben.",
   "FlatCandle": "Flache Kerze",
+  "FlatFiles": "Flat-Dateien",
+  "FlatFilesDesc": "Instrumentbereiche (Wertpapiertypen) für Polygon-Flat-Dateien. Wenn leer, ist der Flat-Dateien-Modus ausgeschaltet.",
   "FlipCoords": "Koordinaten umkehren",
   "FlushOneTime": "Einmal auszahlen",
   "FODepth20": "Futures und Optionen: Orderbuch mit einer Tiefe von 20 Angeboten",

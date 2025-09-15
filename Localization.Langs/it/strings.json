@@ -1278,6 +1278,8 @@
   "Flag": "Bandiera",
   "FlagElement": "Elemento di bandiera. Viene impostato e resettato sulla base dei socket in ingresso. Il valore di uscita viene passato solo alla prima impostazione della bandiera.",
   "FlatCandle": "Candela piatta",
+  "FlatFiles": "File flat",
+  "FlatFilesDesc": "Sezioni strumenti (tipi di titoli) per file flat Polygon. Se vuoto, la modalità file flat è disattivata.",
   "FlipCoords": "Invertire le coordinate",
   "FlushOneTime": "Prelevare (una volta)",
   "FODepth20": "Futures e opzioni: libro ordini con profondità di 20 quotazioni",
