@@ -558,13 +558,19 @@ partial class Connector
 		{
 			foreach (var subscriptionId in message.GetSubscriptionIds())
 			{
-				SubscriptionInfo info;
-
 				lock (_syncObject)
 				{
-					if (!_subscriptions.TryGetValue(subscriptionId, out info))
+					if (!_subscriptions.TryGetValue(subscriptionId, out var info))
 					{
 						TryWriteLog(subscriptionId);
+						continue;
+					}
+
+					var secId = info.Subscription.SecurityId;
+
+					if (secId?.IsAllSecurity() == true)
+					{
+						yield return (info.Subscription, message);
 						continue;
 					}
 
@@ -573,26 +579,26 @@ partial class Connector
 						if (info.SecurityNotFound)
 							continue;
 
-						var security = _connector.TryGetSecurity(info.Subscription.SecurityId);
+						var security = _connector.TryGetSecurity(secId);
 
 						if (security == null)
 						{
 							info.SecurityNotFound = true;
-							_connector.AddWarningLog(LocalizedStrings.SecurityNoFound.Put(info.Subscription.SecurityId));
+							_connector.AddWarningLog(LocalizedStrings.SecurityNoFound.Put(secId));
 							continue;
 						}
 
 						info.Security = security;
 					}
+
+					if (!info.UpdateLastTime(message.OpenTime))
+						continue;
+
+					if (!info.UpdateCandle(message, out var candle))
+						continue;
+
+					yield return (info.Subscription, candle);
 				}
-
-				if (!info.UpdateLastTime(message.OpenTime))
-					continue;
-
-				if (!info.UpdateCandle(message, out var candle))
-					continue;
-
-				yield return (info.Subscription, candle);
 			}
 		}
 

@@ -181,27 +181,30 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 						if (timeFrames.Contains(originalTf) || InnerAdapter.CheckTimeFrameByRequest)
 						{
-							LogDebug("Origin tf: {0}", originalTf);
-
-							var original = mdMsg.TypedClone();
-
-							if (mdMsg.To == null &&
-								mdMsg.BuildMode == MarketDataBuildModes.LoadAndBuild &&
-								!mdMsg.IsFinishedOnly &&
-								!InnerAdapter.IsSupportCandlesUpdates(mdMsg) &&
-								InnerAdapter.TryGetCandlesBuildFrom(original, _candleBuilderProvider) != null)
+							if (!mdMsg.SecurityId.IsAllSecurity())
 							{
-								mdMsg.To = CurrentTime;
-							}
+								LogDebug("Origin tf: {0}", originalTf);
 
-							lock (_syncObject)
-							{
-								_series.Add(transactionId, new SeriesInfo(original, original)
+								var original = mdMsg.TypedClone();
+
+								if (mdMsg.To == null &&
+									mdMsg.BuildMode == MarketDataBuildModes.LoadAndBuild &&
+									!mdMsg.IsFinishedOnly &&
+									!InnerAdapter.IsSupportCandlesUpdates(mdMsg) &&
+									InnerAdapter.TryGetCandlesBuildFrom(original, _candleBuilderProvider) != null)
 								{
-									State = SeriesStates.Regular,
-									LastTime = original.From,
-									Count = original.Count,
-								});
+									mdMsg.To = CurrentTime;
+								}
+
+								lock (_syncObject)
+								{
+									_series.Add(transactionId, new SeriesInfo(original, original)
+									{
+										State = SeriesStates.Regular,
+										LastTime = original.From,
+										Count = original.Count,
+									});
+								}
 							}
 
 							break;
