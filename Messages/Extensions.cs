@@ -2534,10 +2534,13 @@ public static partial class Extensions
 	/// <param name="name">The currency name in the MICEX format.</param>
 	/// <param name="errorHandler">Error handler.</param>
 	/// <returns>Currency type. If the value is empty, <see langword="null" /> will be returned.</returns>
-	public static CurrencyTypes? FromMicexCurrencyName(this string name, Action<Exception> errorHandler = null)
+	public static CurrencyTypes? FromMicexCurrencyName(this string name, Action<Exception> errorHandler)
 	{
 		if (name.IsEmpty() || _ignoreCurrs.Contains(name))
 			return null;
+
+		if (errorHandler is null)
+			throw new ArgumentNullException(nameof(errorHandler));
 
 		try
 		{
@@ -2546,12 +2549,7 @@ public static partial class Extensions
 		catch (Exception ex)
 		{
 			_ignoreCurrs.Add(name);
-
-			if (errorHandler == null)
-				ex.LogError();
-			else
-				errorHandler.Invoke(ex);
-
+			errorHandler(ex);
 			return null;
 		}
 	}
