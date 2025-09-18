@@ -9,11 +9,11 @@ public class DataTypeTests
 		var dt1 = DataType.Create<ExecutionMessage>(ExecutionTypes.Tick);
 		var dt2 = DataType.Ticks.Clone();
 
-		Assert.IsTrue(dt1.Equals(dt2));
-		Assert.AreEqual(dt1.GetHashCode(), dt2.GetHashCode());
+		dt1.Equals(dt2).AssertTrue();
+		dt2.GetHashCode().AreEqual(dt1.GetHashCode());
 
 		var dt3 = DataType.Create<ExecutionMessage>(ExecutionTypes.OrderLog);
-		Assert.IsFalse(dt1.Equals(dt3));
+		dt1.Equals(dt3).AssertFalse();
 	}
 
 	[TestMethod]
@@ -21,33 +21,33 @@ public class DataTypeTests
 	{
 		// Candles
 		var tf = DataType.Create<TimeFrameCandleMessage>(TimeSpan.FromMinutes(1));
-		Assert.IsTrue(tf.IsCandles);
-		Assert.IsTrue(tf.IsMarketData);
-		Assert.IsTrue(tf.IsSecurityRequired);
-		Assert.IsFalse(tf.IsNonSecurity);
+		tf.IsCandles.AssertTrue();
+		tf.IsMarketData.AssertTrue();
+		tf.IsSecurityRequired.AssertTrue();
+		tf.IsNonSecurity.AssertFalse();
 
 		// Specific TF candles shortcut
-		Assert.IsTrue(DataType.CandleTimeFrame.IsCandles);
-		Assert.IsTrue(DataType.CandleTimeFrame.IsTFCandles);
+		DataType.CandleTimeFrame.IsCandles.AssertTrue();
+		DataType.CandleTimeFrame.IsTFCandles.AssertTrue();
 
 		// Level1 and MarketDepth
-		Assert.IsTrue(DataType.Level1.IsMarketData);
-		Assert.IsTrue(DataType.Level1.IsSecurityRequired);
-		Assert.IsTrue(DataType.MarketDepth.IsMarketData);
-		Assert.IsTrue(DataType.MarketDepth.IsSecurityRequired);
+		DataType.Level1.IsMarketData.AssertTrue();
+		DataType.Level1.IsSecurityRequired.AssertTrue();
+		DataType.MarketDepth.IsMarketData.AssertTrue();
+		DataType.MarketDepth.IsSecurityRequired.AssertTrue();
 
 		// Executions: Tick is market-data, Transaction is not
-		Assert.IsTrue(DataType.Ticks.IsMarketData);
-		Assert.IsTrue(DataType.Ticks.IsSecurityRequired);
-		Assert.IsFalse(DataType.Transactions.IsMarketData);
-		Assert.IsFalse(DataType.Transactions.IsSecurityRequired);
+		DataType.Ticks.IsMarketData.AssertTrue();
+		DataType.Ticks.IsSecurityRequired.AssertTrue();
+		DataType.Transactions.IsMarketData.AssertFalse();
+		DataType.Transactions.IsSecurityRequired.AssertFalse();
 
 		// Non-security types
-		Assert.IsTrue(DataType.Securities.IsNonSecurity);
-		Assert.IsTrue(DataType.News.IsNonSecurity);
-		Assert.IsTrue(DataType.Board.IsNonSecurity);
-		Assert.IsTrue(DataType.BoardState.IsNonSecurity);
-		Assert.IsTrue(DataType.DataTypeInfo.IsNonSecurity);
+		DataType.Securities.IsNonSecurity.AssertTrue();
+		DataType.News.IsNonSecurity.AssertTrue();
+		DataType.Board.IsNonSecurity.AssertTrue();
+		DataType.BoardState.IsNonSecurity.AssertTrue();
+		DataType.DataTypeInfo.IsNonSecurity.AssertTrue();
 	}
 
 	[TestMethod]
@@ -66,7 +66,7 @@ public class DataTypeTests
 		var s = dt.ToSerializableString();
 		var back = DataType.FromSerializableString(s);
 
-		Assert.AreEqual(dt, back);
+		back.AreEqual(dt);
 	}
 
 	[TestMethod]
@@ -76,7 +76,7 @@ public class DataTypeTests
 		var s = dt.ToSerializableString();
 		var back = DataType.FromSerializableString(s);
 
-		Assert.AreEqual(dt, back);
+		back.AreEqual(dt);
 	}
 
 	[TestMethod]
@@ -86,7 +86,7 @@ public class DataTypeTests
 		{
 			var s = dt.ToSerializableString();
 			var back = DataType.FromSerializableString(s);
-			Assert.AreEqual(dt, back, $"Roundtrip failed for {dt} -> '{s}'");
+			back.AreEqual(dt, $"Roundtrip failed for {dt} -> '{s}'");
 		}
 
 		var types = new[]
@@ -143,7 +143,7 @@ public class DataTypeTests
 		var loaded = new DataType();
 		loaded.Load(storage);
 
-		Assert.AreEqual(dt, loaded);
+		loaded.AreEqual(dt);
 	}
 
 	[TestMethod]
@@ -156,7 +156,7 @@ public class DataTypeTests
 		var loaded = new DataType();
 		loaded.Load(storage);
 
-		Assert.AreEqual(dt, loaded);
+		loaded.AreEqual(dt);
 	}
 
 	[TestMethod]
@@ -165,7 +165,7 @@ public class DataTypeTests
 		var dt1 = DataType.Create<ExecutionMessage>(ExecutionTypes.Tick).SetName("A");
 		var dt2 = DataType.Create<ExecutionMessage>(ExecutionTypes.Tick).SetName("B");
 
-		Assert.AreEqual(dt1, dt2);
-		Assert.AreEqual(dt1.GetHashCode(), dt2.GetHashCode());
+		dt2.AreEqual(dt1);
+		dt2.GetHashCode().AreEqual(dt1.GetHashCode());
 	}
 }
