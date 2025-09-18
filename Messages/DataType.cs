@@ -389,7 +389,7 @@ public class DataType : Equatable<DataType>, IPersistable
 		var type = MessageType;
 		var arg = Arg;
 
-		return $"{type?.GetTypeName(false)}:{(type?.IsCandleMessage() == true ? type.DataTypeArgToString(arg) : $"{arg?.GetType().GetTypeName(false)}:{arg?.ToString()}")}";
+		return $"{type?.GetTypeName(false)}:{(type?.IsCandleMessage() == true ? (arg is null ? null : type.DataTypeArgToString(arg)) : $"{arg?.GetType().GetTypeName(false)}:{arg?.ToString()}")}";
 	}
 
 	/// <summary>
@@ -412,7 +412,7 @@ public class DataType : Equatable<DataType>, IPersistable
 			arg = msgType.ToDataTypeArg(parts[1]);
 		else
 		{
-			var argType = parts[1].To<Type>();
+			var argType = parts[1].IsEmpty() ? null : parts[1].To<Type>();
 			arg = argType is null ? null : parts[2].To(argType);
 		}
 
