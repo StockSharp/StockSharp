@@ -168,4 +168,26 @@ public class DataTypeTests
 		dt2.AreEqual(dt1);
 		dt2.GetHashCode().AreEqual(dt1.GetHashCode());
 	}
+
+	[TestMethod]
+	public void SerializableString_Aliases()
+	{
+		static void TestAlias(DataType dt, string expected)
+		{
+			var s = dt.ToSerializableString();
+			s.AssertEqual(expected);
+			var back = DataType.FromSerializableString(s);
+			back.AreEqual(dt);
+
+			// also check case-insensitive
+			var upper = expected.ToUpperInvariant();
+			var back2 = DataType.FromSerializableString(upper);
+			back2.AreEqual(dt);
+		}
+
+		TestAlias(DataType.Level1, "level1");
+		TestAlias(DataType.Ticks, "ticks");
+		TestAlias(DataType.MarketDepth, "marketdepth");
+		TestAlias(DataType.OrderLog, "orderlog");
+	}
 }

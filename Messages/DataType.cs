@@ -380,12 +380,27 @@ public class DataType : Equatable<DataType>, IPersistable
 	/// </summary>
 	public static ISet<DataType> CandleSources { get; } = new HashSet<DataType>([Ticks, Level1, MarketDepth, OrderLog]);
 
+	private static readonly PairSet<string, DataType> _aliasToType = new(StringComparer.InvariantCultureIgnoreCase)
+	{
+		{ "level1", Level1 },
+		{ "ticks", Ticks },
+		{ "marketdepth", MarketDepth },
+		{ "orderlog", OrderLog },
+		{ "transactions", Transactions },
+		{ "news", News },
+		{ "securities", Securities },
+		{ "positions", PositionChanges },
+	};
+
 	/// <summary>
 	/// Serialize <see cref="DataType"/> to <see cref="string"/>.
 	/// </summary>
 	/// <returns>The string representation of <see cref="DataType"/>.</returns>
 	public string ToSerializableString()
 	{
+		if (_aliasToType.TryGetKey(this, out var alias))
+			return alias;
+
 		var type = MessageType;
 		var arg = Arg;
 
@@ -401,6 +416,9 @@ public class DataType : Equatable<DataType>, IPersistable
 	{
 		if (value.IsEmpty())
 			return null;
+
+		if (_aliasToType.TryGetValue(value, out var aliasDt))
+			return aliasDt;
 
 		var parts = value.SplitByColon(false);
 
