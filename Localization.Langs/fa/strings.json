@@ -4062,6 +4062,8 @@
   "UserOrderId": "شناسه سفارش کاربر",
   "Users": "کاربران",
   "UseTransactionalSession": "برای ارسال تراکنش‌ها از جلسه تراکنشی استفاده کنید",
+  "UseUdpResnapshot": "استفاده از عکس‌فوری مجدد UDP",
+  "UseUdpResnapshotDesc": "از عکس‌فوری مجدد UDP به جای بازپخش TCP برای ترمیم شکاف‌ها استفاده کنید.",
   "UseWebSockets": "از وب سوکت‌ها استفاده کنید.",
   "UxFtp": "FTP (معامله‌گری الگوریتمی)",
   "ValidAfter": "معتبر بعد از",

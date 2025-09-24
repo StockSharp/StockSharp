@@ -4062,6 +4062,8 @@
   "UserOrderId": "รหัสคำสั่งซื้อของผู้ใช้",
   "Users": "ผู้ใช้",
   "UseTransactionalSession": "ใช้เซสชันทรานส์แอคชั่นในการส่งธุรกรรม",
+  "UseUdpResnapshot": "ใช้ UDP รี-สแนปช็อต",
+  "UseUdpResnapshotDesc": "ใช้ UDP รี-สแนปช็อตแทนการเล่นซ้ำ TCP เพื่อคืนค่าช่องว่าง",
   "UseWebSockets": "ใช้ WebSockets",
   "UxFtp": "FTP (การซื้อขายแบบอัลโก)",
   "ValidAfter": "มีผลหลังจาก",

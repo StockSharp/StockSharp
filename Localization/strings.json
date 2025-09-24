@@ -4073,6 +4073,8 @@
   "UserOrderId": "User's Order ID",
   "Users": "Users",
   "UseTransactionalSession": "Use Session for Transactions",
+  "UseUdpResnapshot": "Use UDP re-snapshot",
+  "UseUdpResnapshotDesc": "Use UDP re-snapshot instead of TCP replay for restoring gaps.",
   "UseWebSockets": "Use web sockets.",
   "UxFtp": "UX (FTP)",
   "ValidAfter": "Active from",

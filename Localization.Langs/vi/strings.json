@@ -4062,6 +4062,8 @@
   "UserOrderId": "Mã đơn hàng của người dùng",
   "Users": "Người dùng",
   "UseTransactionalSession": "Sử dụng phiên giao dịch để gửi giao dịch",
+  "UseUdpResnapshot": "Sử dụng UDP tái chụp nhanh",
+  "UseUdpResnapshotDesc": "Sử dụng UDP tái chụp nhanh thay vì phát lại TCP để khôi phục khoảng trống.",
   "UseWebSockets": "Sử dụng WebSockets.",
   "UxFtp": "FTP (Giao dịch thuật toán)",
   "ValidAfter": "Có hiệu lực sau",

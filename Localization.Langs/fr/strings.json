@@ -4062,6 +4062,8 @@
   "UserOrderId": "Identifiant de commande de l'utilisateur",
   "Users": "Utilisateurs",
   "UseTransactionalSession": "Utiliser une session transactionnelle pour envoyer des transactions",
+  "UseUdpResnapshot": "Utiliser re-instantané UDP",
+  "UseUdpResnapshotDesc": "Utilisez re-instantané UDP au lieu de relecture TCP pour restaurer les lacunes.",
   "UseWebSockets": "Utiliser les WebSockets.",
   "UxFtp": "FTP (Négociation algorithmique)",
   "ValidAfter": "Valide après",

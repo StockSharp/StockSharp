@@ -4062,6 +4062,8 @@
   "UserOrderId": "用户订单标识",
   "Users": "用户",
   "UseTransactionalSession": "使用事务会话发送交易",
+  "UseUdpResnapshot": "使用UDP重新快照",
+  "UseUdpResnapshotDesc": "使用UDP重新快照而不是TCP重播来恢复间隙。",
   "UseWebSockets": "使用网络套接字。",
   "UxFtp": "算法交易",
   "ValidAfter": "有效期始于",

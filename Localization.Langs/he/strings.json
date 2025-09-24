@@ -4062,6 +4062,8 @@
   "UserOrderId": "מזהה הזמנת משתמש",
   "Users": "משתמשים",
   "UseTransactionalSession": "השתמש בהפעלה עסקית כדי לשלוח טרנזקציות",
+  "UseUdpResnapshot": "השתמש בצילום מחדש UDP",
+  "UseUdpResnapshotDesc": "השתמש בצילום מחדש UDP במקום השמעה חוזרת TCP לשחזור פערים.",
   "UseWebSockets": "השתמש ב-WebSockets.",
   "UxFtp": "FTP (מסחר אלגוריתמי)",
   "ValidAfter": "תקף לאחר",

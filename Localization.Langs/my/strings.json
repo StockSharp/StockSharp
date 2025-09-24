@@ -4069,6 +4069,8 @@
   "UserOrderId": "အသုံးပြုသူ၏ အော်ဒါ ID",
   "Users": "အသုံးပြုသူများ",
   "UseTransactionalSession": "ငွေလွှဲပြောင်းမှုများအတွက် Session ကို အသုံးပြုပါ",
+  "UseUdpResnapshot": "UDP ပြန်လည်မှတ်တမ်းတင်ခြင်းအသုံးပြုပါ",
+  "UseUdpResnapshotDesc": "gaps များ ပြန်လည်ရယူရန်အတွက် TCP replay အစား UDP re-snapshot ကိုအသုံးပြုပါ။",
   "UseWebSockets": "web sockets ကို အသုံးပြုပါ။",
   "UxFtp": "UX (FTP)",
   "ValidAfter": "အသက်ဝင်သော အချိန်",

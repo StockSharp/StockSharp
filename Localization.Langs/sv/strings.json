@@ -4062,6 +4062,8 @@
   "UserOrderId": "Användarorderns ID",
   "Users": "Användare",
   "UseTransactionalSession": "Använd transaktionssession för att skicka transaktioner",
+  "UseUdpResnapshot": "Använd UDP omstart-ögonblicksbild",
+  "UseUdpResnapshotDesc": "Använd UDP omstart-ögonblicksbild istället för TCP-uppspelning för att återställa luckor.",
   "UseWebSockets": "Använd WebSockets.",
   "UxFtp": "FTP (Algoritmisk handel)",
   "ValidAfter": "Giltig efter",

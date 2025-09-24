@@ -4062,6 +4062,8 @@
   "UserOrderId": "Identifikátor objednávky užívateľa",
   "Users": "Užívatelia",
   "UseTransactionalSession": "Použiť reláciu na odosielanie transakcií",
+  "UseUdpResnapshot": "Použiť UDP opätovný snímok",
+  "UseUdpResnapshotDesc": "Použite UDP opätovný snímok namiesto TCP prehrávania na obnovenie medzier.",
   "UseWebSockets": "Použiť webové sokety.",
   "UxFtp": "UX (FTP)",
   "ValidAfter": "Platné po",

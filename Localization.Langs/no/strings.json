@@ -4062,6 +4062,8 @@
   "UserOrderId": "Brukerordens ID",
   "Users": "Brukere",
   "UseTransactionalSession": "Bruk transaksjonssesjon for å sende transaksjoner",
+  "UseUdpResnapshot": "Bruk UDP re-snapshot",
+  "UseUdpResnapshotDesc": "Bruk UDP re-snapshot i stedet for TCP-avspilling for å gjenopprette gap.",
   "UseWebSockets": "Bruk WebSockets.",
   "UxFtp": "FTP (Algoritmisk handel)",
   "ValidAfter": "Gyldig etter",

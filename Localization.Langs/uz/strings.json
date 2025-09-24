@@ -4062,6 +4062,8 @@
   "UserOrderId": "Foydalanuvchi buyurtma identifikatori",
   "Users": "Foydalanuvchilar",
   "UseTransactionalSession": "Tranzaksiyalarni yuborish uchun tranzaksiya sessiyasidan foydalaning",
+  "UseUdpResnapshot": "UDP qayta-suratni ishlatish",
+  "UseUdpResnapshotDesc": "Bo'shliqlarni tiklash uchun TCP takrorlash o'rniga UDP qayta-suratni ishlating.",
   "UseWebSockets": "Veb-soketlardan foydalaning.",
   "UxFtp": "FTP (Algoritmik savdo)",
   "ValidAfter": "Keyin amal qiladi",

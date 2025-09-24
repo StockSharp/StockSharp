@@ -4062,6 +4062,8 @@
   "UserOrderId": "Felhasználói rendelés azonosító",
   "Users": "Felhasználók",
   "UseTransactionalSession": "Használjon tranzakciós munkamenetet a tranzakciók küldéséhez",
+  "UseUdpResnapshot": "UDP újra-pillanatfelvétel használata",
+  "UseUdpResnapshotDesc": "Használjon UDP újra-pillanatfelvételt a TCP visszajátszás helyett a rések helyreállításához.",
   "UseWebSockets": "Websocketek használata.",
   "UxFtp": "FTP (Algoritmikus kereskedés)",
   "ValidAfter": "Érvényes ezt követően",

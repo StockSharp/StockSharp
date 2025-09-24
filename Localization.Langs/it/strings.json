@@ -4062,6 +4062,8 @@
   "UserOrderId": "Identificativo dell'ordine dell'utente",
   "Users": "Utenti",
   "UseTransactionalSession": "Usa la sessione transazionale per inviare transazioni",
+  "UseUdpResnapshot": "Usa ri-snapshot UDP",
+  "UseUdpResnapshotDesc": "Usa ri-snapshot UDP invece del replay TCP per ripristinare le lacune.",
   "UseWebSockets": "Usa i WebSocket.",
   "UxFtp": "FTP (Trading Algoritmico)",
   "ValidAfter": "Valido dopo",

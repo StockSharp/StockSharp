@@ -4062,6 +4062,8 @@
   "UserOrderId": "ਯੂਜ਼ਰ ਆਰਡਰ ਆਈਡੀ",
   "Users": "ਉਪਭੋਗਤਾ",
   "UseTransactionalSession": "ਟਰਾਂਜੈਕਸ਼ਨ ਭੇਜਣ ਲਈ ਟਰਾਂਜੈਕਸ਼ਨਲ ਸੈਸ਼ਨ ਦੀ ਵਰਤੋਂ ਕਰੋ",
+  "UseUdpResnapshot": "UDP ਰੀ-ਸਨੈਪਸ਼ਾਟ ਦੀ ਵਰਤੋਂ ਕਰੋ",
+  "UseUdpResnapshotDesc": "ਗੈਪਾਂ ਨੂੰ ਬਹਾਲ ਕਰਨ ਲਈ TCP ਰੀਪਲੇਅ ਦੀ ਬਜਾਏ UDP ਰੀ-ਸਨੈਪਸ਼ਾਟ ਦੀ ਵਰਤੋਂ ਕਰੋ।",
   "UseWebSockets": "ਵੈੱਬ ਸੌਕਟਸ ਦੀ ਵਰਤੋਂ ਕਰੋ।",
   "UxFtp": "FTP (ਐਲਗੋ ਟਰੇਡਿੰਗ)",
   "ValidAfter": "ਇਸ ਤੋਂ ਬਾਅਦ ਵੈਧ",

@@ -4062,6 +4062,8 @@
   "UserOrderId": "ID Pesenan Panganggo",
   "Users": "Pangguna",
   "UseTransactionalSession": "Gunakake Sesi Transaksional kanggo Ngirim Transaksi",
+  "UseUdpResnapshot": "Gunakake UDP re-snapshot",
+  "UseUdpResnapshotDesc": "Gunakake UDP re-snapshot tinimbang TCP replay kanggo mulihake longkangan.",
   "UseWebSockets": "Nggunakake WebSockets.",
   "UxFtp": "FTP (Perdagangan Algo)",
   "ValidAfter": "Sah sawisé",

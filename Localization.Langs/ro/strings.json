@@ -4062,6 +4062,8 @@
   "UserOrderId": "Identificatorul comenzii utilizatorului",
   "Users": "Utilizatori",
   "UseTransactionalSession": "Utilizați sesiunea tranzacțională pentru a trimite tranzacții",
+  "UseUdpResnapshot": "Folosește re-instantaneu UDP",
+  "UseUdpResnapshotDesc": "Folosește re-instantaneu UDP în loc de redare TCP pentru restaurarea golurilor.",
   "UseWebSockets": "Utilizați Websockets.",
   "UxFtp": "FTP (Comerț algoritmic)",
   "ValidAfter": "Valabil după",

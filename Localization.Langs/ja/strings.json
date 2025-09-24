@@ -4062,6 +4062,8 @@
   "UserOrderId": "ユーザー注文ID",
   "Users": "ユーザー",
   "UseTransactionalSession": "トランザクションの送信にトランザクショナルセッションを使用する",
+  "UseUdpResnapshot": "UDP再スナップショットを使用",
+  "UseUdpResnapshotDesc": "ギャップを復元するためにTCP再生の代わりにUDP再スナップショットを使用してください。",
   "UseWebSockets": "Webソケットを使用する。",
   "UxFtp": "FTP（アルゴトレーディング）",
   "ValidAfter": "有効開始日",

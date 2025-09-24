@@ -4062,6 +4062,8 @@
   "UserOrderId": "Gebruikersorder-ID",
   "Users": "Gebruikers",
   "UseTransactionalSession": "Gebruik de transactionele sessie voor het verzenden van transacties",
+  "UseUdpResnapshot": "Gebruik UDP her-momentopname",
+  "UseUdpResnapshotDesc": "Gebruik UDP her-momentopname in plaats van TCP-herhaling voor het herstellen van gaten.",
   "UseWebSockets": "Gebruik WebSockets.",
   "UxFtp": "FTP (Algoritmische handel)",
   "ValidAfter": "Geldig na",

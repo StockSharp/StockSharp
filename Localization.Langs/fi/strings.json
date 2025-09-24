@@ -4062,6 +4062,8 @@
   "UserOrderId": "Käyttäjän tilausnumero",
   "Users": "Käyttäjät",
   "UseTransactionalSession": "Käytä transaktioistuntoa tapahtumien lähettämiseen",
+  "UseUdpResnapshot": "Käytä UDP uudelleentilannevedosta",
+  "UseUdpResnapshotDesc": "Käytä UDP uudelleentilannevedosta TCP-toiston sijaan aukkojen palauttamiseen.",
   "UseWebSockets": "Käytä WebSocketteja.",
   "UxFtp": "FTP (Algoritmikaupankäynti)",
   "ValidAfter": "Voimassa jälkeen",

@@ -4062,6 +4062,8 @@
   "UserOrderId": "उपयोगकर्ता आदेश पहचानकर्ता",
   "Users": "उपयोगकर्ता",
   "UseTransactionalSession": "लेन-देन भेजने के लिए लेन-देन सत्र का उपयोग करें",
+  "UseUdpResnapshot": "UDP री-स्नैपशॉट का उपयोग करें",
+  "UseUdpResnapshotDesc": "अंतराल को बहाल करने के लिए TCP रीप्ले के बजाय UDP री-स्नैपशॉट का उपयोग करें।",
   "UseWebSockets": "वेब सॉकेट का उपयोग करें।",
   "UxFtp": "FTP (एल्गो ट्रेडिंग)",
   "ValidAfter": "इसके बाद मान्य",
