@@ -2036,6 +2036,8 @@
   "MaxProfitDate": "Dato for maksimal fortjeneste",
   "MaxProfitDateDesc": "Dato for høyeste fortjeneste verdi for hele perioden.",
   "MaxProfitWholePeriod": "Maksimal profitt for hele perioden.",
+  "MaxQueue": "Maksimal Køstørrelse",
+  "MaxQueueDesc": "Maksimalt antall buffrede innkommende UDP-pakker per feed før nye pakker slippes.",
   "MaxReadBytes": "Maksimalt lest bytes",
   "MaxReadBytesDesc": "Hent og sett maksimalt tillatt antall bytes for hver leseoperasjon.",
   "MaxRegisterCount": "Maksimalt antall registreringer",

@@ -2036,6 +2036,8 @@
   "MaxProfitDate": "Tarikh Keuntungan Maksima",
   "MaxProfitDateDesc": "Tarikh nilai keuntungan maksimum untuk seluruh tempoh.",
   "MaxProfitWholePeriod": "Keuntungan maksimum untuk seluruh tempoh.",
+  "MaxQueue": "Saiz Baris Gilir Maksimum",
+  "MaxQueueDesc": "Maksimum paket UDP masuk yang dipuffer bagi setiap suapan sebelum paket baru digugurkan.",
   "MaxReadBytes": "Bait Bacaan Maksimum",
   "MaxReadBytesDesc": "Dapatkan dan tetapkan bilangan bait maksimum yang dibenarkan untuk setiap operasi bacaan.",
   "MaxRegisterCount": "Bilangan Pendaftaran Maksimum",

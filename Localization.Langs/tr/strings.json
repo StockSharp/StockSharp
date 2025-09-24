@@ -2036,6 +2036,8 @@
   "MaxProfitDate": "Maksimum Kar Tarihi",
   "MaxProfitDateDesc": "Tüm dönem için maksimum kâr değerinin tarihi.",
   "MaxProfitWholePeriod": "Tüm dönem için maksimum kar.",
+  "MaxQueue": "Maksimum Kuyruk Boyutu",
+  "MaxQueueDesc": "Yeni paketler bırakılmadan önce akış başına maksimum arabelleğe alınan gelen UDP paketleri.",
   "MaxReadBytes": "Maksimum Okunan Baytlar",
   "MaxReadBytesDesc": "Her okuma işlemi için izin verilen maksimum bayt sayısını alın ve ayarlayın.",
   "MaxRegisterCount": "Maksimum Kayıt Sayısı",

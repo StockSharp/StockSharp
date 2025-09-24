@@ -2043,6 +2043,8 @@
   "MaxProfitDate": "Maximum Profit Date",
   "MaxProfitDateDesc": "Date of the highest profit value for the entire period.",
   "MaxProfitWholePeriod": "Maximum profit value for the whole period.",
+  "MaxQueue": "Max Queue Size",
+  "MaxQueueDesc": "Maximum buffered incoming UDP packets per feed before new packets are dropped.",
   "MaxReadBytes": "Max bytes (read)",
   "MaxReadBytesDesc": "Gets and sets the maximum allowed bytes per read.",
   "MaxRegisterCount": "Max registrations",

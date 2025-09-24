@@ -2036,6 +2036,8 @@
   "MaxProfitDate": "Ngày lợi nhuận tối đa",
   "MaxProfitDateDesc": "Ngày giá trị lợi nhuận tối đa cho toàn bộ giai đoạn.",
   "MaxProfitWholePeriod": "Lợi nhuận tối đa cho toàn bộ giai đoạn.",
+  "MaxQueue": "Kích Thước Hàng Đợi Tối Đa",
+  "MaxQueueDesc": "Tối đa các gói UDP đến được đệm mỗi nguồn cấp dữ liệu trước khi các gói mới bị bỏ.",
   "MaxReadBytes": "Số byte đọc tối đa",
   "MaxReadBytesDesc": "Lấy và thiết lập số byte tối đa cho phép cho mỗi thao tác đọc.",
   "MaxRegisterCount": "Số lượng đăng ký tối đa",

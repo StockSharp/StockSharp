@@ -2036,6 +2036,8 @@
   "MaxProfitDate": "Data del màxim benefici",
   "MaxProfitDateDesc": "Data del valor màxim del benefici durant tot el període.",
   "MaxProfitWholePeriod": "Valor màxim del benefici durant tot el període.",
+  "MaxQueue": "Mida Màxima de Cua",
+  "MaxQueueDesc": "Màxim de paquets UDP entrants emmagatzemats per canal abans que els nous paquets siguin descartats.",
   "MaxReadBytes": "Màxim bytes (lectura)",
   "MaxReadBytesDesc": "Obtenir i establir el nombre màxim permès de bytes per cada operació de lectura.",
   "MaxRegisterCount": "Màx registres",

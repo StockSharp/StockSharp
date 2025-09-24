@@ -2036,6 +2036,8 @@
   "MaxProfitDate": "Datum van maximale winst",
   "MaxProfitDateDesc": "Datum van de maximale winstwaarde gedurende de hele periode.",
   "MaxProfitWholePeriod": "Maximale winst voor de hele periode.",
+  "MaxQueue": "Maximale Wachtrij Grootte",
+  "MaxQueueDesc": "Maximum gebufferde binnenkomende UDP-pakketten per feed voordat nieuwe pakketten worden weggegooid.",
   "MaxReadBytes": "Maximaal gelezen bytes",
   "MaxReadBytesDesc": "Haal op en stel het maximum aantal bytes in dat toegestaan is voor elke leesoperatie.",
   "MaxRegisterCount": "Maximaal aantal registraties",

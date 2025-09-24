@@ -2036,6 +2036,8 @@
   "MaxProfitDate": "Data profitului maxim",
   "MaxProfitDateDesc": "Data valorii maxime a profitului pentru întreaga perioadă.",
   "MaxProfitWholePeriod": "Profit maxim pentru întreaga perioadă.",
+  "MaxQueue": "Dimensiunea Maximă a Cozii",
+  "MaxQueueDesc": "Numărul maxim de pachete UDP primite în buffer pe flux înainte ca noile pachete să fie abandonate.",
   "MaxReadBytes": "Număr maxim de octeți citiți",
   "MaxReadBytesDesc": "Obțineți și setați numărul maxim de octeți permis pentru fiecare operație de citire.",
   "MaxRegisterCount": "Număr maxim de înregistrări",

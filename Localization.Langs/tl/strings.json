@@ -2041,6 +2041,8 @@
   "MaxProfitDate": "Petsa ng Maximum na Kita",
   "MaxProfitDateDesc": "Petsa ng pinakamataas na halaga ng kita para sa buong panahon.",
   "MaxProfitWholePeriod": "Maximum na halaga ng kita para sa buong panahon.",
+  "MaxQueue": "Pinakamataas na Laki ng Pila",
+  "MaxQueueDesc": "Pinakamataas na buffered na papasok na UDP packets bawat feed bago ang mga bagong packets ay ma-drop.",
   "MaxReadBytes": "Max bytes (read)",
   "MaxReadBytesDesc": "Kunin at itakda ang maximum na pinapayagang bytes sa bawat pagbasa.",
   "MaxRegisterCount": "Max registrations",

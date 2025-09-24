@@ -2036,6 +2036,8 @@
   "MaxProfitDate": "Suurimman voiton päivämäärä",
   "MaxProfitDateDesc": "Suurimman voiton päivämäärä koko ajanjaksolta.",
   "MaxProfitWholePeriod": "Suurin voitto koko ajanjaksolle.",
+  "MaxQueue": "Maksimi Jonon Koko",
+  "MaxQueueDesc": "Maksimi puskuroitujen saapuvien UDP-pakettien määrä syötettä kohden ennen uusien pakettien hylkäämistä.",
   "MaxReadBytes": "Maksimissaan luettu tavujen määrä",
   "MaxReadBytesDesc": "Hae ja aseta maksimimäärä tavuja jokaiselle lukutoiminnolle.",
   "MaxRegisterCount": "Maksimirekisteröintien määrä",

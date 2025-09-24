@@ -2036,6 +2036,8 @@
   "MaxProfitDate": "Maksimal foyda sanasi",
   "MaxProfitDateDesc": "Butun davr uchun eng yuqori foyda qiymati sanasi.",
   "MaxProfitWholePeriod": "Butun davr uchun maksimal foyda.",
+  "MaxQueue": "Maksimal Navbat Hajmi",
+  "MaxQueueDesc": "Yangi paketlar tashlab yuborilishdan oldin har bir kanal uchun maksimal buferlangan kiruvchi UDP paketlar.",
   "MaxReadBytes": "Maksimal o'qilgan baytlar",
   "MaxReadBytesDesc": "Har bir o'qish operatsiyasi uchun ruxsat etilgan maksimal baytlar sonini oling va o'rnat.",
   "MaxRegisterCount": "Maksimal ro'yxatdan o'tish soni",

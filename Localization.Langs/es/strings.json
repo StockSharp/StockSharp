@@ -2036,6 +2036,8 @@
   "MaxProfitDate": "Fecha de máximo beneficio",
   "MaxProfitDateDesc": "Fecha del valor máximo de beneficio para todo el período.",
   "MaxProfitWholePeriod": "Máximo beneficio para todo el período.",
+  "MaxQueue": "Tamaño Máximo de Cola",
+  "MaxQueueDesc": "Máximo de paquetes UDP entrantes almacenados por canal antes de que los nuevos paquetes sean descartados.",
   "MaxReadBytes": "Máximo de bytes leídos",
   "MaxReadBytesDesc": "Obtener y establecer el número máximo de bytes permitidos para cada operación de lectura.",
   "MaxRegisterCount": "Máximo número de registros",

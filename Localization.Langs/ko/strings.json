@@ -2036,6 +2036,8 @@
   "MaxProfitDate": "최대 이익 날짜",
   "MaxProfitDateDesc": "전체 기간 동안의 최대 이익 값 재다.",
   "MaxProfitWholePeriod": "전체 기간의 최대 이익입니다.",
+  "MaxQueue": "최대 큐 크기",
+  "MaxQueueDesc": "새 패킷이 삭제되기 전 피드당 최대 버퍼링된 수신 UDP 패킷 수.",
   "MaxReadBytes": "최대 읽기 바이트",
   "MaxReadBytesDesc": "각 읽기 작업에 대해 허용되는 최대 바이트 수를 가져오고 설정합니다.",
   "MaxRegisterCount": "최대 등록 수",

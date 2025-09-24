@@ -2036,6 +2036,8 @@
   "MaxProfitDate": "最大利益の日",
   "MaxProfitDateDesc": "全期間の最大利益額の日付。",
   "MaxProfitWholePeriod": "全期間の最大利益。",
+  "MaxQueue": "最大キューサイズ",
+  "MaxQueueDesc": "新しいパケットが破棄される前の、フィードあたりの最大バッファリング入力UDPパケット数。",
   "MaxReadBytes": "最大読み取りバイト数",
   "MaxReadBytesDesc": "各読み取り操作で許可される最大バイト数を取得および設定します。",
   "MaxRegisterCount": "最大登録数",

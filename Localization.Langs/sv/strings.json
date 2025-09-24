@@ -2036,6 +2036,8 @@
   "MaxProfitDate": "Datum för maximal vinst",
   "MaxProfitDateDesc": "Datum för högsta vinstvärdet under hela perioden.",
   "MaxProfitWholePeriod": "Maximal vinst för hela perioden.",
+  "MaxQueue": "Maximal Köstorlek",
+  "MaxQueueDesc": "Maximalt antal buffrade inkommande UDP-paket per flöde innan nya paket tas bort.",
   "MaxReadBytes": "Maximalt lästa byte",
   "MaxReadBytesDesc": "Hämta och ställ in maximalt tillåtna antal bytes för varje läsoperation.",
   "MaxRegisterCount": "Maximalt antal registreringar",

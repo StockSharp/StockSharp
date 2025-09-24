@@ -2036,6 +2036,8 @@
   "MaxProfitDate": "Maximális profit dátuma",
   "MaxProfitDateDesc": "A teljes időszakon belüli maximális nyereség értékének dátuma.",
   "MaxProfitWholePeriod": "Maximális profit az egész időszakra.",
+  "MaxQueue": "Maximális Sor Méret",
+  "MaxQueueDesc": "Maximális pufferelt bejövő UDP csomagok száma csatornánként új csomagok eldobása előtt.",
   "MaxReadBytes": "Maximálisan olvasott bájtok",
   "MaxReadBytesDesc": "Megkapni és beállítani az olvasási műveletekenként megengedett maximális bájtok számát.",
   "MaxRegisterCount": "Maximális regisztrációs szám",

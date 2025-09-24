@@ -2036,6 +2036,8 @@
   "MaxProfitDate": "最大收益日期",
   "MaxProfitDateDesc": "全期最大利润值的日期。",
   "MaxProfitWholePeriod": "整个时期的最大利润。",
+  "MaxQueue": "最大队列大小",
+  "MaxQueueDesc": "在丢弃新数据包之前每个数据源的最大缓冲传入UDP数据包数。",
   "MaxReadBytes": "最大读取字节数",
   "MaxReadBytesDesc": "获取并设置每个读操作的最大允许字节数。",
   "MaxRegisterCount": "最大注册数量",

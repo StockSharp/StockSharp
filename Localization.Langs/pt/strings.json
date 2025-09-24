@@ -2036,6 +2036,8 @@
   "MaxProfitDate": "Data de lucro máximo",
   "MaxProfitDateDesc": "Data do valor máximo de lucro para todo o período.",
   "MaxProfitWholePeriod": "Lucro máximo para o período inteiro.",
+  "MaxQueue": "Tamanho Máximo da Fila",
+  "MaxQueueDesc": "Máximo de pacotes UDP recebidos em buffer por feed antes que novos pacotes sejam descartados.",
   "MaxReadBytes": "Máximo de bytes lidos",
   "MaxReadBytesDesc": "Obter e definir o número máximo de bytes permitidos para cada operação de leitura.",
   "MaxRegisterCount": "Contagem máxima de registros",

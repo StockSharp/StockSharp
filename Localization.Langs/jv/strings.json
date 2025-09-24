@@ -2036,6 +2036,8 @@
   "MaxProfitDate": "Tanggal Laba Maksimal",
   "MaxProfitDateDesc": "Tanggal nilai laba maksimum kanggo kabeh periode.",
   "MaxProfitWholePeriod": "Keuntungan maksimal kanggo periode kabeh.",
+  "MaxQueue": "Ukuran Antrian Maksimal",
+  "MaxQueueDesc": "Maksimum paket UDP mlebu sing dibuffer saben feed sadurunge paket anyar dibuwang.",
   "MaxReadBytes": "Maksimal Baca Bytes",
   "MaxReadBytesDesc": "Nampa lan netepake nomer maksimum byte sing diijini per operasi maca.",
   "MaxRegisterCount": "Jumlah Registrasi Maksimal",

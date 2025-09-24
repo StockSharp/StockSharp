@@ -2036,6 +2036,8 @@
   "MaxProfitDate": "Datum maximálního zisku",
   "MaxProfitDateDesc": "Datum nejvyššího zisku za celé období.",
   "MaxProfitWholePeriod": "Maximální zisk za celé období.",
+  "MaxQueue": "Maximální Velikost Fronty",
+  "MaxQueueDesc": "Maximální počet vyrovnávaných příchozích UDP paketů na kanál před zahozením nových paketů.",
   "MaxReadBytes": "Maximálně přečtené bajty",
   "MaxReadBytesDesc": "Získat a nastavit maximální povolený počet bajtů pro každou operaci čtení.",
   "MaxRegisterCount": "Maximální počet registrací",
