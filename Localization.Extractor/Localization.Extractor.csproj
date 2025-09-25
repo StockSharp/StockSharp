@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\common_target_net.props" />
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ecng.Serialization" Version="$(EcngVer)" />
+    <PackageReference Include="Spectre.Console.Cli" Version="$(SpectreVer)" />
+  </ItemGroup>
+
+</Project>
