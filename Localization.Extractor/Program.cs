@@ -43,6 +43,10 @@ static class Program
 			config.AddCommand<ValidateCommand>("validate")
 				  .WithDescription("Validates of localization strings across languages")
 				  .WithExample(["validate"]);
+
+			config.AddCommand<RenameCommand>("rename")
+				  .WithDescription("Renames a localization key across all languages")
+				  .WithExample(["rename", "OldKey", "NewKey"]);
 		});
 
 		return app.RunAsync(args);
@@ -150,6 +154,89 @@ static class Program
 				});
 
 			AnsiConsole.MarkupLine("[green]Validate completed successfully.[/]");
+			return Task.FromResult(0);
+		}
+	}
+
+	class RenameCommandSettings : CommandSettings
+	{
+		[CommandArgument(0, "<oldKey>")]
+		public string OldKey { get; set; }
+
+		[CommandArgument(1, "<newKey>")]
+		public string NewKey { get; set; }
+
+		public override ValidationResult Validate()
+		{
+			if (OldKey.IsEmptyOrWhiteSpace())
+				return ValidationResult.Error("Old key is required.");
+
+			if (NewKey.IsEmptyOrWhiteSpace())
+				return ValidationResult.Error("New key is required.");
+
+			if (OldKey == NewKey)
+				return ValidationResult.Error("Old and new keys must be different.");
+
+			return base.Validate();
+		}
+	}
+
+	private class RenameCommand : AsyncCommand<RenameCommandSettings>
+	{
+		public override Task<int> ExecuteAsync(CommandContext context, RenameCommandSettings settings)
+		{
+			AnsiConsole.MarkupLine("[bold green]Localization Utility: Rename[/]");
+
+			var oldKey = settings.OldKey;
+			var newKey = settings.NewKey;
+
+			var conflict = false;
+			var missingLangs = new List<string>();
+			var renamedLangs = new List<string>();
+
+			AnsiConsole.Status().Start("Renaming key...", _ =>
+			{
+				foreach (var lang in _langs)
+				{
+					var file = FixEnPath($@"{_langsPath}{lang}\{_stringsFile}");
+					var dict = File.ReadAllText(file).DeserializeObject<IDictionary<string, string>>();
+
+					if (!dict.ContainsKey(oldKey))
+					{
+						missingLangs.Add(lang);
+						continue;
+					}
+
+					if (dict.ContainsKey(newKey))
+					{
+						AnsiConsole.MarkupLine($"[red]Conflict in '{lang}': new key '{newKey}' already exists.[/]");
+						conflict = true;
+						continue;
+					}
+
+					var value = dict[oldKey];
+					dict.Remove(oldKey);
+					dict[newKey] = value;
+
+					var ordered = dict.OrderBy(p => p.Key).ToDictionary(p => p.Key, p => p.Value);
+					File.WriteAllText(file, ordered.ToJson());
+					renamedLangs.Add(lang);
+				}
+			});
+
+			if (renamedLangs.Count > 0)
+				AnsiConsole.MarkupLine($"[green]Renamed in: {string.Join(", ", renamedLangs)}[/]");
+
+			if (missingLangs.Count > 0)
+				AnsiConsole.MarkupLine($"[yellow]Old key not found in: {string.Join(", ", missingLangs)}[/]");
+
+			if (conflict)
+			{
+				AnsiConsole.MarkupLine("[red]Rename completed with conflicts. Fix them and retry if needed.[/>");
+				return Task.FromResult(1);
+			}
+
+			AnsiConsole.MarkupLine("[green]Rename completed successfully.[/]");
 			return Task.FromResult(0);
 		}
 	}
