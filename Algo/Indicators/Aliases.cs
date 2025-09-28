@@ -1523,3 +1523,85 @@ public class PVT : PriceVolumeTrend
 	/// </summary>
 	public PVT() { }
 }
+
+/// <summary>
+/// <see cref="BullPower"/> alias.
+/// </summary>
+[Browsable(false)]
+public class BULL : BullPower
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="BULL"/>.
+	/// </summary>
+	public BULL()
+	{
+	}
+}
+
+/// <summary>
+/// <see cref="BearPower"/> alias.
+/// </summary>
+[Browsable(false)]
+public class BEAR : BearPower
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="BEAR"/>.
+	/// </summary>
+	public BEAR()
+	{
+	}
+}
+
+/// <summary>
+/// <see cref="ElderRay"/> alias.
+/// </summary>
+[Browsable(false)]
+public class ER : ElderRay
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ER"/>.
+	/// </summary>
+	public ER()
+	{
+	}
+}
+
+/// <summary>
+/// <see cref="RankCorrelationIndex"/> alias.
+/// </summary>
+[Browsable(false)]
+public class RCI : RankCorrelationIndex
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="RCI"/>.
+	/// </summary>
+	public RCI() { }
+}
+
+/// <summary>
+/// <see cref="TrueStrengthIndex"/> alias.
+/// </summary>
+[Browsable(false)]
+public class TSI : TrueStrengthIndex
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="TSI"/>.
+	/// </summary>
+	public TSI()
+	{
+	}
+}
+
+/// <summary>
+/// <see cref="Median"/> alias.
+/// </summary>
+[Browsable(false)]
+public class MED : Median
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="MED"/>.
+	/// </summary>
+	public MED()
+	{
+	}
+}

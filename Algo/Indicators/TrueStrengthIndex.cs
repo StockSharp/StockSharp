@@ -4,13 +4,13 @@ namespace StockSharp.Algo.Indicators;
 /// True Strength Index.
 /// </summary>
 /// <remarks>
-/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/tsi.html
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/true_strength_index.html
 /// </remarks>
 [Display(
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.TSIKey,
 	Description = LocalizedStrings.TrueStrengthIndexKey)]
-[Doc("topics/api/indicators/list_of_indicators/tsi.html")]
+[Doc("topics/api/indicators/list_of_indicators/true_strength_index.html")]
 public class TrueStrengthIndex : BaseComplexIndicator<TrueStrengthIndexValue>
 {
 	/// <summary>
