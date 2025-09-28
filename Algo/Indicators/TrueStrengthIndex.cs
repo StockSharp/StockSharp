@@ -69,6 +69,10 @@ public class TrueStrengthIndex : BaseComplexIndicator<TrueStrengthIndexValue>
 		}
 
 		/// <inheritdoc />
+		public override int NumValuesToInitialize
+			=> _doubleSmoothedMomentum.NumValuesToInitialize + 1;
+
+		/// <inheritdoc />
 		protected override bool CalcIsFormed()
 			=> _doubleSmoothedMomentum.IsFormed && _doubleSmoothedAbsMomentum.IsFormed;
 
