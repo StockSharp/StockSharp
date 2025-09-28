@@ -6,10 +6,10 @@
 /// <remarks>
 /// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/aroon.html
 /// </remarks>
-[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.AroonKey,
-		Description = LocalizedStrings.AroonDescriptionKey)]
+[Display(	
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.AroonKey,
+	Description = LocalizedStrings.AroonDescriptionKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/aroon.html")]
 [IndicatorOut(typeof(AroonValue))]
