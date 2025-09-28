@@ -11,6 +11,7 @@ namespace StockSharp.Algo.Indicators;
 	Name = LocalizedStrings.TSIKey,
 	Description = LocalizedStrings.TrueStrengthIndexKey)]
 [Doc("topics/api/indicators/list_of_indicators/true_strength_index.html")]
+[IndicatorOut(typeof(TrueStrengthIndexValue))]
 public class TrueStrengthIndex : BaseComplexIndicator<TrueStrengthIndexValue>
 {
 	/// <summary>

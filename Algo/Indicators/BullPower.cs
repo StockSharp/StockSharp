@@ -12,43 +12,27 @@ namespace StockSharp.Algo.Indicators;
 	Description = LocalizedStrings.BullPowerDescKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/bull_power.html")]
-public class BullPower : LengthIndicator<decimal>
+public class BullPower : ExponentialMovingAverage
 {
-	private readonly ExponentialMovingAverage _ema;
-
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BullPower"/>.
 	/// </summary>
 	public BullPower()
 	{
-		_ema = new() { Length = 13 };
 	}
 
 	/// <inheritdoc />
 	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
 	/// <inheritdoc />
-	public override int NumValuesToInitialize => _ema.NumValuesToInitialize;
-
-	/// <inheritdoc />
-	protected override bool CalcIsFormed() => _ema.IsFormed;
-
-	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
-		var emaValue = _ema.Process(input);
+		var emaValue = base.OnProcessDecimal(input);
 
-		if (_ema.IsFormed && !emaValue.IsEmpty)
-			return candle.HighPrice - emaValue.ToDecimal();
+		if (emaValue is not null)
+			return candle.HighPrice - emaValue.Value;
 
 		return null;
-	}
-
-	/// <inheritdoc />
-	public override void Reset()
-	{
-		_ema.Length = Length;
-		base.Reset();
 	}
 }

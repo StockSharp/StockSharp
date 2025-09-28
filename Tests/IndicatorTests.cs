@@ -169,7 +169,7 @@ public class IndicatorTests
 					i++;
 				}
 
-				finalCount.AssertEqual(indicator.NumValuesToInitialize);
+				finalCount.AssertEqual(indicator.NumValuesToInitialize, indicator.ToString());
 
 				for (var n = 0; n < 100; n++)
 				{
@@ -232,6 +232,7 @@ public class IndicatorTests
 			typeof(Peak),
 			typeof(Trough),
 			typeof(ParabolicSar),
+			typeof(Shift),
 		};
 
 		foreach (var type in GetIndicatorTypes().Where(t => !skipTypes.Contains(t.Indicator)))

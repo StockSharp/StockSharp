@@ -134,4 +134,7 @@ public class IndicatorType : Equatable<IndicatorType>, IDisposable
 	/// <inheritdoc />
 	public override int GetHashCode()
 		=> Id.GetHashCode();
+
+	/// <inheritdoc />
+	public override string ToString() => Name;
 }

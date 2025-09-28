@@ -38,6 +38,12 @@ public class DeMarker : LengthIndicator<decimal>
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 	/// <inheritdoc />
+	protected override bool CalcIsFormed() => _deMaxSma.IsFormed && _deMinSma.IsFormed && _isInitialized;
+
+	/// <inheritdoc />
+	public override int NumValuesToInitialize => base.NumValuesToInitialize + 1;
+
+	/// <inheritdoc />
 	public override void Reset()
 	{
 		_deMaxSma.Length = Length;
@@ -96,7 +102,4 @@ public class DeMarker : LengthIndicator<decimal>
 
 		return new DecimalIndicatorValue(this, deMarkerValue, input.Time);
 	}
-
-	/// <inheritdoc />
-	protected override bool CalcIsFormed() => _deMaxSma.IsFormed && _deMinSma.IsFormed && _isInitialized;
 }
