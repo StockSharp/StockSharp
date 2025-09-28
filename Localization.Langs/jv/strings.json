@@ -3339,6 +3339,7 @@
   "SharpeRatioDesc": "Rasio Sharpe (pengembalian tahunan - tingkat bebas resiko / standar deviasi tahunan)",
   "ShenzhenStockExchange": "Bursa Saham Shenzhen",
   "Shift": "Geser",
+  "ShiftDesc": "Indikator teknis sing mindahake nilai data kanthi jumlah periode tartamtu tanpa kalkulasi, digunakake kanggo perbandingan adhedhasar wektu",
   "ShiftIs": "Geser {0}",
   "ShiftThePriceStepsFromTheEdge": "Mindhah langkah rega saka pinggir selisih ing langkah rega. Kanggo tuku, yen regane > 0, mindhah menyang njero selisih, yen < 0, mundur saka selisih.",
   "ShiftToFuture": "Pindhah maring Masa Depan.",

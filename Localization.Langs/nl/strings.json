@@ -3339,6 +3339,7 @@
   "SharpeRatioDesc": "Sharpe-ratio (geannualiseerd rendement - risicovrije rente / geannualiseerde standaarddeviatie)",
   "ShenzhenStockExchange": "Effectenbeurs van Shenzhen",
   "Shift": "Verschuiving",
+  "ShiftDesc": "Technische indicator die datawaarden verschuift met een bepaald aantal perioden zonder berekeningen, gebruikt voor tijdgebaseerde vergelijkingen",
   "ShiftIs": "Verschuiving {0}",
   "ShiftThePriceStepsFromTheEdge": "Verschuiving in prijsstappen vanaf de rand van de spread in prijsstappen. Bij aankoop, als de waarde > 0 is, verschuift het naar binnen de spread, als < 0, verschuift het weg van de spread.",
   "ShiftToFuture": "Verschuiving naar de toekomst.",

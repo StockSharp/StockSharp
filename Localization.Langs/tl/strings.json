@@ -3344,6 +3344,7 @@
   "SharpeRatioDesc": "Sharpe Ratio (taunang kita - walang panganib na rate / taunang standard deviation)",
   "ShenzhenStockExchange": "Shenzhen Stock Exchange",
   "Shift": "Shift",
+  "ShiftDesc": "Technical indicator na naglilipat ng mga data value sa pamamagitan ng tiyak na bilang ng mga period nang walang mga kalkulasyon, ginagamit para sa time-based na mga paghahambing",
   "ShiftIs": "Shift {0}",
   "ShiftThePriceStepsFromTheEdge": "Ang paglipat sa mga hakbang ng presyo mula sa gilid ng spread sa mga hakbang ng presyo. Para bumili sa halaga ng > 0 inililipat ang spread sa loob, < 0 malayo mula sa spread.",
   "ShiftToFuture": "Paglipat sa hinaharap.",

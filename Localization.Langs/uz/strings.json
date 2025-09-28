@@ -3339,6 +3339,7 @@
   "SharpeRatioDesc": "Sharpe nisbati (yillik daromad - risksiz stavka / yillik standart og'ish)",
   "ShenzhenStockExchange": "Shenjen fond birjasi",
   "Shift": "Siljish",
+  "ShiftDesc": "Hech qanday hisob-kitobsiz ma'lumot qiymatlarini belgilangan davrlar soni bilan siljituvchi texnik ko'rsatkich, vaqtga asoslangan taqqoslashlar uchun ishlatiladi",
   "ShiftIs": "Shift {0}",
   "ShiftThePriceStepsFromTheEdge": "Narx qadamlarini tarqatish chetidan narx qadamlariga ko'chirish. Sotib olish uchun, agar qiymat > 0 bo'lsa, tarqalish ichiga, < 0 bo'lsa, tarqalishdan tashqariga siljiydi.",
   "ShiftToFuture": "Kelajakka siljish.",

@@ -3339,6 +3339,7 @@
   "SharpeRatioDesc": "샤프 비율 (연간 수익률 - 무위험 이자율 / 연간 표준편차)",
   "ShenzhenStockExchange": "심천 증권 거래소",
   "Shift": "시프트",
+  "ShiftDesc": "계산 없이 지정된 기간 수만큼 데이터 값을 이동시키는 기술적 지표로, 시간 기반 비교에 사용됩니다",
   "ShiftIs": "시프트 {0}",
   "ShiftThePriceStepsFromTheEdge": "스프레드의 가장자리에서 가격 단계를 이동합니다. 구매시 값이 > 0인 경우 스프레드 내부로 이동하고, < 0인 경우 스프레드에서 멀어집니다.",
   "ShiftToFuture": "미래로의 전환.",

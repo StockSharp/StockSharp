@@ -3339,6 +3339,7 @@
   "SharpeRatioDesc": "Sharpe Oranı (yıllık getiri - risksiz oran / yıllık standart sapma)",
   "ShenzhenStockExchange": "Shenzhen Borsası",
   "Shift": "Kaydırma",
+  "ShiftDesc": "Herhangi bir hesaplama yapmadan veri değerlerini belirli sayıda dönem kaydıran, zamana dayalı karşılaştırmalar için kullanılan teknik gösterge",
   "ShiftIs": "Kaydırma {0}",
   "ShiftThePriceStepsFromTheEdge": "Spread'ın kenarından fiyat adımlarında kaydırma. Satın alırken, değer > 0 ise spread içine kaydır, < 0 ise spread dışına kaydır.",
   "ShiftToFuture": "Geleceğe Kaydır.",

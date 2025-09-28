@@ -3339,6 +3339,7 @@
   "SharpeRatioDesc": "Rapporto Sharpe (rendimento annualizzato - tasso privo di rischio / deviazione standard annualizzata)",
   "ShenzhenStockExchange": "Borsa di Shenzhen",
   "Shift": "Spostamento",
+  "ShiftDesc": "Indicatore tecnico che sposta i valori dei dati di un numero specifico di periodi senza calcoli, usato per confronti temporali",
   "ShiftIs": "Scostamento {0}",
   "ShiftThePriceStepsFromTheEdge": "Spostamento in passaggi di prezzo dal bordo dello spread in passaggi di prezzo. Per comprare, se il valore è > 0, sposta verso l'interno dello spread, se < 0, sposta verso l'esterno dello spread.",
   "ShiftToFuture": "Spostamento verso il futuro.",

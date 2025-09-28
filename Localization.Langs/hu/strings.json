@@ -3339,6 +3339,7 @@
   "SharpeRatioDesc": "Sharpe arány (éves hozam - kockázatmentes kamatláb / éves szórás)",
   "ShenzhenStockExchange": "Shenzeni Tőzsde",
   "Shift": "Eltolás",
+  "ShiftDesc": "Technikai mutató, amely az adatértékeket meghatározott számú időszakkal eltolja számítások nélkül, időalapú összehasonlításokhoz használatos",
   "ShiftIs": "Eltolás {0}",
   "ShiftThePriceStepsFromTheEdge": "Árazási lépések eltolása a szórás szélétől árazási lépésekben. Vásárláskor, ha az érték > 0, beljebb tolja a szórást, ha < 0, távolabb tolja a szórást.",
   "ShiftToFuture": "Áttérés a jövőbe.",

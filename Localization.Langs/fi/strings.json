@@ -3339,6 +3339,7 @@
   "SharpeRatioDesc": "Sharpe-suhde (vuositasoitettu tuotto - riskitön korko / vuositasoitettu keskihajonta)",
   "ShenzhenStockExchange": "Shenzhenin pörssi",
   "Shift": "Siirtymä",
+  "ShiftDesc": "Tekninen indikaattori, joka siirtää data-arvoja määrätyn määrän jaksoja ilman laskelmia, käytetään aikapohjaisiin vertailuihin",
   "ShiftIs": "Siirtymä {0}",
   "ShiftThePriceStepsFromTheEdge": "Siirto hinta-askelin reunasta levityksessä hinta-askelin. Ostettaessa, jos arvo on > 0, siirtyy sisäänpäin levityksestä, jos < 0, poispäin levityksestä.",
   "ShiftToFuture": "Siirry tulevaisuuteen.",

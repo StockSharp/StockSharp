@@ -3339,6 +3339,7 @@
   "SharpeRatioDesc": "Sharpe pomer (anualizovaný výnos - bezriziková sadzba / anualizovaná smerodajná odchýlka)",
   "ShenzhenStockExchange": "Burza v Shenzhene",
   "Shift": "Posun",
+  "ShiftDesc": "Technický indikátor, ktorý posúva dátové hodnoty o zadaný počet období bez výpočtov, používa sa na časové porovnania",
   "ShiftIs": "Posun {0}",
   "ShiftThePriceStepsFromTheEdge": "Posun v krokoch ceny od hrany spreadu v krokoch ceny. Pre nákup pri hodnote> 0 posúva dnu spreadu, pri < 0 ďaleko od spreadu.",
   "ShiftToFuture": "Posun do budúcnosti.",

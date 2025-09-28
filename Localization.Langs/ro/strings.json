@@ -3339,6 +3339,7 @@
   "SharpeRatioDesc": "Ratio Sharpe (randament anualat - rata fără risc / deviația standard anualizată)",
   "ShenzhenStockExchange": "Bursa de Valori Shenzhen",
   "Shift": "Deplasare",
+  "ShiftDesc": "Indicator tehnic care deplasează valorile datelor cu un număr specificat de perioade fără calcule, folosit pentru comparații bazate pe timp",
   "ShiftIs": "Deplasare {0}",
   "ShiftThePriceStepsFromTheEdge": "Deplasare în pași de preț de la marginea spreadului în pași de preț. Pentru cumpărare, dacă valoarea > 0, se deplasează spre interiorul spreadului, dacă < 0, se îndepărtează de spread.",
   "ShiftToFuture": "Schimbare către viitor.",

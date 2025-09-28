@@ -3339,6 +3339,7 @@
   "SharpeRatioDesc": "Sharpe-kvot (årlig avkastning - riskfri ränta / årlig standardavvikelse)",
   "ShenzhenStockExchange": "Shenzhenbörsen",
   "Shift": "Skift",
+  "ShiftDesc": "Teknisk indikator som förskjuter datavärden med ett specificerat antal perioder utan beräkningar, används för tidsbaserade jämförelser",
   "ShiftIs": "Förskjutning {0}",
   "ShiftThePriceStepsFromTheEdge": "Förskjutning i prissteg från kanten av spreaden i prissteg. Vid köp, om värdet är > 0, flyttas det inåt spreaden, om < 0, flyttas det bort från spreaden.",
   "ShiftToFuture": "Skift till framtiden.",

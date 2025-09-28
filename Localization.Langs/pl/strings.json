@@ -3339,6 +3339,7 @@
   "SharpeRatioDesc": "Współczynnik Sharpe (roczny zwrot - stopa wolna od ryzyka / roczne odchylenie standardowe)",
   "ShenzhenStockExchange": "Giełda Papierów Wartościowych w Shenzhen",
   "Shift": "Przesunięcie",
+  "ShiftDesc": "Wskaźnik techniczny, który przesuwa wartości danych o określoną liczbę okresów bez obliczeń, używany do porównań czasowych",
   "ShiftIs": "Przesunięcie {0}",
   "ShiftThePriceStepsFromTheEdge": "Przesunięcie w krokach ceny od krawędzi spreadu w krokach ceny. Przy zakupie, jeśli wartość > 0, przesunięcie do wewnątrz spreadu, jeśli < 0, przesunięcie na zewnątrz spreadu.",
   "ShiftToFuture": "Przesunięcie w przyszłość.",

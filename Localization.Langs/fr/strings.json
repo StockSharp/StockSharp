@@ -3339,6 +3339,7 @@
   "SharpeRatioDesc": "Ratio Sharpe (rendement annualisé - taux sans risque / écart type annualisé)",
   "ShenzhenStockExchange": "Bourse de Shenzhen",
   "Shift": "Décalage",
+  "ShiftDesc": "Indicateur technique qui décale les valeurs de données d'un nombre spécifique de périodes sans calcul, utilisé pour les comparaisons temporelles",
   "ShiftIs": "Décalage {0}",
   "ShiftThePriceStepsFromTheEdge": "Décalage par paliers de prix à partir du bord du spread en paliers de prix. Pour l'achat, si la valeur est > 0, le décalage se fait vers l'intérieur du spread, si < 0, il s'éloigne du spread.",
   "ShiftToFuture": "Basculer vers l'avenir.",

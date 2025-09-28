@@ -3339,6 +3339,7 @@
   "SharpeRatioDesc": "Sharpe-Verhältnis (annualisierte Rendite - risikofreier Zinssatz / annualisierte Standardabweichung)",
   "ShenzhenStockExchange": "Shenzhen Börse",
   "Shift": "Verschiebung",
+  "ShiftDesc": "Technischer Indikator, der Datenwerte um eine bestimmte Anzahl von Perioden ohne Berechnungen verschiebt, wird für zeitbasierte Vergleiche verwendet",
   "ShiftIs": "Verschiebung {0}",
   "ShiftThePriceStepsFromTheEdge": "Verschiebung in Preisschritten vom Rand des Spreads in Preisschritten. Beim Kauf, wenn der Wert > 0 ist, verschiebt es sich in den Spread hinein, bei < 0 weg vom Spread.",
   "ShiftToFuture": "Verschiebung in die Zukunft.",

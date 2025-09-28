@@ -3339,6 +3339,7 @@
   "SharpeRatioDesc": "シャープ比率（年率リターン - リスクフリーレート / 年率標準偏差）",
   "ShenzhenStockExchange": "深セン証券取引所",
   "Shift": "シフト",
+  "ShiftDesc": "計算を行わずに指定された期間数だけデータ値をシフトするテクニカル指標で、時間ベースの比較に使用される",
   "ShiftIs": "シフト {0}",
   "ShiftThePriceStepsFromTheEdge": "スプレッドの端から価格ステップで移動。購入時、値が>0の場合はスプレッド内に移動、<0の場合はスプレッドから離れる。",
   "ShiftToFuture": "未来へのシフト。",

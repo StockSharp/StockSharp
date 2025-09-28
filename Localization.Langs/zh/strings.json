@@ -3339,6 +3339,7 @@
   "SharpeRatioDesc": "夏普比率（年化收益 - 无风险利率 / 年化标准差）",
   "ShenzhenStockExchange": "深圳证券交易所",
   "Shift": "移位",
+  "ShiftDesc": "将数据值按指定周期数移位而不进行任何计算的技术指标，用于基于时间的比较",
   "ShiftIs": "移位 {0}",
   "ShiftThePriceStepsFromTheEdge": "从价差边缘的价格步长中移动，以价格步长进行。购买时，如果值> 0，则向价差内移动，如果 < 0，则向价差外移动。",
   "ShiftToFuture": "转向未来。",

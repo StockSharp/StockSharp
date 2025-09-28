@@ -3339,6 +3339,7 @@
   "SharpeRatioDesc": "Nisbah Sharpe (pulangan tahunan - kadar bebas risiko / sisihan piawai tahunan)",
   "ShenzhenStockExchange": "Bursa Saham Shenzhen",
   "Shift": "Anjakan",
+  "ShiftDesc": "Penunjuk teknikal yang mengalihkan nilai data dengan bilangan tempoh tertentu tanpa sebarang pengiraan, digunakan untuk perbandingan berasaskan masa",
   "ShiftIs": "Anjakan {0}",
   "ShiftThePriceStepsFromTheEdge": "Mengalihkan langkah harga dari tepi spread dalam langkah harga. Untuk membeli, jika nilai > 0, mengalih ke dalam spread, jika < 0, menjauhi spread.",
   "ShiftToFuture": "Alih ke Masa Depan.",

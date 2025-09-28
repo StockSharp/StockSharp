@@ -3339,6 +3339,7 @@
   "SharpeRatioDesc": "Tỷ lệ Sharpe (lợi nhuận hàng năm - lãi suất phi rủi ro / độ lệch chuẩn hàng năm)",
   "ShenzhenStockExchange": "Sở Giao dịch Chứng khoán Thâm Quyến",
   "Shift": "Dịch chuyển",
+  "ShiftDesc": "Chỉ báo kỹ thuật dịch chuyển giá trị dữ liệu theo một số kỳ cụ thể mà không có tính toán nào, được sử dụng cho các so sánh dựa trên thời gian",
   "ShiftIs": "Dịch chuyển {0}",
   "ShiftThePriceStepsFromTheEdge": "Dịch chuyển theo bước giá từ mép của khoảng chênh lệch theo bước giá. Đối với mua, nếu giá trị > 0, di chuyển vào trong khoảng chênh lệch, nếu < 0, di chuyển ra xa khoảng chênh lệch.",
   "ShiftToFuture": "Dịch chuyển tới tương lai.",

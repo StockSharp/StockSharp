@@ -3346,6 +3346,7 @@
   "SharpeRatioDesc": "Sharpe ratio (annualized return - risk-free rate / annualized standard deviation)",
   "ShenzhenStockExchange": "Shenzhen Stock Exchange",
   "Shift": "Shift",
+  "ShiftDesc": "Technical indicator that shifts data values by a specified number of periods without any calculations, used for time-based comparisons",
   "ShiftIs": "Shift {0}",
   "ShiftThePriceStepsFromTheEdge": "A shift in the price steps from the edge of the spread in price steps. To buy at a value of> 0 shifts the spread inside, <0 away from the spread.",
   "ShiftToFuture": "Shift to the future.",

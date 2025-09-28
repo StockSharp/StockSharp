@@ -3339,6 +3339,7 @@
   "SharpeRatioDesc": "Sharpe-forholdet (annualiseret afkast - risikofri rente / annualiseret standardafvigelse)",
   "ShenzhenStockExchange": "Shenzhen Børsen",
   "Shift": "Forskydning",
+  "ShiftDesc": "Teknisk indikator der forskyder dataværdier med et specificeret antal perioder uden beregninger, bruges til tidsbaserede sammenligninger",
   "ShiftIs": "Forskydning {0}",
   "ShiftThePriceStepsFromTheEdge": "Forskydning i prissteps fra kanten af spread i prissteps. Ved køb, hvis værdien er > 0, forskydes det ind i spreadet, hvis < 0, væk fra spreadet.",
   "ShiftToFuture": "Skift til fremtiden.",
