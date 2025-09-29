@@ -297,6 +297,34 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	}
 
 	/// <summary>
+	/// Set positive validator.
+	/// </summary>
+	/// <returns><see cref="StrategyParam{T}"/></returns>
+	public StrategyParam<T> SetPositive()
+	{
+		var type = GetValueType();
+
+		object max;
+
+		if (type == typeof(int))
+			max = int.MaxValue;
+		else if (type == typeof(long))
+			max = long.MaxValue;
+		else if (type == typeof(decimal))
+			max = decimal.MaxValue;
+		else if (type == typeof(double))
+			max = double.MaxValue;
+		else if (type == typeof(float))
+			max = float.MaxValue;
+		else if (type == typeof(TimeSpan))
+			max = TimeSpan.MaxValue;
+		else
+			throw new InvalidOperationException(type.Name);
+
+		return SetRange(1L.To<T>(), max.To<T>());
+	}
+
+	/// <summary>
 	/// Set range validator.
 	/// </summary>
 	/// <param name="min">Minimum value.</param>
