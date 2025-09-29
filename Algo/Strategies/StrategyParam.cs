@@ -89,7 +89,7 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 			if (!this.IsValid(value))
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
-			if (_hasStep && !IsStepValid(value))
+			if (_hasStep && _hasStep && !IsValueMatchesStep(GetValueType(), value, _stepValue, _stepBaseValue))
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 			_value = value;
@@ -97,83 +97,71 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 		}
 	}
 
-	private bool IsStepValid(T value)
+	private static bool IsValueMatchesStep(Type type, T value, T step, T baseValue)
 	{
-		if (!_hasStep)
-			return true;
-
-		var type = GetValueType();
-
-		try
+		if (type == typeof(TimeSpan))
 		{
-			if (type == typeof(TimeSpan))
-			{
-				var v = value.To<TimeSpan>();
-				var b = _stepBaseValue.To<TimeSpan>();
-				var s = _stepValue.To<TimeSpan>();
+			var v = value.To<TimeSpan>();
+			var b = baseValue.To<TimeSpan>();
+			var s = step.To<TimeSpan>();
 
-				var diff = v - b;
+			var diff = v - b;
 
-				if (diff < TimeSpan.Zero)
-					return false;
+			if (diff < TimeSpan.Zero)
+				return false;
 
-				return diff.Ticks % s.Ticks == 0;
-			}
-			else if (type.IsNumericInteger())
-			{
-				var v = value.To<long>();
-				var b = _stepBaseValue.To<long>();
-				var s = _stepValue.To<long>();
-
-				var diff = v - b;
-
-				if (diff < 0)
-					return false;
-
-				return diff % s == 0;
-			}
-			else if (type.IsNumeric())
-			{
-				var v = value.To<decimal>();
-				var b = _stepBaseValue.To<decimal>();
-				var s = _stepValue.To<decimal>();
-
-				var diff = v - b;
-
-				if (diff < 0)
-					return false;
-
-				var q = diff / s;
-				var rq = Math.Round(q);
-
-				return (q - rq).Abs() < 1e-10m;
-			}
-			else if (type == typeof(Unit))
-			{
-				var v = value.To<Unit>();
-				var b = _stepBaseValue.To<Unit>();
-				var s = _stepValue.To<Unit>();
-
-				if (v.Type != b.Type || v.Type != s.Type)
-					return false;
-
-				var diff = v.Value - b.Value;
-
-				if (diff < 0)
-					return false;
-
-				var q = diff / s.Value;
-				var rq = Math.Round(q);
-
-				return (q - rq).Abs() < 1e-10m;
-			}
-			else
-				throw new NotSupportedException(type.FullName);
+			return diff.Ticks % s.Ticks == 0;
 		}
-		catch
+		else if (type.IsNumericInteger())
 		{
-			return false;
+			var v = value.To<long>();
+			var b = baseValue.To<long>();
+			var s = step.To<long>();
+
+			var diff = v - b;
+
+			if (diff < 0)
+				return false;
+
+			return diff % s == 0;
 		}
+		else if (type.IsNumeric())
+		{
+			var v = value.To<decimal>();
+			var b = baseValue.To<decimal>();
+			var s = step.To<decimal>();
+
+			var diff = v - b;
+
+			if (diff < 0)
+				return false;
+
+			var q = diff / s;
+			var rq = Math.Round(q);
+
+			return (q - rq).Abs() < 1e-10m;
+		}
+		else if (type == typeof(Unit))
+		{
+			var v = value.To<Unit>();
+			var b = baseValue.To<Unit>();
+			var s = step.To<Unit>();
+
+			if (v.Type != b.Type || v.Type != s.Type)
+				return false;
+
+			var diff = v.Value - b.Value;
+
+			if (diff < 0)
+				return false;
+
+			var q = diff / s.Value;
+			var rq = Math.Round(q);
+
+			return (q - rq).Abs() < 1e-10m;
+		}
+		else
+			throw new NotSupportedException(type.FullName);
 	}
 
 	/// <summary>
@@ -202,13 +190,12 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 		if (invalid)
 			throw new ArgumentOutOfRangeException(nameof(step), step, LocalizedStrings.IntervalMustBePositive);
 
+		if (!IsValueMatchesStep(type, _value, step, baseValue))
+			throw new ArgumentOutOfRangeException(nameof(step), step, LocalizedStrings.InvalidValue);
+
 		_stepValue = step;
 		_stepBaseValue = baseValue;
 		_hasStep = true;
-
-		if (!IsStepValid(_value))
-			throw new ArgumentOutOfRangeException(nameof(step), step, LocalizedStrings.InvalidValue);
-
 		return this;
 	}
 
