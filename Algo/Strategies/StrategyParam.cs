@@ -49,6 +49,11 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 {
 	private readonly IEqualityComparer<T> _comparer;
 
+	// step restriction
+	private bool _hasStep;
+	private T _stepValue;
+	private T _stepBaseValue;
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
 	/// </summary>
@@ -84,9 +89,127 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 			if (!this.IsValid(value))
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
+			if (_hasStep && !IsStepValid(value))
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
 			_value = value;
 			NotifyChanged();
 		}
+	}
+
+	private bool IsStepValid(T value)
+	{
+		if (!_hasStep)
+			return true;
+
+		var type = GetValueType();
+
+		try
+		{
+			if (type == typeof(TimeSpan))
+			{
+				var v = value.To<TimeSpan>();
+				var b = _stepBaseValue.To<TimeSpan>();
+				var s = _stepValue.To<TimeSpan>();
+
+				var diff = v - b;
+
+				if (diff < TimeSpan.Zero)
+					return false;
+
+				return diff.Ticks % s.Ticks == 0;
+			}
+			else if (type.IsNumericInteger())
+			{
+				var v = value.To<long>();
+				var b = _stepBaseValue.To<long>();
+				var s = _stepValue.To<long>();
+
+				var diff = v - b;
+
+				if (diff < 0)
+					return false;
+
+				return diff % s == 0;
+			}
+			else if (type.IsNumeric())
+			{
+				var v = value.To<decimal>();
+				var b = _stepBaseValue.To<decimal>();
+				var s = _stepValue.To<decimal>();
+
+				var diff = v - b;
+
+				if (diff < 0)
+					return false;
+
+				var q = diff / s;
+				var rq = Math.Round(q);
+
+				return (q - rq).Abs() < 1e-10m;
+			}
+			else if (type == typeof(Unit))
+			{
+				var v = value.To<Unit>();
+				var b = _stepBaseValue.To<Unit>();
+				var s = _stepValue.To<Unit>();
+
+				if (v.Type != b.Type || v.Type != s.Type)
+					return false;
+
+				var diff = v.Value - b.Value;
+
+				if (diff < 0)
+					return false;
+
+				var q = diff / s.Value;
+				var rq = Math.Round(q);
+
+				return (q - rq).Abs() < 1e-10m;
+			}
+			else
+				throw new NotSupportedException(type.FullName);
+		}
+		catch
+		{
+			return false;
+		}
+	}
+
+	/// <summary>
+	/// Set values step restriction (value must equal base + N*step).
+	/// </summary>
+	/// <param name="step">Step (>0).</param>
+	/// <param name="baseValue">Base value (default 0).</param>
+	/// <returns><see cref="StrategyParam{T}"/>.</returns>
+	public StrategyParam<T> SetStep(T step, T baseValue = default)
+	{
+		var type = GetValueType();
+
+		bool invalid;
+
+		if (type == typeof(TimeSpan))
+			invalid = step.To<TimeSpan>() <= TimeSpan.Zero;
+		else if (type.IsNumericInteger())
+			invalid = step.To<long>() <= 0;
+		else if (type.IsNumeric())
+			invalid = step.To<decimal>() <= 0;
+		else if (type == typeof(Unit))
+			invalid = step.To<Unit>().Value <= 0;
+		else
+			throw new NotSupportedException(type.FullName);
+
+		if (invalid)
+			throw new ArgumentOutOfRangeException(nameof(step), step, LocalizedStrings.IntervalMustBePositive);
+
+		_stepValue = step;
+		_stepBaseValue = baseValue;
+		_hasStep = true;
+
+		if (!IsStepValid(_value))
+			throw new ArgumentOutOfRangeException(nameof(step), step, LocalizedStrings.InvalidValue);
+
+		return this;
 	}
 
 	Type IStrategyParam.Type => typeof(T);
@@ -364,6 +487,12 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 		return Ecng.ComponentModel.Extensions.SetRequired(this);
 	}
 
+	private static class Keys
+	{
+		public const string StepValue = nameof(StepValue);
+		public const string StepBaseValue = nameof(StepBaseValue);
+	}
+
 	/// <summary>
 	/// Load settings.
 	/// </summary>
@@ -401,6 +530,21 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 		OptimizeFrom = storage.GetValue<SettingsStorage>(nameof(OptimizeFrom))?.FromStorage();
 		OptimizeTo = storage.GetValue<SettingsStorage>(nameof(OptimizeTo))?.FromStorage();
 		OptimizeStep = storage.GetValue<SettingsStorage>(nameof(OptimizeStep))?.FromStorage();
+
+		if (!storage.ContainsKey(Keys.StepValue))
+			return;
+
+		var stepVal = storage.GetValue<T>(Keys.StepValue);
+		var baseVal = storage.GetValue<T>(Keys.StepBaseValue);
+
+		try
+		{
+			SetStep(stepVal, baseVal);
+		}
+		catch (Exception ex)
+		{
+			ex.LogError();
+		}
 	}
 
 	/// <summary>
@@ -428,8 +572,15 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 			.Set(nameof(CanOptimize), CanOptimize)
 			.Set(nameof(OptimizeFrom), OptimizeFrom?.ToStorage())
 			.Set(nameof(OptimizeTo), OptimizeTo?.ToStorage())
-			.Set(nameof(OptimizeStep), OptimizeStep?.ToStorage())
-		;
+			.Set(nameof(OptimizeStep), OptimizeStep?.ToStorage());
+
+		if (_hasStep)
+		{
+			storage
+				.Set(Keys.StepValue, _stepValue)
+				.Set(Keys.StepBaseValue, _stepBaseValue)
+			;
+		}
 	}
 
 	/// <inheritdoc />
