@@ -9,19 +9,31 @@ using StockSharp.Charting;
 /// <summary>
 /// Subscription handler.
 /// </summary>
-/// <typeparam name="T">Market-data type.</typeparam>
-public interface ISubscriptionHandler<T>
+public interface ISubscriptionHandler : IDisposable
 {
 	/// <summary>
 	/// <see cref="Subscription"/>.
 	/// </summary>
 	Subscription Subscription { get; }
+}
 
+/// <summary>
+/// Subscription handler.
+/// </summary>
+/// <typeparam name="T">Market-data type.</typeparam>
+public interface ISubscriptionHandler<T> : ISubscriptionHandler
+{
 	/// <summary>
 	/// Start subscription.
 	/// </summary>
 	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
 	ISubscriptionHandler<T> Start();
+
+	/// <summary>
+	/// Start subscription.
+	/// </summary>
+	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
+	ISubscriptionHandler<T> Stop();
 
 	/// <summary>
 	/// Bind the subscription.
@@ -283,7 +295,7 @@ public partial class Strategy
 	/// Subscription handler.
 	/// </summary>
 	/// <typeparam name="T">Market-data type.</typeparam>
-	private class SubscriptionHandler<T> : ISubscriptionHandler<T>
+	private class SubscriptionHandler<T> : Disposable, ISubscriptionHandler<T>
 	{
 		/// <summary>
 		/// Subscription binder with zero indicators.
@@ -377,6 +389,13 @@ public partial class Strategy
         {
 			_strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
 			Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
+		}
+
+		protected override void DisposeManaged()
+		{
+			base.DisposeManaged();
+
+			Stop();
 		}
 
 		/// <summary>
@@ -530,6 +549,12 @@ public partial class Strategy
 		public ISubscriptionHandler<T> Start()
 		{
 			_strategy.Subscribe(Subscription);
+			return this;
+		}
+
+		public ISubscriptionHandler<T> Stop()
+		{
+			_strategy.UnSubscribe(Subscription);
 			return this;
 		}
 
