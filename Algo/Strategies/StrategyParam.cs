@@ -48,13 +48,8 @@ public interface IStrategyParam : IPersistable, INotifyPropertyChanged, IAttribu
 public class StrategyParam<T> : NotifiableObject, IStrategyParam
 {
 	private readonly IEqualityComparer<T> _comparer;
-
-	// step restriction
-	private bool _hasStep;
-	private T _stepValue;
-	private T _stepBaseValue;
-
 	private static readonly Type _valueType = typeof(T).GetUnderlyingType() ?? typeof(T);
+	private static readonly bool _isNullable = Nullable.GetUnderlyingType(typeof(T)) != null;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
@@ -91,114 +86,9 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 			if (!this.IsValid(value))
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
-			if (_hasStep && _hasStep && !IsValueMatchesStep(_valueType, value, _stepValue, _stepBaseValue))
-				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
-
 			_value = value;
 			NotifyChanged();
 		}
-	}
-
-	private static bool IsValueMatchesStep(Type type, T value, T step, T baseValue)
-	{
-		if (type == typeof(TimeSpan))
-		{
-			var v = value.To<TimeSpan>();
-			var b = baseValue.To<TimeSpan>();
-			var s = step.To<TimeSpan>();
-
-			var diff = v - b;
-
-			if (diff < TimeSpan.Zero)
-				return false;
-
-			return diff.Ticks % s.Ticks == 0;
-		}
-		else if (type.IsNumericInteger())
-		{
-			var v = value.To<long>();
-			var b = baseValue.To<long>();
-			var s = step.To<long>();
-
-			var diff = v - b;
-
-			if (diff < 0)
-				return false;
-
-			return diff % s == 0;
-		}
-		else if (type.IsNumeric())
-		{
-			var v = value.To<decimal>();
-			var b = baseValue.To<decimal>();
-			var s = step.To<decimal>();
-
-			var diff = v - b;
-
-			if (diff < 0)
-				return false;
-
-			var q = diff / s;
-			var rq = Math.Round(q);
-
-			return (q - rq).Abs() < 1e-10m;
-		}
-		else if (type == typeof(Unit))
-		{
-			var v = value.To<Unit>();
-			var b = baseValue.To<Unit>();
-			var s = step.To<Unit>();
-
-			if (v.Type != b.Type || v.Type != s.Type)
-				return false;
-
-			var diff = v.Value - b.Value;
-
-			if (diff < 0)
-				return false;
-
-			var q = diff / s.Value;
-			var rq = Math.Round(q);
-
-			return (q - rq).Abs() < 1e-10m;
-		}
-		else
-			throw new NotSupportedException(type.FullName);
-	}
-
-	/// <summary>
-	/// Set values step restriction (value must equal base + N*step).
-	/// </summary>
-	/// <param name="step">Step (>0).</param>
-	/// <param name="baseValue">Base value (default 0).</param>
-	/// <returns><see cref="StrategyParam{T}"/>.</returns>
-	public StrategyParam<T> SetStep(T step, T baseValue = default)
-	{
-		var type = _valueType;
-
-		bool invalid;
-
-		if (type == typeof(TimeSpan))
-			invalid = step.To<TimeSpan>() <= TimeSpan.Zero;
-		else if (type.IsNumericInteger())
-			invalid = step.To<long>() <= 0;
-		else if (type.IsNumeric())
-			invalid = step.To<decimal>() <= 0;
-		else if (type == typeof(Unit))
-			invalid = step.To<Unit>().Value <= 0;
-		else
-			throw new NotSupportedException(type.FullName);
-
-		if (invalid)
-			throw new ArgumentOutOfRangeException(nameof(step), step, LocalizedStrings.IntervalMustBePositive);
-
-		if (!IsValueMatchesStep(type, _value, step, baseValue))
-			throw new ArgumentOutOfRangeException(nameof(step), step, LocalizedStrings.InvalidValue);
-
-		_stepValue = step;
-		_stepBaseValue = baseValue;
-		_hasStep = true;
-		return this;
 	}
 
 	Type IStrategyParam.Type => typeof(T);
@@ -259,7 +149,7 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <param name="category">The category of the diagram element parameter.</param>
 	/// <returns><see cref="StrategyParam{T}"/></returns>
 	public StrategyParam<T> SetDisplay(string displayName, string description, string category)
-		=> ModifyAttributes(true, () => new DisplayAttribute
+		=> this.ModifyAttributes(true, () => new DisplayAttribute
 		{
 			Name = displayName,
 			Description = description,
@@ -272,7 +162,7 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <param name="hidden">Is the parameter hidden in the editor.</param>
 	/// <returns><see cref="StrategyParam{T}"/></returns>
 	public StrategyParam<T> SetHidden(bool hidden = true)
-		=> ModifyAttributes(hidden, () => new BrowsableAttribute(false));
+		=> this.ModifyAttributes(hidden, () => new BrowsableAttribute(false));
 
 	/// <summary>
 	/// Set <see cref="BasicSettingAttribute"/>.
@@ -280,7 +170,7 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <param name="basic">Value.</param>
 	/// <returns><see cref="StrategyParam{T}"/></returns>
 	public StrategyParam<T> SetBasic(bool basic = true)
-		=> ModifyAttributes(basic, () => new BasicSettingAttribute());
+		=> this.ModifyAttributes(basic, () => new BasicSettingAttribute());
 
 	/// <summary>
 	/// Set <see cref="ReadOnlyAttribute"/>.
@@ -288,7 +178,7 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <param name="value">Value.</param>
 	/// <returns><see cref="StrategyParam{T}"/></returns>
 	public StrategyParam<T> SetReadOnly(bool value = true)
-		=> ModifyAttributes(value, () => new ReadOnlyAttribute(true));
+		=> this.ModifyAttributes(value, () => new ReadOnlyAttribute(true));
 
 	/// <summary>
 	/// Set greater than zero validator.
@@ -296,20 +186,19 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <returns><see cref="StrategyParam{T}"/></returns>
 	public StrategyParam<T> SetGreaterThanZero()
 	{
-		var type = _valueType;
-
-		ValidationAttribute attr = type switch
+		ValidationAttribute attr = _valueType switch
 		{
-			_ when type == typeof(int) => new IntGreaterThanZeroAttribute(),
-			_ when type == typeof(long) => new LongGreaterThanZeroAttribute(),
-			_ when type == typeof(decimal) => new DecimalGreaterThanZeroAttribute(),
-			_ when type == typeof(double) => new DoubleGreaterThanZeroAttribute(),
-			_ when type == typeof(float) => new FloatGreaterThanZeroAttribute(),
-			_ when type == typeof(TimeSpan) => new TimeSpanGreaterThanZeroAttribute(),
-			_ => throw new InvalidOperationException(type.Name)
+			_ when _valueType == typeof(int) => new IntGreaterThanZeroAttribute(),
+			_ when _valueType == typeof(long) => new LongGreaterThanZeroAttribute(),
+			_ when _valueType == typeof(decimal) => new DecimalGreaterThanZeroAttribute(),
+			_ when _valueType == typeof(double) => new DoubleGreaterThanZeroAttribute(),
+			_ when _valueType == typeof(float) => new FloatGreaterThanZeroAttribute(),
+			_ when _valueType == typeof(TimeSpan) => new TimeSpanGreaterThanZeroAttribute(),
+			_ when _valueType == typeof(Unit) => new UnitGreaterThanZeroAttribute(),
+			_ => throw new InvalidOperationException(_valueType.Name)
 		};
 
-		return this.SetValidator(attr);
+		return this.ModifyAttributes(true, attr);
 	}
 
 	/// <summary>
@@ -318,20 +207,19 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <returns><see cref="StrategyParam{T}"/></returns>
 	public StrategyParam<T> SetNullOrMoreZero()
 	{
-		var type = _valueType;
-
-		ValidationAttribute attr = type switch
+		ValidationAttribute attr = _valueType switch
 		{
-			_ when type == typeof(int) => new IntNullOrMoreZeroAttribute(),
-			_ when type == typeof(long) => new LongNullOrMoreZeroAttribute(),
-			_ when type == typeof(decimal) => new DecimalNullOrMoreZeroAttribute(),
-			_ when type == typeof(double) => new DoubleNullOrMoreZeroAttribute(),
-			_ when type == typeof(float) => new FloatNullOrMoreZeroAttribute(),
-			_ when type == typeof(TimeSpan) => new TimeSpanNullOrMoreZeroAttribute(),
-			_ => throw new InvalidOperationException(type.Name)
+			_ when _valueType == typeof(int) => new IntNullOrMoreZeroAttribute(),
+			_ when _valueType == typeof(long) => new LongNullOrMoreZeroAttribute(),
+			_ when _valueType == typeof(decimal) => new DecimalNullOrMoreZeroAttribute(),
+			_ when _valueType == typeof(double) => new DoubleNullOrMoreZeroAttribute(),
+			_ when _valueType == typeof(float) => new FloatNullOrMoreZeroAttribute(),
+			_ when _valueType == typeof(TimeSpan) => new TimeSpanNullOrMoreZeroAttribute(),
+			_ when _valueType == typeof(Unit) => new UnitNullOrMoreZeroAttribute(),
+			_ => throw new InvalidOperationException(_valueType.Name)
 		};
 
-		return this.SetValidator(attr);
+		return this.ModifyAttributes(true, attr);
 	}
 
 	/// <summary>
@@ -340,20 +228,19 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <returns><see cref="StrategyParam{T}"/></returns>
 	public StrategyParam<T> SetNullOrNotNegative()
 	{
-		var type = _valueType;
-
-		ValidationAttribute attr = type switch
+		ValidationAttribute attr = _valueType switch
 		{
-			_ when type == typeof(int) => new IntNullOrNotNegativeAttribute(),
-			_ when type == typeof(long) => new LongNullOrNotNegativeAttribute(),
-			_ when type == typeof(decimal) => new DecimalNullOrNotNegativeAttribute(),
-			_ when type == typeof(double) => new DoubleNullOrNotNegativeAttribute(),
-			_ when type == typeof(float) => new FloatNullOrNotNegativeAttribute(),
-			_ when type == typeof(TimeSpan) => new TimeSpanNullOrNotNegativeAttribute(),
-			_ => throw new InvalidOperationException(type.Name)
+			_ when _valueType == typeof(int) => new IntNullOrNotNegativeAttribute(),
+			_ when _valueType == typeof(long) => new LongNullOrNotNegativeAttribute(),
+			_ when _valueType == typeof(decimal) => new DecimalNullOrNotNegativeAttribute(),
+			_ when _valueType == typeof(double) => new DoubleNullOrNotNegativeAttribute(),
+			_ when _valueType == typeof(float) => new FloatNullOrNotNegativeAttribute(),
+			_ when _valueType == typeof(TimeSpan) => new TimeSpanNullOrNotNegativeAttribute(),
+			_ when _valueType == typeof(Unit) => new UnitNullOrNotNegativeAttribute(),
+			_ => throw new InvalidOperationException(_valueType.Name)
 		};
 
-		return this.SetValidator(attr);
+		return this.ModifyAttributes(true, attr);
 	}
 
 	/// <summary>
@@ -362,42 +249,19 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <returns><see cref="StrategyParam{T}"/></returns>
 	public StrategyParam<T> SetNotNegative()
 	{
-		var type = _valueType;
-
-		ValidationAttribute attr = type switch
+		ValidationAttribute attr = _valueType switch
 		{
-			_ when type == typeof(int) => new IntNotNegativeAttribute(),
-			_ when type == typeof(long) => new LongNotNegativeAttribute(),
-			_ when type == typeof(decimal) => new DecimalNotNegativeAttribute(),
-			_ when type == typeof(double) => new DoubleNotNegativeAttribute(),
-			_ when type == typeof(float) => new FloatNotNegativeAttribute(),
-			_ when type == typeof(TimeSpan) => new TimeSpanNotNegativeAttribute(),
-			_ => throw new InvalidOperationException(type.Name)
+			_ when _valueType == typeof(int) => new IntNotNegativeAttribute(),
+			_ when _valueType == typeof(long) => new LongNotNegativeAttribute(),
+			_ when _valueType == typeof(decimal) => new DecimalNotNegativeAttribute(),
+			_ when _valueType == typeof(double) => new DoubleNotNegativeAttribute(),
+			_ when _valueType == typeof(float) => new FloatNotNegativeAttribute(),
+			_ when _valueType == typeof(TimeSpan) => new TimeSpanNotNegativeAttribute(),
+			_ when _valueType == typeof(Unit) => new UnitNotNegativeAttribute(),
+			_ => throw new InvalidOperationException(_valueType.Name)
 		};
 
-		return this.SetValidator(attr);
-	}
-
-	/// <summary>
-	/// Set positive validator.
-	/// </summary>
-	/// <returns><see cref="StrategyParam{T}"/></returns>
-	public StrategyParam<T> SetPositive()
-	{
-		var type = _valueType;
-
-		object max = type switch
-		{
-			_ when type == typeof(int) => int.MaxValue,
-			_ when type == typeof(long) => long.MaxValue,
-			_ when type == typeof(decimal) => decimal.MaxValue,
-			_ when type == typeof(double) => double.MaxValue,
-			_ when type == typeof(float) => float.MaxValue,
-			_ when type == typeof(TimeSpan) => TimeSpan.MaxValue,
-			_ => throw new InvalidOperationException(type.Name)
-		};
-
-		return SetRange(1L.To<T>(), max.To<T>());
+		return this.ModifyAttributes(true, attr);
 	}
 
 	/// <summary>
@@ -407,26 +271,11 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <param name="max">Maximum value.</param>
 	/// <returns><see cref="StrategyParam{T}"/></returns>
 	public StrategyParam<T> SetRange(T min, T max)
-	{
-		var type = _valueType;
-
-		RangeAttribute attr = type == typeof(int)
-			? new RangeAttribute(min.To<int>(), max.To<int>())
-			: new RangeAttribute(type, min.To<string>(), max.To<string>());
-
-		return this.SetValidator(attr);
-	}
-
-	private StrategyParam<T> ModifyAttributes<TAttr>(bool add, Func<TAttr> create)
-		where TAttr : Attribute
-	{
-		Attributes.RemoveWhere(a => a is TAttr);
-
-		if (add)
-			Attributes.Add(create());
-
-		return this;
-	}
+		=> this.ModifyAttributes(true, () =>
+			_valueType == typeof(int)
+				? new RangeAttribute(min.To<int>(), max.To<int>())
+				: new RangeAttribute(_valueType, min.To<string>(), max.To<string>())
+		);
 
 	/// <summary>
 	/// Set required validator.
@@ -435,10 +284,64 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	public StrategyParam<T> SetRequired()
 		=> Ecng.ComponentModel.Extensions.SetRequired(this);
 
-	private static class Keys
+	/// <summary>
+	/// Set values step restriction (value must equal base + N*step).
+	/// </summary>
+	/// <param name="step">Step (>0).</param>
+	/// <param name="baseValue">Base value (default 0).</param>
+	/// <returns><see cref="StrategyParam{T}"/>.</returns>
+	public StrategyParam<T> SetStep(T step, T baseValue = default)
 	{
-		public const string StepValue = nameof(StepValue);
-		public const string StepBaseValue = nameof(StepBaseValue);
+		if (step is null)
+			throw new ArgumentNullException(nameof(step));
+
+		if (baseValue is null)
+		{
+			if (_isNullable)
+				baseValue = _valueType.CreateInstance<T>();
+			else
+				throw new ArgumentNullException(nameof(baseValue));
+		}
+
+		ValidationAttribute attr;
+
+		if (_valueType == typeof(Unit))
+		{
+			var s = step.To<Unit>();
+			var b = baseValue as Unit ?? new(0m, s.Type);
+			attr = new UnitStepAttribute(s, b) { DisableNullCheck = _isNullable };
+		}
+		else if (_valueType == typeof(TimeSpan))
+		{
+			var s = step.To<TimeSpan>();
+			var b = (baseValue as TimeSpan?) ?? default;
+			attr = new TimeSpanStepAttribute(s, b) { DisableNullCheck = _isNullable };
+		}
+		else
+		{
+			decimal stepDec;
+			decimal baseDec;
+
+			if (_valueType.IsNumericInteger())
+			{
+				stepDec = step.To<long>();
+				baseDec = baseValue.To<long>();
+			}
+			else if (_valueType.IsNumeric())
+			{
+				stepDec = step.To<decimal>();
+				baseDec = baseValue.To<decimal>();
+			}
+			else
+				throw new NotSupportedException(_valueType.FullName);
+
+			attr = new StepAttribute(stepDec, baseDec) { DisableNullCheck = _isNullable };
+		}
+
+		if (!attr.IsValid(Value))
+			throw new ArgumentOutOfRangeException(nameof(step), step, LocalizedStrings.InvalidValue);
+
+		return this.ModifyAttributes(true, attr);
 	}
 
 	/// <summary>
@@ -478,21 +381,6 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 		OptimizeFrom = storage.GetValue<SettingsStorage>(nameof(OptimizeFrom))?.FromStorage();
 		OptimizeTo = storage.GetValue<SettingsStorage>(nameof(OptimizeTo))?.FromStorage();
 		OptimizeStep = storage.GetValue<SettingsStorage>(nameof(OptimizeStep))?.FromStorage();
-
-		if (!storage.ContainsKey(Keys.StepValue))
-			return;
-
-		var stepVal = storage.GetValue<T>(Keys.StepValue);
-		var baseVal = storage.GetValue<T>(Keys.StepBaseValue);
-
-		try
-		{
-			SetStep(stepVal, baseVal);
-		}
-		catch (Exception ex)
-		{
-			ex.LogError();
-		}
 	}
 
 	/// <summary>
@@ -521,14 +409,6 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 			.Set(nameof(OptimizeFrom), OptimizeFrom?.ToStorage())
 			.Set(nameof(OptimizeTo), OptimizeTo?.ToStorage())
 			.Set(nameof(OptimizeStep), OptimizeStep?.ToStorage());
-
-		if (_hasStep)
-		{
-			storage
-				.Set(Keys.StepValue, _stepValue)
-				.Set(Keys.StepBaseValue, _stepBaseValue)
-			;
-		}
 	}
 
 	/// <inheritdoc />
