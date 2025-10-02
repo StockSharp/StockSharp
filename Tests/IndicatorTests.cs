@@ -232,7 +232,6 @@ public class IndicatorTests
 			typeof(Peak),
 			typeof(Trough),
 			typeof(ParabolicSar),
-			typeof(Shift),
 		};
 
 		foreach (var type in GetIndicatorTypes().Where(t => !skipTypes.Contains(t.Indicator)))

@@ -13,6 +13,8 @@ namespace StockSharp.Algo.Indicators;
 [Doc("topics/api/indicators/list_of_indicators/shift.html")]
 public class Shift : LengthIndicator<decimal>
 {
+	private int _left;
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Shift"/>.
 	/// </summary>
@@ -22,15 +24,30 @@ public class Shift : LengthIndicator<decimal>
 	}
 
 	/// <inheritdoc />
+	public override void Reset()
+	{
+		base.Reset();
+
+		_left = Length;
+	}
+
+	/// <inheritdoc />
+	protected override bool CalcIsFormed() => _left <= 0;
+
+	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var value = input.ToDecimal(Source);
+		try
+		{
+			if (IsFormed)
+				return new DecimalIndicatorValue(this, input.ToDecimal(Source), input.Time);
 
-		if (input.IsFinal)
-			Buffer.PushBack(value);
-
-		return IsFormed
-			? new DecimalIndicatorValue(this, Buffer[input.IsFinal ? 0 : Math.Min(1, Buffer.Count - 1)], input.Time)
-			: new DecimalIndicatorValue(this, input.Time);
+			return new DecimalIndicatorValue(this, input.Time);
+		}
+		finally
+		{
+			if (input.IsFinal)
+				_left--;
+		}
 	}
 }
