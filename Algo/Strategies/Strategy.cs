@@ -260,7 +260,9 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		_riskManager = new RiskManager { Parent = this };
 		_indicators = new(this);
-		_posManager = new(this);
+
+		_posManager = new(EnsureGetId);
+		_posManager.PositionProcessed += OnManagerPositionProcessed;
 	}
 
 	private readonly StrategyParam<Guid> _id;
@@ -1955,7 +1957,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				if (quoteMsg.State != null)
 					return;
 
-				// TODO на истории когда в стакане будут свои заявки по планкам, то противополжная сторона стакана будет пустой
+				// TODO на истории когда в стакане будут свои заявки по планкам, то противоположная сторона стакана будет пустой
 				// необходимо исключать свои заявки как-то иначе.
 				if (quoteMsg.Asks.IsEmpty() || quoteMsg.Bids.IsEmpty())
 					return;
@@ -2833,6 +2835,8 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		Connector = null;
 
 		Parameters.Dispose();
+
+		_posManager.PositionProcessed -= OnManagerPositionProcessed;
 
 		base.DisposeManaged();
 	}

@@ -1,0 +1,336 @@
+namespace StockSharp.Algo.Strategies;
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+
+using Ecng.Common;
+
+using StockSharp.BusinessEntities;
+using StockSharp.Messages;
+
+/// <summary>
+/// Manages strategy positions (per <see cref="Security"/> + <see cref="Portfolio"/>) and calculates position quantity, average price, realized PnL and commission incrementally from order executions.
+/// Additionally maintains cached per-position aggregates (blocked volume and active buy/sell orders count) via incremental updates (O(1) per order update, no rescans).
+/// </summary>
+
+/// <param name="strategyIdGetter">Delegate returning strategy identifier to stamp into newly created <see cref="Position.StrategyId"/>.</param>
+public class StrategyPositionManager(Func<string> strategyIdGetter)
+{
+	private readonly SyncObject _lock = new();
+	private readonly Dictionary<(Security sec, Portfolio pf), Position> _positions = [];
+	private readonly Dictionary<Order, OrderExecInfo> _orderExecInfos = [];
+
+	/// <summary>
+	/// Per-position aggregates cache (blocked volume and active orders counters).
+	/// </summary>
+	private sealed class PosAgg
+	{
+		public decimal BlockedBuy;   // sum of remaining balances for active buy orders
+		public decimal BlockedSell;  // sum of remaining balances for active sell orders
+		public int BuyCount;         // active buy orders count
+		public int SellCount;        // active sell orders count
+	}
+
+	private readonly Dictionary<(Security, Portfolio), PosAgg> _posAggs = [];
+
+	/// <summary>
+	/// Per-order tracking entry for incremental aggregate adjustments.
+	/// </summary>
+	private sealed class OrderTrack
+	{
+		public decimal LastBalance; // last seen remaining balance
+		public bool Active;         // was order considered active
+	}
+
+	private readonly Dictionary<Order, OrderTrack> _orderTracks = [];
+
+	/// <summary>
+	/// Per-order execution info used to reconstruct slices for PnL and average price calculations.
+	/// </summary>
+	private sealed class OrderExecInfo
+	{
+		public decimal MatchedVolume; // cumulative executed volume (absolute)
+		public decimal Cost;          // cumulative cost (sum executed price * volume)
+		public decimal Commission;    // cumulative commission
+	}
+
+	/// <summary>
+	/// Delegate returning strategy id to assign into new positions.
+	/// </summary>
+	public Func<string> StrategyIdGetter { get; } = strategyIdGetter ?? throw new ArgumentNullException(nameof(strategyIdGetter));
+
+	/// <summary>
+	/// Occurs after position was processed (created or updated by an order execution or order state change affecting aggregates).
+	/// </summary>
+	public event Action<Position, bool> PositionProcessed;
+
+	/// <summary>
+	/// Try get existing position instance for <paramref name="security"/> and <paramref name="portfolio"/>.
+	/// </summary>
+	/// <param name="security">Security.</param>
+	/// <param name="portfolio">Portfolio.</param>
+	/// <returns>Existing <see cref="Position"/> or <see langword="null"/>.</returns>
+	public Position TryGetPosition(Security security, Portfolio portfolio)
+	{
+		ArgumentNullException.ThrowIfNull(security);
+		ArgumentNullException.ThrowIfNull(portfolio);
+
+		lock (_lock)
+			return _positions.TryGetValue((security, portfolio));
+	}
+
+	/// <summary>
+	/// Set current position value explicitly (utility for manual restoration / overrides).
+	/// </summary>
+	/// <param name="security">Security.</param>
+	/// <param name="portfolio">Portfolio.</param>
+	/// <param name="value">New signed quantity.</param>
+	public void SetPosition(Security security, Portfolio portfolio, decimal value)
+	{
+		lock (_lock)
+			GetOrCreate(security, portfolio, out _).CurrentValue = value;
+	}
+
+	private Position GetOrCreate(Security security, Portfolio portfolio, out bool isNew)
+	{
+		ArgumentNullException.ThrowIfNull(security);
+		ArgumentNullException.ThrowIfNull(portfolio);
+
+		return _positions.SafeAdd((security, portfolio), _ => new Position
+		{
+			Security = security,
+			Portfolio = portfolio,
+			StrategyId = StrategyIdGetter?.Invoke(),
+		}, out isNew);
+	}
+
+	/// <summary>
+	/// Snapshot array of managed positions (thread-safe copy).
+	/// </summary>
+	[Browsable(false)]
+	public Position[] Positions
+	{
+		get { lock (_lock) return [.. _positions.Values]; }
+	}
+
+	/// <summary>
+	/// Reset all internal caches (positions, execution info, aggregates, order tracks).
+	/// </summary>
+	public void Reset()
+	{
+		lock (_lock)
+		{
+			_positions.Clear();
+			_orderExecInfos.Clear();
+			_posAggs.Clear();
+			_orderTracks.Clear();
+		}
+	}
+
+	private PosAgg GetAgg((Security sec, Portfolio pf) key)
+		=> _posAggs.SafeAdd(key, _ => new());
+
+	/// <summary>
+	/// Incrementally update aggregates for the order (blocked volume and counts) and push them into the <paramref name="position"/>.
+	/// </summary>
+	private void UpdateAggregates(Order order, Position position)
+	{
+		var key = (order.Security, order.Portfolio);
+		var agg = GetAgg(key);
+
+		var balance = order.Balance; // non-nullable balance
+		var newActive = !order.State.IsFinal() && balance > 0;
+
+		if (!_orderTracks.TryGetValue(order, out var track))
+		{
+			if (newActive)
+			{
+				track = new() { LastBalance = balance, Active = true };
+				_orderTracks[order] = track;
+
+				if (order.Side == Sides.Buy)
+				{
+					agg.BlockedBuy += balance;
+					agg.BuyCount++;
+				}
+				else
+				{
+					agg.BlockedSell += balance;
+					agg.SellCount++;
+				}
+			}
+		}
+		else
+		{
+			if (track.Active && newActive)
+			{
+				var diff = balance - track.LastBalance;
+				if (diff != 0)
+				{
+					if (order.Side == Sides.Buy) agg.BlockedBuy += diff; else agg.BlockedSell += diff;
+					track.LastBalance = balance;
+				}
+			}
+			else if (track.Active && !newActive)
+			{
+				if (order.Side == Sides.Buy)
+				{
+					agg.BlockedBuy -= track.LastBalance;
+					agg.BuyCount--;
+				}
+				else
+				{
+					agg.BlockedSell -= track.LastBalance;
+					agg.SellCount--;
+				}
+
+				_orderTracks.Remove(order);
+			}
+			else if (!track.Active && newActive)
+			{
+				track.Active = true;
+				track.LastBalance = balance;
+
+				if (order.Side == Sides.Buy)
+				{
+					agg.BlockedBuy += balance;
+					agg.BuyCount++;
+				}
+				else
+				{
+					agg.BlockedSell += balance;
+					agg.SellCount++;
+				}
+			}
+		}
+
+		var blockedNet = agg.BlockedBuy - agg.BlockedSell;
+		position.BlockedValue = blockedNet == 0 ? null : blockedNet;
+		position.BuyOrdersCount = agg.BuyCount == 0 ? null : agg.BuyCount;
+		position.SellOrdersCount = agg.SellCount == 0 ? null : agg.SellCount;
+	}
+
+	/// <summary>
+	/// Process order state change (registration, balance change, partial/full execution, cancellation, done).
+	/// </summary>
+	/// <param name="order">Order to process.</param>
+	public void ProcessOrder(Order order)
+	{
+		ArgumentNullException.ThrowIfNull(order);
+
+		var matchedAbs = order.GetMatchedVolume() ?? 0m; // cumulative executed volume (absolute)
+		var signSide = order.Side == Sides.Sell ? -1 : 1;
+
+		Position position;
+		bool isNew;
+
+		var tradePrice = order.AveragePrice;
+		var commission = order.Commission;
+
+		lock (_lock)
+		{
+			position = GetOrCreate(order.Security, order.Portfolio, out isNew);
+
+			// ensure aggregates reflect current order state before fill handling
+			UpdateAggregates(order, position);
+
+			if (!_orderExecInfos.TryGetValue(order, out var execInfo))
+				_orderExecInfos[order] = execInfo = new();
+
+			var deltaMatchedAbs = matchedAbs - execInfo.MatchedVolume;
+			if (deltaMatchedAbs < 0)
+				return; // inconsistent snapshot delivered out-of-order
+
+			if (deltaMatchedAbs > 0)
+			{
+				// reconstruct slice
+				var currentTotalCost = (tradePrice ?? 0m) * matchedAbs;
+				var deltaCost = currentTotalCost - execInfo.Cost;
+				var deltaCommission = (commission ?? 0m) - execInfo.Commission;
+
+				execInfo.MatchedVolume = matchedAbs;
+				execInfo.Cost = currentTotalCost;
+				execInfo.Commission += deltaCommission;
+
+				var posQty = position.CurrentValue ?? 0m;
+				var posAvg = position.AveragePrice;
+				var posRealized = position.RealizedPnL ?? 0m;
+				var posCommission = position.Commission ?? 0m;
+
+				var deltaQtySigned = signSide * deltaMatchedAbs;
+				var slicePrice = deltaCost / deltaMatchedAbs;
+				var newQty = posQty + deltaQtySigned;
+				var sameDirection = posQty == 0 || posQty.Sign() == deltaQtySigned.Sign();
+
+				if (sameDirection)
+				{
+					var posQtyAbs = posQty.Abs();
+					var newQtyAbs = newQty.Abs();
+					var sliceCost = slicePrice * deltaMatchedAbs;
+					var totalCost = (posAvg ?? slicePrice) * posQtyAbs + sliceCost;
+					posAvg = totalCost / newQtyAbs;
+				}
+				else
+				{
+					var closingVolume = posQty.Abs().Min(deltaMatchedAbs);
+					posRealized += (slicePrice - (posAvg ?? slicePrice)) * closingVolume * posQty.Sign();
+					if (newQty == 0)
+						posAvg = null;            // fully flat
+					else if (newQty.Sign() != posQty.Sign())
+						posAvg = slicePrice;      // reversal opens new basis
+				}
+
+				position.CurrentValue = newQty;
+				position.AveragePrice = posAvg;
+				position.RealizedPnL = posRealized;
+
+				if (deltaCommission != 0)
+					position.Commission = posCommission + deltaCommission;
+
+				position.LocalTime = order.LocalTime;
+				position.LastChangeTime = order.ServerTime;
+			}
+
+			// update aggregates again in case balance changed after fill
+			UpdateAggregates(order, position);
+		}
+
+		PositionProcessed?.Invoke(position, isNew);
+	}
+
+	/// <summary>
+	/// Update current (market) price for all positions of the specified <paramref name="security"/>.
+	/// </summary>
+	/// <param name="security">Security whose positions need price update.</param>
+	/// <param name="price">New market price.</param>
+	/// <param name="serverTime">Server time of the price snapshot.</param>
+	/// <param name="localTime">Local time when the price was processed.</param>
+	public void UpdateCurrentPrice(Security security, decimal price, DateTimeOffset serverTime, DateTimeOffset localTime)
+	{
+		ArgumentNullException.ThrowIfNull(security);
+
+		List<Position> changed = null;
+
+		lock (_lock)
+		{
+			foreach (var ((sec, pf), pos) in _positions)
+			{
+				if (sec != security)
+					continue;
+
+				// Update even if flat to reflect last known market price (decision: allow). If not desired, check pos.CurrentValue != 0.
+				pos.CurrentPrice = price;
+				pos.LastChangeTime = serverTime;
+				pos.LocalTime = localTime;
+				(changed ??= []).Add(pos);
+			}
+		}
+
+		if (changed != null)
+		{
+			foreach (var p in changed)
+				PositionProcessed?.Invoke(p, false);
+		}
+	}
+}

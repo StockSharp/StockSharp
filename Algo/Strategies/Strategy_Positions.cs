@@ -2,77 +2,12 @@
 
 partial class Strategy
 {
-	private class StrategyPositionManager(Strategy strategy)
-	{
-		private readonly SyncObject _lock = new();
-
-		private readonly Dictionary<(Security, Portfolio), Position> _positions = [];
-
-		public Position TryGetPosition(Security security, Portfolio portfolio)
-		{
-			lock (_lock)
-				return _positions.TryGetValue((security, portfolio));
-		}
-
-		public void SetPosition(Security security, Portfolio portfolio, decimal value)
-		{
-			lock (_lock)
-				GetPosition(security, portfolio, out _).CurrentValue = value;
-		}
-
-		private Position GetPosition(Security security, Portfolio portfolio, out bool isNew)
-			=> _positions.SafeAdd((security, portfolio), _ => new()
-			{
-				Security = security,
-				Portfolio = portfolio,
-				StrategyId = strategy.EnsureGetId(),
-			}, out isNew);
-
-		public Position[] Positions
-		{
-			get
-			{
-				lock (_lock)
-					return [.. _positions.Values];
-			}
-		}
-
-		public void Reset()
-		{
-			lock (_lock)
-			{
-				_positions.Clear();
-			}
-		}
-
-		public void ProcessOrder(Order order)
-		{
-			ArgumentNullException.ThrowIfNull(order);
-
-			var matched = order.GetMatchedVolume().Value;
-
-			if (matched == 0)
-				return;
-
-			if (order.Side == Sides.Sell)
-				matched = -matched;
-
-			Position position;
-			bool isNew;
-
-			lock (_lock)
-			{
-				position = GetPosition(order.Security, order.Portfolio, out isNew);
-				position.CurrentValue = (position.CurrentValue ?? 0) + matched;
-				position.LocalTime = order.LocalTime;
-				position.LastChangeTime = order.ServerTime;
-			}
-
-			strategy.ProcessPosition(position, isNew);
-		}
-	}
-
 	private readonly StrategyPositionManager _posManager;
+
+	private void OnManagerPositionProcessed(Position position, bool isNew)
+	{
+		ProcessPosition(position, isNew);
+	}
 
 	private void ProcessPosition(Position position, bool isNew)
 	{
