@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 using DrawingColor = System.Drawing.Color;
 
 using Ecng.Collections;
@@ -50,10 +51,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 	private bool _historyLoaded;
 	private bool _isRealTime;
 	private DateTimeOffset _lastTime;
-	private readonly Timer _dataTimer;
-	private bool _isInTimerHandler;
-	private readonly SyncObject _timerLock = new();
-	private readonly SynchronizedList<Action> _dataThreadActions = new();
+	private readonly DispatcherTimer _dataTimer;
 	private readonly CollectionSecurityProvider _securityProvider = new();
 	private readonly TestMarketSubscriptionProvider _testProvider = new();
 
@@ -98,9 +96,12 @@ public partial class MainWindow : ICandleBuilderSubscription
 
 		Loaded += OnLoaded;
 
-		_dataTimer = ThreadingHelper
-			.Timer(OnDataTimer)
-			.Interval(TimeSpan.FromMilliseconds(1));
+		_dataTimer = new DispatcherTimer(DispatcherPriority.Background, Dispatcher)
+		{
+			Interval = TimeSpan.FromMilliseconds(1)
+		};
+		_dataTimer.Tick += (_, _) => OnDataTimer();
+		_dataTimer.Start();
 
 		SeriesEditor.DataType = TimeSpan.FromMinutes(1).TimeFrame();
 
@@ -154,7 +155,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 
 	protected override void OnClosing(CancelEventArgs e)
 	{
-		_dataTimer.Dispose();
+		_dataTimer.Stop();
 		base.OnClosing(e);
 	}
 
@@ -164,7 +165,6 @@ public partial class MainWindow : ICandleBuilderSubscription
 		_historyLoaded = false;
 		_allCandles.Clear();
 		_updatedCandles.Clear();
-		_dataThreadActions.Clear();
 
 		Chart.Reset(new[] {el});
 
@@ -173,7 +173,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 
 	private void Chart_OnSubscribeIndicatorElement(IChartIndicatorElement element, Subscription subscription, IIndicator indicator)
 	{
-		_dataThreadActions.Add(() =>
+		ExecuteOnUi(() =>
 		{
 			var oldReset = Chart.DisableIndicatorReset;
 			try
@@ -200,7 +200,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 
 	private void Chart_OnUnSubscribeElement(IChartElement element)
 	{
-		_dataThreadActions.Add(() =>
+		ExecuteOnUi(() =>
 		{
 			_drawCts.Cancel();
 			_drawCts = new();
@@ -212,45 +212,43 @@ public partial class MainWindow : ICandleBuilderSubscription
 
 	private void RefreshCharts()
 	{
-		if (Dispatcher.CheckAccess())
+		// if called from background (should not happen now), marshal to UI
+		if (!Dispatcher.CheckAccess())
 		{
-			_dataThreadActions.Add(RefreshCharts);
+			Dispatcher.BeginInvoke(RefreshCharts);
 			return;
 		}
 
 		_drawCts.Cancel();
 		_drawCts = new();
 
-		this.GuiSync(() =>
+		Chart.ClearAreas();
+
+		_areaComb = Chart.AddArea();
+
+		var yAxis = _areaComb.YAxises.First();
+
+		yAxis.AutoRange = true;
+		Chart.IsAutoRange = true;
+		Chart.IsAutoScroll = true;
+
+		var id = (SecurityId)Securities.SelectedItem;
+
+		_security = new Security
 		{
-			Chart.ClearAreas();
+			Id = id.ToStringId(),
+		};
 
-			_areaComb = Chart.AddArea();
+		_securityProvider.Clear();
+		_securityProvider.Add(_security);
 
-			var yAxis = _areaComb.YAxises.First();
+		_tradeGenerator = new RandomWalkTradeGenerator(id);
+		_tradeGenerator.Init();
+		_tradeGenerator.Process(_security.ToMessage());
 
-			yAxis.AutoRange = true;
-			Chart.IsAutoRange = true;
-			Chart.IsAutoScroll = true;
-
-			var id = (SecurityId)Securities.SelectedItem;
-
-			_security = new Security
-			{
-				Id = id.ToStringId(),
-			};
-
-			_securityProvider.Clear();
-			_securityProvider.Add(_security);
-
-			_tradeGenerator = new RandomWalkTradeGenerator(id);
-			_tradeGenerator.Init();
-			_tradeGenerator.Process(_security.ToMessage());
-
-			_candleElement = Chart.CreateCandleElement();
-			_candleElement.PriceStep = 20;
-			Chart.AddElement(_areaComb, _candleElement, new Subscription(SeriesEditor.DataType, _security));
-		});
+		_candleElement = Chart.CreateCandleElement();
+		_candleElement.PriceStep = 20;
+		Chart.AddElement(_areaComb, _candleElement, new Subscription(SeriesEditor.DataType, _security));
 	}
 
 	private void Draw_Click(object sender, RoutedEventArgs e)
@@ -393,22 +391,8 @@ public partial class MainWindow : ICandleBuilderSubscription
 
 	private void OnDataTimer()
 	{
-		lock (_timerLock)
-		{
-			if (_isInTimerHandler)
-				return;
-
-			_isInTimerHandler = true;
-		}
-
 		try
 		{
-			if (_dataThreadActions.Count > 0)
-			{
-				var actions = _dataThreadActions.SyncGet(l => l.CopyAndClear());
-				actions.ForEach(a => a());
-			}
-
 			var now = DateTime.UtcNow;
 			DoIfTime(UpdateRealtimeCandles, now, ref _lastRealtimeUpdateTime, _realtimeInterval);
 			DoIfTime(DrawChartElements,     now, ref _lastDrawTime,           _drawInterval);
@@ -416,10 +400,6 @@ public partial class MainWindow : ICandleBuilderSubscription
 		catch (Exception ex)
 		{
 			ex.LogError();
-		}
-		finally
-		{
-			_isInTimerHandler = false;
 		}
 	}
 
@@ -542,7 +522,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 	{
 		var colored = CustomColors2.IsChecked == true;
 		_drawWithColor = colored;
-		_dataThreadActions.Add(() =>
+		ExecuteOnUi(() =>
 		{
 			if(_allCandles.IsEmpty())
 				return;
@@ -634,7 +614,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 			}
 		}
 
-		_dataThreadActions.Add(() =>
+		ExecuteOnUi(() =>
 		{
 			var data = new ChartDrawData.AnnotationData
 			{
@@ -713,6 +693,14 @@ public partial class MainWindow : ICandleBuilderSubscription
 			_annotation = null;
 			_annotationData = null;
 		}
+	}
+
+	private void ExecuteOnUi(Action action)
+	{
+		if (Dispatcher.CheckAccess())
+			action();
+		else
+			Dispatcher.BeginInvoke(action);
 	}
 
 	private class TestMarketSubscriptionProvider : ISubscriptionProvider
