@@ -277,6 +277,7 @@ public class IndicatorTests
 	[
 		nameof(IIndicator.Name),
 		nameof(IIndicator.Container),
+		nameof(IIndicator.Source),
 		nameof(IComplexIndicator.InnerIndicators),
 	];
 
