@@ -1225,6 +1225,30 @@ public class PVO : PercentageVolumeOscillator
 }
 
 /// <summary>
+/// <see cref="PercentagePriceOscillatorSignal"/> alias.
+/// </summary>
+[Browsable(false)]
+public class PPOS : PercentagePriceOscillatorSignal
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="PPOS"/>.
+	/// </summary>
+	public PPOS() { }
+}
+
+/// <summary>
+/// <see cref="PercentagePriceOscillatorHistogram"/> alias.
+/// </summary>
+[Browsable(false)]
+public class PPOH : PercentagePriceOscillatorHistogram
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="PPOH"/>.
+	/// </summary>
+	public PPOH() { }
+}
+
+/// <summary>
 /// <see cref="MassIndex"/> alias.
 /// </summary>
 [Browsable(false)]
