@@ -232,6 +232,7 @@ public class IndicatorTests
 			typeof(Peak),
 			typeof(Trough),
 			typeof(ParabolicSar),
+			typeof(Median),
 		};
 
 		foreach (var type in GetIndicatorTypes().Where(t => !skipTypes.Contains(t.Indicator)))

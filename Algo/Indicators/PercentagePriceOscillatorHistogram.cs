@@ -84,7 +84,13 @@ public class PercentagePriceOscillatorHistogramValue(PercentagePriceOscillatorHi
 	/// <summary>
 	/// Gets PPO value.
 	/// </summary>
-	public PercentagePriceOscillatorValue Ppo => (PercentagePriceOscillatorValue)this[TypedIndicator.Ppo];
+	public IIndicatorValue PpoValue => this[TypedIndicator.Ppo];
+
+	/// <summary>
+	/// Gets PPO value.
+	/// </summary>
+	[Browsable(false)]
+	public decimal? Ppo => PpoValue.ToNullableDecimal(TypedIndicator.Ppo.Source);
 
 	/// <summary>
 	/// Gets signal EMA value.
@@ -95,7 +101,7 @@ public class PercentagePriceOscillatorHistogramValue(PercentagePriceOscillatorHi
 	/// Signal EMA numeric value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Signal => SignalValue.ToNullableDecimal(TypedIndicator.Source);
+	public decimal? Signal => SignalValue.ToNullableDecimal(TypedIndicator.SignalMa.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"PPO={Ppo}, Signal={Signal}";

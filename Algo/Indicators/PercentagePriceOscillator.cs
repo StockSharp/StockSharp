@@ -9,8 +9,8 @@
 	Description = LocalizedStrings.PercentagePriceOscillatorKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/percentage_price_oscillator.html")]
-[IndicatorOut(typeof(PercentagePriceOscillatorValue))]
-public class PercentagePriceOscillator : BaseComplexIndicator<PercentagePriceOscillatorValue>
+[IndicatorOut(typeof(DecimalIndicatorValue))]
+public class PercentagePriceOscillator : BaseIndicator
 {
 	/// <summary>
 	/// Short EMA.
@@ -40,10 +40,12 @@ public class PercentagePriceOscillator : BaseComplexIndicator<PercentagePriceOsc
 	/// <param name="shortEma">The short-term EMA.</param>
 	/// <param name="longEma">The long-term EMA.</param>
 	public PercentagePriceOscillator(ExponentialMovingAverage shortEma, ExponentialMovingAverage longEma)
-		: base(shortEma, longEma)
 	{
 		ShortEma = shortEma;
 		LongEma = longEma;
+
+		AddResetTracking(shortEma);
+		AddResetTracking(longEma);
 	}
 
 	/// <summary>
@@ -78,29 +80,26 @@ public class PercentagePriceOscillator : BaseComplexIndicator<PercentagePriceOsc
 	public override int NumValuesToInitialize => ShortEma.NumValuesToInitialize.Max(LongEma.NumValuesToInitialize);
 
 	/// <inheritdoc />
+	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
+
+	/// <inheritdoc />
 	protected override bool CalcIsFormed() => ShortEma.IsFormed && LongEma.IsFormed;
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var result = new PercentagePriceOscillatorValue(this, input.Time);
-
-		var shortValue = ShortEma.Process(input);
-		var longValue = LongEma.Process(input);
-
-		result.Add(ShortEma, shortValue);
-		result.Add(LongEma, longValue);
+		var shortVal = ShortEma.Process(input);
+		var longVal = LongEma.Process(input);
 
 		if (IsFormed)
 		{
-			var den = longValue.ToDecimal(Source);
-			var ppo = den == 0 ? 0 : ((shortValue.ToDecimal(Source) - den) / den) * 100;
-			result.Add(this, new DecimalIndicatorValue(this, ppo, input.Time) { IsFinal = input.IsFinal });
+			var den = longVal.ToDecimal(Source);
+			var ppo = den == 0 ? 0 : ((shortVal.ToDecimal(Source) - den) / den) * 100m;
+			IsFormed = true;
+			return new DecimalIndicatorValue(this, ppo, input.Time) { IsFinal = input.IsFinal };
 		}
-		else
-			result.Add(this, new DecimalIndicatorValue(this, input.Time) { IsFinal = input.IsFinal });
 
-		return result;
+		return new DecimalIndicatorValue(this, input.Time) { IsFinal = input.IsFinal };
 	}
 
 	/// <inheritdoc />
@@ -123,44 +122,4 @@ public class PercentagePriceOscillator : BaseComplexIndicator<PercentagePriceOsc
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" S={ShortPeriod},L={LongPeriod}";
-
-	/// <inheritdoc />
-	protected override PercentagePriceOscillatorValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
-}
-
-/// <summary>
-/// <see cref="PercentagePriceOscillator"/> indicator value.
-/// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="PercentagePriceOscillatorValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="PercentagePriceOscillator"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class PercentagePriceOscillatorValue(PercentagePriceOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<PercentagePriceOscillator>(indicator, time)
-{
-	/// <summary>
-	/// Gets the short EMA value.
-	/// </summary>
-	public IIndicatorValue ShortEmaValue => this[TypedIndicator.ShortEma];
-
-	/// <summary>
-	/// Gets the short EMA value.
-	/// </summary>
-	[Browsable(false)]
-	public decimal? ShortEma => ShortEmaValue.ToNullableDecimal(TypedIndicator.Source);
-
-	/// <summary>
-	/// Gets the long EMA value.
-	/// </summary>
-	public IIndicatorValue LongEmaValue => this[TypedIndicator.LongEma];
-
-	/// <summary>
-	/// Gets the long EMA value.
-	/// </summary>
-	[Browsable(false)]
-	public decimal? LongEma => LongEmaValue.ToNullableDecimal(TypedIndicator.Source);
-
-	/// <inheritdoc />
-	public override string ToString() => $"ShortEma={ShortEma}, LongEma={LongEma}";
 }
