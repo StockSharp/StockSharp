@@ -232,7 +232,7 @@ public enum Level1Fields
 	/// Average price per session.
 	/// </summary>
 	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AveragePricePerSessionKey)]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AveragePriceKey)]
 	AveragePrice,
 
 	/// <summary>
@@ -330,7 +330,7 @@ public enum Level1Fields
 	/// Average price.
 	/// </summary>
 	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AveragePriceKey)]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VWAPKey)]
 	VWAP,
 
 	/// <summary>
