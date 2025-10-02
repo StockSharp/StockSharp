@@ -84,13 +84,7 @@ public class PercentagePriceOscillatorSignalValue(PercentagePriceOscillatorSigna
 	/// <summary>
 	/// Gets PPO value.
 	/// </summary>
-	public IIndicatorValue PpoValue => this[TypedIndicator.Ppo];
-
-	/// <summary>
-	/// PPO numeric value.
-	/// </summary>
-	[Browsable(false)]
-	public decimal? Ppo => PpoValue.ToNullableDecimal(TypedIndicator.Source);
+	public PercentagePriceOscillatorValue Ppo => (PercentagePriceOscillatorValue)this[TypedIndicator.Ppo];
 
 	/// <summary>
 	/// Gets signal value.
