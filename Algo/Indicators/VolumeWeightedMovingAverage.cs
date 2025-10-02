@@ -40,8 +40,8 @@ public class VolumeWeightedMovingAverage : LengthIndicator<decimal>
 	{
 		var candle = input.ToCandle();
 
-		var shValue = _nominator.Process(input, candle.ClosePrice * candle.TotalVolume).ToDecimal();
-		var znValue = _denominator.Process(input, candle.TotalVolume).ToDecimal();
+		var shValue = _nominator.Process(input, candle.ClosePrice * candle.TotalVolume).ToDecimal(Source);
+		var znValue = _denominator.Process(input, candle.TotalVolume).ToDecimal(Source);
 
 		return znValue != 0 
 			? shValue / znValue 

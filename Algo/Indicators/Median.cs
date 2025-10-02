@@ -39,7 +39,7 @@ public class Median : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var val = input.ToDecimal();
+		var val = input.ToDecimal(Source);
 
 		if (input.IsFinal)
 		{

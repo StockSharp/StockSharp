@@ -94,8 +94,8 @@ public class MovingAverageCrossover : BaseIndicator
 
 		if (IsFormed)
 		{
-			var fast = fastValue.ToDecimal();
-			var slow = slowValue.ToDecimal();
+			var fast = fastValue.ToDecimal(Source);
+			var slow = slowValue.ToDecimal(Source);
 			var signal = fast.CompareTo(slow);
 			return new DecimalIndicatorValue(this, signal, input.Time);
 		}

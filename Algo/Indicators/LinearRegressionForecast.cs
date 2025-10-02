@@ -21,7 +21,7 @@ public class LinearRegressionForecast : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var newValue = input.ToDecimal();
+		var newValue = input.ToDecimal(Source);
 
 		if (input.IsFinal)
 		{

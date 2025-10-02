@@ -112,7 +112,7 @@ public class ElderRayValue(ElderRay indicator, DateTimeOffset time) : ComplexInd
 	/// Gets the <see cref="ElderRay.BullPower"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? BullPower => BullPowerValue.ToNullableDecimal();
+	public decimal? BullPower => BullPowerValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="ElderRay.BearPower"/> value.
@@ -123,7 +123,7 @@ public class ElderRayValue(ElderRay indicator, DateTimeOffset time) : ComplexInd
 	/// Gets the <see cref="ElderRay.BearPower"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? BearPower => BearPowerValue.ToNullableDecimal();
+	public decimal? BearPower => BearPowerValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"Bull={BullPower}, Bear={BearPower}";

@@ -286,7 +286,7 @@ public class AroonValue(Aroon indicator, DateTimeOffset time) : ComplexIndicator
 	/// Gets the <see cref="Aroon.Up"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Up => UpValue.ToNullableDecimal();
+	public decimal? Up => UpValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="Aroon.Down"/> value.
@@ -297,7 +297,7 @@ public class AroonValue(Aroon indicator, DateTimeOffset time) : ComplexIndicator
 	/// Gets the <see cref="Aroon.Down"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Down => DownValue.ToNullableDecimal();
+	public decimal? Down => DownValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"Up={Up}, Down={Down}";

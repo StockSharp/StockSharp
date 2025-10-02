@@ -211,7 +211,7 @@ public class VortexIndicatorValue(VortexIndicator indicator, DateTimeOffset time
 	/// Gets the <see cref="VortexIndicator.PlusVi"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? PlusVi => PlusViValue.ToNullableDecimal();
+	public decimal? PlusVi => PlusViValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="VortexIndicator.MinusVi"/> value.
@@ -222,7 +222,7 @@ public class VortexIndicatorValue(VortexIndicator indicator, DateTimeOffset time
 	/// Gets the <see cref="VortexIndicator.MinusVi"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? MinusVi => MinusViValue.ToNullableDecimal();
+	public decimal? MinusVi => MinusViValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"PlusVi={PlusVi}, MinusVi={MinusVi}";

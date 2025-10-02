@@ -75,8 +75,8 @@ public class ElderImpulseSystem : BaseIndicator
 			if (input.IsFinal)
 				IsFormed = true;
 
-			var ema = emaValue.ToDecimal();
-			var macd = macdValue.ToDecimal();
+			var ema = emaValue.ToDecimal(Source);
+			var macd = macdValue.ToDecimal(Source);
 
 			int impulse;
 

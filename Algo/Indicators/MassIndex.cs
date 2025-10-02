@@ -68,11 +68,11 @@ public class MassIndex : LengthIndicator<decimal>
 
 		if (_doubleEma.IsFormed)
 		{
-			var emaRatio = singleEma.ToDecimal() / doubleEma.ToDecimal();
+			var emaRatio = singleEma.ToDecimal(Source) / doubleEma.ToDecimal(Source);
 			var sumValue = _sum.Process(input, emaRatio);
 
 			if (_sum.IsFormed)
-				return sumValue.ToDecimal();
+				return sumValue.ToDecimal(Source);
 		}
 
 		return null;

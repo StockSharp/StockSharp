@@ -70,7 +70,7 @@ public class AlligatorLine : LengthIndicator<decimal>
 			if (Buffer.Count > Shift)
 				Buffer.PopFront();
 
-			Buffer.PushBack(smaResult.ToDecimal());
+			Buffer.PushBack(smaResult.ToDecimal(Source));
 		}
 
 		return Buffer.Count > Shift

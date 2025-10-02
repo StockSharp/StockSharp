@@ -70,8 +70,8 @@ public class FibonacciRetracement : BaseComplexIndicator<FibonacciRetracementVal
 
 		var result = new FibonacciRetracementValue(this, input.Time);
 
-		var highestHigh = highValue.ToDecimal();
-		var lowestLow = lowValue.ToDecimal();
+		var highestHigh = highValue.ToDecimal(Source);
+		var lowestLow = lowValue.ToDecimal(Source);
 
 		foreach (var level in Levels)
 		{
@@ -157,7 +157,7 @@ public class FibonacciRetracementValue(FibonacciRetracement indicator, DateTimeO
 	/// Gets all level values.
 	/// </summary>
 	[Browsable(false)]
-	public decimal?[] Levels => [.. LevelsValues.Select(v => v.ToNullableDecimal())];
+	public decimal?[] Levels => [.. LevelsValues.Select(v => v.ToNullableDecimal(TypedIndicator.Source))];
 
 	/// <inheritdoc />
 	public override string ToString() => $"Levels=[{string.Join(", ", Levels)}]";

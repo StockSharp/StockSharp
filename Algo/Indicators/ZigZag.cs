@@ -111,7 +111,7 @@ public class ZigZag : BaseIndicator
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
-		=> CalcZigZag(input, input.ToDecimal());
+		=> CalcZigZag(input, input.ToDecimal(Source));
 
 	/// <inheritdoc />
 	protected ZigZagIndicatorValue CalcZigZag(IIndicatorValue input, decimal price)

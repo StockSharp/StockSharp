@@ -40,6 +40,6 @@ public class QStick : LengthIndicator<IIndicatorValue>
 		var candle = input.ToCandle();
 
 		var val = _sma.Process(input, candle.OpenPrice - candle.ClosePrice);
-		return val.ToDecimal();
+		return val.ToDecimal(Source);
 	}
 }

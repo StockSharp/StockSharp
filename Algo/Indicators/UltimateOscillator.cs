@@ -89,15 +89,15 @@ public class UltimateOscillator : BaseIndicator
 
 			input = input.SetValue(this, candle.ClosePrice - min);
 
-			var p7BpValue = _period7BpSum.Process(input).ToDecimal();
-			var p14BpValue = _period14BpSum.Process(input).ToDecimal();
-			var p28BpValue = _period28BpSum.Process(input).ToDecimal();
+			var p7BpValue = _period7BpSum.Process(input).ToDecimal(Source);
+			var p14BpValue = _period14BpSum.Process(input).ToDecimal(Source);
+			var p28BpValue = _period28BpSum.Process(input).ToDecimal(Source);
 
 			input = input.SetValue(this, max - min);
 
-			var p7TrValue = _period7TrSum.Process(input).ToDecimal();
-			var p14TrValue = _period14TrSum.Process(input).ToDecimal();
-			var p28TrValue = _period28TrSum.Process(input).ToDecimal();
+			var p7TrValue = _period7TrSum.Process(input).ToDecimal(Source);
+			var p14TrValue = _period14TrSum.Process(input).ToDecimal(Source);
+			var p28TrValue = _period28TrSum.Process(input).ToDecimal(Source);
 
 			if (input.IsFinal)
 				_previouseClosePrice = candle.ClosePrice;

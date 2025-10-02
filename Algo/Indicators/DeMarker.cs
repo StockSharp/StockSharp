@@ -82,8 +82,8 @@ public class DeMarker : LengthIndicator<decimal>
 		// Calculate DeMin
 		var deMin = currentLow < _prevLow ? _prevLow - currentLow : 0m;
 
-		var deMaxSmaValue = _deMaxSma.Process(new DecimalIndicatorValue(_deMaxSma, deMax, input.Time) { IsFinal = input.IsFinal }).ToDecimal();
-		var deMinSmaValue = _deMinSma.Process(new DecimalIndicatorValue(_deMinSma, deMin, input.Time) { IsFinal = input.IsFinal }).ToDecimal();
+		var deMaxSmaValue = _deMaxSma.Process(new DecimalIndicatorValue(_deMaxSma, deMax, input.Time) { IsFinal = input.IsFinal }).ToDecimal(Source);
+		var deMinSmaValue = _deMinSma.Process(new DecimalIndicatorValue(_deMinSma, deMin, input.Time) { IsFinal = input.IsFinal }).ToDecimal(Source);
 
 		if (input.IsFinal)
 		{

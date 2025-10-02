@@ -147,7 +147,7 @@ public class SineWaveValue(SineWave indicator, DateTimeOffset time) : ComplexInd
 	/// Gets the main line value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Main => MainValue.ToNullableDecimal();
+	public decimal? Main => MainValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the lead line value.
@@ -158,7 +158,7 @@ public class SineWaveValue(SineWave indicator, DateTimeOffset time) : ComplexInd
 	/// Gets the lead line value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Lead => LeadValue.ToNullableDecimal();
+	public decimal? Lead => LeadValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"Main={Main}, Lead={Lead}";

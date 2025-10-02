@@ -28,7 +28,7 @@ public class RankCorrelationIndex : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var newValue = input.ToDecimal();
+		var newValue = input.ToDecimal(Source);
 
 		// Update buffer only on final values.
 		if (input.IsFinal)

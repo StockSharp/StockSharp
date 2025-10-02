@@ -103,11 +103,11 @@ public class CompositeMomentum : BaseComplexIndicator<CompositeMomentumValue>
 
 		if (_roc1.IsFormed && _roc2.IsFormed && _rsi.IsFormed && _emaFast.IsFormed && _emaSlow.IsFormed)
 		{
-			var normalizedShortRoc = shortRocValue.ToDecimal() / 100m;
-			var normalizedLongRoc = longRocValue.ToDecimal() / 100m;
-			var normalizedRsi = (rsiValue.ToDecimal() - 50m) / 50m;
+			var normalizedShortRoc = shortRocValue.ToDecimal(Source) / 100m;
+			var normalizedLongRoc = longRocValue.ToDecimal(Source) / 100m;
+			var normalizedRsi = (rsiValue.ToDecimal(Source) - 50m) / 50m;
 
-			var macdLine = (emaFastValue.ToDecimal() - emaSlowValue.ToDecimal()) / emaSlowValue.ToDecimal();
+			var macdLine = (emaFastValue.ToDecimal(Source) - emaSlowValue.ToDecimal(Source)) / emaSlowValue.ToDecimal(Source);
 
 			var compMomentum = (normalizedShortRoc + normalizedLongRoc + normalizedRsi + macdLine) / 4m;
 			compMomentum *= 100m;
@@ -163,7 +163,7 @@ public class CompositeMomentumValue(CompositeMomentum indicator, DateTimeOffset 
 	/// Gets the SMA value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Sma => SmaValue.ToNullableDecimal();
+	public decimal? Sma => SmaValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the composite momentum line.
@@ -174,7 +174,7 @@ public class CompositeMomentumValue(CompositeMomentum indicator, DateTimeOffset 
 	/// Gets the composite momentum line.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? CompositeLine => CompositeLineValue.ToNullableDecimal();
+	public decimal? CompositeLine => CompositeLineValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"Sma={Sma}, CompositeLine={CompositeLine}";

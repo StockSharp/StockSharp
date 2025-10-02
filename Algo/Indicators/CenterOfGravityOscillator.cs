@@ -37,7 +37,7 @@ public class CenterOfGravityOscillator : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
-		var price = input.ToDecimal();
+		var price = input.ToDecimal(Source);
 
 		decimal sumPrice;
 		decimal sumWeightedPrice = 0m;

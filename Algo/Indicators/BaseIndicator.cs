@@ -51,6 +51,28 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 		}
 	}
 
+	private Level1Fields? _source;
+
+	/// <summary>
+	/// Field specified value source.
+	/// </summary>
+	[ItemsSource(typeof(SourceItemsSource))]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.FieldKey,
+		Description = LocalizedStrings.Level1FieldKey,
+		GroupName = LocalizedStrings.SourceKey)]
+	public Level1Fields? Source
+	{
+		get => _source;
+		set
+		{
+			_source = value;
+
+			Reset();
+		}
+	}
+
 	/// <inheritdoc />
 	[Browsable(false)]
 	public virtual int NumValuesToInitialize => 1;
@@ -118,8 +140,11 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	/// <param name="storage">Settings storage.</param>
 	protected void SaveValues(SettingsStorage storage)
 	{
-		storage.SetValue(nameof(Id), Id);
-		storage.SetValue(nameof(Name), Name);
+		storage
+			.Set(nameof(Id), Id)
+			.Set(nameof(Name), Name)
+			.Set(nameof(Source), Source)
+		;
 	}
 
 	/// <summary>
@@ -130,6 +155,7 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	{
 		Id = storage.GetValue<Guid>(nameof(Id));
 		Name = storage.GetValue<string>(nameof(Name));
+		Source = storage.GetValue<Level1Fields?>(nameof(Source));
 	}
 
 	/// <summary>

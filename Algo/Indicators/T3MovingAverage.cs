@@ -77,7 +77,7 @@ public class T3MovingAverage : LengthIndicator<decimal>
 			var c3 = -6 * _volumeFactor * _volumeFactor - 3 * _volumeFactor - 3 * _volumeFactor * _volumeFactor * _volumeFactor;
 			var c4 = 1 + 3 * _volumeFactor + _volumeFactor * _volumeFactor * _volumeFactor + 3 * _volumeFactor * _volumeFactor;
 
-			return c1 * e6.ToDecimal() + c2 * e5.ToDecimal() + c3 * e4.ToDecimal() + c4 * e3.ToDecimal();
+			return c1 * e6.ToDecimal(Source) + c2 * e5.ToDecimal(Source) + c3 * e4.ToDecimal(Source) + c4 * e3.ToDecimal(Source);
 		}
 
 		return null;

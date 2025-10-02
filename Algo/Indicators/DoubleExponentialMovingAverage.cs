@@ -50,6 +50,6 @@ public class DoubleExponentialMovingAverage : LengthIndicator<decimal>
 
 		var ema2Value = _ema2.Process(ema1Value);
 
-		return 2 * ema1Value.ToDecimal() - ema2Value.ToDecimal();
+		return 2 * ema1Value.ToDecimal(Source) - ema2Value.ToDecimal(Source);
 	}
 }

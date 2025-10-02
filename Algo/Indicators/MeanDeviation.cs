@@ -44,12 +44,12 @@ public class MeanDeviation : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
-		var val = input.ToDecimal();
+		var val = input.ToDecimal(Source);
 
 		if (input.IsFinal)
 			Buffer.PushBack(val);
 
-		var smaValue = Sma.Process(input).ToDecimal();
+		var smaValue = Sma.Process(input).ToDecimal(Source);
 
 		if (Buffer.Count > Length)
 			Buffer.PopFront();

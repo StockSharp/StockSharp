@@ -75,8 +75,8 @@ public class OscillatorOfMovingAverage : BaseIndicator
 
 		if (_shortMa.IsFormed && _longMa.IsFormed)
 		{
-			var shortMa = shortValue.ToDecimal();
-			var longMa = longValue.ToDecimal();
+			var shortMa = shortValue.ToDecimal(Source);
+			var longMa = longValue.ToDecimal(Source);
 			var result = longMa != 0 ? (shortMa - longMa) / longMa * 100 : 0;
 			return new DecimalIndicatorValue(this, result, input.Time);
 		}

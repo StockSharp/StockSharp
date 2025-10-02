@@ -72,8 +72,8 @@ public class HullMovingAverage : LengthIndicator<decimal>
 
 		if (_wmaFast.IsFormed && _wmaSlow.IsFormed)
 		{
-			var diff = 2 * fastVal.ToDecimal() - slowVal.ToDecimal();
-			return _wmaResult.Process(diff, input.Time, input.IsFinal).ToDecimal();
+			var diff = 2 * fastVal.ToDecimal(Source) - slowVal.ToDecimal(Source);
+			return _wmaResult.Process(diff, input.Time, input.IsFinal).ToDecimal(Source);
 		}
 
 		return null;

@@ -117,8 +117,8 @@ public class ChandeKrollStop : BaseComplexIndicator<ChandeKrollStopValue>
 			if (input.IsFinal)
 				IsFormed = true;
 
-			var highest = highestValue.ToDecimal();
-			var lowest = lowestValue.ToDecimal();
+			var highest = highestValue.ToDecimal(Source);
+			var lowest = lowestValue.ToDecimal(Source);
 
 			var highLowDiff = highest - lowest;
 
@@ -187,7 +187,7 @@ public class ChandeKrollStopValue(ChandeKrollStop indicator, DateTimeOffset time
 	/// Gets the highest stop line.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Highest => HighestValue.ToNullableDecimal();
+	public decimal? Highest => HighestValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the lowest stop line.
@@ -198,7 +198,7 @@ public class ChandeKrollStopValue(ChandeKrollStop indicator, DateTimeOffset time
 	/// Gets the lowest stop line.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Lowest => LowestValue.ToNullableDecimal();
+	public decimal? Lowest => LowestValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"Highest={Highest}, Lowest={Lowest}";

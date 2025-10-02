@@ -150,7 +150,7 @@ public class BollingerBandsValue(BollingerBands indicator, DateTimeOffset time) 
 	/// Gets the <see cref="BollingerBands.MovingAverage"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? MovingAverage => MovingAverageValue.ToNullableDecimal();
+	public decimal? MovingAverage => MovingAverageValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="BollingerBands.UpBand"/> value.
@@ -161,7 +161,7 @@ public class BollingerBandsValue(BollingerBands indicator, DateTimeOffset time) 
 	/// Gets the <see cref="BollingerBands.UpBand"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? UpBand => UpBandValue.ToNullableDecimal();
+	public decimal? UpBand => UpBandValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="BollingerBands.LowBand"/> value.
@@ -172,7 +172,7 @@ public class BollingerBandsValue(BollingerBands indicator, DateTimeOffset time) 
 	/// Gets the <see cref="BollingerBands.LowBand"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? LowBand => LowBandValue.ToNullableDecimal();
+	public decimal? LowBand => LowBandValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"MovingAverage={MovingAverage}, UpBand={UpBand}, LowBand={LowBand}";

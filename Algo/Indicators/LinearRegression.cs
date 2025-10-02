@@ -140,7 +140,7 @@ public class LinearRegressionValue(LinearRegression indicator, DateTimeOffset ti
 	/// Gets the <see cref="LinearRegression.LinearReg"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? LinearReg => LinearRegValue.ToNullableDecimal();
+	public decimal? LinearReg => LinearRegValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.RSquared"/> value.
@@ -151,7 +151,7 @@ public class LinearRegressionValue(LinearRegression indicator, DateTimeOffset ti
 	/// Gets the <see cref="LinearRegression.RSquared"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? RSquared => RSquaredValue.ToNullableDecimal();
+	public decimal? RSquared => RSquaredValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.LinearRegSlope"/> value.
@@ -162,7 +162,7 @@ public class LinearRegressionValue(LinearRegression indicator, DateTimeOffset ti
 	/// Gets the <see cref="LinearRegression.LinearRegSlope"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? LinearRegSlope => LinearRegSlopeValue.ToNullableDecimal();
+	public decimal? LinearRegSlope => LinearRegSlopeValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.StandardError"/> value.
@@ -173,7 +173,7 @@ public class LinearRegressionValue(LinearRegression indicator, DateTimeOffset ti
 	/// Gets the <see cref="LinearRegression.StandardError"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? StandardError => StandardErrorValue.ToNullableDecimal();
+	public decimal? StandardError => StandardErrorValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"LinearReg={LinearReg}, RSquared={RSquared}, LinearRegSlope={LinearRegSlope}, StandardError={StandardError}";

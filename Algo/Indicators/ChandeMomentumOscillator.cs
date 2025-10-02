@@ -48,7 +48,7 @@ public class ChandeMomentumOscillator : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
-		var newValue = input.ToDecimal();
+		var newValue = input.ToDecimal(Source);
 
 		if (!_isInitialized)
 		{
@@ -63,8 +63,8 @@ public class ChandeMomentumOscillator : LengthIndicator<decimal>
 
 		var delta = newValue - _last;
 
-		var upValue = _cmoUp.Process(input, delta > 0 ? delta : 0m).ToDecimal();
-		var downValue = _cmoDn.Process(input, delta > 0 ? 0m : -delta).ToDecimal();
+		var upValue = _cmoUp.Process(input, delta > 0 ? delta : 0m).ToDecimal(Source);
+		var downValue = _cmoDn.Process(input, delta > 0 ? 0m : -delta).ToDecimal(Source);
 
 		if (input.IsFinal)
 			_last = newValue;

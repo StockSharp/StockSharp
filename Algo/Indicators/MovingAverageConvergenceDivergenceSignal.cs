@@ -87,7 +87,7 @@ public class MovingAverageConvergenceDivergenceSignalValue(MovingAverageConverge
 	/// Gets the MACD value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Macd => MacdValue.ToNullableDecimal();
+	public decimal? Macd => MacdValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the signal line value.
@@ -98,7 +98,7 @@ public class MovingAverageConvergenceDivergenceSignalValue(MovingAverageConverge
 	/// Gets the signal line value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Signal => SignalValue.ToNullableDecimal();
+	public decimal? Signal => SignalValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"Macd={Macd}, Signal={Signal}";

@@ -56,8 +56,8 @@ public class TwiggsMoneyFlow : LengthIndicator<decimal>
 
 		if (IsFormed)
 		{
-			var advDecimal = advValue.ToDecimal();
-			var volDecimal = volValue.ToDecimal();
+			var advDecimal = advValue.ToDecimal(Source);
+			var volDecimal = volValue.ToDecimal(Source);
 
 			if (volDecimal != 0)
 				tmf = advDecimal / volDecimal;

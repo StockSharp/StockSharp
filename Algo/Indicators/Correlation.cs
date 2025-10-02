@@ -51,10 +51,10 @@ public class Correlation : Covariance
 		var sourceDev = _source.Process(value.Item1, input.Time, input.IsFinal);
 		var otherDev = _other.Process(value.Item2, input.Time, input.IsFinal);
 
-		var v = sourceDev.ToDecimal() * otherDev.ToDecimal();
+		var v = sourceDev.ToDecimal(Source) * otherDev.ToDecimal(Source);
 
 		if (v != 0)
-			v = cov.ToDecimal() / v;
+			v = cov.ToDecimal(Source) / v;
 
 		return new DecimalIndicatorValue(this, v, input.Time);
 	}

@@ -25,7 +25,7 @@ public class SimpleMovingAverage : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
-		var newValue = input.ToDecimal();
+		var newValue = input.ToDecimal(Source);
 
 		if (input.IsFinal)
 		{

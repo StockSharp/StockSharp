@@ -96,7 +96,7 @@ public class WoodiesCCIValue(WoodiesCCI indicator, DateTimeOffset time) : Comple
 	/// Gets the CCI value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Cci => CciValue.ToNullableDecimal();
+	public decimal? Cci => CciValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the SMA value.
@@ -107,7 +107,7 @@ public class WoodiesCCIValue(WoodiesCCI indicator, DateTimeOffset time) : Comple
 	/// Gets the SMA value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Sma => SmaValue.ToNullableDecimal();
+	public decimal? Sma => SmaValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"Cci={Cci}, Sma={Sma}";

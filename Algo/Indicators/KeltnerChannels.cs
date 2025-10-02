@@ -110,8 +110,8 @@ public class KeltnerChannels : BaseComplexIndicator<KeltnerChannelsValue>
 
 		if (IsFormed)
 		{
-			var middle = middleValue.ToDecimal();
-			var atr = atrValue.ToDecimal();
+			var middle = middleValue.ToDecimal(Source);
+			var atr = atrValue.ToDecimal(Source);
 			var offset = Multiplier * atr;
 
 			result.Add(Middle, middleValue);
@@ -194,7 +194,7 @@ public class KeltnerChannelsValue(KeltnerChannels indicator, DateTimeOffset time
 	/// Gets the <see cref="KeltnerChannels.Middle"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Middle => MiddleValue.ToNullableDecimal();
+	public decimal? Middle => MiddleValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="KeltnerChannels.Upper"/> value.
@@ -205,7 +205,7 @@ public class KeltnerChannelsValue(KeltnerChannels indicator, DateTimeOffset time
 	/// Gets the <see cref="KeltnerChannels.Upper"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Upper => UpperValue.ToNullableDecimal();
+	public decimal? Upper => UpperValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="KeltnerChannels.Lower"/> value.
@@ -216,7 +216,7 @@ public class KeltnerChannelsValue(KeltnerChannels indicator, DateTimeOffset time
 	/// Gets the <see cref="KeltnerChannels.Lower"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Lower => LowerValue.ToNullableDecimal();
+	public decimal? Lower => LowerValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"Middle={Middle}, Upper={Upper}, Lower={Lower}";

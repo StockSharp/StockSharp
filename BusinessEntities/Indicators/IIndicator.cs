@@ -31,6 +31,26 @@ public enum IndicatorMeasures
 }
 
 /// <summary>
+/// The source items provider for <see cref="IIndicator.Source"/>.
+/// </summary>
+public class SourceItemsSource : ItemsSourceBase<Level1Fields>
+{
+	private static readonly IEnumerable<Level1Fields> _values =
+	[
+		Level1Fields.OpenPrice,
+		Level1Fields.HighPrice,
+		Level1Fields.LowPrice,
+		Level1Fields.ClosePrice,
+		Level1Fields.SpreadMiddle,
+		Level1Fields.AveragePrice,
+		Level1Fields.VWAP,
+	];
+
+	/// <inheritdoc />
+	protected override IEnumerable<Level1Fields> GetValues() => _values;
+}
+
+/// <summary>
 /// The interface describing indicator.
 /// </summary>
 public interface IIndicator : IPersistable, ICloneable<IIndicator>
@@ -60,6 +80,11 @@ public interface IIndicator : IPersistable, ICloneable<IIndicator>
 	/// The container storing indicator data.
 	/// </summary>
 	IIndicatorContainer Container { get; }
+
+	/// <summary>
+	/// Field specified value source.
+	/// </summary>
+	Level1Fields? Source { get; }
 
 	/// <summary>
 	/// The indicator change event (for example, a new value is added).

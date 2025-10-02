@@ -37,7 +37,7 @@ public class FractalsValue(Fractals fractals, DateTimeOffset time) : ComplexIndi
 	/// Gets the <see cref="Fractals.Up"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Up => UpValue.ToNullableDecimal();
+	public decimal? Up => UpValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="Fractals.Down"/> value.
@@ -48,7 +48,7 @@ public class FractalsValue(Fractals fractals, DateTimeOffset time) : ComplexIndi
 	/// Gets the <see cref="Fractals.Down"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Down => DownValue.ToNullableDecimal();
+	public decimal? Down => DownValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Cast object from <see cref="FractalsValue"/> to <see cref="bool"/>.

@@ -58,8 +58,8 @@ public class DetrendedSyntheticPrice : BaseIndicator
 
 		if (_highest.IsFormed && _lowest.IsFormed)
 		{
-			var highestHigh = highestValue.ToDecimal();
-			var lowestLow = lowestValue.ToDecimal();
+			var highestHigh = highestValue.ToDecimal(Source);
+			var lowestLow = lowestValue.ToDecimal(Source);
 			var dsp = (highestHigh + lowestLow) / 2;
 			return new DecimalIndicatorValue(this, dsp, input.Time);
 		}

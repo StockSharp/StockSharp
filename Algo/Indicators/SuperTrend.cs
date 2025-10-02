@@ -147,7 +147,7 @@ public class SuperTrend : BaseIndicator
 		if (!atrValue.IsFormed)
 			return new SuperTrendIndicatorValue(this, input.Time);
 
-		var atr = atrValue.ToDecimal();
+		var atr = atrValue.ToDecimal(Source);
 		var close = candle.ClosePrice;
 		var hl2 = (candle.HighPrice + candle.LowPrice) / 2;
 

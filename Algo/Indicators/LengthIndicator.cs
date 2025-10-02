@@ -67,6 +67,7 @@ public abstract class LengthIndicator<TResult> : BaseIndicator
 	public override void Load(SettingsStorage storage)
 	{
 		base.Load(storage);
+
 		Length = storage.GetValue<int>(nameof(Length));
 	}
 
@@ -74,7 +75,10 @@ public abstract class LengthIndicator<TResult> : BaseIndicator
 	public override void Save(SettingsStorage storage)
 	{
 		base.Save(storage);
-		storage.SetValue(nameof(Length), Length);
+
+		storage
+			.Set(nameof(Length), Length)
+		;
 	}
 
 	/// <inheritdoc />

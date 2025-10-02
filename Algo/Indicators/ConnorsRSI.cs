@@ -132,9 +132,9 @@ public class ConnorsRSI : BaseComplexIndicator<ConnorsRSIValue>
 			if (input.IsFinal)
 				IsFormed = true;
 
-			var rsi = rsiValue.ToDecimal();
-			var updownRsi = updownRsiValue.ToDecimal();
-			var rocRsi = rocRsiValue.ToDecimal();
+			var rsi = rsiValue.ToDecimal(Source);
+			var updownRsi = updownRsiValue.ToDecimal(Source);
+			var rocRsi = rocRsiValue.ToDecimal(Source);
 
 			var crsi = (rsi + updownRsi + rocRsi) / 3;
 			var crsiValue = CrsiLine.Process(input, crsi);
@@ -248,7 +248,7 @@ public class ConnorsRSIValue(ConnorsRSI indicator, DateTimeOffset time) : Comple
 	/// Gets the RSI component.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Rsi => RsiValue.ToNullableDecimal();
+	public decimal? Rsi => RsiValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the UpDown RSI component.
@@ -259,7 +259,7 @@ public class ConnorsRSIValue(ConnorsRSI indicator, DateTimeOffset time) : Comple
 	/// Gets the UpDown RSI component.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? UpDownRsi => UpDownRsiValue.ToNullableDecimal();
+	public decimal? UpDownRsi => UpDownRsiValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the ROC RSI component.
@@ -270,7 +270,7 @@ public class ConnorsRSIValue(ConnorsRSI indicator, DateTimeOffset time) : Comple
 	/// Gets the ROC RSI component.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? RocRsi => RocRsiValue.ToNullableDecimal();
+	public decimal? RocRsi => RocRsiValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the composite RSI line.
@@ -281,7 +281,7 @@ public class ConnorsRSIValue(ConnorsRSI indicator, DateTimeOffset time) : Comple
 	/// Gets the composite RSI line.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? CrsiLine => CrsiLineValue.ToNullableDecimal();
+	public decimal? CrsiLine => CrsiLineValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"Rsi={Rsi}, UpDownRsi={UpDownRsi}, RocRsi={RocRsi}, CrsiLine={CrsiLine}";

@@ -50,7 +50,7 @@ public class AdaptiveLaguerreFilter : BaseIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var price = input.ToDecimal();
+		var price = input.ToDecimal(Source);
 
 		var gamma = Gamma;
 		var gamma1 = 1 - gamma;

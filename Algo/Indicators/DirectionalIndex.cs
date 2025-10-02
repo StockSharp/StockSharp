@@ -73,8 +73,8 @@ var value = new DirectionalIndexValue(this, input.Time) { IsFinal = input.IsFina
 		if (plusValue.IsEmpty || minusValue.IsEmpty)
 			return value;
 
-		var plus = plusValue.ToDecimal();
-		var minus = minusValue.ToDecimal();
+		var plus = plusValue.ToDecimal(Source);
+		var minus = minusValue.ToDecimal(Source);
 
 		var diSum = plus + minus;
 		var diDiff = Math.Abs(plus - minus);
@@ -125,7 +125,7 @@ public class DirectionalIndexValue(DirectionalIndex indicator, DateTimeOffset ti
 	/// Gets the <see cref="DirectionalIndex.Plus"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Plus => PlusValue.ToNullableDecimal();
+	public decimal? Plus => PlusValue.ToNullableDecimal(TypedIndicator.Source);
 	
 	/// <summary>
 	/// Gets the <see cref="DirectionalIndex.Minus"/> value.
@@ -136,7 +136,7 @@ public class DirectionalIndexValue(DirectionalIndex indicator, DateTimeOffset ti
 	/// Gets the <see cref="DirectionalIndex.Minus"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Minus => MinusValue.ToNullableDecimal();
+	public decimal? Minus => MinusValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"Plus={Plus}, Minus={Minus}";

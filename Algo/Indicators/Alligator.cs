@@ -101,7 +101,7 @@ public class AlligatorValue(Alligator indicator, DateTimeOffset time) : ComplexI
 	/// Gets the <see cref="Alligator.Jaw"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Jaw => JawValue.ToNullableDecimal();
+	public decimal? Jaw => JawValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="Alligator.Teeth"/> value.
@@ -112,7 +112,7 @@ public class AlligatorValue(Alligator indicator, DateTimeOffset time) : ComplexI
 	/// Gets the <see cref="Alligator.Teeth"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Teeth => TeethValue.ToNullableDecimal();
+	public decimal? Teeth => TeethValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="Alligator.Lips"/> value.
@@ -123,7 +123,7 @@ public class AlligatorValue(Alligator indicator, DateTimeOffset time) : ComplexI
 	/// Gets the <see cref="Alligator.Lips"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Lips => LipsValue.ToNullableDecimal();
+	public decimal? Lips => LipsValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"Jaw={Jaw}, Teeth={Teeth}, Lips={Lips}";

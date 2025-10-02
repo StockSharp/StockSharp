@@ -262,26 +262,28 @@ public static class IndicatorHelper
 	/// Convert <see cref="IIndicatorValue"/> to <see cref="decimal"/>.
 	/// </summary>
 	/// <param name="value"><see cref="IIndicatorValue"/></param>
+	/// <param name="source">Field specified value source.</param>
 	/// <returns><see cref="decimal"/></returns>
-	public static decimal ToDecimal(this IIndicatorValue value)
+	public static decimal ToDecimal(this IIndicatorValue value, Level1Fields? source = default)
 	{
 		if (value is null)
 			throw new ArgumentNullException(nameof(value));
 
-		return value.GetValue<decimal>();
+		return value.GetValue<decimal>(source ?? value.Indicator.Source);
 	}
 
 	/// <summary>
 	/// Convert <see cref="IIndicatorValue"/> to <see cref="decimal"/> or <see langword="null"/> if the value is empty..
 	/// </summary>
 	/// <param name="value"><see cref="IIndicatorValue"/></param>
+	/// <param name="source">Field specified value source.</param>
 	/// <returns><see cref="decimal"/> or <see langword="null"/> if the value is empty.</returns>
-	public static decimal? ToNullableDecimal(this IIndicatorValue value)
+	public static decimal? ToNullableDecimal(this IIndicatorValue value, Level1Fields? source = default)
 	{
 		if (value is null)
 			throw new ArgumentNullException(nameof(value));
 
-		return value.IsEmpty ? null : value.ToDecimal();
+		return value.IsEmpty ? null : value.ToDecimal(source);
 	}
 
 	/// <summary>

@@ -290,6 +290,10 @@ public class CandleIndicatorValue : SingleIndicatorValue<ICandleMessage>
 				Level1Fields.Volume => candle.TotalVolume,
 				Level1Fields.OpenInterest => candle.OpenInterest,
 
+				Level1Fields.SpreadMiddle => (candle.HighPrice + candle.LowPrice) / 2,
+				Level1Fields.AveragePrice => (candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 3,
+				Level1Fields.VWAP => (candle.HighPrice + candle.LowPrice + 2 * candle.ClosePrice) / 4,
+
 				_ => throw new ArgumentOutOfRangeException(nameof(field), field, LocalizedStrings.InvalidValue),
 			};
 

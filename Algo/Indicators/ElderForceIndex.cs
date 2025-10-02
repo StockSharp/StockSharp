@@ -56,6 +56,6 @@ public class ElderForceIndex : ExponentialMovingAverage
 		// Apply EMA smoothing
 		var emaValue = base.OnProcess(input.SetValue(this, forceIndex));
 
-		return new DecimalIndicatorValue(this, emaValue.ToDecimal(), input.Time);
+		return new DecimalIndicatorValue(this, emaValue.ToDecimal(Source), input.Time);
 	}
 }

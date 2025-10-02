@@ -24,7 +24,7 @@ public class Shift : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var value = input.ToDecimal();
+		var value = input.ToDecimal(Source);
 
 		if (input.IsFinal)
 			Buffer.PushBack(value);

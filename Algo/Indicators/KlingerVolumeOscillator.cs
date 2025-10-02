@@ -91,7 +91,7 @@ public class KlingerVolumeOscillator : BaseComplexIndicator<KlingerVolumeOscilla
 
 		if (LongEma.IsFormed)
 		{
-			var kvo = shortValue.ToDecimal() - longValue.ToDecimal();
+			var kvo = shortValue.ToDecimal(Source) - longValue.ToDecimal(Source);
 			result.Add(this, new DecimalIndicatorValue(this, kvo, input.Time) { IsFinal = input.IsFinal });
 		}
 
@@ -141,7 +141,7 @@ public class KlingerVolumeOscillatorValue(KlingerVolumeOscillator indicator, Dat
 	/// Gets the short EMA value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? ShortEma => ShortEmaValue.ToNullableDecimal();
+	public decimal? ShortEma => ShortEmaValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the long EMA value.
@@ -152,7 +152,7 @@ public class KlingerVolumeOscillatorValue(KlingerVolumeOscillator indicator, Dat
 	/// Gets the long EMA value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? LongEma => LongEmaValue.ToNullableDecimal();
+	public decimal? LongEma => LongEmaValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the oscillator value.
@@ -163,7 +163,7 @@ public class KlingerVolumeOscillatorValue(KlingerVolumeOscillator indicator, Dat
 	/// Gets the oscillator value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Oscillator => OscillatorValue.ToNullableDecimal();
+	public decimal? Oscillator => OscillatorValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"ShortEma={ShortEma}, LongEma={LongEma}, Oscillator={Oscillator}";

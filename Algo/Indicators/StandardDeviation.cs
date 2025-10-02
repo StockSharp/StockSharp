@@ -40,8 +40,8 @@ public class StandardDeviation : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
-		var newValue = input.ToDecimal();
-		var smaValue = _sma.Process(input).ToDecimal();
+		var newValue = input.ToDecimal(Source);
+		var smaValue = _sma.Process(input).ToDecimal(Source);
 
 		if (input.IsFinal)
 		{

@@ -91,7 +91,7 @@ public class TrueStrengthIndex : BaseComplexIndicator<TrueStrengthIndexValue>
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var currentPrice = input.ToDecimal();
+			var currentPrice = input.ToDecimal(Source);
 
 			if (!_isInitialized)
 			{
@@ -107,11 +107,11 @@ public class TrueStrengthIndex : BaseComplexIndicator<TrueStrengthIndexValue>
 			var momentum = currentPrice - _lastPrice;
 			var absMomentum = Math.Abs(momentum);
 
-			var firstSmoothedMomentum = _firstSmoothedMomentum.Process(input, momentum).ToDecimal();
-			var firstSmoothedAbsMomentum = _firstSmoothedAbsMomentum.Process(input, absMomentum).ToDecimal();
+			var firstSmoothedMomentum = _firstSmoothedMomentum.Process(input, momentum).ToDecimal(Source);
+			var firstSmoothedAbsMomentum = _firstSmoothedAbsMomentum.Process(input, absMomentum).ToDecimal(Source);
 
-			var doubleSmoothedMomentum = _doubleSmoothedMomentum.Process(input, firstSmoothedMomentum).ToDecimal();
-			var doubleSmoothedAbsMomentum = _doubleSmoothedAbsMomentum.Process(input, firstSmoothedAbsMomentum).ToDecimal();
+			var doubleSmoothedMomentum = _doubleSmoothedMomentum.Process(input, firstSmoothedMomentum).ToDecimal(Source);
+			var doubleSmoothedAbsMomentum = _doubleSmoothedAbsMomentum.Process(input, firstSmoothedAbsMomentum).ToDecimal(Source);
 
 			if (input.IsFinal)
 				_lastPrice = currentPrice;
@@ -285,13 +285,13 @@ public class TrueStrengthIndexValue(TrueStrengthIndex indicator, DateTimeOffset 
 	/// TSI numeric value (if available).
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Tsi => TsiValue.ToNullableDecimal();
+	public decimal? Tsi => TsiValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Signal numeric value (if available).
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Signal => SignalValue.ToNullableDecimal();
+	public decimal? Signal => SignalValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"TSI={Tsi}, Signal={Signal}";

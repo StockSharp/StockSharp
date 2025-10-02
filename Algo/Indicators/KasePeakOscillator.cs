@@ -88,7 +88,7 @@ public class KasePeakOscillator : BaseComplexIndicator<KasePeakOscillatorValue>
 
 		if (_atr.IsFormed)
 		{
-			var atr = atrValue.ToDecimal();
+			var atr = atrValue.ToDecimal(Source);
 			var peak = candle.HighPrice;
 			var valley = candle.LowPrice;
 
@@ -171,7 +171,7 @@ public class KasePeakOscillatorPart : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
-		var value = input.ToDecimal();
+		var value = input.ToDecimal(Source);
 
 		if (input.IsFinal)
 			Buffer.PushBack(value);
@@ -199,7 +199,7 @@ public class KasePeakOscillatorValue(KasePeakOscillator indicator, DateTimeOffse
 	/// Gets the <see cref="KasePeakOscillator.ShortTerm"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? ShortTerm => ShortTermValue.ToNullableDecimal();
+	public decimal? ShortTerm => ShortTermValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="KasePeakOscillator.LongTerm"/> value.
@@ -210,7 +210,7 @@ public class KasePeakOscillatorValue(KasePeakOscillator indicator, DateTimeOffse
 	/// Gets the <see cref="KasePeakOscillator.LongTerm"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? LongTerm => LongTermValue.ToNullableDecimal();
+	public decimal? LongTerm => LongTermValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"ShortTerm={ShortTerm}, LongTerm={LongTerm}";

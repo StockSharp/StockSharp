@@ -83,7 +83,7 @@ public class BollingerPercentB : BaseIndicator
 
 			if (bandWidth != 0)
 			{
-				var price = input.ToDecimal();
+				var price = input.ToDecimal(Source);
 
 				var percentB = (price - lowerBand) / bandWidth * 100;
 				return new DecimalIndicatorValue(this, percentB, input.Time);

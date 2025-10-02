@@ -118,7 +118,7 @@ public class IchimokuValue(Ichimoku indicator, DateTimeOffset time) : ComplexInd
 	/// Gets the <see cref="Ichimoku.Tenkan"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Tenkan => TenkanValue.ToNullableDecimal();
+	public decimal? Tenkan => TenkanValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.Kijun"/> value.
@@ -129,7 +129,7 @@ public class IchimokuValue(Ichimoku indicator, DateTimeOffset time) : ComplexInd
 	/// Gets the <see cref="Ichimoku.Kijun"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Kijun => KijunValue.ToNullableDecimal();
+	public decimal? Kijun => KijunValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.SenkouA"/> value.
@@ -140,7 +140,7 @@ public class IchimokuValue(Ichimoku indicator, DateTimeOffset time) : ComplexInd
 	/// Gets the <see cref="Ichimoku.SenkouA"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? SenkouA => SenkouAValue.ToNullableDecimal();
+	public decimal? SenkouA => SenkouAValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.SenkouB"/> value.
@@ -151,7 +151,7 @@ public class IchimokuValue(Ichimoku indicator, DateTimeOffset time) : ComplexInd
 	/// Gets the <see cref="Ichimoku.SenkouB"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? SenkouB => SenkouBValue.ToNullableDecimal();
+	public decimal? SenkouB => SenkouBValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.Chinkou"/> value.
@@ -162,7 +162,7 @@ public class IchimokuValue(Ichimoku indicator, DateTimeOffset time) : ComplexInd
 	/// Gets the <see cref="Ichimoku.Chinkou"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Chinkou => ChinkouValue.ToNullableDecimal();
+	public decimal? Chinkou => ChinkouValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"Tenkan={Tenkan}, Kijun={Kijun}, SenkouA={SenkouA}, SenkouB={SenkouB}, Chinkou={Chinkou}";

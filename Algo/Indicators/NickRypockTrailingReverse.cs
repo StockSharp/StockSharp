@@ -29,14 +29,14 @@ public class NickRypockTrailingReverse : LengthIndicator<decimal>
 		{
 			if (_isInitialized == false)
 			{
-				_k = input.ToDecimal();
-				_highPrice = input.ToDecimal();
-				_lowPrice = input.ToDecimal();
+				_k = input.ToDecimal(ind.Source);
+				_highPrice = input.ToDecimal(ind.Source);
+				_lowPrice = input.ToDecimal(ind.Source);
 
 				_isInitialized = true;
 			}
 
-			_price = input.ToDecimal();
+			_price = input.ToDecimal(ind.Source);
 
 			_k = (_k + (_price - _k) / ind.Length) * ind._multiple;
 

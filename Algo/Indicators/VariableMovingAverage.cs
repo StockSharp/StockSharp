@@ -67,7 +67,7 @@ public class VariableMovingAverage : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var newValue = input.ToDecimal();
+		var newValue = input.ToDecimal(Source);
 
 		if (!_isInitialized)
 		{
@@ -93,7 +93,7 @@ public class VariableMovingAverage : LengthIndicator<decimal>
 
 		// Calculate Variable Index (VI)
 		var avgPrice = Buffer.Sum / Buffer.Count;
-		var volatility = stdDevValue.ToDecimal();
+		var volatility = stdDevValue.ToDecimal(Source);
 
 		// Avoid division by zero
 		var vi = avgPrice != 0 ? Math.Abs(volatility / avgPrice) : 0;

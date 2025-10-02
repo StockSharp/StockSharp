@@ -108,8 +108,8 @@ public class AdaptivePriceZone : BaseComplexIndicator<AdaptivePriceZoneValue>
 
 		if (MovingAverage.IsFormed && _stdDev.IsFormed)
 		{
-			var ma = maValue.ToDecimal();
-			var stdDev = stdDevValue.ToDecimal();
+			var ma = maValue.ToDecimal(Source);
+			var stdDev = stdDevValue.ToDecimal(Source);
 
 			var upperBand = ma + BandPercentage * stdDev;
 			var lowerBand = ma - BandPercentage * stdDev;
@@ -198,19 +198,19 @@ public class AdaptivePriceZoneValue(AdaptivePriceZone indicator, DateTimeOffset 
 	/// Gets the moving average value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? MovingAverage => MovingAverageValue.ToNullableDecimal();
+	public decimal? MovingAverage => MovingAverageValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the upper band value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? UpperBand => UpperBandValue.ToNullableDecimal();
+	public decimal? UpperBand => UpperBandValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the lower band value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? LowerBand => LowerBandValue.ToNullableDecimal();
+	public decimal? LowerBand => LowerBandValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"MovingAverage={MovingAverage}, UpperBand={UpperBand}, LowerBand={LowerBand}";

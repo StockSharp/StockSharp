@@ -46,7 +46,7 @@ public class GuppyMultipleMovingAverageValue(GuppyMultipleMovingAverage indicato
 	/// Gets values of all moving averages.
 	/// </summary>
 	[Browsable(false)]
-	public decimal?[] Averages => [.. AveragesValues.Select(v => v.ToNullableDecimal())];
+	public decimal?[] Averages => [.. AveragesValues.Select(v => v.ToNullableDecimal(TypedIndicator.Source))];
 
 	/// <inheritdoc />
 	public override string ToString() => $"Averages=[{string.Join(", ", Averages)}]";

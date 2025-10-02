@@ -40,9 +40,9 @@ public class PrettyGoodOscillator : LengthIndicator<decimal>
 
 		if (IsFormed)
 		{
-			var sma = smaValue.ToDecimal();
-			var highest = highestValue.ToDecimal();
-			var lowest = lowestValue.ToDecimal();
+			var sma = smaValue.ToDecimal(Source);
+			var highest = highestValue.ToDecimal(Source);
+			var lowest = lowestValue.ToDecimal(Source);
 
 			var diff = highest - lowest;
 

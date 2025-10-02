@@ -46,8 +46,8 @@ public class CommodityChannelIndex : LengthIndicator<decimal>
 
 		var meanValue = _mean.Process(new DecimalIndicatorValue(this, aveP, input.Time) { IsFinal = input.IsFinal });
 
-		if (IsFormed && meanValue.ToDecimal() != 0)
-			return (aveP - _mean.Sma.GetCurrentValue()) / (0.015m * meanValue.ToDecimal());
+		if (IsFormed && meanValue.ToDecimal(Source) != 0)
+			return (aveP - _mean.Sma.GetCurrentValue()) / (0.015m * meanValue.ToDecimal(Source));
 
 		return null;
 	}

@@ -94,7 +94,7 @@ public class DynamicZonesRSI : LengthIndicator<decimal>
 
 		if (_rsi.IsFormed)
 		{
-			var rsi = rsiValue.ToDecimal();
+			var rsi = rsiValue.ToDecimal(Source);
 
 			decimal min, max;
 			if (input.IsFinal)

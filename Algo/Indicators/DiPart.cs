@@ -50,11 +50,11 @@ public abstract class DiPart : LengthIndicator<decimal>
 
 		if (_lastCandle != null)
 		{
-			var trValueDec = trValue.ToDecimal();
+			var trValueDec = trValue.ToDecimal(Source);
 			var maValue = _movingAverage.Process(new DecimalIndicatorValue(this, GetValue(candle, _lastCandle), input.Time) { IsFinal = input.IsFinal });
 
 			if (!maValue.IsEmpty)
-				result = trValueDec != 0m ? 100m * maValue.ToDecimal() / trValueDec : 0m;
+				result = trValueDec != 0m ? 100m * maValue.ToDecimal(Source) / trValueDec : 0m;
 		}
 
 		if (input.IsFinal)

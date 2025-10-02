@@ -75,8 +75,8 @@ public class HistoricalVolatilityRatio : BaseIndicator
 
 		if (_shortSd.IsFormed && _longSd.IsFormed)
 		{
-			var shortSd = shortSdValue.ToDecimal();
-			var longSd = longSdValue.ToDecimal();
+			var shortSd = shortSdValue.ToDecimal(Source);
+			var longSd = longSdValue.ToDecimal(Source);
 			var result = longSd != 0 ? shortSd / longSd : 0;
 			return new DecimalIndicatorValue(this, result, input.Time);
 		}

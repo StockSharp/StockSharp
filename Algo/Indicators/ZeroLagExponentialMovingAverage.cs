@@ -26,7 +26,7 @@ public class ZeroLagExponentialMovingAverage : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
-		var price = input.ToDecimal();
+		var price = input.ToDecimal(Source);
 
 		IList<decimal> buffer;
 

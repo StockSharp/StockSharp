@@ -147,7 +147,7 @@ public class EnvelopeValue(Envelope indicator, DateTimeOffset time) : ComplexInd
 	/// Gets the <see cref="Envelope.Middle"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Middle => MiddleValue.ToNullableDecimal();
+	public decimal? Middle => MiddleValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="Envelope.Upper"/> value.
@@ -158,7 +158,7 @@ public class EnvelopeValue(Envelope indicator, DateTimeOffset time) : ComplexInd
 	/// Gets the <see cref="Envelope.Upper"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Upper => UpperValue.ToNullableDecimal();
+	public decimal? Upper => UpperValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="Envelope.Lower"/> value.
@@ -169,7 +169,7 @@ public class EnvelopeValue(Envelope indicator, DateTimeOffset time) : ComplexInd
 	/// Gets the <see cref="Envelope.Lower"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Lower => LowerValue.ToNullableDecimal();
+	public decimal? Lower => LowerValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"Middle={Middle}, Upper={Upper}, Lower={Lower}";

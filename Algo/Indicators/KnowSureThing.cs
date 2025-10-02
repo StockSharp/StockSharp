@@ -72,7 +72,7 @@ public class KnowSureThing : BaseComplexIndicator<KnowSureThingValue>
 		if (!_sma4.IsFormed)
 			return result;
 
-		var kst = sma1Value.ToDecimal() + 2 * sma2Value.ToDecimal() + 3 * sma3Value.ToDecimal() + 4 * sma4Value.ToDecimal();
+		var kst = sma1Value.ToDecimal(Source) + 2 * sma2Value.ToDecimal(Source) + 3 * sma3Value.ToDecimal(Source) + 4 * sma4Value.ToDecimal(Source);
 
 		result.Add(KstLine, KstLine.Process(kst, input.Time, input.IsFinal));
 		result.Add(Signal, Signal.Process(kst, input.Time, input.IsFinal));
@@ -135,7 +135,7 @@ public class KnowSureThingValue(KnowSureThing indicator, DateTimeOffset time) : 
 	/// Gets the KST line value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? KstLine => KstLineValue.ToNullableDecimal();
+	public decimal? KstLine => KstLineValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the signal line value.
@@ -146,7 +146,7 @@ public class KnowSureThingValue(KnowSureThing indicator, DateTimeOffset time) : 
 	/// Gets the signal line value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Signal => SignalValue.ToNullableDecimal();
+	public decimal? Signal => SignalValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"KstLine={KstLine}, Signal={Signal}";

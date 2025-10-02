@@ -46,11 +46,11 @@ public class DetrendedPriceOscillator : LengthIndicator<decimal>
 		var smaValue = _sma.Process(input);
 
 		if (_sma.IsFormed && input.IsFinal)
-			Buffer.PushBack(smaValue.ToDecimal());
+			Buffer.PushBack(smaValue.ToDecimal(Source));
 
 		if (!IsFormed)
 			return null;
 
-		return input.ToDecimal() - Buffer[0.Max(Buffer.Count - 1 - _lookBack)];
+		return input.ToDecimal(Source) - Buffer[0.Max(Buffer.Count - 1 - _lookBack)];
 	}
 }

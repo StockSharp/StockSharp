@@ -88,7 +88,7 @@ public class RelativeVigorIndexValue(RelativeVigorIndex indicator, DateTimeOffse
 	/// Gets the <see cref="RelativeVigorIndex.Average"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Average => AverageValue.ToNullableDecimal();
+	public decimal? Average => AverageValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the <see cref="RelativeVigorIndex.Signal"/> value.
@@ -99,7 +99,7 @@ public class RelativeVigorIndexValue(RelativeVigorIndex indicator, DateTimeOffse
 	/// Gets the <see cref="RelativeVigorIndex.Signal"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Signal => SignalValue.ToNullableDecimal();
+	public decimal? Signal => SignalValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"Average={Average}, Signal={Signal}";

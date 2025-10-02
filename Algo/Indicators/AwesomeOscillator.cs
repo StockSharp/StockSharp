@@ -84,8 +84,8 @@ public class AwesomeOscillator : BaseIndicator
 	{
 		var mpValue = MedianPrice.Process(input);
 
-		var sValue = ShortMa.Process(mpValue).ToDecimal();
-		var lValue = LongMa.Process(mpValue).ToDecimal();
+		var sValue = ShortMa.Process(mpValue).ToDecimal(Source);
+		var lValue = LongMa.Process(mpValue).ToDecimal(Source);
 
 		return new DecimalIndicatorValue(this, sValue - lValue, input.Time);
 	}

@@ -58,7 +58,7 @@ public class RelativeMomentumIndex : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
-		var price = input.ToDecimal();
+		var price = input.ToDecimal(Source);
 
 		if (input.IsFinal)
 		{
@@ -76,8 +76,8 @@ public class RelativeMomentumIndex : LengthIndicator<decimal>
 
 			if (IsFormed)
 			{
-				var up = upValue.ToDecimal();
-				var down = downValue.ToDecimal();
+				var up = upValue.ToDecimal(Source);
+				var down = downValue.ToDecimal(Source);
 
 				var den = up + down;
 

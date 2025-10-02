@@ -49,8 +49,8 @@ public class WilliamsR : LengthIndicator<decimal>
 	{
 		var candle = input.ToCandle();
 
-		var lowValue = _low.Process(input, candle.LowPrice).ToDecimal();
-		var highValue = _high.Process(input, candle.HighPrice).ToDecimal();
+		var lowValue = _low.Process(input, candle.LowPrice).ToDecimal(Source);
+		var highValue = _high.Process(input, candle.HighPrice).ToDecimal(Source);
 
 		var diff = highValue - lowValue;
 

@@ -116,7 +116,7 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator<ConstanceBrownC
 			if (input.IsFinal)
 				IsFormed = true;
 
-			var rsi = rsiValue.ToDecimal();
+			var rsi = rsiValue.ToDecimal(Source);
 
 			if (stochValue.K is not decimal stochK ||
 				stochValue.D is not decimal stochD)
@@ -170,7 +170,7 @@ public class ConstanceBrownCompositeIndexValue(ConstanceBrownCompositeIndex indi
 	/// Gets the RSI component.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Rsi => RsiValue.ToNullableDecimal();
+	public decimal? Rsi => RsiValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the stochastic component.
@@ -181,7 +181,7 @@ public class ConstanceBrownCompositeIndexValue(ConstanceBrownCompositeIndex indi
 	/// Gets the stochastic component.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Stoch => StochValue.ToNullableDecimal();
+	public decimal? Stoch => StochValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the composite index line.
@@ -192,7 +192,7 @@ public class ConstanceBrownCompositeIndexValue(ConstanceBrownCompositeIndex indi
 	/// Gets the composite index line.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? CompositeIndexLine => CompositeIndexLineValue.ToNullableDecimal();
+	public decimal? CompositeIndexLine => CompositeIndexLineValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"Rsi={Rsi}, Stoch={Stoch}, CompositeIndexLine={CompositeIndexLine}";

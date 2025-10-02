@@ -59,8 +59,8 @@ public class RangeActionVerificationIndex : BaseIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var shortValue = ShortSma.Process(input).ToDecimal();
-		var longValue = LongSma.Process(input).ToDecimal();
+		var shortValue = ShortSma.Process(input).ToDecimal(Source);
+		var longValue = LongSma.Process(input).ToDecimal(Source);
 
 		if (longValue == 0)
 			return new DecimalIndicatorValue(this, input.Time);

@@ -93,8 +93,8 @@ public class PercentagePriceOscillator : BaseComplexIndicator<PercentagePriceOsc
 
 		if (IsFormed)
 		{
-			var den = longValue.ToDecimal();
-			var ppo = den == 0 ? 0 : ((shortValue.ToDecimal() - den) / den) * 100;
+			var den = longValue.ToDecimal(Source);
+			var ppo = den == 0 ? 0 : ((shortValue.ToDecimal(Source) - den) / den) * 100;
 			result.Add(this, new DecimalIndicatorValue(this, ppo, input.Time) { IsFinal = input.IsFinal });
 		}
 
@@ -146,7 +146,7 @@ public class PercentagePriceOscillatorValue(PercentagePriceOscillator indicator,
 	/// Gets the short EMA value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? ShortEma => ShortEmaValue.ToNullableDecimal();
+	public decimal? ShortEma => ShortEmaValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the long EMA value.
@@ -157,7 +157,7 @@ public class PercentagePriceOscillatorValue(PercentagePriceOscillator indicator,
 	/// Gets the long EMA value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? LongEma => LongEmaValue.ToNullableDecimal();
+	public decimal? LongEma => LongEmaValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"ShortEma={ShortEma}, LongEma={LongEma}";

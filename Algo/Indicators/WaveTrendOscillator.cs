@@ -108,17 +108,17 @@ public class WaveTrendOscillator : BaseComplexIndicator<WaveTrendOscillatorValue
 
 		if (_esa.IsFormed)
 		{
-			var capo = capoValue.ToDecimal();
-			var esa = esaValue.ToDecimal();
+			var capo = capoValue.ToDecimal(Source);
+			var esa = esaValue.ToDecimal(Source);
 
 			var d = _d.Process(input, Math.Abs(capo - esa));
 
 			if (_d.IsFormed)
 			{
-				var dValue = d.ToDecimal();
+				var dValue = d.ToDecimal(Source);
 				var ci = (capo - esa) / (0.015m * dValue);
 				var wt1 = ci;
-				var wt2 = _sma.Process(input, ci).ToDecimal();
+				var wt2 = _sma.Process(input, ci).ToDecimal(Source);
 
 				result.Add(Wt1, Wt1.Process(wt1, input.Time, input.IsFinal));
 				result.Add(Wt2, Wt2.Process(wt2, input.Time, input.IsFinal));
@@ -223,7 +223,7 @@ public class WaveTrendOscillatorValue(WaveTrendOscillator indicator, DateTimeOff
 	/// Gets the first Wavetrend line value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Wt1 => Wt1Value.ToNullableDecimal();
+	public decimal? Wt1 => Wt1Value.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Gets the second Wavetrend line value.
@@ -234,7 +234,7 @@ public class WaveTrendOscillatorValue(WaveTrendOscillator indicator, DateTimeOff
 	/// Gets the second Wavetrend line value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Wt2 => Wt2Value.ToNullableDecimal();
+	public decimal? Wt2 => Wt2Value.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />
 	public override string ToString() => $"Wt1={Wt1}, Wt2={Wt2}";

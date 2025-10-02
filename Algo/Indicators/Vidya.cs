@@ -45,7 +45,7 @@ public class Vidya : LengthIndicator<decimal>
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
-		var newValue = input.ToDecimal();
+		var newValue = input.ToDecimal(Source);
 
 		// calc СMO
 		var cmoValue = _cmo.Process(input);
@@ -66,7 +66,7 @@ public class Vidya : LengthIndicator<decimal>
 			return _prevFinalValue;
 		}
 
-		var curValue = (newValue - _prevFinalValue) * _multiplier * Math.Abs(cmoValue.ToDecimal() / 100m) + _prevFinalValue;
+		var curValue = (newValue - _prevFinalValue) * _multiplier * Math.Abs(cmoValue.ToDecimal(Source) / 100m) + _prevFinalValue;
 			
 		if (input.IsFinal)
 			_prevFinalValue = curValue;

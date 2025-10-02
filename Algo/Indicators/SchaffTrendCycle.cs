@@ -86,7 +86,7 @@ public class SchaffTrendCycle : ExponentialMovingAverage
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		if (input.IsFinal)
-			_buffer.PushBack(input.ToDecimal());
+			_buffer.PushBack(input.ToDecimal(Source));
 
 		var macdVal = (MovingAverageConvergenceDivergenceSignalValue)Macd.Process(input);
 
@@ -96,7 +96,7 @@ public class SchaffTrendCycle : ExponentialMovingAverage
 		var macdHist = macd - signal;
 
 		var den = _buffer.Max.Value - _buffer.Min.Value;
-		var stochK = den == 0 ? _prevStochK : StochasticK.Process(input, (macdHist - _buffer.Min.Value) / den).ToDecimal();
+		var stochK = den == 0 ? _prevStochK : StochasticK.Process(input, (macdHist - _buffer.Min.Value) / den).ToDecimal(Source);
 
 		if (!StochasticK.IsFormed)
 			return null;

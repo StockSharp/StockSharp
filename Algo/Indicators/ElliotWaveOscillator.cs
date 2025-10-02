@@ -76,7 +76,7 @@ public class ElliotWaveOscillator : BaseIndicator
 		if (!IsFormed)
 			return new DecimalIndicatorValue(this, input.Time);
 
-		var ewo = shortValue.ToDecimal() - longValue.ToDecimal();
+		var ewo = shortValue.ToDecimal(Source) - longValue.ToDecimal(Source);
 		return new DecimalIndicatorValue(this, ewo, input.Time);
 	}
 

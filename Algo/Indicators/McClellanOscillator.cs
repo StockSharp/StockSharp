@@ -36,7 +36,7 @@ public class McClellanOscillator : BaseIndicator
 
 		if (_ema19.IsFormed && _ema39.IsFormed)
 		{
-			var oscillator = ema19Value.ToDecimal() - ema39Value.ToDecimal();
+			var oscillator = ema19Value.ToDecimal(Source) - ema39Value.ToDecimal(Source);
 
 			if (input.IsFinal)
 				IsFormed = true;
