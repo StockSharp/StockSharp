@@ -4,9 +4,9 @@
 /// Percentage Volume Oscillator (PVO).
 /// </summary>
 [Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.PVOKey,
-		Description = LocalizedStrings.PercentageVolumeOscillatorKey)]
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.PVOKey,
+	Description = LocalizedStrings.PercentageVolumeOscillatorKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/percentage_volume_oscillator.html")]
 [IndicatorOut(typeof(PercentageVolumeOscillatorValue))]
