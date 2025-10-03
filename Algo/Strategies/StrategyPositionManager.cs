@@ -13,12 +13,11 @@ using StockSharp.Messages;
 /// Manages strategy positions (per <see cref="Security"/> + <see cref="Portfolio"/>) and calculates position quantity, average price, realized PnL and commission incrementally from order executions.
 /// Additionally maintains cached per-position aggregates (blocked volume and active buy/sell orders count) via incremental updates (O(1) per order update, no rescans).
 /// </summary>
-
 /// <param name="strategyIdGetter">Delegate returning strategy identifier to stamp into newly created <see cref="Position.StrategyId"/>.</param>
 public class StrategyPositionManager(Func<string> strategyIdGetter)
 {
 	private readonly SyncObject _lock = new();
-	private readonly Dictionary<(Security sec, Portfolio pf), Position> _positions = [];
+	private readonly Dictionary<(SecurityId secId, Portfolio pf), Position> _positions = [];
 	private readonly Dictionary<Order, OrderExecInfo> _orderExecInfos = [];
 
 	/// <summary>
@@ -32,7 +31,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 		public int SellCount;        // active sell orders count
 	}
 
-	private readonly Dictionary<(Security, Portfolio), PosAgg> _posAggs = [];
+	private readonly Dictionary<(SecurityId secId, Portfolio pf), PosAgg> _posAggs = [];
 
 	/// <summary>
 	/// Per-order tracking entry for incremental aggregate adjustments.
@@ -76,8 +75,10 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 		ArgumentNullException.ThrowIfNull(security);
 		ArgumentNullException.ThrowIfNull(portfolio);
 
+		var key = (security.ToSecurityId(), portfolio);
+
 		lock (_lock)
-			return _positions.TryGetValue((security, portfolio));
+			return _positions.TryGetValue(key);
 	}
 
 	/// <summary>
@@ -97,7 +98,8 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 		ArgumentNullException.ThrowIfNull(security);
 		ArgumentNullException.ThrowIfNull(portfolio);
 
-		return _positions.SafeAdd((security, portfolio), _ => new Position
+		var key = (security.ToSecurityId(), portfolio);
+		return _positions.SafeAdd(key, _ => new()
 		{
 			Security = security,
 			Portfolio = portfolio,
@@ -128,16 +130,15 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 		}
 	}
 
-	private PosAgg GetAgg((Security sec, Portfolio pf) key)
-		=> _posAggs.SafeAdd(key, _ => new());
-
 	/// <summary>
 	/// Incrementally update aggregates for the order (blocked volume and counts) and push them into the <paramref name="position"/>.
 	/// </summary>
 	private void UpdateAggregates(Order order, Position position)
 	{
-		var key = (order.Security, order.Portfolio);
-		var agg = GetAgg(key);
+		ArgumentNullException.ThrowIfNull(order);
+		ArgumentNullException.ThrowIfNull(position);
+
+		var agg = _posAggs.SafeAdd((order.Security.ToSecurityId(), order.Portfolio), _ => new());
 
 		var balance = order.Balance; // non-nullable balance
 		var newActive = !order.State.IsFinal() && balance > 0;
@@ -166,9 +167,14 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 			if (track.Active && newActive)
 			{
 				var diff = balance - track.LastBalance;
+
 				if (diff != 0)
 				{
-					if (order.Side == Sides.Buy) agg.BlockedBuy += diff; else agg.BlockedSell += diff;
+					if (order.Side == Sides.Buy)
+						agg.BlockedBuy += diff;
+					else
+						agg.BlockedSell += diff;
+
 					track.LastBalance = balance;
 				}
 			}
@@ -300,26 +306,23 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 	}
 
 	/// <summary>
-	/// Update current (market) price for all positions of the specified <paramref name="security"/>.
+	/// Update current (market) price for all positions of the specified <paramref name="secId"/>.
 	/// </summary>
-	/// <param name="security">Security whose positions need price update.</param>
+	/// <param name="secId">Security identifier whose positions need price update.</param>
 	/// <param name="price">New market price.</param>
 	/// <param name="serverTime">Server time of the price snapshot.</param>
 	/// <param name="localTime">Local time when the price was processed.</param>
-	public void UpdateCurrentPrice(Security security, decimal price, DateTimeOffset serverTime, DateTimeOffset localTime)
+	public void UpdateCurrentPrice(SecurityId secId, decimal price, DateTimeOffset serverTime, DateTimeOffset localTime)
 	{
-		ArgumentNullException.ThrowIfNull(security);
-
 		List<Position> changed = null;
 
 		lock (_lock)
 		{
-			foreach (var ((sec, pf), pos) in _positions)
+			foreach (var ((kSecId, _), pos) in _positions)
 			{
-				if (sec != security)
+				if (!kSecId.Equals(secId))
 					continue;
 
-				// Update even if flat to reflect last known market price (decision: allow). If not desired, check pos.CurrentValue != 0.
 				pos.CurrentPrice = price;
 				pos.LastChangeTime = serverTime;
 				pos.LocalTime = localTime;

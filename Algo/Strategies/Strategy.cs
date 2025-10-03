@@ -95,8 +95,8 @@ public enum StrategyTradingModes
 /// The base class for all trade strategies.
 /// </summary>
 public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMarketRuleContainer,
-    ICloneable<Strategy>, IMarketDataProvider, ISubscriptionProvider, ISecurityProvider,
-    ITransactionProvider, IScheduledTask, ICustomTypeDescriptor, ITimeProvider,
+	ICloneable<Strategy>, IMarketDataProvider, ISubscriptionProvider, ISecurityProvider,
+	ITransactionProvider, IScheduledTask, ICustomTypeDescriptor, ITimeProvider,
 	IPortfolioProvider, IPositionProvider
 {
 	private class StrategyChangeStateMessage(Strategy strategy, ProcessStates state)
@@ -2033,20 +2033,46 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				PnLManager.ProcessMessage(message);
 				msgTime = quoteMsg.ServerTime;
 
+				// Update current price in position manager
+				var security = this.LookupById(quoteMsg.SecurityId);
+				if (security != null)
+				{
+					var price = quoteMsg.GetSpreadMiddle(null);
+					if (price != null)
+						_posManager.UpdateCurrentPrice(quoteMsg.SecurityId, price.Value, quoteMsg.ServerTime, quoteMsg.LocalTime);
+				}
+
 				break;
 			}
 
 			case MessageTypes.Level1Change:
+			{
+				var level1Msg = (Level1ChangeMessage)message;
 				PnLManager.ProcessMessage(message);
-				msgTime = ((Level1ChangeMessage)message).ServerTime;
+				msgTime = level1Msg.ServerTime;
+
+				// Try to get the most relevant price field
+				var price = level1Msg.TryGet(Level1Fields.LastTradePrice) ??
+						   level1Msg.TryGet(Level1Fields.ClosePrice) ??
+						   level1Msg.TryGet(Level1Fields.SpreadMiddle);
+
+				if (price is decimal priceDec)
+					_posManager.UpdateCurrentPrice(level1Msg.SecurityId, priceDec, level1Msg.ServerTime, level1Msg.LocalTime);
+
 				break;
+			}
 
 			case MessageTypes.Execution:
 			{
 				var execMsg = (ExecutionMessage)message;
 
 				if (execMsg.IsMarketData())
+				{
 					PnLManager.ProcessMessage(execMsg);
+
+					if (execMsg.TradePrice is decimal tickPrice)
+						_posManager.UpdateCurrentPrice(execMsg.SecurityId, tickPrice, execMsg.ServerTime, execMsg.LocalTime);
+				}
 
 				msgTime = execMsg.ServerTime;
 				break;
@@ -2097,8 +2123,12 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 			default:
 			{
-				if (message is CandleMessage)
+				if (message is CandleMessage candleMsg)
+				{
 					PnLManager.ProcessMessage(message);
+
+					_posManager.UpdateCurrentPrice(candleMsg.SecurityId, candleMsg.ClosePrice, candleMsg.OpenTime, candleMsg.LocalTime);
+				}
 
 				return;
 			}
