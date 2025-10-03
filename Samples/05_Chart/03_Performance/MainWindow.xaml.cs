@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
-using System.Drawing;
 
 using Ecng.Collections;
 using Ecng.Common;
@@ -428,8 +427,6 @@ class MyMovingAverage : IIndicator
 
 	IndicatorMeasures IIndicator.Measure => IndicatorMeasures.Price;
 
-	DrawStyles IIndicator.Style => DrawStyles.Line;
-	Color? IIndicator.Color => default;
 	Level1Fields? IIndicator.Source { get; set; }
 
 	event Action<IIndicatorValue, IIndicatorValue> IIndicator.Changed

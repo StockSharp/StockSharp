@@ -124,12 +124,12 @@ public interface IIndicator : IPersistable, ICloneable<IIndicator>
 	/// <summary>
 	/// Chart indicator draw style.
 	/// </summary>
-	DrawStyles Style { get; }
+	DrawStyles Style => DrawStyles.Line;
 
 	/// <summary>
 	/// Indicator color. If <see langword="null"/> then the color will be automatically selected.
 	/// </summary>
-	Color? Color { get; }
+	Color? Color => null;
 
 	/// <summary>
 	/// Indicates whether the indicator has been preloaded with historical/external values.
