@@ -1900,7 +1900,7 @@
   "LongMa": "MA Llarga",
   "LongMaDesc": "Mitjana mòbil llarga.",
   "LongOnly": "Només llarg",
-  "LongOnlyDetails": "Permetre només ordres de compra (només posicions llargues)",
+  "LongOnlyDetails": "Permetre només posicions llargues",
   "LongPeriod": "Període llarg",
   "LongTermDebtEquity": "Capital (deute a llarg termini)",
   "LookupSecuritiesNotSupported": "La cerca d'instruments no està suportada. Cal crear manualment l'instrument.",

@@ -1900,7 +1900,7 @@
   "LongMa": "Pitkä MA",
   "LongMaDesc": "Pitkä liukuva keskiarvo.",
   "LongOnly": "Vain pitkä",
-  "LongOnlyDetails": "Salli vain osto-toimeksiannot (vain pitkät positiot)",
+  "LongOnlyDetails": "Salli vain pitkät positiot",
   "LongPeriod": "Pitkä ajanjakso",
   "LongTermDebtEquity": "Pääoma (pitkäaikainen velka)",
   "LookupSecuritiesNotSupported": "Arvopapereiden etsintä ei ole tuettu. Sinun on luotava instrumentti manuaalisesti.",

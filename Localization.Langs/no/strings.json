@@ -1900,7 +1900,7 @@
   "LongMa": "Lang MA",
   "LongMaDesc": "Langt glidende gjennomsnitt.",
   "LongOnly": "Kun lang",
-  "LongOnlyDetails": "Tillat kun kjøpsordrer (kun lange posisjoner)",
+  "LongOnlyDetails": "Tillat kun lange posisjoner",
   "LongPeriod": "Lang periode",
   "LongTermDebtEquity": "Kapital (langsiktig gjeld)",
   "LookupSecuritiesNotSupported": "Oppslag av verdipapirer støttes ikke. Instrumentet må opprettes manuelt.",

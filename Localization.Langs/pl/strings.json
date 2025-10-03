@@ -1900,7 +1900,7 @@
   "LongMa": "Długa MA",
   "LongMaDesc": "Długa średnia ruchoma.",
   "LongOnly": "Tylko long",
-  "LongOnlyDetails": "Zezwalaj tylko na zlecenia kupna (tylko pozycje long)",
+  "LongOnlyDetails": "Zezwalaj tylko na pozycje long",
   "LongPeriod": "Długi okres",
   "LongTermDebtEquity": "Kapitał (długoterminowe zadłużenie)",
   "LookupSecuritiesNotSupported": "Wyszukiwanie papierów wartościowych nie jest wspierane. Należy utworzyć instrument ręcznie.",

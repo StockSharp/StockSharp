@@ -1900,7 +1900,7 @@
   "LongMa": "MA بلند",
   "LongMaDesc": "میانگین متحرک طولانی.",
   "LongOnly": "فقط خرید",
-  "LongOnlyDetails": "فقط سفارشات خرید مجاز است (فقط پوزیشن‌های خرید)",
+  "LongOnlyDetails": "فقط پوزیشن‌های خرید مجاز است",
   "LongPeriod": "دوره طولانی",
   "LongTermDebtEquity": "سرمایه (بدهی بلندمدت)",
   "LookupSecuritiesNotSupported": "جستجوی اوراق بهادار پشتیبانی نمی‌شود. باید دستی ابزار را ایجاد کرد.",

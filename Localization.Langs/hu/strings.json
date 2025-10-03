@@ -1900,7 +1900,7 @@
   "LongMa": "Hosszú MA",
   "LongMaDesc": "Hosszú mozgóátlag.",
   "LongOnly": "Csak long",
-  "LongOnlyDetails": "Csak vételi megbízások engedélyezése (csak long pozíciók)",
+  "LongOnlyDetails": "Csak long pozíciók engedélyezése",
   "LongPeriod": "Hosszú időszak",
   "LongTermDebtEquity": "Tőke (hosszú távú adósság)",
   "LookupSecuritiesNotSupported": "Az értékpapírok keresése nem támogatott. A eszközt manuálisan kell létrehozni.",

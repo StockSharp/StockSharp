@@ -1900,7 +1900,7 @@
   "LongMa": "长期MA",
   "LongMaDesc": "长期移动平均。",
   "LongOnly": "仅做多",
-  "LongOnlyDetails": "仅允许买入订单（仅做多头寸）",
+  "LongOnlyDetails": "仅允许多头头寸",
   "LongPeriod": "长时间",
   "LongTermDebtEquity": "长期债务权益",
   "LookupSecuritiesNotSupported": "不支持查找证券。需要手动创建工具。",

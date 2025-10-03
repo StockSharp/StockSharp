@@ -1900,7 +1900,7 @@
   "LongMa": "Lange MA",
   "LongMaDesc": "Lange voortschrijdend gemiddelde.",
   "LongOnly": "Alleen long",
-  "LongOnlyDetails": "Sta alleen kooporders toe (alleen long posities)",
+  "LongOnlyDetails": "Sta alleen long posities toe",
   "LongPeriod": "Lange periode",
   "LongTermDebtEquity": "Eigen vermogen (langetermijnschuld)",
   "LookupSecuritiesNotSupported": "Het opzoeken van effecten wordt niet ondersteund. Het instrument moet handmatig worden aangemaakt.",

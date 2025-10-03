@@ -1907,7 +1907,7 @@
   "LongMa": "Long MA",
   "LongMaDesc": "Long moving average.",
   "LongOnly": "Long Only",
-  "LongOnlyDetails": "Allow buy orders only (long positions only)",
+  "LongOnlyDetails": "Allow long positions only",
   "LongPeriod": "Long period.",
   "LongTermDebtEquity": "Capital (long-term debt)",
   "LookupSecuritiesNotSupported": "Lookup securities is not supported. Need to manually create appropriate security.",

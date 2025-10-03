@@ -1900,7 +1900,7 @@
   "LongMa": "長期MA",
   "LongMaDesc": "長期移動平均。",
   "LongOnly": "ロングのみ",
-  "LongOnlyDetails": "買い注文のみを許可（ロングポジションのみ）",
+  "LongOnlyDetails": "ロングポジションのみを許可",
   "LongPeriod": "長期間",
   "LongTermDebtEquity": "長期債務資本",
   "LookupSecuritiesNotSupported": "証券の検索はサポートされていません。手動でインストゥルメントを作成する必要があります。",

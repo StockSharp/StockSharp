@@ -1900,7 +1900,7 @@
   "LongMa": "MA longue",
   "LongMaDesc": "Moyenne mobile longue.",
   "LongOnly": "Long uniquement",
-  "LongOnlyDetails": "Autoriser uniquement les ordres d'achat (positions longues uniquement)",
+  "LongOnlyDetails": "Autoriser uniquement les positions longues",
   "LongPeriod": "Période longue",
   "LongTermDebtEquity": "Capitaux propres (dette à long terme)",
   "LookupSecuritiesNotSupported": "La recherche de valeurs mobilières n'est pas prise en charge. Il faut créer l'instrument manuellement.",

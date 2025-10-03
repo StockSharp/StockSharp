@@ -1900,7 +1900,7 @@
   "LongMa": "Lange MA",
   "LongMaDesc": "Langfristiger gleitender Durchschnitt.",
   "LongOnly": "Nur Long",
-  "LongOnlyDetails": "Nur Kaufaufträge zulassen (nur Long-Positionen)",
+  "LongOnlyDetails": "Nur Long-Positionen zulassen",
   "LongPeriod": "Lange Periode",
   "LongTermDebtEquity": "Kapital (Langfristige Schulden)",
   "LookupSecuritiesNotSupported": "Die Suche nach Wertpapieren wird nicht unterstützt. Das Instrument muss manuell erstellt werden.",

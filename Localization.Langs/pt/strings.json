@@ -1900,7 +1900,7 @@
   "LongMa": "MA longa",
   "LongMaDesc": "Média móvel longa.",
   "LongOnly": "Apenas compra",
-  "LongOnlyDetails": "Permitir apenas ordens de compra (apenas posições compradas)",
+  "LongOnlyDetails": "Permitir apenas posições compradas",
   "LongPeriod": "Período longo",
   "LongTermDebtEquity": "Capital (dívida de longo prazo)",
   "LookupSecuritiesNotSupported": "A busca por títulos não é suportada. É necessário criar o instrumento manualmente.",

@@ -1900,7 +1900,7 @@
   "LongMa": "MA طويلة",
   "LongMaDesc": "المتوسط ​​المتحرك الطويل.",
   "LongOnly": "شراء فقط",
-  "LongOnlyDetails": "السماح بأوامر الشراء فقط (مراكز شراء فقط)",
+  "LongOnlyDetails": "السماح بمراكز الشراء فقط",
   "LongPeriod": "فترة طويلة",
   "LongTermDebtEquity": "رأس المال (الدين طويل الأجل)",
   "LookupSecuritiesNotSupported": "البحث عن الأوراق المالية غير مدعوم. يجب إنشاء الأداة يدويًا.",

@@ -1900,7 +1900,7 @@
   "LongMa": "Lång MA",
   "LongMaDesc": "Lång glidande medelvärde.",
   "LongOnly": "Endast lång",
-  "LongOnlyDetails": "Tillåt endast köporder (endast långa positioner)",
+  "LongOnlyDetails": "Tillåt endast långa positioner",
   "LongPeriod": "Lång period",
   "LongTermDebtEquity": "Kapital (långsiktig skuld)",
   "LookupSecuritiesNotSupported": "Uppslag av värdepapper stöds inte. Instrumentet måste skapas manuellt.",

@@ -1905,7 +1905,7 @@
   "LongMa": "Long MA",
   "LongMaDesc": "Long moving average.",
   "LongOnly": "Long lamang",
-  "LongOnlyDetails": "Payagan lamang ang mga buy order (long positions lamang)",
+  "LongOnlyDetails": "Payagan lamang ang long positions",
   "LongPeriod": "Mahabang panahon.",
   "LongTermDebtEquity": "Kapital (pangmatagalang utang)",
   "LookupSecuritiesNotSupported": "Ang paghahanap ng mga security ay hindi suportado. Kailangang manu-manong gumawa ng angkop na security.",
