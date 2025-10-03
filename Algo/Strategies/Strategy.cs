@@ -80,6 +80,15 @@ public enum StrategyTradingModes
 		Name = LocalizedStrings.PosConditionReduceOnlyKey,
 		Description = LocalizedStrings.PosConditionReduceOnlyDetailsKey)]
 	ReducePositionOnly,
+
+	/// <summary>
+	/// Allow long positions only.
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.LongOnlyKey,
+		Description = LocalizedStrings.LongOnlyDetailsKey)]
+	LongOnly,
 }
 
 /// <summary>
@@ -1196,55 +1205,94 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 	private string _lastCantTradeReason;
 
-	private bool CanTrade(bool reducePosition, out string reason)
+	/// <summary>
+	/// Check if can trade with order information.
+	/// </summary>
+	/// <param name="security">Security to trade.</param>
+	/// <param name="portfolio">Portfolio to trade.</param>
+	/// <param name="side">Order side.</param>
+	/// <param name="volume">Order volume.</param>
+	/// <param name="noTradeReason">Reason why trading is not allowed.</param>
+	/// <returns>True if trading is allowed.</returns>
+	protected virtual bool CanTrade(Security security, Portfolio portfolio, Sides side, decimal volume, out string noTradeReason)
 	{
-		if(CanTrade(CurrentTime, reducePosition, out reason))
+		bool canTrade(out string noTradeReason)
 		{
-			_lastCantTradeReason = null;
+			if (_stopping)
+			{
+				noTradeReason = "Strategy is stopping.";
+				return false;
+			}
+
+			if (ProcessState != ProcessStates.Started)
+			{
+				noTradeReason = LocalizedStrings.StrategyInStateCannotRegisterOrder.Put(ProcessState);
+				return false;
+			}
+
+			if (!IsFormed)
+			{
+				noTradeReason = LocalizedStrings.NonFormed;
+				return false;
+			}
+
+			var mode = TradingMode;
+
+			if (mode == StrategyTradingModes.Disabled)
+			{
+				noTradeReason = LocalizedStrings.TradingDisabled;
+				return false;
+			}
+
+			var currentPosition = GetPositionValue(security, portfolio) ?? 0;
+
+			if (mode == StrategyTradingModes.ReducePositionOnly)
+			{
+				if (volume > 0)
+				{
+					var noReducePosition = currentPosition == 0 ||
+						currentPosition.GetDirection() == side ||
+						currentPosition.Abs() < volume;
+
+					if (noReducePosition)
+					{
+						noTradeReason = LocalizedStrings.PosConditionReduceOnly;
+						return false;
+					}
+				}
+			}
+			else if (mode == StrategyTradingModes.LongOnly)
+			{
+				if (side == Sides.Sell && volume > 0)
+				{
+					if (currentPosition <= 0)
+					{
+						noTradeReason = LocalizedStrings.LongOnly;
+						return false;
+					}
+
+					if (volume > currentPosition)
+					{
+						noTradeReason = $"{LocalizedStrings.LongOnly}: sell volume ({volume}) exceeds position ({currentPosition})";
+						return false;
+					}
+				}
+			}
+			
+			noTradeReason = null;
 			return true;
 		}
 
-		var logLevel = reason == _lastCantTradeReason ? LogLevels.Verbose : LogLevels.Warning;
-
-		_lastCantTradeReason = reason;
-		this.AddLog(logLevel, () => $"can't send orders: {_lastCantTradeReason}");
-		return false;
-	}
-
-	/// <summary>
-	/// Check if can trade.
-	/// </summary>
-	protected virtual bool CanTrade(DateTimeOffset time, bool reducePosition, out string noTradeReason)
-	{
-		if (ProcessState != ProcessStates.Started)
+		if (!canTrade(out noTradeReason))
 		{
-			noTradeReason = LocalizedStrings.StrategyInStateCannotRegisterOrder.Put(ProcessState);
+			var logLevel = noTradeReason == _lastCantTradeReason ? LogLevels.Verbose : LogLevels.Warning;
+
+			_lastCantTradeReason = noTradeReason;
+			this.AddLog(logLevel, () => $"can't send orders: {_lastCantTradeReason}");
 			return false;
 		}
 
-		if (!IsFormed)
-		{
-			noTradeReason = LocalizedStrings.NonFormed;
-			return false;
-		}
-
-		if (TradingMode == StrategyTradingModes.Disabled)
-		{
-			noTradeReason = LocalizedStrings.TradingDisabled;
-			return false;
-		}
-		else if (TradingMode == StrategyTradingModes.ReducePositionOnly && !reducePosition)
-		{
-			noTradeReason = LocalizedStrings.PosConditionReduceOnlyKey;
-			return false;
-		}
-
-		if (_stopping)
-		{
-			noTradeReason = "Strategy is stopping.";
-			return false;
-		}
-
+		_lastCantTradeReason = null;
 		noTradeReason = null;
 		return true;
 	}
@@ -1255,9 +1303,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if (order is null)
 			throw new ArgumentNullException(nameof(order));
 
-		var pos = GetPositionValue(order.Security, order.Portfolio);
-
-		if (!CanTrade(pos > 0 && pos.Value.GetDirection() == order.Side.Invert() && pos.Value.Abs() >= order.Volume, out var reason))
+		if (!CanTrade(order.Security, order.Portfolio, order.Side, order.Volume, out var reason))
 		{
 			ProcessOrderFail(order, new InvalidOperationException(reason));
 			return;
@@ -1313,7 +1359,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	{
 		LogInfo("EditOrder: {0}", order);
 
-		if (!CanTrade(changes.Volume > 0 && order.Balance > changes.Volume, out var reason))
+		if (!CanTrade(order.Security, order.Portfolio, order.Side, changes.Volume, out var reason))
 		{
 			ProcessOrderFail(order, new InvalidOperationException(reason));
 			return;
@@ -1336,7 +1382,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		LogInfo("Reregistration {0} with price {1} to price {2}. {3}", oldOrder.TransactionId, oldOrder.Price, newOrder.Price, oldOrder.Comment);
 
-		if (!CanTrade(newOrder.Volume > 0 && oldOrder.Balance > newOrder.Volume, out var reason))
+		if (!CanTrade(newOrder.Security, newOrder.Portfolio, newOrder.Side, newOrder.Volume, out var reason))
 		{
 			ProcessOrderFail(newOrder, new InvalidOperationException(reason));
 			return;
