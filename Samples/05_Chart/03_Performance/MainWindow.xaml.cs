@@ -430,7 +430,7 @@ class MyMovingAverage : IIndicator
 
 	DrawStyles IIndicator.Style => DrawStyles.Line;
 	Color? IIndicator.Color => default;
-	Level1Fields? IIndicator.Source => null;
+	Level1Fields? IIndicator.Source { get; set; }
 
 	event Action<IIndicatorValue, IIndicatorValue> IIndicator.Changed
 	{

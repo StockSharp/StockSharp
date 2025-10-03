@@ -84,7 +84,7 @@ public interface IIndicator : IPersistable, ICloneable<IIndicator>
 	/// <summary>
 	/// Field specified value source.
 	/// </summary>
-	Level1Fields? Source { get; }
+	Level1Fields? Source { get; set; }
 
 	/// <summary>
 	/// The indicator change event (for example, a new value is added).
