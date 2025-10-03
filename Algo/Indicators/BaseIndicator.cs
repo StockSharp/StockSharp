@@ -16,6 +16,7 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	}
 
 	private readonly List<IIndicator> _resetTrackings = [];
+	private Dictionary<DateTimeOffset, (IIndicatorValue input, IIndicatorValue output)> _preloaded;
 
 	/// <summary>
 	/// Initialize <see cref="BaseIndicator"/>.
@@ -90,6 +91,7 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	{
 		_isFormed = false;
 		Container.ClearValues();
+		_preloaded = null;
 		Reseted?.Invoke();
 
 		if (_resetTrackings.Count > 0)
@@ -196,6 +198,9 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 		protected set => _isFormed = value;
 	}
 
+	/// <inheritdoc />
+	public bool IsPreloaded => _preloaded != null;
+
 	/// <summary>
 	/// Calc <see cref="IsFormed"/>.
 	/// </summary>
@@ -213,6 +218,69 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	public event Action Reseted;
 
 	/// <inheritdoc />
+	public void Preload(IEnumerable<(IIndicatorValue input, IIndicatorValue output)> values)
+	{
+		ArgumentNullException.ThrowIfNull(values);
+
+		if (IsPreloaded)
+			throw new InvalidOperationException("Indicator is already preloaded.");
+
+		_preloaded = [];
+
+		var numToInitLeft = NumValuesToInitialize;
+
+		foreach (var (input, output) in values)
+		{
+			if (output.Indicator != this)
+				throw new InvalidOperationException($"invalid indicator value. expected {GetType().Name} got {output.Indicator?.GetType()}");
+
+			if (!input.IsFinal)
+				throw new ArgumentException($"Input value {input.Time} is not final.", nameof(values));
+
+			if (!output.IsFinal)
+				throw new ArgumentException($"Output value {output.Time} is not final.", nameof(values));
+
+			if (numToInitLeft > 0)
+				numToInitLeft--;
+			else
+				output.IsFormed = true;
+
+			_preloaded.Add(input.Time, (input, output));
+
+			Container.AddValue(input, output);
+
+			OnPreload(input, output);
+		}
+
+		IsFormed = numToInitLeft == 0;
+	}
+
+	/// <inheritdoc />
+	public void Preload(IEnumerable<(DateTimeOffset time, object[] values)> items)
+	{
+		ArgumentNullException.ThrowIfNull(items);
+
+		Preload(items.Select(t =>
+		{
+			var time = t.time;
+			var values = t.values;
+
+			var output = CreateValue(time, values);
+			// Create synthetic empty input (descendants may override OnPreload for custom behavior).
+			var input = CreateValue(time, []);
+
+			return (input, output);
+		}));
+	}
+
+	/// <summary>
+	/// Hook for descendants to warm up internal state during preloading.
+	/// </summary>
+	/// <param name="input">Original input.</param>
+	/// <param name="output">Preloaded output.</param>
+	protected virtual void OnPreload(IIndicatorValue input, IIndicatorValue output) { }
+
+	/// <inheritdoc />
 	public virtual IIndicatorValue Process(IIndicatorValue input)
 	{
 		ArgumentNullException.ThrowIfNull(input);
@@ -220,17 +288,25 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 		if (input.IsEmpty)
 			return CreateValue(input.Time, []);
 
-		var result = OnProcess(input);
+		IIndicatorValue result;
 
-		if(result.Indicator != this)
-			throw new InvalidOperationException($"invalid indicator value. expected {GetType().Name} got {result.Indicator?.GetType()}");
-
-		//var result = value as IIndicatorValue ?? input.SetValue(value);
-
-		if (input.IsFinal)
+		// Return preloaded value if exists for given time.
+		if (_preloaded?.TryGetValue(input.Time, out var pair) == true)
 		{
-			result.IsFinal = input.IsFinal;
-			Container.AddValue(input, result);
+			result = pair.output;
+		}
+		else
+		{
+			result = OnProcess(input);
+
+			if (result.Indicator != this)
+				throw new InvalidOperationException($"invalid indicator value. expected {GetType().Name} got {result.Indicator?.GetType()}");
+
+			if (input.IsFinal)
+			{
+				result.IsFinal = input.IsFinal;
+				Container.AddValue(input, result);
+			}
 		}
 
 		if (!result.IsEmpty)
