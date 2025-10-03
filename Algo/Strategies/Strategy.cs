@@ -178,6 +178,9 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		{
 			base.OnAdded(item);
 
+			// Set default source if indicator doesn't have one
+			item.Source ??= _strategy.IndicatorSource;
+
 			if (AllFormed)
 				AllFormed = item.IsFormed;
 
@@ -250,6 +253,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		_security = Param<Security>(nameof(Security)).SetDisplay(LocalizedStrings.Security, LocalizedStrings.StrategySecurity, LocalizedStrings.General).SetNonBrowsable(HideSecurityAndPortfolioParameters);
 		_portfolio = Param<Portfolio>(nameof(Portfolio)).SetDisplay(LocalizedStrings.Portfolio, LocalizedStrings.StrategyPortfolio, LocalizedStrings.General).SetNonBrowsable(HideSecurityAndPortfolioParameters).SetCanOptimize(false);
 		_riskFreeRate = Param<decimal>(nameof(RiskFreeRate)).SetDisplay(LocalizedStrings.RiskFreeRate, LocalizedStrings.RiskFreeRateDesc, LocalizedStrings.General).SetCanOptimize(false);
+		_indicatorSource = Param<Level1Fields?>(nameof(IndicatorSource)).SetDisplay(LocalizedStrings.IndicatorSource, LocalizedStrings.IndicatorSourceDesc, LocalizedStrings.General).SetCanOptimize(false);
 
 		_systemParams =
 		[
@@ -1089,6 +1093,24 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	{
 		get => _riskFreeRate.Value;
 		set => _riskFreeRate.Value = value;
+	}
+
+	private readonly StrategyParam<Level1Fields?> _indicatorSource;
+
+	/// <summary>
+	/// Default source for indicators when <see cref="IIndicator.Source"/> is not set.
+	/// </summary>
+	[ItemsSource(typeof(SourceItemsSource))]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.IndicatorSourceKey,
+		Description = LocalizedStrings.IndicatorSourceDescKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 12)]
+	public Level1Fields? IndicatorSource
+	{
+		get => _indicatorSource.Value;
+		set => _indicatorSource.Value = value;
 	}
 
 	/// <inheritdoc />
