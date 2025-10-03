@@ -3,6 +3,7 @@ namespace StockSharp.Algo.Strategies;
 /// <summary>
 /// Results of the trading strategy one iteration operation.
 /// </summary>
+[Obsolete]
 public enum ProcessResults
 {
 	/// <summary>
@@ -19,6 +20,7 @@ public enum ProcessResults
 /// <summary>
 /// The timeframe based trade strategy.
 /// </summary>
+[Obsolete("Use CreateTimer or StartTimer methods from Strategy instead of inheriting from TimeFrameStrategy.")]
 public abstract class TimeFrameStrategy : Strategy
 {
 	/// <summary>
@@ -58,23 +60,13 @@ public abstract class TimeFrameStrategy : Strategy
 	{
 		base.OnStarted(time);
 
-		SafeGetConnector()
-			.WhenIntervalElapsed(Interval/*, true*/)
-			.Do(() =>
-			{
-				var result = OnProcess();
+		StartTimer(Interval, () =>
+		{
+			var result = OnProcess();
 
-				if (result == ProcessResults.Stop)
-					Stop();
-			})
-			.Until(() =>
-			{
-				if (ProcessState == ProcessStates.Stopping)
-					return OnProcess() == ProcessResults.Stop;
-
-				return false;
-			})
-			.Apply(this);
+			if (result == ProcessResults.Stop)
+				Stop();
+		});
 	}
 
 	/// <summary>

@@ -1271,4 +1271,105 @@ public partial class Strategy
 		_stopTimeout = stopTimeout ?? default;
 		_protectiveUseMarketOrders = useMarketOrders;
 	}
+
+	/// <summary>
+	/// Timer handler.
+	/// </summary>
+	public interface ITimerHandler : IDisposable
+	{
+		/// <summary>
+		/// Start the timer.
+		/// </summary>
+		/// <returns><see cref="ITimerHandler"/></returns>
+		ITimerHandler Start();
+
+		/// <summary>
+		/// Stop the timer.
+		/// </summary>
+		/// <returns><see cref="ITimerHandler"/></returns>
+		ITimerHandler Stop();
+
+		/// <summary>
+		/// Timer interval.
+		/// </summary>
+		TimeSpan Interval { get; set; }
+
+		/// <summary>
+		/// Whether the timer is running.
+		/// </summary>
+		bool IsStarted { get; }
+	}
+
+	/// <summary>
+	/// Timer handler implementation.
+	/// </summary>
+	private class TimerHandler : Disposable, ITimerHandler
+	{
+		private readonly Strategy _strategy;
+		private readonly Action _callback;
+		private IMarketRule _rule;
+
+		public TimerHandler(Strategy strategy, TimeSpan interval, Action callback)
+		{
+			if (interval <= TimeSpan.Zero)
+				throw new ArgumentOutOfRangeException(nameof(interval), interval, LocalizedStrings.InvalidValue);
+
+			_strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
+			_callback = callback ?? throw new ArgumentNullException(nameof(callback));
+			Interval = interval;
+		}
+
+		/// <inheritdoc />
+		public TimeSpan Interval { get; set; }
+
+		/// <inheritdoc />
+		public bool IsStarted => _rule != null;
+
+		/// <inheritdoc />
+		public ITimerHandler Start()
+		{
+			if (IsStarted)
+				return this;
+
+			_rule = _strategy.SafeGetConnector()
+				.WhenIntervalElapsed(Interval)
+				.Do(_callback)
+				.Apply(_strategy);
+
+			return this;
+		}
+
+		/// <inheritdoc />
+		public ITimerHandler Stop()
+		{
+			_rule?.Dispose();
+			_rule = null;
+			return this;
+		}
+
+		/// <inheritdoc />
+		protected override void DisposeManaged()
+		{
+			Stop();
+			base.DisposeManaged();
+		}
+	}
+
+	/// <summary>
+	/// Create a timer that executes callback at specified intervals.
+	/// </summary>
+	/// <param name="interval">Timer interval.</param>
+	/// <param name="callback">Callback to execute.</param>
+	/// <returns><see cref="ITimerHandler"/></returns>
+	protected ITimerHandler CreateTimer(TimeSpan interval, Action callback)
+		=> new TimerHandler(this, interval, callback);
+
+	/// <summary>
+	/// Create a timer that executes callback at specified intervals and starts it immediately.
+	/// </summary>
+	/// <param name="interval">Timer interval.</param>
+	/// <param name="callback">Callback to execute.</param>
+	/// <returns><see cref="ITimerHandler"/></returns>
+	protected ITimerHandler StartTimer(TimeSpan interval, Action callback)
+		=> CreateTimer(interval, callback).Start();
 }
