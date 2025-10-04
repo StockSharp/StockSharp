@@ -14,4 +14,8 @@
     <RootNamespace>StockSharp.Samples.$(SampleProjectName)</RootNamespace>
     <AssemblyName>StockSharp.Samples.$(SampleProjectName)</AssemblyName>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
+  </ItemGroup>
 </Project>

@@ -27,14 +27,21 @@
 		</Grid>
 		
 		<Grid x:Name="OptimizeTypeGrid" Grid.Row="2">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="5" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="5" />
 				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
-			
+
 			<RadioButton x:Name="BruteForce" GroupName="OptimizerType" IsChecked="True" Content="{x:Static loc:LocalizedStrings.BruteForce}" />
 			<RadioButton x:Name="Genetic" GroupName="OptimizerType" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Genetic}" />
+
+			<CheckBox x:Name="RandomSampling" Grid.Row="2" Grid.ColumnSpan="3" Content="Random Sampling (Brute Force only)" Margin="0,5,0,0" />
 		</Grid>
 		
 		<Grid Grid.Row="4">

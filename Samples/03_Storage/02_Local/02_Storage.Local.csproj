@@ -2,7 +2,6 @@
   <Import Project="..\..\common_samples_net.props" />
   <ItemGroup>
     <PackageReference Include="Ecng.Compilation.Roslyn" Version="$(EcngVer)" />
-    <PackageReference Include="StockSharp.Algo" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(StockSharpVer)" />
   </ItemGroup>
 </Project>

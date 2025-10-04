@@ -4,7 +4,4 @@
     <PackageReference Include="StockSharp.Xaml.Charting" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(StockSharpVer)" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
-  </ItemGroup>
 </Project>

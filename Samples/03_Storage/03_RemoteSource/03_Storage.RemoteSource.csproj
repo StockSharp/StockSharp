@@ -3,6 +3,5 @@
   <ItemGroup>
     <PackageReference Include="StockSharp.Web.Api.Client" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Finam" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.Algo" Version="$(StockSharpVer)" />
   </ItemGroup>
 </Project>

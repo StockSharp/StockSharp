@@ -3,7 +3,4 @@
   <ItemGroup>
     <PackageReference Include="StockSharp.Xaml" Version="$(StockSharpVer)" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />
-  </ItemGroup>
 </Project>

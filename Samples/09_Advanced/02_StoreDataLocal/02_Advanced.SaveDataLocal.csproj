@@ -12,7 +12,4 @@
     <Page Include="..\01_MultiConnect\*.xaml" Exclude="..\01_MultiConnect\App.xaml;..\01_MultiConnect\MainWindow.xaml" DependentUpon="%(Filename).xaml" Link="%(Filename).xaml" />
     <Compile Include="..\01_MultiConnect\*.xaml.cs" Exclude="..\01_MultiConnect\App.xaml.cs;..\01_MultiConnect\MainWindow.xaml.cs" DependentUpon="%(Filename)" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
-  </ItemGroup>
 </Project>

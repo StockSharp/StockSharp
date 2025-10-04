@@ -1,7 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\common_samples_net.props" />
   <Import Project="..\..\common_connectors.props" />
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
-  </ItemGroup>
 </Project>
