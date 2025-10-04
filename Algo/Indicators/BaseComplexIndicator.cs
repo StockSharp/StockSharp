@@ -109,6 +109,10 @@ public abstract class BaseComplexIndicator<TValue> : BaseIndicator, IComplexIndi
 		return output;
 	}
 
+	/// <inheritdoc />
+	protected override IIndicatorValue OnCreateValue(DateTimeOffset time)
+		=> CreateValue(time);
+
 	/// <summary>
 	/// Create <typeparamref name="TValue"/>.
 	/// </summary>

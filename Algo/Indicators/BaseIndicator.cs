@@ -349,10 +349,18 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	/// <inheritdoc />
 	public override string ToString() => Name;
 
+	/// <summary>
+	/// Create a new instance of <see cref="IIndicatorValue"/> for the specified time.
+	/// </summary>
+	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
+	/// <returns><see cref="IIndicatorValue"/></returns>
+	protected virtual IIndicatorValue OnCreateValue(DateTimeOffset time)
+		=> GetType().GetValueType(false).CreateInstance<IIndicatorValue>(this, time);
+
 	/// <inheritdoc/>
-	public virtual IIndicatorValue CreateValue(DateTimeOffset time, object[] values)
+	public IIndicatorValue CreateValue(DateTimeOffset time, object[] values)
 	{
-		var value = GetType().GetValueType(false).CreateInstance<IIndicatorValue>(this, time);
+		var value = OnCreateValue(time);
 		value.FromValues(values);
 		return value;
 	}
