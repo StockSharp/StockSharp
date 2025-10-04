@@ -8,26 +8,31 @@ public interface IIndicatorValue : IComparable<IIndicatorValue>, IComparable
 	/// <summary>
 	/// Indicator.
 	/// </summary>
+	[Browsable(false)]
 	IIndicator Indicator { get; }
 
 	/// <summary>
 	/// No indicator value.
 	/// </summary>
+	[Browsable(false)]
 	bool IsEmpty { get; }
 
 	/// <summary>
 	/// Is the value final (indicator finalizes its value and will not be changed anymore in the given point of time).
 	/// </summary>
+	[Browsable(false)]
 	bool IsFinal { get; set; }
 
 	/// <summary>
 	/// Whether the indicator is set.
 	/// </summary>
+	[Browsable(false)]
 	bool IsFormed { get; set; }
 
 	/// <summary>
 	/// Value time.
 	/// </summary>
+	[Browsable(false)]
 	DateTimeOffset Time { get; }
 
 	/// <summary>
@@ -534,6 +539,7 @@ public interface IComplexIndicatorValue : IIndicatorValue
 	/// <summary>
 	/// Embedded values.
 	/// </summary>
+	[Browsable(false)]
 	IDictionary<IIndicator, IIndicatorValue> InnerValues { get; }
 
 	/// <summary>
@@ -541,6 +547,7 @@ public interface IComplexIndicatorValue : IIndicatorValue
 	/// </summary>
 	/// <param name="indicator"><see cref="IIndicator"/></param>
 	/// <returns><see cref="IIndicatorValue"/></returns>
+	[Browsable(false)]
 	IIndicatorValue this[IIndicator indicator] { get; }
 
 	/// <summary>
