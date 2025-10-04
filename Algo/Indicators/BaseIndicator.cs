@@ -199,6 +199,7 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	}
 
 	/// <inheritdoc />
+	[Browsable(false)]
 	public bool IsPreloaded => _preloaded != null;
 
 	/// <summary>
