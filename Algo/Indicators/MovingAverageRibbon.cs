@@ -9,8 +9,8 @@
 	Description = LocalizedStrings.MovingAverageRibbonKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/moving_average_ribbon.html")]
-[IndicatorOut(typeof(MovingAverageRibbonValue))]
-public class MovingAverageRibbon : BaseComplexIndicator<MovingAverageRibbonValue>
+[IndicatorOut(typeof(IMovingAverageRibbonValue))]
+public class MovingAverageRibbon : BaseComplexIndicator<IMovingAverageRibbonValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MovingAverageRibbon"/>.
@@ -132,31 +132,31 @@ public class MovingAverageRibbon : BaseComplexIndicator<MovingAverageRibbonValue
 	public override string ToString() => base.ToString() + $" S={ShortPeriod} L={LongPeriod} C={RibbonCount}";
 
 	/// <inheritdoc />
-	protected override MovingAverageRibbonValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IMovingAverageRibbonValue CreateValue(DateTimeOffset time)
+		=> new MovingAverageRibbonValue(this, time);
 }
 
 /// <summary>
 /// <see cref="MovingAverageRibbon"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="MovingAverageRibbonValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="MovingAverageRibbon"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class MovingAverageRibbonValue(MovingAverageRibbon indicator, DateTimeOffset time) : ComplexIndicatorValue<MovingAverageRibbon>(indicator, time)
+public interface IMovingAverageRibbonValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets all moving average values.
 	/// </summary>
-	public IIndicatorValue[] AveragesValues => [.. TypedIndicator.InnerIndicators.Select(ind => this[ind])];
+	IIndicatorValue[] AveragesValues { get; }
 
 	/// <summary>
 	/// Gets all moving average values.
 	/// </summary>
 	[Browsable(false)]
+	decimal?[] Averages { get; }
+}
+
+class MovingAverageRibbonValue(MovingAverageRibbon indicator, DateTimeOffset time) : ComplexIndicatorValue<MovingAverageRibbon>(indicator, time), IMovingAverageRibbonValue
+{
+	public IIndicatorValue[] AveragesValues => [.. TypedIndicator.InnerIndicators.Select(ind => this[ind])];
 	public decimal?[] Averages => [.. AveragesValues.Select(v => v.ToNullableDecimal(TypedIndicator.Source))];
 
-	/// <inheritdoc />
 	public override string ToString() => $"Averages=[{string.Join(", ", Averages)}]";
 }

@@ -11,8 +11,8 @@
 	Name = LocalizedStrings.GatorKey,
 	Description = LocalizedStrings.GatorOscillatorKey)]
 [Doc("topics/api/indicators/list_of_indicators/gator_oscillator.html")]
-[IndicatorOut(typeof(GatorOscillatorValue))]
-public class GatorOscillator : BaseComplexIndicator<GatorOscillatorValue>
+[IndicatorOut(typeof(IGatorOscillatorValue))]
+public class GatorOscillator : BaseComplexIndicator<IGatorOscillatorValue>
 {
 	private readonly Alligator _alligator;
 
@@ -68,42 +68,45 @@ public class GatorOscillator : BaseComplexIndicator<GatorOscillatorValue>
 	public override string ToString() => $"{base.ToString()}, H1={Histogram1}, H2={Histogram2}";
 
 	/// <inheritdoc />
-	protected override GatorOscillatorValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IGatorOscillatorValue CreateValue(DateTimeOffset time)
+		=> new GatorOscillatorValue(this, time);
 }
 
 /// <summary>
 /// <see cref="GatorOscillator"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="GatorOscillatorValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="GatorOscillator"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class GatorOscillatorValue(GatorOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<GatorOscillator>(indicator, time)
+public interface IGatorOscillatorValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the <see cref="GatorOscillator.Histogram1"/> value.
 	/// </summary>
-	public IIndicatorValue Histogram1Value => this[TypedIndicator.Histogram1];
+	IIndicatorValue Histogram1Value { get; }
 
 	/// <summary>
 	/// Gets the <see cref="GatorOscillator.Histogram1"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Histogram1 => Histogram1Value.ToNullableDecimal(TypedIndicator.Source);
+	decimal? Histogram1 { get; }
 
 	/// <summary>
 	/// Gets the <see cref="GatorOscillator.Histogram2"/> value.
 	/// </summary>
-	public IIndicatorValue Histogram2Value => this[TypedIndicator.Histogram2];
+	IIndicatorValue Histogram2Value { get; }
 
 	/// <summary>
 	/// Gets the <see cref="GatorOscillator.Histogram2"/> value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? Histogram2 { get; }
+}
+
+class GatorOscillatorValue(GatorOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<GatorOscillator>(indicator, time), IGatorOscillatorValue
+{
+	public IIndicatorValue Histogram1Value => this[TypedIndicator.Histogram1];
+	public decimal? Histogram1 => Histogram1Value.ToNullableDecimal(TypedIndicator.Source);
+
+	public IIndicatorValue Histogram2Value => this[TypedIndicator.Histogram2];
 	public decimal? Histogram2 => Histogram2Value.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"Histogram1={Histogram1}, Histogram2={Histogram2}";
 }

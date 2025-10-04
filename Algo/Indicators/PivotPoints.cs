@@ -11,8 +11,8 @@ using StockSharp.Algo.Candles;
 	Description = LocalizedStrings.PivotPointsKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/pivot_points.html")]
-[IndicatorOut(typeof(PivotPointsValue))]
-public class PivotPoints : BaseComplexIndicator<PivotPointsValue>
+[IndicatorOut(typeof(IPivotPointsValue))]
+public class PivotPoints : BaseComplexIndicator<IPivotPointsValue>
 {
 	/// <summary>
 	/// Pivot point.
@@ -76,8 +76,8 @@ public class PivotPoints : BaseComplexIndicator<PivotPointsValue>
 	}
 
 	/// <inheritdoc />
-	protected override PivotPointsValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IPivotPointsValue CreateValue(DateTimeOffset time)
+		=> new PivotPointsValue(this, time);
 }
 
 /// <summary>
@@ -99,68 +99,80 @@ public class PivotPointPart : BaseIndicator
 /// <summary>
 /// <see cref="PivotPoints"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="PivotPointsValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="PivotPoints"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class PivotPointsValue(PivotPoints indicator, DateTimeOffset time) : ComplexIndicatorValue<PivotPoints>(indicator, time)
+public interface IPivotPointsValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the Pivot Point value.
 	/// </summary>
-	public IIndicatorValue PivotPointValue => this[TypedIndicator.PivotPoint];
+	IIndicatorValue PivotPointValue { get; }
 
 	/// <summary>
 	/// Gets the Pivot Point value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? PivotPoint { get; }
+
+	/// <summary>
+	/// Gets the R1 value.
+	/// </summary>
+	IIndicatorValue R1Value { get; }
+
+	/// <summary>
+	/// Gets the R1 value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? R1 { get; }
+
+	/// <summary>
+	/// Gets the R2 value.
+	/// </summary>
+	IIndicatorValue R2Value { get; }
+
+	/// <summary>
+	/// Gets the R2 value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? R2 { get; }
+
+	/// <summary>
+	/// Gets the S1 value.
+	/// </summary>
+	IIndicatorValue S1Value { get; }
+
+	/// <summary>
+	/// Gets the S1 value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? S1 { get; }
+
+	/// <summary>
+	/// Gets the S2 value.
+	/// </summary>
+	IIndicatorValue S2Value { get; }
+
+	/// <summary>
+	/// Gets the S2 value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? S2 { get; }
+}
+
+class PivotPointsValue(PivotPoints indicator, DateTimeOffset time) : ComplexIndicatorValue<PivotPoints>(indicator, time), IPivotPointsValue
+{
+	public IIndicatorValue PivotPointValue => this[TypedIndicator.PivotPoint];
 	public decimal? PivotPoint => PivotPointValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the R1 value.
-	/// </summary>
 	public IIndicatorValue R1Value => this[TypedIndicator.R1];
-
-	/// <summary>
-	/// Gets the R1 value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? R1 => R1Value.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the R2 value.
-	/// </summary>
 	public IIndicatorValue R2Value => this[TypedIndicator.R2];
-
-	/// <summary>
-	/// Gets the R2 value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? R2 => R2Value.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the S1 value.
-	/// </summary>
 	public IIndicatorValue S1Value => this[TypedIndicator.S1];
-
-	/// <summary>
-	/// Gets the S1 value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? S1 => S1Value.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the S2 value.
-	/// </summary>
 	public IIndicatorValue S2Value => this[TypedIndicator.S2];
-
-	/// <summary>
-	/// Gets the S2 value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? S2 => S2Value.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"PivotPoint={PivotPoint}, R1={R1}, R2={R2}, S1={S1}, S2={S2}";
 }

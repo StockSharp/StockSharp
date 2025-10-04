@@ -8,7 +8,7 @@ namespace StockSharp.Algo.Indicators;
 	Name = LocalizedStrings.LinearRegressionKey,
 	Description = LocalizedStrings.LinearRegressionDescKey)]
 [Browsable(false)]
-public class LinearRegression : BaseComplexIndicator<LinearRegressionValue>
+public class LinearRegression : BaseComplexIndicator<ILinearRegressionValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="LinearRegression"/>.
@@ -117,64 +117,73 @@ public class LinearRegression : BaseComplexIndicator<LinearRegressionValue>
 	public override string ToString() => base.ToString() + " " + Length;
 
 	/// <inheritdoc />
-	protected override LinearRegressionValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override ILinearRegressionValue CreateValue(DateTimeOffset time)
+		=> new LinearRegressionValue(this, time);
 }
 
 /// <summary>
 /// <see cref="LinearRegression"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="LinearRegressionValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="LinearRegression"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class LinearRegressionValue(LinearRegression indicator, DateTimeOffset time) : ComplexIndicatorValue<LinearRegression>(indicator, time)
+public interface ILinearRegressionValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.LinearReg"/> value.
 	/// </summary>
-	public IIndicatorValue LinearRegValue => this[TypedIndicator.LinearReg];
+	IIndicatorValue LinearRegValue { get; }
 
 	/// <summary>
 	/// Gets the <see cref="LinearRegression.LinearReg"/> value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? LinearReg { get; }
+
+	/// <summary>
+	/// Gets the <see cref="LinearRegression.RSquared"/> value.
+	/// </summary>
+	IIndicatorValue RSquaredValue { get; }
+
+	/// <summary>
+	/// Gets the <see cref="LinearRegression.RSquared"/> value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? RSquared { get; }
+
+	/// <summary>
+	/// Gets the <see cref="LinearRegression.LinearRegSlope"/> value.
+	/// </summary>
+	IIndicatorValue LinearRegSlopeValue { get; }
+
+	/// <summary>
+	/// Gets the <see cref="LinearRegression.LinearRegSlope"/> value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? LinearRegSlope { get; }
+
+	/// <summary>
+	/// Gets the <see cref="LinearRegression.StandardError"/> value.
+	/// </summary>
+	IIndicatorValue StandardErrorValue { get; }
+
+	/// <summary>
+	/// Gets the <see cref="LinearRegression.StandardError"/> value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? StandardError { get; }
+}
+
+class LinearRegressionValue(LinearRegression indicator, DateTimeOffset time) : ComplexIndicatorValue<LinearRegression>(indicator, time), ILinearRegressionValue
+{
+	public IIndicatorValue LinearRegValue => this[TypedIndicator.LinearReg];
 	public decimal? LinearReg => LinearRegValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the <see cref="LinearRegression.RSquared"/> value.
-	/// </summary>
 	public IIndicatorValue RSquaredValue => this[TypedIndicator.RSquared];
-
-	/// <summary>
-	/// Gets the <see cref="LinearRegression.RSquared"/> value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? RSquared => RSquaredValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the <see cref="LinearRegression.LinearRegSlope"/> value.
-	/// </summary>
 	public IIndicatorValue LinearRegSlopeValue => this[TypedIndicator.LinearRegSlope];
-
-	/// <summary>
-	/// Gets the <see cref="LinearRegression.LinearRegSlope"/> value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? LinearRegSlope => LinearRegSlopeValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the <see cref="LinearRegression.StandardError"/> value.
-	/// </summary>
 	public IIndicatorValue StandardErrorValue => this[TypedIndicator.StandardError];
-
-	/// <summary>
-	/// Gets the <see cref="LinearRegression.StandardError"/> value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? StandardError => StandardErrorValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"LinearReg={LinearReg}, RSquared={RSquared}, LinearRegSlope={LinearRegSlope}, StandardError={StandardError}";
 }

@@ -9,8 +9,8 @@
 	Description = LocalizedStrings.AdaptivePriceZoneKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/adaptive_price_zone.html")]
-[IndicatorOut(typeof(AdaptivePriceZoneValue))]
-public class AdaptivePriceZone : BaseComplexIndicator<AdaptivePriceZoneValue>
+[IndicatorOut(typeof(IAdaptivePriceZoneValue))]
+public class AdaptivePriceZone : BaseComplexIndicator<IAdaptivePriceZoneValue>
 {
 	private readonly StandardDeviation _stdDev;
 
@@ -149,8 +149,8 @@ public class AdaptivePriceZone : BaseComplexIndicator<AdaptivePriceZoneValue>
 	}
 
 	/// <inheritdoc />
-	protected override AdaptivePriceZoneValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IAdaptivePriceZoneValue CreateValue(DateTimeOffset time)
+		=> new AdaptivePriceZoneValue(this, time);
 }
 
 /// <summary>
@@ -172,46 +172,51 @@ public class AdaptivePriceZoneBand : BaseIndicator
 /// <summary>
 /// <see cref="AdaptivePriceZone"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="AdaptivePriceZoneValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="AdaptivePriceZone"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class AdaptivePriceZoneValue(AdaptivePriceZone indicator, DateTimeOffset time) : ComplexIndicatorValue<AdaptivePriceZone>(indicator, time)
+public interface IAdaptivePriceZoneValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the moving average value.
 	/// </summary>
-	public IIndicatorValue MovingAverageValue => this[TypedIndicator.MovingAverage];
+	IIndicatorValue MovingAverageValue { get; }
 
 	/// <summary>
 	/// Gets the upper band value.
 	/// </summary>
-	public IIndicatorValue UpperBandValue => this[TypedIndicator.UpperBand];
+	IIndicatorValue UpperBandValue { get; }
 
 	/// <summary>
 	/// Gets the lower band value.
 	/// </summary>
-	public IIndicatorValue LowerBandValue => this[TypedIndicator.LowerBand];
+	IIndicatorValue LowerBandValue { get; }
 
 	/// <summary>
 	/// Gets the moving average value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? MovingAverage => MovingAverageValue.ToNullableDecimal(TypedIndicator.Source);
+	decimal? MovingAverage { get; }
 
 	/// <summary>
 	/// Gets the upper band value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? UpperBand => UpperBandValue.ToNullableDecimal(TypedIndicator.Source);
+	decimal? UpperBand { get; }
 
 	/// <summary>
 	/// Gets the lower band value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? LowerBand { get; }
+}
+
+class AdaptivePriceZoneValue(AdaptivePriceZone indicator, DateTimeOffset time) : ComplexIndicatorValue<AdaptivePriceZone>(indicator, time), IAdaptivePriceZoneValue
+{
+	public IIndicatorValue MovingAverageValue => this[TypedIndicator.MovingAverage];
+	public IIndicatorValue UpperBandValue => this[TypedIndicator.UpperBand];
+	public IIndicatorValue LowerBandValue => this[TypedIndicator.LowerBand];
+
+	public decimal? MovingAverage => MovingAverageValue.ToNullableDecimal(TypedIndicator.Source);
+	public decimal? UpperBand => UpperBandValue.ToNullableDecimal(TypedIndicator.Source);
 	public decimal? LowerBand => LowerBandValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"MovingAverage={MovingAverage}, UpperBand={UpperBand}, LowerBand={LowerBand}";
 }

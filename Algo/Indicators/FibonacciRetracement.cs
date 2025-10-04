@@ -9,8 +9,8 @@
 	Description = LocalizedStrings.FibonacciRetracementKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/fibonacci_retracement.html")]
-[IndicatorOut(typeof(FibonacciRetracementValue))]
-public class FibonacciRetracement : BaseComplexIndicator<FibonacciRetracementValue>
+[IndicatorOut(typeof(IFibonacciRetracementValue))]
+public class FibonacciRetracement : BaseComplexIndicator<IFibonacciRetracementValue>
 {
 	private readonly Highest _highest;
 	private readonly Lowest _lowest;
@@ -109,8 +109,8 @@ public class FibonacciRetracement : BaseComplexIndicator<FibonacciRetracementVal
 	public override string ToString() => base.ToString() + " " + Length;
 
 	/// <inheritdoc />
-	protected override FibonacciRetracementValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IFibonacciRetracementValue CreateValue(DateTimeOffset time)
+		=> new FibonacciRetracementValue(this, time);
 }
 
 /// <summary>
@@ -141,24 +141,24 @@ public class FibonacciLevel(decimal level) : BaseIndicator
 /// <summary>
 /// <see cref="FibonacciRetracement"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="FibonacciRetracementValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="FibonacciRetracement"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class FibonacciRetracementValue(FibonacciRetracement indicator, DateTimeOffset time) : ComplexIndicatorValue<FibonacciRetracement>(indicator, time)
+public interface IFibonacciRetracementValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets all level values.
 	/// </summary>
-	public IIndicatorValue[] LevelsValues => [.. TypedIndicator.Levels.Select(ind => this[ind])];
+	IIndicatorValue[] LevelsValues { get; }
 
 	/// <summary>
 	/// Gets all level values.
 	/// </summary>
 	[Browsable(false)]
+	decimal?[] Levels { get; }
+}
+
+class FibonacciRetracementValue(FibonacciRetracement indicator, DateTimeOffset time) : ComplexIndicatorValue<FibonacciRetracement>(indicator, time), IFibonacciRetracementValue
+{
+	public IIndicatorValue[] LevelsValues => [.. TypedIndicator.Levels.Select(ind => this[ind])];
 	public decimal?[] Levels => [.. LevelsValues.Select(v => v.ToNullableDecimal(TypedIndicator.Source))];
 
-	/// <inheritdoc />
 	public override string ToString() => $"Levels=[{string.Join(", ", Levels)}]";
 }

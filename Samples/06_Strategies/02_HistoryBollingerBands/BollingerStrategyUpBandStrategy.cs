@@ -93,7 +93,7 @@ namespace StockSharp.Samples.Strategies.HistoryBollingerBands
 			if (!IsFormedAndOnlineAndAllowTrading())
 				return;
 
-			var typed = (BollingerBandsValue)bollingerValue;
+			var typed = (IBollingerBandsValue)bollingerValue;
 
 			// Trading logic:
 			// Buy when price touches the upper band (only when no position)

@@ -12,8 +12,8 @@
 	Description = LocalizedStrings.AroonDescriptionKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/aroon.html")]
-[IndicatorOut(typeof(AroonValue))]
-public class Aroon : BaseComplexIndicator<AroonValue>
+[IndicatorOut(typeof(IAroonValue))]
+public class Aroon : BaseComplexIndicator<IAroonValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Aroon"/>.
@@ -87,8 +87,8 @@ public class Aroon : BaseComplexIndicator<AroonValue>
 	public override string ToString() => base.ToString() + $" L={Length}";
 
 	/// <inheritdoc />
-	protected override AroonValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IAroonValue CreateValue(DateTimeOffset time)
+		=> new AroonValue(this, time);
 }
 
 /// <summary>
@@ -270,35 +270,38 @@ public class AroonDown : LengthIndicator<decimal>
 /// <summary>
 /// <see cref="Aroon"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="AroonValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="Aroon"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class AroonValue(Aroon indicator, DateTimeOffset time) : ComplexIndicatorValue<Aroon>(indicator, time)
+public interface IAroonValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the <see cref="Aroon.Up"/> value.
 	/// </summary>
-	public IIndicatorValue UpValue => this[TypedIndicator.Up];
+	IIndicatorValue UpValue { get; }
 
 	/// <summary>
 	/// Gets the <see cref="Aroon.Up"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Up => UpValue.ToNullableDecimal(TypedIndicator.Source);
+	decimal? Up { get; }
 
 	/// <summary>
 	/// Gets the <see cref="Aroon.Down"/> value.
 	/// </summary>
-	public IIndicatorValue DownValue => this[TypedIndicator.Down];
+	IIndicatorValue DownValue { get; }
 
 	/// <summary>
 	/// Gets the <see cref="Aroon.Down"/> value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? Down { get; }
+}
+
+class AroonValue(Aroon indicator, DateTimeOffset time) : ComplexIndicatorValue<Aroon>(indicator, time), IAroonValue
+{
+	public IIndicatorValue UpValue => this[TypedIndicator.Up];
+	public decimal? Up => UpValue.ToNullableDecimal(TypedIndicator.Source);
+
+	public IIndicatorValue DownValue => this[TypedIndicator.Down];
 	public decimal? Down => DownValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"Up={Up}, Down={Down}";
 }

@@ -8,8 +8,8 @@
 	Name = LocalizedStrings.EnvelopeKey,
 	Description = LocalizedStrings.EnvelopeDescKey)]
 [Doc("topics/api/indicators/list_of_indicators/envelope.html")]
-[IndicatorOut(typeof(EnvelopeValue))]
-public class Envelope : BaseComplexIndicator<EnvelopeValue>
+[IndicatorOut(typeof(IEnvelopeValue))]
+public class Envelope : BaseComplexIndicator<IEnvelopeValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Envelope"/>.
@@ -124,53 +124,59 @@ public class Envelope : BaseComplexIndicator<EnvelopeValue>
 	public override string ToString() => base.ToString() + " " + Length;
 
 	/// <inheritdoc />
-	protected override EnvelopeValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IEnvelopeValue CreateValue(DateTimeOffset time)
+		=> new EnvelopeValue(this, time);
 }
 
 /// <summary>
 /// <see cref="Envelope"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="EnvelopeValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="Envelope"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class EnvelopeValue(Envelope indicator, DateTimeOffset time) : ComplexIndicatorValue<Envelope>(indicator, time)
+public interface IEnvelopeValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the <see cref="Envelope.Middle"/> value.
 	/// </summary>
-	public IIndicatorValue MiddleValue => this[TypedIndicator.Middle];
+	IIndicatorValue MiddleValue { get; }
 
 	/// <summary>
 	/// Gets the <see cref="Envelope.Middle"/> value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? Middle { get; }
+
+	/// <summary>
+	/// Gets the <see cref="Envelope.Upper"/> value.
+	/// </summary>
+	IIndicatorValue UpperValue { get; }
+
+	/// <summary>
+	/// Gets the <see cref="Envelope.Upper"/> value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? Upper { get; }
+
+	/// <summary>
+	/// Gets the <see cref="Envelope.Lower"/> value.
+	/// </summary>
+	IIndicatorValue LowerValue { get; }
+
+	/// <summary>
+	/// Gets the <see cref="Envelope.Lower"/> value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? Lower { get; }
+}
+
+class EnvelopeValue(Envelope indicator, DateTimeOffset time) : ComplexIndicatorValue<Envelope>(indicator, time), IEnvelopeValue
+{
+	public IIndicatorValue MiddleValue => this[TypedIndicator.Middle];
 	public decimal? Middle => MiddleValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the <see cref="Envelope.Upper"/> value.
-	/// </summary>
 	public IIndicatorValue UpperValue => this[TypedIndicator.Upper];
-
-	/// <summary>
-	/// Gets the <see cref="Envelope.Upper"/> value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? Upper => UpperValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the <see cref="Envelope.Lower"/> value.
-	/// </summary>
 	public IIndicatorValue LowerValue => this[TypedIndicator.Lower];
-
-	/// <summary>
-	/// Gets the <see cref="Envelope.Lower"/> value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? Lower => LowerValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"Middle={Middle}, Upper={Upper}, Lower={Lower}";
 }

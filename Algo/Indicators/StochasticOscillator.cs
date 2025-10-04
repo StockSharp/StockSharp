@@ -11,8 +11,8 @@
 	Name = LocalizedStrings.STOCHKey,
 	Description = LocalizedStrings.StochasticOscillatorKey)]
 [Doc("topics/api/indicators/list_of_indicators/stochastic_oscillator.html")]
-[IndicatorOut(typeof(StochasticOscillatorValue))]
-public class StochasticOscillator : BaseComplexIndicator<StochasticOscillatorValue>
+[IndicatorOut(typeof(IStochasticOscillatorValue))]
+public class StochasticOscillator : BaseComplexIndicator<IStochasticOscillatorValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="StochasticOscillator"/>.
@@ -54,42 +54,45 @@ public class StochasticOscillator : BaseComplexIndicator<StochasticOscillatorVal
 	public override string ToString() => base.ToString() + $" %K={K.Length} %D={D.Length}";
 
 	/// <inheritdoc />
-	protected override StochasticOscillatorValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IStochasticOscillatorValue CreateValue(DateTimeOffset time)
+		=> new StochasticOscillatorValue(this, time);
 }
 
 /// <summary>
 /// <see cref="StochasticOscillator"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="StochasticOscillatorValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="StochasticOscillator"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class StochasticOscillatorValue(StochasticOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<StochasticOscillator>(indicator, time)
+public interface IStochasticOscillatorValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the %K value.
 	/// </summary>
-	public IIndicatorValue KValue => this[TypedIndicator.K];
+	IIndicatorValue KValue { get; }
 
 	/// <summary>
 	/// Gets the %K value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? K => KValue.ToNullableDecimal(TypedIndicator.Source);
+	decimal? K { get; }
 
 	/// <summary>
 	/// Gets the %D value.
 	/// </summary>
-	public IIndicatorValue DValue => this[TypedIndicator.D];
+	IIndicatorValue DValue { get; }
 
 	/// <summary>
 	/// Gets the %D value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? D { get; }
+}
+
+class StochasticOscillatorValue(StochasticOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<StochasticOscillator>(indicator, time), IStochasticOscillatorValue
+{
+	public IIndicatorValue KValue => this[TypedIndicator.K];
+	public decimal? K => KValue.ToNullableDecimal(TypedIndicator.Source);
+
+	public IIndicatorValue DValue => this[TypedIndicator.D];
 	public decimal? D => DValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"K={K}, D={D}";
 }

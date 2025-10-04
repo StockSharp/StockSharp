@@ -9,8 +9,8 @@ namespace StockSharp.Algo.Indicators;
 	Description = LocalizedStrings.PriceChannelsDescriptionKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/indicators/price_channels.html")]
-[IndicatorOut(typeof(PriceChannelsValue))]
-public class PriceChannels : BaseComplexIndicator<PriceChannelsValue>
+[IndicatorOut(typeof(IPriceChannelsValue))]
+public class PriceChannels : BaseComplexIndicator<IPriceChannelsValue>
 {
 	private readonly Highest _upperChannel;
 	private readonly Lowest _lowerChannel;
@@ -93,42 +93,45 @@ public class PriceChannels : BaseComplexIndicator<PriceChannelsValue>
 	public override string ToString() => base.ToString() + " " + Length;
 
 	/// <inheritdoc />
-	protected override PriceChannelsValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IPriceChannelsValue CreateValue(DateTimeOffset time)
+		=> new PriceChannelsValue(this, time);
 }
 
 /// <summary>
 /// Price Channels indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="PriceChannelsValue"/>.
-/// </remarks>
-/// <param name="indicator">The indicator.</param>
-/// <param name="time">The time.</param>
-public class PriceChannelsValue(PriceChannels indicator, DateTimeOffset time) : ComplexIndicatorValue<PriceChannels>(indicator, time)
+public interface IPriceChannelsValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the upper channel value.
 	/// </summary>
-	public IIndicatorValue UpperChannelValue => this[TypedIndicator.UpperChannel];
+	IIndicatorValue UpperChannelValue { get; }
 
 	/// <summary>
 	/// Gets the upper channel value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? UpperChannel => UpperChannelValue.ToNullableDecimal(TypedIndicator.Source);
+	decimal? UpperChannel { get; }
 
 	/// <summary>
 	/// Gets the lower channel value.
 	/// </summary>
-	public IIndicatorValue LowerChannelValue => this[TypedIndicator.LowerChannel];
+	IIndicatorValue LowerChannelValue { get; }
 
 	/// <summary>
 	/// Gets the lower channel value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? LowerChannel { get; }
+}
+
+class PriceChannelsValue(PriceChannels indicator, DateTimeOffset time) : ComplexIndicatorValue<PriceChannels>(indicator, time), IPriceChannelsValue
+{
+	public IIndicatorValue UpperChannelValue => this[TypedIndicator.UpperChannel];
+	public decimal? UpperChannel => UpperChannelValue.ToNullableDecimal(TypedIndicator.Source);
+
+	public IIndicatorValue LowerChannelValue => this[TypedIndicator.LowerChannel];
 	public decimal? LowerChannel => LowerChannelValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"UpperChannel={UpperChannel}, LowerChannel={LowerChannel}";
 }

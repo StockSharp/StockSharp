@@ -8,8 +8,8 @@
 	Name = LocalizedStrings.CRSIKey,
 	Description = LocalizedStrings.ConnorsRSIKey)]
 [Doc("topics/api/indicators/list_of_indicators/connors_rsi.html")]
-[IndicatorOut(typeof(ConnorsRSIValue))]
-public class ConnorsRSI : BaseComplexIndicator<ConnorsRSIValue>
+[IndicatorOut(typeof(IConnorsRSIValue))]
+public class ConnorsRSI : BaseComplexIndicator<IConnorsRSIValue>
 {
 	private readonly RateOfChange _roc = new();
 	private readonly CircularBuffer<decimal> _streakBuffer = new(2);
@@ -209,8 +209,8 @@ public class ConnorsRSI : BaseComplexIndicator<ConnorsRSIValue>
 	}
 
 	/// <inheritdoc />
-	protected override ConnorsRSIValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IConnorsRSIValue CreateValue(DateTimeOffset time)
+		=> new ConnorsRSIValue(this, time);
 }
 
 /// <summary>
@@ -232,57 +232,66 @@ public class CrsiLine : BaseIndicator
 /// <summary>
 /// <see cref="ConnorsRSI"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="ConnorsRSIValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="ConnorsRSI"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class ConnorsRSIValue(ConnorsRSI indicator, DateTimeOffset time) : ComplexIndicatorValue<ConnorsRSI>(indicator, time)
+public interface IConnorsRSIValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the RSI component.
 	/// </summary>
-	public IIndicatorValue RsiValue => this[TypedIndicator.Rsi];
+	IIndicatorValue RsiValue { get; }
 
 	/// <summary>
 	/// Gets the RSI component.
 	/// </summary>
 	[Browsable(false)]
+	decimal? Rsi { get; }
+
+	/// <summary>
+	/// Gets the UpDown RSI component.
+	/// </summary>
+	IIndicatorValue UpDownRsiValue { get; }
+
+	/// <summary>
+	/// Gets the UpDown RSI component.
+	/// </summary>
+	[Browsable(false)]
+	decimal? UpDownRsi { get; }
+
+	/// <summary>
+	/// Gets the ROC RSI component.
+	/// </summary>
+	IIndicatorValue RocRsiValue { get; }
+
+	/// <summary>
+	/// Gets the ROC RSI component.
+	/// </summary>
+	[Browsable(false)]
+	decimal? RocRsi { get; }
+
+	/// <summary>
+	/// Gets the composite RSI line.
+	/// </summary>
+	IIndicatorValue CrsiLineValue { get; }
+
+	/// <summary>
+	/// Gets the composite RSI line.
+	/// </summary>
+	[Browsable(false)]
+	decimal? CrsiLine { get; }
+}
+
+class ConnorsRSIValue(ConnorsRSI indicator, DateTimeOffset time) : ComplexIndicatorValue<ConnorsRSI>(indicator, time), IConnorsRSIValue
+{
+	public IIndicatorValue RsiValue => this[TypedIndicator.Rsi];
 	public decimal? Rsi => RsiValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the UpDown RSI component.
-	/// </summary>
 	public IIndicatorValue UpDownRsiValue => this[TypedIndicator.UpDownRsi];
-
-	/// <summary>
-	/// Gets the UpDown RSI component.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? UpDownRsi => UpDownRsiValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the ROC RSI component.
-	/// </summary>
 	public IIndicatorValue RocRsiValue => this[TypedIndicator.RocRsi];
-
-	/// <summary>
-	/// Gets the ROC RSI component.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? RocRsi => RocRsiValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the composite RSI line.
-	/// </summary>
 	public IIndicatorValue CrsiLineValue => this[TypedIndicator.CrsiLine];
-
-	/// <summary>
-	/// Gets the composite RSI line.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? CrsiLine => CrsiLineValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"Rsi={Rsi}, UpDownRsi={UpDownRsi}, RocRsi={RocRsi}, CrsiLine={CrsiLine}";
 }

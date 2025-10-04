@@ -11,8 +11,8 @@
 	Name = LocalizedStrings.MACDSignalKey,
 	Description = LocalizedStrings.MACDSignalDescKey)]
 [Doc("topics/api/indicators/list_of_indicators/macd_with_signal_line.html")]
-[IndicatorOut(typeof(MovingAverageConvergenceDivergenceSignalValue))]
-public class MovingAverageConvergenceDivergenceSignal : BaseComplexIndicator<MovingAverageConvergenceDivergenceSignalValue>
+[IndicatorOut(typeof(IMovingAverageConvergenceDivergenceSignalValue))]
+public class MovingAverageConvergenceDivergenceSignal : BaseComplexIndicator<IMovingAverageConvergenceDivergenceSignalValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MovingAverageConvergenceDivergenceSignal"/>.
@@ -64,42 +64,45 @@ public class MovingAverageConvergenceDivergenceSignal : BaseComplexIndicator<Mov
 	public override string ToString() => base.ToString() + $" L={Macd.LongMa.Length} S={Macd.ShortMa.Length} Sig={SignalMa.Length}";
 
 	/// <inheritdoc />
-	protected override MovingAverageConvergenceDivergenceSignalValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IMovingAverageConvergenceDivergenceSignalValue CreateValue(DateTimeOffset time)
+		=> new MovingAverageConvergenceDivergenceSignalValue(this, time);
 }
 
 /// <summary>
 /// <see cref="MovingAverageConvergenceDivergenceSignal"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="MovingAverageConvergenceDivergenceSignalValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="MovingAverageConvergenceDivergenceSignal"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class MovingAverageConvergenceDivergenceSignalValue(MovingAverageConvergenceDivergenceSignal indicator, DateTimeOffset time) : ComplexIndicatorValue<MovingAverageConvergenceDivergenceSignal>(indicator, time)
+public interface IMovingAverageConvergenceDivergenceSignalValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the MACD value.
 	/// </summary>
-	public IIndicatorValue MacdValue => this[TypedIndicator.Macd];
+	IIndicatorValue MacdValue { get; }
 
 	/// <summary>
 	/// Gets the MACD value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Macd => MacdValue.ToNullableDecimal(TypedIndicator.Source);
+	decimal? Macd { get; }
 
 	/// <summary>
 	/// Gets the signal line value.
 	/// </summary>
-	public IIndicatorValue SignalValue => this[TypedIndicator.SignalMa];
+	IIndicatorValue SignalValue { get; }
 
 	/// <summary>
 	/// Gets the signal line value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? Signal { get; }
+}
+
+class MovingAverageConvergenceDivergenceSignalValue(MovingAverageConvergenceDivergenceSignal indicator, DateTimeOffset time) : ComplexIndicatorValue<MovingAverageConvergenceDivergenceSignal>(indicator, time), IMovingAverageConvergenceDivergenceSignalValue
+{
+	public IIndicatorValue MacdValue => this[TypedIndicator.Macd];
+	public decimal? Macd => MacdValue.ToNullableDecimal(TypedIndicator.Source);
+
+	public IIndicatorValue SignalValue => this[TypedIndicator.SignalMa];
 	public decimal? Signal => SignalValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"Macd={Macd}, Signal={Signal}";
 }

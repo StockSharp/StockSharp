@@ -11,8 +11,8 @@
 	Name = LocalizedStrings.AdxKey,
 	Description = LocalizedStrings.AverageDirectionalIndexKey)]
 [Doc("topics/api/indicators/list_of_indicators/adx.html")]
-[IndicatorOut(typeof(AverageDirectionalIndexValue))]
-public class AverageDirectionalIndex : BaseComplexIndicator<AverageDirectionalIndexValue>
+[IndicatorOut(typeof(IAverageDirectionalIndexValue))]
+public class AverageDirectionalIndex : BaseComplexIndicator<IAverageDirectionalIndexValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="AverageDirectionalIndex"/>.
@@ -86,36 +86,38 @@ public class AverageDirectionalIndex : BaseComplexIndicator<AverageDirectionalIn
 	public override string ToString() => base.ToString() + " " + Length;
 
 	/// <inheritdoc />
-	protected override AverageDirectionalIndexValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IAverageDirectionalIndexValue CreateValue(DateTimeOffset time)
+		=> new AverageDirectionalIndexValue(this, time);
 }
 
 /// <summary>
 /// <see cref="AverageDirectionalIndex"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="AverageDirectionalIndexValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="AverageDirectionalIndex"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class AverageDirectionalIndexValue(AverageDirectionalIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<AverageDirectionalIndex>(indicator, time)
+public interface IAverageDirectionalIndexValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the <see cref="AverageDirectionalIndex.Dx"/> value.
 	/// </summary>
-	public DirectionalIndexValue Dx => (DirectionalIndexValue)this[TypedIndicator.Dx];
+	IDirectionalIndexValue Dx { get; }
 	
 	/// <summary>
 	/// Gets the <see cref="AverageDirectionalIndex.MovingAverage"/> value.
 	/// </summary>
-	public IIndicatorValue MovingAverageValue => this[TypedIndicator.MovingAverage];
+	IIndicatorValue MovingAverageValue { get; }
 
 	/// <summary>
 	/// Gets the <see cref="AverageDirectionalIndex.MovingAverage"/> value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? MovingAverage { get; }
+}
+
+class AverageDirectionalIndexValue(AverageDirectionalIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<AverageDirectionalIndex>(indicator, time), IAverageDirectionalIndexValue
+{
+	public IDirectionalIndexValue Dx => (IDirectionalIndexValue)this[TypedIndicator.Dx];
+	
+	public IIndicatorValue MovingAverageValue => this[TypedIndicator.MovingAverage];
 	public decimal? MovingAverage => MovingAverageValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"Dx={Dx}, MovingAverage={MovingAverage}";
 }

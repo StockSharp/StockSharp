@@ -11,8 +11,8 @@
 	Name = LocalizedStrings.AlligatorKey,
 	Description = LocalizedStrings.AlligatorKey)]
 [Doc("topics/api/indicators/list_of_indicators/alligator.html")]
-[IndicatorOut(typeof(AlligatorValue))]
-public class Alligator : BaseComplexIndicator<AlligatorValue>
+[IndicatorOut(typeof(IAlligatorValue))]
+public class Alligator : BaseComplexIndicator<IAlligatorValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Alligator"/>.
@@ -77,54 +77,61 @@ public class Alligator : BaseComplexIndicator<AlligatorValue>
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + $" J={Jaw.Length} T={Teeth.Length} L={Lips.Length}";
+
 	/// <inheritdoc />
-	protected override AlligatorValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IAlligatorValue CreateValue(DateTimeOffset time)
+		=> new AlligatorValue(this, time);
 }
 
 /// <summary>
-/// <see cref="Alligator"/> indicator value.
+/// <see cref="Alligator"/> indicator value implementation.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="AlligatorValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="Alligator"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class AlligatorValue(Alligator indicator, DateTimeOffset time) : ComplexIndicatorValue<Alligator>(indicator, time)
+public interface IAlligatorValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the <see cref="Alligator.Jaw"/> value.
 	/// </summary>
-	public IIndicatorValue JawValue => this[TypedIndicator.Jaw];
+	IIndicatorValue JawValue { get; }
 
 	/// <summary>
 	/// Gets the <see cref="Alligator.Jaw"/> value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? Jaw { get; }
+
+	/// <summary>
+	/// Gets the <see cref="Alligator.Teeth"/> value.
+	/// </summary>
+	IIndicatorValue TeethValue { get; }
+
+	/// <summary>
+	/// Gets the <see cref="Alligator.Teeth"/> value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? Teeth { get; }
+
+	/// <summary>
+	/// Gets the <see cref="Alligator.Lips"/> value.
+	/// </summary>
+	IIndicatorValue LipsValue { get; }
+
+	/// <summary>
+	/// Gets the <see cref="Alligator.Lips"/> value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? Lips { get; }
+}
+
+class AlligatorValue(Alligator indicator, DateTimeOffset time) : ComplexIndicatorValue<Alligator>(indicator, time), IAlligatorValue
+{
+	public IIndicatorValue JawValue => this[TypedIndicator.Jaw];
 	public decimal? Jaw => JawValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the <see cref="Alligator.Teeth"/> value.
-	/// </summary>
 	public IIndicatorValue TeethValue => this[TypedIndicator.Teeth];
-
-	/// <summary>
-	/// Gets the <see cref="Alligator.Teeth"/> value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? Teeth => TeethValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the <see cref="Alligator.Lips"/> value.
-	/// </summary>
 	public IIndicatorValue LipsValue => this[TypedIndicator.Lips];
-
-	/// <summary>
-	/// Gets the <see cref="Alligator.Lips"/> value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? Lips => LipsValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"Jaw={Jaw}, Teeth={Teeth}, Lips={Lips}";
 }

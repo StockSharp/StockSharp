@@ -9,8 +9,8 @@
 	Description = LocalizedStrings.RainbowChartsKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/rainbow_charts.html")]
-[IndicatorOut(typeof(RainbowChartsValue))]
-public class RainbowCharts : BaseComplexIndicator<RainbowChartsValue>
+[IndicatorOut(typeof(IRainbowChartsValue))]
+public class RainbowCharts : BaseComplexIndicator<IRainbowChartsValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RainbowCharts"/>.
@@ -71,31 +71,31 @@ public class RainbowCharts : BaseComplexIndicator<RainbowChartsValue>
 	public override string ToString() => $"{base.ToString()} L={Lines}";
 
 	/// <inheritdoc />
-	protected override RainbowChartsValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IRainbowChartsValue CreateValue(DateTimeOffset time)
+		=> new RainbowChartsValue(this, time);
 }
 
 /// <summary>
 /// <see cref="RainbowCharts"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="RainbowChartsValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="RainbowCharts"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class RainbowChartsValue(RainbowCharts indicator, DateTimeOffset time) : ComplexIndicatorValue<RainbowCharts>(indicator, time)
+public interface IRainbowChartsValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets values of all moving averages.
 	/// </summary>
-	public IIndicatorValue[] AveragesValues => [.. TypedIndicator.InnerIndicators.Select(ind => this[ind])];
+	IIndicatorValue[] AveragesValues { get; }
 
 	/// <summary>
 	/// Gets values of all moving averages.
 	/// </summary>
 	[Browsable(false)]
+	decimal?[] Averages { get; }
+}
+
+class RainbowChartsValue(RainbowCharts indicator, DateTimeOffset time) : ComplexIndicatorValue<RainbowCharts>(indicator, time), IRainbowChartsValue
+{
+	public IIndicatorValue[] AveragesValues => [.. TypedIndicator.InnerIndicators.Select(ind => this[ind])];
 	public decimal?[] Averages => [.. AveragesValues.Select(v => v.ToNullableDecimal(TypedIndicator.Source))];
 
-	/// <inheritdoc />
 	public override string ToString() => $"Averages=[{string.Join(", ", Averages)}]";
 }

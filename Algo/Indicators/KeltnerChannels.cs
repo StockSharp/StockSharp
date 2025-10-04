@@ -12,8 +12,8 @@
 	Description = LocalizedStrings.KeltnerChannelsKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/keltner_channels.html")]
-[IndicatorOut(typeof(KeltnerChannelsValue))]
-public class KeltnerChannels : BaseComplexIndicator<KeltnerChannelsValue>
+[IndicatorOut(typeof(IKeltnerChannelsValue))]
+public class KeltnerChannels : BaseComplexIndicator<IKeltnerChannelsValue>
 {
 	private readonly AverageTrueRange _atr;
 
@@ -147,8 +147,8 @@ public class KeltnerChannels : BaseComplexIndicator<KeltnerChannelsValue>
 	}
 
 	/// <inheritdoc />
-	protected override KeltnerChannelsValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IKeltnerChannelsValue CreateValue(DateTimeOffset time)
+		=> new KeltnerChannelsValue(this, time);
 }
 
 /// <summary>
@@ -178,46 +178,52 @@ public class KeltnerChannelBand : LengthIndicator<decimal>
 /// <summary>
 /// <see cref="KeltnerChannels"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="KeltnerChannelsValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="KeltnerChannels"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class KeltnerChannelsValue(KeltnerChannels indicator, DateTimeOffset time) : ComplexIndicatorValue<KeltnerChannels>(indicator, time)
+public interface IKeltnerChannelsValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the <see cref="KeltnerChannels.Middle"/> value.
 	/// </summary>
-	public IIndicatorValue MiddleValue => this[TypedIndicator.Middle];
+	IIndicatorValue MiddleValue { get; }
 
 	/// <summary>
 	/// Gets the <see cref="KeltnerChannels.Middle"/> value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? Middle { get; }
+
+	/// <summary>
+	/// Gets the <see cref="KeltnerChannels.Upper"/> value.
+	/// </summary>
+	IIndicatorValue UpperValue { get; }
+
+	/// <summary>
+	/// Gets the <see cref="KeltnerChannels.Upper"/> value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? Upper { get; }
+
+	/// <summary>
+	/// Gets the <see cref="KeltnerChannels.Lower"/> value.
+	/// </summary>
+	IIndicatorValue LowerValue { get; }
+
+	/// <summary>
+	/// Gets the <see cref="KeltnerChannels.Lower"/> value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? Lower { get; }
+}
+
+class KeltnerChannelsValue(KeltnerChannels indicator, DateTimeOffset time) : ComplexIndicatorValue<KeltnerChannels>(indicator, time), IKeltnerChannelsValue
+{
+	public IIndicatorValue MiddleValue => this[TypedIndicator.Middle];
 	public decimal? Middle => MiddleValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the <see cref="KeltnerChannels.Upper"/> value.
-	/// </summary>
 	public IIndicatorValue UpperValue => this[TypedIndicator.Upper];
-
-	/// <summary>
-	/// Gets the <see cref="KeltnerChannels.Upper"/> value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? Upper => UpperValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the <see cref="KeltnerChannels.Lower"/> value.
-	/// </summary>
 	public IIndicatorValue LowerValue => this[TypedIndicator.Lower];
-
-	/// <summary>
-	/// Gets the <see cref="KeltnerChannels.Lower"/> value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? Lower => LowerValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"Middle={Middle}, Upper={Upper}, Lower={Lower}";
 }

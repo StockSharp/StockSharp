@@ -9,8 +9,8 @@
 	Description = LocalizedStrings.ChandeKrollStopKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/chande_kroll_stop.html")]
-[IndicatorOut(typeof(ChandeKrollStopValue))]
-public class ChandeKrollStop : BaseComplexIndicator<ChandeKrollStopValue>
+[IndicatorOut(typeof(IChandeKrollStopValue))]
+public class ChandeKrollStop : BaseComplexIndicator<IChandeKrollStopValue>
 {
 	private readonly SimpleMovingAverage _smaHigh;
 	private readonly SimpleMovingAverage _smaLow;
@@ -164,42 +164,42 @@ public class ChandeKrollStop : BaseComplexIndicator<ChandeKrollStopValue>
 	}
 
 	/// <inheritdoc />
-	protected override ChandeKrollStopValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IChandeKrollStopValue CreateValue(DateTimeOffset time)
+		=> new ChandeKrollStopValue(this, time);
 }
 
 /// <summary>
 /// <see cref="ChandeKrollStop"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="ChandeKrollStopValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="ChandeKrollStop"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class ChandeKrollStopValue(ChandeKrollStop indicator, DateTimeOffset time) : ComplexIndicatorValue<ChandeKrollStop>(indicator, time)
+public interface IChandeKrollStopValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the highest stop line.
 	/// </summary>
-	public IIndicatorValue HighestValue => this[TypedIndicator.Highest];
-
+	IIndicatorValue HighestValue { get; }
 	/// <summary>
 	/// Gets the highest stop line.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Highest => HighestValue.ToNullableDecimal(TypedIndicator.Source);
-
+	decimal? Highest { get; }
 	/// <summary>
 	/// Gets the lowest stop line.
 	/// </summary>
-	public IIndicatorValue LowestValue => this[TypedIndicator.Lowest];
-
+	IIndicatorValue LowestValue { get; }
 	/// <summary>
 	/// Gets the lowest stop line.
 	/// </summary>
 	[Browsable(false)]
+	decimal? Lowest { get; }
+}
+
+class ChandeKrollStopValue(ChandeKrollStop indicator, DateTimeOffset time) : ComplexIndicatorValue<ChandeKrollStop>(indicator, time), IChandeKrollStopValue
+{
+	public IIndicatorValue HighestValue => this[TypedIndicator.Highest];
+	public decimal? Highest => HighestValue.ToNullableDecimal(TypedIndicator.Source);
+
+	public IIndicatorValue LowestValue => this[TypedIndicator.Lowest];
 	public decimal? Lowest => LowestValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"Highest={Highest}, Lowest={Lowest}";
 }

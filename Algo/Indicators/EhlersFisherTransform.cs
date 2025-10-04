@@ -9,8 +9,8 @@
 	Description = LocalizedStrings.EhlersFisherTransformKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/ehlers_fisher_transform.html")]
-[IndicatorOut(typeof(EhlersFisherTransformValue))]
-public class EhlersFisherTransform : BaseComplexIndicator<EhlersFisherTransformValue>
+[IndicatorOut(typeof(IEhlersFisherTransformValue))]
+public class EhlersFisherTransform : BaseComplexIndicator<IEhlersFisherTransformValue>
 {
 	private readonly CircularBufferEx<decimal> _highBuffer;
 	private readonly CircularBufferEx<decimal> _lowBuffer;
@@ -143,8 +143,8 @@ public class EhlersFisherTransform : BaseComplexIndicator<EhlersFisherTransformV
 	public override string ToString() => base.ToString() + " " + Length;
 
 	/// <inheritdoc />
-	protected override EhlersFisherTransformValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IEhlersFisherTransformValue CreateValue(DateTimeOffset time)
+		=> new EhlersFisherTransformValue(this, time);
 }
 
 /// <summary>
@@ -166,35 +166,38 @@ public class EhlersFisherTransformLine : BaseIndicator
 /// <summary>
 /// <see cref="EhlersFisherTransform"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="EhlersFisherTransformValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="EhlersFisherTransform"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class EhlersFisherTransformValue(EhlersFisherTransform indicator, DateTimeOffset time) : ComplexIndicatorValue<EhlersFisherTransform>(indicator, time)
+public interface IEhlersFisherTransformValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the main line value.
 	/// </summary>
-	public IIndicatorValue MainLineValue => this[TypedIndicator.MainLine];
+	IIndicatorValue MainLineValue { get; }
 
 	/// <summary>
 	/// Gets the main line value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? MainLine => MainLineValue.ToNullableDecimal(TypedIndicator.Source);
+	decimal? MainLine { get; }
 
 	/// <summary>
 	/// Gets the trigger line value.
 	/// </summary>
-	public IIndicatorValue TriggerLineValue => this[TypedIndicator.TriggerLine];
+	IIndicatorValue TriggerLineValue { get; }
 
 	/// <summary>
 	/// Gets the trigger line value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? TriggerLine { get; }
+}
+
+class EhlersFisherTransformValue(EhlersFisherTransform indicator, DateTimeOffset time) : ComplexIndicatorValue<EhlersFisherTransform>(indicator, time), IEhlersFisherTransformValue
+{
+	public IIndicatorValue MainLineValue => this[TypedIndicator.MainLine];
+	public decimal? MainLine => MainLineValue.ToNullableDecimal(TypedIndicator.Source);
+
+	public IIndicatorValue TriggerLineValue => this[TypedIndicator.TriggerLine];
 	public decimal? TriggerLine => TriggerLineValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"MainLine={MainLine}, TriggerLine={TriggerLine}";
 }

@@ -8,8 +8,8 @@ namespace StockSharp.Algo.Indicators;
 	Name = LocalizedStrings.PPOHKey,
 	Description = LocalizedStrings.PercentagePriceOscillatorHistogramKey)]
 [Doc("topics/api/indicators/list_of_indicators/percentage_price_oscillator_histogram.html")]
-[IndicatorOut(typeof(PercentagePriceOscillatorHistogramValue))]
-public class PercentagePriceOscillatorHistogram : BaseComplexIndicator<PercentagePriceOscillatorHistogramValue>
+[IndicatorOut(typeof(IPercentagePriceOscillatorHistogramValue))]
+public class PercentagePriceOscillatorHistogram : BaseComplexIndicator<IPercentagePriceOscillatorHistogramValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="PercentagePriceOscillatorHistogram"/>.
@@ -70,39 +70,45 @@ public class PercentagePriceOscillatorHistogram : BaseComplexIndicator<Percentag
 	}
 
 	/// <inheritdoc />
-	protected override PercentagePriceOscillatorHistogramValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IPercentagePriceOscillatorHistogramValue CreateValue(DateTimeOffset time)
+		=> new PercentagePriceOscillatorHistogramValue(this, time);
 }
 
 /// <summary>
 /// <see cref="PercentagePriceOscillatorHistogram"/> indicator value.
 /// </summary>
-/// <param name="indicator">Indicator.</param>
-/// <param name="time">Time.</param>
-public class PercentagePriceOscillatorHistogramValue(PercentagePriceOscillatorHistogram indicator, DateTimeOffset time) : ComplexIndicatorValue<PercentagePriceOscillatorHistogram>(indicator, time)
+public interface IPercentagePriceOscillatorHistogramValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets PPO value.
 	/// </summary>
-	public IIndicatorValue PpoValue => this[TypedIndicator.Ppo];
+	IIndicatorValue PpoValue { get; }
 
 	/// <summary>
 	/// Gets PPO value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Ppo => PpoValue.ToNullableDecimal(TypedIndicator.Ppo.Source);
+	decimal? Ppo { get; }
 
 	/// <summary>
 	/// Gets signal EMA value.
 	/// </summary>
-	public IIndicatorValue SignalValue => this[TypedIndicator.SignalMa];
+	IIndicatorValue SignalValue { get; }
 
 	/// <summary>
 	/// Signal EMA numeric value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? Signal { get; }
+}
+
+class PercentagePriceOscillatorHistogramValue(PercentagePriceOscillatorHistogram indicator, DateTimeOffset time) : ComplexIndicatorValue<PercentagePriceOscillatorHistogram>(indicator, time), IPercentagePriceOscillatorHistogramValue
+{
+	public IIndicatorValue PpoValue => this[TypedIndicator.Ppo];
+	public decimal? Ppo => PpoValue.ToNullableDecimal(TypedIndicator.Ppo.Source);
+
+	public IIndicatorValue SignalValue => this[TypedIndicator.SignalMa];
 	public decimal? Signal => SignalValue.ToNullableDecimal(TypedIndicator.SignalMa.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"PPO={Ppo}, Signal={Signal}";
 }

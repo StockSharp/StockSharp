@@ -8,8 +8,8 @@
 	Name = LocalizedStrings.SWKey,
 	Description = LocalizedStrings.SineWaveKey)]
 [Doc("topics/api/indicators/list_of_indicators/sine_wave.html")]
-[IndicatorOut(typeof(SineWaveValue))]
-public class SineWave : BaseComplexIndicator<SineWaveValue>
+[IndicatorOut(typeof(ISineWaveValue))]
+public class SineWave : BaseComplexIndicator<ISineWaveValue>
 {
 	/// <summary>
 	/// Lead line.
@@ -108,8 +108,8 @@ public class SineWave : BaseComplexIndicator<SineWaveValue>
 	public override string ToString() => base.ToString() + $" L={Length}";
 
 	/// <inheritdoc />
-	protected override SineWaveValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override ISineWaveValue CreateValue(DateTimeOffset time)
+		=> new SineWaveValue(this, time);
 }
 
 /// <summary>
@@ -131,35 +131,37 @@ public class SineWaveLine : BaseIndicator
 /// <summary>
 /// <see cref="SineWave"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="SineWaveValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="SineWave"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class SineWaveValue(SineWave indicator, DateTimeOffset time) : ComplexIndicatorValue<SineWave>(indicator, time)
+public interface ISineWaveValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the main line value.
 	/// </summary>
-	public IIndicatorValue MainValue => this[TypedIndicator.Main];
+	IIndicatorValue MainValue { get; }
 
 	/// <summary>
 	/// Gets the main line value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Main => MainValue.ToNullableDecimal(TypedIndicator.Source);
+	decimal? Main { get; }
 
 	/// <summary>
 	/// Gets the lead line value.
 	/// </summary>
-	public IIndicatorValue LeadValue => this[TypedIndicator.Lead];
+	IIndicatorValue LeadValue { get; }
 
 	/// <summary>
 	/// Gets the lead line value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? Lead { get; }
+}
+
+class SineWaveValue(SineWave indicator, DateTimeOffset time) : ComplexIndicatorValue<SineWave>(indicator, time), ISineWaveValue
+{
+	public IIndicatorValue MainValue => this[TypedIndicator.Main];
+	public decimal? Main => MainValue.ToNullableDecimal(TypedIndicator.Source);
+	public IIndicatorValue LeadValue => this[TypedIndicator.Lead];
 	public decimal? Lead => LeadValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"Main={Main}, Lead={Lead}";
 }

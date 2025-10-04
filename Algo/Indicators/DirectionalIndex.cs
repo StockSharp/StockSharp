@@ -11,8 +11,8 @@
 	Name = LocalizedStrings.DMIKey,
 	Description = LocalizedStrings.WellesWilderDirectionalMovementIndexKey)]
 [Doc("topics/api/indicators/list_of_indicators/dmi.html")]
-[IndicatorOut(typeof(DirectionalIndexValue))]
-public class DirectionalIndex : BaseComplexIndicator<DirectionalIndexValue>
+[IndicatorOut(typeof(IDirectionalIndexValue))]
+public class DirectionalIndex : BaseComplexIndicator<IDirectionalIndexValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="DirectionalIndex"/>.
@@ -62,7 +62,7 @@ public class DirectionalIndex : BaseComplexIndicator<DirectionalIndexValue>
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-var value = new DirectionalIndexValue(this, input.Time) { IsFinal = input.IsFinal };
+		var value = new DirectionalIndexValue(this, input.Time) { IsFinal = input.IsFinal };
 
 		var plusValue = Plus.Process(input);
 		var minusValue = Minus.Process(input);
@@ -102,40 +102,44 @@ var value = new DirectionalIndexValue(this, input.Time) { IsFinal = input.IsFina
 	public override string ToString() => base.ToString() + " " + Length;
 
 	/// <inheritdoc />
-	protected override DirectionalIndexValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IDirectionalIndexValue CreateValue(DateTimeOffset time)
+		=> new DirectionalIndexValue(this, time);
 }
 
 /// <summary>
 /// <see cref="DirectionalIndex"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="DirectionalIndexValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="DirectionalIndex"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class DirectionalIndexValue(DirectionalIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<DirectionalIndex>(indicator, time)
+public interface IDirectionalIndexValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the <see cref="DirectionalIndex.Plus"/> value.
 	/// </summary>
-	public IIndicatorValue PlusValue => this[TypedIndicator.Plus];
+	IIndicatorValue PlusValue { get; }
 
 	/// <summary>
 	/// Gets the <see cref="DirectionalIndex.Plus"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Plus => PlusValue.ToNullableDecimal(TypedIndicator.Source);
-	
+	decimal? Plus { get; }
+
 	/// <summary>
 	/// Gets the <see cref="DirectionalIndex.Minus"/> value.
 	/// </summary>
-	public IIndicatorValue MinusValue => this[TypedIndicator.Minus];
+	IIndicatorValue MinusValue { get; }
 
 	/// <summary>
 	/// Gets the <see cref="DirectionalIndex.Minus"/> value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? Minus { get; }
+}
+
+class DirectionalIndexValue(DirectionalIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<DirectionalIndex>(indicator, time), IDirectionalIndexValue
+{
+	public IIndicatorValue PlusValue => this[TypedIndicator.Plus];
+	public decimal? Plus => PlusValue.ToNullableDecimal(TypedIndicator.Source);
+	
+	public IIndicatorValue MinusValue => this[TypedIndicator.Minus];
 	public decimal? Minus => MinusValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />

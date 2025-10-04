@@ -11,8 +11,8 @@ namespace StockSharp.Algo.Indicators;
 	Name = LocalizedStrings.TSIKey,
 	Description = LocalizedStrings.TrueStrengthIndexKey)]
 [Doc("topics/api/indicators/list_of_indicators/true_strength_index.html")]
-[IndicatorOut(typeof(TrueStrengthIndexValue))]
-public class TrueStrengthIndex : BaseComplexIndicator<TrueStrengthIndexValue>
+[IndicatorOut(typeof(ITrueStrengthIndexValue))]
+public class TrueStrengthIndex : BaseComplexIndicator<ITrueStrengthIndexValue>
 {
 	/// <summary>
 	/// Internal TSI calculation line.
@@ -257,42 +257,45 @@ public class TrueStrengthIndex : BaseComplexIndicator<TrueStrengthIndexValue>
 	public override string ToString() => base.ToString() + $" {FirstLength}/{SecondLength}/{SignalLength}";
 
 	/// <inheritdoc />
-	protected override TrueStrengthIndexValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override ITrueStrengthIndexValue CreateValue(DateTimeOffset time)
+		=> new TrueStrengthIndexValue(this, time);
 }
 
 /// <summary>
 /// TSI composite indicator value.
 /// </summary>
-/// <remarks>
-/// Holds TSI (main) and Signal line values.
-/// </remarks>
-/// <param name="indicator">Parent <see cref="TrueStrengthIndex"/>.</param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/>.</param>
-public class TrueStrengthIndexValue(TrueStrengthIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<TrueStrengthIndex>(indicator, time)
+public interface ITrueStrengthIndexValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Raw TSI line value object.
 	/// </summary>
-	public IIndicatorValue TsiValue => this[TypedIndicator.Tsi];
+	IIndicatorValue TsiValue { get; }
 
 	/// <summary>
 	/// Raw Signal line value object.
 	/// </summary>
-	public IIndicatorValue SignalValue => this[TypedIndicator.Signal];
+	IIndicatorValue SignalValue { get; }
 
 	/// <summary>
 	/// TSI numeric value (if available).
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Tsi => TsiValue.ToNullableDecimal(TypedIndicator.Source);
+	decimal? Tsi { get; }
 
 	/// <summary>
 	/// Signal numeric value (if available).
 	/// </summary>
 	[Browsable(false)]
+	decimal? Signal { get; }
+}
+
+class TrueStrengthIndexValue(TrueStrengthIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<TrueStrengthIndex>(indicator, time), ITrueStrengthIndexValue
+{
+	public IIndicatorValue TsiValue => this[TypedIndicator.Tsi];
+	public IIndicatorValue SignalValue => this[TypedIndicator.Signal];
+
+	public decimal? Tsi => TsiValue.ToNullableDecimal(TypedIndicator.Source);
 	public decimal? Signal => SignalValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"TSI={Tsi}, Signal={Signal}";
 }

@@ -11,8 +11,8 @@
 	Name = LocalizedStrings.BollingerKey,
 	Description = LocalizedStrings.BollingerBandsKey)]
 [Doc("topics/api/indicators/list_of_indicators/bollinger_bands.html")]
-[IndicatorOut(typeof(BollingerBandsValue))]
-public class BollingerBands : BaseComplexIndicator<BollingerBandsValue>
+[IndicatorOut(typeof(IBollingerBandsValue))]
+public class BollingerBands : BaseComplexIndicator<IBollingerBandsValue>
 {
 	private readonly StandardDeviation _dev = new();
 
@@ -127,53 +127,59 @@ public class BollingerBands : BaseComplexIndicator<BollingerBandsValue>
 	public override string ToString() => base.ToString() + " " + Length;
 
 	/// <inheritdoc />
-	protected override BollingerBandsValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IBollingerBandsValue CreateValue(DateTimeOffset time)
+		=> new BollingerBandsValue(this, time);
 }
 
 /// <summary>
 /// <see cref="BollingerBands"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="BollingerBandsValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="BollingerBands"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class BollingerBandsValue(BollingerBands indicator, DateTimeOffset time) : ComplexIndicatorValue<BollingerBands>(indicator, time)
+public interface IBollingerBandsValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the <see cref="BollingerBands.MovingAverage"/> value.
 	/// </summary>
-	public IIndicatorValue MovingAverageValue => this[TypedIndicator.MovingAverage];
+	IIndicatorValue MovingAverageValue { get; }
 
 	/// <summary>
 	/// Gets the <see cref="BollingerBands.MovingAverage"/> value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? MovingAverage { get; }
+
+	/// <summary>
+	/// Gets the <see cref="BollingerBands.UpBand"/> value.
+	/// </summary>
+	IIndicatorValue UpBandValue { get; }
+
+	/// <summary>
+	/// Gets the <see cref="BollingerBands.UpBand"/> value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? UpBand { get; }
+
+	/// <summary>
+	/// Gets the <see cref="BollingerBands.LowBand"/> value.
+	/// </summary>
+	IIndicatorValue LowBandValue { get; }
+
+	/// <summary>
+	/// Gets the <see cref="BollingerBands.LowBand"/> value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? LowBand { get; }
+}
+
+class BollingerBandsValue(BollingerBands indicator, DateTimeOffset time) : ComplexIndicatorValue<BollingerBands>(indicator, time), IBollingerBandsValue
+{
+	public IIndicatorValue MovingAverageValue => this[TypedIndicator.MovingAverage];
 	public decimal? MovingAverage => MovingAverageValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the <see cref="BollingerBands.UpBand"/> value.
-	/// </summary>
 	public IIndicatorValue UpBandValue => this[TypedIndicator.UpBand];
-
-	/// <summary>
-	/// Gets the <see cref="BollingerBands.UpBand"/> value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? UpBand => UpBandValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the <see cref="BollingerBands.LowBand"/> value.
-	/// </summary>
 	public IIndicatorValue LowBandValue => this[TypedIndicator.LowBand];
-
-	/// <summary>
-	/// Gets the <see cref="BollingerBands.LowBand"/> value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? LowBand => LowBandValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"MovingAverage={MovingAverage}, UpBand={UpBand}, LowBand={LowBand}";
 }

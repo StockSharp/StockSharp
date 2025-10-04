@@ -12,8 +12,8 @@ namespace StockSharp.Algo.Indicators;
 	Description = LocalizedStrings.ElderRayDescKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/elder_ray.html")]
-[IndicatorOut(typeof(ElderRayValue))]
-public class ElderRay : BaseComplexIndicator<ElderRayValue>
+[IndicatorOut(typeof(IElderRayValue))]
+public class ElderRay : BaseComplexIndicator<IElderRayValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ElderRay"/>.
@@ -89,42 +89,45 @@ public class ElderRay : BaseComplexIndicator<ElderRayValue>
 	public override string ToString() => base.ToString() + $" L={Length}";
 
 	/// <inheritdoc />
-	protected override ElderRayValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IElderRayValue CreateValue(DateTimeOffset time)
+		=> new ElderRayValue(this, time);
 }
 
 /// <summary>
 /// <see cref="ElderRay"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="ElderRayValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="ElderRay"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class ElderRayValue(ElderRay indicator, DateTimeOffset time) : ComplexIndicatorValue<ElderRay>(indicator, time)
+public interface IElderRayValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the <see cref="ElderRay.BullPower"/> value.
 	/// </summary>
-	public IIndicatorValue BullPowerValue => this[TypedIndicator.BullPower];
+	IIndicatorValue BullPowerValue { get; }
 
 	/// <summary>
 	/// Gets the <see cref="ElderRay.BullPower"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? BullPower => BullPowerValue.ToNullableDecimal(TypedIndicator.Source);
+	decimal? BullPower { get; }
 
 	/// <summary>
 	/// Gets the <see cref="ElderRay.BearPower"/> value.
 	/// </summary>
-	public IIndicatorValue BearPowerValue => this[TypedIndicator.BearPower];
+	IIndicatorValue BearPowerValue { get; }
 
 	/// <summary>
 	/// Gets the <see cref="ElderRay.BearPower"/> value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? BearPower { get; }
+}
+
+class ElderRayValue(ElderRay indicator, DateTimeOffset time) : ComplexIndicatorValue<ElderRay>(indicator, time), IElderRayValue
+{
+	public IIndicatorValue BullPowerValue => this[TypedIndicator.BullPower];
+	public decimal? BullPower => BullPowerValue.ToNullableDecimal(TypedIndicator.Source);
+
+	public IIndicatorValue BearPowerValue => this[TypedIndicator.BearPower];
 	public decimal? BearPower => BearPowerValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"Bull={BullPower}, Bear={BearPower}";
 }

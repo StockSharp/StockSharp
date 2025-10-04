@@ -3,51 +3,59 @@
 /// <summary>
 /// <see cref="Fractals"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="FractalsValue"/>.
-/// </remarks>
-/// <param name="fractals"><see cref="Fractals"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class FractalsValue(Fractals fractals, DateTimeOffset time) : ComplexIndicatorValue<Fractals>(fractals, time)
+public interface IFractalsValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Has pattern.
 	/// </summary>
 	[Browsable(false)]
-	public bool HasPattern { get; private set; }
+	bool HasPattern { get; }
 
 	/// <summary>
 	/// Has up.
 	/// </summary>
 	[Browsable(false)]
-	public bool HasUp { get; private set; }
+	bool HasUp { get; }
 
 	/// <summary>
 	/// Has down.
 	/// </summary>
 	[Browsable(false)]
+	bool HasDown { get; }
+
+	/// <summary>
+	/// Gets the <see cref="Fractals.Up"/> value.
+	/// </summary>
+	IIndicatorValue UpValue { get; }
+
+	/// <summary>
+	/// Gets the <see cref="Fractals.Up"/> value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? Up { get; }
+
+	/// <summary>
+	/// Gets the <see cref="Fractals.Down"/> value.
+	/// </summary>
+	IIndicatorValue DownValue { get; }
+
+	/// <summary>
+	/// Gets the <see cref="Fractals.Down"/> value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? Down { get; }
+}
+
+class FractalsValue(Fractals fractals, DateTimeOffset time) : ComplexIndicatorValue<Fractals>(fractals, time), IFractalsValue
+{
+	public bool HasPattern { get; private set; }
+	public bool HasUp { get; private set; }
 	public bool HasDown { get; private set; }
 
-	/// <summary>
-	/// Gets the <see cref="Fractals.Up"/> value.
-	/// </summary>
 	public IIndicatorValue UpValue => this[TypedIndicator.Up];
-
-	/// <summary>
-	/// Gets the <see cref="Fractals.Up"/> value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? Up => UpValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the <see cref="Fractals.Down"/> value.
-	/// </summary>
 	public IIndicatorValue DownValue => this[TypedIndicator.Down];
-
-	/// <summary>
-	/// Gets the <see cref="Fractals.Down"/> value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? Down => DownValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
@@ -92,9 +100,9 @@ public class FractalsValue(Fractals fractals, DateTimeOffset time) : ComplexIndi
 	Name = LocalizedStrings.FractalsKey,
 	Description = LocalizedStrings.FractalsKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[IndicatorOut(typeof(FractalsValue))]
+[IndicatorOut(typeof(IFractalsValue))]
 [Doc("topics/api/indicators/list_of_indicators/fractals.html")]
-public class Fractals : BaseComplexIndicator<FractalsValue>
+public class Fractals : BaseComplexIndicator<IFractalsValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Fractals"/>.
@@ -161,8 +169,8 @@ public class Fractals : BaseComplexIndicator<FractalsValue>
 	public FractalPart Down { get; }
 
 	/// <inheritdoc />
-	protected override FractalsValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IFractalsValue CreateValue(DateTimeOffset time)
+		=> new FractalsValue(this, time);
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + " " + Length;

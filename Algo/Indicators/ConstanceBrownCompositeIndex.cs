@@ -8,8 +8,8 @@
 		Name = LocalizedStrings.CBCIKey,
 		Description = LocalizedStrings.ConstanceBrownCompositeIndexKey)]
 [Doc("topics/api/indicators/list_of_indicators/constance_brown_composite_index.html")]
-[IndicatorOut(typeof(ConstanceBrownCompositeIndexValue))]
-public class ConstanceBrownCompositeIndex : BaseComplexIndicator<ConstanceBrownCompositeIndexValue>
+[IndicatorOut(typeof(IConstanceBrownCompositeIndexValue))]
+public class ConstanceBrownCompositeIndex : BaseComplexIndicator<IConstanceBrownCompositeIndexValue>
 {
 	/// <summary>
 	/// RSI part.
@@ -131,8 +131,8 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator<ConstanceBrownC
 		return result;
 	}
 	/// <inheritdoc />
-	protected override ConstanceBrownCompositeIndexValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IConstanceBrownCompositeIndexValue CreateValue(DateTimeOffset time)
+		=> new ConstanceBrownCompositeIndexValue(this, time);
 }
 
 /// <summary>
@@ -154,46 +154,52 @@ public class CompositeIndexLine : BaseIndicator
 /// <summary>
 /// <see cref="ConstanceBrownCompositeIndex"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="ConstanceBrownCompositeIndexValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="ConstanceBrownCompositeIndex"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class ConstanceBrownCompositeIndexValue(ConstanceBrownCompositeIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<ConstanceBrownCompositeIndex>(indicator, time)
+public interface IConstanceBrownCompositeIndexValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the RSI component.
 	/// </summary>
-	public IIndicatorValue RsiValue => this[TypedIndicator.Rsi];
+	IIndicatorValue RsiValue { get; }
 
 	/// <summary>
 	/// Gets the RSI component.
 	/// </summary>
 	[Browsable(false)]
+	decimal? Rsi { get; }
+
+	/// <summary>
+	/// Gets the stochastic component.
+	/// </summary>
+	IIndicatorValue StochValue { get; }
+
+	/// <summary>
+	/// Gets the stochastic component.
+	/// </summary>
+	[Browsable(false)]
+	decimal? Stoch { get; }
+
+	/// <summary>
+	/// Gets the composite index line.
+	/// </summary>
+	IIndicatorValue CompositeIndexLineValue { get; }
+
+	/// <summary>
+	/// Gets the composite index line.
+	/// </summary>
+	[Browsable(false)]
+	decimal? CompositeIndexLine { get; }
+}
+
+class ConstanceBrownCompositeIndexValue(ConstanceBrownCompositeIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<ConstanceBrownCompositeIndex>(indicator, time), IConstanceBrownCompositeIndexValue
+{
+	public IIndicatorValue RsiValue => this[TypedIndicator.Rsi];
 	public decimal? Rsi => RsiValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the stochastic component.
-	/// </summary>
 	public IIndicatorValue StochValue => this[TypedIndicator.Stoch];
-
-	/// <summary>
-	/// Gets the stochastic component.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? Stoch => StochValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the composite index line.
-	/// </summary>
 	public IIndicatorValue CompositeIndexLineValue => this[TypedIndicator.CompositeIndexLine];
-
-	/// <summary>
-	/// Gets the composite index line.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? CompositeIndexLine => CompositeIndexLineValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"Rsi={Rsi}, Stoch={Stoch}, CompositeIndexLine={CompositeIndexLine}";
 }

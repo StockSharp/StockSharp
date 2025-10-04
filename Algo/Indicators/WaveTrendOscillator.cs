@@ -9,8 +9,8 @@
 	Description = LocalizedStrings.WaveTrendOscillatorKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/wave_trend_oscillator.html")]
-[IndicatorOut(typeof(WaveTrendOscillatorValue))]
-public class WaveTrendOscillator : BaseComplexIndicator<WaveTrendOscillatorValue>
+[IndicatorOut(typeof(IWaveTrendOscillatorValue))]
+public class WaveTrendOscillator : BaseComplexIndicator<IWaveTrendOscillatorValue>
 {
 	private readonly ChannelAveragePriceOscillator _capo = new();
 	private readonly ExponentialMovingAverage _esa = new() { Length = 10 };
@@ -166,8 +166,8 @@ public class WaveTrendOscillator : BaseComplexIndicator<WaveTrendOscillatorValue
 	public override string ToString() => $"{base.ToString()} ESA={EsaPeriod} D={DPeriod} Avg={AveragePeriod}";
 
 	/// <inheritdoc />
-	protected override WaveTrendOscillatorValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IWaveTrendOscillatorValue CreateValue(DateTimeOffset time)
+		=> new WaveTrendOscillatorValue(this, time);
 }
 
 /// <summary>
@@ -207,35 +207,38 @@ public class WaveTrendLine : BaseIndicator
 /// <summary>
 /// <see cref="WaveTrendOscillator"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="WaveTrendOscillatorValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="WaveTrendOscillator"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class WaveTrendOscillatorValue(WaveTrendOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<WaveTrendOscillator>(indicator, time)
+public interface IWaveTrendOscillatorValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the first Wavetrend line value.
 	/// </summary>
-	public IIndicatorValue Wt1Value => this[TypedIndicator.Wt1];
+	IIndicatorValue Wt1Value { get; }
 
 	/// <summary>
 	/// Gets the first Wavetrend line value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Wt1 => Wt1Value.ToNullableDecimal(TypedIndicator.Source);
+	decimal? Wt1 { get; }
 
 	/// <summary>
 	/// Gets the second Wavetrend line value.
 	/// </summary>
-	public IIndicatorValue Wt2Value => this[TypedIndicator.Wt2];
+	IIndicatorValue Wt2Value { get; }
 
 	/// <summary>
 	/// Gets the second Wavetrend line value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? Wt2 { get; }
+}
+
+class WaveTrendOscillatorValue(WaveTrendOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<WaveTrendOscillator>(indicator, time), IWaveTrendOscillatorValue
+{
+	public IIndicatorValue Wt1Value => this[TypedIndicator.Wt1];
+	public decimal? Wt1 => Wt1Value.ToNullableDecimal(TypedIndicator.Source);
+
+	public IIndicatorValue Wt2Value => this[TypedIndicator.Wt2];
 	public decimal? Wt2 => Wt2Value.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"Wt1={Wt1}, Wt2={Wt2}";
 }

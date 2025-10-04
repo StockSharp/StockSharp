@@ -8,8 +8,8 @@
 	Name = LocalizedStrings.KSTKey,
 	Description = LocalizedStrings.KnowSureThingKey)]
 [Doc("topics/api/indicators/list_of_indicators/kst.html")]
-[IndicatorOut(typeof(KnowSureThingValue))]
-public class KnowSureThing : BaseComplexIndicator<KnowSureThingValue>
+[IndicatorOut(typeof(IKnowSureThingValue))]
+public class KnowSureThing : BaseComplexIndicator<IKnowSureThingValue>
 {
 	private readonly RateOfChange _roc1 = new() { Length = 10 };
 	private readonly RateOfChange _roc2 = new() { Length = 15 };
@@ -96,8 +96,8 @@ public class KnowSureThing : BaseComplexIndicator<KnowSureThingValue>
 	}
 
 	/// <inheritdoc />
-	protected override KnowSureThingValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IKnowSureThingValue CreateValue(DateTimeOffset time)
+		=> new KnowSureThingValue(this, time);
 }
 
 /// <summary>
@@ -119,35 +119,38 @@ public class KnowSureThingLine : BaseIndicator
 /// <summary>
 /// <see cref="KnowSureThing"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="KnowSureThingValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="KnowSureThing"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class KnowSureThingValue(KnowSureThing indicator, DateTimeOffset time) : ComplexIndicatorValue<KnowSureThing>(indicator, time)
+public interface IKnowSureThingValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the KST line value.
 	/// </summary>
-	public IIndicatorValue KstLineValue => this[TypedIndicator.KstLine];
+	IIndicatorValue KstLineValue { get; }
 
 	/// <summary>
 	/// Gets the KST line value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? KstLine => KstLineValue.ToNullableDecimal(TypedIndicator.Source);
+	decimal? KstLine { get; }
 
 	/// <summary>
 	/// Gets the signal line value.
 	/// </summary>
-	public IIndicatorValue SignalValue => this[TypedIndicator.Signal];
+	IIndicatorValue SignalValue { get; }
 
 	/// <summary>
 	/// Gets the signal line value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? Signal { get; }
+}
+
+class KnowSureThingValue(KnowSureThing indicator, DateTimeOffset time) : ComplexIndicatorValue<KnowSureThing>(indicator, time), IKnowSureThingValue
+{
+	public IIndicatorValue KstLineValue => this[TypedIndicator.KstLine];
+	public decimal? KstLine => KstLineValue.ToNullableDecimal(TypedIndicator.Source);
+
+	public IIndicatorValue SignalValue => this[TypedIndicator.Signal];
 	public decimal? Signal => SignalValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"KstLine={KstLine}, Signal={Signal}";
 }

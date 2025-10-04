@@ -8,8 +8,8 @@
 	Name = LocalizedStrings.CMKey,
 	Description = LocalizedStrings.CompositeMomentumKey)]
 [Doc("topics/api/indicators/list_of_indicators/composite_momentum.html")]
-[IndicatorOut(typeof(CompositeMomentumValue))]
-public class CompositeMomentum : BaseComplexIndicator<CompositeMomentumValue>
+[IndicatorOut(typeof(ICompositeMomentumValue))]
+public class CompositeMomentum : BaseComplexIndicator<ICompositeMomentumValue>
 {
 	private readonly RateOfChange _roc1;
 	private readonly RateOfChange _roc2;
@@ -124,8 +124,8 @@ public class CompositeMomentum : BaseComplexIndicator<CompositeMomentumValue>
 	}
 
 	/// <inheritdoc />
-	protected override CompositeMomentumValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override ICompositeMomentumValue CreateValue(DateTimeOffset time)
+		=> new CompositeMomentumValue(this, time);
 }
 
 /// <summary>
@@ -147,35 +147,35 @@ public class CompositeMomentumLine : BaseIndicator
 /// <summary>
 /// <see cref="CompositeMomentum"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="CompositeMomentumValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="CompositeMomentum"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class CompositeMomentumValue(CompositeMomentum indicator, DateTimeOffset time) : ComplexIndicatorValue<CompositeMomentum>(indicator, time)
+public interface ICompositeMomentumValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the SMA value.
 	/// </summary>
-	public IIndicatorValue SmaValue => this[TypedIndicator.Sma];
-
+	IIndicatorValue SmaValue { get; }
 	/// <summary>
 	/// Gets the SMA value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Sma => SmaValue.ToNullableDecimal(TypedIndicator.Source);
-
+	decimal? Sma { get; }
 	/// <summary>
 	/// Gets the composite momentum line.
 	/// </summary>
-	public IIndicatorValue CompositeLineValue => this[TypedIndicator.CompositeLine];
-
+	IIndicatorValue CompositeLineValue { get; }
 	/// <summary>
 	/// Gets the composite momentum line.
 	/// </summary>
 	[Browsable(false)]
+	decimal? CompositeLine { get; }
+}
+
+class CompositeMomentumValue(CompositeMomentum indicator, DateTimeOffset time) : ComplexIndicatorValue<CompositeMomentum>(indicator, time), ICompositeMomentumValue
+{
+	public IIndicatorValue SmaValue => this[TypedIndicator.Sma];
+	public decimal? Sma => SmaValue.ToNullableDecimal(TypedIndicator.Source);
+
+	public IIndicatorValue CompositeLineValue => this[TypedIndicator.CompositeLine];
 	public decimal? CompositeLine => CompositeLineValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"Sma={Sma}, CompositeLine={CompositeLine}";
 }

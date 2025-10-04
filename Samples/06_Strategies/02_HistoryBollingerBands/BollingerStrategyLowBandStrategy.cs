@@ -93,7 +93,7 @@ namespace StockSharp.Samples.Strategies.HistoryBollingerBands
 			if (!IsFormedAndOnlineAndAllowTrading())
 				return;
 
-			var typed = (BollingerBandsValue)bollingerValue;
+			var typed = (IBollingerBandsValue)bollingerValue;
 
 			// Trading logic:
 			// Sell when price touches the lower band (only when no position)

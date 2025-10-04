@@ -9,8 +9,8 @@
 	Description = LocalizedStrings.PercentageVolumeOscillatorKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/percentage_volume_oscillator.html")]
-[IndicatorOut(typeof(PercentageVolumeOscillatorValue))]
-public class PercentageVolumeOscillator : BaseComplexIndicator<PercentageVolumeOscillatorValue>
+[IndicatorOut(typeof(IPercentageVolumeOscillatorValue))]
+public class PercentageVolumeOscillator : BaseComplexIndicator<IPercentageVolumeOscillatorValue>
 {
 	/// <summary>
 	/// Short EMA.
@@ -128,42 +128,45 @@ public class PercentageVolumeOscillator : BaseComplexIndicator<PercentageVolumeO
 	public override string ToString() => base.ToString() + $" S={ShortPeriod},L={LongPeriod}";
 
 	/// <inheritdoc />
-	protected override PercentageVolumeOscillatorValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IPercentageVolumeOscillatorValue CreateValue(DateTimeOffset time)
+		=> new PercentageVolumeOscillatorValue(this, time);
 }
 
 /// <summary>
 /// <see cref="PercentageVolumeOscillator"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="PercentageVolumeOscillatorValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="PercentageVolumeOscillator"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class PercentageVolumeOscillatorValue(PercentageVolumeOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<PercentageVolumeOscillator>(indicator, time)
+public interface IPercentageVolumeOscillatorValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the short EMA value.
 	/// </summary>
-	public IIndicatorValue ShortEmaValue => this[TypedIndicator.ShortEma];
+	IIndicatorValue ShortEmaValue { get; }
 
 	/// <summary>
 	/// Gets the short EMA value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? ShortEma => ShortEmaValue.ToNullableDecimal(TypedIndicator.Source);
+	decimal? ShortEma { get; }
 
 	/// <summary>
 	/// Gets the long EMA value.
 	/// </summary>
-	public IIndicatorValue LongEmaValue => this[TypedIndicator.LongEma];
+	IIndicatorValue LongEmaValue { get; }
 
 	/// <summary>
 	/// Gets the long EMA value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? LongEma { get; }
+}
+
+class PercentageVolumeOscillatorValue(PercentageVolumeOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<PercentageVolumeOscillator>(indicator, time), IPercentageVolumeOscillatorValue
+{
+	public IIndicatorValue ShortEmaValue => this[TypedIndicator.ShortEma];
+	public decimal? ShortEma => ShortEmaValue.ToNullableDecimal(TypedIndicator.Source);
+
+	public IIndicatorValue LongEmaValue => this[TypedIndicator.LongEma];
 	public decimal? LongEma => LongEmaValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"ShortEma={ShortEma}, LongEma={LongEma}";
 }

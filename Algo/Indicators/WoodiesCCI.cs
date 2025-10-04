@@ -9,8 +9,8 @@
 	Description = LocalizedStrings.WoodiesCCIKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/woodies_cci.html")]
-[IndicatorOut(typeof(WoodiesCCIValue))]
-public class WoodiesCCI : BaseComplexIndicator<WoodiesCCIValue>
+[IndicatorOut(typeof(IWoodiesCCIValue))]
+public class WoodiesCCI : BaseComplexIndicator<IWoodiesCCIValue>
 {
 	/// <summary>
 	/// CCI line.
@@ -73,42 +73,45 @@ public class WoodiesCCI : BaseComplexIndicator<WoodiesCCIValue>
 	public override string ToString() => base.ToString() + $" CCI({Length}), SMA({SMALength})";
 
 	/// <inheritdoc />
-	protected override WoodiesCCIValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IWoodiesCCIValue CreateValue(DateTimeOffset time)
+		=> new WoodiesCCIValue(this, time);
 }
 
 /// <summary>
 /// <see cref="WoodiesCCI"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="WoodiesCCIValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="WoodiesCCI"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class WoodiesCCIValue(WoodiesCCI indicator, DateTimeOffset time) : ComplexIndicatorValue<WoodiesCCI>(indicator, time)
+public interface IWoodiesCCIValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the CCI value.
 	/// </summary>
-	public IIndicatorValue CciValue => this[TypedIndicator.Cci];
+	IIndicatorValue CciValue { get; }
 
 	/// <summary>
 	/// Gets the CCI value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Cci => CciValue.ToNullableDecimal(TypedIndicator.Source);
+	decimal? Cci { get; }
 
 	/// <summary>
 	/// Gets the SMA value.
 	/// </summary>
-	public IIndicatorValue SmaValue => this[TypedIndicator.Sma];
+	IIndicatorValue SmaValue { get; }
 
 	/// <summary>
 	/// Gets the SMA value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? Sma { get; }
+}
+
+class WoodiesCCIValue(WoodiesCCI indicator, DateTimeOffset time) : ComplexIndicatorValue<WoodiesCCI>(indicator, time), IWoodiesCCIValue
+{
+	public IIndicatorValue CciValue => this[TypedIndicator.Cci];
+	public decimal? Cci => CciValue.ToNullableDecimal(TypedIndicator.Source);
+
+	public IIndicatorValue SmaValue => this[TypedIndicator.Sma];
 	public decimal? Sma => SmaValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"Cci={Cci}, Sma={Sma}";
 }

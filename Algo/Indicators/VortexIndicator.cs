@@ -9,8 +9,8 @@
 	Description = LocalizedStrings.VortexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/vortex_indicator.html")]
-[IndicatorOut(typeof(VortexIndicatorValue))]
-public class VortexIndicator : BaseComplexIndicator<VortexIndicatorValue>
+[IndicatorOut(typeof(IVortexIndicatorValue))]
+public class VortexIndicator : BaseComplexIndicator<IVortexIndicatorValue>
 {
 	private readonly VortexPart _plusVi;
 	private readonly VortexPart _minusVi;
@@ -96,8 +96,8 @@ public class VortexIndicator : BaseComplexIndicator<VortexIndicatorValue>
 	public override string ToString() => base.ToString() + " " + Length;
 
 	/// <inheritdoc />
-	protected override VortexIndicatorValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IVortexIndicatorValue CreateValue(DateTimeOffset time)
+		=> new VortexIndicatorValue(this, time);
 }
 
 /// <summary>
@@ -195,35 +195,38 @@ public class VortexPart : LengthIndicator<decimal>
 /// <summary>
 /// <see cref="VortexIndicator"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="VortexIndicatorValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="VortexIndicator"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class VortexIndicatorValue(VortexIndicator indicator, DateTimeOffset time) : ComplexIndicatorValue<VortexIndicator>(indicator, time)
+public interface IVortexIndicatorValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the <see cref="VortexIndicator.PlusVi"/> value.
 	/// </summary>
-	public IIndicatorValue PlusViValue => this[TypedIndicator.PlusVi];
+	IIndicatorValue PlusViValue { get; }
 
 	/// <summary>
 	/// Gets the <see cref="VortexIndicator.PlusVi"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? PlusVi => PlusViValue.ToNullableDecimal(TypedIndicator.Source);
+	decimal? PlusVi { get; }
 
 	/// <summary>
 	/// Gets the <see cref="VortexIndicator.MinusVi"/> value.
 	/// </summary>
-	public IIndicatorValue MinusViValue => this[TypedIndicator.MinusVi];
+	IIndicatorValue MinusViValue { get; }
 
 	/// <summary>
 	/// Gets the <see cref="VortexIndicator.MinusVi"/> value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? MinusVi { get; }
+}
+
+class VortexIndicatorValue(VortexIndicator indicator, DateTimeOffset time) : ComplexIndicatorValue<VortexIndicator>(indicator, time), IVortexIndicatorValue
+{
+	public IIndicatorValue PlusViValue => this[TypedIndicator.PlusVi];
+	public decimal? PlusVi => PlusViValue.ToNullableDecimal(TypedIndicator.Source);
+
+	public IIndicatorValue MinusViValue => this[TypedIndicator.MinusVi];
 	public decimal? MinusVi => MinusViValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"PlusVi={PlusVi}, MinusVi={MinusVi}";
 }

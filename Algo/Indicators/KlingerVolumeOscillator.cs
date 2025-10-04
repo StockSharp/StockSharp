@@ -9,8 +9,8 @@
 	Description = LocalizedStrings.KlingerVolumeOscillatorKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/klinger_volume_oscillator.html")]
-[IndicatorOut(typeof(KlingerVolumeOscillatorValue))]
-public class KlingerVolumeOscillator : BaseComplexIndicator<KlingerVolumeOscillatorValue>
+[IndicatorOut(typeof(IKlingerVolumeOscillatorValue))]
+public class KlingerVolumeOscillator : BaseComplexIndicator<IKlingerVolumeOscillatorValue>
 {
 	/// <summary>
 	/// Short EMA.
@@ -118,53 +118,59 @@ public class KlingerVolumeOscillator : BaseComplexIndicator<KlingerVolumeOscilla
 	public override string ToString() => base.ToString() + $" S={ShortPeriod},L={LongPeriod}";
 
 	/// <inheritdoc />
-	protected override KlingerVolumeOscillatorValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IKlingerVolumeOscillatorValue CreateValue(DateTimeOffset time)
+		=> new KlingerVolumeOscillatorValue(this, time);
 }
 
 /// <summary>
 /// <see cref="KlingerVolumeOscillator"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="KlingerVolumeOscillatorValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="KlingerVolumeOscillator"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class KlingerVolumeOscillatorValue(KlingerVolumeOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<KlingerVolumeOscillator>(indicator, time)
+public interface IKlingerVolumeOscillatorValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the short EMA value.
 	/// </summary>
-	public IIndicatorValue ShortEmaValue => this[TypedIndicator.ShortEma];
+	IIndicatorValue ShortEmaValue { get; }
 
 	/// <summary>
 	/// Gets the short EMA value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? ShortEma { get; }
+
+	/// <summary>
+	/// Gets the long EMA value.
+	/// </summary>
+	IIndicatorValue LongEmaValue { get; }
+
+	/// <summary>
+	/// Gets the long EMA value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? LongEma { get; }
+
+	/// <summary>
+	/// Gets the oscillator value.
+	/// </summary>
+	IIndicatorValue OscillatorValue { get; }
+
+	/// <summary>
+	/// Gets the oscillator value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? Oscillator { get; }
+}
+
+class KlingerVolumeOscillatorValue(KlingerVolumeOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<KlingerVolumeOscillator>(indicator, time), IKlingerVolumeOscillatorValue
+{
+	public IIndicatorValue ShortEmaValue => this[TypedIndicator.ShortEma];
 	public decimal? ShortEma => ShortEmaValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the long EMA value.
-	/// </summary>
 	public IIndicatorValue LongEmaValue => this[TypedIndicator.LongEma];
-
-	/// <summary>
-	/// Gets the long EMA value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? LongEma => LongEmaValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the oscillator value.
-	/// </summary>
 	public IIndicatorValue OscillatorValue => this[TypedIndicator];
-
-	/// <summary>
-	/// Gets the oscillator value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? Oscillator => OscillatorValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"ShortEma={ShortEma}, LongEma={LongEma}, Oscillator={Oscillator}";
 }

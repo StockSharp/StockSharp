@@ -622,17 +622,6 @@ public class IndicatorTests
 			docAttr.AssertNotNull($"Indicator {indicatorType.Name} missing [Doc] attribute.");
 		}
 	}
-
-	[TestMethod]
-	public void ComplexIndicatorValues()
-	{
-		foreach (var type in GetIndicatorTypes().Where(t => t.IsComplex))
-		{
-			var genArg = type.OutputValue.GetGenericType(typeof(ComplexIndicatorValue<>)).GetGenericArguments().Single();
-
-			genArg.AssertEqual(type.Indicator);
-		}
-	}
 }
 
 static class IndicatorDataRunner

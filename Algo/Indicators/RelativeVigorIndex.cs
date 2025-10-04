@@ -11,8 +11,8 @@
 	Name = LocalizedStrings.RVIKey,
 	Description = LocalizedStrings.RelativeVigorIndexKey)]
 [Doc("topics/api/indicators/list_of_indicators/rvi.html")]
-[IndicatorOut(typeof(RelativeVigorIndexValue))]
-public class RelativeVigorIndex : BaseComplexIndicator<RelativeVigorIndexValue>
+[IndicatorOut(typeof(IRelativeVigorIndexValue))]
+public class RelativeVigorIndex : BaseComplexIndicator<IRelativeVigorIndexValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RelativeVigorIndex"/>.
@@ -65,42 +65,46 @@ public class RelativeVigorIndex : BaseComplexIndicator<RelativeVigorIndexValue>
 	public override string ToString() => base.ToString() + $" A={Average.Length} S={Signal.Length}";
 
 	/// <inheritdoc />
-	protected override RelativeVigorIndexValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IRelativeVigorIndexValue CreateValue(DateTimeOffset time)
+		=> new RelativeVigorIndexValue(this, time);
 }
 
 /// <summary>
 /// <see cref="RelativeVigorIndex"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="RelativeVigorIndexValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="RelativeVigorIndex"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class RelativeVigorIndexValue(RelativeVigorIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<RelativeVigorIndex>(indicator, time)
+public interface IRelativeVigorIndexValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the <see cref="RelativeVigorIndex.Average"/> value.
 	/// </summary>
-	public IIndicatorValue AverageValue => this[TypedIndicator.Average];
+	IIndicatorValue AverageValue { get; }
 
 	/// <summary>
 	/// Gets the <see cref="RelativeVigorIndex.Average"/> value.
 	/// </summary>
 	[Browsable(false)]
-	public decimal? Average => AverageValue.ToNullableDecimal(TypedIndicator.Source);
+	decimal? Average { get; }
 
 	/// <summary>
 	/// Gets the <see cref="RelativeVigorIndex.Signal"/> value.
 	/// </summary>
-	public IIndicatorValue SignalValue => this[TypedIndicator.Signal];
+	IIndicatorValue SignalValue { get; }
 
 	/// <summary>
 	/// Gets the <see cref="RelativeVigorIndex.Signal"/> value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? Signal { get; }
+}
+
+class RelativeVigorIndexValue(RelativeVigorIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<RelativeVigorIndex>(indicator, time), IRelativeVigorIndexValue
+{
+	public IIndicatorValue AverageValue => this[TypedIndicator.Average];
+	public decimal? Average => AverageValue.ToNullableDecimal(TypedIndicator.Source);
+
+	public IIndicatorValue SignalValue => this[TypedIndicator.Signal];
 	public decimal? Signal => SignalValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
+
 	public override string ToString() => $"Average={Average}, Signal={Signal}";
 }

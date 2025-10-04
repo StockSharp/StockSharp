@@ -11,8 +11,8 @@
 	Name = LocalizedStrings.IchimokuKey,
 	Description = LocalizedStrings.IchimokuKey)]
 [Doc("topics/api/indicators/list_of_indicators/ichimoku.html")]
-[IndicatorOut(typeof(IchimokuValue))]
-public class Ichimoku : BaseComplexIndicator<IchimokuValue>
+[IndicatorOut(typeof(IIchimokuValue))]
+public class Ichimoku : BaseComplexIndicator<IIchimokuValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Ichimoku"/>.
@@ -95,73 +95,86 @@ public class Ichimoku : BaseComplexIndicator<IchimokuValue>
 	public override string ToString() => base.ToString() + $" T={Tenkan.Length} K={Kijun.Length} A={SenkouA.Length} B={SenkouB.Length} C={Chinkou.Length}";
 
 	/// <inheritdoc />
-	protected override IchimokuValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IIchimokuValue CreateValue(DateTimeOffset time)
+		=> new IchimokuValue(this, time);
 }
 
 /// <summary>
 /// <see cref="Ichimoku"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="IchimokuValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="Ichimoku"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class IchimokuValue(Ichimoku indicator, DateTimeOffset time) : ComplexIndicatorValue<Ichimoku>(indicator, time)
+public interface IIchimokuValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.Tenkan"/> value.
 	/// </summary>
-	public IIndicatorValue TenkanValue => this[TypedIndicator.Tenkan];
+	IIndicatorValue TenkanValue { get; }
 
 	/// <summary>
 	/// Gets the <see cref="Ichimoku.Tenkan"/> value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? Tenkan { get; }
+
+	/// <summary>
+	/// Gets the <see cref="Ichimoku.Kijun"/> value.
+	/// </summary>
+	IIndicatorValue KijunValue { get; }
+
+	/// <summary>
+	/// Gets the <see cref="Ichimoku.Kijun"/> value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? Kijun { get; }
+
+	/// <summary>
+	/// Gets the <see cref="Ichimoku.SenkouA"/> value.
+	/// </summary>
+	IIndicatorValue SenkouAValue { get; }
+
+	/// <summary>
+	/// Gets the <see cref="Ichimoku.SenkouA"/> value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? SenkouA { get; }
+
+	/// <summary>
+	/// Gets the <see cref="Ichimoku.SenkouB"/> value.
+	/// </summary>
+	IIndicatorValue SenkouBValue { get; }
+
+	/// <summary>
+	/// Gets the <see cref="Ichimoku.SenkouB"/> value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? SenkouB { get; }
+
+	/// <summary>
+	/// Gets the <see cref="Ichimoku.Chinkou"/> value.
+	/// </summary>
+	IIndicatorValue ChinkouValue { get; }
+
+	/// <summary>
+	/// Gets the <see cref="Ichimoku.Chinkou"/> value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? Chinkou { get; }
+}
+
+class IchimokuValue(Ichimoku indicator, DateTimeOffset time) : ComplexIndicatorValue<Ichimoku>(indicator, time), IIchimokuValue
+{
+	public IIndicatorValue TenkanValue => this[TypedIndicator.Tenkan];
 	public decimal? Tenkan => TenkanValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the <see cref="Ichimoku.Kijun"/> value.
-	/// </summary>
 	public IIndicatorValue KijunValue => this[TypedIndicator.Kijun];
-
-	/// <summary>
-	/// Gets the <see cref="Ichimoku.Kijun"/> value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? Kijun => KijunValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the <see cref="Ichimoku.SenkouA"/> value.
-	/// </summary>
 	public IIndicatorValue SenkouAValue => this[TypedIndicator.SenkouA];
-
-	/// <summary>
-	/// Gets the <see cref="Ichimoku.SenkouA"/> value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? SenkouA => SenkouAValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the <see cref="Ichimoku.SenkouB"/> value.
-	/// </summary>
 	public IIndicatorValue SenkouBValue => this[TypedIndicator.SenkouB];
-
-	/// <summary>
-	/// Gets the <see cref="Ichimoku.SenkouB"/> value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? SenkouB => SenkouBValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the <see cref="Ichimoku.Chinkou"/> value.
-	/// </summary>
 	public IIndicatorValue ChinkouValue => this[TypedIndicator.Chinkou];
-
-	/// <summary>
-	/// Gets the <see cref="Ichimoku.Chinkou"/> value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? Chinkou => ChinkouValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />

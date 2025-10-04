@@ -8,8 +8,8 @@
 	Name = LocalizedStrings.DCKey,
 	Description = LocalizedStrings.DonchianChannelsKey)]
 [Doc("topics/api/indicators/list_of_indicators/donchian_channels.html")]
-[IndicatorOut(typeof(DonchianChannelsValue))]
-public class DonchianChannels : BaseComplexIndicator<DonchianChannelsValue>
+[IndicatorOut(typeof(IDonchianChannelsValue))]
+public class DonchianChannels : BaseComplexIndicator<IDonchianChannelsValue>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="DonchianChannels"/>.
@@ -79,8 +79,8 @@ public class DonchianChannels : BaseComplexIndicator<DonchianChannelsValue>
 	public override string ToString() => base.ToString() + $" {Length}";
 
 	/// <inheritdoc />
-	protected override DonchianChannelsValue CreateValue(DateTimeOffset time)
-		=> new(this, time);
+	protected override IDonchianChannelsValue CreateValue(DateTimeOffset time)
+		=> new DonchianChannelsValue(this, time);
 }
 
 /// <summary>
@@ -126,46 +126,52 @@ public class DonchianMiddle : BaseIndicator
 /// <summary>
 /// <see cref="DonchianChannels"/> indicator value.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="DonchianChannelsValue"/>.
-/// </remarks>
-/// <param name="indicator"><see cref="DonchianChannels"/></param>
-/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public class DonchianChannelsValue(DonchianChannels indicator, DateTimeOffset time) : ComplexIndicatorValue<DonchianChannels>(indicator, time)
+public interface IDonchianChannelsValue : IComplexIndicatorValue
 {
 	/// <summary>
 	/// Gets the <see cref="DonchianChannels.UpperBand"/> value.
 	/// </summary>
-	public IIndicatorValue UpperBandValue => this[TypedIndicator.UpperBand];
+	IIndicatorValue UpperBandValue { get; }
 
 	/// <summary>
 	/// Gets the <see cref="DonchianChannels.UpperBand"/> value.
 	/// </summary>
 	[Browsable(false)]
+	decimal? UpperBand { get; }
+
+	/// <summary>
+	/// Gets the <see cref="DonchianChannels.LowerBand"/> value.
+	/// </summary>
+	IIndicatorValue LowerBandValue { get; }
+
+	/// <summary>
+	/// Gets the <see cref="DonchianChannels.LowerBand"/> value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? LowerBand { get; }
+
+	/// <summary>
+	/// Gets the <see cref="DonchianChannels.Middle"/> value.
+	/// </summary>
+	IIndicatorValue MiddleValue { get; }
+
+	/// <summary>
+	/// Gets the <see cref="DonchianChannels.Middle"/> value.
+	/// </summary>
+	[Browsable(false)]
+	decimal? Middle { get; }
+}
+
+class DonchianChannelsValue(DonchianChannels indicator, DateTimeOffset time) : ComplexIndicatorValue<DonchianChannels>(indicator, time), IDonchianChannelsValue
+{
+	public IIndicatorValue UpperBandValue => this[TypedIndicator.UpperBand];
 	public decimal? UpperBand => UpperBandValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the <see cref="DonchianChannels.LowerBand"/> value.
-	/// </summary>
 	public IIndicatorValue LowerBandValue => this[TypedIndicator.LowerBand];
-
-	/// <summary>
-	/// Gets the <see cref="DonchianChannels.LowerBand"/> value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? LowerBand => LowerBandValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <summary>
-	/// Gets the <see cref="DonchianChannels.Middle"/> value.
-	/// </summary>
 	public IIndicatorValue MiddleValue => this[TypedIndicator.Middle];
-
-	/// <summary>
-	/// Gets the <see cref="DonchianChannels.Middle"/> value.
-	/// </summary>
-	[Browsable(false)]
 	public decimal? Middle => MiddleValue.ToNullableDecimal(TypedIndicator.Source);
 
-	/// <inheritdoc />
 	public override string ToString() => $"UpperBand={UpperBand}, LowerBand={LowerBand}, Middle={Middle}";
 }
