@@ -18,12 +18,22 @@ namespace StockSharp.Samples.Testing.History
 
 		public SmaStrategy()
         {
-			_longSma = Param(nameof(LongSma), 80);
-			_shortSma = Param(nameof(ShortSma), 30);
+			_longSma = Param(nameof(LongSma), 80)
+				.SetCanOptimize(true)
+				.SetOptimize(50, 100, 5);
+
+			_shortSma = Param(nameof(ShortSma), 30)
+				.SetCanOptimize(true)
+				.SetOptimize(20, 40, 1);
+
 			_takeValue = Param(nameof(TakeValue), new Unit(0, UnitTypes.Absolute));
 			_stopValue = Param(nameof(StopValue), new Unit(2, UnitTypes.Percent));
 			_candleType = Param(nameof(CandleType), TimeSpan.FromMinutes(1).TimeFrame()).SetRequired();
-			_candleTimeFrame = Param<TimeSpan?>(nameof(CandleTimeFrame));
+
+			_candleTimeFrame = Param<TimeSpan?>(nameof(CandleTimeFrame))
+				.SetCanOptimize(true)
+				.SetOptimize(TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(15), TimeSpan.FromMinutes(5));
+
 			_buildFrom = Param<DataType>(nameof(BuildFrom));
 			_buildField = Param<Level1Fields?>(nameof(BuildField));
 		}

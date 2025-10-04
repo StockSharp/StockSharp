@@ -539,26 +539,7 @@ public class IndicatorTests
 		var time = new DateTimeOffset(2000, 1, 1, 0, 0, 0, TimeSpan.Zero);
 		var tf = TimeSpan.FromDays(1);
 		var secId = Helper.CreateSecurity().ToSecurityId();
-
-		var candles = Do.Invariant(() => File.ReadAllLines(Path.Combine(Helper.ResFolder, "ohlcv.txt")).Select(line =>
-		{
-			var parts = line.SplitByComma().Select(p => p.To<decimal>()).ToArray();
-
-			return new TimeFrameCandleMessage
-			{
-				TypedArg		= tf,
-				SecurityId		= secId,
-				
-				OpenTime		= time,
-				CloseTime		= time += tf,
-
-				OpenPrice		= parts[0],
-				HighPrice		= parts[1],
-				LowPrice		= parts[2],
-				ClosePrice		= parts[3],
-				TotalVolume		= parts[4],
-			};
-		}).ToArray());
+		var candles = secId.LoadCandles(time, tf);
 
 		foreach (var type in GetIndicatorTypes())
 		{

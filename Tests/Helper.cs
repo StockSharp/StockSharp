@@ -1,5 +1,7 @@
 ﻿namespace StockSharp.Tests;
 
+using System.Text;
+
 using Ecng.Reflection;
 
 using StockSharp.Algo.Storages.Csv;
@@ -1408,4 +1410,41 @@ static class Helper
 		=> [.. type
 			.GetProperties(BindingFlags.Instance | BindingFlags.Public)
 			.Where(p => p.IsModifiable())];
+
+	public static TimeFrameCandleMessage[] LoadCandles(this SecurityId secId, DateTimeOffset time, TimeSpan tf)
+	{
+		var path = Path.Combine(ResFolder, "ohlcv.txt");
+		using var reader = new StreamReader(path, Encoding.UTF8);
+		var csv = new FastCsvReader(reader, StringHelper.RN) { ColumnSeparator = ',' };
+
+		var list = new List<TimeFrameCandleMessage>();
+		var t = time;
+
+		while (csv.NextLine())
+		{
+			var open = csv.ReadDecimal();
+			var high = csv.ReadDecimal();
+			var low = csv.ReadDecimal();
+			var close = csv.ReadDecimal();
+			var volume = csv.ReadDecimal();
+
+			list.Add(new()
+			{
+				TypedArg		= tf,
+				SecurityId		= secId,
+				OpenTime		= t,
+				CloseTime		= t + tf,
+				OpenPrice		= open,
+				HighPrice		= high,
+				LowPrice		= low,
+				ClosePrice		= close,
+				TotalVolume		= volume,
+				State			= CandleStates.Finished,
+			});
+
+			t += tf;
+		}
+
+		return [.. list];
+	}
 }
