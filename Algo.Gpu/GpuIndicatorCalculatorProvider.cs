@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Gpu;
 
-using System.Reflection;
-
 using Ecng.Reflection;
 
 /// <summary>
@@ -22,12 +20,10 @@ public class GpuIndicatorCalculatorProvider
 	public void Init()
 	{
 		_map.Clear();
-		ScanAssembly(typeof(GpuIndicatorCalculatorProvider).Assembly);
-	}
 
-	private void ScanAssembly(Assembly asm)
-	{
-		foreach (var t in asm.FindImplementations<IGpuIndicatorCalculator>(extraFilter: t => t.GetConstructor(Type.EmptyTypes) != null))
+		var asm = typeof(GpuIndicatorCalculatorProvider).Assembly;
+
+		foreach (var t in asm.FindImplementations<IGpuIndicatorCalculator>())
 		{
 			Type indicatorType = null;
 			var baseType = t;
@@ -47,7 +43,7 @@ public class GpuIndicatorCalculatorProvider
 			if (indicatorType is null)
 				continue;
 
-			_map[indicatorType] = t;
+			_map.Add(indicatorType, t);
 		}
 	}
 
@@ -64,7 +60,7 @@ public class GpuIndicatorCalculatorProvider
 		if (!typeof(IGpuIndicatorCalculator).IsAssignableFrom(calculatorType))
 			throw new ArgumentException($"{calculatorType} must implement {nameof(IGpuIndicatorCalculator)}.", nameof(calculatorType));
 
-		_map[indicatorType] = calculatorType;
+		_map.Add(indicatorType, calculatorType);
 	}
 
 	/// <summary>
@@ -86,12 +82,13 @@ public class GpuIndicatorCalculatorProvider
 		=> _map.Remove(indicatorType);
 
 	/// <summary>
-	/// Unregister mapping by indicator type (generic).
+	/// Unregister mapping by indicator type.
 	/// </summary>
 	/// <typeparam name="TIndicator">Indicator type to remove mapping for.</typeparam>
 	/// <returns><see langword="true"/> if removed; otherwise <see langword="false"/>.</returns>
 	public bool Unregister<TIndicator>()
-		where TIndicator : IIndicator => _map.Remove(typeof(TIndicator));
+		where TIndicator : IIndicator
+		=> Unregister(typeof(TIndicator));
 
 	/// <summary>
 	/// Remove all mappings.
@@ -112,13 +109,8 @@ public class GpuIndicatorCalculatorProvider
 	/// </summary>
 	/// <param name="context">ILGPU context.</param>
 	/// <param name="accelerator">ILGPU accelerator.</param>
-	/// <param name="indicatorType">Indicator type.</param>
+	/// <param name="calculatorType"><see cref="IGpuIndicatorCalculator"/></param>
 	/// <returns>Instance implementing <see cref="IGpuIndicatorCalculator"/> or <see langword="null"/> if not found.</returns>
-	public IGpuIndicatorCalculator Create(Context context, Accelerator accelerator, Type indicatorType)
-	{
-		if (!_map.TryGetValue(indicatorType, out var calcType))
-			return null;
-
-		return calcType.CreateInstance<IGpuIndicatorCalculator>(context, accelerator);
-	}
+	public IGpuIndicatorCalculator Create(Context context, Accelerator accelerator, Type calculatorType)
+		=> calculatorType.CreateInstance<IGpuIndicatorCalculator>(context, accelerator);
 }

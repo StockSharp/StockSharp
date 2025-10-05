@@ -5,9 +5,9 @@ using System.Text;
 
 using Ecng.Reflection;
 
-using StockSharp.Algo.Candles;
 using StockSharp.Algo.Candles.Compression;
 using StockSharp.Algo.Gpu;
+using StockSharp.Algo.Gpu.Indicators;
 
 [TestClass]
 public class IndicatorTests
@@ -704,7 +704,7 @@ public class IndicatorTests
 	}
 
 	[TestMethod]
-	public void GPU()
+	public void GpuIndicators()
 	{
 		static ICandleMessage[][] loadCandles()
 		{
@@ -761,6 +761,21 @@ public class IndicatorTests
 			return res;
 		}
 
+		static IGpuIndicatorParams[] randomIndicators(IIndicator[] indicators, Type paramType)
+		{
+			var parameters = new IGpuIndicatorParams[indicators.Length];
+
+			for (var i = 0; i < indicators.Length; i++)
+			{
+				var prm = paramType.CreateInstance<IGpuIndicatorParams>();
+				prm.FromIndicator(indicators[i]);
+
+				parameters[i] = prm;
+			}
+
+			return parameters;
+		}
+
 		var msgSeries = loadCandles(); // multiple TF series
 		var gpuSeries = msgSeries
 			.Select(series => series.Select(c => new GpuCandle(c.OpenTime, c.OpenPrice, c.HighPrice, c.LowPrice, c.ClosePrice, c.TotalVolume)).ToArray())
@@ -774,33 +789,112 @@ public class IndicatorTests
 		using (ctx)
 		using (acc)
 		{
-			foreach (var (indicatorType, _) in provider.All)
+			foreach (var (indicatorType, calculatorType) in provider.All)
 			{
-				var indicator = indicatorType.CreateInstance<IIndicator>();
-				var calculator = provider.Create(ctx, acc, indicatorType);
+				var calculator = provider.Create(ctx, acc, calculatorType);
 				if (calculator is null)
 					continue;
 
-				// build params dynamically from indicator
-				var paramType = calculator.ParameterType;
+				// build N parameter variations from randomized indicators
+				const int variations = 10;
+				var indicators = new IIndicator[variations];
 
-				var param = paramType.CreateInstance<IGpuIndicatorParams>();
-				param.FromIndicator(indicator);
+				for (var i = 0; i < indicators.Length; i++)
+				{
+					var indicator = indicatorType.CreateInstance<IIndicator>();
+					// Randomize indicator settings using existing helper
+					SetRandom(indicator, () => { });
 
-				var parameters = new IGpuIndicatorParams[] { param };
+					indicators[i] = indicator;
+				}
 
-				// calculate via interface for all TF series
+				var parameters = randomIndicators(indicators, calculator.ParameterType);
+
+				// calculate via interface for all TF series and all params
 				var gpuAll = calculator.Calculate(gpuSeries, parameters); // [series][param][bar]
 
 				for (var s = 0; s < msgSeries.Length; s++)
 				{
-					var gpuOut = gpuAll[s][0];
-					var cpu = runCpu(indicator, msgSeries[s]);
+					for (var p = 0; p < indicators.Length; p++)
+					{
+						var gpuOut = gpuAll[s][p];
 
-					CompareValues(gpuOut.Select(r => r.ToValue(indicator)).ToArray(), cpu);
+						// fresh indicator instance for CPU with same settings
+						var indCpu = indicators[p].TypedClone();
+						var cpu = runCpu(indCpu, msgSeries[s]);
+
+						CompareValues(gpuOut.Select(r => r.ToValue(indCpu)).ToArray(), cpu);
+					}
 				}
 			}
 		}
+	}
+
+	[TestMethod]
+	public void GpuProviderInit()
+	{
+		var provider = new GpuIndicatorCalculatorProvider();
+		provider.Init();
+
+		// Must discover at least the built-in GPU calculators
+		provider.All.ContainsKey(typeof(SimpleMovingAverage)).AssertTrue("SMA calculator not discovered");
+		provider.All.ContainsKey(typeof(AverageDirectionalIndex)).AssertTrue("ADX calculator not discovered");
+	}
+
+	[TestMethod]
+	public void GpuProviderTryGet()
+	{
+		var provider = new GpuIndicatorCalculatorProvider();
+		provider.Init();
+
+		var indType = typeof(SimpleMovingAverage);
+
+		provider.TryGetCalculatorType(indType, out var calcType).AssertTrue();
+		calcType.Is<IGpuIndicatorCalculator>().AssertTrue();
+
+		var (ctx, acc) = GpuAcceleratorFactory.CreateBestAccelerator();
+		using (ctx)
+		using (acc)
+		{
+			var calc = provider.Create(ctx, acc, calcType);
+			calc.AssertNotNull();
+			calc.IndicatorType.AssertEqual(indType);
+		}
+	}
+
+	[TestMethod]
+	public void GpuProviderRegisterUnregister()
+	{
+		var provider = new GpuIndicatorCalculatorProvider();
+		provider.Init();
+
+		var unkIndicator = typeof(CandlePatternIndicator); // Assume no built-in GPU calculator for this indicator
+		var unkCalcType = typeof(GpuSmaCalculator);
+
+		// Unknown indicator should not exist initially
+		provider.TryGetCalculatorType(unkIndicator, out _).AssertFalse();
+
+		// Register a mapping (for test purposes, map Acceleration -> GpuSmaCalculator)
+		provider.Register(unkIndicator, unkCalcType);
+		provider.TryGetCalculatorType(unkIndicator, out var calcType).AssertTrue();
+		calcType.AssertEqual(unkCalcType);
+
+		// Create should return a calculator instance
+		var (ctx, acc) = GpuAcceleratorFactory.CreateBestAccelerator();
+		using (ctx)
+		using (acc)
+		{
+			var calc = provider.Create(ctx, acc, unkCalcType);
+			calc.AssertNotNull();
+		}
+
+		// Unregister
+		provider.Unregister(unkIndicator).AssertTrue();
+		provider.TryGetCalculatorType(unkIndicator, out _).AssertFalse();
+
+		// Clear
+		provider.Clear();
+		provider.All.Count.AssertEqual(0);
 	}
 }
 
