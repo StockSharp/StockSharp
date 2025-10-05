@@ -6,6 +6,7 @@ global using System.Runtime.CompilerServices;
 
 global using ILGPU;
 global using ILGPU.Runtime;
+global using ILGPU.Algorithms;
 
 global using Ecng.Common;
 

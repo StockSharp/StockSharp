@@ -9,7 +9,7 @@ StockSharp.Algo.Gpu is a specialized library that provides GPU-accelerated calcu
 - **GPU Acceleration** – leverages ILGPU for cross-platform GPU computing with support for CUDA, OpenCL, and CPU backends
 - **Batch Processing** – efficiently processes multiple data series and parameter combinations in a single GPU pass
 - **Optimized Data Structures** – specialized `GpuCandle` and `GpuIndicatorResult` structs designed for GPU memory layout
-- **Technical Indicators** – currently includes GPU-accelerated Simple Moving Average (SMA) with extensible architecture for additional indicators
+- **Technical Indicators** – currently includes GPU-accelerated Simple Moving Average (SMA), Average Directional Index (ADX), and Envelope with extensible architecture for additional indicators
 - **Automatic Device Selection** – intelligent accelerator selection based on device capabilities and memory size
 
 ## Getting Started
@@ -77,16 +77,6 @@ context.Dispose();
 - **`GpuCandle`** – GPU-optimized candle data structure with float precision for performance
 - **`IGpuIndicatorResult`** – interface for GPU indicator calculation results with ToValue conversion
 - **`GpuIndicatorResult`** – standard GPU result structure implementing IGpuIndicatorResult
-
-### Indicators
-
-- **`GpuSmaCalculator`** – Simple Moving Average calculator supporting multiple price types and batch processing
-- **`GpuOscillatorOfMovingAverageCalculator`** – Oscillator of Moving Average GPU calculator with batched processing support
-
-### Data Types
-
-- **`GpuSmaParams`** – parameter structure for SMA calculations with Level1Fields price type support
-- **`GpuOscillatorOfMovingAverageParams`** – parameter structure encapsulating OMA short/long periods and price type
 - **`IGpuIndicatorParams`** – interface for GPU indicator parameter structures
 - **`IGpuIndicatorResult`** – interface for GPU calculation results with ToValue() conversion method
 
