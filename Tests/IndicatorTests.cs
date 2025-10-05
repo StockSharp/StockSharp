@@ -1,8 +1,13 @@
 ﻿namespace StockSharp.Tests;
 
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 
 using Ecng.Reflection;
+
+using StockSharp.Algo.Candles;
+using StockSharp.Algo.Candles.Compression;
+using StockSharp.Algo.Gpu;
 
 [TestClass]
 public class IndicatorTests
@@ -47,6 +52,81 @@ public class IndicatorTests
 			return isEmpty ? new CandleIndicatorValue(indicator, time) : new CandleIndicatorValue(indicator, createCandle()) { IsFinal = isFinal };
 		else
 			throw new InvalidOperationException(input.ToString());
+	}
+
+	private static TimeFrameCandleMessage[] LoadCandles(SecurityId secId, DateTimeOffset time, TimeSpan tf)
+	{
+		var path = Path.Combine(Helper.ResFolder, "ohlcv.txt");
+		using var reader = new StreamReader(path, Encoding.UTF8);
+		var csv = new FastCsvReader(reader, StringHelper.RN) { ColumnSeparator = ',' };
+
+		var list = new List<TimeFrameCandleMessage>();
+		var t = time;
+
+		while (csv.NextLine())
+		{
+			var open = csv.ReadDecimal();
+			var high = csv.ReadDecimal();
+			var low = csv.ReadDecimal();
+			var close = csv.ReadDecimal();
+			var volume = csv.ReadDecimal();
+
+			list.Add(new()
+			{
+				TypedArg = tf,
+				SecurityId = secId,
+				OpenTime = t,
+				CloseTime = t + tf,
+				OpenPrice = open,
+				HighPrice = high,
+				LowPrice = low,
+				ClosePrice = close,
+				TotalVolume = volume,
+				State = CandleStates.Finished,
+			});
+
+			t += tf;
+		}
+
+		return [.. list];
+	}
+
+	private static void CompareValues<T>(T[] actual, IIndicatorValue[] expected)
+		where T : IIndicatorValue
+	{
+		ArgumentNullException.ThrowIfNull(actual);
+		ArgumentNullException.ThrowIfNull(expected);
+
+		actual.Length.AssertEqual(expected.Length);
+
+		for (var i = 0; i < expected.Length; i++)
+		{
+			if (!actual[i].IsFormed)
+				expected[i].IsFormed.AssertFalse();
+			else
+			{
+				static void compare(IEnumerable<object> a, IEnumerable<object> e)
+				{
+					var aArr = a.ToArray();
+					var eArr = e.ToArray();
+
+					aArr.Length.AssertEqual(eArr.Length);
+
+					for (var i = 0; i < aArr.Length; i++)
+					{
+						var av = aArr[i];
+						var ev = eArr[i];
+
+						if (av is IEnumerable<object> ae)
+							compare(ae, (IEnumerable<object>)ev);
+						else
+							(((decimal)av - (decimal)ev) < 0.001m).AssertTrue();
+					}
+				}
+
+				compare(actual[i].ToValues(), expected[i].ToValues());
+			}
+		}
 	}
 
 	private static IEnumerable<IndicatorType> GetIndicatorTypes()
@@ -539,7 +619,7 @@ public class IndicatorTests
 		var time = new DateTimeOffset(2000, 1, 1, 0, 0, 0, TimeSpan.Zero);
 		var tf = TimeSpan.FromDays(1);
 		var secId = Helper.CreateSecurity().ToSecurityId();
-		var candles = secId.LoadCandles(time, tf);
+		var candles = LoadCandles(secId, time, tf);
 
 		foreach (var type in GetIndicatorTypes())
 		{
@@ -620,6 +700,106 @@ public class IndicatorTests
 			// Check [Doc]
 			var docAttr = indicatorType.GetAttribute<DocAttribute>();
 			docAttr.AssertNotNull($"Indicator {indicatorType.Name} missing [Doc] attribute.");
+		}
+	}
+
+	[TestMethod]
+	public void GPU()
+	{
+		static ICandleMessage[][] loadCandles()
+		{
+			var start = new DateTimeOffset(2000, 1, 1, 0, 0, 0, TimeSpan.Zero);
+			var baseTf = TimeSpan.FromMinutes(1);
+			var secId = Helper.CreateSecurityId();
+
+			// 1m base candles from storage
+			var baseCandles = LoadCandles(secId, start, baseTf)
+				.Cast<ICandleMessage>()
+				.ToArray();
+
+			var result = new List<ICandleMessage[]> { baseCandles };
+
+			// Build bigger TF series from 1m via compressor
+			var provider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
+			var builder = provider.Get(typeof(TimeFrameCandleMessage));
+			var biggerTfs = new[] { TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(15), TimeSpan.FromHours(1) };
+
+			foreach (var tf in biggerTfs)
+			{
+				var subBig = new Subscription(tf.TimeFrame(), new SecurityMessage { SecurityId = secId });
+				var mdBig = subBig.MarketData;
+				mdBig.IsFinishedOnly = false;
+				mdBig.AllowBuildFromSmallerTimeFrame = true;
+
+				var compressor = new BiggerTimeFrameCandleCompressor(mdBig, builder, baseTf.TimeFrame());
+				var list = new List<ICandleMessage>();
+
+				foreach (var c in baseCandles)
+				{
+					var messages = compressor.Process((CandleMessage)c);
+
+					foreach (var m in messages)
+					{
+						if (m is TimeFrameCandleMessage tfMsg && tfMsg.State == CandleStates.Finished)
+							list.Add(tfMsg);
+					}
+				}
+
+				result.Add([.. list]);
+			}
+
+			return [.. result];
+		}
+
+		static IIndicatorValue[] runCpu(IIndicator indicator, ICandleMessage[] candles)
+		{
+			var res = new IIndicatorValue[candles.Length];
+
+			for (var i = 0; i < candles.Length; i++)
+				res[i] = indicator.Process(candles[i]);
+
+			return res;
+		}
+
+		var msgSeries = loadCandles(); // multiple TF series
+		var gpuSeries = msgSeries
+			.Select(series => series.Select(c => new GpuCandle(c.OpenTime, c.OpenPrice, c.HighPrice, c.LowPrice, c.ClosePrice, c.TotalVolume)).ToArray())
+			.ToArray();
+
+		var provider = new GpuIndicatorCalculatorProvider();
+		provider.Init();
+
+		var (ctx, acc) = GpuAcceleratorFactory.CreateBestAccelerator();
+
+		using (ctx)
+		using (acc)
+		{
+			foreach (var (indicatorType, _) in provider.All)
+			{
+				var indicator = indicatorType.CreateInstance<IIndicator>();
+				var calculator = provider.Create(ctx, acc, indicatorType);
+				if (calculator is null)
+					continue;
+
+				// build params dynamically from indicator
+				var paramType = calculator.ParameterType;
+
+				var param = paramType.CreateInstance<IGpuIndicatorParams>();
+				param.FromIndicator(indicator);
+
+				var parameters = new IGpuIndicatorParams[] { param };
+
+				// calculate via interface for all TF series
+				var gpuAll = calculator.Calculate(gpuSeries, parameters); // [series][param][bar]
+
+				for (var s = 0; s < msgSeries.Length; s++)
+				{
+					var gpuOut = gpuAll[s][0];
+					var cpu = runCpu(indicator, msgSeries[s]);
+
+					CompareValues(gpuOut.Select(r => r.ToValue(indicator)).ToArray(), cpu);
+				}
+			}
 		}
 	}
 }
