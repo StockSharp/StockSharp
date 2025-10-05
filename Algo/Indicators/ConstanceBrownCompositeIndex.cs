@@ -178,9 +178,9 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator<IConstanceBrown
 
 	/// <inheritdoc />
 	public override int NumValuesToInitialize =>
-		Math.Max(_rsi.NumValuesToInitialize + _rsiRoc.NumValuesToInitialize,
-			_shortRsi.NumValuesToInitialize + _rsiMomentum.NumValuesToInitialize)
-		+ Math.Max(FastSma.NumValuesToInitialize, SlowSma.NumValuesToInitialize);
+		(_rsi.NumValuesToInitialize + _rsiRoc.NumValuesToInitialize - 1)
+			.Max(_shortRsi.NumValuesToInitialize + _rsiMomentum.NumValuesToInitialize - 1)
+		+ CompositeIndexLine.NumValuesToInitialize + FastSma.NumValuesToInitialize.Max(SlowSma.NumValuesToInitialize) - 2;
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
