@@ -134,12 +134,24 @@ public interface IDirectionalIndexValue : IComplexIndicatorValue
 	decimal? Minus { get; }
 }
 
-class DirectionalIndexValue(DirectionalIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<DirectionalIndex>(indicator, time), IDirectionalIndexValue
+/// <summary>
+/// DirectionalIndex indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="DirectionalIndexValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent DirectionalIndex indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class DirectionalIndexValue(DirectionalIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<DirectionalIndex>(indicator, time), IDirectionalIndexValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue PlusValue => this[TypedIndicator.Plus];
+	/// <inheritdoc />
 	public decimal? Plus => PlusValue.ToNullableDecimal(TypedIndicator.Source);
-	
+
+	/// <inheritdoc />
 	public IIndicatorValue MinusValue => this[TypedIndicator.Minus];
+	/// <inheritdoc />
 	public decimal? Minus => MinusValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />

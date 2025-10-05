@@ -144,13 +144,26 @@ public interface IKnowSureThingValue : IComplexIndicatorValue
 	decimal? Signal { get; }
 }
 
-class KnowSureThingValue(KnowSureThing indicator, DateTimeOffset time) : ComplexIndicatorValue<KnowSureThing>(indicator, time), IKnowSureThingValue
+/// <summary>
+/// KnowSureThing indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="KnowSureThingValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent KnowSureThing indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class KnowSureThingValue(KnowSureThing indicator, DateTimeOffset time) : ComplexIndicatorValue<KnowSureThing>(indicator, time), IKnowSureThingValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue KstLineValue => this[TypedIndicator.KstLine];
+	/// <inheritdoc />
 	public decimal? KstLine => KstLineValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue SignalValue => this[TypedIndicator.Signal];
+	/// <inheritdoc />
 	public decimal? Signal => SignalValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"KstLine={KstLine}, Signal={Signal}";
 }

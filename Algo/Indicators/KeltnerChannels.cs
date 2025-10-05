@@ -214,16 +214,31 @@ public interface IKeltnerChannelsValue : IComplexIndicatorValue
 	decimal? Lower { get; }
 }
 
-class KeltnerChannelsValue(KeltnerChannels indicator, DateTimeOffset time) : ComplexIndicatorValue<KeltnerChannels>(indicator, time), IKeltnerChannelsValue
+/// <summary>
+/// KeltnerChannels indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="KeltnerChannelsValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent KeltnerChannels indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class KeltnerChannelsValue(KeltnerChannels indicator, DateTimeOffset time) : ComplexIndicatorValue<KeltnerChannels>(indicator, time), IKeltnerChannelsValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue MiddleValue => this[TypedIndicator.Middle];
+	/// <inheritdoc />
 	public decimal? Middle => MiddleValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue UpperValue => this[TypedIndicator.Upper];
+	/// <inheritdoc />
 	public decimal? Upper => UpperValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue LowerValue => this[TypedIndicator.Lower];
+	/// <inheritdoc />
 	public decimal? Lower => LowerValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"Middle={Middle}, Upper={Upper}, Lower={Lower}";
 }

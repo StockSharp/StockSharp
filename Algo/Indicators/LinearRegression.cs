@@ -171,19 +171,36 @@ public interface ILinearRegressionValue : IComplexIndicatorValue
 	decimal? StandardError { get; }
 }
 
-class LinearRegressionValue(LinearRegression indicator, DateTimeOffset time) : ComplexIndicatorValue<LinearRegression>(indicator, time), ILinearRegressionValue
+/// <summary>
+/// LinearRegression indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="LinearRegressionValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent LinearRegression indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class LinearRegressionValue(LinearRegression indicator, DateTimeOffset time) : ComplexIndicatorValue<LinearRegression>(indicator, time), ILinearRegressionValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue LinearRegValue => this[TypedIndicator.LinearReg];
+	/// <inheritdoc />
 	public decimal? LinearReg => LinearRegValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue RSquaredValue => this[TypedIndicator.RSquared];
+	/// <inheritdoc />
 	public decimal? RSquared => RSquaredValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue LinearRegSlopeValue => this[TypedIndicator.LinearRegSlope];
+	/// <inheritdoc />
 	public decimal? LinearRegSlope => LinearRegSlopeValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue StandardErrorValue => this[TypedIndicator.StandardError];
+	/// <inheritdoc />
 	public decimal? StandardError => StandardErrorValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"LinearReg={LinearReg}, RSquared={RSquared}, LinearRegSlope={LinearRegSlope}, StandardError={StandardError}";
 }

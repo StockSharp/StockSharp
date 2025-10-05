@@ -122,16 +122,31 @@ public interface IAlligatorValue : IComplexIndicatorValue
 	decimal? Lips { get; }
 }
 
-class AlligatorValue(Alligator indicator, DateTimeOffset time) : ComplexIndicatorValue<Alligator>(indicator, time), IAlligatorValue
+/// <summary>
+/// Alligator indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="AlligatorValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent Alligator indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class AlligatorValue(Alligator indicator, DateTimeOffset time) : ComplexIndicatorValue<Alligator>(indicator, time), IAlligatorValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue JawValue => this[TypedIndicator.Jaw];
+	/// <inheritdoc />
 	public decimal? Jaw => JawValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue TeethValue => this[TypedIndicator.Teeth];
+	/// <inheritdoc />
 	public decimal? Teeth => TeethValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue LipsValue => this[TypedIndicator.Lips];
+	/// <inheritdoc />
 	public decimal? Lips => LipsValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"Jaw={Jaw}, Teeth={Teeth}, Lips={Lips}";
 }

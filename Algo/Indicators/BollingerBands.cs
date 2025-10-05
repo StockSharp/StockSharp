@@ -170,16 +170,31 @@ public interface IBollingerBandsValue : IComplexIndicatorValue
 	decimal? LowBand { get; }
 }
 
-class BollingerBandsValue(BollingerBands indicator, DateTimeOffset time) : ComplexIndicatorValue<BollingerBands>(indicator, time), IBollingerBandsValue
+/// <summary>
+/// BollingerBands indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="BollingerBandsValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent BollingerBands indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class BollingerBandsValue(BollingerBands indicator, DateTimeOffset time) : ComplexIndicatorValue<BollingerBands>(indicator, time), IBollingerBandsValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue MovingAverageValue => this[TypedIndicator.MovingAverage];
+	/// <inheritdoc />
 	public decimal? MovingAverage => MovingAverageValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue UpBandValue => this[TypedIndicator.UpBand];
+	/// <inheritdoc />
 	public decimal? UpBand => UpBandValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue LowBandValue => this[TypedIndicator.LowBand];
+	/// <inheritdoc />
 	public decimal? LowBand => LowBandValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"MovingAverage={MovingAverage}, UpBand={UpBand}, LowBand={LowBand}";
 }

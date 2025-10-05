@@ -295,13 +295,26 @@ public interface IAroonValue : IComplexIndicatorValue
 	decimal? Down { get; }
 }
 
-class AroonValue(Aroon indicator, DateTimeOffset time) : ComplexIndicatorValue<Aroon>(indicator, time), IAroonValue
+/// <summary>
+/// Aroon indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="AroonValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent Aroon indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class AroonValue(Aroon indicator, DateTimeOffset time) : ComplexIndicatorValue<Aroon>(indicator, time), IAroonValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue UpValue => this[TypedIndicator.Up];
+	/// <inheritdoc />
 	public decimal? Up => UpValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue DownValue => this[TypedIndicator.Down];
+	/// <inheritdoc />
 	public decimal? Down => DownValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"Up={Up}, Down={Down}";
 }

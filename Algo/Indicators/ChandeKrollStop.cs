@@ -193,13 +193,26 @@ public interface IChandeKrollStopValue : IComplexIndicatorValue
 	decimal? Lowest { get; }
 }
 
-class ChandeKrollStopValue(ChandeKrollStop indicator, DateTimeOffset time) : ComplexIndicatorValue<ChandeKrollStop>(indicator, time), IChandeKrollStopValue
+/// <summary>
+/// ChandeKrollStop indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="ChandeKrollStopValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent ChandeKrollStop indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class ChandeKrollStopValue(ChandeKrollStop indicator, DateTimeOffset time) : ComplexIndicatorValue<ChandeKrollStop>(indicator, time), IChandeKrollStopValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue HighestValue => this[TypedIndicator.Highest];
+	/// <inheritdoc />
 	public decimal? Highest => HighestValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue LowestValue => this[TypedIndicator.Lowest];
+	/// <inheritdoc />
 	public decimal? Lowest => LowestValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"Highest={Highest}, Lowest={Lowest}";
 }

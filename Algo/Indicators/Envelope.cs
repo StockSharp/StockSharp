@@ -167,16 +167,31 @@ public interface IEnvelopeValue : IComplexIndicatorValue
 	decimal? Lower { get; }
 }
 
-class EnvelopeValue(Envelope indicator, DateTimeOffset time) : ComplexIndicatorValue<Envelope>(indicator, time), IEnvelopeValue
+/// <summary>
+/// Envelope indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="EnvelopeValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent Envelope indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class EnvelopeValue(Envelope indicator, DateTimeOffset time) : ComplexIndicatorValue<Envelope>(indicator, time), IEnvelopeValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue MiddleValue => this[TypedIndicator.Middle];
+	/// <inheritdoc />
 	public decimal? Middle => MiddleValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue UpperValue => this[TypedIndicator.Upper];
+	/// <inheritdoc />
 	public decimal? Upper => UpperValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue LowerValue => this[TypedIndicator.Lower];
+	/// <inheritdoc />
 	public decimal? Lower => LowerValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"Middle={Middle}, Upper={Upper}, Lower={Lower}";
 }

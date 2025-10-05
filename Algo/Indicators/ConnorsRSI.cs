@@ -279,19 +279,36 @@ public interface IConnorsRSIValue : IComplexIndicatorValue
 	decimal? CrsiLine { get; }
 }
 
-class ConnorsRSIValue(ConnorsRSI indicator, DateTimeOffset time) : ComplexIndicatorValue<ConnorsRSI>(indicator, time), IConnorsRSIValue
+/// <summary>
+/// ConnorsRSI indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="ConnorsRSIValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent ConnorsRSI indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class ConnorsRSIValue(ConnorsRSI indicator, DateTimeOffset time) : ComplexIndicatorValue<ConnorsRSI>(indicator, time), IConnorsRSIValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue RsiValue => this[TypedIndicator.Rsi];
+	/// <inheritdoc />
 	public decimal? Rsi => RsiValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue UpDownRsiValue => this[TypedIndicator.UpDownRsi];
+	/// <inheritdoc />
 	public decimal? UpDownRsi => UpDownRsiValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue RocRsiValue => this[TypedIndicator.RocRsi];
+	/// <inheritdoc />
 	public decimal? RocRsi => RocRsiValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue CrsiLineValue => this[TypedIndicator.CrsiLine];
+	/// <inheritdoc />
 	public decimal? CrsiLine => CrsiLineValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"Rsi={Rsi}, UpDownRsi={UpDownRsi}, RocRsi={RocRsi}, CrsiLine={CrsiLine}";
 }

@@ -190,16 +190,31 @@ public interface IConstanceBrownCompositeIndexValue : IComplexIndicatorValue
 	decimal? CompositeIndexLine { get; }
 }
 
-class ConstanceBrownCompositeIndexValue(ConstanceBrownCompositeIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<ConstanceBrownCompositeIndex>(indicator, time), IConstanceBrownCompositeIndexValue
+/// <summary>
+/// ConstanceBrownCompositeIndex indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="ConstanceBrownCompositeIndexValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent ConstanceBrownCompositeIndex indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class ConstanceBrownCompositeIndexValue(ConstanceBrownCompositeIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<ConstanceBrownCompositeIndex>(indicator, time), IConstanceBrownCompositeIndexValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue RsiValue => this[TypedIndicator.Rsi];
+	/// <inheritdoc />
 	public decimal? Rsi => RsiValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue StochValue => this[TypedIndicator.Stoch];
+	/// <inheritdoc />
 	public decimal? Stoch => StochValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue CompositeIndexLineValue => this[TypedIndicator.CompositeIndexLine];
+	/// <inheritdoc />
 	public decimal? CompositeIndexLine => CompositeIndexLineValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"Rsi={Rsi}, Stoch={Stoch}, CompositeIndexLine={CompositeIndexLine}";
 }

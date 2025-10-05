@@ -160,21 +160,39 @@ public interface IIchimokuValue : IComplexIndicatorValue
 	decimal? Chinkou { get; }
 }
 
-class IchimokuValue(Ichimoku indicator, DateTimeOffset time) : ComplexIndicatorValue<Ichimoku>(indicator, time), IIchimokuValue
+/// <summary>
+/// Ichimoku indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="IchimokuValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent Ichimoku indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class IchimokuValue(Ichimoku indicator, DateTimeOffset time) : ComplexIndicatorValue<Ichimoku>(indicator, time), IIchimokuValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue TenkanValue => this[TypedIndicator.Tenkan];
+	/// <inheritdoc />
 	public decimal? Tenkan => TenkanValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue KijunValue => this[TypedIndicator.Kijun];
+	/// <inheritdoc />
 	public decimal? Kijun => KijunValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue SenkouAValue => this[TypedIndicator.SenkouA];
+	/// <inheritdoc />
 	public decimal? SenkouA => SenkouAValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue SenkouBValue => this[TypedIndicator.SenkouB];
+	/// <inheritdoc />
 	public decimal? SenkouB => SenkouBValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue ChinkouValue => this[TypedIndicator.Chinkou];
+	/// <inheritdoc />
 	public decimal? Chinkou => ChinkouValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <inheritdoc />

@@ -191,13 +191,26 @@ public interface IEhlersFisherTransformValue : IComplexIndicatorValue
 	decimal? TriggerLine { get; }
 }
 
-class EhlersFisherTransformValue(EhlersFisherTransform indicator, DateTimeOffset time) : ComplexIndicatorValue<EhlersFisherTransform>(indicator, time), IEhlersFisherTransformValue
+/// <summary>
+/// EhlersFisherTransform indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="EhlersFisherTransformValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent EhlersFisherTransform indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class EhlersFisherTransformValue(EhlersFisherTransform indicator, DateTimeOffset time) : ComplexIndicatorValue<EhlersFisherTransform>(indicator, time), IEhlersFisherTransformValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue MainLineValue => this[TypedIndicator.MainLine];
+	/// <inheritdoc />
 	public decimal? MainLine => MainLineValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue TriggerLineValue => this[TypedIndicator.TriggerLine];
+	/// <inheritdoc />
 	public decimal? TriggerLine => TriggerLineValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"MainLine={MainLine}, TriggerLine={TriggerLine}";
 }

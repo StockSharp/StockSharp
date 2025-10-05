@@ -44,10 +44,21 @@ public interface IGuppyMultipleMovingAverageValue : IComplexIndicatorValue
 	decimal?[] Averages { get; }
 }
 
-class GuppyMultipleMovingAverageValue(GuppyMultipleMovingAverage indicator, DateTimeOffset time) : ComplexIndicatorValue<GuppyMultipleMovingAverage>(indicator, time), IGuppyMultipleMovingAverageValue
+/// <summary>
+/// GuppyMultipleMovingAverage indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="GuppyMultipleMovingAverageValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent GuppyMultipleMovingAverage indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class GuppyMultipleMovingAverageValue(GuppyMultipleMovingAverage indicator, DateTimeOffset time) : ComplexIndicatorValue<GuppyMultipleMovingAverage>(indicator, time), IGuppyMultipleMovingAverageValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue[] AveragesValues => [.. TypedIndicator.InnerIndicators.Select(ind => this[ind])];
+	/// <inheritdoc />
 	public decimal?[] Averages => [.. AveragesValues.Select(v => v.ToNullableDecimal(TypedIndicator.Source))];
 
+	/// <inheritdoc />
 	public override string ToString() => $"Averages=[{string.Join(", ", Averages)}]";
 }

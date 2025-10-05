@@ -169,13 +169,26 @@ public interface ICompositeMomentumValue : IComplexIndicatorValue
 	decimal? CompositeLine { get; }
 }
 
-class CompositeMomentumValue(CompositeMomentum indicator, DateTimeOffset time) : ComplexIndicatorValue<CompositeMomentum>(indicator, time), ICompositeMomentumValue
+/// <summary>
+/// CompositeMomentum indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="CompositeMomentumValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent CompositeMomentum indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class CompositeMomentumValue(CompositeMomentum indicator, DateTimeOffset time) : ComplexIndicatorValue<CompositeMomentum>(indicator, time), ICompositeMomentumValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue SmaValue => this[TypedIndicator.Sma];
+	/// <inheritdoc />
 	public decimal? Sma => SmaValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue CompositeLineValue => this[TypedIndicator.CompositeLine];
+	/// <inheritdoc />
 	public decimal? CompositeLine => CompositeLineValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"Sma={Sma}, CompositeLine={CompositeLine}";
 }

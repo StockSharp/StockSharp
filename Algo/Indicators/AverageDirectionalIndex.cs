@@ -112,12 +112,24 @@ public interface IAverageDirectionalIndexValue : IComplexIndicatorValue
 	decimal? MovingAverage { get; }
 }
 
-class AverageDirectionalIndexValue(AverageDirectionalIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<AverageDirectionalIndex>(indicator, time), IAverageDirectionalIndexValue
+/// <summary>
+/// AverageDirectionalIndex indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="AverageDirectionalIndexValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent AverageDirectionalIndex indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class AverageDirectionalIndexValue(AverageDirectionalIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<AverageDirectionalIndex>(indicator, time), IAverageDirectionalIndexValue
 {
+	/// <inheritdoc />
 	public IDirectionalIndexValue Dx => (IDirectionalIndexValue)this[TypedIndicator.Dx];
-	
+
+	/// <inheritdoc />
 	public IIndicatorValue MovingAverageValue => this[TypedIndicator.MovingAverage];
+	/// <inheritdoc />
 	public decimal? MovingAverage => MovingAverageValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"Dx={Dx}, MovingAverage={MovingAverage}";
 }

@@ -100,13 +100,26 @@ public interface IGatorOscillatorValue : IComplexIndicatorValue
 	decimal? Histogram2 { get; }
 }
 
-class GatorOscillatorValue(GatorOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<GatorOscillator>(indicator, time), IGatorOscillatorValue
+/// <summary>
+/// GatorOscillator indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="GatorOscillatorValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent GatorOscillator indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class GatorOscillatorValue(GatorOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<GatorOscillator>(indicator, time), IGatorOscillatorValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue Histogram1Value => this[TypedIndicator.Histogram1];
+	/// <inheritdoc />
 	public decimal? Histogram1 => Histogram1Value.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue Histogram2Value => this[TypedIndicator.Histogram2];
+	/// <inheritdoc />
 	public decimal? Histogram2 => Histogram2Value.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"Histogram1={Histogram1}, Histogram2={Histogram2}";
 }

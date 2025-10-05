@@ -105,13 +105,26 @@ public interface IWoodiesCCIValue : IComplexIndicatorValue
 	decimal? Sma { get; }
 }
 
-class WoodiesCCIValue(WoodiesCCI indicator, DateTimeOffset time) : ComplexIndicatorValue<WoodiesCCI>(indicator, time), IWoodiesCCIValue
+/// <summary>
+/// Woodies CCI indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="WoodiesCCIValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent Woodies CCI indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class WoodiesCCIValue(WoodiesCCI indicator, DateTimeOffset time) : ComplexIndicatorValue<WoodiesCCI>(indicator, time), IWoodiesCCIValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue CciValue => this[TypedIndicator.Cci];
+	/// <inheritdoc />
 	public decimal? Cci => CciValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue SmaValue => this[TypedIndicator.Sma];
+	/// <inheritdoc />
 	public decimal? Sma => SmaValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"Cci={Cci}, Sma={Sma}";
 }

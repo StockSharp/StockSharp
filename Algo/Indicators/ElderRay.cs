@@ -121,13 +121,26 @@ public interface IElderRayValue : IComplexIndicatorValue
 	decimal? BearPower { get; }
 }
 
-class ElderRayValue(ElderRay indicator, DateTimeOffset time) : ComplexIndicatorValue<ElderRay>(indicator, time), IElderRayValue
+/// <summary>
+/// ElderRay indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="ElderRayValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent ElderRay indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class ElderRayValue(ElderRay indicator, DateTimeOffset time) : ComplexIndicatorValue<ElderRay>(indicator, time), IElderRayValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue BullPowerValue => this[TypedIndicator.BullPower];
+	/// <inheritdoc />
 	public decimal? BullPower => BullPowerValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue BearPowerValue => this[TypedIndicator.BearPower];
+	/// <inheritdoc />
 	public decimal? BearPower => BearPowerValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"Bull={BullPower}, Bear={BearPower}";
 }

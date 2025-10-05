@@ -46,16 +46,31 @@ public interface IFractalsValue : IComplexIndicatorValue
 	decimal? Down { get; }
 }
 
-class FractalsValue(Fractals fractals, DateTimeOffset time) : ComplexIndicatorValue<Fractals>(fractals, time), IFractalsValue
+/// <summary>
+/// Fractals indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="FractalsValue"/> class.
+/// </remarks>
+/// <param name="fractals">The parent Fractals indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class FractalsValue(Fractals fractals, DateTimeOffset time) : ComplexIndicatorValue<Fractals>(fractals, time), IFractalsValue
 {
+	/// <inheritdoc />
 	public bool HasPattern { get; private set; }
+	/// <inheritdoc />
 	public bool HasUp { get; private set; }
+	/// <inheritdoc />
 	public bool HasDown { get; private set; }
 
+	/// <inheritdoc />
 	public IIndicatorValue UpValue => this[TypedIndicator.Up];
+	/// <inheritdoc />
 	public decimal? Up => UpValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue DownValue => this[TypedIndicator.Down];
+	/// <inheritdoc />
 	public decimal? Down => DownValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
@@ -74,11 +89,11 @@ class FractalsValue(Fractals fractals, DateTimeOffset time) : ComplexIndicatorVa
 
 		if (!value.IsEmpty)
 		{
-			HasPattern = true;
+			HasPattern = HasPattern = true;
 
 			if (((FractalPart)indicator).IsUp)
 				HasUp = true;
-			else 
+			else
 				HasDown = true;
 		}
 

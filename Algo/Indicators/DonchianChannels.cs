@@ -162,16 +162,31 @@ public interface IDonchianChannelsValue : IComplexIndicatorValue
 	decimal? Middle { get; }
 }
 
-class DonchianChannelsValue(DonchianChannels indicator, DateTimeOffset time) : ComplexIndicatorValue<DonchianChannels>(indicator, time), IDonchianChannelsValue
+/// <summary>
+/// DonchianChannels indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="DonchianChannelsValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent DonchianChannels indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class DonchianChannelsValue(DonchianChannels indicator, DateTimeOffset time) : ComplexIndicatorValue<DonchianChannels>(indicator, time), IDonchianChannelsValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue UpperBandValue => this[TypedIndicator.UpperBand];
+	/// <inheritdoc />
 	public decimal? UpperBand => UpperBandValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue LowerBandValue => this[TypedIndicator.LowerBand];
+	/// <inheritdoc />
 	public decimal? LowerBand => LowerBandValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue MiddleValue => this[TypedIndicator.Middle];
+	/// <inheritdoc />
 	public decimal? Middle => MiddleValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"UpperBand={UpperBand}, LowerBand={LowerBand}, Middle={Middle}";
 }

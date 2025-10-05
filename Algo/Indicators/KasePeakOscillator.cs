@@ -208,13 +208,26 @@ public interface IKasePeakOscillatorValue : IComplexIndicatorValue
 	decimal? LongTerm { get; }
 }
 
-class KasePeakOscillatorValue(KasePeakOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<KasePeakOscillator>(indicator, time), IKasePeakOscillatorValue
+/// <summary>
+/// KasePeakOscillator indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="KasePeakOscillatorValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent KasePeakOscillator indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class KasePeakOscillatorValue(KasePeakOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<KasePeakOscillator>(indicator, time), IKasePeakOscillatorValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue ShortTermValue => this[TypedIndicator.ShortTerm];
+	/// <inheritdoc />
 	public decimal? ShortTerm => ShortTermValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue LongTermValue => this[TypedIndicator.LongTerm];
+	/// <inheritdoc />
 	public decimal? LongTerm => LongTermValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"ShortTerm={ShortTerm}, LongTerm={LongTerm}";
 }

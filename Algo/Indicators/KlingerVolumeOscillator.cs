@@ -161,16 +161,31 @@ public interface IKlingerVolumeOscillatorValue : IComplexIndicatorValue
 	decimal? Oscillator { get; }
 }
 
-class KlingerVolumeOscillatorValue(KlingerVolumeOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<KlingerVolumeOscillator>(indicator, time), IKlingerVolumeOscillatorValue
+/// <summary>
+/// KlingerVolumeOscillator indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="KlingerVolumeOscillatorValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent KlingerVolumeOscillator indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class KlingerVolumeOscillatorValue(KlingerVolumeOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<KlingerVolumeOscillator>(indicator, time), IKlingerVolumeOscillatorValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue ShortEmaValue => this[TypedIndicator.ShortEma];
+	/// <inheritdoc />
 	public decimal? ShortEma => ShortEmaValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue LongEmaValue => this[TypedIndicator.LongEma];
+	/// <inheritdoc />
 	public decimal? LongEma => LongEmaValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue OscillatorValue => this[TypedIndicator];
+	/// <inheritdoc />
 	public decimal? Oscillator => OscillatorValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"ShortEma={ShortEma}, LongEma={LongEma}, Oscillator={Oscillator}";
 }
