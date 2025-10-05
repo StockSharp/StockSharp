@@ -7,26 +7,51 @@ namespace StockSharp.Algo.Gpu.Indicators;
 /// Initializes a new instance of the <see cref="GpuConstanceBrownCompositeIndexParams"/> struct.
 /// </remarks>
 /// <param name="rsiLength">RSI length.</param>
-/// <param name="stochasticKLength">Stochastic %K length.</param>
-/// <param name="stochasticDLength">Stochastic %D length.</param>
+/// <param name="rocLength">ROC length over RSI.</param>
+/// <param name="shortRsiLength">Short RSI length.</param>
+/// <param name="momentumLength">Momentum SMA length over short RSI.</param>
+/// <param name="fastSmaLength">Fast SMA length over composite.</param>
+/// <param name="slowSmaLength">Slow SMA length over composite.</param>
 /// <param name="priceType">Price type used for RSI part.</param>
 [StructLayout(LayoutKind.Sequential)]
-public struct GpuConstanceBrownCompositeIndexParams(int rsiLength, int stochasticKLength, int stochasticDLength, byte priceType) : IGpuIndicatorParams
+public struct GpuConstanceBrownCompositeIndexParams(
+	int rsiLength,
+	int rocLength,
+	int shortRsiLength,
+	int momentumLength,
+	int fastSmaLength,
+	int slowSmaLength,
+	byte priceType) : IGpuIndicatorParams
 {
 	/// <summary>
-	/// RSI window length.
+	/// RSI length.
 	/// </summary>
 	public int RsiLength = rsiLength;
 
 	/// <summary>
-	/// Stochastic %K length.
+	/// ROC length over RSI.
 	/// </summary>
-	public int StochasticKLength = stochasticKLength;
+	public int RocLength = rocLength;
 
 	/// <summary>
-	/// Stochastic %D length.
+	/// Short RSI length.
 	/// </summary>
-	public int StochasticDLength = stochasticDLength;
+	public int ShortRsiLength = shortRsiLength;
+
+	/// <summary>
+	/// Momentum SMA length over short RSI.
+	/// </summary>
+	public int MomentumLength = momentumLength;
+
+	/// <summary>
+	/// Fast SMA length over composite.
+	/// </summary>
+	public int FastSmaLength = fastSmaLength;
+
+	/// <summary>
+	/// Slow SMA length over composite.
+	/// </summary>
+	public int SlowSmaLength = slowSmaLength;
 
 	/// <summary>
 	/// Price type to extract for RSI part.
@@ -36,14 +61,17 @@ public struct GpuConstanceBrownCompositeIndexParams(int rsiLength, int stochasti
 	/// <inheritdoc />
 	public readonly void FromIndicator(IIndicator indicator)
 	{
-		Unsafe.AsRef(in this).PriceType = (byte)(indicator.Source ?? Level1Fields.ClosePrice);
-
 		if (indicator is ConstanceBrownCompositeIndex cbci)
 		{
-			Unsafe.AsRef(in this).RsiLength = cbci.Length;
-			Unsafe.AsRef(in this).StochasticKLength = cbci.StochasticKPeriod;
-			Unsafe.AsRef(in this).StochasticDLength = cbci.StochasticDPeriod;
+			Unsafe.AsRef(in this).RsiLength = cbci.RsiLength;
+			Unsafe.AsRef(in this).RocLength = cbci.RocLength;
+			Unsafe.AsRef(in this).ShortRsiLength = cbci.ShortRsiLength;
+			Unsafe.AsRef(in this).MomentumLength = cbci.MomentumLength;
+			Unsafe.AsRef(in this).FastSmaLength = cbci.FastSmaLength;
+			Unsafe.AsRef(in this).SlowSmaLength = cbci.SlowSmaLength;
 		}
+
+		Unsafe.AsRef(in this).PriceType = (byte)(indicator.Source ?? Level1Fields.ClosePrice);
 	}
 }
 
@@ -59,24 +87,19 @@ public struct GpuConstanceBrownCompositeIndexResult : IGpuIndicatorResult
 	public long Time;
 
 	/// <summary>
-	/// RSI value.
-	/// </summary>
-	public float Rsi;
-
-	/// <summary>
-	/// Stochastic %K value.
-	/// </summary>
-	public float StochK;
-
-	/// <summary>
-	/// Stochastic %D value.
-	/// </summary>
-	public float StochD;
-
-	/// <summary>
 	/// Composite index line value.
 	/// </summary>
 	public float Composite;
+
+	/// <summary>
+	/// Fast SMA value.
+	/// </summary>
+	public float Fast;
+
+	/// <summary>
+	/// Slow SMA value.
+	/// </summary>
+	public float Slow;
 
 	/// <summary>
 	/// Is indicator formed (byte to be GPU-friendly).
@@ -93,7 +116,7 @@ public struct GpuConstanceBrownCompositeIndexResult : IGpuIndicatorResult
 		var isFormed = this.GetIsFormed();
 		var cbci = (ConstanceBrownCompositeIndex)indicator;
 
-		if (Rsi.IsNaN() || StochK.IsNaN() || StochD.IsNaN() || Composite.IsNaN())
+		if (Composite.IsNaN() || Fast.IsNaN() || Slow.IsNaN())
 		{
 			return new ConstanceBrownCompositeIndexValue(cbci, time)
 			{
@@ -109,39 +132,11 @@ public struct GpuConstanceBrownCompositeIndexResult : IGpuIndicatorResult
 			IsFormed = isFormed,
 		};
 
-		result.Add(cbci.Rsi, new DecimalIndicatorValue(cbci.Rsi, (decimal)Rsi, time)
-		{
-			IsFinal = true,
-			IsFormed = true,
-		});
+		var ci = cbci.CompositeIndexLine;
+		result.Add(ci, new DecimalIndicatorValue(ci, (decimal)Composite, time) { IsFinal = true, IsFormed = true });
 
-		var stochInd = cbci.Stoch;
-		var stochValue = new StochasticOscillatorValue(stochInd, time)
-		{
-			IsFinal = true,
-			IsFormed = true,
-		};
-
-		stochValue.Add(stochInd.K, new DecimalIndicatorValue(stochInd.K, (decimal)StochK, time)
-		{
-			IsFinal = true,
-			IsFormed = true,
-		});
-
-		stochValue.Add(stochInd.D, new DecimalIndicatorValue(stochInd.D, (decimal)StochD, time)
-		{
-			IsFinal = true,
-			IsFormed = true,
-		});
-
-		result.Add(stochInd, stochValue);
-
-		var compositeLine = cbci.CompositeIndexLine;
-		result.Add(compositeLine, new DecimalIndicatorValue(compositeLine, (decimal)Composite, time)
-		{
-			IsFinal = true,
-			IsFormed = true,
-		});
+		result.Add(cbci.FastSma, new DecimalIndicatorValue(cbci.FastSma, (decimal)Fast, time) { IsFinal = true, IsFormed = true });
+		result.Add(cbci.SlowSma, new DecimalIndicatorValue(cbci.SlowSma, (decimal)Slow, time) { IsFinal = true, IsFormed = true });
 
 		return result;
 	}
@@ -152,7 +147,7 @@ public struct GpuConstanceBrownCompositeIndexResult : IGpuIndicatorResult
 /// </summary>
 public class GpuConstanceBrownCompositeIndexCalculator : GpuIndicatorCalculatorBase<ConstanceBrownCompositeIndex, GpuConstanceBrownCompositeIndexParams, GpuConstanceBrownCompositeIndexResult>
 {
-	private readonly Action<Index2D, ArrayView<GpuCandle>, ArrayView<GpuConstanceBrownCompositeIndexResult>, ArrayView<int>, ArrayView<int>, ArrayView<GpuConstanceBrownCompositeIndexParams>> _kernel;
+	private readonly Action<Index2D, ArrayView<GpuCandle>, ArrayView<GpuConstanceBrownCompositeIndexResult>, ArrayView<int>, ArrayView<int>, ArrayView<GpuConstanceBrownCompositeIndexParams>, ArrayView<float>, int, ArrayView<float>, int, ArrayView<float>, int, ArrayView<float>, int> _kernel;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="GpuConstanceBrownCompositeIndexCalculator"/> class.
@@ -163,7 +158,7 @@ public class GpuConstanceBrownCompositeIndexCalculator : GpuIndicatorCalculatorB
 		: base(context, accelerator)
 	{
 		_kernel = Accelerator.LoadAutoGroupedStreamKernel
-			<Index2D, ArrayView<GpuCandle>, ArrayView<GpuConstanceBrownCompositeIndexResult>, ArrayView<int>, ArrayView<int>, ArrayView<GpuConstanceBrownCompositeIndexParams>>(ConstanceBrownCompositeIndexKernel);
+			<Index2D, ArrayView<GpuCandle>, ArrayView<GpuConstanceBrownCompositeIndexResult>, ArrayView<int>, ArrayView<int>, ArrayView<GpuConstanceBrownCompositeIndexParams>, ArrayView<float>, int, ArrayView<float>, int, ArrayView<float>, int, ArrayView<float>, int>(ConstanceBrownCompositeIndexKernel);
 	}
 
 	/// <inheritdoc />
@@ -171,19 +166,14 @@ public class GpuConstanceBrownCompositeIndexCalculator : GpuIndicatorCalculatorB
 	{
 		ArgumentNullException.ThrowIfNull(candlesSeries);
 		ArgumentNullException.ThrowIfNull(parameters);
-
-		if (candlesSeries.Length == 0)
-			throw new ArgumentOutOfRangeException(nameof(candlesSeries));
-
-		if (parameters.Length == 0)
-			throw new ArgumentOutOfRangeException(nameof(parameters));
+		if (candlesSeries.Length == 0) throw new ArgumentOutOfRangeException(nameof(candlesSeries));
+		if (parameters.Length == 0) throw new ArgumentOutOfRangeException(nameof(parameters));
 
 		var seriesCount = candlesSeries.Length;
 
 		var totalSize = 0;
 		var seriesOffsets = new int[seriesCount];
 		var seriesLengths = new int[seriesCount];
-
 		for (var s = 0; s < seriesCount; s++)
 		{
 			seriesOffsets[s] = totalSize;
@@ -204,14 +194,32 @@ public class GpuConstanceBrownCompositeIndexCalculator : GpuIndicatorCalculatorB
 			}
 		}
 
+		int maxRoc = 1, maxMom = 1, maxFast = 1, maxSlow = 1;
+		for (var i = 0; i < parameters.Length; i++)
+		{
+			maxRoc = Math.Max(maxRoc, Math.Max(1, parameters[i].RocLength));
+			maxMom = Math.Max(maxMom, Math.Max(1, parameters[i].MomentumLength));
+			maxFast = Math.Max(maxFast, Math.Max(1, parameters[i].FastSmaLength));
+			maxSlow = Math.Max(maxSlow, Math.Max(1, parameters[i].SlowSmaLength));
+		}
+
 		using var inputBuffer = Accelerator.Allocate1D(flatCandles);
 		using var offsetsBuffer = Accelerator.Allocate1D(seriesOffsets);
 		using var lengthsBuffer = Accelerator.Allocate1D(seriesLengths);
 		using var paramsBuffer = Accelerator.Allocate1D(parameters);
+		using var rocWindowBuffer = Accelerator.Allocate1D<float>(parameters.Length * seriesCount * maxRoc);
+		using var momWindowBuffer = Accelerator.Allocate1D<float>(parameters.Length * seriesCount * maxMom);
+		using var fastWindowBuffer = Accelerator.Allocate1D<float>(parameters.Length * seriesCount * maxFast);
+		using var slowWindowBuffer = Accelerator.Allocate1D<float>(parameters.Length * seriesCount * maxSlow);
 		using var outputBuffer = Accelerator.Allocate1D<GpuConstanceBrownCompositeIndexResult>(totalSize * parameters.Length);
 
 		var extent = new Index2D(parameters.Length, seriesCount);
-		_kernel(extent, inputBuffer.View, outputBuffer.View, offsetsBuffer.View, lengthsBuffer.View, paramsBuffer.View);
+
+		_kernel(extent, inputBuffer.View, outputBuffer.View, offsetsBuffer.View, lengthsBuffer.View, paramsBuffer.View,
+			rocWindowBuffer.View, maxRoc,
+			momWindowBuffer.View, maxMom,
+			fastWindowBuffer.View, maxFast,
+			slowWindowBuffer.View, maxSlow);
 		Accelerator.Synchronize();
 
 		var flatResults = outputBuffer.GetAsArray1D();
@@ -243,7 +251,11 @@ public class GpuConstanceBrownCompositeIndexCalculator : GpuIndicatorCalculatorB
 		ArrayView<GpuConstanceBrownCompositeIndexResult> flatResults,
 		ArrayView<int> offsets,
 		ArrayView<int> lengths,
-		ArrayView<GpuConstanceBrownCompositeIndexParams> parameters)
+		ArrayView<GpuConstanceBrownCompositeIndexParams> parameters,
+		ArrayView<float> rocWindowStorage, int maxRoc,
+		ArrayView<float> momWindowStorage, int maxMom,
+		ArrayView<float> fastWindowStorage, int maxFast,
+		ArrayView<float> slowWindowStorage, int maxSlow)
 	{
 		var paramIdx = index.X;
 		var seriesIdx = index.Y;
@@ -253,131 +265,227 @@ public class GpuConstanceBrownCompositeIndexCalculator : GpuIndicatorCalculatorB
 		if (len <= 0)
 			return;
 
+		var total = flatCandles.Length;
+		var resBase = paramIdx * total;
 		var prm = parameters[paramIdx];
-		var rsiLength = prm.RsiLength <= 0 ? 1 : prm.RsiLength;
-		var kLength = prm.StochasticKLength <= 0 ? 1 : prm.StochasticKLength;
-		var dLength = prm.StochasticDLength <= 0 ? 1 : prm.StochasticDLength;
+
+		int rsiLen = prm.RsiLength <= 0 ? 1 : prm.RsiLength;
+		int rocLen = prm.RocLength <= 0 ? 1 : prm.RocLength;
+		int shortLen = prm.ShortRsiLength <= 0 ? 1 : prm.ShortRsiLength;
+		int momLen = prm.MomentumLength <= 0 ? 1 : prm.MomentumLength;
+		int fastLen = prm.FastSmaLength <= 0 ? 1 : prm.FastSmaLength;
+		int slowLen = prm.SlowSmaLength <= 0 ? 1 : prm.SlowSmaLength;
 		var priceType = (Level1Fields)prm.PriceType;
 
-		var firstCandle = flatCandles[offset];
-		var prevPrice = ExtractPrice(firstCandle, priceType);
+		// RSI state (Wilder)
+		float prevPrice = ExtractPrice(flatCandles[offset], priceType);
+		float gainSum = 0f, lossSum = 0f;
+		float avgGain = 0f, avgLoss = 0f;
 
-		var gainSum = 0f;
-		var lossSum = 0f;
-		var avgGain = 0f;
-		var avgLoss = 0f;
+		// Short RSI state
+		float prevPriceShort = prevPrice;
+		float gainSumS = 0f, lossSumS = 0f;
+		float avgGainS = 0f, avgLossS = 0f;
 
-		for (var i = 0; i < len; i++)
+		// ROC window over RSI
+		var rocBase = (paramIdx * lengths.Length + seriesIdx) * maxRoc;
+		var rocWindow = rocWindowStorage.SubView(rocBase, maxRoc);
+		int rocCount = 0, rocHead = 0;
+
+		// Momentum SMA window over Short RSI
+		var momBase = (paramIdx * lengths.Length + seriesIdx) * maxMom;
+		var momWindow = momWindowStorage.SubView(momBase, maxMom);
+		int momCount = 0, momHead = 0;
+		float momSum = 0f;
+
+		// Fast/Slow SMA over Composite
+		var fastBase = (paramIdx * lengths.Length + seriesIdx) * maxFast;
+		var fastWindow = fastWindowStorage.SubView(fastBase, maxFast);
+		int fastCount = 0, fastHead = 0;
+		float fastSum = 0f;
+
+		var slowBase = (paramIdx * lengths.Length + seriesIdx) * maxSlow;
+		var slowWindow = slowWindowStorage.SubView(slowBase, maxSlow);
+		int slowCount = 0, slowHead = 0;
+		float slowSum = 0f;
+
+		for (int i = 0; i < len; i++)
 		{
-			var candle = flatCandles[offset + i];
-			var resIndex = paramIdx * flatCandles.Length + (offset + i);
+			var c = flatCandles[offset + i];
+			var resIndex = resBase + (offset + i);
 
-			var result = new GpuConstanceBrownCompositeIndexResult
+			var outVal = new GpuConstanceBrownCompositeIndexResult
 			{
-				Time = candle.Time,
-				Rsi = float.NaN,
-				StochK = float.NaN,
-				StochD = float.NaN,
+				Time = c.Time,
 				Composite = float.NaN,
+				Fast = float.NaN,
+				Slow = float.NaN,
 				IsFormed = 0,
 			};
 
-			var price = ExtractPrice(candle, priceType);
-			float rsiValue = float.NaN;
+			var price = ExtractPrice(c, priceType);
+
+			// RSI
+			float rsi = float.NaN;
 			if (i > 0)
 			{
 				var delta = price - prevPrice;
 				var gain = delta > 0f ? delta : 0f;
 				var loss = delta < 0f ? -delta : 0f;
 
-				if (i <= rsiLength)
+				if (i <= rsiLen)
 				{
 					gainSum += gain;
 					lossSum += loss;
-
-					if (i == rsiLength)
+					if (i == rsiLen)
 					{
-						avgGain = gainSum / rsiLength;
-						avgLoss = lossSum / rsiLength;
+						avgGain = gainSum / rsiLen;
+						avgLoss = lossSum / rsiLen;
 					}
 				}
 				else
 				{
-					avgGain = (avgGain * (rsiLength - 1) + gain) / rsiLength;
-					avgLoss = (avgLoss * (rsiLength - 1) + loss) / rsiLength;
+					avgGain = (avgGain * (rsiLen - 1) + gain) / rsiLen;
+					avgLoss = (avgLoss * (rsiLen - 1) + loss) / rsiLen;
 				}
 
-				if (i >= rsiLength)
+				if (i >= rsiLen)
+					rsi = avgLoss == 0f ? 100f : (100f - 100f / (1f + (avgGain / avgLoss)));
+			}
+
+			// Short RSI
+			float shortRsi = float.NaN;
+			if (i > 0)
+			{
+				var deltaS = price - prevPriceShort;
+				var gainS = deltaS > 0f ? deltaS : 0f;
+				var lossS = deltaS < 0f ? -deltaS : 0f;
+
+				if (i <= shortLen)
 				{
-					if (avgLoss == 0f)
+					gainSumS += gainS;
+					lossSumS += lossS;
+					if (i == shortLen)
 					{
-						rsiValue = 100f;
-					}
-					else
-					{
-						var rs = avgGain / avgLoss;
-						rsiValue = rs == 1f ? 0f : 100f - 100f / (1f + rs);
+						avgGainS = gainSumS / shortLen;
+						avgLossS = lossSumS / shortLen;
 					}
 				}
-			}
-
-			var stochK = float.NaN;
-			if (i >= kLength - 1)
-			{
-				stochK = ComputeStochK(flatCandles, offset, i, kLength);
-			}
-
-			var stochD = float.NaN;
-			if (!stochK.IsNaN() && i >= kLength + dLength - 2)
-			{
-				var sumK = 0f;
-				for (var j = i - dLength + 1; j <= i; j++)
+				else
 				{
-					sumK += ComputeStochK(flatCandles, offset, j, kLength);
+					avgGainS = (avgGainS * (shortLen - 1) + gainS) / shortLen;
+					avgLossS = (avgLossS * (shortLen - 1) + lossS) / shortLen;
 				}
-				stochD = sumK / dLength;
+
+				if (i >= shortLen)
+					shortRsi = avgLossS == 0f ? 100f : (100f - 100f / (1f + (avgGainS / avgLossS)));
 			}
 
-			var composite = float.NaN;
-			if (!rsiValue.IsNaN() && !stochK.IsNaN() && !stochD.IsNaN())
+			// ROC over RSI
+			float rsiRoc = float.NaN;
+			if (!float.IsNaN(rsi))
 			{
-				composite = (rsiValue + stochK + stochD) / 3f;
-				result.IsFormed = 1;
+				if (rocCount < rocLen)
+				{
+					if (rocCount == rocLen - 1)
+					{
+						// can compute on next iteration when buffer is full
+					}
+					rocWindow[rocCount] = rsi;
+					rocCount++;
+				}
+				else
+				{
+					var old = rocWindow[rocHead];
+					rsiRoc = rsi - old;
+					rocWindow[rocHead] = rsi;
+					rocHead++;
+					if (rocHead == rocLen) rocHead = 0;
+				}
 			}
 
-			result.Rsi = rsiValue;
-			result.StochK = stochK;
-			result.StochD = stochD;
-			result.Composite = composite;
-			flatResults[resIndex] = result;
+			// Momentum SMA over short RSI
+			float rsiMom = float.NaN;
+			if (!float.IsNaN(shortRsi))
+			{
+				if (momCount < momLen)
+				{
+					momWindow[momCount] = shortRsi;
+					momSum += shortRsi;
+					momCount++;
+				}
+				else
+				{
+					var oldM = momWindow[momHead];
+					momSum = momSum - oldM + shortRsi;
+					momWindow[momHead] = shortRsi;
+					momHead++;
+					if (momHead == momLen) momHead = 0;
+				}
+
+				if (momCount >= momLen)
+					rsiMom = momSum / momLen;
+			}
+
+			// Composite
+			float composite = float.NaN;
+			if (!float.IsNaN(rsiRoc) && !float.IsNaN(rsiMom))
+				composite = rsiRoc + rsiMom;
+
+			// Fast SMA over composite
+			float fast = float.NaN;
+			if (!float.IsNaN(composite))
+			{
+				if (fastCount < fastLen)
+				{
+					fastWindow[fastCount] = composite;
+					fastSum += composite;
+					fastCount++;
+				}
+				else
+				{
+					var oldF = fastWindow[fastHead];
+					fastSum = fastSum - oldF + composite;
+					fastWindow[fastHead] = composite;
+					fastHead++;
+					if (fastHead == fastLen) fastHead = 0;
+				}
+
+				if (fastCount >= fastLen)
+					fast = fastSum / fastLen;
+			}
+
+			// Slow SMA over composite
+			float slow = float.NaN;
+			if (!float.IsNaN(composite))
+			{
+				if (slowCount < slowLen)
+				{
+					slowWindow[slowCount] = composite;
+					slowSum += composite;
+					slowCount++;
+				}
+				else
+				{
+					var oldS = slowWindow[slowHead];
+					slowSum = slowSum - oldS + composite;
+					slowWindow[slowHead] = composite;
+					slowHead++;
+					if (slowHead == slowLen) slowHead = 0;
+				}
+
+				if (slowCount >= slowLen)
+					slow = slowSum / slowLen;
+			}
+
+			outVal.Composite = composite;
+			outVal.Fast = fast;
+			outVal.Slow = slow;
+			outVal.IsFormed = (!float.IsNaN(fast) && !float.IsNaN(slow)) ? (byte)1 : (byte)0;
+			flatResults[resIndex] = outVal;
 
 			prevPrice = price;
+			prevPriceShort = price;
 		}
-	}
-
-	private static float ComputeStochK(ArrayView<GpuCandle> flatCandles, int offset, int index, int kLength)
-	{
-		var start = index - kLength + 1;
-		if (start < 0)
-			start = 0;
-
-		var highestHigh = float.MinValue;
-		var lowestLow = float.MaxValue;
-
-		for (var i = start; i <= index; i++)
-		{
-			var c = flatCandles[offset + i];
-			if (c.High > highestHigh)
-				highestHigh = c.High;
-			if (c.Low < lowestLow)
-				lowestLow = c.Low;
-		}
-
-		var diff = highestHigh - lowestLow;
-		if (diff == 0f)
-			return 0f;
-
-		var close = flatCandles[offset + index].Close;
-		return 100f * (close - lowestLow) / diff;
 	}
 }
