@@ -9,7 +9,7 @@ StockSharp.Algo.Gpu is a specialized library that provides GPU-accelerated calcu
 - **GPU Acceleration** – leverages ILGPU for cross-platform GPU computing with support for CUDA, OpenCL, and CPU backends
 - **Batch Processing** – efficiently processes multiple data series and parameter combinations in a single GPU pass
 - **Optimized Data Structures** – specialized `GpuCandle` and `GpuIndicatorResult` structs designed for GPU memory layout
-- **Technical Indicators** – currently includes GPU-accelerated Simple Moving Average (SMA) with extensible architecture for additional indicators
+- **Technical Indicators** – currently includes GPU-accelerated Simple Moving Average (SMA), Average Directional Index (ADX), and Envelope with extensible architecture for additional indicators
 - **Automatic Device Selection** – intelligent accelerator selection based on device capabilities and memory size
 
 ## Getting Started
@@ -81,11 +81,17 @@ context.Dispose();
 ### Indicators
 
 - **`GpuSmaCalculator`** – Simple Moving Average calculator supporting multiple price types and batch processing
+- **`GpuAdxCalculator`** – Average Directional Index calculator with smoothed directional movement results
+- **`GpuEnvelopeCalculator`** – Envelope calculator providing middle, upper, and lower band outputs
 
 ### Data Types
 
 - **`GpuSmaParams`** – parameter structure for SMA calculations with Level1Fields price type support
+- **`GpuAdxParams`** – parameter structure for ADX calculations including Wilder smoothing parameters
+- **`GpuEnvelopeParams`** – parameter structure for Envelope calculations with shift and price type configuration
 - **`IGpuIndicatorParams`** – interface for GPU indicator parameter structures
+- **`GpuAdxResult`** – complex GPU result structure for ADX (+DI, -DI, ADX) outputs
+- **`GpuEnvelopeResult`** – complex GPU result structure returning middle, upper, and lower band values
 - **`IGpuIndicatorResult`** – interface for GPU calculation results with ToValue() conversion method
 
 ## Performance Considerations
