@@ -2,9 +2,9 @@
 
 # [StockSharp - торговая платформа][1]
 
-## **Язык:** [English](README.md) | **Русский** | [中文](README.zh.md)
+## [English](README.md) | **Русский** | [中文](README.zh.md)
 
-## <a href="https://doc.stocksharp.ru" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4d6.svg" alt="Docs" height="40"/> Документация</a> <a href="https://stocksharp.ru/products/download/" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4be.svg" alt="Download" height="40"/> Скачать</a> <a href="https://t.me/stocksharpchat/1" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4ac.svg" alt="Chat" height="40"/> Чат</a> <a href="https://www.youtube.com/@stocksharp"><img src="https://raw.githubusercontent.com/edent/SuperTinyIcons/master/images/svg/youtube.svg" alt="YouTube" height="40"/> YouTube</a>
+## <a href="https://doc.stocksharp.ru" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4d6.svg" alt="Docs" height="40"/> Документация</a> <a href="https://stocksharp.ru/products/download/" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4be.svg" alt="Download" height="40"/> Скачать</a> <a href="https://t.me/stocksharpchat/1" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4ac.svg" alt="Chat" height="40"/> Чат</a> <a href="https://vkvideo.ru/@stocksharp"><img src="https://raw.githubusercontent.com/edent/SuperTinyIcons/master/images/svg/youtube.svg" alt="Video" height="40"/> Видео</a>
 
 ## Введение ##
 
