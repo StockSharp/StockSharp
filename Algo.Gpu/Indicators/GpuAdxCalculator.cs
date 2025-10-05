@@ -111,7 +111,7 @@ public struct GpuAdxResult : IGpuIndicatorResult
 			IsFormed = isFormed,
 		});
 
-		dxVal.Add(dxInd.Plus, new DecimalIndicatorValue(dxInd.Plus, (decimal)PlusDi, time)
+		dxVal.Add(dxInd.Minus, new DecimalIndicatorValue(dxInd.Minus, (decimal)MinusDi, time)
 		{
 			IsFinal = true,
 			IsFormed = isFormed,
