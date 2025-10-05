@@ -1,71 +1,72 @@
 <img src="./Media/SLogo.png" align="right" />
 
-# [StockSharp - trading platform][1]
+# [StockSharp - 交易平台][1]
 
-## **Language:** **English** | [Русский](README.ru.md) | [中文](README.zh.md)
+## **语言:** [English](README.md) | [Русский](README.ru.md) | **中文**
 
-## <a href="https://doc.stocksharp.com" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4d6.svg" alt="Docs" height="40"/> Docs</a> <a href="https://stocksharp.com/products/download/" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4be.svg" alt="Download" height="40"/> Download</a> <a href="https://t.me/stocksharpchat/361" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4ac.svg" alt="Chat" height="40"/> Chat</a> <a href="https://www.youtube.com/@stocksharp"><img src="https://raw.githubusercontent.com/edent/SuperTinyIcons/master/images/svg/youtube.svg" alt="YouTube" height="40"/> YouTube</a>
+## <a href="https://doc.stocksharp.com" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4d6.svg" alt="Docs" height="40"/> 文档</a> <a href="https://stocksharp.com/products/download/" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4be.svg" alt="Download" height="40"/> 下载</a> <a href="https://t.me/stocksharpchat/361" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4ac.svg" alt="Chat" height="40"/> 聊天</a> <a href="https://www.youtube.com/@stocksharp"><img src="https://raw.githubusercontent.com/edent/SuperTinyIcons/master/images/svg/youtube.svg" alt="YouTube" height="40"/> YouTube</a>
 
-## Introduction ##
+## 介绍 ##
 
-**StockSharp** (shortly **S#**) – are **free** platform for trading at any markets of the world (crypto exchanges, American, European, Asian, Russian, stocks, futures, options, Bitcoins, forex, etc.). You will be able to trade manually or automated trading (algorithmic trading robots, conventional or HFT).
+**StockSharp**（简称 **S#**）是一个**免费**的全球市场交易平台（加密货币交易所、美国、欧洲、亚洲、俄罗斯股票、期货、期权、比特币、外汇等）。您可以进行手动交易或自动交易（算法交易机器人、常规或高频交易 HFT）。
 
-**Available connections**: Binance, MT4, MT5, FIX/FAST, PolygonIO, Trading Technologies, Alpaca Markets, BarChart, CQG, E*Trade, IQFeed, InteractiveBrokers, LMAX, MatLab, Oanda, FXCM, Rithmic, cTrader, DXtrade, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, OKX, Coincheck, CEX.IO, BitMEX, YoBit, Livecoin, EXMO, Deribit, HTX, KuCoin, QuantFEED and many other.
+**可用连接**: Binance, MT4, MT5, FIX/FAST, PolygonIO, Trading Technologies, Alpaca Markets, BarChart, CQG, E*Trade, IQFeed, InteractiveBrokers, LMAX, MatLab, Oanda, FXCM, Rithmic, cTrader, DXtrade, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, OKX, Coincheck, CEX.IO, BitMEX, YoBit, Livecoin, EXMO, Deribit, HTX, KuCoin, QuantFEED 等等。
 
 ## [Designer][8]
 <img src="./Media/Designer500.gif" align="left" />
 
-**Designer** - **free** universal algorithmic strategies application for easy strategy creation:
-  - Visual designer to create strategies by mouse clicking
-  - Embedded C# editor
-  - Easy to create own indicators
-  - Build in debugger
-  - Connections to the multiple electronic boards and brokers
-  - All world platforms
-  - Schema sharing with own team
+**Designer** - **免费**的通用算法策略应用程序，用于轻松创建策略：
+  - 可视化设计器，通过鼠标点击创建策略
+  - 内置 C# 编辑器
+  - 轻松创建自己的指标
+  - 内置调试器
+  - 连接到多个电子交易所和经纪商
+  - 全球所有平台
+  - 与团队共享架构
 
 ## [Hydra][9]
 <img src="./Media/Hydra500.gif" align="right" />
 
-**Hydra** - **free** software to automatically load and store market data:
-  - Supports many sources
-  - High compression ratio
-  - Any data type
-  - Program access to stored data via API
-  - Export to csv, excel, xml or database
-  - Import from csv
-  - Scheduled tasks
-  - Auto-sync over the Internet between several Hydra instances
+**Hydra** - **免费**软件，用于自动加载和存储市场数据：
+  - 支持多种数据源
+  - 高压缩比
+  - 任何数据类型
+  - 通过 API 程序访问存储的数据
+  - 导出到 csv、excel、xml 或数据库
+  - 从 csv 导入
+  - 计划任务
+  - 通过互联网在多个 Hydra 实例之间自动同步
 
 ## [Terminal][10]
 <img src="./Media/Terminal500.gif" align="left" />
 
-**Terminal** - **free** trading charting application (trading terminal):
-  - Connections to the multiple electronic boards and brokers
-  - Trading from charts by clicking
-  - Arbitrary timeframes
-  - Volume, Tick, Range, P&F, Renko candles
-  - Cluster charts
-  - Box charts
-  - Volume Profile
-  
+**Terminal** - **免费**交易图表应用程序（交易终端）：
+  - 连接到多个电子交易所和经纪商
+  - 通过点击图表进行交易
+  - 任意时间框架
+  - Volume、Tick、Range、P&F、Renko K线
+  - 集群图表
+  - Box 图表
+  - 成交量分布
+
 ## [Shell][11]
 <img src="./Media/Shell500.gif" align="right" />
 
-**Shell** - the ready-made graphical framework with the ability to quickly change to your needs and with fully open source code in C#:
-  - Complete source code
-  - Support for all StockSharp platform connections
-  - Support for Designer schemas
-  - Flexible user interface
-  - Strategy testing (statistics, equity, reports)
-  - Save and load strategy settings
-  - Launch strategies in parallel
-  - Detailed information on strategy performance 
-  - Launch strategies on schedule
+**Shell** - 现成的图形框架，可以快速适应您的需求，具有完全开源的 C# 代码：
+  - 完整源代码
+  - 支持所有 StockSharp 平台连接
+  - 支持 Designer 架构
+  - 灵活的用户界面
+  - 策略测试（统计、权益、报告）
+  - 保存和加载策略设置
+  - 并行启动策略
+  - 策略性能的详细信息
+  - 按计划启动策略
 
 ## [API][12]
-API is a **free** C# library for programmers who use Visual Studio. The API lets you create any trading strategy, from long-timeframe positional strategies to high frequency strategies (HFT) with direct access to the exchange (DMA). [More info...][12]
-### Connector example
+API 是一个面向使用 Visual Studio 的程序员的**免费** C# 库。API 允许您创建任何交易策略，从长期持仓策略到直接访问交易所的高频策略 (HFT) (DMA)。[更多信息...][12]
+
+### 连接器示例
 ```C#
 var connector = new Connector();
 var security = connector.LookupById("AAPL@NASDAQ");
@@ -77,10 +78,10 @@ connector.CandleReceived += (sub, candle) =>
         if (sub != subscription || candle.State != CandleStates.Finished)
                 return;
 
-        // determine candle color
+        // 确定K线颜色
         var isGreen = candle.ClosePrice > candle.OpenPrice;
 
-        // register market order depending on candle color
+        // 根据K线颜色注册市价单
         var order = new Order
         {
                 Security = security,
@@ -96,9 +97,9 @@ connector.Subscribe(subscription);
 connector.Connect();
 ```
 
-## Crypto exchanges
-|Logo | Name | Documentation |
-|:---:|:----:|:-------------:|
+## 加密货币交易所
+|图标 | 名称 | 文档|
+|:---:|:----:|:------:|
 |<img src="./Media/logos/bibox_logo.svg" height="30" /> |Bibox | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/bibox.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/Binance_logo.svg" height="30" /> |Binance | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/binance.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bingx_logo.svg" height="30" /> |BingX | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/bingx.html" target="_blank">Docs</a> |
@@ -155,9 +156,11 @@ connector.Connect();
 |<img src="./Media/logos/zaif_logo.svg" height="30" /> |Zaif | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/zaif.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/zb_logo.svg" height="30" /> |ZB | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/zb.html" target="_blank">Docs</a> |
 
-## Stock, Futures and Options
-|Logo | Name | Documentation |
-|:---:|:----:|:-------------:|
+*[所有加密货币交易所的完整列表 - 请参阅英文版 README](README.md#crypto-exchanges)*
+
+## 股票、期货和期权
+|图标 | 名称 | 文档|
+|:---:|:----:|:------:|
 |<img src="./Media/logos/polygonio_logo.svg" height="30" /> |Polygon.io | <a href="//doc.stocksharp.com/topics/api/connectors/stock_market/polygonio.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/alpaca_logo.svg" height="30" /> |Alpaca.Markets | <a href="//doc.stocksharp.com/topics/api/connectors/stock_market/alpaca.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/interactivebrokers_logo.svg" height="30" /> |Interactive Brokers | <a href="//doc.stocksharp.com/topics/api/connectors/stock_market/interactive_brokers.html" target="_blank">Docs</a> |
@@ -182,10 +185,11 @@ connector.Connect();
 |<img src="./Media/logos/yahoo_logo.svg" height="30" /> |Yahoo | <a href="//doc.stocksharp.com/topics/api/connectors/stock_market/yahoo.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/Blackwood_logo.png" height="30" /> |Blackwood (Fusion) | <a href="//doc.stocksharp.com/topics/api/connectors/stock_market/blackwood_fusion.html" target="_blank">Docs</a> |
 
+*[所有股票交易所的完整列表 - 请参阅英文版 README](README.md#stock-futures-and-options)*
 
-## Forex
-|Logo | Name | Documentation |
-|:---:|:----:|:-------------:|
+## 外汇
+|图标 | 名称 | 文档|
+|:---:|:----:|:------:|
 |<img src="./Media/logos/devexperts_logo.svg" height="30" /> |DXtrade | <a href="//doc.stocksharp.com/topics/api/connectors/forex/dxtrade.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/ctrader_logo.svg" height="30" /> |cTrader | <a href="//doc.stocksharp.com/topics/api/connectors/forex/ctrader.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/mt4_logo.svg" height="30" /> |MT4 | <a href="//doc.stocksharp.com/topics/api/connectors/forex/metatrader.html" target="_blank">Docs</a> |
@@ -204,4 +208,3 @@ connector.Connect();
   [10]: https://stocksharp.com/store/trading-terminal/
   [11]: https://stocksharp.com/store/trading-shell/
   [12]: https://stocksharp.com/store/api/
-
