@@ -67,13 +67,11 @@ public class MoneyFlowIndex : LengthIndicator<decimal>
 		if (negativeFlow == 0)
 			return 100m;
 
-		var res = positiveFlow / negativeFlow;
+		var sum = positiveFlow + negativeFlow;
 
-		if (res == 1)
-			return 0m;
+		if (sum == 0)
+			return null;
 
-		return negativeFlow != 0 
-			? 100m - 100m / (1m + res)
-			: null;
+		return 100m * (positiveFlow / sum);
 	}
 }
