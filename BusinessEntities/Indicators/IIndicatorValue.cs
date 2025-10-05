@@ -626,7 +626,7 @@ public abstract class ComplexIndicatorValue<TIndicator>(TIndicator indicator, Da
 			yield break;
 
 		foreach (var inner in TypedIndicator.InnerIndicators)
-			yield return InnerValues[inner].ToValues();
+			yield return InnerValues[inner].ToValues().ToArray();
 	}
 
 	/// <inheritdoc />

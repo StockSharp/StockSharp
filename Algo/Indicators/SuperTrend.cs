@@ -39,7 +39,8 @@ public class SuperTrendIndicatorValue : DecimalIndicatorValue
 		foreach (var v in base.ToValues())
 			yield return v;
 
-		yield return IsUpTrend;
+		if (!IsEmpty)
+			yield return IsUpTrend;
 	}
 
 	/// <inheritdoc />

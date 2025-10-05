@@ -91,8 +91,46 @@ public class IndicatorTests
 		return [.. list];
 	}
 
-	private static void CompareValues<T>(T[] actual, IIndicatorValue[] expected, string indName)
-		where T : IIndicatorValue
+	private static void CompareValue(IIndicatorValue actual, IIndicatorValue expected, string indName, bool checkExtended)
+	{
+		if (checkExtended)
+			actual.IsFinal.AssertEqual(expected.IsFinal, indName);
+
+		if (!actual.IsFormed)
+		{
+			if (checkExtended)
+				expected.IsFormed.AssertFalse(indName);
+		}
+		else
+		{
+			static void compare(IEnumerable<object> a, IEnumerable<object> e, string indName)
+			{
+				var aArr = a.ToArray();
+				var eArr = e.ToArray();
+
+				aArr.Length.AssertEqual(eArr.Length);
+
+				for (var i = 0; i < aArr.Length; i++)
+				{
+					var av = aArr[i];
+					var ev = eArr[i];
+
+					if (av is IEnumerable<object> ae)
+						compare(ae, (IEnumerable<object>)ev, indName);
+					else if (av is bool b1)
+						b1.AssertEqual((bool)ev, indName);
+					else if (av is int i1)
+						i1.AssertEqual((int)ev, indName);
+					else
+						(((decimal)av - (decimal)ev) < 0.001m).AssertTrue(indName);
+				}
+			}
+
+			compare(actual.ToValues(), expected.ToValues(), indName);
+		}
+	}
+
+	private static void CompareValues(IIndicatorValue[] actual, IIndicatorValue[] expected, string indName, bool checkExtended)
 	{
 		ArgumentNullException.ThrowIfNull(actual);
 		ArgumentNullException.ThrowIfNull(expected);
@@ -100,33 +138,7 @@ public class IndicatorTests
 		actual.Length.AssertEqual(expected.Length);
 
 		for (var i = 0; i < expected.Length; i++)
-		{
-			if (!actual[i].IsFormed)
-				expected[i].IsFormed.AssertFalse(indName);
-			else
-			{
-				static void compare(IEnumerable<object> a, IEnumerable<object> e, string indName)
-				{
-					var aArr = a.ToArray();
-					var eArr = e.ToArray();
-
-					aArr.Length.AssertEqual(eArr.Length);
-
-					for (var i = 0; i < aArr.Length; i++)
-					{
-						var av = aArr[i];
-						var ev = eArr[i];
-
-						if (av is IEnumerable<object> ae)
-							compare(ae, (IEnumerable<object>)ev, indName);
-						else
-							(((decimal)av - (decimal)ev) < 0.001m).AssertTrue(indName);
-					}
-				}
-
-				compare(actual[i].ToValues(), expected[i].ToValues(), indName);
-			}
-		}
+			CompareValue(actual[i], expected[i], indName, checkExtended);
 	}
 
 	private static IEnumerable<IndicatorType> GetIndicatorTypes()
@@ -792,8 +804,7 @@ public class IndicatorTests
 			foreach (var (indicatorType, calculatorType) in provider.All)
 			{
 				var calculator = provider.Create(ctx, acc, calculatorType);
-				if (calculator is null)
-					continue;
+				calculator.AssertNotNull();
 
 				// build N parameter variations from randomized indicators
 				const int variations = 10;
@@ -823,7 +834,7 @@ public class IndicatorTests
 						var indCpu = indicators[p].TypedClone();
 						var cpu = runCpu(indCpu, msgSeries[s]);
 
-						CompareValues(gpuOut.Select(r => r.ToValue(indCpu)).ToArray(), cpu, indCpu.ToString());
+						CompareValues(gpuOut.Select(r => r.ToValue(indCpu)).ToArray(), cpu, indCpu.ToString(), true);
 					}
 				}
 			}
@@ -895,6 +906,44 @@ public class IndicatorTests
 		// Clear
 		provider.Clear();
 		provider.All.Count.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void IndicatorValues_Roundtrip()
+	{
+		var time = new DateTimeOffset(2000, 1, 1, 0, 0, 0, TimeSpan.Zero);
+		var tf = TimeSpan.FromMinutes(1);
+		var secId = Helper.CreateSecurity().ToSecurityId();
+		var candles = LoadCandles(secId, time, tf);
+
+		foreach (var type in GetIndicatorTypes())
+		{
+			var indicator = type.CreateIndicator();
+			var outputs = new List<IIndicatorValue>(candles.Length);
+
+			// feed all candles
+			foreach (var c in candles)
+			{
+				IIndicatorValue input = type.InputValue == typeof(DecimalIndicatorValue)
+					? new DecimalIndicatorValue(indicator, c.ClosePrice, c.OpenTime) { IsFinal = true }
+					: new CandleIndicatorValue(indicator, c) { IsFinal = true };
+
+				var outVal = indicator.Process(input);
+				outputs.Add(outVal);
+			}
+
+			// roundtrip each produced value
+			for (var i = 0; i < outputs.Count; i++)
+			{
+				var original = outputs[i];
+				
+				var factory = type.CreateIndicator();
+
+				var restored = factory.CreateValue(original.Time, [.. original.ToValues()]);
+
+				CompareValue(restored, original, factory.ToString(), false);
+			}
+		}
 	}
 }
 
