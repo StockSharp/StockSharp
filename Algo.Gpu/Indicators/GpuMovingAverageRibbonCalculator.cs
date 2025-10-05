@@ -66,6 +66,7 @@ public unsafe struct GpuMovingAverageRibbonResult : IGpuIndicatorResult
 	/// <summary>
 	/// Ribbon average values.
 	/// </summary>
+	[CLSCompliant(false)]
 	public fixed float Averages[MaxRibbonCount];
 
 	/// <summary>

@@ -62,7 +62,7 @@ public struct GpuRainbowChartsResult : IGpuIndicatorResult
 	/// <summary>
 	/// Bit mask describing which averages are formed (bit index corresponds to average index).
 	/// </summary>
-	public ulong FormedMask;
+	public long FormedMask;
 
 	/// <summary>
 	/// First average value.
@@ -269,7 +269,7 @@ public struct GpuRainbowChartsResult : IGpuIndicatorResult
 		{
 			var inner = rainbow.InnerIndicators[index];
 			var avg = GetAverage(index);
-			var lineFormed = (formedMask & (1UL << index)) != 0;
+			var lineFormed = (formedMask & (1L << index)) != 0;
 
 			if (avg.IsNaN())
 			{
@@ -429,7 +429,7 @@ public class GpuRainbowChartsCalculator : GpuIndicatorCalculatorBase<RainbowChar
 					ref var rcRes = ref arr[bar];
 					rcRes.LineCount = (byte)lineCount;
 
-					ulong formedMask = 0;
+					long formedMask = 0;
 					var allFormed = true;
 					var time = 0L;
 
@@ -443,7 +443,7 @@ public class GpuRainbowChartsCalculator : GpuIndicatorCalculatorBase<RainbowChar
 						var lineFormed = smaRes.IsFormed != 0 && !smaRes.Value.IsNaN();
 
 						if (lineFormed)
-							formedMask |= 1UL << line;
+							formedMask |= 1L << line;
 						else
 							allFormed = false;
 
