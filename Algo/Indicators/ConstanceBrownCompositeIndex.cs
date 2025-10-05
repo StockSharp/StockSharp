@@ -59,8 +59,6 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator<IConstanceBrown
 	/// <inheritdoc />
 	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
-	private int _rsiLength = 14;
-
 	/// <summary>
 	/// RSI period length.
 	/// </summary>
@@ -71,12 +69,10 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator<IConstanceBrown
 		GroupName = LocalizedStrings.GeneralKey)]
 	public int RsiLength
 	{
-		get => _rsiLength;
+		get => _rsi.Length;
 		set
 		{
-			_rsiLength = value;
 			_rsi.Length = value;
-
 			Reset();
 		}
 	}
@@ -95,7 +91,6 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator<IConstanceBrown
 		set
 		{
 			_rsiRoc.Length = value;
-
 			Reset();
 		}
 	}
@@ -114,7 +109,6 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator<IConstanceBrown
 		set
 		{
 			_shortRsi.Length = value;
-
 			Reset();
 		}
 	}

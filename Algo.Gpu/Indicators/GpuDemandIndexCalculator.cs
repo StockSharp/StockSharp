@@ -226,7 +226,8 @@ public class GpuDemandIndexCalculator : GpuIndicatorCalculatorBase<DemandIndex, 
 			if (b != 0f)
 				demandIndex = a / b;
 
-			demandIndex *= MathF.Sign(deltaP);
+			var sign = deltaP > 0f ? 1f : (deltaP < 0f ? -1f : 0f);
+			demandIndex *= sign;
 
 			if (count < L)
 			{
