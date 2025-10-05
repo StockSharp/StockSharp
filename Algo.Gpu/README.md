@@ -77,21 +77,7 @@ context.Dispose();
 - **`GpuCandle`** – GPU-optimized candle data structure with float precision for performance
 - **`IGpuIndicatorResult`** – interface for GPU indicator calculation results with ToValue conversion
 - **`GpuIndicatorResult`** – standard GPU result structure implementing IGpuIndicatorResult
-
-### Indicators
-
-- **`GpuSmaCalculator`** – Simple Moving Average calculator supporting multiple price types and batch processing
-- **`GpuAdxCalculator`** – Average Directional Index calculator with smoothed directional movement results
-- **`GpuEnvelopeCalculator`** – Envelope calculator providing middle, upper, and lower band outputs
-
-### Data Types
-
-- **`GpuSmaParams`** – parameter structure for SMA calculations with Level1Fields price type support
-- **`GpuAdxParams`** – parameter structure for ADX calculations including Wilder smoothing parameters
-- **`GpuEnvelopeParams`** – parameter structure for Envelope calculations with shift and price type configuration
 - **`IGpuIndicatorParams`** – interface for GPU indicator parameter structures
-- **`GpuAdxResult`** – complex GPU result structure for ADX (+DI, -DI, ADX) outputs
-- **`GpuEnvelopeResult`** – complex GPU result structure returning middle, upper, and lower band values
 - **`IGpuIndicatorResult`** – interface for GPU calculation results with ToValue() conversion method
 
 ## Performance Considerations
