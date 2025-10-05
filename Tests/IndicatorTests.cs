@@ -91,7 +91,7 @@ public class IndicatorTests
 		return [.. list];
 	}
 
-	private static void CompareValues<T>(T[] actual, IIndicatorValue[] expected)
+	private static void CompareValues<T>(T[] actual, IIndicatorValue[] expected, string indName)
 		where T : IIndicatorValue
 	{
 		ArgumentNullException.ThrowIfNull(actual);
@@ -102,10 +102,10 @@ public class IndicatorTests
 		for (var i = 0; i < expected.Length; i++)
 		{
 			if (!actual[i].IsFormed)
-				expected[i].IsFormed.AssertFalse();
+				expected[i].IsFormed.AssertFalse(indName);
 			else
 			{
-				static void compare(IEnumerable<object> a, IEnumerable<object> e)
+				static void compare(IEnumerable<object> a, IEnumerable<object> e, string indName)
 				{
 					var aArr = a.ToArray();
 					var eArr = e.ToArray();
@@ -118,13 +118,13 @@ public class IndicatorTests
 						var ev = eArr[i];
 
 						if (av is IEnumerable<object> ae)
-							compare(ae, (IEnumerable<object>)ev);
+							compare(ae, (IEnumerable<object>)ev, indName);
 						else
-							(((decimal)av - (decimal)ev) < 0.001m).AssertTrue();
+							(((decimal)av - (decimal)ev) < 0.001m).AssertTrue(indName);
 					}
 				}
 
-				compare(actual[i].ToValues(), expected[i].ToValues());
+				compare(actual[i].ToValues(), expected[i].ToValues(), indName);
 			}
 		}
 	}
@@ -823,7 +823,7 @@ public class IndicatorTests
 						var indCpu = indicators[p].TypedClone();
 						var cpu = runCpu(indCpu, msgSeries[s]);
 
-						CompareValues(gpuOut.Select(r => r.ToValue(indCpu)).ToArray(), cpu);
+						CompareValues(gpuOut.Select(r => r.ToValue(indCpu)).ToArray(), cpu, indCpu.ToString());
 					}
 				}
 			}

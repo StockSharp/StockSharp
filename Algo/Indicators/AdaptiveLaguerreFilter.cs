@@ -101,4 +101,8 @@ public class AdaptiveLaguerreFilter : BaseIndicator
 		base.Load(storage);
 		Gamma = storage.GetValue<decimal>(nameof(Gamma));
 	}
+
+	/// <inheritdoc />
+	public override string ToString()
+		=> $"{base.ToString()} G=({Gamma})";
 }
