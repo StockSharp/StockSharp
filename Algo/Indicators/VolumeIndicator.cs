@@ -11,7 +11,6 @@
 	Name = LocalizedStrings.VolumeKey,
 	Description = LocalizedStrings.CandleVolumeKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[IndicatorOut(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/volume.html")]
 public class VolumeIndicator : BaseIndicator
 {
