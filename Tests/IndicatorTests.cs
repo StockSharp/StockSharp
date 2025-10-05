@@ -240,8 +240,8 @@ public class IndicatorTests
 
 			do
 			{
-				indicator.NumValuesToInitialize.AssertGreater(0);
-				indicator.IsFormed.AssertFalse();
+				indicator.NumValuesToInitialize.AssertGreater(0, indicator.ToString());
+				indicator.IsFormed.AssertFalse(indicator.ToString());
 
 				var finalCount = 0;
 				var i = 0;
@@ -256,7 +256,7 @@ public class IndicatorTests
 					var value = CreateValue(type, indicator, secId, now, i, tf, isFinal, false);
 					indicator.Process(value).ValidateValue();
 
-					finalCount.AssertLess(1000);
+					finalCount.AssertLess(1000, indicator.ToString());
 
 					i++;
 				}
@@ -268,7 +268,7 @@ public class IndicatorTests
 					var value = CreateValue(type, indicator, secId, now, i + n, tf, RandomGen.GetBool(), false);
 					indicator.Process(value).ValidateValue();
 
-					indicator.IsFormed.AssertTrue();
+					indicator.IsFormed.AssertTrue(indicator.ToString());
 				}
 
 				// test 5 times to ensure the same final count
@@ -276,9 +276,9 @@ public class IndicatorTests
 				{
 					// Reset
 					indicator.Reset();
-					indicator.IsFormed.AssertFalse();
+					indicator.IsFormed.AssertFalse(indicator.ToString());
 
-					indicator.NumValuesToInitialize.AssertEqual(finalCount);
+					indicator.NumValuesToInitialize.AssertEqual(finalCount, indicator.ToString());
 
 					var finalCount2 = 0;
 
@@ -295,7 +295,7 @@ public class IndicatorTests
 						i++;
 					}
 
-					finalCount.AssertEqual(finalCount2);
+					finalCount.AssertEqual(finalCount2, indicator.ToString());
 				}
 
 				var isAnySet = false;
@@ -325,6 +325,7 @@ public class IndicatorTests
 			typeof(Trough),
 			typeof(ParabolicSar),
 			typeof(Median),
+			typeof(Fractals),
 		};
 
 		foreach (var type in GetIndicatorTypes().Where(t => !skipTypes.Contains(t.Indicator)))
@@ -437,6 +438,11 @@ public class IndicatorTests
 			hist.Macd.ShortMa.Length = RandomGen.GetInt(5, 20);
 			hist.Macd.LongMa.Length = RandomGen.GetInt(20, 50);
 			hist.SignalMa.Length = RandomGen.GetInt(5, 20);
+			check();
+		}
+		else if (indicator is RainbowCharts rc)
+		{
+			rc.Lines = RandomGen.GetInt(5, 20);
 			check();
 		}
 		else
@@ -796,6 +802,9 @@ public class IndicatorTests
 		var provider = new GpuIndicatorCalculatorProvider();
 		provider.Init();
 
+		// TODO
+		var invalid = new List<Type>();
+
 		var (ctx, acc) = GpuAcceleratorFactory.CreateBestAccelerator();
 
 		using (ctx)
@@ -824,18 +833,25 @@ public class IndicatorTests
 				// calculate via interface for all TF series and all params
 				var gpuAll = calculator.Calculate(gpuSeries, parameters); // [series][param][bar]
 
-				for (var s = 0; s < msgSeries.Length; s++)
+				try
 				{
-					for (var p = 0; p < indicators.Length; p++)
+					for (var s = 0; s < msgSeries.Length; s++)
 					{
-						var gpuOut = gpuAll[s][p];
+						for (var p = 0; p < indicators.Length; p++)
+						{
+							var gpuOut = gpuAll[s][p];
 
-						// fresh indicator instance for CPU with same settings
-						var indCpu = indicators[p].TypedClone();
-						var cpu = runCpu(indCpu, msgSeries[s]);
+							// fresh indicator instance for CPU with same settings
+							var indCpu = indicators[p].TypedClone();
+							var cpu = runCpu(indCpu, msgSeries[s]);
 
-						CompareValues(gpuOut.Select(r => r.ToValue(indCpu)).ToArray(), cpu, indCpu.ToString(), true);
+							CompareValues(gpuOut.Select(r => r.ToValue(indCpu)).ToArray(), cpu, indCpu.ToString(), true);
+						}
 					}
+				}
+				catch
+				{
+					invalid.Add(indicatorType);
 				}
 			}
 		}

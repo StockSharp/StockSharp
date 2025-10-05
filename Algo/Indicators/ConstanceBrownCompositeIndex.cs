@@ -191,7 +191,7 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator<IConstanceBrown
 		var shortRsiValue = _shortRsi.Process(input);
 
 		IIndicatorValue rocValue;
-		if (_rsi.IsFormed)
+		if (_rsi.IsFormed && !rsiValue.IsEmpty)
 		{
 			var rsiDecimal = rsiValue.ToDecimal();
 			rocValue = _rsiRoc.Process(rsiDecimal, input.Time, input.IsFinal);
@@ -200,7 +200,7 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator<IConstanceBrown
 			rocValue = new DecimalIndicatorValue(_rsiRoc, input.Time) { IsFinal = input.IsFinal };
 
 		IIndicatorValue momentumValue;
-		if (_shortRsi.IsFormed)
+		if (_shortRsi.IsFormed && !shortRsiValue.IsEmpty)
 		{
 			var shortRsiDecimal = shortRsiValue.ToDecimal();
 			momentumValue = _rsiMomentum.Process(shortRsiDecimal, input.Time, input.IsFinal);
@@ -208,7 +208,7 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator<IConstanceBrown
 		else
 			momentumValue = new DecimalIndicatorValue(_rsiMomentum, input.Time) { IsFinal = input.IsFinal };
 
-		if (_rsiRoc.IsFormed && _rsiMomentum.IsFormed)
+		if (_rsiRoc.IsFormed && _rsiMomentum.IsFormed && !rocValue.IsEmpty && !momentumValue.IsEmpty)
 		{
 			var rsiChange = rocValue.ToDecimal();
 			var rsiMom = momentumValue.ToDecimal();
@@ -216,7 +216,7 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator<IConstanceBrown
 
 			var compositeValue = CompositeIndexLine.Process(compositeIndexValue, input.Time, input.IsFinal);
 
-			if (CompositeIndexLine.IsFormed)
+			if (CompositeIndexLine.IsFormed && !compositeValue.IsEmpty)
 			{
 				var fastValue = FastSma.Process(compositeValue);
 				var slowValue = SlowSma.Process(compositeValue);
@@ -264,6 +264,10 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator<IConstanceBrown
 			.Set(nameof(SlowSmaLength), SlowSmaLength)
 		;
 	}
+
+	/// <inheritdoc />
+	public override string ToString()
+		=> $"{base.ToString()}, RSI={RsiLength}, ROC={RocLength}, S_RSI={ShortRsiLength}, M={MomentumLength}, F={FastSmaLength}, S={SlowSmaLength}";
 }
 
 /// <summary>
