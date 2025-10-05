@@ -81,10 +81,12 @@ context.Dispose();
 ### Indicators
 
 - **`GpuSmaCalculator`** – Simple Moving Average calculator supporting multiple price types and batch processing
+- **`GpuOscillatorOfMovingAverageCalculator`** – Oscillator of Moving Average GPU calculator with batched processing support
 
 ### Data Types
 
 - **`GpuSmaParams`** – parameter structure for SMA calculations with Level1Fields price type support
+- **`GpuOscillatorOfMovingAverageParams`** – parameter structure encapsulating OMA short/long periods and price type
 - **`IGpuIndicatorParams`** – interface for GPU indicator parameter structures
 - **`IGpuIndicatorResult`** – interface for GPU calculation results with ToValue() conversion method
 
