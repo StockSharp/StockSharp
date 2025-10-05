@@ -105,4 +105,8 @@ public class JurikMovingAverage : LengthIndicator<decimal>
 		base.Save(storage);
 		storage.SetValue(nameof(Phase), Phase);
 	}
+
+	/// <inheritdoc />
+	public override string ToString()
+		=> $"{base.ToString()} PH=({Phase})";
 }

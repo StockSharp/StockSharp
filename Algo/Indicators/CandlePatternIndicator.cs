@@ -236,4 +236,8 @@ public class CandlePatternIndicator : BaseIndicator
 				_buffer.RemoveAt(_buffer.Count - 1);
 		}
 	}
+
+	/// <inheritdoc />
+	public override string ToString()
+		=> Pattern?.Name ?? base.ToString();
 }

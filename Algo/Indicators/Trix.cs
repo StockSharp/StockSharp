@@ -111,4 +111,8 @@ public class Trix : LengthIndicator<IIndicatorValue>
 
 		storage.SetValue(nameof(RocLength), RocLength);
 	}
+
+	/// <inheritdoc />
+	public override string ToString()
+		=> $"{base.ToString()} RL=({RocLength})";
 }

@@ -163,4 +163,8 @@ public class NickRypockTrailingReverse : LengthIndicator<decimal>
 
 		storage.SetValue(nameof(Multiple), Multiple);
 	}
+
+	/// <inheritdoc />
+	public override string ToString()
+		=> $"{base.ToString()} M=({Multiple})";
 }

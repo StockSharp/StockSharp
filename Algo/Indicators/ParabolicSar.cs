@@ -308,4 +308,8 @@ public class ParabolicSar : BaseIndicator
 		storage.SetValue(nameof(AccelerationMax), AccelerationMax);
 		storage.SetValue(nameof(AccelerationStep), AccelerationStep);
 	}
+
+	/// <inheritdoc />
+	public override string ToString()
+		=> $"{base.ToString()} A=({Acceleration}) S=({AccelerationStep}) M=({AccelerationMax})";
 }

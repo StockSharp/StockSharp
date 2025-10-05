@@ -130,4 +130,8 @@ public class ArnaudLegouxMovingAverage : LengthIndicator<decimal>
 		Offset = storage.GetValue<decimal>(nameof(Offset));
 		Sigma = storage.GetValue<int>(nameof(Sigma));
 	}
+
+	/// <inheritdoc />
+	public override string ToString()
+		=> $"{base.ToString()}, Offset={Offset}, Sigma={Sigma}";
 }
