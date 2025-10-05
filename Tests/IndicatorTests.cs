@@ -58,7 +58,7 @@ public class IndicatorTests
 	{
 		var path = Path.Combine(Helper.ResFolder, "ohlcv.txt");
 		using var reader = new StreamReader(path, Encoding.UTF8);
-		var csv = new FastCsvReader(reader, StringHelper.RN) { ColumnSeparator = ',' };
+		var csv = new FastCsvReader(reader, Environment.NewLine) { ColumnSeparator = ',' };
 
 		var list = new List<TimeFrameCandleMessage>();
 		var t = time;
