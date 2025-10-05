@@ -327,7 +327,7 @@ public enum Level1Fields
 	TradesCount,
 
 	/// <summary>
-	/// Average price.
+	/// VWAP.
 	/// </summary>
 	[EnumMember]
 	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VWAPKey)]
