@@ -149,7 +149,7 @@ public class SuperTrend : BaseIndicator
 
 		var atr = atrValue.ToDecimal(Source);
 		var close = candle.ClosePrice;
-		var hl2 = (candle.HighPrice + candle.LowPrice) / 2;
+		var hl2 = candle.GetMedianPrice();
 
 		var basicUpperBand = hl2 + Multiplier * atr;
 		var basicLowerBand = hl2 - Multiplier * atr;

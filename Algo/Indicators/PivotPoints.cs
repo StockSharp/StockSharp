@@ -64,7 +64,7 @@ public class PivotPoints : BaseComplexIndicator<IPivotPointsValue>
 
 		var result = new PivotPointsValue(this, input.Time);
 
-		var pivotPoint = (candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 3;
+		var pivotPoint = candle.GetTypicalPrice();
 
 		result.Add(PivotPoint, PivotPoint.Process(pivotPoint, input.Time, input.IsFinal));
 		result.Add(R1, R1.Process(2 * pivotPoint - candle.LowPrice, input.Time, input.IsFinal));

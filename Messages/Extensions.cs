@@ -5692,4 +5692,30 @@ public static partial class Extensions
 
 		return adapter.UseInChannel || adapter.UseOutChannel;
 	}
+
+	/// <summary>
+	/// Calculate typical price of candle.
+	/// </summary>
+	/// <param name="candle"><see cref="ICandleMessage"/></param>
+	/// <returns>Typical price.</returns>
+	public static decimal GetTypicalPrice(this ICandleMessage candle)
+	{
+		if (candle is null)
+			throw new ArgumentNullException(nameof(candle));
+
+		return (candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 3;
+	}
+
+	/// <summary>
+	/// Calculate median price of candle.
+	/// </summary>
+	/// <param name="candle"><see cref="ICandleMessage"/></param>
+	/// <returns>Median price.</returns>
+	public static decimal GetMedianPrice(this ICandleMessage candle)
+	{
+		if (candle is null)
+			throw new ArgumentNullException(nameof(candle));
+
+		return (candle.HighPrice + candle.LowPrice) / 2;
+	}
 }

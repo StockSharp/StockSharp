@@ -26,7 +26,7 @@ public class VolumeWeightedAveragePrice : BaseIndicator
 	{
 		var candle = input.ToCandle();
 
-		var typicalPrice = (candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 3m;
+		var typicalPrice = candle.GetTypicalPrice();
 		var priceVolume = typicalPrice * candle.TotalVolume;
 
 		decimal cumulativePriceVolume;

@@ -42,7 +42,7 @@ public class CommodityChannelIndex : LengthIndicator<decimal>
 	{
 		var candle = input.ToCandle();
 
-		var aveP = (candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 3m;
+		var aveP = candle.GetTypicalPrice();
 
 		var meanValue = _mean.Process(new DecimalIndicatorValue(this, aveP, input.Time) { IsFinal = input.IsFinal });
 

@@ -26,7 +26,7 @@ public class TypicalPrice : BaseIndicator
 		if (input.IsFinal)
 			IsFormed = true;
 
-		var typicalPrice = (candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 3m;
+		var typicalPrice = candle.GetTypicalPrice();
 		return new DecimalIndicatorValue(this, typicalPrice, input.Time);
 	}
 }

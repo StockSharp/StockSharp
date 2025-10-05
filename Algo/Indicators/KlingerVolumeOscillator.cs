@@ -78,7 +78,7 @@ public class KlingerVolumeOscillator : BaseComplexIndicator<IKlingerVolumeOscill
 	{
 		var candle = input.ToCandle();
 
-		var hlc = (candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 3;
+		var hlc = candle.GetTypicalPrice();
 		var sv = candle.TotalVolume * (hlc > _prevHlc ? 1 : -1);
 
 		var result = new KlingerVolumeOscillatorValue(this, input.Time);

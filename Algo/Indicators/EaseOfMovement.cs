@@ -39,7 +39,7 @@ public class EaseOfMovement : LengthIndicator<decimal>
 
 		if (_prevHigh != 0 && _prevLow != 0 && cl != 0)
 		{
-			var midPointMove = ((candle.HighPrice + candle.LowPrice) / 2) - ((_prevHigh + _prevLow) / 2);
+			var midPointMove = candle.GetMedianPrice() - ((_prevHigh + _prevLow) / 2);
 			var boxRatio = candle.TotalVolume / cl;
 			var emv = midPointMove / boxRatio;
 

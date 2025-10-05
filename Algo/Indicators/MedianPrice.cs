@@ -29,6 +29,6 @@ public class MedianPrice : BaseIndicator
 		if (input.IsFinal)
 			IsFormed = true;
 
-		return new DecimalIndicatorValue(this, (candle.HighPrice + candle.LowPrice) / 2, input.Time);
+		return new DecimalIndicatorValue(this, candle.GetMedianPrice(), input.Time);
 	}
 }

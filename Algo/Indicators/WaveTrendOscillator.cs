@@ -183,7 +183,7 @@ public class ChannelAveragePriceOscillator : BaseIndicator
 			IsFormed = true;
 
 		var candle = input.ToCandle();
-		var capo = (candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 3;
+		var capo = candle.GetTypicalPrice();
 		return new DecimalIndicatorValue(this, capo, input.Time);
 	}
 }

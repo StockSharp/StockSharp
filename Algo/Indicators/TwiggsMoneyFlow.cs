@@ -40,7 +40,7 @@ public class TwiggsMoneyFlow : LengthIndicator<decimal>
 		var candle = input.ToCandle();
 		var cl = candle.GetLength();
 
-		var typicalPrice = (candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 3;
+		var typicalPrice = candle.GetTypicalPrice();
 
 		decimal ad;
 

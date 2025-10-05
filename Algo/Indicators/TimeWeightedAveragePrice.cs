@@ -25,7 +25,7 @@ public class TimeWeightedAveragePrice : BaseIndicator
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
-		var typicalPrice = (candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 3;
+		var typicalPrice = candle.GetTypicalPrice();
 
 		decimal twap;
 

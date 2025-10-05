@@ -295,14 +295,18 @@ public class CandleIndicatorValue : SingleIndicatorValue<ICandleMessage>
 				Level1Fields.Volume => candle.TotalVolume,
 				Level1Fields.OpenInterest => candle.OpenInterest,
 
-				Level1Fields.SpreadMiddle => (candle.HighPrice + candle.LowPrice) / 2,
-				Level1Fields.AveragePrice => (candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 3,
+				Level1Fields.SpreadMiddle => candle.GetMedianPrice(),
+				Level1Fields.AveragePrice => candle.GetTypicalPrice(),
 				Level1Fields.VWAP => (candle.HighPrice + candle.LowPrice + 2 * candle.ClosePrice) / 4,
 
 				_ => throw new ArgumentOutOfRangeException(nameof(field), field, LocalizedStrings.InvalidValue),
 			};
 
 			return candlePart is T t ? t : throw new InvalidCastException($"Cannot convert decimal to {typeof(T).Name}.");
+		}
+		else if (typeof(T) == typeof(ValueTuple<decimal, decimal>))
+		{
+			return (candle.LowPrice, candle.HighPrice).To<T>();
 		}
 		else
 			return candle is T t ? t : throw new InvalidCastException($"Cannot convert candle to {typeof(T).Name}.");
