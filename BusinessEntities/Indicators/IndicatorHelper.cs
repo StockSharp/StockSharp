@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Indicators;
 
-using Ecng.Reflection;
-
 /// <summary>
 /// Extension class for indicators.
 /// </summary>
@@ -366,5 +364,29 @@ public static class IndicatorHelper
 			throw new ArgumentNullException(nameof(indicator));
 
 		return indicator.GetValueType(false) != typeof(DecimalIndicatorValue);
+	}
+
+	/// <summary>
+	/// Bulk preload using primitive tuples. Implementations may override; default throws <see cref="NotSupportedException"/>.
+	/// </summary>
+	/// <param name="indicator"><see cref="IIndicator"/></param>
+	/// <param name="items">Sequence of (time, values) where values correspond to <see cref="IIndicatorValue.ToValues"/> output.</param>
+	public static void Preload(this IIndicator indicator, IEnumerable<(DateTimeOffset time, object[] values)> items)
+	{
+		ArgumentNullException.ThrowIfNull(indicator);
+		ArgumentNullException.ThrowIfNull(items);
+
+		indicator.Preload(items.Select(t =>
+		{
+			var time = t.time;
+			var values = t.values;
+
+			var input = indicator.CreateValue(time, []);
+			var output = indicator.CreateValue(time, values);
+
+			input.IsFinal = output.IsFinal = true;
+
+			return (input, output);
+		}));
 	}
 }

@@ -256,24 +256,6 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 		IsFormed = numToInitLeft == 0;
 	}
 
-	/// <inheritdoc />
-	public void Preload(IEnumerable<(DateTimeOffset time, object[] values)> items)
-	{
-		ArgumentNullException.ThrowIfNull(items);
-
-		Preload(items.Select(t =>
-		{
-			var time = t.time;
-			var values = t.values;
-
-			var output = CreateValue(time, values);
-			// Create synthetic empty input (descendants may override OnPreload for custom behavior).
-			var input = CreateValue(time, []);
-
-			return (input, output);
-		}));
-	}
-
 	/// <summary>
 	/// Hook for descendants to warm up internal state during preloading.
 	/// </summary>

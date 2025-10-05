@@ -140,11 +140,6 @@ public interface IIndicator : IPersistable, ICloneable<IIndicator>
 	/// Bulk preload of indicator values (input/output pairs). Implementations may override; default throws <see cref="NotSupportedException"/>.
 	/// </summary>
 	/// <param name="values">Collection of finalized input/output pairs.</param>
-	void Preload(IEnumerable<(IIndicatorValue input, IIndicatorValue output)> values) => throw new NotSupportedException();
-
-	/// <summary>
-	/// Bulk preload using primitive tuples. Implementations may override; default throws <see cref="NotSupportedException"/>.
-	/// </summary>
-	/// <param name="items">Sequence of (time, values) where values correspond to <see cref="IIndicatorValue.ToValues"/> output.</param>
-	void Preload(IEnumerable<(DateTimeOffset time, object[] values)> items) => throw new NotSupportedException();
+	void Preload(IEnumerable<(IIndicatorValue input, IIndicatorValue output)> values)
+		=> throw new NotSupportedException();
 }

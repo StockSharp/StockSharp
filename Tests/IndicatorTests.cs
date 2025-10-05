@@ -945,6 +945,143 @@ public class IndicatorTests
 			}
 		}
 	}
+
+	[TestMethod]
+	public void Preload()
+	{
+		var time = new DateTimeOffset(2000, 1, 1, 0, 0, 0, TimeSpan.Zero);
+		var tf = TimeSpan.FromMinutes(1);
+		var secId = Helper.CreateSecurity().ToSecurityId();
+		var candles = LoadCandles(secId, time, tf);
+
+		foreach (var type in GetIndicatorTypes())
+		{
+			var indicator1 = type.CreateIndicator();
+			var indicator2 = type.CreateIndicator();
+
+			var preloadData = new List<(IIndicatorValue input, IIndicatorValue output)>();
+
+			// Process first half with indicator1 and collect data for preloading
+			var halfCount = candles.Length / 2;
+			for (var i = 0; i < halfCount; i++)
+			{
+				var c = candles[i];
+				IIndicatorValue input = type.InputValue == typeof(DecimalIndicatorValue)
+					? new DecimalIndicatorValue(indicator1, c.ClosePrice, c.OpenTime) { IsFinal = true }
+					: new CandleIndicatorValue(indicator1, c) { IsFinal = true };
+
+				var output = indicator1.Process(input);
+				preloadData.Add((input, output));
+			}
+
+			// Preload indicator2 with collected data
+			indicator2.Preload(preloadData);
+
+			// Verify that indicator2 is in the same state as indicator1
+			indicator1.IsFormed.AssertEqual(indicator2.IsFormed, type.Name);
+			indicator2.IsPreloaded.AssertTrue(type.Name);
+
+			// Process second half with both indicators and compare results
+			for (var i = halfCount; i < candles.Length; i++)
+			{
+				var c = candles[i];
+
+				IIndicatorValue input1 = type.InputValue == typeof(DecimalIndicatorValue)
+					? new DecimalIndicatorValue(indicator1, c.ClosePrice, c.OpenTime) { IsFinal = true }
+					: new CandleIndicatorValue(indicator1, c) { IsFinal = true };
+
+				IIndicatorValue input2 = type.InputValue == typeof(DecimalIndicatorValue)
+					? new DecimalIndicatorValue(indicator2, c.ClosePrice, c.OpenTime) { IsFinal = true }
+					: new CandleIndicatorValue(indicator2, c) { IsFinal = true };
+
+				var output1 = indicator1.Process(input1);
+				var output2 = indicator2.Process(input2);
+
+				CompareValue(output2, output1, type.Name, true);
+			}
+		}
+	}
+
+	[TestMethod]
+	public void Preload_WithValues()
+	{
+		var time = new DateTimeOffset(2000, 1, 1, 0, 0, 0, TimeSpan.Zero);
+		var tf = TimeSpan.FromMinutes(1);
+		var secId = Helper.CreateSecurity().ToSecurityId();
+		var candles = LoadCandles(secId, time, tf);
+
+		foreach (var type in GetIndicatorTypes())
+		{
+			var indicator1 = type.CreateIndicator();
+			var indicator2 = type.CreateIndicator();
+
+			var preloadData = new List<(DateTimeOffset time, object[] values)>();
+
+			// Process first half with indicator1 and collect output values
+			var halfCount = candles.Length / 2;
+			for (var i = 0; i < halfCount; i++)
+			{
+				var c = candles[i];
+				IIndicatorValue input = type.InputValue == typeof(DecimalIndicatorValue)
+					? new DecimalIndicatorValue(indicator1, c.ClosePrice, c.OpenTime) { IsFinal = true }
+					: new CandleIndicatorValue(indicator1, c) { IsFinal = true };
+
+				var output = indicator1.Process(input);
+				preloadData.Add((output.Time, [.. output.ToValues()]));
+			}
+
+			// Preload indicator2 with collected values
+			indicator2.Preload(preloadData);
+
+			// Verify that indicator2 is in the same state as indicator1
+			indicator1.IsFormed.AssertEqual(indicator2.IsFormed, type.Name);
+			indicator2.IsPreloaded.AssertTrue(type.Name);
+
+			// Process second half with both indicators and compare results
+			for (var i = halfCount; i < candles.Length; i++)
+			{
+				var c = candles[i];
+
+				IIndicatorValue input1 = type.InputValue == typeof(DecimalIndicatorValue)
+					? new DecimalIndicatorValue(indicator1, c.ClosePrice, c.OpenTime) { IsFinal = true }
+					: new CandleIndicatorValue(indicator1, c) { IsFinal = true };
+
+				IIndicatorValue input2 = type.InputValue == typeof(DecimalIndicatorValue)
+					? new DecimalIndicatorValue(indicator2, c.ClosePrice, c.OpenTime) { IsFinal = true }
+					: new CandleIndicatorValue(indicator2, c) { IsFinal = true };
+
+				var output1 = indicator1.Process(input1);
+				var output2 = indicator2.Process(input2);
+
+				CompareValue(output2, output1, type.Name, true);
+			}
+		}
+	}
+
+	[TestMethod]
+	public void Preload_AlreadyPreloaded()
+	{
+		var type = GetIndicatorTypes().First();
+		var indicator = type.CreateIndicator();
+
+		var preloadData = new List<(DateTimeOffset time, object[] values)>
+		{
+			(DateTimeOffset.UtcNow, new object[] { 100m })
+		};
+
+		indicator.Preload(preloadData);
+		indicator.IsPreloaded.AssertTrue();
+
+		try
+		{
+			indicator.Preload(preloadData);
+			Assert.Fail("Expected InvalidOperationException");
+		}
+		catch (InvalidOperationException ex)
+		{
+			ex.Message.Contains("already preloaded").AssertTrue();
+		}
+	}
 }
 
 static class IndicatorDataRunner
