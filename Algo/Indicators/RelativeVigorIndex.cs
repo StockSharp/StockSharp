@@ -97,14 +97,26 @@ public interface IRelativeVigorIndexValue : IComplexIndicatorValue
 	decimal? Signal { get; }
 }
 
-class RelativeVigorIndexValue(RelativeVigorIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<RelativeVigorIndex>(indicator, time), IRelativeVigorIndexValue
+/// <summary>
+/// Relative Vigor Index indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="RelativeVigorIndexValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent Relative Vigor Index indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class RelativeVigorIndexValue(RelativeVigorIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<RelativeVigorIndex>(indicator, time), IRelativeVigorIndexValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue AverageValue => this[TypedIndicator.Average];
+	/// <inheritdoc />
 	public decimal? Average => AverageValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue SignalValue => this[TypedIndicator.Signal];
+	/// <inheritdoc />
 	public decimal? Signal => SignalValue.ToNullableDecimal(TypedIndicator.Source);
 
-
+	/// <inheritdoc />
 	public override string ToString() => $"Average={Average}, Signal={Signal}";
 }

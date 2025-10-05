@@ -92,10 +92,21 @@ public interface IRainbowChartsValue : IComplexIndicatorValue
 	decimal?[] Averages { get; }
 }
 
-class RainbowChartsValue(RainbowCharts indicator, DateTimeOffset time) : ComplexIndicatorValue<RainbowCharts>(indicator, time), IRainbowChartsValue
+/// <summary>
+/// Rainbow Charts indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="RainbowChartsValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent Rainbow Charts indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class RainbowChartsValue(RainbowCharts indicator, DateTimeOffset time) : ComplexIndicatorValue<RainbowCharts>(indicator, time), IRainbowChartsValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue[] AveragesValues => [.. TypedIndicator.InnerIndicators.Select(ind => this[ind])];
+	/// <inheritdoc />
 	public decimal?[] Averages => [.. AveragesValues.Select(v => v.ToNullableDecimal(TypedIndicator.Source))];
 
+	/// <inheritdoc />
 	public override string ToString() => $"Averages=[{string.Join(", ", Averages)}]";
 }

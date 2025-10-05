@@ -153,10 +153,21 @@ public interface IMovingAverageRibbonValue : IComplexIndicatorValue
 	decimal?[] Averages { get; }
 }
 
-class MovingAverageRibbonValue(MovingAverageRibbon indicator, DateTimeOffset time) : ComplexIndicatorValue<MovingAverageRibbon>(indicator, time), IMovingAverageRibbonValue
+/// <summary>
+/// MovingAverageRibbon indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="MovingAverageRibbonValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent MovingAverageRibbon indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class MovingAverageRibbonValue(MovingAverageRibbon indicator, DateTimeOffset time) : ComplexIndicatorValue<MovingAverageRibbon>(indicator, time), IMovingAverageRibbonValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue[] AveragesValues => [.. TypedIndicator.InnerIndicators.Select(ind => this[ind])];
+	/// <inheritdoc />
 	public decimal?[] Averages => [.. AveragesValues.Select(v => v.ToNullableDecimal(TypedIndicator.Source))];
 
+	/// <inheritdoc />
 	public override string ToString() => $"Averages=[{string.Join(", ", Averages)}]";
 }

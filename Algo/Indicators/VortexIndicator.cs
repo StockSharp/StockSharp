@@ -220,13 +220,26 @@ public interface IVortexIndicatorValue : IComplexIndicatorValue
 	decimal? MinusVi { get; }
 }
 
-class VortexIndicatorValue(VortexIndicator indicator, DateTimeOffset time) : ComplexIndicatorValue<VortexIndicator>(indicator, time), IVortexIndicatorValue
+/// <summary>
+/// Vortex Indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="VortexIndicatorValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent Vortex Indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class VortexIndicatorValue(VortexIndicator indicator, DateTimeOffset time) : ComplexIndicatorValue<VortexIndicator>(indicator, time), IVortexIndicatorValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue PlusViValue => this[TypedIndicator.PlusVi];
+	/// <inheritdoc />
 	public decimal? PlusVi => PlusViValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue MinusViValue => this[TypedIndicator.MinusVi];
+	/// <inheritdoc />
 	public decimal? MinusVi => MinusViValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"PlusVi={PlusVi}, MinusVi={MinusVi}";
 }

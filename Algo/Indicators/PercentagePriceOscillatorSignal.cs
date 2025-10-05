@@ -102,13 +102,26 @@ public interface IPercentagePriceOscillatorSignalValue : IComplexIndicatorValue
 	decimal? Signal { get; }
 }
 
-class PercentagePriceOscillatorSignalValue(PercentagePriceOscillatorSignal indicator, DateTimeOffset time) : ComplexIndicatorValue<PercentagePriceOscillatorSignal>(indicator, time), IPercentagePriceOscillatorSignalValue
+/// <summary>
+/// PercentagePriceOscillatorSignal indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="PercentagePriceOscillatorSignalValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent PercentagePriceOscillatorSignal indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class PercentagePriceOscillatorSignalValue(PercentagePriceOscillatorSignal indicator, DateTimeOffset time) : ComplexIndicatorValue<PercentagePriceOscillatorSignal>(indicator, time), IPercentagePriceOscillatorSignalValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue PpoValue => this[TypedIndicator.Ppo];
+	/// <inheritdoc />
 	public decimal? Ppo => PpoValue.ToNullableDecimal(TypedIndicator.Ppo.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue SignalValue => this[TypedIndicator.SignalMa];
+	/// <inheritdoc />
 	public decimal? Signal => SignalValue.ToNullableDecimal(TypedIndicator.SignalMa.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"PPO={Ppo}, Signal={Signal}";
 }

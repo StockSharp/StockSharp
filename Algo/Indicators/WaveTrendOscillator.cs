@@ -232,13 +232,26 @@ public interface IWaveTrendOscillatorValue : IComplexIndicatorValue
 	decimal? Wt2 { get; }
 }
 
-class WaveTrendOscillatorValue(WaveTrendOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<WaveTrendOscillator>(indicator, time), IWaveTrendOscillatorValue
+/// <summary>
+/// Wave Trend Oscillator indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="WaveTrendOscillatorValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent Wave Trend Oscillator indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class WaveTrendOscillatorValue(WaveTrendOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<WaveTrendOscillator>(indicator, time), IWaveTrendOscillatorValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue Wt1Value => this[TypedIndicator.Wt1];
+	/// <inheritdoc />
 	public decimal? Wt1 => Wt1Value.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue Wt2Value => this[TypedIndicator.Wt2];
+	/// <inheritdoc />
 	public decimal? Wt2 => Wt2Value.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"Wt1={Wt1}, Wt2={Wt2}";
 }

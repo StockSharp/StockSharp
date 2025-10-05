@@ -157,22 +157,41 @@ public interface IPivotPointsValue : IComplexIndicatorValue
 	decimal? S2 { get; }
 }
 
-class PivotPointsValue(PivotPoints indicator, DateTimeOffset time) : ComplexIndicatorValue<PivotPoints>(indicator, time), IPivotPointsValue
+/// <summary>
+/// Pivot Points indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="PivotPointsValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent Pivot Points indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class PivotPointsValue(PivotPoints indicator, DateTimeOffset time) : ComplexIndicatorValue<PivotPoints>(indicator, time), IPivotPointsValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue PivotPointValue => this[TypedIndicator.PivotPoint];
+	/// <inheritdoc />
 	public decimal? PivotPoint => PivotPointValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue R1Value => this[TypedIndicator.R1];
+	/// <inheritdoc />
 	public decimal? R1 => R1Value.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue R2Value => this[TypedIndicator.R2];
+	/// <inheritdoc />
 	public decimal? R2 => R2Value.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue S1Value => this[TypedIndicator.S1];
+	/// <inheritdoc />
 	public decimal? S1 => S1Value.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue S2Value => this[TypedIndicator.S2];
+	/// <inheritdoc />
 	public decimal? S2 => S2Value.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"PivotPoint={PivotPoint}, R1={R1}, R2={R2}, S1={S1}, S2={S2}";
 }

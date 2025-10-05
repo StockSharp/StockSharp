@@ -96,13 +96,26 @@ public interface IMovingAverageConvergenceDivergenceSignalValue : IComplexIndica
 	decimal? Signal { get; }
 }
 
-class MovingAverageConvergenceDivergenceSignalValue(MovingAverageConvergenceDivergenceSignal indicator, DateTimeOffset time) : ComplexIndicatorValue<MovingAverageConvergenceDivergenceSignal>(indicator, time), IMovingAverageConvergenceDivergenceSignalValue
+/// <summary>
+/// MovingAverageConvergenceDivergenceSignal indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="MovingAverageConvergenceDivergenceSignalValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent MovingAverageConvergenceDivergenceSignal indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class MovingAverageConvergenceDivergenceSignalValue(MovingAverageConvergenceDivergenceSignal indicator, DateTimeOffset time) : ComplexIndicatorValue<MovingAverageConvergenceDivergenceSignal>(indicator, time), IMovingAverageConvergenceDivergenceSignalValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue MacdValue => this[TypedIndicator.Macd];
+	/// <inheritdoc />
 	public decimal? Macd => MacdValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue SignalValue => this[TypedIndicator.SignalMa];
+	/// <inheritdoc />
 	public decimal? Signal => SignalValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"Macd={Macd}, Signal={Signal}";
 }

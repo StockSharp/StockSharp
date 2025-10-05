@@ -156,12 +156,26 @@ public interface ISineWaveValue : IComplexIndicatorValue
 	decimal? Lead { get; }
 }
 
-class SineWaveValue(SineWave indicator, DateTimeOffset time) : ComplexIndicatorValue<SineWave>(indicator, time), ISineWaveValue
+/// <summary>
+/// Sine Wave indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="SineWaveValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent Sine Wave indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class SineWaveValue(SineWave indicator, DateTimeOffset time) : ComplexIndicatorValue<SineWave>(indicator, time), ISineWaveValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue MainValue => this[TypedIndicator.Main];
+	/// <inheritdoc />
 	public decimal? Main => MainValue.ToNullableDecimal(TypedIndicator.Source);
+
+	/// <inheritdoc />
 	public IIndicatorValue LeadValue => this[TypedIndicator.Lead];
+	/// <inheritdoc />
 	public decimal? Lead => LeadValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"Main={Main}, Lead={Lead}";
 }

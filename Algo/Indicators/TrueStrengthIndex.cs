@@ -289,13 +289,26 @@ public interface ITrueStrengthIndexValue : IComplexIndicatorValue
 	decimal? Signal { get; }
 }
 
-class TrueStrengthIndexValue(TrueStrengthIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<TrueStrengthIndex>(indicator, time), ITrueStrengthIndexValue
+/// <summary>
+/// True Strength Index indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="TrueStrengthIndexValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent True Strength Index indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class TrueStrengthIndexValue(TrueStrengthIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<TrueStrengthIndex>(indicator, time), ITrueStrengthIndexValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue TsiValue => this[TypedIndicator.Tsi];
+	/// <inheritdoc />
 	public IIndicatorValue SignalValue => this[TypedIndicator.Signal];
 
+	/// <inheritdoc />
 	public decimal? Tsi => TsiValue.ToNullableDecimal(TypedIndicator.Source);
+	/// <inheritdoc />
 	public decimal? Signal => SignalValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"TSI={Tsi}, Signal={Signal}";
 }

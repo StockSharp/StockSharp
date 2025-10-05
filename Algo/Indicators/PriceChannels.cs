@@ -125,13 +125,26 @@ public interface IPriceChannelsValue : IComplexIndicatorValue
 	decimal? LowerChannel { get; }
 }
 
-class PriceChannelsValue(PriceChannels indicator, DateTimeOffset time) : ComplexIndicatorValue<PriceChannels>(indicator, time), IPriceChannelsValue
+/// <summary>
+/// Price Channels indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="PriceChannelsValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent Price Channels indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class PriceChannelsValue(PriceChannels indicator, DateTimeOffset time) : ComplexIndicatorValue<PriceChannels>(indicator, time), IPriceChannelsValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue UpperChannelValue => this[TypedIndicator.UpperChannel];
+	/// <inheritdoc />
 	public decimal? UpperChannel => UpperChannelValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue LowerChannelValue => this[TypedIndicator.LowerChannel];
+	/// <inheritdoc />
 	public decimal? LowerChannel => LowerChannelValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"UpperChannel={UpperChannel}, LowerChannel={LowerChannel}";
 }

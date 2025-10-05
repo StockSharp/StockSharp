@@ -86,13 +86,26 @@ public interface IStochasticOscillatorValue : IComplexIndicatorValue
 	decimal? D { get; }
 }
 
-class StochasticOscillatorValue(StochasticOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<StochasticOscillator>(indicator, time), IStochasticOscillatorValue
+/// <summary>
+/// Stochastic Oscillator indicator value implementation.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="StochasticOscillatorValue"/> class.
+/// </remarks>
+/// <param name="indicator">The parent Stochastic Oscillator indicator.</param>
+/// <param name="time">Time associated with this indicator value.</param>
+public class StochasticOscillatorValue(StochasticOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<StochasticOscillator>(indicator, time), IStochasticOscillatorValue
 {
+	/// <inheritdoc />
 	public IIndicatorValue KValue => this[TypedIndicator.K];
+	/// <inheritdoc />
 	public decimal? K => KValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public IIndicatorValue DValue => this[TypedIndicator.D];
+	/// <inheritdoc />
 	public decimal? D => DValue.ToNullableDecimal(TypedIndicator.Source);
 
+	/// <inheritdoc />
 	public override string ToString() => $"K={K}, D={D}";
 }
