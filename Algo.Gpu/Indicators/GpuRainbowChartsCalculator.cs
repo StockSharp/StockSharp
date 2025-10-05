@@ -397,7 +397,7 @@ public class GpuRainbowChartsCalculator : GpuIndicatorCalculatorBase<RainbowChar
 			result[s] = seriesRes;
 
 			var seriesCandles = candlesSeries[s];
-			var smaSeries = smaResults is null ? null : smaResults[s];
+			var smaSeries = smaResults?[s];
 
 			for (var p = 0; p < parameters.Length; p++)
 			{

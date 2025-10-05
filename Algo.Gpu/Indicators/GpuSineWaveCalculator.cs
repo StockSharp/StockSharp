@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Gpu.Indicators;
 
-using ILGPU.Algorithms;
-
 /// <summary>
 /// Parameter set for GPU Sine Wave calculation.
 /// </summary>

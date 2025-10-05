@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Gpu.Indicators;
 
-using System.Runtime.InteropServices;
-
 /// <summary>
 /// Parameter set for GPU Price Channels calculation.
 /// </summary>

@@ -4,9 +4,9 @@
 /// Parameter set for GPU Money Flow Index calculation.
 /// </summary>
 /// <remarks>
-/// Initializes a new instance of the <see \"GpuMoneyFlowIndexParams\"/> struct.
+/// Initializes a new instance of the <see cref="GpuMoneyFlowIndexParams"/> struct.
 /// </remarks>
-/// <param name=\"length\">Money Flow Index length.</param>
+/// <param name="length">Money Flow Index length.</param>
 [StructLayout(LayoutKind.Sequential)]
 public struct GpuMoneyFlowIndexParams(int length) : IGpuIndicatorParams
 {
@@ -33,10 +33,10 @@ public class GpuMoneyFlowIndexCalculator : GpuIndicatorCalculatorBase<MoneyFlowI
 	private readonly Action<Index2D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<int>, ArrayView<int>, ArrayView<GpuMoneyFlowIndexParams>, ArrayView<float>, ArrayView<float>> _kernel;
 
 	/// <summary>
-	/// Initializes a new instance of the <see \"GpuMoneyFlowIndexCalculator\"/> class.
+	/// Initializes a new instance of the <see cref="GpuMoneyFlowIndexCalculator"/> class.
 	/// </summary>
-	/// <param name=\"context\">ILGPU context.</param>
-	/// <param name=\"accelerator\">ILGPU accelerator.</param>
+	/// <param name="context">ILGPU context.</param>
+	/// <param name="accelerator">ILGPU accelerator.</param>
 	public GpuMoneyFlowIndexCalculator(Context context, Accelerator accelerator)
 		: base(context, accelerator)
 	{

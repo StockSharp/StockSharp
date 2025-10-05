@@ -1,14 +1,5 @@
 namespace StockSharp.Algo.Gpu.Indicators;
 
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-
-using ILGPU;
-using ILGPU.Runtime;
-
-using StockSharp.Algo.Indicators;
-using StockSharp.Messages;
-
 /// <summary>
 /// Parameter set for GPU FRAMA calculation.
 /// </summary>

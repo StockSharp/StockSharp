@@ -1,15 +1,6 @@
 namespace StockSharp.Algo.Gpu.Indicators;
 
-using System;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-
-using ILGPU;
-using ILGPU.Algorithms;
-using ILGPU.Runtime;
-
-using StockSharp.Algo.Indicators;
 
 /// <summary>
 /// Parameter set for GPU Gator Oscillator calculation.

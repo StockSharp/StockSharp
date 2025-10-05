@@ -4,10 +4,10 @@ namespace StockSharp.Algo.Gpu.Indicators;
 /// Parameter set for GPU Chaikin Volatility calculation.
 /// </summary>
 /// <remarks>
-/// Initializes a new instance of the <see cref=\"GpuChaikinVolatilityParams\"/> struct.
+/// Initializes a new instance of the <see cref="GpuChaikinVolatilityParams"/> struct.
 /// </remarks>
-/// <param name=\"emaLength\">Length for the EMA smoothing.</param>
-/// <param name=\"rocLength\">Length for the ROC calculation.</param>
+/// <param name="emaLength">Length for the EMA smoothing.</param>
+/// <param name="rocLength">Length for the ROC calculation.</param>
 [StructLayout(LayoutKind.Sequential)]
 public struct GpuChaikinVolatilityParams(int emaLength, int rocLength) : IGpuIndicatorParams
 {
@@ -40,10 +40,10 @@ public class GpuChaikinVolatilityCalculator : GpuIndicatorCalculatorBase<Chaikin
 	private readonly Action<Index2D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<float>, ArrayView<int>, ArrayView<int>, ArrayView<GpuChaikinVolatilityParams>> _kernel;
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref=\"GpuChaikinVolatilityCalculator\"/> class.
+	/// Initializes a new instance of the <see cref="GpuChaikinVolatilityCalculator"/> class.
 	/// </summary>
-	/// <param name=\"context\">ILGPU context.</param>
-	/// <param name=\"accelerator\">ILGPU accelerator.</param>
+	/// <param name="context">ILGPU context.</param>
+	/// <param name="accelerator">ILGPU accelerator.</param>
 	public GpuChaikinVolatilityCalculator(Context context, Accelerator accelerator)
 	: base(context, accelerator)
 	{

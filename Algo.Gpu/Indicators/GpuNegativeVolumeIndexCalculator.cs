@@ -3,13 +3,17 @@ namespace StockSharp.Algo.Gpu.Indicators;
 /// <summary>
 /// Parameter set for GPU Negative Volume Index (NVI) calculation.
 /// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="GpuNegativeVolumeIndexParams"/> struct.
+/// </remarks>
+/// <param name="startValue">Starting value for NVI sequence.</param>
 [StructLayout(LayoutKind.Sequential)]
-public struct GpuNegativeVolumeIndexParams : IGpuIndicatorParams
+public struct GpuNegativeVolumeIndexParams(float startValue) : IGpuIndicatorParams
 {
 	/// <summary>
 	/// Starting value for NVI sequence.
 	/// </summary>
-	public float StartValue = 1000f;
+	public float StartValue = startValue;
 
 	/// <inheritdoc />
 	public readonly void FromIndicator(IIndicator indicator)

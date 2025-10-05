@@ -1,7 +1,3 @@
-using System.Runtime.InteropServices;
-
-using ILGPU.Algorithms;
-
 namespace StockSharp.Algo.Gpu.Indicators;
 
 /// <summary>

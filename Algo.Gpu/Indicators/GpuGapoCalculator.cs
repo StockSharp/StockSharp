@@ -1,11 +1,3 @@
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-
-using ILGPU;
-using ILGPU.Runtime;
-
-using StockSharp.Algo.Indicators;
-
 namespace StockSharp.Algo.Gpu.Indicators;
 
 /// <summary>

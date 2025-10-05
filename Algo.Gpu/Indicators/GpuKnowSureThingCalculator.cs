@@ -5,68 +5,81 @@ using System.Reflection;
 /// <summary>
 /// Parameter set for GPU Know Sure Thing (KST) calculation.
 /// </summary>
+/// <remarks>
+/// Initializes a new instance of <see cref="GpuKnowSureThingParams"/> with provided values.
+/// </remarks>
+/// <param name="roc1Length">Rate of Change length #1.</param>
+/// <param name="roc2Length">Rate of Change length #2.</param>
+/// <param name="roc3Length">Rate of Change length #3.</param>
+/// <param name="roc4Length">Rate of Change length #4.</param>
+/// <param name="sma1Length">Simple Moving Average length applied to ROC #1.</param>
+/// <param name="sma2Length">Simple Moving Average length applied to ROC #2.</param>
+/// <param name="sma3Length">Simple Moving Average length applied to ROC #3.</param>
+/// <param name="sma4Length">Simple Moving Average length applied to ROC #4.</param>
+/// <param name="signalLength">Signal line Simple Moving Average length.</param>
+/// <param name="priceType">Price type to extract from candles.</param>
 [StructLayout(LayoutKind.Sequential)]
-public struct GpuKnowSureThingParams : IGpuIndicatorParams
+public struct GpuKnowSureThingParams(
+	int roc1Length = 10,
+	int roc2Length = 15,
+	int roc3Length = 20,
+	int roc4Length = 30,
+	int sma1Length = 10,
+	int sma2Length = 10,
+	int sma3Length = 10,
+	int sma4Length = 15,
+	int signalLength = 9,
+	Level1Fields priceType = Level1Fields.ClosePrice) : IGpuIndicatorParams
 {
-	private const int DefaultRoc1Length = 10;
-	private const int DefaultRoc2Length = 15;
-	private const int DefaultRoc3Length = 20;
-	private const int DefaultRoc4Length = 30;
-	private const int DefaultSma1Length = 10;
-	private const int DefaultSma2Length = 10;
-	private const int DefaultSma3Length = 10;
-	private const int DefaultSma4Length = 15;
-	private const int DefaultSignalLength = 9;
-
 	/// <summary>
 	/// Rate of Change length #1.
 	/// </summary>
-	public int Roc1Length;
+	public int Roc1Length = roc1Length;
 
 	/// <summary>
 	/// Rate of Change length #2.
 	/// </summary>
-	public int Roc2Length;
+	public int Roc2Length = roc2Length;
 
 	/// <summary>
 	/// Rate of Change length #3.
 	/// </summary>
-	public int Roc3Length;
+	public int Roc3Length = roc3Length;
 
 	/// <summary>
 	/// Rate of Change length #4.
 	/// </summary>
-	public int Roc4Length;
+	public int Roc4Length = roc4Length;
 
 	/// <summary>
 	/// Simple Moving Average length applied to ROC #1.
 	/// </summary>
-	public int Sma1Length;
+	public int Sma1Length = sma1Length;
 
 	/// <summary>
 	/// Simple Moving Average length applied to ROC #2.
 	/// </summary>
-	public int Sma2Length;
+	public int Sma2Length = sma2Length;
 
 	/// <summary>
 	/// Simple Moving Average length applied to ROC #3.
 	/// </summary>
-	public int Sma3Length;
+	public int Sma3Length = sma3Length;
 
 	/// <summary>
 	/// Simple Moving Average length applied to ROC #4.
 	/// </summary>
-	public int Sma4Length;
+	public int Sma4Length = sma4Length;
 
 	/// <summary>
 	/// Signal line Simple Moving Average length.
 	/// </summary>
-	public int SignalLength;
+	public int SignalLength = signalLength;
 
 	/// <summary>
 	/// Price type to extract from candles.
 	/// </summary>
-	public byte PriceType;
+	public byte PriceType = (byte)priceType;
 
 	/// <inheritdoc />
 	public readonly void FromIndicator(IIndicator indicator)
@@ -75,30 +88,33 @@ public struct GpuKnowSureThingParams : IGpuIndicatorParams
 
 		ref var self = ref Unsafe.AsRef(in this);
 
+		// Use defaults from default-initialized instance as fallbacks.
+		var defaults = new GpuKnowSureThingParams();
+
 		self.PriceType = (byte)(indicator.Source ?? Level1Fields.ClosePrice);
 
 		if (indicator is KnowSureThing kst)
 		{
-			self.Roc1Length = GetLength(kst, "_roc1", self.Roc1Length, DefaultRoc1Length);
-			self.Roc2Length = GetLength(kst, "_roc2", self.Roc2Length, DefaultRoc2Length);
-			self.Roc3Length = GetLength(kst, "_roc3", self.Roc3Length, DefaultRoc3Length);
-			self.Roc4Length = GetLength(kst, "_roc4", self.Roc4Length, DefaultRoc4Length);
-			self.Sma1Length = GetLength(kst, "_sma1", self.Sma1Length, DefaultSma1Length);
-			self.Sma2Length = GetLength(kst, "_sma2", self.Sma2Length, DefaultSma2Length);
-			self.Sma3Length = GetLength(kst, "_sma3", self.Sma3Length, DefaultSma3Length);
-			self.Sma4Length = GetLength(kst, "_sma4", self.Sma4Length, DefaultSma4Length);
-			self.SignalLength = kst.Signal?.Length ?? DefaultSignalLength;
+			self.Roc1Length = GetLength(kst, "_roc1", self.Roc1Length, defaults.Roc1Length);
+			self.Roc2Length = GetLength(kst, "_roc2", self.Roc2Length, defaults.Roc2Length);
+			self.Roc3Length = GetLength(kst, "_roc3", self.Roc3Length, defaults.Roc3Length);
+			self.Roc4Length = GetLength(kst, "_roc4", self.Roc4Length, defaults.Roc4Length);
+			self.Sma1Length = GetLength(kst, "_sma1", self.Sma1Length, defaults.Sma1Length);
+			self.Sma2Length = GetLength(kst, "_sma2", self.Sma2Length, defaults.Sma2Length);
+			self.Sma3Length = GetLength(kst, "_sma3", self.Sma3Length, defaults.Sma3Length);
+			self.Sma4Length = GetLength(kst, "_sma4", self.Sma4Length, defaults.Sma4Length);
+			self.SignalLength = kst.Signal?.Length ?? defaults.SignalLength;
 		}
 
-		self.Roc1Length = EnsurePositive(self.Roc1Length, DefaultRoc1Length);
-		self.Roc2Length = EnsurePositive(self.Roc2Length, DefaultRoc2Length);
-		self.Roc3Length = EnsurePositive(self.Roc3Length, DefaultRoc3Length);
-		self.Roc4Length = EnsurePositive(self.Roc4Length, DefaultRoc4Length);
-		self.Sma1Length = EnsurePositive(self.Sma1Length, DefaultSma1Length);
-		self.Sma2Length = EnsurePositive(self.Sma2Length, DefaultSma2Length);
-		self.Sma3Length = EnsurePositive(self.Sma3Length, DefaultSma3Length);
-		self.Sma4Length = EnsurePositive(self.Sma4Length, DefaultSma4Length);
-		self.SignalLength = EnsurePositive(self.SignalLength, DefaultSignalLength);
+		self.Roc1Length = EnsurePositive(self.Roc1Length, defaults.Roc1Length);
+		self.Roc2Length = EnsurePositive(self.Roc2Length, defaults.Roc2Length);
+		self.Roc3Length = EnsurePositive(self.Roc3Length, defaults.Roc3Length);
+		self.Roc4Length = EnsurePositive(self.Roc4Length, defaults.Roc4Length);
+		self.Sma1Length = EnsurePositive(self.Sma1Length, defaults.Sma1Length);
+		self.Sma2Length = EnsurePositive(self.Sma2Length, defaults.Sma2Length);
+		self.Sma3Length = EnsurePositive(self.Sma3Length, defaults.Sma3Length);
+		self.Sma4Length = EnsurePositive(self.Sma4Length, defaults.Sma4Length);
+		self.SignalLength = EnsurePositive(self.SignalLength, defaults.SignalLength);
 	}
 
 	private static int EnsurePositive(int value, int fallback)
@@ -292,7 +308,7 @@ public class GpuKnowSureThingCalculator : GpuIndicatorCalculatorBase<KnowSureThi
 			return;
 		}
 
-		var baseIndex = paramIdx * flatCandles.Length;
+		var baseIndex = paramIdx * (int)flatCandles.Length;
 
 		var prm = parameters[paramIdx];
 		var priceType = (Level1Fields)prm.PriceType;
