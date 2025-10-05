@@ -48,21 +48,23 @@ public class ShiftedIndicatorValue : SingleIndicatorValue<decimal>
 	/// <inheritdoc />
 	public override IEnumerable<object> ToValues()
 	{
+		if (IsEmpty)
+			yield break;
+
 		foreach (var v in base.ToValues())
 			yield return v;
 
-		if (!IsEmpty)
-			yield return Shift;
+		yield return Shift;
 	}
 
 	/// <inheritdoc />
 	public override void FromValues(object[] values)
 	{
-		base.FromValues(values);
-
-		if (IsEmpty)
+		if (values.Length == 0)
 			return;
 
+		base.FromValues(values);
+		
 		Shift = values[1].To<int>();
 	}
 }

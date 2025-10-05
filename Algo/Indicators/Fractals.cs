@@ -29,21 +29,9 @@ public interface IFractalsValue : IComplexIndicatorValue
 	IIndicatorValue UpValue { get; }
 
 	/// <summary>
-	/// Gets the <see cref="Fractals.Up"/> value.
-	/// </summary>
-	[Browsable(false)]
-	decimal? Up { get; }
-
-	/// <summary>
 	/// Gets the <see cref="Fractals.Down"/> value.
 	/// </summary>
 	IIndicatorValue DownValue { get; }
-
-	/// <summary>
-	/// Gets the <see cref="Fractals.Down"/> value.
-	/// </summary>
-	[Browsable(false)]
-	decimal? Down { get; }
 }
 
 /// <summary>
@@ -57,21 +45,16 @@ public interface IFractalsValue : IComplexIndicatorValue
 public class FractalsValue(Fractals fractals, DateTimeOffset time) : ComplexIndicatorValue<Fractals>(fractals, time), IFractalsValue
 {
 	/// <inheritdoc />
-	public bool HasPattern { get; private set; }
+	public bool HasPattern => HasUp || HasDown;
 	/// <inheritdoc />
-	public bool HasUp { get; private set; }
+	public bool HasUp => ((FractalPartIndicatorValue)UpValue).HasPattern;
 	/// <inheritdoc />
-	public bool HasDown { get; private set; }
+	public bool HasDown => ((FractalPartIndicatorValue)DownValue).HasPattern;
 
 	/// <inheritdoc />
 	public IIndicatorValue UpValue => this[TypedIndicator.Up];
 	/// <inheritdoc />
-	public decimal? Up => UpValue.ToNullableDecimal(TypedIndicator.Source);
-
-	/// <inheritdoc />
 	public IIndicatorValue DownValue => this[TypedIndicator.Down];
-	/// <inheritdoc />
-	public decimal? Down => DownValue.ToNullableDecimal(TypedIndicator.Source);
 
 	/// <summary>
 	/// Cast object from <see cref="FractalsValue"/> to <see cref="bool"/>.
@@ -82,26 +65,7 @@ public class FractalsValue(Fractals fractals, DateTimeOffset time) : ComplexIndi
 		=> value.CheckOnNull(nameof(value)).HasPattern;
 
 	/// <inheritdoc />
-	public override void Add(IIndicator indicator, IIndicatorValue value)
-	{
-		if (indicator is null)	throw new ArgumentNullException(nameof(indicator));
-		if (value is null)		throw new ArgumentNullException(nameof(value));
-
-		if (!value.IsEmpty)
-		{
-			HasPattern = HasPattern = true;
-
-			if (((FractalPart)indicator).IsUp)
-				HasUp = true;
-			else
-				HasDown = true;
-		}
-
-	        base.Add(indicator, value);
-	}
-
-	/// <inheritdoc />
-	public override string ToString() => $"HasPattern={HasPattern}, HasUp={HasUp}, HasDown={HasDown}, Up={Up}, Down={Down}";
+	public override string ToString() => $"UP={HasUp}, DOWN={HasDown}";
 }
 
 /// <summary>

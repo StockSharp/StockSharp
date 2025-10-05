@@ -32,7 +32,30 @@ public class ZigZagIndicatorValue : ShiftedIndicatorValue
 	/// <summary>
 	/// Is the trend up.
 	/// </summary>
-	public bool IsUp { get; }
+	public bool IsUp { get; private set; }
+
+	/// <inheritdoc />
+	public override IEnumerable<object> ToValues()
+	{
+		if (IsEmpty)
+			yield break;
+
+		foreach (var v in base.ToValues())
+			yield return v;
+
+		yield return IsUp;
+	}
+
+	/// <inheritdoc />
+	public override void FromValues(object[] values)
+	{
+		if (values.Length == 0)
+			return;
+
+		base.FromValues(values);
+
+		IsUp = values[1].To<bool>();
+	}
 }
 
 /// <summary>
