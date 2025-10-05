@@ -65,189 +65,16 @@ public struct GpuRainbowChartsResult : IGpuIndicatorResult
 	public long FormedMask;
 
 	/// <summary>
-	/// First average value.
+	/// Inline fixed-size buffer for average values.
 	/// </summary>
-	public float Average0;
-
-	/// <summary>
-	/// Second average value.
-	/// </summary>
-	public float Average1;
-
-	/// <summary>
-	/// Third average value.
-	/// </summary>
-	public float Average2;
-
-	/// <summary>
-	/// Fourth average value.
-	/// </summary>
-	public float Average3;
-
-	/// <summary>
-	/// Fifth average value.
-	/// </summary>
-	public float Average4;
-
-	/// <summary>
-	/// Sixth average value.
-	/// </summary>
-	public float Average5;
-
-	/// <summary>
-	/// Seventh average value.
-	/// </summary>
-	public float Average6;
-
-	/// <summary>
-	/// Eighth average value.
-	/// </summary>
-	public float Average7;
-
-	/// <summary>
-	/// Ninth average value.
-	/// </summary>
-	public float Average8;
-
-	/// <summary>
-	/// Tenth average value.
-	/// </summary>
-	public float Average9;
-
-	/// <summary>
-	/// Eleventh average value.
-	/// </summary>
-	public float Average10;
-
-	/// <summary>
-	/// Twelfth average value.
-	/// </summary>
-	public float Average11;
-
-	/// <summary>
-	/// Thirteenth average value.
-	/// </summary>
-	public float Average12;
-
-	/// <summary>
-	/// Fourteenth average value.
-	/// </summary>
-	public float Average13;
-
-	/// <summary>
-	/// Fifteenth average value.
-	/// </summary>
-	public float Average14;
-
-	/// <summary>
-	/// Sixteenth average value.
-	/// </summary>
-	public float Average15;
-
-	/// <summary>
-	/// Seventeenth average value.
-	/// </summary>
-	public float Average16;
-
-	/// <summary>
-	/// Eighteenth average value.
-	/// </summary>
-	public float Average17;
-
-	/// <summary>
-	/// Nineteenth average value.
-	/// </summary>
-	public float Average18;
-
-	/// <summary>
-	/// Twentieth average value.
-	/// </summary>
-	public float Average19;
-
-	/// <summary>
-	/// Twenty first average value.
-	/// </summary>
-	public float Average20;
-
-	/// <summary>
-	/// Twenty second average value.
-	/// </summary>
-	public float Average21;
-
-	/// <summary>
-	/// Twenty third average value.
-	/// </summary>
-	public float Average22;
-
-	/// <summary>
-	/// Twenty fourth average value.
-	/// </summary>
-	public float Average23;
-
-	/// <summary>
-	/// Twenty fifth average value.
-	/// </summary>
-	public float Average24;
-
-	/// <summary>
-	/// Twenty sixth average value.
-	/// </summary>
-	public float Average25;
-
-	/// <summary>
-	/// Twenty seventh average value.
-	/// </summary>
-	public float Average26;
-
-	/// <summary>
-	/// Twenty eighth average value.
-	/// </summary>
-	public float Average27;
-
-	/// <summary>
-	/// Twenty ninth average value.
-	/// </summary>
-	public float Average28;
-
-	/// <summary>
-	/// Thirtieth average value.
-	/// </summary>
-	public float Average29;
-
-	/// <summary>
-	/// Thirty first average value.
-	/// </summary>
-	public float Average30;
-
-	/// <summary>
-	/// Thirty second average value.
-	/// </summary>
-	public float Average31;
+	[CLSCompliant(false)]
+	public unsafe fixed float Averages[MaxLineCount];
 
 	readonly long IGpuIndicatorResult.Time => Time;
 	readonly byte IGpuIndicatorResult.IsFormed => IsFormed;
 
-	/// <summary>
-	/// Set average value by index.
-	/// </summary>
-	/// <param name="index">Average index.</param>
-	/// <param name="value">Average value.</param>
-	internal void SetAverage(int index, float value)
-	{
-		ref var start = ref Average0;
-		Unsafe.Add(ref start, index) = value;
-	}
-
-	/// <summary>
-	/// Get average value by index.
-	/// </summary>
-	/// <param name="index">Average index.</param>
-	/// <returns>Average value.</returns>
-	internal readonly float GetAverage(int index)
-	=> Unsafe.Add(ref Unsafe.AsRef(in Average0), index);
-
 	/// <inheritdoc />
-	public readonly IIndicatorValue ToValue(IIndicator indicator)
+	public readonly unsafe IIndicatorValue ToValue(IIndicator indicator)
 	{
 		var rainbow = (RainbowCharts)indicator;
 		var time = this.GetTime();
@@ -265,29 +92,32 @@ public struct GpuRainbowChartsResult : IGpuIndicatorResult
 		var hasValue = false;
 		var index = 0;
 
-		for (; index < available; index++)
+		fixed (float* p = Averages)
 		{
-			var inner = rainbow.InnerIndicators[index];
-			var avg = GetAverage(index);
-			var lineFormed = (formedMask & (1L << index)) != 0;
+			for (; index < available; index++)
+			{
+				var inner = rainbow.InnerIndicators[index];
+				var avg = p[index];
+				var lineFormed = (formedMask & (1L << index)) != 0;
 
-			if (avg.IsNaN())
-			{
-				value.Add(inner, new DecimalIndicatorValue(inner, time)
+				if (avg.IsNaN())
 				{
-					IsFinal = true,
-					IsFormed = lineFormed,
-					IsEmpty = true,
-				});
-			}
-			else
-			{
-				value.Add(inner, new DecimalIndicatorValue(inner, (decimal)avg, time)
+					value.Add(inner, new DecimalIndicatorValue(inner, time)
+					{
+						IsFinal = true,
+						IsFormed = lineFormed,
+						IsEmpty = true,
+					});
+				}
+				else
 				{
-					IsFinal = true,
-					IsFormed = lineFormed,
-				});
-				hasValue = true;
+					value.Add(inner, new DecimalIndicatorValue(inner, (decimal)avg, time)
+					{
+						IsFinal = true,
+						IsFormed = lineFormed,
+					});
+					hasValue = true;
+				}
 			}
 		}
 
@@ -327,7 +157,7 @@ public class GpuRainbowChartsCalculator : GpuIndicatorCalculatorBase<RainbowChar
 	}
 
 	/// <inheritdoc />
-	public override GpuRainbowChartsResult[][][] Calculate(GpuCandle[][] candlesSeries, GpuRainbowChartsParams[] parameters)
+	public unsafe override GpuRainbowChartsResult[][][] Calculate(GpuCandle[][] candlesSeries, GpuRainbowChartsParams[] parameters)
 	{
 		ArgumentNullException.ThrowIfNull(candlesSeries);
 		ArgumentNullException.ThrowIfNull(parameters);
@@ -433,21 +263,24 @@ public class GpuRainbowChartsCalculator : GpuIndicatorCalculatorBase<RainbowChar
 					var allFormed = true;
 					var time = 0L;
 
-					for (var line = 0; line < lineCount; line++)
+					fixed (float* pAvg = rcRes.Averages)
 					{
-						var smaRes = smaSeries[offset + line][bar];
+						for (var line = 0; line < lineCount; line++)
+						{
+							var smaRes = smaSeries[offset + line][bar];
 
-						if (line == 0)
-							time = smaRes.Time;
+							if (line == 0)
+								time = smaRes.Time;
 
-						var lineFormed = smaRes.IsFormed != 0 && !smaRes.Value.IsNaN();
+							var lineFormed = smaRes.IsFormed != 0 && !smaRes.Value.IsNaN();
 
-						if (lineFormed)
-							formedMask |= 1L << line;
-						else
-							allFormed = false;
+							if (lineFormed)
+								formedMask |= 1L << line;
+							else
+								allFormed = false;
 
-						rcRes.SetAverage(line, smaRes.Value);
+							pAvg[line] = smaRes.Value;
+						}
 					}
 
 					rcRes.Time = time;

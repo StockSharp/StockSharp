@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Gpu.Indicators;
 
-using System.Reflection;
-
 /// <summary>
 /// Parameter set for GPU Know Sure Thing (KST) calculation.
 /// </summary>
@@ -95,14 +93,14 @@ public struct GpuKnowSureThingParams(
 
 		if (indicator is KnowSureThing kst)
 		{
-			self.Roc1Length = GetLength(kst, "_roc1", self.Roc1Length, defaults.Roc1Length);
-			self.Roc2Length = GetLength(kst, "_roc2", self.Roc2Length, defaults.Roc2Length);
-			self.Roc3Length = GetLength(kst, "_roc3", self.Roc3Length, defaults.Roc3Length);
-			self.Roc4Length = GetLength(kst, "_roc4", self.Roc4Length, defaults.Roc4Length);
-			self.Sma1Length = GetLength(kst, "_sma1", self.Sma1Length, defaults.Sma1Length);
-			self.Sma2Length = GetLength(kst, "_sma2", self.Sma2Length, defaults.Sma2Length);
-			self.Sma3Length = GetLength(kst, "_sma3", self.Sma3Length, defaults.Sma3Length);
-			self.Sma4Length = GetLength(kst, "_sma4", self.Sma4Length, defaults.Sma4Length);
+			self.Roc1Length = kst.Roc1.Length;
+			self.Roc2Length = kst.Roc2.Length;
+			self.Roc3Length = kst.Roc3.Length;
+			self.Roc4Length = kst.Roc4.Length;
+			self.Sma1Length = kst.Sma1.Length;
+			self.Sma2Length = kst.Sma2.Length;
+			self.Sma3Length = kst.Sma3.Length;
+			self.Sma4Length = kst.Sma4.Length;
 			self.SignalLength = kst.Signal?.Length ?? defaults.SignalLength;
 		}
 
@@ -118,18 +116,7 @@ public struct GpuKnowSureThingParams(
 	}
 
 	private static int EnsurePositive(int value, int fallback)
-	=> value > 0 ? value : fallback;
-
-	private static int GetLength(KnowSureThing indicator, string fieldName, int currentValue, int fallback)
-	{
-		var field = typeof(KnowSureThing).GetField(fieldName, BindingFlags.Instance | BindingFlags.NonPublic);
-		if (field?.GetValue(indicator) is LengthIndicator<decimal> lengthIndicator)
-		{
-			return EnsurePositive(lengthIndicator.Length, fallback);
-		}
-
-		return EnsurePositive(currentValue, fallback);
-	}
+		=> value > 0 ? value : fallback;
 }
 
 /// <summary>

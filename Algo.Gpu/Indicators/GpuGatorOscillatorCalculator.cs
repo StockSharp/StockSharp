@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Gpu.Indicators;
 
-using System.Reflection;
-
 /// <summary>
 /// Parameter set for GPU Gator Oscillator calculation.
 /// </summary>
@@ -17,9 +15,6 @@ using System.Reflection;
 [StructLayout(LayoutKind.Sequential)]
 public struct GpuGatorOscillatorParams(int jawLength, int jawShift, int teethLength, int teethShift, int lipsLength, int lipsShift) : IGpuIndicatorParams
 {
-	private static readonly FieldInfo _line1Field = typeof(GatorHistogram).GetField("_line1", BindingFlags.Instance | BindingFlags.NonPublic);
-	private static readonly FieldInfo _line2Field = typeof(GatorHistogram).GetField("_line2", BindingFlags.Instance | BindingFlags.NonPublic);
-
 	/// <summary>
 	/// Jaw SMMA period length.
 	/// </summary>
@@ -61,19 +56,19 @@ public struct GpuGatorOscillatorParams(int jawLength, int jawShift, int teethLen
 		var histogram1 = gator.Histogram1;
 		var histogram2 = gator.Histogram2;
 
-		if (_line1Field?.GetValue(histogram1) is AlligatorLine jaw)
+		if (histogram1.Line1 is AlligatorLine jaw)
 		{
 			self.JawLength = jaw.Length;
 			self.JawShift = jaw.Shift;
 		}
 
-		if (_line2Field?.GetValue(histogram1) is AlligatorLine lips)
+		if (histogram1.Line2 is AlligatorLine lips)
 		{
 			self.LipsLength = lips.Length;
 			self.LipsShift = lips.Shift;
 		}
 
-		if (_line2Field?.GetValue(histogram2) is AlligatorLine teeth)
+		if (histogram2.Line2 is AlligatorLine teeth)
 		{
 			self.TeethLength = teeth.Length;
 			self.TeethShift = teeth.Shift;

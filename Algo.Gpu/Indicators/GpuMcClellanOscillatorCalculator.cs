@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Gpu.Indicators;
 
-using System.Reflection;
-
 /// <summary>
 /// Parameter set for GPU McClellan Oscillator calculation.
 /// </summary>
@@ -36,20 +34,8 @@ public struct GpuMcClellanOscillatorParams(int fastLength, int slowLength, byte 
 
 		if (indicator is McClellanOscillator mc)
 		{
-			const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
-			var type = mc.GetType();
-
-			var fastField = type.GetField("_ema19", flags);
-			if (fastField?.GetValue(mc) is ExponentialMovingAverage fastEma)
-				Unsafe.AsRef(in this).FastLength = fastEma.Length;
-			else
-				Unsafe.AsRef(in this).FastLength = 19;
-
-			var slowField = type.GetField("_ema39", flags);
-			if (slowField?.GetValue(mc) is ExponentialMovingAverage slowEma)
-				Unsafe.AsRef(in this).SlowLength = slowEma.Length;
-			else
-				Unsafe.AsRef(in this).SlowLength = 39;
+			Unsafe.AsRef(in this).FastLength = mc.Ema19.Length;
+			Unsafe.AsRef(in this).SlowLength = mc.Ema39.Length;
 		}
 	}
 }

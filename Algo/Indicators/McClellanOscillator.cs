@@ -10,31 +10,38 @@
 [Doc("topics/api/indicators/list_of_indicators/mcclellan_oscillator.html")]
 public class McClellanOscillator : BaseIndicator
 {
-	private readonly ExponentialMovingAverage _ema19;
-	private readonly ExponentialMovingAverage _ema39;
+	/// <summary>
+	/// Exponential Moving Average with length 19.
+	/// </summary>
+	[Browsable(false)]
+	public ExponentialMovingAverage Ema19 { get; } = new() { Length = 19 };
+
+	/// <summary>
+	/// Exponential Moving Average with length 39.
+	/// </summary>
+	[Browsable(false)]
+	public ExponentialMovingAverage Ema39 { get; } = new() { Length = 39 };
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="McClellanOscillator"/>.
 	/// </summary>
 	public McClellanOscillator()
 	{
-		_ema19 = new() { Length = 19 };
-		_ema39 = new() { Length = 39 };
 	}
 
 	/// <inheritdoc />
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 	/// <inheritdoc />
-	public override int NumValuesToInitialize => _ema19.NumValuesToInitialize.Max(_ema39.NumValuesToInitialize);
+	public override int NumValuesToInitialize => Ema19.NumValuesToInitialize.Max(Ema39.NumValuesToInitialize);
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var ema19Value = _ema19.Process(input);
-		var ema39Value = _ema39.Process(input);
+		var ema19Value = Ema19.Process(input);
+		var ema39Value = Ema39.Process(input);
 
-		if (_ema19.IsFormed && _ema39.IsFormed)
+		if (Ema19.IsFormed && Ema39.IsFormed)
 		{
 			var oscillator = ema19Value.ToDecimal(Source) - ema39Value.ToDecimal(Source);
 
@@ -50,8 +57,8 @@ public class McClellanOscillator : BaseIndicator
 	/// <inheritdoc />
 	public override void Reset()
 	{
-		_ema19.Reset();
-		_ema39.Reset();
+		Ema19.Reset();
+		Ema39.Reset();
 		base.Reset();
 	}
 }
