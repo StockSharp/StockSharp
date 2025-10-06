@@ -17,6 +17,7 @@ public class RelativeStrengthIndex : LengthIndicator<decimal>
 	private readonly SmoothedMovingAverage _loss;
 	private bool _isInitialized;
 	private decimal _last;
+	private decimal? _prevResult;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RelativeStrengthIndex"/>.
@@ -43,6 +44,7 @@ public class RelativeStrengthIndex : LengthIndicator<decimal>
 	{
 		_last = default;
 		_isInitialized = default;
+		_prevResult = default;
 		_loss.Length = _gain.Length = Length;
 		base.Reset();
 	}
@@ -71,12 +73,18 @@ public class RelativeStrengthIndex : LengthIndicator<decimal>
 		if(input.IsFinal)
 			_last = newValue;
 
-		if (lossValue == 0)
-			return 100m;
-		
-		if (gainValue / lossValue == 1)
-			return 0m;
+		// Stable RSI computation without risky division by (near) zero:
+		// RSI = 100 * avgGain / (avgGain + avgLoss)
+		var sum = gainValue + lossValue;
 
-		return 100m - 100m / (1m + gainValue / lossValue);
+		if (sum == 0m)
+			return _prevResult ?? 50m;
+
+		var rsi = 100m * gainValue / sum;
+
+		if (input.IsFinal)
+			_prevResult = rsi;
+
+		return rsi;
 	}
 }
