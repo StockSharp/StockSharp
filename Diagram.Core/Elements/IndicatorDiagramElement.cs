@@ -230,7 +230,14 @@ public class IndicatorDiagramElement : DiagramElement
 				propType == typeof(DateTimeOffset) ||
 				propType.IsEnum)
 			{
-				parameters.Add(createParam(propType));
+				// keep property type as nullable if it is
+				var param = createParam(propertyInfo.PropertyType);
+
+				// copy all restrictions
+				param.Attributes.AddRange(propertyInfo.Attributes.OfType<ValidationAttribute>());
+				param.Attributes.AddRange(propertyInfo.Attributes.OfType<ItemsSourceAttribute>());
+
+				parameters.Add(param);
 			}
 			else if (propType.Is<IIndicator>())
 			{
