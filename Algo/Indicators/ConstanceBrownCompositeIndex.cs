@@ -172,9 +172,11 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator<IConstanceBrown
 
 	/// <inheritdoc />
 	public override int NumValuesToInitialize =>
-		(_rsi.NumValuesToInitialize + _rsiRoc.NumValuesToInitialize - 1)
-			.Max(_shortRsi.NumValuesToInitialize + _rsiMomentum.NumValuesToInitialize - 1)
-		+ CompositeIndexLine.NumValuesToInitialize + FastSma.NumValuesToInitialize.Max(SlowSma.NumValuesToInitialize) - 2;
+		_rsi.NumValuesToInitialize
+		.Max(_rsiRoc.NumValuesToInitialize + 1)
+		.Max(_shortRsi.NumValuesToInitialize)
+		.Max(_rsiMomentum.NumValuesToInitialize + 1)
+		+ FastSma.NumValuesToInitialize.Max(SlowSma.NumValuesToInitialize) - 1;
 
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
@@ -184,33 +186,36 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator<IConstanceBrown
 		var rsiValue = _rsi.Process(input);
 		var shortRsiValue = _shortRsi.Process(input);
 
-		IIndicatorValue rocValue;
-		if (_rsi.IsFormed && !rsiValue.IsEmpty)
-		{
-			var rsiDecimal = rsiValue.ToDecimal();
-			rocValue = _rsiRoc.Process(rsiDecimal, input.Time, input.IsFinal);
-		}
-		else
-			rocValue = new DecimalIndicatorValue(_rsiRoc, input.Time) { IsFinal = input.IsFinal };
+		var rocValue = _rsiRoc.Process(rsiValue, input.Time, input.IsFinal);
+		var momentumValue = _rsiMomentum.Process(shortRsiValue, input.Time, input.IsFinal);
 
-		IIndicatorValue momentumValue;
-		if (_shortRsi.IsFormed && !shortRsiValue.IsEmpty)
+		if (_rsi.IsFormed)
 		{
-			var shortRsiDecimal = shortRsiValue.ToDecimal();
-			momentumValue = _rsiMomentum.Process(shortRsiDecimal, input.Time, input.IsFinal);
-		}
-		else
-			momentumValue = new DecimalIndicatorValue(_rsiMomentum, input.Time) { IsFinal = input.IsFinal };
 
-		if (_rsiRoc.IsFormed && _rsiMomentum.IsFormed && !rocValue.IsEmpty && !momentumValue.IsEmpty)
+		}
+
+		if (_shortRsi.IsFormed)
 		{
-			var rsiChange = rocValue.ToDecimal();
-			var rsiMom = momentumValue.ToDecimal();
+
+		}
+
+		if (_rsiRoc.IsFormed)
+		{
+		}
+
+		if (_rsiMomentum.IsFormed)
+		{
+		}
+
+		if (_rsi.IsFormed && _shortRsi.IsFormed && _rsiRoc.IsFormed && _rsiMomentum.IsFormed)
+		{
+			var rsiChange = rocValue.ToNullableDecimal() ?? 0;
+			var rsiMom = momentumValue.ToNullableDecimal() ?? 0;
 			var compositeIndexValue = rsiChange + rsiMom;
 
 			var compositeValue = CompositeIndexLine.Process(compositeIndexValue, input.Time, input.IsFinal);
 
-			if (CompositeIndexLine.IsFormed && !compositeValue.IsEmpty)
+			if (CompositeIndexLine.IsFormed)
 			{
 				var fastValue = FastSma.Process(compositeValue);
 				var slowValue = SlowSma.Process(compositeValue);
