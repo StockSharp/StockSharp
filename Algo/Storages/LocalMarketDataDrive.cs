@@ -379,7 +379,10 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		return dates;
 	}
 
-	private class Index : CachedSynchronizedDictionary<SecurityId, Dictionary<StorageFormats, Dictionary<DataType, HashSet<DateTime>>>>
+	/// <summary>
+	/// Index for fast access to available data in local storage.
+	/// </summary>
+	public class Index : CachedSynchronizedDictionary<SecurityId, Dictionary<StorageFormats, Dictionary<DataType, HashSet<DateTime>>>>
 	{
 		private static readonly Version _ver10 = new(1, 0);
 		private static readonly Version _ver11 = new(1, 1);
@@ -404,6 +407,10 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			{ DataType.CandleRange, _candlesCode + 5 },
 		};
 
+		/// <summary>
+		/// Load index from binary data.
+		/// </summary>
+		/// <param name="data">Binary data.</param>
 		public void Load(byte[] data)
 		{
 			lock (SyncRoot)
@@ -484,6 +491,10 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			}
 		}
 
+		/// <summary>
+		/// Save index to stream.
+		/// </summary>
+		/// <param name="stream">Stream.</param>
 		public void Save(Stream stream)
 		{
 			lock (SyncRoot)
@@ -563,6 +574,14 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 		private DateTime? _lastTimeChanged;
 
+		/// <summary>
+		/// Add or remove date for the specified security, format and data type.
+		/// </summary>
+		/// <param name="secId">Security ID.</param>
+		/// <param name="format">Storage format.</param>
+		/// <param name="dataType">Data type.</param>
+		/// <param name="date">Date.</param>
+		/// <param name="remove">Remove date if <see langword="true"/>, otherwise add.</param>
 		public void ChangeDate(SecurityId secId, StorageFormats format, DataType dataType, DateTime date, bool remove)
 		{
 			lock (SyncRoot)
@@ -595,14 +614,28 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			}
 		}
 
+		/// <summary>
+		/// Check if index needs to be saved.
+		/// </summary>
+		/// <param name="diff">Time difference since last change.</param>
+		/// <returns><see langword="true"/> if index needs to be saved.</returns>
 		public bool NeedSave(TimeSpan diff)
 		{
 			lock (SyncRoot)
 				return _lastTimeChanged is not null && (DateTime.UtcNow - _lastTimeChanged.Value) >= diff;
 		}
 
+		/// <summary>
+		/// Get all available securities in the index.
+		/// </summary>
 		public IEnumerable<SecurityId> AvailableSecurities => CachedKeys;
 
+		/// <summary>
+		/// Get available data types for the specified security and format.
+		/// </summary>
+		/// <param name="securityId">Security ID. If default, returns all data types for the format.</param>
+		/// <param name="format">Storage format.</param>
+		/// <returns>Available data types.</returns>
 		public IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
 		{
 			lock (SyncRoot)
@@ -617,6 +650,13 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			return [];
 		}
 
+		/// <summary>
+		/// Get available dates for the specified security, data type and format.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="dataType">Data type.</param>
+		/// <param name="format">Storage format.</param>
+		/// <returns>Available dates sorted in ascending order.</returns>
 		public IEnumerable<DateTime> GetDates(SecurityId securityId, DataType dataType, StorageFormats format)
 		{
 			lock (SyncRoot)
@@ -702,7 +742,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 			try
 			{
-				index = new();
+				index = [];
 				index.Load(File.ReadAllBytes(IndexFullPath));
 
 				_index = index;

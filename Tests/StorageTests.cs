@@ -3174,4 +3174,188 @@ public class StorageTests
 			storage.Delete([depth]);
 		}
 	}
+
+	[TestMethod]
+	public void Index_AddAndGetDates()
+	{
+		var index = new LocalMarketDataDrive.Index();
+		var secId = new SecurityId { SecurityCode = "SBER", BoardCode = "MOEX" };
+		var date1 = new DateTime(2024, 1, 1);
+		var date2 = new DateTime(2024, 1, 2);
+
+		// Add dates
+		index.ChangeDate(secId, StorageFormats.Binary, DataType.Ticks, date1, false);
+		index.ChangeDate(secId, StorageFormats.Binary, DataType.Ticks, date2, false);
+
+		// Get dates
+		var dates = index.GetDates(secId, DataType.Ticks, StorageFormats.Binary).ToArray();
+		dates.Length.AssertEqual(2);
+		dates[0].AssertEqual(date1);
+		dates[1].AssertEqual(date2);
+	}
+
+	[TestMethod]
+	public void Index_RemoveDate()
+	{
+		var index = new LocalMarketDataDrive.Index();
+		var secId = new SecurityId { SecurityCode = "SBER", BoardCode = "MOEX" };
+		var date1 = new DateTime(2024, 1, 1);
+		var date2 = new DateTime(2024, 1, 2);
+
+		// Add dates
+		index.ChangeDate(secId, StorageFormats.Binary, DataType.Ticks, date1, false);
+		index.ChangeDate(secId, StorageFormats.Binary, DataType.Ticks, date2, false);
+
+		// Remove one date
+		index.ChangeDate(secId, StorageFormats.Binary, DataType.Ticks, date1, true);
+
+		// Check remaining date
+		var dates = index.GetDates(secId, DataType.Ticks, StorageFormats.Binary).ToArray();
+		dates.Length.AssertEqual(1);
+		dates[0].AssertEqual(date2);
+	}
+
+	[TestMethod]
+	public void Index_AvailableSecurities()
+	{
+		var index = new LocalMarketDataDrive.Index();
+		var secId1 = new SecurityId { SecurityCode = "SBER", BoardCode = "MOEX" };
+		var secId2 = new SecurityId { SecurityCode = "GAZP", BoardCode = "MOEX" };
+		var date = new DateTime(2024, 1, 1);
+
+		index.ChangeDate(secId1, StorageFormats.Binary, DataType.Ticks, date, false);
+		index.ChangeDate(secId2, StorageFormats.Binary, DataType.Ticks, date, false);
+
+		var securities = index.AvailableSecurities.ToArray();
+		securities.Length.AssertEqual(2);
+		securities.Contains(secId1).AssertTrue();
+		securities.Contains(secId2).AssertTrue();
+	}
+
+	[TestMethod]
+	public void Index_GetAvailableDataTypes()
+	{
+		var index = new LocalMarketDataDrive.Index();
+		var secId = new SecurityId { SecurityCode = "SBER", BoardCode = "MOEX" };
+		var date = new DateTime(2024, 1, 1);
+
+		index.ChangeDate(secId, StorageFormats.Binary, DataType.Ticks, date, false);
+		index.ChangeDate(secId, StorageFormats.Binary, DataType.MarketDepth, date, false);
+		index.ChangeDate(secId, StorageFormats.Csv, DataType.Level1, date, false);
+
+		// Get data types for Binary format
+		var dataTypes = index.GetAvailableDataTypes(secId, StorageFormats.Binary).ToArray();
+		dataTypes.Length.AssertEqual(2);
+		dataTypes.Contains(DataType.Ticks).AssertTrue();
+		dataTypes.Contains(DataType.MarketDepth).AssertTrue();
+
+		// Get data types for Csv format
+		var dataTypesCsv = index.GetAvailableDataTypes(secId, StorageFormats.Csv).ToArray();
+		dataTypesCsv.Length.AssertEqual(1);
+		dataTypesCsv[0].AssertEqual(DataType.Level1);
+	}
+
+	[TestMethod]
+	public void Index_SaveAndLoad()
+	{
+		var index = new LocalMarketDataDrive.Index();
+		var secId = new SecurityId { SecurityCode = "SBER", BoardCode = "MOEX" };
+		var date1 = new DateTime(2024, 1, 1);
+		var date2 = new DateTime(2024, 1, 2);
+
+		// Add data
+		index.ChangeDate(secId, StorageFormats.Binary, DataType.Ticks, date1, false);
+		index.ChangeDate(secId, StorageFormats.Binary, DataType.Ticks, date2, false);
+		index.ChangeDate(secId, StorageFormats.Binary, DataType.MarketDepth, date1, false);
+
+		// Save to stream
+		using var stream = new MemoryStream();
+		index.Save(stream);
+
+		// Load from stream
+		var loadedIndex = new LocalMarketDataDrive.Index();
+		loadedIndex.Load(stream.ToArray());
+
+		// Verify loaded data
+		var dates = loadedIndex.GetDates(secId, DataType.Ticks, StorageFormats.Binary).ToArray();
+		dates.Length.AssertEqual(2);
+		dates[0].AssertEqual(date1);
+		dates[1].AssertEqual(date2);
+
+		var dataTypes = loadedIndex.GetAvailableDataTypes(secId, StorageFormats.Binary).ToArray();
+		dataTypes.Length.AssertEqual(2);
+		dataTypes.Contains(DataType.Ticks).AssertTrue();
+		dataTypes.Contains(DataType.MarketDepth).AssertTrue();
+	}
+
+	[TestMethod]
+	public void Index_NeedSave()
+	{
+		var index = new LocalMarketDataDrive.Index();
+		var secId = new SecurityId { SecurityCode = "SBER", BoardCode = "MOEX" };
+		var date = new DateTime(2024, 1, 1);
+
+		// Initially should not need save
+		index.NeedSave(TimeSpan.Zero).AssertFalse();
+
+		// Add data
+		index.ChangeDate(secId, StorageFormats.Binary, DataType.Ticks, date, false);
+
+		// Should need save immediately
+		index.NeedSave(TimeSpan.Zero).AssertTrue();
+
+		// Should not need save with large delay
+		index.NeedSave(TimeSpan.FromDays(1)).AssertFalse();
+	}
+
+	[TestMethod]
+	public void Index_MultipleFormatsAndDataTypes()
+	{
+		var index = new LocalMarketDataDrive.Index();
+		var secId = new SecurityId { SecurityCode = "SBER", BoardCode = "MOEX" };
+		var date = new DateTime(2024, 1, 1);
+
+		// Add same date for different formats and data types
+		index.ChangeDate(secId, StorageFormats.Binary, DataType.Ticks, date, false);
+		index.ChangeDate(secId, StorageFormats.Csv, DataType.Ticks, date, false);
+		index.ChangeDate(secId, StorageFormats.Binary, DataType.MarketDepth, date, false);
+
+		// Verify Binary format has both data types
+		var binaryTypes = index.GetAvailableDataTypes(secId, StorageFormats.Binary).ToArray();
+		binaryTypes.Length.AssertEqual(2);
+
+		// Verify Csv format has only Ticks
+		var csvTypes = index.GetAvailableDataTypes(secId, StorageFormats.Csv).ToArray();
+		csvTypes.Length.AssertEqual(1);
+		csvTypes[0].AssertEqual(DataType.Ticks);
+	}
+
+	[TestMethod]
+	public void Index_CandleDataTypes()
+	{
+		var index = new LocalMarketDataDrive.Index();
+		var secId = new SecurityId { SecurityCode = "SBER", BoardCode = "MOEX" };
+		var date = new DateTime(2024, 1, 1);
+
+		var tf5min = TimeSpan.FromMinutes(5).TimeFrame();
+		var tf1hour = TimeSpan.FromHours(1).TimeFrame();
+
+		index.ChangeDate(secId, StorageFormats.Binary, tf5min, date, false);
+		index.ChangeDate(secId, StorageFormats.Binary, tf1hour, date, false);
+
+		var dataTypes = index.GetAvailableDataTypes(secId, StorageFormats.Binary).ToArray();
+		dataTypes.Length.AssertEqual(2);
+		dataTypes.Contains(tf5min).AssertTrue();
+		dataTypes.Contains(tf1hour).AssertTrue();
+
+		// Save and reload to test candle serialization
+		using var stream = new MemoryStream();
+		index.Save(stream);
+
+		var loadedIndex = new LocalMarketDataDrive.Index();
+		loadedIndex.Load(stream.ToArray());
+
+		var loadedTypes = loadedIndex.GetAvailableDataTypes(secId, StorageFormats.Binary).ToArray();
+		loadedTypes.Length.AssertEqual(2);
+	}
 }
