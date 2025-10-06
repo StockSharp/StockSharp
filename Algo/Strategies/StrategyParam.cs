@@ -272,10 +272,14 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <returns><see cref="StrategyParam{T}"/></returns>
 	public StrategyParam<T> SetRange(T min, T max)
 		=> this.ModifyAttributes(true, () =>
-			_valueType == typeof(int)
-				? new RangeAttribute(min.To<int>(), max.To<int>())
-				: new RangeAttribute(_valueType, min.To<string>(), max.To<string>())
-		);
+		{
+			if (_valueType == typeof(int))
+				return (Attribute)new RangeAttribute(min.To<int>(), max.To<int>());
+			else if (_valueType == typeof(Unit))
+				return new UnitRangeAttribute(min.To<Unit>(), max.To<Unit>()) { DisableNullCheck = _isNullable };
+			else
+				return new RangeAttribute(_valueType, min.To<string>(), max.To<string>());
+		});
 
 	/// <summary>
 	/// Set required validator.

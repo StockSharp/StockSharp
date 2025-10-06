@@ -50,6 +50,58 @@ public class UnitNotNegativeAttribute : ValidationAttribute
 		=> value is Unit u && u.Value >= 0m;
 }
 
+/// <summary>Range restriction for Unit values.</summary>
+[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter)]
+[CLSCompliant(false)]
+public class UnitRangeAttribute : ValidationAttribute, IValidator
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="UnitRangeAttribute"/>.
+	/// </summary>
+	/// <param name="min">Minimum value (inclusive).</param>
+	/// <param name="max">Maximum value (inclusive).</param>
+	public UnitRangeAttribute(Unit min, Unit max)
+	{
+		if (min is null) throw new ArgumentNullException(nameof(min));
+		if (max is null) throw new ArgumentNullException(nameof(max));
+		if (min.Type != max.Type)
+			throw new ArgumentOutOfRangeException(nameof(max), max.Type, LocalizedStrings.InvalidValue);
+		if (min.Value > max.Value)
+			throw new ArgumentOutOfRangeException(nameof(min), min.Value, LocalizedStrings.InvalidValue);
+
+		Min = min;
+		Max = max;
+	}
+
+	/// <inheritdoc/>
+	public bool DisableNullCheck { get; set; }
+
+	/// <summary>
+	/// Minimum value.
+	/// </summary>
+	public Unit Min { get; }
+
+	/// <summary>
+	/// Maximum value.
+	/// </summary>
+	public Unit Max { get; }
+
+	/// <inheritdoc/>
+	public override bool IsValid(object value)
+	{
+		if (value is null)
+			return DisableNullCheck;
+
+		if (value is not Unit u)
+			return false;
+
+		if (u.Type != Min.Type)
+			return false;
+
+		return u.Value >= Min.Value && u.Value <= Max.Value;
+	}
+}
+
 /// <summary>Step restriction for Unit values (Value = Base + N*Step, N>=0).</summary>
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter)]
 [CLSCompliant(false)]
