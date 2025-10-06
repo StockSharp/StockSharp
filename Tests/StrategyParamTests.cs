@@ -131,7 +131,7 @@ public class StrategyParamTests
 		AssertRange(1.5, 2.0, 2.5, 1.4, 2.6);
 		AssertRange(1.5f, 2.0f, 2.5f, 1.4f, 2.6f);
 		AssertRange(TimeSpan.FromSeconds(1), TimeSpan.FromMilliseconds(1500), TimeSpan.FromSeconds(2), TimeSpan.FromMilliseconds(500), TimeSpan.FromSeconds(3));
-		// Unit range not added yet (RangeAttribute does not support Unit) – can be extended later.
+		AssertRange((Unit)1.5, (Unit)2.0, (Unit)2.5, (Unit)1.4, (Unit)2.6);
 	}
 
 	[TestMethod]
@@ -451,5 +451,299 @@ public class StrategyParamTests
 		p.Value = 10;
 		p.Value = null; // allowed - nullable removes step restriction when null
 		p.Value = 15; // valid again
+	}
+
+	[TestMethod]
+	public void RandomOptimize_Int_WithinRange()
+	{
+		var p = new StrategyParam<int>("p", 10)
+			.SetCanOptimize(true)
+			.SetOptimize(5, 25, 5);
+
+		for (int i = 0; i < 100; i++)
+		{
+			var randomValue = (int)p.GetRandomOptimizeValue();
+			(randomValue >= 5 && randomValue <= 25).AssertEqual(true);
+			((randomValue - 5) % 5).AssertEqual(0); // Should respect step
+		}
+	}
+
+	[TestMethod]
+	public void RandomOptimize_Decimal_WithinRange()
+	{
+		var p = new StrategyParam<decimal>("p", 1.5m)
+			.SetCanOptimize(true)
+			.SetOptimize(1.0m, 3.0m, 0.5m);
+
+		for (int i = 0; i < 100; i++)
+		{
+			var randomValue = (decimal)p.GetRandomOptimizeValue();
+			(randomValue >= 1.0m && randomValue <= 3.0m).AssertEqual(true);
+			((randomValue - 1.0m) % 0.5m).AssertEqual(0); // Should respect step
+		}
+	}
+
+	[TestMethod]
+	public void RandomOptimize_Bool_RandomValues()
+	{
+		var p = new StrategyParam<bool>("p", false)
+			.SetCanOptimize(true)
+			.SetOptimize(false, true, false);
+
+		var trueCount = 0;
+		var falseCount = 0;
+
+		for (int i = 0; i < 100; i++)
+		{
+			var randomValue = (bool)p.GetRandomOptimizeValue();
+			if (randomValue) trueCount++;
+			else falseCount++;
+		}
+
+		// Both true and false should appear (very high probability)
+		(trueCount > 0).AssertEqual(true);
+		(falseCount > 0).AssertEqual(true);
+	}
+
+	[TestMethod]
+	public void RandomOptimize_TimeSpan_WithinRange()
+	{
+		var p = new StrategyParam<TimeSpan>("p", TimeSpan.FromMinutes(30))
+			.SetCanOptimize(true)
+			.SetOptimize(TimeSpan.FromMinutes(10), TimeSpan.FromMinutes(60), TimeSpan.FromMinutes(10));
+
+		for (int i = 0; i < 50; i++)
+		{
+			var randomValue = (TimeSpan)p.GetRandomOptimizeValue();
+			(randomValue >= TimeSpan.FromMinutes(10)).AssertEqual(true);
+			(randomValue <= TimeSpan.FromMinutes(60)).AssertEqual(true);
+			((randomValue.TotalMinutes - 10) % 10).AssertEqual(0); // Should respect step
+		}
+	}
+
+	[TestMethod]
+	public void RandomOptimize_Unit_WithinRange()
+	{
+		var from = new Unit(1.0m, UnitTypes.Percent);
+		var to = new Unit(5.0m, UnitTypes.Percent);
+		var step = new Unit(0.5m, UnitTypes.Percent);
+
+		var p = new StrategyParam<Unit>("p", from)
+			.SetCanOptimize(true)
+			.SetOptimize(from, to, step);
+
+		for (int i = 0; i < 50; i++)
+		{
+			var randomValue = (Unit)p.GetRandomOptimizeValue();
+			randomValue.Type.AssertEqual(UnitTypes.Percent);
+			(randomValue.Value >= 1.0m && randomValue.Value <= 5.0m).AssertEqual(true);
+			((randomValue.Value - 1.0m) % 0.5m).AssertEqual(0); // Should respect step
+		}
+	}
+
+	[TestMethod]
+	public void RandomOptimize_Unit_MismatchedTypes_ThrowsException()
+	{
+		var from = new Unit(1.0m, UnitTypes.Percent);
+		var to = new Unit(5.0m, UnitTypes.Absolute); // Different type!
+
+		var p = new StrategyParam<Unit>("p", from)
+			.SetCanOptimize(true)
+			.SetOptimize(from, to, null);
+
+		Assert.ThrowsExactly<ArgumentException>(() => p.GetRandomOptimizeValue());
+	}
+
+	[TestMethod]
+	public void RandomOptimize_CannotOptimize_ThrowsException()
+	{
+		var p = new StrategyParam<int>("p", 10)
+			.SetCanOptimize(false)
+			.SetOptimize(5, 25, 5);
+
+		Assert.ThrowsExactly<InvalidOperationException>(() => p.GetRandomOptimizeValue());
+	}
+
+	[TestMethod]
+	public void RandomOptimize_RangeNotSet_ThrowsException()
+	{
+		var p = new StrategyParam<int>("p", 10)
+			.SetCanOptimize(true);
+		// OptimizeFrom and OptimizeTo not set
+
+		Assert.ThrowsExactly<InvalidOperationException>(() => p.GetRandomOptimizeValue());
+	}
+
+	[TestMethod]
+	public void ApplyRandomOptimizeValues_OnlyAppliesOptimizable()
+	{
+		var strategy = new TestStrategy();
+
+		var optimizableParam = strategy.Param("optimizable", 10)
+			.SetCanOptimize(true)
+			.SetOptimize(5, 25, 5);
+
+		var nonOptimizableParam = strategy.Param("non_optimizable", 100)
+			.SetCanOptimize(false);
+
+		var originalNonOptValue = nonOptimizableParam.Value;
+
+		// Apply random values to all optimizable parameters (moved from helper)
+		foreach (var param in strategy.Parameters.CachedValues)
+		{
+			if (param.CanOptimize && param.OptimizeFrom != null && param.OptimizeTo != null)
+			{
+				param.Value = param.GetRandomOptimizeValue();
+			}
+		}
+
+		// Optimizable parameter should be in range
+		(optimizableParam.Value >= 5 && optimizableParam.Value <= 25).AssertEqual(true);
+
+		// Non-optimizable parameter should remain unchanged
+		nonOptimizableParam.Value.AssertEqual(originalNonOptValue);
+	}
+
+	// --- Additional tests for GetRandomOptimizeValue ----------------------
+
+	[TestMethod]
+	public void RandomOptimize_Int_NoStep()
+	{
+		var p = new StrategyParam<int>("p", 0)
+			.SetCanOptimize(true)
+			.SetOptimize(5, 25, 1);
+
+		for (int i = 0; i < 100; i++)
+		{
+			var v = (int)p.GetRandomOptimizeValue();
+			(v >= 5 && v <= 25).AssertEqual(true);
+		}
+	}
+
+	[TestMethod]
+	public void RandomOptimize_Long_WithStep()
+	{
+		var p = new StrategyParam<long>("p", 0)
+			.SetCanOptimize(true)
+			.SetOptimize(100L, 1000L, 50L);
+
+		for (int i = 0; i < 100; i++)
+		{
+			var v = (long)p.GetRandomOptimizeValue();
+			(v >= 100 && v <= 1000).AssertEqual(true);
+			((v - 100) % 50).AssertEqual(0);
+		}
+	}
+
+	[TestMethod]
+	public void RandomOptimize_Decimal_NoStep()
+	{
+		var p = new StrategyParam<decimal>("p", 0m)
+			.SetCanOptimize(true)
+			.SetOptimize(1.0m, 2.0m, 0.1m);
+
+		for (int i = 0; i < 100; i++)
+		{
+			var v = (decimal)p.GetRandomOptimizeValue();
+			(v >= 1.0m && v <= 2.0m).AssertEqual(true);
+		}
+	}
+
+	[TestMethod]
+	public void RandomOptimize_Double_WithStep()
+	{
+		var p = new StrategyParam<double>("p", 0.0)
+			.SetCanOptimize(true)
+			.SetOptimize(0.5, 3.0, 0.25);
+
+		for (int i = 0; i < 100; i++)
+		{
+			var v = (double)p.GetRandomOptimizeValue();
+			(v >= 0.5 && v <= 3.0).AssertEqual(true);
+			var steps = (v - 0.5) / 0.25;
+			(Math.Abs(steps - Math.Round(steps)) <= 1e-6).AssertTrue();
+		}
+	}
+
+	[TestMethod]
+	public void RandomOptimize_Float_WithStep()
+	{
+		var p = new StrategyParam<float>("p", 0f)
+			.SetCanOptimize(true)
+			.SetOptimize(1.0f, 2.0f, 0.5f);
+
+		for (int i = 0; i < 100; i++)
+		{
+			var v = (float)p.GetRandomOptimizeValue();
+			(v >= 1.0f && v <= 2.0f).AssertEqual(true);
+			var steps = (v - 1.0f) / 0.5f;
+			(Math.Abs(steps - MathF.Round(steps)) <= 1e-5f).AssertTrue();
+		}
+	}
+
+	[TestMethod]
+	public void RandomOptimize_TimeSpan_NoStep()
+	{
+		var p = new StrategyParam<TimeSpan>("p", TimeSpan.Zero)
+			.SetCanOptimize(true)
+			.SetOptimize(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(1));
+
+		for (int i = 0; i < 50; i++)
+		{
+			var v = (TimeSpan)p.GetRandomOptimizeValue();
+			(v >= TimeSpan.FromMinutes(1) && v <= TimeSpan.FromMinutes(5)).AssertEqual(true);
+		}
+	}
+
+	[TestMethod]
+	public void RandomOptimize_Unit_NoStep()
+	{
+		var from = new Unit(1.0m, UnitTypes.Absolute);
+		var to = new Unit(3.0m, UnitTypes.Absolute);
+
+		var p = new StrategyParam<Unit>("p", from)
+			.SetCanOptimize(true)
+			.SetOptimize(from, to, null);
+
+		for (int i = 0; i < 50; i++)
+		{
+			var v = (Unit)p.GetRandomOptimizeValue();
+			v.Type.AssertEqual(UnitTypes.Absolute);
+			(v.Value >= 1.0m && v.Value <= 3.0m).AssertEqual(true);
+		}
+	}
+
+	[TestMethod]
+	public void RandomOptimize_FromEqualsTo_ReturnsThatValue()
+	{
+		var p = new StrategyParam<int>("p", 0)
+			.SetCanOptimize(true)
+			.SetOptimize(20, 20, 5);
+
+		for (int i = 0; i < 10; i++)
+		{
+			var v = (int)p.GetRandomOptimizeValue();
+			v.AssertEqual(20);
+		}
+	}
+
+	[TestMethod]
+	public void RandomOptimize_Int_NegativeRange_WithStep()
+	{
+		var p = new StrategyParam<int>("p", 0)
+			.SetCanOptimize(true)
+			.SetOptimize(-10, 10, 5);
+
+		for (int i = 0; i < 100; i++)
+		{
+			var v = (int)p.GetRandomOptimizeValue();
+			(v >= -10 && v <= 10).AssertEqual(true);
+			((v - (-10)) % 5).AssertEqual(0);
+		}
+	}
+
+	private class TestStrategy : Strategy
+	{
+		// Simple test strategy for testing parameter functionality
 	}
 }
