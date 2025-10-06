@@ -44,26 +44,21 @@ public class FractalPartIndicatorValue : ShiftedIndicatorValue
 /// <summary>
 /// Part <see cref="Fractals"/>.
 /// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="FractalPart"/>.
+/// </remarks>
+/// <param name="isUp"><see cref="IsUp"/></param>
 [IndicatorHidden]
 [IndicatorOut(typeof(FractalPartIndicatorValue))]
-public class FractalPart : LengthIndicator<decimal>
+public class FractalPart(bool isUp) : LengthIndicator<decimal>
 {
 	private int _numCenter;
 	private int _counter;
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="FractalPart"/>.
-	/// </summary>
-	/// <param name="isUp"><see cref="IsUp"/></param>
-	public FractalPart(bool isUp)
-	{
-		IsUp = isUp;
-	}
-
-	/// <summary>
 	/// Up value.
 	/// </summary>
-	public bool IsUp { get; }
+	public bool IsUp { get; } = isUp;
 
 	/// <inheritdoc />
 	public override int Length
