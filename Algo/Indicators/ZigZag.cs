@@ -54,7 +54,7 @@ public class ZigZagIndicatorValue : ShiftedIndicatorValue
 
 		base.FromValues(values);
 
-		IsUp = values[1].To<bool>();
+		IsUp = values[2].To<bool>();
 	}
 }
 
