@@ -230,6 +230,9 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 
 		var numToInitLeft = NumValuesToInitialize;
 
+		if (numToInitLeft <= 0)
+			numToInitLeft = 1;
+
 		foreach (var (input, output) in values)
 		{
 			if (output.Indicator != this)
@@ -243,7 +246,8 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 
 			if (numToInitLeft > 0)
 				numToInitLeft--;
-			else
+			
+			if (numToInitLeft == 0)
 				output.IsFormed = true;
 
 			_preloaded.Add(input.Time, (input, output));
@@ -280,6 +284,9 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 		}
 		else
 		{
+			if (IsPreloaded)
+				throw new NotSupportedException("The indicator is preloaded.");
+
 			result = OnProcess(input);
 
 			if (result.Indicator != this)

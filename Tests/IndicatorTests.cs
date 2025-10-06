@@ -969,51 +969,62 @@ public class IndicatorTests
 		var tf = TimeSpan.FromMinutes(1);
 		var secId = Helper.CreateSecurity().ToSecurityId();
 		var candles = LoadCandles(secId, time, tf);
+		var halfCount = candles.Length / 2;
 
 		foreach (var type in GetIndicatorTypes())
 		{
 			var indicator1 = type.CreateIndicator();
 			var indicator2 = type.CreateIndicator();
 
+			var name = indicator1.ToString();
+
 			var preloadData = new List<(IIndicatorValue input, IIndicatorValue output)>();
 
 			// Process first half with indicator1 and collect data for preloading
-			var halfCount = candles.Length / 2;
 			for (var i = 0; i < halfCount; i++)
 			{
 				var c = candles[i];
-				IIndicatorValue input = type.InputValue == typeof(DecimalIndicatorValue)
-					? new DecimalIndicatorValue(indicator1, c.ClosePrice, c.OpenTime) { IsFinal = true }
-					: new CandleIndicatorValue(indicator1, c) { IsFinal = true };
 
-				var output = indicator1.Process(input);
-				preloadData.Add((input, output));
+				indicator1.Process(c);
+
+				var (input, output) = indicator1.Container.GetValue(0);
+
+				if (!input.IsFinal || !output.IsFinal)
+					continue;
+
+				var outputClone = indicator2.CreateValue(output.Time, [.. output.ToValues()]);
+				outputClone.IsFinal = true;
+
+				CompareValue(output, outputClone, name, true);
+
+				preloadData.Add((input, outputClone));
 			}
 
 			// Preload indicator2 with collected data
 			indicator2.Preload(preloadData);
 
 			// Verify that indicator2 is in the same state as indicator1
-			indicator1.IsFormed.AssertEqual(indicator2.IsFormed, type.Name);
-			indicator2.IsPreloaded.AssertTrue(type.Name);
+			indicator1.IsFormed.AssertEqual(indicator2.IsFormed, name);
+			indicator2.IsPreloaded.AssertTrue(name);
 
-			// Process second half with both indicators and compare results
-			for (var i = halfCount; i < candles.Length; i++)
+			indicator1.Reset();
+			indicator1.IsFormed.AssertFalse(name);
+			indicator1.IsPreloaded.AssertFalse(name);
+
+			for (var i = 0; i < halfCount; i++)
 			{
 				var c = candles[i];
 
-				IIndicatorValue input1 = type.InputValue == typeof(DecimalIndicatorValue)
-					? new DecimalIndicatorValue(indicator1, c.ClosePrice, c.OpenTime) { IsFinal = true }
-					: new CandleIndicatorValue(indicator1, c) { IsFinal = true };
+				var output1 = indicator1.Process(c);
+				var output2 = indicator2.Process(c);
 
-				IIndicatorValue input2 = type.InputValue == typeof(DecimalIndicatorValue)
-					? new DecimalIndicatorValue(indicator2, c.ClosePrice, c.OpenTime) { IsFinal = true }
-					: new CandleIndicatorValue(indicator2, c) { IsFinal = true };
+				CompareValue(output2, output1, name, true);
+			}
 
-				var output1 = indicator1.Process(input1);
-				var output2 = indicator2.Process(input2);
-
-				CompareValue(output2, output1, type.Name, true);
+			{
+				var c = candles[halfCount];
+				var output1 = indicator1.Process(c);
+				Assert.ThrowsExactly<NotSupportedException>(() => indicator2.Process(c));
 			}
 		}
 	}
@@ -1031,18 +1042,17 @@ public class IndicatorTests
 			var indicator1 = type.CreateIndicator();
 			var indicator2 = type.CreateIndicator();
 
-			var preloadData = new List<(DateTimeOffset time, object[] values)>();
+			var name = indicator1.ToString();
+
+			var preloadData = new List<(DateTimeOffset, object[])>();
 
 			// Process first half with indicator1 and collect output values
 			var halfCount = candles.Length / 2;
 			for (var i = 0; i < halfCount; i++)
 			{
 				var c = candles[i];
-				IIndicatorValue input = type.InputValue == typeof(DecimalIndicatorValue)
-					? new DecimalIndicatorValue(indicator1, c.ClosePrice, c.OpenTime) { IsFinal = true }
-					: new CandleIndicatorValue(indicator1, c) { IsFinal = true };
 
-				var output = indicator1.Process(input);
+				var output = indicator1.Process(c);
 				preloadData.Add((output.Time, [.. output.ToValues()]));
 			}
 
@@ -1050,26 +1060,21 @@ public class IndicatorTests
 			indicator2.Preload(preloadData);
 
 			// Verify that indicator2 is in the same state as indicator1
-			indicator1.IsFormed.AssertEqual(indicator2.IsFormed, type.Name);
-			indicator2.IsPreloaded.AssertTrue(type.Name);
+			indicator1.IsFormed.AssertEqual(indicator2.IsFormed, name);
+			indicator2.IsPreloaded.AssertTrue(name);
 
-			// Process second half with both indicators and compare results
-			for (var i = halfCount; i < candles.Length; i++)
+			indicator1.Reset();
+			indicator1.IsFormed.AssertFalse(name);
+			indicator1.IsPreloaded.AssertFalse(name);
+
+			for (var i = 0; i < halfCount; i++)
 			{
 				var c = candles[i];
 
-				IIndicatorValue input1 = type.InputValue == typeof(DecimalIndicatorValue)
-					? new DecimalIndicatorValue(indicator1, c.ClosePrice, c.OpenTime) { IsFinal = true }
-					: new CandleIndicatorValue(indicator1, c) { IsFinal = true };
+				var output1 = indicator1.Process(c);
+				var output2 = indicator2.Process(c);
 
-				IIndicatorValue input2 = type.InputValue == typeof(DecimalIndicatorValue)
-					? new DecimalIndicatorValue(indicator2, c.ClosePrice, c.OpenTime) { IsFinal = true }
-					: new CandleIndicatorValue(indicator2, c) { IsFinal = true };
-
-				var output1 = indicator1.Process(input1);
-				var output2 = indicator2.Process(input2);
-
-				CompareValue(output2, output1, type.Name, true);
+				CompareValue(output2, output1, name, true);
 			}
 		}
 	}
