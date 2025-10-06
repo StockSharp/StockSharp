@@ -8,6 +8,7 @@ using Ecng.Reflection;
 using StockSharp.Algo.Candles.Compression;
 using StockSharp.Algo.Gpu;
 using StockSharp.Algo.Gpu.Indicators;
+using DataType = StockSharp.Messages.DataType;
 
 [TestClass]
 public class IndicatorTests
@@ -1101,6 +1102,177 @@ public class IndicatorTests
 		catch (InvalidOperationException ex)
 		{
 			ex.Message.Contains("already preloaded").AssertTrue();
+		}
+	}
+
+	[TestMethod]
+	public void IndicatorValues_Standard()
+	{
+		var ind = new PassThroughIndicator();
+		var t = DateTimeOffset.UtcNow;
+		var tf = TimeSpan.FromMinutes(1);
+
+		// DecimalIndicatorValue
+		{
+			var v1 = new DecimalIndicatorValue(ind, 123.45m, t) { IsFinal = true };
+			var arr = v1.ToValues().ToArray();
+			var v2 = new DecimalIndicatorValue(ind, t);
+			v2.FromValues(arr);
+			v2.IsEmpty.AssertFalse();
+			v2.Value.AssertEqual(123.45m);
+
+			// empty
+			var vEmpty = new DecimalIndicatorValue(ind, t);
+			var arrEmpty = vEmpty.ToValues().ToArray();
+			var vEmpty2 = new DecimalIndicatorValue(ind, t);
+			vEmpty2.FromValues(arrEmpty);
+			vEmpty2.IsEmpty.AssertTrue();
+		}
+
+		// CandleIndicatorValue
+		{
+			var c = new TimeFrameCandleMessage
+			{
+				OpenTime = t,
+				CloseTime = t + tf,
+				OpenPrice = 100m,
+				HighPrice = 105m,
+				LowPrice = 95m,
+				ClosePrice = 102m,
+				TotalVolume = 1000m,
+				State = CandleStates.Finished,
+				TypedArg = tf,
+			};
+
+			var v1 = new CandleIndicatorValue(ind, c);
+			var arr = v1.ToValues().ToArray();
+			var v2 = new CandleIndicatorValue(ind, t);
+			v2.FromValues(arr);
+			v2.IsEmpty.AssertFalse();
+
+			var c2 = v2.Value;
+			c2.OpenPrice.AssertEqual(c.OpenPrice);
+			c2.HighPrice.AssertEqual(c.HighPrice);
+			c2.LowPrice.AssertEqual(c.LowPrice);
+			c2.ClosePrice.AssertEqual(c.ClosePrice);
+			c2.TotalVolume.AssertEqual(c.TotalVolume);
+
+			// empty
+			var vEmpty = new CandleIndicatorValue(ind, t);
+			var arrEmpty = vEmpty.ToValues().ToArray();
+			var vEmpty2 = new CandleIndicatorValue(ind, t);
+			vEmpty2.FromValues(arrEmpty);
+			vEmpty2.IsEmpty.AssertTrue();
+		}
+
+		// MarketDepthIndicatorValue
+		{
+			var depth = new QuoteChangeMessage
+			{
+				ServerTime = t,
+				Bids = new[] { new QuoteChange(100m, 10m) },
+				Asks = new[] { new QuoteChange(101m, 11m) }
+			};
+
+			var v1 = new MarketDepthIndicatorValue(ind, depth) { IsFinal = true };
+			var arr = v1.ToValues().ToArray();
+			var v2 = new MarketDepthIndicatorValue(ind, t);
+			v2.FromValues(arr);
+			v2.IsEmpty.AssertFalse();
+			v2.Value.GetBestBid()?.Price.AssertEqual(100m);
+			v2.Value.GetBestAsk()?.Price.AssertEqual(101m);
+
+			// empty
+			var vEmpty = new MarketDepthIndicatorValue(ind, t);
+			var arrEmpty = vEmpty.ToValues().ToArray();
+			var vEmpty2 = new MarketDepthIndicatorValue(ind, t);
+			vEmpty2.FromValues(arrEmpty);
+			vEmpty2.IsEmpty.AssertTrue();
+		}
+
+		// Level1IndicatorValue
+		{
+			var l1 = new Level1ChangeMessage { ServerTime = t };
+			l1.Add(Level1Fields.LastTradePrice, 77m);
+			l1.Add(Level1Fields.Volume, 555m);
+
+			var v1 = new Level1IndicatorValue(ind, l1) { IsFinal = true };
+			var arr = v1.ToValues().ToArray();
+			var v2 = new Level1IndicatorValue(ind, t);
+			v2.FromValues(arr);
+			v2.IsEmpty.AssertFalse();
+			((decimal?)v2.Value.TryGet(Level1Fields.LastTradePrice)).AssertEqual(77m);
+			((decimal?)v2.Value.TryGet(Level1Fields.Volume)).AssertEqual(555m);
+
+			// empty
+			var vEmpty = new Level1IndicatorValue(ind, t);
+			var arrEmpty = vEmpty.ToValues().ToArray();
+			var vEmpty2 = new Level1IndicatorValue(ind, t);
+			vEmpty2.FromValues(arrEmpty);
+			vEmpty2.IsEmpty.AssertTrue();
+		}
+
+		// TickIndicatorValue
+		{
+			var tick = new ExecutionMessage
+			{
+				ServerTime = t,
+				TradePrice = 12.34m,
+				TradeVolume = 9.87m,
+				DataTypeEx = DataType.Ticks
+			};
+
+			var v1 = new TickIndicatorValue(ind, tick) { IsFinal = true };
+			var arr = v1.ToValues().ToArray();
+			var v2 = new TickIndicatorValue(ind, t);
+			v2.FromValues(arr);
+			v2.IsEmpty.AssertFalse();
+			v2.Value.Price.AssertEqual(12.34m);
+			v2.Value.Volume.AssertEqual(9.87m);
+
+			// empty
+			var vEmpty = new TickIndicatorValue(ind, t);
+			var arrEmpty = vEmpty.ToValues().ToArray();
+			var vEmpty2 = new TickIndicatorValue(ind, t);
+			vEmpty2.FromValues(arrEmpty);
+			vEmpty2.IsEmpty.AssertTrue();
+		}
+
+		// PairIndicatorValue<decimal>
+		{
+			var p = (1.23m, 4.56m);
+			var v1 = new PairIndicatorValue<decimal>(ind, p, t) { IsFinal = true };
+			var arr = v1.ToValues().ToArray();
+			var v2 = new PairIndicatorValue<decimal>(ind, t);
+			v2.FromValues(arr);
+			v2.IsEmpty.AssertFalse();
+			v2.Value.Item1.AssertEqual(1.23m);
+			v2.Value.Item2.AssertEqual(4.56m);
+
+			// empty
+			var vEmpty = new PairIndicatorValue<decimal>(ind, t);
+			var arrEmpty = vEmpty.ToValues().ToArray();
+			var vEmpty2 = new PairIndicatorValue<decimal>(ind, t);
+			vEmpty2.FromValues(arrEmpty);
+			vEmpty2.IsEmpty.AssertTrue();
+		}
+
+		// ShiftedIndicatorValue (extends SingleIndicatorValue<decimal> with extra Shift)
+		{
+			var v1 = new ShiftedIndicatorValue(ind, 999m, 5, t) { IsFinal = true };
+			var arr = v1.ToValues().ToArray();
+			var v2 = new ShiftedIndicatorValue(ind, t);
+			v2.FromValues(arr);
+			v2.IsEmpty.AssertFalse();
+			v2.Value.AssertEqual(999m);
+			v2.Shift.AssertEqual(5);
+
+			// empty
+			var vEmpty = new ShiftedIndicatorValue(ind, t);
+			var arrEmpty = vEmpty.ToValues().ToArray();
+			var vEmpty2 = new ShiftedIndicatorValue(ind, t);
+			vEmpty2.FromValues(arrEmpty);
+			vEmpty2.IsEmpty.AssertTrue();
 		}
 	}
 }
