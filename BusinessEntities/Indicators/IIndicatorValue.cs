@@ -119,7 +119,6 @@ public abstract class SingleIndicatorValue<TValue> : BaseIndicatorValue
 		: base(indicator, time)
 	{
 		Value = value;
-		IsEmpty = value.IsNull();
 	}
 
 	/// <summary>
@@ -175,10 +174,12 @@ public abstract class SingleIndicatorValue<TValue> : BaseIndicatorValue
 	}
 
 	/// <inheritdoc />
-	public override int CompareTo(IIndicatorValue other) => Value.Compare(other.GetValue<TValue>());
+	public override int CompareTo(IIndicatorValue other)
+		=> Value.Compare(other.GetValue<TValue>());
 
 	/// <inheritdoc />
-	public override string ToString() => IsEmpty ? "Empty" : Value.ToString();
+	public override string ToString()
+		=> (IsEmpty ? "Empty" : Value.ToString()) + (IsFinal ? string.Empty : " (non-final)");
 
 	/// <summary>
 	/// Cast object from <see cref="SingleIndicatorValue{TValue}"/> to <typeparamref name="TValue"/>.
