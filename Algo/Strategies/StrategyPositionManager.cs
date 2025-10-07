@@ -19,6 +19,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 	private readonly SyncObject _lock = new();
 	private readonly Dictionary<(SecurityId secId, Portfolio pf), Position> _positions = [];
 	private readonly Dictionary<Order, OrderExecInfo> _orderExecInfos = [];
+	private readonly Dictionary<SecurityId, decimal> _lastPrices = [];
 
 	/// <summary>
 	/// Per-position aggregates cache (blocked volume and active orders counters).
@@ -127,6 +128,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 			_orderExecInfos.Clear();
 			_posAggs.Clear();
 			_orderTracks.Clear();
+			_lastPrices.Clear();
 		}
 	}
 
@@ -141,7 +143,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 		var agg = _posAggs.SafeAdd((order.Security.ToSecurityId(), order.Portfolio), _ => new());
 
 		var balance = order.Balance; // non-nullable balance
-		var newActive = !order.State.IsFinal() && balance > 0;
+		var newActive = order.State == OrderStates.Active && balance > 0;
 
 		if (!_orderTracks.TryGetValue(order, out var track))
 		{
@@ -212,7 +214,8 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 		}
 
 		var blockedNet = agg.BlockedBuy - agg.BlockedSell;
-		position.BlockedValue = blockedNet == 0 ? null : blockedNet;
+		var hasActiveOrders = (agg.BuyCount + agg.SellCount) > 0;
+		position.BlockedValue = hasActiveOrders ? blockedNet : (position.BlockedValue is null ? null : 0m);
 		position.BuyOrdersCount = agg.BuyCount == 0 ? null : agg.BuyCount;
 		position.SellOrdersCount = agg.SellCount == 0 ? null : agg.SellCount;
 	}
@@ -225,6 +228,12 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 	{
 		ArgumentNullException.ThrowIfNull(order);
 
+		if (order.Balance < 0)
+			throw new ArgumentException(LocalizedStrings.OrderBalanceNotEnough.Put(order.TransactionId, order.Balance), nameof(order));
+
+		if (order.State is OrderStates.None or OrderStates.Pending or OrderStates.Failed)
+			return; // not yet active
+
 		var matchedAbs = order.GetMatchedVolume() ?? 0m; // cumulative executed volume (absolute)
 		var signSide = order.Side == Sides.Sell ? -1 : 1;
 
@@ -236,9 +245,16 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 
 		lock (_lock)
 		{
+			var key = (order.Security.ToSecurityId(), order.Portfolio);
+			var posExists = _positions.ContainsKey(key);
+
+			// If there are no executions yet and the order state is not Active and no position exists yet, ignore.
+			if (matchedAbs == 0 && order.State != OrderStates.Active && !posExists)
+				return;
+
 			position = GetOrCreate(order.Security, order.Portfolio, out isNew);
 
-			// ensure aggregates reflect current order state before fill handling
+			// ensure aggregates reflect current order state before fill handling (to close blocked on Done, etc.)
 			UpdateAggregates(order, position);
 
 			if (!_orderExecInfos.TryGetValue(order, out var execInfo))
@@ -294,6 +310,17 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 				if (deltaCommission != 0)
 					position.Commission = posCommission + deltaCommission;
 
+				// Recompute position market value if we know last price for this security
+				if (_lastPrices.TryGetValue(order.Security.ToSecurityId(), out var lastPrice))
+				{
+					var value = newQty.Abs() * lastPrice;
+					position.CurrentPrice = value == 0 ? 0m : value;
+				}
+				else
+				{
+					position.CurrentPrice = null; // unknown market price
+				}
+
 				position.LocalTime = order.LocalTime;
 				position.LastChangeTime = order.ServerTime;
 			}
@@ -318,12 +345,15 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 
 		lock (_lock)
 		{
+			_lastPrices[secId] = price;
+
 			foreach (var ((kSecId, _), pos) in _positions)
 			{
 				if (!kSecId.Equals(secId))
 					continue;
 
-				pos.CurrentPrice = price;
+				var qty = pos.CurrentValue ?? 0m;
+				pos.CurrentPrice = qty == 0 ? 0m : qty.Abs() * price;
 				pos.LastChangeTime = serverTime;
 				pos.LocalTime = localTime;
 				(changed ??= []).Add(pos);
