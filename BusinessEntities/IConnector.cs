@@ -64,12 +64,6 @@ public interface IConnector : IMessageChannel, IPersistable, ILogReceiver,
 	event Action<long, Exception> ChangePasswordResult;
 
 	/// <summary>
-	/// Server time changed <see cref="ILogSource.CurrentTime"/>. It passed the time difference since the last call of the event. The first time the event passes the value <see cref="TimeSpan.Zero"/>.
-	/// </summary>
-	[Obsolete("Use ITimeProvider.CurrentTimeChanged event.")]
-	event Action<TimeSpan> MarketTimeChanged;
-
-	/// <summary>
 	/// List of all exchange boards, for which instruments are loaded <see cref="Securities"/>.
 	/// </summary>
 	IEnumerable<ExchangeBoard> ExchangeBoards { get; }

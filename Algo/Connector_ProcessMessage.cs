@@ -23,7 +23,7 @@ partial class Connector
 				{
 					try
 					{
-						// TimeMsg required for notify invoke MarketTimeChanged event (and active time based IMarketRule-s)
+						// TimeMsg required for notify invoke CurrentTimeChanged event (and active time based IMarketRule-s)
 						// No need to put _marketTimeMessage again, if it still in queue.
 
 						lock (_marketTimerSync)
@@ -646,13 +646,6 @@ partial class Connector
 					break;
 
 				//case MessageTypes.Time:
-				//	var timeMsg = (TimeMessage)message;
-
-				//	if (timeMsg.Shift != null)
-				//		TimeShift = timeMsg.Shift;
-
-				//	// TimeMessage могут пропускаться при наличии других месседжей, поэтому событие
-				//	// MarketTimeChanged необходимо вызывать при обработке времени из любых месседжей.
 				//	break;
 
 				case MessageTypes.SubscriptionResponse:
