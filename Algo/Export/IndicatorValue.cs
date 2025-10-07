@@ -41,12 +41,6 @@ public class IndicatorValue : IServerTimeMessage, ISecurityIdMessage
 	/// <summary>
 	/// Converted to <see cref="decimal"/> type value.
 	/// </summary>
-	[Obsolete("Use Value1 property.")]
-	public decimal? ValueAsDecimal => Value1;
-
-	/// <summary>
-	/// Converted to <see cref="decimal"/> type value.
-	/// </summary>
 	public decimal? Value1 => ValueAt(0);
 
 	/// <summary>
