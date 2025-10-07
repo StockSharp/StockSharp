@@ -333,17 +333,6 @@ public class Order : NotifiableObject, IOrderMessage
 		}
 	}
 
-	/// <summary>
-	/// Time of last order change (Cancellation, Fill).
-	/// </summary>
-	[Obsolete("Use ServerTime property.")]
-	[Browsable(false)]
-	public DateTimeOffset LastChangeTime
-	{
-		get => ServerTime;
-		set => ServerTime = value;
-	}
-
 	private DateTimeOffset _localTime;
 
 	/// <summary>
@@ -417,17 +406,6 @@ public class Order : NotifiableObject, IOrderMessage
 		Order = 14)]
 	[BasicSetting]
 	public Sides Side { get; set; }
-
-	/// <summary>
-	/// Order side (buy or sell).
-	/// </summary>
-	[Browsable(false)]
-	[Obsolete("Use Side property.")]
-	public Sides Direction
-	{
-		get => Side;
-		set => Side = value;
-	}
 
 	private decimal _balance;
 
