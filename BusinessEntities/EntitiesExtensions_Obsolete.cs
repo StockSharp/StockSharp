@@ -22,57 +22,6 @@ static partial class EntitiesExtensions
 	}
 
 	/// <summary>
-	/// Cast <see cref="CandleSeries"/> to <see cref="MarketDataMessage"/>.
-	/// </summary>
-	/// <param name="series">Candles series.</param>
-	/// <param name="isSubscribe">The message is subscription.</param>
-	/// <param name="from">The initial date from which you need to get data.</param>
-	/// <param name="to">The final date by which you need to get data.</param>
-	/// <param name="count">Candles count.</param>
-	/// <param name="throwIfInvalidType">Throw an error if <see cref="MarketDataMessage.DataType2"/> isn't candle type.</param>
-	/// <returns>Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</returns>
-	[Obsolete("Use Subscription class.")]
-	public static MarketDataMessage ToMarketDataMessage(this CandleSeries series, bool isSubscribe, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, bool throwIfInvalidType = true)
-	{
-		if (series == null)
-			throw new ArgumentNullException(nameof(series));
-
-		var mdMsg = new MarketDataMessage
-		{
-			IsSubscribe = isSubscribe,
-			From = from ?? series.From,
-			To = to ?? series.To,
-			Count = count ?? series.Count,
-			BuildMode = series.BuildCandlesMode,
-			BuildFrom = series.BuildCandlesFrom2,
-			BuildField = series.BuildCandlesField,
-			IsCalcVolumeProfile = series.IsCalcVolumeProfile,
-			AllowBuildFromSmallerTimeFrame = series.AllowBuildFromSmallerTimeFrame,
-			IsRegularTradingHours = series.IsRegularTradingHours,
-			IsFinishedOnly = series.IsFinishedOnly,
-		};
-
-		if (series.CandleType == null)
-		{
-			if (throwIfInvalidType)
-				throw new ArgumentException(LocalizedStrings.WrongCandleType);
-		}
-		else
-		{
-			var msgType = series
-				.CandleType
-				.ToCandleMessageType();
-
-			mdMsg.DataType2 = DataType.Create(msgType, series.Arg);
-		}
-
-		mdMsg.ValidateBounds();
-		series.Security?.ToMessage(copyExtendedId: true).CopyTo(mdMsg, false);
-
-		return mdMsg;
-	}
-
-	/// <summary>
 	/// Convert <see cref="DataType"/> to <see cref="CandleSeries"/> value.
 	/// </summary>
 	/// <param name="series">Candles series.</param>
