@@ -64,17 +64,6 @@ public abstract class Message : Cloneable<Message>, IMessage
 	/// <inheritdoc />
 	public MessageTypes Type => _type;
 
-	/// <summary>
-	/// Is loopback message.
-	/// </summary>
-	[XmlIgnore]
-	[Obsolete("Use BackMode property.")]
-	public bool IsBack
-	{
-		get => this.IsBack();
-		set => BackMode = value ? MessageBackModes.Direct : MessageBackModes.None;
-	}
-
 	/// <inheritdoc />
 	[XmlIgnore]
 	public MessageBackModes BackMode { get; set; }
