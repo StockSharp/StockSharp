@@ -25,7 +25,7 @@ public class CandleSeries : NotifiableObject, IPersistable
 	/// <param name="arg">The candle formation parameter. For example, for <see cref="TimeFrameCandle"/> this value is <see cref="TimeFrameCandle.TimeFrame"/>.</param>
 	public CandleSeries(Type candleType, Security security, object arg)
 	{
-		if (!candleType.IsCandle())
+		if (!candleType.IsSubclassOf(typeof(Candle)))
 			throw new ArgumentOutOfRangeException(nameof(candleType), candleType, LocalizedStrings.WrongCandleType);
 
 		_security = security ?? throw new ArgumentNullException(nameof(security));
