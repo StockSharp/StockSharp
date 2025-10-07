@@ -1,106 +1,6 @@
 namespace StockSharp.Messages;
 
 /// <summary>
-/// Market-data types.
-/// </summary>
-[DataContract]
-[Serializable]
-[Obsolete("Use DataType class.")]
-public enum MarketDataTypes
-{
-	/// <summary>
-	/// Level 1.
-	/// </summary>
-	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Level1Key)]
-	Level1,
-
-	/// <summary>
-	/// Market depth (order book).
-	/// </summary>
-	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.MarketDepthKey)]
-	MarketDepth,
-
-	/// <summary>
-	/// Tick trades.
-	/// </summary>
-	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TicksKey)]
-	Trades,
-
-	/// <summary>
-	/// Order log.
-	/// </summary>
-	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.OrderLogKey)]
-	OrderLog,
-
-	/// <summary>
-	/// News.
-	/// </summary>
-	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NewsKey)]
-	News,
-
-	/// <summary>
-	/// Candles (time-frame).
-	/// </summary>
-	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TimeFrameCandleKey)]
-	CandleTimeFrame,
-
-	/// <summary>
-	/// Candle (tick).
-	/// </summary>
-	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TickCandleKey)]
-	CandleTick,
-
-	/// <summary>
-	/// Candle (volume).
-	/// </summary>
-	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VolumeCandleKey)]
-	CandleVolume,
-
-	/// <summary>
-	/// Candle (range).
-	/// </summary>
-	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.RangeCandleKey)]
-	CandleRange,
-
-	/// <summary>
-	/// Candle (X&amp;0).
-	/// </summary>
-	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PnFCandleKey)]
-	CandlePnF,
-
-	/// <summary>
-	/// Candle (renko).
-	/// </summary>
-	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.RenkoCandleKey)]
-	CandleRenko,
-
-	/// <summary>
-	/// Board info.
-	/// </summary>
-	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BoardInfoKey)]
-	Board,
-
-	/// <summary>
-	/// Heikin Ashi.
-	/// </summary>
-	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.HeikinAshiKey)]
-	CandleHeikinAshi
-}
-
-/// <summary>
 /// Build modes.
 /// </summary>
 [DataContract]
@@ -167,7 +67,7 @@ public class MarketDataMessage : SecurityMessage, ISubscriptionMessage, IGenerat
 
 	DataType ISubscriptionMessage.DataType => DataType2;
 
-	private DataType _dataType2 = Messages.DataType.Level1;
+	private DataType _dataType2 = DataType.Level1;
 
 	/// <summary>
 	/// Market data type.
