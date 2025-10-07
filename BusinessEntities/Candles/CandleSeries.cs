@@ -182,17 +182,6 @@ public class CandleSeries : NotifiableObject, IPersistable
 	/// <summary>
 	/// Which market-data type is used as a source value.
 	/// </summary>
-	[Browsable(false)]
-	[Obsolete("Use BuildCandlesFrom2 property.")]
-	public MarketDataTypes? BuildCandlesFrom
-	{
-		get;
-		set;
-	}
-
-	/// <summary>
-	/// Which market-data type is used as a source value.
-	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.SourceKey,
@@ -202,7 +191,7 @@ public class CandleSeries : NotifiableObject, IPersistable
 	public Messages.DataType BuildCandlesFrom2 { get; set; }
 
 	/// <summary>
-	/// Extra info for the <see cref="BuildCandlesFrom"/>.
+	/// Extra info for the <see cref="BuildCandlesFrom2"/>.
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
@@ -222,13 +211,6 @@ public class CandleSeries : NotifiableObject, IPersistable
 		GroupName = LocalizedStrings.BuildKey,
 		Order = 23)]
 	public bool IsFinishedOnly { get; set; }
-
-	/// <summary>
-	/// Try fill gaps.
-	/// </summary>
-	[Obsolete("Use separate subscriptions.")]
-	[Browsable(false)]
-	public bool FillGaps { get; set; }
 
 	/// <inheritdoc />
 	public override string ToString()
@@ -276,8 +258,6 @@ public class CandleSeries : NotifiableObject, IPersistable
 
 		if (storage.ContainsKey(nameof(BuildCandlesFrom2)))
 			BuildCandlesFrom2 = storage.GetValue<SettingsStorage>(nameof(BuildCandlesFrom2)).Load<Messages.DataType>();
-		else if (storage.ContainsKey(nameof(BuildCandlesFrom)))
-			BuildCandlesFrom = storage.GetValue(nameof(BuildCandlesFrom), BuildCandlesFrom);
 
 		BuildCandlesField = storage.GetValue(nameof(BuildCandlesField), BuildCandlesField);
 		AllowBuildFromSmallerTimeFrame = storage.GetValue(nameof(AllowBuildFromSmallerTimeFrame), AllowBuildFromSmallerTimeFrame);
