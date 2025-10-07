@@ -179,34 +179,6 @@ public class MarketDataMessage : SecurityMessage, ISubscriptionMessage, IGenerat
 		set => _dataType2 = value ?? throw new ArgumentNullException(nameof(value));
 	}
 
-	/// <summary>
-	/// Market data type.
-	/// </summary>
-	[Browsable(false)]
-	[DataMember]
-	[Obsolete("Use DataType2 property.")]
-	public new MarketDataTypes DataType
-	{
-		get => DataType2.ToMarketDataType();
-		set => DataType2 = value.ToDataType(Arg);
-	}
-
-	/// <summary>
-	/// Additional argument for market data request.
-	/// </summary>
-	[DataMember]
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.ArgumentKey,
-		Description = LocalizedStrings.ArgumentDescKey,
-		GroupName = LocalizedStrings.GeneralKey)]
-	[Obsolete("Use DataType2 property.")]
-	public object Arg
-	{
-		get => DataType2.Arg;
-		set => DataType2 = Messages.DataType.Create(DataType2.MessageType, value);
-	}
-
 	/// <inheritdoc />
 	[DataMember]
 	public bool IsSubscribe { get; set; }

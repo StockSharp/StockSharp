@@ -186,8 +186,8 @@ public class CandleSeries : NotifiableObject, IPersistable
 	[Obsolete("Use BuildCandlesFrom2 property.")]
 	public MarketDataTypes? BuildCandlesFrom
 	{
-		get => BuildCandlesFrom2?.ToMarketDataType();
-		set => BuildCandlesFrom2 = value?.ToDataType(null);
+		get;
+		set;
 	}
 
 	/// <summary>
