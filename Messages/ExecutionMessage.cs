@@ -116,19 +116,6 @@ public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 	public long TransactionId { get; set; }
 
 	/// <summary>
-	/// Data type, information about which is contained in the <see cref="ExecutionMessage"/>.
-	/// </summary>
-	[DataMember]
-	//[Nullable]
-	[Obsolete("Use DataTypeEx property.")]
-	[Browsable(false)]
-	public ExecutionTypes? ExecutionType
-	{
-		get => DataTypeEx.ToExecutionType();
-		set => DataTypeEx = value?.ToDataType();
-	}
-
-	/// <summary>
 	/// Is the action an order cancellation.
 	/// </summary>
 	[DataMember]
