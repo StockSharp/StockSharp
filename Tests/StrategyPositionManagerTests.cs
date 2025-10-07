@@ -579,9 +579,16 @@ public class StrategyPositionManagerTests
 
 		lastPos.CurrentValue.AssertEqual(5m);
 
+		// Zero volume (invalid data) - should be ignored
+		order.Volume = 0;
+		Assert.ThrowsExactly<ArgumentException>(() => mgr.ProcessOrder(order));
+
+		// Zero balance with active state (invalid data) - should be ignored
+		order.Balance = 0;
+		Assert.ThrowsExactly<ArgumentException>(() => mgr.ProcessOrder(order));
+
 		// Negative balance (invalid data) - should be ignored
 		order.Balance = -1m;
-		order.State = OrderStates.Active;
 		Assert.ThrowsExactly<ArgumentException>(() => mgr.ProcessOrder(order));
 
 		// Position unchanged
@@ -638,5 +645,162 @@ public class StrategyPositionManagerTests
 		positions.Count.AssertEqual(2);
 		positions.Any(p => p.CurrentValue == 10m && p.CurrentPrice == 1050m).AssertTrue();
 		positions.Any(p => p.CurrentValue == -5m && p.CurrentPrice == 525m).AssertTrue();
+	}
+
+	[TestMethod]
+	public void Constructor_Null_Throws()
+	{
+		Assert.ThrowsExactly<ArgumentNullException>(() => new StrategyPositionManager(null));
+	}
+
+	[TestMethod]
+	public void NoneAndFailedStatesIgnored()
+	{
+		var mgr = new StrategyPositionManager(() => "IGNORED");
+		Position last = null;
+		mgr.PositionProcessed += (p, _) => last = p;
+		var (order, _, _) = CreateOrder(Sides.Buy, 10m);
+
+		order.State = OrderStates.None;
+		mgr.ProcessOrder(order);
+		last.AssertNull();
+
+		order.State = OrderStates.Failed;
+		mgr.ProcessOrder(order);
+		last.AssertNull();
+	}
+
+	[TestMethod]
+	public void ActiveWithZeroBalanceThrows()
+	{
+		var mgr = new StrategyPositionManager(() => "ACTIVE_ZERO");
+		var (order, _, _) = CreateOrder(Sides.Buy, 10m);
+		order.State = OrderStates.Active;
+		order.Balance = 0m;
+		Assert.ThrowsExactly<ArgumentException>(() => mgr.ProcessOrder(order));
+	}
+
+	[TestMethod]
+	public void TimestampsSetOnProcessing()
+	{
+		var mgr = new StrategyPositionManager(() => "TS");
+		Position last = null;
+		mgr.PositionProcessed += (p, _) => last = p;
+		var (order, _, _) = CreateOrder(Sides.Buy, 10m);
+		var lt = DateTimeOffset.Now.AddMinutes(-1);
+		var st = DateTimeOffset.Now;
+		order.State = OrderStates.Active;
+		order.Balance = 6m; // matched 4
+		order.AveragePrice = 100m;
+		order.LocalTime = lt;
+		order.ServerTime = st;
+		mgr.ProcessOrder(order);
+
+		last.LocalTime.AssertEqual(lt);
+		last.LastChangeTime.AssertEqual(st);
+	}
+
+	[TestMethod]
+	public void UsesCachedPriceDuringProcessOrder()
+	{
+		var mgr = new StrategyPositionManager(() => "CACHED_PRICE");
+		Position last = null;
+		mgr.PositionProcessed += (p, _) => last = p;
+		var (order, sec, _) = CreateOrder(Sides.Buy, 10m);
+
+		// set last price before fills
+		var now = DateTimeOffset.Now;
+		mgr.UpdateCurrentPrice(sec.ToSecurityId(), 50m, now, now);
+
+		order.State = OrderStates.Done;
+		order.Balance = 0m;
+		order.AveragePrice = 100m;
+		mgr.ProcessOrder(order);
+
+		last.CurrentPrice.AssertEqual(500m); // 10 * 50
+	}
+
+	[TestMethod]
+	public void ReactivationUpdatesAggregates()
+	{
+		var mgr = new StrategyPositionManager(() => "REACT");
+		Position last = null;
+		mgr.PositionProcessed += (p, _) => last = p;
+		var (order, _, _) = CreateOrder(Sides.Buy, 10m);
+
+		order.State = OrderStates.Active;
+		mgr.ProcessOrder(order);
+		last.BlockedValue.AssertEqual(10m);
+
+		// cancel (Done + Balance>0)
+		order.State = OrderStates.Done;
+		order.Balance = 10m;
+		mgr.ProcessOrder(order);
+		last.BlockedValue.AssertEqual(0m);
+		last.BuyOrdersCount.AssertNull();
+
+		// re-activate
+		order.State = OrderStates.Active;
+		mgr.ProcessOrder(order);
+		last.BlockedValue.AssertEqual(10m);
+		last.BuyOrdersCount.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void NonMonotonicCommissionHandled()
+	{
+		var mgr = new StrategyPositionManager(() => "COMM");
+		Position last = null;
+		mgr.PositionProcessed += (p, _) => last = p;
+		var (order, _, _) = CreateOrder(Sides.Buy, 10m);
+
+		// first partial: matched 4, comm 1.0
+		order.State = OrderStates.Active;
+		order.Balance = 6m;
+		order.AveragePrice = 100m;
+		order.Commission = 1.0m;
+		mgr.ProcessOrder(order);
+		(last.Commission ?? 0m).AssertEqual(1.0m);
+
+		// provider corrected cumulative commission downwards to 0.8
+		order.Balance = 2m; // matched 8 total
+		order.AveragePrice = 105m;
+		order.Commission = 0.8m; // cumulative decreased => delta -0.2
+		mgr.ProcessOrder(order);
+		Math.Round(last.Commission ?? 0m, 5).AssertEqual(0.8m);
+	}
+
+	[TestMethod]
+	public void UpdateCurrentPrice_NoPositions_NoEvents()
+	{
+		var mgr = new StrategyPositionManager(() => "NOPOS");
+		var count = 0;
+		mgr.PositionProcessed += (_, __) => count++;
+		var sec = new Security { Id = "S" };
+		var now = DateTimeOffset.Now;
+		mgr.UpdateCurrentPrice(sec.ToSecurityId(), 10m, now, now);
+		count.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void BlockedValueRemainsNullWithoutActiveOrders()
+	{
+		var mgr = new StrategyPositionManager(() => "BLK_NULL");
+		var sec = new Security { Id = "S" };
+		var pf = new Portfolio { Name = "P" };
+		mgr.SetPosition(sec, pf, 1m);
+		var pos = mgr.TryGetPosition(sec, pf);
+		pos.BlockedValue.AssertNull();
+	}
+
+	[TestMethod]
+	public void NegativePricesValidation()
+	{
+		var mgr = new StrategyPositionManager(() => "NEG_PRICE");
+		var (_, sec, _) = CreateOrder(Sides.Buy, 1m);
+
+		// negative market price should throw
+		var now = DateTimeOffset.Now;
+		Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => mgr.UpdateCurrentPrice(sec.ToSecurityId(), -10m, now, now));
 	}
 }

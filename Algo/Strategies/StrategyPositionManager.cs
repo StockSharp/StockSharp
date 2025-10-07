@@ -231,6 +231,12 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 		if (order.Balance < 0)
 			throw new ArgumentException(LocalizedStrings.OrderBalanceNotEnough.Put(order.TransactionId, order.Balance), nameof(order));
 
+		if (order.Volume <= 0)
+			throw new ArgumentException(LocalizedStrings.WrongOrderVolume.Put(order.TransactionId), nameof(order));
+
+		if (order.State == OrderStates.Active && order.Balance == 0)
+			throw new ArgumentException("Active order cannot have zero balance.", nameof(order));
+
 		if (order.State is OrderStates.None or OrderStates.Pending or OrderStates.Failed)
 			return; // not yet active
 
@@ -341,6 +347,9 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 	/// <param name="localTime">Local time when the price was processed.</param>
 	public void UpdateCurrentPrice(SecurityId secId, decimal price, DateTimeOffset serverTime, DateTimeOffset localTime)
 	{
+		if (price < 0)
+			throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.InvalidValue);
+
 		List<Position> changed = null;
 
 		lock (_lock)
