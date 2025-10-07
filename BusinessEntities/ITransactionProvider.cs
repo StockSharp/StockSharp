@@ -73,12 +73,6 @@ public interface ITransactionProvider
 	event Action<long, Exception, DateTimeOffset> MassOrderCancelFailed2;
 
 	/// <summary>
-	/// Failed order status request event.
-	/// </summary>
-	[Obsolete("Use ISubscriptionProvider.SubscriptionFailed event.")]
-	event Action<long, Exception, DateTimeOffset> OrderStatusFailed2;
-
-	/// <summary>
 	/// Lookup result <see cref="PortfolioLookupMessage"/> received.
 	/// </summary>
 	[Obsolete("Use ISubscriptionProvider.PortfolioReceived and ISubscriptionProvider.SubscriptionStopped events.")]

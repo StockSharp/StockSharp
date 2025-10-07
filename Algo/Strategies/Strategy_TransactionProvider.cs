@@ -36,12 +36,6 @@ partial class Strategy
 		remove { }
 	}
 
-	event Action<long, Exception, DateTimeOffset> ITransactionProvider.OrderStatusFailed2
-	{
-		add { }
-		remove { }
-	}
-
 	event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, Exception> ITransactionProvider.LookupPortfoliosResult
 	{
 		add { }

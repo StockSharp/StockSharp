@@ -31,10 +31,6 @@ partial class Connector
 	public event Action<long, OrderFail> OrderEditFailed;
 
 	/// <inheritdoc />
-	[Obsolete("Use SubscriptionFailed event.")]
-	public event Action<long, Exception, DateTimeOffset> OrderStatusFailed2;
-
-	/// <inheritdoc />
 	public event Action<long> MassOrderCanceled;
 
 	/// <inheritdoc />
@@ -261,11 +257,6 @@ partial class Connector
 	{
 		MassOrderCancelFailed?.Invoke(transactionId, error);
 		MassOrderCancelFailed2?.Invoke(transactionId, error, time);
-	}
-
-	private void RaiseOrderStatusFailed(long transactionId, Exception error, DateTimeOffset time)
-	{
-		OrderStatusFailed2?.Invoke(transactionId, error, time);
 	}
 
 	private void RaiseNewPortfolio(Portfolio portfolio)
