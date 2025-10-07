@@ -43,9 +43,7 @@ public class MyTrade : NotifiableObject
 		Description = LocalizedStrings.TickTradeInfoKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 1)]
-#pragma warning disable CS0618 // Type or member is obsolete
-	public Trade Trade { get; set; }
-#pragma warning restore CS0618 // Type or member is obsolete
+	public ITickTradeMessage Trade { get; set; }
 
 	/// <summary>
 	/// Commission.

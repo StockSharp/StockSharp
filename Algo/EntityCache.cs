@@ -736,9 +736,7 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 		{
 			isNew = true;
 
-#pragma warning disable CS0618 // Type or member is obsolete
-			var trade = message.ToTrade(security);
-#pragma warning restore CS0618 // Type or member is obsolete
+			var trade = (ITickTradeMessage)message.TypedClone();
 
 			if (message.SeqNum != default)
 				trade.SeqNum = message.SeqNum;

@@ -185,7 +185,7 @@ public class MarketEmulatorSettings : NotifiableObject, IPersistable
 	private long _initialTradeId;
 
 	/// <summary>
-	/// The number, starting at which the emulator will generate identifiers fir trades <see cref="Trade.Id"/>.
+	/// The number, starting at which the emulator will generate identifiers fir trades <see cref="ExecutionMessage.TradeId"/>.
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),

@@ -21,7 +21,7 @@ public abstract class TradeGenerator : MarketDataGenerator
 	private IdGenerator _idGenerator;
 
 	/// <summary>
-	/// The trade identifier generator <see cref="Trade.Id"/>.
+	/// The trade identifier generator <see cref="ExecutionMessage.TradeId"/>.
 	/// </summary>
 	public IdGenerator IdGenerator
 	{
