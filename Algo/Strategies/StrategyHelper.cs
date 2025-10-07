@@ -5,92 +5,6 @@ namespace StockSharp.Algo.Strategies;
 /// </summary>
 public static partial class StrategyHelper
 {
-	/// <summary>
-	/// To create initialized object of buy order at market price.
-	/// </summary>
-	/// <param name="strategy">Strategy.</param>
-	/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
-	/// <returns>The initialized order object.</returns>
-	/// <remarks>
-	/// The order is not registered, only the object is created.
-	/// </remarks>
-	[Obsolete("Use Strategy.BuyMarket method.")]
-	public static Order BuyAtMarket(this Strategy strategy, decimal? volume = null)
-	{
-		return strategy.CreateOrder(Sides.Buy, default, volume);
-	}
-
-	/// <summary>
-	/// To create the initialized order object of sell order at market price.
-	/// </summary>
-	/// <param name="strategy">Strategy.</param>
-	/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
-	/// <returns>The initialized order object.</returns>
-	/// <remarks>
-	/// The order is not registered, only the object is created.
-	/// </remarks>
-	[Obsolete("Use Strategy.SellMarket method.")]
-	public static Order SellAtMarket(this Strategy strategy, decimal? volume = null)
-	{
-		return strategy.CreateOrder(Sides.Sell, default, volume);
-	}
-
-	/// <summary>
-	/// To create the initialized order object for buy.
-	/// </summary>
-	/// <param name="strategy">Strategy.</param>
-	/// <param name="price">Price.</param>
-	/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
-	/// <returns>The initialized order object.</returns>
-	/// <remarks>
-	/// The order is not registered, only the object is created.
-	/// </remarks>
-	[Obsolete("Use Strategy.BuyLimit method.")]
-	public static Order BuyAtLimit(this Strategy strategy, decimal price, decimal? volume = null)
-	{
-		return strategy.CreateOrder(Sides.Buy, price, volume);
-	}
-
-	/// <summary>
-	/// To create the initialized order object for sell.
-	/// </summary>
-	/// <param name="strategy">Strategy.</param>
-	/// <param name="price">Price.</param>
-	/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
-	/// <returns>The initialized order object.</returns>
-	/// <remarks>
-	/// The order is not registered, only the object is created.
-	/// </remarks>
-	[Obsolete("Use Strategy.SellLimit method.")]
-	public static Order SellAtLimit(this Strategy strategy, decimal price, decimal? volume = null)
-	{
-		return strategy.CreateOrder(Sides.Sell, price, volume);
-	}
-
-	private const string _isEmulationModeKey = "IsEmulationMode";
-
-	/// <summary>
-	/// To get the strategy start-up mode (paper trading or real).
-	/// </summary>
-	/// <param name="strategy">Strategy.</param>
-	/// <returns>If the paper trading mode is used - <see langword="true" />, otherwise - <see langword="false" />.</returns>
-	[Obsolete("Use Strategy.IsBacktesting property.")]
-	public static bool GetIsEmulation(this Strategy strategy)
-	{
-		return strategy.Environment.GetValue(_isEmulationModeKey, false);
-	}
-
-	/// <summary>
-	/// To set the strategy start-up mode (paper trading or real).
-	/// </summary>
-	/// <param name="strategy">Strategy.</param>
-	/// <param name="isEmulation">If the paper trading mode is used - <see langword="true" />, otherwise - <see langword="false" />.</param>
-	[Obsolete("Use Strategy.IsBacktesting property.")]
-	public static void SetIsEmulation(this Strategy strategy, bool isEmulation)
-	{
-		strategy.Environment.SetValue(_isEmulationModeKey, isEmulation);
-	}
-
 	#region Strategy rules
 
 	private abstract class StrategyRule<TArg>(Strategy strategy) : MarketRule<Strategy, TArg>(strategy)
@@ -202,23 +116,6 @@ public static partial class StrategyHelper
 		}
 	}
 
-	[Obsolete]
-	private sealed class OrderChangedStrategyRule : StrategyRule<Order>
-	{
-		public OrderChangedStrategyRule(Strategy strategy)
-			: base(strategy)
-		{
-			Name = LocalizedStrings.Orders + " " + strategy;
-			Strategy.OrderChanged += Activate;
-		}
-
-		protected override void DisposeManaged()
-		{
-			Strategy.OrderChanged -= Activate;
-			base.DisposeManaged();
-		}
-	}
-
 	private sealed class ProcessStateChangedStrategyRule : StrategyRule<Strategy>
 	{
 		private readonly Func<ProcessStates, bool> _condition;
@@ -317,17 +214,6 @@ public static partial class StrategyHelper
 	public static MarketRule<Strategy, Order> WhenOrderRegistered(this Strategy strategy)
 	{
 		return new OrderRegisteredStrategyRule(strategy);
-	}
-
-	/// <summary>
-	/// To create a rule for event of change of any strategy order.
-	/// </summary>
-	/// <param name="strategy">The strategy, based on which orders change will be traced.</param>
-	/// <returns>Rule.</returns>
-	[Obsolete("Use WhenOrderReceived rule.")]
-	public static MarketRule<Strategy, Order> WhenOrderChanged(this Strategy strategy)
-	{
-		return new OrderChangedStrategyRule(strategy);
 	}
 
 	/// <summary>
