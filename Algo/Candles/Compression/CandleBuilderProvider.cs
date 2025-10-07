@@ -34,7 +34,8 @@ public class CandleBuilderProvider
 	/// </summary>
 	/// <param name="type">Market data type.</param>
 	/// <returns><see langword="true" /> if the candle type registered, <see langword="false" /> otherwise.</returns>
-	public bool IsRegistered(Type type) => _builders.ContainsKey(type);
+	public bool IsRegistered(Type type)
+		=> _builders.ContainsKey(type);
 
 	/// <summary>
 	/// Get candles builder.
@@ -42,14 +43,7 @@ public class CandleBuilderProvider
 	/// <param name="type">Market data type.</param>
 	/// <returns>Candles builder.</returns>
 	public ICandleBuilder Get(Type type)
-	{
-		var builder = _builders.TryGetValue(type);
-
-		if (builder == null)
-			throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue);
-
-		return builder;
-	}
+		=> _builders.TryGetValue(type) ?? throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue);
 
 	/// <summary>
 	/// Register candles builder.
