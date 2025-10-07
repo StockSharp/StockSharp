@@ -29,58 +29,6 @@ public static class ChartingInterfacesExtensions
 	}
 
 	/// <summary>
-	/// To draw new data.
-	/// </summary>
-	/// <param name="chart">Chart.</param>
-	/// <param name="time">The time stamp of the new data generation.</param>
-	/// <param name="element">The chart element.</param>
-	/// <param name="value">Value.</param>
-	[Obsolete("Use the Draw method instead.")]
-	public static void Draw(this IChart chart, DateTimeOffset time, IChartElement element, object value)
-	{
-		if (chart == null)
-			throw new ArgumentNullException(nameof(chart));
-
-		chart.Draw(time, new Dictionary<IChartElement, object> { { element, value } });
-	}
-
-	/// <summary>
-	/// To process the new data.
-	/// </summary>
-	/// <param name="chart">Chart.</param>
-	/// <param name="time">The time stamp of the new data generation.</param>
-	/// <param name="values">New data.</param>
-	[Obsolete("Use the Draw method instead.")]
-	public static void Draw(this IChart chart, DateTimeOffset time, IDictionary<IChartElement, object> values)
-	{
-		if (chart == null)
-			throw new ArgumentNullException(nameof(chart));
-
-		chart.Draw([RefTuple.Create(time, values)]);
-	}
-
-	/// <summary>
-	/// To process the new data.
-	/// </summary>
-	/// <param name="chart">Chart.</param>
-	/// <param name="values">New data.</param>
-	[Obsolete("Use the Draw method instead.")]
-	public static void Draw(this IChart chart, IEnumerable<RefPair<DateTimeOffset, IDictionary<IChartElement, object>>> values)
-	{
-		var data = chart.CreateData();
-
-		foreach (var pair in values)
-		{
-			var item = data.Group(pair.First);
-
-			foreach (var p in pair.Second)
-				item.Add(p.Key, p.Value);
-		}
-
-		chart.Draw(data);
-	}
-
-	/// <summary>
 	/// Check the specified style is volume profile based.
 	/// </summary>
 	/// <param name="style">Style.</param>
