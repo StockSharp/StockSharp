@@ -46,17 +46,6 @@ public class MarketDepth(Security security) : Cloneable<MarketDepth>, IEnumerabl
 		Order = 2)]
 	public DateTimeOffset ServerTime { get; set; }
 
-	/// <summary>
-	/// Last change time.
-	/// </summary>
-	[Browsable(false)]
-	[Obsolete("Use ServerTime property.")]
-	public DateTimeOffset LastChangeTime
-	{
-		get => ServerTime;
-		set => ServerTime = value;
-	}
-
 	/// <inheritdoc/>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
