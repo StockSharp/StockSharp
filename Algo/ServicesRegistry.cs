@@ -109,14 +109,6 @@ public static class ServicesRegistry
 	public static Connector Connector => ConfigManager.GetService<Connector>();
 
 	/// <summary>
-	/// Connector.
-	/// </summary>
-	[Obsolete("Use Connector property.")]
-	// ReSharper disable InconsistentNaming
-	public static IConnector IConnector => ConfigManager.GetService<IConnector>();
-	// ReSharper restore InconsistentNaming
-
-	/// <summary>
 	/// Log manager.
 	/// </summary>
 	public static LogManager LogManager => LogManager.Instance;
