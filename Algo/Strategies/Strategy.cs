@@ -518,7 +518,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	private IPnLManager _pnLManager = new PnLManager { UseOrderBook = true };
 
 	/// <summary>
-	/// The profit-loss manager. It accounts trades of this strategy, as well as of its subsidiary strategies <see cref="ChildStrategies"/>.
+	/// The profit-loss manager.
 	/// </summary>
 	[Browsable(false)]
 	public IPnLManager PnLManager
