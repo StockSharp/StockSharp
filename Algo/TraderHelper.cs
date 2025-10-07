@@ -86,7 +86,7 @@ public static partial class TraderHelper
 	/// <summary>
 	/// To get the position on own trade.
 	/// </summary>
-	/// <param name="trade">Own trade, used for position calculation. At buy the trade volume <see cref="Trade.Volume"/> is taken with positive sign, at sell - with negative.</param>
+	/// <param name="trade">Own trade, used for position calculation. At buy the trade volume <see cref="ITickTradeMessage.Volume"/> is taken with positive sign, at sell - with negative.</param>
 	/// <returns>Position.</returns>
 	public static decimal GetPosition(this MyTrade trade)
 	{

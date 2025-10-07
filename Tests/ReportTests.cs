@@ -42,7 +42,15 @@ public class ReportTests
 			var trade = new MyTrade
 			{
 				Order = order,
-				Trade = new() { Id = 2000 + i, Price = 100 + i, Volume = 1, ServerTime = DateTimeOffset.UtcNow.AddMinutes(-i) },
+				Trade = new ExecutionMessage
+				{
+					DataTypeEx = DataType.Ticks,
+					TradeId = 2000 + i,
+					TradePrice = 100 + i,
+					TradeVolume = 1,
+					ServerTime = DateTimeOffset.UtcNow.AddMinutes(-i),
+					SecurityId = strategy.Security.ToSecurityId(),
+				},
 				Slippage = 0.1m * i,
 				PnL = 1.5m * i,
 				Position = i
