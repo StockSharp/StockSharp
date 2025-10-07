@@ -8,12 +8,6 @@ static partial class EntitiesExtensions
 	{
 #pragma warning disable CS0618 // Type or member is obsolete
 		RegisterCandle(() => new TimeFrameCandle(), () => new TimeFrameCandleMessage());
-		RegisterCandle(() => new TickCandle(), () => new TickCandleMessage());
-		RegisterCandle(() => new VolumeCandle(), () => new VolumeCandleMessage());
-		RegisterCandle(() => new RangeCandle(), () => new RangeCandleMessage());
-		RegisterCandle(() => new PnFCandle(), () => new PnFCandleMessage());
-		RegisterCandle(() => new RenkoCandle(), () => new RenkoCandleMessage());
-		RegisterCandle(() => new HeikinAshiCandle(), () => new HeikinAshiCandleMessage());
 #pragma warning restore CS0618 // Type or member is obsolete
 	}
 
@@ -257,56 +251,6 @@ static partial class EntitiesExtensions
 	[Obsolete("Use Subscription class.")]
 	public static CandleSeries TimeFrame(this Security security, TimeSpan arg)
 		=> arg.TimeFrame().ToCandleSeries(security);
-
-	/// <summary>
-	/// To create <see cref="CandleSeries"/> for <see cref="RangeCandle"/> candles.
-	/// </summary>
-	/// <param name="security">Security.</param>
-	/// <param name="arg">The value of <see cref="RangeCandle.PriceRange"/>.</param>
-	/// <returns>Candles series.</returns>
-	[Obsolete("Use Subscription class.")]
-	public static CandleSeries Range(this Security security, Unit arg)
-		=> arg.Range().ToCandleSeries(security);
-
-	/// <summary>
-	/// To create <see cref="CandleSeries"/> for <see cref="VolumeCandle"/> candles.
-	/// </summary>
-	/// <param name="security">Security.</param>
-	/// <param name="arg">The value of <see cref="VolumeCandle.Volume"/>.</param>
-	/// <returns>Candles series.</returns>
-	[Obsolete("Use Subscription class.")]
-	public static CandleSeries Volume(this Security security, decimal arg)
-		=> arg.Volume().ToCandleSeries(security);
-
-	/// <summary>
-	/// To create <see cref="CandleSeries"/> for <see cref="TickCandle"/> candles.
-	/// </summary>
-	/// <param name="security">Security.</param>
-	/// <param name="arg">The value of <see cref="TickCandle.MaxTradeCount"/>.</param>
-	/// <returns>Candles series.</returns>
-	[Obsolete("Use Subscription class.")]
-	public static CandleSeries Tick(this Security security, int arg)
-		=> arg.Tick().ToCandleSeries(security);
-
-	/// <summary>
-	/// To create <see cref="CandleSeries"/> for <see cref="PnFCandle"/> candles.
-	/// </summary>
-	/// <param name="security">Security.</param>
-	/// <param name="arg">The value of <see cref="PnFCandle.PnFArg"/>.</param>
-	/// <returns>Candles series.</returns>
-	[Obsolete("Use Subscription class.")]
-	public static CandleSeries PnF(this Security security, PnFArg arg)
-		=> arg.PnF().ToCandleSeries(security);
-
-	/// <summary>
-	/// To create <see cref="CandleSeries"/> for <see cref="RenkoCandle"/> candles.
-	/// </summary>
-	/// <param name="security">Security.</param>
-	/// <param name="arg">The value of <see cref="RenkoCandle.BoxSize"/>.</param>
-	/// <returns>Candles series.</returns>
-	[Obsolete("Use Subscription class.")]
-	public static CandleSeries Renko(this Security security, Unit arg)
-		=> arg.Renko().ToCandleSeries(security);
 
 	/// <summary>
 	/// Determines the specified candle series if time frame based.
