@@ -306,11 +306,7 @@ public class StorageRegistry : Disposable, IStorageRegistry
 			throw new ArgumentNullException(nameof(dataType));
 
 		if (!dataType.IsSubclassOf(typeof(Message)))
-		{
-#pragma warning disable CS0618 // Type or member is obsolete
-			dataType = dataType.ToMessageType(ref arg);
-#pragma warning restore CS0618 // Type or member is obsolete
-		}
+			throw new ArgumentException(LocalizedStrings.TypeNotImplemented.Put(dataType.Name, typeof(Message).Name), nameof(dataType));
 
 		if (dataType == typeof(ExecutionMessage))
 		{
