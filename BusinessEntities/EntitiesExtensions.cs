@@ -10,6 +10,12 @@ using Ecng.Reflection;
 /// </summary>
 public static partial class EntitiesExtensions
 {
+	static EntitiesExtensions()
+	{
+		var msgTypes = typeof(CandleMessage).Assembly.FindImplementations<CandleMessage>().ToArray();
+		_candleMessageTypes.AddRange(msgTypes);
+	}
+
 	/// <summary>
 	/// To create from <see cref="int"/> the pips values.
 	/// </summary>
@@ -212,15 +218,24 @@ public static partial class EntitiesExtensions
 			.GetMembers<PropertyInfo>(_publicStatic, typeof(ExchangeBoard))
 			.Select(prop => (ExchangeBoard)prop.GetValue(null, null));
 
-	/// <summary>
-	/// All registered candle types.
-	/// </summary>
-	public static IEnumerable<Type> AllCandleTypes => _candleTypes.CachedKeys;
+	private static readonly CachedSynchronizedSet<Type> _candleMessageTypes = [];
 
 	/// <summary>
 	/// All registered candle message types.
 	/// </summary>
-	public static IEnumerable<Type> AllCandleMessageTypes => _candleTypes.CachedValues;
+	public static IEnumerable<Type> AllCandleMessageTypes => _candleMessageTypes.Cache;
+
+	/// <summary>
+	/// Register the candle message type.
+	/// </summary>
+	/// <param name="type">The type of the message <see cref="CandleMessage"/>.</param>
+	public static void RegisterCandleMessageType(Type type)
+	{
+		if (!type.IsCandleMessage())
+			throw new ArgumentException(LocalizedStrings.WrongCandleType, nameof(type));
+
+		_candleMessageTypes.Add(type);
+	}
 
 	/// <summary>
 	/// To convert the own trade into message.

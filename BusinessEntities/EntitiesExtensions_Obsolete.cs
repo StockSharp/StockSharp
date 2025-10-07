@@ -4,86 +4,21 @@ using StockSharp.Algo.Candles;
 
 static partial class EntitiesExtensions
 {
-	static EntitiesExtensions()
-	{
-#pragma warning disable CS0618 // Type or member is obsolete
-		RegisterCandle(() => new TimeFrameCandle(), () => new TimeFrameCandleMessage());
-#pragma warning restore CS0618 // Type or member is obsolete
-	}
-
-	private static readonly CachedSynchronizedPairSet<Type, Type> _candleTypes = [];
-
 	/// <summary>
 	/// Cast candle type <see cref="Candle"/> to the message <see cref="CandleMessage"/>.
 	/// </summary>
 	/// <param name="candleType">The type of the candle <see cref="Candle"/>.</param>
 	/// <returns>The type of the message <see cref="CandleMessage"/>.</returns>
+	[Obsolete("Use candle message type directly.")]
 	public static Type ToCandleMessageType(this Type candleType)
 	{
 		if (candleType is null)
 			throw new ArgumentNullException(nameof(candleType));
 
-		if (!_candleTypes.TryGetValue(candleType, out var messageType))
-			throw new ArgumentOutOfRangeException(nameof(candleType), candleType, LocalizedStrings.WrongCandleType);
+		if (candleType == typeof(TimeFrameCandle))
+			return typeof(TimeFrameCandleMessage);
 
-		return messageType;
-	}
-
-	/// <summary>
-	/// Cast message type <see cref="CandleMessage"/> to the candle type <see cref="Candle"/>.
-	/// </summary>
-	/// <param name="messageType">The type of the message <see cref="CandleMessage"/>.</param>
-	/// <returns>The type of the candle <see cref="Candle"/>.</returns>
-	public static Type ToCandleType(this Type messageType)
-	{
-		if (messageType is null)
-			throw new ArgumentNullException(nameof(messageType));
-
-		if (!_candleTypes.TryGetKey(messageType, out var candleType))
-			throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
-
-		return candleType;
-	}
-
-	[Obsolete]
-	private static readonly SynchronizedDictionary<Type, Func<Candle>> _candleCreators = [];
-
-	/// <summary>
-	/// Register new candle type.
-	/// </summary>
-	/// <typeparam name="TCandle">Candle type.</typeparam>
-	/// <typeparam name="TMessage">The type of candle message.</typeparam>
-	/// <param name="candleCreator"><see cref="Candle"/> instance creator.</param>
-	/// <param name="candleMessageCreator"><see cref="CandleMessage"/> instance creator.</param>
-	[Obsolete("Conversion reduce performance.")]
-	public static void RegisterCandle<TCandle, TMessage>(Func<TCandle> candleCreator, Func<TMessage> candleMessageCreator)
-		where TCandle : Candle
-		where TMessage : CandleMessage
-	{
-		RegisterCandle(typeof(TCandle), typeof(TMessage), candleCreator, candleMessageCreator);
-	}
-
-	/// <summary>
-	/// Register new candle type.
-	/// </summary>
-	/// <param name="candleType">Candle type.</param>
-	/// <param name="messageType">The type of candle message.</param>
-	/// <param name="candleCreator"><see cref="Candle"/> instance creator.</param>
-	/// <param name="candleMessageCreator"><see cref="CandleMessage"/> instance creator.</param>
-	[Obsolete("Conversion reduce performance.")]
-	public static void RegisterCandle(Type candleType, Type messageType, Func<Candle> candleCreator, Func<CandleMessage> candleMessageCreator)
-	{
-		if (messageType == null)
-			throw new ArgumentNullException(nameof(messageType));
-
-		if (candleCreator == null)
-			throw new ArgumentNullException(nameof(candleCreator));
-
-		if (candleMessageCreator == null)
-			throw new ArgumentNullException(nameof(candleMessageCreator));
-
-		_candleTypes.Add(candleType, messageType);
-		_candleCreators.Add(candleType, candleCreator);
+		throw new ArgumentOutOfRangeException(nameof(candleType), candleType, LocalizedStrings.WrongCandleType);
 	}
 
 	/// <summary>
