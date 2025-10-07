@@ -787,18 +787,6 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		}
 	}
 
-	/// <summary>
-	/// Get all available instruments.
-	/// </summary>
-	/// <param name="path">The path to the directory with data.</param>
-	/// <returns>All available instruments.</returns>
-	[Obsolete("Use AvailableSecurities property.")]
-	public static IEnumerable<SecurityId> GetAvailableSecurities(string path)
-	{
-		using var drive = new LocalMarketDataDrive(path);
-		return [.. drive.AvailableSecurities];
-	}
-
 	private static readonly SynchronizedDictionary<string, RefPair<HashSet<DataType>, bool>> _availableDataTypes = new(StringComparer.InvariantCultureIgnoreCase);
 
 	/// <inheritdoc />
