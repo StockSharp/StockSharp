@@ -274,11 +274,13 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 		=> this.ModifyAttributes(true, () =>
 		{
 			if (_valueType == typeof(int))
-				return (Attribute)new RangeAttribute(min.To<int>(), max.To<int>());
+				return new RangeAttribute(min.To<int>(), max.To<int>());
 			else if (_valueType == typeof(Unit))
 				return new UnitRangeAttribute(min.To<Unit>(), max.To<Unit>()) { DisableNullCheck = _isNullable };
+			else if (_valueType == typeof(TimeSpan))
+				return new TimeSpanRangeAttribute(min.To<TimeSpan>(), max.To<TimeSpan>()) { DisableNullCheck = _isNullable };
 			else
-				return new RangeAttribute(_valueType, min.To<string>(), max.To<string>());
+				return Do.Invariant(() => new RangeAttribute(_valueType, min.To<string>(), max.To<string>()) { ParseLimitsInInvariantCulture = true });
 		});
 
 	/// <summary>
@@ -307,7 +309,7 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 				throw new ArgumentNullException(nameof(baseValue));
 		}
 
-		ValidationAttribute attr;
+		StepAttribute attr;
 
 		if (_valueType == typeof(Unit))
 		{

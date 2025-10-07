@@ -742,6 +742,63 @@ public class StrategyParamTests
 		}
 	}
 
+	[TestMethod]
+	public void Range_Decimal_CommaCulture()
+	{
+		var prev = CultureInfo.CurrentCulture;
+		var prevUi = CultureInfo.CurrentUICulture;
+
+		try
+		{
+			CultureInfo.CurrentCulture = new CultureInfo("ru-RU");
+			CultureInfo.CurrentUICulture = new CultureInfo("ru-RU");
+
+			var p = new StrategyParam<decimal>("p", 0m).SetRange(1.5m, 2.5m);
+			
+			p.Value = 2.0m; // should be valid regardless of culture
+			AssertInvalid(() => p.Value = 3.0m); // out of range
+
+			CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+			CultureInfo.CurrentUICulture = CultureInfo.InvariantCulture;
+
+			p.Value = 2.0m; // should be valid regardless of culture
+			AssertInvalid(() => p.Value = 3.0m); // out of range
+		}
+		finally
+		{
+			CultureInfo.CurrentCulture = prev;
+			CultureInfo.CurrentUICulture = prevUi;
+		}
+	}
+
+	[TestMethod]
+	public void Step_Decimal_CommaCulture()
+	{
+		var prev = CultureInfo.CurrentCulture;
+		var prevUi = CultureInfo.CurrentUICulture;
+		try
+		{
+			CultureInfo.CurrentCulture = new CultureInfo("fr-FR");
+			CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
+
+			var p = new StrategyParam<decimal>("p", 0m).SetStep(0.5m);
+
+			p.Value = 1.5m; // valid
+			AssertInvalid(() => p.Value = 1.3m); // invalid
+
+			CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+			CultureInfo.CurrentUICulture = CultureInfo.InvariantCulture;
+
+			p.Value = 1.5m; // valid
+			AssertInvalid(() => p.Value = 1.3m); // invalid
+		}
+		finally
+		{
+			CultureInfo.CurrentCulture = prev;
+			CultureInfo.CurrentUICulture = prevUi;
+		}
+	}
+
 	private class TestStrategy : Strategy
 	{
 		// Simple test strategy for testing parameter functionality
