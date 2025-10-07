@@ -584,13 +584,6 @@ public static class Paths
 		=> CreateSerializer<T>(bom).Serialize(value);
 
 	/// <summary>
-	///
-	/// </summary>
-	[Obsolete("Use Deserialize instead.")]
-	public static T DeserializeWithMigration<T>(this string filePath)
-		=> filePath.Deserialize<T>();
-
-	/// <summary>
 	/// Deserialize value from the specified file.
 	/// </summary>
 	/// <typeparam name="T">Value type.</typeparam>
