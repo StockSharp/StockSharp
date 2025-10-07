@@ -47,9 +47,6 @@ class DummyProvider(IEnumerable<Security> securities, IEnumerable<Position> posi
 			Level1Fields.BestAskVolume
 		];
 
-	SessionStates? IMarketDataProvider.GetSessionState(ExchangeBoard board)
-		=> default;
-
 	event Action<SecurityLookupMessage, IEnumerable<Security>, Exception> IMarketDataProvider.LookupSecuritiesResult
 	{
 		add => throw new NotSupportedException();
@@ -62,36 +59,6 @@ class DummyProvider(IEnumerable<Security> securities, IEnumerable<Position> posi
 		remove => throw new NotSupportedException();
 	}
 
-	event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, Exception> IMarketDataProvider.LookupBoardsResult
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
-	event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> IMarketDataProvider.LookupBoardsResult2
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
-	event Action<DataTypeLookupMessage, IEnumerable<TimeSpan>, Exception> IMarketDataProvider.LookupTimeFramesResult
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
-	event Action<DataTypeLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> IMarketDataProvider.LookupTimeFramesResult2
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-
-	event Action<ExchangeBoard, SessionStates> IMarketDataProvider.SessionStateChanged
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
-	
 	private readonly IEnumerable<Position> _positions = positions ?? throw new ArgumentNullException(nameof(positions));
 	
 	IEnumerable<Position> IPositionProvider.Positions => _positions;

@@ -744,16 +744,10 @@ partial class Connector
 
 				T[] typed<T>() => items.Cast<T>().ToArray();
 
-				if (originalMsg is OrderStatusMessage orderLookup)
-					RaiseOrderStatusFailed(orderLookup.TransactionId, error, replyMsg.LocalTime);
-				else if (originalMsg is SecurityLookupMessage secLookup)
+				if (originalMsg is SecurityLookupMessage secLookup)
 					RaiseLookupSecuritiesResult(secLookup, error, typed<Security>());
-				else if (originalMsg is BoardLookupMessage boardLookup)
-					RaiseLookupBoardsResult(boardLookup, error, typed<ExchangeBoard>());
 				else if (originalMsg is PortfolioLookupMessage pfLookup)
 					RaiseLookupPortfoliosResult(pfLookup, error, typed<Portfolio>());
-				else if (originalMsg is DataTypeLookupMessage tfLookup)
-					RaiseLookupDataTypesResult(tfLookup, error, typed<DataType>());
 			}
 		}
 	}
@@ -812,17 +806,9 @@ partial class Connector
 		{
 			RaiseLookupSecuritiesResult(secLookup, null, typed<Security>());
 		}
-		else if (subscription.SubscriptionMessage is BoardLookupMessage boardLookup)
-		{
-			RaiseLookupBoardsResult(boardLookup, null, typed<ExchangeBoard>());
-		}
 		else if (subscription.SubscriptionMessage is PortfolioLookupMessage pfLookup)
 		{
 			RaiseLookupPortfoliosResult(pfLookup, null, typed<Portfolio>());
-		}
-		else if (subscription.SubscriptionMessage is DataTypeLookupMessage tfLookup)
-		{
-			RaiseLookupDataTypesResult(tfLookup, null, typed<DataType>());
 		}
 	}
 
@@ -906,12 +892,8 @@ partial class Connector
 		if (message.BoardCode.IsEmpty())
 			board = null;
 		else
-		{
 			board = ExchangeInfoProvider.GetOrCreateBoard(message.BoardCode);
-			_entityCache.SetSessionState(board, message.State);
-		}
 
-		RaiseSessionStateChanged(board, message.State);
 		RaiseReceived(board, message, BoardReceived);
 	}
 
@@ -1455,10 +1437,7 @@ partial class Connector
 		{
 			// TransId != 0 means contains failed order info (not just status response)
 			if (message.TransactionId == 0)
-			{
-				RaiseOrderStatusFailed(originId, message.Error, message.ServerTime);
 				return;
-			}
 		}
 
 		Order order = null;

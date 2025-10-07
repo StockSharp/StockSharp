@@ -279,7 +279,6 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 		_orderEditFails.Clear();
 
 		_securityValues.Clear();
-		_boardStates.Clear();
 	}
 
 	public void AddOrderStatusTransactionId(long transactionId)
@@ -1021,11 +1020,6 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 			}
 		}
 	}
-
-	private readonly SynchronizedDictionary<ExchangeBoard, SessionStates?> _boardStates = [];
-
-	public SessionStates? GetSessionState(ExchangeBoard board) => _boardStates.TryGetValue(board);
-	public void SetSessionState(ExchangeBoard board, SessionStates? value) => _boardStates[board] = value;
 
 	private readonly SynchronizedDictionary<Security, Level1Info> _securityValues = [];
 

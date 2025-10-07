@@ -222,10 +222,6 @@ public partial class Connector : BaseLogReceiver, IConnector
 		=> SecurityStorage.LookupMessages(criteria);
 
 	/// <inheritdoc />
-	[Obsolete("Use BoardReceived event.")]
-	public SessionStates? GetSessionState(ExchangeBoard board) => _entityCache.GetSessionState(board);
-
-	/// <inheritdoc />
 	public virtual IEnumerable<Portfolio> Portfolios => _existingPortfolios.Cache;
 
 	/// <inheritdoc />

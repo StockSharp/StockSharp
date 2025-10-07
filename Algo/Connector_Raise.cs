@@ -100,10 +100,6 @@ partial class Connector
 	public event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, Exception> LookupPortfoliosResult;
 
 	/// <inheritdoc />
-	[Obsolete("Use BoardReceived and SubscriptionStopped events.")]
-	public event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult;
-
-	/// <inheritdoc />
 	// TODO
 	[Obsolete("Use SecurityReceived and SubscriptionStopped events.")]
 	public event Action<SecurityLookupMessage, IEnumerable<Security>, IEnumerable<Security>, Exception> LookupSecuritiesResult2;
@@ -111,22 +107,6 @@ partial class Connector
 	/// <inheritdoc />
 	[Obsolete("Use PortfolioReceived and SubscriptionStopped events.")]
 	public event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, IEnumerable<Portfolio>, Exception> LookupPortfoliosResult2;
-
-	/// <inheritdoc />
-	[Obsolete("Use BoardReceived and SubscriptionStopped events.")]
-	public event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult2;
-
-	/// <inheritdoc />
-	[Obsolete("Use DataTypeReceived and SubscriptionStopped events.")]
-	public event Action<DataTypeLookupMessage, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult;
-	
-	/// <inheritdoc />
-	[Obsolete("Use DataTypeReceived and SubscriptionStopped events.")]
-	public event Action<DataTypeLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult2;
-
-	/// <inheritdoc />
-	[Obsolete("Use ISubscriptionProvider.BoardReceived event.")]
-	public event Action<ExchangeBoard, SessionStates> SessionStateChanged;
 
 	/// <inheritdoc />
 	public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged;
@@ -381,32 +361,6 @@ partial class Connector
 	}
 
 	/// <summary>
-	/// To call the event <see cref="LookupBoardsResult"/>.
-	/// </summary>
-	/// <param name="message">Message.</param>
-	/// <param name="error">An error of lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
-	/// <param name="newBoards">Found boards.</param>
-	private void RaiseLookupBoardsResult(BoardLookupMessage message, Exception error, ExchangeBoard[] newBoards)
-	{
-		LookupBoardsResult?.Invoke(message, newBoards, error);
-		LookupBoardsResult2?.Invoke(message, [], newBoards, error);
-	}
-
-	/// <summary>
-	/// To call the event <see cref="LookupTimeFramesResult"/>.
-	/// </summary>
-	/// <param name="message">Message.</param>
-	/// <param name="error">An error of lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
-	/// <param name="newDataTypes">Found data types.</param>
-	private void RaiseLookupDataTypesResult(DataTypeLookupMessage message, Exception error, DataType[] newDataTypes)
-	{
-		var newTimeFrames = newDataTypes.FilterTimeFrames().ToArray();
-
-		LookupTimeFramesResult?.Invoke(message, newTimeFrames, error);
-		LookupTimeFramesResult2?.Invoke(message, [], newTimeFrames, error);
-	}
-
-	/// <summary>
 	/// To call the event <see cref="LookupPortfoliosResult"/>.
 	/// </summary>
 	/// <param name="message">Message.</param>
@@ -604,11 +558,6 @@ partial class Connector
 	private void RaiseConnectionRestored(IMessageAdapter adapter)
 	{
 		ConnectionRestored?.Invoke(adapter);
-	}
-
-	private void RaiseSessionStateChanged(ExchangeBoard board, SessionStates state)
-	{
-		SessionStateChanged?.Invoke(board, state);
 	}
 
 	private void RaiseChangePassword(long transactionId, Exception error)
