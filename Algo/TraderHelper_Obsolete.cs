@@ -175,7 +175,8 @@ partial class TraderHelper
 		if (series is null)
 			throw new ArgumentNullException(nameof(series));
 
-		var subscription = provider.Subscriptions.FirstOrDefault(s => s.CandleSeries == series);
+		var mdMsg = series.ToMarketDataMessage(true);
+		var subscription = provider.Subscriptions.FirstOrDefault(s => s.SecurityId == mdMsg.SecurityId && s.DataType == mdMsg.DataType2 && s.To == mdMsg.To && s.From == mdMsg.From);
 
 		if (subscription is null)
 		{
