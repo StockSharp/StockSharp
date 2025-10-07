@@ -814,30 +814,6 @@ static class Helper
 
 			CheckPosition();
 		}
-#pragma warning disable CS0618 // Type or member is obsolete
-		else if (type == typeof(Trade))
-		{
-			var t1 = expected.To<Trade>().ToMessage();
-			var t2 = actual.To<Trade>().ToMessage();
-
-			CheckEqual(t1, t2, isMls, isSerializer);
-		}
-		else if (type == typeof(MarketDepth))
-		{
-			var e = expected.To<MarketDepth>().ToMessage();
-			var a = actual.To<MarketDepth>().ToMessage();
-
-			CheckEqual(e, a, isMls, isSerializer);
-		}
-		else if (type == typeof(OrderLogItem))
-		{
-			var q1 = expected.To<OrderLogItem>();
-			var q2 = actual.To<OrderLogItem>();
-
-			CheckEqual(q1.Order, q2.Order, isMls, isSerializer);
-			CheckEqual(q1.Trade, q2.Trade, isMls, isSerializer);
-		}
-#pragma warning restore CS0618 // Type or member is obsolete
 		else if (type == typeof(IDictionary<string, object>))
 		{
 			var d1 = expected.To<IDictionary<string, object>>();

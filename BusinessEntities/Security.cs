@@ -658,10 +658,6 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 			_lastTick = value;
 			Notify();
 
-#pragma warning disable CS0618 // Type or member is obsolete
-			Notify(nameof(LastTrade));
-#pragma warning restore CS0618 // Type or member is obsolete
-
 			if (value == null)
 				return;
 
@@ -669,21 +665,6 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 				LastChangeTime = value.ServerTime;
 		}
 	}
-
-	/// <summary>
-	/// Information about the last trade. If during the session on the instrument there were no trades, the value equals to <see langword="null" />.
-	/// </summary>
-	[XmlIgnore]
-	[TypeConverter(typeof(ExpandableObjectConverter))]
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.LastTradeKey,
-		Description = LocalizedStrings.LastTradeDescKey,
-		GroupName = LocalizedStrings.StatisticsKey,
-		Order = 201)]
-	[Browsable(false)]
-	[Obsolete("Use LastTick property.")]
-	public Trade LastTrade => null;
 
 	private decimal? _openPrice;
 
