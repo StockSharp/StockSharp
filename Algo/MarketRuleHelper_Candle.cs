@@ -14,11 +14,7 @@ partial class MarketRuleHelper
 			if (candle is TCandle typedCandle)
 				base.Activate(typedCandle);
 			else
-			{
-#pragma warning disable CS0618 // Type or member is obsolete
-				base.Activate(((CandleMessage)candle).ToCandle(Subscription.CandleSeries.Security).To<TCandle>());
-#pragma warning restore CS0618 // Type or member is obsolete
-			}
+				LogError("Wrong candle type: {0}, expected: {1}", candle.GetType(), typeof(TCandle));
 		}
 	}
 
