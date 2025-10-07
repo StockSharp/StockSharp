@@ -5,11 +5,6 @@ namespace StockSharp.Algo.Storages.Csv;
 /// </summary>
 public class CsvEntityRegistry : IEntityRegistry
 {
-	/// <summary>
-	/// </summary>
-	[Obsolete("This property exists only for backward compatibility.")]
-	public object Storage => throw new NotSupportedException();
-
 	private class ExchangeCsvList(CsvEntityRegistry registry) : CsvEntityList<string, Exchange>(registry, "exchange.csv")
 	{
 		protected override string GetKey(Exchange item)
