@@ -579,33 +579,6 @@ public class Order : NotifiableObject, IOrderMessage
 	[BasicSetting]
 	public TimeInForce? TimeInForce { get; set; }
 
-	private Order _derivedOrder;
-
-	/// <summary>
-	/// Exchange order that was created by the stop-order when the condition is activated (<see langword="null" /> if a stop condition has not been activated).
-	/// </summary>
-	//[DataMember]
-	[XmlIgnore]
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.LinkedOrderKey,
-		Description = LocalizedStrings.LinkedOrderDescKey,
-		GroupName = LocalizedStrings.ConditionalOrderKey)]
-	[Browsable(false)]
-	[Obsolete("No longer used.")]
-	public Order DerivedOrder
-	{
-		get => _derivedOrder;
-		set
-		{
-			if (_derivedOrder == value)
-				return;
-
-			_derivedOrder = value;
-			NotifyChanged();
-		}
-	}
-
 	/// <summary>
 	/// Commission (broker, exchange etc.).
 	/// </summary>
