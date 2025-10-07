@@ -10,6 +10,7 @@ namespace StockSharp.BusinessEntities;
 /// <param name="ask">Ask.</param>
 [System.Runtime.Serialization.DataContract]
 [Serializable]
+[Obsolete("Use QuoteChange.")]
 public class MarketDepthPair(QuoteChange? bid, QuoteChange? ask)
 {
 	private readonly bool _isFull = bid != null && ask != null;

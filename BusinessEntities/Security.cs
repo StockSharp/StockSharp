@@ -683,7 +683,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		Order = 201)]
 	[Browsable(false)]
 	[Obsolete("Use LastTick property.")]
-	public Trade LastTrade => LastTick is ExecutionMessage execMsg ? execMsg.ToTrade(this) : (Trade)LastTick;
+	public Trade LastTrade => null;
 
 	private decimal? _openPrice;
 
@@ -864,7 +864,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 	/// Best pair quotes.
 	/// </summary>
 	[Browsable(false)]
-	//[Obsolete("Use the IConnector.GetSecurityValue.")]
+	[Obsolete("Use BestBid or BestAsk properties.")]
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.BestPairKey,
