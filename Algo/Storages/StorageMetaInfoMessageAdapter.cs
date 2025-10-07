@@ -25,7 +25,7 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 	{
 		_securityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
 		_positionStorage = positionStorage ?? throw new ArgumentNullException(nameof(positionStorage));
-		_exchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(_exchangeInfoProvider));
+		_exchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 		_storageProcessor = storageProcessor ?? throw new ArgumentNullException(nameof(storageProcessor));
 	}
 
@@ -33,32 +33,6 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 	/// Override previous security data by new values.
 	/// </summary>
 	public bool OverrideSecurityData { get; set; }
-
-	/// <summary>
-	/// Load save data from storage.
-	/// </summary>
-	[Obsolete("Use lookup messages.")]
-	public void Load()
-	{
-		foreach (var board in _exchangeInfoProvider.Boards)
-			RaiseNewOutMessage(board.ToMessage());
-
-		foreach (var security in _securityStorage.LookupAll())
-		{
-			RaiseNewOutMessage(security.ToMessage());
-		}
-
-		foreach (var portfolio in _positionStorage.Portfolios)
-		{
-			RaiseNewOutMessage(portfolio.ToMessage());
-			RaiseNewOutMessage(portfolio.ToChangeMessage());
-		}
-
-		foreach (var position in _positionStorage.Positions)
-		{
-			RaiseNewOutMessage(position.ToChangeMessage());
-		}
-	}
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
