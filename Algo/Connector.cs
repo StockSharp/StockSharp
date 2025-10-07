@@ -332,12 +332,6 @@ public partial class Connector : BaseLogReceiver, IConnector
 	/// </summary>
 	public bool TimeChange { get; set; } = true;
 
-	/// <summary>
-	/// Process strategies positions and store it into <see cref="Positions"/>.
-	/// </summary>
-	[Obsolete]
-	public bool KeepStrategiesPositions { get; set; }
-
 	private static Subscription ToSubscription<TLookupMessage>()
 		where TLookupMessage : ISubscriptionMessage, new()
 		=> new(new TLookupMessage());
@@ -935,7 +929,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 	}
 
 	/// <summary>
-	/// To get the instrument by the code. If the instrument is not found, then the <see cref="IEntityFactory.CreateSecurity"/> is called to create an instrument.
+	/// To get the instrument by the code.
 	/// </summary>
 	/// <param name="id">Security ID.</param>
 	/// <param name="changeSecurity">The handler changing the instrument. It returns <see langword="true" /> if the instrument has been changed and the <see cref="SecurityReceived"/> should be called.</param>
