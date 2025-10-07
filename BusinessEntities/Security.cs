@@ -837,23 +837,6 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		}
 	}
 
-	//[DisplayName("Лучшая пара")]
-	//[Description("Лучшая пара котировок.")]
-	//[ExpandableObject]
-	//[StatisticsCategory]
-	/// <summary>
-	/// Best pair quotes.
-	/// </summary>
-	[Browsable(false)]
-	[Obsolete("Use BestBid or BestAsk properties.")]
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.BestPairKey,
-		Description = LocalizedStrings.BestPairKey + LocalizedStrings.Dot,
-		GroupName = LocalizedStrings.StatisticsKey,
-		Order = 208)]
-	public MarketDepthPair BestPair => new(BestBid, BestAsk);
-
 	private SecurityStates? _state;
 
 	//[DataMember]
