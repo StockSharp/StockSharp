@@ -11,9 +11,7 @@ public static class VirtualPropertyRegistry
 	static VirtualPropertyRegistry()
 	{
 		AddProperty(new("SpreadMiddle", "SpreadMiddle", LocalizedStrings.SpreadMiddle, typeof(decimal?), null), (IOrderBookMessage b) => b.GetSpreadMiddle(default));
-
 		AddProperty(new("BestBid", "BestBid", LocalizedStrings.BestBidDesc, typeof(QuoteChange?), null), (IOrderBookMessage b) => b.GetBestBid());
-
 		AddProperty(new("BestAsk", "BestAsk", LocalizedStrings.BestAskDesc, typeof(QuoteChange?), null), (IOrderBookMessage b) => b.GetBestAsk());
 
 		static void AddInterface<T1, T2>()
@@ -21,9 +19,6 @@ public static class VirtualPropertyRegistry
 			=> _interfaces.Add(typeof(T1), typeof(T2));
 
 		AddInterface<QuoteChangeMessage, IOrderBookMessage>();
-#pragma warning disable CS0618 // Type or member is obsolete
-		AddInterface<MarketDepth, IOrderBookMessage>();
-#pragma warning restore CS0618 // Type or member is obsolete
 	}
 
 	/// <summary>
