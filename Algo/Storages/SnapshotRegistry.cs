@@ -560,36 +560,22 @@ public class SnapshotRegistry(string path) : Disposable
 	/// <summary>
 	/// To get the snapshot storage.
 	/// </summary>
-	/// <param name="dataType">Market data type.</param>
-	/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, candle arg.</param>
+	/// <param name="dataType"><see cref="DataType"/></param>
 	/// <returns>The snapshot storage.</returns>
-	public ISnapshotStorage GetSnapshotStorage(Type dataType, object arg)
+	public ISnapshotStorage GetSnapshotStorage(DataType dataType)
 	{
-		return _snapshotStorages.SafeAdd(DataType.Create(dataType, arg), key =>
+		return _snapshotStorages.SafeAdd(dataType, key =>
 		{
-			SnapshotStorage storage;
-
-			if (dataType == typeof(Level1ChangeMessage))
-				storage = new SnapshotStorage<SecurityId, Level1ChangeMessage>(path, new Level1BinarySnapshotSerializer());
-			else if (dataType == typeof(QuoteChangeMessage))
-				storage = new SnapshotStorage<SecurityId, QuoteChangeMessage>(path, new QuotesBinarySnapshotSerializer());
-			else if (dataType == typeof(PositionChangeMessage))
-				storage = new SnapshotStorage<(SecurityId, string, string), PositionChangeMessage>(path, new PositionBinarySnapshotSerializer());
-			else if (dataType == typeof(ExecutionMessage))
-			{
-				switch ((ExecutionTypes)arg)
-				{
-					case ExecutionTypes.Transaction:
-						storage = new SnapshotStorage<string, ExecutionMessage>(path, new TransactionBinarySnapshotSerializer());
-						break;
-					default:
-						throw new ArgumentOutOfRangeException(nameof(arg), arg, LocalizedStrings.InvalidValue);
-				}
-			}
+			if (key == DataType.Level1)
+				return new SnapshotStorage<SecurityId, Level1ChangeMessage>(path, new Level1BinarySnapshotSerializer());
+			else if (key == DataType.MarketDepth)
+				return new SnapshotStorage<SecurityId, QuoteChangeMessage>(path, new QuotesBinarySnapshotSerializer());
+			else if (key == DataType.PositionChanges)
+				return new SnapshotStorage<(SecurityId, string, string), PositionChangeMessage>(path, new PositionBinarySnapshotSerializer());
+			else if (key == DataType.Transactions)
+				return new SnapshotStorage<string, ExecutionMessage>(path, new TransactionBinarySnapshotSerializer());
 			else
 				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.InvalidValue);
-
-			return storage;
 		});
 	}
 }

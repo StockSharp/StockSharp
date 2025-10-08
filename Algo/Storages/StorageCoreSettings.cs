@@ -53,24 +53,23 @@ public class StorageCoreSettings : IPersistable
 	/// </summary>
 	/// <typeparam name="TMessage">Message type.</typeparam>
 	/// <param name="securityId">Security ID.</param>
-	/// <param name="arg">The parameter associated with the <typeparamref name="TMessage" /> type. For example, candle arg.</param>
+	/// <param name="dataType"><see cref="DataType"/></param>
 	/// <returns>Market-data storage.</returns>
-	public IMarketDataStorage<TMessage> GetStorage<TMessage>(SecurityId securityId, object arg)
+	public IMarketDataStorage<TMessage> GetStorage<TMessage>(SecurityId securityId, DataType dataType)
 		where TMessage : Message
 	{
-		return (IMarketDataStorage<TMessage>)GetStorage(securityId, typeof(TMessage), arg);
+		return (IMarketDataStorage<TMessage>)GetStorage(securityId, dataType);
 	}
 
 	/// <summary>
 	/// To get the market-data storage.
 	/// </summary>
 	/// <param name="securityId">Security ID.</param>
-	/// <param name="messageType"></param>
-	/// <param name="arg">The parameter associated with the <paramref name="messageType" /> type. For example, candle arg.</param>
+	/// <param name="dataType"><see cref="DataType"/></param>
 	/// <returns>Market-data storage.</returns>
-	public IMarketDataStorage GetStorage(SecurityId securityId, Type messageType, object arg)
+	public IMarketDataStorage GetStorage(SecurityId securityId, DataType dataType)
 	{
-		return StorageRegistry.GetStorage(securityId, messageType, arg, Drive, Format);
+		return StorageRegistry.GetStorage(securityId, dataType, Drive, Format);
 	}
 
 	/// <summary>

@@ -70,13 +70,12 @@ public interface IMessageStorageRegistry
 	/// <summary>
 	/// To get the candles storage for the specified instrument.
 	/// </summary>
-	/// <param name="candleMessageType">The type of candle message.</param>
 	/// <param name="securityId">Security ID.</param>
-	/// <param name="arg">Candle arg.</param>
+	/// <param name="type"><see cref="DataType"/></param>
 	/// <param name="drive">The storage.</param>
 	/// <param name="format">The format type.</param>
 	/// <returns>The candles storage.</returns>
-	IMarketDataStorage<CandleMessage> GetCandleMessageStorage(Type candleMessageType, SecurityId securityId, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
+	IMarketDataStorage<CandleMessage> GetCandleMessageStorage(SecurityId securityId, DataType type, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 	/// <summary>
 	/// To get the <see cref="ExecutionMessage"/> storage for the specified instrument.
@@ -86,7 +85,7 @@ public interface IMessageStorageRegistry
 	/// <param name="drive">The storage.</param>
 	/// <param name="format">The format type.</param>
 	/// <returns>The <see cref="ExecutionMessage"/> storage.</returns>
-	IMarketDataStorage<ExecutionMessage> GetExecutionMessageStorage(SecurityId securityId, ExecutionTypes type, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
+	IMarketDataStorage<ExecutionMessage> GetExecutionMessageStorage(SecurityId securityId, DataType type, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 	/// <summary>
 	/// To get the transactions storage for the specified instrument.
@@ -101,12 +100,11 @@ public interface IMessageStorageRegistry
 	/// To get the market-data storage.
 	/// </summary>
 	/// <param name="securityId">Security ID.</param>
-	/// <param name="dataType">Market data type.</param>
-	/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, candle arg.</param>
+	/// <param name="dataType"><see cref="DataType"/></param>
 	/// <param name="drive">The storage.</param>
 	/// <param name="format">The format type.</param>
 	/// <returns>Market-data storage.</returns>
-	IMarketDataStorage GetStorage(SecurityId securityId, Type dataType, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
+	IMarketDataStorage GetStorage(SecurityId securityId, DataType dataType, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 	/// <summary>
 	/// To register tick trades storage.

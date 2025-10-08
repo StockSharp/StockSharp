@@ -294,13 +294,13 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 				foreach (var pair in Buffer.GetTicks())
 				{
 					if (incremental)
-						Settings.GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.Tick).Save(pair.Value);
+						Settings.GetStorage<ExecutionMessage>(pair.Key, DataType.Ticks).Save(pair.Value);
 				}
 
 				foreach (var pair in Buffer.GetOrderLog())
 				{
 					if (incremental)
-						Settings.GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.OrderLog).Save(pair.Value);
+						Settings.GetStorage<ExecutionMessage>(pair.Key, DataType.OrderLog).Save(pair.Value);
 				}
 
 				foreach (var pair in Buffer.GetTransactions())
@@ -312,7 +312,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 						continue;
 
 					if (incremental)
-						Settings.GetStorage<ExecutionMessage>(secId, ExecutionTypes.Transaction).Save(pair.Value);
+						Settings.GetStorage<ExecutionMessage>(secId, DataType.Transactions).Save(pair.Value);
 
 					if (snapshot)
 					{
@@ -378,7 +378,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 				foreach (var pair in Buffer.GetOrderBooks())
 				{
 					if (incremental)
-						Settings.GetStorage<QuoteChangeMessage>(pair.Key, null).Save(pair.Value);
+						Settings.GetStorage<QuoteChangeMessage>(pair.Key, DataType.Level1).Save(pair.Value);
 
 					if (snapshot)
 					{
@@ -394,7 +394,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 					var messages = pair.Value.Where(m => m.HasChanges()).ToArray();
 
 					if (incremental)
-						Settings.GetStorage<Level1ChangeMessage>(pair.Key, null).Save(messages);
+						Settings.GetStorage<Level1ChangeMessage>(pair.Key, DataType.Level1).Save(messages);
 
 					if (Settings.IsMode(StorageModes.Snapshot))
 					{
@@ -407,7 +407,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 
 				foreach (var pair in Buffer.GetCandles())
 				{
-					Settings.GetStorage(pair.Key.secId, pair.Key.dataType.MessageType, pair.Key.dataType.Arg).Save(pair.Value);
+					Settings.GetStorage(pair.Key.secId, pair.Key.dataType).Save(pair.Value);
 				}
 
 				foreach (var pair in Buffer.GetPositionChanges())
@@ -415,7 +415,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 					var messages = pair.Value.Where(m => m.HasChanges()).ToArray();
 
 					if (incremental)
-						Settings.GetStorage<PositionChangeMessage>(pair.Key, null).Save(messages);
+						Settings.GetStorage<PositionChangeMessage>(pair.Key, DataType.PositionChanges).Save(messages);
 
 					if (snapshot)
 					{
@@ -430,14 +430,14 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 
 				if (news.Length > 0)
 				{
-					Settings.GetStorage<NewsMessage>(default, null).Save(news);
+					Settings.GetStorage<NewsMessage>(default, DataType.News).Save(news);
 				}
 
 				var boardStates = Buffer.GetBoardStates().ToArray();
 
 				if (boardStates.Length > 0)
 				{
-					Settings.GetStorage<BoardStateMessage>(default, null).Save(boardStates);
+					Settings.GetStorage<BoardStateMessage>(default, DataType.BoardState).Save(boardStates);
 				}
 			}
 			catch (Exception excp)

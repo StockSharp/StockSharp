@@ -20,9 +20,9 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>, 
 	private readonly SynchronizedDictionary<DateTime, SyncObject> _syncRoots = [];
 	private readonly SynchronizedDictionary<DateTime, IMarketDataMetaInfo> _dateMetaInfos = [];
 
-	protected MarketDataStorage(SecurityId securityId, object arg, Func<TMessage, DateTimeOffset> getTime, Func<TMessage, SecurityId> getSecurityId, Func<TMessage, TId> getId, IMarketDataSerializer<TMessage> serializer, IMarketDataStorageDrive drive, Func<TMessage, bool> isValid)
+	protected MarketDataStorage(SecurityId securityId, DataType dataType, Func<TMessage, DateTimeOffset> getTime, Func<TMessage, SecurityId> getSecurityId, Func<TMessage, TId> getId, IMarketDataSerializer<TMessage> serializer, IMarketDataStorageDrive drive, Func<TMessage, bool> isValid)
 	{
-		_dataType = DataType.Create<TMessage>(arg);
+		_dataType = dataType ?? throw new ArgumentNullException(nameof(dataType));
 
 		if (_dataType.IsSecurityRequired && securityId == default)
 			throw new ArgumentException(LocalizedStrings.EmptySecId, nameof(securityId));

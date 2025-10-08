@@ -812,10 +812,10 @@ public static class StorageHelper
 			newOutMessage(message);
 		}
 
-		IMarketDataStorage<TMessage> GetStorage<TMessage>(SecurityId securityId, object arg)
+		IMarketDataStorage<TMessage> GetStorage<TMessage>(SecurityId securityId, DataType dt)
 			where TMessage : Message
 		{
-			return (IMarketDataStorage<TMessage>)settings.GetStorage(securityId, typeof(TMessage), arg);
+			return (IMarketDataStorage<TMessage>)settings.GetStorage(securityId, dt);
 		}
 
 		var secId = subscription.SecurityId;
@@ -831,7 +831,7 @@ public static class StorageHelper
 			{
 				if (subscription.BuildFrom == DataType.OrderLog)
 				{
-					var storage = GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog);
+					var storage = GetStorage<ExecutionMessage>(secId, DataType.OrderLog);
 
 					var range = GetRange(storage, subscription);
 
@@ -868,7 +868,7 @@ public static class StorageHelper
 			{
 				if (subscription.BuildFrom == DataType.OrderLog)
 				{
-					var storage = GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog);
+					var storage = GetStorage<ExecutionMessage>(secId, DataType.OrderLog);
 
 					var range = GetRange(storage, subscription);
 
@@ -898,12 +898,12 @@ public static class StorageHelper
 		else if (subscription.DataType2 == DataType.Ticks)
 		{
 			if (subscription.BuildMode != MarketDataBuildModes.Build)
-				retVal = LoadMessages(GetStorage<ExecutionMessage>(secId, ExecutionTypes.Tick), subscription, SendReply, SendOut);
+				retVal = LoadMessages(GetStorage<ExecutionMessage>(secId, DataType.Ticks), subscription, SendReply, SendOut);
 			else
 			{
 				if (subscription.BuildFrom == DataType.OrderLog)
 				{
-					var storage = GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog);
+					var storage = GetStorage<ExecutionMessage>(secId, DataType.OrderLog);
 
 					var range = GetRange(storage, subscription);
 
@@ -931,7 +931,7 @@ public static class StorageHelper
 		}
 		else if (subscription.DataType2 == DataType.OrderLog)
 		{
-			retVal = LoadMessages(GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog), subscription, SendReply, SendOut);
+			retVal = LoadMessages(GetStorage<ExecutionMessage>(secId, DataType.OrderLog), subscription, SendReply, SendOut);
 		}
 		else if (subscription.DataType2 == DataType.News)
 		{
@@ -953,9 +953,9 @@ public static class StorageHelper
 				var buildFrom = subscription.BuildFrom;
 
 				if (buildFrom == null || buildFrom == DataType.Ticks)
-					storage = GetStorage<ExecutionMessage>(secId, ExecutionTypes.Tick);
+					storage = GetStorage<ExecutionMessage>(secId, DataType.Ticks);
 				else if (buildFrom == DataType.OrderLog)
-					storage = GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog);
+					storage = GetStorage<ExecutionMessage>(secId, DataType.OrderLog);
 				else if (buildFrom == DataType.Level1)
 					storage = GetStorage<Level1ChangeMessage>(secId, null);
 				else if (buildFrom == DataType.MarketDepth)
@@ -1060,7 +1060,7 @@ public static class StorageHelper
 					IMarketDataStorage<CandleMessage> GetTimeFrameCandleMessageStorage(SecurityId securityId, TimeSpan timeFrame, bool allowBuildFromSmallerTimeFrame)
 					{
 						if (!allowBuildFromSmallerTimeFrame)
-							return (IMarketDataStorage<CandleMessage>)settings.GetStorage(securityId, typeof(TimeFrameCandleMessage), timeFrame);
+							return (IMarketDataStorage<CandleMessage>)settings.GetStorage(securityId, timeFrame.TimeFrame());
 
 						return candleBuilderProvider.GetCandleMessageBuildableStorage(settings.StorageRegistry, securityId, timeFrame, settings.Drive, settings.Format);
 					}
@@ -1069,7 +1069,7 @@ public static class StorageHelper
 				}
 				else
 				{
-					storage = (IMarketDataStorage<CandleMessage>)settings.GetStorage(secId, subscription.DataType2.MessageType, subscription.GetArg());
+					storage = (IMarketDataStorage<CandleMessage>)settings.GetStorage(secId, subscription.DataType2);
 				}
 
 				var filter = subscription.IsCalcVolumeProfile
@@ -1232,9 +1232,11 @@ public static class StorageHelper
 	/// To get the snapshot storage.
 	/// </summary>
 	/// <param name="registry">Snapshot storage registry.</param>
-	/// <param name="dataType">Data type info.</param>
+	/// <param name="dataType">Market data type.</param>
+	/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, candle arg.</param>
 	/// <returns>The snapshot storage.</returns>
-	public static ISnapshotStorage GetSnapshotStorage(this SnapshotRegistry registry, DataType dataType)
+	[Obsolete("Use DataType overload.")]
+	public static ISnapshotStorage GetSnapshotStorage(this SnapshotRegistry registry, Type dataType, object arg)
 	{
 		if (registry is null)
 			throw new ArgumentNullException(nameof(registry));
@@ -1242,7 +1244,7 @@ public static class StorageHelper
 		if (dataType is null)
 			throw new ArgumentNullException(nameof(dataType));
 
-		return registry.GetSnapshotStorage(dataType.MessageType, dataType.Arg);
+		return registry.GetSnapshotStorage(DataType.Create(dataType, arg).Immutable());
 	}
 
 	internal static (int messageType, long arg1, decimal arg2, int arg3) Extract(this DataType dataType)
@@ -1390,5 +1392,69 @@ public static class StorageHelper
 		var dt = subscription.DataType;
 
 		return registry.GetCandleMessageStorage(dt.MessageType, subscription.SecurityId.Value, dt.Arg, drive, format);
+	}
+
+	/// <summary>
+	/// To get the <see cref="ExecutionMessage"/> storage for the specified instrument.
+	/// </summary>
+	/// <param name="registry"><see cref="IMessageStorageRegistry"/></param>
+	/// <param name="securityId">Security ID.</param>
+	/// <param name="type">Data type, information about which is contained in the <see cref="ExecutionMessage"/>.</param>
+	/// <param name="drive">The storage.</param>
+	/// <param name="format">The format type.</param>
+	/// <returns>The <see cref="ExecutionMessage"/> storage.</returns>
+	[Obsolete("Use DataType overload.")]
+	public static IMarketDataStorage<ExecutionMessage> GetExecutionMessageStorage(this IMessageStorageRegistry registry, SecurityId securityId, ExecutionTypes type, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+	{
+		ArgumentNullException.ThrowIfNull(registry);
+		return registry.GetExecutionMessageStorage(securityId, type.ToDataType(), drive, format);
+	}
+
+	/// <summary>
+	/// To get the market-data storage.
+	/// </summary>
+	/// <param name="registry"><see cref="IMessageStorageRegistry"/></param>
+	/// <param name="securityId">Security ID.</param>
+	/// <param name="dataType">Market data type.</param>
+	/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, candle arg.</param>
+	/// <param name="drive">The storage.</param>
+	/// <param name="format">The format type.</param>
+	/// <returns>Market-data storage.</returns>
+	public static IMarketDataStorage GetStorage(this IMessageStorageRegistry registry, SecurityId securityId, Type dataType, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+	{
+		ArgumentNullException.ThrowIfNull(registry);
+		return registry.GetExecutionMessageStorage(securityId, DataType.Create(dataType, arg), drive, format);
+	}
+
+	/// <summary>
+	/// To get the market-data storage.
+	/// </summary>
+	/// <param name="registry"><see cref="IMessageStorageRegistry"/></param>
+	/// <param name="security">Security.</param>
+	/// <param name="dataType">Market data type.</param>
+	/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, candle arg.</param>
+	/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+	/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+	/// <returns>Market-data storage.</returns>
+	public static IMarketDataStorage GetStorage(this IMessageStorageRegistry registry, Security security, Type dataType, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+	{
+		ArgumentNullException.ThrowIfNull(registry);
+		return registry.GetStorage(security.ToSecurityId(), dataType, arg, drive, format);
+	}
+
+	/// <summary>
+	/// To get the candles storage for the specified instrument.
+	/// </summary>
+	/// <param name="registry"><see cref="IMessageStorageRegistry"/></param>
+	/// <param name="candleMessageType">The type of candle message.</param>
+	/// <param name="securityId">Security ID.</param>
+	/// <param name="arg">Candle arg.</param>
+	/// <param name="drive">The storage.</param>
+	/// <param name="format">The format type.</param>
+	/// <returns>The candles storage.</returns>
+	public static IMarketDataStorage<CandleMessage> GetCandleMessageStorage(this IMessageStorageRegistry registry, Type candleMessageType, SecurityId securityId, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+	{
+		ArgumentNullException.ThrowIfNull(registry);
+		return registry.GetCandleMessageStorage(securityId, DataType.Create(candleMessageType, arg), drive, format);
 	}
 }
