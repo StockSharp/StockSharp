@@ -1734,7 +1734,7 @@ public class StorageTests
 	private static void CheckCandles<TCandle, TArg>(IStorageRegistry storage, SecurityId security, IEnumerable<CandleMessage> candles, TArg arg, StorageFormats format, bool diffOffset)
 		where TCandle : CandleMessage
 	{
-		var candleStorage = storage.GetCandleMessageStorage(typeof(TCandle), security, arg, null, format);
+		var candleStorage = storage.GetCandleMessageStorage(security, DataType.Create<TCandle>(arg), null, format);
 		var typedCandle = candles.OfType<TCandle>().ToArray();
 
 		if (diffOffset)

@@ -156,13 +156,14 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 		{
 			foreach (var typeGroup in buffer.GroupBy(i => i.GetType()))
 			{
-				var dataType = typeGroup.Key;
+				var msgType = typeGroup.Key;
+				var dataType = DataType.Create(msgType, DataType.Arg);
 
 				foreach (var secGroup in typeGroup.GroupBy(g => ((ISecurityIdMessage)g).SecurityId))
 				{
 					var secId = TryInitSecurity(secGroup.Key);
 
-					if (dataType.IsCandleMessage())
+					if (msgType.IsCandleMessage())
 					{
 						var timeFrame = DataType.Arg as TimeSpan?;
 						var candles = secGroup.Cast<CandleMessage>().ToArray();
@@ -195,24 +196,24 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 						}
 
 						registry
-							.GetCandleMessageStorage(dataType, secId, DataType.Arg, drive, storageFormat)
+							.GetCandleMessageStorage(secId, dataType, drive, storageFormat)
 							.Save(candles.OrderBy(c => c.OpenTime));
 					}
-					else if (dataType == typeof(TimeQuoteChange))
+					else if (msgType == typeof(TimeQuoteChange))
 					{
 						var storage = registry.GetQuoteMessageStorage(secId, drive, storageFormat);
 						storage.Save(secGroup.Cast<QuoteChangeMessage>().OrderBy(md => md.ServerTime));
 					}
 					else
 					{
-						var storage = registry.GetStorage(secId, dataType, DataType.Arg, drive, storageFormat);
+						var storage = registry.GetStorage(secId, dataType, drive, storageFormat);
 
-						if (dataType == typeof(ExecutionMessage))
+						if (msgType == typeof(ExecutionMessage))
 							((IMarketDataStorage<ExecutionMessage>)storage).Save(secGroup.Cast<ExecutionMessage>().OrderBy(m => m.ServerTime));
-						else if (dataType == typeof(Level1ChangeMessage))
+						else if (msgType == typeof(Level1ChangeMessage))
 							((IMarketDataStorage<Level1ChangeMessage>)storage).Save(secGroup.Cast<Level1ChangeMessage>().OrderBy(m => m.ServerTime));
 						else
-							throw new NotSupportedException(LocalizedStrings.UnsupportedType.Put(dataType.Name));
+							throw new NotSupportedException(LocalizedStrings.UnsupportedType.Put(msgType.Name));
 					}
 				}
 			}

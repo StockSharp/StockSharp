@@ -1203,29 +1203,13 @@ public static class StorageHelper
 	/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
 	/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
 	/// <returns>Market-data storage.</returns>
+	[Obsolete("Use SecurityId overload.")]
 	public static IMarketDataStorage GetStorage(this IStorageRegistry registry, Security security, DataType dataType, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 	{
 		if (dataType is null)
 			throw new ArgumentNullException(nameof(dataType));
 
-		return registry.GetStorage(security, dataType.MessageType, dataType.Arg, drive, format);
-	}
-
-	/// <summary>
-	/// To get the market-data storage.
-	/// </summary>
-	/// <param name="registry">Market-data storage.</param>
-	/// <param name="securityId">Security ID.</param>
-	/// <param name="dataType">Data type info.</param>
-	/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
-	/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
-	/// <returns>Market-data storage.</returns>
-	public static IMarketDataStorage GetStorage(this IStorageRegistry registry, SecurityId securityId, DataType dataType, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
-	{
-		if (dataType is null)
-			throw new ArgumentNullException(nameof(dataType));
-
-		return registry.GetStorage(securityId, dataType.MessageType, dataType.Arg, drive, format);
+		return registry.GetStorage(security.ToSecurityId(), dataType, drive, format);
 	}
 
 	/// <summary>
@@ -1372,7 +1356,7 @@ public static class StorageHelper
 	/// <param name="format">The format type.</param>
 	/// <returns>The candles storage.</returns>
 	public static IMarketDataStorage<CandleMessage> GetTimeFrameCandleMessageStorage(this IMessageStorageRegistry registry, SecurityId securityId, TimeSpan arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
-		=> registry.CheckOnNull(nameof(registry)).GetCandleMessageStorage(typeof(TimeFrameCandleMessage), securityId, arg, drive, format);
+		=> registry.CheckOnNull(nameof(registry)).GetCandleMessageStorage(securityId, arg.TimeFrame(), drive, format);
 
 	/// <summary>
 	/// To get the candles storage for the specified instrument.
@@ -1393,9 +1377,7 @@ public static class StorageHelper
 		if (subscription.SecurityId is null)
 			throw new ArgumentException(nameof(subscription));
 
-		var dt = subscription.DataType;
-
-		return registry.GetCandleMessageStorage(dt.MessageType, subscription.SecurityId.Value, dt.Arg, drive, format);
+		return registry.GetCandleMessageStorage(subscription.SecurityId.Value, subscription.DataType, drive, format);
 	}
 
 	/// <summary>
@@ -1424,10 +1406,11 @@ public static class StorageHelper
 	/// <param name="drive">The storage.</param>
 	/// <param name="format">The format type.</param>
 	/// <returns>Market-data storage.</returns>
+	[Obsolete("Use DataType overload.")]
 	public static IMarketDataStorage GetStorage(this IMessageStorageRegistry registry, SecurityId securityId, Type dataType, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 	{
 		ArgumentNullException.ThrowIfNull(registry);
-		return registry.GetExecutionMessageStorage(securityId, DataType.Create(dataType, arg), drive, format);
+		return registry.GetStorage(securityId, DataType.Create(dataType, arg), drive, format);
 	}
 
 	/// <summary>
@@ -1440,6 +1423,7 @@ public static class StorageHelper
 	/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
 	/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
 	/// <returns>Market-data storage.</returns>
+	[Obsolete("Use SecurityId overload.")]
 	public static IMarketDataStorage GetStorage(this IMessageStorageRegistry registry, Security security, Type dataType, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 	{
 		ArgumentNullException.ThrowIfNull(registry);
@@ -1456,6 +1440,7 @@ public static class StorageHelper
 	/// <param name="drive">The storage.</param>
 	/// <param name="format">The format type.</param>
 	/// <returns>The candles storage.</returns>
+	[Obsolete("Use DataType overload.")]
 	public static IMarketDataStorage<CandleMessage> GetCandleMessageStorage(this IMessageStorageRegistry registry, Type candleMessageType, SecurityId securityId, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 	{
 		ArgumentNullException.ThrowIfNull(registry);
