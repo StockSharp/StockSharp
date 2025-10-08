@@ -30,7 +30,7 @@ type ChartDrawScript() =
                 storage: IStorageRegistry,
                 drive: IMarketDataDrive,
                 format: StorageFormats,
-                timeFrame: TimeSpan,
+                dataType: DataType,
                 cancellationToken: CancellationToken
             ) : Task =
 
@@ -52,7 +52,7 @@ type ChartDrawScript() =
                         let volsSeries = Dictionary<DateTimeOffset, decimal>()
 
                         // Get candle storage for this security
-                        let candleStorage = storage.GetTimeFrameCandleMessageStorage(security, timeFrame, drive, format)
+                        let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
 
                         // Load candles within the specified date range
                         let candles = candleStorage.Load(fromDate, toDate)

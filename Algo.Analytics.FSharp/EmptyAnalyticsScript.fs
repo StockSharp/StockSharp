@@ -27,7 +27,7 @@ type EmptyAnalyticsScript() =
                 storage: IStorageRegistry,
                 drive: IMarketDataDrive,
                 format: StorageFormats,
-                timeFrame: TimeSpan,
+                dataType: DataType,
                 cancellationToken: CancellationToken
             ) : Task =
             

@@ -47,7 +47,7 @@ class chart_draw_script(IAnalyticsScript):
             vols_series = {}
 
             # Get candle storage for the current security
-            candle_storage = get_tf_candle_storage(storage, security, time_frame, drive, format)
+            candle_storage = get_candle_storage(storage, security, time_frame, drive, format)
 
             for candle in load_tf_candles(candle_storage, from_date, to_date):
                 # Fill series with closing prices and volumes

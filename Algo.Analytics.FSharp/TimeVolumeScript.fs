@@ -30,7 +30,7 @@ type TimeVolumeScript() =
                 storage: IStorageRegistry,
                 drive: IMarketDataDrive,
                 format: StorageFormats,
-                timeFrame: TimeSpan,
+                dataType: DataType,
                 cancellationToken: CancellationToken
             ) : Task =
 
@@ -42,7 +42,7 @@ type TimeVolumeScript() =
                 let security = securities.First()
 
                 // Get candle storage
-                let candleStorage = storage.GetTimeFrameCandleMessageStorage(security, timeFrame, drive, format)
+                let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
 
                 // Get available dates within the specified period
                 let dates = candleStorage.GetDates(fromDate, toDate).ToArray()

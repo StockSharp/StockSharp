@@ -55,7 +55,7 @@ class chart3d_script(IAnalyticsScript):
             x.append(to_string_id(security))
 
             # Get candle storage for current security
-            candle_storage = get_tf_candle_storage(storage, security, time_frame, drive, format)
+            candle_storage = get_candle_storage(storage, security, time_frame, drive, format)
 
             # Get available dates for the specified period
             dates = get_dates(candle_storage, from_date, to_date)

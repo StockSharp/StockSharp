@@ -30,7 +30,7 @@ type NormalizePriceScript() =
                 storage: IStorageRegistry,
                 drive: IMarketDataDrive,
                 format: StorageFormats,
-                timeFrame: TimeSpan,
+                dataType: DataType,
                 cancellationToken: CancellationToken
             ) : Task =
 
@@ -52,7 +52,7 @@ type NormalizePriceScript() =
 
                         // Get candle storage for this security
                         let candleStorage =
-                            storage.GetTimeFrameCandleMessageStorage(security, timeFrame, drive, format)
+                            storage.GetCandleMessageStorage(security, dataType, drive, format)
 
                         // We'll store the first close price in a mutable option
                         let mutable firstClose: decimal option = None

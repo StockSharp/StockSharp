@@ -31,7 +31,7 @@ type Chart3DScript() =
                 storage: IStorageRegistry,
                 drive: IMarketDataDrive,
                 format: StorageFormats,
-                timeFrame: TimeSpan,
+                dataType: DataType,
                 cancellationToken: CancellationToken
             ) : Task =
 
@@ -64,7 +64,7 @@ type Chart3DScript() =
                         x.Add(security.ToStringId())
 
                         // get candle storage for the specified parameters
-                        let candleStorage = storage.GetTimeFrameCandleMessageStorage(security, timeFrame, drive, format)
+                        let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
 
                         // get available dates for the specified period
                         let dates = candleStorage.GetDates(fromDate, toDate).ToArray()

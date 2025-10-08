@@ -39,7 +39,7 @@ class indicator_script(IAnalyticsScript):
             roc = ROC()
 
             # get candle storage
-            candle_storage = get_tf_candle_storage(storage, security, time_frame, drive, format)
+            candle_storage = get_candle_storage(storage, security, time_frame, drive, format)
 
             for candle in load_tf_candles(candle_storage, from_date, to_date):
                 # fill series

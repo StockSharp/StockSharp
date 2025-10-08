@@ -52,7 +52,7 @@ public class CompilationTests
 		var to = new DateTime(2025, 4, 30).UtcKind();
 		var storageRegistry = Helper.GetResourceStorage();
 		var format = StorageFormats.Binary;
-		var timeFrame = TimeSpan.FromMinutes(1);
+		var timeFrame = TimeSpan.FromMinutes(1).TimeFrame();
 
 		var references = CodeExtensions.DefaultReferences
 			.Concat(CodeExtensions.CreateAssemblyReferences(
@@ -104,7 +104,7 @@ public class CompilationTests
 		}
 	}
 
-	private static async Task RunAnalyticsScript(IAnalyticsScript script, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken token)
+	private static async Task RunAnalyticsScript(IAnalyticsScript script, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, DataType dataType, CancellationToken token)
 	{
 		// Create a test panel to capture output
 		var testPanel = new TestAnalyticsPanel();
@@ -121,7 +121,7 @@ public class CompilationTests
 			storage,
 			drive,
 			format,
-			timeFrame,
+			dataType,
 			t
 		);
 

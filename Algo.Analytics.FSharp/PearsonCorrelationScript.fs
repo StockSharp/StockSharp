@@ -32,7 +32,7 @@ type PearsonCorrelationScript() =
                 storage: IStorageRegistry,
                 drive: IMarketDataDrive,
                 format: StorageFormats,
-                timeFrame: TimeSpan,
+                dataType: DataType,
                 cancellationToken: CancellationToken
             ) : Task =
 
@@ -47,7 +47,7 @@ type PearsonCorrelationScript() =
                     |> Seq.choose (fun security ->
                         if cancellationToken.IsCancellationRequested then None
                         else
-                            let candleStorage = storage.GetTimeFrameCandleMessageStorage(security, timeFrame, drive, format)
+                            let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
                             let prices = 
                                 candleStorage.Load(fromDate, toDate) 
                                 |> Seq.map (fun c -> float c.ClosePrice)

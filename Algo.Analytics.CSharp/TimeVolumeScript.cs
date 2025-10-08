@@ -5,7 +5,7 @@ namespace StockSharp.Algo.Analytics;
 /// </summary>
 public class TimeVolumeScript : IAnalyticsScript
 {
-	Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
+	Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, DataType dataType, CancellationToken cancellationToken)
 	{
 		if (securities.Length == 0)
 		{
@@ -17,7 +17,7 @@ public class TimeVolumeScript : IAnalyticsScript
 		var security = securities.First();
 
 		// get candle storage
-		var candleStorage = storage.GetTimeFrameCandleMessageStorage(security, timeFrame, drive, format);
+		var candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format);
 
 		// get available dates for the specified period
 		var dates = candleStorage.GetDates(from, to).ToArray();

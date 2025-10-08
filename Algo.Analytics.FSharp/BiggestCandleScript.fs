@@ -30,7 +30,7 @@ type BiggestCandleScript() =
                 storage: IStorageRegistry,
                 drive: IMarketDataDrive,
                 format: StorageFormats,
-                timeFrame: TimeSpan,
+                dataType: DataType,
                 cancellationToken: CancellationToken
             ) : Task =
 
@@ -53,7 +53,7 @@ type BiggestCandleScript() =
                         ()
                     else
                         // Get candle storage for the specified timeframe
-                        let candleStorage = storage.GetTimeFrameCandleMessageStorage(security, timeFrame, drive, format)
+                        let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
                         // Load all candles in the specified date range
                         let allCandles = candleStorage.Load(from, ``to``).ToArray()
 

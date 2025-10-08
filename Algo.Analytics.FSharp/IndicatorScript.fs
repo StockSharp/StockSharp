@@ -31,7 +31,7 @@ type IndicatorScript() =
                 storage: IStorageRegistry,
                 drive: IMarketDataDrive,
                 format: StorageFormats,
-                timeFrame: TimeSpan,
+                dataType: DataType,
                 cancellationToken: CancellationToken
             ) : Task =
 
@@ -57,7 +57,7 @@ type IndicatorScript() =
                         let roc = RateOfChange()
 
                         // get candle storage
-                        let candleStorage = storage.GetTimeFrameCandleMessageStorage(security, timeFrame, drive, format)
+                        let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
 
                         // load candles in the specified date range
                         let candles = candleStorage.Load(fromDate, toDate)

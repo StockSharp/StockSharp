@@ -31,7 +31,7 @@ class normalize_price_script(IAnalyticsScript):
             series = {}
 
             # get candle storage
-            candle_storage = get_tf_candle_storage(storage, security, time_frame, drive, format)
+            candle_storage = get_candle_storage(storage, security, time_frame, drive, format)
 
             first_close = None
 

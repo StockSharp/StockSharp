@@ -44,6 +44,19 @@ def load_range(storage, message_type, from_date, to_date):
     # Call the Load method with the specified type
     return list(load_method(storage, from_date, to_date))
 
+def get_candle_storage(registry, security, data_type, drive, format):
+    """
+    Helper function to get CandleMessage storage.
+    :param registry: The storage registry.
+    :param security: The security object.
+    :param data_type: The data type for candles.
+    :param drive: The market data drive.
+    :param format: The storage format.
+    :return: The storage for TimeFrameCandleMessage.
+    """
+    return registry.GetCandleMessageStorage(security, data_type, drive, format)
+
+
 def get_tf_candle_storage(registry, security, time_frame, drive, format):
     """
     Helper function to get TimeFrameCandleMessage storage.

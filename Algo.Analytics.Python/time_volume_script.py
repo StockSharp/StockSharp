@@ -38,7 +38,7 @@ class time_volume_script(IAnalyticsScript):
         security = securities[0]
 
         # Get candle storage
-        candle_storage = get_tf_candle_storage(storage, security, time_frame, drive, format)
+        candle_storage = get_candle_storage(storage, security, time_frame, drive, format)
 
         # Get available dates for the specified period
         dates = get_dates(candle_storage, from_date, to_date)

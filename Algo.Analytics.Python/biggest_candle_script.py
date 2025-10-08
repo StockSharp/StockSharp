@@ -33,7 +33,7 @@ class biggest_candle_script(IAnalyticsScript):
                 break
 
             # get candle storage
-            candle_storage = get_tf_candle_storage(storage, security, time_frame, drive, format)
+            candle_storage = get_candle_storage(storage, security, time_frame, drive, format)
             all_candles = load_tf_candles(candle_storage, from_date, to_date)
 
             if len(all_candles) > 0:
