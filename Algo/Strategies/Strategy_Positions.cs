@@ -65,7 +65,7 @@ partial class Strategy
 	/// <param name="security">Security.</param>
 	/// <param name="portfolio">Portfolio.</param>
 	/// <param name="value">Position.</param>
-	/// <param name="time">Timestamp to assign into <see cref="Position.LocalTime"/> and <see cref="Position.LastChangeTime"/> if position is created anew.</param>
+	/// <param name="time">Timestamp to assign into <see cref="Position.LocalTime"/> and <see cref="Position.ServerTime"/> if position is created anew.</param>
 	public void SetPositionValue(Security security, Portfolio portfolio, decimal value, DateTimeOffset time)
 		=> _posManager.SetPosition(security, portfolio, value, time);
 

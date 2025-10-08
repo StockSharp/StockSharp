@@ -10,7 +10,7 @@ public class StrategyPositionManagerTests
 		p.AssertNotNull();
 		p.RealizedPnL.AssertNotNull();
 		p.LocalTime.AssertNotNull();
-		p.LastChangeTime.AssertNotNull();
+		p.ServerTime.AssertNotNull();
 		p.AveragePrice.AssertNotNull();
 		p.CurrentValue.AssertNotNull();
 		// CurrentPrice is allowed to be null; do not assert here.
@@ -326,7 +326,7 @@ public class StrategyPositionManagerTests
 		mgr.UpdateCurrentPrice(secId, 105m, now, now);
 
 		lastPos.CurrentPrice.AssertEqual(1050m); // 10 * 105
-		lastPos.LastChangeTime.AssertEqual(now);
+		lastPos.ServerTime.AssertEqual(now);
 		AssertCalcFieldsNonNull(lastPos);
 
 		// Update to different price
@@ -334,7 +334,7 @@ public class StrategyPositionManagerTests
 		mgr.UpdateCurrentPrice(secId, 110m, later, later);
 
 		lastPos.CurrentPrice.AssertEqual(1100m); // 10 * 110
-		lastPos.LastChangeTime.AssertEqual(later);
+		lastPos.ServerTime.AssertEqual(later);
 	}
 
 	[TestMethod]
@@ -672,7 +672,7 @@ public class StrategyPositionManagerTests
 		positions.Count.AssertEqual(2);
 		positions.Any(p => p.CurrentValue == 10m && p.CurrentPrice == 1050m).AssertTrue();
 		positions.Any(p => p.CurrentValue == -5m && p.CurrentPrice == 525m).AssertTrue();
-		positions.All(p => p.LastChangeTime == now && p.LocalTime == now).AssertTrue();
+		positions.All(p => p.ServerTime == now && p.LocalTime == now).AssertTrue();
 	}
 
 	[TestMethod]
@@ -725,7 +725,7 @@ public class StrategyPositionManagerTests
 		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		last.LocalTime.AssertEqual(lt);
-		last.LastChangeTime.AssertEqual(st);
+		last.ServerTime.AssertEqual(st);
 		AssertCalcFieldsNonNull(last);
 	}
 

@@ -129,7 +129,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 	/// <param name="security">Security.</param>
 	/// <param name="portfolio">Portfolio.</param>
 	/// <param name="value">New signed quantity.</param>
-	/// <param name="time">Timestamp to assign into <see cref="Position.LocalTime"/> and <see cref="Position.LastChangeTime"/> if position is created anew.</param>
+	/// <param name="time">Timestamp to assign into <see cref="Position.LocalTime"/> and <see cref="Position.ServerTime"/> if position is created anew.</param>
 	public void SetPosition(Security security, Portfolio portfolio, decimal value, DateTimeOffset time)
 	{
 		lock (_lock)
@@ -156,7 +156,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 			AveragePrice = 0m,
 			// timestamps
 			LocalTime = time,
-			LastChangeTime = time,
+			ServerTime = time,
 		}, out isNew);
 	}
 
@@ -427,7 +427,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 				}
 
 				position.LocalTime = order.LocalTime;
-				position.LastChangeTime = order.ServerTime;
+				position.ServerTime = order.ServerTime;
 			}
 			else
 			{
@@ -438,7 +438,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 					var posCommission = position.Commission ?? 0m;
 					position.Commission = posCommission + deltaCommission;
 					position.LocalTime = order.LocalTime;
-					position.LastChangeTime = order.ServerTime;
+					position.ServerTime = order.ServerTime;
 				}
 			}
 
@@ -479,7 +479,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 
 				var qty = pos.CurrentValue ?? 0m;
 				pos.CurrentPrice = qty == 0 ? 0m : qty.Abs() * price;
-				pos.LastChangeTime = serverTime;
+				pos.ServerTime = serverTime;
 				pos.LocalTime = localTime;
 				(changed ??= []).Add(pos);
 			}

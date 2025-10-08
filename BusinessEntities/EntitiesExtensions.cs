@@ -690,7 +690,7 @@ public static partial class EntitiesExtensions
 			PortfolioName = portfolio.Name,
 			BoardCode = portfolio.Board?.Code,
 			LocalTime = portfolio.LocalTime,
-			ServerTime = portfolio.LastChangeTime,
+			ServerTime = portfolio.ServerTime,
 			ClientCode = portfolio.ClientCode,
 		}
 		.TryAdd(PositionChangeTypes.BeginValue, portfolio.BeginValue, true)
@@ -763,7 +763,7 @@ public static partial class EntitiesExtensions
 		return new PositionChangeMessage
 		{
 			LocalTime = position.LocalTime,
-			ServerTime = position.LastChangeTime,
+			ServerTime = position.ServerTime,
 			PortfolioName = position.Portfolio.Name,
 			SecurityId = position.Security.ToSecurityId(),
 			ClientCode = position.ClientCode,
@@ -1446,7 +1446,7 @@ public static partial class EntitiesExtensions
 		}
 
 		position.LocalTime = message.LocalTime;
-		position.LastChangeTime = message.ServerTime;
+		position.ServerTime = message.ServerTime;
 	}
 
 	/// <summary>

@@ -724,7 +724,7 @@ static class Helper
 			p2.CurrentValue.AssertEqual(p1.CurrentValue);
 			p2.BlockedValue.AssertEqual(p1.BlockedValue);
 			p2.BeginValue.AssertEqual(p1.BeginValue);
-			p2.LastChangeTime.AssertEqual(p1.LastChangeTime);
+			p2.ServerTime.AssertEqual(p1.ServerTime);
 			CheckEqual(p1.Security, p2.Security, isMls, isSerializer);
 			CheckEqual(p1.Portfolio, p2.Portfolio, isMls, isSerializer);
 			p2.BeginValue.AssertEqual(p1.BeginValue);

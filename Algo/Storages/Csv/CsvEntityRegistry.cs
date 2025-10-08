@@ -485,7 +485,7 @@ public class CsvEntityRegistry : IEntityRegistry
 				Currency = reader.ReadNullableEnum<CurrencyTypes>(),
 				State = reader.ReadNullableEnum<PortfolioStates>(),
 				Description = reader.ReadString(),
-				LastChangeTime = reader.ReadDateTime(),
+				ServerTime = reader.ReadDateTime(),
 				LocalTime = reader.ReadDateTime(),
 			};
 
@@ -530,7 +530,7 @@ public class CsvEntityRegistry : IEntityRegistry
 				data.Currency.To<string>(),
 				data.State.To<string>(),
 				data.Description,
-				data.LastChangeTime.WriteDateTime(),
+				data.ServerTime.WriteDateTime(),
 				data.LocalTime.WriteDateTime(),
 				data.ClientCode,
 				data.Currency?.To<string>(),
@@ -578,7 +578,7 @@ public class CsvEntityRegistry : IEntityRegistry
 				VariationMargin = reader.ReadNullableDecimal(),
 				Commission = reader.ReadNullableDecimal(),
 				Currency = reader.ReadNullableEnum<CurrencyTypes>(),
-				LastChangeTime = reader.ReadDateTime(),
+				ServerTime = reader.ReadDateTime(),
 				LocalTime = reader.ReadDateTime(),
 			};
 
@@ -640,7 +640,7 @@ public class CsvEntityRegistry : IEntityRegistry
 				data.VariationMargin.To<string>(),
 				data.Commission.To<string>(),
 				data.Description,
-				data.LastChangeTime.WriteDateTime(),
+				data.ServerTime.WriteDateTime(),
 				data.LocalTime.WriteDateTime(),
 				data.ClientCode,
 				data.Currency.To<string>(),

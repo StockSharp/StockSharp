@@ -11,12 +11,6 @@ namespace StockSharp.BusinessEntities;
 	Description = LocalizedStrings.PositionDescKey)]
 public class Position : NotifiableObject, ILocalTimeMessage, IServerTimeMessage
 {
-	DateTimeOffset IServerTimeMessage.ServerTime
-	{
-		get => LastChangeTime;
-		set => LastChangeTime = value;
-	}
-
 	/// <summary>
 	/// Portfolio name.
 	/// </summary>
@@ -291,7 +285,18 @@ public class Position : NotifiableObject, ILocalTimeMessage, IServerTimeMessage
 		}
 	}
 
-	private DateTimeOffset _lastChangeTime;
+	/// <summary>
+	/// Time of last position change.
+	/// </summary>
+	[Browsable(false)]
+	[Obsolete("Use 'ServerTime' property.")]
+	public DateTimeOffset LastChangeTime
+	{
+		get => ServerTime;
+		set => ServerTime = value;
+	}
+
+	private DateTimeOffset _serverTime;
 
 	/// <summary>
 	/// Time of last position change.
@@ -303,12 +308,12 @@ public class Position : NotifiableObject, ILocalTimeMessage, IServerTimeMessage
 		Description = LocalizedStrings.TimePosLastChangeKey,
 		GroupName = LocalizedStrings.StatisticsKey)]
 	[Browsable(false)]
-	public DateTimeOffset LastChangeTime
+	public DateTimeOffset ServerTime
 	{
-		get => _lastChangeTime;
+		get => _serverTime;
 		set
 		{
-			_lastChangeTime = value;
+			_serverTime = value;
 			NotifyChanged();
 		}
 	}
@@ -718,7 +723,7 @@ public class Position : NotifiableObject, ILocalTimeMessage, IServerTimeMessage
 		destination.Currency = Currency;
 		destination.ExpirationDate = ExpirationDate;
 		destination.ClientCode = ClientCode;
-		//destination.LastChangeTime = LastChangeTime;
+		//destination.ServerTime = ServerTime;
 		//destination.LocalTime = LocalTime;
 
 		destination.Portfolio = Portfolio;
