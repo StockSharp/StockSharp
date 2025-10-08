@@ -14,7 +14,7 @@ using StockSharp.Messages;
 /// Additionally maintains cached per-position aggregates (blocked volume and active buy/sell orders count) via incremental updates (O(1) per order update, no rescans).
 /// </summary>
 /// <param name="strategyIdGetter">Delegate returning strategy identifier to stamp into newly created <see cref="Position.StrategyId"/>.</param>
-public class StrategyPositionManager(Func<string> strategyIdGetter)
+public class StrategyPositionManager(Func<string> strategyIdGetter) : BaseLogReceiver
 {
 	private readonly SyncObject _lock = new();
 	private readonly Dictionary<(SecurityId secId, Portfolio pf), Position> _positions = [];

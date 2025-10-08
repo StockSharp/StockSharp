@@ -274,7 +274,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		_riskManager = new RiskManager { Parent = this };
 		_indicators = new(this);
 
-		_posManager = new(EnsureGetId);
+		_posManager = new(EnsureGetId) { Parent = this };
 		_posManager.PositionProcessed += OnManagerPositionProcessed;
 	}
 
