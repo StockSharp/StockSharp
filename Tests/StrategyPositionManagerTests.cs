@@ -429,8 +429,8 @@ public class StrategyPositionManagerTests
 
 		Assert.ThrowsExactly<ArgumentNullException>(() => mgr.TryGetPosition(null, new Portfolio()));
 		Assert.ThrowsExactly<ArgumentNullException>(() => mgr.TryGetPosition(new Security(), null));
-		Assert.ThrowsExactly<ArgumentNullException>(() => mgr.SetPosition(null, new Portfolio(), 10m));
-		Assert.ThrowsExactly<ArgumentNullException>(() => mgr.SetPosition(new Security(), null, 10m));
+		Assert.ThrowsExactly<ArgumentNullException>(() => mgr.SetPosition(null, new Portfolio(), 10m, DateTimeOffset.UtcNow));
+		Assert.ThrowsExactly<ArgumentNullException>(() => mgr.SetPosition(new Security(), null, 10m, DateTimeOffset.UtcNow));
 	}
 
 	[TestMethod]
@@ -461,7 +461,7 @@ public class StrategyPositionManagerTests
 		var sec = new Security { Id = "TEST" };
 		var pf = new Portfolio { Name = "PF" };
 
-		mgr.SetPosition(sec, pf, 15m);
+		mgr.SetPosition(sec, pf, 15m, DateTimeOffset.UtcNow);
 
 		var pos = mgr.TryGetPosition(sec, pf);
 		pos.AssertNotNull();
@@ -469,7 +469,7 @@ public class StrategyPositionManagerTests
 		// No assertion on AveragePrice per new rule enforcement happens via AssertCalcFieldsNonNull when processing orders
 
 		// Update manual position
-		mgr.SetPosition(sec, pf, -5m);
+		mgr.SetPosition(sec, pf, -5m, DateTimeOffset.UtcNow);
 		pos.CurrentValue.AssertEqual(-5m);
 	}
 
@@ -818,7 +818,7 @@ public class StrategyPositionManagerTests
 		var mgr = new StrategyPositionManager(() => "BLK_NULL");
 		var sec = new Security { Id = "S" };
 		var pf = new Portfolio { Name = "P" };
-		mgr.SetPosition(sec, pf, 1m);
+		mgr.SetPosition(sec, pf, 1m, DateTimeOffset.UtcNow);
 		var pos = mgr.TryGetPosition(sec, pf);
 		// New rule: BlockedValue should be initialized (even if logically zero)
 		pos.BlockedValue.AssertNotNull();

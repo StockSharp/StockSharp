@@ -98,23 +98,33 @@ public class StrategyPositionManager(Func<string> strategyIdGetter) : BaseLogRec
 	/// <param name="security">Security.</param>
 	/// <param name="portfolio">Portfolio.</param>
 	/// <param name="value">New signed quantity.</param>
-	public void SetPosition(Security security, Portfolio portfolio, decimal value)
+	/// <param name="time">Timestamp to assign into <see cref="Position.LocalTime"/> and <see cref="Position.LastChangeTime"/> if position is created anew.</param>
+	public void SetPosition(Security security, Portfolio portfolio, decimal value, DateTimeOffset time)
 	{
 		lock (_lock)
-			GetOrCreate(security, portfolio, out _).CurrentValue = value;
+			GetOrCreate(security, portfolio, time, out _).CurrentValue = value;
 	}
 
-	private Position GetOrCreate(Security security, Portfolio portfolio, out bool isNew)
+	private Position GetOrCreate(Security security, Portfolio portfolio, DateTimeOffset time, out bool isNew)
 	{
 		ArgumentNullException.ThrowIfNull(security);
 		ArgumentNullException.ThrowIfNull(portfolio);
 
-		var key = (security.ToSecurityId(), portfolio);
-		return _positions.SafeAdd(key, _ => new()
+		return _positions.SafeAdd((security.ToSecurityId(), portfolio), _ => new()
 		{
 			Security = security,
 			Portfolio = portfolio,
 			StrategyId = StrategyIdGetter?.Invoke(),
+			// initialize calculated fields to non-null defaults
+			RealizedPnL = 0m,
+			Commission = 0m,
+			BlockedValue = 0m,
+			BuyOrdersCount = 0,
+			SellOrdersCount = 0,
+			AveragePrice = 0m,
+			// timestamps
+			LocalTime = time,
+			LastChangeTime = time,
 		}, out isNew);
 	}
 
@@ -280,7 +290,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter) : BaseLogRec
 			if (matchedAbs == 0 && order.State != OrderStates.Active && !posExists)
 				return;
 
-			position = GetOrCreate(order.Security, order.Portfolio, out isNew);
+			position = GetOrCreate(order.Security, order.Portfolio, order.ServerTime, out isNew);
 
 			// ensure aggregates reflect current order state before fill handling (to close blocked on Done, etc.)
 			UpdateAggregates(order, position);
@@ -328,7 +338,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter) : BaseLogRec
 					var closingVolume = posQty.Abs().Min(deltaMatchedAbs);
 					posRealized += (slicePrice - (posAvg ?? slicePrice)) * closingVolume * posQty.Sign();
 					if (newQty == 0)
-						posAvg = null;            // fully flat
+						posAvg = 0m;            // fully flat -> keep non-null average price baseline
 					else if (newQty.Sign() != posQty.Sign())
 						posAvg = slicePrice;      // reversal opens new basis
 				}
