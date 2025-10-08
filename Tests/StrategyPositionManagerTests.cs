@@ -12,6 +12,7 @@ public class StrategyPositionManagerTests
 		p.LocalTime.AssertNotNull();
 		p.LastChangeTime.AssertNotNull();
 		p.AveragePrice.AssertNotNull();
+		p.CurrentValue.AssertNotNull();
 		// CurrentPrice is allowed to be null; do not assert here.
 		p.Commission.AssertNotNull();
 		p.BlockedValue.AssertNotNull();
@@ -566,6 +567,7 @@ public class StrategyPositionManagerTests
 		mgr.ProcessOrder(order);
 		lastPos.AssertNotNull();
 		lastPos.BlockedValue.AssertEqual(10m);
+		AssertCalcFieldsNonNull(lastPos);
 
 		// Partial fill (still Active)
 		order.Balance = 6m;

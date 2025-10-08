@@ -116,6 +116,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter) : BaseLogRec
 			Portfolio = portfolio,
 			StrategyId = StrategyIdGetter?.Invoke(),
 			// initialize calculated fields to non-null defaults
+			CurrentValue = 0m,
 			RealizedPnL = 0m,
 			Commission = 0m,
 			BlockedValue = 0m,
@@ -320,7 +321,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter) : BaseLogRec
 					{
 						if (!_lastPrices.TryGetValue(order.Security.ToSecurityId(), out var lastPrice))
 						{
-							this.AddWarningLog("Cannot determine execution price for market order {0} - no last price. Ignored.", order.TransactionId);
+							LogWarning("Cannot determine execution price for market order {0} - no last price. Ignored.", order.TransactionId);
 							return;
 						}
 
