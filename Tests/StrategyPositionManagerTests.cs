@@ -958,4 +958,45 @@ public class StrategyPositionManagerTests
 		// Expected: commission reflects correction even without new executions
 		(last.Commission ?? 0m).AssertEqual(0.8m);
 	}
+
+	[TestMethod]
+	public void Cleanup_OrderExecInfos_On_Done()
+	{
+		var mgr = new StrategyPositionManager(() => "CLN");
+		var (order, _, _) = CreateOrder(Sides.Buy, 10m);
+
+		order.State = OrderStates.Active;
+		order.Balance = 7m; // matched 3
+		order.AveragePrice = 100m;
+		mgr.ProcessOrder(order);
+
+		mgr.TrackedOrderExecInfosCount.AssertEqual(1);
+
+		order.State = OrderStates.Done; // finish
+		order.Balance = 0m;
+		mgr.ProcessOrder(order);
+
+		mgr.TrackedOrderExecInfosCount.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void Cleanup_Aggregates_When_Empty()
+	{
+		var mgr = new StrategyPositionManager(() => "CLN_AGG");
+		var (order, _, _) = CreateOrder(Sides.Buy, 5m);
+		order.State = OrderStates.Active;
+		mgr.ProcessOrder(order);
+
+		mgr.TrackedAggsCount.AssertEqual(1);
+		mgr.TrackedOrderTracksCount.AssertEqual(1);
+
+		// cancel active (Done + balance>0 means cancellation path used in tests)
+		order.State = OrderStates.Done;
+		order.Balance = 5m;
+		mgr.ProcessOrder(order);
+
+		// after cleanup, no tracks and empty aggs removed
+		mgr.TrackedOrderTracksCount.AssertEqual(0);
+		mgr.TrackedAggsCount.AssertEqual(0);
+	}
 }

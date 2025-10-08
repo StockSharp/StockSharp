@@ -66,6 +66,16 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 	public event Action<Position, bool> PositionProcessed;
 
 	/// <summary>
+	/// </summary>
+	[Browsable(false)] public int TrackedOrderExecInfosCount { get { lock (_lock) return _orderExecInfos.Count; } }
+	/// <summary>
+	/// </summary>
+	[Browsable(false)] public int TrackedOrderTracksCount { get { lock (_lock) return _orderTracks.Count; } }
+	/// <summary>
+	/// </summary>
+	[Browsable(false)] public int TrackedAggsCount { get { lock (_lock) return _posAggs.Count; } }
+
+	/// <summary>
 	/// Try get existing position instance for <paramref name="security"/> and <paramref name="portfolio"/>.
 	/// </summary>
 	/// <param name="security">Security.</param>
@@ -142,7 +152,8 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 
 		var txId = order.TransactionId;
 
-		var agg = _posAggs.SafeAdd((order.Security.ToSecurityId(), order.Portfolio), _ => new());
+		var key = (order.Security.ToSecurityId(), order.Portfolio);
+		var agg = _posAggs.SafeAdd(key, _ => new());
 
 		var balance = order.Balance; // non-nullable balance
 		var newActive = order.State == OrderStates.Active && balance > 0;
@@ -220,6 +231,10 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 		position.BlockedValue = blockedTotal;
 		position.BuyOrdersCount = agg.BuyCount;
 		position.SellOrdersCount = agg.SellCount;
+
+		// cleanup empty aggregates to avoid leaking keys
+		if (agg.BuyCount == 0 && agg.SellCount == 0 && agg.BlockedBuy == 0 && agg.BlockedSell == 0)
+			_posAggs.Remove(key);
 	}
 
 	/// <summary>
@@ -353,6 +368,10 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 
 			// update aggregates again in case balance changed after fill
 			UpdateAggregates(order, position);
+
+			// cleanup per-order exec info on terminal state to avoid leaks (Done covers both full fill and cancellation)
+			if (order.State == OrderStates.Done)
+				_orderExecInfos.Remove(txId);
 		}
 
 		PositionProcessed?.Invoke(position, isNew);
