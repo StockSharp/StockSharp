@@ -656,7 +656,9 @@ public static partial class Extensions
 
 	private static readonly SynchronizedDictionary<Type, (Func<string, object> parse, Func<object, string> toString)> _dataTypeArgConverters = new()
 	{
+#pragma warning disable CS0618 // Type or member is obsolete
 		{ typeof(ExecutionMessage), (str => str.To<ExecutionTypes>(), arg => arg.To<string>()) }
+#pragma warning restore CS0618 // Type or member is obsolete
 	};
 
 	/// <summary>
@@ -930,6 +932,7 @@ public static partial class Extensions
 	/// </summary>
 	/// <param name="type"><see cref="ExecutionTypes"/>.</param>
 	/// <returns><see cref="DataType"/>.</returns>
+	[Obsolete("Use DataType.")]
 	public static DataType ToDataType(this ExecutionTypes type)
 	{
 		return type switch
@@ -946,6 +949,7 @@ public static partial class Extensions
 	/// </summary>
 	/// <param name="type"><see cref="DataType"/>.</param>
 	/// <returns><see cref="ExecutionTypes"/>.</returns>
+	[Obsolete("Use DataType.")]
 	public static ExecutionTypes ToExecutionType(this DataType type)
 	{
 		if (type == DataType.Ticks)

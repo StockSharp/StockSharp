@@ -1258,8 +1258,10 @@ public static class StorageHelper
 		var arg2 = 0M;
 		var arg3 = 0;
 
+#pragma warning disable CS0618 // Type or member is obsolete
 		if (dataType.Arg is ExecutionTypes execType)
 			arg1 = (int)execType;
+#pragma warning restore CS0618 // Type or member is obsolete
 		else if (dataType.Arg is TimeSpan tf)
 			arg1 = tf.Ticks;
 		else if (dataType.Arg is Unit unit)
@@ -1292,7 +1294,9 @@ public static class StorageHelper
 		object arg;
 
 		if (type == typeof(ExecutionMessage))
+#pragma warning disable CS0618 // Type or member is obsolete
 			arg = (ExecutionTypes)arg1;
+#pragma warning restore CS0618 // Type or member is obsolete
 		else if (type.IsCandleMessage())
 		{
 			var argType = type.CreateInstance<CandleMessage>().ArgType;

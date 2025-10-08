@@ -6,13 +6,13 @@ public class DataTypeTests
 	[TestMethod]
 	public void Equality_And_HashCode()
 	{
-		var dt1 = DataType.Create<ExecutionMessage>(ExecutionTypes.Tick);
-		var dt2 = DataType.Ticks.Clone();
+		var dt1 = DataType.Create<Level1ChangeMessage>();
+		var dt2 = DataType.Level1.Clone();
 
 		dt1.Equals(dt2).AssertTrue();
 		dt2.GetHashCode().AreEqual(dt1.GetHashCode());
 
-		var dt3 = DataType.Create<ExecutionMessage>(ExecutionTypes.OrderLog);
+		var dt3 = DataType.Create<Level1ChangeMessage>(1);
 		dt1.Equals(dt3).AssertFalse();
 	}
 
@@ -62,11 +62,12 @@ public class DataTypeTests
 	[TestMethod]
 	public void SerializableString_NonCandle()
 	{
-		var dt = DataType.Create<ExecutionMessage>(ExecutionTypes.Tick);
+		var dt = DataType.Create<Level1ChangeMessage>();
 		var s = dt.ToSerializableString();
 		var back = DataType.FromSerializableString(s);
 
 		back.AreEqual(dt);
+		back.AreEqual(DataType.Level1);
 	}
 
 	[TestMethod]
@@ -117,9 +118,9 @@ public class DataTypeTests
 			DataType.SecurityMapping,
 
 			// Dynamic instances to cover args path
-			DataType.Create<ExecutionMessage>(ExecutionTypes.Tick),
-			DataType.Create<ExecutionMessage>(ExecutionTypes.OrderLog),
-			DataType.Create<ExecutionMessage>(ExecutionTypes.Transaction),
+			DataType.Create<Level1ChangeMessage>(),
+			DataType.Create<QuoteChangeMessage>(),
+			DataType.Create<PositionChangeMessage>(),
 			DataType.Create<TimeFrameCandleMessage>(TimeSpan.FromMinutes(1)),
 			DataType.Create<TickCandleMessage>(100),
 			DataType.Create<VolumeCandleMessage>(123.45m),
@@ -136,7 +137,7 @@ public class DataTypeTests
 	[TestMethod]
 	public void Save_Load_NonCandle()
 	{
-		var dt = DataType.Create<ExecutionMessage>(ExecutionTypes.OrderLog);
+		var dt = DataType.Create<Level1ChangeMessage>();
 		var storage = new SettingsStorage();
 		dt.Save(storage);
 
@@ -144,6 +145,7 @@ public class DataTypeTests
 		loaded.Load(storage);
 
 		loaded.AreEqual(dt);
+		loaded.AreEqual(DataType.Level1);
 	}
 
 	[TestMethod]
@@ -162,8 +164,8 @@ public class DataTypeTests
 	[TestMethod]
 	public void Name_Does_Not_Affect_Equality_Or_Hash()
 	{
-		var dt1 = DataType.Create<ExecutionMessage>(ExecutionTypes.Tick).SetName("A");
-		var dt2 = DataType.Create<ExecutionMessage>(ExecutionTypes.Tick).SetName("B");
+		var dt1 = DataType.Create<Level1ChangeMessage>().SetName("A");
+		var dt2 = DataType.Create<Level1ChangeMessage>().SetName("B");
 
 		dt2.AreEqual(dt1);
 		dt2.GetHashCode().AreEqual(dt1.GetHashCode());

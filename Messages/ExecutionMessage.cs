@@ -5,6 +5,7 @@ namespace StockSharp.Messages;
 /// </summary>
 [DataContract]
 [Serializable]
+[Obsolete("For internal use only.")]
 public enum ExecutionTypes
 {
 	/// <summary>

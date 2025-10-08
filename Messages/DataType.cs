@@ -68,25 +68,11 @@ public class DataType : Equatable<DataType>, IPersistable
 	/// </summary>
 	public static DataType MarketDepth { get; } = CreateImmutable<QuoteChangeMessage>();
 
+#pragma warning disable CS0618 // Type or member is obsolete
 	/// <summary>
 	/// Filtered market depth.
 	/// </summary>
 	public static DataType FilteredMarketDepth { get; } = CreateImmutable<QuoteChangeMessage>(ExecutionTypes.Transaction);
-
-	/// <summary>
-	/// Position changes.
-	/// </summary>
-	public static DataType PositionChanges { get; } = CreateImmutable<PositionChangeMessage>();
-
-	/// <summary>
-	/// News.
-	/// </summary>
-	public static DataType News { get; } = CreateImmutable<NewsMessage>();
-
-	/// <summary>
-	/// Securities.
-	/// </summary>
-	public static DataType Securities { get; } = CreateImmutable<SecurityMessage>();
 
 	/// <summary>
 	/// Ticks.
@@ -102,6 +88,22 @@ public class DataType : Equatable<DataType>, IPersistable
 	/// Transactions.
 	/// </summary>
 	public static DataType Transactions { get; } = CreateImmutable<ExecutionMessage>(ExecutionTypes.Transaction);
+#pragma warning restore CS0618 // Type or member is obsolete
+
+	/// <summary>
+	/// Position changes.
+	/// </summary>
+	public static DataType PositionChanges { get; } = CreateImmutable<PositionChangeMessage>();
+
+	/// <summary>
+	/// News.
+	/// </summary>
+	public static DataType News { get; } = CreateImmutable<NewsMessage>();
+
+	/// <summary>
+	/// Securities.
+	/// </summary>
+	public static DataType Securities { get; } = CreateImmutable<SecurityMessage>();
 
 	/// <summary>
 	/// Board info.
@@ -338,7 +340,9 @@ public class DataType : Equatable<DataType>, IPersistable
 		IsCandles ||
 		MessageType == typeof(QuoteChangeMessage) ||
 		MessageType == typeof(Level1ChangeMessage) ||
+#pragma warning disable CS0618 // Type or member is obsolete
 		(MessageType == typeof(ExecutionMessage) && Arg is ExecutionTypes type && type != ExecutionTypes.Transaction) ||
+#pragma warning restore CS0618 // Type or member is obsolete
 		MessageType == typeof(NewsMessage) ||
 		MessageType == typeof(BoardMessage) ||
 		MessageType == typeof(BoardStateMessage) ||
@@ -357,7 +361,9 @@ public class DataType : Equatable<DataType>, IPersistable
 		IsCandles ||
 		MessageType == typeof(QuoteChangeMessage) ||
 		MessageType == typeof(Level1ChangeMessage) ||
+#pragma warning disable CS0618 // Type or member is obsolete
 		(MessageType == typeof(ExecutionMessage) && Arg is ExecutionTypes t1 && t1 != ExecutionTypes.Transaction)
+#pragma warning restore CS0618 // Type or member is obsolete
 	);
 
 	private bool? _isNonSecurity;
