@@ -274,7 +274,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		_riskManager = new RiskManager { Parent = this };
 		_indicators = new(this);
 
-		_posManager = new(EnsureGetId) { Parent = this };
+		_posManager = new(EnsureGetId);
 		_posManager.PositionProcessed += OnManagerPositionProcessed;
 	}
 
@@ -2228,7 +2228,10 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		{
 			OrderReceived?.Invoke(subscription, order);
 
-			_posManager.ProcessOrder(order);
+			var res = _posManager.ProcessOrder(order);
+
+			if (res != StrategyPositionManager.OrderResults.OK)
+				LogWarning("Order {0} pos manager: {1}", order.TransactionId, res);
 
 			if (subscription == OrderLookup)
 			{

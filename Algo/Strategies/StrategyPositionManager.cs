@@ -14,8 +14,39 @@ using StockSharp.Messages;
 /// Additionally maintains cached per-position aggregates (blocked volume and active buy/sell orders count) via incremental updates (O(1) per order update, no rescans).
 /// </summary>
 /// <param name="strategyIdGetter">Delegate returning strategy identifier to stamp into newly created <see cref="Position.StrategyId"/>.</param>
-public class StrategyPositionManager(Func<string> strategyIdGetter) : BaseLogReceiver
+public class StrategyPositionManager(Func<string> strategyIdGetter)
 {
+	/// <summary>
+	/// Order processing result codes.
+	/// </summary>
+	public enum OrderResults
+	{
+		/// <summary>
+		/// Processed successfully.
+		/// </summary>
+		OK,
+
+		/// <summary>
+		/// Ignored as state is invalid.
+		/// </summary>
+		InvalidStatus,
+
+		/// <summary>
+		/// No existing position for the order.
+		/// </summary>
+		UnknownOrder,
+
+		/// <summary>
+		/// Cumulative matched volume decreased.
+		/// </summary>
+		Inconsistent,
+
+		/// <summary>
+		/// Ignored market order execution due to missing last price.
+		/// </summary>
+		NoMarketPrice,
+	}
+
 	private readonly SyncObject _lock = new();
 	private readonly Dictionary<(SecurityId secId, Portfolio pf), Position> _positions = [];
 	private readonly Dictionary<long, OrderExecInfo> _orderExecInfos = [];
@@ -252,7 +283,8 @@ public class StrategyPositionManager(Func<string> strategyIdGetter) : BaseLogRec
 	/// Process order state change (registration, balance change, partial/full execution, cancellation, done).
 	/// </summary>
 	/// <param name="order">Order to process.</param>
-	public void ProcessOrder(Order order)
+	/// <returns><see cref="OrderResults"/></returns>
+	public OrderResults ProcessOrder(Order order)
 	{
 		ArgumentNullException.ThrowIfNull(order);
 
@@ -271,7 +303,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter) : BaseLogRec
 			throw new ArgumentException("Active order cannot have zero balance.", nameof(order));
 
 		if (order.State is OrderStates.None or OrderStates.Pending or OrderStates.Failed)
-			return; // not yet active
+			return OrderResults.InvalidStatus; // not yet active
 
 		var matchedAbs = order.GetMatchedVolume() ?? 0m; // cumulative executed volume (absolute)
 		var signSide = order.Side == Sides.Sell ? -1 : 1;
@@ -288,7 +320,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter) : BaseLogRec
 
 			// If there are no executions yet and the order state is not Active and no position exists yet, ignore.
 			if (matchedAbs == 0 && order.State != OrderStates.Active && !posExists)
-				return;
+				return OrderResults.UnknownOrder;
 
 			position = GetOrCreate(order.Security, order.Portfolio, order.ServerTime, out isNew);
 
@@ -300,7 +332,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter) : BaseLogRec
 
 			var deltaMatchedAbs = matchedAbs - execInfo.MatchedVolume;
 			if (deltaMatchedAbs < 0)
-				return; // inconsistent snapshot delivered out-of-order
+				return OrderResults.Inconsistent; // inconsistent snapshot delivered out-of-order
 
 			// compute commission delta against last seen cumulative commission for this order
 			var deltaCommission = (commission ?? 0m) - execInfo.Commission;
@@ -320,10 +352,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter) : BaseLogRec
 					if (order.Type == OrderTypes.Market)
 					{
 						if (!_lastPrices.TryGetValue(order.Security.ToSecurityId(), out var lastPrice))
-						{
-							LogWarning("Cannot determine execution price for market order {0} - no last price. Ignored.", order.TransactionId);
-							return;
-						}
+							return OrderResults.NoMarketPrice;
 
 						effPrice = lastPrice;
 						cumulativeBased = false; // last price may change between snapshots; use incremental cost to avoid skew
@@ -422,6 +451,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter) : BaseLogRec
 		}
 
 		PositionProcessed?.Invoke(position, isNew);
+		return OrderResults.OK;
 	}
 
 	/// <summary>

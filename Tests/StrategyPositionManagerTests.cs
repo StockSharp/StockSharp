@@ -54,7 +54,7 @@ public class StrategyPositionManagerTests
 
 		// initial call (no matches) - ignored (Pending)
 		buy.State = OrderStates.Pending;
-		mgr.ProcessOrder(buy);
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.InvalidStatus);
 		lastPos.AssertNull(); // No position should be created before any fill.
 
 		// First partial fill: 3 @100, commission 1 (still Active)
@@ -62,7 +62,7 @@ public class StrategyPositionManagerTests
 		buy.AveragePrice = 100m; // cumulative avg
 		buy.Commission = 1m; // cumulative commission
 		buy.State = OrderStates.Active;
-		mgr.ProcessOrder(buy);
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		lastPos.AssertNotNull();
 		(lastIsNew == true).AssertTrue(); // First fill must create position.
@@ -77,7 +77,7 @@ public class StrategyPositionManagerTests
 		buy.AveragePrice = 106.25m; // cumulative avg ((3*100 + 5*110)/8)
 		buy.Commission = 1.8m; // cumulative
 		buy.State = OrderStates.Active;
-		mgr.ProcessOrder(buy);
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		(lastIsNew == false).AssertTrue(); // Second fill updates existing position.
 		lastPos.CurrentValue.AssertEqual(8m);
@@ -87,7 +87,7 @@ public class StrategyPositionManagerTests
 		AssertCalcFieldsNonNull(lastPos);
 
 		// Duplicate (no change) - should not alter
-		mgr.ProcessOrder(buy);
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
 		lastPos.CurrentValue.AssertEqual(8m);
 		lastPos.AveragePrice.AssertEqual(106.25m);
 
@@ -107,7 +107,7 @@ public class StrategyPositionManagerTests
 			TransactionId = ++_tx,
 		};
 
-		mgr.ProcessOrder(sell);
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.OK);
 		// Realized PnL for closed 5: (120 - 106.25)*5 = 68.75
 		lastPos.CurrentValue.AssertEqual(3m); // 8 - 5
 		lastPos.AveragePrice.AssertEqual(106.25m); // unchanged after partial close
@@ -131,7 +131,7 @@ public class StrategyPositionManagerTests
 			TransactionId = ++_tx,
 		};
 
-		mgr.ProcessOrder(sellRev);
+		mgr.ProcessOrder(sellRev).AssertEqual(StrategyPositionManager.OrderResults.OK);
 		// Additional realized: closing remaining 3 long at 105 => (105 - 106.25)*3 = -3.75
 		// Total realized = 68.75 - 3.75 = 65.0
 		lastPos.CurrentValue.AssertEqual(-7m); // reversed to short 7
@@ -156,7 +156,7 @@ public class StrategyPositionManagerTests
 			TransactionId = ++_tx,
 		};
 
-		mgr.ProcessOrder(buyClose);
+		mgr.ProcessOrder(buyClose).AssertEqual(StrategyPositionManager.OrderResults.OK);
 		// Closing 7 short: average short 105, cover at 100 => PnL += (105 - 100)*7 = 35
 		lastPos.CurrentValue.AssertEqual(0m);
 		// Average should be initialized even after flat (new rule)
@@ -186,7 +186,7 @@ public class StrategyPositionManagerTests
 		sell.AveragePrice = 100m;
 		sell.Commission = 0.5m;
 		sell.State = OrderStates.Done;
-		mgr.ProcessOrder(sell);
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		lastPos.CurrentValue.AssertEqual(-10m);
 		lastPos.AveragePrice.AssertEqual(100m);
@@ -209,7 +209,7 @@ public class StrategyPositionManagerTests
 			State = OrderStates.Done,
 			TransactionId = ++_tx,
 		};
-		mgr.ProcessOrder(buy);
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		// Realized PnL: (100 - 95) * 4 = 20
 		lastPos.CurrentValue.AssertEqual(-6m);
@@ -230,7 +230,7 @@ public class StrategyPositionManagerTests
 		buy1.State = OrderStates.Active;
 
 		// Register active buy order
-		mgr.ProcessOrder(buy1);
+		mgr.ProcessOrder(buy1).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		lastPos.AssertNotNull();
 		lastPos.BlockedValue.AssertEqual(10m); // Blocked buy = 10
@@ -250,7 +250,7 @@ public class StrategyPositionManagerTests
 			ServerTime = DateTimeOffset.Now,
 			TransactionId = ++_tx,
 		};
-		mgr.ProcessOrder(buy2);
+		mgr.ProcessOrder(buy2).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		lastPos.BlockedValue.AssertEqual(15m); // 10 + 5
 		lastPos.BuyOrdersCount.AssertEqual(2);
@@ -268,7 +268,7 @@ public class StrategyPositionManagerTests
 			ServerTime = DateTimeOffset.Now,
 			TransactionId = ++_tx,
 		};
-		mgr.ProcessOrder(sell);
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		lastPos.BlockedValue.AssertEqual(22m); // 15 buy + 7 sell (no netting)
 		lastPos.BuyOrdersCount.AssertEqual(2);
@@ -278,7 +278,7 @@ public class StrategyPositionManagerTests
 		buy1.Balance = 7m;
 		buy1.AveragePrice = 100m;
 		buy1.State = OrderStates.Active;
-		mgr.ProcessOrder(buy1);
+		mgr.ProcessOrder(buy1).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		lastPos.BlockedValue.AssertEqual(19m); // 7 + 5 + 7 (no netting)
 		lastPos.BuyOrdersCount.AssertEqual(2);
@@ -288,7 +288,7 @@ public class StrategyPositionManagerTests
 		buy2.State = OrderStates.Done;
 		// keep remaining balance 5 to indicate cancelled remainder
 		buy2.Balance = 5m;
-		mgr.ProcessOrder(buy2);
+		mgr.ProcessOrder(buy2).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		lastPos.BlockedValue.AssertEqual(14m); // (7 buy1) + (7 sell)
 		lastPos.BuyOrdersCount.AssertEqual(1);
@@ -298,7 +298,7 @@ public class StrategyPositionManagerTests
 		sell.State = OrderStates.Done;
 		// keep remaining balance 7 to indicate cancelled remainder
 		sell.Balance = 7m;
-		mgr.ProcessOrder(sell);
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		lastPos.BlockedValue.AssertEqual(7m); // Only buy1 remains
 		lastPos.BuyOrdersCount.AssertEqual(1);
@@ -316,7 +316,7 @@ public class StrategyPositionManagerTests
 		buy.Balance = 0m;
 		buy.AveragePrice = 100m;
 		buy.State = OrderStates.Done;
-		mgr.ProcessOrder(buy);
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		AssertCalcFieldsNonNull(lastPos);
 		lastPos.CurrentPrice.AssertNull(); // No current price yet
@@ -361,7 +361,7 @@ public class StrategyPositionManagerTests
 			State = OrderStates.Done,
 			TransactionId = ++_tx,
 		};
-		mgr.ProcessOrder(order1);
+		mgr.ProcessOrder(order1).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		// Create position for SEC2/PF1 (Done)
 		var order2 = new Order
@@ -377,7 +377,7 @@ public class StrategyPositionManagerTests
 			State = OrderStates.Done,
 			TransactionId = ++_tx,
 		};
-		mgr.ProcessOrder(order2);
+		mgr.ProcessOrder(order2).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		// Create position for SEC1/PF2 (Done)
 		var order3 = new Order
@@ -393,7 +393,7 @@ public class StrategyPositionManagerTests
 			State = OrderStates.Done,
 			TransactionId = ++_tx,
 		};
-		mgr.ProcessOrder(order3);
+		mgr.ProcessOrder(order3).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		mgr.Positions.Length.AssertEqual(3);
 
@@ -443,7 +443,7 @@ public class StrategyPositionManagerTests
 		order.Balance = 0m;
 		order.AveragePrice = 100m;
 		order.State = OrderStates.Done;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		mgr.Positions.Length.AssertEqual(1);
 		mgr.TryGetPosition(sec, pf).AssertNotNull();
@@ -486,7 +486,7 @@ public class StrategyPositionManagerTests
 		order.AveragePrice = 100m;
 		order.Commission = null; // No commission
 		order.State = OrderStates.Done;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		(lastPos.Commission ?? 0m).AssertEqual(0m);
 		AssertCalcFieldsNonNull(lastPos);
@@ -506,7 +506,7 @@ public class StrategyPositionManagerTests
 			State = OrderStates.Done,
 			TransactionId = ++_tx,
 		};
-		mgr.ProcessOrder(sell);
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		(lastPos.Commission ?? 0m).AssertEqual(1.5m);
 		AssertCalcFieldsNonNull(lastPos);
@@ -523,7 +523,7 @@ public class StrategyPositionManagerTests
 		order.Balance = 0m;
 		order.AveragePrice = null; // Null price
 		order.State = OrderStates.Done;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		lastPos.CurrentValue.AssertEqual(10m);
 		(lastPos.AveragePrice ?? 0m).AssertEqual(0m); // Should default to 0
@@ -542,7 +542,7 @@ public class StrategyPositionManagerTests
 		order.Balance = 0m;
 		order.AveragePrice = 100m;
 		order.State = OrderStates.Done;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		lastPos.StrategyId.AssertEqual(strategyId);
 		AssertCalcFieldsNonNull(lastPos);
@@ -559,12 +559,12 @@ public class StrategyPositionManagerTests
 
 		// Pending order - ignored (no exchange ack yet)
 		order.State = OrderStates.Pending;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.InvalidStatus);
 		lastPos.AssertNull();
 
 		// Active order
 		order.State = OrderStates.Active;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 		lastPos.AssertNotNull();
 		lastPos.BlockedValue.AssertEqual(10m);
 		AssertCalcFieldsNonNull(lastPos);
@@ -573,7 +573,7 @@ public class StrategyPositionManagerTests
 		order.Balance = 6m;
 		order.AveragePrice = 100m;
 		order.State = OrderStates.Active;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 		lastPos.BlockedValue.AssertEqual(6m);
 		lastPos.CurrentValue.AssertEqual(4m);
 		AssertCalcFieldsNonNull(lastPos);
@@ -582,7 +582,7 @@ public class StrategyPositionManagerTests
 		order.State = OrderStates.Done;
 		order.Balance = 0m;
 		order.AveragePrice = 101m;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 		lastPos.BlockedValue.AssertEqual(0m);
 		lastPos.CurrentValue.AssertEqual(10m);
 		AssertCalcFieldsNonNull(lastPos);
@@ -599,7 +599,7 @@ public class StrategyPositionManagerTests
 		order.Balance = 5m;
 		order.AveragePrice = 100m;
 		order.State = OrderStates.Active;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		lastPos.CurrentValue.AssertEqual(5m);
 		AssertCalcFieldsNonNull(lastPos);
@@ -645,7 +645,7 @@ public class StrategyPositionManagerTests
 			State = OrderStates.Done,
 			TransactionId = ++_tx,
 		};
-		mgr.ProcessOrder(order1);
+		mgr.ProcessOrder(order1).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		var order2 = new Order
 		{
@@ -660,7 +660,7 @@ public class StrategyPositionManagerTests
 			State = OrderStates.Done,
 			TransactionId = ++_tx,
 		};
-		mgr.ProcessOrder(order2);
+		mgr.ProcessOrder(order2).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		positions.Clear();
 
@@ -690,11 +690,11 @@ public class StrategyPositionManagerTests
 		var (order, _, _) = CreateOrder(Sides.Buy, 10m);
 
 		order.State = OrderStates.None;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.InvalidStatus);
 		last.AssertNull();
 
 		order.State = OrderStates.Failed;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.InvalidStatus);
 		last.AssertNull();
 	}
 
@@ -722,7 +722,7 @@ public class StrategyPositionManagerTests
 		order.AveragePrice = 100m;
 		order.LocalTime = lt;
 		order.ServerTime = st;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		last.LocalTime.AssertEqual(lt);
 		last.LastChangeTime.AssertEqual(st);
@@ -744,7 +744,7 @@ public class StrategyPositionManagerTests
 		order.State = OrderStates.Done;
 		order.Balance = 0m;
 		order.AveragePrice = 100m;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		last.CurrentPrice.AssertEqual(500m); // 10 * 50
 		AssertCalcFieldsNonNull(last);
@@ -759,19 +759,19 @@ public class StrategyPositionManagerTests
 		var (order, _, _) = CreateOrder(Sides.Buy, 10m);
 
 		order.State = OrderStates.Active;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 		last.BlockedValue.AssertEqual(10m);
 
 		// cancel (Done + Balance>0)
 		order.State = OrderStates.Done;
 		order.Balance = 10m;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 		last.BlockedValue.AssertEqual(0m);
 		last.BuyOrdersCount.AssertEqual(0);
 
 		// re-activate
 		order.State = OrderStates.Active;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 		last.BlockedValue.AssertEqual(10m);
 		last.BuyOrdersCount.AssertEqual(1);
 	}
@@ -789,7 +789,7 @@ public class StrategyPositionManagerTests
 		order.Balance = 6m;
 		order.AveragePrice = 100m;
 		order.Commission = 1.0m;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 		(last.Commission ?? 0m).AssertEqual(1.0m);
 		AssertCalcFieldsNonNull(last);
 
@@ -797,7 +797,7 @@ public class StrategyPositionManagerTests
 		order.Balance = 2m; // matched 8 total
 		order.AveragePrice = 105m;
 		order.Commission = 0.8m; // cumulative decreased => delta -0.2
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 		Math.Round(last.Commission ?? 0m, 5).AssertEqual(0.8m);
 		AssertCalcFieldsNonNull(last);
 	}
@@ -869,7 +869,7 @@ public class StrategyPositionManagerTests
 			ServerTime = DateTimeOffset.Now,
 			TransactionId = ++_tx,
 		};
-		mgr.ProcessOrder(order1);
+		mgr.ProcessOrder(order1).AssertEqual(StrategyPositionManager.OrderResults.OK);
 		last.BlockedValue.AssertEqual(10m);
 		last.BuyOrdersCount.AssertEqual(1);
 
@@ -887,7 +887,7 @@ public class StrategyPositionManagerTests
 			ServerTime = DateTimeOffset.Now,
 			TransactionId = order1.TransactionId, // same id
 		};
-		mgr.ProcessOrder(order1b);
+		mgr.ProcessOrder(order1b).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		// aggregates updated by diff (10 -> 6)
 		last.BlockedValue.AssertEqual(6m);
@@ -909,7 +909,7 @@ public class StrategyPositionManagerTests
 		// first snapshot: matched 3
 		order.Balance = 7m;
 		order.AveragePrice = 100m;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 		last.CurrentValue.AssertEqual(3m);
 
 		// new instance but same tx id: matched 8 total
@@ -926,7 +926,7 @@ public class StrategyPositionManagerTests
 			ServerTime = DateTimeOffset.Now,
 			TransactionId = order.TransactionId,
 		};
-		mgr.ProcessOrder(order2);
+		mgr.ProcessOrder(order2).AssertEqual(StrategyPositionManager.OrderResults.OK);
 		last.CurrentValue.AssertEqual(8m);
 	}
 
@@ -942,7 +942,7 @@ public class StrategyPositionManagerTests
 		order.Balance = 6m; // matched 4
 		order.AveragePrice = 100m;
 		order.Commission = 1.0m;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		(last.Commission ?? 0m).AssertEqual(1.0m);
 
@@ -951,7 +951,7 @@ public class StrategyPositionManagerTests
 		order.Balance = 6m; // matched stays 4
 		order.AveragePrice = 100m;
 		order.Commission = 0.8m; // corrected cumulative commission
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		// Expected: commission reflects correction even without new executions
 		(last.Commission ?? 0m).AssertEqual(0.8m);
@@ -966,13 +966,13 @@ public class StrategyPositionManagerTests
 		order.State = OrderStates.Active;
 		order.Balance = 7m; // matched 3
 		order.AveragePrice = 100m;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		mgr.TrackedOrderExecInfosCount.AssertEqual(1);
 
 		order.State = OrderStates.Done; // finish
 		order.Balance = 0m;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		mgr.TrackedOrderExecInfosCount.AssertEqual(0);
 	}
@@ -983,7 +983,7 @@ public class StrategyPositionManagerTests
 		var mgr = new StrategyPositionManager(() => "CLN_AGG");
 		var (order, _, _) = CreateOrder(Sides.Buy, 5m);
 		order.State = OrderStates.Active;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		mgr.TrackedAggsCount.AssertEqual(1);
 		mgr.TrackedOrderTracksCount.AssertEqual(1);
@@ -991,7 +991,7 @@ public class StrategyPositionManagerTests
 		// cancel active (Done + balance>0 means cancellation path used in tests)
 		order.State = OrderStates.Done;
 		order.Balance = 5m;
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		// after cleanup, no tracks and empty aggs removed
 		mgr.TrackedOrderTracksCount.AssertEqual(0);
@@ -1011,7 +1011,7 @@ public class StrategyPositionManagerTests
 		order.Balance = 0m;
 		order.AveragePrice = 123m;
 		order.Price = 111m; // should be ignored because AveragePrice exists
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		last.AveragePrice.AssertEqual(123m);
 	}
@@ -1029,7 +1029,7 @@ public class StrategyPositionManagerTests
 		order.AveragePrice = null; // no avg
 		order.Type = OrderTypes.Limit;
 		order.Price = 77.77m; // fallback to order price
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		last.AveragePrice.AssertEqual(77.77m);
 	}
@@ -1050,7 +1050,7 @@ public class StrategyPositionManagerTests
 		var now = DateTimeOffset.Now;
 		mgr.UpdateCurrentPrice(sec.ToSecurityId(), 10.5m, now, now);
 
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		last.AveragePrice.AssertEqual(10.5m);
 		last.CurrentValue.AssertEqual(2m);
@@ -1070,7 +1070,7 @@ public class StrategyPositionManagerTests
 		order.AveragePrice = null; // no avg
 		order.Type = OrderTypes.Market;
 
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.NoMarketPrice);
 
 		// No position should be created since there is no way to determine exec price
 		events.AssertEqual(0);
@@ -1093,7 +1093,7 @@ public class StrategyPositionManagerTests
 		var now = DateTimeOffset.Now;
 		mgr.UpdateCurrentPrice(sec.ToSecurityId(), 20m, now, now);
 
-		mgr.ProcessOrder(order);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		last.AveragePrice.AssertEqual(9.99m);
 	}
