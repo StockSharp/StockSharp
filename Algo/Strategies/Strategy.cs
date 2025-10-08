@@ -2172,33 +2172,30 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if (!CanProcess(subscription) || !_ordersInfo.ContainsKey(trade.Order) || !TryAddMyTrade(trade))
 			return;
 
-		TryInvoke(() =>
+		OwnTradeReceived?.Invoke(subscription, trade);
+
+		if (subscription == OrderLookup)
 		{
-			OwnTradeReceived?.Invoke(subscription, trade);
+			OnOwnTradeReceived(trade);
+			_drawingTrades?.Add(trade);
+		}
 
-			if (subscription == OrderLookup)
-			{
-				OnOwnTradeReceived(trade);
-				_drawingTrades?.Add(trade);
-			}
+		if (_protectiveController is null)
+			return;
 
-			if (_protectiveController is null)
-				return;
+		var security = trade.Order.Security;
+		var portfolio = trade.Order.Portfolio;
 
-			var security = trade.Order.Security;
-			var portfolio = trade.Order.Portfolio;
+		_posController ??= _protectiveController.GetController(
+			security.ToSecurityId(),
+			portfolio.Name,
+			new LocalProtectiveBehaviourFactory(security.PriceStep, security.Decimals),
+			_takeProfit ?? new(), _stopLoss ?? new(), _isStopTrailing, _takeTimeout, _stopTimeout, _protectiveUseMarketOrders);
 
-			_posController ??= _protectiveController.GetController(
-				security.ToSecurityId(),
-				portfolio.Name,
-				new LocalProtectiveBehaviourFactory(security.PriceStep, security.Decimals),
-				_takeProfit ?? new(), _stopLoss ?? new(), _isStopTrailing, _takeTimeout, _stopTimeout, _protectiveUseMarketOrders);
+		var info = _posController?.Update(trade.Trade.Price, trade.GetPosition(), trade.Trade.ServerTime);
 
-			var info = _posController?.Update(trade.Trade.Price, trade.GetPosition(), trade.Trade.ServerTime);
-
-			if (info is not null)
-				ActiveProtection(info.Value);
-		});
+		if (info is not null)
+			ActiveProtection(info.Value);
 	}
 
 	/// <summary>
@@ -2222,23 +2219,20 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if (!_ordersInfo.ContainsKey(order) && CanAttach(order))
 			AttachOrder(order, true);
 		else if (_ordersInfo.ContainsKey(order))
-			TryInvoke(() => ProcessOrder(order, true));
+			ProcessOrder(order, true);
 
-		TryInvoke(() =>
+		OrderReceived?.Invoke(subscription, order);
+
+		var res = _posManager.ProcessOrder(order);
+
+		if (res != StrategyPositionManager.OrderResults.OK)
+			LogWarning("Order {0} pos manager: {1}", order.TransactionId, res);
+
+		if (subscription == OrderLookup)
 		{
-			OrderReceived?.Invoke(subscription, order);
-
-			var res = _posManager.ProcessOrder(order);
-
-			if (res != StrategyPositionManager.OrderResults.OK)
-				LogWarning("Order {0} pos manager: {1}", order.TransactionId, res);
-
-			if (subscription == OrderLookup)
-			{
-				OnOrderReceived(order);
-				_drawingOrders?.Add(order);
-			}
-		});
+			OnOrderReceived(order);
+			_drawingOrders?.Add(order);
+		}
 	}
 
 	/// <summary>
@@ -2366,23 +2360,16 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		trade.Position ??= GetPositionValue(tradeSec, order.Portfolio);
 
-		TryInvoke(() => NewMyTrade?.Invoke(trade));
+		NewMyTrade?.Invoke(trade);
 
-		TryInvoke(() =>
-		{
-			if (isComChanged)
-				RaiseCommissionChanged();
-		});
-		TryInvoke(() =>
-		{
-			if (pnLChangeTime is not null)
-				RaisePnLChanged(pnLChangeTime.Value);
-		});
-		TryInvoke(() =>
-		{
-			if (isSlipChanged)
-				RaiseSlippageChanged();
-		});
+		if (isComChanged)
+			RaiseCommissionChanged();
+
+		if (pnLChangeTime is not null)
+			RaisePnLChanged(pnLChangeTime.Value);
+
+		if (isSlipChanged)
+			RaiseSlippageChanged();
 
 		ProcessRisk(() => execMsg);
 
@@ -2656,12 +2643,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// </summary>
 	[Browsable(false)]
 	public IPortfolioProvider PortfolioProvider { get; set; }
-
-	private void TryInvoke(Action handler)
-	{
-		if (!IsDisposeStarted)
-			handler();
-	}
 
 	private RiskActions? ProcessRisk(Func<Message> getMessage)
 	{
