@@ -234,7 +234,7 @@ public class DiagramElementParam<T> : NotifiableObject, IDiagramElementParam
 
 #pragma warning disable CS0618 // Type or member is obsolete
 					if (v is CandleSeries cs && typeof(T) == typeof(DataType))
-						v = cs.ToDataType();
+						v = DataType.Create(typeof(TimeFrameCandleMessage), cs.Arg);
 #pragma warning restore CS0618 // Type or member is obsolete
 
 					Value = (T)v;

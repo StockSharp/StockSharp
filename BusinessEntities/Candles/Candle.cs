@@ -213,7 +213,7 @@ public abstract class Candle : Cloneable<Candle>, ICandleMessage
 				var arg = Arg;
 
 				if (!arg.IsNull(true))
-					_dataType = DataType.Create(GetType().ToCandleMessageType(), arg);
+					_dataType = DataType.Create(typeof(TimeFrameCandleMessage), arg);
 			}
 
 			return _dataType;
