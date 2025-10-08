@@ -483,12 +483,10 @@ public class HistoryMessageAdapter : MessageAdapter
 				}
 
 				var historySource = GetHistorySource();
-				var candleType = dataType.MessageType;
-				var arg = message.GetArg();
 
 				AddStorage(historySource == null
-						? StorageRegistry.GetCandleMessageStorage(candleType, securityId, arg, Drive, StorageFormat)
-						: new InMemoryMarketDataStorage<CandleMessage>(securityId, arg, historySource, candleType),
+						? StorageRegistry.GetCandleMessageStorage(securityId, dataType, Drive, StorageFormat)
+						: new InMemoryMarketDataStorage<CandleMessage>(securityId, dataType.Arg, historySource, dataType.MessageType),
 					transId);
 			}
 			else

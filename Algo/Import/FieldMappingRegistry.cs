@@ -19,9 +19,8 @@ public static class FieldMappingRegistry
 		string timeDescr() => LocalizedStrings.TimeDescription;
 
 		var fields = new List<FieldMapping>();
-		var msgType = dataType.MessageType;
 
-		if (msgType == typeof(SecurityMessage))
+		if (dataType == DataType.Securities)
 		{
 			fields.Add(new FieldMapping<SecurityMessage, string>(GetSecurityCodeField(nameof(SecurityMessage.SecurityId)), () => LocalizedStrings.Security, secCodeDescr, SetSecCode) { IsRequired = true });
 			fields.Add(new FieldMapping<SecurityMessage, string>(GetBoardCodeField(nameof(SecurityMessage.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
@@ -68,90 +67,76 @@ public static class FieldMappingRegistry
 				i.AdapterId = adapterId;
 			}) { IsAdapter = true });
 		}
-		else if (msgType == typeof(ExecutionMessage))
+		else if (dataType == DataType.Ticks)
 		{
-			switch (dataType.Arg.To<ExecutionTypes>())
-			{
-				case ExecutionTypes.Tick:
-				{
-					fields.Add(new FieldMapping<ExecutionMessage, string>(GetSecurityCodeField(nameof(ExecutionMessage.SecurityId)), () => LocalizedStrings.Security, secCodeDescr, SetSecCode) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, string>(GetBoardCodeField(nameof(ExecutionMessage.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, string>(GetSecurityCodeField(nameof(ExecutionMessage.SecurityId)), () => LocalizedStrings.Security, secCodeDescr, SetSecCode) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, string>(GetBoardCodeField(nameof(ExecutionMessage.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
 
-					fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), () => LocalizedStrings.Id, () => LocalizedStrings.Id, (i, v) => i.TradeId = v));
-					fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.TradeStringId), () => LocalizedStrings.StringId, () => LocalizedStrings.StringId, (i, v) => i.TradeStringId = v));
-					fields.Add(new FieldMapping<ExecutionMessage, DateTimeOffset>(GetDateField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, TimeSpan>(GetTimeOfDayField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
-					fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradePrice), () => LocalizedStrings.Price, () => LocalizedStrings.Price, (i, v) => i.TradePrice = v) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradeVolume), () => LocalizedStrings.Volume, () => LocalizedStrings.Volume, (i, v) => i.TradeVolume = v) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, Sides>(nameof(ExecutionMessage.OriginSide), () => LocalizedStrings.Initiator, () => LocalizedStrings.DirectionDesc, (i, v) => i.OriginSide = v));
-					fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OpenInterest), () => LocalizedStrings.OpenInterest, () => LocalizedStrings.OpenInterestDesc, (i, v) => i.OpenInterest = v));
-					fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsSystem), () => LocalizedStrings.System, () => LocalizedStrings.IsSystemTrade, (i, v) => i.IsSystem = v));
-					fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsUpTick), () => LocalizedStrings.UpTrend, () => LocalizedStrings.UpTrendDesc, (i, v) => i.IsUpTick = v));
-					fields.Add(new FieldMapping<ExecutionMessage, CurrencyTypes>(nameof(ExecutionMessage.Currency), () => LocalizedStrings.Currency, () => LocalizedStrings.CurrencyDesc, (i, v) => i.Currency = v));
-					fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.OrderBuyId), () => LocalizedStrings.Buy, () => LocalizedStrings.OrderBuyId, (i, v) => i.OrderBuyId = v));
-					fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.OrderSellId), () => LocalizedStrings.Sell, () => LocalizedStrings.OrderSellId, (i, v) => i.OrderSellId = v));
-
-					break;
-				}
-				case ExecutionTypes.OrderLog:
-				{
-					fields.Add(new FieldMapping<ExecutionMessage, string>(GetSecurityCodeField(nameof(ExecutionMessage.SecurityId)), () => LocalizedStrings.Security, secCodeDescr, SetSecCode) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, string>(GetBoardCodeField(nameof(ExecutionMessage.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
-
-					fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.OrderId), () => LocalizedStrings.Id, () => LocalizedStrings.OrderId, (i, v) => i.OrderId = v) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, DateTimeOffset>(GetDateField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, TimeSpan>(GetTimeOfDayField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
-					fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OrderPrice), () => LocalizedStrings.Price, () => LocalizedStrings.OrderPrice, (i, v) => i.OrderPrice = v) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OrderVolume), () => LocalizedStrings.Volume, () => LocalizedStrings.OrderVolume, (i, v) => i.OrderVolume = v) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, Sides>(nameof(ExecutionMessage.Side), () => LocalizedStrings.Direction, () => LocalizedStrings.OrderSide, (i, v) => i.Side = v) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsSystem), () => LocalizedStrings.System, () => LocalizedStrings.IsSystemTrade, (i, v) => i.IsSystem = v));
-					fields.Add(new FieldMapping<ExecutionMessage, OrderStates>(nameof(ExecutionMessage.OrderState), () => LocalizedStrings.Action, () => LocalizedStrings.OrderStateDesc, (i, v) => i.OrderState = v) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, TimeInForce>(nameof(ExecutionMessage.TimeInForce), () => LocalizedStrings.TimeInForce, () => LocalizedStrings.ExecutionConditionDesc, (i, v) => i.TimeInForce = v) { IsRequired = false });
-					fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), () => LocalizedStrings.IdTrade, () => LocalizedStrings.TradeId, (i, v) => i.TradeId = v) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradePrice), () => LocalizedStrings.TradePrice, () => LocalizedStrings.TradePrice, (i, v) => i.TradePrice = v) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OpenInterest), () => LocalizedStrings.OpenInterest, () => LocalizedStrings.OpenInterestDesc, (i, v) => i.OpenInterest = v));
-
-					break;
-				}
-				case ExecutionTypes.Transaction:
-				{
-					fields.Add(new FieldMapping<ExecutionMessage, string>(GetSecurityCodeField(nameof(ExecutionMessage.SecurityId)), () => LocalizedStrings.Security, secCodeDescr, SetSecCode) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, string>(GetBoardCodeField(nameof(ExecutionMessage.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, DateTimeOffset>(GetDateField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, TimeSpan>(GetTimeOfDayField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
-					fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.PortfolioName), () => LocalizedStrings.Portfolio, () => LocalizedStrings.PortfolioName, (i, v) => i.PortfolioName = v) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TransactionId), () => LocalizedStrings.TransactionId, () => LocalizedStrings.TransactionId, (i, v) => i.TransactionId = v));
-					fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.OrderId), () => LocalizedStrings.Id, () => LocalizedStrings.OrderId, (i, v) => i.OrderId = v));
-					fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OrderPrice), () => LocalizedStrings.Price, () => LocalizedStrings.OrderPrice, (i, v) => { i.OrderPrice = v; i.HasOrderInfo = true; }) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OrderVolume), () => LocalizedStrings.Volume, () => LocalizedStrings.OrderVolume, (i, v) => i.OrderVolume = v) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.Balance), () => LocalizedStrings.Balance, () => LocalizedStrings.OrderBalance, (i, v) => i.Balance = v) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, Sides>(nameof(ExecutionMessage.Side), () => LocalizedStrings.Initiator, () => LocalizedStrings.OrderSide, (i, v) => i.Side = v));
-					fields.Add(new FieldMapping<ExecutionMessage, OrderTypes>(nameof(ExecutionMessage.OrderType), () => LocalizedStrings.OrderType, () => LocalizedStrings.OrderTypeDesc, (i, v) => i.OrderType = v) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, OrderStates>(nameof(ExecutionMessage.OrderState), () => LocalizedStrings.State, () => LocalizedStrings.OrderStateDesc, (i, v) => i.OrderState = v) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, TimeInForce>(nameof(ExecutionMessage.TimeInForce), () => LocalizedStrings.TimeInForce, () => LocalizedStrings.ExecutionConditionDesc, (i, v) => i.TimeInForce = v) { IsRequired = false });
-					fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), () => LocalizedStrings.IdTrade, () => LocalizedStrings.TradeId, (i, v) => i.TradeId = v) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.UserOrderId), () => LocalizedStrings.UserId, () => LocalizedStrings.UserOrderId, (i, v) => i.UserOrderId = v) { IsRequired = false });
-					fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.StrategyId), () => LocalizedStrings.Strategy, () => LocalizedStrings.Strategy, (i, v) => i.StrategyId = v) { IsRequired = false });
-					fields.Add(new FieldMapping<ExecutionMessage, CurrencyTypes>(nameof(ExecutionMessage.Currency), () => LocalizedStrings.Currency, () => LocalizedStrings.CurrencyDesc, (i, v) => i.Currency = v) { IsRequired = false });
-					fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsMarketMaker), () => LocalizedStrings.MarketMaker, () => LocalizedStrings.MarketMakerOrder, (i, v) => i.IsMarketMaker = v) { IsRequired = false });
-					fields.Add(new FieldMapping<ExecutionMessage, MarginModes>(nameof(ExecutionMessage.MarginMode), () => LocalizedStrings.Margin, () => LocalizedStrings.MarginMode, (i, v) => i.MarginMode = v) { IsRequired = false });
-					fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsManual), () => LocalizedStrings.Manual, () => LocalizedStrings.IsOrderManual, (i, v) => i.IsManual = v) { IsRequired = false });
-					fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.MinVolume), () => LocalizedStrings.MinVolume, () => LocalizedStrings.MinVolumeDesc, (i, v) => i.MinVolume = v) { IsRequired = false });
-					fields.Add(new FieldMapping<ExecutionMessage, OrderPositionEffects>(nameof(ExecutionMessage.PositionEffect), () => LocalizedStrings.PositionEffect, () => LocalizedStrings.PositionEffectDesc, (i, v) => i.PositionEffect = v) { IsRequired = false });
-					fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.PostOnly), () => LocalizedStrings.PostOnly, () => LocalizedStrings.PostOnlyOrder, (i, v) => i.PostOnly = v) { IsRequired = false });
-					fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.Initiator), () => LocalizedStrings.Initiator, () => LocalizedStrings.InitiatorTrade, (i, v) => i.Initiator = v) { IsRequired = false });
-					fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.SeqNum), () => LocalizedStrings.SeqNum, () => LocalizedStrings.SequenceNumber, (i, v) => i.SeqNum = v) { IsRequired = false });
-					fields.Add(new FieldMapping<ExecutionMessage, int>(nameof(ExecutionMessage.Leverage), () => LocalizedStrings.Leverage, () => LocalizedStrings.MarginLeverage, (i, v) => i.Leverage = v) { IsRequired = false });
-					fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradePrice), () => LocalizedStrings.Price, () => LocalizedStrings.Price, (i, v) => i.TradePrice = v) { IsRequired = true });
-					fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradeVolume), () => LocalizedStrings.Volume, () => LocalizedStrings.Volume, (i, v) => i.TradeVolume = v) { IsRequired = true });
-
-					break;
-				}
-				default:
-					throw new ArgumentOutOfRangeException(nameof(dataType), msgType, LocalizedStrings.InvalidValue);
-			}
+			fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), () => LocalizedStrings.Id, () => LocalizedStrings.Id, (i, v) => i.TradeId = v));
+			fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.TradeStringId), () => LocalizedStrings.StringId, () => LocalizedStrings.StringId, (i, v) => i.TradeStringId = v));
+			fields.Add(new FieldMapping<ExecutionMessage, DateTimeOffset>(GetDateField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, TimeSpan>(GetTimeOfDayField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
+			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradePrice), () => LocalizedStrings.Price, () => LocalizedStrings.Price, (i, v) => i.TradePrice = v) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradeVolume), () => LocalizedStrings.Volume, () => LocalizedStrings.Volume, (i, v) => i.TradeVolume = v) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, Sides>(nameof(ExecutionMessage.OriginSide), () => LocalizedStrings.Initiator, () => LocalizedStrings.DirectionDesc, (i, v) => i.OriginSide = v));
+			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OpenInterest), () => LocalizedStrings.OpenInterest, () => LocalizedStrings.OpenInterestDesc, (i, v) => i.OpenInterest = v));
+			fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsSystem), () => LocalizedStrings.System, () => LocalizedStrings.IsSystemTrade, (i, v) => i.IsSystem = v));
+			fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsUpTick), () => LocalizedStrings.UpTrend, () => LocalizedStrings.UpTrendDesc, (i, v) => i.IsUpTick = v));
+			fields.Add(new FieldMapping<ExecutionMessage, CurrencyTypes>(nameof(ExecutionMessage.Currency), () => LocalizedStrings.Currency, () => LocalizedStrings.CurrencyDesc, (i, v) => i.Currency = v));
+			fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.OrderBuyId), () => LocalizedStrings.Buy, () => LocalizedStrings.OrderBuyId, (i, v) => i.OrderBuyId = v));
+			fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.OrderSellId), () => LocalizedStrings.Sell, () => LocalizedStrings.OrderSellId, (i, v) => i.OrderSellId = v));
 		}
-		else if (msgType == typeof(CandleMessage) || msgType.IsCandleMessage())
+		else if (dataType == DataType.OrderLog)
+		{
+			fields.Add(new FieldMapping<ExecutionMessage, string>(GetSecurityCodeField(nameof(ExecutionMessage.SecurityId)), () => LocalizedStrings.Security, secCodeDescr, SetSecCode) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, string>(GetBoardCodeField(nameof(ExecutionMessage.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
+
+			fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.OrderId), () => LocalizedStrings.Id, () => LocalizedStrings.OrderId, (i, v) => i.OrderId = v) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, DateTimeOffset>(GetDateField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, TimeSpan>(GetTimeOfDayField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
+			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OrderPrice), () => LocalizedStrings.Price, () => LocalizedStrings.OrderPrice, (i, v) => i.OrderPrice = v) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OrderVolume), () => LocalizedStrings.Volume, () => LocalizedStrings.OrderVolume, (i, v) => i.OrderVolume = v) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, Sides>(nameof(ExecutionMessage.Side), () => LocalizedStrings.Direction, () => LocalizedStrings.OrderSide, (i, v) => i.Side = v) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsSystem), () => LocalizedStrings.System, () => LocalizedStrings.IsSystemTrade, (i, v) => i.IsSystem = v));
+			fields.Add(new FieldMapping<ExecutionMessage, OrderStates>(nameof(ExecutionMessage.OrderState), () => LocalizedStrings.Action, () => LocalizedStrings.OrderStateDesc, (i, v) => i.OrderState = v) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, TimeInForce>(nameof(ExecutionMessage.TimeInForce), () => LocalizedStrings.TimeInForce, () => LocalizedStrings.ExecutionConditionDesc, (i, v) => i.TimeInForce = v) { IsRequired = false });
+			fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), () => LocalizedStrings.IdTrade, () => LocalizedStrings.TradeId, (i, v) => i.TradeId = v) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradePrice), () => LocalizedStrings.TradePrice, () => LocalizedStrings.TradePrice, (i, v) => i.TradePrice = v) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OpenInterest), () => LocalizedStrings.OpenInterest, () => LocalizedStrings.OpenInterestDesc, (i, v) => i.OpenInterest = v));
+		}
+		else if (dataType == DataType.Transactions)
+		{
+			fields.Add(new FieldMapping<ExecutionMessage, string>(GetSecurityCodeField(nameof(ExecutionMessage.SecurityId)), () => LocalizedStrings.Security, secCodeDescr, SetSecCode) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, string>(GetBoardCodeField(nameof(ExecutionMessage.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, DateTimeOffset>(GetDateField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, TimeSpan>(GetTimeOfDayField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
+			fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.PortfolioName), () => LocalizedStrings.Portfolio, () => LocalizedStrings.PortfolioName, (i, v) => i.PortfolioName = v) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TransactionId), () => LocalizedStrings.TransactionId, () => LocalizedStrings.TransactionId, (i, v) => i.TransactionId = v));
+			fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.OrderId), () => LocalizedStrings.Id, () => LocalizedStrings.OrderId, (i, v) => i.OrderId = v));
+			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OrderPrice), () => LocalizedStrings.Price, () => LocalizedStrings.OrderPrice, (i, v) => { i.OrderPrice = v; i.HasOrderInfo = true; }) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OrderVolume), () => LocalizedStrings.Volume, () => LocalizedStrings.OrderVolume, (i, v) => i.OrderVolume = v) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.Balance), () => LocalizedStrings.Balance, () => LocalizedStrings.OrderBalance, (i, v) => i.Balance = v) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, Sides>(nameof(ExecutionMessage.Side), () => LocalizedStrings.Initiator, () => LocalizedStrings.OrderSide, (i, v) => i.Side = v));
+			fields.Add(new FieldMapping<ExecutionMessage, OrderTypes>(nameof(ExecutionMessage.OrderType), () => LocalizedStrings.OrderType, () => LocalizedStrings.OrderTypeDesc, (i, v) => i.OrderType = v) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, OrderStates>(nameof(ExecutionMessage.OrderState), () => LocalizedStrings.State, () => LocalizedStrings.OrderStateDesc, (i, v) => i.OrderState = v) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, TimeInForce>(nameof(ExecutionMessage.TimeInForce), () => LocalizedStrings.TimeInForce, () => LocalizedStrings.ExecutionConditionDesc, (i, v) => i.TimeInForce = v) { IsRequired = false });
+			fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), () => LocalizedStrings.IdTrade, () => LocalizedStrings.TradeId, (i, v) => i.TradeId = v) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.UserOrderId), () => LocalizedStrings.UserId, () => LocalizedStrings.UserOrderId, (i, v) => i.UserOrderId = v) { IsRequired = false });
+			fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.StrategyId), () => LocalizedStrings.Strategy, () => LocalizedStrings.Strategy, (i, v) => i.StrategyId = v) { IsRequired = false });
+			fields.Add(new FieldMapping<ExecutionMessage, CurrencyTypes>(nameof(ExecutionMessage.Currency), () => LocalizedStrings.Currency, () => LocalizedStrings.CurrencyDesc, (i, v) => i.Currency = v) { IsRequired = false });
+			fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsMarketMaker), () => LocalizedStrings.MarketMaker, () => LocalizedStrings.MarketMakerOrder, (i, v) => i.IsMarketMaker = v) { IsRequired = false });
+			fields.Add(new FieldMapping<ExecutionMessage, MarginModes>(nameof(ExecutionMessage.MarginMode), () => LocalizedStrings.Margin, () => LocalizedStrings.MarginMode, (i, v) => i.MarginMode = v) { IsRequired = false });
+			fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsManual), () => LocalizedStrings.Manual, () => LocalizedStrings.IsOrderManual, (i, v) => i.IsManual = v) { IsRequired = false });
+			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.MinVolume), () => LocalizedStrings.MinVolume, () => LocalizedStrings.MinVolumeDesc, (i, v) => i.MinVolume = v) { IsRequired = false });
+			fields.Add(new FieldMapping<ExecutionMessage, OrderPositionEffects>(nameof(ExecutionMessage.PositionEffect), () => LocalizedStrings.PositionEffect, () => LocalizedStrings.PositionEffectDesc, (i, v) => i.PositionEffect = v) { IsRequired = false });
+			fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.PostOnly), () => LocalizedStrings.PostOnly, () => LocalizedStrings.PostOnlyOrder, (i, v) => i.PostOnly = v) { IsRequired = false });
+			fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.Initiator), () => LocalizedStrings.Initiator, () => LocalizedStrings.InitiatorTrade, (i, v) => i.Initiator = v) { IsRequired = false });
+			fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.SeqNum), () => LocalizedStrings.SeqNum, () => LocalizedStrings.SequenceNumber, (i, v) => i.SeqNum = v) { IsRequired = false });
+			fields.Add(new FieldMapping<ExecutionMessage, int>(nameof(ExecutionMessage.Leverage), () => LocalizedStrings.Leverage, () => LocalizedStrings.MarginLeverage, (i, v) => i.Leverage = v) { IsRequired = false });
+			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradePrice), () => LocalizedStrings.Price, () => LocalizedStrings.Price, (i, v) => i.TradePrice = v) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradeVolume), () => LocalizedStrings.Volume, () => LocalizedStrings.Volume, (i, v) => i.TradeVolume = v) { IsRequired = true });
+		}
+		else if (dataType.IsCandles)
 		{
 			fields.Add(new FieldMapping<CandleMessage, string>(GetSecurityCodeField(nameof(CandleMessage.SecurityId)), () => LocalizedStrings.Security, secCodeDescr, SetSecCode) { IsRequired = true });
 			fields.Add(new FieldMapping<CandleMessage, string>(GetBoardCodeField(nameof(CandleMessage.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
@@ -181,7 +166,7 @@ public static class FieldMappingRegistry
 			fields.Add(new FieldMapping<CandleMessage, int>(nameof(CandleMessage.DownTicks), () => LocalizedStrings.TickDown, () => LocalizedStrings.TickDownCount, (i, v) => i.DownTicks = v) { IsRequired = false });
 			fields.Add(new FieldMapping<CandleMessage, int>(nameof(CandleMessage.TotalTicks), () => LocalizedStrings.Ticks, () => LocalizedStrings.TickCount, (i, v) => i.TotalTicks = v) { IsRequired = false });
 		}
-		else if (msgType == typeof(QuoteChangeMessage))
+		else if (dataType == DataType.MarketDepth)
 		{
 			fields.Add(new FieldMapping<TimeQuoteChange, string>(GetSecurityCodeField(nameof(TimeQuoteChange.SecurityId)), () => LocalizedStrings.Security, secCodeDescr, SetSecCode) { IsRequired = true });
 			fields.Add(new FieldMapping<TimeQuoteChange, string>(GetBoardCodeField(nameof(TimeQuoteChange.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
@@ -232,7 +217,7 @@ public static class FieldMappingRegistry
 				i.Quote = q;
 			}));
 		}
-		else if (msgType == typeof(Level1ChangeMessage))
+		else if (dataType == DataType.Level1)
 		{
 			fields.Add(new FieldMapping<Level1ChangeMessage, string>(GetSecurityCodeField(nameof(Level1ChangeMessage.SecurityId)), () => LocalizedStrings.Security, secCodeDescr, SetSecCode) { IsRequired = true });
 			fields.Add(new FieldMapping<Level1ChangeMessage, string>(GetBoardCodeField(nameof(Level1ChangeMessage.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
@@ -253,7 +238,7 @@ public static class FieldMappingRegistry
 				}));
 			}
 		}
-		else if (msgType == typeof(PositionChangeMessage))
+		else if (dataType == DataType.PositionChanges)
 		{
 			fields.Add(new FieldMapping<PositionChangeMessage, string>(GetSecurityCodeField(nameof(PositionChangeMessage.SecurityId)), () => LocalizedStrings.Security, secCodeDescr, SetSecCode) { IsRequired = true });
 			fields.Add(new FieldMapping<PositionChangeMessage, string>(GetBoardCodeField(nameof(PositionChangeMessage.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
@@ -277,7 +262,7 @@ public static class FieldMappingRegistry
 				}));
 			}
 		}
-		else if (msgType == typeof(NewsMessage))
+		else if (dataType == DataType.News)
 		{
 			fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Id), () => LocalizedStrings.Id, () => LocalizedStrings.Id, (i, v) => i.Id = v) { IsRequired = true });
 			fields.Add(new FieldMapping<NewsMessage, string>(GetSecurityCodeField(nameof(NewsMessage.SecurityId)), () => LocalizedStrings.Security, secCodeDescr, (i, v) => { i.SecurityId = new SecurityId { SecurityCode = v }; }));
@@ -291,12 +276,12 @@ public static class FieldMappingRegistry
 			fields.Add(new FieldMapping<NewsMessage, NewsPriorities>(nameof(NewsMessage.Priority), () => LocalizedStrings.Priority, () => LocalizedStrings.NewsPriority, (i, v) => i.Priority = v));
 			fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Language), () => LocalizedStrings.Language, () => LocalizedStrings.Language, (i, v) => i.Language = v));
 		}
-		else if (msgType == typeof(BoardMessage))
+		else if (dataType == DataType.Board)
 		{
 			fields.Add(new FieldMapping<BoardMessage, string>(nameof(BoardMessage.Code), () => LocalizedStrings.Board, () => LocalizedStrings.BoardCode, (i, v) => i.Code = v) { IsRequired = true });
 			fields.Add(new FieldMapping<BoardMessage, string>(nameof(BoardMessage.ExchangeCode), () => LocalizedStrings.Exchange, () => LocalizedStrings.ExchangeBoardDesc, (i, v) => i.ExchangeCode = v) { IsRequired = true });
 		}
-		else if (msgType == typeof(BoardStateMessage))
+		else if (dataType == DataType.BoardState)
 		{
 			fields.Add(new FieldMapping<BoardStateMessage, DateTimeOffset>(GetDateField(nameof(BoardStateMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
 			fields.Add(new FieldMapping<BoardStateMessage, TimeSpan>(GetTimeOfDayField(nameof(BoardStateMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));

@@ -326,7 +326,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 			}
 			else
 			{
-				foreach (var candleMsg in storage.GetCandleMessageStorage(msgType, secId, dt.Arg, new LocalMarketDataDrive(path), format).Load())
+				foreach (var candleMsg in storage.GetCandleMessageStorage(secId, dt, new LocalMarketDataDrive(path), format).Load())
 				{
 					if(token.IsCancellationRequested)
 						break;

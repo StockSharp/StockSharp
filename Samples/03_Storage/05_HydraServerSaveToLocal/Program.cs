@@ -84,7 +84,7 @@ static class Program
 
 		foreach (var dataType in remoteDrive.GetAvailableDataTypes(secId, format))
 		{
-			var localStorage = storageRegistry.GetStorage(secId, dataType.MessageType, dataType.Arg, localDrive, format);
+			var localStorage = storageRegistry.GetStorage(secId, dataType, localDrive, format);
 			var remoteStorage = remoteDrive.GetStorageDrive(secId, dataType, format);
 
 			Console.WriteLine($"Remote {dataType}: {remoteStorage.Dates.FirstOrDefault()}-{remoteStorage.Dates.LastOrDefault()}");

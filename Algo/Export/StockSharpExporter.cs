@@ -43,7 +43,7 @@ public class StockSharpExporter(DataType dataType, Func<int, bool> isCancelled, 
 			{
 				var b = group.ToArray();
 
-				var storage = _storageRegistry.GetStorage(group.Key ?? default, DataType.MessageType, DataType.Arg, _drive, format);
+				var storage = _storageRegistry.GetStorage(group.Key ?? default, DataType, _drive, format);
 
 				if (!CanProcess(b.Length))
 					break;
