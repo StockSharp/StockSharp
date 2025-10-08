@@ -42,8 +42,12 @@ public class DataType : Equatable<DataType>, IPersistable
 	/// <returns>Data type info.</returns>
 	public DataType Immutable()
 	{
-		_immutable = true;
-		return this;
+		if (_immutable)
+			return this;
+
+		var clone = Clone();
+		clone._immutable = true;
+		return clone;
 	}
 
 	private void CheckImmutable()
