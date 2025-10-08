@@ -931,4 +931,31 @@ public class StrategyPositionManagerTests
 		mgr.ProcessOrder(order2);
 		last.CurrentValue.AssertEqual(8m);
 	}
+
+	[TestMethod]
+	public void CommissionCorrectionWithoutNewExecution()
+	{
+		var mgr = new StrategyPositionManager(() => "COMM_CORR");
+		Position last = null;
+		mgr.PositionProcessed += (p, _) => last = p;
+
+		var (order, _, _) = CreateOrder(Sides.Buy, 10m);
+		order.State = OrderStates.Active;
+		order.Balance = 6m; // matched 4
+		order.AveragePrice = 100m;
+		order.Commission = 1.0m;
+		mgr.ProcessOrder(order);
+
+		(last.Commission ?? 0m).AssertEqual(1.0m);
+
+		// Provider sends commission correction only (no new executions)
+		order.State = OrderStates.Active;
+		order.Balance = 6m; // matched stays 4
+		order.AveragePrice = 100m;
+		order.Commission = 0.8m; // corrected cumulative commission
+		mgr.ProcessOrder(order);
+
+		// Expected: commission reflects correction even without new executions
+		(last.Commission ?? 0m).AssertEqual(0.8m);
+	}
 }

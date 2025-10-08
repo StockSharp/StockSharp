@@ -277,12 +277,14 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 			if (deltaMatchedAbs < 0)
 				return; // inconsistent snapshot delivered out-of-order
 
+			// compute commission delta against last seen cumulative commission for this order
+			var deltaCommission = (commission ?? 0m) - execInfo.Commission;
+
 			if (deltaMatchedAbs > 0)
 			{
 				// reconstruct slice
 				var currentTotalCost = (tradePrice ?? 0m) * matchedAbs;
 				var deltaCost = currentTotalCost - execInfo.Cost;
-				var deltaCommission = (commission ?? 0m) - execInfo.Commission;
 
 				execInfo.MatchedVolume = matchedAbs;
 				execInfo.Cost = currentTotalCost;
@@ -335,6 +337,18 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 
 				position.LocalTime = order.LocalTime;
 				position.LastChangeTime = order.ServerTime;
+			}
+			else
+			{
+				// no new executions; still apply commission correction if provider adjusted cumulative commission
+				if (deltaCommission != 0)
+				{
+					execInfo.Commission += deltaCommission;
+					var posCommission = position.Commission ?? 0m;
+					position.Commission = posCommission + deltaCommission;
+					position.LocalTime = order.LocalTime;
+					position.LastChangeTime = order.ServerTime;
+				}
 			}
 
 			// update aggregates again in case balance changed after fill
