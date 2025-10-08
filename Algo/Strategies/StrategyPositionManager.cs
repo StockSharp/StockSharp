@@ -278,7 +278,6 @@ public class StrategyPositionManager(Func<string> strategyIdGetter) : BaseLogRec
 		Position position;
 		bool isNew;
 
-		var tradePrice = order.AveragePrice;
 		var commission = order.Commission;
 
 		lock (_lock)
@@ -307,12 +306,49 @@ public class StrategyPositionManager(Func<string> strategyIdGetter) : BaseLogRec
 
 			if (deltaMatchedAbs > 0)
 			{
+				// determine execution price according to priority:
+				// 1) AveragePrice
+				// 2) Price (for non-market orders)
+				// 3) Last instrument price for market orders
+				// If still unknown -> ignore this execution and log a warning
+				var effPrice = order.AveragePrice;
+				var cumulativeBased = true; // when true, use cumulative cost; otherwise use incremental cost
+
+				if (effPrice == null)
+				{
+					if (order.Type == OrderTypes.Market)
+					{
+						if (!_lastPrices.TryGetValue(order.Security.ToSecurityId(), out var lastPrice))
+						{
+							this.AddWarningLog("Cannot determine execution price for market order {0} - no last price. Ignored.", order.TransactionId);
+							return;
+						}
+
+						effPrice = lastPrice;
+						cumulativeBased = false; // last price may change between snapshots; use incremental cost to avoid skew
+					}
+					else
+					{
+						effPrice = order.Price;
+						cumulativeBased = true;
+					}
+				}
+
 				// reconstruct slice
-				var currentTotalCost = (tradePrice ?? 0m) * matchedAbs;
-				var deltaCost = currentTotalCost - execInfo.Cost;
+				decimal deltaCost;
+				if (cumulativeBased)
+				{
+					var currentTotalCost = effPrice.Value * matchedAbs;
+					deltaCost = currentTotalCost - execInfo.Cost;
+					execInfo.Cost = currentTotalCost;
+				}
+				else
+				{
+					deltaCost = effPrice.Value * deltaMatchedAbs;
+					execInfo.Cost += deltaCost;
+				}
 
 				execInfo.MatchedVolume = matchedAbs;
-				execInfo.Cost = currentTotalCost;
 				execInfo.Commission += deltaCommission;
 
 				var posQty = position.CurrentValue ?? 0m;
@@ -350,9 +386,9 @@ public class StrategyPositionManager(Func<string> strategyIdGetter) : BaseLogRec
 				position.Commission = posCommission + deltaCommission;
 
 				// Recompute position market value if we know last price for this security
-				if (_lastPrices.TryGetValue(order.Security.ToSecurityId(), out var lastPrice))
+				if (_lastPrices.TryGetValue(order.Security.ToSecurityId(), out var lastPrice2))
 				{
-					var value = newQty.Abs() * lastPrice;
+					var value = newQty.Abs() * lastPrice2;
 					position.CurrentPrice = value == 0 ? 0m : value;
 				}
 				else

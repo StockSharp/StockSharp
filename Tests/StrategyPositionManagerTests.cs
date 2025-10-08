@@ -995,4 +995,104 @@ public class StrategyPositionManagerTests
 		mgr.TrackedOrderTracksCount.AssertEqual(0);
 		mgr.TrackedAggsCount.AssertEqual(0);
 	}
+
+	// New tests for execution price selection logic
+	[TestMethod]
+	public void ExecPrice_AveragePrice_Preferred()
+	{
+		var mgr = new StrategyPositionManager(() => "PRICE_PREF");
+		Position last = null;
+		mgr.PositionProcessed += (p, _) => last = p;
+
+		var (order, _, _) = CreateOrder(Sides.Buy, 10m);
+		order.State = OrderStates.Done;
+		order.Balance = 0m;
+		order.AveragePrice = 123m;
+		order.Price = 111m; // should be ignored because AveragePrice exists
+		mgr.ProcessOrder(order);
+
+		last.AveragePrice.AssertEqual(123m);
+	}
+
+	[TestMethod]
+	public void ExecPrice_Fallback_To_OrderPrice_For_Limit()
+	{
+		var mgr = new StrategyPositionManager(() => "PRICE_FALLBACK");
+		Position last = null;
+		mgr.PositionProcessed += (p, _) => last = p;
+
+		var (order, _, _) = CreateOrder(Sides.Buy, 5m);
+		order.State = OrderStates.Done;
+		order.Balance = 0m;
+		order.AveragePrice = null; // no avg
+		order.Type = OrderTypes.Limit;
+		order.Price = 77.77m; // fallback to order price
+		mgr.ProcessOrder(order);
+
+		last.AveragePrice.AssertEqual(77.77m);
+	}
+
+	[TestMethod]
+	public void ExecPrice_Market_Uses_LastPrice_When_No_Average()
+	{
+		var mgr = new StrategyPositionManager(() => "PRICE_MARKET_LAST");
+		Position last = null;
+		mgr.PositionProcessed += (p, _) => last = p;
+
+		var (order, sec, _) = CreateOrder(Sides.Buy, 2m);
+		order.State = OrderStates.Done;
+		order.Balance = 0m;
+		order.AveragePrice = null; // no avg
+		order.Type = OrderTypes.Market;
+
+		var now = DateTimeOffset.Now;
+		mgr.UpdateCurrentPrice(sec.ToSecurityId(), 10.5m, now, now);
+
+		mgr.ProcessOrder(order);
+
+		last.AveragePrice.AssertEqual(10.5m);
+		last.CurrentValue.AssertEqual(2m);
+	}
+
+	[TestMethod]
+	public void ExecPrice_Market_Ignored_When_No_Average_And_No_Last()
+	{
+		var mgr = new StrategyPositionManager(() => "PRICE_MARKET_IGN");
+		Position last = null;
+		var events = 0;
+		mgr.PositionProcessed += (p, _) => { last = p; events++; };
+
+		var (order, _, _) = CreateOrder(Sides.Buy, 3m);
+		order.State = OrderStates.Done;
+		order.Balance = 0m;
+		order.AveragePrice = null; // no avg
+		order.Type = OrderTypes.Market;
+
+		mgr.ProcessOrder(order);
+
+		// No position should be created since there is no way to determine exec price
+		events.AssertEqual(0);
+		last.AssertNull();
+	}
+
+	[TestMethod]
+	public void ExecPrice_Market_Average_Takes_Priority_Over_Last()
+	{
+		var mgr = new StrategyPositionManager(() => "PRICE_MARKET_AVG");
+		Position last = null;
+		mgr.PositionProcessed += (p, _) => last = p;
+
+		var (order, sec, _) = CreateOrder(Sides.Buy, 1m);
+		order.State = OrderStates.Done;
+		order.Balance = 0m;
+		order.Type = OrderTypes.Market;
+		order.AveragePrice = 9.99m; // present -> should be used
+
+		var now = DateTimeOffset.Now;
+		mgr.UpdateCurrentPrice(sec.ToSecurityId(), 20m, now, now);
+
+		mgr.ProcessOrder(order);
+
+		last.AveragePrice.AssertEqual(9.99m);
+	}
 }
