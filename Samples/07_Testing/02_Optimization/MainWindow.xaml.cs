@@ -4,7 +4,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Media;
 using System.Collections.Generic;
 
 using Ecng.Xaml;
@@ -52,7 +51,9 @@ public partial class MainWindow
 
 		OptimizeTypeGrid.IsEnabled = false;
 
-		if (HistoryPath.Folder.IsEmpty() || !Directory.Exists(HistoryPath.Folder))
+		var folder = HistoryPath.Folder;
+
+		if (folder.IsEmpty() || !Directory.Exists(folder))
 		{
 			MessageBox.Show(this, LocalizedStrings.WrongPath);
 			return;
@@ -74,15 +75,60 @@ public partial class MainWindow
 		(TimeSpan min, TimeSpan max, TimeSpan step) tfRange = new(TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(15), TimeSpan.FromMinutes(5));
 
 		// SMA periods
-		var periods = new List<(int longMa, int shortMa, TimeSpan tf, Color color)>();
+		var periods = new List<(int longMa, int shortMa, TimeSpan tf)>();
 
-		for (var l = longRange.max; l >= longRange.min; l -= longRange.step)
+		var isRandomMode = RandomMode.IsChecked == true;
+		var randomCount = isRandomMode ? int.Parse(RandomCount.Text) : 0;
+
+		if (isRandomMode)
 		{
-			for (var s = shortRange.max; s >= shortRange.min; s -= shortRange.step)
+			// Random mode: generate randomCount random combinations using GetRandomOptimizeValue()
+			// Create temporary strategy to use StrategyParam.GetRandomOptimizeValue()
+			var tempStrategy = new History.SmaStrategy();
+
+			var longParam = (StrategyParam<int>)tempStrategy.Parameters[nameof(tempStrategy.LongSma)];
+			var shortParam = (StrategyParam<int>)tempStrategy.Parameters[nameof(tempStrategy.ShortSma)];
+			var tfParam = (StrategyParam<TimeSpan?>)tempStrategy.Parameters[nameof(tempStrategy.CandleTimeFrame)];
+
+			var longValues = new HashSet<int>();
+			var shortValues = new HashSet<int>();
+			var tfValues = new HashSet<TimeSpan>();
+
+			for (var i = 0; i < randomCount; i++)
+				longValues.Add(longParam.GetRandom());
+
+			for (var i = 0; i < randomCount; i++)
+				shortValues.Add(shortParam.GetRandom());
+
+			for (var i = 0; i < randomCount; i++)
 			{
-				for (var t = tfRange.max; t >= tfRange.min; t -= tfRange.step)
+				if (tfParam.GetRandom() is TimeSpan tf)
+					tfValues.Add(tf);
+			}
+
+			// Create all combinations from random samples
+			foreach (var l in longValues)
+			{
+				foreach (var s in shortValues)
 				{
-					periods.Add((l, s, t, Color.FromRgb((byte)RandomGen.GetInt(255), (byte)RandomGen.GetInt(255), (byte)RandomGen.GetInt(255))));
+					foreach (var t in tfValues)
+					{
+						periods.Add((l, s, t));
+					}
+				}
+			}
+		}
+		else
+		{
+			// Step-based mode: generate with step
+			for (var l = longRange.max; l >= longRange.min; l -= longRange.step)
+			{
+				for (var s = shortRange.max; s >= shortRange.min; s -= shortRange.step)
+				{
+					for (var t = tfRange.max; t >= tfRange.min; t -= tfRange.step)
+					{
+						periods.Add((l, s, t));
+					}
 				}
 			}
 		}
@@ -91,7 +137,7 @@ public partial class MainWindow
 		var storageRegistry = new StorageRegistry
 		{
 			// set historical path
-			DefaultDrive = new LocalMarketDataDrive(HistoryPath.Folder)
+			DefaultDrive = new LocalMarketDataDrive(folder)
 		};
 
 		// create test security
@@ -121,10 +167,10 @@ public partial class MainWindow
 		settings.MaxIterations = 100;
 
 		// 1 cent commission for trade
-		settings.CommissionRules = new ICommissionRule[]
-		{
+		settings.CommissionRules =
+		[
 			new CommissionTradeRule { Value = 0.01m },
-		};
+		];
 
 		// count of parallel testing strategies
 		// if not set, then CPU count * 2

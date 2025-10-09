@@ -4,7 +4,12 @@
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:sx="http://schemas.stocksharp.com/xaml"
         xmlns:ex="clr-namespace:Ecng.Xaml;assembly=StockSharp.Xaml"
+        xmlns:exc="clr-namespace:Ecng.Xaml.Converters;assembly=StockSharp.Xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         Title="{x:Static loc:LocalizedStrings.SampleOptimizationApp}" Height="430" Width="525">
+	<Window.Resources>
+		<exc:BoolAllConverter x:Key="boolAll" />
+	</Window.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
@@ -27,14 +32,40 @@
 		</Grid>
 
 		<Grid x:Name="OptimizeTypeGrid" Grid.Row="2">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="5" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
 
 			<RadioButton x:Name="BruteForce" GroupName="OptimizerType" IsChecked="True" Content="{x:Static loc:LocalizedStrings.BruteForce}" />
 			<RadioButton x:Name="Genetic" GroupName="OptimizerType" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Genetic}" />
+
+			<CheckBox x:Name="RandomMode" Grid.Row="2" Grid.Column="0" Content="Random" IsEnabled="{Binding ElementName=BruteForce, Path=IsChecked}" />
+			<Label Grid.Row="2" Grid.Column="2" Content="Count:">
+				<Label.IsEnabled>
+					<MultiBinding Converter="{StaticResource boolAll}">
+						<Binding ElementName="BruteForce" Path="IsChecked" />
+						<Binding ElementName="RandomMode" Path="IsChecked" />
+					</MultiBinding>
+				</Label.IsEnabled>
+			</Label>
+			<TextBox x:Name="RandomCount" Grid.Row="2" Grid.Column="4" Width="60" Text="10">
+				<TextBox.IsEnabled>
+					<MultiBinding Converter="{StaticResource boolAll}">
+						<Binding ElementName="BruteForce" Path="IsChecked" />
+						<Binding ElementName="RandomMode" Path="IsChecked" />
+					</MultiBinding>
+				</TextBox.IsEnabled>
+			</TextBox>
 		</Grid>
 
 		<Grid Grid.Row="4">
