@@ -782,13 +782,13 @@ public static class StorageHelper
 			if (subscription.BuildMode != MarketDataBuildModes.Build)
 			{
 				if (settings.IsMode(StorageModes.Incremental))
-					retVal = LoadMessages(GetStorage<Level1ChangeMessage>(secId, null), subscription, SendReply, SendOut);
+					retVal = LoadMessages(GetStorage<Level1ChangeMessage>(secId, subscription.DataType2), subscription, SendReply, SendOut);
 			}
 			else
 			{
 				if (subscription.BuildFrom == DataType.OrderLog)
 				{
-					var storage = GetStorage<ExecutionMessage>(secId, DataType.OrderLog);
+					var storage = GetStorage<ExecutionMessage>(secId, subscription.BuildFrom);
 
 					var range = GetRange(storage, subscription);
 
@@ -801,7 +801,7 @@ public static class StorageHelper
 				}
 				else if (subscription.BuildFrom == DataType.MarketDepth)
 				{
-					var storage = GetStorage<QuoteChangeMessage>(secId, null);
+					var storage = GetStorage<QuoteChangeMessage>(secId, subscription.BuildFrom);
 
 					var range = GetRange(storage, subscription);
 
@@ -819,13 +819,13 @@ public static class StorageHelper
 			if (subscription.BuildMode != MarketDataBuildModes.Build)
 			{
 				if (settings.IsMode(StorageModes.Incremental))
-					retVal = LoadMessages(GetStorage<QuoteChangeMessage>(secId, null), subscription, SendReply, SendOut);
+					retVal = LoadMessages(GetStorage<QuoteChangeMessage>(secId, subscription.DataType2), subscription, SendReply, SendOut);
 			}
 			else
 			{
 				if (subscription.BuildFrom == DataType.OrderLog)
 				{
-					var storage = GetStorage<ExecutionMessage>(secId, DataType.OrderLog);
+					var storage = GetStorage<ExecutionMessage>(secId, subscription.BuildFrom);
 
 					var range = GetRange(storage, subscription);
 
@@ -839,7 +839,7 @@ public static class StorageHelper
 				}
 				else if (subscription.BuildFrom == DataType.Level1)
 				{
-					var storage = GetStorage<Level1ChangeMessage>(secId, null);
+					var storage = GetStorage<Level1ChangeMessage>(secId, subscription.BuildFrom);
 
 					var range = GetRange(storage, subscription);
 
@@ -855,12 +855,12 @@ public static class StorageHelper
 		else if (subscription.DataType2 == DataType.Ticks)
 		{
 			if (subscription.BuildMode != MarketDataBuildModes.Build)
-				retVal = LoadMessages(GetStorage<ExecutionMessage>(secId, DataType.Ticks), subscription, SendReply, SendOut);
+				retVal = LoadMessages(GetStorage<ExecutionMessage>(secId, subscription.DataType2), subscription, SendReply, SendOut);
 			else
 			{
 				if (subscription.BuildFrom == DataType.OrderLog)
 				{
-					var storage = GetStorage<ExecutionMessage>(secId, DataType.OrderLog);
+					var storage = GetStorage<ExecutionMessage>(secId, subscription.BuildFrom);
 
 					var range = GetRange(storage, subscription);
 
@@ -873,7 +873,7 @@ public static class StorageHelper
 				}
 				else if (subscription.BuildFrom == DataType.Level1)
 				{
-					var storage = GetStorage<Level1ChangeMessage>(secId, null);
+					var storage = GetStorage<Level1ChangeMessage>(secId, subscription.BuildFrom);
 
 					var range = GetRange(storage, subscription);
 
@@ -888,15 +888,15 @@ public static class StorageHelper
 		}
 		else if (subscription.DataType2 == DataType.OrderLog)
 		{
-			retVal = LoadMessages(GetStorage<ExecutionMessage>(secId, DataType.OrderLog), subscription, SendReply, SendOut);
+			retVal = LoadMessages(GetStorage<ExecutionMessage>(secId, subscription.DataType2), subscription, SendReply, SendOut);
 		}
 		else if (subscription.DataType2 == DataType.News)
 		{
-			retVal = LoadMessages(GetStorage<NewsMessage>(default, null), subscription, SendReply, SendOut);
+			retVal = LoadMessages(GetStorage<NewsMessage>(default, subscription.DataType2), subscription, SendReply, SendOut);
 		}
 		else if (subscription.DataType2 == DataType.BoardState)
 		{
-			retVal = LoadMessages(GetStorage<BoardStateMessage>(default, null), subscription, SendReply, SendOut);
+			retVal = LoadMessages(GetStorage<BoardStateMessage>(default, subscription.DataType2), subscription, SendReply, SendOut);
 		}
 		else if (subscription.DataType2.IsCandles)
 		{
@@ -912,11 +912,11 @@ public static class StorageHelper
 				if (buildFrom == null || buildFrom == DataType.Ticks)
 					storage = GetStorage<ExecutionMessage>(secId, DataType.Ticks);
 				else if (buildFrom == DataType.OrderLog)
-					storage = GetStorage<ExecutionMessage>(secId, DataType.OrderLog);
+					storage = GetStorage<ExecutionMessage>(secId, buildFrom);
 				else if (buildFrom == DataType.Level1)
-					storage = GetStorage<Level1ChangeMessage>(secId, null);
+					storage = GetStorage<Level1ChangeMessage>(secId, buildFrom);
 				else if (buildFrom == DataType.MarketDepth)
-					storage = GetStorage<QuoteChangeMessage>(secId, null);
+					storage = GetStorage<QuoteChangeMessage>(secId, buildFrom);
 				else
 					throw new ArgumentOutOfRangeException(nameof(subscription), buildFrom, LocalizedStrings.InvalidValue);
 
@@ -926,7 +926,7 @@ public static class StorageHelper
 					buildFrom = DataType.Ticks;
 				else if (range == null && buildFrom == null)
 				{
-					storage = GetStorage<Level1ChangeMessage>(secId, null);
+					storage = GetStorage<Level1ChangeMessage>(secId, DataType.Level1);
 					range = GetRange(storage, subscription);
 
 					if (range != null)
