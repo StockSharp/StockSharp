@@ -3,7 +3,7 @@ namespace StockSharp.Messages;
 /// <summary>
 /// The interface describing an message with <see cref="SubscriptionId"/> property.
 /// </summary>
-public interface ISubscriptionIdMessage : IOriginalTransactionIdMessage
+public interface ISubscriptionIdMessage : IOriginalTransactionIdMessage, IDataTypeMessage
 {
 	/// <summary>
 	/// Subscription id.
@@ -14,9 +14,4 @@ public interface ISubscriptionIdMessage : IOriginalTransactionIdMessage
 	/// Identifiers.
 	/// </summary>
 	long[] SubscriptionIds { get; set; }
-
-	/// <summary>
-	/// Data type info.
-	/// </summary>
-	DataType DataType { get; }
 }

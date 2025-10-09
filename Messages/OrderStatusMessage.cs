@@ -68,7 +68,7 @@ public class OrderStatusMessage : OrderCancelMessage, ISubscriptionMessage
 	{
 	}
 
-	DataType ISubscriptionMessage.DataType => DataType.Transactions;
+	DataType IDataTypeMessage.DataType => DataType.Transactions;
 
 	/// <summary>
 	/// Copy the message into the <paramref name="destination" />.

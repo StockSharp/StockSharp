@@ -65,7 +65,7 @@ public class MarketDataMessage : SecurityMessage, ISubscriptionMessage, IGenerat
 		Order = 3)]
 	public IEnumerable<Level1Fields> Fields { get; set; }
 
-	DataType ISubscriptionMessage.DataType => DataType2;
+	DataType IDataTypeMessage.DataType => DataType2;
 
 	private DataType _dataType2 = DataType.Level1;
 

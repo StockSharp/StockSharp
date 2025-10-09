@@ -79,7 +79,7 @@ public class SecurityLookupMessage : SecurityMessage, ISubscriptionMessage, ISec
 	{
 	}
 
-	DataType ISubscriptionMessage.DataType => DataType.Securities;
+	DataType IDataTypeMessage.DataType => DataType.Securities;
 
 	bool ISubscriptionMessage.FilterEnabled
 		=>

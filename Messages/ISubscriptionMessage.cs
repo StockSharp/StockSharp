@@ -27,7 +27,7 @@ public enum FillGapsDays
 /// <summary>
 /// The interface describing an message with <see cref="IsSubscribe"/> property.
 /// </summary>
-public interface ISubscriptionMessage : ITransactionIdMessage, IOriginalTransactionIdMessage, IMessage
+public interface ISubscriptionMessage : ITransactionIdMessage, IOriginalTransactionIdMessage, IDataTypeMessage, IMessage
 {
 	/// <summary>
 	/// Message contains fields with non default values.
@@ -63,11 +63,6 @@ public interface ISubscriptionMessage : ITransactionIdMessage, IOriginalTransact
 	/// Max count.
 	/// </summary>
 	long? Count { get; set; }
-
-	/// <summary>
-	/// Data type info.
-	/// </summary>
-	DataType DataType { get; }
 
 	/// <summary>
 	/// <see cref="FillGapsDays"/>.
