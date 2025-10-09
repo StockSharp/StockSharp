@@ -6,7 +6,6 @@ public class IOHelperTests
 	[TestMethod]
 	public void IsNetworkPath_UNCPath()
 	{
-		// UNC paths (Universal Naming Convention)
 		@"\\server\share".IsNetworkPath().AssertTrue();
 		@"\\192.168.1.1\share".IsNetworkPath().AssertTrue();
 		@"\\server\share\folder\file.txt".IsNetworkPath().AssertTrue();
@@ -18,20 +17,16 @@ public class IOHelperTests
 	[TestMethod]
 	public void IsNetworkPath_LocalPath()
 	{
-		// Local Windows paths with drive letter
 		@"C:\Windows\System32".IsNetworkPath().AssertFalse();
 		@"D:\Data\file.txt".IsNetworkPath().AssertFalse();
 		@"E:\".IsNetworkPath().AssertFalse();
 		@"Z:\NetworkShare".IsNetworkPath().AssertFalse();
 		@"Y:\Data\file.txt".IsNetworkPath().AssertFalse();
-		@"Folder1".IsNetworkPath().AssertFalse();
-		@"temp".IsNetworkPath().AssertFalse();
 	}
 
 	[TestMethod]
 	public void IsNetworkPath_UnixPath()
 	{
-		// Unix-style paths are NOT network paths
 		@"/usr/bin/bash".IsNetworkPath().AssertFalse();
 		@"/home/user/file.txt".IsNetworkPath().AssertFalse();
 	}
@@ -49,6 +44,8 @@ public class IOHelperTests
 		@"folder\file.txt".IsNetworkPath().AssertFalse();
 		@".\file.txt".IsNetworkPath().AssertFalse();
 		@"..\file.txt".IsNetworkPath().AssertFalse();
+		@"Folder1".IsNetworkPath().AssertFalse();
+		@"temp".IsNetworkPath().AssertFalse();
 	}
 
 	[TestMethod]
