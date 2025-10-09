@@ -207,10 +207,30 @@ public class DataTypeTests
 		Assert.ThrowsExactly<ArgumentException>(() => DataType.RegisterAlias("ticks_custom", DataType.Ticks));
 		Assert.ThrowsExactly<ArgumentException>(() => DataType.RegisterAlias("l1_custom", custom));
 
-		// replace for ticks
-		DataType.UnRegisterAlias("ticks").AssertTrue();
-		DataType.UnRegisterAlias(DataType.Ticks).AssertFalse();
-		DataType.RegisterAlias("ticks", DataType.Ticks);
-		DataType.UnRegisterAlias(DataType.Ticks).AssertTrue();
+		// clean up
+		DataType.UnRegisterAlias("l1_custom").AssertTrue();
+		DataType.UnRegisterAlias(custom).AssertFalse();
+	}
+
+	[TestMethod]
+	public void CandleTypeAliases()
+	{
+		var dt = TimeSpan.FromMinutes(1).TimeFrame();
+
+		// custom candle data type cannot be unregistered
+		DataType.UnRegisterAlias(dt).AssertFalse();
+
+		// ensure serialization uses short token
+		var s = dt.ToSerializableString();
+		s.AssertEqual("tf:00-01-00");
+
+		// roundtrip using short token
+		var back = DataType.FromSerializableString("TF:00-01-00");
+		back.AreEqual(dt);
+
+		back = DataType.FromSerializableString("tf:00-01-00");
+		back.AreEqual(dt);
+
+		DataType.UnRegisterAlias("tf").AssertTrue();
 	}
 }

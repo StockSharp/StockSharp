@@ -400,10 +400,16 @@ public class DataType : Equatable<DataType>, IPersistable
 		{ "news", News },
 		{ "securities", Securities },
 		{ "positions", PositionChanges },
+		{ "tf", CandleTimeFrame },
+		{ "renko", CandleRenko },
+		{ "volume", CandleVolume },
+		{ "tick_candle", CandleTick },
+		{ "range", CandleRange },
+		{ "pnf", CandlePnF },
 	};
 
 	/// <summary>
-	/// Register or replace alias for a specific <see cref="DataType"/>.
+	/// Register or replace alias for a specific <see cref="DataType"/> instance.
 	/// </summary>
 	/// <param name="alias">Alias string. Case-insensitive.</param>
 	/// <param name="dataType">Target data type.</param>
@@ -419,7 +425,7 @@ public class DataType : Equatable<DataType>, IPersistable
 	}
 
 	/// <summary>
-	/// Try to remove a previously registered alias.
+	/// Try to remove a previously registered alias by name.
 	/// </summary>
 	/// <param name="alias">Alias to remove.</param>
 	/// <returns><c>true</c> if alias was removed; otherwise <c>false</c>.</returns>
@@ -432,7 +438,7 @@ public class DataType : Equatable<DataType>, IPersistable
 	}
 
 	/// <summary>
-	/// Try to remove a previously registered alias.
+	/// Try to remove a previously registered alias by value.
 	/// </summary>
 	/// <param name="dataType">Data type whose alias to remove.</param>
 	/// <returns><c>true</c> if alias was removed; otherwise <c>false</c>.</returns>
@@ -472,7 +478,10 @@ public class DataType : Equatable<DataType>, IPersistable
 		var type = MessageType;
 		var arg = Arg;
 
-		return $"{type?.GetTypeName(false)}:{(type?.IsCandleMessage() == true ? (arg is null ? null : type.DataTypeArgToString(arg)) : $"{arg?.GetType().GetTypeName(false)}:{arg?.ToString()}")}";
+		if (!_aliasToType.TryGetKey(Create(type, null), out var typeName))
+			typeName = type?.GetTypeName(false);
+
+		return $"{typeName}:{(type?.IsCandleMessage() == true ? (arg is null ? null : type.DataTypeArgToString(arg)) : $"{arg?.GetType().GetTypeName(false)}:{arg?.ToString()}")}";
 	}
 
 	/// <summary>
@@ -490,7 +499,17 @@ public class DataType : Equatable<DataType>, IPersistable
 
 		var parts = value.SplitByColon(false);
 
-		var msgType = parts[0].To<Type>();
+		var typeToken = parts[0];
+		Type msgType;
+
+		if (_aliasToType.TryGetValue(typeToken, out var dt))
+		{
+			msgType = dt.MessageType;
+		}
+		else
+		{
+			msgType = typeToken.To<Type>();
+		}
 
 		object arg;
 
