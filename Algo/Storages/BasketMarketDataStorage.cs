@@ -37,7 +37,7 @@ public interface IBasketMarketDataStorageInnerList : ISynchronizedCollection<IMa
 /// The aggregator-storage, allowing to load data simultaneously from several market data storages.
 /// </summary>
 /// <typeparam name="TMessage">Message type.</typeparam>
-public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<TMessage>, IMarketDataStorageInfo<TMessage>
+public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<TMessage>
 	where TMessage : Message
 {
 	private class BasketMarketDataStorageEnumerator : IEnumerator<TMessage>
@@ -411,7 +411,4 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 	/// <param name="date">Date.</param>
 	/// <returns>The messages loader.</returns>
 	public IBasketMarketDataStorageEnumerable<TMessage> Load(DateTime date) => new BasketEnumerable(this, date);
-
-	DateTimeOffset IMarketDataStorageInfo<TMessage>.GetTime(TMessage data) => data.GetServerTime();
-	DateTimeOffset IMarketDataStorageInfo.GetTime(object data) => ((IMarketDataStorageInfo<TMessage>)this).GetTime((TMessage)data);
 }

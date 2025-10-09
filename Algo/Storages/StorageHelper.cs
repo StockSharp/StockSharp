@@ -10,28 +10,26 @@ using StockSharp.Algo.Candles.Compression;
 /// </summary>
 public static class StorageHelper
 {
-	private sealed class RangeEnumerable<TData> : SimpleEnumerable<TData>//, IEnumerableEx<TData>
-		where TData : Message
+	private class RangeEnumerable<TData> : SimpleEnumerable<TData>//, IEnumerableEx<TData>
+		where TData : Message, IServerTimeMessage
 	{
 		[DebuggerDisplay("From {_from} Cur {_currDate} To {_to}")]
-		private sealed class RangeEnumerator : IEnumerator<TData>
+		private class RangeEnumerator : IEnumerator<TData>
 		{
 			private DateTime _currDate;
 			private readonly IMarketDataStorage<TData> _storage;
 			private readonly DateTime _from;
 			private readonly DateTime _to;
-			private readonly Func<TData, DateTimeOffset> _getTime;
 			private IEnumerator<TData> _current;
 
 			private bool _checkBounds;
 			private readonly Range<DateTime> _bounds;
 
-			public RangeEnumerator(IMarketDataStorage<TData> storage, DateTimeOffset from, DateTimeOffset to, Func<TData, DateTimeOffset> getTime)
+			public RangeEnumerator(IMarketDataStorage<TData> storage, DateTimeOffset from, DateTimeOffset to)
 			{
 				_storage = storage;
 				_from = from.UtcDateTime;
 				_to = to.UtcDateTime;
-				_getTime = getTime;
 				_currDate = from.UtcDateTime.Date;
 
 				_checkBounds = true; // проверяем нижнюю границу
@@ -80,7 +78,7 @@ public static class StorageHelper
 
 					do
 					{
-						var time = _getTime(Current).UtcDateTime;
+						var time = Current.ServerTime.UtcDateTime;
 
 						if (_bounds.Contains(time))
 							return true;
@@ -111,50 +109,15 @@ public static class StorageHelper
 			object IEnumerator.Current => Current;
 		}
 
-		//private readonly IMarketDataStorage<TData> _storage;
-		//private readonly DateTimeOffset _from;
-		//private readonly DateTimeOffset _to;
-
-		public RangeEnumerable(IMarketDataStorage<TData> storage, DateTimeOffset from, DateTimeOffset to, Func<TData, DateTimeOffset> getTime)
-			: base(() => new RangeEnumerator(storage, from, to, getTime))
+		public RangeEnumerable(IMarketDataStorage<TData> storage, DateTimeOffset from, DateTimeOffset to)
+			: base(() => new RangeEnumerator(storage, from, to))
 		{
 			if (storage == null)
 				throw new ArgumentNullException(nameof(storage));
 
-			if (getTime == null)
-				throw new ArgumentNullException(nameof(getTime));
-
 			if (from > to)
 				throw new InvalidOperationException(LocalizedStrings.StartCannotBeMoreEnd.Put(from, to));
-
-			//_storage = storage;
-			//_from = from;
-			//_to = to;
 		}
-
-		//private int? _count;
-
-		//int IEnumerableEx.Count
-		//{
-		//	get
-		//	{
-		//		if (_count == null)
-		//		{
-		//			// TODO
-		//			//if (_from.TimeOfDay != TimeSpan.Zero || _to.TimeOfDay != TimeSpan.Zero)
-		//			//	throw new InvalidOperationException("Невозможно вычислить количество элементов для диапазона со временем. Можно использовать только диапазон по датами.");
-
-		//			var count = 0;
-
-		//			for (var i = _from; i <= _to; i += TimeSpan.FromDays(1))
-		//				count += _storage.Load(i.UtcDateTime).Count;
-
-		//			_count = count;
-		//		}
-
-		//		return (int)_count;
-		//	}
-		//}
 	}
 
 	internal static IEnumerable<Range<DateTimeOffset>> GetRanges<TMessage>(this IMarketDataStorage<TMessage> storage)
@@ -180,13 +143,13 @@ public static class StorageHelper
 	/// <param name="to">The end time for data loading. If the value is not specified, data will be loaded up to the <see cref="GetToDate"/> date, inclusive.</param>
 	/// <returns>The iterative loader of market data.</returns>
 	public static IEnumerable<TMessage> Load<TMessage>(this IMarketDataStorage<TMessage> storage, DateTimeOffset? from = null, DateTimeOffset? to = null)
-		where TMessage : Message
+		where TMessage : Message, IServerTimeMessage
 	{
 		var range = GetRange(storage, from, to);
 
 		return range == null
 			? []
-			: new RangeEnumerable<TMessage>(storage, range.Min, range.Max, ((IMarketDataStorageInfo<TMessage>)storage).GetTime);
+			: new RangeEnumerable<TMessage>(storage, range.Min, range.Max);
 	}
 
 	/// <summary>
@@ -205,8 +168,6 @@ public static class StorageHelper
 
 		if (range == null)
 			return false;
-
-		var info = (IMarketDataStorageInfo)storage;
 
 		var min = range.Min.UtcDateTime;
 		var max = range.Max.UtcDateTime.EndOfDay();
@@ -247,7 +208,7 @@ public static class StorageHelper
 					var data = storage.Load(date).ToList();
 					data.RemoveWhere(d =>
 					{
-						var t = info.GetTime(d);
+						var t = d.GetServerTime();
 						return t.UtcDateTime < min || t > range.Max;
 					});
 					storage.Delete(data);
@@ -258,7 +219,7 @@ public static class StorageHelper
 			else
 			{
 				var data = storage.Load(date).ToList();
-				data.RemoveWhere(d => info.GetTime(d) > range.Max);
+				data.RemoveWhere(d => d.GetServerTime() > range.Max);
 				storage.Delete(data);
 			}
 		}
@@ -458,7 +419,7 @@ public static class StorageHelper
 		securityStorage.DeleteBy(new SecurityLookupMessage { SecurityId = securityId });
 	}
 
-	private class CandleMessageBuildableStorage : IMarketDataStorage<CandleMessage>, IMarketDataStorageInfo<CandleMessage>
+	private class CandleMessageBuildableStorage : IMarketDataStorage<CandleMessage>
 	{
 		private readonly IMarketDataStorage<CandleMessage> _original;
 		private readonly Func<TimeSpan, IMarketDataStorage<CandleMessage>> _getStorage;
@@ -623,10 +584,6 @@ public static class StorageHelper
 		public int Save(IEnumerable<CandleMessage> data) => _original.Save(data);
 
 		public void Delete(IEnumerable<CandleMessage> data) => _original.Delete(data);
-
-		DateTimeOffset IMarketDataStorageInfo<CandleMessage>.GetTime(CandleMessage data) => ((IMarketDataStorageInfo<CandleMessage>)_original).GetTime(data);
-
-		DateTimeOffset IMarketDataStorageInfo.GetTime(object data) => ((IMarketDataStorageInfo<CandleMessage>)_original).GetTime(data);
 
 		private class BuildableCandleInfo(IMarketDataMetaInfo info, TimeSpan tf) : IMarketDataMetaInfo
 		{

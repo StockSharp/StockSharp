@@ -663,7 +663,7 @@ static class Helper
 	}
 
 	public static void DeleteWithCheck<T>(this IMarketDataStorage<T> storage)
-		where T : Message
+		where T : Message, IServerTimeMessage
 	{
 		storage.Delete();
 		storage.Load().Count().AssertEqual(0);

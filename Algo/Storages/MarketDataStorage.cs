@@ -1,26 +1,15 @@
 namespace StockSharp.Algo.Storages;
 
-interface IMarketDataStorageInfo
+abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
+	where TMessage : Message, IServerTimeMessage
 {
-	DateTimeOffset GetTime(object data);
-}
-
-interface IMarketDataStorageInfo<in TData> : IMarketDataStorageInfo
-{
-	DateTimeOffset GetTime(TData data);
-}
-
-abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>, IMarketDataStorageInfo<TMessage>
-	where TMessage : Message
-{
-	private readonly Func<TMessage, DateTimeOffset> _getTime;
 	private readonly Func<TMessage, SecurityId> _getSecurityId;
 	private readonly Func<TMessage, TId> _getId;
 	private readonly Func<TMessage, bool> _isValid;
 	private readonly SynchronizedDictionary<DateTime, SyncObject> _syncRoots = [];
 	private readonly SynchronizedDictionary<DateTime, IMarketDataMetaInfo> _dateMetaInfos = [];
 
-	protected MarketDataStorage(SecurityId securityId, DataType dataType, Func<TMessage, DateTimeOffset> getTime, Func<TMessage, SecurityId> getSecurityId, Func<TMessage, TId> getId, IMarketDataSerializer<TMessage> serializer, IMarketDataStorageDrive drive, Func<TMessage, bool> isValid)
+	protected MarketDataStorage(SecurityId securityId, DataType dataType, Func<TMessage, SecurityId> getSecurityId, Func<TMessage, TId> getId, IMarketDataSerializer<TMessage> serializer, IMarketDataStorageDrive drive, Func<TMessage, bool> isValid)
 	{
 		_dataType = dataType ?? throw new ArgumentNullException(nameof(dataType));
 
@@ -31,7 +20,6 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>, 
 
 		AppendOnlyNew = true;
 
-		_getTime = getTime ?? throw new ArgumentNullException(nameof(getTime));
 		_getSecurityId = getSecurityId ?? throw new ArgumentNullException(nameof(getSecurityId));
 		_getId = getId ?? throw new ArgumentNullException(nameof(getId));
 		Drive = drive ?? throw new ArgumentNullException(nameof(drive));
@@ -53,7 +41,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>, 
 
 	public IMarketDataStorageDrive Drive { get; }
 
-	protected DateTime GetTruncatedTime(TMessage data) => _getTime(data).StorageTruncate(Serializer.TimePrecision).UtcDateTime;
+	protected DateTime GetTruncatedTime(TMessage data) => data.ServerTime.StorageTruncate(Serializer.TimePrecision).UtcDateTime;
 
 	private SyncObject GetSync(DateTime time) => _syncRoots.SafeAdd(time);
 
@@ -77,7 +65,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>, 
 			if (securityId != default && !SecurityIdEqual(securityId))
 				throw new ArgumentException(LocalizedStrings.SecIdMustBe.Put(typeof(TMessage).Name, securityId, SecurityId));
 
-			var time = _getTime(d);
+			var time = d.ServerTime;
 
 			if (time == DateTimeOffset.MinValue)
 				throw new ArgumentException(LocalizedStrings.EmptyMessageTime.Put(d));
@@ -86,7 +74,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>, 
 		}))
 		{
 			var date = group.Key;
-			var newItems = group.OrderBy(_getTime).ToArray();
+			var newItems = group.OrderBy(e => e.ServerTime).ToArray();
 
 			lock (GetSync(date))
 			{
@@ -254,7 +242,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>, 
 		if (data == null)
 			throw new ArgumentNullException(nameof(data));
 
-		foreach (var group in data.GroupBy(i => GetStorageDate(_getTime(i))))
+		foreach (var group in data.GroupBy(i => GetStorageDate(i.ServerTime)))
 		{
 			var date = group.Key;
 
@@ -405,15 +393,5 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>, 
 	IEnumerable<Message> IMarketDataStorage.Load(DateTime date)
 	{
 		return Load(date);
-	}
-
-	DateTimeOffset IMarketDataStorageInfo<TMessage>.GetTime(TMessage data)
-	{
-		return _getTime(data);
-	}
-
-	DateTimeOffset IMarketDataStorageInfo.GetTime(object data)
-	{
-		return _getTime((TMessage)data);
 	}
 }
