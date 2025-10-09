@@ -51,10 +51,20 @@ public static class StrategyParamHelper
 	/// <summary>
 	/// Generate a random value within the optimization range for the parameter.
 	/// </summary>
+	/// <typeparam name="T">The type of the parameter value.</typeparam>
+	/// <param name="param"><see cref="StrategyParam{T}"/></param>
+	/// <returns>Random value within the optimization range.</returns>
+	/// <exception cref="InvalidOperationException">Thrown when parameter cannot be optimized or optimization range is not set.</exception>
+	public static T GetRandom<T>(this StrategyParam<T> param)
+		=> (T)GetRandom((IStrategyParam)param);
+
+	/// <summary>
+	/// Generate a random value within the optimization range for the parameter.
+	/// </summary>
 	/// <param name="param"><see cref="IStrategyParam"/></param>
 	/// <returns>Random value within the optimization range.</returns>
 	/// <exception cref="InvalidOperationException">Thrown when parameter cannot be optimized or optimization range is not set.</exception>
-	public static object GetRandomOptimizeValue(this IStrategyParam param)
+	public static object GetRandom(this IStrategyParam param)
 	{
 		if (param is null)
 			throw new ArgumentNullException(nameof(param));

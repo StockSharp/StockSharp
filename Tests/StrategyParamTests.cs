@@ -462,7 +462,7 @@ public class StrategyParamTests
 
 		for (int i = 0; i < 100; i++)
 		{
-			var randomValue = (int)p.GetRandomOptimizeValue();
+			var randomValue = (int)p.GetRandom();
 			(randomValue >= 5 && randomValue <= 25).AssertEqual(true);
 			((randomValue - 5) % 5).AssertEqual(0); // Should respect step
 		}
@@ -477,7 +477,7 @@ public class StrategyParamTests
 
 		for (int i = 0; i < 100; i++)
 		{
-			var randomValue = (decimal)p.GetRandomOptimizeValue();
+			var randomValue = (decimal)p.GetRandom();
 			(randomValue >= 1.0m && randomValue <= 3.0m).AssertEqual(true);
 			((randomValue - 1.0m) % 0.5m).AssertEqual(0); // Should respect step
 		}
@@ -495,7 +495,7 @@ public class StrategyParamTests
 
 		for (int i = 0; i < 100; i++)
 		{
-			var randomValue = (bool)p.GetRandomOptimizeValue();
+			var randomValue = (bool)p.GetRandom();
 			if (randomValue) trueCount++;
 			else falseCount++;
 		}
@@ -514,7 +514,7 @@ public class StrategyParamTests
 
 		for (int i = 0; i < 50; i++)
 		{
-			var randomValue = (TimeSpan)p.GetRandomOptimizeValue();
+			var randomValue = (TimeSpan)p.GetRandom();
 			(randomValue >= TimeSpan.FromMinutes(10)).AssertEqual(true);
 			(randomValue <= TimeSpan.FromMinutes(60)).AssertEqual(true);
 			((randomValue.TotalMinutes - 10) % 10).AssertEqual(0); // Should respect step
@@ -534,7 +534,7 @@ public class StrategyParamTests
 
 		for (int i = 0; i < 50; i++)
 		{
-			var randomValue = (Unit)p.GetRandomOptimizeValue();
+			var randomValue = (Unit)p.GetRandom();
 			randomValue.Type.AssertEqual(UnitTypes.Percent);
 			(randomValue.Value >= 1.0m && randomValue.Value <= 5.0m).AssertEqual(true);
 			((randomValue.Value - 1.0m) % 0.5m).AssertEqual(0); // Should respect step
@@ -551,7 +551,7 @@ public class StrategyParamTests
 			.SetCanOptimize(true)
 			.SetOptimize(from, to, null);
 
-		Assert.ThrowsExactly<ArgumentException>(() => p.GetRandomOptimizeValue());
+		Assert.ThrowsExactly<ArgumentException>(() => p.GetRandom());
 	}
 
 	[TestMethod]
@@ -561,7 +561,7 @@ public class StrategyParamTests
 			.SetCanOptimize(false)
 			.SetOptimize(5, 25, 5);
 
-		Assert.ThrowsExactly<InvalidOperationException>(() => p.GetRandomOptimizeValue());
+		Assert.ThrowsExactly<InvalidOperationException>(() => p.GetRandom());
 	}
 
 	[TestMethod]
@@ -571,7 +571,7 @@ public class StrategyParamTests
 			.SetCanOptimize(true);
 		// OptimizeFrom and OptimizeTo not set
 
-		Assert.ThrowsExactly<InvalidOperationException>(() => p.GetRandomOptimizeValue());
+		Assert.ThrowsExactly<InvalidOperationException>(() => p.GetRandom());
 	}
 
 	[TestMethod]
@@ -593,7 +593,7 @@ public class StrategyParamTests
 		{
 			if (param.CanOptimize && param.OptimizeFrom != null && param.OptimizeTo != null)
 			{
-				param.Value = param.GetRandomOptimizeValue();
+				param.Value = param.GetRandom();
 			}
 		}
 
@@ -615,7 +615,7 @@ public class StrategyParamTests
 
 		for (int i = 0; i < 100; i++)
 		{
-			var v = (int)p.GetRandomOptimizeValue();
+			var v = (int)p.GetRandom();
 			(v >= 5 && v <= 25).AssertEqual(true);
 		}
 	}
@@ -629,7 +629,7 @@ public class StrategyParamTests
 
 		for (int i = 0; i < 100; i++)
 		{
-			var v = (long)p.GetRandomOptimizeValue();
+			var v = (long)p.GetRandom();
 			(v >= 100 && v <= 1000).AssertEqual(true);
 			((v - 100) % 50).AssertEqual(0);
 		}
@@ -644,7 +644,7 @@ public class StrategyParamTests
 
 		for (int i = 0; i < 100; i++)
 		{
-			var v = (decimal)p.GetRandomOptimizeValue();
+			var v = (decimal)p.GetRandom();
 			(v >= 1.0m && v <= 2.0m).AssertEqual(true);
 		}
 	}
@@ -658,7 +658,7 @@ public class StrategyParamTests
 
 		for (int i = 0; i < 100; i++)
 		{
-			var v = (double)p.GetRandomOptimizeValue();
+			var v = (double)p.GetRandom();
 			(v >= 0.5 && v <= 3.0).AssertEqual(true);
 			var steps = (v - 0.5) / 0.25;
 			(Math.Abs(steps - Math.Round(steps)) <= 1e-6).AssertTrue();
@@ -674,7 +674,7 @@ public class StrategyParamTests
 
 		for (int i = 0; i < 100; i++)
 		{
-			var v = (float)p.GetRandomOptimizeValue();
+			var v = (float)p.GetRandom();
 			(v >= 1.0f && v <= 2.0f).AssertEqual(true);
 			var steps = (v - 1.0f) / 0.5f;
 			(Math.Abs(steps - MathF.Round(steps)) <= 1e-5f).AssertTrue();
@@ -690,7 +690,7 @@ public class StrategyParamTests
 
 		for (int i = 0; i < 50; i++)
 		{
-			var v = (TimeSpan)p.GetRandomOptimizeValue();
+			var v = (TimeSpan)p.GetRandom();
 			(v >= TimeSpan.FromMinutes(1) && v <= TimeSpan.FromMinutes(5)).AssertEqual(true);
 		}
 	}
@@ -707,7 +707,7 @@ public class StrategyParamTests
 
 		for (int i = 0; i < 50; i++)
 		{
-			var v = (Unit)p.GetRandomOptimizeValue();
+			var v = (Unit)p.GetRandom();
 			v.Type.AssertEqual(UnitTypes.Absolute);
 			(v.Value >= 1.0m && v.Value <= 3.0m).AssertEqual(true);
 		}
@@ -722,7 +722,7 @@ public class StrategyParamTests
 
 		for (int i = 0; i < 10; i++)
 		{
-			var v = (int)p.GetRandomOptimizeValue();
+			var v = (int)p.GetRandom();
 			v.AssertEqual(20);
 		}
 	}
@@ -736,7 +736,7 @@ public class StrategyParamTests
 
 		for (int i = 0; i < 100; i++)
 		{
-			var v = (int)p.GetRandomOptimizeValue();
+			var v = (int)p.GetRandom();
 			(v >= -10 && v <= 10).AssertEqual(true);
 			((v - (-10)) % 5).AssertEqual(0);
 		}
