@@ -103,4 +103,16 @@ public static class Extensions
 
 		return adapters;
 	}
+
+	/// <summary>
+	/// Builds an absolute path from a potentially relative <paramref name="relative"/> path.
+	/// </summary>
+	/// <param name="relative">A relative or absolute path.</param>
+	/// <param name="baseDir">The base directory used when <paramref name="relative"/> is not rooted.</param>
+	/// <returns>
+	/// An absolute path. If <paramref name="relative"/> is already rooted, the same value is returned;
+	/// otherwise the path combined with <paramref name="baseDir"/> is returned.
+	/// </returns>
+	public static string MakeFullPath(this string relative, string baseDir)
+		=> Path.IsPathRooted(relative) ? relative : Path.Combine(baseDir, relative);
 }
