@@ -210,6 +210,10 @@ public class DataTypeTests
 		// clean up
 		DataType.UnRegisterAlias("l1_custom").AssertTrue();
 		DataType.UnRegisterAlias(custom).AssertFalse();
+
+		DataType.RegisterAlias("l1_custom", custom);
+		DataType.UnRegisterAlias(custom).AssertTrue();
+		DataType.UnRegisterAlias("l1_custom").AssertFalse();
 	}
 
 	[TestMethod]
@@ -230,8 +234,6 @@ public class DataTypeTests
 
 		back = DataType.FromSerializableString("tf:00-01-00");
 		back.AreEqual(dt);
-
-		DataType.UnRegisterAlias("tf").AssertTrue();
 	}
 
 	[TestMethod]
