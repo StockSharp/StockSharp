@@ -49,8 +49,8 @@
 			<RadioButton x:Name="BruteForce" GroupName="OptimizerType" IsChecked="True" Content="{x:Static loc:LocalizedStrings.BruteForce}" />
 			<RadioButton x:Name="Genetic" GroupName="OptimizerType" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Genetic}" />
 
-			<CheckBox x:Name="RandomMode" Grid.Row="2" Grid.Column="0" Content="Random" IsEnabled="{Binding ElementName=BruteForce, Path=IsChecked}" />
-			<Label Grid.Row="2" Grid.Column="2" Content="Count:">
+			<CheckBox x:Name="RandomMode" Grid.Row="2" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.Random}" IsEnabled="{Binding ElementName=BruteForce, Path=IsChecked}" />
+			<Label Grid.Row="2" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Count}">
 				<Label.IsEnabled>
 					<MultiBinding Converter="{StaticResource boolAll}">
 						<Binding ElementName="BruteForce" Path="IsChecked" />
