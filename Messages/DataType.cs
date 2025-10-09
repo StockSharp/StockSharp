@@ -390,7 +390,7 @@ public class DataType : Equatable<DataType>, IPersistable
 	/// </summary>
 	public static ISet<DataType> CandleSources { get; } = new HashSet<DataType>([Ticks, Level1, MarketDepth, OrderLog]);
 
-	private static readonly PairSet<string, DataType> _aliasToType = new(StringComparer.InvariantCultureIgnoreCase)
+	private static readonly SynchronizedPairSet<string, DataType> _aliasToType = new(StringComparer.InvariantCultureIgnoreCase)
 	{
 		{ "level1", Level1 },
 		{ "ticks", Ticks },
@@ -401,6 +401,64 @@ public class DataType : Equatable<DataType>, IPersistable
 		{ "securities", Securities },
 		{ "positions", PositionChanges },
 	};
+
+	/// <summary>
+	/// Register or replace alias for a specific <see cref="DataType"/>.
+	/// </summary>
+	/// <param name="alias">Alias string. Case-insensitive.</param>
+	/// <param name="dataType">Target data type.</param>
+	public static void RegisterAlias(string alias, DataType dataType)
+	{
+		if (alias.IsEmpty())
+			throw new ArgumentNullException(nameof(alias));
+
+		if (dataType is null)
+			throw new ArgumentNullException(nameof(dataType));
+
+		_aliasToType.Add(alias, dataType);
+	}
+
+	/// <summary>
+	/// Try to remove a previously registered alias.
+	/// </summary>
+	/// <param name="alias">Alias to remove.</param>
+	/// <returns><c>true</c> if alias was removed; otherwise <c>false</c>.</returns>
+	public static bool UnRegisterAlias(string alias)
+	{
+		if (alias.IsEmpty())
+			throw new ArgumentNullException(nameof(alias));
+
+		return _aliasToType.Remove(alias);
+	}
+
+	/// <summary>
+	/// Try to remove a previously registered alias.
+	/// </summary>
+	/// <param name="dataType">Data type whose alias to remove.</param>
+	/// <returns><c>true</c> if alias was removed; otherwise <c>false</c>.</returns>
+	public static bool UnRegisterAlias(DataType dataType)
+	{
+		if (dataType is null)
+			throw new ArgumentNullException(nameof(dataType));
+
+		return _aliasToType.RemoveByValue(dataType);
+	}
+
+	/// <summary>
+	/// Try get an alias for the specified <see cref="DataType"/> if any exists.
+	/// </summary>
+	/// <param name="dataType">Data type.</param>
+	/// <param name="alias">Alias string.</param>
+	/// <returns><c>true</c> if alias exists; otherwise <c>false</c>.</returns>
+	public static bool TryGetAlias(DataType dataType, out string alias)
+	{
+		alias = null;
+
+		if (dataType is null)
+			return false;
+
+		return _aliasToType.TryGetKey(dataType, out alias);
+	}
 
 	/// <summary>
 	/// Serialize <see cref="DataType"/> to <see cref="string"/>.

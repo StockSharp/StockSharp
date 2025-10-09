@@ -192,4 +192,25 @@ public class DataTypeTests
 		TestAlias(DataType.MarketDepth, "marketdepth");
 		TestAlias(DataType.OrderLog, "orderlog");
 	}
+
+	[TestMethod]
+	public void CustomAliases()
+	{
+		var custom = DataType.Create<Level1ChangeMessage>("custom");
+
+		// register new alias for custom instance (same MessageType/Arg as Level1)
+		DataType.RegisterAlias("l1_custom", custom);
+		DataType.FromSerializableString("l1_custom").AreEqual(custom);
+		custom.ToSerializableString().AssertEqual("l1_custom");
+
+		// replacing alias for existing built-in should be denied
+		Assert.ThrowsExactly<ArgumentException>(() => DataType.RegisterAlias("ticks_custom", DataType.Ticks));
+		Assert.ThrowsExactly<ArgumentException>(() => DataType.RegisterAlias("l1_custom", custom));
+
+		// replace for ticks
+		DataType.UnRegisterAlias("ticks").AssertTrue();
+		DataType.UnRegisterAlias(DataType.Ticks).AssertFalse();
+		DataType.RegisterAlias("ticks", DataType.Ticks);
+		DataType.UnRegisterAlias(DataType.Ticks).AssertTrue();
+	}
 }
