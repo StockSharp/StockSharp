@@ -233,4 +233,135 @@ public class DataTypeTests
 
 		DataType.UnRegisterAlias("tf").AssertTrue();
 	}
+
+	[TestMethod]
+	public void CandleType_TimeFrame_Large()
+	{
+		var tfs = new[]
+		{
+			TimeSpan.FromDays(1),
+			TimeSpan.FromDays(7),
+			TimeSpan.FromDays(30),
+			TimeSpan.FromDays(365),
+			new TimeSpan(days: 10, hours: 12, minutes: 0, seconds: 0)
+		};
+
+		foreach (var tf in tfs)
+		{
+			var dt = tf.TimeFrame();
+
+			// roundtrip via single-string form
+			var s = dt.ToSerializableString();
+			var back = DataType.FromSerializableString(s);
+			back.AreEqual(dt, $"To/FromSerializableString failed for TF={tf} -> '{s}'");
+
+			// roundtrip via (type,arg) form
+			var (type, arg) = dt.FormatToString();
+			var s2 = $"{type}:{arg}";
+			var back2 = DataType.FromSerializableString(s2);
+			back2.AreEqual(dt, $"FormatToString/FromSerializableString failed for TF={tf} -> '{s2}'");
+
+			// also through Extensions.ToDataType(type,arg)
+			var back3 = type.ToDataType(arg);
+			back3.AreEqual(dt, $"ToDataType(type,arg) failed for TF={tf}");
+		}
+	}
+
+	[TestMethod]
+	public void CandleType_HeikinAshi_Large()
+	{
+		var tfs = new[]
+		{
+			TimeSpan.FromHours(12),
+			TimeSpan.FromDays(1),
+			TimeSpan.FromDays(5)
+		};
+
+		foreach (var tf in tfs)
+		{
+			var dt = DataType.Create<HeikinAshiCandleMessage>(tf);
+
+			var s = dt.ToSerializableString();
+			var back = DataType.FromSerializableString(s);
+			back.AreEqual(dt);
+
+			var (type, arg) = dt.FormatToString();
+			var back2 = type.ToDataType(arg);
+			back2.AreEqual(dt);
+		}
+	}
+
+	[TestMethod]
+	public void CandleType_LargeArgs()
+	{
+		var cases = new List<DataType>
+		{
+			DataType.Create<TickCandleMessage>(1_000_000),
+			DataType.Create<VolumeCandleMessage>(1_000_000.123m),
+			DataType.Create<RangeCandleMessage>(new Unit(1_000)),
+			DataType.Create<RenkoCandleMessage>(new Unit(50)),
+			DataType.Create<PnFCandleMessage>(new PnFArg { BoxSize = new Unit(100), ReversalAmount = 10 }),
+		};
+
+		foreach (var dt in cases)
+		{
+			var s = dt.ToSerializableString();
+			var back = DataType.FromSerializableString(s);
+			back.AreEqual(dt, $"Single-string roundtrip failed for {dt} -> '{s}'");
+
+			var (type, arg) = dt.FormatToString();
+			var s2 = $"{type}:{arg}";
+			var back2 = DataType.FromSerializableString(s2);
+			back2.AreEqual(dt, $"(type:arg) roundtrip failed for {dt} -> '{s2}'");
+
+			var back3 = type.ToDataType(arg);
+			back3.AreEqual(dt, $"ToDataType(type,arg) failed for {dt}");
+		}
+	}
+
+	[TestMethod]
+	public void CandleType_ShortAliases_Check()
+	{
+		// mapping message types to expected short aliases
+		var aliasMap = new Dictionary<Type, string>
+		{
+			{ typeof(TimeFrameCandleMessage), "tf" },
+			{ typeof(VolumeCandleMessage), "volume" },
+			{ typeof(TickCandleMessage), "tick_candle" },
+			{ typeof(RangeCandleMessage), "range" },
+			{ typeof(RenkoCandleMessage), "renko" },
+			{ typeof(PnFCandleMessage), "pnf" },
+		};
+
+		var cases = new List<DataType>
+		{
+			TimeSpan.FromDays(7).TimeFrame(),
+			TimeSpan.FromDays(30).TimeFrame(),
+			TimeSpan.FromDays(365).TimeFrame(),
+			new TimeSpan(10, 12, 0, 0).TimeFrame(),
+			DataType.Create<VolumeCandleMessage>(10_000m),
+			DataType.Create<TickCandleMessage>(50_000),
+			DataType.Create<RangeCandleMessage>(new Unit(250)),
+			DataType.Create<RenkoCandleMessage>(new Unit(25)),
+			DataType.Create<PnFCandleMessage>(new PnFArg { BoxSize = new Unit(5), ReversalAmount = 3 }),
+		};
+
+		foreach (var dt in cases)
+		{
+			var s = dt.ToSerializableString();
+
+			var expectedPrefix = aliasMap[dt.MessageType];
+			(s.StartsWith(expectedPrefix + ":", StringComparison.InvariantCultureIgnoreCase)).AssertTrue($"Expected '{expectedPrefix}:' prefix for {dt}, got '{s}'");
+
+			var expected = expectedPrefix + ":" + dt.DataTypeArgToString();
+			s.AssertEqual(expected);
+
+			// ensure long name not used
+			(s.Contains("StockSharp.Messages.") == false).AssertTrue($"Long type name leakage detected in '{s}'");
+
+			// roundtrip as well
+			var back = DataType.FromSerializableString(s);
+			back.AreEqual(dt);
+		}
+	}
 }
