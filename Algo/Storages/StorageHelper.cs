@@ -1300,7 +1300,17 @@ public static class StorageHelper
 		if (path.Length < 3)
 			throw new ArgumentOutOfRangeException(nameof(path), path, LocalizedStrings.WrongPath);
 
-		return !(path[0] >= 'A' && path[1] <= 'z' && path[1] == ':' && path[2] == '\\');
+		// UNC paths (\\server\share or //server/share)
+		if (path.StartsWith(@"\\") || path.StartsWith(@"//"))
+			return true;
+
+		// HTTP/HTTPS/FTP URLs (can be parsed as EndPoint)
+		if (path.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+		    path.StartsWith("https://", StringComparison.OrdinalIgnoreCase) ||
+		    path.StartsWith("ftp://", StringComparison.OrdinalIgnoreCase))
+			return true;
+
+		return false;
 	}
 
 	/// <summary>
