@@ -1027,6 +1027,8 @@
   "DSP": "DSP",
   "DukasCopy": "Dukascopy",
   "DumpBooks": "Dump order books",
+  "DumpOnError": "Dump on Error",
+  "DumpOnErrorDesc": "Save system data when an error occurs for analysis",
   "Duplicate": "Duplicate",
   "Duplicates": "Duplicates",
   "DuplicateSystemId": "Securities {0} and {1} have the same trading system {2} ID.",

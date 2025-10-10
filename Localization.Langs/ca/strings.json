@@ -1023,6 +1023,8 @@
   "DSP": "DSP",
   "DukasCopy": "Dukascopy",
   "DumpBooks": "Desar el registre del llibre d'ordres",
+  "DumpOnError": "Bolcat en error",
+  "DumpOnErrorDesc": "Desar dades del sistema quan es produeix un error per a l'anàlisi",
   "Duplicate": "Duplicat",
   "Duplicates": "Duplicats",
   "DuplicateSystemId": "Els instruments {0} i {1} tenen el mateix identificador de sistema comercial {2}",

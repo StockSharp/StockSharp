@@ -1023,6 +1023,8 @@
   "DSP": "DSP",
   "DukasCopy": "Dukascopy",
   "DumpBooks": "Buyurtmalar kitobini yozib oling",
+  "DumpOnError": "Xato bo'lganda dump",
+  "DumpOnErrorDesc": "Tahlil qilish uchun xato yuz berganda tizim ma'lumotlarini saqlash",
   "Duplicate": "Nusxalash",
   "Duplicates": "Dublikatlar",
   "DuplicateSystemId": "{0} va {1} asboblarida bir xil savdo tizimi identifikatori {2} mavjud.",

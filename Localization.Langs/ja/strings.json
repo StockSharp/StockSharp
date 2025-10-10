@@ -1023,6 +1023,8 @@
   "DSP": "DSP",
   "DukasCopy": "Dukascopy",
   "DumpBooks": "注文書のログを保存",
+  "DumpOnError": "エラー時にダンプ",
+  "DumpOnErrorDesc": "エラー発生時にシステムデータを分析用に保存",
   "Duplicate": "重複",
   "Duplicates": "重複",
   "DuplicateSystemId": "インストルメント {0} と {1} は同じ取引システム識別子 {2} を持っています。",

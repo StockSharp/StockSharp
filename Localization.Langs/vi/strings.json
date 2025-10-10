@@ -1023,6 +1023,8 @@
   "DSP": "DSP",
   "DukasCopy": "Dukascopy",
   "DumpBooks": "Lưu nhật ký sổ lệnh",
+  "DumpOnError": "Dump khi có lỗi",
+  "DumpOnErrorDesc": "Lưu dữ liệu hệ thống khi xảy ra lỗi để phân tích",
   "Duplicate": "Bản sao",
   "Duplicates": "Bản sao",
   "DuplicateSystemId": "Các công cụ {0} và {1} có cùng mã nhận dạng hệ thống giao dịch {2}.",

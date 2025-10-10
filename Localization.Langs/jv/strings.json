@@ -1023,6 +1023,8 @@
   "DSP": "DSP",
   "DukasCopy": "Dukascopy",
   "DumpBooks": "Simpen log buku pesenan",
+  "DumpOnError": "Dump nalika ana error",
+  "DumpOnErrorDesc": "Simpen data sistem nalika ana error kanggo analisis",
   "Duplicate": "Nduplikat",
   "Duplicates": "Duplikat",
   "DuplicateSystemId": "Piranti {0} lan {1} duwé pangenal sistem dagang sing padha {2}.",

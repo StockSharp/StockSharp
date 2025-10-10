@@ -1023,6 +1023,8 @@
   "DSP": "DSP",
   "DukasCopy": "Dukascopy",
   "DumpBooks": "Salvați jurnalul cărții de comenzi",
+  "DumpOnError": "Dump la eroare",
+  "DumpOnErrorDesc": "Salvați datele sistemului când apare o eroare pentru analiză",
   "Duplicate": "Duplicat",
   "Duplicates": "Duplicate",
   "DuplicateSystemId": "Instrumentele {0} și {1} au același identificator de sistem de tranzacționare {2}.",

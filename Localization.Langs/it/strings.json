@@ -1023,6 +1023,8 @@
   "DSP": "DSP",
   "DukasCopy": "Dukascopy",
   "DumpBooks": "Salva il registro del libro ordini",
+  "DumpOnError": "Dump in caso di errore",
+  "DumpOnErrorDesc": "Salva i dati di sistema quando si verifica un errore per l'analisi",
   "Duplicate": "Duplicare",
   "Duplicates": "Duplicati",
   "DuplicateSystemId": "Gli strumenti {0} e {1} hanno lo stesso identificatore di sistema di trading {2}.",

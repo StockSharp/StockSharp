@@ -1023,6 +1023,8 @@
   "DSP": "DSP",
   "DukasCopy": "Dukascopy",
   "DumpBooks": "Sipariş kitabı günlüğünü kaydet",
+  "DumpOnError": "Hata durumunda döküm",
+  "DumpOnErrorDesc": "Analiz için hata oluştuğunda sistem verilerini kaydet",
   "Duplicate": "Çoğalt",
   "Duplicates": "Çiftler",
   "DuplicateSystemId": "Araçlar {0} ve {1} aynı ticaret sistem tanımlayıcı {2} sahiptir.",

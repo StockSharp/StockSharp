@@ -1026,6 +1026,8 @@
   "DSP": "DSP",
   "DukasCopy": "Dukascopy",
   "DumpBooks": "I-dump ang order books",
+  "DumpOnError": "Dump sa error",
+  "DumpOnErrorDesc": "I-save ang system data kapag may error para sa pagsusuri",
   "Duplicate": "Duplicate",
   "Duplicates": "Mga duplicate",
   "DuplicateSystemId": "Ang mga securities na {0} at {1} ay may parehong trading system {2} ID.",

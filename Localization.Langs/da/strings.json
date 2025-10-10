@@ -1023,6 +1023,8 @@
   "DSP": "DSP",
   "DukasCopy": "Dukascopy",
   "DumpBooks": "Gem ordrebog log",
+  "DumpOnError": "Dump ved fejl",
+  "DumpOnErrorDesc": "Gem systemdata når der opstår en fejl til analyse",
   "Duplicate": "Dublet",
   "Duplicates": "Dubletter",
   "DuplicateSystemId": "Instrumenterne {0} og {1} har samme handelssystemidentifikator {2}.",

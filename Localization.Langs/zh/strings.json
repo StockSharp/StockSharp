@@ -1023,6 +1023,8 @@
   "DSP": "DSP",
   "DukasCopy": "Dukascopy",
   "DumpBooks": "保存订单簿日志",
+  "DumpOnError": "错误时转储",
+  "DumpOnErrorDesc": "发生错误时保存系统数据以供分析",
   "Duplicate": "重复",
   "Duplicates": "重复项",
   "DuplicateSystemId": "工具 {0} 和 {1} 有相同的交易系统标识符 {2}。",

@@ -1023,6 +1023,8 @@
   "DSP": "DSP",
   "DukasCopy": "Dukascopy",
   "DumpBooks": "Lagre ordrebok logg",
+  "DumpOnError": "Dump ved feil",
+  "DumpOnErrorDesc": "Lagre systemdata når det oppstår en feil for analyse",
   "Duplicate": "Dupliser",
   "Duplicates": "Duplikater",
   "DuplicateSystemId": "Instrumentene {0} og {1} har samme handelssystemidentifikator {2}.",

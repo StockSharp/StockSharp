@@ -1023,6 +1023,8 @@
   "DSP": "DSP",
   "DukasCopy": "Dukascopy",
   "DumpBooks": "Logboek van het orderboek opslaan",
+  "DumpOnError": "Dump bij fout",
+  "DumpOnErrorDesc": "Systeemgegevens opslaan wanneer er een fout optreedt voor analyse",
   "Duplicate": "Dupliceren",
   "Duplicates": "Duplicaten",
   "DuplicateSystemId": "De instrumenten {0} en {1} hebben dezelfde handelssysteem identificator {2}.",
