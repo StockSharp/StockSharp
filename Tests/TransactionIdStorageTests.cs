@@ -11,6 +11,29 @@ public class TransactionIdStorageTests
 	private static readonly string _session1 = "session1";
 	private static readonly string _session2 = "session2";
 
+	// Deterministic generator to simulate duplicate transaction IDs.
+	private sealed class DeterministicIdGenerator : IdGenerator
+	{
+		private readonly long[] _sequence;
+		private int _index;
+
+		public DeterministicIdGenerator(params long[] sequence)
+		{
+			_sequence = sequence ?? throw new ArgumentNullException(nameof(sequence));
+			if (_sequence.Length == 0)
+				throw new ArgumentException("Sequence must contain at least one value.", nameof(sequence));
+		}
+
+		public override long GetNextId()
+		{
+			if (_index < _sequence.Length)
+				return _sequence[_index++];
+
+			// If exhausted, keep returning the last value to maintain determinism in tests
+			return _sequence[^1];
+		}
+	}
+
 	#region InMemoryTransactionIdStorage Tests
 
 	[TestMethod]
@@ -133,17 +156,29 @@ public class TransactionIdStorageTests
 	[TestMethod]
 	public void InMemorySession_CreateTransactionId_DuplicateTransactionIdThrows()
 	{
-		var idGen = new IncrementalIdGenerator();
+		// Force generator to return the same transaction ID twice
+		var idGen = new DeterministicIdGenerator(10, 10);
 		ITransactionIdStorage storage = new InMemoryTransactionIdStorage(idGen);
 		var session = storage.Get(_session1, persistable: true);
 
-		var requestId1 = "request-1";
-		var transactionId = session.CreateTransactionId(requestId1);
+		// First association succeeds
+		session.CreateTransactionId("request-1");
 
-		// Try to create another association with same transaction ID
-		// This shouldn't happen in normal usage since IdGenerator is sequential,
-		// but the code checks for it
-		// We can't easily test this without mocking IdGenerator
+		// Second association tries to use the same transactionId but a different requestId
+		// Should trigger duplicate transactionId branch in Add(...)
+		Assert.ThrowsExactly<ArgumentException>(() => session.CreateTransactionId("request-2"));
+	}
+
+	[TestMethod]
+	public void InMemorySession_CreateRequestId_DuplicateTransactionIdThrows()
+	{
+		// Duplicate transaction IDs through CreateRequestId path
+		var idGen = new DeterministicIdGenerator(42, 42);
+		ITransactionIdStorage storage = new InMemoryTransactionIdStorage(idGen);
+		var session = storage.Get(_session1, persistable: true);
+
+		var _ = session.CreateRequestId();
+		Assert.ThrowsExactly<ArgumentException>(() => session.CreateRequestId());
 	}
 
 	[TestMethod]
@@ -186,6 +221,17 @@ public class TransactionIdStorageTests
 	}
 
 	[TestMethod]
+	public void InMemorySession_TryGetTransactionId_EmptyRequestId_ReturnsFalse()
+	{
+		var idGen = new IncrementalIdGenerator();
+		ITransactionIdStorage storage = new InMemoryTransactionIdStorage(idGen);
+		var session = storage.Get(_session1, persistable: true);
+
+		var ok = session.TryGetTransactionId(string.Empty, out var _);
+		ok.AssertFalse();
+	}
+
+	[TestMethod]
 	public void InMemorySession_RemoveRequestId_RemovesAssociation()
 	{
 		var idGen = new IncrementalIdGenerator();
@@ -212,6 +258,20 @@ public class TransactionIdStorageTests
 		var removed = session.RemoveRequestId("nonexistent");
 
 		removed.AssertFalse();
+	}
+
+	[TestMethod]
+	public void InMemorySession_RemoveRequestId_Twice_SecondReturnsFalse()
+	{
+		var idGen = new IncrementalIdGenerator();
+		ITransactionIdStorage storage = new InMemoryTransactionIdStorage(idGen);
+		var session = storage.Get(_session1, persistable: true);
+
+		var requestId = "remove-twice";
+		session.CreateTransactionId(requestId);
+
+		session.RemoveRequestId(requestId).AssertTrue();
+		session.RemoveRequestId(requestId).AssertFalse();
 	}
 
 	[TestMethod]
@@ -242,6 +302,20 @@ public class TransactionIdStorageTests
 		var removed = session.RemoveTransactionId(999999);
 
 		removed.AssertFalse();
+	}
+
+	[TestMethod]
+	public void InMemorySession_RemoveTransactionId_Twice_SecondReturnsFalse()
+	{
+		var idGen = new IncrementalIdGenerator();
+		ITransactionIdStorage storage = new InMemoryTransactionIdStorage(idGen);
+		var session = storage.Get(_session1, persistable: true);
+
+		var requestId = "remove-trans-twice";
+		var transactionId = session.CreateTransactionId(requestId);
+
+		session.RemoveTransactionId(transactionId).AssertTrue();
+		session.RemoveTransactionId(transactionId).AssertFalse();
 	}
 
 	[TestMethod]
@@ -394,6 +468,26 @@ public class TransactionIdStorageTests
 		session.TryGetRequestId(transId1, out var requestId).AssertTrue();
 		requestId.AssertEqual("12345");
 		session.TryGetTransactionId("12345", out var t1).AssertTrue(); t1.AssertEqual(12345);
+	}
+
+	[TestMethod]
+	public void PlainSession_TryGetTransactionId_EmptyRequestId_ReturnsFalse()
+	{
+		ITransactionIdStorage storage = new PlainTransactionIdStorage();
+		var session = storage.Get(_session1, persistable: false);
+
+		var ok = session.TryGetTransactionId(string.Empty, out var _);
+		ok.AssertFalse();
+	}
+
+	[TestMethod]
+	public void PlainSession_RemoveRequestId_Null_ReturnsTrue()
+	{
+		ITransactionIdStorage storage = new PlainTransactionIdStorage();
+		var session = storage.Get(_session1, persistable: false);
+
+		// Method always returns true regardless of input
+		session.RemoveRequestId(null).AssertTrue();
 	}
 
 	#endregion
