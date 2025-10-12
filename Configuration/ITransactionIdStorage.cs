@@ -20,18 +20,20 @@ public interface ITransactionIdStorage
 public interface ISessionTransactionIdStorage
 {
 	/// <summary>
-	/// Find request id by the specified transaction id.
+	/// Try find request id by the specified transaction id.
 	/// </summary>
 	/// <param name="transactionId">Transaction ID.</param>
-	/// <returns>The request identifier. <see langword="null"/> if the specified id doesn't exist.</returns>
-	string TryGetRequestId(long transactionId);
+	/// <param name="requestId">The found request identifier when method returns <see langword="true"/>; otherwise default.</param>
+	/// <returns><see langword="true"/> if request id was found for the specified transaction; otherwise, <see langword="false"/>.</returns>
+	bool TryGetRequestId(long transactionId, out string requestId);
 
 	/// <summary>
-	/// Find transaction id by the specified request id.
+	/// Try find transaction id by the specified request id.
 	/// </summary>
 	/// <param name="requestId">The request identifier.</param>
-	/// <returns>Transaction ID. <see langword="null"/> if the specified request doesn't exist.</returns>
-	long? TryGetTransactionId(string requestId);
+	/// <param name="transactionId">The found transaction id when method returns <see langword="true"/>; otherwise default.</param>
+	/// <returns><see langword="true"/> if transaction id was found for the specified request; otherwise, <see langword="false"/>.</returns>
+	bool TryGetTransactionId(string requestId, out long transactionId);
 
 	/// <summary>
 	/// Create request identifier.
@@ -75,21 +77,28 @@ public class InMemoryTransactionIdStorage(IdGenerator idGenerator) : ITransactio
 		private readonly IdGenerator _idGenerator = idGenerator ?? throw new ArgumentNullException(nameof(idGenerator));
 		private readonly SynchronizedPairSet<long, string> _requestIdMap = [];
 
-		string ISessionTransactionIdStorage.TryGetRequestId(long transactionId)
-			=> _requestIdMap.TryGetValue(transactionId);
+		bool ISessionTransactionIdStorage.TryGetRequestId(long transactionId, out string requestId)
+			=> _requestIdMap.TryGetValue(transactionId, out requestId);
 
-		long? ISessionTransactionIdStorage.TryGetTransactionId(string requestId)
+		bool ISessionTransactionIdStorage.TryGetTransactionId(string requestId, out long transactionId)
 		{
-			if (_requestIdMap.TryGetKey(requestId, out var transId))
-				return transId;
+			if (!requestId.IsEmpty())
+			{
+				if (_requestIdMap.TryGetKey(requestId, out var transId))
+				{
+					transactionId = transId;
+					return true;
+				}
+			}
 
-			return null;
+			transactionId = default;
+			return false;
 		}
 
 		string ISessionTransactionIdStorage.CreateRequestId()
 		{
 			var transactionId = _idGenerator.GetNextId();
-			var requestId = transactionId.To<string>();
+			var requestId = Do.Invariant(transactionId.To<string>);
 
 			Add(requestId, transactionId);
 
@@ -143,13 +152,44 @@ public class PlainTransactionIdStorage : ITransactionIdStorage
 {
 	private class PlainSessionTransactionIdStorage : ISessionTransactionIdStorage
 	{
-		string ISessionTransactionIdStorage.TryGetRequestId(long transactionId) => transactionId.To<string>();
-		string ISessionTransactionIdStorage.CreateRequestId() => DateTime.UtcNow.Ticks.To<string>();
-		bool ISessionTransactionIdStorage.RemoveRequestId(string requestId) => true;
+		bool ISessionTransactionIdStorage.TryGetRequestId(long transactionId, out string requestId)
+		{
+			requestId = Do.Invariant(transactionId.To<string>);
+			return true;
+		}
 
-		long? ISessionTransactionIdStorage.TryGetTransactionId(string requestId) => requestId.To<long>();
-		long ISessionTransactionIdStorage.CreateTransactionId(string requestId) => requestId.To<long>();
-		bool ISessionTransactionIdStorage.RemoveTransactionId(long transactionId) => true;
+		string ISessionTransactionIdStorage.CreateRequestId()
+			=> Do.Invariant(DateTime.UtcNow.Ticks.To<string>);
+
+		bool ISessionTransactionIdStorage.RemoveRequestId(string requestId)
+			=> true;
+
+		bool ISessionTransactionIdStorage.TryGetTransactionId(string requestId, out long transactionId)
+		{
+			if (!requestId.IsEmpty())
+			{
+				var parsed = 0L;
+				if (Do.Invariant(() => long.TryParse(requestId, out parsed)))
+				{
+					transactionId = parsed;
+					return true;
+				}
+			}
+
+			transactionId = default;
+			return false;
+		}
+
+		long ISessionTransactionIdStorage.CreateTransactionId(string requestId)
+		{
+			if (requestId.IsEmpty())
+				throw new ArgumentNullException(nameof(requestId));
+
+			return Do.Invariant(requestId.To<long>);
+		}
+
+		bool ISessionTransactionIdStorage.RemoveTransactionId(long transactionId)
+			=> true;
 	}
 
 	ISessionTransactionIdStorage ITransactionIdStorage.Get(string sessionId, bool persistable)
