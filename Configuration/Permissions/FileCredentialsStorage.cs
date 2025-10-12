@@ -8,13 +8,15 @@ using System.Text.RegularExpressions;
 public class FileCredentialsStorage : BaseLogReceiver, IPermissionCredentialsStorage
 {
 	private readonly string _fileName;
+	private readonly bool _asEmail;
 	private readonly CachedSynchronizedDictionary<string, PermissionCredentials> _credentials = new(StringComparer.InvariantCultureIgnoreCase);
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="FileCredentialsStorage"/>.
 	/// </summary>
 	/// <param name="fileName">File name to persist credentials.</param>
-	public FileCredentialsStorage(string fileName)
+	/// <param name="asEmail">Use email as login. If <see langword="false"/>, then login can be any string.</param>
+	public FileCredentialsStorage(string fileName, bool asEmail = false)
 	{
 		if (fileName.IsEmpty())
 			throw new ArgumentNullException(nameof(fileName));
@@ -24,6 +26,7 @@ public class FileCredentialsStorage : BaseLogReceiver, IPermissionCredentialsSto
 			throw new InvalidOperationException(LocalizedStrings.FileNotExist.Put(fileName));
 
 		_fileName = fileName;
+		_asEmail = asEmail;
 
 		LoadFromFile();
 	}
@@ -46,7 +49,7 @@ public class FileCredentialsStorage : BaseLogReceiver, IPermissionCredentialsSto
 		if (credentials == null)
 			throw new ArgumentNullException(nameof(credentials));
 
-		if (!credentials.Email.IsValidLogin())
+		if (!credentials.Email.IsValidLogin(_asEmail))
 			throw new ArgumentException(credentials.Email, nameof(credentials));
 
 		_credentials[credentials.Email] = credentials;
