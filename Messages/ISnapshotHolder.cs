@@ -11,9 +11,9 @@ public interface ISnapshotHolder<TMessage>
 	/// Try get snapshot for the specified security.
 	/// </summary>
 	/// <param name="securityId">Security ID.</param>
-    /// <param name="snapshot">Snapshot if exists, otherwise <see langword="null"/>.</param>
-    /// <returns><c>true</c> if snapshot exists; otherwise <c>false</c>.</returns>
-    bool TryGetSnapshot(SecurityId securityId, out TMessage snapshot);
+	/// <param name="snapshot">Snapshot if exists, otherwise <see langword="null"/>.</param>
+	/// <returns><c>true</c> if snapshot exists; otherwise <c>false</c>.</returns>
+	bool TryGetSnapshot(SecurityId securityId, out TMessage snapshot);
 
 	/// <summary>
 	/// Process <typeref name="TMessage"/> change.
@@ -44,17 +44,20 @@ public class Level1SnapshotHolder : BaseLogReceiver, ISnapshotHolder<Level1Chang
 	{
 	}
 
-    /// <inheritdoc />
-    public bool TryGetSnapshot(SecurityId securityId, out Level1ChangeMessage snapshot)
-    {
-		snapshot = null;
+	/// <inheritdoc />
+	public bool TryGetSnapshot(SecurityId securityId, out Level1ChangeMessage snapshot)
+	{
+		lock (_snapshots.SyncRoot)
+		{
+			snapshot = null;
 
-		if (!_snapshots.TryGetValue(securityId, out var s))
-			return false;
+			if (!_snapshots.TryGetValue(securityId, out var s))
+				return false;
 
-		snapshot = s.TypedClone();
-        return true;
-    }
+			snapshot = s.TypedClone();
+			return true;
+		}
+	}
 
 	/// <inheritdoc />
 	public Level1ChangeMessage Process(Level1ChangeMessage level1Msg, bool needResponse)
@@ -64,47 +67,48 @@ public class Level1SnapshotHolder : BaseLogReceiver, ISnapshotHolder<Level1Chang
 
 		var secId = level1Msg.SecurityId;
 
-		if (_snapshots.TryGetValue(secId, out var snapshot))
+		lock (_snapshots.SyncRoot)
 		{
-			var diff = needResponse ? new Level1ChangeMessage
+			if (_snapshots.TryGetValue(secId, out var snapshot))
 			{
-				SecurityId = secId,
-				ServerTime = level1Msg.ServerTime,
-				LocalTime = level1Msg.LocalTime,
-				BuildFrom = level1Msg.BuildFrom,
-			} : null;
-
-			var changes = snapshot.Changes;
-
-			foreach (var change in level1Msg.Changes)
-			{
-				if (changes.TryGetValue(change.Key, out var prevValue))
+				var diff = needResponse ? new Level1ChangeMessage
 				{
-					if (prevValue?.Equals(change.Value) != true)
+					SecurityId = secId,
+					ServerTime = level1Msg.ServerTime,
+					LocalTime = level1Msg.LocalTime,
+					BuildFrom = level1Msg.BuildFrom,
+				} : null;
+
+				var changes = snapshot.Changes;
+
+				foreach (var change in level1Msg.Changes)
+				{
+					if (changes.TryGetValue(change.Key, out var prevValue))
 					{
-						changes[change.Key] = change.Value;
+						if (prevValue?.Equals(change.Value) != true)
+						{
+							changes[change.Key] = change.Value;
+							diff?.Changes.Add(change);
+						}
+					}
+					else
+					{
+						changes.Add(change);
 						diff?.Changes.Add(change);
 					}
 				}
-				else
-				{
-					changes.Add(change);
-					diff?.Changes.Add(change);
-				}
+
+				snapshot.LocalTime = level1Msg.LocalTime;
+				snapshot.ServerTime = level1Msg.ServerTime;
+
+				return diff;
 			}
+			else
+			{
+				_snapshots.Add(secId, level1Msg.TypedClone());
 
-			snapshot.LocalTime = level1Msg.LocalTime;
-			snapshot.ServerTime = level1Msg.ServerTime;
-
-			return diff;
-		}
-		else
-		{
-			LogDebug(LocalizedStrings.SnapshotFormed, "L1", secId);
-
-			_snapshots.Add(secId, level1Msg.TypedClone());
-
-			return level1Msg;
+				return level1Msg;
+			}
 		}
 	}
 
@@ -136,13 +140,16 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 	/// <inheritdoc />
 	public bool TryGetSnapshot(SecurityId securityId, out QuoteChangeMessage snapshot)
 	{
-		snapshot = null;
+		lock (_snapshots.SyncRoot)
+		{
+			snapshot = null;
 
-		if (!_snapshots.TryGetValue(securityId, out var s))
-			return false;
+			if (!_snapshots.TryGetValue(securityId, out var s))
+				return false;
 
-		snapshot = s.First.TypedClone();
-		return true;
+			snapshot = s.First.TypedClone();
+			return true;
+		}
 	}
 
 	/// <inheritdoc />
@@ -152,6 +159,11 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 			throw new ArgumentNullException(nameof(quoteMsg));
 
 		var secId = quoteMsg.SecurityId;
+
+		QuoteChangeMessage result = null;
+		bool logTurnedOff = false;
+		int logErrorCount = 0;
+		Exception toThrow = null;
 
 		lock (_snapshots.SyncRoot)
 		{
@@ -163,36 +175,41 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 				if (_snapshots.TryGetValue(secId, out var tuple))
 				{
 					if (tuple.Third == _maxError)
-						return null;
-
-					try
 					{
-						var delta = needResponse ? tuple.First.GetDelta(quoteMsg) : null;
-						tuple.First = snapshot;
-						tuple.Third = 0;
-						return delta;
+						result = null;
 					}
-					catch (Exception ex)
+					else
 					{
-						if (++tuple.Third == _maxError)
+						try
 						{
-							LogError(LocalizedStrings.SnapshotTurnedOff, secId, tuple.Third, _maxError);
+							var delta = needResponse ? tuple.First.GetDelta(quoteMsg) : null;
+							tuple.First = snapshot;
+							tuple.Third = 0;
+							result = delta;
 						}
+						catch (Exception ex)
+						{
+							if (++tuple.Third == _maxError)
+							{
+								logTurnedOff = true;
+								logErrorCount = tuple.Third;
+							}
 
-						throw new InvalidOperationException(LocalizedStrings.MessageWithError.Put(quoteMsg), ex);
+							toThrow = new InvalidOperationException(LocalizedStrings.MessageWithError.Put(quoteMsg), ex);
+						}
 					}
 				}
 				else
 				{
-					LogDebug(LocalizedStrings.SnapshotFormed, "OB", secId);
-
 					var builder = new OrderBookIncrementBuilder(secId) { Parent = this };
 
 					if (builder.TryApply(snapshot) is null)
-						throw new InvalidOperationException();
-
-					_snapshots.Add(secId, RefTuple.Create(snapshot, builder, 0));
-					return snapshot.TypedClone();
+						toThrow = new InvalidOperationException();
+					else
+					{
+						_snapshots.Add(secId, RefTuple.Create(snapshot, builder, 0));
+						result = snapshot.TypedClone();
+					}
 				}
 			}
 			else
@@ -200,30 +217,39 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 				if (_snapshots.TryGetValue(secId, out var tuple))
 				{
 					if (tuple.Third == _maxError)
-						return null;
-
-					try
 					{
-						var snapshot = tuple.Second.TryApply(quoteMsg);
-
-						// reset error count (no exception)
-						tuple.Third = 0;
-
-						if (snapshot is null)
-							return null;
-
-						snapshot.State = QuoteChangeStates.SnapshotComplete;
-						tuple.First = snapshot;
-						return quoteMsg;
+						result = null;
 					}
-					catch (Exception ex)
+					else
 					{
-						if (++tuple.Third == _maxError)
+						try
 						{
-							LogError(LocalizedStrings.SnapshotTurnedOff, secId, tuple.Third, _maxError);
-						}
+							var snapshot = tuple.Second.TryApply(quoteMsg);
 
-						throw new InvalidOperationException(LocalizedStrings.MessageWithError.Put(quoteMsg), ex);
+							// reset error count (no exception)
+							tuple.Third = 0;
+
+							if (snapshot is null)
+							{
+								result = null;
+							}
+							else
+							{
+								snapshot.State = QuoteChangeStates.SnapshotComplete;
+								tuple.First = snapshot;
+								result = quoteMsg;
+							}
+						}
+						catch (Exception ex)
+						{
+							if (++tuple.Third == _maxError)
+							{
+								logTurnedOff = true;
+								logErrorCount = tuple.Third;
+							}
+
+							toThrow = new InvalidOperationException(LocalizedStrings.MessageWithError.Put(quoteMsg), ex);
+						}
 					}
 				}
 				else
@@ -234,19 +260,28 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 
 					if (snapshot is null)
 					{
-						return null;
+						result = null;
 						//throw new InvalidOperationException($"First depth is not snapshot: {quoteMsg}");
 					}
+					else
+					{
+						snapshot.State = QuoteChangeStates.SnapshotComplete;
 
-					snapshot.State = QuoteChangeStates.SnapshotComplete;
+						_snapshots.Add(secId, RefTuple.Create(snapshot, builder, 0));
 
-					LogDebug(LocalizedStrings.SnapshotFormed, "OB", secId);
-					_snapshots.Add(secId, RefTuple.Create(snapshot, builder, 0));
-
-					return snapshot;
+						result = snapshot;
+					}
 				}
 			}
 		}
+
+		if (logTurnedOff)
+			LogError(LocalizedStrings.SnapshotTurnedOff, secId, logErrorCount, _maxError);
+
+		if (toThrow != null)
+			throw toThrow;
+
+		return result;
 	}
 
 	/// <inheritdoc />
