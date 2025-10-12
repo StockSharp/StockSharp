@@ -149,7 +149,7 @@ public class TransactionIdStorageTests
 		var ok = session.TryGetTransactionId(requestId, out var t1);
 		ok.AssertTrue();
 		t1.AssertEqual(transactionId);
-		(session.TryGetRequestId(transactionId, out var r1)).AssertTrue();
+		session.TryGetRequestId(transactionId, out var r1).AssertTrue();
 		r1.AssertEqual(requestId);
 	}
 
@@ -216,7 +216,6 @@ public class TransactionIdStorageTests
 		var session = storage.Get(_session1, persistable: true);
 
 		var found = session.TryGetTransactionId("nonexistent-request", out var _);
-
 		found.AssertFalse();
 	}
 
@@ -244,7 +243,7 @@ public class TransactionIdStorageTests
 		var removed = session.RemoveRequestId(requestId);
 
 		removed.AssertTrue();
-		(session.TryGetRequestId(transactionId, out var _)).AssertFalse();
+		session.TryGetRequestId(transactionId, out var _).AssertFalse();
 		session.TryGetTransactionId(requestId, out _).AssertFalse();
 	}
 
@@ -287,7 +286,7 @@ public class TransactionIdStorageTests
 		var removed = session.RemoveTransactionId(transactionId);
 
 		removed.AssertTrue();
-		(session.TryGetRequestId(transactionId, out var _)).AssertFalse();
+		session.TryGetRequestId(transactionId, out var _).AssertFalse();
 ;
 		session.TryGetTransactionId(requestId, out _).AssertFalse();
 	}
@@ -334,20 +333,34 @@ public class TransactionIdStorageTests
 		var trans3 = session.CreateTransactionId(req3);
 
 		// Verify all associations exist
-		(session.TryGetRequestId(trans1, out var r1)).AssertTrue(); r1.AssertEqual(req1);
-		(session.TryGetRequestId(trans2, out var r2)).AssertTrue(); r2.AssertEqual(req2);
-		(session.TryGetRequestId(trans3, out var r3)).AssertTrue(); r3.AssertEqual(req3);
+		session.TryGetRequestId(trans1, out var r1).AssertTrue();
+		r1.AssertEqual(req1);
 
-		session.TryGetTransactionId(req1, out var t1).AssertTrue(); t1.AssertEqual(trans1);
-		session.TryGetTransactionId(req2, out var t2).AssertTrue(); t2.AssertEqual(trans2);
-		session.TryGetTransactionId(req3, out var t3).AssertTrue(); t3.AssertEqual(trans3);
+		session.TryGetRequestId(trans2, out var r2).AssertTrue();
+		r2.AssertEqual(req2);
+
+		session.TryGetRequestId(trans3, out var r3).AssertTrue();
+		r3.AssertEqual(req3);
+
+		session.TryGetTransactionId(req1, out var t1).AssertTrue();
+		t1.AssertEqual(trans1);
+
+		session.TryGetTransactionId(req2, out var t2).AssertTrue();
+		t2.AssertEqual(trans2);
+
+		session.TryGetTransactionId(req3, out var t3).AssertTrue();
+		t3.AssertEqual(trans3);
 
 		// Remove one and verify others remain
 		session.RemoveRequestId(req2);
 
-		(session.TryGetRequestId(trans1, out r1)).AssertTrue(); r1.AssertEqual(req1);
-		(session.TryGetRequestId(trans2, out _)).AssertFalse();
-		(session.TryGetRequestId(trans3, out r3)).AssertTrue(); r3.AssertEqual(req3);
+		session.TryGetRequestId(trans1, out r1).AssertTrue();
+		r1.AssertEqual(req1);
+
+		session.TryGetRequestId(trans2, out _).AssertFalse();
+
+		session.TryGetRequestId(trans3, out r3).AssertTrue();
+		r3.AssertEqual(req3);
 	}
 
 	#endregion
@@ -467,7 +480,9 @@ public class TransactionIdStorageTests
 		// Can still "get" the same values (because it's just conversion)
 		session.TryGetRequestId(transId1, out var requestId).AssertTrue();
 		requestId.AssertEqual("12345");
-		session.TryGetTransactionId("12345", out var t1).AssertTrue(); t1.AssertEqual(12345);
+
+		session.TryGetTransactionId("12345", out var t1).AssertTrue();
+		t1.AssertEqual(12345);
 	}
 
 	[TestMethod]
@@ -511,8 +526,11 @@ public class TransactionIdStorageTests
 		trans1.AssertNotEqual(trans2);
 
 		// Each session only knows about its own associations
-		session1.TryGetTransactionId(req1, out var t1).AssertTrue(); t1.AssertEqual(trans1);
-		session2.TryGetTransactionId(req1, out var t2).AssertTrue(); t2.AssertEqual(trans2);
+		session1.TryGetTransactionId(req1, out var t1).AssertTrue();
+		t1.AssertEqual(trans1);
+
+		session2.TryGetTransactionId(req1, out var t2).AssertTrue();
+		t2.AssertEqual(trans2);
 	}
 
 	#endregion
@@ -522,8 +540,10 @@ public class TransactionIdStorageTests
 	[TestMethod]
 	public void InMemorySession_LargeTransactionId_HandledCorrectly()
 	{
-		var idGen = new IncrementalIdGenerator();
-		idGen.Current = long.MaxValue - 10;
+		var idGen = new IncrementalIdGenerator
+		{
+			Current = long.MaxValue - 10
+		};
 		ITransactionIdStorage storage = new InMemoryTransactionIdStorage(idGen);
 		var session = storage.Get(_session1, persistable: true);
 
