@@ -46,6 +46,9 @@ public class FileCredentialsStorage : BaseLogReceiver, IPermissionCredentialsSto
 		if (credentials == null)
 			throw new ArgumentNullException(nameof(credentials));
 
+		if (!credentials.Email.IsValidLogin())
+			throw new ArgumentException(credentials.Email, nameof(credentials));
+
 		_credentials[credentials.Email] = credentials;
 
 		SaveToFile();
