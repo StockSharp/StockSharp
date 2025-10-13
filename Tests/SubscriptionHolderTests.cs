@@ -61,7 +61,7 @@ public class SubscriptionHolderTests
 
 		holder.Add(subscription);
 
-		var retrieved = holder.TryGetById(1);
+		holder.TryGetById(1, out var retrieved).AssertTrue();
 		retrieved.AssertNotNull();
 		retrieved.Id.AssertEqual(1);
 	}
@@ -78,9 +78,9 @@ public class SubscriptionHolderTests
 		holder.Add(sub2);
 		holder.Add(sub3);
 
-		holder.TryGetById(1).AssertNotNull();
-		holder.TryGetById(2).AssertNotNull();
-		holder.TryGetById(3).AssertNotNull();
+		holder.TryGetById(1, out _).AssertTrue();
+		holder.TryGetById(2, out _).AssertTrue();
+		holder.TryGetById(3, out _).AssertTrue();
 	}
 
 	[TestMethod]
@@ -91,7 +91,7 @@ public class SubscriptionHolderTests
 
 		holder.Add(subscription);
 
-		holder.TryGetById(1).AssertNotNull();
+		holder.TryGetById(1, out _).AssertTrue();
 	}
 
 	#endregion
@@ -144,9 +144,10 @@ public class SubscriptionHolderTests
 	public void TryGetById_NotFound_ReturnsNull()
 	{
 		var holder = CreateHolder();
-		var result = holder.TryGetById(999);
+		var result = holder.TryGetById(999, out var notFound);
 
-		result.AssertNull();
+		result.AssertFalse();
+		notFound.AssertNull();
 	}
 
 	[TestMethod]
@@ -157,7 +158,7 @@ public class SubscriptionHolderTests
 
 		holder.Add(subscription);
 
-		var result = holder.TryGetById(100);
+		holder.TryGetById(100, out var result).AssertTrue();
 		result.AssertNotNull();
 		result.Id.AssertEqual(100);
 		result.Session.AssertEqual("session1");
@@ -171,8 +172,9 @@ public class SubscriptionHolderTests
 	public void TryGetSubscription_NotFound_ReturnsNull()
 	{
 		var holder = CreateHolder();
-		var result = holder.TryGetSubscription(999, SubscriptionStates.Active);
+		var ok = holder.TryGetSubscription(999, SubscriptionStates.Active, out var result);
 
+		ok.AssertFalse();
 		result.AssertNull();
 	}
 
@@ -184,7 +186,7 @@ public class SubscriptionHolderTests
 
 		holder.Add(subscription);
 
-		var result = holder.TryGetSubscription(1, null);
+		holder.TryGetSubscription(1, null, out var result).AssertTrue();
 		result.AssertNotNull();
 	}
 
@@ -196,7 +198,7 @@ public class SubscriptionHolderTests
 
 		holder.Add(subscription);
 
-		var result = holder.TryGetSubscription(1, SubscriptionStates.Active);
+		holder.TryGetSubscription(1, SubscriptionStates.Active, out var result).AssertTrue();
 		result.AssertNotNull();
 	}
 
@@ -208,8 +210,9 @@ public class SubscriptionHolderTests
 	public void TryGetSubscriptionAndStop_NotFound_ReturnsNull()
 	{
 		var holder = CreateHolder();
-		var result = holder.TryGetSubscriptionAndStop(999);
+		var ok = holder.TryGetSubscriptionAndStop(999, out var result);
 
+		ok.AssertFalse();
 		result.AssertNull();
 	}
 
@@ -221,7 +224,7 @@ public class SubscriptionHolderTests
 
 		holder.Add(subscription);
 
-		var result = holder.TryGetSubscriptionAndStop(1);
+		holder.TryGetSubscriptionAndStop(1, out var result).AssertTrue();
 		result.AssertNotNull();
 		result.State.AssertEqual(SubscriptionStates.Stopped);
 	}
@@ -237,11 +240,12 @@ public class SubscriptionHolderTests
 		var subscription = CreateSubscription(1, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks);
 
 		holder.Add(subscription);
-		holder.TryGetById(1).AssertNotNull();
+		holder.TryGetById(1, out _).AssertTrue();
 
 		holder.Remove(subscription);
 
-		holder.TryGetById(1).AssertNull();
+		holder.TryGetById(1, out var shouldBeNull).AssertFalse();
+		shouldBeNull.AssertNull();
 	}
 
 	[TestMethod]
@@ -266,9 +270,11 @@ public class SubscriptionHolderTests
 		var removed = holder.Remove("session1").ToArray();
 
 		removed.Length.AssertEqual(2);
-		holder.TryGetById(1).AssertNull();
-		holder.TryGetById(2).AssertNull();
-		holder.TryGetById(3).AssertNotNull();
+		holder.TryGetById(1, out var _c1).AssertFalse();
+		_c1.AssertNull();
+		holder.TryGetById(2, out var _c2).AssertFalse();
+		_c2.AssertNull();
+		holder.TryGetById(3, out _).AssertTrue();
 	}
 
 	[TestMethod]
@@ -303,8 +309,10 @@ public class SubscriptionHolderTests
 
 		holder.Clear();
 
-		holder.TryGetById(1).AssertNull();
-		holder.TryGetById(2).AssertNull();
+		holder.TryGetById(1, out var _a).AssertFalse();
+		_a.AssertNull();
+		holder.TryGetById(2, out var _b).AssertFalse();
+		_b.AssertNull();
 		holder.GetSubscriptions((string)"session1").Count().AssertEqual(0);
 		holder.GetSubscriptions((string)"session2").Count().AssertEqual(0);
 	}
@@ -387,7 +395,7 @@ public class SubscriptionHolderTests
 		TestSubscription changedSub = null;
 		holder.SubscriptionChanged += (sub) => changedSub = sub;
 
-		holder.TryGetSubscriptionAndStop(1);
+		holder.TryGetSubscriptionAndStop(1, out _);
 
 		changedSub.AssertNotNull();
 		changedSub.Id.AssertEqual(1);
@@ -416,8 +424,9 @@ public class SubscriptionHolderTests
 
 		holder.Remove("session1");
 
-		holder.TryGetById(1).AssertNull();
-		holder.TryGetById(2).AssertNotNull();
+		holder.TryGetById(1, out var _c3).AssertFalse();
+		_c3.AssertNull();
+		holder.TryGetById(2, out _).AssertTrue();
 	}
 
 	#endregion
@@ -434,7 +443,7 @@ public class SubscriptionHolderTests
 		holder.Add(sub1);
 		Assert.ThrowsExactly<ArgumentException>(() => holder.Add(sub2));
 		
-		var retrieved = holder.TryGetById(1);
+		holder.TryGetById(1, out var retrieved).AssertTrue();
 		retrieved.AssertNotNull();
 		// Should be the second subscription
 		retrieved.Session.AssertEqual("session1");

@@ -59,7 +59,7 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 	private readonly ILogReceiver _logs = logs ?? throw new ArgumentNullException(nameof(logs));
 
 	/// <summary>
-	/// Get subscription for the specified session.
+	/// Get subscriptions for the specified session.
 	/// </summary>
 	/// <param name="session">Session.</param>
 	/// <returns>Subscriptions.</returns>
@@ -122,7 +122,7 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 	}
 
 	/// <summary>
-	/// Remove session.
+	/// Remove all subscriptions for the specified session.
 	/// </summary>
 	/// <param name="session">Session.</param>
 	/// <returns>Subscriptions.</returns>
@@ -196,12 +196,13 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 	}
 
 	/// <summary>
-	/// Try get subscription by the specified identifier.
+	/// Try to get a subscription by the specified identifier.
 	/// </summary>
 	/// <param name="id">Identifier.</param>
-	/// <returns>Subscription.</returns>
-	public TSubcription TryGetById(long id)
-		=> _subscriptionsById.TryGetValue(id);
+	/// <param name="info">The found subscription, if any.</param>
+	/// <returns><see langword="true"/> if a subscription with the specified identifier exists; otherwise, <see langword="false"/>.</returns>
+	public bool TryGetById(long id, out TSubcription info)
+		=> _subscriptionsById.TryGetValue(id, out info);
 
 	/// <summary>
 	/// Clear state.
@@ -217,11 +218,11 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 	}
 
 	/// <summary>
-	/// Determines has subscription for the specified data type and security.
+	/// Determines whether any subscription exists for the specified data type and security.
 	/// </summary>
 	/// <param name="dataType">Data type info.</param>
 	/// <param name="securityId">Security ID.</param>
-	/// <returns>Check result.</returns>
+	/// <returns><see langword="true"/> if any subscription exists; otherwise, <see langword="false"/>.</returns>
 	public bool HasSubscriptions(DataType dataType, SecurityId securityId)
 	{
 		var receivers = _subscriptionsByAllSec.TryGetValue(dataType) ?? _subscriptionsBySec.TryGetValue((dataType, securityId));
@@ -229,32 +230,29 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 	}
 
 	/// <summary>
-	/// Try get and stop subscription by the specified identifier.
+	/// Try to get the subscription by the specified identifier and set its state to <see cref="SubscriptionStates.Stopped"/>.
 	/// </summary>
 	/// <param name="id">Identifier.</param>
-	/// <returns>Subscription.</returns>
-	public TSubcription TryGetSubscriptionAndStop(long id)
-		=> TryGetSubscription(id, SubscriptionStates.Stopped);
+	/// <param name="info">The found subscription, if any.</param>
+	/// <returns><see langword="true"/> if the subscription was found; otherwise, <see langword="false"/>.</returns>
+	public bool TryGetSubscriptionAndStop(long id, out TSubcription info)
+		=> TryGetSubscription(id, SubscriptionStates.Stopped, out info);
 
 	/// <summary>
-	/// Try get subscription by the specified identifier and swith into new state.
+	/// Try to get the subscription by the specified identifier and switch to a new state if specified.
 	/// </summary>
 	/// <param name="id">Identifier.</param>
-	/// <param name="state">State.</param>
-	/// <returns>Subscription.</returns>
-	public TSubcription TryGetSubscription(long id, SubscriptionStates? state)
+	/// <param name="state">The state to set for the subscription, or <see langword="null"/> to leave unchanged.</param>
+	/// <param name="info">The found subscription, if any.</param>
+	/// <returns><see langword="true"/> if the subscription was found; otherwise, <see langword="false"/>.</returns>
+	public bool TryGetSubscription(long id, SubscriptionStates? state, out TSubcription info)
 	{
-		if (id == 0)
-			return null;
-
-		var info = TryGetById(id);
-
-		if (info == null)
+		if (!TryGetById(id, out info))
 		{
 			if (_nonFoundSubscriptions.TryAdd(id))
 				_logs.AddWarningLog(LocalizedStrings.SubscriptionNonExist, id);
 
-			return null;
+			return false;
 		}
 
 		if (state != null)
@@ -266,7 +264,7 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 		if (state?.IsActive() == false)
 			Remove(info);
 
-		return info;
+		return true;
 	}
 
 	private IEnumerable<TSubcription> GetSubscriptions(MessageTypes type, long id)
@@ -280,7 +278,9 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 				_ => null,
 			};
 
-			return ToSet(TryGetSubscription(id, state));
+			return TryGetSubscription(id, state, out var sub)
+				? ToSet(sub)
+				: [];
 		}
 
 		return _subscriptionsByType.TryGetValue(type)?.Cache.Where(i => !i.Suspend) ?? [];
@@ -292,7 +292,9 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 	private IEnumerable<TSubcription> GetSubscriptions(DataType dataType, SecurityId securityId, long id)
 	{
 		if (id != 0)
-			return ToSet(TryGetSubscription(id, null));
+			return TryGetSubscription(id, null, out var sub)
+				? ToSet(sub)
+				: [];
 
 		if (dataType is null)
 			return [];
@@ -325,9 +327,7 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 					return GetSubscriptions(execMsg.DataType, execMsg.SecurityId, originTransId);
 				else if (execMsg.DataType == DataType.Transactions)
 				{
-					var subscription = TryGetById(originTransId);
-
-					if (subscription == null)
+					if (!TryGetById(originTransId, out var subscription))
 						return [];
 
 					if (execMsg.TransactionId != 0)
@@ -356,11 +356,17 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 				TSubcription info;
 
 				if (_unsubscribeRequests.TryGetAndRemove(originId, out var subscriptionId))
-					info = TryGetSubscription(subscriptionId, SubscriptionStates.Stopped);
+				{
+					return TryGetSubscription(subscriptionId, SubscriptionStates.Stopped, out info)
+						? ToSet(info, false)
+						: [];
+				}
 				else
-					info = TryGetSubscription(originId, responseMsg.IsOk() ? SubscriptionStates.Active : SubscriptionStates.Error);
-
-				return ToSet(info, false);
+				{
+					return TryGetSubscription(originId, responseMsg.IsOk() ? SubscriptionStates.Active : SubscriptionStates.Error, out info)
+						? ToSet(info, false)
+						: [];
+				}
 			}
 
 			default:
