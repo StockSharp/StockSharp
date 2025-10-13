@@ -197,21 +197,26 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 					{
 						var delta = info.Snapshot.GetDelta(quoteMsg);
 
-						info.Snapshot = snapshot;
-						info.ErrorCount = 0;
-
 						// reinitialize builder state to the new full snapshot
 						var applied = info.Builder.TryApply(snapshot)
 							?? throw new InvalidOperationException();
+
+						info.Snapshot = snapshot;
+						info.ErrorCount = 0;
 
 						result = delta;
 					}
 					catch (Exception ex)
 					{
-						if (++info.ErrorCount == _maxError)
+						if (info.ErrorCount < _maxError)
 						{
-							logTurnedOff = true;
-							logErrorCount = info.ErrorCount;
+							info.ErrorCount++;
+
+							if (info.ErrorCount == _maxError)
+							{
+								logTurnedOff = true;
+								logErrorCount = info.ErrorCount;
+							}
 						}
 
 						toThrow = new InvalidOperationException(LocalizedStrings.MessageWithError.Put(quoteMsg), ex);
@@ -260,10 +265,15 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 						}
 						catch (Exception ex)
 						{
-							if (++info.ErrorCount == _maxError)
+							if (info.ErrorCount < _maxError)
 							{
-								logTurnedOff = true;
-								logErrorCount = info.ErrorCount;
+								info.ErrorCount++;
+
+								if (info.ErrorCount == _maxError)
+								{
+									logTurnedOff = true;
+									logErrorCount = info.ErrorCount;
+								}
 							}
 
 							toThrow = new InvalidOperationException(LocalizedStrings.MessageWithError.Put(quoteMsg), ex);

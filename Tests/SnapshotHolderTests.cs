@@ -1066,4 +1066,332 @@ public class SnapshotHolderTests
 	}
 
 	#endregion
+
+	[TestMethod]
+	public void OrderBook_SnapshotUpdatedButBuilderNotReinitialized()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		// Create initial snapshot with one bid level at 100
+		var snap1 = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = null,
+			Bids = [new QuoteChange(100m, 10)],
+			Asks = [],
+		};
+		holder.Process(snap1);
+
+		// Create new full snapshot with EMPTY book but using HasPositions
+		// This will cause builder.TryApply to fail (can't apply positioned changes to empty book)
+		var snap2 = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			State = null,
+			HasPositions = true,
+			Bids = [], // empty - builder expects positions but gets empty
+			Asks = [],
+		};
+
+		// Full snapshot with HasPositions=true and empty book should NOT throw.
+		// It should reinitialize builder to empty state.
+		holder.Process(snap2);
+
+		// Now send increment that assumes EMPTY book (as per snap2)
+		var inc = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(2),
+			State = QuoteChangeStates.Increment,
+			HasPositions = true,
+			Bids = [new QuoteChange(101m, 5) { Action = QuoteChangeActions.New, StartPosition = 0 }], // add to position 0 of empty book
+			Asks = [],
+		};
+
+		// After empty full snapshot, builder must think book is empty, so result is [101:5]
+		var res = holder.Process(inc);
+		res.AssertNotNull();
+
+		// Check final snapshot
+		holder.TryGetSnapshot(_secId1, out var finalSnap).AssertTrue();
+		finalSnap.Bids.Length.AssertEqual(1);
+		finalSnap.Bids[0].Price.AssertEqual(101m);
+		finalSnap.Bids[0].Volume.AssertEqual(5m);
+	}
+
+	[TestMethod]
+	public void OrderBook_SnapshotAndBuilderOutOfSync()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		// Initial snapshot: Bids=[100:10, 99:5]
+		var snap1 = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = null,
+			Bids = [new QuoteChange(100m, 10), new QuoteChange(99m, 5)],
+			Asks = [],
+		};
+		holder.Process(snap1);
+
+		// Send new full snapshot that will fail in builder but succeed in GetDelta
+		// Use invalid HasPositions on full snapshot
+		var snap2 = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			State = null,
+			HasPositions = true, // invalid for full snapshot
+			Bids = [new QuoteChange(101m, 20) { Action = QuoteChangeActions.Update, StartPosition = 5 }], // impossible position
+			Asks = [],
+		};
+
+		try
+		{
+			holder.Process(snap2);
+		}
+		catch (InvalidOperationException)
+		{
+			// Expected - builder.TryApply failed
+			// BUG: info.Snapshot now points to snap2, but builder still has snap1 state
+		}
+
+		// Send simple update increment without positions
+		var inc = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(2),
+			State = QuoteChangeStates.Increment,
+			Bids = [new QuoteChange(101m, 25)], // simple price update
+			Asks = [],
+		};
+
+		var res = holder.Process(inc);
+
+		// After increment, check snapshot
+		holder.TryGetSnapshot(_secId1, out var snap).AssertTrue();
+
+		// EXPECTED: Should have bid at 101:25 (from snap2 base + increment)
+		// BUG: Will have wrong state because builder has snap1 state but snapshot has snap2
+		// The exact result depends on builder behavior, but state is corrupted
+
+		// At minimum, errorCount should be > 0 if subsequent processing fails
+		var errorCount = holder.GetErrorCount(_secId1);
+		errorCount.AssertNotNull();
+
+		// This test may be flaky depending on builder, but demonstrates the issue
+	}
+
+	[TestMethod]
+	public void OrderBook_ErrorCount_ExceedsMaxError()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		// Create empty snapshot
+		var start = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = null,
+			Bids = [],
+			Asks = [],
+		};
+		holder.Process(start);
+
+		// Invalid increment that will always fail
+		var invalidInc = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			State = QuoteChangeStates.Increment,
+			HasPositions = true,
+			Bids = [new QuoteChange(100m, 1) { Action = QuoteChangeActions.New, StartPosition = 5 }], // invalid position
+			Asks = [],
+		};
+
+		// Send 105 times to exceed maxError
+		for (var i = 0; i < 105; i++)
+		{
+			try
+			{ holder.Process(invalidInc); }
+			catch { /* ignore */ }
+		}
+
+		var errorCount = holder.GetErrorCount(_secId1);
+		errorCount.AssertNotNull();
+
+		// BUG: ErrorCount = 105 (continues to grow)
+		// EXPECTED: ErrorCount should be capped at 100
+		errorCount.Value.AssertEqual(100); // FAILS - will be 105
+	}
+
+	[TestMethod]
+	public void OrderBook_MultipleLogsAfterMaxError()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		var start = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = null,
+			Bids = [],
+			Asks = [],
+		};
+		holder.Process(start);
+
+		var invalidInc = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			State = QuoteChangeStates.Increment,
+			HasPositions = true,
+			Bids = [new QuoteChange(100m, 1) { Action = QuoteChangeActions.New, StartPosition = 5 }],
+			Asks = [],
+		};
+
+		// Send exactly 100 times to reach maxError
+		for (var i = 0; i < 100; i++)
+		{
+			try
+			{ holder.Process(invalidInc); }
+			catch { }
+		}
+
+		var errorCount1 = holder.GetErrorCount(_secId1);
+		errorCount1.Value.AssertEqual(100);
+
+		// Send 1 more time
+		try
+		{ holder.Process(invalidInc); }
+		catch { }
+
+		var errorCount2 = holder.GetErrorCount(_secId1);
+
+		// BUG: ErrorCount = 101 (incremented again)
+		// EXPECTED: Should stay at 100
+		errorCount2.Value.AssertEqual(100); // FAILS - will be 101
+	}
+
+	[TestMethod]
+	public void OrderBook_ErrorCount_ResetBeforeBuilderValidation()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		// Create initial snapshot
+		var snap1 = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = null,
+			Bids = [new QuoteChange(100m, 10)],
+			Asks = [],
+		};
+		holder.Process(snap1);
+
+		// Force 5 errors with invalid increments
+		var invalidInc = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			State = QuoteChangeStates.Increment,
+			HasPositions = true,
+			Bids = [new QuoteChange(100m, 1) { Action = QuoteChangeActions.New, StartPosition = 99 }],
+			Asks = [],
+		};
+
+		for (var i = 0; i < 5; i++)
+		{
+			try
+			{ holder.Process(invalidInc); }
+			catch { }
+		}
+
+		// Now ErrorCount should be 5
+		var errorCountBefore = holder.GetErrorCount(_secId1);
+		errorCountBefore.Value.AssertEqual(5);
+
+		// Send new full snapshot that will fail in builder.TryApply
+		// (but succeed in GetDelta)
+		var snap2 = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(2),
+			State = null,
+			HasPositions = true,
+			Bids = [new QuoteChange(99m, 5) { Action = QuoteChangeActions.Update, StartPosition = 100 }],
+			Asks = [],
+		};
+
+		try
+		{
+			holder.Process(snap2);
+		}
+		catch (InvalidOperationException)
+		{
+			// Expected - builder.TryApply failed
+		}
+
+		// Check ErrorCount after failed full snapshot
+		var errorCountAfter = holder.GetErrorCount(_secId1);
+		errorCountAfter.AssertNotNull();
+
+		// BUG: ErrorCount = 1 (was reset to 0, then incremented)
+		// EXPECTED: ErrorCount = 6 (old value 5 + 1)
+		errorCountAfter.Value.AssertEqual(6); // FAILS - will be 1
+	}
+
+	[TestMethod]
+	public void OrderBook_SnapshotUpdated_ButBuilderNotReinitialized()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		// Initial: bid at 100
+		var snap1 = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = null,
+			Bids = [new QuoteChange(100m, 10)],
+			Asks = [],
+		};
+		holder.Process(snap1);
+
+		// Get snapshot to verify initial state
+		holder.TryGetSnapshot(_secId1, out var snapBefore).AssertTrue();
+		snapBefore.Bids[0].Price.AssertEqual(100m);
+
+		// Try to send full snapshot with bid at 200, but use invalid data for builder
+		var snap2 = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			State = null,
+			HasPositions = true, // invalid for full snapshot
+			Bids = [new QuoteChange(200m, 20) { Action = QuoteChangeActions.New, StartPosition = 50 }],
+			Asks = [],
+		};
+
+		try
+		{
+			holder.Process(snap2);
+		}
+		catch (InvalidOperationException)
+		{
+			// Expected - builder.TryApply failed
+			// BUG: info.Snapshot was ALREADY set to snap2 (with bid at 200)
+			// but builder was NOT reinitialized, still thinks bid is at 100
+		}
+
+		// Now TryGetSnapshot should return what's in info.Snapshot
+		holder.TryGetSnapshot(_secId1, out var snapAfter).AssertTrue();
+
+		// BUG: snapAfter will have bid at 200 (from failed snap2)
+		// EXPECTED: Should still have bid at 100 (from snap1)
+		// Because snap2 processing failed, state should not have changed
+		snapAfter.Bids[0].Price.AssertEqual(100m); // FAILS - will be 200m
+	}
 }
