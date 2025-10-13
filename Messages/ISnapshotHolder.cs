@@ -19,9 +19,8 @@ public interface ISnapshotHolder<TMessage>
 	/// Process <typeref name="TMessage"/> change.
 	/// </summary>
 	/// <param name="change"><typeref name="TMessage"/> change.</param>
-	/// <param name="needResponse">Need response value.</param>
-	/// <returns><typeref name="TMessage"/> change.</returns>
-	TMessage Process(TMessage change, bool needResponse);
+	/// <returns><typeref name="TMessage"/> change (diff or snapshot clone on first call).</returns>
+	TMessage Process(TMessage change);
 
 	/// <summary>
 	/// Reset snapshot for the specified security.
@@ -60,7 +59,7 @@ public class Level1SnapshotHolder : BaseLogReceiver, ISnapshotHolder<Level1Chang
 	}
 
 	/// <inheritdoc />
-	public Level1ChangeMessage Process(Level1ChangeMessage level1Msg, bool needResponse)
+	public Level1ChangeMessage Process(Level1ChangeMessage level1Msg)
 	{
 		if (level1Msg is null)
 			throw new ArgumentNullException(nameof(level1Msg));
@@ -71,13 +70,13 @@ public class Level1SnapshotHolder : BaseLogReceiver, ISnapshotHolder<Level1Chang
 		{
 			if (_snapshots.TryGetValue(secId, out var snapshot))
 			{
-				var diff = needResponse ? new Level1ChangeMessage
+				var diff = new Level1ChangeMessage
 				{
 					SecurityId = secId,
 					ServerTime = level1Msg.ServerTime,
 					LocalTime = level1Msg.LocalTime,
 					BuildFrom = level1Msg.BuildFrom,
-				} : null;
+				};
 
 				var changes = snapshot.Changes;
 
@@ -88,13 +87,13 @@ public class Level1SnapshotHolder : BaseLogReceiver, ISnapshotHolder<Level1Chang
 						if (prevValue?.Equals(change.Value) != true)
 						{
 							changes[change.Key] = change.Value;
-							diff?.Changes.Add(change);
+							diff.Changes.Add(change);
 						}
 					}
 					else
 					{
 						changes.Add(change);
-						diff?.Changes.Add(change);
+						diff.Changes.Add(change);
 					}
 				}
 
@@ -137,6 +136,21 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 	{
 	}
 
+	/// <summary>
+	/// Try get current error counter for the specified security.
+	/// </summary>
+	/// <param name="securityId">Security ID.</param>
+	/// <returns>
+	/// Error counter value if snapshot exists; otherwise <see langword="null"/>.
+	/// </returns>
+	public int? GetErrorCount(SecurityId securityId)
+	{
+		lock (_snapshots.SyncRoot)
+		{
+			return _snapshots.TryGetValue(securityId, out var s) ? s.Third : null;
+		}
+	}
+
 	/// <inheritdoc />
 	public bool TryGetSnapshot(SecurityId securityId, out QuoteChangeMessage snapshot)
 	{
@@ -153,7 +167,7 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 	}
 
 	/// <inheritdoc />
-	public QuoteChangeMessage Process(QuoteChangeMessage quoteMsg, bool needResponse)
+	public QuoteChangeMessage Process(QuoteChangeMessage quoteMsg)
 	{
 		if (quoteMsg is null)
 			throw new ArgumentNullException(nameof(quoteMsg));
@@ -174,29 +188,28 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 
 				if (_snapshots.TryGetValue(secId, out var tuple))
 				{
-					if (tuple.Third == _maxError)
+					try
 					{
-						result = null;
-					}
-					else
-					{
-						try
-						{
-							var delta = needResponse ? tuple.First.GetDelta(quoteMsg) : null;
-							tuple.First = snapshot;
-							tuple.Third = 0;
-							result = delta;
-						}
-						catch (Exception ex)
-						{
-							if (++tuple.Third == _maxError)
-							{
-								logTurnedOff = true;
-								logErrorCount = tuple.Third;
-							}
+						var delta = tuple.First.GetDelta(quoteMsg);
 
-							toThrow = new InvalidOperationException(LocalizedStrings.MessageWithError.Put(quoteMsg), ex);
+						tuple.First = snapshot;
+						tuple.Third = 0;
+
+						// reinitialize builder state to the new full snapshot
+						var applied = tuple.Second.TryApply(snapshot)
+							?? throw new InvalidOperationException();
+
+						result = delta;
+					}
+					catch (Exception ex)
+					{
+						if (++tuple.Third == _maxError)
+						{
+							logTurnedOff = true;
+							logErrorCount = tuple.Third;
 						}
+
+						toThrow = new InvalidOperationException(LocalizedStrings.MessageWithError.Put(quoteMsg), ex);
 					}
 				}
 				else

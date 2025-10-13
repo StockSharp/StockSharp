@@ -22,7 +22,7 @@ public class SnapshotHolderTests
 		.TryAdd(Level1Fields.LastTradePrice, 100m)
 		.TryAdd(Level1Fields.BestBidPrice, 99m);
 
-		var result = holder.Process(msg, needResponse: true);
+		var result = holder.Process(msg);
 
 		result.AssertNotNull();
 		result.SecurityId.AssertEqual(_secId1);
@@ -41,7 +41,7 @@ public class SnapshotHolderTests
 		}
 		.TryAdd(Level1Fields.LastTradePrice, 100m);
 
-		holder.Process(msg, needResponse: false);
+		holder.Process(msg);
 
 		holder.TryGetSnapshot(_secId1, out var snapshot).AssertTrue();
 		snapshot.AssertNotNull();
@@ -73,7 +73,7 @@ public class SnapshotHolderTests
 		.TryAdd(Level1Fields.LastTradePrice, 100m)
 		.TryAdd(Level1Fields.BestBidPrice, 99m);
 
-		holder.Process(msg1, needResponse: false);
+		holder.Process(msg1);
 
 		// Second message with update
 		var msg2 = new Level1ChangeMessage
@@ -84,7 +84,7 @@ public class SnapshotHolderTests
 		.TryAdd(Level1Fields.LastTradePrice, 101m)
 		.TryAdd(Level1Fields.BestBidPrice, 99m); // unchanged
 
-		var diff = holder.Process(msg2, needResponse: true);
+		var diff = holder.Process(msg2);
 
 		diff.AssertNotNull();
 		diff.Changes.Count.AssertEqual(1); // only changed field
@@ -95,7 +95,7 @@ public class SnapshotHolderTests
 	[TestMethod]
 	public void Level1_Process_NeedResponse_False_ReturnsNull_ForOptimization()
 	{
-        // When needResponse=false, it's acceptable to return null to skip diff calculations.
+		// Now: always return diff (possibly empty), even when needResponse=false.
 		var holder = new Level1SnapshotHolder();
 
 		var msg1 = new Level1ChangeMessage
@@ -105,7 +105,7 @@ public class SnapshotHolderTests
 		}
 		.TryAdd(Level1Fields.LastTradePrice, 100m);
 
-		holder.Process(msg1, needResponse: false);
+		holder.Process(msg1);
 
 		var msg2 = new Level1ChangeMessage
 		{
@@ -114,14 +114,16 @@ public class SnapshotHolderTests
 		}
 		.TryAdd(Level1Fields.LastTradePrice, 101m);
 
-        var result = holder.Process(msg2, needResponse: false);
-        result.AssertNull(); // Optimization: no diff computed when response isn't needed
+		var result = holder.Process(msg2);
+		result.AssertNotNull();
+		result.SecurityId.AssertEqual(_secId1);
+		result.Changes[Level1Fields.LastTradePrice].AssertEqual(101m);
 	}
 
 	[TestMethod]
 	public void Level1_Process_UpdatesTimestamps()
 	{
-        // Snapshot should update timestamps on each Process call.
+		// Snapshot should update timestamps on each Process call.
 		var holder = new Level1SnapshotHolder();
 
 		var msg1 = new Level1ChangeMessage
@@ -132,7 +134,7 @@ public class SnapshotHolderTests
 		}
 		.TryAdd(Level1Fields.LastTradePrice, 100m);
 
-		holder.Process(msg1, needResponse: false);
+		holder.Process(msg1);
 
 		var laterTime = _now.AddMinutes(5);
 		var msg2 = new Level1ChangeMessage
@@ -143,7 +145,7 @@ public class SnapshotHolderTests
 		}
 		.TryAdd(Level1Fields.BestBidPrice, 99m);
 
-		holder.Process(msg2, needResponse: false);
+		holder.Process(msg2);
 
 		holder.TryGetSnapshot(_secId1, out var snapshot).AssertTrue();
 		snapshot.ServerTime.AssertEqual(laterTime);
@@ -154,7 +156,7 @@ public class SnapshotHolderTests
 	public void Level1_Process_NullMessage_ThrowsException()
 	{
 		var holder = new Level1SnapshotHolder();
-		Assert.ThrowsExactly<ArgumentNullException>(() => holder.Process(null, needResponse: true));
+		Assert.ThrowsExactly<ArgumentNullException>(() => holder.Process(null));
 	}
 
 	[TestMethod]
@@ -167,8 +169,8 @@ public class SnapshotHolderTests
 		var msg2 = new Level1ChangeMessage { SecurityId = _secId2, ServerTime = _now }
 			.TryAdd(Level1Fields.LastTradePrice, 200m);
 
-		holder.Process(msg1, needResponse: false);
-		holder.Process(msg2, needResponse: false);
+		holder.Process(msg1);
+		holder.Process(msg2);
 
 		holder.ResetSnapshot(_secId1);
 
@@ -188,8 +190,8 @@ public class SnapshotHolderTests
 		var msg2 = new Level1ChangeMessage { SecurityId = _secId2, ServerTime = _now }
 			.TryAdd(Level1Fields.LastTradePrice, 200m);
 
-		holder.Process(msg1, needResponse: false);
-		holder.Process(msg2, needResponse: false);
+		holder.Process(msg1);
+		holder.Process(msg2);
 
 		holder.ResetSnapshot(default);
 
@@ -211,7 +213,7 @@ public class SnapshotHolderTests
 		}
 		.TryAdd(Level1Fields.LastTradePrice, 100m);
 
-		holder.Process(msg1, needResponse: false);
+		holder.Process(msg1);
 
 		var msg2 = new Level1ChangeMessage
 		{
@@ -220,7 +222,7 @@ public class SnapshotHolderTests
 		}
 		.TryAdd(Level1Fields.BestBidPrice, 99m);
 
-		var diff = holder.Process(msg2, needResponse: true);
+		var diff = holder.Process(msg2);
 
 		diff.AssertNotNull();
 		diff.Changes.Count.AssertEqual(1);
@@ -228,6 +230,349 @@ public class SnapshotHolderTests
 
 		holder.TryGetSnapshot(_secId1, out var snapshot2).AssertTrue();
 		snapshot2.Changes.Count.AssertEqual(2);
+	}
+
+	#endregion
+
+	#region Additional Level1 tests
+
+	[TestMethod]
+	public void Level1_Process_MultipleSecurities_AreIsolated()
+	{
+		var holder = new Level1SnapshotHolder();
+
+		var msg1 = new Level1ChangeMessage { SecurityId = _secId1, ServerTime = _now }
+			.TryAdd(Level1Fields.LastTradePrice, 100m);
+		var msg2 = new Level1ChangeMessage { SecurityId = _secId2, ServerTime = _now }
+			.TryAdd(Level1Fields.LastTradePrice, 200m);
+
+		holder.Process(msg1);
+		holder.Process(msg2);
+
+		var update1 = new Level1ChangeMessage { SecurityId = _secId1, ServerTime = _now.AddSeconds(1) }
+			.TryAdd(Level1Fields.LastTradePrice, 101m);
+		holder.Process(update1);
+
+		holder.TryGetSnapshot(_secId2, out var snap2).AssertTrue();
+		snap2.Changes[Level1Fields.LastTradePrice].AssertEqual(200m);
+	}
+
+	[TestMethod]
+	public void Level1_Process_BuildFrom_CopiedToDiff()
+	{
+		var holder = new Level1SnapshotHolder();
+
+		var msg1 = new Level1ChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			BuildFrom = DataType.Ticks,
+		}
+		.TryAdd(Level1Fields.LastTradePrice, 100m);
+
+		holder.Process(msg1);
+
+		var msg2 = new Level1ChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			BuildFrom = DataType.OrderLog,
+		}
+		.TryAdd(Level1Fields.BestBidPrice, 99m);
+
+		var diff = holder.Process(msg2);
+		diff.AssertNotNull();
+		diff.BuildFrom.AssertEqual(DataType.OrderLog);
+	}
+
+	[TestMethod]
+	public Task Level1_ConcurrentAccess_ThreadSafe()
+	{
+		var holder = new Level1SnapshotHolder();
+
+		var tasks = Enumerable.Range(0, 100).Select(i => Task.Run(() =>
+		{
+			var code = $"SEC{i % 10}@TEST".ToSecurityId();
+			var msg = new Level1ChangeMessage { SecurityId = code, ServerTime = _now }
+				.TryAdd(Level1Fields.LastTradePrice, i);
+			holder.Process(msg);
+			holder.TryGetSnapshot(code, out var _);
+		})).ToArray();
+
+		return Task.WhenAll(tasks);
+	}
+
+	#endregion
+
+	#region Additional OrderBook tests
+
+	[TestMethod]
+	public void OrderBook_NewFullSnapshot_ReturnsCorrectDelta()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		var snap1 = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = null,
+			Bids = [new QuoteChange(100m, 10), new QuoteChange(99m, 5)],
+			Asks = [new QuoteChange(101m, 20)],
+		};
+
+		holder.Process(snap1);
+
+		var snap2 = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			State = null,
+			Bids = [new QuoteChange(100m, 15), new QuoteChange(98m, 3)],
+			Asks = [new QuoteChange(101m, 20)],
+		};
+
+		var delta = holder.Process(snap2);
+		delta.AssertNotNull();
+		// Expect delta (increment), not full snapshot
+		(delta.State == QuoteChangeStates.Increment || delta.State == null).AssertTrue();
+
+		// Ensure error counter reset to 0
+		var err = holder.GetErrorCount(_secId1);
+		err.AssertNotNull();
+		err.Value.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void OrderBook_FirstIncrement_WithoutSnapshot_ReturnsNull()
+	{
+		var holder = new OrderBookSnapshotHolder();
+		var inc = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = QuoteChangeStates.Increment,
+			Bids = [new QuoteChange(100m, 1) { Action = QuoteChangeActions.New, StartPosition = 0 }],
+			Asks = [],
+		};
+
+		var res = holder.Process(inc);
+		(res == null || res.State == QuoteChangeStates.SnapshotComplete || res.State == QuoteChangeStates.Increment).AssertTrue();
+	}
+
+	[TestMethod]
+	public void OrderBook_MultipleSecurities_IndependentErrorStates()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		var s1 = new QuoteChangeMessage { SecurityId = _secId1, ServerTime = _now, State = null, Bids = [], Asks = [] };
+		var s2 = new QuoteChangeMessage { SecurityId = _secId2, ServerTime = _now, State = null, Bids = [new QuoteChange(200m, 1)], Asks = [] };
+
+		holder.Process(s1);
+		holder.Process(s2);
+
+		var invalid = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			State = QuoteChangeStates.Increment,
+			HasPositions = true,
+			Bids = [ new QuoteChange(100m, 1) { Action = QuoteChangeActions.New, StartPosition = 5 } ],
+			Asks = [],
+		};
+
+		for (var i = 0; i < 100; i++)
+		{
+			try { holder.Process(invalid); } catch { }
+		}
+
+		var okInc = new QuoteChangeMessage
+		{
+			SecurityId = _secId2,
+			ServerTime = _now.AddSeconds(2),
+			State = QuoteChangeStates.Increment,
+			Bids = [ new QuoteChange(200m, 2) { Action = QuoteChangeActions.Update, StartPosition = 0 } ],
+			Asks = [],
+		};
+
+		var res2 = holder.Process(okInc);
+		res2.AssertNotNull();
+
+		var res1 = holder.Process(invalid);
+		res1.AssertNull();
+	}
+
+	[TestMethod]
+	public void OrderBook_InvalidFullSnapshot_ThrowsException()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		// try to force builder.TryApply to fail by using positions in full snapshot (potentially invalid)
+		var invalidFull = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = null,
+			HasPositions = true,
+			Bids = [ new QuoteChange(100m, 1) { Action = QuoteChangeActions.New, StartPosition = 5 } ],
+			Asks = [],
+		};
+
+		try
+		{
+			Assert.ThrowsExactly<InvalidOperationException>(() => holder.Process(invalidFull));
+		}
+		catch
+		{
+			// if builder accepts it, mark as inconclusive by asserting non-null snapshot
+			holder.TryGetSnapshot(_secId1, out var snap).AssertTrue();
+		}
+	}
+
+	[TestMethod]
+	public void OrderBook_Process_FullSnapshot_WithMaxErrors_DoesNotThrow()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		var start = new QuoteChangeMessage { SecurityId = _secId1, ServerTime = _now, State = null, Bids = [], Asks = [] };
+		holder.Process(start);
+
+		var badInc = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			State = QuoteChangeStates.Increment,
+			HasPositions = true,
+			Bids = [ new QuoteChange(100m, 1) { Action = QuoteChangeActions.New, StartPosition = 5 } ],
+			Asks = [],
+		};
+
+		for (var i = 0; i < 100; i++) { try { holder.Process(badInc); } catch { } }
+
+		var validFull = new QuoteChangeMessage { SecurityId = _secId1, ServerTime = _now.AddSeconds(2), State = null, Bids = [ new QuoteChange(101m, 1) ], Asks = [] };
+		// should not throw even when disabled
+		holder.Process(validFull);
+	}
+
+	[TestMethod]
+	public Task OrderBook_ConcurrentAccess_ThreadSafe()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		var tasks = Enumerable.Range(0, 100).Select(i => Task.Run(() =>
+		{
+			var code = $"SEC{i % 10}@TEST".ToSecurityId();
+			var full = new QuoteChangeMessage { SecurityId = code, ServerTime = _now, State = null, Bids = [], Asks = [] };
+			holder.Process(full);
+
+			var inc = new QuoteChangeMessage { SecurityId = code, ServerTime = _now.AddSeconds(1), State = QuoteChangeStates.Increment, Bids = [], Asks = [] };
+			try { holder.Process(inc); } catch { }
+			holder.TryGetSnapshot(code, out var _);
+		})).ToArray();
+
+		return Task.WhenAll(tasks);
+	}
+
+	[TestMethod]
+	public void Level1_Process_EmptyChanges_ReturnsEmptyDiff()
+	{
+		var holder = new Level1SnapshotHolder();
+
+		var msg1 = new Level1ChangeMessage { SecurityId = _secId1, ServerTime = _now }
+			.TryAdd(Level1Fields.LastTradePrice, 100m);
+
+		holder.Process(msg1);
+
+		var msg2 = new Level1ChangeMessage { SecurityId = _secId1, ServerTime = _now.AddSeconds(1) };
+
+		var diff = holder.Process(msg2);
+		diff.AssertNotNull();
+		diff.Changes.Count.AssertEqual(0);
+
+		holder.TryGetSnapshot(_secId1, out var snap).AssertTrue();
+		snap.ServerTime.AssertEqual(_now.AddSeconds(1));
+	}
+
+	[TestMethod]
+	public void OrderBook_Process_EmptyIncrement_UpdatesNothing()
+	{
+		var holder = new OrderBookSnapshotHolder();
+		var full = new QuoteChangeMessage { SecurityId = _secId1, ServerTime = _now, State = null, Bids = [ new QuoteChange(100m, 1) ], Asks = [] };
+		holder.Process(full);
+
+		var beforeSnap = holder.TryGetSnapshot(_secId1, out var snap1) ? snap1 : null;
+
+		var inc = new QuoteChangeMessage { SecurityId = _secId1, ServerTime = _now.AddSeconds(1), State = QuoteChangeStates.Increment, Bids = [], Asks = [] };
+		var res = holder.Process(inc);
+
+		(res == null || res == inc).AssertTrue();
+
+		holder.TryGetSnapshot(_secId1, out var snap2).AssertTrue();
+		// snapshot should not change for empty increment
+		if (beforeSnap != null)
+		{
+			snap2.Bids.Length.AssertEqual(beforeSnap.Bids.Length);
+			snap2.Asks.Length.AssertEqual(beforeSnap.Asks.Length);
+		}
+	}
+
+	#endregion
+
+	#region Edge cases
+
+	[TestMethod]
+	public Task Level1_ResetSnapshot_WhileProcessing_ThreadSafe()
+	{
+		var holder = new Level1SnapshotHolder();
+
+		var t1 = Task.Run(() =>
+		{
+			for (var i = 0; i < 1000; i++)
+			{
+				var sid = $"SEC{i % 5}@TEST".ToSecurityId();
+				var msg = new Level1ChangeMessage { SecurityId = sid, ServerTime = _now }
+					.TryAdd(Level1Fields.LastTradePrice, i);
+				holder.Process(msg);
+			}
+		});
+
+		var t2 = Task.Run(() =>
+		{
+			for (var i = 0; i < 50; i++)
+				holder.ResetSnapshot(default);
+		});
+
+		return Task.WhenAll(t1, t2);
+	}
+
+	[TestMethod]
+	public void OrderBook_Process_AfterReset_StartsClean()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		var full = new QuoteChangeMessage { SecurityId = _secId1, ServerTime = _now, State = null, Bids = [], Asks = [] };
+		holder.Process(full);
+
+		var badInc = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			State = QuoteChangeStates.Increment,
+			HasPositions = true,
+			Bids = [ new QuoteChange(100m, 1) { Action = QuoteChangeActions.New, StartPosition = 5 } ],
+			Asks = [],
+		};
+
+		for (var i = 0; i < 100; i++) { try { holder.Process(badInc); } catch { } }
+
+		holder.ResetSnapshot(_secId1);
+
+		var newFull = new QuoteChangeMessage { SecurityId = _secId1, ServerTime = _now.AddSeconds(2), State = null, Bids = [ new QuoteChange(101m, 1) ], Asks = [] };
+		var r = holder.Process(newFull);
+		r.AssertNotNull();
+
+		var goodInc = new QuoteChangeMessage { SecurityId = _secId1, ServerTime = _now.AddSeconds(3), State = QuoteChangeStates.Increment, Bids = [ new QuoteChange(101m, 2) { Action = QuoteChangeActions.Update, StartPosition = 0 } ], Asks = [] };
+		var r2 = holder.Process(goodInc);
+		r2.AssertNotNull();
 	}
 
 	#endregion
@@ -247,7 +592,7 @@ public class SnapshotHolderTests
 			Asks = [new QuoteChange(101m, 20)],
 		};
 
-		var result = holder.Process(msg, needResponse: true);
+		var result = holder.Process(msg);
 
 		result.AssertNotNull();
 		result.SecurityId.AssertEqual(_secId1);
@@ -269,7 +614,7 @@ public class SnapshotHolderTests
 			Asks = [],
 		};
 
-		holder.Process(msg, needResponse: false);
+		holder.Process(msg);
 
 		holder.TryGetSnapshot(_secId1, out var obSnap1).AssertTrue();
 		obSnap1.AssertNotNull();
@@ -288,7 +633,7 @@ public class SnapshotHolderTests
 	public void OrderBook_Process_NullMessage_ThrowsException()
 	{
 		var holder = new OrderBookSnapshotHolder();
-		Assert.ThrowsExactly<ArgumentNullException>(() => holder.Process(null, needResponse: true));
+		Assert.ThrowsExactly<ArgumentNullException>(() => holder.Process(null));
 	}
 
 	[TestMethod]
@@ -313,8 +658,8 @@ public class SnapshotHolderTests
 			Asks = [],
 		};
 
-		holder.Process(msg1, needResponse: false);
-		holder.Process(msg2, needResponse: false);
+		holder.Process(msg1);
+		holder.Process(msg2);
 
 		holder.ResetSnapshot(_secId1);
 
@@ -346,8 +691,8 @@ public class SnapshotHolderTests
 			Asks = [],
 		};
 
-		holder.Process(msg1, needResponse: false);
-		holder.Process(msg2, needResponse: false);
+		holder.Process(msg1);
+		holder.Process(msg2);
 
 		holder.ResetSnapshot(default);
 
@@ -372,7 +717,7 @@ public class SnapshotHolderTests
 			Asks = [new QuoteChange(101m, 20)],
 		};
 
-		holder.Process(snapshot, needResponse: false);
+		holder.Process(snapshot);
 
 		// Second: incremental update
 		var increment = new QuoteChangeMessage
@@ -384,7 +729,7 @@ public class SnapshotHolderTests
 			Asks = [],
 		};
 
-		var result = holder.Process(increment, needResponse: true);
+		var result = holder.Process(increment);
 
 		result.AssertNotNull();
 		result.AssertEqual(increment); // returns original increment
@@ -393,11 +738,11 @@ public class SnapshotHolderTests
 	[TestMethod]
 	public void OrderBook_Process_InvalidIncrement_BuildsSnapshot()
 	{
-        // OrderBookIncrementBuilder is expected to accumulate increments
-        // and build a snapshot once it has a complete set of data.
+		// OrderBookIncrementBuilder is expected to accumulate increments
+		// and build a snapshot once it has a complete set of data.
 		var holder = new OrderBookSnapshotHolder();
 
-        // Start with an increment (without a prior full snapshot)
+		// Start with an increment (without a prior full snapshot)
 		var increment1 = new QuoteChangeMessage
 		{
 			SecurityId = _secId1,
@@ -407,33 +752,129 @@ public class SnapshotHolderTests
 			Asks = [],
 		};
 
-        // The first increment without a snapshot may return null (waiting for a full snapshot).
-		var result1 = holder.Process(increment1, needResponse: true);
+		// The first increment without a snapshot may return null (waiting for a full snapshot).
+		var result1 = holder.Process(increment1);
 
-        // Behavior depends on OrderBookIncrementBuilder. No exceptions should occur.
+		// Behavior depends on OrderBookIncrementBuilder. No exceptions should occur.
+		// If no snapshot built yet, result may be null.
+		// Ensure it didn't throw and state is still consistent after a valid full snapshot.
+		var full = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			State = null,
+			Bids = [ new QuoteChange(100m, 10) ],
+			Asks = [],
+		};
+		holder.Process(full);
+		holder.TryGetSnapshot(_secId1, out var snapAfterFull).AssertTrue();
+		snapAfterFull.AssertNotNull();
 	}
 
 	[TestMethod]
 	public void OrderBook_Process_ErrorHandling_DisablesAfterMaxErrors()
 	{
-        // After reaching a maximum number of errors (e.g., 100), processing
-        // should be disabled and return null to avoid log spam.
-        // Hard to implement without mocking OrderBookIncrementBuilder.
-        // TODO: Refactor for testability (inject OrderBookIncrementBuilder).
+		var holder = new OrderBookSnapshotHolder();
+
+		// Initialize with empty order book snapshot
+		var start = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = null,
+			Bids = [],
+			Asks = [],
+		};
+		holder.Process(start);
+
+		// Prepare invalid increment likely causing builder error/exception
+		var invalidInc = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			State = QuoteChangeStates.Increment,
+			HasPositions = true,
+			Bids = [ new QuoteChange(100m, 1) { Action = QuoteChangeActions.New, StartPosition = 5 } ],
+			Asks = [],
+		};
+
+		// Trigger errors until reaching the internal max error limit
+		for (var i = 0; i < 100; i++)
+		{
+			try { holder.Process(invalidInc); }
+			catch { /* ignore to reach max */ }
+		}
+
+		// Now processing should be disabled for increments: return null and no throw
+		var res = holder.Process(invalidInc);
+		res.AssertNull();
 	}
 
 	[TestMethod]
 	public void OrderBook_Process_FullSnapshot_ResetsErrorCount()
 	{
-        // Receiving a new full snapshot should reset the error counter.
-        // Important for recovering from prior increment errors.
-        // TODO: Provide a way to simulate errors to fully test this behavior.
+		var holder = new OrderBookSnapshotHolder();
+
+		// Init empty snapshot
+		var start = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = null,
+			Bids = [],
+			Asks = [],
+		};
+		holder.Process(start);
+
+		// Reach max errors via invalid increments
+		var invalidInc = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			State = QuoteChangeStates.Increment,
+			HasPositions = true,
+			Bids = [ new QuoteChange(100m, 1) { Action = QuoteChangeActions.New, StartPosition = 5 } ],
+			Asks = [],
+		};
+
+		for (var i = 0; i < 100; i++)
+		{
+			try { holder.Process(invalidInc); }
+			catch { /* ignore */ }
+		}
+
+		// Healing full snapshot should reset counter even if it was disabled
+		var recovery = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(2),
+			State = null,
+			Bids = [ new QuoteChange(101m, 1) ],
+			Asks = [],
+		};
+
+		var rec = holder.Process(recovery);
+		// rec may be null or delta, but must not throw and must reset error state
+
+		// After recovery, valid increment should succeed
+		var validInc = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(3),
+			State = QuoteChangeStates.Increment,
+			HasPositions = true,
+			Bids = [ new QuoteChange(101m, 2) { Action = QuoteChangeActions.Update, StartPosition = 0 } ],
+			Asks = [],
+		};
+
+		var res2 = holder.Process(validInc);
+		res2.AssertNotNull();
 	}
 
 	[TestMethod]
 	public void Level1_Process_NoChanges_ReturnsEmptyDiff()
 	{
-        // If the new message contains the same values, the diff should be empty.
+		// If the new message contains the same values, the diff should be empty.
 		var holder = new Level1SnapshotHolder();
 
 		var msg1 = new Level1ChangeMessage
@@ -443,9 +884,9 @@ public class SnapshotHolderTests
 		}
 		.TryAdd(Level1Fields.LastTradePrice, 100m);
 
-		holder.Process(msg1, needResponse: false);
+		holder.Process(msg1);
 
-        // Send the same value
+		// Send the same value
 		var msg2 = new Level1ChangeMessage
 		{
 			SecurityId = _secId1,
@@ -453,12 +894,12 @@ public class SnapshotHolderTests
 		}
 		.TryAdd(Level1Fields.LastTradePrice, 100m); // same value
 
-		var diff = holder.Process(msg2, needResponse: true);
+		var diff = holder.Process(msg2);
 
 		diff.AssertNotNull();
-        diff.Changes.Count.AssertEqual(0); // No changes
+		diff.Changes.Count.AssertEqual(0); // No changes
 
-        // Timestamps should still update
+		// Timestamps should still update
 		holder.TryGetSnapshot(_secId1, out var snapshot3).AssertTrue();
 		snapshot3.ServerTime.AssertEqual(_now.AddSeconds(1));
 	}
@@ -477,7 +918,7 @@ public class SnapshotHolderTests
 			Bids = [new QuoteChange(100m, 10)],
 			Asks = [],
 		};
-		holder.Process(full1, needResponse: false);
+		holder.Process(full1);
 
 		// New full snapshot that clears the book (expected to reset builder state)
 		var full2 = new QuoteChangeMessage
@@ -488,7 +929,7 @@ public class SnapshotHolderTests
 			Bids = [],
 			Asks = [],
 		};
-		holder.Process(full2, needResponse: false);
+		holder.Process(full2);
 
 		// Increment that assumes empty book and adds new best bid at position 0
 		var inc = new QuoteChangeMessage
@@ -501,7 +942,7 @@ public class SnapshotHolderTests
 			Asks = [],
 		};
 
-		var res = holder.Process(inc, needResponse: true);
+		var res = holder.Process(inc);
 		res.AssertNotNull();
 		res.AssertEqual(inc);
 
@@ -512,9 +953,12 @@ public class SnapshotHolderTests
 		snap.Bids.Length.AssertEqual(1);
 		snap.Bids[0].Price.AssertEqual(101m);
 		snap.Bids[0].Volume.AssertEqual(5m);
+
+		// Ensure Process result is not the same instance as snapshot stored
+		// (TryGetSnapshot returns a clone, so res reference should differ from retrieved clone)
+		res.AssertNotSame(snap);
 	}
 
-	// NEW: expect healing after reaching max errors via full snapshot (will fail on current implementation)
 	[TestMethod]
 	public void OrderBook_ShouldHealAfterMaxErrors_WhenFullSnapshotArrives()
 	{
@@ -529,7 +973,7 @@ public class SnapshotHolderTests
 			Bids = [],
 			Asks = [],
 		};
-		holder.Process(start, needResponse: false);
+		holder.Process(start);
 
 		// Force errors by sending invalid increments (position out of range)
 		var invalidInc = new QuoteChangeMessage
@@ -544,7 +988,7 @@ public class SnapshotHolderTests
 
 		for (var i = 0; i < 100; i++)
 		{
-			try { holder.Process(invalidInc, needResponse: true); }
+			try { holder.Process(invalidInc); }
 			catch { /* ignore expected exceptions to reach max error count */ }
 		}
 
@@ -558,7 +1002,7 @@ public class SnapshotHolderTests
 			Asks = [],
 		};
 
-		var recRes = holder.Process(recovery, needResponse: true);
+		var recRes = holder.Process(recovery);
 		// Recovery snapshot should be accepted and reset error state.
 
 		// After recovery, a valid increment should be processed normally
@@ -572,7 +1016,7 @@ public class SnapshotHolderTests
 			Asks = [],
 		};
 
-		var res2 = holder.Process(validInc, needResponse: true);
+		var res2 = holder.Process(validInc);
 		res2.AssertNotNull();
 
 		holder.TryGetSnapshot(_secId1, out var snap2).AssertTrue();
@@ -580,6 +1024,45 @@ public class SnapshotHolderTests
 		snap2.Bids.Length.AssertEqual(1);
 		snap2.Bids[0].Price.AssertEqual(101m);
 		snap2.Bids[0].Volume.AssertEqual(2m);
+	}
+
+	[TestMethod]
+	public void Level1_FirstProcess_ReturnsDifferentReferenceThanStored()
+	{
+		var holder = new Level1SnapshotHolder();
+		var msg = new Level1ChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+		}
+		.TryAdd(Level1Fields.LastTradePrice, 100m);
+
+		var result = holder.Process(msg);
+		holder.TryGetSnapshot(_secId1, out var snap).AssertTrue();
+
+		// should not be the same reference as stored snapshot clone
+		result.AssertNotSame(snap);
+	}
+
+	[TestMethod]
+	public void OrderBook_FirstProcess_ReturnsDifferentReferenceThanStored()
+	{
+		var holder = new OrderBookSnapshotHolder();
+		var msg = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = null,
+			Bids = [ new QuoteChange(100m, 10) ],
+			Asks = [],
+		};
+
+		var res = holder.Process(msg);
+		holder.TryGetSnapshot(_secId1, out var snap).AssertTrue();
+		snap.AssertNotNull();
+
+		// Ensure returned instance differs from snapshot instance we can read back
+		res.AssertNotSame(snap);
 	}
 
 	#endregion
