@@ -171,7 +171,10 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 	/// <param name="info">Subscription.</param>
 	public void Remove(TSubcription info)
 	{
-		void TryRemoveSubscription<TKey>(SynchronizedDictionary<TKey, CachedSynchronizedSet<TSubcription>> dict)
+		if (info is null)
+			throw new ArgumentNullException(nameof(info));
+
+		void tryRemove<TKey>(SynchronizedDictionary<TKey, CachedSynchronizedSet<TSubcription>> dict)
 		{
 			lock (dict.SyncRoot)
 			{
@@ -185,9 +188,9 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 			}
 		}
 
-		TryRemoveSubscription(_subscriptionsByAllSec);
-		TryRemoveSubscription(_subscriptionsBySec);
-		TryRemoveSubscription(_subscriptionsByType);
+		tryRemove(_subscriptionsByAllSec);
+		tryRemove(_subscriptionsBySec);
+		tryRemove(_subscriptionsByType);
 
 		_subscriptionsById.Remove(info.Id);
 	}
@@ -197,7 +200,8 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 	/// </summary>
 	/// <param name="id">Identifier.</param>
 	/// <returns>Subscription.</returns>
-	public TSubcription TryGetById(long id) => _subscriptionsById.TryGetValue(id);
+	public TSubcription TryGetById(long id)
+		=> _subscriptionsById.TryGetValue(id);
 
 	/// <summary>
 	/// Clear state.
@@ -282,7 +286,7 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 		return _subscriptionsByType.TryGetValue(type)?.Cache.Where(i => !i.Suspend) ?? [];
 	}
 
-	private IEnumerable<TSubcription> ToSet(TSubcription info, bool checkSuspend = true)
+	private static IEnumerable<TSubcription> ToSet(TSubcription info, bool checkSuspend = true)
 		=> info == null || (checkSuspend && info.Suspend) ? [] : [info];
 
 	private IEnumerable<TSubcription> GetSubscriptions(DataType dataType, SecurityId securityId, long id)
@@ -335,7 +339,7 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 					return ToSet(subscription);
 				}
 				else
-					throw new ArgumentOutOfRangeException();
+					throw new ArgumentOutOfRangeException(execMsg.DataType.To<string>());
 			}
 
 			case MessageTypes.QuoteChange:
