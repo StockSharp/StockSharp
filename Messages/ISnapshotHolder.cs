@@ -300,7 +300,7 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 
 						_snapshots.Add(secId, new() { Snapshot = snapshot, Builder = builder });
 
-						result = snapshot;
+						result = snapshot.TypedClone();
 					}
 				}
 			}

@@ -302,6 +302,46 @@ public class SnapshotHolderTests
 		return Task.WhenAll(tasks);
 	}
 
+	[TestMethod]
+	public void OrderBook_ReturnedMessage_IsNotInternalInstance()
+	{
+		var holder = new OrderBookSnapshotHolder();
+		var inc = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = QuoteChangeStates.Increment,
+			Bids = [ new QuoteChange(100m, 10) ],
+			Asks = [],
+		};
+
+		// First increment may build snapshot immediately depending on builder logic
+		var res = holder.Process(inc);
+		if (res == null)
+		{
+			// Make a full snapshot to initialize
+			var full = new QuoteChangeMessage
+			{
+				SecurityId = _secId1,
+				ServerTime = _now.AddSeconds(1),
+				State = null,
+				Bids = [ new QuoteChange(100m, 10) ],
+				Asks = [],
+			};
+			res = holder.Process(full);
+		}
+
+		res.AssertNotNull();
+
+		// mutate returned message
+		res.Bids = [ new QuoteChange(999m, 1) ];
+
+		// internal snapshot must not be affected
+		holder.TryGetSnapshot(_secId1, out var snap).AssertTrue();
+		snap.AssertNotNull();
+		(snap.Bids.Length == 1 && snap.Bids[0].Price != 999m).AssertTrue();
+	}
+
 	#endregion
 
 	#region Additional OrderBook tests
