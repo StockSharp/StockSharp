@@ -84,7 +84,7 @@ public class Level1SnapshotHolder : BaseLogReceiver, ISnapshotHolder<Level1Chang
 				{
 					if (changes.TryGetValue(change.Key, out var prevValue))
 					{
-						if (prevValue?.Equals(change.Value) != true)
+						if (!Equals(prevValue, change.Value))
 						{
 							changes[change.Key] = change.Value;
 							diff.Changes.Add(change);
@@ -126,8 +126,15 @@ public class Level1SnapshotHolder : BaseLogReceiver, ISnapshotHolder<Level1Chang
 /// </summary>
 public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteChangeMessage>
 {
+	private class SnapshotInfo
+	{
+		public QuoteChangeMessage Snapshot;
+		public OrderBookIncrementBuilder Builder;
+		public int ErrorCount;
+	}
+
 	private const int _maxError = 100;
-	private readonly SynchronizedDictionary<SecurityId, RefTriple<QuoteChangeMessage, OrderBookIncrementBuilder, int>> _snapshots = [];
+	private readonly SynchronizedDictionary<SecurityId, SnapshotInfo> _snapshots = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="OrderBookSnapshotHolder"/>.
@@ -146,9 +153,7 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 	public int? GetErrorCount(SecurityId securityId)
 	{
 		lock (_snapshots.SyncRoot)
-		{
-			return _snapshots.TryGetValue(securityId, out var s) ? s.Third : null;
-		}
+			return _snapshots.TryGetValue(securityId, out var s) ? s.ErrorCount : null;
 	}
 
 	/// <inheritdoc />
@@ -161,7 +166,7 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 			if (!_snapshots.TryGetValue(securityId, out var s))
 				return false;
 
-			snapshot = s.First.TypedClone();
+			snapshot = s.Snapshot.TypedClone();
 			return true;
 		}
 	}
@@ -186,27 +191,27 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 				var snapshot = quoteMsg.TypedClone();
 				snapshot.State = QuoteChangeStates.SnapshotComplete;
 
-				if (_snapshots.TryGetValue(secId, out var tuple))
+				if (_snapshots.TryGetValue(secId, out var info))
 				{
 					try
 					{
-						var delta = tuple.First.GetDelta(quoteMsg);
+						var delta = info.Snapshot.GetDelta(quoteMsg);
 
-						tuple.First = snapshot;
-						tuple.Third = 0;
+						info.Snapshot = snapshot;
+						info.ErrorCount = 0;
 
 						// reinitialize builder state to the new full snapshot
-						var applied = tuple.Second.TryApply(snapshot)
+						var applied = info.Builder.TryApply(snapshot)
 							?? throw new InvalidOperationException();
 
 						result = delta;
 					}
 					catch (Exception ex)
 					{
-						if (++tuple.Third == _maxError)
+						if (++info.ErrorCount == _maxError)
 						{
 							logTurnedOff = true;
-							logErrorCount = tuple.Third;
+							logErrorCount = info.ErrorCount;
 						}
 
 						toThrow = new InvalidOperationException(LocalizedStrings.MessageWithError.Put(quoteMsg), ex);
@@ -220,16 +225,16 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 						toThrow = new InvalidOperationException();
 					else
 					{
-						_snapshots.Add(secId, RefTuple.Create(snapshot, builder, 0));
+						_snapshots.Add(secId, new() { Snapshot = snapshot, Builder = builder });
 						result = snapshot.TypedClone();
 					}
 				}
 			}
 			else
 			{
-				if (_snapshots.TryGetValue(secId, out var tuple))
+				if (_snapshots.TryGetValue(secId, out var info))
 				{
-					if (tuple.Third == _maxError)
+					if (info.ErrorCount == _maxError)
 					{
 						result = null;
 					}
@@ -237,10 +242,10 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 					{
 						try
 						{
-							var snapshot = tuple.Second.TryApply(quoteMsg);
+							var snapshot = info.Builder.TryApply(quoteMsg);
 
 							// reset error count (no exception)
-							tuple.Third = 0;
+							info.ErrorCount = 0;
 
 							if (snapshot is null)
 							{
@@ -249,16 +254,16 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 							else
 							{
 								snapshot.State = QuoteChangeStates.SnapshotComplete;
-								tuple.First = snapshot;
+								info.Snapshot = snapshot;
 								result = quoteMsg;
 							}
 						}
 						catch (Exception ex)
 						{
-							if (++tuple.Third == _maxError)
+							if (++info.ErrorCount == _maxError)
 							{
 								logTurnedOff = true;
-								logErrorCount = tuple.Third;
+								logErrorCount = info.ErrorCount;
 							}
 
 							toThrow = new InvalidOperationException(LocalizedStrings.MessageWithError.Put(quoteMsg), ex);
@@ -280,7 +285,7 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 					{
 						snapshot.State = QuoteChangeStates.SnapshotComplete;
 
-						_snapshots.Add(secId, RefTuple.Create(snapshot, builder, 0));
+						_snapshots.Add(secId, new() { Snapshot = snapshot, Builder = builder });
 
 						result = snapshot;
 					}
