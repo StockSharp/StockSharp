@@ -188,9 +188,12 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 		{
 			if (quoteMsg.State is null)
 			{
-				var snapshot = quoteMsg.TypedClone();
-				snapshot.State = QuoteChangeStates.SnapshotComplete;
+				quoteMsg = quoteMsg.TypedClone();
+				quoteMsg.State = QuoteChangeStates.SnapshotComplete;
+			}
 
+			if (quoteMsg.State == QuoteChangeStates.SnapshotComplete)
+			{
 				if (_snapshots.TryGetValue(secId, out var info))
 				{
 					try
@@ -198,10 +201,10 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 						var delta = info.Snapshot.GetDelta(quoteMsg);
 
 						// reinitialize builder state to the new full snapshot
-						var applied = info.Builder.TryApply(snapshot)
+						var applied = info.Builder.TryApply(quoteMsg)
 							?? throw new InvalidOperationException();
 
-						info.Snapshot = snapshot;
+						info.Snapshot = quoteMsg;
 						info.ErrorCount = 0;
 
 						result = delta;
@@ -226,12 +229,12 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 				{
 					var builder = new OrderBookIncrementBuilder(secId) { Parent = this };
 
-					if (builder.TryApply(snapshot) is null)
+					if (builder.TryApply(quoteMsg) is null)
 						toThrow = new InvalidOperationException();
 					else
 					{
-						_snapshots.Add(secId, new() { Snapshot = snapshot, Builder = builder });
-						result = snapshot.TypedClone();
+						_snapshots.Add(secId, new() { Snapshot = quoteMsg, Builder = builder });
+						result = quoteMsg.TypedClone(); // return clone for safety
 					}
 				}
 			}
