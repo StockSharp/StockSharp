@@ -15,10 +15,10 @@ public class SubscriptionHolderTests
 		public DataType DataType { get; set; }
 	}
 
-	private static SubscriptionHolder<TestSubscription, string, long> CreateHolder()
+	private static SubscriptionHolder<TestSubscription, string> CreateHolder()
 	{
 		var logger = new LogManager();
-		return new SubscriptionHolder<TestSubscription, string, long>(logger.Application);
+		return new(logger.Application);
 	}
 
 	private static TestSubscription CreateSubscription(long id, string session, SecurityId securityId, DataType dataType, SubscriptionStates state = SubscriptionStates.Active)
@@ -39,7 +39,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void Constructor_NullLogs_Throws()
 	{
-		Assert.ThrowsExactly<ArgumentNullException>(() => new SubscriptionHolder<TestSubscription, string, long>(null));
+		Assert.ThrowsExactly<ArgumentNullException>(() => new SubscriptionHolder<TestSubscription, string>(null));
 	}
 
 	#endregion

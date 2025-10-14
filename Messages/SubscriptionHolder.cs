@@ -40,12 +40,11 @@ public interface ISubscription<TSession>
 /// </summary>
 /// <typeparam name="TSubcription">Subscription type.</typeparam>
 /// <typeparam name="TSession">Session type.</typeparam>
-/// <typeparam name="TRequestId">Request identifier type.</typeparam>
 /// <remarks>
-/// Initializes a new instance of the <see cref="SubscriptionHolder{TSubcription,TSession,TRequestId}"/>.
+/// Initializes a new instance of the <see cref="SubscriptionHolder{TSubcription,TSession}"/>.
 /// </remarks>
 /// <param name="logs">Logs.</param>
-public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver logs)
+public class SubscriptionHolder<TSubcription, TSession>(ILogReceiver logs)
 	where TSubcription : class, ISecurityIdMessage, IDataTypeMessage, ISubscription<TSession>
 	where TSession : class
 {
