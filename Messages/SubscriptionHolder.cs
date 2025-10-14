@@ -53,6 +53,7 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 	private readonly SynchronizedDictionary<(DataType dt, SecurityId secId), CachedSynchronizedSet<TSubcription>> _subscriptionsBySec = [];
 	private readonly SynchronizedDictionary<long, TSubcription> _subscriptionsById = [];
 	private readonly SynchronizedDictionary<MessageTypes, CachedSynchronizedSet<TSubcription>> _subscriptionsByType = [];
+	private readonly SynchronizedDictionary<TSession, CachedSynchronizedSet<TSubcription>> _subscriptionsBySession = [];
 	private readonly SynchronizedDictionary<long, long> _unsubscribeRequests = [];
 	private readonly SynchronizedSet<long> _nonFoundSubscriptions = [];
 		
@@ -68,11 +69,9 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 		if (session is null)
 			throw new ArgumentNullException(nameof(session));
 
-		lock (_subscriptionsById.SyncRoot)
+		lock (_subscriptionsBySession.SyncRoot)
 		{
-			return [.. _subscriptionsById
-				.Values
-				.Where(s => s.Session == session)];
+			return [.. _subscriptionsBySession.TryGetValue(session)?.Cache ?? Enumerable.Empty<TSubcription>()];
 		}
 	}
 
@@ -90,8 +89,14 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 		if (info is null)
 			throw new ArgumentNullException(nameof(info));
 
-		var secId = info.SecurityId;
+		// Reserve id first to avoid partial indexing on duplicate ids in concurrent scenarios
+		if (info.Id != 0)
+		{
+			lock (_subscriptionsById.SyncRoot)
+				_subscriptionsById.Add(info.Id, info);
+		}
 
+		var secId = info.SecurityId;
 		var dataType = info.DataType;
 
 		if (dataType != null)
@@ -105,8 +110,9 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 		foreach (var type in info.Responses)
 			_subscriptionsByType.SafeAdd(type).Add(info);
 
-		if (info.Id != 0)
-			_subscriptionsById.Add(info.Id, info);
+		// index by session as well (covers subscriptions with Id == 0)
+		if (info.Session is not null)
+			_subscriptionsBySession.SafeAdd(info.Session).Add(info);
 
 		SubscriptionChanged?.Invoke(info);
 	}
@@ -152,6 +158,7 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 		TryRemoveSubscription(_subscriptionsByAllSec);
 		TryRemoveSubscription(_subscriptionsBySec);
 		TryRemoveSubscription(_subscriptionsByType);
+		TryRemoveSubscription(_subscriptionsBySession);
 
 		lock (_subscriptionsById.SyncRoot)
 			subscriptions.AddRange(_subscriptionsById.RemoveWhere(p => p.Value.Session == session).Select(p => p.Value));
@@ -191,6 +198,7 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 		tryRemove(_subscriptionsByAllSec);
 		tryRemove(_subscriptionsBySec);
 		tryRemove(_subscriptionsByType);
+		tryRemove(_subscriptionsBySession);
 
 		_subscriptionsById.Remove(info.Id);
 	}
@@ -213,6 +221,7 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 		_subscriptionsById.Clear();
 		_subscriptionsBySec.Clear();
 		_subscriptionsByAllSec.Clear();
+		_subscriptionsBySession.Clear();
 		_unsubscribeRequests.Clear();
 		_nonFoundSubscriptions.Clear();
 	}

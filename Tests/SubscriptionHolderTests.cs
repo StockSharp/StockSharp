@@ -87,7 +87,7 @@ public class SubscriptionHolderTests
 	public void Add_SubscriptionWithAllSecurity_Stored()
 	{
 		var holder = CreateHolder();
-		var subscription = CreateSubscription(1, "session1", default(SecurityId), DataType.Ticks);
+		var subscription = CreateSubscription(1, "session1", default, DataType.Ticks);
 
 		holder.Add(subscription);
 
@@ -109,7 +109,7 @@ public class SubscriptionHolderTests
 	public void GetSubscriptions_BySession_EmptyHolder_ReturnsEmpty()
 	{
 		var holder = CreateHolder();
-		var subscriptions = holder.GetSubscriptions((string)"session1").ToArray();
+		var subscriptions = holder.GetSubscriptions("session1").ToArray();
 
 		subscriptions.Length.AssertEqual(0);
 	}
@@ -126,12 +126,12 @@ public class SubscriptionHolderTests
 		holder.Add(sub2);
 		holder.Add(sub3);
 
-		var session1Subs = holder.GetSubscriptions((string)"session1").ToArray();
+		var session1Subs = holder.GetSubscriptions("session1").ToArray();
 		session1Subs.Length.AssertEqual(2);
 		session1Subs.Any(s => s.Id == 1).AssertTrue();
 		session1Subs.Any(s => s.Id == 2).AssertTrue();
 
-		var session2Subs = holder.GetSubscriptions((string)"session2").ToArray();
+		var session2Subs = holder.GetSubscriptions("session2").ToArray();
 		session2Subs.Length.AssertEqual(1);
 		session2Subs[0].Id.AssertEqual(3);
 	}
@@ -249,7 +249,7 @@ public class SubscriptionHolderTests
 	}
 
 	[TestMethod]
-	public void Remove_NullSubscription_DoesNotThrow()
+	public void Remove_NullSubscription_Throws()
 	{
 		var holder = CreateHolder();
 		Assert.ThrowsExactly<ArgumentNullException>(() => holder.Remove((TestSubscription)null));
@@ -313,8 +313,8 @@ public class SubscriptionHolderTests
 		_a.AssertNull();
 		holder.TryGetById(2, out var _b).AssertFalse();
 		_b.AssertNull();
-		holder.GetSubscriptions((string)"session1").Count().AssertEqual(0);
-		holder.GetSubscriptions((string)"session2").Count().AssertEqual(0);
+		holder.GetSubscriptions("session1").Count().AssertEqual(0);
+		holder.GetSubscriptions("session2").Count().AssertEqual(0);
 	}
 
 	#endregion
@@ -416,8 +416,8 @@ public class SubscriptionHolderTests
 		holder.Add(sub1);
 		holder.Add(sub2);
 
-		var session1Subs = holder.GetSubscriptions((string)"session1").ToArray();
-		var session2Subs = holder.GetSubscriptions((string)"session2").ToArray();
+		var session1Subs = holder.GetSubscriptions("session1").ToArray();
+		var session2Subs = holder.GetSubscriptions("session2").ToArray();
 
 		session1Subs.Length.AssertEqual(1);
 		session2Subs.Length.AssertEqual(1);
@@ -434,7 +434,7 @@ public class SubscriptionHolderTests
 	#region Edge Cases
 
 	[TestMethod]
-	public void Add_DuplicateId_SecondOverwritesFirst()
+	public void Add_DuplicateId_Throws_And_KeepsFirst()
 	{
 		var holder = CreateHolder();
 		var sub1 = CreateSubscription(1, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks);
@@ -445,7 +445,7 @@ public class SubscriptionHolderTests
 		
 		holder.TryGetById(1, out var retrieved).AssertTrue();
 		retrieved.AssertNotNull();
-		// Should be the second subscription
+		// Should be the first subscription
 		retrieved.Session.AssertEqual("session1");
 		retrieved.SecurityId.SecurityCode.AssertEqual("AAPL");
 	}
@@ -454,12 +454,122 @@ public class SubscriptionHolderTests
 	public void HasSubscriptions_AllSecurity_Checked()
 	{
 		var holder = CreateHolder();
-		var subscription = CreateSubscription(1, "session1", default(SecurityId), DataType.Ticks);
+		var subscription = CreateSubscription(1, "session1", default, DataType.Ticks);
 
 		holder.Add(subscription);
 
-		var result = holder.HasSubscriptions(DataType.Ticks, default(SecurityId));
+		var result = holder.HasSubscriptions(DataType.Ticks, default);
 		result.AssertTrue();
+	}
+
+	[TestMethod]
+	public void TryGetSubscription_ActiveState_DoesNotRemove()
+	{
+		var holder = CreateHolder();
+		var subscription = CreateSubscription(10, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks, SubscriptionStates.Active);
+
+		holder.Add(subscription);
+
+		holder.TryGetSubscription(10, SubscriptionStates.Active, out var result).AssertTrue();
+		result.AssertNotNull();
+
+		holder.TryGetById(10, out var stillThere).AssertTrue();
+		stillThere.AssertNotNull();
+	}
+
+	[TestMethod]
+	public void TryGetSubscriptionAndStop_RemovesFromHolder()
+	{
+		var holder = CreateHolder();
+		var subscription = CreateSubscription(11, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks, SubscriptionStates.Active);
+
+		holder.Add(subscription);
+
+		holder.TryGetSubscriptionAndStop(11, out var result).AssertTrue();
+		result.AssertNotNull();
+		result.State.AssertEqual(SubscriptionStates.Stopped);
+
+		holder.TryGetById(11, out var removed).AssertFalse();
+		removed.AssertNull();
+	}
+
+	[TestMethod]
+	public void Remove_BySession_RaisesEventAndSetsStopped()
+	{
+		var holder = CreateHolder();
+		var sub1 = CreateSubscription(21, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks, SubscriptionStates.Active);
+		var sub2 = CreateSubscription(22, "session1", new SecurityId { SecurityCode = "MSFT" }, DataType.Ticks, SubscriptionStates.Active);
+		var sub3 = CreateSubscription(23, "session2", new SecurityId { SecurityCode = "GOOGL" }, DataType.Level1, SubscriptionStates.Active);
+
+		holder.Add(sub1);
+		holder.Add(sub2);
+		holder.Add(sub3);
+
+		var events = new List<TestSubscription>();
+		holder.SubscriptionChanged += s => events.Add(s);
+
+		var removed = holder.Remove("session1").ToArray();
+
+		removed.Length.AssertEqual(2);
+		removed.Any(s => s.Id == 21).AssertTrue();
+		removed.Any(s => s.Id == 22).AssertTrue();
+		removed.All(s => s.State == SubscriptionStates.Stopped).AssertTrue();
+
+		// event raised for both removed items
+		events.Count(e => e.Id == 21 || e.Id == 22).AssertEqual(2);
+	}
+
+	[TestMethod]
+	public void SubscriptionChanged_TriggeredOnAdd()
+	{
+		var holder = CreateHolder();
+		var subscription = CreateSubscription(30, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks, SubscriptionStates.Active);
+
+		TestSubscription added = null;
+		holder.SubscriptionChanged += s => added = s;
+
+		holder.Add(subscription);
+
+		added.AssertNotNull();
+		added.Id.AssertEqual(30);
+		added.State.AssertEqual(SubscriptionStates.Active);
+	}
+
+	[TestMethod]
+	public void TryGetSubscription_ErrorState_RemovesAndRaisesEvent()
+	{
+		var holder = CreateHolder();
+		var subscription = CreateSubscription(12, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks, SubscriptionStates.Active);
+
+		holder.Add(subscription);
+
+		TestSubscription changed = null;
+		holder.SubscriptionChanged += s => changed = s;
+
+		holder.TryGetSubscription(12, SubscriptionStates.Error, out var result).AssertTrue();
+		result.AssertNotNull();
+		result.State.AssertEqual(SubscriptionStates.Error);
+		changed.AssertNotNull();
+		changed.Id.AssertEqual(12);
+
+		holder.TryGetById(12, out var removed).AssertFalse();
+		removed.AssertNull();
+	}
+
+	[TestMethod]
+	public void GetSubscriptions_BySession_IncludesIdZero()
+	{
+		var holder = CreateHolder();
+		var subWithId = CreateSubscription(40, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks, SubscriptionStates.Active);
+		var subNoId = CreateSubscription(0, "session1", new SecurityId { SecurityCode = "MSFT" }, DataType.Level1, SubscriptionStates.Active);
+
+		holder.Add(subWithId);
+		holder.Add(subNoId);
+
+		var sessionSubs = holder.GetSubscriptions("session1").ToArray();
+		sessionSubs.Length.AssertEqual(2);
+		sessionSubs.Any(s => s.Id == 40).AssertTrue();
+		sessionSubs.Any(s => s.Id == 0 && s.SecurityId.SecurityCode == "MSFT").AssertTrue();
 	}
 
 	#endregion
