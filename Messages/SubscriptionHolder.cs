@@ -38,22 +38,22 @@ public interface ISubscription<TSession>
 /// <summary>
 /// Subscription holder.
 /// </summary>
-/// <typeparam name="TSubcription">Subscription type.</typeparam>
+/// <typeparam name="TSubscription">Subscription type.</typeparam>
 /// <typeparam name="TSession">Session type.</typeparam>
 /// <remarks>
-/// Initializes a new instance of the <see cref="SubscriptionHolder{TSubcription,TSession}"/>.
+/// Initializes a new instance of the <see cref="SubscriptionHolder{TSubscription,TSession}"/>.
 /// </remarks>
 /// <param name="logs">Logs.</param>
-public class SubscriptionHolder<TSubcription, TSession>(ILogReceiver logs)
-	where TSubcription : class, ISecurityIdMessage, IDataTypeMessage, ISubscription<TSession>
+public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs)
+	where TSubscription : class, ISecurityIdMessage, IDataTypeMessage, ISubscription<TSession>
 	where TSession : class
 {
 	private readonly ReaderWriterLockSlim _rw = new(LockRecursionPolicy.NoRecursion);
-	private readonly Dictionary<DataType, HashSet<TSubcription>> _subscriptionsByAllSec = [];
-	private readonly Dictionary<(DataType dt, SecurityId secId), HashSet<TSubcription>> _subscriptionsBySec = [];
-	private readonly Dictionary<long, TSubcription> _subscriptionsById = [];
-	private readonly Dictionary<MessageTypes, HashSet<TSubcription>> _subscriptionsByType = [];
-	private readonly Dictionary<TSession, HashSet<TSubcription>> _subscriptionsBySession = [];
+	private readonly Dictionary<DataType, HashSet<TSubscription>> _subscriptionsByAllSec = [];
+	private readonly Dictionary<(DataType dt, SecurityId secId), HashSet<TSubscription>> _subscriptionsBySec = [];
+	private readonly Dictionary<long, TSubscription> _subscriptionsById = [];
+	private readonly Dictionary<MessageTypes, HashSet<TSubscription>> _subscriptionsByType = [];
+	private readonly Dictionary<TSession, HashSet<TSubscription>> _subscriptionsBySession = [];
 	private readonly Dictionary<long, long> _unsubscribeRequests = [];
 	private readonly HashSet<long> _nonFoundSubscriptions = [];
 		
@@ -64,7 +64,7 @@ public class SubscriptionHolder<TSubcription, TSession>(ILogReceiver logs)
 	/// </summary>
 	/// <param name="session">Session.</param>
 	/// <returns>Subscriptions.</returns>
-	public IEnumerable<TSubcription> GetSubscriptions(TSession session)
+	public IEnumerable<TSubscription> GetSubscriptions(TSession session)
 	{
 		if (session is null)
 			throw new ArgumentNullException(nameof(session));
@@ -86,13 +86,13 @@ public class SubscriptionHolder<TSubcription, TSession>(ILogReceiver logs)
 	/// <summary>
 	/// Subscription changed event.
 	/// </summary>
-	public event Action<TSubcription> SubscriptionChanged;
+	public event Action<TSubscription> SubscriptionChanged;
 
 	/// <summary>
 	/// Add new subscription.
 	/// </summary>
 	/// <param name="info">Subscription.</param>
-	public void Add(TSubcription info)
+	public void Add(TSubscription info)
 	{
 		if (info is null)
 			throw new ArgumentNullException(nameof(info));
@@ -155,18 +155,18 @@ public class SubscriptionHolder<TSubcription, TSession>(ILogReceiver logs)
 	/// </summary>
 	/// <param name="session">Session.</param>
 	/// <returns>Subscriptions.</returns>
-	public IEnumerable<TSubcription> Remove(TSession session)
+	public IEnumerable<TSubscription> Remove(TSession session)
 	{
 		if (session is null)
 			throw new ArgumentNullException(nameof(session));
 
-		var subscriptions = new HashSet<TSubcription>();
+		var subscriptions = new HashSet<TSubscription>();
 
 		_rw.EnterWriteLock();
 
 		try
 		{
-			void tryRemove<TKey>(Dictionary<TKey, HashSet<TSubcription>> dict)
+			void tryRemove<TKey>(Dictionary<TKey, HashSet<TSubscription>> dict)
 			{
 				foreach (var pair in dict.ToArray())
 				{
@@ -216,7 +216,7 @@ public class SubscriptionHolder<TSubcription, TSession>(ILogReceiver logs)
 	/// Remove subscription.
 	/// </summary>
 	/// <param name="info">Subscription.</param>
-	public void Remove(TSubcription info)
+	public void Remove(TSubscription info)
 	{
 		if (info is null)
 			throw new ArgumentNullException(nameof(info));
@@ -225,7 +225,7 @@ public class SubscriptionHolder<TSubcription, TSession>(ILogReceiver logs)
 
 		try
 		{
-			void tryRemove<TKey>(Dictionary<TKey, HashSet<TSubcription>> dict)
+			void tryRemove<TKey>(Dictionary<TKey, HashSet<TSubscription>> dict)
 			{
 				foreach (var pair in dict.ToArray())
 				{
@@ -254,7 +254,7 @@ public class SubscriptionHolder<TSubcription, TSession>(ILogReceiver logs)
 	/// <param name="id">Identifier.</param>
 	/// <param name="info">The found subscription, if any.</param>
 	/// <returns><see langword="true"/> if a subscription with the specified identifier exists; otherwise, <see langword="false"/>.</returns>
-	public bool TryGetById(long id, out TSubcription info)
+	public bool TryGetById(long id, out TSubscription info)
 	{
 		_rw.EnterReadLock();
 
@@ -318,7 +318,7 @@ public class SubscriptionHolder<TSubcription, TSession>(ILogReceiver logs)
 	/// <param name="id">Identifier.</param>
 	/// <param name="info">The found subscription, if any.</param>
 	/// <returns><see langword="true"/> if the subscription was found; otherwise, <see langword="false"/>.</returns>
-	public bool TryGetSubscriptionAndStop(long id, out TSubcription info)
+	public bool TryGetSubscriptionAndStop(long id, out TSubscription info)
 		=> TryGetSubscription(id, SubscriptionStates.Stopped, out info);
 
 	/// <summary>
@@ -328,7 +328,7 @@ public class SubscriptionHolder<TSubcription, TSession>(ILogReceiver logs)
 	/// <param name="state">The state to set for the subscription, or <see langword="null"/> to leave unchanged.</param>
 	/// <param name="info">The found subscription, if any.</param>
 	/// <returns><see langword="true"/> if the subscription was found; otherwise, <see langword="false"/>.</returns>
-	public bool TryGetSubscription(long id, SubscriptionStates? state, out TSubcription info)
+	public bool TryGetSubscription(long id, SubscriptionStates? state, out TSubscription info)
 	{
 		SubscriptionStates? newState = null;
 
@@ -388,7 +388,7 @@ public class SubscriptionHolder<TSubcription, TSession>(ILogReceiver logs)
 		return true;
 	}
 
-	private IEnumerable<TSubcription> GetSubscriptions(MessageTypes type, long id)
+	private IEnumerable<TSubscription> GetSubscriptions(MessageTypes type, long id)
 	{
 		if (id != 0)
 		{
@@ -418,10 +418,10 @@ public class SubscriptionHolder<TSubcription, TSession>(ILogReceiver logs)
 		}
 	}
 
-	private static IEnumerable<TSubcription> ToSet(TSubcription info, bool checkSuspend = true)
+	private static IEnumerable<TSubscription> ToSet(TSubscription info, bool checkSuspend = true)
 		=> info == null || (checkSuspend && info.Suspend) ? [] : [info];
 
-	private IEnumerable<TSubcription> GetSubscriptions(DataType dataType, SecurityId securityId, long id)
+	private IEnumerable<TSubscription> GetSubscriptions(DataType dataType, SecurityId securityId, long id)
 	{
 		if (id != 0)
 			return TryGetSubscription(id, null, out var sub)
@@ -431,7 +431,7 @@ public class SubscriptionHolder<TSubcription, TSession>(ILogReceiver logs)
 		if (dataType is null)
 			return [];
 
-		IEnumerable<TSubcription> subscriptions;
+		IEnumerable<TSubscription> subscriptions;
 
 		_rw.EnterReadLock();
 
@@ -459,7 +459,7 @@ public class SubscriptionHolder<TSubcription, TSession>(ILogReceiver logs)
 	/// </summary>
 	/// <param name="message">Message.</param>
 	/// <returns>Subscriptions.</returns>
-	public IEnumerable<TSubcription> GetSubscriptions(Message message)
+	public IEnumerable<TSubscription> GetSubscriptions(Message message)
 	{
 		switch (message.Type)
 		{
@@ -507,7 +507,7 @@ public class SubscriptionHolder<TSubcription, TSession>(ILogReceiver logs)
 				var responseMsg = (SubscriptionResponseMessage)message;
 				var originId = responseMsg.OriginalTransactionId;
 
-				TSubcription info;
+				TSubscription info;
 
 				bool removed;
 				long subscriptionId;
