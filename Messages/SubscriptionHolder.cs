@@ -64,9 +64,9 @@ public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs) : Di
 	/// <inheritdoc />
 	protected override void DisposeManaged()
 	{
-		base.DisposeManaged();
-
 		_rw.Dispose();
+
+		base.DisposeManaged();
 	}
 
 	private int _maxTrackedItems = 1000;
@@ -243,7 +243,9 @@ public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs) : Di
 			tryRemove(_subscriptionsByAllSec);
 			tryRemove(_subscriptionsBySec);
 			tryRemove(_subscriptionsByType);
-			_subscriptionsBySession.Remove(session);
+
+			if (_subscriptionsBySession.TryGetAndRemove(session, out var sessionSubs))
+				subscriptions.AddRange(sessionSubs);
 
 			var removeIds = _subscriptionsById.Where(p => p.Value.Session == session).Select(p => p.Key).ToArray();
 			foreach (var key in removeIds)
