@@ -56,7 +56,9 @@ public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs) : Di
 	private readonly Dictionary<TSession, HashSet<TSubscription>> _subscriptionsBySession = [];
 	private readonly Dictionary<long, long> _unsubscribeRequests = [];
 	private readonly HashSet<long> _nonFoundSubscriptions = [];
-		
+	private readonly Queue<long> _nonFoundOrder = [];
+	private readonly Queue<long> _unsubscribeOrder = [];
+
 	private readonly ILogReceiver _logs = logs ?? throw new ArgumentNullException(nameof(logs));
 
 	/// <inheritdoc />
@@ -65,6 +67,45 @@ public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs) : Di
 		base.DisposeManaged();
 
 		_rw.Dispose();
+	}
+
+	private int _maxTrackedItems = 1000;
+
+	/// <summary>
+	/// Maximum number of tracked helper entries.
+	/// </summary>
+	public int MaxTrackedItems
+	{
+		get => _maxTrackedItems;
+		set
+		{
+			if (value <= 0)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			_rw.EnterWriteLock();
+
+			try
+			{
+				_maxTrackedItems = value;
+
+				// prune both collections immediately if new limit is lower
+				while (_nonFoundSubscriptions.Count > _maxTrackedItems && _nonFoundOrder.Count > 0)
+				{
+					var oldest = _nonFoundOrder.Dequeue();
+					_nonFoundSubscriptions.Remove(oldest);
+				}
+
+				while (_unsubscribeRequests.Count > _maxTrackedItems && _unsubscribeOrder.Count > 0)
+				{
+					var oldest = _unsubscribeOrder.Dequeue();
+					_unsubscribeRequests.Remove(oldest);
+				}
+			}
+			finally
+			{
+				_rw.ExitWriteLock();
+			}
+		}
 	}
 
 	/// <summary>
@@ -151,6 +192,14 @@ public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs) : Di
 		try
 		{
 			_unsubscribeRequests.Add(transactionId, originalTransactionId);
+			_unsubscribeOrder.Enqueue(transactionId);
+
+			// prune if exceeded size
+			while (_unsubscribeRequests.Count > _maxTrackedItems && _unsubscribeOrder.Count > 0)
+			{
+				var oldest = _unsubscribeOrder.Dequeue();
+				_unsubscribeRequests.Remove(oldest);
+			}
 		}
 		finally
 		{
@@ -194,7 +243,7 @@ public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs) : Di
 			tryRemove(_subscriptionsByAllSec);
 			tryRemove(_subscriptionsBySec);
 			tryRemove(_subscriptionsByType);
-			tryRemove(_subscriptionsBySession);
+			_subscriptionsBySession.Remove(session);
 
 			var removeIds = _subscriptionsById.Where(p => p.Value.Session == session).Select(p => p.Key).ToArray();
 			foreach (var key in removeIds)
@@ -292,6 +341,8 @@ public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs) : Di
 			_subscriptionsBySession.Clear();
 			_unsubscribeRequests.Clear();
 			_nonFoundSubscriptions.Clear();
+			_nonFoundOrder.Clear();
+			_unsubscribeOrder.Clear();
 		}
 		finally
 		{
@@ -351,7 +402,17 @@ public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs) : Di
 				try
 				{
 					if (_nonFoundSubscriptions.Add(id))
+					{
+						_nonFoundOrder.Enqueue(id);
 						_logs.AddWarningLog(LocalizedStrings.SubscriptionNonExist, id);
+
+						// prune overflow
+						while (_nonFoundSubscriptions.Count > _maxTrackedItems && _nonFoundOrder.Count > 0)
+						{
+							var oldest = _nonFoundOrder.Dequeue();
+							_nonFoundSubscriptions.Remove(oldest);
+						}
+					}
 				}
 				finally
 				{
