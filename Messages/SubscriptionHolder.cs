@@ -49,13 +49,14 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 	where TSubcription : class, ISecurityIdMessage, IDataTypeMessage, ISubscription<TSession>
 	where TSession : class
 {
-	private readonly SynchronizedDictionary<DataType, CachedSynchronizedSet<TSubcription>> _subscriptionsByAllSec = [];
-	private readonly SynchronizedDictionary<(DataType dt, SecurityId secId), CachedSynchronizedSet<TSubcription>> _subscriptionsBySec = [];
-	private readonly SynchronizedDictionary<long, TSubcription> _subscriptionsById = [];
-	private readonly SynchronizedDictionary<MessageTypes, CachedSynchronizedSet<TSubcription>> _subscriptionsByType = [];
-	private readonly SynchronizedDictionary<TSession, CachedSynchronizedSet<TSubcription>> _subscriptionsBySession = [];
-	private readonly SynchronizedDictionary<long, long> _unsubscribeRequests = [];
-	private readonly SynchronizedSet<long> _nonFoundSubscriptions = [];
+	private readonly ReaderWriterLockSlim _rw = new(LockRecursionPolicy.NoRecursion);
+	private readonly Dictionary<DataType, HashSet<TSubcription>> _subscriptionsByAllSec = [];
+	private readonly Dictionary<(DataType dt, SecurityId secId), HashSet<TSubcription>> _subscriptionsBySec = [];
+	private readonly Dictionary<long, TSubcription> _subscriptionsById = [];
+	private readonly Dictionary<MessageTypes, HashSet<TSubcription>> _subscriptionsByType = [];
+	private readonly Dictionary<TSession, HashSet<TSubcription>> _subscriptionsBySession = [];
+	private readonly Dictionary<long, long> _unsubscribeRequests = [];
+	private readonly HashSet<long> _nonFoundSubscriptions = [];
 		
 	private readonly ILogReceiver _logs = logs ?? throw new ArgumentNullException(nameof(logs));
 
@@ -69,9 +70,17 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 		if (session is null)
 			throw new ArgumentNullException(nameof(session));
 
-		lock (_subscriptionsBySession.SyncRoot)
+		_rw.EnterReadLock();
+
+		try
 		{
-			return [.. _subscriptionsBySession.TryGetValue(session)?.Cache ?? Enumerable.Empty<TSubcription>()];
+			return _subscriptionsBySession.TryGetValue(session, out var set)
+				? set.ToArray()
+				: [];
+		}
+		finally
+		{
+			_rw.ExitReadLock();
 		}
 	}
 
@@ -89,30 +98,36 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 		if (info is null)
 			throw new ArgumentNullException(nameof(info));
 
-		// Reserve id first to avoid partial indexing on duplicate ids in concurrent scenarios
-		if (info.Id != 0)
+		_rw.EnterWriteLock();
+
+		try
 		{
-			lock (_subscriptionsById.SyncRoot)
+			// Reserve id first to avoid partial indexing on duplicate ids in concurrent scenarios
+			if (info.Id != 0)
 				_subscriptionsById.Add(info.Id, info);
+
+			var secId = info.SecurityId;
+			var dataType = info.DataType;
+
+			if (dataType != null)
+			{
+				if (secId.IsAllSecurity())
+					_subscriptionsByAllSec.SafeAdd(dataType).Add(info);
+				else
+					_subscriptionsBySec.SafeAdd((dataType, secId)).Add(info);
+			}
+
+			foreach (var type in info.Responses)
+				_subscriptionsByType.SafeAdd(type).Add(info);
+
+			// index by session as well (covers subscriptions with Id == 0)
+			if (info.Session is not null)
+				_subscriptionsBySession.SafeAdd(info.Session).Add(info);
 		}
-
-		var secId = info.SecurityId;
-		var dataType = info.DataType;
-
-		if (dataType != null)
+		finally
 		{
-			if (secId.IsAllSecurity())
-				_subscriptionsByAllSec.SafeAdd(dataType).Add(info);
-			else
-				_subscriptionsBySec.SafeAdd((dataType, secId)).Add(info);
+			_rw.ExitWriteLock();
 		}
-
-		foreach (var type in info.Responses)
-			_subscriptionsByType.SafeAdd(type).Add(info);
-
-		// index by session as well (covers subscriptions with Id == 0)
-		if (info.Session is not null)
-			_subscriptionsBySession.SafeAdd(info.Session).Add(info);
 
 		SubscriptionChanged?.Invoke(info);
 	}
@@ -124,7 +139,16 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 	/// <param name="originalTransactionId">ID of the original message <see cref="ITransactionIdMessage.TransactionId"/> for which this message is a response.</param>
 	public void AddUnsubscribeRequest(long transactionId, long originalTransactionId)
 	{
-		_unsubscribeRequests.Add(transactionId, originalTransactionId);
+		_rw.EnterWriteLock();
+
+		try
+		{
+			_unsubscribeRequests.Add(transactionId, originalTransactionId);
+		}
+		finally
+		{
+			_rw.ExitWriteLock();
+		}
 	}
 
 	/// <summary>
@@ -139,29 +163,46 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 
 		var subscriptions = new HashSet<TSubcription>();
 
-		void TryRemoveSubscription<TKey>(SynchronizedDictionary<TKey, CachedSynchronizedSet<TSubcription>> dict)
+		_rw.EnterWriteLock();
+
+		try
 		{
-			lock (dict.SyncRoot)
+			void tryRemove<TKey>(Dictionary<TKey, HashSet<TSubcription>> dict)
 			{
 				foreach (var pair in dict.ToArray())
 				{
 					var set = pair.Value;
+					var removed = set.Where(r => r.Session == session).ToArray();
 
-					subscriptions.AddRange(set.RemoveWhere(r => r.Session == session));
+					foreach (var r in removed)
+						set.Remove(r);
+
+					subscriptions.AddRange(removed);
 
 					if (set.Count == 0)
 						dict.Remove(pair.Key);
 				}
 			}
+
+			tryRemove(_subscriptionsByAllSec);
+			tryRemove(_subscriptionsBySec);
+			tryRemove(_subscriptionsByType);
+			tryRemove(_subscriptionsBySession);
+
+			var removeIds = _subscriptionsById.Where(p => p.Value.Session == session).Select(p => p.Key).ToArray();
+			foreach (var key in removeIds)
+			{
+				if (_subscriptionsById.TryGetValue(key, out var sub))
+				{
+					_subscriptionsById.Remove(key);
+					subscriptions.Add(sub);
+				}
+			}
 		}
-
-		TryRemoveSubscription(_subscriptionsByAllSec);
-		TryRemoveSubscription(_subscriptionsBySec);
-		TryRemoveSubscription(_subscriptionsByType);
-		TryRemoveSubscription(_subscriptionsBySession);
-
-		lock (_subscriptionsById.SyncRoot)
-			subscriptions.AddRange(_subscriptionsById.RemoveWhere(p => p.Value.Session == session).Select(p => p.Value));
+		finally
+		{
+			_rw.ExitWriteLock();
+		}
 
 		foreach (var subscription in subscriptions)
 		{
@@ -181,26 +222,31 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 		if (info is null)
 			throw new ArgumentNullException(nameof(info));
 
-		void tryRemove<TKey>(SynchronizedDictionary<TKey, CachedSynchronizedSet<TSubcription>> dict)
+		_rw.EnterWriteLock();
+
+		try
 		{
-			lock (dict.SyncRoot)
+			void tryRemove<TKey>(Dictionary<TKey, HashSet<TSubcription>> dict)
 			{
 				foreach (var pair in dict.ToArray())
 				{
 					var set = pair.Value;
-
 					if (set.Remove(info) && set.Count == 0)
 						dict.Remove(pair.Key);
 				}
 			}
+
+			tryRemove(_subscriptionsByAllSec);
+			tryRemove(_subscriptionsBySec);
+			tryRemove(_subscriptionsByType);
+			tryRemove(_subscriptionsBySession);
+
+			_subscriptionsById.Remove(info.Id);
 		}
-
-		tryRemove(_subscriptionsByAllSec);
-		tryRemove(_subscriptionsBySec);
-		tryRemove(_subscriptionsByType);
-		tryRemove(_subscriptionsBySession);
-
-		_subscriptionsById.Remove(info.Id);
+		finally
+		{
+			_rw.ExitWriteLock();
+		}
 	}
 
 	/// <summary>
@@ -210,20 +256,40 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 	/// <param name="info">The found subscription, if any.</param>
 	/// <returns><see langword="true"/> if a subscription with the specified identifier exists; otherwise, <see langword="false"/>.</returns>
 	public bool TryGetById(long id, out TSubcription info)
-		=> _subscriptionsById.TryGetValue(id, out info);
+	{
+		_rw.EnterReadLock();
+
+		try
+		{
+			return _subscriptionsById.TryGetValue(id, out info);
+		}
+		finally
+		{
+			_rw.ExitReadLock();
+		}
+	}
 
 	/// <summary>
 	/// Clear state.
 	/// </summary>
 	public void Clear()
 	{
-		_subscriptionsByType.Clear();
-		_subscriptionsById.Clear();
-		_subscriptionsBySec.Clear();
-		_subscriptionsByAllSec.Clear();
-		_subscriptionsBySession.Clear();
-		_unsubscribeRequests.Clear();
-		_nonFoundSubscriptions.Clear();
+		_rw.EnterWriteLock();
+
+		try
+		{
+			_subscriptionsByType.Clear();
+			_subscriptionsById.Clear();
+			_subscriptionsBySec.Clear();
+			_subscriptionsByAllSec.Clear();
+			_subscriptionsBySession.Clear();
+			_unsubscribeRequests.Clear();
+			_nonFoundSubscriptions.Clear();
+		}
+		finally
+		{
+			_rw.ExitWriteLock();
+		}
 	}
 
 	/// <summary>
@@ -234,8 +300,17 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 	/// <returns><see langword="true"/> if any subscription exists; otherwise, <see langword="false"/>.</returns>
 	public bool HasSubscriptions(DataType dataType, SecurityId securityId)
 	{
-		var receivers = _subscriptionsByAllSec.TryGetValue(dataType) ?? _subscriptionsBySec.TryGetValue((dataType, securityId));
-		return receivers != null && receivers.Count > 0;
+		_rw.EnterReadLock();
+
+		try
+		{
+			var receivers = _subscriptionsByAllSec.TryGetValue(dataType) ?? _subscriptionsBySec.TryGetValue((dataType, securityId));
+			return receivers != null && receivers.Count > 0;
+		}
+		finally
+		{
+			_rw.ExitReadLock();
+		}
 	}
 
 	/// <summary>
@@ -256,22 +331,60 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 	/// <returns><see langword="true"/> if the subscription was found; otherwise, <see langword="false"/>.</returns>
 	public bool TryGetSubscription(long id, SubscriptionStates? state, out TSubcription info)
 	{
-		if (!TryGetById(id, out info))
-		{
-			if (_nonFoundSubscriptions.TryAdd(id))
-				_logs.AddWarningLog(LocalizedStrings.SubscriptionNonExist, id);
+		SubscriptionStates? newState = null;
 
-			return false;
+		_rw.EnterUpgradeableReadLock();
+
+		try
+		{
+			if (!_subscriptionsById.TryGetValue(id, out var localInfo))
+			{
+				_rw.EnterWriteLock();
+
+				try
+				{
+					if (_nonFoundSubscriptions.Add(id))
+						_logs.AddWarningLog(LocalizedStrings.SubscriptionNonExist, id);
+				}
+				finally
+				{
+					_rw.ExitWriteLock();
+				}
+
+				info = null;
+				return false;
+			}
+
+			if (state != null)
+			{
+				_rw.EnterWriteLock();
+
+				try
+				{
+					localInfo.State = localInfo.State.ChangeSubscriptionState(state.Value, id, _logs);
+					newState = state;
+				}
+				finally
+				{
+					_rw.ExitWriteLock();
+				}
+			}
+
+			if (state?.IsActive() == false)
+			{
+				// remove under write lock
+				Remove(localInfo);
+			}
+
+			info = localInfo;
+		}
+		finally
+		{
+			_rw.ExitUpgradeableReadLock();
 		}
 
-		if (state != null)
-		{
-			info.State = info.State.ChangeSubscriptionState(state.Value, id, _logs);
+		if (newState != null)
 			SubscriptionChanged?.Invoke(info);
-		}
-
-		if (state?.IsActive() == false)
-			Remove(info);
 
 		return true;
 	}
@@ -292,7 +405,18 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 				: [];
 		}
 
-		return _subscriptionsByType.TryGetValue(type)?.Cache.Where(i => !i.Suspend) ?? [];
+		_rw.EnterReadLock();
+
+		try
+		{
+			return _subscriptionsByType.TryGetValue(type, out var set)
+				? set.Where(i => !i.Suspend).ToArray()
+				: [];
+		}
+		finally
+		{
+			_rw.ExitReadLock();
+		}
 	}
 
 	private static IEnumerable<TSubcription> ToSet(TSubcription info, bool checkSuspend = true)
@@ -308,10 +432,23 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 		if (dataType is null)
 			return [];
 
-		var subscriptions = _subscriptionsByAllSec.TryGetValue(dataType)?.Cache ?? Enumerable.Empty<TSubcription>();
+		IEnumerable<TSubcription> subscriptions;
 
-		if (_subscriptionsBySec.TryGetValue((dataType, securityId), out var mdSubscriptions))
-			subscriptions = subscriptions.Concat(mdSubscriptions.Cache);
+		_rw.EnterReadLock();
+
+		try
+		{
+			subscriptions = _subscriptionsByAllSec.TryGetValue(dataType, out var setAll)
+				? setAll.ToArray()
+				: [];
+
+			if (_subscriptionsBySec.TryGetValue((dataType, securityId), out var mdSubscriptions))
+				subscriptions = [.. subscriptions, .. mdSubscriptions];
+		}
+		finally
+		{
+			_rw.ExitReadLock();
+		}
 
 		return subscriptions
 			.Where(i => i.State == SubscriptionStates.Online && !i.Suspend) // non id messages only for online
@@ -342,7 +479,16 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 					if (execMsg.TransactionId != 0)
 					{
 						// TODO Many clients can subscribe on the same order id
-						_subscriptionsById[execMsg.TransactionId] = subscription;
+						_rw.EnterWriteLock();
+
+						try
+						{
+							_subscriptionsById[execMsg.TransactionId] = subscription;
+						}
+						finally
+						{
+							_rw.ExitWriteLock();
+						}
 					}
 
 					return ToSet(subscription);
@@ -364,7 +510,23 @@ public class SubscriptionHolder<TSubcription, TSession, TRequestId>(ILogReceiver
 
 				TSubcription info;
 
-				if (_unsubscribeRequests.TryGetAndRemove(originId, out var subscriptionId))
+				bool removed;
+				long subscriptionId;
+
+				_rw.EnterWriteLock();
+
+				try
+				{
+					removed = _unsubscribeRequests.TryGetValue(originId, out subscriptionId);
+					if (removed)
+						_unsubscribeRequests.Remove(originId);
+				}
+				finally
+				{
+					_rw.ExitWriteLock();
+				}
+
+				if (removed)
 				{
 					return TryGetSubscription(subscriptionId, SubscriptionStates.Stopped, out info)
 						? ToSet(info, false)
