@@ -49,14 +49,14 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void Add_NullSubscription_Throws()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		Assert.ThrowsExactly<ArgumentNullException>(() => holder.Add(null));
 	}
 
 	[TestMethod]
 	public void Add_ValidSubscription_CanRetrieveById()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var subscription = CreateSubscription(1, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks);
 
 		holder.Add(subscription);
@@ -69,7 +69,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void Add_MultipleSubscriptions_AllRetrievable()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var sub1 = CreateSubscription(1, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks);
 		var sub2 = CreateSubscription(2, "session1", new SecurityId { SecurityCode = "MSFT" }, DataType.Ticks);
 		var sub3 = CreateSubscription(3, "session2", new SecurityId { SecurityCode = "GOOGL" }, DataType.Level1);
@@ -86,7 +86,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void Add_SubscriptionWithAllSecurity_Stored()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var subscription = CreateSubscription(1, "session1", default, DataType.Ticks);
 
 		holder.Add(subscription);
@@ -101,14 +101,14 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void GetSubscriptions_NullSession_Throws()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		Assert.ThrowsExactly<ArgumentNullException>(() => holder.GetSubscriptions((string)null));
 	}
 
 	[TestMethod]
 	public void GetSubscriptions_BySession_EmptyHolder_ReturnsEmpty()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var subscriptions = holder.GetSubscriptions("session1").ToArray();
 
 		subscriptions.Length.AssertEqual(0);
@@ -117,7 +117,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void GetSubscriptions_FiltersBySession()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var sub1 = CreateSubscription(1, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks);
 		var sub2 = CreateSubscription(2, "session1", new SecurityId { SecurityCode = "MSFT" }, DataType.Ticks);
 		var sub3 = CreateSubscription(3, "session2", new SecurityId { SecurityCode = "GOOGL" }, DataType.Level1);
@@ -143,7 +143,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void TryGetById_NotFound_ReturnsNull()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var result = holder.TryGetById(999, out var notFound);
 
 		result.AssertFalse();
@@ -153,7 +153,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void TryGetById_Found_ReturnsSubscription()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var subscription = CreateSubscription(100, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks);
 
 		holder.Add(subscription);
@@ -171,7 +171,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void TryGetSubscription_NotFound_ReturnsNull()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var ok = holder.TryGetSubscription(999, SubscriptionStates.Active, out var result);
 
 		ok.AssertFalse();
@@ -181,7 +181,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void TryGetSubscription_NullState_ReturnsSubscription()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var subscription = CreateSubscription(1, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks, SubscriptionStates.Active);
 
 		holder.Add(subscription);
@@ -193,7 +193,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void TryGetSubscription_MatchingState_ReturnsSubscription()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var subscription = CreateSubscription(1, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks, SubscriptionStates.Active);
 
 		holder.Add(subscription);
@@ -209,7 +209,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void TryGetSubscriptionAndStop_NotFound_ReturnsNull()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var ok = holder.TryGetSubscriptionAndStop(999, out var result);
 
 		ok.AssertFalse();
@@ -219,7 +219,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void TryGetSubscriptionAndStop_Found_ReturnsAndChangesState()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var subscription = CreateSubscription(1, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks, SubscriptionStates.Active);
 
 		holder.Add(subscription);
@@ -236,7 +236,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void Remove_BySubscription_RemovesFromHolder()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var subscription = CreateSubscription(1, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks);
 
 		holder.Add(subscription);
@@ -251,14 +251,14 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void Remove_NullSubscription_Throws()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		Assert.ThrowsExactly<ArgumentNullException>(() => holder.Remove((TestSubscription)null));
 	}
 
 	[TestMethod]
 	public void Remove_BySession_RemovesAllForSession()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var sub1 = CreateSubscription(1, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks);
 		var sub2 = CreateSubscription(2, "session1", new SecurityId { SecurityCode = "MSFT" }, DataType.Ticks);
 		var sub3 = CreateSubscription(3, "session2", new SecurityId { SecurityCode = "GOOGL" }, DataType.Level1);
@@ -280,14 +280,14 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void Remove_BySession_NullSession_Throws()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		Assert.ThrowsExactly<ArgumentNullException>(() => holder.Remove((string)null));
 	}
 
 	[TestMethod]
 	public void Remove_NonExistentSession_ReturnsEmpty()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var removed = holder.Remove("nonexistent").ToArray();
 
 		removed.Length.AssertEqual(0);
@@ -300,7 +300,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void Clear_RemovesAllSubscriptions()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var sub1 = CreateSubscription(1, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks);
 		var sub2 = CreateSubscription(2, "session2", new SecurityId { SecurityCode = "MSFT" }, DataType.Ticks);
 
@@ -324,7 +324,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void HasSubscriptions_NoSubscriptions_ReturnsFalse()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var result = holder.HasSubscriptions(DataType.Ticks, new SecurityId { SecurityCode = "AAPL" });
 
 		result.AssertFalse();
@@ -333,7 +333,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void HasSubscriptions_MatchingSubscription_ReturnsTrue()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var securityId = new SecurityId { SecurityCode = "AAPL" };
 		var subscription = CreateSubscription(1, "session1", securityId, DataType.Ticks);
 
@@ -346,7 +346,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void HasSubscriptions_DifferentDataType_ReturnsFalse()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var securityId = new SecurityId { SecurityCode = "AAPL" };
 		var subscription = CreateSubscription(1, "session1", securityId, DataType.Ticks);
 
@@ -359,7 +359,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void HasSubscriptions_DifferentSecurityId_ReturnsFalse()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var subscription = CreateSubscription(1, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks);
 
 		holder.Add(subscription);
@@ -375,7 +375,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void AddUnsubscribeRequest_StoresRequest()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		// Should not throw - just stores the unsubscribe request mapping
 		holder.AddUnsubscribeRequest(100, 50);
 	}
@@ -387,7 +387,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void SubscriptionChanged_TriggeredOnStateChange()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var subscription = CreateSubscription(1, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks, SubscriptionStates.Active);
 
 		holder.Add(subscription);
@@ -409,7 +409,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void MultipleSessions_IsolatedCorrectly()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var sub1 = CreateSubscription(1, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks);
 		var sub2 = CreateSubscription(2, "session2", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks);
 
@@ -436,7 +436,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void Add_DuplicateId_Throws_And_KeepsFirst()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var sub1 = CreateSubscription(1, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks);
 		var sub2 = CreateSubscription(1, "session2", new SecurityId { SecurityCode = "MSFT" }, DataType.Level1);
 
@@ -453,7 +453,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void HasSubscriptions_AllSecurity_Checked()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var subscription = CreateSubscription(1, "session1", default, DataType.Ticks);
 
 		holder.Add(subscription);
@@ -465,7 +465,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void TryGetSubscription_ActiveState_DoesNotRemove()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var subscription = CreateSubscription(10, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks, SubscriptionStates.Active);
 
 		holder.Add(subscription);
@@ -480,7 +480,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void TryGetSubscriptionAndStop_RemovesFromHolder()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var subscription = CreateSubscription(11, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks, SubscriptionStates.Active);
 
 		holder.Add(subscription);
@@ -496,7 +496,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void Remove_BySession_RaisesEventAndSetsStopped()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var sub1 = CreateSubscription(21, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks, SubscriptionStates.Active);
 		var sub2 = CreateSubscription(22, "session1", new SecurityId { SecurityCode = "MSFT" }, DataType.Ticks, SubscriptionStates.Active);
 		var sub3 = CreateSubscription(23, "session2", new SecurityId { SecurityCode = "GOOGL" }, DataType.Level1, SubscriptionStates.Active);
@@ -522,7 +522,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void SubscriptionChanged_TriggeredOnAdd()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var subscription = CreateSubscription(30, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks, SubscriptionStates.Active);
 
 		TestSubscription added = null;
@@ -538,7 +538,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void TryGetSubscription_ErrorState_RemovesAndRaisesEvent()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var subscription = CreateSubscription(12, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks, SubscriptionStates.Active);
 
 		holder.Add(subscription);
@@ -559,7 +559,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void GetSubscriptions_BySession_IncludesIdZero()
 	{
-		var holder = CreateHolder();
+		using var holder = CreateHolder();
 		var subWithId = CreateSubscription(40, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks, SubscriptionStates.Active);
 		var subNoId = CreateSubscription(0, "session1", new SecurityId { SecurityCode = "MSFT" }, DataType.Level1, SubscriptionStates.Active);
 

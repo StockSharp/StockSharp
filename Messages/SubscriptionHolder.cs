@@ -44,7 +44,7 @@ public interface ISubscription<TSession>
 /// Initializes a new instance of the <see cref="SubscriptionHolder{TSubscription,TSession}"/>.
 /// </remarks>
 /// <param name="logs">Logs.</param>
-public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs)
+public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs) : Disposable
 	where TSubscription : class, ISecurityIdMessage, IDataTypeMessage, ISubscription<TSession>
 	where TSession : class
 {
@@ -58,6 +58,14 @@ public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs)
 	private readonly HashSet<long> _nonFoundSubscriptions = [];
 		
 	private readonly ILogReceiver _logs = logs ?? throw new ArgumentNullException(nameof(logs));
+
+	/// <inheritdoc />
+	protected override void DisposeManaged()
+	{
+		base.DisposeManaged();
+
+		_rw.Dispose();
+	}
 
 	/// <summary>
 	/// Get subscriptions for the specified session.
