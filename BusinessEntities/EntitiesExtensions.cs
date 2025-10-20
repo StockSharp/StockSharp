@@ -213,6 +213,13 @@ public static partial class EntitiesExtensions
 			.Select(prop => (ExchangeBoard)prop.GetValue(null, null));
 
 	/// <summary>
+	/// All registered candle message types.
+	/// </summary>
+	[Obsolete("Use Extensions.AllCandleTypes property.")]
+	public static IEnumerable<Type> AllCandleMessageTypes
+		=> Messages.Extensions.AllCandleTypes;
+
+	/// <summary>
 	/// To convert the own trade into message.
 	/// </summary>
 	/// <param name="trade">Own trade.</param>
