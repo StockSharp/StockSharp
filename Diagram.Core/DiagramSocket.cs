@@ -71,7 +71,7 @@ public class DiagramSocket : Disposable, INotifyPropertyChanged
 	/// <summary>
 	/// The connection direction.
 	/// </summary>
-	public DiagramSocketDirection Directon { get; }
+	public DiagramSocketDirection Direction { get; }
 
 	/// <summary>
 	/// Dynamic sockets are removed during Load().
@@ -214,7 +214,7 @@ public class DiagramSocket : Disposable, INotifyPropertyChanged
 		GuiWrapper = new DispatcherNotifiableObject<DiagramSocket>(ConfigManager.GetService<IDispatcher>(), this);
 
 		Id = socketId ?? Guid.NewGuid().ToN();
-		Directon = dir;
+		Direction = dir;
 		AvailableTypes = [];
 		this.ResetAvailableTypes();
 	}
@@ -265,12 +265,12 @@ public class DiagramSocket : Disposable, INotifyPropertyChanged
 	/// <summary>
 	/// Is input.
 	/// </summary>
-	public bool IsInput => Directon == DiagramSocketDirection.In;
+	public bool IsInput => Direction == DiagramSocketDirection.In;
 
 	/// <summary>
 	/// Is output.
 	/// </summary>
-	public bool IsOutput => Directon == DiagramSocketDirection.Out;
+	public bool IsOutput => Direction == DiagramSocketDirection.Out;
 
 	private readonly HashSet<DiagramSocket> _connections = [];
 
@@ -285,7 +285,7 @@ public class DiagramSocket : Disposable, INotifyPropertyChanged
 	/// <param name="other"><see cref="DiagramSocket"/></param>
 	public void Connect(DiagramSocket other)
 	{
-		if (other.Directon == Directon)
+		if (other.Direction == Direction)
 			throw new InvalidOperationException("invalid direction");
 
 		_connections.Add(other);

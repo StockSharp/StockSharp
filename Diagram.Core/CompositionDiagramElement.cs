@@ -553,7 +553,7 @@ public class CompositionDiagramElement : DiagramElement
 			get
 			{
 				var node = InternalNode;
-				return (Directon == DiagramSocketDirection.In ? node?.InputSockets : node?.OutputSockets)?.FindById(InternalSocketId);
+				return (Direction == DiagramSocketDirection.In ? node?.InputSockets : node?.OutputSockets)?.FindById(InternalSocketId);
 			}
 		}
 	}
@@ -570,7 +570,7 @@ public class CompositionDiagramElement : DiagramElement
 		var sockets = Model.GetDisconnectedSockets().ToArray();
 
 		static (string nodeKey, DiagramSocketDirection dir, string socketId, DiagramSocketType sockType, int linkMax) CreateSocketKey(string nodeKey, DiagramSocket socket)
-			=> (nodeKey, socket?.Directon ?? DiagramSocketDirection.In, socket?.Id, socket?.Type, socket?.LinkableMaximum ?? 0);
+			=> (nodeKey, socket?.Direction ?? DiagramSocketDirection.In, socket?.Id, socket?.Type, socket?.LinkableMaximum ?? 0);
 
 		var needKeys = sockets.Select(s => CreateSocketKey(s.nodeKey, s.socket)).ToSet();
 
@@ -610,7 +610,7 @@ public class CompositionDiagramElement : DiagramElement
 				else
 				{
 					var newSocketId = GenerateSocketId(nodeKey, socket.Id);
-					var newSocket = (CompositionSocket)(socket.Directon == DiagramSocketDirection.In ? AddInput(newSocketId, socket.Name, socket.Type, linkableMax: socket.LinkableMaximum) : AddOutput(newSocketId, socket.Name, socket.Type, linkableMax: socket.LinkableMaximum));
+					var newSocket = (CompositionSocket)(socket.Direction == DiagramSocketDirection.In ? AddInput(newSocketId, socket.Name, socket.Type, linkableMax: socket.LinkableMaximum) : AddOutput(newSocketId, socket.Name, socket.Type, linkableMax: socket.LinkableMaximum));
 
 					newSocket.InternalNodeKey = nodeKey;
 					newSocket.InternalSocketId = socket.Id;
