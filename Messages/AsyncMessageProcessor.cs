@@ -432,6 +432,7 @@ class AsyncMessageProcessor : Disposable
 	private void CancelAndReplaceGlobalCts()
 	{
 		_globalCts.Cancel();
+		_globalCts.Dispose();
 		_globalCts = new();
 	}
 

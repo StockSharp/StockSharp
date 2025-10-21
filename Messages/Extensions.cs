@@ -51,6 +51,9 @@ public static partial class Extensions
 		{
 			var parts = str.Split('_');
 
+			if (parts.Length < 2)
+				throw new ArgumentException($"Invalid PnF argument format: {str}. Expected format: 'boxSize_reversalAmount'");
+
 			return new PnFArg
 			{
 				BoxSize = parts[0].ToUnit(),
@@ -1284,20 +1287,30 @@ public static partial class Extensions
 			foreach (var str in input.SplitByComma())
 			{
 				var parts = str.Split('=');
+
+				if (parts.Length < 3)
+					throw new InvalidOperationException($"Invalid period format: {str}. Expected format: 'date=times=specialDays'");
+
 				periods.Add(new WorkingTimePeriod
 				{
 					Till = parts[0].ToDateTime(_dateFormat),
 					Times = [.. parts[1].SplitBySep("--").Select(s =>
 					{
 						var parts2 = s.Split('-');
+						if (parts2.Length < 2)
+							throw new InvalidOperationException($"Invalid time range format: {s}. Expected format: 'start-end'");
 						return new Range<TimeSpan>(parts2[0].ToTimeSpan(_timeFormat), parts2[1].ToTimeSpan(_timeFormat));
 					})],
 					SpecialDays = parts[2].SplitBySep("//").Select(s =>
 					{
 						var idx = s.IndexOf(':');
+						if (idx < 0)
+							throw new InvalidOperationException($"Invalid special day format: {s}. Expected format: 'dayOfWeek:times'");
 						return new KeyValuePair<DayOfWeek, Range<TimeSpan>[]>(s.Substring(0, idx).To<DayOfWeek>(), [.. s.Substring(idx + 1).SplitBySep("--").Select(s2 =>
 						{
 							var parts3 = s2.Split('-');
+							if (parts3.Length < 2)
+								throw new InvalidOperationException($"Invalid time range format: {s2}. Expected format: 'start-end'");
 							return new Range<TimeSpan>(parts3[0].ToTimeSpan(_timeFormat), parts3[1].ToTimeSpan(_timeFormat));
 						})]);
 					}).ToDictionary()
@@ -4520,11 +4533,11 @@ public static partial class Extensions
 		if (cfi.IsEmpty())
 			throw new ArgumentNullException(nameof(cfi));
 
-		if (cfi[0] != 'O')
-			return null;
-
 		if (cfi.Length < 2)
 			throw new ArgumentOutOfRangeException(nameof(cfi), cfi, LocalizedStrings.InvalidValue);
+
+		if (cfi[0] != 'O')
+			return null;
 
 		return cfi[1] switch
 		{

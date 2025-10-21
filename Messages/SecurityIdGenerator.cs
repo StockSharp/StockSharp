@@ -52,8 +52,27 @@ public class SecurityIdGenerator
 
 		var index = securityId.LastIndexOfIgnoreCase(Delimiter);
 
-		return index == -1
-			? nullIfInvalid ? default : new SecurityId { SecurityCode = securityId, BoardCode = SecurityId.AssociatedBoardCode }
-			: new SecurityId { SecurityCode = securityId.Substring(0, index), BoardCode = securityId.Substring(index + Delimiter.Length, securityId.Length - index - Delimiter.Length) };
+		if (index == -1)
+			return nullIfInvalid ? default : new SecurityId { SecurityCode = securityId, BoardCode = SecurityId.AssociatedBoardCode };
+
+		var boardCodeStartIndex = index + Delimiter.Length;
+		if (boardCodeStartIndex >= securityId.Length)
+		{
+			// Delimiter is at the end of string, no board code
+			return nullIfInvalid ? default : throw new ArgumentException($"Invalid security ID format: {securityId}. Delimiter is at the end.", nameof(securityId));
+		}
+
+		var boardCodeLength = securityId.Length - boardCodeStartIndex;
+		if (boardCodeLength <= 0)
+		{
+			// Invalid board code length
+			return nullIfInvalid ? default : throw new ArgumentException($"Invalid security ID format: {securityId}. Invalid board code.", nameof(securityId));
+		}
+
+		return new SecurityId
+		{
+			SecurityCode = securityId.Substring(0, index),
+			BoardCode = securityId.Substring(boardCodeStartIndex, boardCodeLength)
+		};
 	}
 }

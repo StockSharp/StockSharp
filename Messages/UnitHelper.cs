@@ -49,10 +49,16 @@ public static class UnitHelper
 			return null;
 		}
 
+		if (str.Length < 1)
+			throw new ArgumentException(LocalizedStrings.InvalidValue, nameof(str));
+
 		var lastSymbol = str.Last();
 
 		if (char.IsDigit(lastSymbol))
 			return new(str.To<decimal>(), UnitTypes.Absolute);
+
+		if (str.Length < 2)
+			throw new ArgumentException(LocalizedStrings.InvalidValue.Put(str), nameof(str));
 
 		var value = str.Substring(0, str.Length - 1).To<decimal>();
 
