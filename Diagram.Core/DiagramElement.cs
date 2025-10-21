@@ -554,7 +554,7 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 
 		using var _ = SaveUndoState();
 
-		if(!GetSockets(socket.Directon).Remove(socket))
+		if(!GetSockets(socket.Direction).Remove(socket))
 			return;
 
 		socket.Connected -= OnSocketConnected;

@@ -514,7 +514,7 @@ public class CompositionModel<TNode, TLink> : ICompositionModel
 				.Where(s => ports.All(p => !p.EqualsIgnoreCase(s.Id)))
 				.Select(s =>
 				{
-					var socket = new DiagramSocket(s.Directon, s.Id)
+					var socket = new DiagramSocket(s.Direction, s.Id)
 					{
 						Name = $"{s.Name} - {node.Element.Name}",
 						Type = s.Type,

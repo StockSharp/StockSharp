@@ -414,7 +414,7 @@ public class DiagramDebugger : Disposable, IDebugger
 				continue;
 
 			if (_breakpoints.ContainsKey(socket))
-				return;
+				continue;
 
 			var obj = CreateSocketBreakpoint(socket);
 			obj.Load(breakPoint);
