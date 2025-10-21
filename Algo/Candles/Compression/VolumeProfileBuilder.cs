@@ -116,7 +116,7 @@ public class VolumeProfileBuilder
 	{
 		if (_levels.Count == 0)
 			return;
-	
+
 		PoC = default;
 		High = default;
 		Low = default;
@@ -125,6 +125,9 @@ public class VolumeProfileBuilder
 		var currVolume = _levels.Select(p => p.BuyVolume + p.SellVolume).Max();
 
 		PoC = _levels.FirstOrDefault(p => p.BuyVolume + p.SellVolume == currVolume);
+
+		if (PoC.Price == 0)
+			return;
 
 		var abovePoc = Combine(_levels.Where(p => p.Price > PoC.Price).OrderBy(p => p.Price), true);
 		var belowePoc = Combine(_levels.Where(p => p.Price < PoC.Price).OrderByDescending(p => p.Price), false);

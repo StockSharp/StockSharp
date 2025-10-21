@@ -278,8 +278,13 @@ public static partial class CandleHelper
 		if (volumeProfile == null)
 			throw new ArgumentNullException(nameof(volumeProfile));
 
-		var max = volumeProfile.PriceLevels.Select(p => p.BuyVolume + p.SellVolume).Max();
-		return volumeProfile.PriceLevels.FirstOrDefault(p => p.BuyVolume + p.SellVolume == max);
+		var levels = volumeProfile.PriceLevels.ToArray();
+
+		if (levels.Length == 0)
+			return default;
+
+		var max = levels.Select(p => p.BuyVolume + p.SellVolume).Max();
+		return levels.FirstOrDefault(p => p.BuyVolume + p.SellVolume == max);
 	}
 
 	/// <summary>
@@ -290,6 +295,10 @@ public static partial class CandleHelper
 	public static decimal BuyVolAbovePoC(this VolumeProfileBuilder volumeProfile)
 	{
 		var poc = volumeProfile.PoC();
+
+		if (poc.Price == 0)
+			return 0;
+
 		return volumeProfile.PriceLevels.Where(p => p.Price > poc.Price).Select(p => p.BuyVolume).Sum();
 	}
 
@@ -301,6 +310,10 @@ public static partial class CandleHelper
 	public static decimal BuyVolBelowPoC(this VolumeProfileBuilder volumeProfile)
 	{
 		var poc = volumeProfile.PoC();
+
+		if (poc.Price == 0)
+			return 0;
+
 		return volumeProfile.PriceLevels.Where(p => p.Price < poc.Price).Select(p => p.BuyVolume).Sum();
 	}
 
@@ -312,6 +325,10 @@ public static partial class CandleHelper
 	public static decimal SellVolAbovePoC(this VolumeProfileBuilder volumeProfile)
 	{
 		var poc = volumeProfile.PoC();
+
+		if (poc.Price == 0)
+			return 0;
+
 		return volumeProfile.PriceLevels.Where(p => p.Price > poc.Price).Select(p => p.SellVolume).Sum();
 	}
 
@@ -323,6 +340,10 @@ public static partial class CandleHelper
 	public static decimal SellVolBelowPoC(this VolumeProfileBuilder volumeProfile)
 	{
 		var poc = volumeProfile.PoC();
+
+		if (poc.Price == 0)
+			return 0;
+
 		return volumeProfile.PriceLevels.Where(p => p.Price < poc.Price).Select(p => p.SellVolume).Sum();
 	}
 
@@ -366,8 +387,13 @@ public static partial class CandleHelper
 		if (volumeProfile == null)
 			throw new ArgumentNullException(nameof(volumeProfile));
 
-		var delta = volumeProfile.PriceLevels.Select(p => p.BuyVolume - p.SellVolume).Max();
-		return volumeProfile.PriceLevels.FirstOrDefault(p => p.BuyVolume - p.SellVolume == delta);
+		var levels = volumeProfile.PriceLevels.ToArray();
+
+		if (levels.Length == 0)
+			return default;
+
+		var delta = levels.Select(p => p.BuyVolume - p.SellVolume).Max();
+		return levels.FirstOrDefault(p => p.BuyVolume - p.SellVolume == delta);
 	}
 
 	/// <summary>
@@ -380,8 +406,13 @@ public static partial class CandleHelper
 		if (volumeProfile == null)
 			throw new ArgumentNullException(nameof(volumeProfile));
 
-		var delta = volumeProfile.PriceLevels.Select(p => p.BuyVolume - p.SellVolume).Min();
-		return volumeProfile.PriceLevels.FirstOrDefault(p => p.BuyVolume - p.SellVolume == delta);
+		var levels = volumeProfile.PriceLevels.ToArray();
+
+		if (levels.Length == 0)
+			return default;
+
+		var delta = levels.Select(p => p.BuyVolume - p.SellVolume).Min();
+		return levels.FirstOrDefault(p => p.BuyVolume - p.SellVolume == delta);
 	}
 
 	/// <summary>
@@ -518,7 +549,7 @@ public static partial class CandleHelper
 			candleMsg.OpenPrice == candleMsg.LowPrice ||
 			candleMsg.TotalVolume == 1)
 		{
-			// все цены в свече равны или объем равен 1 - считаем ее за один тик
+			// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 1 - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
 			ticks[0] = (Sides.Buy, candleMsg.OpenPrice, candleMsg.TotalVolume, time);
 
 			ticks[1] = ticks[2] = ticks[3] = default;
