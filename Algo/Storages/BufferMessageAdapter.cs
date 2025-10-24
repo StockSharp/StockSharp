@@ -378,7 +378,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 				foreach (var pair in Buffer.GetOrderBooks())
 				{
 					if (incremental)
-						Settings.GetStorage<QuoteChangeMessage>(pair.Key, DataType.Level1).Save(pair.Value);
+						Settings.GetStorage<QuoteChangeMessage>(pair.Key, DataType.MarketDepth).Save(pair.Value);
 
 					if (snapshot)
 					{
