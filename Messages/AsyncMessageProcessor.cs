@@ -362,8 +362,6 @@ class AsyncMessageProcessor : Disposable
 					}
 					catch (Exception ex2)
 					{
-						done();
-
 						if (!token.IsCancellationRequested)
 							_adapter.AddErrorLog(ex2);
 					}
