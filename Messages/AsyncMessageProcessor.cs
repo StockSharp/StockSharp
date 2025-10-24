@@ -414,14 +414,14 @@ class AsyncMessageProcessor : Disposable
 		});
 	}
 
-	private ValueTask ConnectAsync(ConnectMessage msg, CancellationToken token)
+	private async ValueTask ConnectAsync(ConnectMessage msg, CancellationToken token)
 	{
 		if(_isConnectionStarted)
 			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
 
-		_isConnectionStarted = true;
+		await _adapter.ConnectAsync(msg, token);
 
-		return _adapter.ConnectAsync(msg, token);
+		_isConnectionStarted = true;
 	}
 
 	private async ValueTask DisconnectAsync(DisconnectMessage msg)
