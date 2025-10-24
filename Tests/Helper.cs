@@ -25,11 +25,15 @@ static class Helper
 
 	public const string TempFolder = "temp";
 
-	public static string GetSubTemp(string subName)
+	public static string GetSubTemp(string subName = default)
 	{
 		var dir = Path.Combine(TempFolder, Guid.NewGuid().ToString("N"));
 		Directory.CreateDirectory(dir);
-		return Path.Combine(dir, subName);
+
+		if (!subName.IsEmpty())
+			dir = Path.Combine(dir, subName);
+
+		return dir;
 	}
 
 	public static void ClearTemp()

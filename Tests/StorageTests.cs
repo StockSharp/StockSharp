@@ -15,7 +15,7 @@ public class StorageTests
 	private static readonly int[] _sourceArray = [01,02,03,06,07,08,09,10,13,14,15,16,17,20,21,22,23,24,27,28,29,30];
 
 	private static IStorageRegistry GetStorageRegistry()
-		=> Helper.GetStorage(Helper.GetSubTemp(Guid.NewGuid().ToString("N")));
+		=> Helper.GetStorage(Helper.GetSubTemp());
 
 	private static IMarketDataStorage<ExecutionMessage> GetTradeStorage(SecurityId security, StorageFormats format)
 	{
