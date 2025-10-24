@@ -84,7 +84,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 				.SetCell(3, 0, LocalizedStrings.Volume).SetStyle(3, typeof(decimal))
 				.SetCell(4, 0, LocalizedStrings.Direction)
 				.SetCell(5, 0, LocalizedStrings.OI).SetStyle(5, typeof(decimal))
-				.SetCell(6, 0, "UP_DOWN").SetStyle(5, typeof(bool))
+				.SetCell(6, 0, "UP_DOWN").SetStyle(6, typeof(bool))
 				.SetCell(7, 0, LocalizedStrings.Currency);
 
 			//worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Buy), null, Colors.Green);
@@ -121,18 +121,19 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 		return Do(worker =>
 		{
 			worker
-				.SetCell(0, 0, LocalizedStrings.Time).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff zzz")
+				.SetCell(0, 0, LocalizedStrings.Time).SetStyle(0, "yyyy-MM-dd HH:mm:ss.fff zzz")
 				.SetCell(1, 0, LocalizedStrings.Portfolio)
 				.SetCell(2, 0, LocalizedStrings.TransactionId)
 				.SetCell(3, 0, LocalizedStrings.OrderId)
-				.SetCell(4, 0, LocalizedStrings.Price).SetStyle(2, typeof(decimal))
-				.SetCell(5, 0, LocalizedStrings.Volume).SetStyle(3, typeof(decimal))
-				.SetCell(6, 0, LocalizedStrings.Balance).SetStyle(3, typeof(decimal))
+				.SetCell(4, 0, LocalizedStrings.Price).SetStyle(4, typeof(decimal))
+				.SetCell(5, 0, LocalizedStrings.Volume).SetStyle(5, typeof(decimal))
+				.SetCell(6, 0, LocalizedStrings.Balance).SetStyle(6, typeof(decimal))
 				.SetCell(7, 0, LocalizedStrings.Direction)
 				.SetCell(8, 0, LocalizedStrings.OrderType)
 				.SetCell(9, 0, LocalizedStrings.OrderStateDesc)
 				.SetCell(10, 0, LocalizedStrings.Trade)
-				.SetCell(11, 0, LocalizedStrings.TradePrice).SetStyle(3, typeof(decimal));
+				.SetCell(11, 0, LocalizedStrings.TradePrice).SetStyle(11, typeof(decimal))
+				.SetCell(12, 0, "HasOrderInfo").SetStyle(12, typeof(bool));
 
 			//worker.SetConditionalFormatting(7, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Buy), null, Colors.Green);
 			//worker.SetConditionalFormatting(7, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Sell), null, Colors.Red);
@@ -185,7 +186,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 			{
 				worker
 					.SetCell(0, rowIndex, LocalizedStrings.Time)
-					.SetCell(1, rowIndex, message.ServerTime.ToString());
+					.SetCell(1, rowIndex, message.ServerTime).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff zzz");
 
 				var columnIndex = 0;
 
@@ -387,12 +388,12 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 
 			worker
 				.SetCell(0, row, LocalizedStrings.Time).SetStyle(0, "yyyy-MM-dd HH:mm:ss.fff")
-				.SetCell(1, row, "O").SetStyle(2, typeof(decimal))
-				.SetCell(2, row, "H").SetStyle(3, typeof(decimal))
-				.SetCell(3, row, "L").SetStyle(4, typeof(decimal))
-				.SetCell(4, row, "C").SetStyle(5, typeof(decimal))
-				.SetCell(5, row, "V").SetStyle(6, typeof(decimal))
-				.SetCell(6, row, LocalizedStrings.OI).SetStyle(7, typeof(decimal));
+				.SetCell(1, row, "O").SetStyle(1, typeof(decimal))
+				.SetCell(2, row, "H").SetStyle(2, typeof(decimal))
+				.SetCell(3, row, "L").SetStyle(3, typeof(decimal))
+				.SetCell(4, row, "C").SetStyle(4, typeof(decimal))
+				.SetCell(5, row, "V").SetStyle(5, typeof(decimal))
+				.SetCell(6, row, LocalizedStrings.OI).SetStyle(6, typeof(decimal));
 
 			row++;
 
@@ -483,9 +484,10 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 				.SetCell(colIndex, 0, LocalizedStrings.Decimals).SetStyle(colIndex++, typeof(decimal))
 				.SetCell(colIndex, 0, LocalizedStrings.OptionType).SetStyle(colIndex++, typeof(string))
 				.SetCell(colIndex, 0, LocalizedStrings.Strike).SetStyle(colIndex++, typeof(decimal))
+				.SetCell(colIndex, 0, LocalizedStrings.BinaryOption).SetStyle(colIndex++, typeof(string))
 				.SetCell(colIndex, 0, LocalizedStrings.UnderlyingAsset).SetStyle(colIndex++, typeof(string))
 				.SetCell(colIndex, 0, LocalizedStrings.UnderlyingSecurityType).SetStyle(colIndex++, typeof(string))
-				.SetCell(colIndex, 0, LocalizedStrings.UnderlyingMinVolume).SetStyle(colIndex++, typeof(string))
+				.SetCell(colIndex, 0, LocalizedStrings.UnderlyingMinVolume).SetStyle(colIndex++, typeof(decimal))
 				.SetCell(colIndex, 0, LocalizedStrings.ExpiryDate).SetStyle(colIndex++, "yyyy-MM-dd")
 				.SetCell(colIndex, 0, LocalizedStrings.SettlementDate).SetStyle(colIndex++, "yyyy-MM-dd")
 				.SetCell(colIndex, 0, LocalizedStrings.IssueSize).SetStyle(colIndex++, typeof(decimal))
