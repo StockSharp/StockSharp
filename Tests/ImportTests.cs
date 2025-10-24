@@ -54,7 +54,8 @@ public class ImportTests
 		{
 			ColumnSeparator = ";"
 		};
-		var msgs = parser.Parse(fileName, () => false).ToArray();
+		using var stream = File.OpenRead(fileName);
+		var msgs = parser.Parse(stream, () => false).ToArray();
 
 		msgs.Length.AssertEqual(arr.Length);
 	}

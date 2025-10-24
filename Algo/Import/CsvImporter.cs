@@ -30,12 +30,16 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 	/// <summary>
 	/// Import from CSV file.
 	/// </summary>
-	/// <param name="fileName">File name.</param>
+	/// <param name="stream">Thr file stream.</param>
 	/// <param name="updateProgress">Progress notification.</param>
 	/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 	/// <returns>Count and last time.</returns>
-	public (int, DateTimeOffset?) Import(string fileName, Action<int> updateProgress, Func<bool> isCancelled)
+	public (int, DateTimeOffset?) Import(Stream stream, Action<int> updateProgress, Func<bool> isCancelled)
 	{
+		ArgumentNullException.ThrowIfNull(stream);
+		ArgumentNullException.ThrowIfNull(updateProgress);
+		ArgumentNullException.ThrowIfNull(isCancelled);
+
 		var count = 0;
 		var lastTime = default(DateTimeOffset?);
 
@@ -51,17 +55,17 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 			FlushBuffer(buffer);
 		}
 
-		LogInfo(LocalizedStrings.ImportOfType.Put(fileName, DataType.MessageType.Name));
+		//LogInfo(LocalizedStrings.ImportOfType.Put(fileName, DataType.MessageType.Name));
 
 		try
 		{
-			var len = new FileInfo(fileName).Length;
+			var len = stream.CanSeek ? stream.Length : -1;
 			var prevPercent = 0;
 			var lineIndex = 0;
 
 			var isSecurityRequired = DataType.IsSecurityRequired;
 
-			foreach (var msg in Parse(fileName, isCancelled))
+			foreach (var msg in Parse(stream, isCancelled))
 			{
 				if (msg is SecurityMappingMessage)
 					continue;
@@ -102,6 +106,9 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 					SecurityUpdated?.Invoke(security, isNew);
 				}
 
+				if (len == -1)
+					continue;
+
 				var percent = (int)(((double)lineIndex / len) * 100 - 1).Round();
 
 				lineIndex++;
@@ -110,7 +117,7 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 					continue;
 
 				prevPercent = percent;
-				updateProgress?.Invoke(prevPercent);
+				updateProgress(prevPercent);
 			}
 		}
 		catch (Exception ex)

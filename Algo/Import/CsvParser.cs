@@ -113,15 +113,18 @@ public class CsvParser : BaseLogReceiver
 	/// <summary>
 	/// Parse CSV file.
 	/// </summary>
-	/// <param name="fileName">File name.</param>
+	/// <param name="stream">The file stream.</param>
 	/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 	/// <returns>Parsed instances.</returns>
-	public IEnumerable<Message> Parse(string fileName, Func<bool> isCancelled = null)
+	public IEnumerable<Message> Parse(Stream stream, Func<bool> isCancelled)
 	{
+		ArgumentNullException.ThrowIfNull(stream);
+		ArgumentNullException.ThrowIfNull(isCancelled);
+
 		var columnSeparator = ColumnSeparator.ReplaceIgnoreCase("TAB", "\t");
 
 		using (TimeZone.ToScope())
-		using (var reader = new CsvFileReader(fileName, LineSeparator) { Delimiter = columnSeparator[0] })
+		using (var reader = new CsvFileReader(stream, LineSeparator) { Delimiter = columnSeparator[0] })
 		{
 			var skipLines = SkipFromHeader;
 			var lineIndex = 0;
@@ -170,7 +173,7 @@ public class CsvParser : BaseLogReceiver
 
 			while (reader.ReadRow(cells))
 			{
-				if (isCancelled?.Invoke() == true)
+				if (isCancelled())
 					break;
 
 				lineIndex++;
