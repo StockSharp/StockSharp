@@ -411,13 +411,76 @@ public class PnLTests
 	public void SaveLoad()
 	{
 		var manager = new PnLManager { UseLevel1 = true };
-		
+
 		var storage = manager.Save();
 
 		var manager2 = new PnLManager();
-		
+
 		manager2.UseLevel1.AssertFalse();
 		manager2.Load(storage);
 		manager2.UseLevel1.AssertTrue();
+	}
+
+	[TestMethod]
+	public void StalePrices_QuoteThenCandle()
+	{
+		var secId = Helper.CreateSecurityId();
+
+		IPnLManager manager = new PnLManager
+		{
+			UseOrderBook = true,
+			UseCandles = true
+		};
+
+		var reg = new OrderRegisterMessage
+		{
+			PortfolioName = Helper.CreatePortfolio().Name,
+			SecurityId = secId,
+			TransactionId = 1,
+		};
+		manager.ProcessMessage(reg);
+
+		// Buy 1 at 100
+		var buy = new ExecutionMessage
+		{
+			OriginalTransactionId = reg.TransactionId,
+			DataTypeEx = DataType.Transactions,
+			SecurityId = secId,
+			TradeId = 1,
+			TradePrice = 100m,
+			TradeVolume = 1m,
+			Side = Sides.Buy,
+			ServerTime = DateTimeOffset.UtcNow
+		};
+		manager.ProcessMessage(buy);
+
+		// Quote: bid=130, ask=131
+		var quote = new QuoteChangeMessage
+		{
+			SecurityId = secId,
+			Bids = [new(130m, 1)],
+			Asks = [new(131m, 1)]
+		};
+		manager.ProcessMessage(quote);
+		manager.UnrealizedPnL.AssertEqual(30m); // (130-100)*1 = 30
+
+		// Candle closes at 150 (newer data!)
+		var candle = new TimeFrameCandleMessage
+		{
+			SecurityId = secId,
+			OpenTime = DateTimeOffset.Now,
+			CloseTime = DateTimeOffset.Now,
+			OpenPrice = 100,
+			HighPrice = 150,
+			LowPrice = 90,
+			ClosePrice = 150,
+			TotalVolume = 1
+		};
+		manager.ProcessMessage(candle);
+
+		// BUG: UnrealizedPnL still uses stale bid=130 instead of fresh close=150
+		// Expected: (150-100)*1 = 50
+		// Actual: (130-100)*1 = 30 ❌
+		manager.UnrealizedPnL.AssertEqual(50m);
 	}
 }
