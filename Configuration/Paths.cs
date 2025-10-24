@@ -616,7 +616,8 @@ public static class Paths
 		if(!File.Exists(defFile))
 			throw new FileNotFoundException($"file not found: '{defFile}'");
 
-		return defSer.Deserialize(defFile);
+		using FileStream stream = new FileStream(defFile, FileMode.Open, FileAccess.Read, FileShare.Read);
+		return defSer.Deserialize(stream);
 	}
 
 	/// <summary>
@@ -626,20 +627,7 @@ public static class Paths
 	/// <param name="data">Serialized data.</param>
 	/// <returns>Value.</returns>
 	public static T Deserialize<T>(this byte[] data)
-	{
-		var serializer = CreateSerializer<T>();
-
-		try
-		{
-			return serializer.Deserialize(data);
-		}
-		catch(Exception e)
-		{
-			e.LogError();
-		}
-
-		return default;
-	}
+		=> Deserialize<T>(new MemoryStream(data));
 
 	/// <summary>
 	/// Deserialize value from the serialized data.
