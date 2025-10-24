@@ -50,6 +50,7 @@ class AsyncMessageProcessor : Disposable
 
 	private readonly AsyncManualResetEvent _processMessageEvt = new(false);
 	private CancellationTokenSource _globalCts = new();
+	private readonly Task _processorTask;
 
 	private bool _isConnectionStarted, _isDisconnecting;
 
@@ -62,8 +63,7 @@ class AsyncMessageProcessor : Disposable
 	public AsyncMessageProcessor(AsyncMessageAdapter adapter)
 	{
 		_adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
-		// ReSharper disable once VirtualMemberCallInConstructor
-		Task.Run(ProcessMessagesAsync);
+		_processorTask = Task.Run(ProcessMessagesAsync);
 	}
 
 	/// <inheritdoc />
@@ -71,10 +71,44 @@ class AsyncMessageProcessor : Disposable
 	{
 		base.DisposeManaged();
 
-		_processMessageEvt.Set();
+		try
+		{
+			_processMessageEvt.Set();
+		}
+		catch { }
 
-		_globalCts?.Cancel();
-		_globalCts?.Dispose();
+		try
+		{
+			_globalCts?.Cancel();
+		}
+		finally
+		{
+			_globalCts?.Dispose();
+		}
+
+		// cancel and dispose any active per-subscription CTS
+		try
+		{
+			foreach (var (_, item) in _subscriptionItems.CopyAndClear())
+			{
+				try
+				{
+					item.Cts?.Cancel();
+				}
+				finally
+				{
+					item.Cts?.Dispose();
+				}
+			}
+		}
+		catch { }
+
+		// give the background loop a moment to exit
+		try
+		{
+			_processorTask?.Wait(TimeSpan.FromSeconds(5));
+		}
+		catch { }
 	}
 
 	/// <summary>
@@ -422,7 +456,10 @@ class AsyncMessageProcessor : Disposable
 			_globalCts.Token);
 
 		foreach (var (_, item) in _subscriptionItems.CopyAndClear())
+		{
 			item.Cts.Cancel();
+			item.Cts.Dispose();
+		}
 
 		await _adapter.ResetAsync(msg, default); // reset must not throw.
 
@@ -432,6 +469,8 @@ class AsyncMessageProcessor : Disposable
 	private void CancelAndReplaceGlobalCts()
 	{
 		_globalCts.Cancel();
+		_globalCts.Dispose();
+
 		_globalCts = new();
 	}
 
