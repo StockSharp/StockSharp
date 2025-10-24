@@ -437,14 +437,21 @@ class AsyncMessageProcessor : Disposable
 
 		_isDisconnecting = true;
 
-		CancelAndReplaceGlobalCts();
+		try
+		{
+			CancelAndReplaceGlobalCts();
 
-		if(!await WhenChildrenComplete(_adapter.DisconnectTimeout.CreateTimeoutToken()))
-			throw new InvalidOperationException("unable to complete disconnect. some tasks are still running.");
+			if(!await WhenChildrenComplete(_adapter.DisconnectTimeout.CreateTimeoutToken()))
+				throw new InvalidOperationException("unable to complete disconnect. some tasks are still running.");
 
-		await _adapter.DisconnectAsync(msg, default);
+			await _adapter.DisconnectAsync(msg, default);
 
-		_isDisconnecting = _isConnectionStarted = false;
+			_isConnectionStarted = false;
+		}
+		finally
+		{
+			_isDisconnecting = false;
+		}
 	}
 
 	private async ValueTask ResetAsync(ResetMessage msg)
