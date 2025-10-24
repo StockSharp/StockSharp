@@ -1,5 +1,6 @@
 ﻿namespace StockSharp.Tests;
 
+using StockSharp.Algo.Candles;
 using StockSharp.Algo.Candles.Compression;
 
 [TestClass]
@@ -871,5 +872,222 @@ public class CandleTests
 		// Should stop at second pair (97+96) with price 96 (closer to PoC from sorted pair)
 		builder.Low.Price.AssertEqual(96m);
 		builder.High.Price.AssertEqual(100m);
+	}
+
+	[TestMethod]
+	public void VolumeProfile_EmptyBuilder_CalculateDoesNotCrash()
+	{
+		// Test that Calculate() on empty builder doesn't crash with InvalidOperationException
+		var builder = new VolumeProfileBuilder();
+
+		// Should not throw InvalidOperationException from Max() on empty sequence
+		builder.Calculate();
+
+		// Should return default values
+		builder.PoC.Price.AssertEqual(0m);
+		builder.High.Price.AssertEqual(0m);
+		builder.Low.Price.AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_PoC_EmptyCollection_ReturnsDefault()
+	{
+		// Test that PoC() on empty collection doesn't crash with InvalidOperationException
+		var builder = new VolumeProfileBuilder();
+
+		// Should not throw InvalidOperationException from Max() on empty sequence
+		var poc = builder.PoC();
+
+		// Should return default value
+		poc.Price.AssertEqual(0m);
+		poc.TotalVolume.AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_PriceLevelOfMaxDelta_EmptyCollection_ReturnsDefault()
+	{
+		// Test that PriceLevelOfMaxDelta() on empty collection doesn't crash
+		var builder = new VolumeProfileBuilder();
+
+		// Should not throw InvalidOperationException from Max() on empty sequence
+		var level = builder.PriceLevelOfMaxDelta();
+
+		// Should return default value
+		level.Price.AssertEqual(0m);
+		level.TotalVolume.AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_PriceLevelOfMinDelta_EmptyCollection_ReturnsDefault()
+	{
+		// Test that PriceLevelOfMinDelta() on empty collection doesn't crash
+		var builder = new VolumeProfileBuilder();
+
+		// Should not throw InvalidOperationException from Min() on empty sequence
+		var level = builder.PriceLevelOfMinDelta();
+
+		// Should return default value
+		level.Price.AssertEqual(0m);
+		level.TotalVolume.AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_BuyVolAbovePoC_EmptyCollection_ReturnsZero()
+	{
+		// Test that BuyVolAbovePoC() handles empty collection correctly
+		var builder = new VolumeProfileBuilder();
+
+		// Should return 0 instead of throwing or calculating with invalid PoC
+		var vol = builder.BuyVolAbovePoC();
+
+		vol.AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_BuyVolBelowPoC_EmptyCollection_ReturnsZero()
+	{
+		// Test that BuyVolBelowPoC() handles empty collection correctly
+		var builder = new VolumeProfileBuilder();
+
+		// Should return 0 instead of throwing or calculating with invalid PoC
+		var vol = builder.BuyVolBelowPoC();
+
+		vol.AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_SellVolAbovePoC_EmptyCollection_ReturnsZero()
+	{
+		// Test that SellVolAbovePoC() handles empty collection correctly
+		var builder = new VolumeProfileBuilder();
+
+		// Should return 0 instead of throwing or calculating with invalid PoC
+		var vol = builder.SellVolAbovePoC();
+
+		vol.AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_SellVolBelowPoC_EmptyCollection_ReturnsZero()
+	{
+		// Test that SellVolBelowPoC() handles empty collection correctly
+		var builder = new VolumeProfileBuilder();
+
+		// Should return 0 instead of throwing or calculating with invalid PoC
+		var vol = builder.SellVolBelowPoC();
+
+		vol.AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_TotalBuyVolume_EmptyCollection_ReturnsZero()
+	{
+		// Test that TotalBuyVolume() handles empty collection correctly
+		var builder = new VolumeProfileBuilder();
+
+		var vol = builder.TotalBuyVolume();
+
+		vol.AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_TotalSellVolume_EmptyCollection_ReturnsZero()
+	{
+		// Test that TotalSellVolume() handles empty collection correctly
+		var builder = new VolumeProfileBuilder();
+
+		var vol = builder.TotalSellVolume();
+
+		vol.AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_Delta_EmptyCollection_ReturnsZero()
+	{
+		// Test that Delta() handles empty collection correctly
+		var builder = new VolumeProfileBuilder();
+
+		var delta = builder.Delta();
+
+		delta.AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_PoC_WithData_ReturnsMaxVolumeLevel()
+	{
+		// Test that PoC() correctly returns the level with maximum volume
+		var builder = new VolumeProfileBuilder();
+
+		builder.Update(100m, 10m, Sides.Buy);
+		builder.Update(101m, 50m, Sides.Buy);  // This should be PoC
+		builder.Update(102m, 20m, Sides.Sell);
+
+		var poc = builder.PoC();
+
+		poc.Price.AssertEqual(101m);
+		(poc.BuyVolume + poc.SellVolume).AssertEqual(50m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_PriceLevelOfMaxDelta_WithData_ReturnsCorrectLevel()
+	{
+		// Test that PriceLevelOfMaxDelta() correctly finds maximum buy-sell delta
+		var builder = new VolumeProfileBuilder();
+
+		builder.Update(100m, 10m, Sides.Buy);   // delta = +10
+		builder.Update(101m, 50m, Sides.Buy);   // delta = +50 (MAX)
+		builder.Update(102m, 20m, Sides.Sell);  // delta = -20
+
+		var level = builder.PriceLevelOfMaxDelta();
+
+		level.Price.AssertEqual(101m);
+		(level.BuyVolume - level.SellVolume).AssertEqual(50m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_PriceLevelOfMinDelta_WithData_ReturnsCorrectLevel()
+	{
+		// Test that PriceLevelOfMinDelta() correctly finds minimum buy-sell delta
+		var builder = new VolumeProfileBuilder();
+
+		builder.Update(100m, 10m, Sides.Buy);   // delta = +10
+		builder.Update(101m, 5m, Sides.Sell);   // delta = -5
+		builder.Update(102m, 30m, Sides.Sell);  // delta = -30 (MIN)
+
+		var level = builder.PriceLevelOfMinDelta();
+
+		level.Price.AssertEqual(102m);
+		(level.BuyVolume - level.SellVolume).AssertEqual(-30m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_VolumesAboveBelowPoC_WithData_CalculatesCorrectly()
+	{
+		// Test that volume calculations above/below PoC work correctly
+		var builder = new VolumeProfileBuilder();
+
+		builder.Update(98m, 5m, Sides.Buy);     // Below PoC
+		builder.Update(99m, 10m, Sides.Sell);   // Below PoC
+		builder.Update(100m, 100m, Sides.Buy);  // This is PoC (max volume)
+		builder.Update(101m, 15m, Sides.Buy);   // Above PoC
+		builder.Update(102m, 20m, Sides.Sell);  // Above PoC
+
+		// Verify PoC is correct
+		var poc = builder.PoC();
+		poc.Price.AssertEqual(100m);
+
+		// Test volumes above PoC
+		builder.BuyVolAbovePoC().AssertEqual(15m);
+		builder.SellVolAbovePoC().AssertEqual(20m);
+		builder.VolumeAbovePoC().AssertEqual(35m);
+
+		// Test volumes below PoC
+		builder.BuyVolBelowPoC().AssertEqual(5m);
+		builder.SellVolBelowPoC().AssertEqual(10m);
+		builder.VolumeBelowPoC().AssertEqual(15m);
+
+		// Test delta calculations
+		builder.DeltaAbovePoC().AssertEqual(-5m);  // 15 - 20
+		builder.DeltaBelowPoC().AssertEqual(-5m);  // 5 - 10
 	}
 }
