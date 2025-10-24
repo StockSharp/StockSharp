@@ -549,7 +549,7 @@ public static partial class CandleHelper
 			candleMsg.OpenPrice == candleMsg.LowPrice ||
 			candleMsg.TotalVolume == 1)
 		{
-			// ��� ���� � ����� ����� ��� ����� ����� 1 - ������� �� �� ���� ���
+			// For candle with single price or volume equals 1 - generate only one tick
 			ticks[0] = (Sides.Buy, candleMsg.OpenPrice, candleMsg.TotalVolume, time);
 
 			ticks[1] = ticks[2] = ticks[3] = default;
