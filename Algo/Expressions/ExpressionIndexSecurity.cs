@@ -11,9 +11,16 @@ using Ecng.Compilation;
 	Name = LocalizedStrings.IndexKey,
 	Description = LocalizedStrings.IndexSecurityKey)]
 [BasketCode("EI")]
-public class ExpressionIndexSecurity : IndexSecurity
+public class ExpressionIndexSecurity : IndexSecurity, IDisposable
 {
 	private readonly AssemblyLoadContextTracker _context = new();
+
+	void IDisposable.Dispose()
+	{
+		_context.Dispose();
+
+		GC.SuppressFinalize(this);
+	}
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ExpressionIndexSecurity"/>.
