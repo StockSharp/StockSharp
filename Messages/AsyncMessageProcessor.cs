@@ -303,6 +303,9 @@ class AsyncMessageProcessor : Disposable
 					if (!item.IsControl)
 						_childTasks.Remove(item);
 
+					// dispose per-subscription CTS when message completes
+					item.Cts?.Dispose();
+
 					_messages.Remove(item);
 					_processMessageEvt.Set();
 				}
