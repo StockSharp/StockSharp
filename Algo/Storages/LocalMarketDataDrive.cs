@@ -424,7 +424,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 				if (ver > _ver11)
 					throw new InvalidOperationException(LocalizedStrings.StorageVersionNewerKey.Put(nameof(Index), ver, _ver11));
 				else if (ver == _ver10)
-					throw new NotSupportedException("osolete format");
+					throw new NotSupportedException("obsolete format");
 
 				var boardsLen = reader.ReadInt();
 

@@ -532,6 +532,9 @@ public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs) : Di
 	/// <returns>Subscriptions.</returns>
 	public IEnumerable<TSubscription> GetSubscriptions(Message message)
 	{
+		if (message is null)
+			throw new ArgumentNullException(nameof(message));
+
 		switch (message.Type)
 		{
 			case MessageTypes.Execution:

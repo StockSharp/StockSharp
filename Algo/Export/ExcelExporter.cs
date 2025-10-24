@@ -639,15 +639,14 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 		if (action is null)
 			throw new ArgumentNullException(nameof(action));
 
-		using (var stream = new FileStream(Path, FileMode.Create, FileAccess.Write))
-		using (var worker = _provider.CreateNew(stream))
-		{
-			worker
-				.AddSheet()
-				.RenameSheet(LocalizedStrings.Export);
+		using var stream = new FileStream(Path, FileMode.Create, FileAccess.Write);
+		using var worker = _provider.CreateNew(stream);
 
-			return action(worker);
-		}
+		worker
+			.AddSheet()
+			.RenameSheet(LocalizedStrings.Export);
+
+		return action(worker);
 	}
 
 	private bool Check(int index)
