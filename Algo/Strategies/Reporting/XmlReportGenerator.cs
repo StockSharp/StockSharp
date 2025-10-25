@@ -14,9 +14,9 @@ public class XmlReportGenerator : BaseReportGenerator
 	public override string Extension => "xml";
 
 	/// <inheritdoc />
-	public override ValueTask Generate(Strategy strategy, string fileName, CancellationToken cancellationToken)
+	public override ValueTask Generate(Strategy strategy, Stream stream, CancellationToken cancellationToken)
 	{
-		using var writer = new XmlTextWriter(fileName, Encoding.UTF8) { Formatting = Formatting.Indented };
+		using var writer = new XmlTextWriter(new StreamWriter(stream, Encoding.UTF8, leaveOpen: true)) { Formatting = Formatting.Indented };
 
 		void WriteStartElement(string name)
 			=> writer.WriteStartElement(name);

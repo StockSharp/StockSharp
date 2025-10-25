@@ -18,9 +18,9 @@ public class CsvReportGenerator : BaseReportGenerator
 	public override string Extension => "csv";
 
 	/// <inheritdoc />
-	public override ValueTask Generate(Strategy strategy, string fileName, CancellationToken cancellationToken)
+	public override ValueTask Generate(Strategy strategy, Stream stream, CancellationToken cancellationToken)
 	{
-		using var writer = new StreamWriter(fileName);
+		using var writer = new StreamWriter(stream, leaveOpen: true);
 
 		void WriteValues(params object[] values)
 		{

@@ -29,9 +29,9 @@ public interface IReportGenerator
 	/// To generate the report.
 	/// </summary>
 	/// <param name="strategy"><see cref="Strategy"/>.</param>
-	/// <param name="fileName">The name of the file, in which the report is generated.</param>
+	/// <param name="stream">The stream to write the report to.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
-	ValueTask Generate(Strategy strategy, string fileName, CancellationToken cancellationToken = default);
+	ValueTask Generate(Strategy strategy, Stream stream, CancellationToken cancellationToken = default);
 }
 
 /// <summary>
@@ -59,5 +59,5 @@ public abstract class BaseReportGenerator : IReportGenerator
 	public abstract string Extension { get; }
 
 	/// <inheritdoc />
-	public abstract ValueTask Generate(Strategy strategy, string fileName, CancellationToken cancellationToken);
+	public abstract ValueTask Generate(Strategy strategy, Stream stream, CancellationToken cancellationToken);
 }

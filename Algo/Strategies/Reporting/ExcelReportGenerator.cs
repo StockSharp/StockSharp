@@ -31,15 +31,20 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, string template
 	public override string Extension => "xlsx";
 
 	/// <inheritdoc />
-	public override ValueTask Generate(Strategy strategy, string fileName, CancellationToken cancellationToken)
+	public override ValueTask Generate(Strategy strategy, Stream stream, CancellationToken cancellationToken)
 	{
+		if (stream == null)
+			throw new ArgumentNullException(nameof(stream));
+
 		var hasTemplate = !Template.IsEmpty();
 
 		if (hasTemplate)
-			File.Copy(Template, fileName);
+		{
+			using var templateStream = File.OpenRead(Template);
+			templateStream.CopyTo(stream);
+			stream.Position = 0;
+		}
 
-		var mode = hasTemplate ? FileMode.Open : FileMode.Create;
-		using var stream = new FileStream(fileName, mode, FileAccess.ReadWrite);
 		using var worker = hasTemplate ? _provider.OpenExist(stream) : _provider.CreateNew(stream);
 
 		if (Template.IsEmpty())

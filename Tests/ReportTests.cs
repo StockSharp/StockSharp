@@ -68,9 +68,9 @@ public class ReportTests
 	[DataRow("xlsx")]
 	public async Task Reports(string format)
 	{
-		var strategy = CreateTestStrategy();
-		var fileName = Path.Combine(Helper.TempFolder, $"test_report.{format}");
 		Directory.CreateDirectory(Helper.TempFolder);
+
+		var strategy = CreateTestStrategy();
 
 		IReportGenerator generator = format switch
 		{
@@ -81,10 +81,12 @@ public class ReportTests
 			_ => throw new ArgumentException($"Unknown format: {format}")
 		};
 
-		await generator.Generate(strategy, fileName, CancellationToken.None);
+		using var stream = File.Create(Path.Combine(Helper.TempFolder, $"test_report.{format}"));
 
-		File.Exists(fileName).AssertTrue();
-		var content = File.ReadAllText(fileName);
+		await generator.Generate(strategy, stream, CancellationToken.None);
+
+		stream.Position = 0;
+		var content = new StreamReader(stream, leaveOpen: true).ReadToEnd();
 		content.IsEmptyOrWhiteSpace().AssertFalse();
 	}
 }
