@@ -17,22 +17,22 @@ public class TemplateTxtRegistry : IPersistable
 	/// Depth txt export template.
 	/// </summary>
 	[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.TemplateDepthKey,
-			Description = LocalizedStrings.TemplateTxtDepthKey,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 0)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TemplateDepthKey,
+		Description = LocalizedStrings.TemplateTxtDepthKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 0)]
 	public string TemplateTxtDepth { get; set; } = "{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{Quote.Price};{Quote.Volume};{Side}";
 
 	/// <summary>
 	/// Ticks txt export template.
 	/// </summary>
 	[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.TemplateTickKey,
-			Description = LocalizedStrings.TemplateTxtTickKey,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 1)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TemplateTickKey,
+		Description = LocalizedStrings.TemplateTxtTickKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 1)]
 	[BasicSetting]
 	public string TemplateTxtTick { get; set; } = "{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{TradeId};{TradePrice};{TradeVolume};{OriginSide}";
 
@@ -40,11 +40,11 @@ public class TemplateTxtRegistry : IPersistable
 	/// Candles txt export template.
 	/// </summary>
 	[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.TemplateCandleKey,
-			Description = LocalizedStrings.TemplateTxtCandleKey,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 2)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TemplateCandleKey,
+		Description = LocalizedStrings.TemplateTxtCandleKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 2)]
 	[BasicSetting]
 	public string TemplateTxtCandle { get; set; } = "{OpenTime:default:yyyyMMdd};{OpenTime:default:HH:mm:ss};{OpenPrice};{HighPrice};{LowPrice};{ClosePrice};{TotalVolume}";
 
@@ -52,11 +52,11 @@ public class TemplateTxtRegistry : IPersistable
 	/// Level1 txt export template.
 	/// </summary>
 	[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.TemplateLevel1Key,
-			Description = LocalizedStrings.TemplateTxtLevel1Key,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 3)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TemplateLevel1Key,
+		Description = LocalizedStrings.TemplateTxtLevel1Key,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 3)]
 	[BasicSetting]
 	public string TemplateTxtLevel1 { get; set; } = "{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{Changes:{BestBidPrice};{BestBidVolume};{BestAskPrice};{BestAskVolume};{LastTradePrice};{LastTradeVolume}}";
 
@@ -64,55 +64,55 @@ public class TemplateTxtRegistry : IPersistable
 	/// Options greeks txt export template.
 	/// </summary>
 	[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.TemplateOptionsKey,
-			Description = LocalizedStrings.TemplateTxtOptionsKey,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 4)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TemplateOptionsKey,
+		Description = LocalizedStrings.TemplateTxtOptionsKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 4)]
 	public string TemplateTxtOptions { get; set; } = "{SecurityId.SecurityCode};{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{Changes:{BestBidPrice};{BestAskPrice};{BestAskVolume};{Delta};{Gamma};{Vega};{Theta};{Rho};{HistoricalVolatility};{ImpliedVolatility};{OpenInterest};{TheorPrice};{Volume}}";
 
 	/// <summary>
 	/// Order log txt export template.
 	/// </summary>
 	[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.TemplateOrderLogKey,
-			Description = LocalizedStrings.TemplateTxtOrderLogKey,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 5)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TemplateOrderLogKey,
+		Description = LocalizedStrings.TemplateTxtOrderLogKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 5)]
 	public string TemplateTxtOrderLog { get; set; } = "{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{IsSystem};{OrderId};{OrderPrice};{OrderVolume};{Side};{OrderState};{TimeInForce};{TradeId};{TradePrice}";
 
 	/// <summary>
 	/// Transactions txt export template.
 	/// </summary>
 	[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.TemplateTransactionKey,
-			Description = LocalizedStrings.TemplateTxtTransactionKey,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 6)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TemplateTransactionKey,
+		Description = LocalizedStrings.TemplateTxtTransactionKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 6)]
 	public string TemplateTxtTransaction { get; set; } = "{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{PortfolioName};{TransactionId};{OrderId};{OrderPrice};{OrderVolume};{Balance};{Side};{OrderType};{OrderState};{TradeId};{TradePrice};{TradeVolume}";
 
 	/// <summary>
 	/// Security txt export template.
 	/// </summary>
 	[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.TemplateSecurityKey,
-			Description = LocalizedStrings.TemplateTxtSecurityKey,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 7)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TemplateSecurityKey,
+		Description = LocalizedStrings.TemplateTxtSecurityKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 7)]
 	public string TemplateTxtSecurity { get; set; } = "{SecurityId.SecurityCode};{SecurityId.BoardCode};{PriceStep};{SecurityType};{VolumeStep};{Multiplier};{Decimals}";
 
 	/// <summary>
 	/// News txt export template.
 	/// </summary>
 	[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.TemplateNewsKey,
-			Description = LocalizedStrings.TemplateTxtNewsKey,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 8)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TemplateNewsKey,
+		Description = LocalizedStrings.TemplateTxtNewsKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 8)]
 	public string TemplateTxtNews { get; set; } = "{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss};{Headline};{Source};{Url}";
 
 	/// <summary>
@@ -163,11 +163,11 @@ public class TemplateTxtRegistry : IPersistable
 	/// Do not show again.
 	/// </summary>
 	[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.DoNotShowAgainKey,
-			Description = LocalizedStrings.DoNotShowAgainKey,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 12)]
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.DoNotShowAgainKey,
+		Description = LocalizedStrings.DoNotShowAgainKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 12)]
 	public bool DoNotShowAgain { get; set; }
 
 	void IPersistable.Load(SettingsStorage storage)

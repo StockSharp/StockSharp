@@ -26,12 +26,8 @@ public class SlippageMessageAdapter(IMessageAdapter innerAdapter, ISlippageManag
 		{
 			var slippage = _slippageManager.ProcessMessage(message);
 
-			if (slippage != null)
-			{
-				var execMsg = (ExecutionMessage)message;
-
-				execMsg.Slippage ??= slippage;
-			}
+			if (slippage is decimal s && message is ExecutionMessage execMsg)
+				execMsg.Slippage ??= s;
 		}
 
 		base.OnInnerAdapterNewOutMessage(message);
