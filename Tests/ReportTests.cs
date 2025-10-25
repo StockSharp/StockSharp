@@ -85,7 +85,9 @@ public class ReportTests
 
 		await generator.Generate(strategy, stream, CancellationToken.None);
 
+		stream.Flush();
 		stream.Position = 0;
+
 		var content = new StreamReader(stream, leaveOpen: true).ReadToEnd();
 		content.IsEmptyOrWhiteSpace().AssertFalse();
 	}
