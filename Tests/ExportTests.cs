@@ -126,10 +126,10 @@ public class ExportTests
 	{
 		var arr = values.ToArray();
 
-		void Do(string extension, Func<string, BaseExporter> create)
+		void Do(string extension, Func<Stream, BaseExporter> create)
 		{
-			var fileName = Helper.GetSubTemp($"{fileNameNoExt}.{extension}");
-			var export = create(fileName);
+			using var stream = File.OpenWrite(Helper.GetSubTemp($"{fileNameNoExt}.{extension}"));
+			var export = create(stream);
 			export.Export(arr);
 		}
 

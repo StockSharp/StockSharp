@@ -11,7 +11,7 @@ namespace StockSharp.Algo.Export;
 /// <param name="storageRegistry">The storage of market data.</param>
 /// <param name="drive">Storage.</param>
 /// <param name="format">Format type.</param>
-public class StockSharpExporter(DataType dataType, Func<int, bool> isCancelled, IStorageRegistry storageRegistry, IMarketDataDrive drive, StorageFormats format) : BaseExporter(dataType, isCancelled, drive.CheckOnNull(nameof(drive)).Path)
+public class StockSharpExporter(DataType dataType, Func<int, bool> isCancelled, IStorageRegistry storageRegistry, IMarketDataDrive drive, StorageFormats format) : BaseExporter(dataType, isCancelled)
 {
 	private readonly IStorageRegistry _storageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
 	private readonly IMarketDataDrive _drive = drive ?? throw new ArgumentNullException(nameof(drive));

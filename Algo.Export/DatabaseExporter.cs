@@ -32,7 +32,7 @@ public class DatabaseExporter : BaseExporter
 	/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 	/// <param name="connection">The connection to DB.</param>
 	public DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType dataType, Func<int, bool> isCancelled, DatabaseConnectionPair connection)
-		: base(dataType, isCancelled, nameof(DatabaseExporter))
+		: base(dataType, isCancelled)
 	{
 		PriceStep = priceStep;
 		VolumeStep = volumeStep;

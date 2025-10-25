@@ -46,15 +46,17 @@ public class ImportTests
 		for (var i = 0; i < fields.Length; i++)
 			fields[i].Order = i;
 
-		var fileName = Helper.GetSubTemp($"{dataType.DataTypeToFileName()}_import.csv");
+		using var stream = File.Create(Helper.GetSubTemp($"{dataType.DataTypeToFileName()}_import.csv"));
 
-		new TextExporter(dataType, _ => false, fileName, template, null).Export(arr);
+		new TextExporter(dataType, _ => false, stream, template, null).Export(arr);
+
+		stream.Flush();
+		stream.Position = 0;
 
 		var parser = new CsvParser(dataType, fields)
 		{
 			ColumnSeparator = ";"
 		};
-		using var stream = File.OpenRead(fileName);
 		var msgs = parser.Parse(stream, () => false).ToArray();
 
 		msgs.Length.AssertEqual(arr.Length);

@@ -6,28 +6,18 @@ using SmartFormat.Core.Formatting;
 /// <summary>
 /// The export into text file.
 /// </summary>
-public class TextExporter : BaseExporter
+/// <remarks>
+/// Initializes a new instance of the <see cref="TextExporter"/>.
+/// </remarks>
+/// <param name="dataType">Data type info.</param>
+/// <param name="isCancelled">The processor, returning process interruption sign.</param>
+/// <param name="stream">The stream to write to.</param>
+/// <param name="template">The string formatting template.</param>
+/// <param name="header">Header at the first line. Do not add header while empty string.</param>
+public class TextExporter(DataType dataType, Func<int, bool> isCancelled, Stream stream, string template, string header) : BaseExporter(dataType, isCancelled)
 {
-	private readonly string _template;
-	private readonly string _header;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="TextExporter"/>.
-	/// </summary>
-	/// <param name="dataType">Data type info.</param>
-	/// <param name="isCancelled">The processor, returning process interruption sign.</param>
-	/// <param name="fileName">The path to file.</param>
-	/// <param name="template">The string formatting template.</param>
-	/// <param name="header">Header at the first line. Do not add header while empty string.</param>
-	public TextExporter(DataType dataType, Func<int, bool> isCancelled, string fileName, string template, string header)
-		: base(dataType, isCancelled, fileName)
-	{
-		if (template.IsEmpty())
-			throw new ArgumentNullException(nameof(template));
-
-		_template = template;
-		_header = header;
-	}
+	private readonly string _template = template.ThrowIfEmpty(nameof(template));
+	private readonly string _header = header;
 
 	/// <inheritdoc />
 	protected override (int, DateTimeOffset?) ExportOrderLog(IEnumerable<ExecutionMessage> messages)
@@ -82,7 +72,7 @@ public class TextExporter : BaseExporter
 		var count = 0;
 		var lastTime = default(DateTimeOffset?);
 
-		using (var writer = new StreamWriter(Path, true))
+		using (var writer = new StreamWriter(stream, Encoding, leaveOpen: true))
 		{
 			if (!_header.IsEmpty())
 				writer.WriteLine(_header);

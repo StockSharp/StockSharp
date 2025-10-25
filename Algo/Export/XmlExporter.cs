@@ -10,8 +10,8 @@ using System.Xml;
 /// </remarks>
 /// <param name="dataType">Data type info.</param>
 /// <param name="isCancelled">The processor, returning process interruption sign.</param>
-/// <param name="fileName">The path to file.</param>
-public class XmlExporter(DataType dataType, Func<int, bool> isCancelled, string fileName) : BaseExporter(dataType, isCancelled, fileName)
+/// <param name="stream">The stream to write to.</param>
+public class XmlExporter(DataType dataType, Func<int, bool> isCancelled, Stream stream) : BaseExporter(dataType, isCancelled)
 {
 	private const string _timeFormat = "yyyy-MM-dd HH:mm:ss.fff zzz";
 
@@ -534,7 +534,7 @@ public class XmlExporter(DataType dataType, Func<int, bool> isCancelled, string 
 		var count = 0;
 		var lastTime = default(DateTimeOffset?);
 		
-		using (var writer = XmlWriter.Create(Path, new XmlWriterSettings { Indent = Indent }))
+		using (var writer = XmlWriter.Create(new StreamWriter(stream, Encoding, leaveOpen: true), new() { Indent = Indent, CloseOutput = false }))
 		{
 			writer.WriteStartElement(rootElem);
 

@@ -11,9 +11,9 @@ using Ecng.Interop;
 /// <param name="provider">Excel provider.</param>
 /// <param name="dataType">Data type info.</param>
 /// <param name="isCancelled">The processor, returning process interruption sign.</param>
-/// <param name="fileName">The path to file.</param>
+/// <param name="stream">The stream to write to.</param>
 /// <param name="breaked">The processor, which will be called if maximal value of strings is exceeded.</param>
-public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Func<int, bool> isCancelled, string fileName, Action breaked) : BaseExporter(dataType, isCancelled, fileName)
+public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Func<int, bool> isCancelled, Stream stream, Action breaked) : BaseExporter(dataType, isCancelled)
 {
 	private readonly IExcelWorkerProvider _provider = provider ?? throw new ArgumentNullException(nameof(provider));
 	private readonly Action _breaked = breaked ?? throw new ArgumentNullException(nameof(breaked));
@@ -639,7 +639,6 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 		if (action is null)
 			throw new ArgumentNullException(nameof(action));
 
-		using var stream = new FileStream(Path, FileMode.Create, FileAccess.Write);
 		using var worker = _provider.CreateNew(stream);
 
 		worker

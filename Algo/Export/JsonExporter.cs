@@ -10,8 +10,8 @@ using Newtonsoft.Json;
 /// </remarks>
 /// <param name="dataType">Data type info.</param>
 /// <param name="isCancelled">The processor, returning process interruption sign.</param>
-/// <param name="fileName">The path to file.</param>
-public class JsonExporter(DataType dataType, Func<int, bool> isCancelled, string fileName) : BaseExporter(dataType, isCancelled, fileName)
+/// <param name="stream">The stream to write to.</param>
+public class JsonExporter(DataType dataType, Func<int, bool> isCancelled, Stream stream) : BaseExporter(dataType, isCancelled)
 {
 	/// <summary>
 	/// Gets or sets a value indicating whether to indent elements.
@@ -489,7 +489,7 @@ public class JsonExporter(DataType dataType, Func<int, bool> isCancelled, string
 		var count = 0;
 		var lastTime = default(DateTimeOffset?);
 
-		using (var writer = new StreamWriter(Path))
+		using (var writer = new StreamWriter(stream, Encoding, leaveOpen: true))
 		{
 			var json = new JsonTextWriter(writer);
 

@@ -3,35 +3,30 @@ namespace StockSharp.Algo.Export;
 /// <summary>
 /// The base class of export.
 /// </summary>
-public abstract class BaseExporter
+/// <remarks>
+/// Initialize <see cref="BaseExporter"/>.
+/// </remarks>
+/// <param name="dataType">Data type info.</param>
+/// <param name="isCancelled">The processor, returning process interruption sign.</param>
+public abstract class BaseExporter(DataType dataType, Func<int, bool> isCancelled)
 {
-	private readonly Func<int, bool> _isCancelled;
-
-	/// <summary>
-	/// Initialize <see cref="BaseExporter"/>.
-	/// </summary>
-	/// <param name="dataType">Data type info.</param>
-	/// <param name="isCancelled">The processor, returning process interruption sign.</param>
-	/// <param name="path">The path to file.</param>
-	protected BaseExporter(DataType dataType, Func<int, bool> isCancelled, string path)
-	{
-		if (path.IsEmpty())
-			throw new ArgumentNullException(nameof(path));
-
-		DataType = dataType ?? throw new ArgumentNullException(nameof(dataType));
-		_isCancelled = isCancelled ?? throw new ArgumentNullException(nameof(isCancelled));
-		Path = path;
-	}
+	private readonly Func<int, bool> _isCancelled = isCancelled ?? throw new ArgumentNullException(nameof(isCancelled));
 
 	/// <summary>
 	/// Data type info.
 	/// </summary>
-	public DataType DataType { get; }
+	public DataType DataType { get; } = dataType ?? throw new ArgumentNullException(nameof(dataType));
+
+	private Encoding _encoding = Encoding.UTF8;
 
 	/// <summary>
-	/// The path to file.
+	/// Encoding.
 	/// </summary>
-	protected string Path { get; }
+	public Encoding Encoding
+	{
+		get => _encoding;
+		set => _encoding = value ?? throw new ArgumentNullException(nameof(value));
+	}
 
 	/// <summary>
 	/// To export values.
