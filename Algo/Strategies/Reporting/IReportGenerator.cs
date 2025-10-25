@@ -26,6 +26,11 @@ public interface IReportGenerator
 	bool IncludeTrades { get; set; }
 
 	/// <summary>
+	/// Encoding.
+	/// </summary>
+	Encoding Encoding { get; set; }
+
+	/// <summary>
 	/// To generate the report.
 	/// </summary>
 	/// <param name="strategy"><see cref="Strategy"/>.</param>
@@ -51,6 +56,15 @@ public abstract class BaseReportGenerator : IReportGenerator
 
 	/// <inheritdoc />
 	public bool IncludeTrades { get; set; } = true;
+
+	private Encoding _encoding = Encoding.UTF8;
+
+	/// <inheritdoc />
+	public Encoding Encoding
+	{
+		get => _encoding;
+		set => _encoding = value ?? throw new ArgumentNullException(nameof(value));
+	}
 
 	/// <inheritdoc />
 	public abstract string Name { get; }

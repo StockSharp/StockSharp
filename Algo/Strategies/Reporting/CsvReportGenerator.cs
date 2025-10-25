@@ -20,7 +20,7 @@ public class CsvReportGenerator : BaseReportGenerator
 	/// <inheritdoc />
 	public override ValueTask Generate(Strategy strategy, Stream stream, CancellationToken cancellationToken)
 	{
-		using var writer = new StreamWriter(stream, leaveOpen: true);
+		using var writer = new StreamWriter(stream, Encoding, leaveOpen: true);
 
 		void WriteValues(params object[] values)
 		{
