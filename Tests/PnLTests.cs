@@ -411,13 +411,261 @@ public class PnLTests
 	public void SaveLoad()
 	{
 		var manager = new PnLManager { UseLevel1 = true };
-		
+
 		var storage = manager.Save();
 
 		var manager2 = new PnLManager();
-		
+
 		manager2.UseLevel1.AssertFalse();
 		manager2.Load(storage);
 		manager2.UseLevel1.AssertTrue();
+	}
+
+	[TestMethod]
+	public void StalePrices_QuoteThenCandle()
+	{
+		var secId = Helper.CreateSecurityId();
+
+		IPnLManager manager = new PnLManager
+		{
+			UseOrderBook = true,
+			UseCandles = true
+		};
+
+		var reg = new OrderRegisterMessage
+		{
+			PortfolioName = Helper.CreatePortfolio().Name,
+			SecurityId = secId,
+			TransactionId = 1,
+		};
+		manager.ProcessMessage(reg);
+
+		// Open long position: buy 1 at 100
+		var buy = new ExecutionMessage
+		{
+			OriginalTransactionId = reg.TransactionId,
+			DataTypeEx = DataType.Transactions,
+			SecurityId = secId,
+			TradeId = 1,
+			TradePrice = 100m,
+			TradeVolume = 1m,
+			Side = Sides.Buy,
+			ServerTime = DateTimeOffset.UtcNow
+		};
+		manager.ProcessMessage(buy);
+
+		// Market data: quote with bid=130, ask=131
+		var quote = new QuoteChangeMessage
+		{
+			SecurityId = secId,
+			Bids = [new(130m, 1)],
+			Asks = [new(131m, 1)]
+		};
+		manager.ProcessMessage(quote);
+		manager.UnrealizedPnL.AssertEqual(30m); // (130-100)*1 = 30
+
+		// Newer market data: candle closes at 150
+		// BUG: ProcessCandle doesn't clear bid/ask prices, so UnrealizedPnL
+		// continues to use stale bid=130 instead of fresh close=150
+		var candle = new TimeFrameCandleMessage
+		{
+			SecurityId = secId,
+			OpenTime = DateTimeOffset.Now,
+			CloseTime = DateTimeOffset.Now,
+			OpenPrice = 100,
+			HighPrice = 150,
+			LowPrice = 90,
+			ClosePrice = 150,
+			TotalVolume = 1
+		};
+		manager.ProcessMessage(candle);
+
+		// Expected: (150-100)*1 = 50
+		// Actual: (130-100)*1 = 30 (uses stale bid instead of fresh close price)
+		manager.UnrealizedPnL.AssertEqual(50m);
+	}
+
+	[TestMethod]
+	public void StalePrices_CandleThenQuote()
+	{
+		var secId = Helper.CreateSecurityId();
+
+		IPnLManager manager = new PnLManager
+		{
+			UseOrderBook = true,
+			UseCandles = true
+		};
+
+		var reg = new OrderRegisterMessage
+		{
+			PortfolioName = Helper.CreatePortfolio().Name,
+			SecurityId = secId,
+			TransactionId = 1,
+		};
+		manager.ProcessMessage(reg);
+
+		// Open short position: sell 1 at 100
+		var sell = new ExecutionMessage
+		{
+			OriginalTransactionId = reg.TransactionId,
+			DataTypeEx = DataType.Transactions,
+			SecurityId = secId,
+			TradeId = 1,
+			TradePrice = 100m,
+			TradeVolume = 1m,
+			Side = Sides.Sell,
+			ServerTime = DateTimeOffset.UtcNow
+		};
+		manager.ProcessMessage(sell);
+
+		// Market data: candle closes at 90
+		var candle = new TimeFrameCandleMessage
+		{
+			SecurityId = secId,
+			OpenTime = DateTimeOffset.Now,
+			CloseTime = DateTimeOffset.Now,
+			OpenPrice = 100,
+			HighPrice = 110,
+			LowPrice = 85,
+			ClosePrice = 90,
+			TotalVolume = 1
+		};
+		manager.ProcessMessage(candle);
+		manager.UnrealizedPnL.AssertEqual(10m); // (100-90)*1 = 10
+
+		// Newer market data: quote with ask=80
+		// BUG: ProcessQuotes doesn't clear lastPrice, so if ask is not available,
+		// UnrealizedPnL uses stale close=90 instead of fresh ask=80
+		var quote = new QuoteChangeMessage
+		{
+			SecurityId = secId,
+			Bids = [new(79m, 1)],
+			Asks = [new(80m, 1)]
+		};
+		manager.ProcessMessage(quote);
+
+		// For short position, uses ask price for UnrealizedPnL
+		// Expected: (100-80)*1 = 20
+		manager.UnrealizedPnL.AssertEqual(20m);
+	}
+
+	[TestMethod]
+	public void StalePrices_TickThenQuote()
+	{
+		var secId = Helper.CreateSecurityId();
+
+		IPnLManager manager = new PnLManager
+		{
+			UseTick = true,
+			UseOrderBook = true,
+		};
+
+		var reg = new OrderRegisterMessage
+		{
+			PortfolioName = Helper.CreatePortfolio().Name,
+			SecurityId = secId,
+			TransactionId = 1,
+		};
+		manager.ProcessMessage(reg);
+
+		// Open long position: buy 1 at 100
+		var buy = new ExecutionMessage
+		{
+			OriginalTransactionId = reg.TransactionId,
+			DataTypeEx = DataType.Transactions,
+			SecurityId = secId,
+			TradeId = 1,
+			TradePrice = 100m,
+			TradeVolume = 1m,
+			Side = Sides.Buy,
+			ServerTime = DateTimeOffset.UtcNow
+		};
+		manager.ProcessMessage(buy);
+
+		// Market data: tick at 140
+		var tick = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = secId,
+			TradePrice = 140m,
+			ServerTime = DateTimeOffset.UtcNow
+		};
+		manager.ProcessMessage(tick);
+		manager.UnrealizedPnL.AssertEqual(40m); // (140-100)*1 = 40
+
+		// Newer market data: quote with bid=130
+		// BUG: ProcessQuotes doesn't clear lastPrice, so UnrealizedPnL
+		// prefers bid=130 over stale lastPrice=140
+		var quote = new QuoteChangeMessage
+		{
+			SecurityId = secId,
+			Bids = [new(130m, 1)],
+			Asks = [new(131m, 1)]
+		};
+		manager.ProcessMessage(quote);
+
+		// For long position, uses bid price (which is more accurate than last trade)
+		// Expected: (130-100)*1 = 30
+		manager.UnrealizedPnL.AssertEqual(30m);
+	}
+
+	[TestMethod]
+	public void StalePrices_QuoteThenTick()
+	{
+		var secId = Helper.CreateSecurityId();
+
+		IPnLManager manager = new PnLManager
+		{
+			UseTick = true,
+			UseOrderBook = true,
+		};
+
+		var reg = new OrderRegisterMessage
+		{
+			PortfolioName = Helper.CreatePortfolio().Name,
+			SecurityId = secId,
+			TransactionId = 1,
+		};
+		manager.ProcessMessage(reg);
+
+		// Open long position: buy 1 at 100
+		var buy = new ExecutionMessage
+		{
+			OriginalTransactionId = reg.TransactionId,
+			DataTypeEx = DataType.Transactions,
+			SecurityId = secId,
+			TradeId = 1,
+			TradePrice = 100m,
+			TradeVolume = 1m,
+			Side = Sides.Buy,
+			ServerTime = DateTimeOffset.UtcNow
+		};
+		manager.ProcessMessage(buy);
+
+		// Market data: quote with bid=130
+		var quote = new QuoteChangeMessage
+		{
+			SecurityId = secId,
+			Bids = [new(130m, 1)],
+			Asks = [new(131m, 1)]
+		};
+		manager.ProcessMessage(quote);
+		manager.UnrealizedPnL.AssertEqual(30m); // (130-100)*1 = 30
+
+		// Newer market data: tick at 150
+		// BUG: ProcessExecution doesn't clear bid/ask prices, so UnrealizedPnL
+		// continues to use stale bid=130 instead of fresh tick=150
+		var tick = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = secId,
+			TradePrice = 150m,
+			ServerTime = DateTimeOffset.UtcNow
+		};
+		manager.ProcessMessage(tick);
+
+		// Expected: (150-100)*1 = 50
+		// Actual: (130-100)*1 = 30 (uses stale bid instead of fresh tick)
+		manager.UnrealizedPnL.AssertEqual(50m);
 	}
 }
