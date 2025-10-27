@@ -1,7 +1,7 @@
 namespace StockSharp.Tests;
 
 [TestClass]
-public class SnapshotHolderTests
+public class SnapshotHolderTests : BaseTestClass
 {
 	private static readonly SecurityId _secId1 = "AAPL@NASDAQ".ToSecurityId();
 	private static readonly SecurityId _secId2 = "MSFT@NASDAQ".ToSecurityId();
@@ -289,6 +289,7 @@ public class SnapshotHolderTests
 	public Task Level1_ConcurrentAccess_ThreadSafe()
 	{
 		var holder = new Level1SnapshotHolder();
+		var token = CancellationToken;
 
 		var tasks = Enumerable.Range(0, 100).Select(i => Task.Run(() =>
 		{
@@ -297,7 +298,7 @@ public class SnapshotHolderTests
 				.TryAdd(Level1Fields.LastTradePrice, i);
 			holder.Process(msg);
 			holder.TryGetSnapshot(code, out var _);
-		})).ToArray();
+		}, token)).ToArray();
 
 		return Task.WhenAll(tasks);
 	}
@@ -497,6 +498,7 @@ public class SnapshotHolderTests
 	public Task OrderBook_ConcurrentAccess_ThreadSafe()
 	{
 		var holder = new OrderBookSnapshotHolder();
+		var token = CancellationToken;
 
 		var tasks = Enumerable.Range(0, 100).Select(i => Task.Run(() =>
 		{
@@ -507,7 +509,7 @@ public class SnapshotHolderTests
 			var inc = new QuoteChangeMessage { SecurityId = code, ServerTime = _now.AddSeconds(1), State = QuoteChangeStates.Increment, Bids = [], Asks = [] };
 			try { holder.Process(inc); } catch { }
 			holder.TryGetSnapshot(code, out var _);
-		})).ToArray();
+		}, token)).ToArray();
 
 		return Task.WhenAll(tasks);
 	}
@@ -563,6 +565,7 @@ public class SnapshotHolderTests
 	public Task Level1_ResetSnapshot_WhileProcessing_ThreadSafe()
 	{
 		var holder = new Level1SnapshotHolder();
+		var token = CancellationToken;
 
 		var t1 = Task.Run(() =>
 		{
@@ -573,13 +576,13 @@ public class SnapshotHolderTests
 					.TryAdd(Level1Fields.LastTradePrice, i);
 				holder.Process(msg);
 			}
-		});
+		}, token);
 
 		var t2 = Task.Run(() =>
 		{
 			for (var i = 0; i < 50; i++)
 				holder.ResetSnapshot(default);
-		});
+		}, token);
 
 		return Task.WhenAll(t1, t2);
 	}

@@ -3,7 +3,7 @@
 using StockSharp.Algo.Strategies.Reporting;
 
 [TestClass]
-public class ReportTests
+public class ReportTests : BaseTestClass
 {
 	private static Strategy CreateTestStrategy()
 	{
@@ -68,6 +68,8 @@ public class ReportTests
 	[DataRow("xlsx")]
 	public async Task Reports(string format)
 	{
+		var token = CancellationToken;
+
 		Directory.CreateDirectory(Helper.TempFolder);
 
 		var strategy = CreateTestStrategy();
@@ -83,12 +85,12 @@ public class ReportTests
 
 		using var stream = File.Create(Path.Combine(Helper.TempFolder, $"test_report.{format}"));
 
-		await generator.Generate(strategy, stream, CancellationToken.None);
+		await generator.Generate(strategy, stream, token);
 
 		stream.Flush();
 		stream.Position = 0;
 
-		var content = new StreamReader(stream, leaveOpen: true).ReadToEnd();
+		var content = await new StreamReader(stream, leaveOpen: true).ReadToEndAsync(token);
 		content.IsEmptyOrWhiteSpace().AssertFalse();
 	}
 }

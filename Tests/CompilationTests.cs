@@ -16,18 +16,18 @@ using StockSharp.Algo.Compilation;
 using StockSharp.Diagram;
 
 [TestClass]
-public class CompilationTests
+public class CompilationTests : BaseTestClass
 {
 	private static readonly string _analyticsFolder = "../../../../Algo.Analytics.{0}";
 
 	[TestMethod]
-	public Task CSharpAnalyticsScripts() => TestAnalyticsScripts(_analyticsFolder.Put("CSharp"), FileExts.CSharp, default);
+	public Task CSharpAnalyticsScripts() => TestAnalyticsScripts(_analyticsFolder.Put("CSharp"), FileExts.CSharp, CancellationToken);
 
 	[TestMethod]
-	public Task FSharpAnalyticsScripts() => TestAnalyticsScripts(_analyticsFolder.Put("FSharp"), FileExts.FSharp, default);
+	public Task FSharpAnalyticsScripts() => TestAnalyticsScripts(_analyticsFolder.Put("FSharp"), FileExts.FSharp, CancellationToken);
 
 	[TestMethod]
-	public Task PythonAnalyticsScripts() => TestAnalyticsScripts(_analyticsFolder.Put("Python"), FileExts.Python, default);
+	public Task PythonAnalyticsScripts() => TestAnalyticsScripts(_analyticsFolder.Put("Python"), FileExts.Python, CancellationToken);
 
 	private static async Task TestAnalyticsScripts(string folderPath, string fileExtension, CancellationToken token)
 	{
@@ -343,14 +343,16 @@ public class CompilationTests
 	public Task CSharpDiagramElem()
 		=> CSharpCompile<DiagramExternalElement>("Custom/EmptyDiagramElement.cs", InvokeDiagramElem);
 
-	private static async Task CSharpCompile<T>(string fileName, Action<Type, T> custom = null)
+	private async Task CSharpCompile<T>(string fileName, Action<Type, T> custom = null)
 		where T : IPersistable
 	{
+		var token = CancellationToken;
+
 		ICompiler compiler = ServicesRegistry.CompilerProvider[FileExts.CSharp];
 
 		var sourceCode = File.ReadAllText(Path.Combine(_designerFolder, fileName));
 
-		var res = await compiler.Compile("test", [sourceCode], await CodeExtensions.DefaultReferences.ToValidRefImages(default), default);
+		var res = await compiler.Compile("test", [sourceCode], await CodeExtensions.DefaultReferences.ToValidRefImages(token), token);
 		Validate(res);
 
 		var type = res.GetAssembly(compiler.CreateContext()).GetExportedTypes().First();
@@ -380,16 +382,18 @@ public class CompilationTests
 	public Task FSharpDiagramElem()
 		=> FSharpCompile<DiagramExternalElement>("Custom/EmptyDiagramElement.fs", InvokeDiagramElem);
 
-	private static async Task FSharpCompile<T>(string fileName, Action<Type, T> custom = null)
+	private async Task FSharpCompile<T>(string fileName, Action<Type, T> custom = null)
 		where T : IPersistable
 	{
+		var token = CancellationToken;
+
 		ICompiler compiler = ServicesRegistry.CompilerProvider[FileExts.FSharp];
 
 		var sourceCode = File.ReadAllText(Path.Combine(_designerFolder, fileName));
 
 		var fsharpRefs = CodeExtensions.FSharpReferences;
 
-		var res = await compiler.Compile("test", [sourceCode], await CodeExtensions.DefaultReferences.Concat(fsharpRefs).ToValidRefImages(default), default);
+		var res = await compiler.Compile("test", [sourceCode], await CodeExtensions.DefaultReferences.Concat(fsharpRefs).ToValidRefImages(token), token);
 		Validate(res);
 
 		var type = res.GetAssembly(compiler.CreateContext()).GetExportedTypes().First();
@@ -419,16 +423,18 @@ public class CompilationTests
 	public Task PythonDiagramElem()
 		=> PythonCompile<DiagramExternalElement>("Custom/empty_diagram_element.py", InvokeDiagramElem);
 
-	private static async Task PythonCompile<T>(string fileName, Action<Type, T> custom = null)
+	private async Task PythonCompile<T>(string fileName, Action<Type, T> custom = null)
 		where T : IPersistable
 	{
+		var token = CancellationToken;
+
 		ICompiler compiler = ServicesRegistry.CompilerProvider[FileExts.Python];
 
 		var context = compiler.CreateContext();
 		
 		var sourceCode = File.ReadAllText(Path.Combine(_designerFolder, fileName));
 		
-		var res = await compiler.Compile(typeof(T).Name, [sourceCode], await CodeExtensions.DefaultReferences.ToValidRefImages(default), default);
+		var res = await compiler.Compile(typeof(T).Name, [sourceCode], await CodeExtensions.DefaultReferences.ToValidRefImages(token), token);
 
 		Validate(res);
 
@@ -439,7 +445,7 @@ public class CompilationTests
 
 		var types = asm.GetExportedTypes();
 
-		res = await compiler.Compile(typeof(T).Name, [sourceCode], await CodeExtensions.DefaultReferences.ToValidRefImages(default), default);
+		res = await compiler.Compile(typeof(T).Name, [sourceCode], await CodeExtensions.DefaultReferences.ToValidRefImages(token), token);
 		asm = res.GetAssembly(context);
 		var types2 = asm.GetExportedTypes().First();
 

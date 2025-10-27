@@ -3,7 +3,7 @@
 using StockSharp.Algo.Export;
 
 [TestClass]
-public class ExportTests
+public class ExportTests : BaseTestClass
 {
 	private static readonly TemplateTxtRegistry _txtReg = new();
 
@@ -119,18 +119,19 @@ public class ExportTests
 		return Export(DataType.Securities, securities, "security_export", _txtReg.TemplateTxtSecurity);
 	}
 
-	private static async Task Export<TValue>(
+	private async Task Export<TValue>(
 		DataType dataType, IEnumerable<TValue> values,
 		string fileNameNoExt, string txtTemplate)
 		where TValue : class
 	{
+		var token = CancellationToken;
 		var arr = values.ToArray();
 
 		Task Do(string extension, Func<Stream, BaseExporter> create)
 		{
 			using var stream = File.OpenWrite(Helper.GetSubTemp($"{fileNameNoExt}.{extension}"));
 			var export = create(stream);
-			return export.Export(arr, CancellationToken.None);
+			return export.Export(arr, token);
 		}
 
 		await Do("txt", f => new TextExporter(dataType, f, txtTemplate, null));

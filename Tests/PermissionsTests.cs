@@ -8,7 +8,7 @@ using Ecng.Security;
 using StockSharp.Configuration.Permissions;
 
 [TestClass]
-public class PermissionsTests
+public class PermissionsTests : BaseTestClass
 {
 	private static readonly IPAddress _ip1 = IPAddress.Parse("192.168.1.1");
 	private static readonly IPAddress _ip2 = IPAddress.Parse("10.0.0.1");
@@ -565,51 +565,51 @@ public class PermissionsTests
 	}
 
 	[TestMethod]
-	public async Task Authorization_ValidateCredentials_EmptyLoginThrows()
+	public Task Authorization_ValidateCredentials_EmptyLoginThrows()
 	{
 		var tempFile = Helper.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
-		await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
-			await auth.ValidateCredentials("", ToSecureString("pass"), _ip1, default));
+		return Assert.ThrowsExactlyAsync<ArgumentNullException>(() =>
+			auth.ValidateCredentials("", ToSecureString("pass"), _ip1, CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public async Task Authorization_ValidateCredentials_EmptyPasswordThrows()
+	public Task Authorization_ValidateCredentials_EmptyPasswordThrows()
 	{
 		var tempFile = Helper.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
-		await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
-			await auth.ValidateCredentials("user", new SecureString(), _ip1, default));
+		return Assert.ThrowsExactlyAsync<ArgumentNullException>(() =>
+			auth.ValidateCredentials("user", new SecureString(), _ip1, CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public async Task Authorization_ValidateCredentials_NullPasswordThrows()
+	public Task Authorization_ValidateCredentials_NullPasswordThrows()
 	{
 		var tempFile = Helper.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
-		await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
-			await auth.ValidateCredentials("user", null, _ip1, default));
+		return Assert.ThrowsExactlyAsync<ArgumentNullException>(() =>
+			auth.ValidateCredentials("user", null, _ip1, CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public async Task Authorization_ValidateCredentials_NonExistentUser_Throws()
+	public Task Authorization_ValidateCredentials_NonExistentUser_Throws()
 	{
 		var tempFile = Helper.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
-		await Assert.ThrowsExactlyAsync<UnauthorizedAccessException>(async () =>
-			await auth.ValidateCredentials("nonexistent", ToSecureString("pass"), _ip1, default));
+		return Assert.ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
+			auth.ValidateCredentials("nonexistent", ToSecureString("pass"), _ip1, CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public async Task Authorization_ValidateCredentials_WrongPassword_Throws()
+	public Task Authorization_ValidateCredentials_WrongPassword_Throws()
 	{
 		var tempFile = Helper.GetSubTemp("creds.json");
 		var login = "user1";
@@ -623,8 +623,8 @@ public class PermissionsTests
 
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
-		await Assert.ThrowsExactlyAsync<UnauthorizedAccessException>(async () =>
-			await auth.ValidateCredentials(login, ToSecureString("wrongpass"), _ip1, default));
+		return Assert.ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
+			auth.ValidateCredentials(login, ToSecureString("wrongpass"), _ip1, CancellationToken).AsTask());
 	}
 
 	[TestMethod]
@@ -644,7 +644,7 @@ public class PermissionsTests
 
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
-		var sessionId = await auth.ValidateCredentials(login, password, _ip1, default);
+		var sessionId = await auth.ValidateCredentials(login, password, _ip1, CancellationToken);
 
 		sessionId.AssertNotNull();
 		(sessionId.Length > 0).AssertTrue();
@@ -667,14 +667,14 @@ public class PermissionsTests
 
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
-		var sessionId = await auth.ValidateCredentials(login, password, _ip1, default);
+		var sessionId = await auth.ValidateCredentials(login, password, _ip1, CancellationToken);
 
 		sessionId.AssertNotNull();
 		(sessionId.Length > 0).AssertTrue();
 	}
 
 	[TestMethod]
-	public async Task Authorization_ValidateCredentials_IpRestriction_Blocked()
+	public Task Authorization_ValidateCredentials_IpRestriction_Blocked()
 	{
 		var tempFile = Helper.GetSubTemp("creds.json");
 		var login = "user1";
@@ -690,12 +690,12 @@ public class PermissionsTests
 
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
-		await Assert.ThrowsExactlyAsync<UnauthorizedAccessException>(async () =>
-			await auth.ValidateCredentials(login, password, _ip3, default));  // different IP
+		return Assert.ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
+			auth.ValidateCredentials(login, password, _ip3, CancellationToken).AsTask());  // different IP
 	}
 
 	[TestMethod]
-	public async Task Authorization_ValidateCredentials_IpRestriction_NullClientAddress_Blocked()
+	public Task Authorization_ValidateCredentials_IpRestriction_NullClientAddress_Blocked()
 	{
 		var tempFile = Helper.GetSubTemp("creds.json");
 		var login = "user1";
@@ -711,8 +711,8 @@ public class PermissionsTests
 
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
-		await Assert.ThrowsExactlyAsync<UnauthorizedAccessException>(async () =>
-			await auth.ValidateCredentials(login, password, null, default));
+		return Assert.ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
+			auth.ValidateCredentials(login, password, null, CancellationToken).AsTask());
 	}
 
 	#endregion
