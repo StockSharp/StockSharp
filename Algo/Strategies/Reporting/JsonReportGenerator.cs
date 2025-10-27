@@ -44,7 +44,14 @@ public class JsonReportGenerator : BaseReportGenerator
 			if (p.Value is WorkingTime)
 				continue;
 
-			await WriteElementAsync(p.GetName(), p.Value);
+			var value = p.Value;
+
+			if (value is Security sec)
+				value = sec.Id;
+			else if (value is Portfolio pf)
+				value = pf.Name;
+
+			await WriteElementAsync(p.GetName(), value);
 		}
 
 		await WriteElementAsync("totalWorkingTime", strategy.TotalWorkingTime);
