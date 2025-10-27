@@ -1,5 +1,6 @@
 namespace StockSharp.Algo.Export;
 
+using System.Globalization;
 using System.Xml;
 
 /// <summary>
@@ -9,9 +10,8 @@ using System.Xml;
 /// Initializes a new instance of the <see cref="XmlExporter"/>.
 /// </remarks>
 /// <param name="dataType">Data type info.</param>
-/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 /// <param name="stream">The stream to write to.</param>
-public class XmlExporter(DataType dataType, Func<int, bool> isCancelled, Stream stream) : BaseExporter(dataType, isCancelled)
+public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataType)
 {
 	private const string _timeFormat = "yyyy-MM-dd HH:mm:ss.fff zzz";
 
@@ -23,527 +23,544 @@ public class XmlExporter(DataType dataType, Func<int, bool> isCancelled, Stream 
 	/// </remarks>
 	public bool Indent { get; set; } = true;
 
-	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) ExportOrderLog(IEnumerable<ExecutionMessage> messages)
+	private static Task WriteAttrAsync(XmlWriter writer, string name, object value, CancellationToken _)
 	{
-		return Do(messages, "orderLog", (writer, item) =>
-		{
-			writer.WriteStartElement("item");
+		if (value is null)
+			return Task.CompletedTask;
 
-			writer
-				.WriteAttribute("id", item.OrderId == null ? item.OrderStringId : item.OrderId.To<string>())
-				.WriteAttribute("serverTime", item.ServerTime.ToString(_timeFormat))
-				.WriteAttribute("localTime", item.LocalTime.ToString(_timeFormat))
-				.WriteAttribute("price", item.OrderPrice)
-				.WriteAttribute("volume", item.OrderVolume)
-				.WriteAttribute("side", item.Side)
-				.WriteAttribute("state", item.OrderState)
-				.WriteAttribute("timeInForce", item.TimeInForce)
-				.WriteAttribute("isSystem", item.IsSystem);
+		string str = value switch
+		{
+			DateTimeOffset dto => dto.ToString(_timeFormat, CultureInfo.InvariantCulture),
+			DateTime dt => dt.ToString(_timeFormat, CultureInfo.InvariantCulture),
+			IFormattable f => f.ToString(null, CultureInfo.InvariantCulture),
+			_ => value.ToString(),
+		};
+
+		return writer.WriteAttributeStringAsync(null, name, null, str);
+	}
+
+	/// <inheritdoc />
+	protected override Task<(int, DateTimeOffset?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	{
+		return Do(messages, "orderLog", async (writer, item, t) =>
+		{
+			await writer.WriteStartElementAsync(null, "item", null);
+
+			await WriteAttrAsync(writer, "id", item.OrderId == null ? item.OrderStringId : item.OrderId.To<string>(), t);
+			await WriteAttrAsync(writer, "serverTime", item.ServerTime.ToString(_timeFormat), t);
+			await WriteAttrAsync(writer, "localTime", item.LocalTime.ToString(_timeFormat), t);
+			await WriteAttrAsync(writer, "price", item.OrderPrice, t);
+			await WriteAttrAsync(writer, "volume", item.OrderVolume, t);
+			await WriteAttrAsync(writer, "side", item.Side, t);
+			await WriteAttrAsync(writer, "state", item.OrderState, t);
+			await WriteAttrAsync(writer, "timeInForce", item.TimeInForce, t);
+			await WriteAttrAsync(writer, "isSystem", item.IsSystem, t);
 
 			if (item.SeqNum != default)
-				writer.WriteAttribute("seqNum", item.SeqNum);
+				await WriteAttrAsync(writer, "seqNum", item.SeqNum, t);
 
 			if (item.TradePrice != null)
 			{
-				writer
-					.WriteAttribute("tradeId", item.TradeId == null ? item.TradeStringId : item.TradeId.To<string>())
-					.WriteAttribute("tradePrice", item.TradePrice);
+				await WriteAttrAsync(writer, "tradeId", item.TradeId == null ? item.TradeStringId : item.TradeId.To<string>(), t);
+				await WriteAttrAsync(writer, "tradePrice", item.TradePrice, t);
 
 				if (item.OpenInterest != null)
-					writer.WriteAttribute("openInterest", item.OpenInterest.Value);
+					await WriteAttrAsync(writer, "openInterest", item.OpenInterest.Value, t);
 			}
 
-			writer.WriteEndElement();
-		});
+			await writer.WriteEndElementAsync();
+		}, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) ExportTicks(IEnumerable<ExecutionMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "ticks", (writer, trade) =>
+		return Do(messages, "ticks", async (writer, trade, t) =>
 		{
-			writer.WriteStartElement("trade");
+			await writer.WriteStartElementAsync(null, "trade", null);
 
-			writer
-				.WriteAttribute("id", trade.TradeId == null ? trade.TradeStringId : trade.TradeId.To<string>())
-				.WriteAttribute("serverTime", trade.ServerTime.ToString(_timeFormat))
-				.WriteAttribute("localTime", trade.LocalTime.ToString(_timeFormat))
-				.WriteAttribute("price", trade.TradePrice)
-				.WriteAttribute("volume", trade.TradeVolume);
+			await WriteAttrAsync(writer, "id", trade.TradeId == null ? trade.TradeStringId : trade.TradeId.To<string>(), t);
+			await WriteAttrAsync(writer, "serverTime", trade.ServerTime.ToString(_timeFormat), t);
+			await WriteAttrAsync(writer, "localTime", trade.LocalTime.ToString(_timeFormat), t);
+			await WriteAttrAsync(writer, "price", trade.TradePrice, t);
+			await WriteAttrAsync(writer, "volume", trade.TradeVolume, t);
 
 			if (trade.OriginSide != null)
-				writer.WriteAttribute("originSide", trade.OriginSide.Value);
+				await WriteAttrAsync(writer, "originSide", trade.OriginSide.Value, t);
 
 			if (trade.OpenInterest != null)
-				writer.WriteAttribute("openInterest", trade.OpenInterest.Value);
+				await WriteAttrAsync(writer, "openInterest", trade.OpenInterest.Value, t);
 
 			if (trade.IsUpTick != null)
-				writer.WriteAttribute("isUpTick", trade.IsUpTick.Value);
+				await WriteAttrAsync(writer, "isUpTick", trade.IsUpTick.Value, t);
 
 			if (trade.Currency != null)
-				writer.WriteAttribute("currency", trade.Currency.Value);
+				await WriteAttrAsync(writer, "currency", trade.Currency.Value, t);
 
 			if (trade.SeqNum != default)
-				writer.WriteAttribute("seqNum", trade.SeqNum);
+				await WriteAttrAsync(writer, "seqNum", trade.SeqNum, t);
 
 			if (trade.Yield != default)
-				writer.WriteAttribute("yield", trade.Yield);
+				await WriteAttrAsync(writer, "yield", trade.Yield, t);
 
 			if (trade.OrderBuyId != default)
-				writer.WriteAttribute("buy", trade.OrderBuyId);
+				await WriteAttrAsync(writer, "buy", trade.OrderBuyId, t);
 
 			if (trade.OrderSellId != default)
-				writer.WriteAttribute("sell", trade.OrderSellId);
+				await WriteAttrAsync(writer, "sell", trade.OrderSellId, t);
 
-			writer.WriteEndElement();
-		});
+			await writer.WriteEndElementAsync();
+		}, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) ExportTransactions(IEnumerable<ExecutionMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "transactions", (writer, item) =>
+		return Do(messages, "transactions", async (writer, item, t) =>
 		{
-			writer.WriteStartElement("item");
+			await writer.WriteStartElementAsync(null, "item", null);
 
-			writer
-				.WriteAttribute("serverTime", item.ServerTime.ToString(_timeFormat))
-				.WriteAttribute("localTime", item.LocalTime.ToString(_timeFormat))
-				.WriteAttribute("portfolio", item.PortfolioName)
-				.WriteAttribute("clientCode", item.ClientCode)
-				.WriteAttribute("brokerCode", item.BrokerCode)
-				.WriteAttribute("depoName", item.DepoName)
-				.WriteAttribute("transactionId", item.TransactionId)
-				.WriteAttribute("originalTransactionId", item.OriginalTransactionId)
-				.WriteAttribute("orderId", item.OrderId == null ? item.OrderStringId : item.OrderId.To<string>())
-				.WriteAttribute("orderPrice", item.OrderPrice)
-				.WriteAttribute("orderVolume", item.OrderVolume)
-				.WriteAttribute("orderType", item.OrderType)
-				.WriteAttribute("orderState", item.OrderState)
-				.WriteAttribute("orderStatus", item.OrderStatus)
-				.WriteAttribute("visibleVolume", item.VisibleVolume)
-				.WriteAttribute("balance", item.Balance)
-				.WriteAttribute("side", item.Side)
-				.WriteAttribute("originSide", item.OriginSide)
-				.WriteAttribute("tradeId", item.TradeId == null ? item.TradeStringId : item.TradeId.To<string>())
-				.WriteAttribute("tradePrice", item.TradePrice)
-				.WriteAttribute("tradeVolume", item.TradeVolume)
-				.WriteAttribute("tradeStatus", item.TradeStatus)
-				.WriteAttribute("isOrder", item.HasOrderInfo)
-				.WriteAttribute("commission", item.Commission)
-				.WriteAttribute("commissionCurrency", item.CommissionCurrency)
-				.WriteAttribute("pnl", item.PnL)
-				.WriteAttribute("position", item.Position)
-				.WriteAttribute("latency", item.Latency)
-				.WriteAttribute("slippage", item.Slippage)
-				.WriteAttribute("error", item.Error?.Message)
-				.WriteAttribute("openInterest", item.OpenInterest)
-				.WriteAttribute("isCancelled", item.IsCancellation)
-				.WriteAttribute("isSystem", item.IsSystem)
-				.WriteAttribute("isUpTick", item.IsUpTick)
-				.WriteAttribute("userOrderId", item.UserOrderId)
-				.WriteAttribute("strategyId", item.StrategyId)
-				.WriteAttribute("currency", item.Currency)
-				.WriteAttribute("marginMode", item.MarginMode)
-				.WriteAttribute("isMarketMaker", item.IsMarketMaker)
-				.WriteAttribute("isManual", item.IsManual)
-				.WriteAttribute("averagePrice", item.AveragePrice)
-				.WriteAttribute("yield", item.Yield)
-				.WriteAttribute("minVolume", item.MinVolume)
-				.WriteAttribute("positionEffect", item.PositionEffect)
-				.WriteAttribute("postOnly", item.PostOnly)
-				.WriteAttribute("initiator", item.Initiator)
-				.WriteAttribute("seqNum", item.SeqNum)
-				.WriteAttribute("leverage", item.Leverage);
+			await WriteAttrAsync(writer, "serverTime", item.ServerTime.ToString(_timeFormat), t);
+			await WriteAttrAsync(writer, "localTime", item.LocalTime.ToString(_timeFormat), t);
+			await WriteAttrAsync(writer, "portfolio", item.PortfolioName, t);
+			await WriteAttrAsync(writer, "clientCode", item.ClientCode, t);
+			await WriteAttrAsync(writer, "brokerCode", item.BrokerCode, t);
+			await WriteAttrAsync(writer, "depoName", item.DepoName, t);
+			await WriteAttrAsync(writer, "transactionId", item.TransactionId, t);
+			await WriteAttrAsync(writer, "originalTransactionId", item.OriginalTransactionId, t);
+			await WriteAttrAsync(writer, "orderId", item.OrderId == null ? item.OrderStringId : item.OrderId.To<string>(), t);
+			await WriteAttrAsync(writer, "orderPrice", item.OrderPrice, t);
+			await WriteAttrAsync(writer, "orderVolume", item.OrderVolume, t);
+			await WriteAttrAsync(writer, "orderType", item.OrderType, t);
+			await WriteAttrAsync(writer, "orderState", item.OrderState, t);
+			await WriteAttrAsync(writer, "orderStatus", item.OrderStatus, t);
+			await WriteAttrAsync(writer, "visibleVolume", item.VisibleVolume, t);
+			await WriteAttrAsync(writer, "balance", item.Balance, t);
+			await WriteAttrAsync(writer, "side", item.Side, t);
+			await WriteAttrAsync(writer, "originSide", item.OriginSide, t);
+			await WriteAttrAsync(writer, "tradeId", item.TradeId == null ? item.TradeStringId : item.TradeId.To<string>(), t);
+			await WriteAttrAsync(writer, "tradePrice", item.TradePrice, t);
+			await WriteAttrAsync(writer, "tradeVolume", item.TradeVolume, t);
+			await WriteAttrAsync(writer, "tradeStatus", item.TradeStatus, t);
+			await WriteAttrAsync(writer, "isOrder", item.HasOrderInfo, t);
+			await WriteAttrAsync(writer, "commission", item.Commission, t);
+			await WriteAttrAsync(writer, "commissionCurrency", item.CommissionCurrency, t);
+			await WriteAttrAsync(writer, "pnl", item.PnL, t);
+			await WriteAttrAsync(writer, "position", item.Position, t);
+			await WriteAttrAsync(writer, "latency", item.Latency, t);
+			await WriteAttrAsync(writer, "slippage", item.Slippage, t);
+			await WriteAttrAsync(writer, "error", item.Error?.Message, t);
+			await WriteAttrAsync(writer, "openInterest", item.OpenInterest, t);
+			await WriteAttrAsync(writer, "isCancelled", item.IsCancellation, t);
+			await WriteAttrAsync(writer, "isSystem", item.IsSystem, t);
+			await WriteAttrAsync(writer, "isUpTick", item.IsUpTick, t);
+			await WriteAttrAsync(writer, "userOrderId", item.UserOrderId, t);
+			await WriteAttrAsync(writer, "strategyId", item.StrategyId, t);
+			await WriteAttrAsync(writer, "currency", item.Currency, t);
+			await WriteAttrAsync(writer, "marginMode", item.MarginMode, t);
+			await WriteAttrAsync(writer, "isMarketMaker", item.IsMarketMaker, t);
+			await WriteAttrAsync(writer, "isManual", item.IsManual, t);
+			await WriteAttrAsync(writer, "averagePrice", item.AveragePrice, t);
+			await WriteAttrAsync(writer, "yield", item.Yield, t);
+			await WriteAttrAsync(writer, "minVolume", item.MinVolume, t);
+			await WriteAttrAsync(writer, "positionEffect", item.PositionEffect, t);
+			await WriteAttrAsync(writer, "postOnly", item.PostOnly, t);
+			await WriteAttrAsync(writer, "initiator", item.Initiator, t);
+			await WriteAttrAsync(writer, "seqNum", item.SeqNum, t);
+			await WriteAttrAsync(writer, "leverage", item.Leverage, t);
 
-			writer.WriteEndElement();
-		});
+			await writer.WriteEndElementAsync();
+		}, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<QuoteChangeMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "depths", (writer, depth) =>
+		return Do(messages, "depths", async (writer, depth, t) =>
 		{
-			writer.WriteStartElement("depth");
+			await writer.WriteStartElementAsync(null, "depth", null);
 
-			writer
-				.WriteAttribute("serverTime", depth.ServerTime.ToString(_timeFormat))
-				.WriteAttribute("localTime", depth.LocalTime.ToString(_timeFormat));
+			await WriteAttrAsync(writer, "serverTime", depth.ServerTime.ToString(_timeFormat), t);
+			await WriteAttrAsync(writer, "localTime", depth.LocalTime.ToString(_timeFormat), t);
 
 			if (depth.State != null)
-				writer.WriteAttribute("state", depth.State.Value);
+				await WriteAttrAsync(writer, "state", depth.State.Value, t);
 
 			if (depth.HasPositions)
-				writer.WriteAttribute("pos", true);
+				await WriteAttrAsync(writer, "pos", true, t);
 
 			if (depth.SeqNum != default)
-				writer.WriteAttribute("seqNum", depth.SeqNum);
+				await WriteAttrAsync(writer, "seqNum", depth.SeqNum, t);
 
 			var bids = new HashSet<QuoteChange>(depth.Bids);
 
 			foreach (var quote in depth.Bids.Concat(depth.Asks).OrderByDescending(q => q.Price))
 			{
-				writer.WriteStartElement("quote");
+				await writer.WriteStartElementAsync(null, "quote", null);
 
-				writer
-					.WriteAttribute("price", quote.Price)
-					.WriteAttribute("volume", quote.Volume)
-					.WriteAttribute("side", bids.Contains(quote) ? Sides.Buy : Sides.Sell);
+				await WriteAttrAsync(writer, "price", quote.Price, t);
+				await WriteAttrAsync(writer, "volume", quote.Volume, t);
+				await WriteAttrAsync(writer, "side", bids.Contains(quote) ? Sides.Buy : Sides.Sell, t);
 
 				if (quote.OrdersCount != default)
-					writer.WriteAttribute("ordersCount", quote.OrdersCount.Value);
+					await WriteAttrAsync(writer, "ordersCount", quote.OrdersCount.Value, t);
 
 				if (quote.StartPosition != default)
-					writer.WriteAttribute("startPos", quote.StartPosition.Value);
+					await WriteAttrAsync(writer, "startPos", quote.StartPosition.Value, t);
 
 				if (quote.EndPosition != default)
-					writer.WriteAttribute("endPos", quote.EndPosition.Value);
+					await WriteAttrAsync(writer, "endPos", quote.EndPosition.Value, t);
 
 				if (quote.Action != default)
-					writer.WriteAttribute("action", quote.Action.Value);
+					await WriteAttrAsync(writer, "action", quote.Action.Value, t);
 
 				if (quote.Condition != default)
-					writer.WriteAttribute("condition", quote.Condition);
+					await WriteAttrAsync(writer, "condition", quote.Condition, t);
 
-				writer.WriteEndElement();
+				await writer.WriteEndElementAsync();
 			}
 
-			writer.WriteEndElement();
-		});
+			await writer.WriteEndElementAsync();
+		}, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<Level1ChangeMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "level1", (writer, message) =>
+		return Do(messages, "level1", async (writer, message, t) =>
 		{
-			writer.WriteStartElement("change");
+			await writer.WriteStartElementAsync(null, "change", null);
 
-			writer
-				.WriteAttribute("serverTime", message.ServerTime.ToString(_timeFormat))
-				.WriteAttribute("localTime", message.LocalTime.ToString(_timeFormat));
+			await WriteAttrAsync(writer, "serverTime", message.ServerTime.ToString(_timeFormat), t);
+			await WriteAttrAsync(writer, "localTime", message.LocalTime.ToString(_timeFormat), t);
 
 			if (message.SeqNum != default)
-				writer.WriteAttribute("seqNum", message.SeqNum);
+				await WriteAttrAsync(writer, "seqNum", message.SeqNum, t);
 
 			foreach (var pair in message.Changes)
-				writer.WriteAttribute(pair.Key.ToString(), (pair.Value as DateTime?)?.ToString(_timeFormat) ?? pair.Value);
+			{
+				var val = (pair.Value as DateTime?)?.ToString(_timeFormat) ?? pair.Value;
+				await WriteAttrAsync(writer, pair.Key.ToString(), val, t);
+			}
 
-			writer.WriteEndElement();
-		});
+			await writer.WriteEndElementAsync();
+		}, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<PositionChangeMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "positions", (writer, message) =>
+		return Do(messages, "positions", async (writer, message, t) =>
 		{
-			writer.WriteStartElement("change");
+			await writer.WriteStartElementAsync(null, "change", null);
 
-			writer
-				.WriteAttribute("serverTime", message.ServerTime.ToString(_timeFormat))
-				.WriteAttribute("localTime", message.LocalTime.ToString(_timeFormat))
+			await WriteAttrAsync(writer, "serverTime", message.ServerTime.ToString(_timeFormat), t);
+			await WriteAttrAsync(writer, "localTime", message.LocalTime.ToString(_timeFormat), t);
 
-				.WriteAttribute("portfolio", message.PortfolioName)
-				.WriteAttribute("clientCode", message.ClientCode)
-				.WriteAttribute("depoName", message.DepoName)
-				.WriteAttribute("limit", message.LimitType)
-				.WriteAttribute("strategyId", message.StrategyId)
-				.WriteAttribute("side", message.Side)
-				;
+			await WriteAttrAsync(writer, "portfolio", message.PortfolioName, t);
+			await WriteAttrAsync(writer, "clientCode", message.ClientCode, t);
+			await WriteAttrAsync(writer, "depoName", message.DepoName, t);
+			await WriteAttrAsync(writer, "limit", message.LimitType, t);
+			await WriteAttrAsync(writer, "strategyId", message.StrategyId, t);
+			await WriteAttrAsync(writer, "side", message.Side, t);
 
 			foreach (var pair in message.Changes.Where(c => !c.Key.IsObsolete()))
-				writer.WriteAttribute(pair.Key.ToString(), (pair.Value as DateTime?)?.ToString(_timeFormat) ?? pair.Value);
+			{
+				var val = (pair.Value as DateTime?)?.ToString(_timeFormat) ?? pair.Value;
+				await WriteAttrAsync(writer, pair.Key.ToString(), val, t);
+			}
 
-			writer.WriteEndElement();
-		});
+			await writer.WriteEndElementAsync();
+		}, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<IndicatorValue> values)
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
 	{
-		return Do(values, "values", (writer, value) =>
+		return Do(values, "values", async (writer, value, t) =>
 		{
-			writer.WriteStartElement("value");
+			await writer.WriteStartElementAsync(null, "value", null);
 
-			writer.WriteAttribute("time", value.Time.ToString(_timeFormat));
+			await WriteAttrAsync(writer, "time", value.Time.ToString(_timeFormat), t);
 
-			var index = 1;
+			var index =1;
 			foreach (var indVal in value.ValuesAsDecimal)
-				writer.WriteAttribute($"value{index++}", indVal);
+				await WriteAttrAsync(writer, $"value{index++}", indVal, t);
 
-			writer.WriteEndElement();
-		});
+			await writer.WriteEndElementAsync();
+		}, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<CandleMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "candles", (writer, candle) =>
+		return Do(messages, "candles", async (writer, candle, t) =>
 		{
-			writer.WriteStartElement("candle");
+			await writer.WriteStartElementAsync(null, "candle", null);
 
-			writer
-				.WriteAttribute("openTime", candle.OpenTime.ToString(_timeFormat))
-				.WriteAttribute("closeTime", candle.CloseTime.ToString(_timeFormat))
+			await WriteAttrAsync(writer, "openTime", candle.OpenTime.ToString(_timeFormat), t);
+			await WriteAttrAsync(writer, "closeTime", candle.CloseTime.ToString(_timeFormat), t);
 
-				.WriteAttribute("O", candle.OpenPrice)
-				.WriteAttribute("H", candle.HighPrice)
-				.WriteAttribute("L", candle.LowPrice)
-				.WriteAttribute("C", candle.ClosePrice)
-				.WriteAttribute("V", candle.TotalVolume);
+			await WriteAttrAsync(writer, "O", candle.OpenPrice, t);
+			await WriteAttrAsync(writer, "H", candle.HighPrice, t);
+			await WriteAttrAsync(writer, "L", candle.LowPrice, t);
+			await WriteAttrAsync(writer, "C", candle.ClosePrice, t);
+			await WriteAttrAsync(writer, "V", candle.TotalVolume, t);
 
 			if (candle.OpenInterest != null)
-				writer.WriteAttribute("openInterest", candle.OpenInterest.Value);
+				await WriteAttrAsync(writer, "openInterest", candle.OpenInterest.Value, t);
 
 			if (candle.SeqNum != default)
-				writer.WriteAttribute("seqNum", candle.SeqNum);
+				await WriteAttrAsync(writer, "seqNum", candle.SeqNum, t);
 
 			if (candle.PriceLevels != null)
 			{
-				writer.WriteStartElement("levels");
+				await writer.WriteStartElementAsync(null, "levels", null);
 
 				foreach (var level in candle.PriceLevels)
 				{
-					writer.WriteStartElement("level");
+					await writer.WriteStartElementAsync(null, "level", null);
 
-					writer
-						.WriteAttribute("price", level.Price)
-						.WriteAttribute("buyCount", level.BuyCount)
-						.WriteAttribute("sellCount", level.SellCount)
-						.WriteAttribute("buyVolume", level.BuyVolume)
-						.WriteAttribute("sellVolume", level.SellVolume)
-						.WriteAttribute("volume", level.TotalVolume);
+					await WriteAttrAsync(writer, "price", level.Price, t);
+					await WriteAttrAsync(writer, "buyCount", level.BuyCount, t);
+					await WriteAttrAsync(writer, "sellCount", level.SellCount, t);
+					await WriteAttrAsync(writer, "buyVolume", level.BuyVolume, t);
+					await WriteAttrAsync(writer, "sellVolume", level.SellVolume, t);
+					await WriteAttrAsync(writer, "volume", level.TotalVolume, t);
 
-					writer.WriteEndElement();
+					await writer.WriteEndElementAsync();
 				}
 
-				writer.WriteEndElement();
+				await writer.WriteEndElementAsync();
 			}
 
-			writer.WriteEndElement();
-		});
+			await writer.WriteEndElementAsync();
+		}, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<NewsMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "news", (writer, n) =>
+		return Do(messages, "news", async (writer, n, t) =>
 		{
-			writer.WriteStartElement("item");
+			await writer.WriteStartElementAsync(null, "item", null);
 
 			if (!n.Id.IsEmpty())
-				writer.WriteAttribute("id", n.Id);
+				await WriteAttrAsync(writer, "id", n.Id, t);
 
-			writer.WriteAttribute("serverTime", n.ServerTime.ToString(_timeFormat));
-			writer.WriteAttribute("localTime", n.LocalTime.ToString(_timeFormat));
+			await WriteAttrAsync(writer, "serverTime", n.ServerTime.ToString(_timeFormat), t);
+			await WriteAttrAsync(writer, "localTime", n.LocalTime.ToString(_timeFormat), t);
 
 			if (n.SecurityId != null)
-				writer.WriteAttribute("securityCode", n.SecurityId.Value.SecurityCode);
+				await WriteAttrAsync(writer, "securityCode", n.SecurityId.Value.SecurityCode, t);
 
 			if (!n.BoardCode.IsEmpty())
-				writer.WriteAttribute("boardCode", n.BoardCode);
+				await WriteAttrAsync(writer, "boardCode", n.BoardCode, t);
 
-			writer.WriteAttribute("headline", n.Headline);
+			await WriteAttrAsync(writer, "headline", n.Headline, t);
 
 			if (!n.Source.IsEmpty())
-				writer.WriteAttribute("source", n.Source);
+				await WriteAttrAsync(writer, "source", n.Source, t);
 
 			if (!n.Url.IsEmpty())
-				writer.WriteAttribute("url", n.Url);
+				await WriteAttrAsync(writer, "url", n.Url, t);
 
 			if (n.Priority != null)
-				writer.WriteAttribute("priority", n.Priority.Value);
+				await WriteAttrAsync(writer, "priority", n.Priority.Value, t);
 
 			if (!n.Language.IsEmpty())
-				writer.WriteAttribute("language", n.Language);
+				await WriteAttrAsync(writer, "language", n.Language, t);
 
 			if (n.ExpiryDate != null)
-				writer.WriteAttribute("expiry", n.ExpiryDate.Value);
+				await WriteAttrAsync(writer, "expiry", n.ExpiryDate.Value, t);
 
 			if (!n.Story.IsEmpty())
-				writer.WriteCData(n.Story);
+				await writer.WriteCDataAsync(n.Story);
 
 			if (n.SeqNum != default)
-				writer.WriteAttribute("seqNum", n.SeqNum);
+				await WriteAttrAsync(writer, "seqNum", n.SeqNum, t);
 
-			writer.WriteEndElement();
-		});
+			await writer.WriteEndElementAsync();
+		}, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<SecurityMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "securities", (writer, security) =>
+		return Do(messages, "securities", async (writer, security, t) =>
 		{
-			writer.WriteStartElement("security");
+			await writer.WriteStartElementAsync(null, "security", null);
 
-			writer.WriteAttribute("code", security.SecurityId.SecurityCode);
-			writer.WriteAttribute("board", security.SecurityId.BoardCode);
+			await WriteAttrAsync(writer, "code", security.SecurityId.SecurityCode, t);
+			await WriteAttrAsync(writer, "board", security.SecurityId.BoardCode, t);
 
 			if (!security.Name.IsEmpty())
-				writer.WriteAttribute("name", security.Name);
+				await WriteAttrAsync(writer, "name", security.Name, t);
 
 			if (!security.ShortName.IsEmpty())
-				writer.WriteAttribute("shortName", security.ShortName);
+				await WriteAttrAsync(writer, "shortName", security.ShortName, t);
 
 			if (security.PriceStep != null)
-				writer.WriteAttribute("priceStep", security.PriceStep.Value);
+				await WriteAttrAsync(writer, "priceStep", security.PriceStep.Value, t);
 
 			if (security.VolumeStep != null)
-				writer.WriteAttribute("volumeStep", security.VolumeStep.Value);
+				await WriteAttrAsync(writer, "volumeStep", security.VolumeStep.Value, t);
 
 			if (security.MinVolume != null)
-				writer.WriteAttribute("minVolume", security.MinVolume.Value);
+				await WriteAttrAsync(writer, "minVolume", security.MinVolume.Value, t);
 
 			if (security.MaxVolume != null)
-				writer.WriteAttribute("maxVolume", security.MaxVolume.Value);
+				await WriteAttrAsync(writer, "maxVolume", security.MaxVolume.Value, t);
 
 			if (security.Multiplier != null)
-				writer.WriteAttribute("multiplier", security.Multiplier.Value);
+				await WriteAttrAsync(writer, "multiplier", security.Multiplier.Value, t);
 
 			if (security.Decimals != null)
-				writer.WriteAttribute("decimals", security.Decimals.Value);
+				await WriteAttrAsync(writer, "decimals", security.Decimals.Value, t);
 
 			if (security.Currency != null)
-				writer.WriteAttribute("currency", security.Currency.Value);
+				await WriteAttrAsync(writer, "currency", security.Currency.Value, t);
 
 			if (security.SecurityType != null)
-				writer.WriteAttribute("type", security.SecurityType.Value);
+				await WriteAttrAsync(writer, "type", security.SecurityType.Value, t);
 			
 			if (!security.CfiCode.IsEmpty())
-				writer.WriteAttribute("cfiCode", security.CfiCode);
+				await WriteAttrAsync(writer, "cfiCode", security.CfiCode, t);
 			
 			if (security.Shortable != null)
-				writer.WriteAttribute("shortable", security.Shortable.Value);
+				await WriteAttrAsync(writer, "shortable", security.Shortable.Value, t);
 
 			if (security.OptionType != null)
-				writer.WriteAttribute("optionType", security.OptionType.Value);
+				await WriteAttrAsync(writer, "optionType", security.OptionType.Value, t);
 
 			if (security.Strike != null)
-				writer.WriteAttribute("strike", security.Strike.Value);
+				await WriteAttrAsync(writer, "strike", security.Strike.Value, t);
 
 			if (!security.BinaryOptionType.IsEmpty())
-				writer.WriteAttribute("binaryOptionType", security.BinaryOptionType);
+				await WriteAttrAsync(writer, "binaryOptionType", security.BinaryOptionType, t);
 
 			if (security.IssueSize != null)
-				writer.WriteAttribute("issueSize", security.IssueSize.Value);
+				await WriteAttrAsync(writer, "issueSize", security.IssueSize.Value, t);
 
 			if (security.IssueDate != null)
-				writer.WriteAttribute("issueDate", security.IssueDate.Value);
+				await WriteAttrAsync(writer, "issueDate", security.IssueDate.Value, t);
 
 			if (!security.GetUnderlyingCode().IsEmpty())
-				writer.WriteAttribute("underlyingId", security.GetUnderlyingCode());
+				await WriteAttrAsync(writer, "underlyingId", security.GetUnderlyingCode(), t);
 
 			if (security.UnderlyingSecurityType != null)
-				writer.WriteAttribute("underlyingType", security.UnderlyingSecurityType);
+				await WriteAttrAsync(writer, "underlyingType", security.UnderlyingSecurityType, t);
 
 			if (security.UnderlyingSecurityMinVolume != null)
-				writer.WriteAttribute("underlyingMinVolume", security.UnderlyingSecurityMinVolume.Value);
+				await WriteAttrAsync(writer, "underlyingMinVolume", security.UnderlyingSecurityMinVolume.Value, t);
 
 			if (security.ExpiryDate != null)
-				writer.WriteAttribute("expiryDate", security.ExpiryDate.Value.ToString("yyyy-MM-dd"));
+				await WriteAttrAsync(writer, "expiryDate", security.ExpiryDate.Value.ToString("yyyy-MM-dd"), t);
 
 			if (security.SettlementDate != null)
-				writer.WriteAttribute("settlementDate", security.SettlementDate.Value.ToString("yyyy-MM-dd"));
+				await WriteAttrAsync(writer, "settlementDate", security.SettlementDate.Value.ToString("yyyy-MM-dd"), t);
 
 			if (!security.BasketCode.IsEmpty())
-				writer.WriteAttribute("basketCode", security.BasketCode);
+				await WriteAttrAsync(writer, "basketCode", security.BasketCode, t);
 
 			if (!security.BasketExpression.IsEmpty())
-				writer.WriteAttribute("basketExpression", security.BasketExpression);
+				await WriteAttrAsync(writer, "basketExpression", security.BasketExpression, t);
 
 			if (security.FaceValue != null)
-				writer.WriteAttribute("faceValue", security.FaceValue.Value);
+				await WriteAttrAsync(writer, "faceValue", security.FaceValue.Value, t);
 
 			if (security.SettlementType != null)
-				writer.WriteAttribute("settlementType", security.SettlementType.Value);
+				await WriteAttrAsync(writer, "settlementType", security.SettlementType.Value, t);
 
 			if (security.OptionStyle != null)
-				writer.WriteAttribute("optionStyle", security.OptionStyle.Value);
+				await WriteAttrAsync(writer, "optionStyle", security.OptionStyle.Value, t);
 
 			if (!security.PrimaryId.SecurityCode.IsEmpty())
-				writer.WriteAttribute("primaryCode", security.PrimaryId.SecurityCode);
+				await WriteAttrAsync(writer, "primaryCode", security.PrimaryId.SecurityCode, t);
 
 			if (!security.PrimaryId.BoardCode.IsEmpty())
-				writer.WriteAttribute("primaryBoard", security.PrimaryId.BoardCode);
+				await WriteAttrAsync(writer, "primaryBoard", security.PrimaryId.BoardCode, t);
 
 			if (!security.SecurityId.Bloomberg.IsEmpty())
-				writer.WriteAttribute("bloomberg", security.SecurityId.Bloomberg);
+				await WriteAttrAsync(writer, "bloomberg", security.SecurityId.Bloomberg, t);
 
 			if (!security.SecurityId.Cusip.IsEmpty())
-				writer.WriteAttribute("cusip", security.SecurityId.Cusip);
+				await WriteAttrAsync(writer, "cusip", security.SecurityId.Cusip, t);
 
 			if (!security.SecurityId.IQFeed.IsEmpty())
-				writer.WriteAttribute("iqfeed", security.SecurityId.IQFeed);
+				await WriteAttrAsync(writer, "iqfeed", security.SecurityId.IQFeed, t);
 
 			if (security.SecurityId.InteractiveBrokers != null)
-				writer.WriteAttribute("ib", security.SecurityId.InteractiveBrokers);
+				await WriteAttrAsync(writer, "ib", security.SecurityId.InteractiveBrokers, t);
 
 			if (!security.SecurityId.Isin.IsEmpty())
-				writer.WriteAttribute("isin", security.SecurityId.Isin);
+				await WriteAttrAsync(writer, "isin", security.SecurityId.Isin, t);
 
 			if (!security.SecurityId.Plaza.IsEmpty())
-				writer.WriteAttribute("plaza", security.SecurityId.Plaza);
+				await WriteAttrAsync(writer, "plaza", security.SecurityId.Plaza, t);
 
 			if (!security.SecurityId.Ric.IsEmpty())
-				writer.WriteAttribute("ric", security.SecurityId.Ric);
+				await WriteAttrAsync(writer, "ric", security.SecurityId.Ric, t);
 
 			if (!security.SecurityId.Sedol.IsEmpty())
-				writer.WriteAttribute("sedol", security.SecurityId.Sedol);
+				await WriteAttrAsync(writer, "sedol", security.SecurityId.Sedol, t);
 
-			writer.WriteEndElement();
-		});
+			await writer.WriteEndElementAsync();
+		}, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<BoardStateMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "boardStates", (writer, msg) =>
+		return Do(messages, "boardStates", async (writer, msg, t) =>
 		{
-			writer.WriteStartElement("boardState");
+			await writer.WriteStartElementAsync(null, "boardState", null);
 
-			writer.WriteAttribute("serverTime", msg.ServerTime.ToString(_timeFormat));
-			writer.WriteAttribute("boardCode", msg.BoardCode);
-			writer.WriteAttribute("state", msg.State.ToString());
+			await WriteAttrAsync(writer, "serverTime", msg.ServerTime.ToString(_timeFormat), t);
+			await WriteAttrAsync(writer, "boardCode", msg.BoardCode, t);
+			await WriteAttrAsync(writer, "state", msg.State.ToString(), t);
 
-			writer.WriteEndElement();
-		});
+			await writer.WriteEndElementAsync();
+		}, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<BoardMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "boards", (writer, msg) =>
+		return Do(messages, "boards", async (writer, msg, t) =>
 		{
-			writer.WriteStartElement("board");
+			await writer.WriteStartElementAsync(null, "board", null);
 
-			writer.WriteAttribute("code", msg.Code);
-			writer.WriteAttribute("exchangeCode", msg.ExchangeCode);
-			writer.WriteAttribute("expiryTime", msg.ExpiryTime.ToString());
-			writer.WriteAttribute("timeZone", msg.TimeZone?.Id);
+			await WriteAttrAsync(writer, "code", msg.Code, t);
+			await WriteAttrAsync(writer, "exchangeCode", msg.ExchangeCode, t);
+			await WriteAttrAsync(writer, "expiryTime", msg.ExpiryTime.ToString(), t);
+			await WriteAttrAsync(writer, "timeZone", msg.TimeZone?.Id, t);
 
-			writer.WriteEndElement();
-		});
+			await writer.WriteEndElementAsync();
+		}, cancellationToken);
 	}
 
-	private (int, DateTimeOffset?) Do<TValue>(IEnumerable<TValue> values, string rootElem, Action<XmlWriter, TValue> action)
+	private async Task<(int, DateTimeOffset?)> Do<TValue>(IEnumerable<TValue> values, string rootElem, Func<XmlWriter, TValue, CancellationToken, Task> action, CancellationToken cancellationToken)
 	{
 		var count = 0;
 		var lastTime = default(DateTimeOffset?);
-		
-		using (var writer = XmlWriter.Create(new StreamWriter(stream, Encoding, leaveOpen: true), new() { Indent = Indent, CloseOutput = false }))
+
+		var settings = new XmlWriterSettings
 		{
-			writer.WriteStartElement(rootElem);
+			Indent = Indent,
+			CloseOutput = false,
+			Async = true
+		};
+
+		using (var writer = XmlWriter.Create(new StreamWriter(stream, Encoding, leaveOpen: true), settings))
+		{
+			await writer.WriteStartElementAsync(null, rootElem, null);
 
 			foreach (var value in values)
 			{
-				if (!CanProcess())
-					break;
+				cancellationToken.ThrowIfCancellationRequested();
 
-				action(writer, value);
+				await action(writer, value, cancellationToken);
 
 				count++;
 
@@ -551,7 +568,7 @@ public class XmlExporter(DataType dataType, Func<int, bool> isCancelled, Stream 
 					lastTime = timeMsg.ServerTime;
 			}
 
-			writer.WriteEndElement();
+			await writer.WriteEndElementAsync();
 		}
 
 		return (count, lastTime);

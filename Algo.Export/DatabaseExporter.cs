@@ -2,6 +2,8 @@ namespace StockSharp.Algo.Export;
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Linq;
 
 using Ecng.Common;
@@ -19,35 +21,26 @@ using LinqToDB.Mapping;
 /// <summary>
 /// The export into database.
 /// </summary>
-public class DatabaseExporter : BaseExporter
+/// <remarks>
+/// Initializes a new instance of the <see cref="DatabaseExporter"/>.
+/// </remarks>
+/// <param name="priceStep">Minimum price step.</param>
+/// <param name="volumeStep">Minimum volume step.</param>
+/// <param name="dataType">Data type info.</param>
+/// <param name="connection">The connection to DB.</param>
+public class DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType dataType, DatabaseConnectionPair connection) : BaseExporter(dataType)
 {
-	private readonly DatabaseConnectionPair _connection;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="DatabaseExporter"/>.
-	/// </summary>
-	/// <param name="priceStep">Minimum price step.</param>
-	/// <param name="volumeStep">Minimum volume step.</param>
-	/// <param name="dataType">Data type info.</param>
-	/// <param name="isCancelled">The processor, returning process interruption sign.</param>
-	/// <param name="connection">The connection to DB.</param>
-	public DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType dataType, Func<int, bool> isCancelled, DatabaseConnectionPair connection)
-		: base(dataType, isCancelled)
-	{
-		PriceStep = priceStep;
-		VolumeStep = volumeStep;
-		_connection = connection ?? throw new ArgumentNullException(nameof(connection));
-	}
+	private readonly DatabaseConnectionPair _connection = connection ?? throw new ArgumentNullException(nameof(connection));
 
 	/// <summary>
 	/// Minimum price step.
 	/// </summary>
-	public decimal? PriceStep { get; }
+	public decimal? PriceStep { get; } = priceStep;
 
 	/// <summary>
 	/// Minimum volume step.
 	/// </summary>
-	public decimal? VolumeStep { get; }
+	public decimal? VolumeStep { get; } = volumeStep;
 
 	private int _batchSize = 50;
 
@@ -72,54 +65,54 @@ public class DatabaseExporter : BaseExporter
 	public bool CheckUnique { get; set; }
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) ExportOrderLog(IEnumerable<ExecutionMessage> messages)
-		=> Do(messages, CreateExecutionTable);
+	protected override Task<(int, DateTimeOffset?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+		=> Do(messages, CreateExecutionTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) ExportTicks(IEnumerable<ExecutionMessage> messages)
-		=> Do(messages, CreateExecutionTable);
+	protected override Task<(int, DateTimeOffset?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+		=> Do(messages, CreateExecutionTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) ExportTransactions(IEnumerable<ExecutionMessage> messages)
-		=> Do(messages, CreateExecutionTable);
+	protected override Task<(int, DateTimeOffset?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+		=> Do(messages, CreateExecutionTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<QuoteChangeMessage> messages)
-		=> Do(messages.ToTimeQuotes(), CreateMarketDepthQuoteTable);
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
+		=> Do(messages.ToTimeQuotes(), CreateMarketDepthQuoteTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<Level1ChangeMessage> messages)
-		=> Do(messages, CreateLevel1Table);
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
+		=> Do(messages, CreateLevel1Table, cancellationToken);
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<CandleMessage> messages)
-		=> Do(messages, CreateCandleTable);
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
+		=> Do(messages, CreateCandleTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<NewsMessage> messages)
-		=> Do(messages, CreateNewsTable);
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
+		=> Do(messages, CreateNewsTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<SecurityMessage> messages)
-		=> Do(messages, CreateSecurityTable);
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
+		=> Do(messages, CreateSecurityTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<PositionChangeMessage> messages)
-		=> Do(messages, CreatePositionChangeTable);
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
+		=> Do(messages, CreatePositionChangeTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<IndicatorValue> values)
-		=> Do(values, CreateIndicatorValueTable);
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
+		=> Do(values, CreateIndicatorValueTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<BoardStateMessage> messages)
-		=> Do(messages, CreateBoardStateTable);
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
+		=> Do(messages, CreateBoardStateTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<BoardMessage> messages)
-		=> Do(messages, CreateBoardTable);
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
+		=> Do(messages, CreateBoardTable, cancellationToken);
 
-	private (int, DateTimeOffset?) Do<TValue>(IEnumerable<TValue> values, Action<string, FluentMappingBuilder> createTable)
+	private async Task<(int, DateTimeOffset?)> Do<TValue>(IEnumerable<TValue> values, Action<string, FluentMappingBuilder> createTable, CancellationToken cancellationToken)
 		where TValue : class
 	{
 		if (values is null)
@@ -165,16 +158,13 @@ public class DatabaseExporter : BaseExporter
 
 		foreach (var batch in values.Chunk(BatchSize).Select(b => b.ToArray()))
 		{
-			if (!CanProcess(batch.Length))
-				break;
-
 			if (CheckUnique)
 			{
 				foreach (var item in batch)
-					table.Insert(() => item);
+					await table.InsertAsync(() => item, cancellationToken);
 			}
 			else
-				table.BulkCopy(batch);
+				await table.BulkCopyAsync(batch, cancellationToken);
 
 			count += batch.Length;
 

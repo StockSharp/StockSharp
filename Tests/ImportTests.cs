@@ -36,7 +36,7 @@ public class ImportTests
 			throw new ArgumentOutOfRangeException(nameof(dataType), dataType, "Unsupported data type for import test.");
 	}
 
-	private static void Import<TValue>(DataType dataType, IEnumerable<TValue> values, FieldMapping[] fields)
+	private static async Task Import<TValue>(DataType dataType, IEnumerable<TValue> values, FieldMapping[] fields)
 		where TValue : class
 	{
 		var arr = values.ToArray();
@@ -46,9 +46,11 @@ public class ImportTests
 		for (var i = 0; i < fields.Length; i++)
 			fields[i].Order = i;
 
+		var token = CancellationToken.None;
+
 		using var stream = File.Create(Helper.GetSubTemp($"{dataType.DataTypeToFileName()}_import.csv"));
 
-		new TextExporter(dataType, _ => false, stream, template, null).Export(arr);
+		await new TextExporter(dataType, stream, template, null).Export(arr, token);
 
 		stream.Flush();
 		stream.Position = 0;
@@ -63,7 +65,7 @@ public class ImportTests
 	}
 
 	[TestMethod]
-	public void Ticks()
+	public Task Ticks()
 	{
 		var security = Helper.CreateStorageSecurity();
 		var allFields = FieldMappingRegistry.CreateFields(DataType.Ticks).ToArray();
@@ -76,11 +78,11 @@ public class ImportTests
 			allFields.First(f => f.Name == "TradeVolume"),
 			allFields.First(f => f.Name == "OriginSide"),
 		};
-		Import(DataType.Ticks, security.RandomTicks(100, true), fields);
+		return Import(DataType.Ticks, security.RandomTicks(100, true), fields);
 	}
 
 	//[TestMethod]
-	//public void Depths()
+	//public Task Depths()
 	//{
 	//	var security = Helper.CreateStorageSecurity();
 	//	var allFields = FieldMappingRegistry.CreateFields(DataType.MarketDepth).ToArray();
@@ -92,11 +94,11 @@ public class ImportTests
 	//		allFields.First(f => f.Name == "Quote.Volume"),
 	//		allFields.First(f => f.Name == "Side"),
 	//	};
-	//	Import(DataType.MarketDepth, security.RandomDepths(100, ordersCount: true), fields);
+	//	return Import(DataType.MarketDepth, security.RandomDepths(100, ordersCount: true), fields);
 	//}
 
 	[TestMethod]
-	public void OrderLog()
+	public Task OrderLog()
 	{
 		var security = Helper.CreateStorageSecurity();
 		var allFields = FieldMappingRegistry.CreateFields(DataType.OrderLog).ToArray();
@@ -114,11 +116,11 @@ public class ImportTests
 			allFields.First(f => f.Name == "TradeId"),
 			allFields.First(f => f.Name == "TradePrice"),
 		};
-		Import(DataType.OrderLog, security.RandomOrderLog(100), fields);
+		return Import(DataType.OrderLog, security.RandomOrderLog(100), fields);
 	}
 
 	[TestMethod]
-	public void Positions()
+	public Task Positions()
 	{
 		var security = Helper.CreateStorageSecurity();
 		var allFields = FieldMappingRegistry.CreateFields(DataType.PositionChanges).ToArray();
@@ -134,11 +136,11 @@ public class ImportTests
 			allFields.First(f => f.Name == "Changes[AveragePrice]"),
 			allFields.First(f => f.Name == "Changes[Commission]"),
 		};
-		Import(DataType.PositionChanges, security.RandomPositionChanges(100), fields);
+		return Import(DataType.PositionChanges, security.RandomPositionChanges(100), fields);
 	}
 
 	[TestMethod]
-	public void News()
+	public Task News()
 	{
 		var allFields = FieldMappingRegistry.CreateFields(DataType.News).ToArray();
 		var fields = new[]
@@ -149,11 +151,11 @@ public class ImportTests
 			allFields.First(f => f.Name == "Source"),
 			allFields.First(f => f.Name == "Url"),
 		};
-		Import(DataType.News, Helper.RandomNews(), fields);
+		return Import(DataType.News, Helper.RandomNews(), fields);
 	}
 
 	[TestMethod]
-	public void Level1()
+	public Task Level1()
 	{
 		var security = Helper.CreateStorageSecurity();
 		var allFields = FieldMappingRegistry.CreateFields(DataType.Level1).ToArray();
@@ -168,11 +170,11 @@ public class ImportTests
 			allFields.First(f => f.Name == "Changes[LastTradePrice]"),
 			allFields.First(f => f.Name == "Changes[LastTradeVolume]"),
 		};
-		Import(DataType.Level1, security.RandomLevel1(count: 100), fields);
+		return Import(DataType.Level1, security.RandomLevel1(count: 100), fields);
 	}
 
 	[TestMethod]
-	public void Candles()
+	public async Task Candles()
 	{
 		var security = Helper.CreateStorageSecurity();
 		var candles = CandleTests.GenerateCandles(security.RandomTicks(100, true), security, CandleTests.PriceRange.Pips(security), CandleTests.TotalTicks, CandleTests.TimeFrame, CandleTests.VolumeRange, CandleTests.BoxSize, CandleTests.PnF(security), true);
@@ -191,12 +193,12 @@ public class ImportTests
 				allFields.First(f => f.Name == "ClosePrice"),
 				allFields.First(f => f.Name == "TotalVolume"),
 			};
-			Import(dataType, group.ToArray(), fields);
+			await Import(dataType, group.ToArray(), fields);
 		}
 	}
 
 	[TestMethod]
-	public void BoardState()
+	public Task BoardState()
 	{
 		var allFields = FieldMappingRegistry.CreateFields(DataType.BoardState).ToArray();
 		var fields = new[]
@@ -206,11 +208,11 @@ public class ImportTests
 			allFields.First(f => f.Name == "BoardCode"),
 			allFields.First(f => f.Name == "State"),
 		};
-		Import(DataType.BoardState, Helper.RandomBoardStates(), fields);
+		return Import(DataType.BoardState, Helper.RandomBoardStates(), fields);
 	}
 
 	[TestMethod]
-	public void Transactions()
+	public Task Transactions()
 	{
 		var security = Helper.CreateStorageSecurity();
 		var allFields = FieldMappingRegistry.CreateFields(DataType.Transactions).ToArray();
@@ -232,11 +234,11 @@ public class ImportTests
 			allFields.First(f => f.Name == "TradePrice"),
 			allFields.First(f => f.Name == "TradeVolume"),
 		};
-		Import(DataType.Transactions, security.RandomTransactions(10), fields);
+		return Import(DataType.Transactions, security.RandomTransactions(10), fields);
 	}
 
 	[TestMethod]
-	public void Securities()
+	public Task Securities()
 	{
 		var allFields = FieldMappingRegistry.CreateFields(DataType.Securities).ToArray();
 		var fields = new[]
@@ -249,11 +251,11 @@ public class ImportTests
 			allFields.First(f => f.Name == "Multiplier"),
 			allFields.First(f => f.Name == "Decimals"),
 		};
-		Import(DataType.Securities, Helper.RandomSecurities(10), fields);
+		return Import(DataType.Securities, Helper.RandomSecurities(10), fields);
 	}
 
 	[TestMethod]
-	public void Boards()
+	public Task Boards()
 	{
 		var allFields = FieldMappingRegistry.CreateFields(DataType.Board).ToArray();
 		var fields = new[]
@@ -263,6 +265,6 @@ public class ImportTests
 			//allFields.First(f => f.Name == "ExpiryTime"),
 			//allFields.First(f => f.Name == "TimeZone"),
 		};
-		Import(DataType.Board, Helper.RandomBoards(10), fields);
+		return Import(DataType.Board, Helper.RandomBoards(10), fields);
 	}
 }

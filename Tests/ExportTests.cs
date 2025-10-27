@@ -8,60 +8,60 @@ public class ExportTests
 	private static readonly TemplateTxtRegistry _txtReg = new();
 
 	[TestMethod]
-	public void Ticks()
+	public Task Ticks()
 	{
 		var security = Helper.CreateStorageSecurity();
 		var ticks = security.RandomTicks(1000, true);
 
-		Export(DataType.Ticks, ticks, "tick_export", _txtReg.TemplateTxtTick);
+		return Export(DataType.Ticks, ticks, "tick_export", _txtReg.TemplateTxtTick);
 	}
 
 	[TestMethod]
-	public void Depths()
+	public Task Depths()
 	{
 		var security = Helper.CreateStorageSecurity();
 		var depths = security.RandomDepths(100, ordersCount: true);
 
-		Export(DataType.MarketDepth, depths, "depth_export", _txtReg.TemplateTxtDepth);
+		return Export(DataType.MarketDepth, depths, "depth_export", _txtReg.TemplateTxtDepth);
 	}
 
 	[TestMethod]
-	public void OrderLog()
+	public Task OrderLog()
 	{
 		var security = Helper.CreateStorageSecurity();
 		var ol = security.RandomOrderLog(1000);
 
-		Export(DataType.OrderLog, ol, "ol_export", _txtReg.TemplateTxtOrderLog);
+		return Export(DataType.OrderLog, ol, "ol_export", _txtReg.TemplateTxtOrderLog);
 	}
 
 	[TestMethod]
-	public void Positions()
+	public Task Positions()
 	{
 		var security = Helper.CreateStorageSecurity();
 		var pos = security.RandomPositionChanges(1000);
 
-		Export(DataType.PositionChanges, pos, "pos_export", _txtReg.TemplateTxtPositionChange);
+		return Export(DataType.PositionChanges, pos, "pos_export", _txtReg.TemplateTxtPositionChange);
 	}
 
 	[TestMethod]
-	public void News()
+	public Task News()
 	{
 		var news = Helper.RandomNews();
 
-		Export(DataType.News, news, "news_export", _txtReg.TemplateTxtNews);
+		return Export(DataType.News, news, "news_export", _txtReg.TemplateTxtNews);
 	}
 
 	[TestMethod]
-	public void Level1()
+	public Task Level1()
 	{
 		var security = Helper.CreateStorageSecurity();
 		var level1 = security.RandomLevel1(count: 1000);
 
-		Export(DataType.Level1, level1, "level1_export", _txtReg.TemplateTxtLevel1);
+		return Export(DataType.Level1, level1, "level1_export", _txtReg.TemplateTxtLevel1);
 	}
 
 	[TestMethod]
-	public void Candles()
+	public async Task Candles()
 	{
 		var security = Helper.CreateStorageSecurity();
 
@@ -70,12 +70,12 @@ public class ExportTests
 		foreach (var group in candles.GroupBy(c => Tuple.Create(c.GetType(), c.Arg)))
 		{
 			var name = $"candles_{group.Key.Item1.Name}_{group.Key.Item2}_export".Replace(":", "_");
-			Export(DataType.Create(group.Key.Item1, group.Key.Item2), group.ToArray(), name, _txtReg.TemplateTxtCandle);
+			await Export(DataType.Create(group.Key.Item1, group.Key.Item2), group.ToArray(), name, _txtReg.TemplateTxtCandle);
 		}
 	}
 
 	[TestMethod]
-	public void Indicator()
+	public Task Indicator()
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
@@ -95,47 +95,47 @@ public class ExportTests
 			});
 		}
 
-		Export(TraderHelper.IndicatorValue, values, "indicator_export", _txtReg.TemplateTxtIndicator);
+		return Export(TraderHelper.IndicatorValue, values, "indicator_export", _txtReg.TemplateTxtIndicator);
 	}
 
 	[TestMethod]
-	public void Board()
+	public Task Board()
 	{
 		var boards = Helper.RandomBoards(100);
-		Export(DataType.Board, boards, "board_export", _txtReg.TemplateTxtBoard);
+		return Export(DataType.Board, boards, "board_export", _txtReg.TemplateTxtBoard);
 	}
 
 	[TestMethod]
-	public void BoardState()
+	public Task BoardState()
 	{
 		var boardStates = Helper.RandomBoardStates();
-		Export(DataType.BoardState, boardStates, "boardstate_export", _txtReg.TemplateTxtBoardState);
+		return Export(DataType.BoardState, boardStates, "boardstate_export", _txtReg.TemplateTxtBoardState);
 	}
 
 	[TestMethod]
-	public void Security()
+	public Task Security()
 	{
 		var securities = Helper.RandomSecurities(100);
-		Export(DataType.Securities, securities, "security_export", _txtReg.TemplateTxtSecurity);
+		return Export(DataType.Securities, securities, "security_export", _txtReg.TemplateTxtSecurity);
 	}
 
-	private static void Export<TValue>(
+	private static async Task Export<TValue>(
 		DataType dataType, IEnumerable<TValue> values,
 		string fileNameNoExt, string txtTemplate)
 		where TValue : class
 	{
 		var arr = values.ToArray();
 
-		void Do(string extension, Func<Stream, BaseExporter> create)
+		Task Do(string extension, Func<Stream, BaseExporter> create)
 		{
 			using var stream = File.OpenWrite(Helper.GetSubTemp($"{fileNameNoExt}.{extension}"));
 			var export = create(stream);
-			export.Export(arr);
+			return export.Export(arr, CancellationToken.None);
 		}
 
-		Do("txt", f => new TextExporter(dataType, i => false, f, txtTemplate, null));
-		Do("xml", f => new XmlExporter(dataType, i => false, f));
-		Do("json", f => new JsonExporter(dataType, i => false, f));
-		Do("xlsx", f => new ExcelExporter(ServicesRegistry.ExcelProvider, dataType, i => false, f, () => { }));
+		await Do("txt", f => new TextExporter(dataType, f, txtTemplate, null));
+		await Do("xml", f => new XmlExporter(dataType, f));
+		await Do("json", f => new JsonExporter(dataType, f));
+		await Do("xlsx", f => new ExcelExporter(ServicesRegistry.ExcelProvider, dataType, f, () => { }));
 	}
 }

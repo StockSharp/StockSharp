@@ -7,11 +7,10 @@ namespace StockSharp.Algo.Export;
 /// Initializes a new instance of the <see cref="StockSharpExporter"/>.
 /// </remarks>
 /// <param name="dataType">Data type info.</param>
-/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 /// <param name="storageRegistry">The storage of market data.</param>
 /// <param name="drive">Storage.</param>
 /// <param name="format">Format type.</param>
-public class StockSharpExporter(DataType dataType, Func<int, bool> isCancelled, IStorageRegistry storageRegistry, IMarketDataDrive drive, StorageFormats format) : BaseExporter(dataType, isCancelled)
+public class StockSharpExporter(DataType dataType, IStorageRegistry storageRegistry, IMarketDataDrive drive, StorageFormats format) : BaseExporter(dataType)
 {
 	private readonly IStorageRegistry _storageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
 	private readonly IMarketDataDrive _drive = drive ?? throw new ArgumentNullException(nameof(drive));
@@ -32,7 +31,7 @@ public class StockSharpExporter(DataType dataType, Func<int, bool> isCancelled, 
 		}
 	}
 
-	private (int, DateTimeOffset?) Export(IEnumerable<Message> messages)
+	private Task<(int, DateTimeOffset?)> Export(IEnumerable<Message> messages, CancellationToken cancellationToken)
 	{
 		var count = 0;
 		var lastTime = default(DateTimeOffset?);
@@ -45,8 +44,7 @@ public class StockSharpExporter(DataType dataType, Func<int, bool> isCancelled, 
 
 				var storage = _storageRegistry.GetStorage(group.Key ?? default, DataType, _drive, format);
 
-				if (!CanProcess(b.Length))
-					break;
+				cancellationToken.ThrowIfCancellationRequested();
 
 				storage.Save(b);
 
@@ -57,52 +55,54 @@ public class StockSharpExporter(DataType dataType, Func<int, bool> isCancelled, 
 			}
 		}
 
-		return (count, lastTime);
+		return (count, lastTime).FromResult();
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) ExportOrderLog(IEnumerable<ExecutionMessage> messages)
-		=> Export(messages);
+	protected override Task<(int, DateTimeOffset?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+		=> Export(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) ExportTicks(IEnumerable<ExecutionMessage> messages)
-		=> Export(messages);
+	protected override Task<(int, DateTimeOffset?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+		=> Export(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) ExportTransactions(IEnumerable<ExecutionMessage> messages)
-		=> Export(messages);
+	protected override Task<(int, DateTimeOffset?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+		=> Export(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<QuoteChangeMessage> messages)
-		=> Export(messages);
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
+		=> Export(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<Level1ChangeMessage> messages)
-		=> Export(messages);
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
+		=> Export(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<PositionChangeMessage> messages)
-		=> Export(messages);
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
+		=> Export(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<IndicatorValue> values) => throw new NotSupportedException();
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
+		=> throw new NotSupportedException();
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<CandleMessage> messages)
-		=> Export(messages);
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
+		=> Export(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<NewsMessage> messages)
-		=> Export(messages);
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
+		=> Export(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<SecurityMessage> messages) => throw new NotSupportedException();
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
+		=> throw new NotSupportedException();
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<BoardStateMessage> messages)
-		=> Export(messages);
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
+		=> Export(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<BoardMessage> messages)
-		=> Export(messages);
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
+		=> Export(messages, cancellationToken);
 }

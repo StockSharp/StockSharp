@@ -10,17 +10,18 @@ using Ecng.Interop;
 /// </remarks>
 /// <param name="provider">Excel provider.</param>
 /// <param name="dataType">Data type info.</param>
-/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 /// <param name="stream">The stream to write to.</param>
 /// <param name="breaked">The processor, which will be called if maximal value of strings is exceeded.</param>
-public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Func<int, bool> isCancelled, Stream stream, Action breaked) : BaseExporter(dataType, isCancelled)
+public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Stream stream, Action breaked) : BaseExporter(dataType)
 {
 	private readonly IExcelWorkerProvider _provider = provider ?? throw new ArgumentNullException(nameof(provider));
 	private readonly Action _breaked = breaked ?? throw new ArgumentNullException(nameof(breaked));
+	private CancellationToken _cancellationToken;
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) ExportOrderLog(IEnumerable<ExecutionMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
+		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			worker
@@ -73,8 +74,9 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) ExportTicks(IEnumerable<ExecutionMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
+		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			worker
@@ -116,8 +118,9 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) ExportTransactions(IEnumerable<ExecutionMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
+		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			worker
@@ -173,8 +176,9 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<QuoteChangeMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
 	{
+		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			var count = 0;
@@ -220,8 +224,9 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<Level1ChangeMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
 	{
+		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			var columns = new Dictionary<Level1Fields, int>();
@@ -290,8 +295,9 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<PositionChangeMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
 	{
+		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			var columns = new Dictionary<PositionChangeTypes, int>();
@@ -333,8 +339,9 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<IndicatorValue> values)
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
 	{
+		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			var row = 0;
@@ -380,8 +387,9 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<CandleMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
 	{
+		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			var row = 0;
@@ -421,8 +429,9 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<NewsMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
 	{
+		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			var row = 0;
@@ -464,8 +473,9 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<SecurityMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
 	{
+		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			var colIndex = 0;
@@ -572,8 +582,9 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<BoardStateMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
 	{
+		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			var row = 0;
@@ -604,8 +615,9 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 	}
 
 	/// <inheritdoc />
-	protected override (int, DateTimeOffset?) Export(IEnumerable<BoardMessage> messages)
+	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
 	{
+		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			var row = 0;
@@ -634,7 +646,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 		});
 	}
 
-	private (int, DateTimeOffset?) Do(Func<IExcelWorker, (int, DateTimeOffset?)> action)
+	private Task<(int, DateTimeOffset?)> Do(Func<IExcelWorker, (int, DateTimeOffset?)> action)
 	{
 		if (action is null)
 			throw new ArgumentNullException(nameof(action));
@@ -645,7 +657,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 			.AddSheet()
 			.RenameSheet(LocalizedStrings.Export);
 
-		return action(worker);
+		return action(worker).FromResult();
 	}
 
 	private bool Check(int index)
@@ -654,7 +666,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Fun
 		if (index < 1048576)
 		//if (index < (ushort.MaxValue - 1))
 		{
-			return CanProcess();
+			return !_cancellationToken.IsCancellationRequested;
 		}
 		else
 		{
