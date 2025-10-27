@@ -271,7 +271,7 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 	/// <returns>The result of the multiplication.</returns>
 	public static Unit operator *(Unit u1, Unit u2)
 	{
-		return CreateResult(u1, u2, (v1, v2) => v1 * v2, (nonPer, per) => nonPer * per);
+		return CreateResult(u1, u2, (v1, v2) => v1 * v2, (nonPer, per) => per);
 	}
 
 	/// <summary>

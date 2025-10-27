@@ -104,6 +104,7 @@ public class UnitTests
 		(1 / u == 10).AssertTrue();
 		(1 + u == 1.1m).AssertTrue();
 		(1 - u == 0.9m).AssertTrue();
+		(500 * u == 50).AssertTrue();
 	}
 
 	[TestMethod]
@@ -328,6 +329,9 @@ public class UnitTests
 	{
 		//result.Security.AssertSame(security);
 
+		// Check if operation is multiplication
+		var isMultiply = !transAbs && opr(10, 2) == 20;
+
 		if (u1.Type == u2.Type)
 		{
 			var resultValue = opr(u1.Value, u2.Value);
@@ -356,7 +360,9 @@ public class UnitTests
 
 				per = (abs.Abs() * per) / 100;
 
-				var resultValue = u1.Type != UnitTypes.Percent ? opr(abs, per) : opr(per, abs);
+				// For multiplication, the result is just 'per' (already calculated percentage value)
+				// For other operations, apply the operation
+				var resultValue = isMultiply ? per : (u1.Type != UnitTypes.Percent ? opr(abs, per) : opr(per, abs));
 
 				result.Value.AssertEqual(resultValue);
 			}
