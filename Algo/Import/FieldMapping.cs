@@ -259,21 +259,6 @@ public abstract class FieldMapping : NotifiableObject, IPersistable, ICloneable
 
 		object fastParserConverter(string str)
 		{
-			if (Type == typeof(DateTimeOffset))
-			{
-				var dto = _dateParser.ParseDto(str);
-
-				if (dto.Offset == default)
-				{
-					var tz = Scope<TimeZoneInfo>.Current?.Value;
-
-					if (tz != null)
-						dto = dto.UtcDateTime.ApplyTimeZone(tz);
-				}
-
-				return dto;
-			}
-
 			return _dateParser.Parse(str);
 		}
 

@@ -101,17 +101,6 @@ public class CsvParser : BaseLogReceiver
 		}
 	}
 
-	private TimeZoneInfo _timeZone = TimeZoneInfo.Utc;
-
-	/// <summary>
-	/// Time zone.
-	/// </summary>
-	public TimeZoneInfo TimeZone
-	{
-		get => _timeZone;
-		set => _timeZone = value ?? throw new ArgumentNullException(nameof(value));
-	}
-
 	/// <summary>
 	/// Parse CSV file.
 	/// </summary>
@@ -124,7 +113,6 @@ public class CsvParser : BaseLogReceiver
 
 		var columnSeparator = ColumnSeparator.ReplaceIgnoreCase("TAB", "\t");
 
-		using (TimeZone.ToScope())
 		using (var reader = new CsvFileReader(stream, LineSeparator) { Delimiter = columnSeparator[0] })
 		{
 			var skipLines = SkipFromHeader;

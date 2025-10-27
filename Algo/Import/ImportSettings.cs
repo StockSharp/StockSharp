@@ -18,7 +18,6 @@ public class ImportSettings : NotifiableObject, IPersistable
 		FileMask = "*.csv";
 		SkipFromHeader = 0;
 		ColumnSeparator = ",";
-		TimeZone = TimeZoneInfo.Utc;
 		UpdateDuplicateSecurities = true;
 		IgnoreNonIdSecurities = true;
 	}
@@ -222,28 +221,6 @@ public class ImportSettings : NotifiableObject, IPersistable
 		}
 	}
 
-	private TimeZoneInfo _timeZone;
-
-	/// <summary>
-	/// Time zone.
-	/// </summary>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.TimeZoneKey,
-		Description = LocalizedStrings.TimeZoneKey + LocalizedStrings.Dot,
-		GroupName = LocalizedStrings.CommonKey,
-		Order = 7)]
-	[BasicSetting]
-	public TimeZoneInfo TimeZone
-	{
-		get => _timeZone;
-		set
-		{
-			_timeZone = value ?? throw new ArgumentNullException(nameof(value));
-			NotifyChanged();
-		}
-	}
-
 	private TimeSpan _interval;
 
 	/// <summary>
@@ -414,7 +391,6 @@ public class ImportSettings : NotifiableObject, IPersistable
 		ColumnSeparator = storage.GetValue(nameof(ColumnSeparator), ColumnSeparator);
 		LineSeparator = storage.GetValue(nameof(LineSeparator), LineSeparator);
 		SkipFromHeader = storage.GetValue(nameof(SkipFromHeader), SkipFromHeader);
-		TimeZone = storage.GetValue(nameof(TimeZone), TimeZone);
 		UpdateDuplicateSecurities = storage.GetValue(nameof(UpdateDuplicateSecurities), UpdateDuplicateSecurities);
 		IgnoreNonIdSecurities = storage.GetValue(nameof(IgnoreNonIdSecurities), IgnoreNonIdSecurities);
 		Interval = storage.GetValue(nameof(Interval), Interval);
@@ -437,7 +413,6 @@ public class ImportSettings : NotifiableObject, IPersistable
 		storage.SetValue(nameof(ColumnSeparator), ColumnSeparator);
 		storage.SetValue(nameof(LineSeparator), LineSeparator);
 		storage.SetValue(nameof(SkipFromHeader), SkipFromHeader);
-		storage.SetValue(nameof(TimeZone), TimeZone);
 		storage.SetValue(nameof(UpdateDuplicateSecurities), UpdateDuplicateSecurities);
 		storage.SetValue(nameof(IgnoreNonIdSecurities), IgnoreNonIdSecurities);
 		storage.SetValue(nameof(Interval), Interval);
@@ -503,7 +478,6 @@ public class ImportSettings : NotifiableObject, IPersistable
 		parser.ColumnSeparator = ColumnSeparator;
 		parser.LineSeparator = LineSeparator;
 		parser.SkipFromHeader = SkipFromHeader;
-		parser.TimeZone = TimeZone;
 		parser.ExtendedInfoStorageItem = ExtendedStorage;
 		parser.IgnoreNonIdSecurities = IgnoreNonIdSecurities;
 	}
