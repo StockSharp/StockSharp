@@ -3,8 +3,10 @@ namespace StockSharp.Tests;
 using StockSharp.Algo.Export;
 using StockSharp.Algo.Import;
 
+using Ecng.Linq;
+
 [TestClass]
-public class ImportTests
+public class ImportTests : BaseTestClass
 {
 	private static string GetTemplate(DataType dataType)
 	{
@@ -36,7 +38,7 @@ public class ImportTests
 			throw new ArgumentOutOfRangeException(nameof(dataType), dataType, "Unsupported data type for import test.");
 	}
 
-	private static async Task Import<TValue>(DataType dataType, IEnumerable<TValue> values, FieldMapping[] fields)
+	private async Task Import<TValue>(DataType dataType, IEnumerable<TValue> values, FieldMapping[] fields)
 		where TValue : class
 	{
 		var arr = values.ToArray();
@@ -46,7 +48,7 @@ public class ImportTests
 		for (var i = 0; i < fields.Length; i++)
 			fields[i].Order = i;
 
-		var token = CancellationToken.None;
+		var token = CancellationToken;
 
 		using var stream = File.Create(Helper.GetSubTemp($"{dataType.DataTypeToFileName()}_import.csv"));
 
@@ -59,7 +61,7 @@ public class ImportTests
 		{
 			ColumnSeparator = ";"
 		};
-		var msgs = parser.Parse(stream, () => false).ToArray();
+		var msgs = await parser.Parse(stream, token).ToArrayAsync2(token);
 
 		msgs.Length.AssertEqual(arr.Length);
 	}

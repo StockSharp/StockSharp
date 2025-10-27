@@ -32,13 +32,12 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 	/// </summary>
 	/// <param name="stream">Thr file stream.</param>
 	/// <param name="updateProgress">Progress notification.</param>
-	/// <param name="isCancelled">The processor, returning process interruption sign.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Count and last time.</returns>
-	public (int, DateTimeOffset?) Import(Stream stream, Action<int> updateProgress, Func<bool> isCancelled)
+	public async ValueTask<(int, DateTimeOffset?)> Import(Stream stream, Action<int> updateProgress, CancellationToken cancellationToken)
 	{
 		ArgumentNullException.ThrowIfNull(stream);
 		ArgumentNullException.ThrowIfNull(updateProgress);
-		ArgumentNullException.ThrowIfNull(isCancelled);
 
 		var count = 0;
 		var lastTime = default(DateTimeOffset?);
@@ -65,7 +64,7 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 
 			var isSecurityRequired = DataType.IsSecurityRequired;
 
-			foreach (var msg in Parse(stream, isCancelled))
+			await foreach (var msg in Parse(stream, cancellationToken).WithEnforcedCancellation(cancellationToken))
 			{
 				if (msg is SecurityMappingMessage)
 					continue;

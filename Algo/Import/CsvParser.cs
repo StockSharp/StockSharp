@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Import;
 
+using System.Runtime.CompilerServices;
+
 /// <summary>
 /// Messages parser from text file in CSV format.
 /// </summary>
@@ -114,12 +116,11 @@ public class CsvParser : BaseLogReceiver
 	/// Parse CSV file.
 	/// </summary>
 	/// <param name="stream">The file stream.</param>
-	/// <param name="isCancelled">The processor, returning process interruption sign.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Parsed instances.</returns>
-	public IEnumerable<Message> Parse(Stream stream, Func<bool> isCancelled)
+	public async IAsyncEnumerable<Message> Parse(Stream stream, [EnumeratorCancellation]CancellationToken cancellationToken)
 	{
 		ArgumentNullException.ThrowIfNull(stream);
-		ArgumentNullException.ThrowIfNull(isCancelled);
 
 		var columnSeparator = ColumnSeparator.ReplaceIgnoreCase("TAB", "\t");
 
@@ -136,7 +137,6 @@ public class CsvParser : BaseLogReceiver
 			var cells = new List<string>();
 
 			var isDepth = DataType == DataType.MarketDepth;
-			var isSecurities = DataType == DataType.Securities;
 
 			var quoteMsg = isDepth ? new QuoteChangeMessage() : null;
 			var bids = isDepth ? new List<QuoteChange>() : null;
@@ -171,10 +171,9 @@ public class CsvParser : BaseLogReceiver
 
 			var adapters = new Dictionary<Type, IMessageAdapter>();
 
-			while (reader.ReadRow(cells))
+			while (await reader.ReadRowAsync(cells, cancellationToken))
 			{
-				if (isCancelled())
-					break;
+				cancellationToken.ThrowIfCancellationRequested();
 
 				lineIndex++;
 
@@ -184,7 +183,7 @@ public class CsvParser : BaseLogReceiver
 					continue;
 				}
 
-				dynamic instance = CreateInstance(isDepth, isSecurities);
+				dynamic instance = CreateInstance(isDepth);
 
 				var mappings = new Dictionary<string, SecurityIdMapping>(StringComparer.InvariantCultureIgnoreCase);
 
@@ -308,18 +307,11 @@ public class CsvParser : BaseLogReceiver
 		}
 	}
 
-	/// <summary>
-	/// Create instance for the specified type.
-	/// </summary>
-	/// <returns>Instance.</returns>
-	private object CreateInstance(bool isDepth, bool isSecurities)
+	private object CreateInstance(bool isDepth)
 	{
 		var instance = isDepth
 			? new TimeQuoteChange()
 			: DataType.MessageType.CreateInstance<object>();
-
-		//if (isSecurities && ExtendedInfoStorageItem != null)
-		//	((SecurityMessage)instance).ExtensionInfo = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 
 		return instance;
 	}
