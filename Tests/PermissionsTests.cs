@@ -16,9 +16,7 @@ public class PermissionsTests
 
 	private static SecureString ToSecureString(string s)
 	{
-		var secureString = s.Secure();
-		secureString.MakeReadOnly();
-		return secureString;
+		return s.Secure().ReadOnly();
 	}
 
 	#region PermissionCredentials Tests
@@ -649,7 +647,7 @@ public class PermissionsTests
 		var sessionId = await auth.ValidateCredentials(login, password, _ip1, default);
 
 		sessionId.AssertNotNull();
-		Assert.IsTrue(sessionId.Length > 0);
+		(sessionId.Length > 0).AssertTrue();
 	}
 
 	[TestMethod]
@@ -672,7 +670,7 @@ public class PermissionsTests
 		var sessionId = await auth.ValidateCredentials(login, password, _ip1, default);
 
 		sessionId.AssertNotNull();
-		Assert.IsTrue(sessionId.Length > 0);
+		(sessionId.Length > 0).AssertTrue();
 	}
 
 	[TestMethod]

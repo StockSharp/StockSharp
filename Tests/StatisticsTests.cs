@@ -1331,7 +1331,7 @@ public class StatisticsTests
 		parameter.Add(new(marketTime, 1, -25m));
 
 		// Assert - profit factor should be > 1
-		Assert.IsTrue(parameter.Value > 1);
+		(parameter.Value > 1).AssertTrue();
 	}
 
 	[TestMethod]
