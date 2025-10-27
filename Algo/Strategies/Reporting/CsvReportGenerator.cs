@@ -18,21 +18,17 @@ public class CsvReportGenerator : BaseReportGenerator
 	public override string Extension => "csv";
 
 	/// <inheritdoc />
-	public override ValueTask Generate(Strategy strategy, Stream stream, CancellationToken cancellationToken)
+	public override async ValueTask Generate(Strategy strategy, Stream stream, CancellationToken cancellationToken)
 	{
 		using var writer = new StreamWriter(stream, Encoding, leaveOpen: true);
 
-		void WriteValues(params object[] values)
+		async Task WriteValuesAsync(params object[] values)
 		{
 			if (values is null)
 				throw new ArgumentNullException(nameof(values));
 
-			cancellationToken.ThrowIfCancellationRequested();
-
 			for (var i = 0; i < values.Length; i++)
 			{
-				cancellationToken.ThrowIfCancellationRequested();
-
 				var value = values[i];
 
 				if (value is DateTimeOffset dto)
@@ -40,38 +36,40 @@ public class CsvReportGenerator : BaseReportGenerator
 				else if (value is TimeSpan ts)
 					value = ts.Format();
 
-				writer.Write(value);
+				var str = value?.ToString() ?? string.Empty;
 
-				if (i < (values.Length - 1))
-					writer.Write(_separator);
+				await writer.WriteAsync(str.AsMemory(), cancellationToken);
+
+				if (i < (values.Length -1))
+					await writer.WriteAsync(_separator.AsMemory(), cancellationToken);
 			}
 
-			writer.WriteLine();
+			await writer.WriteLineAsync();
 		}
 
-		WriteValues(LocalizedStrings.Strategy, LocalizedStrings.WorkingTime, LocalizedStrings.Position, LocalizedStrings.PnL, LocalizedStrings.Commission, LocalizedStrings.Slippage, LocalizedStrings.Latency);
-		WriteValues(strategy.Name, strategy.TotalWorkingTime, strategy.Position, strategy.PnL, strategy.Commission, strategy.Slippage, strategy.Latency);
+		await WriteValuesAsync(LocalizedStrings.Strategy, LocalizedStrings.WorkingTime, LocalizedStrings.Position, LocalizedStrings.PnL, LocalizedStrings.Commission, LocalizedStrings.Slippage, LocalizedStrings.Latency);
+		await WriteValuesAsync(strategy.Name, strategy.TotalWorkingTime, strategy.Position, strategy.PnL, strategy.Commission, strategy.Slippage, strategy.Latency);
 
 		var parameters = strategy.GetParameters();
-		WriteValues(LocalizedStrings.Parameters);
-		WriteValues([.. parameters.Select(p => (object)p.GetName())]);
-		WriteValues([.. parameters.Select(p => p.Value is TimeSpan ts ? ts.Format() : p.Value)]);
+		await WriteValuesAsync(LocalizedStrings.Parameters);
+		await WriteValuesAsync([.. parameters.Select(p => (object)p.GetName())]);
+		await WriteValuesAsync([.. parameters.Select(p => p.Value is TimeSpan ts ? ts.Format() : p.Value)]);
 
 		var statParameters = strategy.StatisticManager.Parameters;
-		WriteValues(LocalizedStrings.Statistics);
-		WriteValues([.. statParameters.Select(p => (object)p.Name)]);
-		WriteValues([.. statParameters.Select(p => p.Value is TimeSpan ts ? ts.Format() : (p.Value is DateTimeOffset dto ? dto.Format() : p.Value))]);
+		await WriteValuesAsync(LocalizedStrings.Statistics);
+		await WriteValuesAsync([.. statParameters.Select(p => (object)p.Name)]);
+		await WriteValuesAsync([.. statParameters.Select(p => p.Value is TimeSpan ts ? ts.Format() : (p.Value is DateTimeOffset dto ? dto.Format() : p.Value))]);
 
 		if (IncludeOrders)
 		{
-			WriteValues(LocalizedStrings.Orders);
-			WriteValues(LocalizedStrings.Identifier, LocalizedStrings.Transaction, LocalizedStrings.Direction, LocalizedStrings.Time, LocalizedStrings.Price,
+			await WriteValuesAsync(LocalizedStrings.Orders);
+			await WriteValuesAsync(LocalizedStrings.Identifier, LocalizedStrings.Transaction, LocalizedStrings.Direction, LocalizedStrings.Time, LocalizedStrings.Price,
 				LocalizedStrings.Status, LocalizedStrings.State, LocalizedStrings.Balance,
 				LocalizedStrings.Volume, LocalizedStrings.Type, LocalizedStrings.LatencyReg, LocalizedStrings.LatencyCancel, LocalizedStrings.EditionLatency);
 
 			foreach (var order in strategy.Orders)
 			{
-				WriteValues(order.Id, order.TransactionId, order.Side.GetDisplayName(), order.Time, order.Price,
+				await WriteValuesAsync(order.Id, order.TransactionId, order.Side.GetDisplayName(), order.Time, order.Price,
 					order.State.GetDisplayName(), order.IsMatched() ? LocalizedStrings.Done : (order.IsCanceled() ? LocalizedStrings.Cancelled : string.Empty), order.Balance,
 						order.Volume, order.Type.GetDisplayName(), order.LatencyRegistration.Format(), order.LatencyCancellation.Format(), order.LatencyEdition.Format());
 			}
@@ -79,17 +77,15 @@ public class CsvReportGenerator : BaseReportGenerator
 
 		if (IncludeTrades)
 		{
-			WriteValues(LocalizedStrings.Trades);
-			WriteValues(LocalizedStrings.Identifier, LocalizedStrings.Transaction, LocalizedStrings.Time, LocalizedStrings.Price, LocalizedStrings.Volume,
+			await WriteValuesAsync(LocalizedStrings.Trades);
+			await WriteValuesAsync(LocalizedStrings.Identifier, LocalizedStrings.Transaction, LocalizedStrings.Time, LocalizedStrings.Price, LocalizedStrings.Volume,
 				LocalizedStrings.Direction, LocalizedStrings.OrderId, LocalizedStrings.PnL, LocalizedStrings.Slippage);
 
 			foreach (var trade in strategy.MyTrades)
 			{
-				WriteValues(trade.Trade.Id, trade.Order.TransactionId, trade.Trade.ServerTime.Format(), trade.Trade.Price, trade.Trade.Volume,
+				await WriteValuesAsync(trade.Trade.Id, trade.Order.TransactionId, trade.Trade.ServerTime.Format(), trade.Trade.Price, trade.Trade.Volume,
 					trade.Order.Side.GetDisplayName(), trade.Order.Id, trade.PnL, trade.Slippage);
 			}
 		}
-
-		return default;
 	}
 }

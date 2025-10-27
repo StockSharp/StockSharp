@@ -14,30 +14,32 @@ public class XmlReportGenerator : BaseReportGenerator
 	public override string Extension => "xml";
 
 	/// <inheritdoc />
-	public override ValueTask Generate(Strategy strategy, Stream stream, CancellationToken cancellationToken)
+	public override async ValueTask Generate(Strategy strategy, Stream stream, CancellationToken cancellationToken)
 	{
-		using var writer = new XmlTextWriter(new StreamWriter(stream, Encoding, leaveOpen: true)) { Formatting = Formatting.Indented };
+		var settings = new XmlWriterSettings
+		{
+			Indent = true,
+			CloseOutput = false,
+			Async = true,
+		};
 
-		void WriteStartElement(string name)
-			=> writer.WriteStartElement(name);
+		using var writer = XmlWriter.Create(new StreamWriter(stream, Encoding, leaveOpen: true), settings);
 
-		void WriteEndElement()
-			=> writer.WriteEndElement();
+		Task WriteStartElement(string name) => writer.WriteStartElementAsync(null, name, null);
+		Task WriteEndElement() => writer.WriteEndElementAsync();
+		Task WriteAttributeString(string name, object value) => writer.WriteAttributeStringAsync(null, name, null, value is TimeSpan ts ? ts.Format() : (value is DateTimeOffset dto ? dto.Format() : value.To<string>()));
 
-		void WriteAttributeString(string name, object value)
-			=> writer.WriteAttributeString(name, value is TimeSpan ts ? ts.Format() : (value is DateTimeOffset dto ? dto.Format() : value.To<string>()));
+		await WriteStartElement("strategy");
 
-		WriteStartElement("strategy");
+		await WriteAttributeString("name", strategy.Name);
+		await WriteAttributeString("totalWorkingTime", strategy.TotalWorkingTime);
+		await WriteAttributeString("commission", strategy.Commission);
+		await WriteAttributeString("position", strategy.Position);
+		await WriteAttributeString("PnL", strategy.PnL);
+		await WriteAttributeString("slippage", strategy.Slippage);
+		await WriteAttributeString("latency", strategy.Latency);
 
-		WriteAttributeString("name", strategy.Name);
-		WriteAttributeString("totalWorkingTime", strategy.TotalWorkingTime);
-		WriteAttributeString("commission", strategy.Commission);
-		WriteAttributeString("position", strategy.Position);
-		WriteAttributeString("PnL", strategy.PnL);
-		WriteAttributeString("slippage", strategy.Slippage);
-		WriteAttributeString("latency", strategy.Latency);
-
-		WriteStartElement("parameters");
+		await WriteStartElement("parameters");
 
 		foreach (var p in strategy.GetParameters())
 		{
@@ -46,86 +48,84 @@ public class XmlReportGenerator : BaseReportGenerator
 			if (p.Value is WorkingTime)
 				continue;
 
-			WriteStartElement("parameter");
+			await WriteStartElement("parameter");
 
-			WriteAttributeString("name", p.GetName());
-			WriteAttributeString("value", p.Value);
+			await WriteAttributeString("name", p.GetName());
+			await WriteAttributeString("value", p.Value);
 
-			WriteEndElement();
+			await WriteEndElement();
 		}
 
-		WriteEndElement();
+		await WriteEndElement();
 
-		WriteStartElement("statistics");
+		await WriteStartElement("statistics");
 
 		foreach (var p in strategy.StatisticManager.Parameters)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
-			WriteStartElement("parameter");
+			await WriteStartElement("parameter");
 
-			WriteAttributeString("name", p.Name);
-			WriteAttributeString("value", p.Value);
+			await WriteAttributeString("name", p.Name);
+			await WriteAttributeString("value", p.Value);
 
-			WriteEndElement();
+			await WriteEndElement();
 		}
 
-		WriteEndElement();
+		await WriteEndElement();
 
 		if (IncludeOrders)
 		{
-			WriteStartElement("orders");
+			await WriteStartElement("orders");
 
 			foreach (var o in strategy.Orders)
 			{
 				cancellationToken.ThrowIfCancellationRequested();
 
-				WriteStartElement("order");
+				await WriteStartElement("order");
 
-				WriteAttributeString("id", o.Id);
-				WriteAttributeString("transactionId", o.TransactionId);
-				WriteAttributeString("direction", o.Side);
-				WriteAttributeString("time", o.Time);
-				WriteAttributeString("price", o.Price);
-				WriteAttributeString("state", o.State);
-				WriteAttributeString("balance", o.Balance);
-				WriteAttributeString("volume", o.Volume);
-				WriteAttributeString("type", o.Type);
-				WriteAttributeString("comment", o.Comment);
+				await WriteAttributeString("id", o.Id);
+				await WriteAttributeString("transactionId", o.TransactionId);
+				await WriteAttributeString("direction", o.Side);
+				await WriteAttributeString("time", o.Time);
+				await WriteAttributeString("price", o.Price);
+				await WriteAttributeString("state", o.State);
+				await WriteAttributeString("balance", o.Balance);
+				await WriteAttributeString("volume", o.Volume);
+				await WriteAttributeString("type", o.Type);
+				await WriteAttributeString("comment", o.Comment);
 
-				WriteEndElement();
+				await WriteEndElement();
 			}
 
-			WriteEndElement();
+			await WriteEndElement();
 		}
 
 		if (IncludeTrades)
 		{
-			WriteStartElement("trades");
+			await WriteStartElement("trades");
 
 			foreach (var t in strategy.MyTrades)
 			{
 				cancellationToken.ThrowIfCancellationRequested();
 
-				WriteStartElement("trade");
+				await WriteStartElement("trade");
 
-				WriteAttributeString("id", t.Trade.Id);
-				WriteAttributeString("transactionId", t.Order.TransactionId);
-				WriteAttributeString("time", t.Trade.ServerTime);
-				WriteAttributeString("price", t.Trade.Price);
-				WriteAttributeString("volume", t.Trade.Volume);
-				WriteAttributeString("order", t.Order.Id);
-				WriteAttributeString("PnL", t.PnL);
-				WriteAttributeString("slippage", t.Slippage);
+				await WriteAttributeString("id", t.Trade.Id);
+				await WriteAttributeString("transactionId", t.Order.TransactionId);
+				await WriteAttributeString("time", t.Trade.ServerTime);
+				await WriteAttributeString("price", t.Trade.Price);
+				await WriteAttributeString("volume", t.Trade.Volume);
+				await WriteAttributeString("order", t.Order.Id);
+				await WriteAttributeString("PnL", t.PnL);
+				await WriteAttributeString("slippage", t.Slippage);
 
-				WriteEndElement();
+				await WriteEndElement();
 			}
 
-			WriteEndElement();
+			await WriteEndElement();
 		}
 
-		WriteEndElement();
-
-		return default;
+		await WriteEndElement();
 	}
 }

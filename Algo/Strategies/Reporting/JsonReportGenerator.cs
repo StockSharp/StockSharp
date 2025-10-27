@@ -14,182 +14,105 @@ public class JsonReportGenerator : BaseReportGenerator
 	public override string Extension => "json";
 
 	/// <inheritdoc />
-	public override ValueTask Generate(Strategy strategy, Stream stream, CancellationToken cancellationToken)
+	public override async ValueTask Generate(Strategy strategy, Stream stream, CancellationToken cancellationToken)
 	{
-		using var writer = new JsonTextWriter(new StreamWriter(stream, Encoding, leaveOpen: true)) { Formatting = Formatting.Indented };
+		using var textWriter = new StreamWriter(stream, Encoding, leaveOpen: true);
+		using var writer = new JsonTextWriter(textWriter) { Formatting = Formatting.Indented };
 
-		void WriteStartElement()
-			=> writer.WriteStartObject();
+		Task WriteStartElement() => writer.WriteStartObjectAsync(cancellationToken);
+		Task WriteEndElement() => writer.WriteEndObjectAsync(cancellationToken);
+		Task WriteStartArray() => writer.WriteStartArrayAsync(cancellationToken);
+		Task WriteEndArray() => writer.WriteEndArrayAsync(cancellationToken);
+		Task WritePropertyName(string name) => writer.WritePropertyNameAsync(name, cancellationToken);
 
-		void WriteEndElement()
-			=> writer.WriteEndObject();
-
-		void WriteStartArray()
-			=> writer.WriteStartArray();
-
-		void WriteEndArray()
-			=> writer.WriteEndArray();
-
-		void WritePropertyName(string name)
-			=> writer.WritePropertyName(name);
-
-		void WriteElementString(string name, object value)
+		async Task WriteElementAsync(string name, object value)
 		{
-			WritePropertyName(name);
+			await WritePropertyName(name);
 
 			if (value is null)
-			{
-				writer.WriteNull();
-				return;
-			}
-
-			switch (value)
-			{
-				case string s:
-					writer.WriteValue(s);
-					break;
-				case bool b:
-					writer.WriteValue(b);
-					break;
-				case sbyte sb:
-					writer.WriteValue(sb);
-					break;
-				case byte by:
-					writer.WriteValue(by);
-					break;
-				case short sh:
-					writer.WriteValue(sh);
-					break;
-				case ushort ush:
-					writer.WriteValue(ush);
-					break;
-				case int i:
-					writer.WriteValue(i);
-					break;
-				case uint ui:
-					writer.WriteValue(ui);
-					break;
-				case long l:
-					writer.WriteValue(l);
-					break;
-				case ulong ul:
-					writer.WriteValue(ul);
-					break;
-				case float f:
-					writer.WriteValue(f);
-					break;
-				case double d:
-					writer.WriteValue(d);
-					break;
-				case decimal m:
-					writer.WriteValue(m);
-					break;
-				case DateTime dt:
-					writer.WriteValue(dt);
-					break;
-				case DateTimeOffset dto:
-					writer.WriteValue(dto);
-					break;
-				case TimeSpan ts:
-					writer.WriteValue(ts);
-					break;
-				case Guid g:
-					writer.WriteValue(g);
-					break;
-				default:
-					writer.WriteValue(value.To<string>());
-					break;
-			}
+				await writer.WriteNullAsync(cancellationToken);
+			else
+				await writer.WriteValueAsync(value, cancellationToken);
 		}
 
-		WriteStartElement();
+		await WriteStartElement();
 
-		WriteElementString("name", strategy.Name);
+		await WriteElementAsync("name", strategy.Name);
 
 		foreach (var p in strategy.GetParameters())
 		{
-			cancellationToken.ThrowIfCancellationRequested();
-
 			if (p.Value is WorkingTime)
 				continue;
 
-			WriteElementString(p.GetName(), p.Value);
+			await WriteElementAsync(p.GetName(), p.Value);
 		}
 
-		WriteElementString("totalWorkingTime", strategy.TotalWorkingTime);
-		WriteElementString("commission", strategy.Commission);
-		WriteElementString("position", strategy.Position);
-		WriteElementString("PnL", strategy.PnL);
-		WriteElementString("slippage", strategy.Slippage);
-		WriteElementString("latency", strategy.Latency);
+		await WriteElementAsync("totalWorkingTime", strategy.TotalWorkingTime);
+		await WriteElementAsync("commission", strategy.Commission);
+		await WriteElementAsync("position", strategy.Position);
+		await WriteElementAsync("PnL", strategy.PnL);
+		await WriteElementAsync("slippage", strategy.Slippage);
+		await WriteElementAsync("latency", strategy.Latency);
 
-		WritePropertyName("statistics");
-		WriteStartElement();
+		await WritePropertyName("statistics");
+		await WriteStartElement();
 
 		foreach (var p in strategy.StatisticManager.Parameters)
 		{
-			cancellationToken.ThrowIfCancellationRequested();
-
-			WriteElementString(p.Name, p.Value);
+			await WriteElementAsync(p.Name, p.Value);
 		}
 
-		WriteEndElement();
+		await WriteEndElement();
 
 		if (IncludeOrders)
 		{
-			WritePropertyName("orders");
-			WriteStartArray();
+			await WritePropertyName("orders");
+			await WriteStartArray();
 
 			foreach (var o in strategy.Orders)
 			{
-				cancellationToken.ThrowIfCancellationRequested();
+				await WriteStartElement();
 
-				WriteStartElement();
+				await WriteElementAsync("id", o.Id);
+				await WriteElementAsync("transactionId", o.TransactionId);
+				await WriteElementAsync("direction", o.Side);
+				await WriteElementAsync("time", o.Time);
+				await WriteElementAsync("price", o.Price);
+				await WriteElementAsync("state", o.State);
+				await WriteElementAsync("balance", o.Balance);
+				await WriteElementAsync("volume", o.Volume);
+				await WriteElementAsync("type", o.Type);
 
-				WriteElementString("id", o.Id);
-				WriteElementString("transactionId", o.TransactionId);
-				WriteElementString("direction", o.Side);
-				WriteElementString("time", o.Time);
-				WriteElementString("price", o.Price);
-				WriteElementString("state", o.State);
-				WriteElementString("balance", o.Balance);
-				WriteElementString("volume", o.Volume);
-				WriteElementString("type", o.Type);
-
-				WriteEndElement();
+				await WriteEndElement();
 			}
 
-			WriteEndArray();
+			await WriteEndArray();
 		}
 
 		if (IncludeTrades)
 		{
-			WritePropertyName("trades");
-			WriteStartArray();
+			await WritePropertyName("trades");
+			await WriteStartArray();
 
 			foreach (var t in strategy.MyTrades)
 			{
-				cancellationToken.ThrowIfCancellationRequested();
+				await WriteStartElement();
 
-				WriteStartElement();
+				await WriteElementAsync("id", t.Trade.Id);
+				await WriteElementAsync("transactionId", t.Order.TransactionId);
+				await WriteElementAsync("time", t.Trade.ServerTime);
+				await WriteElementAsync("price", t.Trade.Price);
+				await WriteElementAsync("volume", t.Trade.Volume);
+				await WriteElementAsync("order", t.Order.Id);
+				await WriteElementAsync("PnL", t.PnL);
+				await WriteElementAsync("slippage", t.Slippage);
 
-				WriteElementString("id", t.Trade.Id);
-				WriteElementString("transactionId", t.Order.TransactionId);
-				WriteElementString("time", t.Trade.ServerTime);
-				WriteElementString("price", t.Trade.Price);
-				WriteElementString("volume", t.Trade.Volume);
-				WriteElementString("order", t.Order.Id);
-				WriteElementString("PnL", t.PnL);
-				WriteElementString("slippage", t.Slippage);
-
-				WriteEndElement();
+				await WriteEndElement();
 			}
 
-			WriteEndArray();
+			await WriteEndArray();
 		}
 
-		WriteEndElement();
-
-		return default;
+		await WriteEndElement();
 	}
 }
