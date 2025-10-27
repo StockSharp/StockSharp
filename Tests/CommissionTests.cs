@@ -916,13 +916,12 @@ public class CommissionTests
 		result = rule.Process(tradeMsg2);
 		result.AssertEqual(50m); // Turnover reached, commission applied
 
-		// BUG: Third trade should return null (until next threshold reached)
-		// but will return 50m because _currentTurnOver is not reset
+		// After commission application the accumulated turnover is decreased by the threshold (1000),
+		// so the remainder is100. Next small trade won't reach the threshold again and should return null.
 		var tradeMsg3 = CreateTradeMessage(100m, 1m, Inc(ref now));
 		result = rule.Process(tradeMsg3);
-		// Expected: null (need 1000 more turnover)
-		// Actual: 50m (bug - _currentTurnOver not reset after threshold)
-		result.AssertEqual(50m); // This exposes the bug
+		// Expected: null (need1000 more turnover)
+		result.AssertNull();
 	}
 
 	[TestMethod]
@@ -956,8 +955,7 @@ public class CommissionTests
 		result = rule.Process(orderMsg2);
 
 		// Expected (with GetValue): (50 * 10 * 10) / 100 = 50
-		// Actual (current bug): 10 * 10 = 100
-		result.AssertEqual(100m); // This exposes the bug - should be 50
+		result.AssertEqual(50m);
 	}
 
 	[TestMethod]
@@ -975,9 +973,8 @@ public class CommissionTests
 		var tradeMsg = CreateTradeMessage(50m, 10m, Inc(ref now));
 		var result = rule.Process(tradeMsg);
 
-		// BUG: Expected (with GetValue): (50 * 10 * 10) / 100 = 50
-		// Actual (current bug): 10 * 10 = 100
-		result.AssertEqual(100m); // This exposes the bug - should be 50
+		// Expected (with GetValue): (50 * 10 * 10) / 100 = 50
+		result.AssertEqual(50m);
 	}
 
 	[TestMethod]
@@ -995,10 +992,8 @@ public class CommissionTests
 		var tradeMsg = CreateTradeMessage(100m, 5m, Inc(ref now));
 		var result = rule.Process(tradeMsg);
 
-		// BUG: Current code: price * volume * Value = 100 * 5 * 10 = 5000
-		// This is wrong for percent-based commission
 		// Expected (with GetValue): (100 * 5 * 10) / 100 = 50
-		result.AssertEqual(5000m); // This exposes the bug - should be 50
+		result.AssertEqual(50m);
 	}
 
 	// A custom rule class for testing

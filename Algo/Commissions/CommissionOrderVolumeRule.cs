@@ -14,7 +14,7 @@ public class CommissionOrderVolumeRule : CommissionRule
 	public override decimal? Process(ExecutionMessage message)
 	{
 		if (message.HasOrderInfo())
-			return (decimal)(message.OrderVolume * Value);
+			return (decimal)(message.OrderPrice * message.OrderVolume * Value);
 
 		return null;
 	}
