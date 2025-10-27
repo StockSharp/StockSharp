@@ -275,6 +275,8 @@ public class PnLQueue
 			throw new ArgumentNullException(nameof(candleMsg));
 
 		_lastPrice = candleMsg.ClosePrice;
+		_bidPrice = default;
+		_askPrice = default;
 
 		_unrealizedPnL = default;
 	}
@@ -292,6 +294,8 @@ public class PnLQueue
 			return;
 
 		_lastPrice = execMsg.TradePrice.Value;
+		_bidPrice = default;
+		_askPrice = default;
 
 		_unrealizedPnL = default;
 	}
