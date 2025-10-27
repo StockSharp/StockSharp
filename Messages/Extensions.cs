@@ -2001,6 +2001,19 @@ public static partial class Extensions
 	}
 
 	/// <summary>
+	/// Get <see cref="ExecutionMessage.TradeVolume"/>.
+	/// </summary>
+	/// <param name="message">The message contains information about the execution.</param>
+	/// <returns>Trade volume.</returns>
+	public static decimal GetTradeVolume(this ExecutionMessage message)
+	{
+		if (message == null)
+			throw new ArgumentNullException(nameof(message));
+
+		return message.TradeVolume ?? throw new ArgumentOutOfRangeException(nameof(message), null, LocalizedStrings.OrderVolumeNotSpecified);
+	}
+
+	/// <summary>
 	/// Get <see cref="ExecutionMessage.Balance"/>.
 	/// </summary>
 	/// <param name="message">The message contains information about the execution.</param>
