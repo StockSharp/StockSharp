@@ -13,9 +13,19 @@ public class CommissionOrderVolumeRule : CommissionRule
 	/// <inheritdoc />
 	public override decimal? Process(ExecutionMessage message)
 	{
-		if (message.HasOrderInfo())
-			return (decimal)(message.OrderPrice * message.OrderVolume * Value);
+		if (!message.HasOrderInfo())
+			return null;
 
-		return null;
+		var price = message.HasTradeInfo() ? message.TradePrice : message.OrderPrice;
+		var volume = message.HasTradeInfo() ? message.TradeVolume : message.OrderVolume;
+
+		if (Value.Type == UnitTypes.Percent)
+		{
+			// percent of turnover
+			return price * volume * (Value.Value / 100m);
+		}
+
+		// absolute per volume
+		return volume * Value.Value;
 	}
 }
