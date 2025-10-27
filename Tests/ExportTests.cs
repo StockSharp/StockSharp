@@ -127,11 +127,11 @@ public class ExportTests : BaseTestClass
 		var token = CancellationToken;
 		var arr = values.ToArray();
 
-		Task Do(string extension, Func<Stream, BaseExporter> create)
+		async Task Do(string extension, Func<Stream, BaseExporter> create)
 		{
 			using var stream = File.OpenWrite(Helper.GetSubTemp($"{fileNameNoExt}.{extension}"));
 			var export = create(stream);
-			return export.Export(arr, token);
+			await export.Export(arr, token);
 		}
 
 		await Do("txt", f => new TextExporter(dataType, f, txtTemplate, null));
