@@ -22,7 +22,7 @@ public interface IMessageAdapterProvider
 	/// </summary>
 	/// <param name="transactionIdGenerator">Transaction id generator.</param>
 	/// <returns>Message adapter.</returns>
-	IMessageAdapter CreateTransportAdapter(IdGenerator transactionIdGenerator);
+	IAsyncMessageAdapter CreateTransportAdapter(IdGenerator transactionIdGenerator);
 
 	/// <summary>
 	/// Create adapters for StockSharp server connections.
