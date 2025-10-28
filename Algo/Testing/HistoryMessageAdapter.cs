@@ -781,7 +781,7 @@ public class HistoryMessageAdapter : MessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override void SendOutMessage(Message message)
+	public override void SendOutMessage(Message message)
 	{
 		LoadedMessageCount++;
 

@@ -368,6 +368,9 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageChannel>, IMessa
 	public virtual bool IsSecurityRequired(DataType dataType)
 		=> InnerAdapter.IsSecurityRequired(dataType);
 
+	void IMessageAdapter.SendOutMessage(Message message)
+		=> InnerAdapter.SendOutMessage(message);
+
 	/// <inheritdoc />
 	public virtual void Dispose()
 	{

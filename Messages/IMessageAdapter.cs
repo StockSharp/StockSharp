@@ -248,6 +248,12 @@ public interface IMessageAdapter : IMessageChannel, IPersistable, ILogReceiver
 	/// Lookup timeout.
 	/// </summary>
 	TimeSpan? LookupTimeout { get; }
+
+	/// <summary>
+	/// Send outgoing message and raise <see cref="IMessageChannel.NewOutMessage"/> event.
+	/// </summary>
+	/// <param name="message">Message.</param>
+	void SendOutMessage(Message message);
 }
 
 /// <summary>

@@ -1558,7 +1558,8 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		SendOutMessage(error.ToErrorMessage());
 	}
 
-	private void SendOutMessage(Message message)
+	/// <inheritdoc />
+	public void SendOutMessage(Message message)
 	{
 		OnSendOutMessage(message);
 	}

@@ -3677,4 +3677,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		=> new MarketEmulator(SecurityProvider, PortfolioProvider, ExchangeInfoProvider, TransactionIdGenerator) { VerifyMode = VerifyMode };
 
 	object ICloneable.Clone() => ((ICloneable<IMessageChannel>)this).Clone();
+
+	void IMessageAdapter.SendOutMessage(Message message)
+		=> RaiseNewOutMessage(message);
 }

@@ -385,11 +385,8 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 	/// <returns><see langword="true"/> if the specified message was processed successfully, otherwise, <see langword="false"/>.</returns>
 	protected abstract bool OnSendInMessage(Message message);
 
-	/// <summary>
-	/// Send outgoing message and raise <see cref="NewOutMessage"/> event.
-	/// </summary>
-	/// <param name="message">Message.</param>
-	protected internal virtual void SendOutMessage(Message message)
+	/// <inheritdoc />
+	public virtual void SendOutMessage(Message message)
 	{
 		//// do not process empty change msgs
 		//if (!message.IsBack)
