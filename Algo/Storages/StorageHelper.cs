@@ -334,64 +334,14 @@ public static class StorageHelper
 	}
 
 	/// <summary>
-	/// Clear dates cache for storages.
+	/// Get all available data types.
 	/// </summary>
-	/// <param name="drives">Storage drives.</param>
-	/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
-	/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
-	/// <param name="logsReceiver">Logs receiver.</param>
-	public static void ClearDatesCache(this IEnumerable<IMarketDataDrive> drives,
-		Action<int, int> updateProgress, Func<bool> isCancelled, ILogReceiver logsReceiver)
-	{
-		if (drives == null)
-			throw new ArgumentNullException(nameof(drives));
-
-		if (updateProgress == null)
-			throw new ArgumentNullException(nameof(updateProgress));
-
-		if (isCancelled == null)
-			throw new ArgumentNullException(nameof(isCancelled));
-
-		if (logsReceiver == null)
-			throw new ArgumentNullException(nameof(logsReceiver));
-
-		var formats = Enumerator.GetValues<StorageFormats>().ToArray();
-		var progress = 0;
-
-		var marketDataDrives = drives as IMarketDataDrive[] ?? [.. drives];
-		var iterCount = marketDataDrives.Sum(d => d.AvailableSecurities.Count()); // кол-во сбросов кэша дат
-
-		updateProgress(progress, iterCount);
-
-		foreach (var drive in marketDataDrives)
-		{
-			foreach (var secId in drive.AvailableSecurities)
-			{
-				foreach (var format in formats)
-				{
-					foreach (var dataType in drive.GetAvailableDataTypes(secId, format))
-					{
-						if (isCancelled())
-							break;
-
-						drive
-							.GetStorageDrive(secId, dataType, format)
-							.ClearDatesCache();
-					}
-				}
-
-				if (isCancelled())
-					break;
-
-				updateProgress(progress++, iterCount);
-
-				logsReceiver.AddInfoLog(LocalizedStrings.DatesCacheResetted, secId, drive.Path);
-			}
-
-			if (isCancelled())
-				break;
-		}
-	}
+	/// <param name="drive"><see cref="IMarketDataDrive"/></param>
+	/// <param name="securityId">Instrument identifier.</param>
+	/// <param name="format">Format type.</param>
+	/// <returns>Data types.</returns>
+	public static IEnumerable<DataType> GetAvailableDataTypes(this IMarketDataDrive drive, SecurityId securityId, StorageFormats format)
+		=> AsyncHelper.Run(() => drive.GetAvailableDataTypesAsync(securityId, format, default));
 
 	/// <summary>
 	/// Delete instrument by identifier.

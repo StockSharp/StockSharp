@@ -3,6 +3,8 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Ecng.Common;
 using Ecng.Logging;
@@ -16,8 +18,10 @@ using StockSharp.BusinessEntities;
 
 static class Program
 {
-	static void Main()
+	static async Task Main()
 	{
+		var token = CancellationToken.None;
+
 		const string pathHistory = "Storage";
 
 		if (Directory.Exists(pathHistory))
@@ -61,9 +65,11 @@ static class Program
 
 		//----------------------------------Security------------------------------------------------------------------
 		var exchangeInfoProvider = new InMemoryExchangeInfoProvider();
-		remoteDrive.LookupSecurities(new() { SecurityId = secId }, registry.Securities,
-			s => securityStorage.Save(s.ToSecurity(exchangeInfoProvider), false), () => false,
-			(c, t) => Console.WriteLine($"Downloaded [{c}]/[{t}]"));
+		await foreach (var secMsg in remoteDrive.LookupSecuritiesAsync(new() { SecurityId = secId }, registry.Securities, token).WithEnforcedCancellation(token))
+		{
+			securityStorage.Save(secMsg.ToSecurity(exchangeInfoProvider), false);
+			Console.WriteLine($"Downloaded [{secMsg.SecurityId}]");
+		}
 
 		var securities = securityStorage.LookupAll();
 
@@ -82,7 +88,7 @@ static class Program
 
 		const StorageFormats format = StorageFormats.Binary;
 
-		foreach (var dataType in remoteDrive.GetAvailableDataTypes(secId, format))
+		foreach (var dataType in await remoteDrive.GetAvailableDataTypesAsync(secId, format, token))
 		{
 			var localStorage = storageRegistry.GetStorage(secId, dataType, localDrive, format);
 			var remoteStorage = remoteDrive.GetStorageDrive(secId, dataType, format);

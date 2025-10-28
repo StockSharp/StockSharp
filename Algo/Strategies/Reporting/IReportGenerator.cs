@@ -36,7 +36,7 @@ public interface IReportGenerator
 	/// <param name="strategy"><see cref="Strategy"/>.</param>
 	/// <param name="stream">The stream to write the report to.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
-	ValueTask Generate(Strategy strategy, Stream stream, CancellationToken cancellationToken = default);
+	ValueTask Generate(Strategy strategy, Stream stream, CancellationToken cancellationToken);
 }
 
 /// <summary>

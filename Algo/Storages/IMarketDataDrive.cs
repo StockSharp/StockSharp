@@ -53,24 +53,20 @@ public interface IMarketDataDrive : IPersistable, IDisposable
 	string Path { get; }
 
 	/// <summary>
-	/// To get news storage.
-	/// </summary>
-	/// <param name="serializer">The serializer.</param>
-	/// <returns>The news storage.</returns>
-	IMarketDataStorage<NewsMessage> GetNewsMessageStorage(IMarketDataSerializer<NewsMessage> serializer);
-
-	/// <summary>
 	/// Get all available instruments.
 	/// </summary>
-	IEnumerable<SecurityId> AvailableSecurities { get; }
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Available instruments.</returns>
+	IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync(CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Get all available data types.
 	/// </summary>
 	/// <param name="securityId">Instrument identifier.</param>
 	/// <param name="format">Format type.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Data types.</returns>
-	IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format);
+	ValueTask<IEnumerable<DataType>> GetAvailableDataTypesAsync(SecurityId securityId, StorageFormats format, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To get the storage for <see cref="IMarketDataStorage"/>.
@@ -84,17 +80,18 @@ public interface IMarketDataDrive : IPersistable, IDisposable
 	/// <summary>
 	/// Verify settings.
 	/// </summary>
-	void Verify();
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	ValueTask VerifyAsync(CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Download securities by the specified criteria.
 	/// </summary>
 	/// <param name="criteria">Message security lookup for specified criteria.</param>
 	/// <param name="securityProvider">The provider of information about instruments.</param>
-	/// <param name="newSecurity">The handler through which a new instrument will be passed.</param>
-	/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
-	/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
-	void LookupSecurities(SecurityLookupMessage criteria, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Func<bool> isCancelled, Action<int, int> updateProgress);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>The sequence of found instruments.</returns>
+	IAsyncEnumerable<SecurityMessage> LookupSecuritiesAsync(SecurityLookupMessage criteria, ISecurityProvider securityProvider, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -113,23 +110,19 @@ public abstract class BaseMarketDataDrive : Disposable, IMarketDataDrive
 	public abstract string Path { get; set; }
 
 	/// <inheritdoc />
-	public IMarketDataStorage<NewsMessage> GetNewsMessageStorage(IMarketDataSerializer<NewsMessage> serializer)
-		=> throw new NotSupportedException();
+	public abstract IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync(CancellationToken cancellationToken);
 
 	/// <inheritdoc />
-	public abstract IEnumerable<SecurityId> AvailableSecurities { get; }
-
-	/// <inheritdoc />
-	public abstract IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format);
+	public abstract ValueTask<IEnumerable<DataType>> GetAvailableDataTypesAsync(SecurityId securityId, StorageFormats format, CancellationToken cancellationToken);
 
 	/// <inheritdoc />
 	public abstract IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, DataType dataType, StorageFormats format);
 
 	/// <inheritdoc />
-	public abstract void Verify();
+	public abstract ValueTask VerifyAsync(CancellationToken cancellationToken);
 
 	/// <inheritdoc />
-	public abstract void LookupSecurities(SecurityLookupMessage criteria, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Func<bool> isCancelled, Action<int, int> updateProgress);
+	public abstract IAsyncEnumerable<SecurityMessage> LookupSecuritiesAsync(SecurityLookupMessage criteria, ISecurityProvider securityProvider, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Load settings.

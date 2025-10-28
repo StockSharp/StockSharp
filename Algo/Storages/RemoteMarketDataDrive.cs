@@ -45,7 +45,7 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 			{
 				if (_prevDatesSync == default || (DateTime.UtcNow - _prevDatesSync).TotalSeconds > 3)
 				{
-					_dates = _parent.EnsureGetClient().GetDates(_securityId, _dataType, _format);
+					_dates = Run(client => client.GetDatesAsync(_securityId, _dataType, _format, default));
 
 					_prevDatesSync = DateTime.UtcNow;
 				}
@@ -59,18 +59,30 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 			//_parent.Invoke(f => f.ClearDatesCache(_parent.SessionId, _security.Id, _dataType, _arg));
 		}
 
+		private void Run(Func<RemoteStorageClient, ValueTask> func)
+		{
+			var client = _parent.EnsureGetClient();
+			AsyncHelper.Run(() => func(client));
+		}
+
+		private T Run<T>(Func<RemoteStorageClient, ValueTask<T>> func)
+		{
+			var client = _parent.EnsureGetClient();
+			return AsyncHelper.Run(() => func(client));
+		}
+
 		void IMarketDataStorageDrive.Delete(DateTime date)
-			=> _parent.EnsureGetClient().Delete(_securityId, _dataType, _format, date);
+			=> Run(client => client.DeleteAsync(_securityId, _dataType, _format, date, default));
 
 		void IMarketDataStorageDrive.SaveStream(DateTime date, Stream stream)
-			=> _parent.EnsureGetClient().SaveStream(_securityId, _dataType, _format, date, stream);
+			=> Run(client => client.SaveStreamAsync(_securityId, _dataType, _format, date, stream, default));
 
 		Stream IMarketDataStorageDrive.LoadStream(DateTime date, bool readOnly)
-			=> _parent.EnsureGetClient().LoadStream(_securityId, _dataType, _format, date);
+			=> Run(client => client.LoadStreamAsync(_securityId, _dataType, _format, date, default));
 	}
 
 	private readonly SynchronizedDictionary<(SecurityId, DataType, StorageFormats), RemoteStorageDrive> _remoteStorages = [];
-	private readonly Func<IMessageAdapter> _createAdapter;
+	private readonly Func<IAsyncMessageAdapter> _createAdapter;
 	
 	private readonly SyncObject _clientSync = new();
 	private RemoteStorageClient _client;
@@ -107,14 +119,14 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 	/// </summary>
 	/// <param name="address">Server address.</param>
 	/// <param name="adapter">Message adapter.</param>
-	public RemoteMarketDataDrive(EndPoint address, IMessageAdapter adapter)
+	public RemoteMarketDataDrive(EndPoint address, IAsyncMessageAdapter adapter)
 		: this(address, adapter.TypedClone)
 	{
 		if (adapter is null)
 			throw new ArgumentNullException(nameof(adapter));
 	}
 
-	private RemoteMarketDataDrive(EndPoint address, Func<IMessageAdapter> createAdapter)
+	private RemoteMarketDataDrive(EndPoint address, Func<IAsyncMessageAdapter> createAdapter)
 	{
 		Address = address;
 		_createAdapter = createAdapter ?? throw new ArgumentNullException(nameof(createAdapter));
@@ -272,12 +284,12 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 	}
 
 	/// <inheritdoc />
-	public override IEnumerable<SecurityId> AvailableSecurities
-		=> EnsureGetClient().AvailableSecurities;
+	public override IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync(CancellationToken cancellationToken)
+		=> EnsureGetClient().GetAvailableSecuritiesAsync(cancellationToken);
 
 	/// <inheritdoc />
-	public override IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
-		=> EnsureGetClient().GetAvailableDataTypes(securityId, format);
+	public override ValueTask<IEnumerable<DataType>> GetAvailableDataTypesAsync(SecurityId securityId, StorageFormats format, CancellationToken cancellationToken)
+		=> EnsureGetClient().GetAvailableDataTypesAsync(securityId, format, cancellationToken);
 
 	/// <inheritdoc />
 	public override IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, DataType dataType, StorageFormats format)
@@ -290,11 +302,12 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 	}
 
 	/// <inheritdoc />
-	public override void Verify() => CreateClient().Verify();
+	public override ValueTask VerifyAsync(CancellationToken cancellationToken)
+		=> CreateClient().VerifyAsync(cancellationToken);
 
 	/// <inheritdoc />
-	public override void LookupSecurities(SecurityLookupMessage criteria, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Func<bool> isCancelled, Action<int, int> updateProgress)
-		=> EnsureGetClient().LookupSecurities(criteria, securityProvider, newSecurity, isCancelled, updateProgress);
+	public override IAsyncEnumerable<SecurityMessage> LookupSecuritiesAsync(SecurityLookupMessage criteria, ISecurityProvider securityProvider, CancellationToken cancellationToken)
+		=> EnsureGetClient().LookupSecuritiesAsync(criteria, securityProvider, cancellationToken);
 
 	/// <inheritdoc />
 	public override void Load(SettingsStorage storage)

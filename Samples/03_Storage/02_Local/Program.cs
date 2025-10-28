@@ -3,7 +3,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
+using Ecng.Common;
 using Ecng.Compilation;
 using Ecng.Configuration;
 using Ecng.Compilation.Roslyn;
@@ -17,14 +20,15 @@ using StockSharp.Configuration;
 
 static class Program
 {
-	private static void Main()
+	private static async Task Main()
 	{
+		var token = CancellationToken.None;
+
 		//--------------------------------Security--------------------------------------
 		var pathHistory = Paths.HistoryDataPath;
 		var localDrive = new LocalMarketDataDrive(pathHistory);
-		var securities = localDrive.AvailableSecurities;
 
-		foreach (var sec in securities)
+		await foreach (var sec in localDrive.GetAvailableSecuritiesAsync(token).WithEnforcedCancellation(token))
 		{
 			Console.WriteLine(sec);
 		}
