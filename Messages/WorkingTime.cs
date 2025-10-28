@@ -106,11 +106,11 @@ public class WorkingTime : IPersistable
 
 	private DateTime[] CheckDates(DateTime[] dates)
 	{
-		if (!_checkDates)
-			return dates;
-
 		if (dates is null)
 			throw new ArgumentNullException(nameof(dates));
+
+		if (!_checkDates)
+			return dates;
 
 		var dupDate = dates.GroupBy(d => d).FirstOrDefault(g => g.Count() > 1);
 
