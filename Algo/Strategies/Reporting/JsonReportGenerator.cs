@@ -41,6 +41,8 @@ public class JsonReportGenerator : BaseReportGenerator
 
 		foreach (var p in strategy.GetParameters())
 		{
+			cancellationToken.ThrowIfCancellationRequested();
+
 			if (p.Value is WorkingTime)
 				continue;
 
@@ -66,6 +68,8 @@ public class JsonReportGenerator : BaseReportGenerator
 
 		foreach (var p in strategy.StatisticManager.Parameters)
 		{
+			cancellationToken.ThrowIfCancellationRequested();
+
 			await WriteElementAsync(p.Name, p.Value);
 		}
 
@@ -78,6 +82,8 @@ public class JsonReportGenerator : BaseReportGenerator
 
 			foreach (var o in strategy.Orders)
 			{
+				cancellationToken.ThrowIfCancellationRequested();
+
 				await WriteStartElement();
 
 				await WriteElementAsync("id", o.Id);
@@ -103,6 +109,8 @@ public class JsonReportGenerator : BaseReportGenerator
 
 			foreach (var t in strategy.MyTrades)
 			{
+				cancellationToken.ThrowIfCancellationRequested();
+
 				await WriteStartElement();
 
 				await WriteElementAsync("id", t.Trade.Id);
