@@ -29,6 +29,9 @@ public class RiskTradePriceRule : RiskRule
 			if (_price == value)
 				return;
 
+			if (value < 0)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
 			_price = value;
 			UpdateTitle();
 		}
