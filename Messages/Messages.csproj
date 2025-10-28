@@ -12,11 +12,4 @@
   <ItemGroup>
     <PackageReference Include="Ecng.Logging" Version="$(EcngVer)" />
   </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <Compile Remove="AsyncMessageProcessor.cs" />
-    <Compile Remove="AsyncMessageAdapter.cs" />
-    <Compile Remove="HistoricalAsyncMessageAdapter.cs" />
-  </ItemGroup>
-
 </Project>

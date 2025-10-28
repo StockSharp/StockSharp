@@ -89,8 +89,10 @@ class AsyncMessageProcessor : Disposable
 		// cancel and dispose any active per-subscription CTS
 		try
 		{
-			foreach (var (_, item) in _subscriptionItems.CopyAndClear())
+			foreach (var kv in _subscriptionItems.CopyAndClear())
 			{
+				var item = kv.Value;
+
 				try
 				{
 					item.Cts?.Cancel();
@@ -463,8 +465,10 @@ class AsyncMessageProcessor : Disposable
 			() => WhenChildrenComplete(_adapter.DisconnectTimeout.CreateTimeoutToken()),
 			_globalCts.Token);
 
-		foreach (var (_, item) in _subscriptionItems.CopyAndClear())
+		foreach (var kv in _subscriptionItems.CopyAndClear())
 		{
+			var item = kv.Value;
+
 			item.Cts.Cancel();
 			item.Cts.Dispose();
 		}
