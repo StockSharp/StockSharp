@@ -40,7 +40,7 @@ public class CsvReportGenerator : BaseReportGenerator
 
 				await writer.WriteAsync(str.AsMemory(), cancellationToken);
 
-				if (i < (values.Length -1))
+				if (i < (values.Length - 1))
 					await writer.WriteAsync(_separator.AsMemory(), cancellationToken);
 			}
 
@@ -70,7 +70,7 @@ public class CsvReportGenerator : BaseReportGenerator
 			foreach (var order in strategy.Orders)
 			{
 				await WriteValuesAsync(order.Id, order.TransactionId, order.Side.GetDisplayName(), order.Time, order.Price,
-					order.State.GetDisplayName(), order.IsMatched() ? LocalizedStrings.Done : (order.IsCanceled() ? LocalizedStrings.Cancelled : string.Empty), order.Balance,
+					order.State.GetDisplayName(), order.IsMatched() ? LocalizedStrings.Done : (order.IsCanceled() ? LocalizedStrings.Cancelled : LocalizedStrings.Active), order.Balance,
 						order.Volume, order.Type.GetDisplayName(), order.LatencyRegistration.Format(), order.LatencyCancellation.Format(), order.LatencyEdition.Format());
 			}
 		}

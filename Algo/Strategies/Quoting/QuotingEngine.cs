@@ -134,7 +134,7 @@ public class QuotingEngine
 
 			var orderType = quotingPrice == 0 ? OrderTypes.Market : OrderTypes.Limit;
 			return QuotingAction.Register(quotingPrice, newVolume, orderType,
-				$"Registering {_quotingSide} order for {newVolume} at {quotingPrice.ToString() ?? "market"}");
+				$"Registering {_quotingSide} order for {newVolume} at {(quotingPrice == default ? "market" : quotingPrice.ToString())}");
 		}
 		else
 		{

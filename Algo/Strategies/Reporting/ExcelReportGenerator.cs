@@ -146,13 +146,8 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, string template
 				.SetCell(columnShift + 8, 1, LocalizedStrings.Slippage).SetStyle(columnShift + 8, typeof(decimal))
 				.SetCell(columnShift + 9, 1, LocalizedStrings.Comment)
 				.SetCell(columnShift + 10, 1, LocalizedStrings.PnL).SetStyle(columnShift + 10, typeof(decimal))
-				.SetCell(columnShift + 14, 1, LocalizedStrings.Position).SetStyle(columnShift + 14, typeof(decimal));
-
-			//worker
-			//	.SetConditionalFormatting(columnShift + 10, ComparisonOperator.Less, "0", null, Colors.Red)
-			//	.SetConditionalFormatting(columnShift + 11, ComparisonOperator.Less, "0", null, Colors.Red)
-			//	.SetConditionalFormatting(columnShift + 12, ComparisonOperator.Less, "0", null, Colors.Red)
-			//	.SetConditionalFormatting(columnShift + 13, ComparisonOperator.Less, "0", null, Colors.Red);
+				.SetCell(columnShift + 11, 1, LocalizedStrings.TotalPnL).SetStyle(columnShift + 11, typeof(decimal))
+				.SetCell(columnShift + 12, 1, LocalizedStrings.Position).SetStyle(columnShift + 12, typeof(decimal));
 
 			var totalPnL = 0m;
 			var position = 0m;
@@ -179,8 +174,8 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, string template
 					.SetCell(columnShift + 8, rowIndex, trade.Slippage)
 					.SetCell(columnShift + 9, rowIndex, trade.Order.Comment)
 					.SetCell(columnShift + 10, rowIndex, pnl)
-					.SetCell(columnShift + 12, rowIndex, totalPnL.Round(Decimals))
-					.SetCell(columnShift + 14, rowIndex, position);
+					.SetCell(columnShift + 11, rowIndex, totalPnL.Round(Decimals))
+					.SetCell(columnShift + 12, rowIndex, position);
 
 				rowIndex++;
 			}
@@ -188,7 +183,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, string template
 
 		if (IncludeOrders)
 		{
-			columnShift += 17;
+			columnShift += 14;
 
 			worker
 				.SetCell(columnShift + 0, 0, LocalizedStrings.Orders)
@@ -209,10 +204,6 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, string template
 				.SetCell(columnShift + 13, 1, LocalizedStrings.LatencyCancel)
 				.SetCell(columnShift + 14, 1, LocalizedStrings.EditionLatency)
 				.SetCell(columnShift + 15, 1, LocalizedStrings.Comment);
-
-			//worker
-			//	.SetConditionalFormatting(columnShift + 8, ComparisonOperator.Equal, "\"{0}\"".Put(LocalizedStrings.Cancelled), null, Colors.Green)
-			//	.SetConditionalFormatting(columnShift + 8, ComparisonOperator.Equal, "\"{0}\"".Put(LocalizedStrings.Active), null, Colors.Red);
 
 			rowIndex = 2;
 			foreach (var order in strategy.Orders.ToArray())

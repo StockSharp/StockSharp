@@ -225,24 +225,15 @@ public class BestByVolumeQuotingBehavior(Unit volumeExchange) : IQuotingBehavior
 /// <summary>
 /// Quoting behavior based on a specified level in the order book.
 /// </summary>
-public class LevelQuotingBehavior : IQuotingBehavior
+/// <remarks>
+/// Initializes a new instance of the <see cref="LevelQuotingBehavior"/> class.
+/// </remarks>
+/// <param name="level">The range of levels in the order book (min and max depth from the best quote).</param>
+/// <param name="ownLevel">Whether to create a custom price level if the desired quote is not present.</param>
+public class LevelQuotingBehavior(Range<int> level, bool ownLevel) : IQuotingBehavior
 {
-	private readonly Range<int> _level;
-	private readonly bool _ownLevel;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="LevelQuotingBehavior"/> class.
-	/// </summary>
-	/// <param name="level">The range of levels in the order book (min and max depth from the best quote).</param>
-	/// <param name="ownLevel">Whether to create a custom price level if the desired quote is not present.</param>
-	public LevelQuotingBehavior(Range<int> level, bool ownLevel)
-	{
-		if (level == null)
-			throw new ArgumentNullException(nameof(level));
-
-		_level = level ?? throw new ArgumentNullException(nameof(level));
-		_ownLevel = ownLevel;
-	}
+	private readonly Range<int> _level = level ?? throw new ArgumentNullException(nameof(level));
+	private readonly bool _ownLevel = ownLevel;
 
 	decimal? IQuotingBehavior.CalculateBestPrice(Security security, IMarketDataProvider provider, Sides quotingDirection, decimal? bestBidPrice, decimal? bestAskPrice,
 		decimal? lastTradePrice, QuoteChange[] bids, QuoteChange[] asks)
