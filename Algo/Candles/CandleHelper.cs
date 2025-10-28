@@ -15,7 +15,7 @@ public static partial class CandleHelper
 	/// <param name="adapter">Adapter.</param>
 	/// <param name="subscription">Subscription.</param>
 	/// <param name="provider">Candle builders provider.</param>
-	/// <returns>Which market-data type is used as a source value. <see langword="null"/> is compression is impossible.</returns>
+	/// <returns>Which market-data type is used as a source value. <see langword="null"/> if compression is impossible.</returns>
 	public static DataType TryGetCandlesBuildFrom(this IMessageAdapter adapter, MarketDataMessage subscription, CandleBuilderProvider provider)
 	{
 		if (adapter == null)

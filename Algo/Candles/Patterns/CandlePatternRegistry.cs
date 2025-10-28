@@ -170,5 +170,5 @@ public static class CandlePatternRegistry
 	/// <summary>
 	/// All patterns.
 	/// </summary>
-	public static IEnumerable<ICandlePattern> All => typeof(CandlePatternRegistry).GetFields().Select(p => p.GetValue(null)).OfType<ICandlePattern>();
+	public static IEnumerable<ICandlePattern> All => typeof(CandlePatternRegistry).GetFields(BindingFlags.Public | BindingFlags.Static).Select(p => p.GetValue(null)).OfType<ICandlePattern>();
 }
