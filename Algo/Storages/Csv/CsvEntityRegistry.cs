@@ -494,7 +494,8 @@ public class CsvEntityRegistry : IEntityRegistry
 
 			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 			{
-				portfolio.Currency = reader.ReadString().To<CurrencyTypes?>();
+				reader.ReadString();
+				//portfolio.Currency = reader.ReadString().To<CurrencyTypes?>();
 				portfolio.ExpirationDate = reader.ReadNullableDateTime();
 			}
 
@@ -527,13 +528,13 @@ public class CsvEntityRegistry : IEntityRegistry
 				data.BlockedValue.To<string>(),
 				data.VariationMargin.To<string>(),
 				data.Commission.To<string>(),
-				data.Currency.To<string>(),
+				data.Currency?.To<string>(),
 				data.State.To<string>(),
 				data.Description,
 				data.ServerTime.WriteDateTime(),
 				data.LocalTime.WriteDateTime(),
 				data.ClientCode,
-				data.Currency?.To<string>(),
+				string.Empty,
 				data.ExpirationDate?.WriteDateTime(),
 				data.CommissionMaker.To<string>(),
 				data.CommissionTaker.To<string>(),
