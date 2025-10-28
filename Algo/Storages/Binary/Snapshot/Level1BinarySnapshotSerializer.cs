@@ -509,7 +509,7 @@ public class Level1BinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Le
 					snapshot.LowPrice52Week = (BlittableDecimal)(decimal)change.Value;
 					break;
 				case Level1Fields.LastTradeStringId:
-					snapshot.LastTradeStringId = (string)change.Value;
+					snapshot.LastTradeStringId = ((string)change.Value).VerifySize(Sizes.S100);
 					break;
 			}
 		}
