@@ -16,9 +16,7 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 		: base(innerAdapter)
 	{
 		_riskManager = riskManager ?? throw new ArgumentNullException(nameof(riskManager));
-
-		if (_riskManager.Parent != null)
-			_riskManager.Parent = this;
+		_riskManager.Parent ??= this;
 	}
 
 	/// <inheritdoc />
