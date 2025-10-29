@@ -39,7 +39,7 @@ public class ProtectiveController : BaseLogReceiver
 			=> _behaviour.TryActivate(price, time);
 	}
 
-	private readonly SynchronizedDictionary<SecurityId, CachedSynchronizedDictionary<string, ProtectivePositionController>> _contollers = [];
+	private readonly SynchronizedDictionary<SecurityId, CachedSynchronizedDictionary<string, ProtectivePositionController>> _controllers = [];
 
 	/// <summary>
 	/// Get <see cref="IProtectivePositionController"/> instance.
@@ -61,7 +61,7 @@ public class ProtectiveController : BaseLogReceiver
 		bool isStopTrailing,
 		TimeSpan takeTimeout, TimeSpan stopTimeout,
 		bool useMarketOrders)
-		=> _contollers.SafeAdd(securityId, key => new(StringComparer.InvariantCultureIgnoreCase)).SafeAdd(portfolioName.ThrowIfEmpty(nameof(portfolioName)),
+		=> _controllers.SafeAdd(securityId, key => new(StringComparer.InvariantCultureIgnoreCase)).SafeAdd(portfolioName.ThrowIfEmpty(nameof(portfolioName)),
 			key => new(
 				securityId, portfolioName,
 				factory,
@@ -83,7 +83,7 @@ public class ProtectiveController : BaseLogReceiver
 		if (price <= 0)
 			yield break;
 
-		if (!_contollers.TryGetValue(securityId, out var dict))
+		if (!_controllers.TryGetValue(securityId, out var dict))
 			yield break;
 
 		foreach (var controller in dict.CachedValues)
@@ -99,5 +99,5 @@ public class ProtectiveController : BaseLogReceiver
 	/// Clear state.
 	/// </summary>
 	public void Clear()
-		=> _contollers.Clear();
+		=> _controllers.Clear();
 }
