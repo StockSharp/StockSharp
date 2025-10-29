@@ -290,10 +290,10 @@ public class PnLQueue
 		if (execMsg is null)
 			throw new ArgumentNullException(nameof(execMsg));
 
-		if (execMsg.TradePrice == null)
+		if (execMsg.TradePrice is not decimal tradePrice)
 			return;
 
-		_lastPrice = execMsg.TradePrice.Value;
+		_lastPrice = tradePrice;
 		_bidPrice = default;
 		_askPrice = default;
 
@@ -309,6 +309,7 @@ public class PnLQueue
 		if (quoteMsg is null)
 			throw new ArgumentNullException(nameof(quoteMsg));
 
+		_lastPrice = default;
 		_askPrice = quoteMsg.GetBestAsk()?.Price;
 		_bidPrice = quoteMsg.GetBestBid()?.Price;
 
