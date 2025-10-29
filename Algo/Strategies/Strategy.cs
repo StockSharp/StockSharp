@@ -271,7 +271,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		NameGenerator = new(this);
 		NameGenerator.Changed += name => _name.Value = name;
 
-		_riskManager = new RiskManager { Parent = this };
+		RiskManager = new RiskManager();
 		_indicators = new(this);
 
 		_posManager = new(EnsureGetId);
@@ -607,7 +607,11 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	public IRiskManager RiskManager
 	{
 		get => _riskManager;
-		set => _riskManager = value ?? throw new ArgumentNullException(nameof(value));
+		set
+		{
+			_riskManager = value ?? throw new ArgumentNullException(nameof(value));
+			_riskManager.Parent ??= this;
+		}
 	}
 
 	/// <summary>
@@ -621,14 +625,18 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		Order = 300)]
 	public IEnumerable<IRiskRule> RiskRules
 	{
-		get => _riskManager.Rules;
+		get => RiskManager.Rules;
 		set
 		{
 			if (value is null)
 				throw new ArgumentNullException(nameof(value));
 
-			_riskManager.Rules.Clear();
-			_riskManager.Rules.AddRange(value);
+			if (value.HasNullItem())
+				throw new ArgumentException(LocalizedStrings.ProcessNullValues, nameof(value));
+
+			var rules = RiskManager.Rules;
+			rules.Clear();
+			rules.AddRange(value);
 
 			RaiseParametersChanged();
 		}
@@ -2648,9 +2656,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	{
 		if (getMessage is null)
 			throw new ArgumentNullException(nameof(getMessage));
-
-		if (RiskManager.Rules.Count == 0)
-			return null;
 
 		foreach (var rule in RiskManager.ProcessRules(getMessage()))
 		{

@@ -40,7 +40,12 @@ public class RiskManager : BaseLogReceiver, IRiskManager
 			return [];
 		}
 
-		return [.. _rules.Cache.Where(r => r.ProcessMessage(message))];
+		var rules = _rules.Cache;
+
+		if (rules.Length == 0)
+			return [];
+
+		return [.. rules.Where(r => r.ProcessMessage(message))];
 	}
 
 	/// <inheritdoc />
