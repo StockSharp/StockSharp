@@ -258,11 +258,9 @@ public abstract class FieldMapping : NotifiableObject, IPersistable, ICloneable
 			return;
 
 		object fastParserConverter(string str)
-		{
-			return _dateParser.Parse(str);
-		}
+			=> _dateParser.Parse(str).UtcKind();
 
-		Func<DateTimeOffset, object> toObj = Type == typeof(DateTimeOffset) ? dto => dto : dto => dto.DateTime;
+		Func<DateTimeOffset, object> toObj = Type == typeof(DateTimeOffset) ? dto => dto : dto => dto.UtcDateTime;
 
 		switch (Format.ToLowerInvariant())
 		{
