@@ -14,7 +14,9 @@ public static class AsmInit
 	public static async Task Init(TestContext _)
 	{
 		ConfigManager.RegisterService<ICompiler>(new CSharpCompiler());
-		ConfigManager.RegisterService<ISecurityProvider>(new CollectionSecurityProvider());
+		var secProvider = new CollectionSecurityProvider();
+		ConfigManager.RegisterService<ISecurityProvider>(secProvider);
+		ConfigManager.RegisterService<ISecurityStorage>(new InMemorySecurityStorage(secProvider));
 		ConfigManager.RegisterService<IExchangeInfoProvider>(new InMemoryExchangeInfoProvider());
 		ConfigManager.RegisterService<IExcelWorkerProvider>(new DevExpExcelWorkerProvider());
 

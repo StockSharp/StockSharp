@@ -10,7 +10,7 @@ static class Helper
 
 	public const string ResFolder = "../../../Resources/";
 
-	public static SecurityLookupMessage LookupAll => StockSharp.Messages.Extensions.LookupAllCriteriaMessage;
+	public static SecurityLookupMessage LookupAll => Messages.Extensions.LookupAllCriteriaMessage;
 
 	public static IStorageRegistry GetStorage(string path)
 	{

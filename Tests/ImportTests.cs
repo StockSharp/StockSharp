@@ -83,21 +83,21 @@ public class ImportTests : BaseTestClass
 		return Import(DataType.Ticks, security.RandomTicks(100, true), fields);
 	}
 
-	//[TestMethod]
-	//public Task Depths()
-	//{
-	//	var security = Helper.CreateStorageSecurity();
-	//	var allFields = FieldMappingRegistry.CreateFields(DataType.MarketDepth).ToArray();
-	//	var fields = new[]
-	//	{
-	//		allFields.First(f => f.Name == "ServerTime.Date"),
-	//		allFields.First(f => f.Name == "ServerTime.TimeOfDay"),
-	//		allFields.First(f => f.Name == "Quote.Price"),
-	//		allFields.First(f => f.Name == "Quote.Volume"),
-	//		allFields.First(f => f.Name == "Side"),
-	//	};
-	//	return Import(DataType.MarketDepth, security.RandomDepths(100, ordersCount: true), fields);
-	//}
+	[TestMethod]
+	public Task Depths()
+	{
+		var security = Helper.CreateStorageSecurity();
+		var allFields = FieldMappingRegistry.CreateFields(DataType.MarketDepth).ToArray();
+		var fields = new[]
+		{
+			allFields.First(f => f.Name == "ServerTime.Date"),
+			allFields.First(f => f.Name == "ServerTime.TimeOfDay"),
+			allFields.First(f => f.Name == "Price"),
+			allFields.First(f => f.Name == "Volume"),
+			allFields.First(f => f.Name == "Side"),
+		};
+		return Import(DataType.MarketDepth, security.RandomDepths(100, ordersCount: true), fields);
+	}
 
 	[TestMethod]
 	public Task OrderLog()
@@ -268,5 +268,156 @@ public class ImportTests : BaseTestClass
 			//allFields.First(f => f.Name == "TimeZone"),
 		};
 		return Import(DataType.Board, Helper.RandomBoards(10), fields);
+	}
+
+	private const string _tickFullTemplate = "{SecurityId.SecurityCode};{SecurityId.BoardCode};{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{TradeId};{TradePrice};{TradeVolume}";
+
+	[TestMethod]
+	public async Task CsvImporter_ProgressCalculation()
+	{
+		var security = Helper.CreateStorageSecurity();
+		var allFields = FieldMappingRegistry.CreateFields(DataType.Ticks).ToArray();
+		var fields = new[]
+		{
+			allFields.First(f => f.Name == "SecurityId.SecurityCode"),
+			allFields.First(f => f.Name == "SecurityId.BoardCode"),
+			allFields.First(f => f.Name == "ServerTime.Date"),
+			allFields.First(f => f.Name == "ServerTime.TimeOfDay"),
+			allFields.First(f => f.Name == "TradeId"),
+			allFields.First(f => f.Name == "TradePrice"),
+			allFields.First(f => f.Name == "TradeVolume"),
+		};
+
+		for (var i = 0; i < fields.Length; i++)
+			fields[i].Order = i;
+
+		var arr = security.RandomTicks(1000, true);
+
+		using var stream = File.Create(Helper.GetSubTemp($"ticks_progress_import.csv"));
+		await new TextExporter(DataType.Ticks, stream, _tickFullTemplate, null).Export(arr, CancellationToken);
+		stream.Flush();
+		stream.Position = 0;
+
+		var storage = Helper.GetStorage(Helper.GetSubTemp());
+
+		var importer = new CsvImporter(DataType.Ticks, fields, ServicesRegistry.SecurityStorage, ServicesRegistry.ExchangeInfoProvider, secId => storage.GetTickMessageStorage(secId))
+		{
+			ColumnSeparator = ";"
+		};
+
+		var progresses = new List<int>();
+
+		var (count, lastTime) = await importer.Import(stream, p =>
+		{
+			if (progresses.Count > 0 && progresses.Last() >= p)
+				throw new DuplicateException($"Progress {p} already exist.");
+
+			progresses.Add(p);
+		}, CancellationToken);
+
+		// Ensure we reported some progress values and they are non-decreasing
+		(progresses.Count > 0).AssertTrue();
+		for (var i = 1; i < progresses.Count; i++)
+			(progresses[i] >= progresses[i - 1]).AssertTrue();
+
+		(progresses.Max() <= 100).AssertTrue();
+		(progresses.Min() >= 0).AssertTrue();
+
+		progresses.First().AssertEqual(1);
+		progresses.Last().AssertEqual(100);
+
+		// Ensure importer processed all messages and returned last time equals last message server time
+		count.AssertEqual(arr.Length);
+		lastTime.AssertNotNull();
+		lastTime.Value.AssertEqual(arr.Last().ServerTime.Truncate(TimeSpan.FromSeconds(1)));
+	}
+
+	[TestMethod]
+	public async Task CsvImporter_StopsImport()
+	{
+		var security = Helper.CreateStorageSecurity();
+		var allFields = FieldMappingRegistry.CreateFields(DataType.Ticks).ToArray();
+		var fields = new[]
+		{
+			allFields.First(f => f.Name == "SecurityId.SecurityCode"),
+			allFields.First(f => f.Name == "SecurityId.BoardCode"),
+			allFields.First(f => f.Name == "ServerTime.Date"),
+			allFields.First(f => f.Name == "ServerTime.TimeOfDay"),
+			allFields.First(f => f.Name == "TradeId"),
+			allFields.First(f => f.Name == "TradePrice"),
+			allFields.First(f => f.Name == "TradeVolume"),
+		};
+
+		for (var i = 0; i < fields.Length; i++)
+			fields[i].Order = i;
+
+		var arr = security.RandomTicks(20000, true);
+
+		using var stream = File.Create(Helper.GetSubTemp($"ticks_cancel_import.csv"));
+		await new TextExporter(DataType.Ticks, stream, _tickFullTemplate, null).Export(arr, CancellationToken);
+		stream.Flush();
+		stream.Position = 0;
+
+		var storage = Helper.GetStorage(Helper.GetSubTemp());
+
+		var importer = new CsvImporter(DataType.Ticks, fields, ServicesRegistry.SecurityStorage, ServicesRegistry.ExchangeInfoProvider, secId => storage.GetTickMessageStorage(secId))
+		{
+			ColumnSeparator = ";"
+		};
+
+		var progresses = new List<int>();
+		using var cts = new CancellationTokenSource();
+
+		await Assert.ThrowsExactlyAsync<OperationCanceledException>(() => importer.Import(stream, p =>
+		{
+			if (progresses.Count > 0 && progresses.Last() >= p)
+				throw new DuplicateException($"Progress {p} already exist.");
+
+			progresses.Add(p);
+
+			if (p >= 40)
+				cts.Cancel();
+		}, cts.Token).AsTask());
+
+		(progresses.Count > 0).AssertTrue();
+	}
+
+	[TestMethod]
+	public async Task CsvImporter_ErrorDuringImport()
+	{
+		var security = Helper.CreateStorageSecurity();
+		var allFields = FieldMappingRegistry.CreateFields(DataType.Ticks).ToArray();
+		var fields = new[]
+		{
+			allFields.First(f => f.Name == "SecurityId.SecurityCode"),
+			allFields.First(f => f.Name == "SecurityId.BoardCode"),
+			allFields.First(f => f.Name == "ServerTime.Date"),
+			allFields.First(f => f.Name == "ServerTime.TimeOfDay"),
+			allFields.First(f => f.Name == "TradeId"),
+			allFields.First(f => f.Name == "TradePrice"),
+			allFields.First(f => f.Name == "TradeVolume"),
+		};
+
+		for (var i = 0; i < fields.Length; i++)
+			fields[i].Order = i;
+
+		var arr = security.RandomTicks(1000, true);
+
+		using var stream = File.Create(Helper.GetSubTemp($"ticks_error_import.csv"));
+		await new TextExporter(DataType.Ticks, stream, _tickFullTemplate, null).Export(arr, CancellationToken);
+		stream.Flush();
+		stream.Position = 0;
+
+		// Make one of the field orders invalid (beyond column count) to provoke parsing error
+		fields[0].Order = 9999;
+
+		var storage = Helper.GetStorage(Helper.GetSubTemp());
+
+		var importer = new CsvImporter(DataType.Ticks, fields, ServicesRegistry.SecurityStorage, ServicesRegistry.ExchangeInfoProvider, secId => storage.GetTickMessageStorage(secId))
+		{
+			ColumnSeparator = ";"
+		};
+
+		await Assert.ThrowsExactlyAsync<InvalidOperationException>(() => importer.Import(stream, _ => { }, CancellationToken).AsTask());
 	}
 }
