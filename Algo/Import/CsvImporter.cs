@@ -1,5 +1,7 @@
 ﻿namespace StockSharp.Algo.Import;
 
+using StockSharp.Algo.Indicators;
+
 /// <summary>
 /// Messages importer from text file in CSV format into storage.
 /// </summary>
@@ -70,14 +72,7 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 			if (isSecurityRequired && msg is ISecurityIdMessage secIdMsg && secIdMsg.SecurityId == default)
 				throw new InvalidOperationException($"{LocalizedStrings.EmptySecId}: {msg}");
 
-			if (msg is not SecurityMessage secMsg)
-			{
-				buffer.Add(msg);
-
-				if (buffer.Count > 1000)
-					Flush();
-			}
-			else
+			if (msg is SecurityMessage secMsg)
 			{
 				var security = _securityStorage.LookupById(secMsg.SecurityId);
 				var isNew = true;
@@ -100,7 +95,20 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 
 				//ExtendedInfoStorageItem?.Add(secMsg.SecurityId, secMsg.ExtensionInfo);
 
+				count++;
 				SecurityUpdated?.Invoke(security, isNew);
+			}
+			else if (msg is BoardMessage boardMsg)
+			{
+				count++;
+				_exchangeInfoProvider.GetOrCreateBoard(boardMsg.Code);
+			}
+			else
+			{
+				buffer.Add(msg);
+
+				if (buffer.Count > 1000)
+					Flush();
 			}
 
 			if (!canProgress)
@@ -127,22 +135,27 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 		return (count, lastTime);
 	}
 
-	private void SaveSecurity(SecurityId securityId)
+	private SecurityId SaveSecurity(SecurityId securityId)
 	{
 		var security = _securityStorage.LookupById(securityId);
 
-		if (security != null)
-			return;
-
-		security = new()
+		if (security is null)
 		{
-			Id = securityId.ToStringId(),
-			Code = securityId.SecurityCode,
-			Board = _exchangeInfoProvider.GetOrCreateBoard(securityId.BoardCode),
-		};
+			if (securityId.BoardCode.IsEmpty())
+				securityId.BoardCode = SecurityId.AssociatedBoardCode;
 
-		_securityStorage.Save(security, false);
-		LogInfo(LocalizedStrings.CreatingSec.Put(securityId));
+			security = new()
+			{
+				Id = securityId.ToStringId(),
+				Code = securityId.SecurityCode,
+				Board = _exchangeInfoProvider.GetOrCreateBoard(securityId.BoardCode),
+			};
+
+			_securityStorage.Save(security, false);
+			LogInfo(LocalizedStrings.CreatingSec.Put(securityId));
+		}
+
+		return securityId;
 	}
 
 	private void FlushBuffer(List<Message> buffer)
@@ -150,18 +163,29 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 		if (buffer.Count == 0)
 			return;
 
-		var secIdMsgs = buffer.Cast<ISecurityIdMessage>().ToArray();
+		static IEnumerable<Message> orderBy<T>(IEnumerable<T> messages)
+			=> messages.Cast<IServerTimeMessage>().OrderBy(m => m.ServerTime).Cast<Message>();
 
-		var secIds = secIdMsgs.Select(s => s.SecurityId).Where(id => !id.IsAllSecurity() && !id.IsSpecial).Distinct().ToSet();
-		secIds.AddRange(buffer.OfType<INullableSecurityIdMessage>().Select(s => s.SecurityId).OfType<SecurityId>().Where(secId => !secId.IsAllSecurity() && !secId.IsSpecial));
-
-		foreach (var secId in secIds)
-			SaveSecurity(secId);
-
-		foreach (var secGroup in secIdMsgs.GroupBy(m => m.SecurityId))
+		if (buffer[0] is ISecurityIdMessage)
 		{
-			var storage = _getStorage(secGroup.Key);
-			storage.Save(secGroup.Cast<IServerTimeMessage>().OrderBy(m => m.ServerTime).Cast<Message>());
+			var secIdMsgs = buffer.Cast<ISecurityIdMessage>().ToArray();
+
+			foreach (var secGroup in secIdMsgs.GroupBy(m => m.SecurityId))
+			{
+				var secId = secGroup.Key;
+				secId = SaveSecurity(secId);
+
+				var arr = secGroup.ToArray();
+
+				foreach (var m in arr)
+					m.SecurityId = secId;
+
+				_getStorage(secId).Save(orderBy(arr));
+			}
+		}
+		else
+		{
+			_getStorage(default).Save(orderBy(buffer));
 		}
 
 		buffer.Clear();

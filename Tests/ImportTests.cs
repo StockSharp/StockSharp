@@ -38,12 +38,15 @@ public class ImportTests : BaseTestClass
 			throw new ArgumentOutOfRangeException(nameof(dataType), dataType, "Unsupported data type for import test.");
 	}
 
-	private async Task Import<TValue>(DataType dataType, IEnumerable<TValue> values, FieldMapping[] fields)
+	private async Task Import<TValue>(DataType dataType, bool addSecId, IEnumerable<TValue> values, FieldMapping[] fields)
 		where TValue : class
 	{
 		var arr = values.ToArray();
 
 		var template = GetTemplate(dataType);
+
+		if (addSecId)
+			template = "{SecurityId.SecurityCode};{SecurityId.BoardCode};" + template;
 
 		for (var i = 0; i < fields.Length; i++)
 			fields[i].Order = i;
@@ -92,6 +95,8 @@ public class ImportTests : BaseTestClass
 		var allFields = FieldMappingRegistry.CreateFields(DataType.Ticks).ToArray();
 		var fields = new[]
 		{
+			allFields.First(f => f.Name == "SecurityId.SecurityCode"),
+			allFields.First(f => f.Name == "SecurityId.BoardCode"),
 			allFields.First(f => f.Name == "ServerTime.Date"),
 			allFields.First(f => f.Name == "ServerTime.TimeOfDay"),
 			allFields.First(f => f.Name == "TradeId"),
@@ -99,7 +104,7 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "TradeVolume"),
 			allFields.First(f => f.Name == "OriginSide"),
 		};
-		return Import(DataType.Ticks, security.RandomTicks(100, true), fields);
+		return Import(DataType.Ticks, true, security.RandomTicks(100, true), fields);
 	}
 
 	[TestMethod]
@@ -109,13 +114,15 @@ public class ImportTests : BaseTestClass
 		var allFields = FieldMappingRegistry.CreateFields(DataType.MarketDepth).ToArray();
 		var fields = new[]
 		{
+			allFields.First(f => f.Name == "SecurityId.SecurityCode"),
+			allFields.First(f => f.Name == "SecurityId.BoardCode"),
 			allFields.First(f => f.Name == "ServerTime.Date"),
 			allFields.First(f => f.Name == "ServerTime.TimeOfDay"),
 			allFields.First(f => f.Name == "Price"),
 			allFields.First(f => f.Name == "Volume"),
 			allFields.First(f => f.Name == "Side"),
 		};
-		return Import(DataType.MarketDepth, security.RandomDepths(100, ordersCount: true), fields);
+		return Import(DataType.MarketDepth, true, security.RandomDepths(100, ordersCount: true), fields);
 	}
 
 	[TestMethod]
@@ -125,6 +132,8 @@ public class ImportTests : BaseTestClass
 		var allFields = FieldMappingRegistry.CreateFields(DataType.OrderLog).ToArray();
 		var fields = new[]
 		{
+			allFields.First(f => f.Name == "SecurityId.SecurityCode"),
+			allFields.First(f => f.Name == "SecurityId.BoardCode"),
 			allFields.First(f => f.Name == "ServerTime.Date"),
 			allFields.First(f => f.Name == "ServerTime.TimeOfDay"),
 			allFields.First(f => f.Name == "IsSystem"),
@@ -137,7 +146,7 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "TradeId"),
 			allFields.First(f => f.Name == "TradePrice"),
 		};
-		return Import(DataType.OrderLog, security.RandomOrderLog(100), fields);
+		return Import(DataType.OrderLog, true, security.RandomOrderLog(100), fields);
 	}
 
 	[TestMethod]
@@ -148,6 +157,7 @@ public class ImportTests : BaseTestClass
 		var fields = new[]
 		{
 			allFields.First(f => f.Name == "SecurityId.SecurityCode"),
+			allFields.First(f => f.Name == "PortfolioName"),
 			allFields.First(f => f.Name == "ServerTime.Date"),
 			allFields.First(f => f.Name == "ServerTime.TimeOfDay"),
 			allFields.First(f => f.Name == "Changes[CurrentValue]"),
@@ -157,7 +167,7 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "Changes[AveragePrice]"),
 			allFields.First(f => f.Name == "Changes[Commission]"),
 		};
-		return Import(DataType.PositionChanges, security.RandomPositionChanges(100), fields);
+		return Import(DataType.PositionChanges, false, security.RandomPositionChanges(100), fields);
 	}
 
 	[TestMethod]
@@ -172,7 +182,7 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "Source"),
 			allFields.First(f => f.Name == "Url"),
 		};
-		return Import(DataType.News, Helper.RandomNews(), fields);
+		return Import(DataType.News, false, Helper.RandomNews(), fields);
 	}
 
 	[TestMethod]
@@ -182,6 +192,8 @@ public class ImportTests : BaseTestClass
 		var allFields = FieldMappingRegistry.CreateFields(DataType.Level1).ToArray();
 		var fields = new[]
 		{
+			allFields.First(f => f.Name == "SecurityId.SecurityCode"),
+			allFields.First(f => f.Name == "SecurityId.BoardCode"),
 			allFields.First(f => f.Name == "ServerTime.Date"),
 			allFields.First(f => f.Name == "ServerTime.TimeOfDay"),
 			allFields.First(f => f.Name == "Changes[BestBidPrice]"),
@@ -191,7 +203,7 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "Changes[LastTradePrice]"),
 			allFields.First(f => f.Name == "Changes[LastTradeVolume]"),
 		};
-		return Import(DataType.Level1, security.RandomLevel1(count: 100), fields);
+		return Import(DataType.Level1, true, security.RandomLevel1(count: 100), fields);
 	}
 
 	[TestMethod]
@@ -206,6 +218,8 @@ public class ImportTests : BaseTestClass
 			var allFields = FieldMappingRegistry.CreateFields(dataType).ToArray();
 			var fields = new[]
 			{
+				allFields.First(f => f.Name == "SecurityId.SecurityCode"),
+				allFields.First(f => f.Name == "SecurityId.BoardCode"),
 				allFields.First(f => f.Name == "OpenTime.Date"),
 				allFields.First(f => f.Name == "OpenTime.TimeOfDay"),
 				allFields.First(f => f.Name == "OpenPrice"),
@@ -214,7 +228,7 @@ public class ImportTests : BaseTestClass
 				allFields.First(f => f.Name == "ClosePrice"),
 				allFields.First(f => f.Name == "TotalVolume"),
 			};
-			await Import(dataType, group.ToArray(), fields);
+			await Import(dataType, true, group.ToArray(), fields);
 		}
 	}
 
@@ -229,7 +243,7 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "BoardCode"),
 			allFields.First(f => f.Name == "State"),
 		};
-		return Import(DataType.BoardState, Helper.RandomBoardStates(), fields);
+		return Import(DataType.BoardState, false, Helper.RandomBoardStates(), fields);
 	}
 
 	[TestMethod]
@@ -240,6 +254,8 @@ public class ImportTests : BaseTestClass
 
 		var fields = new[]
 		{
+			allFields.First(f => f.Name == "SecurityId.SecurityCode"),
+			allFields.First(f => f.Name == "SecurityId.BoardCode"),
 			allFields.First(f => f.Name == "ServerTime.Date"),
 			allFields.First(f => f.Name == "ServerTime.TimeOfDay"),
 			allFields.First(f => f.Name == "PortfolioName"),
@@ -255,7 +271,7 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "TradePrice"),
 			allFields.First(f => f.Name == "TradeVolume"),
 		};
-		return Import(DataType.Transactions, security.RandomTransactions(10), fields);
+		return Import(DataType.Transactions, true, security.RandomTransactions(10), fields);
 	}
 
 	[TestMethod]
@@ -272,7 +288,7 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "Multiplier"),
 			allFields.First(f => f.Name == "Decimals"),
 		};
-		return Import(DataType.Securities, Helper.RandomSecurities(10), fields);
+		return Import(DataType.Securities, false, Helper.RandomSecurities(10), fields);
 	}
 
 	[TestMethod]
@@ -286,7 +302,7 @@ public class ImportTests : BaseTestClass
 			//allFields.First(f => f.Name == "ExpiryTime"),
 			//allFields.First(f => f.Name == "TimeZone"),
 		};
-		return Import(DataType.Board, Helper.RandomBoards(10), fields);
+		return Import(DataType.Board, false, Helper.RandomBoards(10), fields);
 	}
 
 	private const string _tickFullTemplate = "{SecurityId.SecurityCode};{SecurityId.BoardCode};{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{TradeId};{TradePrice};{TradeVolume}";
