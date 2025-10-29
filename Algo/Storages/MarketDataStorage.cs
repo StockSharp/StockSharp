@@ -349,8 +349,8 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 
 		lock (GetSync(date))
 		{
-			using (var stream = LoadStream(date, true))
-				return GetInfo(stream, date);
+			using var stream = LoadStream(date, true);
+			return GetInfo(stream, date);
 		}
 	}
 

@@ -157,19 +157,18 @@ public class CsvPortfolioMessageAdapterProvider : IPortfolioMessageAdapterProvid
 
 	private void Load()
 	{
-		using (var stream = new FileStream(_fileName, FileMode.Open, FileAccess.Read))
+		using var stream = new FileStream(_fileName, FileMode.Open, FileAccess.Read);
+
+		var reader = stream.CreateCsvReader(Encoding.UTF8);
+
+		reader.NextLine();
+
+		while (reader.NextLine())
 		{
-			var reader = stream.CreateCsvReader(Encoding.UTF8);
+			var portfolioName = reader.ReadString();
+			var adapterId = reader.ReadString().To<Guid>();
 
-			reader.NextLine();
-
-			while (reader.NextLine())
-			{
-				var portfolioName = reader.ReadString();
-				var adapterId = reader.ReadString().To<Guid>();
-
-				_inMemory.SetAdapter(portfolioName, adapterId);
-			}
+			_inMemory.SetAdapter(portfolioName, adapterId);
 		}
 	}
 

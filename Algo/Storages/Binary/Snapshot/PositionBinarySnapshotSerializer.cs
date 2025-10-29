@@ -198,56 +198,55 @@ public class PositionBinarySnapshotSerializer : ISnapshotSerializer<Key, Positio
 		if (version == null)
 			throw new ArgumentNullException(nameof(version));
 
-		using (var handle = new GCHandle<byte[]>(buffer))
+		using var handle = new GCHandle<byte[]>(buffer);
+
+		var snapshot = handle.CreatePointer().ToStruct<PositionSnapshot>(true);
+
+		var posMsg = new PositionChangeMessage
 		{
-			var snapshot = handle.CreatePointer().ToStruct<PositionSnapshot>(true);
-
-			var posMsg = new PositionChangeMessage
-			{
-				SecurityId = snapshot.SecurityId.ToSecurityId(),
-				PortfolioName = snapshot.Portfolio,
-				ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
-				LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
-				ClientCode = snapshot.ClientCode,
-				DepoName = snapshot.DepoName,
-				BoardCode = snapshot.BoardCode,
-				LimitType = (TPlusLimits?)snapshot.LimitType,
-				Description = snapshot.Description,
-				StrategyId = snapshot.StrategyId,
-				Side = (Sides?)snapshot.Side,
-				BuildFrom = snapshot.BuildFrom,
-			}
-			.TryAdd(PositionChangeTypes.BeginValue, snapshot.BeginValue, true)
-			.TryAdd(PositionChangeTypes.CurrentValue, snapshot.CurrentValue, true)
-			.TryAdd(PositionChangeTypes.BlockedValue, snapshot.BlockedValue, true)
-			.TryAdd(PositionChangeTypes.CurrentPrice, snapshot.CurrentPrice, true)
-			.TryAdd(PositionChangeTypes.AveragePrice, snapshot.AveragePrice, true)
-			.TryAdd(PositionChangeTypes.UnrealizedPnL, snapshot.UnrealizedPnL, true)
-			.TryAdd(PositionChangeTypes.RealizedPnL, snapshot.RealizedPnL, true)
-			.TryAdd(PositionChangeTypes.VariationMargin, snapshot.VariationMargin, true)
-			.TryAdd(PositionChangeTypes.Leverage, snapshot.Leverage, true)
-			.TryAdd(PositionChangeTypes.Commission, snapshot.Commission, true)
-			.TryAdd(PositionChangeTypes.CurrentValueInLots, snapshot.CurrentValueInLots, true)
-			.TryAdd(PositionChangeTypes.CommissionTaker, snapshot.CommissionTaker, true)
-			.TryAdd(PositionChangeTypes.CommissionMaker, snapshot.CommissionMaker, true)
-			.TryAdd(PositionChangeTypes.SettlementPrice, snapshot.SettlementPrice, true)
-			.TryAdd(PositionChangeTypes.ExpirationDate, snapshot.ExpirationDate.To<DateTimeOffset?>())
-			.TryAdd(PositionChangeTypes.BuyOrdersCount, snapshot.BuyOrdersCount, true)
-			.TryAdd(PositionChangeTypes.SellOrdersCount, snapshot.SellOrdersCount, true)
-			.TryAdd(PositionChangeTypes.BuyOrdersMargin, snapshot.BuyOrdersMargin, true)
-			.TryAdd(PositionChangeTypes.SellOrdersMargin, snapshot.SellOrdersMargin, true)
-			.TryAdd(PositionChangeTypes.OrdersMargin, snapshot.OrdersMargin, true)
-			.TryAdd(PositionChangeTypes.OrdersCount, snapshot.OrdersCount, true)
-			.TryAdd(PositionChangeTypes.TradesCount, snapshot.TradesCount, true)
-			.TryAdd(PositionChangeTypes.State, snapshot.State?.ToEnum<PortfolioStates>())
-			.TryAdd(PositionChangeTypes.LiquidationPrice, snapshot.LiquidationPrice, true)
-			;
-
-			if (snapshot.Currency != null)
-				posMsg.Add(PositionChangeTypes.Currency, (CurrencyTypes)snapshot.Currency.Value);
-
-			return posMsg;
+			SecurityId = snapshot.SecurityId.ToSecurityId(),
+			PortfolioName = snapshot.Portfolio,
+			ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
+			LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
+			ClientCode = snapshot.ClientCode,
+			DepoName = snapshot.DepoName,
+			BoardCode = snapshot.BoardCode,
+			LimitType = (TPlusLimits?)snapshot.LimitType,
+			Description = snapshot.Description,
+			StrategyId = snapshot.StrategyId,
+			Side = (Sides?)snapshot.Side,
+			BuildFrom = snapshot.BuildFrom,
 		}
+		.TryAdd(PositionChangeTypes.BeginValue, snapshot.BeginValue, true)
+		.TryAdd(PositionChangeTypes.CurrentValue, snapshot.CurrentValue, true)
+		.TryAdd(PositionChangeTypes.BlockedValue, snapshot.BlockedValue, true)
+		.TryAdd(PositionChangeTypes.CurrentPrice, snapshot.CurrentPrice, true)
+		.TryAdd(PositionChangeTypes.AveragePrice, snapshot.AveragePrice, true)
+		.TryAdd(PositionChangeTypes.UnrealizedPnL, snapshot.UnrealizedPnL, true)
+		.TryAdd(PositionChangeTypes.RealizedPnL, snapshot.RealizedPnL, true)
+		.TryAdd(PositionChangeTypes.VariationMargin, snapshot.VariationMargin, true)
+		.TryAdd(PositionChangeTypes.Leverage, snapshot.Leverage, true)
+		.TryAdd(PositionChangeTypes.Commission, snapshot.Commission, true)
+		.TryAdd(PositionChangeTypes.CurrentValueInLots, snapshot.CurrentValueInLots, true)
+		.TryAdd(PositionChangeTypes.CommissionTaker, snapshot.CommissionTaker, true)
+		.TryAdd(PositionChangeTypes.CommissionMaker, snapshot.CommissionMaker, true)
+		.TryAdd(PositionChangeTypes.SettlementPrice, snapshot.SettlementPrice, true)
+		.TryAdd(PositionChangeTypes.ExpirationDate, snapshot.ExpirationDate.To<DateTimeOffset?>())
+		.TryAdd(PositionChangeTypes.BuyOrdersCount, snapshot.BuyOrdersCount, true)
+		.TryAdd(PositionChangeTypes.SellOrdersCount, snapshot.SellOrdersCount, true)
+		.TryAdd(PositionChangeTypes.BuyOrdersMargin, snapshot.BuyOrdersMargin, true)
+		.TryAdd(PositionChangeTypes.SellOrdersMargin, snapshot.SellOrdersMargin, true)
+		.TryAdd(PositionChangeTypes.OrdersMargin, snapshot.OrdersMargin, true)
+		.TryAdd(PositionChangeTypes.OrdersCount, snapshot.OrdersCount, true)
+		.TryAdd(PositionChangeTypes.TradesCount, snapshot.TradesCount, true)
+		.TryAdd(PositionChangeTypes.State, snapshot.State?.ToEnum<PortfolioStates>())
+		.TryAdd(PositionChangeTypes.LiquidationPrice, snapshot.LiquidationPrice, true)
+		;
+
+		if (snapshot.Currency != null)
+			posMsg.Add(PositionChangeTypes.Currency, (CurrencyTypes)snapshot.Currency.Value);
+
+		return posMsg;
 	}
 
 	Key ISnapshotSerializer<Key, PositionChangeMessage>.GetKey(PositionChangeMessage message)

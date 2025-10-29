@@ -143,50 +143,49 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 			{
 				Do.Invariant(() =>
 				{
-					using (var stream = new FileStream(_fileName, FileMode.Open, FileAccess.Read))
+					using var stream = new FileStream(_fileName, FileMode.Open, FileAccess.Read);
+
+					var reader = stream.CreateCsvReader(Encoding.UTF8);
+
+					reader.NextLine();
+					reader.Skip();
+
+					var fields = new string[reader.ColumnCount - 1];
+
+					for (var i = 0; i < fields.Length; i++)
+						fields[i] = reader.ReadString();
+
+					reader.NextLine();
+					reader.Skip();
+
+					var types = new Type[reader.ColumnCount - 1];
+
+					for (var i = 0; i < types.Length; i++)
 					{
-						var reader = stream.CreateCsvReader(Encoding.UTF8);
+						types[i] = reader.ReadString().To<Type>();
+						//_fieldTypes.Add(fields[i], types[i]);
+					}
 
-						reader.NextLine();
-						reader.Skip();
+					if (_fields == null)
+					{
+						if (fields.Length != types.Length)
+							throw new InvalidOperationException($"{fields.Length} != {types.Length}");
 
-						var fields = new string[reader.ColumnCount - 1];
+						_fields = [.. fields.Select((f, i) => Tuple.Create(f, types[i]))];
+					}
+
+					while (reader.NextLine())
+					{
+						var secId = reader.ReadString().ToSecurityId();
+
+						var values = new Dictionary<string, object>();
 
 						for (var i = 0; i < fields.Length; i++)
-							fields[i] = reader.ReadString();
-
-						reader.NextLine();
-						reader.Skip();
-
-						var types = new Type[reader.ColumnCount - 1];
-
-						for (var i = 0; i < types.Length; i++)
 						{
-							types[i] = reader.ReadString().To<Type>();
-							//_fieldTypes.Add(fields[i], types[i]);
+							values[fields[i]] = reader.ReadString().To(types[i]);
 						}
 
-						if (_fields == null)
-						{
-							if (fields.Length != types.Length)
-								throw new InvalidOperationException($"{fields.Length} != {types.Length}");
-
-							_fields = [.. fields.Select((f, i) => Tuple.Create(f, types[i]))];
-						}
-
-						while (reader.NextLine())
-						{
-							var secId = reader.ReadString().ToSecurityId();
-
-							var values = new Dictionary<string, object>();
-
-							for (var i = 0; i < fields.Length; i++)
-							{
-								values[fields[i]] = reader.ReadString().To(types[i]);
-							}
-
-							_cache.Add(secId, values);
-						}
+						_cache.Add(secId, values);
 					}
 				});
 			}

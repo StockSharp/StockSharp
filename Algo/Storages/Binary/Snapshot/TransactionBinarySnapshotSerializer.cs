@@ -353,156 +353,155 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 		if (version == null)
 			throw new ArgumentNullException(nameof(version));
 
-		using (var handle = new GCHandle<byte[]>(buffer))
+		using var handle = new GCHandle<byte[]>(buffer);
+
+		var ptr = handle.CreatePointer();
+
+		var snapshot = ptr.ToStruct<TransactionSnapshot>(true);
+
+		var execMsg = new ExecutionMessage
 		{
-			var ptr = handle.CreatePointer();
+			SecurityId = snapshot.SecurityId.ToSecurityId(),
+			PortfolioName = snapshot.PortfolioName,
+			ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
+			LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
 
-			var snapshot = ptr.ToStruct<TransactionSnapshot>(true);
+			DataTypeEx = DataType.Transactions,
 
-			var execMsg = new ExecutionMessage
+			//OriginalTransactionId = snapshot.OriginalTransactionId,
+			TransactionId = snapshot.TransactionId,
+
+			HasOrderInfo = snapshot.HasOrderInfo,
+			//HasTradeInfo = snapshot.HasTradeInfo,
+
+
+		};
+
+		execMsg.BrokerCode = snapshot.BrokerCode;
+		execMsg.ClientCode = snapshot.ClientCode;
+
+		execMsg.Comment = snapshot.Comment;
+		execMsg.SystemComment = snapshot.SystemComment;
+
+		execMsg.Currency = snapshot.Currency == null ? null : (CurrencyTypes)snapshot.Currency.Value;
+		execMsg.DepoName = snapshot.DepoName;
+		execMsg.Error = snapshot.Error.IsEmpty() ? null : new InvalidOperationException(snapshot.Error);
+
+		execMsg.ExpiryDate = snapshot.ExpiryDate?.To<DateTimeOffset>();
+		execMsg.IsMarketMaker = snapshot.IsMarketMaker?.ToBool();
+		execMsg.MarginMode = (MarginModes?)snapshot.MarginMode;
+		execMsg.IsManual = snapshot.IsManual?.ToBool();
+		execMsg.Side = (Sides)snapshot.Side;
+		execMsg.OrderId = snapshot.OrderId;
+		execMsg.OrderStringId = snapshot.OrderStringId;
+		execMsg.OrderBoardId = snapshot.OrderBoardId;
+		execMsg.OrderPrice = snapshot.OrderPrice;
+		execMsg.OrderVolume = snapshot.OrderVolume;
+		execMsg.VisibleVolume = snapshot.VisibleVolume;
+		execMsg.OrderType = snapshot.OrderType?.ToEnum<OrderTypes>();
+		execMsg.OrderState = snapshot.OrderState?.ToEnum<OrderStates>();
+		execMsg.OrderStatus = snapshot.OrderStatus;
+		execMsg.Balance = snapshot.Balance;
+		execMsg.UserOrderId = snapshot.UserOrderId;
+		execMsg.StrategyId = snapshot.StrategyId;
+		execMsg.OriginSide = snapshot.OriginSide?.ToEnum<Sides>();
+		execMsg.Latency = snapshot.Latency == null ? null : TimeSpan.FromTicks(snapshot.Latency.Value);
+		execMsg.PnL = snapshot.PnL;
+		execMsg.Position = snapshot.Position;
+		execMsg.Slippage = snapshot.Slippage;
+		execMsg.Commission = snapshot.Commission;
+		execMsg.TradePrice = snapshot.TradePrice;
+		execMsg.TradeVolume = snapshot.TradeVolume;
+		execMsg.TradeStatus = snapshot.TradeStatus;
+		execMsg.TradeId = snapshot.TradeId;
+		execMsg.TradeStringId = snapshot.TradeStringId;
+		execMsg.OpenInterest = snapshot.OpenInterest;
+		execMsg.IsSystem = snapshot.IsSystem?.ToBool();
+		execMsg.TimeInForce = snapshot.OrderTif?.ToEnum<TimeInForce>();
+
+		execMsg.AveragePrice = snapshot.AveragePrice;
+		execMsg.Yield = snapshot.Yield;
+		execMsg.MinVolume = snapshot.MinVolume;
+		execMsg.PositionEffect = snapshot.PositionEffect?.ToEnum<OrderPositionEffects>();
+		execMsg.PostOnly = snapshot.PostOnly?.ToBool();
+		execMsg.Initiator = snapshot.Initiator?.ToBool();
+		execMsg.SeqNum = snapshot.SeqNum;
+		execMsg.BuildFrom = snapshot.BuildFrom;
+		execMsg.Leverage = snapshot.Leverage;
+
+		//var paramSize = (version > SnapshotVersions.V20 ? typeof(TransactionConditionParamV21) : typeof(TransactionConditionParamV20)).SizeOf();
+
+		if (!snapshot.ConditionType.IsEmpty())
+		{
+			execMsg.Condition = snapshot.ConditionType.To<Type>().CreateInstance<OrderCondition>();
+			execMsg.Condition.Parameters.Clear(); // removing pre-defined values
+		}
+
+		for (var i = 0; i < snapshot.ConditionParamsCount; i++)
+		{
+			var param = ptr.ToStruct<TransactionConditionParamV21>(true);
+
+			var typeBuffer = new byte[param.ValueTypeLen];
+			ptr.CopyTo(typeBuffer, true);
+
+			var paramTypeName = typeBuffer.UTF8();
+
+			try
 			{
-				SecurityId = snapshot.SecurityId.ToSecurityId(),
-				PortfolioName = snapshot.PortfolioName,
-				ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
-				LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
+				var paramType = paramTypeName.To<Type>();
 
-				DataTypeEx = DataType.Transactions,
+				object value;
 
-				//OriginalTransactionId = snapshot.OriginalTransactionId,
-				TransactionId = snapshot.TransactionId,
-
-				HasOrderInfo = snapshot.HasOrderInfo,
-				//HasTradeInfo = snapshot.HasTradeInfo,
-
-				
-			};
-
-			execMsg.BrokerCode = snapshot.BrokerCode;
-			execMsg.ClientCode = snapshot.ClientCode;
-
-			execMsg.Comment = snapshot.Comment;
-			execMsg.SystemComment = snapshot.SystemComment;
-
-			execMsg.Currency = snapshot.Currency == null ? null : (CurrencyTypes)snapshot.Currency.Value;
-			execMsg.DepoName = snapshot.DepoName;
-			execMsg.Error = snapshot.Error.IsEmpty() ? null : new InvalidOperationException(snapshot.Error);
-
-			execMsg.ExpiryDate = snapshot.ExpiryDate?.To<DateTimeOffset>();
-			execMsg.IsMarketMaker = snapshot.IsMarketMaker?.ToBool();
-			execMsg.MarginMode = (MarginModes?)snapshot.MarginMode;
-			execMsg.IsManual = snapshot.IsManual?.ToBool();
-			execMsg.Side = (Sides)snapshot.Side;
-			execMsg.OrderId = snapshot.OrderId;
-			execMsg.OrderStringId = snapshot.OrderStringId;
-			execMsg.OrderBoardId = snapshot.OrderBoardId;
-			execMsg.OrderPrice = snapshot.OrderPrice;
-			execMsg.OrderVolume = snapshot.OrderVolume;
-			execMsg.VisibleVolume = snapshot.VisibleVolume;
-			execMsg.OrderType = snapshot.OrderType?.ToEnum<OrderTypes>();
-			execMsg.OrderState = snapshot.OrderState?.ToEnum<OrderStates>();
-			execMsg.OrderStatus = snapshot.OrderStatus;
-			execMsg.Balance = snapshot.Balance;
-			execMsg.UserOrderId = snapshot.UserOrderId;
-			execMsg.StrategyId = snapshot.StrategyId;
-			execMsg.OriginSide = snapshot.OriginSide?.ToEnum<Sides>();
-			execMsg.Latency = snapshot.Latency == null ? null : TimeSpan.FromTicks(snapshot.Latency.Value);
-			execMsg.PnL = snapshot.PnL;
-			execMsg.Position = snapshot.Position;
-			execMsg.Slippage = snapshot.Slippage;
-			execMsg.Commission = snapshot.Commission;
-			execMsg.TradePrice = snapshot.TradePrice;
-			execMsg.TradeVolume = snapshot.TradeVolume;
-			execMsg.TradeStatus = snapshot.TradeStatus;
-			execMsg.TradeId = snapshot.TradeId;
-			execMsg.TradeStringId = snapshot.TradeStringId;
-			execMsg.OpenInterest = snapshot.OpenInterest;
-			execMsg.IsSystem = snapshot.IsSystem?.ToBool();
-			execMsg.TimeInForce = snapshot.OrderTif?.ToEnum<TimeInForce>();
-
-			execMsg.AveragePrice = snapshot.AveragePrice;
-			execMsg.Yield = snapshot.Yield;
-			execMsg.MinVolume = snapshot.MinVolume;
-			execMsg.PositionEffect = snapshot.PositionEffect?.ToEnum<OrderPositionEffects>();
-			execMsg.PostOnly = snapshot.PostOnly?.ToBool();
-			execMsg.Initiator = snapshot.Initiator?.ToBool();
-			execMsg.SeqNum = snapshot.SeqNum;
-			execMsg.BuildFrom = snapshot.BuildFrom;
-			execMsg.Leverage = snapshot.Leverage;
-
-			//var paramSize = (version > SnapshotVersions.V20 ? typeof(TransactionConditionParamV21) : typeof(TransactionConditionParamV20)).SizeOf();
-
-			if (!snapshot.ConditionType.IsEmpty())
-			{
-				execMsg.Condition = snapshot.ConditionType.To<Type>().CreateInstance<OrderCondition>();
-				execMsg.Condition.Parameters.Clear(); // removing pre-defined values
-			}
-
-			for (var i = 0; i < snapshot.ConditionParamsCount; i++)
-			{
-				var param = ptr.ToStruct<TransactionConditionParamV21>(true);
-
-				var typeBuffer = new byte[param.ValueTypeLen];
-				ptr.CopyTo(typeBuffer, true);
-
-				var paramTypeName = typeBuffer.UTF8();
-
-				try
+				if (param.NumValue != null)
+					value = (long)param.NumValue;
+				else if (param.DecimalValue != null)
+					value = (decimal)param.DecimalValue;
+				else if (param.BoolValue != null)
+					value = (bool)param.BoolValue;
+				//else if (paramType == typeof(Unit))
+				//	value = param.StringValue.ToUnit();
+				else if (param.StringValueLen > 0)
 				{
-					var paramType = paramTypeName.To<Type>();
+					var strBuffer = new byte[param.StringValueLen];
+					ptr.CopyTo(strBuffer, true);
 
-					object value;
-
-					if (param.NumValue != null)
-						value = (long)param.NumValue;
-					else if (param.DecimalValue != null)
-						value = (decimal)param.DecimalValue;
-					else if (param.BoolValue != null)
-						value = (bool)param.BoolValue;
-					//else if (paramType == typeof(Unit))
-					//	value = param.StringValue.ToUnit();
-					else if (param.StringValueLen > 0)
+					if (paramType.IsPersistable())
 					{
-						var strBuffer = new byte[param.StringValueLen];
-						ptr.CopyTo(strBuffer, true);
+						value = strBuffer.Deserialize<SettingsStorage>()?.Load(paramType) ?? throw new InvalidOperationException("unable to deserialize param value");
+					}
+					else if (paramType.Is<IRange>())
+					{
+						var range = paramType.CreateInstance<IRange>();
 
-						if (paramType.IsPersistable())
-						{
-							value = strBuffer.Deserialize<SettingsStorage>()?.Load(paramType) ?? throw new InvalidOperationException("unable to deserialize param value");
-						}
-						else if (paramType.Is<IRange>())
-						{
-							var range = paramType.CreateInstance<IRange>();
+						var storage = strBuffer.Deserialize<SettingsStorage>() ?? throw new InvalidOperationException("unable to deserialize IRange param value");
 
-							var storage = strBuffer.Deserialize<SettingsStorage>() ?? throw new InvalidOperationException("unable to deserialize IRange param value");
+						if (storage.ContainsKey(nameof(range.Min)))
+							range.Min = storage.GetValue<SettingsStorage>(nameof(range.Min)).FromStorage();
 
-							if (storage.ContainsKey(nameof(range.Min)))
-								range.Min = storage.GetValue<SettingsStorage>(nameof(range.Min)).FromStorage();
+						if (storage.ContainsKey(nameof(range.Max)))
+							range.Max = storage.GetValue<SettingsStorage>(nameof(range.Max)).FromStorage();
 
-							if (storage.ContainsKey(nameof(range.Max)))
-								range.Max = storage.GetValue<SettingsStorage>(nameof(range.Max)).FromStorage();
-
-							value = range;
-						}
-						else
-						{
-							value = null;
-							//value = Paths.CreateSerializer(paramType).Deserialize(strBuffer);
-						}
+						value = range;
 					}
 					else
+					{
 						value = null;
+						//value = Paths.CreateSerializer(paramType).Deserialize(strBuffer);
+					}
+				}
+				else
+					value = null;
 
-					value = value.To(paramType);
-					execMsg.Condition.Parameters.Add(param.Name, value);
-				}
-				catch (Exception ex)
-				{
-					ex.LogError();
-				}
+				value = value.To(paramType);
+				execMsg.Condition.Parameters.Add(param.Name, value);
 			}
-
-			return execMsg;
+			catch (Exception ex)
+			{
+				ex.LogError();
+			}
 		}
+
+		return execMsg;
 	}
 
 	string ISnapshotSerializer<string, ExecutionMessage>.GetKey(ExecutionMessage message)

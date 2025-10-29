@@ -528,163 +528,162 @@ public class Level1BinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Le
 		if (version == null)
 			throw new ArgumentNullException(nameof(version));
 
-		using (var handle = new GCHandle<byte[]>(buffer))
+		using var handle = new GCHandle<byte[]>(buffer);
+
+		var snapshot = handle.CreatePointer().ToStruct<Level1Snapshot>(true);
+
+		var level1Msg = new Level1ChangeMessage
 		{
-			var snapshot = handle.CreatePointer().ToStruct<Level1Snapshot>(true);
+			SecurityId = snapshot.SecurityId.ToSecurityId(),
+			ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
+			LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
+			BuildFrom = snapshot.BuildFrom,
+			SeqNum = snapshot.SeqNum,
+		};
 
-			var level1Msg = new Level1ChangeMessage
-			{
-				SecurityId = snapshot.SecurityId.ToSecurityId(),
-				ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
-				LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
-				BuildFrom = snapshot.BuildFrom,
-				SeqNum = snapshot.SeqNum,
-			};
+		level1Msg
+			.TryAdd(Level1Fields.LastTradePrice, snapshot.LastTradePrice)
+			.TryAdd(Level1Fields.LastTradeVolume, snapshot.LastTradeVolume)
+			.TryAdd(Level1Fields.LastTradeId, snapshot.LastTradeId)
 
-			level1Msg
-				.TryAdd(Level1Fields.LastTradePrice, snapshot.LastTradePrice)
-				.TryAdd(Level1Fields.LastTradeVolume, snapshot.LastTradeVolume)
-				.TryAdd(Level1Fields.LastTradeId, snapshot.LastTradeId)
+			.TryAdd(Level1Fields.BestBidPrice, snapshot.BestBidPrice)
+			.TryAdd(Level1Fields.BestAskPrice, snapshot.BestAskPrice)
 
-				.TryAdd(Level1Fields.BestBidPrice, snapshot.BestBidPrice)
-				.TryAdd(Level1Fields.BestAskPrice, snapshot.BestAskPrice)
+			.TryAdd(Level1Fields.BestBidVolume, snapshot.BestBidVolume)
+			.TryAdd(Level1Fields.BestAskVolume, snapshot.BestAskVolume)
 
-				.TryAdd(Level1Fields.BestBidVolume, snapshot.BestBidVolume)
-				.TryAdd(Level1Fields.BestAskVolume, snapshot.BestAskVolume)
+			.TryAdd(Level1Fields.BidsVolume, snapshot.BidsVolume)
+			.TryAdd(Level1Fields.AsksVolume, snapshot.AsksVolume)
 
-				.TryAdd(Level1Fields.BidsVolume, snapshot.BidsVolume)
-				.TryAdd(Level1Fields.AsksVolume, snapshot.AsksVolume)
+			.TryAdd(Level1Fields.BidsCount, snapshot.BidsCount)
+			.TryAdd(Level1Fields.AsksCount, snapshot.AsksCount)
 
-				.TryAdd(Level1Fields.BidsCount, snapshot.BidsCount)
-				.TryAdd(Level1Fields.AsksCount, snapshot.AsksCount)
+			.TryAdd(Level1Fields.HighBidPrice, snapshot.HighBidPrice)
+			.TryAdd(Level1Fields.LowAskPrice, snapshot.LowAskPrice)
 
-				.TryAdd(Level1Fields.HighBidPrice, snapshot.HighBidPrice)
-				.TryAdd(Level1Fields.LowAskPrice, snapshot.LowAskPrice)
+			.TryAdd(Level1Fields.OpenPrice, snapshot.OpenPrice)
+			.TryAdd(Level1Fields.HighPrice, snapshot.HighPrice)
+			.TryAdd(Level1Fields.LowPrice, snapshot.LowPrice)
+			.TryAdd(Level1Fields.ClosePrice, snapshot.ClosePrice)
+			.TryAdd(Level1Fields.Volume, snapshot.Volume)
 
-				.TryAdd(Level1Fields.OpenPrice, snapshot.OpenPrice)
-				.TryAdd(Level1Fields.HighPrice, snapshot.HighPrice)
-				.TryAdd(Level1Fields.LowPrice, snapshot.LowPrice)
-				.TryAdd(Level1Fields.ClosePrice, snapshot.ClosePrice)
-				.TryAdd(Level1Fields.Volume, snapshot.Volume)
+			.TryAdd(Level1Fields.StepPrice, snapshot.StepPrice)
+			.TryAdd(Level1Fields.OpenInterest, snapshot.OI)
 
-				.TryAdd(Level1Fields.StepPrice, snapshot.StepPrice)
-				.TryAdd(Level1Fields.OpenInterest, snapshot.OI)
+			.TryAdd(Level1Fields.MinPrice, snapshot.MinPrice)
+			.TryAdd(Level1Fields.MaxPrice, snapshot.MaxPrice)
 
-				.TryAdd(Level1Fields.MinPrice, snapshot.MinPrice)
-				.TryAdd(Level1Fields.MaxPrice, snapshot.MaxPrice)
+			.TryAdd(Level1Fields.MarginBuy, snapshot.MarginBuy)
+			.TryAdd(Level1Fields.MarginSell, snapshot.MarginSell)
 
-				.TryAdd(Level1Fields.MarginBuy, snapshot.MarginBuy)
-				.TryAdd(Level1Fields.MarginSell, snapshot.MarginSell)
+			.TryAdd(Level1Fields.ImpliedVolatility, snapshot.IV)
+			.TryAdd(Level1Fields.HistoricalVolatility, snapshot.HV)
+			.TryAdd(Level1Fields.TheorPrice, snapshot.TheorPrice)
+			.TryAdd(Level1Fields.Delta, snapshot.Delta)
+			.TryAdd(Level1Fields.Gamma, snapshot.Gamma)
+			.TryAdd(Level1Fields.Vega, snapshot.Vega)
+			.TryAdd(Level1Fields.Theta, snapshot.Theta)
+			.TryAdd(Level1Fields.Rho, snapshot.Rho)
 
-				.TryAdd(Level1Fields.ImpliedVolatility, snapshot.IV)
-				.TryAdd(Level1Fields.HistoricalVolatility, snapshot.HV)
-				.TryAdd(Level1Fields.TheorPrice, snapshot.TheorPrice)
-				.TryAdd(Level1Fields.Delta, snapshot.Delta)
-				.TryAdd(Level1Fields.Gamma, snapshot.Gamma)
-				.TryAdd(Level1Fields.Vega, snapshot.Vega)
-				.TryAdd(Level1Fields.Theta, snapshot.Theta)
-				.TryAdd(Level1Fields.Rho, snapshot.Rho)
+			.TryAdd(Level1Fields.AveragePrice, snapshot.AveragePrice)
+			.TryAdd(Level1Fields.SettlementPrice, snapshot.SettlementPrice)
+			.TryAdd(Level1Fields.Change, snapshot.Change)
+			.TryAdd(Level1Fields.AccruedCouponIncome, snapshot.AccruedCouponIncome)
+			.TryAdd(Level1Fields.Yield, snapshot.Yield)
+			.TryAdd(Level1Fields.VWAP, snapshot.VWAP)
 
-				.TryAdd(Level1Fields.AveragePrice, snapshot.AveragePrice)
-				.TryAdd(Level1Fields.SettlementPrice, snapshot.SettlementPrice)
-				.TryAdd(Level1Fields.Change, snapshot.Change)
-				.TryAdd(Level1Fields.AccruedCouponIncome, snapshot.AccruedCouponIncome)
-				.TryAdd(Level1Fields.Yield, snapshot.Yield)
-				.TryAdd(Level1Fields.VWAP, snapshot.VWAP)
-							
-				.TryAdd(Level1Fields.TradesCount, snapshot.TradesCount)
-							
-				.TryAdd(Level1Fields.Beta, snapshot.Beta)
-				.TryAdd(Level1Fields.AverageTrueRange, snapshot.AverageTrueRange)
-				.TryAdd(Level1Fields.Duration, snapshot.Duration)
-				.TryAdd(Level1Fields.Turnover, snapshot.Turnover)
-				.TryAdd(Level1Fields.SpreadMiddle, snapshot.SpreadMiddle)
+			.TryAdd(Level1Fields.TradesCount, snapshot.TradesCount)
 
-				.TryAdd(Level1Fields.PriceEarnings, snapshot.PriceEarnings)
-				.TryAdd(Level1Fields.ForwardPriceEarnings, snapshot.ForwardPriceEarnings)
-				.TryAdd(Level1Fields.PriceEarningsGrowth, snapshot.PriceEarningsGrowth)
-				.TryAdd(Level1Fields.PriceSales, snapshot.PriceSales)
-				.TryAdd(Level1Fields.PriceBook, snapshot.PriceBook)
-				.TryAdd(Level1Fields.PriceCash, snapshot.PriceCash)
-				.TryAdd(Level1Fields.PriceFreeCash, snapshot.PriceFreeCash)
-				.TryAdd(Level1Fields.Payout, snapshot.Payout)
-				.TryAdd(Level1Fields.SharesOutstanding, snapshot.SharesOutstanding)
-				.TryAdd(Level1Fields.SharesFloat, snapshot.SharesFloat)
-				.TryAdd(Level1Fields.FloatShort, snapshot.FloatShort)
-				.TryAdd(Level1Fields.ShortRatio, snapshot.ShortRatio)
-				.TryAdd(Level1Fields.ReturnOnAssets, snapshot.ReturnOnAssets)
-				.TryAdd(Level1Fields.ReturnOnEquity, snapshot.ReturnOnEquity)
-				.TryAdd(Level1Fields.ReturnOnInvestment, snapshot.ReturnOnInvestment)
-				.TryAdd(Level1Fields.CurrentRatio, snapshot.CurrentRatio)
-				.TryAdd(Level1Fields.QuickRatio, snapshot.QuickRatio)
-				.TryAdd(Level1Fields.HistoricalVolatilityWeek, snapshot.HistoricalVolatilityWeek)
-				.TryAdd(Level1Fields.HistoricalVolatilityMonth, snapshot.HistoricalVolatilityMonth)
-				.TryAdd(Level1Fields.IssueSize, snapshot.IssueSize)
-				.TryAdd(Level1Fields.BuyBackPrice, snapshot.BuyBackPrice)
-				.TryAdd(Level1Fields.Dividend, snapshot.Dividend)
-				.TryAdd(Level1Fields.AfterSplit, snapshot.AfterSplit)
-				.TryAdd(Level1Fields.BeforeSplit, snapshot.BeforeSplit)
-				.TryAdd(Level1Fields.CommissionTaker, snapshot.CommissionTaker)
-				.TryAdd(Level1Fields.CommissionMaker, snapshot.CommissionMaker)
-				.TryAdd(Level1Fields.MinVolume, snapshot.MinVolume)
-				.TryAdd(Level1Fields.UnderlyingMinVolume, snapshot.UnderlyingMinVolume)
-				.TryAdd(Level1Fields.CouponValue, snapshot.CouponValue)
-				.TryAdd(Level1Fields.CouponDate, snapshot.CouponDate?.To<DateTimeOffset>())
-				.TryAdd(Level1Fields.CouponPeriod, snapshot.CouponPeriod)
-				.TryAdd(Level1Fields.MarketPriceYesterday, snapshot.MarketPriceYesterday)
-				.TryAdd(Level1Fields.MarketPriceToday, snapshot.MarketPriceToday)
-				.TryAdd(Level1Fields.VWAPPrev, snapshot.VWAPPrev)
-				.TryAdd(Level1Fields.YieldVWAP, snapshot.YieldVWAP)
-				.TryAdd(Level1Fields.YieldVWAPPrev, snapshot.YieldVWAPPrev)
-				.TryAdd(Level1Fields.Index, snapshot.Index)
-				.TryAdd(Level1Fields.Imbalance, snapshot.Imbalance)
-				.TryAdd(Level1Fields.UnderlyingPrice, snapshot.UnderlyingPrice)
-				.TryAdd(Level1Fields.MaxVolume, snapshot.MaxVolume)
-				.TryAdd(Level1Fields.LowBidPrice, snapshot.LowBidPrice)
-				.TryAdd(Level1Fields.HighAskPrice, snapshot.HighAskPrice)
-				.TryAdd(Level1Fields.LastTradeVolumeLow, snapshot.LastTradeVolumeLow)
-				.TryAdd(Level1Fields.LastTradeVolumeHigh, snapshot.LastTradeVolumeHigh)
-				.TryAdd(Level1Fields.OptionMargin, snapshot.OptionMargin)
-				.TryAdd(Level1Fields.OptionSyntheticMargin, snapshot.OptionSyntheticMargin)
-				.TryAdd(Level1Fields.PriceStep, snapshot.PriceStep)
-				.TryAdd(Level1Fields.VolumeStep, snapshot.VolumeStep)
-				.TryAdd(Level1Fields.BestBidTime, snapshot.BestBidTime?.To<DateTimeOffset>())
-				.TryAdd(Level1Fields.BestAskTime, snapshot.BestAskTime?.To<DateTimeOffset>())
-				.TryAdd(Level1Fields.Multiplier, snapshot.Multiplier)
-				.TryAdd(Level1Fields.LongTermDebtEquity, snapshot.LongTermDebtEquity)
-				.TryAdd(Level1Fields.TotalDebtEquity, snapshot.TotalDebtEquity)
-				.TryAdd(Level1Fields.GrossMargin, snapshot.GrossMargin)
-				.TryAdd(Level1Fields.OperatingMargin, snapshot.OperatingMargin)
-				.TryAdd(Level1Fields.ProfitMargin, snapshot.ProfitMargin)
-				.TryAdd(Level1Fields.IsSystem, snapshot.IsSystem?.ToBool())
-				.TryAdd(Level1Fields.Decimals, snapshot.Decimals, true)
-				.TryAdd(Level1Fields.LowBidVolume, snapshot.LowBidVolume)
-				.TryAdd(Level1Fields.HighAskVolume, snapshot.HighAskVolume)
-				.TryAdd(Level1Fields.UnderlyingBestBidPrice, snapshot.UnderlyingBestBidPrice)
-				.TryAdd(Level1Fields.UnderlyingBestAskPrice, snapshot.UnderlyingBestAskPrice)
-				.TryAdd(Level1Fields.MedianPrice, snapshot.MedianPrice)
-				.TryAdd(Level1Fields.HighPrice52Week, snapshot.HighPrice52Week)
-				.TryAdd(Level1Fields.LowPrice52Week, snapshot.LowPrice52Week)
-				.TryAdd(Level1Fields.LastTradeStringId, snapshot.LastTradeStringId)
-				;
+			.TryAdd(Level1Fields.Beta, snapshot.Beta)
+			.TryAdd(Level1Fields.AverageTrueRange, snapshot.AverageTrueRange)
+			.TryAdd(Level1Fields.Duration, snapshot.Duration)
+			.TryAdd(Level1Fields.Turnover, snapshot.Turnover)
+			.TryAdd(Level1Fields.SpreadMiddle, snapshot.SpreadMiddle)
 
-			if (snapshot.LastTradeTime != null)
-				level1Msg.Add(Level1Fields.LastTradeTime, snapshot.LastTradeTime.Value.To<DateTimeOffset>());
+			.TryAdd(Level1Fields.PriceEarnings, snapshot.PriceEarnings)
+			.TryAdd(Level1Fields.ForwardPriceEarnings, snapshot.ForwardPriceEarnings)
+			.TryAdd(Level1Fields.PriceEarningsGrowth, snapshot.PriceEarningsGrowth)
+			.TryAdd(Level1Fields.PriceSales, snapshot.PriceSales)
+			.TryAdd(Level1Fields.PriceBook, snapshot.PriceBook)
+			.TryAdd(Level1Fields.PriceCash, snapshot.PriceCash)
+			.TryAdd(Level1Fields.PriceFreeCash, snapshot.PriceFreeCash)
+			.TryAdd(Level1Fields.Payout, snapshot.Payout)
+			.TryAdd(Level1Fields.SharesOutstanding, snapshot.SharesOutstanding)
+			.TryAdd(Level1Fields.SharesFloat, snapshot.SharesFloat)
+			.TryAdd(Level1Fields.FloatShort, snapshot.FloatShort)
+			.TryAdd(Level1Fields.ShortRatio, snapshot.ShortRatio)
+			.TryAdd(Level1Fields.ReturnOnAssets, snapshot.ReturnOnAssets)
+			.TryAdd(Level1Fields.ReturnOnEquity, snapshot.ReturnOnEquity)
+			.TryAdd(Level1Fields.ReturnOnInvestment, snapshot.ReturnOnInvestment)
+			.TryAdd(Level1Fields.CurrentRatio, snapshot.CurrentRatio)
+			.TryAdd(Level1Fields.QuickRatio, snapshot.QuickRatio)
+			.TryAdd(Level1Fields.HistoricalVolatilityWeek, snapshot.HistoricalVolatilityWeek)
+			.TryAdd(Level1Fields.HistoricalVolatilityMonth, snapshot.HistoricalVolatilityMonth)
+			.TryAdd(Level1Fields.IssueSize, snapshot.IssueSize)
+			.TryAdd(Level1Fields.BuyBackPrice, snapshot.BuyBackPrice)
+			.TryAdd(Level1Fields.Dividend, snapshot.Dividend)
+			.TryAdd(Level1Fields.AfterSplit, snapshot.AfterSplit)
+			.TryAdd(Level1Fields.BeforeSplit, snapshot.BeforeSplit)
+			.TryAdd(Level1Fields.CommissionTaker, snapshot.CommissionTaker)
+			.TryAdd(Level1Fields.CommissionMaker, snapshot.CommissionMaker)
+			.TryAdd(Level1Fields.MinVolume, snapshot.MinVolume)
+			.TryAdd(Level1Fields.UnderlyingMinVolume, snapshot.UnderlyingMinVolume)
+			.TryAdd(Level1Fields.CouponValue, snapshot.CouponValue)
+			.TryAdd(Level1Fields.CouponDate, snapshot.CouponDate?.To<DateTimeOffset>())
+			.TryAdd(Level1Fields.CouponPeriod, snapshot.CouponPeriod)
+			.TryAdd(Level1Fields.MarketPriceYesterday, snapshot.MarketPriceYesterday)
+			.TryAdd(Level1Fields.MarketPriceToday, snapshot.MarketPriceToday)
+			.TryAdd(Level1Fields.VWAPPrev, snapshot.VWAPPrev)
+			.TryAdd(Level1Fields.YieldVWAP, snapshot.YieldVWAP)
+			.TryAdd(Level1Fields.YieldVWAPPrev, snapshot.YieldVWAPPrev)
+			.TryAdd(Level1Fields.Index, snapshot.Index)
+			.TryAdd(Level1Fields.Imbalance, snapshot.Imbalance)
+			.TryAdd(Level1Fields.UnderlyingPrice, snapshot.UnderlyingPrice)
+			.TryAdd(Level1Fields.MaxVolume, snapshot.MaxVolume)
+			.TryAdd(Level1Fields.LowBidPrice, snapshot.LowBidPrice)
+			.TryAdd(Level1Fields.HighAskPrice, snapshot.HighAskPrice)
+			.TryAdd(Level1Fields.LastTradeVolumeLow, snapshot.LastTradeVolumeLow)
+			.TryAdd(Level1Fields.LastTradeVolumeHigh, snapshot.LastTradeVolumeHigh)
+			.TryAdd(Level1Fields.OptionMargin, snapshot.OptionMargin)
+			.TryAdd(Level1Fields.OptionSyntheticMargin, snapshot.OptionSyntheticMargin)
+			.TryAdd(Level1Fields.PriceStep, snapshot.PriceStep)
+			.TryAdd(Level1Fields.VolumeStep, snapshot.VolumeStep)
+			.TryAdd(Level1Fields.BestBidTime, snapshot.BestBidTime?.To<DateTimeOffset>())
+			.TryAdd(Level1Fields.BestAskTime, snapshot.BestAskTime?.To<DateTimeOffset>())
+			.TryAdd(Level1Fields.Multiplier, snapshot.Multiplier)
+			.TryAdd(Level1Fields.LongTermDebtEquity, snapshot.LongTermDebtEquity)
+			.TryAdd(Level1Fields.TotalDebtEquity, snapshot.TotalDebtEquity)
+			.TryAdd(Level1Fields.GrossMargin, snapshot.GrossMargin)
+			.TryAdd(Level1Fields.OperatingMargin, snapshot.OperatingMargin)
+			.TryAdd(Level1Fields.ProfitMargin, snapshot.ProfitMargin)
+			.TryAdd(Level1Fields.IsSystem, snapshot.IsSystem?.ToBool())
+			.TryAdd(Level1Fields.Decimals, snapshot.Decimals, true)
+			.TryAdd(Level1Fields.LowBidVolume, snapshot.LowBidVolume)
+			.TryAdd(Level1Fields.HighAskVolume, snapshot.HighAskVolume)
+			.TryAdd(Level1Fields.UnderlyingBestBidPrice, snapshot.UnderlyingBestBidPrice)
+			.TryAdd(Level1Fields.UnderlyingBestAskPrice, snapshot.UnderlyingBestAskPrice)
+			.TryAdd(Level1Fields.MedianPrice, snapshot.MedianPrice)
+			.TryAdd(Level1Fields.HighPrice52Week, snapshot.HighPrice52Week)
+			.TryAdd(Level1Fields.LowPrice52Week, snapshot.LowPrice52Week)
+			.TryAdd(Level1Fields.LastTradeStringId, snapshot.LastTradeStringId)
+			;
 
-			if (snapshot.LastTradeUpDown != null)
-				level1Msg.Add(Level1Fields.LastTradeUpDown, snapshot.LastTradeUpDown.Value == 1);
+		if (snapshot.LastTradeTime != null)
+			level1Msg.Add(Level1Fields.LastTradeTime, snapshot.LastTradeTime.Value.To<DateTimeOffset>());
 
-			if (snapshot.LastTradeOrigin != null)
-				level1Msg.Add(Level1Fields.LastTradeOrigin, (Sides)snapshot.LastTradeOrigin.Value);
+		if (snapshot.LastTradeUpDown != null)
+			level1Msg.Add(Level1Fields.LastTradeUpDown, snapshot.LastTradeUpDown.Value == 1);
 
-			if (snapshot.State != null)
-				level1Msg.Add(Level1Fields.State, (SecurityStates)snapshot.State.Value);
+		if (snapshot.LastTradeOrigin != null)
+			level1Msg.Add(Level1Fields.LastTradeOrigin, (Sides)snapshot.LastTradeOrigin.Value);
 
-			if (snapshot.BuyBackDate != null)
-				level1Msg.Add(Level1Fields.BuyBackDate, snapshot.BuyBackDate.Value.To<DateTimeOffset>());
+		if (snapshot.State != null)
+			level1Msg.Add(Level1Fields.State, (SecurityStates)snapshot.State.Value);
 
-			return level1Msg;
-		}
+		if (snapshot.BuyBackDate != null)
+			level1Msg.Add(Level1Fields.BuyBackDate, snapshot.BuyBackDate.Value.To<DateTimeOffset>());
+
+		return level1Msg;
 	}
 
 	SecurityId ISnapshotSerializer<SecurityId, Level1ChangeMessage>.GetKey(Level1ChangeMessage message)

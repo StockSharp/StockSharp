@@ -123,38 +123,37 @@ public class QuotesBinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Qu
 		if (version == null)
 			throw new ArgumentNullException(nameof(version));
 
-		using (var handle = new GCHandle<byte[]>(buffer))
+		using var handle = new GCHandle<byte[]>(buffer);
+
+		var ptr = handle.CreatePointer();
+
+		var snapshot = ptr.ToStruct<QuotesSnapshot>(true);
+
+		var bids = new QuoteChange[snapshot.BidCount];
+		var asks = new QuoteChange[snapshot.AskCount];
+
+		QuoteChange ReadQuote()
 		{
-			var ptr = handle.CreatePointer();
-
-			var snapshot = ptr.ToStruct<QuotesSnapshot>(true);
-
-			var bids = new QuoteChange[snapshot.BidCount];
-			var asks = new QuoteChange[snapshot.AskCount];
-
-			QuoteChange ReadQuote()
-			{
-				var row = ptr.ToStruct<QuotesSnapshotRow>(true);
-				return new QuoteChange(row.Price, row.Volume, row.OrdersCount.DefaultAsNull(), (QuoteConditions)row.QuoteCondition);
-			}
-
-			for (var i = 0; i < snapshot.BidCount; i++)
-				bids[i] = ReadQuote();
-
-			for (var i = 0; i < snapshot.AskCount; i++)
-				asks[i] = ReadQuote();
-
-			return new QuoteChangeMessage
-			{
-				SecurityId = snapshot.SecurityId.ToSecurityId(),
-				ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
-				LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
-				Bids = bids,
-				Asks = asks,
-				BuildFrom = snapshot.BuildFrom,
-				SeqNum = snapshot.SeqNum,
-			};
+			var row = ptr.ToStruct<QuotesSnapshotRow>(true);
+			return new QuoteChange(row.Price, row.Volume, row.OrdersCount.DefaultAsNull(), (QuoteConditions)row.QuoteCondition);
 		}
+
+		for (var i = 0; i < snapshot.BidCount; i++)
+			bids[i] = ReadQuote();
+
+		for (var i = 0; i < snapshot.AskCount; i++)
+			asks[i] = ReadQuote();
+
+		return new QuoteChangeMessage
+		{
+			SecurityId = snapshot.SecurityId.ToSecurityId(),
+			ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
+			LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
+			Bids = bids,
+			Asks = asks,
+			BuildFrom = snapshot.BuildFrom,
+			SeqNum = snapshot.SeqNum,
+		};
 	}
 
 	SecurityId ISnapshotSerializer<SecurityId, QuoteChangeMessage>.GetKey(QuoteChangeMessage message)
