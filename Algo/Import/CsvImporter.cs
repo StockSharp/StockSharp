@@ -58,9 +58,9 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 
 		try
 		{
-			var len = stream.CanSeek ? stream.Length : -1;
+			var canPosition = stream.CanSeek;
+			var len = canPosition ? stream.Length : -1;
 			var prevPercent = 0;
-			var lineIndex = 0;
 
 			var isSecurityRequired = DataType.IsSecurityRequired;
 
@@ -105,12 +105,10 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 					SecurityUpdated?.Invoke(security, isNew);
 				}
 
-				if (len == -1)
+				if (!canPosition)
 					continue;
 
-				var percent = (int)(((double)lineIndex / len) * 100 - 1).Round();
-
-				lineIndex++;
+				var percent = (int)Math.Round(((double)stream.Position / len) * 100);
 
 				if (percent <= prevPercent)
 					continue;
