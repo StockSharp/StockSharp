@@ -254,7 +254,7 @@ public abstract class FieldMapping : NotifiableObject, IPersistable, ICloneable
 
 	private void EnsureDateConverter()
 	{
-		if(_dateConverter != null)
+		if (_dateConverter != null)
 			return;
 
 		object fastParserConverter(string str)
@@ -413,7 +413,7 @@ public class FieldMapping<TInstance, TValue> : FieldMapping
 	/// <inheritdoc />
 	public override object Clone()
 	{
-		var clone = new FieldMapping<TInstance, TValue>(Name, GetDisplayName, GetDescription, _apply);
+		var clone = new FieldMapping<TInstance, TValue>(Name, GetDisplayName, GetDescription, Type, _apply);
 		clone.Load(this.Save());
 		return clone;
 	}

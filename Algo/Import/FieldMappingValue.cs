@@ -18,16 +18,7 @@ public class FieldMappingValue : IPersistable
 	void IPersistable.Load(SettingsStorage storage)
 	{
 		ValueFile = storage.GetValue<string>(nameof(ValueFile));
-
-		try
-		{
-			ValueStockSharp = storage.GetValue<SettingsStorage>(nameof(ValueStockSharp))?.FromStorage();
-		}
-		catch (Exception)
-		{
-			// 2022-08-08 remove 1 year later
-			ValueStockSharp = storage.GetValue<string>(nameof(ValueStockSharp));
-		}
+		ValueStockSharp = storage.GetValue<SettingsStorage>(nameof(ValueStockSharp))?.FromStorage();
 	}
 
 	void IPersistable.Save(SettingsStorage storage)

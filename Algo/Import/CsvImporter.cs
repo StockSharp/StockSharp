@@ -30,7 +30,7 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 	/// <summary>
 	/// Import from CSV file.
 	/// </summary>
-	/// <param name="stream">Thr file stream.</param>
+	/// <param name="stream">The file stream.</param>
 	/// <param name="updateProgress">Progress notification.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Count and last time.</returns>
@@ -117,10 +117,10 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 				updateProgress(prevPercent);
 			}
 		}
-		catch (Exception ex)
+		catch
 		{
 			if (!cancellationToken.IsCancellationRequested)
-				ex.LogError();
+				throw;
 		}
 
 		if (buffer.Count > 0)
