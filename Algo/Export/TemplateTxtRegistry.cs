@@ -157,7 +157,7 @@ public class TemplateTxtRegistry : IPersistable
 		Description = LocalizedStrings.TemplateTxtPositionChangeKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 11)]
-	public string TemplateTxtPositionChange { get; set; } = "{SecurityId.SecurityCode};{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{Changes:{CurrentValue};{BlockedValue};{RealizedPnL};{UnrealizedPnL};{AveragePrice};{Commission}}";
+	public string TemplateTxtPositionChange { get; set; } = "{SecurityId.SecurityCode};{PortfolioName};{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{Changes:{CurrentValue};{BlockedValue};{RealizedPnL};{UnrealizedPnL};{AveragePrice};{Commission}}";
 
 	/// <summary>
 	/// Do not show again.

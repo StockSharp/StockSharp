@@ -243,6 +243,8 @@ public static class FieldMappingRegistry
 			fields.Add(new FieldMapping<PositionChangeMessage, string>(GetSecurityCodeField(nameof(PositionChangeMessage.SecurityId)), () => LocalizedStrings.Security, secCodeDescr, SetSecCode) { IsRequired = true });
 			fields.Add(new FieldMapping<PositionChangeMessage, string>(GetBoardCodeField(nameof(PositionChangeMessage.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
 
+			fields.Add(new FieldMapping<PositionChangeMessage, string>(nameof(PositionChangeMessage.PortfolioName), () => LocalizedStrings.Portfolio, () => LocalizedStrings.PortfolioName, (i, v) => i.PortfolioName = v) { IsRequired = true });
+
 			fields.Add(new FieldMapping<PositionChangeMessage, DateTimeOffset>(GetDateField(nameof(PositionChangeMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
 			fields.Add(new FieldMapping<PositionChangeMessage, TimeSpan>(GetTimeOfDayField(nameof(PositionChangeMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
 
