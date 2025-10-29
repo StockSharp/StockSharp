@@ -36,8 +36,15 @@ public enum NewsPriorities
 [DataContract]
 [Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NewsKey)]
 public class NewsMessage : BaseSubscriptionIdMessage<NewsMessage>,
-	IServerTimeMessage, INullableSecurityIdMessage, ITransactionIdMessage, ISeqNumMessage
+	IServerTimeMessage, INullableSecurityIdMessage, ITransactionIdMessage,
+	ISeqNumMessage, ISecurityIdMessage
 {
+	SecurityId ISecurityIdMessage.SecurityId
+	{
+		get => Messages.SecurityId.News;
+		set => throw new NotSupportedException();
+	}
+
 	/// <inheritdoc />
 	[DataMember]
 	public long TransactionId { get; set; }

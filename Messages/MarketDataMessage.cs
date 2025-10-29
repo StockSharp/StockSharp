@@ -76,7 +76,13 @@ public class MarketDataMessage : SecurityMessage, ISubscriptionMessage, IGenerat
 	public DataType DataType2
 	{
 		get => _dataType2;
-		set => _dataType2 = value ?? throw new ArgumentNullException(nameof(value));
+		set
+		{
+			_dataType2 = value ?? throw new ArgumentNullException(nameof(value));
+
+			if (SecurityId == default && value == DataType.News)
+				SecurityId = SecurityId.News;
+		}
 	}
 
 	/// <inheritdoc />
