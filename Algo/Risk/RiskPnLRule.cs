@@ -72,14 +72,18 @@ public class RiskPnLRule : RiskRule
 		{
 			if (PnL.Value > 0)
 				return PnL.Value <= currValue.Value;
-			else
+			else if (PnL.Value < 0)
 				return PnL.Value >= currValue.Value;
+			else
+				return false; // PnL.Value == 0: never activate
 		}
 
 		if (PnL.Value > 0)
 			return (_initValue + PnL) <= currValue.Value;
-		else
+		else if (PnL.Value < 0)
 			return (_initValue + PnL) >= currValue.Value;
+		else
+			return false; // PnL.Value == 0: never activate
 	}
 
 	/// <inheritdoc />

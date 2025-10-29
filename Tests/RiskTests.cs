@@ -209,6 +209,122 @@ public class RiskTests
 	}
 
 	[TestMethod]
+	public void PnLZeroLimit()
+	{
+		// Test for PnL.Value == 0 with Limit type
+		// Verifies that RiskPnLRule correctly handles zero threshold
+		// Fixed in RiskPnLRule.cs:77-78 to explicitly return false when PnL == 0
+		var rule = new RiskPnLRule
+		{
+			PnL = new() { Value = 0, Type = UnitTypes.Limit },
+			Action = RiskActions.ClosePositions
+		};
+
+		// Test 1: currValue = 0
+		// Should NOT activate - zero threshold means rule is effectively disabled
+		var positionMsg = new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTimeOffset.UtcNow,
+			PortfolioName = _pfName
+		};
+		positionMsg.Add(PositionChangeTypes.CurrentValue, 0m);
+
+		// Rule correctly does not activate for zero threshold
+		rule.ProcessMessage(positionMsg).AssertFalse();
+
+		// Test 2: currValue = -100
+		// Should NOT activate - zero threshold means no risk limit is set
+		positionMsg = new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTimeOffset.UtcNow,
+			PortfolioName = _pfName
+		};
+		positionMsg.Add(PositionChangeTypes.CurrentValue, -100m);
+
+		// Rule correctly does not activate
+		rule.ProcessMessage(positionMsg).AssertFalse();
+
+		// Test 3: currValue = 100 (positive value)
+		// Should NOT activate - zero threshold means no limit
+		positionMsg = new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTimeOffset.UtcNow,
+			PortfolioName = _pfName
+		};
+		positionMsg.Add(PositionChangeTypes.CurrentValue, 100m);
+
+		// Rule correctly does not activate
+		rule.ProcessMessage(positionMsg).AssertFalse();
+	}
+
+	[TestMethod]
+	public void PnLZeroAbsolute()
+	{
+		// Test for PnL.Value == 0 with Absolute type
+		// Verifies that RiskPnLRule correctly handles zero threshold for absolute PnL changes
+		// Fixed in RiskPnLRule.cs:85-86 to explicitly return false when PnL == 0
+		var rule = new RiskPnLRule
+		{
+			PnL = new() { Value = 0, Type = UnitTypes.Absolute },
+			Action = RiskActions.ClosePositions
+		};
+
+		// Initialize with starting value of 1000
+		var positionMsg = new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTimeOffset.UtcNow,
+			PortfolioName = _pfName
+		};
+		positionMsg.Add(PositionChangeTypes.CurrentValue, 1000m);
+
+		// First message sets _initValue = 1000, should not activate
+		rule.ProcessMessage(positionMsg).AssertFalse();
+
+		// Test 1: currValue = 1000 (no change)
+		// Should NOT activate - zero threshold means no risk limit
+		positionMsg = new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTimeOffset.UtcNow,
+			PortfolioName = _pfName
+		};
+		positionMsg.Add(PositionChangeTypes.CurrentValue, 1000m);
+
+		// Rule correctly does not activate when threshold is zero
+		rule.ProcessMessage(positionMsg).AssertFalse();
+
+		// Test 2: currValue = 900 (loss of 100)
+		// Should NOT activate - zero threshold means rule is effectively disabled
+		positionMsg = new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTimeOffset.UtcNow,
+			PortfolioName = _pfName
+		};
+		positionMsg.Add(PositionChangeTypes.CurrentValue, 900m);
+
+		// Rule correctly does not activate
+		rule.ProcessMessage(positionMsg).AssertFalse();
+
+		// Test 3: currValue = 1100 (profit of 100)
+		// Should NOT activate - zero threshold means no limit
+		positionMsg = new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTimeOffset.UtcNow,
+			PortfolioName = _pfName
+		};
+		positionMsg.Add(PositionChangeTypes.CurrentValue, 1100m);
+
+		// Rule correctly does not activate
+		rule.ProcessMessage(positionMsg).AssertFalse();
+	}
+
+	[TestMethod]
 	public void PositionSize()
 	{
 		var rule = new RiskPositionSizeRule
@@ -361,6 +477,45 @@ public class RiskTests
 		};
 		positionMsg.Add(PositionChangeTypes.Commission, 1500m);
 
+		rule.ProcessMessage(positionMsg).AssertTrue();
+	}
+
+	[TestMethod]
+	public void CommissionNegative()
+	{
+		// Test for negative commission limit (lower bound)
+		// Verifies that RiskCommissionRule correctly handles negative thresholds
+		// Fixed in RiskCommissionRule.cs:57-60 to handle both positive and negative limits
+		var rule = new RiskCommissionRule
+		{
+			Commission = -1000, // Negative limit means we're tracking downside
+			Action = RiskActions.StopTrading
+		};
+
+		// First test: commission is -500, which is ABOVE -1000 (less negative)
+		// Should NOT trigger the rule (within acceptable range)
+		var positionMsg = new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTimeOffset.UtcNow,
+			PortfolioName = _pfName
+		};
+		positionMsg.Add(PositionChangeTypes.Commission, -500m);
+
+		rule.ProcessMessage(positionMsg).AssertFalse();
+
+		// Second test: commission is -1500, which is BELOW -1000 (more negative)
+		// SHOULD trigger the rule - commission exceeded the negative threshold
+		// Correctly uses "currValue <= Commission" for negative limits
+		positionMsg = new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTimeOffset.UtcNow,
+			PortfolioName = _pfName
+		};
+		positionMsg.Add(PositionChangeTypes.Commission, -1500m);
+
+		// Rule activates correctly when commission goes below negative threshold
 		rule.ProcessMessage(positionMsg).AssertTrue();
 	}
 

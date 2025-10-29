@@ -53,7 +53,11 @@ public class RiskCommissionRule : RiskRule
 		if (currValue == null)
 			return false;
 
-		return currValue >= Commission;
+		// Handle both positive (upper bound) and negative (lower bound) commission limits
+		if (Commission >= 0)
+			return currValue >= Commission;
+		else
+			return currValue <= Commission;
 	}
 
 	/// <inheritdoc />
