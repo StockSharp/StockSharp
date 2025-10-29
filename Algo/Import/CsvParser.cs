@@ -177,6 +177,8 @@ public class CsvParser : BaseLogReceiver
 
 			foreach (var field in fields)
 			{
+				cancellationToken.ThrowIfCancellationRequested();
+
 				if (field.Order >= cells.Count)
 					throw new InvalidOperationException(LocalizedStrings.IndexMoreThanLen.Put(field.DisplayName, field.Order, cells.Count));
 
@@ -233,6 +235,8 @@ public class CsvParser : BaseLogReceiver
 				{
 					foreach (var pair in mappings)
 					{
+						cancellationToken.ThrowIfCancellationRequested();
+
 						var info = pair.Value;
 
 						if (info.AdapterId.SecurityCode.IsEmpty())

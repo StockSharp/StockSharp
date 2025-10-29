@@ -119,7 +119,8 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 		}
 		catch (Exception ex)
 		{
-			ex.LogError();
+			if (!cancellationToken.IsCancellationRequested)
+				ex.LogError();
 		}
 
 		if (buffer.Count > 0)
