@@ -66,10 +66,24 @@ public class ExpressionIndexSecurity : IndexSecurity, IDisposable
 
 				if (Formula.Error.IsEmpty())
 				{
+					List<Exception> errors = null;
+
 					foreach (var v in Formula.Variables)
 					{
-						_innerSecurityIds.Add(v.ToSecurityId());
+						try
+						{
+							var secId = v.ToSecurityId();
+							_innerSecurityIds.Add(secId);
+						}
+						catch (Exception ex)
+						{
+							errors ??= [];
+							errors.Add(ex);
+						}
 					}
+
+					if (errors is not null)
+						throw new AggregateException(LocalizedStrings.InvalidValue, errors);
 				}
 				else
 					new InvalidOperationException(Formula.Error).LogError();
