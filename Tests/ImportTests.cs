@@ -50,20 +50,39 @@ public class ImportTests : BaseTestClass
 
 		var token = CancellationToken;
 
-		using var stream = File.Create(Helper.GetSubTemp($"{dataType.DataTypeToFileName()}_import.csv"));
+		var filePath = Helper.GetSubTemp($"{dataType.DataTypeToFileName()}_import.csv");
 
-		await new TextExporter(dataType, stream, template, null).Export(arr, token);
-
-		stream.Flush();
-		stream.Position = 0;
-
-		var parser = new CsvParser(dataType, fields)
+		using (var stream = File.Create(filePath))
 		{
-			ColumnSeparator = ";"
-		};
-		var msgs = await parser.Parse(stream, token).ToArrayAsync2(token);
+			await new TextExporter(dataType, stream, template, null).Export(arr, token);
+		}
 
-		msgs.Length.AssertEqual(arr.Length);
+		// Parser check
+		using (var stream = File.OpenRead(filePath))
+		{
+			var parser = new CsvParser(dataType, fields)
+			{
+				ColumnSeparator = ";"
+			};
+
+			var msgs = await parser.Parse(stream, token).ToArrayAsync2(token);
+
+			msgs.Length.AssertEqual(arr.Length);
+		}
+
+		var storageRegistry = Helper.GetStorage(Helper.GetSubTemp());
+
+		using (var stream = File.OpenRead(filePath))
+		{
+			var importer = new CsvImporter(dataType, fields, ServicesRegistry.SecurityStorage, ServicesRegistry.ExchangeInfoProvider, secId => storageRegistry.GetStorage(secId, dataType))
+			{
+				ColumnSeparator = ";"
+			};
+
+			var (count, lastTime) = await importer.Import(stream, _ => { }, token);
+
+			count.AssertEqual(arr.Length);
+		}
 	}
 
 	[TestMethod]
