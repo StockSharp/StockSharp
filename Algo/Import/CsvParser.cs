@@ -161,8 +161,6 @@ public class CsvParser : BaseLogReceiver
 
 		while (await reader.ReadRowAsync(cells, cancellationToken))
 		{
-			cancellationToken.ThrowIfCancellationRequested();
-
 			lineIndex++;
 
 			if (skipLines > 0)
