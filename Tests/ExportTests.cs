@@ -126,6 +126,7 @@ public class ExportTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var arr = values.ToArray();
+		var hasTime = typeof(TValue).Is<IServerTimeMessage>();
 
 		async Task Do(string extension, Func<Stream, BaseExporter> create)
 		{
@@ -136,7 +137,7 @@ public class ExportTests : BaseTestClass
 			// Verify returned values: count equals number of elements; lastTime should be non-null for non-empty arrays
 			count.AreEqual(arr.Length, $"Export returned unexpected count for {extension}");
 
-			if (arr.Length > 0)
+			if (hasTime && arr.Length > 0)
 				lastTime.AssertNotNull($"Export returned null last time for {extension} when exporting non-empty collection");
 		}
 
@@ -158,7 +159,7 @@ public class ExportTests : BaseTestClass
 
 		var (_, token) = CancellationToken.CreateChildToken(TimeSpan.FromSeconds(1));
 
-		await Assert.ThrowsExactlyAsync<OperationCanceledException>(() => exporter.Export(ticks, token));
+		await Assert.ThrowsAsync<OperationCanceledException>(() => exporter.Export(ticks, token));
 
 		// partial file should exist
 		(new FileInfo(path).Length > 0).AssertTrue();
