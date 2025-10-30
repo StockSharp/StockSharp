@@ -19,7 +19,6 @@ public partial class BitexbookMessageAdapter
 		this.AddMarketDataSupport();
 		this.AddTransactionalSupport();
 		this.RemoveSupportedMessage(MessageTypes.OrderReplace);
-		this.RemoveSupportedMessage(MessageTypes.OrderGroupCancel);
 
 		this.AddSupportedMarketDataType(DataType.OrderLog);
 		this.AddSupportedCandleTimeFrames(AllTimeFrames);

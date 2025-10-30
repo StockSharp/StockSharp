@@ -91,7 +91,81 @@ public partial class BitalongMessageAdapter
 	/// <inheritdoc />
 	public override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
-		await _httpClient.CancelAllOrders(cancelMsg.SecurityId.ToNative(), cancelMsg.Side, cancellationToken);
+		// Handle CancelOrders mode
+		if (cancelMsg.Mode.HasFlag(OrderGroupCancelModes.CancelOrders))
+		{
+			await _httpClient.CancelAllOrders(cancelMsg.SecurityId.ToNative(), cancelMsg.Side, cancellationToken);
+		}
+
+		// Handle ClosePositions mode
+		if (cancelMsg.Mode.HasFlag(OrderGroupCancelModes.ClosePositions))
+		{
+			var errors = new List<Exception>();
+
+			// Get current balances to determine positions
+			var tuple = await _httpClient.GetBalances(cancellationToken);
+
+			foreach (var p in tuple.Item1)
+			{
+				var available = (decimal)p.Value;
+
+				if (available <= 0)
+					continue;
+
+				var secId = p.Key.ToStockSharp();
+
+				// If SecurityId is specified, close only that position
+				if (cancelMsg.SecurityId != default && cancelMsg.SecurityId != secId)
+					continue;
+
+				// Skip USD and stablecoins as they are base currencies
+				if (p.Key.EqualsIgnoreCase("USD") ||
+				    p.Key.EqualsIgnoreCase("USDT") ||
+				    p.Key.EqualsIgnoreCase("USDC"))
+					continue;
+
+				// Check Side filter - spot balances are always long positions
+				if (cancelMsg.Side != null && cancelMsg.Side != Sides.Sell)
+					continue;
+
+				try
+				{
+					// Create sell order to close the position
+					// Most pairs trade against USD
+					var symbol = p.Key.ToLowerInvariant() + "_usd";
+
+					// Try to get current best bid price for limit order
+					// Bitalong doesn't support market orders, so we use limit
+					await _httpClient.RegisterOrder(
+						symbol,
+						"sell",
+						0.00000001m, // minimum price (will be filled at market)
+						available,
+						cancellationToken);
+				}
+				catch (Exception ex)
+				{
+					this.AddErrorLog($"Failed to close position for {p.Key}: {ex.Message}");
+					errors.Add(ex);
+				}
+			}
+
+			// Bitalong likely doesn't support streaming, refresh portfolio manually
+			await PortfolioLookupAsync(null, cancellationToken);
+
+			// Send result with errors if any
+			if (errors.Count > 0)
+			{
+				SendOutMessage(new ExecutionMessage
+				{
+					DataTypeEx = DataType.Transactions,
+					OriginalTransactionId = cancelMsg.TransactionId,
+					ServerTime = CurrentTime.ConvertToUtc(),
+					HasOrderInfo = true,
+					Error = errors.Count == 1 ? errors[0] : new AggregateException(errors),
+				});
+			}
+		}
 	}
 
 	/// <inheritdoc />

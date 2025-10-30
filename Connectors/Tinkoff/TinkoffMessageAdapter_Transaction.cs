@@ -180,6 +180,178 @@ public partial class TinkoffMessageAdapter
 		}
 	}
 
+	/// <inheritdoc/>
+	public override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
+	{
+		var errors = new List<Exception>();
+		var accountIds = cancelMsg.PortfolioName.IsEmpty() ? await EnsureGetAccounts(cancellationToken) : [cancelMsg.PortfolioName];
+
+		// Handle CancelOrders mode
+		if (cancelMsg.Mode.HasFlag(OrderGroupCancelModes.CancelOrders))
+		{
+			foreach (var accountId in accountIds)
+			{
+				// Get all active orders
+				var ordersResponse = await (IsDemo
+					? _service.Sandbox.GetSandboxOrdersAsync(new() { AccountId = accountId }, cancellationToken: cancellationToken)
+					: _service.Orders.GetOrdersAsync(new() { AccountId = accountId }, cancellationToken: cancellationToken)
+				);
+
+				foreach (var order in ordersResponse.Orders)
+				{
+					var secId = order.InstrumentUid.FromInstrumentIdToSecId();
+
+					// If SecurityId is specified, cancel only orders for that security
+					if (cancelMsg.SecurityId != default && cancelMsg.SecurityId != secId)
+						continue;
+
+					// Check Side filter
+					if (cancelMsg.Side != null && cancelMsg.Side != order.Direction.ToSide())
+						continue;
+
+					try
+					{
+						if (IsDemo)
+						{
+							await _service.Sandbox.CancelSandboxOrderAsync(new()
+							{
+								OrderId = order.OrderId,
+								AccountId = accountId,
+							}, cancellationToken: cancellationToken);
+						}
+						else
+						{
+							await _service.Orders.CancelOrderAsync(new()
+							{
+								OrderId = order.OrderId,
+								AccountId = accountId,
+							}, cancellationToken: cancellationToken);
+						}
+					}
+					catch (Exception ex)
+					{
+						this.AddErrorLog($"Failed to cancel order {order.OrderId}: {ex.Message}");
+						errors.Add(ex);
+					}
+				}
+
+				// Also cancel stop orders if not in demo mode
+				if (!IsDemo)
+				{
+					var stopOrdersResponse = await _service.StopOrders.GetStopOrdersAsync(new() { AccountId = accountId }, cancellationToken: cancellationToken);
+
+					foreach (var order in stopOrdersResponse.StopOrders)
+					{
+						var secId = order.InstrumentUid.FromInstrumentIdToSecId();
+
+						// If SecurityId is specified, cancel only orders for that security
+						if (cancelMsg.SecurityId != default && cancelMsg.SecurityId != secId)
+							continue;
+
+						// Check Side filter
+						if (cancelMsg.Side != null && cancelMsg.Side != order.Direction.ToSide())
+							continue;
+
+						try
+						{
+							await _service.StopOrders.CancelStopOrderAsync(new()
+							{
+								StopOrderId = order.StopOrderId,
+							}, cancellationToken: cancellationToken);
+						}
+						catch (Exception ex)
+						{
+							this.AddErrorLog($"Failed to cancel stop order {order.StopOrderId}: {ex.Message}");
+							errors.Add(ex);
+						}
+					}
+				}
+			}
+		}
+
+		// Handle ClosePositions mode
+		if (cancelMsg.Mode.HasFlag(OrderGroupCancelModes.ClosePositions))
+		{
+			foreach (var accountId in accountIds)
+			{
+				var pfResponse = await (IsDemo
+					? _service.Sandbox.GetSandboxPortfolioAsync(new() { AccountId = accountId }, cancellationToken: cancellationToken)
+					: _service.Operations.GetPortfolioAsync(new() { AccountId = accountId }, cancellationToken: cancellationToken)
+				);
+
+				foreach (var position in pfResponse.Positions)
+				{
+					var quantity = position.Quantity?.ToDecimal();
+
+					if (quantity == null || quantity == 0)
+						continue;
+
+					var secId = position.InstrumentUid.FromInstrumentIdToSecId();
+
+					// If SecurityId is specified, close only that position
+					if (cancelMsg.SecurityId != default && cancelMsg.SecurityId != secId)
+						continue;
+
+					// Determine side to close position
+					var closingSide = quantity > 0 ? Sides.Sell : Sides.Buy;
+
+					// Check Side filter
+					if (cancelMsg.Side != null && cancelMsg.Side != closingSide)
+						continue;
+
+					try
+					{
+						var volume = Math.Abs(quantity.Value);
+
+						// Create market order to close position
+						if (IsDemo)
+						{
+							await _service.Sandbox.PostSandboxOrderAsync(new PostOrderRequest
+							{
+								AccountId = accountId,
+								Direction = closingSide.ToNative(),
+								InstrumentId = position.InstrumentUid,
+								OrderId = Guid.NewGuid().ToString(),
+								OrderType = OrderType.Market,
+								Quantity = (long)volume,
+							}, cancellationToken: cancellationToken);
+						}
+						else
+						{
+							await _service.Orders.PostOrderAsync(new PostOrderRequest
+							{
+								AccountId = accountId,
+								Direction = closingSide.ToNative(),
+								InstrumentId = position.InstrumentUid,
+								OrderId = Guid.NewGuid().ToString(),
+								OrderType = OrderType.Market,
+								Quantity = (long)volume,
+							}, cancellationToken: cancellationToken);
+						}
+					}
+					catch (Exception ex)
+					{
+						this.AddErrorLog($"Failed to close position for {position.InstrumentUid}: {ex.Message}");
+						errors.Add(ex);
+					}
+				}
+			}
+		}
+
+		// Send result with errors if any
+		if (errors.Count > 0)
+		{
+			SendOutMessage(new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				OriginalTransactionId = cancelMsg.TransactionId,
+				ServerTime = CurrentTime.ConvertToUtc(),
+				HasOrderInfo = true,
+				Error = errors.Count == 1 ? errors[0] : new AggregateException(errors),
+			});
+		}
+	}
+
 	private async ValueTask<string[]> EnsureGetAccounts(CancellationToken cancellationToken)
 	{
 		if (_accountIds.Count == 0)

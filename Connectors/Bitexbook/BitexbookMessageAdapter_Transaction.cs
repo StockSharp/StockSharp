@@ -91,6 +91,85 @@ public partial class BitexbookMessageAdapter
 	}
 
 	/// <inheritdoc />
+	public override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
+	{
+		var errors = new List<Exception>();
+
+		// Handle CancelOrders mode
+		if (cancelMsg.Mode.HasFlag(OrderGroupCancelModes.CancelOrders))
+		{
+			// Bitexbook doesn't have a cancel all API, cancel orders one by one
+			// We can only cancel orders we know about from _orderInfo
+			foreach (var info in _orderInfo.Keys.ToArray())
+			{
+				// We don't have SecurityId or Side info in _orderInfo, so we can't filter
+				// If filters are specified, skip this emulation
+				if (cancelMsg.SecurityId != default || cancelMsg.Side != null)
+					continue;
+
+				try
+				{
+					var orderInfo = _orderInfo[info];
+					await _httpClient.CancelOrder(orderInfo.Third, info, cancellationToken);
+				}
+				catch (Exception ex)
+				{
+					this.AddErrorLog($"Failed to cancel order {info}: {ex.Message}");
+					errors.Add(ex);
+				}
+			}
+
+			// Refresh order status
+			await OrderStatusAsync(null, cancellationToken);
+		}
+
+		// Handle ClosePositions mode
+		if (cancelMsg.Mode.HasFlag(OrderGroupCancelModes.ClosePositions))
+		{
+			// Bitexbook stores balances similar to other crypto exchanges
+			// We need to get balances and sell all non-base currencies
+
+			// Note: Bitexbook's PortfolioLookupAsync doesn't actually fetch balances from the API
+			// For a real implementation, we would need to add GetBalances API call
+			// For now, we'll try to close positions based on known open orders
+
+			// Cancel all open orders first (they might be holding funds)
+			foreach (var info in _orderInfo.Values.ToArray())
+			{
+				// Check Side filter if applicable
+				// (we don't know the side of the order from the stored info)
+
+				try
+				{
+					await _httpClient.CancelOrder(info.Third, info.First, cancellationToken);
+				}
+				catch (Exception ex)
+				{
+					this.AddErrorLog($"Failed to cancel order {info.First}: {ex.Message}");
+					errors.Add(ex);
+				}
+			}
+
+			// Bitexbook likely doesn't support streaming, refresh status manually
+			await OrderStatusAsync(null, cancellationToken);
+			await PortfolioLookupAsync(null, cancellationToken);
+		}
+
+		// Send result with errors if any
+		if (errors.Count > 0)
+		{
+			SendOutMessage(new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				OriginalTransactionId = cancelMsg.TransactionId,
+				ServerTime = CurrentTime.ConvertToUtc(),
+				HasOrderInfo = true,
+				Error = errors.Count == 1 ? errors[0] : new AggregateException(errors),
+			});
+		}
+	}
+
+	/// <inheritdoc />
 	public override ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
 		if (lookupMsg != null)

@@ -80,6 +80,115 @@ public partial class CoinbaseMessageAdapter
 	}
 
 	/// <inheritdoc />
+	public override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
+	{
+		var errors = new List<Exception>();
+
+		// Handle CancelOrders mode
+		if (cancelMsg.Mode.HasFlag(OrderGroupCancelModes.CancelOrders))
+		{
+			// Get all active orders
+			var orders = await _restClient.GetOrders(cancellationToken);
+
+			foreach (var order in orders)
+			{
+				var secId = order.Product.ToStockSharp();
+
+				// If SecurityId is specified, cancel only orders for that security
+				if (cancelMsg.SecurityId != default && cancelMsg.SecurityId != secId)
+					continue;
+
+				// Check Side filter
+				if (cancelMsg.Side != null && cancelMsg.Side != order.Side.ToSide())
+					continue;
+
+				try
+				{
+					await _restClient.CancelOrder(order.Id, cancellationToken);
+				}
+				catch (Exception ex)
+				{
+					this.AddErrorLog($"Failed to cancel order {order.Id}: {ex.Message}");
+					errors.Add(ex);
+				}
+			}
+		}
+
+		// Handle ClosePositions mode
+		if (cancelMsg.Mode.HasFlag(OrderGroupCancelModes.ClosePositions))
+		{
+			// Get current balances to determine positions
+			var accounts = await _restClient.GetAccounts(cancellationToken);
+
+			foreach (var account in accounts)
+			{
+				var available = (decimal)account.Available;
+
+				if (available <= 0)
+					continue;
+
+				var secId = new SecurityId
+				{
+					SecurityCode = account.Currency,
+					BoardCode = BoardCodes.Coinbase,
+				};
+
+				// If SecurityId is specified, close only that position
+				if (cancelMsg.SecurityId != default && cancelMsg.SecurityId != secId)
+					continue;
+
+				// Skip USD and stablecoins as they are base currencies
+				if (account.Currency.EqualsIgnoreCase("USD") ||
+				    account.Currency.EqualsIgnoreCase("USDT") ||
+				    account.Currency.EqualsIgnoreCase("USDC"))
+					continue;
+
+				// Check Side filter - spot balances are always long positions
+				if (cancelMsg.Side != null && cancelMsg.Side != Sides.Sell)
+					continue;
+
+				try
+				{
+					// Create market sell order to close the position
+					var product = $"{account.Currency}-USD";
+
+					OrderTypes? orderType = OrderTypes.Market;
+					await _restClient.RegisterOrder(
+						TransactionIdGenerator.GetNextId().To<string>(),
+						product,
+						orderType.ToNative(),
+						Sides.Sell.ToNative(),
+						null, // market order
+						null, // no stop price
+						available,
+						null, // default TIF
+						default,
+						null, // no leverage
+						cancellationToken);
+				}
+				catch (Exception ex)
+				{
+					this.AddErrorLog($"Failed to close position for {account.Currency}: {ex.Message}");
+					errors.Add(ex);
+				}
+			}
+		}
+
+		// Send result with errors if any
+		if (errors.Count > 0)
+		{
+			SendOutMessage(new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				OriginalTransactionId = cancelMsg.TransactionId,
+				ServerTime = CurrentTime.ConvertToUtc(),
+				HasOrderInfo = true,
+				Error = errors.Count == 1 ? errors[0] : new AggregateException(errors),
+			});
+		}
+	}
+
+	/// <inheritdoc />
 	public override async ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
 		var transId = lookupMsg.TransactionId;

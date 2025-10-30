@@ -113,9 +113,125 @@ partial class FtxMessageAdapter
 	/// <inheritdoc />
 	public override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
-		if (!await _restClient.CancelAllOrders(SubaccountName, cancellationToken))
+		// Handle CancelOrders mode
+		if (cancelMsg.Mode.HasFlag(OrderGroupCancelModes.CancelOrders))
 		{
-			throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(cancelMsg.OriginalTransactionId));
+			if (!await _restClient.CancelAllOrders(SubaccountName, cancellationToken))
+			{
+				throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(cancelMsg.OriginalTransactionId));
+			}
+		}
+
+		// Handle ClosePositions mode
+		if (cancelMsg.Mode.HasFlag(OrderGroupCancelModes.ClosePositions))
+		{
+			var errors = new List<Exception>();
+
+			// Get current futures positions
+			var futures = await _restClient.GetFuturesPositions(SubaccountName, cancellationToken);
+
+			foreach (var fut in futures)
+			{
+				if (!fut.Cost.HasValue || fut.Cost == 0)
+					continue;
+
+				var secId = fut.Name.ToStockSharp();
+
+				// If SecurityId is specified, close only that position
+				if (cancelMsg.SecurityId != default && cancelMsg.SecurityId != secId)
+					continue;
+
+				// Determine the side to close the position (opposite of current position)
+				var closingSide = fut.Cost > 0 ? Sides.Sell : Sides.Buy;
+
+				// Check Side filter
+				if (cancelMsg.Side != null && cancelMsg.Side != closingSide)
+					continue;
+
+				try
+				{
+					var size = Math.Abs(fut.Cost.Value);
+
+					// Create market order to close the position
+					await _restClient.RegisterOrder(
+						fut.Name,
+						closingSide,
+						null, // market order
+						OrderTypes.Market,
+						size,
+						TransactionIdGenerator.GetNextId().To<string>(),
+						SubaccountName,
+						cancellationToken);
+				}
+				catch (Exception ex)
+				{
+					this.AddErrorLog($"Failed to close position for {fut.Name}: {ex.Message}");
+					errors.Add(ex);
+				}
+			}
+
+			// Get spot balances
+			var balances = await _restClient.GetBalances(SubaccountName, cancellationToken);
+			if (balances != null)
+			{
+				foreach (var balance in balances)
+				{
+					if (balance.Total <= 0)
+						continue;
+
+					var secId = balance.Coin.ToStockSharp();
+
+					// If SecurityId is specified, close only that position
+					if (cancelMsg.SecurityId != default && cancelMsg.SecurityId != secId)
+						continue;
+
+					// Skip USD and stablecoins as they are base currencies
+					if (balance.Coin.EqualsIgnoreCase("USD") ||
+					    balance.Coin.EqualsIgnoreCase("USDT") ||
+					    balance.Coin.EqualsIgnoreCase("USDC"))
+						continue;
+
+					// Check Side filter - spot balances are always long positions
+					if (cancelMsg.Side != null && cancelMsg.Side != Sides.Sell)
+						continue;
+
+					try
+					{
+						// Try to sell the coin to USD
+						var market = $"{balance.Coin}/USD";
+
+						await _restClient.RegisterOrder(
+							market,
+							Sides.Sell,
+							null, // market order
+							OrderTypes.Market,
+							balance.Total,
+							TransactionIdGenerator.GetNextId().To<string>(),
+							SubaccountName,
+							cancellationToken);
+					}
+					catch (Exception ex)
+					{
+						this.AddErrorLog($"Failed to close position for {balance.Coin}: {ex.Message}");
+						errors.Add(ex);
+					}
+				}
+			}
+
+			// FTX supports real-time updates, no need to refresh portfolio manually
+
+			// Send result with errors if any
+			if (errors.Count > 0)
+			{
+				SendOutMessage(new ExecutionMessage
+				{
+					DataTypeEx = DataType.Transactions,
+					OriginalTransactionId = cancelMsg.TransactionId,
+					ServerTime = CurrentTime.ConvertToUtc(),
+					HasOrderInfo = true,
+					Error = errors.Count == 1 ? errors[0] : new AggregateException(errors),
+				});
+			}
 		}
 	}
 

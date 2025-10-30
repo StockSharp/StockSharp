@@ -30,6 +30,12 @@ public class OrderGroupCancelMessage : OrderMessage, ISecurityTypesMessage
 	public Sides? Side { get; set; }
 
 	/// <summary>
+	/// Operation mode: cancel orders, close positions, or both.
+	/// </summary>
+	[DataMember]
+	public OrderGroupCancelModes Mode { get; set; } = OrderGroupCancelModes.CancelOrders;
+
+	/// <summary>
 	/// Securities types.
 	/// </summary>
 	[DataMember]
@@ -51,7 +57,7 @@ public class OrderGroupCancelMessage : OrderMessage, ISecurityTypesMessage
 	/// <inheritdoc />
 	public override string ToString()
 	{
-		return base.ToString() + $",IsStop={IsStop},Side={Side}";
+		return base.ToString() + $",IsStop={IsStop},Side={Side},Mode={Mode}";
 	}
 
 	/// <summary>
@@ -77,6 +83,28 @@ public class OrderGroupCancelMessage : OrderMessage, ISecurityTypesMessage
 
 		destination.IsStop = IsStop;
 		destination.Side = Side;
+		destination.Mode = Mode;
 		destination.SecurityTypes = SecurityTypes?.ToArray();
 	}
+}
+
+/// <summary>
+/// Order group cancel modes.
+/// </summary>
+[DataContract]
+[Serializable]
+[Flags]
+public enum OrderGroupCancelModes
+{
+	/// <summary>
+	/// Cancel orders.
+	/// </summary>
+	[EnumMember]
+	CancelOrders = 1,
+
+	/// <summary>
+	/// Close positions.
+	/// </summary>
+	[EnumMember]
+	ClosePositions = CancelOrders << 1,
 }

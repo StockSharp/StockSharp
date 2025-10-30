@@ -21,7 +21,6 @@ public partial class CoinbaseMessageAdapter
 
 		this.AddMarketDataSupport();
 		this.AddTransactionalSupport();
-		this.RemoveSupportedMessage(MessageTypes.OrderGroupCancel);
 
 		this.AddSupportedMarketDataType(DataType.Ticks);
 		this.AddSupportedMarketDataType(DataType.MarketDepth);

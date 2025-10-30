@@ -126,6 +126,105 @@ partial class BtceMessageAdapter
 		ProcessFunds(reply.Command.Funds);
 	}
 
+	/// <inheritdoc />
+	public override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
+	{
+		var errors = new List<Exception>();
+
+		// Handle CancelOrders mode
+		if (cancelMsg.Mode.HasFlag(OrderGroupCancelModes.CancelOrders))
+		{
+			// Get all active orders
+			var orders = (await _httpClient.GetActiveOrders(cancellationToken)).Items.Values;
+
+			foreach (var order in orders)
+			{
+				var secId = order.Instrument.ToStockSharp();
+
+				// If SecurityId is specified, cancel only orders for that security
+				if (cancelMsg.SecurityId != default && cancelMsg.SecurityId != secId)
+					continue;
+
+				// Check Side filter
+				if (cancelMsg.Side != null && cancelMsg.Side != order.Side.ToSide())
+					continue;
+
+				try
+				{
+					await _httpClient.CancelOrder(order.Id, cancellationToken);
+				}
+				catch (Exception ex)
+				{
+					this.AddErrorLog($"Failed to cancel order {order.Id}: {ex.Message}");
+					errors.Add(ex);
+				}
+			}
+		}
+
+		// Handle ClosePositions mode
+		if (cancelMsg.Mode.HasFlag(OrderGroupCancelModes.ClosePositions))
+		{
+			// Get current positions
+			foreach (var pos in _positions.ToArray())
+			{
+				var secId = pos.Key;
+				var value = pos.Value;
+
+				if (value <= 0)
+					continue;
+
+				// If SecurityId is specified, close only that position
+				if (cancelMsg.SecurityId != default && cancelMsg.SecurityId != secId)
+					continue;
+
+				// Skip base currencies (USD, EUR, RUR)
+				if (secId.SecurityCode.EqualsIgnoreCase("USD") ||
+				    secId.SecurityCode.EqualsIgnoreCase("EUR") ||
+				    secId.SecurityCode.EqualsIgnoreCase("RUR"))
+					continue;
+
+				// Check Side filter - spot balances are always long positions
+				if (cancelMsg.Side != null && cancelMsg.Side != Sides.Sell)
+					continue;
+
+				try
+				{
+					// Create sell order to close the position
+					var currency = secId.SecurityCode.ToLowerInvariant() + "_usd";
+
+					await _httpClient.MakeOrder(
+						currency,
+						Sides.Sell.ToBtce(),
+						0.00000001m, // minimum price (will be filled at market)
+						value,
+						cancellationToken);
+				}
+				catch (Exception ex)
+				{
+					this.AddErrorLog($"Failed to close position for {secId.SecurityCode}: {ex.Message}");
+					errors.Add(ex);
+				}
+			}
+		}
+
+		// Btce likely doesn't support streaming, refresh positions and portfolio manually
+		await OrderStatusAsync(null, cancellationToken);
+		await PortfolioLookupAsync(null, cancellationToken);
+
+		// Send result with errors if any
+		if (errors.Count > 0)
+		{
+			SendOutMessage(new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				OriginalTransactionId = cancelMsg.TransactionId,
+				ServerTime = CurrentTime.ConvertToUtc(),
+				HasOrderInfo = true,
+				Error = errors.Count == 1 ? errors[0] : new AggregateException(errors),
+			});
+		}
+	}
+
 	private void ProcessOrder(Order order, decimal balance, long transId, long origTransId)
 	{
 		SendOutMessage(new ExecutionMessage
@@ -164,7 +263,7 @@ partial class BtceMessageAdapter
 			//if (!_unkOrds.TryGetValue(trade.Instrument, out var que) || que.Count == 0)
 			//	return;
 
-			//// ïîñëåäíèé íåèçâåñòíûé îðäåð â äåêå
+			//// Ð¿Ð¾ÑÐ»ÐµÐ´Ð½Ð¸Ð¹ Ð½ÐµÐ¸Ð·Ð²ÐµÑÑ‚Ð½Ñ‹Ð¹ Ð¾Ñ€Ð´ÐµÑ€ Ð² Ð´ÐµÐºÐµ
 			//var msg = que.FindLast(o => o.SecurityId == secId);
 			//if (msg == null)
 			//	return;

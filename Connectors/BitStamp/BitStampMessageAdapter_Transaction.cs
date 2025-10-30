@@ -71,18 +71,29 @@ partial class BitStampMessageAdapter
 	/// <inheritdoc />
 	public override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
-		await _httpClient.CancelAllOrders(cancellationToken);
-
-		SendOutMessage(new ExecutionMessage
+		// Handle CancelOrders mode
+		if (cancelMsg.Mode.HasFlag(OrderGroupCancelModes.CancelOrders))
 		{
-			ServerTime = CurrentTime.ConvertToUtc(),
-			DataTypeEx = DataType.Transactions,
-			OriginalTransactionId = cancelMsg.TransactionId,
-			HasOrderInfo = true,
-		});
+			await _httpClient.CancelAllOrders(cancellationToken);
 
-		await OrderStatusAsync(null, cancellationToken);
-		await PortfolioLookupAsync(null, cancellationToken);
+			SendOutMessage(new ExecutionMessage
+			{
+				ServerTime = CurrentTime.ConvertToUtc(),
+				DataTypeEx = DataType.Transactions,
+				OriginalTransactionId = cancelMsg.TransactionId,
+				HasOrderInfo = true,
+			});
+
+			await OrderStatusAsync(null, cancellationToken);
+			await PortfolioLookupAsync(null, cancellationToken);
+		}
+
+		// Handle ClosePositions mode
+		if (cancelMsg.Mode.HasFlag(OrderGroupCancelModes.ClosePositions))
+		{
+			// Delegate to base adapter for ClosePositions
+			await base.CancelOrderGroupAsync(cancelMsg, cancellationToken);
+		}
 	}
 
 	private void ProcessOrder(UserOrder order, decimal balance, long transId, long origTransId)
@@ -376,6 +387,8 @@ partial class BitStampMessageAdapter
 
 		return trades;
 	}
+
+	/// <inheritdoc />
 
 	/// <inheritdoc />
 	public override async ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)

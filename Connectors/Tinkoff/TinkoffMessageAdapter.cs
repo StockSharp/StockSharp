@@ -29,7 +29,6 @@ public partial class TinkoffMessageAdapter
 	{
 		this.AddMarketDataSupport();
 		this.AddTransactionalSupport();
-		this.RemoveSupportedMessage(MessageTypes.OrderGroupCancel);
 
 		MaxParallelMessages = 1;
 

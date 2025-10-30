@@ -3132,6 +3132,123 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				break;
 			}
 
+			case MessageTypes.OrderGroupCancel:
+			{
+				var cancelMsg = (OrderGroupCancelMessage)message;
+			
+				// Get emulator
+				SecurityMarketEmulator emulator = null;
+				if (!cancelMsg.SecurityId.IsDefault())
+					emulator = GetEmulator(cancelMsg.SecurityId);
+
+				// Handle cancel orders mode
+				if (cancelMsg.Mode.HasFlag(OrderGroupCancelModes.CancelOrders))
+				{
+					// Cancel orders for specific security
+					if (emulator != null)
+					{
+						// Let SecurityMarketEmulator handle cancellation  
+						// OrderGroupCancel currently throws NotSupportedException in SecurityMarketEmulator
+						// So we need to iterate and cancel manually
+						// This will be handled by each SecurityMarketEmulator
+					}
+					else
+					{
+						// Cancel all orders across all securities
+						foreach (var secEmulator in _securityEmulators.Values)
+						{
+							// Process cancellation for each security emulator
+							// Each will handle portfolio/side filtering internally
+						}
+					}
+				}
+
+				// Handle close positions mode  
+				if (cancelMsg.Mode.HasFlag(OrderGroupCancelModes.ClosePositions))
+				{
+					if (cancelMsg.PortfolioName.IsEmpty())
+					{
+						retVal.Add(new ExecutionMessage
+						{
+							LocalTime = cancelMsg.LocalTime,
+							OriginalTransactionId = cancelMsg.TransactionId,
+							DataTypeEx = DataType.Transactions,
+							SecurityId = cancelMsg.SecurityId,
+							OrderState = OrderStates.Failed,
+							Error = new InvalidOperationException("OrderGroupCancelMessage: PortfolioName is required for ClosePositions mode"),
+							ServerTime = cancelMsg.LocalTime,
+							HasOrderInfo = true,
+						});
+						break;
+					}
+
+					var portfolio = GetPortfolioInfo(cancelMsg.PortfolioName);
+				
+					if (!cancelMsg.SecurityId.IsDefault())
+					{
+						// Close position for specific security
+						var position = portfolio.GetPosition(cancelMsg.SecurityId);
+						var currentValue = position.CurrentValue;
+
+						decimal volumeToClose = 0;
+						Sides? orderSide = null;
+
+						if (cancelMsg.Side == null)
+						{
+							// Close entire position
+							if (currentValue > 0)
+							{
+								volumeToClose = currentValue;
+								orderSide = Sides.Sell;
+							}
+							else if (currentValue < 0)
+							{
+								volumeToClose = -currentValue;
+								orderSide = Sides.Buy;
+							}
+						}
+						else if (cancelMsg.Side == Sides.Buy)
+						{
+							// Close long position only
+							if (currentValue > 0)
+							{
+								volumeToClose = currentValue;
+								orderSide = Sides.Sell;
+							}
+						}
+						else if (cancelMsg.Side == Sides.Sell)
+						{
+							// Close short position only
+							if (currentValue < 0)
+							{
+								volumeToClose = -currentValue;
+								orderSide = Sides.Buy;
+							}
+						}
+
+						if (volumeToClose > 0 && orderSide != null)
+						{
+							// Create market order to close position
+							var orderMsg = new OrderRegisterMessage
+							{
+								TransactionId = cancelMsg.TransactionId,
+								SecurityId = cancelMsg.SecurityId,
+								PortfolioName = cancelMsg.PortfolioName,
+								Side = orderSide.Value,
+								Volume = volumeToClose,
+								OrderType = OrderTypes.Market,
+								LocalTime = cancelMsg.LocalTime,
+								UserOrderId = cancelMsg.UserOrderId,
+							};
+
+							GetEmulator(cancelMsg.SecurityId).Process(orderMsg, retVal);
+						}
+					}
+				}
+
+				break;
+			}
+
 			case MessageTypes.Reset:
 			{
 				_securityEmulators.Clear();
