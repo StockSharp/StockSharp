@@ -1094,6 +1094,211 @@ public class RiskTests
 		rule.ProcessMessage(execMsg).AssertTrue();
 	}
 
+	[TestMethod]
+	public void AdapterClosePositionsMode()
+	{
+		// Test that RiskMessageAdapter sends OrderGroupCancelMessage with ClosePositions mode
+		// when a risk rule with ClosePositions action is triggered
+
+		// Use a custom adapter to intercept messages sent to inner adapter
+		var testAdapter = new TestInnerAdapter();
+		var riskManager = new RiskManager();
+		var adapter = new RiskMessageAdapter(testAdapter, riskManager);
+
+		var rule = new RiskPnLRule
+		{
+			PnL = new() { Value = -1000, Type = UnitTypes.Absolute },
+			Action = RiskActions.ClosePositions
+		};
+		riskManager.Rules.Add(rule);
+
+		// Trigger the rule by sending a position change message with loss
+		var positionMsg = new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTimeOffset.UtcNow,
+			PortfolioName = _pfName
+		};
+		positionMsg.Add(PositionChangeTypes.CurrentValue, -1500m);
+
+		adapter.SendInMessage(positionMsg);
+
+		// Check that OrderGroupCancelMessage was sent to inner adapter with ClosePositions mode
+		var cancelMsg = testAdapter.ReceivedMessages.OfType<OrderGroupCancelMessage>().FirstOrDefault();
+		cancelMsg.AssertNotNull();
+		cancelMsg.Mode.AssertEqual(OrderGroupCancelModes.ClosePositions);
+	}
+
+	[TestMethod]
+	public void AdapterCancelOrdersMode()
+	{
+		// Test that RiskMessageAdapter sends OrderGroupCancelMessage with CancelOrders mode
+		// when a risk rule with CancelOrders action is triggered
+		var emu = new MarketEmulator(new CollectionSecurityProvider([new() { Id = "TEST@TEST" }]), new CollectionPortfolioProvider([Portfolio.CreateSimulator()]), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator());
+		var riskManager = new RiskManager();
+		var adapter = new RiskMessageAdapter(emu, riskManager);
+
+		var messages = new List<Message>();
+		adapter.NewOutMessage += messages.Add;
+
+		var rule = new RiskPositionSizeRule
+		{
+			Position = 100,
+			Action = RiskActions.CancelOrders
+		};
+		riskManager.Rules.Add(rule);
+
+		// Trigger the rule by sending a position change message exceeding the limit
+		var positionMsg = new PositionChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTimeOffset.UtcNow,
+			PortfolioName = _pfName
+		};
+		positionMsg.Add(PositionChangeTypes.CurrentValue, 150m);
+
+		adapter.SendInMessage(positionMsg);
+
+		// Check that OrderGroupCancelMessage was sent with CancelOrders mode (looped back)
+		var cancelMsg = messages.OfType<OrderGroupCancelMessage>().FirstOrDefault();
+		cancelMsg.AssertNotNull();
+		// CancelOrders is the default mode, should be set
+		(cancelMsg.Mode & OrderGroupCancelModes.CancelOrders).AssertEqual(OrderGroupCancelModes.CancelOrders);
+	}
+
+	[TestMethod]
+	public void AdapterStopTradingBlocks()
+	{
+		// Test that RiskMessageAdapter blocks trading when StopTrading action is triggered
+		var emu = new MarketEmulator(new CollectionSecurityProvider([new() { Id = "TEST@TEST" }]), new CollectionPortfolioProvider([Portfolio.CreateSimulator()]), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator());
+		var riskManager = new RiskManager();
+		var adapter = new RiskMessageAdapter(emu, riskManager);
+
+		var messages = new List<Message>();
+		adapter.NewOutMessage += messages.Add;
+
+		var rule = new RiskCommissionRule
+		{
+			Commission = 1000,
+			Action = RiskActions.StopTrading
+		};
+		riskManager.Rules.Add(rule);
+
+		// Trigger the rule by sending a position change message with high commission
+		var positionMsg = new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTimeOffset.UtcNow,
+			PortfolioName = _pfName
+		};
+		positionMsg.Add(PositionChangeTypes.Commission, 1500m);
+
+		adapter.SendInMessage(positionMsg);
+
+		// Now try to register an order - it should be rejected
+		var orderMsg = new OrderRegisterMessage
+		{
+			TransactionId = 1,
+			SecurityId = Helper.CreateSecurityId(),
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 10,
+			PortfolioName = _pfName
+		};
+
+		adapter.SendInMessage(orderMsg);
+
+		// Check that the order was rejected with Failed state
+		var execMsg = messages.OfType<ExecutionMessage>()
+			.FirstOrDefault(x => x.OriginalTransactionId == 1 && x.OrderState == OrderStates.Failed);
+		execMsg.AssertNotNull();
+		execMsg.Error.AssertNotNull();
+	}
+
+	[TestMethod]
+	public void AdapterTradingUnblocks()
+	{
+		// Test that RiskMessageAdapter unblocks trading when risk limits are no longer exceeded
+		var testAdapter = new TestInnerAdapter();
+		var riskManager = new RiskManager();
+		var adapter = new RiskMessageAdapter(testAdapter, riskManager);
+
+		var messages = new List<Message>();
+		adapter.NewOutMessage += messages.Add;
+
+		var rule = new RiskPnLRule
+		{
+			PnL = new() { Value = -1000, Type = UnitTypes.Absolute },
+			Action = RiskActions.StopTrading
+		};
+		riskManager.Rules.Add(rule);
+
+		// Trigger the rule by sending a position change message with loss
+		var positionMsg = new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTimeOffset.UtcNow,
+			PortfolioName = _pfName
+		};
+		positionMsg.Add(PositionChangeTypes.CurrentValue, -1500m);
+
+		adapter.SendInMessage(positionMsg);
+
+		// Verify trading is blocked
+		var orderMsg = new OrderRegisterMessage
+		{
+			TransactionId = 1,
+			SecurityId = Helper.CreateSecurityId(),
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 10,
+			PortfolioName = _pfName
+		};
+
+		adapter.SendInMessage(orderMsg);
+
+		var execMsg = messages.OfType<ExecutionMessage>()
+			.FirstOrDefault(x => x.OriginalTransactionId == 1 && x.OrderState == OrderStates.Failed);
+		execMsg.AssertNotNull();
+
+		messages.Clear();
+		testAdapter.ReceivedMessages.Clear();
+
+		// Now send a position message that no longer exceeds the limit
+		positionMsg = new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTimeOffset.UtcNow,
+			PortfolioName = _pfName
+		};
+		positionMsg.Add(PositionChangeTypes.CurrentValue, -500m);
+
+		adapter.SendInMessage(positionMsg);
+
+		// Try to register an order again - it should now be accepted (not rejected)
+		var orderMsg2 = new OrderRegisterMessage
+		{
+			TransactionId = 2,
+			SecurityId = Helper.CreateSecurityId(),
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 10,
+			PortfolioName = _pfName
+		};
+
+		adapter.SendInMessage(orderMsg2);
+
+		// Check that the order was NOT rejected
+		var failedMsg = messages.OfType<ExecutionMessage>()
+			.FirstOrDefault(x => x.OriginalTransactionId == 2 && x.OrderState == OrderStates.Failed);
+		failedMsg.AssertNull();
+
+		// Verify the message was sent to inner adapter
+		var sentOrder = testAdapter.ReceivedMessages.OfType<OrderRegisterMessage>()
+			.FirstOrDefault(x => x.TransactionId == 2);
+		sentOrder.AssertNotNull();
+	}
+
 	private class TestRiskRule : RiskRule
 	{
 		public bool ShouldActivate { get; set; }
@@ -1113,5 +1318,28 @@ public class RiskTests
 			LastMessage = message;
 			return ShouldActivate;
 		}
+	}
+
+	// Wrapper adapter that captures all incoming messages
+	private class TestInnerAdapter : MessageAdapterWrapper
+	{
+		public List<Message> ReceivedMessages { get; } = new();
+
+		public TestInnerAdapter()
+			: base(new MarketEmulator(
+				new CollectionSecurityProvider([new() { Id = "TEST@TEST" }]),
+				new CollectionPortfolioProvider([Portfolio.CreateSimulator()]),
+				new InMemoryExchangeInfoProvider(),
+				new IncrementalIdGenerator()))
+		{
+		}
+
+		protected override bool OnSendInMessage(Message message)
+		{
+			ReceivedMessages.Add(message);
+			return base.OnSendInMessage(message);
+		}
+
+		public override IMessageChannel Clone() => new TestInnerAdapter();
 	}
 }

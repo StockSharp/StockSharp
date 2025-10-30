@@ -305,6 +305,149 @@ public class ImportTests : BaseTestClass
 		return Import(DataType.Board, false, Helper.RandomBoards(10), fields);
 	}
 
+	[TestMethod]
+	public Task Depths_OnlyBids()
+	{
+		var security = Helper.CreateStorageSecurity();
+		var allFields = FieldMappingRegistry.CreateFields(DataType.MarketDepth).ToArray();
+		var fields = new[]
+		{
+			allFields.First(f => f.Name == "SecurityId.SecurityCode"),
+			allFields.First(f => f.Name == "SecurityId.BoardCode"),
+			allFields.First(f => f.Name == "ServerTime.Date"),
+			allFields.First(f => f.Name == "ServerTime.TimeOfDay"),
+			allFields.First(f => f.Name == "Price"),
+			allFields.First(f => f.Name == "Volume"),
+			allFields.First(f => f.Name == "Side"),
+		};
+
+		// Create depths with only bids
+		var depths = security.RandomDepths(20, ordersCount: false);
+		var onlyBids = depths.Select((d, i) =>
+		{
+			var clone = d.TypedClone();
+			clone.Asks = Array.Empty<QuoteChange>();
+			// Ensure unique timestamps to avoid grouping
+			clone.ServerTime = d.ServerTime.AddMilliseconds(i);
+			return clone;
+		}).ToArray();
+
+		return Import(DataType.MarketDepth, true, onlyBids, fields);
+	}
+
+	[TestMethod]
+	public Task Depths_OnlyAsks()
+	{
+		var security = Helper.CreateStorageSecurity();
+		var allFields = FieldMappingRegistry.CreateFields(DataType.MarketDepth).ToArray();
+		var fields = new[]
+		{
+			allFields.First(f => f.Name == "SecurityId.SecurityCode"),
+			allFields.First(f => f.Name == "SecurityId.BoardCode"),
+			allFields.First(f => f.Name == "ServerTime.Date"),
+			allFields.First(f => f.Name == "ServerTime.TimeOfDay"),
+			allFields.First(f => f.Name == "Price"),
+			allFields.First(f => f.Name == "Volume"),
+			allFields.First(f => f.Name == "Side"),
+		};
+
+		// Create depths with only asks
+		var depths = security.RandomDepths(20, ordersCount: false);
+		var onlyAsks = depths.Select((d, i) =>
+		{
+			var clone = d.TypedClone();
+			clone.Bids = Array.Empty<QuoteChange>();
+			// Ensure unique timestamps to avoid grouping
+			clone.ServerTime = d.ServerTime.AddMilliseconds(i);
+			return clone;
+		}).ToArray();
+
+		return Import(DataType.MarketDepth, true, onlyAsks, fields);
+	}
+
+	[TestMethod]
+	public Task Depths_Empty()
+	{
+		var security = Helper.CreateStorageSecurity();
+		var allFields = FieldMappingRegistry.CreateFields(DataType.MarketDepth).ToArray();
+		var fields = new[]
+		{
+			allFields.First(f => f.Name == "SecurityId.SecurityCode"),
+			allFields.First(f => f.Name == "SecurityId.BoardCode"),
+			allFields.First(f => f.Name == "ServerTime.Date"),
+			allFields.First(f => f.Name == "ServerTime.TimeOfDay"),
+			allFields.First(f => f.Name == "Price"),
+			allFields.First(f => f.Name == "Volume"),
+			allFields.First(f => f.Name == "Side"),
+		};
+
+		// Create empty depths (to clear the order book)
+		var depths = security.RandomDepths(20, ordersCount: false);
+		var empty = depths.Select((d, i) =>
+		{
+			var clone = d.TypedClone();
+			clone.Bids = Array.Empty<QuoteChange>();
+			clone.Asks = Array.Empty<QuoteChange>();
+			// Ensure unique timestamps to avoid grouping
+			clone.ServerTime = d.ServerTime.AddMilliseconds(i);
+			return clone;
+		}).ToArray();
+
+		return Import(DataType.MarketDepth, true, empty, fields);
+	}
+
+	[TestMethod]
+	public Task Depths_Mixed()
+	{
+		var security = Helper.CreateStorageSecurity();
+		var allFields = FieldMappingRegistry.CreateFields(DataType.MarketDepth).ToArray();
+		var fields = new[]
+		{
+			allFields.First(f => f.Name == "SecurityId.SecurityCode"),
+			allFields.First(f => f.Name == "SecurityId.BoardCode"),
+			allFields.First(f => f.Name == "ServerTime.Date"),
+			allFields.First(f => f.Name == "ServerTime.TimeOfDay"),
+			allFields.First(f => f.Name == "Price"),
+			allFields.First(f => f.Name == "Volume"),
+			allFields.First(f => f.Name == "Side"),
+		};
+
+		// Create mixed depths: some full, some only bids, some only asks, some empty
+		var depths = security.RandomDepths(40, ordersCount: false);
+		var mixed = new List<QuoteChangeMessage>();
+
+		for (int i = 0; i < depths.Length; i++)
+		{
+			var clone = depths[i].TypedClone();
+
+			switch (i % 4)
+			{
+				case 0:
+					// Full depth - keep as is
+					break;
+				case 1:
+					// Only bids
+					clone.Asks = Array.Empty<QuoteChange>();
+					break;
+				case 2:
+					// Only asks
+					clone.Bids = Array.Empty<QuoteChange>();
+					break;
+				case 3:
+					// Empty
+					clone.Bids = Array.Empty<QuoteChange>();
+					clone.Asks = Array.Empty<QuoteChange>();
+					break;
+			}
+
+			// Ensure unique timestamps to avoid grouping
+			clone.ServerTime = depths[i].ServerTime.AddMilliseconds(i);
+			mixed.Add(clone);
+		}
+
+		return Import(DataType.MarketDepth, true, mixed.ToArray(), fields);
+	}
+
 	private const string _tickFullTemplate = "{SecurityId.SecurityCode};{SecurityId.BoardCode};{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{TradeId};{TradePrice};{TradeVolume}";
 
 	[TestMethod]

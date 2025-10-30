@@ -1115,4 +1115,280 @@ public class MarketEmulatorTests
 		m.AssertNotNull();
 		m.TradeVolume.AssertEqual(reg.Volume);
 	}
+
+	[TestMethod]
+	public void OrderGroupCancelOrders()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTimeOffset.UtcNow;
+		AddBook(emu, id, now);
+
+		// Create two limit orders
+		var reg1 = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Price = 99,
+			Volume = 5,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg1);
+
+		var reg2 = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Sell,
+			Price = 102,
+			Volume = 3,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg2);
+
+		// Check that orders are active
+		var m1 = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg1.TransactionId);
+		m1.AssertNotNull();
+		m1.OrderState.AssertEqual(OrderStates.Active);
+
+		var m2 = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg2.TransactionId);
+		m2.AssertNotNull();
+		m2.OrderState.AssertEqual(OrderStates.Active);
+
+		res.Clear();
+
+		// Cancel all orders
+		emu.SendInMessage(new OrderGroupCancelMessage
+		{
+			LocalTime = now.AddSeconds(1),
+			TransactionId = _idGenerator.GetNextId(),
+			PortfolioName = _pfName,
+			Mode = OrderGroupCancelModes.CancelOrders,
+		});
+
+		// Check that both orders are cancelled
+		var cancelled1 = res.OfType<ExecutionMessage>().FirstOrDefault(x => x.OrderId == 1 && x.OrderState == OrderStates.Done);
+		cancelled1.AssertNotNull();
+
+		var cancelled2 = res.OfType<ExecutionMessage>().FirstOrDefault(x => x.OrderId == 2 && x.OrderState == OrderStates.Done);
+		cancelled2.AssertNotNull();
+	}
+
+	[TestMethod]
+	public void OrderGroupClosePositions()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTimeOffset.UtcNow;
+		AddBook(emu, id, now);
+
+		// Create a long position by executing a buy order
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Price = 101,
+			Volume = 10,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg);
+
+		// Verify the order executed
+		var trade = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		trade.AssertNotNull();
+		trade.TradeVolume.AssertEqual(10);
+
+		res.Clear();
+
+		// Close all positions
+		emu.SendInMessage(new OrderGroupCancelMessage
+		{
+			LocalTime = now.AddSeconds(1),
+			TransactionId = _idGenerator.GetNextId(),
+			PortfolioName = _pfName,
+			Mode = OrderGroupCancelModes.ClosePositions,
+		});
+
+		// Check that a closing order was created (sell order to close long position)
+		var closeOrder = res.OfType<ExecutionMessage>().FirstOrDefault(x => x.Side == Sides.Sell && x.OrderVolume == 10);
+		closeOrder.AssertNotNull();
+	}
+
+	[TestMethod]
+	public void OrderGroupCancelAndClose()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTimeOffset.UtcNow;
+		AddBook(emu, id, now);
+
+		// Create a limit order that stays in the book
+		var reg1 = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Price = 99,
+			Volume = 5,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg1);
+
+		// Create a position by executing a buy order
+		var reg2 = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Price = 101,
+			Volume = 10,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg2);
+
+		res.Clear();
+
+		// Cancel all orders AND close all positions
+		emu.SendInMessage(new OrderGroupCancelMessage
+		{
+			LocalTime = now.AddSeconds(1),
+			TransactionId = _idGenerator.GetNextId(),
+			PortfolioName = _pfName,
+			Mode = OrderGroupCancelModes.CancelOrders | OrderGroupCancelModes.ClosePositions,
+		});
+
+		// Check that the pending order was cancelled
+		var cancelled = res.OfType<ExecutionMessage>().FirstOrDefault(x => x.OrderId == 1 && x.OrderState == OrderStates.Done);
+		cancelled.AssertNotNull();
+
+		// Check that a closing order was created
+		var closeOrder = res.OfType<ExecutionMessage>().FirstOrDefault(x => x.Side == Sides.Sell && x.OrderVolume == 10);
+		closeOrder.AssertNotNull();
+	}
+
+	[TestMethod]
+	public void OrderGroupCancelOrdersWithSecurityFilter()
+	{
+		var id1 = Helper.CreateSecurityId();
+		var id2 = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id1, out var res);
+		var now = DateTimeOffset.UtcNow;
+		AddBook(emu, id1, now);
+		AddBook(emu, id2, now);
+
+		// Create orders for two different securities
+		var reg1 = new OrderRegisterMessage
+		{
+			SecurityId = id1,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Price = 99,
+			Volume = 5,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg1);
+
+		var reg2 = new OrderRegisterMessage
+		{
+			SecurityId = id2,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Price = 99,
+			Volume = 3,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg2);
+
+		res.Clear();
+
+		// Cancel only orders for id1
+		emu.SendInMessage(new OrderGroupCancelMessage
+		{
+			LocalTime = now.AddSeconds(1),
+			TransactionId = _idGenerator.GetNextId(),
+			PortfolioName = _pfName,
+			SecurityId = id1,
+			Mode = OrderGroupCancelModes.CancelOrders,
+		});
+
+		// Check that only order for id1 is cancelled
+		var cancelled1 = res.OfType<ExecutionMessage>().FirstOrDefault(x => x.OrderId == 1 && x.OrderState == OrderStates.Done);
+		cancelled1.AssertNotNull();
+
+		// Order for id2 should still be active (no cancellation message)
+		var cancelled2 = res.OfType<ExecutionMessage>().FirstOrDefault(x => x.OrderId == 2 && x.OrderState == OrderStates.Done);
+		cancelled2.AssertNull();
+	}
+
+	[TestMethod]
+	public void OrderGroupCancelOrdersWithSideFilter()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTimeOffset.UtcNow;
+		AddBook(emu, id, now);
+
+		// Create buy and sell orders
+		var reg1 = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Price = 99,
+			Volume = 5,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg1);
+
+		var reg2 = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Sell,
+			Price = 102,
+			Volume = 3,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg2);
+
+		res.Clear();
+
+		// Cancel only buy orders
+		emu.SendInMessage(new OrderGroupCancelMessage
+		{
+			LocalTime = now.AddSeconds(1),
+			TransactionId = _idGenerator.GetNextId(),
+			PortfolioName = _pfName,
+			Side = Sides.Buy,
+			Mode = OrderGroupCancelModes.CancelOrders,
+		});
+
+		// Check that only buy order is cancelled
+		var cancelled1 = res.OfType<ExecutionMessage>().FirstOrDefault(x => x.OrderId == 1 && x.OrderState == OrderStates.Done);
+		cancelled1.AssertNotNull();
+
+		// Sell order should still be active
+		var cancelled2 = res.OfType<ExecutionMessage>().FirstOrDefault(x => x.OrderId == 2 && x.OrderState == OrderStates.Done);
+		cancelled2.AssertNull();
+	}
 }
