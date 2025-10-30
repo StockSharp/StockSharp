@@ -224,6 +224,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	private bool _isPrevDateTradable;
 	private bool _stopping;
 	private BoardMessage _boardMsg;
+	private bool _isTradingBlocked;
 
 	private readonly IStrategyParam[] _systemParams;
 
@@ -1308,7 +1309,13 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 					}
 				}
 			}
-			
+
+			if (_isTradingBlocked)
+			{
+				noTradeReason = LocalizedStrings.TradingDisabled;
+				return false;
+			}
+
 			noTradeReason = null;
 			return true;
 		}
@@ -2657,7 +2664,9 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if (getMessage is null)
 			throw new ArgumentNullException(nameof(getMessage));
 
-		foreach (var rule in RiskManager.ProcessRules(getMessage()))
+		var triggeredRules = RiskManager.ProcessRules(getMessage()).ToArray();
+
+		foreach (var rule in triggeredRules)
 		{
 			LogWarning(LocalizedStrings.ActivatingRiskRule,
 				rule.Name, rule.Title, rule.Action);
@@ -2668,7 +2677,8 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 					ClosePosition();
 					return rule.Action;
 				case RiskActions.StopTrading:
-					Stop();
+					_isTradingBlocked = true;
+					LogInfo(LocalizedStrings.TradingDisabled);
 					return rule.Action;
 				case RiskActions.CancelOrders:
 					CancelActiveOrders();
@@ -2677,7 +2687,14 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 					throw new InvalidOperationException(rule.Action.ToString());
 			}
 		}
-		
+
+		// Check if trading should be unblocked: if no rules triggered, clear the flag
+		if (_isTradingBlocked && triggeredRules.Length == 0)
+		{
+			_isTradingBlocked = false;
+			LogInfo("Trading unblocked - risk limits no longer exceeded.");
+		}
+
 		return null;
 	}
 
