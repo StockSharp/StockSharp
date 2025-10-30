@@ -353,7 +353,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 
 			message.ReplaceSecurityId(fullSecurityId.Value);
 		}
-		else
+		else if (!securityId.IsSpecial)
 		{
 			var securityCode = securityId.SecurityCode;
 			var boardCode = securityId.BoardCode;

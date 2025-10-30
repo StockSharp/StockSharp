@@ -64,7 +64,7 @@ public class SecurityMappingMessageAdapter(IMessageAdapter innerAdapter, ISecuri
 
 			default:
 			{
-				if (message is ISecurityIdMessage secIdMsg)
+				if (message is ISecurityIdMessage secIdMsg && !secIdMsg.SecurityId.IsSpecial)
 					ProcessMessage(secIdMsg.SecurityId, message);
 				else
 					base.OnInnerAdapterNewOutMessage(message);
