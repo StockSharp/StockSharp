@@ -42,7 +42,7 @@ public class NewsMessage : BaseSubscriptionIdMessage<NewsMessage>,
 	SecurityId ISecurityIdMessage.SecurityId
 	{
 		get => Messages.SecurityId.News;
-		set => throw new NotSupportedException();
+		set { }
 	}
 
 	/// <inheritdoc />
