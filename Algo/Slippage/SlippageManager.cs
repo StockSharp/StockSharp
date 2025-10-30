@@ -103,11 +103,8 @@ public class SlippageManager : ISlippageManager
 				// remove on order complete messages (no trade info) if possible
 				if (!execMsg.HasTradeInfo() && execMsg.HasOrderInfo())
 				{
-					if (_plannedPrices.ContainsKey(execMsg.OriginalTransactionId))
-					{
-						if (execMsg.OrderState?.IsFinal() == true)
-							_plannedPrices.Remove(execMsg.OriginalTransactionId);
-					}
+					if (execMsg.OrderState?.IsFinal() == true)
+						_plannedPrices.Remove(execMsg.OriginalTransactionId);
 
 					break;
 				}
@@ -120,11 +117,15 @@ public class SlippageManager : ISlippageManager
 						if (execMsg.TradePrice == null)
 							return null;
 
+						// If there is no trade volume, cannot compute weighted slippage; keep planned price for future executions.
+						if (execMsg.TradeVolume is not decimal trVol)
+							return null;
+
 						var diff = t.side == Sides.Buy
 							? execMsg.TradePrice.Value - t.price
 							: t.price - execMsg.TradePrice.Value;
 
-						var volume = execMsg.TradeVolume ?? 1m;
+						var volume = trVol;
 						var weighted = diff * volume;
 
 						if (!CalculateNegative && weighted < 0)

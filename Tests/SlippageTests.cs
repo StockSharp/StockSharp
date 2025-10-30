@@ -471,4 +471,38 @@ public class SlippageTests
 		afterDone.AssertNull();
 		mgr.Slippage.AssertEqual(4m);
 	}
+
+	[TestMethod]
+	public void MissingTradeVolume()
+	{
+		var mgr = new SlippageManager();
+
+		mgr.ProcessMessage(new Level1ChangeMessage
+		{
+			SecurityId = _secId
+		}
+		.Add(Level1Fields.BestBidPrice, 100m)
+		.Add(Level1Fields.BestAskPrice, 102m));
+
+		var regMsg = new OrderRegisterMessage
+		{
+			SecurityId = _secId,
+			Side = Sides.Buy,
+			TransactionId = 501
+		};
+		mgr.ProcessMessage(regMsg);
+
+		// TradePrice provided, but no TradeVolume
+		var result = mgr.ProcessMessage(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = _secId,
+			OriginalTransactionId = regMsg.TransactionId,
+			TradePrice = 104m,
+			Side = Sides.Buy
+		});
+
+		result.AssertNull();
+		mgr.Slippage.AssertEqual(0m);
+	}
 }
