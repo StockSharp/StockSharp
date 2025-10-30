@@ -2702,7 +2702,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 	private class PortfolioEmulator(MarketEmulator parent, string name)
 	{
-		private class PositionInfo(SecurityMarketEmulator secEmu)
+		public class PositionInfo(SecurityMarketEmulator secEmu)
 		{
 			public decimal BeginValue;
 			public decimal Diff;
@@ -2810,7 +2810,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			);
 		}
 
-		private PositionInfo GetPosition(SecurityId securityId)
+		public PositionInfo GetPosition(SecurityId securityId)
 			=> _positions.SafeAdd(securityId, k => new(parent.GetEmulator(securityId)));
 
 		public decimal? ProcessOrder(ExecutionMessage orderMsg, decimal? cancelBalance, ICollection<Message> result)
