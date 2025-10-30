@@ -131,12 +131,36 @@ public class ExportTests : BaseTestClass
 		{
 			using var stream = File.OpenWrite(Helper.GetSubTemp($"{fileNameNoExt}.{extension}"));
 			var export = create(stream);
-			await export.Export(arr, token);
+			var (count, lastTime) = await export.Export(arr, token);
+
+			// Verify returned values: count equals number of elements; lastTime should be non-null for non-empty arrays
+			count.AreEqual(arr.Length, $"Export returned unexpected count for {extension}");
+
+			if (arr.Length >0)
+				lastTime.AssertNotNull($"Export returned null last time for {extension} when exporting non-empty collection");
 		}
 
 		await Do("txt", f => new TextExporter(dataType, f, txtTemplate, null));
 		await Do("xml", f => new XmlExporter(dataType, f));
 		await Do("json", f => new JsonExporter(dataType, f));
 		await Do("xlsx", f => new ExcelExporter(ServicesRegistry.ExcelProvider, dataType, f, () => { }));
+	}
+
+	[TestMethod]
+	public async Task Cancellation()
+	{
+		var security = Helper.CreateStorageSecurity();
+		var ticks = security.RandomTicks(20000, true).ToArray();
+
+		var path = Helper.GetSubTemp("cancel_test.txt");
+		using var stream = File.OpenWrite(path);
+		var exporter = new TextExporter(DataType.Ticks, stream, _txtReg.TemplateTxtTick, null);
+
+		var (_, token) = CancellationToken.CreateChildToken(TimeSpan.FromSeconds(1));
+
+		await Assert.ThrowsExactlyAsync<OperationCanceledException>(() => exporter.Export(ticks, token));
+
+		// partial file should exist
+		(new FileInfo(path).Length >0).AssertTrue();
 	}
 }

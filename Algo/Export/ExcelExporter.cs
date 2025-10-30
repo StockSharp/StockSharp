@@ -16,12 +16,10 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 {
 	private readonly IExcelWorkerProvider _provider = provider ?? throw new ArgumentNullException(nameof(provider));
 	private readonly Action _breaked = breaked ?? throw new ArgumentNullException(nameof(breaked));
-	private CancellationToken _cancellationToken;
 
 	/// <inheritdoc />
 	protected override Task<(int, DateTimeOffset?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
-		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			worker
@@ -45,6 +43,8 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 
 			foreach (var message in messages)
 			{
+				cancellationToken.ThrowIfCancellationRequested();
+
 				worker
 					.SetCell(0, row, message.OrderId == null ? message.OrderStringId : message.OrderId.To<string>())
 					.SetCell(1, row, message.ServerTime)
@@ -76,7 +76,6 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	/// <inheritdoc />
 	protected override Task<(int, DateTimeOffset?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
-		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			worker
@@ -97,6 +96,8 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 
 			foreach (var message in messages)
 			{
+				cancellationToken.ThrowIfCancellationRequested();
+
 				worker
 					.SetCell(0, row, message.TradeId == null ? message.TradeStringId : message.TradeId.To<string>())
 					.SetCell(1, row, message.ServerTime)
@@ -120,7 +121,6 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	/// <inheritdoc />
 	protected override Task<(int, DateTimeOffset?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
-		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			worker
@@ -150,6 +150,8 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 
 			foreach (var message in messages)
 			{
+				cancellationToken.ThrowIfCancellationRequested();
+
 				worker
 					.SetCell(0, row, message.ServerTime)
 					.SetCell(1, row, message.PortfolioName)
@@ -178,7 +180,6 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	/// <inheritdoc />
 	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
 	{
-		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			var count = 0;
@@ -188,6 +189,8 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 
 			foreach (var message in messages)
 			{
+				cancellationToken.ThrowIfCancellationRequested();
+
 				worker
 					.SetCell(0, rowIndex, LocalizedStrings.Time)
 					.SetCell(1, rowIndex, message.ServerTime).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff zzz");
@@ -198,6 +201,8 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 
 				foreach (var quote in message.Bids.Concat(message.Asks).OrderByDescending(q => q.Price))
 				{
+					cancellationToken.ThrowIfCancellationRequested();
+
 					worker
 						.SetCell(columnIndex, rowIndex + (bids.Contains(quote) ? 1 : 3), quote.Price)
 						.SetCell(columnIndex, rowIndex + 2, quote.Volume)
@@ -226,7 +231,6 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	/// <inheritdoc />
 	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
 	{
-		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			var columns = new Dictionary<Level1Fields, int>();
@@ -258,10 +262,14 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 
 			foreach (var message in messages)
 			{
+				cancellationToken.ThrowIfCancellationRequested();
+
 				worker.SetCell(0, row, message.LocalTime);
 
 				foreach (var pair in message.Changes)
 				{
+					cancellationToken.ThrowIfCancellationRequested();
+
 					var field = pair.Key;
 
 					if (!columns.TryGetValue(field, out var columnIndex))
@@ -297,7 +305,6 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	/// <inheritdoc />
 	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
 	{
-		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			var columns = new Dictionary<PositionChangeTypes, int>();
@@ -310,10 +317,14 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 
 			foreach (var message in messages)
 			{
+				cancellationToken.ThrowIfCancellationRequested();
+
 				worker.SetCell(0, row, message.LocalTime);
 
 				foreach (var pair in message.Changes)
 				{
+					cancellationToken.ThrowIfCancellationRequested();
+
 					var type = pair.Key;
 
 					if (!columns.TryGetValue(type, out var columnIndex))
@@ -341,7 +352,6 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	/// <inheritdoc />
 	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
 	{
-		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			var row = 0;
@@ -356,6 +366,8 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 
 			foreach (var value in values)
 			{
+				cancellationToken.ThrowIfCancellationRequested();
+
 				worker.SetCell(0, row, value.Time);
 
 				var col = 1;
@@ -389,7 +401,6 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	/// <inheritdoc />
 	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
 	{
-		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			var row = 0;
@@ -409,6 +420,8 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 
 			foreach (var candle in messages)
 			{
+				cancellationToken.ThrowIfCancellationRequested();
+
 				worker
 					.SetCell(0, row, candle.OpenTime)
 					.SetCell(1, row, candle.OpenPrice)
@@ -431,7 +444,6 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	/// <inheritdoc />
 	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
 	{
-		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			var row = 0;
@@ -452,6 +464,8 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 
 			foreach (var n in messages)
 			{
+				cancellationToken.ThrowIfCancellationRequested();
+
 				worker
 					.SetCell(0, row, n.Id)
 					.SetCell(1, row, n.ServerTime)
@@ -475,7 +489,6 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	/// <inheritdoc />
 	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
 	{
-		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			var colIndex = 0;
@@ -528,6 +541,8 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 
 			foreach (var security in messages)
 			{
+				cancellationToken.ThrowIfCancellationRequested();
+
 				colIndex = 0;
 
 				worker
@@ -584,7 +599,6 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	/// <inheritdoc />
 	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
 	{
-		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			var row = 0;
@@ -599,6 +613,8 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 
 			foreach (var msg in messages)
 			{
+				cancellationToken.ThrowIfCancellationRequested();
+
 				worker
 					.SetCell(0, row, msg.ServerTime)
 					.SetCell(1, row, msg.BoardCode)
@@ -617,7 +633,6 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	/// <inheritdoc />
 	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
 	{
-		_cancellationToken = cancellationToken;
 		return Do(worker =>
 		{
 			var row = 0;
@@ -632,6 +647,8 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 
 			foreach (var msg in messages)
 			{
+				cancellationToken.ThrowIfCancellationRequested();
+
 				worker
 					.SetCell(0, row, msg.Code)
 					.SetCell(1, row, msg.ExchangeCode)
@@ -666,7 +683,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 		if (index < 1048576)
 		//if (index < (ushort.MaxValue - 1))
 		{
-			return !_cancellationToken.IsCancellationRequested;
+			return true;
 		}
 		else
 		{
