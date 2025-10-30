@@ -136,7 +136,7 @@ public class ExportTests : BaseTestClass
 			// Verify returned values: count equals number of elements; lastTime should be non-null for non-empty arrays
 			count.AreEqual(arr.Length, $"Export returned unexpected count for {extension}");
 
-			if (arr.Length >0)
+			if (arr.Length > 0)
 				lastTime.AssertNotNull($"Export returned null last time for {extension} when exporting non-empty collection");
 		}
 
@@ -161,6 +161,6 @@ public class ExportTests : BaseTestClass
 		await Assert.ThrowsExactlyAsync<OperationCanceledException>(() => exporter.Export(ticks, token));
 
 		// partial file should exist
-		(new FileInfo(path).Length >0).AssertTrue();
+		(new FileInfo(path).Length > 0).AssertTrue();
 	}
 }

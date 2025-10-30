@@ -326,7 +326,7 @@ public class ImportTests : BaseTestClass
 		var onlyBids = depths.Select((d, i) =>
 		{
 			var clone = d.TypedClone();
-			clone.Asks = Array.Empty<QuoteChange>();
+			clone.Asks = [];
 			// Ensure unique timestamps to avoid grouping
 			clone.ServerTime = d.ServerTime.AddMilliseconds(i);
 			return clone;
@@ -356,7 +356,7 @@ public class ImportTests : BaseTestClass
 		var onlyAsks = depths.Select((d, i) =>
 		{
 			var clone = d.TypedClone();
-			clone.Bids = Array.Empty<QuoteChange>();
+			clone.Bids = [];
 			// Ensure unique timestamps to avoid grouping
 			clone.ServerTime = d.ServerTime.AddMilliseconds(i);
 			return clone;
@@ -386,8 +386,8 @@ public class ImportTests : BaseTestClass
 		var empty = depths.Select((d, i) =>
 		{
 			var clone = d.TypedClone();
-			clone.Bids = Array.Empty<QuoteChange>();
-			clone.Asks = Array.Empty<QuoteChange>();
+			clone.Bids = [];
+			clone.Asks = [];
 			// Ensure unique timestamps to avoid grouping
 			clone.ServerTime = d.ServerTime.AddMilliseconds(i);
 			return clone;
@@ -427,16 +427,16 @@ public class ImportTests : BaseTestClass
 					break;
 				case 1:
 					// Only bids
-					clone.Asks = Array.Empty<QuoteChange>();
+					clone.Asks = [];
 					break;
 				case 2:
 					// Only asks
-					clone.Bids = Array.Empty<QuoteChange>();
+					clone.Bids = [];
 					break;
 				case 3:
 					// Empty
-					clone.Bids = Array.Empty<QuoteChange>();
-					clone.Asks = Array.Empty<QuoteChange>();
+					clone.Bids = [];
+					clone.Asks = [];
 					break;
 			}
 
