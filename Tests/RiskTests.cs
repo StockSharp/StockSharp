@@ -1112,16 +1112,20 @@ public class RiskTests
 		};
 		riskManager.Rules.Add(rule);
 
-		// Trigger the rule by sending a position change message with loss
-		var positionMsg = new PositionChangeMessage
+		adapter.SendInMessage(new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
 			ServerTime = DateTimeOffset.UtcNow,
 			PortfolioName = _pfName
-		};
-		positionMsg.Add(PositionChangeTypes.CurrentValue, -1500m);
+		}.Add(PositionChangeTypes.CurrentValue, 0m));
 
-		adapter.SendInMessage(positionMsg);
+		// Trigger the rule by sending a position change message with loss
+		adapter.SendInMessage(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTimeOffset.UtcNow,
+			PortfolioName = _pfName
+		}.Add(PositionChangeTypes.CurrentValue, -1500m));
 
 		// Check that OrderGroupCancelMessage was sent to inner adapter with ClosePositions mode
 		var cancelMsg = testAdapter.ReceivedMessages.OfType<OrderGroupCancelMessage>().FirstOrDefault();
@@ -1233,16 +1237,20 @@ public class RiskTests
 		};
 		riskManager.Rules.Add(rule);
 
-		// Trigger the rule by sending a position change message with loss
-		var positionMsg = new PositionChangeMessage
+		adapter.SendInMessage(new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
 			ServerTime = DateTimeOffset.UtcNow,
 			PortfolioName = _pfName
-		};
-		positionMsg.Add(PositionChangeTypes.CurrentValue, -1500m);
+		}.Add(PositionChangeTypes.CurrentValue, 0m));
 
-		adapter.SendInMessage(positionMsg);
+		// Trigger the rule by sending a position change message with loss
+		adapter.SendInMessage(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTimeOffset.UtcNow,
+			PortfolioName = _pfName
+		}.Add(PositionChangeTypes.CurrentValue, -1500m));
 
 		// Verify trading is blocked
 		var orderMsg = new OrderRegisterMessage
@@ -1265,15 +1273,12 @@ public class RiskTests
 		testAdapter.ReceivedMessages.Clear();
 
 		// Now send a position message that no longer exceeds the limit
-		positionMsg = new PositionChangeMessage
+		adapter.SendInMessage(new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
 			ServerTime = DateTimeOffset.UtcNow,
 			PortfolioName = _pfName
-		};
-		positionMsg.Add(PositionChangeTypes.CurrentValue, -500m);
-
-		adapter.SendInMessage(positionMsg);
+		}.Add(PositionChangeTypes.CurrentValue, -500m));
 
 		// Try to register an order again - it should now be accepted (not rejected)
 		var orderMsg2 = new OrderRegisterMessage
@@ -1323,7 +1328,7 @@ public class RiskTests
 	// Wrapper adapter that captures all incoming messages
 	private class TestInnerAdapter : MessageAdapterWrapper
 	{
-		public List<Message> ReceivedMessages { get; } = new();
+		public List<Message> ReceivedMessages { get; } = [];
 
 		public TestInnerAdapter()
 			: base(new MarketEmulator(
