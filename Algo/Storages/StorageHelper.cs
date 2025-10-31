@@ -1238,32 +1238,6 @@ public static class StorageHelper
 	}
 
 	/// <summary>
-	/// Determines the specified path is network.
-	/// </summary>
-	/// <param name="path">Path.</param>
-	/// <returns>Check result.</returns>
-	public static bool IsNetworkPath(this string path)
-	{
-		if (path.IsEmpty())
-			throw new ArgumentNullException(nameof(path));
-
-		if (path.Length < 3)
-			throw new ArgumentOutOfRangeException(nameof(path), path, LocalizedStrings.WrongPath);
-
-		// UNC paths (\\server\share or //server/share)
-		if (path.StartsWith(@"\\") || path.StartsWith(@"//"))
-			return true;
-
-		// HTTP/HTTPS/FTP URLs (can be parsed as EndPoint)
-		if (path.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
-		    path.StartsWith("https://", StringComparison.OrdinalIgnoreCase) ||
-		    path.StartsWith("ftp://", StringComparison.OrdinalIgnoreCase))
-			return true;
-
-		return false;
-	}
-
-	/// <summary>
 	/// To get the candles storage for the specified instrument.
 	/// </summary>
 	/// <param name="registry"><see cref="IStorageRegistry"/>.</param>

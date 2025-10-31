@@ -1,8 +1,9 @@
 ﻿namespace StockSharp.Algo.Storages;
 
 using System.Net;
+using PathPair = Tuple<string, System.Net.EndPoint>;
 
-using PathPair = System.Tuple<string, System.Net.EndPoint>;
+using Ecng.Net;
 
 /// <summary>
 /// <see cref="IMarketDataDrive"/> cache.
