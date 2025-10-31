@@ -2817,6 +2817,24 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			var time = pfMsg.LocalTime;
 
 			AddPortfolioChangeMessage(time, result);
+
+			// Send all open positions
+			foreach (var pos in _positions.Values)
+			{
+				if (pos.CurrentValue == 0)
+					continue;
+
+				result.Add(new PositionChangeMessage
+				{
+					SecurityId = pos.SecurityId,
+					ServerTime = time,
+					LocalTime = time,
+					PortfolioName = portfolioName,
+				}
+				.Add(PositionChangeTypes.BeginValue, pos.BeginValue)
+				.Add(PositionChangeTypes.CurrentValue, pos.CurrentValue)
+				.TryAdd(PositionChangeTypes.AveragePrice, pos.AveragePrice));
+			}
 		}
 
 		public void ProcessPositionChange(PositionChangeMessage posMsg, ICollection<Message> result)

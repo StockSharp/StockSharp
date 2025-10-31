@@ -1284,6 +1284,22 @@ public class MarketEmulatorTests
 
 		now = now.AddSeconds(1);
 
+		// Check open positions via PortfolioLookupMessage
+		emu.SendInMessage(new PortfolioLookupMessage
+		{
+			IsSubscribe = true,
+			TransactionId = _idGenerator.GetNextId(),
+		});
+
+		res.OfType<PositionChangeMessage>()
+			.Single(x => x.SecurityId == id)
+			.TryGetDecimal(PositionChangeTypes.CurrentValue)
+			.AssertEqual(10);
+
+		res.Clear();
+
+		now = now.AddSeconds(1);
+
 		// Cancel all orders AND close all positions
 		emu.SendInMessage(new OrderGroupCancelMessage
 		{
@@ -1295,7 +1311,22 @@ public class MarketEmulatorTests
 
 		res.OfType<ExecutionMessage>()
 			.Count(x => x.OrderState == OrderStates.Done)
-			.AssertEqual(1);
+			.AssertEqual(2);
+
+		res.Clear();
+
+		now = now.AddSeconds(1);
+
+		// Verify no open positions remain after close
+		emu.SendInMessage(new PortfolioLookupMessage
+		{
+			IsSubscribe = true,
+			TransactionId = _idGenerator.GetNextId(),
+		});
+
+		res.OfType<PositionChangeMessage>()
+			.Count(x => x.SecurityId == id)
+			.AssertEqual(0);
 	}
 
 	[TestMethod]
