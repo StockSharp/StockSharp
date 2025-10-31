@@ -75,7 +75,7 @@ public static class FieldMappingRegistry
 			fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), () => LocalizedStrings.Id, () => LocalizedStrings.Id, (i, v) => i.TradeId = v));
 			fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.TradeStringId), () => LocalizedStrings.StringId, () => LocalizedStrings.StringId, (i, v) => i.TradeStringId = v));
 			fields.Add(new FieldMapping<ExecutionMessage, DateTimeOffset>(GetDateField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
-			fields.Add(new FieldMapping<ExecutionMessage, TimeSpan>(GetTimeOfDayField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
+			fields.Add(new FieldMapping<ExecutionMessage, TimeSpan>(GetTimeOfDayField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v) { Format = "hh:mm:ss.ffffff" });
 			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradePrice), () => LocalizedStrings.Price, () => LocalizedStrings.Price, (i, v) => i.TradePrice = v) { IsRequired = true });
 			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradeVolume), () => LocalizedStrings.Volume, () => LocalizedStrings.Volume, (i, v) => i.TradeVolume = v) { IsRequired = true });
 			fields.Add(new FieldMapping<ExecutionMessage, Sides>(nameof(ExecutionMessage.OriginSide), () => LocalizedStrings.Initiator, () => LocalizedStrings.DirectionDesc, (i, v) => i.OriginSide = v));
@@ -93,7 +93,7 @@ public static class FieldMappingRegistry
 
 			fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.OrderId), () => LocalizedStrings.Id, () => LocalizedStrings.OrderId, (i, v) => i.OrderId = v) { IsRequired = true });
 			fields.Add(new FieldMapping<ExecutionMessage, DateTimeOffset>(GetDateField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
-			fields.Add(new FieldMapping<ExecutionMessage, TimeSpan>(GetTimeOfDayField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
+			fields.Add(new FieldMapping<ExecutionMessage, TimeSpan>(GetTimeOfDayField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v) { Format = "hh:mm:ss.ffffff" });
 			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OrderPrice), () => LocalizedStrings.Price, () => LocalizedStrings.OrderPrice, (i, v) => i.OrderPrice = v) { IsRequired = true });
 			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OrderVolume), () => LocalizedStrings.Volume, () => LocalizedStrings.OrderVolume, (i, v) => i.OrderVolume = v) { IsRequired = true });
 			fields.Add(new FieldMapping<ExecutionMessage, Sides>(nameof(ExecutionMessage.Side), () => LocalizedStrings.Direction, () => LocalizedStrings.OrderSide, (i, v) => i.Side = v) { IsRequired = true });
@@ -109,7 +109,7 @@ public static class FieldMappingRegistry
 			fields.Add(new FieldMapping<ExecutionMessage, string>(GetSecurityCodeField(nameof(ExecutionMessage.SecurityId)), () => LocalizedStrings.Security, secCodeDescr, SetSecCode) { IsRequired = true });
 			fields.Add(new FieldMapping<ExecutionMessage, string>(GetBoardCodeField(nameof(ExecutionMessage.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
 			fields.Add(new FieldMapping<ExecutionMessage, DateTimeOffset>(GetDateField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
-			fields.Add(new FieldMapping<ExecutionMessage, TimeSpan>(GetTimeOfDayField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
+			fields.Add(new FieldMapping<ExecutionMessage, TimeSpan>(GetTimeOfDayField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v) { Format = "hh:mm:ss.ffffff" });
 			fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.PortfolioName), () => LocalizedStrings.Portfolio, () => LocalizedStrings.PortfolioName, (i, v) => i.PortfolioName = v) { IsRequired = true });
 			fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TransactionId), () => LocalizedStrings.TransactionId, () => LocalizedStrings.TransactionId, (i, v) => i.TransactionId = v));
 			fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.OrderId), () => LocalizedStrings.Id, () => LocalizedStrings.OrderId, (i, v) => i.OrderId = v));

@@ -140,7 +140,7 @@ public class ExportTests : BaseTestClass
 				count.AreEqual(arr.Length, $"Export returned unexpected count for {extension}");
 
 			if (hasTime && arr.Length > 0)
-				lastTime.AssertNotNull($"Export returned null last time for {extension} when exporting non-empty collection");
+				lastTime.AssertEqual(((IServerTimeMessage)arr.Last()).ServerTime);
 		}
 
 		await Do("txt", f => new TextExporter(dataType, f, txtTemplate, null));

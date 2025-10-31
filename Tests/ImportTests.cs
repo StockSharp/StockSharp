@@ -38,10 +38,14 @@ public class ImportTests : BaseTestClass
 			throw new ArgumentOutOfRangeException(nameof(dataType), dataType, "Unsupported data type for import test.");
 	}
 
-	private async Task Import<TValue>(DataType dataType, bool addSecId, IEnumerable<TValue> values, FieldMapping[] fields)
+	private async Task Import<TValue>(DataType dataType, bool addSecId, IEnumerable<TValue> values, FieldMapping[] fields, TimeSpan truncate, int? exportCnt = default, int? importCnt = default)
 		where TValue : class
 	{
 		var arr = values.ToArray();
+		var hasTime = typeof(TValue).Is<IServerTimeMessage>();
+
+		exportCnt ??= arr.Length;
+		importCnt ??= arr.Length;
 
 		var template = GetTemplate(dataType);
 
@@ -57,7 +61,12 @@ public class ImportTests : BaseTestClass
 
 		using (var stream = File.Create(filePath))
 		{
-			await new TextExporter(dataType, stream, template, null).Export(arr, token);
+			var (count, lastTime) = await new TextExporter(dataType, stream, template, null).Export(arr, token);
+
+			count.AssertEqual(exportCnt.Value);
+
+			if (hasTime && exportCnt > 0)
+				lastTime.AssertEqual(((IServerTimeMessage)arr.Last()).ServerTime);
 		}
 
 		// Parser check
@@ -70,7 +79,10 @@ public class ImportTests : BaseTestClass
 
 			var msgs = await parser.Parse(stream, token).ToArrayAsync2(token);
 
-			msgs.Length.AssertEqual(arr.Length);
+			msgs.Length.AssertEqual(importCnt.Value);
+
+			if (hasTime && importCnt.Value > 0)
+				((IServerTimeMessage)msgs.Last()).ServerTime.AssertEqual(((IServerTimeMessage)arr.Last()).ServerTime.Truncate(truncate));
 		}
 
 		var storageRegistry = Helper.GetStorage(Helper.GetSubTemp());
@@ -84,7 +96,10 @@ public class ImportTests : BaseTestClass
 
 			var (count, lastTime) = await importer.Import(stream, _ => { }, token);
 
-			count.AssertEqual(arr.Length);
+			count.AssertEqual(importCnt.Value);
+
+			if (hasTime && importCnt.Value > 0)
+				lastTime.AssertEqual(((IServerTimeMessage)arr.Last()).ServerTime.Truncate(truncate));
 		}
 	}
 
@@ -104,7 +119,7 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "TradeVolume"),
 			allFields.First(f => f.Name == "OriginSide"),
 		};
-		return Import(DataType.Ticks, true, security.RandomTicks(100, true), fields);
+		return Import(DataType.Ticks, true, security.RandomTicks(100, true), fields, TimeSpan.FromMicroseconds(1));
 	}
 
 	[TestMethod]
@@ -122,7 +137,8 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "Volume"),
 			allFields.First(f => f.Name == "Side"),
 		};
-		return Import(DataType.MarketDepth, true, security.RandomDepths(100, ordersCount: true), fields);
+		var depths = security.RandomDepths(100, ordersCount: true);
+		return Import(DataType.MarketDepth, true, depths, fields, TimeSpan.FromMicroseconds(1), depths.Sum(q => q.ToTimeQuotes().Count()));
 	}
 
 	[TestMethod]
@@ -146,7 +162,7 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "TradeId"),
 			allFields.First(f => f.Name == "TradePrice"),
 		};
-		return Import(DataType.OrderLog, true, security.RandomOrderLog(100), fields);
+		return Import(DataType.OrderLog, true, security.RandomOrderLog(100), fields, TimeSpan.FromMicroseconds(1));
 	}
 
 	[TestMethod]
@@ -167,7 +183,7 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "Changes[AveragePrice]"),
 			allFields.First(f => f.Name == "Changes[Commission]"),
 		};
-		return Import(DataType.PositionChanges, false, security.RandomPositionChanges(100), fields);
+		return Import(DataType.PositionChanges, false, security.RandomPositionChanges(100), fields, TimeSpan.FromSeconds(1));
 	}
 
 	[TestMethod]
@@ -182,7 +198,7 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "Source"),
 			allFields.First(f => f.Name == "Url"),
 		};
-		return Import(DataType.News, false, Helper.RandomNews(), fields);
+		return Import(DataType.News, false, Helper.RandomNews(), fields, TimeSpan.FromSeconds(1));
 	}
 
 	[TestMethod]
@@ -203,7 +219,7 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "Changes[LastTradePrice]"),
 			allFields.First(f => f.Name == "Changes[LastTradeVolume]"),
 		};
-		return Import(DataType.Level1, true, security.RandomLevel1(count: 100), fields);
+		return Import(DataType.Level1, true, security.RandomLevel1(count: 100), fields, TimeSpan.FromSeconds(1));
 	}
 
 	[TestMethod]
@@ -228,7 +244,7 @@ public class ImportTests : BaseTestClass
 				allFields.First(f => f.Name == "ClosePrice"),
 				allFields.First(f => f.Name == "TotalVolume"),
 			};
-			await Import(dataType, true, group.ToArray(), fields);
+			await Import(dataType, true, group.ToArray(), fields, TimeSpan.FromSeconds(1));
 		}
 	}
 
@@ -243,7 +259,7 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "BoardCode"),
 			allFields.First(f => f.Name == "State"),
 		};
-		return Import(DataType.BoardState, false, Helper.RandomBoardStates(), fields);
+		return Import(DataType.BoardState, false, Helper.RandomBoardStates(), fields, TimeSpan.FromSeconds(1));
 	}
 
 	[TestMethod]
@@ -271,7 +287,7 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "TradePrice"),
 			allFields.First(f => f.Name == "TradeVolume"),
 		};
-		return Import(DataType.Transactions, true, security.RandomTransactions(10), fields);
+		return Import(DataType.Transactions, true, security.RandomTransactions(10), fields, TimeSpan.FromMicroseconds(1));
 	}
 
 	[TestMethod]
@@ -288,7 +304,7 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "Multiplier"),
 			allFields.First(f => f.Name == "Decimals"),
 		};
-		return Import(DataType.Securities, false, Helper.RandomSecurities(10), fields);
+		return Import(DataType.Securities, false, Helper.RandomSecurities(10), fields, TimeSpan.FromSeconds(1));
 	}
 
 	[TestMethod]
@@ -302,7 +318,7 @@ public class ImportTests : BaseTestClass
 			//allFields.First(f => f.Name == "ExpiryTime"),
 			//allFields.First(f => f.Name == "TimeZone"),
 		};
-		return Import(DataType.Board, false, Helper.RandomBoards(10), fields);
+		return Import(DataType.Board, false, Helper.RandomBoards(10), fields, TimeSpan.FromSeconds(1));
 	}
 
 	[TestMethod]
@@ -332,7 +348,7 @@ public class ImportTests : BaseTestClass
 			return clone;
 		}).ToArray();
 
-		return Import(DataType.MarketDepth, true, onlyBids, fields);
+		return Import(DataType.MarketDepth, true, onlyBids, fields, TimeSpan.FromMicroseconds(1), onlyBids.Sum(q => q.ToTimeQuotes().Count()));
 	}
 
 	[TestMethod]
@@ -362,7 +378,7 @@ public class ImportTests : BaseTestClass
 			return clone;
 		}).ToArray();
 
-		return Import(DataType.MarketDepth, true, onlyAsks, fields);
+		return Import(DataType.MarketDepth, true, onlyAsks, fields, TimeSpan.FromMicroseconds(1), onlyAsks.Sum(q => q.ToTimeQuotes().Count()));
 	}
 
 	[TestMethod]
@@ -393,7 +409,7 @@ public class ImportTests : BaseTestClass
 			return clone;
 		}).ToArray();
 
-		return Import(DataType.MarketDepth, true, empty, fields);
+		return Import(DataType.MarketDepth, true, empty, fields, TimeSpan.FromMicroseconds(1), 0, 0);
 	}
 
 	[TestMethod]
@@ -416,6 +432,8 @@ public class ImportTests : BaseTestClass
 		var depths = security.RandomDepths(40, ordersCount: false);
 		var mixed = new List<QuoteChangeMessage>();
 
+		var cnt = 0;
+
 		for (int i = 0; i < depths.Length; i++)
 		{
 			var clone = depths[i].TypedClone();
@@ -424,14 +442,17 @@ public class ImportTests : BaseTestClass
 			{
 				case 0:
 					// Full depth - keep as is
+					cnt++;
 					break;
 				case 1:
 					// Only bids
 					clone.Asks = [];
+					cnt++;
 					break;
 				case 2:
 					// Only asks
 					clone.Bids = [];
+					cnt++;
 					break;
 				case 3:
 					// Empty
@@ -445,7 +466,7 @@ public class ImportTests : BaseTestClass
 			mixed.Add(clone);
 		}
 
-		return Import(DataType.MarketDepth, true, mixed.ToArray(), fields);
+		return Import(DataType.MarketDepth, true, mixed.ToArray(), fields, TimeSpan.FromMicroseconds(1), cnt);
 	}
 
 	private const string _tickFullTemplate = "{SecurityId.SecurityCode};{SecurityId.BoardCode};{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{TradeId};{TradePrice};{TradeVolume}";
@@ -507,7 +528,7 @@ public class ImportTests : BaseTestClass
 		// Ensure importer processed all messages and returned last time equals last message server time
 		count.AssertEqual(arr.Length);
 		lastTime.AssertNotNull();
-		lastTime.Value.AssertEqual(arr.Last().ServerTime.Truncate(TimeSpan.FromSeconds(1)));
+		lastTime.Value.AssertEqual(arr.Last().ServerTime.Truncate(TimeSpan.FromMicroseconds(1)));
 	}
 
 	[TestMethod]
