@@ -125,7 +125,10 @@ public partial class MainWindow : ICandleBuilderSubscription
 		Securities.ItemsSource = secs;
 
 		if (secs.Length > 0)
+		{
 			Securities.SelectedIndex = 0;
+			RefreshCharts();
+		}
 	}
 
 	private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
