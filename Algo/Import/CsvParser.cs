@@ -277,7 +277,7 @@ public class CsvParser : BaseLogReceiver
 						FlushQuotes();
 						yield return quoteMsg;
 
-						quoteMsg = new QuoteChangeMessage();
+						quoteMsg = new();
 						bids = [];
 						asks = [];
 						hasPos = false;
@@ -289,7 +289,7 @@ public class CsvParser : BaseLogReceiver
 				yield return instance;
 		}
 
-		if (quoteMsg != null && !bids.IsEmpty() && !asks.IsEmpty())
+		if (quoteMsg != null && (!bids.IsEmpty() || !asks.IsEmpty()))
 		{
 			FlushQuotes();
 			yield return quoteMsg;
