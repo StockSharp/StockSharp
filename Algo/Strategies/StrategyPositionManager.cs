@@ -419,7 +419,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 				if (_lastPrices.TryGetValue(order.Security.ToSecurityId(), out var lastPrice2))
 				{
 					var value = newQty.Abs() * lastPrice2;
-					position.CurrentPrice = value == 0 ? 0m : value;
+					position.CurrentPrice = value;
 				}
 				else
 				{
