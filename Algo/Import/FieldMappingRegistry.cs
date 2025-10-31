@@ -172,7 +172,7 @@ public static class FieldMappingRegistry
 			fields.Add(new FieldMapping<TimeQuoteChange, string>(GetBoardCodeField(nameof(TimeQuoteChange.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
 
 			fields.Add(new FieldMapping<TimeQuoteChange, DateTimeOffset>(GetDateField(nameof(TimeQuoteChange.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
-			fields.Add(new FieldMapping<TimeQuoteChange, TimeSpan>(GetTimeOfDayField(nameof(TimeQuoteChange.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
+			fields.Add(new FieldMapping<TimeQuoteChange, TimeSpan>(GetTimeOfDayField(nameof(TimeQuoteChange.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v) { Format = "hh:mm:ss.ffffff" });
 			fields.Add(new FieldMapping<TimeQuoteChange, decimal>(nameof(QuoteChange.Price), () => LocalizedStrings.Price, () => LocalizedStrings.QuotePrice, (i, v) =>
 			{
 				var q = i.Quote;
