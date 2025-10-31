@@ -38,7 +38,7 @@ public class ImportTests : BaseTestClass
 			throw new ArgumentOutOfRangeException(nameof(dataType), dataType, "Unsupported data type for import test.");
 	}
 
-	private async Task Import<TValue>(DataType dataType, bool addSecId, IEnumerable<TValue> values, FieldMapping[] fields, TimeSpan truncate, int? exportCnt = default, int? importCnt = default)
+	private async Task Import<TValue>(DataType dataType, bool addSecId, IEnumerable<TValue> values, FieldMapping[] fields, TimeSpan truncate, int? exportCnt = default, int? importCnt = default, DateTimeOffset? lastTime2 = default)
 		where TValue : class
 	{
 		var arr = values.ToArray();
@@ -66,7 +66,7 @@ public class ImportTests : BaseTestClass
 			count.AssertEqual(exportCnt.Value);
 
 			if (hasTime && exportCnt > 0)
-				lastTime.AssertEqual(((IServerTimeMessage)arr.Last()).ServerTime);
+				lastTime.AssertEqual(lastTime2 ?? ((IServerTimeMessage)arr.Last()).ServerTime);
 		}
 
 		// Parser check
@@ -82,7 +82,7 @@ public class ImportTests : BaseTestClass
 			msgs.Length.AssertEqual(importCnt.Value);
 
 			if (hasTime && importCnt.Value > 0)
-				((IServerTimeMessage)msgs.Last()).ServerTime.AssertEqual(((IServerTimeMessage)arr.Last()).ServerTime.Truncate(truncate));
+				((IServerTimeMessage)msgs.Last()).ServerTime.AssertEqual((lastTime2 ?? ((IServerTimeMessage)arr.Last()).ServerTime).Truncate(truncate));
 		}
 
 		var storageRegistry = Helper.GetStorage(Helper.GetSubTemp());
@@ -99,7 +99,7 @@ public class ImportTests : BaseTestClass
 			count.AssertEqual(importCnt.Value);
 
 			if (hasTime && importCnt.Value > 0)
-				lastTime.AssertEqual(((IServerTimeMessage)arr.Last()).ServerTime.Truncate(truncate));
+				lastTime.AssertEqual((lastTime2 ?? ((IServerTimeMessage)arr.Last()).ServerTime).Truncate(truncate));
 		}
 	}
 
@@ -432,8 +432,6 @@ public class ImportTests : BaseTestClass
 		var depths = security.RandomDepths(40, ordersCount: false);
 		var mixed = new List<QuoteChangeMessage>();
 
-		var cnt = 0;
-
 		for (int i = 0; i < depths.Length; i++)
 		{
 			var clone = depths[i].TypedClone();
@@ -442,17 +440,14 @@ public class ImportTests : BaseTestClass
 			{
 				case 0:
 					// Full depth - keep as is
-					cnt++;
 					break;
 				case 1:
 					// Only bids
 					clone.Asks = [];
-					cnt++;
 					break;
 				case 2:
 					// Only asks
 					clone.Bids = [];
-					cnt++;
 					break;
 				case 3:
 					// Empty
@@ -466,7 +461,8 @@ public class ImportTests : BaseTestClass
 			mixed.Add(clone);
 		}
 
-		return Import(DataType.MarketDepth, true, mixed.ToArray(), fields, TimeSpan.FromMicroseconds(1), cnt);
+		var withQuotes = mixed.Where(q => q.ToTimeQuotes().Any()).ToArray();
+		return Import(DataType.MarketDepth, true, mixed.ToArray(), fields, TimeSpan.FromMicroseconds(1), mixed.Sum(q => q.ToTimeQuotes().Count()), withQuotes.Length, withQuotes.Last().ServerTime);
 	}
 
 	private const string _tickFullTemplate = "{SecurityId.SecurityCode};{SecurityId.BoardCode};{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{TradeId};{TradePrice};{TradeVolume}";
