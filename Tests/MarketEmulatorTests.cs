@@ -6,8 +6,11 @@ using StockSharp.Algo.Testing;
 public class MarketEmulatorTests
 {
 	private static IMarketEmulator CreateEmuWithEvents(SecurityId secId, out List<Message> result)
+		=> CreateEmuWithEvents([secId], out result);
+
+	private static IMarketEmulator CreateEmuWithEvents(IEnumerable<SecurityId> secIds, out List<Message> result)
 	{
-		var emu = new MarketEmulator(new CollectionSecurityProvider([new() { Id = secId.ToStringId() }]), new CollectionPortfolioProvider([Portfolio.CreateSimulator()]), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator()) { VerifyMode = true };
+		var emu = new MarketEmulator(new CollectionSecurityProvider(secIds.Select(id => new Security { Id = id.ToStringId() })), new CollectionPortfolioProvider([Portfolio.CreateSimulator()]), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator()) { VerifyMode = true };
 		var result2 = new List<Message>();
 		emu.NewOutMessage += result2.Add;
 		result = result2;
@@ -1162,21 +1165,51 @@ public class MarketEmulatorTests
 
 		res.Clear();
 
+		now = now.AddSeconds(1);
+
+		// Check active orders via OrderStatusMessage
+		emu.SendInMessage(new OrderStatusMessage
+		{
+			IsSubscribe = true,
+			TransactionId = _idGenerator.GetNextId(),
+		});
+
+		res.OfType<ExecutionMessage>()
+			.Count(x => x.OrderState == OrderStates.Active)
+			.AssertEqual(2);
+
+		res.Clear();
+
+		now = now.AddSeconds(1);
+
 		// Cancel all orders
 		emu.SendInMessage(new OrderGroupCancelMessage
 		{
-			LocalTime = now.AddSeconds(1),
+			LocalTime = now,
 			TransactionId = _idGenerator.GetNextId(),
 			PortfolioName = _pfName,
 			Mode = OrderGroupCancelModes.CancelOrders,
 		});
 
 		// Check that both orders are cancelled
-		var cancelled1 = res.OfType<ExecutionMessage>().FirstOrDefault(x => x.OrderId == 1 && x.OrderState == OrderStates.Done);
-		cancelled1.AssertNotNull();
+		res.OfType<ExecutionMessage>()
+			.Count(x => x.OrderState == OrderStates.Done)
+			.AssertEqual(2);
 
-		var cancelled2 = res.OfType<ExecutionMessage>().FirstOrDefault(x => x.OrderId == 2 && x.OrderState == OrderStates.Done);
-		cancelled2.AssertNotNull();
+		res.Clear();
+
+		now = now.AddSeconds(1);
+
+		// Verify no active orders remain
+		emu.SendInMessage(new OrderStatusMessage
+		{
+			IsSubscribe = true,
+			TransactionId = _idGenerator.GetNextId(),
+		});
+
+		res.OfType<ExecutionMessage>()
+			.Count(x => x.OrderState == OrderStates.Active)
+			.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -1208,18 +1241,231 @@ public class MarketEmulatorTests
 
 		res.Clear();
 
+		now = now.AddSeconds(1);
+
+		// Check open positions via PortfolioLookupMessage
+		emu.SendInMessage(new PortfolioLookupMessage
+		{
+			IsSubscribe = true,
+			TransactionId = _idGenerator.GetNextId(),
+		});
+
+		res.OfType<PositionChangeMessage>()
+			.Single(x => x.SecurityId == id)
+			.TryGetDecimal(PositionChangeTypes.CurrentValue)
+			.AssertEqual(10);
+
+		res.Clear();
+
+		now = now.AddSeconds(1);
+
 		// Close all positions
 		emu.SendInMessage(new OrderGroupCancelMessage
 		{
-			LocalTime = now.AddSeconds(1),
+			LocalTime = now,
 			TransactionId = _idGenerator.GetNextId(),
 			PortfolioName = _pfName,
 			Mode = OrderGroupCancelModes.ClosePositions,
 		});
 
 		// Check that a closing order was created (sell order to close long position)
-		var closeOrder = res.OfType<ExecutionMessage>().FirstOrDefault(x => x.Side == Sides.Sell && x.OrderVolume == 10);
-		closeOrder.AssertNotNull();
+		res.OfType<ExecutionMessage>().Count(x => x.OrderState == OrderStates.Done).AssertEqual(1);
+
+		res.Clear();
+
+		now = now.AddSeconds(1);
+
+		// Verify no open positions remain after close
+		emu.SendInMessage(new PortfolioLookupMessage
+		{
+			IsSubscribe = true,
+			TransactionId = _idGenerator.GetNextId(),
+		});
+
+		res.OfType<PositionChangeMessage>()
+			.Count(x => x.SecurityId == id)
+			.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void OrderGroupClosePositionsWithSecurityFilter()
+	{
+		var id1 = Helper.CreateSecurityId();
+		var id2 = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents([id1, id2], out var res);
+		var now = DateTimeOffset.UtcNow;
+		AddBook(emu, id1, now);
+		AddBook(emu, id2, now);
+
+		// Create a long position for id1
+		var reg1 = new OrderRegisterMessage
+		{
+			SecurityId = id1,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Price = 101,
+			Volume = 10,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg1);
+
+		// Create a long position for id2
+		var reg2 = new OrderRegisterMessage
+		{
+			SecurityId = id2,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Price = 101,
+			Volume = 5,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg2);
+
+		res.Clear();
+
+		now = now.AddSeconds(1);
+
+		// Check open positions via PortfolioLookupMessage
+		emu.SendInMessage(new PortfolioLookupMessage
+		{
+			IsSubscribe = true,
+			TransactionId = _idGenerator.GetNextId(),
+		});
+
+		res.OfType<PositionChangeMessage>()
+			.Count(x => x.SecurityId == id1 || x.SecurityId == id2)
+			.AssertEqual(2);
+
+		res.Clear();
+
+		now = now.AddSeconds(1);
+
+		// Close only positions for id1
+		emu.SendInMessage(new OrderGroupCancelMessage
+		{
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			PortfolioName = _pfName,
+			SecurityId = id1,
+			Mode = OrderGroupCancelModes.ClosePositions,
+		});
+
+		// Check that a closing order was created for id1
+		res.OfType<ExecutionMessage>().Count(x => x.OrderState == OrderStates.Done).AssertEqual(1);
+
+		res.Clear();
+
+		now = now.AddSeconds(1);
+
+		// Verify that position for id1 is closed but id2 remains open
+		emu.SendInMessage(new PortfolioLookupMessage
+		{
+			IsSubscribe = true,
+			TransactionId = _idGenerator.GetNextId(),
+		});
+
+		res.OfType<PositionChangeMessage>()
+			.Count(x => x.SecurityId == id1)
+			.AssertEqual(0);
+
+		res.OfType<PositionChangeMessage>()
+			.Single(x => x.SecurityId == id2)
+			.TryGetDecimal(PositionChangeTypes.CurrentValue)
+			.AssertEqual(5);
+	}
+
+	[TestMethod]
+	public void OrderGroupClosePositionsWithSideFilter()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTimeOffset.UtcNow;
+		AddBook(emu, id, now);
+
+		// Create a long position (buy)
+		var reg1 = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Price = 101,
+			Volume = 10,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg1);
+
+		res.Clear();
+
+		now = now.AddSeconds(1);
+
+		// Create a short position (sell)
+		var reg2 = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Sell,
+			Price = 100,
+			Volume = 5,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
+		};
+		emu.SendInMessage(reg2);
+
+		res.Clear();
+
+		now = now.AddSeconds(1);
+
+		// Check open positions via PortfolioLookupMessage
+		emu.SendInMessage(new PortfolioLookupMessage
+		{
+			IsSubscribe = true,
+			TransactionId = _idGenerator.GetNextId(),
+		});
+
+		// Net position should be 10 - 5 = 5 (long)
+		res.OfType<PositionChangeMessage>()
+			.Single(x => x.SecurityId == id)
+			.TryGetDecimal(PositionChangeTypes.CurrentValue)
+			.AssertEqual(5);
+
+		res.Clear();
+
+		now = now.AddSeconds(1);
+
+		// Close only long positions (Side = Sides.Buy means close long positions)
+		emu.SendInMessage(new OrderGroupCancelMessage
+		{
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			PortfolioName = _pfName,
+			Side = Sides.Buy,
+			Mode = OrderGroupCancelModes.ClosePositions,
+		});
+
+		// Check that a closing sell order was created to close long position
+		res.OfType<ExecutionMessage>().Count(x => x.OrderState == OrderStates.Done).AssertEqual(1);
+
+		res.Clear();
+
+		now = now.AddSeconds(1);
+
+		// Verify that position is now closed
+		emu.SendInMessage(new PortfolioLookupMessage
+		{
+			IsSubscribe = true,
+			TransactionId = _idGenerator.GetNextId(),
+		});
+
+		res.OfType<PositionChangeMessage>()
+			.Count(x => x.SecurityId == id)
+			.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -1334,7 +1580,7 @@ public class MarketEmulatorTests
 	{
 		var id1 = Helper.CreateSecurityId();
 		var id2 = Helper.CreateSecurityId();
-		var emu = CreateEmuWithEvents(id1, out var res);
+		var emu = CreateEmuWithEvents([id1, id2], out var res);
 		var now = DateTimeOffset.UtcNow;
 		AddBook(emu, id1, now);
 		AddBook(emu, id2, now);
@@ -1368,10 +1614,27 @@ public class MarketEmulatorTests
 
 		res.Clear();
 
+		now = now.AddSeconds(1);
+
+		// Check active orders via OrderStatusMessage
+		emu.SendInMessage(new OrderStatusMessage
+		{
+			IsSubscribe = true,
+			TransactionId = _idGenerator.GetNextId(),
+		});
+
+		res.OfType<ExecutionMessage>()
+			.Count(x => x.OrderState == OrderStates.Active)
+			.AssertEqual(2);
+
+		res.Clear();
+
+		now = now.AddSeconds(1);
+
 		// Cancel only orders for id1
 		emu.SendInMessage(new OrderGroupCancelMessage
 		{
-			LocalTime = now.AddSeconds(1),
+			LocalTime = now,
 			TransactionId = _idGenerator.GetNextId(),
 			PortfolioName = _pfName,
 			SecurityId = id1,
@@ -1379,12 +1642,24 @@ public class MarketEmulatorTests
 		});
 
 		// Check that only order for id1 is cancelled
-		var cancelled1 = res.OfType<ExecutionMessage>().FirstOrDefault(x => x.OrderId == 1 && x.OrderState == OrderStates.Done);
-		cancelled1.AssertNotNull();
+		res.OfType<ExecutionMessage>()
+			.Count(x => x.OrderState == OrderStates.Done)
+			.AssertEqual(1);
 
-		// Order for id2 should still be active (no cancellation message)
-		var cancelled2 = res.OfType<ExecutionMessage>().FirstOrDefault(x => x.OrderId == 2 && x.OrderState == OrderStates.Done);
-		cancelled2.AssertNull();
+		res.Clear();
+
+		now = now.AddSeconds(1);
+
+		// Verify that order for id2 is still active
+		emu.SendInMessage(new OrderStatusMessage
+		{
+			IsSubscribe = true,
+			TransactionId = _idGenerator.GetNextId(),
+		});
+
+		res.OfType<ExecutionMessage>()
+			.Count(x => x.OrderState == OrderStates.Active && x.SecurityId == id2)
+			.AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -1424,10 +1699,27 @@ public class MarketEmulatorTests
 
 		res.Clear();
 
+		now = now.AddSeconds(1);
+
+		// Check active orders via OrderStatusMessage
+		emu.SendInMessage(new OrderStatusMessage
+		{
+			IsSubscribe = true,
+			TransactionId = _idGenerator.GetNextId(),
+		});
+
+		res.OfType<ExecutionMessage>()
+			.Count(x => x.OrderState == OrderStates.Active)
+			.AssertEqual(2);
+
+		res.Clear();
+
+		now = now.AddSeconds(1);
+
 		// Cancel only buy orders
 		emu.SendInMessage(new OrderGroupCancelMessage
 		{
-			LocalTime = now.AddSeconds(1),
+			LocalTime = now,
 			TransactionId = _idGenerator.GetNextId(),
 			PortfolioName = _pfName,
 			Side = Sides.Buy,
@@ -1435,11 +1727,23 @@ public class MarketEmulatorTests
 		});
 
 		// Check that only buy order is cancelled
-		var cancelled1 = res.OfType<ExecutionMessage>().FirstOrDefault(x => x.OrderId == 1 && x.OrderState == OrderStates.Done);
-		cancelled1.AssertNotNull();
+		res.OfType<ExecutionMessage>()
+			.Count(x => x.OrderState == OrderStates.Done && x.Side == Sides.Buy)
+			.AssertEqual(1);
 
-		// Sell order should still be active
-		var cancelled2 = res.OfType<ExecutionMessage>().FirstOrDefault(x => x.OrderId == 2 && x.OrderState == OrderStates.Done);
-		cancelled2.AssertNull();
+		res.Clear();
+
+		now = now.AddSeconds(1);
+
+		// Verify that sell order is still active
+		emu.SendInMessage(new OrderStatusMessage
+		{
+			IsSubscribe = true,
+			TransactionId = _idGenerator.GetNextId(),
+		});
+
+		res.OfType<ExecutionMessage>()
+			.Count(x => x.OrderState == OrderStates.Active && x.Side == Sides.Sell)
+			.AssertEqual(1);
 	}
 }
