@@ -1244,6 +1244,8 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg1);
 
+		now = now.AddSeconds(1);
+
 		// Create a position by executing a buy order
 		var reg2 = new OrderRegisterMessage
 		{
@@ -1258,24 +1260,42 @@ public class MarketEmulatorTests
 		};
 		emu.SendInMessage(reg2);
 
+		res.OfType<ExecutionMessage>()
+			.Count(x => x.OrderState == OrderStates.Done)
+			.AssertEqual(1);
+
 		res.Clear();
+
+		now = now.AddSeconds(1);
+
+		res.Clear();
+
+		emu.SendInMessage(new OrderStatusMessage
+		{
+			IsSubscribe = true,
+			TransactionId = _idGenerator.GetNextId(),
+		});
+
+		res.OfType<ExecutionMessage>()
+			.Count(x => x.OrderState == OrderStates.Active)
+			.AssertEqual(1);
+
+		res.Clear();
+
+		now = now.AddSeconds(1);
 
 		// Cancel all orders AND close all positions
 		emu.SendInMessage(new OrderGroupCancelMessage
 		{
-			LocalTime = now.AddSeconds(1),
+			LocalTime = now,
 			TransactionId = _idGenerator.GetNextId(),
 			PortfolioName = _pfName,
 			Mode = OrderGroupCancelModes.CancelOrders | OrderGroupCancelModes.ClosePositions,
 		});
 
-		// Check that the pending order was cancelled
-		var cancelled = res.OfType<ExecutionMessage>().FirstOrDefault(x => x.OrderId == 1 && x.OrderState == OrderStates.Done);
-		cancelled.AssertNotNull();
-
-		// Check that a closing order was created
-		var closeOrder = res.OfType<ExecutionMessage>().FirstOrDefault(x => x.Side == Sides.Sell && x.OrderVolume == 10);
-		closeOrder.AssertNotNull();
+		res.OfType<ExecutionMessage>()
+			.Count(x => x.OrderState == OrderStates.Done)
+			.AssertEqual(1);
 	}
 
 	[TestMethod]

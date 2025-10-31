@@ -384,6 +384,46 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					break;
 				}
 
+				case MessageTypes.OrderGroupCancel:
+				{
+					var cancelMsg = (OrderGroupCancelMessage)message;
+
+					// Filter orders that match the criteria
+					var ordersToCancel = _activeOrders.Values
+						.Where(order =>
+						{
+							// Check portfolio filter
+							if (!cancelMsg.PortfolioName.IsEmpty() && !order.PortfolioName.EqualsIgnoreCase(cancelMsg.PortfolioName))
+								return false;
+
+							// Check side filter
+							if (cancelMsg.Side.HasValue && order.Side != cancelMsg.Side.Value)
+								return false;
+
+							return true;
+						})
+						.ToArray();
+
+					// Cancel each matching order
+					foreach (var order in ordersToCancel)
+					{
+						var cancelOrderMsg = new OrderCancelMessage
+						{
+							SecurityId = securityId,
+							LocalTime = cancelMsg.LocalTime,
+							TransactionId = _parent.TransactionIdGenerator.GetNextId(),
+							OrderId = order.OrderId.Value,
+							OriginalTransactionId = order.TransactionId,
+							PortfolioName = order.PortfolioName,
+						};
+
+						foreach (var m in ToExecutionLog(cancelOrderMsg, 0))
+							Process(m, result);
+					}
+
+					break;
+				}
+
 				default:
 				{
 					if (message is CandleMessage candleMsg)
@@ -2700,10 +2740,14 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		}
 	}
 
-	private class PortfolioEmulator(MarketEmulator parent, string name)
+	private class PortfolioEmulator(MarketEmulator parent, string portfolioName)
 	{
-		public class PositionInfo(SecurityMarketEmulator secEmu)
+		public class PositionInfo(SecurityMarketEmulator secEmu, SecurityId secId, string portfolioName)
 		{
+			public SecurityId SecurityId { get; } = secId;
+			public string PortfolioName { get; } = portfolioName.ThrowIfEmpty(nameof(portfolioName));
+			public SecurityMarketEmulator SecMsg { get; } = secEmu ?? throw new ArgumentNullException(nameof(secEmu));
+
 			public decimal BeginValue;
 			public decimal Diff;
 			public decimal CurrentValue => BeginValue + Diff;
@@ -2729,8 +2773,8 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			{
 				var price = Price;
 
-				var buyOrderPrice = (TotalBidsVolume + buyVol) * secEmu.GetMarginPrice(Sides.Buy);
-				var sellOrderPrice = (TotalAsksVolume + sellVol) * secEmu.GetMarginPrice(Sides.Sell);
+				var buyOrderPrice = (TotalBidsVolume + buyVol) * SecMsg.GetMarginPrice(Sides.Buy);
+				var sellOrderPrice = (TotalAsksVolume + sellVol) * SecMsg.GetMarginPrice(Sides.Sell);
 
 				if (price != 0)
 				{
@@ -2764,7 +2808,9 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		private decimal _totalBlockedMoney;
 
-		public PortfolioPnLManager PnLManager { get; } = new PortfolioPnLManager(name, secId => null);
+		public IEnumerable<PositionInfo> Positions => _positions.Values;
+
+		public PortfolioPnLManager PnLManager { get; } = new PortfolioPnLManager(portfolioName, secId => null);
 
 		public void RequestState(PortfolioLookupMessage pfMsg, ICollection<Message> result)
 		{
@@ -2805,13 +2851,13 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					SecurityId = SecurityId.Money,
 					ServerTime = posMsg.ServerTime,
 					LocalTime = posMsg.LocalTime,
-					PortfolioName = name,
+					PortfolioName = portfolioName,
 				}.Add(PositionChangeTypes.BlockedValue, _totalBlockedMoney)
 			);
 		}
 
 		public PositionInfo GetPosition(SecurityId securityId)
-			=> _positions.SafeAdd(securityId, k => new(parent.GetEmulator(securityId)));
+			=> _positions.SafeAdd(securityId, k => new(parent.GetEmulator(securityId), securityId, portfolioName));
 
 		public decimal? ProcessOrder(ExecutionMessage orderMsg, decimal? cancelBalance, ICollection<Message> result)
 		{
@@ -2890,7 +2936,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				{
 					LocalTime = time,
 					ServerTime = time,
-					PortfolioName = name,
+					PortfolioName = portfolioName,
 					SecurityId = SecurityId.Money,
 				}
 				.Add(PositionChangeTypes.CurrentValue, pos.CurrentValue)
@@ -2918,7 +2964,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					SecurityId = SecurityId.Money,
 					ServerTime = time,
 					LocalTime = time,
-					PortfolioName = name,
+					PortfolioName = portfolioName,
 				}.Add(PositionChangeTypes.BlockedValue, _totalBlockedMoney)
 			);
 		}
@@ -2944,7 +2990,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				SecurityId = SecurityId.Money,
 				ServerTime = time,
 				LocalTime = time,
-				PortfolioName = name,
+				PortfolioName = portfolioName,
 			}
 			.Add(PositionChangeTypes.RealizedPnL, realizedPnL)
 			.TryAdd(PositionChangeTypes.UnrealizedPnL, unrealizedPnL, true)
@@ -3138,7 +3184,8 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			
 				// Get emulator
 				SecurityMarketEmulator emulator = null;
-				if (!cancelMsg.SecurityId.IsDefault())
+
+				if (!cancelMsg.SecurityId.IsAllSecurity())
 					emulator = GetEmulator(cancelMsg.SecurityId);
 
 				// Handle cancel orders mode
@@ -3147,18 +3194,14 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					// Cancel orders for specific security
 					if (emulator != null)
 					{
-						// Let SecurityMarketEmulator handle cancellation  
-						// OrderGroupCancel currently throws NotSupportedException in SecurityMarketEmulator
-						// So we need to iterate and cancel manually
-						// This will be handled by each SecurityMarketEmulator
+						emulator.Process(cancelMsg, retVal);
 					}
 					else
 					{
 						// Cancel all orders across all securities
 						foreach (var secEmulator in _securityEmulators.Values)
 						{
-							// Process cancellation for each security emulator
-							// Each will handle portfolio/side filtering internally
+							secEmulator.Process(cancelMsg, retVal);
 						}
 					}
 				}
@@ -3179,69 +3222,43 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 							ServerTime = cancelMsg.LocalTime,
 							HasOrderInfo = true,
 						});
+
 						break;
 					}
 
-					var portfolio = GetPortfolioInfo(cancelMsg.PortfolioName);
-				
-					if (!cancelMsg.SecurityId.IsDefault())
+					IEnumerable<PortfolioEmulator> portfolios = cancelMsg.PortfolioName.IsEmpty()
+						? _portfolios.Values
+						: [GetPortfolioInfo(cancelMsg.PortfolioName)];
+
+					foreach (var portfolio in portfolios)
 					{
-						// Close position for specific security
-						var position = portfolio.GetPosition(cancelMsg.SecurityId);
-						var currentValue = position.CurrentValue;
+						var positions = cancelMsg.SecurityId.IsAllSecurity()
+							? portfolio.Positions
+							: [portfolio.GetPosition(cancelMsg.SecurityId)];
 
-						decimal volumeToClose = 0;
-						Sides? orderSide = null;
+						foreach (var position in positions)
+						{
+							var currentValue = position.CurrentValue;
 
-						if (cancelMsg.Side == null)
-						{
-							// Close entire position
-							if (currentValue > 0)
-							{
-								volumeToClose = currentValue;
-								orderSide = Sides.Sell;
-							}
-							else if (currentValue < 0)
-							{
-								volumeToClose = -currentValue;
-								orderSide = Sides.Buy;
-							}
-						}
-						else if (cancelMsg.Side == Sides.Buy)
-						{
-							// Close long position only
-							if (currentValue > 0)
-							{
-								volumeToClose = currentValue;
-								orderSide = Sides.Sell;
-							}
-						}
-						else if (cancelMsg.Side == Sides.Sell)
-						{
-							// Close short position only
-							if (currentValue < 0)
-							{
-								volumeToClose = -currentValue;
-								orderSide = Sides.Buy;
-							}
-						}
+							if (currentValue == 0)
+								continue;
 
-						if (volumeToClose > 0 && orderSide != null)
-						{
-							// Create market order to close position
+							var volumeToClose = currentValue.Abs();
+							var orderSide = currentValue.GetDirection().Value.Invert();
+
 							var orderMsg = new OrderRegisterMessage
 							{
 								TransactionId = cancelMsg.TransactionId,
-								SecurityId = cancelMsg.SecurityId,
-								PortfolioName = cancelMsg.PortfolioName,
-								Side = orderSide.Value,
+								SecurityId = position.SecurityId,
+								PortfolioName = position.PortfolioName,
+								Side = orderSide,
 								Volume = volumeToClose,
 								OrderType = OrderTypes.Market,
 								LocalTime = cancelMsg.LocalTime,
 								UserOrderId = cancelMsg.UserOrderId,
 							};
 
-							GetEmulator(cancelMsg.SecurityId).Process(orderMsg, retVal);
+							GetEmulator(orderMsg.SecurityId).Process(orderMsg, retVal);
 						}
 					}
 				}
