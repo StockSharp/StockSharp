@@ -2,7 +2,6 @@
   <Import Project="..\common_target_tests.props" />
   <ItemGroup>
     <PackageReference Include="Moq" Version="$(MoqVer)" />
-    <PackageReference Include="Ecng.Linq" Version="$(EcngVer)" />
     <PackageReference Include="System.Drawing.Common" Version="$(MsExtensionsVer)" />
   </ItemGroup>
   <ItemGroup>

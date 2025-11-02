@@ -4,6 +4,7 @@ using IOPath = System.IO.Path;
 using System.Runtime.CompilerServices;
 
 using Ecng.Reflection;
+using Ecng.Linq;
 
 using StockSharp.Algo.Storages.Binary;
 
@@ -757,6 +758,13 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			return index is not null;
 		}
 	}
+
+	/// <summary>
+	/// Available securities.
+	/// </summary>
+	[Obsolete("Use GetAvailableSecuritiesAsync instead.")]
+	public IEnumerable<SecurityId> AvailableSecurities
+		=> AsyncHelper.Run(() => GetAvailableSecuritiesAsync(default).ToArrayAsync2(default));
 
 	/// <inheritdoc />
 	public override async IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync([EnumeratorCancellation]CancellationToken cancellationToken)

@@ -10,7 +10,8 @@
     <PackageReference Include="Ecng.StringSearch" Version="$(EcngVer)" />
     <PackageReference Include="Ecng.Compilation" Version="$(EcngVer)" />
     <PackageReference Include="Ecng.MathLight" Version="$(EcngVer)" />
-	  
+    <PackageReference Include="Ecng.Linq" Version="$(EcngVer)" />
+
     <PackageReference Include="GeneticSharp" Version="$(GeneticSharpVer)" />
   </ItemGroup>
   <ItemGroup>
