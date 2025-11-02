@@ -60,7 +60,7 @@ public interface IChartCandleElement : IChartElement
 	/// <summary>
 	/// Custom elements colorer.
 	/// </summary>
-	new Func<DateTimeOffset, bool, bool, Color?> Colorer { get; set; }
+	new Func<DateTime, bool, bool, Color?> Colorer { get; set; }
 
 	#endregion
 

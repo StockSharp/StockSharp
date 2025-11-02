@@ -26,8 +26,8 @@ public class OrderLogTests
 			OrderVolume = volume,
 			OrderState = orderState,
 			TradeVolume = tradeVolume,
-			ServerTime = DateTimeOffset.UtcNow,
-			LocalTime = DateTimeOffset.UtcNow
+			ServerTime = DateTime.UtcNow,
+			LocalTime = DateTime.UtcNow
 		};
 	}
 
@@ -37,7 +37,7 @@ public class OrderLogTests
 		var securityId = _secId;
 		IOrderLogMarketDepthBuilder builder = new OrderLogMarketDepthBuilder(securityId);
 
-		var snapshot = builder.GetSnapshot(DateTimeOffset.UtcNow);
+		var snapshot = builder.GetSnapshot(DateTime.UtcNow);
 		snapshot.SecurityId.AssertEqual(securityId);
 		snapshot.BuildFrom.AssertEqual(DataType.OrderLog);
 		snapshot.State.AssertEqual(QuoteChangeStates.SnapshotComplete);
@@ -57,7 +57,7 @@ public class OrderLogTests
 		};
 
 		IOrderLogMarketDepthBuilder builder = new OrderLogMarketDepthBuilder(initialDepth);
-		var snapshot = builder.GetSnapshot(DateTimeOffset.UtcNow);
+		var snapshot = builder.GetSnapshot(DateTime.UtcNow);
 
 		snapshot.SecurityId.AssertEqual(securityId);
 		snapshot.BuildFrom.AssertEqual(DataType.OrderLog);
@@ -128,7 +128,7 @@ public class OrderLogTests
 		result.Bids[0].Price.AssertEqual(100m);
 		result.Bids[0].Volume.AssertEqual(10m);
 
-		var snapshot = builder.GetSnapshot(DateTimeOffset.UtcNow);
+		var snapshot = builder.GetSnapshot(DateTime.UtcNow);
 		snapshot.Bids.Length.AssertEqual(1);
 		snapshot.Bids[0].Price.AssertEqual(100m);
 		snapshot.Bids[0].Volume.AssertEqual(10m);
@@ -182,7 +182,7 @@ public class OrderLogTests
 		result.Bids[0].Price.AssertEqual(100m);
 		result.Bids[0].Volume.AssertEqual(15m);
 
-		var snapshot = builder.GetSnapshot(DateTimeOffset.UtcNow);
+		var snapshot = builder.GetSnapshot(DateTime.UtcNow);
 		snapshot.Bids.Length.AssertEqual(1);
 		snapshot.Bids[0].Volume.AssertEqual(15m);
 	}
@@ -215,7 +215,7 @@ public class OrderLogTests
 		result.AssertNotNull();
 		result.Bids[0].Volume.AssertEqual(8m);
 
-		var snapshot = builder.GetSnapshot(DateTimeOffset.UtcNow);
+		var snapshot = builder.GetSnapshot(DateTime.UtcNow);
 		snapshot.Bids[0].Volume.AssertEqual(8m);
 	}
 
@@ -247,7 +247,7 @@ public class OrderLogTests
 		result.AssertNotNull();
 		result.Bids[0].Volume.AssertEqual(7m);
 
-		var snapshot = builder.GetSnapshot(DateTimeOffset.UtcNow);
+		var snapshot = builder.GetSnapshot(DateTime.UtcNow);
 		snapshot.Bids[0].Volume.AssertEqual(7m);
 	}
 
@@ -279,7 +279,7 @@ public class OrderLogTests
 		result.AssertNotNull();
 		result.Bids[0].Volume.AssertEqual(0m);
 
-		var snapshot = builder.GetSnapshot(DateTimeOffset.UtcNow);
+		var snapshot = builder.GetSnapshot(DateTime.UtcNow);
 		snapshot.Bids.Length.AssertEqual(0);
 	}
 
@@ -350,7 +350,7 @@ public class OrderLogTests
 		result.AssertNotNull();
 		result.Bids[0].Volume.AssertEqual(0m);
 
-		var snapshot = builder.GetSnapshot(DateTimeOffset.UtcNow);
+		var snapshot = builder.GetSnapshot(DateTime.UtcNow);
 		snapshot.Bids.Length.AssertEqual(0);
 	}
 
@@ -381,7 +381,7 @@ public class OrderLogTests
 		result.AssertNotNull();
 		result.Asks[0].Volume.AssertEqual(0m);
 
-		var snapshot = builder.GetSnapshot(DateTimeOffset.UtcNow);
+		var snapshot = builder.GetSnapshot(DateTime.UtcNow);
 		snapshot.Asks.Length.AssertEqual(0);
 	}
 
@@ -453,7 +453,7 @@ public class OrderLogTests
 			volume: 12m,
 			orderState: OrderStates.Active));
 
-		var snapshot = builder.GetSnapshot(DateTimeOffset.UtcNow);
+		var snapshot = builder.GetSnapshot(DateTime.UtcNow);
 
 		snapshot.Bids.Length.AssertEqual(2);
 		snapshot.Asks.Length.AssertEqual(2);
@@ -531,7 +531,7 @@ public class OrderLogTests
 		var result = builder.Update(cancelMessage);
 		result.AssertNotNull();
 
-		var snapshot = builder.GetSnapshot(DateTimeOffset.UtcNow);
+		var snapshot = builder.GetSnapshot(DateTime.UtcNow);
 		snapshot.Bids.Length.AssertEqual(0);
 	}
 
@@ -554,7 +554,7 @@ public class OrderLogTests
 		// Add new order at existing price level
 		builder.Update(CreateOrderLogMessage(orderId: 4, side: Sides.Buy, price: 100m, volume: 5m, orderState: OrderStates.Active));
 
-		var snapshot = builder.GetSnapshot(DateTimeOffset.UtcNow);
+		var snapshot = builder.GetSnapshot(DateTime.UtcNow);
 
 		// Should have one bid level with combined volume (7 + 5 = 12)
 		snapshot.Bids.Length.AssertEqual(1);
@@ -567,7 +567,7 @@ public class OrderLogTests
 		snapshot.Asks[0].Volume.AssertEqual(8m);
 	}
 
-	private static (Security sec, IStorageRegistry registry, DateTimeOffset date) Init()
+	private static (Security sec, IStorageRegistry registry, DateTime date) Init()
 	{
 		var gazp = new Security { Id = "GAZP@TQBR", Board = ExchangeBoard.MicexTqbr };
 		var registry = Helper.GetResourceStorage();

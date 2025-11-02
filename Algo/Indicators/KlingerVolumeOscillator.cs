@@ -118,7 +118,7 @@ public class KlingerVolumeOscillator : BaseComplexIndicator<IKlingerVolumeOscill
 	public override string ToString() => base.ToString() + $" S={ShortPeriod},L={LongPeriod}";
 
 	/// <inheritdoc />
-	protected override IKlingerVolumeOscillatorValue CreateValue(DateTimeOffset time)
+	protected override IKlingerVolumeOscillatorValue CreateValue(DateTime time)
 		=> new KlingerVolumeOscillatorValue(this, time);
 }
 
@@ -169,7 +169,7 @@ public interface IKlingerVolumeOscillatorValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent KlingerVolumeOscillator indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class KlingerVolumeOscillatorValue(KlingerVolumeOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<KlingerVolumeOscillator>(indicator, time), IKlingerVolumeOscillatorValue
+public class KlingerVolumeOscillatorValue(KlingerVolumeOscillator indicator, DateTime time) : ComplexIndicatorValue<KlingerVolumeOscillator>(indicator, time), IKlingerVolumeOscillatorValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue ShortEmaValue => this[TypedIndicator.ShortEma];

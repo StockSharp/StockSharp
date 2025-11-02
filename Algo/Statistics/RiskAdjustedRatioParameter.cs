@@ -64,7 +64,7 @@ public abstract class RiskAdjustedRatioParameter : BasePnLStatisticParameter<dec
 	}
 
 	/// <inheritdoc />
-	public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+	public override void Add(DateTime marketTime, decimal pnl, decimal? commission)
 	{
 		if (_previousPnL != null)
 		{

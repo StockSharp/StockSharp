@@ -83,7 +83,7 @@ public struct GpuGatorOscillatorParams(int jawLength, int jawShift, int teethLen
 public struct GpuGatorOscillatorResult : IGpuIndicatorResult
 {
 	/// <summary>
-	/// Time in <see cref="DateTimeOffset.Ticks"/>.
+	/// Time in <see cref="DateTime.Ticks"/>.
 	/// </summary>
 	public long Time;
 
@@ -124,7 +124,7 @@ public struct GpuGatorOscillatorResult : IGpuIndicatorResult
 		return value;
 	}
 
-	private static IIndicatorValue CreateHistogramValue(GatorHistogram histogram, float data, DateTimeOffset time, bool isFormed)
+	private static IIndicatorValue CreateHistogramValue(GatorHistogram histogram, float data, DateTime time, bool isFormed)
 	{
 		if (float.IsNaN(data))
 		{

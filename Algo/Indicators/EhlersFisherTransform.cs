@@ -143,7 +143,7 @@ public class EhlersFisherTransform : BaseComplexIndicator<IEhlersFisherTransform
 	public override string ToString() => base.ToString() + " " + Length;
 
 	/// <inheritdoc />
-	protected override IEhlersFisherTransformValue CreateValue(DateTimeOffset time)
+	protected override IEhlersFisherTransformValue CreateValue(DateTime time)
 		=> new EhlersFisherTransformValue(this, time);
 }
 
@@ -199,7 +199,7 @@ public interface IEhlersFisherTransformValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent EhlersFisherTransform indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class EhlersFisherTransformValue(EhlersFisherTransform indicator, DateTimeOffset time) : ComplexIndicatorValue<EhlersFisherTransform>(indicator, time), IEhlersFisherTransformValue
+public class EhlersFisherTransformValue(EhlersFisherTransform indicator, DateTime time) : ComplexIndicatorValue<EhlersFisherTransform>(indicator, time), IEhlersFisherTransformValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue MainLineValue => this[TypedIndicator.MainLine];

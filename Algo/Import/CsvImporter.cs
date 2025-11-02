@@ -36,13 +36,13 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 	/// <param name="updateProgress">Progress notification.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Count and last time.</returns>
-	public async ValueTask<(int count, DateTimeOffset? lastTime)> Import(Stream stream, Action<int> updateProgress, CancellationToken cancellationToken)
+	public async ValueTask<(int count, DateTime? lastTime)> Import(Stream stream, Action<int> updateProgress, CancellationToken cancellationToken)
 	{
 		ArgumentNullException.ThrowIfNull(stream);
 		ArgumentNullException.ThrowIfNull(updateProgress);
 
 		var count = 0;
-		var lastTime = default(DateTimeOffset?);
+		var lastTime = default(DateTime?);
 
 		var buffer = new List<Message>();
 

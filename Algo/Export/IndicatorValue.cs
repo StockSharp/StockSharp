@@ -13,7 +13,7 @@ public class IndicatorValue : IServerTimeMessage, ISecurityIdMessage
 	/// <summary>
 	/// Value time.
 	/// </summary>
-	public DateTimeOffset Time { get; set; }
+	public DateTime Time { get; set; }
 
 	private IIndicatorValue _value;
 
@@ -92,7 +92,7 @@ public class IndicatorValue : IServerTimeMessage, ISecurityIdMessage
 			throw new ArgumentOutOfRangeException(nameof(value), value.GetType(), LocalizedStrings.InvalidValue);
 	}
 
-	DateTimeOffset IServerTimeMessage.ServerTime
+	DateTime IServerTimeMessage.ServerTime
 	{
 		get => Time;
 		set => Time = value;

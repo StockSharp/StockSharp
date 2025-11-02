@@ -133,7 +133,7 @@ public abstract class BaseExternalDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
-	protected override void OnStart(DateTimeOffset time)
+	protected override void OnStart(DateTime time)
 	{
 		if (_element is null)
 			throw new InvalidOperationException("_element is null");
@@ -212,7 +212,7 @@ public abstract class BaseExternalDiagramElement : DiagramElement
 
 	private void RaiseProcessOutput(DiagramSocket outputSocket, object value)
 	{
-		RaiseProcessOutput(outputSocket, Strategy.CurrentTime, value);
+		RaiseProcessOutput(outputSocket, Strategy.CurrentTimeUtc, value);
 	}
 
 	private const BindingFlags _flags = BindingFlags.Instance | BindingFlags.Public;

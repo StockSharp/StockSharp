@@ -21,7 +21,7 @@ public class RecoveryFactorParameter(MaxDrawdownParameter maxDrawdown, NetProfit
 	private readonly NetProfitParameter _netProfit = netProfit ?? throw new ArgumentNullException(nameof(netProfit));
 
 	/// <inheritdoc />
-	public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+	public override void Add(DateTime marketTime, decimal pnl, decimal? commission)
 	{
 		if (_maxDrawdown.Value != 0)
 			Value = _netProfit.Value / _maxDrawdown.Value;

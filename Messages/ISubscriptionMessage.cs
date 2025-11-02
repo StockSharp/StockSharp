@@ -42,12 +42,12 @@ public interface ISubscriptionMessage : ITransactionIdMessage, IOriginalTransact
 	/// <summary>
 	/// Start date, from which data needs to be retrieved.
 	/// </summary>
-	DateTimeOffset? From { get; set; }
+	DateTime? From { get; set; }
 
 	/// <summary>
 	/// End date, until which data needs to be retrieved.
 	/// </summary>
-	DateTimeOffset? To { get; set; }
+	DateTime? To { get; set; }
 
 	/// <summary>
 	/// The message is subscription.

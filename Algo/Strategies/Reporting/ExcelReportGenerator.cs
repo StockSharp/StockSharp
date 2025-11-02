@@ -91,7 +91,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, string template
 
 			if (value is TimeSpan ts)
 				value = ts.Format();
-			else if (value is DateTimeOffset dto)
+			else if (value is DateTime dto)
 				value = dto.Format();
 			else if (value is decimal dec)
 				value = dec.Round(Decimals);

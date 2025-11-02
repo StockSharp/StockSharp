@@ -1,5 +1,5 @@
 import clr
-from System import Decimal, DateTimeOffset
+from System import Decimal, DateTime
 from datetime import datetime
 
 # Add references to required assemblies
@@ -19,12 +19,12 @@ def create_chart(panel, x_type, y_type):
     if x_type == float:
         x_type = Decimal
     elif x_type == datetime:
-        x_type = DateTimeOffset
+        x_type = DateTime
 
     if y_type == float:
         y_type = Decimal
     elif y_type == datetime:
-        y_type = DateTimeOffset
+        y_type = DateTime
 
     # Create the chart with the correct types
     return panel.CreateChart[x_type, y_type]()
@@ -42,17 +42,17 @@ def create_3d_chart(panel, x_type, y_type, z_type):
     if x_type == float:
         x_type = Decimal
     elif x_type == datetime:
-        x_type = DateTimeOffset
+        x_type = DateTime
 
     if y_type == float:
         y_type = Decimal
     elif y_type == datetime:
-        y_type = DateTimeOffset
+        y_type = DateTime
 
     if z_type == float:
         z_type = Decimal
     elif z_type == datetime:
-        z_type = DateTimeOffset
+        z_type = DateTime
 
     # Create the 3D chart with the correct types
     return panel.CreateChart[x_type, y_type, z_type]()

@@ -101,7 +101,7 @@ public sealed class AlertDiagramElement : DiagramElement
 	private bool _canProcess;
 
 	/// <inheritdoc />
-	protected override void OnStart(DateTimeOffset time)
+	protected override void OnStart(DateTime time)
 	{
 		base.OnStart(time);
 

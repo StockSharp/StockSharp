@@ -33,7 +33,7 @@ class BoardStateBinarySerializer(IExchangeInfoProvider exchangeInfoProvider) : B
 		{
 			if (isMetaEmpty)
 			{
-				metaInfo.ServerOffset = msg.ServerTime.Offset;
+				metaInfo.ServerOffset = default;
 				isMetaEmpty = false;
 			}
 

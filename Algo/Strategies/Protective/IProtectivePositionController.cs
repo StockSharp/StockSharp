@@ -28,7 +28,7 @@ public interface IProtectivePositionController
 	/// <param name="time">Current time.</param>
 	/// <returns>Registration order info.</returns>
 	(bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)?
-		Update(decimal price, decimal value, DateTimeOffset time);
+		Update(decimal price, decimal value, DateTime time);
 
 	/// <summary>
 	/// Try activate local stop orders.
@@ -37,5 +37,5 @@ public interface IProtectivePositionController
 	/// <param name="time">Current time.</param>
 	/// <returns>Registration order info.</returns>
 	(bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)?
-		TryActivate(decimal price, DateTimeOffset time);
+		TryActivate(decimal price, DateTime time);
 }

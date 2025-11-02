@@ -4,7 +4,7 @@ public partial class FtxMessageAdapter
 {
 	private FtxRestClient _restClient;
 	private FtxWebSocketClient _wsClient;
-	private DateTimeOffset _lastStateUpdate;
+	private DateTime _lastStateUpdate;
 
 	/// <summary>
 	/// All possible time frames.

@@ -47,7 +47,7 @@ public struct GpuEnvelopeParams(int length, float shift, byte priceType) : IGpuI
 public struct GpuEnvelopeResult : IGpuIndicatorResult
 {
 	/// <summary>
-	/// Time in <see cref="DateTimeOffset.Ticks"/>.
+	/// Time in <see cref="DateTime.Ticks"/>.
 	/// </summary>
 	public long Time;
 

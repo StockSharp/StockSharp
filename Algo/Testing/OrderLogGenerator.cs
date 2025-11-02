@@ -73,7 +73,7 @@ public class OrderLogGenerator : MarketDataGenerator
 	/// <inheritdoc />
 	protected override Message OnProcess(Message message)
 	{
-		DateTimeOffset time;
+		DateTime time;
 
 		switch (message.Type)
 		{

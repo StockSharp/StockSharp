@@ -1,13 +1,12 @@
 namespace StockSharp.Algo;
 
-using StockSharp.Algo.Candles;
 using StockSharp.Algo.Testing;
 
 partial class Connector
 {
 	private class SubscriptionInfo
 	{
-		private DateTimeOffset? _last;
+		private DateTime? _last;
 		private ICandleMessage _currentCandle;
 
 		public SubscriptionInfo(Subscription subscription, SubscriptionInfo parent)
@@ -46,7 +45,7 @@ partial class Connector
 			return subscrMsg;
 		}
 
-		public bool UpdateLastTime(DateTimeOffset time)
+		public bool UpdateLastTime(DateTime time)
 		{
 			if (_last == null || _last.Value <= time)
 			{
@@ -138,7 +137,7 @@ partial class Connector
 			_connector.LogInfo(LocalizedStrings.SubscriptionRemoved, id);
 		}
 
-		private SubscriptionInfo TryGetInfo(long id, bool ignoreAll, bool remove, DateTimeOffset? time, bool addLog)
+		private SubscriptionInfo TryGetInfo(long id, bool ignoreAll, bool remove, DateTime? time, bool addLog)
 		{
 			lock (_syncObject)
 			{
@@ -177,7 +176,7 @@ partial class Connector
 
 		public IEnumerable<Subscription> GetSubscriptions(ISubscriptionIdMessage message)
 		{
-			var time = message is IServerTimeMessage timeMsg ? timeMsg.ServerTime : (DateTimeOffset?)null;
+			var time = message is IServerTimeMessage timeMsg ? timeMsg.ServerTime : (DateTime?)null;
 
 			var processed = new HashSet<SubscriptionInfo>();
 
@@ -205,7 +204,7 @@ partial class Connector
 			}
 		}
 
-		public SubscriptionInfo TryGetSubscription(long id, bool ignoreAll, bool remove, DateTimeOffset? time)
+		public SubscriptionInfo TryGetSubscription(long id, bool ignoreAll, bool remove, DateTime? time)
 		{
 			return TryGetInfo(id, ignoreAll, remove, time, true);
 		}

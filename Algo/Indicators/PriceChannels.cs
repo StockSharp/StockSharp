@@ -93,7 +93,7 @@ public class PriceChannels : BaseComplexIndicator<IPriceChannelsValue>
 	public override string ToString() => base.ToString() + " " + Length;
 
 	/// <inheritdoc />
-	protected override IPriceChannelsValue CreateValue(DateTimeOffset time)
+	protected override IPriceChannelsValue CreateValue(DateTime time)
 		=> new PriceChannelsValue(this, time);
 }
 
@@ -133,7 +133,7 @@ public interface IPriceChannelsValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent Price Channels indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class PriceChannelsValue(PriceChannels indicator, DateTimeOffset time) : ComplexIndicatorValue<PriceChannels>(indicator, time), IPriceChannelsValue
+public class PriceChannelsValue(PriceChannels indicator, DateTime time) : ComplexIndicatorValue<PriceChannels>(indicator, time), IPriceChannelsValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue UpperChannelValue => this[TypedIndicator.UpperChannel];

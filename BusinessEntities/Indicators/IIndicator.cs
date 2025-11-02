@@ -119,7 +119,7 @@ public interface IIndicator : IPersistable, ICloneable<IIndicator>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
 	/// <param name="values"><see cref="IIndicatorValue.ToValues"/></param>
 	/// <returns><see cref="IIndicatorValue"/></returns>
-	IIndicatorValue CreateValue(DateTimeOffset time, object[] values);
+	IIndicatorValue CreateValue(DateTime time, object[] values);
 
 	/// <summary>
 	/// Chart indicator draw style.

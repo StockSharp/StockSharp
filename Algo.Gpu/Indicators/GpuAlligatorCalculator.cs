@@ -68,7 +68,7 @@ public struct GpuAlligatorParams(int jawLength, int jawShift, int teethLength, i
 public struct GpuAlligatorResult : IGpuIndicatorResult
 {
 	/// <summary>
-	/// Time in <see cref="DateTimeOffset.Ticks"/>.
+	/// Time in <see cref="DateTime.Ticks"/>.
 	/// </summary>
 	public long Time;
 
@@ -116,7 +116,7 @@ public struct GpuAlligatorResult : IGpuIndicatorResult
 		return value;
 	}
 
-	private static IIndicatorValue CreateInnerValue(AlligatorLine line, float rawValue, DateTimeOffset time, bool parentIsFormed)
+	private static IIndicatorValue CreateInnerValue(AlligatorLine line, float rawValue, DateTime time, bool parentIsFormed)
 	{
 		if (rawValue.IsNaN())
 		{

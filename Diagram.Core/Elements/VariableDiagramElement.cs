@@ -381,7 +381,7 @@ public class VariableDiagramElement : TypedDiagramElement<VariableDiagramElement
 	}
 
 	/// <inheritdoc />
-	protected override void OnStart(DateTimeOffset time)
+	protected override void OnStart(DateTime time)
 	{
 		base.OnStart(time);
 
@@ -438,7 +438,7 @@ public class VariableDiagramElement : TypedDiagramElement<VariableDiagramElement
 	}
 
 	/// <inheritdoc />
-	public override void Flush(DateTimeOffset time)
+	public override void Flush(DateTime time)
 	{
 		RaiseProcessOutput(OutputSocket, time, _currentValue);
 	}

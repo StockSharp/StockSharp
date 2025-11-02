@@ -29,8 +29,8 @@ static class Extensions
         };
     }
 
-    public static DateTimeOffset ToDto(this string value, string format = "yyyy-MM-dd HH:mm:ss")
+    public static DateTime ToDto(this string value, string format = "yyyy-MM-dd HH:mm:ss")
     {
-        return value.ToDateTime(format).ApplyUtc();
+        return value.ToDateTime(format).UtcKind();
     }
 }

@@ -167,9 +167,9 @@ public class ArbitrageStrategy : Strategy
 	/// <summary>
 	/// Strategy startup initialization.
 	/// </summary>
-	protected override void OnStarted(DateTimeOffset time)
+	protected override void OnStarted2(DateTime time)
 	{
-		base.OnStarted(time);
+		base.OnStarted2(time);
 
 		if (FutureSecurity == null)
 			throw new InvalidOperationException("Future security is not specified.");

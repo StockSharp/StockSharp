@@ -56,10 +56,10 @@ public class ServerProtectiveBehaviourFactory(IMessageAdapter adapter) : IProtec
 
 		public override decimal Position => 0;
 
-		public override (bool, Sides, decimal, decimal, OrderCondition)? TryActivate(decimal price, DateTimeOffset time)
+		public override (bool, Sides, decimal, decimal, OrderCondition)? TryActivate(decimal price, DateTime time)
 			=> default;
 
-		public override (bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)? Update(decimal price, decimal value, DateTimeOffset time)
+		public override (bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)? Update(decimal price, decimal value, DateTime time)
 		{
 			var condition = _adapter.CreateOrderCondition() ?? throw new NotSupportedException();
 
@@ -138,7 +138,7 @@ public class LocalProtectiveBehaviourFactory(decimal? priceStep, int? decimals) 
 
 		public override decimal Position => _posValue;
 
-		public override (bool, Sides, decimal, decimal, OrderCondition)? TryActivate(decimal price, DateTimeOffset time)
+		public override (bool, Sides, decimal, decimal, OrderCondition)? TryActivate(decimal price, DateTime time)
 		{
 			if (_posValue == 0)
 				return null;
@@ -166,7 +166,7 @@ public class LocalProtectiveBehaviourFactory(decimal? priceStep, int? decimals) 
 			return info;
 		}
 
-		public override (bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)? Update(decimal price, decimal value, DateTimeOffset time)
+		public override (bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)? Update(decimal price, decimal value, DateTime time)
 		{
 			if (price <= 0)
 				throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.InvalidValue);

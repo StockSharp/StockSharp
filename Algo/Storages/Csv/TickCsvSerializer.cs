@@ -39,7 +39,7 @@ public class TickCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMa
 			data.OrderSellId.ToString(),
 		]));
 
-		metaInfo.LastTime = data.ServerTime.UtcDateTime;
+		metaInfo.LastTime = data.ServerTime;
 		metaInfo.LastId = data.TradeId;
 	}
 

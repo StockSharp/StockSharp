@@ -26,13 +26,13 @@ public abstract class Candle : Cloneable<Candle>, ICandleMessage
 		set => throw new NotSupportedException();
 	}
 
-	DateTimeOffset IServerTimeMessage.ServerTime
+	DateTime IServerTimeMessage.ServerTime
 	{
 		get => OpenTime;
 		set => OpenTime = value;
 	}
 
-	DateTimeOffset ILocalTimeMessage.LocalTime => OpenTime;
+	DateTime ILocalTimeMessage.LocalTime => OpenTime;
 
 	/// <summary>
 	/// Security.
@@ -52,7 +52,7 @@ public abstract class Candle : Cloneable<Candle>, ICandleMessage
 		Name = LocalizedStrings.CandleOpenTimeKey,
 		Description = LocalizedStrings.CandleOpenTimeKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset OpenTime { get; set; }
+	public DateTime OpenTime { get; set; }
 
 	/// <inheritdoc />
 	[DataMember]
@@ -61,7 +61,7 @@ public abstract class Candle : Cloneable<Candle>, ICandleMessage
 		Name = LocalizedStrings.CandleCloseTimeKey,
 		Description = LocalizedStrings.CandleCloseTimeKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset CloseTime { get; set; }
+	public DateTime CloseTime { get; set; }
 
 	/// <inheritdoc />
 	[DataMember]
@@ -70,7 +70,7 @@ public abstract class Candle : Cloneable<Candle>, ICandleMessage
 		Name = LocalizedStrings.CandleHighTimeKey,
 		Description = LocalizedStrings.CandleHighTimeKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset HighTime { get; set; }
+	public DateTime HighTime { get; set; }
 
 	/// <inheritdoc />
 	[DataMember]
@@ -79,7 +79,7 @@ public abstract class Candle : Cloneable<Candle>, ICandleMessage
 		Name = LocalizedStrings.CandleLowTimeKey,
 		Description = LocalizedStrings.CandleLowTimeKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset LowTime { get; set; }
+	public DateTime LowTime { get; set; }
 
 	/// <inheritdoc />
 	[DataMember]

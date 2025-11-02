@@ -28,9 +28,9 @@ public class SyncDiagramElement : DiagramElement
 		public bool NoCandles => CandlesTotal == 0;
 		public bool IsAllCandlesFinished => CandlesTotal == CandlesFinished;
 
-		public DateTimeOffset Time { get; private set; }
+		public DateTime Time { get; private set; }
 
-		public void AddValue(DiagramSocket output, DateTimeOffset time, object value)
+		public void AddValue(DiagramSocket output, DateTime time, object value)
 		{
 			var isNewValue = true;
 
@@ -92,9 +92,9 @@ public class SyncDiagramElement : DiagramElement
 		}
 	}
 
-	private readonly SortedList<DateTimeOffset, RangeData> _ranges = [];
+	private readonly SortedList<DateTime, RangeData> _ranges = [];
 	private readonly Dictionary<DiagramSocket, DiagramSocket> _map = [];
-	private DateTimeOffset _minTime;
+	private DateTime _minTime;
 
 	private int _connectedCount;
 	private int _lastIndex;
@@ -219,7 +219,7 @@ public class SyncDiagramElement : DiagramElement
 		ProcessRangesIfPossible();
 	}
 
-	private RangeData TryGetOrCreateRange(DateTimeOffset time)
+	private RangeData TryGetOrCreateRange(DateTime time)
 	{
 		if (_ranges.Count > 0 && time < _ranges.Keys[0])
 			return null;

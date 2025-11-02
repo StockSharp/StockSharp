@@ -44,7 +44,7 @@ public interface IQuotingBehavior
 	decimal? NeedQuoting(
 		Security security,
 		IMarketDataProvider provider,
-		DateTimeOffset currentTime,
+		DateTime currentTime,
 		decimal? currentPrice,
 		decimal? currentVolume,
 		decimal newVolume,
@@ -99,7 +99,7 @@ public class MarketQuotingBehavior(Unit priceOffset, Unit bestPriceOffset, Marke
 			: basePrice - (decimal)_priceOffset;
 	}
 
-	decimal? IQuotingBehavior.NeedQuoting(Security security, IMarketDataProvider provider, DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume, decimal? bestPrice)
+	decimal? IQuotingBehavior.NeedQuoting(Security security, IMarketDataProvider provider, DateTime currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume, decimal? bestPrice)
 	{
 		if (bestPrice == null)
 			return null;
@@ -131,7 +131,7 @@ public class BestByPriceQuotingBehavior(Unit bestPriceOffset) : IQuotingBehavior
 		return (quotingDirection == Sides.Buy ? bestBidPrice : bestAskPrice) ?? lastTradePrice;
 	}
 
-	decimal? IQuotingBehavior.NeedQuoting(Security security, IMarketDataProvider provider, DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume, decimal? bestPrice)
+	decimal? IQuotingBehavior.NeedQuoting(Security security, IMarketDataProvider provider, DateTime currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume, decimal? bestPrice)
 	{
 		if (bestPrice == null)
 			return null;
@@ -163,7 +163,7 @@ public class LimitQuotingBehavior(decimal limitPrice) : IQuotingBehavior
 		return limitPrice;
 	}
 
-	decimal? IQuotingBehavior.NeedQuoting(Security security, IMarketDataProvider provider, DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume, decimal? bestPrice)
+	decimal? IQuotingBehavior.NeedQuoting(Security security, IMarketDataProvider provider, DateTime currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume, decimal? bestPrice)
 	{
 		if (bestPrice == null)
 			return null;
@@ -207,7 +207,7 @@ public class BestByVolumeQuotingBehavior(Unit volumeExchange) : IQuotingBehavior
 		return quotes.Last().Price; // Default to the last quote if volume threshold not exceeded
 	}
 
-	decimal? IQuotingBehavior.NeedQuoting(Security security, IMarketDataProvider provider, DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume, decimal? bestPrice)
+	decimal? IQuotingBehavior.NeedQuoting(Security security, IMarketDataProvider provider, DateTime currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume, decimal? bestPrice)
 	{
 		if (bestPrice == null)
 			return null;
@@ -269,7 +269,7 @@ public class LevelQuotingBehavior(Range<int> level, bool ownLevel) : IQuotingBeh
 		return ((fromPrice + toPrice) / 2m).Round(pip, null); // Return the midpoint between min and max levels
 	}
 
-	decimal? IQuotingBehavior.NeedQuoting(Security security, IMarketDataProvider provider, DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume, decimal? bestPrice)
+	decimal? IQuotingBehavior.NeedQuoting(Security security, IMarketDataProvider provider, DateTime currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume, decimal? bestPrice)
 	{
 		if (bestPrice == null)
 			return null;
@@ -303,7 +303,7 @@ public class LastTradeQuotingBehavior(Unit bestPriceOffset) : IQuotingBehavior
 		return lastTradePrice;
 	}
 
-	decimal? IQuotingBehavior.NeedQuoting(Security security, IMarketDataProvider provider, DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume, decimal? bestPrice)
+	decimal? IQuotingBehavior.NeedQuoting(Security security, IMarketDataProvider provider, DateTime currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume, decimal? bestPrice)
 	{
 		if (bestPrice == null)
 			return null;
@@ -337,7 +337,7 @@ public class TheorPriceQuotingBehavior(Range<Unit> theorPriceOffset) : IQuotingB
 		return (quotingDirection == Sides.Buy ? bestBidPrice : bestAskPrice) ?? lastTradePrice;
 	}
 
-	decimal? IQuotingBehavior.NeedQuoting(Security security, IMarketDataProvider provider, DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume, decimal? bestPrice)
+	decimal? IQuotingBehavior.NeedQuoting(Security security, IMarketDataProvider provider, DateTime currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume, decimal? bestPrice)
 	{
 		var tp = provider.GetSecurityValue<decimal?>(security, Level1Fields.TheorPrice);
 		if (tp == null)
@@ -376,7 +376,7 @@ public class VolatilityQuotingBehavior(Range<decimal> ivRange, IBlackScholes mod
 		return (quotingDirection == Sides.Buy ? bestBidPrice : bestAskPrice) ?? lastTradePrice;
 	}
 
-	decimal? IQuotingBehavior.NeedQuoting(Security security, IMarketDataProvider provider, DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume, decimal? bestPrice)
+	decimal? IQuotingBehavior.NeedQuoting(Security security, IMarketDataProvider provider, DateTime currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume, decimal? bestPrice)
 	{
 		var minPrice = _model.Premium(currentTime, _ivRange.Min / 100);
 		if (minPrice == null)

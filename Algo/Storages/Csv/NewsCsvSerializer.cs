@@ -29,7 +29,7 @@ public class NewsCsvSerializer(Encoding encoding) : CsvMarketDataSerializer<News
 			data.SeqNum.DefaultAsNull().ToString(),
 		]);
 
-		metaInfo.LastTime = data.ServerTime.UtcDateTime;
+		metaInfo.LastTime = data.ServerTime;
 	}
 
 	/// <inheritdoc />

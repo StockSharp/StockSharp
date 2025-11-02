@@ -20,7 +20,7 @@ public class LunarPhase : BaseIndicator
 			IsFormed = true;
 
 		var time = input.Time;
-		var phase = (int)time.DateTime.GetLunarPhase();
+		var phase = (int)time.GetLunarPhase();
 		return new DecimalIndicatorValue(this, phase, time);
 	}
 }

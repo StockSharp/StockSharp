@@ -95,7 +95,7 @@ public class Ichimoku : BaseComplexIndicator<IIchimokuValue>
 	public override string ToString() => base.ToString() + $" T={Tenkan.Length} K={Kijun.Length} A={SenkouA.Length} B={SenkouB.Length} C={Chinkou.Length}";
 
 	/// <inheritdoc />
-	protected override IIchimokuValue CreateValue(DateTimeOffset time)
+	protected override IIchimokuValue CreateValue(DateTime time)
 		=> new IchimokuValue(this, time);
 }
 
@@ -168,7 +168,7 @@ public interface IIchimokuValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent Ichimoku indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class IchimokuValue(Ichimoku indicator, DateTimeOffset time) : ComplexIndicatorValue<Ichimoku>(indicator, time), IIchimokuValue
+public class IchimokuValue(Ichimoku indicator, DateTime time) : ComplexIndicatorValue<Ichimoku>(indicator, time), IIchimokuValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue TenkanValue => this[TypedIndicator.Tenkan];

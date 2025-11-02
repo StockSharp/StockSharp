@@ -363,8 +363,8 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 		{
 			SecurityId = snapshot.SecurityId.ToSecurityId(),
 			PortfolioName = snapshot.PortfolioName,
-			ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
-			LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
+			ServerTime = snapshot.LastChangeServerTime.To<DateTime>().UtcKind(),
+			LocalTime = snapshot.LastChangeLocalTime.To<DateTime>().UtcKind(),
 
 			DataTypeEx = DataType.Transactions,
 
@@ -387,7 +387,7 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 		execMsg.DepoName = snapshot.DepoName;
 		execMsg.Error = snapshot.Error.IsEmpty() ? null : new InvalidOperationException(snapshot.Error);
 
-		execMsg.ExpiryDate = snapshot.ExpiryDate?.To<DateTimeOffset>();
+		execMsg.ExpiryDate = snapshot.ExpiryDate?.To<DateTime>().UtcKind();
 		execMsg.IsMarketMaker = snapshot.IsMarketMaker?.ToBool();
 		execMsg.MarginMode = (MarginModes?)snapshot.MarginMode;
 		execMsg.IsManual = snapshot.IsManual?.ToBool();

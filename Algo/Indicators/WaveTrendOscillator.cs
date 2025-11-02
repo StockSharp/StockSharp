@@ -166,7 +166,7 @@ public class WaveTrendOscillator : BaseComplexIndicator<IWaveTrendOscillatorValu
 	public override string ToString() => $"{base.ToString()} ESA={EsaPeriod} D={DPeriod} Avg={AveragePeriod}";
 
 	/// <inheritdoc />
-	protected override IWaveTrendOscillatorValue CreateValue(DateTimeOffset time)
+	protected override IWaveTrendOscillatorValue CreateValue(DateTime time)
 		=> new WaveTrendOscillatorValue(this, time);
 }
 
@@ -240,7 +240,7 @@ public interface IWaveTrendOscillatorValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent Wave Trend Oscillator indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class WaveTrendOscillatorValue(WaveTrendOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<WaveTrendOscillator>(indicator, time), IWaveTrendOscillatorValue
+public class WaveTrendOscillatorValue(WaveTrendOscillator indicator, DateTime time) : ComplexIndicatorValue<WaveTrendOscillator>(indicator, time), IWaveTrendOscillatorValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue Wt1Value => this[TypedIndicator.Wt1];

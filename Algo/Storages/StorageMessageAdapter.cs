@@ -13,7 +13,7 @@ public class StorageMessageAdapter(IMessageAdapter innerAdapter, StorageProcesso
 	private readonly StorageProcessor _storageProcessor = storageProcessor ?? throw new ArgumentNullException(nameof(storageProcessor));
 
 	/// <inheritdoc />
-	public override IEnumerable<DataType> GetSupportedMarketDataTypes(SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
+	public override IEnumerable<DataType> GetSupportedMarketDataTypes(SecurityId securityId, DateTime? from, DateTime? to)
 	{
 		var dataTypes = base.GetSupportedMarketDataTypes(securityId, from, to);
 

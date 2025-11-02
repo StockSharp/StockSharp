@@ -132,7 +132,7 @@ public class MovingAverageRibbon : BaseComplexIndicator<IMovingAverageRibbonValu
 	public override string ToString() => base.ToString() + $" S={ShortPeriod} L={LongPeriod} C={RibbonCount}";
 
 	/// <inheritdoc />
-	protected override IMovingAverageRibbonValue CreateValue(DateTimeOffset time)
+	protected override IMovingAverageRibbonValue CreateValue(DateTime time)
 		=> new MovingAverageRibbonValue(this, time);
 }
 
@@ -161,7 +161,7 @@ public interface IMovingAverageRibbonValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent MovingAverageRibbon indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class MovingAverageRibbonValue(MovingAverageRibbon indicator, DateTimeOffset time) : ComplexIndicatorValue<MovingAverageRibbon>(indicator, time), IMovingAverageRibbonValue
+public class MovingAverageRibbonValue(MovingAverageRibbon indicator, DateTime time) : ComplexIndicatorValue<MovingAverageRibbon>(indicator, time), IMovingAverageRibbonValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue[] AveragesValues => [.. TypedIndicator.InnerIndicators.Select(ind => this[ind])];

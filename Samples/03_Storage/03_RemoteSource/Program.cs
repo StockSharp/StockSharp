@@ -69,7 +69,7 @@ static class Program
 			candles.Add((CandleMessage)candle);
 		};
 
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		connector.Subscribe(new(TimeSpan.FromMinutes(15).TimeFrame(), security)
 		{

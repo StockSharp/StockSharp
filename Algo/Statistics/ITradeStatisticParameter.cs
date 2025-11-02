@@ -48,7 +48,7 @@ public abstract class PerPeriodBaseTradeParameter(StatisticParameterTypes type) 
 		if (info is null)
 			throw new ArgumentNullException(nameof(info));
 
-		var date = Align(info.ServerTime.UtcDateTime);
+		var date = Align(info.ServerTime);
 
 		if (_currStart == default)
 		{

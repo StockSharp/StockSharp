@@ -99,7 +99,7 @@ public class News : NotifiableObject
 		Description = LocalizedStrings.NewsTimeKey,
 		GroupName = LocalizedStrings.GeneralKey)]
 	[BasicSetting]
-	public DateTimeOffset ServerTime { get; set; }
+	public DateTime ServerTime { get; set; }
 
 	/// <summary>
 	/// News received local time.
@@ -110,7 +110,7 @@ public class News : NotifiableObject
 		Name = LocalizedStrings.LocalTimeKey,
 		Description = LocalizedStrings.LocalTimeDescKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset LocalTime { get; set; }
+	public DateTime LocalTime { get; set; }
 
 	/// <summary>
 	/// News link in the internet.
@@ -145,7 +145,7 @@ public class News : NotifiableObject
 	/// Expiration date.
 	/// </summary>
 	[DataMember]
-	public DateTimeOffset? ExpiryDate { get; set; }
+	public DateTime? ExpiryDate { get; set; }
 
 	/// <summary>
 	/// Sequence number.

@@ -202,8 +202,8 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 	// https://stocksharp.myjetbrains.com/youtrack/issue/DESIGNER-166/Strannosti-s-grafikom
 	private class IndicatorTimes
 	{
-        public DateTimeOffset Last { get; set; }
-		public List<DateTimeOffset> Pending { get; } = [];
+        public DateTime Last { get; set; }
+		public List<DateTime> Pending { get; } = [];
     }
 
 	/// <summary>
@@ -215,7 +215,7 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 
 	private readonly IChartBuilder _chartBuilder;
 	private readonly IChartArea _area;
-	private readonly SortedDictionary<DateTimeOffset, Dictionary<IChartElement, object>> _chartValues = [];
+	private readonly SortedDictionary<DateTime, Dictionary<IChartElement, object>> _chartValues = [];
 	private readonly ObsCollection<IChartAxis> _xAxes;
 	private readonly ObsCollection<IChartAxis> _yAxes;
 	private readonly Dictionary<DiagramSocket, PassThroughIndicator> _unitIndicators = [];
@@ -382,7 +382,7 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 	private IEnumerable<IChartElement> ChartElements => InputSockets.OfType<ChartElementSocket>().Where(s => s.ChartElement != null).Select(s => s.ChartElement);
 
 	/// <inheritdoc />
-	protected override void OnStart(DateTimeOffset time)
+	protected override void OnStart(DateTime time)
 	{
 		base.OnStart(time);
 
@@ -441,7 +441,7 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 	}
 
 	/// <inheritdoc />
-	public override void Flush(DateTimeOffset _)
+	public override void Flush(DateTime _)
 	{
 		GetChart(chart =>
 		{
@@ -572,7 +572,7 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 
 		var socket = (ChartElementSocket)value.Socket;
 
-		void addChartValue(DateTimeOffset time, object v)
+		void addChartValue(DateTime time, object v)
 		{
 			if (time == default)
 				time = value.Time;

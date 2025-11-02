@@ -231,7 +231,7 @@ public class DummyChartBuilder : IChartBuilder
 		public Color? LineColor { get; set; }
 		public Color? AreaColor { get; set; }
 		public bool ShowAxisMarker { get; set; }
-		Func<DateTimeOffset, bool, bool, Color?> IChartCandleElement.Colorer { get; set; }
+		Func<DateTime, bool, bool, Color?> IChartCandleElement.Colorer { get; set; }
 		public int? Timeframe2Multiplier { get; set; }
 		public int? Timeframe3Multiplier { get; set; }
 		public Color? FontColor { get; set; }

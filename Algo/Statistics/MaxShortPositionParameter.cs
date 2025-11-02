@@ -21,7 +21,7 @@ public class MaxShortPositionParameter : BaseStatisticParameter<decimal>, IPosit
 	}
 
 	/// <inheritdoc/>
-	public void Add(DateTimeOffset marketTime, decimal position)
+	public void Add(DateTime marketTime, decimal position)
 	{
 		if (position < 0 && position.Abs() > Value.Abs())
 			Value = position;

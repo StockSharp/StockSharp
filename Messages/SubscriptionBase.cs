@@ -16,14 +16,14 @@ public abstract class SubscriptionBase<TSubscription> : Cloneable<TSubscription>
 	public DataType DataType => SubscriptionMessage.DataType;
 
 	/// <inheritdoc />
-	public DateTimeOffset? From
+	public DateTime? From
 	{
 		get => SubscriptionMessage.From;
 		set => SubscriptionMessage.From = value;
 	}
 
 	/// <inheritdoc />
-	public DateTimeOffset? To
+	public DateTime? To
 	{
 		get => SubscriptionMessage.To;
 		set => SubscriptionMessage.To = value;
@@ -153,5 +153,5 @@ public abstract class SubscriptionBase<TSubscription> : Cloneable<TSubscription>
 		set => SubscriptionMessage.BackMode = value;
 	}
 
-	DateTimeOffset ILocalTimeMessage.LocalTime => SubscriptionMessage.LocalTime;
+	DateTime ILocalTimeMessage.LocalTime => SubscriptionMessage.LocalTime;
 }

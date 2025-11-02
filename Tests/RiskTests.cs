@@ -59,7 +59,7 @@ public class RiskTests
 		manager.Rules.Add(rule1);
 		manager.Rules.Add(rule2);
 
-		var message = new TimeMessage { LocalTime = DateTimeOffset.UtcNow };
+		var message = new TimeMessage { LocalTime = DateTime.UtcNow };
 		var activatedRules = manager.ProcessRules(message).ToArray();
 
 		activatedRules.Length.AssertEqual(1);
@@ -137,7 +137,7 @@ public class RiskTests
 		var positionMsg = new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.CurrentValue, -500m);
@@ -147,7 +147,7 @@ public class RiskTests
 		positionMsg = new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.CurrentValue, -1500m);
@@ -167,7 +167,7 @@ public class RiskTests
 		var positionMsg = new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.CurrentValue, -500m);
@@ -177,7 +177,7 @@ public class RiskTests
 		positionMsg = new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.CurrentValue, -1500m);
@@ -196,7 +196,7 @@ public class RiskTests
 		var positionMsg = new PositionChangeMessage
 		{
 			SecurityId = Helper.CreateSecurityId(),
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.CurrentValue, 0m);
@@ -225,7 +225,7 @@ public class RiskTests
 		var positionMsg = new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.CurrentValue, 0m);
@@ -238,7 +238,7 @@ public class RiskTests
 		positionMsg = new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.CurrentValue, -100m);
@@ -251,7 +251,7 @@ public class RiskTests
 		positionMsg = new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.CurrentValue, 100m);
@@ -276,7 +276,7 @@ public class RiskTests
 		var positionMsg = new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.CurrentValue, 1000m);
@@ -289,7 +289,7 @@ public class RiskTests
 		positionMsg = new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.CurrentValue, 1000m);
@@ -302,7 +302,7 @@ public class RiskTests
 		positionMsg = new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.CurrentValue, 900m);
@@ -315,7 +315,7 @@ public class RiskTests
 		positionMsg = new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.CurrentValue, 1100m);
@@ -336,7 +336,7 @@ public class RiskTests
 		var positionMsg = new PositionChangeMessage
 		{
 			SecurityId = Helper.CreateSecurityId(),
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.CurrentValue, 50m);
@@ -346,7 +346,7 @@ public class RiskTests
 		positionMsg = new PositionChangeMessage
 		{
 			SecurityId = Helper.CreateSecurityId(),
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.CurrentValue, 150m);
@@ -366,7 +366,7 @@ public class RiskTests
 		var positionMsg = new PositionChangeMessage
 		{
 			SecurityId = Helper.CreateSecurityId(),
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.CurrentValue, -50m);
@@ -376,7 +376,7 @@ public class RiskTests
 		positionMsg = new PositionChangeMessage
 		{
 			SecurityId = Helper.CreateSecurityId(),
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.CurrentValue, -150m);
@@ -394,7 +394,7 @@ public class RiskTests
 		};
 
 		var securityId = Helper.CreateSecurityId();
-		var startTime = DateTimeOffset.UtcNow;
+		var startTime = DateTime.UtcNow;
 
 		var positionMsg = new PositionChangeMessage
 		{
@@ -434,8 +434,8 @@ public class RiskTests
 		{
 			SecurityId = securityId,
 			PortfolioName = _pfName,
-			LocalTime = DateTimeOffset.UtcNow,
-			ServerTime = DateTimeOffset.UtcNow
+			LocalTime = DateTime.UtcNow,
+			ServerTime = DateTime.UtcNow
 		};
 		positionMsg.Add(PositionChangeTypes.CurrentValue, 100m);
 
@@ -445,7 +445,7 @@ public class RiskTests
 
 		var timeMsg = new TimeMessage
 		{
-			LocalTime = DateTimeOffset.UtcNow.AddMinutes(6)
+			LocalTime = DateTime.UtcNow.AddMinutes(6)
 		};
 		rule.ProcessMessage(timeMsg).AssertFalse();
 	}
@@ -462,7 +462,7 @@ public class RiskTests
 		var positionMsg = new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.Commission, 500m);
@@ -472,7 +472,7 @@ public class RiskTests
 		positionMsg = new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.Commission, 1500m);
@@ -497,7 +497,7 @@ public class RiskTests
 		var positionMsg = new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.Commission, -500m);
@@ -510,7 +510,7 @@ public class RiskTests
 		positionMsg = new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.Commission, -1500m);
@@ -532,7 +532,7 @@ public class RiskTests
 		{
 			DataTypeEx = DataType.Transactions,
 			SecurityId = Helper.CreateSecurityId(),
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			Slippage = 5
 		};
 
@@ -555,7 +555,7 @@ public class RiskTests
 		{
 			DataTypeEx = DataType.Transactions,
 			SecurityId = Helper.CreateSecurityId(),
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			Slippage = -5
 		};
 
@@ -647,7 +647,7 @@ public class RiskTests
 			Action = RiskActions.CancelOrders
 		};
 
-		var startTime = DateTimeOffset.UtcNow;
+		var startTime = DateTime.UtcNow;
 
 		for (int i = 0; i < 2; i++)
 		{
@@ -689,7 +689,7 @@ public class RiskTests
 		var orderMsg = new OrderRegisterMessage
 		{
 			SecurityId = Helper.CreateSecurityId(),
-			LocalTime = DateTimeOffset.UtcNow
+			LocalTime = DateTime.UtcNow
 		};
 
 		rule.ProcessMessage(orderMsg);
@@ -712,7 +712,7 @@ public class RiskTests
 		{
 			DataTypeEx = DataType.Transactions,
 			SecurityId = Helper.CreateSecurityId(),
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			Error = new InvalidOperationException("Test error")
 		};
 
@@ -724,7 +724,7 @@ public class RiskTests
 		{
 			DataTypeEx = DataType.Transactions,
 			SecurityId = Helper.CreateSecurityId(),
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			HasOrderInfo = true,
 			OrderState = OrderStates.Active
 		};
@@ -747,7 +747,7 @@ public class RiskTests
 		{
 			DataTypeEx = DataType.Transactions,
 			SecurityId = Helper.CreateSecurityId(),
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			TradePrice = 90,
 			TradeVolume = 10
 		};
@@ -771,7 +771,7 @@ public class RiskTests
 		{
 			DataTypeEx = DataType.Transactions,
 			SecurityId = Helper.CreateSecurityId(),
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			TradePrice = 100,
 			TradeVolume = 500
 		};
@@ -792,7 +792,7 @@ public class RiskTests
 			Action = RiskActions.StopTrading
 		};
 
-		var startTime = DateTimeOffset.UtcNow;
+		var startTime = DateTime.UtcNow;
 
 		var tradeMsg1 = new ExecutionMessage
 		{
@@ -997,7 +997,7 @@ public class RiskTests
 		{
 			DataTypeEx = DataType.Transactions,
 			SecurityId = Helper.CreateSecurityId(),
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			Commission = 200m,
 			TradePrice = 100,
 			TradeVolume = 10
@@ -1022,7 +1022,7 @@ public class RiskTests
 		{
 			DataTypeEx = DataType.Transactions,
 			SecurityId = Helper.CreateSecurityId(),
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			Commission = -200m,
 			TradePrice = 100,
 			TradeVolume = 10
@@ -1047,7 +1047,7 @@ public class RiskTests
 		{
 			DataTypeEx = DataType.Transactions,
 			SecurityId = Helper.CreateSecurityId(),
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			Commission = 50,
 			HasOrderInfo = true
 		};
@@ -1077,7 +1077,7 @@ public class RiskTests
 		{
 			DataTypeEx = DataType.Transactions,
 			SecurityId = Helper.CreateSecurityId(),
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			Commission = -50,
 			HasOrderInfo = true
 		};
@@ -1115,7 +1115,7 @@ public class RiskTests
 		adapter.SendInMessage(new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		}.Add(PositionChangeTypes.CurrentValue, 0m));
 
@@ -1123,7 +1123,7 @@ public class RiskTests
 		adapter.SendInMessage(new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		}.Add(PositionChangeTypes.CurrentValue, -1500m));
 
@@ -1156,7 +1156,7 @@ public class RiskTests
 		var positionMsg = new PositionChangeMessage
 		{
 			SecurityId = Helper.CreateSecurityId(),
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.CurrentValue, 150m);
@@ -1192,7 +1192,7 @@ public class RiskTests
 		var positionMsg = new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
 		positionMsg.Add(PositionChangeTypes.Commission, 1500m);
@@ -1240,7 +1240,7 @@ public class RiskTests
 		adapter.SendInMessage(new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		}.Add(PositionChangeTypes.CurrentValue, 0m));
 
@@ -1248,7 +1248,7 @@ public class RiskTests
 		adapter.SendInMessage(new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		}.Add(PositionChangeTypes.CurrentValue, -1500m));
 
@@ -1276,7 +1276,7 @@ public class RiskTests
 		adapter.SendInMessage(new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		}.Add(PositionChangeTypes.CurrentValue, -500m));
 

@@ -1398,7 +1398,7 @@ public static partial class EntitiesExtensions
 						position.Currency = (CurrencyTypes)change.Value;
 						break;
 					case PositionChangeTypes.ExpirationDate:
-						position.ExpirationDate = (DateTimeOffset)change.Value;
+						position.ExpirationDate = (change.Value as DateTimeOffset?)?.UtcDateTime ?? (DateTime)change.Value;
 						break;
 					case PositionChangeTypes.SettlementPrice:
 						position.SettlementPrice = (decimal)change.Value;
@@ -1464,7 +1464,7 @@ public static partial class EntitiesExtensions
 	/// <param name="serverTime">Change server time.</param>
 	/// <param name="localTime">Local timestamp when a message was received/created.</param>
 	/// <param name="defaultHandler">Default handler.</param>
-	public static void ApplyChanges(this Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTimeOffset localTime, Action<Security, Level1Fields, object> defaultHandler = null)
+	public static void ApplyChanges(this Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTime serverTime, DateTime localTime, Action<Security, Level1Fields, object> defaultHandler = null)
 	{
 		if (security == null)
 			throw new ArgumentNullException(nameof(security));
@@ -1613,7 +1613,7 @@ public static partial class EntitiesExtensions
 						lastTradeChanged = true;
 						break;
 					case Level1Fields.LastTradeTime:
-						lastTrade.ServerTime = (DateTimeOffset)value;
+						lastTrade.ServerTime = (DateTime)value;
 						lastTradeChanged = true;
 						break;
 					case Level1Fields.LastTradeUpDown:
@@ -1659,7 +1659,7 @@ public static partial class EntitiesExtensions
 						security.BuyBackPrice = (decimal)value;
 						break;
 					case Level1Fields.BuyBackDate:
-						security.BuyBackDate = (DateTimeOffset)value;
+						security.BuyBackDate = (DateTime)value;
 						break;
 					case Level1Fields.CommissionTaker:
 						security.CommissionTaker = (decimal)value;
@@ -2108,7 +2108,7 @@ public static partial class EntitiesExtensions
 	/// <param name="n">The N size. The number of trading days for the addition or subtraction.</param>
 	/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
 	/// <returns>The end T +/- N date.</returns>
-	public static DateTimeOffset AddOrSubtractTradingDays(this ExchangeBoard board, DateTimeOffset date, int n, bool checkHolidays = true)
+	public static DateTime AddOrSubtractTradingDays(this ExchangeBoard board, DateTime date, int n, bool checkHolidays = true)
 		=> board.ToMessage().AddOrSubtractTradingDays(date, n, checkHolidays);
 
 	/// <summary>
@@ -2117,7 +2117,7 @@ public static partial class EntitiesExtensions
 	/// <param name="from">The start of the expiration range.</param>
 	/// <param name="to">The end of the expiration range.</param>
 	/// <returns>Expiration dates.</returns>
-	public static IEnumerable<DateTimeOffset> GetExpiryDates(this DateTime from, DateTime to)
+	public static IEnumerable<DateTime> GetExpiryDates(this DateTime from, DateTime to)
 	{
 		if (from > to)
 			throw new InvalidOperationException(LocalizedStrings.StartCannotBeMoreEnd.Put(from, to));
@@ -2138,12 +2138,13 @@ public static partial class EntitiesExtensions
 					case 9:
 					case 12:
 					{
-						var dt = new DateTime(year, month, 15).ApplyTimeZone(board.TimeZone);
+						var dt = new DateTime(year, month, 15).UtcKind();
 
 						while (!board.IsTradeDate(dt))
 						{
 							dt = dt.AddDays(1);
 						}
+
 						yield return dt;
 						break;
 					}

@@ -73,7 +73,7 @@ public class WoodiesCCI : BaseComplexIndicator<IWoodiesCCIValue>
 	public override string ToString() => base.ToString() + $" CCI({Length}), SMA({SMALength})";
 
 	/// <inheritdoc />
-	protected override IWoodiesCCIValue CreateValue(DateTimeOffset time)
+	protected override IWoodiesCCIValue CreateValue(DateTime time)
 		=> new WoodiesCCIValue(this, time);
 }
 
@@ -113,7 +113,7 @@ public interface IWoodiesCCIValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent Woodies CCI indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class WoodiesCCIValue(WoodiesCCI indicator, DateTimeOffset time) : ComplexIndicatorValue<WoodiesCCI>(indicator, time), IWoodiesCCIValue
+public class WoodiesCCIValue(WoodiesCCI indicator, DateTime time) : ComplexIndicatorValue<WoodiesCCI>(indicator, time), IWoodiesCCIValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue CciValue => this[TypedIndicator.Cci];

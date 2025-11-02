@@ -39,7 +39,7 @@ public class QuotingInput
 	/// <summary>
 	/// Current time.
 	/// </summary>
-	public DateTimeOffset CurrentTime { get; set; }
+	public DateTime CurrentTime { get; set; }
 
 	/// <summary>
 	/// Current position.

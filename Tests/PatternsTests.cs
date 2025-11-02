@@ -17,7 +17,7 @@ public class PatternsTests
 			LowPrice = low,
 			ClosePrice = close,
 			TotalVolume = volume,
-			OpenTime = DateTimeOffset.UtcNow,
+			OpenTime = DateTime.UtcNow,
 			SecurityId = _secId,
 			DataType = _dt
 		};

@@ -257,7 +257,7 @@ public class TrueStrengthIndex : BaseComplexIndicator<ITrueStrengthIndexValue>
 	public override string ToString() => base.ToString() + $" {FirstLength}/{SecondLength}/{SignalLength}";
 
 	/// <inheritdoc />
-	protected override ITrueStrengthIndexValue CreateValue(DateTimeOffset time)
+	protected override ITrueStrengthIndexValue CreateValue(DateTime time)
 		=> new TrueStrengthIndexValue(this, time);
 }
 
@@ -297,7 +297,7 @@ public interface ITrueStrengthIndexValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent True Strength Index indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class TrueStrengthIndexValue(TrueStrengthIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<TrueStrengthIndex>(indicator, time), ITrueStrengthIndexValue
+public class TrueStrengthIndexValue(TrueStrengthIndex indicator, DateTime time) : ComplexIndicatorValue<TrueStrengthIndex>(indicator, time), ITrueStrengthIndexValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue TsiValue => this[TypedIndicator.Tsi];

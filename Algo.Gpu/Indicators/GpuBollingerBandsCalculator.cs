@@ -47,7 +47,7 @@ public struct GpuBollingerBandsParams(int length, float width, byte priceType) :
 public struct GpuBollingerBandsResult : IGpuIndicatorResult
 {
 	/// <summary>
-	/// Time in <see cref="DateTimeOffset.Ticks"/>.
+	/// Time in <see cref="DateTime.Ticks"/>.
 	/// </summary>
 	public long Time;
 

@@ -20,7 +20,7 @@ public class BoardStateCsvSerializer(Encoding encoding) : CsvMarketDataSerialize
 			((int)data.State).To<string>(),
 		]);
 
-		metaInfo.LastTime = data.ServerTime.UtcDateTime;
+		metaInfo.LastTime = data.ServerTime;
 	}
 
 	/// <inheritdoc />

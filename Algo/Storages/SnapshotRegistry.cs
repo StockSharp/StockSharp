@@ -24,7 +24,7 @@ public class SnapshotRegistry(string path) : Disposable
 		public abstract void Clear(object key);
 		public abstract void Update(Message message);
 		public abstract Message Get(object key);
-		public abstract IEnumerable<Message> GetAll(DateTimeOffset? from, DateTimeOffset? to);
+		public abstract IEnumerable<Message> GetAll(DateTime? from, DateTime? to);
 	}
 
 	private class SnapshotStorage<TKey, TMessage> : SnapshotStorage, ISnapshotStorage<TKey, TMessage>
@@ -177,7 +177,7 @@ public class SnapshotRegistry(string path) : Disposable
 					return (TMessage)_snapshots.TryGetValue(key)?.Clone();
 			}
 
-			public IEnumerable<TMessage> GetAll(DateTimeOffset? from, DateTimeOffset? to)
+			public IEnumerable<TMessage> GetAll(DateTime? from, DateTime? to)
 			{
 				lock (_snapshots.SyncRoot)
 				{
@@ -332,7 +332,7 @@ public class SnapshotRegistry(string path) : Disposable
 
 			var curr = (TMessage)message;
 
-			var date = curr.ServerTime.UtcDateTime.Date;
+			var date = curr.ServerTime.Date;
 
 			if (date == default)
 				throw new ArgumentException(message.ToString());
@@ -364,12 +364,12 @@ public class SnapshotRegistry(string path) : Disposable
 			return ((ISnapshotStorage<TKey, TMessage>)this).Get((TKey)key);
 		}
 
-		IEnumerable<TMessage> ISnapshotStorage<TKey, TMessage>.GetAll(DateTimeOffset? from, DateTimeOffset? to)
+		IEnumerable<TMessage> ISnapshotStorage<TKey, TMessage>.GetAll(DateTime? from, DateTime? to)
 		{
 			var dates = Dates;
 
-			var fromDate = from?.UtcDateTime.Date;
-			var toDate = to?.UtcDateTime.Date;
+			var fromDate = from?.Date;
+			var toDate = to?.Date;
 
 			if (fromDate != null)
 				dates = dates.Where(d => d >= fromDate.Value);
@@ -385,7 +385,7 @@ public class SnapshotRegistry(string path) : Disposable
 			});
 		}
 
-		public override IEnumerable<Message> GetAll(DateTimeOffset? from, DateTimeOffset? to)
+		public override IEnumerable<Message> GetAll(DateTime? from, DateTime? to)
 		{
 			return ((ISnapshotStorage<TKey, TMessage>)this).GetAll(from, to);
 		}

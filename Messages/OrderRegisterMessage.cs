@@ -64,7 +64,7 @@ public class OrderRegisterMessage : OrderMessage
 		Name = LocalizedStrings.ExpirationKey,
 		Description = LocalizedStrings.OrderExpirationTimeKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset? TillDate { get; set; }
+	public DateTime? TillDate { get; set; }
 
 	/// <summary>
 	/// Limit order time in force.

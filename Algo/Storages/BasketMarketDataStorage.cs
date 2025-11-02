@@ -93,7 +93,7 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 						//}
 
 						var enu = loaded.GetEnumerator();
-						var lastTime = Current?.GetServerTime() ?? DateTimeOffset.MinValue;
+						var lastTime = Current?.GetServerTime() ?? DateTime.MinValue;
 
 						var hasValues = true;
 
@@ -116,7 +116,7 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 						if (hasValues)
 						{
 							lock (_enumerators)
-								_enumerators.Enqueue(GetServerTime(enu).UtcTicks, (enu, storage, action.Value.transId));
+								_enumerators.Enqueue(GetServerTime(enu).Ticks, (enu, storage, action.Value.transId));
 						}
 						else
 							enu.DoDispose();
@@ -160,7 +160,7 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 
 			if (enumerator.MoveNext())
 			{
-				var serverTime = GetServerTime(enumerator).UtcTicks;
+				var serverTime = GetServerTime(enumerator).Ticks;
 
 				lock (_enumerators)
 					_enumerators.Enqueue(serverTime, element);
@@ -182,7 +182,7 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 			return (TMessage)message;
 		}
 
-		private static DateTimeOffset GetServerTime(IEnumerator<Message> enumerator)
+		private static DateTime GetServerTime(IEnumerator<Message> enumerator)
 		{
 			return enumerator.Current.GetServerTime();
 		}

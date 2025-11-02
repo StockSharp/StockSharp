@@ -216,11 +216,11 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	private readonly SynchronizedDictionary<long, Subscription> _subscriptionsById = [];
 	private readonly CachedSynchronizedSet<Subscription> _suspendSubscriptions = [];
 
-	private DateTimeOffset _firstOrderTime;
-	private DateTimeOffset _lastOrderTime;
+	private DateTime _firstOrderTime;
+	private DateTime _lastOrderTime;
 	private TimeSpan _maxOrdersKeepTime;
-	private DateTimeOffset _lastPnlRefreshTime;
-	private DateTimeOffset _prevTradeDate;
+	private DateTime _lastPnlRefreshTime;
+	private DateTime _prevTradeDate;
 	private bool _isPrevDateTradable;
 	private bool _stopping;
 	private BoardMessage _boardMsg;
@@ -549,7 +549,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// <summary>
 	/// <see cref="PnL"/> change event.
 	/// </summary>
-	public event Action<Subscription, Portfolio, DateTimeOffset, decimal, decimal?, decimal?> PnLReceived2;
+	public event Action<Subscription, Portfolio, DateTime, decimal, decimal?, decimal?> PnLReceived2;
 
 	/// <summary>
 	/// Total commission.
@@ -736,10 +736,10 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				{
 					case ProcessStates.Started:
 					{
-						StartedTime = base.CurrentTime;
+						StartedTime = base.CurrentTimeUtc;
 						TotalWorkingTime = default;
 						LogProcessState(value);
-						OnStarted(StartedTime);
+						OnStarted2(StartedTime);
 						break;
 					}
 					case ProcessStates.Stopping:
@@ -751,7 +751,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 					case ProcessStates.Stopped:
 					{
 						if (StartedTime != default)
-							TotalWorkingTime += base.CurrentTime - StartedTime;
+							TotalWorkingTime += base.CurrentTimeUtc - StartedTime;
 
 						StartedTime = default;
 						LogProcessState(value);
@@ -980,7 +980,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		}
 	}
 
-	private DateTimeOffset _startedTime;
+	private DateTime _startedTime;
 
 	/// <summary>
 	/// Strategy start time.
@@ -993,7 +993,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		Order = 105)]
 	[ReadOnly(true)]
 	[Browsable(false)]
-	public DateTimeOffset StartedTime
+	public DateTime StartedTime
 	{
 		get => _startedTime;
 		private set
@@ -1178,7 +1178,16 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// <summary>
 	/// The method is called when the <see cref="Start()"/> method has been called and the <see cref="ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.
 	/// </summary>
+	[Obsolete("Use OnStarted2 instead.")]
 	protected virtual void OnStarted(DateTimeOffset time)
+	{
+		OnStarted2(time.UtcDateTime);
+	}
+
+	/// <summary>
+	/// The method is called when the <see cref="Start()"/> method has been called and the <see cref="ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.
+	/// </summary>
+	protected virtual void OnStarted2(DateTime time)
 	{
 		InitStartValues();
 
@@ -1551,7 +1560,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		{
 			Order = order,
 			Error = error,
-			ServerTime = CurrentTime,
+			ServerTime = CurrentTimeUtc,
 			TransactionId = order.TransactionId,
 		};
 
@@ -1715,7 +1724,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	}
 
 	/// <inheritdoc />
-	public override DateTimeOffset CurrentTime => Connector?.CurrentTime ?? base.CurrentTime;
+	public override DateTime CurrentTimeUtc => Connector?.CurrentTimeUtc ?? base.CurrentTimeUtc;
 
 	/// <inheritdoc />
 	protected override void RaiseLog(LogMessage message)
@@ -1841,7 +1850,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		if (!KeepStatistics)
 		{
-			var time = CurrentTime;
+			var time = CurrentTimeUtc;
 
 			// события вызываем только после вызова Reseted
 			// чтобы сбросить состояние у подписчиков стратегии.
@@ -2024,7 +2033,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if(IsDisposeStarted)
 			return;
 
-		DateTimeOffset? msgTime = null;
+		DateTime? msgTime = null;
 
 		switch (message.Type)
 		{
@@ -2100,7 +2109,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				if (timeMsg.IsBack())
 					return;
 
-				msgTime = CurrentTime;
+				msgTime = CurrentTimeUtc;
 				break;
 			}
 
@@ -2342,7 +2351,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		PnLManager.UpdateSecurity(new Level1ChangeMessage
 		{
 			SecurityId = tradeSec.ToSecurityId(),
-			ServerTime = CurrentTime
+			ServerTime = CurrentTimeUtc
 		}
 		.TryAdd(Level1Fields.PriceStep, tradeSec.PriceStep)
 		.TryAdd(Level1Fields.StepPrice, this.GetSecurityValue<decimal?>(tradeSec, Level1Fields.StepPrice) ?? tradeSec.StepPrice)
@@ -2350,7 +2359,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		);
 
 		var execMsg = trade.ToMessage();
-		DateTimeOffset? pnLChangeTime = null;
+		DateTime? pnLChangeTime = null;
 
 		var tradeInfo = PnLManager.ProcessMessage(execMsg);
 
@@ -2403,7 +2412,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		CommissionChanged?.Invoke();
 	}
 
-	private void RaisePnLChanged(DateTimeOffset time)
+	private void RaisePnLChanged(DateTime time)
 	{
 		this.Notify(nameof(PnL));
 		PnLChanged?.Invoke();

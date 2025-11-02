@@ -200,7 +200,7 @@ public class MathDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
-	protected override void OnProcess(DateTimeOffset time, IDictionary<DiagramSocket, DiagramSocketValue> values, DiagramSocketValue source)
+	protected override void OnProcess(DateTime time, IDictionary<DiagramSocket, DiagramSocketValue> values, DiagramSocketValue source)
 	{
 		var valuesByName = values.ToDictionary(p => p.Key.Name, p => p.Value.GetValue<decimal>());
 
@@ -235,12 +235,7 @@ public class MathDiagramElement : DiagramElement
 		var result = _formula.Calculate(inputValues);
 
 		if (_outputSocket.Type == DiagramSocketType.Date)
-		{
-			var inputValue = values.Values.Select(v => v.Value).OfType<DateTimeOffset>().FirstOrDefault();
-			var offset = inputValue == default ? TimeSpan.Zero : inputValue.Offset;
-
-			RaiseProcessOutput(_outputSocket, time, new DateTimeOffset(result.To<long>(), TimeSpan.Zero).ToOffset(offset), source);
-		}
+			RaiseProcessOutput(_outputSocket, time, new DateTime(result.To<long>()).UtcKind(), source);
 		else if (_outputSocket.Type == DiagramSocketType.Time)
 			RaiseProcessOutput(_outputSocket, time, new TimeSpan(result.To<long>()), source);
 		else

@@ -90,7 +90,7 @@ public class DevExpExcelWorkerProvider : IExcelWorkerProvider
 							else if (pair.Value is DateTime dt)
 								xlVal = new XlVariantValue { DateTimeValue = dt };
 							else if (pair.Value is DateTimeOffset dto)
-								xlVal = new XlVariantValue { DateTimeValue = dto.DateTime };
+								xlVal = new XlVariantValue { DateTimeValue = dto.UtcDateTime };
 							//else if (pair.Value is string s)
 							//	xlVal = new XlVariantValue { TextValue = s };
 							else if (pair.Value.GetType().IsNumeric())

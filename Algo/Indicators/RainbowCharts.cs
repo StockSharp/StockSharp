@@ -71,7 +71,7 @@ public class RainbowCharts : BaseComplexIndicator<IRainbowChartsValue>
 	public override string ToString() => $"{base.ToString()} L={Lines}";
 
 	/// <inheritdoc />
-	protected override IRainbowChartsValue CreateValue(DateTimeOffset time)
+	protected override IRainbowChartsValue CreateValue(DateTime time)
 		=> new RainbowChartsValue(this, time);
 }
 
@@ -100,7 +100,7 @@ public interface IRainbowChartsValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent Rainbow Charts indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class RainbowChartsValue(RainbowCharts indicator, DateTimeOffset time) : ComplexIndicatorValue<RainbowCharts>(indicator, time), IRainbowChartsValue
+public class RainbowChartsValue(RainbowCharts indicator, DateTime time) : ComplexIndicatorValue<RainbowCharts>(indicator, time), IRainbowChartsValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue[] AveragesValues => [.. TypedIndicator.InnerIndicators.Select(ind => this[ind])];

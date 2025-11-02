@@ -98,7 +98,7 @@ public interface IChartDrawData
 	/// </summary>
 	/// <param name="timeStamp">The time stamp of the new data generation.</param>
 	/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-	IChartDrawDataItem Group(DateTimeOffset timeStamp);
+	IChartDrawDataItem Group(DateTime timeStamp);
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="IChartDrawDataItem"/>.

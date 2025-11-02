@@ -20,7 +20,7 @@ public interface ICandleBuilderValueTransform
 	/// <summary>
 	/// The time of new data occurrence.
 	/// </summary>
-	DateTimeOffset Time { get; }
+	DateTime Time { get; }
 
 	/// <summary>
 	/// Price.
@@ -82,7 +82,7 @@ public abstract class BaseCandleBuilderValueTransform(DataType buildFrom) : ICan
 	/// <param name="side">Side.</param>
 	/// <param name="openInterest">Open interest.</param>
 	/// <param name="priceLevels">Price levels.</param>
-	protected void Update(DateTimeOffset time, decimal price, decimal? volume, Sides? side, decimal? openInterest, IEnumerable<CandlePriceLevel> priceLevels)
+	protected void Update(DateTime time, decimal price, decimal? volume, Sides? side, decimal? openInterest, IEnumerable<CandlePriceLevel> priceLevels)
 	{
 		_time = time;
 		_price = price;
@@ -92,9 +92,9 @@ public abstract class BaseCandleBuilderValueTransform(DataType buildFrom) : ICan
 		_priceLevels = priceLevels;
 	}
 
-	private DateTimeOffset _time;
-	
-	DateTimeOffset ICandleBuilderValueTransform.Time => _time;
+	private DateTime _time;
+
+	DateTime ICandleBuilderValueTransform.Time => _time;
 
 	private decimal _price;
 

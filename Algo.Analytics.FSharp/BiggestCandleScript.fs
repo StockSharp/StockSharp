@@ -39,8 +39,8 @@ type BiggestCandleScript() =
                 Task.CompletedTask
             else
                 // Create 2D/3D charts for biggest candle by price length and by volume
-                let priceChart = panel.CreateChart<DateTimeOffset, decimal, decimal>()
-                let volChart = panel.CreateChart<DateTimeOffset, decimal, decimal>()
+                let priceChart = panel.CreateChart<DateTime, decimal, decimal>()
+                let volChart = panel.CreateChart<DateTime, decimal, decimal>()
 
                 // Lists to store the biggest candles
                 let bigPriceCandles = List<CandleMessage>()

@@ -11,7 +11,7 @@ namespace StockSharp.Samples.Strategies.HistoryMarketRule
 {
 	public class SimpleCandleRulesStrategy : Strategy
 	{
-		protected override void OnStarted(DateTimeOffset time)
+		protected override void OnStarted2(DateTime time)
 		{
 			var subscription = new Subscription(TimeSpan.FromMinutes(5).TimeFrame(), Security)
 			{
@@ -45,7 +45,7 @@ namespace StockSharp.Samples.Strategies.HistoryMarketRule
 
 				}).Apply(this);
 
-			base.OnStarted(time);
+			base.OnStarted2(time);
 		}
 	}
 }

@@ -200,7 +200,7 @@ public class DiagramStrategy : Strategy, INotifyPropertiesChanged
 	}
 
 	/// <inheritdoc />
-	protected override void OnStarted(DateTimeOffset time)
+	protected override void OnStarted2(DateTime time)
 	{
 		var composition = Composition ?? throw new InvalidOperationException(LocalizedStrings.DiagramNotSet);
 
@@ -240,7 +240,7 @@ public class DiagramStrategy : Strategy, INotifyPropertiesChanged
 
 		composition.Prepare();
 
-		base.OnStarted(time);
+		base.OnStarted2(time);
 
 		this.SuspendRules(() =>
 		{
@@ -326,7 +326,7 @@ public class DiagramStrategy : Strategy, INotifyPropertiesChanged
 	/// <summary>
 	/// Flush non trigger (root) elements.
 	/// </summary>
-	public void Flush(DateTimeOffset time)
+	public void Flush(DateTime time)
 	{
 		Composition.Flush(time);
 

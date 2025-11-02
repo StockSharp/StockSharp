@@ -283,7 +283,7 @@ static partial class Extensions
 	/// <param name="type">Change type.</param>
 	/// <param name="value">Change value.</param>
 	/// <returns>Change message.</returns>
-	public static TMessage Add<TMessage, TChange>(this TMessage message, TChange type, DateTimeOffset value)
+	public static TMessage Add<TMessage, TChange>(this TMessage message, TChange type, DateTime value)
 		where TMessage : BaseChangeMessage<TMessage, TChange>, new()
 	{
 		if (message == null)
@@ -302,7 +302,7 @@ static partial class Extensions
 	/// <param name="type">Change type.</param>
 	/// <param name="value">Change value.</param>
 	/// <returns>Change message.</returns>
-	public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, DateTimeOffset? value)
+	public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, DateTime? value)
 		where TMessage : BaseChangeMessage<TMessage, TChange>, new()
 	{
 		if (value == null)

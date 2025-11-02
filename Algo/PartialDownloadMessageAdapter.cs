@@ -71,10 +71,10 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 		private readonly TimeSpan _iterationInterval;
 		private readonly TimeSpan _step;
 
-		private DateTimeOffset _currFrom;
+		private DateTime _currFrom;
 		private bool _firstIteration;
-		private DateTimeOffset _nextFrom;
-		private readonly DateTimeOffset _to;
+		private DateTime _nextFrom;
+		private readonly DateTime _to;
 		private long? _count;
 
 		private bool IsStepMax => _step == TimeSpan.MaxValue;
@@ -94,7 +94,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 			_step = step;
 			_iterationInterval = iterationInterval;
 
-			_to = origin.To ?? _adapter.CurrentTime;
+			_to = origin.To ?? _adapter.CurrentTimeUtc;
 			_currFrom = origin.From ?? _to - (IsStepMax ? TimeSpan.FromDays(1) : step);
 
 			_firstIteration = true;
@@ -108,7 +108,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 				throw new ArgumentOutOfRangeException(nameof(origin), origin.To, LocalizedStrings.InvalidValue);
 		}
 
-		public void TryUpdateNextFrom(DateTimeOffset last)
+		public void TryUpdateNextFrom(DateTime last)
 		{
 			if (_currFrom < last)
 				_nextFrom = last;
@@ -256,7 +256,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 					var from = mdMsg.From;
 					var to = mdMsg.To;
 
-					if ((from != null || to != null) && mdMsg.Count is null or > 0 && (to is null || to > default(DateTimeOffset)))
+					if ((from != null || to != null) && mdMsg.Count is null or > 0 && (to is null || to > default(DateTime)))
 					{
 						var step = InnerAdapter.GetHistoryStepSize(mdMsg.SecurityId, mdMsg.DataType2, out var iterationInterval);
 

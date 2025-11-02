@@ -80,7 +80,7 @@ static class Program
 
 		Console.ReadLine();
 		
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		var startDate = now.AddDays(-30);
 		var endDate = now;
 

@@ -34,7 +34,7 @@ public interface IMessageAdapter : IMessageChannel, IPersistable, ILogReceiver
 	/// <param name="from">Start date for request. If <see langword="null"/>, then all available messages will be returned.</param>
 	/// <param name="to">End date for request. If <see langword="null"/>, then all available messages will be returned.</param>
 	/// <returns>Supported by adapter market data types.</returns>
-	IEnumerable<DataType> GetSupportedMarketDataTypes(SecurityId securityId = default, DateTimeOffset? from = default, DateTimeOffset? to = default);
+	IEnumerable<DataType> GetSupportedMarketDataTypes(SecurityId securityId = default, DateTime? from = default, DateTime? to = default);
 
 	/// <summary>
 	/// Possible options for candles building.

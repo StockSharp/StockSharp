@@ -47,7 +47,7 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 		return (board.TimeZone, board.WorkingTime);
 	}
 
-	private bool IsTimeValid(MarketDataMessage message, DateTimeOffset time)
+	private bool IsTimeValid(MarketDataMessage message, DateTime time)
 	{
 		if (message.IsRegularTradingHours != true)
 			return true;
@@ -718,7 +718,7 @@ public class PnFCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Cand
 		}
 	}
 
-	private void UpdateCandle(PnFCandleMessage currentPnFCandle, decimal price, decimal? volume, DateTimeOffset time, Sides? side, decimal? oi, VolumeProfileBuilder volumeProfile)
+	private void UpdateCandle(PnFCandleMessage currentPnFCandle, decimal price, decimal? volume, DateTime time, Sides? side, decimal? oi, VolumeProfileBuilder volumeProfile)
 	{
 		IncrementTicks(currentPnFCandle);
 
@@ -737,7 +737,7 @@ public class PnFCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Cand
 		currentPnFCandle.OpenInterest = oi;
 	}
 
-	private PnFCandleMessage CreateCandle(ICandleBuilderSubscription subscription, DataType buildFrom, PnFArg pnfArg, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, decimal price, decimal? volume, Sides? side, DateTimeOffset time, decimal? oi)
+	private PnFCandleMessage CreateCandle(ICandleBuilderSubscription subscription, DataType buildFrom, PnFArg pnfArg, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, decimal price, decimal? volume, Sides? side, DateTime time, decimal? oi)
 	{
 		var candle = new PnFCandleMessage
 		{

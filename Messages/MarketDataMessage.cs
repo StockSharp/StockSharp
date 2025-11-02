@@ -43,7 +43,7 @@ public class MarketDataMessage : SecurityMessage, ISubscriptionMessage, IGenerat
 		Name = LocalizedStrings.FromKey,
 		Description = LocalizedStrings.StartDateDescKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset? From { get; set; }
+	public DateTime? From { get; set; }
 
 	/// <inheritdoc />
 	[DataMember]
@@ -52,7 +52,7 @@ public class MarketDataMessage : SecurityMessage, ISubscriptionMessage, IGenerat
 		Name = LocalizedStrings.UntilKey,
 		Description = LocalizedStrings.ToDateDescKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset? To { get; set; }
+	public DateTime? To { get; set; }
 
 	/// <summary>
 	/// Market data fields, which will be received with subscribed to <see cref="DataType.Level1"/> messages.

@@ -193,7 +193,7 @@ public static partial class CandleHelper
 	/// <param name="currentTime">The current time within the range of time frames.</param>
 	/// <param name="board">The information about the board from which <see cref="ExchangeBoard.WorkingTime"/> working hours will be taken.</param>
 	/// <returns>The candle time frames.</returns>
-	public static Range<DateTimeOffset> GetCandleBounds(this TimeSpan timeFrame, DateTimeOffset currentTime, ExchangeBoard board)
+	public static Range<DateTime> GetCandleBounds(this TimeSpan timeFrame, DateTime currentTime, ExchangeBoard board)
 	{
 		if (board == null)
 			throw new ArgumentNullException(nameof(board));
@@ -208,12 +208,12 @@ public static partial class CandleHelper
 	/// <param name="timeFrame">The time frame size.</param>
 	/// <param name="board"><see cref="ExchangeBoard"/>.</param>
 	/// <returns>The received number of time frames.</returns>
-	public static long GetTimeFrameCount(this Range<DateTimeOffset> range, TimeSpan timeFrame, ExchangeBoard board)
+	public static long GetTimeFrameCount(this Range<DateTime> range, TimeSpan timeFrame, ExchangeBoard board)
 	{
 		if (board is null)
 			throw new ArgumentNullException(nameof(board));
 
-		return range.GetTimeFrameCount(timeFrame, board.WorkingTime, board.TimeZone);
+		return range.GetTimeFrameCount(timeFrame, board.WorkingTime);
 	}
 
 	/// <summary>
@@ -529,7 +529,7 @@ public static partial class CandleHelper
 	/// <param name="volumeStep">Volume step.</param>
 	/// <param name="decimals">The number of decimal places for the volume.</param>
 	/// <param name="ticks">Array to tick trades.</param>
-	public static void ConvertToTrades(this ICandleMessage candleMsg, decimal volumeStep, int decimals, (Sides? side, decimal price, decimal volume, DateTimeOffset time)[] ticks)
+	public static void ConvertToTrades(this ICandleMessage candleMsg, decimal volumeStep, int decimals, (Sides? side, decimal price, decimal volume, DateTime time)[] ticks)
 	{
 		if (candleMsg is null)
 			throw new ArgumentNullException(nameof(candleMsg));
@@ -585,7 +585,7 @@ public static partial class CandleHelper
 	/// <param name="securityId"><see cref="ExecutionMessage.SecurityId"/></param>
 	/// <param name="localTime"><see cref="Message.LocalTime"/></param>
 	/// <returns><see cref="ExecutionMessage"/></returns>
-	public static ExecutionMessage ToTickMessage(this (Sides? side, decimal price, decimal volume, DateTimeOffset time) tick, SecurityId securityId, DateTimeOffset localTime)
+	public static ExecutionMessage ToTickMessage(this (Sides? side, decimal price, decimal volume, DateTime time) tick, SecurityId securityId, DateTime localTime)
 	{
 		return new()
 		{
@@ -609,7 +609,7 @@ public static partial class CandleHelper
 			private readonly IEnumerator<TCandle> _valuesEnumerator = candles.GetEnumerator();
 			private IEnumerator<ExecutionMessage> _currCandleEnumerator;
 			private readonly int _decimals = volumeStep.GetCachedDecimals();
-			private readonly (Sides? side, decimal price, decimal volume, DateTimeOffset time)[] _ticks = new (Sides?, decimal, decimal, DateTimeOffset)[4];
+			private readonly (Sides? side, decimal price, decimal volume, DateTime time)[] _ticks = new (Sides?, decimal, decimal, DateTime)[4];
 
 			private IEnumerable<ExecutionMessage> ToTicks(TCandle candleMsg)
 			{
@@ -713,7 +713,7 @@ public static partial class CandleHelper
 	/// <param name="currentTime">The current time within the range of time frames.</param>
 	/// <param name="board">The information about the board from which <see cref="BoardMessage.WorkingTime"/> working hours will be taken.</param>
 	/// <returns>The candle time frames.</returns>
-	public static Range<DateTimeOffset> GetCandleBounds(this TimeSpan timeFrame, DateTimeOffset currentTime, BoardMessage board)
+	public static Range<DateTime> GetCandleBounds(this TimeSpan timeFrame, DateTime currentTime, BoardMessage board)
 	{
 		if (board == null)
 			throw new ArgumentNullException(nameof(board));
@@ -728,12 +728,12 @@ public static partial class CandleHelper
 	/// <param name="timeFrame">The time frame size.</param>
 	/// <param name="board"><see cref="BoardMessage"/>.</param>
 	/// <returns>The received number of time frames.</returns>
-	public static long GetTimeFrameCount(this Range<DateTimeOffset> range, TimeSpan timeFrame, BoardMessage board)
+	public static long GetTimeFrameCount(this Range<DateTime> range, TimeSpan timeFrame, BoardMessage board)
 	{
 		if (board is null)
 			throw new ArgumentNullException(nameof(board));
 
-		return range.GetTimeFrameCount(timeFrame, board.WorkingTime, board.TimeZone);
+		return range.GetTimeFrameCount(timeFrame, board.WorkingTime);
 	}
 
 	/// <summary>

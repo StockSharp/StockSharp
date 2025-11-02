@@ -9,12 +9,12 @@ using StockSharp.Algo.Candles.Patterns;
 /// </summary>
 public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 {
-	private DateTimeOffset[] _candleOpenTimes;
+	private DateTime[] _candleOpenTimes;
 
 	/// <summary>
 	/// Pattern candle times.
 	/// </summary>
-	public DateTimeOffset[] CandleOpenTimes
+	public DateTime[] CandleOpenTimes
 	{
 		get => _candleOpenTimes;
 		set => _candleOpenTimes = value ?? throw new ArgumentNullException(nameof(value));
@@ -26,7 +26,7 @@ public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 	/// <param name="indicator"><see cref="IIndicator"/></param>
 	/// <param name="value">Signal value.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public CandlePatternIndicatorValue(IIndicator indicator, bool value, DateTimeOffset time)
+	public CandlePatternIndicatorValue(IIndicator indicator, bool value, DateTime time)
 		: base(indicator, value, time)
 	{ }
 
@@ -35,7 +35,7 @@ public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 	/// </summary>
 	/// <param name="indicator"><see cref="IIndicator"/></param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public CandlePatternIndicatorValue(IIndicator indicator, DateTimeOffset time)
+	public CandlePatternIndicatorValue(IIndicator indicator, DateTime time)
 		: base(indicator, time)
 	{ }
 
@@ -57,7 +57,7 @@ public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 			yield break;
 
 		foreach (var time in CandleOpenTimes)
-			yield return time.UtcDateTime;
+			yield return time;
 	}
 
 	/// <inheritdoc />
@@ -68,7 +68,7 @@ public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 		if (IsEmpty)
 			return;
 
-		CandleOpenTimes = [.. values.Skip(1).Select(v => (DateTimeOffset)v.To<DateTime>().UtcKind())];
+		CandleOpenTimes = [.. values.Skip(1).Select(v => (DateTime)v.To<DateTime>().UtcKind())];
 	}
 }
 
@@ -201,7 +201,7 @@ public class CandlePatternIndicator : BaseIndicator
 			_buffer.Add(candle);
 
 			var recognized = false;
-			var times = Array.Empty<DateTimeOffset>();
+			var times = Array.Empty<DateTime>();
 
 			if (_buffer.Count == candlesCount)
 			{
@@ -209,7 +209,7 @@ public class CandlePatternIndicator : BaseIndicator
 
 				if (recognized)
 				{
-					times = new DateTimeOffset[candlesCount];
+					times = new DateTime[candlesCount];
 
 					for (var i = 0; i < times.Length; ++i)
 						times[i] = _buffer[i].OpenTime;

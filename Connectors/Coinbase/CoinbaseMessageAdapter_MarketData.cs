@@ -95,7 +95,7 @@ public partial class CoinbaseMessageAdapter
 			//if (mdMsg.From is not null)
 			//{
 			//	var from = (long)mdMsg.From.Value.ToUnix(false);
-			//	var to = (long)(mdMsg.To ?? DateTimeOffset.UtcNow).ToUnix(false);
+			//	var to = (long)(mdMsg.To ?? DateTime.UtcNow).ToUnix(false);
 			//	var left = mdMsg.Count ?? long.MaxValue;
 
 			//	while (from < to)
@@ -146,7 +146,7 @@ public partial class CoinbaseMessageAdapter
 			//		from = last;
 			//	}
 			//}
-			
+
 			if (!mdMsg.IsHistoryOnly())
 				await _socketClient.SubscribeTrades(mdMsg.TransactionId, symbol, cancellationToken);
 
@@ -172,7 +172,7 @@ public partial class CoinbaseMessageAdapter
 			if (mdMsg.From is not null)
 			{
 				var from = (long)mdMsg.From.Value.ToUnix();
-				var to = (long)(mdMsg.To ?? DateTimeOffset.UtcNow).ToUnix();
+				var to = (long)(mdMsg.To ?? DateTime.UtcNow).ToUnix();
 				var left = mdMsg.Count ?? long.MaxValue;
 				var step = (long)tf.Multiply(200).TotalSeconds;
 				var granularity = mdMsg.GetTimeFrame().ToNative();
@@ -248,7 +248,7 @@ public partial class CoinbaseMessageAdapter
 		SendOutMessage(new Level1ChangeMessage
 		{
 			SecurityId = ticker.Product.ToStockSharp(),
-			ServerTime = CurrentTime.ConvertToUtc(),
+			ServerTime = CurrentTimeUtc,
 		}
 		.TryAdd(Level1Fields.LastTradeId, ticker.LastTradeId)
 		.TryAdd(Level1Fields.LastTradePrice, ticker.LastTradePrice?.ToDecimal())
@@ -298,7 +298,7 @@ public partial class CoinbaseMessageAdapter
 			SecurityId = symbol.ToStockSharp(),
 			Bids = bids.ToArray(),
 			Asks = asks.ToArray(),
-			ServerTime = CurrentTime.ConvertToUtc(),
+			ServerTime = CurrentTimeUtc,
 			State = type == "snapshot" ? QuoteChangeStates.SnapshotComplete : QuoteChangeStates.Increment,
 		});
 	}

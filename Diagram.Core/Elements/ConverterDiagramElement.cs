@@ -263,7 +263,7 @@ public class ConverterDiagramElement : TypedDiagramElement<ConverterDiagramEleme
 		=> throw new NotSupportedException();
 
 	/// <inheritdoc />
-	protected override void OnProcess(DateTimeOffset time, IDictionary<DiagramSocket, DiagramSocketValue> values, DiagramSocketValue source)
+	protected override void OnProcess(DateTime time, IDictionary<DiagramSocket, DiagramSocketValue> values, DiagramSocketValue source)
 	{
 		var nextValue = values[_inputSocket].Value;
 

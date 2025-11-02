@@ -4,7 +4,7 @@ namespace StockSharp.Bitalong;
 public partial class BitalongMessageAdapter
 {
 	private HttpClient _httpClient;
-	private DateTimeOffset? _lastTimeBalanceCheck;
+	private DateTime? _lastTimeBalanceCheck;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BitalongMessageAdapter"/>.
@@ -104,7 +104,7 @@ public partial class BitalongMessageAdapter
 		}
 
 		if (BalanceCheckInterval > TimeSpan.Zero &&
-			(_lastTimeBalanceCheck == null || (CurrentTime - _lastTimeBalanceCheck) > BalanceCheckInterval))
+			(_lastTimeBalanceCheck == null || (CurrentTimeUtc - _lastTimeBalanceCheck) > BalanceCheckInterval))
 		{
 			await PortfolioLookupAsync(null, cancellationToken);
 		}

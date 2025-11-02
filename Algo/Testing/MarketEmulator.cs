@@ -84,10 +84,10 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		protected override ExecutionMessage Create() => new() { DataTypeEx = DataType.Transactions };
 	}
 
-	private class TickPool : Pool<(Sides? side, decimal price, decimal vol, DateTimeOffset time)[]>
+	private class TickPool : Pool<(Sides? side, decimal price, decimal vol, DateTime time)[]>
 	{
-		protected override (Sides?, decimal, decimal, DateTimeOffset)[] Create()
-			=> new (Sides?, decimal, decimal, DateTimeOffset)[4];
+		protected override (Sides?, decimal, decimal, DateTime)[] Create()
+			=> new (Sides?, decimal, decimal, DateTime)[4];
 	}
 
 	private sealed class SecurityMarketEmulator(MarketEmulator parent, SecurityId securityId) : BaseLogReceiver//, IMarketEmulator
@@ -98,13 +98,13 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		private readonly QuotesDict _bids = new(new BackwardComparer<decimal>());
 		private readonly QuotesDict _asks = [];
 		private readonly Dictionary<ExecutionMessage, TimeSpan> _pendingExecutions = [];
-		private DateTimeOffset _prevTime;
+		private DateTime _prevTime;
 		private readonly MarketEmulatorSettings _settings = parent.Settings;
-		private readonly Random _volumeRandom = new(DateTime.Now.Millisecond);
-		private readonly Random _priceRandom = new(DateTime.Now.Millisecond);
+		private readonly Random _volumeRandom = new(DateTime.UtcNow.Millisecond);
+		private readonly Random _priceRandom = new(DateTime.UtcNow.Millisecond);
 		private readonly RandomArray<bool> _isMatch = new(100);
 		private int _volumeDecimals;
-		private readonly SortedDictionary<DateTimeOffset, List<(CandleMessage candle, (Sides? side, decimal price, decimal vol, DateTimeOffset time)[] ticks)>> _candleInfo = [];
+		private readonly SortedDictionary<DateTime, List<(CandleMessage candle, (Sides? side, decimal price, decimal vol, DateTime time)[] ticks)>> _candleInfo = [];
 		private LogLevels? _logLevel;
 		private DateTime _lastStripDate;
 
@@ -159,7 +159,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		public void Process(Message message, ICollection<Message> result)
 		{
-			if (_prevTime == DateTimeOffset.MinValue)
+			if (_prevTime == DateTime.MinValue)
 				_prevTime = message.LocalTime;
 
 			LogMessage(message, true);
@@ -433,7 +433,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						// т.о. время уйдет вперед данных, которые построены по свечкам.
 						var candles = _candleInfo.SafeAdd(candleMsg.OpenTime, key => []);
 
-						(Sides? side, decimal price, decimal vol, DateTimeOffset time)[] ticks = null;
+						(Sides? side, decimal price, decimal vol, DateTime time)[] ticks = null;
 
 						if (_securityDefinition is not null && _ticksSubscription is not null)
 						{
@@ -460,7 +460,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				LogMessage(item, false);
 		}
 
-		private ExecutionMessage CreateMessage(DateTimeOffset localTime, DateTimeOffset serverTime, Sides side, decimal price, decimal volume, bool isCancelling = false, TimeInForce tif = TimeInForce.PutInQueue)
+		private ExecutionMessage CreateMessage(DateTime localTime, DateTime serverTime, Sides side, decimal price, decimal volume, bool isCancelling = false, TimeInForce tif = TimeInForce.PutInQueue)
 		{
 			if (price <= 0)
 				throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.InvalidValue);
@@ -1307,11 +1307,11 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			ProcessTick(tick.SecurityId, tick.LocalTime, (tick.OriginSide, tick.GetTradePrice(), tick.TradeVolume ?? 1, tick.ServerTime), result);
 		}
 
-		private bool AddActiveOrder(ExecutionMessage orderMsg, DateTimeOffset time)
+		private bool AddActiveOrder(ExecutionMessage orderMsg, DateTime time)
 		{
 			_activeOrders.Add(orderMsg.TransactionId, orderMsg);
 
-			if (orderMsg.ExpiryDate is DateTimeOffset expiry)
+			if (orderMsg.ExpiryDate is DateTime expiry)
 			{
 				var left = expiry - time;
 
@@ -1333,7 +1333,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			return true;
 		}
 
-		private void ProcessTick(SecurityId secId, DateTimeOffset localTime, (Sides? side, decimal price, decimal volume, DateTimeOffset time) tick, ICollection<Message> result)
+		private void ProcessTick(SecurityId secId, DateTime localTime, (Sides? side, decimal price, decimal volume, DateTime time) tick, ICollection<Message> result)
 		{
 			var tradePrice = tick.price;
 			var tradeVolume = tick.volume;
@@ -1580,7 +1580,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			}
 		}
 
-		private void CancelWorst(DateTimeOffset localTime, DateTimeOffset serverTime)
+		private void CancelWorst(DateTime localTime, DateTime serverTime)
 		{
 			void CancelWorstQuote(Sides side)
 			{
@@ -1604,7 +1604,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		}
 
 		private decimal GetPriceStep() => _securityDefinition?.PriceStep ?? 0.01m;
-		private bool HasDepth(DateTimeOffset time) => _lastDepthDate == time.Date;
+		private bool HasDepth(DateTime time) => _lastDepthDate == time.Date;
 
 		private void UpdateSteps(decimal price, decimal? volume)
 		{
@@ -1730,7 +1730,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				.RemoveTrailingZeros();
 		}
 
-		private static ExecutionMessage CreateReply(ExecutionMessage original, DateTimeOffset time, Exception error)
+		private static ExecutionMessage CreateReply(ExecutionMessage original, DateTime time, Exception error)
 		{
 			var replyMsg = new ExecutionMessage
 			{
@@ -1748,7 +1748,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			return replyMsg;
 		}
 
-		private void AcceptExecution(DateTimeOffset time, ExecutionMessage execution, ICollection<Message> result)
+		private void AcceptExecution(DateTime time, ExecutionMessage execution, ICollection<Message> result)
 		{
 			if (_settings.Failing > 0)
 			{
@@ -1903,7 +1903,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			}
 		}
 
-		private QuoteChangeMessage CreateQuoteMessage(SecurityId securityId, DateTimeOffset timeStamp, DateTimeOffset time)
+		private QuoteChangeMessage CreateQuoteMessage(SecurityId securityId, DateTime timeStamp, DateTime time)
 		{
 			Verify();
 
@@ -1997,7 +1997,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			};
 		}
 
-		private void MatchOrderByCandle(DateTimeOffset time, ExecutionMessage order, CandleMessage candle, ICollection<Message> result)
+		private void MatchOrderByCandle(DateTime time, ExecutionMessage order, CandleMessage candle, ICollection<Message> result)
 		{
 			Verify();
 
@@ -2046,7 +2046,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			Verify();
 		}
 
-		private void MatchOrder(DateTimeOffset time, ExecutionMessage order, ICollection<Message> result, bool isNewOrder)
+		private void MatchOrder(DateTime time, ExecutionMessage order, ICollection<Message> result, bool isNewOrder)
 		{
 			Verify();
 
@@ -2252,7 +2252,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				MatchOrderPostProcess(time, order, executions, leftBalance, isCrossTrade, result);
 		}
 
-		private void MatchOrderPostProcess(DateTimeOffset time, ExecutionMessage order, List<(decimal price, decimal volume)> executions, decimal leftBalance, bool isCrossTrade, ICollection<Message> result)
+		private void MatchOrderPostProcess(DateTime time, ExecutionMessage order, List<(decimal price, decimal volume)> executions, decimal leftBalance, bool isCrossTrade, ICollection<Message> result)
 		{
 			switch (order.TimeInForce)
 			{
@@ -2346,7 +2346,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 			var matchByCandle = _candlesSubscription is not null;
 
-			List<DateTimeOffset> toRemove = null;
+			List<DateTime> toRemove = null;
 
 			foreach (var pair in _candleInfo)
 			{
@@ -2636,7 +2636,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			}
 		}
 
-		private decimal ExecuteOrder(DateTimeOffset time, ExecutionMessage order, decimal price, ICollection<Message> result)
+		private decimal ExecuteOrder(DateTime time, ExecutionMessage order, decimal price, ICollection<Message> result)
 		{
 			var balance = order.Balance.Value;
 
@@ -2652,7 +2652,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			return balance;
 		}
 
-		private void ProcessOrder(DateTimeOffset time, ExecutionMessage message, ICollection<Message> result)
+		private void ProcessOrder(DateTime time, ExecutionMessage message, ICollection<Message> result)
 		{
 			result.Add(new ExecutionMessage
 			{
@@ -2670,7 +2670,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			});
 		}
 
-		private void ProcessTrade(DateTimeOffset time, ExecutionMessage order, decimal price, decimal volume, ICollection<Message> result)
+		private void ProcessTrade(DateTime time, ExecutionMessage order, decimal price, decimal volume, ICollection<Message> result)
 		{
 			if (volume <= 0)
 				throw new ArgumentOutOfRangeException(nameof(volume), volume, LocalizedStrings.InvalidValue);
@@ -2710,7 +2710,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			}
 		}
 
-		private DateTimeOffset GetServerTime(DateTimeOffset time)
+		private DateTime GetServerTime(DateTime time)
 		{
 			if (!_settings.ConvertTime)
 				return time;
@@ -2964,7 +2964,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			AddPortfolioChangeMessage(time, result);
 		}
 
-		public void ProcessMarginChange(DateTimeOffset time, SecurityId securityId, ICollection<Message> result)
+		public void ProcessMarginChange(DateTime time, SecurityId securityId, ICollection<Message> result)
 		{
 			var money = _positions.TryGetValue(securityId);
 
@@ -2987,7 +2987,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			);
 		}
 
-		public void AddPortfolioChangeMessage(DateTimeOffset time, ICollection<Message> result)
+		public void AddPortfolioChangeMessage(DateTime time, ICollection<Message> result)
 		{
 			var realizedPnL = PnLManager.RealizedPnL;
 			var unrealizedPnL = PnLManager.UnrealizedPnL;
@@ -3061,7 +3061,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	private readonly Dictionary<string, PortfolioEmulator> _portfolios = [];
 	private readonly Dictionary<string, BoardMessage> _boardDefinitions = new(StringComparer.InvariantCultureIgnoreCase);
 	private readonly Dictionary<SecurityId, Dictionary<Level1Fields, object>> _secStates = [];
-	private DateTimeOffset _portfoliosPrevRecalc;
+	private DateTime _portfoliosPrevRecalc;
 	private readonly ICommissionManager _commissionManager = new CommissionManager();
 	private readonly Dictionary<string, SessionStates> _boardStates = new(StringComparer.InvariantCultureIgnoreCase);
 
@@ -3114,10 +3114,10 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	/// </summary>
 	public IncrementalIdGenerator TradeIdGenerator { get; set; } = new IncrementalIdGenerator();
 
-	private DateTimeOffset _currentTime;
+	private DateTime _currentTime;
 
 	/// <inheritdoc />
-	public override DateTimeOffset CurrentTime => _currentTime;
+	public override DateTime CurrentTimeUtc => _currentTime;
 
 	/// <inheritdoc />
 	public bool SendInMessage(Message message)
@@ -3680,7 +3680,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		return GetPortfolioInfo(execMsg.PortfolioName).CheckRegistration(execMsg/*, result*/);
 	}
 
-	private void RecalcPnL(DateTimeOffset time, ICollection<Message> messages)
+	private void RecalcPnL(DateTime time, ICollection<Message> messages)
 	{
 		if (Settings.PortfolioRecalcInterval == TimeSpan.Zero)
 			return;
@@ -3731,7 +3731,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	];
 	IEnumerable<MessageTypes> IMessageAdapter.SupportedInMessages { get; set; }
 	IEnumerable<MessageTypes> IMessageAdapter.NotSupportedResultMessages { get; } = [];
-	IEnumerable<DataType> IMessageAdapter.GetSupportedMarketDataTypes(SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to) =>
+	IEnumerable<DataType> IMessageAdapter.GetSupportedMarketDataTypes(SecurityId securityId, DateTime? from, DateTime? to) =>
 	[
 		DataType.OrderLog,
 		DataType.Ticks,

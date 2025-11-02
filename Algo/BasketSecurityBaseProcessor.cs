@@ -145,7 +145,7 @@ public abstract class ContinuousSecurityBaseProcessor<TBasketSecurity>(Security 
 	/// <param name="volume">Volume.</param>
 	/// <param name="openInterest">Number of open positions (open interest).</param>
 	/// <returns><see langword="true"/> if the specified message can be processed, otherwise, <see langword="false"/>.</returns>
-	protected abstract bool CanProcess(SecurityId securityId, DateTimeOffset serverTime, decimal? price, decimal? volume, decimal? openInterest);
+	protected abstract bool CanProcess(SecurityId securityId, DateTime serverTime, decimal? price, decimal? volume, decimal? openInterest);
 }
 
 /// <summary>
@@ -154,7 +154,7 @@ public abstract class ContinuousSecurityBaseProcessor<TBasketSecurity>(Security 
 public class ContinuousSecurityExpirationProcessor : ContinuousSecurityBaseProcessor<ExpirationContinuousSecurity>
 {
 	private SecurityId _currId;
-	private DateTimeOffset _expirationDate;
+	private DateTime _expirationDate;
 
 	private bool _finished;
 
@@ -170,7 +170,7 @@ public class ContinuousSecurityExpirationProcessor : ContinuousSecurityBaseProce
 	}
 
 	/// <inheritdoc />
-	protected override bool CanProcess(SecurityId securityId, DateTimeOffset serverTime, decimal? price, decimal? volume, decimal? openInterest)
+	protected override bool CanProcess(SecurityId securityId, DateTime serverTime, decimal? price, decimal? volume, decimal? openInterest)
 	{
 		if (_finished)
 			return false;
@@ -230,7 +230,7 @@ public class ContinuousSecurityVolumeProcessor : ContinuousSecurityBaseProcessor
 	}
 
 	/// <inheritdoc />
-	protected override bool CanProcess(SecurityId securityId, DateTimeOffset serverTime, decimal? price, decimal? volume, decimal? openInterest)
+	protected override bool CanProcess(SecurityId securityId, DateTime serverTime, decimal? price, decimal? volume, decimal? openInterest)
 	{
 		if (_finished)
 			return _currId == securityId;
@@ -277,7 +277,7 @@ public abstract class IndexSecurityBaseProcessor<TBasketSecurity>(Security secur
 	private readonly Dictionary<SecurityId, ExecutionMessage> _ticks = [];
 	private readonly Dictionary<SecurityId, ExecutionMessage> _ol = [];
 
-	private readonly SortedDictionary<DateTimeOffset, Dictionary<SecurityId, CandleMessage>> _candles = [];
+	private readonly SortedDictionary<DateTime, Dictionary<SecurityId, CandleMessage>> _candles = [];
 
 	/// <inheritdoc />
 	public override IEnumerable<Message> Process(Message message)
@@ -295,7 +295,7 @@ public abstract class IndexSecurityBaseProcessor<TBasketSecurity>(Security secur
 					var allBids = new List<QuoteChange>();
 					var allAsks = new List<QuoteChange>();
 
-					DateTimeOffset? time = null;
+					DateTime? time = null;
 
 					var minBidDepth = int.MaxValue;
 					var minAskDepth = int.MaxValue;

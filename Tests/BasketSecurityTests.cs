@@ -79,7 +79,7 @@ public class BasketSecurityTests
 			PriceStep = 10m,
 			Board = ExchangeBoard.Associated,
 			LastTick = new ExecutionMessage { DataTypeEx = DataType.Ticks, TradePrice = 98440 },
-			ExpiryDate = new DateTime(2018, 09, 15).ApplyMoscow(),
+			ExpiryDate = new DateTime(2018, 09, 15).UtcKind(),
 		};
 
 		riz = new Security
@@ -90,7 +90,7 @@ public class BasketSecurityTests
 			PriceStep = 10m,
 			Board = ExchangeBoard.Associated,
 			LastTick = new ExecutionMessage { DataTypeEx = DataType.Ticks, TradePrice = 100440 },
-			ExpiryDate = new DateTime(2018, 12, 15).ApplyMoscow(),
+			ExpiryDate = new DateTime(2018, 12, 15).UtcKind(),
 		};
 	}
 
@@ -134,7 +134,7 @@ public class BasketSecurityTests
 		securities = [.. basketSecurity.GetInnerSecurities(secProvider)];
 		var legsCount = securities.Length;
 
-		var start = securities.First().ExpiryDate?.Subtract(TimeSpan.FromHours(5)) ?? DateTimeOffset.UtcNow;
+		var start = securities.First().ExpiryDate?.Subtract(TimeSpan.FromHours(5)) ?? DateTime.UtcNow;
 
 		// TODO Implement tests to support all types of messages and data
 

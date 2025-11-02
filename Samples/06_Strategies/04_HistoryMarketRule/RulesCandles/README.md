@@ -11,7 +11,7 @@ This strategy is designed to monitor candle data and apply specific rules when c
 When the strategy starts, it subscribes to candle data for a specific timeframe and sets up market rules based on candle events:
 
 ```csharp
-protected override void OnStarted(DateTimeOffset time)
+protected override void OnStarted2(DateTime time)
 {
     _subscription = new(Security.TimeFrame(TimeSpan.FromMinutes(5)))
     {
@@ -38,7 +38,7 @@ protected override void OnStarted(DateTimeOffset time)
 
         }).Apply(this);
 
-    base.OnStarted(time);
+    base.OnStarted2(time);
 }
 ```
 

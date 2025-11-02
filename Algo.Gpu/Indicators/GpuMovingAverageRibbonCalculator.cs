@@ -59,7 +59,7 @@ public unsafe struct GpuMovingAverageRibbonResult : IGpuIndicatorResult
 	public const int MaxRibbonCount = 32;
 
 	/// <summary>
-	/// Time in <see cref="DateTimeOffset.Ticks"/>.
+	/// Time in <see cref="DateTime.Ticks"/>.
 	/// </summary>
 	public long Time;
 

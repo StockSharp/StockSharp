@@ -93,9 +93,9 @@ public abstract class QuotingStrategy : Strategy
 	protected abstract IQuotingBehavior CreateBehavior();
 
 	/// <inheritdoc />
-	protected override void OnStarted(DateTimeOffset time)
+	protected override void OnStarted2(DateTime time)
 	{
-		base.OnStarted(time);
+		base.OnStarted2(time);
 
 		_processor = new(CreateBehavior(), Security, Portfolio, QuotingSide, QuotingVolume, Volume, TimeOut, this, this, this, this, this, IsFormedAndOnlineAndAllowTrading, UseBidAsk, UseLastTradePrice)
 		{

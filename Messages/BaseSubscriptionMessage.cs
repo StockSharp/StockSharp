@@ -19,11 +19,11 @@ public abstract class BaseSubscriptionMessage(MessageTypes type) : Message(type)
 
 	/// <inheritdoc />
 	[DataMember]
-	public virtual DateTimeOffset? From { get; set; }
+	public virtual DateTime? From { get; set; }
 	
 	/// <inheritdoc />
 	[DataMember]
-	public virtual DateTimeOffset? To { get; set; }
+	public virtual DateTime? To { get; set; }
 
 	/// <inheritdoc />
 	[DataMember]

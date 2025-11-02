@@ -27,7 +27,7 @@ public class QuotingProcessor : BaseLogReceiver
 	private Order _currentOrder;
 	private IOrderBookMessage _filteredBook;
 	private ITickTradeMessage _lastTrade;
-	private DateTimeOffset _startedTime;
+	private DateTime _startedTime;
 	private QuotingEngine _engine;
 	private decimal _position;
 
@@ -132,7 +132,7 @@ public class QuotingProcessor : BaseLogReceiver
 		_pending = default;
 		_finished = default;
 
-		_startedTime = _timeProvider.CurrentTime;
+		_startedTime = _timeProvider.CurrentTimeUtc;
 
 		_engine = new QuotingEngine(
 			_behavior, _security, _portfolio, _quotingSide, _quotingVolume,
@@ -407,7 +407,7 @@ public class QuotingProcessor : BaseLogReceiver
 	{
 		return new()
 		{
-			CurrentTime = _timeProvider.CurrentTime,
+			CurrentTime = _timeProvider.CurrentTimeUtc,
 			Position = _position,
 			BestBidPrice = _filteredBook?.Bids?.FirstOr()?.Price,
 			BestAskPrice = _filteredBook?.Asks?.FirstOr()?.Price,

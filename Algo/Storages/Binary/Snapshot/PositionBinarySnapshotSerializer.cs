@@ -206,8 +206,8 @@ public class PositionBinarySnapshotSerializer : ISnapshotSerializer<Key, Positio
 		{
 			SecurityId = snapshot.SecurityId.ToSecurityId(),
 			PortfolioName = snapshot.Portfolio,
-			ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
-			LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
+			ServerTime = snapshot.LastChangeServerTime.To<DateTime>(),
+			LocalTime = snapshot.LastChangeLocalTime.To<DateTime>(),
 			ClientCode = snapshot.ClientCode,
 			DepoName = snapshot.DepoName,
 			BoardCode = snapshot.BoardCode,
@@ -231,7 +231,7 @@ public class PositionBinarySnapshotSerializer : ISnapshotSerializer<Key, Positio
 		.TryAdd(PositionChangeTypes.CommissionTaker, snapshot.CommissionTaker, true)
 		.TryAdd(PositionChangeTypes.CommissionMaker, snapshot.CommissionMaker, true)
 		.TryAdd(PositionChangeTypes.SettlementPrice, snapshot.SettlementPrice, true)
-		.TryAdd(PositionChangeTypes.ExpirationDate, snapshot.ExpirationDate.To<DateTimeOffset?>())
+		.TryAdd(PositionChangeTypes.ExpirationDate, snapshot.ExpirationDate?.To<DateTime>())
 		.TryAdd(PositionChangeTypes.BuyOrdersCount, snapshot.BuyOrdersCount, true)
 		.TryAdd(PositionChangeTypes.SellOrdersCount, snapshot.SellOrdersCount, true)
 		.TryAdd(PositionChangeTypes.BuyOrdersMargin, snapshot.BuyOrdersMargin, true)

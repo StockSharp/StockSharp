@@ -10,8 +10,8 @@ public static class IGpuIndicatorResultExtensions
 	/// </summary>
 	/// <param name="result"><see cref="IGpuIndicatorResult"/></param>
 	/// <returns><see cref="IIndicatorValue.Time"/></returns>
-	public static DateTimeOffset GetTime(this IGpuIndicatorResult result)
-		=> result.Time.To<DateTimeOffset>();
+	public static DateTime GetTime(this IGpuIndicatorResult result)
+		=> result.Time.To<DateTime>().UtcKind();
 
 	/// <summary>
 	/// Convert <see cref="IGpuIndicatorResult.IsFormed"/> to <see cref="IIndicatorValue.IsFormed"/> for the specified indicator.

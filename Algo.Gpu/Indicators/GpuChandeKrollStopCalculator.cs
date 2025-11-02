@@ -46,7 +46,7 @@ public struct GpuChandeKrollStopParams(float multiplier, int period, int stopPer
 public struct GpuChandeKrollStopResult : IGpuIndicatorResult
 {
 	/// <summary>
-	/// Time in <see cref="DateTimeOffset.Ticks"/>.
+	/// Time in <see cref="DateTime.Ticks"/>.
 	/// </summary>
 	public long Time;
 

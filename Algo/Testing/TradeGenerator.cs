@@ -57,7 +57,7 @@ public class RandomWalkTradeGenerator(SecurityId securityId) : TradeGenerator(se
 	/// <inheritdoc />
 	protected override Message OnProcess(Message message)
 	{
-		DateTimeOffset time;
+		DateTime time;
 
 		switch (message.Type)
 		{

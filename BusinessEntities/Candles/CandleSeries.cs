@@ -119,7 +119,7 @@ public class CandleSeries : NotifiableObject, IPersistable
 		Description = LocalizedStrings.StartDateDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 3)]
-	public DateTimeOffset? From { get; set; }
+	public DateTime? From { get; set; }
 
 	/// <summary>
 	/// The final date by which you need to get data.
@@ -130,7 +130,7 @@ public class CandleSeries : NotifiableObject, IPersistable
 		Description = LocalizedStrings.ToDateDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 4)]
-	public DateTimeOffset? To { get; set; }
+	public DateTime? To { get; set; }
 
 	/// <summary>
 	/// Allow build candles from smaller timeframe.

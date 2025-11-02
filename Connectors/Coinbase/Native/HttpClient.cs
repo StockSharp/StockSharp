@@ -79,7 +79,7 @@ class HttpClient : BaseLogReceiver
 		return ((JToken)response.fills).DeserializeObject<IEnumerable<Fill>>();
 	}
 
-	public Task<Order> RegisterOrder(string clientOrderId, string symbol, string type, string side, decimal? price, decimal? stopPrice, decimal volume, TimeInForce? timeInForce, DateTimeOffset? tillDate, int? leverage, CancellationToken cancellationToken)
+	public Task<Order> RegisterOrder(string clientOrderId, string symbol, string type, string side, decimal? price, decimal? stopPrice, decimal volume, TimeInForce? timeInForce, DateTime? tillDate, int? leverage, CancellationToken cancellationToken)
 	{
 		var url = CreateUrl("brokerage/orders");
 
@@ -105,7 +105,7 @@ class HttpClient : BaseLogReceiver
 			body.time_in_force = timeInForce.ToNative(tillDate);
 
 		if (tillDate != null)
-			body.cancel_after = tillDate.Value.UtcDateTime;
+			body.cancel_after = tillDate.Value;
 
 		if (stopPrice != null)
 		{

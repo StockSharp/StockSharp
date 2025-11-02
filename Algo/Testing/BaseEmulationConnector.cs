@@ -31,10 +31,10 @@ public abstract class BaseEmulationConnector : Connector
 	/// <inheritdoc />
 	public override IEnumerable<Portfolio> Portfolios => base.Portfolios.Concat(EmulationAdapter.Emulator.PortfolioProvider.Portfolios).Distinct();
 
-	private DateTimeOffset _currentTime;
+	private DateTime _currentTime;
 
 	/// <inheritdoc />
-	public override DateTimeOffset CurrentTime => _currentTime;
+	public override DateTime CurrentTimeUtc => _currentTime;
 
 	/// <summary>
 	/// The adapter, executing messages in <see cref="IMarketEmulator"/>.

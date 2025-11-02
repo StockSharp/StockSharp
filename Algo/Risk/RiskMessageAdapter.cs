@@ -51,7 +51,7 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 					{
 						OriginalTransactionId = regMsg.TransactionId,
 						DataTypeEx = DataType.Transactions,
-						ServerTime = DateTimeOffset.Now,
+						ServerTime = DateTime.UtcNow,
 						HasOrderInfo = true,
 						OrderState = OrderStates.Failed,
 						Error = new InvalidOperationException(LocalizedStrings.TradingDisabled)
@@ -65,7 +65,7 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 					{
 						OriginalTransactionId = replaceMsg.TransactionId,
 						DataTypeEx = DataType.Transactions,
-						ServerTime = DateTimeOffset.Now,
+						ServerTime = DateTime.UtcNow,
 						HasOrderInfo = true,
 						OrderState = OrderStates.Failed,
 						Error = new InvalidOperationException(LocalizedStrings.TradingDisabled)

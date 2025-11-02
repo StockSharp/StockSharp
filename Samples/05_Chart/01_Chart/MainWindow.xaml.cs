@@ -41,7 +41,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 	private IChartArea _areaComb;
 	private IChartCandleElement _candleElement;
 	private readonly SynchronizedList<CandleMessage> _updatedCandles = new();
-	private readonly CachedSynchronizedOrderedDictionary<DateTimeOffset, CandleMessage> _allCandles = new();
+	private readonly CachedSynchronizedOrderedDictionary<DateTime, CandleMessage> _allCandles = new();
 	private Security _security;
 	private RandomWalkTradeGenerator _tradeGenerator;
 	private readonly CachedSynchronizedDictionary<IChartIndicatorElement, IIndicator> _indicators = new();
@@ -51,7 +51,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 	private readonly CandleBuilderProvider _builderProvider = new(new InMemoryExchangeInfoProvider());
 	private bool _historyLoaded;
 	private bool _isRealTime;
-	private DateTimeOffset _lastTime;
+	private DateTime _lastTime;
 	private readonly DispatcherTimer _dataTimer;
 	private readonly CollectionSecurityProvider _securityProvider = new();
 	private readonly TestMarketSubscriptionProvider _testProvider = new();
@@ -68,7 +68,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 	private ChartDrawData.AnnotationData _annotationData;
 	private int _annotationId;
 
-	private DateTimeOffset _lastCandleDrawTime;
+	private DateTime _lastCandleDrawTime;
 	private bool _drawWithColor;
 	private DrawingColor _candleDrawColor;
 
@@ -442,7 +442,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 		if (messages.Length == 0)
 			return;
 
-		var lastTime = DateTimeOffset.MinValue;
+		var lastTime = DateTime.MinValue;
 		var candlesToUpdate = new List<CandleMessage>();
 
 		foreach (var candle in messages.Reverse())
@@ -510,7 +510,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 		if (CustomColors.IsChecked == true)
 		{
 			_candleElement.Colorer = (dto, isUpCandle, isLastCandle) => dto.Hour % 2 != 0 ? null : (isUpCandle ? DrawingColor.Chartreuse : DrawingColor.Aqua);
-			_indicators.Keys.ForEach(el => el.Colorer = c => ((DateTimeOffset)c).Hour % 2 != 0 ? null : DrawingColor.Magenta);
+			_indicators.Keys.ForEach(el => el.Colorer = c => ((DateTime)c).Hour % 2 != 0 ? null : DrawingColor.Magenta);
 		}
 		else
 		{
@@ -544,10 +544,10 @@ public partial class MainWindow : ICandleBuilderSubscription
 		_isRealTime = IsRealtime.IsChecked == true;
 	}
 
-	private void GetMiddle(out DateTimeOffset time, out decimal price)
+	private void GetMiddle(out DateTime time, out decimal price)
 	{
-		var dtMin = DateTimeOffset.MaxValue;
-		var dtMax = DateTimeOffset.MinValue;
+		var dtMin = DateTime.MaxValue;
+		var dtMax = DateTime.MinValue;
 		var priceMin = decimal.MaxValue;
 		var priceMax = decimal.MinValue;
 
@@ -604,8 +604,8 @@ public partial class MainWindow : ICandleBuilderSubscription
 
 			if (mode == AnnotationCoordinateMode.Absolute)
 			{
-				x1 = (DateTimeOffset)_annotationData.X1 - TimeSpan.FromMinutes(1);
-				x2 = (DateTimeOffset)_annotationData.X2 + TimeSpan.FromMinutes(1);
+				x1 = (DateTime)_annotationData.X1 - TimeSpan.FromMinutes(1);
+				x2 = (DateTime)_annotationData.X2 + TimeSpan.FromMinutes(1);
 				y1 = (decimal)_annotationData.Y1 + _security.PriceStep ?? 0.01m;
 				y2 = (decimal)_annotationData.Y2 - _security.PriceStep ?? 0.01m;
 			}
@@ -718,7 +718,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 			var msg = new Level1ChangeMessage
 			{
 				SecurityId = sec.ToSecurityId(),
-				ServerTime = DateTimeOffset.UtcNow,
+				ServerTime = DateTime.UtcNow,
 			};
 
 			if (RandomGen.GetBool())

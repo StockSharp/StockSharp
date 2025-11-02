@@ -209,7 +209,7 @@ public class ConnorsRSI : BaseComplexIndicator<IConnorsRSIValue>
 	}
 
 	/// <inheritdoc />
-	protected override IConnorsRSIValue CreateValue(DateTimeOffset time)
+	protected override IConnorsRSIValue CreateValue(DateTime time)
 		=> new ConnorsRSIValue(this, time);
 }
 
@@ -287,7 +287,7 @@ public interface IConnorsRSIValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent ConnorsRSI indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class ConnorsRSIValue(ConnorsRSI indicator, DateTimeOffset time) : ComplexIndicatorValue<ConnorsRSI>(indicator, time), IConnorsRSIValue
+public class ConnorsRSIValue(ConnorsRSI indicator, DateTime time) : ComplexIndicatorValue<ConnorsRSI>(indicator, time), IConnorsRSIValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue RsiValue => this[TypedIndicator.Rsi];

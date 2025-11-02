@@ -96,7 +96,7 @@ public static partial class Extensions
 		if (pfName.IsEmpty())
 			throw new ArgumentNullException(nameof(pfName));
 
-		var time = adapter.CurrentTime;
+		var time = adapter.CurrentTimeUtc;
 
 		return new PositionChangeMessage
 		{
@@ -122,7 +122,7 @@ public static partial class Extensions
 		if (pfName.IsEmpty())
 			throw new ArgumentNullException(nameof(pfName));
 
-		var time = adapter.CurrentTime;
+		var time = adapter.CurrentTimeUtc;
 
 		return new PositionChangeMessage
 		{
@@ -291,7 +291,7 @@ public static partial class Extensions
 	/// <param name="transactionId">Transaction ID.</param>
 	/// <param name="serverTime">Server time.</param>
 	/// <returns>The message contains information about the execution.</returns>
-	public static ExecutionMessage CreateOrderReply(this long transactionId, DateTimeOffset serverTime)
+	public static ExecutionMessage CreateOrderReply(this long transactionId, DateTime serverTime)
 	{
 		return new ExecutionMessage
 		{
@@ -307,7 +307,7 @@ public static partial class Extensions
 	/// </summary>
 	/// <param name="message">Message.</param>
 	/// <returns>Server time.</returns>
-	public static DateTimeOffset GetServerTime(this Message message)
+	public static DateTime GetServerTime(this Message message)
 	{
 		if (message.TryGetServerTime(out var serverTime))
 			return serverTime;
@@ -321,7 +321,7 @@ public static partial class Extensions
 	/// <param name="message">Message.</param>
 	/// <param name="serverTime">Server time. If the value is <see langword="default" />, the message does not contain the server time.</param>
 	/// <returns>Operation result.</returns>
-	public static bool TryGetServerTime(this Message message, out DateTimeOffset serverTime)
+	public static bool TryGetServerTime(this Message message, out DateTime serverTime)
 	{
 		if (message is IServerTimeMessage timeMsg)
 		{
@@ -889,7 +889,7 @@ public static partial class Extensions
 	/// <param name="from">The initial date from which you need to get data.</param>
 	/// <param name="to">The final date by which you need to get data.</param>
 	/// <returns>Possible time-frames.</returns>
-	public static IEnumerable<TimeSpan> GetTimeFrames(this IMessageAdapter adapter, SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null)
+	public static IEnumerable<TimeSpan> GetTimeFrames(this IMessageAdapter adapter, SecurityId securityId = default, DateTime? from = null, DateTime? to = null)
 	{
 		if (adapter is null)
 			throw new ArgumentNullException(nameof(adapter));
@@ -1069,7 +1069,7 @@ public static partial class Extensions
 	public static bool IsObsolete(this Level1Fields field) => field.GetAttributeOfType<ObsoleteAttribute>() != null;
 
 	/// <summary>
-	/// Try to initialize <see cref="Message.LocalTime"/> by <see cref="ILogSource.CurrentTime"/>.
+	/// Try to initialize <see cref="Message.LocalTime"/> by <see cref="ILogSource.CurrentTimeUtc"/>.
 	/// </summary>
 	/// <param name="message">Message.</param>
 	/// <param name="source">Source.</param>
@@ -1082,7 +1082,7 @@ public static partial class Extensions
 			throw new ArgumentNullException(nameof(source));
 
 		if (message.LocalTime == default)
-			message.LocalTime = source.CurrentTime;
+			message.LocalTime = source.CurrentTimeUtc;
 	}
 
 	/// <summary>
@@ -2355,7 +2355,7 @@ public static partial class Extensions
 			TradePrice = level1.TryGetDecimal(Level1Fields.LastTradePrice),
 			TradeVolume = level1.TryGetDecimal(Level1Fields.LastTradeVolume),
 			OriginSide = (Sides?)level1.TryGet(Level1Fields.LastTradeOrigin),
-			ServerTime = (DateTimeOffset?)level1.TryGet(Level1Fields.LastTradeTime) ?? level1.ServerTime,
+			ServerTime = (DateTime?)level1.TryGet(Level1Fields.LastTradeTime) ?? level1.ServerTime,
 			IsUpTick = (bool?)level1.TryGet(Level1Fields.LastTradeUpDown),
 			LocalTime = level1.LocalTime,
 			BuildFrom = level1.BuildFrom ?? DataType.Level1,
@@ -2587,7 +2587,7 @@ public static partial class Extensions
 
 			Level1Fields.BestAskTime or Level1Fields.BestBidTime or
 			Level1Fields.LastTradeTime or Level1Fields.BuyBackDate or
-			Level1Fields.CouponDate => typeof(DateTimeOffset),
+			Level1Fields.CouponDate => typeof(DateTime),
 
 			Level1Fields.LastTradeUpDown or Level1Fields.IsSystem => typeof(bool),
 
@@ -2608,7 +2608,7 @@ public static partial class Extensions
 	{
 		return type switch
 		{
-			PositionChangeTypes.ExpirationDate => typeof(DateTimeOffset),
+			PositionChangeTypes.ExpirationDate => typeof(DateTime),
 			PositionChangeTypes.State => typeof(PortfolioStates),
 			PositionChangeTypes.Currency => typeof(CurrencyTypes),
 			PositionChangeTypes.BuyOrdersCount or PositionChangeTypes.SellOrdersCount or PositionChangeTypes.OrdersCount or PositionChangeTypes.TradesCount => typeof(int),
@@ -3370,14 +3370,14 @@ public static partial class Extensions
 	/// <summary>
 	/// Constant value for <see cref="OrderRegisterMessage.TillDate"/> means Today(=Session).
 	/// </summary>
-	public static readonly DateTimeOffset Today = new(2100, 1, 1, 0, 0, 0, TimeSpan.Zero);
+	public static readonly DateTime Today = new DateTime(2100, 1, 1, 0, 0, 0).UtcKind();
 
 	/// <summary>
 	/// To check the specified date is today.
 	/// </summary>
 	/// <param name="date">The specified date.</param>
 	/// <returns><see langword="true"/> if the specified date is today, otherwise, <see langword="false"/>.</returns>
-	public static bool IsToday(this DateTimeOffset? date)
+	public static bool IsToday(this DateTime? date)
 	{
 		return date?.IsToday() == true;
 	}
@@ -3387,7 +3387,7 @@ public static partial class Extensions
 	/// </summary>
 	/// <param name="date">The specified date.</param>
 	/// <returns><see langword="true"/> if the specified date is today, otherwise, <see langword="false"/>.</returns>
-	public static bool IsToday(this DateTimeOffset date)
+	public static bool IsToday(this DateTime date)
 	{
 		return date == Today;
 	}
@@ -3397,8 +3397,8 @@ public static partial class Extensions
 	/// </summary>
 	/// <param name="date">The specified date.</param>
 	/// <returns>Result value.</returns>
-	public static DateTimeOffset? EnsureToday(this DateTimeOffset? date)
-		=> date.EnsureToday(DateTime.Today.ApplyUtc());
+	public static DateTime? EnsureToday(this DateTime? date)
+		=> date.EnsureToday(DateTime.Today);
 
 	/// <summary>
 	/// Determines the specified date equals is <see cref="Today"/> and returns <paramref name="todayValue"/>.
@@ -3406,7 +3406,7 @@ public static partial class Extensions
 	/// <param name="date">The specified date.</param>
 	/// <param name="todayValue">Today value.</param>
 	/// <returns>Result value.</returns>
-	public static DateTimeOffset? EnsureToday(this DateTimeOffset? date, DateTimeOffset? todayValue)
+	public static DateTime? EnsureToday(this DateTime? date, DateTime? todayValue)
 		=> date == null ? null : (date.IsToday() ? todayValue : date);
 
 	/// <summary>
@@ -4155,7 +4155,7 @@ public static partial class Extensions
 
 		return new ExecutionMessage
 		{
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			DataTypeEx = DataType.Transactions,
 			SecurityId = regMsg.SecurityId,
 			TransactionId = regMsg.TransactionId,
@@ -4754,7 +4754,7 @@ public static partial class Extensions
 	/// <param name="timeFrame">The time frame for which you need to get time range.</param>
 	/// <param name="currentTime">The current time within the range of time frames.</param>
 	/// <returns>The candle time frames.</returns>
-	public static Range<DateTimeOffset> GetCandleBounds(this TimeSpan timeFrame, DateTimeOffset currentTime)
+	public static Range<DateTime> GetCandleBounds(this TimeSpan timeFrame, DateTime currentTime)
 		=> GetCandleBounds(timeFrame, currentTime, TimeZoneInfo.Utc, _time);
 
 	private static readonly long _weekTf = TimeSpan.FromDays(7).Ticks;
@@ -4767,7 +4767,7 @@ public static partial class Extensions
 	/// <param name="timeZone">Information about the time zone where the exchange is located.</param>
 	/// <param name="time">The information about the exchange working pattern.</param>
 	/// <returns>The candle time frames.</returns>
-	public static Range<DateTimeOffset> GetCandleBounds(this TimeSpan timeFrame, DateTimeOffset currentTime, TimeZoneInfo timeZone, WorkingTime time)
+	public static Range<DateTime> GetCandleBounds(this TimeSpan timeFrame, DateTime currentTime, TimeZoneInfo timeZone, WorkingTime time)
 	{
 		if (timeZone == null)
 			throw new ArgumentNullException(nameof(timeZone));
@@ -4775,7 +4775,7 @@ public static partial class Extensions
 		if (time == null)
 			throw new ArgumentNullException(nameof(time));
 
-		var exchangeTime = currentTime.ToLocalTime(timeZone);
+		var exchangeTime = currentTime.To(destination: timeZone);
 		Range<DateTime> bounds;
 
 		if (timeFrame.Ticks == _weekTf)
@@ -4835,15 +4835,10 @@ public static partial class Extensions
 			var min = beginTime.Truncate(TimeSpan.TicksPerMillisecond);
 			var max = endTime.Truncate(TimeSpan.TicksPerMillisecond).AddDays(days);
 
-			bounds = new Range<DateTime>(min, max);
+			bounds = new(min, max);
 		}
 
-		var offset = currentTime.Offset;
-		var diff = currentTime.DateTime - exchangeTime;
-
-		return new Range<DateTimeOffset>(
-			(bounds.Min + diff).ApplyTimeZone(offset),
-			(bounds.Max + diff).ApplyTimeZone(offset));
+		return bounds;
 	}
 
 	private static readonly WorkingTime _allRange = new();
@@ -4854,18 +4849,16 @@ public static partial class Extensions
 	/// <param name="range">The specified time range for which you need to get the number of time frames.</param>
 	/// <param name="timeFrame">The time frame size.</param>
 	/// <param name="workingTime"><see cref="WorkingTime"/>.</param>
-	/// <param name="timeZone">Information about the time zone where the exchange is located.</param>
 	/// <returns>The received number of time frames.</returns>
-	public static long GetTimeFrameCount(this Range<DateTimeOffset> range, TimeSpan timeFrame, WorkingTime workingTime = default, TimeZoneInfo timeZone = default)
+	public static long GetTimeFrameCount(this Range<DateTime> range, TimeSpan timeFrame, WorkingTime workingTime = default)
 	{
 		if (range is null)
 			throw new ArgumentNullException(nameof(range));
 
 		workingTime ??= _allRange;
-		timeZone ??= TimeZoneInfo.Utc;
 
-		var to = range.Max.ToLocalTime(timeZone);
-		var from = range.Min.ToLocalTime(timeZone);
+		var to = range.Max;
+		var from = range.Min;
 
 		var days = (int)(to.Date - from.Date).TotalDays;
 
@@ -4991,7 +4984,7 @@ public static partial class Extensions
 	/// <param name="board">Board info.</param>
 	/// <param name="time">The passed time to be checked.</param>
 	/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
-	public static bool IsTradeTime(this BoardMessage board, DateTimeOffset time)
+	public static bool IsTradeTime(this BoardMessage board, DateTime time)
 	{
 		return board.IsTradeTime(time, out _, out _);
 	}
@@ -5004,15 +4997,12 @@ public static partial class Extensions
 	/// <param name="isWorkingDay"><see langword="true" />, if the date is traded, otherwise, is not traded.</param>
 	/// <param name="period">Current working time period.</param>
 	/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
-	public static bool IsTradeTime(this BoardMessage board, DateTimeOffset time, out bool? isWorkingDay, out WorkingTimePeriod period)
+	public static bool IsTradeTime(this BoardMessage board, DateTime time, out bool? isWorkingDay, out WorkingTimePeriod period)
 	{
 		if (board is null)
 			throw new ArgumentNullException(nameof(board));
 
-		var exchangeTime = time.ToLocalTime(board.TimeZone);
-		var workingTime = board.WorkingTime;
-
-		return workingTime.IsTradeTime(exchangeTime, out isWorkingDay, out period);
+		return board.WorkingTime.IsTradeTime(time, out isWorkingDay, out period);
 	}
 
 	/// <summary>
@@ -5052,16 +5042,8 @@ public static partial class Extensions
 	/// <param name="date">The passed date to be checked.</param>
 	/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
 	/// <returns><see langword="true" />, if the date is traded, otherwise, is not traded.</returns>
-	public static bool IsTradeDate(this BoardMessage board, DateTimeOffset date, bool checkHolidays = false)
-	{
-		if (board is null)
-			throw new ArgumentNullException(nameof(board));
-
-		var exchangeTime = date.ToLocalTime(board.TimeZone);
-		var workingTime = board.WorkingTime;
-
-		return workingTime.IsTradeDate(exchangeTime, checkHolidays);
-	}
+	public static bool IsTradeDate(this BoardMessage board, DateTime date, bool checkHolidays = false)
+		=> IsTradeDate(board.WorkingTime, date, checkHolidays);
 
 	/// <summary>
 	/// To check, whether date is traded.
@@ -5094,7 +5076,7 @@ public static partial class Extensions
 	/// <param name="date">The date from which to start checking.</param>
 	/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
 	/// <returns>Last trade date.</returns>
-	public static DateTimeOffset LastTradeDay(this BoardMessage board, DateTimeOffset date, bool checkHolidays = true)
+	public static DateTime LastTradeDay(this BoardMessage board, DateTime date, bool checkHolidays = true)
 	{
 		if (board == null)
 			throw new ArgumentNullException(nameof(board));
@@ -5113,7 +5095,7 @@ public static partial class Extensions
 	/// <param name="n">The N size. The number of trading days for the addition or subtraction.</param>
 	/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
 	/// <returns>The end T +/- N date.</returns>
-	public static DateTimeOffset AddOrSubtractTradingDays(this BoardMessage board, DateTimeOffset date, int n, bool checkHolidays = true)
+	public static DateTime AddOrSubtractTradingDays(this BoardMessage board, DateTime date, int n, bool checkHolidays = true)
 	{
 		if (board == null)
 			throw new ArgumentNullException(nameof(board));
@@ -5165,7 +5147,7 @@ public static partial class Extensions
 	/// <param name="from">The start date for searching.</param>
 	/// <param name="to">The end date for searching.</param>
 	/// <returns>Filtered messages.</returns>
-	public static IEnumerable<TMessage> Filter<TMessage>(this IEnumerable<TMessage> messages, DateTimeOffset from, DateTimeOffset to)
+	public static IEnumerable<TMessage> Filter<TMessage>(this IEnumerable<TMessage> messages, DateTime from, DateTime to)
 		where TMessage : IServerTimeMessage
 	{
 		if (messages == null)
@@ -5430,7 +5412,7 @@ public static partial class Extensions
 	public static IEnumerable<QuoteChangeMessage> ToOrderBooks(this IEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default, int maxDepth = int.MaxValue)
 	{
 		var snapshotSent = false;
-		var prevTime = default(DateTimeOffset?);
+		var prevTime = default(DateTime?);
 
 		foreach (var item in items)
 		{

@@ -18,7 +18,7 @@ partial class Strategy
 		remove { }
 	}
 
-	event Action<long, DateTimeOffset> ITransactionProvider.MassOrderCanceled2
+	event Action<long, DateTime> ITransactionProvider.MassOrderCanceled2
 	{
 		add { }
 		remove { }
@@ -30,7 +30,7 @@ partial class Strategy
 		remove { }
 	}
 
-	event Action<long, Exception, DateTimeOffset> ITransactionProvider.MassOrderCancelFailed2
+	event Action<long, Exception, DateTime> ITransactionProvider.MassOrderCancelFailed2
 	{
 		add { }
 		remove { }

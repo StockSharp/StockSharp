@@ -19,7 +19,7 @@ public class MaxDrawdownPercentParameter(MaxDrawdownParameter underlying) : Base
 	private readonly MaxDrawdownParameter _underlying = underlying ?? throw new ArgumentNullException(nameof(underlying));
 
 	/// <inheritdoc />
-	public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+	public override void Add(DateTime marketTime, decimal pnl, decimal? commission)
 	{
 		var maxEquity = _underlying.MaxEquity;
 

@@ -65,54 +65,54 @@ public class DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType 
 	public bool CheckUnique { get; set; }
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages, CreateExecutionTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages, CreateExecutionTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages, CreateExecutionTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages.ToTimeQuotes(), CreateMarketDepthQuoteTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages, CreateLevel1Table, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages, CreateCandleTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages, CreateNewsTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages, CreateSecurityTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages, CreatePositionChangeTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
 		=> Do(values, CreateIndicatorValueTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages, CreateBoardStateTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages, CreateBoardTable, cancellationToken);
 
-	private async Task<(int, DateTimeOffset?)> Do<TValue>(IEnumerable<TValue> values, Action<string, FluentMappingBuilder> createTable, CancellationToken cancellationToken)
+	private async Task<(int, DateTime?)> Do<TValue>(IEnumerable<TValue> values, Action<string, FluentMappingBuilder> createTable, CancellationToken cancellationToken)
 		where TValue : class
 	{
 		if (values is null)
@@ -122,7 +122,7 @@ public class DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType 
 			throw new ArgumentNullException(nameof(createTable));
 
 		var count = 0;
-		var lastTime = default(DateTimeOffset?);
+		var lastTime = default(DateTime?);
 
 		using var db = _connection.CreateConnection();
 		

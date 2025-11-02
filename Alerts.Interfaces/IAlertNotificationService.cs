@@ -16,7 +16,7 @@ public interface IAlertNotificationService : ILogSource
 	/// <param name="time">Creation time.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	ValueTask NotifyAsync(AlertNotifications type, long? externalId, LogLevels logLevel, string caption, string message, DateTimeOffset time, CancellationToken cancellationToken);
+	ValueTask NotifyAsync(AlertNotifications type, long? externalId, LogLevels logLevel, string caption, string message, DateTime time, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -33,5 +33,5 @@ public interface IDesktopPopupService : ILogSource
 	/// <param name="iconKey">Icon to show with notification.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>Task result is true if user has clicked the notification.</returns>
-	ValueTask<bool> NotifyAsync(DateTimeOffset time, string caption, string message, string iconKey, CancellationToken cancellationToken);
+	ValueTask<bool> NotifyAsync(DateTime time, string caption, string message, string iconKey, CancellationToken cancellationToken);
 }

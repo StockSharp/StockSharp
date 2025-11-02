@@ -253,7 +253,7 @@ public class DiagramSocketType : Equatable<DiagramSocketType>, INotifyPropertyCh
 	/// <summary>
 	/// Strategy.
 	/// </summary>
-	public static readonly DiagramSocketType Date = RegisterType<DateTimeOffset>(LocalizedStrings.Date, Color.Chocolate);
+	public static readonly DiagramSocketType Date = RegisterType<DateTime>(LocalizedStrings.Date, Color.Chocolate);
 
 	/// <summary>
 	/// Connector.

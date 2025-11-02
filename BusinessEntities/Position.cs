@@ -290,13 +290,13 @@ public class Position : NotifiableObject, ILocalTimeMessage, IServerTimeMessage
 	/// </summary>
 	[Browsable(false)]
 	[Obsolete("Use 'ServerTime' property.")]
-	public DateTimeOffset LastChangeTime
+	public DateTime LastChangeTime
 	{
 		get => ServerTime;
 		set => ServerTime = value;
 	}
 
-	private DateTimeOffset _serverTime;
+	private DateTime _serverTime;
 
 	/// <summary>
 	/// Time of last position change.
@@ -308,7 +308,7 @@ public class Position : NotifiableObject, ILocalTimeMessage, IServerTimeMessage
 		Description = LocalizedStrings.TimePosLastChangeKey,
 		GroupName = LocalizedStrings.StatisticsKey)]
 	[Browsable(false)]
-	public DateTimeOffset ServerTime
+	public DateTime ServerTime
 	{
 		get => _serverTime;
 		set
@@ -318,7 +318,7 @@ public class Position : NotifiableObject, ILocalTimeMessage, IServerTimeMessage
 		}
 	}
 
-	private DateTimeOffset _localTime;
+	private DateTime _localTime;
 
 	/// <summary>
 	/// Local time of the last position change.
@@ -330,7 +330,7 @@ public class Position : NotifiableObject, ILocalTimeMessage, IServerTimeMessage
 		Description = LocalizedStrings.LocalTimeDescKey,
 		GroupName = LocalizedStrings.StatisticsKey)]
 	[Browsable(false)]
-	public DateTimeOffset LocalTime
+	public DateTime LocalTime
 	{
 		get => _localTime;
 		set
@@ -382,7 +382,7 @@ public class Position : NotifiableObject, ILocalTimeMessage, IServerTimeMessage
 		}
 	}
 
-	private DateTimeOffset? _expirationDate;
+	private DateTime? _expirationDate;
 
 	/// <summary>
 	/// Expiration date.
@@ -393,7 +393,7 @@ public class Position : NotifiableObject, ILocalTimeMessage, IServerTimeMessage
 		Name = LocalizedStrings.ExpiryDateKey,
 		Description = LocalizedStrings.ExpiryDateKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset? ExpirationDate
+	public DateTime? ExpirationDate
 	{
 		get => _expirationDate;
 		set

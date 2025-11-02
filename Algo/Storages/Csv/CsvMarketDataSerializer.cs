@@ -47,7 +47,7 @@ class CsvMetaInfo(DateTime date, Encoding encoding, Func<FastCsvReader, object> 
 
 				if (!firstTimeRead)
 				{
-					FirstTime = reader.ReadTime(Date).UtcDateTime;
+					FirstTime = reader.ReadTime(Date);
 					firstTimeRead = true;
 				}
 
@@ -63,7 +63,7 @@ class CsvMetaInfo(DateTime date, Encoding encoding, Func<FastCsvReader, object> 
 				if (!reader.NextLine())
 					throw new InvalidOperationException();
 
-				LastTime = reader.ReadTime(Date).UtcDateTime;
+				LastTime = reader.ReadTime(Date);
 				_lastId = readId?.Invoke(reader);
 				IncrementalOnly = readIncrementalOnly?.Invoke(reader);
 			}

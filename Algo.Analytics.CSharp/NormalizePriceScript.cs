@@ -13,7 +13,7 @@ public class NormalizePriceScript : IAnalyticsScript
 			return Task.CompletedTask;
 		}
 
-		var chart = panel.CreateChart<DateTimeOffset, decimal>();
+		var chart = panel.CreateChart<DateTime, decimal>();
 
 		foreach (var security in securities)
 		{
@@ -21,7 +21,7 @@ public class NormalizePriceScript : IAnalyticsScript
 			if (cancellationToken.IsCancellationRequested)
 				break;
 
-			var series = new Dictionary<DateTimeOffset, decimal>();
+			var series = new Dictionary<DateTime, decimal>();
 
 			// get candle storage
 			var candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format);

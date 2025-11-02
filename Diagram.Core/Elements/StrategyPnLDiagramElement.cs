@@ -33,7 +33,7 @@ public class StrategyPnLDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
-	protected override void OnStart(DateTimeOffset time)
+	protected override void OnStart(DateTime time)
 	{
 		Strategy.PnLReceived2 += OnStrategyPnLReceived;
 
@@ -48,7 +48,7 @@ public class StrategyPnLDiagramElement : DiagramElement
 		base.OnStop();
 	}
 
-	private void OnStrategyPnLReceived(Subscription subscription, Portfolio pf, DateTimeOffset time, decimal realized, decimal? unrealized, decimal? commission)
+	private void OnStrategyPnLReceived(Subscription subscription, Portfolio pf, DateTime time, decimal realized, decimal? unrealized, decimal? commission)
 	{
 		RaiseProcessOutput(_pnlUnrealizedSocket, time, new Unit(unrealized ?? 0), null, subscription);
 		RaiseProcessOutput(_pnlRealizedSocket, time, new Unit(realized), null, subscription);

@@ -49,7 +49,7 @@ partial class BtceMessageAdapter
 			SendOutMessage(new Level1ChangeMessage
 			{
 				SecurityId = secId,
-				ServerTime = reply.Timestamp.ApplyUtc()
+				ServerTime = reply.Timestamp.UtcKind()
 			}
 			.TryAdd(Level1Fields.MinPrice, minPrice)
 			.TryAdd(Level1Fields.MaxPrice, info.MaxPrice.ToDecimal())
@@ -91,7 +91,7 @@ partial class BtceMessageAdapter
 		{
 			if (mdMsg.From is not null)
 			{
-				var to = mdMsg.To ?? DateTimeOffset.UtcNow;
+				var to = mdMsg.To ?? DateTime.UtcNow;
 				var left = mdMsg.Count ?? long.MaxValue;
 
 				var trades = (await _httpClient.GetTrades(5000, new[] { currency }, cancellationToken)).Items.TryGetValue(currency);
@@ -147,7 +147,7 @@ partial class BtceMessageAdapter
 			Bids = book.Bids?.Select(ToChange).ToArray() ?? Array.Empty<QuoteChange>(),
 			Asks = book.Asks?.Select(ToChange).ToArray() ?? Array.Empty<QuoteChange>(),
 			State = state,
-			ServerTime = CurrentTime.ConvertToUtc(),
+			ServerTime = CurrentTimeUtc,
 		});
 	}
 
@@ -161,7 +161,7 @@ partial class BtceMessageAdapter
 				DataTypeEx = DataType.Ticks,
 				TradePrice = trade.Price,
 				TradeVolume = trade.Size,
-				ServerTime = CurrentTime.ConvertToUtc(),
+				ServerTime = CurrentTimeUtc,
 				OriginSide = trade.Side.ToSide()
 			});	
 		}

@@ -51,7 +51,7 @@ class NewsBinarySerializer(IExchangeInfoProvider exchangeInfoProvider) : BinaryM
 		{
 			var first = messages.First();
 
-			metaInfo.ServerOffset = first.ServerTime.Offset;
+			metaInfo.ServerOffset = default;
 			metaInfo.FirstSeqNum = metaInfo.PrevSeqNum = first.SeqNum;
 		}
 
@@ -147,7 +147,7 @@ class NewsBinarySerializer(IExchangeInfoProvider exchangeInfoProvider) : BinaryM
 		if (metaInfo.Version < MarketDataVersions.Version50)
 			return message;
 
-		message.ExpiryDate = reader.Read() ? reader.ReadLong().To<DateTimeOffset>() : null;
+		message.ExpiryDate = reader.Read() ? reader.ReadLong().To<DateTime>() : null;
 
 		var secBoard = reader.ReadStringEx();
 		if (!secBoard.IsEmpty() && message.SecurityId != null)

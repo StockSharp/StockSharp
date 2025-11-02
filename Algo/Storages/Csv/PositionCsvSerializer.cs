@@ -43,7 +43,7 @@ public class PositionCsvSerializer(SecurityId securityId, Encoding encoding) : C
 
 			if (type == PositionChangeTypes.ExpirationDate)
 			{
-				var date = (DateTimeOffset?)value;
+				var date = (DateTime?)value;
 				row.AddRange([date?.WriteDate(), date?.WriteTime(), date?.ToString("zzz")]);
 			}
 			else
@@ -52,7 +52,7 @@ public class PositionCsvSerializer(SecurityId securityId, Encoding encoding) : C
 
 		writer.WriteRow(row);
 
-		metaInfo.LastTime = data.ServerTime.UtcDateTime;
+		metaInfo.LastTime = data.ServerTime;
 	}
 
 	/// <inheritdoc />

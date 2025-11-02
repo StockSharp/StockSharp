@@ -26,11 +26,11 @@ partial class MarketRuleHelper
 		}
 	}
 
-	private class TimeComeRule : MarketRule<ITimeProvider, DateTimeOffset>
+	private class TimeComeRule : MarketRule<ITimeProvider, DateTime>
 	{
 		private readonly MarketTimer _timer;
 
-		public TimeComeRule(ITimeProvider provider, IEnumerable<DateTimeOffset> times)
+		public TimeComeRule(ITimeProvider provider, IEnumerable<DateTime> times)
 			: base(provider)
 		{
 			if (provider is null)
@@ -39,10 +39,10 @@ partial class MarketRuleHelper
 			if (times == null)
 				throw new ArgumentNullException(nameof(times));
 
-			var currentTime = provider.CurrentTime;
+			var currentTime = provider.CurrentTimeUtc;
 
 			var intervals = new SynchronizedQueue<TimeSpan>();
-			var timesList = new SynchronizedList<DateTimeOffset>();
+			var timesList = new SynchronizedList<DateTime>();
 
 			foreach (var time in times)
 			{
@@ -102,8 +102,8 @@ partial class MarketRuleHelper
 	/// <param name="provider"><see cref="ITimeProvider"/></param>
 	/// <param name="times">The exact time. Several values may be sent.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<ITimeProvider, DateTimeOffset> WhenTimeCome(this ITimeProvider provider, params DateTimeOffset[] times)
-		=> provider.WhenTimeCome((IEnumerable<DateTimeOffset>)times);
+	public static MarketRule<ITimeProvider, DateTime> WhenTimeCome(this ITimeProvider provider, params DateTime[] times)
+		=> provider.WhenTimeCome((IEnumerable<DateTime>)times);
 
 	/// <summary>
 	/// To create a rule, activated at the exact time, specified through <paramref name="times" />.
@@ -111,7 +111,7 @@ partial class MarketRuleHelper
 	/// <param name="provider"><see cref="ITimeProvider"/></param>
 	/// <param name="times">The exact time. Several values may be sent.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<ITimeProvider, DateTimeOffset> WhenTimeCome(this ITimeProvider provider, IEnumerable<DateTimeOffset> times)
+	public static MarketRule<ITimeProvider, DateTime> WhenTimeCome(this ITimeProvider provider, IEnumerable<DateTime> times)
 		=> new TimeComeRule(provider, times);
 
 	/// <summary>

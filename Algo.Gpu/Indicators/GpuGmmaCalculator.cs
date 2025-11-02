@@ -150,7 +150,7 @@ public struct GpuGmmaResult : IGpuIndicatorResult
 	public const int AveragesCount = 12;
 
 	/// <summary>
-	/// Time in <see cref="DateTimeOffset.Ticks"/>.
+	/// Time in <see cref="DateTime.Ticks"/>.
 	/// </summary>
 	public long Time;
 

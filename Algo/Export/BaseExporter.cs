@@ -31,7 +31,7 @@ public abstract class BaseExporter(DataType dataType)
 	/// <param name="values">Value.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	public Task<(int, DateTimeOffset?)> Export(IEnumerable values, CancellationToken cancellationToken)
+	public Task<(int, DateTime?)> Export(IEnumerable values, CancellationToken cancellationToken)
 	{
 		if (values == null)
 			throw new ArgumentNullException(nameof(values));
@@ -73,7 +73,7 @@ public abstract class BaseExporter(DataType dataType)
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTimeOffset?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To export <see cref="Level1ChangeMessage"/>.
@@ -81,7 +81,7 @@ public abstract class BaseExporter(DataType dataType)
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTimeOffset?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To export <see cref="DataType.Ticks"/>.
@@ -89,7 +89,7 @@ public abstract class BaseExporter(DataType dataType)
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTimeOffset?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To export <see cref="DataType.OrderLog"/>.
@@ -97,7 +97,7 @@ public abstract class BaseExporter(DataType dataType)
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTimeOffset?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To export <see cref="DataType.Transactions"/>.
@@ -105,7 +105,7 @@ public abstract class BaseExporter(DataType dataType)
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTimeOffset?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To export <see cref="CandleMessage"/>.
@@ -113,7 +113,7 @@ public abstract class BaseExporter(DataType dataType)
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTimeOffset?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To export <see cref="NewsMessage"/>.
@@ -121,7 +121,7 @@ public abstract class BaseExporter(DataType dataType)
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTimeOffset?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To export <see cref="SecurityMessage"/>.
@@ -129,7 +129,7 @@ public abstract class BaseExporter(DataType dataType)
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTimeOffset?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To export <see cref="PositionChangeMessage"/>.
@@ -137,7 +137,7 @@ public abstract class BaseExporter(DataType dataType)
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTimeOffset?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To export <see cref="IndicatorValue"/>.
@@ -145,7 +145,7 @@ public abstract class BaseExporter(DataType dataType)
 	/// <param name="values">Values.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTimeOffset?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To export <see cref="BoardStateMessage"/>.
@@ -153,7 +153,7 @@ public abstract class BaseExporter(DataType dataType)
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To export <see cref="BoardMessage"/> and its derived types.
@@ -161,5 +161,5 @@ public abstract class BaseExporter(DataType dataType)
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken);
 }

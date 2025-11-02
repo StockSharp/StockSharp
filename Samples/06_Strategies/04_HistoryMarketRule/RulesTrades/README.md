@@ -10,7 +10,7 @@ This strategy listens for tick trades for a specific security and sets up a comp
 Upon starting, the strategy subscribes to trade ticks for the specified security and sets up a compound rule to monitor trade prices:
 
 ```csharp
-protected override void OnStarted(DateTimeOffset time)
+protected override void OnStarted2(DateTime time)
 {
     var sub = new Subscription(DataType.Ticks, Security);
 
@@ -30,7 +30,7 @@ protected override void OnStarted(DateTimeOffset time)
     // Sending request for subscribe to market data.
     Subscribe(sub);
 
-    base.OnStarted(time);
+    base.OnStarted2(time);
 }
 ```
 

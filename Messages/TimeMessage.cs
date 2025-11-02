@@ -36,7 +36,7 @@ public class TimeMessage : Message, ITransactionIdMessage, IServerTimeMessage
 
 	/// <inheritdoc />
 	[DataMember]
-	public DateTimeOffset ServerTime { get; set; }
+	public DateTime ServerTime { get; set; }
 
 	/// <inheritdoc />
 	public override string ToString()

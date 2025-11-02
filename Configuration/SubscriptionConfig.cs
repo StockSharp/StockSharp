@@ -33,12 +33,12 @@ public record SubscriptionConfig : IPersistable
 	/// <summary>
 	/// Optional start time (UTC) of the requested data interval.
 	/// </summary>
-	public DateTimeOffset? From { get; set; }
+	public DateTime? From { get; set; }
 
 	/// <summary>
 	/// Optional end time (UTC) of the requested data interval.
 	/// </summary>
-	public DateTimeOffset? To { get; set; }
+	public DateTime? To { get; set; }
 
 	/// <summary>
 	/// Optional maximum number of data items to request.

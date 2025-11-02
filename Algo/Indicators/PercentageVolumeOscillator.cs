@@ -128,7 +128,7 @@ public class PercentageVolumeOscillator : BaseComplexIndicator<IPercentageVolume
 	public override string ToString() => base.ToString() + $" S={ShortPeriod},L={LongPeriod}";
 
 	/// <inheritdoc />
-	protected override IPercentageVolumeOscillatorValue CreateValue(DateTimeOffset time)
+	protected override IPercentageVolumeOscillatorValue CreateValue(DateTime time)
 		=> new PercentageVolumeOscillatorValue(this, time);
 }
 
@@ -168,7 +168,7 @@ public interface IPercentageVolumeOscillatorValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent Percentage Volume Oscillator indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class PercentageVolumeOscillatorValue(PercentageVolumeOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<PercentageVolumeOscillator>(indicator, time), IPercentageVolumeOscillatorValue
+public class PercentageVolumeOscillatorValue(PercentageVolumeOscillator indicator, DateTime time) : ComplexIndicatorValue<PercentageVolumeOscillator>(indicator, time), IPercentageVolumeOscillatorValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue ShortEmaValue => this[TypedIndicator.ShortEma];

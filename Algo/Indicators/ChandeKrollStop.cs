@@ -164,7 +164,7 @@ public class ChandeKrollStop : BaseComplexIndicator<IChandeKrollStopValue>
 	}
 
 	/// <inheritdoc />
-	protected override IChandeKrollStopValue CreateValue(DateTimeOffset time)
+	protected override IChandeKrollStopValue CreateValue(DateTime time)
 		=> new ChandeKrollStopValue(this, time);
 }
 
@@ -201,7 +201,7 @@ public interface IChandeKrollStopValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent ChandeKrollStop indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class ChandeKrollStopValue(ChandeKrollStop indicator, DateTimeOffset time) : ComplexIndicatorValue<ChandeKrollStop>(indicator, time), IChandeKrollStopValue
+public class ChandeKrollStopValue(ChandeKrollStop indicator, DateTime time) : ComplexIndicatorValue<ChandeKrollStop>(indicator, time), IChandeKrollStopValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue HighestValue => this[TypedIndicator.Highest];

@@ -5,13 +5,13 @@ using StockSharp.Algo.Commissions;
 [TestClass]
 public class CommissionTests
 {
-	private static DateTimeOffset Inc(ref DateTimeOffset time)
+	private static DateTime Inc(ref DateTime time)
 	{
 		time = time.AddHours(1);
 		return time;
 	}
 
-	private static ExecutionMessage CreateOrderMessage(decimal price, decimal volume, DateTimeOffset time)
+	private static ExecutionMessage CreateOrderMessage(decimal price, decimal volume, DateTime time)
 	{
 		return new()
 		{
@@ -23,7 +23,7 @@ public class CommissionTests
 		};
 	}
 
-	private static ExecutionMessage CreateTradeMessage(decimal price, decimal volume, DateTimeOffset time)
+	private static ExecutionMessage CreateTradeMessage(decimal price, decimal volume, DateTime time)
 	{
 		return new()
 		{
@@ -37,7 +37,7 @@ public class CommissionTests
 	[TestMethod]
 	public void PerOrderRule()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		// Arrange
 		var rule = new CommissionOrderRule
@@ -64,7 +64,7 @@ public class CommissionTests
 	[TestMethod]
 	public void PerTradeRule()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		// Arrange
 		var rule = new CommissionTradeRule
@@ -91,7 +91,7 @@ public class CommissionTests
 	[TestMethod]
 	public void PerOrderVolumeRule()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		// Arrange
 		var rule = new CommissionOrderVolumeRule
@@ -113,7 +113,7 @@ public class CommissionTests
 	[TestMethod]
 	public void PerTradeVolumeRule()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		// Arrange
 		var rule = new CommissionTradeVolumeRule
@@ -135,7 +135,7 @@ public class CommissionTests
 	[TestMethod]
 	public void PerOrderCountRule()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		// Arrange
 		var rule = new CommissionOrderCountRule
@@ -177,7 +177,7 @@ public class CommissionTests
 	[TestMethod]
 	public void PerTradeCountRule()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		// Arrange
 		var rule = new CommissionTradeCountRule
@@ -216,7 +216,7 @@ public class CommissionTests
 	[TestMethod]
 	public void PerTradePriceRule()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		// Arrange
 		var rule = new CommissionTradePriceRule
@@ -238,7 +238,7 @@ public class CommissionTests
 	[TestMethod]
 	public void SecurityIdRule()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		// Arrange
 		var securityId = new SecurityId { SecurityCode = "AAPL", BoardCode = BoardCodes.Nasdaq };
@@ -297,7 +297,7 @@ public class CommissionTests
 	[TestMethod]
 	public void BoardCodeRule()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		// Arrange
 		var board = new ExchangeBoard { Code = BoardCodes.Nasdaq };
@@ -355,7 +355,7 @@ public class CommissionTests
 	[TestMethod]
 	public void TurnOverRule()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		// Arrange
 		var rule = new CommissionTurnOverRule
@@ -389,7 +389,7 @@ public class CommissionTests
 	[TestMethod]
 	public void SecurityTypeRule()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		// Arrange
 		var rule = new CommissionSecurityTypeRule
@@ -414,7 +414,7 @@ public class CommissionTests
 	[TestMethod]
 	public void SecurityTypeRuleSecProvider()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		var secId = new SecurityId { SecurityCode = "AAPL", BoardCode = BoardCodes.Nasdaq };
 		var appl = new Security { Id = secId.ToStringId(), Type = SecurityTypes.Stock };
@@ -464,7 +464,7 @@ public class CommissionTests
 	[TestMethod]
 	public void ManagerOrderMessage()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		var manager = CreateManager();
 
@@ -489,7 +489,7 @@ public class CommissionTests
 	[TestMethod]
 	public void ManagerTradeMessage()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		var manager = CreateManager();
 
@@ -513,7 +513,7 @@ public class CommissionTests
 	[TestMethod]
 	public void ManagerOrderAndTradeMessages()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		var manager = CreateManager();
 
@@ -546,7 +546,7 @@ public class CommissionTests
 	[TestMethod]
 	public void ManagerResetMessage()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		var manager = CreateManager();
 
@@ -575,7 +575,7 @@ public class CommissionTests
 	[TestMethod]
 	public void ManagerEmptyRules()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		var manager = CreateManager();
 
@@ -647,7 +647,7 @@ public class CommissionTests
 	[TestMethod]
 	public void ManagerReset()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		var manager = CreateManager();
 
@@ -825,7 +825,7 @@ public class CommissionTests
 	[TestMethod]
 	public void PerOrderCountRulePartialFill()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		var rule = new CommissionOrderCountRule
 		{
 			Value = 10m,
@@ -871,7 +871,7 @@ public class CommissionTests
 	[TestMethod]
 	public void PerOrderTradeTurnover()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		var rule = new CommissionOrderRule
 		{
 			Value = new Unit { Value = 1m, Type = UnitTypes.Percent }
@@ -896,7 +896,7 @@ public class CommissionTests
 	[TestMethod]
 	public void TurnOverRuleRepeatedTrigger()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		// Arrange
 		var rule = new CommissionTurnOverRule
@@ -927,7 +927,7 @@ public class CommissionTests
 	[TestMethod]
 	public void PerOrderVolumeRuleWithPercent()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		// Arrange
 		var rule = new CommissionOrderVolumeRule
@@ -961,7 +961,7 @@ public class CommissionTests
 	[TestMethod]
 	public void PerTradeVolumeRuleWithPercent()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		// Arrange
 		var rule = new CommissionTradeVolumeRule
@@ -980,7 +980,7 @@ public class CommissionTests
 	[TestMethod]
 	public void PerTradePriceRuleWithPercent()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		// Arrange
 		var rule = new CommissionTradePriceRule

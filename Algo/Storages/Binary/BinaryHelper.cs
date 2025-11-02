@@ -232,18 +232,20 @@ static class BinaryHelper
 		return id;
 	}
 
-	public static DateTime WriteTime(this BitArrayWriter writer, DateTimeOffset dto, DateTime prevTime, string name, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, bool isTickPrecision, ref TimeSpan prevOffset, bool bigRange = false)
+	public static DateTime WriteTime(this BitArrayWriter writer, DateTime dt, DateTime prevTime, string name, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, bool isTickPrecision, ref TimeSpan prevOffset, bool bigRange = false)
 	{
 		if (writer == null)
 			throw new ArgumentNullException(nameof(writer));
 
+		var dtOffset = TimeSpan.Zero;//dt.Offset;
+
 		if (allowDiffOffsets)
 		{
-			writer.Write(dto.Offset == prevOffset);
+			writer.Write(dtOffset == prevOffset);
 
-			if (prevOffset != dto.Offset)
+			if (prevOffset != dtOffset)
 			{
-				prevOffset = dto.Offset;
+				prevOffset = dtOffset;
 
 				writer.WriteInt(prevOffset.Hours);
 
@@ -253,13 +255,13 @@ static class BinaryHelper
 					writer.WriteInt(prevOffset.Minutes);
 			}
 		}
-		else if (isUtc && dto.Offset != offset)
-			throw new ArgumentException(LocalizedStrings.WrongTimeOffset.Put(dto, offset));
+		else if (isUtc && dtOffset != offset)
+			throw new ArgumentException(LocalizedStrings.WrongTimeOffset.Put(dt, offset));
 
 		if (!isTickPrecision)
-			dto = dto.StorageBinaryOldTruncate();
+			dt = dt.StorageBinaryOldTruncate();
 
-		var time = isUtc ? dto.UtcDateTime : dto.LocalDateTime;
+		var time = isUtc ? dt : dt.ToLocalTime();
 
 		var timeDiff = time - prevTime;
 
@@ -290,7 +292,7 @@ static class BinaryHelper
 					if (timeDiff.Days > 0)
 					{
 						if (!bigRange)
-							throw new ArgumentOutOfRangeException(nameof(dto), LocalizedStrings.BigRangeError.Put(prevTime, dto));
+							throw new ArgumentOutOfRangeException(nameof(dt), LocalizedStrings.BigRangeError.Put(prevTime, dt));
 
 						writer.Write(true);
 						writer.WriteInt(timeDiff.Days);
@@ -312,7 +314,7 @@ static class BinaryHelper
 		else
 		{
 			if (timeDiff < TimeSpan.Zero)
-				throw new ArgumentException(LocalizedStrings.UnsortedData.Put(name, prevTime, time), nameof(dto));
+				throw new ArgumentException(LocalizedStrings.UnsortedData.Put(name, prevTime, time), nameof(dt));
 
 			if (timeDiff >= TimeSpan.FromMinutes(1))
 			{
@@ -342,7 +344,7 @@ static class BinaryHelper
 		return time;
 	}
 
-	public static DateTimeOffset ReadTime(this BitArrayReader reader, ref DateTime prevTime, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, bool isTickPrecision, ref TimeSpan prevOffset)
+	public static DateTime ReadTime(this BitArrayReader reader, ref DateTime prevTime, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, bool isTickPrecision, ref TimeSpan prevOffset)
 	{
 		if (allowDiffOffsets)
 		{
@@ -411,7 +413,7 @@ static class BinaryHelper
 
 		prevTime = new DateTime(time, isUtc ? DateTimeKind.Utc : DateTimeKind.Unspecified);
 
-		return (isUtc ? new DateTime(time + offset.Ticks) : prevTime).ApplyTimeZone(offset);
+		return (isUtc ? new DateTime(time + offset.Ticks) : prevTime).ApplyTimeZone(offset).UtcDateTime;
 	}
 
 	public static void WriteVolume(this BitArrayWriter writer, decimal volume, BinaryMetaInfo info, bool largeDecimal)
@@ -567,27 +569,27 @@ static class BinaryHelper
 		return reader.ReadLong();
 	}
 
-	public static bool HasLocalTime(this Message msg, DateTimeOffset serverTime)
+	public static bool HasLocalTime(this Message msg, DateTime serverTime)
 	{
 		return msg.LocalTime != default && msg.LocalTime != serverTime/* && (msg.LocalTime - serverTime).TotalHours.Abs() < 1*/;
 	}
 
-	public static void WriteDto(this BitArrayWriter writer, DateTimeOffset? dto)
+	public static void WriteDto(this BitArrayWriter writer, DateTime? dt)
 	{
-		if (dto != null)
+		if (dt != null)
 		{
 			writer.Write(true);
-			writer.WriteLong(dto.Value.Ticks);
-			writer.WriteInt(dto.Value.Offset.Hours);
-			writer.WriteInt(dto.Value.Offset.Minutes);
+			writer.WriteLong(dt.Value.Ticks);
+			writer.WriteInt(0/*dto.Value.Offset.Hours*/);
+			writer.WriteInt(0/*dto.Value.Offset.Minutes*/);
 		}
 		else
 			writer.Write(false);
 	}
 
-	public static DateTimeOffset? ReadDto(this BitArrayReader reader)
+	public static DateTime? ReadDto(this BitArrayReader reader)
 	{
-		return reader.Read() ? reader.ReadLong().To<DateTime>().ApplyTimeZone(new TimeSpan(reader.ReadInt(), reader.ReadInt(), 0)) : null;
+		return reader.Read() ? reader.ReadLong().To<DateTime>().ApplyTimeZone(new TimeSpan(reader.ReadInt(), reader.ReadInt(), 0)).UtcDateTime : null;
 	}
 
 	public static void WriteBuildFrom(this BitArrayWriter writer, DataType buildFrom)

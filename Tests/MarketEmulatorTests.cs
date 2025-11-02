@@ -20,7 +20,7 @@ public class MarketEmulatorTests
 	private const string _pfName = Messages.Extensions.SimulatorPortfolioName;
 	private static readonly IdGenerator _idGenerator = new IncrementalIdGenerator();
 
-	private static void AddBook(IMarketEmulator emu, SecurityId secId, DateTimeOffset now, decimal bid = 100, decimal ask = 101)
+	private static void AddBook(IMarketEmulator emu, SecurityId secId, DateTime now, decimal bid = 100, decimal ask = 101)
 	{
 		emu.SendInMessage(new QuoteChangeMessage
 		{
@@ -39,7 +39,7 @@ public class MarketEmulatorTests
 		{
 			return new ExecutionMessage
 			{
-				LocalTime = DateTimeOffset.UtcNow,
+				LocalTime = DateTime.UtcNow,
 				SecurityId = secId,
 				Side = side,
 				OrderPrice = price,
@@ -65,7 +65,7 @@ public class MarketEmulatorTests
 
 		emu.SendInMessage(new ExecutionMessage
 		{
-			LocalTime = DateTimeOffset.UtcNow,
+			LocalTime = DateTime.UtcNow,
 			SecurityId = id,
 			Side = Sides.Buy,
 			TransactionId = _idGenerator.GetNextId(),
@@ -82,14 +82,14 @@ public class MarketEmulatorTests
 		{
 			SecurityId = SecurityId.Money,
 			PortfolioName = "test",
-			LocalTime = DateTimeOffset.UtcNow,
+			LocalTime = DateTime.UtcNow,
 		}
 		.Add(PositionChangeTypes.BeginValue, 100000000m)
 		.Add(PositionChangeTypes.CurrentValue, 100000000m));
 
 		emu.SendInMessage(new ExecutionMessage
 		{
-			LocalTime = DateTimeOffset.UtcNow,
+			LocalTime = DateTime.UtcNow,
 			SecurityId = id,
 			Side = Sides.Buy,
 			TransactionId = _idGenerator.GetNextId(),
@@ -108,7 +108,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		var reg = new OrderRegisterMessage
@@ -135,7 +135,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		var reg = new OrderRegisterMessage
@@ -162,7 +162,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		var reg = new OrderRegisterMessage
@@ -191,7 +191,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		var reg = new OrderRegisterMessage
@@ -223,7 +223,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		var reg = new OrderRegisterMessage
@@ -252,7 +252,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		var reg = new OrderRegisterMessage
@@ -279,7 +279,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		var reg = new OrderRegisterMessage
@@ -311,7 +311,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		var reg = new OrderRegisterMessage
@@ -343,7 +343,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		var reg = new OrderRegisterMessage
@@ -374,7 +374,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		var reg = new OrderRegisterMessage
@@ -406,7 +406,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		var reg = new OrderRegisterMessage
@@ -438,7 +438,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		var reg = new OrderRegisterMessage
@@ -469,7 +469,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		var reg = new OrderRegisterMessage
@@ -518,7 +518,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		var reg = new OrderRegisterMessage
@@ -567,7 +567,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		var reg = new OrderRegisterMessage
@@ -598,7 +598,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		var reg = new OrderRegisterMessage
@@ -629,7 +629,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		var expiry = DateTime.UtcNow.AddDays(1);
 
 		var reg = new OrderRegisterMessage
@@ -672,7 +672,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow.AddDays(1);
+		var now = DateTime.UtcNow.AddDays(1);
 		var expiry = DateTime.UtcNow;
 
 		var reg = new OrderRegisterMessage
@@ -701,7 +701,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		var reg = new OrderRegisterMessage
@@ -755,7 +755,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		var reg = new OrderRegisterMessage
@@ -814,7 +814,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		var reg = new OrderRegisterMessage
@@ -858,7 +858,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		emu.SendInMessage(new MarketDataMessage
 		{
 			TransactionId = _idGenerator.GetNextId(),
@@ -905,7 +905,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		emu.SendInMessage(new ExecutionMessage
 		{
@@ -944,7 +944,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		emu.SendInMessage(new Level1ChangeMessage
 		{
@@ -985,7 +985,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		emu.SendInMessage(new ExecutionMessage
 		{
@@ -1025,7 +1025,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		emu.SendInMessage(new ExecutionMessage
 		{
@@ -1063,7 +1063,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		emu.SendInMessage(new ExecutionMessage
 		{
@@ -1124,7 +1124,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		// Create two limit orders
@@ -1217,7 +1217,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		// Create a long position by executing a buy order
@@ -1293,7 +1293,7 @@ public class MarketEmulatorTests
 		var id1 = Helper.CreateSecurityId();
 		var id2 = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents([id1, id2], out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id1, now);
 		AddBook(emu, id2, now);
 
@@ -1383,7 +1383,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		// Create a long position (buy)
@@ -1473,7 +1473,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		// Create a limit order that stays in the book
@@ -1581,7 +1581,7 @@ public class MarketEmulatorTests
 		var id1 = Helper.CreateSecurityId();
 		var id2 = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents([id1, id2], out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id1, now);
 		AddBook(emu, id2, now);
 
@@ -1667,7 +1667,7 @@ public class MarketEmulatorTests
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		AddBook(emu, id, now);
 
 		// Create buy and sell orders

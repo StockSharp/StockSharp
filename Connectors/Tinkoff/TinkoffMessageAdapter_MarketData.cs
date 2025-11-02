@@ -58,8 +58,8 @@ public partial class TinkoffMessageAdapter
 								SendOutMessage(new TimeFrameCandleMessage
 								{
 									OriginalTransactionId = transId,
-									OpenTime = c.Time.ToDateTimeOffset(),
-									CloseTime = c.LastTradeTs?.ToDateTimeOffset() ?? default,
+									OpenTime = c.Time.ToDateTime(),
+									CloseTime = c.LastTradeTs?.ToDateTime() ?? default,
 									OpenPrice = c.Open?.ToDecimal() ?? default,
 									HighPrice = c.High?.ToDecimal() ?? default,
 									LowPrice = c.Low?.ToDecimal() ?? default,
@@ -78,7 +78,7 @@ public partial class TinkoffMessageAdapter
 								{
 									DataTypeEx = DataType.Ticks,
 									OriginalTransactionId = transId,
-									ServerTime = t.Time.ToDateTimeOffset(),
+									ServerTime = t.Time.ToDateTime(),
 									TradePrice = t.Price?.ToDecimal(),
 									TradeVolume = t.Quantity,
 									OriginSide = t.Direction.ToSide(),
@@ -94,7 +94,7 @@ public partial class TinkoffMessageAdapter
 								SendOutMessage(new Level1ChangeMessage
 								{
 									OriginalTransactionId = transId,
-									ServerTime = p.Time.ToDateTimeOffset(),
+									ServerTime = p.Time.ToDateTime(),
 								}.TryAdd(Level1Fields.LastTradePrice, p.Price?.ToDecimal()));
 							}
 						}
@@ -106,7 +106,7 @@ public partial class TinkoffMessageAdapter
 								SendOutMessage(new Level1ChangeMessage
 								{
 									OriginalTransactionId = transId,
-									ServerTime = s.Time.ToDateTimeOffset(),
+									ServerTime = s.Time.ToDateTime(),
 								}.TryAdd(Level1Fields.State, s.TradingStatus_.ToState()));
 							}
 						}
@@ -121,7 +121,7 @@ public partial class TinkoffMessageAdapter
 								SendOutMessage(new QuoteChangeMessage
 								{
 									OriginalTransactionId = transId,
-									ServerTime = b.Time.ToDateTimeOffset(),
+									ServerTime = b.Time.ToDateTime(),
 
 									Bids = convert(b.Bids),
 									Asks = convert(b.Asks),
@@ -275,7 +275,7 @@ public partial class TinkoffMessageAdapter
 							Multiplier = instr.Lot,
 							SecurityType = SecurityTypes.Stock,
 							Currency = instr.Currency.To<CurrencyTypes?>(),
-							IssueDate = instr.IpoDate?.ToDateTimeOffset(),
+							IssueDate = instr.IpoDate?.ToDateTime(),
 							IssueSize = instr.IssueSize,
 							Shortable = instr.ShortEnabledFlag,
 							PriceStep = instr.MinPriceIncrement?.ToDecimal(),
@@ -305,8 +305,8 @@ public partial class TinkoffMessageAdapter
 							SecurityType = SecurityTypes.Future,
 							Currency = instr.Currency.To<CurrencyTypes?>(),
 							Class = instr.ClassCode,
-							ExpiryDate = instr.ExpirationDate?.ToDateTimeOffset(),
-							IssueDate = instr.FirstTradeDate?.ToDateTimeOffset(),
+							ExpiryDate = instr.ExpirationDate?.ToDateTime(),
+							IssueDate = instr.FirstTradeDate?.ToDateTime(),
 							UnderlyingSecurityType = instr.AssetType.ToSecurityType(),
 							Shortable = instr.ShortEnabledFlag,
 							PriceStep = instr.MinPriceIncrement?.ToDecimal(),
@@ -341,8 +341,8 @@ public partial class TinkoffMessageAdapter
 							Multiplier = instr.Lot,
 							SecurityType = SecurityTypes.Option,
 							Currency = instr.Currency.To<CurrencyTypes?>(),
-							ExpiryDate = instr.ExpirationDate?.ToDateTimeOffset(),
-							IssueDate = instr.FirstTradeDate?.ToDateTimeOffset(),
+							ExpiryDate = instr.ExpirationDate?.ToDateTime(),
+							IssueDate = instr.FirstTradeDate?.ToDateTime(),
 							UnderlyingSecurityType = instr.AssetType.ToSecurityType(),
 							Shortable = instr.ShortEnabledFlag,
 							PriceStep = instr.MinPriceIncrement?.ToDecimal(),
@@ -403,8 +403,8 @@ public partial class TinkoffMessageAdapter
 							Multiplier = instr.Lot,
 							SecurityType = SecurityTypes.Bond,
 							Currency = instr.Currency.To<CurrencyTypes?>(),
-							ExpiryDate = instr.MaturityDate?.ToDateTimeOffset(),
-							IssueDate = instr.StateRegDate?.ToDateTimeOffset(),
+							ExpiryDate = instr.MaturityDate?.ToDateTime(),
+							IssueDate = instr.StateRegDate?.ToDateTime(),
 							IssueSize = instr.IssueSize,
 							Shortable = instr.ShortEnabledFlag,
 							PriceStep = instr.MinPriceIncrement?.ToDecimal(),
@@ -436,7 +436,7 @@ public partial class TinkoffMessageAdapter
 							SecurityType = SecurityTypes.Etf,
 							Currency = instr.Currency.To<CurrencyTypes?>(),
 							Shortable = instr.ShortEnabledFlag,
-							IssueDate = instr.ReleasedDate?.ToDateTimeOffset(),
+							IssueDate = instr.ReleasedDate?.ToDateTime(),
 							IssueSize = instr.NumShares?.ToDecimal(),
 							PriceStep = instr.MinPriceIncrement?.ToDecimal(),
 							OriginalTransactionId = lookupMsg.TransactionId,
@@ -469,7 +469,7 @@ public partial class TinkoffMessageAdapter
 			if (mdMsg.From is not null)
 			{
 				var from = mdMsg.From.Value;
-				var to = mdMsg.To ?? CurrentTime;
+				var to = mdMsg.To ?? CurrentTimeUtc;
 
 				if (tf.ToNative() == SubscriptionInterval.OneMinute && (to - from).TotalDays > 1)
 				{
@@ -510,7 +510,7 @@ public partial class TinkoffMessageAdapter
 					{
 						OriginalTransactionId = mdMsg.TransactionId,
 
-						OpenTime = c.Time.ToDateTimeOffset(),
+						OpenTime = c.Time.ToDateTime(),
 						OpenPrice = c.Open?.ToDecimal() ?? default,
 						HighPrice = c.High?.ToDecimal() ?? default,
 						LowPrice = c.Low?.ToDecimal() ?? default,
@@ -578,7 +578,7 @@ public partial class TinkoffMessageAdapter
 			},
 		}, cancellationToken);
 
-	private async Task<DateTimeOffset> DownloadHistoryAsync(long transId, string figi, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellationToken)
+	private async Task<DateTime> DownloadHistoryAsync(long transId, string figi, DateTime from, DateTime to, CancellationToken cancellationToken)
 	{
 		var last = from;
 		var curr = from;

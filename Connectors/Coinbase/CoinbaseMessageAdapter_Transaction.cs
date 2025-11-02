@@ -26,7 +26,7 @@ public partial class CoinbaseMessageAdapter
 				{
 					DataTypeEx = DataType.Transactions,
 					OrderStringId = withdrawId,
-					ServerTime = CurrentTime.ConvertToUtc(),
+					ServerTime = CurrentTimeUtc,
 					OriginalTransactionId = regMsg.TransactionId,
 					OrderState = OrderStates.Done,
 					HasOrderInfo = true,
@@ -181,7 +181,7 @@ public partial class CoinbaseMessageAdapter
 			{
 				DataTypeEx = DataType.Transactions,
 				OriginalTransactionId = cancelMsg.TransactionId,
-				ServerTime = CurrentTime.ConvertToUtc(),
+				ServerTime = CurrentTimeUtc,
 				HasOrderInfo = true,
 				Error = errors.Count == 1 ? errors[0] : new AggregateException(errors),
 			});
@@ -226,7 +226,7 @@ public partial class CoinbaseMessageAdapter
 					SecurityCode = account.Currency,
 					BoardCode = BoardCodes.Coinbase,
 				},
-				ServerTime = CurrentTime.ConvertToUtc(),
+				ServerTime = CurrentTimeUtc,
 			}
 			.TryAdd(PositionChangeTypes.CurrentValue, (decimal)account.Available, true)
 			.TryAdd(PositionChangeTypes.BlockedValue, (decimal)account.Hold, true));
@@ -263,7 +263,7 @@ public partial class CoinbaseMessageAdapter
 
 		SendOutMessage(new ExecutionMessage
 		{
-			ServerTime = originTransId == 0 ? CurrentTime.ConvertToUtc() : order.CreationTime,
+			ServerTime = originTransId == 0 ? CurrentTimeUtc : order.CreationTime,
 			DataTypeEx = DataType.Transactions,
 			SecurityId = order.Product.ToStockSharp(),
 			TransactionId = originTransId== 0 ? 0 : transId,

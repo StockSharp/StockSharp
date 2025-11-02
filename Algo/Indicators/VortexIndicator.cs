@@ -96,7 +96,7 @@ public class VortexIndicator : BaseComplexIndicator<IVortexIndicatorValue>
 	public override string ToString() => base.ToString() + " " + Length;
 
 	/// <inheritdoc />
-	protected override IVortexIndicatorValue CreateValue(DateTimeOffset time)
+	protected override IVortexIndicatorValue CreateValue(DateTime time)
 		=> new VortexIndicatorValue(this, time);
 }
 
@@ -228,7 +228,7 @@ public interface IVortexIndicatorValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent Vortex Indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class VortexIndicatorValue(VortexIndicator indicator, DateTimeOffset time) : ComplexIndicatorValue<VortexIndicator>(indicator, time), IVortexIndicatorValue
+public class VortexIndicatorValue(VortexIndicator indicator, DateTime time) : ComplexIndicatorValue<VortexIndicator>(indicator, time), IVortexIndicatorValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue PlusViValue => this[TypedIndicator.PlusVi];

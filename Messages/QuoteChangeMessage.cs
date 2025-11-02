@@ -85,7 +85,7 @@ public sealed class QuoteChangeMessage : BaseSubscriptionIdMessage<QuoteChangeMe
 		Name = LocalizedStrings.ServerTimeKey,
 		Description = LocalizedStrings.ChangeServerTimeKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset ServerTime { get; set; }
+	public DateTime ServerTime { get; set; }
 
 	/// <inheritdoc />
 	[DataMember]

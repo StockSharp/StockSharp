@@ -35,7 +35,7 @@ public partial class MainWindow
 	private TimeFrameCandleMessage _candle;
 
 	private readonly DispatcherTimer _chartUpdateTimer = new();
-	private readonly SynchronizedDictionary<DateTimeOffset, TimeFrameCandleMessage> _updatedCandles = new();
+	private readonly SynchronizedDictionary<DateTime, TimeFrameCandleMessage> _updatedCandles = new();
 	private readonly CachedSynchronizedList<TimeFrameCandleMessage> _allCandles = new();
 
 	private const decimal _priceStep = 0.01m;
@@ -491,7 +491,7 @@ public partial class MainWindow
 
 	private void Log(string msg)
 	{
-		LogBox.AppendText($"{DateTime.Now:HH:mm:ss.fff}: {msg}\n");
+		LogBox.AppendText($"{DateTime.UtcNow:HH:mm:ss.fff}: {msg}\n");
 		LogBox.ScrollToEnd();
 	}
 

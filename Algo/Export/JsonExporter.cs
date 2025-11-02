@@ -30,12 +30,12 @@ public class JsonExporter(DataType dataType, Stream stream) : BaseExporter(dataT
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, async (writer, depth, t) =>
 		{
-			await WriteProperty(writer, "s", depth.ServerTime.UtcDateTime, t);
-			await WriteProperty(writer, "l", depth.LocalTime.UtcDateTime, t);
+			await WriteProperty(writer, "s", depth.ServerTime, t);
+			await WriteProperty(writer, "l", depth.LocalTime, t);
 
 			if (depth.State != null)
 				await WriteProperty(writer, "st", depth.State.Value, t);
@@ -85,12 +85,12 @@ public class JsonExporter(DataType dataType, Stream stream) : BaseExporter(dataT
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, async (writer, message, t) =>
 		{
-			await WriteProperty(writer, "s", message.ServerTime.UtcDateTime, t);
-			await WriteProperty(writer, "l", message.LocalTime.UtcDateTime, t);
+			await WriteProperty(writer, "s", message.ServerTime, t);
+			await WriteProperty(writer, "l", message.LocalTime, t);
 
 			if (message.SeqNum != default)
 				await WriteProperty(writer, "sn", message.SeqNum, t);
@@ -101,12 +101,12 @@ public class JsonExporter(DataType dataType, Stream stream) : BaseExporter(dataT
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, async (writer, candle, t) =>
 		{
-			await WriteProperty(writer, "open", candle.OpenTime.UtcDateTime, t);
-			await WriteProperty(writer, "close", candle.CloseTime.UtcDateTime, t);
+			await WriteProperty(writer, "open", candle.OpenTime, t);
+			await WriteProperty(writer, "close", candle.CloseTime, t);
 			await WriteProperty(writer, "O", candle.OpenPrice, t);
 			await WriteProperty(writer, "H", candle.HighPrice, t);
 			await WriteProperty(writer, "L", candle.LowPrice, t);
@@ -142,15 +142,15 @@ public class JsonExporter(DataType dataType, Stream stream) : BaseExporter(dataT
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, async (writer, n, t) =>
 		{
 			if (!n.Id.IsEmpty())
 				await WriteProperty(writer, "id", n.Id, t);
 
-			await WriteProperty(writer, "s", n.ServerTime.UtcDateTime, t);
-			await WriteProperty(writer, "l", n.LocalTime.UtcDateTime, t);
+			await WriteProperty(writer, "s", n.ServerTime, t);
+			await WriteProperty(writer, "l", n.LocalTime, t);
 
 			if (n.SecurityId != null)
 				await WriteProperty(writer, "secCode", n.SecurityId.Value.SecurityCode, t);
@@ -184,7 +184,7 @@ public class JsonExporter(DataType dataType, Stream stream) : BaseExporter(dataT
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, async (writer, security, t) =>
 		{
@@ -305,12 +305,12 @@ public class JsonExporter(DataType dataType, Stream stream) : BaseExporter(dataT
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, async (writer, message, t) =>
 		{
-			await WriteProperty(writer, "s", message.ServerTime.UtcDateTime, t);
-			await WriteProperty(writer, "l", message.LocalTime.UtcDateTime, t);
+			await WriteProperty(writer, "s", message.ServerTime, t);
+			await WriteProperty(writer, "l", message.LocalTime, t);
 			await WriteProperty(writer, "acc", message.PortfolioName, t);
 			await WriteProperty(writer, "client", message.ClientCode, t);
 			await WriteProperty(writer, "depo", message.DepoName, t);
@@ -324,11 +324,11 @@ public class JsonExporter(DataType dataType, Stream stream) : BaseExporter(dataT
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
 	{
 		return Do(values, async (writer, value, t) =>
 		{
-			await WriteProperty(writer, "time", value.Time.UtcDateTime, t);
+			await WriteProperty(writer, "time", value.Time, t);
 
 			var index =1;
 			foreach (var indVal in value.ValuesAsDecimal)
@@ -337,13 +337,13 @@ public class JsonExporter(DataType dataType, Stream stream) : BaseExporter(dataT
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, async (writer, item, t) =>
 		{
 			await WriteProperty(writer, "id", item.OrderId == null ? item.OrderStringId : item.OrderId.To<string>(), t);
-			await WriteProperty(writer, "s", item.ServerTime.UtcDateTime, t);
-			await WriteProperty(writer, "l", item.LocalTime.UtcDateTime, t);
+			await WriteProperty(writer, "s", item.ServerTime, t);
+			await WriteProperty(writer, "l", item.LocalTime, t);
 			await WriteProperty(writer, "p", item.OrderPrice, t);
 			await WriteProperty(writer, "v", item.OrderVolume, t);
 			await WriteProperty(writer, "side", item.Side, t);
@@ -366,13 +366,13 @@ public class JsonExporter(DataType dataType, Stream stream) : BaseExporter(dataT
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, async (writer, trade, t) =>
 		{
 			await WriteProperty(writer, "id", trade.TradeId == null ? trade.TradeStringId : trade.TradeId.To<string>(), t);
-			await WriteProperty(writer, "s", trade.ServerTime.UtcDateTime, t);
-			await WriteProperty(writer, "l", trade.LocalTime.UtcDateTime, t);
+			await WriteProperty(writer, "s", trade.ServerTime, t);
+			await WriteProperty(writer, "l", trade.LocalTime, t);
 			await WriteProperty(writer, "p", trade.TradePrice, t);
 			await WriteProperty(writer, "v", trade.TradeVolume, t);
 
@@ -403,12 +403,12 @@ public class JsonExporter(DataType dataType, Stream stream) : BaseExporter(dataT
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, async (writer, item, t) =>
 		{
-			await WriteProperty(writer, "s", item.ServerTime.UtcDateTime, t);
-			await WriteProperty(writer, "l", item.LocalTime.UtcDateTime, t);
+			await WriteProperty(writer, "s", item.ServerTime, t);
+			await WriteProperty(writer, "l", item.LocalTime, t);
 			await WriteProperty(writer, "acc", item.PortfolioName, t);
 			await WriteProperty(writer, "client", item.ClientCode, t);
 			await WriteProperty(writer, "broker", item.BrokerCode, t);
@@ -459,18 +459,18 @@ public class JsonExporter(DataType dataType, Stream stream) : BaseExporter(dataT
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, async (writer, msg, t) =>
 		{
-			await WriteProperty(writer, "serverTime", msg.ServerTime.UtcDateTime, t);
+			await WriteProperty(writer, "serverTime", msg.ServerTime, t);
 			await WriteProperty(writer, "boardCode", msg.BoardCode, t);
 			await WriteProperty(writer, "state", msg.State.ToString(), t);
 		}, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, async (writer, msg, t) =>
 		{
@@ -481,10 +481,10 @@ public class JsonExporter(DataType dataType, Stream stream) : BaseExporter(dataT
 		}, cancellationToken);
 	}
 
-	private async Task<(int, DateTimeOffset?)> Do<TValue>(IEnumerable<TValue> values, Func<JsonTextWriter, TValue, CancellationToken, Task> action, CancellationToken cancellationToken)
+	private async Task<(int, DateTime?)> Do<TValue>(IEnumerable<TValue> values, Func<JsonTextWriter, TValue, CancellationToken, Task> action, CancellationToken cancellationToken)
 	{
 		var count =0;
-		var lastTime = default(DateTimeOffset?);
+		var lastTime = default(DateTime?);
 
 		using (var writer = new StreamWriter(stream, Encoding, leaveOpen: true))
 		{

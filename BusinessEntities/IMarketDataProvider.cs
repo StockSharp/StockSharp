@@ -8,7 +8,7 @@ public interface IMarketDataProvider
 	/// <summary>
 	/// Security changed.
 	/// </summary>
-	event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged;
+	event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTime, DateTime> ValuesChanged;
 
 	/// <summary>
 	/// To get the value of market data for the instrument.

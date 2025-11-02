@@ -23,9 +23,9 @@ public partial class SecuritiesWindow
 {
 	private class DatesSettings : NotifiableObject, IPersistable
 	{
-		private DateTimeOffset? _from;
+		private DateTime? _from;
 
-		public DateTimeOffset? From
+		public DateTime? From
 		{
 			get => _from;
 			set
@@ -35,9 +35,9 @@ public partial class SecuritiesWindow
 			}
 		}
 
-		private DateTimeOffset? _to;
+		private DateTime? _to;
 
-		public DateTimeOffset? To
+		public DateTime? To
 		{
 			get => _to;
 			set
@@ -103,9 +103,9 @@ public partial class SecuritiesWindow
 
 	private class DepthSettings : IPersistable
 	{
-		public DateTimeOffset? From { get; set; }
+		public DateTime? From { get; set; }
 
-		public DateTimeOffset? To { get; set; }
+		public DateTime? To { get; set; }
 
 		public int? MaxDepth { get; set; }
 

@@ -8,5 +8,5 @@ public interface IServerTimeMessage
 	/// <summary>
 	/// Server time.
 	/// </summary>
-	DateTimeOffset ServerTime { get; set; }
+	DateTime ServerTime { get; set; }
 }

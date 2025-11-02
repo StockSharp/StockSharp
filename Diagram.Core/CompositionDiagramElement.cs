@@ -377,7 +377,7 @@ public class CompositionDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
-	protected override void OnStart(DateTimeOffset time)
+	protected override void OnStart(DateTime time)
 	{
 		Elements.ForEach(e => e.Start(time));
 
@@ -431,12 +431,11 @@ public class CompositionDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
-	public override void Flush(DateTimeOffset time)
+	public override void Flush(DateTime time)
 		=> _flushingElements.OrderBy(e => e.FlushPriority).ToArray().ForEach(e => e.Flush(time));
 
 	/// <inheritdoc />
-	protected override void OnProcess(DateTimeOffset time,
-		IDictionary<DiagramSocket, DiagramSocketValue> values, DiagramSocketValue source)
+	protected override void OnProcess(DateTime time, IDictionary<DiagramSocket, DiagramSocketValue> values, DiagramSocketValue source)
 	{
 	}
 

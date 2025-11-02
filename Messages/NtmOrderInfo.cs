@@ -26,7 +26,7 @@ public class NtmOrderInfo : Cloneable<NtmOrderInfo>, IPersistable
 	/// </summary>
 	[DataMember]
 	//[Nullable]
-	public DateTimeOffset? SettleDate { get; set; }
+	public DateTime? SettleDate { get; set; }
 
 	/// <summary>
 	/// REPO NTM reference.
@@ -78,7 +78,7 @@ public class NtmOrderInfo : Cloneable<NtmOrderInfo>, IPersistable
 		MatchRef = storage.GetValue<string>(nameof(MatchRef));
 		Partner = storage.GetValue<string>(nameof(Partner));
 		SettleCode = storage.GetValue<string>(nameof(SettleCode));
-		SettleDate = storage.GetValue<DateTimeOffset?>(nameof(SettleDate));
+		SettleDate = storage.GetValue<DateTime?>(nameof(SettleDate));
 		ForAccount = storage.GetValue<string>(nameof(ForAccount));
 		CurrencyType = storage.GetValue<CurrencyTypes>(nameof(CurrencyType));
 	}

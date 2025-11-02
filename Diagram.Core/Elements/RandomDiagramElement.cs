@@ -69,7 +69,7 @@ public class RandomDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
-	protected override void OnStart(DateTimeOffset time)
+	protected override void OnStart(DateTime time)
 	{
 		base.OnStart(time);
 
@@ -80,12 +80,12 @@ public class RandomDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
-	public override void Flush(DateTimeOffset time)
+	public override void Flush(DateTime time)
 	{
 		RaiseRandomOuput(time);
 	}
 
-	private void RaiseRandomOuput(DateTimeOffset time)
+	private void RaiseRandomOuput(DateTime time)
 	{
 		var value = RandomGen.GetDecimal(Min, Max, 2);
 		RaiseProcessOutput(_outputSocket, time, (Unit)value);

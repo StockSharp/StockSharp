@@ -75,7 +75,7 @@ public class BoardStateMessage : BaseSubscriptionIdMessage<BoardStateMessage>, I
 
 	/// <inheritdoc />
 	[DataMember]
-	public DateTimeOffset ServerTime { get; set; }
+	public DateTime ServerTime { get; set; }
 
 	/// <inheritdoc />
 	public override void CopyTo(BoardStateMessage destination)

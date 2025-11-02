@@ -27,7 +27,7 @@ public class PnLTests
 			TradePrice = 10m,
 			TradeVolume = 1m,
 			Side = Sides.Buy,
-			ServerTime = DateTimeOffset.UtcNow
+			ServerTime = DateTime.UtcNow
 		};
 
 		queue.Process(buy).PnL.AssertEqual(0m);
@@ -70,7 +70,7 @@ public class PnLTests
 			TradePrice = 10m,
 			TradeVolume = 1m,
 			Side = Sides.Buy,
-			ServerTime = DateTimeOffset.UtcNow
+			ServerTime = DateTime.UtcNow
 		};
 
 		manager.ProcessMyTrade(buy, out var info1).AssertTrue();
@@ -116,7 +116,7 @@ public class PnLTests
 			TradePrice = 100,
 			TradeId = 1,
 			TradeVolume = 10,
-			ServerTime = DateTimeOffset.Now,
+			ServerTime = DateTime.UtcNow,
 		};
 		manager.ProcessMessage(buyMsg);
 
@@ -134,7 +134,7 @@ public class PnLTests
 			TradePrice = 110,
 			TradeId = 2,
 			TradeVolume = 10,
-			ServerTime = DateTimeOffset.Now,
+			ServerTime = DateTime.UtcNow,
 		};
 		manager.ProcessMessage(sellMsg);
 
@@ -169,7 +169,7 @@ public class PnLTests
 			TradePrice = 100,
 			TradeId = 1,
 			TradeVolume = 10,
-			ServerTime = DateTimeOffset.Now,
+			ServerTime = DateTime.UtcNow,
 		});
 
 		// Sell 4 at 110 (partial close)
@@ -183,7 +183,7 @@ public class PnLTests
 			TradePrice = 110,
 			TradeId = 2,
 			TradeVolume = 4,
-			ServerTime = DateTimeOffset.Now,
+			ServerTime = DateTime.UtcNow,
 		});
 
 		// Realized PnL = (110-100)*4 = 40
@@ -196,7 +196,7 @@ public class PnLTests
 			DataTypeEx = DataType.Ticks,
 			SecurityId = secId,
 			TradePrice = 120m,
-			ServerTime = DateTimeOffset.Now,
+			ServerTime = DateTime.UtcNow,
 		});
 
 		// Unrealized PnL = (120-100)*6 = 120
@@ -232,7 +232,7 @@ public class PnLTests
 			TradePrice = 100,
 			TradeId = 1,
 			TradeVolume = 10,
-			ServerTime = DateTimeOffset.Now,
+			ServerTime = DateTime.UtcNow,
 		});
 
 		// Reset PnL
@@ -279,7 +279,7 @@ public class PnLTests
 			TradePrice = 100,
 			TradeId = 1,
 			TradeVolume = 10,
-			ServerTime = DateTimeOffset.Now,
+			ServerTime = DateTime.UtcNow,
 		});
 
 		// Buy in B
@@ -293,7 +293,7 @@ public class PnLTests
 			TradePrice = 200,
 			TradeId = 2,
 			TradeVolume = 5,
-			ServerTime = DateTimeOffset.Now,
+			ServerTime = DateTime.UtcNow,
 		});
 
 		// Sell in A
@@ -307,7 +307,7 @@ public class PnLTests
 			TradePrice = 110,
 			TradeId = 3,
 			TradeVolume = 10,
-			ServerTime = DateTimeOffset.Now,
+			ServerTime = DateTime.UtcNow,
 		});
 
 		// Sell in B
@@ -321,7 +321,7 @@ public class PnLTests
 			TradePrice = 180,
 			TradeId = 4,
 			TradeVolume = 5,
-			ServerTime = DateTimeOffset.Now,
+			ServerTime = DateTime.UtcNow,
 		});
 
 		// Portfolio A: (110-100)*10 = 100
@@ -362,7 +362,7 @@ public class PnLTests
 			TradePrice = 100m,
 			TradeVolume = 1m,
 			Side = Sides.Buy,
-			ServerTime = DateTimeOffset.UtcNow
+			ServerTime = DateTime.UtcNow
 		};
 		manager.ProcessMessage(buy);
 
@@ -395,8 +395,8 @@ public class PnLTests
 		var candle = new TimeFrameCandleMessage
 		{
 			SecurityId = secId,
-			OpenTime = DateTimeOffset.Now,
-			CloseTime = DateTimeOffset.Now,
+			OpenTime = DateTime.UtcNow,
+			CloseTime = DateTime.UtcNow,
 			OpenPrice = 100,
 			HighPrice = 150,
 			LowPrice = 90,
@@ -450,7 +450,7 @@ public class PnLTests
 			TradePrice = 100m,
 			TradeVolume = 1m,
 			Side = Sides.Buy,
-			ServerTime = DateTimeOffset.UtcNow
+			ServerTime = DateTime.UtcNow
 		};
 		manager.ProcessMessage(buy);
 
@@ -470,8 +470,8 @@ public class PnLTests
 		var candle = new TimeFrameCandleMessage
 		{
 			SecurityId = secId,
-			OpenTime = DateTimeOffset.Now,
-			CloseTime = DateTimeOffset.Now,
+			OpenTime = DateTime.UtcNow,
+			CloseTime = DateTime.UtcNow,
 			OpenPrice = 100,
 			HighPrice = 150,
 			LowPrice = 90,
@@ -514,7 +514,7 @@ public class PnLTests
 			TradePrice = 100m,
 			TradeVolume = 1m,
 			Side = Sides.Sell,
-			ServerTime = DateTimeOffset.UtcNow
+			ServerTime = DateTime.UtcNow
 		};
 		manager.ProcessMessage(sell);
 
@@ -522,8 +522,8 @@ public class PnLTests
 		var candle = new TimeFrameCandleMessage
 		{
 			SecurityId = secId,
-			OpenTime = DateTimeOffset.Now,
-			CloseTime = DateTimeOffset.Now,
+			OpenTime = DateTime.UtcNow,
+			CloseTime = DateTime.UtcNow,
 			OpenPrice = 100,
 			HighPrice = 110,
 			LowPrice = 85,
@@ -578,7 +578,7 @@ public class PnLTests
 			TradePrice = 100m,
 			TradeVolume = 1m,
 			Side = Sides.Buy,
-			ServerTime = DateTimeOffset.UtcNow
+			ServerTime = DateTime.UtcNow
 		};
 		manager.ProcessMessage(buy);
 
@@ -588,7 +588,7 @@ public class PnLTests
 			DataTypeEx = DataType.Ticks,
 			SecurityId = secId,
 			TradePrice = 140m,
-			ServerTime = DateTimeOffset.UtcNow
+			ServerTime = DateTime.UtcNow
 		};
 		manager.ProcessMessage(tick);
 		manager.UnrealizedPnL.AssertEqual(40m); // (140-100)*1 = 40
@@ -638,7 +638,7 @@ public class PnLTests
 			TradePrice = 100m,
 			TradeVolume = 1m,
 			Side = Sides.Buy,
-			ServerTime = DateTimeOffset.UtcNow
+			ServerTime = DateTime.UtcNow
 		};
 		manager.ProcessMessage(buy);
 
@@ -660,7 +660,7 @@ public class PnLTests
 			DataTypeEx = DataType.Ticks,
 			SecurityId = secId,
 			TradePrice = 150m,
-			ServerTime = DateTimeOffset.UtcNow
+			ServerTime = DateTime.UtcNow
 		};
 		manager.ProcessMessage(tick);
 

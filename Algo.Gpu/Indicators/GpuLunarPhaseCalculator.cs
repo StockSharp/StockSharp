@@ -147,7 +147,7 @@ public class GpuLunarPhaseCalculator : GpuIndicatorCalculatorBase<LunarPhase, Gp
 	/// <summary>
 	/// Calculate lunar phase index (0..7) for the specified timestamp ticks.
 	/// </summary>
-	/// <param name="ticks">Timestamp in <see cref="DateTimeOffset.Ticks"/>.</param>
+	/// <param name="ticks">Timestamp in <see cref="DateTime.Ticks"/>.</param>
 	/// <returns>Lunar phase index as float for GPU result storage.</returns>
 	private static float CalculatePhase(long ticks)
 	{

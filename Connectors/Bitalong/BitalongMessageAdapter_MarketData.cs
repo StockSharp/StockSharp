@@ -32,7 +32,7 @@ public partial class BitalongMessageAdapter
 			SendOutMessage(new Level1ChangeMessage
 			{
 				SecurityId = pair.Key.ToStockSharp(),
-				ServerTime = CurrentTime.ConvertToUtc()
+				ServerTime = CurrentTimeUtc
 			}
 			.TryAdd(Level1Fields.CommissionMaker, (decimal)symbol.FeeSell)
 			.TryAdd(Level1Fields.CommissionTaker, (decimal)symbol.FeeBuy));
@@ -136,7 +136,7 @@ public partial class BitalongMessageAdapter
 			SecurityId = symbol.ToStockSharp(),
 			Bids = book.Bids?.Select(e => new QuoteChange((decimal)e.Price, (decimal)e.Size)).ToArray() ?? Array.Empty<QuoteChange>(),
 			Asks = book.Asks?.Select(e => new QuoteChange((decimal)e.Price, (decimal)e.Size)).ToArray() ?? Array.Empty<QuoteChange>(),
-			ServerTime = CurrentTime.ConvertToUtc(),
+			ServerTime = CurrentTimeUtc,
 		});
 	}
 
@@ -165,7 +165,7 @@ public partial class BitalongMessageAdapter
 			SendOutMessage(new Level1ChangeMessage
 			{
 				SecurityId = symbol.ToStockSharp(),
-				ServerTime = CurrentTime.ConvertToUtc(),
+				ServerTime = CurrentTimeUtc,
 			}
 			.TryAdd(Level1Fields.HighPrice, (decimal?)ticker.High24)
 			.TryAdd(Level1Fields.LowPrice, (decimal?)ticker.Low24)

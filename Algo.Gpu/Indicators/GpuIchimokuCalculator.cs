@@ -46,7 +46,7 @@ public struct GpuIchimokuParams(int tenkanLength, int kijunLength, int senkouBLe
 public struct GpuIchimokuResult : IGpuIndicatorResult
 {
 	/// <summary>
-	/// Time in <see cref="DateTimeOffset.Ticks"/>.
+	/// Time in <see cref="DateTime.Ticks"/>.
 	/// </summary>
 	public long Time;
 
@@ -132,7 +132,7 @@ public struct GpuIchimokuResult : IGpuIndicatorResult
 		return value;
 	}
 
-	private static DecimalIndicatorValue CreateDecimalValue(IIndicator indicator, DateTimeOffset time, float data, byte formed)
+	private static DecimalIndicatorValue CreateDecimalValue(IIndicator indicator, DateTime time, float data, byte formed)
 	{
 		if (data.IsNaN())
 		{

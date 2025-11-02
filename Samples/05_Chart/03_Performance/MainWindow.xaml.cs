@@ -55,7 +55,7 @@ public partial class MainWindow
 	private readonly TimeSpan _tfSpan = TimeSpan.FromTicks(_timeframe);
 	private readonly DispatcherTimer _chartUpdateTimer = new();
 	private decimal _lastPrice;
-	private DateTimeOffset _lastTime;
+	private DateTime _lastTime;
 	private bool _dataIsLoaded;
 	private TimeFrameCandleMessage _lastCandle;
 
@@ -331,8 +331,8 @@ public partial class MainWindow
 
 class LightCandle
 {
-	public DateTimeOffset TimeFrom { get; set; }
-	public DateTimeOffset TimeTo { get; set; }
+	public DateTime TimeFrom { get; set; }
+	public DateTime TimeTo { get; set; }
 	public decimal Open { get; set; }
 	public decimal High { get; set; }
 	public decimal Low { get; set; }
@@ -415,7 +415,7 @@ class MyMovingAverage : IIndicator
 	{
 	}
 
-	IIndicatorValue IIndicator.CreateValue(DateTimeOffset time, object[] values)
+	IIndicatorValue IIndicator.CreateValue(DateTime time, object[] values)
 		=> values.Length == 0 ? new DecimalIndicatorValue(this, time) : new DecimalIndicatorValue(this, values[0].To<decimal>(), time);
 
 	int IIndicator.NumValuesToInitialize => _period;

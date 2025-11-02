@@ -10,7 +10,7 @@ public class FractalPartIndicatorValue : ShiftedIndicatorValue
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public FractalPartIndicatorValue(FractalPart indicator, DateTimeOffset time)
+	public FractalPartIndicatorValue(FractalPart indicator, DateTime time)
 		: base(indicator, time)
 	{
 	}
@@ -22,7 +22,7 @@ public class FractalPartIndicatorValue : ShiftedIndicatorValue
 	/// <param name="value">Indicator value.</param>
 	/// <param name="shift">The shift of the indicator value.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public FractalPartIndicatorValue(FractalPart indicator, decimal value, int shift, DateTimeOffset time)
+	public FractalPartIndicatorValue(FractalPart indicator, decimal value, int shift, DateTime time)
 		: base(indicator, value, shift, time)
 	{
 	}

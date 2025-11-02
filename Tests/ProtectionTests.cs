@@ -22,16 +22,16 @@ public class ProtectionTests
 		behaviour.Position.AssertEqual(0);
 
 		// Open long position at price 100
-		var updateResult = behaviour.Update(100m, 10m, DateTimeOffset.Now);
+		var updateResult = behaviour.Update(100m, 10m, DateTime.UtcNow);
 		updateResult.AssertNull(); // No immediate activation expected
 		behaviour.Position.AssertEqual(10m);
 
 		// Test price movement without activation
-		var activationResult = behaviour.TryActivate(100.5m, DateTimeOffset.Now);
+		var activationResult = behaviour.TryActivate(100.5m, DateTime.UtcNow);
 		activationResult.AssertNull(); // No activation yet
 
 		// Test take profit activation
-		activationResult = behaviour.TryActivate(101.1m, DateTimeOffset.Now);
+		activationResult = behaviour.TryActivate(101.1m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 
 		var (isTake, side, price, volume, condition) = activationResult.Value;
@@ -42,11 +42,11 @@ public class ProtectionTests
 		condition.AssertNull(); // LocalProtectiveBehaviour should return null condition
 
 		// Emulate execution of protective order (position reset)
-		behaviour.Update(price, -volume, DateTimeOffset.Now);
+		behaviour.Update(price, -volume, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(0);
 
 		// After activation, position should be reset
-		var newActivation = behaviour.TryActivate(102m, DateTimeOffset.Now);
+		var newActivation = behaviour.TryActivate(102m, DateTime.UtcNow);
 		newActivation.AssertNull(); // No activation should happen
 	}
 
@@ -64,10 +64,10 @@ public class ProtectionTests
 			false);                           // No market orders
 
 		// Open long position at price 100
-		behaviour.Update(100m, 10m, DateTimeOffset.Now);
+		behaviour.Update(100m, 10m, DateTime.UtcNow);
 
 		// Test stop loss activation
-		var activationResult = behaviour.TryActivate(98.9m, DateTimeOffset.Now);
+		var activationResult = behaviour.TryActivate(98.9m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 
 		var (isTake, side, price, volume, condition) = activationResult.Value;
@@ -78,7 +78,7 @@ public class ProtectionTests
 		condition.AssertNull();
 
 		// Emulate execution of protective order (position reset)
-		behaviour.Update(price, -volume, DateTimeOffset.Now);
+		behaviour.Update(price, -volume, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(0);
 	}
 
@@ -96,11 +96,11 @@ public class ProtectionTests
 			false);                           // No market orders
 
 		// Open short position at price 100
-		behaviour.Update(100m, -10m, DateTimeOffset.Now);
+		behaviour.Update(100m, -10m, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(-10m);
 
 		// Test take profit activation (price going down for short)
-		var activationResult = behaviour.TryActivate(98.9m, DateTimeOffset.Now);
+		var activationResult = behaviour.TryActivate(98.9m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 
 		var (isTake, side, price, volume, condition) = activationResult.Value;
@@ -111,14 +111,14 @@ public class ProtectionTests
 		condition.AssertNull();
 
 		// Emulate execution of protective order (position reset)
-		behaviour.Update(price, volume, DateTimeOffset.Now);
+		behaviour.Update(price, volume, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(0);
 
 		// Test new position after activation
-		behaviour.Update(95m, -5m, DateTimeOffset.Now);
+		behaviour.Update(95m, -5m, DateTime.UtcNow);
 
 		// Test stop loss activation (price going up for short)
-		activationResult = behaviour.TryActivate(96m, DateTimeOffset.Now);
+		activationResult = behaviour.TryActivate(96m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 		(isTake, side, price, volume, condition) = activationResult.Value;
 		isTake.AssertFalse(); // Should be stop loss
@@ -128,7 +128,7 @@ public class ProtectionTests
 		condition.AssertNull();
 
 		// Emulate execution of protective order (position reset)
-		behaviour.Update(price, volume, DateTimeOffset.Now);
+		behaviour.Update(price, volume, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(0);
 	}
 
@@ -146,14 +146,14 @@ public class ProtectionTests
 			false);                           // No market orders
 
 		// Open long position at price 100
-		behaviour.Update(100m, 10m, DateTimeOffset.Now);
+		behaviour.Update(100m, 10m, DateTime.UtcNow);
 
 		// Price moves up, no activation
-		var activationResult = behaviour.TryActivate(101m, DateTimeOffset.Now);
+		var activationResult = behaviour.TryActivate(101m, DateTime.UtcNow);
 		activationResult.AssertNull();
 
 		// Price moves up to take profit, should activate take profit
-		activationResult = behaviour.TryActivate(102m, DateTimeOffset.Now);
+		activationResult = behaviour.TryActivate(102m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 		{
 			var (isTake, side, price, volume, condition) = activationResult.Value;
@@ -164,14 +164,14 @@ public class ProtectionTests
 			condition.AssertNull();
 		}
 		// Emulate execution of protective order (position reset)
-		behaviour.Update(102m, -10m, DateTimeOffset.Now);
+		behaviour.Update(102m, -10m, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(0);
 
 		// Open new position at price 100
-		behaviour.Update(100m, 10m, DateTimeOffset.Now);
+		behaviour.Update(100m, 10m, DateTime.UtcNow);
 
 		// Price moves up more, no activation
-		activationResult = behaviour.TryActivate(102m, DateTimeOffset.Now);
+		activationResult = behaviour.TryActivate(102m, DateTime.UtcNow);
 		activationResult.AssertNotNull(); // take profit снова
 		{
 			var (isTake, side, price, volume, condition) = activationResult.Value;
@@ -181,7 +181,7 @@ public class ProtectionTests
 			volume.AssertEqual(10m);
 			condition.AssertNull();
 		}
-		behaviour.Update(102m, -10m, DateTimeOffset.Now);
+		behaviour.Update(102m, -10m, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(0);
 
 		// Test trailing stop activation (take profit is not active)
@@ -191,18 +191,18 @@ public class ProtectionTests
 			true,                              // Trailing stop
 			TimeSpan.Zero, TimeSpan.Zero, false);
 
-		behaviourTrailingOnly.Update(100m, 10m, DateTimeOffset.Now);
+		behaviourTrailingOnly.Update(100m, 10m, DateTime.UtcNow);
 
 		// Price moves up, trailing stop подтягивается, но не срабатывает
-		activationResult = behaviourTrailingOnly.TryActivate(101m, DateTimeOffset.Now);
+		activationResult = behaviourTrailingOnly.TryActivate(101m, DateTime.UtcNow);
 		activationResult.AssertNull();
-		activationResult = behaviourTrailingOnly.TryActivate(102m, DateTimeOffset.Now);
+		activationResult = behaviourTrailingOnly.TryActivate(102m, DateTime.UtcNow);
 		activationResult.AssertNull();
-		activationResult = behaviourTrailingOnly.TryActivate(101.5m, DateTimeOffset.Now);
+		activationResult = behaviourTrailingOnly.TryActivate(101.5m, DateTime.UtcNow);
 		activationResult.AssertNull();
 
 		// Price falls to trailing stop (1% below 102 = 100.98)
-		activationResult = behaviourTrailingOnly.TryActivate(100.98m, DateTimeOffset.Now);
+		activationResult = behaviourTrailingOnly.TryActivate(100.98m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 		{
 			var (isTake, side, price, volume, condition) = activationResult.Value;
@@ -212,7 +212,7 @@ public class ProtectionTests
 			volume.AssertEqual(10m);
 			condition.AssertNull();
 		}
-		behaviourTrailingOnly.Update(100.98m, -10m, DateTimeOffset.Now);
+		behaviourTrailingOnly.Update(100.98m, -10m, DateTime.UtcNow);
 		behaviourTrailingOnly.Position.AssertEqual(0);
 	}
 
@@ -230,15 +230,15 @@ public class ProtectionTests
 			false);                           // No market orders
 
 		// Open long position at price 100
-		behaviour.Update(100m, 5m, DateTimeOffset.Now);
+		behaviour.Update(100m, 5m, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(5m);
 
 		// Add to position at higher price
-		behaviour.Update(102m, 5m, DateTimeOffset.Now);
+		behaviour.Update(102m, 5m, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(10m);
 
 		// Test take profit based on weighted average price (101)
-		var activationResult = behaviour.TryActivate(102.01m, DateTimeOffset.Now);
+		var activationResult = behaviour.TryActivate(102.01m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 
 		var (isTake, side, price, volume, condition) = activationResult.Value;
@@ -249,23 +249,23 @@ public class ProtectionTests
 		condition.AssertNull();
 
 		// Emulate execution of protective order (position reset)
-		behaviour.Update(price, -volume, DateTimeOffset.Now);
+		behaviour.Update(price, -volume, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(0);
 
 		// Open new position and reduce it
-		behaviour.Update(100m, 10m, DateTimeOffset.Now);
+		behaviour.Update(100m, 10m, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(10m);
 
 		// Reduce position
-		behaviour.Update(100m, -3m, DateTimeOffset.Now);
+		behaviour.Update(100m, -3m, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(7m);
 
 		// Close position
-		behaviour.Update(100m, -7m, DateTimeOffset.Now);
+		behaviour.Update(100m, -7m, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(0);
 
 		// After position is closed, no activation should happen
-		activationResult = behaviour.TryActivate(110m, DateTimeOffset.Now);
+		activationResult = behaviour.TryActivate(110m, DateTime.UtcNow);
 		activationResult.AssertNull();
 	}
 
@@ -286,7 +286,7 @@ public class ProtectionTests
 			true);                            // Use market orders
 
 		// Open long position at price 100
-		var startTime = DateTimeOffset.Now;
+		var startTime = DateTime.UtcNow;
 		behaviour.Update(100m, 10m, startTime);
 
 		// No activation before timeout
@@ -352,14 +352,14 @@ public class ProtectionTests
 			false);                           // No market orders
 
 		// Open long position
-		behaviour.Update(100m, 10m, DateTimeOffset.Now);
+		behaviour.Update(100m, 10m, DateTime.UtcNow);
 
 		// Flip to short position
-		behaviour.Update(102m, -20m, DateTimeOffset.Now);
+		behaviour.Update(102m, -20m, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(-10m);
 
 		// Check take profit for new short position (based on new entry price 102)
-		var activationResult = behaviour.TryActivate(100.98m, DateTimeOffset.Now);
+		var activationResult = behaviour.TryActivate(100.98m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 
 		var (isTake, side, price, volume, condition) = activationResult.Value;
@@ -370,7 +370,7 @@ public class ProtectionTests
 		condition.AssertNull(); // No special condition
 
 		// Emulate execution of protective order (position reset)
-		behaviour.Update(price, volume, DateTimeOffset.Now);
+		behaviour.Update(price, volume, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(0);
 	}
 
@@ -406,9 +406,9 @@ public class ProtectionTests
 			false, TimeSpan.Zero, TimeSpan.Zero, false);
 
 		// Create positions
-		posController1.Update(100m, 10m, DateTimeOffset.Now);
-		posController2.Update(100m, -10m, DateTimeOffset.Now);
-		posController3.Update(50m, 20m, DateTimeOffset.Now);
+		posController1.Update(100m, 10m, DateTime.UtcNow);
+		posController2.Update(100m, -10m, DateTime.UtcNow);
+		posController3.Update(50m, 20m, DateTime.UtcNow);
 
 		// Test position values
 		posController1.Position.AssertEqual(10m);
@@ -416,7 +416,7 @@ public class ProtectionTests
 		posController3.Position.AssertEqual(20m);
 
 		// Test activations for securityId1
-		var activations = controller.TryActivate(securityId1, 101m, DateTimeOffset.Now).ToArray();
+		var activations = controller.TryActivate(securityId1, 101m, DateTime.UtcNow).ToArray();
 		activations.Length.AssertEqual(1); // Only posController1 should activate
 		{
 			var (isTake, side, price, volume, condition) = activations[0];
@@ -428,11 +428,11 @@ public class ProtectionTests
 		}
 
 		// Emulate execution of take-profit for posController1
-		posController1.Update(101m, -10m, DateTimeOffset.Now);
+		posController1.Update(101m, -10m, DateTime.UtcNow);
 		posController1.Position.AssertEqual(0m);
 
 		// Now at price 98, take profit should activate for posController2
-		activations = [.. controller.TryActivate(securityId1, 98m, DateTimeOffset.Now)];
+		activations = [.. controller.TryActivate(securityId1, 98m, DateTime.UtcNow)];
 		activations.Length.AssertEqual(1); // posController2 should activate
 		{
 			var (isTake, side, price, volume, condition) = activations[0];
@@ -443,11 +443,11 @@ public class ProtectionTests
 			condition.AssertNull();
 		}
 		// Emulate execution of take-profit for posController2
-		posController2.Update(98m, 10m, DateTimeOffset.Now);
+		posController2.Update(98m, 10m, DateTime.UtcNow);
 		posController2.Position.AssertEqual(0m);
 
 		// Test activations for securityId2
-		activations = [.. controller.TryActivate(securityId2, 50.8m, DateTimeOffset.Now)];
+		activations = [.. controller.TryActivate(securityId2, 50.8m, DateTime.UtcNow)];
 		activations.Length.AssertEqual(1); // posController3 should activate
 		{
 			var (isTake, side, price, volume, condition) = activations[0];
@@ -460,7 +460,7 @@ public class ProtectionTests
 
 		// Test Clear method
 		controller.Clear();
-		activations = [.. controller.TryActivate(securityId1, 95m, DateTimeOffset.Now)];
+		activations = [.. controller.TryActivate(securityId1, 95m, DateTime.UtcNow)];
 		activations.Length.AssertEqual(0); // No controllers after clear
 	}
 
@@ -478,14 +478,14 @@ public class ProtectionTests
 			false);                           // No market orders
 
 		// Initial position
-		behaviour.Update(100m, 10m, DateTimeOffset.Now);
+		behaviour.Update(100m, 10m, DateTime.UtcNow);
 
 		// Should not activate at 0.6
-		var activationResult = behaviour.TryActivate(0.6m, DateTimeOffset.Now);
+		var activationResult = behaviour.TryActivate(0.6m, DateTime.UtcNow);
 		activationResult.AssertNull();
 
 		// Should activate stop at 0.5
-		var activationResult2 = behaviour.TryActivate(0.5m, DateTimeOffset.Now);
+		var activationResult2 = behaviour.TryActivate(0.5m, DateTime.UtcNow);
 		activationResult2.AssertNotNull();
 
 		var (isTake, side, price, volume, condition) = activationResult2.Value;
@@ -496,14 +496,14 @@ public class ProtectionTests
 		condition.AssertNull(); // No special condition
 
 		// Emulate execution of protective order (position reset)
-		behaviour.Update(price, -volume, DateTimeOffset.Now);
+		behaviour.Update(price, -volume, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(0);
 
 		// New position
-		behaviour.Update(100m, 10m, DateTimeOffset.Now);
+		behaviour.Update(100m, 10m, DateTime.UtcNow);
 
 		// Should activate take at 1.0
-		activationResult = behaviour.TryActivate(1.0m, DateTimeOffset.Now);
+		activationResult = behaviour.TryActivate(1.0m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 		(isTake, side, price, volume, condition) = activationResult.Value;
 		isTake.AssertTrue(); // Should be take profit
@@ -513,7 +513,7 @@ public class ProtectionTests
 		condition.AssertNull(); // No special condition
 
 		// Emulate execution of protective order (position reset)
-		behaviour.Update(price, -volume, DateTimeOffset.Now);
+		behaviour.Update(price, -volume, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(0);
 	}
 
@@ -531,14 +531,14 @@ public class ProtectionTests
 			false);                            // No market orders
 
 		// Initial position
-		behaviour.Update(100m, 10m, DateTimeOffset.Now);
+		behaviour.Update(100m, 10m, DateTime.UtcNow);
 
 		// Should not activate at 100.5
-		var activationResult = behaviour.TryActivate(100.5m, DateTimeOffset.Now);
+		var activationResult = behaviour.TryActivate(100.5m, DateTime.UtcNow);
 		activationResult.AssertNull();
 
 		// Should activate take at 101 (100 + 1)
-		activationResult = behaviour.TryActivate(101m, DateTimeOffset.Now);
+		activationResult = behaviour.TryActivate(101m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 		{
 			var (isTake, side, price, volume, condition) = activationResult.Value;
@@ -548,18 +548,18 @@ public class ProtectionTests
 			volume.AssertEqual(10m);
 			condition.AssertNull();
 		}
-		behaviour.Update(101m, -10m, DateTimeOffset.Now);
+		behaviour.Update(101m, -10m, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(0);
 
 		// New position
-		behaviour.Update(100m, 10m, DateTimeOffset.Now);
+		behaviour.Update(100m, 10m, DateTime.UtcNow);
 
 		// Should not activate at 85
-		activationResult = behaviour.TryActivate(85m, DateTimeOffset.Now);
+		activationResult = behaviour.TryActivate(85m, DateTime.UtcNow);
 		activationResult.AssertNull();
 
 		// Should activate stop at 80 (100 - 20)
-		activationResult = behaviour.TryActivate(80m, DateTimeOffset.Now);
+		activationResult = behaviour.TryActivate(80m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 		{
 			var (isTake, side, price, volume, condition) = activationResult.Value;
@@ -569,7 +569,7 @@ public class ProtectionTests
 			volume.AssertEqual(10m);
 			condition.AssertNull();
 		}
-		behaviour.Update(80m, -10m, DateTimeOffset.Now);
+		behaviour.Update(80m, -10m, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(0);
 	}
 
@@ -587,16 +587,16 @@ public class ProtectionTests
 			false);                           // No market orders
 
 		// Build position gradually
-		behaviour.Update(100m, 5m, DateTimeOffset.Now);
-		behaviour.Update(101m, 3m, DateTimeOffset.Now);
-		behaviour.Update(102m, 2m, DateTimeOffset.Now);
+		behaviour.Update(100m, 5m, DateTime.UtcNow);
+		behaviour.Update(101m, 3m, DateTime.UtcNow);
+		behaviour.Update(102m, 2m, DateTime.UtcNow);
 
 		behaviour.Position.AssertEqual(10m);
 
 		// Average price should be (100*5 + 101*3 + 102*2)/10 = 100.7
 
 		// Test take profit at 1% above average
-		var activationResult = behaviour.TryActivate(101.71m, DateTimeOffset.Now);
+		var activationResult = behaviour.TryActivate(101.71m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 
 		var (isTake, side, price, volume, condition) = activationResult.Value;
@@ -607,24 +607,24 @@ public class ProtectionTests
 		condition.AssertNull(); // No special condition
 
 		// Emulate execution of protective order (position reset)
-		behaviour.Update(price, -volume, DateTimeOffset.Now);
+		behaviour.Update(price, -volume, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(0);
 
 		// New set of trades with partial reductions
-		behaviour.Update(100m, 10m, DateTimeOffset.Now);
-		behaviour.Update(98m, 5m, DateTimeOffset.Now);
+		behaviour.Update(100m, 10m, DateTime.UtcNow);
+		behaviour.Update(98m, 5m, DateTime.UtcNow);
 
 		// Total 15 units
 
 		// Reduce partially, should be FIFO
-		behaviour.Update(100m, -6m, DateTimeOffset.Now);  // Reduce 6 from first trade
-		behaviour.Update(100m, -4m, DateTimeOffset.Now);  // Reduce 4 from first trade + 0 from second
+		behaviour.Update(100m, -6m, DateTime.UtcNow);  // Reduce 6 from first trade
+		behaviour.Update(100m, -4m, DateTime.UtcNow);  // Reduce 4 from first trade + 0 from second
 
 		// Left with 5 units from second trade at 98
 		behaviour.Position.AssertEqual(5m);
 
 		// Test take profit at 1% above 98
-		activationResult = behaviour.TryActivate(98.98m, DateTimeOffset.Now);
+		activationResult = behaviour.TryActivate(98.98m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 		(isTake, side, price, volume, condition) = activationResult.Value;
 		isTake.AssertTrue();
@@ -634,7 +634,7 @@ public class ProtectionTests
 		condition.AssertNull(); // No special condition
 
 		// Emulate execution of protective order (position reset)
-		behaviour.Update(price, -volume, DateTimeOffset.Now);
+		behaviour.Update(price, -volume, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(0);
 	}
 
@@ -657,12 +657,12 @@ public class ProtectionTests
 			true);   // Market orders
 
 		// Setup positions
-		behaviourLimit.Update(100m, 10m, DateTimeOffset.Now);
-		behaviourMarket.Update(100m, 10m, DateTimeOffset.Now);
+		behaviourLimit.Update(100m, 10m, DateTime.UtcNow);
+		behaviourMarket.Update(100m, 10m, DateTime.UtcNow);
 
 		// Test activations
-		var activationLimit = behaviourLimit.TryActivate(101m, DateTimeOffset.Now);
-		var activationMarket = behaviourMarket.TryActivate(101m, DateTimeOffset.Now);
+		var activationLimit = behaviourLimit.TryActivate(101m, DateTime.UtcNow);
+		var activationMarket = behaviourMarket.TryActivate(101m, DateTime.UtcNow);
 
 		activationLimit.AssertNotNull();
 		activationMarket.AssertNotNull();
@@ -687,9 +687,9 @@ public class ProtectionTests
 			Sides.Buy, 100m, true, false,
 			new Unit(1m, UnitTypes.Percent), false,
 			new Unit(), TimeSpan.Zero,
-			DateTimeOffset.Now, logReceiver);
+			DateTime.UtcNow, logReceiver);
 
-		var activationPrice = processorTakeLong.GetActivationPrice(101m, DateTimeOffset.Now);
+		var activationPrice = processorTakeLong.GetActivationPrice(101m, DateTime.UtcNow);
 		activationPrice.AssertEqual(101m);
 
 		// Test long position stop loss
@@ -697,9 +697,9 @@ public class ProtectionTests
 			Sides.Buy, 100m, false, false,
 			new Unit(1m, UnitTypes.Percent), false,
 			new Unit(), TimeSpan.Zero,
-			DateTimeOffset.Now, logReceiver);
+			DateTime.UtcNow, logReceiver);
 
-		activationPrice = processorStopLong.GetActivationPrice(99m, DateTimeOffset.Now);
+		activationPrice = processorStopLong.GetActivationPrice(99m, DateTime.UtcNow);
 		activationPrice.AssertEqual(99m);
 
 		// Test trailing stop
@@ -707,18 +707,18 @@ public class ProtectionTests
 			Sides.Buy, 100m, false, true,
 			new Unit(1m, UnitTypes.Percent), false,
 			new Unit(), TimeSpan.Zero,
-			DateTimeOffset.Now, logReceiver);
+			DateTime.UtcNow, logReceiver);
 
 		// Price moves in favorable direction, no activation
-		activationPrice = processorTrailing.GetActivationPrice(102m, DateTimeOffset.Now);
+		activationPrice = processorTrailing.GetActivationPrice(102m, DateTime.UtcNow);
 		activationPrice.AssertNull();
 
 		// Price moves in unfavorable direction but not enough to trigger
-		activationPrice = processorTrailing.GetActivationPrice(101.5m, DateTimeOffset.Now);
+		activationPrice = processorTrailing.GetActivationPrice(101.5m, DateTime.UtcNow);
 		activationPrice.AssertNull();
 
 		// Price moves enough to trigger
-		activationPrice = processorTrailing.GetActivationPrice(98.9m, DateTimeOffset.Now);
+		activationPrice = processorTrailing.GetActivationPrice(98.9m, DateTime.UtcNow);
 		activationPrice.AssertEqual(98.9m);
 	}
 
@@ -733,10 +733,10 @@ public class ProtectionTests
 			false, TimeSpan.Zero, TimeSpan.Zero, false);
 
 		// Large position at high price
-		behaviour.Update(1000m, 1000m, DateTimeOffset.Now);
+		behaviour.Update(1000m, 1000m, DateTime.UtcNow);
 
 		// Test take profit
-		var activationResult = behaviour.TryActivate(1500m, DateTimeOffset.Now);
+		var activationResult = behaviour.TryActivate(1500m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 
 		var (isTake, side, price, volume, condition) = activationResult.Value;
@@ -747,14 +747,14 @@ public class ProtectionTests
 		condition.AssertNull();
 
 		// Emulate execution of protective order (position reset)
-		behaviour.Update(price, -volume, DateTimeOffset.Now);
+		behaviour.Update(price, -volume, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(0);
 
 		// Very small position and price
-		behaviour.Update(0.001m, 0.001m, DateTimeOffset.Now);
+		behaviour.Update(0.001m, 0.001m, DateTime.UtcNow);
 
 		// Test stop loss
-		var activationResult2 = behaviour.TryActivate(0.0005m, DateTimeOffset.Now);
+		var activationResult2 = behaviour.TryActivate(0.0005m, DateTime.UtcNow);
 		activationResult2.AssertNotNull();
 		(isTake, side, price, volume, condition) = activationResult2.Value;
 		isTake.AssertFalse();
@@ -764,11 +764,11 @@ public class ProtectionTests
 		condition.AssertNull();
 
 		// Emulate execution of protective order (position reset)
-		behaviour.Update(price, -volume, DateTimeOffset.Now);
+		behaviour.Update(price, -volume, DateTime.UtcNow);
 		behaviour.Position.AssertEqual(0);
 
 		// Test position with zero price (should throw)
-		Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => behaviour.Update(0m, 10m, DateTimeOffset.Now));
+		Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => behaviour.Update(0m, 10m, DateTime.UtcNow));
 	}
 
 	[TestMethod]
@@ -781,14 +781,14 @@ public class ProtectionTests
 			true,                             // Trailing enabled
 			TimeSpan.Zero, TimeSpan.Zero, false);
 
-		behaviour.Update(100m, 10m, DateTimeOffset.Now);
+		behaviour.Update(100m, 10m, DateTime.UtcNow);
 		// Trailing stop for long: the stop level moves up as price rises, but triggers only when price falls to the trailing level.
-		behaviour.TryActivate(101m, DateTimeOffset.Now).AssertNull();
-		behaviour.TryActivate(102m, DateTimeOffset.Now).AssertNull();
-		behaviour.TryActivate(101.5m, DateTimeOffset.Now).AssertNull();
+		behaviour.TryActivate(101m, DateTime.UtcNow).AssertNull();
+		behaviour.TryActivate(102m, DateTime.UtcNow).AssertNull();
+		behaviour.TryActivate(101.5m, DateTime.UtcNow).AssertNull();
 		
 		// Price falls to the trailing stop level (1% below 102 = 100.98), should trigger stop
-		var activation = behaviour.TryActivate(100.98m, DateTimeOffset.Now);
+		var activation = behaviour.TryActivate(100.98m, DateTime.UtcNow);
 		activation.AssertNotNull();
 
 		var (isTake, side, price, volume, condition) = activation.Value;
@@ -809,15 +809,15 @@ public class ProtectionTests
 			true,                             // Trailing enabled
 			TimeSpan.Zero, TimeSpan.Zero, false);
 
-		behaviour.Update(100m, -10m, DateTimeOffset.Now);
+		behaviour.Update(100m, -10m, DateTime.UtcNow);
 		
 		// Trailing stop for short: the stop level moves down as price falls, but triggers only when price rises to the trailing level.
-		behaviour.TryActivate(99m, DateTimeOffset.Now).AssertNull();
-		behaviour.TryActivate(98m, DateTimeOffset.Now).AssertNull();
-		behaviour.TryActivate(98.5m, DateTimeOffset.Now).AssertNull();
+		behaviour.TryActivate(99m, DateTime.UtcNow).AssertNull();
+		behaviour.TryActivate(98m, DateTime.UtcNow).AssertNull();
+		behaviour.TryActivate(98.5m, DateTime.UtcNow).AssertNull();
 		
 		// Price rises to the trailing stop level (1% above 98 = 98.98), should trigger stop
-		var activation = behaviour.TryActivate(98.98m, DateTimeOffset.Now);
+		var activation = behaviour.TryActivate(98.98m, DateTime.UtcNow);
 		activation.AssertNotNull();
 		
 		var (isTake, side, price, volume, condition) = activation.Value;
@@ -854,7 +854,7 @@ public class ProtectionTests
 		// Regular stop with UnitTypes.Limit for take profit
 		var p = new ProtectiveProcessor(
 			Sides.Buy, 100m, false, false, new(10, UnitTypes.Limit),
-			true, new Unit(), TimeSpan.Zero, DateTimeOffset.Now, logReceiver);
+			true, new Unit(), TimeSpan.Zero, DateTime.UtcNow, logReceiver);
 
 		p.AssertNotNull();
 
@@ -862,6 +862,6 @@ public class ProtectionTests
 		Assert.ThrowsExactly<ArgumentException>(() =>
 			new ProtectiveProcessor(
 				Sides.Buy, 100m, false, true, new(10, UnitTypes.Limit),
-				true, new Unit(), TimeSpan.Zero, DateTimeOffset.Now, logReceiver));
+				true, new Unit(), TimeSpan.Zero, DateTime.UtcNow, logReceiver));
 	}
 }

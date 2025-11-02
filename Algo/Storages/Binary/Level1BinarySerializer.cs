@@ -532,7 +532,7 @@ class Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchan
 		{
 			var first = messages.First();
 
-			metaInfo.ServerOffset = first.ServerTime.Offset;
+			metaInfo.ServerOffset = default;
 			metaInfo.MaxKnownType = Level1Fields.LastTradeStringId;
 			metaInfo.FirstSeqNum = metaInfo.PrevSeqNum = first.SeqNum;
 		}
@@ -853,7 +853,7 @@ class Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchan
 					case Level1Fields.BestBidTime:
 					case Level1Fields.BestAskTime:
 					{
-						var timeValue = (DateTimeOffset)value;
+						var timeValue = (DateTime)value;
 
 						if (splitFieldTimes)
 						{
@@ -864,7 +864,7 @@ class Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchan
 								if (!isTickPrecision)
 									timeValue = timeValue.StorageBinaryOldTruncate();
 
-								info.FirstDateTime = info.LastDateTime = isUtc ? timeValue.UtcDateTime : timeValue.LocalDateTime;
+								info.FirstDateTime = info.LastDateTime = isUtc ? timeValue : timeValue.ToLocalTime();
 							}
 
 							var lastOffset = info.LastDateOffset;
@@ -878,7 +878,7 @@ class Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchan
 								if (!isTickPrecision)
 									timeValue = timeValue.StorageBinaryOldTruncate();
 
-								metaInfo.FirstFieldTime = metaInfo.LastFieldTime = isUtc ? timeValue.UtcDateTime : timeValue.LocalDateTime;
+								metaInfo.FirstFieldTime = metaInfo.LastFieldTime = isUtc ? timeValue : timeValue.ToLocalTime();
 							}
 
 							var lastOffset = metaInfo.LastServerOffset;
@@ -1072,14 +1072,14 @@ class Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchan
 					case Level1Fields.BuyBackDate:
 					{
 						var info = metaInfo.BuyBackInfo;
-						var timeValue = (DateTimeOffset)value;
+						var timeValue = (DateTime)value;
 						
 						if (info.FirstDateTime == default)
 						{
 							if (!isTickPrecision)
 								timeValue = timeValue.StorageBinaryOldTruncate();
 
-							info.FirstDateTime = info.LastDateTime = isUtc ? timeValue.UtcDateTime : timeValue.LocalDateTime;
+							info.FirstDateTime = info.LastDateTime = isUtc ? timeValue : timeValue.ToLocalTime();
 						}
 
 						var lastOffset = info.LastDateOffset;
@@ -1117,14 +1117,14 @@ class Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchan
 					case Level1Fields.CouponDate:
 					{
 						var info = metaInfo.CouponInfo;
-						var timeValue = (DateTimeOffset)value;
+						var timeValue = (DateTime)value;
 
 						if (info.FirstDateTime == default)
 						{
 							if (!isTickPrecision)
 								timeValue = timeValue.StorageBinaryOldTruncate();
 
-							info.FirstDateTime = info.LastDateTime = isUtc ? timeValue.UtcDateTime : timeValue.LocalDateTime;
+							info.FirstDateTime = info.LastDateTime = isUtc ? timeValue : timeValue.ToLocalTime();
 						}
 
 						var lastOffset = info.LastDateOffset;
@@ -1220,7 +1220,7 @@ class Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchan
 							break;
 
 						case 3:
-							l1Msg.Add(field, reader.ReadLong().To<DateTimeOffset>());
+							l1Msg.Add(field, reader.ReadLong().To<DateTime>());
 							break;
 
 						case 4:

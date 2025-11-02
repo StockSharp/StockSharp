@@ -698,7 +698,7 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 	/// <param name="value">Value.</param>
 	/// <param name="source">Source value.</param>
 	/// <param name="subscription">Subscription.</param>
-	protected void RaiseProcessOutput(DiagramSocket socket, DateTimeOffset time, object value, DiagramSocketValue source = null, Subscription subscription = null)
+	protected void RaiseProcessOutput(DiagramSocket socket, DateTime time, object value, DiagramSocketValue source = null, Subscription subscription = null)
 	{
 		var dsv = new DiagramSocketValue(socket, time, value, source, subscription ?? source?.Subscription);
 
@@ -762,7 +762,7 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 	/// <summary>
 	/// Flush non trigger (root) elements.
 	/// </summary>
-	public virtual void Flush(DateTimeOffset time)
+	public virtual void Flush(DateTime time)
 	{
 	}
 
@@ -932,7 +932,7 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 	/// <param name="time">Time.</param>
 	/// <param name="values">Values.</param>
 	/// <param name="source">Source value.</param>
-	protected virtual void OnProcess(DateTimeOffset time, IDictionary<DiagramSocket, DiagramSocketValue> values, DiagramSocketValue source)
+	protected virtual void OnProcess(DateTime time, IDictionary<DiagramSocket, DiagramSocketValue> values, DiagramSocketValue source)
 	{
 		throw new NotSupportedException();
 	}
@@ -963,7 +963,7 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 	/// <summary>
 	/// To start for start the diagram element algorithm.
 	/// </summary>
-	public void Start(DateTimeOffset time)
+	public void Start(DateTime time)
 	{
 		try
 		{
@@ -979,7 +979,7 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 	/// <summary>
 	/// The method is called at the start of the diagram element algorithm.
 	/// </summary>
-	protected virtual void OnStart(DateTimeOffset time)
+	protected virtual void OnStart(DateTime time)
 	{
 	}
 

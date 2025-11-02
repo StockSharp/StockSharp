@@ -51,7 +51,7 @@ public abstract class SubscriptionDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
-	protected override void OnStart(DateTimeOffset time)
+	protected override void OnStart(DateTime time)
 	{
 		base.OnStart(time);
 

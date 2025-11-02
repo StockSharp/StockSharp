@@ -60,7 +60,7 @@ public interface ITransactionProvider
 	/// <summary>
 	/// Mass order cancellation event.
 	/// </summary>
-	event Action<long, DateTimeOffset> MassOrderCanceled2;
+	event Action<long, DateTime> MassOrderCanceled2;
 
 	/// <summary>
 	/// Mass order cancellation errors event.
@@ -70,7 +70,7 @@ public interface ITransactionProvider
 	/// <summary>
 	/// Mass order cancellation errors event.
 	/// </summary>
-	event Action<long, Exception, DateTimeOffset> MassOrderCancelFailed2;
+	event Action<long, Exception, DateTime> MassOrderCancelFailed2;
 
 	/// <summary>
 	/// Lookup result <see cref="PortfolioLookupMessage"/> received.

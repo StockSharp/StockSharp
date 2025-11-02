@@ -79,7 +79,7 @@ class CandleBinarySerializer<TCandleMessage>(SecurityId securityId, DataType dat
 			else
 				metaInfo.FirstFractionalPrice = metaInfo.LastFractionalPrice = low;
 
-			metaInfo.ServerOffset = firstCandle.OpenTime.Offset;
+			metaInfo.ServerOffset = default;
 			metaInfo.FirstSeqNum = metaInfo.PrevSeqNum = firstCandle.SeqNum;
 		}
 
@@ -174,8 +174,8 @@ class CandleBinarySerializer<TCandleMessage>(SecurityId securityId, DataType dat
 			{
 				var isAll = candle.HighTime != default && candle.LowTime != default;
 
-				DateTimeOffset first;
-				DateTimeOffset second;
+				DateTime first;
+				DateTime second;
 
 				writer.Write(isAll);
 
@@ -196,9 +196,12 @@ class CandleBinarySerializer<TCandleMessage>(SecurityId securityId, DataType dat
 					second = default;
 				}
 
+				var firstOffset = TimeSpan.Zero; // first.Offset
+				var secondOffset = TimeSpan.Zero; // second.Offset
+
 				if (first != default)
 				{
-					if (first.Offset != lastOffset && !allowDiffOffsets)
+					if (firstOffset != lastOffset && !allowDiffOffsets)
 						throw new ArgumentException(LocalizedStrings.WrongTimeOffset.Put(first, lastOffset));
 
 					if (candle.CloseTime != default && first > candle.CloseTime)
@@ -209,7 +212,7 @@ class CandleBinarySerializer<TCandleMessage>(SecurityId securityId, DataType dat
 
 				if (second != default)
 				{
-					if (second.Offset != lastOffset && !allowDiffOffsets)
+					if (secondOffset != lastOffset && !allowDiffOffsets)
 						throw new ArgumentException(LocalizedStrings.WrongTimeOffset.Put(second, lastOffset));
 
 					if (candle.CloseTime != default && second > candle.CloseTime)
@@ -225,7 +228,9 @@ class CandleBinarySerializer<TCandleMessage>(SecurityId securityId, DataType dat
 
 				if (candle.CloseTime != default)
 				{
-					if (candle.CloseTime.Offset != lastOffset && !allowDiffOffsets)
+					var closeOffset = TimeSpan.Zero; // candle.CloseTime.Offset
+
+					if (closeOffset != lastOffset && !allowDiffOffsets)
 						throw new ArgumentException(LocalizedStrings.WrongTimeOffset.Put(candle.CloseTime, lastOffset));
 
 					metaInfo.LastTime = writer.WriteTime(candle.CloseTime, metaInfo.LastTime, LocalizedStrings.CandleCloseTime, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset, bigRange);
@@ -518,7 +523,7 @@ class CandleBinarySerializer<TCandleMessage>(SecurityId securityId, DataType dat
 
 		candle.State = (CandleStates)reader.ReadInt();
 
-		metaInfo.FirstTime = metaInfo.Version <= MarketDataVersions.Version40 ? candle.OpenTime.LocalDateTime : prevTime;
+		metaInfo.FirstTime = metaInfo.Version <= MarketDataVersions.Version40 ? candle.OpenTime.ToLocalTime() : prevTime;
 
 		if (metaInfo.Version >= MarketDataVersions.Version45)
 		{

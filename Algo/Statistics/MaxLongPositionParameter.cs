@@ -21,7 +21,7 @@ public class MaxLongPositionParameter : BaseStatisticParameter<decimal>, IPositi
 	}
 
 	/// <inheritdoc/>
-	public void Add(DateTimeOffset marketTime, decimal position)
+	public void Add(DateTime marketTime, decimal position)
 	{
 		if (position > 0 && position > Value)
 			Value = position;

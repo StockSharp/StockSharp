@@ -72,7 +72,7 @@ public class Synthetic(Security security, ISecurityProvider provider)
 	/// <param name="strike">Strike.</param>
 	/// <param name="expiryDate">The date of the option expiration.</param>
 	/// <returns>The option position.</returns>
-	public (Security security, Sides side)[] Buy(decimal strike, DateTimeOffset expiryDate)
+	public (Security security, Sides side)[] Buy(decimal strike, DateTime expiryDate)
 	{
 		return Position(strike, expiryDate, Sides.Buy);
 	}
@@ -93,7 +93,7 @@ public class Synthetic(Security security, ISecurityProvider provider)
 	/// <param name="strike">Strike.</param>
 	/// <param name="expiryDate">The date of the option expiration.</param>
 	/// <returns>The option position.</returns>
-	public (Security security, Sides side)[] Sell(decimal strike, DateTimeOffset expiryDate)
+	public (Security security, Sides side)[] Sell(decimal strike, DateTime expiryDate)
 	{
 		return Position(strike, expiryDate, Sides.Sell);
 	}
@@ -105,7 +105,7 @@ public class Synthetic(Security security, ISecurityProvider provider)
 	/// <param name="expiryDate">The date of the option expiration.</param>
 	/// <param name="side">The main position direction.</param>
 	/// <returns>The option position.</returns>
-	public (Security security, Sides side)[] Position(decimal strike, DateTimeOffset expiryDate, Sides side)
+	public (Security security, Sides side)[] Position(decimal strike, DateTime expiryDate, Sides side)
 	{
 		var call = _security.GetCall(_provider, strike, expiryDate);
 		var put = _security.GetPut(_provider, strike, expiryDate);
@@ -117,7 +117,7 @@ public class Synthetic(Security security, ISecurityProvider provider)
 		];
 	}
 
-	private DateTimeOffset GetExpiryDate()
+	private DateTime GetExpiryDate()
 	{
 		if (_security.ExpiryDate == null)
 			throw new InvalidOperationException(LocalizedStrings.NoExpirationDate.Put(_security.Id));

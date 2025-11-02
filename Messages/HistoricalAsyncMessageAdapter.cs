@@ -25,7 +25,7 @@ public abstract class HistoricalAsyncMessageAdapter(IdGenerator transactionIdGen
 		{
 			mdMsg = (MarketDataMessage)mdMsg.Clone();
 
-			mdMsg.To ??= DateTimeOffset.UtcNow;
+			mdMsg.To ??= DateTime.UtcNow;
 
 			if (from is null)
 			{

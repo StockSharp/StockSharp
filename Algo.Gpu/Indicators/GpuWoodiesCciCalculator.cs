@@ -39,7 +39,7 @@ public struct GpuWoodiesCciParams(int cciLength, int smaLength) : IGpuIndicatorP
 public struct GpuWoodiesCciResult : IGpuIndicatorResult
 {
 	/// <summary>
-	/// Time in <see cref="DateTimeOffset.Ticks"/>.
+	/// Time in <see cref="DateTime.Ticks"/>.
 	/// </summary>
 	public long Time;
 

@@ -40,7 +40,7 @@ public interface ISnapshotStorage
 	/// <param name="from">Start date, from which data needs to be retrieved.</param>
 	/// <param name="to">End date, until which data needs to be retrieved.</param>
 	/// <returns>All snapshots.</returns>
-	IEnumerable<Message> GetAll(DateTimeOffset? from = null, DateTimeOffset? to = null);
+	IEnumerable<Message> GetAll(DateTime? from = null, DateTime? to = null);
 }
 
 /// <summary>
@@ -70,5 +70,5 @@ public interface ISnapshotStorage<TKey, TMessage> : ISnapshotStorage
 	/// <param name="from">Start date, from which data needs to be retrieved.</param>
 	/// <param name="to">End date, until which data needs to be retrieved.</param>
 	/// <returns>All snapshots.</returns>
-	new IEnumerable<TMessage> GetAll(DateTimeOffset? from = null, DateTimeOffset? to = null);
+	new IEnumerable<TMessage> GetAll(DateTime? from = null, DateTime? to = null);
 }

@@ -18,7 +18,7 @@ public interface IProtectiveBehaviour : ILogSource
 	/// <param name="time">Current time.</param>
 	/// <returns>Registration order info.</returns>
 	(bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)?
-		Update(decimal price, decimal value, DateTimeOffset time);
+		Update(decimal price, decimal value, DateTime time);
 
 	/// <summary>
 	/// Try activate protection.
@@ -27,7 +27,7 @@ public interface IProtectiveBehaviour : ILogSource
 	/// <param name="time">Current time.</param>
 	/// <returns>Registration order info.</returns>
 	(bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)?
-		TryActivate(decimal price, DateTimeOffset time);
+		TryActivate(decimal price, DateTime time);
 }
 
 /// <summary>
@@ -98,8 +98,8 @@ public abstract class BaseProtectiveBehaviour : BaseLogReceiver, IProtectiveBeha
 	public abstract decimal Position { get; }
 
 	/// <inheritdoc />
-	public abstract (bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)? Update(decimal price, decimal value, DateTimeOffset time);
+	public abstract (bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)? Update(decimal price, decimal value, DateTime time);
 
 	/// <inheritdoc />
-	public abstract (bool, Sides, decimal, decimal, OrderCondition)? TryActivate(decimal price, DateTimeOffset time);
+	public abstract (bool, Sides, decimal, decimal, OrderCondition)? TryActivate(decimal price, DateTime time);
 }

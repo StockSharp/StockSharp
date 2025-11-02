@@ -130,13 +130,13 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 	/// <param name="portfolio">Portfolio.</param>
 	/// <param name="value">New signed quantity.</param>
 	/// <param name="time">Timestamp to assign into <see cref="Position.LocalTime"/> and <see cref="Position.ServerTime"/> if position is created anew.</param>
-	public void SetPosition(Security security, Portfolio portfolio, decimal value, DateTimeOffset time)
+	public void SetPosition(Security security, Portfolio portfolio, decimal value, DateTime time)
 	{
 		lock (_lock)
 			GetOrCreate(security, portfolio, time, out _).CurrentValue = value;
 	}
 
-	private Position GetOrCreate(Security security, Portfolio portfolio, DateTimeOffset time, out bool isNew)
+	private Position GetOrCreate(Security security, Portfolio portfolio, DateTime time, out bool isNew)
 	{
 		ArgumentNullException.ThrowIfNull(security);
 		ArgumentNullException.ThrowIfNull(portfolio);
@@ -461,7 +461,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 	/// <param name="price">New market price.</param>
 	/// <param name="serverTime">Server time of the price snapshot.</param>
 	/// <param name="localTime">Local time when the price was processed.</param>
-	public void UpdateCurrentPrice(SecurityId secId, decimal price, DateTimeOffset serverTime, DateTimeOffset localTime)
+	public void UpdateCurrentPrice(SecurityId secId, decimal price, DateTime serverTime, DateTime localTime)
 	{
 		if (price < 0)
 			throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.InvalidValue);

@@ -124,7 +124,7 @@ public class Envelope : BaseComplexIndicator<IEnvelopeValue>
 	public override string ToString() => base.ToString() + " " + Length;
 
 	/// <inheritdoc />
-	protected override IEnvelopeValue CreateValue(DateTimeOffset time)
+	protected override IEnvelopeValue CreateValue(DateTime time)
 		=> new EnvelopeValue(this, time);
 }
 
@@ -175,7 +175,7 @@ public interface IEnvelopeValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent Envelope indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class EnvelopeValue(Envelope indicator, DateTimeOffset time) : ComplexIndicatorValue<Envelope>(indicator, time), IEnvelopeValue
+public class EnvelopeValue(Envelope indicator, DateTime time) : ComplexIndicatorValue<Envelope>(indicator, time), IEnvelopeValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue MiddleValue => this[TypedIndicator.Middle];

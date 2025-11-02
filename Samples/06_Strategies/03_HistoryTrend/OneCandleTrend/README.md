@@ -47,9 +47,9 @@ This helps platforms like Designer properly initialize the required market data.
 When the strategy starts, it sets up data subscriptions and visualization components:
 
 ```csharp
-protected override void OnStarted(DateTimeOffset time)
+protected override void OnStarted2(DateTime time)
 {
-    base.OnStarted(time);
+    base.OnStarted2(time);
 
     // Create subscription
     var subscription = SubscribeCandles(CandleType);

@@ -73,7 +73,7 @@ public class RepoOrderInfo : Cloneable<RepoOrderInfo>, IPersistable
 	/// </summary>
 	[DataMember]
 	//[Nullable]
-	public DateTimeOffset? SettleDate { get; set; }
+	public DateTime? SettleDate { get; set; }
 
 	/// <summary>
 	/// REPO-M the begin value of the discount.
@@ -142,7 +142,7 @@ public class RepoOrderInfo : Cloneable<RepoOrderInfo>, IPersistable
 		MatchRef = storage.GetValue<string>(nameof(MatchRef));
 		Partner = storage.GetValue<string>(nameof(Partner));
 		SettleCode = storage.GetValue<string>(nameof(SettleCode));
-		SettleDate = storage.GetValue<DateTimeOffset?>(nameof(SettleDate));
+		SettleDate = storage.GetValue<DateTime?>(nameof(SettleDate));
 		Value = storage.GetValue<decimal?>(nameof(Value));
 		BlockSecurities = storage.GetValue<bool?>(nameof(BlockSecurities));
 		LowerDiscount = storage.GetValue<decimal?>(nameof(LowerDiscount));

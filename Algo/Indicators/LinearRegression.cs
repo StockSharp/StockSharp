@@ -117,7 +117,7 @@ public class LinearRegression : BaseComplexIndicator<ILinearRegressionValue>
 	public override string ToString() => base.ToString() + " " + Length;
 
 	/// <inheritdoc />
-	protected override ILinearRegressionValue CreateValue(DateTimeOffset time)
+	protected override ILinearRegressionValue CreateValue(DateTime time)
 		=> new LinearRegressionValue(this, time);
 }
 
@@ -179,7 +179,7 @@ public interface ILinearRegressionValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent LinearRegression indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class LinearRegressionValue(LinearRegression indicator, DateTimeOffset time) : ComplexIndicatorValue<LinearRegression>(indicator, time), ILinearRegressionValue
+public class LinearRegressionValue(LinearRegression indicator, DateTime time) : ComplexIndicatorValue<LinearRegression>(indicator, time), ILinearRegressionValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue LinearRegValue => this[TypedIndicator.LinearReg];

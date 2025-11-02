@@ -269,7 +269,7 @@ public class StorageBuffer : IPersistable
 
 			//	_transactionsBuffer.Add(cancelMsg.SecurityId, new ExecutionMessage
 			//	{
-			//		ServerTime = DateTimeOffset.UtcNow,
+			//		ServerTime = DateTime.UtcNow,
 			//		DataTypeEx = DataType.Transactions,
 			//		SecurityId = cancelMsg.SecurityId,
 			//		HasOrderInfo = true,

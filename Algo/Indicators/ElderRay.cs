@@ -89,7 +89,7 @@ public class ElderRay : BaseComplexIndicator<IElderRayValue>
 	public override string ToString() => base.ToString() + $" L={Length}";
 
 	/// <inheritdoc />
-	protected override IElderRayValue CreateValue(DateTimeOffset time)
+	protected override IElderRayValue CreateValue(DateTime time)
 		=> new ElderRayValue(this, time);
 }
 
@@ -129,7 +129,7 @@ public interface IElderRayValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent ElderRay indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class ElderRayValue(ElderRay indicator, DateTimeOffset time) : ComplexIndicatorValue<ElderRay>(indicator, time), IElderRayValue
+public class ElderRayValue(ElderRay indicator, DateTime time) : ComplexIndicatorValue<ElderRay>(indicator, time), IElderRayValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue BullPowerValue => this[TypedIndicator.BullPower];

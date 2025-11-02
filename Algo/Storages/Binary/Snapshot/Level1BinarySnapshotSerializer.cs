@@ -401,7 +401,7 @@ public class Level1BinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Le
 					snapshot.CouponValue = (BlittableDecimal)(decimal)change.Value;
 					break;
 				case Level1Fields.CouponDate:
-					snapshot.CouponDate = ((DateTimeOffset)change.Value).To<long>();
+					snapshot.CouponDate = ((DateTime)change.Value).To<long>();
 					break;
 				case Level1Fields.CouponPeriod:
 					snapshot.CouponPeriod = (BlittableDecimal)(decimal)change.Value;
@@ -458,10 +458,10 @@ public class Level1BinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Le
 					snapshot.VolumeStep = (BlittableDecimal)(decimal)change.Value;
 					break;
 				case Level1Fields.BestBidTime:
-					snapshot.BestBidTime = ((DateTimeOffset)change.Value).To<long>();
+					snapshot.BestBidTime = ((DateTime)change.Value).To<long>();
 					break;
 				case Level1Fields.BestAskTime:
-					snapshot.BestAskTime = ((DateTimeOffset)change.Value).To<long>();
+					snapshot.BestAskTime = ((DateTime)change.Value).To<long>();
 					break;
 				case Level1Fields.Multiplier:
 					snapshot.Multiplier = (BlittableDecimal)(decimal)change.Value;
@@ -535,8 +535,8 @@ public class Level1BinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Le
 		var level1Msg = new Level1ChangeMessage
 		{
 			SecurityId = snapshot.SecurityId.ToSecurityId(),
-			ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
-			LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
+			ServerTime = snapshot.LastChangeServerTime.To<DateTime>(),
+			LocalTime = snapshot.LastChangeLocalTime.To<DateTime>(),
 			BuildFrom = snapshot.BuildFrom,
 			SeqNum = snapshot.SeqNum,
 		};
@@ -629,7 +629,7 @@ public class Level1BinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Le
 			.TryAdd(Level1Fields.MinVolume, snapshot.MinVolume)
 			.TryAdd(Level1Fields.UnderlyingMinVolume, snapshot.UnderlyingMinVolume)
 			.TryAdd(Level1Fields.CouponValue, snapshot.CouponValue)
-			.TryAdd(Level1Fields.CouponDate, snapshot.CouponDate?.To<DateTimeOffset>())
+			.TryAdd(Level1Fields.CouponDate, snapshot.CouponDate?.To<DateTime>())
 			.TryAdd(Level1Fields.CouponPeriod, snapshot.CouponPeriod)
 			.TryAdd(Level1Fields.MarketPriceYesterday, snapshot.MarketPriceYesterday)
 			.TryAdd(Level1Fields.MarketPriceToday, snapshot.MarketPriceToday)
@@ -648,8 +648,8 @@ public class Level1BinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Le
 			.TryAdd(Level1Fields.OptionSyntheticMargin, snapshot.OptionSyntheticMargin)
 			.TryAdd(Level1Fields.PriceStep, snapshot.PriceStep)
 			.TryAdd(Level1Fields.VolumeStep, snapshot.VolumeStep)
-			.TryAdd(Level1Fields.BestBidTime, snapshot.BestBidTime?.To<DateTimeOffset>())
-			.TryAdd(Level1Fields.BestAskTime, snapshot.BestAskTime?.To<DateTimeOffset>())
+			.TryAdd(Level1Fields.BestBidTime, snapshot.BestBidTime?.To<DateTime>())
+			.TryAdd(Level1Fields.BestAskTime, snapshot.BestAskTime?.To<DateTime>())
 			.TryAdd(Level1Fields.Multiplier, snapshot.Multiplier)
 			.TryAdd(Level1Fields.LongTermDebtEquity, snapshot.LongTermDebtEquity)
 			.TryAdd(Level1Fields.TotalDebtEquity, snapshot.TotalDebtEquity)
@@ -669,7 +669,7 @@ public class Level1BinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Le
 			;
 
 		if (snapshot.LastTradeTime != null)
-			level1Msg.Add(Level1Fields.LastTradeTime, snapshot.LastTradeTime.Value.To<DateTimeOffset>());
+			level1Msg.Add(Level1Fields.LastTradeTime, snapshot.LastTradeTime.Value.To<DateTime>());
 
 		if (snapshot.LastTradeUpDown != null)
 			level1Msg.Add(Level1Fields.LastTradeUpDown, snapshot.LastTradeUpDown.Value == 1);
@@ -681,7 +681,7 @@ public class Level1BinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Le
 			level1Msg.Add(Level1Fields.State, (SecurityStates)snapshot.State.Value);
 
 		if (snapshot.BuyBackDate != null)
-			level1Msg.Add(Level1Fields.BuyBackDate, snapshot.BuyBackDate.Value.To<DateTimeOffset>());
+			level1Msg.Add(Level1Fields.BuyBackDate, snapshot.BuyBackDate.Value.To<DateTime>());
 
 		return level1Msg;
 	}

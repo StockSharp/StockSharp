@@ -123,7 +123,7 @@ class QuoteBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchang
 			//		metaInfo.LastFractionalPrice = metaInfo.FirstFractionalPrice = price;
 			//}
 
-			metaInfo.ServerOffset = firstDepth.ServerTime.Offset;
+			metaInfo.ServerOffset = default;
 			metaInfo.IncrementalOnly = firstDepth.State != null;
 			metaInfo.FirstSeqNum = metaInfo.PrevSeqNum = firstDepth.SeqNum;
 		}

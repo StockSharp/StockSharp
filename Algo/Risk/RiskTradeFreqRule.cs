@@ -10,7 +10,7 @@ namespace StockSharp.Algo.Risk;
 	GroupName = LocalizedStrings.TradesKey)]
 public class RiskTradeFreqRule : RiskRule
 {
-	private DateTimeOffset? _endTime;
+	private DateTime? _endTime;
 	private int _current;
 
 	/// <inheritdoc />

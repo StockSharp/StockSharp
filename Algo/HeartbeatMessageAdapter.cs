@@ -270,7 +270,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 		var heartbeat = HeartbeatInterval;
 		var needHeartbeat = heartbeat > TimeSpan.Zero;
 
-		var time = CurrentTime;
+		var time = CurrentTimeUtc;
 		var lastHeartBeatTime = time;
 
 		var sync = new SyncObject();
@@ -298,7 +298,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 			    try
 			    {
-				    var now = CurrentTime;
+				    var now = CurrentTimeUtc;
 				    var diff = now - time;
 
 				    if (needHeartbeat && (now - lastHeartBeatTime) >= heartbeat)
@@ -314,7 +314,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 					if (outMsgInterval <= TimeSpan.Zero)
 					{
 						outMsgInterval = outMsgIntervalInitial;
-						RaiseNewOutMessage(new TimeMessage { LocalTime = CurrentTime });
+						RaiseNewOutMessage(new TimeMessage { LocalTime = CurrentTimeUtc });
 					}
 
 				    time = now;
@@ -408,7 +408,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 				if (_connectionTimeOut > TimeSpan.Zero)
 					break;
 
-				if (_reConnectionSettings.WorkingTime.IsTradeTime(CurrentTime.UtcDateTime, out _, out _))
+				if (_reConnectionSettings.WorkingTime.IsTradeTime(CurrentTimeUtc, out _, out _))
 				{
 					LogInfo("RCM: To Connecting. CurrState {0} PrevState {1} Attempts {2}.", FormatState(_currState), FormatState(_prevState), _connectingAttemptCount);
 

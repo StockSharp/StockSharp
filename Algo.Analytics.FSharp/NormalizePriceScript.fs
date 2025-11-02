@@ -39,7 +39,7 @@ type NormalizePriceScript() =
                 Task.CompletedTask
             else
                 // Create a chart for normalized close prices
-                let chart = panel.CreateChart<DateTimeOffset, decimal>()
+                let chart = panel.CreateChart<DateTime, decimal>()
 
                 // Iterate over each security
                 for security in securities do
@@ -48,7 +48,7 @@ type NormalizePriceScript() =
                         ()
                     else
                         // Dictionary to store time -> normalized close price
-                        let series = Dictionary<DateTimeOffset, decimal>()
+                        let series = Dictionary<DateTime, decimal>()
 
                         // Get candle storage for this security
                         let candleStorage =

@@ -456,7 +456,7 @@ public static partial class MarketRuleHelper
 			remove => Container.Log -= value;
 		}
 
-		DateTimeOffset ILogSource.CurrentTime => Container.CurrentTime;
+		DateTime ILogSource.CurrentTimeUtc => Container.CurrentTimeUtc;
 
 		bool ILogSource.IsRoot => Container.IsRoot;
 
@@ -464,7 +464,7 @@ public static partial class MarketRuleHelper
 
 		void ILogReceiver.AddLog(LogMessage message)
 		{
-			Container.AddLog(new LogMessage(Container, message.Time, message.Level, () => message.Message));
+			Container.AddLog(new LogMessage(Container, message.TimeUtc, message.Level, () => message.Message));
 		}
 
 		#region Implementation of IMarketRuleContainer

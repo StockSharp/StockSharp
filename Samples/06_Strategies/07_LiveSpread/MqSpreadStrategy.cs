@@ -67,9 +67,9 @@ public class MqSpreadStrategy : Strategy
 	/// <summary>
 	/// On strategy started.
 	/// </summary>
-	protected override void OnStarted(DateTimeOffset time)
+	protected override void OnStarted2(DateTime time)
 	{
-		base.OnStarted(time);
+		base.OnStarted2(time);
 
 		// Subscribe to market time changes to update quotes
 		Connector.CurrentTimeChanged += Connector_CurrentTimeChanged;
@@ -171,7 +171,7 @@ public class MqSpreadStrategy : Strategy
 		};
 
 		// Log the creation of the new quoting processors
-		this.AddInfoLog($"Created buy/sell spread at {CurrentTime}");
+		this.AddInfoLog($"Created buy/sell spread");
 
 		// Subscribe to buy processor events for logging
 		_buyProcessor.OrderRegistered += order =>

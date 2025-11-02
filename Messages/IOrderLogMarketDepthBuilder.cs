@@ -10,7 +10,7 @@ public interface IOrderLogMarketDepthBuilder
 	/// </summary>
 	/// <param name="serverTime"><see cref="QuoteChangeMessage.ServerTime"/></param>
 	/// <returns>Snapshot.</returns>
-	QuoteChangeMessage GetSnapshot(DateTimeOffset serverTime);
+	QuoteChangeMessage GetSnapshot(DateTime serverTime);
 
 	/// <summary>
 	/// Process order log item.
@@ -59,7 +59,7 @@ public class OrderLogMarketDepthBuilder : IOrderLogMarketDepthBuilder
 			_asks.Add(ask.Price, ask);
 	}
 
-	QuoteChangeMessage IOrderLogMarketDepthBuilder.GetSnapshot(DateTimeOffset serverTime)
+	QuoteChangeMessage IOrderLogMarketDepthBuilder.GetSnapshot(DateTime serverTime)
 	{
 		var depth = _depth.TypedClone();
 

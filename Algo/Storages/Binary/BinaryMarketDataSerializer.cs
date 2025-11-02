@@ -48,7 +48,7 @@ abstract class BinaryMetaInfo : MetaInfo
 	protected BinaryMetaInfo(DateTime date)
 		: base(date)
 	{
-		LocalOffset = DateTimeOffset.Now.Offset;
+		LocalOffset = default/*DateTimeOffset.Now.Offset*/;
 
 		FirstLocalTime = LastLocalTime = DateTime.UtcNow;
 	}
@@ -510,7 +510,7 @@ abstract class BinaryMarketDataSerializer<TData, TMetaInfo> : IMarketDataSeriali
 		metaInfo.LastItemLocalOffset = lastLocalOffset;
 	}
 
-	protected static DateTimeOffset ReadItemLocalTime(BitArrayReader reader, TMetaInfo metaInfo, bool isTickPrecision)
+	protected static DateTime ReadItemLocalTime(BitArrayReader reader, TMetaInfo metaInfo, bool isTickPrecision)
 	{
 		var prevTsTime = metaInfo.FirstItemLocalTime;
 		var lastOffset = metaInfo.FirstItemLocalOffset;

@@ -286,7 +286,7 @@ public partial class MainWindow
 		
 		_candlesSubscription = new(CandleDataTypeEdit.DataType, security)
 		{
-			From = DateTimeOffset.UtcNow - TimeSpan.FromDays(10),
+			From = DateTime.UtcNow - TimeSpan.FromDays(10),
 		};
 		_emuConnector.Subscribe(_candlesSubscription);
 	}

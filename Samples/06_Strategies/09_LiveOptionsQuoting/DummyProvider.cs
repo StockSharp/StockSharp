@@ -10,7 +10,7 @@ using StockSharp.Messages;
 
 class DummyProvider(IEnumerable<Security> securities, IEnumerable<Position> positions) : CollectionSecurityProvider(securities), IMarketDataProvider, IPositionProvider
 {
-	event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> IMarketDataProvider.ValuesChanged
+	event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTime, DateTime> IMarketDataProvider.ValuesChanged
 	{
 		add { }
 		remove { }

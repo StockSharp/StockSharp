@@ -20,7 +20,7 @@ public class CandleTests
 				TradePrice = 11,
 				TradeVolume = 11,
 				SecurityId = secId,
-				ServerTime = new DateTime(2000, 1, 1, 1, 1, 1, 100).ApplyMoscow()
+				ServerTime = new DateTime(2000, 1, 1, 1, 1, 1, 100).UtcKind()
 			},
 			new ExecutionMessage
 			{
@@ -28,7 +28,7 @@ public class CandleTests
 				TradePrice = 12,
 				TradeVolume = 12,
 				SecurityId = secId,
-				ServerTime = new DateTime(2000, 1, 1, 1, 1, 1, 200).ApplyMoscow()
+				ServerTime = new DateTime(2000, 1, 1, 1, 1, 1, 200).UtcKind()
 			},
 			new ExecutionMessage
 			{
@@ -36,7 +36,7 @@ public class CandleTests
 				TradePrice = 13,
 				TradeVolume = 13,
 				SecurityId = secId,
-				ServerTime = new DateTime(2000, 1, 1, 1, 1, 1, 300).ApplyMoscow()
+				ServerTime = new DateTime(2000, 1, 1, 1, 1, 1, 300).UtcKind()
 			}
 		};
 
@@ -77,7 +77,7 @@ public class CandleTests
 				TradePrice = 11,
 				TradeVolume = 11,
 				SecurityId = secId,
-				ServerTime = new DateTime(2000, 1, 10, 10, 0, 0).ApplyMoscow()
+				ServerTime = new DateTime(2000, 1, 10, 10, 0, 0).UtcKind()
 			},
 			new ExecutionMessage
 			{
@@ -85,7 +85,7 @@ public class CandleTests
 				TradePrice = 12,
 				TradeVolume = 12,
 				SecurityId = secId,
-				ServerTime = new DateTime(2000, 1, 10, 10, 1, 0).ApplyMoscow()
+				ServerTime = new DateTime(2000, 1, 10, 10, 1, 0).UtcKind()
 			},
 			new ExecutionMessage
 			{
@@ -93,7 +93,7 @@ public class CandleTests
 				TradePrice = 13,
 				TradeVolume = 13,
 				SecurityId = secId,
-				ServerTime = new DateTime(2000, 1, 10, 10, 2, 0).ApplyMoscow()
+				ServerTime = new DateTime(2000, 1, 10, 10, 2, 0).UtcKind()
 			}
 		};
 
@@ -237,7 +237,7 @@ public class CandleTests
 	[TestMethod]
 	public void CandleBounds()
 	{
-		var date = new DateTime(2013, 5, 15).ApplyTimeZone(ExchangeBoard.Micex.TimeZone);
+		var date = new DateTime(2013, 5, 15).UtcKind();
 
 		CheckCandleBounds(TimeSpan.FromMinutes(5).GetCandleBounds(date.Add(new TimeSpan(7, 49, 33)), ExchangeBoard.MicexJunior), date.Add(new TimeSpan(7, 45, 0)), date.Add(new TimeSpan(7, 50, 0)));
 		CheckCandleBounds(TimeSpan.FromMinutes(5).GetCandleBounds(date.Add(new TimeSpan(14, 1, 33)), ExchangeBoard.Forts), date.Add(new TimeSpan(14, 0, 0)), date.Add(new TimeSpan(14, 5, 0)));
@@ -256,7 +256,7 @@ public class CandleTests
 		CheckCandleBounds(TimeSpan.FromHours(48).GetCandleBounds(date.Add(new TimeSpan(23, 30, 0)), ExchangeBoard.Forts), date.Add(new TimeSpan(10, 0, 0)), date.Add(new TimeSpan(1, 23, 50, 0)));
 	}
 
-	private static void CheckCandleBounds(Range<DateTimeOffset> range, DateTimeOffset min, DateTimeOffset max)
+	private static void CheckCandleBounds(Range<DateTime> range, DateTime min, DateTime max)
 	{
 		min.AssertEqual(range.Min);
 		max.AssertEqual(range.Max);
@@ -267,8 +267,8 @@ public class CandleTests
 	{
 		var tf = TimeSpan.FromMinutes(5);
 
-		static Range<DateTimeOffset> Create(DateTime from, DateTime to)
-			=> new(from.ApplyMoscow(), to.ApplyMoscow());
+		static Range<DateTime> Create(DateTime from, DateTime to)
+			=> new(from.UtcKind(), to.UtcKind());
 
 		Create(new DateTime(2011, 1, 1, 9, 0, 0), new DateTime(2011, 1, 1, 23, 59, 59)).GetTimeFrameCount(tf, ExchangeBoard.Forts).AssertEqual(162);
 		Create(new DateTime(2011, 1, 1, 9, 0, 0), new DateTime(2011, 1, 2, 23, 59, 59)).GetTimeFrameCount(tf, ExchangeBoard.Forts).AssertEqual(162 * 2);
@@ -401,7 +401,7 @@ public class CandleTests
 		var sub = new CandleBuilderSubscription(md);
 		var transform = new TickCandleBuilderValueTransform();
 
-		var now = DateTimeOffset.Now;
+		var now = DateTime.UtcNow;
 
 		var tick1 = new ExecutionMessage
 		{
@@ -471,10 +471,10 @@ public class CandleTests
 
 		var candle1 = new TimeFrameCandleMessage
 		{
-			OpenTime = new(2020, 1, 1, 0, 0, 0, TimeSpan.Zero),
-			CloseTime = new(2020, 1, 1, 0, 1, 0, TimeSpan.Zero),
-			HighTime = new(2020, 1, 1, 0, 0, 0, TimeSpan.Zero),
-			LowTime = new(2020, 1, 1, 0, 0, 0, TimeSpan.Zero),
+			OpenTime = new DateTime(2020, 1, 1, 0, 0, 0).UtcKind(),
+			CloseTime = new DateTime(2020, 1, 1, 0, 1, 0).UtcKind(),
+			HighTime = new DateTime(2020, 1, 1, 0, 0, 0).UtcKind(),
+			LowTime = new DateTime(2020, 1, 1, 0, 0, 0).UtcKind(),
 			OpenPrice = 100m,
 			HighPrice = 101m,
 			LowPrice = 100m,
@@ -502,10 +502,10 @@ public class CandleTests
 
 		var candle2 = new TimeFrameCandleMessage
 		{
-			OpenTime = new(2020, 1, 1, 0, 1, 0, TimeSpan.Zero),
-			CloseTime = new(2020, 1, 1, 0, 2, 0, TimeSpan.Zero),
-			HighTime = new(2020, 1, 1, 0, 1, 0, TimeSpan.Zero),
-			LowTime = new(2020, 1, 1, 0, 1, 0, TimeSpan.Zero),
+			OpenTime = new DateTime(2020, 1, 1, 0, 1, 0).UtcKind(),
+			CloseTime = new DateTime(2020, 1, 1, 0, 2, 0).UtcKind(),
+			HighTime = new DateTime(2020, 1, 1, 0, 1, 0).UtcKind(),
+			LowTime = new DateTime(2020, 1, 1, 0, 1, 0).UtcKind(),
 			OpenPrice = 102m,
 			HighPrice = 103m,
 			LowPrice = 102m,

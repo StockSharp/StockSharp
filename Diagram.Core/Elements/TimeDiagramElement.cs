@@ -29,7 +29,7 @@ public class TimeDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc/>
-	protected override void OnStart(DateTimeOffset time)
+	protected override void OnStart(DateTime time)
 	{
 		base.OnStart(time);
 
@@ -39,11 +39,11 @@ public class TimeDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc/>
-	public override void Flush(DateTimeOffset time)
+	public override void Flush(DateTime time)
 	{
 		RaiseTime(time);
 	}
 
-	private void RaiseTime(DateTimeOffset time)
+	private void RaiseTime(DateTime time)
 		=> RaiseProcessOutput(_outputSocket, time, time);
 }

@@ -135,7 +135,7 @@ public class KnowSureThing : BaseComplexIndicator<IKnowSureThingValue>
 	}
 
 	/// <inheritdoc />
-	protected override IKnowSureThingValue CreateValue(DateTimeOffset time)
+	protected override IKnowSureThingValue CreateValue(DateTime time)
 		=> new KnowSureThingValue(this, time);
 }
 
@@ -191,7 +191,7 @@ public interface IKnowSureThingValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent KnowSureThing indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class KnowSureThingValue(KnowSureThing indicator, DateTimeOffset time) : ComplexIndicatorValue<KnowSureThing>(indicator, time), IKnowSureThingValue
+public class KnowSureThingValue(KnowSureThing indicator, DateTime time) : ComplexIndicatorValue<KnowSureThing>(indicator, time), IKnowSureThingValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue KstLineValue => this[TypedIndicator.KstLine];

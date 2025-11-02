@@ -216,7 +216,7 @@ public partial class MainWindow
 						if (!_optimizer.IsCancelled)
 						{
 							TestingProcess.Value = TestingProcess.Maximum;
-							MessageBox.Show(this, LocalizedStrings.CompletedIn.Put(DateTime.Now - _startEmulationTime));
+							MessageBox.Show(this, LocalizedStrings.CompletedIn.Put(DateTime.UtcNow - _startEmulationTime));
 						}
 						else
 							MessageBox.Show(this, LocalizedStrings.Cancelled);
@@ -236,7 +236,7 @@ public partial class MainWindow
 			});
 		};
 
-		_startEmulationTime = DateTime.Now;
+		_startEmulationTime = DateTime.UtcNow;
 
 		if (_optimizer is BruteForceOptimizer btOptimizer)
 		{

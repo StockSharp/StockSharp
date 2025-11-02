@@ -225,9 +225,9 @@ class TransactionBinarySerializer(SecurityId securityId, IExchangeInfoProvider e
 			metaInfo.FirstPnL = metaInfo.LastPnL = msg.PnL ?? 0;
 			metaInfo.FirstPosition = metaInfo.LastPosition = msg.Position ?? 0;
 			metaInfo.FirstSlippage = metaInfo.LastSlippage = msg.Slippage ?? 0;
-			metaInfo.FirstItemLocalTime = metaInfo.LastItemLocalTime = msg.LocalTime.UtcDateTime;
-			metaInfo.FirstItemLocalOffset = metaInfo.LastItemLocalOffset = msg.LocalTime.Offset;
-			metaInfo.ServerOffset = msg.ServerTime.Offset;
+			metaInfo.FirstItemLocalTime = metaInfo.LastItemLocalTime = msg.LocalTime;
+			metaInfo.FirstItemLocalOffset = metaInfo.LastItemLocalOffset = default;
+			metaInfo.ServerOffset = default;
 		}
 
 		writer.WriteInt(messages.Count());

@@ -25,12 +25,12 @@ public static class StorageHelper
 			private bool _checkBounds;
 			private readonly Range<DateTime> _bounds;
 
-			public RangeEnumerator(IMarketDataStorage<TData> storage, DateTimeOffset from, DateTimeOffset to)
+			public RangeEnumerator(IMarketDataStorage<TData> storage, DateTime from, DateTime to)
 			{
 				_storage = storage;
-				_from = from.UtcDateTime;
-				_to = to.UtcDateTime;
-				_currDate = from.UtcDateTime.Date;
+				_from = from;
+				_to = to;
+				_currDate = from.Date;
 
 				_checkBounds = true; // проверяем нижнюю границу
 				_bounds = new Range<DateTime>(_from, _to);
@@ -78,7 +78,7 @@ public static class StorageHelper
 
 					do
 					{
-						var time = Current.ServerTime.UtcDateTime;
+						var time = Current.ServerTime;
 
 						if (_bounds.Contains(time))
 							return true;
@@ -109,7 +109,7 @@ public static class StorageHelper
 			object IEnumerator.Current => Current;
 		}
 
-		public RangeEnumerable(IMarketDataStorage<TData> storage, DateTimeOffset from, DateTimeOffset to)
+		public RangeEnumerable(IMarketDataStorage<TData> storage, DateTime from, DateTime to)
 			: base(() => new RangeEnumerator(storage, from, to))
 		{
 			if (storage == null)
@@ -120,7 +120,7 @@ public static class StorageHelper
 		}
 	}
 
-	internal static IEnumerable<Range<DateTimeOffset>> GetRanges<TMessage>(this IMarketDataStorage<TMessage> storage)
+	internal static IEnumerable<Range<DateTime>> GetRanges<TMessage>(this IMarketDataStorage<TMessage> storage)
 		where TMessage : Message
 	{
 		if (storage == null)
@@ -131,7 +131,7 @@ public static class StorageHelper
 		if (range == null)
 			return [];
 
-		return storage.Dates.Select(d => d.ApplyUtc()).GetRanges(range.Min, range.Max);
+		return storage.Dates.Select(d => d.UtcKind()).GetRanges(range.Min, range.Max);
 	}
 
 	/// <summary>
@@ -142,7 +142,7 @@ public static class StorageHelper
 	/// <param name="from">The start time for data loading. If the value is not specified, data will be loaded from the starting time <see cref="GetFromDate"/>.</param>
 	/// <param name="to">The end time for data loading. If the value is not specified, data will be loaded up to the <see cref="GetToDate"/> date, inclusive.</param>
 	/// <returns>The iterative loader of market data.</returns>
-	public static IEnumerable<TMessage> Load<TMessage>(this IMarketDataStorage<TMessage> storage, DateTimeOffset? from = null, DateTimeOffset? to = null)
+	public static IEnumerable<TMessage> Load<TMessage>(this IMarketDataStorage<TMessage> storage, DateTime? from = null, DateTime? to = null)
 		where TMessage : Message, IServerTimeMessage
 	{
 		var range = GetRange(storage, from, to);
@@ -159,7 +159,7 @@ public static class StorageHelper
 	/// <param name="from">The start time for data deleting. If the value is not specified, the data will be deleted starting from the date <see cref="GetFromDate"/>.</param>
 	/// <param name="to">The end time, up to which the data shall be deleted. If the value is not specified, data will be deleted up to the end date <see cref="GetToDate"/>, inclusive.</param>
 	/// <returns><see langword="true"/> if data was deleted, <see langword="false"/> data not exist for the specified period.</returns>
-	public static bool Delete(this IMarketDataStorage storage, DateTimeOffset? from = null, DateTimeOffset? to = null)
+	public static bool Delete(this IMarketDataStorage storage, DateTime? from = null, DateTime? to = null)
 	{
 		if (storage == null)
 			throw new ArgumentNullException(nameof(storage));
@@ -169,8 +169,8 @@ public static class StorageHelper
 		if (range == null)
 			return false;
 
-		var min = range.Min.UtcDateTime;
-		var max = range.Max.UtcDateTime.EndOfDay();
+		var min = range.Min;
+		var max = range.Max.EndOfDay();
 
 		for (var time = min; time <= max; time = time.AddDays(1))
 		{
@@ -181,12 +181,12 @@ public static class StorageHelper
 				storage.Delete(date);
 				continue;
 			}
-			else if (from == null && date < to.Value.UtcDateTime.Date)
+			else if (from == null && date < to.Value.Date)
 			{
 				storage.Delete(date);
 				continue;
 			}
-			else if (to == null && date > from.Value.UtcDateTime.Date)
+			else if (to == null && date > from.Value.Date)
 			{
 				storage.Delete(date);
 				continue;
@@ -209,7 +209,7 @@ public static class StorageHelper
 					data.RemoveWhere(d =>
 					{
 						var t = d.GetServerTime();
-						return t.UtcDateTime < min || t > range.Max;
+						return t < min || t > range.Max;
 					});
 					storage.Delete(data);
 				}
@@ -234,7 +234,7 @@ public static class StorageHelper
 	/// <param name="from">The initial date from which you need to get data.</param>
 	/// <param name="to">The final date by which you need to get data.</param>
 	/// <returns>Date range</returns>
-	public static Range<DateTimeOffset> GetRange(this IMarketDataStorage storage, DateTimeOffset? from, DateTimeOffset? to)
+	public static Range<DateTime> GetRange(this IMarketDataStorage storage, DateTime? from, DateTime? to)
 	{
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
@@ -278,7 +278,7 @@ public static class StorageHelper
 			return null;
 
 		var timePrecision = storage.Serializer.TimePrecision;
-		return new Range<DateTimeOffset>(first, last).Intersect(new Range<DateTimeOffset>((from ?? first).StorageTruncate(timePrecision), (to ?? last).StorageTruncate(timePrecision)));
+		return new Range<DateTime>(first, last).Intersect(new Range<DateTime>((from ?? first).StorageTruncate(timePrecision), (to ?? last).StorageTruncate(timePrecision)));
 	}
 
 	/// <summary>
@@ -321,14 +321,14 @@ public static class StorageHelper
 		return dates;
 	}
 
-	internal static DateTimeOffset StorageTruncate(this DateTimeOffset time, TimeSpan precision)
+	internal static DateTime StorageTruncate(this DateTime time, TimeSpan precision)
 	{
 		var ticks = precision.Ticks;
 
 		return ticks == 1 ? time : time.Truncate(ticks);
 	}
 
-	internal static DateTimeOffset StorageBinaryOldTruncate(this DateTimeOffset time)
+	internal static DateTime StorageBinaryOldTruncate(this DateTime time)
 	{
 		return time.StorageTruncate(TimeSpan.FromMilliseconds(1));
 	}
@@ -449,14 +449,14 @@ public static class StorageHelper
 
 		IMarketDataSerializer IMarketDataStorage.Serializer => ((IMarketDataStorage<CandleMessage>)this).Serializer;
 
-		private DateTimeOffset _nextCandleMinTime;
+		private DateTime _nextCandleMinTime;
 
 		public IEnumerable<CandleMessage> Load(DateTime date)
 		{
 			if (date <= _prevDate)
 			{
 				_compressors.Values.ForEach(c => c.Reset());
-				_nextCandleMinTime = DateTimeOffset.MinValue;
+				_nextCandleMinTime = DateTime.MinValue;
 			}
 
 			_prevDate = date;
@@ -550,13 +550,13 @@ public static class StorageHelper
 
 			public DateTime FirstTime
 			{
-				get => tf.GetCandleBounds(_info.FirstTime).Min.UtcDateTime;
+				get => tf.GetCandleBounds(_info.FirstTime).Min;
 				set => throw new NotSupportedException();
 			}
 
 			public DateTime LastTime
 			{
-				get => tf.GetCandleBounds(_info.LastTime).Max.UtcDateTime;
+				get => tf.GetCandleBounds(_info.LastTime).Max;
 				set => throw new NotSupportedException();
 			}
 
@@ -693,7 +693,7 @@ public static class StorageHelper
 	/// <param name="subscription">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 	/// <param name="newOutMessage">New message event.</param>
 	/// <returns>Last date.</returns>
-	public static (DateTimeOffset lastDate, long? left)? LoadMessages(this StorageCoreSettings settings, CandleBuilderProvider candleBuilderProvider, MarketDataMessage subscription, Action<Message> newOutMessage)
+	public static (DateTime lastDate, long? left)? LoadMessages(this StorageCoreSettings settings, CandleBuilderProvider candleBuilderProvider, MarketDataMessage subscription, Action<Message> newOutMessage)
 	{
 		if (settings is null)
 			throw new ArgumentNullException(nameof(settings));
@@ -707,7 +707,7 @@ public static class StorageHelper
 		if (newOutMessage is null)
 			throw new ArgumentNullException(nameof(newOutMessage));
 
-		(DateTimeOffset lastTime, long? left)? retVal = default;
+		(DateTime lastTime, long? left)? retVal = default;
 
 		if (subscription.From == null)
 			return retVal;
@@ -850,7 +850,7 @@ public static class StorageHelper
 		}
 		else if (subscription.DataType2.IsCandles)
 		{
-			(DateTimeOffset lastDate, long? left)? TryBuildCandles(MarketDataMessage subscription)
+			(DateTime lastDate, long? left)? TryBuildCandles(MarketDataMessage subscription)
 			{
 				if (subscription.Count <= 0)
 					return null;
@@ -1007,7 +1007,7 @@ public static class StorageHelper
 		return retVal;
 	}
 
-	private static Tuple<DateTimeOffset, DateTimeOffset> GetRange(IMarketDataStorage storage, ISubscriptionMessage subscription)
+	private static Tuple<DateTime, DateTime> GetRange(IMarketDataStorage storage, ISubscriptionMessage subscription)
 	{
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
@@ -1015,7 +1015,7 @@ public static class StorageHelper
 		if (subscription is null)
 			throw new ArgumentNullException(nameof(subscription));
 
-		if (subscription.From is not DateTimeOffset from)
+		if (subscription.From is not DateTime from)
 			return null;
 
 		var last = storage.Dates.LastOr();
@@ -1036,7 +1036,7 @@ public static class StorageHelper
 		return Tuple.Create(from, to);
 	}
 
-	private static (DateTimeOffset lastTime, long? left)? LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, ISubscriptionMessage subscription, Action sendReply, Action<Message> newOutMessage, Func<TMessage, bool> filter = null)
+	private static (DateTime lastTime, long? left)? LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, ISubscriptionMessage subscription, Action sendReply, Action<Message> newOutMessage, Func<TMessage, bool> filter = null)
 		where TMessage : Message, ISubscriptionIdMessage, IServerTimeMessage
 	{
 		var range = GetRange(storage, subscription);
@@ -1052,7 +1052,7 @@ public static class StorageHelper
 		return LoadMessages(messages, subscription.Count, subscription.TransactionId, sendReply, newOutMessage, filter);
 	}
 
-	private static (DateTimeOffset lastTime, long? left)? LoadMessages<TMessage>(IEnumerable<TMessage> messages, long? count, long transactionId, Action sendReply, Action<Message> newOutMessage, Func<TMessage, bool> filter = null)
+	private static (DateTime lastTime, long? left)? LoadMessages<TMessage>(IEnumerable<TMessage> messages, long? count, long transactionId, Action sendReply, Action<Message> newOutMessage, Func<TMessage, bool> filter = null)
 		where TMessage : Message, ISubscriptionIdMessage, IServerTimeMessage
 	{
 		if (messages == null)
@@ -1075,7 +1075,7 @@ public static class StorageHelper
 
 		var left = count ?? long.MaxValue;
 
-		DateTimeOffset? lastTime = null;
+		DateTime? lastTime = null;
 
 		foreach (var message in messages)
 		{

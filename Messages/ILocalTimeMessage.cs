@@ -8,5 +8,5 @@ public interface ILocalTimeMessage
 	/// <summary>
 	/// Local timestamp when a message was received/created.
 	/// </summary>
-	DateTimeOffset LocalTime { get; }
+	DateTime LocalTime { get; }
 }

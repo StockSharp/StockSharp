@@ -11,7 +11,7 @@ namespace StockSharp.Diagram;
 /// <param name="value">Value.</param>
 /// <param name="source">The source value.</param>
 /// <param name="subscription">Subscription.</param>
-public class DiagramSocketValue(DiagramSocket socket, DateTimeOffset time, object value, DiagramSocketValue source, Subscription subscription)
+public class DiagramSocketValue(DiagramSocket socket, DateTime time, object value, DiagramSocketValue source, Subscription subscription)
 {
 	/// <summary>
 	/// The source value.
@@ -26,7 +26,7 @@ public class DiagramSocketValue(DiagramSocket socket, DateTimeOffset time, objec
 	/// <summary>
 	/// Time.
 	/// </summary>
-	public DateTimeOffset Time { get; } = time;
+	public DateTime Time { get; } = time;
 
 	/// <summary>
 	/// Subscription.

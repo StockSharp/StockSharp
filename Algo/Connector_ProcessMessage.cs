@@ -34,7 +34,7 @@ partial class Connector
 							_isMarketTimeHandled = false;
 						}
 
-						_marketTimeMessage.LocalTime = CurrentTime;
+						_marketTimeMessage.LocalTime = CurrentTimeUtc;
 						SendOutMessage(_marketTimeMessage);
 					}
 					catch (Exception ex)

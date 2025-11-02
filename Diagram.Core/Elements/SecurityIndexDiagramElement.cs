@@ -77,7 +77,7 @@ public class SecurityIndexDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
-	protected override void OnStart(DateTimeOffset time)
+	protected override void OnStart(DateTime time)
 	{
 		_indexSecurity = new()
 		{

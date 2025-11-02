@@ -32,7 +32,7 @@ public struct GpuDirectionalIndexParams(int length) : IGpuIndicatorParams
 public struct GpuDirectionalIndexResult : IGpuIndicatorResult
 {
 	/// <summary>
-	/// Time in <see cref="DateTimeOffset.Ticks"/>.
+	/// Time in <see cref="DateTime.Ticks"/>.
 	/// </summary>
 	public long Time;
 

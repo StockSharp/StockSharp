@@ -33,12 +33,12 @@ public class OptionsStrikesDiagramElement : DiagramElement
 		set => _optionType.Value = value;
 	}
 
-	private readonly DiagramElementParam<DateTimeOffset?> _expirationDate;
+	private readonly DiagramElementParam<DateTime?> _expirationDate;
 
 	/// <summary>
 	/// Expiration date.
 	/// </summary>
-	public DateTimeOffset? ExpirationDate
+	public DateTime? ExpirationDate
 	{
 		get => _expirationDate.Value;
 		set => _expirationDate.Value = value;
@@ -79,7 +79,7 @@ public class OptionsStrikesDiagramElement : DiagramElement
 			.SetBasic(true)
 			.SetDisplay(LocalizedStrings.Options, LocalizedStrings.OptionType, LocalizedStrings.OptionType + ".", 10);
 
-		_expirationDate = AddParam<DateTimeOffset?>(nameof(ExpirationDate), null)
+		_expirationDate = AddParam<DateTime?>(nameof(ExpirationDate), null)
 			.SetBasic(true)
 			.SetDisplay(LocalizedStrings.Options, LocalizedStrings.ExpiryDate, LocalizedStrings.ExpiryDate + ".", 20);
 

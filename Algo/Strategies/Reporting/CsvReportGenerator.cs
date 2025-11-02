@@ -31,8 +31,8 @@ public class CsvReportGenerator : BaseReportGenerator
 			{
 				var value = values[i];
 
-				if (value is DateTimeOffset dto)
-					value = dto.Format();
+				if (value is DateTime dt)
+					value = dt.Format();
 				else if (value is TimeSpan ts)
 					value = ts.Format();
 
@@ -58,7 +58,7 @@ public class CsvReportGenerator : BaseReportGenerator
 		var statParameters = strategy.StatisticManager.Parameters;
 		await WriteValuesAsync(LocalizedStrings.Statistics);
 		await WriteValuesAsync([.. statParameters.Select(p => (object)p.Name)]);
-		await WriteValuesAsync([.. statParameters.Select(p => p.Value is TimeSpan ts ? ts.Format() : (p.Value is DateTimeOffset dto ? dto.Format() : p.Value))]);
+		await WriteValuesAsync([.. statParameters.Select(p => p.Value is TimeSpan ts ? ts.Format() : (p.Value is DateTime dt ? dt.Format() : p.Value))]);
 
 		if (IncludeOrders)
 		{

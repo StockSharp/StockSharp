@@ -486,7 +486,7 @@ public partial class Strategy
 				return this;
 			}
 
-			internal virtual IEnumerable<IIndicatorValue> Invoke(T typed, DateTimeOffset time)
+			internal virtual IEnumerable<IIndicatorValue> Invoke(T typed, DateTime time)
 			{
 				_callback(typed);
 				return [];
@@ -527,7 +527,7 @@ public partial class Strategy
 				return this;
 			}
 
-			internal override IEnumerable<IIndicatorValue> Invoke(T typed, DateTimeOffset time)
+			internal override IEnumerable<IIndicatorValue> Invoke(T typed, DateTime time)
 			{
 				var hasEmpty = false;
 
@@ -573,7 +573,7 @@ public partial class Strategy
 		{
 			var type = typeof(T);
 
-			void tryActivateProtection(decimal price, DateTimeOffset time)
+			void tryActivateProtection(decimal price, DateTime time)
 			{
 				var info = _strategy._posController?.TryActivate(price, time);
 
@@ -581,7 +581,7 @@ public partial class Strategy
 					_strategy.ActiveProtection(info.Value);
 			}
 
-			void handle(object v, DateTimeOffset time, Func<ICandleMessage> getCandle)
+			void handle(object v, DateTime time, Func<ICandleMessage> getCandle)
 			{
 				var typed = v.To<T>();
 
@@ -602,7 +602,7 @@ public partial class Strategy
 						if (_strategy.ProcessState != ProcessStates.Started)
 							return;
 
-						tryActivateProtection(v.ClosePrice, _strategy.CurrentTime);
+						tryActivateProtection(v.ClosePrice, _strategy.CurrentTimeUtc);
 
 						handle(v, v.ServerTime, () => v);
 					})
@@ -619,7 +619,7 @@ public partial class Strategy
 						if (_strategy.ProcessState != ProcessStates.Started)
 							return;
 
-						tryActivateProtection(v.Price, _strategy.CurrentTime);
+						tryActivateProtection(v.Price, _strategy.CurrentTimeUtc);
 
 						handle(v, v.ServerTime, () => new TickCandleMessage
 						{
@@ -659,7 +659,7 @@ public partial class Strategy
 						if (value is not decimal price)
 							return;
 
-						tryActivateProtection(price, _strategy.CurrentTime);
+						tryActivateProtection(price, _strategy.CurrentTimeUtc);
 
 						handle(v, v.ServerTime, () => new TickCandleMessage
 						{
@@ -690,7 +690,7 @@ public partial class Strategy
 						if (v.TryGet(field) is not decimal price)
 							return;
 
-						tryActivateProtection(price, _strategy.CurrentTime);
+						tryActivateProtection(price, _strategy.CurrentTimeUtc);
 
 						handle(v, v.ServerTime, () => new TickCandleMessage
 						{

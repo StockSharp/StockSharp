@@ -18,14 +18,14 @@ public interface IStatisticManager : IPersistable
 	/// <param name="time">The change time <paramref name="pnl" />.</param>
 	/// <param name="pnl">New profit-loss value.</param>
 	/// <param name="commission">Commission.</param>
-	void AddPnL(DateTimeOffset time, decimal pnl, decimal? commission);
+	void AddPnL(DateTime time, decimal pnl, decimal? commission);
 
 	/// <summary>
 	/// To add the new position value.
 	/// </summary>
 	/// <param name="time">The change time <paramref name="position" />.</param>
 	/// <param name="position">The new position value.</param>
-	void AddPosition(DateTimeOffset time, decimal position);
+	void AddPosition(DateTime time, decimal position);
 
 	/// <summary>
 	/// To add information about new trade.

@@ -27,7 +27,7 @@ public class XmlReportGenerator : BaseReportGenerator
 
 		Task WriteStartElement(string name) => writer.WriteStartElementAsync(null, name, null);
 		Task WriteEndElement() => writer.WriteEndElementAsync();
-		Task WriteAttributeString(string name, object value) => writer.WriteAttributeStringAsync(null, name, null, value is TimeSpan ts ? ts.Format() : (value is DateTimeOffset dto ? dto.Format() : value.To<string>()));
+		Task WriteAttributeString(string name, object value) => writer.WriteAttributeStringAsync(null, name, null, value is TimeSpan ts ? ts.Format() : (value is DateTime dto ? dto.Format() : value.To<string>()));
 
 		await WriteStartElement("strategy");
 

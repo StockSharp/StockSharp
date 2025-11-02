@@ -39,8 +39,8 @@ type ChartDrawScript() =
                 Task.CompletedTask
             else
                 // Create two charts: lineChart and histogramChart
-                let lineChart = panel.CreateChart<DateTimeOffset, decimal>()
-                let histogramChart = panel.CreateChart<DateTimeOffset, decimal>()
+                let lineChart = panel.CreateChart<DateTime, decimal>()
+                let histogramChart = panel.CreateChart<DateTime, decimal>()
 
                 // Iterate over each security
                 for security in securities do
@@ -48,8 +48,8 @@ type ChartDrawScript() =
                     if cancellationToken.IsCancellationRequested then
                         ()
                     else
-                        let candlesSeries = Dictionary<DateTimeOffset, decimal>()
-                        let volsSeries = Dictionary<DateTimeOffset, decimal>()
+                        let candlesSeries = Dictionary<DateTime, decimal>()
+                        let volsSeries = Dictionary<DateTime, decimal>()
 
                         // Get candle storage for this security
                         let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)

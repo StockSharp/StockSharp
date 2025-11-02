@@ -13,7 +13,7 @@ public class QuotingEngine
 	private readonly IQuotingBehavior _behavior;
 	private readonly TimeSpan _timeOut;
 	private readonly IMarketDataProvider _mdProvider;
-	private readonly DateTimeOffset _startTime;
+	private readonly DateTime _startTime;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="QuotingEngine"/> class.
@@ -36,7 +36,7 @@ public class QuotingEngine
 		decimal maxOrderVolume,
 		TimeSpan timeOut,
 		IMarketDataProvider mdProvider,
-		DateTimeOffset startTime)
+		DateTime startTime)
 	{
 		if (quotingVolume <= 0)
 			throw new ArgumentOutOfRangeException(nameof(quotingVolume), quotingVolume, "Invalid value");
@@ -67,7 +67,7 @@ public class QuotingEngine
 	/// <summary>
 	/// Check if timeout has occurred.
 	/// </summary>
-	public bool IsTimeOut(DateTimeOffset currentTime) =>
+	public bool IsTimeOut(DateTime currentTime) =>
 		_timeOut != TimeSpan.Zero && (currentTime - _startTime) >= _timeOut;
 
 	/// <summary>

@@ -210,7 +210,7 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 		if (!msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
 			return base.OnSendInMessage(msg);
 
-		var now = CurrentTime;
+		var now = CurrentTimeUtc;
 		var transId = msg.TransactionId;
 
 		void SendOut<TMessage>(TMessage outMsg)

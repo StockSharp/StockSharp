@@ -19,7 +19,7 @@ public abstract class BaseConnectionControlMessage(MessageTypes type)
 	public override string ToString()
 		=> $"{base.ToString()},R={IsResetState}";
 
-	DateTimeOffset IServerTimeMessage.ServerTime
+	DateTime IServerTimeMessage.ServerTime
 	{
 		get => LocalTime;
 		set => LocalTime = value;

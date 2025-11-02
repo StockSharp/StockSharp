@@ -40,8 +40,8 @@ type IndicatorScript() =
                 Task.CompletedTask
             else
                 // create 2 panes for candles (close prices) and indicator (ROC) series
-                let candleChart = panel.CreateChart<DateTimeOffset, decimal>()
-                let indicatorChart = panel.CreateChart<DateTimeOffset, decimal>()
+                let candleChart = panel.CreateChart<DateTime, decimal>()
+                let indicatorChart = panel.CreateChart<DateTime, decimal>()
 
                 // process each security
                 for security in securities do
@@ -50,8 +50,8 @@ type IndicatorScript() =
                         ()
                     else
                         // dictionaries to store candle close prices and ROC values
-                        let candlesSeries = Dictionary<DateTimeOffset, decimal>()
-                        let indicatorSeries = Dictionary<DateTimeOffset, decimal>()
+                        let candlesSeries = Dictionary<DateTime, decimal>()
+                        let indicatorSeries = Dictionary<DateTime, decimal>()
 
                         // create ROC indicator
                         let roc = RateOfChange()

@@ -157,7 +157,7 @@ public static class IndicatorHelper
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
 	/// <param name="isFinal">Is the value final (the indicator finally forms its value and will not be changed in this point of time anymore). Default is <see langword="true" />.</param>
 	/// <returns>The new value of the indicator.</returns>
-	public static IIndicatorValue Process(this IIndicator indicator, decimal value, DateTimeOffset time, bool isFinal)
+	public static IIndicatorValue Process(this IIndicator indicator, decimal value, DateTime time, bool isFinal)
 		=> indicator.Process(new DecimalIndicatorValue(indicator, value, time) { IsFinal = isFinal });
 
 	/// <summary>
@@ -169,7 +169,7 @@ public static class IndicatorHelper
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
 	/// <param name="isFinal">If the pair final (the indicator finally forms its value and will not be changed in this point of time anymore). Default is <see langword="true" />.</param>
 	/// <returns>The new value of the indicator.</returns>
-	public static IIndicatorValue Process<TValue>(this IIndicator indicator, (TValue, TValue) value, DateTimeOffset time, bool isFinal)
+	public static IIndicatorValue Process<TValue>(this IIndicator indicator, (TValue, TValue) value, DateTime time, bool isFinal)
 		=> indicator.Process(new PairIndicatorValue<TValue>(indicator, value, time) { IsFinal = isFinal });
 
 	/// <summary>
@@ -180,7 +180,7 @@ public static class IndicatorHelper
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
 	/// <param name="isFinal"><see cref="IIndicatorValue.IsFinal"/></param>
 	/// <returns><see cref="IIndicatorValue"/>.</returns>
-	public static IIndicatorValue Process(this IIndicator indicator, object inputValue, DateTimeOffset time, bool isFinal)
+	public static IIndicatorValue Process(this IIndicator indicator, object inputValue, DateTime time, bool isFinal)
 	{
 		if (indicator == null)
 			throw new ArgumentNullException(nameof(indicator));
@@ -303,7 +303,7 @@ public static class IndicatorHelper
 	/// <param name="indicator"><see cref="IIndicator"/></param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
 	/// <returns>Empty <see cref="IIndicatorValue"/>.</returns>
-	public static IIndicatorValue CreateEmptyValue(this IIndicator indicator, DateTimeOffset time)
+	public static IIndicatorValue CreateEmptyValue(this IIndicator indicator, DateTime time)
 	{
 		if (indicator is null)
 			throw new ArgumentNullException(nameof(indicator));
@@ -371,7 +371,7 @@ public static class IndicatorHelper
 	/// </summary>
 	/// <param name="indicator"><see cref="IIndicator"/></param>
 	/// <param name="items">Sequence of (time, values) where values correspond to <see cref="IIndicatorValue.ToValues"/> output.</param>
-	public static void Preload(this IIndicator indicator, IEnumerable<(DateTimeOffset time, object[] values)> items)
+	public static void Preload(this IIndicator indicator, IEnumerable<(DateTime time, object[] values)> items)
 	{
 		ArgumentNullException.ThrowIfNull(indicator);
 		ArgumentNullException.ThrowIfNull(items);

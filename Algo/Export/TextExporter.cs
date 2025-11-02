@@ -19,57 +19,57 @@ public class TextExporter(DataType dataType, Stream stream, string template, str
 	private readonly string _header = header;
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages.ToTimeQuotes(), cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
 		=> Do(values, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
 		=> Do(messages, cancellationToken);
 
-	private async Task<(int, DateTimeOffset?)> Do<TValue>(IEnumerable<TValue> values, CancellationToken cancellationToken)
+	private async Task<(int, DateTime?)> Do<TValue>(IEnumerable<TValue> values, CancellationToken cancellationToken)
 	{
 		var count = 0;
-		var lastTime = default(DateTimeOffset?);
+		var lastTime = default(DateTime?);
 
 		using (var writer = new StreamWriter(stream, Encoding, leaveOpen: true))
 		{

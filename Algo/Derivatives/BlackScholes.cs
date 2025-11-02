@@ -119,7 +119,7 @@ public class BlackScholes : IBlackScholes
 	/// </summary>
 	/// <param name="currentTime">The current time.</param>
 	/// <returns>The time remaining until expiration. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
-	public virtual double? GetExpirationTimeLine(DateTimeOffset currentTime)
+	public virtual double? GetExpirationTimeLine(DateTime currentTime)
 	{
 		return DerivativesHelper.GetExpirationTimeLine(Option.GetExpirationTime(ExchangeInfoProvider), currentTime);
 	}
@@ -167,7 +167,7 @@ public class BlackScholes : IBlackScholes
 	}
 
 	/// <inheritdoc />
-	public virtual decimal? Premium(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	public virtual decimal? Premium(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
 		deviation = deviation ?? DefaultDeviation;
 		assetPrice = GetAssetPrice(assetPrice);
@@ -184,7 +184,7 @@ public class BlackScholes : IBlackScholes
 	}
 
 	/// <inheritdoc />
-	public virtual decimal? Delta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	public virtual decimal? Delta(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
 		assetPrice = GetAssetPrice(assetPrice);
 
@@ -200,7 +200,7 @@ public class BlackScholes : IBlackScholes
 	}
 
 	/// <inheritdoc />
-	public virtual decimal? Gamma(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	public virtual decimal? Gamma(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
 		deviation = deviation ?? DefaultDeviation;
 		assetPrice = GetAssetPrice(assetPrice);
@@ -217,7 +217,7 @@ public class BlackScholes : IBlackScholes
 	}
 
 	/// <inheritdoc />
-	public virtual decimal? Vega(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	public virtual decimal? Vega(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
 		assetPrice = GetAssetPrice(assetPrice);
 
@@ -233,7 +233,7 @@ public class BlackScholes : IBlackScholes
 	}
 
 	/// <inheritdoc />
-	public virtual decimal? Theta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	public virtual decimal? Theta(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
 		deviation = deviation ?? DefaultDeviation;
 		assetPrice = GetAssetPrice(assetPrice);
@@ -250,7 +250,7 @@ public class BlackScholes : IBlackScholes
 	}
 
 	/// <inheritdoc />
-	public virtual decimal? Rho(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	public virtual decimal? Rho(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
 		deviation = deviation ?? DefaultDeviation;
 		assetPrice = GetAssetPrice(assetPrice);
@@ -267,7 +267,7 @@ public class BlackScholes : IBlackScholes
 	}
 
 	/// <inheritdoc />
-	public virtual decimal? ImpliedVolatility(DateTimeOffset currentTime, decimal premium)
+	public virtual decimal? ImpliedVolatility(DateTime currentTime, decimal premium)
 	{
 		//var timeToExp = GetExpirationTimeLine();
 		return TryRound(DerivativesHelper.ImpliedVolatility(premium, diviation => Premium(currentTime, diviation)));

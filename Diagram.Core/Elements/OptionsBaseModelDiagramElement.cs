@@ -41,5 +41,5 @@ public abstract class OptionsBaseModelDiagramElement<TModel> : DiagramElement
 	/// <see cref="Model"/> changed.
 	/// </summary>
 	/// <param name="time">Time.</param>
-	protected virtual void ProcessModel(DateTimeOffset time) { }
+	protected virtual void ProcessModel(DateTime time) { }
 }

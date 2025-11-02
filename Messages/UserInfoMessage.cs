@@ -127,7 +127,7 @@ public class UserInfoMessage : BaseSubscriptionIdMessage<UserInfoMessage>, ITran
 	/// Date of registration.
 	/// </summary>
 	[DataMember]
-	public DateTimeOffset? CreationDate { get; set; }
+	public DateTime? CreationDate { get; set; }
 
 	private IEnumerable<IPAddress> _ipRestrictions = [];
 

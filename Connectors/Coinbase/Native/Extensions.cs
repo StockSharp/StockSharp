@@ -51,7 +51,7 @@ static class Extensions
 			_ => throw new ArgumentOutOfRangeException(nameof(status), status, LocalizedStrings.InvalidValue),
 		};
 
-	public static string ToNative(this TimeInForce? tif, DateTimeOffset? tillDate)
+	public static string ToNative(this TimeInForce? tif, DateTime? tillDate)
 	{
 		return tif switch
 		{

@@ -52,7 +52,7 @@ public class PositionManager(bool byOrders) : BaseLogReceiver, IPositionManager
 		void ProcessRegOrder(OrderRegisterMessage regMsg)
 			=> EnsureGetInfo(regMsg, regMsg.Side, regMsg.Volume, regMsg.Volume);
 
-		PositionChangeMessage UpdatePositions(SecurityId secId, string portfolioName, decimal diff, DateTimeOffset time)
+		PositionChangeMessage UpdatePositions(SecurityId secId, string portfolioName, decimal diff, DateTime time)
 		{
 			var position = _positions.SafeAdd(CreateKey(secId, portfolioName));
 			position.Value += diff;

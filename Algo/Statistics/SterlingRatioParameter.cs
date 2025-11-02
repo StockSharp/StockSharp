@@ -21,7 +21,7 @@ public class SterlingRatioParameter(NetProfitParameter profit, AverageDrawdownPa
 	private readonly AverageDrawdownParameter _avgDrawdown = avgDrawdown ?? throw new ArgumentNullException(nameof(avgDrawdown));
 
 	/// <inheritdoc />
-	public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+	public override void Add(DateTime marketTime, decimal pnl, decimal? commission)
 	{
 		var annualizedProfit = _profit.Value;
 		var avgDrawdown = _avgDrawdown.Value;

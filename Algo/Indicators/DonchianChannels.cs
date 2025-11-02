@@ -79,7 +79,7 @@ public class DonchianChannels : BaseComplexIndicator<IDonchianChannelsValue>
 	public override string ToString() => base.ToString() + $" {Length}";
 
 	/// <inheritdoc />
-	protected override IDonchianChannelsValue CreateValue(DateTimeOffset time)
+	protected override IDonchianChannelsValue CreateValue(DateTime time)
 		=> new DonchianChannelsValue(this, time);
 }
 
@@ -170,7 +170,7 @@ public interface IDonchianChannelsValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent DonchianChannels indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class DonchianChannelsValue(DonchianChannels indicator, DateTimeOffset time) : ComplexIndicatorValue<DonchianChannels>(indicator, time), IDonchianChannelsValue
+public class DonchianChannelsValue(DonchianChannels indicator, DateTime time) : ComplexIndicatorValue<DonchianChannels>(indicator, time), IDonchianChannelsValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue UpperBandValue => this[TypedIndicator.UpperBand];

@@ -2,8 +2,8 @@ namespace StockSharp.Algo.Storages.Csv;
 
 class NullableTimeQuoteChange
 {
-	public DateTimeOffset ServerTime { get; set; }
-	public DateTimeOffset LocalTime { get; set; }
+	public DateTime ServerTime { get; set; }
+	public DateTime LocalTime { get; set; }
 	public QuoteChange? Quote { get; set; }
 	public Sides Side { get; set; }
 	public QuoteChangeStates? State { get; set; }
@@ -55,7 +55,7 @@ class QuoteCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMarketDa
 			data?.SeqNum.ToString(),
 		}.Concat(data.BuildFrom.ToCsv()));
 
-		metaInfo.LastTime = data.ServerTime.UtcDateTime;
+		metaInfo.LastTime = data.ServerTime;
 	}
 
 	/// <inheritdoc />

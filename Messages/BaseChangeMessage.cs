@@ -22,7 +22,7 @@ public abstract class BaseChangeMessage<TMessage, TField>(MessageTypes type) :	B
 		Name = LocalizedStrings.ServerTimeKey,
 		Description = LocalizedStrings.ChangeServerTimeKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset ServerTime { get; set; }
+	public DateTime ServerTime { get; set; }
 
 	/// <inheritdoc />
 	[DataMember]

@@ -32,20 +32,20 @@ public class Level1CsvSerializer(SecurityId securityId, Encoding encoding) : Csv
 		{
 			var field = pair.Key;
 
-			if (pair.Value == typeof(DateTimeOffset))
+			if (pair.Value == typeof(DateTime))
 			{
-				var date = (DateTimeOffset?)data.TryGet(field);
-				row.AddRange([date?.WriteDate(), date?.WriteTime(), date?.ToString("zzz")]);
+				var date = (DateTime?)data.TryGet(field);
+				row.AddRange([date?.WriteDate(), date?.WriteTime(), string.Empty]);
 			}
 			else
 			{
 				row.Add(data.TryGet(field)?.ToString());
-                }
+			}
 		}
 
 		writer.WriteRow(row);
 
-		metaInfo.LastTime = data.ServerTime.UtcDateTime;
+		metaInfo.LastTime = data.ServerTime;
 	}
 
 	/// <inheritdoc />
@@ -71,13 +71,13 @@ public class Level1CsvSerializer(SecurityId securityId, Encoding encoding) : Csv
 
 			var field = pair.Key;
 
-			if (pair.Value == typeof(DateTimeOffset))
+			if (pair.Value == typeof(DateTime))
 			{
 				var dtStr = reader.ReadString();
 
 				if (dtStr != null)
 				{
-					level1.Changes.Add(field, (dtStr.ToDateTime() + reader.ReadString().ToTimeMls()).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Remove("+"))));
+					level1.Changes.Add(field, (dtStr.ToDateTime() + reader.ReadString().ToTimeMls()).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Remove("+"))).UtcDateTime);
 				}
 				else
 				{

@@ -55,7 +55,7 @@ public struct GpuMacdSignalParams(int longLength, int shortLength, int signalLen
 public struct GpuMacdSignalResult : IGpuIndicatorResult
 {
 	/// <summary>
-	/// Time in <see cref="DateTimeOffset.Ticks"/>.
+	/// Time in <see cref="DateTime.Ticks"/>.
 	/// </summary>
 	public long Time;
 

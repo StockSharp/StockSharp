@@ -19,7 +19,7 @@ public class SubscriptionFinishedMessage : BaseResultMessage<SubscriptionFinishe
 	/// Recommended value for next <see cref="ISubscriptionMessage.From"/> (in case of partial requests).
 	/// </summary>
 	[DataMember]
-	public DateTimeOffset? NextFrom { get; set; }
+	public DateTime? NextFrom { get; set; }
 
 	private byte[] _body = [];
 

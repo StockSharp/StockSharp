@@ -428,7 +428,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		}
 	}
 
-	private DateTimeOffset? _expiryDate;
+	private DateTime? _expiryDate;
 
 	/// <summary>
 	/// Security expiration date (for derivatives - expiration, for bonds — redemption).
@@ -441,7 +441,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 14)]
 	[BasicSetting]
-	public DateTimeOffset? ExpiryDate
+	public DateTime? ExpiryDate
 	{
 		get => _expiryDate;
 		set
@@ -454,7 +454,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		}
 	}
 
-	private DateTimeOffset? _settlementDate;
+	private DateTime? _settlementDate;
 
 	/// <summary>
 	/// Settlement date for security (for derivatives and bonds).
@@ -467,7 +467,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 15)]
 	[BasicSetting]
-	public DateTimeOffset? SettlementDate
+	public DateTime? SettlementDate
 	{
 		get => _settlementDate;
 		set
@@ -1334,14 +1334,14 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		}
 	}
 
-	private DateTimeOffset _localTime;
+	private DateTime _localTime;
 
 	/// <summary>
 	/// Local time of the last instrument change.
 	/// </summary>
 	[Browsable(false)]
 	[XmlIgnore]
-	public DateTimeOffset LocalTime
+	public DateTime LocalTime
 	{
 		get => _localTime;
 		set
@@ -1351,7 +1351,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		}
 	}
 
-	private DateTimeOffset _lastChangeTime;
+	private DateTime _lastChangeTime;
 
 	//[StatisticsCategory]
 	/// <summary>
@@ -1360,7 +1360,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 	[Browsable(false)]
 	//[Obsolete("Use the IConnector.GetSecurityValue.")]
 	[XmlIgnore]
-	public DateTimeOffset LastChangeTime
+	public DateTime LastChangeTime
 	{
 		get => _lastChangeTime;
 		set
@@ -1716,7 +1716,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		}
 	}
 
-	private DateTimeOffset? _issueDate;
+	private DateTime? _issueDate;
 
 	/// <summary>
 	/// Date of issue.
@@ -1728,7 +1728,7 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 22)]
 	[DataMember]
-	public DateTimeOffset? IssueDate
+	public DateTime? IssueDate
 	{
 		get => _issueDate;
 		set
@@ -1821,14 +1821,14 @@ public class Security : Cloneable<Security>, INotifyPropertyChanged
 		}
 	}
 
-	private DateTimeOffset? _buyBackDate;
+	private DateTime? _buyBackDate;
 
 	/// <summary>
 	/// BuyBack date.
 	/// </summary>
 	[XmlIgnore]
 	[Browsable(false)]
-	public DateTimeOffset? BuyBackDate
+	public DateTime? BuyBackDate
 	{
 		get => _buyBackDate;
 		set

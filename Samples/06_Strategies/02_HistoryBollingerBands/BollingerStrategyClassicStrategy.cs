@@ -56,9 +56,9 @@ namespace StockSharp.Samples.Strategies.HistoryBollingerBands
 			return new[] { (Security, CandleType) };
 		}
 
-		protected override void OnStarted(DateTimeOffset time)
+		protected override void OnStarted2(DateTime time)
 		{
-			base.OnStarted(time);
+			base.OnStarted2(time);
 
 			// Create the Bollinger Bands indicator
 			_bollingerBands = new BollingerBands

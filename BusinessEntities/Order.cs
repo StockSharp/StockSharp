@@ -172,7 +172,7 @@ public class Order : NotifiableObject, IOrderMessage
 		}
 	}
 
-	private DateTimeOffset _time;
+	private DateTime _time;
 
 	/// <summary>
 	/// Order placing time on exchange.
@@ -184,7 +184,7 @@ public class Order : NotifiableObject, IOrderMessage
 		Description = LocalizedStrings.RegTimeDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 3)]
-	public DateTimeOffset Time
+	public DateTime Time
 	{
 		get => _time;
 		set
@@ -259,7 +259,7 @@ public class Order : NotifiableObject, IOrderMessage
 		Order = 7)]
 	public Portfolio Portfolio { get; set; }
 
-	private DateTimeOffset _serverTime;
+	private DateTime _serverTime;
 
 	/// <inheritdoc/>
 	[DataMember]
@@ -270,7 +270,7 @@ public class Order : NotifiableObject, IOrderMessage
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 8)]
 	[BasicSetting]
-	public DateTimeOffset ServerTime
+	public DateTime ServerTime
 	{
 		get => _serverTime;
 		set
@@ -283,7 +283,7 @@ public class Order : NotifiableObject, IOrderMessage
 		}
 	}
 
-	private DateTimeOffset? _cancelledTime;
+	private DateTime? _cancelledTime;
 
 	/// <summary>
 	/// Cancelled time.
@@ -295,7 +295,7 @@ public class Order : NotifiableObject, IOrderMessage
 		Description = LocalizedStrings.CancelledTimeKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 9)]
-	public DateTimeOffset? CancelledTime
+	public DateTime? CancelledTime
 	{
 		get => _cancelledTime;
 		set
@@ -308,7 +308,7 @@ public class Order : NotifiableObject, IOrderMessage
 		}
 	}
 
-	private DateTimeOffset? _matchedTime;
+	private DateTime? _matchedTime;
 
 	/// <summary>
 	/// Cancelled time.
@@ -320,7 +320,7 @@ public class Order : NotifiableObject, IOrderMessage
 		Description = LocalizedStrings.MatchedTimeKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 10)]
-	public DateTimeOffset? MatchedTime
+	public DateTime? MatchedTime
 	{
 		get => _matchedTime;
 		set
@@ -333,7 +333,7 @@ public class Order : NotifiableObject, IOrderMessage
 		}
 	}
 
-	private DateTimeOffset _localTime;
+	private DateTime _localTime;
 
 	/// <summary>
 	/// Last order change local time (Cancellation, Fill).
@@ -345,7 +345,7 @@ public class Order : NotifiableObject, IOrderMessage
 		Description = LocalizedStrings.LocalTimeDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 11)]
-	public DateTimeOffset LocalTime
+	public DateTime LocalTime
 	{
 		get => _localTime;
 		set
@@ -504,7 +504,7 @@ public class Order : NotifiableObject, IOrderMessage
 	[BasicSetting]
 	public OrderTypes? Type { get; set; }
 
-	private DateTimeOffset? _expiryDate;
+	private DateTime? _expiryDate;
 
 	/// <summary>
 	/// Order expiry time. The default is <see langword="null" />, which mean (GTC).
@@ -520,7 +520,7 @@ public class Order : NotifiableObject, IOrderMessage
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 19)]
 	[BasicSetting]
-	public DateTimeOffset? ExpiryDate
+	public DateTime? ExpiryDate
 	{
 		get => _expiryDate;
 		set

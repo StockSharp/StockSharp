@@ -26,11 +26,11 @@ public class RemoteFileCommandMessage : CommandMessage, ISecurityIdMessage, IFil
 
 	/// <inheritdoc />
 	[DataMember]
-	public override DateTimeOffset? From { get; set; }
+	public override DateTime? From { get; set; }
 
 	/// <inheritdoc />
 	[DataMember]
-	public override DateTimeOffset? To { get; set; }
+	public override DateTime? To { get; set; }
 
 	/// <summary>
 	/// Storage format.

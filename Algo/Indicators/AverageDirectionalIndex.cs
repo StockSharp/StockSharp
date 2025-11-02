@@ -86,7 +86,7 @@ public class AverageDirectionalIndex : BaseComplexIndicator<IAverageDirectionalI
 	public override string ToString() => base.ToString() + " " + Length;
 
 	/// <inheritdoc />
-	protected override IAverageDirectionalIndexValue CreateValue(DateTimeOffset time)
+	protected override IAverageDirectionalIndexValue CreateValue(DateTime time)
 		=> new AverageDirectionalIndexValue(this, time);
 }
 
@@ -120,7 +120,7 @@ public interface IAverageDirectionalIndexValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent AverageDirectionalIndex indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class AverageDirectionalIndexValue(AverageDirectionalIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<AverageDirectionalIndex>(indicator, time), IAverageDirectionalIndexValue
+public class AverageDirectionalIndexValue(AverageDirectionalIndex indicator, DateTime time) : ComplexIndicatorValue<AverageDirectionalIndex>(indicator, time), IAverageDirectionalIndexValue
 {
 	/// <inheritdoc />
 	public IDirectionalIndexValue Dx => (IDirectionalIndexValue)this[TypedIndicator.Dx];

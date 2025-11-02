@@ -36,7 +36,7 @@ public abstract class MarketDataGenerator : Cloneable<MarketDataGenerator>
 	/// </summary>
 	public virtual void Init()
 	{
-		LastGenerationTime = DateTimeOffset.MinValue;
+		LastGenerationTime = DateTime.MinValue;
 
 		Volumes = new RandomArray<int>(MinVolume, MaxVolume, RandomArrayLength);
 		Steps = new RandomArray<int>(1, MaxPriceStepCount, RandomArrayLength);
@@ -57,7 +57,7 @@ public abstract class MarketDataGenerator : Cloneable<MarketDataGenerator>
 	/// <summary>
 	/// The time of last data generation.
 	/// </summary>
-	protected DateTimeOffset LastGenerationTime { get; set; }
+	protected DateTime LastGenerationTime { get; set; }
 
 	/// <summary>
 	/// The data generation interval.
@@ -154,7 +154,7 @@ public abstract class MarketDataGenerator : Cloneable<MarketDataGenerator>
 	/// </summary>
 	/// <param name="time">The current time.</param>
 	/// <returns><see langword="true" />, if data shall be generated, Otherwise, <see langword="false" />.</returns>
-	protected bool IsTimeToGenerate(DateTimeOffset time)
+	protected bool IsTimeToGenerate(DateTime time)
 	{
 		return time >= LastGenerationTime + Interval;
 	}

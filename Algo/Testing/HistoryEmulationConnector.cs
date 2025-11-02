@@ -276,9 +276,9 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 	/// </summary>
 	public event Action<int> ProgressChanged;
 
-	private DateTimeOffset _startTime;
-	private DateTimeOffset _stopTime;
-	private DateTimeOffset _nextTime;
+	private DateTime _startTime;
+	private DateTime _stopTime;
+	private DateTime _nextTime;
 	private long _stepTicks;
 	private int _progress;
 
@@ -287,7 +287,7 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		if (_stepTicks == default)
 			return;
 
-		if (CurrentTime < _nextTime && CurrentTime < _stopTime)
+		if (CurrentTimeUtc < _nextTime && CurrentTimeUtc < _stopTime)
 			return;
 
 		_nextTime = _nextTime.AddTicks(_stepTicks);
@@ -479,7 +479,7 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 	/// <param name="getMessages">Historical data source.</param>
 	/// <returns>Subscription.</returns>
 	[Obsolete("Uses custom adapter implementation.")]
-	public Subscription RegisterHistorySource(Security security, DataType dataType, Func<DateTimeOffset, IEnumerable<Message>> getMessages)
+	public Subscription RegisterHistorySource(Security security, DataType dataType, Func<DateTime, IEnumerable<Message>> getMessages)
 	{
 		var subscription = new Subscription(new HistorySourceMessage
 		{

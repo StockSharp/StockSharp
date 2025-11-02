@@ -109,7 +109,7 @@ public class FibonacciRetracement : BaseComplexIndicator<IFibonacciRetracementVa
 	public override string ToString() => base.ToString() + " " + Length;
 
 	/// <inheritdoc />
-	protected override IFibonacciRetracementValue CreateValue(DateTimeOffset time)
+	protected override IFibonacciRetracementValue CreateValue(DateTime time)
 		=> new FibonacciRetracementValue(this, time);
 }
 
@@ -163,7 +163,7 @@ public interface IFibonacciRetracementValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent FibonacciRetracement indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class FibonacciRetracementValue(FibonacciRetracement indicator, DateTimeOffset time) : ComplexIndicatorValue<FibonacciRetracement>(indicator, time), IFibonacciRetracementValue
+public class FibonacciRetracementValue(FibonacciRetracement indicator, DateTime time) : ComplexIndicatorValue<FibonacciRetracement>(indicator, time), IFibonacciRetracementValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue[] LevelsValues => [.. TypedIndicator.Levels.Select(ind => this[ind])];

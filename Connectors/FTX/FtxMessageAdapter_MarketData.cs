@@ -93,8 +93,8 @@ partial class FtxMessageAdapter
 		{
 			if (mdMsg.From is not null)
 			{
-				var startTime = mdMsg.From.Value.UtcDateTime;
-				var endTime = mdMsg.To?.UtcDateTime ?? DateTime.UtcNow;
+				var startTime = mdMsg.From.Value;
+				var endTime = mdMsg.To ?? DateTime.UtcNow;
 				var left = mdMsg.Count ?? long.MaxValue;
 
 				while (startTime < endTime)
@@ -156,10 +156,9 @@ partial class FtxMessageAdapter
 
 		if (mdMsg.IsSubscribe)
 		{
-			if (mdMsg.From is not null)
+			if (mdMsg.From is DateTime startTime)
 			{
-				var startTime = mdMsg.From.Value.UtcDateTime;
-				var endTime = mdMsg.To?.UtcDateTime ?? DateTime.UtcNow;
+				var endTime = mdMsg.To ?? DateTime.UtcNow;
 				var left = mdMsg.Count ?? long.MaxValue;
 
 				var resolution = (TimeSpan)mdMsg.DataType2.Arg;

@@ -76,7 +76,7 @@ public class PivotPoints : BaseComplexIndicator<IPivotPointsValue>
 	}
 
 	/// <inheritdoc />
-	protected override IPivotPointsValue CreateValue(DateTimeOffset time)
+	protected override IPivotPointsValue CreateValue(DateTime time)
 		=> new PivotPointsValue(this, time);
 }
 
@@ -165,7 +165,7 @@ public interface IPivotPointsValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent Pivot Points indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class PivotPointsValue(PivotPoints indicator, DateTimeOffset time) : ComplexIndicatorValue<PivotPoints>(indicator, time), IPivotPointsValue
+public class PivotPointsValue(PivotPoints indicator, DateTime time) : ComplexIndicatorValue<PivotPoints>(indicator, time), IPivotPointsValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue PivotPointValue => this[TypedIndicator.PivotPoint];

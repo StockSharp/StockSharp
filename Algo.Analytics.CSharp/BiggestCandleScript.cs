@@ -13,8 +13,8 @@ public class BiggestCandleScript : IAnalyticsScript
 			return Task.CompletedTask;
 		}
 
-		var priceChart = panel.CreateChart<DateTimeOffset, decimal, decimal>();
-		var volChart = panel.CreateChart<DateTimeOffset, decimal, decimal>();
+		var priceChart = panel.CreateChart<DateTime, decimal, decimal>();
+		var volChart = panel.CreateChart<DateTime, decimal, decimal>();
 
 		var bigPriceCandles = new List<CandleMessage>();
 		var bigVolCandles = new List<CandleMessage>();

@@ -23,7 +23,7 @@ public class GuppyMultipleMovingAverage : BaseComplexIndicator<IGuppyMultipleMov
 	}
 
 	/// <inheritdoc />
-	protected override IGuppyMultipleMovingAverageValue CreateValue(DateTimeOffset time)
+	protected override IGuppyMultipleMovingAverageValue CreateValue(DateTime time)
 		=> new GuppyMultipleMovingAverageValue(this, time);
 }
 
@@ -52,7 +52,7 @@ public interface IGuppyMultipleMovingAverageValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent GuppyMultipleMovingAverage indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class GuppyMultipleMovingAverageValue(GuppyMultipleMovingAverage indicator, DateTimeOffset time) : ComplexIndicatorValue<GuppyMultipleMovingAverage>(indicator, time), IGuppyMultipleMovingAverageValue
+public class GuppyMultipleMovingAverageValue(GuppyMultipleMovingAverage indicator, DateTime time) : ComplexIndicatorValue<GuppyMultipleMovingAverage>(indicator, time), IGuppyMultipleMovingAverageValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue[] AveragesValues => [.. TypedIndicator.InnerIndicators.Select(ind => this[ind])];

@@ -157,16 +157,16 @@ public class SecurityLookupMessage : SecurityMessage, ISubscriptionMessage, ISec
 		return str;
 	}
 
-	DateTimeOffset? ISubscriptionMessage.From
+	DateTime? ISubscriptionMessage.From
 	{
 		get => null;
 		set { }
 	}
 
-	DateTimeOffset? ISubscriptionMessage.To
+	DateTime? ISubscriptionMessage.To
 	{
 		// prevent for online mode
-		get => DateTimeOffset.MaxValue;
+		get => DateTime.MaxValue;
 		set { }
 	}
 

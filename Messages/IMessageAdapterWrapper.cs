@@ -223,7 +223,9 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageChannel>, IMessa
 	}
 
 	/// <inheritdoc />
-	public DateTimeOffset CurrentTime => InnerAdapter.CurrentTime;
+	public DateTime CurrentTimeUtc => InnerAdapter.CurrentTimeUtc;
+
+	DateTimeOffset ILogSource.CurrentTime => CurrentTimeUtc;
 
 	bool ILogSource.IsRoot => InnerAdapter.IsRoot;
 
@@ -261,7 +263,7 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageChannel>, IMessa
 	public virtual IEnumerable<MessageTypes> NotSupportedResultMessages => InnerAdapter.NotSupportedResultMessages;
 
 	/// <inheritdoc />
-	public virtual IEnumerable<DataType> GetSupportedMarketDataTypes(SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
+	public virtual IEnumerable<DataType> GetSupportedMarketDataTypes(SecurityId securityId, DateTime? from, DateTime? to)
 		=> InnerAdapter.GetSupportedMarketDataTypes(securityId, from, to);
 
 	/// <inheritdoc />

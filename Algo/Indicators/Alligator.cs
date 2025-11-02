@@ -79,7 +79,7 @@ public class Alligator : BaseComplexIndicator<IAlligatorValue>
 	public override string ToString() => base.ToString() + $" J={Jaw.Length} T={Teeth.Length} L={Lips.Length}";
 
 	/// <inheritdoc />
-	protected override IAlligatorValue CreateValue(DateTimeOffset time)
+	protected override IAlligatorValue CreateValue(DateTime time)
 		=> new AlligatorValue(this, time);
 }
 
@@ -130,7 +130,7 @@ public interface IAlligatorValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent Alligator indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class AlligatorValue(Alligator indicator, DateTimeOffset time) : ComplexIndicatorValue<Alligator>(indicator, time), IAlligatorValue
+public class AlligatorValue(Alligator indicator, DateTime time) : ComplexIndicatorValue<Alligator>(indicator, time), IAlligatorValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue JawValue => this[TypedIndicator.Jaw];

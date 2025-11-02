@@ -47,7 +47,7 @@ public struct GpuAdaptivePriceZoneParams(int period, float bandPercentage, byte 
 public struct GpuAdaptivePriceZoneResult : IGpuIndicatorResult
 {
 	/// <summary>
-	/// Time in <see cref="DateTimeOffset.Ticks"/>.
+	/// Time in <see cref="DateTime.Ticks"/>.
 	/// </summary>
 	public long Time;
 

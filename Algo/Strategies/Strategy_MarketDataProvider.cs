@@ -2,7 +2,7 @@ namespace StockSharp.Algo.Strategies;
 
 partial class Strategy
 {
-	event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> IMarketDataProvider.ValuesChanged
+	event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTime, DateTime> IMarketDataProvider.ValuesChanged
 	{
 		add { }
 		remove { }

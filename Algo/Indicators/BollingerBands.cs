@@ -127,7 +127,7 @@ public class BollingerBands : BaseComplexIndicator<IBollingerBandsValue>
 	public override string ToString() => base.ToString() + " " + Length;
 
 	/// <inheritdoc />
-	protected override IBollingerBandsValue CreateValue(DateTimeOffset time)
+	protected override IBollingerBandsValue CreateValue(DateTime time)
 		=> new BollingerBandsValue(this, time);
 }
 
@@ -178,7 +178,7 @@ public interface IBollingerBandsValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent BollingerBands indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class BollingerBandsValue(BollingerBands indicator, DateTimeOffset time) : ComplexIndicatorValue<BollingerBands>(indicator, time), IBollingerBandsValue
+public class BollingerBandsValue(BollingerBands indicator, DateTime time) : ComplexIndicatorValue<BollingerBands>(indicator, time), IBollingerBandsValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue MovingAverageValue => this[TypedIndicator.MovingAverage];

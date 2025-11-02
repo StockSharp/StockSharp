@@ -22,10 +22,10 @@ public static class FormatExtensions
 		=> time.ToString(@"hh\:mm\:ss");
 
 	/// <summary>
-	/// To format the <see cref="DateTimeOffset"/> in <see cref="string"/>.
+	/// To format the <see cref="DateTime"/> in <see cref="string"/>.
 	/// </summary>
-	/// <param name="time"><see cref="DateTimeOffset"/> value.</param>
+	/// <param name="time"><see cref="DateTime"/> value.</param>
 	/// <returns><see cref="string"/>.</returns>
-	public static string Format(this DateTimeOffset time)
+	public static string Format(this DateTime time)
 		=> time.To<string>();
 }

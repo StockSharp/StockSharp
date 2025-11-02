@@ -60,7 +60,7 @@ public partial class BitexbookMessageAdapter
 		{
 			if (mdMsg.From is not null)
 			{
-				var candles = await _httpClient.GetCandles(symbol, tfName, (long)mdMsg.From.Value.ToUnix(), (long)(mdMsg.To ?? DateTimeOffset.UtcNow).ToUnix(), cancellationToken);
+				var candles = await _httpClient.GetCandles(symbol, tfName, (long)mdMsg.From.Value.ToUnix(), (long)(mdMsg.To ?? DateTime.UtcNow).ToUnix(), cancellationToken);
 				var left = mdMsg.Count ?? long.MaxValue;
 
 				foreach (var candle in candles)
@@ -127,7 +127,7 @@ public partial class BitexbookMessageAdapter
 		SendOutMessage(new Level1ChangeMessage
 		{
 			SecurityId = _secIdMapping[ticker.Symbol],
-			ServerTime = CurrentTime.ConvertToUtc(),
+			ServerTime = CurrentTimeUtc,
 		}
 		.TryAdd(Level1Fields.BestBidPrice, ticker.Bid?.ToDecimal())
 		.TryAdd(Level1Fields.BestAskPrice, ticker.Ask?.ToDecimal()));
@@ -141,7 +141,7 @@ public partial class BitexbookMessageAdapter
 			{
 				DataTypeEx = DataType.OrderLog,
 				SecurityId = _secIdMapping[ticket.Symbol],
-				ServerTime = ticket.ModifyTimestamp ?? ticket.CreatedTimestamp ?? CurrentTime.ConvertToUtc(),
+				ServerTime = ticket.ModifyTimestamp ?? ticket.CreatedTimestamp ?? CurrentTimeUtc,
 				OrderId = ticket.Id,
 				OrderPrice = ticket.Price?.ToDecimal() ?? 0,
 				OrderVolume = ticket.StartVolume?.ToDecimal(),
@@ -158,7 +158,7 @@ public partial class BitexbookMessageAdapter
 		{
 			DataTypeEx = DataType.OrderLog,
 			SecurityId = _secIdMapping[ticket.Symbol],
-			ServerTime = ticket.CreatedTimestamp ?? CurrentTime.ConvertToUtc(),
+			ServerTime = ticket.CreatedTimestamp ?? CurrentTimeUtc,
 			OrderId = ticket.Id,
 			OrderPrice = ticket.Price?.ToDecimal() ?? 0,
 			OrderVolume = ticket.StartVolume?.ToDecimal(),
@@ -174,7 +174,7 @@ public partial class BitexbookMessageAdapter
 		{
 			DataTypeEx = DataType.OrderLog,
 			SecurityId = _secIdMapping[ticket.Symbol],
-			ServerTime = CurrentTime.ConvertToUtc(),
+			ServerTime = CurrentTimeUtc,
 			OrderId = ticket.Id,
 			OrderPrice = ticket.Price?.ToDecimal() ?? 0,
 			Balance = ticket.Volume?.ToDecimal(),
@@ -189,7 +189,7 @@ public partial class BitexbookMessageAdapter
 		{
 			DataTypeEx = DataType.OrderLog,
 			SecurityId = _secIdMapping[ticket.Symbol],
-			ServerTime = CurrentTime.ConvertToUtc(),
+			ServerTime = CurrentTimeUtc,
 			OrderId = ticket.Id,
 			Balance = ticket.OrderVolume?.ToDecimal(),
 			TradePrice = ticket.Price?.ToDecimal() ?? 0,

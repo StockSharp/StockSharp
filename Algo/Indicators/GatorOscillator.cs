@@ -68,7 +68,7 @@ public class GatorOscillator : BaseComplexIndicator<IGatorOscillatorValue>
 	public override string ToString() => $"{base.ToString()}, H1={Histogram1}, H2={Histogram2}";
 
 	/// <inheritdoc />
-	protected override IGatorOscillatorValue CreateValue(DateTimeOffset time)
+	protected override IGatorOscillatorValue CreateValue(DateTime time)
 		=> new GatorOscillatorValue(this, time);
 }
 
@@ -108,7 +108,7 @@ public interface IGatorOscillatorValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent GatorOscillator indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class GatorOscillatorValue(GatorOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<GatorOscillator>(indicator, time), IGatorOscillatorValue
+public class GatorOscillatorValue(GatorOscillator indicator, DateTime time) : ComplexIndicatorValue<GatorOscillator>(indicator, time), IGatorOscillatorValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue Histogram1Value => this[TypedIndicator.Histogram1];

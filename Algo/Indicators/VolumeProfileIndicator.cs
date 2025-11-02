@@ -23,7 +23,7 @@ public class VolumeProfileIndicator : BaseIndicator
 	/// </remarks>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public class VolumeProfileIndicatorValue(IIndicator indicator, DateTimeOffset time) : SingleIndicatorValue<IDictionary<decimal, decimal>>(indicator, time)
+	public class VolumeProfileIndicatorValue(IIndicator indicator, DateTime time) : SingleIndicatorValue<IDictionary<decimal, decimal>>(indicator, time)
 	{
 		/// <summary>
 		/// Embedded values.

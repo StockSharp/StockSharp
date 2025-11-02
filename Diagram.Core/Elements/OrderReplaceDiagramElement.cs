@@ -115,7 +115,7 @@ public class OrderReplaceDiagramElement : OrderBaseDiagramElement
 	}
 
 	/// <inheritdoc />
-	protected override void OnProcess(DateTimeOffset time, IDictionary<DiagramSocket, DiagramSocketValue> values, DiagramSocketValue source)
+	protected override void OnProcess(DateTime time, IDictionary<DiagramSocket, DiagramSocketValue> values, DiagramSocketValue source)
 	{
 		if (!CanProcess(values))
 			return;
@@ -207,7 +207,7 @@ public class OrderReplaceDiagramElement : OrderBaseDiagramElement
 				.WhenCanceled(Strategy)
 				.Do(o =>
 				{
-					var time = o.CancelledTime ?? Strategy.CurrentTime;
+					var time = o.CancelledTime ?? Strategy.CurrentTimeUtc;
 
 					if (_isCancelledSocket)
 					{

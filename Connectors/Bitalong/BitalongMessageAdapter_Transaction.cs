@@ -29,7 +29,7 @@ public partial class BitalongMessageAdapter
 				SendOutMessage(new ExecutionMessage
 				{
 					DataTypeEx = DataType.Transactions,
-					ServerTime = CurrentTime.ConvertToUtc(),
+					ServerTime = CurrentTimeUtc,
 					OriginalTransactionId = regMsg.TransactionId,
 					OrderState = OrderStates.Done,
 					HasOrderInfo = true,
@@ -50,7 +50,7 @@ public partial class BitalongMessageAdapter
 		{
 			DataTypeEx = DataType.Transactions,
 			OrderId = orderId,
-			ServerTime = CurrentTime.ConvertToUtc(),
+			ServerTime = CurrentTimeUtc,
 			OriginalTransactionId = regMsg.TransactionId,
 			OrderState = isMarket ? OrderStates.Done : OrderStates.Active,
 			Balance = isMarket ? 0 : null,
@@ -77,7 +77,7 @@ public partial class BitalongMessageAdapter
 
 		//SendOutMessage(new ExecutionMessage
 		//{
-		//	ServerTime = CurrentTime.ConvertToUtc(),
+		//	ServerTime = CurrentTimeUtc,
 		//	DataTypeEx = DataType.Transactions,
 		//	OriginalTransactionId = cancelMsg.TransactionId,
 		//	OrderState = OrderStates.Done,
@@ -160,7 +160,7 @@ public partial class BitalongMessageAdapter
 				{
 					DataTypeEx = DataType.Transactions,
 					OriginalTransactionId = cancelMsg.TransactionId,
-					ServerTime = CurrentTime.ConvertToUtc(),
+					ServerTime = CurrentTimeUtc,
 					HasOrderInfo = true,
 					Error = errors.Count == 1 ? errors[0] : new AggregateException(errors),
 				});
@@ -196,7 +196,7 @@ public partial class BitalongMessageAdapter
 			{
 				PortfolioName = PortfolioName,
 				SecurityId = asset.ToStockSharp(),
-				ServerTime = CurrentTime.ConvertToUtc(),
+				ServerTime = CurrentTimeUtc,
 			};
 		}
 
@@ -217,7 +217,7 @@ public partial class BitalongMessageAdapter
 			SendOutMessage(msg);
 		}
 
-		_lastTimeBalanceCheck = CurrentTime;
+		_lastTimeBalanceCheck = CurrentTimeUtc;
 	}
 
 	/// <inheritdoc />
@@ -268,7 +268,7 @@ public partial class BitalongMessageAdapter
 						DataTypeEx = DataType.Transactions,
 						OrderId = order.Id,
 						OriginalTransactionId = info.First,
-						ServerTime = CurrentTime.ConvertToUtc(),
+						ServerTime = CurrentTimeUtc,
 						Balance = balance,
 					});
 
@@ -317,7 +317,7 @@ public partial class BitalongMessageAdapter
 		{
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
-			ServerTime = transId != 0 ? order.Timestamp : CurrentTime.ConvertToUtc(),
+			ServerTime = transId != 0 ? order.Timestamp : CurrentTimeUtc,
 			SecurityId = order.CurrencyPair.ToStockSharp(),
 			TransactionId = transId,
 			OriginalTransactionId = origTransId,

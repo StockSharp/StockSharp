@@ -108,7 +108,7 @@ public class SineWave : BaseComplexIndicator<ISineWaveValue>
 	public override string ToString() => base.ToString() + $" L={Length}";
 
 	/// <inheritdoc />
-	protected override ISineWaveValue CreateValue(DateTimeOffset time)
+	protected override ISineWaveValue CreateValue(DateTime time)
 		=> new SineWaveValue(this, time);
 }
 
@@ -164,7 +164,7 @@ public interface ISineWaveValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent Sine Wave indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class SineWaveValue(SineWave indicator, DateTimeOffset time) : ComplexIndicatorValue<SineWave>(indicator, time), ISineWaveValue
+public class SineWaveValue(SineWave indicator, DateTime time) : ComplexIndicatorValue<SineWave>(indicator, time), ISineWaveValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue MainValue => this[TypedIndicator.Main];

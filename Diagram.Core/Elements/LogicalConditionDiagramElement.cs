@@ -174,7 +174,7 @@ public class LogicalConditionDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
-	protected override void OnProcess(DateTimeOffset time, IDictionary<DiagramSocket, DiagramSocketValue> values, DiagramSocketValue source)
+	protected override void OnProcess(DateTime time, IDictionary<DiagramSocket, DiagramSocketValue> values, DiagramSocketValue source)
 	{
 		var bools = values.Select(p => p.Value.GetValue<bool>()).ToArray();
 

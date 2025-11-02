@@ -41,15 +41,13 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 
 	public IMarketDataStorageDrive Drive { get; }
 
-	protected DateTime GetTruncatedTime(TMessage data) => data.ServerTime.StorageTruncate(Serializer.TimePrecision).UtcDateTime;
+	protected DateTime GetTruncatedTime(TMessage data) => data.ServerTime.StorageTruncate(Serializer.TimePrecision);
 
 	private SyncObject GetSync(DateTime time) => _syncRoots.SafeAdd(time);
 
 	private Stream LoadStream(DateTime date, bool readOnly) => Drive.LoadStream(date, readOnly);
 
 	private bool SecurityIdEqual(SecurityId securityId) => securityId.SecurityCode.EqualsIgnoreCase(SecurityId.SecurityCode) && securityId.BoardCode.EqualsIgnoreCase(SecurityId.BoardCode);
-
-	private static DateTime GetStorageDate(DateTimeOffset dto) => dto.UtcDateTime.Date;
 
 	public int Save(IEnumerable<TMessage> data)
 	{
@@ -67,10 +65,10 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 
 			var time = d.ServerTime;
 
-			if (time == DateTimeOffset.MinValue)
+			if (time == DateTime.MinValue)
 				throw new ArgumentException(LocalizedStrings.EmptyMessageTime.Put(d));
 
-			return GetStorageDate(time);
+			return time;
 		}))
 		{
 			var date = group.Key;
@@ -242,7 +240,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 		if (data == null)
 			throw new ArgumentNullException(nameof(data));
 
-		foreach (var group in data.GroupBy(i => GetStorageDate(i.ServerTime)))
+		foreach (var group in data.GroupBy(i => i.ServerTime))
 		{
 			var date = group.Key;
 

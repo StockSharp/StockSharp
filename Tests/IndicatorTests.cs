@@ -13,7 +13,7 @@ using DataType = StockSharp.Messages.DataType;
 [TestClass]
 public class IndicatorTests
 {
-	private static IIndicatorValue CreateValue(IndicatorType type, IIndicator indicator, SecurityId secId, DateTimeOffset now, int idx, TimeSpan tf, bool isFinal, bool isEmpty, int diffLimit = 10)
+	private static IIndicatorValue CreateValue(IndicatorType type, IIndicator indicator, SecurityId secId, DateTime now, int idx, TimeSpan tf, bool isFinal, bool isEmpty, int diffLimit = 10)
 	{
 		var time = now + tf.Multiply(idx);
 
@@ -55,7 +55,7 @@ public class IndicatorTests
 			throw new InvalidOperationException(input.ToString());
 	}
 
-	private static TimeFrameCandleMessage[] LoadCandles(SecurityId secId, DateTimeOffset time, TimeSpan tf)
+	private static TimeFrameCandleMessage[] LoadCandles(SecurityId secId, DateTime time, TimeSpan tf)
 	{
 		var path = Path.Combine(Helper.ResFolder, "ohlcv.txt");
 		using var reader = new StreamReader(path, Encoding.UTF8);
@@ -152,7 +152,7 @@ public class IndicatorTests
 	[TestMethod]
 	public void StateNonFinalInput()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		var secId = Helper.CreateSecurityId();
 		var tf = TimeSpan.FromDays(1);
 
@@ -224,7 +224,7 @@ public class IndicatorTests
 	[TestMethod]
 	public void NumValuesToInitialize()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		var secId = Helper.CreateSecurityId();
 		var tf = TimeSpan.FromDays(1);
 
@@ -312,7 +312,7 @@ public class IndicatorTests
 	[TestMethod]
 	public void NonFinalValueChanges()
 	{
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		var secId = Helper.CreateSecurityId();
 		var tf = TimeSpan.FromDays(1);
 
@@ -635,7 +635,7 @@ public class IndicatorTests
 	[TestMethod]
 	public void Process()
 	{
-		var time = new DateTimeOffset(2000, 1, 1, 0, 0, 0, TimeSpan.Zero);
+		var time = new DateTime(2000, 1, 1, 0, 0, 0).UtcKind();
 		var tf = TimeSpan.FromDays(1);
 		var secId = Helper.CreateSecurity().ToSecurityId();
 		var candles = LoadCandles(secId, time, tf);
@@ -727,7 +727,7 @@ public class IndicatorTests
 	{
 		static ICandleMessage[][] loadCandles()
 		{
-			var start = new DateTimeOffset(2000, 1, 1, 0, 0, 0, TimeSpan.Zero);
+			var start = new DateTime(2000, 1, 1, 0, 0, 0).UtcKind();
 			var baseTf = TimeSpan.FromMinutes(1);
 			var secId = Helper.CreateSecurityId();
 
@@ -928,7 +928,7 @@ public class IndicatorTests
 	[TestMethod]
 	public void IndicatorValues_Roundtrip()
 	{
-		var time = new DateTimeOffset(2000, 1, 1, 0, 0, 0, TimeSpan.Zero);
+		var time = new DateTime(2000, 1, 1, 0, 0, 0).UtcKind();
 		var tf = TimeSpan.FromMinutes(1);
 		var secId = Helper.CreateSecurity().ToSecurityId();
 		var candles = LoadCandles(secId, time, tf);
@@ -966,7 +966,7 @@ public class IndicatorTests
 	[TestMethod]
 	public void Preload()
 	{
-		var time = new DateTimeOffset(2000, 1, 1, 0, 0, 0, TimeSpan.Zero);
+		var time = new DateTime(2000, 1, 1, 0, 0, 0).UtcKind();
 		var tf = TimeSpan.FromMinutes(1);
 		var secId = Helper.CreateSecurity().ToSecurityId();
 		var candles = LoadCandles(secId, time, tf);
@@ -1033,7 +1033,7 @@ public class IndicatorTests
 	[TestMethod]
 	public void Preload_WithValues()
 	{
-		var time = new DateTimeOffset(2000, 1, 1, 0, 0, 0, TimeSpan.Zero);
+		var time = new DateTime(2000, 1, 1, 0, 0, 0).UtcKind();
 		var tf = TimeSpan.FromMinutes(1);
 		var secId = Helper.CreateSecurity().ToSecurityId();
 		var candles = LoadCandles(secId, time, tf);
@@ -1045,7 +1045,7 @@ public class IndicatorTests
 
 			var name = indicator1.ToString();
 
-			var preloadData = new List<(DateTimeOffset, object[])>();
+			var preloadData = new List<(DateTime, object[])>();
 
 			// Process first half with indicator1 and collect output values
 			var halfCount = candles.Length / 2;
@@ -1086,9 +1086,9 @@ public class IndicatorTests
 		var type = GetIndicatorTypes().First();
 		var indicator = type.CreateIndicator();
 
-		var preloadData = new List<(DateTimeOffset time, object[] values)>
+		var preloadData = new List<(DateTime time, object[] values)>
 		{
-			(DateTimeOffset.UtcNow, new object[] { 100m })
+			(DateTime.UtcNow, new object[] { 100m })
 		};
 
 		indicator.Preload(preloadData);
@@ -1109,7 +1109,7 @@ public class IndicatorTests
 	public void IndicatorValues_Standard()
 	{
 		var ind = new PassThroughIndicator();
-		var t = DateTimeOffset.UtcNow;
+		var t = DateTime.UtcNow;
 		var tf = TimeSpan.FromMinutes(1);
 
 		// DecimalIndicatorValue
@@ -1283,7 +1283,7 @@ static class IndicatorDataRunner
 	{
 		private readonly TInner _value;
 
-		public TestIndicatorValue(IIndicator indicator, DateTimeOffset time, TInner value, TInner initFrom = default)
+		public TestIndicatorValue(IIndicator indicator, DateTime time, TInner value, TInner initFrom = default)
 		{
 			Indicator = indicator ?? throw new ArgumentNullException(nameof(indicator));
 			_value = value is ICloneable cl ? (TInner)cl.Clone() : value;
@@ -1299,7 +1299,7 @@ static class IndicatorDataRunner
 
 		public IIndicator Indicator { get; }
 		public bool IsFinal { get; set; }
-		public DateTimeOffset Time { get; }
+		public DateTime Time { get; }
 		bool IIndicatorValue.IsFormed { get; set; }
 		bool IIndicatorValue.IsEmpty => false;
 
@@ -1317,7 +1317,7 @@ static class IndicatorDataRunner
 					HighPrice = dec,
 					LowPrice = dec,
 					ClosePrice = dec,
-					OpenTime = DateTimeOffset.UtcNow,
+					OpenTime = DateTime.UtcNow,
 				}.To<T>();
 			}
 			else if (typeof(T) == typeof(decimal))

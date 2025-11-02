@@ -33,7 +33,7 @@ public interface IIndicatorValue : IComparable<IIndicatorValue>, IComparable
 	/// Value time.
 	/// </summary>
 	[Browsable(false)]
-	DateTimeOffset Time { get; }
+	DateTime Time { get; }
 
 	/// <summary>
 	/// To get the value by the data type.
@@ -64,7 +64,7 @@ public interface IIndicatorValue : IComparable<IIndicatorValue>, IComparable
 /// </remarks>
 /// <param name="indicator">Indicator.</param>
 /// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public abstract class BaseIndicatorValue(IIndicator indicator, DateTimeOffset time) : IIndicatorValue
+public abstract class BaseIndicatorValue(IIndicator indicator, DateTime time) : IIndicatorValue
 {
 	/// <inheritdoc />
 	public IIndicator Indicator { get; } = indicator ?? throw new ArgumentNullException(nameof(indicator));
@@ -79,7 +79,7 @@ public abstract class BaseIndicatorValue(IIndicator indicator, DateTimeOffset ti
 	public bool IsFormed { get; set; } = indicator.IsFormed;
 
 	/// <inheritdoc />
-	public DateTimeOffset Time { get; } = time;
+	public DateTime Time { get; } = time;
 
 	/// <inheritdoc />
 	public abstract T GetValue<T>(Level1Fields? field);
@@ -115,7 +115,7 @@ public abstract class SingleIndicatorValue<TValue> : BaseIndicatorValue
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="value">Value.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	protected SingleIndicatorValue(IIndicator indicator, TValue value, DateTimeOffset time)
+	protected SingleIndicatorValue(IIndicator indicator, TValue value, DateTime time)
 		: base(indicator, time)
 	{
 		Value = value;
@@ -126,7 +126,7 @@ public abstract class SingleIndicatorValue<TValue> : BaseIndicatorValue
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	protected SingleIndicatorValue(IIndicator indicator, DateTimeOffset time)
+	protected SingleIndicatorValue(IIndicator indicator, DateTime time)
 		: base(indicator, time)
 	{
 		IsEmpty = true;
@@ -221,7 +221,7 @@ public class DecimalIndicatorValue : SingleIndicatorValue<decimal>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="value">Value.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public DecimalIndicatorValue(IIndicator indicator, decimal value, DateTimeOffset time)
+	public DecimalIndicatorValue(IIndicator indicator, decimal value, DateTime time)
 		: base(indicator, value, time)
 	{
 	}
@@ -231,7 +231,7 @@ public class DecimalIndicatorValue : SingleIndicatorValue<decimal>
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public DecimalIndicatorValue(IIndicator indicator, DateTimeOffset time)
+	public DecimalIndicatorValue(IIndicator indicator, DateTime time)
 		: base(indicator, time)
 	{
 	}
@@ -274,7 +274,7 @@ public class CandleIndicatorValue : SingleIndicatorValue<ICandleMessage>
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public CandleIndicatorValue(IIndicator indicator, DateTimeOffset time)
+	public CandleIndicatorValue(IIndicator indicator, DateTime time)
 		: base(indicator, time)
 	{
 	}
@@ -334,7 +334,7 @@ public class MarketDepthIndicatorValue : SingleIndicatorValue<IOrderBookMessage>
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public MarketDepthIndicatorValue(IIndicator indicator, DateTimeOffset time)
+	public MarketDepthIndicatorValue(IIndicator indicator, DateTime time)
 		: base(indicator, time)
 	{
 	}
@@ -402,7 +402,7 @@ public class Level1IndicatorValue : SingleIndicatorValue<Level1ChangeMessage>
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public Level1IndicatorValue(IIndicator indicator, DateTimeOffset time)
+	public Level1IndicatorValue(IIndicator indicator, DateTime time)
 		: base(indicator, time)
 	{
 	}
@@ -466,7 +466,7 @@ public class TickIndicatorValue : SingleIndicatorValue<ITickTradeMessage>
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public TickIndicatorValue(IIndicator indicator, DateTimeOffset time)
+	public TickIndicatorValue(IIndicator indicator, DateTime time)
 		: base(indicator, time)
 	{
 	}
@@ -520,7 +520,7 @@ public class PairIndicatorValue<TValue> : SingleIndicatorValue<(TValue, TValue)>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="value">Value.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public PairIndicatorValue(IIndicator indicator, (TValue, TValue) value, DateTimeOffset time)
+	public PairIndicatorValue(IIndicator indicator, (TValue, TValue) value, DateTime time)
 		: base(indicator, value, time)
 	{
 	}
@@ -530,7 +530,7 @@ public class PairIndicatorValue<TValue> : SingleIndicatorValue<(TValue, TValue)>
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public PairIndicatorValue(IIndicator indicator, DateTimeOffset time)
+	public PairIndicatorValue(IIndicator indicator, DateTime time)
 		: base(indicator, time)
 	{
 	}
@@ -580,7 +580,7 @@ public interface IComplexIndicatorValue : IIndicatorValue
 /// </remarks>
 /// <param name="indicator">Indicator.</param>
 /// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-public abstract class ComplexIndicatorValue<TIndicator>(TIndicator indicator, DateTimeOffset time) : BaseIndicatorValue(indicator, time), IComplexIndicatorValue
+public abstract class ComplexIndicatorValue<TIndicator>(TIndicator indicator, DateTime time) : BaseIndicatorValue(indicator, time), IComplexIndicatorValue
 	where TIndicator : IComplexIndicator
 {
 	/// <summary>
@@ -656,7 +656,7 @@ public abstract class ComplexIndicatorValue<TIndicator>(TIndicator indicator, Da
 	/// <param name="time">Time of the value, which is set.</param>
 	/// <param name="value">Value of the indicator as <see cref="decimal"/> or <see langword="null"/> if the value is empty.</param>
 	/// <param name="isFinal"><see cref="IIndicatorValue.IsFinal"/></param>
-	public void SetInnerDecimal(IIndicator indicator, DateTimeOffset time, decimal? value, bool isFinal)
+	public void SetInnerDecimal(IIndicator indicator, DateTime time, decimal? value, bool isFinal)
 		=> InnerValues[indicator] = value is not decimal v
 		? new DecimalIndicatorValue(indicator, time) { IsFinal = isFinal }
 		: new DecimalIndicatorValue(indicator, v, time) { IsFinal = isFinal };

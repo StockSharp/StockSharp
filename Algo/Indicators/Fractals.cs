@@ -42,7 +42,7 @@ public interface IFractalsValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="fractals">The parent Fractals indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class FractalsValue(Fractals fractals, DateTimeOffset time) : ComplexIndicatorValue<Fractals>(fractals, time), IFractalsValue
+public class FractalsValue(Fractals fractals, DateTime time) : ComplexIndicatorValue<Fractals>(fractals, time), IFractalsValue
 {
 	/// <inheritdoc />
 	public bool HasPattern => HasUp || HasDown;
@@ -148,7 +148,7 @@ public class Fractals : BaseComplexIndicator<IFractalsValue>
 	public FractalPart Down { get; }
 
 	/// <inheritdoc />
-	protected override IFractalsValue CreateValue(DateTimeOffset time)
+	protected override IFractalsValue CreateValue(DateTime time)
 		=> new FractalsValue(this, time);
 
 	/// <inheritdoc />

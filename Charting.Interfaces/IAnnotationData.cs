@@ -13,7 +13,7 @@ public interface IAnnotationData
 
 	/// <summary>
 	/// X1 coordinate for annotation drawing.
-	/// <see cref="DateTimeOffset"/> for coordinate mode <see cref="AnnotationCoordinateMode.Absolute"/> or <see cref="AnnotationCoordinateMode.RelativeY"/>.
+	/// <see cref="DateTime"/> for coordinate mode <see cref="AnnotationCoordinateMode.Absolute"/> or <see cref="AnnotationCoordinateMode.RelativeY"/>.
 	/// <see cref="double"/> otherwise.
 	/// </summary>
 	IComparable X1 { get; set; }
@@ -27,7 +27,7 @@ public interface IAnnotationData
 
 	/// <summary>
 	/// X2 coordinate for annotation drawing.
-	/// <see cref="DateTimeOffset"/> for coordinate mode <see cref="AnnotationCoordinateMode.Absolute"/> or <see cref="AnnotationCoordinateMode.RelativeY"/>.
+	/// <see cref="DateTime"/> for coordinate mode <see cref="AnnotationCoordinateMode.Absolute"/> or <see cref="AnnotationCoordinateMode.RelativeY"/>.
 	/// <see cref="double"/> otherwise.
 	/// </summary>
 	IComparable X2 { get; set; }
@@ -65,7 +65,7 @@ public interface IAnnotationData
 
 	/// <summary>
 	/// Coordinate mode.
-	/// <see cref="AnnotationCoordinateMode.Absolute"/> means <see cref="DateTimeOffset"/> for X and <see cref="decimal"/> price for Y.
+	/// <see cref="AnnotationCoordinateMode.Absolute"/> means <see cref="DateTime"/> for X and <see cref="decimal"/> price for Y.
 	/// <see cref="AnnotationCoordinateMode.Relative"/> means relative to the screen edges: double. 0=top/left, 0.5=center, 1=bottom/right
 	/// </summary>
 	AnnotationCoordinateMode? CoordinateMode { get; set; }

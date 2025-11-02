@@ -120,7 +120,7 @@ public static partial class TraderHelper
 	/// <param name="board">Board info.</param>
 	/// <param name="time">The passed time to be checked.</param>
 	/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
-	public static bool IsTradeTime(this ExchangeBoard board, DateTimeOffset time)
+	public static bool IsTradeTime(this ExchangeBoard board, DateTime time)
 	{
 		return board.ToMessage().IsTradeTime(time, out _, out _);
 	}
@@ -133,7 +133,7 @@ public static partial class TraderHelper
 	/// <param name="isWorkingDay"><see langword="true" />, if the date is traded, otherwise, is not traded.</param>
 	/// <param name="period">Current working time period.</param>
 	/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
-	public static bool IsTradeTime(this ExchangeBoard board, DateTimeOffset time, out bool? isWorkingDay, out WorkingTimePeriod period)
+	public static bool IsTradeTime(this ExchangeBoard board, DateTime time, out bool? isWorkingDay, out WorkingTimePeriod period)
 	{
 		return board.ToMessage().IsTradeTime(time, out isWorkingDay, out period);
 	}
@@ -464,7 +464,7 @@ public static partial class TraderHelper
 		var orderDescription = order.ToString();
 		var additionalInfo = getAdditionalInfo == null ? string.Empty : getAdditionalInfo();
 
-		receiver.AddLog(new LogMessage(receiver, receiver.CurrentTime, type, () => "{0}: {1} {2}".Put(operation, orderDescription, additionalInfo)));
+		receiver.AddLog(new LogMessage(receiver, receiver.CurrentTimeUtc, type, () => "{0}: {1} {2}".Put(operation, orderDescription, additionalInfo)));
 	}
 
 	/// <summary>
@@ -1278,7 +1278,7 @@ public static partial class TraderHelper
 	/// <param name="buildField">Extra info for the <see cref="MarketDataMessage.BuildFrom"/>.</param>
 	/// <param name="secType"><see cref="SecurityMessage.SecurityType"/>.</param>
 	/// <returns>Downloaded candles.</returns>
-	public static void DownloadCandles(this IMessageAdapter adapter, Action<TimeFrameCandleMessage> receiver, TimeSpan timeout, SecurityId securityId, TimeSpan timeFrame, DateTimeOffset from, DateTimeOffset to, long? count = null, Level1Fields? buildField = null, SecurityTypes? secType = default)
+	public static void DownloadCandles(this IMessageAdapter adapter, Action<TimeFrameCandleMessage> receiver, TimeSpan timeout, SecurityId securityId, TimeSpan timeFrame, DateTime from, DateTime to, long? count = null, Level1Fields? buildField = null, SecurityTypes? secType = default)
 	{
 		var mdMsg = new MarketDataMessage
 		{

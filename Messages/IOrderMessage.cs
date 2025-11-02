@@ -28,7 +28,7 @@ public interface IOrderMessage :
 	/// <remarks>
 	/// If the value is equal <see langword="null" />, order will be GTC (good til cancel). Or uses exact date.
 	/// </remarks>
-	DateTimeOffset? ExpiryDate { get; set; }
+	DateTime? ExpiryDate { get; set; }
 
 	/// <summary>
 	/// <see cref="Type"/>

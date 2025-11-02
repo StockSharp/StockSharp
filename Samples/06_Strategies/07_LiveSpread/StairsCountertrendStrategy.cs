@@ -65,7 +65,7 @@ public class StairsCountertrendStrategy : Strategy
 	/// <summary>
 	/// On strategy started.
 	/// </summary>
-	protected override void OnStarted(DateTimeOffset time)
+	protected override void OnStarted2(DateTime time)
 	{
 		// Reset counters on start
 		_bullLength = 0;
@@ -86,7 +86,7 @@ public class StairsCountertrendStrategy : Strategy
 			DrawOwnTrades(area);
 		}
 
-		base.OnStarted(time);
+		base.OnStarted2(time);
 	}
 
 	/// <summary>

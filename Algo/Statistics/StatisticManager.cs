@@ -103,10 +103,10 @@ public class StatisticManager : IStatisticManager
 	/// <inheritdoc />
 	public IStatisticParameter[] Parameters => _parameters.Cache;
 
-	void IStatisticManager.AddPnL(DateTimeOffset time, decimal pnl, decimal? commission)
+	void IStatisticManager.AddPnL(DateTime time, decimal pnl, decimal? commission)
 		=> _parameters.PnLParams.ForEach(p => p.Add(time, pnl, commission));
 
-	void IStatisticManager.AddPosition(DateTimeOffset time, decimal position)
+	void IStatisticManager.AddPosition(DateTime time, decimal position)
 		=> _parameters.PositionParams.ForEach(p => p.Add(time, position));
 
 	void IStatisticManager.AddMyTrade(PnLInfo info)

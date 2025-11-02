@@ -11,7 +11,7 @@ public class PnLInfo
 	/// <param name="serverTime"><see cref="ServerTime"/>.</param>
 	/// <param name="closedVolume">The volume of position, which was closed by own trade.</param>
 	/// <param name="pnL">The profit, realized by this trade.</param>
-	public PnLInfo(DateTimeOffset serverTime, decimal closedVolume, decimal pnL)
+	public PnLInfo(DateTime serverTime, decimal closedVolume, decimal pnL)
 	{
 		if (closedVolume < 0)
 			throw new ArgumentOutOfRangeException(nameof(closedVolume), closedVolume, LocalizedStrings.InvalidValue);
@@ -24,7 +24,7 @@ public class PnLInfo
 	/// <summary>
 	/// Time.
 	/// </summary>
-	public DateTimeOffset ServerTime { get; }
+	public DateTime ServerTime { get; }
 
 	/// <summary>
 	/// The volume of position, which was closed by own trade.

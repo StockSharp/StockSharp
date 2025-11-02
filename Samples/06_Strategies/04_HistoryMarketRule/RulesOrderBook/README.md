@@ -10,7 +10,7 @@ This strategy sets up various rules based on market depth updates (`OrderBookRec
 When the strategy starts, it subscribes to trade ticks and market depth for the specified security and then sets up multiple rules to react to changes in market depth:
 
 ```csharp
-protected override void OnStarted(DateTimeOffset time)
+protected override void OnStarted2(DateTime time)
 {
     var tickSub = new Subscription(DataType.Ticks, Security);
     var mdSub = new Subscription(DataType.MarketDepth, Security);
@@ -24,7 +24,7 @@ protected override void OnStarted(DateTimeOffset time)
     Subscribe(tickSub);
     Subscribe(mdSub);
 
-    base.OnStarted(time);
+    base.OnStarted2(time);
 }
 ```
 

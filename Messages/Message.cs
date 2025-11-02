@@ -56,7 +56,7 @@ public abstract class Message : Cloneable<Message>, IMessage
 		Description = LocalizedStrings.LocalTimeDescKey,
 		GroupName = LocalizedStrings.GeneralKey)]
 	[DataMember]
-	public DateTimeOffset LocalTime { get; set; }
+	public DateTime LocalTime { get; set; }
 
 	[field: NonSerialized]
 	private readonly MessageTypes _type;

@@ -40,14 +40,14 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 	/// <summary>
 	/// The interface describing the internal instruments collection <see cref="ExpirationJumps"/>.
 	/// </summary>
-	public interface IExpirationJumpList : ISynchronizedCollection<KeyValuePair<SecurityId, DateTimeOffset>>, IDictionary<SecurityId, DateTimeOffset>
+	public interface IExpirationJumpList : ISynchronizedCollection<KeyValuePair<SecurityId, DateTime>>, IDictionary<SecurityId, DateTime>
 	{
 		/// <summary>
 		/// To get the instrument for the specified expiration time.
 		/// </summary>
 		/// <param name="time">The expiration time.</param>
 		/// <returns>Security.</returns>
-		SecurityId this[DateTimeOffset time] { get; }
+		SecurityId this[DateTime time] { get; }
 
 		/// <summary>
 		/// To get the first instrument by expiration.
@@ -76,23 +76,23 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 		SecurityId? GetPrevSecurity(SecurityId security);
 	}
 
-	private sealed class ExpirationJumpsDictionary : SynchronizedPairSet<SecurityId, DateTimeOffset>, IExpirationJumpList
+	private sealed class ExpirationJumpsDictionary : SynchronizedPairSet<SecurityId, DateTime>, IExpirationJumpList
 	{
-		private readonly SortedDictionary<Range<DateTimeOffset>, SecurityId> _expirationRanges;
-		private IEnumerator<KeyValuePair<Range<DateTimeOffset>, SecurityId>> _enumerator;
-		private KeyValuePair<Range<DateTimeOffset>, SecurityId>? _current;
+		private readonly SortedDictionary<Range<DateTime>, SecurityId> _expirationRanges;
+		private IEnumerator<KeyValuePair<Range<DateTime>, SecurityId>> _enumerator;
+		private KeyValuePair<Range<DateTime>, SecurityId>? _current;
 
 		public ExpirationJumpsDictionary()
 		{
-			Func<Range<DateTimeOffset>, Range<DateTimeOffset>, int> comparer = (r1, r2) => r1.Max.CompareTo(r2.Max);
-			_expirationRanges = new SortedDictionary<Range<DateTimeOffset>, SecurityId>(comparer.ToComparer());
+			Func<Range<DateTime>, Range<DateTime>, int> comparer = (r1, r2) => r1.Max.CompareTo(r2.Max);
+			_expirationRanges = new SortedDictionary<Range<DateTime>, SecurityId>(comparer.ToComparer());
 
 			InnerSecurities = [];
 		}
 
 		public SecurityId[] InnerSecurities { get; private set; }
 
-		public override void Add(SecurityId key, DateTimeOffset value)
+		public override void Add(SecurityId key, DateTime value)
 		{
 			lock (SyncRoot)
 			{
@@ -131,13 +131,13 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 
 		private void RefreshRanges()
 		{
-			var prevTime = DateTimeOffset.MinValue;
+			var prevTime = DateTime.MinValue;
 
 			_expirationRanges.Clear();
 
 			foreach (var pair in this.OrderBy(kv => kv.Value).ToArray())
 			{
-				_expirationRanges.Add(new Range<DateTimeOffset>(prevTime, pair.Value), pair.Key);
+				_expirationRanges.Add(new Range<DateTime>(prevTime, pair.Value), pair.Key);
 				prevTime = pair.Value + TimeSpan.FromTicks(1);
 			}
 
@@ -145,7 +145,7 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 
 			DisposeEnumerator();
 
-			_enumerator = new CircularBuffer<KeyValuePair<Range<DateTimeOffset>, SecurityId>>(_expirationRanges.Count, [.. _expirationRanges]).GetEnumerator();
+			_enumerator = new CircularBuffer<KeyValuePair<Range<DateTime>, SecurityId>>(_expirationRanges.Count, [.. _expirationRanges]).GetEnumerator();
 
 			MoveNext();
 		}
@@ -158,7 +158,7 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 				_current = null;
 		}
 
-		public SecurityId GetSecurity(DateTimeOffset marketTime)
+		public SecurityId GetSecurity(DateTime marketTime)
 		{
 			lock (SyncRoot)
 			{
@@ -187,7 +187,7 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 
 		private void DisposeEnumerator() => _enumerator?.Dispose();
 
-		SecurityId IExpirationJumpList.FirstSecurity => GetSecurity(DateTimeOffset.MinValue);
+		SecurityId IExpirationJumpList.FirstSecurity => GetSecurity(DateTime.MinValue);
 
 		SecurityId IExpirationJumpList.LastSecurity => _expirationRanges.LastOrDefault().Value;
 
@@ -242,7 +242,7 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 	/// </summary>
 	/// <param name="marketTime">The exchange time.</param>
 	/// <returns>The instrument. If there is no instrument for the specified time then the <see langword="null" /> will be returned.</returns>
-	public SecurityId GetSecurity(DateTimeOffset marketTime)
+	public SecurityId GetSecurity(DateTime marketTime)
 	{
 		return _expirationJumps.GetSecurity(marketTime);
 	}
@@ -253,7 +253,7 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 	protected override string ToSerializedString()
 	{
 		lock (_expirationJumps.SyncRoot)
-			return _expirationJumps.Select(j => $"{j.Key.ToStringId()}={j.Value.UtcDateTime.ToString(_dateFormat)}").JoinComma();
+			return _expirationJumps.Select(j => $"{j.Key.ToStringId()}={j.Value.ToString(_dateFormat)}").JoinComma();
 	}
 
 	/// <inheritdoc />
@@ -269,7 +269,7 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 			_expirationJumps.AddRange(text.SplitByComma().Select(p =>
 			{
 				var parts = p.SplitByEqual();
-				return new KeyValuePair<SecurityId, DateTimeOffset>(parts[0].ToSecurityId(), parts[1].ToDateTime(_dateFormat).UtcKind());
+				return new KeyValuePair<SecurityId, DateTime>(parts[0].ToSecurityId(), parts[1].ToDateTime(_dateFormat).UtcKind());
 			}));
 		}
 	}

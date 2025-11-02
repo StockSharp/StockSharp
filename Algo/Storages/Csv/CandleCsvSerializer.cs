@@ -34,7 +34,7 @@ public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType
 				{
 					var message = serializer.Read(reader, this);
 
-					var openTime = message.OpenTime.UtcDateTime;
+					var openTime = message.OpenTime;
 
 					if (!firstTimeRead)
 					{
@@ -59,7 +59,7 @@ public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType
 
 			foreach (var message in messages)
 			{
-				var openTime = message.OpenTime.UtcDateTime;
+				var openTime = message.OpenTime;
 
 				LastTime = openTime;
 			}

@@ -116,7 +116,7 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 {
 	private interface IPositionAlgo
 	{
-		void UpdateLast(DateTimeOffset time, decimal? price, decimal? volume);
+		void UpdateLast(DateTime time, decimal? price, decimal? volume);
 		void Cancel();
 	}
 
@@ -133,23 +133,23 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 		protected DiagramSocket TradeSocket => Parent._tradeSocket;
 		protected bool IsTradeSocket => Parent._isTradeSocket;
 
-		protected void ResetAlgo(DateTimeOffset time, decimal volume)
+		protected void ResetAlgo(DateTime time, decimal volume)
 		{
 			Parent._currAlgo = null;
 			RaiseProcessOutput(Parent._remainVolumeSocket, time, volume);
 		}
 
-		protected void RaiseProcessOutput(DiagramSocket socket, DateTimeOffset time, object value)
+		protected void RaiseProcessOutput(DiagramSocket socket, DateTime time, object value)
 			=> Parent.RaiseProcessOutput(socket, time, value);
 
-		public abstract void UpdateLast(DateTimeOffset time, decimal? price, decimal? volume);
+		public abstract void UpdateLast(DateTime time, decimal? price, decimal? volume);
 		public abstract void Cancel();
 	}
 
 	private class MarketOrderAlgo(PositionModifyElement parent, Security security, Portfolio portfolio, Sides side, decimal volume)
 		: BasePositionAlgo(parent, security, portfolio, side, volume)
 	{
-		public override void UpdateLast(DateTimeOffset time, decimal? price, decimal? volume)
+		public override void UpdateLast(DateTime time, decimal? price, decimal? volume)
 		{
 			var order = new Order
 			{
@@ -347,7 +347,7 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 
 		private decimal _currentVwap;
 
-		public override void UpdateLast(DateTimeOffset time, decimal? price, decimal? volume)
+		public override void UpdateLast(DateTime time, decimal? price, decimal? volume)
 		{
 			if (price is not decimal decPrice || volume is not decimal decVol)
 				return;
@@ -368,7 +368,7 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 	{
 		private readonly CircularBuffer<decimal> _prices = new(10);
 		private readonly TimeSpan _timeInterval;
-		private DateTimeOffset? _lastOrderTime;
+		private DateTime? _lastOrderTime;
 
 		public TWAPOrderAlgo(PositionModifyElement parent, Security security, Portfolio portfolio, Sides side, decimal volume, Unit volumePart, TimeSpan timeInterval)
 			: base(parent, security, portfolio, side, volume, volumePart)
@@ -379,7 +379,7 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 			_timeInterval = timeInterval;
 		}
 
-		public override void UpdateLast(DateTimeOffset time, decimal? price, decimal? volume)
+		public override void UpdateLast(DateTime time, decimal? price, decimal? volume)
 		{
 			if (price is not decimal decPrice)
 				return;
@@ -410,7 +410,7 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 	{
 		private decimal _lastPrice;
 
-		public override void UpdateLast(DateTimeOffset time, decimal? price, decimal? volume)
+		public override void UpdateLast(DateTime time, decimal? price, decimal? volume)
 		{
 			if (price is not decimal decPrice)
 				return;
@@ -649,7 +649,7 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 	}
 
 	/// <inheritdoc />
-	protected override void OnProcess(DateTimeOffset time, IDictionary<DiagramSocket, DiagramSocketValue> values, DiagramSocketValue source)
+	protected override void OnProcess(DateTime time, IDictionary<DiagramSocket, DiagramSocketValue> values, DiagramSocketValue source)
 	{
 		if (_currAlgo is not null || !CanProcess(values))
 			return;

@@ -46,7 +46,7 @@ public struct GpuKasePeakOscillatorParams(int shortPeriod, int longPeriod, int a
 public struct GpuKasePeakOscillatorResult : IGpuIndicatorResult
 {
 	/// <summary>
-	/// Time in <see cref="DateTimeOffset.Ticks"/>.
+	/// Time in <see cref="DateTime.Ticks"/>.
 	/// </summary>
 	public long Time;
 
@@ -98,7 +98,7 @@ public struct GpuKasePeakOscillatorResult : IGpuIndicatorResult
 		return value;
 	}
 
-	private static IIndicatorValue CreatePartValue(KasePeakOscillatorPart part, DateTimeOffset time, float data, byte formed)
+	private static IIndicatorValue CreatePartValue(KasePeakOscillatorPart part, DateTime time, float data, byte formed)
 	{
 		if (data.IsNaN())
 		{

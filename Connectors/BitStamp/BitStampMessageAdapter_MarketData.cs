@@ -57,8 +57,8 @@ partial class BitStampMessageAdapter
 
 			if (mdMsg.From is not null || mdMsg.To is not null)
 			{
-				var from = mdMsg.From?.UtcDateTime ?? DateTime.Today;
-				var to = mdMsg.To?.UtcDateTime ?? DateTime.UtcNow;
+				var from = mdMsg.From ?? DateTime.Today;
+				var to = mdMsg.To ?? DateTime.UtcNow;
 				var left = mdMsg.Count ?? long.MaxValue;
 
 				while (true)
@@ -166,8 +166,8 @@ partial class BitStampMessageAdapter
 		{
 			if (mdMsg.From is not null || mdMsg.To is not null)
 			{
-				var from = mdMsg.From?.UtcDateTime ?? DateTime.Today;
-				var to = mdMsg.To?.UtcDateTime ?? DateTime.UtcNow;
+				var from = mdMsg.From ?? DateTime.Today;
+				var to = mdMsg.To ?? DateTime.UtcNow;
 
 				var trades = await _httpClient.GetTransactions(currency, "day", cancellationToken);
 

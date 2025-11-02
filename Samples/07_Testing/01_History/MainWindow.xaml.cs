@@ -539,7 +539,7 @@ public partial class MainWindow
 						if (connector.IsFinished)
 						{
 							progressBar.Value = progressBar.Maximum;
-							MessageBox.Show(this, LocalizedStrings.CompletedIn.Put(DateTime.Now - _startEmulationTime), title);
+							MessageBox.Show(this, LocalizedStrings.CompletedIn.Put(DateTime.UtcNow - _startEmulationTime), title);
 						}
 						else
 							MessageBox.Show(this, LocalizedStrings.Cancelled, title);
@@ -578,7 +578,7 @@ public partial class MainWindow
 			progressBar.Value = 0;
 		}
 
-		_startEmulationTime = DateTime.Now;
+		_startEmulationTime = DateTime.UtcNow;
 
 		// start emulation
 		foreach (var connector in _connectors.Cache)

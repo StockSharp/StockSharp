@@ -18,7 +18,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	private readonly Action _breaked = breaked ?? throw new ArgumentNullException(nameof(breaked));
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(worker =>
 		{
@@ -39,7 +39,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 			//worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Sell), null, Colors.Red);
 
 			var row = 1;
-			var lastTime = default(DateTimeOffset?);
+			var lastTime = default(DateTime?);
 
 			foreach (var message in messages)
 			{
@@ -74,7 +74,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(worker =>
 		{
@@ -92,7 +92,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 			//worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Sell), null, Colors.Red);
 
 			var row = 1;
-			var lastTime = default(DateTimeOffset?);
+			var lastTime = default(DateTime?);
 
 			foreach (var message in messages)
 			{
@@ -119,7 +119,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(worker =>
 		{
@@ -146,7 +146,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 			//worker.SetConditionalFormatting(9, ComparisonOperator.Equal, "\"{0}\"".Put(OrderStates.Failed), null, Colors.Red);
 
 			var row = 1;
-			var lastTime = default(DateTimeOffset?);
+			var lastTime = default(DateTime?);
 
 			foreach (var message in messages)
 			{
@@ -178,12 +178,12 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(worker =>
 		{
 			var count = 0;
-			var lastTime = default(DateTimeOffset?);
+			var lastTime = default(DateTime?);
 
 			var rowIndex = 0;
 
@@ -229,7 +229,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(worker =>
 		{
@@ -258,7 +258,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 				.SetCell(0, 0, LocalizedStrings.Time).SetStyle(0, "yyyy-MM-dd HH:mm:ss.fff");
 
 			var row = 1;
-			var lastTime = default(DateTimeOffset?);
+			var lastTime = default(DateTime?);
 
 			foreach (var message in messages)
 			{
@@ -303,7 +303,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(worker =>
 		{
@@ -313,7 +313,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 				.SetCell(0, 0, LocalizedStrings.Time).SetStyle(0, "yyyy-MM-dd HH:mm:ss.fff");
 
 			var row = 1;
-			var lastTime = default(DateTimeOffset?);
+			var lastTime = default(DateTime?);
 
 			foreach (var message in messages)
 			{
@@ -350,7 +350,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
 	{
 		return Do(worker =>
 		{
@@ -362,7 +362,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 
 			row++;
 
-			var lastTime = default(DateTimeOffset?);
+			var lastTime = default(DateTime?);
 
 			foreach (var value in values)
 			{
@@ -399,7 +399,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(worker =>
 		{
@@ -416,7 +416,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 
 			row++;
 
-			var lastTime = default(DateTimeOffset?);
+			var lastTime = default(DateTime?);
 
 			foreach (var candle in messages)
 			{
@@ -442,7 +442,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(worker =>
 		{
@@ -460,7 +460,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 
 			row++;
 
-			var lastTime = default(DateTimeOffset?);
+			var lastTime = default(DateTime?);
 
 			foreach (var n in messages)
 			{
@@ -487,7 +487,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(worker =>
 		{
@@ -537,7 +537,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 
 			var rowIndex = 1;
 
-			var lastTime = default(DateTimeOffset?);
+			var lastTime = default(DateTime?);
 
 			foreach (var security in messages)
 			{
@@ -597,7 +597,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(worker =>
 		{
@@ -609,7 +609,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 
 			row++;
 
-			var lastTime = default(DateTimeOffset?);
+			var lastTime = default(DateTime?);
 
 			foreach (var msg in messages)
 			{
@@ -631,7 +631,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(worker =>
 		{
@@ -643,7 +643,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 				.SetCell(3, row, LocalizedStrings.TimeZone).SetStyle(3, typeof(string));
 
 			row++;
-			var lastTime = default(DateTimeOffset?);
+			var lastTime = default(DateTime?);
 
 			foreach (var msg in messages)
 			{
@@ -663,7 +663,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 		});
 	}
 
-	private Task<(int, DateTimeOffset?)> Do(Func<IExcelWorker, (int, DateTimeOffset?)> action)
+	private Task<(int, DateTime?)> Do(Func<IExcelWorker, (int, DateTime?)> action)
 	{
 		if (action is null)
 			throw new ArgumentNullException(nameof(action));

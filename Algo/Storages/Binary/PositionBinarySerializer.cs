@@ -163,7 +163,7 @@ class PositionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exch
 		{
 			var msg = messages.First();
 
-			metaInfo.ServerOffset = msg.ServerTime.Offset;
+			metaInfo.ServerOffset = default;
 		}
 
 		writer.WriteInt(messages.Count());
@@ -269,7 +269,7 @@ class PositionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exch
 						writer.WriteInt((int)(PortfolioStates)change.Value);
 						break;
 					case PositionChangeTypes.ExpirationDate:
-						writer.WriteDto((DateTimeOffset)change.Value);
+						writer.WriteDto((DateTime)change.Value);
 						break;
 					case PositionChangeTypes.CommissionMaker:
 					case PositionChangeTypes.CommissionTaker:

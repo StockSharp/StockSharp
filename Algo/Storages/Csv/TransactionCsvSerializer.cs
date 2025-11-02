@@ -78,7 +78,7 @@ public class TransactionCsvSerializer(SecurityId securityId, Encoding encoding) 
 		}.Concat(data.BuildFrom.ToCsv());
 		writer.WriteRow(row);
 
-		metaInfo.LastTime = data.ServerTime.UtcDateTime;
+		metaInfo.LastTime = data.ServerTime;
 	}
 
 	/// <inheritdoc />
@@ -144,7 +144,7 @@ public class TransactionCsvSerializer(SecurityId securityId, Encoding encoding) 
 
 		if (dtStr != null)
 		{
-			msg.ExpiryDate = (dtStr.ToDateTime() + reader.ReadString().ToTimeMls()).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Remove("+")));
+			msg.ExpiryDate = (dtStr.ToDateTime() + reader.ReadString().ToTimeMls()).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Remove("+"))).UtcDateTime;
 		}
 		else
 			reader.Skip(2);

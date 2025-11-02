@@ -21,7 +21,7 @@ public class NetProfitParameter : BasePnLStatisticParameter<decimal>
 	}
 
 	/// <inheritdoc />
-	public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+	public override void Add(DateTime marketTime, decimal pnl, decimal? commission)
 	{
 		Value = pnl;
 	}

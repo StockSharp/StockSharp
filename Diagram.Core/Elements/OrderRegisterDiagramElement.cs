@@ -81,12 +81,12 @@ public class OrderRegisterDiagramElement : OrderRegisterBaseDiagramElement
 		set => _shrinkPrice.Value = value;
 	}
 
-	private readonly DiagramElementParam<DateTimeOffset?> _expiryDate;
+	private readonly DiagramElementParam<DateTime?> _expiryDate;
 
 	/// <summary>
 	/// Order expiry time. The default is <see langword="null" />, which mean (GTC).
 	/// </summary>
-	public DateTimeOffset? ExpiryDate
+	public DateTime? ExpiryDate
 	{
 		get => _expiryDate.Value;
 		set => _expiryDate.Value = value;
@@ -145,7 +145,7 @@ public class OrderRegisterDiagramElement : OrderRegisterBaseDiagramElement
 			.SetBasic(true)
 			.SetDisplay(LocalizedStrings.Order, LocalizedStrings.ZeroPrice, LocalizedStrings.ZeroAsMarket, 60);
 
-		_expiryDate = AddParam(nameof(ExpiryDate), (DateTimeOffset?)null)
+		_expiryDate = AddParam(nameof(ExpiryDate), (DateTime?)null)
 			.SetDisplay(LocalizedStrings.ExtraConditions, LocalizedStrings.Expiration, LocalizedStrings.OrderExpirationTime, 100);
 
 		_conditionalSettings = AddParam<OrderConditionSettings>(nameof(ConditionalSettings))
@@ -184,7 +184,7 @@ public class OrderRegisterDiagramElement : OrderRegisterBaseDiagramElement
 	}
 
 	/// <inheritdoc />
-	protected override void OnProcess(DateTimeOffset time, IDictionary<DiagramSocket, DiagramSocketValue> values, DiagramSocketValue source)
+	protected override void OnProcess(DateTime time, IDictionary<DiagramSocket, DiagramSocketValue> values, DiagramSocketValue source)
 	{
 		if (!CanProcess(values))
 			return;
@@ -332,7 +332,7 @@ public class OrderRegisterDiagramElement : OrderRegisterBaseDiagramElement
 				.WhenCanceled(Strategy)
 				.Do(o =>
 				{
-					var time = o.CancelledTime ?? Strategy.CurrentTime;
+					var time = o.CancelledTime ?? Strategy.CurrentTimeUtc;
 
 					if (_isCancelledSocket)
 					{

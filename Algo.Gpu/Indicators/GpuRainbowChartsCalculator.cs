@@ -45,7 +45,7 @@ public struct GpuRainbowChartsResult : IGpuIndicatorResult
 	public const int MaxLineCount = 32;
 
 	/// <summary>
-	/// Time in <see cref="DateTimeOffset.Ticks"/>.
+	/// Time in <see cref="DateTime.Ticks"/>.
 	/// </summary>
 	public long Time;
 

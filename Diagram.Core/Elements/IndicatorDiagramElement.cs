@@ -328,7 +328,7 @@ public class IndicatorDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
-	protected override void OnStart(DateTimeOffset time)
+	protected override void OnStart(DateTime time)
 	{
 		Strategy.Indicators.Add(Indicator ?? throw new InvalidOperationException(LocalizedStrings.NotInitializedParams.Put(LocalizedStrings.Indicator)));
 
@@ -358,7 +358,7 @@ public class IndicatorDiagramElement : DiagramElement
 		OnProcessValue(value.Time, value);
 	}
 
-	private void OnProcessValue(DateTimeOffset time, DiagramSocketValue source)
+	private void OnProcessValue(DateTime time, DiagramSocketValue source)
 	{
 		if (_value == null || _additionalValue == null)
 			return;
@@ -372,7 +372,7 @@ public class IndicatorDiagramElement : DiagramElement
 		OnProcessValue(time, Tuple.Create(item1, item2), source);
 	}
 
-	private void OnProcessValue(DateTimeOffset time, object inputValue, DiagramSocketValue source)
+	private void OnProcessValue(DateTime time, object inputValue, DiagramSocketValue source)
 	{
 		var result = Indicator.Process(inputValue, time, true);
 

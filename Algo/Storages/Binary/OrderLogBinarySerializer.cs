@@ -154,7 +154,7 @@ class OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exch
 
 			metaInfo.FirstOrderId = metaInfo.LastOrderId = item.OrderId ?? default;
 			metaInfo.FirstTransactionId = metaInfo.LastTransactionId = item.TransactionId;
-			metaInfo.ServerOffset = item.ServerTime.Offset;
+			metaInfo.ServerOffset = default;
 			metaInfo.FirstSeqNum = metaInfo.PrevSeqNum = item.SeqNum;
 		}
 

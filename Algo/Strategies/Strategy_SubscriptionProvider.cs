@@ -108,7 +108,7 @@ partial class Strategy
 					var dataType = subscription.DataType;
 
 					if (dataType.IsMarketData && dataType.IsSecurityRequired)
-						subscription.From = CurrentTime - history;
+						subscription.From = CurrentTimeUtc - history;
 				}
 			}
 		}

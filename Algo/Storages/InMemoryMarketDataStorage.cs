@@ -7,7 +7,7 @@ namespace StockSharp.Algo.Storages;
 public sealed class InMemoryMarketDataStorage<T> : IMarketDataStorage<T>
 	where T : Message
 {
-	private readonly Func<DateTimeOffset, IEnumerable<T>> _getData;
+	private readonly Func<DateTime, IEnumerable<T>> _getData;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="InMemoryMarketDataStorage{T}"/>.
@@ -16,7 +16,7 @@ public sealed class InMemoryMarketDataStorage<T> : IMarketDataStorage<T>
 	/// <param name="arg">The additional argument, associated with data. For example, candle arg.</param>
 	/// <param name="getData">Handler for retrieving in-memory data.</param>
 	/// <param name="dataType">Data type.</param>
-	public InMemoryMarketDataStorage(SecurityId securityId, object arg, Func<DateTimeOffset, IEnumerable<Message>> getData, Type dataType = null)
+	public InMemoryMarketDataStorage(SecurityId securityId, object arg, Func<DateTime, IEnumerable<Message>> getData, Type dataType = null)
 		: this(securityId, arg, d => getData(d).Cast<T>(), dataType)
 	{
 		if (getData == null)
@@ -30,7 +30,7 @@ public sealed class InMemoryMarketDataStorage<T> : IMarketDataStorage<T>
 	/// <param name="arg">The additional argument, associated with data. For example, candle arg.</param>
 	/// <param name="getData">Handler for retrieving in-memory data.</param>
 	/// <param name="dataType">Data type.</param>
-	public InMemoryMarketDataStorage(SecurityId securityId, object arg, Func<DateTimeOffset, IEnumerable<T>> getData, Type dataType = null)
+	public InMemoryMarketDataStorage(SecurityId securityId, object arg, Func<DateTime, IEnumerable<T>> getData, Type dataType = null)
 	{
 		_securityId = securityId;
 		_getData = getData ?? throw new ArgumentNullException(nameof(getData));

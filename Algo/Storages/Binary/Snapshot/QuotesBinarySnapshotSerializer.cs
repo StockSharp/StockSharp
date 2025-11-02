@@ -147,8 +147,8 @@ public class QuotesBinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Qu
 		return new QuoteChangeMessage
 		{
 			SecurityId = snapshot.SecurityId.ToSecurityId(),
-			ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
-			LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
+			ServerTime = snapshot.LastChangeServerTime.To<DateTime>(),
+			LocalTime = snapshot.LastChangeLocalTime.To<DateTime>(),
 			Bids = bids,
 			Asks = asks,
 			BuildFrom = snapshot.BuildFrom,

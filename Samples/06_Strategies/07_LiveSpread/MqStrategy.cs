@@ -65,9 +65,9 @@ public class MqStrategy : Strategy
 	/// <summary>
 	/// On strategy started.
 	/// </summary>
-	protected override void OnStarted(DateTimeOffset time)
+	protected override void OnStarted2(DateTime time)
 	{
-		base.OnStarted(time);
+		base.OnStarted2(time);
 
 		// Subscribe to market time changes to update quotes
 		Connector.CurrentTimeChanged += Connector_CurrentTimeChanged;
@@ -135,7 +135,7 @@ public class MqStrategy : Strategy
 		};
 
 		// Log the creation of the new quoting processor
-		this.AddInfoLog($"Created {side} quoting processor for {quotingVolume} at {CurrentTime}");
+		this.AddInfoLog($"Created {side} quoting processor for {quotingVolume}");
 
 		// Subscribe to processor events for logging
 		_quotingProcessor.OrderRegistered += order =>

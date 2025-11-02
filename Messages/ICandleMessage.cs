@@ -30,22 +30,22 @@ public interface ICandleMessage :
 	/// <summary>
 	/// Open time.
 	/// </summary>
-	DateTimeOffset OpenTime { get; set; }
+	DateTime OpenTime { get; set; }
 
 	/// <summary>
 	/// Close time.
 	/// </summary>
-	DateTimeOffset CloseTime { get; set; }
+	DateTime CloseTime { get; set; }
 
 	/// <summary>
 	/// High time.
 	/// </summary>
-	DateTimeOffset HighTime { get; set; }
+	DateTime HighTime { get; set; }
 
 	/// <summary>
 	/// Low time.
 	/// </summary>
-	DateTimeOffset LowTime { get; set; }
+	DateTime LowTime { get; set; }
 
 	/// <summary>
 	/// State.

@@ -52,7 +52,7 @@ public class QuotingTests
 			50m,  // max order volume
 			TimeSpan.FromMinutes(5), // timeout
 			_mdProvider.Object,
-			DateTime.Now
+			DateTime.UtcNow
 		);
 	}
 
@@ -128,7 +128,7 @@ public class QuotingTests
 		IQuotingBehavior behavior = new MarketQuotingBehavior(new Unit(0.01m), new Unit(0.01m));
 		
 		// Act
-		var result = behavior.NeedQuoting(_security, _mdProvider.Object, DateTimeOffset.Now, 100.50m, 1000, 1000, null);
+		var result = behavior.NeedQuoting(_security, _mdProvider.Object, DateTime.UtcNow, 100.50m, 1000, 1000, null);
 
 		// Assert
 		result.AssertNull();
@@ -141,7 +141,7 @@ public class QuotingTests
 		IQuotingBehavior behavior = new MarketQuotingBehavior(new Unit(0.01m), new Unit(0.01m));
 		
 		// Act
-		var result = behavior.NeedQuoting(_security, _mdProvider.Object, DateTimeOffset.Now, null, 1000, 1000, 100.50m);
+		var result = behavior.NeedQuoting(_security, _mdProvider.Object, DateTime.UtcNow, null, 1000, 1000, 100.50m);
 		
 		// Assert
 		result.AssertEqual(100.50m);
@@ -154,7 +154,7 @@ public class QuotingTests
 		IQuotingBehavior behavior = new MarketQuotingBehavior(new Unit(0.01m), new Unit(0.01m));
 		
 		// Act
-		var result = behavior.NeedQuoting(_security, _mdProvider.Object, DateTimeOffset.Now, 100.50m, 1000, 1000, 100.52m);
+		var result = behavior.NeedQuoting(_security, _mdProvider.Object, DateTime.UtcNow, 100.50m, 1000, 1000, 100.52m);
 		
 		// Assert
 		result.AssertEqual(100.52m);
@@ -167,7 +167,7 @@ public class QuotingTests
 		IQuotingBehavior behavior = new MarketQuotingBehavior(new Unit(0.01m), new Unit(0.01m));
 		
 		// Act
-		var result = behavior.NeedQuoting(_security, _mdProvider.Object, DateTimeOffset.Now, 100.50m, 1000, 1500, 100.50m);
+		var result = behavior.NeedQuoting(_security, _mdProvider.Object, DateTime.UtcNow, 100.50m, 1000, 1500, 100.50m);
 		
 		// Assert
 		result.AssertEqual(100.50m);
@@ -180,7 +180,7 @@ public class QuotingTests
 		IQuotingBehavior behavior = new MarketQuotingBehavior(new Unit(0.01m), new Unit(0.01m));
 		
 		// Act
-		var result = behavior.NeedQuoting(_security, _mdProvider.Object, DateTimeOffset.Now, 100.50m, 1000, 1000, 100.50m);
+		var result = behavior.NeedQuoting(_security, _mdProvider.Object, DateTime.UtcNow, 100.50m, 1000, 1000, 100.50m);
 
 		// Assert
 		result.AssertNull();
@@ -207,7 +207,7 @@ public class QuotingTests
 		IQuotingBehavior behavior = new LimitQuotingBehavior(100.75m);
 		
 		// Act
-		var result = behavior.NeedQuoting(_security, _mdProvider.Object, DateTimeOffset.Now, 100.75m, 1000, 1000, 100.75m);
+		var result = behavior.NeedQuoting(_security, _mdProvider.Object, DateTime.UtcNow, 100.75m, 1000, 1000, 100.75m);
 		
 		// Assert
 		result.AssertNull();
@@ -220,7 +220,7 @@ public class QuotingTests
 		IQuotingBehavior behavior = new LimitQuotingBehavior(100.75m);
 		
 		// Act
-		var result = behavior.NeedQuoting(_security, _mdProvider.Object, DateTimeOffset.Now, 100.70m, 1000, 1000, 100.75m);
+		var result = behavior.NeedQuoting(_security, _mdProvider.Object, DateTime.UtcNow, 100.70m, 1000, 1000, 100.75m);
 		
 		// Assert
 		result.AssertEqual(100.75m);
@@ -387,7 +387,7 @@ public class QuotingTests
 		IQuotingBehavior behavior = new LastTradeQuotingBehavior(new Unit(0.01m));
 		
 		// Act
-		var result = behavior.NeedQuoting(_security, _mdProvider.Object, DateTimeOffset.Now, 100.50m, 1000, 1000, 100.52m);
+		var result = behavior.NeedQuoting(_security, _mdProvider.Object, DateTime.UtcNow, 100.50m, 1000, 1000, 100.52m);
 		
 		// Assert
 		result.AssertEqual(100.52m);
@@ -431,7 +431,7 @@ public class QuotingTests
 			.Returns((decimal?)null);
 		
 		// Act
-		var result = behavior.NeedQuoting(_security, _mdProvider.Object, DateTimeOffset.Now, 100.50m, 1000, 1000, 100.50m);
+		var result = behavior.NeedQuoting(_security, _mdProvider.Object, DateTime.UtcNow, 100.50m, 1000, 1000, 100.50m);
 		
 		// Assert
 		result.AssertNull();
@@ -443,10 +443,10 @@ public class QuotingTests
 		// Arrange
 		var ivRange = new Range<decimal>(0.15m, 0.25m);
 		IQuotingBehavior behavior = new VolatilityQuotingBehavior(ivRange, _blackScholes.Object);
-		var currentTime = DateTimeOffset.Now;
+		var currentTime = DateTime.UtcNow;
 
-		_blackScholes.Setup(m => m.Premium(It.IsAny<DateTimeOffset>(), 0.0015m, null)).Returns(100.45m);
-		_blackScholes.Setup(m => m.Premium(It.IsAny<DateTimeOffset>(), 0.0025m, null)).Returns(100.55m);
+		_blackScholes.Setup(m => m.Premium(It.IsAny<DateTime>(), 0.0015m, null)).Returns(100.45m);
+		_blackScholes.Setup(m => m.Premium(It.IsAny<DateTime>(), 0.0025m, null)).Returns(100.55m);
 
 		// Act
 		var result = behavior.NeedQuoting(_security, _mdProvider.Object, currentTime, 100.50m, 1000, 1000, 100.50m);
@@ -461,7 +461,7 @@ public class QuotingTests
 		// Arrange
 		var ivRange = new Range<decimal>(0.15m, 0.25m);
 		IQuotingBehavior behavior = new VolatilityQuotingBehavior(ivRange, _blackScholes.Object);
-		var currentTime = DateTimeOffset.Now;
+		var currentTime = DateTime.UtcNow;
 
 		_blackScholes.Setup(m => m.Premium(currentTime, 0.0015m, null)).Returns(100.45m); // minPrice
 		_blackScholes.Setup(m => m.Premium(currentTime, 0.0025m, null)).Returns(100.55m); // maxPrice
@@ -479,7 +479,7 @@ public class QuotingTests
 		// Arrange
 		var ivRange = new Range<decimal>(0.15m, 0.25m);
 		IQuotingBehavior behavior = new VolatilityQuotingBehavior(ivRange, _blackScholes.Object);
-		var currentTime = DateTimeOffset.Now;
+		var currentTime = DateTime.UtcNow;
 
 		_blackScholes.Setup(m => m.Premium(currentTime, 0.0015m, null)).Returns(100.45m);
 		_blackScholes.Setup(m => m.Premium(currentTime, 0.0025m, null)).Returns(100.55m);
@@ -671,7 +671,7 @@ public class QuotingTests
 
 		var input = new QuotingInput
 		{
-			CurrentTime = DateTime.Now,
+			CurrentTime = DateTime.UtcNow,
 			Position = 0,
 			IsTradingAllowed = true,
 			IsCancellationAllowed = true
@@ -696,13 +696,13 @@ public class QuotingTests
 			.Returns(100m);
 
 		_behavior.Setup(b => b.NeedQuoting(
-			It.IsAny<Security>(), It.IsAny<IMarketDataProvider>(), It.IsAny<DateTimeOffset>(),
+			It.IsAny<Security>(), It.IsAny<IMarketDataProvider>(), It.IsAny<DateTime>(),
 			It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal>(), It.IsAny<decimal?>()))
 			.Returns(100m);
 
 		var input = new QuotingInput
 		{
-			CurrentTime = DateTime.Now,
+			CurrentTime = DateTime.UtcNow,
 			Position = 0,
 			BestBidPrice = 99m,
 			BestAskPrice = 101m,
@@ -732,13 +732,13 @@ public class QuotingTests
 			.Returns(102m);
 
 		_behavior.Setup(b => b.NeedQuoting(
-			It.IsAny<Security>(), It.IsAny<IMarketDataProvider>(), It.IsAny<DateTimeOffset>(),
+			It.IsAny<Security>(), It.IsAny<IMarketDataProvider>(), It.IsAny<DateTime>(),
 			It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal>(), It.IsAny<decimal?>()))
 			.Returns(102m); // Different price
 
 		var input = new QuotingInput
 		{
-			CurrentTime = DateTime.Now,
+			CurrentTime = DateTime.UtcNow,
 			Position = 0,
 			BestBidPrice = 101m,
 			BestAskPrice = 103m,
@@ -773,13 +773,13 @@ public class QuotingTests
 			.Returns(100m);
 
 		_behavior.Setup(b => b.NeedQuoting(
-			It.IsAny<Security>(), It.IsAny<IMarketDataProvider>(), It.IsAny<DateTimeOffset>(),
+			It.IsAny<Security>(), It.IsAny<IMarketDataProvider>(), It.IsAny<DateTime>(),
 			It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal>(), It.IsAny<decimal?>()))
 			.Returns(100m);
 
 		var input = new QuotingInput
 		{
-			CurrentTime = DateTime.Now,
+			CurrentTime = DateTime.UtcNow,
 			Position = 0,
 			BestBidPrice = 99m,
 			BestAskPrice = 101m,
@@ -802,7 +802,7 @@ public class QuotingTests
 		// Arrange
 		var input = new QuotingInput
 		{
-			CurrentTime = DateTime.Now,
+			CurrentTime = DateTime.UtcNow,
 			Position = 100m, // Position equals quoting volume for Buy side
 			BestBidPrice = 99m,
 			BestAskPrice = 101m,
@@ -832,12 +832,12 @@ public class QuotingTests
 			50m,
 			TimeSpan.FromSeconds(1), // Short timeout
 			_mdProvider.Object,
-			DateTime.Now.AddSeconds(-2) // Started 2 seconds ago
+			DateTime.UtcNow.AddSeconds(-2) // Started 2 seconds ago
 		);
 
 		var input = new QuotingInput
 		{
-			CurrentTime = DateTime.Now,
+			CurrentTime = DateTime.UtcNow,
 			Position = 0,
 			BestBidPrice = 99m,
 			BestAskPrice = 101m,
@@ -860,7 +860,7 @@ public class QuotingTests
 		// Arrange
 		var input = new QuotingInput
 		{
-			CurrentTime = DateTime.Now,
+			CurrentTime = DateTime.UtcNow,
 			Position = 0,
 			BestBidPrice = 99m,
 			BestAskPrice = 101m,
@@ -895,13 +895,13 @@ public class QuotingTests
 			.Returns(100m);
 
 		_behavior.Setup(b => b.NeedQuoting(
-			It.IsAny<Security>(), It.IsAny<IMarketDataProvider>(), It.IsAny<DateTimeOffset>(),
+			It.IsAny<Security>(), It.IsAny<IMarketDataProvider>(), It.IsAny<DateTime>(),
 			It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal>(), It.IsAny<decimal?>()))
 			.Returns((decimal?)null); // No quoting needed
 
 		var input = new QuotingInput
 		{
-			CurrentTime = DateTime.Now,
+			CurrentTime = DateTime.UtcNow,
 			Position = 0,
 			BestBidPrice = 99m,
 			BestAskPrice = 101m,
@@ -937,7 +937,7 @@ public class QuotingTests
 
 		var input = new QuotingInput
 		{
-			CurrentTime = DateTime.Now,
+			CurrentTime = DateTime.UtcNow,
 			Position = 0,
 			IsTradingAllowed = true,
 			IsCancellationAllowed = true
@@ -963,7 +963,7 @@ public class QuotingTests
 
 		var input = new QuotingInput
 		{
-			CurrentTime = DateTime.Now,
+			CurrentTime = DateTime.UtcNow,
 			Position = 10m, // Position after trade
 			IsTradingAllowed = true,
 			IsCancellationAllowed = true
@@ -1002,7 +1002,7 @@ public class QuotingTests
 			50m,
 			TimeSpan.FromMinutes(5),
 			_mdProvider.Object,
-			DateTime.Now
+			DateTime.UtcNow
 		);
 		var position = -30m; // Negative position for sell
 
@@ -1030,7 +1030,7 @@ public class QuotingTests
 	public void IsTimeOut_WithinTimeout_ReturnsFalse()
 	{
 		// Arrange
-		var currentTime = DateTime.Now.AddMinutes(2); // 2 minutes after start
+		var currentTime = DateTime.UtcNow.AddMinutes(2); // 2 minutes after start
 
 		// Act
 		var isTimeout = _engine.IsTimeOut(currentTime);
@@ -1043,7 +1043,7 @@ public class QuotingTests
 	public void IsTimeOut_ExceedsTimeout_ReturnsTrue()
 	{
 		// Arrange
-		var currentTime = DateTime.Now.AddMinutes(10); // 10 minutes after start (timeout is 5 minutes)
+		var currentTime = DateTime.UtcNow.AddMinutes(10); // 10 minutes after start (timeout is 5 minutes)
 
 		// Act
 		var isTimeout = _engine.IsTimeOut(currentTime);
@@ -1065,9 +1065,9 @@ public class QuotingTests
 			50m,
 			TimeSpan.Zero, // No timeout
 			_mdProvider.Object,
-			DateTime.Now
+			DateTime.UtcNow
 		);
-		var currentTime = DateTime.Now.AddHours(10); // Much later
+		var currentTime = DateTime.UtcNow.AddHours(10); // Much later
 
 		// Act
 		var isTimeout = noTimeoutEngine.IsTimeOut(currentTime);

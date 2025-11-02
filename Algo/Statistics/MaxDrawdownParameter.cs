@@ -30,7 +30,7 @@ public class MaxDrawdownParameter : BasePnLStatisticParameter<decimal>
 	}
 
 	/// <inheritdoc />
-	public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+	public override void Add(DateTime marketTime, decimal pnl, decimal? commission)
 	{
 		// baseline cannot be below zero to properly account first negative pnl as drawdown from zero
 		MaxEquity = Math.Max(MaxEquity, pnl);

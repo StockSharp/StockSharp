@@ -141,14 +141,14 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 
 	/// <inheritdoc />
 	public virtual ValueTask ProcessMessageAsync(Message msg, CancellationToken cancellationToken)
-		=> default;
+		=> throw SubscriptionResponseMessage.NotSupported;
 
 	/// <inheritdoc />
 	public virtual async ValueTask MarketDataAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
 		if (mdMsg.IsSubscribe)
 		{
-			var now = DateTimeOffset.UtcNow;
+			var now = DateTime.UtcNow;
 
 			var from = mdMsg.From;
 			var to = mdMsg.To;

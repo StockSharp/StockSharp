@@ -40,7 +40,7 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, "orderLog", async (writer, item) =>
 		{
@@ -73,7 +73,7 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, "ticks", async (writer, trade) =>
 		{
@@ -114,7 +114,7 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, "transactions", async (writer, item) =>
 		{
@@ -174,7 +174,7 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, "depths", async (writer, depth) =>
 		{
@@ -225,7 +225,7 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, "level1", async (writer, message) =>
 		{
@@ -248,7 +248,7 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, "positions", async (writer, message) =>
 		{
@@ -275,7 +275,7 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
 	{
 		return Do(values, "values", async (writer, value) =>
 		{
@@ -292,7 +292,7 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, "candles", async (writer, candle) =>
 		{
@@ -339,7 +339,7 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, "news", async (writer, n) =>
 		{
@@ -385,7 +385,7 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, "securities", async (writer, security) =>
 		{
@@ -510,7 +510,7 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, "boardStates", async (writer, msg) =>
 		{
@@ -525,7 +525,7 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTimeOffset?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
 	{
 		return Do(messages, "boards", async (writer, msg) =>
 		{
@@ -540,10 +540,10 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 		}, cancellationToken);
 	}
 
-	private async Task<(int, DateTimeOffset?)> Do<TValue>(IEnumerable<TValue> values, string rootElem, Func<XmlWriter, TValue, Task> action, CancellationToken cancellationToken)
+	private async Task<(int, DateTime?)> Do<TValue>(IEnumerable<TValue> values, string rootElem, Func<XmlWriter, TValue, Task> action, CancellationToken cancellationToken)
 	{
 		var count = 0;
-		var lastTime = default(DateTimeOffset?);
+		var lastTime = default(DateTime?);
 
 		var settings = new XmlWriterSettings
 		{

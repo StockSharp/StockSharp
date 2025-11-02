@@ -40,10 +40,10 @@ public static class FieldMappingRegistry
 			fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.Strike), () => LocalizedStrings.Strike, () => LocalizedStrings.OptionStrikePrice, (i, v) => i.Strike = v));
 			fields.Add(new FieldMapping<SecurityMessage, OptionTypes>(nameof(SecurityMessage.OptionType), () => LocalizedStrings.OptionsContract, () => LocalizedStrings.OptionContractType, (i, v) => i.OptionType = v));
 			fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.BinaryOptionType), () => LocalizedStrings.BinaryOption, () => LocalizedStrings.TypeBinaryOption, (i, v) => i.BinaryOptionType = v));
-			fields.Add(new FieldMapping<SecurityMessage, DateTimeOffset>(nameof(SecurityMessage.ExpiryDate), () => LocalizedStrings.ExpiryDate, () => LocalizedStrings.ExpiryDateDesc, (i, v) => i.ExpiryDate = v));
+			fields.Add(new FieldMapping<SecurityMessage, DateTime>(nameof(SecurityMessage.ExpiryDate), () => LocalizedStrings.ExpiryDate, () => LocalizedStrings.ExpiryDateDesc, (i, v) => i.ExpiryDate = v));
 			fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.Class), () => LocalizedStrings.Class, () => LocalizedStrings.SecurityClass, (i, v) => i.Class = v));
 			fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.IssueSize), () => LocalizedStrings.IssueSize, () => LocalizedStrings.IssueSize, (i, v) => i.IssueSize = v));
-			fields.Add(new FieldMapping<SecurityMessage, DateTimeOffset>(nameof(SecurityMessage.IssueDate), () => LocalizedStrings.IssueDate, () => LocalizedStrings.IssueDate, (i, v) => i.IssueDate = v));
+			fields.Add(new FieldMapping<SecurityMessage, DateTime>(nameof(SecurityMessage.IssueDate), () => LocalizedStrings.IssueDate, () => LocalizedStrings.IssueDate, (i, v) => i.IssueDate = v));
 			fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.CfiCode), () => LocalizedStrings.CfiCode, () => LocalizedStrings.CfiCodeDesc, (i, v) => i.CfiCode = v));
 			fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.ShortName), () => LocalizedStrings.ShortName, () => LocalizedStrings.ShortNameDesc, (i, v) => i.ShortName = v));
 			fields.Add(new FieldMapping<SecurityMessage, bool>(nameof(SecurityMessage.Shortable), () => LocalizedStrings.Shortable, () => LocalizedStrings.ShortableDesc, (i, v) => i.Shortable = v));
@@ -74,7 +74,7 @@ public static class FieldMappingRegistry
 
 			fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), () => LocalizedStrings.Id, () => LocalizedStrings.Id, (i, v) => i.TradeId = v));
 			fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.TradeStringId), () => LocalizedStrings.StringId, () => LocalizedStrings.StringId, (i, v) => i.TradeStringId = v));
-			fields.Add(new FieldMapping<ExecutionMessage, DateTimeOffset>(GetDateField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, DateTime>(GetDateField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
 			fields.Add(new FieldMapping<ExecutionMessage, TimeSpan>(GetTimeOfDayField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v) { Format = "hh:mm:ss.ffffff" });
 			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradePrice), () => LocalizedStrings.Price, () => LocalizedStrings.Price, (i, v) => i.TradePrice = v) { IsRequired = true });
 			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradeVolume), () => LocalizedStrings.Volume, () => LocalizedStrings.Volume, (i, v) => i.TradeVolume = v) { IsRequired = true });
@@ -92,7 +92,7 @@ public static class FieldMappingRegistry
 			fields.Add(new FieldMapping<ExecutionMessage, string>(GetBoardCodeField(nameof(ExecutionMessage.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
 
 			fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.OrderId), () => LocalizedStrings.Id, () => LocalizedStrings.OrderId, (i, v) => i.OrderId = v) { IsRequired = true });
-			fields.Add(new FieldMapping<ExecutionMessage, DateTimeOffset>(GetDateField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, DateTime>(GetDateField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
 			fields.Add(new FieldMapping<ExecutionMessage, TimeSpan>(GetTimeOfDayField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v) { Format = "hh:mm:ss.ffffff" });
 			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OrderPrice), () => LocalizedStrings.Price, () => LocalizedStrings.OrderPrice, (i, v) => i.OrderPrice = v) { IsRequired = true });
 			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OrderVolume), () => LocalizedStrings.Volume, () => LocalizedStrings.OrderVolume, (i, v) => i.OrderVolume = v) { IsRequired = true });
@@ -108,7 +108,7 @@ public static class FieldMappingRegistry
 		{
 			fields.Add(new FieldMapping<ExecutionMessage, string>(GetSecurityCodeField(nameof(ExecutionMessage.SecurityId)), () => LocalizedStrings.Security, secCodeDescr, SetSecCode) { IsRequired = true });
 			fields.Add(new FieldMapping<ExecutionMessage, string>(GetBoardCodeField(nameof(ExecutionMessage.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
-			fields.Add(new FieldMapping<ExecutionMessage, DateTimeOffset>(GetDateField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, DateTime>(GetDateField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
 			fields.Add(new FieldMapping<ExecutionMessage, TimeSpan>(GetTimeOfDayField(nameof(ExecutionMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v) { Format = "hh:mm:ss.ffffff" });
 			fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.PortfolioName), () => LocalizedStrings.Portfolio, () => LocalizedStrings.PortfolioName, (i, v) => i.PortfolioName = v) { IsRequired = true });
 			fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TransactionId), () => LocalizedStrings.TransactionId, () => LocalizedStrings.TransactionId, (i, v) => i.TransactionId = v));
@@ -141,7 +141,7 @@ public static class FieldMappingRegistry
 			fields.Add(new FieldMapping<CandleMessage, string>(GetSecurityCodeField(nameof(CandleMessage.SecurityId)), () => LocalizedStrings.Security, secCodeDescr, SetSecCode) { IsRequired = true });
 			fields.Add(new FieldMapping<CandleMessage, string>(GetBoardCodeField(nameof(CandleMessage.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
 
-			fields.Add(new FieldMapping<CandleMessage, DateTimeOffset>(GetDateField(nameof(CandleMessage.OpenTime)), () => LocalizedStrings.Date, dateDescr, (i, v) =>
+			fields.Add(new FieldMapping<CandleMessage, DateTime>(GetDateField(nameof(CandleMessage.OpenTime)), () => LocalizedStrings.Date, dateDescr, (i, v) =>
 			{
 				i.OpenTime = v + i.OpenTime.TimeOfDay;
 
@@ -171,7 +171,7 @@ public static class FieldMappingRegistry
 			fields.Add(new FieldMapping<TimeQuoteChange, string>(GetSecurityCodeField(nameof(TimeQuoteChange.SecurityId)), () => LocalizedStrings.Security, secCodeDescr, SetSecCode) { IsRequired = true });
 			fields.Add(new FieldMapping<TimeQuoteChange, string>(GetBoardCodeField(nameof(TimeQuoteChange.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
 
-			fields.Add(new FieldMapping<TimeQuoteChange, DateTimeOffset>(GetDateField(nameof(TimeQuoteChange.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
+			fields.Add(new FieldMapping<TimeQuoteChange, DateTime>(GetDateField(nameof(TimeQuoteChange.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
 			fields.Add(new FieldMapping<TimeQuoteChange, TimeSpan>(GetTimeOfDayField(nameof(TimeQuoteChange.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v) { Format = "hh:mm:ss.ffffff" });
 			fields.Add(new FieldMapping<TimeQuoteChange, decimal>(nameof(QuoteChange.Price), () => LocalizedStrings.Price, () => LocalizedStrings.QuotePrice, (i, v) =>
 			{
@@ -222,7 +222,7 @@ public static class FieldMappingRegistry
 			fields.Add(new FieldMapping<Level1ChangeMessage, string>(GetSecurityCodeField(nameof(Level1ChangeMessage.SecurityId)), () => LocalizedStrings.Security, secCodeDescr, SetSecCode) { IsRequired = true });
 			fields.Add(new FieldMapping<Level1ChangeMessage, string>(GetBoardCodeField(nameof(Level1ChangeMessage.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
 
-			fields.Add(new FieldMapping<Level1ChangeMessage, DateTimeOffset>(GetDateField(nameof(Level1ChangeMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
+			fields.Add(new FieldMapping<Level1ChangeMessage, DateTime>(GetDateField(nameof(Level1ChangeMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
 			fields.Add(new FieldMapping<Level1ChangeMessage, TimeSpan>(GetTimeOfDayField(nameof(Level1ChangeMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
 
 			foreach (var f in Enumerator.GetValues<Level1Fields>().ExcludeObsolete())
@@ -245,7 +245,7 @@ public static class FieldMappingRegistry
 
 			fields.Add(new FieldMapping<PositionChangeMessage, string>(nameof(PositionChangeMessage.PortfolioName), () => LocalizedStrings.Portfolio, () => LocalizedStrings.PortfolioName, (i, v) => i.PortfolioName = v) { IsRequired = true });
 
-			fields.Add(new FieldMapping<PositionChangeMessage, DateTimeOffset>(GetDateField(nameof(PositionChangeMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
+			fields.Add(new FieldMapping<PositionChangeMessage, DateTime>(GetDateField(nameof(PositionChangeMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
 			fields.Add(new FieldMapping<PositionChangeMessage, TimeSpan>(GetTimeOfDayField(nameof(PositionChangeMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
 
 			fields.Add(new FieldMapping<PositionChangeMessage, string>(nameof(PositionChangeMessage.StrategyId), () => LocalizedStrings.Strategy, () => LocalizedStrings.Strategy, (i, v) => i.StrategyId = v) { IsRequired = false });
@@ -269,7 +269,7 @@ public static class FieldMappingRegistry
 			fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Id), () => LocalizedStrings.Id, () => LocalizedStrings.Id, (i, v) => i.Id = v) { IsRequired = true });
 			fields.Add(new FieldMapping<NewsMessage, string>(GetSecurityCodeField(nameof(NewsMessage.SecurityId)), () => LocalizedStrings.Security, secCodeDescr, (i, v) => { i.SecurityId = new SecurityId { SecurityCode = v }; }));
 			fields.Add(new FieldMapping<NewsMessage, string>(GetBoardCodeField(nameof(NewsMessage.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, (i, v) => i.BoardCode = v));
-			fields.Add(new FieldMapping<NewsMessage, DateTimeOffset>(GetDateField(nameof(NewsMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
+			fields.Add(new FieldMapping<NewsMessage, DateTime>(GetDateField(nameof(NewsMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
 			fields.Add(new FieldMapping<NewsMessage, TimeSpan>(GetTimeOfDayField(nameof(NewsMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
 			fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Headline), () => LocalizedStrings.Header, () => LocalizedStrings.Header, (i, v) => i.Headline = v));
 			fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Story), () => LocalizedStrings.Text, () => LocalizedStrings.NewsText, (i, v) => i.Story = v));
@@ -285,7 +285,7 @@ public static class FieldMappingRegistry
 		}
 		else if (dataType == DataType.BoardState)
 		{
-			fields.Add(new FieldMapping<BoardStateMessage, DateTimeOffset>(GetDateField(nameof(BoardStateMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
+			fields.Add(new FieldMapping<BoardStateMessage, DateTime>(GetDateField(nameof(BoardStateMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
 			fields.Add(new FieldMapping<BoardStateMessage, TimeSpan>(GetTimeOfDayField(nameof(BoardStateMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
 			fields.Add(new FieldMapping<BoardStateMessage, string>(nameof(BoardStateMessage.BoardCode), () => LocalizedStrings.Board, () => LocalizedStrings.BoardCode, (i, v) => i.BoardCode = v));
 			fields.Add(new FieldMapping<BoardStateMessage, SessionStates>(nameof(BoardStateMessage.State), () => LocalizedStrings.State, () => LocalizedStrings.State, (i, v) => i.State = v));
@@ -322,12 +322,12 @@ public static class FieldMappingRegistry
 
 	private static string GetDateField(string prefix)
 	{
-		return prefix + "." + nameof(DateTimeOffset.Date);
+		return prefix + "." + nameof(DateTime.Date);
 	}
 
 	private static string GetTimeOfDayField(string prefix)
 	{
-		return prefix + "." + nameof(DateTimeOffset.TimeOfDay);
+		return prefix + "." + nameof(DateTime.TimeOfDay);
 	}
 
 	private static string GetChangesField(Level1Fields field)

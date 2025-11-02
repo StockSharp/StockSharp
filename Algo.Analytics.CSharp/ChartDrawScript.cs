@@ -13,8 +13,8 @@ public class ChartDrawScript : IAnalyticsScript
 			return Task.CompletedTask;
 		}
 
-		var lineChart = panel.CreateChart<DateTimeOffset, decimal>();
-		var histogramChart = panel.CreateChart<DateTimeOffset, decimal>();
+		var lineChart = panel.CreateChart<DateTime, decimal>();
+		var histogramChart = panel.CreateChart<DateTime, decimal>();
 
 		foreach (var security in securities)
 		{
@@ -22,8 +22,8 @@ public class ChartDrawScript : IAnalyticsScript
 			if (cancellationToken.IsCancellationRequested)
 				break;
 
-			var candlesSeries = new Dictionary<DateTimeOffset, decimal>();
-			var volsSeries = new Dictionary<DateTimeOffset, decimal>();
+			var candlesSeries = new Dictionary<DateTime, decimal>();
+			var volsSeries = new Dictionary<DateTime, decimal>();
 
 			// get candle storage
 			var candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format);

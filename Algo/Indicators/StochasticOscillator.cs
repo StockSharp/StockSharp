@@ -54,7 +54,7 @@ public class StochasticOscillator : BaseComplexIndicator<IStochasticOscillatorVa
 	public override string ToString() => base.ToString() + $" %K={K.Length} %D={D.Length}";
 
 	/// <inheritdoc />
-	protected override IStochasticOscillatorValue CreateValue(DateTimeOffset time)
+	protected override IStochasticOscillatorValue CreateValue(DateTime time)
 		=> new StochasticOscillatorValue(this, time);
 }
 
@@ -94,7 +94,7 @@ public interface IStochasticOscillatorValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent Stochastic Oscillator indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class StochasticOscillatorValue(StochasticOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<StochasticOscillator>(indicator, time), IStochasticOscillatorValue
+public class StochasticOscillatorValue(StochasticOscillator indicator, DateTime time) : ComplexIndicatorValue<StochasticOscillator>(indicator, time), IStochasticOscillatorValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue KValue => this[TypedIndicator.K];

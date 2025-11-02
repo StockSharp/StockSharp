@@ -105,7 +105,7 @@ public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 		Name = LocalizedStrings.ServerTimeKey,
 		Description = LocalizedStrings.ServerTimeKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset ServerTime { get; set; }
+	public DateTime ServerTime { get; set; }
 
 	/// <inheritdoc />
 	[DataMember]
@@ -312,7 +312,7 @@ public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 		Name = LocalizedStrings.ExpirationKey,
 		Description = LocalizedStrings.OrderExpirationTimeKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset? ExpiryDate { get; set; }
+	public DateTime? ExpiryDate { get; set; }
 
 	/// <summary>
 	/// Limit order execution condition.

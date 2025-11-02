@@ -58,7 +58,7 @@ public abstract class CandleMessage(MessageTypes type) : Message(type), ISubscri
 		Description = LocalizedStrings.CandleOpenTimeKey,
 		GroupName = LocalizedStrings.GeneralKey)]
 	[BasicSetting]
-	public DateTimeOffset OpenTime { get; set; }
+	public DateTime OpenTime { get; set; }
 
 	/// <inheritdoc />
 	[DataMember]
@@ -67,7 +67,7 @@ public abstract class CandleMessage(MessageTypes type) : Message(type), ISubscri
 		Name = LocalizedStrings.CandleHighTimeKey,
 		Description = LocalizedStrings.CandleHighTimeKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset HighTime { get; set; }
+	public DateTime HighTime { get; set; }
 
 	/// <inheritdoc />
 	[DataMember]
@@ -76,7 +76,7 @@ public abstract class CandleMessage(MessageTypes type) : Message(type), ISubscri
 		Name = LocalizedStrings.CandleLowTimeKey,
 		Description = LocalizedStrings.CandleLowTimeKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset LowTime { get; set; }
+	public DateTime LowTime { get; set; }
 
 	/// <inheritdoc />
 	[DataMember]
@@ -85,7 +85,7 @@ public abstract class CandleMessage(MessageTypes type) : Message(type), ISubscri
 		Name = LocalizedStrings.CandleCloseTimeKey,
 		Description = LocalizedStrings.CandleCloseTimeKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset CloseTime { get; set; }
+	public DateTime CloseTime { get; set; }
 
 	/// <inheritdoc />
 	[DataMember]
@@ -337,7 +337,7 @@ public abstract class CandleMessage(MessageTypes type) : Message(type), ISubscri
 		return str;
 	}
 
-	DateTimeOffset IServerTimeMessage.ServerTime
+	DateTime IServerTimeMessage.ServerTime
 	{
 		get => OpenTime;
 		set => OpenTime = value;

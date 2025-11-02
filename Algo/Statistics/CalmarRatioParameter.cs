@@ -21,7 +21,7 @@ public class CalmarRatioParameter(NetProfitParameter profit, MaxDrawdownParamete
 	private readonly MaxDrawdownParameter _maxDrawdown = maxDrawdown ?? throw new ArgumentNullException(nameof(maxDrawdown));
 
 	/// <inheritdoc />
-	public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+	public override void Add(DateTime marketTime, decimal pnl, decimal? commission)
 	{
 		var annualizedProfit = _profit.Value;
 		var maxDrawdown = _maxDrawdown.Value;

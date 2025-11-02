@@ -34,7 +34,7 @@ partial class BtceMessageAdapter
 				{
 					DataTypeEx = DataType.Transactions,
 					OrderId = withdrawId,
-					ServerTime = CurrentTime.ConvertToUtc(),
+					ServerTime = CurrentTimeUtc,
 					OriginalTransactionId = regMsg.TransactionId,
 					OrderState = OrderStates.Done,
 					HasOrderInfo = true,
@@ -119,7 +119,7 @@ partial class BtceMessageAdapter
 		//	OrderState = OrderStates.Done,
 		//	DataTypeEx = DataType.Transactions,
 		//	HasOrderInfo = true,
-		//	ServerTime = CurrentTime.ConvertToUtc(),
+		//	ServerTime = CurrentTimeUtc,
 		//});
 
 		await OrderStatusAsync(null, cancellationToken);
@@ -218,7 +218,7 @@ partial class BtceMessageAdapter
 			{
 				DataTypeEx = DataType.Transactions,
 				OriginalTransactionId = cancelMsg.TransactionId,
-				ServerTime = CurrentTime.ConvertToUtc(),
+				ServerTime = CurrentTimeUtc,
 				HasOrderInfo = true,
 				Error = errors.Count == 1 ? errors[0] : new AggregateException(errors),
 			});
@@ -238,7 +238,7 @@ partial class BtceMessageAdapter
 			OrderVolume = (decimal)order.Volume,
 			Side = order.Side.ToSide(),
 			SecurityId = order.Instrument.ToStockSharp(),
-			ServerTime = transId != 0 ? order.Timestamp.ApplyUtc() : CurrentTime.ConvertToUtc(),
+			ServerTime = transId != 0 ? order.Timestamp : CurrentTimeUtc,
 			PortfolioName = PortfolioName,
 			//OrderState = order.Status.ToOrderState(),
 			OrderState = OrderStates.Active,
@@ -251,7 +251,7 @@ partial class BtceMessageAdapter
 
 	private void ProcessTrade(Trade trade)
 	{
-		var serverTime = trade.Timestamp.ApplyUtc();
+		var serverTime = trade.Timestamp;
 		var secId = trade.Instrument.ToStockSharp();
 		var side = trade.Side.ToSide();
 
@@ -430,7 +430,7 @@ partial class BtceMessageAdapter
 					HasOrderInfo = true,
 					OrderId = id,
 					OriginalTransactionId = info.First,
-					ServerTime = CurrentTime.ConvertToUtc(),
+					ServerTime = CurrentTimeUtc,
 					OrderState = OrderStates.Done,
 				});
 			}
@@ -532,6 +532,6 @@ partial class BtceMessageAdapter
 		if (lookupMsg != null)
 			SendSubscriptionResult(lookupMsg);
 
-		_lastTimeBalanceCheck = CurrentTime;
+		_lastTimeBalanceCheck = CurrentTimeUtc;
 	}
 }

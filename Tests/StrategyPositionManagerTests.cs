@@ -32,8 +32,8 @@ public class StrategyPositionManagerTests
 			Side = side,
 			Volume = volume,
 			Balance = volume, // nothing matched yet
-			LocalTime = DateTimeOffset.Now,
-			ServerTime = DateTimeOffset.Now,
+			LocalTime = DateTime.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			State = OrderStates.Pending, // explicit initial state
 			TransactionId = ++_tx,
 		};
@@ -101,8 +101,8 @@ public class StrategyPositionManagerTests
 			Balance = 0m, // fully matched
 			AveragePrice = 120m,
 			Commission = 0.5m,
-			LocalTime = DateTimeOffset.Now,
-			ServerTime = DateTimeOffset.Now,
+			LocalTime = DateTime.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			State = OrderStates.Done,
 			TransactionId = ++_tx,
 		};
@@ -125,8 +125,8 @@ public class StrategyPositionManagerTests
 			Balance = 0m,
 			AveragePrice = 105m,
 			Commission = 1.2m,
-			LocalTime = DateTimeOffset.Now,
-			ServerTime = DateTimeOffset.Now,
+			LocalTime = DateTime.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			State = OrderStates.Done,
 			TransactionId = ++_tx,
 		};
@@ -150,8 +150,8 @@ public class StrategyPositionManagerTests
 			Balance = 0m,
 			AveragePrice = 100m,
 			Commission = 0.2m,
-			LocalTime = DateTimeOffset.Now,
-			ServerTime = DateTimeOffset.Now,
+			LocalTime = DateTime.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			State = OrderStates.Done,
 			TransactionId = ++_tx,
 		};
@@ -204,8 +204,8 @@ public class StrategyPositionManagerTests
 			Balance = 0m,
 			AveragePrice = 95m,
 			Commission = 0.2m,
-			LocalTime = DateTimeOffset.Now,
-			ServerTime = DateTimeOffset.Now,
+			LocalTime = DateTime.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			State = OrderStates.Done,
 			TransactionId = ++_tx,
 		};
@@ -246,8 +246,8 @@ public class StrategyPositionManagerTests
 			Volume = 5m,
 			Balance = 5m,
 			State = OrderStates.Active,
-			LocalTime = DateTimeOffset.Now,
-			ServerTime = DateTimeOffset.Now,
+			LocalTime = DateTime.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			TransactionId = ++_tx,
 		};
 		mgr.ProcessOrder(buy2).AssertEqual(StrategyPositionManager.OrderResults.OK);
@@ -264,8 +264,8 @@ public class StrategyPositionManagerTests
 			Volume = 7m,
 			Balance = 7m,
 			State = OrderStates.Active,
-			LocalTime = DateTimeOffset.Now,
-			ServerTime = DateTimeOffset.Now,
+			LocalTime = DateTime.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			TransactionId = ++_tx,
 		};
 		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.OK);
@@ -322,7 +322,7 @@ public class StrategyPositionManagerTests
 		lastPos.CurrentPrice.AssertNull(); // No current price yet
 
 		var secId = sec.ToSecurityId();
-		var now = DateTimeOffset.Now;
+		var now = DateTime.UtcNow;
 		mgr.UpdateCurrentPrice(secId, 105m, now, now);
 
 		lastPos.CurrentPrice.AssertEqual(1050m); // 10 * 105
@@ -356,8 +356,8 @@ public class StrategyPositionManagerTests
 			Volume = 10m,
 			Balance = 0m,
 			AveragePrice = 100m,
-			LocalTime = DateTimeOffset.Now,
-			ServerTime = DateTimeOffset.Now,
+			LocalTime = DateTime.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			State = OrderStates.Done,
 			TransactionId = ++_tx,
 		};
@@ -372,8 +372,8 @@ public class StrategyPositionManagerTests
 			Volume = 5m,
 			Balance = 0m,
 			AveragePrice = 200m,
-			LocalTime = DateTimeOffset.Now,
-			ServerTime = DateTimeOffset.Now,
+			LocalTime = DateTime.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			State = OrderStates.Done,
 			TransactionId = ++_tx,
 		};
@@ -388,8 +388,8 @@ public class StrategyPositionManagerTests
 			Volume = 7m,
 			Balance = 0m,
 			AveragePrice = 105m,
-			LocalTime = DateTimeOffset.Now,
-			ServerTime = DateTimeOffset.Now,
+			LocalTime = DateTime.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			State = OrderStates.Done,
 			TransactionId = ++_tx,
 		};
@@ -430,8 +430,8 @@ public class StrategyPositionManagerTests
 
 		Assert.ThrowsExactly<ArgumentNullException>(() => mgr.TryGetPosition(null, new Portfolio()));
 		Assert.ThrowsExactly<ArgumentNullException>(() => mgr.TryGetPosition(new Security(), null));
-		Assert.ThrowsExactly<ArgumentNullException>(() => mgr.SetPosition(null, new Portfolio(), 10m, DateTimeOffset.UtcNow));
-		Assert.ThrowsExactly<ArgumentNullException>(() => mgr.SetPosition(new Security(), null, 10m, DateTimeOffset.UtcNow));
+		Assert.ThrowsExactly<ArgumentNullException>(() => mgr.SetPosition(null, new Portfolio(), 10m, DateTime.UtcNow));
+		Assert.ThrowsExactly<ArgumentNullException>(() => mgr.SetPosition(new Security(), null, 10m, DateTime.UtcNow));
 	}
 
 	[TestMethod]
@@ -462,7 +462,7 @@ public class StrategyPositionManagerTests
 		var sec = new Security { Id = "TEST" };
 		var pf = new Portfolio { Name = "PF" };
 
-		mgr.SetPosition(sec, pf, 15m, DateTimeOffset.UtcNow);
+		mgr.SetPosition(sec, pf, 15m, DateTime.UtcNow);
 
 		var pos = mgr.TryGetPosition(sec, pf);
 		pos.AssertNotNull();
@@ -470,7 +470,7 @@ public class StrategyPositionManagerTests
 		// No assertion on AveragePrice per new rule enforcement happens via AssertCalcFieldsNonNull when processing orders
 
 		// Update manual position
-		mgr.SetPosition(sec, pf, -5m, DateTimeOffset.UtcNow);
+		mgr.SetPosition(sec, pf, -5m, DateTime.UtcNow);
 		pos.CurrentValue.AssertEqual(-5m);
 	}
 
@@ -501,8 +501,8 @@ public class StrategyPositionManagerTests
 			Balance = 0m,
 			AveragePrice = 110m,
 			Commission = 1.5m,
-			LocalTime = DateTimeOffset.Now,
-			ServerTime = DateTimeOffset.Now,
+			LocalTime = DateTime.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			State = OrderStates.Done,
 			TransactionId = ++_tx,
 		};
@@ -640,8 +640,8 @@ public class StrategyPositionManagerTests
 			Volume = 10m,
 			Balance = 0m,
 			AveragePrice = 100m,
-			LocalTime = DateTimeOffset.Now,
-			ServerTime = DateTimeOffset.Now,
+			LocalTime = DateTime.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			State = OrderStates.Done,
 			TransactionId = ++_tx,
 		};
@@ -655,8 +655,8 @@ public class StrategyPositionManagerTests
 			Volume = 5m,
 			Balance = 0m,
 			AveragePrice = 100m,
-			LocalTime = DateTimeOffset.Now,
-			ServerTime = DateTimeOffset.Now,
+			LocalTime = DateTime.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			State = OrderStates.Done,
 			TransactionId = ++_tx,
 		};
@@ -665,7 +665,7 @@ public class StrategyPositionManagerTests
 		positions.Clear();
 
 		// Update current price for security
-		var now = DateTimeOffset.Now;
+		var now = DateTime.UtcNow;
 		mgr.UpdateCurrentPrice(sec.ToSecurityId(), 105m, now, now);
 
 		// Both positions should be updated
@@ -715,8 +715,8 @@ public class StrategyPositionManagerTests
 		Position last = null;
 		mgr.PositionProcessed += (p, _) => last = p;
 		var (order, _, _) = CreateOrder(Sides.Buy, 10m);
-		var lt = DateTimeOffset.Now.AddMinutes(-1);
-		var st = DateTimeOffset.Now;
+		var lt = DateTime.UtcNow.AddMinutes(-1);
+		var st = DateTime.UtcNow;
 		order.State = OrderStates.Active;
 		order.Balance = 6m; // matched 4
 		order.AveragePrice = 100m;
@@ -738,7 +738,7 @@ public class StrategyPositionManagerTests
 		var (order, sec, _) = CreateOrder(Sides.Buy, 10m);
 
 		// set last price before fills
-		var now = DateTimeOffset.Now;
+		var now = DateTime.UtcNow;
 		mgr.UpdateCurrentPrice(sec.ToSecurityId(), 50m, now, now);
 
 		order.State = OrderStates.Done;
@@ -809,7 +809,7 @@ public class StrategyPositionManagerTests
 		var count = 0;
 		mgr.PositionProcessed += (_, __) => count++;
 		var sec = new Security { Id = "S" };
-		var now = DateTimeOffset.Now;
+		var now = DateTime.UtcNow;
 		mgr.UpdateCurrentPrice(sec.ToSecurityId(), 10m, now, now);
 		count.AssertEqual(0);
 	}
@@ -820,7 +820,7 @@ public class StrategyPositionManagerTests
 		var mgr = new StrategyPositionManager(() => "BLK_NULL");
 		var sec = new Security { Id = "S" };
 		var pf = new Portfolio { Name = "P" };
-		mgr.SetPosition(sec, pf, 1m, DateTimeOffset.UtcNow);
+		mgr.SetPosition(sec, pf, 1m, DateTime.UtcNow);
 		var pos = mgr.TryGetPosition(sec, pf);
 		// New rule: BlockedValue should be initialized (even if logically zero)
 		pos.BlockedValue.AssertNotNull();
@@ -833,7 +833,7 @@ public class StrategyPositionManagerTests
 		var (_, sec, _) = CreateOrder(Sides.Buy, 1m);
 
 		// negative market price should throw
-		var now = DateTimeOffset.Now;
+		var now = DateTime.UtcNow;
 		Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => mgr.UpdateCurrentPrice(sec.ToSecurityId(), -10m, now, now));
 	}
 
@@ -865,8 +865,8 @@ public class StrategyPositionManagerTests
 			Volume = 10m,
 			Balance = 10m,
 			State = OrderStates.Active,
-			LocalTime = DateTimeOffset.Now,
-			ServerTime = DateTimeOffset.Now,
+			LocalTime = DateTime.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			TransactionId = ++_tx,
 		};
 		mgr.ProcessOrder(order1).AssertEqual(StrategyPositionManager.OrderResults.OK);
@@ -883,8 +883,8 @@ public class StrategyPositionManagerTests
 			Balance = 6m, // partial fill happened (matched 4)
 			AveragePrice = 100m,
 			State = OrderStates.Active,
-			LocalTime = DateTimeOffset.Now,
-			ServerTime = DateTimeOffset.Now,
+			LocalTime = DateTime.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			TransactionId = order1.TransactionId, // same id
 		};
 		mgr.ProcessOrder(order1b).AssertEqual(StrategyPositionManager.OrderResults.OK);
@@ -922,8 +922,8 @@ public class StrategyPositionManagerTests
 			Balance = 2m,
 			AveragePrice = 106.25m,
 			State = OrderStates.Active,
-			LocalTime = DateTimeOffset.Now,
-			ServerTime = DateTimeOffset.Now,
+			LocalTime = DateTime.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			TransactionId = order.TransactionId,
 		};
 		mgr.ProcessOrder(order2).AssertEqual(StrategyPositionManager.OrderResults.OK);
@@ -1047,7 +1047,7 @@ public class StrategyPositionManagerTests
 		order.AveragePrice = null; // no avg
 		order.Type = OrderTypes.Market;
 
-		var now = DateTimeOffset.Now;
+		var now = DateTime.UtcNow;
 		mgr.UpdateCurrentPrice(sec.ToSecurityId(), 10.5m, now, now);
 
 		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
@@ -1090,7 +1090,7 @@ public class StrategyPositionManagerTests
 		order.Type = OrderTypes.Market;
 		order.AveragePrice = 9.99m; // present -> should be used
 
-		var now = DateTimeOffset.Now;
+		var now = DateTime.UtcNow;
 		mgr.UpdateCurrentPrice(sec.ToSecurityId(), 20m, now, now);
 
 		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);

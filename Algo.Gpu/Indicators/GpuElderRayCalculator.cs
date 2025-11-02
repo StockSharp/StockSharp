@@ -40,7 +40,7 @@ public struct GpuElderRayParams(int length, byte priceType) : IGpuIndicatorParam
 public struct GpuElderRayResult : IGpuIndicatorResult
 {
 	/// <summary>
-	/// Time in <see cref="DateTimeOffset.Ticks"/>.
+	/// Time in <see cref="DateTime.Ticks"/>.
 	/// </summary>
 	public long Time;
 

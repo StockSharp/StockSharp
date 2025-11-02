@@ -501,7 +501,7 @@ public class DiagramDebugger : Disposable, IDebugger
 		}
 		else if (type == DiagramSocketType.Date)
 		{
-			breakpoint = new RangeDiagramSocketBreakpoint<DateTimeOffset>(socket);
+			breakpoint = new RangeDiagramSocketBreakpoint<DateTime>(socket);
 		}
 		else if (type == DiagramSocketType.Time)
 		{

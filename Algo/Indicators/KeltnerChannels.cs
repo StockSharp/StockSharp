@@ -147,7 +147,7 @@ public class KeltnerChannels : BaseComplexIndicator<IKeltnerChannelsValue>
 	}
 
 	/// <inheritdoc />
-	protected override IKeltnerChannelsValue CreateValue(DateTimeOffset time)
+	protected override IKeltnerChannelsValue CreateValue(DateTime time)
 		=> new KeltnerChannelsValue(this, time);
 }
 
@@ -222,7 +222,7 @@ public interface IKeltnerChannelsValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent KeltnerChannels indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class KeltnerChannelsValue(KeltnerChannels indicator, DateTimeOffset time) : ComplexIndicatorValue<KeltnerChannels>(indicator, time), IKeltnerChannelsValue
+public class KeltnerChannelsValue(KeltnerChannels indicator, DateTime time) : ComplexIndicatorValue<KeltnerChannels>(indicator, time), IKeltnerChannelsValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue MiddleValue => this[TypedIndicator.Middle];

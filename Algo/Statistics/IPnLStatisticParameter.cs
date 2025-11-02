@@ -11,7 +11,7 @@ public interface IPnLStatisticParameter : IStatisticParameter
 	/// <param name="marketTime">The exchange time.</param>
 	/// <param name="pnl">The profit-loss value.</param>
 	/// <param name="commission">Commission.</param>
-	void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission);
+	void Add(DateTime marketTime, decimal pnl, decimal? commission);
 }
 
 /// <summary>
@@ -26,6 +26,6 @@ public abstract class BasePnLStatisticParameter<TValue>(StatisticParameterTypes 
 	where TValue : IComparable<TValue>
 {
 	/// <inheritdoc />
-	public virtual void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+	public virtual void Add(DateTime marketTime, decimal pnl, decimal? commission)
 		=> throw new NotSupportedException();
 }

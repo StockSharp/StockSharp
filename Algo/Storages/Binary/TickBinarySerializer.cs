@@ -87,7 +87,7 @@ class TickBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchange
 			var first = messages.First();
 
 			metaInfo.FirstId = metaInfo.PrevId = first.TradeId ?? 0;
-			metaInfo.ServerOffset = first.ServerTime.Offset;
+			metaInfo.ServerOffset = default;
 			metaInfo.FirstSeqNum = metaInfo.PrevSeqNum = first.SeqNum;
 		}
 

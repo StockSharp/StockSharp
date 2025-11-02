@@ -18,5 +18,5 @@ public interface IOptionPositionChart : IThemeableChart
 	/// <param name="assetPrice">The current price of the underlying asset.</param>
 	/// <param name="currentTime">The current time.</param>
 	/// <param name="expiryDate">The expiration date.</param>
-	public void Refresh(decimal? assetPrice = default, DateTimeOffset? currentTime = default, DateTimeOffset? expiryDate = default);
+	public void Refresh(decimal? assetPrice = default, DateTime? currentTime = default, DateTime? expiryDate = default);
 }

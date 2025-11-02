@@ -87,7 +87,7 @@ public class Aroon : BaseComplexIndicator<IAroonValue>
 	public override string ToString() => base.ToString() + $" L={Length}";
 
 	/// <inheritdoc />
-	protected override IAroonValue CreateValue(DateTimeOffset time)
+	protected override IAroonValue CreateValue(DateTime time)
 		=> new AroonValue(this, time);
 }
 
@@ -303,7 +303,7 @@ public interface IAroonValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent Aroon indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class AroonValue(Aroon indicator, DateTimeOffset time) : ComplexIndicatorValue<Aroon>(indicator, time), IAroonValue
+public class AroonValue(Aroon indicator, DateTime time) : ComplexIndicatorValue<Aroon>(indicator, time), IAroonValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue UpValue => this[TypedIndicator.Up];

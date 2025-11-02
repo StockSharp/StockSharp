@@ -45,7 +45,7 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 
 	private readonly CachedSynchronizedDictionary<long, LookupInfo> _lookups = [];
 	private readonly Dictionary<MessageTypes, Dictionary<long, ISubscriptionMessage>> _queue = [];
-	private DateTimeOffset _prevTime;
+	private DateTime _prevTime;
 	private static readonly TimeSpan _defaultTimeOut = TimeSpan.FromSeconds(10);
 
 	private TimeSpan? _timeOut;

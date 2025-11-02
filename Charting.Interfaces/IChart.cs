@@ -81,7 +81,7 @@ public interface IChart : IChartBuilder, IThemeableChart
 	bool OrderCreationMode { get; set; }
 
 	/// <summary>
-	/// Local time zone for all <see cref="DateTimeOffset"/> values conversion.
+	/// Local time zone for all <see cref="DateTime"/> values conversion.
 	/// </summary>
 	TimeZoneInfo TimeZone { get; set; }
 

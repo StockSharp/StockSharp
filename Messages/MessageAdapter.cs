@@ -109,7 +109,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 	}
 
 	/// <inheritdoc />
-	public virtual IEnumerable<DataType> GetSupportedMarketDataTypes(SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
+	public virtual IEnumerable<DataType> GetSupportedMarketDataTypes(SecurityId securityId, DateTime? from, DateTime? to)
 		=> SupportedMarketDataTypes;
 
 	/// <inheritdoc />
@@ -418,10 +418,10 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 		switch (message)
 		{
 			case PositionChangeMessage posMsg when posMsg.ServerTime == default:
-				posMsg.ServerTime = CurrentTime;
+				posMsg.ServerTime = CurrentTimeUtc;
 				break;
 			case ExecutionMessage execMsg when execMsg.DataType == DataType.Transactions && execMsg.ServerTime == default:
-				execMsg.ServerTime = CurrentTime;
+				execMsg.ServerTime = CurrentTimeUtc;
 				break;
 		}
 	}
@@ -499,7 +499,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 	/// </summary>
 	/// <param name="originalTransactionId">ID of the original message for which this message is a response.</param>
 	/// <param name="nextFrom"><see cref="SubscriptionFinishedMessage.NextFrom"/>.</param>
-	protected void SendSubscriptionFinished(long originalTransactionId, DateTimeOffset? nextFrom = null)
+	protected void SendSubscriptionFinished(long originalTransactionId, DateTime? nextFrom = null)
 	{
 		SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = originalTransactionId, NextFrom = nextFrom });
 	}

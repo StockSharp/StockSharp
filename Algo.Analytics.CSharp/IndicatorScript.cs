@@ -14,8 +14,8 @@ public class IndicatorScript : IAnalyticsScript
 		}
 
 		// creating 2 panes for candles and indicator series
-		var candleChart = panel.CreateChart<DateTimeOffset, decimal>();
-		var indicatorChart = panel.CreateChart<DateTimeOffset, decimal>();
+		var candleChart = panel.CreateChart<DateTime, decimal>();
+		var indicatorChart = panel.CreateChart<DateTime, decimal>();
 
 		foreach (var security in securities)
 		{
@@ -23,8 +23,8 @@ public class IndicatorScript : IAnalyticsScript
 			if (cancellationToken.IsCancellationRequested)
 				break;
 
-			var candlesSeries = new Dictionary<DateTimeOffset, decimal>();
-			var indicatorSeries = new Dictionary<DateTimeOffset, decimal>();
+			var candlesSeries = new Dictionary<DateTime, decimal>();
+			var indicatorSeries = new Dictionary<DateTime, decimal>();
 
 			// creating ROC
 			var roc = new RateOfChange();

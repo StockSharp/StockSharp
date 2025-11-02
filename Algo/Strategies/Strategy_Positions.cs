@@ -41,7 +41,7 @@ partial class Strategy
 	{
 	}
 
-	private void RaisePositionChanged(DateTimeOffset time)
+	private void RaisePositionChanged(DateTime time)
 	{
 		this.Notify(nameof(Position));
 		PositionChanged?.Invoke();
@@ -66,7 +66,7 @@ partial class Strategy
 	/// <param name="portfolio">Portfolio.</param>
 	/// <param name="value">Position.</param>
 	/// <param name="time">Timestamp to assign into <see cref="Position.LocalTime"/> and <see cref="Position.ServerTime"/> if position is created anew.</param>
-	public void SetPositionValue(Security security, Portfolio portfolio, decimal value, DateTimeOffset time)
+	public void SetPositionValue(Security security, Portfolio portfolio, decimal value, DateTime time)
 		=> _posManager.SetPosition(security, portfolio, value, time);
 
 	/// <summary>

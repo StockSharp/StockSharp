@@ -47,7 +47,7 @@ static class Helper
 	public static IEntityRegistry GetEntityRegistry()
 		=> new CsvEntityRegistry(string.Empty);
 
-	public static ExecutionMessage[] RandomTicks(this Security security, int count, bool generateOriginSide, TimeSpan? interval = null, DateTimeOffset? start = null)
+	public static ExecutionMessage[] RandomTicks(this Security security, int count, bool generateOriginSide, TimeSpan? interval = null, DateTime? start = null)
 	{
 		var trades = new List<ExecutionMessage>();
 
@@ -64,7 +64,7 @@ static class Helper
 
 		tradeGenerator.Process(secMsg);
 
-		var dt = start ?? DateTimeOffset.UtcNow;
+		var dt = start ?? DateTime.UtcNow;
 
 		tradeGenerator.Process(new Level1ChangeMessage
 		{
@@ -130,7 +130,7 @@ static class Helper
 		return [.. trades];
 	}
 
-	public static ExecutionMessage[] RandomOrderLog(this Security security, int count, DateTimeOffset? start = null)
+	public static ExecutionMessage[] RandomOrderLog(this Security security, int count, DateTime? start = null)
 	{
 		var items = new List<ExecutionMessage>();
 
@@ -146,7 +146,7 @@ static class Helper
 
 		generator.Process(secMsg);
 
-		var dt = start ?? DateTimeOffset.UtcNow;
+		var dt = start ?? DateTime.UtcNow;
 
 		generator.Process(new Level1ChangeMessage
 		{
@@ -224,7 +224,7 @@ static class Helper
 		return [.. items];
 	}
 
-	public static QuoteChangeMessage[] RandomDepths(this Security security, int count, TimeSpan? interval = null, DateTimeOffset? start = null, bool ordersCount = false)
+	public static QuoteChangeMessage[] RandomDepths(this Security security, int count, TimeSpan? interval = null, DateTime? start = null, bool ordersCount = false)
 	{
 		var generator = new TrendMarketDepthGenerator(security.ToSecurityId())
 		{
@@ -237,7 +237,7 @@ static class Helper
 		return security.RandomDepths(count, generator, start);
 	}
 
-	public static QuoteChangeMessage[] RandomDepths(this Security security, int count, TrendMarketDepthGenerator depthGenerator, DateTimeOffset? start = null)
+	public static QuoteChangeMessage[] RandomDepths(this Security security, int count, TrendMarketDepthGenerator depthGenerator, DateTime? start = null)
 	{
 		depthGenerator.Init();
 
@@ -248,7 +248,7 @@ static class Helper
 
 		var depths = new List<QuoteChangeMessage>();
 
-		var dt = start ?? DateTimeOffset.UtcNow;
+		var dt = start ?? DateTime.UtcNow;
 
 		var totalIterations = count * 100;
 		var i = 0;
@@ -287,7 +287,7 @@ static class Helper
 
 	private static readonly IEnumerable<Level1Fields> _l1Fields = [.. Enumerator.GetValues<Level1Fields>().ExcludeObsolete()];
 
-	public static Level1ChangeMessage RandomLevel1(Security security, SecurityId secId, DateTimeOffset serverTime, bool isFractional, bool diffDays, bool diffTimeZones, Func<decimal> getTickPrice)
+	public static Level1ChangeMessage RandomLevel1(Security security, SecurityId secId, DateTime serverTime, bool isFractional, bool diffDays, Func<decimal> getTickPrice)
 	{
 		var msg = new Level1ChangeMessage
 		{
@@ -336,15 +336,12 @@ static class Helper
 
 				msg.Add(field, price);
 			}
-			else if (type == typeof(DateTimeOffset))
+			else if (type == typeof(DateTime))
 			{
 				var time = serverTime.AddMilliseconds(RandomGen.GetInt(-10, 10));
 
 				if (diffDays)
 					time = time.AddDays(RandomGen.GetInt(-10, 10));
-
-				if (diffTimeZones)
-					time = time.ConvertToEst();
 
 				msg.Add(field, time);
 			}
@@ -360,9 +357,9 @@ static class Helper
 		return msg;
 	}
 
-	public static Level1ChangeMessage[] RandomLevel1(this Security security, bool isFractional = true, bool diffTimeZones = false, bool diffDays = false, int count = 100000)
+	public static Level1ChangeMessage[] RandomLevel1(this Security security, bool isFractional = true, bool diffDays = false, int count = 100000)
 	{
-		var serverTime = DateTimeOffset.UtcNow;
+		var serverTime = DateTime.UtcNow;
 		var securityId = security.ToSecurityId();
 
 		var ticks = security.RandomTicks(count, false);
@@ -373,7 +370,7 @@ static class Helper
 
 		for (var i = 0; i < count; i++)
 		{
-			var msg = RandomLevel1(security, securityId, serverTime, isFractional, diffDays, diffTimeZones, () =>
+			var msg = RandomLevel1(security, securityId, serverTime, isFractional, diffDays, () =>
 			{
 				var price = ticks[ticksIndex].TradePrice.Value;
 
@@ -409,8 +406,8 @@ static class Helper
 		var posMsg = new PositionChangeMessage
 		{
 			SecurityId = secId,
-			ServerTime = DateTimeOffset.UtcNow,
-			LocalTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
+			LocalTime = DateTime.UtcNow,
 			PortfolioName = $"Pf{RandomGen.GetInt(2)}",
 			ClientCode = RandomGen.GetBool() ? $"ClCode{RandomGen.GetInt(2)}" : null,
 			DepoName = RandomGen.GetBool() ? $"Depo{RandomGen.GetInt(2)}" : null,
@@ -435,12 +432,11 @@ static class Helper
 			var value = (decimal)RandomGen.GetInt(100, 1000) / RandomGen.GetInt(100, 1000);
 			posMsg.Add(type, value.Round(5));
 		}
-		else if (tt == typeof(DateTimeOffset))
+		else if (tt == typeof(DateTime))
 		{
 			var time = posMsg.ServerTime.AddMilliseconds(RandomGen.GetInt(-10, 10));
 
 			time = time.AddDays(RandomGen.GetInt(-10, 10));
-			time = time.ConvertToEst();
 
 			posMsg.Add(type, time);
 		}
@@ -476,8 +472,8 @@ static class Helper
 			Error = RandomGen.GetInt(10) == 5 ? new InvalidOperationException("Test error") : null,
 			Latency = RandomGen.GetBool() ? ((long)RandomGen.GetInt()).To<TimeSpan>() : null,
 			DataTypeEx = DataType.Transactions,
-			ServerTime = DateTimeOffset.UtcNow,
-			LocalTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
+			LocalTime = DateTime.UtcNow,
 			HasOrderInfo = RandomGen.GetBool(),
 		};
 
@@ -500,7 +496,7 @@ static class Helper
 			msg.SystemComment = RandomGen.GetBool() ? @"test
 																comment" + i : null;
 			msg.OrderBoardId = RandomGen.GetBool() ? "test board id" + i : null;
-			msg.ExpiryDate = RandomGen.GetBool() ? DateTimeOffset.UtcNow : null;
+			msg.ExpiryDate = RandomGen.GetBool() ? DateTime.UtcNow : null;
 
 			if (RandomGen.GetBool())
 				msg.OrderId = RandomGen.GetInt();
@@ -563,7 +559,7 @@ static class Helper
 				Headline = "Headline 1",
 				Source = "reuters",
 				BoardCode = BoardCodes.Forts,
-				ServerTime = DateTimeOffset.UtcNow,
+				ServerTime = DateTime.UtcNow,
 				SeqNum = RandomGen.GetInt(0, 100),
 			},
 
@@ -572,15 +568,15 @@ static class Helper
 				Headline = "Headline 2",
 				Url = "http://google.com",
 				SecurityId = "AAPL@NASDAQ".ToSecurityId(),
-				ServerTime = DateTimeOffset.UtcNow,
+				ServerTime = DateTime.UtcNow,
 			},
 
 			new NewsMessage
 			{
 				Headline = "Headline 3",
 				Priority = NewsPriorities.High,
-				ServerTime = DateTimeOffset.UtcNow,
-				ExpiryDate = DateTimeOffset.UtcNow,
+				ServerTime = DateTime.UtcNow,
+				ExpiryDate = DateTime.UtcNow,
 				SeqNum = RandomGen.GetInt(0, 100),
 			},
 
@@ -588,7 +584,7 @@ static class Helper
 			{
 				Headline = "Headline 4",
 				Language = "FR",
-				ServerTime = DateTimeOffset.UtcNow,
+				ServerTime = DateTime.UtcNow,
 			},
 		];
 	}
@@ -601,13 +597,13 @@ static class Helper
 			{
 				State = SessionStates.Active,
 				BoardCode = ExchangeBoard.Forts.Code,
-				ServerTime = DateTimeOffset.UtcNow,
+				ServerTime = DateTime.UtcNow,
 			},
 
 			new BoardStateMessage
 			{
 				State = SessionStates.Paused,
-				ServerTime = DateTimeOffset.UtcNow,
+				ServerTime = DateTime.UtcNow,
 			},
 		];
 	}
@@ -923,7 +919,7 @@ static class Helper
 
 					var expectedValue = p1.Value;
 
-					if (expectedValue is DateTimeOffset dto)
+					if (expectedValue is DateTime dto)
 						expectedValue = dto.TruncateTime(isMls);
 
 					value.AssertEqual(expectedValue);
@@ -1363,7 +1359,7 @@ static class Helper
 		}
 	}
 
-	public static DateTimeOffset TruncateTime(this DateTimeOffset dt, bool isMls)
+	public static DateTime TruncateTime(this DateTime dt, bool isMls)
 	{
 		return isMls ? dt.Truncate(TimeSpan.FromMilliseconds(1)) : dt;
 	}

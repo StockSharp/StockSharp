@@ -76,7 +76,7 @@ public class MovingAverageConvergenceDivergenceHistogram : BaseComplexIndicator<
 	}
 
 	/// <inheritdoc />
-	protected override IMacdHistogramValue CreateValue(DateTimeOffset time)
+	protected override IMacdHistogramValue CreateValue(DateTime time)
 		=> new MovingAverageConvergenceDivergenceHistogramValue(this, time);
 }
 
@@ -116,7 +116,7 @@ public interface IMacdHistogramValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent MovingAverageConvergenceDivergenceHistogram indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class MovingAverageConvergenceDivergenceHistogramValue(MovingAverageConvergenceDivergenceHistogram indicator, DateTimeOffset time) : ComplexIndicatorValue<MovingAverageConvergenceDivergenceHistogram>(indicator, time), IMacdHistogramValue
+public class MovingAverageConvergenceDivergenceHistogramValue(MovingAverageConvergenceDivergenceHistogram indicator, DateTime time) : ComplexIndicatorValue<MovingAverageConvergenceDivergenceHistogram>(indicator, time), IMacdHistogramValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue MacdValue => this[TypedIndicator.Macd];

@@ -39,7 +39,7 @@ public struct GpuPercentageVolumeOscillatorParams(int shortLength, int longLengt
 public struct GpuPercentageVolumeOscillatorResult : IGpuIndicatorResult
 {
 	/// <summary>
-	/// Time in <see cref="DateTimeOffset.Ticks"/>.
+	/// Time in <see cref="DateTime.Ticks"/>.
 	/// </summary>
 	public long Time;
 

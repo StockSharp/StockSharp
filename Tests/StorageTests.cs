@@ -38,7 +38,7 @@ public class StorageTests
 			TradePrice = -10,
 			SecurityId = secId,
 			TradeVolume = 10,
-			ServerTime = DateTimeOffset.UtcNow
+			ServerTime = DateTime.UtcNow
 		}]);
 	}
 
@@ -56,7 +56,7 @@ public class StorageTests
 			TradeId = 1,
 			TradePrice = 10,
 			TradeVolume = 10,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 		}]);
 	}
 
@@ -77,7 +77,7 @@ public class StorageTests
 				TradeId = 1,
 				TradePrice = 10,
 				TradeVolume = 10,
-				ServerTime = DateTimeOffset.UtcNow,
+				ServerTime = DateTime.UtcNow,
 				SecurityId = new() { SecurityCode = "another", BoardCode = BoardCodes.Ux }
 			}
 		]));
@@ -411,8 +411,8 @@ public class StorageTests
 
 		tradeStorage.Save(trades);
 
-		var minTime = DateTimeOffset.MaxValue;
-		var maxTime = DateTimeOffset.MinValue;
+		var minTime = DateTime.MaxValue;
+		var maxTime = DateTime.MinValue;
 
 		foreach (var t in trades)
 		{
@@ -439,7 +439,7 @@ public class StorageTests
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
-		var dt = DateTimeOffset.UtcNow;
+		var dt = DateTime.UtcNow;
 
 		var tradeStorage = GetTradeStorage(secId, format);
 
@@ -535,7 +535,7 @@ public class StorageTests
 
 		var depth = new QuoteChangeMessage
 		{
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			SecurityId = secId,
 			Bids = [new(1, -1)],
 		};
@@ -673,7 +673,7 @@ public class StorageTests
 
 		var depth = new QuoteChangeMessage
 		{
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 			SecurityId = secId,
 		};
 
@@ -887,7 +887,7 @@ public class StorageTests
 		generator.Process(secMsg);
 		generator.Process(security.Board.ToMessage());
 
-		var time = DateTimeOffset.UtcNow;
+		var time = DateTime.UtcNow;
 
 		var depths = new List<QuoteChangeMessage>();
 
@@ -1094,7 +1094,7 @@ public class StorageTests
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
 
-		var dt = DateTimeOffset.UtcNow;
+		var dt = DateTime.UtcNow;
 
 		var depthStorage = GetDepthStorage(secId, format);
 
@@ -1393,7 +1393,7 @@ public class StorageTests
 			new QuoteChangeMessage
 			{
 				SecurityId = secId,
-				ServerTime = DateTimeOffset.UtcNow,
+				ServerTime = DateTime.UtcNow,
 				Bids = [new(101, 1)],
 				Asks = [new(102, 2)],
 				State = isStateFirst ? QuoteChangeStates.SnapshotComplete : null,
@@ -1402,7 +1402,7 @@ public class StorageTests
 			new QuoteChangeMessage
 			{
 				SecurityId = secId,
-				ServerTime = DateTimeOffset.UtcNow,
+				ServerTime = DateTime.UtcNow,
 				Bids = [new(101, 1)],
 				Asks = [new(102, 2)],
 				State = isStateFirst ? null : QuoteChangeStates.SnapshotComplete,
@@ -1442,7 +1442,7 @@ public class StorageTests
 			new QuoteChangeMessage
 			{
 				SecurityId = secId,
-				ServerTime = DateTimeOffset.UtcNow,
+				ServerTime = DateTime.UtcNow,
 				Bids = [new(101, 1)],
 				Asks = [new(102, 2)],
 				State = QuoteChangeStates.SnapshotComplete,
@@ -1451,7 +1451,7 @@ public class StorageTests
 			new QuoteChangeMessage
 			{
 				SecurityId = secId,
-				ServerTime = DateTimeOffset.UtcNow,
+				ServerTime = DateTime.UtcNow,
 				Bids = [new(101, 1)],
 				Asks = [new(102, 2)],
 				State = null,
@@ -1510,7 +1510,7 @@ public class StorageTests
 		var secId = security.ToSecurityId();
 
 		var tf = TimeSpan.FromMinutes(5);
-		var time = new DateTime(2017, 10, 02, 15, 30, 00).ApplyMoscow();
+		var time = new DateTime(2017, 10, 02, 15, 30, 00).UtcKind();
 
 		var candles = new[]
 		{
@@ -1578,7 +1578,7 @@ public class StorageTests
 		var secId = security.ToSecurityId();
 
 		var tf = TimeSpan.FromMinutes(5);
-		var time = new DateTime(2017, 10, 02, 15, 30, 00).ApplyMoscow();
+		var time = new DateTime(2017, 10, 02, 15, 30, 00).UtcKind();
 
 		var candles = new CandleMessage[]
 		{
@@ -1683,8 +1683,7 @@ public class StorageTests
 		Security security, bool isCalcVolumeProfile,
 		bool resetPriceStep = false,
 		decimal volumeRange = CandleTests.VolumeRange,
-		decimal boxSize = CandleTests.BoxSize,
-		bool diffOffset = false)
+		decimal boxSize = CandleTests.BoxSize)
 	{
 		var minPrice = decimal.MaxValue;
 		var maxPrice = decimal.MinValue;
@@ -1723,67 +1722,19 @@ public class StorageTests
 
 		var secId = security.ToSecurityId();
 
-		CheckCandles<TimeFrameCandleMessage, TimeSpan>(storage, secId, candles, tfArg, format, diffOffset);
-		CheckCandles<VolumeCandleMessage, decimal>(storage, secId, candles, volumeRange, format, diffOffset);
-		CheckCandles<TickCandleMessage, int>(storage, secId, candles, ticksArg, format, diffOffset);
-		CheckCandles<RangeCandleMessage, Unit>(storage, secId, candles, rangeArg, format, diffOffset);
-		CheckCandles<RenkoCandleMessage, Unit>(storage, secId, candles, renkoArg, format, diffOffset);
-		CheckCandles<PnFCandleMessage, PnFArg>(storage, secId, candles, pnfArg, format, diffOffset);
+		CheckCandles<TimeFrameCandleMessage, TimeSpan>(storage, secId, candles, tfArg, format);
+		CheckCandles<VolumeCandleMessage, decimal>(storage, secId, candles, volumeRange, format);
+		CheckCandles<TickCandleMessage, int>(storage, secId, candles, ticksArg, format);
+		CheckCandles<RangeCandleMessage, Unit>(storage, secId, candles, rangeArg, format);
+		CheckCandles<RenkoCandleMessage, Unit>(storage, secId, candles, renkoArg, format);
+		CheckCandles<PnFCandleMessage, PnFArg>(storage, secId, candles, pnfArg, format);
 	}
 
-	private static void CheckCandles<TCandle, TArg>(IStorageRegistry storage, SecurityId security, IEnumerable<CandleMessage> candles, TArg arg, StorageFormats format, bool diffOffset)
+	private static void CheckCandles<TCandle, TArg>(IStorageRegistry storage, SecurityId security, IEnumerable<CandleMessage> candles, TArg arg, StorageFormats format)
 		where TCandle : CandleMessage
 	{
 		var candleStorage = storage.GetCandleMessageStorage(security, DataType.Create<TCandle>(arg), null, format);
 		var typedCandle = candles.OfType<TCandle>().ToArray();
-
-		if (diffOffset)
-		{
-			foreach (var candle in typedCandle)
-			{
-				TimeZoneInfo tz;
-
-				switch (RandomGen.GetInt(4))
-				{
-					case 0:
-						continue;
-
-					case 1:
-						tz = TimeHelper.Cst;
-						break;
-
-					case 2:
-						tz = TimeHelper.Est;
-						break;
-
-					default:
-						tz = TimeZoneInfo.Utc;
-						break;
-				}
-
-				switch (RandomGen.GetInt(4))
-				{
-					case 0:
-						break;
-
-					case 1:
-						candle.OpenTime = candle.OpenTime.Convert(tz);
-						break;
-
-					case 2:
-						candle.CloseTime = candle.CloseTime.Convert(tz);
-						break;
-
-					case 3:
-						candle.HighTime = candle.HighTime.Convert(tz);
-						break;
-
-					default:
-						candle.LowTime = candle.LowTime.Convert(tz);
-						break;
-				}
-			}
-		}
 
 		candleStorage.Save(typedCandle);
 		var loadedCandles = candleStorage.Load(typedCandle.First().OpenTime, typedCandle.Last().OpenTime).ToArray();
@@ -1869,7 +1820,7 @@ public class StorageTests
 		var storage = GetStorageRegistry();
 		var tfStorage = storage.GetTimeFrameCandleMessageStorage(secId, tf, format: format);
 
-		var time = DateTimeOffset.UtcNow;
+		var time = DateTime.UtcNow;
 
 		var candles = new[]
 		{
@@ -1899,7 +1850,7 @@ public class StorageTests
 		}
 	}
 
-	private static void CandlesTimeFrame(StorageFormats format, TimeSpan tf, DateTimeOffset? time = null)
+	private static void CandlesTimeFrame(StorageFormats format, TimeSpan tf, DateTime? time = null)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -1907,7 +1858,7 @@ public class StorageTests
 		var storage = GetStorageRegistry();
 		var tfStorage = storage.GetTimeFrameCandleMessageStorage(secId, tf, format: format);
 
-		time ??= DateTimeOffset.UtcNow;
+		time ??= DateTime.UtcNow;
 
 		var candles = new[]
 		{
@@ -2014,11 +1965,11 @@ public class StorageTests
 		var storage = GetStorageRegistry();
 		var tfStorage = storage.GetTimeFrameCandleMessageStorage(secId, tf, format: format);
 
-		var time = new DateTimeOffset(2019, 05, 06, 17, 1, 1, TimeSpan.FromHours(3));
+		var time = new DateTime(2019, 05, 06, 17, 1, 1).UtcKind();
 
 		var candle = new TimeFrameCandleMessage
 		{
-			OpenTime = time.ConvertToUtc(),
+			OpenTime = time,
 			CloseTime = (time + tf),//.AddTicks(-1),
 			OpenPrice = 10,
 			HighPrice = 20,
@@ -2076,13 +2027,13 @@ public class StorageTests
 		var storage = GetStorageRegistry();
 		var tfStorage = storage.GetTimeFrameCandleMessageStorage(secId, tf, format: format);
 
-		var time = new DateTimeOffset(2019, 05, 06, 17, 1, 1, TimeSpan.FromHours(3));
+		var time = new DateTime(2019, 05, 06, 17, 1, 1);
 
 		var candles = new[]
 		{
 			new TimeFrameCandleMessage
 			{
-				OpenTime = time.ConvertToUtc(),
+				OpenTime = time,
 				CloseTime = time + tf,
 				OpenPrice = 10,
 				HighPrice = 20,
@@ -2094,8 +2045,8 @@ public class StorageTests
 
 			new TimeFrameCandleMessage
 			{
-				OpenTime = (time + tf).ConvertToUtc(),
-				CloseTime = (time + tf + tf).ConvertToUtc(),
+				OpenTime = time + tf,
+				CloseTime = time + tf + tf,
 				OpenPrice = 10,
 				HighPrice = 20,
 				LowPrice = 9,
@@ -2106,8 +2057,8 @@ public class StorageTests
 
 			new TimeFrameCandleMessage
 			{
-				OpenTime = (time + tf + tf).ConvertToEst(),
-				CloseTime = (time + tf + tf + tf).ConvertToEst(),
+				OpenTime = time + tf + tf,
+				CloseTime = time + tf + tf + tf,
 				OpenPrice = 10,
 				HighPrice = 20,
 				LowPrice = 9,
@@ -2165,13 +2116,13 @@ public class StorageTests
 		var storage = GetStorageRegistry();
 		var tfStorage = storage.GetTimeFrameCandleMessageStorage(secId, tf, format: format);
 
-		var time = new DateTimeOffset(2019, 05, 06, 17, 1, 1, TimeSpan.FromHours(3));
+		var time = new DateTime(2019, 05, 06, 17, 1, 1).UtcKind();
 
 		var candles = new[]
 		{
 			new TimeFrameCandleMessage
 			{
-				OpenTime = time.Convert(TimeHelper.Gmt),
+				OpenTime = time,
 				CloseTime = time + tf,
 				OpenPrice = 10,
 				HighPrice = 20,
@@ -2183,8 +2134,8 @@ public class StorageTests
 
 			new TimeFrameCandleMessage
 			{
-				OpenTime = (time + tf).ConvertToUtc(),
-				CloseTime = (time + tf + tf).ConvertToMoscow(),
+				OpenTime = time + tf,
+				CloseTime = time + tf + tf,
 				OpenPrice = 10,
 				HighPrice = 20,
 				LowPrice = 9,
@@ -2195,8 +2146,8 @@ public class StorageTests
 
 			new TimeFrameCandleMessage
 			{
-				OpenTime = (time + tf + tf).ConvertToEst(),
-				CloseTime = (time + tf + tf + tf).Convert(TimeHelper.Cst),
+				OpenTime = time + tf + tf,
+				CloseTime = time + tf + tf + tf,
 				OpenPrice = 10,
 				HighPrice = 20,
 				LowPrice = 9,
@@ -2233,16 +2184,6 @@ public class StorageTests
 		{
 			tfStorage.Delete(candles);
 		}
-	}
-
-	[TestMethod]
-	[DataRow(StorageFormats.Binary)]
-	[DataRow(StorageFormats.Csv)]
-	public void CandlesDiffOffsets3(StorageFormats format)
-	{
-		var security = Helper.CreateSecurity(100);
-
-		CandlesRandom(format, security.RandomTicks(_depthCount3, false), security, false, diffOffset: true);
 	}
 
 	[TestMethod]
@@ -2356,7 +2297,7 @@ public class StorageTests
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
-		var dt = DateTimeOffset.UtcNow;
+		var dt = DateTime.UtcNow;
 
 		var olStorage = GetStorageRegistry().GetOrderLogMessageStorage(secId, null, format);
 
@@ -2373,7 +2314,7 @@ public class StorageTests
 				ServerTime = dt,
 				OrderVolume = 1,
 				TransactionId = 1,
-				PortfolioName = StockSharp.Messages.Extensions.AnonymousPortfolioName,
+				PortfolioName = Messages.Extensions.AnonymousPortfolioName,
 			},
 			new ExecutionMessage
 			{
@@ -2386,7 +2327,7 @@ public class StorageTests
 				ServerTime = dt,
 				OrderVolume = 1,
 				TransactionId = 2,
-				PortfolioName = StockSharp.Messages.Extensions.AnonymousPortfolioName,
+				PortfolioName = Messages.Extensions.AnonymousPortfolioName,
 			},
 		}.ToArray();
 
@@ -2456,12 +2397,12 @@ public class StorageTests
 		storage.DeleteWithCheck();
 	}
 
-	private static void Level1(StorageFormats format, bool isFractional, bool diffTimeZones = false, bool diffDays = false)
+	private static void Level1(StorageFormats format, bool isFractional, bool diffDays = false)
 	{
 		var security = Helper.CreateSecurity();
 		var securityId = security.ToSecurityId();
 
-		var testValues = security.RandomLevel1(isFractional, diffTimeZones, diffDays, _depthCount3);
+		var testValues = security.RandomLevel1(isFractional, diffDays, _depthCount3);
 
 		var l1Storage = GetStorageRegistry().GetLevel1MessageStorage(securityId, null, format);
 
@@ -2496,7 +2437,7 @@ public class StorageTests
 			new Level1ChangeMessage
 			{
 				SecurityId = securityId,
-				ServerTime = DateTimeOffset.UtcNow,
+				ServerTime = DateTime.UtcNow,
 			}
 		};
 
@@ -2511,19 +2452,11 @@ public class StorageTests
 	}
 
 	[TestMethod]
-	[DataRow(StorageFormats.Binary)]
-	[DataRow(StorageFormats.Csv)]
-	public void Level1DiffOffset(StorageFormats format)
-	{
-		Level1(format, false, true);
-	}
-
-	[TestMethod]
 	//[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	public void Level1DiffDays(StorageFormats format)
 	{
-		Level1(format, false, true, true);
+		Level1(format, false, true);
 	}
 
 	[TestMethod]
@@ -2545,7 +2478,7 @@ public class StorageTests
 		security.MaxPrice = 100000000m;
 
 		var securityId = security.ToSecurityId();
-		var serverTime = DateTimeOffset.UtcNow;
+		var serverTime = DateTime.UtcNow;
 
 		var testValues = new List<Level1ChangeMessage>
 		{
@@ -2584,7 +2517,7 @@ public class StorageTests
 	//	var security = Helper.CreateSecurity();
 
 	//	var securityId = security.ToSecurityId();
-	//	var serverTime = DateTimeOffset.UtcNow;
+	//	var serverTime = DateTime.UtcNow;
 
 	//	var testValues = new List<Level1ChangeMessage>();
 
@@ -2714,7 +2647,7 @@ public class StorageTests
 			new PositionChangeMessage
 			{
 				SecurityId = secId,
-				ServerTime = DateTimeOffset.UtcNow,
+				ServerTime = DateTime.UtcNow,
 			},
 		};
 
@@ -2785,7 +2718,7 @@ public class StorageTests
 
 		var storage = GetStorageRegistry().GetTickMessageStorage(secId, null, format);
 
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		storage.Save(
 		[
@@ -2832,7 +2765,7 @@ public class StorageTests
 
 		for (var i = 0; i < 100; i++)
 		{
-			Check(new Level1BinarySnapshotSerializer(), Helper.RandomLevel1(security, secId, DateTimeOffset.UtcNow, RandomGen.GetBool(), RandomGen.GetBool(), RandomGen.GetBool(), () => 1m));
+			Check(new Level1BinarySnapshotSerializer(), Helper.RandomLevel1(security, secId, DateTime.UtcNow, RandomGen.GetBool(), RandomGen.GetBool(), () => 1m));
 		}
 
 		for (var i = 0; i < 100; i++)
@@ -2845,6 +2778,9 @@ public class StorageTests
 			Check(new TransactionBinarySnapshotSerializer(), Helper.RandomTransaction(secId, i));
 		}
 	}
+
+	private static readonly DateTime _regressionFrom = DateTime.ParseExact("01/12/2021 +03:00", "dd/MM/yyyy zzz", CultureInfo.InvariantCulture).ApplyMoscow().UtcDateTime;
+	private static readonly DateTime _regressionTo = DateTime.ParseExact("01/01/2022 +03:00", "dd/MM/yyyy zzz", CultureInfo.InvariantCulture).ApplyMoscow().UtcDateTime;
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
@@ -2864,15 +2800,12 @@ public class StorageTests
 
 		var buildableStorage = cbProv.GetCandleMessageBuildableStorage(reg, secId, tf, null, format);
 
-		var from = DateTimeOffset.ParseExact("01/12/2021 +03:00", "dd/MM/yyyy zzz", CultureInfo.InvariantCulture);
-		var to = DateTimeOffset.ParseExact("01/01/2022 +03:00", "dd/MM/yyyy zzz", CultureInfo.InvariantCulture);
-
 		var expectedDates = _sourceArray.Select(d => new DateTime(2021, 12, d)).ToHashSet();
 		var dates = buildableStorage.Dates.ToHashSet();
 
 		expectedDates.SetEquals(dates).AssertTrue();
 
-		var candles = buildableStorage.Load(from, to).ToArray();
+		var candles = buildableStorage.Load(_regressionFrom, _regressionTo).ToArray();
 		candles.Length.AssertEqual(expectedDates.Count);
 	}
 
@@ -2894,10 +2827,7 @@ public class StorageTests
 
 		var buildableStorage = cbProv.GetCandleMessageBuildableStorage(reg, secId, tf, null, format);
 
-		var from = DateTimeOffset.ParseExact("01/12/2021 +03:00", "dd/MM/yyyy zzz", CultureInfo.InvariantCulture);
-		var to = DateTimeOffset.ParseExact("01/01/2022 +03:00", "dd/MM/yyyy zzz", CultureInfo.InvariantCulture);
-
-		var candles = buildableStorage.Load(from, to);
+		var candles = buildableStorage.Load(_regressionFrom, _regressionTo);
 
 		CandleMessage prevCandle = null;
 
@@ -2933,13 +2863,10 @@ public class StorageTests
 
 		var buildableStorage = cbProv.GetCandleMessageBuildableStorage(reg, secId, tf, null, format);
 
-		var from = DateTimeOffset.ParseExact("01/12/2021 +03:00", "dd/MM/yyyy zzz", CultureInfo.InvariantCulture);
-		var to = DateTimeOffset.ParseExact("01/01/2022 +03:00", "dd/MM/yyyy zzz", CultureInfo.InvariantCulture);
+		var range = buildableStorage.GetRange(_regressionFrom, _regressionTo);
 
-		var range = buildableStorage.GetRange(from, to);
-
-		range.Min.UtcDateTime.AssertEqual(range.Min.UtcDateTime.Date);
-		range.Max.UtcDateTime.AssertEqual(range.Max.UtcDateTime.Date);
+		range.Min.AssertEqual(range.Min.Date);
+		range.Max.AssertEqual(range.Max.Date);
 	}
 
 	[TestMethod]
@@ -2949,7 +2876,7 @@ public class StorageTests
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		var storage = GetTradeStorage(secId, format);
 
 		var ticks = new[]
@@ -2990,7 +2917,7 @@ public class StorageTests
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		var storage = GetStorageRegistry().GetOrderLogMessageStorage(secId, null, format);
 
 		var logs = new[]
@@ -3033,7 +2960,7 @@ public class StorageTests
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		var storage = GetStorageRegistry().GetLevel1MessageStorage(secId, null, format);
 
 		var l1 = new[]
@@ -3067,7 +2994,7 @@ public class StorageTests
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
 		var tf = TimeSpan.FromMinutes(1);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		var storage = GetStorageRegistry().GetTimeFrameCandleMessageStorage(secId, tf, format: format);
 
 		var candles = new[]
@@ -3145,7 +3072,7 @@ public class StorageTests
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		var storage = GetStorageRegistry().GetQuoteMessageStorage(secId, null, format);
 
 		var depths = new[]

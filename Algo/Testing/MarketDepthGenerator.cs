@@ -218,7 +218,7 @@ public class TrendMarketDepthGenerator(SecurityId securityId) : MarketDepthGener
 			return null;
 		}
 
-		DateTimeOffset time;
+		DateTime time;
 
 		switch (message.Type)
 		{

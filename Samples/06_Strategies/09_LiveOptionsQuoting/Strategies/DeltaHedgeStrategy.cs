@@ -50,7 +50,7 @@ public class DeltaHedgeStrategy : HedgeStrategy
 	}
 
 	/// <inheritdoc />
-	protected override IEnumerable<Order> GetReHedgeOrders(DateTimeOffset currentTime)
+	protected override IEnumerable<Order> GetReHedgeOrders(DateTime currentTime)
 	{
 		// Calculate the portfolio delta
 		var portfolioDelta = BlackScholes.Delta(currentTime);

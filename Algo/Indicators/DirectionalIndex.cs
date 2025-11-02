@@ -102,7 +102,7 @@ public class DirectionalIndex : BaseComplexIndicator<IDirectionalIndexValue>
 	public override string ToString() => base.ToString() + " " + Length;
 
 	/// <inheritdoc />
-	protected override IDirectionalIndexValue CreateValue(DateTimeOffset time)
+	protected override IDirectionalIndexValue CreateValue(DateTime time)
 		=> new DirectionalIndexValue(this, time);
 }
 
@@ -142,7 +142,7 @@ public interface IDirectionalIndexValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent DirectionalIndex indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class DirectionalIndexValue(DirectionalIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<DirectionalIndex>(indicator, time), IDirectionalIndexValue
+public class DirectionalIndexValue(DirectionalIndex indicator, DateTime time) : ComplexIndicatorValue<DirectionalIndex>(indicator, time), IDirectionalIndexValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue PlusValue => this[TypedIndicator.Plus];

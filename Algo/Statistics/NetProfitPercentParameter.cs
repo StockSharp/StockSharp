@@ -24,7 +24,7 @@ public class NetProfitPercentParameter : BasePnLStatisticParameter<decimal>, IBe
 	public decimal BeginValue { get; set; }
 
 	/// <inheritdoc />
-	public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+	public override void Add(DateTime marketTime, decimal pnl, decimal? commission)
 	{
 		if (BeginValue == 0)
 			return;

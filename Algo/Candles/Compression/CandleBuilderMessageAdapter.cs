@@ -50,7 +50,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 		public ICandleBuilderValueTransform Transform { get; set; }
 
-		public DateTimeOffset? LastTime { get; set; }
+		public DateTime? LastTime { get; set; }
 		public long? Count { get; set; }
 
 		CandleMessage ICandleBuilderSubscription.CurrentCandle { get; set; }
@@ -193,7 +193,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 									!InnerAdapter.IsSupportCandlesUpdates(mdMsg) &&
 									InnerAdapter.TryGetCandlesBuildFrom(original, _candleBuilderProvider) != null)
 								{
-									mdMsg.To = CurrentTime;
+									mdMsg.To = CurrentTimeUtc;
 								}
 
 								lock (_syncObject)
@@ -358,7 +358,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 		}
 	}
 
-	private MarketDataMessage TryCreateBuildSubscription(MarketDataMessage original, DateTimeOffset? lastTime, long? count, bool needCalcCount)
+	private MarketDataMessage TryCreateBuildSubscription(MarketDataMessage original, DateTime? lastTime, long? count, bool needCalcCount)
 	{
 		if (original == null)
 			throw new ArgumentNullException(nameof(original));

@@ -32,10 +32,10 @@ public class ProtectiveController : BaseLogReceiver
 
 		public decimal Position => _behaviour.Position;
 
-		public (bool, Sides, decimal, decimal, OrderCondition)? Update(decimal price, decimal value, DateTimeOffset time)
+		public (bool, Sides, decimal, decimal, OrderCondition)? Update(decimal price, decimal value, DateTime time)
 			=> _behaviour.Update(price, value, time);
 
-		public (bool, Sides, decimal, decimal, OrderCondition)? TryActivate(decimal price, DateTimeOffset time)
+		public (bool, Sides, decimal, decimal, OrderCondition)? TryActivate(decimal price, DateTime time)
 			=> _behaviour.TryActivate(price, time);
 	}
 
@@ -78,7 +78,7 @@ public class ProtectiveController : BaseLogReceiver
 	/// <param name="price">Current price.</param>
 	/// <param name="time">Current time.</param>
 	/// <returns>Registration order info.</returns>
-	public IEnumerable<(bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)> TryActivate(SecurityId securityId, decimal price, DateTimeOffset time)
+	public IEnumerable<(bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)> TryActivate(SecurityId securityId, decimal price, DateTime time)
 	{
 		if (price <= 0)
 			yield break;

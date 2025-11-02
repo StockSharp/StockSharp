@@ -16,7 +16,7 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	}
 
 	private readonly List<IIndicator> _resetTrackings = [];
-	private Dictionary<DateTimeOffset, (IIndicatorValue input, IIndicatorValue output)> _preloaded;
+	private Dictionary<DateTime, (IIndicatorValue input, IIndicatorValue output)> _preloaded;
 
 	/// <summary>
 	/// Initialize <see cref="BaseIndicator"/>.
@@ -343,11 +343,11 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	/// </summary>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
 	/// <returns><see cref="IIndicatorValue"/></returns>
-	protected virtual IIndicatorValue OnCreateValue(DateTimeOffset time)
+	protected virtual IIndicatorValue OnCreateValue(DateTime time)
 		=> GetType().GetValueType(false).CreateInstance<IIndicatorValue>(this, time);
 
 	/// <inheritdoc/>
-	public IIndicatorValue CreateValue(DateTimeOffset time, object[] values)
+	public IIndicatorValue CreateValue(DateTime time, object[] values)
 	{
 		var value = OnCreateValue(time);
 		value.FromValues(values);

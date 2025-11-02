@@ -44,7 +44,7 @@ public class StrategyTradesDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
-	protected override void OnStart(DateTimeOffset time)
+	protected override void OnStart(DateTime time)
 	{
 		OnSubscribe();
 		base.OnStart(time);

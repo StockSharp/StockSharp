@@ -64,7 +64,7 @@ public class MovingAverageConvergenceDivergenceSignal : BaseComplexIndicator<IMo
 	public override string ToString() => base.ToString() + $" L={Macd.LongMa.Length} S={Macd.ShortMa.Length} Sig={SignalMa.Length}";
 
 	/// <inheritdoc />
-	protected override IMovingAverageConvergenceDivergenceSignalValue CreateValue(DateTimeOffset time)
+	protected override IMovingAverageConvergenceDivergenceSignalValue CreateValue(DateTime time)
 		=> new MovingAverageConvergenceDivergenceSignalValue(this, time);
 }
 
@@ -104,7 +104,7 @@ public interface IMovingAverageConvergenceDivergenceSignalValue : IComplexIndica
 /// </remarks>
 /// <param name="indicator">The parent MovingAverageConvergenceDivergenceSignal indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class MovingAverageConvergenceDivergenceSignalValue(MovingAverageConvergenceDivergenceSignal indicator, DateTimeOffset time) : ComplexIndicatorValue<MovingAverageConvergenceDivergenceSignal>(indicator, time), IMovingAverageConvergenceDivergenceSignalValue
+public class MovingAverageConvergenceDivergenceSignalValue(MovingAverageConvergenceDivergenceSignal indicator, DateTime time) : ComplexIndicatorValue<MovingAverageConvergenceDivergenceSignal>(indicator, time), IMovingAverageConvergenceDivergenceSignalValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue MacdValue => this[TypedIndicator.Macd];

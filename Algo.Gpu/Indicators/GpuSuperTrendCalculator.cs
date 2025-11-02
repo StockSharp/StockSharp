@@ -39,7 +39,7 @@ public struct GpuSuperTrendParams(int length, float multiplier) : IGpuIndicatorP
 public struct GpuSuperTrendResult : IGpuIndicatorResult
 {
 	/// <summary>
-	/// Time in <see cref="DateTimeOffset.Ticks"/>.
+	/// Time in <see cref="DateTime.Ticks"/>.
 	/// </summary>
 	public long Time;
 

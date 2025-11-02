@@ -70,7 +70,7 @@ public class PercentagePriceOscillatorHistogram : BaseComplexIndicator<IPercenta
 	}
 
 	/// <inheritdoc />
-	protected override IPercentagePriceOscillatorHistogramValue CreateValue(DateTimeOffset time)
+	protected override IPercentagePriceOscillatorHistogramValue CreateValue(DateTime time)
 		=> new PercentagePriceOscillatorHistogramValue(this, time);
 }
 
@@ -110,7 +110,7 @@ public interface IPercentagePriceOscillatorHistogramValue : IComplexIndicatorVal
 /// </remarks>
 /// <param name="indicator">The parent PercentagePriceOscillatorHistogram indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class PercentagePriceOscillatorHistogramValue(PercentagePriceOscillatorHistogram indicator, DateTimeOffset time) : ComplexIndicatorValue<PercentagePriceOscillatorHistogram>(indicator, time), IPercentagePriceOscillatorHistogramValue
+public class PercentagePriceOscillatorHistogramValue(PercentagePriceOscillatorHistogram indicator, DateTime time) : ComplexIndicatorValue<PercentagePriceOscillatorHistogram>(indicator, time), IPercentagePriceOscillatorHistogramValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue PpoValue => this[TypedIndicator.Ppo];

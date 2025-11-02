@@ -44,10 +44,10 @@ public class TimeQuoteChange : IServerTimeMessage, ISecurityIdMessage
 	public SecurityId SecurityId { get; set; }
 
 	/// <inheritdoc />
-	public DateTimeOffset ServerTime { get; set; }
+	public DateTime ServerTime { get; set; }
 
 	/// <summary>
 	/// The local time mark.
 	/// </summary>
-	public DateTimeOffset LocalTime { get; set; }
+	public DateTime LocalTime { get; set; }
 }

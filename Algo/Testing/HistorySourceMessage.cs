@@ -16,7 +16,7 @@ public class HistorySourceMessage : MarketDataMessage
 	/// <summary>
 	/// Callback to retrieve historical data for the specified date.
 	/// </summary>
-	public Func<DateTimeOffset, IEnumerable<Message>> GetMessages { get; set; }
+	public Func<DateTime, IEnumerable<Message>> GetMessages { get; set; }
 
 	/// <summary>
 	/// Copy the message into the <paramref name="destination" />.

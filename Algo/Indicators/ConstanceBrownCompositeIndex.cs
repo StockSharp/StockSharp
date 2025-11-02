@@ -233,7 +233,7 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator<IConstanceBrown
 	}
 
 	/// <inheritdoc />
-	protected override IConstanceBrownCompositeIndexValue CreateValue(DateTimeOffset time)
+	protected override IConstanceBrownCompositeIndexValue CreateValue(DateTime time)
 		=> new ConstanceBrownCompositeIndexValue(this, time);
 
 	/// <inheritdoc />
@@ -332,7 +332,7 @@ public interface IConstanceBrownCompositeIndexValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent ConstanceBrownCompositeIndex indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class ConstanceBrownCompositeIndexValue(ConstanceBrownCompositeIndex indicator, DateTimeOffset time)
+public class ConstanceBrownCompositeIndexValue(ConstanceBrownCompositeIndex indicator, DateTime time)
 	: ComplexIndicatorValue<ConstanceBrownCompositeIndex>(indicator, time), IConstanceBrownCompositeIndexValue
 {
 	/// <inheritdoc />

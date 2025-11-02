@@ -43,7 +43,7 @@ public class Black : BlackScholes
 		}
 	}
 
-	private decimal? GetExpRate(DateTimeOffset currentTime)
+	private decimal? GetExpRate(DateTime currentTime)
 	{
 		var timeLine = GetExpirationTimeLine(currentTime);
 
@@ -54,37 +54,37 @@ public class Black : BlackScholes
 	}
 
 	/// <inheritdoc />
-	public override decimal? Premium(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	public override decimal? Premium(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
 		return GetExpRate(currentTime) * base.Premium(currentTime, deviation, assetPrice);
 	}
 
 	/// <inheritdoc />
-	public override decimal? Delta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	public override decimal? Delta(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
 		return GetExpRate(currentTime) * base.Delta(currentTime, deviation, assetPrice);
 	}
 
 	/// <inheritdoc />
-	public override decimal? Gamma(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	public override decimal? Gamma(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
 		return GetExpRate(currentTime) * base.Gamma(currentTime, deviation, assetPrice);
 	}
 
 	/// <inheritdoc />
-	public override decimal? Vega(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	public override decimal? Vega(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
 		return GetExpRate(currentTime) * base.Vega(currentTime, deviation, assetPrice);
 	}
 
 	/// <inheritdoc />
-	public override decimal? Theta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	public override decimal? Theta(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
 		return GetExpRate(currentTime) * base.Theta(currentTime, deviation, assetPrice);
 	}
 
 	/// <inheritdoc />
-	public override decimal? Rho(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	public override decimal? Rho(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
 		return GetExpRate(currentTime) * base.Rho(currentTime, deviation, assetPrice);
 	}

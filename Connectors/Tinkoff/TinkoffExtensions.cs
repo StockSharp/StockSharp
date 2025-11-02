@@ -169,7 +169,7 @@ static class TinkoffExtensions
 			_ => null,
 		};
 
-	public static StopOrderExpirationType ToStopNative(this TimeInForce? tif, DateTimeOffset? till)
+	public static StopOrderExpirationType ToStopNative(this TimeInForce? tif, DateTime? till)
 		=> tif switch
 		{
 			null => StopOrderExpirationType.Unspecified,
@@ -177,7 +177,7 @@ static class TinkoffExtensions
 			_ => throw new ArgumentOutOfRangeException(nameof(tif), tif, LocalizedStrings.InvalidValue),
 		};
 
-	public static TimeInForceType ToNative(this TimeInForce? tif, DateTimeOffset? till)
+	public static TimeInForceType ToNative(this TimeInForce? tif, DateTime? till)
 		=> tif switch
 		{
 			null => TimeInForceType.TimeInForceUnspecified,
@@ -241,7 +241,7 @@ static class TinkoffExtensions
 			_ => throw new ArgumentOutOfRangeException(nameof(status), status, LocalizedStrings.InvalidValue),
 		};
 
-	public static Timestamp ToTimestamp(this DateTimeOffset dto)
+	public static Timestamp ToTimestamp(this DateTime dto)
 		=> Timestamp.FromDateTimeOffset(dto);
 
 	public static decimal ToDecimal(this Quotation v)

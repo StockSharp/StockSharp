@@ -11,7 +11,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new NetProfitParameter();
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 		var pnl = 1000m;
 
 		// Act
@@ -29,7 +29,7 @@ public class StatisticsTests
 		var beginValue = 500m;
 		parameter.BeginValue = beginValue;
 
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 		var pnl = 600m;
 		var expectedPercent = (pnl * 100m) / beginValue; // 120%
 
@@ -47,7 +47,7 @@ public class StatisticsTests
 		var parameter = new NetProfitPercentParameter();
 		parameter.BeginValue = 0m;
 
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 		var pnl = 600m;
 
 		// Act
@@ -62,7 +62,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new MaxProfitParameter();
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 
 		// Act & Assert
 		parameter.Add(marketTime, 100m, null);
@@ -82,9 +82,9 @@ public class StatisticsTests
 		var maxProfitParam = new MaxProfitParameter();
 		var parameter = new MaxProfitDateParameter(maxProfitParam);
 
-		var time1 = new DateTimeOffset(2023, 1, 1, 12, 0, 0, TimeSpan.Zero);
-		var time2 = new DateTimeOffset(2023, 1, 2, 12, 0, 0, TimeSpan.Zero);
-		var time3 = new DateTimeOffset(2023, 1, 3, 12, 0, 0, TimeSpan.Zero);
+		var time1 = new DateTime(2023, 1, 1, 12, 0, 0).UtcKind();
+		var time2 = new DateTime(2023, 1, 2, 12, 0, 0).UtcKind();
+		var time3 = new DateTime(2023, 1, 3, 12, 0, 0).UtcKind();
 
 		// Act & Assert
 		// First update sets the max profit and the date
@@ -108,7 +108,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new MaxDrawdownParameter();
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 
 		// Act & Assert
 		// Start with profit
@@ -142,7 +142,7 @@ public class StatisticsTests
 		// Arrange
 		var maxDrawdownParam = new MaxDrawdownParameter();
 		var parameter = new MaxDrawdownPercentParameter(maxDrawdownParam);
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 
 		// Act & Assert
 		// Create a 200 drawdown (20%)
@@ -165,7 +165,7 @@ public class StatisticsTests
 		var netProfitParam = new NetProfitParameter();
 		var parameter = new RecoveryFactorParameter(maxDrawdownParam, netProfitParam);
 
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 
 		// Act
 		// Create a drawdown and final profit
@@ -184,7 +184,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new CommissionParameter();
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 
 		// Act
 		parameter.Add(marketTime, 1000m, 25m);
@@ -204,7 +204,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new MaxRelativeDrawdownParameter();
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 
 		// Act & Assert
 		// Start with profit
@@ -237,7 +237,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new ReturnParameter();
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 
 		// Act & Assert
 		// Start with value
@@ -270,7 +270,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new ReturnParameter();
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 
 		// Act & Assert
 		// Start with loss
@@ -569,7 +569,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new MaxLongPositionParameter();
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 
 		// Act & Assert
 		// Initial zero position
@@ -598,7 +598,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new MaxLongPositionParameter();
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 
 		// Act & Assert
 		// Initial short position - should not update from default 0
@@ -619,7 +619,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new MaxShortPositionParameter();
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 
 		// Act & Assert
 		// Initial zero position
@@ -648,7 +648,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new MaxShortPositionParameter();
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 
 		// Act & Assert
 		// Initial long position - should not update from default 0
@@ -670,7 +670,7 @@ public class StatisticsTests
 		// Arrange
 		var maxLong = new MaxLongPositionParameter();
 		var maxShort = new MaxShortPositionParameter();
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 
 		// Add some values
 		maxLong.Add(marketTime, 100);
@@ -691,7 +691,7 @@ public class StatisticsTests
 		// Arrange
 		var maxLong = new MaxLongPositionParameter();
 		var maxShort = new MaxShortPositionParameter();
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 
 		// Act - add mixed positions
 		maxLong.Add(marketTime, 50);
@@ -715,7 +715,7 @@ public class StatisticsTests
 		// Arrange
 		var maxLong = new MaxLongPositionParameter();
 		var maxShort = new MaxShortPositionParameter();
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 
 		// Act & Assert - starting with zero
 		maxLong.Add(marketTime, 0);
@@ -741,7 +741,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new WinningTradesParameter();
-		var serverTime = DateTimeOffset.UtcNow;
+		var serverTime = DateTime.UtcNow;
 
 		// Act & Assert
 		// Profitable trade
@@ -770,7 +770,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new LossingTradesParameter();
-		var serverTime = DateTimeOffset.UtcNow;
+		var serverTime = DateTime.UtcNow;
 
 		// Act & Assert
 		// Losing trade with closed volume
@@ -799,7 +799,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new TradeCountParameter();
-		var serverTime = DateTimeOffset.UtcNow;
+		var serverTime = DateTime.UtcNow;
 
 		// Act & Assert
 		// Profitable trade
@@ -824,7 +824,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new RoundtripCountParameter();
-		var serverTime = DateTimeOffset.UtcNow;
+		var serverTime = DateTime.UtcNow;
 
 		// Act & Assert
 		// Trade with closed volume
@@ -845,7 +845,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new AverageTradeProfitParameter();
-		var serverTime = DateTimeOffset.UtcNow;
+		var serverTime = DateTime.UtcNow;
 
 		// Act & Assert
 		// First trade
@@ -870,7 +870,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new AverageWinTradeParameter();
-		var serverTime = DateTimeOffset.UtcNow;
+		var serverTime = DateTime.UtcNow;
 
 		// Act & Assert
 		// First winning trade
@@ -903,7 +903,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new AverageLossTradeParameter();
-		var serverTime = DateTimeOffset.UtcNow;
+		var serverTime = DateTime.UtcNow;
 
 		// Act & Assert
 		// First losing trade
@@ -1011,7 +1011,7 @@ public class StatisticsTests
 	public void PnLInfo()
 	{
 		// Arrange
-		var serverTime = DateTimeOffset.UtcNow;
+		var serverTime = DateTime.UtcNow;
 
 		// Act & Assert - negative closed volume should throw
 		Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => _ = new PnLInfo(serverTime, -1, 100));
@@ -1037,7 +1037,7 @@ public class StatisticsTests
 		var perMonthTrade = new PerMonthTradeParameter();
 		var perDayTrade = new PerDayTradeParameter();
 
-		var serverTime = DateTimeOffset.UtcNow;
+		var serverTime = DateTime.UtcNow;
 
 		// Add some values
 		winningTrades.Add(new(serverTime, 10, 100));
@@ -1107,7 +1107,7 @@ public class StatisticsTests
 	public void SharpeRatioPositive()
 	{
 		var parameter = new SharpeRatioParameter();
-		var t = DateTimeOffset.UtcNow;
+		var t = DateTime.UtcNow;
 
 		// PnL: 0.0 → 0.1 → 0.3 → 0.5, returns: +0.1, +0.2, +0.2 (mean > 0)
 		parameter.Add(t, 0.0m, null);
@@ -1122,7 +1122,7 @@ public class StatisticsTests
 	public void SharpeRatioNegative()
 	{
 		var parameter = new SharpeRatioParameter();
-		var t = DateTimeOffset.UtcNow;
+		var t = DateTime.UtcNow;
 
 		// PnL: 0.0 → -0.1 → -0.2 → -0.5, returns: -0.1, -0.1, -0.3 (mean < 0)
 		parameter.Add(t, 0.0m, null);
@@ -1137,7 +1137,7 @@ public class StatisticsTests
 	public void SharpeRatioZero()
 	{
 		var parameter = new SharpeRatioParameter();
-		var t = DateTimeOffset.UtcNow;
+		var t = DateTime.UtcNow;
 
 		// PnL: 0.0 → 0.0 → 0.0 → 0.0, returns: 0, 0, 0 (mean = 0)
 		parameter.Add(t, 0.0m, null);
@@ -1152,7 +1152,7 @@ public class StatisticsTests
 	public void SortinoRatioPositive()
 	{
 		var parameter = new SortinoRatioParameter();
-		var t = DateTimeOffset.UtcNow;
+		var t = DateTime.UtcNow;
 
 		// PnL: 0.0 → 0.1 → 0.2 → 0.4, returns: +0.1, +0.1, +0.2 (downside deviation = 0)
 		parameter.Add(t, 0.0m, null);
@@ -1168,7 +1168,7 @@ public class StatisticsTests
 	public void SortinoRatioMixed()
 	{
 		var parameter = new SortinoRatioParameter();
-		var t = DateTimeOffset.UtcNow;
+		var t = DateTime.UtcNow;
 
 		// PnL: 0.0 → 0.1 → 0.3 → 0.2, returns: +0.1, +0.2, -0.1 (mean > 0, есть downside)
 		parameter.Add(t, 0.0m, null);
@@ -1183,7 +1183,7 @@ public class StatisticsTests
 	public void SortinoRatioNegative()
 	{
 		var parameter = new SortinoRatioParameter();
-		var t = DateTimeOffset.UtcNow;
+		var t = DateTime.UtcNow;
 
 		// PnL: 0.0 → -0.1 → -0.3 → -0.5, returns: -0.1, -0.2, -0.2 (mean < 0, downside deviation > 0)
 		parameter.Add(t, 0.0m, null);
@@ -1198,7 +1198,7 @@ public class StatisticsTests
 	public void SortinoRatioZero()
 	{
 		var parameter = new SortinoRatioParameter();
-		var t = DateTimeOffset.UtcNow;
+		var t = DateTime.UtcNow;
 
 		// PnL: 0.0 → 0.1 → 0.3 → 0.6, returns: +0.1, +0.2, +0.3 (все возвраты положительные)
 		parameter.Add(t, 0.0m, null);
@@ -1215,7 +1215,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new AverageDrawdownParameter();
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 
 		// Act - simulate drawdowns: 0, 100, 50, 0, 200
 		parameter.Add(marketTime, 1000m, null); // peak
@@ -1232,7 +1232,7 @@ public class StatisticsTests
 	public void AverageDrawdown_ComplexCases()
 	{
 		var parameter = new AverageDrawdownParameter();
-		var t = DateTimeOffset.UtcNow;
+		var t = DateTime.UtcNow;
 
 		// Case 1: Standard drawdown and recovery
 		parameter.Add(t, 1000m, null); // New peak
@@ -1305,7 +1305,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new ExpectancyParameter();
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 
 		// Act - add some trades: win 100, loss -50, win 50, loss -30
 		parameter.Add(new(marketTime, 1, 100m));
@@ -1322,7 +1322,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new ProfitFactorParameter();
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 
 		// Act - add some trades: win 100, loss -50, win 50, loss -25
 		parameter.Add(new(marketTime, 1, 100m));
@@ -1339,7 +1339,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new ProfitFactorParameter();
-		var marketTime = DateTimeOffset.UtcNow;
+		var marketTime = DateTime.UtcNow;
 
 		// Act - add some trades: win 100, loss -50, win 50, loss -25
 		parameter.Add(new(marketTime, 1, 100m));
@@ -1363,7 +1363,7 @@ public class StatisticsTests
 		var maxDrawdown = new MaxDrawdownParameter();
 		var parameter = new CalmarRatioParameter(profit, maxDrawdown);
 
-		var t = DateTimeOffset.UtcNow;
+		var t = DateTime.UtcNow;
 
 		// Act - add some profits and drawdowns
 		decimal[] pnls = [1000m, 800m, 1200m];
@@ -1387,7 +1387,7 @@ public class StatisticsTests
 		var avgDrawdown = new AverageDrawdownParameter();
 		var parameter = new SterlingRatioParameter(profit, avgDrawdown);
 
-		var t = DateTimeOffset.UtcNow;
+		var t = DateTime.UtcNow;
 		decimal[] pnls = [1000m, 900m, 1100m, 950m];
 
 		foreach (var pnl in pnls)
@@ -1404,7 +1404,7 @@ public class StatisticsTests
 	public void AverageDrawdown_MultipleDrawdownsAndUnfinished()
 	{
 		var parameter = new AverageDrawdownParameter();
-		var t = DateTimeOffset.UtcNow;
+		var t = DateTime.UtcNow;
 
 		// Peak → deep drawdown → partial recovery → new peak (fix first drawdown)
 		parameter.Add(t, 1000m, null);
@@ -1423,7 +1423,7 @@ public class StatisticsTests
 	public void MaxDrawdown_HandlesMultipleMinimas()
 	{
 		var parameter = new MaxDrawdownParameter();
-		var t = DateTimeOffset.UtcNow;
+		var t = DateTime.UtcNow;
 
 		// Simulate two drawdowns, second is deeper
 		parameter.Add(t, 1000m, null); // first peak
@@ -1440,7 +1440,7 @@ public class StatisticsTests
 	public void ProfitFactor_NegativeAndZeroTrades()
 	{
 		var parameter = new ProfitFactorParameter();
-		var t = DateTimeOffset.UtcNow;
+		var t = DateTime.UtcNow;
 
 		// 3 wins, 2 losses, 1 zero
 		parameter.Add(new(t, 1, 100m));   // win
@@ -1468,7 +1468,7 @@ public class StatisticsTests
 		var maxDrawdown = new MaxDrawdownParameter();
 		var netProfit = new NetProfitParameter();
 		var parameter = new RecoveryFactorParameter(maxDrawdown, netProfit);
-		var t = DateTimeOffset.UtcNow;
+		var t = DateTime.UtcNow;
 
 		// Two drawdowns, two recoveries
 		maxDrawdown.Add(t, 1000m, null);
@@ -1499,7 +1499,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new MaxDrawdownParameter();
-		var t = DateTimeOffset.UtcNow;
+		var t = DateTime.UtcNow;
 
 		// Act: first value is negative
 		parameter.Add(t, -1000m, null);
@@ -1516,7 +1516,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new MaxRelativeDrawdownParameter();
-		var t = DateTimeOffset.UtcNow;
+		var t = DateTime.UtcNow;
 
 		// Act: first negative point
 		parameter.Add(t, -1000m, null);
@@ -1534,7 +1534,7 @@ public class StatisticsTests
 	{
 		// Arrange
 		var parameter = new AverageDrawdownParameter();
-		var t = DateTimeOffset.UtcNow;
+		var t = DateTime.UtcNow;
 
 		// Act: first value is negative
 		parameter.Add(t, -1000m, null);
@@ -1552,7 +1552,7 @@ public class StatisticsTests
 		// Arrange
 		var s1 = new SharpeRatioParameter { RiskFreeRate = 0.05m }; // 5% RF
 		var s2 = new SharpeRatioParameter { RiskFreeRate = 0.05m };
-		var t = DateTimeOffset.UtcNow;
+		var t = DateTime.UtcNow;
 
 		// Baseline equity series (currency units)
 		decimal[] a = [1000m, 1100m, 1050m, 1200m]; // returns: +100, -50, +150
@@ -1574,7 +1574,7 @@ public class StatisticsTests
 		// Arrange
 		var r1 = new SortinoRatioParameter { RiskFreeRate = 0.05m };
 		var r2 = new SortinoRatioParameter { RiskFreeRate = 0.05m };
-		var t = DateTimeOffset.UtcNow;
+		var t = DateTime.UtcNow;
 
 		// Baseline equity series (currency units) with negative period to ensure downside samples
 		decimal[] a = [1000m, 900m, 950m, 1100m]; // returns: -100, +50, +150 (has downside)

@@ -39,7 +39,7 @@ partial class FtxMessageAdapter
 			DataTypeEx = DataType.Transactions,
 			PortfolioName = GetPortfolioName(),
 			HasOrderInfo = true,
-			ServerTime = order.CreatedAt ?? CurrentTime.ConvertToUtc(),
+			ServerTime = order.CreatedAt ?? CurrentTimeUtc,
 			OrderState = order.Status.ToOrderState(),
 			OrderType = order.Type.ToOrderType(),
 			AveragePrice = order.AvgFillPrice,
@@ -63,7 +63,7 @@ partial class FtxMessageAdapter
 			DataTypeEx = DataType.Transactions,
 			PortfolioName = GetPortfolioName(),
 			HasOrderInfo = true,
-			ServerTime = order.CreatedAt ?? CurrentTime.ConvertToUtc(),
+			ServerTime = order.CreatedAt ?? CurrentTimeUtc,
 			OrderId = order.Id,
 			OrderState = order.Status.ToOrderState(),
 			OrderType = order.Type.ToOrderType(),
@@ -227,7 +227,7 @@ partial class FtxMessageAdapter
 				{
 					DataTypeEx = DataType.Transactions,
 					OriginalTransactionId = cancelMsg.TransactionId,
-					ServerTime = CurrentTime.ConvertToUtc(),
+					ServerTime = CurrentTimeUtc,
 					HasOrderInfo = true,
 					Error = errors.Count == 1 ? errors[0] : new AggregateException(errors),
 				});

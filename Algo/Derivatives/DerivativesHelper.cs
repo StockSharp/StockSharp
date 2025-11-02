@@ -136,7 +136,7 @@ public static class DerivativesHelper
 	/// <param name="securities">Instruments to be filtered.</param>
 	/// <param name="expirationDate">The expiration date.</param>
 	/// <returns>Instruments filtered.</returns>
-	public static IEnumerable<Security> Filter(this IEnumerable<Security> securities, DateTimeOffset? expirationDate)
+	public static IEnumerable<Security> Filter(this IEnumerable<Security> securities, DateTime? expirationDate)
 	{
 		if (expirationDate == null)
 			return securities;
@@ -154,7 +154,7 @@ public static class DerivativesHelper
 	/// <remarks>
 	/// It returns an empty list if derivatives are not found.
 	/// </remarks>
-	public static IEnumerable<Security> GetDerivatives(this Security asset, ISecurityProvider provider, DateTimeOffset? expirationDate = null)
+	public static IEnumerable<Security> GetDerivatives(this Security asset, ISecurityProvider provider, DateTime? expirationDate = null)
 	{
 		return provider.Lookup(new Security
 		{
@@ -220,7 +220,7 @@ public static class DerivativesHelper
 	/// <param name="strike">Strike.</param>
 	/// <param name="expirationDate">The date of the option expiration.</param>
 	/// <returns>The Call option.</returns>
-	public static Security GetCall(this Security future, ISecurityProvider provider, decimal strike, DateTimeOffset expirationDate)
+	public static Security GetCall(this Security future, ISecurityProvider provider, decimal strike, DateTime expirationDate)
 	{
 		return future.GetOption(provider, strike, expirationDate, OptionTypes.Call);
 	}
@@ -233,7 +233,7 @@ public static class DerivativesHelper
 	/// <param name="strike">Strike.</param>
 	/// <param name="expirationDate">The date of the option expiration.</param>
 	/// <returns>The Put option.</returns>
-	public static Security GetPut(this Security future, ISecurityProvider provider, decimal strike, DateTimeOffset expirationDate)
+	public static Security GetPut(this Security future, ISecurityProvider provider, decimal strike, DateTime expirationDate)
 	{
 		return future.GetOption(provider, strike, expirationDate, OptionTypes.Put);
 	}
@@ -247,7 +247,7 @@ public static class DerivativesHelper
 	/// <param name="expirationDate">The options expiration date.</param>
 	/// <param name="optionType">Option type.</param>
 	/// <returns>Options contract.</returns>
-	public static Security GetOption(this Security future, ISecurityProvider provider, decimal strike, DateTimeOffset expirationDate, OptionTypes optionType)
+	public static Security GetOption(this Security future, ISecurityProvider provider, decimal strike, DateTime expirationDate, OptionTypes optionType)
 	{
 		if (future == null)
 			throw new ArgumentNullException(nameof(future));
@@ -277,7 +277,7 @@ public static class DerivativesHelper
 	/// <param name="optionType">Option type.</param>
 	/// <param name="assetPrice">The current market price of the asset. It is used to calculate the main strike.</param>
 	/// <returns>The main strike.</returns>
-	public static Security GetCentralStrike(this Security underlyingAsset, ISecurityProvider securityProvider, DateTimeOffset expirationDate, OptionTypes optionType, decimal assetPrice)
+	public static Security GetCentralStrike(this Security underlyingAsset, ISecurityProvider securityProvider, DateTime expirationDate, OptionTypes optionType, decimal assetPrice)
 	{
 		return underlyingAsset.GetDerivatives(securityProvider, expirationDate).Filter(optionType).GetCentralStrike(assetPrice);
 	}
@@ -303,7 +303,7 @@ public static class DerivativesHelper
 	/// <param name="underlyingAsset">Underlying asset.</param>
 	/// <param name="expirationDate">The options expiration date (to specify a particular series).</param>
 	/// <returns>The strike step size.</returns>
-	public static decimal GetStrikeStep(this Security underlyingAsset, ISecurityProvider provider, DateTimeOffset? expirationDate = null)
+	public static decimal GetStrikeStep(this Security underlyingAsset, ISecurityProvider provider, DateTime? expirationDate = null)
 	{
 		var group = underlyingAsset
 			.GetDerivatives(provider, expirationDate)
@@ -460,7 +460,7 @@ public static class DerivativesHelper
 		return currentPrice - option.GetIntrinsicValue(assetPrice);
 	}
 
-	internal static DateTimeOffset GetExpirationTime(this Security security, IExchangeInfoProvider provider)
+	internal static DateTime GetExpirationTime(this Security security, IExchangeInfoProvider provider)
 	{
 		if (security == null)
 			throw new ArgumentNullException(nameof(security));
@@ -489,7 +489,7 @@ public static class DerivativesHelper
 	/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 	/// <param name="currentTime">The current time.</param>
 	/// <returns><see langword="true" /> if the instrument has finished its action.</returns>
-	public static bool IsExpired(this Security security, IExchangeInfoProvider exchangeInfoProvider, DateTimeOffset currentTime)
+	public static bool IsExpired(this Security security, IExchangeInfoProvider exchangeInfoProvider, DateTime currentTime)
 	{
 		return security.GetExpirationTime(exchangeInfoProvider) <= currentTime;
 	}
@@ -520,7 +520,7 @@ public static class DerivativesHelper
 			return new Security
 			{
 				UnderlyingSecurityId = groups["code"].Value,
-				ExpiryDate = groups["expiryDate"].Value.ToDateTime("ddMMyy").ApplyTimeZone(board.TimeZone),
+				ExpiryDate = groups["expiryDate"].Value.ToDateTime("ddMMyy").UtcKind(),
 				OptionType = groups["optionType"].Value == "C" ? OptionTypes.Call : OptionTypes.Put,
 				Strike = decimal.Parse(groups["strike"].Value, CultureInfo.InvariantCulture),
 			};
@@ -572,7 +572,7 @@ public static class DerivativesHelper
 			{
 				SecurityCode = optionMatch.Groups["code"].Value + _futureMonthCodes[month] + yearStr.Last(),
 			},
-			ExpiryDate = new DateTime(2000 + yearStr.To<int>(), month, 1).ApplyTimeZone(board.TimeZone),
+			ExpiryDate = new DateTime(2000 + yearStr.To<int>(), month, 1).UtcKind(),
 			Name = futureName,
 		};
 	}
@@ -588,7 +588,7 @@ public static class DerivativesHelper
 	/// <param name="riskFree">The risk free interest rate.</param>
 	/// <param name="dividend">The dividend amount on shares.</param>
 	/// <returns>The order book volatility.</returns>
-	public static QuoteChangeMessage ImpliedVolatility(this IOrderBookMessage depth, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider, DateTimeOffset currentTime, decimal riskFree = 0, decimal dividend = 0)
+	public static QuoteChangeMessage ImpliedVolatility(this IOrderBookMessage depth, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider, DateTime currentTime, decimal riskFree = 0, decimal dividend = 0)
 	{
 		if (depth == null)
 			throw new ArgumentNullException(nameof(depth));
@@ -603,7 +603,7 @@ public static class DerivativesHelper
 	/// <param name="model">The model for calculating Greeks values by the Black-Scholes formula.</param>
 	/// <param name="currentTime">The current time.</param>
 	/// <returns>The order book volatility.</returns>
-	public static QuoteChangeMessage ImpliedVolatility(this IOrderBookMessage depth, IBlackScholes model, DateTimeOffset currentTime)
+	public static QuoteChangeMessage ImpliedVolatility(this IOrderBookMessage depth, IBlackScholes model, DateTime currentTime)
 	{
 		if (depth == null)
 			throw new ArgumentNullException(nameof(depth));
@@ -632,7 +632,7 @@ public static class DerivativesHelper
 	/// <param name="expirationTime">The option expiration time.</param>
 	/// <param name="currentTime">The current time.</param>
 	/// <returns>The option period before expiration. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
-	public static double? GetExpirationTimeLine(DateTimeOffset expirationTime, DateTimeOffset currentTime)
+	public static double? GetExpirationTimeLine(DateTime expirationTime, DateTime currentTime)
 	{
 		return GetExpirationTimeLine(expirationTime, currentTime, TimeSpan.FromDays(365));
 	}
@@ -644,7 +644,7 @@ public static class DerivativesHelper
 	/// <param name="currentTime">The current time.</param>
 	/// <param name="timeLine">The length of the total period.</param>
 	/// <returns>The option period before expiration. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
-	public static double? GetExpirationTimeLine(DateTimeOffset expirationTime, DateTimeOffset currentTime, TimeSpan timeLine)
+	public static double? GetExpirationTimeLine(DateTime expirationTime, DateTime currentTime, TimeSpan timeLine)
 	{
 		var retVal = expirationTime - currentTime;
 

@@ -10,7 +10,7 @@ namespace StockSharp.Algo.Risk;
 	GroupName = LocalizedStrings.OrdersKey)]
 public class RiskOrderFreqRule : RiskRule
 {
-	private DateTimeOffset? _endTime;
+	private DateTime? _endTime;
 	private int _current;
 
 	/// <inheritdoc />

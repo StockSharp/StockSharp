@@ -14,7 +14,7 @@ namespace StockSharp.Algo.Statistics;
 	GroupName = LocalizedStrings.PnLKey,
 	Order = 3
 )]
-public class MaxProfitDateParameter(MaxProfitParameter underlying) : BasePnLStatisticParameter<DateTimeOffset>(StatisticParameterTypes.MaxProfitDate)
+public class MaxProfitDateParameter(MaxProfitParameter underlying) : BasePnLStatisticParameter<DateTime>(StatisticParameterTypes.MaxProfitDate)
 {
 	private readonly MaxProfitParameter _underlying = underlying ?? throw new ArgumentNullException(nameof(underlying));
 	private decimal _prevValue;
@@ -27,7 +27,7 @@ public class MaxProfitDateParameter(MaxProfitParameter underlying) : BasePnLStat
 	}
 
 	/// <inheritdoc />
-	public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+	public override void Add(DateTime marketTime, decimal pnl, decimal? commission)
 	{
 		if (_prevValue < _underlying.Value)
 		{

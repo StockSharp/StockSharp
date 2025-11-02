@@ -9,7 +9,7 @@ namespace StockSharp.Samples.Strategies.HistoryMarketRule
 {
 	public class SimpleTradeRulesStrategy : Strategy
 	{
-		protected override void OnStarted(DateTimeOffset time)
+		protected override void OnStarted2(DateTime time)
 		{
 			var sub = new Subscription(DataType.Ticks, Security);
 
@@ -30,7 +30,7 @@ namespace StockSharp.Samples.Strategies.HistoryMarketRule
 			// Sending request for subscribe to market data.
 			Subscribe(sub);
 
-			base.OnStarted(time);
+			base.OnStarted2(time);
 		}
 	}
 }

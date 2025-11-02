@@ -104,7 +104,7 @@ public class PositionDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
-	protected override void OnStart(DateTimeOffset time)
+	protected override void OnStart(DateTime time)
 	{
 		ResetFlushPriority();
 
@@ -190,7 +190,7 @@ public class PositionDiagramElement : DiagramElement
 	private bool _isFlushing;
 
 	/// <inheritdoc />
-	public override void Flush(DateTimeOffset time)
+	public override void Flush(DateTime time)
 	{
 		if (_isFlushing)
 			return;
@@ -254,7 +254,7 @@ public class PositionDiagramElement : DiagramElement
 		Strategy.Flush(portfolio);
 	}
 
-	private void OnProcessSecurity(DiagramSocketValue value, DateTimeOffset time)
+	private void OnProcessSecurity(DiagramSocketValue value, DateTime time)
 	{
 		if (IsMoney)
 			return;

@@ -43,7 +43,7 @@ public class RemoteFileMessage : BaseSubscriptionIdMessage<RemoteFileMessage>, I
 	/// Date.
 	/// </summary>
 	[DataMember]
-	public DateTimeOffset Date { get; set; }
+	public DateTime Date { get; set; }
 
 	/// <summary>
 	/// Storage format.

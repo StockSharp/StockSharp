@@ -14,7 +14,7 @@ namespace StockSharp.Algo.Statistics;
 	GroupName = LocalizedStrings.PnLKey,
 	Order = 6
 )]
-public class MaxDrawdownDateParameter(MaxDrawdownParameter underlying) : BasePnLStatisticParameter<DateTimeOffset>(StatisticParameterTypes.MaxDrawdownDate)
+public class MaxDrawdownDateParameter(MaxDrawdownParameter underlying) : BasePnLStatisticParameter<DateTime>(StatisticParameterTypes.MaxDrawdownDate)
 {
 	private readonly MaxDrawdownParameter _underlying = underlying ?? throw new ArgumentNullException(nameof(underlying));
 	private decimal _prevValue;
@@ -27,7 +27,7 @@ public class MaxDrawdownDateParameter(MaxDrawdownParameter underlying) : BasePnL
 	}
 
 	/// <inheritdoc />
-	public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+	public override void Add(DateTime marketTime, decimal pnl, decimal? commission)
 	{
 		if (_prevValue < _underlying.Value)
 		{

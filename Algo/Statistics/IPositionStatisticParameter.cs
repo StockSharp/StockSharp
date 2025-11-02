@@ -10,5 +10,5 @@ public interface IPositionStatisticParameter : IStatisticParameter
 	/// </summary>
 	/// <param name="marketTime">The exchange time.</param>
 	/// <param name="position">The new position value.</param>
-	void Add(DateTimeOffset marketTime, decimal position);
+	void Add(DateTime marketTime, decimal position);
 }

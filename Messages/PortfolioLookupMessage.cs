@@ -35,7 +35,7 @@ public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessa
 		Name = LocalizedStrings.FromKey,
 		Description = LocalizedStrings.StartDateDescKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset? From { get; set; }
+	public DateTime? From { get; set; }
 
 	/// <inheritdoc />
 	[DataMember]
@@ -44,7 +44,7 @@ public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessa
 		Name = LocalizedStrings.UntilKey,
 		Description = LocalizedStrings.ToDateDescKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset? To { get; set; }
+	public DateTime? To { get; set; }
 
 	/// <inheritdoc />
 	[DataMember]

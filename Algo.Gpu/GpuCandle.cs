@@ -13,10 +13,10 @@
 /// <param name="close">Close price.</param>
 /// <param name="volume">Candle volume.</param>
 [StructLayout(LayoutKind.Sequential)]
-public struct GpuCandle(DateTimeOffset time, decimal open, decimal high, decimal low, decimal close, decimal volume)
+public struct GpuCandle(DateTime time, decimal open, decimal high, decimal low, decimal close, decimal volume)
 {
 	/// <summary>
-	/// Candle time as <see cref="DateTimeOffset.Ticks"/>.
+	/// Candle time as <see cref="DateTime.Ticks"/>.
 	/// </summary>
 	public long Time = time.Ticks;
 

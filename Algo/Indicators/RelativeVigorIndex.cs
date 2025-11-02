@@ -65,7 +65,7 @@ public class RelativeVigorIndex : BaseComplexIndicator<IRelativeVigorIndexValue>
 	public override string ToString() => base.ToString() + $" A={Average.Length} S={Signal.Length}";
 
 	/// <inheritdoc />
-	protected override IRelativeVigorIndexValue CreateValue(DateTimeOffset time)
+	protected override IRelativeVigorIndexValue CreateValue(DateTime time)
 		=> new RelativeVigorIndexValue(this, time);
 }
 
@@ -105,7 +105,7 @@ public interface IRelativeVigorIndexValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent Relative Vigor Index indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class RelativeVigorIndexValue(RelativeVigorIndex indicator, DateTimeOffset time) : ComplexIndicatorValue<RelativeVigorIndex>(indicator, time), IRelativeVigorIndexValue
+public class RelativeVigorIndexValue(RelativeVigorIndex indicator, DateTime time) : ComplexIndicatorValue<RelativeVigorIndex>(indicator, time), IRelativeVigorIndexValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue AverageValue => this[TypedIndicator.Average];

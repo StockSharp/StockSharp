@@ -317,7 +317,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 				}
 				else
 				{
-					var now = CurrentTime;
+					var now = CurrentTimeUtc;
 
 					if (message.From > now)
 					{

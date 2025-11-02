@@ -10,7 +10,7 @@ public class ZigZagIndicatorValue : ShiftedIndicatorValue
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public ZigZagIndicatorValue(IIndicator indicator, DateTimeOffset time)
+	public ZigZagIndicatorValue(IIndicator indicator, DateTime time)
 		: base(indicator, time)
 	{
 	}
@@ -23,7 +23,7 @@ public class ZigZagIndicatorValue : ShiftedIndicatorValue
 	/// <param name="shift">The shift of the indicator value.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
 	/// <param name="isUp"><see cref="IsUp"/></param>
-	public ZigZagIndicatorValue(IIndicator indicator, decimal value, int shift, DateTimeOffset time, bool isUp)
+	public ZigZagIndicatorValue(IIndicator indicator, decimal value, int shift, DateTime time, bool isUp)
 		: base(indicator, value, shift, time)
 	{
 		IsUp = isUp;

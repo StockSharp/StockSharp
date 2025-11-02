@@ -54,7 +54,7 @@ public class MessageByLocalTimeQueue : BaseMessageQueue
 	}
 
 	/// <inheritdoc />
-	public override void Enqueue(Message message) => Enqueue((message.LocalTime.UtcTicks, message), message.Forced);
+	public override void Enqueue(Message message) => Enqueue((message.LocalTime.Ticks, message), message.Forced);
 }
 
 /// <summary>

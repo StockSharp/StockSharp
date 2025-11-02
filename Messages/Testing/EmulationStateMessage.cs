@@ -8,12 +8,12 @@ public class EmulationStateMessage : Message, IErrorMessage
 	/// <summary>
 	/// Date in history for starting the paper trading.
 	/// </summary>
-	public DateTimeOffset StartDate { get; set; }
+	public DateTime StartDate { get; set; }
 
 	/// <summary>
 	/// Date in history to stop the paper trading (date is included).
 	/// </summary>
-	public DateTimeOffset StopDate { get; set; }
+	public DateTime StopDate { get; set; }
 
 	/// <summary>
 	/// State.

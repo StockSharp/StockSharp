@@ -6,7 +6,7 @@ namespace StockSharp.Algo.Testing;
 public class HistoryMessageAdapter : MessageAdapter
 {
 	private readonly Dictionary<(SecurityId secId, DataType dataType), (MarketDataGenerator generator, long transId)> _generators = [];
-	private readonly Dictionary<(SecurityId secId, DataType dataType), Func<DateTimeOffset, IEnumerable<Message>>> _historySources = [];
+	private readonly Dictionary<(SecurityId secId, DataType dataType), Func<DateTime, IEnumerable<Message>>> _historySources = [];
 
 	private readonly List<Tuple<IMarketDataStorage, long>> _actions = [];
 	private readonly SyncObject _moveNextSyncRoot = new();
@@ -93,8 +93,8 @@ public class HistoryMessageAdapter : MessageAdapter
 	{
 		SecurityProvider = securityProvider;
 
-		StartDate = DateTimeOffset.MinValue;
-		StopDate = DateTimeOffset.MaxValue;
+		StartDate = DateTime.MinValue;
+		StopDate = DateTime.MaxValue;
 
 		this.AddMarketDataSupport();
 		this.AddSupportedMessage(MessageTypes.EmulationState, null);
@@ -105,12 +105,12 @@ public class HistoryMessageAdapter : MessageAdapter
 	/// <summary>
 	/// Date in history for starting the paper trading.
 	/// </summary>
-	public DateTimeOffset StartDate { get; set; }
+	public DateTime StartDate { get; set; }
 
 	/// <summary>
 	/// Date in history to stop the paper trading (date is included).
 	/// </summary>
-	public DateTimeOffset StopDate { get; set; }
+	public DateTime StopDate { get; set; }
 
 	/// <summary>
 	/// Check loading dates are they tradable.
@@ -142,10 +142,10 @@ public class HistoryMessageAdapter : MessageAdapter
 		return OrderLogMarketDepthBuilders[securityId];
 	}
 
-	private DateTimeOffset _currentTime;
+	private DateTime _currentTime;
 
 	/// <inheritdoc />
-	public override DateTimeOffset CurrentTime => _currentTime;
+	public override DateTime CurrentTimeUtc => _currentTime;
 
 	/// <inheritdoc />
 	public override bool UseOutChannel => false;
@@ -163,7 +163,7 @@ public class HistoryMessageAdapter : MessageAdapter
 	private readonly Dictionary<SecurityId, HashSet<DataType>> _supportedMarketDataTypes = [];
 
 	/// <inheritdoc />
-	public override IEnumerable<DataType> GetSupportedMarketDataTypes(SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
+	public override IEnumerable<DataType> GetSupportedMarketDataTypes(SecurityId securityId, DateTime? from, DateTime? to)
 	{
 		return _supportedMarketDataTypes.SafeAdd(securityId, key =>
 		{
@@ -375,9 +375,9 @@ public class HistoryMessageAdapter : MessageAdapter
 			return;
 		}
 
-		Func<DateTimeOffset, IEnumerable<Message>> GetHistorySource()
+		Func<DateTime, IEnumerable<Message>> GetHistorySource()
 		{
-			Func<DateTimeOffset, IEnumerable<Message>> GetHistorySource2(SecurityId s)
+			Func<DateTime, IEnumerable<Message>> GetHistorySource2(SecurityId s)
 				=> _historySources.TryGetValue((s, dataType));
 
 			return GetHistorySource2(securityId) ?? GetHistorySource2(default);
@@ -515,7 +515,7 @@ public class HistoryMessageAdapter : MessageAdapter
 	/// </summary>
 	/// <param name="startDateTime">Datetime in history for starting the paper trading.</param>
 	/// <param name="stopDateTime">Datetime in history to stop the paper trading (date is included).</param>
-	private void Start(DateTimeOffset startDateTime, DateTimeOffset stopDateTime)
+	private void Start(DateTime startDateTime, DateTime stopDateTime)
 	{
 		_isStarted = true;
 
@@ -554,8 +554,8 @@ public class HistoryMessageAdapter : MessageAdapter
 
 						var currentTime = _currentTime == default ? startDateTime : _currentTime;
 
-						var loadDateInUtc = currentTime.UtcDateTime.Date;
-						var stopDateInUtc = stopDateTime.UtcDateTime.Date;
+						var loadDateInUtc = currentTime.Date;
+						var stopDateInUtc = stopDateTime.Date;
 
 						var checkDates = CheckTradableDates && boards.Length > 0;
 
@@ -629,7 +629,7 @@ public class HistoryMessageAdapter : MessageAdapter
 		_syncRoot.PulseSignal();
 	}
 
-	private void EnqueueMessages(DateTimeOffset fromTime, DateTimeOffset toTime, DateTimeOffset curTime, IEnumerable<Message> messages, CancellationToken token)
+	private void EnqueueMessages(DateTime fromTime, DateTime toTime, DateTime curTime, IEnumerable<Message> messages, CancellationToken token)
 	{
 		foreach (var msg in messages)
 		{
@@ -657,7 +657,7 @@ public class HistoryMessageAdapter : MessageAdapter
 		}
 	}
 
-	private static IEnumerable<(BoardMessage, Range<TimeSpan>)> GetOrderedRanges(BoardMessage[] boards, DateTimeOffset date)
+	private static IEnumerable<(BoardMessage, Range<TimeSpan>)> GetOrderedRanges(BoardMessage[] boards, DateTime date)
 	{
 		if (boards is null)
 			throw new ArgumentNullException(nameof(boards));
@@ -666,7 +666,7 @@ public class HistoryMessageAdapter : MessageAdapter
 			.Where(b => b.IsTradeDate(date, true))
 			.SelectMany(board =>
 			{
-				var period = board.WorkingTime.GetPeriod(date.ToLocalTime(board.TimeZone));
+				var period = board.WorkingTime.GetPeriod(date);
 
 				return period == null || period.Times.Count == 0
 					       ? [(board, new Range<TimeSpan>(TimeSpan.Zero, TimeHelper.LessOneDay))]
@@ -709,7 +709,7 @@ public class HistoryMessageAdapter : MessageAdapter
 	}
 
 	/*
-	private IEnumerable<TimeMessage> GetTimeLine(BoardMessage[] boards, DateTimeOffset date, TimeSpan interval)
+	private IEnumerable<TimeMessage> GetTimeLine(BoardMessage[] boards, DateTime date, TimeSpan interval)
 	{
 		var ranges = GetOrderedRanges(boards, date);
 		var lastTime = TimeSpan.Zero;
@@ -735,7 +735,7 @@ public class HistoryMessageAdapter : MessageAdapter
 	}
 	*/
 
-	private IEnumerable<TimeMessage> GetSimpleTimeLine(BoardMessage[] boards, DateTimeOffset date, TimeSpan interval)
+	private IEnumerable<TimeMessage> GetSimpleTimeLine(BoardMessage[] boards, DateTime date, TimeSpan interval)
 	{
 		var ranges = GetOrderedRanges(boards, date);
 		var lastTime = TimeSpan.Zero;
@@ -759,12 +759,12 @@ public class HistoryMessageAdapter : MessageAdapter
 		}
 	}
 
-	private static DateTimeOffset GetTime(DateTimeOffset date, TimeSpan timeOfDay)
+	private static DateTime GetTime(DateTime date, TimeSpan timeOfDay)
 	{
-		return (date.Date + timeOfDay).ApplyTimeZone(date.Offset);
+		return date.Date + timeOfDay;
 	}
 
-	private IEnumerable<TimeMessage> GetPostTradeTimeMessages(DateTimeOffset date, TimeSpan lastTime, TimeSpan interval)
+	private IEnumerable<TimeMessage> GetPostTradeTimeMessages(DateTime date, TimeSpan lastTime, TimeSpan interval)
 	{
 		for (var i = 0; i < PostTradeMarketTimeChangedCount; i++)
 		{

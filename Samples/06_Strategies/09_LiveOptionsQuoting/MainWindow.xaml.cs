@@ -364,9 +364,7 @@ public partial class MainWindow
 			ClearSmiles();
 
 			PosChart.Model = null;
-			//PosChart.Positions.Clear();
-			//PosChart.AssetPosition = null;
-			//PosChart.Refresh(1, 1, default(DateTimeOffset), default(DateTimeOffset));
+			//PosChart.Refresh(1, default, default);
 
 			Portfolio.Portfolios = new PortfolioDataSource(Connector);
 
@@ -387,7 +385,7 @@ public partial class MainWindow
 			PosChart.Refresh(trade.Price);
 	}
 
-	private void RefreshSmile(DateTimeOffset? time = null)
+	private void RefreshSmile(DateTime? time = null)
 	{
 		_model.Refresh(time);
 

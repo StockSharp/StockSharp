@@ -10,7 +10,7 @@ public class SuperTrendIndicatorValue : DecimalIndicatorValue
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="time">Value time.</param>
-	public SuperTrendIndicatorValue(IIndicator indicator, DateTimeOffset time)
+	public SuperTrendIndicatorValue(IIndicator indicator, DateTime time)
 		: base(indicator, time)
 	{
 	}
@@ -22,7 +22,7 @@ public class SuperTrendIndicatorValue : DecimalIndicatorValue
 	/// <param name="value">SuperTrend line value.</param>
 	/// <param name="isUpTrend">Trend direction.</param>
 	/// <param name="time">Value time.</param>
-	public SuperTrendIndicatorValue(IIndicator indicator, decimal value, bool isUpTrend, DateTimeOffset time)
+	public SuperTrendIndicatorValue(IIndicator indicator, decimal value, bool isUpTrend, DateTime time)
 		: base(indicator, value, time)
 	{
 		IsUpTrend = isUpTrend;

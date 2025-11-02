@@ -9,7 +9,7 @@ public class LatencyTests
 	public void RegisterLatencyCalculated()
 	{
 		var mgr = new LatencyManager();
-		var t0 = DateTimeOffset.UtcNow;
+		var t0 = DateTime.UtcNow;
 		var reg = new OrderRegisterMessage { TransactionId = 1, LocalTime = t0 };
 		mgr.ProcessMessage(reg).AssertNull();
 
@@ -31,7 +31,7 @@ public class LatencyTests
 	public void CancelLatencyCalculated()
 	{
 		var mgr = new LatencyManager();
-		var t0 = DateTimeOffset.UtcNow;
+		var t0 = DateTime.UtcNow;
 		var cancel = new OrderCancelMessage { TransactionId = 2, LocalTime = t0 };
 		mgr.ProcessMessage(cancel).AssertNull();
 
@@ -53,7 +53,7 @@ public class LatencyTests
 	public void ReplaceUsesOriginalIdForCancel()
 	{
 		var mgr = new LatencyManager();
-		var t0 = DateTimeOffset.UtcNow;
+		var t0 = DateTime.UtcNow;
 		var replace = new OrderReplaceMessage
 		{
 			TransactionId = 3,
@@ -89,7 +89,7 @@ public class LatencyTests
 	public void ResetClearsState()
 	{
 		var mgr = new LatencyManager();
-		var t0 = DateTimeOffset.UtcNow;
+		var t0 = DateTime.UtcNow;
 		var transId = 5L;
 		mgr.ProcessMessage(new OrderRegisterMessage { TransactionId = transId, LocalTime = t0 });
 		mgr.Reset();

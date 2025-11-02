@@ -158,7 +158,7 @@ public class KasePeakOscillator : BaseComplexIndicator<IKasePeakOscillatorValue>
 	public override string ToString() => base.ToString() + $" S={ShortPeriod} L={LongPeriod}";
 
 	/// <inheritdoc />
-	protected override IKasePeakOscillatorValue CreateValue(DateTimeOffset time)
+	protected override IKasePeakOscillatorValue CreateValue(DateTime time)
 		=> new KasePeakOscillatorValue(this, time);
 }
 
@@ -216,7 +216,7 @@ public interface IKasePeakOscillatorValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent KasePeakOscillator indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class KasePeakOscillatorValue(KasePeakOscillator indicator, DateTimeOffset time) : ComplexIndicatorValue<KasePeakOscillator>(indicator, time), IKasePeakOscillatorValue
+public class KasePeakOscillatorValue(KasePeakOscillator indicator, DateTime time) : ComplexIndicatorValue<KasePeakOscillator>(indicator, time), IKasePeakOscillatorValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue ShortTermValue => this[TypedIndicator.ShortTerm];

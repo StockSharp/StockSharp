@@ -5,7 +5,7 @@ public class SnapshotHolderTests : BaseTestClass
 {
 	private static readonly SecurityId _secId1 = "AAPL@NASDAQ".ToSecurityId();
 	private static readonly SecurityId _secId2 = "MSFT@NASDAQ".ToSecurityId();
-	private static readonly DateTimeOffset _now = DateTimeOffset.UtcNow;
+	private static readonly DateTime _now = DateTime.UtcNow;
 
 	#region Level1SnapshotHolder Tests
 

@@ -6,7 +6,7 @@ clr.AddReference("StockSharp.BusinessEntities")
 
 from StockSharp.Messages import ICandleMessage
 from StockSharp.Algo.Indicators import IndicatorHelper, IIndicator, IIndicatorValue
-from System import Decimal, DateTimeOffset
+from System import Decimal, DateTime
 
 def get_first_value(indicator):
     """
@@ -63,7 +63,7 @@ def process_value(indicator, value, time, is_final=True):
     Process the indicator with a numeric value.
     :param indicator: The indicator (IIndicator).
     :param value: The numeric value (Decimal).
-    :param time: The time of the value (DateTimeOffset).
+    :param time: The time of the value (DateTime).
     :param is_final: Whether the value is final (default is True).
     :return: The new value of the indicator (IIndicatorValue).
     """
@@ -98,7 +98,7 @@ def create_empty_value(indicator, time):
     """
     Create an empty IIndicatorValue.
     :param indicator: The indicator (IIndicator).
-    :param time: The time of the value (DateTimeOffset).
+    :param time: The time of the value (DateTime).
     :return: The empty indicator value (IIndicatorValue).
     """
     return IndicatorHelper.CreateEmptyValue(indicator, time)
@@ -108,7 +108,7 @@ def process_float(indicator, value, time, is_final=True):
     Process the indicator with a numeric value.
     :param indicator: The indicator (IIndicator).
     :param value: The numeric value (Decimal).
-    :param time: The time of the value (DateTimeOffset).
+    :param time: The time of the value (DateTime).
     :param is_final: Whether the value is final (default is True).
     :return: The new value of the indicator (IIndicatorValue).
     """

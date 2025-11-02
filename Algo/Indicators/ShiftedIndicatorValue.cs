@@ -10,7 +10,7 @@ public class ShiftedIndicatorValue : SingleIndicatorValue<decimal>
 	/// </summary>
 	/// <param name="indicator">Indicator.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public ShiftedIndicatorValue(IIndicator indicator, DateTimeOffset time)
+	public ShiftedIndicatorValue(IIndicator indicator, DateTime time)
 		: base(indicator, time)
 	{
 	}
@@ -22,7 +22,7 @@ public class ShiftedIndicatorValue : SingleIndicatorValue<decimal>
 	/// <param name="value">Indicator value.</param>
 	/// <param name="shift">The shift of the indicator value.</param>
 	/// <param name="time"><see cref="IIndicatorValue.Time"/></param>
-	public ShiftedIndicatorValue(IIndicator indicator, decimal value, int shift, DateTimeOffset time)
+	public ShiftedIndicatorValue(IIndicator indicator, decimal value, int shift, DateTime time)
 		: base(indicator, value, time)
 	{
 		Shift = shift;

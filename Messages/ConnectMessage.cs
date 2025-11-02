@@ -50,7 +50,7 @@ public class ConnectMessage : BaseConnectionMessage, IServerTimeMessage
 		return clone;
 	}
 
-	DateTimeOffset IServerTimeMessage.ServerTime
+	DateTime IServerTimeMessage.ServerTime
 	{
 		get => LocalTime;
 		set => LocalTime = value;

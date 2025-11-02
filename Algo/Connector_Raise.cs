@@ -34,13 +34,13 @@ partial class Connector
 	public event Action<long> MassOrderCanceled;
 
 	/// <inheritdoc />
-	public event Action<long, DateTimeOffset> MassOrderCanceled2;
+	public event Action<long, DateTime> MassOrderCanceled2;
 
 	/// <inheritdoc />
 	public event Action<long, Exception> MassOrderCancelFailed;
 
 	/// <inheritdoc />
-	public event Action<long, Exception, DateTimeOffset> MassOrderCancelFailed2;
+	public event Action<long, Exception, DateTime> MassOrderCancelFailed2;
 
 	/// <inheritdoc />
 	[Obsolete("Use PortfolioReceived event.")]
@@ -105,7 +105,7 @@ partial class Connector
 	public event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, IEnumerable<Portfolio>, Exception> LookupPortfoliosResult2;
 
 	/// <inheritdoc />
-	public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged;
+	public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTime, DateTime> ValuesChanged;
 
 	/// <inheritdoc />
 	public event Action<Subscription, Level1ChangeMessage> Level1Received;
@@ -223,13 +223,13 @@ partial class Connector
 		RaiseOrderFailed(nameof(OrderEditFailed), transactionId, fail, OrderEditFailed);
 	}
 
-	private void RaiseMassOrderCanceled(long transactionId, DateTimeOffset time)
+	private void RaiseMassOrderCanceled(long transactionId, DateTime time)
 	{
 		MassOrderCanceled?.Invoke(transactionId);
 		MassOrderCanceled2?.Invoke(transactionId, time);
 	}
 
-	private void RaiseMassOrderCancelFailed(long transactionId, Exception error, DateTimeOffset time)
+	private void RaiseMassOrderCancelFailed(long transactionId, Exception error, DateTime time)
 	{
 		MassOrderCancelFailed?.Invoke(transactionId, error);
 		MassOrderCancelFailed2?.Invoke(transactionId, error, time);
@@ -540,7 +540,7 @@ partial class Connector
 		_newOutMessage?.Invoke(message);
 	}
 
-	private void RaiseValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTimeOffset localTime)
+	private void RaiseValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTime serverTime, DateTime localTime)
 	{
 		ValuesChanged?.Invoke(security, changes, serverTime, localTime);
 	}

@@ -30,7 +30,7 @@ public class PositionTests
 			Side = Sides.Buy,
 			OrderVolume = 10,
 			Balance = 7,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 		});
 
 		change.AssertNotNull();
@@ -60,7 +60,7 @@ public class PositionTests
 			PortfolioName = "pf",
 			Side = Sides.Buy,
 			TradeVolume = 2,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 		});
 
 		change.AssertNotNull();
@@ -93,7 +93,7 @@ public class PositionTests
 			Side = Sides.Buy,
 			OrderVolume = 10,
 			Balance = 7,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 		});
 
 		manager.ProcessMessage(new ResetMessage());
@@ -108,7 +108,7 @@ public class PositionTests
 			Side = Sides.Buy,
 			OrderVolume = 10,
 			Balance = 5,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 		});
 
 		change.AssertNull();
@@ -139,7 +139,7 @@ public class PositionTests
 			Side = Sides.Buy,
 			OrderVolume = 10,
 			Balance = 7,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 		});
 
 		change.AssertNotNull();
@@ -174,7 +174,7 @@ public class PositionTests
 			OrderVolume = reg.Volume,
 			Balance = 0,
 			OrderState = OrderStates.Done,
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 		});
 		first.AssertNotNull();
 		first.Changes[PositionChangeTypes.CurrentValue].To<decimal>().AssertEqual(10m);
@@ -186,7 +186,7 @@ public class PositionTests
 			HasOrderInfo = true,
 			OriginalTransactionId = reg.TransactionId,
 			Balance = 1, // bogus balance after completion
-			ServerTime = DateTimeOffset.UtcNow,
+			ServerTime = DateTime.UtcNow,
 		});
 
 		afterComplete.AssertNull();
@@ -237,7 +237,7 @@ public class PositionTests
 			Side = Sides.Buy,
 			TradeVolume = 1m,
 			SecurityId = secId,
-			ServerTime = DateTimeOffset.UtcNow
+			ServerTime = DateTime.UtcNow
 		});
 
 		output.Count.AssertEqual(1);

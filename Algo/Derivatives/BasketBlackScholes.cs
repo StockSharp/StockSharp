@@ -124,44 +124,44 @@ public class BasketBlackScholes : BlackScholes
 	}
 
 	/// <inheritdoc />
-	public override decimal? Delta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	public override decimal? Delta(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
 		var pos = PositionProvider.Positions.Where(p => p.Security == UnderlyingAsset).Sum(p => p.CurrentValue);
 		return ProcessOptions(bs => bs.Delta(currentTime, deviation, assetPrice)) + pos;
 	}
 
 	/// <inheritdoc />
-	public override decimal? Gamma(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	public override decimal? Gamma(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
 		return ProcessOptions(bs => bs.Gamma(currentTime, deviation, assetPrice));
 	}
 
 	/// <inheritdoc />
-	public override decimal? Vega(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	public override decimal? Vega(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
 		return ProcessOptions(bs => bs.Vega(currentTime, deviation, assetPrice));
 	}
 
 	/// <inheritdoc />
-	public override decimal? Theta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	public override decimal? Theta(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
 		return ProcessOptions(bs => bs.Theta(currentTime, deviation, assetPrice));
 	}
 
 	/// <inheritdoc />
-	public override decimal? Rho(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	public override decimal? Rho(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
 		return ProcessOptions(bs => bs.Rho(currentTime, deviation, assetPrice));
 	}
 
 	/// <inheritdoc />
-	public override decimal? Premium(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	public override decimal? Premium(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
 		return ProcessOptions(bs => bs.Premium(currentTime, deviation, assetPrice));
 	}
 
 	/// <inheritdoc />
-	public override decimal? ImpliedVolatility(DateTimeOffset currentTime, decimal premium)
+	public override decimal? ImpliedVolatility(DateTime currentTime, decimal premium)
 	{
 		return ProcessOptions(bs => bs.ImpliedVolatility(currentTime, premium), false);
 	}

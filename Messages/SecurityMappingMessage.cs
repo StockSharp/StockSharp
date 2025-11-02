@@ -37,16 +37,16 @@ public class SecurityMappingMessage : Message, ISubscriptionMessage
 	bool ISubscriptionMessage.FilterEnabled => false;
 	bool ISubscriptionMessage.SpecificItemRequest => false;
 
-	DateTimeOffset? ISubscriptionMessage.From
+	DateTime? ISubscriptionMessage.From
 	{
 		get => null;
 		set { }
 	}
 
-	DateTimeOffset? ISubscriptionMessage.To
+	DateTime? ISubscriptionMessage.To
 	{
 		// prevent for online mode
-		get => DateTimeOffset.MaxValue;
+		get => DateTime.MaxValue;
 		set { }
 	}
 

@@ -30,12 +30,12 @@ public class OrderFail : IErrorMessage, ILocalTimeMessage, IServerTimeMessage, I
 	/// Server time.
 	/// </summary>
 	[DataMember]
-	public DateTimeOffset ServerTime { get; set; }
+	public DateTime ServerTime { get; set; }
 
 	/// <summary>
 	/// Local time, when the error has been received.
 	/// </summary>
-	public DateTimeOffset LocalTime { get; set; }
+	public DateTime LocalTime { get; set; }
 
 	/// <summary>
 	/// Sequence number.

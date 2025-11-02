@@ -14,7 +14,7 @@ public class ProtectiveProcessor
 	private readonly ILogReceiver _logs;
 	private readonly Sides _protectiveSide;
 
-	private readonly DateTimeOffset _startedTime;
+	private readonly DateTime _startedTime;
 	private decimal? _prevCurrPrice;
 	private decimal _prevBestPrice;
 
@@ -31,7 +31,7 @@ public class ProtectiveProcessor
 	/// <param name="timeout">Time limit. If protection has not worked by this time, the position will be closed on the market.</param>
 	/// <param name="startedTime">The time when the protective strategy was started.</param>
 	/// <param name="logs">The log source.</param>
-	public ProtectiveProcessor(Sides protectiveSide, decimal protectivePrice, bool isUpTrend, bool isTrailing, Unit protectiveLevel, bool useMarketOrders, Unit priceOffset, TimeSpan timeout, DateTimeOffset startedTime, ILogReceiver logs)
+	public ProtectiveProcessor(Sides protectiveSide, decimal protectivePrice, bool isUpTrend, bool isTrailing, Unit protectiveLevel, bool useMarketOrders, Unit priceOffset, TimeSpan timeout, DateTime startedTime, ILogReceiver logs)
 	{
 		if (protectivePrice <= 0)
 			throw new ArgumentOutOfRangeException(nameof(protectivePrice), protectivePrice, LocalizedStrings.InvalidValue);
@@ -61,7 +61,7 @@ public class ProtectiveProcessor
 	/// <param name="currentPrice">The current price of the security. If the price is equal to <see langword="null" />, then the activation is not required.</param>
 	/// <param name="currentTime">The current time.</param>
 	/// <returns>If the price is equal to <see langword="null" /> then the activation is not required.</returns>
-	public decimal? GetActivationPrice(decimal? currentPrice, DateTimeOffset currentTime)
+	public decimal? GetActivationPrice(decimal? currentPrice, DateTime currentTime)
 	{
 		if (currentPrice is decimal currPriceDec2)
 			_prevCurrPrice = currPriceDec2;

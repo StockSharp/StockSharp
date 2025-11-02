@@ -10,7 +10,7 @@ namespace StockSharp.Algo.Risk;
 	GroupName = LocalizedStrings.PositionsKey)]
 public class RiskPositionTimeRule : RiskRule
 {
-	private readonly Dictionary<Tuple<SecurityId, string>, DateTimeOffset> _posOpenTime = [];
+	private readonly Dictionary<Tuple<SecurityId, string>, DateTime> _posOpenTime = [];
 	private TimeSpan _time;
 
 	/// <summary>

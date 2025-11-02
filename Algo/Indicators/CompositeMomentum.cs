@@ -124,7 +124,7 @@ public class CompositeMomentum : BaseComplexIndicator<ICompositeMomentumValue>
 	}
 
 	/// <inheritdoc />
-	protected override ICompositeMomentumValue CreateValue(DateTimeOffset time)
+	protected override ICompositeMomentumValue CreateValue(DateTime time)
 		=> new CompositeMomentumValue(this, time);
 }
 
@@ -177,7 +177,7 @@ public interface ICompositeMomentumValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent CompositeMomentum indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class CompositeMomentumValue(CompositeMomentum indicator, DateTimeOffset time) : ComplexIndicatorValue<CompositeMomentum>(indicator, time), ICompositeMomentumValue
+public class CompositeMomentumValue(CompositeMomentum indicator, DateTime time) : ComplexIndicatorValue<CompositeMomentum>(indicator, time), ICompositeMomentumValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue SmaValue => this[TypedIndicator.Sma];

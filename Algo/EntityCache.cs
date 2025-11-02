@@ -92,7 +92,7 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 			if (message.OrderState != null)
 				order.ApplyNewState(message.OrderState.Value, _parent._logReceiver);
 
-			if (order.Time == DateTimeOffset.MinValue)
+			if (order.Time == DateTime.MinValue)
 				order.Time = message.ServerTime;
 
 			// для новых заявок используем серверное время,
@@ -941,7 +941,7 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 		private readonly SyncObject _sync = new();
 		private readonly Level1ChangeMessage _snapshot;
 
-		public Level1Info(SecurityId securityId, DateTimeOffset serverTime)
+		public Level1Info(SecurityId securityId, DateTime serverTime)
 		{
 			_snapshot = new Level1ChangeMessage
 			{
@@ -968,7 +968,7 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 			}
 		}
 
-		public void SetValue(DateTimeOffset serverTime, Level1Fields field, object value)
+		public void SetValue(DateTime serverTime, Level1Fields field, object value)
 		{
 			lock (_sync)
 			{
@@ -989,7 +989,7 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 				_snapshot.Changes.Remove(field);
 		}
 
-		public void ClearBestQuotes(DateTimeOffset serverTime)
+		public void ClearBestQuotes(DateTime serverTime)
 		{
 			lock (_sync)
 			{
@@ -1005,7 +1005,7 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 			}
 		}
 
-		public void ClearLastTrade(DateTimeOffset serverTime)
+		public void ClearLastTrade(DateTime serverTime)
 		{
 			lock (_sync)
 			{
@@ -1045,7 +1045,7 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 	public bool HasLevel1Info(Security security)
 		=> _securityValues.ContainsKey(security);
 
-	public Level1Info GetSecurityValues(Security security, DateTimeOffset serverTime)
+	public Level1Info GetSecurityValues(Security security, DateTime serverTime)
 		=> _securityValues.SafeAdd(security, key => new Level1Info(security.ToSecurityId(), serverTime));
 
 	IEnumerable<Message> ISnapshotHolder.GetSnapshot(ISubscriptionMessage subscription)

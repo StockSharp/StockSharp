@@ -48,7 +48,7 @@ public class OrderLogCsvSerializer(SecurityId securityId, Encoding encoding) : C
 			data.TradeVolume.ToString()
 		]);
 
-		metaInfo.LastTime = data.ServerTime.UtcDateTime;
+		metaInfo.LastTime = data.ServerTime;
 		metaInfo.LastId = data.TransactionId;
 	}
 

@@ -120,9 +120,9 @@ public abstract class HedgeStrategy : Strategy
 	}
 
 	/// <inheritdoc />
-	protected override void OnStarted(DateTimeOffset time)
+	protected override void OnStarted2(DateTime time)
 	{
-		base.OnStarted(time);
+		base.OnStarted2(time);
 
 		BlackScholes.InnerModels.Clear();
 
@@ -152,7 +152,7 @@ public abstract class HedgeStrategy : Strategy
 					if (IsFormedAndOnlineAndAllowTrading())
 					{
 						LogInfo("Periodic rebalancing triggered");
-						RehedgePositions(CurrentTime);
+						RehedgePositions(CurrentTimeUtc);
 					}
 				})
 				.Apply(this);
@@ -165,7 +165,7 @@ public abstract class HedgeStrategy : Strategy
 				if (IsFormedAndOnlineAndAllowTrading() && !_isRebalancing)
 				{
 					LogInfo("Position change detected - checking if rehedging is needed");
-					RehedgePositions(CurrentTime);
+					RehedgePositions(CurrentTimeUtc);
 				}
 			})
 			.Apply(this);
@@ -182,13 +182,13 @@ public abstract class HedgeStrategy : Strategy
 	/// </summary>
 	/// <param name="currentTime">Current time for calculations.</param>
 	/// <returns>Enumeration of orders needed for rehedging.</returns>
-	protected abstract IEnumerable<Order> GetReHedgeOrders(DateTimeOffset currentTime);
+	protected abstract IEnumerable<Order> GetReHedgeOrders(DateTime currentTime);
 
 	/// <summary>
 	/// Rehedge positions based on current market conditions.
 	/// </summary>
 	/// <param name="currentTime">Current time for calculations.</param>
-	protected virtual void RehedgePositions(DateTimeOffset currentTime)
+	protected virtual void RehedgePositions(DateTime currentTime)
 	{
 		// Skip if already rebalancing
 		if (_isRebalancing || !IsFormedAndOnlineAndAllowTrading())

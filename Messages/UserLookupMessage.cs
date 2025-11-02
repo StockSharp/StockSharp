@@ -69,11 +69,11 @@ public class UserLookupMessage : BaseSubscriptionMessage
 
 	/// <inheritdoc />
 	[DataMember]
-	public override DateTimeOffset? From => null;
+	public override DateTime? From => null;
 
 	/// <inheritdoc />
 	[DataMember]
-	public override DateTimeOffset? To => DateTimeOffset.MaxValue /* prevent for online mode */;
+	public override DateTime? To => DateTime.MaxValue /* prevent for online mode */;
 
 	/// <inheritdoc />
 	[DataMember]

@@ -150,7 +150,7 @@ public class SecurityMessage : BaseSubscriptionIdMessage<SecurityMessage>, ISecu
 		Description = LocalizedStrings.ExpiryDateDescKey,
 		GroupName = LocalizedStrings.GeneralKey)]
 	//[Nullable]
-	public DateTimeOffset? ExpiryDate { get; set; }
+	public DateTime? ExpiryDate { get; set; }
 
 	/// <summary>
 	/// Settlement date for security (for derivatives and bonds).
@@ -162,7 +162,7 @@ public class SecurityMessage : BaseSubscriptionIdMessage<SecurityMessage>, ISecu
 		Description = LocalizedStrings.SettlementDateForSecurityKey,
 		GroupName = LocalizedStrings.GeneralKey)]
 	//[Nullable]
-	public DateTimeOffset? SettlementDate { get; set; }
+	public DateTime? SettlementDate { get; set; }
 
 	/// <summary>
 	/// Underlying asset on which the current security is built.
@@ -255,7 +255,7 @@ public class SecurityMessage : BaseSubscriptionIdMessage<SecurityMessage>, ISecu
 	/// Date of issue.
 	/// </summary>
 	[DataMember]
-	public DateTimeOffset? IssueDate { get; set; }
+	public DateTime? IssueDate { get; set; }
 
 	/// <summary>
 	/// Underlying security type.

@@ -120,7 +120,7 @@ public class NewsMessage : BaseSubscriptionIdMessage<NewsMessage>,
 		Name = LocalizedStrings.TimeKey,
 		Description = LocalizedStrings.NewsTimeKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public DateTimeOffset ServerTime { get; set; }
+	public DateTime ServerTime { get; set; }
 
 	/// <summary>
 	/// News link in the internet.
@@ -162,7 +162,7 @@ public class NewsMessage : BaseSubscriptionIdMessage<NewsMessage>,
 	/// Expiration date.
 	/// </summary>
 	[DataMember]
-	public DateTimeOffset? ExpiryDate { get; set; }
+	public DateTime? ExpiryDate { get; set; }
 
 	/// <inheritdoc />
 	public override DataType DataType => DataType.News;

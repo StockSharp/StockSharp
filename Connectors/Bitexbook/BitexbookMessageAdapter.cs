@@ -5,7 +5,7 @@ public partial class BitexbookMessageAdapter
 {
 	private HttpClient _httpClient;
 	private PusherClient _pusherClient;
-	private DateTimeOffset? _lastTimeBalanceCheck;
+	private DateTime? _lastTimeBalanceCheck;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BitexbookMessageAdapter"/>.
@@ -151,7 +151,7 @@ public partial class BitexbookMessageAdapter
 		}
 
 		if (BalanceCheckInterval > TimeSpan.Zero &&
-			(_lastTimeBalanceCheck == null || (CurrentTime - _lastTimeBalanceCheck) > BalanceCheckInterval))
+			(_lastTimeBalanceCheck == null || (CurrentTimeUtc - _lastTimeBalanceCheck) > BalanceCheckInterval))
 		{
 			await PortfolioLookupAsync(null, cancellationToken);
 		}

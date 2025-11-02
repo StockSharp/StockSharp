@@ -38,7 +38,7 @@ public class ImportTests : BaseTestClass
 			throw new ArgumentOutOfRangeException(nameof(dataType), dataType, "Unsupported data type for import test.");
 	}
 
-	private async Task Import<TValue>(DataType dataType, bool addSecId, IEnumerable<TValue> values, FieldMapping[] fields, TimeSpan truncate, int? exportCnt = default, int? importCnt = default, DateTimeOffset? lastTime2 = default)
+	private async Task Import<TValue>(DataType dataType, bool addSecId, IEnumerable<TValue> values, FieldMapping[] fields, TimeSpan truncate, int? exportCnt = default, int? importCnt = default, DateTime? lastTime2 = default)
 		where TValue : class
 	{
 		var arr = values.ToArray();

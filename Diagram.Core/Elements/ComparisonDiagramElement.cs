@@ -91,7 +91,7 @@ public sealed class ComparisonDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
-	protected override void OnProcess(DateTimeOffset time, IDictionary<DiagramSocket, DiagramSocketValue> values, DiagramSocketValue source)
+	protected override void OnProcess(DateTime time, IDictionary<DiagramSocket, DiagramSocketValue> values, DiagramSocketValue source)
 	{
 		if (Operator == null)
 			throw new InvalidOperationException(LocalizedStrings.NotInitializedParams.Put(LocalizedStrings.Comparison));
