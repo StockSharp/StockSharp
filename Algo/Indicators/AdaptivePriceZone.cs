@@ -149,7 +149,7 @@ public class AdaptivePriceZone : BaseComplexIndicator<IAdaptivePriceZoneValue>
 	}
 
 	/// <inheritdoc />
-	protected override IAdaptivePriceZoneValue CreateValue(DateTimeOffset time)
+	protected override IAdaptivePriceZoneValue CreateValue(DateTime time)
 		=> new AdaptivePriceZoneValue(this, time);
 }
 
@@ -216,7 +216,7 @@ public interface IAdaptivePriceZoneValue : IComplexIndicatorValue
 /// </remarks>
 /// <param name="indicator">The parent AdaptivePriceZone indicator.</param>
 /// <param name="time">Time associated with this indicator value.</param>
-public class AdaptivePriceZoneValue(AdaptivePriceZone indicator, DateTimeOffset time) : ComplexIndicatorValue<AdaptivePriceZone>(indicator, time), IAdaptivePriceZoneValue
+public class AdaptivePriceZoneValue(AdaptivePriceZone indicator, DateTime time) : ComplexIndicatorValue<AdaptivePriceZone>(indicator, time), IAdaptivePriceZoneValue
 {
 	/// <inheritdoc />
 	public IIndicatorValue MovingAverageValue => this[TypedIndicator.MovingAverage];
