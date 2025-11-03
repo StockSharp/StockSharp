@@ -1,5 +1,7 @@
 ﻿namespace StockSharp.Tests;
 
+using Ecng.Linq;
+
 using StockSharp.Algo.Candles.Compression;
 using StockSharp.Algo.Storages.Binary.Snapshot;
 
@@ -12,7 +14,7 @@ public class StorageTests
 	private const int _depthCount1 = 10;
 	private const int _depthCount2 = 1000;
 	private const int _depthCount3 = 10000;
-	private static readonly int[] _sourceArray = [01,02,03,06,07,08,09,10,13,14,15,16,17,20,21,22,23,24,27,28,29,30];
+	private static readonly int[] _sourceArray = [01, 02, 03, 06, 07, 08, 09, 10, 13, 14, 15, 16, 17, 20, 21, 22, 23, 24, 27, 28, 29, 30];
 
 	private static IStorageRegistry GetStorageRegistry()
 		=> Helper.GetStorage(Helper.GetSubTemp());
@@ -3284,5 +3286,268 @@ public class StorageTests
 
 		var loadedTypes = loadedIndex.GetAvailableDataTypes(secId, StorageFormats.Binary).ToArray();
 		loadedTypes.Length.AssertEqual(2);
+	}
+
+	private static LocalMarketDataDrive CreateDrive(string path = null)
+	{
+		return new(path ?? Helper.GetSubTemp());
+	}
+
+	private static Task SetupTestDataAsync(LocalMarketDataDrive drive, SecurityId securityId, DataType dataType, StorageFormats format, DateTime[] dates)
+	{
+		var storageDrive = drive.GetStorageDrive(securityId, dataType, format);
+
+		foreach (var date in dates)
+		{
+			using var stream = new MemoryStream();
+			using var writer = new BinaryWriter(stream);
+
+			// Write minimal valid data
+			stream.Position = 0;
+			storageDrive.SaveStream(date, stream);
+		}
+
+		return Task.CompletedTask;
+	}
+
+	[TestMethod]
+	public async Task GetAvailableSecuritiesAsync_EmptyDrive_ReturnsEmpty()
+	{
+		var drive = CreateDrive();
+
+		var securities = await drive.GetAvailableSecuritiesAsync(CancellationToken.None).ToArrayAsync2(CancellationToken.None);
+
+		securities.Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public async Task GetAvailableSecuritiesAsync_WithSecurities_ReturnsSecurities()
+	{
+		var drive = CreateDrive();
+		var security1 = new SecurityId { SecurityCode = "TEST1", BoardCode = BoardCodes.Test };
+		var security2 = new SecurityId { SecurityCode = "TEST2", BoardCode = BoardCodes.Test };
+		var dates = new[] { DateTime.UtcNow.Date };
+
+		await SetupTestDataAsync(drive, security1, DataType.Ticks, StorageFormats.Binary, dates);
+		await SetupTestDataAsync(drive, security2, DataType.Ticks, StorageFormats.Binary, dates);
+
+		var securities = await drive.GetAvailableSecuritiesAsync(CancellationToken.None).ToArrayAsync2(CancellationToken.None);
+
+		(securities.Length >= 2).AssertTrue();
+		securities.Any(s => s.SecurityCode == "TEST1" && s.BoardCode == BoardCodes.Test).AssertTrue();
+		securities.Any(s => s.SecurityCode == "TEST2" && s.BoardCode == BoardCodes.Test).AssertTrue();
+	}
+
+	[TestMethod]
+	public async Task GetAvailableSecuritiesAsync_CancellationRequested_ThrowsOperationCanceledException()
+	{
+		var drive = CreateDrive();
+		var security = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test };
+		var dates = new[] { DateTime.UtcNow.Date };
+
+		await SetupTestDataAsync(drive, security, DataType.Ticks, StorageFormats.Binary, dates);
+
+		using var cts = new CancellationTokenSource();
+		cts.Cancel();
+
+		await Assert.ThrowsExactlyAsync<OperationCanceledException>(async () =>
+		{
+			await drive.GetAvailableSecuritiesAsync(cts.Token).ToArrayAsync2(cts.Token);
+		});
+	}
+
+	[TestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public async Task GetAvailableDataTypesAsync_EmptySecurity_ReturnsEmpty(StorageFormats format)
+	{
+		var drive = CreateDrive();
+		var securityId = new SecurityId { SecurityCode = "EMPTY", BoardCode = BoardCodes.Test };
+
+		var dataTypes = await drive.GetAvailableDataTypesAsync(securityId, format, CancellationToken.None);
+
+		dataTypes.AssertNotNull();
+		dataTypes.Count().AssertEqual(0);
+	}
+
+	[TestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public async Task GetAvailableDataTypesAsync_WithData_ReturnsDataTypes(StorageFormats format)
+	{
+		var drive = CreateDrive();
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test };
+		var dates = new[] { DateTime.UtcNow.Date };
+
+		await SetupTestDataAsync(drive, securityId, DataType.Ticks, format, dates);
+		await SetupTestDataAsync(drive, securityId, DataType.Level1, format, dates);
+
+		var dataTypes = (await drive.GetAvailableDataTypesAsync(securityId, format, CancellationToken.None)).ToArray();
+
+		(dataTypes.Length >= 2).AssertTrue();
+		dataTypes.Contains(DataType.Ticks).AssertTrue();
+		dataTypes.Contains(DataType.Level1).AssertTrue();
+	}
+
+	[TestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public async Task GetAvailableDataTypesAsync_DefaultSecurityId_ReturnsAllDataTypes(StorageFormats format)
+	{
+		var drive = CreateDrive();
+		var security1 = new SecurityId { SecurityCode = "TEST1", BoardCode = BoardCodes.Test };
+		var security2 = new SecurityId { SecurityCode = "TEST2", BoardCode = BoardCodes.Test };
+		var dates = new[] { DateTime.UtcNow.Date };
+
+		await SetupTestDataAsync(drive, security1, DataType.Ticks, format, dates);
+		await SetupTestDataAsync(drive, security2, DataType.Level1, format, dates);
+		await SetupTestDataAsync(drive, security2, DataType.MarketDepth, format, dates);
+
+		var dataTypes = (await drive.GetAvailableDataTypesAsync(default, format, CancellationToken.None)).ToArray();
+
+		(dataTypes.Length >= 3).AssertTrue();
+		dataTypes.Contains(DataType.Ticks).AssertTrue();
+		dataTypes.Contains(DataType.Level1).AssertTrue();
+		dataTypes.Contains(DataType.MarketDepth).AssertTrue();
+	}
+
+	[TestMethod]
+	public async Task VerifyAsync_ExistingPath_DoesNotThrow()
+	{
+		var drive = CreateDrive();
+
+		await drive.VerifyAsync(CancellationToken.None);
+
+		// Should not throw
+		true.AssertTrue();
+	}
+
+	[TestMethod]
+	public async Task VerifyAsync_NonExistingPath_ThrowsInvalidOperationException()
+	{
+		var drive = new LocalMarketDataDrive(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()));
+
+		await Assert.ThrowsExactlyAsync<InvalidOperationException>(async () =>
+		{
+			await drive.VerifyAsync(CancellationToken.None);
+		});
+	}
+
+	[TestMethod]
+	public async Task LookupSecuritiesAsync_EmptyDrive_ReturnsEmpty()
+	{
+		var drive = CreateDrive();
+		var criteria = Messages.Extensions.LookupAllCriteriaMessage;
+		var securityProvider = new CollectionSecurityProvider([]);
+
+		var securities = await drive.LookupSecuritiesAsync(criteria, securityProvider, CancellationToken.None).ToArrayAsync2(CancellationToken.None);
+
+		securities.Length.AssertEqual(0);
+	}
+
+
+	[TestMethod]
+	public async Task LookupSecuritiesAsync_NullCriteria_ThrowsArgumentNullException()
+	{
+		var drive = CreateDrive();
+		var securityProvider = new CollectionSecurityProvider([]);
+
+		await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+		{
+			await drive.LookupSecuritiesAsync(null, securityProvider, CancellationToken.None).ToArrayAsync2(CancellationToken.None);
+		});
+	}
+
+	[TestMethod]
+	public async Task LookupSecuritiesAsync_NullSecurityProvider_ThrowsArgumentNullException()
+	{
+		var drive = CreateDrive();
+		var criteria = Messages.Extensions.LookupAllCriteriaMessage;
+
+		await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+		{
+			await drive.LookupSecuritiesAsync(criteria, null, CancellationToken.None).ToArrayAsync2(CancellationToken.None);
+		});
+	}
+
+	[TestMethod]
+	public async Task LookupSecuritiesAsync_CancellationRequested_ThrowsOperationCanceledException()
+	{
+		var drive = CreateDrive();
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test };
+		var dates = new[] { DateTime.UtcNow.Date };
+
+		await SetupTestDataAsync(drive, securityId, DataType.Ticks, StorageFormats.Binary, dates);
+
+		var criteria = Messages.Extensions.LookupAllCriteriaMessage;
+		var securityProvider = new CollectionSecurityProvider([]);
+
+		using var cts = new CancellationTokenSource();
+		cts.Cancel();
+
+		await Assert.ThrowsExactlyAsync<OperationCanceledException>(async () =>
+		{
+			await drive.LookupSecuritiesAsync(criteria, securityProvider, cts.Token).ToArrayAsync2(cts.Token);
+		});
+	}
+
+	[TestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public async Task GetAvailableDataTypesAsync_MultipleDates_ReturnsDataTypes(StorageFormats format)
+	{
+		var drive = CreateDrive();
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test };
+		var dates = new[]
+		{
+			DateTime.UtcNow.Date.AddDays(-2),
+			DateTime.UtcNow.Date.AddDays(-1),
+			DateTime.UtcNow.Date
+		};
+
+		await SetupTestDataAsync(drive, securityId, DataType.Ticks, format, dates);
+
+		var dataTypes = (await drive.GetAvailableDataTypesAsync(securityId, format, CancellationToken.None)).ToArray();
+
+		(dataTypes.Length >= 1).AssertTrue();
+		dataTypes.Contains(DataType.Ticks).AssertTrue();
+	}
+
+	[TestMethod]
+	public async Task GetAvailableSecuritiesAsync_MultipleSecurities_ReturnsAllSecurities()
+	{
+		var drive = CreateDrive();
+		var securities = new[]
+		{
+			new SecurityId { SecurityCode = "AAPL", BoardCode = BoardCodes.Test },
+			new SecurityId { SecurityCode = "MSFT", BoardCode = BoardCodes.Test },
+			new SecurityId { SecurityCode = "GOOGL", BoardCode = BoardCodes.Test }
+		};
+		var dates = new[] { DateTime.UtcNow.Date };
+
+		foreach (var secId in securities)
+		{
+			await SetupTestDataAsync(drive, secId, DataType.Ticks, StorageFormats.Binary, dates);
+		}
+
+		var result = await drive.GetAvailableSecuritiesAsync(CancellationToken.None).ToArrayAsync2(CancellationToken.None);
+
+		(result.Length >= 3).AssertTrue();
+		foreach (var secId in securities)
+		{
+			result.Any(s => s.SecurityCode == secId.SecurityCode && s.BoardCode == secId.BoardCode).AssertTrue();
+		}
+	}
+
+	[TestMethod]
+	public async Task VerifyAsync_PathWithNoAccess_ThrowsInvalidOperationException()
+	{
+		var invalidPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString(), "nested", "path");
+		var drive = new LocalMarketDataDrive(invalidPath);
+
+		await Assert.ThrowsExactlyAsync<InvalidOperationException>(async () =>
+		{
+			await drive.VerifyAsync(CancellationToken.None);
+		});
 	}
 }
