@@ -29,7 +29,7 @@ class empty_strategy(Strategy):
         """
         self._intParam.Value = value
 
-    def OnStarted(self, time):
+    def OnStarted2(self, time):
         """
         Called when the strategy is started.
 
@@ -38,8 +38,8 @@ class empty_strategy(Strategy):
         :param time: The time when the strategy started.
         """
         # Log information when the strategy starts
-        self.LogInfo("OnStarted")
-        super(empty_strategy, self).OnStarted(time)
+        self.LogInfo("OnStarted2")
+        super(empty_strategy, self).OnStarted2(time)
 
     def CreateClone(self):
         """

@@ -84,13 +84,13 @@ class sma_strategy(Strategy):
         super(sma_strategy, self).OnReseted()
         self._isShortLessThenLong = None
 
-    def OnStarted(self, time):
+    def OnStarted2(self, time):
         """
         Called when the strategy starts. Sets up indicators, subscriptions, charting, and protection.
         
         :param time: The time when the strategy started.
         """
-        super(sma_strategy, self).OnStarted(time)
+        super(sma_strategy, self).OnStarted2(time)
 
         # Create indicators
         longSma = SMA()
