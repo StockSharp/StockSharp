@@ -3398,7 +3398,7 @@ public static partial class Extensions
 	/// <param name="date">The specified date.</param>
 	/// <returns>Result value.</returns>
 	public static DateTime? EnsureToday(this DateTime? date)
-		=> date.EnsureToday(DateTime.Today);
+		=> date.EnsureToday(DateTime.UtcNow.Date);
 
 	/// <summary>
 	/// Determines the specified date equals is <see cref="Today"/> and returns <paramref name="todayValue"/>.

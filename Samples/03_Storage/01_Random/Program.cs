@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 using Ecng.Common;
 
-using StockSharp.Algo;
 using StockSharp.Algo.Storages;
 using StockSharp.BusinessEntities;
 using StockSharp.Localization;
@@ -32,7 +31,7 @@ class Program
 
 		const int count = 1000;
 
-		var begin = DateTime.Today;
+		var begin = DateTime.UtcNow.Date;
 		var end = begin + TimeSpan.FromMinutes(count);
 
 		for (var i = 0; i < count; i++)
@@ -55,29 +54,28 @@ class Program
 			DefaultDrive = new LocalMarketDataDrive(),
 		};
 
-		using (var drive = new LocalMarketDataDrive())
+		using var drive = new LocalMarketDataDrive();
+
+		// get AAPL tick storage
+		var tradeStorage = storageRegistry.GetTickMessageStorage(securityId);
+
+		// saving ticks
+		tradeStorage.Save(trades);
+
+		for (var d = begin; d < end; d += TimeSpan.FromDays(1))
 		{
-			// get AAPL tick storage
-			var tradeStorage = storageRegistry.GetTickMessageStorage(securityId);
+			// loading ticks
+			var loadedTrades = tradeStorage.Load(d);
 
-			// saving ticks
-			tradeStorage.Save(trades);
-
-			for (var d = begin; d < end; d += TimeSpan.FromDays(1))
+			foreach (var trade in loadedTrades)
 			{
-				// loading ticks
-				var loadedTrades = tradeStorage.Load(d);
-
-				foreach (var trade in loadedTrades)
-				{
-					Console.WriteLine(LocalizedStrings.TradeDetails, trade.TradeId, trade);
-				}	
+				Console.WriteLine(LocalizedStrings.TradeDetails, trade.TradeId, trade);
 			}
-
-			Console.ReadLine();
-
-			// deleting ticks (and removing file)
-			tradeStorage.Delete(DateTime.Today, DateTime.Today + TimeSpan.FromMinutes(1000));	
 		}
+
+		Console.ReadLine();
+
+		// deleting ticks (and removing file)
+		tradeStorage.Delete(begin, begin + TimeSpan.FromMinutes(1000));
 	}
 }

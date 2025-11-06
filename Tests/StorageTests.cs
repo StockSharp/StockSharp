@@ -1233,8 +1233,10 @@ public class StorageTests
 
 		depthStorage.Save(depths);
 
-		var from = DateTime.Today + TimeSpan.FromMinutes(_depthCount3 / 2);
-		var to = DateTime.Today + TimeSpan.FromMinutes(3 * _depthCount3 / 2);
+		var now = DateTime.UtcNow;
+
+		var from = now + TimeSpan.FromMinutes(_depthCount3 / 2);
+		var to = now + TimeSpan.FromMinutes(3 * _depthCount3 / 2);
 		depthStorage.Delete(from, to);
 
 		LoadDepthsAndCompare(depthStorage, [.. depths.Where(d => d.ServerTime < from || d.ServerTime > to).OrderBy(d => d.ServerTime)]);
@@ -1635,18 +1637,20 @@ public class StorageTests
 		var tradeGenerator = new RandomWalkTradeGenerator(secMsg.SecurityId);
 		tradeGenerator.Init();
 
+		var now = DateTime.UtcNow;
+
 		tradeGenerator.Process(secMsg);
 		tradeGenerator.Process(new Level1ChangeMessage
 		{
 			SecurityId = secMsg.SecurityId,
-			ServerTime = DateTime.Today,
-		}.TryAdd(Level1Fields.LastTradeTime, DateTime.Today));
+			ServerTime = now,
+		}.TryAdd(Level1Fields.LastTradeTime, now));
 
 		for (var i = 0; i < _tickCount; i++)
 		{
 			var msg = (ExecutionMessage)tradeGenerator.Process(new TimeMessage
 			{
-				ServerTime = DateTime.Today + TimeSpan.FromSeconds(i + 1)
+				ServerTime = now + TimeSpan.FromSeconds(i + 1)
 			});
 
 			msg.TradeVolume *= security.VolumeStep * modifier;
