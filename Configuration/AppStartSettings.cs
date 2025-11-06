@@ -15,15 +15,21 @@ public class AppStartSettings : IPersistable
 	/// </summary>
 	public bool Online { get; set; } = true;
 
+	private TimeZoneInfo _timeZone = TimeZoneInfo.Local;
+
 	/// <summary>
 	/// Preferred application time zone.
 	/// </summary>
-	public TimeZoneInfo TimeZone { get; set; }
+	public TimeZoneInfo TimeZone
+	{
+		get => _timeZone;
+		set => _timeZone = value ?? throw new ArgumentNullException(nameof(value));
+	}
 
 	void IPersistable.Load(SettingsStorage storage)
 	{
 		Online = storage.GetValue(nameof(Online), Online);
-		Language = storage.GetValue<string>(nameof(Language));
+		Language = storage.GetValue(nameof(Language), Language);
 
 		var tzId = storage.GetValue<string>(nameof(TimeZone));
 		if (!tzId.IsEmptyOrWhiteSpace())
@@ -35,7 +41,6 @@ public class AppStartSettings : IPersistable
 			catch
 			{
 				// ignore invalid/unknown tz on current OS
-				TimeZone = null;
 			}
 		}
 	}
@@ -45,7 +50,7 @@ public class AppStartSettings : IPersistable
 		storage
 			.Set(nameof(Language), Language)
 			.Set(nameof(Online), Online)
-			.Set(nameof(TimeZone), TimeZone?.Id)
+			.Set(nameof(TimeZone), TimeZone.Id)
 		;
 	}
 

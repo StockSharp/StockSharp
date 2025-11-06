@@ -5,12 +5,18 @@ namespace StockSharp.Configuration;
 /// </summary>
 public static class AppTime
 {
-	/// <summary>
-	/// Global application time zone. When null, system local timezone is used.
-	/// </summary>
-	public static TimeZoneInfo TimeZone { get; set; }
+	private static TimeZoneInfo _timeZone = TimeZoneInfo.Local;
 
-	private static TimeZoneInfo Tz => TimeZone ?? TimeZoneInfo.Local;
+	/// <summary>
+	/// Global application time zone.
+	/// </summary>
+	public static TimeZoneInfo TimeZone
+	{
+		get => _timeZone;
+		set => _timeZone = value ?? throw new ArgumentNullException(nameof(value));
+	}
+
+	private static TimeZoneInfo Tz => TimeZone;
 
 	/// <summary>
 	/// Convert a date-time (UTC/Local/Unspecified) to application time zone, mimicking TimeConverter logic.
