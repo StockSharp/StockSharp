@@ -15,17 +15,38 @@ public class AppStartSettings : IPersistable
 	/// </summary>
 	public bool Online { get; set; } = true;
 
+	/// <summary>
+	/// Preferred application time zone.
+	/// </summary>
+	public TimeZoneInfo TimeZone { get; set; }
+
 	void IPersistable.Load(SettingsStorage storage)
 	{
 		Online = storage.GetValue(nameof(Online), Online);
 		Language = storage.GetValue<string>(nameof(Language));
+
+		var tzId = storage.GetValue<string>(nameof(TimeZone));
+		if (!tzId.IsEmptyOrWhiteSpace())
+		{
+			try
+			{
+				TimeZone = TimeZoneInfo.FindSystemTimeZoneById(tzId);
+			}
+			catch
+			{
+				// ignore invalid/unknown tz on current OS
+				TimeZone = null;
+			}
+		}
 	}
 
 	void IPersistable.Save(SettingsStorage storage)
 	{
 		storage
 			.Set(nameof(Language), Language)
-			.Set(nameof(Online), Online);
+			.Set(nameof(Online), Online)
+			.Set(nameof(TimeZone), TimeZone?.Id)
+		;
 	}
 
 	/// <summary>
