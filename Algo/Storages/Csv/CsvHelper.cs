@@ -21,7 +21,16 @@ static class CsvHelper
 		if (reader == null)
 			throw new ArgumentNullException(nameof(reader));
 
-		return (date + reader.ReadString().ToTimeMls()).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Remove("+"))).UtcDateTime;
+		date += reader.ReadString().ToTimeMls();
+
+		var offset = reader.ReadString();
+
+		if (offset.IsEmpty())
+			date = date.UtcKind();
+		else
+			date = date.ToDateTimeOffset(TimeSpan.Parse(offset.Remove("+"))).UtcDateTime;
+
+		return date;
 	}
 
 	public static string WriteTime(this TimeSpan time)
@@ -29,9 +38,12 @@ static class CsvHelper
 		return time.ToString(_tsFormat);
 	}
 
-	public static string WriteTime(this DateTime time)
+	public static string[] WriteTime(this DateTime time)
 	{
-		return time.TimeOfDay.ToString(_timeFormat);
+		return [
+			time.TimeOfDay.ToString(_timeFormat),
+			string.Empty
+		];
 	}
 
 	public static string WriteDate(this DateTime time)

@@ -19,10 +19,8 @@ public class OrderLogCsvSerializer(SecurityId securityId, Encoding encoding) : C
 	/// <inheritdoc />
 	protected override void Write(CsvFileWriter writer, ExecutionMessage data, IMarketDataMetaInfo metaInfo)
 	{
-		writer.WriteRow(
+		writer.WriteRow(data.ServerTime.WriteTime().Concat(
 		[
-			data.ServerTime.WriteTime(),
-			data.ServerTime.ToString("zzz"),
 			data.TransactionId.ToString(),
 			data.OrderId.ToString(),
 			data.OrderPrice.ToString(),
@@ -46,7 +44,7 @@ public class OrderLogCsvSerializer(SecurityId securityId, Encoding encoding) : C
 			data.OpenInterest.ToString(),
 			data.OriginSide.To<int?>().ToString(),
 			data.TradeVolume.ToString()
-		]);
+		]));
 
 		metaInfo.LastTime = data.ServerTime;
 		metaInfo.LastId = data.TransactionId;

@@ -107,16 +107,14 @@ public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType
 		if (data.State == CandleStates.Active)
 			throw new ArgumentException(LocalizedStrings.CandleActiveNotSupport.Put(data), nameof(data));
 
-		writer.WriteRow(new[]
-		{
-			data.OpenTime.WriteTime(),
-			data.OpenTime.ToString("zzz"),
+		writer.WriteRow(data.OpenTime.WriteTime().Concat(
+		[
 			data.OpenPrice.ToString(),
 			data.HighPrice.ToString(),
 			data.LowPrice.ToString(),
 			data.ClosePrice.ToString(),
 			data.TotalVolume.ToString()
-		}.Concat(data.BuildFrom.ToCsv()).Concat(
+		]).Concat(data.BuildFrom.ToCsv()).Concat(
 		[
 			data.SeqNum.DefaultAsNull().ToString(),
 		]));

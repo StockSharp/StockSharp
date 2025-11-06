@@ -13,10 +13,10 @@ public class TransactionCsvSerializer(SecurityId securityId, Encoding encoding) 
 	/// <inheritdoc />
 	protected override void Write(CsvFileWriter writer, ExecutionMessage data, IMarketDataMetaInfo metaInfo)
 	{
-		var row = new[]
-		{
-			data.ServerTime.WriteTime(),
-			data.ServerTime.ToString("zzz"),
+		var row = new List<string>();
+		row.AddRange(data.ServerTime.WriteTime());
+		row.AddRange(
+		[
 			data.TransactionId.ToString(),
 			data.OriginalTransactionId.ToString(),
 			data.OrderId.ToString(),
@@ -60,10 +60,11 @@ public class TransactionCsvSerializer(SecurityId securityId, Encoding encoding) 
 			data.Latency?.Ticks.ToString(),
 			data.Error?.Message,
 			data.ExpiryDate?.WriteDate(),
-			data.ExpiryDate?.WriteTime(),
-			data.ExpiryDate?.ToString("zzz"),
-			data.LocalTime.WriteTime(),
-			data.LocalTime.ToString("zzz"),
+		]);
+		row.AddRange(data.ExpiryDate?.WriteTime() ?? new string[2]);
+		row.AddRange(data.LocalTime.WriteTime());
+		row.AddRange(
+		[
 			data.IsMarketMaker.To<int?>().ToString(),
 			data.CommissionCurrency,
 			data.MarginMode.To<int?>().ToString(),
@@ -75,7 +76,8 @@ public class TransactionCsvSerializer(SecurityId securityId, Encoding encoding) 
 			data.SeqNum.To<string>(),
 			data.StrategyId,
 			data.Leverage.To<string>(),
-		}.Concat(data.BuildFrom.ToCsv());
+		]);
+		row.AddRange(data.BuildFrom.ToCsv());
 		writer.WriteRow(row);
 
 		metaInfo.LastTime = data.ServerTime;

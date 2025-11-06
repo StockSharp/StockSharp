@@ -13,7 +13,7 @@ using System.Xml;
 /// <param name="stream">The stream to write to.</param>
 public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataType)
 {
-	private const string _timeFormat = "yyyy-MM-dd HH:mm:ss.fff zzz";
+	private const string _timeFormat = "yyyy-MM-dd HH:mm:ss.fff";
 
 	/// <summary>
 	/// Gets or sets a value indicating whether to indent elements.

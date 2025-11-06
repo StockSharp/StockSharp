@@ -12,10 +12,8 @@ public class NewsCsvSerializer(Encoding encoding) : CsvMarketDataSerializer<News
 	/// <inheritdoc />
 	protected override void Write(CsvFileWriter writer, NewsMessage data, IMarketDataMetaInfo metaInfo)
 	{
-		writer.WriteRow(
+		writer.WriteRow(data.ServerTime.WriteTime().Concat(
 		[
-			data.ServerTime.WriteTime(),
-			data.ServerTime.ToString("zzz"),
 			data.Headline,
 			data.Source,
 			data.Url,
@@ -27,7 +25,7 @@ public class NewsCsvSerializer(Encoding encoding) : CsvMarketDataSerializer<News
 			data.SecurityId?.BoardCode,
 			data.ExpiryDate?.WriteDateTimeEx(),
 			data.SeqNum.DefaultAsNull().ToString(),
-		]);
+		]));
 
 		metaInfo.LastTime = data.ServerTime;
 	}

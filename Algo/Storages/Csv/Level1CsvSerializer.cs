@@ -18,7 +18,7 @@ public class Level1CsvSerializer(SecurityId securityId, Encoding encoding) : Csv
 	{
 		var row = new List<string>();
 
-		row.AddRange([data.ServerTime.WriteTime(), data.ServerTime.ToString("zzz")]);
+		row.AddRange(data.ServerTime.WriteTime());
 
 		row.AddRange(data.BuildFrom.ToCsv());
 
@@ -35,7 +35,8 @@ public class Level1CsvSerializer(SecurityId securityId, Encoding encoding) : Csv
 			if (pair.Value == typeof(DateTime))
 			{
 				var date = (DateTime?)data.TryGet(field);
-				row.AddRange([date?.WriteDate(), date?.WriteTime(), string.Empty]);
+				row.Add(date?.WriteDate());
+				row.AddRange(date?.WriteTime() ?? new string[2]);
 			}
 			else
 			{
@@ -77,7 +78,7 @@ public class Level1CsvSerializer(SecurityId securityId, Encoding encoding) : Csv
 
 				if (dtStr != null)
 				{
-					level1.Changes.Add(field, (dtStr.ToDateTime() + reader.ReadString().ToTimeMls()).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Remove("+"))).UtcDateTime);
+					level1.Changes.Add(field, reader.ReadTime(dtStr.ToDateTime()));
 				}
 				else
 				{

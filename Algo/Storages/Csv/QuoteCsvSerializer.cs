@@ -39,10 +39,8 @@ class QuoteCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMarketDa
 		if (quote != null && quote.Value.Volume < 0)
 			throw new ArgumentOutOfRangeException(nameof(data), quote.Value.Volume, LocalizedStrings.InvalidValue);
 
-		writer.WriteRow(new[]
-		{
-			data.ServerTime.WriteTime(),
-			data.ServerTime.ToString("zzz"),
+		writer.WriteRow(data.ServerTime.WriteTime().Concat(
+		[
 			quote?.Price.To<string>(),
 			quote?.Volume.To<string>(),
 			data.Side.To<int>().ToString(),
@@ -53,7 +51,7 @@ class QuoteCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMarketDa
 			quote?.Action.To<int?>().ToString(),
 			data?.State.To<int?>().ToString(),
 			data?.SeqNum.ToString(),
-		}.Concat(data.BuildFrom.ToCsv()));
+		]).Concat(data.BuildFrom.ToCsv()));
 
 		metaInfo.LastTime = data.ServerTime;
 	}

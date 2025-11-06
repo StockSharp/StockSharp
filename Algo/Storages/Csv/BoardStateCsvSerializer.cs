@@ -12,13 +12,11 @@ public class BoardStateCsvSerializer(Encoding encoding) : CsvMarketDataSerialize
 	/// <inheritdoc />
 	protected override void Write(CsvFileWriter writer, BoardStateMessage data, IMarketDataMetaInfo metaInfo)
 	{
-		writer.WriteRow(
+		writer.WriteRow(data.ServerTime.WriteTime().Concat(
 		[
-			data.ServerTime.WriteTime(),
-			data.ServerTime.ToString("zzz"),
 			data.BoardCode,
 			((int)data.State).To<string>(),
-		]);
+		]));
 
 		metaInfo.LastTime = data.ServerTime;
 	}

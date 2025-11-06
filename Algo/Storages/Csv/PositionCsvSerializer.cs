@@ -18,10 +18,8 @@ public class PositionCsvSerializer(SecurityId securityId, Encoding encoding) : C
 	{
 		var row = new List<string>();
 
-		row.AddRange(
+		row.AddRange(data.ServerTime.WriteTime().Concat(
 		[
-			data.ServerTime.WriteTime(),
-			data.ServerTime.ToString("zzz"),
 			data.PortfolioName,
 			data.ClientCode,
 			data.DepoName,
@@ -29,7 +27,7 @@ public class PositionCsvSerializer(SecurityId securityId, Encoding encoding) : C
 			data.Description,
 			data.StrategyId,
 			data.Side.To<int?>().ToString(),
-		]);
+		]));
 
 		row.AddRange(data.BuildFrom.ToCsv());
 
@@ -44,7 +42,8 @@ public class PositionCsvSerializer(SecurityId securityId, Encoding encoding) : C
 			if (type == PositionChangeTypes.ExpirationDate)
 			{
 				var date = (DateTime?)value;
-				row.AddRange([date?.WriteDate(), date?.WriteTime(), date?.ToString("zzz")]);
+				row.Add(date?.WriteDate());
+				row.AddRange(date?.WriteTime() ?? new string[2]);
 			}
 			else
 				row.Add(value?.ToString());
@@ -104,7 +103,7 @@ public class PositionCsvSerializer(SecurityId securityId, Encoding encoding) : C
 
 					if (dtStr != null)
 					{
-						posMsg.Changes.Add(type, (dtStr.ToDateTime() + reader.ReadString().ToTimeMls()).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Remove("+"))));
+						posMsg.Changes.Add(type, reader.ReadTime(dtStr.ToDateTime()));
 					}
 					else
 					{
