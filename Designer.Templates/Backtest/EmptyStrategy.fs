@@ -39,6 +39,6 @@ type EmptyStrategy() as this =
     /// <summary>
     /// Overridden method to log information when the strategy is started.
     /// </summary>
-    override this.OnStarted(time: DateTimeOffset) =
+    override this.OnStarted2(time: DateTime) =
         this.LogInfo(nameof this.OnStarted)
-        base.OnStarted(time)
+        base.OnStarted2(time)

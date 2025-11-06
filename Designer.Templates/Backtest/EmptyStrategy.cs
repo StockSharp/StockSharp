@@ -36,10 +36,10 @@ public class EmptyStrategy : Strategy
 		set => _intParam.Value = value;
 	}
 
-	protected override void OnStarted(DateTimeOffset time)
+	protected override void OnStarted2(DateTime time)
 	{
 		LogInfo(nameof(OnStarted));
 
-		base.OnStarted(time);
+		base.OnStarted2(time);
 	}
 }

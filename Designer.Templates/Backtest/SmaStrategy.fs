@@ -97,8 +97,8 @@ type SmaStrategy() as this =
     /// <summary>
     /// Initializes and starts the strategy.
     /// </summary>
-    override this.OnStarted(time: DateTimeOffset) =
-        base.OnStarted(time)
+    override this.OnStarted2(time: DateTime) =
+        base.OnStarted2(time)
 
         // ---------- Create indicators ----------
         let longSma = SMA()
