@@ -6,7 +6,6 @@ namespace StockSharp.Algo.Testing;
 public class HistoryMessageAdapter : MessageAdapter
 {
 	private readonly Dictionary<(SecurityId secId, DataType dataType), (MarketDataGenerator generator, long transId)> _generators = [];
-	private readonly Dictionary<(SecurityId secId, DataType dataType), Func<DateTime, IEnumerable<Message>>> _historySources = [];
 
 	private readonly List<Tuple<IMarketDataStorage, long>> _actions = [];
 	private readonly SyncObject _moveNextSyncRoot = new();
@@ -98,7 +97,6 @@ public class HistoryMessageAdapter : MessageAdapter
 
 		this.AddMarketDataSupport();
 		this.AddSupportedMessage(MessageTypes.EmulationState, null);
-		this.AddSupportedMessage(ExtendedMessageTypes.HistorySource, true);
 		this.AddSupportedMessage(ExtendedMessageTypes.Generator, true);
 	}
 
@@ -175,7 +173,6 @@ public class HistoryMessageAdapter : MessageAdapter
 			var dataTypes = new HashSet<DataType>();
 			
 			dataTypes.AddRange(drive.GetAvailableDataTypes(securityId, StorageFormat));
-			dataTypes.AddRange(_historySources.Select(s => s.Key.dataType));
 			dataTypes.AddRange(_generators.Select(t => t.Key.dataType));
 
 			return dataTypes;
@@ -200,7 +197,6 @@ public class HistoryMessageAdapter : MessageAdapter
 			case MessageTypes.Reset:
 			{
 				_generators.Clear();
-				_historySources.Clear();
 
 				_currentTime = default;
 				_basketStorage.InnerStorages.Clear();
@@ -261,20 +257,6 @@ public class HistoryMessageAdapter : MessageAdapter
 			case MessageTypes.MarketData:
 				ProcessMarketDataMessage((MarketDataMessage)message);
 				break;
-
-			case ExtendedMessageTypes.HistorySource:
-			{
-				var sourceMsg = (HistorySourceMessage)message;
-
-				var key = (sourceMsg.SecurityId, sourceMsg.DataType2);
-
-				if (sourceMsg.IsSubscribe)
-					_historySources[key] = sourceMsg.GetMessages;
-				else
-					_historySources.Remove(key);
-
-				break;
-			}
 
 			case MessageTypes.EmulationState:
 			{
@@ -375,14 +357,6 @@ public class HistoryMessageAdapter : MessageAdapter
 			return;
 		}
 
-		Func<DateTime, IEnumerable<Message>> GetHistorySource()
-		{
-			Func<DateTime, IEnumerable<Message>> GetHistorySource2(SecurityId s)
-				=> _historySources.TryGetValue((s, dataType));
-
-			return GetHistorySource2(securityId) ?? GetHistorySource2(default);
-		}
-
 		bool HasGenerator(DataType dt) => _generators.ContainsKey((securityId, dt));
 
 		Exception error = null;
@@ -393,26 +367,7 @@ public class HistoryMessageAdapter : MessageAdapter
 			{
 				if (!HasGenerator(dataType))
 				{
-					var historySource = GetHistorySource();
-
-					if (historySource == null)
-					{
-						AddStorage(StorageRegistry.GetLevel1MessageStorage(securityId, Drive, StorageFormat), transId);
-
-						//AddStorage(new InMemoryMarketDataStorage<ClearingMessage>(security, null, date => new[]
-						//{
-						//	new ClearingMessage
-						//	{
-						//		LocalTime = date.Date + security.Board.ExpiryTime,
-						//		SecurityId = securityId,
-						//		ClearMarketDepth = true
-						//	}
-						//}), message.TransactionId);
-					}
-					else
-					{
-						AddStorage(new InMemoryMarketDataStorage<Level1ChangeMessage>(securityId, null, historySource), transId);
-					}
+					AddStorage(StorageRegistry.GetLevel1MessageStorage(securityId, Drive, StorageFormat), transId);
 				}
 			}
 			else
@@ -427,12 +382,7 @@ public class HistoryMessageAdapter : MessageAdapter
 			{
 				if (!HasGenerator(dataType))
 				{
-					var historySource = GetHistorySource();
-
-					AddStorage(historySource == null
-						? StorageRegistry.GetQuoteMessageStorage(securityId, Drive, StorageFormat, message.DoNotBuildOrderBookIncrement)
-						: new InMemoryMarketDataStorage<QuoteChangeMessage>(securityId, null, historySource),
-						transId);
+					AddStorage(StorageRegistry.GetQuoteMessageStorage(securityId, Drive, StorageFormat, message.DoNotBuildOrderBookIncrement), transId);
 				}
 			}
 			else
@@ -444,12 +394,7 @@ public class HistoryMessageAdapter : MessageAdapter
 			{
 				if (!HasGenerator(dataType))
 				{
-					var historySource = GetHistorySource();
-
-					AddStorage(historySource == null
-						? StorageRegistry.GetTickMessageStorage(securityId, Drive, StorageFormat)
-						: new InMemoryMarketDataStorage<ExecutionMessage>(securityId, null, historySource),
-						transId);
+					AddStorage(StorageRegistry.GetTickMessageStorage(securityId, Drive, StorageFormat), transId);
 				}
 			}
 			else
@@ -461,12 +406,7 @@ public class HistoryMessageAdapter : MessageAdapter
 			{
 				if (!HasGenerator(dataType))
 				{
-					var historySource = GetHistorySource();
-
-					AddStorage(historySource == null
-						? StorageRegistry.GetOrderLogMessageStorage(securityId, Drive, StorageFormat)
-						: new InMemoryMarketDataStorage<ExecutionMessage>(securityId, null, historySource),
-						transId);
+					AddStorage(StorageRegistry.GetOrderLogMessageStorage(securityId, Drive, StorageFormat), transId);
 				}
 			}
 			else
@@ -482,12 +422,7 @@ public class HistoryMessageAdapter : MessageAdapter
 					return;
 				}
 
-				var historySource = GetHistorySource();
-
-				AddStorage(historySource == null
-						? StorageRegistry.GetCandleMessageStorage(securityId, dataType, Drive, StorageFormat)
-						: new InMemoryMarketDataStorage<CandleMessage>(securityId, dataType.Arg, historySource, dataType.MessageType),
-					transId);
+				AddStorage(StorageRegistry.GetCandleMessageStorage(securityId, dataType, Drive, StorageFormat), transId);
 			}
 			else
 				RemoveStorage(originId);

@@ -470,45 +470,4 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		if (_stopPending && (State is ChannelStates.Started or ChannelStates.Suspended))
 			ProcessEmulationStateMessage(new() { State = ChannelStates.Stopping });
 	}
-
-	/// <summary>
-	/// Register historical data source.
-	/// </summary>
-	/// <param name="security">Instrument. If passed <see langword="null"/> the source will be applied for all subscriptions.</param>
-	/// <param name="dataType">Data type.</param>
-	/// <param name="getMessages">Historical data source.</param>
-	/// <returns>Subscription.</returns>
-	[Obsolete("Uses custom adapter implementation.")]
-	public Subscription RegisterHistorySource(Security security, DataType dataType, Func<DateTime, IEnumerable<Message>> getMessages)
-	{
-		var subscription = new Subscription(new HistorySourceMessage
-		{
-			IsSubscribe = true,
-			SecurityId = security?.ToSecurityId(copyExtended: true) ?? default,
-			DataType2 = dataType,
-			GetMessages = getMessages
-		}, security);
-
-		Subscribe(subscription);
-
-		return subscription;
-	}
-
-	/// <summary>
-	/// Unregister historical data source, previously registered by <see cref="RegisterHistorySource"/>.
-	/// </summary>
-	/// <param name="security">Instrument. If passed <see langword="null"/> the source will be removed for all subscriptions.</param>
-	/// <param name="dataType">Data type.</param>
-	[Obsolete("Uses UnSubscribe method.")]
-	public void UnRegisterHistorySource(Security security, DataType dataType)
-	{
-		var secId = security?.ToSecurityId();
-		
-		var subscription = Subscriptions.FirstOrDefault(s => s.SubscriptionMessage is HistorySourceMessage sourceMsg && sourceMsg.SecurityId == secId && sourceMsg.DataType2 == dataType);
-		
-		if (subscription != null)
-			UnSubscribe(subscription);
-		else
-			LogWarning(LocalizedStrings.SubscriptionNonExist, dataType);
-	}
 }
