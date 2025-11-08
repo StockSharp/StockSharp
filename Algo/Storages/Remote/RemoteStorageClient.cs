@@ -344,7 +344,7 @@ public class RemoteStorageClient : Disposable
 		{
 			try
 			{
-				await _connector.ConnectAsync(token).ConfigureAwait(false);
+				await _connector.ConnectAsync(token).NoWait();
 			}
 			catch (OperationCanceledException)
 			{

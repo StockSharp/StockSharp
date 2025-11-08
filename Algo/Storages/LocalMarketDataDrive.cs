@@ -932,7 +932,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			{
 				try
 				{
-					var fileBytes = await File.ReadAllBytesAsync(firstDataFile, cancellationToken).ConfigureAwait(false);
+					var fileBytes = await File.ReadAllBytesAsync(firstDataFile, cancellationToken).NoWait();
 					priceStep = fileBytes.AsSpan().Slice(6, 16).ToArray().To<decimal>();
 				}
 				catch (Exception ex)

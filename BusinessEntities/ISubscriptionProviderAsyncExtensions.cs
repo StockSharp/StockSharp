@@ -72,7 +72,7 @@ public static class ISubscriptionProviderAsyncExtensions
 			{
 				try
 				{
-					if (!await channel.Reader.WaitToReadAsync(cancellationToken).ConfigureAwait(false))
+					if (!await channel.Reader.WaitToReadAsync(cancellationToken).NoWait())
 						yield break;
 				}
 				catch (Exception)
@@ -134,23 +134,23 @@ public static class ISubscriptionProviderAsyncExtensions
 		{
 			provider.Subscribe(subscription);
 
-			var first = await Task.WhenAny(startedTcs.Task, failedTcs.Task, cancelTcs.Task).ConfigureAwait(false);
+			var first = await Task.WhenAny(startedTcs.Task, failedTcs.Task, cancelTcs.Task).NoWait();
 			
 			if (first == failedTcs.Task)
-				await failedTcs.Task.ConfigureAwait(false);
+				await failedTcs.Task.NoWait();
 
 			if (first == cancelTcs.Task)
 			{
-				await stoppedTcs.Task.ConfigureAwait(false);
+				await stoppedTcs.Task.NoWait();
 				return;
 			}
 
-			var next = await Task.WhenAny(failedTcs.Task, cancelTcs.Task).ConfigureAwait(false);
+			var next = await Task.WhenAny(failedTcs.Task, cancelTcs.Task).NoWait();
 
 			if (next == failedTcs.Task)
-				await failedTcs.Task.ConfigureAwait(false);
+				await failedTcs.Task.NoWait();
 
-			await stoppedTcs.Task.ConfigureAwait(false);
+			await stoppedTcs.Task.NoWait();
 		}
 		catch (Exception)
 		{
