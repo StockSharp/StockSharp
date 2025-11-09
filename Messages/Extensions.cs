@@ -3,6 +3,7 @@ namespace StockSharp.Messages;
 using System.Collections;
 
 using Ecng.Reflection;
+using Ecng.Linq;
 
 /// <summary>
 /// Extension class.
@@ -5710,5 +5711,33 @@ public static partial class Extensions
 			throw new ArgumentNullException(nameof(candle));
 
 		return (candle.HighPrice + candle.LowPrice) / 2;
+	}
+
+	/// <summary>
+	/// To get the instrument by the identifier.
+	/// </summary>
+	/// <param name="provider"><see cref="ISecurityMessageProvider"/></param>
+	/// <param name="id">Security ID.</param>
+	/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+	public static SecurityMessage LookupMessageById(this ISecurityMessageProvider provider, SecurityId id)
+	{
+		if (provider is null)
+			throw new ArgumentNullException(nameof(provider));
+		
+		return AsyncHelper.Run(() => provider.LookupMessageByIdAsync(id, default));
+	}
+
+	/// <summary>
+	/// Lookup securities by criteria <paramref name="criteria" />.
+	/// </summary>
+	/// <param name="provider"><see cref="ISecurityMessageProvider"/></param>
+	/// <param name="criteria">Message security lookup for specified criteria.</param>
+	/// <returns>Found instruments.</returns>
+	public static IEnumerable<SecurityMessage> LookupMessages(this ISecurityMessageProvider provider, SecurityLookupMessage criteria)
+	{
+		if (provider is null)
+			throw new ArgumentNullException(nameof(provider));
+
+		return AsyncHelper.Run(() => provider.LookupMessagesAsync(criteria, default).ToArrayAsync2(default));
 	}
 }

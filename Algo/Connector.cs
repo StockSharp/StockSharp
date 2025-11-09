@@ -211,15 +211,17 @@ public partial class Connector : BaseLogReceiver, IConnector
 	}
 
 	/// <inheritdoc />
-	public Security LookupById(SecurityId id) => SecurityStorage.LookupById(id);
+	public ValueTask<Security> LookupByIdAsync(SecurityId id, CancellationToken cancellationToken)
+		=> SecurityStorage.LookupByIdAsync(id, cancellationToken);
 
-	IEnumerable<Security> ISecurityProvider.Lookup(SecurityLookupMessage criteria) => SecurityStorage.Lookup(criteria);
+	IAsyncEnumerable<Security> ISecurityProvider.LookupAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken)
+		=> SecurityStorage.LookupAsync(criteria, cancellationToken);
 
-	SecurityMessage ISecurityMessageProvider.LookupMessageById(SecurityId id)
-		=> SecurityStorage.LookupMessageById(id);
+	ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)
+		=> SecurityStorage.LookupMessageByIdAsync(id, cancellationToken);
 
-	IEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessages(SecurityLookupMessage criteria)
-		=> SecurityStorage.LookupMessages(criteria);
+	IAsyncEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessagesAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken)
+		=> SecurityStorage.LookupMessagesAsync(criteria, cancellationToken);
 
 	/// <inheritdoc />
 	public virtual IEnumerable<Portfolio> Portfolios => _existingPortfolios.Cache;

@@ -46,14 +46,14 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 
 		var buffer = new List<Message>();
 
-		void Flush()
+		async ValueTask Flush()
 		{
 			count += buffer.Count;
 
 			if (buffer.LastOrDefault() is IServerTimeMessage timeMsg)
 				lastTime = timeMsg.ServerTime;
 
-			FlushBuffer(buffer);
+			await FlushBuffer(buffer, cancellationToken);
 		}
 
 		//LogInfo(LocalizedStrings.ImportOfType.Put(fileName, DataType.MessageType.Name));
@@ -74,7 +74,7 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 
 			if (msg is SecurityMessage secMsg)
 			{
-				var security = _securityStorage.LookupById(secMsg.SecurityId);
+				var security = await _securityStorage.LookupByIdAsync(secMsg.SecurityId, cancellationToken);
 				var isNew = true;
 
 				if (security != null)
@@ -108,7 +108,7 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 				buffer.Add(msg);
 
 				if (buffer.Count > 1000)
-					Flush();
+					await Flush();
 			}
 
 			if (!canProgress)
@@ -124,7 +124,7 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 		}
 
 		if (buffer.Count > 0)
-			Flush();
+			await Flush();
 
 		if (canProgress)
 		{
@@ -135,9 +135,9 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 		return (count, lastTime);
 	}
 
-	private SecurityId SaveSecurity(SecurityId securityId)
+	private async ValueTask<SecurityId> SaveSecurity(SecurityId securityId, CancellationToken cancellationToken)
 	{
-		var security = _securityStorage.LookupById(securityId);
+		var security = await _securityStorage.LookupByIdAsync(securityId, cancellationToken);
 
 		if (security is null)
 		{
@@ -158,7 +158,7 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 		return securityId;
 	}
 
-	private void FlushBuffer(List<Message> buffer)
+	private async ValueTask FlushBuffer(List<Message> buffer, CancellationToken cancellationToken)
 	{
 		if (buffer.Count == 0)
 			return;
@@ -173,7 +173,7 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 			foreach (var secGroup in secIdMsgs.GroupBy(m => m.SecurityId))
 			{
 				var secId = secGroup.Key;
-				secId = SaveSecurity(secId);
+				secId = await SaveSecurity(secId, cancellationToken);
 
 				var arr = secGroup.ToArray();
 

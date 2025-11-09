@@ -9,13 +9,15 @@ public interface ISecurityMessageProvider
 	/// To get the instrument by the identifier.
 	/// </summary>
 	/// <param name="id">Security ID.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
-	SecurityMessage LookupMessageById(SecurityId id);
+	ValueTask<SecurityMessage> LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Lookup securities by criteria <paramref name="criteria" />.
 	/// </summary>
 	/// <param name="criteria">Message security lookup for specified criteria.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Found instruments.</returns>
-	IEnumerable<SecurityMessage> LookupMessages(SecurityLookupMessage criteria);
+	IAsyncEnumerable<SecurityMessage> LookupMessagesAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken);
 }

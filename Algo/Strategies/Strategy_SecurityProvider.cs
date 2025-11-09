@@ -25,15 +25,15 @@ partial class Strategy
 	}
 
 	/// <inheritdoc />
-	public Security LookupById(SecurityId id)
-		=> SecurityProvider.LookupById(id);
-	
-	IEnumerable<Security> ISecurityProvider.Lookup(SecurityLookupMessage criteria)
-		=> SecurityProvider.Lookup(criteria);
+	public ValueTask<Security> LookupByIdAsync(SecurityId id, CancellationToken cancellationToken)
+		=> SecurityProvider.LookupByIdAsync(id, cancellationToken);
 
-	SecurityMessage ISecurityMessageProvider.LookupMessageById(SecurityId id)
-		=> SecurityProvider.LookupMessageById(id);
+	IAsyncEnumerable<Security> ISecurityProvider.LookupAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken)
+		=> SecurityProvider.LookupAsync(criteria, cancellationToken);
 
-	IEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessages(SecurityLookupMessage criteria)
-		=> SecurityProvider.LookupMessages(criteria);
+	ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)
+		=> SecurityProvider.LookupMessageByIdAsync(id, cancellationToken);
+
+	IAsyncEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessagesAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken)
+		=> SecurityProvider.LookupMessagesAsync(criteria, cancellationToken);
 }

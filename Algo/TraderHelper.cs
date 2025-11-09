@@ -709,7 +709,7 @@ public static partial class TraderHelper
 	/// <returns>Found instance.</returns>
 	public static Security GetAllSecurity(this ISecurityProvider provider)
 	{
-		return provider.LookupById(default);
+		return provider.LookupById(default(SecurityId));
 	}
 
 	/// <summary>

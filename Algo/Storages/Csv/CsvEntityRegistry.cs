@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Storages.Csv;
 
+using System.Runtime.CompilerServices;
+
 /// <summary>
 /// The CSV storage of trading objects.
 /// </summary>
@@ -116,27 +118,40 @@ public class CsvEntityRegistry : IEntityRegistry
 
 		private Security GetById(SecurityId id) => ((IStorageSecurityList)this).ReadById(id);
 
-		Security ISecurityProvider.LookupById(SecurityId id) => GetById(id);
+		ValueTask<Security> ISecurityProvider.LookupByIdAsync(SecurityId id, CancellationToken cancellationToken) => new(GetById(id));
 
-		IEnumerable<Security> ISecurityProvider.Lookup(SecurityLookupMessage criteria)
+		async IAsyncEnumerable<Security> ISecurityProvider.LookupAsync(SecurityLookupMessage criteria, [EnumeratorCancellation]CancellationToken cancellationToken)
 		{
+			Security[] arr;
+
 			var secId = criteria.SecurityId;
 
 			if (secId == default || secId.BoardCode.IsEmpty())
 			{
 				lock (SyncRoot)
-					return this.Filter(criteria);
+					arr = [.. this.Filter(criteria)];
 			}
 
 			var security = GetById(secId);
-			return security == null ? [] : [security];
+			arr = security == null ? [] : [security];
+
+			await Task.Yield();
+
+			foreach (var item in arr)
+			{
+				cancellationToken.ThrowIfCancellationRequested();
+				yield return item;
+			}
 		}
 
-		SecurityMessage ISecurityMessageProvider.LookupMessageById(SecurityId id)
-			=> GetById(id)?.ToMessage();
+		ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)
+			=> new(GetById(id)?.ToMessage());
 
-		IEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessages(SecurityLookupMessage criteria)
-			=> ((ISecurityProvider)this).Lookup(criteria).Select(s => s.ToMessage());
+		async IAsyncEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessagesAsync(SecurityLookupMessage criteria, [EnumeratorCancellation]CancellationToken cancellationToken)
+		{
+			await foreach (var item in ((ISecurityProvider)this).LookupAsync(criteria, cancellationToken).WithEnforcedCancellation(cancellationToken))
+				yield return item.ToMessage();
+		}
 
 		void ISecurityStorage.Delete(Security security)
 		{

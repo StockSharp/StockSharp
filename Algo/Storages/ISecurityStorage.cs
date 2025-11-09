@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Storages;
 
+using System.Runtime.CompilerServices;
+
 /// <summary>
 /// The interface for access to the storage of information on instruments.
 /// </summary>
@@ -132,18 +134,29 @@ public class InMemorySecurityStorage : ISecurityStorage
 	}
 
 	/// <inheritdoc />
-	public IEnumerable<Security> Lookup(SecurityLookupMessage criteria)
-		=> _inner.SyncGet(d => d.Values.Filter(criteria).ToArray()).Concat(_underlying.Lookup(criteria)).Distinct();
+	public async IAsyncEnumerable<Security> LookupAsync(SecurityLookupMessage criteria, [EnumeratorCancellation]CancellationToken cancellationToken)
+	{
+		await Task.Yield();
+
+		foreach (var s in _inner.SyncGet(d => d.Values.Filter(criteria).ToArray()).Concat(_underlying.Lookup(criteria)).Distinct())
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+			yield return s;
+		}
+	}
 
 	/// <inheritdoc />
-	public Security LookupById(SecurityId id)
-		=> _inner.TryGetValue(id) ?? _underlying.LookupById(id);
+	public ValueTask<Security> LookupByIdAsync(SecurityId id, CancellationToken cancellationToken)
+		=> new(_inner.TryGetValue(id) ?? _underlying.LookupById(id));
 
-	SecurityMessage ISecurityMessageProvider.LookupMessageById(SecurityId id)
-		=> LookupById(id)?.ToMessage();
+	async ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)
+		=> (await LookupByIdAsync(id, cancellationToken))?.ToMessage();
 
-	IEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessages(SecurityLookupMessage criteria)
-		=> Lookup(criteria).Select(s => s.ToMessage());
+	async IAsyncEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessagesAsync(SecurityLookupMessage criteria, [EnumeratorCancellation]CancellationToken cancellationToken)
+	{
+		await foreach (var s in LookupAsync(criteria, cancellationToken).WithEnforcedCancellation(cancellationToken))
+			yield return s.ToMessage();
+	}
 
 	/// <inheritdoc />
 	public void Save(Security security, bool forced)

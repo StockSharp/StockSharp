@@ -3,6 +3,7 @@ namespace StockSharp.BusinessEntities;
 using System.Reflection;
 
 using Ecng.Configuration;
+using Ecng.Linq;
 using Ecng.Reflection;
 
 /// <summary>
@@ -2327,5 +2328,33 @@ public static partial class EntitiesExtensions
 			IsSubscribe = true,
 			NewsId = news.Id.To<string>(),
 		}));
+	}
+
+	/// <summary>
+	/// To get the instrument by the identifier.
+	/// </summary>
+	/// <param name="provider"><see cref="ISecurityProvider"/></param>
+	/// <param name="id">Security ID.</param>
+	/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+	public static Security LookupById(this ISecurityProvider provider, SecurityId id)
+	{
+		if (provider is null)
+			throw new ArgumentNullException(nameof(provider));
+
+		return AsyncHelper.Run(() => provider.LookupByIdAsync(id, default));
+	}
+
+	/// <summary>
+	/// Lookup securities by criteria <paramref name="criteria" />.
+	/// </summary>
+	/// <param name="provider"><see cref="ISecurityProvider"/></param>
+	/// <param name="criteria">Message security lookup for specified criteria.</param>
+	/// <returns>Found instruments.</returns>
+	public static IEnumerable<Security> Lookup(this ISecurityProvider provider, SecurityLookupMessage criteria)
+	{
+		if (provider is null)
+			throw new ArgumentNullException(nameof(provider));
+
+		return AsyncHelper.Run(() => provider.LookupAsync(criteria, default).ToArrayAsync2(default));
 	}
 }

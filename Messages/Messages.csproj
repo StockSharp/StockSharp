@@ -11,5 +11,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.Logging" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.Linq" Version="$(EcngVer)" />
   </ItemGroup>
 </Project>

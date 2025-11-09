@@ -1,5 +1,7 @@
 namespace StockSharp.Algo;
 
+using System.Runtime.CompilerServices;
+
 /// <summary>
 /// Provider of information about instruments supporting search using <see cref="SecurityTrie"/>.
 /// </summary>
@@ -37,10 +39,11 @@ public class FilterableSecurityProvider : Disposable, ISecurityProvider
 	public event Action Cleared;
 
 	/// <inheritdoc />
-	public Security LookupById(SecurityId id) => _trie.GetById(id);
+	public ValueTask<Security> LookupByIdAsync(SecurityId id, CancellationToken cancellationToken)
+		=> new(_trie.GetById(id));
 
 	/// <inheritdoc />
-	public IEnumerable<Security> Lookup(SecurityLookupMessage criteria)
+	public async IAsyncEnumerable<Security> LookupAsync(SecurityLookupMessage criteria, [EnumeratorCancellation]CancellationToken cancellationToken)
 	{
 		if (criteria == null)
 			throw new ArgumentNullException(nameof(criteria));
@@ -56,14 +59,23 @@ public class FilterableSecurityProvider : Disposable, ISecurityProvider
 		if (!secId.IsEmpty())
 			securities = securities.Where(s => s.Id.EqualsIgnoreCase(secId));
 
-		return securities.Filter(criteria).TryLimitByCount(criteria);
+		await Task.Yield();
+
+		foreach (var s in securities.Filter(criteria).TryLimitByCount(criteria))
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+			yield return s;
+		}
 	}
 
-	SecurityMessage ISecurityMessageProvider.LookupMessageById(SecurityId id)
-		=> LookupById(id)?.ToMessage();
+	async ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)
+		=> (await LookupByIdAsync(id, cancellationToken))?.ToMessage();
 
-	IEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessages(SecurityLookupMessage criteria)
-		=> Lookup(criteria).Select(s => s.ToMessage());
+	async IAsyncEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessagesAsync(SecurityLookupMessage criteria, [EnumeratorCancellation]CancellationToken cancellationToken)
+	{
+		await foreach (var s in LookupAsync(criteria, cancellationToken).WithEnforcedCancellation(cancellationToken))
+			yield return s.ToMessage();
+	}
 
 	private void AddSecurities(IEnumerable<Security> securities)
 	{

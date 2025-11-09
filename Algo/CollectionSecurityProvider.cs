@@ -1,5 +1,7 @@
 namespace StockSharp.Algo;
 
+using System.Runtime.CompilerServices;
+
 /// <summary>
 /// The supplier of information on instruments, getting data from the collection.
 /// </summary>
@@ -49,16 +51,29 @@ public class CollectionSecurityProvider : ISecurityProvider
 	}
 
 	/// <inheritdoc />
-	public Security LookupById(SecurityId id) => _inner.TryGetValue(id);
+	public ValueTask<Security> LookupByIdAsync(SecurityId id, CancellationToken cancellationToken)
+		=> new(_inner.TryGetValue(id));
 
 	/// <inheritdoc />
-	public IEnumerable<Security> Lookup(SecurityLookupMessage criteria) => _inner.SyncGet(d => d.Values.Filter(criteria));
+	public async IAsyncEnumerable<Security> LookupAsync(SecurityLookupMessage criteria, [EnumeratorCancellation] CancellationToken cancellationToken)
+	{
+		await Task.Yield();
 
-	SecurityMessage ISecurityMessageProvider.LookupMessageById(SecurityId id)
-		=> LookupById(id)?.ToMessage();
+		foreach (var s in _inner.SyncGet(d => d.Values.Filter(criteria)))
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+			yield return s;
+		}
+	}
 
-	IEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessages(SecurityLookupMessage criteria)
-		=> Lookup(criteria).Select(s => s.ToMessage());
+	async ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)
+		=> (await LookupByIdAsync(id, cancellationToken))?.ToMessage();
+
+	async IAsyncEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessagesAsync(SecurityLookupMessage criteria, [EnumeratorCancellation]CancellationToken cancellationToken)
+	{
+		await foreach (var s in LookupAsync(criteria, cancellationToken).WithEnforcedCancellation(cancellationToken))
+			yield return s.ToMessage();
+	}
 
 	/// <summary>
 	/// Add security.
