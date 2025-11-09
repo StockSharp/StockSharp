@@ -1286,7 +1286,7 @@ public static partial class Extensions
 				var parts = str.Split('=');
 				periods.Add(new WorkingTimePeriod
 				{
-					Till = parts[0].ToDateTime(_dateFormat),
+					Till = parts[0].ToDateTime(_dateFormat).UtcKind(),
 					Times = [.. parts[1].SplitBySep("--").Select(s =>
 					{
 						var parts2 = s.Split('-');
@@ -4794,12 +4794,12 @@ public static partial class Extensions
 				endDay = nextDay;
 			}
 
-			bounds = new Range<DateTime>(monday, endDay.EndOfDay());
+			bounds = new(monday, endDay.EndOfDay());
 		}
 		else if (timeFrame.Ticks == TimeHelper.TicksPerMonth)
 		{
 			var month = new DateTime(exchangeTime.Year, exchangeTime.Month, 1);
-			bounds = new Range<DateTime>(month, (month + TimeSpan.FromDays(month.DaysInMonth())).EndOfDay());
+			bounds = new(month, (month + TimeSpan.FromDays(month.DaysInMonth())).EndOfDay());
 		}
 		else
 		{
@@ -4838,7 +4838,7 @@ public static partial class Extensions
 			bounds = new(min, max);
 		}
 
-		return bounds;
+		return new(bounds.Min.ToUniversalTime(), bounds.Max.ToUniversalTime());
 	}
 
 	private static readonly WorkingTime _allRange = new();
