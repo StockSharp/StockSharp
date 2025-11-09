@@ -523,7 +523,7 @@ public partial class TinkoffMessageAdapter
 					{
 						var statesStream = _service.OrdersStream.OrderStateStream(new(), cancellationToken: statesToken).ResponseStream;
 
-						await foreach (var response in statesStream.ReadAllAsync(statesToken))
+						await foreach (var response in statesStream.ReadAllAsync(statesToken).WithEnforcedCancellation(cancellationToken))
 						{
 							currentDelay = _baseDelay;
 
@@ -676,7 +676,7 @@ public partial class TinkoffMessageAdapter
 					{
 						var pfStream = _service.OperationsStream.PortfolioStream(new() { Accounts = { _accountIds } }, cancellationToken: pfToken).ResponseStream;
 
-						await foreach (var response in pfStream.ReadAllAsync(pfToken))
+						await foreach (var response in pfStream.ReadAllAsync(pfToken).WithEnforcedCancellation(cancellationToken))
 						{
 							currentDelay = _baseDelay;
 
@@ -707,7 +707,7 @@ public partial class TinkoffMessageAdapter
 					{
 						var posStream = _service.OperationsStream.PositionsStream(new() { Accounts = { _accountIds } }, cancellationToken: pfToken).ResponseStream;
 
-						await foreach (var response in posStream.ReadAllAsync(pfToken))
+						await foreach (var response in posStream.ReadAllAsync(pfToken).WithEnforcedCancellation(cancellationToken))
 						{
 							currentDelay = _baseDelay;
 

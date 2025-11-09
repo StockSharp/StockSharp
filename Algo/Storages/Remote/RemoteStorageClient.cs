@@ -360,7 +360,7 @@ public class RemoteStorageClient : Disposable
 
 		try
 		{
-			await foreach (var msg in _connector.SubscribeAsync<Message>(subscription, token))
+			await foreach (var msg in _connector.SubscribeAsync<Message>(subscription, token).WithEnforcedCancellation(cancellationToken))
 			{
 				if (msg is SubscriptionFinishedMessage finishedMsg)
 				{

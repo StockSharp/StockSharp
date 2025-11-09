@@ -45,7 +45,7 @@ public partial class TinkoffMessageAdapter
 			{
 				try
 				{
-					await foreach (var response in _mdStream.ResponseStream.ReadAllAsync(cancellationToken))
+					await foreach (var response in _mdStream.ResponseStream.ReadAllAsync(cancellationToken).WithEnforcedCancellation(cancellationToken))
 					{
 						currentDelay = _baseDelay;
 
