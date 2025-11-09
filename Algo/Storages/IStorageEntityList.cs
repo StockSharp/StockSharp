@@ -23,14 +23,4 @@ public interface IStorageEntityList<T> : INotifyList<T>, ISynchronizedCollection
 	/// </summary>
 	/// <param name="entity">The trading object.</param>
 	void Save(T entity);
-
-	/// <summary>
-	/// The time delayed action.
-	/// </summary>
-	DelayAction DelayAction { get; }
-
-	/// <summary>
-	/// Wait flush.
-	/// </summary>
-	void WaitFlush();
 }

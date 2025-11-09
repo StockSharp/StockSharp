@@ -35,7 +35,7 @@ public interface ICsvEntityList
 	/// </summary>
 	/// <returns>File body.</returns>
 	byte[] GetCopy();
-    }
+}
 
 /// <summary>
 /// List of trade objects, received from the CSV storage.
@@ -150,12 +150,6 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 				});
 			}
 		}
-	}
-
-	/// <inheritdoc />
-	void IStorageEntityList<TEntity>.WaitFlush()
-	{
-		_delayActionGroup?.WaitFlush(false);
 	}
 
 	TEntity IStorageEntityList<TEntity>.ReadById(object id)
