@@ -1,9 +1,5 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-using System.IO.Compression;
-
-using Ecng.IO;
-
 /// <summary>
 /// The interface for presentation in the form of list of trade objects, received from the external storage.
 /// </summary>
@@ -29,12 +25,6 @@ public interface ICsvEntityList
 	/// Create archived copy.
 	/// </summary>
 	bool CreateArchivedCopy { get; set; }
-
-	/// <summary>
-	/// Get archived copy body.
-	/// </summary>
-	/// <returns>File body.</returns>
-	byte[] GetCopy();
 }
 
 /// <summary>
@@ -78,36 +68,6 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 	/// <inheritdoc />
 	public bool CreateArchivedCopy { get; set; }
-
-	/// <inheritdoc />
-	public byte[] GetCopy()
-	{
-		if (!CreateArchivedCopy)
-			throw new NotSupportedException();
-
-		byte[] body;
-
-		lock (_copySync)
-			body = _copy;
-
-		if (body is null)
-		{
-			lock (_copySync)
-			{
-				if (File.Exists(FileName))
-					body = File.ReadAllBytes(FileName);
-				else
-					body = [];
-			}
-
-			body = body.Compress<GZipStream>();
-
-			lock (_copySync)
-				_copy ??= body;
-		}
-
-		return body;
-	}
 
 	private void ResetCopy()
 	{
