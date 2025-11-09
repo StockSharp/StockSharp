@@ -1090,4 +1090,37 @@ public class CandleTests
 		builder.DeltaAbovePoC().AssertEqual(-5m);  // 15 - 20
 		builder.DeltaBelowPoC().AssertEqual(-5m);  // 5 - 10
 	}
+
+	[TestMethod]
+	public void CandleBounds_WeekCrossMonth()
+	{
+		var board = ExchangeBoard.Forts;
+		var current = new DateTime(2024, 4, 29, 12, 0, 0).UtcKind(); // Monday29 Apr2024
+		var bounds = TimeSpan.FromDays(7).GetCandleBounds(current, board);
+		bounds.Min.AssertEqual(new DateTime(2024, 4, 29).ApplyTimeZone(board.TimeZone).UtcDateTime);
+		bounds.Max.AssertEqual(new DateTime(2024, 5, 5).EndOfDay().ApplyTimeZone(board.TimeZone).UtcDateTime);
+		(bounds.Max.DayOfWeek == DayOfWeek.Sunday).AssertTrue();
+	}
+
+	[TestMethod]
+	public void CandleBounds_WeekOnSunday()
+	{
+		var board = ExchangeBoard.Forts;
+		var current = new DateTime(2024, 5, 5, 10, 0, 0).UtcKind(); // Sunday
+		var bounds = TimeSpan.FromDays(7).GetCandleBounds(current, board);
+		bounds.Min.AssertEqual(new DateTime(2024, 4, 29).ApplyTimeZone(board.TimeZone).UtcDateTime);
+		bounds.Max.AssertEqual(new DateTime(2024, 5, 5).EndOfDay().ApplyTimeZone(board.TimeZone).UtcDateTime);
+		(bounds.Max.DayOfWeek == DayOfWeek.Sunday).AssertTrue();
+	}
+
+	[TestMethod]
+	public void CandleBounds_Month()
+	{
+		var board = ExchangeBoard.Forts;
+		var current = new DateTime(2024, 4, 15, 8, 0, 0).UtcKind();
+		var monthTf = new TimeSpan(TimeHelper.TicksPerMonth);
+		var bounds = monthTf.GetCandleBounds(current, board);
+		bounds.Min.AssertEqual(new DateTime(2024, 4, 1).ApplyTimeZone(board.TimeZone).UtcDateTime);
+		bounds.Max.AssertEqual(new DateTime(2024, 4, 30).EndOfDay().ApplyTimeZone(board.TimeZone).UtcDateTime);
+	}
 }

@@ -4785,21 +4785,15 @@ public static partial class Extensions
 			var endDay = exchangeTime.Date;
 
 			while (endDay.DayOfWeek != DayOfWeek.Sunday)
-			{
-				var nextDay = endDay.AddDays(1);
-
-				if (nextDay.Month != endDay.Month)
-					break;
-
-				endDay = nextDay;
-			}
+				endDay = endDay.AddDays(1);
 
 			bounds = new(monday, endDay.EndOfDay());
 		}
 		else if (timeFrame.Ticks == TimeHelper.TicksPerMonth)
 		{
 			var month = new DateTime(exchangeTime.Year, exchangeTime.Month, 1);
-			bounds = new(month, (month + TimeSpan.FromDays(month.DaysInMonth())).EndOfDay());
+			var lastDay = new DateTime(exchangeTime.Year, exchangeTime.Month, month.DaysInMonth());
+			bounds = new(month, lastDay.EndOfDay());
 		}
 		else
 		{
