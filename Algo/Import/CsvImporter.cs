@@ -91,7 +91,7 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 				else
 					security = secMsg.ToSecurity(_exchangeInfoProvider);
 
-				_securityStorage.Save(security, UpdateDuplicateSecurities);
+				await _securityStorage.SaveAsync(security, UpdateDuplicateSecurities, cancellationToken);
 
 				//ExtendedInfoStorageItem?.Add(secMsg.SecurityId, secMsg.ExtensionInfo);
 
@@ -151,7 +151,7 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 				Board = _exchangeInfoProvider.GetOrCreateBoard(securityId.BoardCode),
 			};
 
-			_securityStorage.Save(security, false);
+			await _securityStorage.SaveAsync(security, false, cancellationToken);
 			LogInfo(LocalizedStrings.CreatingSec.Put(securityId));
 		}
 

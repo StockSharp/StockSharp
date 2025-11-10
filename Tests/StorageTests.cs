@@ -2648,7 +2648,7 @@ public class StorageTests : BaseTestClass
 		}
 
 		storage = registry.Securities;
-		var loaded = storage.LookupAll().ToArray();
+		var loaded = await storage.LookupAllAsync(token).ToArrayAsync2(token);
 
 		loaded.Length.AssertEqual(securities.Length);
 
@@ -2657,8 +2657,8 @@ public class StorageTests : BaseTestClass
 			Helper.CheckEqual(securities[i], loaded[i]);
 		}
 
-		storage.DeleteAll();
-		storage.LookupAll().Count().AssertEqual(0);
+		await storage.DeleteAllAsync(token);
+		(await storage.LookupAllAsync(token).ToArrayAsync2(token)).Count().AssertEqual(0);
 	}
 
 	[TestMethod]

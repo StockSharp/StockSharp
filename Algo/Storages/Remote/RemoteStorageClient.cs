@@ -90,7 +90,12 @@ public class RemoteStorageClient : Disposable
 		if (securityProvider is null)
 			throw new ArgumentNullException(nameof(securityProvider));
 
-		var existingIds = securityProvider.LookupAll().Select(s => s.Id.ToSecurityId()).ToSet();
+		var existingIds = new HashSet<SecurityId>();
+
+		await foreach (var s in securityProvider.LookupAllAsync(cancellationToken).WithEnforcedCancellation(cancellationToken))
+		{
+			existingIds.Add(s.Id.ToSecurityId());
+		}
 
 		if (criteria.SecurityId != default || criteria.SecurityIds.Length > 0)
 		{

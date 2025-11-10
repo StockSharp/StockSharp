@@ -5,6 +5,7 @@ using System.IO.Compression;
 using Ecng.Compilation;
 using Ecng.Compilation.Expressions;
 using Ecng.IO;
+using Ecng.Linq;
 
 using Nito.AsyncEx;
 
@@ -528,11 +529,20 @@ public static partial class TraderHelper
 	/// <param name="provider">The provider of information about instruments.</param>
 	/// <returns>All available instruments.</returns>
 	public static IEnumerable<Security> LookupAll(this ISecurityProvider provider)
+		=> AsyncHelper.Run(() => LookupAllAsync(provider, default).ToArrayAsync2(default));
+
+	/// <summary>
+	/// Get all available instruments.
+	/// </summary>
+	/// <param name="provider">The provider of information about instruments.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>All available instruments.</returns>
+	public static IAsyncEnumerable<Security> LookupAllAsync(this ISecurityProvider provider, CancellationToken cancellationToken)
 	{
 		if (provider == null)
 			throw new ArgumentNullException(nameof(provider));
 
-		return provider.Lookup(Extensions.LookupAllCriteriaMessage);
+		return provider.LookupAsync(Extensions.LookupAllCriteriaMessage, cancellationToken);
 	}
 
 	/// <summary>
@@ -653,12 +663,13 @@ public static partial class TraderHelper
 	/// To delete all instruments.
 	/// </summary>
 	/// <param name="storage">Securities meta info storage.</param>
-	public static void DeleteAll(this ISecurityStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	public static ValueTask DeleteAllAsync(this ISecurityStorage storage, CancellationToken cancellationToken)
 	{
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
 
-		storage.DeleteBy(Extensions.LookupAllCriteriaMessage);
+		return storage.DeleteByAsync(Extensions.LookupAllCriteriaMessage, cancellationToken);
 	}
 
 	/// <summary>

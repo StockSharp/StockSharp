@@ -67,7 +67,7 @@ static class Program
 		var exchangeInfoProvider = new InMemoryExchangeInfoProvider();
 		await foreach (var secMsg in remoteDrive.LookupSecuritiesAsync(new() { SecurityId = secId }, registry.Securities, token).WithEnforcedCancellation(token))
 		{
-			securityStorage.Save(secMsg.ToSecurity(exchangeInfoProvider), false);
+			await securityStorage.SaveAsync(secMsg.ToSecurity(exchangeInfoProvider), false, token);
 			Console.WriteLine($"Downloaded [{secMsg.SecurityId}]");
 		}
 

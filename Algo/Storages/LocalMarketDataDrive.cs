@@ -910,7 +910,12 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 		cancellationToken.ThrowIfCancellationRequested();
 
-		var existingIds = securityProvider.LookupAll().Select(s => s.Id).ToIgnoreCaseSet();
+		var existingIds = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+
+		await foreach (var s in securityProvider.LookupAllAsync(cancellationToken).WithEnforcedCancellation(cancellationToken))
+		{
+			existingIds.Add(s.Id);
+		}
 
 		foreach (var securityPath in securityPaths)
 		{
