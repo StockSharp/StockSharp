@@ -1421,6 +1421,7 @@ public static class StorageHelper
 	/// <param name="storage">Security storage.</param>
 	/// <param name="security">Security.</param>
 	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	//[Obsolete("Use DeleteAsync method instead.")]
 	public static void Delete(this ISecurityStorage storage, Security security)
 	{
 		if (storage is null)
@@ -1556,6 +1557,7 @@ public static class StorageHelper
 	/// <param name="data">Market data.</param>
 	/// <returns>Count of saved data.</returns>
 	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	[Obsolete("Use SaveAsync method instead.")]
 	public static int Save(this IMarketDataStorage storage, IEnumerable<Message> data)
 	{
 		if (storage is null)
@@ -1570,6 +1572,7 @@ public static class StorageHelper
 	/// <param name="storage">Market data storage.</param>
 	/// <param name="data">Market data to be deleted.</param>
 	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	[Obsolete("Use DeleteAsync method instead.")]
 	public static void Delete(this IMarketDataStorage storage, IEnumerable<Message> data)
 	{
 		if (storage is null)
@@ -1633,6 +1636,7 @@ public static class StorageHelper
 	/// <param name="data">Market data.</param>
 	/// <returns>Count of saved data.</returns>
 	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	[Obsolete("Use SaveAsync method instead.")]
 	public static int Save<TMessage>(this IMarketDataStorage<TMessage> storage, IEnumerable<TMessage> data)
 		where TMessage : Message
 	{
