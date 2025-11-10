@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Import;
 
-using System.Runtime.CompilerServices;
-
 /// <summary>
 /// Messages parser from text file in CSV format.
 /// </summary>

@@ -3,6 +3,7 @@ global using System.Text;
 global using System.Collections;
 global using System.Collections.Generic;
 global using System.Runtime.Serialization;
+global using System.Runtime.CompilerServices;
 global using System.Linq;
 global using System.ComponentModel;
 global using System.ComponentModel.DataAnnotations;

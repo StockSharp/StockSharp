@@ -1,6 +1,6 @@
 namespace StockSharp.Algo;
 
-using System.Runtime.CompilerServices;
+using Ecng.Linq;
 
 /// <summary>
 /// Provider of information about instruments supporting search using <see cref="SecurityTrie"/>.
@@ -43,7 +43,7 @@ public class FilterableSecurityProvider : Disposable, ISecurityProvider
 		=> new(_trie.GetById(id));
 
 	/// <inheritdoc />
-	public async IAsyncEnumerable<Security> LookupAsync(SecurityLookupMessage criteria, [EnumeratorCancellation]CancellationToken cancellationToken)
+	public IAsyncEnumerable<Security> LookupAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken)
 	{
 		if (criteria == null)
 			throw new ArgumentNullException(nameof(criteria));
@@ -59,13 +59,7 @@ public class FilterableSecurityProvider : Disposable, ISecurityProvider
 		if (!secId.IsEmpty())
 			securities = securities.Where(s => s.Id.EqualsIgnoreCase(secId));
 
-		await Task.Yield();
-
-		foreach (var s in securities.Filter(criteria).TryLimitByCount(criteria))
-		{
-			cancellationToken.ThrowIfCancellationRequested();
-			yield return s;
-		}
+		return securities.Filter(criteria).TryLimitByCount(criteria).ToAsyncEnumerable2(cancellationToken);
 	}
 
 	async ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)

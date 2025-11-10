@@ -1,6 +1,6 @@
 namespace StockSharp.Algo;
 
-using System.Runtime.CompilerServices;
+using Ecng.Linq;
 
 /// <summary>
 /// The supplier of information on instruments, getting data from the collection.
@@ -55,16 +55,8 @@ public class CollectionSecurityProvider : ISecurityProvider
 		=> new(_inner.TryGetValue(id));
 
 	/// <inheritdoc />
-	public async IAsyncEnumerable<Security> LookupAsync(SecurityLookupMessage criteria, [EnumeratorCancellation] CancellationToken cancellationToken)
-	{
-		await Task.Yield();
-
-		foreach (var s in _inner.SyncGet(d => d.Values.Filter(criteria)))
-		{
-			cancellationToken.ThrowIfCancellationRequested();
-			yield return s;
-		}
-	}
+	public IAsyncEnumerable<Security> LookupAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken)
+		=> _inner.SyncGet(d => d.Values.Filter(criteria)).ToAsyncEnumerable2(cancellationToken);
 
 	async ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)
 		=> (await LookupByIdAsync(id, cancellationToken))?.ToMessage();

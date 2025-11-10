@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Risk;
 
-using System.Runtime.CompilerServices;
-
 /// <summary>
 /// Base risk-rule.
 /// </summary>

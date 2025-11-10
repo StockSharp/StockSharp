@@ -1,6 +1,6 @@
 namespace StockSharp.Algo.Storages;
 
-using System.Runtime.CompilerServices;
+using Ecng.Linq;
 
 /// <summary>
 /// The interface for access to the storage of information on instruments.
@@ -153,16 +153,8 @@ public class InMemorySecurityStorage : ISecurityStorage
 	}
 
 	/// <inheritdoc />
-	public async IAsyncEnumerable<Security> LookupAsync(SecurityLookupMessage criteria, [EnumeratorCancellation]CancellationToken cancellationToken)
-	{
-		await Task.Yield();
-
-		foreach (var s in _inner.SyncGet(d => d.Values.Filter(criteria).ToArray()).Concat(_underlying.Lookup(criteria)).Distinct())
-		{
-			cancellationToken.ThrowIfCancellationRequested();
-			yield return s;
-		}
-	}
+	public IAsyncEnumerable<Security> LookupAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken)
+		=> _inner.SyncGet(d => d.Values.Filter(criteria).ToArray()).Concat(_underlying.Lookup(criteria)).Distinct().ToAsyncEnumerable2(cancellationToken);
 
 	/// <inheritdoc />
 	public ValueTask<Security> LookupByIdAsync(SecurityId id, CancellationToken cancellationToken)

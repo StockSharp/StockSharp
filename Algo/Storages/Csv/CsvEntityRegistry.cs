@@ -1,6 +1,6 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-using System.Runtime.CompilerServices;
+using Ecng.Linq;
 
 /// <summary>
 /// The CSV storage of trading objects.
@@ -120,7 +120,7 @@ public class CsvEntityRegistry : IEntityRegistry
 
 		ValueTask<Security> ISecurityProvider.LookupByIdAsync(SecurityId id, CancellationToken cancellationToken) => new(GetById(id));
 
-		async IAsyncEnumerable<Security> ISecurityProvider.LookupAsync(SecurityLookupMessage criteria, [EnumeratorCancellation]CancellationToken cancellationToken)
+		IAsyncEnumerable<Security> ISecurityProvider.LookupAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken)
 		{
 			Security[] arr;
 
@@ -137,13 +137,7 @@ public class CsvEntityRegistry : IEntityRegistry
 				arr = security == null ? [] : [security];
 			}
 
-			await Task.Yield();
-
-			foreach (var item in arr)
-			{
-				cancellationToken.ThrowIfCancellationRequested();
-				yield return item;
-			}
+			return arr.ToAsyncEnumerable2(cancellationToken);
 		}
 
 		ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)

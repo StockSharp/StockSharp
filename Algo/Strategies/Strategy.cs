@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Strategies;
 
-using System.Runtime.CompilerServices;
-
 using StockSharp.Algo.PnL;
 using StockSharp.Algo.Risk;
 using StockSharp.Algo.Statistics;

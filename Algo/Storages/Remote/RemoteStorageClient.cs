@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages.Remote;
 
-using System.Runtime.CompilerServices;
-
 /// <summary>
 /// The client for access to the history server.
 /// </summary>
