@@ -1337,4 +1337,61 @@ public static class StorageHelper
 		ArgumentNullException.ThrowIfNull(registry);
 		return registry.GetCandleMessageStorage(securityId, DataType.Create(candleMessageType, arg), drive, format);
 	}
+
+	/// <summary>
+	/// Synchronous wrapper for <see cref="ISecurityStorage.SaveAsync(Security, bool, CancellationToken)"/>.
+	/// </summary>
+	/// <param name="storage">Security storage.</param>
+	/// <param name="security">Security.</param>
+	/// <param name="forced">Forced update.</param>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	public static void Save(this ISecurityStorage storage, Security security, bool forced)
+	{
+		if (storage is null)
+			throw new ArgumentNullException(nameof(storage));
+
+		AsyncHelper.Run(() => storage.SaveAsync(security, forced, default));
+	}
+
+	/// <summary>
+	/// Synchronous wrapper for <see cref="ISecurityStorage.DeleteAsync(Security, CancellationToken)"/>.
+	/// </summary>
+	/// <param name="storage">Security storage.</param>
+	/// <param name="security">Security.</param>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	public static void Delete(this ISecurityStorage storage, Security security)
+	{
+		if (storage is null)
+			throw new ArgumentNullException(nameof(storage));
+
+		AsyncHelper.Run(() => storage.DeleteAsync(security, default));
+	}
+
+	/// <summary>
+	/// Synchronous wrapper for <see cref="ISecurityStorage.DeleteRangeAsync(System.Collections.Generic.IEnumerable{Security}, CancellationToken)"/>.
+	/// </summary>
+	/// <param name="storage">Security storage.</param>
+	/// <param name="securities">Securities.</param>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	public static void DeleteRange(this ISecurityStorage storage, IEnumerable<Security> securities)
+	{
+		if (storage is null)
+			throw new ArgumentNullException(nameof(storage));
+
+		AsyncHelper.Run(() => storage.DeleteRangeAsync(securities, default));
+	}
+
+	/// <summary>
+	/// Synchronous wrapper for <see cref="ISecurityStorage.DeleteByAsync(SecurityLookupMessage, CancellationToken)"/>.
+	/// </summary>
+	/// <param name="storage">Security storage.</param>
+	/// <param name="criteria">The criterion.</param>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	public static void DeleteBy(this ISecurityStorage storage, SecurityLookupMessage criteria)
+	{
+		if (storage is null)
+			throw new ArgumentNullException(nameof(storage));
+
+		AsyncHelper.Run(() => storage.DeleteByAsync(criteria, default));
+	}
 }

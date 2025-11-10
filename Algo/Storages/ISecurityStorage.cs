@@ -17,25 +17,33 @@ public interface ISecurityStorage : ISecurityProvider
 	/// </summary>
 	/// <param name="security">Security.</param>
 	/// <param name="forced">Forced update.</param>
-	void Save(Security security, bool forced);
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>Operation task.</returns>
+	ValueTask SaveAsync(Security security, bool forced, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Delete security.
 	/// </summary>
 	/// <param name="security">Security.</param>
-	void Delete(Security security);
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>Operation task.</returns>
+	ValueTask DeleteAsync(Security security, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Delete securities.
 	/// </summary>
 	/// <param name="securities">Securities.</param>
-	void DeleteRange(IEnumerable<Security> securities);
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>Operation task.</returns>
+	ValueTask DeleteRangeAsync(IEnumerable<Security> securities, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To delete instruments by the criterion.
 	/// </summary>
 	/// <param name="criteria">The criterion.</param>
-	void DeleteBy(SecurityLookupMessage criteria);
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>Operation task.</returns>
+	ValueTask DeleteByAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -77,23 +85,30 @@ public class InMemorySecurityStorage : ISecurityStorage
 	public event Action Cleared;
 
 	/// <inheritdoc />
-	public void Delete(Security security)
+	public ValueTask DeleteAsync(Security security, CancellationToken cancellationToken)
 	{
 		if (security is null)
 			throw new ArgumentNullException(nameof(security));
 
+		cancellationToken.ThrowIfCancellationRequested();
+
 		if (_inner.Remove(security.ToSecurityId()))
 			Removed?.Invoke([security]);
+
+		return default;
 	}
 
 	/// <inheritdoc />
-	public void DeleteBy(SecurityLookupMessage criteria)
+	public ValueTask DeleteByAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken)
 	{
+		if (criteria is null)
+			throw new ArgumentNullException(nameof(criteria));
+
 		if (criteria.IsLookupAll())
 		{
 			_inner.Clear();
 			Cleared?.Invoke();
-			return;
+			return default;
 		}
 
 		Security[] toDelete;
@@ -106,11 +121,13 @@ public class InMemorySecurityStorage : ISecurityStorage
 				_inner.Remove(security.ToSecurityId());
 		}
 
+		cancellationToken.ThrowIfCancellationRequested();
 		Removed?.Invoke(toDelete);
+		return default;
 	}
 
 	/// <inheritdoc />
-	public void DeleteRange(IEnumerable<Security> securities)
+	public ValueTask DeleteRangeAsync(IEnumerable<Security> securities, CancellationToken cancellationToken)
 	{
 		if (securities is null)
 			throw new ArgumentNullException(nameof(securities));
@@ -130,7 +147,9 @@ public class InMemorySecurityStorage : ISecurityStorage
 			}
 		}
 
+		cancellationToken.ThrowIfCancellationRequested();
 		Removed?.Invoke(toDelete);
+		return default;
 	}
 
 	/// <inheritdoc />
@@ -159,12 +178,16 @@ public class InMemorySecurityStorage : ISecurityStorage
 	}
 
 	/// <inheritdoc />
-	public void Save(Security security, bool forced)
+	public ValueTask SaveAsync(Security security, bool forced, CancellationToken cancellationToken)
 	{
 		if (security is null)
 			throw new ArgumentNullException(nameof(security));
 
+		cancellationToken.ThrowIfCancellationRequested();
+
 		if (_inner.TryAdd2(security.ToSecurityId(), security))
 			Added?.Invoke([security]);
+
+		return default;
 	}
 }

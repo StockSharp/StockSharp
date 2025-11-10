@@ -131,9 +131,11 @@ public class CsvEntityRegistry : IEntityRegistry
 				lock (SyncRoot)
 					arr = [.. this.Filter(criteria)];
 			}
-
-			var security = GetById(secId);
-			arr = security == null ? [] : [security];
+			else
+			{
+				var security = GetById(secId);
+				arr = security == null ? [] : [security];
+			}
 
 			await Task.Yield();
 
@@ -153,20 +155,46 @@ public class CsvEntityRegistry : IEntityRegistry
 				yield return item.ToMessage();
 		}
 
-		void ISecurityStorage.Delete(Security security)
+
+		ValueTask ISecurityStorage.SaveAsync(Security security, bool forced, CancellationToken cancellationToken)
 		{
+			if (security is null)
+				throw new ArgumentNullException(nameof(security));
+
+			cancellationToken.ThrowIfCancellationRequested();
+			Save(security, forced);
+			return default;
+		}
+
+		ValueTask ISecurityStorage.DeleteAsync(Security security, CancellationToken cancellationToken)
+		{
+			if (security is null)
+				throw new ArgumentNullException(nameof(security));
+
+			cancellationToken.ThrowIfCancellationRequested();
 			Remove(security);
+			return default;
 		}
 
-		void ISecurityStorage.DeleteBy(SecurityLookupMessage criteria)
+		ValueTask ISecurityStorage.DeleteByAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken)
 		{
+			if (criteria is null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			cancellationToken.ThrowIfCancellationRequested();
 			this.Filter(criteria).ForEach(s => Remove(s));
+			return default;
 		}
 
-		void ISecurityStorage.DeleteRange(IEnumerable<Security> securities)
+		ValueTask ISecurityStorage.DeleteRangeAsync(IEnumerable<Security> securities, CancellationToken cancellationToken)
 		{
+			if (securities is null)
+				throw new ArgumentNullException(nameof(securities));
+
+			cancellationToken.ThrowIfCancellationRequested();
 			RemoveRange(securities);
 			OnRemovedRange(securities);
+			return default;
 		}
 
 		#endregion
