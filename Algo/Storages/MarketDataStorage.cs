@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Storages;
 
+using Ecng.Linq;
+
 abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 	where TMessage : Message, IServerTimeMessage
 {
@@ -27,7 +29,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 		_isValid = isValid ?? throw new ArgumentNullException(nameof(isValid));
 	}
 
-	IEnumerable<DateTime> IMarketDataStorage.Dates => Drive.Dates;
+	ValueTask<IEnumerable<DateTime>> IMarketDataStorage.GetDatesAsync(CancellationToken cancellationToken) => Drive.GetDatesAsync(cancellationToken);
 
 	private readonly DataType _dataType;
 	DataType IMarketDataStorage.DataType => _dataType;
@@ -49,7 +51,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 
 	private bool SecurityIdEqual(SecurityId securityId) => securityId.SecurityCode.EqualsIgnoreCase(SecurityId.SecurityCode) && securityId.BoardCode.EqualsIgnoreCase(SecurityId.BoardCode);
 
-	public int Save(IEnumerable<TMessage> data)
+	public ValueTask<int> SaveAsync(IEnumerable<TMessage> data, CancellationToken cancellationToken)
 	{
 		if (data == null)
 			throw new ArgumentNullException(nameof(data));
@@ -108,7 +110,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 			}
 		}
 
-		return count;
+		return new(count);
 	}
 
 	private int Save(Stream stream, IMarketDataMetaInfo metaInfo, TMessage[] data, bool isOverride)
@@ -225,17 +227,17 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 		}
 	}
 
-	int IMarketDataStorage.Save(IEnumerable<Message> data)
+	ValueTask<int> IMarketDataStorage.SaveAsync(IEnumerable<Message> data, CancellationToken cancellationToken)
 	{
-		return Save(data.Cast<TMessage>());
+		return SaveAsync(data.Cast<TMessage>(), cancellationToken);
 	}
 
-	void IMarketDataStorage.Delete(IEnumerable<Message> data)
+	ValueTask IMarketDataStorage.DeleteAsync(IEnumerable<Message> data, CancellationToken cancellationToken)
 	{
-		Delete(data.Cast<TMessage>());
+		return DeleteAsync(data.Cast<TMessage>(), cancellationToken);
 	}
 
-	public void Delete(IEnumerable<TMessage> data)
+	public ValueTask DeleteAsync(IEnumerable<TMessage> data, CancellationToken cancellationToken)
 	{
 		if (data == null)
 			throw new ArgumentNullException(nameof(data));
@@ -312,11 +314,15 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 				}
 			}
 		}
+
+		return default;
 	}
 
-	public IEnumerable<TMessage> Load(DateTime date)
+	public IAsyncEnumerable<TMessage> LoadAsync(DateTime date, CancellationToken cancellationToken)
 	{
 		date = date.Date;
+
+		IEnumerable<TMessage> msgs;
 
 		lock (GetSync(date))
 		{
@@ -327,11 +333,13 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 				var metaInfo = GetInfo(stream, date);
 
 				if (metaInfo == null)
-					return [];
-
-				// нельзя закрывать поток, так как из него будут читаться данные через энумератор
-				//using (stream)
-				return Serializer.Deserialize(stream, metaInfo);
+					msgs = [];
+				else
+				{
+					// нельзя закрывать поток, так как из него будут читаться данные через энумератор
+					//using (stream)
+					msgs = Serializer.Deserialize(stream, metaInfo);
+				}
 			}
 			catch (Exception)
 			{
@@ -339,16 +347,18 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 				throw;
 			}
 		}
+
+		return msgs.ToAsyncEnumerable2(cancellationToken);
 	}
 
-	IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
+	ValueTask<IMarketDataMetaInfo> IMarketDataStorage.GetMetaInfoAsync(DateTime date, CancellationToken cancellationToken)
 	{
 		date = date.Date;
 
 		lock (GetSync(date))
 		{
 			using var stream = LoadStream(date, true);
-			return GetInfo(stream, date);
+			return new(GetInfo(stream, date));
 		}
 	}
 
@@ -377,7 +387,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 		return metaInfo;
 	}
 
-	void IMarketDataStorage.Delete(DateTime date)
+	ValueTask IMarketDataStorage.DeleteAsync(DateTime date, CancellationToken cancellationToken)
 	{
 		date = date.Date;
 
@@ -386,10 +396,12 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 			Drive.Delete(date);
 			_dateMetaInfos.Remove(date);
 		}
+
+		return default;
 	}
 
-	IEnumerable<Message> IMarketDataStorage.Load(DateTime date)
+	IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date, CancellationToken cancellationToken)
 	{
-		return Load(date);
+		return LoadAsync(date, cancellationToken);
 	}
 }
