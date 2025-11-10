@@ -162,6 +162,17 @@ public static class StorageHelper
 	/// <param name="to">The end time, up to which the data shall be deleted. If the value is not specified, data will be deleted up to the end date <see cref="GetToDate"/>, inclusive.</param>
 	/// <returns><see langword="true"/> if data was deleted, <see langword="false"/> data not exist for the specified period.</returns>
 	public static bool Delete(this IMarketDataStorage storage, DateTime? from = null, DateTime? to = null)
+		=> AsyncHelper.Run(() => DeleteAsync(storage, from, to));
+
+	/// <summary>
+	/// To delete market data from the storage for the specified time period.
+	/// </summary>
+	/// <param name="storage">Market-data storage.</param>
+	/// <param name="from">The start time for data deleting. If the value is not specified, the data will be deleted starting from the date <see cref="GetFromDate"/>.</param>
+	/// <param name="to">The end time, up to which the data shall be deleted. If the value is not specified, data will be deleted up to the end date <see cref="GetToDate"/>, inclusive.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see langword="true"/> if data was deleted, <see langword="false"/> data not exist for the specified period.</returns>
+	public static async ValueTask<bool> DeleteAsync(this IMarketDataStorage storage, DateTime? from = null, DateTime? to = null, CancellationToken cancellationToken = default)
 	{
 		if (storage == null)
 			throw new ArgumentNullException(nameof(storage));
@@ -180,49 +191,49 @@ public static class StorageHelper
 
 			if (from == null && to == null)
 			{
-				storage.Delete(date);
+				await storage.DeleteAsync(date, cancellationToken);
 				continue;
 			}
 			else if (from == null && date < to.Value.Date)
 			{
-				storage.Delete(date);
+				await storage.DeleteAsync(date, cancellationToken);
 				continue;
 			}
 			else if (to == null && date > from.Value.Date)
 			{
-				storage.Delete(date);
+				await storage.DeleteAsync(date, cancellationToken);
 				continue;
 			}
 
 			if (time == min)
 			{
-				var metaInfo = storage.GetMetaInfo(date);
+				var metaInfo = await storage.GetMetaInfoAsync(date, cancellationToken);
 
 				if (metaInfo is null)
 					continue;
 
 				if (metaInfo.FirstTime >= time && max.Date != min.Date)
 				{
-					storage.Delete(date);
+					await storage.DeleteAsync(date, cancellationToken);
 				}
 				else
 				{
-					var data = storage.Load(date).ToList();
+					var data = (await storage.LoadAsync(date, cancellationToken).ToArrayAsync2(cancellationToken)).ToList();
 					data.RemoveWhere(d =>
 					{
 						var t = d.GetServerTime();
 						return t < min || t > range.Max;
 					});
-					storage.Delete(data);
+					await storage.DeleteAsync(data, cancellationToken);
 				}
 			}
 			else if (date < max.Date)
-				storage.Delete(date);
+				await storage.DeleteAsync(date, cancellationToken);
 			else
 			{
 				var data = storage.Load(date).ToList();
 				data.RemoveWhere(d => d.GetServerTime() > range.Max);
-				storage.Delete(data);
+				await storage.DeleteAsync(data, cancellationToken);
 			}
 		}
 

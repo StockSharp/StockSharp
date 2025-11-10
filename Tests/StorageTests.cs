@@ -28,12 +28,13 @@ public class StorageTests : BaseTestClass
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	//[ExpectedException(typeof(ArgumentOutOfRangeException), "Неправильная цена сделки.")]
-	public void TickNegativePrice(StorageFormats format)
+	public async Task TickNegativePrice(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
-		GetTradeStorage(secId, format).Save([new ExecutionMessage
+		await GetTradeStorage(secId, format).SaveAsync([new ExecutionMessage
 		{
 			DataTypeEx = DataType.Ticks,
 			TradeId = 1,
@@ -41,37 +42,39 @@ public class StorageTests : BaseTestClass
 			SecurityId = secId,
 			TradeVolume = 10,
 			ServerTime = DateTime.UtcNow
-		}]);
+		}], token);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickEmptySecurityBinary(StorageFormats format)
+	public async Task TickEmptySecurityBinary(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
-		GetTradeStorage(secId, format).Save([new ExecutionMessage
+		await GetTradeStorage(secId, format).SaveAsync([new ExecutionMessage
 		{
 			DataTypeEx = DataType.Ticks,
 			TradeId = 1,
 			TradePrice = 10,
 			TradeVolume = 10,
 			ServerTime = DateTime.UtcNow,
-		}]);
+		}], token);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickInvalidSecurity2(StorageFormats format)
+	public Task TickInvalidSecurity2(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var storage = GetTradeStorage(secId, format);
-		Assert.ThrowsExactly<ArgumentException>(() => storage.Save(
+		return Assert.ThrowsExactlyAsync<ArgumentException>(async () => { await storage.SaveAsync(
 		[
 			new ExecutionMessage
 			{
@@ -82,42 +85,43 @@ public class StorageTests : BaseTestClass
 				ServerTime = DateTime.UtcNow,
 				SecurityId = new() { SecurityCode = "another", BoardCode = BoardCodes.Ux }
 			}
-		]));
+		], token); });
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickInvalidSecurity3(StorageFormats format)
+	public Task TickInvalidSecurity3(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var storage = GetTradeStorage(secId, format);
-		Assert.ThrowsExactly<ArgumentException>(() => storage.Save([new ExecutionMessage
+		return Assert.ThrowsExactlyAsync<ArgumentException>(async () => { await storage.SaveAsync([new ExecutionMessage
 		{
 			DataTypeEx = DataType.Ticks,
 			TradeId = 1,
 			TradePrice = 10,
 			TradeVolume = 10,
 			SecurityId = secId,
-		}]));
+		}], token); });
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickRandom(StorageFormats format)
+	public async Task TickRandom(StorageFormats format)
 	{
-		TickRandomSaveLoad(format, _tickCount);
+		await TickRandomSaveLoad(format, _tickCount);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickStringId(StorageFormats format)
+	public async Task TickStringId(StorageFormats format)
 	{
-		TickRandomSaveLoad(format, _tickCount, trades =>
+		await TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			foreach (var trade in trades)
 			{
@@ -135,9 +139,9 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickRandomLocalTime(StorageFormats format)
+	public async Task TickRandomLocalTime(StorageFormats format)
 	{
-		TickRandomSaveLoad(format, _tickCount, trades =>
+		await TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			foreach (var trade in trades)
 			{
@@ -150,17 +154,17 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickNanosec(StorageFormats format)
+	public async Task TickNanosec(StorageFormats format)
 	{
-		TickRandomSaveLoad(format, _tickCount, interval: TimeSpan.FromTicks(16546));
+		await TickRandomSaveLoad(format, _tickCount, interval: TimeSpan.FromTicks(16546));
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickHighPrice(StorageFormats format)
+	public async Task TickHighPrice(StorageFormats format)
 	{
-		TickRandomSaveLoad(format, _tickCount, trades =>
+		await TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			for (var i = 0; i < trades.Length; i++)
 			{
@@ -172,9 +176,9 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickLowPrice(StorageFormats format)
+	public async Task TickLowPrice(StorageFormats format)
 	{
-		TickRandomSaveLoad(format, _tickCount, trades =>
+		await TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			var priceStep = /*trades.First().Security.PriceStep = */0.00001m;
 
@@ -188,9 +192,9 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickExtremePrice(StorageFormats format)
+	public async Task TickExtremePrice(StorageFormats format)
 	{
-		TickRandomSaveLoad(format, _tickCount, trades =>
+		await TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			//trades.First().Security.PriceStep = 0.0001m;
 
@@ -204,9 +208,9 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickExtremePrice2(StorageFormats format)
+	public async Task TickExtremePrice2(StorageFormats format)
 	{
-		TickRandomSaveLoad(format, _tickCount, trades =>
+		await TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			//trades.First().Security.PriceStep = 0.0001m;
 
@@ -220,9 +224,9 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickExtremeVolume(StorageFormats format)
+	public async Task TickExtremeVolume(StorageFormats format)
 	{
-		TickRandomSaveLoad(format, _tickCount, trades =>
+		await TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			//trades.First().Security.VolumeStep = 0.0001m;
 
@@ -236,9 +240,9 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickExtremeVolume2(StorageFormats format)
+	public async Task TickExtremeVolume2(StorageFormats format)
 	{
-		TickRandomSaveLoad(format, _tickCount, trades =>
+		await TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			//trades.First().Security.VolumeStep = 0.0001m;
 
@@ -250,9 +254,9 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickNonSystem(StorageFormats format)
+	public async Task TickNonSystem(StorageFormats format)
 	{
-		TickRandomSaveLoad(format, _tickCount, trades =>
+		await TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			for (var i = 0; i < trades.Length; i++)
 			{
@@ -268,9 +272,9 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickFractionalVolume(StorageFormats format)
+	public async Task TickFractionalVolume(StorageFormats format)
 	{
-		TickRandomSaveLoad(format, _tickCount, trades =>
+		await TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			var volumeStep = /*trades.First().Security.VolumeStep = */0.00001m;
 
@@ -284,9 +288,9 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickFractionalVolume2(StorageFormats format)
+	public async Task TickFractionalVolume2(StorageFormats format)
 	{
-		TickRandomSaveLoad(format, _tickCount, trades =>
+		await TickRandomSaveLoad(format, _tickCount, trades =>
 		{
 			var volumeStep = /*trades.First().Security.VolumeStep = */0.00001m;
 
@@ -297,27 +301,29 @@ public class StorageTests : BaseTestClass
 		});
 	}
 
-	private static void TickRandomSaveLoad(StorageFormats format, int count, Action<ExecutionMessage[]> modify = null, TimeSpan? interval = null)
+	private async Task TickRandomSaveLoad(StorageFormats format, int count, Action<ExecutionMessage[]> modify = null, TimeSpan? interval = null)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var trades = security.RandomTicks(count, false, interval);
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		modify?.Invoke(trades);
 
 		var storage = GetTradeStorage(secId, format);
-		storage.Save(trades);
-		LoadTradesAndCompare(storage, trades);
-		storage.DeleteWithCheck();
+		await storage.SaveAsync(trades, token);
+		await LoadTradesAndCompare(storage, trades);
+		await storage.DeleteWithCheckAsync();
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickPartSave(StorageFormats format)
+	public async Task TickPartSave(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var trades = security.RandomTicks(_tickCount, false);
 
@@ -325,93 +331,97 @@ public class StorageTests : BaseTestClass
 
 		var tradeStorage = GetTradeStorage(secId, format);
 
-		tradeStorage.Save(trades.Take(halfTicks));
-		LoadTradesAndCompare(tradeStorage, [.. trades.Take(halfTicks)]);
+		await tradeStorage.SaveAsync(trades.Take(halfTicks), token);
+		await LoadTradesAndCompare(tradeStorage, [.. trades.Take(halfTicks)]);
 
-		tradeStorage.Save([.. trades.Skip(halfTicks)]);
-		LoadTradesAndCompare(tradeStorage, [.. trades.Skip(halfTicks)]);
+		await tradeStorage.SaveAsync([.. trades.Skip(halfTicks)], token);
+		await LoadTradesAndCompare(tradeStorage, [.. trades.Skip(halfTicks)]);
 
-		LoadTradesAndCompare(tradeStorage, trades);
-		tradeStorage.DeleteWithCheck();
+		await LoadTradesAndCompare(tradeStorage, trades);
+		await tradeStorage.DeleteWithCheckAsync();
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickRandomDelete(StorageFormats format)
+	public async Task TickRandomDelete(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var trades = security.RandomTicks(_tickCount, false);
 
 		var tradeStorage = GetTradeStorage(secId, format);
 
-		tradeStorage.Save(trades);
+		await tradeStorage.SaveAsync(trades, token);
 
 		var randomDeleteTrades = trades.Select(t => RandomGen.GetInt(5) == 2 ? null : t).WhereNotNull().ToList();
-		tradeStorage.Delete(randomDeleteTrades);
+		await tradeStorage.DeleteAsync(randomDeleteTrades, token);
 
-		LoadTradesAndCompare(tradeStorage, [.. trades.Except(randomDeleteTrades)]);
-		tradeStorage.DeleteWithCheck();
+		await LoadTradesAndCompare(tradeStorage, [.. trades.Except(randomDeleteTrades)]);
+		await tradeStorage.DeleteWithCheckAsync();
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickFullDelete(StorageFormats format)
+	public async Task TickFullDelete(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var trades = security.RandomTicks(_tickCount, false);
 
 		var tradeStorage = GetTradeStorage(secId, format);
 
-		tradeStorage.Save(trades);
+		await tradeStorage.SaveAsync(trades, token);
 
-		tradeStorage.Delete(trades.First().ServerTime, trades.Last().ServerTime);
+		await tradeStorage.DeleteAsync(trades.First().ServerTime, trades.Last().ServerTime, token);
 
-		var loadedTrades = tradeStorage.Load(trades.First().ServerTime, trades.Last().ServerTime).ToArray();
+		var loadedTrades = await tradeStorage.LoadAsync(trades.First().ServerTime, trades.Last().ServerTime, token);
 		loadedTrades.Length.AssertEqual(0);
 
-		tradeStorage.Save(trades);
+		await tradeStorage.SaveAsync(trades, token);
 
-		LoadTradesAndCompare(tradeStorage, trades);
+		await LoadTradesAndCompare(tradeStorage, trades);
 
-		tradeStorage.Delete(trades);
+		await tradeStorage.DeleteAsync(trades, token);
 
-		loadedTrades = [.. tradeStorage.Load(trades.First().ServerTime, trades.Last().ServerTime)];
+		loadedTrades = await tradeStorage.LoadAsync(trades.First().ServerTime, trades.Last().ServerTime, token);
 		loadedTrades.Length.AssertEqual(0);
 
-		loadedTrades = [.. tradeStorage.Load()];
+		loadedTrades = await tradeStorage.LoadAsync(DateTime.MinValue, token).ToArrayAsync2(token);
 		loadedTrades.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickWrongDateDelete(StorageFormats format)
+	public async Task TickWrongDateDelete(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
-		GetTradeStorage(secId, format).Delete(new DateTime(2005, 1, 1), new DateTime(2005, 1, 10));
+		await GetTradeStorage(secId, format).DeleteAsync(new DateTime(2005, 1, 1), new DateTime(2005, 1, 10), token);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickRandomDateDelete(StorageFormats format)
+	public async Task TickRandomDateDelete(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var trades = security.RandomTicks(_tickCount, false);
 
 		var tradeStorage = GetTradeStorage(secId, format);
 
-		tradeStorage.Save(trades);
+		await tradeStorage.SaveAsync(trades, token);
 
 		var minTime = DateTime.MaxValue;
 		var maxTime = DateTime.MinValue;
@@ -427,21 +437,22 @@ public class StorageTests : BaseTestClass
 
 		var from = minTime + third;
 		var to = maxTime - third;
-		tradeStorage.Delete(from, to);
+		await tradeStorage.DeleteAsync(from, to, token);
 
-		LoadTradesAndCompare(tradeStorage, [.. trades.Where(t => t.ServerTime < from || t.ServerTime > to)]);
+		await LoadTradesAndCompare(tradeStorage, [.. trades.Where(t => t.ServerTime < from || t.ServerTime > to)]);
 
-		tradeStorage.DeleteWithCheck();
+		await tradeStorage.DeleteWithCheckAsync();
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickSameTime(StorageFormats format)
+	public async Task TickSameTime(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
 		var dt = DateTime.UtcNow;
+		var token = CancellationToken;
 
 		var tradeStorage = GetTradeStorage(secId, format);
 
@@ -467,16 +478,18 @@ public class StorageTests : BaseTestClass
 			}
 		};
 
-		tradeStorage.Save([trades[0]]);
-		tradeStorage.Save([trades[1]]);
+		await tradeStorage.SaveAsync([trades[0]], token);
+		await tradeStorage.SaveAsync([trades[1]], token);
 
-		LoadTradesAndCompare(tradeStorage, trades);
-		tradeStorage.DeleteWithCheck();
+		await LoadTradesAndCompare(tradeStorage, trades);
+		await tradeStorage.DeleteWithCheckAsync();
 	}
 
-	private static void LoadTradesAndCompare(IMarketDataStorage<ExecutionMessage> tradeStorage, ExecutionMessage[] trades)
+	private async Task LoadTradesAndCompare(IMarketDataStorage<ExecutionMessage> tradeStorage, ExecutionMessage[] trades)
 	{
-		var loadedTrades = tradeStorage.Load(trades.First().ServerTime, trades.Last().ServerTime).ToArray();
+		var token = CancellationToken;
+		
+		var loadedTrades = await tradeStorage.LoadAsync(trades.First().ServerTime, trades.Last().ServerTime, token);
 
 		loadedTrades.CompareMessages(trades);
 	}
@@ -484,7 +497,7 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthAdaptivePriceStep(StorageFormats format)
+	public async Task DepthAdaptivePriceStep(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -496,17 +509,21 @@ public class StorageTests : BaseTestClass
 
 		var storage = GetStorageRegistry().GetQuoteMessageStorage(secId, null, format);
 
-		storage.Save(depths);
-		LoadDepthsAndCompare(storage, depths);
+		var token = CancellationToken;
 
-		storage.DeleteWithCheck();
+		await storage.SaveAsync(depths, token);
+		await LoadDepthsAndCompare(storage, depths);
+
+		await storage.DeleteWithCheckAsync();
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthLowPriceStep(StorageFormats format)
+	public async Task DepthLowPriceStep(StorageFormats format)
 	{
+		var token = CancellationToken;
+		
 		var security = Helper.CreateSecurity();
 		security.PriceStep = 0.00000001m;
 
@@ -516,10 +533,10 @@ public class StorageTests : BaseTestClass
 
 		var storage = GetStorageRegistry().GetQuoteMessageStorage(secId, null, format: format);
 
-		storage.Save(depths);
-		LoadDepthsAndCompare(storage, depths);
+		await storage.SaveAsync(depths, token);
+		await LoadDepthsAndCompare(storage, depths);
 
-		storage.DeleteWithCheck();
+		await storage.DeleteWithCheckAsync();
 	}
 
 	private static IMarketDataStorage<QuoteChangeMessage> GetDepthStorage(SecurityId security, StorageFormats format)
@@ -530,10 +547,11 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthInvalidVolume(StorageFormats format)
+	public Task DepthInvalidVolume(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var depth = new QuoteChangeMessage
 		{
@@ -543,16 +561,17 @@ public class StorageTests : BaseTestClass
 		};
 
 		var storage = GetDepthStorage(secId, format);
-		Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => storage.Save([depth]));
+		return Assert.ThrowsExactlyAsync<ArgumentOutOfRangeException>(async () => { await storage.SaveAsync([depth], token); });
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthInvalidSecurity(StorageFormats format)
+	public Task DepthInvalidSecurity(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var depth = new QuoteChangeMessage
 		{
@@ -561,17 +580,18 @@ public class StorageTests : BaseTestClass
 		};
 
 		var storage = GetDepthStorage(secId, format);
-		Assert.ThrowsExactly<ArgumentException>(() => storage.Save([depth]));
+		return Assert.ThrowsExactlyAsync<ArgumentException>(async () => { await storage.SaveAsync([depth], token); });
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	//[ExpectedException(typeof(ArgumentException), "Попытка записать неупорядоченные стаканы.")]
-	public void DepthInvalidOrder(StorageFormats format)
+	public async Task DepthInvalidOrder(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var depth1 = new QuoteChangeMessage
 		{
@@ -589,18 +609,19 @@ public class StorageTests : BaseTestClass
 
 		var storage = GetDepthStorage(secId, format);
 		storage.AppendOnlyNew = false;
-		storage.Save([depth2]);
-		storage.Save([depth1]);
+		await storage.SaveAsync([depth2], token);
+		await storage.SaveAsync([depth1], token);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	//[ExpectedException(typeof(ArgumentException), "Попытка записать неупорядоченные стаканы.")]
-	public void DepthInvalidOrder2(StorageFormats format)
+	public async Task DepthInvalidOrder2(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var depth1 = new QuoteChangeMessage
 		{
@@ -617,22 +638,23 @@ public class StorageTests : BaseTestClass
 		};
 
 		var depthStorage = GetDepthStorage(secId, format);
-		depthStorage.Save([depth2]);
-		LoadDepthsAndCompare(depthStorage, [depth2]);
+		await depthStorage.SaveAsync([depth2], token);
+		await LoadDepthsAndCompare(depthStorage, [depth2]);
 
-		depthStorage.Save([depth1]);
-		LoadDepthsAndCompare(depthStorage, [depth2]);
-		depthStorage.DeleteWithCheck();
+		await depthStorage.SaveAsync([depth1], token);
+		await LoadDepthsAndCompare(depthStorage, [depth2]);
+		await depthStorage.DeleteWithCheckAsync();
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	//[ExpectedException(typeof(ArgumentException), "Попытка записать неупорядоченные стаканы.")]
-	public void DepthInvalidOrder3(StorageFormats format)
+	public async Task DepthInvalidOrder3(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var depth1 = new QuoteChangeMessage
 		{
@@ -650,16 +672,16 @@ public class StorageTests : BaseTestClass
 
 		var depthStorage = GetDepthStorage(secId, format);
 		depthStorage.AppendOnlyNew = false;
-		depthStorage.Save([depth2]);
-		LoadDepthsAndCompare(depthStorage, [depth2]);
+		await depthStorage.SaveAsync([depth2], token);
+		await LoadDepthsAndCompare(depthStorage, [depth2]);
 
 		try
 		{
-			depthStorage.Save([depth1]);
+			await depthStorage.SaveAsync([depth1], token);
 		}
 		catch
 		{
-			depthStorage.DeleteWithCheck();
+			await depthStorage.DeleteWithCheckAsync();
 			throw;
 		}
 	}
@@ -668,10 +690,11 @@ public class StorageTests : BaseTestClass
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	//[ExpectedException(typeof(ArgumentException), "Все переданные стаканы является пустыми.")]
-	public void DepthInvalidEmpty(StorageFormats format)
+	public async Task DepthInvalidEmpty(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var depth = new QuoteChangeMessage
 		{
@@ -682,18 +705,19 @@ public class StorageTests : BaseTestClass
 		var depths = new[] { depth };
 
 		var storage = GetDepthStorage(secId, format);
-		storage.Save(depths);
-		LoadDepthsAndCompare(storage, depths);
+		await storage.SaveAsync(depths, token);
+		await LoadDepthsAndCompare(storage, depths);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	//[ExpectedException(typeof(ArgumentException), "Переданный стакан является пустым.")]
-	public void DepthEmpty(StorageFormats format)
+	public async Task DepthEmpty(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var depth1 = new QuoteChangeMessage
 		{
@@ -716,19 +740,20 @@ public class StorageTests : BaseTestClass
 		};
 
 		var depthStorage = GetDepthStorage(secId, format);
-		depthStorage.Save([depth1, depth2, depth3]);
-		LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
+		await depthStorage.SaveAsync([depth1, depth2, depth3], token);
+		await LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
 
-		depthStorage.DeleteWithCheck();
+		await depthStorage.DeleteWithCheckAsync();
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthNegativePrices(StorageFormats format)
+	public async Task DepthNegativePrices(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var depth1 = new QuoteChangeMessage
 		{
@@ -754,19 +779,20 @@ public class StorageTests : BaseTestClass
 		};
 
 		var depthStorage = GetDepthStorage(secId, format);
-		depthStorage.Save([depth1, depth2, depth3]);
-		LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
+		await depthStorage.SaveAsync([depth1, depth2, depth3], token);
+		await LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
 
-		depthStorage.DeleteWithCheck();
+		await depthStorage.DeleteWithCheckAsync();
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthZeroPrices(StorageFormats format)
+	public async Task DepthZeroPrices(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var depth1 = new QuoteChangeMessage
 		{
@@ -792,19 +818,20 @@ public class StorageTests : BaseTestClass
 		};
 
 		var depthStorage = GetDepthStorage(secId, format);
-		depthStorage.Save([depth1, depth2, depth3]);
-		LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
+		await depthStorage.SaveAsync([depth1, depth2, depth3], token);
+		await LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
 
-		depthStorage.DeleteWithCheck();
+		await depthStorage.DeleteWithCheckAsync();
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthEmpty2(StorageFormats format)
+	public async Task DepthEmpty2(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var depth1 = new QuoteChangeMessage
 		{
@@ -826,55 +853,57 @@ public class StorageTests : BaseTestClass
 		};
 
 		var depthStorage = GetDepthStorage(secId, format);
-		depthStorage.Save([depth1, depth2, depth3]);
-		LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
+		await depthStorage.SaveAsync([depth1, depth2, depth3], token);
+		await LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
 
-		depthStorage.DeleteWithCheck();
+		await depthStorage.DeleteWithCheckAsync();
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthEmpty3(StorageFormats format)
+	public async Task DepthEmpty3(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var depth1 = new QuoteChangeMessage { SecurityId = secId, ServerTime = new DateTime(2005, 1, 1, 0, 0, 0, 0) };
 		var depth2 = new QuoteChangeMessage { SecurityId = secId, ServerTime = new DateTime(2005, 1, 1, 0, 0, 0, 1) };
 		var depth3 = new QuoteChangeMessage { SecurityId = secId, ServerTime = new DateTime(2005, 1, 1, 0, 0, 0, 2) };
 
 		var depthStorage = GetDepthStorage(secId, format);
-		depthStorage.Save([depth1, depth2, depth3]);
-		LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
+		await depthStorage.SaveAsync([depth1, depth2, depth3], token);
+		await LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
 
-		depthStorage.DeleteWithCheck();
+		await depthStorage.DeleteWithCheckAsync();
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthPartSave(StorageFormats format)
+	public async Task DepthPartSave(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var depths = security.RandomDepths(_depthCount2);
 
 		var depthStorage = GetDepthStorage(secId, format);
 
-		depthStorage.Save(depths.Take(500));
-		LoadDepthsAndCompare(depthStorage, [.. depths.Take(500)]);
+		await depthStorage.SaveAsync(depths.Take(500), token);
+		await LoadDepthsAndCompare(depthStorage, [.. depths.Take(500)]);
 
-		depthStorage.Save([.. depths.Skip(500)]);
-		LoadDepthsAndCompare(depthStorage, [.. depths.Skip(000)]);
+		await depthStorage.SaveAsync([.. depths.Skip(500)], token);
+		await LoadDepthsAndCompare(depthStorage, [.. depths.Skip(000)]);
 
-		LoadDepthsAndCompare(depthStorage, depths);
+		await LoadDepthsAndCompare(depthStorage, depths);
 
-		depthStorage.DeleteWithCheck();
+		await depthStorage.DeleteWithCheckAsync();
 	}
 
-	private static void DepthHalfFilled(StorageFormats format, int count)
+	private async Task DepthHalfFilled(StorageFormats format, int count)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
@@ -892,6 +921,8 @@ public class StorageTests : BaseTestClass
 		var time = DateTime.UtcNow;
 
 		var depths = new List<QuoteChangeMessage>();
+
+		var token = CancellationToken;
 
 		for (var x = 0; x < count; x++)
 		{
@@ -914,57 +945,57 @@ public class StorageTests : BaseTestClass
 			}));
 		}
 
-		depthStorage.Save(depths);
+		await depthStorage.SaveAsync(depths, token);
 
-		LoadDepthsAndCompare(depthStorage, depths);
+		await LoadDepthsAndCompare(depthStorage, depths);
 
 		var from = time;
 		var to = from.AddDays(count + 1);
 
-		depthStorage.Delete(from, to);
+		await depthStorage.DeleteAsync(from, to, token);
 
-		var loadedDepths = depthStorage.Load(from, to).ToArray();
+		var loadedDepths = await depthStorage.LoadAsync(from, to, token);
 		loadedDepths.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthHalfFilled(StorageFormats format)
+	public async Task DepthHalfFilled(StorageFormats format)
 	{
-		DepthHalfFilled(format, _depthCount1);
+		await DepthHalfFilled(format, _depthCount1);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthRandom(StorageFormats format)
+	public async Task DepthRandom(StorageFormats format)
 	{
-		DepthRandom(format, _depthCount3);
+		await DepthRandom(format, _depthCount3);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthRandomOrdersCount(StorageFormats format)
+	public async Task DepthRandomOrdersCount(StorageFormats format)
 	{
-		DepthRandom(format, _depthCount3, ordersCount: true);
+		await DepthRandom(format, _depthCount3, ordersCount: true);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthRandomConditions(StorageFormats format)
+	public async Task DepthRandomConditions(StorageFormats format)
 	{
-		DepthRandom(format, _depthCount3, conditions: true);
+		await DepthRandom(format, _depthCount3, conditions: true);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthExtremePrice(StorageFormats format)
+	public async Task DepthExtremePrice(StorageFormats format)
 	{
-		DepthRandom(format, _depthCount3, depths =>
+		await DepthRandom(format, _depthCount3, depths =>
 		{
 			//depths.First().Security.PriceStep = 0.0001m;
 
@@ -1001,9 +1032,9 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthExtremeVolume(StorageFormats format)
+	public async Task DepthExtremeVolume(StorageFormats format)
 	{
-		DepthRandom(format, _depthCount3, depths =>
+		await DepthRandom(format, _depthCount3, depths =>
 		{
 			//depths.First().Security.VolumeStep = 0.0001m;
 
@@ -1021,9 +1052,9 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthExtremeVolume2(StorageFormats format)
+	public async Task DepthExtremeVolume2(StorageFormats format)
 	{
-		DepthRandom(format, _depthCount3, depths =>
+		await DepthRandom(format, _depthCount3, depths =>
 		{
 			//depths.First().Security.VolumeStep = 0.0001m;
 
@@ -1041,17 +1072,17 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthRandomNanosec(StorageFormats format)
+	public async Task DepthRandomNanosec(StorageFormats format)
 	{
-		DepthRandom(format, _depthCount3, interval: TimeSpan.FromTicks(14465));
+		await DepthRandom(format, _depthCount3, interval: TimeSpan.FromTicks(14465));
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthFractionalVolume(StorageFormats format)
+	public async Task DepthFractionalVolume(StorageFormats format)
 	{
-		DepthRandom(format, _depthCount3, depths =>
+		await DepthRandom(format, _depthCount3, depths =>
 		{
 			var volumeStep = /*depths.First().Security.VolumeStep = */0.00001m;
 
@@ -1069,9 +1100,9 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthFractionalVolume2(StorageFormats format)
+	public async Task DepthFractionalVolume2(StorageFormats format)
 	{
-		DepthRandom(format, _depthCount3, depths =>
+		await DepthRandom(format, _depthCount3, depths =>
 		{
 			var volumeStep = /*depths.First().Security.VolumeStep = */0.00001m;
 
@@ -1091,10 +1122,11 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthSameTime(StorageFormats format)
+	public async Task DepthSameTime(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var dt = DateTime.UtcNow;
 
@@ -1116,17 +1148,18 @@ public class StorageTests : BaseTestClass
 			},
 		};
 
-		depthStorage.Save([depths[0]]);
-		depthStorage.Save([depths[1]]);
+		await depthStorage.SaveAsync([depths[0]], token);
+		await depthStorage.SaveAsync([depths[1]], token);
 
-		LoadDepthsAndCompare(depthStorage, depths);
-		depthStorage.DeleteWithCheck();
+		await LoadDepthsAndCompare(depthStorage, depths);
+		await depthStorage.DeleteWithCheckAsync();
 	}
 
-	private static void DepthRandom(StorageFormats format, int count, Action<QuoteChangeMessage[]> modify = null, TimeSpan? interval = null, bool ordersCount = false, bool conditions = false)
+	private async Task DepthRandom(StorageFormats format, int count, Action<QuoteChangeMessage[]> modify = null, TimeSpan? interval = null, bool ordersCount = false, bool conditions = false)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var depths = security.RandomDepths(count, interval, null, ordersCount);
 
@@ -1158,95 +1191,100 @@ public class StorageTests : BaseTestClass
 		modify?.Invoke(depths);
 
 		var depthStorage = GetDepthStorage(secId, format);
-		depthStorage.Save(depths);
-		LoadDepthsAndCompare(depthStorage, depths);
-		depthStorage.DeleteWithCheck();
+		await depthStorage.SaveAsync(depths, token);
+		await LoadDepthsAndCompare(depthStorage, depths);
+		await depthStorage.DeleteWithCheckAsync();
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthRandomDelete(StorageFormats format)
+	public async Task DepthRandomDelete(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var depths = security.RandomDepths(_depthCount3, TimeSpan.FromSeconds(2));
 
 		var depthStorage = GetDepthStorage(secId, format);
 
-		depthStorage.Save(depths);
+		await depthStorage.SaveAsync(depths, token);
 
 		var randomDeleteDepths = depths.Select(d => RandomGen.GetInt(5) == 2 ? null : d).WhereNotNull().ToList();
-		depthStorage.Delete(randomDeleteDepths);
+		await depthStorage.DeleteAsync(randomDeleteDepths, token);
 
-		LoadDepthsAndCompare(depthStorage, [.. depths.Except(randomDeleteDepths).OrderBy(d => d.ServerTime)]);
+		await LoadDepthsAndCompare(depthStorage, [.. depths.Except(randomDeleteDepths).OrderBy(d => d.ServerTime)]);
 
-		depthStorage.DeleteWithCheck();
+		await depthStorage.DeleteWithCheckAsync();
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthFullDelete(StorageFormats format)
+	public async Task DepthFullDelete(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var depths = security.RandomDepths(_depthCount3);
 
 		var depthStorage = GetDepthStorage(secId, format);
 
-		depthStorage.Save(depths);
+		await depthStorage.SaveAsync(depths, token);
 
-		LoadDepthsAndCompare(depthStorage, depths);
+		await LoadDepthsAndCompare(depthStorage, depths);
 
-		depthStorage.Delete(depths.First().ServerTime, depths.Last().ServerTime);
+		await depthStorage.DeleteAsync(depths.First().ServerTime, depths.Last().ServerTime, token);
 
-		var loadedDepths = depthStorage.Load(depths.First().ServerTime, depths.Last().ServerTime).ToArray();
+		var loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token);
 		loadedDepths.Length.AssertEqual(0);
 
-		depthStorage.Save(depths);
+		await depthStorage.SaveAsync(depths, token);
 
-		LoadDepthsAndCompare(depthStorage, depths);
+		await LoadDepthsAndCompare(depthStorage, depths);
 
-		depthStorage.Delete(depths);
+		await depthStorage.DeleteAsync(depths, token);
 
-		loadedDepths = [.. depthStorage.Load(depths.First().ServerTime, depths.Last().ServerTime)];
+		loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token);
 		loadedDepths.Length.AssertEqual(0);
 
-		loadedDepths = [.. depthStorage.Load()];
+		loadedDepths = await depthStorage.LoadAsync(DateTime.MinValue, token).ToArrayAsync2(token);
 		loadedDepths.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthRandomDateDelete(StorageFormats format)
+	public async Task DepthRandomDateDelete(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var depths = security.RandomDepths(_depthCount3);
 
 		var depthStorage = GetDepthStorage(secId, format);
 
-		depthStorage.Save(depths);
+		await depthStorage.SaveAsync(depths, token);
 
 		var now = DateTime.UtcNow;
 
 		var from = now + TimeSpan.FromMinutes(_depthCount3 / 2);
 		var to = now + TimeSpan.FromMinutes(3 * _depthCount3 / 2);
-		depthStorage.Delete(from, to);
+		await depthStorage.DeleteAsync(from, to, token);
 
-		LoadDepthsAndCompare(depthStorage, [.. depths.Where(d => d.ServerTime < from || d.ServerTime > to).OrderBy(d => d.ServerTime)]);
+		await LoadDepthsAndCompare(depthStorage, [.. depths.Where(d => d.ServerTime < from || d.ServerTime > to).OrderBy(d => d.ServerTime)]);
 
-		depthStorage.DeleteWithCheck();
+		await depthStorage.DeleteWithCheckAsync();
 	}
 
-	private static void LoadDepthsAndCompare(IMarketDataStorage<QuoteChangeMessage> depthStorage, IList<QuoteChangeMessage> depths)
+	private async Task LoadDepthsAndCompare(IMarketDataStorage<QuoteChangeMessage> depthStorage, IList<QuoteChangeMessage> depths)
 	{
-		var loadedDepths = depthStorage.Load(depths.First().ServerTime, depths.Last().ServerTime).ToArray();
+		var token = CancellationToken;
+		
+		var loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token);
 
 		loadedDepths.CompareMessages(depths);
 	}
@@ -1254,10 +1292,11 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthRandomLessMaxDepth(StorageFormats format)
+	public async Task DepthRandomLessMaxDepth(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		const int depthSize = 20;
 
@@ -1271,25 +1310,26 @@ public class StorageTests : BaseTestClass
 
 		var depthStorage = GetDepthStorage(secId, format);
 
-		depthStorage.Save(depths);
-		var loadedDepths = depthStorage.Load(depths.First().ServerTime, depths.Last().ServerTime).ToArray();
+		await depthStorage.SaveAsync(depths, token);
+		var loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token);
 
 		loadedDepths.CompareMessages(depths);
 
-		depthStorage.Delete(depths.First().ServerTime, depths.Last().ServerTime);
-		loadedDepths = [.. depthStorage.Load(depths.First().ServerTime, depths.Last().ServerTime)];
+		await depthStorage.DeleteAsync(depths.First().ServerTime, depths.Last().ServerTime, token);
+		loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token);
 		loadedDepths.Length.AssertEqual(0);
 
-		depthStorage.DeleteWithCheck();
+		await depthStorage.DeleteWithCheckAsync();
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthRandomMoreMaxDepth(StorageFormats format)
+	public async Task DepthRandomMoreMaxDepth(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var depths = security.RandomDepths(_depthCount3);
 
@@ -1297,22 +1337,23 @@ public class StorageTests : BaseTestClass
 
 		var depthStorage = GetDepthStorage(secId, format);
 
-		depthStorage.Save(depths);
-		var loadedDepths = depthStorage.Load(depths.First().ServerTime, depths.Last().ServerTime).ToArray();
+		await depthStorage.SaveAsync(depths, token);
+		var loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token);
 
 		loadedDepths.CompareMessages(depths);
 
-		depthStorage.Delete(depths.First().ServerTime, depths.Last().ServerTime);
-		loadedDepths = [.. depthStorage.Load(depths.First().ServerTime, depths.Last().ServerTime)];
+		await depthStorage.DeleteAsync(depths.First().ServerTime, depths.Last().ServerTime, token);
+		loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token);
 		loadedDepths.Length.AssertEqual(0);
 
-		depthStorage.DeleteWithCheck();
+		await depthStorage.DeleteWithCheckAsync();
 	}
 
-	private static void DepthRandomIncrement(StorageFormats format, bool ordersCount, bool conditions)
+	private async Task DepthRandomIncrement(StorageFormats format, bool ordersCount, bool conditions)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var depths = security.RandomDepths(_depthCount2, null, null, ordersCount);
 
@@ -1351,14 +1392,16 @@ public class StorageTests : BaseTestClass
 		diffQuotes.Reverse();
 
 		var depthStorage = GetDepthStorage(secId, format);
-		depthStorage.Save(diffQuotes);
-		LoadQuotesAndCompare(depthStorage, diffQuotes);
-		depthStorage.DeleteWithCheck();
+		await depthStorage.SaveAsync(diffQuotes, token);
+		await LoadQuotesAndCompare(depthStorage, diffQuotes);
+		await depthStorage.DeleteWithCheckAsync();
 	}
 
-	private static void LoadQuotesAndCompare(IMarketDataStorage<QuoteChangeMessage> depthStorage, IList<QuoteChangeMessage> depths)
+	private async Task LoadQuotesAndCompare(IMarketDataStorage<QuoteChangeMessage> depthStorage, IList<QuoteChangeMessage> depths)
 	{
-		var loadedDepths = depthStorage.Load(depths.First().ServerTime, depths.Last().ServerTime).ToArray();
+		var token = CancellationToken;
+		
+		var loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token);
 
 		loadedDepths.CompareMessages(depths);
 	}
@@ -1366,31 +1409,32 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthRandomIncrement(StorageFormats format)
+	public Task DepthRandomIncrement(StorageFormats format)
 	{
-		DepthRandomIncrement(format, false, false);
+		return DepthRandomIncrement(format, false, false);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthRandomIncrementOrders(StorageFormats format)
+	public Task DepthRandomIncrementOrders(StorageFormats format)
 	{
-		DepthRandomIncrement(format, true, false);
+		return DepthRandomIncrement(format, true, false);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthRandomIncrementOrdersConditions(StorageFormats format)
+	public Task DepthRandomIncrementOrdersConditions(StorageFormats format)
 	{
-		DepthRandomIncrement(format, true, true);
+		return DepthRandomIncrement(format, true, true);
 	}
 
-	private static void DepthRandomIncrementNonIncrement(StorageFormats format, bool isStateFirst)
+	private Task DepthRandomIncrementNonIncrement(StorageFormats format, bool isStateFirst)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var depths = new[]
 		{
@@ -1414,32 +1458,33 @@ public class StorageTests : BaseTestClass
 		};
 
 		var depthStorage = GetDepthStorage(secId, format);
-		Assert.ThrowsExactly<InvalidOperationException>(() => depthStorage.Save(depths));
+		return Assert.ThrowsExactlyAsync<InvalidOperationException>(async () => { await depthStorage.SaveAsync(depths, token); });
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthRandomIncrementNonIncrement(StorageFormats format)
+	public Task DepthRandomIncrementNonIncrement(StorageFormats format)
 	{
-		DepthRandomIncrementNonIncrement(format, true);
+		return DepthRandomIncrementNonIncrement(format, true);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthRandomIncrementNonIncrement2(StorageFormats format)
+	public Task DepthRandomIncrementNonIncrement2(StorageFormats format)
 	{
-		DepthRandomIncrementNonIncrement(format, false);
+		return DepthRandomIncrementNonIncrement(format, false);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthRandomIncrementNonIncrement3(StorageFormats format)
+	public async Task DepthRandomIncrementNonIncrement3(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var depths = new[]
 		{
@@ -1463,14 +1508,14 @@ public class StorageTests : BaseTestClass
 		};
 
 		var depthStorage = GetDepthStorage(secId, format);
-		depthStorage.Save(depths.Take(1));
-		Assert.ThrowsExactly<ArgumentException>(() => depthStorage.Save(depths.Skip(1)));
+		await depthStorage.SaveAsync(depths.Take(1), token);
+		await Assert.ThrowsExactlyAsync<ArgumentException>(async () => await depthStorage.SaveAsync(depths.Skip(1), token));
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void CandlesExtremePrices(StorageFormats format)
+	public Task CandlesExtremePrices(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity(100);
 
@@ -1482,36 +1527,37 @@ public class StorageTests : BaseTestClass
 			trade.TradeVolume = RandomGen.GetDecimal();
 		}
 
-		CandlesRandom(format, trades, security, false);
+		return CandlesRandom(format, trades, security, false);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void CandlesNoProfile(StorageFormats format)
+	public Task CandlesNoProfile(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity(100);
 
-		CandlesRandom(format, security.RandomTicks(_tickCount, false), security, false);
+		return CandlesRandom(format, security.RandomTicks(_tickCount, false), security, false);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	//[DataRow(StorageFormats.Csv)]
-	public void CandlesWithProfile(StorageFormats format)
+	public Task CandlesWithProfile(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity(100);
 
-		CandlesRandom(format, security.RandomTicks(_tickCount, true), security, true);
+		return CandlesRandom(format, security.RandomTicks(_tickCount, true), security, true);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void CandlesActive(StorageFormats format)
+	public async Task CandlesActive(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity(100);
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var tf = TimeSpan.FromMinutes(5);
 		var time = new DateTime(2017, 10, 02, 15, 30, 00).UtcKind();
@@ -1557,29 +1603,30 @@ public class StorageTests : BaseTestClass
 
 		var candleStorage = GetStorageRegistry().GetTimeFrameCandleMessageStorage(secId, tf);
 
-		candleStorage.Save(candles);
+		await candleStorage.SaveAsync(candles, token);
 
-		var loadedCandles = candleStorage.Load(candles.First().OpenTime, candles.Last().OpenTime).ToArray();
+		var loadedCandles = await candleStorage.LoadAsync(candles.First().OpenTime, candles.Last().OpenTime, token);
 		loadedCandles.CompareCandles([.. candles.Where(c => c.State != CandleStates.Active)], format);
-		candleStorage.Delete(loadedCandles);
+		await candleStorage.DeleteAsync(loadedCandles, token);
 
 		foreach (var candle in candles)
 		{
-			candleStorage.Save([candle]);
+			await candleStorage.SaveAsync([candle], token);
 		}
 
-		loadedCandles = [.. candleStorage.Load(candles.First().OpenTime, candles.Last().OpenTime)];
+		loadedCandles = await candleStorage.LoadAsync(candles.First().OpenTime, candles.Last().OpenTime, token);
 		loadedCandles.CompareCandles([.. candles.Where(c => c.State != CandleStates.Active)], format);
-		candleStorage.Delete(loadedCandles);
+		await candleStorage.DeleteAsync(loadedCandles, token);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void CandlesDuplicate(StorageFormats format)
+	public async Task CandlesDuplicate(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity(100);
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var tf = TimeSpan.FromMinutes(5);
 		var time = new DateTime(2017, 10, 02, 15, 30, 00).UtcKind();
@@ -1612,20 +1659,20 @@ public class StorageTests : BaseTestClass
 
 		var candleStorage = GetStorageRegistry().GetTimeFrameCandleMessageStorage(secId, tf);
 
-		candleStorage.Save(candles);
+		await candleStorage.SaveAsync(candles, token);
 
-		var loadedCandles = candleStorage.Load(candles.First().OpenTime, candles.Last().OpenTime).ToArray();
+		var loadedCandles = await candleStorage.LoadAsync(candles.First().OpenTime, candles.Last().OpenTime, token);
 		loadedCandles.CompareCandles([.. candles.Take(1)], format);
-		candleStorage.Delete(loadedCandles);
+		await candleStorage.DeleteAsync(loadedCandles, token);
 
 		foreach (var candle in candles)
 		{
-			candleStorage.Save([candle]);
+			await candleStorage.SaveAsync([candle], token);
 		}
 
-		loadedCandles = [.. candleStorage.Load(candles.First().OpenTime, candles.Last().OpenTime)];
+		loadedCandles = await candleStorage.LoadAsync(candles.First().OpenTime, candles.Last().OpenTime, token);
 		loadedCandles.CompareCandles([.. candles.Take(1)], format);
-		candleStorage.Delete(loadedCandles);
+		await candleStorage.DeleteAsync(loadedCandles, token);
 	}
 
 	private static ExecutionMessage[] GenerateFactalVolumeTrades(Security security, decimal modifier)
@@ -1664,26 +1711,26 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void CandlesFractionalVolume(StorageFormats format)
+	public Task CandlesFractionalVolume(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity(100);
 		security.VolumeStep = 0.00001m;
 
-		CandlesRandom(format, GenerateFactalVolumeTrades(security, 1), security, false, volumeRange: 0.0003m, boxSize: 0.0003m);
+		return CandlesRandom(format, GenerateFactalVolumeTrades(security, 1), security, false, volumeRange: 0.0003m, boxSize: 0.0003m);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void CandlesFractionalVolume2(StorageFormats format)
+	public Task CandlesFractionalVolume2(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity(100);
 		security.VolumeStep = 0.00001m;
 
-		CandlesRandom(format, GenerateFactalVolumeTrades(security, 0.1m), security, false, volumeRange: 0.0003m, boxSize: 0.0003m);
+		return CandlesRandom(format, GenerateFactalVolumeTrades(security, 0.1m), security, false, volumeRange: 0.0003m, boxSize: 0.0003m);
 	}
 
-	private static void CandlesRandom(
+	private async Task CandlesRandom(
 		StorageFormats format,
 		ExecutionMessage[] trades,
 		Security security, bool isCalcVolumeProfile,
@@ -1728,33 +1775,36 @@ public class StorageTests : BaseTestClass
 
 		var secId = security.ToSecurityId();
 
-		CheckCandles<TimeFrameCandleMessage, TimeSpan>(storage, secId, candles, tfArg, format);
-		CheckCandles<VolumeCandleMessage, decimal>(storage, secId, candles, volumeRange, format);
-		CheckCandles<TickCandleMessage, int>(storage, secId, candles, ticksArg, format);
-		CheckCandles<RangeCandleMessage, Unit>(storage, secId, candles, rangeArg, format);
-		CheckCandles<RenkoCandleMessage, Unit>(storage, secId, candles, renkoArg, format);
-		CheckCandles<PnFCandleMessage, PnFArg>(storage, secId, candles, pnfArg, format);
+		await CheckCandles<TimeFrameCandleMessage, TimeSpan>(storage, secId, candles, tfArg, format);
+		await CheckCandles<VolumeCandleMessage, decimal>(storage, secId, candles, volumeRange, format);
+		await CheckCandles<TickCandleMessage, int>(storage, secId, candles, ticksArg, format);
+		await CheckCandles<RangeCandleMessage, Unit>(storage, secId, candles, rangeArg, format);
+		await CheckCandles<RenkoCandleMessage, Unit>(storage, secId, candles, renkoArg, format);
+		await CheckCandles<PnFCandleMessage, PnFArg>(storage, secId, candles, pnfArg, format);
 	}
 
-	private static void CheckCandles<TCandle, TArg>(IStorageRegistry storage, SecurityId security, IEnumerable<CandleMessage> candles, TArg arg, StorageFormats format)
+	private async Task CheckCandles<TCandle, TArg>(IStorageRegistry storage, SecurityId security, IEnumerable<CandleMessage> candles, TArg arg, StorageFormats format)
 		where TCandle : CandleMessage
 	{
+		var token = CancellationToken;
+		
 		var candleStorage = storage.GetCandleMessageStorage(security, DataType.Create<TCandle>(arg), null, format);
 		var typedCandle = candles.OfType<TCandle>().ToArray();
 
-		candleStorage.Save(typedCandle);
-		var loadedCandles = candleStorage.Load(typedCandle.First().OpenTime, typedCandle.Last().OpenTime).ToArray();
+		await candleStorage.SaveAsync(typedCandle, token);
+		var loadedCandles = await candleStorage.LoadAsync(typedCandle.First().OpenTime, typedCandle.Last().OpenTime, token);
 		loadedCandles.CompareCandles([.. typedCandle.Where(c => c.State != CandleStates.Active)], format);
-		candleStorage.Delete(loadedCandles);
+		await candleStorage.DeleteAsync(loadedCandles, token);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void CandlesInvalid(StorageFormats format)
+	public async Task CandlesInvalid(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var storage = GetStorageRegistry();
 
@@ -1764,21 +1814,22 @@ public class StorageTests : BaseTestClass
 
 		try
 		{
-			Assert.ThrowsExactly<ArgumentException>(() => tfStorage.Save(candles));
+			await Assert.ThrowsExactlyAsync<ArgumentException>(async () => { await tfStorage.SaveAsync(candles, token); });
 		}
 		finally
 		{
-			tfStorage.Delete(candles);
+			await tfStorage.DeleteAsync(candles, token);
 		}
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void CandlesInvalid2(StorageFormats format)
+	public async Task CandlesInvalid2(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var storage = GetStorageRegistry();
 
@@ -1792,11 +1843,11 @@ public class StorageTests : BaseTestClass
 
 		try
 		{
-			Assert.ThrowsExactly<ArgumentException>(() => tfStorage.Save(candles));
+			await Assert.ThrowsExactlyAsync<ArgumentException>(async () => { await tfStorage.SaveAsync(candles, token); });
 		}
 		finally
 		{
-			tfStorage.Delete(candles);
+			await tfStorage.DeleteAsync(candles, token);
 		}
 	}
 
@@ -1816,10 +1867,11 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void CandlesSameTime(StorageFormats format)
+	public async Task CandlesSameTime(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var tf = TimeSpan.FromMinutes(5);
 
@@ -1844,22 +1896,23 @@ public class StorageTests : BaseTestClass
 
 		try
 		{
-			tfStorage.Save(candles);
-			tfStorage.Save(candles);
+			await tfStorage.SaveAsync(candles, token);
+			await tfStorage.SaveAsync(candles, token);
 
-			var loaded = tfStorage.Load().Cast<TimeFrameCandleMessage>().ToArray();
+			var loaded = (await tfStorage.LoadAsync(DateTime.MinValue, token).ToArrayAsync2(token)).Cast<TimeFrameCandleMessage>().ToArray();
 			loaded.CompareCandles(candles, format);
 		}
 		finally
 		{
-			tfStorage.Delete(candles);
+			await tfStorage.DeleteAsync(candles, token);
 		}
 	}
 
-	private static void CandlesTimeFrame(StorageFormats format, TimeSpan tf, DateTime? time = null)
+	private async Task CandlesTimeFrame(StorageFormats format, TimeSpan tf, DateTime? time = null)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var storage = GetStorageRegistry();
 		var tfStorage = storage.GetTimeFrameCandleMessageStorage(secId, tf, format: format);
@@ -1903,68 +1956,69 @@ public class StorageTests : BaseTestClass
 
 		try
 		{
-			tfStorage.Save(candles);
-			tfStorage.Load().ToArray().CompareCandles(candles, format);
+			await tfStorage.SaveAsync(candles, token);
+			(await tfStorage.LoadAsync(DateTime.MinValue, token).ToArrayAsync2(token)).CompareCandles(candles, format);
 		}
 		finally
 		{
-			tfStorage.Delete(candles);
+			await tfStorage.DeleteAsync(candles, token);
 		}
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void CandlesMiniTimeFrame(StorageFormats format)
+	public Task CandlesMiniTimeFrame(StorageFormats format)
 	{
-		CandlesTimeFrame(format, TimeSpan.FromMilliseconds(100));
+		return CandlesTimeFrame(format, TimeSpan.FromMilliseconds(100));
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void CandlesMiniTimeFrame2(StorageFormats format)
+	public Task CandlesMiniTimeFrame2(StorageFormats format)
 	{
-		CandlesTimeFrame(format, TimeSpan.FromMinutes(1.0456));
+		return CandlesTimeFrame(format, TimeSpan.FromMinutes(1.0456));
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void CandlesBigTimeFrame(StorageFormats format)
+	public Task CandlesBigTimeFrame(StorageFormats format)
 	{
-		CandlesTimeFrame(format, TimeSpan.FromHours(100));
+		return CandlesTimeFrame(format, TimeSpan.FromHours(100));
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void CandlesBigTimeFrame2(StorageFormats format)
+	public Task CandlesBigTimeFrame2(StorageFormats format)
 	{
-		CandlesTimeFrame(format, TimeSpan.FromHours(100.4570456));
+		return CandlesTimeFrame(format, TimeSpan.FromHours(100.4570456));
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void CandlesDiffDates(StorageFormats format)
+	public Task CandlesDiffDates(StorageFormats format)
 	{
-		CandlesTimeFrame(format, TimeSpan.FromHours(3), new DateTime(2019, 1, 1, 20, 00, 00).UtcKind());
+		return CandlesTimeFrame(format, TimeSpan.FromHours(3), new DateTime(2019, 1, 1, 20, 00, 00).UtcKind());
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void CandlesDiffDaysOffsets(StorageFormats format)
+	public async Task CandlesDiffDaysOffsets(StorageFormats format)
 	{
-		CandlesDiffDaysOffsets(format, false);
-		CandlesDiffDaysOffsets(format, true);
+		await CandlesDiffDaysOffsets(format, false);
+		await CandlesDiffDaysOffsets(format, true);
 	}
 
-	private static void CandlesDiffDaysOffsets(StorageFormats format, bool initHighLow)
+	private async Task CandlesDiffDaysOffsets(StorageFormats format, bool initHighLow)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var tf = TimeSpan.FromDays(1);
 
@@ -1998,35 +2052,36 @@ public class StorageTests : BaseTestClass
 
 		try
 		{
-			tfStorage.Save(candles);
-			tfStorage.Load().ToArray().CompareCandles(candles, format);
+			await tfStorage.SaveAsync(candles, token);
+			(await tfStorage.LoadAsync(DateTime.MinValue, token).ToArrayAsync2(token)).CompareCandles(candles, format);
 		}
 		finally
 		{
-			tfStorage.Delete(candles);
+			await tfStorage.DeleteAsync(candles, token);
 		}
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void CandlesDiffOffsets(StorageFormats format)
+	public Task CandlesDiffOffsets(StorageFormats format)
 	{
-		CandlesDiffOffsets(format, false);
+		return CandlesDiffOffsets(format, false);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void CandlesDiffOffsetsIntraday(StorageFormats format)
+	public Task CandlesDiffOffsetsIntraday(StorageFormats format)
 	{
-		CandlesDiffOffsets(format, true);
+		return CandlesDiffOffsets(format, true);
 	}
 
-	private static void CandlesDiffOffsets(StorageFormats format, bool initHighLow)
+	private async Task CandlesDiffOffsets(StorageFormats format, bool initHighLow)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var tf = initHighLow ? TimeSpan.FromMinutes(1) : TimeSpan.FromDays(1);
 
@@ -2092,30 +2147,31 @@ public class StorageTests : BaseTestClass
 		{
 			foreach (var candle in candles)
 			{
-				tfStorage.Save([candle]);
+				await tfStorage.SaveAsync([candle], token);
 			}
 
-			tfStorage.Load().ToArray().CompareCandles(candles, format);
+			(await tfStorage.LoadAsync(DateTime.MinValue, token).ToArrayAsync2(token)).CompareCandles(candles, format);
 		}
 		finally
 		{
-			tfStorage.Delete(candles);
+			await tfStorage.DeleteAsync(candles, token);
 		}
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void CandlesDiffOffsets2(StorageFormats format)
+	public async Task CandlesDiffOffsets2(StorageFormats format)
 	{
-		CandlesDiffOffsets2(format, true);
-		CandlesDiffOffsets2(format, false);
+		await CandlesDiffOffsets2(format, true);
+		await CandlesDiffOffsets2(format, false);
 	}
 
-	private static void CandlesDiffOffsets2(StorageFormats format, bool initHighLow)
+	private async Task CandlesDiffOffsets2(StorageFormats format, bool initHighLow)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var tf = initHighLow ? TimeSpan.FromMinutes(1) : TimeSpan.FromDays(1);
 
@@ -2181,31 +2237,31 @@ public class StorageTests : BaseTestClass
 		{
 			foreach (var candle in candles)
 			{
-				tfStorage.Save([candle]);
+				await tfStorage.SaveAsync([candle], token);
 			}
 
-			tfStorage.Load().ToArray().CompareCandles(candles, format);
+			(await tfStorage.LoadAsync(DateTime.MinValue, token).ToArrayAsync2(token)).CompareCandles(candles, format);
 		}
 		finally
 		{
-			tfStorage.Delete(candles);
+			await tfStorage.DeleteAsync(candles, token);
 		}
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void OrderLogRandom(StorageFormats format)
+	public Task OrderLogRandom(StorageFormats format)
 	{
-		OrderLogRandomSaveLoad(format, _depthCount3);
+		return OrderLogRandomSaveLoad(format, _depthCount3);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void OrderLogFractionalVolume(StorageFormats format)
+	public Task OrderLogFractionalVolume(StorageFormats format)
 	{
-		OrderLogRandomSaveLoad(format, _depthCount3, items =>
+		return OrderLogRandomSaveLoad(format, _depthCount3, items =>
 		{
 			var volumeStep = /*items.First().Order.Security.VolumeStep = */0.00001m;
 
@@ -2222,9 +2278,9 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void OrderLogFractionalVolume2(StorageFormats format)
+	public Task OrderLogFractionalVolume2(StorageFormats format)
 	{
-		OrderLogRandomSaveLoad(format, _depthCount3, items =>
+		return OrderLogRandomSaveLoad(format, _depthCount3, items =>
 		{
 			var volumeStep = /*items.First().Order.Security.VolumeStep = */0.00001m;
 
@@ -2241,9 +2297,9 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void OrderLogExtreme(StorageFormats format)
+	public Task OrderLogExtreme(StorageFormats format)
 	{
-		OrderLogRandomSaveLoad(format, _depthCount3, items =>
+		return OrderLogRandomSaveLoad(format, _depthCount3, items =>
 		{
 			foreach (var item in items)
 			{
@@ -2262,10 +2318,11 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void OrderLogNonSystem(StorageFormats format)
+	public async Task OrderLogNonSystem(StorageFormats format)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var quotes = security.RandomOrderLog(_depthCount3);
 
@@ -2291,19 +2348,20 @@ public class StorageTests : BaseTestClass
 		var storage = GetStorageRegistry();
 
 		var logStorage = storage.GetOrderLogMessageStorage(secId, null, format);
-		logStorage.Save(quotes);
-		LoadOrderLogAndCompare(logStorage, quotes);
-		logStorage.DeleteWithCheck();
+		await logStorage.SaveAsync(quotes, token);
+		await LoadOrderLogAndCompare(logStorage, quotes);
+		await logStorage.DeleteWithCheckAsync();
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void OrderLogSameTime(StorageFormats format)
+	public async Task OrderLogSameTime(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
 		var dt = DateTime.UtcNow;
+		var token = CancellationToken;
 
 		var olStorage = GetStorageRegistry().GetOrderLogMessageStorage(secId, null, format);
 
@@ -2337,17 +2395,18 @@ public class StorageTests : BaseTestClass
 			},
 		}.ToArray();
 
-		olStorage.Save([ol[0]]);
-		olStorage.Save([ol[1]]);
+		await olStorage.SaveAsync([ol[0]], token);
+		await olStorage.SaveAsync([ol[1]], token);
 
-		LoadOrderLogAndCompare(olStorage, ol);
-		olStorage.DeleteWithCheck();
+		await LoadOrderLogAndCompare(olStorage, ol);
+		await olStorage.DeleteWithCheckAsync();
 	}
 
-	private static void OrderLogRandomSaveLoad(StorageFormats format, int count, Action<IEnumerable<ExecutionMessage>> modify = null)
+	private async Task OrderLogRandomSaveLoad(StorageFormats format, int count, Action<IEnumerable<ExecutionMessage>> modify = null)
 	{
 		var security = Helper.CreateStorageSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var items = security.RandomOrderLog(count);
 
@@ -2356,87 +2415,92 @@ public class StorageTests : BaseTestClass
 		var storage = GetStorageRegistry();
 
 		var logStorage = storage.GetOrderLogMessageStorage(secId, null, format);
-		logStorage.Save(items);
-		LoadOrderLogAndCompare(logStorage, items);
-		logStorage.DeleteWithCheck();
+		await logStorage.SaveAsync(items, token);
+		await LoadOrderLogAndCompare(logStorage, items);
+		await logStorage.DeleteWithCheckAsync();
 	}
 
-	private static void LoadOrderLogAndCompare(IMarketDataStorage<ExecutionMessage> storage, IList<ExecutionMessage> items)
+	private async Task LoadOrderLogAndCompare(IMarketDataStorage<ExecutionMessage> storage, IList<ExecutionMessage> items)
 	{
-		var loadedItems = storage.Load(items.First().ServerTime, items.Last().ServerTime).ToArray();
+		var token = CancellationToken;
+		var loadedItems = await storage.LoadAsync(items.First().ServerTime, items.Last().ServerTime, token);
 		loadedItems.CompareMessages(items);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void News(StorageFormats format)
+	public async Task News(StorageFormats format)
 	{
 		var newsStorage = GetStorageRegistry().GetNewsMessageStorage(null, format);
+		var token = CancellationToken;
 
 		var news = Helper.RandomNews();
 
-		newsStorage.Save(news);
+		await newsStorage.SaveAsync(news, token);
 
-		var loaded = newsStorage.Load(news.First().ServerTime, news.Last().ServerTime).ToArray();
+		var loaded = await newsStorage.LoadAsync(news.First().ServerTime, news.Last().ServerTime, token);
 
 		loaded.CompareMessages(news);
 
-		newsStorage.DeleteWithCheck();
+		await newsStorage.DeleteWithCheckAsync();
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void BoardState(StorageFormats format)
+	public async Task BoardState(StorageFormats format)
 	{
 		var storage = GetStorageRegistry().GetBoardStateMessageStorage(null, format);
+		var token = CancellationToken;
 
 		var data = Helper.RandomBoardStates();
 
-		storage.Save(data);
+		await storage.SaveAsync(data, token);
 
-		var loaded = storage.Load(data.First().ServerTime, data.Last().ServerTime).ToArray();
+		var loaded = await storage.LoadAsync(data.First().ServerTime, data.Last().ServerTime, token);
 
 		loaded.CompareMessages(data);
 
-		storage.DeleteWithCheck();
+		await storage.DeleteWithCheckAsync();
 	}
 
-	private static void Level1(StorageFormats format, bool isFractional, bool diffDays = false)
+	private async Task Level1(StorageFormats format, bool isFractional, bool diffDays = false)
 	{
 		var security = Helper.CreateSecurity();
 		var securityId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var testValues = security.RandomLevel1(isFractional, diffDays, _depthCount3);
 
 		var l1Storage = GetStorageRegistry().GetLevel1MessageStorage(securityId, null, format);
 
-		l1Storage.Save(testValues);
-		var loaded = l1Storage.Load().ToArray();
+		await l1Storage.SaveAsync(testValues, token);
+		var loaded = await l1Storage.LoadAsync(DateTime.MinValue, token).ToArrayAsync2(token);
 		loaded.CompareMessages(testValues);
 
-		var loadedItems = l1Storage.Load(testValues.First().ServerTime, testValues.Last().ServerTime).ToArray();
+		var loadedItems = await l1Storage.LoadAsync(testValues.First().ServerTime, testValues.Last().ServerTime, token);
 		loadedItems.CompareMessages(testValues);
 
-		l1Storage.DeleteWithCheck();
+		await l1Storage.DeleteWithCheckAsync();
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void Level1(StorageFormats format)
+	public Task Level1(StorageFormats format)
 	{
-		Level1(format, false);
+		return Level1(format, false);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void Level1Empty(StorageFormats format)
+	public async Task Level1Empty(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var securityId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var testValues = new[]
 		{
@@ -2449,36 +2513,37 @@ public class StorageTests : BaseTestClass
 
 		var l1Storage = GetStorageRegistry().GetLevel1MessageStorage(securityId, null, format);
 
-		l1Storage.Save(testValues);
-		var loaded = l1Storage.Load();
+		await l1Storage.SaveAsync(testValues, token);
+		var loaded = await l1Storage.LoadAsync(DateTime.MinValue, token).ToArrayAsync2(token);
 
 		loaded.Count().AssertEqual(0);
 
-		l1Storage.DeleteWithCheck();
+		await l1Storage.DeleteWithCheckAsync();
 	}
 
 	[TestMethod]
 	//[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void Level1DiffDays(StorageFormats format)
+	public Task Level1DiffDays(StorageFormats format)
 	{
-		Level1(format, false, true);
+		return Level1(format, false, true);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void Level1Fractional(StorageFormats format)
+	public Task Level1Fractional(StorageFormats format)
 	{
-		Level1(format, true);
+		return Level1(format, true);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void Level1MinMax(StorageFormats format)
+	public async Task Level1MinMax(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
+		var token = CancellationToken;
 
 		security.PriceStep = security.MinPrice = 0.0000001m;
 		security.MaxPrice = 100000000m;
@@ -2505,14 +2570,14 @@ public class StorageTests : BaseTestClass
 
 		var l1Storage = GetStorageRegistry().GetLevel1MessageStorage(securityId, null, format);
 
-		l1Storage.Save(testValues);
-		var loaded = l1Storage.Load().ToArray();
+		await l1Storage.SaveAsync(testValues, token);
+		var loaded = await l1Storage.LoadAsync(DateTime.MinValue, token).ToArrayAsync2(token);
 		loaded.CompareMessages(testValues);
 
-		var loadedItems = l1Storage.Load(testValues.First().ServerTime, testValues.Last().ServerTime).ToArray();
+		var loadedItems = await l1Storage.LoadAsync(testValues.First().ServerTime, testValues.Last().ServerTime, token);
 		loadedItems.CompareMessages(testValues);
 
-		l1Storage.DeleteWithCheck();
+		await l1Storage.DeleteWithCheckAsync();
 	}
 
 	//[DataTestMethod]
@@ -2554,8 +2619,8 @@ public class StorageTests : BaseTestClass
 
 	//	var l1Storage = GetStorageRegistry().GetLevel1MessageStorage(securityId, null, format);
 
-	//	l1Storage.Save(testValues);
-	//	var loaded = l1Storage.Load().ToArray();
+	//	await l1Storage.SaveAsync(testValues, token);
+	//	var loaded = await l1Storage.LoadAsync(DateTime.MinValue, token).ToArrayAsync2(token);
 
 	//	testValues.RemoveAt(0);
 	//	testValues[1].Changes.Remove(Level1Fields.LastTradePrice);
@@ -2563,14 +2628,15 @@ public class StorageTests : BaseTestClass
 	//	var loadedItems = l1Storage.Load(testValues.First().ServerTime, testValues.Last().ServerTime).ToArray();
 	//	loaded.CompareMessages(testValues);
 
-	//	l1Storage.DeleteWithCheck();
+	//	await l1Storage.DeleteWithCheckAsync();
 	//}
 
 	[TestMethod]
-	public void Securities()
+	public async Task Securities()
 	{
 		var exchangeProvider = ServicesRegistry.ExchangeInfoProvider;
 		var securities = Helper.RandomSecurities().Select(s => s.ToSecurity(exchangeProvider)).ToArray();
+		var token = CancellationToken;
 
 		var registry = Helper.GetEntityRegistry();
 
@@ -2578,7 +2644,7 @@ public class StorageTests : BaseTestClass
 
 		foreach (var security in securities)
 		{
-			storage.Save(security, true);
+			await storage.SaveAsync(security, true, token);
 		}
 
 		storage = registry.Securities;
@@ -2598,55 +2664,57 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void Transaction(StorageFormats format)
+	public async Task Transaction(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
-
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var transactions = security.RandomTransactions(1000);
 
 		var storage = GetStorageRegistry().GetTransactionStorage(secId, null, format);
 
-		storage.Save(transactions);
-		var loaded = storage.Load().ToArray();
+		await storage.SaveAsync(transactions, token);
+		var loaded = await storage.LoadAsync(DateTime.MinValue, token).ToArrayAsync2(token);
 
 		loaded.CompareMessages(transactions);
 
-		storage.Delete();
-		storage.Load().Count().AssertEqual(0);
+		await storage.DeleteAsync(cancellationToken: token);
+		(await storage.LoadAsync(DateTime.MinValue, token).ToArrayAsync2(token)).Length.AssertEqual(0);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void Position(StorageFormats format)
+	public async Task Position(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var testValues = security.RandomPositionChanges();
+		var token = CancellationToken;
 
 		var secId = security.ToSecurityId();
 
 		var storage = GetStorageRegistry().GetPositionMessageStorage(secId, null, format);
 
-		storage.Save(testValues);
-		var loaded = storage.Load().ToArray();
+		await storage.SaveAsync(testValues, token);
+		var loaded = await storage.LoadAsync(DateTime.MinValue, token).ToArrayAsync2(token);
 
 		testValues = [.. testValues.Where(t => t.HasChanges())];
 
 		loaded.CompareMessages(testValues);
 
-		storage.Delete();
-		storage.Load().Count().AssertEqual(0);
+		await storage.DeleteAsync(cancellationToken: token);
+		(await storage.LoadAsync(DateTime.MinValue, token).ToArrayAsync2(token)).Length.AssertEqual(0);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void PositionEmpty(StorageFormats format)
+	public async Task PositionEmpty(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var testValues = new[]
 		{
@@ -2659,13 +2727,13 @@ public class StorageTests : BaseTestClass
 
 		var storage = GetStorageRegistry().GetPositionMessageStorage(secId, null, format);
 
-		storage.Save(testValues);
-		var loaded = storage.Load().ToArray();
+		await storage.SaveAsync(testValues, token);
+		var loaded = await storage.LoadAsync(DateTime.MinValue, token).ToArrayAsync2(token);
 
 		loaded.Length.AssertEqual(0);
 
-		storage.Delete();
-		storage.Load().Count().AssertEqual(0);
+		await storage.DeleteAsync(cancellationToken: token);
+		(await storage.LoadAsync(DateTime.MinValue, token).ToArrayAsync2(token)).Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -2717,16 +2785,17 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void Bounds(StorageFormats format)
+	public async Task Bounds(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
+		var token = CancellationToken;
 
 		var storage = GetStorageRegistry().GetTickMessageStorage(secId, null, format);
 
 		var now = DateTime.UtcNow;
 
-		storage.Save(
+		await storage.SaveAsync(
 		[
 			new ExecutionMessage
 			{
@@ -2737,18 +2806,18 @@ public class StorageTests : BaseTestClass
 				TradeVolume = 1,
 				TradeId = 10
 			}
-		]);
+		], token);
 
 		now = now.ToUniversalTime().Date;
 
-		storage.Load(now).Count().AssertEqual(1);
-		storage.Load(now, null).Count().AssertEqual(1);
-		storage.Load(now.EndOfDay(), null).Count().AssertEqual(0);
-		storage.Load(now.EndOfDay(), DateTime.Today).Count().AssertEqual(0);
-		storage.Load(now.AddDays(10), null).Count().AssertEqual(0);
+		(await storage.LoadAsync(now, token).ToArrayAsync2(token)).Length.AssertEqual(1);
+		(await storage.LoadAsync(now, DateTime.MaxValue, token)).Length.AssertEqual(1);
+		(await storage.LoadAsync(now.EndOfDay(), DateTime.MaxValue, token)).Length.AssertEqual(0);
+		(await storage.LoadAsync(now.EndOfDay(), DateTime.Today, token)).Length.AssertEqual(0);
+		(await storage.LoadAsync(now.AddDays(10), DateTime.MaxValue, token)).Length.AssertEqual(0);
 
-		storage.Delete(now);
-		storage.Load(now).Count().AssertEqual(0);
+		await storage.DeleteAsync(now, token);
+		(await storage.LoadAsync(now, token).ToArrayAsync2(token)).Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -2796,6 +2865,7 @@ public class StorageTests : BaseTestClass
 		// https://stocksharp.myjetbrains.com/youtrack/issue/hydra-10
 		// build daily candles from smaller timeframes
 
+		var token = CancellationToken;
 		var secId = "SBER@MICEX".ToSecurityId();
 
 		var reg = Helper.GetResourceStorage();
@@ -2811,18 +2881,19 @@ public class StorageTests : BaseTestClass
 
 		expectedDates.SetEquals(dates).AssertTrue();
 
-		var candles = buildableStorage.Load(_regressionFrom, _regressionTo).ToArray();
+		var candles = await buildableStorage.LoadAsync(_regressionFrom, _regressionTo, token);
 		candles.Length.AssertEqual(expectedDates.Count);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	//[DataRow(StorageFormats.Csv)]
-	public void RegressionBuildFromSmallerTimeframesCandleOrder(StorageFormats format)
+	public async Task RegressionBuildFromSmallerTimeframesCandleOrder(StorageFormats format)
 	{
 		// https://stocksharp.myjetbrains.com/youtrack/issue/hydra-10
 		// build daily candles from smaller timeframes using original issue data, ensure candle updates are ordered in time and not doubled
 
+		var token = CancellationToken;
 		var secId = "SBER1@MICEX".ToSecurityId();
 
 		var reg = Helper.GetResourceStorage();
@@ -2833,7 +2904,7 @@ public class StorageTests : BaseTestClass
 
 		var buildableStorage = cbProv.GetCandleMessageBuildableStorage(reg, secId, tf, null, format);
 
-		var candles = buildableStorage.Load(_regressionFrom, _regressionTo);
+		var candles = await buildableStorage.LoadAsync(_regressionFrom, _regressionTo, token);
 
 		CandleMessage prevCandle = null;
 
@@ -2878,11 +2949,12 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void TickZeroValues(StorageFormats format)
+	public async Task TickZeroValues(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
 		var now = DateTime.UtcNow;
+		var token = CancellationToken;
 		var storage = GetTradeStorage(secId, format);
 
 		var ticks = new[]
@@ -2909,21 +2981,22 @@ public class StorageTests : BaseTestClass
 
 		foreach (var tick in ticks)
 		{
-			storage.Save([tick]);
-			var loaded = storage.Load().ToArray();
+			await storage.SaveAsync([tick], token);
+			var loaded = await storage.LoadAsync(DateTime.MinValue, token).ToArrayAsync2(token);
 			loaded.CompareMessages([tick]);
-			storage.Delete([tick]);
+			await storage.DeleteAsync([tick], token);
 		}
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void OrderLogZeroValues(StorageFormats format)
+	public async Task OrderLogZeroValues(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
 		var now = DateTime.UtcNow;
+		var token = CancellationToken;
 		var storage = GetStorageRegistry().GetOrderLogMessageStorage(secId, null, format);
 
 		var logs = new[]
@@ -2952,21 +3025,22 @@ public class StorageTests : BaseTestClass
 
 		foreach (var log in logs)
 		{
-			storage.Save([log]);
-			var loaded = storage.Load(log.ServerTime, log.ServerTime).ToArray();
+			await storage.SaveAsync([log], token);
+			var loaded = await storage.LoadAsync(log.ServerTime, log.ServerTime, token);
 			loaded.CompareMessages([log]);
-			storage.Delete([log]);
+			await storage.DeleteAsync([log], token);
 		}
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void Level1ZeroValues(StorageFormats format)
+	public async Task Level1ZeroValues(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
 		var now = DateTime.UtcNow;
+		var token = CancellationToken;
 		var storage = GetStorageRegistry().GetLevel1MessageStorage(secId, null, format);
 
 		var l1 = new[]
@@ -2985,22 +3059,23 @@ public class StorageTests : BaseTestClass
 
 		foreach (var msg in l1)
 		{
-			storage.Save([msg]);
-			var loaded = storage.Load(msg.ServerTime, msg.ServerTime).ToArray();
+			await storage.SaveAsync([msg], token);
+			var loaded = await storage.LoadAsync(msg.ServerTime, msg.ServerTime, token);
 			loaded.CompareMessages([msg]);
-			storage.Delete([msg]);
+			await storage.DeleteAsync([msg], token);
 		}
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void CandlesZeroValues(StorageFormats format)
+	public async Task CandlesZeroValues(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
 		var tf = TimeSpan.FromMinutes(1);
 		var now = DateTime.UtcNow;
+		var token = CancellationToken;
 		var storage = GetStorageRegistry().GetTimeFrameCandleMessageStorage(secId, tf, format: format);
 
 		var candles = new[]
@@ -3064,21 +3139,22 @@ public class StorageTests : BaseTestClass
 
 		foreach (var candle in candles)
 		{
-			storage.Save([candle]);
-			var loaded = storage.Load(candle.OpenTime, candle.OpenTime).ToArray();
+			await storage.SaveAsync([candle], token);
+			var loaded = await storage.LoadAsync(candle.OpenTime, candle.OpenTime, token);
 			loaded.CompareCandles([candle], format);
-			storage.Delete([candle]);
+			await storage.DeleteAsync([candle], token);
 		}
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public void DepthZeroValues(StorageFormats format)
+	public async Task DepthZeroValues(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
 		var now = DateTime.UtcNow;
+		var token = CancellationToken;
 		var storage = GetStorageRegistry().GetQuoteMessageStorage(secId, null, format);
 
 		var depths = new[]
@@ -3101,10 +3177,10 @@ public class StorageTests : BaseTestClass
 
 		foreach (var depth in depths)
 		{
-			storage.Save([depth]);
-			var loaded = storage.Load(depth.ServerTime, depth.ServerTime).ToArray();
+			await storage.SaveAsync([depth], token);
+			var loaded = await storage.LoadAsync(depth.ServerTime, depth.ServerTime, token);
 			loaded.CompareMessages([depth]);
-			storage.Delete([depth]);
+			await storage.DeleteAsync([depth], token);
 		}
 	}
 
@@ -3318,8 +3394,9 @@ public class StorageTests : BaseTestClass
 	public async Task GetAvailableSecuritiesAsync_EmptyDrive_ReturnsEmpty()
 	{
 		var drive = CreateDrive();
+		var token = CancellationToken;
 
-		var securities = await drive.GetAvailableSecuritiesAsync(CancellationToken.None).ToArrayAsync2(CancellationToken.None);
+		var securities = await drive.GetAvailableSecuritiesAsync(token).ToArrayAsync2(token);
 
 		securities.Length.AssertEqual(0);
 	}
@@ -3331,11 +3408,12 @@ public class StorageTests : BaseTestClass
 		var security1 = new SecurityId { SecurityCode = "TEST1", BoardCode = BoardCodes.Test };
 		var security2 = new SecurityId { SecurityCode = "TEST2", BoardCode = BoardCodes.Test };
 		var dates = new[] { DateTime.UtcNow.Date };
+		var token = CancellationToken;
 
 		await SetupTestDataAsync(drive, security1, DataType.Ticks, StorageFormats.Binary, dates);
 		await SetupTestDataAsync(drive, security2, DataType.Ticks, StorageFormats.Binary, dates);
 
-		var securities = await drive.GetAvailableSecuritiesAsync(CancellationToken.None).ToArrayAsync2(CancellationToken.None);
+		var securities = await drive.GetAvailableSecuritiesAsync(token).ToArrayAsync2(token);
 
 		(securities.Length >= 2).AssertTrue();
 		securities.Any(s => s.SecurityCode == "TEST1" && s.BoardCode == BoardCodes.Test).AssertTrue();
@@ -3348,15 +3426,13 @@ public class StorageTests : BaseTestClass
 		var drive = CreateDrive();
 		var security = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test };
 		var dates = new[] { DateTime.UtcNow.Date };
+		var token = CancellationToken;
 
 		await SetupTestDataAsync(drive, security, DataType.Ticks, StorageFormats.Binary, dates);
 
-		using var cts = new CancellationTokenSource();
-		cts.Cancel();
-
 		await Assert.ThrowsExactlyAsync<OperationCanceledException>(async () =>
 		{
-			await drive.GetAvailableSecuritiesAsync(cts.Token).ToArrayAsync2(cts.Token);
+			await drive.GetAvailableSecuritiesAsync(token).ToArrayAsync2(token);
 		});
 	}
 
@@ -3367,8 +3443,9 @@ public class StorageTests : BaseTestClass
 	{
 		var drive = CreateDrive();
 		var securityId = new SecurityId { SecurityCode = "EMPTY", BoardCode = BoardCodes.Test };
+		var token = CancellationToken;
 
-		var dataTypes = await drive.GetAvailableDataTypesAsync(securityId, format, CancellationToken.None);
+		var dataTypes = await drive.GetAvailableDataTypesAsync(securityId, format, token);
 
 		dataTypes.AssertNotNull();
 		dataTypes.Count().AssertEqual(0);
@@ -3382,11 +3459,12 @@ public class StorageTests : BaseTestClass
 		var drive = CreateDrive();
 		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test };
 		var dates = new[] { DateTime.UtcNow.Date };
+		var token = CancellationToken;
 
 		await SetupTestDataAsync(drive, securityId, DataType.Ticks, format, dates);
 		await SetupTestDataAsync(drive, securityId, DataType.Level1, format, dates);
 
-		var dataTypes = (await drive.GetAvailableDataTypesAsync(securityId, format, CancellationToken.None)).ToArray();
+		var dataTypes = (await drive.GetAvailableDataTypesAsync(securityId, format, token)).ToArray();
 
 		(dataTypes.Length >= 2).AssertTrue();
 		dataTypes.Contains(DataType.Ticks).AssertTrue();
@@ -3402,12 +3480,13 @@ public class StorageTests : BaseTestClass
 		var security1 = new SecurityId { SecurityCode = "TEST1", BoardCode = BoardCodes.Test };
 		var security2 = new SecurityId { SecurityCode = "TEST2", BoardCode = BoardCodes.Test };
 		var dates = new[] { DateTime.UtcNow.Date };
+		var token = CancellationToken;
 
 		await SetupTestDataAsync(drive, security1, DataType.Ticks, format, dates);
 		await SetupTestDataAsync(drive, security2, DataType.Level1, format, dates);
 		await SetupTestDataAsync(drive, security2, DataType.MarketDepth, format, dates);
 
-		var dataTypes = (await drive.GetAvailableDataTypesAsync(default, format, CancellationToken.None)).ToArray();
+		var dataTypes = (await drive.GetAvailableDataTypesAsync(default, format, token)).ToArray();
 
 		(dataTypes.Length >= 3).AssertTrue();
 		dataTypes.Contains(DataType.Ticks).AssertTrue();
@@ -3420,20 +3499,21 @@ public class StorageTests : BaseTestClass
 	{
 		var drive = CreateDrive();
 
-		await drive.VerifyAsync(CancellationToken.None);
+		await drive.VerifyAsync(CancellationToken);
 
 		// Should not throw
 		true.AssertTrue();
 	}
 
 	[TestMethod]
-	public async Task VerifyAsync_NonExistingPath_ThrowsInvalidOperationException()
+	public Task VerifyAsync_NonExistingPath_ThrowsInvalidOperationException()
 	{
 		var drive = new LocalMarketDataDrive(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()));
+		var token = CancellationToken;
 
-		await Assert.ThrowsExactlyAsync<InvalidOperationException>(async () =>
+		return Assert.ThrowsExactlyAsync<InvalidOperationException>(async () =>
 		{
-			await drive.VerifyAsync(CancellationToken.None);
+			await drive.VerifyAsync(token);
 		});
 	}
 
@@ -3443,34 +3523,37 @@ public class StorageTests : BaseTestClass
 		var drive = CreateDrive();
 		var criteria = Messages.Extensions.LookupAllCriteriaMessage;
 		var securityProvider = new CollectionSecurityProvider([]);
+		var token = CancellationToken;
 
-		var securities = await drive.LookupSecuritiesAsync(criteria, securityProvider, CancellationToken.None).ToArrayAsync2(CancellationToken.None);
+		var securities = await drive.LookupSecuritiesAsync(criteria, securityProvider, token).ToArrayAsync2(token);
 
 		securities.Length.AssertEqual(0);
 	}
 
 
 	[TestMethod]
-	public async Task LookupSecuritiesAsync_NullCriteria_ThrowsArgumentNullException()
+	public Task LookupSecuritiesAsync_NullCriteria_ThrowsArgumentNullException()
 	{
 		var drive = CreateDrive();
 		var securityProvider = new CollectionSecurityProvider([]);
+		var token = CancellationToken;
 
-		await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+		return Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
 		{
-			await drive.LookupSecuritiesAsync(null, securityProvider, CancellationToken.None).ToArrayAsync2(CancellationToken.None);
+			await drive.LookupSecuritiesAsync(null, securityProvider, token).ToArrayAsync2(token);
 		});
 	}
 
 	[TestMethod]
-	public async Task LookupSecuritiesAsync_NullSecurityProvider_ThrowsArgumentNullException()
+	public Task LookupSecuritiesAsync_NullSecurityProvider_ThrowsArgumentNullException()
 	{
 		var drive = CreateDrive();
 		var criteria = Messages.Extensions.LookupAllCriteriaMessage;
+		var token = CancellationToken;
 
-		await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+		return Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
 		{
-			await drive.LookupSecuritiesAsync(criteria, null, CancellationToken.None).ToArrayAsync2(CancellationToken.None);
+			await drive.LookupSecuritiesAsync(criteria, null, token).ToArrayAsync2(token);
 		});
 	}
 
@@ -3480,18 +3563,16 @@ public class StorageTests : BaseTestClass
 		var drive = CreateDrive();
 		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test };
 		var dates = new[] { DateTime.UtcNow.Date };
+		var token = CancellationToken;
 
 		await SetupTestDataAsync(drive, securityId, DataType.Ticks, StorageFormats.Binary, dates);
 
 		var criteria = Messages.Extensions.LookupAllCriteriaMessage;
 		var securityProvider = new CollectionSecurityProvider([]);
 
-		using var cts = new CancellationTokenSource();
-		cts.Cancel();
-
 		await Assert.ThrowsExactlyAsync<OperationCanceledException>(async () =>
 		{
-			await drive.LookupSecuritiesAsync(criteria, securityProvider, cts.Token).ToArrayAsync2(cts.Token);
+			await drive.LookupSecuritiesAsync(criteria, securityProvider, token).ToArrayAsync2(token);
 		});
 	}
 
@@ -3508,10 +3589,11 @@ public class StorageTests : BaseTestClass
 			DateTime.UtcNow.Date.AddDays(-1),
 			DateTime.UtcNow.Date
 		};
+		var token = CancellationToken;
 
 		await SetupTestDataAsync(drive, securityId, DataType.Ticks, format, dates);
 
-		var dataTypes = (await drive.GetAvailableDataTypesAsync(securityId, format, CancellationToken.None)).ToArray();
+		var dataTypes = (await drive.GetAvailableDataTypesAsync(securityId, format, token)).ToArray();
 
 		(dataTypes.Length >= 1).AssertTrue();
 		dataTypes.Contains(DataType.Ticks).AssertTrue();
@@ -3528,13 +3610,14 @@ public class StorageTests : BaseTestClass
 			new SecurityId { SecurityCode = "GOOGL", BoardCode = BoardCodes.Test }
 		};
 		var dates = new[] { DateTime.UtcNow.Date };
+		var token = CancellationToken;
 
 		foreach (var secId in securities)
 		{
 			await SetupTestDataAsync(drive, secId, DataType.Ticks, StorageFormats.Binary, dates);
 		}
 
-		var result = await drive.GetAvailableSecuritiesAsync(CancellationToken.None).ToArrayAsync2(CancellationToken.None);
+		var result = await drive.GetAvailableSecuritiesAsync(token).ToArrayAsync2(token);
 
 		(result.Length >= 3).AssertTrue();
 		foreach (var secId in securities)
@@ -3544,14 +3627,15 @@ public class StorageTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public async Task VerifyAsync_PathWithNoAccess_ThrowsInvalidOperationException()
+	public Task VerifyAsync_PathWithNoAccess_ThrowsInvalidOperationException()
 	{
 		var invalidPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString(), "nested", "path");
 		var drive = new LocalMarketDataDrive(invalidPath);
+		var token = CancellationToken;
 
-		await Assert.ThrowsExactlyAsync<InvalidOperationException>(async () =>
+		return Assert.ThrowsExactlyAsync<InvalidOperationException>(async () =>
 		{
-			await drive.VerifyAsync(CancellationToken.None);
+			await drive.VerifyAsync(token);
 		});
 	}
 }

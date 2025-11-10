@@ -180,12 +180,12 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 				foreach (var m in arr)
 					m.SecurityId = secId;
 
-				_getStorage(secId).Save(orderBy(arr));
+				await _getStorage(secId).SaveAsync(orderBy(arr), cancellationToken);
 			}
 		}
 		else
 		{
-			_getStorage(default).Save(orderBy(buffer));
+			await _getStorage(default).SaveAsync(orderBy(buffer), cancellationToken);
 		}
 
 		buffer.Clear();

@@ -451,9 +451,12 @@ public class HistoryMessageAdapter : MessageAdapter
 	{
 		_isStarted = true;
 
+		_cancellationToken = new();
+
 		_ = Task.Run(async () =>
 		{
 			await Task.Yield();
+
 			try
 			{
 				var messageTypes = new[] { MessageTypes.Time/*, ExtendedMessageTypes.Clearing*/ };

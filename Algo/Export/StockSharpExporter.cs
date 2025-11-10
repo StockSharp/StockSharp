@@ -31,7 +31,7 @@ public class StockSharpExporter(DataType dataType, IStorageRegistry storageRegis
 		}
 	}
 
-	private Task<(int, DateTime?)> Export(IEnumerable<Message> messages, CancellationToken cancellationToken)
+	private async Task<(int, DateTime?)> Export(IEnumerable<Message> messages, CancellationToken cancellationToken)
 	{
 		var count = 0;
 		var lastTime = default(DateTime?);
@@ -44,9 +44,7 @@ public class StockSharpExporter(DataType dataType, IStorageRegistry storageRegis
 
 				var storage = _storageRegistry.GetStorage(group.Key ?? default, DataType, _drive, format);
 
-				cancellationToken.ThrowIfCancellationRequested();
-
-				storage.Save(b);
+				await storage.SaveAsync(b, cancellationToken);
 
 				count += b.Length;
 
@@ -55,7 +53,7 @@ public class StockSharpExporter(DataType dataType, IStorageRegistry storageRegis
 			}
 		}
 
-		return (count, lastTime).FromResult();
+		return (count, lastTime);
 	}
 
 	/// <inheritdoc />
