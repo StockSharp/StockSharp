@@ -20,11 +20,6 @@ public interface ICsvEntityList
 	/// CSV file name.
 	/// </summary>
 	string FileName { get; }
-
-	/// <summary>
-	/// Create archived copy.
-	/// </summary>
-	bool CreateArchivedCopy { get; set; }
 }
 
 /// <summary>
@@ -36,9 +31,6 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	where TEntity : class
 {
 	private readonly CachedSynchronizedDictionary<TKey, TEntity> _items = [];
-
-	private readonly SyncObject _copySync = new();
-	private byte[] _copy;
 
 	/// <summary>
 	/// The CSV storage of trading objects.
@@ -65,18 +57,6 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 	/// <inheritdoc />
 	public string FileName { get; }
-
-	/// <inheritdoc />
-	public bool CreateArchivedCopy { get; set; }
-
-	private void ResetCopy()
-	{
-		if (!CreateArchivedCopy)
-			return;
-
-		lock (_copySync)
-			_copy = null;
-	}
 
 	#region IStorageEntityList<T>
 
@@ -235,7 +215,6 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 			_delayActionGroup.Add((writer, data) =>
 			{
-				ResetCopy();
 				Write(writer, data);
 			}, item);
 		}
@@ -292,7 +271,6 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 			_delayActionGroup.Add(writer =>
 			{
-				ResetCopy();
 				writer.Truncate();
 			});
 		}
@@ -306,8 +284,6 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	{
 		_delayActionGroup.Add((writer, state) =>
 		{
-			ResetCopy();
-
 			writer.Truncate();
 
 			foreach (var item in state)
