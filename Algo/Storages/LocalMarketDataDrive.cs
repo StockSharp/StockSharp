@@ -1,7 +1,6 @@
 namespace StockSharp.Algo.Storages;
 
 using IOPath = System.IO.Path;
-using System.Runtime.CompilerServices;
 
 using Ecng.Reflection;
 using Ecng.Linq;
@@ -90,12 +89,12 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		private readonly LocalMarketDataDrive _drive;
 		IMarketDataDrive IMarketDataStorageDrive.Drive => _drive;
 
-		IEnumerable<DateTime> IMarketDataStorageDrive.Dates => DatesDict.CachedValues;
+		ValueTask<IEnumerable<DateTime>> IMarketDataStorageDrive.GetDatesAsync(CancellationToken cancellationToken) => new(DatesDict.CachedValues);
 
 		private readonly Lazy<CachedSynchronizedOrderedDictionary<DateTime, DateTime>> _datesDict;
 		private CachedSynchronizedOrderedDictionary<DateTime, DateTime> DatesDict => _datesDict.Value;
 
-		public void ClearDatesCache()
+		ValueTask IMarketDataStorageDrive.ClearDatesCacheAsync(CancellationToken cancellationToken)
 		{
 			if (Directory.Exists(_path))
 			{
@@ -108,6 +107,8 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			}
 
 			ResetCache();
+
+			return default;
 		}
 
 		private void ChangeIndex(DateTime date, bool remove)
@@ -116,7 +117,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 				index.ChangeDate(_secId, _format, _dataType, date, remove);
 		}
 
-		void IMarketDataStorageDrive.Delete(DateTime date)
+		ValueTask IMarketDataStorageDrive.DeleteAsync(DateTime date, CancellationToken cancellationToken)
 		{
 			date = date.UtcKind();
 
@@ -140,9 +141,11 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			ChangeIndex(date, true);
 
 			_availableDataTypes.Remove(_drive.Path);
+
+			return default;
 		}
 
-		void IMarketDataStorageDrive.SaveStream(DateTime date, Stream stream)
+		ValueTask IMarketDataStorageDrive.SaveStreamAsync(DateTime date, Stream stream, CancellationToken cancellationToken)
 		{
 			date = date.UtcKind();
 
@@ -160,19 +163,23 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 				var tuple = _availableDataTypes.TryGetValue(_drive.Path);
 
 				if (tuple == null || !tuple.Second)
-					return;
+					return default;
 
 				tuple.First.Add(_dataType);
 			}
+
+			return default;
 		}
 
-		Stream IMarketDataStorageDrive.LoadStream(DateTime date, bool readOnly)
+		ValueTask<Stream> IMarketDataStorageDrive.LoadStreamAsync(DateTime date, bool readOnly, CancellationToken cancellationToken)
 		{
 			var path = GetPath(date.UtcKind(), true);
 
-			return File.Exists(path)
+			var stream = File.Exists(path)
 				? File.Open(path, FileMode.Open, readOnly ? FileAccess.Read : FileAccess.ReadWrite, FileShare.Read)
 				: Stream.Null;
+
+			return new(stream);
 		}
 
 		private IEnumerable<DateTime> LoadDates()

@@ -7,7 +7,7 @@ using StockSharp.Algo.Storages.Binary.Snapshot;
 
 [TestClass]
 [DoNotParallelize]
-public class StorageTests
+public class StorageTests : BaseTestClass
 {
 	private const int _tickCount = 5000;
 	private const int _maxRenkoSteps = 100;
@@ -2791,7 +2791,7 @@ public class StorageTests
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	//[DataRow(StorageFormats.Csv)]
-	public void RegressionBuildFromSmallerTimeframes(StorageFormats format)
+	public async Task RegressionBuildFromSmallerTimeframes(StorageFormats format)
 	{
 		// https://stocksharp.myjetbrains.com/youtrack/issue/hydra-10
 		// build daily candles from smaller timeframes
@@ -2807,7 +2807,7 @@ public class StorageTests
 		var buildableStorage = cbProv.GetCandleMessageBuildableStorage(reg, secId, tf, null, format);
 
 		var expectedDates = _sourceArray.Select(d => new DateTime(2021, 12, d)).ToHashSet();
-		var dates = buildableStorage.Dates.ToHashSet();
+		var dates = (await buildableStorage.GetDatesAsync(CancellationToken)).ToHashSet();
 
 		expectedDates.SetEquals(dates).AssertTrue();
 

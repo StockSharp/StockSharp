@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Testing;
 
+using Ecng.Linq;
+
 /// <summary>
 /// The adapter, receiving messages form the storage <see cref="IStorageRegistry"/>.
 /// </summary>
@@ -267,7 +269,7 @@ public class HistoryMessageAdapter : MessageAdapter
 					case ChannelStates.Starting:
 					{
 						if (!_isStarted)
-							Start(stateMsg.StartDate == default ? StartDate : stateMsg.StartDate, stateMsg.StopDate == default ? StopDate : stateMsg.StopDate);
+							Start(stateMsg.StartDate == default ? StartDate : stateMsg.StartDate, stateMsg.StopDate == default ? StopDate : stateMsg.StopDate, _cancellationToken?.Token ?? default);
 
 						break;
 					}
@@ -445,114 +447,105 @@ public class HistoryMessageAdapter : MessageAdapter
 		.Distinct()
 		.Select(b => b.ToMessage())];
 
-	/// <summary>
-	/// Start data loading.
-	/// </summary>
-	/// <param name="startDateTime">Datetime in history for starting the paper trading.</param>
-	/// <param name="stopDateTime">Datetime in history to stop the paper trading (date is included).</param>
-	private void Start(DateTime startDateTime, DateTime stopDateTime)
+	private void Start(DateTime startDateTime, DateTime stopDateTime, CancellationToken cancellationToken)
 	{
 		_isStarted = true;
 
-		_cancellationToken = new CancellationTokenSource();
-
-		ThreadingHelper
-			.ThreadInvariant(() =>
+		_ = Task.Run(async () =>
+		{
+			await Task.Yield();
+			try
 			{
-				try
+				var messageTypes = new[] { MessageTypes.Time/*, ExtendedMessageTypes.Clearing*/ };
+
+				BoardMessage[] boards = null;
+
+				while (!IsDisposed && !cancellationToken.IsCancellationRequested)
 				{
-					var messageTypes = new[] { MessageTypes.Time/*, ExtendedMessageTypes.Clearing*/ };
-					var token = _cancellationToken.Token;
+					_syncRoot.WaitSignal();
 
-					BoardMessage[] boards = null;
+					_isChanged = false;
 
-					while (!IsDisposed && !token.IsCancellationRequested)
+					_moveNextSyncRoot.PulseSignal();
+
+					foreach (var action in _actions.CopyAndClear())
 					{
-						_syncRoot.WaitSignal();
+						var storage = action.Item1;
+						var subscriptionId = action.Item2;
 
-						_isChanged = false;
+						if (storage != null)
+							_basketStorage.InnerStorages.Add(storage, subscriptionId);
+						else
+							_basketStorage.InnerStorages.Remove(subscriptionId);
+					}
 
-						_moveNextSyncRoot.PulseSignal();
+					boards ??= CheckTradableDates ? GetBoard() : [];
 
-						foreach (var action in _actions.CopyAndClear())
+					var currentTime = _currentTime == default ? startDateTime : _currentTime;
+
+					var loadDateInUtc = currentTime.Date;
+					var stopDateInUtc = stopDateTime.Date;
+
+					var checkDates = CheckTradableDates && boards.Length > 0;
+
+					while (loadDateInUtc <= stopDateInUtc && !_isChanged && !cancellationToken.IsCancellationRequested)
+					{
+						if (!checkDates || boards.Any(b => b.IsTradeDate(currentTime, true)))
 						{
-							var storage = action.Item1;
-							var subscriptionId = action.Item2;
+							LogInfo("Loading {0}", loadDateInUtc);
 
-							if (storage != null)
-								_basketStorage.InnerStorages.Add(storage, subscriptionId);
-							else
-								_basketStorage.InnerStorages.Remove(subscriptionId);
-						}
+							IAsyncEnumerable<Message> messages;
+							bool noData;
 
-						boards ??= CheckTradableDates ? GetBoard() : [];
-
-						var currentTime = _currentTime == default ? startDateTime : _currentTime;
-
-						var loadDateInUtc = currentTime.Date;
-						var stopDateInUtc = stopDateTime.Date;
-
-						var checkDates = CheckTradableDates && boards.Length > 0;
-
-						while (loadDateInUtc <= stopDateInUtc && !_isChanged && !token.IsCancellationRequested)
-						{
-							if (!checkDates || boards.Any(b => b.IsTradeDate(currentTime, true)))
+							if (AdapterCache is not null)
 							{
-								LogInfo("Loading {0}", loadDateInUtc);
+								messages = AdapterCache.GetMessagesAsync(default, default, loadDateInUtc, _basketStorage.LoadAsync, cancellationToken);
+								noData = await messages.FirstOrDefaultAsync2(cancellationToken) is null;
+							}
+							else
+							{
+								var enu = _basketStorage.LoadAsync(loadDateInUtc, cancellationToken);
 
-								IEnumerable<Message> messages;
-								bool noData;
+								// storage for the specified date contains only time messages and clearing events
+								noData = !enu.DataTypes.Except(messageTypes).Any();
 
-								if (AdapterCache is not null)
-								{
-									messages = AdapterCache.GetMessages(default, default, loadDateInUtc, _basketStorage.Load);
-									noData = messages.IsEmpty();
-								}
-								else
-								{
-									var enu = _basketStorage.Load(loadDateInUtc);
-
-									// storage for the specified date contains only time messages and clearing events
-									noData = !enu.DataTypes.Except(messageTypes).Any();
-
-									messages = enu;
-								}
-
-								if (noData)
-									EnqueueMessages(startDateTime, stopDateTime, currentTime, GetSimpleTimeLine(boards, currentTime, MarketTimeChangedInterval), token);
-								else
-									EnqueueMessages(startDateTime, stopDateTime, currentTime, messages, token);
+								messages = enu;
 							}
 
-							loadDateInUtc += TimeSpan.FromDays(1);
+							if (noData)
+								await EnqueueMessages(startDateTime, stopDateTime, currentTime, GetSimpleTimeLine(boards, currentTime, MarketTimeChangedInterval).ToAsyncEnumerable2(cancellationToken));
+							else
+								await EnqueueMessages(startDateTime, stopDateTime, currentTime, messages);
 						}
 
-						if (!_isChanged)
+						loadDateInUtc += TimeSpan.FromDays(1);
+					}
+
+					if (!_isChanged)
+					{
+						SendOutMessage(new EmulationStateMessage
 						{
-							SendOutMessage(new EmulationStateMessage
-							{
-								LocalTime = stopDateTime,
-								State = ChannelStates.Stopping,
-							});
+							LocalTime = stopDateTime,
+							State = ChannelStates.Stopping,
+						});
 
-							break;
-						}
+						break;
 					}
 				}
-				catch (Exception ex)
-				{
+			}
+			catch (Exception ex)
+			{
+				if (!cancellationToken.IsCancellationRequested)
 					SendOutMessage(ex.ToErrorMessage());
 
-					SendOutMessage(new EmulationStateMessage
-					{
-						LocalTime = stopDateTime,
-						State = ChannelStates.Stopping,
-						Error = ex,
-					});
-				}
-			})
-			.Name(Name)
-			.Launch();
+				SendOutMessage(new EmulationStateMessage
+				{
+					LocalTime = stopDateTime,
+					State = ChannelStates.Stopping,
+					Error = ex,
+				});
+			}
+		}, cancellationToken);
 	}
 
 	/// <summary>
@@ -564,11 +557,11 @@ public class HistoryMessageAdapter : MessageAdapter
 		_syncRoot.PulseSignal();
 	}
 
-	private void EnqueueMessages(DateTime fromTime, DateTime toTime, DateTime curTime, IEnumerable<Message> messages, CancellationToken token)
+	private async ValueTask EnqueueMessages(DateTime fromTime, DateTime toTime, DateTime curTime, IAsyncEnumerable<Message> messages)
 	{
-		foreach (var msg in messages)
+		await foreach (var msg in messages)
 		{
-			if (_isChanged || token.IsCancellationRequested)
+			if (_isChanged)
 				break;
 
 			var msgServerTime = ((IServerTimeMessage)msg).ServerTime;

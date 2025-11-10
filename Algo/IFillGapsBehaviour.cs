@@ -34,7 +34,7 @@ public class StorageFillGapsBehaviour(IMarketDataDrive drive, StorageFormats for
 		if (from >= to)
 			return default;
 
-		var existing = _drive.GetStorageDrive(secId, dataType, format).Dates.Where(d => from <= d || d <= to).ToSet();
+		var existing = _drive.GetStorageDrive(secId, dataType, format).GetDates().Where(d => from <= d || d <= to).ToSet();
 
 		DateTime? gapStart = null;
 		DateTime? gapEnd = null;

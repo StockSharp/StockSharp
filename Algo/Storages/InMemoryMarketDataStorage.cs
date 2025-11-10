@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Storages;
 
+using Ecng.Linq;
+
 /// <summary>
 /// The storage, generating data in the process of operation.
 /// </summary>
@@ -37,7 +39,7 @@ public sealed class InMemoryMarketDataStorage<T> : IMarketDataStorage<T>
 		_dataType = DataType.Create(dataType ?? typeof(T), arg);
 	}
 
-	IEnumerable<DateTime> IMarketDataStorage.Dates => throw new NotSupportedException();
+	ValueTask<IEnumerable<DateTime>> IMarketDataStorage.GetDatesAsync(CancellationToken cancellationToken) => throw new NotSupportedException();
 
 	private readonly SecurityId _securityId;
 	SecurityId IMarketDataStorage.SecurityId => _securityId;
@@ -53,14 +55,16 @@ public sealed class InMemoryMarketDataStorage<T> : IMarketDataStorage<T>
 	IMarketDataSerializer<T> IMarketDataStorage<T>.Serializer => throw new NotSupportedException();
 
 	/// <inheritdoc />
-	public IEnumerable<T> Load(DateTime date) => _getData(date);
+	public IAsyncEnumerable<T> LoadAsync(DateTime date, CancellationToken cancellationToken)
+		=> _getData(date).ToAsyncEnumerable2(cancellationToken);
 
-	IEnumerable<Message> IMarketDataStorage.Load(DateTime date) => Load(date);
-	IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date) => throw new NotSupportedException();
+	IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date, CancellationToken cancellationToken) => LoadAsync(date, cancellationToken);
+
+	ValueTask<IMarketDataMetaInfo> IMarketDataStorage.GetMetaInfoAsync(DateTime date, CancellationToken cancellationToken) => throw new NotSupportedException();
 	
-	int IMarketDataStorage.Save(IEnumerable<Message> data) => throw new NotSupportedException();
-	void IMarketDataStorage.Delete(IEnumerable<Message> data) => throw new NotSupportedException();
-	void IMarketDataStorage.Delete(DateTime date) => throw new NotSupportedException();
-	int IMarketDataStorage<T>.Save(IEnumerable<T> data) => throw new NotSupportedException();
-	void IMarketDataStorage<T>.Delete(IEnumerable<T> data) => throw new NotSupportedException();
+	ValueTask<int> IMarketDataStorage.SaveAsync(IEnumerable<Message> data, CancellationToken cancellationToken) => throw new NotSupportedException();
+	ValueTask IMarketDataStorage.DeleteAsync(IEnumerable<Message> data, CancellationToken cancellationToken) => throw new NotSupportedException();
+	ValueTask IMarketDataStorage.DeleteAsync(DateTime date, CancellationToken cancellationToken) => throw new NotSupportedException();
+	ValueTask<int> IMarketDataStorage<T>.SaveAsync(IEnumerable<T> data, CancellationToken cancellationToken) => throw new NotSupportedException();
+	ValueTask IMarketDataStorage<T>.DeleteAsync(IEnumerable<T> data, CancellationToken cancellationToken) => throw new NotSupportedException();
 }

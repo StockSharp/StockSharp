@@ -21,7 +21,7 @@ class TradeStorage(SecurityId securityId, IMarketDataStorageDrive drive, IMarket
 			}
 			else if (msg.ServerTime == prevTime)
 			{
-				// если разные сделки имеют одинаковое время
+				// РµСЃР»Рё СЂР°Р·РЅС‹Рµ СЃРґРµР»РєРё РёРјРµСЋС‚ РѕРґРёРЅР°РєРѕРІРѕРµ РІСЂРµРјСЏ
 				if (prevId != 0 && msg.TradeId != null && msg.TradeId != prevId)
 				{
 					prevId = msg.TradeId ?? 0;
@@ -112,22 +112,16 @@ class CandleStorage<TCandleMessage> :
 		}
 	}
 
-	IEnumerable<CandleMessage> IMarketDataStorage<CandleMessage>.Load(DateTime date)
-	{
-		return Load(date);
-	}
+	IAsyncEnumerable<CandleMessage> IMarketDataStorage<CandleMessage>.LoadAsync(DateTime date, CancellationToken cancellationToken)
+		=> LoadAsync(date, cancellationToken);
 
 	IMarketDataSerializer<CandleMessage> IMarketDataStorage<CandleMessage>.Serializer => _serializer;
 
-	int IMarketDataStorage<CandleMessage>.Save(IEnumerable<CandleMessage> data)
-	{
-		return Save(data.Cast<TCandleMessage>());
-	}
+	ValueTask<int> IMarketDataStorage<CandleMessage>.SaveAsync(IEnumerable<CandleMessage> data, CancellationToken cancellationToken)
+		=> SaveAsync(data.Cast<TCandleMessage>(), cancellationToken);
 
-	void IMarketDataStorage<CandleMessage>.Delete(IEnumerable<CandleMessage> data)
-	{
-		Delete(data.Cast<TCandleMessage>());
-	}
+	ValueTask IMarketDataStorage<CandleMessage>.DeleteAsync(IEnumerable<CandleMessage> data, CancellationToken cancellationToken)
+		=> DeleteAsync(data.Cast<TCandleMessage>(), cancellationToken);
 }
 
 class Level1Storage(SecurityId securityId, IMarketDataStorageDrive drive, IMarketDataSerializer<Level1ChangeMessage> serializer)

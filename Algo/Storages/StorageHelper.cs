@@ -2,6 +2,8 @@ namespace StockSharp.Algo.Storages;
 
 using System.Diagnostics;
 
+using Ecng.Linq;
+
 using StockSharp.Algo.Candles;
 using StockSharp.Algo.Candles.Compression;
 
@@ -131,7 +133,7 @@ public static class StorageHelper
 		if (range == null)
 			return [];
 
-		return storage.Dates.Select(d => d.UtcKind()).GetRanges(range.Min, range.Max);
+		return storage.GetDates().Select(d => d.UtcKind()).GetRanges(range.Min, range.Max);
 	}
 
 	/// <summary>
@@ -244,7 +246,7 @@ public static class StorageHelper
 			return null;
 		}
 
-		var dates = storage.Dates.ToArray();
+		var dates = storage.GetDates().ToArray();
 
 		if (dates.IsEmpty())
 			return null;
@@ -288,7 +290,7 @@ public static class StorageHelper
 	/// <returns>The start date. If the value is not initialized, the storage is empty.</returns>
 	public static DateTime? GetFromDate(this IMarketDataStorage storage)
 	{
-		return storage.Dates.FirstOr();
+		return storage.GetDates().FirstOr();
 	}
 
 	/// <summary>
@@ -298,7 +300,7 @@ public static class StorageHelper
 	/// <returns>The end date. If the value is not initialized, the storage is empty.</returns>
 	public static DateTime? GetToDate(this IMarketDataStorage storage)
 	{
-		return storage.Dates.LastOr();
+		return storage.GetDates().LastOr();
 	}
 
 	/// <summary>
@@ -310,7 +312,7 @@ public static class StorageHelper
 	/// <returns>All available data within the range.</returns>
 	public static IEnumerable<DateTime> GetDates(this IMarketDataStorage storage, DateTime? from, DateTime? to)
 	{
-		var dates = storage.Dates;
+		var dates = storage.GetDates();
 
 		if (from != null)
 			dates = dates.Where(d => d >= from.Value);
@@ -411,7 +413,20 @@ public static class StorageHelper
 		private IEnumerable<IMarketDataStorage<CandleMessage>> GetStorages()
 			=> new[] { _original }.Concat(GetSmallerTimeFrames().Select(_getStorage));
 
-		IEnumerable<DateTime> IMarketDataStorage.Dates => GetStorages().SelectMany(s => s.Dates).OrderBy().Distinct();
+		async ValueTask<IEnumerable<DateTime>> IMarketDataStorage.GetDatesAsync(CancellationToken cancellationToken)
+		{
+			var dates = new HashSet<DateTime>();
+
+			foreach (var storage in GetStorages())
+			{
+				var storageDates = await storage.GetDatesAsync(cancellationToken);
+
+				foreach (var date in storageDates)
+					dates.Add(date);
+			}
+
+			return dates.OrderBy();
+		}
 
 		private readonly DataType _dataType;
 		DataType IMarketDataStorage.DataType => _dataType;
@@ -426,19 +441,19 @@ public static class StorageHelper
 			set => _original.AppendOnlyNew = value;
 		}
 
-		int IMarketDataStorage.Save(IEnumerable<Message> data) => Save(data.Cast<CandleMessage>());
+		ValueTask<int> IMarketDataStorage.SaveAsync(IEnumerable<Message> data, CancellationToken cancellationToken) => ((IMarketDataStorage<CandleMessage>)this).SaveAsync(data.Cast<CandleMessage>(), cancellationToken);
 
-		void IMarketDataStorage.Delete(IEnumerable<Message> data) => Delete(data.Cast<CandleMessage>());
+		ValueTask IMarketDataStorage.DeleteAsync(IEnumerable<Message> data, CancellationToken cancellationToken) => ((IMarketDataStorage<CandleMessage>)this).DeleteAsync(data.Cast<CandleMessage>(), cancellationToken);
 
-		void IMarketDataStorage.Delete(DateTime date) => _original.Delete(date);
+		ValueTask IMarketDataStorage.DeleteAsync(DateTime date, CancellationToken cancellationToken) => _original.DeleteAsync(date, cancellationToken);
 
-		IEnumerable<Message> IMarketDataStorage.Load(DateTime date) => Load(date);
+		IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date, CancellationToken cancellationToken) => ((IMarketDataStorage<CandleMessage>)this).LoadAsync(date, cancellationToken);
 
-		IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
+		async ValueTask<IMarketDataMetaInfo> IMarketDataStorage.GetMetaInfoAsync(DateTime date, CancellationToken cancellationToken)
 		{
 			foreach (var storage in GetStorages())
 			{
-				var info = storage.GetMetaInfo(date);
+				var info = await storage.GetMetaInfoAsync(date, cancellationToken);
 
 				if (info != null)
 					return new BuildableCandleInfo(info, _timeFrame);
@@ -451,7 +466,7 @@ public static class StorageHelper
 
 		private DateTime _nextCandleMinTime;
 
-		public IEnumerable<CandleMessage> Load(DateTime date)
+		public async IAsyncEnumerable<CandleMessage> LoadAsync(DateTime date, [EnumeratorCancellation]CancellationToken cancellationToken)
 		{
 			if (date <= _prevDate)
 			{
@@ -461,9 +476,22 @@ public static class StorageHelper
 
 			_prevDate = date;
 
-			var enumerators = GetStorages().Where(s => s.Dates.Contains(date)).Select(s =>
+			var storagesWithData = new List<(IMarketDataStorage<CandleMessage> storage, IEnumerable<CandleMessage> data)>();
+
+			foreach (var s in GetStorages())
 			{
-				var data = s.Load(date);
+				var dates = await s.GetDatesAsync(cancellationToken);
+
+				if (dates.Contains(date))
+				{
+					var data = await s.LoadAsync(date, cancellationToken).ToArrayAsync2(cancellationToken);
+					storagesWithData.Add((s, data));
+				}
+			}
+
+			var enumerators = storagesWithData.Select(pair =>
+			{
+				var (s, data) = pair;
 
 				if (s == _original)
 					return data;
@@ -531,9 +559,9 @@ public static class StorageHelper
 
 		IMarketDataSerializer<CandleMessage> IMarketDataStorage<CandleMessage>.Serializer => _original.Serializer;
 
-		public int Save(IEnumerable<CandleMessage> data) => _original.Save(data);
+		public ValueTask<int> SaveAsync(IEnumerable<CandleMessage> data, CancellationToken cancellationToken) => _original.SaveAsync(data, cancellationToken);
 
-		public void Delete(IEnumerable<CandleMessage> data) => _original.Delete(data);
+		public ValueTask DeleteAsync(IEnumerable<CandleMessage> data, CancellationToken cancellationToken) => _original.DeleteAsync(data, cancellationToken);
 
 		private class BuildableCandleInfo(IMarketDataMetaInfo info, TimeSpan tf) : IMarketDataMetaInfo
 		{
@@ -1018,14 +1046,14 @@ public static class StorageHelper
 		if (subscription.From is not DateTime from)
 			return null;
 
-		var last = storage.Dates.LastOr();
+		var last = storage.GetDates().LastOr();
 
 		if (last == null)
 			return null;
 
 		var to = subscription.To ?? last.Value.EndOfDay();
 
-		var first = storage.Dates.First();
+		var first = storage.GetDates().First();
 
 		if (from < first)
 			from = first;
@@ -1393,5 +1421,214 @@ public static class StorageHelper
 			throw new ArgumentNullException(nameof(storage));
 
 		AsyncHelper.Run(() => storage.DeleteByAsync(criteria, default));
+	}
+
+	/// <summary>
+	/// Synchronous wrapper for <see cref="IMarketDataStorageDrive.GetDatesAsync(CancellationToken)"/>.
+	/// </summary>
+	/// <param name="drive">Market data storage drive.</param>
+	/// <returns>Available dates.</returns>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	public static IEnumerable<DateTime> GetDates(this IMarketDataStorageDrive drive)
+	{
+		if (drive is null)
+			throw new ArgumentNullException(nameof(drive));
+
+		return AsyncHelper.Run(() => drive.GetDatesAsync(default));
+	}
+
+	/// <summary>
+	/// Synchronous wrapper for <see cref="IMarketDataStorageDrive.ClearDatesCacheAsync(CancellationToken)"/>.
+	/// </summary>
+	/// <param name="drive">Market data storage drive.</param>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	public static void ClearDatesCache(this IMarketDataStorageDrive drive)
+	{
+		if (drive is null)
+			throw new ArgumentNullException(nameof(drive));
+
+		AsyncHelper.Run(() => drive.ClearDatesCacheAsync(default));
+	}
+
+	/// <summary>
+	/// Synchronous wrapper for <see cref="IMarketDataStorageDrive.DeleteAsync(DateTime, CancellationToken)"/>.
+	/// </summary>
+	/// <param name="drive">Market data storage drive.</param>
+	/// <param name="date">Date, for which all data shall be deleted.</param>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	public static void Delete(this IMarketDataStorageDrive drive, DateTime date)
+	{
+		if (drive is null)
+			throw new ArgumentNullException(nameof(drive));
+
+		AsyncHelper.Run(() => drive.DeleteAsync(date, default));
+	}
+
+	/// <summary>
+	/// Synchronous wrapper for <see cref="IMarketDataStorageDrive.SaveStreamAsync(DateTime, Stream, CancellationToken)"/>.
+	/// </summary>
+	/// <param name="drive">Market data storage drive.</param>
+	/// <param name="date">The date, for which data shall be saved.</param>
+	/// <param name="stream">Data in the format of StockSharp storage.</param>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	public static void SaveStream(this IMarketDataStorageDrive drive, DateTime date, Stream stream)
+	{
+		if (drive is null)
+			throw new ArgumentNullException(nameof(drive));
+
+		AsyncHelper.Run(() => drive.SaveStreamAsync(date, stream, default));
+	}
+
+	/// <summary>
+	/// Synchronous wrapper for <see cref="IMarketDataStorageDrive.LoadStreamAsync(DateTime, bool, CancellationToken)"/>.
+	/// </summary>
+	/// <param name="drive">Market data storage drive.</param>
+	/// <param name="date">Date, for which data shall be loaded.</param>
+	/// <param name="readOnly">Get stream in read mode only.</param>
+	/// <returns>Data in the format of StockSharp storage. If no data exists, <see cref="Stream.Null"/> will be returned.</returns>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	public static Stream LoadStream(this IMarketDataStorageDrive drive, DateTime date, bool readOnly = false)
+	{
+		if (drive is null)
+			throw new ArgumentNullException(nameof(drive));
+
+		return AsyncHelper.Run(() => drive.LoadStreamAsync(date, readOnly, default));
+	}
+
+	/// <summary>
+	/// Synchronous wrapper for <see cref="IMarketDataStorage.GetDatesAsync(CancellationToken)"/>.
+	/// </summary>
+	/// <param name="storage">Market data storage.</param>
+	/// <returns>Available dates.</returns>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	public static IEnumerable<DateTime> GetDates(this IMarketDataStorage storage)
+	{
+		if (storage is null)
+			throw new ArgumentNullException(nameof(storage));
+
+		return AsyncHelper.Run(() => storage.GetDatesAsync(default));
+	}
+
+	/// <summary>
+	/// Synchronous wrapper for <see cref="IMarketDataStorage.SaveAsync(IEnumerable{Message}, CancellationToken)"/>.
+	/// </summary>
+	/// <param name="storage">Market data storage.</param>
+	/// <param name="data">Market data.</param>
+	/// <returns>Count of saved data.</returns>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	public static int Save(this IMarketDataStorage storage, IEnumerable<Message> data)
+	{
+		if (storage is null)
+			throw new ArgumentNullException(nameof(storage));
+
+		return AsyncHelper.Run(() => storage.SaveAsync(data, default));
+	}
+
+	/// <summary>
+	/// Synchronous wrapper for <see cref="IMarketDataStorage.DeleteAsync(IEnumerable{Message}, CancellationToken)"/>.
+	/// </summary>
+	/// <param name="storage">Market data storage.</param>
+	/// <param name="data">Market data to be deleted.</param>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	public static void Delete(this IMarketDataStorage storage, IEnumerable<Message> data)
+	{
+		if (storage is null)
+			throw new ArgumentNullException(nameof(storage));
+
+		AsyncHelper.Run(() => storage.DeleteAsync(data, default));
+	}
+
+	/// <summary>
+	/// Synchronous wrapper for <see cref="IMarketDataStorage.DeleteAsync(DateTime, CancellationToken)"/>.
+	/// </summary>
+	/// <param name="storage">Market data storage.</param>
+	/// <param name="date">Date, for which all data shall be deleted.</param>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	public static void Delete(this IMarketDataStorage storage, DateTime date)
+	{
+		if (storage is null)
+			throw new ArgumentNullException(nameof(storage));
+
+		AsyncHelper.Run(() => storage.DeleteAsync(date, default));
+	}
+
+	/// <summary>
+	/// Synchronous wrapper for <see cref="IMarketDataStorage.LoadAsync(DateTime, CancellationToken)"/>.
+	/// </summary>
+	/// <param name="storage">Market data storage.</param>
+	/// <param name="date">Date, for which data shall be loaded.</param>
+	/// <returns>Data. If there is no data, the empty set will be returned.</returns>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	public static IEnumerable<Message> Load(this IMarketDataStorage storage, DateTime date)
+	{
+		if (storage is null)
+			throw new ArgumentNullException(nameof(storage));
+
+		return AsyncHelper.Run(() => storage.LoadAsync(date, default).ToArrayAsync2(default));
+	}
+
+	/// <summary>
+	/// Synchronous wrapper for <see cref="IMarketDataStorage.GetMetaInfoAsync(DateTime, CancellationToken)"/>.
+	/// </summary>
+	/// <param name="storage">Market data storage.</param>
+	/// <param name="date">Date, for which meta-information on data shall be received.</param>
+	/// <returns>Meta-information on data. If there is no such date in history, <see langword="null" /> will be returned.</returns>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	public static IMarketDataMetaInfo GetMetaInfo(this IMarketDataStorage storage, DateTime date)
+	{
+		if (storage is null)
+			throw new ArgumentNullException(nameof(storage));
+
+		return AsyncHelper.Run(() => storage.GetMetaInfoAsync(date, default));
+	}
+
+	/// <summary>
+	/// Synchronous wrapper for <see cref="IMarketDataStorage{TMessage}.SaveAsync(IEnumerable{TMessage}, CancellationToken)"/>.
+	/// </summary>
+	/// <typeparam name="TMessage">Market data type.</typeparam>
+	/// <param name="storage">Market data storage.</param>
+	/// <param name="data">Market data.</param>
+	/// <returns>Count of saved data.</returns>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	public static int Save<TMessage>(this IMarketDataStorage<TMessage> storage, IEnumerable<TMessage> data)
+		where TMessage : Message
+	{
+		if (storage is null)
+			throw new ArgumentNullException(nameof(storage));
+
+		return AsyncHelper.Run(() => storage.SaveAsync(data, default));
+	}
+
+	/// <summary>
+	/// Synchronous wrapper for <see cref="IMarketDataStorage{TMessage}.DeleteAsync(IEnumerable{TMessage}, CancellationToken)"/>.
+	/// </summary>
+	/// <typeparam name="TMessage">Market data type.</typeparam>
+	/// <param name="storage">Market data storage.</param>
+	/// <param name="data">Market data to be deleted.</param>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	public static void Delete<TMessage>(this IMarketDataStorage<TMessage> storage, IEnumerable<TMessage> data)
+		where TMessage : Message
+	{
+		if (storage is null)
+			throw new ArgumentNullException(nameof(storage));
+
+		AsyncHelper.Run(() => storage.DeleteAsync(data, default));
+	}
+
+	/// <summary>
+	/// Synchronous wrapper for <see cref="IMarketDataStorage{TMessage}.LoadAsync(DateTime, CancellationToken)"/>.
+	/// </summary>
+	/// <typeparam name="TMessage">Market data type.</typeparam>
+	/// <param name="storage">Market data storage.</param>
+	/// <param name="date">Date, for which data shall be loaded.</param>
+	/// <returns>Data. If there is no data, the empty set will be returned.</returns>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	public static IEnumerable<TMessage> Load<TMessage>(this IMarketDataStorage<TMessage> storage, DateTime date)
+		where TMessage : Message
+	{
+		if (storage is null)
+			throw new ArgumentNullException(nameof(storage));
+
+		return AsyncHelper.Run(() => storage.LoadAsync(date, default).ToArrayAsync2(default));
 	}
 }

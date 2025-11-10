@@ -6,7 +6,7 @@ using Ecng.Reflection;
 /// The aggregator-storage enumerator.
 /// </summary>
 /// <typeparam name="TMessage">Message type.</typeparam>
-public interface IBasketMarketDataStorageEnumerable<TMessage> : IEnumerable<TMessage>
+public interface IBasketMarketDataStorageEnumerable<TMessage> : IAsyncEnumerable<TMessage>
 {
 	/// <summary>
 	/// Available message types.
@@ -40,21 +40,23 @@ public interface IBasketMarketDataStorageInnerList : ISynchronizedCollection<IMa
 public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<TMessage>
 	where TMessage : Message
 {
-	private class BasketMarketDataStorageEnumerator : IEnumerator<TMessage>
+	private class BasketMarketDataStorageEnumerator : IAsyncEnumerator<TMessage>
 	{
 		private readonly BasketMarketDataStorage<TMessage> _storage;
 		private readonly DateTime _date;
+		private readonly CancellationToken _cancellationToken;
 		private readonly SynchronizedQueue<(ActionTypes action, IMarketDataStorage storage, long transId)> _actions = [];
-		private readonly Ecng.Collections.PriorityQueue<long, (IEnumerator<Message> enu, IMarketDataStorage storage, long transId)> _enumerators = new((p1, p2) => (p1 - p2).Abs());
+		private readonly Ecng.Collections.PriorityQueue<long, (IAsyncEnumerator<Message> enu, IMarketDataStorage storage, long transId)> _enumerators = new((p1, p2) => (p1 - p2).Abs());
 
-		public BasketMarketDataStorageEnumerator(BasketMarketDataStorage<TMessage> storage, DateTime date)
+		public BasketMarketDataStorageEnumerator(BasketMarketDataStorage<TMessage> storage, DateTime date, CancellationToken cancellationToken)
 		{
 			_storage = storage ?? throw new ArgumentNullException(nameof(storage));
 			_date = date;
+			_cancellationToken = cancellationToken;
 
 			foreach (var s in storage._innerStorages.Cache)
 			{
-				if (s.GetType().GetGenericType(typeof(InMemoryMarketDataStorage<>)) == null && !s.Dates.Contains(date))
+				if (s.GetType().GetGenericType(typeof(InMemoryMarketDataStorage<>)) == null && !s.GetDates().Contains(date))
 					continue;
 
 				_actions.Add((ActionTypes.Add, s, storage._innerStorages.TryGetTransactionId(s)));
@@ -65,10 +67,12 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 
 		public TMessage Current { get; private set; }
 
-		bool IEnumerator.MoveNext()
+		async ValueTask<bool> IAsyncEnumerator<TMessage>.MoveNextAsync()
 		{
 			while (true)
 			{
+				_cancellationToken.ThrowIfCancellationRequested();
+
 				var action = _actions.TryDequeue2();
 
 				if (action is null)
@@ -84,7 +88,7 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 						if (_storage.Cache is not null)
 							storage = new CacheableMarketDataStorage(storage, _storage.Cache);
 
-						var loaded = storage.Load(_date);
+						var loaded = storage.LoadAsync(_date, _cancellationToken);
 
 						// built books slower for emulation, so this case is not real one
 						//if (!_storage.PassThroughOrderBookIncrement && loaded is IEnumerable<QuoteChangeMessage> quotes)
@@ -92,7 +96,7 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 						//	loaded = quotes.BuildIfNeed();
 						//}
 
-						var enu = loaded.GetEnumerator();
+						await using var enu = loaded.GetAsyncEnumerator(_cancellationToken);
 						var lastTime = Current?.GetServerTime() ?? DateTime.MinValue;
 
 						var hasValues = true;
@@ -100,7 +104,7 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 						// пропускаем данные, что меньше времени последнего сообщения (lastTime)
 						while (true)
 						{
-							if (!enu.MoveNext())
+							if (!await enu.MoveNextAsync())
 							{
 								hasValues = false;
 								break;
@@ -116,10 +120,10 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 						if (hasValues)
 						{
 							lock (_enumerators)
-								_enumerators.Enqueue(GetServerTime(enu).Ticks, (enu, storage, action.Value.transId));
+								_enumerators.Enqueue(enu.Current.GetServerTime().Ticks, (enu, storage, action.Value.transId));
 						}
 						else
-							enu.DoDispose();
+							await enu.DisposeAsync();
 
 						break;
 					}
@@ -142,7 +146,7 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 				}
 			}
 
-			(long, (IEnumerator<Message> enu, IMarketDataStorage, long transId) element) item;
+			(long, (IAsyncEnumerator<Message> enu, IMarketDataStorage, long transId) element) item;
 
 			lock (_enumerators)
 			{
@@ -158,15 +162,15 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 
 			Current = TrySetTransactionId(enumerator.Current, element.transId);
 
-			if (enumerator.MoveNext())
+			if (await enumerator.MoveNextAsync())
 			{
-				var serverTime = GetServerTime(enumerator).Ticks;
+				var serverTime = enumerator.Current.GetServerTime().Ticks;
 
 				lock (_enumerators)
 					_enumerators.Enqueue(serverTime, element);
 			}
 			else
-				enumerator.DoDispose();
+				await enumerator.DisposeAsync();
 
 			return true;
 		}
@@ -182,31 +186,10 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 			return (TMessage)message;
 		}
 
-		private static DateTime GetServerTime(IEnumerator<Message> enumerator)
+		async ValueTask IAsyncDisposable.DisposeAsync()
 		{
-			return enumerator.Current.GetServerTime();
-		}
-
-		object IEnumerator.Current => Current;
-
-		void IEnumerator.Reset()
-		{
-			lock (_enumerators)
-			{
-				foreach (var enumerator in _enumerators)
-					enumerator.Item2.enu.Reset();
-			}
-		}
-
-		void IDisposable.Dispose()
-		{
-			lock (_enumerators)
-			{
-				foreach (var enumerator in _enumerators)
-					enumerator.Item2.enu.DoDispose();
-
-				_enumerators.Clear();
-			}
+			foreach (var enumerator in _enumerators.CopyAndClear())
+				await enumerator.Item2.enu.DisposeAsync();
 
 			_actions.Clear();
 
@@ -221,19 +204,23 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 		}
 	}
 
-	private sealed class BasketEnumerable : SimpleEnumerable<TMessage>, IBasketMarketDataStorageEnumerable<TMessage>
+	private sealed class BasketEnumerable : IBasketMarketDataStorageEnumerable<TMessage>
 	{
-		public BasketEnumerable(BasketMarketDataStorage<TMessage> storage, DateTime date)
-			: base(() => new BasketMarketDataStorageEnumerator(storage, date))
+		private readonly BasketMarketDataStorage<TMessage> _storage;
+		private readonly DateTime _date;
+		private readonly CancellationToken _cancellationToken;
+
+		public BasketEnumerable(BasketMarketDataStorage<TMessage> storage, DateTime date, CancellationToken cancellationToken)
 		{
-			if (storage == null)
-				throw new ArgumentNullException(nameof(storage));
+			_storage = storage ?? throw new ArgumentNullException(nameof(storage));
+			_date = date;
+			_cancellationToken = cancellationToken;
 
 			var dataTypes = new List<MessageTypes>();
 
 			foreach (var s in storage._innerStorages.Cache)
 			{
-				if (s.GetType().GetGenericType(typeof(InMemoryMarketDataStorage<>)) == null && !s.Dates.Contains(date))
+				if (s.GetType().GetGenericType(typeof(InMemoryMarketDataStorage<>)) == null && !s.GetDates().Contains(date))
 					continue;
 
 				dataTypes.Add(s.DataType.ToMessageType2());
@@ -243,6 +230,9 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 		}
 
 		public IEnumerable<MessageTypes> DataTypes { get; }
+
+		IAsyncEnumerator<TMessage> IAsyncEnumerable<TMessage>.GetAsyncEnumerator(CancellationToken cancellationToken)
+			=> new BasketMarketDataStorageEnumerator(_storage, _date, _cancellationToken);
 	}
 
 	private enum ActionTypes
@@ -360,8 +350,20 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 	private void AddAction(ActionTypes type, IMarketDataStorage storage, long transactionId)
 		=> _enumerators.Cache.ForEach(e => e.AddAction(type, storage, transactionId));
 
-	IEnumerable<DateTime> IMarketDataStorage.Dates
-		=> _innerStorages.Cache.SelectMany(s => s.Dates).OrderBy().Distinct();
+	async ValueTask<IEnumerable<DateTime>> IMarketDataStorage.GetDatesAsync(CancellationToken cancellationToken)
+	{
+		var dates = new HashSet<DateTime>();
+
+		foreach (var storage in _innerStorages.Cache)
+		{
+			var storageDates = await storage.GetDatesAsync(cancellationToken);
+
+			foreach (var date in storageDates)
+				dates.Add(date);
+		}
+
+		return dates.OrderBy();
+	}
 
 	/// <inheritdoc />
 	public virtual DataType DataType => throw new NotSupportedException();
@@ -377,25 +379,27 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 		set => throw new NotSupportedException();
 	}
 
-	int IMarketDataStorage.Save(IEnumerable<Message> data) => throw new NotSupportedException();
-	int IMarketDataStorage<TMessage>.Save(IEnumerable<TMessage> data) => throw new NotSupportedException();
+	ValueTask<int> IMarketDataStorage.SaveAsync(IEnumerable<Message> data, CancellationToken cancellationToken) => throw new NotSupportedException();
+	ValueTask<int> IMarketDataStorage<TMessage>.SaveAsync(IEnumerable<TMessage> data, CancellationToken cancellationToken) => throw new NotSupportedException();
 	
-	void IMarketDataStorage.Delete(IEnumerable<Message> data) => throw new NotSupportedException();
-	void IMarketDataStorage<TMessage>.Delete(IEnumerable<TMessage> data) => throw new NotSupportedException();
+	ValueTask IMarketDataStorage.DeleteAsync(IEnumerable<Message> data, CancellationToken cancellationToken) => throw new NotSupportedException();
+	ValueTask IMarketDataStorage<TMessage>.DeleteAsync(IEnumerable<TMessage> data, CancellationToken cancellationToken) => throw new NotSupportedException();
 	
-	void IMarketDataStorage.Delete(DateTime date) => throw new NotSupportedException();
-	
-	IEnumerable<Message> IMarketDataStorage.Load(DateTime date) => Load(date);
-	IEnumerable<TMessage> IMarketDataStorage<TMessage>.Load(DateTime date) => Load(date);
+	ValueTask IMarketDataStorage.DeleteAsync(DateTime date, CancellationToken cancellationToken) => throw new NotSupportedException();
 
-	IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
+	IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date, CancellationToken cancellationToken) => LoadAsync(date, cancellationToken);
+	IAsyncEnumerable<TMessage> IMarketDataStorage<TMessage>.LoadAsync(DateTime date, CancellationToken cancellationToken) => LoadAsync(date, cancellationToken);
+
+	async ValueTask<IMarketDataMetaInfo> IMarketDataStorage.GetMetaInfoAsync(DateTime date, CancellationToken cancellationToken)
 	{
 		date = date.Date.UtcKind();
 
 		foreach (var inner in _innerStorages.Cache)
 		{
-			if (inner.Dates.Contains(date))
-				return inner.GetMetaInfo(date);
+			var dates = await inner.GetDatesAsync(cancellationToken);
+
+			if (dates.Contains(date))
+				return await inner.GetMetaInfoAsync(date, cancellationToken);
 		}
 
 		return null;
@@ -409,6 +413,8 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 	/// To load messages from embedded storages for specified date.
 	/// </summary>
 	/// <param name="date">Date.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>The messages loader.</returns>
-	public IBasketMarketDataStorageEnumerable<TMessage> Load(DateTime date) => new BasketEnumerable(this, date);
+	public IBasketMarketDataStorageEnumerable<TMessage> LoadAsync(DateTime date, CancellationToken cancellationToken)
+		=> new BasketEnumerable(this, date, cancellationToken);
 }

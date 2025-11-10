@@ -14,17 +14,17 @@ public class CacheableMarketDataStorage(IMarketDataStorage underlying, MarketDat
 	private readonly MarketDataStorageCache _cache = cache ?? throw new ArgumentNullException(nameof(cache));
 
 	IMarketDataSerializer IMarketDataStorage.Serializer => _underlying.Serializer;
-	IEnumerable<DateTime> IMarketDataStorage.Dates => _underlying.Dates;
+	ValueTask<IEnumerable<DateTime>> IMarketDataStorage.GetDatesAsync(CancellationToken cancellationToken) => _underlying.GetDatesAsync(cancellationToken);
 	DataType IMarketDataStorage.DataType => _underlying.DataType;
 	SecurityId IMarketDataStorage.SecurityId => _underlying.SecurityId;
 	IMarketDataStorageDrive IMarketDataStorage.Drive => _underlying.Drive;
 	bool IMarketDataStorage.AppendOnlyNew { get => _underlying.AppendOnlyNew; set => _underlying.AppendOnlyNew = value; }
 
-	IEnumerable<Message> IMarketDataStorage.Load(DateTime date)
-		=> _cache.GetMessages(_underlying.SecurityId, _underlying.DataType, date, _underlying.Load);
+	IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date, CancellationToken cancellationToken)
+		=> _cache.GetMessagesAsync(_underlying.SecurityId, _underlying.DataType, date, _underlying.LoadAsync, cancellationToken);
 
-	int IMarketDataStorage.Save(IEnumerable<Message> data) => _underlying.Save(data);
-	void IMarketDataStorage.Delete(IEnumerable<Message> data) => _underlying.Delete(data);
-	void IMarketDataStorage.Delete(DateTime date) => _underlying.Delete(date);
-	IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date) => _underlying.GetMetaInfo(date);
+	ValueTask<int> IMarketDataStorage.SaveAsync(IEnumerable<Message> data, CancellationToken cancellationToken) => _underlying.SaveAsync(data, cancellationToken);
+	ValueTask IMarketDataStorage.DeleteAsync(IEnumerable<Message> data, CancellationToken cancellationToken) => _underlying.DeleteAsync(data, cancellationToken);
+	ValueTask IMarketDataStorage.DeleteAsync(DateTime date, CancellationToken cancellationToken) => _underlying.DeleteAsync(date, cancellationToken);
+	ValueTask<IMarketDataMetaInfo> IMarketDataStorage.GetMetaInfoAsync(DateTime date, CancellationToken cancellationToken) => _underlying.GetMetaInfoAsync(date, cancellationToken);
 }

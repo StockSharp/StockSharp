@@ -13,33 +13,42 @@ public interface IMarketDataStorageDrive
 	/// <summary>
 	/// To get all the dates for which market data are recorded.
 	/// </summary>
-	IEnumerable<DateTime> Dates { get; }
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Available dates.</returns>
+	ValueTask<IEnumerable<DateTime>> GetDatesAsync(CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To delete cache-files, containing information on available time ranges.
 	/// </summary>
-	void ClearDatesCache();
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	ValueTask ClearDatesCacheAsync(CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To remove market data on specified date from the storage.
 	/// </summary>
 	/// <param name="date">Date, for which all data shall be deleted.</param>
-	void Delete(DateTime date);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	ValueTask DeleteAsync(DateTime date, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To save data in the format of StockSharp storage.
 	/// </summary>
 	/// <param name="date">The date, for which data shall be saved.</param>
 	/// <param name="stream">Data in the format of StockSharp storage.</param>
-	void SaveStream(DateTime date, Stream stream);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	ValueTask SaveStreamAsync(DateTime date, Stream stream, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To load data in the format of StockSharp storage.
 	/// </summary>
 	/// <param name="date">Date, for which data shall be loaded.</param>
 	/// <param name="readOnly">Get stream in read mode only.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Data in the format of StockSharp storage. If no data exists, <see cref="Stream.Null"/> will be returned.</returns>
-	Stream LoadStream(DateTime date, bool readOnly = false);
+	ValueTask<Stream> LoadStreamAsync(DateTime date, bool readOnly = false, CancellationToken cancellationToken = default);
 }
 
 /// <summary>

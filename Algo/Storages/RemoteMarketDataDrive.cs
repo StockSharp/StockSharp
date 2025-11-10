@@ -39,46 +39,42 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 		private IEnumerable<DateTime> _dates;
 		private DateTime _prevDatesSync;
 
-		IEnumerable<DateTime> IMarketDataStorageDrive.Dates
+		async ValueTask<IEnumerable<DateTime>> IMarketDataStorageDrive.GetDatesAsync(CancellationToken cancellationToken)
 		{
-			get
+			if (_prevDatesSync == default || (DateTime.UtcNow - _prevDatesSync).TotalSeconds > 3)
 			{
-				if (_prevDatesSync == default || (DateTime.UtcNow - _prevDatesSync).TotalSeconds > 3)
-				{
-					_dates = Run(client => client.GetDatesAsync(_securityId, _dataType, _format, default));
+				var client = _parent.EnsureGetClient();
+				_dates = await client.GetDatesAsync(_securityId, _dataType, _format, cancellationToken);
 
-					_prevDatesSync = DateTime.UtcNow;
-				}
-
-				return _dates;
+				_prevDatesSync = DateTime.UtcNow;
 			}
+
+			return _dates;
 		}
 
-		void IMarketDataStorageDrive.ClearDatesCache()
+		ValueTask IMarketDataStorageDrive.ClearDatesCacheAsync(CancellationToken cancellationToken)
 		{
 			//_parent.Invoke(f => f.ClearDatesCache(_parent.SessionId, _security.Id, _dataType, _arg));
+			return default;
 		}
 
-		private void Run(Func<RemoteStorageClient, ValueTask> func)
+		ValueTask IMarketDataStorageDrive.DeleteAsync(DateTime date, CancellationToken cancellationToken)
 		{
 			var client = _parent.EnsureGetClient();
-			AsyncHelper.Run(() => func(client));
+			return client.DeleteAsync(_securityId, _dataType, _format, date, cancellationToken);
 		}
 
-		private T Run<T>(Func<RemoteStorageClient, ValueTask<T>> func)
+		ValueTask IMarketDataStorageDrive.SaveStreamAsync(DateTime date, Stream stream, CancellationToken cancellationToken)
 		{
 			var client = _parent.EnsureGetClient();
-			return AsyncHelper.Run(() => func(client));
+			return client.SaveStreamAsync(_securityId, _dataType, _format, date, stream, cancellationToken);
 		}
 
-		void IMarketDataStorageDrive.Delete(DateTime date)
-			=> Run(client => client.DeleteAsync(_securityId, _dataType, _format, date, default));
-
-		void IMarketDataStorageDrive.SaveStream(DateTime date, Stream stream)
-			=> Run(client => client.SaveStreamAsync(_securityId, _dataType, _format, date, stream, default));
-
-		Stream IMarketDataStorageDrive.LoadStream(DateTime date, bool readOnly)
-			=> Run(client => client.LoadStreamAsync(_securityId, _dataType, _format, date, default));
+		ValueTask<Stream> IMarketDataStorageDrive.LoadStreamAsync(DateTime date, bool readOnly, CancellationToken cancellationToken)
+		{
+			var client = _parent.EnsureGetClient();
+			return client.LoadStreamAsync(_securityId, _dataType, _format, date, cancellationToken);
+		}
 	}
 
 	private readonly SynchronizedDictionary<(SecurityId, DataType, StorageFormats), RemoteStorageDrive> _remoteStorages = [];

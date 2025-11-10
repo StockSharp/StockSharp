@@ -1,5 +1,7 @@
 ﻿namespace StockSharp.Algo.Storages;
 
+using Ecng.Linq;
+
 /// <summary>
 /// <see cref="IMarketDataStorage"/> cache.
 /// </summary>
@@ -28,14 +30,17 @@ public class MarketDataStorageCache : Cloneable<MarketDataStorageCache>
 	public override MarketDataStorageCache Clone() => new() { Limit = Limit };
 
 	/// <summary>
-	/// Get data.
+	/// Get data asynchronously.
 	/// </summary>
+	/// <typeparam name="TEnumerable">Type of data collection.</typeparam>
 	/// <param name="securityId"><see cref="SecurityId"/>.</param>
 	/// <param name="dataType"><see cref="DataType"/>.</param>
 	/// <param name="date">Date to load.</param>
 	/// <param name="loadIfNeed">Handler to load data from real storage.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Data.</returns>
-	public Message[] GetMessages(SecurityId securityId, DataType dataType, DateTime date, Func<DateTime, IEnumerable<Message>> loadIfNeed)
+	public async IAsyncEnumerable<Message> GetMessagesAsync<TEnumerable>(SecurityId securityId, DataType dataType, DateTime date, Func<DateTime, CancellationToken, TEnumerable> loadIfNeed, [EnumeratorCancellation]CancellationToken cancellationToken)
+		where TEnumerable : IAsyncEnumerable<Message>
 	{
 		//if (dataType is null)
 		//	throw new ArgumentNullException(nameof(dataType));
@@ -49,7 +54,8 @@ public class MarketDataStorageCache : Cloneable<MarketDataStorageCache>
 
 		if (!_cache.TryGetValue(key, out var t))
 		{
-			t = (now, loadIfNeed(date).ToArray());
+			var data = await loadIfNeed(date, cancellationToken).ToArrayAsync2(cancellationToken);
+			t = (now, data.ToArray());
 
 			if (_cache.Count > Limit)
 			{
@@ -62,6 +68,7 @@ public class MarketDataStorageCache : Cloneable<MarketDataStorageCache>
 
 		_cache[key] = t;
 
-		return t.data;
+		foreach (var msg in t.data)
+			yield return msg;
 	}
 }

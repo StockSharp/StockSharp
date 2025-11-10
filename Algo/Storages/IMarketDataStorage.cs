@@ -6,9 +6,11 @@ namespace StockSharp.Algo.Storages;
 public interface IMarketDataStorage
 {
 	/// <summary>
-	/// All data, for which market data are recorded.
+	/// To get all the dates for which market data are recorded.
 	/// </summary>
-	IEnumerable<DateTime> Dates { get; }
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Available dates.</returns>
+	ValueTask<IEnumerable<DateTime>> GetDatesAsync(CancellationToken cancellationToken);
 
 	/// <summary>
 	/// The type of market-data, operated by given storage.
@@ -34,34 +36,41 @@ public interface IMarketDataStorage
 	/// To save market data in storage.
 	/// </summary>
 	/// <param name="data">Market data.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Count of saved data.</returns>
-	int Save(IEnumerable<Message> data);
+	ValueTask<int> SaveAsync(IEnumerable<Message> data, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To delete market data from storage.
 	/// </summary>
 	/// <param name="data">Market data to be deleted.</param>
-	void Delete(IEnumerable<Message> data);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	ValueTask DeleteAsync(IEnumerable<Message> data, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To remove market data on specified date from the storage.
 	/// </summary>
 	/// <param name="date">Date, for which all data shall be deleted.</param>
-	void Delete(DateTime date);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	ValueTask DeleteAsync(DateTime date, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To load data.
 	/// </summary>
 	/// <param name="date">Date, for which data shall be loaded.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Data. If there is no data, the empty set will be returned.</returns>
-	IEnumerable<Message> Load(DateTime date);
+	IAsyncEnumerable<Message> LoadAsync(DateTime date, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To get meta-information on data.
 	/// </summary>
 	/// <param name="date">Date, for which meta-information on data shall be received.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Meta-information on data. If there is no such date in history, <see langword="null" /> will be returned.</returns>
-	IMarketDataMetaInfo GetMetaInfo(DateTime date);
+	ValueTask<IMarketDataMetaInfo> GetMetaInfoAsync(DateTime date, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// The serializer.
@@ -80,21 +89,25 @@ public interface IMarketDataStorage<TMessage> : IMarketDataStorage
 	/// To save market data in storage.
 	/// </summary>
 	/// <param name="data">Market data.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Count of saved data.</returns>
-	int Save(IEnumerable<TMessage> data);
+	ValueTask<int> SaveAsync(IEnumerable<TMessage> data, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To delete market data from storage.
 	/// </summary>
 	/// <param name="data">Market data to be deleted.</param>
-	void Delete(IEnumerable<TMessage> data);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	ValueTask DeleteAsync(IEnumerable<TMessage> data, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To load data.
 	/// </summary>
 	/// <param name="date">Date, for which data shall be loaded.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Data. If there is no data, the empty set will be returned.</returns>
-	new IEnumerable<TMessage> Load(DateTime date);
+	new IAsyncEnumerable<TMessage> LoadAsync(DateTime date, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// The serializer.
