@@ -1,5 +1,6 @@
 ﻿namespace StockSharp.Tests;
 
+using Ecng.Linq;
 using Ecng.Reflection;
 
 using StockSharp.Algo.Storages.Csv;
@@ -662,11 +663,11 @@ static class Helper
 		return [.. boards];
 	}
 
-	public static void DeleteWithCheck<T>(this IMarketDataStorage<T> storage)
+	public static async Task DeleteWithCheckAsync<T>(this IMarketDataStorage<T> storage, CancellationToken cancellationToken)
 		where T : Message, IServerTimeMessage
 	{
-		storage.Delete();
-		storage.Load().Count().AssertEqual(0);
+		await storage.DeleteAsync(cancellationToken: cancellationToken);
+		(await storage.LoadAsync(cancellationToken: cancellationToken).ToArrayAsync2(cancellationToken)).Count().AssertEqual(0);
 	}
 
 	public static SecurityId CreateSecurityId()

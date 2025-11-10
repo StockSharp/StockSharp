@@ -2,6 +2,8 @@ namespace StockSharp.Samples.Storage.Random;
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Ecng.Common;
 
@@ -12,8 +14,10 @@ using StockSharp.Messages;
 
 class Program
 {
-	static void Main()
+	static async Task Main()
 	{
+		var token = CancellationToken.None;
+
 		// creating AAPL security
 		var security = new Security
 		{
@@ -60,14 +64,14 @@ class Program
 		var tradeStorage = storageRegistry.GetTickMessageStorage(securityId);
 
 		// saving ticks
-		tradeStorage.Save(trades);
+		await tradeStorage.SaveAsync(trades, token);
 
 		for (var d = begin; d < end; d += TimeSpan.FromDays(1))
 		{
 			// loading ticks
-			var loadedTrades = tradeStorage.Load(d);
+			var loadedTrades = tradeStorage.LoadAsync(d, token);
 
-			foreach (var trade in loadedTrades)
+			await foreach (var trade in loadedTrades)
 			{
 				Console.WriteLine(LocalizedStrings.TradeDetails, trade.TradeId, trade);
 			}
@@ -76,6 +80,6 @@ class Program
 		Console.ReadLine();
 
 		// deleting ticks (and removing file)
-		tradeStorage.Delete(begin, begin + TimeSpan.FromMinutes(1000));
+		await tradeStorage.DeleteAsync(begin, begin + TimeSpan.FromMinutes(1000), token);
 	}
 }

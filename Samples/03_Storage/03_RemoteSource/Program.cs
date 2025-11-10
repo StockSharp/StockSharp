@@ -3,6 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Ecng.Common;
 using Ecng.Configuration;
@@ -18,8 +20,10 @@ using StockSharp.Web.Api.Interfaces;
 
 static class Program
 {
-	private static void Main()
+	private static async Task Main()
 	{
+		var ct = CancellationToken.None;
+
 		ICredentialsProvider credProvider = new DefaultCredentialsProvider();
 
 		string token;
@@ -91,17 +95,17 @@ static class Program
 		//------------------------------Save---------------------------------------------------
 		Console.WriteLine("Saving...");
 		var candlesStorageCsv = storageRegistry.GetTimeFrameCandleMessageStorage(secId, TimeSpan.FromMinutes(5), format: StorageFormats.Csv);
-		candlesStorageCsv.Save(candles);
+		await candlesStorageCsv.SaveAsync(candles, ct);
 		var candlesStorageBin = storageRegistry.GetTimeFrameCandleMessageStorage(secId, TimeSpan.FromMinutes(5), format: StorageFormats.Binary);
-		candlesStorageBin.Save(candles);
+		await candlesStorageBin.SaveAsync(candles, ct);
 		Console.WriteLine("Save done!");
 
 		Console.ReadLine();
 
 		//------------------------------Delete---------------------------------------------------
 		Console.WriteLine("Deleting...");
-		candlesStorageCsv.Delete(candles.First().OpenTime, candles.Last().CloseTime);
-		candlesStorageBin.Delete(candles.First().OpenTime, candles.Last().CloseTime);
+		await candlesStorageCsv.DeleteAsync(candles.First().OpenTime, candles.Last().CloseTime, ct);
+		await candlesStorageBin.DeleteAsync(candles.First().OpenTime, candles.Last().CloseTime, ct);
 		Console.WriteLine("Delete done!");
 
 		Console.ReadLine();

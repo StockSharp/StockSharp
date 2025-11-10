@@ -93,26 +93,30 @@ static class Program
 			var localStorage = storageRegistry.GetStorage(secId, dataType, localDrive, format);
 			var remoteStorage = remoteDrive.GetStorageDrive(secId, dataType, format);
 
-			Console.WriteLine($"Remote {dataType}: {remoteStorage.Dates.FirstOrDefault()}-{remoteStorage.Dates.LastOrDefault()}");
+			Console.WriteLine($"Remote {dataType}: {(await remoteStorage.GetDatesAsync(token)).FirstOrDefault()}-{(await remoteStorage.GetDatesAsync(token)).LastOrDefault()}");
 
-			var dates = remoteStorage.Dates.Where(date => date >= startDate && date <= endDate).ToList();
+			var dates = (await remoteStorage.GetDatesAsync(token)).Where(date => date >= startDate && date <= endDate).ToList();
 
 			foreach (var dateTime in dates)
 			{
-				using (var stream = remoteStorage.LoadStream(dateTime))
+				using (var stream = await remoteStorage.LoadStreamAsync(dateTime, cancellationToken: token))
 				{
 					if (stream == Stream.Null)
 						continue;
 
-					localStorage.Drive.SaveStream(dateTime, stream);
+					await localStorage.Drive.SaveStreamAsync(dateTime, stream, token);
 				}
 
 				Console.WriteLine($"{dataType}={dateTime}");
 
-				var localStor = localStorage.Load(dateTime);
-				foreach (var marketDate in localStor.Take(100))
+				var left = 100;
+				var localStor = localStorage.LoadAsync(dateTime, token);
+				await foreach (var marketDate in localStor)
 				{
 					Console.WriteLine(marketDate);
+
+					if (--left < 0)
+						break;
 				}
 			}
 		}

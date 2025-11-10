@@ -313,7 +313,7 @@ public class StorageTests : BaseTestClass
 		var storage = GetTradeStorage(secId, format);
 		await storage.SaveAsync(trades, token);
 		await LoadTradesAndCompare(storage, trades);
-		await storage.DeleteWithCheckAsync();
+		await storage.DeleteWithCheckAsync(token);
 	}
 
 	[TestMethod]
@@ -338,7 +338,7 @@ public class StorageTests : BaseTestClass
 		await LoadTradesAndCompare(tradeStorage, [.. trades.Skip(halfTicks)]);
 
 		await LoadTradesAndCompare(tradeStorage, trades);
-		await tradeStorage.DeleteWithCheckAsync();
+		await tradeStorage.DeleteWithCheckAsync(token);
 	}
 
 	[TestMethod]
@@ -360,7 +360,7 @@ public class StorageTests : BaseTestClass
 		await tradeStorage.DeleteAsync(randomDeleteTrades, token);
 
 		await LoadTradesAndCompare(tradeStorage, [.. trades.Except(randomDeleteTrades)]);
-		await tradeStorage.DeleteWithCheckAsync();
+		await tradeStorage.DeleteWithCheckAsync(token);
 	}
 
 	[TestMethod]
@@ -441,7 +441,7 @@ public class StorageTests : BaseTestClass
 
 		await LoadTradesAndCompare(tradeStorage, [.. trades.Where(t => t.ServerTime < from || t.ServerTime > to)]);
 
-		await tradeStorage.DeleteWithCheckAsync();
+		await tradeStorage.DeleteWithCheckAsync(token);
 	}
 
 	[TestMethod]
@@ -482,7 +482,7 @@ public class StorageTests : BaseTestClass
 		await tradeStorage.SaveAsync([trades[1]], token);
 
 		await LoadTradesAndCompare(tradeStorage, trades);
-		await tradeStorage.DeleteWithCheckAsync();
+		await tradeStorage.DeleteWithCheckAsync(token);
 	}
 
 	private async Task LoadTradesAndCompare(IMarketDataStorage<ExecutionMessage> tradeStorage, ExecutionMessage[] trades)
@@ -514,7 +514,7 @@ public class StorageTests : BaseTestClass
 		await storage.SaveAsync(depths, token);
 		await LoadDepthsAndCompare(storage, depths);
 
-		await storage.DeleteWithCheckAsync();
+		await storage.DeleteWithCheckAsync(token);
 	}
 
 	[TestMethod]
@@ -536,7 +536,7 @@ public class StorageTests : BaseTestClass
 		await storage.SaveAsync(depths, token);
 		await LoadDepthsAndCompare(storage, depths);
 
-		await storage.DeleteWithCheckAsync();
+		await storage.DeleteWithCheckAsync(token);
 	}
 
 	private static IMarketDataStorage<QuoteChangeMessage> GetDepthStorage(SecurityId security, StorageFormats format)
@@ -643,7 +643,7 @@ public class StorageTests : BaseTestClass
 
 		await depthStorage.SaveAsync([depth1], token);
 		await LoadDepthsAndCompare(depthStorage, [depth2]);
-		await depthStorage.DeleteWithCheckAsync();
+		await depthStorage.DeleteWithCheckAsync(token);
 	}
 
 	[TestMethod]
@@ -681,7 +681,7 @@ public class StorageTests : BaseTestClass
 		}
 		catch
 		{
-			await depthStorage.DeleteWithCheckAsync();
+			await depthStorage.DeleteWithCheckAsync(token);
 			throw;
 		}
 	}
@@ -743,7 +743,7 @@ public class StorageTests : BaseTestClass
 		await depthStorage.SaveAsync([depth1, depth2, depth3], token);
 		await LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
 
-		await depthStorage.DeleteWithCheckAsync();
+		await depthStorage.DeleteWithCheckAsync(token);
 	}
 
 	[TestMethod]
@@ -782,7 +782,7 @@ public class StorageTests : BaseTestClass
 		await depthStorage.SaveAsync([depth1, depth2, depth3], token);
 		await LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
 
-		await depthStorage.DeleteWithCheckAsync();
+		await depthStorage.DeleteWithCheckAsync(token);
 	}
 
 	[TestMethod]
@@ -821,7 +821,7 @@ public class StorageTests : BaseTestClass
 		await depthStorage.SaveAsync([depth1, depth2, depth3], token);
 		await LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
 
-		await depthStorage.DeleteWithCheckAsync();
+		await depthStorage.DeleteWithCheckAsync(token);
 	}
 
 	[TestMethod]
@@ -856,7 +856,7 @@ public class StorageTests : BaseTestClass
 		await depthStorage.SaveAsync([depth1, depth2, depth3], token);
 		await LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
 
-		await depthStorage.DeleteWithCheckAsync();
+		await depthStorage.DeleteWithCheckAsync(token);
 	}
 
 	[TestMethod]
@@ -876,7 +876,7 @@ public class StorageTests : BaseTestClass
 		await depthStorage.SaveAsync([depth1, depth2, depth3], token);
 		await LoadDepthsAndCompare(depthStorage, [depth1, depth2, depth3]);
 
-		await depthStorage.DeleteWithCheckAsync();
+		await depthStorage.DeleteWithCheckAsync(token);
 	}
 
 	[TestMethod]
@@ -900,7 +900,7 @@ public class StorageTests : BaseTestClass
 
 		await LoadDepthsAndCompare(depthStorage, depths);
 
-		await depthStorage.DeleteWithCheckAsync();
+		await depthStorage.DeleteWithCheckAsync(token);
 	}
 
 	private async Task DepthHalfFilled(StorageFormats format, int count)
@@ -1152,7 +1152,7 @@ public class StorageTests : BaseTestClass
 		await depthStorage.SaveAsync([depths[1]], token);
 
 		await LoadDepthsAndCompare(depthStorage, depths);
-		await depthStorage.DeleteWithCheckAsync();
+		await depthStorage.DeleteWithCheckAsync(token);
 	}
 
 	private async Task DepthRandom(StorageFormats format, int count, Action<QuoteChangeMessage[]> modify = null, TimeSpan? interval = null, bool ordersCount = false, bool conditions = false)
@@ -1193,7 +1193,7 @@ public class StorageTests : BaseTestClass
 		var depthStorage = GetDepthStorage(secId, format);
 		await depthStorage.SaveAsync(depths, token);
 		await LoadDepthsAndCompare(depthStorage, depths);
-		await depthStorage.DeleteWithCheckAsync();
+		await depthStorage.DeleteWithCheckAsync(token);
 	}
 
 	[TestMethod]
@@ -1216,7 +1216,7 @@ public class StorageTests : BaseTestClass
 
 		await LoadDepthsAndCompare(depthStorage, [.. depths.Except(randomDeleteDepths).OrderBy(d => d.ServerTime)]);
 
-		await depthStorage.DeleteWithCheckAsync();
+		await depthStorage.DeleteWithCheckAsync(token);
 	}
 
 	[TestMethod]
@@ -1277,7 +1277,7 @@ public class StorageTests : BaseTestClass
 
 		await LoadDepthsAndCompare(depthStorage, [.. depths.Where(d => d.ServerTime < from || d.ServerTime > to).OrderBy(d => d.ServerTime)]);
 
-		await depthStorage.DeleteWithCheckAsync();
+		await depthStorage.DeleteWithCheckAsync(token);
 	}
 
 	private async Task LoadDepthsAndCompare(IMarketDataStorage<QuoteChangeMessage> depthStorage, IList<QuoteChangeMessage> depths)
@@ -1319,7 +1319,7 @@ public class StorageTests : BaseTestClass
 		loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token);
 		loadedDepths.Length.AssertEqual(0);
 
-		await depthStorage.DeleteWithCheckAsync();
+		await depthStorage.DeleteWithCheckAsync(token);
 	}
 
 	[TestMethod]
@@ -1346,7 +1346,7 @@ public class StorageTests : BaseTestClass
 		loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token);
 		loadedDepths.Length.AssertEqual(0);
 
-		await depthStorage.DeleteWithCheckAsync();
+		await depthStorage.DeleteWithCheckAsync(token);
 	}
 
 	private async Task DepthRandomIncrement(StorageFormats format, bool ordersCount, bool conditions)
@@ -1394,7 +1394,7 @@ public class StorageTests : BaseTestClass
 		var depthStorage = GetDepthStorage(secId, format);
 		await depthStorage.SaveAsync(diffQuotes, token);
 		await LoadQuotesAndCompare(depthStorage, diffQuotes);
-		await depthStorage.DeleteWithCheckAsync();
+		await depthStorage.DeleteWithCheckAsync(token);
 	}
 
 	private async Task LoadQuotesAndCompare(IMarketDataStorage<QuoteChangeMessage> depthStorage, IList<QuoteChangeMessage> depths)
@@ -2350,7 +2350,7 @@ public class StorageTests : BaseTestClass
 		var logStorage = storage.GetOrderLogMessageStorage(secId, null, format);
 		await logStorage.SaveAsync(quotes, token);
 		await LoadOrderLogAndCompare(logStorage, quotes);
-		await logStorage.DeleteWithCheckAsync();
+		await logStorage.DeleteWithCheckAsync(token);
 	}
 
 	[TestMethod]
@@ -2399,7 +2399,7 @@ public class StorageTests : BaseTestClass
 		await olStorage.SaveAsync([ol[1]], token);
 
 		await LoadOrderLogAndCompare(olStorage, ol);
-		await olStorage.DeleteWithCheckAsync();
+		await olStorage.DeleteWithCheckAsync(token);
 	}
 
 	private async Task OrderLogRandomSaveLoad(StorageFormats format, int count, Action<IEnumerable<ExecutionMessage>> modify = null)
@@ -2417,7 +2417,7 @@ public class StorageTests : BaseTestClass
 		var logStorage = storage.GetOrderLogMessageStorage(secId, null, format);
 		await logStorage.SaveAsync(items, token);
 		await LoadOrderLogAndCompare(logStorage, items);
-		await logStorage.DeleteWithCheckAsync();
+		await logStorage.DeleteWithCheckAsync(token);
 	}
 
 	private async Task LoadOrderLogAndCompare(IMarketDataStorage<ExecutionMessage> storage, IList<ExecutionMessage> items)
@@ -2443,7 +2443,7 @@ public class StorageTests : BaseTestClass
 
 		loaded.CompareMessages(news);
 
-		await newsStorage.DeleteWithCheckAsync();
+		await newsStorage.DeleteWithCheckAsync(token);
 	}
 
 	[TestMethod]
@@ -2462,7 +2462,7 @@ public class StorageTests : BaseTestClass
 
 		loaded.CompareMessages(data);
 
-		await storage.DeleteWithCheckAsync();
+		await storage.DeleteWithCheckAsync(token);
 	}
 
 	private async Task Level1(StorageFormats format, bool isFractional, bool diffDays = false)
@@ -2482,7 +2482,7 @@ public class StorageTests : BaseTestClass
 		var loadedItems = await l1Storage.LoadAsync(testValues.First().ServerTime, testValues.Last().ServerTime, token);
 		loadedItems.CompareMessages(testValues);
 
-		await l1Storage.DeleteWithCheckAsync();
+		await l1Storage.DeleteWithCheckAsync(token);
 	}
 
 	[TestMethod]
@@ -2518,7 +2518,7 @@ public class StorageTests : BaseTestClass
 
 		loaded.Count().AssertEqual(0);
 
-		await l1Storage.DeleteWithCheckAsync();
+		await l1Storage.DeleteWithCheckAsync(token);
 	}
 
 	[TestMethod]
@@ -2577,7 +2577,7 @@ public class StorageTests : BaseTestClass
 		var loadedItems = await l1Storage.LoadAsync(testValues.First().ServerTime, testValues.Last().ServerTime, token);
 		loadedItems.CompareMessages(testValues);
 
-		await l1Storage.DeleteWithCheckAsync();
+		await l1Storage.DeleteWithCheckAsync(token);
 	}
 
 	//[DataTestMethod]
@@ -2628,7 +2628,7 @@ public class StorageTests : BaseTestClass
 	//	var loadedItems = l1Storage.Load(testValues.First().ServerTime, testValues.Last().ServerTime).ToArray();
 	//	loaded.CompareMessages(testValues);
 
-	//	await l1Storage.DeleteWithCheckAsync();
+	//	await l1Storage.DeleteWithCheckAsync(token);
 	//}
 
 	[TestMethod]
@@ -2926,13 +2926,14 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	//[DataRow(StorageFormats.Csv)]
-	public void RegressionBuildableRange(StorageFormats format)
+	public async Task RegressionBuildableRange(StorageFormats format)
 	{
 		// https://stocksharp.myjetbrains.com/youtrack/issue/SS-192
 
 		var secId = "SBER@MICEX".ToSecurityId();
 
 		var reg = Helper.GetResourceStorage();
+		var token = CancellationToken;
 
 		var tf = TimeSpan.FromDays(1);
 		var eiProv = ServicesRegistry.EnsureGetExchangeInfoProvider();
@@ -2940,7 +2941,7 @@ public class StorageTests : BaseTestClass
 
 		var buildableStorage = cbProv.GetCandleMessageBuildableStorage(reg, secId, tf, null, format);
 
-		var range = buildableStorage.GetRange(_regressionFrom, _regressionTo);
+		var range = await buildableStorage.GetRangeAsync(_regressionFrom, _regressionTo, token);
 
 		range.Min.AssertEqual(range.Min.Date);
 		range.Max.AssertEqual(range.Max.Date);
@@ -3373,8 +3374,9 @@ public class StorageTests : BaseTestClass
 		return new(path ?? Helper.GetSubTemp());
 	}
 
-	private static Task SetupTestDataAsync(LocalMarketDataDrive drive, SecurityId securityId, DataType dataType, StorageFormats format, DateTime[] dates)
+	private async Task SetupTestDataAsync(LocalMarketDataDrive drive, SecurityId securityId, DataType dataType, StorageFormats format, DateTime[] dates)
 	{
+		var token = CancellationToken;
 		var storageDrive = drive.GetStorageDrive(securityId, dataType, format);
 
 		foreach (var date in dates)
@@ -3384,10 +3386,8 @@ public class StorageTests : BaseTestClass
 
 			// Write minimal valid data
 			stream.Position = 0;
-			storageDrive.SaveStream(date, stream);
+			await storageDrive.SaveStreamAsync(date, stream, token);
 		}
-
-		return Task.CompletedTask;
 	}
 
 	[TestMethod]
