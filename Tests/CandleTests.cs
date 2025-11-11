@@ -67,7 +67,8 @@ public class CandleTests
 
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
-		security.Board = ExchangeBoard.Forts;
+		secId.BoardCode = BoardCodes.Forts;
+		security.Id = secId.ToStringId();
 
 		var trades = new[]
 		{
@@ -77,7 +78,7 @@ public class CandleTests
 				TradePrice = 11,
 				TradeVolume = 11,
 				SecurityId = secId,
-				ServerTime = new DateTime(2000, 1, 10, 10, 0, 0).UtcKind()
+				ServerTime = new DateTime(2000, 1, 10, 9, 55, 0).UtcKind()
 			},
 			new ExecutionMessage
 			{
@@ -85,7 +86,7 @@ public class CandleTests
 				TradePrice = 12,
 				TradeVolume = 12,
 				SecurityId = secId,
-				ServerTime = new DateTime(2000, 1, 10, 10, 1, 0).UtcKind()
+				ServerTime = new DateTime(2000, 1, 10, 9, 56, 0).UtcKind()
 			},
 			new ExecutionMessage
 			{
@@ -93,7 +94,7 @@ public class CandleTests
 				TradePrice = 13,
 				TradeVolume = 13,
 				SecurityId = secId,
-				ServerTime = new DateTime(2000, 1, 10, 10, 2, 0).UtcKind()
+				ServerTime = new DateTime(2000, 1, 10, 10, 0, 0).UtcKind()
 			}
 		};
 
@@ -239,27 +240,33 @@ public class CandleTests
 	{
 		var date = new DateTime(2013, 5, 15).UtcKind();
 
-		CheckCandleBounds(TimeSpan.FromMinutes(5).GetCandleBounds(date.Add(new TimeSpan(7, 49, 33)), ExchangeBoard.MicexJunior), date.Add(new TimeSpan(7, 45, 0)), date.Add(new TimeSpan(7, 50, 0)));
-		CheckCandleBounds(TimeSpan.FromMinutes(5).GetCandleBounds(date.Add(new TimeSpan(14, 1, 33)), ExchangeBoard.Forts), date.Add(new TimeSpan(14, 0, 0)), date.Add(new TimeSpan(14, 5, 0)));
+		void CheckCandleBounds(TimeSpan tf, TimeSpan exchangeTimeOfDay, ExchangeBoard board, TimeSpan exchangeMin, TimeSpan exchangeMax)
+		{
+			var currTime = date.Add(exchangeTimeOfDay).ApplyTimeZone(board.TimeZone).UtcDateTime;
+			var range = tf.GetCandleBounds(currTime, board);
 
-		CheckCandleBounds(TimeSpan.FromMinutes(15).GetCandleBounds(date.Add(new TimeSpan(23, 46, 0)), ExchangeBoard.Forts), date.Add(new TimeSpan(23, 45, 0)), date.Add(new TimeSpan(23, 50, 0)));
+			var min = date.Add(exchangeMin).ApplyTimeZone(board.TimeZone);
+			var max = date.Add(exchangeMax).ApplyTimeZone(board.TimeZone);
 
-		CheckCandleBounds(TimeSpan.FromMinutes(30).GetCandleBounds(date.Add(new TimeSpan(19, 0, 0)), ExchangeBoard.Forts), date.Add(new TimeSpan(19, 0, 0)), date.Add(new TimeSpan(19, 30, 0)));
-		CheckCandleBounds(TimeSpan.FromMinutes(30).GetCandleBounds(date.Add(new TimeSpan(18, 3, 0)), ExchangeBoard.Forts), date.Add(new TimeSpan(18, 0, 0)), date.Add(new TimeSpan(18, 30, 0)));
+			min.UtcDateTime.AssertEqual(range.Min);
+			max.UtcDateTime.AssertEqual(range.Max);
+		}
 
-		CheckCandleBounds(TimeSpan.FromHours(1).GetCandleBounds(date.Add(new TimeSpan(23, 30, 0)), ExchangeBoard.Forts), date.Add(new TimeSpan(23, 00, 0)), date.Add(new TimeSpan(23, 50, 0)));
-		CheckCandleBounds(TimeSpan.FromHours(1).GetCandleBounds(date.Add(new TimeSpan(18, 30, 0)), ExchangeBoard.Forts), date.Add(new TimeSpan(18, 0, 0)), date.Add(new TimeSpan(18, 45, 0)));
+		CheckCandleBounds(TimeSpan.FromMinutes(5), new(7, 49, 33), ExchangeBoard.MicexJunior, new(7, 45, 0), new(7, 50, 0));
+		CheckCandleBounds(TimeSpan.FromMinutes(5), new(14, 1, 33), ExchangeBoard.Forts, new(14, 0, 0), new(14, 5, 0));
 
-		CheckCandleBounds(TimeSpan.FromHours(2).GetCandleBounds(date.Add(new TimeSpan(18, 30, 0)), ExchangeBoard.Forts), date.Add(new TimeSpan(18, 0, 0)), date.Add(new TimeSpan(20, 00, 0)));
+		CheckCandleBounds(TimeSpan.FromMinutes(15), new(23, 46, 0), ExchangeBoard.Forts, new(23, 45, 0), new(23, 50, 0));
 
-		CheckCandleBounds(TimeSpan.FromHours(24).GetCandleBounds(date.Add(new TimeSpan(23, 30, 0)), ExchangeBoard.Forts), date.Add(new TimeSpan(10, 0, 0)), date.Add(new TimeSpan(23, 50, 0)));
-		CheckCandleBounds(TimeSpan.FromHours(48).GetCandleBounds(date.Add(new TimeSpan(23, 30, 0)), ExchangeBoard.Forts), date.Add(new TimeSpan(10, 0, 0)), date.Add(new TimeSpan(1, 23, 50, 0)));
-	}
+		CheckCandleBounds(TimeSpan.FromMinutes(30), new(19, 0, 0), ExchangeBoard.Forts, new(19, 0, 0), new(19, 30, 0));
+		CheckCandleBounds(TimeSpan.FromMinutes(30), new(18, 3, 0), ExchangeBoard.Forts, new(18, 0, 0), new(18, 30, 0));
 
-	private static void CheckCandleBounds(Range<DateTime> range, DateTime min, DateTime max)
-	{
-		min.AssertEqual(range.Min);
-		max.AssertEqual(range.Max);
+		CheckCandleBounds(TimeSpan.FromHours(1), new(23, 30, 0), ExchangeBoard.Forts, new(23, 00, 0), new(23, 50, 0));
+		CheckCandleBounds(TimeSpan.FromHours(1), new(18, 30, 0), ExchangeBoard.Forts, new(18, 0, 0), new(18, 45, 0));
+
+		CheckCandleBounds(TimeSpan.FromHours(2), new(18, 30, 0), ExchangeBoard.Forts, new(18, 0, 0), new(20, 00, 0));
+
+		CheckCandleBounds(TimeSpan.FromHours(24), new(23, 30, 0), ExchangeBoard.Forts, new(10, 0, 0), new(23, 50, 0));
+		CheckCandleBounds(TimeSpan.FromHours(48), new(23, 30, 0), ExchangeBoard.Forts, new(10, 0, 0), new(1, 23, 50, 0));
 	}
 
 	[TestMethod]
