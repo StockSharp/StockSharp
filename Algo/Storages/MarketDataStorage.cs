@@ -2,13 +2,15 @@ namespace StockSharp.Algo.Storages;
 
 using Ecng.Linq;
 
+using Nito.AsyncEx;
+
 abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 	where TMessage : Message, IServerTimeMessage
 {
 	private readonly Func<TMessage, SecurityId> _getSecurityId;
 	private readonly Func<TMessage, TId> _getId;
 	private readonly Func<TMessage, bool> _isValid;
-	private readonly SynchronizedDictionary<DateTime, SyncObject> _syncRoots = [];
+	private readonly SynchronizedDictionary<DateTime, AsyncReaderWriterLock> _locks = [];
 	private readonly SynchronizedDictionary<DateTime, IMarketDataMetaInfo> _dateMetaInfos = [];
 
 	protected MarketDataStorage(SecurityId securityId, DataType dataType, Func<TMessage, SecurityId> getSecurityId, Func<TMessage, TId> getId, IMarketDataSerializer<TMessage> serializer, IMarketDataStorageDrive drive, Func<TMessage, bool> isValid)
@@ -45,13 +47,16 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 
 	protected DateTime GetTruncatedTime(TMessage data) => data.ServerTime.StorageTruncate(Serializer.TimePrecision);
 
-	private SyncObject GetSync(DateTime time) => _syncRoots.SafeAdd(time);
+	private AsyncReaderWriterLock GetLock(DateTime date) => _locks.SafeAdd(date);
+	private AwaitableDisposable<IDisposable> GetReadSync(DateTime date, CancellationToken cancellationToken) => GetLock(date).ReaderLockAsync(cancellationToken);
+	private AwaitableDisposable<IDisposable> GetWriteSync(DateTime date, CancellationToken cancellationToken) => GetLock(date).WriterLockAsync(cancellationToken);
 
-	private Stream LoadStream(DateTime date, bool readOnly) => Drive.LoadStream(date, readOnly);
+	private ValueTask<Stream> LoadStreamAsync(DateTime date, bool readOnly, CancellationToken cancellationToken)
+		=> Drive.LoadStreamAsync(date, readOnly, cancellationToken);
 
 	private bool SecurityIdEqual(SecurityId securityId) => securityId.SecurityCode.EqualsIgnoreCase(SecurityId.SecurityCode) && securityId.BoardCode.EqualsIgnoreCase(SecurityId.BoardCode);
 
-	public ValueTask<int> SaveAsync(IEnumerable<TMessage> data, CancellationToken cancellationToken)
+	public async ValueTask<int> SaveAsync(IEnumerable<TMessage> data, CancellationToken cancellationToken)
 	{
 		if (data == null)
 			throw new ArgumentNullException(nameof(data));
@@ -70,47 +75,46 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 			if (time == DateTime.MinValue)
 				throw new ArgumentException(LocalizedStrings.EmptyMessageTime.Put(d));
 
-			return time;
+			return time.Date;
 		}))
 		{
 			var date = group.Key;
 			var newItems = group.OrderBy(e => e.ServerTime).ToArray();
 
-			lock (GetSync(date))
+			using var _ = await GetWriteSync(date, cancellationToken);
+
+			var stream = await LoadStreamAsync(date, false, cancellationToken);
+
+			try
 			{
-				var stream = LoadStream(date, false);
+				var metaInfo = GetInfo(stream, date);
 
-				try
+				if (metaInfo == null)
 				{
-					var metaInfo = GetInfo(stream, date);
-
-					if (metaInfo == null)
-					{
-						stream = new MemoryStream();
-						metaInfo = Serializer.CreateMetaInfo(date);
-					}
-
-					var diff = Save(stream, metaInfo, newItems, false);
-
-					if (diff == 0)
-						continue;
-
-					count += diff;
-
-					if (stream is not MemoryStream)
-						continue;
-
-					stream.Position = 0;
-					Drive.SaveStream(date, stream);
+					stream = new MemoryStream();
+					metaInfo = Serializer.CreateMetaInfo(date);
 				}
-				finally
-				{
-					stream.Dispose();
-				}
+
+				var diff = Save(stream, metaInfo, newItems, false);
+
+				if (diff == 0)
+					continue;
+
+				count += diff;
+
+				if (stream is not MemoryStream)
+					continue;
+
+				stream.Position = 0;
+				await Drive.SaveStreamAsync(date, stream, cancellationToken);
+			}
+			finally
+			{
+				stream.Dispose();
 			}
 		}
 
-		return new(count);
+		return count;
 	}
 
 	private int Save(Stream stream, IMarketDataMetaInfo metaInfo, TMessage[] data, bool isOverride)
@@ -146,15 +150,12 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 
 			/*metaInfo.FirstPriceStep = */((MetaInfo)metaInfo).LastPriceStep = metaInfo.PriceStep;
 		}
-		else
+		else if (AppendOnlyNew)
 		{
-			if (AppendOnlyNew)
-			{
-				data = [.. FilterNewData(data, metaInfo)];
+			data = [.. FilterNewData(data, metaInfo)];
 
-				if (data.IsEmpty())
-					return 0;
-			}
+			if (data.IsEmpty())
+				return 0;
 		}
 
 		if (!isOverride && _dataType == DataType.MarketDepth)
@@ -206,7 +207,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 			stream.Position = stream.Length;
 
 		newDayData.Position = 0;
-		stream.WriteRaw(newDayData.To<byte[]>());
+		newDayData.CopyTo(stream);
 
 		return data.Length;
 	}
@@ -237,129 +238,114 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 		return DeleteAsync(data.Cast<TMessage>(), cancellationToken);
 	}
 
-	public ValueTask DeleteAsync(IEnumerable<TMessage> data, CancellationToken cancellationToken)
+	public async ValueTask DeleteAsync(IEnumerable<TMessage> data, CancellationToken cancellationToken)
 	{
 		if (data == null)
 			throw new ArgumentNullException(nameof(data));
 
-		foreach (var group in data.GroupBy(i => i.ServerTime))
+		foreach (var group in data.GroupBy(i => i.ServerTime.Date))
 		{
 			var date = group.Key;
 
-			lock (GetSync(date))
-			{
-				var stream = LoadStream(date, true);
+			using var _ = await GetWriteSync(date, cancellationToken);
 
-				try
-				{
-					var metaInfo = GetInfo(stream, date);
-
-					if (metaInfo == null)
-						continue;
-
-					var count = metaInfo.Count;
-
-					if (count != group.Count())
-					{
-						var loadedData = new Dictionary<TId, List<TMessage>>();
-
-						foreach (var item in Serializer.Deserialize(stream, metaInfo))
-						{
-							var id = _getId(item);
-
-							var loadedItems = loadedData.TryGetValue(id);
-
-							if (loadedItems == null)
-							{
-								loadedItems = [item];
-								loadedData.Add(id, loadedItems);
-							}
-							else
-								loadedItems.Add(item);
-						}
-
-						foreach (var item in group)
-							loadedData.Remove(_getId(item));
-
-						if (loadedData.Count > 0)
-						{
-							// повторная иницилизация потока, так как предыдущий раз он был закрыл выше
-							// при десериализации
-							stream = LoadStream(date, false);
-
-							Save(stream, Serializer.CreateMetaInfo(date),
-								[.. loadedData.Values.SelectMany(l => l)], true);
-
-							stream.Dispose();
-							stream = null;
-						}
-						else
-						{
-							((IMarketDataStorage)this).Delete(date);
-							stream = null;
-						}
-					}
-					else
-					{
-						stream.Dispose();
-						stream = null;
-
-						((IMarketDataStorage)this).Delete(date);
-					}
-				}
-				catch
-				{
-					stream?.Dispose();
-					throw;
-				}
-			}
-		}
-
-		return default;
-	}
-
-	public IAsyncEnumerable<TMessage> LoadAsync(DateTime date, CancellationToken cancellationToken)
-	{
-		date = date.Date;
-
-		IEnumerable<TMessage> msgs;
-
-		lock (GetSync(date))
-		{
-			var stream = LoadStream(date, true);
+			var stream = await LoadStreamAsync(date, true, cancellationToken);
 
 			try
 			{
 				var metaInfo = GetInfo(stream, date);
 
 				if (metaInfo == null)
-					msgs = [];
+					continue;
+
+				var count = metaInfo.Count;
+
+				if (count != group.Count())
+				{
+					var loadedData = new Dictionary<TId, List<TMessage>>();
+
+					foreach (var item in Serializer.Deserialize(stream, metaInfo))
+					{
+						var id = _getId(item);
+
+						var loadedItems = loadedData.TryGetValue(id);
+
+						if (loadedItems == null)
+						{
+							loadedItems = [item];
+							loadedData.Add(id, loadedItems);
+						}
+						else
+							loadedItems.Add(item);
+					}
+
+					foreach (var item in group)
+						loadedData.Remove(_getId(item));
+
+					if (loadedData.Count > 0)
+					{
+						// повторная иницилизация потока, так как предыдущий раз он был закрыл выше
+						// при десериализации
+						stream = await LoadStreamAsync(date, false, cancellationToken);
+
+						Save(stream, Serializer.CreateMetaInfo(date),
+							[.. loadedData.Values.SelectMany(l => l)], true);
+
+						stream.Dispose();
+						stream = null;
+					}
+					else
+					{
+						await ((IMarketDataStorage)this).DeleteAsync(date, cancellationToken);
+						stream = null;
+					}
+				}
 				else
 				{
-					// нельзя закрывать поток, так как из него будут читаться данные через энумератор
-					//using (stream)
-					msgs = Serializer.Deserialize(stream, metaInfo);
+					stream.Dispose();
+					stream = null;
+
+					await ((IMarketDataStorage)this).DeleteAsync(date, cancellationToken);
 				}
 			}
-			catch (Exception)
+			catch
 			{
-				stream.Dispose();
+				stream?.Dispose();
 				throw;
 			}
 		}
-
-		return msgs.ToAsyncEnumerable2(cancellationToken);
 	}
 
-	ValueTask<IMarketDataMetaInfo> IMarketDataStorage.GetMetaInfoAsync(DateTime date, CancellationToken cancellationToken)
+	public async IAsyncEnumerable<TMessage> LoadAsync(DateTime date, [EnumeratorCancellation]CancellationToken cancellationToken)
 	{
 		date = date.Date;
 
-		lock (GetSync(date))
+		using var _ = await GetReadSync(date, cancellationToken);
+
+		using var stream = await LoadStreamAsync(date, true, cancellationToken);
+
+		var metaInfo = GetInfo(stream, date);
+
+		if (metaInfo == null)
+			yield break;
+
+		var msgs = Serializer.Deserialize(stream, metaInfo);
+
+		foreach (var msg in msgs)
 		{
-			using var stream = LoadStream(date, true);
-			return new(GetInfo(stream, date));
+			cancellationToken.ThrowIfCancellationRequested();
+			yield return msg;
 		}
+	}
+
+	async ValueTask<IMarketDataMetaInfo> IMarketDataStorage.GetMetaInfoAsync(DateTime date, CancellationToken cancellationToken)
+	{
+		date = date.Date;
+
+		using var _ = await GetReadSync(date, cancellationToken);
+
+		using var stream = await LoadStreamAsync(date, true, cancellationToken);
+		return GetInfo(stream, date);
 	}
 
 	private IMarketDataMetaInfo GetInfo(Stream stream, DateTime date)
@@ -387,17 +373,14 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 		return metaInfo;
 	}
 
-	ValueTask IMarketDataStorage.DeleteAsync(DateTime date, CancellationToken cancellationToken)
+	async ValueTask IMarketDataStorage.DeleteAsync(DateTime date, CancellationToken cancellationToken)
 	{
 		date = date.Date;
 
-		lock (GetSync(date))
-		{
-			Drive.Delete(date);
-			_dateMetaInfos.Remove(date);
-		}
+		using var _ = await GetWriteSync(date, cancellationToken);
 
-		return default;
+		await Drive.DeleteAsync(date, cancellationToken);
+		_dateMetaInfos.Remove(date);
 	}
 
 	IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date, CancellationToken cancellationToken)
