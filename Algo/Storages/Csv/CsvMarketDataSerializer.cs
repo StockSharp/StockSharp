@@ -200,20 +200,7 @@ public abstract class CsvMarketDataSerializer<TData> : IMarketDataSerializer<TDa
 	/// <param name="metaInfo">Meta-information on data for one day.</param>
 	/// <returns>Data.</returns>
 	public virtual IEnumerable<TData> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
-	{
-		// TODO (переделать в будущем)
-		var copy = new MemoryStream();
-		stream.CopyTo(copy);
-		copy.Position = 0;
-
-		stream.Dispose();
-
-		//return new SimpleEnumerable<TData>(() =>
-		//	new CsvReader(copy, _encoding, SecurityId, metaInfo.Date.Date, _executionType, _candleArg, _members))
-		//	.ToEx(metaInfo.Count);
-
-		return new SimpleEnumerable<TData>(() => new CsvEnumerator(this, copy.CreateCsvReader(Encoding), metaInfo));
-	}
+		=> new SimpleEnumerable<TData>(() => new CsvEnumerator(this, stream.CreateCsvReader(Encoding), metaInfo));
 
 	/// <summary>
 	/// Read data from the specified reader.

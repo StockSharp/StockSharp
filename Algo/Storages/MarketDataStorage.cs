@@ -282,10 +282,11 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 					foreach (var item in group)
 						loadedData.Remove(_getId(item));
 
+					stream.Dispose();
+					stream = null;
+
 					if (loadedData.Count > 0)
 					{
-						// повторная иницилизация потока, так как предыдущий раз он был закрыл выше
-						// при десериализации
 						stream = await LoadStreamAsync(date, false, cancellationToken);
 
 						Save(stream, Serializer.CreateMetaInfo(date),
@@ -297,7 +298,6 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 					else
 					{
 						await ((IMarketDataStorage)this).DeleteAsync(date, cancellationToken);
-						stream = null;
 					}
 				}
 				else
@@ -308,10 +308,9 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 					await ((IMarketDataStorage)this).DeleteAsync(date, cancellationToken);
 				}
 			}
-			catch
+			finally
 			{
 				stream?.Dispose();
-				throw;
 			}
 		}
 	}

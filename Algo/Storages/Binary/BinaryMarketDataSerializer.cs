@@ -478,12 +478,9 @@ abstract class BinaryMarketDataSerializer<TData, TMetaInfo> : IMarketDataSeriali
 	{
 		var typedInfo = (TMetaInfo)metaInfo;
 		CheckVersion(typedInfo, "Save");
-		//var temp = new MemoryStream { Capacity = DataSize * data.Count() * 2 };
 
-		using (var writer = new BitArrayWriter(stream))
-			OnSave(writer, data, typedInfo);
-
-		//return stream.To<byte[]>();
+		using var writer = new BitArrayWriter(stream);
+		OnSave(writer, data, typedInfo);
 	}
 
 	public IEnumerable<TData> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
@@ -491,13 +488,7 @@ abstract class BinaryMarketDataSerializer<TData, TMetaInfo> : IMarketDataSeriali
 		var typedInfo = (TMetaInfo)metaInfo;
 		CheckVersion(typedInfo, "Load");
 
-		var data = new MemoryStream();
-		stream.CopyTo(data);
-		stream.Dispose();
-
-		data.Position = 0;
-
-		return new SimpleEnumerable<TData>(() => new MarketDataEnumerator(this, new BitArrayReader(data), typedInfo));
+		return new SimpleEnumerable<TData>(() => new MarketDataEnumerator(this, new BitArrayReader(stream), typedInfo));
 	}
 
 	protected abstract void OnSave(BitArrayWriter writer, IEnumerable<TData> data, TMetaInfo metaInfo);
