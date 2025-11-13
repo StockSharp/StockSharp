@@ -22,7 +22,6 @@
     <StockSharpVer>5.*</StockSharpVer>
 
     <MathNumVer>5.0.0</MathNumVer>
-    <ProtobufNetVer>3.1.17</ProtobufNetVer>
     <HtmlAgilityPackVer>1.11.45</HtmlAgilityPackVer>
     <JwtVer>9.0.3</JwtVer>
     <FluentFtpVer>40.0.0</FluentFtpVer>
