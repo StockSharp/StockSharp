@@ -10,7 +10,6 @@
     <HtmlAgilityPackVer>1.11.45</HtmlAgilityPackVer>
     <JwtVer>9.0.3</JwtVer>
     <FluentFtpVer>40.0.0</FluentFtpVer>
-    <CSharpVer>4.7.0</CSharpVer>
     <SignalRVer>2.4.3</SignalRVer>
     <MsTestVer>3.*</MsTestVer>
     <MsTestSdkVer>17.*</MsTestSdkVer>
@@ -19,7 +18,6 @@
     <SpectreVer>0.48.0</SpectreVer>
     <AWSSDKVer>4.*</AWSSDKVer>
     <GeneticSharpVer>3.1.4</GeneticSharpVer>
-    <InterprocessVer>2.0.0-alpha176</InterprocessVer>
     <SharpPcapVer>6.3.0</SharpPcapVer>
     <GoogleProtobufVer>3.*</GoogleProtobufVer>
     <PandasVer>0.6.*</PandasVer>

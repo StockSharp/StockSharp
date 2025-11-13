@@ -16,7 +16,7 @@ public class WorkingTime : IPersistable
 	/// </summary>
 	public WorkingTime()
 	{
-        }
+	}
 
 	/// <summary>
 	/// Is enabled.
