@@ -47,7 +47,10 @@ public class AsyncExtensionsTests : BaseTestClass
 						ActiveSubscriptions[mdMsg.TransactionId] = mdMsg;
 						LastSubscribedId = mdMsg.TransactionId;
 
-						SendSubscriptionResult(mdMsg);
+						// For historical subscriptions, send result AFTER data is sent
+						// For live subscriptions, send result now to start receiving
+						if (mdMsg.To == null)
+							SendSubscriptionResult(mdMsg);
 					}
 					else
 					{
@@ -75,6 +78,12 @@ public class AsyncExtensionsTests : BaseTestClass
 				sid.SetSubscriptionIds([subscriptionId]);
 
 			SendOutMessage(data);
+		}
+
+		public void FinishHistoricalSubscription(long subscriptionId)
+		{
+			if (ActiveSubscriptions.TryGetValue(subscriptionId, out var mdMsg))
+				SendSubscriptionResult(mdMsg);
 		}
 	}
 
@@ -115,7 +124,10 @@ public class AsyncExtensionsTests : BaseTestClass
 				ActiveSubscriptions[mdMsg.TransactionId] = mdMsg;
 				LastSubscribedId = mdMsg.TransactionId;
 
-				SendSubscriptionResult(mdMsg);
+				// For historical subscriptions, send result AFTER data is sent
+				// For live subscriptions, send result now to start receiving
+				if (mdMsg.To == null)
+					SendSubscriptionResult(mdMsg);
 			}
 			else
 			{
@@ -131,6 +143,12 @@ public class AsyncExtensionsTests : BaseTestClass
 			if (data is ISubscriptionIdMessage sid)
 				sid.SetSubscriptionIds([subscriptionId]);
 			SendOutMessage(data);
+		}
+
+		public void FinishHistoricalSubscription(long subscriptionId)
+		{
+			if (ActiveSubscriptions.TryGetValue(subscriptionId, out var mdMsg))
+				SendSubscriptionResult(mdMsg);
 		}
 
 		public override IMessageChannel Clone() => new MockAsyncAdapter(TransactionIdGenerator);
@@ -168,6 +186,9 @@ public class AsyncExtensionsTests : BaseTestClass
 		var got = new List<Level1ChangeMessage>();
 		using var enumCts = new CancellationTokenSource();
 
+		var started = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		connector.SubscriptionStarted += s => { if (ReferenceEquals(s, sub)) started.TrySetResult(true); };
+
 		var enumerating = Task.Run(async () =>
 		{
 			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub, enumCts.Token))
@@ -178,12 +199,11 @@ public class AsyncExtensionsTests : BaseTestClass
 			}
 		}, token);
 
-		// wait until subscription ID assigned by adapter
-		await Task.Run(async () =>
-		{
-			while (adapter.ActiveSubscriptions.Count == 0)
-				await Task.Delay(10, cts.Token);
-		}, cts.Token);
+		// Wait until subscription is started (online message received)
+		await started.Task.WithTimeout(TimeSpan.FromSeconds(3));
+
+		// Give time for enumeration to start
+		await Task.Delay(200, cts.Token);
 
 		var id = adapter.LastSubscribedId;
 
@@ -230,11 +250,15 @@ public class AsyncExtensionsTests : BaseTestClass
 			}
 		}, token);
 
+		// Wait for subscription to be processed
 		await Task.Run(async () =>
 		{
 			while (adapter.ActiveSubscriptions.Count == 0)
 				await Task.Delay(10, cts.Token);
 		}, cts.Token);
+
+		// Give time for subscription to fully activate
+		await Task.Delay(100, cts.Token);
 
 		var id = adapter.LastSubscribedId;
 
@@ -243,6 +267,9 @@ public class AsyncExtensionsTests : BaseTestClass
 			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow.AddDays(-1).AddMinutes(i) };
 			adapter.SimulateData(id, l1);
 		}
+
+		// Finish historical subscription after sending all data
+		adapter.FinishHistoricalSubscription(id);
 
 		enumCts.Cancel();
 		await enumerating.WithTimeout(TimeSpan.FromSeconds(5));
@@ -267,6 +294,9 @@ public class AsyncExtensionsTests : BaseTestClass
 		var got = new List<Level1ChangeMessage>();
 		using var enumCts = new CancellationTokenSource();
 
+		var started = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		connector.SubscriptionStarted += s => { if (ReferenceEquals(s, sub)) started.TrySetResult(true); };
+
 		var enumerating = Task.Run(async () =>
 		{
 			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub, enumCts.Token))
@@ -277,11 +307,11 @@ public class AsyncExtensionsTests : BaseTestClass
 			}
 		}, token);
 
-		await Task.Run(async () =>
-		{
-			while (adapter.ActiveSubscriptions.Count == 0)
-				await Task.Delay(10, cts.Token);
-		}, cts.Token);
+		// Wait until subscription is started (online message received)
+		await started.Task.WithTimeout(TimeSpan.FromSeconds(3));
+
+		// Give time for enumeration to start
+		await Task.Delay(200, cts.Token);
 
 		var id = adapter.LastSubscribedId;
 
@@ -327,11 +357,15 @@ public class AsyncExtensionsTests : BaseTestClass
 			}
 		}, token);
 
+		// Wait for subscription to be processed
 		await Task.Run(async () =>
 		{
 			while (adapter.ActiveSubscriptions.Count == 0)
 				await Task.Delay(10, cts.Token);
 		}, cts.Token);
+
+		// Give time for subscription to fully activate
+		await Task.Delay(100, cts.Token);
 
 		var id = adapter.LastSubscribedId;
 
@@ -340,6 +374,9 @@ public class AsyncExtensionsTests : BaseTestClass
 			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow.AddDays(-1).AddMinutes(i) };
 			adapter.SimulateData(id, l1);
 		}
+
+		// Finish historical subscription after sending all data
+		adapter.FinishHistoricalSubscription(id);
 
 		enumCts.Cancel();
 		await enumerating.WithTimeout(TimeSpan.FromSeconds(5));
