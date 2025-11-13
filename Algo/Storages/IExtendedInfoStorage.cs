@@ -262,7 +262,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 				var i = 0;
 				foreach (var pair in _cache)
 				{
-					retVal[i] = Tuple.Create(pair.Key, pair.Value.ToDictionary());
+					retVal[i] = Tuple.Create(pair.Key, (IDictionary<string, object>)pair.Value.ToDictionary());
 					i++;
 				}
 

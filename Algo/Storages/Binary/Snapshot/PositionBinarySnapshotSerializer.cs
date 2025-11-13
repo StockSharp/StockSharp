@@ -200,7 +200,15 @@ public class PositionBinarySnapshotSerializer : ISnapshotSerializer<Key, Positio
 
 		using var handle = new GCHandle<byte[]>(buffer);
 
-		var snapshot = handle.CreatePointer().ToStruct<PositionSnapshot>(true);
+		var ptr =
+#if NET10_0_OR_GREATER
+			new SafePointer(GCHandle<byte[]>.ToIntPtr(handle), buffer.Length)
+#else
+			handle.CreatePointer()
+#endif
+		;
+
+		var snapshot = ptr.ToStruct<PositionSnapshot>(true);
 
 		var posMsg = new PositionChangeMessage
 		{

@@ -1,7 +1,23 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('netstandard')) OR $(TargetFramework.StartsWith('net6'))">
     <LangVersion>12.0</LangVersion>
+    <MsExtensionsVer>8.*</MsExtensionsVer>
+    <MicrosoftCodeAnalysisVer>4.12.0</MicrosoftCodeAnalysisVer>
+    <MicrosoftCodeAnalysisAnalyzersVer>3.3.4</MicrosoftCodeAnalysisAnalyzersVer>
+    <MsTestVer>3.11.1</MsTestVer>
+    <MsTestSdkVer>17.13.0</MsTestSdkVer>
+  </PropertyGroup>
 
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net10'))">
+    <LangVersion>14.0</LangVersion>
+    <MsExtensionsVer>10.*</MsExtensionsVer>
+    <MicrosoftCodeAnalysisVer>4.*</MicrosoftCodeAnalysisVer>
+    <MicrosoftCodeAnalysisAnalyzersVer>3.*</MicrosoftCodeAnalysisAnalyzersVer>
+    <MsTestVer>4.*</MsTestVer>
+    <MsTestSdkVer>18.*</MsTestSdkVer>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <EcngVer>1.0.*</EcngVer>
     <StockSharpVer>5.*</StockSharpVer>
 
@@ -11,8 +27,6 @@
     <JwtVer>9.0.3</JwtVer>
     <FluentFtpVer>40.0.0</FluentFtpVer>
     <SignalRVer>2.4.3</SignalRVer>
-    <MsTestVer>3.*</MsTestVer>
-    <MsTestSdkVer>17.*</MsTestSdkVer>
     <MsExtensionsVer>8.*</MsExtensionsVer>
     <NuGetApiVer>6.14.0</NuGetApiVer>
     <SpectreVer>0.48.0</SpectreVer>
@@ -25,8 +39,5 @@
     <IronPythonVer>3.4.2</IronPythonVer>
     <MoqVer>4.*</MoqVer>
     <ILGPUVer>1.*</ILGPUVer>
-
-    <MicrosoftCodeAnalysisVer>4.12.0</MicrosoftCodeAnalysisVer>
-    <MicrosoftCodeAnalysisAnalyzersVer>3.3.4</MicrosoftCodeAnalysisAnalyzersVer>
   </PropertyGroup>
 </Project>

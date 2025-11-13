@@ -8,6 +8,14 @@ using Ecng.Linq;
 [TestClass]
 public class ImportTests : BaseTestClass
 {
+	private static readonly TimeSpan _1mcs = TimeSpan.
+#if NET9_0_OR_GREATER
+		FromMicroseconds(1)
+#else
+		FromTicks(TimeHelper.TicksPerMicrosecond)
+#endif
+	;
+
 	private static string GetTemplate(DataType dataType)
 	{
 		var registry = new TemplateTxtRegistry();
@@ -119,7 +127,7 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "TradeVolume"),
 			allFields.First(f => f.Name == "OriginSide"),
 		};
-		return Import(DataType.Ticks, true, security.RandomTicks(100, true), fields, TimeSpan.FromMicroseconds(1));
+		return Import(DataType.Ticks, true, security.RandomTicks(100, true), fields, _1mcs);
 	}
 
 	[TestMethod]
@@ -138,7 +146,7 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "Side"),
 		};
 		var depths = security.RandomDepths(100, ordersCount: true);
-		return Import(DataType.MarketDepth, true, depths, fields, TimeSpan.FromMicroseconds(1), depths.Sum(q => q.ToTimeQuotes().Count()));
+		return Import(DataType.MarketDepth, true, depths, fields, _1mcs, depths.Sum(q => q.ToTimeQuotes().Count()));
 	}
 
 	[TestMethod]
@@ -162,7 +170,7 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "TradeId"),
 			allFields.First(f => f.Name == "TradePrice"),
 		};
-		return Import(DataType.OrderLog, true, security.RandomOrderLog(100), fields, TimeSpan.FromMicroseconds(1));
+		return Import(DataType.OrderLog, true, security.RandomOrderLog(100), fields, _1mcs);
 	}
 
 	[TestMethod]
@@ -287,7 +295,7 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "TradePrice"),
 			allFields.First(f => f.Name == "TradeVolume"),
 		};
-		return Import(DataType.Transactions, true, security.RandomTransactions(10), fields, TimeSpan.FromMicroseconds(1));
+		return Import(DataType.Transactions, true, security.RandomTransactions(10), fields, _1mcs);
 	}
 
 	[TestMethod]
@@ -348,7 +356,7 @@ public class ImportTests : BaseTestClass
 			return clone;
 		}).ToArray();
 
-		return Import(DataType.MarketDepth, true, onlyBids, fields, TimeSpan.FromMicroseconds(1), onlyBids.Sum(q => q.ToTimeQuotes().Count()));
+		return Import(DataType.MarketDepth, true, onlyBids, fields, _1mcs, onlyBids.Sum(q => q.ToTimeQuotes().Count()));
 	}
 
 	[TestMethod]
@@ -378,7 +386,7 @@ public class ImportTests : BaseTestClass
 			return clone;
 		}).ToArray();
 
-		return Import(DataType.MarketDepth, true, onlyAsks, fields, TimeSpan.FromMicroseconds(1), onlyAsks.Sum(q => q.ToTimeQuotes().Count()));
+		return Import(DataType.MarketDepth, true, onlyAsks, fields, _1mcs, onlyAsks.Sum(q => q.ToTimeQuotes().Count()));
 	}
 
 	[TestMethod]
@@ -409,7 +417,7 @@ public class ImportTests : BaseTestClass
 			return clone;
 		}).ToArray();
 
-		return Import(DataType.MarketDepth, true, empty, fields, TimeSpan.FromMicroseconds(1), 0, 0);
+		return Import(DataType.MarketDepth, true, empty, fields, _1mcs, 0, 0);
 	}
 
 	[TestMethod]
@@ -462,7 +470,7 @@ public class ImportTests : BaseTestClass
 		}
 
 		var withQuotes = mixed.Where(q => q.ToTimeQuotes().Any()).ToArray();
-		return Import(DataType.MarketDepth, true, mixed.ToArray(), fields, TimeSpan.FromMicroseconds(1), mixed.Sum(q => q.ToTimeQuotes().Count()), withQuotes.Length, withQuotes.Last().ServerTime);
+		return Import(DataType.MarketDepth, true, mixed.ToArray(), fields, _1mcs, mixed.Sum(q => q.ToTimeQuotes().Count()), withQuotes.Length, withQuotes.Last().ServerTime);
 	}
 
 	private const string _tickFullTemplate = "{SecurityId.SecurityCode};{SecurityId.BoardCode};{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{TradeId};{TradePrice};{TradeVolume}";
@@ -524,7 +532,7 @@ public class ImportTests : BaseTestClass
 		// Ensure importer processed all messages and returned last time equals last message server time
 		count.AssertEqual(arr.Length);
 		lastTime.AssertNotNull();
-		lastTime.Value.AssertEqual(arr.Last().ServerTime.Truncate(TimeSpan.FromMicroseconds(1)));
+		lastTime.Value.AssertEqual(arr.Last().ServerTime.Truncate(_1mcs));
 	}
 
 	[TestMethod]

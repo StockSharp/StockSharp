@@ -90,7 +90,11 @@ public class ReportTests : BaseTestClass
 		stream.Flush();
 		stream.Position = 0;
 
-		var content = await new StreamReader(stream, leaveOpen: true).ReadToEndAsync(token);
+		var content = await new StreamReader(stream, leaveOpen: true).ReadToEndAsync(
+#if NET7_0_OR_GREATER
+token
+#endif
+			);
 		content.IsEmptyOrWhiteSpace().AssertFalse();
 	}
 }

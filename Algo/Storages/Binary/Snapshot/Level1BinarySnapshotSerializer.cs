@@ -530,7 +530,15 @@ public class Level1BinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Le
 
 		using var handle = new GCHandle<byte[]>(buffer);
 
-		var snapshot = handle.CreatePointer().ToStruct<Level1Snapshot>(true);
+		var ptr =
+#if NET10_0_OR_GREATER
+			new SafePointer(GCHandle<byte[]>.ToIntPtr(handle), buffer.Length)
+#else
+			handle.CreatePointer()
+#endif
+		;
+
+		var snapshot = ptr.ToStruct<Level1Snapshot>(true);
 
 		var level1Msg = new Level1ChangeMessage
 		{

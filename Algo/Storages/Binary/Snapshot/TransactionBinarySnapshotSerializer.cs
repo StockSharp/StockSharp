@@ -355,7 +355,13 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 
 		using var handle = new GCHandle<byte[]>(buffer);
 
-		var ptr = handle.CreatePointer();
+		var ptr =
+#if NET10_0_OR_GREATER
+			new SafePointer(GCHandle<byte[]>.ToIntPtr(handle), buffer.Length)
+#else
+			handle.CreatePointer()
+#endif
+		;
 
 		var snapshot = ptr.ToStruct<TransactionSnapshot>(true);
 
