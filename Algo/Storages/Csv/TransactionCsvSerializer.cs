@@ -145,9 +145,7 @@ public class TransactionCsvSerializer(SecurityId securityId, Encoding encoding) 
 		var dtStr = reader.ReadString();
 
 		if (dtStr != null)
-		{
-			msg.ExpiryDate = (dtStr.ToDateTime() + reader.ReadString().ToTimeMls()).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Remove("+"))).UtcDateTime;
-		}
+			msg.ExpiryDate = reader.ReadTime(dtStr.ToDateTime());
 		else
 			reader.Skip(2);
 
