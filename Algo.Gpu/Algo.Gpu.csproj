@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
-	<Import Project="..\common_target_net.props" />
+  <Import Project="..\common_target_net.props" />
 
-	<PropertyGroup>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	</PropertyGroup>
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="ILGPU.Algorithms" Version="$(ILGPUVer)" />
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ILGPU.Algorithms" Version="$(ILGPUVer)" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\Algo\Algo.csproj" />
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Algo\Algo.csproj" />
+  </ItemGroup>
 </Project>
