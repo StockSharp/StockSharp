@@ -297,7 +297,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 					}
 					else
 					{
-						await ((IMarketDataStorage)this).DeleteAsync(date, cancellationToken);
+						await DoDelete(date, cancellationToken);
 					}
 				}
 				else
@@ -305,7 +305,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 					stream.Dispose();
 					stream = null;
 
-					await ((IMarketDataStorage)this).DeleteAsync(date, cancellationToken);
+					await DoDelete(date, cancellationToken);
 				}
 			}
 			finally
@@ -378,6 +378,11 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 
 		using var _ = await GetWriteSync(date, cancellationToken);
 
+		await DoDelete(date, cancellationToken);
+	}
+
+	private async ValueTask DoDelete(DateTime date, CancellationToken cancellationToken)
+	{
 		await Drive.DeleteAsync(date, cancellationToken);
 		_dateMetaInfos.Remove(date);
 	}
