@@ -1,8 +1,6 @@
 namespace StockSharp.Algo.Storages.Binary.Snapshot;
 
-using System.Runtime.InteropServices;
-
-using Ecng.Interop;
+using Ecng.Serialization;
 
 using StockSharp.Configuration;
 
@@ -11,127 +9,7 @@ using StockSharp.Configuration;
 /// </summary>
 public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, ExecutionMessage>
 {
-	[StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Unicode)]
-	private struct TransactionSnapshot
-	{
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
-		public string SecurityId;
-
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
-		public string PortfolioName;
-
-		public long LastChangeServerTime;
-		public long LastChangeLocalTime;
-
-		public long TransactionId;
-
-		public bool HasOrderInfo;
-		public bool HasTradeInfo;
-
-		public BlittableDecimal OrderPrice;
-		public long? OrderId;
-		//public long OrderUserId;
-		public BlittableDecimal? OrderVolume;
-		public byte? OrderType;
-		//public byte OrderSide;
-		public byte? OrderTif;
-
-		public byte? IsSystem;
-
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
-		public string OrderStringId;
-
-		public long? TradeId;
-		public BlittableDecimal? TradePrice;
-		public BlittableDecimal? TradeVolume;
-
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
-		public string BrokerCode;
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
-		public string ClientCode;
-
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
-		public string Comment;
-
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
-		public string SystemComment;
-
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S200)]
-		public string Error;
-
-		public short? Currency;
-
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
-		public string DepoName;
-
-		public long? ExpiryDate;
-
-		public byte? IsMarketMaker;
-		public byte Side;
-
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
-		public string OrderBoardId;
-
-		public BlittableDecimal? VisibleVolume;
-		public byte? OrderState;
-		public long? OrderStatus;
-		public BlittableDecimal? Balance;
-
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
-		public string UserOrderId;
-
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
-		public string StrategyId;
-
-		public byte? OriginSide;
-		public long? Latency;
-		public BlittableDecimal? PnL;
-		public BlittableDecimal? Position;
-		public BlittableDecimal? Slippage;
-		public BlittableDecimal? Commission;
-		public int? TradeStatus;
-
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
-		public string TradeStringId;
-
-		public BlittableDecimal? OpenInterest;
-		public byte? MarginMode;
-		public byte? IsManual;
-
-		public BlittableDecimal? AveragePrice;
-		public BlittableDecimal? Yield;
-		public BlittableDecimal? MinVolume;
-		public byte? PositionEffect;
-		public byte? PostOnly;
-		public byte? Initiator;
-
-		public long SeqNum;
-		public SnapshotDataType? BuildFrom;
-
-		public int? Leverage;
-
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S256)]
-		public string ConditionType;
-
-		public int ConditionParamsCount;
-	}
-
-	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	private struct TransactionConditionParamV21
-	{
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S32)]
-		public string Name;
-
-		public int ValueTypeLen;
-
-		public long? NumValue;
-		public BlittableDecimal? DecimalValue;
-		public bool? BoolValue;
-
-		public int StringValueLen;
-	}
-
-	Version ISnapshotSerializer<string, ExecutionMessage>.Version { get; } = SnapshotVersions.V23;
+	Version ISnapshotSerializer<string, ExecutionMessage>.Version { get; } = SnapshotVersions.V24;
 
 	string ISnapshotSerializer<string, ExecutionMessage>.Name => "Transactions";
 
@@ -149,151 +27,267 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 		if (message.TransactionId == 0)
 			throw new InvalidOperationException("TransId == 0");
 
-		var snapshot = new TransactionSnapshot
-		{
-			SecurityId = message.SecurityId.ToStringId().VerifySize(Sizes.S100),
-			PortfolioName = message.PortfolioName.VerifySize(Sizes.S100),
-			LastChangeServerTime = message.ServerTime.To<long>(),
-			LastChangeLocalTime = message.LocalTime.To<long>(),
-
-			//OriginalTransactionId = message.OriginalTransactionId,
-			TransactionId = message.TransactionId,
-
-			HasOrderInfo = message.HasOrderInfo,
-			HasTradeInfo = message.HasTradeInfo,
-
-			BrokerCode = message.BrokerCode.VerifySize(Sizes.S100),
-			ClientCode = message.ClientCode.VerifySize(Sizes.S100),
-			Comment = message.Comment.VerifySize(Sizes.S100),
-			SystemComment = message.SystemComment.VerifySize(Sizes.S100),
-			Currency = message.Currency == null ? null : (short)message.Currency.Value,
-			DepoName = message.DepoName.VerifySize(Sizes.S100),
-			Error = (message.Error?.Message).VerifySize(Sizes.S200),
-			ExpiryDate = message.ExpiryDate?.To<long>(),
-			IsMarketMaker = message.IsMarketMaker?.ToByte(),
-			MarginMode = message.MarginMode?.ToByte(),
-			IsManual = message.IsManual?.ToByte(),
-			Side = (byte)message.Side,
-			OrderId = message.OrderId,
-			OrderStringId = message.OrderStringId.VerifySize(Sizes.S100),
-			OrderBoardId = message.OrderBoardId.VerifySize(Sizes.S100),
-			OrderPrice = (BlittableDecimal)message.OrderPrice,
-			OrderVolume = (BlittableDecimal?)message.OrderVolume,
-			VisibleVolume = (BlittableDecimal?)message.VisibleVolume,
-			OrderType = message.OrderType?.ToByte(),
-			OrderState = message.OrderState?.ToByte(),
-			OrderStatus = message.OrderStatus,
-			Balance = (BlittableDecimal?)message.Balance,
-			UserOrderId = message.UserOrderId.VerifySize(Sizes.S100),
-			StrategyId = message.StrategyId.VerifySize(Sizes.S100),
-			OriginSide = message.OriginSide?.ToByte(),
-			Latency = message.Latency?.Ticks,
-			PnL = (BlittableDecimal?)message.PnL,
-			Position = (BlittableDecimal?)message.Position,
-			Slippage = (BlittableDecimal?)message.Slippage,
-			Commission = (BlittableDecimal?)message.Commission,
-			TradePrice = (BlittableDecimal?)message.TradePrice,
-			TradeVolume = (BlittableDecimal?)message.TradeVolume,
-			TradeStatus = (int?)message.TradeStatus,
-			TradeId = message.TradeId,
-			TradeStringId = message.TradeStringId.VerifySize(Sizes.S100),
-			OpenInterest = (BlittableDecimal?)message.OpenInterest,
-			IsSystem = message.IsSystem?.ToByte(),
-			OrderTif = message.TimeInForce?.ToByte(),
-
-			AveragePrice = (BlittableDecimal?)message.AveragePrice,
-			Yield = (BlittableDecimal?)message.Yield,
-			MinVolume = (BlittableDecimal?)message.MinVolume,
-			PositionEffect = message.PositionEffect?.ToByte(),
-			PostOnly = message.PostOnly?.ToByte(),
-			Initiator = message.Initiator?.ToByte(),
-			SeqNum = message.SeqNum,
-			BuildFrom = message.BuildFrom == null ? default(SnapshotDataType?) : (SnapshotDataType)message.BuildFrom,
-			Leverage = message.Leverage,
-
-			ConditionType = (message.Condition?.GetType().GetTypeName(false)).VerifySize(Sizes.S256),
-		};
-
+		// Prepare condition parameters
 		var conParams = message.Condition?.Parameters.Where(p => p.Value != null).ToArray() ?? [];
 
-		snapshot.ConditionParamsCount = conParams.Length;
+		// Estimate buffer size
+		var secIdBytes = message.SecurityId.ToStringId().UTF8();
+		var portfolioBytes = (message.PortfolioName ?? string.Empty).UTF8();
+		var brokerCodeBytes = (message.BrokerCode ?? string.Empty).UTF8();
+		var clientCodeBytes = (message.ClientCode ?? string.Empty).UTF8();
+		var commentBytes = (message.Comment ?? string.Empty).UTF8();
+		var systemCommentBytes = (message.SystemComment ?? string.Empty).UTF8();
+		var errorBytes = (message.Error?.Message ?? string.Empty).UTF8();
+		var depoBytes = (message.DepoName ?? string.Empty).UTF8();
+		var orderStringIdBytes = (message.OrderStringId ?? string.Empty).UTF8();
+		var orderBoardIdBytes = (message.OrderBoardId ?? string.Empty).UTF8();
+		var userOrderIdBytes = (message.UserOrderId ?? string.Empty).UTF8();
+		var strategyIdBytes = (message.StrategyId ?? string.Empty).UTF8();
+		var tradeStringIdBytes = (message.TradeStringId ?? string.Empty).UTF8();
+		var conditionTypeBytes = (message.Condition?.GetType().GetTypeName(false) ?? string.Empty).UTF8();
 
-		var paramSize = typeof(TransactionConditionParamV21).SizeOf();
+		var estimatedSize =
+			4 + secIdBytes.Length +
+			4 + portfolioBytes.Length +
+			8 + 8 + // ServerTime, LocalTime
+			8 + // TransactionId
+			1 + 1 + // HasOrderInfo, HasTradeInfo
+			16 + // OrderPrice (decimal)
+			1 + 8 + // OrderId (nullable)
+			1 + 16 + // OrderVolume (nullable)
+			1 + 1 + // OrderType (nullable)
+			1 + 1 + // OrderTif (nullable)
+			1 + 1 + // IsSystem (nullable)
+			4 + orderStringIdBytes.Length +
+			1 + 8 + // TradeId (nullable)
+			1 + 16 + // TradePrice (nullable)
+			1 + 16 + // TradeVolume (nullable)
+			4 + brokerCodeBytes.Length +
+			4 + clientCodeBytes.Length +
+			4 + commentBytes.Length +
+			4 + systemCommentBytes.Length +
+			4 + errorBytes.Length +
+			1 + 2 + // Currency (nullable)
+			4 + depoBytes.Length +
+			1 + 8 + // ExpiryDate (nullable)
+			1 + 1 + // IsMarketMaker (nullable)
+			1 + // Side
+			4 + orderBoardIdBytes.Length +
+			1 + 16 + // VisibleVolume (nullable)
+			1 + 1 + // OrderState (nullable)
+			1 + 8 + // OrderStatus (nullable)
+			1 + 16 + // Balance (nullable)
+			4 + userOrderIdBytes.Length +
+			4 + strategyIdBytes.Length +
+			1 + 1 + // OriginSide (nullable)
+			1 + 8 + // Latency (nullable)
+			1 + 16 + // PnL (nullable)
+			1 + 16 + // Position (nullable)
+			1 + 16 + // Slippage (nullable)
+			1 + 16 + // Commission (nullable)
+			1 + 4 + // TradeStatus (nullable)
+			4 + tradeStringIdBytes.Length +
+			1 + 16 + // OpenInterest (nullable)
+			1 + 1 + // MarginMode (nullable)
+			1 + 1 + // IsManual (nullable)
+			1 + 16 + // AveragePrice (nullable)
+			1 + 16 + // Yield (nullable)
+			1 + 16 + // MinVolume (nullable)
+			1 + 1 + // PositionEffect (nullable)
+			1 + 1 + // PostOnly (nullable)
+			1 + 1 + // Initiator (nullable)
+			8 + // SeqNum
+			1 + 1 + // BuildFrom (nullable)
+			1 + 4 + // Leverage (nullable)
+			4 + conditionTypeBytes.Length +
+			4 + // ConditionParamsCount
+			conParams.Length * 200; // approximate per condition parameter
 
-		var result = new List<byte>();
+		var buffer = new byte[estimatedSize];
+		var writer = new SpanWriter(buffer);
 
-		var buffer = new byte[typeof(TransactionSnapshot).SizeOf()];
+		// Helper to write nullable string
+		void WriteNullableString(ref SpanWriter writer, byte[] bytes)
+		{
+			writer.WriteInt32(bytes.Length);
+			if (bytes.Length > 0)
+				writer.WriteSpan(bytes);
+		}
 
-		var ptr = snapshot.StructToPtr();
-		ptr.CopyTo(buffer);
-		ptr.FreeHGlobal();
+		// Helper to write nullable decimal
+		void WriteNullableDecimal(ref SpanWriter writer, decimal? value)
+		{
+			writer.WriteBoolean(value.HasValue);
+			if (value.HasValue)
+				writer.WriteDecimal(value.Value);
+		}
 
-		result.AddRange(buffer);
+		// Helper to write nullable long
+		void WriteNullableLong(ref SpanWriter writer, long? value)
+		{
+			writer.WriteBoolean(value.HasValue);
+			if (value.HasValue)
+				writer.WriteInt64(value.Value);
+		}
 
+		// Helper to write nullable byte
+		void WriteNullableByte(ref SpanWriter writer, byte? value)
+		{
+			writer.WriteBoolean(value.HasValue);
+			if (value.HasValue)
+				writer.WriteByte(value.Value);
+		}
+
+		// Helper to write nullable short
+		void WriteNullableShort(ref SpanWriter writer, short? value)
+		{
+			writer.WriteBoolean(value.HasValue);
+			if (value.HasValue)
+				writer.WriteInt16(value.Value);
+		}
+
+		// Helper to write nullable int
+		void WriteNullableInt(ref SpanWriter writer, int? value)
+		{
+			writer.WriteBoolean(value.HasValue);
+			if (value.HasValue)
+				writer.WriteInt32(value.Value);
+		}
+
+		// Write base fields
+		WriteNullableString(ref writer, secIdBytes);
+		WriteNullableString(ref writer, portfolioBytes);
+
+		writer.WriteInt64(message.ServerTime.To<long>());
+		writer.WriteInt64(message.LocalTime.To<long>());
+
+		writer.WriteInt64(message.TransactionId);
+
+		writer.WriteBoolean(message.HasOrderInfo);
+		writer.WriteBoolean(message.HasTradeInfo);
+
+		writer.WriteDecimal(message.OrderPrice);
+		WriteNullableLong(ref writer, message.OrderId);
+		WriteNullableDecimal(ref writer, message.OrderVolume);
+		WriteNullableByte(ref writer, message.OrderType?.ToByte());
+		WriteNullableByte(ref writer, message.TimeInForce?.ToByte());
+		WriteNullableByte(ref writer, message.IsSystem?.ToByte());
+
+		WriteNullableString(ref writer, orderStringIdBytes);
+
+		WriteNullableLong(ref writer, message.TradeId);
+		WriteNullableDecimal(ref writer, message.TradePrice);
+		WriteNullableDecimal(ref writer, message.TradeVolume);
+
+		WriteNullableString(ref writer, brokerCodeBytes);
+		WriteNullableString(ref writer, clientCodeBytes);
+		WriteNullableString(ref writer, commentBytes);
+		WriteNullableString(ref writer, systemCommentBytes);
+		WriteNullableString(ref writer, errorBytes);
+
+		WriteNullableShort(ref writer, message.Currency == null ? null : (short)message.Currency.Value);
+
+		WriteNullableString(ref writer, depoBytes);
+
+		WriteNullableLong(ref writer, message.ExpiryDate?.To<long>());
+		WriteNullableByte(ref writer, message.IsMarketMaker?.ToByte());
+
+		writer.WriteByte((byte)message.Side);
+
+		WriteNullableString(ref writer, orderBoardIdBytes);
+
+		WriteNullableDecimal(ref writer, message.VisibleVolume);
+		WriteNullableByte(ref writer, message.OrderState?.ToByte());
+		WriteNullableLong(ref writer, message.OrderStatus);
+		WriteNullableDecimal(ref writer, message.Balance);
+
+		WriteNullableString(ref writer, userOrderIdBytes);
+		WriteNullableString(ref writer, strategyIdBytes);
+
+		WriteNullableByte(ref writer, message.OriginSide?.ToByte());
+		WriteNullableLong(ref writer, message.Latency?.Ticks);
+		WriteNullableDecimal(ref writer, message.PnL);
+		WriteNullableDecimal(ref writer, message.Position);
+		WriteNullableDecimal(ref writer, message.Slippage);
+		WriteNullableDecimal(ref writer, message.Commission);
+		WriteNullableInt(ref writer, (int?)message.TradeStatus);
+
+		WriteNullableString(ref writer, tradeStringIdBytes);
+
+		WriteNullableDecimal(ref writer, message.OpenInterest);
+		WriteNullableByte(ref writer, message.MarginMode?.ToByte());
+		WriteNullableByte(ref writer, message.IsManual?.ToByte());
+
+		WriteNullableDecimal(ref writer, message.AveragePrice);
+		WriteNullableDecimal(ref writer, message.Yield);
+		WriteNullableDecimal(ref writer, message.MinVolume);
+		WriteNullableByte(ref writer, message.PositionEffect?.ToByte());
+		WriteNullableByte(ref writer, message.PostOnly?.ToByte());
+		WriteNullableByte(ref writer, message.Initiator?.ToByte());
+
+		writer.WriteInt64(message.SeqNum);
+
+		writer.WriteBoolean(message.BuildFrom != null);
+		if (message.BuildFrom != null)
+			((SnapshotDataType)message.BuildFrom).Write(ref writer);
+
+		WriteNullableInt(ref writer, message.Leverage);
+
+		WriteNullableString(ref writer, conditionTypeBytes);
+
+		// Write condition parameters count
+		writer.WriteInt32(conParams.Length);
+
+		// Write each condition parameter
 		foreach (var conParam in conParams)
 		{
 			var paramType = conParam.Value.GetType();
-
 			var paramTypeName = paramType.GetTypeAsString(false);
+			var paramTypeNameBytes = paramTypeName.UTF8();
 
-			var param = new TransactionConditionParamV21
-			{
-				ValueTypeLen = paramTypeName.UTF8().Length,
-				Name = conParam.Key.VerifySize(Sizes.S32)
-			};
+			var nameBytes = conParam.Key.UTF8();
+
+			// Write parameter name
+			writer.WriteInt32(nameBytes.Length);
+			writer.WriteSpan(nameBytes);
+
+			// Write parameter type name
+			writer.WriteInt32(paramTypeNameBytes.Length);
+			writer.WriteSpan(paramTypeNameBytes);
 
 			byte[] stringValue = null;
 
+			// Determine parameter value type and write it
 			switch (conParam.Value)
 			{
 				case byte b:
-					param.NumValue = b;
-					break;
 				case sbyte sb:
-					param.NumValue = sb;
-					break;
 				case int i:
-					param.NumValue = i;
-					break;
 				case short s:
-					param.NumValue = s;
-					break;
 				case long l:
-					param.NumValue = l;
-					break;
 				case uint ui:
-					param.NumValue = ui;
-					break;
 				case ushort us:
-					param.NumValue = us;
-					break;
 				case ulong ul:
-					param.NumValue = (long)ul;
-					break;
 				case DateTimeOffset dto:
-					param.NumValue = dto.To<long>();
-					break;
 				case DateTime dt:
-					param.NumValue = dt.To<long>();
-					break;
 				case TimeSpan ts:
-					param.NumValue = ts.To<long>();
-					break;
-				case float f:
-					param.DecimalValue = (BlittableDecimal)(decimal)f;
-					break;
-				case double d:
-					param.DecimalValue = (BlittableDecimal)(decimal)d;
-					break;
-				case decimal dec:
-					param.DecimalValue = (BlittableDecimal)dec;
-					break;
-				case bool bln:
-					param.BoolValue = bln;
-					break;
 				case Enum e:
-					param.NumValue = e.To<long>();
+					writer.WriteByte((byte)TypeCode.Int64);
+					writer.WriteInt64(conParam.Value.To<long>());
 					break;
+
+				case float f:
+				case double d:
+				case decimal dec:
+					writer.WriteByte((byte)TypeCode.Decimal);
+					writer.WriteDecimal(conParam.Value.To<decimal>());
+					break;
+
+				case bool bln:
+					writer.WriteByte((byte)TypeCode.Boolean);
+					writer.WriteBoolean(bln);
+					break;
+
 				case IRange r:
 				{
 					var storage = new SettingsStorage();
@@ -307,8 +301,13 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 					if (storage.Count > 0)
 						stringValue = storage.Serialize();
 
+					writer.WriteByte((byte)TypeCode.String);
+					writer.WriteInt32(stringValue?.Length ?? 0);
+					if (stringValue != null)
+						writer.WriteSpan(stringValue);
 					break;
 				}
+
 				case IPersistable p:
 				{
 					var storage = p.Save();
@@ -316,36 +315,23 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 					if (storage.Count > 0)
 						stringValue = storage.Serialize();
 
+					writer.WriteByte((byte)TypeCode.String);
+					writer.WriteInt32(stringValue?.Length ?? 0);
+					if (stringValue != null)
+						writer.WriteSpan(stringValue);
 					break;
 				}
+
 				default:
-					//stringValue = Paths.CreateSerializer(paramType).Serialize(conParam.Value);
+					// Unknown type - skip
+					writer.WriteByte((byte)TypeCode.String);
+					writer.WriteInt32(0);
 					break;
 			}
-
-			if (stringValue != null)
-			{
-				param.StringValueLen = stringValue.Length;
-			}
-
-			var paramBuff = new byte[paramSize];
-
-			var rowPtr = param.StructToPtr();
-			rowPtr.CopyTo(paramBuff);
-			rowPtr.FreeHGlobal();
-
-			result.AddRange(paramBuff);
-
-			if (version > SnapshotVersions.V20)
-				result.AddRange(paramTypeName.UTF8());
-
-			if (stringValue == null)
-				continue;
-
-			result.AddRange(stringValue);
 		}
 
-		return [.. result];
+		// Return actual written data
+		return writer.GetWrittenSpan().ToArray();
 	}
 
 	ExecutionMessage ISnapshotSerializer<string, ExecutionMessage>.Deserialize(Version version, byte[] buffer)
@@ -353,153 +339,294 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 		if (version == null)
 			throw new ArgumentNullException(nameof(version));
 
-		using var handle = new GCHandle<byte[]>(buffer);
+		if (buffer == null || buffer.Length == 0)
+			throw new ArgumentNullException(nameof(buffer));
 
-		var ptr =
-#if NET10_0_OR_GREATER
-			new SafePointer(GCHandle<byte[]>.ToIntPtr(handle), buffer.Length)
-#else
-			handle.CreatePointer()
-#endif
-		;
+		var reader = new SpanReader(buffer);
 
-		var snapshot = ptr.ToStruct<TransactionSnapshot>(true);
+		// Helper to read nullable string
+		string ReadNullableString(ref SpanReader reader)
+		{
+			var len = reader.ReadInt32();
+			if (len == 0)
+				return null;
 
+			var bytes = reader.ReadSpan(len);
+			return bytes.ToArray().UTF8();
+		}
+
+		// Helper to read nullable decimal
+		decimal? ReadNullableDecimal(ref SpanReader reader)
+		{
+			var hasValue = reader.ReadBoolean();
+			return hasValue ? reader.ReadDecimal() : null;
+		}
+
+		// Helper to read nullable long
+		long? ReadNullableLong(ref SpanReader reader)
+		{
+			var hasValue = reader.ReadBoolean();
+			return hasValue ? reader.ReadInt64() : null;
+		}
+
+		// Helper to read nullable byte
+		byte? ReadNullableByte(ref SpanReader reader)
+		{
+			var hasValue = reader.ReadBoolean();
+			return hasValue ? reader.ReadByte() : null;
+		}
+
+		// Helper to read nullable short
+		short? ReadNullableShort(ref SpanReader reader)
+		{
+			var hasValue = reader.ReadBoolean();
+			return hasValue ? reader.ReadInt16() : null;
+		}
+
+		// Helper to read nullable int
+		int? ReadNullableInt(ref SpanReader reader)
+		{
+			var hasValue = reader.ReadBoolean();
+			return hasValue ? reader.ReadInt32() : null;
+		}
+
+		// Read base fields
+		var securityId = ReadNullableString(ref reader).ToSecurityId();
+		var portfolioName = ReadNullableString(ref reader);
+
+		var serverTime = reader.ReadInt64().To<DateTime>();
+		var localTime = reader.ReadInt64().To<DateTime>();
+
+		var transactionId = reader.ReadInt64();
+
+		var hasOrderInfo = reader.ReadBoolean();
+		var hasTradeInfo = reader.ReadBoolean();
+
+		var orderPrice = reader.ReadDecimal();
+		var orderId = ReadNullableLong(ref reader);
+		var orderVolume = ReadNullableDecimal(ref reader);
+		var orderType = ReadNullableByte(ref reader);
+		var orderTif = ReadNullableByte(ref reader);
+		var isSystem = ReadNullableByte(ref reader);
+
+		var orderStringId = ReadNullableString(ref reader);
+
+		var tradeId = ReadNullableLong(ref reader);
+		var tradePrice = ReadNullableDecimal(ref reader);
+		var tradeVolume = ReadNullableDecimal(ref reader);
+
+		var brokerCode = ReadNullableString(ref reader);
+		var clientCode = ReadNullableString(ref reader);
+		var comment = ReadNullableString(ref reader);
+		var systemComment = ReadNullableString(ref reader);
+		var error = ReadNullableString(ref reader);
+
+		var currency = ReadNullableShort(ref reader);
+
+		var depoName = ReadNullableString(ref reader);
+
+		var expiryDate = ReadNullableLong(ref reader);
+		var isMarketMaker = ReadNullableByte(ref reader);
+
+		var side = reader.ReadByte();
+
+		var orderBoardId = ReadNullableString(ref reader);
+
+		var visibleVolume = ReadNullableDecimal(ref reader);
+		var orderState = ReadNullableByte(ref reader);
+		var orderStatus = ReadNullableLong(ref reader);
+		var balance = ReadNullableDecimal(ref reader);
+
+		var userOrderId = ReadNullableString(ref reader);
+		var strategyId = ReadNullableString(ref reader);
+
+		var originSide = ReadNullableByte(ref reader);
+		var latency = ReadNullableLong(ref reader);
+		var pnl = ReadNullableDecimal(ref reader);
+		var position = ReadNullableDecimal(ref reader);
+		var slippage = ReadNullableDecimal(ref reader);
+		var commission = ReadNullableDecimal(ref reader);
+		var tradeStatus = ReadNullableInt(ref reader);
+
+		var tradeStringId = ReadNullableString(ref reader);
+
+		var openInterest = ReadNullableDecimal(ref reader);
+		var marginMode = ReadNullableByte(ref reader);
+		var isManual = ReadNullableByte(ref reader);
+
+		var averagePrice = ReadNullableDecimal(ref reader);
+		var yield = ReadNullableDecimal(ref reader);
+		var minVolume = ReadNullableDecimal(ref reader);
+		var positionEffect = ReadNullableByte(ref reader);
+		var postOnly = ReadNullableByte(ref reader);
+		var initiator = ReadNullableByte(ref reader);
+
+		var seqNum = reader.ReadInt64();
+
+		var hasBuildFrom = reader.ReadBoolean();
+		SnapshotDataType? buildFrom = null;
+		if (hasBuildFrom)
+			buildFrom = SnapshotDataType.Read(ref reader);
+
+		var leverage = ReadNullableInt(ref reader);
+
+		var conditionType = ReadNullableString(ref reader);
+
+		// Create message
 		var execMsg = new ExecutionMessage
 		{
-			SecurityId = snapshot.SecurityId.ToSecurityId(),
-			PortfolioName = snapshot.PortfolioName,
-			ServerTime = snapshot.LastChangeServerTime.To<DateTime>().UtcKind(),
-			LocalTime = snapshot.LastChangeLocalTime.To<DateTime>().UtcKind(),
+			SecurityId = securityId,
+			PortfolioName = portfolioName,
+			ServerTime = serverTime.UtcKind(),
+			LocalTime = localTime.UtcKind(),
 
 			DataTypeEx = DataType.Transactions,
 
-			//OriginalTransactionId = snapshot.OriginalTransactionId,
-			TransactionId = snapshot.TransactionId,
+			TransactionId = transactionId,
 
-			HasOrderInfo = snapshot.HasOrderInfo,
-			//HasTradeInfo = snapshot.HasTradeInfo,
+			HasOrderInfo = hasOrderInfo,
 
+			BrokerCode = brokerCode,
+			ClientCode = clientCode,
 
+			Comment = comment,
+			SystemComment = systemComment,
+
+			Currency = currency == null ? null : (CurrencyTypes)currency.Value,
+			DepoName = depoName,
+			Error = error.IsEmpty() ? null : new InvalidOperationException(error),
+
+			ExpiryDate = expiryDate?.To<DateTime>().UtcKind(),
+			IsMarketMaker = isMarketMaker?.ToBool(),
+			MarginMode = (MarginModes?)marginMode,
+			IsManual = isManual?.ToBool(),
+			Side = (Sides)side,
+			OrderId = orderId,
+			OrderStringId = orderStringId,
+			OrderBoardId = orderBoardId,
+			OrderPrice = orderPrice,
+			OrderVolume = orderVolume,
+			VisibleVolume = visibleVolume,
+			OrderType = orderType?.ToEnum<OrderTypes>(),
+			OrderState = orderState?.ToEnum<OrderStates>(),
+			OrderStatus = orderStatus,
+			Balance = balance,
+			UserOrderId = userOrderId,
+			StrategyId = strategyId,
+			OriginSide = originSide?.ToEnum<Sides>(),
+			Latency = latency == null ? null : TimeSpan.FromTicks(latency.Value),
+			PnL = pnl,
+			Position = position,
+			Slippage = slippage,
+			Commission = commission,
+			TradePrice = tradePrice,
+			TradeVolume = tradeVolume,
+			TradeStatus = tradeStatus,
+			TradeId = tradeId,
+			TradeStringId = tradeStringId,
+			OpenInterest = openInterest,
+			IsSystem = isSystem?.ToBool(),
+			TimeInForce = orderTif?.ToEnum<TimeInForce>(),
+
+			AveragePrice = averagePrice,
+			Yield = yield,
+			MinVolume = minVolume,
+			PositionEffect = positionEffect?.ToEnum<OrderPositionEffects>(),
+			PostOnly = postOnly?.ToBool(),
+			Initiator = initiator?.ToBool(),
+			SeqNum = seqNum,
+			BuildFrom = buildFrom,
+			Leverage = leverage,
 		};
 
-		execMsg.BrokerCode = snapshot.BrokerCode;
-		execMsg.ClientCode = snapshot.ClientCode;
-
-		execMsg.Comment = snapshot.Comment;
-		execMsg.SystemComment = snapshot.SystemComment;
-
-		execMsg.Currency = snapshot.Currency == null ? null : (CurrencyTypes)snapshot.Currency.Value;
-		execMsg.DepoName = snapshot.DepoName;
-		execMsg.Error = snapshot.Error.IsEmpty() ? null : new InvalidOperationException(snapshot.Error);
-
-		execMsg.ExpiryDate = snapshot.ExpiryDate?.To<DateTime>().UtcKind();
-		execMsg.IsMarketMaker = snapshot.IsMarketMaker?.ToBool();
-		execMsg.MarginMode = (MarginModes?)snapshot.MarginMode;
-		execMsg.IsManual = snapshot.IsManual?.ToBool();
-		execMsg.Side = (Sides)snapshot.Side;
-		execMsg.OrderId = snapshot.OrderId;
-		execMsg.OrderStringId = snapshot.OrderStringId;
-		execMsg.OrderBoardId = snapshot.OrderBoardId;
-		execMsg.OrderPrice = snapshot.OrderPrice;
-		execMsg.OrderVolume = snapshot.OrderVolume;
-		execMsg.VisibleVolume = snapshot.VisibleVolume;
-		execMsg.OrderType = snapshot.OrderType?.ToEnum<OrderTypes>();
-		execMsg.OrderState = snapshot.OrderState?.ToEnum<OrderStates>();
-		execMsg.OrderStatus = snapshot.OrderStatus;
-		execMsg.Balance = snapshot.Balance;
-		execMsg.UserOrderId = snapshot.UserOrderId;
-		execMsg.StrategyId = snapshot.StrategyId;
-		execMsg.OriginSide = snapshot.OriginSide?.ToEnum<Sides>();
-		execMsg.Latency = snapshot.Latency == null ? null : TimeSpan.FromTicks(snapshot.Latency.Value);
-		execMsg.PnL = snapshot.PnL;
-		execMsg.Position = snapshot.Position;
-		execMsg.Slippage = snapshot.Slippage;
-		execMsg.Commission = snapshot.Commission;
-		execMsg.TradePrice = snapshot.TradePrice;
-		execMsg.TradeVolume = snapshot.TradeVolume;
-		execMsg.TradeStatus = snapshot.TradeStatus;
-		execMsg.TradeId = snapshot.TradeId;
-		execMsg.TradeStringId = snapshot.TradeStringId;
-		execMsg.OpenInterest = snapshot.OpenInterest;
-		execMsg.IsSystem = snapshot.IsSystem?.ToBool();
-		execMsg.TimeInForce = snapshot.OrderTif?.ToEnum<TimeInForce>();
-
-		execMsg.AveragePrice = snapshot.AveragePrice;
-		execMsg.Yield = snapshot.Yield;
-		execMsg.MinVolume = snapshot.MinVolume;
-		execMsg.PositionEffect = snapshot.PositionEffect?.ToEnum<OrderPositionEffects>();
-		execMsg.PostOnly = snapshot.PostOnly?.ToBool();
-		execMsg.Initiator = snapshot.Initiator?.ToBool();
-		execMsg.SeqNum = snapshot.SeqNum;
-		execMsg.BuildFrom = snapshot.BuildFrom;
-		execMsg.Leverage = snapshot.Leverage;
-
-		//var paramSize = (version > SnapshotVersions.V20 ? typeof(TransactionConditionParamV21) : typeof(TransactionConditionParamV20)).SizeOf();
-
-		if (!snapshot.ConditionType.IsEmpty())
+		// Read condition parameters
+		if (!conditionType.IsEmpty())
 		{
-			execMsg.Condition = snapshot.ConditionType.To<Type>().CreateInstance<OrderCondition>();
+			execMsg.Condition = conditionType.To<Type>().CreateInstance<OrderCondition>();
 			execMsg.Condition.Parameters.Clear(); // removing pre-defined values
 		}
 
-		for (var i = 0; i < snapshot.ConditionParamsCount; i++)
+		var conditionParamsCount = reader.ReadInt32();
+
+		for (var i = 0; i < conditionParamsCount; i++)
 		{
-			var param = ptr.ToStruct<TransactionConditionParamV21>(true);
+			// Read parameter name
+			var nameLen = reader.ReadInt32();
+			var nameBytes = reader.ReadSpan(nameLen);
+			var paramName = nameBytes.ToArray().UTF8();
 
-			var typeBuffer = new byte[param.ValueTypeLen];
-			ptr.CopyTo(typeBuffer, true);
-
-			var paramTypeName = typeBuffer.UTF8();
+			// Read parameter type name
+			var typeNameLen = reader.ReadInt32();
+			var typeNameBytes = reader.ReadSpan(typeNameLen);
+			var paramTypeName = typeNameBytes.ToArray().UTF8();
 
 			try
 			{
 				var paramType = paramTypeName.To<Type>();
 
+				// Read parameter value
+				var valueType = (TypeCode)reader.ReadByte();
+
 				object value;
 
-				if (param.NumValue != null)
-					value = (long)param.NumValue;
-				else if (param.DecimalValue != null)
-					value = (decimal)param.DecimalValue;
-				else if (param.BoolValue != null)
-					value = (bool)param.BoolValue;
-				//else if (paramType == typeof(Unit))
-				//	value = param.StringValue.ToUnit();
-				else if (param.StringValueLen > 0)
+				switch (valueType)
 				{
-					var strBuffer = new byte[param.StringValueLen];
-					ptr.CopyTo(strBuffer, true);
+					case TypeCode.Int64:
+						value = reader.ReadInt64();
+						break;
 
-					if (paramType.IsPersistable())
-					{
-						value = strBuffer.Deserialize<SettingsStorage>()?.Load(paramType) ?? throw new InvalidOperationException("unable to deserialize param value");
-					}
-					else if (paramType.Is<IRange>())
-					{
-						var range = paramType.CreateInstance<IRange>();
+					case TypeCode.Decimal:
+						value = reader.ReadDecimal();
+						break;
 
-						var storage = strBuffer.Deserialize<SettingsStorage>() ?? throw new InvalidOperationException("unable to deserialize IRange param value");
+					case TypeCode.Boolean:
+						value = reader.ReadBoolean();
+						break;
 
-						if (storage.ContainsKey(nameof(range.Min)))
-							range.Min = storage.GetValue<SettingsStorage>(nameof(range.Min)).FromStorage();
+					case TypeCode.String:
+						var strLen = reader.ReadInt32();
+						if (strLen > 0)
+						{
+							var strBytes = reader.ReadSpan(strLen);
 
-						if (storage.ContainsKey(nameof(range.Max)))
-							range.Max = storage.GetValue<SettingsStorage>(nameof(range.Max)).FromStorage();
+							if (paramType.IsPersistable())
+							{
+								value = strBytes.ToArray().Deserialize<SettingsStorage>()?.Load(paramType) ?? throw new InvalidOperationException("unable to deserialize param value");
+							}
+							else if (paramType.Is<IRange>())
+							{
+								var range = paramType.CreateInstance<IRange>();
 
-						value = range;
-					}
-					else
-					{
-						value = null;
-						//value = Paths.CreateSerializer(paramType).Deserialize(strBuffer);
-					}
+								var storage = strBytes.ToArray().Deserialize<SettingsStorage>() ?? throw new InvalidOperationException("unable to deserialize IRange param value");
+
+								if (storage.ContainsKey(nameof(range.Min)))
+									range.Min = storage.GetValue<SettingsStorage>(nameof(range.Min)).FromStorage();
+
+								if (storage.ContainsKey(nameof(range.Max)))
+									range.Max = storage.GetValue<SettingsStorage>(nameof(range.Max)).FromStorage();
+
+								value = range;
+							}
+							else
+							{
+								value = null;
+							}
+						}
+						else
+						{
+							value = null;
+						}
+						break;
+
+					default:
+						throw new InvalidOperationException($"Unknown condition parameter value type: {valueType}");
 				}
-				else
-					value = null;
 
-				value = value.To(paramType);
-				execMsg.Condition.Parameters.Add(param.Name, value);
+				if (value != null)
+				{
+					value = value.To(paramType);
+					execMsg.Condition.Parameters.Add(paramName, value);
+				}
 			}
 			catch (Exception ex)
 			{
@@ -559,9 +686,6 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 
 		if (changes.IsMarketMaker != default)
 			message.IsMarketMaker = changes.IsMarketMaker;
-
-		//if (changes.HasOrderInfo)
-		//	message.Side = changes.Side;
 
 		if (changes.OrderId != default)
 			message.OrderId = changes.OrderId;
@@ -641,17 +765,8 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 		if (changes.TimeInForce != default)
 			message.TimeInForce = changes.TimeInForce;
 
-		//if (changes.OriginalTransactionId != default)
-		//	message.OriginalTransactionId = changes.OriginalTransactionId;
-
-		//if (changes.TransactionId != default)
-		//	message.TransactionId = changes.TransactionId;
-
 		if (changes.HasOrderInfo)
 			message.HasOrderInfo = true;
-
-		//if (changes.HasTradeInfo)
-		//	message.HasTradeInfo = true;
 
 		if (changes.AveragePrice != default)
 			message.AveragePrice = changes.AveragePrice;
