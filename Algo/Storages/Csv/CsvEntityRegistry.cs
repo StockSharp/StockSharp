@@ -147,7 +147,6 @@ public class CsvEntityRegistry : IEntityRegistry
 				yield return item.ToMessage();
 		}
 
-
 		ValueTask ISecurityStorage.SaveAsync(Security security, bool forced, CancellationToken cancellationToken)
 		{
 			if (security is null)

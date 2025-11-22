@@ -76,7 +76,7 @@ static class Program
 				});
 
 			AnsiConsole.MarkupLine("[green]Sort completed successfully.[/]");
-			return Task.FromResult(0);
+			return 0.FromResult();
 		}
 	}
 
@@ -125,7 +125,7 @@ static class Program
 				});
 
 			AnsiConsole.MarkupLine("[green]Split completed successfully.[/]");
-			return Task.FromResult(0);
+			return 0.FromResult();
 		}
 	}
 
@@ -154,7 +154,7 @@ static class Program
 				});
 
 			AnsiConsole.MarkupLine("[green]Validate completed successfully.[/]");
-			return Task.FromResult(0);
+			return 0.FromResult();
 		}
 	}
 
@@ -233,11 +233,11 @@ static class Program
 			if (conflict)
 			{
 				AnsiConsole.MarkupLine("[red]Rename completed with conflicts. Fix them and retry if needed.[/>");
-				return Task.FromResult(1);
+				return 1.FromResult();
 			}
 
 			AnsiConsole.MarkupLine("[green]Rename completed successfully.[/]");
-			return Task.FromResult(0);
+			return 0.FromResult();
 		}
 	}
 }

@@ -152,7 +152,7 @@ public static class ISubscriptionProviderAsyncExtensions
 
 			await stoppedTcs.Task.NoWait();
 		}
-		catch (Exception)
+		catch
 		{
 			if (!cancellationToken.IsCancellationRequested)
 				throw;
