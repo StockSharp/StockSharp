@@ -115,6 +115,17 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 	/// </summary>
 	/// <param name="address">Server address.</param>
 	/// <param name="adapter">Message adapter.</param>
+	[Obsolete("Use IAsyncMessageAdapter overload.")]
+	public RemoteMarketDataDrive(EndPoint address, IMessageAdapter adapter)
+		: this(address, (IAsyncMessageAdapter)adapter)
+	{
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="RemoteMarketDataDrive"/>.
+	/// </summary>
+	/// <param name="address">Server address.</param>
+	/// <param name="adapter">Message adapter.</param>
 	public RemoteMarketDataDrive(EndPoint address, IAsyncMessageAdapter adapter)
 		: this(address, adapter.TypedClone)
 	{
