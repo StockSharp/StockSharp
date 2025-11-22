@@ -3,7 +3,6 @@ namespace StockSharp.BusinessEntities;
 using System.Reflection;
 
 using Ecng.Configuration;
-using Ecng.Linq;
 using Ecng.Reflection;
 
 /// <summary>
@@ -2355,6 +2354,6 @@ public static partial class EntitiesExtensions
 		if (provider is null)
 			throw new ArgumentNullException(nameof(provider));
 
-		return AsyncHelper.Run(() => provider.LookupAsync(criteria, default).ToArrayAsync2(default));
+		return AsyncHelper.Run(() => provider.LookupAsync(criteria, default).ToArrayAsync(default));
 	}
 }

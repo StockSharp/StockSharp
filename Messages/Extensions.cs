@@ -3,7 +3,6 @@ namespace StockSharp.Messages;
 using System.Collections;
 
 using Ecng.Reflection;
-using Ecng.Linq;
 
 /// <summary>
 /// Extension class.
@@ -5738,6 +5737,6 @@ public static partial class Extensions
 		if (provider is null)
 			throw new ArgumentNullException(nameof(provider));
 
-		return AsyncHelper.Run(() => provider.LookupMessagesAsync(criteria, default).ToArrayAsync2(default));
+		return AsyncHelper.Run(() => provider.LookupMessagesAsync(criteria, default).ToArrayAsync(default));
 	}
 }

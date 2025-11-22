@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using Ecng.Linq;
-
 using Nito.AsyncEx;
 
 abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>

@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-using Ecng.Linq;
-
 /// <summary>
 /// The CSV storage of trading objects.
 /// </summary>
@@ -137,7 +135,7 @@ public class CsvEntityRegistry : IEntityRegistry
 				arr = security == null ? [] : [security];
 			}
 
-			return arr.ToAsyncEnumerable2(cancellationToken);
+			return arr.ToAsyncEnumerable();
 		}
 
 		ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)

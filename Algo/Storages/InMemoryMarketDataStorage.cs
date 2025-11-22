@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using Ecng.Linq;
-
 /// <summary>
 /// The storage, generating data in the process of operation.
 /// </summary>
@@ -56,7 +54,7 @@ public sealed class InMemoryMarketDataStorage<T> : IMarketDataStorage<T>
 
 	/// <inheritdoc />
 	public IAsyncEnumerable<T> LoadAsync(DateTime date, CancellationToken cancellationToken)
-		=> _getData(date).ToAsyncEnumerable2(cancellationToken);
+		=> _getData(date).ToAsyncEnumerable();
 
 	IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date, CancellationToken cancellationToken) => LoadAsync(date, cancellationToken);
 

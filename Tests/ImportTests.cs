@@ -3,8 +3,6 @@ namespace StockSharp.Tests;
 using StockSharp.Algo.Export;
 using StockSharp.Algo.Import;
 
-using Ecng.Linq;
-
 [TestClass]
 public class ImportTests : BaseTestClass
 {
@@ -85,7 +83,7 @@ public class ImportTests : BaseTestClass
 				ColumnSeparator = ";"
 			};
 
-			var msgs = await parser.Parse(stream, token).ToArrayAsync2(token);
+			var msgs = await parser.Parse(stream, token).ToArrayAsync(token);
 
 			msgs.Length.AssertEqual(importCnt.Value);
 

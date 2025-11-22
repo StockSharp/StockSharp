@@ -3,7 +3,6 @@ namespace StockSharp.Algo.Storages;
 using IOPath = System.IO.Path;
 
 using Ecng.Reflection;
-using Ecng.Linq;
 
 using StockSharp.Algo.Storages.Binary;
 
@@ -43,7 +42,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			_datesPathObsoleteBin = $"{datesPath}.bin";
 			_datesPathObsoleteTxt = $"{datesPath}.txt";
 
-			_datesDict = new Lazy<CachedSynchronizedOrderedDictionary<DateTime, DateTime>>(() =>
+			_datesDict = new(() =>
 			{
 				var retVal = new CachedSynchronizedOrderedDictionary<DateTime, DateTime>();
 
@@ -83,7 +82,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 					SaveDates(retVal.CachedValues);
 
 				return retVal;
-			}).Track();
+			});
 		}
 
 		private readonly LocalMarketDataDrive _drive;
@@ -91,7 +90,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 		ValueTask<IEnumerable<DateTime>> IMarketDataStorageDrive.GetDatesAsync(CancellationToken cancellationToken) => new(DatesDict.CachedValues);
 
-		private readonly Lazy<CachedSynchronizedOrderedDictionary<DateTime, DateTime>> _datesDict;
+		private readonly ResettableLazy<CachedSynchronizedOrderedDictionary<DateTime, DateTime>> _datesDict;
 		private CachedSynchronizedOrderedDictionary<DateTime, DateTime> DatesDict => _datesDict.Value;
 
 		ValueTask IMarketDataStorageDrive.ClearDatesCacheAsync(CancellationToken cancellationToken)
@@ -771,7 +770,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 	/// </summary>
 	[Obsolete("Use GetAvailableSecuritiesAsync instead.")]
 	public IEnumerable<SecurityId> AvailableSecurities
-		=> AsyncHelper.Run(() => GetAvailableSecuritiesAsync(default).ToArrayAsync2(default));
+		=> AsyncHelper.Run(() => GetAvailableSecuritiesAsync(default).ToArrayAsync(default));
 
 	/// <inheritdoc />
 	public override async IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync([EnumeratorCancellation]CancellationToken cancellationToken)

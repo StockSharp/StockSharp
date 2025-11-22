@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Tests;
 
-using Ecng.Linq;
-
 using StockSharp.Algo.Candles.Compression;
 using StockSharp.Algo.Storages.Binary.Snapshot;
 
@@ -380,7 +378,7 @@ public class StorageTests : BaseTestClass
 
 		await tradeStorage.DeleteAsync(trades.First().ServerTime, trades.Last().ServerTime, token);
 
-		var loadedTrades = await tradeStorage.LoadAsync(trades.First().ServerTime, trades.Last().ServerTime, token).ToArrayAsync2(token);
+		var loadedTrades = await tradeStorage.LoadAsync(trades.First().ServerTime, trades.Last().ServerTime, token).ToArrayAsync(token);
 		loadedTrades.Length.AssertEqual(0);
 
 		await tradeStorage.SaveAsync(trades, token);
@@ -389,10 +387,10 @@ public class StorageTests : BaseTestClass
 
 		await tradeStorage.DeleteAsync(trades, token);
 
-		loadedTrades = await tradeStorage.LoadAsync(trades.First().ServerTime, trades.Last().ServerTime, token).ToArrayAsync2(token);
+		loadedTrades = await tradeStorage.LoadAsync(trades.First().ServerTime, trades.Last().ServerTime, token).ToArrayAsync(token);
 		loadedTrades.Length.AssertEqual(0);
 
-		loadedTrades = await tradeStorage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync2(token);
+		loadedTrades = await tradeStorage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync(token);
 		loadedTrades.Length.AssertEqual(0);
 	}
 
@@ -489,7 +487,7 @@ public class StorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		
-		var loadedTrades = await tradeStorage.LoadAsync(trades.First().ServerTime, trades.Last().ServerTime, token).ToArrayAsync2(token);
+		var loadedTrades = await tradeStorage.LoadAsync(trades.First().ServerTime, trades.Last().ServerTime, token).ToArrayAsync(token);
 
 		loadedTrades.CompareMessages(trades);
 	}
@@ -954,7 +952,7 @@ public class StorageTests : BaseTestClass
 
 		await depthStorage.DeleteAsync(from, to, token);
 
-		var loadedDepths = await depthStorage.LoadAsync(from, to, token).ToArrayAsync2(token);
+		var loadedDepths = await depthStorage.LoadAsync(from, to, token).ToArrayAsync(token);
 		loadedDepths.Length.AssertEqual(0);
 	}
 
@@ -1238,7 +1236,7 @@ public class StorageTests : BaseTestClass
 
 		await depthStorage.DeleteAsync(depths.First().ServerTime, depths.Last().ServerTime, token);
 
-		var loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token).ToArrayAsync2(token);
+		var loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token).ToArrayAsync(token);
 		loadedDepths.Length.AssertEqual(0);
 
 		await depthStorage.SaveAsync(depths, token);
@@ -1247,10 +1245,10 @@ public class StorageTests : BaseTestClass
 
 		await depthStorage.DeleteAsync(depths, token);
 
-		loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token).ToArrayAsync2(token);
+		loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token).ToArrayAsync(token);
 		loadedDepths.Length.AssertEqual(0);
 
-		loadedDepths = await depthStorage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync2(token);
+		loadedDepths = await depthStorage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync(token);
 		loadedDepths.Length.AssertEqual(0);
 	}
 
@@ -1284,7 +1282,7 @@ public class StorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		
-		var loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token).ToArrayAsync2(token);
+		var loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token).ToArrayAsync(token);
 
 		loadedDepths.CompareMessages(depths);
 	}
@@ -1311,12 +1309,12 @@ public class StorageTests : BaseTestClass
 		var depthStorage = GetDepthStorage(secId, format);
 
 		await depthStorage.SaveAsync(depths, token);
-		var loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token).ToArrayAsync2(token);
+		var loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token).ToArrayAsync(token);
 
 		loadedDepths.CompareMessages(depths);
 
 		await depthStorage.DeleteAsync(depths.First().ServerTime, depths.Last().ServerTime, token);
-		loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token).ToArrayAsync2(token);
+		loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token).ToArrayAsync(token);
 		loadedDepths.Length.AssertEqual(0);
 
 		await depthStorage.DeleteWithCheckAsync(token);
@@ -1338,12 +1336,12 @@ public class StorageTests : BaseTestClass
 		var depthStorage = GetDepthStorage(secId, format);
 
 		await depthStorage.SaveAsync(depths, token);
-		var loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token).ToArrayAsync2(token);
+		var loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token).ToArrayAsync(token);
 
 		loadedDepths.CompareMessages(depths);
 
 		await depthStorage.DeleteAsync(depths.First().ServerTime, depths.Last().ServerTime, token);
-		loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token).ToArrayAsync2(token);
+		loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token).ToArrayAsync(token);
 		loadedDepths.Length.AssertEqual(0);
 
 		await depthStorage.DeleteWithCheckAsync(token);
@@ -1401,7 +1399,7 @@ public class StorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		
-		var loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token).ToArrayAsync2(token);
+		var loadedDepths = await depthStorage.LoadAsync(depths.First().ServerTime, depths.Last().ServerTime, token).ToArrayAsync(token);
 
 		loadedDepths.CompareMessages(depths);
 	}
@@ -1605,7 +1603,7 @@ public class StorageTests : BaseTestClass
 
 		await candleStorage.SaveAsync(candles, token);
 
-		var loadedCandles = await candleStorage.LoadAsync(candles.First().OpenTime, candles.Last().OpenTime, token).ToArrayAsync2(token);
+		var loadedCandles = await candleStorage.LoadAsync(candles.First().OpenTime, candles.Last().OpenTime, token).ToArrayAsync(token);
 		loadedCandles.CompareCandles([.. candles.Where(c => c.State != CandleStates.Active)], format);
 		await candleStorage.DeleteAsync(loadedCandles, token);
 
@@ -1614,7 +1612,7 @@ public class StorageTests : BaseTestClass
 			await candleStorage.SaveAsync([candle], token);
 		}
 
-		loadedCandles = await candleStorage.LoadAsync(candles.First().OpenTime, candles.Last().OpenTime, token).ToArrayAsync2(token);
+		loadedCandles = await candleStorage.LoadAsync(candles.First().OpenTime, candles.Last().OpenTime, token).ToArrayAsync(token);
 		loadedCandles.CompareCandles([.. candles.Where(c => c.State != CandleStates.Active)], format);
 		await candleStorage.DeleteAsync(loadedCandles, token);
 	}
@@ -1661,7 +1659,7 @@ public class StorageTests : BaseTestClass
 
 		await candleStorage.SaveAsync(candles, token);
 
-		var loadedCandles = await candleStorage.LoadAsync(candles.First().OpenTime, candles.Last().OpenTime, token).ToArrayAsync2(token);
+		var loadedCandles = await candleStorage.LoadAsync(candles.First().OpenTime, candles.Last().OpenTime, token).ToArrayAsync(token);
 		loadedCandles.CompareCandles([.. candles.Take(1)], format);
 		await candleStorage.DeleteAsync(loadedCandles, token);
 
@@ -1670,7 +1668,7 @@ public class StorageTests : BaseTestClass
 			await candleStorage.SaveAsync([candle], token);
 		}
 
-		loadedCandles = await candleStorage.LoadAsync(candles.First().OpenTime, candles.Last().OpenTime, token).ToArrayAsync2(token);
+		loadedCandles = await candleStorage.LoadAsync(candles.First().OpenTime, candles.Last().OpenTime, token).ToArrayAsync(token);
 		loadedCandles.CompareCandles([.. candles.Take(1)], format);
 		await candleStorage.DeleteAsync(loadedCandles, token);
 	}
@@ -1792,7 +1790,7 @@ public class StorageTests : BaseTestClass
 		var typedCandle = candles.OfType<TCandle>().ToArray();
 
 		await candleStorage.SaveAsync(typedCandle, token);
-		var loadedCandles = await candleStorage.LoadAsync(typedCandle.First().OpenTime, typedCandle.Last().OpenTime, token).ToArrayAsync2(token);
+		var loadedCandles = await candleStorage.LoadAsync(typedCandle.First().OpenTime, typedCandle.Last().OpenTime, token).ToArrayAsync(token);
 		loadedCandles.CompareCandles([.. typedCandle.Where(c => c.State != CandleStates.Active)], format);
 		await candleStorage.DeleteAsync(loadedCandles, token);
 	}
@@ -1899,7 +1897,7 @@ public class StorageTests : BaseTestClass
 			await tfStorage.SaveAsync(candles, token);
 			await tfStorage.SaveAsync(candles, token);
 
-			var loaded = (await tfStorage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync2(token)).Cast<TimeFrameCandleMessage>().ToArray();
+			var loaded = (await tfStorage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync(token)).Cast<TimeFrameCandleMessage>().ToArray();
 			loaded.CompareCandles(candles, format);
 		}
 		finally
@@ -1957,7 +1955,7 @@ public class StorageTests : BaseTestClass
 		try
 		{
 			await tfStorage.SaveAsync(candles, token);
-			(await tfStorage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync2(token)).CompareCandles(candles, format);
+			(await tfStorage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync(token)).CompareCandles(candles, format);
 		}
 		finally
 		{
@@ -2053,7 +2051,7 @@ public class StorageTests : BaseTestClass
 		try
 		{
 			await tfStorage.SaveAsync(candles, token);
-			(await tfStorage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync2(token)).CompareCandles(candles, format);
+			(await tfStorage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync(token)).CompareCandles(candles, format);
 		}
 		finally
 		{
@@ -2150,7 +2148,7 @@ public class StorageTests : BaseTestClass
 				await tfStorage.SaveAsync([candle], token);
 			}
 
-			(await tfStorage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync2(token)).CompareCandles(candles, format);
+			(await tfStorage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync(token)).CompareCandles(candles, format);
 		}
 		finally
 		{
@@ -2240,7 +2238,7 @@ public class StorageTests : BaseTestClass
 				await tfStorage.SaveAsync([candle], token);
 			}
 
-			(await tfStorage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync2(token)).CompareCandles(candles, format);
+			(await tfStorage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync(token)).CompareCandles(candles, format);
 		}
 		finally
 		{
@@ -2423,7 +2421,7 @@ public class StorageTests : BaseTestClass
 	private async Task LoadOrderLogAndCompare(IMarketDataStorage<ExecutionMessage> storage, IList<ExecutionMessage> items)
 	{
 		var token = CancellationToken;
-		var loadedItems = await storage.LoadAsync(items.First().ServerTime, items.Last().ServerTime, token).ToArrayAsync2(token);
+		var loadedItems = await storage.LoadAsync(items.First().ServerTime, items.Last().ServerTime, token).ToArrayAsync(token);
 		loadedItems.CompareMessages(items);
 	}
 
@@ -2439,7 +2437,7 @@ public class StorageTests : BaseTestClass
 
 		await newsStorage.SaveAsync(news, token);
 
-		var loaded = await newsStorage.LoadAsync(news.First().ServerTime, news.Last().ServerTime, token).ToArrayAsync2(token);
+		var loaded = await newsStorage.LoadAsync(news.First().ServerTime, news.Last().ServerTime, token).ToArrayAsync(token);
 
 		loaded.CompareMessages(news);
 
@@ -2458,7 +2456,7 @@ public class StorageTests : BaseTestClass
 
 		await storage.SaveAsync(data, token);
 
-		var loaded = await storage.LoadAsync(data.First().ServerTime, data.Last().ServerTime, token).ToArrayAsync2(token);
+		var loaded = await storage.LoadAsync(data.First().ServerTime, data.Last().ServerTime, token).ToArrayAsync(token);
 
 		loaded.CompareMessages(data);
 
@@ -2476,10 +2474,10 @@ public class StorageTests : BaseTestClass
 		var l1Storage = GetStorageRegistry().GetLevel1MessageStorage(securityId, null, format);
 
 		await l1Storage.SaveAsync(testValues, token);
-		var loaded = await l1Storage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync2(token);
+		var loaded = await l1Storage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync(token);
 		loaded.CompareMessages(testValues);
 
-		var loadedItems = await l1Storage.LoadAsync(testValues.First().ServerTime, testValues.Last().ServerTime, token).ToArrayAsync2(token);
+		var loadedItems = await l1Storage.LoadAsync(testValues.First().ServerTime, testValues.Last().ServerTime, token).ToArrayAsync(token);
 		loadedItems.CompareMessages(testValues);
 
 		await l1Storage.DeleteWithCheckAsync(token);
@@ -2514,7 +2512,7 @@ public class StorageTests : BaseTestClass
 		var l1Storage = GetStorageRegistry().GetLevel1MessageStorage(securityId, null, format);
 
 		await l1Storage.SaveAsync(testValues, token);
-		var loaded = await l1Storage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync2(token);
+		var loaded = await l1Storage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync(token);
 
 		loaded.Count().AssertEqual(0);
 
@@ -2571,10 +2569,10 @@ public class StorageTests : BaseTestClass
 		var l1Storage = GetStorageRegistry().GetLevel1MessageStorage(securityId, null, format);
 
 		await l1Storage.SaveAsync(testValues, token);
-		var loaded = await l1Storage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync2(token);
+		var loaded = await l1Storage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync(token);
 		loaded.CompareMessages(testValues);
 
-		var loadedItems = await l1Storage.LoadAsync(testValues.First().ServerTime, testValues.Last().ServerTime, token).ToArrayAsync2(token);
+		var loadedItems = await l1Storage.LoadAsync(testValues.First().ServerTime, testValues.Last().ServerTime, token).ToArrayAsync(token);
 		loadedItems.CompareMessages(testValues);
 
 		await l1Storage.DeleteWithCheckAsync(token);
@@ -2620,7 +2618,7 @@ public class StorageTests : BaseTestClass
 	//	var l1Storage = GetStorageRegistry().GetLevel1MessageStorage(securityId, null, format);
 
 	//	await l1Storage.SaveAsync(testValues, token);
-	//	var loaded = await l1Storage.LoadAsync(DateTime.MinValue, token).ToArrayAsync2(token);
+	//	var loaded = await l1Storage.LoadAsync(DateTime.MinValue, token).ToArrayAsync(token);
 
 	//	testValues.RemoveAt(0);
 	//	testValues[1].Changes.Remove(Level1Fields.LastTradePrice);
@@ -2648,7 +2646,7 @@ public class StorageTests : BaseTestClass
 		}
 
 		storage = registry.Securities;
-		var loaded = await storage.LookupAllAsync(token).ToArrayAsync2(token);
+		var loaded = await storage.LookupAllAsync(token).ToArrayAsync(token);
 
 		loaded.Length.AssertEqual(securities.Length);
 
@@ -2658,7 +2656,7 @@ public class StorageTests : BaseTestClass
 		}
 
 		await storage.DeleteAllAsync(token);
-		(await storage.LookupAllAsync(token).ToArrayAsync2(token)).Count().AssertEqual(0);
+		(await storage.LookupAllAsync(token).ToArrayAsync(token)).Count().AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -2675,12 +2673,12 @@ public class StorageTests : BaseTestClass
 		var storage = GetStorageRegistry().GetTransactionStorage(secId, null, format);
 
 		await storage.SaveAsync(transactions, token);
-		var loaded = await storage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync2(token);
+		var loaded = await storage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync(token);
 
 		loaded.CompareMessages(transactions);
 
 		await storage.DeleteAsync(cancellationToken: token);
-		(await storage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync2(token)).Length.AssertEqual(0);
+		(await storage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync(token)).Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -2697,14 +2695,14 @@ public class StorageTests : BaseTestClass
 		var storage = GetStorageRegistry().GetPositionMessageStorage(secId, null, format);
 
 		await storage.SaveAsync(testValues, token);
-		var loaded = await storage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync2(token);
+		var loaded = await storage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync(token);
 
 		testValues = [.. testValues.Where(t => t.HasChanges())];
 
 		loaded.CompareMessages(testValues);
 
 		await storage.DeleteAsync(cancellationToken: token);
-		(await storage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync2(token)).Length.AssertEqual(0);
+		(await storage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync(token)).Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -2728,12 +2726,12 @@ public class StorageTests : BaseTestClass
 		var storage = GetStorageRegistry().GetPositionMessageStorage(secId, null, format);
 
 		await storage.SaveAsync(testValues, token);
-		var loaded = await storage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync2(token);
+		var loaded = await storage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync(token);
 
 		loaded.Length.AssertEqual(0);
 
 		await storage.DeleteAsync(cancellationToken: token);
-		(await storage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync2(token)).Length.AssertEqual(0);
+		(await storage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync(token)).Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -2810,14 +2808,14 @@ public class StorageTests : BaseTestClass
 
 		now = now.ToUniversalTime().Date;
 
-		(await storage.LoadAsync(from: now, cancellationToken: token).ToArrayAsync2(token)).Length.AssertEqual(1);
-		(await storage.LoadAsync(now, DateTime.MaxValue, token).ToArrayAsync2(token)).Length.AssertEqual(1);
-		(await storage.LoadAsync(now.EndOfDay(), DateTime.MaxValue, token).ToArrayAsync2(token)).Length.AssertEqual(0);
-		(await storage.LoadAsync(now.EndOfDay(), DateTime.Today, token).ToArrayAsync2(token)).Length.AssertEqual(0);
-		(await storage.LoadAsync(now.AddDays(10), DateTime.MaxValue, token).ToArrayAsync2(token)).Length.AssertEqual(0);
+		(await storage.LoadAsync(from: now, cancellationToken: token).ToArrayAsync(token)).Length.AssertEqual(1);
+		(await storage.LoadAsync(now, DateTime.MaxValue, token).ToArrayAsync(token)).Length.AssertEqual(1);
+		(await storage.LoadAsync(now.EndOfDay(), DateTime.MaxValue, token).ToArrayAsync(token)).Length.AssertEqual(0);
+		(await storage.LoadAsync(now.EndOfDay(), DateTime.Today, token).ToArrayAsync(token)).Length.AssertEqual(0);
+		(await storage.LoadAsync(now.AddDays(10), DateTime.MaxValue, token).ToArrayAsync(token)).Length.AssertEqual(0);
 
 		await storage.DeleteAsync(from: now, cancellationToken: token);
-		(await storage.LoadAsync(from: now, cancellationToken: token).ToArrayAsync2(token)).Length.AssertEqual(0);
+		(await storage.LoadAsync(from: now, cancellationToken: token).ToArrayAsync(token)).Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -2881,7 +2879,7 @@ public class StorageTests : BaseTestClass
 
 		expectedDates.SetEquals(dates).AssertTrue();
 
-		var candles = await buildableStorage.LoadAsync(_regressionFrom, _regressionTo, token).ToArrayAsync2(token);
+		var candles = await buildableStorage.LoadAsync(_regressionFrom, _regressionTo, token).ToArrayAsync(token);
 		candles.Length.AssertEqual(expectedDates.Count);
 	}
 
@@ -2904,7 +2902,7 @@ public class StorageTests : BaseTestClass
 
 		var buildableStorage = cbProv.GetCandleMessageBuildableStorage(reg, secId, tf, null, format);
 
-		var candles = await buildableStorage.LoadAsync(_regressionFrom, _regressionTo, token).ToArrayAsync2(token);
+		var candles = await buildableStorage.LoadAsync(_regressionFrom, _regressionTo, token).ToArrayAsync(token);
 
 		CandleMessage prevCandle = null;
 
@@ -2983,7 +2981,7 @@ public class StorageTests : BaseTestClass
 		foreach (var tick in ticks)
 		{
 			await storage.SaveAsync([tick], token);
-			var loaded = await storage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync2(token);
+			var loaded = await storage.LoadAsync(from: DateTime.MinValue, cancellationToken: token).ToArrayAsync(token);
 			loaded.CompareMessages([tick]);
 			await storage.DeleteAsync([tick], token);
 		}
@@ -3027,7 +3025,7 @@ public class StorageTests : BaseTestClass
 		foreach (var log in logs)
 		{
 			await storage.SaveAsync([log], token);
-			var loaded = await storage.LoadAsync(log.ServerTime, log.ServerTime, token).ToArrayAsync2(token);
+			var loaded = await storage.LoadAsync(log.ServerTime, log.ServerTime, token).ToArrayAsync(token);
 			loaded.CompareMessages([log]);
 			await storage.DeleteAsync([log], token);
 		}
@@ -3061,7 +3059,7 @@ public class StorageTests : BaseTestClass
 		foreach (var msg in l1)
 		{
 			await storage.SaveAsync([msg], token);
-			var loaded = await storage.LoadAsync(msg.ServerTime, msg.ServerTime, token).ToArrayAsync2(token);
+			var loaded = await storage.LoadAsync(msg.ServerTime, msg.ServerTime, token).ToArrayAsync(token);
 			loaded.CompareMessages([msg]);
 			await storage.DeleteAsync([msg], token);
 		}
@@ -3141,7 +3139,7 @@ public class StorageTests : BaseTestClass
 		foreach (var candle in candles)
 		{
 			await storage.SaveAsync([candle], token);
-			var loaded = await storage.LoadAsync(candle.OpenTime, candle.OpenTime, token).ToArrayAsync2(token);
+			var loaded = await storage.LoadAsync(candle.OpenTime, candle.OpenTime, token).ToArrayAsync(token);
 			loaded.CompareCandles([candle], format);
 			await storage.DeleteAsync([candle], token);
 		}
@@ -3179,7 +3177,7 @@ public class StorageTests : BaseTestClass
 		foreach (var depth in depths)
 		{
 			await storage.SaveAsync([depth], token);
-			var loaded = await storage.LoadAsync(depth.ServerTime, depth.ServerTime, token).ToArrayAsync2(token);
+			var loaded = await storage.LoadAsync(depth.ServerTime, depth.ServerTime, token).ToArrayAsync(token);
 			loaded.CompareMessages([depth]);
 			await storage.DeleteAsync([depth], token);
 		}
@@ -3396,7 +3394,7 @@ public class StorageTests : BaseTestClass
 		var drive = CreateDrive();
 		var token = CancellationToken;
 
-		var securities = await drive.GetAvailableSecuritiesAsync(token).ToArrayAsync2(token);
+		var securities = await drive.GetAvailableSecuritiesAsync(token).ToArrayAsync(token);
 
 		securities.Length.AssertEqual(0);
 	}
@@ -3413,7 +3411,7 @@ public class StorageTests : BaseTestClass
 		await SetupTestDataAsync(drive, security1, DataType.Ticks, StorageFormats.Binary, dates);
 		await SetupTestDataAsync(drive, security2, DataType.Ticks, StorageFormats.Binary, dates);
 
-		var securities = await drive.GetAvailableSecuritiesAsync(token).ToArrayAsync2(token);
+		var securities = await drive.GetAvailableSecuritiesAsync(token).ToArrayAsync(token);
 
 		(securities.Length >= 2).AssertTrue();
 		securities.Any(s => s.SecurityCode == "TEST1" && s.BoardCode == BoardCodes.Test).AssertTrue();
@@ -3435,7 +3433,7 @@ public class StorageTests : BaseTestClass
 
 		await Assert.ThrowsExactlyAsync<OperationCanceledException>(async () =>
 		{
-			await drive.GetAvailableSecuritiesAsync(token).ToArrayAsync2(token);
+			await drive.GetAvailableSecuritiesAsync(token).ToArrayAsync(token);
 		});
 	}
 
@@ -3528,7 +3526,7 @@ public class StorageTests : BaseTestClass
 		var securityProvider = new CollectionSecurityProvider([]);
 		var token = CancellationToken;
 
-		var securities = await drive.LookupSecuritiesAsync(criteria, securityProvider, token).ToArrayAsync2(token);
+		var securities = await drive.LookupSecuritiesAsync(criteria, securityProvider, token).ToArrayAsync(token);
 
 		securities.Length.AssertEqual(0);
 	}
@@ -3543,7 +3541,7 @@ public class StorageTests : BaseTestClass
 
 		return Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
 		{
-			await drive.LookupSecuritiesAsync(null, securityProvider, token).ToArrayAsync2(token);
+			await drive.LookupSecuritiesAsync(null, securityProvider, token).ToArrayAsync(token);
 		});
 	}
 
@@ -3556,7 +3554,7 @@ public class StorageTests : BaseTestClass
 
 		return Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
 		{
-			await drive.LookupSecuritiesAsync(criteria, null, token).ToArrayAsync2(token);
+			await drive.LookupSecuritiesAsync(criteria, null, token).ToArrayAsync(token);
 		});
 	}
 
@@ -3578,7 +3576,7 @@ public class StorageTests : BaseTestClass
 
 		await Assert.ThrowsExactlyAsync<OperationCanceledException>(async () =>
 		{
-			await drive.LookupSecuritiesAsync(criteria, securityProvider, token).ToArrayAsync2(token);
+			await drive.LookupSecuritiesAsync(criteria, securityProvider, token).ToArrayAsync(token);
 		});
 	}
 
@@ -3623,7 +3621,7 @@ public class StorageTests : BaseTestClass
 			await SetupTestDataAsync(drive, secId, DataType.Ticks, StorageFormats.Binary, dates);
 		}
 
-		var result = await drive.GetAvailableSecuritiesAsync(token).ToArrayAsync2(token);
+		var result = await drive.GetAvailableSecuritiesAsync(token).ToArrayAsync(token);
 
 		(result.Length >= 3).AssertTrue();
 		foreach (var secId in securities)

@@ -267,7 +267,7 @@ public class SnapshotRegistry(string path) : Disposable
 			_fileNameWithExtension = _serializer.Name.ToLowerInvariant() + ".bin";
 			_datesPath = Path.Combine(_path, _serializer.Name + "Dates.txt");
 
-			_datesDict = new Lazy<CachedSynchronizedOrderedDictionary<DateTime, DateTime>>(() =>
+			_datesDict = new(() =>
 			{
 				var retVal = new CachedSynchronizedOrderedDictionary<DateTime, DateTime>();
 
@@ -290,12 +290,12 @@ public class SnapshotRegistry(string path) : Disposable
 				}
 
 				return retVal;
-			}).Track();
+			});
 		}
 
 		public override IEnumerable<DateTime> Dates => DatesDict.CachedValues;
 
-		private readonly Lazy<CachedSynchronizedOrderedDictionary<DateTime, DateTime>> _datesDict;
+		private readonly ResettableLazy<CachedSynchronizedOrderedDictionary<DateTime, DateTime>> _datesDict;
 
 		private CachedSynchronizedOrderedDictionary<DateTime, DateTime> DatesDict => _datesDict.Value;
 

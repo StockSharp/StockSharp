@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Testing;
 
-using Ecng.Linq;
-
 /// <summary>
 /// The adapter, receiving messages form the storage <see cref="IStorageRegistry"/>.
 /// </summary>
@@ -503,7 +501,7 @@ public class HistoryMessageAdapter : MessageAdapter
 							if (AdapterCache is not null)
 							{
 								messages = AdapterCache.GetMessagesAsync(default, default, loadDateInUtc, _basketStorage.LoadAsync, cancellationToken);
-								noData = await messages.FirstOrDefaultAsync2(cancellationToken) is null;
+								noData = await messages.FirstOrDefaultAsync(cancellationToken) is null;
 							}
 							else
 							{
@@ -516,7 +514,7 @@ public class HistoryMessageAdapter : MessageAdapter
 							}
 
 							if (noData)
-								await EnqueueMessages(startDateTime, stopDateTime, currentTime, GetSimpleTimeLine(boards, currentTime, MarketTimeChangedInterval).ToAsyncEnumerable2(cancellationToken));
+								await EnqueueMessages(startDateTime, stopDateTime, currentTime, GetSimpleTimeLine(boards, currentTime, MarketTimeChangedInterval).ToAsyncEnumerable());
 							else
 								await EnqueueMessages(startDateTime, stopDateTime, currentTime, messages);
 						}

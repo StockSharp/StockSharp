@@ -20,7 +20,6 @@ using Ecng.Compilation;
 using Ecng.Compilation.Roslyn;
 using Ecng.Serialization;
 using Ecng.Logging;
-using Ecng.Linq;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Candles.Compression;
@@ -120,7 +119,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 	private async void HistoryPath_OnFolderChanged(string path)
 	{
 		using var drive = new LocalMarketDataDrive(path);
-		var secs = await drive.GetAvailableSecuritiesAsync(default).ToArrayAsync2(default);
+		var secs = await drive.GetAvailableSecuritiesAsync(default).ToArrayAsync(default);
 
 		Securities.ItemsSource = secs;
 

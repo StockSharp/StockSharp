@@ -1,6 +1,5 @@
 ﻿namespace StockSharp.Tests;
 
-using Ecng.Linq;
 using Ecng.Reflection;
 
 using StockSharp.Algo.Storages.Csv;
@@ -667,7 +666,7 @@ static class Helper
 		where T : Message, IServerTimeMessage
 	{
 		await storage.DeleteAsync(cancellationToken: cancellationToken);
-		(await storage.LoadAsync(cancellationToken: cancellationToken).ToArrayAsync2(cancellationToken)).Count().AssertEqual(0);
+		(await storage.LoadAsync(cancellationToken: cancellationToken).ToArrayAsync(cancellationToken)).Count().AssertEqual(0);
 	}
 
 	public static SecurityId CreateSecurityId()

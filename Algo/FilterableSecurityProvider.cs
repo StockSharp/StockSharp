@@ -1,7 +1,5 @@
 namespace StockSharp.Algo;
 
-using Ecng.Linq;
-
 /// <summary>
 /// Provider of information about instruments supporting search using <see cref="SecurityTrie"/>.
 /// </summary>
@@ -59,7 +57,7 @@ public class FilterableSecurityProvider : Disposable, ISecurityProvider
 		if (!secId.IsEmpty())
 			securities = securities.Where(s => s.Id.EqualsIgnoreCase(secId));
 
-		return securities.Filter(criteria).TryLimitByCount(criteria).ToAsyncEnumerable2(cancellationToken);
+		return securities.Filter(criteria).TryLimitByCount(criteria).ToAsyncEnumerable();
 	}
 
 	async ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)

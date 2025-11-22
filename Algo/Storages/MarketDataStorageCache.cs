@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Algo.Storages;
 
-using Ecng.Linq;
-
 /// <summary>
 /// <see cref="IMarketDataStorage"/> cache.
 /// </summary>
@@ -54,7 +52,7 @@ public class MarketDataStorageCache : Cloneable<MarketDataStorageCache>
 
 		if (!_cache.TryGetValue(key, out var t))
 		{
-			var data = await loadIfNeed(date, cancellationToken).ToArrayAsync2(cancellationToken);
+			var data = await loadIfNeed(date, cancellationToken).ToArrayAsync(cancellationToken);
 			t = (now, data.ToArray());
 
 			if (_cache.Count > Limit)

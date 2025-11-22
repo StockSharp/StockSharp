@@ -1,6 +1,7 @@
 ﻿namespace StockSharp.Diagram.Elements;
 
 using StockSharp.Alerts;
+using StockSharp.Configuration;
 
 /// <summary>
 /// Notification element (sound, window etc.) for specific market events.

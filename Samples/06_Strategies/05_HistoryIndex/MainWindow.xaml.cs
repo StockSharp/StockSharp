@@ -55,13 +55,13 @@ public partial class MainWindow
 		_security = new Security
 		{
 			Id = Paths.HistoryDefaultSecurity,
-			ExchangeBoard.Binance,
+			Board = ExchangeBoard.Binance,
 		};
 		_indexSecurity = new ExpressionIndexSecurity()
 		{
 			Id = "Index" + Paths.HistoryDefaultSecurity,
 			Expression = $"{_security.Id}/2 + {_security.Id}*100",
-			ExchangeBoard.Binance,
+			Board = ExchangeBoard.Binance,
 		};
 
 		_portfolio = new Portfolio { Name = "test portfolio", BeginValue = 10000000 };

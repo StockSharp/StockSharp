@@ -2,8 +2,6 @@ namespace StockSharp.Algo.Storages;
 
 using System.Diagnostics;
 
-using Ecng.Linq;
-
 using StockSharp.Algo.Candles;
 using StockSharp.Algo.Candles.Compression;
 
@@ -133,7 +131,7 @@ public static class StorageHelper
 	public static IEnumerable<TMessage> Load<TMessage>(this IMarketDataStorage<TMessage> storage, DateTime? from = null, DateTime? to = null)
 		where TMessage : Message, IServerTimeMessage
 	{
-		return AsyncHelper.Run(() => LoadAsync(storage, from, to).ToArrayAsync2(default));
+		return AsyncHelper.Run(() => LoadAsync(storage, from, to).ToArrayAsync(default));
 	}
 
 	/// <summary>
@@ -227,7 +225,7 @@ public static class StorageHelper
 				}
 				else
 				{
-					var data = (await storage.LoadAsync(date, cancellationToken).ToArrayAsync2(cancellationToken)).ToList();
+					var data = (await storage.LoadAsync(date, cancellationToken).ToArrayAsync(cancellationToken)).ToList();
 					data.RemoveWhere(d =>
 					{
 						var t = d.GetServerTime();
@@ -240,7 +238,7 @@ public static class StorageHelper
 				await storage.DeleteAsync(date, cancellationToken);
 			else
 			{
-				var data = (await storage.LoadAsync(date, cancellationToken).ToArrayAsync2(cancellationToken)).ToList();
+				var data = (await storage.LoadAsync(date, cancellationToken).ToArrayAsync(cancellationToken)).ToList();
 				data.RemoveWhere(d => d.GetServerTime() > range.Max);
 				await storage.DeleteAsync(data, cancellationToken);
 			}
@@ -518,7 +516,7 @@ public static class StorageHelper
 
 				if (dates.Contains(date))
 				{
-					var data = await s.LoadAsync(date, cancellationToken).ToArrayAsync2(cancellationToken);
+					var data = await s.LoadAsync(date, cancellationToken).ToArrayAsync(cancellationToken);
 					storagesWithData.Add((s, data));
 				}
 			}
@@ -1609,7 +1607,7 @@ public static class StorageHelper
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
 
-		return AsyncHelper.Run(() => storage.LoadAsync(date, default).ToArrayAsync2(default));
+		return AsyncHelper.Run(() => storage.LoadAsync(date, default).ToArrayAsync(default));
 	}
 
 	/// <summary>
@@ -1677,6 +1675,6 @@ public static class StorageHelper
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
 
-		return AsyncHelper.Run(() => storage.LoadAsync(date, default).ToArrayAsync2(default));
+		return AsyncHelper.Run(() => storage.LoadAsync(date, default).ToArrayAsync(default));
 	}
 }
