@@ -90,8 +90,8 @@ static class Program
 		ConfigManager.RegisterService<ICompiler>(new CSharpCompiler());
 		var basketSecurity = new ExpressionIndexSecurity
 		{
-			Id = "IndexInstr@TQBR",
-			Board = ExchangeBoard.MicexTqbr,
+			Id = $"Index{secId}",
+			Board = ExchangeBoard.Binance,
 			BasketExpression = $"{secId} + 987654321",
 		};
 
