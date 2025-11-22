@@ -38,7 +38,7 @@ public partial class MainWindow
 	private readonly SynchronizedDictionary<DateTime, TimeFrameCandleMessage> _updatedCandles = new();
 	private readonly CachedSynchronizedList<TimeFrameCandleMessage> _allCandles = new();
 
-	private const decimal _priceStep = 0.01m;
+	private const decimal _priceStep = 0.0001m;
 	private const int _timeframe = 1;
 
 	private bool NeedToDelay => DelayCtrl.IsChecked == true;
@@ -48,9 +48,9 @@ public partial class MainWindow
 
 	private readonly Security _security = new()
 	{
-		Id = "SBER@TQBR",
+		Id = Paths.HistoryDefaultSecurity,
 		PriceStep = _priceStep,
-		Board = ExchangeBoard.Micex
+		Board = ExchangeBoard.Binance,
 	};
 
 	private readonly PortfolioDataSource _portfolios;

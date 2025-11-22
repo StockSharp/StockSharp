@@ -54,17 +54,14 @@ public partial class MainWindow
 	{
 		_security = new Security
 		{
-			Id = "SBER@TQBR",
-			Code = "SBER",
-			PriceStep = 0.01m,
-			Board = ExchangeBoard.Micex,
+			Id = Paths.HistoryDefaultSecurity,
+			ExchangeBoard.Binance,
 		};
 		_indexSecurity = new ExpressionIndexSecurity()
 		{
-			Id = "IndexInstr@TQBR",
-			Code = "IndexInstr",
-			Expression = "SBER@TQBR/2 + SBER@TQBR*100",
-			Board = ExchangeBoard.Micex,
+			Id = "Index" + Paths.HistoryDefaultSecurity,
+			Expression = $"{_security.Id}/2 + {_security.Id}*100",
+			ExchangeBoard.Binance,
 		};
 
 		_portfolio = new Portfolio { Name = "test portfolio", BeginValue = 10000000 };

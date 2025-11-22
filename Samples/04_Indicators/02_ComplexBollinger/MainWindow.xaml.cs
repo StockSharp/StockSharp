@@ -37,7 +37,7 @@ public partial class MainWindow
 		};
 		Chart.AddElement(chartArea, chartIndicatorElement);
 
-		var secId = "SBER@TQBR".ToSecurityId();
+		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
 
 		var candleStorage = new StorageRegistry().GetTimeFrameCandleMessageStorage(secId, TimeSpan.FromMinutes(1), new LocalMarketDataDrive(_pathHistory), StorageFormats.Binary);
 		var candles = candleStorage.Load(Paths.HistoryBeginDate, Paths.HistoryEndDate);

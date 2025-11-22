@@ -58,8 +58,8 @@ static class Program
 				Console.WriteLine(security1);
 			}
 		};
-		connector.Subscribe(new(new SecurityLookupMessage() { SecurityId = new() { SecurityCode = "SBER" }, SecurityType = SecurityTypes.Stock }));
-		var secId = "SBER@TQBR".ToSecurityId();
+		connector.Subscribe(new(new SecurityLookupMessage() { SecurityId = new() { SecurityCode = "BTCUSD" } }));
+		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
 		var security = connector.GetSecurity(secId);
 
 		Console.ReadLine();

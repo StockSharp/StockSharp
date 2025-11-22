@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
+using System.Threading.Tasks;
 
 using Ecng.Collections;
 using Ecng.Common;
@@ -41,7 +42,7 @@ public partial class MainWindow
 	}
 
 	private static readonly string _historyPath = Paths.HistoryDataPath;
-	private static readonly SecurityId _securityId = "SBER@TQBR".ToSecurityId();
+	private static readonly SecurityId _securityId = Paths.HistoryDefaultSecurity.ToSecurityId();
 	private const int _timeframe = 1; //minutes
 	private const decimal _priceStep = 0.01m;
 	private const int _candlesPacketSize = 10;
@@ -161,7 +162,7 @@ public partial class MainWindow
 
 		//_curCandleNum = 0;
 
-		ThreadingHelper.Thread(() =>
+		Task.Factory.StartNew(() =>
 		{
 			try
 			{
@@ -222,7 +223,7 @@ public partial class MainWindow
 					//_area.YAxises.FirstOrDefault().Do(a => a.AutoRange = false);
 				});
 			}
-		}).Launch();
+		}, TaskCreationOptions.LongRunning);
 	}
 
 	public static decimal Round(decimal value, decimal nearest)
