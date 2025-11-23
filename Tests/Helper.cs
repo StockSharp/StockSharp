@@ -45,7 +45,7 @@ static class Helper
 	}
 
 	public static IEntityRegistry GetEntityRegistry()
-		=> new CsvEntityRegistry(string.Empty);
+		=> new CsvEntityRegistry(GetSubTemp());
 
 	public static ExecutionMessage[] RandomTicks(this Security security, int count, bool generateOriginSide, TimeSpan? interval = null, DateTime? start = null)
 	{
