@@ -1,5 +1,9 @@
 namespace StockSharp.Algo.Storages.Csv;
 
+using System.IO.Compression;
+
+using Ecng.IO;
+
 /// <summary>
 /// The interface for presentation in the form of list of trade objects, received from the external storage.
 /// </summary>
@@ -20,6 +24,17 @@ public interface ICsvEntityList
 	/// CSV file name.
 	/// </summary>
 	string FileName { get; }
+
+	/// <summary>
+	/// Create archived copy.
+	/// </summary>
+	bool CreateArchivedCopy { get; set; }
+
+	/// <summary>
+	/// Get archived copy body.
+	/// </summary>
+	/// <returns>File body.</returns>
+	byte[] GetCopy();
 }
 
 /// <summary>
@@ -31,6 +46,9 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	where TEntity : class
 {
 	private readonly CachedSynchronizedDictionary<TKey, TEntity> _items = [];
+
+	private readonly SyncObject _copySync = new();
+	private byte[] _copy;
 
 	/// <summary>
 	/// The CSV storage of trading objects.
@@ -47,7 +65,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	/// <param name="fileName">CSV file name.</param>
 	protected CsvEntityList(CsvEntityRegistry registry, string fileName)
 	{
-		if (fileName == null)
+		if (fileName.IsEmpty())
 			throw new ArgumentNullException(nameof(fileName));
 
 		Registry = registry ?? throw new ArgumentNullException(nameof(registry));
@@ -57,6 +75,48 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 	/// <inheritdoc />
 	public string FileName { get; }
+
+	/// <inheritdoc />
+	public bool CreateArchivedCopy { get; set; }
+
+	/// <inheritdoc />
+	public byte[] GetCopy()
+	{
+		if (!CreateArchivedCopy)
+			throw new NotSupportedException();
+
+		byte[] body;
+
+		lock (_copySync)
+			body = _copy;
+
+		if (body is null)
+		{
+			lock (_copySync)
+			{
+				if (File.Exists(FileName))
+					body = File.ReadAllBytes(FileName);
+				else
+					body = [];
+			}
+
+			body = body.Compress<GZipStream>();
+
+			lock (_copySync)
+				_copy ??= body;
+		}
+
+		return body;
+	}
+
+	private void ResetCopy()
+	{
+		if (!CreateArchivedCopy)
+			return;
+
+		lock (_copySync)
+			_copy = null;
+	}
 
 	#region IStorageEntityList<T>
 
@@ -215,6 +275,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 			_delayActionGroup.Add((writer, data) =>
 			{
+				ResetCopy();
 				Write(writer, data);
 			}, item);
 		}
@@ -271,6 +332,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 			_delayActionGroup.Add(writer =>
 			{
+				ResetCopy();
 				writer.Truncate();
 			});
 		}
@@ -284,6 +346,8 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	{
 		_delayActionGroup.Add((writer, state) =>
 		{
+			ResetCopy();
+
 			writer.Truncate();
 
 			foreach (var item in state)
