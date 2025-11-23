@@ -4906,14 +4906,26 @@ public static partial class Extensions
 	/// <param name="code">Security code.</param>
 	/// <param name="type">Security type.</param>
 	/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+	[Obsolete("Use LookupByCodeAsync method.")]
 	public static IEnumerable<SecurityMessage> LookupByCode(this ISecurityMessageProvider provider, string code, SecurityTypes? type = null)
+		=> AsyncHelper.Run(() => provider.LookupByCodeAsync(code, type, default).ToArrayAsync(default));
+
+	/// <summary>
+	/// To get the instrument by the instrument code.
+	/// </summary>
+	/// <param name="provider">The provider of information about instruments.</param>
+	/// <param name="code">Security code.</param>
+	/// <param name="type">Security type.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+	public static IAsyncEnumerable<SecurityMessage> LookupByCodeAsync(this ISecurityMessageProvider provider, string code, SecurityTypes? type, CancellationToken cancellationToken)
 	{
 		if (provider is null)
 			throw new ArgumentNullException(nameof(provider));
 
 		return code.IsEmpty() && type == null
-			? provider.LookupMessages(LookupAllCriteriaMessage)
-			: provider.LookupMessages(new() { SecurityId = new() { SecurityCode = code }, SecurityType = type });
+			? provider.LookupMessagesAsync(LookupAllCriteriaMessage, cancellationToken)
+			: provider.LookupMessagesAsync(new() { SecurityId = new() { SecurityCode = code }, SecurityType = type }, cancellationToken);
 	}
 
 	/// <summary>
@@ -5718,6 +5730,7 @@ public static partial class Extensions
 	/// <param name="provider"><see cref="ISecurityMessageProvider"/></param>
 	/// <param name="id">Security ID.</param>
 	/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+	[Obsolete("Use LookupMessageByIdAsync method.")]
 	public static SecurityMessage LookupMessageById(this ISecurityMessageProvider provider, SecurityId id)
 	{
 		if (provider is null)
@@ -5732,6 +5745,7 @@ public static partial class Extensions
 	/// <param name="provider"><see cref="ISecurityMessageProvider"/></param>
 	/// <param name="criteria">Message security lookup for specified criteria.</param>
 	/// <returns>Found instruments.</returns>
+	[Obsolete("Use LookupMessagesAsync method.")]
 	public static IEnumerable<SecurityMessage> LookupMessages(this ISecurityMessageProvider provider, SecurityLookupMessage criteria)
 	{
 		if (provider is null)
