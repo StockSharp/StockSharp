@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using Ecng.Common;
 using Ecng.Logging;
+using Ecng.ComponentModel;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Storages;
@@ -34,7 +35,8 @@ static class Program
 
 		var storageRegistry = new StorageRegistry();
 
-		var registry = new CsvEntityRegistry(Path.Combine(Directory.GetCurrentDirectory(), "Storage"));
+		await using var executor = new ChannelExecutor(ex => ConsoleHelper.ConsoleError(ex.ToString()));
+		var registry = new CsvEntityRegistry(Path.Combine(Directory.GetCurrentDirectory(), "Storage"), executor);
 		var securityStorage = (ISecurityStorage)registry.Securities;
 
 		var remoteDrive = new RemoteMarketDataDrive(RemoteMarketDataDrive.DefaultAddress, new FixMessageAdapter(new IncrementalIdGenerator()))
