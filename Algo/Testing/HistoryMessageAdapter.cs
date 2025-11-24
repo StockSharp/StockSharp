@@ -319,7 +319,8 @@ public class HistoryMessageAdapter : MessageAdapter
 			if (transactionId == 0)
 				throw new ArgumentNullException(nameof(transactionId));
 
-			LogInfo("Add storage: {0}/{1} {2}-{3}", storage.SecurityId, storage.DataType, storage.GetFromDate(), storage.GetToDate());
+			var storageDates = storage.GetDates();
+			LogInfo("Add storage: {0}/{1} {2}-{3}", storage.SecurityId, storage.DataType, storageDates.FirstOr(), storageDates.LastOr());
 
 			_isChanged = true;
 			_actions.Add(Tuple.Create(storage, transactionId));

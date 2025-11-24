@@ -125,8 +125,8 @@ public static class StorageHelper
 	/// </summary>
 	/// <typeparam name="TMessage">Data type.</typeparam>
 	/// <param name="storage">Market-data storage.</param>
-	/// <param name="from">The start time for data loading. If the value is not specified, data will be loaded from the starting time <see cref="GetFromDate"/>.</param>
-	/// <param name="to">The end time for data loading. If the value is not specified, data will be loaded up to the <see cref="GetToDate"/> date, inclusive.</param>
+	/// <param name="from">The start time for data loading. If the value is not specified, data will be loaded from the starting time <see cref="IMarketDataStorageDrive.GetDatesAsync"/>.</param>
+	/// <param name="to">The end time for data loading. If the value is not specified, data will be loaded up to the <see cref="IMarketDataStorageDrive.GetDatesAsync"/> date, inclusive.</param>
 	/// <returns>The iterative loader of market data.</returns>
 	public static IEnumerable<TMessage> Load<TMessage>(this IMarketDataStorage<TMessage> storage, DateTime? from = null, DateTime? to = null)
 		where TMessage : Message, IServerTimeMessage
@@ -139,8 +139,8 @@ public static class StorageHelper
 	/// </summary>
 	/// <typeparam name="TMessage">Data type.</typeparam>
 	/// <param name="storage">Market-data storage.</param>
-	/// <param name="from">The start time for data loading. If the value is not specified, data will be loaded from the starting time <see cref="GetFromDate"/>.</param>
-	/// <param name="to">The end time for data loading. If the value is not specified, data will be loaded up to the <see cref="GetToDate"/> date, inclusive.</param>
+	/// <param name="from">The start time for data loading. If the value is not specified, data will be loaded from the starting time <see cref="IMarketDataStorageDrive.GetDatesAsync"/>.</param>
+	/// <param name="to">The end time for data loading. If the value is not specified, data will be loaded up to the <see cref="IMarketDataStorageDrive.GetDatesAsync"/> date, inclusive.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>The iterative loader of market data.</returns>
 	public static async IAsyncEnumerable<TMessage> LoadAsync<TMessage>(this IMarketDataStorage<TMessage> storage, DateTime? from = null, DateTime? to = null, [EnumeratorCancellation]CancellationToken cancellationToken = default)
@@ -164,8 +164,8 @@ public static class StorageHelper
 	/// To delete market data from the storage for the specified time period.
 	/// </summary>
 	/// <param name="storage">Market-data storage.</param>
-	/// <param name="from">The start time for data deleting. If the value is not specified, the data will be deleted starting from the date <see cref="GetFromDate"/>.</param>
-	/// <param name="to">The end time, up to which the data shall be deleted. If the value is not specified, data will be deleted up to the end date <see cref="GetToDate"/>, inclusive.</param>
+	/// <param name="from">The start time for data deleting. If the value is not specified, the data will be deleted starting from the date <see cref="IMarketDataStorageDrive.GetDatesAsync"/>.</param>
+	/// <param name="to">The end time, up to which the data shall be deleted. If the value is not specified, data will be deleted up to the end date <see cref="IMarketDataStorageDrive.GetDatesAsync"/>, inclusive.</param>
 	/// <returns><see langword="true"/> if data was deleted, <see langword="false"/> data not exist for the specified period.</returns>
 	[Obsolete("Use DeleteAsync method instead.")]
 	public static bool Delete(this IMarketDataStorage storage, DateTime? from = null, DateTime? to = null)
@@ -175,8 +175,8 @@ public static class StorageHelper
 	/// To delete market data from the storage for the specified time period.
 	/// </summary>
 	/// <param name="storage">Market-data storage.</param>
-	/// <param name="from">The start time for data deleting. If the value is not specified, the data will be deleted starting from the date <see cref="GetFromDate"/>.</param>
-	/// <param name="to">The end time, up to which the data shall be deleted. If the value is not specified, data will be deleted up to the end date <see cref="GetToDate"/>, inclusive.</param>
+	/// <param name="from">The start time for data deleting. If the value is not specified, the data will be deleted starting from the date <see cref="IMarketDataStorageDrive.GetDatesAsync"/>.</param>
+	/// <param name="to">The end time, up to which the data shall be deleted. If the value is not specified, data will be deleted up to the end date <see cref="IMarketDataStorageDrive.GetDatesAsync"/>, inclusive.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns><see langword="true"/> if data was deleted, <see langword="false"/> data not exist for the specified period.</returns>
 	public static async ValueTask<bool> DeleteAsync(this IMarketDataStorage storage, DateTime? from = null, DateTime? to = null, CancellationToken cancellationToken = default)
@@ -318,27 +318,25 @@ public static class StorageHelper
 	/// </summary>
 	/// <param name="storage">Market-data storage.</param>
 	/// <returns>The start date. If the value is not initialized, the storage is empty.</returns>
+	[Obsolete("Use GetDatesAsync instead.")]
 	public static DateTime? GetFromDate(this IMarketDataStorage storage)
-	{
-		return storage.GetDates().FirstOr();
-	}
+		=> storage.GetDates().FirstOr();
 
 	/// <summary>
 	/// To get the end date for market data, stored in the storage.
 	/// </summary>
 	/// <param name="storage">Market-data storage.</param>
 	/// <returns>The end date. If the value is not initialized, the storage is empty.</returns>
+	[Obsolete("Use GetDatesAsync instead.")]
 	public static DateTime? GetToDate(this IMarketDataStorage storage)
-	{
-		return storage.GetDates().LastOr();
-	}
+		=> storage.GetDates().LastOr();
 
 	/// <summary>
 	/// To get all dates for stored market data for the specified range.
 	/// </summary>
 	/// <param name="storage">Market-data storage.</param>
-	/// <param name="from">The range start time. If the value is not specified, data will be loaded from the start date <see cref="GetFromDate"/>.</param>
-	/// <param name="to">The range end time. If the value is not specified, data will be loaded up to the end date <see cref="GetToDate"/>, inclusive.</param>
+	/// <param name="from">The range start time. If the value is not specified, data will be loaded from the start date <see cref="IMarketDataStorageDrive.GetDatesAsync"/>.</param>
+	/// <param name="to">The range end time. If the value is not specified, data will be loaded up to the end date <see cref="IMarketDataStorageDrive.GetDatesAsync"/>, inclusive.</param>
 	/// <returns>All available data within the range.</returns>
 	public static IEnumerable<DateTime> GetDates(this IMarketDataStorage storage, DateTime? from, DateTime? to)
 	{
@@ -1078,14 +1076,15 @@ public static class StorageHelper
 		if (subscription.From is not DateTime from)
 			return null;
 
-		var last = storage.GetDates().LastOr();
+		var dates = storage.GetDates();
+		var last = dates.LastOr();
 
 		if (last == null)
 			return null;
 
 		var to = subscription.To ?? last.Value.EndOfDay();
 
-		var first = storage.GetDates().First();
+		var first = dates.First();
 
 		if (from < first)
 			from = first;
