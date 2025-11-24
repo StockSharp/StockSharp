@@ -10,11 +10,6 @@ using Ecng.IO;
 public interface ICsvEntityList
 {
 	/// <summary>
-	/// The time delayed action.
-	/// </summary>
-	DelayAction DelayAction { get; set; }
-
-	/// <summary>
 	/// Initialize the storage.
 	/// </summary>
 	/// <param name="errors">Possible errors.</param>
@@ -50,6 +45,8 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	private readonly SyncObject _copySync = new();
 	private byte[] _copy;
 
+	private ChannelExecutor _executor;
+
 	/// <summary>
 	/// The CSV storage of trading objects.
 	/// </summary>
@@ -63,12 +60,14 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	/// </summary>
 	/// <param name="registry">The CSV storage of trading objects.</param>
 	/// <param name="fileName">CSV file name.</param>
-	protected CsvEntityList(CsvEntityRegistry registry, string fileName)
+	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
+	protected CsvEntityList(CsvEntityRegistry registry, string fileName, ChannelExecutor executor)
 	{
 		if (fileName.IsEmpty())
 			throw new ArgumentNullException(nameof(fileName));
 
 		Registry = registry ?? throw new ArgumentNullException(nameof(registry));
+		_executor = executor ?? throw new ArgumentNullException(nameof(executor));
 
 		FileName = Path.Combine(Registry.Path, fileName);
 	}
@@ -119,38 +118,6 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	}
 
 	#region IStorageEntityList<T>
-
-	private DelayAction.IGroup<CsvFileWriter> _delayActionGroup;
-	private DelayAction _delayAction;
-
-	/// <inheritdoc cref="ICsvEntityList" />
-	public DelayAction DelayAction
-	{
-		get => _delayAction;
-		set
-		{
-			if (_delayAction == value)
-				return;
-
-			if (_delayAction != null)
-			{
-				_delayAction.DeleteGroup(_delayActionGroup);
-				_delayActionGroup = null;
-			}
-
-			_delayAction = value;
-
-			if (_delayAction != null)
-			{
-				_delayActionGroup = _delayAction.CreateGroup(() =>
-				{
-					var stream = new TransactionFileStream(FileName, FileMode.OpenOrCreate);
-					stream.Seek(0, SeekOrigin.End);
-					return stream.CreateCsvWriter(Registry.Encoding);
-				});
-			}
-		}
-	}
 
 	TEntity IStorageEntityList<TEntity>.ReadById(object id)
 	{
@@ -273,11 +240,15 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 			AddCache(item);
 
-			_delayActionGroup.Add((writer, data) =>
+			var itemCopy = item;
+			_executor.Add(() =>
 			{
+				using var stream = new TransactionFileStream(FileName, FileMode.OpenOrCreate);
+				stream.Seek(0, SeekOrigin.End);
+				using var writer = stream.CreateCsvWriter(Registry.Encoding);
 				ResetCopy();
-				Write(writer, data);
-			}, item);
+				Write(writer, itemCopy);
+			});
 		}
 
 		return base.OnAdding(item);
@@ -330,8 +301,10 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 			_items.Clear();
 			ClearCache();
 
-			_delayActionGroup.Add(writer =>
+			_executor.Add(() =>
 			{
+				using var stream = new TransactionFileStream(FileName, FileMode.Create);
+				using var writer = stream.CreateCsvWriter(Registry.Encoding);
 				ResetCopy();
 				writer.Truncate();
 			});
@@ -344,26 +317,17 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	/// <param name="values">Trading objects.</param>
 	private void WriteMany(TEntity[] values)
 	{
-		_delayActionGroup.Add((writer, state) =>
+		var valuesCopy = values;
+		_executor.Add(() =>
 		{
+			using var stream = new TransactionFileStream(FileName, FileMode.Create);
+			using var writer = stream.CreateCsvWriter(Registry.Encoding);
 			ResetCopy();
 
 			writer.Truncate();
 
-			foreach (var item in state)
+			foreach (var item in valuesCopy)
 				Write(writer, item);
-		}, values, compareStates: (v1, v2) =>
-		{
-			if (v1 == null)
-				return v2 == null;
-
-			if (v2 == null)
-				return false;
-
-			if (v1.Length != v2.Length)
-				return false;
-
-			return v1.SequenceEqual(v2);
 		});
 	}
 

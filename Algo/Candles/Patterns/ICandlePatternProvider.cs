@@ -123,11 +123,13 @@ public class InMemoryCandlePatternProvider : ICandlePatternProvider
 /// Initializes a new instance of the <see cref="CandlePatternFileStorage"/>.
 /// </remarks>
 /// <param name="fileName">File name.</param>
-public class CandlePatternFileStorage(string fileName) : ICandlePatternProvider
+/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
+public class CandlePatternFileStorage(string fileName, ChannelExecutor executor) : ICandlePatternProvider
 {
 	private readonly ICandlePatternProvider _inMemory = new InMemoryCandlePatternProvider();
 	private readonly CachedSynchronizedDictionary<string, ICandlePattern> _cache = [];
 	private readonly string _fileName = fileName.ThrowIfEmpty(nameof(fileName));
+	private readonly ChannelExecutor _executor = executor ?? throw new ArgumentNullException(nameof(executor));
 
 	/// <inheritdoc/>
 	public event Action<ICandlePattern> PatternCreated;
@@ -137,17 +139,6 @@ public class CandlePatternFileStorage(string fileName) : ICandlePatternProvider
 
 	/// <inheritdoc/>
 	public event Action<ICandlePattern> PatternDeleted;
-
-	private DelayAction _delayAction = new(ex => ex.LogError());
-
-	/// <summary>
-	/// The time delayed action.
-	/// </summary>
-	public DelayAction DelayAction
-	{
-		get => _delayAction;
-		set => _delayAction = value ?? throw new ArgumentNullException(nameof(value));
-	}
 
 	void ICandlePatternProvider.Init()
 	{
@@ -216,7 +207,7 @@ public class CandlePatternFileStorage(string fileName) : ICandlePatternProvider
 
 	private void Save()
 	{
-		DelayAction.DefaultGroup.Add(() =>
+		_executor.Add(() =>
 			_cache
 				.CachedValues
 				.Select(i => i.SaveEntire(false))

@@ -5,7 +5,7 @@ namespace StockSharp.Algo.Storages.Csv;
 /// </summary>
 public class CsvEntityRegistry : IEntityRegistry
 {
-	private class ExchangeCsvList(CsvEntityRegistry registry) : CsvEntityList<string, Exchange>(registry, "exchange.csv")
+	private class ExchangeCsvList(CsvEntityRegistry registry, ChannelExecutor executor) : CsvEntityList<string, Exchange>(registry, "exchange.csv", executor)
 	{
 		protected override string GetKey(Exchange item)
 		{
@@ -45,7 +45,7 @@ public class CsvEntityRegistry : IEntityRegistry
 		}
 	}
 
-	private class ExchangeBoardCsvList(CsvEntityRegistry registry) : CsvEntityList<string, ExchangeBoard>(registry, "exchangeboard.csv")
+	private class ExchangeBoardCsvList(CsvEntityRegistry registry, ChannelExecutor executor) : CsvEntityList<string, ExchangeBoard>(registry, "exchangeboard.csv", executor)
 	{
 		protected override string GetKey(ExchangeBoard item)
 		{
@@ -89,8 +89,8 @@ public class CsvEntityRegistry : IEntityRegistry
 
 	private class SecurityCsvList : CsvEntityList<SecurityId, Security>, IStorageSecurityList
 	{
-		public SecurityCsvList(CsvEntityRegistry registry)
-			: base(registry, "security.csv")
+		public SecurityCsvList(CsvEntityRegistry registry, ChannelExecutor executor)
+			: base(registry, "security.csv", executor)
 		{
 			AddedRange += s => _added?.Invoke(s);
 			RemovedRange += s => _removed?.Invoke(s);
@@ -497,7 +497,7 @@ public class CsvEntityRegistry : IEntityRegistry
 		#endregion
 	}
 
-	private class PortfolioCsvList(CsvEntityRegistry registry) : CsvEntityList<string, Portfolio>(registry, "portfolio.csv")
+	private class PortfolioCsvList(CsvEntityRegistry registry, ChannelExecutor executor) : CsvEntityList<string, Portfolio>(registry, "portfolio.csv", executor)
 	{
 		protected override string GetKey(Portfolio item)
 		{
@@ -577,7 +577,7 @@ public class CsvEntityRegistry : IEntityRegistry
 		}
 	}
 
-	private class PositionCsvList(CsvEntityRegistry registry) : CsvEntityList<(Portfolio, Security, string, Sides?), Position>(registry, "position.csv"), IStoragePositionList
+	private class PositionCsvList(CsvEntityRegistry registry, ChannelExecutor executor) : CsvEntityList<(Portfolio, Security, string, Sides?), Position>(registry, "position.csv", executor), IStoragePositionList
 	{
 		protected override (Portfolio, Security, string, Sides?) GetKey(Position item)
 			=> CreateKey(item.Portfolio, item.Security, item.StrategyId, item.Side);
@@ -708,7 +708,7 @@ public class CsvEntityRegistry : IEntityRegistry
 			=> (portfolio, security, strategyId?.ToLowerInvariant() ?? string.Empty, side);
 	}
 
-	private class SubscriptionCsvList(CsvEntityRegistry registry) : CsvEntityList<(SecurityId, DataType), MarketDataMessage>(registry, "subscription.csv")
+	private class SubscriptionCsvList(CsvEntityRegistry registry, ChannelExecutor executor) : CsvEntityList<(SecurityId, DataType), MarketDataMessage>(registry, "subscription.csv", executor)
 	{
 		protected override (SecurityId, DataType) GetKey(MarketDataMessage item)
 			=> (item.SecurityId, item.DataType2);
@@ -839,27 +839,6 @@ public class CsvEntityRegistry : IEntityRegistry
 		set => _encoding = value ?? throw new ArgumentNullException(nameof(value));
 	}
 
-	private DelayAction _delayAction = new(ex => ex.LogError());
-
-	/// <inheritdoc />
-	public virtual DelayAction DelayAction
-	{
-		get => _delayAction;
-		set
-		{
-			_delayAction = value ?? throw new ArgumentNullException(nameof(value));
-			UpdateDelayAction();
-		}
-	}
-
-	private void UpdateDelayAction()
-	{
-		foreach (var csvList in _csvLists)
-		{
-			csvList.DelayAction = _delayAction;
-		}
-	}
-
 	private readonly ExchangeCsvList _exchanges;
 
 	/// <inheritdoc />
@@ -897,18 +876,18 @@ public class CsvEntityRegistry : IEntityRegistry
 	/// Initializes a new instance of the <see cref="CsvEntityRegistry"/>.
 	/// </summary>
 	/// <param name="path">The path to data directory.</param>
-	public CsvEntityRegistry(string path)
+	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
+	public CsvEntityRegistry(string path, ChannelExecutor executor)
 	{
 		Path = path ?? throw new ArgumentNullException(nameof(path));
+		var exec = executor ?? throw new ArgumentNullException(nameof(executor));
 
-		Add(_exchanges = new ExchangeCsvList(this));
-		Add(_exchangeBoards = new ExchangeBoardCsvList(this));
-		Add(_securities = new SecurityCsvList(this));
-		Add(_portfolios = new PortfolioCsvList(this));
-		Add(_positions = new PositionCsvList(this));
-		Add(_subscriptions = new SubscriptionCsvList(this));
-
-		UpdateDelayAction();
+		Add(_exchanges = new ExchangeCsvList(this, exec));
+		Add(_exchangeBoards = new ExchangeBoardCsvList(this, exec));
+		Add(_securities = new SecurityCsvList(this, exec));
+		Add(_portfolios = new PortfolioCsvList(this, exec));
+		Add(_positions = new PositionCsvList(this, exec));
+		Add(_subscriptions = new SubscriptionCsvList(this, exec));
 
 		PositionStorage = new PositionStorage(this);
 	}

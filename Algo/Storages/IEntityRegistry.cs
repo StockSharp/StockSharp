@@ -5,10 +5,6 @@ namespace StockSharp.Algo.Storages;
 /// </summary>
 public interface IEntityRegistry
 {
-	/// <summary>
-	/// The time delayed action.
-	/// </summary>
-	DelayAction DelayAction { get; set; }
 
 	/// <summary>
 	/// List of exchanges.

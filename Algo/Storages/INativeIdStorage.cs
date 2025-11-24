@@ -83,29 +83,20 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 	private readonly SynchronizedDictionary<SecurityId, object> _buffer = [];
 
 	private readonly string _path;
+	private readonly ChannelExecutor _executor;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CsvNativeIdStorage"/>.
 	/// </summary>
 	/// <param name="path">Path to storage.</param>
-	public CsvNativeIdStorage(string path)
+	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
+	public CsvNativeIdStorage(string path, ChannelExecutor executor)
 	{
 		if (path == null)
 			throw new ArgumentNullException(nameof(path));
 
 		_path = path.ToFullPath();
-		_delayAction = new DelayAction(ex => ex.LogError());
-	}
-
-	private DelayAction _delayAction;
-
-	/// <summary>
-	/// The time delayed action.
-	/// </summary>
-	public DelayAction DelayAction
-	{
-		get => _delayAction;
-		set => _delayAction = value ?? throw new ArgumentNullException(nameof(value));
+		_executor = executor ?? throw new ArgumentNullException(nameof(executor));
 	}
 
 	/// <inheritdoc />
@@ -159,7 +150,7 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 	{
 		_inMemory.Clear(storageName);
 		_buffer.Clear();
-		DelayAction.DefaultGroup.Add(() => File.Delete(GetFileName(storageName)));
+		_executor.Add(() => File.Delete(GetFileName(storageName)));
 	}
 
 	/// <inheritdoc />
@@ -194,7 +185,7 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 	{
 		_buffer.Clear();
 
-		DelayAction.DefaultGroup.Add(() =>
+		_executor.Add(() =>
 		{
 			var fileName = GetFileName(storageName);
 
@@ -291,7 +282,7 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 	{
 		_buffer[securityId] = nativeId;
 
-		DelayAction.DefaultGroup.Add(() =>
+		_executor.Add(() =>
 		{
 			var items = _buffer.SyncGet(c => c.CopyAndClear());
 

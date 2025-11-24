@@ -110,18 +110,20 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 	private readonly InMemorySecurityMessageAdapterProvider _inMemory = new();
 
 	private readonly string _fileName;
+	private readonly ChannelExecutor _executor;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CsvSecurityMessageAdapterProvider"/>.
 	/// </summary>
 	/// <param name="fileName">File name.</param>
-	public CsvSecurityMessageAdapterProvider(string fileName)
+	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
+	public CsvSecurityMessageAdapterProvider(string fileName, ChannelExecutor executor)
 	{
 		if (fileName.IsEmpty())
 			throw new ArgumentNullException(nameof(fileName));
 
 		_fileName = fileName;
-		_delayAction = new DelayAction(ex => ex.LogError());
+		_executor = executor ?? throw new ArgumentNullException(nameof(executor));
 
 		_inMemory.Changed += InMemoryOnChanged;
 	}
@@ -129,17 +131,6 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 	private void InMemoryOnChanged(Key key, Guid adapterId, bool changeType)
 	{
 		Changed?.Invoke(key, adapterId, changeType);
-	}
-
-	private DelayAction _delayAction;
-
-	/// <summary>
-	/// The time delayed action.
-	/// </summary>
-	public DelayAction DelayAction
-	{
-		get => _delayAction;
-		set => _delayAction = value ?? throw new ArgumentNullException(nameof(value));
 	}
 
 	/// <inheritdoc />
@@ -220,7 +211,7 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 
 	private void Save(bool overwrite, IEnumerable<KeyValuePair<Key, Guid>> adapters)
 	{
-		DelayAction.DefaultGroup.Add(() =>
+		_executor.Add(() =>
 		{
 			var appendHeader = overwrite || !File.Exists(_fileName) || new FileInfo(_fileName).Length == 0;
 			var mode = overwrite ? FileMode.Create : FileMode.Append;

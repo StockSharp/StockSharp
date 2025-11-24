@@ -229,17 +229,7 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 	private readonly ISecurityMappingStorage _inMemory = new InMemorySecurityMappingStorage();
 
 	private readonly string _path;
-
-	private DelayAction _delayAction;
-
-	/// <summary>
-	/// The time delayed action.
-	/// </summary>
-	public DelayAction DelayAction
-	{
-		get => _delayAction;
-		set => _delayAction = value ?? throw new ArgumentNullException(nameof(value));
-	}
+	private readonly ChannelExecutor _executor;
 
 	/// <inheritdoc />
 	public event Action<string, SecurityIdMapping> Changed;
@@ -248,13 +238,14 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 	/// Initializes a new instance of the <see cref="CsvSecurityMappingStorage"/>.
 	/// </summary>
 	/// <param name="path">Path to storage.</param>
-	public CsvSecurityMappingStorage(string path)
+	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
+	public CsvSecurityMappingStorage(string path, ChannelExecutor executor)
 	{
 		if (path == null)
 			throw new ArgumentNullException(nameof(path));
 
 		_path = path.ToFullPath();
-		_delayAction = new DelayAction(ex => ex.LogError());
+		_executor = executor ?? throw new ArgumentNullException(nameof(executor));
 	}
 
 	/// <inheritdoc />
@@ -371,7 +362,7 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 
 	private void Save(string name, bool overwrite, IEnumerable<SecurityIdMapping> mappings)
 	{
-		DelayAction.DefaultGroup.Add(() =>
+		_executor.Add(() =>
 		{
 			var fileName = Path.Combine(_path, name + ".csv");
 

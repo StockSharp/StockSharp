@@ -7,11 +7,15 @@ using StockSharp.Algo.Storages.Csv;
 [TestClass]
 public class StorageCsvRegistryTests : BaseTestClass
 {
+	private static ChannelExecutor CreateExecutor()
+		=> new(ex => { });
+
 	[TestMethod]
-	public void ExchangeList_AddAndRead()
+	public async Task ExchangeList_AddAndRead()
 	{
-		var registry = Helper.GetEntityRegistry();
-		var exchanges = (ICsvEntityList)registry.Exchanges;
+		var token = CancellationToken;
+		var executor = CreateExecutor();
+		var registry = Helper.GetEntityRegistry(executor);
 
 		var exchange = new Exchange
 		{
@@ -21,7 +25,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 		};
 
 		registry.Exchanges.Add(exchange);
-		exchanges.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		var loaded = registry.Exchanges.ReadById("TEST");
 		Assert.IsNotNull(loaded);
@@ -31,10 +35,11 @@ public class StorageCsvRegistryTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ExchangeList_Update()
+	public async Task ExchangeList_Update()
 	{
-		var registry = Helper.GetEntityRegistry();
-		var exchanges = (ICsvEntityList)registry.Exchanges;
+		var token = CancellationToken;
+		var executor = CreateExecutor();
+		var registry = Helper.GetEntityRegistry(executor);
 
 		var exchange = new Exchange
 		{
@@ -44,13 +49,13 @@ public class StorageCsvRegistryTests : BaseTestClass
 		};
 
 		registry.Exchanges.Add(exchange);
-		exchanges.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		// Update
 		exchange.CountryCode = CountryCodes.RU;
 		exchange.FullNameLoc = "Updated Exchange";
 		registry.Exchanges.Save(exchange);
-		exchanges.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		var loaded = registry.Exchanges.ReadById("TEST");
 		Assert.IsNotNull(loaded);
@@ -59,10 +64,11 @@ public class StorageCsvRegistryTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ExchangeList_Remove()
+	public async Task ExchangeList_Remove()
 	{
-		var registry = Helper.GetEntityRegistry();
-		var exchanges = (ICsvEntityList)registry.Exchanges;
+		var token = CancellationToken;
+		var executor = CreateExecutor();
+		var registry = Helper.GetEntityRegistry(executor);
 
 		var exchange = new Exchange
 		{
@@ -72,37 +78,40 @@ public class StorageCsvRegistryTests : BaseTestClass
 		};
 
 		registry.Exchanges.Add(exchange);
-		exchanges.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		registry.Exchanges.Remove(exchange);
-		exchanges.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		var loaded = registry.Exchanges.ReadById("TEST");
 		Assert.IsNull(loaded);
 	}
 
 	[TestMethod]
-	public void ExchangeList_Clear()
+	public async Task ExchangeList_Clear()
 	{
-		var registry = Helper.GetEntityRegistry();
-		var exchanges = (ICsvEntityList)registry.Exchanges;
+		var token = CancellationToken;
+		var executor = CreateExecutor();
+		var registry = Helper.GetEntityRegistry(executor);
 
 		registry.Exchanges.Add(new Exchange { Name = "TEST1", CountryCode = CountryCodes.US });
 		registry.Exchanges.Add(new Exchange { Name = "TEST2", CountryCode = CountryCodes.RU });
-		exchanges.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
-		Assert.AreEqual(2, registry.Exchanges.Count);
+		registry.Exchanges.Count.AreEqual(2);
 
 		registry.Exchanges.Clear();
-		exchanges.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
-		Assert.AreEqual(0, registry.Exchanges.Count);
+		registry.Exchanges.Count.AreEqual(0);
 	}
 
 	[TestMethod]
-	public void ExchangeBoardList_AddAndRead()
+	public async Task ExchangeBoardList_AddAndRead()
 	{
-		var registry = Helper.GetEntityRegistry();
+		var token = CancellationToken;
+		var executor = CreateExecutor();
+		var registry = Helper.GetEntityRegistry(executor);
 
 		// First add exchange
 		var exchange = new Exchange
@@ -112,7 +121,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 			FullNameLoc = "Test Exchange"
 		};
 		registry.Exchanges.Add(exchange);
-		((ICsvEntityList)registry.Exchanges).DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		// Then add board
 		var board = new ExchangeBoard
@@ -123,7 +132,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 		};
 
 		registry.ExchangeBoards.Add(board);
-		((ICsvEntityList)registry.ExchangeBoards).DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		var loaded = registry.ExchangeBoards.ReadById("TEST_BOARD");
 		Assert.IsNotNull(loaded);
@@ -132,18 +141,20 @@ public class StorageCsvRegistryTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void SecurityList_AddAndRead()
+	public async Task SecurityList_AddAndRead()
 	{
-		var registry = Helper.GetEntityRegistry();
+		var token = CancellationToken;
+		var executor = CreateExecutor();
+		var registry = Helper.GetEntityRegistry(executor);
 
 		// Add exchange and board first
 		var exchange = new Exchange { Name = "TEST_EX", CountryCode = CountryCodes.US };
 		registry.Exchanges.Add(exchange);
-		((ICsvEntityList)registry.Exchanges).DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		var board = new ExchangeBoard { Code = "TBOARD", Exchange = exchange, TimeZone = TimeZoneInfo.Utc };
 		registry.ExchangeBoards.Add(board);
-		((ICsvEntityList)registry.ExchangeBoards).DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		// Add security
 		var security = new Security
@@ -156,7 +167,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 		};
 
 		registry.Securities.Save(security);
-		((ICsvEntityList)registry.Securities).DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		var loaded = registry.Securities.ReadById(security.ToSecurityId());
 		Assert.IsNotNull(loaded);
@@ -166,9 +177,11 @@ public class StorageCsvRegistryTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void PortfolioList_AddAndRead()
+	public async Task PortfolioList_AddAndRead()
 	{
-		var registry = Helper.GetEntityRegistry();
+		var token = CancellationToken;
+		var executor = CreateExecutor();
+		var registry = Helper.GetEntityRegistry(executor);
 
 		var portfolio = new Portfolio
 		{
@@ -177,7 +190,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 		};
 
 		registry.Portfolios.Add(portfolio);
-		((ICsvEntityList)registry.Portfolios).DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		var loaded = registry.Portfolios.ReadById("TEST_PORTFOLIO");
 		Assert.IsNotNull(loaded);
@@ -186,10 +199,12 @@ public class StorageCsvRegistryTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void CsvEntityList_LoadExisting()
+	public async Task CsvEntityList_LoadExisting()
 	{
+		var token = CancellationToken;
 		var path = Helper.GetSubTemp();
-		var registry1 = new CsvEntityRegistry(path);
+		var executor = new ChannelExecutor(ex => Helper.LogManager.Application.AddErrorLog(ex));
+		var registry1 = new CsvEntityRegistry(path, executor);
 
 		var exchange = new Exchange
 		{
@@ -199,10 +214,10 @@ public class StorageCsvRegistryTests : BaseTestClass
 		};
 
 		registry1.Exchanges.Add(exchange);
-		((ICsvEntityList)registry1.Exchanges).DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		// Create new registry instance to test loading
-		var registry2 = new CsvEntityRegistry(path);
+		var registry2 = new CsvEntityRegistry(path, executor);
 		registry2.Init();
 
 		var loaded = registry2.Exchanges.ReadById("TEST");
@@ -212,16 +227,18 @@ public class StorageCsvRegistryTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void CsvEntityList_DuplicateHandling()
+	public async Task CsvEntityList_DuplicateHandling()
 	{
+		var token = CancellationToken;
 		var path = Helper.GetSubTemp();
-		var registry = new CsvEntityRegistry(path);
+		var executor = new ChannelExecutor(ex => Helper.LogManager.Application.AddErrorLog(ex));
+		var registry = new CsvEntityRegistry(path, executor);
 
 		var exchange1 = new Exchange { Name = "TEST", CountryCode = CountryCodes.US };
 		var exchange2 = new Exchange { Name = "TEST", CountryCode = CountryCodes.RU };
 
 		registry.Exchanges.Add(exchange1);
-		((ICsvEntityList)registry.Exchanges).DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		// Try to add duplicate - should fail
 		var added = registry.Exchanges.Contains(exchange2);
@@ -229,9 +246,10 @@ public class StorageCsvRegistryTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ArchivedCopy_NotEnabled_ThrowsException()
+	public async Task ArchivedCopy_NotEnabled_ThrowsException()
 	{
-		var registry = Helper.GetEntityRegistry();
+		var executor = CreateExecutor();
+		var registry = Helper.GetEntityRegistry(executor);
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
 		// CreateArchivedCopy is false by default
@@ -244,13 +262,15 @@ public class StorageCsvRegistryTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ArchivedCopy_EmptyList()
+	public async Task ArchivedCopy_EmptyList()
 	{
-		var registry = Helper.GetEntityRegistry();
+		var token = CancellationToken;
+		var executor = CreateExecutor();
+		var registry = Helper.GetEntityRegistry(executor);
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
 		exchanges.CreateArchivedCopy = true;
-		exchanges.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		var copy = exchanges.GetCopy();
 		Assert.IsNotNull(copy);
@@ -267,9 +287,11 @@ public class StorageCsvRegistryTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ArchivedCopy_WithData()
+	public async Task ArchivedCopy_WithData()
 	{
-		var registry = Helper.GetEntityRegistry();
+		var token = CancellationToken;
+		var executor = CreateExecutor();
+		var registry = Helper.GetEntityRegistry(executor);
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
 		exchanges.CreateArchivedCopy = true;
@@ -282,7 +304,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 		registry.Exchanges.Add(exchange1);
 		registry.Exchanges.Add(exchange2);
 		registry.Exchanges.Add(exchange3);
-		exchanges.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		// Get archived copy
 		var copy = exchanges.GetCopy();
@@ -305,16 +327,18 @@ public class StorageCsvRegistryTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ArchivedCopy_CacheTest()
+	public async Task ArchivedCopy_CacheTest()
 	{
-		var registry = Helper.GetEntityRegistry();
+		var token = CancellationToken;
+		var executor = CreateExecutor();
+		var registry = Helper.GetEntityRegistry(executor);
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
 		exchanges.CreateArchivedCopy = true;
 
 		// Add data
 		registry.Exchanges.Add(new Exchange { Name = "TEST1", CountryCode = CountryCodes.US });
-		exchanges.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		// Get first copy
 		var copy1 = exchanges.GetCopy();
@@ -327,16 +351,18 @@ public class StorageCsvRegistryTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ArchivedCopy_ResetOnAdd()
+	public async Task ArchivedCopy_ResetOnAdd()
 	{
-		var registry = Helper.GetEntityRegistry();
+		var token = CancellationToken;
+		var executor = CreateExecutor();
+		var registry = Helper.GetEntityRegistry(executor);
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
 		exchanges.CreateArchivedCopy = true;
 
 		// Add initial data
 		registry.Exchanges.Add(new Exchange { Name = "TEST1", CountryCode = CountryCodes.US });
-		exchanges.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		// Get first copy
 		var copy1 = exchanges.GetCopy();
@@ -351,7 +377,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 
 		// Add more data
 		registry.Exchanges.Add(new Exchange { Name = "TEST2", CountryCode = CountryCodes.RU });
-		exchanges.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		// Get second copy - should be regenerated
 		var copy2 = exchanges.GetCopy();
@@ -373,9 +399,11 @@ public class StorageCsvRegistryTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ArchivedCopy_ResetOnClear()
+	public async Task ArchivedCopy_ResetOnClear()
 	{
-		var registry = Helper.GetEntityRegistry();
+		var token = CancellationToken;
+		var executor = CreateExecutor();
+		var registry = Helper.GetEntityRegistry(executor);
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
 		exchanges.CreateArchivedCopy = true;
@@ -383,7 +411,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 		// Add data
 		registry.Exchanges.Add(new Exchange { Name = "TEST1", CountryCode = CountryCodes.US });
 		registry.Exchanges.Add(new Exchange { Name = "TEST2", CountryCode = CountryCodes.RU });
-		exchanges.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		// Get first copy
 		var copy1 = exchanges.GetCopy();
@@ -399,7 +427,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 
 		// Clear list
 		registry.Exchanges.Clear();
-		exchanges.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		// Get second copy - should be regenerated
 		var copy2 = exchanges.GetCopy();
@@ -420,9 +448,11 @@ public class StorageCsvRegistryTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ArchivedCopy_ResetOnUpdate()
+	public async Task ArchivedCopy_ResetOnUpdate()
 	{
-		var registry = Helper.GetEntityRegistry();
+		var token = CancellationToken;
+		var executor = CreateExecutor();
+		var registry = Helper.GetEntityRegistry(executor);
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
 		exchanges.CreateArchivedCopy = true;
@@ -430,7 +460,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 		// Add data
 		var exchange = new Exchange { Name = "TEST", CountryCode = CountryCodes.US, FullNameLoc = "Original Name" };
 		registry.Exchanges.Add(exchange);
-		exchanges.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		// Get first copy
 		var copy1 = exchanges.GetCopy();
@@ -447,7 +477,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 		// Update data
 		exchange.FullNameLoc = "Updated Name";
 		registry.Exchanges.Save(exchange);
-		exchanges.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		// Get second copy - should be regenerated
 		var copy2 = exchanges.GetCopy();
@@ -468,15 +498,17 @@ public class StorageCsvRegistryTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ArchivedCopy_MultipleEntityTypes()
+	public async Task ArchivedCopy_MultipleEntityTypes()
 	{
-		var registry = Helper.GetEntityRegistry();
+		var token = CancellationToken;
+		var executor = CreateExecutor();
+		var registry = Helper.GetEntityRegistry(executor);
 
 		// Test with Exchanges
 		var exchangesList = (ICsvEntityList)registry.Exchanges;
 		exchangesList.CreateArchivedCopy = true;
 		registry.Exchanges.Add(new Exchange { Name = "NYSE", CountryCode = CountryCodes.US });
-		exchangesList.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		var exchangeCopy = exchangesList.GetCopy();
 		Assert.IsNotNull(exchangeCopy);
@@ -486,7 +518,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 		var portfoliosList = (ICsvEntityList)registry.Portfolios;
 		portfoliosList.CreateArchivedCopy = true;
 		registry.Portfolios.Add(new Portfolio { Name = "PORT1", Currency = CurrencyTypes.USD });
-		portfoliosList.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		var portfolioCopy = portfoliosList.GetCopy();
 		Assert.IsNotNull(portfolioCopy);
@@ -516,9 +548,11 @@ public class StorageCsvRegistryTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ArchivedCopy_CompressionRatio()
+	public async Task ArchivedCopy_CompressionRatio()
 	{
-		var registry = Helper.GetEntityRegistry();
+		var token = CancellationToken;
+		var executor = CreateExecutor();
+		var registry = Helper.GetEntityRegistry(executor);
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
 		exchanges.CreateArchivedCopy = true;
@@ -533,7 +567,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 				FullNameLoc = $"Test Exchange Number {i} with some additional text for better compression testing"
 			});
 		}
-		exchanges.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		// Get compressed copy
 		var compressed = exchanges.GetCopy();
@@ -547,8 +581,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 		}
 
 		// Verify compression is working (compressed should be smaller)
-		Assert.IsLessThan(decompressed.Length,
-compressed.Length, $"Compressed ({compressed.Length} bytes) should be smaller than decompressed ({decompressed.Length} bytes)");
+		Assert.IsLessThan(decompressed.Length, compressed.Length, $"Compressed ({compressed.Length} bytes) should be smaller than decompressed ({decompressed.Length} bytes)");
 
 		// Verify all data is present
 		var content = decompressed.UTF8();
@@ -558,9 +591,11 @@ compressed.Length, $"Compressed ({compressed.Length} bytes) should be smaller th
 	}
 
 	[TestMethod]
-	public void ArchivedCopy_EnableDisable()
+	public async Task ArchivedCopy_EnableDisable()
 	{
-		var registry = Helper.GetEntityRegistry();
+		var token = CancellationToken;
+		var executor = CreateExecutor();
+		var registry = Helper.GetEntityRegistry(executor);
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
 		// Initially disabled
@@ -569,7 +604,7 @@ compressed.Length, $"Compressed ({compressed.Length} bytes) should be smaller th
 		// Enable
 		exchanges.CreateArchivedCopy = true;
 		registry.Exchanges.Add(new Exchange { Name = "TEST", CountryCode = CountryCodes.US });
-		exchanges.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		var copy = exchanges.GetCopy();
 		Assert.IsNotNull(copy);
@@ -585,9 +620,11 @@ compressed.Length, $"Compressed ({compressed.Length} bytes) should be smaller th
 	}
 
 	[TestMethod]
-	public void ArchivedCopy_LargeData()
+	public async Task ArchivedCopy_LargeData()
 	{
-		var registry = Helper.GetEntityRegistry();
+		var token = CancellationToken;
+		var executor = CreateExecutor();
+		var registry = Helper.GetEntityRegistry(executor);
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
 		exchanges.CreateArchivedCopy = true;
@@ -602,7 +639,7 @@ compressed.Length, $"Compressed ({compressed.Length} bytes) should be smaller th
 				FullNameLoc = $"Large Test Exchange Number {i} with lots of additional text to make the data larger and test performance of compression and caching mechanisms"
 			});
 		}
-		exchanges.DelayAction.WaitFlush(true);
+		await executor.WaitFlushAsync(token);
 
 		byte[] copy1 = null;
 		// Measure time for first call (creates and caches)

@@ -44,8 +44,8 @@ static class Helper
 			Directory.CreateDirectory(TempFolder);
 	}
 
-	public static IEntityRegistry GetEntityRegistry()
-		=> new CsvEntityRegistry(GetSubTemp());
+	public static IEntityRegistry GetEntityRegistry(ChannelExecutor executor)
+		=> new CsvEntityRegistry(GetSubTemp(), executor);
 
 	public static ExecutionMessage[] RandomTicks(this Security security, int count, bool generateOriginSide, TimeSpan? interval = null, DateTime? start = null)
 	{

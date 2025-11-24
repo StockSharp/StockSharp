@@ -5,6 +5,8 @@ using System.IO;
 
 using Ecng.Common;
 using Ecng.Configuration;
+using Ecng.ComponentModel;
+using Ecng.Logging;
 
 using StockSharp.Messages;
 using StockSharp.Algo;
@@ -14,19 +16,23 @@ using StockSharp.BusinessEntities;
 
 public partial class MainWindow
 {
+	private readonly ChannelExecutor _executor;
+
 	public MainWindow()
 	{
 		InitializeComponent();
 		Instance = this;
 
 		Title = Title.Put("Connections with storage");
+
+		_executor = new(ex => ex.LogError());
 	}
 
 	private Connector MainPanel_OnCreateConnector(string path)
 	{
 		//HistoryPath.Folder = path;
 
-		var entityRegistry = new CsvEntityRegistry(path);
+		var entityRegistry = new CsvEntityRegistry(path, _executor);
 
 		var exchangeInfoProvider = new StorageExchangeInfoProvider(entityRegistry, false);
 		ConfigManager.RegisterService<IExchangeInfoProvider>(exchangeInfoProvider);
@@ -40,10 +46,7 @@ public partial class MainWindow
 		ConfigManager.RegisterService<IEntityRegistry>(entityRegistry);
 		ConfigManager.RegisterService<IStorageRegistry>(storageRegistry);
 
-		INativeIdStorage nativeIdStorage = new CsvNativeIdStorage(Path.Combine(path, "NativeId"))
-		{
-			DelayAction = entityRegistry.DelayAction
-		};
+		INativeIdStorage nativeIdStorage = new CsvNativeIdStorage(Path.Combine(path, "NativeId"), _executor);
 		ConfigManager.RegisterService(nativeIdStorage);
 
 		var snapshotRegistry = new SnapshotRegistry(Path.Combine(path, "Snapshots"));
@@ -55,7 +58,7 @@ public partial class MainWindow
 	{
 		MainPanel.Close();
 
-		ServicesRegistry.EntityRegistry.DelayAction.DefaultGroup.WaitFlush(true);
+		AsyncHelper.Run(_executor.DisposeAsync);
 
 		base.OnClosing(e);
 	}

@@ -11,6 +11,7 @@ using Ecng.Serialization;
 using Ecng.Xaml;
 using Ecng.Collections;
 using Ecng.Logging;
+using Ecng.ComponentModel;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Storages;
@@ -38,6 +39,8 @@ public partial class MainWindow
 
 	private readonly string _settingsFile;
 
+	private readonly ChannelExecutor _executor;
+
 	public MainWindow()
 	{
 		InitializeComponent();
@@ -53,7 +56,9 @@ public partial class MainWindow
 		LogManager.Listeners.Add(new FileLogListener { LogDirectory = Path.Combine(path, "Logs") });
 		LogManager.Listeners.Add(new GuiLogListener(Monitor));
 
-		var entityRegistry = new CsvEntityRegistry(path);
+		_executor = new(LogManager.Application.AddErrorLog);
+
+		var entityRegistry = new CsvEntityRegistry(path, _executor);
 
 		ConfigManager.RegisterService<IEntityRegistry>(entityRegistry);
 
@@ -187,7 +192,7 @@ public partial class MainWindow
 
 		Connector.Dispose();
 
-		ServicesRegistry.EntityRegistry.DelayAction.DefaultGroup.WaitFlush(true);
+		AsyncHelper.Run(_executor.DisposeAsync);
 
 		base.OnClosing(e);
 	}

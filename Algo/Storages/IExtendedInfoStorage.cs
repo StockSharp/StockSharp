@@ -113,18 +113,20 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 		private readonly SyncObject _lock = new();
 		//private readonly Dictionary<string, Type> _fieldTypes = new Dictionary<string, Type>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly Dictionary<SecurityId, Dictionary<string, object>> _cache = [];
+		private ChannelExecutor _executor;
 
-		public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName)
+		public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName, ChannelExecutor executor)
 		{
 			if (fileName.IsEmpty())
 				throw new ArgumentNullException(nameof(fileName));
 
 			_storage = storage ?? throw new ArgumentNullException(nameof(storage));
 			_fileName = fileName;
+			_executor = executor ?? throw new ArgumentNullException(nameof(executor));
 		}
 
-		public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName, IEnumerable<Tuple<string, Type>> fields)
-			: this(storage, fileName)
+		public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName, IEnumerable<Tuple<string, Type>> fields, ChannelExecutor executor)
+			: this(storage, fileName, executor)
 		{
 			if (fields == null)
 				throw new ArgumentNullException(nameof(fields));
@@ -200,7 +202,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 
 		private void Flush()
 		{
-			_storage.DelayAction.DefaultGroup.Add(() => Write(((IExtendedInfoStorageItem)this).Load()));
+			_executor.Add(() => Write(((IExtendedInfoStorageItem)this).Load()));
 		}
 
 		private void Write(IEnumerable<Tuple<SecurityId, IDictionary<string, object>>> values)
@@ -221,7 +223,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 
 		public void Delete()
 		{
-			_storage.DelayAction.DefaultGroup.Add(() =>
+			_executor.Add(() =>
 			{
 				File.Delete(_fileName);
 			});
@@ -296,31 +298,21 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 
 	private readonly CachedSynchronizedDictionary<string, CsvExtendedInfoStorageItem> _items = new(StringComparer.InvariantCultureIgnoreCase);
 	private readonly string _path;
+	private ChannelExecutor _executor;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CsvExtendedInfoStorage"/>.
 	/// </summary>
 	/// <param name="path">Path to storage.</param>
-	public CsvExtendedInfoStorage(string path)
+	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
+	public CsvExtendedInfoStorage(string path, ChannelExecutor executor)
 	{
 		if (path == null)
 			throw new ArgumentNullException(nameof(path));
 
+		_executor = executor ?? throw new ArgumentNullException(nameof(executor));
 		_path = path.ToFullPath();
 		Directory.CreateDirectory(path);
-
-		_delayAction = new DelayAction(ex => ex.LogError());
-	}
-
-	private DelayAction _delayAction;
-
-	/// <summary>
-	/// The time delayed action.
-	/// </summary>
-	public DelayAction DelayAction
-	{
-		get => _delayAction;
-		set => _delayAction = value ?? throw new ArgumentNullException(nameof(value));
 	}
 
 	IExtendedInfoStorageItem IExtendedInfoStorage.Create(string storageName, IEnumerable<Tuple<string, Type>> fields)
@@ -330,7 +322,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 
 		var retVal = _items.SafeAdd(storageName, key =>
 		{
-			var item = new CsvExtendedInfoStorageItem(this, Path.Combine(_path, key + ".csv"), fields);
+			var item = new CsvExtendedInfoStorageItem(this, Path.Combine(_path, key + ".csv"), fields, _executor);
 			item.Init();
 			return item;
 		}, out var isNew);
@@ -385,7 +377,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 
 		foreach (var fileName in Directory.GetFiles(_path, "*.csv"))
 		{
-			var item = new CsvExtendedInfoStorageItem(this, fileName);
+			var item = new CsvExtendedInfoStorageItem(this, fileName, _executor);
 
 			_items.Add(Path.GetFileNameWithoutExtension(fileName), item);
 
