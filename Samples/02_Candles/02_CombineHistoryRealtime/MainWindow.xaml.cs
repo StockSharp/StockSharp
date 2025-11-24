@@ -7,6 +7,8 @@ using System.IO;
 using Ecng.Common;
 using Ecng.Serialization;
 using Ecng.Configuration;
+using Ecng.ComponentModel;
+using Ecng.Logging;
 
 using StockSharp.Configuration;
 using StockSharp.Algo;
@@ -30,10 +32,16 @@ public partial class MainWindow
 
 	private Subscription _subscription;
 	private ChartCandleElement _candleElement;
+
+	private readonly ChannelExecutor _executor;
+
 	public MainWindow()
 	{
 		InitializeComponent();
-		var entityRegistry = new CsvEntityRegistry(_pathHistory);
+
+		_executor = new(ex => ex.LogError());
+
+		var entityRegistry = new CsvEntityRegistry(_pathHistory, _executor);
 		var storageRegistry = new StorageRegistry
 		{
 			DefaultDrive = new LocalMarketDataDrive(_pathHistory)
@@ -51,7 +59,14 @@ public partial class MainWindow
 		CandleDataTypeEdit.DataType = TimeSpan.FromMinutes(5).TimeFrame();
 	}
 
-	private void Setting_Click(object sender, RoutedEventArgs e)
+    protected override void OnClosed(EventArgs e)
+    {
+		AsyncHelper.Run(_executor.DisposeAsync);
+
+		base.OnClosed(e);
+    }
+
+    private void Setting_Click(object sender, RoutedEventArgs e)
 	{
 		if (_connector.Configure(this))
 		{
