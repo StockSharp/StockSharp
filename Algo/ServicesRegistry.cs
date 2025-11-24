@@ -282,4 +282,14 @@ public static class ServicesRegistry
 	/// <see cref="ICustomTypeDescriptorProvider"/>
 	/// </summary>
 	public static ICustomTypeDescriptorProvider CustomTypeDescriptorProvider => ConfigManager.GetService<ICustomTypeDescriptorProvider>();
+
+	/// <summary>
+	/// <see cref="ChannelExecutor"/>
+	/// </summary>
+	public static ChannelExecutor TryChannelExecutor => ConfigManager.TryGetService<ChannelExecutor>();
+
+	/// <summary>
+	/// <see cref="ICustomTypeDescriptorProvider"/>
+	/// </summary>
+	public static ChannelExecutor ChannelExecutor => ConfigManager.GetService<ChannelExecutor>();
 }
