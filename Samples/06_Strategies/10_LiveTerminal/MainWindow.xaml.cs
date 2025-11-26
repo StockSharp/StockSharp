@@ -57,6 +57,7 @@ public partial class MainWindow
 		LogManager.Listeners.Add(new GuiLogListener(Monitor));
 
 		_executor = new(LogManager.Application.AddErrorLog);
+		_ = _executor.RunAsync(default);
 
 		var entityRegistry = new CsvEntityRegistry(path, _executor);
 

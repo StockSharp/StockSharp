@@ -26,6 +26,7 @@ public partial class MainWindow
 		Title = Title.Put("Connections with storage");
 
 		_executor = new(ex => ex.LogError());
+		_ = _executor.RunAsync(default);
 	}
 
 	private Connector MainPanel_OnCreateConnector(string path)
