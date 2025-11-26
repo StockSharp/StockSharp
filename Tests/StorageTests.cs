@@ -3431,10 +3431,8 @@ public class StorageTests : BaseTestClass
 		var token = cts.Token;
 		cts.Cancel();
 
-		await Assert.ThrowsExactlyAsync<OperationCanceledException>(async () =>
-		{
-			await drive.GetAvailableSecuritiesAsync(token).ToArrayAsync(token);
-		});
+		await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+			await drive.GetAvailableSecuritiesAsync(token).ToArrayAsync(token));
 	}
 
 	[TestMethod]
