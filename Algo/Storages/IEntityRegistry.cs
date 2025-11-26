@@ -5,7 +5,6 @@ namespace StockSharp.Algo.Storages;
 /// </summary>
 public interface IEntityRegistry
 {
-
 	/// <summary>
 	/// List of exchanges.
 	/// </summary>
