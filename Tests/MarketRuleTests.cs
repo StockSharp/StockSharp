@@ -1,0 +1,1396 @@
+namespace StockSharp.Tests;
+
+[TestClass]
+public class MarketRuleTests
+{
+	private static void ClearRules()
+	{
+		var rules = MarketRuleHelper.DefaultRuleContainer.Rules;
+		rules.Clear();
+		rules.Count.AssertEqual(0);
+	}
+
+	[TestInitialize]
+	public void Setup()
+	{
+		ClearRules();
+	}
+
+	[TestCleanup]
+	public void Teardown()
+	{
+		ClearRules();
+	}
+
+	private sealed class TestRule : MarketRule<object, object>
+	{
+		public TestRule() : base(new object())
+		{
+			Name = "TestRule";
+		}
+
+		public void Trigger(object arg = null)
+		{
+			Activate(arg);
+		}
+	}
+
+	[TestMethod]
+	public void ApplyAndBasics()
+	{
+		var rule = new TestRule()
+		.UpdateName("X")
+		.UpdateLogLevel(LogLevels.Debug)
+		.Suspend(false)
+		.Apply();
+
+		rule.Name.AssertEqual("X");
+		rule.LogLevel.AssertEqual(LogLevels.Debug);
+		rule.IsSuspended.AssertFalse();
+		rule.IsReady.AssertTrue();
+
+		// Once should finish immediately on activation
+		bool fired = false;
+		var once = new TestRule().Once().Apply().Do(_ => fired = true);
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(once).AssertTrue();
+		((TestRule)once).Trigger();
+		fired.AssertTrue();
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(once).AssertFalse();
+	}
+
+	[TestMethod]
+	public void ExclusiveAndRemove()
+	{
+		var r1 = new TestRule().Apply();
+		var r2 = new TestRule().Apply();
+		r1.Exclusive(r2);
+
+		bool f1 = false;
+		bool f2 = false;
+		r1.Do(_ => f1 = true);
+		r2.Do(_ => f2 = true);
+
+		((TestRule)r1).Trigger();
+
+		f1.AssertTrue();
+
+		// r2 must be removed due to exclusivity after r1 fired
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(r2).AssertFalse();
+
+		// TryRemove API
+		MarketRuleHelper.DefaultRuleContainer.TryRemoveRule(r1).AssertTrue();
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(r1).AssertFalse();
+	}
+
+	[TestMethod]
+	public void RemoveWithExclusive()
+	{
+		var r1 = new TestRule().Apply();
+		var r2 = new TestRule().Apply();
+		r1.Exclusive(r2);
+
+		// Remove r1 and its exclusive r2
+		MarketRuleHelper.DefaultRuleContainer.TryRemoveWithExclusive(r1).AssertTrue();
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(r1).AssertFalse();
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(r2).AssertFalse();
+	}
+
+	[TestMethod]
+	public void OrAndAnd()
+	{
+		var a = new TestRule().Apply();
+		var b = new TestRule().Apply();
+
+		bool orFired = false;
+		a.Or(b).Apply().Do(_ => orFired = true);
+		((TestRule)b).Trigger();
+		orFired.AssertTrue();
+
+		a = new TestRule().Apply();
+		b = new TestRule().Apply();
+		bool andFired = false;
+		a.And(b).Apply().Do(_ => andFired = true);
+		andFired.AssertFalse();
+		((TestRule)a).Trigger();
+		andFired.AssertFalse();
+		((TestRule)b).Trigger();
+		andFired.AssertTrue();
+	}
+
+	[TestMethod]
+	public void ConnectorRules()
+	{
+		var mock = new Mock<IConnector>(MockBehavior.Loose);
+		var adapter = Mock.Of<IMessageAdapter>();
+
+		bool connected = false;
+		bool disconnected = false;
+		Tuple<IMessageAdapter, Exception> lost = null;
+
+		mock.Object.WhenConnected().Apply().Do(a => connected = a == adapter);
+		mock.Object.WhenDisconnected().Apply().Do(a => disconnected = a == adapter);
+		mock.Object.WhenConnectionLost().Apply().Do(t => lost = t);
+
+		mock.Raise(m => m.ConnectedEx += null, adapter);
+		connected.AssertTrue();
+
+		mock.Raise(m => m.DisconnectedEx += null, adapter);
+		disconnected.AssertTrue();
+
+		var ex = new Exception("x");
+		mock.Raise(m => m.ConnectionErrorEx += null, adapter, ex);
+		(lost.Item1 == adapter).AssertTrue();
+		(lost.Item2 == ex).AssertTrue();
+	}
+
+	[TestMethod]
+	public void OrAndMultipleAndOnce()
+	{
+		// Or with3 rules, fire middle one
+		var r1 = new TestRule().Apply();
+		var r2 = new TestRule().Apply();
+		var r3 = new TestRule().Apply();
+		int orCount = 0;
+		r1.Or(r2, r3).Apply().Do(_ => orCount++);
+		((TestRule)r2).Trigger();
+		orCount.AssertEqual(1);
+
+		// And with3 rules, ensure activates once after last trigger
+		r1 = new TestRule().Apply();
+		r2 = new TestRule().Apply();
+		r3 = new TestRule().Apply();
+		int andCount = 0;
+		r1.And(r2, r3).Apply().Do(_ => andCount++);
+		((TestRule)r1).Trigger();
+		andCount.AssertEqual(0);
+		((TestRule)r3).Trigger();
+		andCount.AssertEqual(0);
+		((TestRule)r2).Trigger();
+		andCount.AssertEqual(1);
+
+		// Once – second activation does not repeat the handler
+		int onceCount = 0;
+		var once = new TestRule().Once().Apply().Do(_ => onceCount++);
+		((TestRule)once).Trigger();
+		((TestRule)once).Trigger();
+		onceCount.AssertEqual(1);
+
+		// TryRemoveRule(checkCanFinish=false) removes even an endless rule
+		var inf = new TestRule().Apply();
+		inf.Until(() => false);
+		MarketRuleHelper.DefaultRuleContainer.TryRemoveRule(inf, false).AssertTrue();
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(inf).AssertFalse();
+	}
+
+	[TestMethod]
+	public void TimeRules()
+	{
+		var start = new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		var mock = new Mock<ITimeProvider>(MockBehavior.Loose);
+		mock.SetupGet(p => p.CurrentTimeUtc).Returns(start);
+
+		var intervalFired = 0;
+		mock.Object.WhenIntervalElapsed(TimeSpan.FromSeconds(5)).Apply().Do(_ => intervalFired++);
+
+		// advance5 seconds
+		mock.Raise(m => m.CurrentTimeChanged += null, TimeSpan.FromSeconds(5));
+		intervalFired.AssertEqual(1);
+
+		// WhenTimeCome – two activations
+		var times = new[] { start.AddSeconds(3), start.AddSeconds(6) };
+		var firedAt = new List<DateTime>();
+		mock.Object.WhenTimeCome(times).Apply().Do(firedAt.Add);
+
+		// move3 seconds to first time
+		mock.Raise(m => m.CurrentTimeChanged += null, TimeSpan.FromSeconds(3));
+		firedAt.Count.AssertEqual(1);
+		firedAt[0].AssertEqual(times[0]);
+
+		// then3 more seconds to second time
+		mock.Raise(m => m.CurrentTimeChanged += null, TimeSpan.FromSeconds(3));
+		firedAt.Count.AssertEqual(2);
+		firedAt[1].AssertEqual(times[1]);
+	}
+
+	[TestMethod]
+	public void OrderRules()
+	{
+		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
+		var order = new Order { Volume = 10m, Balance = 10m };
+		var sub = new Subscription(DataType.Ticks, Helper.CreateSecurity());
+
+		Order regRes = null;
+		order.WhenRegistered(provider.Object).Apply().Do(o => regRes = o);
+		order.State = OrderStates.Active;
+		provider.Raise(p => p.OrderReceived += null, sub, order);
+		(regRes == order).AssertTrue();
+
+		// Partial match
+		Order partialRes = null;
+		order.Balance = 10m; // initial
+		order.WhenPartiallyMatched(provider.Object).Apply().Do(o => partialRes = o);
+		provider.Raise(p => p.OrderReceived += null, sub, order); // baseline
+		order.Balance = 6m; // changed
+		provider.Raise(p => p.OrderReceived += null, sub, order);
+		(partialRes == order).AssertTrue();
+
+		// Register failed
+		OrderFail regFail = null;
+		order.WhenRegisterFailed(provider.Object).Apply().Do(f => regFail = f);
+		var of1 = new OrderFail { Order = order };
+		provider.Raise(p => p.OrderRegisterFailReceived += null, sub, of1);
+		(regFail == of1).AssertTrue();
+
+		// Cancel failed
+		OrderFail cancelFail = null;
+		order.WhenCancelFailed(provider.Object).Apply().Do(f => cancelFail = f);
+		var of2 = new OrderFail { Order = order };
+		provider.Raise(p => p.OrderCancelFailReceived += null, sub, of2);
+		(cancelFail == of2).AssertTrue();
+
+		// Canceled (simulate by Done + CancelledTime)
+		Order canceledRes = null;
+		order.WhenCanceled(provider.Object).Apply().Do(o => canceledRes = o);
+		order.State = OrderStates.Done;
+		order.CancelledTime = DateTime.UtcNow;
+		provider.Raise(p => p.OrderReceived += null, sub, order);
+		(canceledRes == order).AssertTrue();
+
+		// Matched
+		Order matchedRes = null;
+		order.WhenMatched(provider.Object).Apply().Do(o => matchedRes = o);
+		order.State = OrderStates.Done;
+		order.Balance = 0m;
+		provider.Raise(p => p.OrderReceived += null, sub, order);
+		(matchedRes == order).AssertTrue();
+
+		// Changed
+		Order changedRes = null;
+		order.WhenChanged(provider.Object).Apply().Do(o => changedRes = o);
+		provider.Raise(p => p.OrderReceived += null, sub, order);
+		(changedRes == order).AssertTrue();
+
+		// Edit failed
+		OrderFail editFail = null;
+		order.WhenEditFailed(provider.Object).Apply().Do(f => editFail = f);
+		var of3 = new OrderFail { Order = order };
+		provider.Raise(p => p.OrderEditFailReceived += null, sub, of3);
+		(editFail == of3).AssertTrue();
+
+#pragma warning disable CS0618
+		// Edited (obsolete API path)
+		var tx = new Mock<ITransactionProvider>(MockBehavior.Loose);
+		Order editedRes = null;
+		order.WhenEdited(tx.Object).Apply().Do(o => editedRes = o);
+		tx.Raise(t => t.OrderEdited += null, 1L, order);
+		(editedRes == order).AssertTrue();
+#pragma warning restore CS0618
+
+		// New trade
+		MyTrade tradeRes = null;
+		order.WhenNewTrade(provider.Object).Apply().Do(t => tradeRes = t);
+		var mt = new MyTrade { Order = order, Trade = new ExecutionMessage { DataTypeEx = DataType.Ticks, TradePrice = 1m, TradeVolume = 3m } };
+		provider.Raise(p => p.OwnTradeReceived += null, sub, mt);
+		(tradeRes == mt).AssertTrue();
+
+		// All trades
+		IEnumerable<MyTrade> allRes = null;
+		order.WhenAllTrades(provider.Object).Apply().Do(ts => allRes = ts);
+		provider.Raise(p => p.OwnTradeReceived += null, sub, new MyTrade { Order = order, Trade = new ExecutionMessage { DataTypeEx = DataType.Ticks, TradePrice = 1m, TradeVolume = 7m } });
+		provider.Raise(p => p.OrderReceived += null, sub, order);
+		order.State = OrderStates.Done;
+		provider.Raise(p => p.OwnTradeReceived += null, sub, new MyTrade { Order = order, Trade = new ExecutionMessage { DataTypeEx = DataType.Ticks, TradePrice = 1m, TradeVolume = 3m } });
+		(allRes?.Sum(t => t.Trade.Volume)).AssertEqual(10m);
+
+		// WhenRegistered – срабатывает один раз (правило .Once())
+		int regCount = 0;
+		var o2 = new Order();
+		o2.WhenRegistered(provider.Object).Apply().Do(_ => regCount++);
+		o2.State = OrderStates.Active;
+		provider.Raise(p => p.OrderReceived += null, sub, o2);
+		o2.State = OrderStates.Done;
+		provider.Raise(p => p.OrderReceived += null, sub, o2);
+		regCount.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void PortfolioAndPositionRules()
+	{
+		var pfProvider = new Mock<IPortfolioProvider>(MockBehavior.Loose);
+		var posProvider = new Mock<IPositionProvider>(MockBehavior.Loose);
+
+		var pf = new Portfolio { Name = "P", CurrentValue = 100m };
+		Portfolio pfChanged = null;
+		pf.WhenChanged(pfProvider.Object).Apply().Do(p => pfChanged = p);
+		pfProvider.Raise(p => p.PortfolioChanged += null, pf);
+		(pfChanged == pf).AssertTrue();
+
+		Portfolio pfLess = null;
+		pf.WhenMoneyLess(pfProvider.Object, 90m).Apply().Do(p => pfLess = p);
+		pf.CurrentValue = 80m;
+		pfProvider.Raise(p => p.PortfolioChanged += null, pf);
+		(pfLess == pf).AssertTrue();
+
+		Portfolio pfMore = null;
+		pf.CurrentValue = 100m;
+		pf.WhenMoneyMore(pfProvider.Object, 110m).Apply().Do(p => pfMore = p);
+		pf.CurrentValue = 120m;
+		pfProvider.Raise(p => p.PortfolioChanged += null, pf);
+		(pfMore == pf).AssertTrue();
+
+		var pos = new Position
+		{
+			Security = Helper.CreateSecurity(),
+			Portfolio = pf,
+			CurrentValue = 10m
+		};
+
+		Position posLess = null;
+		pos.WhenLess(posProvider.Object, 9m).Apply().Do(p => posLess = p);
+		pos.CurrentValue = 8m;
+		posProvider.Raise(p => p.PositionChanged += null, pos);
+		(posLess == pos).AssertTrue();
+
+		Position posMore = null;
+		pos.WhenMore(posProvider.Object, 7m).Apply().Do(p => posMore = p);
+		pos.CurrentValue = 12m;
+		posProvider.Raise(p => p.PositionChanged += null, pos);
+		(posMore == pos).AssertTrue();
+
+		Position posChanged = null;
+		pos.Changed(posProvider.Object).Apply().Do(p => posChanged = p);
+		posProvider.Raise(p => p.PositionChanged += null, pos);
+		(posChanged == pos).AssertTrue();
+	}
+
+	[TestMethod]
+	public void SubscriptionRules()
+	{
+		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
+		var sec = Helper.CreateSecurity();
+		var sub = new Subscription(DataType.Ticks, sec) { TransactionId = 123 };
+
+		Subscription started = null;
+		sub.WhenSubscriptionStarted(provider.Object).Apply().Do(s => started = s);
+		provider.Raise(p => p.SubscriptionStarted += null, sub);
+		(started == sub).AssertTrue();
+
+		Subscription online = null;
+		sub.WhenSubscriptionOnline(provider.Object).Apply().Do(s => online = s);
+		provider.Raise(p => p.SubscriptionOnline += null, sub);
+		(online == sub).AssertTrue();
+
+		Tuple<Subscription, Exception> stopped = null;
+		sub.WhenSubscriptionStopped(provider.Object).Apply().Do(t => stopped = t);
+		var ex = new Exception("stop");
+		provider.Raise(p => p.SubscriptionStopped += null, sub, ex);
+		(stopped.Item1 == sub).AssertTrue();
+		(stopped.Item2 == ex).AssertTrue();
+
+		Tuple<Subscription, Exception, bool> failed = null;
+		sub.WhenSubscriptionFailed(provider.Object).Apply().Do(t => failed = t);
+		provider.Raise(p => p.SubscriptionFailed += null, sub, ex, true);
+		(failed.Item1 == sub).AssertTrue();
+		(failed.Item2 == ex).AssertTrue();
+		failed.Item3.AssertTrue();
+
+		var l1 = new Level1ChangeMessage { SecurityId = sec.ToSecurityId() };
+		Level1ChangeMessage l1Res = null;
+		sub.WhenLevel1Received(provider.Object).Apply().Do(m => l1Res = m);
+		provider.Raise(p => p.Level1Received += null, sub, l1);
+		(l1Res == l1).AssertTrue();
+
+		var ob = new QuoteChangeMessage
+		{
+			SecurityId = sec.ToSecurityId(),
+			Bids = [new QuoteChange(101m, 1m, 1)],
+			Asks = [new QuoteChange(102m, 1m, 1)]
+		};
+
+		IOrderBookMessage obRes = null;
+		sub.WhenOrderBookReceived(provider.Object).Apply().Do(m => obRes = m);
+		provider.Raise(p => p.OrderBookReceived += null, sub, ob);
+		(obRes == ob).AssertTrue();
+
+		IOrderBookMessage bestBidMore = null;
+		sub.WhenBestBidPriceMore(provider.Object, 100m).Apply().Do(m => bestBidMore = m);
+		provider.Raise(p => p.OrderBookReceived += null, sub, ob);
+		(bestBidMore == ob).AssertTrue();
+
+		IOrderBookMessage bestAskLess = null;
+		sub.WhenBestAskPriceLess(provider.Object, 103m).Apply().Do(m => bestAskLess = m);
+		provider.Raise(p => p.OrderBookReceived += null, sub, ob);
+		(bestAskLess == ob).AssertTrue();
+
+		var tick = new ExecutionMessage { SecurityId = sec.ToSecurityId(), TradePrice = 50m, TradeVolume = 1m, DataTypeEx = DataType.Ticks };
+		ITickTradeMessage lastMore = null;
+		sub.WhenLastTradePriceMore(provider.Object, 40m).Apply().Do(t => lastMore = t);
+		provider.Raise(p => p.TickTradeReceived += null, sub, tick);
+		(lastMore == tick).AssertTrue();
+
+		var news = new News();
+		News newsRes = null;
+		sub.WhenNewsReceived(provider.Object).Apply().Do(n => newsRes = n);
+		provider.Raise(p => p.NewsReceived += null, sub, news);
+		(newsRes == news).AssertTrue();
+
+		var order = new Order();
+		Order orderRes = null;
+		sub.WhenOrderReceived(provider.Object).Apply().Do(o => orderRes = o);
+		provider.Raise(p => p.OrderReceived += null, sub, order);
+		(orderRes == order).AssertTrue();
+
+		Order orderRegisteredRes = null;
+		sub.WhenOrderRegistered(provider.Object).Apply().Do(o => orderRegisteredRes = o);
+		provider.Raise(p => p.OrderReceived += null, sub, order);
+		(orderRegisteredRes == order).AssertTrue();
+
+		OrderFail orderFailReg = null;
+		sub.WhenOrderFailReceived(provider.Object, true).Apply().Do(f => orderFailReg = f);
+		var of1 = new OrderFail { Order = order };
+		provider.Raise(p => p.OrderRegisterFailReceived += null, sub, of1);
+		(orderFailReg == of1).AssertTrue();
+
+		OrderFail orderEditFail = null;
+		sub.WhenOrderEditFailReceived(provider.Object).Apply().Do(f => orderEditFail = f);
+		var of2 = new OrderFail { Order = order };
+		provider.Raise(p => p.OrderEditFailReceived += null, sub, of2);
+		(orderEditFail == of2).AssertTrue();
+
+		var pos = new Position { Security = sec, Portfolio = new Portfolio() };
+		Position posRes = null;
+		sub.WhenPositionReceived(provider.Object).Apply().Do(p => posRes = p);
+		provider.Raise(p => p.PositionReceived += null, sub, pos);
+		(posRes == pos).AssertTrue();
+
+		var pf = new Portfolio();
+		Portfolio pfRes = null;
+		sub.WhenPortfolioReceived(provider.Object).Apply().Do(p => pfRes = p);
+		provider.Raise(p => p.PortfolioReceived += null, sub, pf);
+		(pfRes == pf).AssertTrue();
+
+		// OrderLogReceived
+		var ol = new ExecutionMessage { SecurityId = sec.ToSecurityId(), DataTypeEx = DataType.OrderLog };
+		IOrderLogMessage olRes = null;
+		sub.WhenOrderLogReceived(provider.Object).Apply().Do(m => olRes = m);
+		provider.Raise(p => p.OrderLogReceived += null, sub, ol);
+		(olRes == ol).AssertTrue();
+
+		// TickTradeReceived
+		ITickTradeMessage tRes = null;
+		sub.WhenTickTradeReceived(provider.Object).Apply().Do(t => tRes = t);
+		var tick2 = new ExecutionMessage { SecurityId = sec.ToSecurityId(), TradePrice = 10m, TradeVolume = 1m, DataTypeEx = DataType.Ticks };
+		provider.Raise(p => p.TickTradeReceived += null, sub, tick2);
+		(tRes == tick2).AssertTrue();
+
+		// CandleReceived (non-generic and generic)
+		ICandleMessage candAny = null;
+		sub.WhenCandleReceived(provider.Object).Apply().Do(c => candAny = c);
+		var anyCandle = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active };
+		provider.Raise(p => p.CandleReceived += null, sub, anyCandle);
+		(candAny == anyCandle).AssertTrue();
+
+		TimeFrameCandleMessage candTyped = null;
+		sub.WhenCandleReceived<TimeFrameCandleMessage>(provider.Object).Apply().Do(c => candTyped = c);
+		var tfc = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active };
+		provider.Raise(p => p.CandleReceived += null, sub, tfc);
+		(candTyped == tfc).AssertTrue();
+
+		// Provider overloads using default lookup subscriptions
+		provider.SetupGet(p => p.OrderLookup).Returns(new Subscription(DataType.Transactions, sec));
+		provider.SetupGet(p => p.PortfolioLookup).Returns(new Subscription(DataType.PositionChanges, sec));
+
+		MyTrade ownTradeRes = null;
+		provider.Object.WhenOwnTradeReceived().Apply().Do(t => ownTradeRes = t);
+		var mt2 = new MyTrade { Order = order, Trade = new ExecutionMessage { DataTypeEx = DataType.Ticks, TradePrice = 1m, TradeVolume = 1m } };
+		provider.Raise(p => p.OwnTradeReceived += null, provider.Object.OrderLookup, mt2);
+		(ownTradeRes == mt2).AssertTrue();
+
+		Order provOrderRes = null;
+		provider.Object.WhenOrderReceived().Apply().Do(o => provOrderRes = o);
+		provider.Raise(p => p.OrderReceived += null, provider.Object.OrderLookup, order);
+		(provOrderRes == order).AssertTrue();
+
+		Order provOrderRegRes = null;
+		provider.Object.WhenOrderRegistered().Apply().Do(o => provOrderRegRes = o);
+		provider.Raise(p => p.OrderReceived += null, provider.Object.OrderLookup, order);
+		(provOrderRegRes == order).AssertTrue();
+
+		Position provPosRes = null;
+		provider.Object.WhenPositionReceived().Apply().Do(p => provPosRes = p);
+		provider.Raise(p => p.PositionReceived += null, provider.Object.PortfolioLookup, pos);
+		(provPosRes == pos).AssertTrue();
+
+		Portfolio provPfRes = null;
+		provider.Object.WhenPortfolioReceived().Apply().Do(p => provPfRes = p);
+		provider.Raise(p => p.PortfolioReceived += null, provider.Object.PortfolioLookup, pf);
+		(provPfRes == pf).AssertTrue();
+
+		// Opposite price conditions to cover both branches
+		IOrderBookMessage bestBidLess = null;
+		sub.WhenBestBidPriceLess(provider.Object, 200m).Apply().Do(m => bestBidLess = m);
+		provider.Raise(p => p.OrderBookReceived += null, sub, ob);
+		(bestBidLess == ob).AssertTrue();
+
+		IOrderBookMessage bestAskMore = null;
+		sub.WhenBestAskPriceMore(provider.Object, 50m).Apply().Do(m => bestAskMore = m);
+		provider.Raise(p => p.OrderBookReceived += null, sub, ob);
+		(bestAskMore == ob).AssertTrue();
+
+		ITickTradeMessage lastLess = null;
+		sub.WhenLastTradePriceLess(provider.Object, 60m).Apply().Do(t => lastLess = t);
+		provider.Raise(p => p.TickTradeReceived += null, sub, tick);
+		(lastLess == tick).AssertTrue();
+	}
+
+	[TestMethod]
+	public void CandleRules()
+	{
+		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
+		var sec = Helper.CreateSecurity();
+		var sub = new Subscription(TimeSpan.FromMinutes(1).TimeFrame(), sec) { TransactionId = 321 };
+
+		// Series: started/changed/finished/all
+		ICandleMessage started = null;
+		provider.Object.WhenCandlesStarted<ICandleMessage>(sub).Apply().Do(c => started = c);
+		var c1 = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active };
+		provider.Raise(p => p.CandleReceived += null, sub, c1);
+		(started == c1).AssertTrue();
+
+		ICandleMessage changed = null;
+		provider.Object.WhenCandlesChanged<ICandleMessage>(sub).Apply().Do(c => changed = c);
+		provider.Raise(p => p.CandleReceived += null, sub, new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active });
+		(changed is not null).AssertTrue();
+
+		ICandleMessage finished = null;
+		provider.Object.WhenCandlesFinished<ICandleMessage>(sub).Apply().Do(c => finished = c);
+		provider.Raise(p => p.CandleReceived += null, sub, new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished });
+		(finished is not null).AssertTrue();
+
+		ICandleMessage anyCandle = null;
+		provider.Object.WhenCandles<ICandleMessage>(sub).Apply().Do(c => anyCandle = c);
+		provider.Raise(p => p.CandleReceived += null, sub, new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active });
+		(anyCandle is not null).AssertTrue();
+
+		// Single candle rules
+		var sc = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, ClosePrice = 105m };
+
+		TimeFrameCandleMessage chCandle = null;
+		provider.Object.WhenChanged(sc).Apply().Do(c => chCandle = c);
+		provider.Raise(p => p.CandleReceived += null, sub, sc);
+		(chCandle == sc).AssertTrue();
+
+		TimeFrameCandleMessage finCandle = null;
+		provider.Object.WhenFinished(new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished }).Apply().Do(c => finCandle = c);
+		provider.Raise(p => p.CandleReceived += null, sub, new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished });
+		(finCandle is not null).AssertTrue();
+
+		// Price-based rules
+		TimeFrameCandleMessage more = null;
+		provider.Object.WhenClosePriceMore(sc, 100m).Apply().Do(c => more = c);
+		provider.Raise(p => p.CandleReceived += null, sub, sc);
+		(more == sc).AssertTrue();
+
+		TimeFrameCandleMessage less = null;
+		sc.ClosePrice = 95m;
+		provider.Object.WhenClosePriceLess(sc, 100m).Apply().Do(c => less = c);
+		provider.Raise(p => p.CandleReceived += null, sub, sc);
+		(less == sc).AssertTrue();
+
+		// Partial finished (series and single). For TimeFrame candle, method allows Finished case.
+		ICandleMessage partSeries = null;
+		provider.Object.WhenPartiallyFinishedCandles<ICandleMessage>(sub, 50m).Apply().Do(c => partSeries = c);
+		provider.Raise(p => p.CandleReceived += null, sub, new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished });
+		(partSeries is not null).AssertTrue();
+
+		TimeFrameCandleMessage partSingle = null;
+		var sc2 = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished };
+		provider.Object.WhenPartiallyFinished(sc2, 50m).Apply().Do(c => partSingle = c);
+		provider.Raise(p => p.CandleReceived += null, sub, sc2);
+		(partSingle is not null).AssertTrue();
+
+		// Total volume more
+		var sc3 = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, TotalVolume = 10m };
+		TimeFrameCandleMessage volMore = null;
+		provider.Object.WhenTotalVolumeMore(sc3, 5m).Apply().Do(c => volMore = c);
+		// simulate update with higher total volume
+		sc3.TotalVolume = 20m;
+		provider.Raise(p => p.CandleReceived += null, sub, sc3);
+		(volMore == sc3).AssertTrue();
+
+		// Граница по цене: равно порогу не активирует
+		TimeFrameCandleMessage eq = null;
+		var sc4 = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, ClosePrice = 100m };
+		provider.Object.WhenClosePriceMore(sc4, 100m).Apply().Do(c => eq = c);
+		provider.Raise(p => p.CandleReceived += null, sub, sc4);
+		(eq is null).AssertTrue();
+
+		// Относительная цена: +5 и -5 от текущей
+		var sc5 = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, ClosePrice = 200m };
+		TimeFrameCandleMessage relMore = null;
+		provider.Object.WhenClosePriceMore(sc5, new Unit(5m)).Apply().Do(c => relMore = c);
+		sc5.ClosePrice = 210m;
+		provider.Raise(p => p.CandleReceived += null, sub, sc5);
+		(relMore == sc5).AssertTrue();
+
+		TimeFrameCandleMessage relLess = null;
+		var sc6 = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, ClosePrice = 200m };
+		provider.Object.WhenClosePriceLess(sc6, new Unit(5m)).Apply().Do(c => relLess = c);
+		sc6.ClosePrice = 190m;
+		provider.Raise(p => p.CandleReceived += null, sub, sc6);
+		(relLess == sc6).AssertTrue();
+	}
+
+	[TestMethod]
+	public void PriceEdgesAndNoDuplicates()
+	{
+		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
+		var sec = Helper.CreateSecurity();
+		var sub = new Subscription(DataType.MarketDepth, sec);
+
+		// BestBid/Less – равно порогу не активирует
+		var obEq = new QuoteChangeMessage
+		{
+			SecurityId = sec.ToSecurityId(),
+			Bids = [new QuoteChange(100m, 1m, 1)],
+			Asks = [new QuoteChange(101m, 1m, 1)]
+		};
+		IOrderBookMessage res = null;
+		sub.WhenBestBidPriceMore(provider.Object, 100m).Apply().Do(m => res = m);
+		provider.Raise(p => p.OrderBookReceived += null, sub, obEq);
+		(res is null).AssertTrue();
+
+		// LastTrade – равно порогу не активирует
+		var tick = new ExecutionMessage { SecurityId = sec.ToSecurityId(), TradePrice = 50m, TradeVolume = 1m, DataTypeEx = DataType.Ticks };
+		ITickTradeMessage ltRes = null;
+		sub.WhenLastTradePriceMore(provider.Object, 50m).Apply().Do(t => ltRes = t);
+		provider.Raise(p => p.TickTradeReceived += null, sub, tick);
+		(ltRes is null).AssertTrue();
+
+		// CandlesStarted – повтор того же сообщения не вызывает повторную активацию
+		int startedCount = 0;
+		provider.Object.WhenCandlesStarted<ICandleMessage>(sub).Apply().Do(_ => startedCount++);
+		var candle = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active };
+		provider.Raise(p => p.CandleReceived += null, sub, candle);
+		provider.Raise(p => p.CandleReceived += null, sub, candle); // тот же
+		startedCount.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void SuspendResumeRules()
+	{
+		var r = new TestRule().Apply();
+		bool fired = false;
+		r.Do(_ => fired = true);
+		MarketRuleHelper.DefaultRuleContainer.SuspendRules();
+		MarketRuleHelper.DefaultRuleContainer.IsRulesSuspended.AssertTrue();
+		((TestRule)r).Trigger(); // не должно активировать
+		fired.AssertFalse();
+		MarketRuleHelper.DefaultRuleContainer.ResumeRules();
+		MarketRuleHelper.DefaultRuleContainer.IsRulesSuspended.AssertFalse();
+		((TestRule)r).Trigger(); // теперь активирует
+		fired.AssertTrue();
+		MarketRuleHelper.DefaultRuleContainer.TryRemoveRule(r).AssertTrue();
+	}
+
+	[TestMethod]
+	public void ExclusiveThreeRules()
+	{
+		var r1 = new TestRule().Apply();
+		var r2 = new TestRule().Apply();
+		var r3 = new TestRule().Apply();
+		r1.Exclusive(r2);
+		r1.Exclusive(r3);
+		bool fired = false;
+		r1.Do(_ => fired = true);
+		((TestRule)r1).Trigger();
+		fired.AssertTrue();
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(r2).AssertFalse();
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(r3).AssertFalse();
+	}
+
+	[TestMethod]
+	public void TryRemoveInfiniteRuleWithCheck()
+	{
+		var r = new TestRule().Apply();
+		r.Until(() => false); // бесконечное
+		MarketRuleHelper.DefaultRuleContainer.TryRemoveRule(r, true).AssertFalse();
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(r).AssertTrue();
+		// cleanup
+		MarketRuleHelper.DefaultRuleContainer.TryRemoveRule(r, false).AssertTrue();
+	}
+
+	[TestMethod]
+	public void SubscriptionOrderFailCancelBranch()
+	{
+		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
+		var sec = Helper.CreateSecurity();
+		var sub = new Subscription(DataType.Ticks, sec);
+		var order = new Order();
+		OrderFail fail = null;
+		sub.WhenOrderFailReceived(provider.Object, false).Apply().Do(f => fail = f);
+		var of = new OrderFail { Order = order };
+		provider.Raise(p => p.OrderCancelFailReceived += null, sub, of);
+		(fail == of).AssertTrue();
+	}
+
+	[TestMethod]
+	public void DoActivatedOverloads()
+	{
+		var r1 = new TestRule().Once().Apply();
+		int captured = 0;
+		r1.Do(() => 7).Activated<int>(v => captured = v);
+		((TestRule)r1).Trigger();
+		captured.AssertEqual(7);
+
+		var r2 = new TestRule().Once().Apply();
+		bool activated = false;
+		r2.Do(() => { }).Activated(() => activated = true);
+		((TestRule)r2).Trigger();
+		activated.AssertTrue();
+	}
+
+	[TestMethod]
+	public void CandleRulesPercentUnits()
+	{
+		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
+		var sec = Helper.CreateSecurity();
+		var sub = new Subscription(TimeSpan.FromMinutes(1).TimeFrame(), sec);
+
+		var scUp = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, ClosePrice = 100m };
+		TimeFrameCandleMessage up = null;
+		provider.Object.WhenClosePriceMore(scUp, new Unit(5m, UnitTypes.Percent)).Apply().Do(c => up = c);
+		scUp.ClosePrice = 106m; // +6%
+		provider.Raise(p => p.CandleReceived += null, sub, scUp);
+		(up == scUp).AssertTrue();
+
+		var scDown = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, ClosePrice = 100m };
+		TimeFrameCandleMessage down = null;
+		provider.Object.WhenClosePriceLess(scDown, new Unit(5m, UnitTypes.Percent)).Apply().Do(c => down = c);
+		scDown.ClosePrice = 94m; // -6%
+		provider.Raise(p => p.CandleReceived += null, sub, scDown);
+		(down == scDown).AssertTrue();
+	}
+
+	[TestMethod]
+	public void RuleLifecycleBasics()
+	{
+		var r = new TestRule();
+		r.IsReady.AssertFalse();
+		r.IsActive.AssertFalse();
+
+		r = (TestRule)r.Apply();
+		r.IsReady.AssertTrue();
+		r.IsActive.AssertFalse();
+
+		int cnt = 0;
+		r.Do(_ => cnt++);
+		((TestRule)r).Trigger();
+		cnt.AssertEqual(1);
+
+		// remove and ensure no further activations
+		MarketRuleHelper.DefaultRuleContainer.TryRemoveRule(r).AssertTrue();
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(r).AssertFalse();
+		((TestRule)r).Trigger();
+		cnt.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void PeriodicUntil_FinishFirst()
+	{
+		var r = new TestRule().Until(() => true).Apply();
+		int cnt = 0;
+		r.Do(_ => cnt++);
+		((TestRule)r).Trigger();
+		cnt.AssertEqual(1);
+		// правило завершено после первой активации
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(r).AssertFalse();
+		((TestRule)r).Trigger();
+		cnt.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void PeriodicUntil_DynamicFinishSecond()
+	{
+		bool finish = false;
+		var r = new TestRule().Until(() => finish).Apply();
+		int cnt = 0;
+		r.Do(_ => cnt++);
+
+		((TestRule)r).Trigger(); // first, not finished
+		cnt.AssertEqual(1);
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(r).AssertTrue();
+
+		finish = true;
+		((TestRule)r).Trigger(); // second, finishes
+		cnt.AssertEqual(2);
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(r).AssertFalse();
+	}
+
+	[TestMethod]
+	public void SelfRemovalInsideHandler()
+	{
+		var r = new TestRule().Apply();
+		int cnt = 0;
+		r.Do(_ =>
+		{
+			cnt++;
+			MarketRuleHelper.DefaultRuleContainer.TryRemoveRule(r).AssertTrue();
+		});
+		((TestRule)r).Trigger();
+		cnt.AssertEqual(1);
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(r).AssertFalse();
+		((TestRule)r).Trigger();
+		cnt.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void DisposeStopsFurtherActivations()
+	{
+		var r = new TestRule().Apply();
+		int cnt = 0;
+		r.Do(_ => cnt++);
+		((TestRule)r).Trigger();
+		cnt.AssertEqual(1);
+		r.Dispose();
+		((TestRule)r).Trigger();
+		cnt.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void SuspendBetweenAndParts()
+	{
+		var a = new TestRule().Apply();
+		var b = new TestRule().Apply();
+		int cnt = 0;
+		a.And(b).Apply().Do(_ => cnt++);
+
+		((TestRule)a).Trigger();
+		cnt.AssertEqual(0);
+
+		MarketRuleHelper.DefaultRuleContainer.SuspendRules();
+		((TestRule)b).Trigger(); // игнорируется
+		cnt.AssertEqual(0);
+
+		MarketRuleHelper.DefaultRuleContainer.ResumeRules();
+		((TestRule)b).Trigger(); // теперь сработает
+		cnt.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void SuspendSpecificRule()
+	{
+		var r = new TestRule().Apply();
+		int cnt = 0;
+		r.Do(_ => cnt++);
+		r.Suspend(true);
+		((TestRule)r).Trigger();
+		cnt.AssertEqual(0);
+		r.Suspend(false);
+		((TestRule)r).Trigger();
+		cnt.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void OrFive_NoDuplicateFire()
+	{
+		var r1 = new TestRule().Apply();
+		var r2 = new TestRule().Apply();
+		var r3 = new TestRule().Apply();
+		var r4 = new TestRule().Apply();
+		var r5 = new TestRule().Apply();
+
+		int cnt = 0;
+		var orRule = r1.Or(r2, r3, r4, r5).Apply().Do(_ => cnt++);
+		((TestRule)r3).Trigger();
+		cnt.AssertEqual(1);
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(orRule).AssertFalse();
+		((TestRule)r4).Trigger();
+		cnt.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void AndFive_FiresOnce()
+	{
+		var r1 = new TestRule();
+		var r2 = new TestRule();
+		var r3 = new TestRule();
+		var r4 = new TestRule();
+		var r5 = new TestRule();
+
+		int cnt = 0;
+		r1.And(r2, r3, r4, r5).Apply().Do(_ => cnt++);
+		((TestRule)r1).Trigger();
+		((TestRule)r2).Trigger();
+		((TestRule)r3).Trigger();
+		cnt.AssertEqual(0);
+		((TestRule)r4).Trigger();
+		cnt.AssertEqual(0);
+		((TestRule)r5).Trigger();
+		cnt.AssertEqual(1);
+		((TestRule)r1).Trigger();
+		cnt.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void NestedOrWithAnd()
+	{
+		var a = new TestRule();
+		var b = new TestRule();
+		var c = new TestRule();
+
+		int cnt = 0;
+		var andBC = b.And(c);
+		var orRule = a.Or(andBC).Apply().Do(_ => cnt++);
+
+		b.Trigger();
+		cnt.AssertEqual(0);
+		c.Trigger(); // and(b,c) completes -> or fires
+		cnt.AssertEqual(1);
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(orRule).AssertFalse();
+		a.Trigger();
+		cnt.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void AndSimultaneousActivation()
+	{
+		var a = new TestRule();
+		var b = new TestRule();
+		int cnt = 0;
+		a.And(b).Apply().Do(_ => cnt++);
+		// Быстрая последовательность как «одновременно»
+		b.Trigger();
+		a.Trigger();
+		cnt.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void DoWithRuleArgument()
+	{
+		var r = new TestRule().Apply();
+		int cnt = 0;
+		r.Do((rule, arg) =>
+		{
+			(rule == r).AssertTrue();
+			(arg as string).AssertEqual("abc");
+			cnt++;
+		});
+		((TestRule)r).Trigger("abc");
+		cnt.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void DoWithRuleArgumentAndResult()
+	{
+		var r = new TestRule().Once().Apply();
+		int captured = 0;
+		r.Do((rule, arg) =>
+		{
+			(rule == r).AssertTrue();
+			return 42;
+		}).Activated<int>(v => captured = v);
+		((TestRule)r).Trigger();
+		captured.AssertEqual(42);
+	}
+
+	[TestMethod]
+	public void PercentEqualThresholdDoesNotActivate()
+	{
+		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
+		var sec = Helper.CreateSecurity();
+		var sub = new Subscription(TimeSpan.FromMinutes(1).TimeFrame(), sec);
+
+		var candle = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, ClosePrice = 100m };
+		TimeFrameCandleMessage res = null;
+		provider.Object.WhenClosePriceMore(candle, new Unit(5m, UnitTypes.Percent)).Apply().Do(c => res = c);
+		candle.ClosePrice = 105m; // ровно +5%
+		provider.Raise(p => p.CandleReceived += null, sub, candle);
+		(res is null).AssertTrue();
+	}
+
+	[TestMethod]
+	public void ExclusiveNullThrows()
+	{
+		var r = new TestRule().Apply();
+		bool thrown = false;
+		try
+		{
+			// ReSharper disable once AssignNullToNotNullAttribute
+			r.Exclusive(null);
+		}
+		catch (ArgumentNullException)
+		{
+			thrown = true;
+		}
+		thrown.AssertTrue();
+	}
+
+	[TestMethod]
+	public void TryRemoveNullRuleReturnsFalse()
+	{
+		MarketRuleHelper.DefaultRuleContainer.TryRemoveRule(null).AssertFalse();
+	}
+
+	[TestMethod]
+	public void OrderMatchedOnlyOnce()
+	{
+		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
+		var sub = new Subscription(DataType.Ticks, Helper.CreateSecurity());
+		var order = new Order { Volume = 10m, Balance = 10m };
+
+		int cnt = 0;
+		order.WhenMatched(provider.Object).Apply().Do(_ => cnt++);
+
+		order.State = OrderStates.Done;
+		order.Balance = 0m;
+		provider.Raise(p => p.OrderReceived += null, sub, order);
+		cnt.AssertEqual(1);
+
+		// повторные события не должны увеличивать счётчик
+		provider.Raise(p => p.OrderReceived += null, sub, order);
+		cnt.AssertEqual(1);
+
+		order.Balance = 5m; // изменение после done не должно влиять
+		provider.Raise(p => p.OrderReceived += null, sub, order);
+		cnt.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void CancelFailedThenCanceledFlow()
+	{
+		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
+		var sub = new Subscription(DataType.Ticks, Helper.CreateSecurity());
+		var order = new Order { Volume = 10m, Balance = 10m };
+
+		int failCnt = 0;
+		order.WhenCancelFailed(provider.Object).Apply().Do(_ => failCnt++);
+
+		int canceledCnt = 0;
+		order.WhenCanceled(provider.Object).Apply().Do(_ => canceledCnt++);
+
+		var of = new OrderFail { Order = order };
+		provider.Raise(p => p.OrderCancelFailReceived += null, sub, of);
+		failCnt.AssertEqual(1);
+
+		order.State = OrderStates.Done;
+		order.CancelledTime = DateTime.UtcNow;
+		provider.Raise(p => p.OrderReceived += null, sub, order);
+		canceledCnt.AssertEqual(1);
+
+		// повтор не увеличивает счётчики
+		provider.Raise(p => p.OrderCancelFailReceived += null, sub, of);
+		failCnt.AssertEqual(1);
+		provider.Raise(p => p.OrderReceived += null, sub, order);
+		canceledCnt.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void SubscriptionStartedNotDuplicated()
+	{
+		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
+		var sec = Helper.CreateSecurity();
+		var sub = new Subscription(DataType.MarketDepth, sec);
+
+		int cnt = 0;
+		sub.WhenSubscriptionStarted(provider.Object).Apply().Do(_ => cnt++);
+		provider.Raise(p => p.SubscriptionStarted += null, sub);
+		provider.Raise(p => p.SubscriptionStarted += null, sub);
+		cnt.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void SubscriptionStoppedWithoutError()
+	{
+		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
+		var sec = Helper.CreateSecurity();
+		var sub = new Subscription(DataType.Ticks, sec);
+
+		Tuple<Subscription, Exception> stopped = null;
+		sub.WhenSubscriptionStopped(provider.Object).Apply().Do(t => stopped = t);
+		provider.Raise(p => p.SubscriptionStopped += null, sub, (Exception)null);
+		(stopped.Item1 == sub).AssertTrue();
+		(stopped.Item2 == null).AssertTrue();
+	}
+
+	[TestMethod]
+	public void SubscriptionFailedUnsubscribeBranch()
+	{
+		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
+		var sec = Helper.CreateSecurity();
+		var sub = new Subscription(DataType.Ticks, sec);
+
+		Tuple<Subscription, Exception, bool> failed = null;
+		sub.WhenSubscriptionFailed(provider.Object).Apply().Do(t => failed = t);
+		var ex = new Exception("stop");
+		provider.Raise(p => p.SubscriptionFailed += null, sub, ex, false);
+		(failed.Item1 == sub).AssertTrue();
+		(failed.Item2 == ex).AssertTrue();
+		failed.Item3.AssertFalse();
+	}
+
+	[TestMethod]
+	public void VolumeCandlePartiallyFinishedSeries()
+	{
+		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
+		var sec = Helper.CreateSecurity();
+		var sub = new Subscription(TimeSpan.FromMinutes(1).TimeFrame(), sec);
+
+		VolumeCandleMessage fired = null;
+		provider.Object.WhenPartiallyFinishedCandles<VolumeCandleMessage>(sub, 50m).Apply().Do(c => fired = c);
+		provider.Raise(p => p.CandleReceived += null, sub, new VolumeCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished });
+		(fired is not null).AssertTrue();
+	}
+
+	[TestMethod]
+	public void VolumeCandlePartiallyFinishedSingle()
+	{
+		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
+		var sec = Helper.CreateSecurity();
+		var msg = new VolumeCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished };
+		VolumeCandleMessage fired = null;
+		provider.Object.WhenPartiallyFinished(msg, 50m).Apply().Do(c => fired = c);
+		var sub = new Subscription(TimeSpan.FromMinutes(1).TimeFrame(), sec);
+		provider.Raise(p => p.CandleReceived += null, sub, msg);
+		(fired == msg).AssertTrue();
+	}
+
+	[TestMethod]
+	public void TotalVolumeMoreDoesNotReFireOnDecrease()
+	{
+		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
+		var sec = Helper.CreateSecurity();
+		var sub = new Subscription(TimeSpan.FromMinutes(1).TimeFrame(), sec);
+		var candle = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, TotalVolume = 12m };
+		int cnt = 0;
+		provider.Object.WhenTotalVolumeMore(candle, 10m).Apply().Do(_ => cnt++);
+		provider.Raise(p => p.CandleReceived += null, sub, candle); // first fire
+		cnt.AssertEqual(1);
+		candle.TotalVolume = 11m; // decrease
+		provider.Raise(p => p.CandleReceived += null, sub, candle);
+		cnt.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void OrderBook_BothConditionsSameUpdate()
+	{
+		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
+		var sec = Helper.CreateSecurity();
+		var sub = new Subscription(DataType.MarketDepth, sec);
+
+		int bidCnt = 0, askCnt = 0;
+		sub.WhenBestBidPriceMore(provider.Object, 100m).Apply().Do(_ => bidCnt++);
+		sub.WhenBestAskPriceLess(provider.Object, 200m).Apply().Do(_ => askCnt++);
+
+		var ob = new QuoteChangeMessage
+		{
+			SecurityId = sec.ToSecurityId(),
+			Bids = [new QuoteChange(150m, 1m, 1)],
+			Asks = [new QuoteChange(160m, 1m, 1)]
+		};
+
+		provider.Raise(p => p.OrderBookReceived += null, sub, ob);
+		bidCnt.AssertEqual(1);
+		askCnt.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void OrderBook_EmptyDoesNotActivate()
+	{
+		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
+		var sec = Helper.CreateSecurity();
+		var sub = new Subscription(DataType.MarketDepth, sec);
+
+		int cnt = 0;
+		sub.WhenBestBidPriceMore(provider.Object, 1m).Apply().Do(_ => cnt++);
+		sub.WhenBestAskPriceMore(provider.Object, 1m).Apply().Do(_ => cnt++);
+
+		var ob = new QuoteChangeMessage
+		{
+			SecurityId = sec.ToSecurityId(),
+			Bids = [],
+			Asks = [],
+		};
+
+		provider.Raise(p => p.OrderBookReceived += null, sub, ob);
+		cnt.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void RuleStateTransitions()
+	{
+		var r = new TestRule();
+		r.IsReady.AssertFalse();
+		r.IsActive.AssertFalse();
+		r = (TestRule)r.Apply();
+		r.IsReady.AssertTrue();
+		r.IsActive.AssertFalse();
+		bool fired = false;
+		r.Do(_ => fired = true);
+		r.Trigger();
+		fired.AssertTrue();
+		r.IsActive.AssertTrue(); // после первой активации станет активным
+	}
+
+	[TestMethod]
+	public void DoubleApplyIgnored()
+	{
+		var r = new TestRule();
+		var first = r.Apply();
+		var second = first.Apply(); // повторный Apply
+		(first == second).AssertTrue();
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(first).AssertTrue();
+	}
+
+	[TestMethod]
+	public void DisposeBeforeActivation()
+	{
+		var r = new TestRule().Apply();
+		bool fired = false;
+		r.Do(_ => fired = true);
+		r.Dispose();
+		((TestRule)r).Trigger();
+		fired.AssertFalse();
+	}
+
+	[TestMethod]
+	public void PeriodicUntilMultiActivations()
+	{
+		int cnt = 0;
+		bool finish = false;
+		var r = new TestRule().Until(() => finish).Apply().Do(_ => cnt++);
+		((TestRule)r).Trigger();
+		((TestRule)r).Trigger();
+		cnt.AssertEqual(2);
+		finish = true;
+		((TestRule)r).Trigger(); // завершающая
+		cnt.AssertEqual(3);
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(r).AssertFalse();
+	}
+
+	[TestMethod]
+	public void ExclusiveChainAllRemovedAfterFirstFire()
+	{
+		var a = new TestRule().Apply();
+		var b = new TestRule().Apply();
+		var c = new TestRule().Apply();
+		var d = new TestRule().Apply();
+		// цепочка: a эксклюзивен к b,c,d
+		a.Exclusive(b);
+		a.Exclusive(c);
+		a.Exclusive(d);
+		bool fired = false;
+		a.Do(_ => fired = true);
+		((TestRule)a).Trigger();
+		fired.AssertTrue();
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(b).AssertFalse();
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(c).AssertFalse();
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(d).AssertFalse();
+	}
+
+	[TestMethod]
+	public void ExclusiveCrossRemoval()
+	{
+		var a = new TestRule().Apply();
+		var b = new TestRule().Apply();
+		var c = new TestRule().Apply();
+		// двусторонние связи
+		a.Exclusive(b);
+		b.Exclusive(c);
+		bool af = false, bf = false, cf = false;
+		a.Do(_ => af = true);
+		b.Do(_ => bf = true);
+		c.Do(_ => cf = true);
+		// активируем средний
+		((TestRule)b).Trigger();
+		bf.AssertTrue();
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(a).AssertFalse();
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(c).AssertFalse();
+	}
+
+	[TestMethod]
+	public void SuspendPreventsCombinedOrAndActivation()
+	{
+		var a = new TestRule().Apply();
+		var b = new TestRule().Apply();
+		var c = new TestRule().Apply();
+		int cnt = 0;
+		var combo = a.Or(b.And(c)).Apply().Do(_ => cnt++);
+		MarketRuleHelper.DefaultRuleContainer.SuspendRules();
+		((TestRule)b).Trigger();
+		((TestRule)c).Trigger();
+		((TestRule)a).Trigger();
+		cnt.AssertEqual(0);
+		MarketRuleHelper.DefaultRuleContainer.ResumeRules();
+		// завершим and(b,c)
+		((TestRule)b).Trigger();
+		((TestRule)c).Trigger(); // and готов -> or активируется
+		cnt.AssertEqual(1);
+		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(combo).AssertFalse();
+	}
+
+	[TestMethod]
+	public void SuspendBetweenMultiStepAnd()
+	{
+		var a = new TestRule().Apply();
+		var b = new TestRule().Apply();
+		var c = new TestRule().Apply();
+		int cnt = 0;
+		a.And(b, c).Apply().Do(_ => cnt++);
+		((TestRule)a).Trigger();
+		((TestRule)b).Trigger();
+		cnt.AssertEqual(0);
+		MarketRuleHelper.DefaultRuleContainer.SuspendRules();
+		((TestRule)c).Trigger(); // игнорируется
+		cnt.AssertEqual(0);
+		MarketRuleHelper.DefaultRuleContainer.ResumeRules();
+		((TestRule)c).Trigger();
+		cnt.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void LastTradePriceOnceRule()
+	{
+		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
+		var sec = Helper.CreateSecurity();
+		var sub = new Subscription(DataType.Ticks, sec);
+		int cnt = 0;
+		sub.WhenLastTradePriceMore(provider.Object, 10m).Once().Apply().Do(_ => cnt++);
+		var tick = new ExecutionMessage { SecurityId = sec.ToSecurityId(), TradePrice = 15m, TradeVolume = 1m, DataTypeEx = DataType.Ticks };
+		provider.Raise(p => p.TickTradeReceived += null, sub, tick);
+		provider.Raise(p => p.TickTradeReceived += null, sub, tick);
+		cnt.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void ClosePriceLessEqualBoundaryNoFire()
+	{
+		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
+		var sec = Helper.CreateSecurity();
+		var sub = new Subscription(TimeSpan.FromMinutes(1).TimeFrame(), sec);
+		var candle = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, ClosePrice = 100m };
+		TimeFrameCandleMessage res = null;
+		provider.Object.WhenClosePriceLess(candle, 100m).Apply().Do(c => res = c);
+		provider.Raise(p => p.CandleReceived += null, sub, candle);
+		(res is null).AssertTrue();
+	}
+
+	[TestMethod]
+	public void RelativePricePercentExactBoundaryNoFire()
+	{
+		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
+		var sec = Helper.CreateSecurity();
+		var sub = new Subscription(TimeSpan.FromMinutes(1).TimeFrame(), sec);
+		var candle = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, ClosePrice = 200m };
+		TimeFrameCandleMessage more = null, less = null;
+		provider.Object.WhenClosePriceMore(candle, new Unit(5m, UnitTypes.Percent)).Apply().Do(c => more = c);
+		provider.Object.WhenClosePriceLess(candle, new Unit(5m, UnitTypes.Percent)).Apply().Do(c => less = c);
+		// ровно +5% и -5% не должны активироваться
+		candle.ClosePrice = 210m; // +5%
+		provider.Raise(p => p.CandleReceived += null, sub, candle);
+		(more is null).AssertTrue();
+		candle.ClosePrice = 190m; // -5%
+		provider.Raise(p => p.CandleReceived += null, sub, candle);
+		(less is null).AssertTrue();
+	}
+}
