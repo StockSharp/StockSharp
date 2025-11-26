@@ -1,0 +1,7 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="common_target_common.props" />
+  <PropertyGroup>
+    <StockSharpTargets Condition="'$(StockSharpTargets)' == ''">net10.0-windows</StockSharpTargets>
+    <TargetFrameworks>$(StockSharpTargets)</TargetFrameworks>
+  </PropertyGroup>
+</Project>

@@ -1,5 +1,5 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\common_target_netwindows.props" />
+  <Import Project="..\common_target_netwindows_new.props" />
   <Import Project="common_samples.props" />
   <PropertyGroup>
     <ApplicationIcon>..\..\..\stocksharp.ico</ApplicationIcon>
