@@ -2636,7 +2636,7 @@ public class StorageTests : BaseTestClass
 		var securities = Helper.RandomSecurities().Select(s => s.ToSecurity(exchangeProvider)).ToArray();
 		var token = CancellationToken;
 
-		var registry = Helper.GetEntityRegistry(new(ex => { }));
+		var registry = Helper.GetEntityRegistry(Helper.CreateExecutor(token));
 
 		var storage = registry.Securities;
 

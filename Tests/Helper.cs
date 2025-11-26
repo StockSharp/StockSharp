@@ -1384,4 +1384,11 @@ static class Helper
 		=> [.. type
 			.GetProperties(BindingFlags.Instance | BindingFlags.Public)
 			.Where(p => p.IsModifiable())];
+
+	public static ChannelExecutor CreateExecutor(CancellationToken token)
+	{
+		var executor = new ChannelExecutor(ex => { });
+		_ = executor.RunAsync(token);
+		return executor;
+	}
 }

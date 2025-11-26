@@ -7,14 +7,14 @@ using StockSharp.Algo.Storages.Csv;
 [TestClass]
 public class StorageCsvRegistryTests : BaseTestClass
 {
-	private static ChannelExecutor CreateExecutor()
-		=> new(ex => { });
+	private static ChannelExecutor CreateExecutor(CancellationToken token)
+		=> Helper.CreateExecutor(token);
 
 	[TestMethod]
 	public async Task ExchangeList_AddAndRead()
 	{
 		var token = CancellationToken;
-		var executor = CreateExecutor();
+		var executor = CreateExecutor(token);
 		var registry = Helper.GetEntityRegistry(executor);
 
 		var exchange = new Exchange
@@ -38,7 +38,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	public async Task ExchangeList_Update()
 	{
 		var token = CancellationToken;
-		var executor = CreateExecutor();
+		var executor = CreateExecutor(token);
 		var registry = Helper.GetEntityRegistry(executor);
 
 		var exchange = new Exchange
@@ -67,7 +67,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	public async Task ExchangeList_Remove()
 	{
 		var token = CancellationToken;
-		var executor = CreateExecutor();
+		var executor = CreateExecutor(token);
 		var registry = Helper.GetEntityRegistry(executor);
 
 		var exchange = new Exchange
@@ -91,7 +91,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	public async Task ExchangeList_Clear()
 	{
 		var token = CancellationToken;
-		var executor = CreateExecutor();
+		var executor = CreateExecutor(token);
 		var registry = Helper.GetEntityRegistry(executor);
 
 		registry.Exchanges.Add(new Exchange { Name = "TEST1", CountryCode = CountryCodes.US });
@@ -110,7 +110,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	public async Task ExchangeBoardList_AddAndRead()
 	{
 		var token = CancellationToken;
-		var executor = CreateExecutor();
+		var executor = CreateExecutor(token);
 		var registry = Helper.GetEntityRegistry(executor);
 
 		// First add exchange
@@ -144,7 +144,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	public async Task SecurityList_AddAndRead()
 	{
 		var token = CancellationToken;
-		var executor = CreateExecutor();
+		var executor = CreateExecutor(token);
 		var registry = Helper.GetEntityRegistry(executor);
 
 		// Add exchange and board first
@@ -180,7 +180,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	public async Task PortfolioList_AddAndRead()
 	{
 		var token = CancellationToken;
-		var executor = CreateExecutor();
+		var executor = CreateExecutor(token);
 		var registry = Helper.GetEntityRegistry(executor);
 
 		var portfolio = new Portfolio
@@ -203,7 +203,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var path = Helper.GetSubTemp();
-		var executor = new ChannelExecutor(ex => Helper.LogManager.Application.AddErrorLog(ex));
+		var executor = CreateExecutor(token);
 		var registry1 = new CsvEntityRegistry(path, executor);
 
 		var exchange = new Exchange
@@ -230,9 +230,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 	public async Task CsvEntityList_DuplicateHandling()
 	{
 		var token = CancellationToken;
-		var path = Helper.GetSubTemp();
-		var executor = new ChannelExecutor(ex => Helper.LogManager.Application.AddErrorLog(ex));
-		var registry = new CsvEntityRegistry(path, executor);
+		var executor = CreateExecutor(token);
+		var registry = Helper.GetEntityRegistry(executor);
 
 		var exchange1 = new Exchange { Name = "TEST", CountryCode = CountryCodes.US };
 		var exchange2 = new Exchange { Name = "TEST", CountryCode = CountryCodes.RU };
@@ -248,7 +247,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 	[TestMethod]
 	public async Task ArchivedCopy_NotEnabled_ThrowsException()
 	{
-		var executor = CreateExecutor();
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
 		var registry = Helper.GetEntityRegistry(executor);
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
@@ -265,7 +265,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	public async Task ArchivedCopy_EmptyList()
 	{
 		var token = CancellationToken;
-		var executor = CreateExecutor();
+		var executor = CreateExecutor(token);
 		var registry = Helper.GetEntityRegistry(executor);
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
@@ -290,7 +290,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	public async Task ArchivedCopy_WithData()
 	{
 		var token = CancellationToken;
-		var executor = CreateExecutor();
+		var executor = CreateExecutor(token);
 		var registry = Helper.GetEntityRegistry(executor);
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
@@ -330,7 +330,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	public async Task ArchivedCopy_CacheTest()
 	{
 		var token = CancellationToken;
-		var executor = CreateExecutor();
+		var executor = CreateExecutor(token);
 		var registry = Helper.GetEntityRegistry(executor);
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
@@ -354,7 +354,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	public async Task ArchivedCopy_ResetOnAdd()
 	{
 		var token = CancellationToken;
-		var executor = CreateExecutor();
+		var executor = CreateExecutor(token);
 		var registry = Helper.GetEntityRegistry(executor);
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
@@ -402,7 +402,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	public async Task ArchivedCopy_ResetOnClear()
 	{
 		var token = CancellationToken;
-		var executor = CreateExecutor();
+		var executor = CreateExecutor(token);
 		var registry = Helper.GetEntityRegistry(executor);
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
@@ -451,7 +451,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	public async Task ArchivedCopy_ResetOnUpdate()
 	{
 		var token = CancellationToken;
-		var executor = CreateExecutor();
+		var executor = CreateExecutor(token);
 		var registry = Helper.GetEntityRegistry(executor);
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
@@ -501,7 +501,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	public async Task ArchivedCopy_MultipleEntityTypes()
 	{
 		var token = CancellationToken;
-		var executor = CreateExecutor();
+		var executor = CreateExecutor(token);
 		var registry = Helper.GetEntityRegistry(executor);
 
 		// Test with Exchanges
@@ -551,7 +551,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	public async Task ArchivedCopy_CompressionRatio()
 	{
 		var token = CancellationToken;
-		var executor = CreateExecutor();
+		var executor = CreateExecutor(token);
 		var registry = Helper.GetEntityRegistry(executor);
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
@@ -594,7 +594,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	public async Task ArchivedCopy_EnableDisable()
 	{
 		var token = CancellationToken;
-		var executor = CreateExecutor();
+		var executor = CreateExecutor(token);
 		var registry = Helper.GetEntityRegistry(executor);
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
@@ -623,7 +623,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	public async Task ArchivedCopy_LargeData()
 	{
 		var token = CancellationToken;
-		var executor = CreateExecutor();
+		var executor = CreateExecutor(token);
 		var registry = Helper.GetEntityRegistry(executor);
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
