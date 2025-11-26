@@ -4832,7 +4832,7 @@ public static partial class Extensions
 			bounds = new(min, max);
 		}
 
-		return new(bounds.Min.ToUniversalTime(), bounds.Max.ToUniversalTime());
+		return new(bounds.Min.ApplyTimeZone(timeZone).UtcDateTime, bounds.Max.ApplyTimeZone(timeZone).UtcDateTime);
 	}
 
 	private static readonly WorkingTime _allRange = new();
