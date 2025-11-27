@@ -78,7 +78,7 @@ public class MarketRuleTests
 		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(r2).AssertFalse();
 
 		// TryRemove API
-		MarketRuleHelper.DefaultRuleContainer.TryRemoveRule(r1).AssertTrue();
+		MarketRuleHelper.DefaultRuleContainer.TryRemoveRule(r1, false).AssertTrue();
 		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(r1).AssertFalse();
 	}
 
@@ -103,7 +103,7 @@ public class MarketRuleTests
 
 		bool orFired = false;
 		a.Or(b).Apply().Do(_ => orFired = true);
-		((TestRule)b).Trigger();
+		b.Trigger();
 		orFired.AssertTrue();
 
 		a = new TestRule();
@@ -111,9 +111,9 @@ public class MarketRuleTests
 		bool andFired = false;
 		a.And(b).Apply().Do(_ => andFired = true);
 		andFired.AssertFalse();
-		((TestRule)a).Trigger();
+		a.Trigger();
 		andFired.AssertFalse();
-		((TestRule)b).Trigger();
+		b.Trigger();
 		andFired.AssertTrue();
 	}
 
@@ -121,7 +121,7 @@ public class MarketRuleTests
 	public void ConnectorRules()
 	{
 		var mock = new Mock<IConnector>(MockBehavior.Loose);
-		var adapter = Mock.Of<IMessageAdapter>();
+		var adapter = new Mock<IMessageAdapter>().Object;
 
 		bool connected = false;
 		bool disconnected = false;
@@ -581,8 +581,10 @@ public class MarketRuleTests
 		(chCandle == sc).AssertTrue();
 
 		TimeFrameCandleMessage finCandle = null;
-		provider.Object.WhenFinished(new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished }).Apply().Do(c => finCandle = c);
-		provider.Raise(p => p.CandleReceived += null, sub, new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished });
+		provider.Object.WhenFinished(sc).Apply().Do(c => finCandle = c);
+		var finishedMsg = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished };
+		provider.Object.WhenFinished(finishedMsg).Apply().Do(c => finCandle = c);
+		provider.Raise(p => p.CandleReceived += null, sub, finishedMsg);
 		(finCandle is not null).AssertTrue();
 
 		// Price-based rules
@@ -600,11 +602,11 @@ public class MarketRuleTests
 		// Partial finished (series and single). For TimeFrame candle, method allows Finished case.
 		ICandleMessage partSeries = null;
 		provider.Object.WhenPartiallyFinishedCandles<ICandleMessage>(sub, 50m).Apply().Do(c => partSeries = c);
-		provider.Raise(p => p.CandleReceived += null, sub, new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished });
+		provider.Raise(p => p.CandleReceived += null, sub, new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished, TotalVolume = 60m });
 		(partSeries is not null).AssertTrue();
 
 		TimeFrameCandleMessage partSingle = null;
-		var sc2 = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished };
+		var sc2 = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished, TotalVolume = 60m };
 		provider.Object.WhenPartiallyFinished(sc2, 50m).Apply().Do(c => partSingle = c);
 		provider.Raise(p => p.CandleReceived += null, sub, sc2);
 		(partSingle is not null).AssertTrue();
@@ -860,20 +862,20 @@ public class MarketRuleTests
 	[TestMethod]
 	public void SuspendBetweenAndParts()
 	{
-		var a = new TestRule().Apply();
-		var b = new TestRule().Apply();
+		var a = new TestRule();
+		var b = new TestRule();
 		int cnt = 0;
 		a.And(b).Apply().Do(_ => cnt++);
 
-		((TestRule)a).Trigger();
+		a.Trigger();
 		cnt.AssertEqual(0);
 
 		MarketRuleHelper.DefaultRuleContainer.SuspendRules();
-		((TestRule)b).Trigger(); // ignored
+		b.Trigger(); // ignored
 		cnt.AssertEqual(0);
 
 		MarketRuleHelper.DefaultRuleContainer.ResumeRules();
-		((TestRule)b).Trigger(); // will work now
+		b.Trigger(); // will work now
 		cnt.AssertEqual(1);
 	}
 
@@ -894,18 +896,18 @@ public class MarketRuleTests
 	[TestMethod]
 	public void OrFive_NoDuplicateFire()
 	{
-		var r1 = new TestRule().Apply();
-		var r2 = new TestRule().Apply();
-		var r3 = new TestRule().Apply();
-		var r4 = new TestRule().Apply();
-		var r5 = new TestRule().Apply();
+		var r1 = new TestRule();
+		var r2 = new TestRule();
+		var r3 = new TestRule();
+		var r4 = new TestRule();
+		var r5 = new TestRule();
 
 		int cnt = 0;
-		var orRule = r1.Or(r2, r3, r4, r5).Apply().Do(_ => cnt++);
-		((TestRule)r3).Trigger();
+		var orRule = r1.Or(r2, r3, r4, r5).Once().Apply().Do(_ => cnt++);
+		r3.Trigger();
 		cnt.AssertEqual(1);
 		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(orRule).AssertFalse();
-		((TestRule)r4).Trigger();
+		r4.Trigger();
 		cnt.AssertEqual(1);
 	}
 
@@ -920,15 +922,15 @@ public class MarketRuleTests
 
 		int cnt = 0;
 		r1.And(r2, r3, r4, r5).Apply().Do(_ => cnt++);
-		((TestRule)r1).Trigger();
-		((TestRule)r2).Trigger();
-		((TestRule)r3).Trigger();
+		r1.Trigger();
+		r2.Trigger();
+		r3.Trigger();
 		cnt.AssertEqual(0);
-		((TestRule)r4).Trigger();
+		r4.Trigger();
 		cnt.AssertEqual(0);
-		((TestRule)r5).Trigger();
+		r5.Trigger();
 		cnt.AssertEqual(1);
-		((TestRule)r1).Trigger();
+		r1.Trigger();
 		cnt.AssertEqual(1);
 	}
 
@@ -941,7 +943,8 @@ public class MarketRuleTests
 
 		int cnt = 0;
 		var andBC = b.And(c);
-		var orRule = a.Or(andBC).Apply().Do(_ => cnt++);
+		// Ensure the outer OR rule is removed after first activation.
+		var orRule = a.Or(andBC).Once().Apply().Do(_ => cnt++);
 
 		b.Trigger();
 		cnt.AssertEqual(0);
@@ -1029,7 +1032,7 @@ public class MarketRuleTests
 	[TestMethod]
 	public void TryRemoveNullRuleReturnsFalse()
 	{
-		MarketRuleHelper.DefaultRuleContainer.TryRemoveRule(null).AssertFalse();
+		Assert.ThrowsExactly<ArgumentNullException>(() => MarketRuleHelper.DefaultRuleContainer.TryRemoveRule(null));
 	}
 
 	[TestMethod]
@@ -1138,7 +1141,7 @@ public class MarketRuleTests
 
 		VolumeCandleMessage fired = null;
 		provider.Object.WhenPartiallyFinishedCandles<VolumeCandleMessage>(sub, 50m).Apply().Do(c => fired = c);
-		provider.Raise(p => p.CandleReceived += null, sub, new VolumeCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished });
+		provider.Raise(p => p.CandleReceived += null, sub, new VolumeCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished, TotalVolume = 60m });
 		(fired is not null).AssertTrue();
 	}
 
@@ -1147,7 +1150,7 @@ public class MarketRuleTests
 	{
 		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
 		var sec = Helper.CreateSecurity();
-		var msg = new VolumeCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished };
+		var msg = new VolumeCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished, TotalVolume = 60m };
 		VolumeCandleMessage fired = null;
 		provider.Object.WhenPartiallyFinished(msg, 50m).Apply().Do(c => fired = c);
 		var sub = new Subscription(TimeSpan.FromMinutes(1).TimeFrame(), sec);
@@ -1311,9 +1314,9 @@ public class MarketRuleTests
 	[TestMethod]
 	public void SuspendPreventsCombinedOrAndActivation()
 	{
-		var a = new TestRule().Apply();
-		var b = new TestRule().Apply();
-		var c = new TestRule().Apply();
+		var a = new TestRule();
+		var b = new TestRule();
+		var c = new TestRule();
 		int cnt = 0;
 		var combo = a.Or(b.And(c)).Apply().Do(_ => cnt++);
 		MarketRuleHelper.DefaultRuleContainer.SuspendRules();

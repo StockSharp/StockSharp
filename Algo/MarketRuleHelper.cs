@@ -183,7 +183,7 @@ public static partial class MarketRuleHelper
 
 		container.AddRuleLog(LogLevels.Debug, rule, LocalizedStrings.Activation);
 
-		List<IMarketRule> removedRules = null;
+		var removedRules = new List<IMarketRule>();
 
 		// mika
 		// проверяем правило, так как оно могло быть удалено параллельным потоком
@@ -197,16 +197,13 @@ public static partial class MarketRuleHelper
 			if (process())
 			{
 				container.Rules.Remove(rule);
-				removedRules = [rule];
+				removedRules.Add(rule);
 			}
 		}
 		finally
 		{
 			rule.IsActive = false;
 		}
-
-		if (removedRules == null)
-			return;
 
 		if (rule.ExclusiveRules.Count > 0)
 		{

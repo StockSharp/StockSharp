@@ -355,7 +355,7 @@ partial class MarketRuleHelper
 	/// <returns>Rule.</returns>
 	public static MarketRule<Order, OrderFail> WhenCancelFailed(this Order order, ISubscriptionProvider provider)
 	{
-		return new CancelFailedOrderRule(order, provider);
+		return new CancelFailedOrderRule(order, provider).Once();
 	}
 
 	/// <summary>
