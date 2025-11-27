@@ -467,19 +467,18 @@ public static partial class MarketRuleHelper
 		#region Implementation of IMarketRuleContainer
 
 		ProcessStates IMarketRuleContainer.ProcessState => Container.ProcessState;
+		IMarketRuleList IMarketRuleContainer.Rules => throw new NotSupportedException();
+
+		public bool IsRulesSuspended => Container.IsRulesSuspended;
 
 		void IMarketRuleContainer.ActivateRule(IMarketRule rule, Func<bool> process)
 		{
-			process();
+			if (!IsRulesSuspended)
+				process();
 		}
-
-		bool IMarketRuleContainer.IsRulesSuspended => Container.IsRulesSuspended;
-
+		
 		void IMarketRuleContainer.SuspendRules() => throw new NotSupportedException();
-
 		void IMarketRuleContainer.ResumeRules() => throw new NotSupportedException();
-
-		IMarketRuleList IMarketRuleContainer.Rules => throw new NotSupportedException();
 
 		#endregion
 
@@ -493,7 +492,13 @@ public static partial class MarketRuleHelper
 	{
 		protected override IMarketRule Init(IMarketRule rule)
 		{
-			return rule.Do(arg => Activate(arg));
+			return rule.Do(arg =>
+			{
+				if (IsRulesSuspended)
+					return;
+
+				Activate(arg);
+			});
 		}
 	}
 
@@ -501,7 +506,13 @@ public static partial class MarketRuleHelper
 	{
 		protected override IMarketRule Init(IMarketRule rule)
 		{
-			return ((MarketRule<TToken, TArg>)rule).Do(a => Activate(a));
+			return ((MarketRule<TToken, TArg>)rule).Do(a =>
+			{
+				if (IsRulesSuspended)
+					return;
+
+				Activate(a);
+			});
 		}
 	}
 
@@ -520,6 +531,9 @@ public static partial class MarketRuleHelper
 		{
 			return rule.Do(a =>
 			{
+				if (IsRulesSuspended)
+					return;
+
 				var canActivate = false;
 
 				lock (_nonActivatedRules.SyncRoot)
@@ -554,6 +568,9 @@ public static partial class MarketRuleHelper
 		{
 			return ((MarketRule<TToken, TArg>)rule).Do(a =>
 			{
+				if (IsRulesSuspended)
+					return;
+
 				var canActivate = false;
 
 				lock (_nonActivatedRules.SyncRoot)

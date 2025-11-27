@@ -298,7 +298,12 @@ public abstract class MarketRule<TToken, TArg> : BaseLogReceiver, IMarketRule
 	/// <param name="arg">The value, which will be sent to processor, registered through <see cref="Do(Action{TArg})"/>.</param>
 	protected virtual void Activate(TArg arg)
 	{
-		if (!IsReady || IsSuspended)
+		CheckOnReady();
+
+		if (Container is null)
+			throw new InvalidOperationException($"Rule '{Name}' no container.");
+
+		if (IsSuspended)
 			return;
 
 		_arg = arg;
@@ -338,22 +343,38 @@ public abstract class MarketRule<TToken, TArg> : BaseLogReceiver, IMarketRule
 
 	bool IMarketRule.CanFinish()
 	{
+		CheckOnReady();
 		return !IsActive && IsReady && _canFinish();
 	}
 
+	private void CheckOnReady()
+	{
+		if (IsDisposed)
+			throw new ObjectDisposedException(Name);
+	}
+
 	/// <inheritdoc />
-	public bool IsReady => !IsDisposed && _container is not null;
+	public bool IsReady
+	{
+		get
+		{
+			CheckOnReady();
+			return _container is not null;
+		}
+	}
 
 	/// <inheritdoc />
 	public bool IsActive { get; set; }
 
 	IMarketRule IMarketRule.Until(Func<bool> canFinish)
 	{
+		CheckOnReady();
 		return Until(canFinish);
 	}
 
 	IMarketRule IMarketRule.Do(Action action)
 	{
+		CheckOnReady();
 		return Do(action);
 	}
 
@@ -362,11 +383,14 @@ public abstract class MarketRule<TToken, TArg> : BaseLogReceiver, IMarketRule
 		if (action == null)
 			throw new ArgumentNullException(nameof(action));
 
+		CheckOnReady();
+
 		return Do(arg => action(arg));
 	}
 
 	IMarketRule IMarketRule.Do<TResult>(Func<TResult> action)
 	{
+		CheckOnReady();
 		return Do(action);
 	}
 }
