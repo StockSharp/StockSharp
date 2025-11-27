@@ -98,16 +98,16 @@ public class MarketRuleTests
 	[TestMethod]
 	public void OrAndAnd()
 	{
-		var a = new TestRule().Apply();
-		var b = new TestRule().Apply();
+		var a = new TestRule();
+		var b = new TestRule();
 
 		bool orFired = false;
 		a.Or(b).Apply().Do(_ => orFired = true);
 		((TestRule)b).Trigger();
 		orFired.AssertTrue();
 
-		a = new TestRule().Apply();
-		b = new TestRule().Apply();
+		a = new TestRule();
+		b = new TestRule();
 		bool andFired = false;
 		a.And(b).Apply().Do(_ => andFired = true);
 		andFired.AssertFalse();
@@ -146,19 +146,19 @@ public class MarketRuleTests
 	[TestMethod]
 	public void OrAndMultipleAndOnce()
 	{
-		// Or with3 rules, fire middle one
-		var r1 = new TestRule().Apply();
-		var r2 = new TestRule().Apply();
-		var r3 = new TestRule().Apply();
+		// Or with 3 rules, fire the middle one
+		var r1 = new TestRule();
+		var r2 = new TestRule();
+		var r3 = new TestRule();
 		int orCount = 0;
 		r1.Or(r2, r3).Apply().Do(_ => orCount++);
 		((TestRule)r2).Trigger();
 		orCount.AssertEqual(1);
 
-		// And with3 rules, ensure activates once after last trigger
-		r1 = new TestRule().Apply();
-		r2 = new TestRule().Apply();
-		r3 = new TestRule().Apply();
+		// And with 3 rules, ensure activates once after the last trigger
+		r1 = new TestRule();
+		r2 = new TestRule();
+		r3 = new TestRule();
 		int andCount = 0;
 		r1.And(r2, r3).Apply().Do(_ => andCount++);
 		((TestRule)r1).Trigger();
@@ -168,7 +168,7 @@ public class MarketRuleTests
 		((TestRule)r2).Trigger();
 		andCount.AssertEqual(1);
 
-		// Once – second activation does not repeat the handler
+		// Once – the second activation does not re-run the handler
 		int onceCount = 0;
 		var once = new TestRule().Once().Apply().Do(_ => onceCount++);
 		((TestRule)once).Trigger();
@@ -192,7 +192,7 @@ public class MarketRuleTests
 		var intervalFired = 0;
 		mock.Object.WhenIntervalElapsed(TimeSpan.FromSeconds(5)).Apply().Do(_ => intervalFired++);
 
-		// advance5 seconds
+		// Advance 5 seconds
 		mock.Raise(m => m.CurrentTimeChanged += null, TimeSpan.FromSeconds(5));
 		intervalFired.AssertEqual(1);
 
@@ -201,12 +201,12 @@ public class MarketRuleTests
 		var firedAt = new List<DateTime>();
 		mock.Object.WhenTimeCome(times).Apply().Do(firedAt.Add);
 
-		// move3 seconds to first time
+		// Move 3 seconds to the first time
 		mock.Raise(m => m.CurrentTimeChanged += null, TimeSpan.FromSeconds(3));
 		firedAt.Count.AssertEqual(1);
 		firedAt[0].AssertEqual(times[0]);
 
-		// then3 more seconds to second time
+		// Then 3 more seconds to the second time
 		mock.Raise(m => m.CurrentTimeChanged += null, TimeSpan.FromSeconds(3));
 		firedAt.Count.AssertEqual(2);
 		firedAt[1].AssertEqual(times[1]);
@@ -302,7 +302,7 @@ public class MarketRuleTests
 		provider.Raise(p => p.OwnTradeReceived += null, sub, new MyTrade { Order = order, Trade = new ExecutionMessage { DataTypeEx = DataType.Ticks, TradePrice = 1m, TradeVolume = 3m } });
 		(allRes?.Sum(t => t.Trade.Volume)).AssertEqual(10m);
 
-		// WhenRegistered – срабатывает один раз (правило .Once())
+		// WhenRegistered – fires only once (rule .Once())
 		int regCount = 0;
 		var o2 = new Order();
 		o2.WhenRegistered(provider.Object).Apply().Do(_ => regCount++);
@@ -618,14 +618,14 @@ public class MarketRuleTests
 		provider.Raise(p => p.CandleReceived += null, sub, sc3);
 		(volMore == sc3).AssertTrue();
 
-		// Граница по цене: равно порогу не активирует
+		// Price boundary: equal to threshold does not activate
 		TimeFrameCandleMessage eq = null;
 		var sc4 = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, ClosePrice = 100m };
 		provider.Object.WhenClosePriceMore(sc4, 100m).Apply().Do(c => eq = c);
 		provider.Raise(p => p.CandleReceived += null, sub, sc4);
 		(eq is null).AssertTrue();
 
-		// Относительная цена: +5 и -5 от текущей
+		// Relative price: +5 and -5 from current
 		var sc5 = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, ClosePrice = 200m };
 		TimeFrameCandleMessage relMore = null;
 		provider.Object.WhenClosePriceMore(sc5, new Unit(5m)).Apply().Do(c => relMore = c);
@@ -648,7 +648,7 @@ public class MarketRuleTests
 		var sec = Helper.CreateSecurity();
 		var sub = new Subscription(DataType.MarketDepth, sec);
 
-		// BestBid/Less – равно порогу не активирует
+		// BestBid/Less – equal to threshold does not activate
 		var obEq = new QuoteChangeMessage
 		{
 			SecurityId = sec.ToSecurityId(),
@@ -660,19 +660,19 @@ public class MarketRuleTests
 		provider.Raise(p => p.OrderBookReceived += null, sub, obEq);
 		(res is null).AssertTrue();
 
-		// LastTrade – равно порогу не активирует
+		// LastTrade – equal to threshold does not activate
 		var tick = new ExecutionMessage { SecurityId = sec.ToSecurityId(), TradePrice = 50m, TradeVolume = 1m, DataTypeEx = DataType.Ticks };
 		ITickTradeMessage ltRes = null;
 		sub.WhenLastTradePriceMore(provider.Object, 50m).Apply().Do(t => ltRes = t);
 		provider.Raise(p => p.TickTradeReceived += null, sub, tick);
 		(ltRes is null).AssertTrue();
 
-		// CandlesStarted – повтор того же сообщения не вызывает повторную активацию
+		// CandlesStarted – repeating the same message does not trigger again
 		int startedCount = 0;
 		provider.Object.WhenCandlesStarted<ICandleMessage>(sub).Apply().Do(_ => startedCount++);
 		var candle = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active };
 		provider.Raise(p => p.CandleReceived += null, sub, candle);
-		provider.Raise(p => p.CandleReceived += null, sub, candle); // тот же
+		provider.Raise(p => p.CandleReceived += null, sub, candle); // same message
 		startedCount.AssertEqual(1);
 	}
 
@@ -684,11 +684,11 @@ public class MarketRuleTests
 		r.Do(_ => fired = true);
 		MarketRuleHelper.DefaultRuleContainer.SuspendRules();
 		MarketRuleHelper.DefaultRuleContainer.IsRulesSuspended.AssertTrue();
-		((TestRule)r).Trigger(); // не должно активировать
+		((TestRule)r).Trigger(); // should not activate
 		fired.AssertFalse();
 		MarketRuleHelper.DefaultRuleContainer.ResumeRules();
 		MarketRuleHelper.DefaultRuleContainer.IsRulesSuspended.AssertFalse();
-		((TestRule)r).Trigger(); // теперь активирует
+		((TestRule)r).Trigger(); // now activates
 		fired.AssertTrue();
 		MarketRuleHelper.DefaultRuleContainer.TryRemoveRule(r).AssertTrue();
 	}
@@ -713,7 +713,7 @@ public class MarketRuleTests
 	public void TryRemoveInfiniteRuleWithCheck()
 	{
 		var r = new TestRule().Apply();
-		r.Until(() => false); // бесконечное
+		r.Until(() => false); // infinite
 		MarketRuleHelper.DefaultRuleContainer.TryRemoveRule(r, true).AssertFalse();
 		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(r).AssertTrue();
 		// cleanup
@@ -803,7 +803,7 @@ public class MarketRuleTests
 		r.Do(_ => cnt++);
 		((TestRule)r).Trigger();
 		cnt.AssertEqual(1);
-		// правило завершено после первой активации
+		// rule is finished after the first activation
 		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(r).AssertFalse();
 		((TestRule)r).Trigger();
 		cnt.AssertEqual(1);
@@ -869,11 +869,11 @@ public class MarketRuleTests
 		cnt.AssertEqual(0);
 
 		MarketRuleHelper.DefaultRuleContainer.SuspendRules();
-		((TestRule)b).Trigger(); // игнорируется
+		((TestRule)b).Trigger(); // ignored
 		cnt.AssertEqual(0);
 
 		MarketRuleHelper.DefaultRuleContainer.ResumeRules();
-		((TestRule)b).Trigger(); // теперь сработает
+		((TestRule)b).Trigger(); // will work now
 		cnt.AssertEqual(1);
 	}
 
@@ -959,7 +959,7 @@ public class MarketRuleTests
 		var b = new TestRule();
 		int cnt = 0;
 		a.And(b).Apply().Do(_ => cnt++);
-		// Быстрая последовательность как «одновременно»
+		// Fast sequence treated as "simultaneous"
 		b.Trigger();
 		a.Trigger();
 		cnt.AssertEqual(1);
@@ -1004,7 +1004,7 @@ public class MarketRuleTests
 		var candle = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, ClosePrice = 100m };
 		TimeFrameCandleMessage res = null;
 		provider.Object.WhenClosePriceMore(candle, new Unit(5m, UnitTypes.Percent)).Apply().Do(c => res = c);
-		candle.ClosePrice = 105m; // ровно +5%
+		candle.ClosePrice = 105m; // exactly +5%
 		provider.Raise(p => p.CandleReceived += null, sub, candle);
 		(res is null).AssertTrue();
 	}
@@ -1047,11 +1047,11 @@ public class MarketRuleTests
 		provider.Raise(p => p.OrderReceived += null, sub, order);
 		cnt.AssertEqual(1);
 
-		// повторные события не должны увеличивать счётчик
+		// repeated events should not increase the counter
 		provider.Raise(p => p.OrderReceived += null, sub, order);
 		cnt.AssertEqual(1);
 
-		order.Balance = 5m; // изменение после done не должно влиять
+		order.Balance = 5m; // change after done should not affect
 		provider.Raise(p => p.OrderReceived += null, sub, order);
 		cnt.AssertEqual(1);
 	}
@@ -1078,7 +1078,7 @@ public class MarketRuleTests
 		provider.Raise(p => p.OrderReceived += null, sub, order);
 		canceledCnt.AssertEqual(1);
 
-		// повтор не увеличивает счётчики
+		// repeat does not increase counters
 		provider.Raise(p => p.OrderCancelFailReceived += null, sub, of);
 		failCnt.AssertEqual(1);
 		provider.Raise(p => p.OrderReceived += null, sub, order);
@@ -1229,7 +1229,7 @@ public class MarketRuleTests
 		r.Do(_ => fired = true);
 		r.Trigger();
 		fired.AssertTrue();
-		r.IsActive.AssertTrue(); // после первой активации станет активным
+		r.IsActive.AssertTrue(); // becomes active after the first activation
 	}
 
 	[TestMethod]
@@ -1237,7 +1237,7 @@ public class MarketRuleTests
 	{
 		var r = new TestRule();
 		var first = r.Apply();
-		var second = first.Apply(); // повторный Apply
+		var second = first.Apply(); // repeat Apply
 		(first == second).AssertTrue();
 		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(first).AssertTrue();
 	}
@@ -1263,7 +1263,7 @@ public class MarketRuleTests
 		((TestRule)r).Trigger();
 		cnt.AssertEqual(2);
 		finish = true;
-		((TestRule)r).Trigger(); // завершающая
+		((TestRule)r).Trigger(); // final activation
 		cnt.AssertEqual(3);
 		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(r).AssertFalse();
 	}
@@ -1275,7 +1275,7 @@ public class MarketRuleTests
 		var b = new TestRule().Apply();
 		var c = new TestRule().Apply();
 		var d = new TestRule().Apply();
-		// цепочка: a эксклюзивен к b,c,d
+		// chain: a is exclusive to b, c, d
 		a.Exclusive(b);
 		a.Exclusive(c);
 		a.Exclusive(d);
@@ -1294,14 +1294,14 @@ public class MarketRuleTests
 		var a = new TestRule().Apply();
 		var b = new TestRule().Apply();
 		var c = new TestRule().Apply();
-		// двусторонние связи
+		// bidirectional links
 		a.Exclusive(b);
 		b.Exclusive(c);
 		bool af = false, bf = false, cf = false;
 		a.Do(_ => af = true);
 		b.Do(_ => bf = true);
 		c.Do(_ => cf = true);
-		// активируем средний
+		// activate the middle
 		((TestRule)b).Trigger();
 		bf.AssertTrue();
 		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(a).AssertFalse();
@@ -1322,9 +1322,9 @@ public class MarketRuleTests
 		((TestRule)a).Trigger();
 		cnt.AssertEqual(0);
 		MarketRuleHelper.DefaultRuleContainer.ResumeRules();
-		// завершим and(b,c)
+		// complete and(b,c)
 		((TestRule)b).Trigger();
-		((TestRule)c).Trigger(); // and готов -> or активируется
+		((TestRule)c).Trigger(); // and is ready -> or activates
 		cnt.AssertEqual(1);
 		MarketRuleHelper.DefaultRuleContainer.Rules.Contains(combo).AssertFalse();
 	}
@@ -1341,7 +1341,7 @@ public class MarketRuleTests
 		((TestRule)b).Trigger();
 		cnt.AssertEqual(0);
 		MarketRuleHelper.DefaultRuleContainer.SuspendRules();
-		((TestRule)c).Trigger(); // игнорируется
+		((TestRule)c).Trigger(); // ignored
 		cnt.AssertEqual(0);
 		MarketRuleHelper.DefaultRuleContainer.ResumeRules();
 		((TestRule)c).Trigger();
@@ -1385,7 +1385,7 @@ public class MarketRuleTests
 		TimeFrameCandleMessage more = null, less = null;
 		provider.Object.WhenClosePriceMore(candle, new Unit(5m, UnitTypes.Percent)).Apply().Do(c => more = c);
 		provider.Object.WhenClosePriceLess(candle, new Unit(5m, UnitTypes.Percent)).Apply().Do(c => less = c);
-		// ровно +5% и -5% не должны активироваться
+		// exactly +5% and -5% should not activate
 		candle.ClosePrice = 210m; // +5%
 		provider.Raise(p => p.CandleReceived += null, sub, candle);
 		(more is null).AssertTrue();
