@@ -8,8 +8,7 @@ public class HistoryMessageAdapter : MessageAdapter
 	private readonly Dictionary<(SecurityId secId, DataType dataType), (MarketDataGenerator generator, long transId)> _generators = [];
 
 	private readonly List<Tuple<IMarketDataStorage, long>> _actions = [];
-	private readonly SyncObject _moveNextSyncRoot = new();
-	private readonly SyncObject _syncRoot = new();
+	private readonly AutoResetEvent _syncRoot = new(false);
 
 	private readonly BasketMarketDataStorage<Message> _basketStorage = new();
 
@@ -325,7 +324,7 @@ public class HistoryMessageAdapter : MessageAdapter
 			_isChanged = true;
 			_actions.Add(Tuple.Create(storage, transactionId));
 
-			_syncRoot.PulseSignal();
+			_syncRoot.Set();
 		}
 
 		void RemoveStorage(long originalTransactionId)
@@ -336,7 +335,7 @@ public class HistoryMessageAdapter : MessageAdapter
 			_isChanged = true;
 			_actions.Add(Tuple.Create((IMarketDataStorage)null, originalTransactionId));
 
-			_syncRoot.PulseSignal();
+			_syncRoot.Set();
 		}
 
 		var isSubscribe = message.IsSubscribe;
@@ -464,11 +463,9 @@ public class HistoryMessageAdapter : MessageAdapter
 
 				while (!IsDisposed && !cancellationToken.IsCancellationRequested)
 				{
-					_syncRoot.WaitSignal();
+					_syncRoot.WaitOne();
 
 					_isChanged = false;
-
-					_moveNextSyncRoot.PulseSignal();
 
 					foreach (var action in _actions.CopyAndClear())
 					{
@@ -556,7 +553,7 @@ public class HistoryMessageAdapter : MessageAdapter
 	private void Stop()
 	{
 		_cancellationToken?.Cancel();
-		_syncRoot.PulseSignal();
+		_syncRoot.Set();
 	}
 
 	private async ValueTask EnqueueMessages(DateTime fromTime, DateTime toTime, DateTime curTime, IAsyncEnumerable<Message> messages)
