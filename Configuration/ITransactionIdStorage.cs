@@ -119,7 +119,7 @@ public class InMemoryTransactionIdStorage(IdGenerator idGenerator) : ITransactio
 
 		private void Add(string requestId, long transactionId)
 		{
-			lock (_requestIdMap.SyncRoot)
+			using (_requestIdMap.EnterScope())
 			{
 				if (_requestIdMap.ContainsKey(transactionId))
 					throw new ArgumentException(LocalizedStrings.HasDuplicates.Put(transactionId));

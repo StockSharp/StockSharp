@@ -47,7 +47,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 		NoMarketPrice,
 	}
 
-	private readonly SyncObject _lock = new();
+	private readonly Lock _lock = new();
 	private readonly Dictionary<(SecurityId secId, Portfolio pf), Position> _positions = [];
 	private readonly Dictionary<long, OrderExecInfo> _orderExecInfos = [];
 	private readonly Dictionary<SecurityId, decimal> _lastPrices = [];
@@ -98,13 +98,13 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 
 	/// <summary>
 	/// </summary>
-	[Browsable(false)] public int TrackedOrderExecInfosCount { get { lock (_lock) return _orderExecInfos.Count; } }
+	[Browsable(false)] public int TrackedOrderExecInfosCount { get { using (_lock.EnterScope()) return _orderExecInfos.Count; } }
 	/// <summary>
 	/// </summary>
-	[Browsable(false)] public int TrackedOrderTracksCount { get { lock (_lock) return _orderTracks.Count; } }
+	[Browsable(false)] public int TrackedOrderTracksCount { get { using (_lock.EnterScope()) return _orderTracks.Count; } }
 	/// <summary>
 	/// </summary>
-	[Browsable(false)] public int TrackedAggsCount { get { lock (_lock) return _posAggs.Count; } }
+	[Browsable(false)] public int TrackedAggsCount { get { using (_lock.EnterScope()) return _posAggs.Count; } }
 
 	/// <summary>
 	/// Try get existing position instance for <paramref name="security"/> and <paramref name="portfolio"/>.
@@ -119,7 +119,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 
 		var key = (security.ToSecurityId(), portfolio);
 
-		lock (_lock)
+		using (_lock.EnterScope())
 			return _positions.TryGetValue(key);
 	}
 
@@ -132,7 +132,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 	/// <param name="time">Timestamp to assign into <see cref="Position.LocalTime"/> and <see cref="Position.ServerTime"/> if position is created anew.</param>
 	public void SetPosition(Security security, Portfolio portfolio, decimal value, DateTime time)
 	{
-		lock (_lock)
+		using (_lock.EnterScope())
 			GetOrCreate(security, portfolio, time, out _).CurrentValue = value;
 	}
 
@@ -166,7 +166,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 	[Browsable(false)]
 	public Position[] Positions
 	{
-		get { lock (_lock) return [.. _positions.Values]; }
+		get { using (_lock.EnterScope()) return [.. _positions.Values]; }
 	}
 
 	/// <summary>
@@ -174,7 +174,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 	/// </summary>
 	public void Reset()
 	{
-		lock (_lock)
+		using (_lock.EnterScope())
 		{
 			_positions.Clear();
 			_orderExecInfos.Clear();
@@ -313,7 +313,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 
 		var commission = order.Commission;
 
-		lock (_lock)
+		using (_lock.EnterScope())
 		{
 			var key = (order.Security.ToSecurityId(), order.Portfolio);
 			var posExists = _positions.ContainsKey(key);
@@ -468,7 +468,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 
 		List<Position> changed = null;
 
-		lock (_lock)
+		using (_lock.EnterScope())
 		{
 			_lastPrices[secId] = price;
 

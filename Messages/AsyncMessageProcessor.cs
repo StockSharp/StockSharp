@@ -123,7 +123,7 @@ class AsyncMessageProcessor : Disposable
 		if (msg.Type != MessageTypes.Time)
 			_adapter.AddVerboseLog("enqueue: {0}", msg.Type);
 
-		lock (_messages.SyncRoot)
+		using (_messages.EnterScope())
 		{
 			if (msg is ResetMessage)
 			{
@@ -145,7 +145,7 @@ class AsyncMessageProcessor : Disposable
 		{
 			MessageQueueItem item;
 
-			lock (_messages.SyncRoot)
+			using (_messages.EnterScope())
 			{
 				var isControlProcessing = false;
 				var isPingProcessing = false;

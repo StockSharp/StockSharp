@@ -11,7 +11,7 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 {
 	private class SubscriptionInfo(OrderStatusMessage original)
 	{
-		public SyncObject Sync { get; } = new SyncObject();
+		public Lock Sync { get; } = new();
 
 		public OrderStatusMessage Original { get; } = original ?? throw new ArgumentNullException(nameof(original));
 		public Dictionary<long, Tuple<List<ExecutionMessage>, List<ExecutionMessage>, long>> Transactions { get; } = [];
@@ -26,7 +26,7 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 	private readonly SynchronizedPairSet<long, long> _orderIds = [];
 	private readonly SynchronizedPairSet<string, long> _orderStringIds = new(StringComparer.InvariantCultureIgnoreCase);
 
-	private readonly SyncObject _nonAssociatedLock = new();
+	private readonly Lock _nonAssociatedLock = new();
 	private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedOrderIds = [];
 	private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedStringOrderIds = [];
 
@@ -41,7 +41,7 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 		_orderIds.Clear();
 		_orderStringIds.Clear();
 
-		lock (_nonAssociatedLock)
+		using (_nonAssociatedLock.EnterScope())
 		{
 			_nonAssociatedOrderIds.Clear();
 			_nonAssociatedStringOrderIds.Clear();
@@ -146,7 +146,7 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 
 				Tuple<List<ExecutionMessage>, List<ExecutionMessage>, long>[] tuples;
 
-				lock (subscription.Sync)
+				using (subscription.Sync.EnterScope())
 					tuples = [.. subscription.Transactions.Values];
 
 				//var canProcessFailed = truesubscription.Original.States.Contains(OrderStates.Failed);
@@ -252,7 +252,7 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 					{
 						LogInfo("{0} suspended.", execMsg);
 
-						lock (_nonAssociatedLock)
+						using (_nonAssociatedLock.EnterScope())
 							_nonAssociatedOrderIds.SafeAdd(execMsg.OrderId.Value).Add(execMsg.TypedClone());
 
 						return;
@@ -261,7 +261,7 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 					{
 						LogInfo("{0} suspended.", execMsg);
 
-						lock (_nonAssociatedLock)
+						using (_nonAssociatedLock.EnterScope())
 							_nonAssociatedStringOrderIds.SafeAdd(execMsg.OrderStringId).Add(execMsg.TypedClone());
 
 						return;
@@ -295,7 +295,7 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 					}
 				}
 
-				lock (subscription.Sync)
+				using (subscription.Sync.EnterScope())
 				{
 					if (subscription.Transactions.TryGetValue(transId, out var tuple))
 					{
@@ -349,7 +349,7 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 	{
 		List<ExecutionMessage> trades;
 
-		lock (_nonAssociatedLock)
+		using (_nonAssociatedLock.EnterScope())
 		{
 			if (nonAssociated.Count > 0)
 			{

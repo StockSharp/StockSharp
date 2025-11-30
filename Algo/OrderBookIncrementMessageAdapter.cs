@@ -15,7 +15,7 @@ public class OrderBookIncrementMessageAdapter(IMessageAdapter innerAdapter) : Me
 		public readonly CachedSynchronizedSet<long> SubscriptionIds = [];
 	}
 
-	private readonly SyncObject _syncObject = new();
+	private readonly Lock _syncObject = new();
 
 	private readonly Dictionary<long, BookInfo> _byId = [];
 	private readonly Dictionary<SecurityId, BookInfo> _online = [];
@@ -30,7 +30,7 @@ public class OrderBookIncrementMessageAdapter(IMessageAdapter innerAdapter) : Me
 		{
 			case MessageTypes.Reset:
 			{
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					_byId.Clear();
 					_online.Clear();
@@ -52,7 +52,7 @@ public class OrderBookIncrementMessageAdapter(IMessageAdapter innerAdapter) : Me
 					{
 						var transId = mdMsg.TransactionId;
 
-						lock (_syncObject)
+						using (_syncObject.EnterScope())
 						{
 							if (mdMsg.SecurityId == default)
 							{
@@ -97,7 +97,7 @@ public class OrderBookIncrementMessageAdapter(IMessageAdapter innerAdapter) : Me
 
 	private void RemoveSubscription(long id)
 	{
-		lock (_syncObject)
+		using (_syncObject.EnterScope())
 		{
 			var changeId = true;
 
@@ -156,7 +156,7 @@ public class OrderBookIncrementMessageAdapter(IMessageAdapter innerAdapter) : Me
 			{
 				var id = ((SubscriptionOnlineMessage)message).OriginalTransactionId;
 
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					if (_byId.TryGetValue(id, out var info))
 					{
@@ -184,7 +184,7 @@ public class OrderBookIncrementMessageAdapter(IMessageAdapter innerAdapter) : Me
 				if (quoteMsg.State == null)
 					break;
 
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					if (_allSecSubscriptions.Count == 0 &&
 						_allSecSubscriptionsPassThrough.Count == 0 &&
@@ -201,7 +201,7 @@ public class OrderBookIncrementMessageAdapter(IMessageAdapter innerAdapter) : Me
 					QuoteChangeMessage newQuoteMsg;
 					long[] ids;
 
-					lock (_syncObject)
+					using (_syncObject.EnterScope())
 					{
 						if (!_byId.TryGetValue(subscriptionId, out var info))
 						{

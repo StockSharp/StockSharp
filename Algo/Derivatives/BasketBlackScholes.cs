@@ -116,7 +116,7 @@ public class BasketBlackScholes : BlackScholes
 		{
 			base.RoundDecimals = value;
 
-			lock (_innerModels.SyncRoot)
+			using (_innerModels.EnterScope())
 			{
 				_innerModels.ForEach(m => m.RoundDecimals = value);
 			}

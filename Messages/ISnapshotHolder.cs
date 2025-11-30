@@ -46,7 +46,7 @@ public class Level1SnapshotHolder : BaseLogReceiver, ISnapshotHolder<Level1Chang
 	/// <inheritdoc />
 	public bool TryGetSnapshot(SecurityId securityId, out Level1ChangeMessage snapshot)
 	{
-		lock (_snapshots.SyncRoot)
+		using (_snapshots.EnterScope())
 		{
 			snapshot = null;
 
@@ -66,7 +66,7 @@ public class Level1SnapshotHolder : BaseLogReceiver, ISnapshotHolder<Level1Chang
 
 		var secId = level1Msg.SecurityId;
 
-		lock (_snapshots.SyncRoot)
+		using (_snapshots.EnterScope())
 		{
 			if (_snapshots.TryGetValue(secId, out var snapshot))
 			{
@@ -152,14 +152,14 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 	/// </returns>
 	public int? GetErrorCount(SecurityId securityId)
 	{
-		lock (_snapshots.SyncRoot)
+		using (_snapshots.EnterScope())
 			return _snapshots.TryGetValue(securityId, out var s) ? s.ErrorCount : null;
 	}
 
 	/// <inheritdoc />
 	public bool TryGetSnapshot(SecurityId securityId, out QuoteChangeMessage snapshot)
 	{
-		lock (_snapshots.SyncRoot)
+		using (_snapshots.EnterScope())
 		{
 			snapshot = null;
 
@@ -184,7 +184,7 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 		int logErrorCount = 0;
 		Exception toThrow = null;
 
-		lock (_snapshots.SyncRoot)
+		using (_snapshots.EnterScope())
 		{
 			if (quoteMsg.State is null)
 			{

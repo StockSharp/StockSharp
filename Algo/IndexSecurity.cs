@@ -64,7 +64,7 @@ public class WeightedIndexSecurity : IndexSecurity
 	/// <inheritdoc />
 	protected override void FromSerializedString(string text)
 	{
-		lock (Weights.SyncRoot)
+		using (Weights.EnterScope())
 		{
 			Weights.Clear();
 			Weights.AddRange(text.SplitByComma().Select(p =>

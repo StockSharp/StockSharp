@@ -52,7 +52,7 @@ public class PnLManager : IPnLManager
 	/// <inheritdoc />
 	public void Reset()
 	{
-		lock (_managersByPf.SyncRoot)
+		using (_managersByPf.EnterScope())
 		{
 			RealizedPnL = default;
 
@@ -89,7 +89,7 @@ public class PnLManager : IPnLManager
 		PortfolioPnLManager createManager(string pfName)
 			=> new(pfName, secId =>
 			{
-				lock (_managersByPf.SyncRoot)
+				using (_managersByPf.EnterScope())
 					return _secLevel1.TryGetValue(secId);
 			});
 
@@ -105,7 +105,7 @@ public class PnLManager : IPnLManager
 			{
 				var regMsg = (OrderRegisterMessage)message;
 
-				lock (_managersByPf.SyncRoot)
+				using (_managersByPf.EnterScope())
 				{
 					var manager = _managersByPf.SafeAdd(regMsg.PortfolioName, createManager);
 					_managersByTransId.Add(regMsg.TransactionId, manager);
@@ -128,7 +128,7 @@ public class PnLManager : IPnLManager
 
 					if (execMsg.HasOrderInfo())
 					{
-						lock (_managersByPf.SyncRoot)
+						using (_managersByPf.EnterScope())
 						{
 							if (!_managersByTransId.TryGetValue(transId, out manager))
 							{
@@ -152,7 +152,7 @@ public class PnLManager : IPnLManager
 
 					if (execMsg.HasTradeInfo())
 					{
-						lock (_managersByPf.SyncRoot)
+						using (_managersByPf.EnterScope())
 						{
 							if (manager == null && !_managersByTransId.TryGetValue(transId, out manager))
 								return null;

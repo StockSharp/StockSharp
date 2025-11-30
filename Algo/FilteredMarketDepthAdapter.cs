@@ -206,7 +206,7 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 		public readonly CachedSynchronizedSet<long> OrdersSubscribers = [];
 	}
 
-	private readonly SyncObject _sync = new();
+	private readonly Lock _sync = new();
 
 	private readonly Dictionary<long, FilteredMarketDepthInfo> _byId = [];
 	private readonly Dictionary<long, FilteredMarketDepthInfo> _byBookId = [];
@@ -228,7 +228,7 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 			if (regMsg.TimeInForce is TimeInForce.MatchOrCancel or TimeInForce.CancelBalance)
 				return;
 
-			lock (_sync)
+			using (_sync.EnterScope())
 			{
 				foreach (var info in _byId.Values)
 				{
@@ -242,7 +242,7 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 		{
 			case MessageTypes.Reset:
 			{
-				lock (_sync)
+				using (_sync.EnterScope())
 				{
 					_byId.Clear();
 					_byBookId.Clear();
@@ -289,7 +289,7 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 
 					var info = new FilteredMarketDepthInfo(transId, new Subscription(mdMsg, mdMsg), new Subscription(orderStatus, orderStatus));
 
-					lock (_sync)
+					using (_sync.EnterScope())
 					{
 						_byId.Add(transId, info);
 						_byBookId.Add(mdMsg.TransactionId, info);
@@ -308,7 +308,7 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 					MarketDataMessage bookUnsubscribe = null;
 					OrderStatusMessage ordersUnsubscribe = null;
 
-					lock (_sync)
+					using (_sync.EnterScope())
 					{
 						if (!_byId.TryGetValue(mdMsg.OriginalTransactionId, out var info))
 							break;
@@ -394,7 +394,7 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 
 			var id = msg.OriginalTransactionId;
 
-			lock (_sync)
+			using (_sync.EnterScope())
 			{
 				if (_byBookId.TryGetValue(id, out var info))
 				{
@@ -502,7 +502,7 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 
 				HashSet<long> leftIds = null;
 
-				lock (_sync)
+				using (_sync.EnterScope())
 				{
 					if (_byBookId.Count == 0)
 						break;
@@ -557,7 +557,7 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 
 				HashSet<long> leftIds = null;
 
-				lock (_sync)
+				using (_sync.EnterScope())
 				{
 					if (_byOrderStatusId.Count == 0)
 						break;

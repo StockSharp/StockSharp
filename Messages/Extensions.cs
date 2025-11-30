@@ -603,7 +603,7 @@ public static partial class Extensions
 	/// <returns><see cref="MessageTypes"/> value.</returns>
 	public static MessageTypes ToMessageType(this Type type)
 	{
-		lock (_messageTypeMap.SyncRoot)
+		using (_messageTypeMap.EnterScope())
 		{
 			if (_messageTypeMap.TryGetKey(type, out var enumVal))
 				return enumVal;
@@ -623,7 +623,7 @@ public static partial class Extensions
 	/// <returns><see cref="Type"/> value.</returns>
 	public static Type ToMessageType(this MessageTypes type)
 	{
-		lock (_messageTypeMap.SyncRoot)
+		using (_messageTypeMap.EnterScope())
 		{
 			if (_messageTypeMap.TryGetValue(type, out var typeVal))
 				return typeVal;

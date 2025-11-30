@@ -10,7 +10,7 @@
 public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
 	private bool _connected;
-	private readonly SyncObject _syncObject = new();
+	private readonly Lock _syncObject = new();
 	private readonly List<Message> _suspendedIn = [];
 	private readonly PairSet<long, ISubscriptionMessage> _pendingSubscriptions = [];
 	private readonly PairSet<long, OrderRegisterMessage> _pendingRegistration = [];
@@ -71,7 +71,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 		{
 			case MessageTypes.Reset:
 			{
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					_connected = false;
 
@@ -87,7 +87,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 				break;
 			case MessageTypes.Time:
 			{
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					if (!_connected)
 					{
@@ -104,7 +104,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 			}
 			case MessageTypes.OrderRegister:
 			{
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					if (!_connected)
 					{
@@ -121,7 +121,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 			}
 			case MessageTypes.OrderCancel:
 			{
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					if (!_connected)
 					{
@@ -152,7 +152,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 			}
 			case MessageTypes.OrderReplace:
 			{
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					if (!_connected)
 					{
@@ -167,7 +167,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 			{
 				Message[] msgs;
 
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					msgs = _suspendedIn.CopyAndClear();
 
@@ -190,7 +190,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 				switch (message.OfflineMode)
 				{
 					case MessageOfflineModes.None:
-						lock (_syncObject)
+						using (_syncObject.EnterScope())
 						{
 							if (!_connected)
 							{
@@ -280,7 +280,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 
 			case MessageTypes.Disconnect:
 			{
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 					_connected = false;
 
 				break;
@@ -288,7 +288,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 
 			case MessageTypes.ConnectionLost:
 			{
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 					_connected = false;
 
 				var lostMsg = (ConnectionLostMessage)message;
@@ -309,7 +309,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 
 		if ((connectMessage != null && connectMessage.IsOk()) || message.Type == MessageTypes.ConnectionRestored)
 		{
-			lock (_syncObject)
+			using (_syncObject.EnterScope())
 			{
 				_connected = true;
 

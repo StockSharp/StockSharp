@@ -62,7 +62,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 		public bool Stopped { get; set; }
 	}
 
-	private readonly SyncObject _syncObject = new();
+	private readonly Lock _syncObject = new();
 
 	private readonly Dictionary<long, SeriesInfo> _series = [];
 	private readonly Dictionary<long, long> _replaceId = [];
@@ -88,7 +88,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 		{
 			case MessageTypes.Reset:
 			{
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					_series.Clear();
 					_replaceId.Clear();
@@ -110,7 +110,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 				if (mdMsg.IsSubscribe)
 				{
-					lock (_syncObject)
+					using (_syncObject.EnterScope())
 					{
 						if (_replaceId.ContainsKey(transactionId))
 							break;
@@ -196,7 +196,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 									mdMsg.To = CurrentTimeUtc;
 								}
 
-								lock (_syncObject)
+								using (_syncObject.EnterScope())
 								{
 									_series.Add(transactionId, new SeriesInfo(original, original)
 									{
@@ -234,7 +234,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 								var current = original.TypedClone();
 								current.DataType2 = s;
 
-								lock (_syncObject)
+								using (_syncObject.EnterScope())
 								{
 									_series.Add(transactionId, new SeriesInfo(original, current)
 									{
@@ -262,7 +262,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 							var original = mdMsg.TypedClone();
 
-							lock (_syncObject)
+							using (_syncObject.EnterScope())
 							{
 								_series.Add(transactionId, new SeriesInfo(original, original)
 								{
@@ -293,7 +293,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 					{
 						var sentResponse = false;
 
-						lock (_syncObject)
+						using (_syncObject.EnterScope())
 						{
 							if (_allChilds.TryGetAndRemove(mdMsg.OriginalTransactionId, out var child))
 							{
@@ -333,7 +333,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 	private SeriesInfo TryGetSeries(long id, out long originalId)
 	{
-		lock (_syncObject)
+		using (_syncObject.EnterScope())
 		{
 			if (_replaceId.TryGetValue(id, out originalId))
 				id = originalId;
@@ -348,7 +348,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 	{
 		LogDebug("Series removing {0}.", id);
 
-		lock (_syncObject)
+		using (_syncObject.EnterScope())
 		{
 			if (!_series.TryGetAndRemove(id, out var series))
 				return null;
@@ -406,7 +406,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 			State = SeriesStates.Compress,
 		};
 
-		lock (_syncObject)
+		using (_syncObject.EnterScope())
 			_series.Add(original.TransactionId, series);
 
 		Buffer?.ProcessInMessage(current);
@@ -505,7 +505,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 				var onlineMsg = (SubscriptionOnlineMessage)message;
 				var subscriptionId = onlineMsg.OriginalTransactionId;
 
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					if (_series.ContainsKey(subscriptionId))
 						LogInfo("Series online {0}.", subscriptionId);
@@ -717,7 +717,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 						series.State = SeriesStates.SmallTimeFrame;
 						series.NonFinishedCandle = null;
 
-						lock (_syncObject)
+						using (_syncObject.EnterScope())
 							_replaceId.Add(curr.TransactionId, series.Id);
 
 						LogInfo("Series smaller tf: ids {0}->{1}", original.TransactionId, newTransId);
@@ -771,7 +771,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 		current.TransactionId = TransactionIdGenerator.GetNextId();
 
-		lock (_syncObject)
+		using (_syncObject.EnterScope())
 			_replaceId.Add(current.TransactionId, series.Id);
 
 		LogInfo("Series compress: ids {0}->{1}", original.TransactionId, current.TransactionId);
@@ -845,7 +845,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 			{
 				SubscriptionSecurityAllMessage allMsg = null;
 
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					series = series.Child.SafeAdd(((ISecurityIdMessage)message).SecurityId, key =>
 					{

@@ -43,10 +43,11 @@ The assembly is titled **S#.Configuration** and described as "Configuration comp
   ```csharp
   class DefaultCredentialsProvider : ICredentialsProvider
   {
+-     private readonly Lock _lock = new();
       private ServerCredentials _credentials;
       bool ICredentialsProvider.TryLoad(out ServerCredentials credentials)
       {
-          lock (this)
+          using (_lock.EnterScope())
           {
               if(_credentials != null)
               {

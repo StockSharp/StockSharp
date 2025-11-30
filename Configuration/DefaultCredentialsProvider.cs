@@ -1,15 +1,19 @@
 ﻿namespace StockSharp.Configuration;
 
+using System.Threading;
+
 /// <summary>
 /// Default implementation of <see cref="ICredentialsProvider"/>.
 /// </summary>
 public class DefaultCredentialsProvider : ICredentialsProvider
 {
+	private readonly Lock _lock = new();
+
 	private ServerCredentials _credentials;
 
 	bool ICredentialsProvider.TryLoad(out ServerCredentials credentials)
 	{
-		lock (this)
+		using (_lock.EnterScope())
 		{
 			if(_credentials != null)
 			{
@@ -44,7 +48,7 @@ public class DefaultCredentialsProvider : ICredentialsProvider
 		if (credentials is null)
 			throw new ArgumentNullException(nameof(credentials));
 
-		lock (this)
+		using (_lock.EnterScope())
 		{
 			_credentials = credentials.Clone();
 
@@ -62,7 +66,7 @@ public class DefaultCredentialsProvider : ICredentialsProvider
 	{
 		var fileName = Paths.CredentialsFile;
 
-		lock (this)
+		using (_lock.EnterScope())
 		{
 			if (File.Exists(fileName))
 				File.Delete(fileName);

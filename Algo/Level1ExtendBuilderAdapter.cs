@@ -23,7 +23,7 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 		public SubscriptionStates State { get; set; }
 	}
 
-	private readonly SyncObject _syncObject = new();
+	private readonly Lock _syncObject = new();
 	private readonly Dictionary<long, Level1Info> _level1Subscriptions = [];
 
 	/// <inheritdoc />
@@ -33,7 +33,7 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 		{
 			case MessageTypes.Reset:
 			{
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 					_level1Subscriptions.Clear();
 				
 				break;
@@ -60,7 +60,7 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 					mdMsg.DataType2 = mdMsg.BuildFrom ?? DataType.MarketDepth;
 					mdMsg.BuildFrom = null;
 
-					lock (_syncObject)
+					using (_syncObject.EnterScope())
 						_level1Subscriptions.Add(transId, new Level1Info(mdMsg.TypedClone()));
 					
 					message = mdMsg;
@@ -70,7 +70,7 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 				{
 					var id = mdMsg.OriginalTransactionId;
 
-					lock (_syncObject)
+					using (_syncObject.EnterScope())
 					{
 						if (_level1Subscriptions.TryGetAndRemove(id, out var info))
 							info.State = info.State.ChangeSubscriptionState(SubscriptionStates.Stopped, id, this);
@@ -93,7 +93,7 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 		List<long> subscriptions = null;
 		List<long> leftSubscriptions = null;
 
-		lock (_syncObject)
+		using (_syncObject.EnterScope())
 		{
 			if (_level1Subscriptions.Count == 0)
 				return subscrMsg;
@@ -138,7 +138,7 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 				var responseMsg = (SubscriptionResponseMessage)message;
 				var id = responseMsg.OriginalTransactionId;
 
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					if (!_level1Subscriptions.TryGetValue(id, out var info))
 						break;
@@ -159,7 +159,7 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 			{
 				var id = ((SubscriptionFinishedMessage)message).OriginalTransactionId;
 
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					if (_level1Subscriptions.TryGetAndRemove(id, out var info))
 						info.State = info.State.ChangeSubscriptionState(SubscriptionStates.Finished, id, this);
@@ -172,7 +172,7 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 			{
 				var id = ((SubscriptionOnlineMessage)message).OriginalTransactionId;
 
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					if (_level1Subscriptions.TryGetValue(id, out var info))
 						info.State = info.State.ChangeSubscriptionState(SubscriptionStates.Online, id, this);
@@ -185,7 +185,7 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 			//{
 			//	var level1Msg = (Level1ChangeMessage)message;
 
-			//	lock (_syncObject)
+			//	using (_syncObject.EnterScope())
 			//	{
 			//		if (_level1Subscriptions.Count == 0)
 			//			break;

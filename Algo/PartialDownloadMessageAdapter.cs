@@ -173,7 +173,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 		}
 	}
 
-	private readonly SyncObject _syncObject = new();
+	private readonly Lock _syncObject = new();
 	private readonly Dictionary<long, DownloadInfo> _original = [];
 	private readonly Dictionary<long, DownloadInfo> _partialRequests = [];
 	private readonly Dictionary<long, bool> _liveRequests = [];
@@ -188,7 +188,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 		{
 			case MessageTypes.Reset:
 			{
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					_partialRequests.Clear();
 					_original.Clear();
@@ -231,14 +231,14 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 								subscriptionMsg.From = null;
 								subscriptionMsg.To = null;
 
-								lock (_syncObject)
+								using (_syncObject.EnterScope())
 									_liveRequests.Add(subscriptionMsg.TransactionId, false);
 							}
 						}
 					}
 					else
 					{
-						lock (_syncObject)
+						using (_syncObject.EnterScope())
 							_liveRequests.Add(subscriptionMsg.TransactionId, false);
 					}
 				}
@@ -275,7 +275,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 								mdMsg.From = null;
 								mdMsg.To = null;
 
-								lock (_syncObject)
+								using (_syncObject.EnterScope())
 									_liveRequests.Add(transId, false);
 							}
 
@@ -286,7 +286,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 
 						message = info.InitNext();
 
-						lock (_syncObject)
+						using (_syncObject.EnterScope())
 						{
 							_original.Add(info.Origin.TransactionId, info);
 							_partialRequests.Add(info.CurrTransId, info);
@@ -297,13 +297,13 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 					}
 					else
 					{
-						lock (_syncObject)
+						using (_syncObject.EnterScope())
 							_liveRequests.Add(transId, false);
 					}
 				}
 				else
 				{
-					lock (_syncObject)
+					using (_syncObject.EnterScope())
 					{
 						if (!_original.TryGetValue(mdMsg.OriginalTransactionId, out var info))
 							break;
@@ -325,7 +325,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 
 				MarketDataMessage mdMsg;
 
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					if (!_original.TryGetValue(partialMsg.OriginalTransactionId, out var info))
 						return false;
@@ -380,7 +380,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 			case MessageTypes.Disconnect:
 			case MessageTypes.Reset:
 			{
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					_partialRequests.Clear();
 					_original.Clear();
@@ -393,7 +393,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 				var responseMsg = (SubscriptionResponseMessage)message;
 				var originId = responseMsg.OriginalTransactionId;
 
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					if (_liveRequests.TryGetValue(originId, out var isPartial))
 					{
@@ -455,7 +455,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 				var onlineMsg = (SubscriptionOnlineMessage)message;
 				var id = onlineMsg.OriginalTransactionId;
 
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					if (_partialRequests.TryGetValue(id, out var info))
 					{
@@ -476,7 +476,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 				var finishMsg = (SubscriptionFinishedMessage)message;
 				var id = finishMsg.OriginalTransactionId;
 
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					if (_partialRequests.TryGetAndRemove(id, out var info))
 					{
@@ -561,7 +561,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 		if (originId == 0)
 			return;
 
-		lock (_syncObject)
+		using (_syncObject.EnterScope())
 		{
 			if (!_partialRequests.TryGetValue(originId, out var info))
 				return;

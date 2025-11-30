@@ -563,7 +563,7 @@ public static partial class TraderHelper
 		if (creator is null)
 			throw new ArgumentNullException(nameof(creator));
 
-		lock (storage.SyncRoot)
+		using (storage.SyncRoot.EnterScope())
 		{
 			var security = storage.LookupById(id);
 
@@ -596,7 +596,7 @@ public static partial class TraderHelper
 		if (creator is null)
 			throw new ArgumentNullException(nameof(creator));
 
-		lock (storage.SyncRoot)
+		using (storage.SyncRoot.EnterScope())
 		{
 			var portfolio = storage.LookupByPortfolioName(portfolioName);
 
@@ -641,7 +641,7 @@ public static partial class TraderHelper
 		if (creator is null)
 			throw new ArgumentNullException(nameof(creator));
 
-		lock (storage.SyncRoot)
+		using (storage.SyncRoot.EnterScope())
 		{
 			var position = storage.GetPosition(portfolio, security, strategyId, side, clientCode, depoName, limitType);
 

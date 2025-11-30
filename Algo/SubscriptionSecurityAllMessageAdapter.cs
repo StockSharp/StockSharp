@@ -29,7 +29,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 		public Dictionary<SecurityId, ChildSubscription> Child { get; } = [];
 	}
 
-	private readonly SyncObject _sync = new();
+	private readonly Lock _sync = new();
 
 	private readonly Dictionary<long, RefPair<long, SubscriptionStates>> _pendingLoopbacks = [];
 	private readonly Dictionary<long, ParentSubscription> _parents = [];
@@ -39,7 +39,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 
 	private void ClearState()
 	{
-		lock (_sync)
+		using (_sync.EnterScope())
 		{
 			_pendingLoopbacks.Clear();
 			_parents.Clear();
@@ -66,7 +66,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 				{
 					var transId = mdMsg.TransactionId;
 
-					lock (_sync)
+					using (_sync.EnterScope())
 					{
 						if (_pendingLoopbacks.TryGetAndRemove(transId, out var tuple))
 						{
@@ -164,7 +164,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 				{
 					var originId = mdMsg.OriginalTransactionId;
 
-					lock (_sync)
+					using (_sync.EnterScope())
 					{
 						var found = false;
 
@@ -255,7 +255,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 
 				if (!responseMsg.IsOk())
 				{
-					lock (_sync)
+					using (_sync.EnterScope())
 					{
 						if (_parents.TryGetAndRemove(originId, out var parent))
 						{
@@ -298,7 +298,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 			{
 				var finishMsg = (SubscriptionFinishedMessage)message;
 
-				lock (_sync)
+				using (_sync.EnterScope())
 				{
 					if (_parents.TryGetAndRemove(finishMsg.OriginalTransactionId, out var parent))
 					{
@@ -366,7 +366,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 
 	private SubscriptionSecurityAllMessage CheckSubscription(ref Message message)
 	{
-		lock (_sync)
+		using (_sync.EnterScope())
 		{
 			if (_toFlush.Count > 0)
 			{

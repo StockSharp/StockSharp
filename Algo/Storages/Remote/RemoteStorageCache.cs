@@ -5,7 +5,7 @@
 /// </summary>
 public class RemoteStorageCache
 {
-	private readonly SyncObject _sync = new();
+	private readonly Lock _sync = new();
 	private readonly Dictionary<object, (Message[] messages, DateTime till)> _state = [];
 	private readonly TimeSpan _timeout;
 
@@ -34,7 +34,7 @@ public class RemoteStorageCache
 		if (messages is null)
 			throw new ArgumentNullException(nameof(messages));
 
-		lock (_sync)
+		using (_sync.EnterScope())
 			_state[key] = (messages, DateTime.UtcNow + _timeout);
 	}
 
@@ -51,7 +51,7 @@ public class RemoteStorageCache
 
 		messages = null;
 
-		lock (_sync)
+		using (_sync.EnterScope())
 		{
 			if (_state.TryGetValue(key, out var t))
 			{

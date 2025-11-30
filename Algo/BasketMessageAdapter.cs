@@ -59,7 +59,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			if (item.Parent == _parent)
 				item.Parent = null;
 
-			lock (_parent._connectedResponseLock)
+			using (_parent._connectedResponseLock.EnterScope())
 				_parent._adapterStates.Remove(item);
 
 			return base.OnRemoving(item);
@@ -76,7 +76,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			});
 			_parent._adapterWrappers.Clear();
 
-			lock (_parent._connectedResponseLock)
+			using (_parent._connectedResponseLock.EnterScope())
 				_parent._adapterStates.Clear();
 
 			return base.OnClearing();
@@ -86,7 +86,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		{
 			get
 			{
-				lock (SyncRoot)
+				using (EnterScope())
 					return _enables.TryGetValue2(adapter) ?? -1;
 			}
 			set
@@ -94,7 +94,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				if (value < -1)
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
-				lock (SyncRoot)
+				using (EnterScope())
 				{
 					if (!Contains(adapter))
 						Add(adapter);
@@ -107,7 +107,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 	private class ParentChildMap
 	{
-		private readonly SyncObject _syncObject = new();
+		private readonly Lock _syncObject = new();
 		private readonly Dictionary<long, RefQuadruple<long, SubscriptionStates, IMessageAdapter, Exception>> _childToParentIds = [];
 
 		public void AddMapping(long childId, ISubscriptionMessage parentMsg, IMessageAdapter adapter)
@@ -121,7 +121,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
 
-			lock (_syncObject)
+			using (_syncObject.EnterScope())
 				_childToParentIds.Add(childId, RefTuple.Create(parentMsg.TransactionId, SubscriptionStates.Stopped, adapter, default(Exception)));
 		}
 
@@ -130,7 +130,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			if (parentId <= 0)
 				throw new ArgumentOutOfRangeException(nameof(parentId));
 
-			lock (_syncObject)
+			using (_syncObject.EnterScope())
 				return FilterByParent(parentId).Where(p => p.Value.Second.IsActive()).ToDictionary(p => p.Key, p => p.Value.Third);
 		}
 
@@ -145,7 +145,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			if (childId == 0)
 				return null;
 
-			lock (_syncObject)
+			using (_syncObject.EnterScope())
 			{
 				if (!_childToParentIds.TryGetValue(childId, out var tuple))
 					return null;
@@ -188,7 +188,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		{
 			needParentResponse = true;
 
-			lock (_syncObject)
+			using (_syncObject.EnterScope())
 			{
 				if (!_childToParentIds.TryGetValue(childId, out var tuple))
 					return null;
@@ -213,7 +213,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		public void Clear()
 		{
-			lock (_syncObject)
+			using (_syncObject.EnterScope())
 				_childToParentIds.Clear();
 		}
 
@@ -221,7 +221,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		{
 			parentId = default;
 
-			lock (_syncObject)
+			using (_syncObject.EnterScope())
 			{
 				if (!_childToParentIds.TryGetValue(childId, out var t))
 					return false;
@@ -234,7 +234,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 	private readonly Dictionary<long, HashSet<IMessageAdapter>> _nonSupportedAdapters = [];
 	private readonly CachedSynchronizedDictionary<IMessageAdapter, IMessageAdapter> _adapterWrappers = [];
-	private readonly SyncObject _connectedResponseLock = new();
+	private readonly Lock _connectedResponseLock = new();
 	private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = [];
 	private readonly List<Message> _pendingMessages = [];
 
@@ -595,7 +595,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		_adapterWrappers.Clear();
 
-		lock (_connectedResponseLock)
+		using (_connectedResponseLock.EnterScope())
 		{
 			_messageTypeAdapters.Clear();
 
@@ -876,7 +876,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				{
 					var adapter = a;
 
-					lock (_connectedResponseLock)
+					using (_connectedResponseLock.EnterScope())
 						_adapterStates.Add(adapter, CreateState(ConnectionStates.Connecting));
 
 					adapter = CreateWrappers(adapter);
@@ -904,7 +904,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			{
 				IDictionary<IMessageAdapter, IMessageAdapter> adapters;
 
-				lock (_connectedResponseLock)
+				using (_connectedResponseLock.EnterScope())
 				{
 					_currState = ConnectionStates.Disconnecting;
 
@@ -1068,7 +1068,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			}
 		}
 
-		lock (_connectedResponseLock)
+		using (_connectedResponseLock.EnterScope())
 		{
 			adapters ??= _messageTypeAdapters.TryGetValue(message.Type)?.Cache;
 
@@ -1304,7 +1304,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 				if (!_subscription.TryGetValue(originTransId, out var tuple))
 				{
-					lock (_connectedResponseLock)
+					using (_connectedResponseLock.EnterScope())
 					{
 						var suspended = _pendingMessages.FirstOrDefault(m => m is MarketDataMessage prevMdMsg && prevMdMsg.TransactionId == originTransId);
 
@@ -1589,7 +1589,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		Message[] notSupportedMsgs = null;
 
-		lock (_connectedResponseLock)
+		using (_connectedResponseLock.EnterScope())
 		{
 			if (error == null)
 			{
@@ -1633,7 +1633,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		else
 			LogError(LocalizedStrings.ErrorDisconnectFor, underlyingAdapter, error);
 
-		lock (_connectedResponseLock)
+		using (_connectedResponseLock.EnterScope())
 		{
 			foreach (var supportedMessage in innerAdapter.SupportedInMessages)
 			{
@@ -1795,7 +1795,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		if (message.IsNotSupported() && originMsg is ISubscriptionMessage subscrMsg)
 		{
-			lock (_connectedResponseLock)
+			using (_connectedResponseLock.EnterScope())
 			{
 				// try loopback only subscribe messages
 				if (subscrMsg.IsSubscribe)
@@ -1846,7 +1846,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
 	{
-		lock (InnerAdapters.SyncRoot)
+		using (InnerAdapters.EnterScope())
 		{
 			storage.SetValue(nameof(InnerAdapters), InnerAdapters.Select(a =>
 			{
@@ -1866,7 +1866,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	/// <inheritdoc />
 	public override void Load(SettingsStorage storage)
 	{
-		lock (InnerAdapters.SyncRoot)
+		using (InnerAdapters.EnterScope())
 		{
 			InnerAdapters.Clear();
 

@@ -131,7 +131,7 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 				
 				if (_subscriptionsByChildId.TryGetValue(responseMsg.OriginalTransactionId, out var info))
 				{
-					lock (info.LegsSubscriptions.SyncRoot)
+					using (info.LegsSubscriptions.EnterScope())
 					{
 						if (responseMsg.IsOk())
 						{
@@ -163,7 +163,7 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 
 				if (_subscriptionsByChildId.TryGetValue(id, out var info))
 				{
-					lock (info.LegsSubscriptions.SyncRoot)
+					using (info.LegsSubscriptions.EnterScope())
 					{
 						info.LegsSubscriptions[id] = state;
 

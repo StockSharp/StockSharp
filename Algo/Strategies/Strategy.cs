@@ -1126,7 +1126,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 	private IMarketRule[] GetRules()
 	{
-		lock (Rules.SyncRoot)
+		using (Rules.EnterScope())
 			return [.. Rules];
 	}
 
@@ -1588,7 +1588,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			return;
 		}
 
-		lock (_ordersInfo.SyncRoot)
+		using (_ordersInfo.EnterScope())
 		{
 			if (!_ordersInfo.TryGetValue(order, out var info))
 				throw new ArgumentException(LocalizedStrings.OrderNotFromStrategy.Put(order.TransactionId, Name));
@@ -1669,7 +1669,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 			if (ProcessState == ProcessStates.Stopping && CancelOrdersWhenStopping)
 			{
-				lock (_ordersInfo.SyncRoot)
+				using (_ordersInfo.EnterScope())
 				{
 					if (info == null)
 						return;
@@ -2321,7 +2321,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		if (WaitAllTrades)
 		{
-			lock (_ordersInfo.SyncRoot)
+			using (_ordersInfo.EnterScope())
 			{
 				if (_ordersInfo.TryGetValue(order, out var info))
 					info.ReceivedVolume += tick.Volume;
@@ -2593,7 +2593,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		var order = fail.Order;
 
-		lock (_ordersInfo.SyncRoot)
+		using (_ordersInfo.EnterScope())
 		{
 			if (!_ordersInfo.TryGetValue(order, out var info))
 				return;
@@ -2828,13 +2828,13 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		}
 	}
 
-	private readonly object _onlineStateLock = new();
+	private readonly Lock _onlineStateLock = new();
 
 	private void CheckRefreshOnlineState()
 	{
 		bool wasOnline, nowOnline;
 
-		lock (_onlineStateLock)
+		using (_onlineStateLock.EnterScope())
 		{
 			wasOnline = IsOnline;
 

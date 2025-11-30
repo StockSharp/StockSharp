@@ -873,7 +873,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 	{
 		if (message == _marketTimeMessage)
 		{
-			lock (_marketTimerSync)
+			using (_marketTimerSync.EnterScope())
 				_isMarketTimeHandled = true;
 		}
 

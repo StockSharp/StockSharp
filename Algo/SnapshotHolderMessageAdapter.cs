@@ -23,7 +23,7 @@ public interface ISnapshotHolder
 /// <param name="holder">Snapshot holder.</param>
 public class SnapshotHolderMessageAdapter(IMessageAdapter innerAdapter, ISnapshotHolder holder) : MessageAdapterWrapper(innerAdapter)
 {
-	private readonly SyncObject _sync = new();
+	private readonly Lock _sync = new();
 	private readonly SynchronizedDictionary<long, ISubscriptionMessage> _pending = [];
 
 	private readonly ISnapshotHolder _holder = holder ?? throw new ArgumentNullException(nameof(holder));
@@ -35,7 +35,7 @@ public class SnapshotHolderMessageAdapter(IMessageAdapter innerAdapter, ISnapsho
 		{
 			case MessageTypes.Reset:
 			{
-				lock (_sync)
+				using (_sync.EnterScope())
 				{
 					_pending.Clear();
 				}
@@ -55,12 +55,12 @@ public class SnapshotHolderMessageAdapter(IMessageAdapter innerAdapter, ISnapsho
 					if (mdMsg.DataType2 != DataType.MarketDepth && mdMsg.DataType2 != DataType.Level1)
 						break;
 
-					lock (_sync)
+					using (_sync.EnterScope())
 						_pending[mdMsg.TransactionId] = mdMsg.TypedClone();
 				}
 				else
 				{
-					lock (_sync)
+					using (_sync.EnterScope())
 						_pending.Remove(mdMsg.OriginalTransactionId);
 				}
 
@@ -74,7 +74,7 @@ public class SnapshotHolderMessageAdapter(IMessageAdapter innerAdapter, ISnapsho
 
 				if (subscrMsg.IsSubscribe && !subscrMsg.IsHistoryOnly())
 				{
-					lock (_sync)
+					using (_sync.EnterScope())
 						_pending[subscrMsg.TransactionId] = subscrMsg.TypedClone();
 				}
 
@@ -98,7 +98,7 @@ public class SnapshotHolderMessageAdapter(IMessageAdapter innerAdapter, ISnapsho
 
 				if (!response.IsOk())
 				{
-					lock (_sync)
+					using (_sync.EnterScope())
 						_pending.Remove(response.OriginalTransactionId);
 				}
 
@@ -109,7 +109,7 @@ public class SnapshotHolderMessageAdapter(IMessageAdapter innerAdapter, ISnapsho
 			{
 				var finished = (SubscriptionFinishedMessage)message;
 
-				lock (_sync)
+				using (_sync.EnterScope())
 					_pending.Remove(finished.OriginalTransactionId);
 
 				break;
@@ -121,7 +121,7 @@ public class SnapshotHolderMessageAdapter(IMessageAdapter innerAdapter, ISnapsho
 
 				ISubscriptionMessage subscrMsg;
 
-				lock (_sync)
+				using (_sync.EnterScope())
 				{
 					if (!_pending.TryGetAndRemove(online.OriginalTransactionId, out subscrMsg))
 						break;
@@ -143,7 +143,7 @@ public class SnapshotHolderMessageAdapter(IMessageAdapter innerAdapter, ISnapsho
 
 			default:
 			{
-				lock (_sync)
+				using (_sync.EnterScope())
 				{
 					if (_pending.Count > 0 && message is ISubscriptionIdMessage subscrMsg)
 					{

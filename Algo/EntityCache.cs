@@ -618,7 +618,7 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 
 			Order TryAddFail(OrderOperations operation)
 			{
-				lock (_allOrdersByFailedId.SyncRoot)
+				using (_allOrdersByFailedId.EnterScope())
 				{
 					if (_allOrdersByFailedId.TryGetAndRemove((message.OriginalTransactionId, operation), out var fail))
 					{
@@ -909,7 +909,7 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 
 		var countToRemove = totalCount - OrdersKeepCount;
 
-		lock (_securityData.SyncRoot)
+		using (_securityData.EnterScope())
 		{
 			var toRemove = _orders.SyncGet(d =>
 			{
@@ -938,7 +938,7 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 
 	public class Level1Info
 	{
-		private readonly SyncObject _sync = new();
+		private readonly Lock _sync = new();
 		private readonly Level1ChangeMessage _snapshot;
 
 		public Level1Info(SecurityId securityId, DateTime serverTime)
@@ -952,7 +952,7 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 
 		public Level1ChangeMessage GetCopy()
 		{
-			lock (_sync)
+			using (_sync.EnterScope())
 				return _snapshot.TypedClone();
 		}
 
@@ -963,14 +963,14 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 		{
 			get
 			{
-				lock (_sync)
+				using (_sync.EnterScope())
 					return [.. _snapshot.Changes.Keys];
 			}
 		}
 
 		public void SetValue(DateTime serverTime, Level1Fields field, object value)
 		{
-			lock (_sync)
+			using (_sync.EnterScope())
 			{
 				_snapshot.ServerTime = serverTime;
 				_snapshot.Changes[field] = value;
@@ -979,7 +979,7 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 
 		public object GetValue(Level1Fields field)
 		{
-			lock (_sync)
+			using (_sync.EnterScope())
 				return _snapshot.TryGet(field);
 		}
 
@@ -991,7 +991,7 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 
 		public void ClearBestQuotes(DateTime serverTime)
 		{
-			lock (_sync)
+			using (_sync.EnterScope())
 			{
 				if (!CanBestQuotes)
 					return;
@@ -1007,7 +1007,7 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 
 		public void ClearLastTrade(DateTime serverTime)
 		{
-			lock (_sync)
+			using (_sync.EnterScope())
 			{
 				if (!CanLastTrade)
 					return;
@@ -1066,7 +1066,7 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 		}
 		else if (dataType == DataType.Transactions)
 		{
-			lock (_orders.SyncRoot)
+			using (_orders.EnterScope())
 				return [.. _orders.Keys.Select(o => o.ToMessage()).Where(m => m.IsMatch(m.Type, subscription))];
 		}
 		else if (dataType == DataType.PositionChanges)

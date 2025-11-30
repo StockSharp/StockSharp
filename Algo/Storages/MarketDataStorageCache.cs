@@ -57,7 +57,7 @@ public class MarketDataStorageCache : Cloneable<MarketDataStorageCache>
 
 			if (_cache.Count > Limit)
 			{
-				lock (_cache.SyncRoot)
+				using (_cache.EnterScope())
 					_cache.RemoveRange([.. _cache.OrderBy(p => p.Value.lastAccess).Take(500)]);
 			}
 		}

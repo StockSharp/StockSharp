@@ -164,13 +164,7 @@ public partial class MainWindow
 
 	private void ChartUpdateTimerOnTick(object sender, EventArgs eventArgs)
 	{
-		TimeFrameCandleMessage[] candlesToUpdate;
-
-		lock (_updatedCandles.SyncRoot)
-		{
-			candlesToUpdate = _updatedCandles.OrderBy(p => p.Key).Select(p => p.Value).ToArray();
-			_updatedCandles.Clear();
-		}
+		var candlesToUpdate = _updatedCandles.CopyAndClear().OrderBy(p => p.Key).Select(p => p.Value).ToArray();
 
 		var lastCandle = _allCandles.LastOrDefault();
 		_allCandles.AddRange(candlesToUpdate.Where(c => lastCandle == null || c.OpenTime != lastCandle.OpenTime));
@@ -195,8 +189,7 @@ public partial class MainWindow
 			if (_candle != null)
 			{
 				_candle.State = CandleStates.Finished;
-				lock (_updatedCandles.SyncRoot)
-					_updatedCandles[_candle.OpenTime] = _candle;
+				_updatedCandles[_candle.OpenTime] = _candle;
 			}
 
 			var tf = TimeSpan.FromMinutes(_timeframe);
@@ -222,8 +215,7 @@ public partial class MainWindow
 
 		_candle.TotalVolume += tick.TradeVolume.Value;
 
-		lock (_updatedCandles.SyncRoot)
-			_updatedCandles[_candle.OpenTime] = _candle;
+		_updatedCandles[_candle.OpenTime] = _candle;
 	}
 
 	private void Error(string msg)

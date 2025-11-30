@@ -5,7 +5,7 @@ namespace StockSharp.Algo.Latency;
 /// </summary>
 public class LatencyManager : ILatencyManager
 {
-	private readonly SyncObject _syncObject = new();
+	private readonly Lock _syncObject = new();
 	private readonly Dictionary<long, DateTime> _register = [];
 	private readonly Dictionary<long, DateTime> _cancel = [];
 
@@ -37,7 +37,7 @@ public class LatencyManager : ILatencyManager
 			{
 				var regMsg = (OrderRegisterMessage)message;
 
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					AddRegister(regMsg.TransactionId, regMsg.LocalTime);
 				}
@@ -48,7 +48,7 @@ public class LatencyManager : ILatencyManager
 			{
 				var replaceMsg = (OrderReplaceMessage)message;
 
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					AddCancel(replaceMsg.OriginalTransactionId, replaceMsg.LocalTime);
 					AddRegister(replaceMsg.TransactionId, replaceMsg.LocalTime);
@@ -60,7 +60,7 @@ public class LatencyManager : ILatencyManager
 			{
 				var cancelMsg = (OrderCancelMessage)message;
 
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 					AddCancel(cancelMsg.TransactionId, cancelMsg.LocalTime);
 
 				break;
@@ -77,7 +77,7 @@ public class LatencyManager : ILatencyManager
 
 				var transId = execMsg.OriginalTransactionId;
 
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					if (!_register.TryGetValue(transId, out var time))
 					{
@@ -144,7 +144,7 @@ public class LatencyManager : ILatencyManager
 	/// <inheritdoc />
 	public void Reset()
 	{
-		lock (_syncObject)
+		using (_syncObject.EnterScope())
 		{
 			LatencyRegistration = LatencyCancellation = default;
 

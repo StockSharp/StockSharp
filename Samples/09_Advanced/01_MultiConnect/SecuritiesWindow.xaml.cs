@@ -189,7 +189,7 @@ public partial class SecuritiesWindow
 
 	public void ProcessOrder(Order order)
 	{
-		lock (_quotesWindows.SyncRoot)
+		using (_quotesWindows.EnterScope())
 		{
 			foreach (var pair in _quotesWindows)
 			{
@@ -203,7 +203,7 @@ public partial class SecuritiesWindow
 
 	public void ProcessOrderFail(OrderFail fail)
 	{
-		lock (_quotesWindows.SyncRoot)
+		using (_quotesWindows.EnterScope())
 		{
 			foreach (var pair in _quotesWindows)
 			{

@@ -90,7 +90,7 @@ public class BruteForceOptimizer : BaseOptimizer
 		_itersCount = iterationCount;
 		_itersDone = 0;
 
-		var leftSync = new SyncObject();
+		var leftSync = new Lock();
 		var left = iterationCount;
 
 		OnStart();
@@ -107,7 +107,7 @@ public class BruteForceOptimizer : BaseOptimizer
 				TryNextRun(startTime, stopTime,
 					pfProvider =>
 					{
-						lock (leftSync)
+						using (leftSync.EnterScope())
 						{
 							if (left <= 0)
 								return null;

@@ -25,14 +25,14 @@ public class ExtendedInfoStorageMessageAdapter : MessageAdapterWrapper
 		_fields = [.. InnerAdapter.SecurityExtendedFields];
 	}
 
-	private readonly SyncObject _sync = new();
+	private readonly Lock _sync = new();
 	private IExtendedInfoStorageItem _storage;
 
 	private IExtendedInfoStorageItem GetStorage()
 	{
 		if (_storage == null)
 		{
-			lock (_sync)
+			using (_sync.EnterScope())
 			{
 				_storage ??= _extendedInfoStorage.Create(_storageName, _fields);
 			}	

@@ -7,7 +7,7 @@ using Gma.DataStructures.StringSearch;
 /// </summary>
 public class SecurityTrie : ICollection<Security>
 {
-	private readonly SyncObject _sync = new();
+	private readonly Lock _sync = new();
 
 	private readonly Dictionary<SecurityId, Security> _allSecurities = [];
 	private readonly ITrie<Security> _trie = new PatriciaSuffixTrie<Security>(1);
@@ -26,7 +26,7 @@ public class SecurityTrie : ICollection<Security>
 	/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
 	public Security GetById(SecurityId id)
 	{
-		lock (_sync)
+		using (_sync.EnterScope())
 			return _allSecurities.TryGetValue(id);
 	}
 
@@ -37,7 +37,7 @@ public class SecurityTrie : ICollection<Security>
 	{
 		get
 		{
-			lock (_sync)
+			using (_sync.EnterScope())
 				return _allSecurities.Count;
 		}
 	}
@@ -61,7 +61,7 @@ public class SecurityTrie : ICollection<Security>
 
 		var externalId = security.ExternalId;
 
-		lock (_sync)
+		using (_sync.EnterScope())
 		{
 			AddSuffix(security.Id, security);
 			AddSuffix(security.Code, security);
@@ -96,7 +96,7 @@ public class SecurityTrie : ICollection<Security>
 	/// <returns>Found instruments.</returns>
 	public IEnumerable<Security> Retrieve(string filter)
 	{
-		lock (_sync)
+		using (_sync.EnterScope())
 			return [.. (filter.IsEmpty() ? _allSecurities.Values : _trie.Retrieve(filter.ToLowerInvariant()))];
 	}
 
@@ -107,7 +107,7 @@ public class SecurityTrie : ICollection<Security>
 	/// <param name="arrayIndex">Start index.</param>
 	public void CopyTo(Security[] array, int arrayIndex)
 	{
-		lock (_sync)
+		using (_sync.EnterScope())
 			_allSecurities.Values.CopyTo(array, arrayIndex);
 	}
 
@@ -121,7 +121,7 @@ public class SecurityTrie : ICollection<Security>
 		if (security is null)
 			throw new ArgumentNullException(nameof(security));
 
-		lock (_sync)
+		using (_sync.EnterScope())
 		{
 			_trie.Remove(security);
 			return _allSecurities.Remove(security.ToSecurityId());
@@ -139,7 +139,7 @@ public class SecurityTrie : ICollection<Security>
 
 		securities = [.. securities];
 
-		lock (_sync)
+		using (_sync.EnterScope())
 		{
 			if (securities.Count() > 1000 || (_allSecurities.Count > 1000 && securities.Count() > _allSecurities.Count * 0.1))
 			{
@@ -168,7 +168,7 @@ public class SecurityTrie : ICollection<Security>
 	/// </summary>
 	public virtual void Clear()
 	{
-		lock (_sync)
+		using (_sync.EnterScope())
 		{
 			_trie.Clear();
 			_allSecurities.Clear();
@@ -187,7 +187,7 @@ public class SecurityTrie : ICollection<Security>
 		if (item is null)
 			throw new ArgumentNullException(nameof(item));
 
-		lock (_sync)
+		using (_sync.EnterScope())
 			return _allSecurities.ContainsKey(item.ToSecurityId());
 	}
 
@@ -199,7 +199,7 @@ public class SecurityTrie : ICollection<Security>
 	/// </returns>
 	public IEnumerator<Security> GetEnumerator()
 	{
-		lock (_sync)
+		using (_sync.EnterScope())
 			return _allSecurities.Values.GetEnumerator();
 	}
 

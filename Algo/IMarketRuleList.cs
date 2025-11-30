@@ -88,7 +88,7 @@ public class MarketRuleList(IMarketRuleContainer container) : SynchronizedSet<IM
 	{
 		get
 		{
-			lock (SyncRoot)
+			using (EnterScope())
 				return [.. _rulesByToken.Keys];
 		}
 	}
@@ -100,7 +100,7 @@ public class MarketRuleList(IMarketRuleContainer container) : SynchronizedSet<IM
 	/// <returns>All rules, associated with token.</returns>
 	public IEnumerable<IMarketRule> GetRulesByToken(object token)
 	{
-		lock (SyncRoot)
+		using (EnterScope())
 		{
 			return _rulesByToken.TryGetValue(token, out var set)
 				? [.. set]
@@ -110,7 +110,7 @@ public class MarketRuleList(IMarketRuleContainer container) : SynchronizedSet<IM
 
 	void IMarketRuleList.RemoveRulesByToken(object token, IMarketRule currentRule)
 	{
-		lock (SyncRoot)
+		using (EnterScope())
 		{
 			foreach (var rule in GetRulesByToken(token))
 			{

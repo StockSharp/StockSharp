@@ -1,5 +1,9 @@
 namespace StockSharp.Algo.Storages;
 
+#if NET10_0_OR_GREATER
+using SyncObject = System.Threading.Lock;
+#endif
+
 /// <summary>
 /// The interface for access to the storage of information on instruments.
 /// </summary>
@@ -111,7 +115,7 @@ public class InMemorySecurityStorage : ISecurityStorage
 
 		Security[] toDelete;
 
-		lock (_inner.SyncRoot)
+		using (_inner.EnterScope())
 		{
 			toDelete = [.. _inner.Values.Filter(criteria)];
 
@@ -132,7 +136,7 @@ public class InMemorySecurityStorage : ISecurityStorage
 
 		ISet<Security> toDelete = null;
 
-		lock (_inner.SyncRoot)
+		using (_inner.EnterScope())
 		{
 			foreach (var security in securities)
 			{

@@ -134,7 +134,7 @@ public class InMemoryExchangeInfoProvider : IExchangeInfoProvider
 		if (board == null)
 			throw new ArgumentNullException(nameof(board));
 
-		lock (_boards.SyncRoot)
+		using (_boards.EnterScope())
 		{
 			var oldBoard = _boards.TryGetValue(board.Code);
 
@@ -153,7 +153,7 @@ public class InMemoryExchangeInfoProvider : IExchangeInfoProvider
 		if (exchange == null)
 			throw new ArgumentNullException(nameof(exchange));
 
-		lock (_exchanges.SyncRoot)
+		using (_exchanges.EnterScope())
 		{
 			var oldExchange = _exchanges.TryGetValue(exchange.Name);
 

@@ -46,6 +46,7 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 		private readonly DateTime _date;
 		private readonly CancellationToken _cancellationToken;
 		private readonly SynchronizedQueue<(ActionTypes action, IMarketDataStorage storage, long transId)> _actions = [];
+		private readonly Lock _enumsLock = new();
 		private readonly Ecng.Collections.PriorityQueue<long, (IAsyncEnumerator<Message> enu, IMarketDataStorage storage, long transId)> _enumerators = new((p1, p2) => (p1 - p2).Abs());
 
 		public BasketMarketDataStorageEnumerator(BasketMarketDataStorage<TMessage> storage, DateTime date, CancellationToken cancellationToken)
@@ -119,7 +120,7 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 						// данных в хранилище нет больше последней даты
 						if (hasValues)
 						{
-							lock (_enumerators)
+							using (_enumsLock.EnterScope())
 								_enumerators.Enqueue(enu.Current.GetServerTime().Ticks, (enu, storage, action.Value.transId));
 						}
 						else
@@ -129,14 +130,14 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 					}
 					case ActionTypes.Remove:
 					{
-						lock (_enumerators)
+						using (_enumsLock.EnterScope())
 							_enumerators.RemoveWhere(p => p.Item2.storage == storage);
 
 						break;
 					}
 					case ActionTypes.Clear:
 					{
-						lock (_enumerators)
+						using (_enumsLock.EnterScope())
 							_enumerators.Clear();
 
 						break;
@@ -148,7 +149,7 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 
 			(long, (IAsyncEnumerator<Message> enu, IMarketDataStorage, long transId) element) item;
 
-			lock (_enumerators)
+			using (_enumsLock.EnterScope())
 			{
 				if (_enumerators.Count == 0)
 					return false;
@@ -166,7 +167,7 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 			{
 				var serverTime = enumerator.Current.GetServerTime().Ticks;
 
-				lock (_enumerators)
+				using (_enumsLock.EnterScope())
 					_enumerators.Enqueue(serverTime, element);
 			}
 			else

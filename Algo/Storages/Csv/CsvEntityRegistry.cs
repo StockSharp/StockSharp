@@ -126,7 +126,7 @@ public class CsvEntityRegistry : IEntityRegistry
 
 			if (secId == default || secId.BoardCode.IsEmpty())
 			{
-				lock (SyncRoot)
+				using (EnterScope())
 					arr = [.. this.Filter(criteria)];
 			}
 			else
@@ -484,10 +484,10 @@ public class CsvEntityRegistry : IEntityRegistry
 
 			if (board is not null)
 			{
-				lock (Registry.Exchanges.SyncRoot)
+				using (Registry.Exchanges.EnterScope())
 					Registry.Exchanges.TryAdd(board.Exchange);
 
-				lock (Registry.ExchangeBoards.SyncRoot)
+				using (Registry.ExchangeBoards.EnterScope())
 					Registry.ExchangeBoards.TryAdd(board);
 			}
 

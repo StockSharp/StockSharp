@@ -66,7 +66,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 		public override string ToString() => (_main != null ? "Linked: " : string.Empty) + Subscription.ToString();
 	}
 
-	private readonly SyncObject _sync = new();
+	private readonly Lock _sync = new();
 
 	private readonly PairSet<(DataType, SecurityId), SubscriptionInfo> _subscriptionsByKey = [];
 	private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = [];
@@ -78,7 +78,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 	{
 		void TryAddOrderSubscription(OrderMessage orderMsg)
 		{
-			lock (_sync)
+			using (_sync.EnterScope())
 			{
 				if (_subscriptionsByKey.TryGetValue((DataType.Transactions, default(SecurityId)), out var info))
 					TryAddOrderTransaction(info, orderMsg.TransactionId);
@@ -154,7 +154,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 
 				HashSet<long> subscribers = null;
 
-				lock (_sync)
+				using (_sync.EnterScope())
 				{
 					if (responseMsg.IsOk())
 					{
@@ -196,7 +196,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 			{
 				var originTransId = ((SubscriptionOnlineMessage)message).OriginalTransactionId;
 
-				lock (_sync)
+				using (_sync.EnterScope())
 				{
 					if (_subscriptionsById.TryGetValue(originTransId, out var info))
 					{
@@ -214,7 +214,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 			{
 				var originTransId = ((SubscriptionFinishedMessage)message).OriginalTransactionId;
 
-				lock (_sync)
+				using (_sync.EnterScope())
 				{
 					if (_subscriptionsById.TryGetValue(originTransId, out var info))
 					{
@@ -233,7 +233,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 			{
 				if (message is ISubscriptionIdMessage subscrMsg)
 				{
-					lock (_sync)
+					using (_sync.EnterScope())
 					{
 						if (subscrMsg.OriginalTransactionId != 0 && _subscriptionsById.TryGetValue(subscrMsg.OriginalTransactionId, out var info))
 						{
@@ -304,7 +304,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 
 	private void ClearState()
 	{
-		lock (_sync)
+		using (_sync.EnterScope())
 		{
 			_subscriptionsByKey.Clear();
 			_subscriptionsById.Clear();
@@ -331,7 +331,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 		ISubscriptionMessage sendInMsg = null;
 		Message[] sendOutMsgs = null;
 
-		lock (_sync)
+		using (_sync.EnterScope())
 		{
 			if (isSubscribe)
 			{

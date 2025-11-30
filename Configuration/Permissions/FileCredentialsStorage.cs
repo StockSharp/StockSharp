@@ -90,7 +90,7 @@ public class FileCredentialsStorage : BaseLogReceiver, IPermissionCredentialsSto
 						loaded.Add(s.Load<PermissionCredentials>());
 				}
 
-				lock (_credentials.SyncRoot)
+				using (_credentials.EnterScope())
 				{
 					_credentials.Clear();
 

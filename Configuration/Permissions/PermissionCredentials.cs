@@ -41,7 +41,7 @@ public class PermissionCredentials : ServerCredentials
 
 		storage.SetValue(nameof(IpRestrictions), IpRestrictions.Select(e => e.To<string>()).JoinComma());
 
-		lock (Permissions.SyncRoot)
+		using (Permissions.EnterScope())
 		{
 			storage.SetValue(nameof(Permissions), Permissions
 				.Select(p =>
@@ -70,7 +70,7 @@ public class PermissionCredentials : ServerCredentials
 
 		var permissions = storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Permissions));
 
-		lock (Permissions.SyncRoot)
+		using (Permissions.EnterScope())
 		{
 			Permissions.Clear();
 

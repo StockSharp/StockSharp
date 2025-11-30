@@ -94,7 +94,7 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 
 		public override void Add(SecurityId key, DateTime value)
 		{
-			lock (SyncRoot)
+			using (EnterScope())
 			{
 				base.Add(key, value);
 				RefreshRanges();
@@ -103,7 +103,7 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 
 		public override bool Remove(SecurityId key)
 		{
-			lock (SyncRoot)
+			using (EnterScope())
 			{
 				if (base.Remove(key))
 				{
@@ -117,7 +117,7 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 
 		public override void Clear()
 		{
-			lock (SyncRoot)
+			using (EnterScope())
 			{
 				base.Clear();
 
@@ -160,7 +160,7 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 
 		public SecurityId GetSecurity(DateTime marketTime)
 		{
-			lock (SyncRoot)
+			using (EnterScope())
 			{
 				var security = default(SecurityId);
 
@@ -193,7 +193,7 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 
 		SecurityId? IExpirationJumpList.GetNextSecurity(SecurityId security)
 		{
-			lock (SyncRoot)
+			using (EnterScope())
 			{
 				if (!ContainsKey(security))
 					throw new ArgumentException(LocalizedStrings.NotInternalSecurity.Put(security));
@@ -205,7 +205,7 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 
 		SecurityId? IExpirationJumpList.GetPrevSecurity(SecurityId security)
 		{
-			lock (SyncRoot)
+			using (EnterScope())
 			{
 				if (!ContainsKey(security))
 					throw new ArgumentException(LocalizedStrings.NotInternalSecurity.Put(security));
@@ -252,14 +252,14 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 	/// <inheritdoc />
 	protected override string ToSerializedString()
 	{
-		lock (_expirationJumps.SyncRoot)
+		using (_expirationJumps.EnterScope())
 			return _expirationJumps.Select(j => $"{j.Key.ToStringId()}={j.Value.ToString(_dateFormat)}").JoinComma();
 	}
 
 	/// <inheritdoc />
 	protected override void FromSerializedString(string text)
 	{
-		lock (_expirationJumps.SyncRoot)
+		using (_expirationJumps.EnterScope())
 		{
 			_expirationJumps.Clear();
 
@@ -333,7 +333,7 @@ public class VolumeContinuousSecurity : ContinuousSecurity
 	/// <inheritdoc />
 	protected override string ToSerializedString()
 	{
-		lock (InnerSecurities.SyncRoot)
+		using (InnerSecurities.EnterScope())
 		{
 			return $"{IsOpenInterest},{VolumeLevel}," + InnerSecurities.Select(id => id.ToStringId()).JoinComma();
 		}
@@ -347,7 +347,7 @@ public class VolumeContinuousSecurity : ContinuousSecurity
 		IsOpenInterest = parts[0].To<bool>();
 		VolumeLevel = parts[1].ToUnit();
 
-		lock (InnerSecurities.SyncRoot)
+		using (InnerSecurities.EnterScope())
 		{
 			InnerSecurities.Clear();
 			InnerSecurities.AddRange(parts.Skip(2).Select(p => p.ToSecurityId()));

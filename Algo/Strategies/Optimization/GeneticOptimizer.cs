@@ -63,7 +63,7 @@ public class GeneticOptimizer : BaseOptimizer
 
 			if (_optimizer._leftIterations is not null)
 			{
-				lock (_optimizer._leftIterLock)
+				using (_optimizer._leftIterLock.EnterScope())
 				{
 					_optimizer._leftIterations = _optimizer._leftIterations.Value - 1;
 
@@ -154,7 +154,7 @@ public class GeneticOptimizer : BaseOptimizer
 
 		protected override bool PerformHasReached(IGeneticAlgorithm geneticAlgorithm)
 		{
-			lock (_optimizer._leftIterLock)
+			using (_optimizer._leftIterLock.EnterScope())
 				return _optimizer._leftIterations <= 0;
 		}
 	}
@@ -162,7 +162,7 @@ public class GeneticOptimizer : BaseOptimizer
 	private readonly SynchronizedSet<ManualResetEvent> _events = [];
 	private GeneticAlgorithm _ga;
 
-	private readonly SyncObject _leftIterLock = new();
+	private readonly Lock _leftIterLock = new();
 	private int? _leftIterations;
 
 	private readonly AssemblyLoadContextTracker _context = new();

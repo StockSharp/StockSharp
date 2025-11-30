@@ -71,7 +71,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	private CacheAllocator _adapterCacheAllocator;
 	private CacheAllocator _storageCacheAllocator;
 
-	private readonly SyncObject _sync = new();
+	private readonly Lock _sync = new();
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BaseOptimizer"/>.
@@ -250,7 +250,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	/// </summary>
 	public virtual void Suspend()
 	{
-		lock (_sync)
+		using (_sync.EnterScope())
 		{
 			if (State != ChannelStates.Started)
 				return;
@@ -272,7 +272,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	/// </summary>
 	public virtual void Resume()
 	{
-		lock (_sync)
+		using (_sync.EnterScope())
 		{
 			if (State != ChannelStates.Suspended)
 				return;
@@ -294,7 +294,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	/// </summary>
 	public virtual void Stop()
 	{
-		lock (_sync)
+		using (_sync.EnterScope())
 		{
 			if (!(State is ChannelStates.Started or ChannelStates.Suspended))
 				return;
@@ -332,7 +332,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 
 		var needProgress = false;
 
-		lock (_sync)
+		using (_sync.EnterScope())
 			needProgress = !_cancelEmulation && _lastTotalProgress < 100;
 
 		if (needProgress)
@@ -366,7 +366,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		IStrategyParam[] parameters;
 		HistoryEmulationConnector connector;
 
-		lock (_sync)
+		using (_sync.EnterScope())
 		{
 			if (State == ChannelStates.Suspending || State == ChannelStates.Suspended)
 				return;
@@ -449,7 +449,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 
 			int? progress;
 
-			lock (_sync)
+			using (_sync.EnterScope())
 			{
 				_startedConnectors.Remove(connector);
 

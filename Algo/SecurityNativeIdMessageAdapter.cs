@@ -9,7 +9,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 	private readonly Dictionary<SecurityId, List<ISecurityIdMessage>> _suspendedInMessages = [];
 	private readonly Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>> _suspendedOutMessages = [];
 	private readonly Dictionary<long, SecurityId> _transToSec = [];
-	private readonly SyncObject _syncRoot = new();
+	private readonly Lock _syncRoot = new();
 
 	/// <summary>
 	/// Security native identifier storage.
@@ -44,7 +44,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 			{
 				var nativeIds = Storage.Get(StorageName);
 
-				lock (_syncRoot)
+				using (_syncRoot.EnterScope())
 				{
 					foreach (var (securityId, nativeId) in nativeIds)
 					{
@@ -103,7 +103,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 							}
 						}
 
-						lock (_syncRoot)
+						using (_syncRoot.EnterScope())
 							_securityIds[nativeSecurityId] = noNative;
 					}
 				}
@@ -145,14 +145,14 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 				var secId = execMsg.SecurityId;
 				if (execMsg.TransactionId != 0 && secId != default && (!secId.SecurityCode.IsEmpty() || secId.Native != null))
 				{
-					lock (_syncRoot)
+					using (_syncRoot.EnterScope())
 						_transToSec[execMsg.TransactionId] = secId;
 				}
 
 				var noSecInfo = secId == default || (secId.SecurityCode.IsEmpty() && secId.Native == null);
 				if (noSecInfo && execMsg.TransactionId == 0 && execMsg.OriginalTransactionId != 0)
 				{
-					lock (_syncRoot)
+					using (_syncRoot.EnterScope())
 					{
 						if (
 							_transToSec.TryGetValue(execMsg.OriginalTransactionId, out var suspendedSecId) &&
@@ -227,7 +227,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 		{
 			case MessageTypes.Reset:
 			{
-				lock (_syncRoot)
+				using (_syncRoot.EnterScope())
 				{
 					_securityIds.Clear();
 					_suspendedOutMessages.Clear();
@@ -281,7 +281,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
 
-		lock (_syncRoot)
+		using (_syncRoot.EnterScope())
 		{
 			var native = _securityIds.TryGetKey(securityId);
 
@@ -319,12 +319,12 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 		{
 			SecurityId? fullSecurityId;
 
-			lock (_syncRoot)
+			using (_syncRoot.EnterScope())
 				fullSecurityId = _securityIds.TryGetValue2(native);
 
 			if (fullSecurityId == null)
 			{
-				lock (_syncRoot)
+				using (_syncRoot.EnterScope())
 				{
 					var tuple = _suspendedOutMessages.SafeAdd(securityId, key => RefTuple.Create((List<Message>)null, (Dictionary<MessageTypes, Message>)null));
 
@@ -367,7 +367,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 			{
 				SecurityId? foundId = null;
 
-				lock (_syncRoot)
+				using (_syncRoot.EnterScope())
 				{
 					foreach (var id in _securityIds.Values)
 					{
@@ -400,7 +400,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 		List<Message> inMsgs;
 		List<Message> outMsgs;
 
-		lock (_syncRoot)
+		using (_syncRoot.EnterScope())
 		{
 			inMsgs = [];
 			outMsgs = [];
@@ -476,7 +476,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 
 		List<ISecurityIdMessage> msgs = null;
 
-		lock (_syncRoot)
+		using (_syncRoot.EnterScope())
 		{
 			msgs = _suspendedInMessages.TryGetAndRemove(securityId);
 
@@ -529,7 +529,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 
 		List<Message> msgs = null;
 
-		lock (_syncRoot)
+		using (_syncRoot.EnterScope())
 		{
 			var tuple = _suspendedOutMessages.TryGetAndRemove(securityId);
 
@@ -595,7 +595,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 
 		bool needMessage;
 
-		lock (_syncRoot)
+		using (_syncRoot.EnterScope())
 		{
 			var added = _securityIds.TryAdd(nativeId, securityId);
 

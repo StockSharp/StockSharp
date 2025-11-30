@@ -15,7 +15,7 @@ public class StatisticManager : IStatisticManager
 		{
 			get
 			{
-				lock (SyncRoot)
+				using (EnterScope())
 					return _pnlParams ??= [.. this.OfType<IPnLStatisticParameter>()];
 			}
 		}
@@ -26,7 +26,7 @@ public class StatisticManager : IStatisticManager
 		{
 			get
 			{
-				lock (SyncRoot)
+				using (EnterScope())
 					return _tradeParams ??= [.. this.OfType<ITradeStatisticParameter>()];
 			}
 		}
@@ -37,7 +37,7 @@ public class StatisticManager : IStatisticManager
 		{
 			get
 			{
-				lock (SyncRoot)
+				using (EnterScope())
 					return _positionParams ??= [.. this.OfType<IPositionStatisticParameter>()];
 			}
 		}
@@ -48,7 +48,7 @@ public class StatisticManager : IStatisticManager
 		{
 			get
 			{
-				lock (SyncRoot)
+				using (EnterScope())
 					return _orderParams ??= [.. this.OfType<IOrderStatisticParameter>()];
 			}
 		}
@@ -57,7 +57,7 @@ public class StatisticManager : IStatisticManager
 
 		public bool TryGetValue(StatisticParameterTypes type, out IStatisticParameter parameter)
 		{
-			lock (SyncRoot)
+			using (EnterScope())
 				return _dict.TryGetValue(type, out parameter);
 		}
 

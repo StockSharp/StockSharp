@@ -1,5 +1,9 @@
 namespace StockSharp.Algo.Storages;
 
+#if NET10_0_OR_GREATER
+using SyncObject = System.Threading.Lock;
+#endif
+
 class PositionStorage(IEntityRegistry entityRegistry) : IPositionStorage
 {
 	private readonly IEntityRegistry _entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));

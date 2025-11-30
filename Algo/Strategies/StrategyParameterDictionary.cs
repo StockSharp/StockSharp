@@ -48,7 +48,7 @@ public class StrategyParameterDictionary(Strategy strategy) : CachedSynchronized
 	/// <inheritdoc/>
 	public override bool Remove(string key)
 	{
-		lock (SyncRoot)
+		using (EnterScope())
 		{
 			if (!TryGetValue(key, out var p))
 				return false;

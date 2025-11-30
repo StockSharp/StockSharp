@@ -536,7 +536,7 @@ public static partial class MarketRuleHelper
 
 				var canActivate = false;
 
-				lock (_nonActivatedRules.SyncRoot)
+				using (_nonActivatedRules.EnterScope())
 				{
 					if (_nonActivatedRules.Remove(rule))
 					{
@@ -573,7 +573,7 @@ public static partial class MarketRuleHelper
 
 				var canActivate = false;
 
-				lock (_nonActivatedRules.SyncRoot)
+				using (_nonActivatedRules.EnterScope())
 				{
 					if (_nonActivatedRules.Remove(rule))
 					{
@@ -706,7 +706,7 @@ public static partial class MarketRuleHelper
 	///// <param name="rule">Правило.</param>
 	///// <param name="syncToken">Объект синхронизации. Если значение равно <see langword="null"/>, то правило рассинхронизовывается.</param>
 	///// <returns>Правило.</returns>
-	//public static TRule Sync<TRule>(this TRule rule, SyncObject syncToken)
+	//public static TRule Sync<TRule>(this TRule rule, Lock syncToken)
 	//	where TRule : IMarketRule
 	//{
 	//	return rule.Modify(r => r.SyncRoot = syncToken);

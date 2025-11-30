@@ -270,14 +270,14 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 
 	private CancellationTokenSource _cts;
 	private Task _storageTask;
-	private readonly object _timerSync = new();
+	private readonly Lock _timerSync = new();
 
 	/// <summary>
 	/// Start storage auto-save thread.
 	/// </summary>
 	private void StartStorageTimer()
 	{
-		lock (_timerSync)
+		using (_timerSync.EnterScope())
 		{
 			if (_cts != null || !Buffer.Enabled || Buffer.DisableStorageTimer)
 				return;
@@ -458,7 +458,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 
 	private void StopStorageTimer()
 	{
-		lock (_timerSync)
+		using (_timerSync.EnterScope())
 		{
 			var cts = _cts;
 

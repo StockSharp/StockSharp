@@ -4,14 +4,14 @@ using StockSharp.Algo.Risk;
 
 partial class Connector
 {
-	private readonly SyncObject _marketTimerSync = new();
+	private readonly Lock _marketTimerSync = new();
 	private Timer _marketTimer;
 	private readonly TimeMessage _marketTimeMessage = new();
 	private bool _isMarketTimeHandled;
 
 	private void CreateTimer()
 	{
-		lock (_marketTimerSync)
+		using (_marketTimerSync.EnterScope())
 		{
 			_isMarketTimeHandled = true;
 
@@ -26,7 +26,7 @@ partial class Connector
 						// TimeMsg required for notify invoke CurrentTimeChanged event (and active time based IMarketRule-s)
 						// No need to put _marketTimeMessage again, if it still in queue.
 
-						lock (_marketTimerSync)
+						using (_marketTimerSync.EnterScope())
 						{
 							if (_marketTimer == null || !_isMarketTimeHandled)
 								return;
@@ -48,7 +48,7 @@ partial class Connector
 
 	private void CloseTimer()
 	{
-		lock (_marketTimerSync)
+		using (_marketTimerSync.EnterScope())
 		{
 			if (_marketTimer != null)
 			{

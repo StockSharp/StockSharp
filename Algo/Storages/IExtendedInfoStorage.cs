@@ -110,7 +110,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 		private readonly CsvExtendedInfoStorage _storage;
 		private readonly string _fileName;
 		private Tuple<string, Type>[] _fields;
-		private readonly SyncObject _lock = new();
+		private readonly Lock _lock = new();
 		//private readonly Dictionary<string, Type> _fieldTypes = new Dictionary<string, Type>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly Dictionary<SecurityId, Dictionary<string, object>> _cache = [];
 		private ChannelExecutor _executor;
@@ -235,7 +235,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 
 		void IExtendedInfoStorageItem.Add(SecurityId securityId, IDictionary<string, object> extensionInfo)
 		{
-			lock (_lock)
+			using (_lock.EnterScope())
 			{
 				var dict = _cache.SafeAdd(securityId);
 
@@ -257,7 +257,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 
 		IEnumerable<Tuple<SecurityId, IDictionary<string, object>>> IExtendedInfoStorageItem.Load()
 		{
-			lock (_lock)
+			using (_lock.EnterScope())
 			{
 				var retVal = new Tuple<SecurityId, IDictionary<string, object>>[_cache.Count];
 
@@ -274,13 +274,13 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 
 		IDictionary<string, object> IExtendedInfoStorageItem.Load(SecurityId securityId)
 		{
-			lock (_lock)
+			using (_lock.EnterScope())
 				return _cache.TryGetValue(securityId)?.ToDictionary();
 		}
 
 		void IExtendedInfoStorageItem.Delete(SecurityId securityId)
 		{
-			lock (_lock)
+			using (_lock.EnterScope())
 				_cache.Remove(securityId);
 
 			Flush();
@@ -290,7 +290,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 		{
 			get
 			{
-				lock (_lock)
+				using (_lock.EnterScope())
 					return [.. _cache.Keys];
 			}
 		}

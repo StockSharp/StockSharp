@@ -160,7 +160,7 @@ public class PnLQueue
 
 		decimal tradePnL;
 
-		lock (_openedTrades.SyncRoot)
+		using (_openedTrades.EnterScope())
 		{
 			if (_openedTrades.Count > 0)
 			{

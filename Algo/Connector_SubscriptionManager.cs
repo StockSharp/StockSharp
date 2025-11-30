@@ -82,7 +82,7 @@ partial class Connector
 
 	private class SubscriptionManager(Connector connector)
 	{
-		private readonly SyncObject _syncObject = new();
+		private readonly Lock _syncObject = new();
 
 		private readonly Dictionary<long, SubscriptionInfo> _subscriptions = [];
 		private readonly Dictionary<long, (ISubscriptionMessage request, Subscription subscription)> _requests = [];
@@ -97,7 +97,7 @@ partial class Connector
 		{
 			get
 			{
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					return [.. _subscriptions.Select(p => p.Value.Subscription)];
 				}
@@ -106,7 +106,7 @@ partial class Connector
 
 		public void ClearCache()
 		{
-			lock (_syncObject)
+			using (_syncObject.EnterScope())
 			{
 				_wasConnected = default;
 				_subscriptions.Clear();
@@ -122,7 +122,7 @@ partial class Connector
 			return Subscriptions
 			       .Where(s => s.DataType == dataType && s.State.IsActive())
 			       .Select(s => _connector.TryGetSecurity(s.SecurityId))
-				   .WhereNotNull();
+					.WhereNotNull();
 		}
 
 		private void TryWriteLog(long id)
@@ -139,7 +139,7 @@ partial class Connector
 
 		private SubscriptionInfo TryGetInfo(long id, bool ignoreAll, bool remove, DateTime? time, bool addLog)
 		{
-			lock (_syncObject)
+			using (_syncObject.EnterScope())
 			{
 				if (_subscriptionAllMap.ContainsKey(id))
 				{
@@ -225,7 +225,7 @@ partial class Connector
 
 			try
 			{
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					unexpectedCancelled = false;
 
@@ -307,7 +307,7 @@ partial class Connector
 			if (subscription.TransactionId == 0)
 				subscription.TransactionId = _connector.TransactionIdGenerator.GetNextId();
 
-			lock (_syncObject)
+			using (_syncObject.EnterScope())
 			{
 				var info = new SubscriptionInfo(subscription, _subscriptionAllMap.TryGetValue(subscription.TransactionId, out var parentId) ? _subscriptions.TryGetValue(parentId) : null);
 
@@ -367,7 +367,7 @@ partial class Connector
 
 		private void SendRequest(ISubscriptionMessage request, Subscription subscription, bool isAllExtension)
 		{
-			lock (_syncObject)
+			using (_syncObject.EnterScope())
 				_requests.Add(request.TransactionId, (request, subscription));
 
 			if(isAllExtension)
@@ -385,7 +385,7 @@ partial class Connector
 
 			Subscription[] missingSubscriptions;
 
-			lock (_syncObject)
+			using (_syncObject.EnterScope())
 				missingSubscriptions = [.. subscriptions.Where(sub => (!_wasConnected || !_connector.SubscriptionsOnConnect.Contains(sub)) && !_subscriptions.ContainsKey(sub.TransactionId))];
 
 			if (_wasConnected)
@@ -419,7 +419,7 @@ partial class Connector
 
 			var requests = new Dictionary<ISubscriptionMessage, SubscriptionInfo>();
 
-			lock (_syncObject)
+			using (_syncObject.EnterScope())
 			{
 				_requests.Clear();
 
@@ -457,7 +457,7 @@ partial class Connector
 
 			var subscriptions = new List<Subscription>();
 
-			lock (_syncObject)
+			using (_syncObject.EnterScope())
 			{
 				_keeped.Clear();
 				_keeped.AddRange(_subscriptions.Values);
@@ -497,7 +497,7 @@ partial class Connector
 
 		public Subscription ProcessSubscriptionFinishedMessage(SubscriptionFinishedMessage message, out object[] items)
 		{
-			lock (_syncObject)
+			using (_syncObject.EnterScope())
 			{
 				var info = TryGetSubscription(message.OriginalTransactionId, false, true, null);
 
@@ -524,7 +524,7 @@ partial class Connector
 
 		public Subscription ProcessSubscriptionOnlineMessage(SubscriptionOnlineMessage message, out object[] items)
 		{
-			lock (_syncObject)
+			using (_syncObject.EnterScope())
 			{
 				var info = TryGetSubscription(message.OriginalTransactionId, false, false, null);
 
@@ -550,9 +550,11 @@ partial class Connector
 
 		public IEnumerable<(Subscription subscription, ICandleMessage candle)> UpdateCandles(CandleMessage message)
 		{
+			var results = new List<(Subscription, ICandleMessage)>();
+
 			foreach (var subscriptionId in message.GetSubscriptionIds())
 			{
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					if (!_subscriptions.TryGetValue(subscriptionId, out var info))
 					{
@@ -564,7 +566,7 @@ partial class Connector
 
 					if (secId?.IsAllSecurity() == true)
 					{
-						yield return (info.Subscription, message);
+						results.Add((info.Subscription, message));
 						continue;
 					}
 
@@ -591,14 +593,16 @@ partial class Connector
 					if (!info.UpdateCandle(message, out var candle))
 						continue;
 
-					yield return (info.Subscription, candle);
+					results.Add((info.Subscription, candle));
 				}
 			}
+
+			return results;
 		}
 
 		public void SubscribeAll(SubscriptionSecurityAllMessage allMsg)
 		{
-			lock (_syncObject)
+			using (_syncObject.EnterScope())
 				_subscriptionAllMap.Add(allMsg.TransactionId, allMsg.ParentTransactionId);
 
 			var mdMsg = new MarketDataMessage

@@ -5,7 +5,7 @@ namespace StockSharp.Algo.Positions;
 /// </summary>
 public class PositionMessageAdapter : MessageAdapterWrapper
 {
-	private readonly SyncObject _sync = new();
+	private readonly Lock _sync = new();
 	private readonly IPositionManager _positionManager;
 
 	private readonly CachedSynchronizedSet<long> _subscriptions = [];
@@ -41,7 +41,7 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 			{
 				_subscriptions.Clear();
 
-				lock (_sync)
+				using (_sync.EnterScope())
 					_positionManager.ProcessMessage(message);
 
 				break;
@@ -57,7 +57,7 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 						LogDebug("Subscription {0} added.", lookupMsg.TransactionId);
 						_subscriptions.Add(lookupMsg.TransactionId);
 
-						lock (_sync)
+						using (_sync.EnterScope())
 							_positionManager.ProcessMessage(message);
 					}
 
@@ -69,7 +69,7 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 					{
 						LogDebug("Subscription {0} removed.", lookupMsg.OriginalTransactionId);
 
-						lock (_sync)
+						using (_sync.EnterScope())
 							_positionManager.ProcessMessage(message);
 					}
 
@@ -81,7 +81,7 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 
 			default:
 			{
-				lock (_sync)
+				using (_sync.EnterScope())
 					_positionManager.ProcessMessage(message);
 
 				break;
@@ -101,7 +101,7 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 			not MessageTypes.Connect and
 			not MessageTypes.Disconnect)
 		{
-			lock (_sync)
+			using (_sync.EnterScope())
 				change = _positionManager.ProcessMessage(message);
 		}
 

@@ -42,7 +42,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 {
 	private readonly CachedSynchronizedDictionary<TKey, TEntity> _items = [];
 
-	private readonly SyncObject _copySync = new();
+	private readonly Lock _copySync = new();
 	private byte[] _copy;
 
 	private ChannelExecutor _executor;
@@ -86,12 +86,12 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 		byte[] body;
 
-		lock (_copySync)
+		using (_copySync.EnterScope())
 			body = _copy;
 
 		if (body is null)
 		{
-			lock (_copySync)
+			using (_copySync.EnterScope())
 			{
 				if (File.Exists(FileName))
 					body = File.ReadAllBytes(FileName);
@@ -101,7 +101,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 			body = body.Compress<GZipStream>();
 
-			lock (_copySync)
+			using (_copySync.EnterScope())
 				_copy ??= body;
 		}
 
@@ -113,7 +113,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 		if (!CreateArchivedCopy)
 			return;
 
-		lock (_copySync)
+		using (_copySync.EnterScope())
 			_copy = null;
 	}
 
@@ -121,7 +121,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 	TEntity IStorageEntityList<TEntity>.ReadById(object id)
 	{
-		lock (SyncRoot)
+		using (EnterScope())
 			return _items.TryGetValue(NormalizedKey(id));
 	}
 
@@ -163,7 +163,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	/// <param name="forced">Forced update.</param>
 	public virtual void Save(TEntity entity, bool forced)
 	{
-		lock (SyncRoot)
+		using (EnterScope())
 		{
 			var item = _items.TryGetValue(GetNormalizedKey(entity));
 
@@ -222,7 +222,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	/// <returns></returns>
 	public override bool Contains(TEntity item)
 	{
-		lock (SyncRoot)
+		using (EnterScope())
 			return _items.ContainsKey(GetNormalizedKey(item));
 	}
 
@@ -233,7 +233,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	/// <returns></returns>
 	protected override bool OnAdding(TEntity item)
 	{
-		lock (SyncRoot)
+		using (EnterScope())
 		{
 			if (!_items.TryAdd2(GetNormalizedKey(item), item))
 				return false;
@@ -262,7 +262,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	{
 		base.OnRemoved(item);
 
-		lock (SyncRoot)
+		using (EnterScope())
 		{
 			_items.Remove(GetNormalizedKey(item));
 			RemoveCache(item);
@@ -277,7 +277,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	/// <param name="items"></param>
 	protected void OnRemovedRange(IEnumerable<TEntity> items)
 	{
-		lock (SyncRoot)
+		using (EnterScope())
 		{
 			foreach (var item in items)
 			{
@@ -296,7 +296,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	{
 		base.OnCleared();
 
-		lock (SyncRoot)
+		using (EnterScope())
 		{
 			_items.Clear();
 			ClearCache();
@@ -355,7 +355,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 					var item = Read(reader);
 					var key = GetNormalizedKey(item);
 
-					lock (SyncRoot)
+					using (EnterScope())
 					{
 						if (_items.TryAdd2(key, item))
 						{
@@ -385,7 +385,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 			try
 			{
-				lock (SyncRoot)
+				using (EnterScope())
 				{
 					stream.SetLength(0);
 

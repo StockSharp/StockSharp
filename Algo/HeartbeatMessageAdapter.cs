@@ -24,7 +24,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 	private const ConnectionStates _none = (ConnectionStates)(-1);
 
-	private readonly SyncObject _timeSync = new();
+	private readonly Lock _timeSync = new();
 	private readonly TimeMessage _timeMessage = new() { OfflineMode = MessageOfflineModes.Ignore };
 
 	private readonly ReConnectionSettings _reConnectionSettings;
@@ -71,7 +71,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 				{
 					isRestored = _currState == ConnectionStates.Connecting && (_prevState == ConnectionStates.Failed || _prevState == ConnectionStates.Reconnecting);
 
-					lock (_timeSync)
+					using (_timeSync.EnterScope())
 					{
 						_prevState = _currState = ConnectionStates.Connected;
 
@@ -81,7 +81,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 				}
 				else
 				{
-					lock (_timeSync)
+					using (_timeSync.EnterScope())
 					{
 						if (_connectingAttemptCount != 0)
 						{
@@ -129,12 +129,12 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 				if (disconnectMsg.IsOk())
 				{
-					lock (_timeSync)
+					using (_timeSync.EnterScope())
 						_prevState = _currState = ConnectionStates.Disconnected;
 				}
 				else
 				{
-					lock (_timeSync)
+					using (_timeSync.EnterScope())
 					{
 						if (_suppressDisconnectError)
 						{
@@ -166,7 +166,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 			{
 				_prevState = _none;
 
-				lock (_timeSync)
+				using (_timeSync.EnterScope())
 				{
 					_currState = _none;
 
@@ -188,7 +188,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 				else
 					base.OnSendInMessage(new ResetMessage());
 
-				lock (_timeSync)
+				using (_timeSync.EnterScope())
 				{
 					_currState = ConnectionStates.Connecting;
 
@@ -205,7 +205,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 			}
 			case MessageTypes.Disconnect:
 			{
-				lock (_timeSync)
+				using (_timeSync.EnterScope())
 				{
 					_suppressDisconnectError = _timer != null;
 
@@ -223,7 +223,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 			{
 				if (_timeMessage == message)
 				{
-					lock (_timeSync)
+					using (_timeSync.EnterScope())
 					{
 						if (_currState is ConnectionStates.Disconnecting or ConnectionStates.Disconnected)
 							return true;
@@ -243,7 +243,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 		{
 			var result = base.OnSendInMessage(message);
 
-			lock (_timeSync)
+			using (_timeSync.EnterScope())
 			{
 				if (isStartTimer && (_currState == ConnectionStates.Connecting || _currState == ConnectionStates.Connected))
 					StartTimer();
@@ -255,7 +255,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 		{
 			if (message == _timeMessage)
 			{
-				lock (_timeSync)
+				using (_timeSync.EnterScope())
 					_canSendTime = true;
 			}
 		}
@@ -273,7 +273,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 		var time = CurrentTimeUtc;
 		var lastHeartBeatTime = time;
 
-		var sync = new SyncObject();
+		var sync = new Lock();
 		var isProcessing = false;
 
 		if (needHeartbeat)
@@ -288,7 +288,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 		_timer = ThreadingHelper
 		    .Timer(() =>
 		    {
-			    lock (sync)
+			    using (sync.EnterScope())
 			    {
 				    if (isProcessing)
 					    return;
@@ -325,7 +325,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 			    }
 			    finally
 			    {
-				    lock (sync)
+					using (sync.EnterScope())
 					    isProcessing = false;
 			    }
 		    })
@@ -369,21 +369,21 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 					{
 						LogInfo("RCM: Connecting AttemptError.");
 
-						lock (_timeSync)
+						using (_timeSync.EnterScope())
 							_currState = _prevState;
 					}
 					else
 					{
 						if (_currState == ConnectionStates.Connecting && _connectingAttemptCount != 0)
 						{
-							lock (_timeSync)
+							using (_timeSync.EnterScope())
 								_currState = ConnectionStates.Reconnecting;
 
 							LogInfo("RCM: To Reconnecting Attempts {0} Timeout {1}.", _connectingAttemptCount, _connectionTimeOut);
 						}
 						else
 						{
-							lock (_timeSync)
+							using (_timeSync.EnterScope())
 								_currState = _none;
 						}
 					}
@@ -397,7 +397,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 				{
 					LogWarning("RCM: Reconnecting attempts {0} PrevState {1}.", _connectingAttemptCount, FormatState(_prevState));
 
-					lock (_timeSync)
+					using (_timeSync.EnterScope())
 						_currState = _none;
 
 					break;
@@ -447,7 +447,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 	private void ProcessHeartbeat()
 	{
-		lock (_timeSync)
+		using (_timeSync.EnterScope())
 		{
 			if (_currState != ConnectionStates.Connected && !InnerAdapter.HeartbeatBeforConnect)
 				return;

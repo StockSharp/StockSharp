@@ -11,7 +11,7 @@ public class OrderLogMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 {
 	private class SubscriptionInfo
 	{
-		public readonly SyncObject Lock = new();
+		public readonly Lock Lock = new();
 
 		public SubscriptionInfo(MarketDataMessage origin)
 		{
@@ -111,13 +111,13 @@ public class OrderLogMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 				{
 					if (TryRemoveSubscription(id, out var info))
 					{
-						lock (info.Lock)
+						using (info.Lock.EnterScope())
 							info.State = info.State.ChangeSubscriptionState(SubscriptionStates.Error, id, this);
 					}
 				}
 				else if (_subscriptionIds.TryGetValue(id, out var info) && info.State != SubscriptionStates.Online)
 				{
-					lock (info.Lock)
+					using (info.Lock.EnterScope())
 					{
 						QuoteChangeMessage snapshot = null;
 
@@ -145,7 +145,7 @@ public class OrderLogMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 
 				if (TryRemoveSubscription(id, out var info))
 				{
-					lock (info.Lock)
+					using (info.Lock.EnterScope())
 						info.State = info.State.ChangeSubscriptionState(SubscriptionStates.Finished, id, this);
 				}
 
@@ -192,7 +192,7 @@ public class OrderLogMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 				{
 					QuoteChangeMessage depth;
 
-					lock (info.Lock)
+					using (info.Lock.EnterScope())
 					{
 						depth = info.Builder.Update(execMsg);
 

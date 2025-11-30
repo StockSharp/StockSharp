@@ -123,7 +123,7 @@ public class SnapshotRegistry(string path) : Disposable
 
 			public void ClearAll()
 			{
-				lock (_snapshots.SyncRoot)
+				using (_snapshots.EnterScope())
 				{
 					_snapshots.Clear();
 					_dirtyKeys.Clear();
@@ -133,7 +133,7 @@ public class SnapshotRegistry(string path) : Disposable
 
 			public void Clear(TKey key)
 			{
-				lock (_snapshots.SyncRoot)
+				using (_snapshots.EnterScope())
 				{
 					_snapshots.Remove(key);
 					_dirtyKeys.Remove(key);
@@ -148,7 +148,7 @@ public class SnapshotRegistry(string path) : Disposable
 
 				var key = _serializer.GetKey(curr);
 
-				lock (_snapshots.SyncRoot)
+				using (_snapshots.EnterScope())
 				{
 					var prev = _snapshots.TryGetValue(key);
 
@@ -173,13 +173,13 @@ public class SnapshotRegistry(string path) : Disposable
 
 			public TMessage Get(TKey key)
 			{
-				lock (_snapshots.SyncRoot)
+				using (_snapshots.EnterScope())
 					return (TMessage)_snapshots.TryGetValue(key)?.Clone();
 			}
 
 			public IEnumerable<TMessage> GetAll(DateTime? from, DateTime? to)
 			{
-				lock (_snapshots.SyncRoot)
+				using (_snapshots.EnterScope())
 				{
 					return [.. _snapshots.Values.Where(m =>
 					{
@@ -205,7 +205,7 @@ public class SnapshotRegistry(string path) : Disposable
 
 				IEnumerable<byte[]> buffers;
 
-				lock (_snapshots.SyncRoot)
+				using (_snapshots.EnterScope())
 				{
 					if (!_resetFile)
 					{
@@ -250,7 +250,7 @@ public class SnapshotRegistry(string path) : Disposable
 
 		private bool _flushDates;
 
-		private readonly SyncObject _cacheSync = new();
+		private readonly Lock _cacheSync = new();
 
 		private readonly CachedSynchronizedDictionary<DateTime, SnapshotStorageDate> _dates = [];
 
@@ -303,7 +303,7 @@ public class SnapshotRegistry(string path) : Disposable
 		{
 			if (Directory.Exists(_path))
 			{
-				lock (_cacheSync)
+				using (_cacheSync.EnterScope())
 					File.Delete(_datesPath);
 			}
 
@@ -339,7 +339,7 @@ public class SnapshotRegistry(string path) : Disposable
 
 			GetStorageDate(date).Update(curr);
 
-			lock (DatesDict.SyncRoot)
+			using (DatesDict.EnterScope())
 			{
 				if (DatesDict.TryAdd2(date, date))
 					_flushDates = true;
@@ -448,7 +448,7 @@ public class SnapshotRegistry(string path) : Disposable
 					}
 				});
 
-				lock (_cacheSync)
+				using (_cacheSync.EnterScope())
 				{
 					stream.Position = 0;
 					stream.Save(_datesPath);
@@ -485,7 +485,7 @@ public class SnapshotRegistry(string path) : Disposable
 
 			try
 			{
-				lock (DatesDict.SyncRoot)
+				using (DatesDict.EnterScope())
 				{
 					if (_flushDates)
 						saveDates = true;
@@ -512,11 +512,11 @@ public class SnapshotRegistry(string path) : Disposable
 	public void Init()
 	{
 		var isFlushing = false;
-		var flushLock = new SyncObject();
+		var flushLock = new Lock();
 
 		_timer = ThreadingHelper.Timer(() =>
 		{
-			lock (flushLock)
+			using (flushLock.EnterScope())
 			{
 				if (isFlushing)
 					return;
@@ -536,7 +536,7 @@ public class SnapshotRegistry(string path) : Disposable
 				ex.LogError();
 			}
 
-			lock (flushLock)
+			using (flushLock.EnterScope())
 			{
 				isFlushing = false;
 			}

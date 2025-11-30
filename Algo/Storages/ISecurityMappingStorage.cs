@@ -84,7 +84,7 @@ public class InMemorySecurityMappingStorage : ISecurityMappingStorage
 
 	IEnumerable<string> ISecurityMappingStorage.GetStorageNames()
 	{
-		lock (_mappings.SyncRoot)
+		using (_mappings.EnterScope())
 			return [.. _mappings.Keys];
 	}
 
@@ -93,7 +93,7 @@ public class InMemorySecurityMappingStorage : ISecurityMappingStorage
 		if (storageName.IsEmpty())
 			throw new ArgumentNullException(nameof(storageName));
 
-		lock (_mappings.SyncRoot)
+		using (_mappings.EnterScope())
 			return _mappings.TryGetValue(storageName)?.Select(p => (SecurityIdMapping)p).ToArray() ?? Enumerable.Empty<SecurityIdMapping>();
 	}
 
@@ -112,7 +112,7 @@ public class InMemorySecurityMappingStorage : ISecurityMappingStorage
 
 		var added = false;
 
-		lock (_mappings.SyncRoot)
+		using (_mappings.EnterScope())
 		{
 			var mappings = _mappings.SafeAdd(storageName);
 
@@ -147,7 +147,7 @@ public class InMemorySecurityMappingStorage : ISecurityMappingStorage
 
 	SecurityId? ISecurityMappingStorage.TryGetStockSharpId(string storageName, SecurityId adapterId)
 	{
-		lock (_mappings.SyncRoot)
+		using (_mappings.EnterScope())
 		{
 			if (!_mappings.TryGetValue(storageName, out var mappings))
 				return null;
@@ -161,7 +161,7 @@ public class InMemorySecurityMappingStorage : ISecurityMappingStorage
 
 	SecurityId? ISecurityMappingStorage.TryGetAdapterId(string storageName, SecurityId stockSharpId)
 	{
-		lock (_mappings.SyncRoot)
+		using (_mappings.EnterScope())
 		{
 			if (!_mappings.TryGetValue(storageName, out var mappings))
 				return null;
@@ -183,7 +183,7 @@ public class InMemorySecurityMappingStorage : ISecurityMappingStorage
 
 		all = null;
 
-		lock (_mappings.SyncRoot)
+		using (_mappings.EnterScope())
 		{
 			var mappings = _mappings.TryGetValue(storageName);
 
@@ -211,7 +211,7 @@ public class InMemorySecurityMappingStorage : ISecurityMappingStorage
 		if (pairs == null)
 			throw new ArgumentNullException(nameof(pairs));
 
-		lock (_mappings.SyncRoot)
+		using (_mappings.EnterScope())
 		{
 			var mappings = _mappings.SafeAdd(storageName);
 

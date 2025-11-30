@@ -69,7 +69,7 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 		{
 			case MessageTypes.Reset:
 			{
-				lock (_lookups.SyncRoot)
+				using (_lookups.EnterScope())
 				{
 					_prevTime = default;
 					_lookups.Clear();
@@ -103,7 +103,7 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 		{
 			if (message.IsSubscribe)
 			{
-				lock (_lookups.SyncRoot)
+				using (_lookups.EnterScope())
 				{
 					if (InnerAdapter.EnqueueSubscriptions)
 					{
@@ -170,7 +170,7 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 			{
 				var id = originIdMsg.OriginalTransactionId;
 
-				lock (_lookups.SyncRoot)
+				using (_lookups.EnterScope())
 				{
 					if (_lookups.TryGetAndRemove(id, out var info))
 					{
@@ -194,7 +194,7 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 			{
 				ignoreIds = subscrMsg.GetSubscriptionIds();
 
-				lock (_lookups.SyncRoot)
+				using (_lookups.EnterScope())
 				{
 					foreach (var id in ignoreIds)
 					{
@@ -243,7 +243,7 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 
 				nextLookups ??= [];
 
-				lock (_lookups.SyncRoot)
+				using (_lookups.EnterScope())
 				{
 					var next = TryInitNextLookup(info.Subscription.Type, info.Subscription.TransactionId);
 

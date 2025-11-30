@@ -14,7 +14,7 @@ public class MarketTimer(ITimeProvider provider, Action activated) : Disposable
 	private readonly Action _activated = activated ?? throw new ArgumentNullException(nameof(activated));
 	private bool _started;
 	private TimeSpan _interval;
-	private readonly object _syncLock = new();
+	private readonly Lock _syncLock = new();
 	private TimeSpan _elapsedTime;
 
 	/// <summary>
@@ -27,7 +27,7 @@ public class MarketTimer(ITimeProvider provider, Action activated) : Disposable
 		if (interval <= TimeSpan.Zero)
 			throw new ArgumentOutOfRangeException(nameof(interval), interval, LocalizedStrings.InvalidValue);
 
-		lock (_syncLock)
+		using (_syncLock.EnterScope())
 		{
 			_interval = interval;
 			_elapsedTime = TimeSpan.Zero;
@@ -45,7 +45,7 @@ public class MarketTimer(ITimeProvider provider, Action activated) : Disposable
 		if (_interval == default)
 			throw new InvalidOperationException(LocalizedStrings.IntervalNotSet);
 
-		lock (_syncLock)
+		using (_syncLock.EnterScope())
 		{
 			if (!_started)
 			{
@@ -63,7 +63,7 @@ public class MarketTimer(ITimeProvider provider, Action activated) : Disposable
 	/// <returns>The timer.</returns>
 	public MarketTimer Stop()
 	{
-		lock (_syncLock)
+		using (_syncLock.EnterScope())
 		{
 			if (_started)
 			{
@@ -77,7 +77,7 @@ public class MarketTimer(ITimeProvider provider, Action activated) : Disposable
 
 	private void OnCurrentTimeChanged(TimeSpan diff)
 	{
-		lock (_syncLock)
+		using (_syncLock.EnterScope())
 		{
 			if (!_started)
 				return;

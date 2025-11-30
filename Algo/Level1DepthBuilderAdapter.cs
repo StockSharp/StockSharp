@@ -51,7 +51,7 @@ public class Level1DepthBuilderAdapter(IMessageAdapter innerAdapter) : MessageAd
 		public readonly CachedSynchronizedSet<long> SubscriptionIds = [];
 	}
 
-	private readonly SyncObject _syncObject = new();
+	private readonly Lock _syncObject = new();
 
 	private readonly Dictionary<long, BookInfo> _byId = [];
 	private readonly Dictionary<SecurityId, BookInfo> _online = [];
@@ -63,7 +63,7 @@ public class Level1DepthBuilderAdapter(IMessageAdapter innerAdapter) : MessageAd
 		{
 			case MessageTypes.Reset:
 			{
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					_byId.Clear();
 					_online.Clear();
@@ -89,7 +89,7 @@ public class Level1DepthBuilderAdapter(IMessageAdapter innerAdapter) : MessageAd
 
 					var transId = mdMsg.TransactionId;
 
-					lock (_syncObject)
+					using (_syncObject.EnterScope())
 					{
 						var info = new BookInfo(new(mdMsg.SecurityId));
 						info.SubscriptionIds.Add(transId);
@@ -116,7 +116,7 @@ public class Level1DepthBuilderAdapter(IMessageAdapter innerAdapter) : MessageAd
 
 	private void RemoveSubscription(long id)
 	{
-		lock (_syncObject)
+		using (_syncObject.EnterScope())
 		{
 			var changeId = true;
 
@@ -175,7 +175,7 @@ public class Level1DepthBuilderAdapter(IMessageAdapter innerAdapter) : MessageAd
 			{
 				var id = ((SubscriptionOnlineMessage)message).OriginalTransactionId;
 
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					if (_byId.TryGetValue(id, out var info))
 					{
@@ -198,7 +198,7 @@ public class Level1DepthBuilderAdapter(IMessageAdapter innerAdapter) : MessageAd
 
 			case MessageTypes.Level1Change:
 			{
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					if (_byId.Count == 0 && _online.Count == 0)
 						break;
@@ -210,7 +210,7 @@ public class Level1DepthBuilderAdapter(IMessageAdapter innerAdapter) : MessageAd
 
 				HashSet<long> leftIds = null;
 
-				lock (_syncObject)
+				using (_syncObject.EnterScope())
 				{
 					foreach (var id in ids)
 					{

@@ -23,7 +23,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		private readonly DataType _dataType;
 		private readonly SecurityId _secId;
 		private readonly StorageFormats _format;
-		private readonly SyncObject _cacheSync = new();
+		private readonly Lock _cacheSync = new();
 
 		public LocalMarketDataStorageDrive(DataType dataType, SecurityId secId, StorageFormats format, LocalMarketDataDrive drive)
 		{
@@ -97,7 +97,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		{
 			if (Directory.Exists(_path))
 			{
-				lock (_cacheSync)
+				using (_cacheSync.EnterScope())
 				{
 					File.Delete(_datesPath);
 					File.Delete(_datesPathObsoleteBin);
@@ -130,7 +130,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 				if (Directory.EnumerateFiles(dir).IsEmpty())
 				{
-					lock (_cacheSync)
+					using (_cacheSync.EnterScope())
 						IOHelper.BlockDeleteDir(dir);
 				}
 			}
@@ -157,7 +157,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			SaveDates(DatesDict.CachedValues);
 			ChangeIndex(date, false);
 
-			lock (_availableDataTypes.SyncRoot)
+			using (_availableDataTypes.EnterScope())
 			{
 				var tuple = _availableDataTypes.TryGetValue(_drive.Path);
 
@@ -264,7 +264,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 				stream.Position = 0;
 
-				lock (_cacheSync)
+				using (_cacheSync.EnterScope())
 				{
 					stream.Save(_datesPath);
 
@@ -421,7 +421,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		/// <param name="data">Binary data.</param>
 		public void Load(byte[] data)
 		{
-			lock (SyncRoot)
+			using (EnterScope())
 			{
 				Clear();
 
@@ -505,7 +505,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		/// <param name="stream">Stream.</param>
 		public void Save(Stream stream)
 		{
-			lock (SyncRoot)
+			using (EnterScope())
 			{
 				_lastTimeChanged = null;
 
@@ -592,7 +592,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		/// <param name="remove">Remove date if <see langword="true"/>, otherwise add.</param>
 		public void ChangeDate(SecurityId secId, StorageFormats format, DataType dataType, DateTime date, bool remove)
 		{
-			lock (SyncRoot)
+			using (EnterScope())
 			{
 				if (remove)
 				{
@@ -629,7 +629,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		/// <returns><see langword="true"/> if index needs to be saved.</returns>
 		public bool NeedSave(TimeSpan diff)
 		{
-			lock (SyncRoot)
+			using (EnterScope())
 				return _lastTimeChanged is not null && (DateTime.UtcNow - _lastTimeChanged.Value) >= diff;
 		}
 
@@ -646,7 +646,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		/// <returns>Available data types.</returns>
 		public IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
 		{
-			lock (SyncRoot)
+			using (EnterScope())
 			{
 				if (securityId == default)
 					return [.. this.SelectMany(p => p.Value.TryGetValue(format, out var formatsDict) ? formatsDict.Keys : Enumerable.Empty<DataType>()).Distinct()];
@@ -667,7 +667,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		/// <returns>Available dates sorted in ascending order.</returns>
 		public IEnumerable<DateTime> GetDates(SecurityId securityId, DataType dataType, StorageFormats format)
 		{
-			lock (SyncRoot)
+			using (EnterScope())
 			{
 				if (TryGetValue(securityId, out var dict) &&
 					dict.TryGetValue(format, out var dict2) &&
@@ -719,14 +719,14 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 	private void ResetDrives()
 	{
-		lock (_drives.SyncRoot)
+		using (_drives.EnterScope())
 			_drives.Values.ForEach(d => d.ResetCache());
 
-		lock (_indexLock)
+		using (_indexLock.EnterScope())
 			_index = null;
 	}
 
-	private readonly SyncObject _indexLock = new();
+	private readonly Lock _indexLock = new();
 	private Index _index;
 
 	private string IndexFullPath => IOPath.Combine(Path, "index.bin");
@@ -738,7 +738,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		if (index is not null)
 			return true;
 
-		lock (_indexLock)
+		using (_indexLock.EnterScope())
 		{
 			index = _index;
 
@@ -836,7 +836,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 		if (securityId == default)
 		{
-			lock (_availableDataTypes.SyncRoot)
+			using (_availableDataTypes.EnterScope())
 			{
 				var tuple = _availableDataTypes.SafeAdd(Path, key => RefTuple.Create(new HashSet<DataType>(), false));
 
@@ -1136,7 +1136,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			}
 		}
 
-		lock (_indexLock)
+		using (_indexLock.EnterScope())
 			_index = index;
 
 		SaveIndex(index);
@@ -1155,7 +1155,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 	{
 		Index index;
 
-		lock (_indexLock)
+		using (_indexLock.EnterScope())
 			index = _index;
 
 		if (index?.NeedSave(diff) != true)
@@ -1174,7 +1174,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 		stream.Position = 0;
 
-		lock (_indexLock)
+		using (_indexLock.EnterScope())
 			stream.Save(IndexFullPath);
 	}
 }

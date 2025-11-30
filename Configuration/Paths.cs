@@ -1,6 +1,7 @@
 ﻿namespace StockSharp.Configuration;
 
 using System.Text;
+using System.Threading;
 
 using Newtonsoft.Json;
 
@@ -381,6 +382,8 @@ public static class Paths
 	public static string BuildVersion
 		=> EntryAssembly?.GetAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
 
+	private static readonly Lock _installationsLock = new();
+
 	private static SettingsStorage[] GetInstallations()
 	{
 		if (!InstallerInstallationsConfigPath.IsConfigExists())
@@ -388,7 +391,7 @@ public static class Paths
 
 		SettingsStorage storage;
 
-		lock (InstallerInstallationsConfigPath)
+		using (_installationsLock.EnterScope())
 			storage = InstallerInstallationsConfigPath.DeserializeInvariant();
 
 		if (storage is null)

@@ -80,7 +80,7 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 	private readonly SynchronizedDictionary<(SecurityId, DataType, StorageFormats), RemoteStorageDrive> _remoteStorages = [];
 	private readonly Func<IAsyncMessageAdapter> _createAdapter;
 	
-	private readonly SyncObject _clientSync = new();
+	private readonly Lock _clientSync = new();
 	private RemoteStorageClient _client;
 
 	/// <summary>
@@ -141,7 +141,7 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 
 	private void ResetClient()
 	{
-		lock (_clientSync)
+		using (_clientSync.EnterScope())
 		{
 			_client?.Dispose();
 			_client = null;
@@ -283,7 +283,7 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 
 	private RemoteStorageClient EnsureGetClient()
 	{
-		lock (_clientSync)
+		using (_clientSync.EnterScope())
 		{
 			_client ??= CreateClient();
 			return _client;

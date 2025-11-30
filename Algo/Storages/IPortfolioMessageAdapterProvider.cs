@@ -47,7 +47,7 @@ public class InMemoryPortfolioMessageAdapterProvider : IPortfolioMessageAdapterP
 		if (adapterId == default)
 			throw new ArgumentNullException(nameof(adapterId));
 
-		lock (_adapters.SyncRoot)
+		using (_adapters.EnterScope())
 		{
 			var prev = TryGetAdapter(key);
 

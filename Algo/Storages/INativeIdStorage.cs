@@ -360,7 +360,7 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 
 			((InMemoryNativeIdStorage)_inMemory).Add(name, pairs);
 		});
-        }
+	}
 }
 
 /// <summary>
@@ -369,7 +369,7 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 public class InMemoryNativeIdStorage : INativeIdStorage
 {
 	private readonly Dictionary<string, PairSet<SecurityId, object>> _nativeIds = new(StringComparer.InvariantCultureIgnoreCase);
-	private readonly SyncObject _syncRoot = new();
+	private readonly Lock _syncRoot = new();
 
 	private Action<string, SecurityId, object> _added;
 
@@ -392,7 +392,7 @@ public class InMemoryNativeIdStorage : INativeIdStorage
 		if (ids == null)
 			throw new ArgumentNullException(nameof(ids));
 
-		lock (_syncRoot)
+		using (_syncRoot.EnterScope())
 		{
 			var dict = _nativeIds.SafeAdd(storageName);
 
@@ -415,7 +415,7 @@ public class InMemoryNativeIdStorage : INativeIdStorage
 		if (nativeId == null)
 			throw new ArgumentNullException(nameof(nativeId));
 
-		lock (_syncRoot)
+		using (_syncRoot.EnterScope())
 		{
 			var added = _nativeIds.SafeAdd(storageName).TryAdd(securityId, nativeId);
 
@@ -433,7 +433,7 @@ public class InMemoryNativeIdStorage : INativeIdStorage
 		if (storageName.IsEmpty())
 			throw new ArgumentNullException(nameof(storageName));
 
-		lock (_syncRoot)
+		using (_syncRoot.EnterScope())
 			return _nativeIds.TryGetValue(storageName)?.TryGetValue(securityId);
 	}
 
@@ -442,7 +442,7 @@ public class InMemoryNativeIdStorage : INativeIdStorage
 		if (storageName.IsEmpty())
 			throw new ArgumentNullException(nameof(storageName));
 
-		lock (_syncRoot)
+		using (_syncRoot.EnterScope())
 			_nativeIds.Remove(storageName);
 	}
 
@@ -453,7 +453,7 @@ public class InMemoryNativeIdStorage : INativeIdStorage
 
 		var securityId = default(SecurityId);
 
-		lock (_syncRoot)
+		using (_syncRoot.EnterScope())
 		{
 			if (_nativeIds.TryGetValue(storageName)?.TryGetKey(nativeId, out securityId) != true)
 				return null;
@@ -467,7 +467,7 @@ public class InMemoryNativeIdStorage : INativeIdStorage
 		if (storageName.IsEmpty())
 			throw new ArgumentNullException(nameof(storageName));
 
-		lock (_syncRoot)
+		using (_syncRoot.EnterScope())
 			return _nativeIds.TryGetValue(storageName)?.Select(p => (p.Key, p.Value)).ToArray() ?? [];
 	}
 
@@ -476,7 +476,7 @@ public class InMemoryNativeIdStorage : INativeIdStorage
 		if (storageName.IsEmpty())
 			throw new ArgumentNullException(nameof(storageName));
 
-		lock (_syncRoot)
+		using (_syncRoot.EnterScope())
 		{
 			var set = _nativeIds.TryGetValue(storageName);
 
@@ -492,7 +492,7 @@ public class InMemoryNativeIdStorage : INativeIdStorage
 		if (storageName.IsEmpty())
 			throw new ArgumentNullException(nameof(storageName));
 
-		lock (_syncRoot)
+		using (_syncRoot.EnterScope())
 		{
 			var set = _nativeIds.TryGetValue(storageName);
 

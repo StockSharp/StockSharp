@@ -156,7 +156,7 @@ public class DriveCache : Disposable, IPersistable
 			.Select(s => s.LoadEntire<IMarketDataDrive>())
 			.ToArray();
 
-		lock (_drives.SyncRoot)
+		using (_drives.EnterScope())
 		{
 			foreach (var drive in drives)
 				_drives.TryAdd2(CreatePair(drive.Path), drive);

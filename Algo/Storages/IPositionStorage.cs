@@ -1,5 +1,9 @@
 ﻿namespace StockSharp.Algo.Storages;
 
+#if NET10_0_OR_GREATER
+using SyncObject = System.Threading.Lock;
+#endif
+
 using Key = ValueTuple<Portfolio, Security, string, Sides?, string, string, TPlusLimits?>;
 
 /// <summary>
@@ -120,7 +124,7 @@ public class InMemoryPositionStorage : IPositionStorage
 
 		var isNew = false;
 
-		lock (_portfolios.SyncRoot)
+		using (_portfolios.EnterScope())
 		{
 			if (!_portfolios.ContainsKey(portfolio.Name))
 			{
@@ -141,7 +145,7 @@ public class InMemoryPositionStorage : IPositionStorage
 		var key = CreateKey(position);
 		var isNew = false;
 
-		lock (_positions.SyncRoot)
+		using (_positions.EnterScope())
 		{
 			if (!_positions.ContainsKey(key))
 			{

@@ -18,7 +18,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 		public override string ToString() => Subscription.ToString();
 	}
 
-	private readonly SyncObject _sync = new();
+	private readonly Lock _sync = new();
 
 	private readonly Dictionary<long, ISubscriptionMessage> _historicalRequests = [];
 	private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = [];
@@ -46,7 +46,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 			{
 				Message[] reMapSubscriptions;
 
-				lock (_sync)
+				using (_sync.EnterScope())
 					reMapSubscriptions = _reMapSubscriptions.CopyAndClear();
 
 				foreach (var reMapSubscription in reMapSubscriptions)
@@ -67,7 +67,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 
 	private bool ProcessReset(Message message)
 	{
-		lock (_sync)
+		using (_sync.EnterScope())
 		{
 			_historicalRequests.Clear();
 			_subscriptionsById.Clear();
@@ -92,7 +92,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 			if (id == 0)
 				return 0;
 
-			lock (_sync)
+			using (_sync.EnterScope())
 				return _replaceId.TryGetValue(id, out var prevId) ? prevId : id;
 		}
 
@@ -109,7 +109,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 		{
 			case MessageTypes.SubscriptionResponse:
 			{
-				lock (_sync)
+				using (_sync.EnterScope())
 				{
 					if (((SubscriptionResponseMessage)message).IsOk())
 					{
@@ -144,7 +144,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 
 			case MessageTypes.SubscriptionOnline:
 			{
-				lock (_sync)
+				using (_sync.EnterScope())
 				{
 					if (!_subscriptionsById.TryGetValue(prevOriginId, out var info))
 						break;
@@ -165,7 +165,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 
 			case MessageTypes.SubscriptionFinished:
 			{
-				lock (_sync)
+				using (_sync.EnterScope())
 				{
 					if (_replaceId.ContainsKey(newOriginId))
 						return;
@@ -183,7 +183,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 			{
 				if (message is ISubscriptionIdMessage subscrMsg)
 				{
-					lock (_sync)
+					using (_sync.EnterScope())
 					{
 						var ids = subscrMsg.GetSubscriptionIds();
 
@@ -194,7 +194,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 						}
 						else
 						{
-							lock (_sync)
+							using (_sync.EnterScope())
 							{
 								if (_replaceId.Count > 0)
 									subscrMsg.SetSubscriptionIds([.. ids.Select(id => _replaceId.TryGetValue2(id) ?? id)]);
@@ -246,7 +246,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 
 				ProcessSuspendedMessage supended = null;
 
-				lock (_sync)
+				using (_sync.EnterScope())
 				{
 					_replaceId.Clear();
 					_reMapSubscriptions.Clear();
@@ -284,7 +284,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 			{
 				var allMsg = (SubscriptionSecurityAllMessage)message;
 
-				lock (_sync)
+				using (_sync.EnterScope())
 					_allSecIdChilds.Add(allMsg.TransactionId);
 
 				break;
@@ -307,7 +307,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 
 		var isInfoLevel = true;
 
-		lock (_sync)
+		using (_sync.EnterScope())
 		{
 			if (isSubscribe)
 			{
