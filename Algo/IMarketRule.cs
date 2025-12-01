@@ -343,7 +343,9 @@ public abstract class MarketRule<TToken, TArg> : BaseLogReceiver, IMarketRule
 
 	bool IMarketRule.CanFinish()
 	{
-		CheckOnReady();
+		if (IsDisposed)
+			return true;
+
 		return !IsActive && IsReady && _canFinish();
 	}
 
@@ -354,14 +356,7 @@ public abstract class MarketRule<TToken, TArg> : BaseLogReceiver, IMarketRule
 	}
 
 	/// <inheritdoc />
-	public bool IsReady
-	{
-		get
-		{
-			CheckOnReady();
-			return _container is not null;
-		}
-	}
+	public bool IsReady => !IsDisposed && _container is not null;
 
 	/// <inheritdoc />
 	public bool IsActive { get; set; }

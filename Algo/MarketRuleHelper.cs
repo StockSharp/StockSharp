@@ -119,6 +119,7 @@ public static partial class MarketRuleHelper
 	/// </summary>
 	/// <param name="rule">Rule.</param>
 	/// <returns>Rule.</returns>
+	[Obsolete("Use overload with container parameter.")]
 	public static IMarketRule Apply(this IMarketRule rule)
 	{
 		if (rule == null)
@@ -152,6 +153,7 @@ public static partial class MarketRuleHelper
 	/// <typeparam name="TArg">The type of argument, accepted by the rule.</typeparam>
 	/// <param name="rule">Rule.</param>
 	/// <returns>Rule.</returns>
+	[Obsolete("Use overload with container parameter.")]
 	public static MarketRule<TToken, TArg> Apply<TToken, TArg>(this MarketRule<TToken, TArg> rule)
 	{
 		return rule.Apply(DefaultRuleContainer);
@@ -262,12 +264,14 @@ public static partial class MarketRuleHelper
 	/// <summary>
 	/// The container of rules, which will be applied by default to all rules, not included into strategy.
 	/// </summary>
+	[Obsolete("Use exact container.")]
 	public static readonly IMarketRuleContainer DefaultRuleContainer = new MarketRuleContainer();
 
 	/// <summary>
 	/// To process rules in suspended mode (for example, create several rules and start them up simultaneously). After completion of method operation all rules, attached to the container resume their activity.
 	/// </summary>
 	/// <param name="action">The action to be processed at suspended rules. For example, to add several rules simultaneously.</param>
+	[Obsolete]
 	public static void SuspendRules(Action action)
 	{
 		DefaultRuleContainer.SuspendRules(action);
@@ -318,10 +322,7 @@ public static partial class MarketRuleHelper
 		var isRemoved = false;
 
 		if ((!checkCanFinish && !rule.IsActive && rule.IsReady) || rule.CanFinish())
-		{
-			container.Rules.Remove(rule);
-			isRemoved = true;
-		}
+			isRemoved = container.Rules.Remove(rule);
 
 		if (isRemoved)
 		{
@@ -345,7 +346,7 @@ public static partial class MarketRuleHelper
 		if (rule == null)
 			throw new ArgumentNullException(nameof(rule));
 
-		if (container.TryRemoveRule(rule))
+		if (container.TryRemoveRule(rule, false))
 		{
 			if (rule.ExclusiveRules.Count > 0)
 			{
