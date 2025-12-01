@@ -78,6 +78,11 @@ public partial class MainWindow
 		_connector.CandleReceived += Connector_CandleReceived;
 	}
 
+	private void OnLoaded(object sender, RoutedEventArgs e)
+	{
+		ThemeExtensions.ApplyDefaultTheme();
+	}
+
 	private void Connector_ConnectionError(Exception error)
 	{
 		this.GuiAsync(() =>

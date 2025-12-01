@@ -35,6 +35,11 @@ public partial class MainWindow
 		_logManager.Listeners.Add(new GuiLogListener(Monitor));
 	}
 
+	private void OnLoaded(object sender, RoutedEventArgs e)
+	{
+		ThemeExtensions.ApplyDefaultTheme();
+	}
+
 	private void Start_Click(object sender, RoutedEventArgs e)
 	{
 		_security = new Security

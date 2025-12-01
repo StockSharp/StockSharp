@@ -56,4 +56,9 @@ public partial class MainWindow
 			Chart.Draw(chartDrawData);
 		}
 	}
+
+	private void OnLoaded(object sender, System.Windows.RoutedEventArgs e)
+	{
+		ThemeExtensions.ApplyDefaultTheme();
+	}
 }

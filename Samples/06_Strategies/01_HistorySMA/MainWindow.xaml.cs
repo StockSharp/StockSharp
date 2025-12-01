@@ -49,6 +49,11 @@ public partial class MainWindow
 		CandleDataTypeEdit.DataType = TimeSpan.FromMinutes(5).TimeFrame();
 	}
 
+	private void OnLoaded(object sender, RoutedEventArgs e)
+	{
+		ThemeExtensions.ApplyDefaultTheme();
+	}
+
 	private void Start_Click(object sender, RoutedEventArgs e)
 	{
 		_security = new Security

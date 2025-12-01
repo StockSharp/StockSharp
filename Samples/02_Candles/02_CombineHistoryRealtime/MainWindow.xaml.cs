@@ -59,6 +59,11 @@ public partial class MainWindow
 		CandleDataTypeEdit.DataType = TimeSpan.FromMinutes(5).TimeFrame();
 	}
 
+	private void OnLoaded(object sender, RoutedEventArgs e)
+	{
+		ThemeExtensions.ApplyDefaultTheme();
+	}
+
     protected override void OnClosed(EventArgs e)
     {
 		AsyncHelper.Run(_executor.DisposeAsync);

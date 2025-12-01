@@ -20,6 +20,7 @@ using StockSharp.Algo.Storages;
 using StockSharp.BusinessEntities;
 using StockSharp.Localization;
 using StockSharp.Messages;
+using StockSharp.Xaml;
 using StockSharp.Xaml.Charting;
 using StockSharp.Configuration;
 using StockSharp.Charting;
@@ -100,6 +101,7 @@ public partial class MainWindow
 
 	private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
 	{
+		ThemeExtensions.ApplyDefaultTheme();
 		Chart.FillIndicators();
 		InitCharts();
 		LoadData();

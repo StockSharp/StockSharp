@@ -25,6 +25,7 @@ using StockSharp.BusinessEntities;
 using StockSharp.Messages;
 using StockSharp.Localization;
 using StockSharp.Configuration;
+using StockSharp.Xaml;
 
 public partial class MainWindow
 {
@@ -39,6 +40,11 @@ public partial class MainWindow
 		ConfigManager.RegisterService<ICompiler>(new CSharpCompiler());
 		HistoryPath.Folder = Paths.HistoryDataPath;
 		GeneticSettings.SelectedObject = new GeneticSettings();
+	}
+
+	private void OnLoaded(object sender, RoutedEventArgs e)
+	{
+		ThemeExtensions.ApplyDefaultTheme();
 	}
 
 	private void StartBtnClick(object sender, RoutedEventArgs e)

@@ -1,11 +1,13 @@
 namespace StockSharp.Samples.Advanced.MultiConnect;
 
 using System.ComponentModel;
+using System.Windows;
 
 using Ecng.Common;
 using Ecng.Configuration;
 
 using StockSharp.BusinessEntities;
+using StockSharp.Xaml;
 
 public partial class MainWindow
 {
@@ -27,4 +29,9 @@ public partial class MainWindow
 	}
 
 	public static MainWindow Instance { get; private set; }
+
+	private void OnLoaded(object sender, RoutedEventArgs e)
+	{
+		ThemeExtensions.ApplyDefaultTheme();
+	}
 }

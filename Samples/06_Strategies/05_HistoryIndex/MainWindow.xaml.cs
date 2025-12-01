@@ -50,6 +50,11 @@ public partial class MainWindow
 		DatePickerEnd.SelectedDate = Paths.HistoryEndDate;
 	}
 
+	private void OnLoaded(object sender, RoutedEventArgs e)
+	{
+		ThemeExtensions.ApplyDefaultTheme();
+	}
+
 	private void Start_Click(object sender, RoutedEventArgs e)
 	{
 		_security = new Security

@@ -2,6 +2,7 @@ namespace StockSharp.Samples.Advanced.MultiConnect;
 
 using System.ComponentModel;
 using System.IO;
+using System.Windows;
 
 using Ecng.Common;
 using Ecng.Configuration;
@@ -13,6 +14,7 @@ using StockSharp.Algo;
 using StockSharp.Algo.Storages;
 using StockSharp.Algo.Storages.Csv;
 using StockSharp.BusinessEntities;
+using StockSharp.Xaml;
 
 public partial class MainWindow
 {
@@ -62,6 +64,11 @@ public partial class MainWindow
 		AsyncHelper.Run(_executor.DisposeAsync);
 
 		base.OnClosing(e);
+	}
+
+	private void OnLoaded(object sender, RoutedEventArgs e)
+	{
+		ThemeExtensions.ApplyDefaultTheme();
 	}
 
 	public static MainWindow Instance { get; private set; }

@@ -80,6 +80,7 @@ public partial class MainWindow
 
 	private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
 	{
+		ThemeExtensions.ApplyDefaultTheme();
 		InitCharts();
 		LoadData(Paths.HistoryDataPath);
 	}

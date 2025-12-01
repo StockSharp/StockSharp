@@ -1,4 +1,4 @@
-﻿<Window x:Class="StockSharp.Samples.Strategies.LiveTerminal.StrategyEditWindow"
+﻿<dx:ThemedWindow x:Class="StockSharp.Samples.Strategies.LiveTerminal.StrategyEditWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
@@ -18,4 +18,4 @@
 
 		<dx:SimpleButton x:Name="Send" Content="{x:Static loc:LocalizedStrings.OK}" xaml:XamlHelper.DialogResult="True" IsDefault="True" Grid.Column="0" Grid.Row="2" Width="100" />
 	</Grid>
-</Window>
+</dx:ThemedWindow>

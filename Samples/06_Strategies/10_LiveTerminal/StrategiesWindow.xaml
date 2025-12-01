@@ -1,8 +1,9 @@
-﻿<Window x:Class="StockSharp.Samples.Strategies.LiveTerminal.StrategiesWindow"
+﻿<dx:ThemedWindow x:Class="StockSharp.Samples.Strategies.LiveTerminal.StrategiesWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:xaml="http://schemas.stocksharp.com/xaml"
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
         Title="{x:Static loc:LocalizedStrings.Strategies}" Height="300" Width="700">
 	<Grid Margin="5">
 		<Grid.RowDefinitions>
@@ -19,4 +20,4 @@
 			</Button>
 		</StackPanel>
 	</Grid>
-</Window>
+</dx:ThemedWindow>

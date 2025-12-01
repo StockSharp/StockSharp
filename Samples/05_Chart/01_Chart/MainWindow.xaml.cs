@@ -107,9 +107,6 @@ public partial class MainWindow : ICandleBuilderSubscription
 
 		ConfigManager.RegisterService<ISubscriptionProvider>(_testProvider);
 		ConfigManager.RegisterService<ISecurityProvider>(_securityProvider);
-
-		ThemeExtensions.ApplyDefaultTheme();
-		Chart.UpdateTheme();
 	}
 
 	private void Theme_OnClick(object sender, RoutedEventArgs e)
@@ -133,6 +130,8 @@ public partial class MainWindow : ICandleBuilderSubscription
 
 	private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
 	{
+		ThemeExtensions.ApplyDefaultTheme();
+
 		Chart.FillIndicators();
 		Chart.SubscribeCandleElement += Chart_OnSubscribeCandleElement;
 		Chart.SubscribeIndicatorElement += Chart_OnSubscribeIndicatorElement;

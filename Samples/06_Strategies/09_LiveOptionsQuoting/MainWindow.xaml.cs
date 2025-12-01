@@ -120,6 +120,11 @@ public partial class MainWindow
 		};
 	}
 
+	private void OnLoaded(object sender, System.Windows.RoutedEventArgs e)
+	{
+		ThemeExtensions.ApplyDefaultTheme();
+	}
+
 	private void DrawTestData()
 	{
 		//

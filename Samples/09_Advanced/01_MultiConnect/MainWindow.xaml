@@ -4,6 +4,7 @@
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
     xmlns:local="clr-namespace:StockSharp.Samples.Advanced.MultiConnect"
-    Title="{x:Static loc:LocalizedStrings.SampleAppFor}" Height="500" Width="850">
+    Title="{x:Static loc:LocalizedStrings.SampleAppFor}"
+	Height="500" Width="850" Loaded="OnLoaded">
     <local:MainPanel x:Name="MainPanel" />
 </dx:ThemedWindow>

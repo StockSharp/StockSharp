@@ -37,6 +37,11 @@ public partial class MainWindow
 		}
 	}
 
+	private void OnLoaded(object sender, RoutedEventArgs e)
+	{
+		ThemeExtensions.ApplyDefaultTheme();
+	}
+
 	private void Setting_Click(object sender, RoutedEventArgs e)
 	{
 		if (_connector.Configure(this))

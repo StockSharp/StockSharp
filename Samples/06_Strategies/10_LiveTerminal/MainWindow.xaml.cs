@@ -104,6 +104,11 @@ public partial class MainWindow
 		_portfoliosWindow.MakeHideable();
 	}
 
+	private void OnLoaded(object sender, RoutedEventArgs e)
+	{
+		ThemeExtensions.ApplyDefaultTheme();
+	}
+
 	private void InitConnector(IEntityRegistry entityRegistry, SnapshotRegistry snapshotRegistry)
 	{
 		// subscribe on connection successfully event

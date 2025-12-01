@@ -233,6 +233,11 @@ public partial class MainWindow
 		};
 	}
 
+	private void OnLoaded(object sender, RoutedEventArgs e)
+	{
+		ThemeExtensions.ApplyDefaultTheme();
+	}
+
 	private void StartBtnClick(object sender, RoutedEventArgs e)
 	{
 		if (_connectors.Count > 0)

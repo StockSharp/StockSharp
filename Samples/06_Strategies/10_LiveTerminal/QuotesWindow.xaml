@@ -1,7 +1,8 @@
-﻿<Window x:Class="StockSharp.Samples.Strategies.LiveTerminal.QuotesWindow"
+﻿<dx:ThemedWindow x:Class="StockSharp.Samples.Strategies.LiveTerminal.QuotesWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:xaml="http://schemas.stocksharp.com/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     Title="QuotesWindow" Height="600" Width="280">
 	<xaml:MarketDepthControl x:Name="DepthCtrl" x:FieldModifier="public" />
-</Window>
+</dx:ThemedWindow>

@@ -41,6 +41,11 @@ public partial class MainWindow
 		});
 	}
 
+	private void OnLoaded(object sender, RoutedEventArgs e)
+	{
+		ThemeExtensions.ApplyDefaultTheme();
+	}
+
 	private void TestSource_OnClick(object sender, RoutedEventArgs e)
 	{
 		// push randomly log's event from test source

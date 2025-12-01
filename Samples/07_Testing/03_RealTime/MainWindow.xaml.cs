@@ -72,6 +72,11 @@ public partial class MainWindow
 		GuiDispatcher.GlobalDispatcher.AddPeriodicalAction(ProcessCandles);
 	}
 
+	private void OnLoaded(object sender, RoutedEventArgs e)
+	{
+		ThemeExtensions.ApplyDefaultTheme();
+	}
+
 	private void InitRealConnector()
 	{
 		_realConnector.OrderReceived += (s, o) => OrderGrid.Orders.TryAdd(o);
