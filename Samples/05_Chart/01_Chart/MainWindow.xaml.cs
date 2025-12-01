@@ -109,6 +109,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 		ConfigManager.RegisterService<ISecurityProvider>(_securityProvider);
 
 		ThemeExtensions.ApplyDefaultTheme();
+		Chart.UpdateTheme();
 	}
 
 	private void Theme_OnClick(object sender, RoutedEventArgs e)
