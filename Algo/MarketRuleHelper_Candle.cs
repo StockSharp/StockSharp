@@ -109,7 +109,7 @@ partial class MarketRuleHelper
 
 		protected override void OnProcessCandle(ICandleMessage candle)
 		{
-			if (candle.State == CandleStates.Active && _condition(candle))
+			if ((candle.State is CandleStates.Active or CandleStates.Finished) && _condition(candle))
 				Activate(candle);
 		}
 	}
@@ -178,8 +178,8 @@ partial class MarketRuleHelper
 
 		protected override void OnProcessCandle(ICandleMessage candle)
 		{
-			if (candle.State == CandleStates.Active && Candle.IsSame(candle) && _condition(Candle))
-				Activate(Candle);
+			if ((candle.State is CandleStates.Active or CandleStates.Finished) && Candle.IsSame(candle) && _condition((TCandle)candle))
+				Activate((TCandle)candle);
 		}
 	}
 
@@ -195,7 +195,7 @@ partial class MarketRuleHelper
 		protected override void OnProcessCandle(ICandleMessage candle)
 		{
 			if (candle.State == CandleStates.Finished && candle.IsSame(Candle))
-				Activate(Candle);
+				Activate((TCandle)candle);
 		}
 	}
 

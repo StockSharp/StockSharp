@@ -65,7 +65,7 @@ partial class MarketRuleHelper
 		if (money == null)
 			throw new ArgumentNullException(nameof(money));
 
-		var finishMoney = money.Type == UnitTypes.Limit ? money : portfolio.CurrentValue - money;
+		var finishMoney = money.Type == UnitTypes.Percent ? portfolio.CurrentValue - money : money;
 
 		return new PortfolioRule(portfolio, provider, pf => pf.CurrentValue < finishMoney)
 		{
@@ -88,7 +88,7 @@ partial class MarketRuleHelper
 		if (money == null)
 			throw new ArgumentNullException(nameof(money));
 
-		var finishMoney = money.Type == UnitTypes.Limit ? money : portfolio.CurrentValue + money;
+		var finishMoney = money.Type == UnitTypes.Percent ? portfolio.CurrentValue + money : money;
 
 		return new PortfolioRule(portfolio, provider, pf => pf.CurrentValue > finishMoney)
 		{
@@ -150,7 +150,7 @@ partial class MarketRuleHelper
 		if (value == null)
 			throw new ArgumentNullException(nameof(value));
 
-		var finishPosition = value.Type == UnitTypes.Limit ? value : position.CurrentValue - value;
+		var finishPosition = value.Type == UnitTypes.Percent ? position.CurrentValue - value : value;
 
 		return new PositionRule(position, provider, pf => pf.CurrentValue < finishPosition)
 		{
@@ -173,7 +173,7 @@ partial class MarketRuleHelper
 		if (value == null)
 			throw new ArgumentNullException(nameof(value));
 
-		var finishPosition = value.Type == UnitTypes.Limit ? value : position.CurrentValue + value;
+		var finishPosition = value.Type == UnitTypes.Percent ? position.CurrentValue + value : value;
 
 		return new PositionRule(position, provider, pf => pf.CurrentValue > finishPosition)
 		{
