@@ -97,8 +97,6 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
 	{
-		message.Forced = true;
-
 		switch (message.Type)
 		{
 			case MessageTypes.OrderRegister:
