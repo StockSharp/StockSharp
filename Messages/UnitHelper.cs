@@ -59,11 +59,11 @@ public static class UnitHelper
 		var type = char.ToLowerInvariant(lastSymbol) switch
 		{
 			'%' => UnitTypes.Percent,
+#pragma warning disable CS0618
 			'л' or 'l' => UnitTypes.Limit,
-#pragma warning disable CS0618 // Type or member is obsolete
 			'ш' or 's' => UnitTypes.Step,
 			'п' or 'p' => UnitTypes.Point,
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore CS0618
 			_ => throw new ArgumentException(LocalizedStrings.UnknownUnitMeasurement.Put(lastSymbol), nameof(str)),
 		};
 

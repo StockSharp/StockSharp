@@ -3502,9 +3502,11 @@ public static partial class Extensions
 		var val = (decimal)priceRange;
 		ValidatePriceRange(val);
 
+#pragma warning disable CS0618
 		// Limit can be casted to decimal, so check it extra
 		if (priceRange.Type is UnitTypes.Limit)
 			throw new ArgumentException(LocalizedStrings.UnsupportedType.Put(priceRange.Type), nameof(priceRange));
+#pragma warning restore CS0618
 
 		return val;
 	}

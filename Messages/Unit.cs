@@ -38,10 +38,11 @@ public enum UnitTypes
 	Step,
 
 	/// <summary>
-	/// The limited value. This unit allows to set a specific change number, which cannot be used in arithmetic operations <see cref="Unit"/>.
+	/// Obsolete. Use <see cref="Absolute"/> instead.
 	/// </summary>
 	[EnumMember]
 	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LimitKey)]
+	[Obsolete("Use Absolute value.")]
 	Limit,
 }
 
@@ -123,8 +124,10 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 		get => _type;
 		set
 		{
+#pragma warning disable CS0618
 			if (value < UnitTypes.Absolute || value > UnitTypes.Limit)
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+#pragma warning restore CS0618
 
 			_type = value;
 		}
@@ -209,8 +212,10 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 		if (u2 is null)
 			return null;
 
+#pragma warning disable CS0618
 		if (u1.Type == UnitTypes.Limit || u2.Type == UnitTypes.Limit)
 			throw new ArgumentException(LocalizedStrings.LimitedValueNotMath);
+#pragma warning restore CS0618
 
 		if (operation is null)
 			throw new ArgumentNullException(nameof(operation));
@@ -310,8 +315,10 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 		if (Type == UnitTypes.Percent || other.Type == UnitTypes.Percent)
 			return false;
 
+#pragma warning disable CS0618
 		if (Type == UnitTypes.Limit || other.Type == UnitTypes.Limit)
 			return false;
+#pragma warning restore CS0618
 
 		var curr = this;
 
@@ -404,12 +411,12 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 		{
 			UnitTypes.Percent	=> "%",
 			UnitTypes.Absolute	=> string.Empty,
-			UnitTypes.Limit		=> "l",
 
-#pragma warning disable CS0618 // Type or member is obsolete
-			UnitTypes.Step => "s",
-			UnitTypes.Point => "p",
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning disable CS0618
+			UnitTypes.Limit		=> string.Empty,
+			UnitTypes.Step 		=> "s",
+			UnitTypes.Point 	=> "p",
+#pragma warning restore CS0618
 
 			_ => throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue),
 		};
@@ -438,8 +445,11 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 
 		return Type switch
 		{
-			UnitTypes.Limit or UnitTypes.Absolute => value,
+			UnitTypes.Absolute => value,
 			UnitTypes.Percent => throw new InvalidOperationException(LocalizedStrings.PercentagesConvert),
+#pragma warning disable CS0618
+			UnitTypes.Limit => value,
+#pragma warning restore CS0618
 			_ => throw new InvalidOperationException(Type.ToString()),
 		};
 	}

@@ -230,7 +230,7 @@ public static partial class StrategyHelper
 	/// To create a rule for event of position event reduction below the specified level.
 	/// </summary>
 	/// <param name="strategy">The strategy, based on which position change will be traced.</param>
-	/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+	/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Absolute"/>, specified price is set. Otherwise, shift value is specified.</param>
 	/// <returns>Rule.</returns>
 	public static MarketRule<Strategy, decimal> WhenPositionLess(this Strategy strategy, Unit value)
 	{
@@ -240,7 +240,7 @@ public static partial class StrategyHelper
 		if (value == null)
 			throw new ArgumentNullException(nameof(value));
 
-		var finishPosition = value.Type == UnitTypes.Limit ? value : strategy.Position - value;
+		var finishPosition = value.Type == UnitTypes.Absolute ? value : strategy.Position - value;
 
 		return new PositionManagerStrategyRule(strategy, pos => pos < finishPosition)
 		{
@@ -252,7 +252,7 @@ public static partial class StrategyHelper
 	/// To create a rule for event of position event increase above the specified level.
 	/// </summary>
 	/// <param name="strategy">The strategy, based on which position change will be traced.</param>
-	/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+	/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Absolute"/>, specified price is set. Otherwise, shift value is specified.</param>
 	/// <returns>Rule.</returns>
 	public static MarketRule<Strategy, decimal> WhenPositionMore(this Strategy strategy, Unit value)
 	{
@@ -262,7 +262,7 @@ public static partial class StrategyHelper
 		if (value == null)
 			throw new ArgumentNullException(nameof(value));
 
-		var finishPosition = value.Type == UnitTypes.Limit ? value : strategy.Position + value;
+		var finishPosition = value.Type == UnitTypes.Absolute ? value : strategy.Position + value;
 
 		return new PositionManagerStrategyRule(strategy, pos => pos > finishPosition)
 		{
@@ -274,7 +274,7 @@ public static partial class StrategyHelper
 	/// To create a rule for event of profit reduction below the specified level.
 	/// </summary>
 	/// <param name="strategy">The strategy, based on which the profit change will be traced.</param>
-	/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+	/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Absolute"/>, specified price is set. Otherwise, shift value is specified.</param>
 	/// <returns>Rule.</returns>
 	public static MarketRule<Strategy, decimal> WhenPnLLess(this Strategy strategy, Unit value)
 	{
@@ -284,7 +284,7 @@ public static partial class StrategyHelper
 		if (value == null)
 			throw new ArgumentNullException(nameof(value));
 
-		var finishPosition = value.Type == UnitTypes.Limit ? value : strategy.PnL - value;
+		var finishPosition = value.Type == UnitTypes.Absolute ? value : strategy.PnL - value;
 
 		return new PnLManagerStrategyRule(strategy, pos => pos < finishPosition)
 		{
@@ -296,7 +296,7 @@ public static partial class StrategyHelper
 	/// To create a rule for event of profit increase above the specified level.
 	/// </summary>
 	/// <param name="strategy">The strategy, based on which the profit change will be traced.</param>
-	/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+	/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Absolute"/>, specified price is set. Otherwise, shift value is specified.</param>
 	/// <returns>Rule.</returns>
 	public static MarketRule<Strategy, decimal> WhenPnLMore(this Strategy strategy, Unit value)
 	{
@@ -306,7 +306,7 @@ public static partial class StrategyHelper
 		if (value == null)
 			throw new ArgumentNullException(nameof(value));
 
-		var finishPosition = value.Type == UnitTypes.Limit ? value : strategy.PnL + value;
+		var finishPosition = value.Type == UnitTypes.Absolute ? value : strategy.PnL + value;
 
 		return new PnLManagerStrategyRule(strategy, pos => pos > finishPosition)
 		{

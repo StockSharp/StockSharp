@@ -68,7 +68,7 @@ public class RiskPnLRule : RiskRule
 			return false;
 		}
 
-		if (PnL.Type == UnitTypes.Limit)
+		if (PnL.Type == UnitTypes.Absolute)
 		{
 			if (PnL.Value > 0)
 				return PnL.Value <= currValue.Value;

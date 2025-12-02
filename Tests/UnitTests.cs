@@ -27,7 +27,7 @@ public class UnitTests
 			u.ToString().AssertEqual(v + "%");
 
 			u = (v + "л").ToUnit();
-			u.AssertEqual(new Unit(v, UnitTypes.Limit));
+			u.AssertEqual(new Unit(v, UnitTypes.Absolute));
 			u.ToString().AssertEqual(v + "l");
 			(v + "л").ToUnit().AssertEqual((v + "l").ToUnit());
 			(v + "л").ToUnit().AssertEqual((v + "Л").ToUnit());
@@ -204,12 +204,12 @@ public class UnitTests
 		((Unit)10 == null).AssertFalse();
 		((Unit)10 != null).AssertTrue();
 
-		(new Unit(10, UnitTypes.Limit) == new Unit(10, UnitTypes.Limit)).AssertTrue();
-		new Unit(10, UnitTypes.Limit).AssertEqual(new Unit(10, UnitTypes.Limit));
-		(new Unit(10, UnitTypes.Limit) > null).AssertFalse();
-		(new Unit(10, UnitTypes.Limit) < null).AssertFalse();
-		(new Unit(10, UnitTypes.Limit) == null).AssertFalse();
-		(new Unit(10, UnitTypes.Limit) != null).AssertTrue();
+		(new Unit(10, UnitTypes.Absolute) == new Unit(10, UnitTypes.Absolute)).AssertTrue();
+		new Unit(10, UnitTypes.Absolute).AssertEqual(new Unit(10, UnitTypes.Absolute));
+		(new Unit(10, UnitTypes.Absolute) > null).AssertFalse();
+		(new Unit(10, UnitTypes.Absolute) < null).AssertFalse();
+		(new Unit(10, UnitTypes.Absolute) == null).AssertFalse();
+		(new Unit(10, UnitTypes.Absolute) != null).AssertTrue();
 
 		var security = Helper.CreateSecurity();
 
@@ -430,9 +430,9 @@ public class UnitTests
 		negativePercent.Type.AssertEqual(UnitTypes.Percent);
 		negativePercent.Value.AssertEqual(-50m);
 
-		var limit = new Unit(30m, UnitTypes.Limit);
+		var limit = new Unit(30m, UnitTypes.Absolute);
 		var negativeLimit = -limit;
-		negativeLimit.Type.AssertEqual(UnitTypes.Limit);
+		negativeLimit.Type.AssertEqual(UnitTypes.Absolute);
 		negativeLimit.Value.AssertEqual(-30m);
 	}
 
@@ -541,20 +541,23 @@ public class UnitTests
 #pragma warning disable CS0618 // Type or member is obsolete
 		Unit.GetTypeSuffix(UnitTypes.Step).AssertEqual("s");
 		Unit.GetTypeSuffix(UnitTypes.Point).AssertEqual("p");
-#pragma warning restore CS0618 // Type or member is obsolete
 		Unit.GetTypeSuffix(UnitTypes.Limit).AssertEqual("l");
+#pragma warning restore CS0618 // Type or member is obsolete
 
 		// Проверка исключения для неизвестного типа
 		Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => _ = Unit.GetTypeSuffix((UnitTypes)999));
 	}
 
 	[TestMethod]
-	public void LimitInvalidOperationTest()
+	public void AbsolutePercentOperationTest()
 	{
-		var limit = new Unit(100m, UnitTypes.Limit);
+		var absolute = new Unit(100m, UnitTypes.Absolute);
 		var percent = new Unit(10m, UnitTypes.Percent);
 
-		Assert.ThrowsExactly<ArgumentException>(() => limit + percent);
+		// Absolute + Percent теперь работает (было исключение для Limit)
+		var result = absolute + percent;
+		result.Value.AssertEqual(110m);
+		result.Type.AssertEqual(UnitTypes.Absolute);
 	}
 
 	[TestMethod]

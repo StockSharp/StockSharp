@@ -160,7 +160,7 @@ public class RiskTests
 	{
 		var rule = new RiskPnLRule
 		{
-			PnL = new() { Value = -1000, Type = UnitTypes.Limit },
+			PnL = new() { Value = -1000, Type = UnitTypes.Absolute },
 			Action = RiskActions.ClosePositions
 		};
 
@@ -216,7 +216,7 @@ public class RiskTests
 		// Fixed in RiskPnLRule.cs:77-78 to explicitly return false when PnL == 0
 		var rule = new RiskPnLRule
 		{
-			PnL = new() { Value = 0, Type = UnitTypes.Limit },
+			PnL = new() { Value = 0, Type = UnitTypes.Absolute },
 			Action = RiskActions.ClosePositions
 		};
 

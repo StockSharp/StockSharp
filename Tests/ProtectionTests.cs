@@ -470,8 +470,8 @@ public class ProtectionTests
 		// Arrange
 		IProtectiveBehaviourFactory factory = new LocalProtectiveBehaviourFactory(0.01m, 2);
 		var behaviour = factory.Create(
-			new Unit(1m, UnitTypes.Limit),    // Take profit at exactly price 1
-			new Unit(0.5m, UnitTypes.Limit),  // Stop loss at exactly price 0.5
+			new Unit(1m, UnitTypes.Absolute),    // Take profit at exactly price 1
+			new Unit(0.5m, UnitTypes.Absolute),  // Stop loss at exactly price 0.5
 			false,                            // No trailing stop
 			TimeSpan.Zero,                    // No take timeout
 			TimeSpan.Zero,                    // No stop timeout
@@ -836,32 +836,32 @@ public class ProtectionTests
 
 		IProtectiveBehaviourFactory factory = new LocalProtectiveBehaviourFactory(0.1m, 2);
 
-		// Trailing stop with UnitTypes.Limit for take profit
+		// Trailing stop with UnitTypes.Absolute for take profit
 		factory.Create(
-			new Unit(1m, UnitTypes.Limit),
+			new Unit(1m, UnitTypes.Absolute),
 			new Unit(1m, UnitTypes.Percent),
 			true, // Trailing stop enabled
 			TimeSpan.Zero, TimeSpan.Zero, false);
 
-		// Trailing stop with UnitTypes.Limit for stop loss
+		// Trailing stop with UnitTypes.Absolute for stop loss
 		Assert.ThrowsExactly<ArgumentException>(() =>
 			factory.Create(
 				new Unit(1m, UnitTypes.Percent),
-				new Unit(1m, UnitTypes.Limit),
+				new Unit(1m, UnitTypes.Absolute),
 				true, // Trailing stop enabled
 				TimeSpan.Zero, TimeSpan.Zero, false));
 
-		// Regular stop with UnitTypes.Limit for take profit
+		// Regular stop with UnitTypes.Absolute for take profit
 		var p = new ProtectiveProcessor(
-			Sides.Buy, 100m, false, false, new(10, UnitTypes.Limit),
+			Sides.Buy, 100m, false, false, new(10, UnitTypes.Absolute),
 			true, new Unit(), TimeSpan.Zero, DateTime.UtcNow, logReceiver);
 
 		p.AssertNotNull();
 
-		// Trailing stop with UnitTypes.Limit for stop loss
+		// Trailing stop with UnitTypes.Absolute for stop loss
 		Assert.ThrowsExactly<ArgumentException>(() =>
 			new ProtectiveProcessor(
-				Sides.Buy, 100m, false, true, new(10, UnitTypes.Limit),
+				Sides.Buy, 100m, false, true, new(10, UnitTypes.Absolute),
 				true, new Unit(), TimeSpan.Zero, DateTime.UtcNow, logReceiver));
 	}
 }

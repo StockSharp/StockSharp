@@ -239,7 +239,9 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 					=> RemainingVolume.Min((decimal)VolumePart),
 
 				UnitTypes.Percent => RemainingVolume.Min(RemainingVolume - (decimal)(RemainingVolume - VolumePart)),
+#pragma warning disable CS0618
 				UnitTypes.Limit => VolumePart.Value,
+#pragma warning restore CS0618
 
 				_ => throw new InvalidOperationException(VolumePart.Type.To<string>())
 			};

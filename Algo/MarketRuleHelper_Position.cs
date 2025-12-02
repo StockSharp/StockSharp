@@ -55,7 +55,7 @@ partial class MarketRuleHelper
 	/// </summary>
 	/// <param name="portfolio">The portfolio to be traced for the event of money decrease below the specific level.</param>
 	/// <param name="provider">The provider of information about portfolios.</param>
-	/// <param name="money">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+	/// <param name="money">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Absolute"/>, specified price is set. Otherwise, shift value is specified.</param>
 	/// <returns>Rule.</returns>
 	public static MarketRule<Portfolio, Portfolio> WhenMoneyLess(this Portfolio portfolio, IPortfolioProvider provider, Unit money)
 	{
@@ -78,7 +78,7 @@ partial class MarketRuleHelper
 	/// </summary>
 	/// <param name="portfolio">The portfolio to be traced for the event of money increase above the specific level.</param>
 	/// <param name="provider">The provider of information about portfolios.</param>
-	/// <param name="money">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+	/// <param name="money">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Absolute"/>, specified price is set. Otherwise, shift value is specified.</param>
 	/// <returns>Rule.</returns>
 	public static MarketRule<Portfolio, Portfolio> WhenMoneyMore(this Portfolio portfolio, IPortfolioProvider provider, Unit money)
 	{
@@ -140,7 +140,7 @@ partial class MarketRuleHelper
 	/// </summary>
 	/// <param name="position">The position to be traced for the event of decrease below the specific level.</param>
 	/// <param name="provider">The position provider.</param>
-	/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+	/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Absolute"/>, specified price is set. Otherwise, shift value is specified.</param>
 	/// <returns>Rule.</returns>
 	public static MarketRule<Position, Position> WhenLess(this Position position, IPositionProvider provider, Unit value)
 	{
@@ -163,7 +163,7 @@ partial class MarketRuleHelper
 	/// </summary>
 	/// <param name="position">The position to be traced of the event of increase above the specific level.</param>
 	/// <param name="provider">The position provider.</param>
-	/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+	/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Absolute"/>, specified price is set. Otherwise, shift value is specified.</param>
 	/// <returns>Rule.</returns>
 	public static MarketRule<Position, Position> WhenMore(this Position position, IPositionProvider provider, Unit value)
 	{

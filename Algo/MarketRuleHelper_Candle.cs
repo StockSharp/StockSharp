@@ -205,7 +205,7 @@ partial class MarketRuleHelper
 	/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
 	/// <param name="subscriptionProvider">The subscription manager.</param>
 	/// <param name="candle">The candle to be traced for the event of candle closing price excess above a specific level.</param>
-	/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+	/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Absolute"/>, specified price is set. Otherwise, shift value is specified.</param>
 	/// <returns>Rule.</returns>
 	public static MarketRule<TCandle, TCandle> WhenClosePriceMore<TCandle>(this ISubscriptionProvider subscriptionProvider, TCandle candle, Unit price)
 		where TCandle : ICandleMessage
@@ -222,7 +222,7 @@ partial class MarketRuleHelper
 	/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
 	/// <param name="subscriptionProvider">The subscription manager.</param>
 	/// <param name="candle">The candle to be traced for the event of candle closing price reduction below a specific level.</param>
-	/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+	/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Absolute"/>, specified price is set. Otherwise, shift value is specified.</param>
 	/// <returns>Rule.</returns>
 	public static MarketRule<TCandle, TCandle> WhenClosePriceLess<TCandle>(this ISubscriptionProvider subscriptionProvider, TCandle candle, Unit price)
 		where TCandle : ICandleMessage
@@ -250,12 +250,12 @@ partial class MarketRuleHelper
 
 		if (isLess)
 		{
-			var finishPrice = (decimal)(price.Type == UnitTypes.Limit ? price : currentPrice(candle) - price);
+			var finishPrice = (decimal)(price.Type == UnitTypes.Absolute ? price : currentPrice(candle) - price);
 			return c => currentPrice(c) < finishPrice;
 		}
 		else
 		{
-			var finishPrice = (decimal)(price.Type == UnitTypes.Limit ? price : currentPrice(candle) + price);
+			var finishPrice = (decimal)(price.Type == UnitTypes.Absolute ? price : currentPrice(candle) + price);
 			return c => currentPrice(c) > finishPrice;
 		}
 	}
@@ -266,7 +266,7 @@ partial class MarketRuleHelper
 	/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
 	/// <param name="subscriptionProvider">The subscription manager.</param>
 	/// <param name="candle">The candle to be traced for the event of candle total volume excess above a specific level.</param>
-	/// <param name="diff">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+	/// <param name="diff">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Absolute"/>, specified price is set. Otherwise, shift value is specified.</param>
 	/// <returns>Rule.</returns>
 	public static MarketRule<TCandle, TCandle> WhenTotalVolumeMore<TCandle>(this ISubscriptionProvider subscriptionProvider, TCandle candle, Unit diff)
 		where TCandle : ICandleMessage
@@ -274,7 +274,7 @@ partial class MarketRuleHelper
 		if (candle == null)
 			throw new ArgumentNullException(nameof(candle));
 
-		var finishVolume = diff.Type == UnitTypes.Limit ? diff : candle.TotalVolume + diff;
+		var finishVolume = diff.Type == UnitTypes.Absolute ? diff : candle.TotalVolume + diff;
 
 		return new ChangedCandleRule<TCandle>(subscriptionProvider, candle, c => c.TotalVolume > finishVolume)
 		{
