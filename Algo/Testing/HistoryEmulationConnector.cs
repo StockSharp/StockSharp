@@ -241,13 +241,15 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 	/// </summary>
 	public int MaxMessageCount
 	{
-		get => InMemChannel?.MaxMessageCount ?? -1;
+		get => -1;
 		set
 		{
-			var channel = InMemChannel;
+			// TODO
 
-			if (channel is not null)
-				channel.MaxMessageCount = value;
+			//var channel = InMemChannel;
+
+			//if (channel is not null)
+			//	channel.MaxMessageCount = value;
 		}
 	}
 

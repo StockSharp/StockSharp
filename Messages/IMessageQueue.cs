@@ -1,76 +1,112 @@
 namespace StockSharp.Messages;
 
+using Ecng.Collections;
+
 /// <summary>
-/// The interfaces described message queue.
+/// Describes a message queue with asynchronous semantics.
 /// </summary>
-public interface IMessageQueue : IBlockingQueue<(long sort, Message elem)>
+public interface IMessageQueue
 {
 	/// <summary>
-	/// Enqueue the specified message.
+	/// Gets the current number of messages buffered in the queue.
 	/// </summary>
-	/// <param name="message">Message.</param>
+	int Count { get; }
+
+	/// <summary>
+	/// Gets a value indicating whether the queue is closed.
+	/// </summary>
+	bool IsClosed { get; }
+
+	/// <summary>
+	/// Opens the queue and allows enqueue and dequeue operations.
+	/// </summary>
+	void Open();
+
+	/// <summary>
+	/// Closes the queue and prevents new messages from being enqueued.
+	/// </summary>
+	void Close();
+
+	/// <summary>
+	/// Enqueues the specified message.
+	/// </summary>
+	/// <param name="message">The message to enqueue.</param>
 	void Enqueue(Message message);
 
 	/// <summary>
-	/// Try dequeue a message.
+	/// Removes and returns the next message from the queue asynchronously.
 	/// </summary>
-	/// <param name="message">Message.</param>
-	/// <param name="exitOnClose">Exit from method if the queue closed.</param>
-	/// <param name="block">Block the operation.</param>
-	/// <returns>Operation result.</returns>
-	bool TryDequeue(out Message message, bool exitOnClose = true, bool block = true);
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>The next message in the queue.</returns>
+	ValueTask<Message> DequeueAsync(CancellationToken cancellationToken = default);
+
+	/// <summary>
+	/// Returns an async enumerable that yields messages from the queue.
+	/// </summary>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>Async enumerable of messages.</returns>
+	IAsyncEnumerable<Message> ReadAllAsync(CancellationToken cancellationToken = default);
+
+	/// <summary>
+	/// Removes all messages from the queue.
+	/// </summary>
+	void Clear();
 }
 
 /// <summary>
-/// Message queue.
+/// Base implementation of <see cref="IMessageQueue"/>.
 /// </summary>
-public abstract class BaseMessageQueue : BaseOrderedBlockingQueue<long, Message, Ecng.Collections.PriorityQueue<long, Message>>, IMessageQueue
+/// <remarks>
+/// Initializes a new instance of the <see cref="BaseMessageQueue"/> class.
+/// </remarks>
+public abstract class BaseMessageQueue() : BaseOrderedChannel<long, Message, PriorityQueue<long, Message>>(new((p1, p2) => (p1 - p2).Abs()), -1), IMessageQueue
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="BaseMessageQueue"/>.
-	/// </summary>
-	protected BaseMessageQueue()
-		: base(new((p1, p2) => (p1 - p2).Abs()))
-	{
-	}
-
-	/// <summary>
-	/// Enqueue message.
-	/// </summary>
-	/// <param name="message"><see cref="Message"/>.</param>
+	/// <inheritdoc />
 	public abstract void Enqueue(Message message);
 }
 
 /// <summary>
-/// Sorted by <see cref="Message.LocalTime"/> queue.
+/// Message queue that is sorted by <see cref="Message.LocalTime"/>.
 /// </summary>
 public class MessageByLocalTimeQueue : BaseMessageQueue
 {
 	/// <summary>
-	/// Initializes a new instance of the <see cref="MessageByLocalTimeQueue"/>.
+	/// Initializes a new instance of the <see cref="MessageByLocalTimeQueue"/> class.
 	/// </summary>
 	public MessageByLocalTimeQueue()
 	{
 	}
 
 	/// <inheritdoc />
-	public override void Enqueue(Message message) => Enqueue((message.LocalTime.Ticks, message), message.Forced);
+	public override void Enqueue(Message message)
+	{
+		if (message is null)
+			throw new ArgumentNullException(nameof(message));
+
+		Enqueue(message.LocalTime.Ticks, message);
+	}
 }
 
 /// <summary>
-/// Sorted by incoming order queue.
+/// Message queue that is sorted by the order in which messages are enqueued.
 /// </summary>
 public class MessageByOrderQueue : BaseMessageQueue
 {
-	private readonly IdGenerator _idGen = new IncrementalIdGenerator();
+	private readonly IncrementalIdGenerator _idGen = new();
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="MessageByOrderQueue"/>.
+	/// Initializes a new instance of the <see cref="MessageByOrderQueue"/> class.
 	/// </summary>
 	public MessageByOrderQueue()
 	{
 	}
 
 	/// <inheritdoc />
-	public override void Enqueue(Message message) => Enqueue(_idGen.GetNextId(), message);
+	public override void Enqueue(Message message)
+	{
+		if (message is null)
+			throw new ArgumentNullException(nameof(message));
+
+		Enqueue(_idGen.GetNextId(), message);
+	}
 }

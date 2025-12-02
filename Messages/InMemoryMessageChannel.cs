@@ -3,14 +3,13 @@ namespace StockSharp.Messages;
 /// <summary>
 /// Message channel, based on the queue and operate within a single process.
 /// </summary>
-public class InMemoryMessageChannel : IMessageChannel
+public class InMemoryMessageChannel : Disposable, IMessageChannel
 {
 	private readonly IMessageQueue _queue;
 	private readonly Action<Exception> _errorHandler;
 
-	private readonly SyncObject _suspendLock = new();
-
-	private int _version;
+	private CancellationTokenSource _cancellationTokenSource;
+	private Task _processingTask;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="InMemoryMessageChannel"/>.
@@ -40,18 +39,6 @@ public class InMemoryMessageChannel : IMessageChannel
 	/// Message queue count.
 	/// </summary>
 	public int MessageCount => _queue.Count;
-
-	/// <summary>
-	/// Max message queue count.
-	/// </summary>
-	/// <remarks>
-	/// The default value is -1, which corresponds to the size without limitations.
-	/// </remarks>
-	public int MaxMessageCount
-	{
-		get => _queue.MaxSize;
-		set => _queue.MaxSize = value;
-	}
 
 	/// <summary>
 	/// The channel cannot be opened.
@@ -86,42 +73,39 @@ public class InMemoryMessageChannel : IMessageChannel
 		State = ChannelStates.Started;
 		_queue.Open();
 
-		var version = Interlocked.Increment(ref _version);
+		_cancellationTokenSource = new();
 
-		ThreadingHelper
-			.Thread(() => Do.Invariant(() =>
+		_processingTask = ProcessMessagesAsync(_cancellationTokenSource.Token);
+	}
+
+	private async Task ProcessMessagesAsync(CancellationToken cancellationToken)
+	{
+		try
+		{
+			await foreach (var message in _queue.ReadAllAsync(cancellationToken).ConfigureAwait(false))
 			{
-				while (this.IsOpened())
+				try
 				{
-					try
-					{
-						if (!_queue.TryDequeue(out var message))
-							break;
-
-						if (State == ChannelStates.Suspended)
-						{
-							_suspendLock.Wait();
-
-							if (!this.IsOpened())
-								break;
-						}
-
-						if (_version != version)
-							break;
-
-						NewOutMessage?.Invoke(message);
-					}
-					catch (Exception ex)
-					{
-						_errorHandler(ex);
-					}
+					NewOutMessage?.Invoke(message);
 				}
-
-				State = ChannelStates.Stopped;
-			}))
-			.Name($"{Name} channel thread.")
-			//.Culture(CultureInfo.InvariantCulture)
-			.Launch();
+				catch (Exception ex)
+				{
+					_errorHandler(ex);
+				}
+			}
+		}
+		catch (OperationCanceledException)
+		{
+			// Normal cancellation
+		}
+		catch (Exception ex)
+		{
+			_errorHandler(ex);
+		}
+		finally
+		{
+			State = ChannelStates.Stopped;
+		}
 	}
 
 	/// <inheritdoc />
@@ -129,10 +113,21 @@ public class InMemoryMessageChannel : IMessageChannel
 	{
 		State = ChannelStates.Stopping;
 
+		_cancellationTokenSource?.Cancel();
 		_queue.Close();
 		_queue.Clear();
 
-		_suspendLock.Pulse();
+		try
+		{
+			_processingTask?.Wait(TimeSpan.FromSeconds(5));
+		}
+		catch (AggregateException)
+		{
+			// Ignore cancellation exceptions
+		}
+
+		_cancellationTokenSource?.Dispose();
+		_cancellationTokenSource = null;
 	}
 
 	void IMessageChannel.Suspend()
@@ -143,7 +138,6 @@ public class InMemoryMessageChannel : IMessageChannel
 	void IMessageChannel.Resume()
 	{
 		State = ChannelStates.Started;
-		_suspendLock.PulseAll();
 	}
 
 	void IMessageChannel.Clear()
@@ -160,14 +154,6 @@ public class InMemoryMessageChannel : IMessageChannel
 			return false;
 		}
 
-		if (State == ChannelStates.Suspended)
-		{
-			_suspendLock.Wait();
-
-			if (!this.IsOpened())
-				return false;
-		}
-
 		_queue.Enqueue(message);
 
 		return true;
@@ -181,22 +167,14 @@ public class InMemoryMessageChannel : IMessageChannel
 	/// </summary>
 	/// <returns>Copy.</returns>
 	public virtual IMessageChannel Clone()
-	{
-		return new InMemoryMessageChannel(_queue, Name, _errorHandler)
-		{
-			MaxMessageCount = MaxMessageCount,
-		};
-	}
+		=> new InMemoryMessageChannel(_queue, Name, _errorHandler);
 
-	object ICloneable.Clone()
-	{
-		return Clone();
-	}
+	object ICloneable.Clone() => Clone();
 
-	void IDisposable.Dispose()
+	/// <inheritdoc />
+	protected override void DisposeManaged()
 	{
 		Close();
-
-		GC.SuppressFinalize(this);
+		base.DisposeManaged();
 	}
 }
