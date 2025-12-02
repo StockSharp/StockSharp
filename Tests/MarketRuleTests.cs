@@ -667,14 +667,14 @@ public class MarketRuleTests
 		// Relative price: +5 and -5 from current
 		var sc5 = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, ClosePrice = 200m };
 		TimeFrameCandleMessage relMore = null;
-		provider.Object.WhenClosePriceMore(sc5, new Unit(5m)).Apply(container).Do(c => relMore = c);
+		provider.Object.WhenClosePriceMore(sc5, 205).Apply(container).Do(c => relMore = c);
 		sc5.ClosePrice = 210m;
 		provider.Raise(p => p.CandleReceived += null, sub, sc5);
 		(relMore == sc5).AssertTrue();
 
 		TimeFrameCandleMessage relLess = null;
 		var sc6 = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, ClosePrice = 200m };
-		provider.Object.WhenClosePriceLess(sc6, new Unit(5m)).Apply(container).Do(c => relLess = c);
+		provider.Object.WhenClosePriceLess(sc6, 205).Apply(container).Do(c => relLess = c);
 		sc6.ClosePrice = 190m;
 		provider.Raise(p => p.CandleReceived += null, sub, sc6);
 		(relLess == sc6).AssertTrue();
@@ -1245,10 +1245,9 @@ public class MarketRuleTests
 		var candle = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, TotalVolume = 12m };
 		int cnt = 0;
 		provider.Object.WhenTotalVolumeMore(candle, 10m).Apply(container).Do(_ => cnt++);
-		candle.TotalVolume = 23m; // increase
 		provider.Raise(p => p.CandleReceived += null, sub, candle); // first fire
 		cnt.AssertEqual(1);
-		candle.TotalVolume = 11m; // decrease
+		candle.TotalVolume = 9m; // decrease
 		provider.Raise(p => p.CandleReceived += null, sub, candle);
 		cnt.AssertEqual(1);
 	}

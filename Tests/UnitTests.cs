@@ -26,21 +26,23 @@ public class UnitTests
 			u.AssertEqual(new Unit(v, UnitTypes.Percent));
 			u.ToString().AssertEqual(v + "%");
 
+#pragma warning disable CS0618
 			u = (v + "л").ToUnit();
-			u.AssertEqual(new Unit(v, UnitTypes.Absolute));
+			u.AssertEqual(new Unit(v, UnitTypes.Limit));
 			u.ToString().AssertEqual(v + "l");
 			(v + "л").ToUnit().AssertEqual((v + "l").ToUnit());
 			(v + "л").ToUnit().AssertEqual((v + "Л").ToUnit());
 			(v + "l").ToUnit().AssertEqual((v + "L").ToUnit());
+#pragma warning restore CS0618
 
 			//u = v + "%";
 			//u.AssertEqual(new Unit(v, UnitTypes.Percent));
 			//u.ToString().AssertEqual(v + "%");
 
 			u = (v + "ш").ToUnit(false);
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0618
 			u.AssertEqual(new Unit(v, UnitTypes.Step)/*.SetSecurity(security)*/);
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore CS0618
 			u.ToString().AssertEqual(v + "s");
 			(v + "ш").ToUnit(false).AssertEqual((v + "s").ToUnit(false));
 			(v + "ш").ToUnit(false).AssertEqual((v + "Ш").ToUnit(false));

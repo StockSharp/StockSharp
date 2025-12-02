@@ -465,13 +465,13 @@ public class ProtectionTests
 	}
 
 	[TestMethod]
-	public void UnitsLimit()
+	public void UnitsPercent()
 	{
 		// Arrange
 		IProtectiveBehaviourFactory factory = new LocalProtectiveBehaviourFactory(0.01m, 2);
 		var behaviour = factory.Create(
-			new Unit(1m, UnitTypes.Absolute),    // Take profit at exactly price 1
-			new Unit(0.5m, UnitTypes.Absolute),  // Stop loss at exactly price 0.5
+			new Unit(1m, UnitTypes.Percent),     // Take profit +1%
+			new Unit(0.5m, UnitTypes.Percent),   // Stop loss -0.5%
 			false,                            // No trailing stop
 			TimeSpan.Zero,                    // No take timeout
 			TimeSpan.Zero,                    // No stop timeout
@@ -480,18 +480,18 @@ public class ProtectionTests
 		// Initial position
 		behaviour.Update(100m, 10m, DateTime.UtcNow);
 
-		// Should not activate at 0.6
-		var activationResult = behaviour.TryActivate(0.6m, DateTime.UtcNow);
+		// Stop: threshold at 99.5 (0.5% below 100). Should not activate at 99.6
+		var activationResult = behaviour.TryActivate(99.6m, DateTime.UtcNow);
 		activationResult.AssertNull();
 
-		// Should activate stop at 0.5
-		var activationResult2 = behaviour.TryActivate(0.5m, DateTime.UtcNow);
+		// Should activate stop at 99.5
+		var activationResult2 = behaviour.TryActivate(99.5m, DateTime.UtcNow);
 		activationResult2.AssertNotNull();
 
 		var (isTake, side, price, volume, condition) = activationResult2.Value;
 		isTake.AssertFalse(); // Should be stop loss
 		side.AssertEqual(Sides.Sell); // Should sell to close long
-		price.AssertEqual(0.5m);
+		price.AssertEqual(99.5m);
 		volume.AssertEqual(10m);
 		condition.AssertNull(); // No special condition
 
@@ -502,13 +502,13 @@ public class ProtectionTests
 		// New position
 		behaviour.Update(100m, 10m, DateTime.UtcNow);
 
-		// Should activate take at 1.0
-		activationResult = behaviour.TryActivate(1.0m, DateTime.UtcNow);
+		// Take: threshold at 101.0 (1% above 100)
+		activationResult = behaviour.TryActivate(101.0m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 		(isTake, side, price, volume, condition) = activationResult.Value;
 		isTake.AssertTrue(); // Should be take profit
 		side.AssertEqual(Sides.Sell); // Should sell to close long
-		price.AssertEqual(1.0m);
+		price.AssertEqual(101.0m);
 		volume.AssertEqual(10m);
 		condition.AssertNull(); // No special condition
 
@@ -523,8 +523,8 @@ public class ProtectionTests
 		// Arrange
 		IProtectiveBehaviourFactory factory = new LocalProtectiveBehaviourFactory(0.01m, 2);
 		var behaviour = factory.Create(
-			new Unit(1m, UnitTypes.Absolute),   // Take profit +1
-			new Unit(20m, UnitTypes.Absolute),  // Stop loss -20
+			new Unit(101m, UnitTypes.Absolute),  // Take profit at absolute price 101
+			new Unit(80m, UnitTypes.Absolute),   // Stop loss at absolute price 80
 			false,                             // No trailing stop
 			TimeSpan.Zero,                     // No take timeout
 			TimeSpan.Zero,                     // No stop timeout
@@ -533,11 +533,11 @@ public class ProtectionTests
 		// Initial position
 		behaviour.Update(100m, 10m, DateTime.UtcNow);
 
-		// Should not activate at 100.5
+		// Should not activate at 100.5 (take at 101 absolute)
 		var activationResult = behaviour.TryActivate(100.5m, DateTime.UtcNow);
 		activationResult.AssertNull();
 
-		// Should activate take at 101 (100 + 1)
+		// Should activate take at 101 (absolute price)
 		activationResult = behaviour.TryActivate(101m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 		{
@@ -554,11 +554,11 @@ public class ProtectionTests
 		// New position
 		behaviour.Update(100m, 10m, DateTime.UtcNow);
 
-		// Should not activate at 85
+		// Should not activate at 85 (stop at 80 absolute)
 		activationResult = behaviour.TryActivate(85m, DateTime.UtcNow);
 		activationResult.AssertNull();
 
-		// Should activate stop at 80 (100 - 20)
+		// Should activate stop at 80 (absolute price)
 		activationResult = behaviour.TryActivate(80m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 		{

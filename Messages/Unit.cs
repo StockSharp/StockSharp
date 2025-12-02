@@ -413,7 +413,7 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 			UnitTypes.Absolute	=> string.Empty,
 
 #pragma warning disable CS0618
-			UnitTypes.Limit		=> string.Empty,
+			UnitTypes.Limit		=> "l",
 			UnitTypes.Step 		=> "s",
 			UnitTypes.Point 	=> "p",
 #pragma warning restore CS0618
