@@ -5,10 +5,10 @@ using System.Windows.Media;
 
 using Ecng.Drawing;
 
-using StockSharp.Algo;
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Storages;
 using StockSharp.Configuration;
+using StockSharp.Xaml;
 using StockSharp.Xaml.Charting;
 using StockSharp.Charting;
 using StockSharp.Messages;

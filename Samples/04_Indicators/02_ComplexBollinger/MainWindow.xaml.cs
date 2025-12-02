@@ -4,10 +4,10 @@ using System;
 
 using Ecng.Drawing;
 
-using StockSharp.Algo;
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Storages;
 using StockSharp.Configuration;
+using StockSharp.Xaml;
 using StockSharp.Xaml.Charting;
 using StockSharp.Xaml.Charting.IndicatorPainters;
 using StockSharp.Charting;
