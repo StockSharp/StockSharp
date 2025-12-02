@@ -56,7 +56,7 @@ public class OptimizerSettings : MarketEmulatorSettings
 	}
 
 	/// <summary>
-	/// <see cref="InMemoryMessageChannel.MaxMessageCount"/>
+	/// Maximum number of messages processed during backtesting. Negative value means the option is ignored.
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),

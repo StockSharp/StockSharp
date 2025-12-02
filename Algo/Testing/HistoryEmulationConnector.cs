@@ -237,7 +237,7 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		=> (Adapter.InnerAdapters.FirstOrDefault() as EmulationMessageAdapter)?.InChannel as InMemoryMessageChannel;
 
 	/// <summary>
-	/// <see cref="InMemoryMessageChannel.MaxMessageCount"/>
+	/// Maximum number of messages processed during backtesting. Negative value means the option is ignored.
 	/// </summary>
 	public int MaxMessageCount
 	{
