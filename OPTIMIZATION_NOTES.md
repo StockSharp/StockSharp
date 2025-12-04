@@ -152,17 +152,26 @@ group.Dispose();
 
 **Ускорение: 2-5x**
 
+## ✅ Статус оптимизации (обновлено)
+
+### Полностью оптимизированы:
+1. ✅ **CsvEntityList.cs** - Коммит `645b004`
+2. ✅ **INativeIdStorage.cs** - Коммит `9dad515`
+3. ✅ **IExtendedInfoStorage.cs** - Коммит `9dad515`
+4. ✅ **IPortfolioMessageAdapterProvider.cs** - Коммит `9dad515`
+5. ✅ **ISecurityMappingStorage.cs** - Коммит `9dad515`
+6. ✅ **ISecurityMessageAdapterProvider.cs** - Коммит `9dad515`
+
+### Не требуют оптимизации:
+7. ✅ **SnapshotRegistry.cs** - разовая запись снапшота, не критично
+
+**Результат:** Все CSV хранилища восстановили оригинальное поведение DelayAction с переиспользуемыми stream/writer.
+
 ## Рекомендации
 
 1. **Тестирование**: Запустить существующие тесты для проверки корректности
 2. **Бенчмарки**: Создать бенчмарк для измерения реальной производительности
 3. **Мониторинг**: Отслеживать метрики файловых операций в продакшене
-4. **Применение**: Рассмотреть использование паттерна в других CSV-хранилищах:
-   - `IExtendedInfoStorage.cs`
-   - `INativeIdStorage.cs`
-   - `ISecurityMappingStorage.cs`
-   - `IPortfolioMessageAdapterProvider.cs`
-   - `ISecurityMessageAdapterProvider.cs`
 
 ## Совместимость с тестами
 
