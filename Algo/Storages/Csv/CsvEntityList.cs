@@ -46,6 +46,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	private byte[] _copy;
 
 	private ChannelExecutor _executor;
+	private ChannelExecutorGroup<CsvFileWriter> _writerGroup;
 
 	/// <summary>
 	/// The CSV storage of trading objects.
@@ -70,6 +71,14 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 		_executor = executor ?? throw new ArgumentNullException(nameof(executor));
 
 		FileName = Path.Combine(Registry.Path, fileName);
+
+		// Create a writer group with reusable stream/writer for append operations
+		_writerGroup = new ChannelExecutorGroup<CsvFileWriter>(_executor, () =>
+		{
+			var stream = new TransactionFileStream(FileName, FileMode.OpenOrCreate);
+			stream.Seek(0, SeekOrigin.End);
+			return stream.CreateCsvWriter(Registry.Encoding);
+		});
 	}
 
 	/// <inheritdoc />
@@ -240,15 +249,12 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 			AddCache(item);
 
-			var itemCopy = item;
-			_executor.Add(() =>
+			// Use the reusable writer group for better performance
+			_writerGroup.Add((writer, data) =>
 			{
-				using var stream = new TransactionFileStream(FileName, FileMode.OpenOrCreate);
-				stream.Seek(0, SeekOrigin.End);
-				using var writer = stream.CreateCsvWriter(Registry.Encoding);
 				ResetCopy();
-				Write(writer, itemCopy);
-			});
+				Write(writer, data);
+			}, item);
 		}
 
 		return base.OnAdding(item);
@@ -301,6 +307,9 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 			_items.Clear();
 			ClearCache();
 
+			// Force recreation of writer since we're clearing the file
+			_writerGroup.RecreateResource();
+
 			_executor.Add(() =>
 			{
 				using var stream = new TransactionFileStream(FileName, FileMode.Create);
@@ -308,6 +317,9 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 				ResetCopy();
 				writer.Truncate();
 			});
+
+			// After clear, recreate the append-mode writer for future operations
+			_writerGroup.RecreateResource();
 		}
 	}
 
@@ -317,6 +329,9 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	/// <param name="values">Trading objects.</param>
 	private void WriteMany(TEntity[] values)
 	{
+		// Force recreation of writer since we're changing from append to overwrite mode
+		_writerGroup.RecreateResource();
+
 		var valuesCopy = values;
 		_executor.Add(() =>
 		{
@@ -329,6 +344,9 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 			foreach (var item in valuesCopy)
 				Write(writer, item);
 		});
+
+		// After full rewrite, recreate the append-mode writer for future operations
+		_writerGroup.RecreateResource();
 	}
 
 	void ICsvEntityList.Init(IList<Exception> errors)
@@ -433,6 +451,13 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	/// <param name="item">Item.</param>
 	protected virtual void RemoveCache(TEntity item)
 	{
+	}
+
+	/// <inheritdoc />
+	protected override void DisposeManaged()
+	{
+		_writerGroup?.Dispose();
+		base.DisposeManaged();
 	}
 
 	/// <inheritdoc />

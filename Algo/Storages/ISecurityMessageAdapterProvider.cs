@@ -111,6 +111,7 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 
 	private readonly string _fileName;
 	private readonly ChannelExecutor _executor;
+	private ChannelExecutorGroup<CsvFileWriter> _writerGroup;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CsvSecurityMessageAdapterProvider"/>.
@@ -124,6 +125,13 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 
 		_fileName = fileName;
 		_executor = executor ?? throw new ArgumentNullException(nameof(executor));
+
+		// Create a writer group with reusable stream/writer
+		_writerGroup = new ChannelExecutorGroup<CsvFileWriter>(_executor, () =>
+		{
+			var stream = new TransactionFileStream(_fileName, FileMode.Append);
+			return stream.CreateCsvWriter();
+		});
 
 		_inMemory.Changed += InMemoryOnChanged;
 	}
@@ -211,38 +219,61 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 
 	private void Save(bool overwrite, IEnumerable<KeyValuePair<Key, Guid>> adapters)
 	{
-		_executor.Add(() =>
+		var adaptersCopy = adapters.ToArray();
+
+		if (overwrite)
 		{
-			var appendHeader = overwrite || !File.Exists(_fileName) || new FileInfo(_fileName).Length == 0;
-			var mode = overwrite ? FileMode.Create : FileMode.Append;
+			// For overwrite mode, recreate the group to switch to Create mode
+			_writerGroup.RecreateResource();
 
-			using var writer = new TransactionFileStream(_fileName, mode).CreateCsvWriter();
-
-			if (appendHeader)
+			_executor.Add(() =>
 			{
-				writer.WriteRow(
-				[
-					"Symbol",
-					"Board",
-					"MessageType",
-					"Arg",
-					"Adapter",
-				]);
-			}
+				using var writer = new TransactionFileStream(_fileName, FileMode.Create).CreateCsvWriter();
 
-			foreach (var pair in adapters)
+				writer.WriteRow(["Symbol", "Board", "MessageType", "Arg", "Adapter"]);
+
+				foreach (var pair in adaptersCopy)
+				{
+					var dataType = pair.Key.Item2?.FormatToString();
+
+					writer.WriteRow(
+					[
+						pair.Key.Item1.SecurityCode,
+						pair.Key.Item1.BoardCode,
+						dataType?.type,
+						dataType?.arg,
+						pair.Value.To<string>()
+					]);
+				}
+			});
+
+			// Recreate the group back to Append mode
+			_writerGroup.RecreateResource();
+		}
+		else
+		{
+			// Use the reusable writer group for append operations
+			var needHeader = !File.Exists(_fileName) || new FileInfo(_fileName).Length == 0;
+
+			_writerGroup.Add((writer, state) =>
 			{
-				var dataType = pair.Key.Item2?.FormatToString();
+				if (state.needHeader)
+					writer.WriteRow(["Symbol", "Board", "MessageType", "Arg", "Adapter"]);
 
-				writer.WriteRow(
-				[
-					pair.Key.Item1.SecurityCode,
-					pair.Key.Item1.BoardCode,
-					dataType?.type,
-					dataType?.arg,
-					pair.Value.To<string>()
-				]);
-			}
-		});
+				foreach (var pair in state.adapters)
+				{
+					var dataType = pair.Key.Item2?.FormatToString();
+
+					writer.WriteRow(
+					[
+						pair.Key.Item1.SecurityCode,
+						pair.Key.Item1.BoardCode,
+						dataType?.type,
+						dataType?.arg,
+						pair.Value.To<string>()
+					]);
+				}
+			}, (needHeader, adapters: adaptersCopy));
+		}
 	}
 }

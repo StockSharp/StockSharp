@@ -84,6 +84,7 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 
 	private readonly string _path;
 	private readonly ChannelExecutor _executor;
+	private readonly SynchronizedDictionary<string, ChannelExecutorGroup<CsvFileWriter>> _writerGroups = new(StringComparer.InvariantCultureIgnoreCase);
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CsvNativeIdStorage"/>.
@@ -150,6 +151,11 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 	{
 		_inMemory.Clear(storageName);
 		_buffer.Clear();
+
+		// Dispose and remove the writer group for this storage
+		if (_writerGroups.TryGetAndRemove(storageName, out var group))
+			group.Dispose();
+
 		_executor.Add(() => File.Delete(GetFileName(storageName)));
 	}
 
@@ -185,6 +191,10 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 	{
 		_buffer.Clear();
 
+		// Recreate the writer group since we're deleting and recreating the file
+		var group = GetOrCreateWriterGroup(storageName);
+		group.RecreateResource();
+
 		_executor.Add(() =>
 		{
 			var fileName = GetFileName(storageName);
@@ -203,6 +213,9 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 			foreach (var (secId, nativeId) in items)
 				WriteItem(writer, secId, nativeId);
 		});
+
+		// Recreate the writer group after file recreation
+		group.RecreateResource();
 	}
 
 	/// <inheritdoc />
@@ -282,6 +295,8 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 	{
 		_buffer[securityId] = nativeId;
 
+		var group = GetOrCreateWriterGroup(storageName);
+
 		_executor.Add(() =>
 		{
 			var items = _buffer.SyncGet(c => c.CopyAndClear());
@@ -290,22 +305,36 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 				return;
 
 			var fileName = GetFileName(storageName);
-
 			var appendHeader = !File.Exists(fileName) || new FileInfo(fileName).Length == 0;
 
-			using var writer = new TransactionFileStream(fileName, FileMode.Append).CreateCsvWriter();
+			// Use the reusable writer group for better performance
+			group.Add((writer, state) =>
+			{
+				if (state.appendHeader)
+					WriteHeader(writer, state.nativeId);
 
-			if (appendHeader)
-				WriteHeader(writer, nativeId);
-
-			foreach (var item in items)
-				WriteItem(writer, item.Key, item.Value);
+				foreach (var item in state.items)
+					WriteItem(writer, item.Key, item.Value);
+			}, (appendHeader, nativeId, items));
 		});
 	}
 
 	private string GetFileName(string storageName) => Path.Combine(_path, storageName + ".csv");
 
 	private static string GetTypeName(Type nativeIdType) => nativeIdType.TryGetCSharpAlias() ?? nativeIdType.GetTypeName(false);
+
+	private ChannelExecutorGroup<CsvFileWriter> GetOrCreateWriterGroup(string storageName)
+	{
+		return _writerGroups.SafeAdd(storageName, key =>
+		{
+			var fileName = GetFileName(key);
+			return new ChannelExecutorGroup<CsvFileWriter>(_executor, () =>
+			{
+				var stream = new TransactionFileStream(fileName, FileMode.Append);
+				return stream.CreateCsvWriter();
+			});
+		});
+	}
 
 	private void LoadFile(string fileName)
 	{

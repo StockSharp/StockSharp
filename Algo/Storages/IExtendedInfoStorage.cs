@@ -114,6 +114,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 		//private readonly Dictionary<string, Type> _fieldTypes = new Dictionary<string, Type>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly Dictionary<SecurityId, Dictionary<string, object>> _cache = [];
 		private ChannelExecutor _executor;
+		private ChannelExecutorGroup<CsvFileWriter> _writerGroup;
 
 		public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName, ChannelExecutor executor)
 		{
@@ -123,6 +124,13 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 			_storage = storage ?? throw new ArgumentNullException(nameof(storage));
 			_fileName = fileName;
 			_executor = executor ?? throw new ArgumentNullException(nameof(executor));
+
+			// Create a writer group with reusable stream/writer for all write operations
+			_writerGroup = new ChannelExecutorGroup<CsvFileWriter>(_executor, () =>
+			{
+				var stream = new TransactionFileStream(_fileName, FileMode.Create);
+				return stream.CreateCsvWriter();
+			});
 		}
 
 		public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName, IEnumerable<Tuple<string, Type>> fields, ChannelExecutor executor)
@@ -210,19 +218,30 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 			if (values == null)
 				throw new ArgumentNullException(nameof(values));
 
-			using var writer = new TransactionFileStream(_fileName, FileMode.Create).CreateCsvWriter();
+			var valuesCopy = values.ToArray(); // Materialize to avoid multiple enumerations
+			var fieldsCopy = _fields;
 
-			writer.WriteRow(new[] { nameof(SecurityId) }.Concat(_fields.Select(f => f.Item1)));
-			writer.WriteRow(new[] { typeof(string) }.Concat(_fields.Select(f => f.Item2)).Select(t => t.TryGetCSharpAlias() ?? t.GetTypeName(false)));
-
-			foreach (var pair in values)
+			// Use the reusable writer group for better performance
+			_writerGroup.Add((writer, state) =>
 			{
-				writer.WriteRow(new[] { pair.Item1.ToStringId() }.Concat(_fields.Select(f => pair.Item2.TryGetValue(f.Item1)?.To<string>())));
-			}
+				// Truncate is needed for FileMode.Create behavior
+				writer.Truncate();
+
+				writer.WriteRow(new[] { nameof(SecurityId) }.Concat(state.fields.Select(f => f.Item1)));
+				writer.WriteRow(new[] { typeof(string) }.Concat(state.fields.Select(f => f.Item2)).Select(t => t.TryGetCSharpAlias() ?? t.GetTypeName(false)));
+
+				foreach (var pair in state.values)
+				{
+					writer.WriteRow(new[] { pair.Item1.ToStringId() }.Concat(state.fields.Select(f => pair.Item2.TryGetValue(f.Item1)?.To<string>())));
+				}
+			}, (values: valuesCopy, fields: fieldsCopy));
 		}
 
 		public void Delete()
 		{
+			// Dispose the writer group since we're deleting the file
+			_writerGroup?.Dispose();
+
 			_executor.Add(() =>
 			{
 				File.Delete(_fileName);
