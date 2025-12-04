@@ -230,6 +230,7 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 
 	private readonly string _path;
 	private readonly ChannelExecutor _executor;
+	private readonly SynchronizedDictionary<string, ChannelExecutorGroup<CsvFileWriter>> _writerGroups = new(StringComparer.InvariantCultureIgnoreCase);
 
 	/// <inheritdoc />
 	public event Action<string, SecurityIdMapping> Changed;
@@ -360,38 +361,75 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 		});
 	}
 
+	private ChannelExecutorGroup<CsvFileWriter> GetOrCreateWriterGroup(string name)
+	{
+		return _writerGroups.SafeAdd(name, key =>
+		{
+			var fileName = Path.Combine(_path, key + ".csv");
+			return new ChannelExecutorGroup<CsvFileWriter>(_executor, () =>
+			{
+				var stream = new TransactionFileStream(fileName, FileMode.Append);
+				return stream.CreateCsvWriter();
+			});
+		});
+	}
+
 	private void Save(string name, bool overwrite, IEnumerable<SecurityIdMapping> mappings)
 	{
-		_executor.Add(() =>
+		var mappingsCopy = mappings.ToArray();
+
+		if (overwrite)
 		{
+			// For overwrite mode, recreate the group to switch to Create mode
+			var group = GetOrCreateWriterGroup(name);
+			group.RecreateResource();
+
+			_executor.Add(() =>
+			{
+				var fileName = Path.Combine(_path, name + ".csv");
+				using var writer = new TransactionFileStream(fileName, FileMode.Create).CreateCsvWriter();
+
+				writer.WriteRow(["SecurityCode", "BoardCode", "AdapterCode", "AdapterBoard"]);
+
+				foreach (var mapping in mappingsCopy)
+				{
+					writer.WriteRow(
+					[
+						mapping.StockSharpId.SecurityCode,
+						mapping.StockSharpId.BoardCode,
+						mapping.AdapterId.SecurityCode,
+						mapping.AdapterId.BoardCode,
+					]);
+				}
+			});
+
+			// Recreate the group back to Append mode
+			group.RecreateResource();
+		}
+		else
+		{
+			// Use the reusable writer group for append operations
 			var fileName = Path.Combine(_path, name + ".csv");
+			var needHeader = !File.Exists(fileName) || new FileInfo(fileName).Length == 0;
 
-			var appendHeader = overwrite || !File.Exists(fileName) || new FileInfo(fileName).Length == 0;
-			var mode = overwrite ? FileMode.Create : FileMode.Append;
+			var group = GetOrCreateWriterGroup(name);
 
-			using var writer = new TransactionFileStream(fileName, mode).CreateCsvWriter();
-
-			if (appendHeader)
+			group.Add((writer, state) =>
 			{
-				writer.WriteRow(
-				[
-					"SecurityCode",
-					"BoardCode",
-					"AdapterCode",
-					"AdapterBoard",
-				]);
-			}
+				if (state.needHeader)
+					writer.WriteRow(["SecurityCode", "BoardCode", "AdapterCode", "AdapterBoard"]);
 
-			foreach (var mapping in mappings)
-			{
-				writer.WriteRow(
-				[
-					mapping.StockSharpId.SecurityCode,
-					mapping.StockSharpId.BoardCode,
-					mapping.AdapterId.SecurityCode,
-					mapping.AdapterId.BoardCode,
-				]);
-			}
-		});
+				foreach (var mapping in state.mappings)
+				{
+					writer.WriteRow(
+					[
+						mapping.StockSharpId.SecurityCode,
+						mapping.StockSharpId.BoardCode,
+						mapping.AdapterId.SecurityCode,
+						mapping.AdapterId.BoardCode,
+					]);
+				}
+			}, (needHeader, mappings: mappingsCopy));
+		}
 	}
 }
