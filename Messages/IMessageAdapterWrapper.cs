@@ -14,7 +14,7 @@ public interface IMessageAdapterWrapper : IMessageAdapter
 /// <summary>
 /// Base implementation of <see cref="IMessageAdapterWrapper"/>.
 /// </summary>
-public abstract class MessageAdapterWrapper : Cloneable<IMessageChannel>, IMessageAdapterWrapper
+public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessageAdapterWrapper
 {
 	private IMessageAdapter _innerAdapter;
 
@@ -92,39 +92,6 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageChannel>, IMessa
 	protected void RaiseNewOutMessage(Message message)
 	{
 		NewOutMessage?.Invoke(message);
-	}
-
-	ChannelStates IMessageChannel.State => InnerAdapter.State;
-
-	void IMessageChannel.Open()
-	{
-		InnerAdapter.Open();
-	}
-
-	void IMessageChannel.Close()
-	{
-		InnerAdapter.Close();
-	}
-
-	void IMessageChannel.Suspend()
-	{
-		InnerAdapter.Suspend();
-	}
-
-	void IMessageChannel.Resume()
-	{
-		InnerAdapter.Resume();
-	}
-
-	void IMessageChannel.Clear()
-	{
-		InnerAdapter.Clear();
-	}
-
-	event Action IMessageChannel.StateChanged
-	{
-		add => InnerAdapter.StateChanged += value;
-		remove => InnerAdapter.StateChanged -= value;
 	}
 
 	/// <summary>

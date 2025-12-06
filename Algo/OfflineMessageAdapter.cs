@@ -327,7 +327,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 	/// Create a copy of <see cref="OfflineMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new OfflineMessageAdapter(InnerAdapter.TypedClone());
 	}

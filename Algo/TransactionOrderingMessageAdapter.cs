@@ -370,7 +370,7 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 	/// Create a copy of <see cref="TransactionOrderingMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new TransactionOrderingMessageAdapter(InnerAdapter.TypedClone());
 	}

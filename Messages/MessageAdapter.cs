@@ -267,34 +267,6 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 	/// <inheritdoc />
 	public event Action<Message> NewOutMessage;
 
-	ChannelStates IMessageChannel.State => ChannelStates.Started;
-
-	void IMessageChannel.Open()
-	{
-	}
-
-	void IMessageChannel.Close()
-	{
-	}
-
-	void IMessageChannel.Suspend()
-	{
-	}
-
-	void IMessageChannel.Resume()
-	{
-	}
-
-	void IMessageChannel.Clear()
-	{
-	}
-
-	event Action IMessageChannel.StateChanged
-	{
-		add { }
-		remove { }
-	}
-
 	/// <inheritdoc />
 	[Browsable(false)]
 	public virtual string[] AssociatedBoards => [];
@@ -616,7 +588,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 	/// Create a copy of <see cref="MessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public virtual IMessageChannel Clone()
+	public virtual IMessageAdapter Clone()
 	{
 		var clone = GetType().CreateInstance<MessageAdapter>(TransactionIdGenerator);
 		clone.Load(this.Save());

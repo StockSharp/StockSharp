@@ -45,7 +45,7 @@ public class LatencyMessageAdapter(IMessageAdapter innerAdapter, ILatencyManager
 	/// Create a copy of <see cref="LatencyMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new LatencyMessageAdapter(InnerAdapter.TypedClone(), _latencyManager.Clone());
 	}

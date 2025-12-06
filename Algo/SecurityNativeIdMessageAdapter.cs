@@ -299,7 +299,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 	/// Create a copy of <see cref="SecurityNativeIdMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new SecurityNativeIdMessageAdapter(InnerAdapter.TypedClone(), Storage);
 	}

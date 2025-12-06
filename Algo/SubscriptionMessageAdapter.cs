@@ -425,7 +425,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 	/// Create a copy of <see cref="SubscriptionMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new SubscriptionMessageAdapter(InnerAdapter.TypedClone())
 		{

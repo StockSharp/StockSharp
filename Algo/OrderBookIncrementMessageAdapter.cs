@@ -255,7 +255,7 @@ public class OrderBookIncrementMessageAdapter(IMessageAdapter innerAdapter) : Me
 	/// Create a copy of <see cref="OrderBookIncrementMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new OrderBookIncrementMessageAdapter(InnerAdapter.TypedClone());
 	}

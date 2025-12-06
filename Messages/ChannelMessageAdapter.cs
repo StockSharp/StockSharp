@@ -100,7 +100,7 @@ public class ChannelMessageAdapter : MessageAdapterWrapper
 	/// Create a copy of <see cref="ChannelMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new ChannelMessageAdapter(InnerAdapter.TypedClone(), InputChannel.Clone(), OutputChannel.Clone());
 	}

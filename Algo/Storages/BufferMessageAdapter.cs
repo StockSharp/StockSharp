@@ -529,7 +529,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 	/// Create a copy of <see cref="BufferMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new BufferMessageAdapter(InnerAdapter.TypedClone(), Settings, Buffer.Clone(), SnapshotRegistry);
 	}

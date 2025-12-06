@@ -269,5 +269,5 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 	/// Create a copy of <see cref="Level1ExtendBuilderAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone() => new Level1ExtendBuilderAdapter(InnerAdapter.TypedClone());
+	public override IMessageAdapter Clone() => new Level1ExtendBuilderAdapter(InnerAdapter.TypedClone());
 }

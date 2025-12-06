@@ -3702,8 +3702,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		_portfoliosPrevRecalc = time;
 	}
 
-	ChannelStates IMessageChannel.State => ChannelStates.Started;
-
 	IdGenerator IMessageAdapter.TransactionIdGenerator { get; } = new IncrementalIdGenerator();
 
 	IEnumerable<MessageTypeInfo> IMessageAdapter.PossibleSupportedMessages { get; } =
@@ -3794,38 +3792,12 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	bool IMessageAdapter.IsAllDownloadingSupported(DataType dataType) => false;
 	bool IMessageAdapter.IsSecurityRequired(DataType dataType) => dataType.IsSecurityRequired;
 
-	void IMessageChannel.Open()
-	{
-	}
-
-	void IMessageChannel.Close()
-	{
-	}
-
-	void IMessageChannel.Suspend()
-	{
-	}
-
-	void IMessageChannel.Resume()
-	{
-	}
-
-	void IMessageChannel.Clear()
-	{
-	}
-
-	event Action IMessageChannel.StateChanged
-	{
-		add { }
-		remove { }
-	}
-
 	/// <summary>
 	/// Extended verification mode.
 	/// </summary>
 	public bool VerifyMode { get; set; }
 
-	IMessageChannel ICloneable<IMessageChannel>.Clone()
+	IMessageAdapter ICloneable<IMessageAdapter>.Clone()
 		=> new MarketEmulator(SecurityProvider, PortfolioProvider, ExchangeInfoProvider, TransactionIdGenerator) { VerifyMode = VerifyMode };
 
 	object ICloneable.Clone() => ((ICloneable<IMessageChannel>)this).Clone();

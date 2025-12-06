@@ -804,7 +804,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	}
 
 	/// <inheritdoc />
-	bool IMessageChannel.SendInMessage(Message message)
+	bool IMessageAdapter.SendInMessage(Message message)
 	{
 		return OnSendInMessage(message);
 	}
@@ -1929,7 +1929,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	/// Create a copy of <see cref="BasketMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public IMessageChannel Clone()
+	public IMessageAdapter Clone()
 	{
 		var clone = new BasketMessageAdapter(TransactionIdGenerator, StorageProcessor.CandleBuilderProvider, SecurityAdapterProvider, PortfolioAdapterProvider, Buffer)
 		{
@@ -1958,32 +1958,4 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	}
 
 	object ICloneable.Clone() => Clone();
-
-	ChannelStates IMessageChannel.State => ChannelStates.Started;
-
-	void IMessageChannel.Open()
-	{
-	}
-
-	void IMessageChannel.Close()
-	{
-	}
-
-	void IMessageChannel.Suspend()
-	{
-	}
-
-	void IMessageChannel.Resume()
-	{
-	}
-
-	void IMessageChannel.Clear()
-	{
-	}
-
-	event Action IMessageChannel.StateChanged
-	{
-		add { }
-		remove { }
-	}
 }

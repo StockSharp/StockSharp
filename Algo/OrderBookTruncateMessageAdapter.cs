@@ -151,5 +151,5 @@ public class OrderBookTruncateMessageAdapter(IMessageAdapter innerAdapter) : Mes
 	/// Create a copy of <see cref="OrderBookTruncateMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone() => new OrderBookTruncateMessageAdapter(InnerAdapter.TypedClone());
+	public override IMessageAdapter Clone() => new OrderBookTruncateMessageAdapter(InnerAdapter.TypedClone());
 }

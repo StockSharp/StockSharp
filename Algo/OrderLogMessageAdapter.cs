@@ -235,5 +235,5 @@ public class OrderLogMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 	/// Create a copy of <see cref="OrderLogMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone() => new OrderLogMessageAdapter(InnerAdapter.TypedClone());
+	public override IMessageAdapter Clone() => new OrderLogMessageAdapter(InnerAdapter.TypedClone());
 }

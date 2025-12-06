@@ -205,7 +205,7 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 	/// Create a copy of <see cref="BasketSecurityMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new BasketSecurityMessageAdapter(InnerAdapter, _securityProvider, _processorProvider, _exchangeInfoProvider);
 	}

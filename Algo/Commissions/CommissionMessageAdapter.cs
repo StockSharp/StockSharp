@@ -32,7 +32,7 @@ public class CommissionMessageAdapter(IMessageAdapter innerAdapter, ICommissionM
 	/// Create a copy of <see cref="CommissionMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new CommissionMessageAdapter(InnerAdapter.TypedClone(), _commissionManager.Clone());
 	}

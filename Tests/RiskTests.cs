@@ -1345,6 +1345,6 @@ public class RiskTests
 			return base.OnSendInMessage(message);
 		}
 
-		public override IMessageChannel Clone() => new TestInnerAdapter();
+		public override IMessageAdapter Clone() => new TestInnerAdapter();
 	}
 }

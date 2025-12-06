@@ -136,7 +136,7 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 	/// Create a copy of <see cref="RiskMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new RiskMessageAdapter(InnerAdapter.TypedClone(), _riskManager.Clone());
 	}

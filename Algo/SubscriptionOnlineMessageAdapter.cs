@@ -503,7 +503,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 	/// Create a copy of <see cref="SubscriptionOnlineMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new SubscriptionOnlineMessageAdapter(InnerAdapter.TypedClone());
 	}

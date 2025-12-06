@@ -83,7 +83,7 @@ public class CandleHolderMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 	/// Create a copy of <see cref="CandleHolderMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new CandleHolderMessageAdapter(InnerAdapter.TypedClone());
 	}

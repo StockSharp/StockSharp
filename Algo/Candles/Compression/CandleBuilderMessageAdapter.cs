@@ -944,7 +944,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 	/// Create a copy of <see cref="CandleBuilderMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new CandleBuilderMessageAdapter(InnerAdapter.TypedClone(), _candleBuilderProvider)
 		{

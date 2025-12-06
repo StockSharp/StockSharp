@@ -141,7 +141,7 @@ public class AssociatedSecurityAdapter(IMessageAdapter innerAdapter) : MessageAd
 	/// Create a copy of <see cref="AssociatedSecurityAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new AssociatedSecurityAdapter(InnerAdapter);
 	}

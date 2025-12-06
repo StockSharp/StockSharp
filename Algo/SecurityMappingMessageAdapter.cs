@@ -94,7 +94,7 @@ public class SecurityMappingMessageAdapter(IMessageAdapter innerAdapter, ISecuri
 	/// Create a copy of <see cref="SecurityMappingMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new SecurityMappingMessageAdapter(InnerAdapter.TypedClone(), Storage);
 	}

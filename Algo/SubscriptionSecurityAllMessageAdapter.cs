@@ -446,7 +446,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 	/// Create a copy of <see cref="SubscriptionSecurityAllMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new SubscriptionSecurityAllMessageAdapter(InnerAdapter.TypedClone());
 	}

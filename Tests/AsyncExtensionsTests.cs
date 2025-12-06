@@ -151,7 +151,7 @@ public class AsyncExtensionsTests : BaseTestClass
 				SendSubscriptionResult(mdMsg);
 		}
 
-		public override IMessageChannel Clone() => new MockAsyncAdapter(TransactionIdGenerator);
+		public override IMessageAdapter Clone() => new MockAsyncAdapter(TransactionIdGenerator);
 	}
 
 	[TestMethod]

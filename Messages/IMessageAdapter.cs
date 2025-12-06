@@ -5,7 +5,7 @@ using System.Security;
 /// <summary>
 /// Base message adapter interface which convert messages <see cref="Message"/> to native commands and back.
 /// </summary>
-public interface IMessageAdapter : IMessageChannel, IPersistable, ILogReceiver
+public interface IMessageAdapter : IPersistable, ILogReceiver, ICloneable<IMessageAdapter>
 {
 	/// <summary>
 	/// Transaction id generator.
@@ -250,7 +250,19 @@ public interface IMessageAdapter : IMessageChannel, IPersistable, ILogReceiver
 	TimeSpan? LookupTimeout { get; }
 
 	/// <summary>
-	/// Send outgoing message and raise <see cref="IMessageChannel.NewOutMessage"/> event.
+	/// Send message.
+	/// </summary>
+	/// <param name="message">Message.</param>
+	/// <returns><see langword="true"/> if the specified message was processed successfully, otherwise, <see langword="false"/>.</returns>
+	bool SendInMessage(Message message);
+
+	/// <summary>
+	/// New message event.
+	/// </summary>
+	event Action<Message> NewOutMessage;
+
+	/// <summary>
+	/// Send outgoing message and raise <see cref="NewOutMessage"/> event.
 	/// </summary>
 	/// <param name="message">Message.</param>
 	void SendOutMessage(Message message);

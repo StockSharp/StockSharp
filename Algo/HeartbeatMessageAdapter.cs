@@ -468,7 +468,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 	/// Create a copy of <see cref="HeartbeatMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new HeartbeatMessageAdapter(InnerAdapter.TypedClone()) { SuppressReconnectingErrors = SuppressReconnectingErrors };
 	}

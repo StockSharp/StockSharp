@@ -153,6 +153,6 @@ public class FillGapsMessageAdapter(IMessageAdapter innerAdapter, IFillGapsBehav
 	/// Create a copy of <see cref="FillGapsMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 		=> new FillGapsMessageAdapter(InnerAdapter.TypedClone(), _behaviour);
 }

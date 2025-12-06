@@ -267,7 +267,7 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 	/// Create a copy of <see cref="LookupTrackingMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new LookupTrackingMessageAdapter(InnerAdapter.TypedClone()) { _timeOut = _timeOut };
 	}

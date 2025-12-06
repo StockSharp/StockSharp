@@ -161,5 +161,5 @@ public class SnapshotHolderMessageAdapter(IMessageAdapter innerAdapter, ISnapsho
 	/// Create a copy of <see cref="SnapshotHolderMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone() => new SnapshotHolderMessageAdapter(InnerAdapter.TypedClone(), _holder);
+	public override IMessageAdapter Clone() => new SnapshotHolderMessageAdapter(InnerAdapter.TypedClone(), _holder);
 }

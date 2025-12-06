@@ -619,5 +619,5 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 	/// Create a copy of <see cref="FilteredMarketDepthAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone() => new FilteredMarketDepthAdapter(InnerAdapter);
+	public override IMessageAdapter Clone() => new FilteredMarketDepthAdapter(InnerAdapter);
 }

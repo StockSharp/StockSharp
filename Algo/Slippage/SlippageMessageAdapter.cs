@@ -37,7 +37,7 @@ public class SlippageMessageAdapter(IMessageAdapter innerAdapter, ISlippageManag
 	/// Create a copy of <see cref="SlippageMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new SlippageMessageAdapter(InnerAdapter.TypedClone(), _slippageManager.Clone());
 	}

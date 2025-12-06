@@ -56,7 +56,7 @@ public class ExtendedInfoStorageMessageAdapter : MessageAdapterWrapper
 	/// Create a copy of <see cref="ExtendedInfoStorageMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new ExtendedInfoStorageMessageAdapter(InnerAdapter.TypedClone(), _extendedInfoStorage);
 	}

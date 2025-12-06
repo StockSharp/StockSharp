@@ -119,5 +119,5 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 	/// Create a copy of <see cref="PositionMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone() => new PositionMessageAdapter(InnerAdapter.TypedClone(), _positionManager.Clone());
+	public override IMessageAdapter Clone() => new PositionMessageAdapter(InnerAdapter.TypedClone(), _positionManager.Clone());
 }

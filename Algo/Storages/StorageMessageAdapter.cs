@@ -56,7 +56,7 @@ public class StorageMessageAdapter(IMessageAdapter innerAdapter, StorageProcesso
 	/// Create a copy of <see cref="StorageMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new StorageMessageAdapter(InnerAdapter.TypedClone(), _storageProcessor);
 	}

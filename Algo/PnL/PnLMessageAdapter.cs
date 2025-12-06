@@ -51,7 +51,7 @@ public class PnLMessageAdapter(IMessageAdapter innerAdapter, IPnLManager pnlMana
 	/// Create a copy of <see cref="PnLMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 	{
 		return new PnLMessageAdapter(InnerAdapter.TypedClone(), _pnlManager.Clone());
 	}

@@ -348,6 +348,6 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 	/// Create a copy of <see cref="EmulationMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageChannel Clone()
+	public override IMessageAdapter Clone()
 		=> new EmulationMessageAdapter(InnerAdapter.TypedClone(), InChannel, _isEmulationOnly, Emulator.SecurityProvider, Emulator.PortfolioProvider, Emulator.ExchangeInfoProvider);
 }
