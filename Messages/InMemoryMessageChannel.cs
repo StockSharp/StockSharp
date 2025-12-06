@@ -82,7 +82,7 @@ public class InMemoryMessageChannel : Disposable, IMessageChannel
 	{
 		try
 		{
-			await foreach (var message in _queue.ReadAllAsync(cancellationToken).ConfigureAwait(false))
+			await foreach (var message in _queue.ReadAllAsync(cancellationToken).NoWait())
 			{
 				try
 				{
