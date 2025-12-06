@@ -114,16 +114,16 @@ public interface IAsyncMessageAdapter : IMessageAdapter
 	ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken);
 
 	/// <summary>
-	/// Processes a generic message asynchronously.
-	/// </summary>
-	/// <param name="msg">The message to process.</param>
-	/// <param name="cancellationToken">Cancellation token.</param>
-	ValueTask ProcessMessageAsync(Message msg, CancellationToken cancellationToken);
-
-	/// <summary>
 	/// Processes a market data message asynchronously (subscribe/unsubscribe or history retrieval).
 	/// </summary>
 	/// <param name="mdMsg">The market data message.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	ValueTask MarketDataAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken);
+
+	/// <summary>
+	/// Processes a generic message asynchronously.
+	/// </summary>
+	/// <param name="msg">The message to process.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	ValueTask SendInMessageAsync(Message msg, CancellationToken cancellationToken);
 }

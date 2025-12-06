@@ -297,7 +297,7 @@ class AsyncMessageProcessor : Disposable
 
 						ChangePasswordMessage m		=> _adapter.ChangePasswordAsync(m, token),
 
-						_ => _adapter.ProcessMessageAsync(msg, token)
+						_ => _adapter.SendInMessageAsync(msg, token)
 					};
 
 				void done()

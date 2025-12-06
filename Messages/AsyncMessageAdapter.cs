@@ -101,46 +101,46 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 
 	/// <inheritdoc />
 	public virtual ValueTask ChangePasswordAsync(ChangePasswordMessage pwdMsg, CancellationToken cancellationToken)
-		=> ProcessMessageAsync(pwdMsg, cancellationToken);
+		=> SendInMessageAsync(pwdMsg, cancellationToken);
 
 	/// <inheritdoc />
 	public virtual ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
-		=> ProcessMessageAsync(lookupMsg, cancellationToken);
+		=> SendInMessageAsync(lookupMsg, cancellationToken);
 
 	/// <inheritdoc />
 	public virtual ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
-		=> ProcessMessageAsync(lookupMsg, cancellationToken);
+		=> SendInMessageAsync(lookupMsg, cancellationToken);
 
 	/// <inheritdoc />
 	public virtual ValueTask BoardLookupAsync(BoardLookupMessage lookupMsg, CancellationToken cancellationToken)
-		=> ProcessMessageAsync(lookupMsg, cancellationToken);
+		=> SendInMessageAsync(lookupMsg, cancellationToken);
 
 	/// <inheritdoc />
 	public virtual ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
-		=> ProcessMessageAsync(statusMsg, cancellationToken);
+		=> SendInMessageAsync(statusMsg, cancellationToken);
 
 	/// <inheritdoc />
 	public virtual ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
-		=> ProcessMessageAsync(regMsg, cancellationToken);
+		=> SendInMessageAsync(regMsg, cancellationToken);
 
 	/// <inheritdoc />
 	public virtual ValueTask ReplaceOrderAsync(OrderReplaceMessage replaceMsg, CancellationToken cancellationToken)
-		=> ProcessMessageAsync(replaceMsg, cancellationToken);
+		=> SendInMessageAsync(replaceMsg, cancellationToken);
 
 	/// <inheritdoc />
 	public virtual ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
-		=> ProcessMessageAsync(cancelMsg, cancellationToken);
+		=> SendInMessageAsync(cancelMsg, cancellationToken);
 
 	/// <inheritdoc />
 	public virtual ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
-		=> ProcessMessageAsync(cancelMsg, cancellationToken);
+		=> SendInMessageAsync(cancelMsg, cancellationToken);
 
 	/// <inheritdoc />
 	public virtual ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
-		=> ProcessMessageAsync(timeMsg, cancellationToken);
+		=> SendInMessageAsync(timeMsg, cancellationToken);
 
 	/// <inheritdoc />
-	public virtual ValueTask ProcessMessageAsync(Message msg, CancellationToken cancellationToken)
+	public virtual ValueTask SendInMessageAsync(Message msg, CancellationToken cancellationToken)
 		=> throw SubscriptionResponseMessage.NotSupported;
 
 	/// <inheritdoc />

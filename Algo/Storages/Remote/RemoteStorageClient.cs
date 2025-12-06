@@ -175,7 +175,7 @@ public class RemoteStorageClient : Disposable
 			throw new ArgumentNullException(nameof(securities));
 
 		foreach (var message in securities)
-			await _adapter.ProcessMessageAsync(message, cancellationToken);
+			await _adapter.SendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <summary>
@@ -250,7 +250,7 @@ public class RemoteStorageClient : Disposable
 		if (stream is null)
 			throw new ArgumentNullException(nameof(stream));
 
-		return _adapter.ProcessMessageAsync(new RemoteFileCommandMessage
+		return _adapter.SendInMessageAsync(new RemoteFileCommandMessage
 		{
 			Command = CommandTypes.Update,
 			Scope = CommandScopes.File,
@@ -299,7 +299,7 @@ public class RemoteStorageClient : Disposable
 	/// <returns><see cref="ValueTask"/></returns>
 	public ValueTask DeleteAsync(SecurityId securityId, DataType dataType, StorageFormats format, DateTime date, CancellationToken cancellationToken)
 	{
-		return _adapter.ProcessMessageAsync(new RemoteFileCommandMessage
+		return _adapter.SendInMessageAsync(new RemoteFileCommandMessage
 		{
 			Command = CommandTypes.Remove,
 			Scope = CommandScopes.File,
