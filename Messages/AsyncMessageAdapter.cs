@@ -26,10 +26,6 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 
 	/// <inheritdoc />
 	[Browsable(false)]
-	public override bool IsSupportPartialDownloading => false;
-
-	/// <inheritdoc />
-	[Browsable(false)]
 	public virtual TimeSpan DisconnectTimeout { get; } = TimeSpan.FromSeconds(5);
 
 	private int _maxParallelMessages = 5;
@@ -251,13 +247,6 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 	/// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
 	protected virtual ValueTask OnCandlesSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 		=> throw SubscriptionResponseMessage.NotSupported;
-
-	/// <inheritdoc />
-	public override TimeSpan GetHistoryStepSize(SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)
-	{
-		iterationInterval = TimeSpan.Zero;
-		return TimeSpan.MaxValue;
-	}
 
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)

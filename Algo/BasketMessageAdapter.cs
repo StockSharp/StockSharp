@@ -401,8 +401,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 	bool IMessageAdapter.IsSupportCandlesPriceLevels(MarketDataMessage subscription) => GetSortedAdapters().Any(a => a.IsSupportCandlesPriceLevels(subscription));
 
-	bool IMessageAdapter.IsSupportPartialDownloading => GetSortedAdapters().Any(a => a.IsSupportPartialDownloading);
-
 	IEnumerable<(string, Type)> IMessageAdapter.SecurityExtendedFields => GetSortedAdapters().SelectMany(a => a.SecurityExtendedFields).Distinct();
 
 	IEnumerable<int> IMessageAdapter.SupportedOrderBookDepths => GetSortedAdapters().SelectMany(a => a.SupportedOrderBookDepths).Distinct().OrderBy();
@@ -423,33 +421,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 	IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 		=> new OrderLogMarketDepthBuilder(securityId);
-
-	TimeSpan IMessageAdapter.GetHistoryStepSize(SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)
-	{
-		foreach (var adapter in GetSortedAdapters())
-		{
-			var step = adapter.GetHistoryStepSize(securityId, dataType, out iterationInterval);
-
-			if (step > TimeSpan.Zero)
-				return step;
-		}
-
-		iterationInterval = TimeSpan.Zero;
-		return TimeSpan.Zero;
-	}
-
-	int? IMessageAdapter.GetMaxCount(DataType dataType)
-	{
-		foreach (var adapter in GetSortedAdapters())
-		{
-			var count = adapter.GetMaxCount(dataType);
-
-			if (count != null)
-				return count;
-		}
-
-		return null;
-	}
 
 	bool IMessageAdapter.IsAllDownloadingSupported(DataType dataType) => GetSortedAdapters().Any(a => a.IsAllDownloadingSupported(dataType));
 
@@ -510,7 +481,8 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	/// <summary>
 	/// Use <see cref="PartialDownloadMessageAdapter"/>.
 	/// </summary>
-	public bool SupportPartialDownload { get; set; } = true;
+	[Obsolete("Sync mode is obsolete.")]
+	public bool SupportPartialDownload { get; set; }
 
 	/// <summary>
 	/// Use <see cref="LookupTrackingMessageAdapter"/>.
@@ -711,10 +683,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			adapter = ApplyOwnInner(new CommissionMessageAdapter(adapter, CommissionManager.Clone()));
 		}
 
-		if (SupportPartialDownload && adapter.IsSupportPartialDownloading)
+#pragma warning disable CS0618 // Type or member is obsolete
+		if (SupportPartialDownload && adapter is SyncMessageAdapter syncAdp && syncAdp.IsSupportPartialDownloading)
 		{
-			adapter = ApplyOwnInner(new PartialDownloadMessageAdapter(adapter));
+			adapter = ApplyOwnInner(new PartialDownloadMessageAdapter(syncAdp));
 		}
+#pragma warning restore CS0618 // Type or member is obsolete
 
 		if (adapter.IsSupportSubscriptions)
 		{

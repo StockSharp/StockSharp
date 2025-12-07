@@ -3753,7 +3753,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	bool IMessageAdapter.IsSupportSubscriptions => true;
 	bool IMessageAdapter.IsSupportCandlesUpdates(MarketDataMessage subscription) => true;
 	bool IMessageAdapter.IsSupportCandlesPriceLevels(MarketDataMessage subscription) => false;
-	bool IMessageAdapter.IsSupportPartialDownloading => false;
 
 	MessageAdapterCategories IMessageAdapter.Categories => default;
 
@@ -3780,14 +3779,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 	IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 		=> new OrderLogMarketDepthBuilder(securityId);
-
-	TimeSpan IMessageAdapter.GetHistoryStepSize(SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)
-	{
-		iterationInterval = TimeSpan.Zero;
-		return TimeSpan.Zero;
-	}
-
-	int? IMessageAdapter.GetMaxCount(DataType dataType) => null;
 
 	bool IMessageAdapter.IsAllDownloadingSupported(DataType dataType) => false;
 	bool IMessageAdapter.IsSecurityRequired(DataType dataType) => dataType.IsSecurityRequired;

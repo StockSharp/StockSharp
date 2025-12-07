@@ -262,9 +262,6 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 	public virtual bool IsSupportCandlesPriceLevels(MarketDataMessage subscription) => InnerAdapter.IsSupportCandlesPriceLevels(subscription);
 
 	/// <inheritdoc />
-	public virtual bool IsSupportPartialDownloading => InnerAdapter.IsSupportPartialDownloading;
-
-	/// <inheritdoc />
 	public virtual MessageAdapterCategories Categories => InnerAdapter.Categories;
 
 	IEnumerable<(string, Type)> IMessageAdapter.SecurityExtendedFields => InnerAdapter.SecurityExtendedFields;
@@ -321,13 +318,6 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 
 	IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 		=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
-
-	/// <inheritdoc />
-	public virtual TimeSpan GetHistoryStepSize(SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)
-		=> InnerAdapter.GetHistoryStepSize(securityId, dataType, out iterationInterval);
-
-	/// <inheritdoc />
-	public virtual int? GetMaxCount(DataType dataType) => InnerAdapter.GetMaxCount(dataType);
 
 	/// <inheritdoc />
 	public virtual bool IsAllDownloadingSupported(DataType dataType)

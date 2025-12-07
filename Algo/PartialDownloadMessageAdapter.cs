@@ -7,7 +7,8 @@
 /// Initializes a new instance of the <see cref="PartialDownloadMessageAdapter"/>.
 /// </remarks>
 /// <param name="innerAdapter">Underlying adapter.</param>
-public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
+[Obsolete("Sync mode is obsolete.")]
+public class PartialDownloadMessageAdapter(SyncMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
 	/// <summary>
 	/// Message for iterate action.
@@ -123,7 +124,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 				_nextFrom = _to;
 
 			mdMsg.TransactionId = _adapter.TransactionIdGenerator.GetNextId();
-			mdMsg.Count = _adapter.GetMaxCount(mdMsg.DataType2);
+			mdMsg.Count = _adapter.SyncAdapter.GetMaxCount(mdMsg.DataType2);
 			mdMsg.From = _currFrom;
 			mdMsg.To = _nextFrom;
 
@@ -179,6 +180,8 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 	private readonly Dictionary<long, bool> _liveRequests = [];
 	private readonly HashSet<long> _finished = [];
 
+	private SyncMessageAdapter SyncAdapter => (SyncMessageAdapter)InnerAdapter;
+
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
 	{
@@ -213,7 +216,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 
 					if (from != null || to != null || subscriptionMsg.Count != null)
 					{
-						var step = InnerAdapter.GetHistoryStepSize(default, DataType.Transactions, out _);
+						var step = SyncAdapter.GetHistoryStepSize(default, DataType.Transactions, out _);
 
 						// adapter do not provide historical request
 						if (step == TimeSpan.Zero)
@@ -258,7 +261,7 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 
 					if ((from != null || to != null) && mdMsg.Count is null or > 0 && (to is null || to > default(DateTime)))
 					{
-						var step = InnerAdapter.GetHistoryStepSize(mdMsg.SecurityId, mdMsg.DataType2, out var iterationInterval);
+						var step = SyncAdapter.GetHistoryStepSize(mdMsg.SecurityId, mdMsg.DataType2, out var iterationInterval);
 
 						// adapter do not provide historical request
 						if (step == TimeSpan.Zero)
@@ -579,6 +582,6 @@ public class PartialDownloadMessageAdapter(IMessageAdapter innerAdapter) : Messa
 	/// <returns>Copy.</returns>
 	public override IMessageAdapter Clone()
 	{
-		return new PartialDownloadMessageAdapter(InnerAdapter.TypedClone());
+		return new PartialDownloadMessageAdapter(SyncAdapter.TypedClone());
 	}
 }

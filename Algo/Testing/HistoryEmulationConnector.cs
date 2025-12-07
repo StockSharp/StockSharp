@@ -106,7 +106,6 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		Adapter.SendFinishedCandlesImmediatelly = true;
 		//Adapter.SupportCandlesCompression = false;
 		Adapter.SupportBuildingFromOrderLog = false;
-		Adapter.SupportPartialDownload = false;
 		Adapter.SupportLookupTracking = false;
 		Adapter.SupportOrderBookTruncate = false;
 		Adapter.ConnectDisconnectEventOnFirstAdapter = false;

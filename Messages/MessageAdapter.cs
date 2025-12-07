@@ -165,10 +165,6 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 
 	/// <inheritdoc />
 	[Browsable(false)]
-	public virtual bool IsSupportPartialDownloading => true;
-
-	/// <inheritdoc />
-	[Browsable(false)]
 	public virtual MessageAdapterCategories Categories { get; }
 
 	/// <inheritdoc />
@@ -497,13 +493,6 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 	/// <inheritdoc />
 	public virtual IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 		=> new OrderLogMarketDepthBuilder(securityId);
-
-	/// <inheritdoc />
-	public virtual TimeSpan GetHistoryStepSize(SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)
-		=> Extensions.GetHistoryStepSize(this, securityId, dataType, out iterationInterval);
-
-	/// <inheritdoc />
-	public virtual int? GetMaxCount(DataType dataType) => dataType.GetDefaultMaxCount();
 
 	/// <inheritdoc />
 	public virtual bool IsAllDownloadingSupported(DataType dataType) => false;

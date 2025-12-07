@@ -96,11 +96,6 @@ public interface IMessageAdapter : IPersistable, ILogReceiver, ICloneable<IMessa
 	bool IsSupportCandlesPriceLevels(MarketDataMessage subscription);
 
 	/// <summary>
-	/// Support partial downloading.
-	/// </summary>
-	bool IsSupportPartialDownloading { get; }
-
-	/// <summary>
 	/// Message adapter categories.
 	/// </summary>
 	MessageAdapterCategories Categories { get; }
@@ -193,22 +188,6 @@ public interface IMessageAdapter : IPersistable, ILogReceiver, ICloneable<IMessa
 	/// <param name="securityId">Security ID.</param>
 	/// <returns>Order log to market depth builder.</returns>
 	IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId);
-
-	/// <summary>
-	/// Get maximum size step allowed for historical download.
-	/// </summary>
-	/// <param name="securityId"><see cref="SecurityId"/></param>
-	/// <param name="dataType">Data type info.</param>
-	/// <param name="iterationInterval">Interval between iterations.</param>
-	/// <returns>Step.</returns>
-	TimeSpan GetHistoryStepSize(SecurityId securityId, DataType dataType, out TimeSpan iterationInterval);
-
-	/// <summary>
-	/// Get maximum possible items count per single subscription request.
-	/// </summary>
-	/// <param name="dataType">Data type info.</param>
-	/// <returns>Max items count.</returns>
-	int? GetMaxCount(DataType dataType);
 
 	/// <summary>
 	/// Is for the specified <paramref name="dataType"/> all securities downloading enabled.

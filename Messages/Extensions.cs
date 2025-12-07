@@ -2195,7 +2195,8 @@ public static partial class Extensions
 	/// <param name="dataType">Data type info.</param>
 	/// <param name="iterationInterval">Interval between iterations.</param>
 	/// <returns>Step.</returns>
-	public static TimeSpan GetHistoryStepSize(this IMessageAdapter adapter, SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)
+	[Obsolete("Sync mode is obsolete.")]
+	public static TimeSpan GetDefaultHistoryStepSize(this IMessageAdapter adapter, SecurityId securityId, DataType dataType, out TimeSpan iterationInterval)
 	{
 		if (adapter == null)
 			throw new ArgumentNullException(nameof(adapter));
@@ -2232,6 +2233,7 @@ public static partial class Extensions
 	/// </summary>
 	/// <param name="dataType">Data type info.</param>
 	/// <returns>Max items count.</returns>
+	[Obsolete("Sync mode is obsolete.")]
 	public static int? GetDefaultMaxCount(this DataType dataType)
 	{
 		if (dataType == DataType.Ticks ||
