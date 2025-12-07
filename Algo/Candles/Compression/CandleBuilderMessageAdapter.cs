@@ -60,6 +60,8 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 		public VolumeProfileBuilder VolumeProfile { get; set; }
 
 		public bool Stopped { get; set; }
+
+		public bool IsCountExhausted => Count <= 0;
 	}
 
 	private readonly Lock _syncObject = new();
@@ -538,104 +540,13 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 				{
 					if (candleMsg.Type == MessageTypes.CandleTimeFrame)
 					{
-						var subscriptionIds = candleMsg.GetSubscriptionIds();
-						HashSet<long> newSubscriptionIds = null;
-
-						foreach (var subscriptionId in subscriptionIds)
-						{
-							var series = TryGetSeries(subscriptionId, out _);
-
-							if (series == null)
-								continue;
-
-							newSubscriptionIds ??= [.. subscriptionIds];
-
-							newSubscriptionIds.Remove(subscriptionId);
-
-							switch (series.State)
-							{
-								case SeriesStates.Regular:
-									ProcessCandle(series, candleMsg);
-									break;
-
-								case SeriesStates.SmallTimeFrame:
-									if (series.Count <= 0)
-									{
-										if (TryRemoveSeries(series.Id, out _))
-											RaiseNewOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = series.Original.TransactionId });
-
-										break;
-									}
-
-									var candles = series.BigTimeFrameCompressor.Process(candleMsg);
-
-									foreach (var bigCandle in candles)
-									{
-										var isFinished = bigCandle.State == CandleStates.Finished;
-
-										if (series.Current.IsFinishedOnly && !isFinished)
-											continue;
-
-										bigCandle.SetSubscriptionIds(subscriptionId: series.Id);
-										bigCandle.Adapter = candleMsg.Adapter;
-										bigCandle.LocalTime = candleMsg.LocalTime;
-
-										if (isFinished)
-										{
-											series.LastTime = bigCandle.CloseTime;
-
-											if (series.Count != null)
-											{
-												if (series.Count <= 0)
-													break;
-
-												series.Count--;
-											}
-										}
-
-										base.OnInnerAdapterNewOutMessage(/*_isHistory ? bigCandle : */bigCandle.TypedClone());
-									}
-
-									break;
-
-								// TODO default
-							}
-						}
-
-						if (newSubscriptionIds != null)
-						{
-							if (newSubscriptionIds.Count == 0)
-								return;
-
-							candleMsg.SetSubscriptionIds([.. newSubscriptionIds]);
-						}
+						if (ProcessCandleSubscriptions(candleMsg, ProcessTimeFrameCandle))
+							return;
 					}
 					else
 					{
-						var subscriptionIds = candleMsg.GetSubscriptionIds();
-						HashSet<long> newSubscriptionIds = null;
-
-						foreach (var subscriptionId in subscriptionIds)
-						{
-							var series = TryGetSeries(subscriptionId, out _);
-
-							if (series == null)
-								continue;
-
-							newSubscriptionIds ??= [.. subscriptionIds];
-
-							newSubscriptionIds.Remove(subscriptionId);
-
-							ProcessCandle(series, candleMsg);
-						}
-
-						if (newSubscriptionIds != null)
-						{
-							if (newSubscriptionIds.Count == 0)
-								return;
-
-							candleMsg.SetSubscriptionIds([.. newSubscriptionIds]);
-						}
+						if (ProcessCandleSubscriptions(candleMsg, ProcessCandle))
+							return;
 					}
 				}
 
@@ -644,6 +555,89 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 		}
 
 		base.OnInnerAdapterNewOutMessage(message);
+	}
+
+	private bool ProcessCandleSubscriptions(CandleMessage candleMsg, Action<SeriesInfo, CandleMessage> processor)
+	{
+		var subscriptionIds = candleMsg.GetSubscriptionIds();
+		HashSet<long> newSubscriptionIds = null;
+
+		foreach (var subscriptionId in subscriptionIds)
+		{
+			var series = TryGetSeries(subscriptionId, out _);
+
+			if (series == null)
+				continue;
+
+			newSubscriptionIds ??= [.. subscriptionIds];
+
+			newSubscriptionIds.Remove(subscriptionId);
+
+			processor(series, candleMsg);
+		}
+
+		if (newSubscriptionIds != null)
+		{
+			if (newSubscriptionIds.Count == 0)
+				return true;
+
+			candleMsg.SetSubscriptionIds([.. newSubscriptionIds]);
+		}
+
+		return false;
+	}
+
+	private void ProcessTimeFrameCandle(SeriesInfo series, CandleMessage candleMsg)
+	{
+		switch (series.State)
+		{
+			case SeriesStates.Regular:
+				ProcessCandle(series, candleMsg);
+				break;
+
+			case SeriesStates.SmallTimeFrame:
+				if (series.IsCountExhausted)
+				{
+					if (TryRemoveSeries(series.Id, out _))
+						RaiseNewOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = series.Original.TransactionId });
+
+					break;
+				}
+
+				var candles = series.BigTimeFrameCompressor.Process(candleMsg);
+
+				foreach (var bigCandle in candles)
+				{
+					var isFinished = bigCandle.State == CandleStates.Finished;
+
+					if (series.Current.IsFinishedOnly && !isFinished)
+						continue;
+
+					bigCandle.SetSubscriptionIds(subscriptionId: series.Id);
+					bigCandle.Adapter = candleMsg.Adapter;
+					bigCandle.LocalTime = candleMsg.LocalTime;
+
+					if (isFinished)
+					{
+						series.LastTime = bigCandle.CloseTime;
+
+						if (series.Count != null)
+						{
+							if (series.IsCountExhausted)
+								break;
+
+							series.Count--;
+						}
+					}
+
+					base.OnInnerAdapterNewOutMessage(/*_isHistory ? bigCandle : */bigCandle.TypedClone());
+				}
+
+				break;
+
+			default:
+				break;
+		}
 	}
 
 	private void UpgradeSubscription(SeriesInfo series, SubscriptionResponseMessage response, SubscriptionFinishedMessage finish)
@@ -677,7 +671,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 			return;
 		}
 
-		if (original.Count != null && series.Count <= 0)
+		if (original.Count != null && series.IsCountExhausted)
 		{
 			Finish();
 			return;
@@ -789,7 +783,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 		if (info.LastTime != null && info.LastTime > candleMsg.OpenTime)
 			return;
 
-		if (info.Count <= 0)
+		if (info.IsCountExhausted)
 		{
 			if (TryRemoveSeries(info.Id, out _))
 				RaiseNewOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = info.Original.TransactionId });
@@ -829,18 +823,18 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 	private bool ProcessValue(ISubscriptionIdMessage message)
 	{
-		var subsciptionIds = message.GetSubscriptionIds();
+		var subscriptionIds = message.GetSubscriptionIds();
 
 		HashSet<long> newSubscriptionIds = null;
 
-		foreach (var id in subsciptionIds)
+		foreach (var id in subscriptionIds)
 		{
 			var series = TryGetSeries(id, out var subscriptionId);
 
 			if (series == null)
 				continue;
 
-			newSubscriptionIds ??= [.. subsciptionIds];
+			newSubscriptionIds ??= [.. subscriptionIds];
 
 			newSubscriptionIds.Remove(id);
 
@@ -903,7 +897,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 			if (series.LastTime != null && series.LastTime.Value > time)
 				continue;
 
-			if (series.Count <= 0)
+			if (series.IsCountExhausted)
 			{
 				if (TryRemoveSeries(subscriptionId, out _))
 					RaiseNewOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = origin.TransactionId });
