@@ -267,7 +267,7 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 	/// <inheritdoc />
 	public virtual MessageAdapterCategories Categories => InnerAdapter.Categories;
 
-	IEnumerable<Tuple<string, Type>> IMessageAdapter.SecurityExtendedFields => InnerAdapter.SecurityExtendedFields;
+	IEnumerable<(string, Type)> IMessageAdapter.SecurityExtendedFields => InnerAdapter.SecurityExtendedFields;
 
 	/// <inheritdoc />
 	public virtual IEnumerable<int> SupportedOrderBookDepths => InnerAdapter.SupportedOrderBookDepths;

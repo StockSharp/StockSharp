@@ -403,7 +403,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 	bool IMessageAdapter.IsSupportPartialDownloading => GetSortedAdapters().Any(a => a.IsSupportPartialDownloading);
 
-	IEnumerable<Tuple<string, Type>> IMessageAdapter.SecurityExtendedFields => GetSortedAdapters().SelectMany(a => a.SecurityExtendedFields).Distinct();
+	IEnumerable<(string, Type)> IMessageAdapter.SecurityExtendedFields => GetSortedAdapters().SelectMany(a => a.SecurityExtendedFields).Distinct();
 
 	IEnumerable<int> IMessageAdapter.SupportedOrderBookDepths => GetSortedAdapters().SelectMany(a => a.SupportedOrderBookDepths).Distinct().OrderBy();
 

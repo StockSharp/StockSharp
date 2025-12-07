@@ -108,7 +108,7 @@ public interface IMessageAdapter : IPersistable, ILogReceiver, ICloneable<IMessa
 	/// <summary>
 	/// Names of extended security fields in <see cref="SecurityMessage"/>.
 	/// </summary>
-	IEnumerable<Tuple<string, Type>> SecurityExtendedFields { get; }
+	IEnumerable<(string name, Type type)> SecurityExtendedFields { get; }
 
 	/// <summary>
 	/// Available options for <see cref="MarketDataMessage.MaxDepth"/>.

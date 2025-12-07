@@ -189,7 +189,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 
 	/// <inheritdoc />
 	[Browsable(false)]
-	public virtual IEnumerable<Tuple<string, Type>> SecurityExtendedFields { get; } = [];
+	public virtual IEnumerable<(string, Type)> SecurityExtendedFields { get; } = [];
 
 	/// <inheritdoc />
 	[Browsable(false)]

@@ -18,7 +18,7 @@ public interface IRemoteExtendedStorage
 	/// <summary>
 	/// Get security extended fields (names and types).
 	/// </summary>
-	Tuple<string, Type>[] Fields { get; }
+	(string name, Type type)[] Fields { get; }
 
 	/// <summary>
 	/// Get remote security extended info storage.
@@ -37,5 +37,5 @@ public interface IRemoteExtendedStorage
 	/// Create extended info storage.
 	/// </summary>
 	/// <param name="fields">Extended fields (names and types).</param>
-	void CreateSecurityExtendedFields(Tuple<string, Type>[] fields);
+	void CreateSecurityExtendedFields((string name, Type type)[] fields);
 }

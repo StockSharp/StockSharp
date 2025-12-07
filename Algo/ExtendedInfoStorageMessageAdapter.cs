@@ -7,7 +7,7 @@ public class ExtendedInfoStorageMessageAdapter : MessageAdapterWrapper
 {
 	private readonly IExtendedInfoStorage _extendedInfoStorage;
 	private readonly string _storageName;
-	private readonly IEnumerable<Tuple<string, Type>> _fields;
+	private readonly IEnumerable<(string, Type)> _fields;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MessageAdapterWrapper"/>.

@@ -3757,7 +3757,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 	MessageAdapterCategories IMessageAdapter.Categories => default;
 
-	IEnumerable<Tuple<string, Type>> IMessageAdapter.SecurityExtendedFields { get; } = [];
+	IEnumerable<(string, Type)> IMessageAdapter.SecurityExtendedFields { get; } = [];
 	IEnumerable<int> IMessageAdapter.SupportedOrderBookDepths => throw new NotSupportedException();
 	bool IMessageAdapter.IsSupportOrderBookIncrements => false;
 	bool IMessageAdapter.IsSupportExecutionsPnL => true;

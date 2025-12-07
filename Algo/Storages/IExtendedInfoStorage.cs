@@ -8,7 +8,7 @@ public interface IExtendedInfoStorageItem
 	/// <summary>
 	/// Extended fields (names and types).
 	/// </summary>
-	IEnumerable<Tuple<string, Type>> Fields { get; }
+	IEnumerable<(string name, Type type)> Fields { get; }
 
 	/// <summary>
 	/// Get all security identifiers.
@@ -81,7 +81,7 @@ public interface IExtendedInfoStorage
 	/// <param name="storageName">Storage name.</param>
 	/// <param name="fields">Extended fields (names and types).</param>
 	/// <returns>Storage.</returns>
-	IExtendedInfoStorageItem Create(string storageName, IEnumerable<Tuple<string, Type>> fields);
+	IExtendedInfoStorageItem Create(string storageName, IEnumerable<(string name, Type type)> fields);
 
 	/// <summary>
 	/// Delete storage.
@@ -109,11 +109,11 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 	{
 		private readonly CsvExtendedInfoStorage _storage;
 		private readonly string _fileName;
-		private Tuple<string, Type>[] _fields;
+		private (string name, Type type)[] _fields;
 		private readonly Lock _lock = new();
 		//private readonly Dictionary<string, Type> _fieldTypes = new Dictionary<string, Type>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly Dictionary<SecurityId, Dictionary<string, object>> _cache = [];
-		private ChannelExecutor _executor;
+		private readonly ChannelExecutor _executor;
 
 		public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName, ChannelExecutor executor)
 		{
@@ -125,7 +125,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 			_executor = executor ?? throw new ArgumentNullException(nameof(executor));
 		}
 
-		public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName, IEnumerable<Tuple<string, Type>> fields, ChannelExecutor executor)
+		public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName, IEnumerable<(string, Type)> fields, ChannelExecutor executor)
 			: this(storage, fileName, executor)
 		{
 			if (fields == null)
@@ -173,7 +173,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 						if (fields.Length != types.Length)
 							throw new InvalidOperationException($"{fields.Length} != {types.Length}");
 
-						_fields = [.. fields.Select((f, i) => Tuple.Create(f, types[i]))];
+						_fields = [.. fields.Select((f, i) => (f, types[i]))];
 					}
 
 					while (reader.NextLine())
@@ -231,7 +231,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 			_storage._deleted?.Invoke(this);
 		}
 
-		IEnumerable<Tuple<string, Type>> IExtendedInfoStorageItem.Fields => _fields;
+		IEnumerable<(string, Type)> IExtendedInfoStorageItem.Fields => _fields;
 
 		void IExtendedInfoStorageItem.Add(SecurityId securityId, IDictionary<string, object> extensionInfo)
 		{
@@ -315,7 +315,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 		Directory.CreateDirectory(path);
 	}
 
-	IExtendedInfoStorageItem IExtendedInfoStorage.Create(string storageName, IEnumerable<Tuple<string, Type>> fields)
+	IExtendedInfoStorageItem IExtendedInfoStorage.Create(string storageName, IEnumerable<(string, Type)> fields)
 	{
 		if (storageName.IsEmpty())
 			throw new ArgumentNullException(nameof(storageName));
