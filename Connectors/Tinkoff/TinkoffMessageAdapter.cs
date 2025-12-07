@@ -63,7 +63,7 @@ public partial class TinkoffMessageAdapter
 	public override string StorageName => nameof(Tinkoff);
 
 	/// <inheritdoc />
-	public override async ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
+	protected override async ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
 	{
 		if (this.IsTransactional())
 		{
@@ -161,7 +161,7 @@ public partial class TinkoffMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override ValueTask DisconnectAsync(DisconnectMessage msg, CancellationToken cancellationToken)
+	protected override ValueTask DisconnectAsync(DisconnectMessage msg, CancellationToken cancellationToken)
 	{
 		if (_channel is null)
 			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
@@ -175,7 +175,7 @@ public partial class TinkoffMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override ValueTask ResetAsync(ResetMessage msg, CancellationToken cancellationToken)
+	protected override ValueTask ResetAsync(ResetMessage msg, CancellationToken cancellationToken)
 	{
 		try
 		{

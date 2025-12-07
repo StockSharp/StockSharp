@@ -32,7 +32,7 @@ public partial class BitalongMessageAdapter
 	public override string[] AssociatedBoards { get; } = new[] { BoardCodes.Bitalong };
 
 	/// <inheritdoc />
-	public override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+	protected override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
 		if (_httpClient != null)
 		{
@@ -61,7 +61,7 @@ public partial class BitalongMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
+	protected override ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
 	{
 		if (this.IsTransactional())
 		{
@@ -82,7 +82,7 @@ public partial class BitalongMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
+	protected override ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
 	{
 		if (_httpClient == null)
 			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
@@ -95,7 +95,7 @@ public partial class BitalongMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override async ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
+	protected override async ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
 	{
 		if (_orderInfo.Count > 0)
 		{

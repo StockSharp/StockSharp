@@ -7,7 +7,7 @@ public partial class BitalongMessageAdapter
 	private readonly HashSet<string> _level1Subscriptions = new(StringComparer.InvariantCultureIgnoreCase);
 
 	/// <inheritdoc />
-	public override async ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
+	protected override async ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
 		var secTypes = lookupMsg.GetSecurityTypes();
 		var left = lookupMsg.Count ?? long.MaxValue;

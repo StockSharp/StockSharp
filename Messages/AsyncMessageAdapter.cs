@@ -75,72 +75,91 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 		=> _asyncMessageProcessor.EnqueueMessage(message);
 
 	/// <inheritdoc />
-	public virtual ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
+	public virtual ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
+	{
+		return message.Type switch
+		{
+			MessageTypes.Connect => ConnectAsync((ConnectMessage)message, cancellationToken),
+			MessageTypes.Disconnect => DisconnectAsync((DisconnectMessage)message, cancellationToken),
+			MessageTypes.Reset => ResetAsync((ResetMessage)message, cancellationToken),
+			MessageTypes.ChangePassword => ChangePasswordAsync((ChangePasswordMessage)message, cancellationToken),
+			MessageTypes.SecurityLookup => SecurityLookupAsync((SecurityLookupMessage)message, cancellationToken),
+			MessageTypes.PortfolioLookup => PortfolioLookupAsync((PortfolioLookupMessage)message, cancellationToken),
+			MessageTypes.BoardLookup => BoardLookupAsync((BoardLookupMessage)message, cancellationToken),
+			MessageTypes.OrderStatus => OrderStatusAsync((OrderStatusMessage)message, cancellationToken),
+			MessageTypes.OrderRegister => RegisterOrderAsync((OrderRegisterMessage)message, cancellationToken),
+			MessageTypes.OrderReplace => ReplaceOrderAsync((OrderReplaceMessage)message, cancellationToken),
+			MessageTypes.OrderCancel => CancelOrderAsync((OrderCancelMessage)message, cancellationToken),
+			MessageTypes.OrderGroupCancel => CancelOrderGroupAsync((OrderGroupCancelMessage)message, cancellationToken),
+			MessageTypes.Time => TimeAsync((TimeMessage)message, cancellationToken),
+			MessageTypes.MarketData => MarketDataAsync((MarketDataMessage)message, cancellationToken),
+			_ => throw SubscriptionResponseMessage.NotSupported,
+		};
+	}
+
+	/// <inheritdoc />
+	protected virtual ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
 	{
 		SendOutMessage(new ConnectMessage());
 		return default;
 	}
 
 	/// <inheritdoc />
-	public virtual ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
+	protected virtual ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
 	{
 		SendOutMessage(new DisconnectMessage());
 		return default;
 	}
 
 	/// <inheritdoc />
-	public virtual ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+	protected virtual ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
 		SendOutMessage(new ResetMessage());
 		return default;
 	}
 
 	/// <inheritdoc />
-	public virtual ValueTask ChangePasswordAsync(ChangePasswordMessage pwdMsg, CancellationToken cancellationToken)
-		=> SendInMessageAsync(pwdMsg, cancellationToken);
-
-	/// <inheritdoc />
-	public virtual ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
-		=> SendInMessageAsync(lookupMsg, cancellationToken);
-
-	/// <inheritdoc />
-	public virtual ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
-		=> SendInMessageAsync(lookupMsg, cancellationToken);
-
-	/// <inheritdoc />
-	public virtual ValueTask BoardLookupAsync(BoardLookupMessage lookupMsg, CancellationToken cancellationToken)
-		=> SendInMessageAsync(lookupMsg, cancellationToken);
-
-	/// <inheritdoc />
-	public virtual ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
-		=> SendInMessageAsync(statusMsg, cancellationToken);
-
-	/// <inheritdoc />
-	public virtual ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
-		=> SendInMessageAsync(regMsg, cancellationToken);
-
-	/// <inheritdoc />
-	public virtual ValueTask ReplaceOrderAsync(OrderReplaceMessage replaceMsg, CancellationToken cancellationToken)
-		=> SendInMessageAsync(replaceMsg, cancellationToken);
-
-	/// <inheritdoc />
-	public virtual ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
-		=> SendInMessageAsync(cancelMsg, cancellationToken);
-
-	/// <inheritdoc />
-	public virtual ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
-		=> SendInMessageAsync(cancelMsg, cancellationToken);
-
-	/// <inheritdoc />
-	public virtual ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
-		=> SendInMessageAsync(timeMsg, cancellationToken);
-
-	/// <inheritdoc />
-	public virtual ValueTask SendInMessageAsync(Message msg, CancellationToken cancellationToken)
+	protected virtual ValueTask ChangePasswordAsync(ChangePasswordMessage pwdMsg, CancellationToken cancellationToken)
 		=> throw SubscriptionResponseMessage.NotSupported;
 
 	/// <inheritdoc />
-	public virtual async ValueTask MarketDataAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	protected virtual ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <inheritdoc />
+	protected virtual ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <inheritdoc />
+	protected virtual ValueTask BoardLookupAsync(BoardLookupMessage lookupMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <inheritdoc />
+	protected virtual ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <inheritdoc />
+	protected virtual ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <inheritdoc />
+	protected virtual ValueTask ReplaceOrderAsync(OrderReplaceMessage replaceMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <inheritdoc />
+	protected virtual ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <inheritdoc />
+	protected virtual ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <inheritdoc />
+	protected virtual ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <inheritdoc />
+	protected virtual async ValueTask MarketDataAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
 		if (mdMsg.IsSubscribe)
 		{

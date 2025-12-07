@@ -280,23 +280,6 @@ class AsyncMessageProcessor : Disposable
 						DisconnectMessage m			=> DisconnectAsync(m),
 						ResetMessage m				=> ResetAsync(m),
 
-						SecurityLookupMessage m		=> _adapter.SecurityLookupAsync(m, token),
-						PortfolioLookupMessage m	=> _adapter.PortfolioLookupAsync(m, token),
-						BoardLookupMessage m		=> _adapter.BoardLookupAsync(m, token),
-
-						TimeMessage m				=> _adapter.TimeAsync(m, token),
-
-						OrderStatusMessage m		=> _adapter.OrderStatusAsync(m, token),
-
-						OrderReplaceMessage m		=> _adapter.ReplaceOrderAsync(m, token),
-						OrderRegisterMessage m		=> _adapter.RegisterOrderAsync(m, token),
-						OrderCancelMessage m		=> _adapter.CancelOrderAsync(m, token),
-						OrderGroupCancelMessage m	=> _adapter.CancelOrderGroupAsync(m, token),
-
-						MarketDataMessage m			=> _adapter.MarketDataAsync(m, token),
-
-						ChangePasswordMessage m		=> _adapter.ChangePasswordAsync(m, token),
-
 						_ => _adapter.SendInMessageAsync(msg, token)
 					};
 
@@ -424,7 +407,7 @@ class AsyncMessageProcessor : Disposable
 		if(_isConnectionStarted)
 			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
 
-		await _adapter.ConnectAsync(msg, token);
+		await _adapter.SendInMessageAsync(msg, token);
 
 		_isConnectionStarted = true;
 	}
@@ -446,7 +429,7 @@ class AsyncMessageProcessor : Disposable
 			if(!await WhenChildrenComplete(_adapter.DisconnectTimeout.CreateTimeoutToken()))
 				throw new InvalidOperationException("unable to complete disconnect. some tasks are still running.");
 
-			await _adapter.DisconnectAsync(msg, default);
+			await _adapter.SendInMessageAsync(msg, default);
 
 			_isConnectionStarted = false;
 		}
@@ -473,7 +456,14 @@ class AsyncMessageProcessor : Disposable
 			item.Cts.Dispose();
 		}
 
-		await _adapter.ResetAsync(msg, default); // reset must not throw.
+		try
+		{
+			await _adapter.SendInMessageAsync(msg, default);
+		}
+		catch (Exception ex)
+		{
+			_adapter.AddErrorLog(ex);
+		}
 
 		_isDisconnecting = _isConnectionStarted = false;
 	}

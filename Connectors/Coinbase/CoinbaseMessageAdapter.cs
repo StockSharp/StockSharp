@@ -79,7 +79,7 @@ public partial class CoinbaseMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+	protected override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
 		if (_restClient != null)
 		{
@@ -131,7 +131,7 @@ public partial class CoinbaseMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override async ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
+	protected override async ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
 	{
 		if (this.IsTransactional())
 		{
@@ -160,7 +160,7 @@ public partial class CoinbaseMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
+	protected override ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
 	{
 		if (_restClient == null)
 			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
@@ -177,7 +177,7 @@ public partial class CoinbaseMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
+	protected override ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
 	{
 		// can send pings to keep web socket alive
 		return default;

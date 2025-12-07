@@ -10,7 +10,7 @@
 public abstract class HistoricalAsyncMessageAdapter(IdGenerator transactionIdGenerator) : AsyncMessageAdapter(transactionIdGenerator)
 {
 	/// <inheritdoc />
-	public override ValueTask MarketDataAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	protected override ValueTask MarketDataAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
 		if (!mdMsg.IsSubscribe)
 		{

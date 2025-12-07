@@ -8,7 +8,7 @@ public partial class TinkoffMessageAdapter
 	private readonly SynchronizedPairSet<long, Guid> _orderUids = [];
 
 	/// <inheritdoc/>
-	public override async ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
+	protected override async ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
 	{
 		var transId = regMsg.TransactionId;
 
@@ -106,7 +106,7 @@ public partial class TinkoffMessageAdapter
 	}
 
 	/// <inheritdoc/>
-	public override async ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
+	protected override async ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
 		if (cancelMsg.OrderType == OrderTypes.Conditional)
 		{
@@ -147,7 +147,7 @@ public partial class TinkoffMessageAdapter
 	}
 
 	/// <inheritdoc/>
-	public override async ValueTask ReplaceOrderAsync(OrderReplaceMessage replaceMsg, CancellationToken cancellationToken)
+	protected override async ValueTask ReplaceOrderAsync(OrderReplaceMessage replaceMsg, CancellationToken cancellationToken)
 	{
 		if (replaceMsg.OrderType == OrderTypes.Conditional)
 		{
@@ -181,7 +181,7 @@ public partial class TinkoffMessageAdapter
 	}
 
 	/// <inheritdoc/>
-	public override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
+	protected override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
 		var errors = new List<Exception>();
 		var accountIds = cancelMsg.PortfolioName.IsEmpty() ? await EnsureGetAccounts(cancellationToken) : [cancelMsg.PortfolioName];
@@ -368,7 +368,7 @@ public partial class TinkoffMessageAdapter
 	}
 
 	/// <inheritdoc/>
-	public override async ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
+	protected override async ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
 	{
 		SendSubscriptionReply(statusMsg.TransactionId);
 
@@ -586,7 +586,7 @@ public partial class TinkoffMessageAdapter
 	}
 
 	/// <inheritdoc/>
-	public override async ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
+	protected override async ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
 		var transId = lookupMsg.TransactionId;
 

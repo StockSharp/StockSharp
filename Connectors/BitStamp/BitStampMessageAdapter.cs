@@ -75,7 +75,7 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override async ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
+	protected override async ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
 	{
 		if (this.IsTransactional())
 		{
@@ -101,7 +101,7 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
+	protected override ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
 	{
 		if (_httpClient == null)
 			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
@@ -118,7 +118,7 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+	protected override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
 		_lastMyTradeId = 0;
 		_lastTimeBalanceCheck = null;
@@ -158,7 +158,7 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override async ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
+	protected override async ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
 	{
 		if (_orderInfo.Count > 0)
 		{

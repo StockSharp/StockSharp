@@ -5,7 +5,7 @@ public partial class BitexbookMessageAdapter
 	private readonly SynchronizedDictionary<string, SecurityId> _secIdMapping = new(StringComparer.InvariantCultureIgnoreCase);
 
 	/// <inheritdoc />
-	public override async ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
+	protected override async ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
 		var left = lookupMsg.Count ?? long.MaxValue;
 

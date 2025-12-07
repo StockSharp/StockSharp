@@ -13,7 +13,7 @@ partial class BtceMessageAdapter
 	private string PortfolioName => nameof(Btce) + "_" + Key.ToId();
 
 	/// <inheritdoc />
-	public override async ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
+	protected override async ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
 	{
 		switch (regMsg.OrderType)
 		{
@@ -105,7 +105,7 @@ partial class BtceMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override async ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
+	protected override async ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
 		if (cancelMsg.OrderId == null)
 			throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(cancelMsg.OriginalTransactionId));
@@ -127,7 +127,7 @@ partial class BtceMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
+	protected override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
 		var errors = new List<Exception>();
 
@@ -377,7 +377,7 @@ partial class BtceMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override async ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
+	protected override async ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
 	{
 		if (statusMsg == null)
 		{
@@ -500,7 +500,7 @@ partial class BtceMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override async ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
+	protected override async ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
 		if (lookupMsg != null)
 		{

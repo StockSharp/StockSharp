@@ -72,7 +72,7 @@ public partial class FtxMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+	protected override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
 		_lastStateUpdate = default;
 
@@ -95,7 +95,7 @@ public partial class FtxMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
+	protected override ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
 	{
 		if (this.IsTransactional())
 		{
@@ -120,7 +120,7 @@ public partial class FtxMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
+	protected override ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
 	{
 		if (_restClient == null)
 			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
@@ -134,7 +134,7 @@ public partial class FtxMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override async ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
+	protected override async ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
 	{
 		if ((DateTime.UtcNow - _lastStateUpdate).TotalMilliseconds >= 1000)
 		{

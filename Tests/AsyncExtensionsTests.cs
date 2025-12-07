@@ -101,13 +101,13 @@ public class AsyncExtensionsTests : BaseTestClass
 			this.AddSupportedMarketDataType(DataType.Level1);
 		}
 
-		public override ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
+		protected override ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
 		{
 			SendOutMessage(new ConnectMessage());
 			return default;
 		}
 
-		public override ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
+		protected override ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
 		{
 			SendOutMessage(new DisconnectMessage());
 			return default;

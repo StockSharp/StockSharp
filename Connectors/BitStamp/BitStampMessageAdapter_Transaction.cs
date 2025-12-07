@@ -5,7 +5,7 @@ partial class BitStampMessageAdapter
 	private string PortfolioName => nameof(BitStamp) + "_" + Key.ToId();
 
 	/// <inheritdoc />
-	public override async ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
+	protected override async ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
 	{
 		var condition = (BitStampOrderCondition)regMsg.Condition;
 
@@ -57,7 +57,7 @@ partial class BitStampMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override async ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
+	protected override async ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
 		if (cancelMsg.OrderId == null)
 			throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(cancelMsg.OriginalTransactionId));
@@ -69,7 +69,7 @@ partial class BitStampMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
+	protected override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
 		// Handle CancelOrders mode
 		if (cancelMsg.Mode.HasFlag(OrderGroupCancelModes.CancelOrders))
@@ -257,7 +257,7 @@ partial class BitStampMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override async ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
+	protected override async ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
 	{
 		if (statusMsg == null)
 		{
@@ -391,7 +391,7 @@ partial class BitStampMessageAdapter
 	/// <inheritdoc />
 
 	/// <inheritdoc />
-	public override async ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
+	protected override async ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
 		if (lookupMsg != null)
 		{

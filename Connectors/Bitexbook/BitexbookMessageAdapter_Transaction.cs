@@ -7,7 +7,7 @@ public partial class BitexbookMessageAdapter
 	private readonly SynchronizedDictionary<long, RefTriple<long, decimal, string>> _orderInfo = new();
 
 	/// <inheritdoc />
-	public override async ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
+	protected override async ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
 	{
 		var symbol = regMsg.SecurityId.ToNative();
 
@@ -70,7 +70,7 @@ public partial class BitexbookMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override async ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
+	protected override async ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
 		if (cancelMsg.OrderId == null)
 			throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(cancelMsg.OriginalTransactionId));
@@ -91,7 +91,7 @@ public partial class BitexbookMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
+	protected override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
 		var errors = new List<Exception>();
 
@@ -170,7 +170,7 @@ public partial class BitexbookMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
+	protected override ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
 		if (lookupMsg != null)
 		{
@@ -203,7 +203,7 @@ public partial class BitexbookMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
+	protected override ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
 	{
 		if (statusMsg == null)
 		{

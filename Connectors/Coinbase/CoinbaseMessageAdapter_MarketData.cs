@@ -5,7 +5,7 @@ public partial class CoinbaseMessageAdapter
 	private readonly SynchronizedDictionary<string, long> _candlesTransIds = new();
 
 	/// <inheritdoc />
-	public override async ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
+	protected override async ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
 		var secTypes = lookupMsg.GetSecurityTypes();
 		var left = lookupMsg.Count ?? long.MaxValue;

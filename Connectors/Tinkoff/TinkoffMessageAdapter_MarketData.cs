@@ -222,7 +222,7 @@ public partial class TinkoffMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override async ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
+	protected override async ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
 		var instrSvc = _service.Instruments;
 

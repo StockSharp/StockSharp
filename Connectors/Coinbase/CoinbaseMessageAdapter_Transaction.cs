@@ -5,7 +5,7 @@ public partial class CoinbaseMessageAdapter
 	private string PortfolioName => nameof(Coinbase) + "_" + Key.ToId();
 
 	/// <inheritdoc />
-	public override async ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
+	protected override async ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
 	{
 		var condition = (CoinbaseOrderCondition)regMsg.Condition;
 
@@ -65,7 +65,7 @@ public partial class CoinbaseMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override async ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
+	protected override async ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
 		if (cancelMsg.OrderStringId.IsEmpty())
 			throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(cancelMsg.OriginalTransactionId));
@@ -74,13 +74,13 @@ public partial class CoinbaseMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override async ValueTask ReplaceOrderAsync(OrderReplaceMessage replaceMsg, CancellationToken cancellationToken)
+	protected override async ValueTask ReplaceOrderAsync(OrderReplaceMessage replaceMsg, CancellationToken cancellationToken)
 	{
 		await _restClient.EditOrder(replaceMsg.OldOrderId.To<string>(), replaceMsg.Price, replaceMsg.Volume, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
+	protected override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
 		var errors = new List<Exception>();
 
@@ -189,7 +189,7 @@ public partial class CoinbaseMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override async ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
+	protected override async ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
 		var transId = lookupMsg.TransactionId;
 
@@ -236,7 +236,7 @@ public partial class CoinbaseMessageAdapter
 	}
 
 	/// <inheritdoc />
-	public override async ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
+	protected override async ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
 	{
 		SendSubscriptionReply(statusMsg.TransactionId);
 
