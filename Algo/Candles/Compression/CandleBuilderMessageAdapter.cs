@@ -287,9 +287,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 				}
 				else
 				{
-					var series = TryRemoveSeries(mdMsg.OriginalTransactionId);
-
-					if (series == null)
+					if (!TryRemoveSeries(mdMsg.OriginalTransactionId, out var series))
 					{
 						var sentResponse = false;
 
@@ -344,21 +342,21 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 		}
 	}
 
-	private SeriesInfo TryRemoveSeries(long id)
+	private bool TryRemoveSeries(long id, out SeriesInfo series)
 	{
 		LogDebug("Series removing {0}.", id);
 
 		using (_syncObject.EnterScope())
 		{
-			if (!_series.TryGetAndRemove(id, out var series))
-				return null;
+			if (!_series.TryGetAndRemove(id, out series))
+				return false;
 
 			_replaceId.RemoveWhere(p => p.Value == id);
-			return series;
+			return true;
 		}
 	}
 
-	private MarketDataMessage TryCreateBuildSubscription(MarketDataMessage original, DateTime? lastTime, long? count, bool needCalcCount)
+	private MarketDataMessage TryCreateBuildSubscription(MarketDataMessage original, DateTime? lastTime)
 	{
 		if (original == null)
 			throw new ArgumentNullException(nameof(original));
@@ -368,15 +366,11 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 		if (buildFrom == null)
 			return null;
 
-		if (needCalcCount && count is null)
-			count = GetMaxCount(buildFrom);
-
 		var current = new MarketDataMessage
 		{
 			DataType2 = buildFrom,
 			From = lastTime,
 			To = original.To,
-			Count = count,
 			MaxDepth = original.MaxDepth,
 			BuildField = original.BuildField,
 			IsSubscribe = true,
@@ -391,7 +385,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 	private bool TrySubscribeBuild(MarketDataMessage original)
 	{
-		var current = TryCreateBuildSubscription(original, original.From, original.Count, false);
+		var current = TryCreateBuildSubscription(original, original.From);
 
 		if (current == null)
 			return false;
@@ -566,7 +560,12 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 								case SeriesStates.SmallTimeFrame:
 									if (series.Count <= 0)
+									{
+										if (TryRemoveSeries(series.Id, out _))
+											RaiseNewOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = series.Original.TransactionId });
+
 										break;
+									}
 
 									var candles = series.BigTimeFrameCompressor.Process(candleMsg);
 
@@ -656,7 +655,8 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 		void Finish()
 		{
-			TryRemoveSeries(series.Id);
+			if (!TryRemoveSeries(series.Id, out _))
+				return;
 
 			if (response != null && !response.IsOk())
 			{
@@ -761,7 +761,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 		series.NonFinishedCandle = null;
 
-		var current = TryCreateBuildSubscription(original, series.LastTime, null, series.Count != null);
+		var current = TryCreateBuildSubscription(original, series.LastTime);
 
 		if (current == null)
 		{
@@ -790,7 +790,12 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 			return;
 
 		if (info.Count <= 0)
+		{
+			if (TryRemoveSeries(info.Id, out _))
+				RaiseNewOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = info.Original.TransactionId });
+
 			return;
+		}
 
 		info.LastTime = candleMsg.OpenTime;
 
@@ -889,8 +894,9 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 			if (origin.To != null && origin.To.Value < time)
 			{
-				TryRemoveSeries(subscriptionId);
-				RaiseNewOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = origin.TransactionId });
+				if (TryRemoveSeries(subscriptionId, out _))
+					RaiseNewOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = origin.TransactionId });
+
 				continue;
 			}
 
@@ -898,7 +904,12 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 				continue;
 
 			if (series.Count <= 0)
+			{
+				if (TryRemoveSeries(subscriptionId, out _))
+					RaiseNewOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = origin.TransactionId });
+
 				continue;
+			}
 
 			series.LastTime = time;
 
