@@ -75,7 +75,7 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override bool OnSendInMessageInternal(Message message)
 		=> _asyncMessageProcessor.EnqueueMessage(message);
 
 	/// <inheritdoc />

@@ -17,7 +17,7 @@ public class AsyncExtensionsTests : BaseTestClass
 			this.AddSupportedMarketDataType(DataType.Level1);
 		}
 
-		protected override bool OnSendInMessage(Message message)
+		protected override bool OnSendInMessageInternal(Message message)
 		{
 			SentMessages.Add(message);
 

@@ -189,7 +189,7 @@ public class HistoryMessageAdapter : MessageAdapter
 		=> dataType == DataType.Securities || base.IsAllDownloadingSupported(dataType);
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override bool OnSendInMessageInternal(Message message)
 	{
 		switch (message.Type)
 		{

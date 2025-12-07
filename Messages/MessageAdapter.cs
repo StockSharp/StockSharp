@@ -322,7 +322,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 				}
 			}
 
-			var result = OnSendInMessage(message);
+			var result = OnSendInMessageInternal(message);
 
 			if (IsAutoReplyOnTransactonalUnsubscription)
 			{
@@ -355,7 +355,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 	/// </summary>
 	/// <param name="message">Message.</param>
 	/// <returns><see langword="true"/> if the specified message was processed successfully, otherwise, <see langword="false"/>.</returns>
-	protected abstract bool OnSendInMessage(Message message);
+	protected abstract bool OnSendInMessageInternal(Message message);
 
 	/// <inheritdoc />
 	public virtual void SendOutMessage(Message message)
@@ -628,7 +628,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 public class PassThroughMessageAdapter(IdGenerator transactionIdGenerator) : MessageAdapter(transactionIdGenerator)
 {
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override bool OnSendInMessageInternal(Message message)
 	{
 		SendOutMessage(message);
 		return true;
