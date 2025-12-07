@@ -18,7 +18,7 @@ using Ecng.ComponentModel;
 [MessageAdapterCategory(MessageAdapterCategories.Crypto | MessageAdapterCategories.RealTime |
 	MessageAdapterCategories.Free | MessageAdapterCategories.Ticks | MessageAdapterCategories.MarketDepth |
 	MessageAdapterCategories.Level1 | MessageAdapterCategories.Transactions | MessageAdapterCategories.OrderLog)]
-public partial class BitexbookMessageAdapter : AsyncMessageAdapter, IKeySecretAdapter
+public partial class BitexbookMessageAdapter : MessageAdapter, IKeySecretAdapter
 {
 	/// <summary>
 	/// Possible time-frames.

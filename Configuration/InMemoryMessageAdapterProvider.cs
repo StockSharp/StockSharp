@@ -57,11 +57,11 @@ public class InMemoryMessageAdapterProvider : IMessageAdapterProvider
 	public virtual IEnumerable<IMessageAdapter> CreateStockSharpAdapters(IdGenerator transactionIdGenerator, string login, SecureString password) => [];
 
 	/// <inheritdoc />
-	public virtual IAsyncMessageAdapter CreateTransportAdapter(IdGenerator transactionIdGenerator)
+	public virtual IMessageAdapter CreateTransportAdapter(IdGenerator transactionIdGenerator)
 	{
 		if (_transportAdapter is null)
 			throw new NotSupportedException();
 
-		return _transportAdapter.CreateInstance<IAsyncMessageAdapter>(transactionIdGenerator);
+		return _transportAdapter.CreateInstance<IMessageAdapter>(transactionIdGenerator);
 	}
 }

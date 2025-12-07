@@ -7,6 +7,9 @@ using System.Runtime.CompilerServices;
 /// </summary>
 public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotifyPropertyChanged
 {
+	private readonly Lock _processorLock = new();
+	private AsyncMessageProcessor _asyncMessageProcessor;
+
 	/// <summary>
 	/// Initialize <see cref="MessageAdapter"/>.
 	/// </summary>
@@ -22,6 +25,13 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 		var attr = GetType().GetAttribute<MessageAdapterCategoryAttribute>();
 		if (attr != null)
 			Categories = attr.Categories;
+	}
+
+	/// <inheritdoc />
+	protected override void DisposeManaged()
+	{
+		_asyncMessageProcessor?.Dispose();
+		base.DisposeManaged();
 	}
 
 	private IEnumerable<MessageTypes> CheckDuplicate(IEnumerable<MessageTypes> value, string propName)
@@ -267,6 +277,52 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 	[Browsable(false)]
 	public virtual string[] AssociatedBoards => [];
 
+	/// <inheritdoc />
+	[Browsable(false)]
+	public virtual TimeSpan DisconnectTimeout { get; } = TimeSpan.FromSeconds(5);
+
+	private int _maxParallelMessages = 5;
+
+	/// <inheritdoc />
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.ParallelKey,
+		Description = LocalizedStrings.ParallelDescKey,
+		GroupName = LocalizedStrings.AdaptersKey,
+		Order = 310)]
+	public int MaxParallelMessages
+	{
+		get => _maxParallelMessages;
+		set
+		{
+			if (value < 1)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			_maxParallelMessages = value;
+		}
+	}
+
+	private TimeSpan _faultDelay = TimeSpan.FromSeconds(2);
+
+	/// <inheritdoc />
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.FaultDelayKey,
+		Description = LocalizedStrings.FaultDelayDescKey,
+		GroupName = LocalizedStrings.AdaptersKey,
+		Order = 310)]
+	public TimeSpan FaultDelay
+	{
+		get => _faultDelay;
+		set
+		{
+			if (value < TimeSpan.Zero)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			_faultDelay = value;
+		}
+	}
+
 	/// <summary>
 	/// Validate the specified security id is supported by the adapter and subscription can be done.
 	/// </summary>
@@ -351,7 +407,210 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 	/// </summary>
 	/// <param name="message">Message.</param>
 	/// <returns><see langword="true"/> if the specified message was processed successfully, otherwise, <see langword="false"/>.</returns>
-	protected abstract bool OnSendInMessageInternal(Message message);
+	protected virtual bool OnSendInMessageInternal(Message message)
+	{
+		if (_asyncMessageProcessor is null)
+		{
+			using var _ = _processorLock.EnterScope();
+
+			_asyncMessageProcessor ??= new(this);
+		}
+
+		return _asyncMessageProcessor.EnqueueMessage(message);
+	}
+
+	/// <inheritdoc />
+	public virtual ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
+	{
+		return message.Type switch
+		{
+			MessageTypes.Connect => ConnectAsync((ConnectMessage)message, cancellationToken),
+			MessageTypes.Disconnect => DisconnectAsync((DisconnectMessage)message, cancellationToken),
+			MessageTypes.Reset => ResetAsync((ResetMessage)message, cancellationToken),
+			MessageTypes.ChangePassword => ChangePasswordAsync((ChangePasswordMessage)message, cancellationToken),
+			MessageTypes.SecurityLookup => SecurityLookupAsync((SecurityLookupMessage)message, cancellationToken),
+			MessageTypes.PortfolioLookup => PortfolioLookupAsync((PortfolioLookupMessage)message, cancellationToken),
+			MessageTypes.BoardLookup => BoardLookupAsync((BoardLookupMessage)message, cancellationToken),
+			MessageTypes.OrderStatus => OrderStatusAsync((OrderStatusMessage)message, cancellationToken),
+			MessageTypes.OrderRegister => RegisterOrderAsync((OrderRegisterMessage)message, cancellationToken),
+			MessageTypes.OrderReplace => ReplaceOrderAsync((OrderReplaceMessage)message, cancellationToken),
+			MessageTypes.OrderCancel => CancelOrderAsync((OrderCancelMessage)message, cancellationToken),
+			MessageTypes.OrderGroupCancel => CancelOrderGroupAsync((OrderGroupCancelMessage)message, cancellationToken),
+			MessageTypes.Time => TimeAsync((TimeMessage)message, cancellationToken),
+			MessageTypes.MarketData => MarketDataAsync((MarketDataMessage)message, cancellationToken),
+			_ => throw SubscriptionResponseMessage.NotSupported,
+		};
+	}
+
+	/// <inheritdoc />
+	protected virtual ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
+	{
+		SendOutMessage(new ConnectMessage());
+		return default;
+	}
+
+	/// <inheritdoc />
+	protected virtual ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
+	{
+		SendOutMessage(new DisconnectMessage());
+		return default;
+	}
+
+	/// <inheritdoc />
+	protected virtual ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+	{
+		SendOutMessage(new ResetMessage());
+		return default;
+	}
+
+	/// <inheritdoc />
+	protected virtual ValueTask ChangePasswordAsync(ChangePasswordMessage pwdMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <inheritdoc />
+	protected virtual ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <inheritdoc />
+	protected virtual ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <inheritdoc />
+	protected virtual ValueTask BoardLookupAsync(BoardLookupMessage lookupMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <inheritdoc />
+	protected virtual ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <inheritdoc />
+	protected virtual ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <inheritdoc />
+	protected virtual ValueTask ReplaceOrderAsync(OrderReplaceMessage replaceMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <inheritdoc />
+	protected virtual ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <inheritdoc />
+	protected virtual ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <inheritdoc />
+	protected virtual ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <inheritdoc />
+	protected virtual async ValueTask MarketDataAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	{
+		if (mdMsg.IsSubscribe)
+		{
+			var now = DateTime.UtcNow;
+
+			var from = mdMsg.From;
+			var to = mdMsg.To;
+
+			if ((from > now && mdMsg.IsHistoryOnly()) || from > to)
+			{
+				SendSubscriptionResult(mdMsg);
+				return;
+			}
+		}
+
+		var dataType = mdMsg.DataType2;
+
+		var task =
+				dataType == DataType.News 		? OnNewsSubscriptionAsync(mdMsg, cancellationToken)
+			: dataType == DataType.Level1 		? OnLevel1SubscriptionAsync(mdMsg, cancellationToken)
+			: dataType == DataType.Ticks 		? OnTicksSubscriptionAsync(mdMsg, cancellationToken)
+			: dataType == DataType.MarketDepth 	? OnMarketDepthSubscriptionAsync(mdMsg, cancellationToken)
+			: dataType == DataType.OrderLog 	? OnOrderLogSubscriptionAsync(mdMsg, cancellationToken)
+			: dataType.IsTFCandles 				? OnTFCandlesSubscriptionAsync(mdMsg, cancellationToken)
+			: dataType.IsCandles 				? OnCandlesSubscriptionAsync(mdMsg, cancellationToken)
+			: throw SubscriptionResponseMessage.NotSupported;
+
+		await task;
+	}
+
+	/// <summary>
+	/// Handles subscription request for news data.
+	/// Override to provide implementation for news subscription processing.
+	/// The default implementation throws <see cref="SubscriptionResponseMessage.NotSupported"/>.
+	/// </summary>
+	/// <param name="mdMsg">Market data subscription message.</param>
+	/// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+	/// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
+	protected virtual ValueTask OnNewsSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <summary>
+	/// Handles subscription request for level1 data.
+	/// Override to provide implementation for level1 subscription processing.
+	/// The default implementation throws <see cref="SubscriptionResponseMessage.NotSupported"/>.
+	/// </summary>
+	/// <param name="mdMsg">Market data subscription message.</param>
+	/// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+	/// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
+	protected virtual ValueTask OnLevel1SubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <summary>
+	/// Handles subscription request for ticks data.
+	/// Override to provide implementation for ticks subscription processing.
+	/// The default implementation throws <see cref="SubscriptionResponseMessage.NotSupported"/>.
+	/// </summary>
+	/// <param name="mdMsg">Market data subscription message.</param>
+	/// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+	/// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
+	protected virtual ValueTask OnTicksSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <summary>
+	/// Handles subscription request for market depth data.
+	/// Override to provide implementation for market depth subscription processing.
+	/// The default implementation throws <see cref="SubscriptionResponseMessage.NotSupported"/>.
+	/// </summary>
+	/// <param name="mdMsg">Market data subscription message.</param>
+	/// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+	/// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
+	protected virtual ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <summary>
+	/// Handles subscription request for order log (trades/transactions) data.
+	/// Override to provide implementation for order log subscription processing.
+	/// The default implementation throws <see cref="SubscriptionResponseMessage.NotSupported"/>.
+	/// </summary>
+	/// <param name="mdMsg">Market data subscription message.</param>
+	/// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+	/// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
+	protected virtual ValueTask OnOrderLogSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <summary>
+	/// Handles subscription request for time-frame candles (TF candles) data.
+	/// Override to provide implementation for TF candles subscription processing.
+	/// The default implementation throws <see cref="SubscriptionResponseMessage.NotSupported"/>.
+	/// </summary>
+	/// <param name="mdMsg">Market data subscription message.</param>
+	/// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+	/// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
+	protected virtual ValueTask OnTFCandlesSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <summary>
+	/// Handles subscription request for candles data.
+	/// Override to provide implementation for candles subscription processing.
+	/// The default implementation throws <see cref="SubscriptionResponseMessage.NotSupported"/>.
+	/// </summary>
+	/// <param name="mdMsg">Market data subscription message.</param>
+	/// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+	/// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
+	protected virtual ValueTask OnCandlesSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
 
 	/// <inheritdoc />
 	public virtual void SendOutMessage(Message message)
@@ -557,18 +816,25 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 		EnqueueSubscriptions = storage.GetValue(nameof(EnqueueSubscriptions), EnqueueSubscriptions);
 		IterationInterval = storage.GetValue(nameof(IterationInterval), IterationInterval);
 
+		MaxParallelMessages = storage.GetValue(nameof(MaxParallelMessages), MaxParallelMessages);
+		FaultDelay = storage.GetValue(nameof(FaultDelay), FaultDelay);
+
 		base.Load(storage);
 	}
 
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
 	{
-		storage.SetValue(nameof(Id), Id);
-		storage.SetValue(nameof(HeartbeatInterval), HeartbeatInterval);
-		storage.SetValue(nameof(SupportedInMessages), Do.Invariant(() => SupportedInMessages.Select(t => t.To<string>()).ToArray()));
-		storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
-		storage.SetValue(nameof(EnqueueSubscriptions), EnqueueSubscriptions);
-		storage.SetValue(nameof(IterationInterval), IterationInterval);
+		storage
+			.Set(nameof(Id), Id)
+			.Set(nameof(HeartbeatInterval), HeartbeatInterval)
+			.Set(nameof(SupportedInMessages), Do.Invariant(() => SupportedInMessages.Select(t => t.To<string>()).ToArray()))
+			.Set(nameof(ReConnectionSettings), ReConnectionSettings.Save())
+			.Set(nameof(EnqueueSubscriptions), EnqueueSubscriptions)
+			.Set(nameof(IterationInterval), IterationInterval)
+			.Set(nameof(MaxParallelMessages), MaxParallelMessages)
+			.Set(nameof(FaultDelay), FaultDelay)
+		;
 
 		base.Save(storage);
 	}

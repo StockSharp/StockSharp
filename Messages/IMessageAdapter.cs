@@ -183,6 +183,22 @@ public interface IMessageAdapter : IPersistable, ILogReceiver, ICloneable<IMessa
 	bool ExtraSetup { get; }
 
 	/// <summary>
+	/// Gets the timeout to wait for a graceful disconnect.
+	/// </summary>
+	TimeSpan DisconnectTimeout { get; }
+
+	/// <summary>
+	/// Gets or sets the maximum number of parallel (non-control) messages that can be processed.
+	/// Must be greater than or equal to1.
+	/// </summary>
+	int MaxParallelMessages { get; set; }
+
+	/// <summary>
+	/// Gets or sets the delay applied between faulted iterations.
+	/// </summary>
+	TimeSpan FaultDelay { get; set; }
+
+	/// <summary>
 	/// Create market depth builder.
 	/// </summary>
 	/// <param name="securityId">Security ID.</param>
@@ -234,6 +250,13 @@ public interface IMessageAdapter : IPersistable, ILogReceiver, ICloneable<IMessa
 	/// <param name="message">Message.</param>
 	/// <returns><see langword="true"/> if the specified message was processed successfully, otherwise, <see langword="false"/>.</returns>
 	bool SendInMessage(Message message);
+
+	/// <summary>
+	/// Processes a generic message asynchronously.
+	/// </summary>
+	/// <param name="message">The message to process.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// New message event.

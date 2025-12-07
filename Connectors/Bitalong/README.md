@@ -1,6 +1,6 @@
 # Bitalong Connector
 
-This directory contains the source code for the **Bitalong** connector used by the [StockSharp](https://github.com/StockSharp/StockSharp) trading platform. The connector implements an `AsyncMessageAdapter` which provides access to market data and trading operations on the Bitalong cryptocurrency exchange.
+This directory contains the source code for the **Bitalong** connector used by the [StockSharp](https://github.com/StockSharp/StockSharp) trading platform. The connector implements an `MessageAdapter` which provides access to market data and trading operations on the Bitalong cryptocurrency exchange.
 
 ## Features
 

@@ -3788,6 +3788,11 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	/// </summary>
 	public bool VerifyMode { get; set; }
 
+	TimeSpan IMessageAdapter.DisconnectTimeout => default;
+
+	int IMessageAdapter.MaxParallelMessages { get => default; set => throw new NotSupportedException(); }
+	TimeSpan IMessageAdapter.FaultDelay { get => default; set => throw new NotSupportedException(); }
+
 	IMessageAdapter ICloneable<IMessageAdapter>.Clone()
 		=> new MarketEmulator(SecurityProvider, PortfolioProvider, ExchangeInfoProvider, TransactionIdGenerator) { VerifyMode = VerifyMode };
 
@@ -3795,4 +3800,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 	void IMessageAdapter.SendOutMessage(Message message)
 		=> RaiseNewOutMessage(message);
+
+	ValueTask IMessageAdapter.SendInMessageAsync(Message message, CancellationToken cancellationToken)
+		=> throw new NotSupportedException();
 }

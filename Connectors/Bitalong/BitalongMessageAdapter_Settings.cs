@@ -18,7 +18,7 @@ using Ecng.ComponentModel;
 [MessageAdapterCategory(MessageAdapterCategories.Crypto | MessageAdapterCategories.RealTime |
 	MessageAdapterCategories.Free | MessageAdapterCategories.Ticks | MessageAdapterCategories.MarketDepth |
 	MessageAdapterCategories.Level1 | MessageAdapterCategories.Transactions)]
-public partial class BitalongMessageAdapter : AsyncMessageAdapter, IKeySecretAdapter, IAddressAdapter<string>
+public partial class BitalongMessageAdapter : MessageAdapter, IKeySecretAdapter, IAddressAdapter<string>
 {
 	/// <inheritdoc />
 	[Display(

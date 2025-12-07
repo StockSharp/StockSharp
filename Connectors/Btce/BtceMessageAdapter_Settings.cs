@@ -18,7 +18,7 @@ using Ecng.ComponentModel;
 [MessageAdapterCategory(MessageAdapterCategories.Crypto | MessageAdapterCategories.RealTime |
 	MessageAdapterCategories.Free | MessageAdapterCategories.Ticks | MessageAdapterCategories.MarketDepth |
 	MessageAdapterCategories.Level1 | MessageAdapterCategories.Transactions)]
-public partial class BtceMessageAdapter : AsyncMessageAdapter, IKeySecretAdapter, IAddressAdapter<string>
+public partial class BtceMessageAdapter : MessageAdapter, IKeySecretAdapter, IAddressAdapter<string>
 {
 	/// <summary>
 	/// Default value for <see cref="MessageAdapter.HeartbeatInterval"/>.

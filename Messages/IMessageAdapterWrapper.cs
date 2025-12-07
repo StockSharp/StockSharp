@@ -316,6 +316,14 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 
 	string[] IMessageAdapter.AssociatedBoards => InnerAdapter.AssociatedBoards;
 
+	TimeSpan IMessageAdapter.DisconnectTimeout => InnerAdapter.DisconnectTimeout;
+
+	int IMessageAdapter.MaxParallelMessages { get => InnerAdapter.MaxParallelMessages; set => InnerAdapter.MaxParallelMessages = value; }
+	TimeSpan IMessageAdapter.FaultDelay { get => InnerAdapter.FaultDelay; set => InnerAdapter.FaultDelay = value; }
+
+	ValueTask IMessageAdapter.SendInMessageAsync(Message message, CancellationToken cancellationToken)
+		=> InnerAdapter.SendInMessageAsync(message, cancellationToken);
+
 	IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 		=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
 

@@ -87,7 +87,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		}
 	}
 
-	private class MockAsyncAdapter : HistoricalAsyncMessageAdapter
+	private class MockAsyncAdapter : HistoricalMessageAdapter
 	{
 		public List<Message> SentMessages { get; } = [];
 		public Dictionary<long, MarketDataMessage> ActiveSubscriptions { get; } = [];

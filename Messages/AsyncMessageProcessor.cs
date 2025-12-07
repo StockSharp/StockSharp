@@ -54,13 +54,13 @@ class AsyncMessageProcessor : Disposable
 
 	private bool _isConnectionStarted, _isDisconnecting;
 
-	private readonly IAsyncMessageAdapter _adapter;
+	private readonly IMessageAdapter _adapter;
 
 	/// <summary>
 	/// Initialize <see cref="AsyncMessageProcessor"/>.
 	/// </summary>
-	/// <param name="adapter"><see cref="IAsyncMessageAdapter"/>.</param>
-	public AsyncMessageProcessor(IAsyncMessageAdapter adapter)
+	/// <param name="adapter"><see cref="IMessageAdapter"/>.</param>
+	public AsyncMessageProcessor(IMessageAdapter adapter)
 	{
 		_adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
 		_processorTask = Task.Run(ProcessMessagesAsync);

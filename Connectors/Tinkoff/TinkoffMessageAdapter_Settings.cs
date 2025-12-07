@@ -21,7 +21,7 @@ using Ecng.Serialization;
 	MessageAdapterCategories.Futures | MessageAdapterCategories.Options |
 	MessageAdapterCategories.Stock | MessageAdapterCategories.Free | MessageAdapterCategories.Ticks)]
 [OrderCondition(typeof(TinkoffOrderCondition))]
-public partial class TinkoffMessageAdapter : AsyncMessageAdapter, ITokenAdapter, IDemoAdapter
+public partial class TinkoffMessageAdapter : MessageAdapter, ITokenAdapter, IDemoAdapter
 {
 	/// <inheritdoc />
 	[Display(

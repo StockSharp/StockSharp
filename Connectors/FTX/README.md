@@ -15,7 +15,7 @@ This folder contains the source code of the **FTX** connector for the [StockShar
   - Order status subscriptions with automatic retrieval of active and historical orders.
   - Portfolio and position information for the main account or a specified sub‑account.
 - **Connectivity**
-  - Asynchronous message adapter built on top of `AsyncMessageAdapter`.
+  - Asynchronous message adapter built on top of `MessageAdapter`.
   - Combined REST client for historical data and WebSocket client for real‑time updates.
   - Connection heartbeat interval of one second by default.
 

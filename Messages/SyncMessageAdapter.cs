@@ -8,7 +8,7 @@
 /// </remarks>
 /// <param name="transactionIdGenerator">Transaction id generator.</param>
 [Obsolete("Sync mode is obsolete.")]
-public abstract class SyncMessageAdapter(IdGenerator transactionIdGenerator) : AsyncMessageAdapter(transactionIdGenerator)
+public abstract class SyncMessageAdapter(IdGenerator transactionIdGenerator) : MessageAdapter(transactionIdGenerator)
 {
 	/// <summary>
 	/// Support partial downloading.

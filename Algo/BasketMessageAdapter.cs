@@ -552,7 +552,14 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 	private IMessageAdapter[] Wrappers => _adapterWrappers.CachedValues;
 
+	TimeSpan IMessageAdapter.DisconnectTimeout => default;
+	int IMessageAdapter.MaxParallelMessages { get => default; set => throw new NotSupportedException(); }
+	TimeSpan IMessageAdapter.FaultDelay { get => default; set => throw new NotSupportedException(); }
+
 	private void TryAddOrderAdapter(long transId, IMessageAdapter adapter) => _orderAdapters.TryAdd2(transId, GetUnderlyingAdapter(adapter));
+
+	ValueTask IMessageAdapter.SendInMessageAsync(Message message, CancellationToken cancellationToken)
+		=> throw new NotSupportedException();
 
 	private void ProcessReset(ResetMessage message, bool isConnect)
 	{
@@ -1158,9 +1165,9 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			if (mdMsg.AllowBuildFromSmallerTimeFrame)
 			{
 				var smaller = timeFrames
-				              .FilterSmallerTimeFrames(original)
-				              .OrderByDescending()
-				              .FirstOr();
+							  .FilterSmallerTimeFrames(original)
+							  .OrderByDescending()
+							  .FirstOr();
 
 				if (smaller != null)
 					return true;

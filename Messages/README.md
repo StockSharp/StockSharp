@@ -6,7 +6,7 @@ The **Messages** project contains the essential message definitions shared acros
 
 - **Message Types Enumeration** – [`MessageTypes`](MessageTypes.cs) lists every supported message kind.
 - **Base Classes** – classes like [`Message`](Message.cs), [`BaseConnectionMessage`](BaseConnectionMessage.cs) and [`BaseSubscriptionMessage`](BaseSubscriptionMessage.cs) provide common fields and behaviour.
-- **Asynchronous Processing** – [`AsyncMessageAdapter`](AsyncMessageAdapter.cs) and [`AsyncMessageProcessor`](AsyncMessageProcessor.cs) handle messages asynchronously.
+- **Asynchronous Processing** – [`MessageAdapter`](MessageAdapter.cs) and [`AsyncMessageProcessor`](AsyncMessageProcessor.cs) handle messages asynchronously.
 - **Utility Helpers** – classes such as [`ReConnectionSettings`](ReConnectionSettings.cs) control reconnection and subscription options.
 
 ### Core Messages

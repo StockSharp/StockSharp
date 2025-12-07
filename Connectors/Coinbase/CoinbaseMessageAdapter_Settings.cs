@@ -17,7 +17,7 @@ using Ecng.ComponentModel;
 	GroupName = LocalizedStrings.CryptocurrencyKey)]
 [MessageAdapterCategory(MessageAdapterCategories.Crypto | MessageAdapterCategories.RealTime | MessageAdapterCategories.OrderLog |
 	MessageAdapterCategories.Free | MessageAdapterCategories.Level1 | MessageAdapterCategories.Transactions)]
-public partial class CoinbaseMessageAdapter : AsyncMessageAdapter, IKeySecretAdapter, IPassphraseAdapter
+public partial class CoinbaseMessageAdapter : MessageAdapter, IKeySecretAdapter, IPassphraseAdapter
 {
 	/// <inheritdoc />
 	[Display(

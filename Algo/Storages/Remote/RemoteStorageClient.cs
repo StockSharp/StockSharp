@@ -5,7 +5,7 @@ namespace StockSharp.Algo.Storages.Remote;
 /// </summary>
 public class RemoteStorageClient : Disposable
 {
-	private readonly IAsyncMessageAdapter _adapter;
+	private readonly IMessageAdapter _adapter;
 	private readonly RemoteStorageCache _cache;
 	private readonly int _securityBatchSize;
 	private readonly TimeSpan _timeout;
@@ -19,7 +19,7 @@ public class RemoteStorageClient : Disposable
 	/// <param name="cache">Cache.</param>
 	/// <param name="securityBatchSize">The new instruments request block size.</param>
 	/// <param name="timeout">Timeout.</param>
-	public RemoteStorageClient(IAsyncMessageAdapter adapter, RemoteStorageCache cache, int securityBatchSize, TimeSpan timeout)
+	public RemoteStorageClient(IMessageAdapter adapter, RemoteStorageCache cache, int securityBatchSize, TimeSpan timeout)
 	{
 		if (securityBatchSize <= 0)
 			throw new ArgumentOutOfRangeException(nameof(securityBatchSize), securityBatchSize, LocalizedStrings.InvalidValue);

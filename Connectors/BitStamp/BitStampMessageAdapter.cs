@@ -1,7 +1,7 @@
 namespace StockSharp.BitStamp;
 
 [OrderCondition(typeof(BitStampOrderCondition))]
-public partial class BitStampMessageAdapter : AsyncMessageAdapter
+public partial class BitStampMessageAdapter : MessageAdapter
 {
 	private long _lastMyTradeId;
 	private readonly Dictionary<long, RefPair<long, decimal>> _orderInfo = new();
