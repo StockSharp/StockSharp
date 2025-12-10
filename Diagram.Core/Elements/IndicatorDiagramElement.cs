@@ -369,7 +369,7 @@ public class IndicatorDiagramElement : DiagramElement
 		_value = null;
 		_additionalValue = null;
 
-		OnProcessValue(time, Tuple.Create(item1, item2), source);
+		OnProcessValue(time, (item1, item2), source);
 	}
 
 	private void OnProcessValue(DateTime time, object inputValue, DiagramSocketValue source)

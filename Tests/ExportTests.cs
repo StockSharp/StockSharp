@@ -67,10 +67,12 @@ public class ExportTests : BaseTestClass
 
 		var candles = CandleTests.GenerateCandles(security.RandomTicks(1000, true), security, CandleTests.PriceRange.Pips(security), CandleTests.TotalTicks, CandleTests.TimeFrame, CandleTests.VolumeRange, CandleTests.BoxSize, CandleTests.PnF(security), true);
 
-		foreach (var group in candles.GroupBy(c => Tuple.Create(c.GetType(), c.Arg)))
+		foreach (var group in candles.GroupBy(c => (type: c.GetType(), arg: c.Arg)))
 		{
-			var name = $"candles_{group.Key.Item1.Name}_{group.Key.Item2}_export".Replace(":", "_");
-			await Export(DataType.Create(group.Key.Item1, group.Key.Item2), group.ToArray(), name, _txtReg.TemplateTxtCandle);
+			var type = group.Key.type;
+			var arg = group.Key.arg;
+			var name = $"candles_{type.Name}_{arg}_export".Replace(":", "_");
+			await Export(DataType.Create(type, arg), group.ToArray(), name, _txtReg.TemplateTxtCandle);
 		}
 	}
 

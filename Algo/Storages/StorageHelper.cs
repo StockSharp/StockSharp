@@ -800,10 +800,10 @@ public static class StorageHelper
 
 					var range = GetRange(storage, subscription);
 
-					if (range != null)
+					if (range != default)
 					{
 						retVal = LoadMessages(storage
-							.Load(range.Item1, range.Item2)
+							.Load(range.from, range.to)
 							.ToLevel1(subscription.DepthBuilder, subscription.RefreshSpeed ?? default), subscription.Count, subscription.TransactionId, SendReply, SendOut);
 					}
 				}
@@ -813,10 +813,10 @@ public static class StorageHelper
 
 					var range = GetRange(storage, subscription);
 
-					if (range != null)
+					if (range != default)
 					{
 						retVal = LoadMessages(storage
-							.Load(range.Item1, range.Item2)
+							.Load(range.from, range.to)
 							.ToLevel1(), subscription.Count, subscription.TransactionId, SendReply, SendOut);
 					}
 				}
@@ -837,10 +837,10 @@ public static class StorageHelper
 
 					var range = GetRange(storage, subscription);
 
-					if (range != null)
+					if (range != default)
 					{
 						retVal = LoadMessages(storage
-							.Load(range.Item1, range.Item2)
+							.Load(range.from, range.to)
 							.ToOrderBooks(subscription.DepthBuilder, subscription.RefreshSpeed ?? default, subscription.MaxDepth ?? int.MaxValue)
 							.BuildIfNeed(), subscription.Count, subscription.TransactionId, SendReply, SendOut);
 					}
@@ -851,10 +851,10 @@ public static class StorageHelper
 
 					var range = GetRange(storage, subscription);
 
-					if (range != null)
+					if (range != default)
 					{
 						retVal = LoadMessages(storage
-							.Load(range.Item1, range.Item2)
+							.Load(range.from, range.to)
 							.ToOrderBooks(), subscription.Count, subscription.TransactionId, SendReply, SendOut);
 					}
 				}
@@ -872,10 +872,10 @@ public static class StorageHelper
 
 					var range = GetRange(storage, subscription);
 
-					if (range != null)
+					if (range != default)
 					{
 						retVal = LoadMessages(storage
-							.Load(range.Item1, range.Item2)
+							.Load(range.from, range.to)
 							.ToTicks(), subscription.Count, subscription.TransactionId, SendReply, SendOut);
 					}
 				}
@@ -885,10 +885,10 @@ public static class StorageHelper
 
 					var range = GetRange(storage, subscription);
 
-					if (range != null)
+					if (range != default)
 					{
 						retVal = LoadMessages(storage
-							.Load(range.Item1, range.Item2)
+							.Load(range.from, range.to)
 							.ToTicks(), subscription.Count, subscription.TransactionId, SendReply, SendOut);
 					}
 				}
@@ -930,22 +930,22 @@ public static class StorageHelper
 
 				var range = GetRange(storage, subscription);
 
-				if (range != null && buildFrom == null)
+				if (range != default && buildFrom == null)
 					buildFrom = DataType.Ticks;
-				else if (range == null && buildFrom == null)
+				else if (range == default && buildFrom == null)
 				{
 					storage = GetStorage<Level1ChangeMessage>(secId, DataType.Level1);
 					range = GetRange(storage, subscription);
 
-					if (range != null)
+					if (range != default)
 						buildFrom = DataType.Level1;
 				}
 
-				if (range is null)
+				if (range == default)
 					return null;
 
-				var from = range.Item1;
-				var to = range.Item2;
+				var from = range.from;
+				var to = range.to;
 
 				var count = subscription.Count;
 				var transId = subscription.TransactionId;
@@ -1065,7 +1065,7 @@ public static class StorageHelper
 		return retVal;
 	}
 
-	private static Tuple<DateTime, DateTime> GetRange(IMarketDataStorage storage, ISubscriptionMessage subscription)
+	private static (DateTime from, DateTime to) GetRange(IMarketDataStorage storage, ISubscriptionMessage subscription)
 	{
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
@@ -1074,13 +1074,13 @@ public static class StorageHelper
 			throw new ArgumentNullException(nameof(subscription));
 
 		if (subscription.From is not DateTime from)
-			return null;
+			return default;
 
 		var dates = storage.GetDates();
 		var last = dates.LastOr();
 
 		if (last == null)
-			return null;
+			return default;
 
 		var to = subscription.To ?? last.Value.EndOfDay();
 
@@ -1090,9 +1090,9 @@ public static class StorageHelper
 			from = first;
 
 		if (from >= to)
-			return null;
+			return default;
 
-		return Tuple.Create(from, to);
+		return (from, to);
 	}
 
 	private static (DateTime lastTime, long? left)? LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, ISubscriptionMessage subscription, Action sendReply, Action<Message> newOutMessage, Func<TMessage, bool> filter = null)
@@ -1100,7 +1100,7 @@ public static class StorageHelper
 	{
 		var range = GetRange(storage, subscription);
 
-		if (range == null)
+		if (range == default)
 			return null;
 
 		var messages = storage.Load(range.Item1, range.Item2);

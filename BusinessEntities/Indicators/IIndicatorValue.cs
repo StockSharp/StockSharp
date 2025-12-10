@@ -509,7 +509,7 @@ public class TickIndicatorValue : SingleIndicatorValue<ITickTradeMessage>
 }
 
 /// <summary>
-/// The value of the indicator, operating with pair <see ref="Tuple{TValue, TValue}" />.
+/// The value of the indicator, operating with pair <see cref="ValueTuple{TValue, TValue}" />.
 /// </summary>
 /// <typeparam name="TValue">Value type.</typeparam>
 public class PairIndicatorValue<TValue> : SingleIndicatorValue<(TValue, TValue)>

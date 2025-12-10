@@ -90,7 +90,7 @@ public static class IChartExtensions
 					null => throw new ArgumentNullException(nameof(value)),
 					double d => item.Add(lineElem, d),
 					decimal d => item.Add(lineElem, (double)d),
-					Tuple<double, double> t => item.Add(lineElem, t.Item1, t.Item2),
+					ValueTuple<double, double> t => item.Add(lineElem, t.Item1, t.Item2),
 					_ => throw new ArgumentException(LocalizedStrings.UnsupportedType.Put(value.GetType().Name)),
 				};
 			case IChartBandElement belem:
@@ -99,7 +99,7 @@ public static class IChartExtensions
 					null => throw new ArgumentNullException(nameof(value)),
 					double d => item.Add(belem, d, 0),
 					decimal d => item.Add(belem, d),
-					Tuple<double, double> t => item.Add(belem, t.Item1, t.Item2),
+					ValueTuple<double, double> t => item.Add(belem, t.Item1, t.Item2),
 					_ => throw new ArgumentException(LocalizedStrings.UnsupportedType.Put(value.GetType().Name)),
 				};
 			default:
