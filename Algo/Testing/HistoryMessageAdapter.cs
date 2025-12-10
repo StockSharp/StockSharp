@@ -7,7 +7,7 @@ public class HistoryMessageAdapter : MessageAdapter
 {
 	private readonly Dictionary<(SecurityId secId, DataType dataType), (MarketDataGenerator generator, long transId)> _generators = [];
 
-	private readonly List<Tuple<IMarketDataStorage, long>> _actions = [];
+	private readonly List<(IMarketDataStorage storage, long subscriptionId)> _actions = [];
 	private readonly AutoResetEvent _syncRoot = new(false);
 
 	private readonly BasketMarketDataStorage<Message> _basketStorage = new();
@@ -322,7 +322,7 @@ public class HistoryMessageAdapter : MessageAdapter
 			LogInfo("Add storage: {0}/{1} {2}-{3}", storage.SecurityId, storage.DataType, storageDates.FirstOr(), storageDates.LastOr());
 
 			_isChanged = true;
-			_actions.Add(Tuple.Create(storage, transactionId));
+			_actions.Add((storage, transactionId));
 
 			_syncRoot.Set();
 		}
@@ -333,7 +333,7 @@ public class HistoryMessageAdapter : MessageAdapter
 				throw new ArgumentNullException(nameof(originalTransactionId));
 
 			_isChanged = true;
-			_actions.Add(Tuple.Create((IMarketDataStorage)null, originalTransactionId));
+			_actions.Add(((IMarketDataStorage)null, originalTransactionId));
 
 			_syncRoot.Set();
 		}
@@ -467,11 +467,8 @@ public class HistoryMessageAdapter : MessageAdapter
 
 					_isChanged = false;
 
-					foreach (var action in _actions.CopyAndClear())
+					foreach (var (storage, subscriptionId) in _actions.CopyAndClear())
 					{
-						var storage = action.Item1;
-						var subscriptionId = action.Item2;
-
 						if (storage != null)
 							_basketStorage.InnerStorages.Add(storage, subscriptionId);
 						else

@@ -10,7 +10,7 @@ namespace StockSharp.Algo.Risk;
 	GroupName = LocalizedStrings.PositionsKey)]
 public class RiskPositionTimeRule : RiskRule
 {
-	private readonly Dictionary<Tuple<SecurityId, string>, DateTime> _posOpenTime = [];
+	private readonly Dictionary<(SecurityId secId, string pfName), DateTime> _posOpenTime = [];
 	private TimeSpan _time;
 
 	/// <summary>
@@ -61,7 +61,7 @@ public class RiskPositionTimeRule : RiskRule
 				if (currValue == null)
 					return false;
 
-				var key = Tuple.Create(posMsg.SecurityId, posMsg.PortfolioName);
+				var key = (posMsg.SecurityId, posMsg.PortfolioName);
 
 				if (currValue == 0)
 				{
@@ -86,7 +86,7 @@ public class RiskPositionTimeRule : RiskRule
 
 			case MessageTypes.Time:
 			{
-				List<Tuple<SecurityId, string>> removingPos = null;
+				List<(SecurityId, string)> removingPos = null;
 
 				foreach (var pair in _posOpenTime)
 				{

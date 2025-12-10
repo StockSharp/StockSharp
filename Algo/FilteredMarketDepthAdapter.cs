@@ -212,7 +212,7 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 	private readonly Dictionary<long, FilteredMarketDepthInfo> _byBookId = [];
 	private readonly Dictionary<long, FilteredMarketDepthInfo> _byOrderStatusId = [];
 	private readonly Dictionary<SecurityId, OnlineInfo> _online = [];
-	private readonly Dictionary<long, Tuple<FilteredMarketDepthInfo, bool>> _unsubscribeRequests = [];
+	private readonly Dictionary<long, (FilteredMarketDepthInfo info, bool isOrderBook)> _unsubscribeRequests = [];
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
@@ -324,7 +324,7 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 								IsSubscribe = false,
 							};
 
-							_unsubscribeRequests.Add(bookUnsubscribe.TransactionId, Tuple.Create(info, true));
+							_unsubscribeRequests.Add(bookUnsubscribe.TransactionId, (info, true));
 						}
 
 						if (info.OrdersSubscription.State.IsActive())
@@ -336,7 +336,7 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 								IsSubscribe = false,
 							};
 
-							_unsubscribeRequests.Add(ordersUnsubscribe.TransactionId, Tuple.Create(info, false));
+							_unsubscribeRequests.Add(ordersUnsubscribe.TransactionId, (info, false));
 						}
 					}
 
@@ -445,9 +445,9 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 				}
 				else if (_unsubscribeRequests.TryGetAndRemove(id, out var tuple))
 				{
-					info = tuple.Item1;
+					info = tuple.info;
 
-					if (tuple.Item2)
+					if (tuple.isOrderBook)
 					{
 						var book = info.BookSubscription;
 						book.State = book.State.ChangeSubscriptionState(SubscriptionStates.Stopped, book.TransactionId, this);

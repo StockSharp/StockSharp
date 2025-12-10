@@ -1,11 +1,11 @@
 namespace StockSharp.Algo.Storages;
 
-using Key = Tuple<SecurityId, DataType>;
+using Key = ValueTuple<SecurityId, DataType>;
 
 /// <summary>
 /// The security based message adapter's provider interface.
 /// </summary>
-public interface ISecurityMessageAdapterProvider : IMappingMessageAdapterProvider<Key>
+public interface ISecurityMessageAdapterProvider : IMappingMessageAdapterProvider<(SecurityId secId, DataType dt)>
 {
 	/// <summary>
 	/// Get adapter by the specified security id.
@@ -59,7 +59,7 @@ public class InMemorySecurityMessageAdapterProvider : ISecurityMessageAdapterPro
 	/// <inheritdoc />
 	public bool SetAdapter(Key key, Guid adapterId)
 	{
-		if (key == null)
+		if (key == default)
 			throw new ArgumentNullException(nameof(key));
 
 		if (adapterId == default)
@@ -92,13 +92,13 @@ public class InMemorySecurityMessageAdapterProvider : ISecurityMessageAdapterPro
 	/// <inheritdoc />
 	public Guid? TryGetAdapter(SecurityId securityId, DataType dataType)
 	{
-		return TryGetAdapter(Tuple.Create(securityId, dataType));
+		return TryGetAdapter((securityId, dataType));
 	}
 
 	/// <inheritdoc />
 	public bool SetAdapter(SecurityId securityId, DataType dataType, Guid adapterId)
 	{
-		return SetAdapter(Tuple.Create(securityId, dataType), adapterId);
+		return SetAdapter((securityId, dataType), adapterId);
 	}
 }
 
@@ -176,7 +176,7 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 		if (!_inMemory.SetAdapter(securityId, dataType, adapterId))
 			return false;
 
-		Save(has, has ? _inMemory.Adapters : [new KeyValuePair<Key, Guid>(Tuple.Create(securityId, dataType), adapterId)]);
+		Save(has, has ? _inMemory.Adapters : [new KeyValuePair<Key, Guid>((securityId, dataType), adapterId)]);
 		return true;
 	}
 

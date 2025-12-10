@@ -14,7 +14,7 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 		public Lock Sync { get; } = new();
 
 		public OrderStatusMessage Original { get; } = original ?? throw new ArgumentNullException(nameof(original));
-		public Dictionary<long, Tuple<List<ExecutionMessage>, List<ExecutionMessage>, long>> Transactions { get; } = [];
+		public Dictionary<long, (List<ExecutionMessage> changes, List<ExecutionMessage> trades, long transId)> Transactions { get; } = [];
 	}
 
 	private readonly SynchronizedDictionary<long, SubscriptionInfo> _transactionLogSubscriptions = [];
@@ -144,21 +144,21 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 				if (!_transactionLogSubscriptions.TryGetAndRemove(originMsg.OriginalTransactionId, out var subscription))
 					break;
 
-				Tuple<List<ExecutionMessage>, List<ExecutionMessage>, long>[] tuples;
+				(List<ExecutionMessage> orderChanges, List<ExecutionMessage> trades, long transId)[] tuples;
 
 				using (subscription.Sync.EnterScope())
 					tuples = [.. subscription.Transactions.Values];
 
 				//var canProcessFailed = truesubscription.Original.States.Contains(OrderStates.Failed);
 
-				foreach (var tuple in tuples)
+				foreach (var (changes, trades, transId) in tuples)
 				{
-					var order = tuple.Item1.ToOrderSnapshot(tuple.Item3, this);
+					var order = changes.ToOrderSnapshot(transId, this);
 
 					//if (order.OrderState == OrderStates.Failed && !canProcessFailed)
 					//{
-					//	if (tuple.Item2.Count > 0)
-					//		LogWarning("Order {0} has failed state but contains {1} trades.", order.TransactionId, tuple.Item2.Count);
+					//	if (trades.Count > 0)
+					//		LogWarning("Order {0} has failed state but contains {1} trades.", order.TransactionId, trades.Count);
 
 					//	continue;
 					//}
@@ -167,7 +167,7 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 
 					ProcessSuspended(order);
 
-					foreach (var trade in tuple.Item2)
+					foreach (var trade in trades)
 						base.OnInnerAdapterNewOutMessage(trade);
 				}
 
@@ -306,20 +306,20 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 							order.TradeId = null;
 							order.TradePrice = null;
 							order.TradeVolume = null;
-							tuple.Item1.Add(order);
+							tuple.changes.Add(order);
 						}
 
 						if (execMsg.HasTradeInfo)
 						{
 							var trade = execMsg.TypedClone();
 							trade.HasOrderInfo = false;
-							tuple.Item2.Add(trade);
+							tuple.trades.Add(trade);
 						}
 					}
 					else
 					{
 						_orders.Add(transId, execMsg.OriginalTransactionId);
-						subscription.Transactions.Add(transId, Tuple.Create(new List<ExecutionMessage> { execMsg.TypedClone() }, new List<ExecutionMessage>(), transId));
+						subscription.Transactions.Add(transId, ([execMsg.TypedClone()], [], transId));
 					}
 				}
 

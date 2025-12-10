@@ -156,7 +156,7 @@ public class MarketRuleTests
 
 		bool connected = false;
 		bool disconnected = false;
-		Tuple<IMessageAdapter, Exception> lost = null;
+		(IMessageAdapter adapter, Exception error)? lost = null;
 
 		mock.Object.WhenConnected().Apply(container).Do(a => connected = a == adapter);
 		mock.Object.WhenDisconnected().Apply(container).Do(a => disconnected = a == adapter);
@@ -170,8 +170,8 @@ public class MarketRuleTests
 
 		var ex = new Exception("x");
 		mock.Raise(m => m.ConnectionErrorEx += null, adapter, ex);
-		(lost.Item1 == adapter).AssertTrue();
-		(lost.Item2 == ex).AssertTrue();
+		(lost?.adapter == adapter).AssertTrue();
+		(lost?.error == ex).AssertTrue();
 	}
 
 	[TestMethod]
@@ -416,19 +416,19 @@ public class MarketRuleTests
 		provider.Raise(p => p.SubscriptionOnline += null, sub);
 		(online == sub).AssertTrue();
 
-		Tuple<Subscription, Exception> stopped = null;
+		(Subscription sub, Exception error)? stopped = null;
 		sub.WhenSubscriptionStopped(provider.Object).Apply(container).Do(t => stopped = t);
 		var ex = new Exception("stop");
 		provider.Raise(p => p.SubscriptionStopped += null, sub, ex);
-		(stopped.Item1 == sub).AssertTrue();
-		(stopped.Item2 == ex).AssertTrue();
+		(stopped?.sub == sub).AssertTrue();
+		(stopped?.error == ex).AssertTrue();
 
-		Tuple<Subscription, Exception, bool> failed = null;
+		(Subscription sub, Exception error, bool isSubscribe)? failed = null;
 		sub.WhenSubscriptionFailed(provider.Object).Apply(container).Do(t => failed = t);
 		provider.Raise(p => p.SubscriptionFailed += null, sub, ex, true);
-		(failed.Item1 == sub).AssertTrue();
-		(failed.Item2 == ex).AssertTrue();
-		failed.Item3.AssertTrue();
+		(failed?.sub == sub).AssertTrue();
+		(failed?.error == ex).AssertTrue();
+		failed.Value.isSubscribe.AssertTrue();
 
 		var l1 = new Level1ChangeMessage { SecurityId = sec.ToSecurityId() };
 		Level1ChangeMessage l1Res = null;
@@ -1183,11 +1183,11 @@ public class MarketRuleTests
 		var sec = Helper.CreateSecurity();
 		var sub = new Subscription(DataType.Ticks, sec);
 
-		Tuple<Subscription, Exception> stopped = null;
+		(Subscription sub, Exception error)? stopped = null;
 		sub.WhenSubscriptionStopped(provider.Object).Apply(container).Do(t => stopped = t);
 		provider.Raise(p => p.SubscriptionStopped += null, sub, (Exception)null);
-		(stopped.Item1 == sub).AssertTrue();
-		(stopped.Item2 == null).AssertTrue();
+		(stopped?.sub == sub).AssertTrue();
+		(stopped?.error == null).AssertTrue();
 	}
 
 	[TestMethod]
@@ -1198,13 +1198,13 @@ public class MarketRuleTests
 		var sec = Helper.CreateSecurity();
 		var sub = new Subscription(DataType.Ticks, sec);
 
-		Tuple<Subscription, Exception, bool> failed = null;
+		(Subscription sub, Exception error, bool isSubscribe)? failed = null;
 		sub.WhenSubscriptionFailed(provider.Object).Apply(container).Do(t => failed = t);
 		var ex = new Exception("stop");
 		provider.Raise(p => p.SubscriptionFailed += null, sub, ex, false);
-		(failed.Item1 == sub).AssertTrue();
-		(failed.Item2 == ex).AssertTrue();
-		failed.Item3.AssertFalse();
+		(failed?.sub == sub).AssertTrue();
+		(failed?.error == ex).AssertTrue();
+		failed.Value.isSubscribe.AssertFalse();
 	}
 
 	[TestMethod]

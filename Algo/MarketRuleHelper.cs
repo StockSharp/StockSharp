@@ -59,7 +59,7 @@ public static partial class MarketRuleHelper
 		}
 	}
 
-	private class ConnectionLostRule : ConnectorRule<Tuple<IMessageAdapter, Exception>>
+	private class ConnectionLostRule : ConnectorRule<(IMessageAdapter, Exception)>
 	{
 		public ConnectionLostRule(IConnector connector)
 			: base(connector)
@@ -70,7 +70,7 @@ public static partial class MarketRuleHelper
 
 		private void OnConnectionErrorEx(IMessageAdapter adapter, Exception error)
 		{
-			Activate(Tuple.Create(adapter, error));
+			Activate((adapter, error));
 		}
 
 		protected override void DisposeManaged()
@@ -105,7 +105,7 @@ public static partial class MarketRuleHelper
 	/// </summary>
 	/// <param name="connector">The connection to be traced for state.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<IConnector, Tuple<IMessageAdapter, Exception>> WhenConnectionLost(this IConnector connector)
+	public static MarketRule<IConnector, (IMessageAdapter adapter, Exception error)> WhenConnectionLost(this IConnector connector)
 	{
 		return new ConnectionLostRule(connector);
 	}

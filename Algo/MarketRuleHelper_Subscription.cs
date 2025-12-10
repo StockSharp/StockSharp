@@ -74,7 +74,7 @@ partial class MarketRuleHelper
 		return new SubscriptionOnlineRule(subscription, provider);
 	}
 
-	private class SubscriptionStoppedRule : MarketRule<Subscription, Tuple<Subscription, Exception>>
+	private class SubscriptionStoppedRule : MarketRule<Subscription, (Subscription, Exception)>
 	{
 		private readonly ISubscriptionProvider _provider;
 		private readonly Subscription _subscription;
@@ -93,7 +93,7 @@ partial class MarketRuleHelper
 		private void ProviderOnSubscriptionStopped(Subscription subscription, Exception error)
 		{
 			if (_subscription == subscription)
-				Activate(Tuple.Create(subscription, error));
+				Activate((subscription, error));
 		}
 
 		protected override void DisposeManaged()
@@ -109,12 +109,12 @@ partial class MarketRuleHelper
 	/// <param name="subscription">Subscription.</param>
 	/// <param name="provider">Subscription provider.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Subscription, Tuple<Subscription, Exception>> WhenSubscriptionStopped(this Subscription subscription, ISubscriptionProvider provider)
+	public static MarketRule<Subscription, (Subscription sub, Exception error)> WhenSubscriptionStopped(this Subscription subscription, ISubscriptionProvider provider)
 	{
 		return new SubscriptionStoppedRule(subscription, provider);
 	}
 
-	private class SubscriptionFailedRule : MarketRule<Subscription, Tuple<Subscription, Exception, bool>>
+	private class SubscriptionFailedRule : MarketRule<Subscription, (Subscription, Exception, bool)>
 	{
 		private readonly ISubscriptionProvider _provider;
 		private readonly Subscription _subscription;
@@ -133,7 +133,7 @@ partial class MarketRuleHelper
 		private void ProviderOnSubscriptionFailed(Subscription subscription, Exception error, bool isSubscribe)
 		{
 			if (_subscription == subscription)
-				Activate(Tuple.Create(subscription, error, isSubscribe));
+				Activate((subscription, error, isSubscribe));
 		}
 
 		protected override void DisposeManaged()
@@ -149,7 +149,7 @@ partial class MarketRuleHelper
 	/// <param name="subscription">Subscription.</param>
 	/// <param name="provider">Subscription provider.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Subscription, Tuple<Subscription, Exception, bool>> WhenSubscriptionFailed(this Subscription subscription, ISubscriptionProvider provider)
+	public static MarketRule<Subscription, (Subscription sub, Exception error, bool isSubscribe)> WhenSubscriptionFailed(this Subscription subscription, ISubscriptionProvider provider)
 	{
 		return new SubscriptionFailedRule(subscription, provider);
 	}

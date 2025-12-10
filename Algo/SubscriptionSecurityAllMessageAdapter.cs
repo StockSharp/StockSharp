@@ -34,7 +34,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 	private readonly Dictionary<long, RefPair<long, SubscriptionStates>> _pendingLoopbacks = [];
 	private readonly Dictionary<long, ParentSubscription> _parents = [];
 	private readonly Dictionary<long, ParentSubscription> _unsubscribes = [];
-	private readonly Dictionary<long, Tuple<ParentSubscription, MarketDataMessage>> _requests = [];
+	private readonly Dictionary<long, (ParentSubscription parent, MarketDataMessage request)> _requests = [];
 	private readonly List<ChildSubscription> _toFlush = [];
 
 	private void ClearState()
@@ -100,7 +100,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 
 							LogDebug("New ALL map (active): {0}/{1} TrId={2}", child.Origin.SecurityId, child.Origin.DataType2, mdMsg.TransactionId);
 							
-							_requests.Add(transId, Tuple.Create(parent, mdMsg.TypedClone()));
+							_requests.Add(transId, (parent, mdMsg.TypedClone()));
 
 							// for child subscriptions make online (or finished) immediatelly
 							RaiseNewOutMessage(mdMsg.CreateResponse());
@@ -127,7 +127,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 										parent.NonAlls.SafeAdd(mdMsg.SecurityId).Add(transId);
 									}
 
-									_requests.Add(transId, Tuple.Create(parent, mdMsg));
+									_requests.Add(transId, (parent, mdMsg));
 								}
 
 								if (parent == null)
@@ -173,8 +173,8 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 
 						//LogDebug("Sec ALL child {0} unsubscribe.", originId);
 
-						var parent = tuple.Item1;
-						var request = tuple.Item2;
+						var parent = tuple.parent;
+						var request = tuple.request;
 						var secId = request.SecurityId;
 						var transId = request.TransactionId;
 
@@ -342,7 +342,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 		}
 	}
 
-	private void ApplySubscriptionIds(ISubscriptionIdMessage subscrMsg, ParentSubscription parent, long[] newIds)
+	private static void ApplySubscriptionIds(ISubscriptionIdMessage subscrMsg, ParentSubscription parent, long[] newIds)
 	{
 		var ids = subscrMsg.GetSubscriptionIds();
 		var initialId = parent.Origin.TransactionId;
@@ -359,7 +359,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 			subscrMsg.SetSubscriptionIds([.. ids.Where(id => id != initialId), .. newIds]);
 	}
 
-	private void ApplySubscriptionIds(ISubscriptionIdMessage subscrMsg, ChildSubscription child)
+	private static void ApplySubscriptionIds(ISubscriptionIdMessage subscrMsg, ChildSubscription child)
 	{
 		ApplySubscriptionIds(subscrMsg, child.Parent, child.Subscribers.CachedKeys);
 	}

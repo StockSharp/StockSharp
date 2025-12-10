@@ -238,14 +238,14 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = [];
 	private readonly List<Message> _pendingMessages = [];
 
-	private readonly Dictionary<IMessageAdapter, Tuple<ConnectionStates, Exception>> _adapterStates = [];
+	private readonly Dictionary<IMessageAdapter, (ConnectionStates state, Exception err)> _adapterStates = [];
 	private ConnectionStates _currState = ConnectionStates.Disconnected;
 
 	private readonly SynchronizedDictionary<string, IMessageAdapter> _portfolioAdapters = new(StringComparer.InvariantCultureIgnoreCase);
-	private readonly SynchronizedDictionary<Tuple<SecurityId, DataType>, IMessageAdapter> _securityAdapters = [];
+	private readonly SynchronizedDictionary<(SecurityId secId, DataType dt), IMessageAdapter> _securityAdapters = [];
 
-	private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter[], DataType>> _subscription = [];
-	private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>> _requestsById = [];
+	private readonly SynchronizedDictionary<long, (ISubscriptionMessage subMsg, IMessageAdapter[] adapters, DataType dt)> _subscriptions = [];
+	private readonly SynchronizedDictionary<long, (ISubscriptionMessage subMsg, IMessageAdapter adapter)> _requestsById = [];
 	private readonly ParentChildMap _parentChildMap = new();
 
 	private readonly SynchronizedDictionary<long, IMessageAdapter> _orderAdapters = [];
@@ -588,7 +588,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		}
 
 		_requestsById.Clear();
-		_subscription.Clear();
+		_subscriptions.Clear();
 		_parentChildMap.Clear();
 	}
 
@@ -790,15 +790,15 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		return OnSendInMessage(message);
 	}
 
-	private static Tuple<ConnectionStates, Exception> CreateState(ConnectionStates state, Exception error = null)
+	private static (ConnectionStates, Exception) CreateState(ConnectionStates state, Exception error = null)
 	{
 		if (state == ConnectionStates.Failed && error == null)
 			throw new ArgumentNullException(nameof(error));
 
-		return Tuple.Create(state, error);
+		return (state, error);
 	}
 
-	private long[] GetSubscribers(DataType dataType) => _subscription.SyncGet(c => c.Where(p => p.Value.Item3 == dataType).Select(p => p.Key).ToArray());
+	private long[] GetSubscribers(DataType dataType) => _subscriptions.SyncGet(c => c.Where(p => p.Value.dt == dataType).Select(p => p.Key).ToArray());
 
 	/// <summary>
 	/// Send message.
@@ -889,7 +889,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				{
 					_currState = ConnectionStates.Disconnecting;
 
-					adapters = _adapterStates.ToArray().Where(p => _adapterWrappers.ContainsKey(p.Key) && (p.Value.Item1 == ConnectionStates.Connecting || p.Value.Item1 == ConnectionStates.Connected)).ToDictionary(p => _adapterWrappers[p.Key], p =>
+					adapters = _adapterStates.ToArray().Where(p => _adapterWrappers.ContainsKey(p.Key) && (p.Value.state == ConnectionStates.Connecting || p.Value.state == ConnectionStates.Connected)).ToDictionary(p => _adapterWrappers[p.Key], p =>
 					{
 						var underlying = p.Key;
 						_adapterStates[underlying] = CreateState(ConnectionStates.Disconnecting);
@@ -962,7 +962,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		if (message is ISubscriptionMessage subscrMsg)
 		{
-			_subscription.TryAdd2(subscrMsg.TransactionId, Tuple.Create(subscrMsg.TypedClone(), new[] { adapter }, subscrMsg.DataType));
+			_subscriptions.TryAdd2(subscrMsg.TransactionId, (subscrMsg.TypedClone(), new[] { adapter }, subscrMsg.DataType));
 			SendRequest(subscrMsg.TypedClone(), adapter);
 		}
 		else
@@ -994,7 +994,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 					return;
 				}
 
-				_subscription.TryAdd2(subscrMsg.TransactionId, Tuple.Create(subscrMsg.TypedClone(), adapters, subscrMsg.DataType));
+				_subscriptions.TryAdd2(subscrMsg.TransactionId, (subscrMsg.TypedClone(), adapters, subscrMsg.DataType));
 			}
 			else
 				adapters = null;
@@ -1030,7 +1030,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		if (adapter == null && message is MarketDataMessage mdMsg && mdMsg.DataType2.IsSecurityRequired && mdMsg.SecurityId != default)
 		{
-			adapter = _securityAdapters.TryGetValue(Tuple.Create(mdMsg.SecurityId, mdMsg.DataType2)) ?? _securityAdapters.TryGetValue(Tuple.Create(mdMsg.SecurityId, (DataType)null));
+			adapter = _securityAdapters.TryGetValue((mdMsg.SecurityId, mdMsg.DataType2)) ?? _securityAdapters.TryGetValue((mdMsg.SecurityId, (DataType)null));
 
 			if (adapter != null && !adapter.IsMessageSupported(message.Type))
 			{
@@ -1083,7 +1083,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 			if (adapters == null)
 			{
-				if (HasPendingAdapters() || _adapterStates.Count == 0 || _adapterStates.All(p => p.Value.Item1 is ConnectionStates.Disconnected or ConnectionStates.Failed))
+				if (HasPendingAdapters() || _adapterStates.Count == 0 || _adapterStates.All(p => p.Value.state is ConnectionStates.Disconnected or ConnectionStates.Failed))
 				{
 					isPended = true;
 					_pendingMessages.Add(message.Clone());
@@ -1104,7 +1104,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	}
 
 	private bool HasPendingAdapters()
-		=> _adapterStates.Any(p => p.Value.Item1 == ConnectionStates.Connecting);
+		=> _adapterStates.Any(p => p.Value.state == ConnectionStates.Connecting);
 
 	private IMessageAdapter[] GetSubscriptionAdapters(MarketDataMessage mdMsg, out bool isPended)
 	{
@@ -1224,7 +1224,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	private void SendRequest(ISubscriptionMessage subscrMsg, IMessageAdapter adapter)
 	{
 		// if the message was looped back via IsBack=true
-		_requestsById.TryAdd2(subscrMsg.TransactionId, Tuple.Create(subscrMsg, GetUnderlyingAdapter(adapter)));
+		_requestsById.TryAdd2(subscrMsg.TransactionId, (subscrMsg, GetUnderlyingAdapter(adapter)));
 		LogDebug("Send to {0}: {1}", adapter, subscrMsg);
 		adapter.SendInMessage((Message)subscrMsg);
 	}
@@ -1259,7 +1259,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				if (adapters == null)
 					return;
 
-				_subscription.TryAdd2(mdMsg.TransactionId, Tuple.Create((ISubscriptionMessage)mdMsg.Clone(), adapters, mdMsg.DataType2));
+				_subscriptions.TryAdd2(mdMsg.TransactionId, ((ISubscriptionMessage)mdMsg.Clone(), adapters, mdMsg.DataType2));
 			}
 
 			foreach (var pair in ToChild(mdMsg, adapters))
@@ -1277,13 +1277,13 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 					return;
 
 				mdMsg = mdMsg.TypedClone();
-				_subscription.TryAdd2(mdMsg.TransactionId, Tuple.Create((ISubscriptionMessage)mdMsg.Clone(), new[] { adapter }, mdMsg.DataType2));
+				_subscriptions.TryAdd2(mdMsg.TransactionId, ((ISubscriptionMessage)mdMsg.Clone(), new[] { adapter }, mdMsg.DataType2));
 			}
 			else
 			{
 				var originTransId = mdMsg.OriginalTransactionId;
 
-				if (!_subscription.TryGetValue(originTransId, out var tuple))
+				if (!_subscriptions.TryGetValue(originTransId, out var tuple))
 				{
 					using (_connectedResponseLock.EnterScope())
 					{
@@ -1301,7 +1301,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 					return;
 				}
 
-				adapter = tuple.Item2.First();
+				adapter = tuple.adapters.First();
 
 				mdMsg = mdMsg.TypedClone();
 			}
@@ -1584,7 +1584,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			{
 				var pending = _pendingMessages.CopyAndClear();
 
-				if (_adapterStates.Any(p => p.Value.Item1 == ConnectionStates.Connected))
+				if (_adapterStates.Any(p => p.Value.state == ConnectionStates.Connected))
 					extra.AddRange(pending.Select(m => m.LoopBack(this)));
 				else
 					notSupportedMsgs = pending;
@@ -1658,7 +1658,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 					}
 					else
 					{
-						var noPending = _adapterStates.All(v => v.Value.Item1 != ConnectionStates.Connecting);
+						var noPending = _adapterStates.All(v => v.Value.state != ConnectionStates.Connecting);
 
 						if (noPending)
 							CreateConnectedMsg(ConnectionStates.Connected);
@@ -1671,11 +1671,11 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 				if (_currState is ConnectionStates.Connecting or ConnectionStates.Connected)
 				{
-					var allFailed = _adapterStates.All(v => v.Value.Item1 == ConnectionStates.Failed);
+					var allFailed = _adapterStates.All(v => v.Value.state == ConnectionStates.Failed);
 
 					if (allFailed)
 					{
-						var errors = _adapterStates.Select(v => v.Value.Item2).WhereNotNull().ToArray();
+						var errors = _adapterStates.Select(v => v.Value.err).WhereNotNull().ToArray();
 						CreateConnectedMsg(ConnectionStates.Failed, errors.SingleOrAggr());
 					}
 				}
@@ -1688,7 +1688,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			else
 				_adapterStates[adapter] = CreateState(ConnectionStates.Failed, error);
 
-			var noPending = _adapterStates.All(v => v.Value.Item1 is ConnectionStates.Disconnected or ConnectionStates.Failed);
+			var noPending = _adapterStates.All(v => v.Value.state is ConnectionStates.Disconnected or ConnectionStates.Failed);
 
 			if (noPending)
 			{
@@ -1723,14 +1723,14 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		if (parentId == null)
 		{
-			_subscription.Remove(originalTransactionId);
+			_subscriptions.Remove(originalTransactionId);
 			return message;
 		}
 
 		if (!needParentResponse)
 			return null;
 
-		_subscription.Remove(parentId.Value);
+		_subscriptions.Remove(parentId.Value);
 		return new SubscriptionFinishedMessage { OriginalTransactionId = parentId.Value, Body = message.Body };
 	}
 
@@ -1742,12 +1742,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			return message;
 
 		var error = message.Error;
-		var originMsg = tuple.Item1;
+		var originMsg = tuple.subMsg;
 
 		if (error != null)
 		{
 			LogWarning("Subscription Error out: {0}", message);
-			_subscription.Remove(originalTransactionId);
+			_subscriptions.Remove(originalTransactionId);
 			_requestsById.Remove(originalTransactionId);
 		}
 		else if (!originMsg.IsSubscribe)
@@ -1762,7 +1762,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		if (parentId != null)
 		{
 			if (allError)
-				_subscription.Remove(parentId.Value);
+				_subscriptions.Remove(parentId.Value);
 
 			return needParentResponse
 				? parentId.Value.CreateSubscriptionResponse(allError ? new AggregateException(LocalizedStrings.NoAdapterFoundFor.Put(originMsg), innerErrors) : null)
@@ -1771,7 +1771,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		else
 		{
 			if (!originMsg.IsSubscribe)
-				_subscription.Remove(originMsg.OriginalTransactionId);
+				_subscriptions.Remove(originMsg.OriginalTransactionId);
 		}
 
 		if (message.IsNotSupported() && originMsg is ISubscriptionMessage subscrMsg)
@@ -1794,19 +1794,19 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		return message;
 	}
 
-	private void SecurityAdapterProviderOnChanged(Tuple<SecurityId, DataType> key, Guid adapterId, bool changeType)
+	private void SecurityAdapterProviderOnChanged((SecurityId, DataType) t, Guid adapterId, bool changeType)
 	{
 		if (changeType)
 		{
 			var adapter = InnerAdapters.SyncGet(c => c.FindById(adapterId));
 
 			if (adapter == null)
-				_securityAdapters.Remove(key);
+				_securityAdapters.Remove(t);
 			else
-				_securityAdapters[key] = adapter;
+				_securityAdapters[t] = adapter;
 		}
 		else
-			_securityAdapters.Remove(key);
+			_securityAdapters.Remove(t);
 	}
 
 	private void PortfolioAdapterProviderOnChanged(string key, Guid adapterId, bool changeType)

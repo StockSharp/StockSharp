@@ -36,7 +36,7 @@ public interface IExtendedInfoStorageItem
 	/// Load extended info.
 	/// </summary>
 	/// <returns>Extended information.</returns>
-	IEnumerable<Tuple<SecurityId, IDictionary<string, object>>> Load();
+	IEnumerable<(SecurityId secId, IDictionary<string, object> fields)> Load();
 
 	/// <summary>
 	/// Load extended info.
@@ -205,19 +205,19 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 			_executor.Add(() => Write(((IExtendedInfoStorageItem)this).Load()));
 		}
 
-		private void Write(IEnumerable<Tuple<SecurityId, IDictionary<string, object>>> values)
+		private void Write(IEnumerable<(SecurityId secId, IDictionary<string, object> fields)> values)
 		{
 			if (values == null)
 				throw new ArgumentNullException(nameof(values));
 
 			using var writer = new TransactionFileStream(_fileName, FileMode.Create).CreateCsvWriter();
 
-			writer.WriteRow(new[] { nameof(SecurityId) }.Concat(_fields.Select(f => f.Item1)));
-			writer.WriteRow(new[] { typeof(string) }.Concat(_fields.Select(f => f.Item2)).Select(t => t.TryGetCSharpAlias() ?? t.GetTypeName(false)));
+			writer.WriteRow(new[] { nameof(SecurityId) }.Concat(_fields.Select(f => f.name)));
+			writer.WriteRow(new[] { typeof(string) }.Concat(_fields.Select(f => f.type)).Select(t => t.TryGetCSharpAlias() ?? t.GetTypeName(false)));
 
-			foreach (var pair in values)
+			foreach (var (secId, fields) in values)
 			{
-				writer.WriteRow(new[] { pair.Item1.ToStringId() }.Concat(_fields.Select(f => pair.Item2.TryGetValue(f.Item1)?.To<string>())));
+				writer.WriteRow(new[] { secId.ToStringId() }.Concat(_fields.Select(f => fields.TryGetValue(f.name)?.To<string>())));
 			}
 		}
 
@@ -239,14 +239,14 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 			{
 				var dict = _cache.SafeAdd(securityId);
 
-				foreach (var field in _fields)
+				foreach (var (name, _) in _fields)
 				{
-					var value = extensionInfo.TryGetValue(field.Item1);
+					var value = extensionInfo.TryGetValue(name);
 
 					if (value == null)
 						continue;
 
-					dict[field.Item1] = value;
+					dict[name] = value;
 
 					//_fieldTypes.TryAdd(field, value.GetType());
 				}
@@ -255,16 +255,16 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 			Flush();
 		}
 
-		IEnumerable<Tuple<SecurityId, IDictionary<string, object>>> IExtendedInfoStorageItem.Load()
+		IEnumerable<(SecurityId secId, IDictionary<string, object> fields)> IExtendedInfoStorageItem.Load()
 		{
 			using (_lock.EnterScope())
 			{
-				var retVal = new Tuple<SecurityId, IDictionary<string, object>>[_cache.Count];
+				var retVal = new (SecurityId, IDictionary<string, object>)[_cache.Count];
 
 				var i = 0;
 				foreach (var pair in _cache)
 				{
-					retVal[i] = Tuple.Create(pair.Key, (IDictionary<string, object>)pair.Value.ToDictionary());
+					retVal[i] = (pair.Key, pair.Value.ToDictionary());
 					i++;
 				}
 
@@ -298,7 +298,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 
 	private readonly CachedSynchronizedDictionary<string, CsvExtendedInfoStorageItem> _items = new(StringComparer.InvariantCultureIgnoreCase);
 	private readonly string _path;
-	private ChannelExecutor _executor;
+	private readonly ChannelExecutor _executor;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CsvExtendedInfoStorage"/>.

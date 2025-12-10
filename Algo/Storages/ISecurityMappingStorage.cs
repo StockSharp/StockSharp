@@ -119,9 +119,8 @@ public class InMemorySecurityMappingStorage : ISecurityMappingStorage
 			var stockSharpId = mapping.StockSharpId;
 			var adapterId = mapping.AdapterId;
 
-			if (mappings.ContainsKey(stockSharpId))
+			if (mappings.Remove(stockSharpId))
 			{
-				mappings.Remove(stockSharpId);
 			}
 			else if (mappings.ContainsValue(adapterId))
 			{
@@ -203,7 +202,7 @@ public class InMemorySecurityMappingStorage : ISecurityMappingStorage
 		return true;
 	}
 
-	internal void Load(string storageName, List<Tuple<SecurityId, SecurityId>> pairs)
+	internal void Load(string storageName, List<(SecurityId stockSharpId, SecurityId adapterId)> pairs)
 	{
 		if (storageName.IsEmpty())
 			throw new ArgumentNullException(nameof(storageName));
@@ -215,8 +214,8 @@ public class InMemorySecurityMappingStorage : ISecurityMappingStorage
 		{
 			var mappings = _mappings.SafeAdd(storageName);
 
-			foreach (var tuple in pairs)
-				mappings.Add(tuple.Item1, tuple.Item2);
+			foreach (var (stockSharpId, adapterId) in pairs)
+				mappings.Add(stockSharpId, adapterId);
 		}
 	}
 }
@@ -331,7 +330,7 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 			if (!File.Exists(fileName))
 				return;
 
-			var pairs = new List<Tuple<SecurityId, SecurityId>>();
+			var pairs = new List<(SecurityId, SecurityId)>();
 
 			using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
 			{
@@ -341,7 +340,7 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 
 				while (reader.NextLine())
 				{
-					var securityId = new SecurityId
+					var stockSharpId = new SecurityId
 					{
 						SecurityCode = reader.ReadString(),
 						BoardCode = reader.ReadString()
@@ -352,7 +351,7 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 						BoardCode = reader.ReadString()
 					};
 
-					pairs.Add(Tuple.Create(securityId, adapterId));
+					pairs.Add((stockSharpId, adapterId));
 				}
 			}
 

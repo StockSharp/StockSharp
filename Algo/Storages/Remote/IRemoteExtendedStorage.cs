@@ -31,7 +31,7 @@ public interface IRemoteExtendedStorage
 	/// Get security extended info.
 	/// </summary>
 	/// <returns>Extended information.</returns>
-	Tuple<SecurityId, object[]>[] GetAllExtendedInfo();
+	(SecurityId secId, object[] values)[] GetAllExtendedInfo();
 
 	/// <summary>
 	/// Create extended info storage.
