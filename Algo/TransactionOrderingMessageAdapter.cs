@@ -49,7 +49,7 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 	}
 
 	/// <inheritdoc />
-	public override bool SendInMessage(Message message)
+	public override ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		static void RemoteTrailingZeros(OrderRegisterMessage regMsg)
 		{
@@ -115,7 +115,7 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 			}
 		}
 
-		return base.SendInMessage(message);
+		return base.SendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />

@@ -35,36 +35,36 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 	public bool OverrideSecurityData { get; set; }
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
 			//case MessageTypes.Reset:
 			//	_storageProcessor.Reset();
-			//	return base.OnSendInMessage(message);
+			//	return base.OnSendInMessageAsync(message, cancellationToken);
 
 			case MessageTypes.SecurityLookup:
-				return ProcessSecurityLookup((SecurityLookupMessage)message);
+				return ProcessSecurityLookup((SecurityLookupMessage)message, cancellationToken);
 
 			case MessageTypes.BoardLookup:
-				return ProcessBoardLookup((BoardLookupMessage)message);
+				return ProcessBoardLookup((BoardLookupMessage)message, cancellationToken);
 
 			case MessageTypes.PortfolioLookup:
-				return ProcessPortfolioLookup((PortfolioLookupMessage)message);
+				return ProcessPortfolioLookup((PortfolioLookupMessage)message, cancellationToken);
 
 			case MessageTypes.MarketData:
-				return ProcessMarketData((MarketDataMessage)message);
+				return ProcessMarketData((MarketDataMessage)message, cancellationToken);
 
 			default:
-				return base.OnSendInMessage(message);
+				return base.OnSendInMessageAsync(message, cancellationToken);
 		}
 	}
 
-	private bool ProcessMarketData(MarketDataMessage message)
+	private ValueTask ProcessMarketData(MarketDataMessage message, CancellationToken cancellationToken)
 	{
 		message = _storageProcessor.ProcessMarketData(message, RaiseNewOutMessage);
 
-		return message == null || base.OnSendInMessage(message);
+		return message == null ? default : base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -170,45 +170,45 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 		base.OnInnerAdapterNewOutMessage(message);
 	}
 
-	private bool ProcessSecurityLookup(SecurityLookupMessage msg)
+	private ValueTask ProcessSecurityLookup(SecurityLookupMessage msg, CancellationToken cancellationToken)
 	{
 		if (msg == null)
 			throw new ArgumentNullException(nameof(msg));
 
 		if (/*!msg.IsSubscribe || */(msg.Adapter != null && msg.Adapter != this))
-			return base.OnSendInMessage(msg);
+			return base.OnSendInMessageAsync(msg, cancellationToken);
 
 		var transId = msg.TransactionId;
 
 		foreach (var security in _securityStorage.Lookup(msg))
 			RaiseNewOutMessage(security.ToMessage(originalTransactionId: transId).SetSubscriptionIds(subscriptionId: transId));
 
-		return base.OnSendInMessage(msg);
+		return base.OnSendInMessageAsync(msg, cancellationToken);
 	}
 
-	private bool ProcessBoardLookup(BoardLookupMessage msg)
+	private ValueTask ProcessBoardLookup(BoardLookupMessage msg, CancellationToken cancellationToken)
 	{
 		if (msg == null)
 			throw new ArgumentNullException(nameof(msg));
 
 		if (!msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
-			return base.OnSendInMessage(msg);
+			return base.OnSendInMessageAsync(msg, cancellationToken);
 
 		var transId = msg.TransactionId;
 
 		foreach (var board in _exchangeInfoProvider.LookupBoards2(msg))
 			RaiseNewOutMessage(board.SetSubscriptionIds(subscriptionId: transId));
 
-		return base.OnSendInMessage(msg);
+		return base.OnSendInMessageAsync(msg, cancellationToken);
 	}
 
-	private bool ProcessPortfolioLookup(PortfolioLookupMessage msg)
+	private ValueTask ProcessPortfolioLookup(PortfolioLookupMessage msg, CancellationToken cancellationToken)
 	{
 		if (msg == null)
 			throw new ArgumentNullException(nameof(msg));
 
 		if (!msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
-			return base.OnSendInMessage(msg);
+			return base.OnSendInMessageAsync(msg, cancellationToken);
 
 		var now = CurrentTimeUtc;
 		var transId = msg.TransactionId;
@@ -244,7 +244,7 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 			SendOut(posMsg);
 		}
 
-		return base.OnSendInMessage(msg);
+		return base.OnSendInMessageAsync(msg, cancellationToken);
 	}
 
 	private Position GetPosition(SecurityId securityId, string portfolioName, string strategyId, Sides? side)

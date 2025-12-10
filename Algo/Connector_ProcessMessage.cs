@@ -116,14 +116,14 @@ partial class Connector
 
 			if (_inMessageChannel != null)
 			{
-				_inMessageChannel.NewOutMessage -= InMessageChannelOnNewOutMessage;
+				_inMessageChannel.NewOutMessageAsync -= InMessageChannelOnNewOutMessage;
 				_inMessageChannel.Dispose();
 			}
 
 			_inMessageChannel = value;
 
 			if (_inMessageChannel != null)
-				_inMessageChannel.NewOutMessage += InMessageChannelOnNewOutMessage;
+				_inMessageChannel.NewOutMessageAsync += InMessageChannelOnNewOutMessage;
 		}
 	}
 
@@ -142,20 +142,20 @@ partial class Connector
 
 			if (_outMessageChannel != null)
 			{
-				_outMessageChannel.NewOutMessage -= OutMessageChannelOnNewOutMessage;
+				_outMessageChannel.NewOutMessageAsync -= OutMessageChannelOnNewOutMessage;
 				_outMessageChannel.Dispose();
 			}
 
 			_outMessageChannel = value;
 
 			if (_outMessageChannel != null)
-				_outMessageChannel.NewOutMessage += OutMessageChannelOnNewOutMessage;
+				_outMessageChannel.NewOutMessageAsync += OutMessageChannelOnNewOutMessage;
 		}
 	}
 
-	private void InMessageChannelOnNewOutMessage(Message message)
+	private async ValueTask InMessageChannelOnNewOutMessage(Message message, CancellationToken cancellationToken)
 	{
-		_inAdapter?.SendInMessage(message);
+		await (_inAdapter?.SendInMessageAsync(message, cancellationToken) ?? default);
 
 		if (message != _disposeMessage)
 			return;
@@ -165,9 +165,9 @@ partial class Connector
 		OutMessageChannel = null;
 	}
 
-	private void OutMessageChannelOnNewOutMessage(Message message)
+	private ValueTask OutMessageChannelOnNewOutMessage(Message message, CancellationToken cancellationToken)
 	{
-		OnProcessMessage(message);
+		return OnProcessMessage(message, cancellationToken);
 	}
 
 	private IMessageAdapter _inAdapter;
@@ -542,21 +542,21 @@ partial class Connector
 	/// </summary>
 	public StorageMetaInfoMessageAdapter StorageAdapter { get; private set; }
 
-	private bool SendMessage(IMessageChannel channel, Message message)
+	private void SendMessage(IMessageChannel channel, Message message)
 	{
 		if (channel is null)
-			return false;
+			return;
 
 		message.TryInitLocalTime(this);
 
 		if (!channel.IsOpened())
 			channel.Open();
 
-		return channel.SendInMessage(message);
+		channel.SendInMessage(message);
 	}
 
 	/// <inheritdoc />
-	public bool SendInMessage(Message message)
+	public void SendInMessage(Message message)
 		=> SendMessage(InMessageChannel, message);
 
 	/// <inheritdoc />
@@ -576,14 +576,15 @@ partial class Connector
 	/// Process message.
 	/// </summary>
 	/// <param name="message">Message.</param>
-	protected virtual void OnProcessMessage(Message message)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	protected virtual async ValueTask OnProcessMessage(Message message, CancellationToken cancellationToken)
 	{
 		if (message.Type is not MessageTypes.Time and not MessageTypes.QuoteChange)
 			LogVerbose("BP:{0}", message);
 
 		ProcessTimeInterval(message);
 
-		RaiseNewMessage(message);
+		await RaiseNewMessage(message, cancellationToken);
 
 		try
 		{

@@ -245,13 +245,6 @@ public interface IMessageAdapter : IPersistable, ILogReceiver, ICloneable<IMessa
 	TimeSpan? LookupTimeout { get; }
 
 	/// <summary>
-	/// Send message.
-	/// </summary>
-	/// <param name="message">Message.</param>
-	/// <returns><see langword="true"/> if the specified message was processed successfully, otherwise, <see langword="false"/>.</returns>
-	bool SendInMessage(Message message);
-
-	/// <summary>
 	/// Processes a generic message asynchronously.
 	/// </summary>
 	/// <param name="message">The message to process.</param>

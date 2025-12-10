@@ -12,7 +12,7 @@ public class CandleHolderMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 	private readonly SynchronizedDictionary<long, CandleMessage> _infos = [];
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -42,7 +42,7 @@ public class CandleHolderMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 			}
 		}
 
-		return base.OnSendInMessage(message);
+		return base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />

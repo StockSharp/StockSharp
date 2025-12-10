@@ -13,10 +13,10 @@ public class SlippageMessageAdapter(IMessageAdapter innerAdapter, ISlippageManag
 	private readonly ISlippageManager _slippageManager = slippageManager ?? throw new ArgumentNullException(nameof(slippageManager));
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		_slippageManager.ProcessMessage(message);
-		return base.OnSendInMessage(message);
+		return base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />

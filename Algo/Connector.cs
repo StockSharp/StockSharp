@@ -1126,12 +1126,13 @@ public partial class Connector : BaseLogReceiver, IConnector
 
 	#region IMessageChannel implementation
 
-	private Action<Message> _newOutMessage;
+	private Func<Message, CancellationToken, ValueTask> _newOutMessageAsync;
 
-	event Action<Message> IMessageChannel.NewOutMessage
+	/// <inheritdoc />
+	public event Func<Message, CancellationToken, ValueTask> NewOutMessageAsync
 	{
-		add => _newOutMessage += value;
-		remove => _newOutMessage -= value;
+		add => _newOutMessageAsync += value;
+		remove => _newOutMessageAsync -= value;
 	}
 
 	ChannelStates IMessageChannel.State => ConnectionState == ConnectionStates.Connected ? ChannelStates.Started : ChannelStates.Stopped;

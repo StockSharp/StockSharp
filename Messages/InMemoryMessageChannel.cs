@@ -86,7 +86,7 @@ public class InMemoryMessageChannel : Disposable, IMessageChannel
 			{
 				try
 				{
-					NewOutMessage?.Invoke(message);
+					await (NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default);
 				}
 				catch (Exception ex)
 				{
@@ -94,13 +94,10 @@ public class InMemoryMessageChannel : Disposable, IMessageChannel
 				}
 			}
 		}
-		catch (OperationCanceledException)
-		{
-			// Normal cancellation
-		}
 		catch (Exception ex)
 		{
-			_errorHandler(ex);
+			if (!cancellationToken.IsCancellationRequested)
+				_errorHandler(ex);
 		}
 		finally
 		{
@@ -146,21 +143,19 @@ public class InMemoryMessageChannel : Disposable, IMessageChannel
 	}
 
 	/// <inheritdoc />
-	public bool SendInMessage(Message message)
+	public void SendInMessage(Message message)
 	{
 		if (!this.IsOpened())
 		{
 			//throw new InvalidOperationException();
-			return false;
+			return;
 		}
 
 		_queue.Enqueue(message);
-
-		return true;
 	}
 
 	/// <inheritdoc />
-	public event Action<Message> NewOutMessage;
+	public event Func<Message, CancellationToken, ValueTask> NewOutMessageAsync;
 
 	/// <summary>
 	/// Create a copy of <see cref="InMemoryMessageChannel"/>.

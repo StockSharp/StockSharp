@@ -13,7 +13,7 @@ public class AutoConnectMessageAdapter(IMessageAdapter innerAdapter) : OfflineMe
 	private bool _wasConnected;
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -32,17 +32,17 @@ public class AutoConnectMessageAdapter(IMessageAdapter innerAdapter) : OfflineMe
 				if (!_isConnect)
 				{
 					if (_wasConnected)
-						base.OnSendInMessage(new ResetMessage());
+						await base.OnSendInMessageAsync(new ResetMessage(), cancellationToken);
 
 					_wasConnected = true;
-					base.OnSendInMessage(new ConnectMessage());
+					await base.OnSendInMessageAsync(new ConnectMessage(), cancellationToken);
 				}
 
 				break;
 			}
 		}
 
-		return base.OnSendInMessage(message);
+		await base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />

@@ -440,7 +440,7 @@ public partial class MainWindow
 					return;
 
 				// fill level1 values
-				connector.EmulationAdapter.SendInMessage(level1Info);
+				_ = connector.EmulationAdapter.SendInMessageAsync(level1Info, default);
 
 				if (emulationInfo.UseMarketDepth)
 				{

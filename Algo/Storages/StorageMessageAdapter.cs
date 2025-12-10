@@ -28,20 +28,20 @@ public class StorageMessageAdapter(IMessageAdapter innerAdapter, StorageProcesso
 	}
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
 			case MessageTypes.Reset:
 				_storageProcessor.Reset();
-				return base.OnSendInMessage(message);
+				return base.OnSendInMessageAsync(message, cancellationToken);
 
 			case MessageTypes.MarketData:
 				message = _storageProcessor.ProcessMarketData((MarketDataMessage)message, RaiseStorageMessage);
-				return message == null || base.OnSendInMessage(message);
+				return message is null ? default : base.OnSendInMessageAsync(message, cancellationToken);
 
 			default:
-				return base.OnSendInMessage(message);
+				return base.OnSendInMessageAsync(message, cancellationToken);
 		}
 	}
 

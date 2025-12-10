@@ -12,7 +12,7 @@ public class OrderBookTruncateMessageAdapter(IMessageAdapter innerAdapter) : Mes
 	private readonly SynchronizedDictionary<long, int> _depths = [];
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -61,7 +61,7 @@ public class OrderBookTruncateMessageAdapter(IMessageAdapter innerAdapter) : Mes
 			}
 		}
 
-		return base.OnSendInMessage(message);
+		return base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	private void RemoveSubscription(long id)

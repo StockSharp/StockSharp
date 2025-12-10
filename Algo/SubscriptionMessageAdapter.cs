@@ -35,12 +35,12 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 	public bool IsRestoreSubscriptionOnErrorReconnect { get; set; }
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
 			case MessageTypes.Reset:
-				return ProcessReset(message);
+				return ProcessReset(message, cancellationToken);
 
 			case MessageTypes.ProcessSuspended:
 			{
@@ -49,23 +49,20 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 				using (_sync.EnterScope())
 					reMapSubscriptions = _reMapSubscriptions.CopyAndClear();
 
-				foreach (var reMapSubscription in reMapSubscriptions)
-					base.OnSendInMessage(reMapSubscription);
-
-				return true;
+				return reMapSubscriptions.Select(reMapSubscription => base.OnSendInMessageAsync(reMapSubscription, cancellationToken)).WhenAll();
 			}
 
 			default:
 			{
 				if (message is ISubscriptionMessage subscrMsg)
-					return ProcessInSubscriptionMessage(subscrMsg);
+					return ProcessInSubscriptionMessage(subscrMsg, cancellationToken);
 				else
-					return base.OnSendInMessage(message);
+					return base.OnSendInMessageAsync(message, cancellationToken);
 			}
 		}
 	}
 
-	private bool ProcessReset(Message message)
+	private ValueTask ProcessReset(Message message, CancellationToken cancellationToken)
 	{
 		using (_sync.EnterScope())
 		{
@@ -76,7 +73,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 			_reMapSubscriptions.Clear();
 		}
 
-		return base.OnSendInMessage(message);
+		return base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	private void ChangeState(SubscriptionInfo info, SubscriptionStates state)
@@ -294,7 +291,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 		base.InnerAdapterNewOutMessage(message);
 	}
 
-	private bool ProcessInSubscriptionMessage(ISubscriptionMessage message)
+	private async ValueTask ProcessInSubscriptionMessage(ISubscriptionMessage message, CancellationToken cancellationToken)
 	{
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
@@ -397,8 +394,6 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 			}
 		}
 
-		var retVal = true;
-
 		if (sendInMsg != null)
 		{
 			if (isInfoLevel)
@@ -406,7 +401,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 			else
 				LogDebug("In: {0}", sendInMsg);
 
-			retVal = base.OnSendInMessage((Message)sendInMsg);
+			await base.OnSendInMessageAsync((Message)sendInMsg, cancellationToken);
 		}
 
 		if (sendOutMsgs != null)
@@ -417,8 +412,6 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 				RaiseNewOutMessage(sendOutMsg);	
 			}
 		}
-
-		return retVal;
 	}
 
 	/// <summary>

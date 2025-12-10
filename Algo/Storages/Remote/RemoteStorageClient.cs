@@ -330,7 +330,7 @@ public class RemoteStorageClient : Disposable
 		// if request is not a subscription message - just send and return empty
 		if (request is not ISubscriptionMessage)
 		{
-			_adapter.SendInMessage((Message)request);
+			await _adapter.SendInMessageAsync((Message)request, cancellationToken);
 			return ([], false);
 		}
 

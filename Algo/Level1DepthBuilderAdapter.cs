@@ -57,7 +57,7 @@ public class Level1DepthBuilderAdapter(IMessageAdapter innerAdapter) : MessageAd
 	private readonly Dictionary<SecurityId, BookInfo> _online = [];
 
 	/// <inheritdoc />
-	public override bool SendInMessage(Message message)
+	public override ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -111,7 +111,7 @@ public class Level1DepthBuilderAdapter(IMessageAdapter innerAdapter) : MessageAd
 			}
 		}
 
-		return base.SendInMessage(message);
+		return base.SendInMessageAsync(message, cancellationToken);
 	}
 
 	private void RemoveSubscription(long id)

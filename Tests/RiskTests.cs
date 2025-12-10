@@ -5,7 +5,7 @@ using System.ComponentModel;
 using StockSharp.Algo.Risk;
 
 [TestClass]
-public class RiskTests
+public class RiskTests : BaseTestClass
 {
 	private static readonly string _pfName = Helper.CreatePortfolio().Name;
 
@@ -1095,8 +1095,9 @@ public class RiskTests
 	}
 
 	[TestMethod]
-	public void AdapterClosePositionsMode()
+	public async Task AdapterClosePositionsMode()
 	{
+		var token = CancellationToken;
 		// Test that RiskMessageAdapter sends OrderGroupCancelMessage with ClosePositions mode
 		// when a risk rule with ClosePositions action is triggered
 
@@ -1112,20 +1113,20 @@ public class RiskTests
 		};
 		riskManager.Rules.Add(rule);
 
-		adapter.SendInMessage(new PositionChangeMessage
+		await adapter.SendInMessageAsync(new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
 			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
-		}.Add(PositionChangeTypes.CurrentValue, 0m));
+		}.Add(PositionChangeTypes.CurrentValue, 0m), token);
 
 		// Trigger the rule by sending a position change message with loss
-		adapter.SendInMessage(new PositionChangeMessage
+		await adapter.SendInMessageAsync(new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
 			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
-		}.Add(PositionChangeTypes.CurrentValue, -1500m));
+		}.Add(PositionChangeTypes.CurrentValue, -1500m), token);
 
 		// Check that OrderGroupCancelMessage was sent to inner adapter with ClosePositions mode
 		var cancelMsg = testAdapter.ReceivedMessages.OfType<OrderGroupCancelMessage>().FirstOrDefault();
@@ -1134,7 +1135,7 @@ public class RiskTests
 	}
 
 	[TestMethod]
-	public void AdapterCancelOrdersMode()
+	public async Task AdapterCancelOrdersMode()
 	{
 		// Test that RiskMessageAdapter sends OrderGroupCancelMessage with CancelOrders mode
 		// when a risk rule with CancelOrders action is triggered
@@ -1161,7 +1162,7 @@ public class RiskTests
 		};
 		positionMsg.Add(PositionChangeTypes.CurrentValue, 150m);
 
-		adapter.SendInMessage(positionMsg);
+		await adapter.SendInMessageAsync(positionMsg, CancellationToken);
 
 		// Check that OrderGroupCancelMessage was sent with CancelOrders mode (looped back)
 		var cancelMsg = messages.OfType<OrderGroupCancelMessage>().FirstOrDefault();
@@ -1171,8 +1172,9 @@ public class RiskTests
 	}
 
 	[TestMethod]
-	public void AdapterStopTradingBlocks()
+	public async Task AdapterStopTradingBlocks()
 	{
+		var token = CancellationToken;
 		// Test that RiskMessageAdapter blocks trading when StopTrading action is triggered
 		var emu = new MarketEmulator(new CollectionSecurityProvider([new() { Id = "TEST@TEST" }]), new CollectionPortfolioProvider([Portfolio.CreateSimulator()]), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator());
 		var riskManager = new RiskManager();
@@ -1197,7 +1199,7 @@ public class RiskTests
 		};
 		positionMsg.Add(PositionChangeTypes.Commission, 1500m);
 
-		adapter.SendInMessage(positionMsg);
+		await adapter.SendInMessageAsync(positionMsg, token);
 
 		// Now try to register an order - it should be rejected
 		var orderMsg = new OrderRegisterMessage
@@ -1210,7 +1212,7 @@ public class RiskTests
 			PortfolioName = _pfName
 		};
 
-		adapter.SendInMessage(orderMsg);
+		await adapter.SendInMessageAsync(orderMsg, token);
 
 		// Check that the order was rejected with Failed state
 		var execMsg = messages.OfType<ExecutionMessage>()
@@ -1220,8 +1222,9 @@ public class RiskTests
 	}
 
 	[TestMethod]
-	public void AdapterTradingUnblocks()
+	public async Task AdapterTradingUnblocks()
 	{
+		var token = CancellationToken;
 		// Test that RiskMessageAdapter unblocks trading when risk limits are no longer exceeded
 		var testAdapter = new TestInnerAdapter();
 		var riskManager = new RiskManager();
@@ -1237,20 +1240,20 @@ public class RiskTests
 		};
 		riskManager.Rules.Add(rule);
 
-		adapter.SendInMessage(new PositionChangeMessage
+		await adapter.SendInMessageAsync(new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
 			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
-		}.Add(PositionChangeTypes.CurrentValue, 0m));
+		}.Add(PositionChangeTypes.CurrentValue, 0m), token);
 
 		// Trigger the rule by sending a position change message with loss
-		adapter.SendInMessage(new PositionChangeMessage
+		await adapter.SendInMessageAsync(new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
 			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
-		}.Add(PositionChangeTypes.CurrentValue, -1500m));
+		}.Add(PositionChangeTypes.CurrentValue, -1500m), token);
 
 		// Verify trading is blocked
 		var orderMsg = new OrderRegisterMessage
@@ -1263,7 +1266,7 @@ public class RiskTests
 			PortfolioName = _pfName
 		};
 
-		adapter.SendInMessage(orderMsg);
+		await adapter.SendInMessageAsync(orderMsg, token);
 
 		var execMsg = messages.OfType<ExecutionMessage>()
 			.FirstOrDefault(x => x.OriginalTransactionId == 1 && x.OrderState == OrderStates.Failed);
@@ -1273,12 +1276,12 @@ public class RiskTests
 		testAdapter.ReceivedMessages.Clear();
 
 		// Now send a position message that no longer exceeds the limit
-		adapter.SendInMessage(new PositionChangeMessage
+		await adapter.SendInMessageAsync(new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
 			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
-		}.Add(PositionChangeTypes.CurrentValue, -500m));
+		}.Add(PositionChangeTypes.CurrentValue, -500m), token);
 
 		// Try to register an order again - it should now be accepted (not rejected)
 		var orderMsg2 = new OrderRegisterMessage
@@ -1291,7 +1294,7 @@ public class RiskTests
 			PortfolioName = _pfName
 		};
 
-		adapter.SendInMessage(orderMsg2);
+		await adapter.SendInMessageAsync(orderMsg2, token);
 
 		// Check that the order was NOT rejected
 		var failedMsg = messages.OfType<ExecutionMessage>()
@@ -1339,10 +1342,10 @@ public class RiskTests
 		{
 		}
 
-		protected override bool OnSendInMessage(Message message)
+		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 		{
 			ReceivedMessages.Add(message);
-			return base.OnSendInMessage(message);
+			return base.OnSendInMessageAsync(message, cancellationToken);
 		}
 
 		public override IMessageAdapter Clone() => new TestInnerAdapter();

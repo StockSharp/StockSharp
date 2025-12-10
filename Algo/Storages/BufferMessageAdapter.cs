@@ -53,7 +53,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 		=> GetSnapshotStorage<SecurityId, TMessage>(dataType);
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -123,9 +123,9 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 		}
 
 		if (message == null)
-			return true;
+			return default;
 
-		return base.OnSendInMessage(message);
+		return base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	private void ProcessMarketData(MarketDataMessage message)

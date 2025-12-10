@@ -54,7 +54,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 
 				base.OnInnerAdapterNewOutMessage(message);
 
-				ProcessAllSuspended();
+				ProcessAllSuspended(default);
 
 				break;
 			}
@@ -221,7 +221,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 	}
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -244,9 +244,9 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 				var suspendMsg = (ProcessSuspendedMessage)message;
 
 				if (suspendMsg.Arg is SecurityId secId)
-					ProcessInSuspended(secId);
+					return ProcessInSuspended(secId, cancellationToken);
 
-				return true;
+				return default;
 
 			default:
 			{
@@ -263,7 +263,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 					var native = GetNativeId(secIdMsg, securityId);
 
 					if (native == null)
-						return true;
+						return default;
 
 					securityId.Native = native;
 					message.ReplaceSecurityId(securityId);
@@ -273,7 +273,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 			}
 		}
 
-		return base.OnSendInMessage(message);
+		return base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	private object GetNativeId(ISecurityIdMessage message, SecurityId securityId)
@@ -395,7 +395,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 		base.OnInnerAdapterNewOutMessage(message);
 	}
 
-	private void ProcessAllSuspended()
+	private async ValueTask ProcessAllSuspended(CancellationToken cancellationToken)
 	{
 		List<Message> inMsgs;
 		List<Message> outMsgs;
@@ -456,14 +456,14 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 		foreach (var msg in inMsgs)
 		{
 			msg.LoopBack(this);
-			base.OnSendInMessage(msg);
+			await base.OnSendInMessageAsync(msg, cancellationToken);
 		}
 
 		foreach (var msg in outMsgs)
 			base.OnInnerAdapterNewOutMessage(msg);
 	}
 
-	private void ProcessInSuspended(SecurityId securityId)
+	private async ValueTask ProcessInSuspended(SecurityId securityId, CancellationToken cancellationToken)
 	{
 		var noNativeId = securityId.Native == null ? (SecurityId?)null : securityId;
 
@@ -500,7 +500,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 		foreach (var msg in msgs)
 		{
 			msg.SecurityId = securityId;
-			base.OnSendInMessage((Message)msg);
+			await base.OnSendInMessageAsync((Message)msg, cancellationToken);
 		}
 	}
 

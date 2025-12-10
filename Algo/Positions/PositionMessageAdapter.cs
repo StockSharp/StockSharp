@@ -33,7 +33,7 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 		=> InnerAdapter.NotSupportedResultMessages.Concat([MessageTypes.PortfolioLookup]).Distinct();
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -76,7 +76,7 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 					RaiseNewOutMessage(lookupMsg.CreateResponse());
 				}
 
-				return true;
+				return default;
 			}
 
 			default:
@@ -88,7 +88,7 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 			}
 		}
 		
-		return base.OnSendInMessage(message);
+		return base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />

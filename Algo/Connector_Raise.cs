@@ -59,6 +59,7 @@ partial class Connector
 	public event Action<Position> PositionChanged;
 
 	/// <inheritdoc />
+	[Obsolete("Use NewOutMessageAsync event.")]
 	public event Action<Message> NewMessage;
 
 	/// <inheritdoc />
@@ -530,14 +531,10 @@ partial class Connector
 		RaiseSubscriptionOnline(subscription);
 	}
 
-	/// <summary>
-	/// To call the event <see cref="NewMessage"/>.
-	/// </summary>
-	/// <param name="message">A new message.</param>
-	private void RaiseNewMessage(Message message)
+	private ValueTask RaiseNewMessage(Message message, CancellationToken cancellationToken)
 	{
 		NewMessage?.Invoke(message);
-		_newOutMessage?.Invoke(message);
+		return _newOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
 	}
 
 	private void RaiseValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTime serverTime, DateTime localTime)

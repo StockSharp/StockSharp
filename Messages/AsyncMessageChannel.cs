@@ -1,11 +1,11 @@
-﻿namespace StockSharp.Messages;
+namespace StockSharp.Messages;
 
 using Nito.AsyncEx;
 
 /// <summary>
-/// Async message processor helper.
+/// Async message channel that processes messages via <see cref="IMessageChannel.NewOutMessageAsync"/>.
 /// </summary>
-class AsyncMessageProcessor : Disposable
+public class AsyncMessageChannel : Disposable, IMessageChannel
 {
 	private class MessageQueueItem
 	{
@@ -38,8 +38,8 @@ class AsyncMessageProcessor : Disposable
 		public bool IsLookup { get; }
 		public bool IsTransaction { get; }
 
-        public CancellationTokenSource Cts { get; set; }
-        public long UnsubscribeRequest { get; set; }
+		public CancellationTokenSource Cts { get; set; }
+		public long UnsubscribeRequest { get; set; }
 
 		public override string ToString() => Message.ToString();
 	}
@@ -50,26 +50,51 @@ class AsyncMessageProcessor : Disposable
 
 	private readonly AsyncManualResetEvent _processMessageEvt = new(false);
 	private CancellationTokenSource _globalCts = new();
-	private readonly Task _processorTask;
+	private Task _processorTask;
 
 	private bool _isConnectionStarted, _isDisconnecting;
 
 	private readonly IMessageAdapter _adapter;
 
 	/// <summary>
-	/// Initialize <see cref="AsyncMessageProcessor"/>.
+	/// Initializes a new instance of the <see cref="AsyncMessageChannel"/>.
 	/// </summary>
 	/// <param name="adapter"><see cref="IMessageAdapter"/>.</param>
-	public AsyncMessageProcessor(IMessageAdapter adapter)
+	public AsyncMessageChannel(IMessageAdapter adapter)
 	{
 		_adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
+	}
+
+	private ChannelStates _state = ChannelStates.Stopped;
+
+	/// <inheritdoc />
+	public ChannelStates State
+	{
+		get => _state;
+		private set
+		{
+			if (_state == value)
+				return;
+
+			_state = value;
+			StateChanged?.Invoke();
+		}
+	}
+
+	/// <inheritdoc />
+	public event Action StateChanged;
+
+	/// <inheritdoc />
+	public void Open()
+	{
+		State = ChannelStates.Started;
 		_processorTask = Task.Run(ProcessMessagesAsync);
 	}
 
 	/// <inheritdoc />
-	protected override void DisposeManaged()
+	public void Close()
 	{
-		base.DisposeManaged();
+		State = ChannelStates.Stopping;
 
 		try
 		{
@@ -84,59 +109,82 @@ class AsyncMessageProcessor : Disposable
 		finally
 		{
 			_globalCts?.Dispose();
+			_globalCts = new();
 		}
 
-		// cancel and dispose any active per-subscription CTS
-		try
+		foreach (var kv in _subscriptionItems.CopyAndClear())
 		{
-			foreach (var kv in _subscriptionItems.CopyAndClear())
-			{
-				var item = kv.Value;
+			var item = kv.Value;
 
-				try
-				{
-					item.Cts?.Cancel();
-				}
-				finally
-				{
-					item.Cts?.Dispose();
-				}
+			try
+			{
+				item.Cts?.Cancel();
+			}
+			finally
+			{
+				item.Cts?.Dispose();
 			}
 		}
-		catch { }
 
-		// give the background loop a moment to exit
 		try
 		{
 			_processorTask?.Wait(TimeSpan.FromSeconds(5));
 		}
 		catch { }
+
+		_messages.Clear();
+		_childTasks.Clear();
+
+		State = ChannelStates.Stopped;
 	}
 
-	/// <summary>
-	/// </summary>
-	public bool EnqueueMessage(Message msg)
+	/// <inheritdoc />
+	public void Suspend()
+	{
+		State = ChannelStates.Suspended;
+	}
+
+	/// <inheritdoc />
+	public void Resume()
+	{
+		State = ChannelStates.Started;
+	}
+
+	/// <inheritdoc />
+	public void Clear()
+	{
+		_messages.Clear();
+	}
+
+	/// <inheritdoc />
+	public void SendInMessage(Message message)
 	{
 		if (IsDisposed)
-			throw new ObjectDisposedException(nameof(AsyncMessageProcessor));
+			throw new ObjectDisposedException(nameof(AsyncMessageChannel));
 
-		if (msg.Type != MessageTypes.Time)
-			_adapter.AddVerboseLog("enqueue: {0}", msg.Type);
+		if (!this.IsOpened())
+			return;
 
 		using (_messages.EnterScope())
 		{
-			if (msg is ResetMessage)
+			if (message is ResetMessage)
 			{
 				_messages.Clear();
 				CancelAndReplaceGlobalCts();
 			}
 
-			_messages.Add(new(msg));
+			_messages.Add(new(message));
 		}
 
 		_processMessageEvt.Set();
+	}
 
-		return true;
+	/// <inheritdoc />
+	public event Func<Message, CancellationToken, ValueTask> NewOutMessageAsync;
+
+	private ValueTask RaiseNewOutMessage(Message message, CancellationToken cancellationToken)
+	{
+		return NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
 	}
 
 	private async Task ProcessMessagesAsync()
@@ -280,7 +328,7 @@ class AsyncMessageProcessor : Disposable
 						DisconnectMessage m			=> DisconnectAsync(m),
 						ResetMessage m				=> ResetAsync(m),
 
-						_ => _adapter.SendInMessageAsync(msg, token)
+						_ => RaiseNewOutMessage(msg, token)
 					};
 
 				void done()
@@ -388,6 +436,14 @@ class AsyncMessageProcessor : Disposable
 				if (IsDisposeStarted)
 					break;
 
+				if (State != ChannelStates.Started)
+				{
+					if (State == ChannelStates.Stopping)
+						break;
+
+					continue;
+				}
+
 				_processMessageEvt.Reset();
 
 				try
@@ -407,7 +463,7 @@ class AsyncMessageProcessor : Disposable
 		if(_isConnectionStarted)
 			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
 
-		await _adapter.SendInMessageAsync(msg, token);
+		await RaiseNewOutMessage(msg, token);
 
 		_isConnectionStarted = true;
 	}
@@ -429,7 +485,7 @@ class AsyncMessageProcessor : Disposable
 			if(!await WhenChildrenComplete(_adapter.DisconnectTimeout.CreateTimeoutToken()))
 				throw new InvalidOperationException("unable to complete disconnect. some tasks are still running.");
 
-			await _adapter.SendInMessageAsync(msg, default);
+			await RaiseNewOutMessage(msg, default);
 
 			_isConnectionStarted = false;
 		}
@@ -443,7 +499,7 @@ class AsyncMessageProcessor : Disposable
 	{
 		_isDisconnecting = true;
 
-		// token is already canceled in EnqueueMessage
+		// token is already canceled in SendInMessage
 		await AsyncHelper.CatchHandle(
 			() => WhenChildrenComplete(_adapter.DisconnectTimeout.CreateTimeoutToken()),
 			_globalCts.Token);
@@ -458,7 +514,7 @@ class AsyncMessageProcessor : Disposable
 
 		try
 		{
-			await _adapter.SendInMessageAsync(msg, default);
+			await RaiseNewOutMessage(msg, default);
 		}
 		catch (Exception ex)
 		{
@@ -494,4 +550,16 @@ class AsyncMessageProcessor : Disposable
 
 		return allComplete;
 	}
+
+	/// <inheritdoc />
+	protected override void DisposeManaged()
+	{
+		Close();
+		base.DisposeManaged();
+	}
+
+	/// <inheritdoc />
+	public IMessageChannel Clone() => new AsyncMessageChannel(_adapter);
+
+	object ICloneable.Clone() => Clone();
 }

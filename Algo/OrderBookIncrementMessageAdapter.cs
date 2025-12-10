@@ -24,7 +24,7 @@ public class OrderBookIncrementMessageAdapter(IMessageAdapter innerAdapter) : Me
 	private readonly CachedSynchronizedSet<long> _allSecSubscriptionsPassThrough = [];
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -92,7 +92,7 @@ public class OrderBookIncrementMessageAdapter(IMessageAdapter innerAdapter) : Me
 			}
 		}
 
-		return base.OnSendInMessage(message);
+		return base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	private void RemoveSubscription(long id)

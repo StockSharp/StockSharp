@@ -215,7 +215,7 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 	private readonly Dictionary<long, (FilteredMarketDepthInfo info, bool isOrderBook)> _unsubscribeRequests = [];
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		void AddInfo(OrderRegisterMessage regMsg)
 		{
@@ -298,10 +298,10 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 
 					LogInfo("Filtered book {0} started (Book={1} / Orders={2}).", transId, mdMsg.TransactionId, orderStatus.TransactionId);
 
-					base.OnSendInMessage(mdMsg);
-					base.OnSendInMessage(orderStatus);
+					await base.OnSendInMessageAsync(mdMsg, cancellationToken);
+					await base.OnSendInMessageAsync(orderStatus, cancellationToken);
 
-					return true;
+					return;
 				}
 				else
 				{
@@ -353,18 +353,18 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 						LogInfo("Filtered book {0} unsubscribing.", mdMsg.OriginalTransactionId);
 
 						if (bookUnsubscribe != null)
-							base.OnSendInMessage(bookUnsubscribe);
+							await base.OnSendInMessageAsync(bookUnsubscribe, cancellationToken);
 
 						if (ordersUnsubscribe != null)
-							base.OnSendInMessage(ordersUnsubscribe);
+							await base.OnSendInMessageAsync(ordersUnsubscribe, cancellationToken);
 					}
 
-					return true;
+					return;
 				}
 			}
 		}
 
-		return base.OnSendInMessage(message);
+		await base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />

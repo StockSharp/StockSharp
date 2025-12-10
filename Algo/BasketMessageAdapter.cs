@@ -9,6 +9,8 @@ using StockSharp.Algo.Slippage;
 using StockSharp.Algo.Testing;
 using StockSharp.Algo.Positions;
 
+using Nito.AsyncEx;
+
 /// <summary>
 /// The interface describing the list of adapters to trading systems with which the aggregator operates.
 /// </summary>
@@ -479,12 +481,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	public bool SupportOrderBookTruncate { get; set; } = true;
 
 	/// <summary>
-	/// Use <see cref="PartialDownloadMessageAdapter"/>.
-	/// </summary>
-	[Obsolete("Sync mode is obsolete.")]
-	public bool SupportPartialDownload { get; set; }
-
-	/// <summary>
 	/// Use <see cref="LookupTrackingMessageAdapter"/>.
 	/// </summary>
 	public bool SupportLookupTracking { get; set; } = true;
@@ -558,19 +554,16 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 	private void TryAddOrderAdapter(long transId, IMessageAdapter adapter) => _orderAdapters.TryAdd2(transId, GetUnderlyingAdapter(adapter));
 
-	ValueTask IMessageAdapter.SendInMessageAsync(Message message, CancellationToken cancellationToken)
-		=> throw new NotSupportedException();
-
-	private void ProcessReset(ResetMessage message, bool isConnect)
+	private async ValueTask ProcessReset(ResetMessage message, bool isConnect, CancellationToken cancellationToken)
 	{
-		Wrappers.ForEach(a =>
+		await Wrappers.Select(async a =>
 		{
 			// remove channel adapter to send ResetMsg in sync
 			a.TryRemoveWrapper<ChannelMessageAdapter>()?.Dispose();
 
-			a.SendInMessage(message);
+			await a.SendInMessageAsync(message, cancellationToken);
 			a.Dispose();
-		});
+		}).WhenAll();
 
 		_adapterWrappers.Clear();
 
@@ -620,7 +613,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		if (this.UseChannels() && adapter.UseChannels())
 		{
 			adapter = ApplyOwnInner(new ChannelMessageAdapter(adapter,
-				adapter.UseInChannel ? new InMemoryMessageChannel(new MessageByOrderQueue(), $"{adapter} In", SendOutError) : new PassThroughMessageChannel(),
+				adapter.UseInChannel ? new AsyncMessageChannel(adapter) : new PassThroughMessageChannel(),
 				adapter.UseOutChannel ? new InMemoryMessageChannel(new MessageByOrderQueue(), $"{adapter} Out", SendOutError) : new PassThroughMessageChannel()
 			));
 		}
@@ -689,13 +682,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		{
 			adapter = ApplyOwnInner(new CommissionMessageAdapter(adapter, CommissionManager.Clone()));
 		}
-
-#pragma warning disable CS0618 // Type or member is obsolete
-		if (SupportPartialDownload && adapter is SyncMessageAdapter syncAdp && syncAdp.IsSupportPartialDownloading)
-		{
-			adapter = ApplyOwnInner(new PartialDownloadMessageAdapter(syncAdp));
-		}
-#pragma warning restore CS0618 // Type or member is obsolete
 
 		if (adapter.IsSupportSubscriptions)
 		{
@@ -785,9 +771,9 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	}
 
 	/// <inheritdoc />
-	bool IMessageAdapter.SendInMessage(Message message)
+	ValueTask IMessageAdapter.SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		return OnSendInMessage(message);
+		return OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	private static (ConnectionStates, Exception) CreateState(ConnectionStates state, Exception error = null)
@@ -804,21 +790,21 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	/// Send message.
 	/// </summary>
 	/// <param name="message">Message.</param>
-	/// <returns><see langword="true"/> if the specified message was processed successfully, otherwise, <see langword="false"/>.</returns>
-	protected virtual bool OnSendInMessage(Message message)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	protected virtual ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		try
 		{
-			return InternalSendInMessage(message);
+			return InternalSendInMessage(message, cancellationToken);
 		}
 		catch (Exception ex)
 		{
 			SendOutMessage(message.CreateErrorResponse(ex, this, GetSubscribers));
-			return false;
+			return default;
 		}
 	}
 
-	private bool InternalSendInMessage(Message message)
+	private async ValueTask InternalSendInMessage(Message message, CancellationToken cancellationToken)
 	{
 		LogDebug("In: {0}", message);
 
@@ -835,21 +821,21 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			}
 			else
 			{
-				ProcessAdapterMessage(adapter, message);
-				return true;
+				await ProcessAdapterMessage(adapter, message, cancellationToken);
+				return;
 			}
 		}
 
 		switch (message.Type)
 		{
 			case MessageTypes.Reset:
-				ProcessReset((ResetMessage)message, false);
+				await ProcessReset((ResetMessage)message, false, cancellationToken);
 				break;
 
 			case MessageTypes.Connect:
 			case MessageTypes.ChangePassword:
 			{
-				ProcessReset(new ResetMessage(), true);
+				await ProcessReset(new ResetMessage(), true, cancellationToken);
 
 				_currState = ConnectionStates.Connecting;
 
@@ -870,14 +856,13 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				if (Wrappers.Length == 0)
 					throw new InvalidOperationException(LocalizedStrings.AtLeastOneConnectionMustBe);
 
-				Wrappers.ForEach(w =>
+				await Wrappers.Select(w =>
 				{
 					var u = GetUnderlyingAdapter(w);
 					LogInfo("Connecting '{0}'.", u);
 
-					w.SendInMessage(message);
-				});
-
+					return w.SendInMessageAsync(message, cancellationToken);
+				}).WhenAll();
 				break;
 			}
 
@@ -897,14 +882,14 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 					});
 				}
 
-				foreach (var a in adapters)
+				await adapters.Select(a =>
 				{
 					var wrapper = a.Key;
 					var underlying = a.Value;
 
 					LogInfo("Disconnecting '{0}'.", underlying);
-					wrapper.SendInMessage(message);
-				}
+					return wrapper.SendInMessageAsync(message, cancellationToken);
+				}).WhenAll();
 
 				break;
 			}
@@ -912,14 +897,14 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			case MessageTypes.OrderRegister:
 			{
 				var ordMsg = (OrderMessage)message;
-				ProcessPortfolioMessage(ordMsg.PortfolioName, ordMsg);
+				await ProcessPortfolioMessage(ordMsg.PortfolioName, ordMsg, cancellationToken);
 				break;
 			}
 			case MessageTypes.OrderReplace:
 			case MessageTypes.OrderCancel:
 			{
 				var ordMsg = (OrderMessage)message;
-				ProcessOrderMessage(ordMsg.TransactionId, ordMsg.OriginalTransactionId, ordMsg);
+				await ProcessOrderMessage(ordMsg.TransactionId, ordMsg.OriginalTransactionId, ordMsg, cancellationToken);
 				break;
 			}
 			case MessageTypes.OrderGroupCancel:
@@ -927,33 +912,31 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				var groupMsg = (OrderGroupCancelMessage)message;
 
 				if (groupMsg.PortfolioName.IsEmpty())
-					ProcessOtherMessage(message);
+					await ProcessOtherMessage(message, cancellationToken);
 				else
-					ProcessPortfolioMessage(groupMsg.PortfolioName, groupMsg);
+					await ProcessPortfolioMessage(groupMsg.PortfolioName, groupMsg, cancellationToken);
 
 				break;
 			}
 
 			case MessageTypes.MarketData:
 			{
-				ProcessMarketDataRequest((MarketDataMessage)message);
+				await ProcessMarketDataRequest((MarketDataMessage)message, cancellationToken);
 				break;
 			}
 
 			default:
 			{
-				ProcessOtherMessage(message);
+				await ProcessOtherMessage(message, cancellationToken);
 				break;
 			}
 		}
-
-		return true;
 	}
 
 	/// <inheritdoc />
 	public event Action<Message> NewOutMessage;
 
-	private void ProcessAdapterMessage(IMessageAdapter adapter, Message message)
+	private ValueTask ProcessAdapterMessage(IMessageAdapter adapter, Message message, CancellationToken cancellationToken)
 	{
 		if (message.BackMode == MessageBackModes.Chain)
 		{
@@ -963,18 +946,17 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		if (message is ISubscriptionMessage subscrMsg)
 		{
 			_subscriptions.TryAdd2(subscrMsg.TransactionId, (subscrMsg.TypedClone(), new[] { adapter }, subscrMsg.DataType));
-			SendRequest(subscrMsg.TypedClone(), adapter);
+			return SendRequest(subscrMsg.TypedClone(), adapter, cancellationToken);
 		}
 		else
-			adapter.SendInMessage(message);
+			return adapter.SendInMessageAsync(message, cancellationToken);
 	}
 
-	private void ProcessOtherMessage(Message message)
+	private ValueTask ProcessOtherMessage(Message message, CancellationToken cancellationToken)
 	{
 		if (message.Adapter != null)
 		{
-			message.Adapter.SendInMessage(message);
-			return;
+			return message.Adapter.SendInMessageAsync(message, cancellationToken);
 		}
 
 		if (message is ISubscriptionMessage subscrMsg)
@@ -986,12 +968,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				adapters = GetAdapters(message, out var isPended, out _);
 
 				if (isPended)
-					return;
+					return default;
 
 				if (adapters.Length == 0)
 				{
 					SendOutMessage(subscrMsg.CreateResult());
-					return;
+					return default;
 				}
 
 				_subscriptions.TryAdd2(subscrMsg.TransactionId, (subscrMsg.TypedClone(), adapters, subscrMsg.DataType));
@@ -999,20 +981,19 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			else
 				adapters = null;
 
-			foreach (var pair in ToChild(subscrMsg, adapters))
-				SendRequest(pair.Key, pair.Value);
+			return ToChild(subscrMsg, adapters).Select(pair => SendRequest(pair.Key, pair.Value, cancellationToken)).WhenAll();
 		}
 		else
 		{
 			var adapters = GetAdapters(message, out var isPended, out _);
 
 			if (isPended)
-				return;
+				return default;
 
 			if (adapters.Length == 0)
-				return;
+				return default;
 
-			adapters.ForEach(a => a.SendInMessage(message));
+			return adapters.Select(a => a.SendInMessageAsync(message, cancellationToken)).WhenAll();
 		}
 	}
 
@@ -1221,15 +1202,15 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		return child;
 	}
 
-	private void SendRequest(ISubscriptionMessage subscrMsg, IMessageAdapter adapter)
+	private ValueTask SendRequest(ISubscriptionMessage subscrMsg, IMessageAdapter adapter, CancellationToken cancellationToken)
 	{
 		// if the message was looped back via IsBack=true
 		_requestsById.TryAdd2(subscrMsg.TransactionId, (subscrMsg, GetUnderlyingAdapter(adapter)));
 		LogDebug("Send to {0}: {1}", adapter, subscrMsg);
-		adapter.SendInMessage((Message)subscrMsg);
+		return adapter.SendInMessageAsync((Message)subscrMsg, cancellationToken);
 	}
 
-	private void ProcessMarketDataRequest(MarketDataMessage mdMsg)
+	private ValueTask ProcessMarketDataRequest(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
 		IMessageAdapter[] GetAdapters()
 		{
@@ -1257,13 +1238,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			if (mdMsg.IsSubscribe)
 			{
 				if (adapters == null)
-					return;
+					return default;
 
 				_subscriptions.TryAdd2(mdMsg.TransactionId, ((ISubscriptionMessage)mdMsg.Clone(), adapters, mdMsg.DataType2));
 			}
 
-			foreach (var pair in ToChild(mdMsg, adapters))
-				SendRequest(pair.Key, pair.Value);
+			return ToChild(mdMsg, adapters).Select(pair => SendRequest(pair.Key, pair.Value, cancellationToken)).WhenAll();
 		}
 		else
 		{
@@ -1274,7 +1254,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				adapter = GetAdapters()?.First();
 
 				if (adapter == null)
-					return;
+					return default;
 
 				mdMsg = mdMsg.TypedClone();
 				_subscriptions.TryAdd2(mdMsg.TransactionId, ((ISubscriptionMessage)mdMsg.Clone(), new[] { adapter }, mdMsg.DataType2));
@@ -1293,12 +1273,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 						{
 							_pendingMessages.Remove(suspended);
 							SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = mdMsg.TransactionId });
-							return;
+							return default;
 						}
 					}
 
 					LogInfo("Unsubscribe not found: {0}/{1}", originTransId, mdMsg);
-					return;
+					return default;
 				}
 
 				adapter = tuple.adapters.First();
@@ -1306,11 +1286,11 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				mdMsg = mdMsg.TypedClone();
 			}
 
-			SendRequest(mdMsg, adapter);
+			return SendRequest(mdMsg, adapter, cancellationToken);
 		}
 	}
 
-	private void ProcessPortfolioMessage(string portfolioName, OrderMessage message)
+	private ValueTask ProcessPortfolioMessage(string portfolioName, OrderMessage message, CancellationToken cancellationToken)
 	{
 		var adapter = message.Adapter;
 
@@ -1321,22 +1301,22 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			if (adapter == null)
 			{
 				if (isPending)
-					return;
+					return default;
 
 				LogDebug("No adapter for {0}", message);
 
 				SendOutMessage(message.CreateReply(new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(message))));
-				return;
+				return default;
 			}
 		}
 
 		if (message is OrderRegisterMessage regMsg)
 			TryAddOrderAdapter(regMsg.TransactionId, adapter);
 
-		adapter.SendInMessage(message);
+		return adapter.SendInMessageAsync(message, cancellationToken);
 	}
 
-	private void ProcessOrderMessage(long transId, long originId, Message message)
+	private ValueTask ProcessOrderMessage(long transId, long originId, Message message, CancellationToken cancellationToken)
 	{
 		if (!_orderAdapters.TryGetValue(originId, out var adapter))
 		{
@@ -1360,13 +1340,13 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		if (adapter is null)
 		{
 			sendUnkTrans();
-			return;
+			return default;
 		}
 
 		if (!_adapterWrappers.TryGetValue(adapter, out var wrapper))
 		{
 			sendUnkTrans();
-			return;
+			return default;
 		}
 
 		if (message is OrderReplaceMessage replace)
@@ -1374,7 +1354,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			TryAddOrderAdapter(replace.TransactionId, adapter);
 		}
 
-		wrapper.SendInMessage(message);
+		return wrapper.SendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <summary>
@@ -1408,7 +1388,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	}
 
 	/// <summary>
-	/// The embedded adapter event <see cref="IMessageChannel.NewOutMessage"/> handler.
+	/// The embedded adapter event <see cref="IMessageAdapter.NewOutMessage"/> handler.
 	/// </summary>
 	/// <param name="innerAdapter">The embedded adapter.</param>
 	/// <param name="message">Message.</param>

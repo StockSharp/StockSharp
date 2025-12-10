@@ -411,7 +411,7 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 	}
 
 	/// <inheritdoc />
-	protected override void OnProcessMessage(Message message)
+	protected override async ValueTask OnProcessMessage(Message message, CancellationToken cancellationToken)
 	{
 		try
 		{
@@ -423,7 +423,7 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 
 				default:
 				{
-					base.OnProcessMessage(message);
+					await base.OnProcessMessage(message, cancellationToken);
 					break;
 				}
 			}

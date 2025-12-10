@@ -74,7 +74,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 	private readonly HashSet<long> _unsubscribeRequests = [];
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		void TryAddOrderSubscription(OrderMessage orderMsg)
 		{
@@ -91,7 +91,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 		switch (message.Type)
 		{
 			case MessageTypes.Reset:
-				return ProcessReset(message);
+				return ProcessReset(message, cancellationToken);
 
 			case MessageTypes.OrderRegister:
 			case MessageTypes.OrderReplace:
@@ -102,15 +102,15 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 
 				TryAddOrderSubscription(orderMsg);
 
-				return base.OnSendInMessage(message);
+				return base.OnSendInMessageAsync(message, cancellationToken);
 			}
 
 			default:
 			{
 				if (message is ISubscriptionMessage subscrMsg)
-					return ProcessInSubscriptionMessage(subscrMsg);
+					return ProcessInSubscriptionMessage(subscrMsg, cancellationToken);
 				else
-					return base.OnSendInMessage(message);
+					return base.OnSendInMessageAsync(message, cancellationToken);
 			}
 		}
 	}
@@ -313,14 +313,14 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 		}
 	}
 
-	private bool ProcessReset(Message message)
+	private ValueTask ProcessReset(Message message, CancellationToken cancellationToken)
 	{
 		ClearState();
 
-		return base.OnSendInMessage(message);
+		return base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
-	private bool ProcessInSubscriptionMessage(ISubscriptionMessage message)
+	private async ValueTask ProcessInSubscriptionMessage(ISubscriptionMessage message, CancellationToken cancellationToken)
 	{
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
@@ -488,15 +488,11 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 			}
 		}
 
-		var retVal = true;
-
 		if (sendInMsg != null)
 		{
 			LogDebug("In: {0}", sendInMsg);
-			retVal = base.OnSendInMessage((Message)sendInMsg);
+			await base.OnSendInMessageAsync((Message)sendInMsg, cancellationToken);
 		}
-
-		return retVal;
 	}
 
 	/// <summary>

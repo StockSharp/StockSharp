@@ -41,16 +41,15 @@ public interface IMessageChannel : IDisposable, ICloneable<IMessageChannel>
 	void Clear();
 
 	/// <summary>
-	/// Send message.
+	/// Processes a generic message asynchronously.
 	/// </summary>
-	/// <param name="message">Message.</param>
-	/// <returns><see langword="true"/> if the specified message was processed successfully, otherwise, <see langword="false"/>.</returns>
-	bool SendInMessage(Message message);
+	/// <param name="message">The message to process.</param>
+	void SendInMessage(Message message);
 
 	/// <summary>
 	/// New message event.
 	/// </summary>
-	event Action<Message> NewOutMessage;
+	event Func<Message, CancellationToken, ValueTask> NewOutMessageAsync;
 }
 
 /// <summary>
@@ -98,18 +97,17 @@ public class PassThroughMessageChannel : Cloneable<IMessageChannel>, IMessageCha
 	{
 	}
 
-	bool IMessageChannel.SendInMessage(Message message)
+	void IMessageChannel.SendInMessage(Message message)
 	{
-		_newMessage?.Invoke(message);
-		return true;
+		var _ = _mewOutMessageAsync?.Invoke(message, default);
 	}
 
-	private Action<Message> _newMessage;
+	private Func<Message, CancellationToken, ValueTask> _mewOutMessageAsync;
 
-	event Action<Message> IMessageChannel.NewOutMessage
+	event Func<Message, CancellationToken, ValueTask> IMessageChannel.NewOutMessageAsync
 	{
-		add => _newMessage += value;
-		remove => _newMessage -= value;
+		add => _mewOutMessageAsync += value;
+		remove => _mewOutMessageAsync -= value;
 	}
 
 	/// <summary>

@@ -17,8 +17,8 @@ public class ChannelMessageAdapter : MessageAdapterWrapper
 		InputChannel = inputChannel ?? throw new ArgumentNullException(nameof(inputChannel));
 		OutputChannel = outputChannel ?? throw new ArgumentNullException(nameof(outputChannel));
 
-		InputChannel.NewOutMessage += InputChannelOnNewOutMessage;
-		OutputChannel.NewOutMessage += OutputChannelOnNewOutMessage;
+		InputChannel.NewOutMessageAsync += InputChannelOnNewOutMessage;
+		OutputChannel.NewOutMessageAsync += OutputChannelOnNewOutMessage;
 	}
 
 	/// <summary>
@@ -41,9 +41,13 @@ public class ChannelMessageAdapter : MessageAdapterWrapper
 	/// </summary>
 	public bool OwnOutputChannel { get; set; } = true;
 
-	private void OutputChannelOnNewOutMessage(Message message)
+	private ValueTask InputChannelOnNewOutMessage(Message message, CancellationToken cancellationToken)
+		=> InnerAdapter.SendInMessageAsync(message, cancellationToken);
+
+	private ValueTask OutputChannelOnNewOutMessage(Message message, CancellationToken cancellationToken)
 	{
 		RaiseNewOutMessage(message);
+		return default;
 	}
 
 	/// <inheritdoc />
@@ -55,16 +59,11 @@ public class ChannelMessageAdapter : MessageAdapterWrapper
 		OutputChannel.SendInMessage(message);
 	}
 
-	private void InputChannelOnNewOutMessage(Message message)
-	{
-		InnerAdapter.SendInMessage(message);
-	}
-
 	/// <inheritdoc />
 	public override void Dispose()
 	{
-		InputChannel.NewOutMessage -= InputChannelOnNewOutMessage;
-		OutputChannel.NewOutMessage -= OutputChannelOnNewOutMessage;
+		InputChannel.NewOutMessageAsync -= InputChannelOnNewOutMessage;
+		OutputChannel.NewOutMessageAsync -= OutputChannelOnNewOutMessage;
 
 		if (OwnInputChannel)
 			InputChannel.Dispose();
@@ -76,12 +75,13 @@ public class ChannelMessageAdapter : MessageAdapterWrapper
 	}
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (!InputChannel.IsOpened())
 			InputChannel.Open();
 
-		return InputChannel.SendInMessage(message);
+		InputChannel.SendInMessage(message);
+		return default;
 	}
 
 	/// <summary>
@@ -102,6 +102,6 @@ public class ChannelMessageAdapter : MessageAdapterWrapper
 	/// <returns>Copy.</returns>
 	public override IMessageAdapter Clone()
 	{
-		return new ChannelMessageAdapter(InnerAdapter.TypedClone(), InputChannel.Clone(), OutputChannel.Clone());
+		return new ChannelMessageAdapter(InnerAdapter.TypedClone(), InputChannel.TypedClone(), OutputChannel.TypedClone());
 	}
 }

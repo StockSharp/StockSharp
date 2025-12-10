@@ -89,40 +89,40 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 	/// <inheritdoc />
 	public override bool IsSupportTransactionLog => Emulator.IsSupportTransactionLog;
 
-	private void SendToEmulator(Message message)
+	private ValueTask SendToEmulator(Message message, CancellationToken cancellationToken)
 	{
-		_inAdapter.SendInMessage(message);
+		return _inAdapter.SendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
 			case MessageTypes.OrderRegister:
 			{
 				var regMsg = (OrderRegisterMessage)message;
-				ProcessOrderMessage(regMsg.PortfolioName, regMsg);
-				return true;
+				await ProcessOrderMessage(regMsg.PortfolioName, regMsg, cancellationToken);
+				return;
 			}
 			case MessageTypes.OrderReplace:
 			case MessageTypes.OrderCancel:
 			{
-				ProcessOrderMessage(((OrderMessage)message).OriginalTransactionId, message);
-				return true;
+				await ProcessOrderMessage(((OrderMessage)message).OriginalTransactionId, message, cancellationToken);
+				return;
 			}
 
 			case MessageTypes.OrderGroupCancel:
 			{
-				SendToEmulator(message);
-				return true;
+				await SendToEmulator(message, cancellationToken);
+				return;
 			}
 
 			case MessageTypes.Reset:
 			case MessageTypes.Connect:
 			case MessageTypes.Disconnect:
 			{
-				SendToEmulator(message);
+				await SendToEmulator(message, cancellationToken);
 
 				if (message.Type == MessageTypes.Reset)
 				{
@@ -131,9 +131,11 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 				}
 
 				if (OwnInnerAdapter)
-					return base.OnSendInMessage(message);
+					await base.OnSendInMessageAsync(message, cancellationToken);
 				else
-					return true;
+					return;
+
+				break;
 			}
 
 			case MessageTypes.PortfolioLookup:
@@ -141,10 +143,10 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 			case MessageTypes.OrderStatus:
 			{
 				if (OwnInnerAdapter)
-					base.OnSendInMessage(message);
+					await base.OnSendInMessageAsync(message, cancellationToken);
 
-				SendToEmulator(message);
-				return true;
+				await SendToEmulator(message, cancellationToken);
+				return;
 			}
 
 			case MessageTypes.SecurityLookup:
@@ -159,24 +161,25 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 				_subscriptionIds.Add(((ISubscriptionMessage)message).TransactionId);
 
 				// sends to emu for init subscription ids
-				SendToEmulator(message);
+				await SendToEmulator(message, cancellationToken);
 
-				return base.OnSendInMessage(message);
+				await base.OnSendInMessageAsync(message, cancellationToken);
+				return;
 			}
 
 			case MessageTypes.Level1Change:
 			case ExtendedMessageTypes.CommissionRule:
 			{
-				SendToEmulator(message);
-				return true;
+				await SendToEmulator(message, cancellationToken);
+				return;
 			}
 
 			default:
 			{
 				if (OwnInnerAdapter)
-					return base.OnSendInMessage(message);
+					await base.OnSendInMessageAsync(message, cancellationToken);
 
-				return true;
+				return;
 			}
 		}
 	}
@@ -210,7 +213,7 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 			case MessageTypes.SubscriptionOnline:
 			{
 				if (_subscriptionIds.Contains(((IOriginalTransactionIdMessage)message).OriginalTransactionId))
-					SendToEmulator(message);
+					SendToEmulator(message, default);
 
 				break;
 			}
@@ -229,7 +232,7 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 				var execMsg = (ExecutionMessage)message;
 
 				if (execMsg.IsMarketData())
-					TrySendToEmulator((ISubscriptionIdMessage)message);
+					TrySendToEmulator((ISubscriptionIdMessage)message, default);
 				else
 				{
 					if (OwnInnerAdapter)
@@ -245,13 +248,13 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 				if (OwnInnerAdapter)
 					base.OnInnerAdapterNewOutMessage(message);
 
-				SendToEmulator(message);
+				SendToEmulator(message, default);
 				//TrySendToEmulator((ISubscriptionIdMessage)message);
 				break;
 			}
 
 			case MessageTypes.EmulationState:
-				SendToEmulator(message);
+				SendToEmulator(message, default);
 				break;
 
 			case MessageTypes.Time:
@@ -259,7 +262,7 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 				if (OwnInnerAdapter)
 				{
 					if (_isEmulationOnly)
-						SendToEmulator(message);
+						SendToEmulator(message, default);
 					else
 						base.OnInnerAdapterNewOutMessage(message);
 				}
@@ -270,7 +273,7 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 			default:
 			{
 				if (message is ISubscriptionIdMessage subscrMsg)
-					TrySendToEmulator(subscrMsg);
+					TrySendToEmulator(subscrMsg, default);
 				else
 				{
 					if (OwnInnerAdapter)
@@ -282,24 +285,24 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 		}
 	}
 
-	private void TrySendToEmulator(ISubscriptionIdMessage message)
+	private async ValueTask TrySendToEmulator(ISubscriptionIdMessage message, CancellationToken cancellationToken)
 	{
 		if (_isEmulationOnly)
-			SendToEmulator((Message)message);
+			await SendToEmulator((Message)message, cancellationToken);
 		else
 		{
 			foreach (var id in message.GetSubscriptionIds())
 			{
 				if (_subscriptionIds.Contains(id))
 				{
-					SendToEmulator((Message)message);
+					await SendToEmulator((Message)message, cancellationToken);
 					break;
 				}
 			}
 		}
 	}
 
-	private void ProcessOrderMessage(string portfolioName, OrderMessage message)
+	private ValueTask ProcessOrderMessage(string portfolioName, OrderMessage message, CancellationToken cancellationToken)
 	{
 		if (OwnInnerAdapter)
 		{
@@ -308,24 +311,24 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 				if (!_isEmulationOnly)
 					_emuOrderIds.Add(message.TransactionId);
 
-				SendToEmulator(message);
+				return SendToEmulator(message, cancellationToken);
 			}
 			else
-				base.OnSendInMessage(message);
+				return base.OnSendInMessageAsync(message, cancellationToken);
 		}
 		else
 		{
 			_emuOrderIds.Add(message.TransactionId);
-			SendToEmulator(message);
+			return SendToEmulator(message, cancellationToken);
 		}
 	}
 
-	private void ProcessOrderMessage(long transId, Message message)
+	private ValueTask ProcessOrderMessage(long transId, Message message, CancellationToken cancellationToken)
 	{
 		if (_isEmulationOnly || _emuOrderIds.Contains(transId))
-			SendToEmulator(message);
+			return SendToEmulator(message, cancellationToken);
 		else
-			base.OnSendInMessage(message);
+			return base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />

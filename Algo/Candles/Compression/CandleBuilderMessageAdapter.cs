@@ -84,7 +84,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 	public StorageBuffer Buffer { get; set; }
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -137,14 +137,14 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 									});
 								}
 
-								return true;
+								return;
 							}
 
 							tuple.Second = SubscriptionStates.Active;
 							LogDebug("New ALL candle-map (active): {0}/{1} TrId={2}", mdMsg.SecurityId, tuple.Second, mdMsg.TransactionId);
 
 							RaiseNewOutMessage(mdMsg.CreateResponse());
-							return true;
+							return;
 						}
 					}
 
@@ -160,20 +160,20 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 							}
 							else
 							{
-								if (!TrySubscribeBuild(mdMsg))
+								if (!await TrySubscribeBuild(mdMsg, cancellationToken))
 									RaiseNewOutMessage(transactionId.CreateNotSupported());
 							}
 
-							return true;
+							return;
 						}
 					}
 
 					if (mdMsg.BuildMode == MarketDataBuildModes.Build && mdMsg.BuildFrom?.IsTFCandles != true)
 					{
-						if (!TrySubscribeBuild(mdMsg))
+						if (!await TrySubscribeBuild(mdMsg, cancellationToken))
 							RaiseNewOutMessage(transactionId.CreateNotSupported());
 
-						return true;
+						return;
 					}
 
 					if (mdMsg.DataType2.IsTFCandles)
@@ -216,7 +216,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 						{
 							RaiseNewOutMessage(transactionId.CreateNotSupported());
 
-							return true;
+							return;
 						}
 
 						if (mdMsg.AllowBuildFromSmallerTimeFrame)
@@ -247,11 +247,12 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 									});
 								}
 
-								return base.OnSendInMessage(current);
+								await base.OnSendInMessageAsync(current, cancellationToken);
+								return;
 							}
 						}
 
-						if (!TrySubscribeBuild(mdMsg))
+						if (!await TrySubscribeBuild(mdMsg, cancellationToken))
 						{
 							RaiseNewOutMessage(transactionId.CreateNotSupported());
 						}
@@ -278,14 +279,14 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 						}
 						else
 						{
-							if (isLoadOnly || !TrySubscribeBuild(mdMsg))
+							if (isLoadOnly || !await TrySubscribeBuild(mdMsg, cancellationToken))
 							{
 								RaiseNewOutMessage(transactionId.CreateNotSupported());
 							}
 						}
 					}
 
-					return true;
+					return;
 				}
 				else
 				{
@@ -305,7 +306,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 						if (sentResponse)
 						{
 							RaiseNewOutMessage(mdMsg.CreateResponse());
-							return true;
+							return;
 						}
 
 						break;
@@ -328,7 +329,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 			}
 		}
 
-		return base.OnSendInMessage(message);
+		await base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	private SeriesInfo TryGetSeries(long id, out long originalId)
@@ -385,7 +386,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 		return current;
 	}
 
-	private bool TrySubscribeBuild(MarketDataMessage original)
+	private async ValueTask<bool> TrySubscribeBuild(MarketDataMessage original, CancellationToken cancellationToken)
 	{
 		var current = TryCreateBuildSubscription(original, original.From);
 
@@ -406,7 +407,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 			_series.Add(original.TransactionId, series);
 
 		Buffer?.ProcessInMessage(current);
-		base.OnSendInMessage(current);
+		await base.OnSendInMessageAsync(current, cancellationToken);
 		return true;
 	}
 

@@ -3,7 +3,7 @@
 using StockSharp.Algo.Testing;
 
 [TestClass]
-public class MarketEmulatorTests
+public class MarketEmulatorTests : BaseTestClass
 {
 	private static IMarketEmulator CreateEmuWithEvents(SecurityId secId, out List<Message> result)
 		=> CreateEmuWithEvents([secId], out result);
@@ -20,20 +20,20 @@ public class MarketEmulatorTests
 	private const string _pfName = Messages.Extensions.SimulatorPortfolioName;
 	private static readonly IdGenerator _idGenerator = new IncrementalIdGenerator();
 
-	private static void AddBook(IMarketEmulator emu, SecurityId secId, DateTime now, decimal bid = 100, decimal ask = 101)
+	private async Task AddBookAsync(IMarketEmulator emu, SecurityId secId, DateTime now, decimal bid = 100, decimal ask = 101)
 	{
-		emu.SendInMessage(new QuoteChangeMessage
+		await emu.SendInMessageAsync(new QuoteChangeMessage
 		{
 			SecurityId = secId,
 			LocalTime = now,
 			ServerTime = now,
 			Bids = [new(bid, 10)],
 			Asks = [new(ask, 10)]
-		});
+		}, CancellationToken);
 	}
 
 	[TestMethod]
-	public void OrderMatcher()
+	public async Task OrderMatcher()
 	{
 		static ExecutionMessage CreateQuote(Sides side, decimal price, decimal volume, SecurityId secId)
 		{
@@ -51,19 +51,19 @@ public class MarketEmulatorTests
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 
-		emu.SendInMessage(CreateQuote(Sides.Buy, 90, 1, id));
-		emu.SendInMessage(CreateQuote(Sides.Buy, 91, 1, id));
-		emu.SendInMessage(CreateQuote(Sides.Buy, 92, 1, id));
-		emu.SendInMessage(CreateQuote(Sides.Buy, 93, 1, id));
-		emu.SendInMessage(CreateQuote(Sides.Buy, 94, 1, id));
+		await emu.SendInMessageAsync(CreateQuote(Sides.Buy, 90, 1, id), CancellationToken);
+		await emu.SendInMessageAsync(CreateQuote(Sides.Buy, 91, 1, id), CancellationToken);
+		await emu.SendInMessageAsync(CreateQuote(Sides.Buy, 92, 1, id), CancellationToken);
+		await emu.SendInMessageAsync(CreateQuote(Sides.Buy, 93, 1, id), CancellationToken);
+		await emu.SendInMessageAsync(CreateQuote(Sides.Buy, 94, 1, id), CancellationToken);
 
-		emu.SendInMessage(CreateQuote(Sides.Sell, 96, 1, id));
-		emu.SendInMessage(CreateQuote(Sides.Sell, 97, 1, id));
-		emu.SendInMessage(CreateQuote(Sides.Sell, 98, 1, id));
-		emu.SendInMessage(CreateQuote(Sides.Sell, 99, 1, id));
-		emu.SendInMessage(CreateQuote(Sides.Sell, 100, 1, id));
+		await emu.SendInMessageAsync(CreateQuote(Sides.Sell, 96, 1, id), CancellationToken);
+		await emu.SendInMessageAsync(CreateQuote(Sides.Sell, 97, 1, id), CancellationToken);
+		await emu.SendInMessageAsync(CreateQuote(Sides.Sell, 98, 1, id), CancellationToken);
+		await emu.SendInMessageAsync(CreateQuote(Sides.Sell, 99, 1, id), CancellationToken);
+		await emu.SendInMessageAsync(CreateQuote(Sides.Sell, 100, 1, id), CancellationToken);
 
-		emu.SendInMessage(new ExecutionMessage
+		await emu.SendInMessageAsync(new ExecutionMessage
 		{
 			LocalTime = DateTime.UtcNow,
 			SecurityId = id,
@@ -74,20 +74,20 @@ public class MarketEmulatorTests
 			PortfolioName = "test",
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
-		});
+		}, CancellationToken);
 
 		res.Count.AssertEqual(6);
 
-		emu.SendInMessage(new PositionChangeMessage
+		await emu.SendInMessageAsync(new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
 			PortfolioName = "test",
 			LocalTime = DateTime.UtcNow,
 		}
 		.Add(PositionChangeTypes.BeginValue, 100000000m)
-		.Add(PositionChangeTypes.CurrentValue, 100000000m));
+		.Add(PositionChangeTypes.CurrentValue, 100000000m), CancellationToken);
 
-		emu.SendInMessage(new ExecutionMessage
+		await emu.SendInMessageAsync(new ExecutionMessage
 		{
 			LocalTime = DateTime.UtcNow,
 			SecurityId = id,
@@ -98,18 +98,18 @@ public class MarketEmulatorTests
 			PortfolioName = "test",
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
-		});
+		}, CancellationToken);
 
 		res.Count.AssertEqual(9);
 	}
 
 	[TestMethod]
-	public void LimitBuyPutInQueueOrderBook()
+	public async Task LimitBuyPutInQueueOrderBook()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		var reg = new OrderRegisterMessage
 		{
@@ -123,7 +123,7 @@ public class MarketEmulatorTests
 			TimeInForce = TimeInForce.PutInQueue,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.Find(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
@@ -131,12 +131,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void LimitSellPutInQueueOrderBook()
+	public async Task LimitSellPutInQueueOrderBook()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		var reg = new OrderRegisterMessage
 		{
@@ -150,7 +150,7 @@ public class MarketEmulatorTests
 			TimeInForce = TimeInForce.PutInQueue,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.Find(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
@@ -158,12 +158,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void LimitBuyFOKFull()
+	public async Task LimitBuyFOKFull()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		var reg = new OrderRegisterMessage
 		{
@@ -177,7 +177,7 @@ public class MarketEmulatorTests
 			TimeInForce = TimeInForce.MatchOrCancel,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
@@ -187,12 +187,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void LimitBuyFOKNone()
+	public async Task LimitBuyFOKNone()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		var reg = new OrderRegisterMessage
 		{
@@ -206,7 +206,7 @@ public class MarketEmulatorTests
 			TimeInForce = TimeInForce.MatchOrCancel,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
@@ -219,12 +219,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void LimitSellFOKFull()
+	public async Task LimitSellFOKFull()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		var reg = new OrderRegisterMessage
 		{
@@ -238,7 +238,7 @@ public class MarketEmulatorTests
 			TimeInForce = TimeInForce.MatchOrCancel,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
@@ -248,12 +248,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void LimitSellFOKNone()
+	public async Task LimitSellFOKNone()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		var reg = new OrderRegisterMessage
 		{
@@ -267,7 +267,7 @@ public class MarketEmulatorTests
 			TimeInForce = TimeInForce.MatchOrCancel,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
 		m.AssertNotNull();
@@ -275,12 +275,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void LimitBuyIOCFull()
+	public async Task LimitBuyIOCFull()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		var reg = new OrderRegisterMessage
 		{
@@ -294,7 +294,7 @@ public class MarketEmulatorTests
 			TimeInForce = TimeInForce.CancelBalance,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
@@ -307,12 +307,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void LimitBuyIOCPartial()
+	public async Task LimitBuyIOCPartial()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		var reg = new OrderRegisterMessage
 		{
@@ -326,7 +326,7 @@ public class MarketEmulatorTests
 			TimeInForce = TimeInForce.CancelBalance,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
@@ -339,12 +339,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void LimitBuyIOCNone()
+	public async Task LimitBuyIOCNone()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		var reg = new OrderRegisterMessage
 		{
@@ -358,7 +358,7 @@ public class MarketEmulatorTests
 			TimeInForce = TimeInForce.CancelBalance,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
@@ -370,12 +370,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void LimitSellIOCFull()
+	public async Task LimitSellIOCFull()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		var reg = new OrderRegisterMessage
 		{
@@ -389,7 +389,7 @@ public class MarketEmulatorTests
 			TimeInForce = TimeInForce.CancelBalance,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
@@ -402,12 +402,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void LimitSellIOCPartial()
+	public async Task LimitSellIOCPartial()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		var reg = new OrderRegisterMessage
 		{
@@ -421,7 +421,7 @@ public class MarketEmulatorTests
 			TimeInForce = TimeInForce.CancelBalance,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
@@ -434,12 +434,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void LimitSellIOCNone()
+	public async Task LimitSellIOCNone()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		var reg = new OrderRegisterMessage
 		{
@@ -453,7 +453,7 @@ public class MarketEmulatorTests
 			TimeInForce = TimeInForce.CancelBalance,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
@@ -465,12 +465,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void LimitBuyPostOnlyOrderBook()
+	public async Task LimitBuyPostOnlyOrderBook()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		var reg = new OrderRegisterMessage
 		{
@@ -484,7 +484,7 @@ public class MarketEmulatorTests
 			PostOnly = true,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
@@ -504,7 +504,7 @@ public class MarketEmulatorTests
 			PostOnly = true,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
@@ -514,12 +514,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void LimitSellPostOnlyOrderBook()
+	public async Task LimitSellPostOnlyOrderBook()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		var reg = new OrderRegisterMessage
 		{
@@ -533,7 +533,7 @@ public class MarketEmulatorTests
 			PostOnly = true,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
@@ -553,7 +553,7 @@ public class MarketEmulatorTests
 			PostOnly = true,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
@@ -563,12 +563,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void MarketBuyPutInQueueOrderBook()
+	public async Task MarketBuyPutInQueueOrderBook()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		var reg = new OrderRegisterMessage
 		{
@@ -581,7 +581,7 @@ public class MarketEmulatorTests
 			TimeInForce = TimeInForce.PutInQueue,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
@@ -594,12 +594,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void MarketSellPutInQueueOrderBook()
+	public async Task MarketSellPutInQueueOrderBook()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		var reg = new OrderRegisterMessage
 		{
@@ -612,7 +612,7 @@ public class MarketEmulatorTests
 			TimeInForce = TimeInForce.PutInQueue,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
@@ -625,7 +625,7 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void ExpiryDateLimitOrder()
+	public async Task ExpiryDateLimitOrder()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
@@ -644,14 +644,14 @@ public class MarketEmulatorTests
 			TillDate = expiry,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 		m.OrderState.AssertEqual(OrderStates.Active);
 
 		res.Clear();
-		emu.SendInMessage(new ExecutionMessage
+		await emu.SendInMessageAsync(new ExecutionMessage
 		{
 			SecurityId = id,
 			LocalTime = expiry.AddSeconds(1),
@@ -659,7 +659,7 @@ public class MarketEmulatorTests
 			DataTypeEx = DataType.Ticks,
 			TradePrice = 105,
 			TradeVolume = 2
-		});
+		}, CancellationToken);
 		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 		m.OrderState.AssertEqual(OrderStates.Done);
@@ -668,7 +668,7 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void ExpiryDateInvalidLimitOrder()
+	public async Task ExpiryDateInvalidLimitOrder()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
@@ -687,7 +687,7 @@ public class MarketEmulatorTests
 			TillDate = expiry,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
@@ -697,12 +697,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void ReplaceOrder()
+	public async Task ReplaceOrder()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		var reg = new OrderRegisterMessage
 		{
@@ -715,7 +715,7 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
@@ -737,7 +737,7 @@ public class MarketEmulatorTests
 
 		res.Clear();
 
-		emu.SendInMessage(replace);
+		await emu.SendInMessageAsync(replace, CancellationToken);
 
 		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
@@ -751,12 +751,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void ReplaceOrderAndMatch()
+	public async Task ReplaceOrderAndMatch()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		var reg = new OrderRegisterMessage
 		{
@@ -769,7 +769,7 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
@@ -791,7 +791,7 @@ public class MarketEmulatorTests
 
 		res.Clear();
 
-		emu.SendInMessage(replace);
+		await emu.SendInMessageAsync(replace, CancellationToken);
 
 		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
@@ -810,12 +810,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void CancelOrder()
+	public async Task CancelOrder()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		var reg = new OrderRegisterMessage
 		{
@@ -828,7 +828,7 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
@@ -836,7 +836,7 @@ public class MarketEmulatorTests
 
 		res.Clear();
 
-		emu.SendInMessage(new OrderCancelMessage
+		await emu.SendInMessageAsync(new OrderCancelMessage
 		{
 			SecurityId = id,
 			LocalTime = now.AddSeconds(1),
@@ -844,7 +844,7 @@ public class MarketEmulatorTests
 			OrderId = 1,
 			OriginalTransactionId = reg.TransactionId,
 			PortfolioName = _pfName,
-		});
+		}, CancellationToken);
 
 		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
@@ -854,19 +854,19 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void CandleExecution()
+	public async Task CandleExecution()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		emu.SendInMessage(new MarketDataMessage
+		await emu.SendInMessageAsync(new MarketDataMessage
 		{
 			TransactionId = _idGenerator.GetNextId(),
 			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
 			SecurityId = id,
 			IsSubscribe = true,
-		});
-		emu.SendInMessage(new TimeFrameCandleMessage
+		}, CancellationToken);
+		await emu.SendInMessageAsync(new TimeFrameCandleMessage
 		{
 			SecurityId = id,
 			OpenTime = now.AddMinutes(-5),
@@ -876,7 +876,7 @@ public class MarketEmulatorTests
 			LowPrice = 95,
 			ClosePrice = 104,
 			TotalVolume = 100
-		});
+		}, CancellationToken);
 		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
@@ -888,7 +888,7 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
@@ -901,13 +901,13 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void TickExecution()
+	public async Task TickExecution()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
 
-		emu.SendInMessage(new ExecutionMessage
+		await emu.SendInMessageAsync(new ExecutionMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -915,7 +915,7 @@ public class MarketEmulatorTests
 			DataTypeEx = DataType.Ticks,
 			TradePrice = 105,
 			TradeVolume = 2
-		});
+		}, CancellationToken);
 		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
@@ -927,7 +927,7 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
@@ -940,13 +940,13 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void Level1Execution()
+	public async Task Level1Execution()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
 
-		emu.SendInMessage(new Level1ChangeMessage
+		await emu.SendInMessageAsync(new Level1ChangeMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -955,7 +955,7 @@ public class MarketEmulatorTests
 		.Add(Level1Fields.BestBidPrice, 104m)
 		.Add(Level1Fields.BestAskPrice, 105m)
 		.Add(Level1Fields.BestBidVolume, 1m)
-		.Add(Level1Fields.BestAskVolume, 2m));
+		.Add(Level1Fields.BestAskVolume, 2m), CancellationToken);
 
 		var reg = new OrderRegisterMessage
 		{
@@ -968,7 +968,7 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
@@ -981,13 +981,13 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void OrderLogExecution()
+	public async Task OrderLogExecution()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
 
-		emu.SendInMessage(new ExecutionMessage
+		await emu.SendInMessageAsync(new ExecutionMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -996,7 +996,7 @@ public class MarketEmulatorTests
 			OrderPrice = 106,
 			OrderVolume = 4,
 			Side = Sides.Buy
-		});
+		}, CancellationToken);
 		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
@@ -1008,7 +1008,7 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
@@ -1021,13 +1021,13 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void MarketOrderOnTickExecution()
+	public async Task MarketOrderOnTickExecution()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
 
-		emu.SendInMessage(new ExecutionMessage
+		await emu.SendInMessageAsync(new ExecutionMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -1035,7 +1035,7 @@ public class MarketEmulatorTests
 			DataTypeEx = DataType.Ticks,
 			TradePrice = 107,
 			TradeVolume = 1
-		});
+		}, CancellationToken);
 		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
@@ -1046,7 +1046,7 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Market,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
@@ -1059,13 +1059,13 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void MarketOrderOnOrderLogExecution()
+	public async Task MarketOrderOnOrderLogExecution()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
 
-		emu.SendInMessage(new ExecutionMessage
+		await emu.SendInMessageAsync(new ExecutionMessage
 		{
 			SecurityId = id,
 			LocalTime = now,
@@ -1074,7 +1074,7 @@ public class MarketEmulatorTests
 			OrderPrice = 108,
 			OrderVolume = 2,
 			Side = Sides.Sell
-		});
+		}, CancellationToken);
 		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
@@ -1085,7 +1085,7 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Market,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
@@ -1107,7 +1107,7 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Market,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
 		m.AssertNotNull();
@@ -1120,12 +1120,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void OrderGroupCancelOrders()
+	public async Task OrderGroupCancelOrders()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		// Create two limit orders
 		var reg1 = new OrderRegisterMessage
@@ -1139,7 +1139,7 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg1);
+		await emu.SendInMessageAsync(reg1, CancellationToken);
 
 		var reg2 = new OrderRegisterMessage
 		{
@@ -1152,7 +1152,7 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg2);
+		await emu.SendInMessageAsync(reg2, CancellationToken);
 
 		// Check that orders are active
 		var m1 = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg1.TransactionId);
@@ -1168,11 +1168,11 @@ public class MarketEmulatorTests
 		now = now.AddSeconds(1);
 
 		// Check active orders via OrderStatusMessage
-		emu.SendInMessage(new OrderStatusMessage
+		await emu.SendInMessageAsync(new OrderStatusMessage
 		{
 			IsSubscribe = true,
 			TransactionId = _idGenerator.GetNextId(),
-		});
+		}, CancellationToken);
 
 		res.OfType<ExecutionMessage>()
 			.Count(x => x.OrderState == OrderStates.Active)
@@ -1183,13 +1183,13 @@ public class MarketEmulatorTests
 		now = now.AddSeconds(1);
 
 		// Cancel all orders
-		emu.SendInMessage(new OrderGroupCancelMessage
+		await emu.SendInMessageAsync(new OrderGroupCancelMessage
 		{
 			LocalTime = now,
 			TransactionId = _idGenerator.GetNextId(),
 			PortfolioName = _pfName,
 			Mode = OrderGroupCancelModes.CancelOrders,
-		});
+		}, CancellationToken);
 
 		// Check that both orders are cancelled
 		res.OfType<ExecutionMessage>()
@@ -1201,11 +1201,11 @@ public class MarketEmulatorTests
 		now = now.AddSeconds(1);
 
 		// Verify no active orders remain
-		emu.SendInMessage(new OrderStatusMessage
+		await emu.SendInMessageAsync(new OrderStatusMessage
 		{
 			IsSubscribe = true,
 			TransactionId = _idGenerator.GetNextId(),
-		});
+		}, CancellationToken);
 
 		res.OfType<ExecutionMessage>()
 			.Count(x => x.OrderState == OrderStates.Active)
@@ -1213,12 +1213,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void OrderGroupClosePositions()
+	public async Task OrderGroupClosePositions()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		// Create a long position by executing a buy order
 		var reg = new OrderRegisterMessage
@@ -1232,7 +1232,7 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg);
+		await emu.SendInMessageAsync(reg, CancellationToken);
 
 		// Verify the order executed
 		var trade = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
@@ -1244,11 +1244,11 @@ public class MarketEmulatorTests
 		now = now.AddSeconds(1);
 
 		// Check open positions via PortfolioLookupMessage
-		emu.SendInMessage(new PortfolioLookupMessage
+		await emu.SendInMessageAsync(new PortfolioLookupMessage
 		{
 			IsSubscribe = true,
 			TransactionId = _idGenerator.GetNextId(),
-		});
+		}, CancellationToken);
 
 		res.OfType<PositionChangeMessage>()
 			.Single(x => x.SecurityId == id)
@@ -1260,13 +1260,13 @@ public class MarketEmulatorTests
 		now = now.AddSeconds(1);
 
 		// Close all positions
-		emu.SendInMessage(new OrderGroupCancelMessage
+		await emu.SendInMessageAsync(new OrderGroupCancelMessage
 		{
 			LocalTime = now,
 			TransactionId = _idGenerator.GetNextId(),
 			PortfolioName = _pfName,
 			Mode = OrderGroupCancelModes.ClosePositions,
-		});
+		}, CancellationToken);
 
 		// Check that a closing order was created (sell order to close long position)
 		res.OfType<ExecutionMessage>().Count(x => x.OrderState == OrderStates.Done).AssertEqual(1);
@@ -1276,11 +1276,11 @@ public class MarketEmulatorTests
 		now = now.AddSeconds(1);
 
 		// Verify no open positions remain after close
-		emu.SendInMessage(new PortfolioLookupMessage
+		await emu.SendInMessageAsync(new PortfolioLookupMessage
 		{
 			IsSubscribe = true,
 			TransactionId = _idGenerator.GetNextId(),
-		});
+		}, CancellationToken);
 
 		res.OfType<PositionChangeMessage>()
 			.Count(x => x.SecurityId == id)
@@ -1288,14 +1288,14 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void OrderGroupClosePositionsWithSecurityFilter()
+	public async Task OrderGroupClosePositionsWithSecurityFilter()
 	{
 		var id1 = Helper.CreateSecurityId();
 		var id2 = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents([id1, id2], out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id1, now);
-		AddBook(emu, id2, now);
+		await AddBookAsync(emu, id1, now);
+		await AddBookAsync(emu, id2, now);
 
 		// Create a long position for id1
 		var reg1 = new OrderRegisterMessage
@@ -1309,7 +1309,7 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg1);
+		await emu.SendInMessageAsync(reg1, CancellationToken);
 
 		// Create a long position for id2
 		var reg2 = new OrderRegisterMessage
@@ -1323,18 +1323,18 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg2);
+		await emu.SendInMessageAsync(reg2, CancellationToken);
 
 		res.Clear();
 
 		now = now.AddSeconds(1);
 
 		// Check open positions via PortfolioLookupMessage
-		emu.SendInMessage(new PortfolioLookupMessage
+		await emu.SendInMessageAsync(new PortfolioLookupMessage
 		{
 			IsSubscribe = true,
 			TransactionId = _idGenerator.GetNextId(),
-		});
+		}, CancellationToken);
 
 		res.OfType<PositionChangeMessage>()
 			.Count(x => x.SecurityId == id1 || x.SecurityId == id2)
@@ -1345,14 +1345,14 @@ public class MarketEmulatorTests
 		now = now.AddSeconds(1);
 
 		// Close only positions for id1
-		emu.SendInMessage(new OrderGroupCancelMessage
+		await emu.SendInMessageAsync(new OrderGroupCancelMessage
 		{
 			LocalTime = now,
 			TransactionId = _idGenerator.GetNextId(),
 			PortfolioName = _pfName,
 			SecurityId = id1,
 			Mode = OrderGroupCancelModes.ClosePositions,
-		});
+		}, CancellationToken);
 
 		// Check that a closing order was created for id1
 		res.OfType<ExecutionMessage>().Count(x => x.OrderState == OrderStates.Done).AssertEqual(1);
@@ -1362,11 +1362,11 @@ public class MarketEmulatorTests
 		now = now.AddSeconds(1);
 
 		// Verify that position for id1 is closed but id2 remains open
-		emu.SendInMessage(new PortfolioLookupMessage
+		await emu.SendInMessageAsync(new PortfolioLookupMessage
 		{
 			IsSubscribe = true,
 			TransactionId = _idGenerator.GetNextId(),
-		});
+		}, CancellationToken);
 
 		res.OfType<PositionChangeMessage>()
 			.Count(x => x.SecurityId == id1)
@@ -1379,12 +1379,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void OrderGroupClosePositionsWithSideFilter()
+	public async Task OrderGroupClosePositionsWithSideFilter()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		// Create a long position (buy)
 		var reg1 = new OrderRegisterMessage
@@ -1398,7 +1398,7 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg1);
+		await emu.SendInMessageAsync(reg1, CancellationToken);
 
 		res.Clear();
 
@@ -1416,18 +1416,18 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg2);
+		await emu.SendInMessageAsync(reg2, CancellationToken);
 
 		res.Clear();
 
 		now = now.AddSeconds(1);
 
 		// Check open positions via PortfolioLookupMessage
-		emu.SendInMessage(new PortfolioLookupMessage
+		await emu.SendInMessageAsync(new PortfolioLookupMessage
 		{
 			IsSubscribe = true,
 			TransactionId = _idGenerator.GetNextId(),
-		});
+		}, CancellationToken);
 
 		// Net position should be 10 - 5 = 5 (long)
 		res.OfType<PositionChangeMessage>()
@@ -1440,14 +1440,14 @@ public class MarketEmulatorTests
 		now = now.AddSeconds(1);
 
 		// Close only long positions (Side = Sides.Buy means close long positions)
-		emu.SendInMessage(new OrderGroupCancelMessage
+		await emu.SendInMessageAsync(new OrderGroupCancelMessage
 		{
 			LocalTime = now,
 			TransactionId = _idGenerator.GetNextId(),
 			PortfolioName = _pfName,
 			Side = Sides.Buy,
 			Mode = OrderGroupCancelModes.ClosePositions,
-		});
+		}, CancellationToken);
 
 		// Check that a closing sell order was created to close long position
 		res.OfType<ExecutionMessage>().Count(x => x.OrderState == OrderStates.Done).AssertEqual(1);
@@ -1457,11 +1457,11 @@ public class MarketEmulatorTests
 		now = now.AddSeconds(1);
 
 		// Verify that position is now closed
-		emu.SendInMessage(new PortfolioLookupMessage
+		await emu.SendInMessageAsync(new PortfolioLookupMessage
 		{
 			IsSubscribe = true,
 			TransactionId = _idGenerator.GetNextId(),
-		});
+		}, CancellationToken);
 
 		res.OfType<PositionChangeMessage>()
 			.Count(x => x.SecurityId == id)
@@ -1469,12 +1469,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void OrderGroupCancelAndClose()
+	public async Task OrderGroupCancelAndClose()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		// Create a limit order that stays in the book
 		var reg1 = new OrderRegisterMessage
@@ -1488,7 +1488,7 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg1);
+		await emu.SendInMessageAsync(reg1, CancellationToken);
 
 		now = now.AddSeconds(1);
 
@@ -1504,7 +1504,7 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg2);
+		await emu.SendInMessageAsync(reg2, CancellationToken);
 
 		res.OfType<ExecutionMessage>()
 			.Count(x => x.OrderState == OrderStates.Done)
@@ -1516,11 +1516,11 @@ public class MarketEmulatorTests
 
 		res.Clear();
 
-		emu.SendInMessage(new OrderStatusMessage
+		await emu.SendInMessageAsync(new OrderStatusMessage
 		{
 			IsSubscribe = true,
 			TransactionId = _idGenerator.GetNextId(),
-		});
+		}, CancellationToken);
 
 		res.OfType<ExecutionMessage>()
 			.Count(x => x.OrderState == OrderStates.Active)
@@ -1531,11 +1531,11 @@ public class MarketEmulatorTests
 		now = now.AddSeconds(1);
 
 		// Check open positions via PortfolioLookupMessage
-		emu.SendInMessage(new PortfolioLookupMessage
+		await emu.SendInMessageAsync(new PortfolioLookupMessage
 		{
 			IsSubscribe = true,
 			TransactionId = _idGenerator.GetNextId(),
-		});
+		}, CancellationToken);
 
 		res.OfType<PositionChangeMessage>()
 			.Single(x => x.SecurityId == id)
@@ -1547,13 +1547,13 @@ public class MarketEmulatorTests
 		now = now.AddSeconds(1);
 
 		// Cancel all orders AND close all positions
-		emu.SendInMessage(new OrderGroupCancelMessage
+		await emu.SendInMessageAsync(new OrderGroupCancelMessage
 		{
 			LocalTime = now,
 			TransactionId = _idGenerator.GetNextId(),
 			PortfolioName = _pfName,
 			Mode = OrderGroupCancelModes.CancelOrders | OrderGroupCancelModes.ClosePositions,
-		});
+		}, CancellationToken);
 
 		res.OfType<ExecutionMessage>()
 			.Count(x => x.OrderState == OrderStates.Done)
@@ -1564,11 +1564,11 @@ public class MarketEmulatorTests
 		now = now.AddSeconds(1);
 
 		// Verify no open positions remain after close
-		emu.SendInMessage(new PortfolioLookupMessage
+		await emu.SendInMessageAsync(new PortfolioLookupMessage
 		{
 			IsSubscribe = true,
 			TransactionId = _idGenerator.GetNextId(),
-		});
+		}, CancellationToken);
 
 		res.OfType<PositionChangeMessage>()
 			.Count(x => x.SecurityId == id)
@@ -1576,14 +1576,14 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void OrderGroupCancelOrdersWithSecurityFilter()
+	public async Task OrderGroupCancelOrdersWithSecurityFilter()
 	{
 		var id1 = Helper.CreateSecurityId();
 		var id2 = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents([id1, id2], out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id1, now);
-		AddBook(emu, id2, now);
+		await AddBookAsync(emu, id1, now);
+		await AddBookAsync(emu, id2, now);
 
 		// Create orders for two different securities
 		var reg1 = new OrderRegisterMessage
@@ -1597,7 +1597,7 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg1);
+		await emu.SendInMessageAsync(reg1, CancellationToken);
 
 		var reg2 = new OrderRegisterMessage
 		{
@@ -1610,18 +1610,18 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg2);
+		await emu.SendInMessageAsync(reg2, CancellationToken);
 
 		res.Clear();
 
 		now = now.AddSeconds(1);
 
 		// Check active orders via OrderStatusMessage
-		emu.SendInMessage(new OrderStatusMessage
+		await emu.SendInMessageAsync(new OrderStatusMessage
 		{
 			IsSubscribe = true,
 			TransactionId = _idGenerator.GetNextId(),
-		});
+		}, CancellationToken);
 
 		res.OfType<ExecutionMessage>()
 			.Count(x => x.OrderState == OrderStates.Active)
@@ -1632,14 +1632,14 @@ public class MarketEmulatorTests
 		now = now.AddSeconds(1);
 
 		// Cancel only orders for id1
-		emu.SendInMessage(new OrderGroupCancelMessage
+		await emu.SendInMessageAsync(new OrderGroupCancelMessage
 		{
 			LocalTime = now,
 			TransactionId = _idGenerator.GetNextId(),
 			PortfolioName = _pfName,
 			SecurityId = id1,
 			Mode = OrderGroupCancelModes.CancelOrders,
-		});
+		}, CancellationToken);
 
 		// Check that only order for id1 is cancelled
 		res.OfType<ExecutionMessage>()
@@ -1651,11 +1651,11 @@ public class MarketEmulatorTests
 		now = now.AddSeconds(1);
 
 		// Verify that order for id2 is still active
-		emu.SendInMessage(new OrderStatusMessage
+		await emu.SendInMessageAsync(new OrderStatusMessage
 		{
 			IsSubscribe = true,
 			TransactionId = _idGenerator.GetNextId(),
-		});
+		}, CancellationToken);
 
 		res.OfType<ExecutionMessage>()
 			.Count(x => x.OrderState == OrderStates.Active && x.SecurityId == id2)
@@ -1663,12 +1663,12 @@ public class MarketEmulatorTests
 	}
 
 	[TestMethod]
-	public void OrderGroupCancelOrdersWithSideFilter()
+	public async Task OrderGroupCancelOrdersWithSideFilter()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
-		AddBook(emu, id, now);
+		await AddBookAsync(emu, id, now);
 
 		// Create buy and sell orders
 		var reg1 = new OrderRegisterMessage
@@ -1682,7 +1682,7 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg1);
+		await emu.SendInMessageAsync(reg1, CancellationToken);
 
 		var reg2 = new OrderRegisterMessage
 		{
@@ -1695,18 +1695,18 @@ public class MarketEmulatorTests
 			OrderType = OrderTypes.Limit,
 			PortfolioName = _pfName,
 		};
-		emu.SendInMessage(reg2);
+		await emu.SendInMessageAsync(reg2, CancellationToken);
 
 		res.Clear();
 
 		now = now.AddSeconds(1);
 
 		// Check active orders via OrderStatusMessage
-		emu.SendInMessage(new OrderStatusMessage
+		await emu.SendInMessageAsync(new OrderStatusMessage
 		{
 			IsSubscribe = true,
 			TransactionId = _idGenerator.GetNextId(),
-		});
+		}, CancellationToken);
 
 		res.OfType<ExecutionMessage>()
 			.Count(x => x.OrderState == OrderStates.Active)
@@ -1717,14 +1717,14 @@ public class MarketEmulatorTests
 		now = now.AddSeconds(1);
 
 		// Cancel only buy orders
-		emu.SendInMessage(new OrderGroupCancelMessage
+		await emu.SendInMessageAsync(new OrderGroupCancelMessage
 		{
 			LocalTime = now,
 			TransactionId = _idGenerator.GetNextId(),
 			PortfolioName = _pfName,
 			Side = Sides.Buy,
 			Mode = OrderGroupCancelModes.CancelOrders,
-		});
+		}, CancellationToken);
 
 		// Check that only buy order is cancelled
 		res.OfType<ExecutionMessage>()
@@ -1736,11 +1736,11 @@ public class MarketEmulatorTests
 		now = now.AddSeconds(1);
 
 		// Verify that sell order is still active
-		emu.SendInMessage(new OrderStatusMessage
+		await emu.SendInMessageAsync(new OrderStatusMessage
 		{
 			IsSubscribe = true,
 			TransactionId = _idGenerator.GetNextId(),
-		});
+		}, CancellationToken);
 
 		res.OfType<ExecutionMessage>()
 			.Count(x => x.OrderState == OrderStates.Active && x.Side == Sides.Sell)

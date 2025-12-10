@@ -29,7 +29,7 @@ public class SnapshotHolderMessageAdapter(IMessageAdapter innerAdapter, ISnapsho
 	private readonly ISnapshotHolder _holder = holder ?? throw new ArgumentNullException(nameof(holder));
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -82,7 +82,7 @@ public class SnapshotHolderMessageAdapter(IMessageAdapter innerAdapter, ISnapsho
 			}
 		}
 
-		return base.OnSendInMessage(message);
+		return base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />

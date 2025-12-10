@@ -13,10 +13,10 @@ public class PnLMessageAdapter(IMessageAdapter innerAdapter, IPnLManager pnlMana
 	private readonly IPnLManager _pnlManager = pnlManager ?? throw new ArgumentNullException(nameof(pnlManager));
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		_pnlManager.ProcessMessage(message);
-		return base.OnSendInMessage(message);
+		return base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />

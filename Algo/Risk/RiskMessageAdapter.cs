@@ -21,7 +21,7 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 	}
 
 	/// <inheritdoc />
-	public override bool SendInMessage(Message message)
+	public override ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (message.IsBack())
 		{
@@ -29,15 +29,15 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 			{
 				message.UndoBack();
 
-				return base.OnSendInMessage(message);
+				return base.OnSendInMessageAsync(message, cancellationToken);
 			}
 		}
 
-		return base.SendInMessage(message);
+		return base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		// Check if trading is blocked and reject order registration/modification
 		if (_isTradingBlocked)
@@ -56,7 +56,7 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 						OrderState = OrderStates.Failed,
 						Error = new InvalidOperationException(LocalizedStrings.TradingDisabled)
 					});
-					return true;
+					return default;
 				}
 				case MessageTypes.OrderReplace:
 				{
@@ -70,27 +70,35 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 						OrderState = OrderStates.Failed,
 						Error = new InvalidOperationException(LocalizedStrings.TradingDisabled)
 					});
-					return true;
+					return default;
 				}
 			}
 		}
 
-		ProcessRisk(message);
-		
-		return base.OnSendInMessage(message);
+		var extra = ProcessRisk(message);
+
+		if (extra is not null)
+			message = extra;
+
+		return base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />
 	protected override void OnInnerAdapterNewOutMessage(Message message)
 	{
 		if (message.Type != MessageTypes.Reset)
-			ProcessRisk(message);
+		{
+			var extra = ProcessRisk(message);
+			extra.LoopBack(this);
+			RaiseNewOutMessage(extra);
+		}
 
 		base.OnInnerAdapterNewOutMessage(message);
 	}
 
-	private void ProcessRisk(Message message)
+	private Message ProcessRisk(Message message)
 	{
+		Message retVal = null;
 		var triggeredRules = _riskManager.ProcessRules(message).ToArray();
 
 		foreach (var rule in triggeredRules)
@@ -103,11 +111,11 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 				case RiskActions.ClosePositions:
 				{
 					// Delegate closing positions to the inner adapter
-					base.OnSendInMessage(new OrderGroupCancelMessage
+					retVal = new OrderGroupCancelMessage
 					{
 						TransactionId = TransactionIdGenerator.GetNextId(),
 						Mode = OrderGroupCancelModes.ClosePositions,
-					});
+					};
 					break;
 				}
 				case RiskActions.StopTrading:
@@ -130,6 +138,8 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 			_isTradingBlocked = false;
 			LogInfo("Trading unblocked - risk limits no longer exceeded.");
 		}
+
+		return retVal;
 	}
 
 	/// <summary>

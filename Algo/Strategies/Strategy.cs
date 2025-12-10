@@ -359,7 +359,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				con.OrderEdited               -= OnConnectorOrderEdited;
 				con.OrderEditFailed           -= OnConnectorOrderEditFailed;
 #pragma warning restore CS0618 // Type or member is obsolete
-				con.NewMessage                -= OnConnectorNewMessage;
+				con.NewOutMessageAsync        -= OnConnectorNewMessage;
 				con.CurrentTimeChanged        -= OnConnectorCurrentTimeChanged;
 				isp.Level1Received            -= OnConnectorLevel1Received;
 				isp.OrderBookReceived         -= OnConnectorOrderBookReceived;
@@ -400,7 +400,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				con.OrderEdited               += OnConnectorOrderEdited;
 				con.OrderEditFailed           += OnConnectorOrderEditFailed;
 #pragma warning restore CS0618 // Type or member is obsolete
-				con.NewMessage                += OnConnectorNewMessage;
+				con.NewOutMessageAsync        += OnConnectorNewMessage;
 				con.CurrentTimeChanged        += OnConnectorCurrentTimeChanged;
 				isp.Level1Received            += OnConnectorLevel1Received;
 				isp.OrderBookReceived         += OnConnectorOrderBookReceived;
@@ -2026,10 +2026,10 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			ProcessRisk(() => fail.ToMessage(fail.Order.TransactionId));
 	}
 
-	private void OnConnectorNewMessage(Message message)
+	private ValueTask OnConnectorNewMessage(Message message, CancellationToken cancellationToken)
 	{
 		if(IsDisposeStarted)
-			return;
+			return default;
 
 		DateTime? msgTime = null;
 
@@ -2045,12 +2045,12 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				var quoteMsg = (QuoteChangeMessage)message;
 
 				if (quoteMsg.State != null)
-					return;
+					return default;
 
 				// TODO на истории когда в стакане будут свои заявки по планкам, то противоположная сторона стакана будет пустой
 				// необходимо исключать свои заявки как-то иначе.
 				if (quoteMsg.Asks.IsEmpty() || quoteMsg.Bids.IsEmpty())
-					return;
+					return default;
 
 				PnLManager.ProcessMessage(message);
 				msgTime = quoteMsg.ServerTime;
@@ -2105,7 +2105,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				var timeMsg = (TimeMessage)message;
 
 				if (timeMsg.IsBack())
-					return;
+					return default;
 
 				msgTime = CurrentTimeUtc;
 				break;
@@ -2140,7 +2140,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 					}
 				}
 
-				return;
+				return default;
 			}
 
 			default:
@@ -2152,13 +2152,13 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 					_posManager.UpdateCurrentPrice(candleMsg.SecurityId, candleMsg.ClosePrice, candleMsg.OpenTime, candleMsg.LocalTime);
 				}
 
-				return;
+				return default;
 			}
 		}
 
 		var unrealInterval = UnrealizedPnLInterval;
 		if (msgTime == null || unrealInterval == default || (msgTime.Value - _lastPnlRefreshTime) < unrealInterval)
-			return;
+			return default;
 
 		_lastPnlRefreshTime = msgTime.Value;
 
@@ -2175,18 +2175,20 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			}
 
 			if (!_isPrevDateTradable)
-				return;
+				return default;
 
 			var period = _boardMsg.WorkingTime.GetPeriod(date);
 
 			var tod = _lastPnlRefreshTime.TimeOfDay;
 
 			if (period != null && !period.Times.IsEmpty() && !period.Times.Any(r => r.Contains(tod)))
-				return;
+				return default;
 		}
 
 		if (Positions.Any())
 			RaisePnLChanged(msgTime.Value);
+
+		return default;
 	}
 
 	private void OnConnectorOwnTradeReceived(Subscription subscription, MyTrade trade)

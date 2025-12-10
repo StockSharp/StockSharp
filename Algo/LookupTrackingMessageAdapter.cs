@@ -63,7 +63,7 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 	}
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -81,12 +81,12 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 
 			default:
 				if (message is ISubscriptionMessage subscrMsg && !ProcessLookupMessage(subscrMsg))
-					return true;
+					return default;
 
 				break;
 		}
 
-		return base.OnSendInMessage(message);
+		return base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	private bool ProcessLookupMessage(ISubscriptionMessage message)

@@ -27,7 +27,7 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 	private readonly Dictionary<long, Level1Info> _level1Subscriptions = [];
 
 	/// <inheritdoc />
-	public override bool SendInMessage(Message message)
+	public override ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -81,7 +81,7 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 			}
 		}
 
-		return base.SendInMessage(message);
+		return base.SendInMessageAsync(message, cancellationToken);
 	}
 
 	private TMessage TryConvert<TMessage>(TMessage subscrMsg, DataType dataType, Func<TMessage, Level1ChangeMessage> convert)

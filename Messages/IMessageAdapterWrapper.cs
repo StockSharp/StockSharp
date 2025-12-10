@@ -100,7 +100,7 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 	protected virtual bool SendInBackFurther => true;
 
 	/// <inheritdoc />
-	public virtual bool SendInMessage(Message message)
+	public virtual ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (message.IsBack())
 		{
@@ -112,14 +112,14 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 			{
 				if (SendInBackFurther)
 				{
-					return InnerAdapter.SendInMessage(message);
+					return InnerAdapter.SendInMessageAsync(message, cancellationToken);
 				}
 			}
 		}
 
 		try
 		{
-			return OnSendInMessage(message);
+			return OnSendInMessageAsync(message, cancellationToken);
 		}
 		catch (Exception ex)
 		{
@@ -132,10 +132,10 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 	/// Send message.
 	/// </summary>
 	/// <param name="message">Message.</param>
-	/// <returns><see langword="true"/> if the specified message was processed successfully, otherwise, <see langword="false"/>.</returns>
-	protected virtual bool OnSendInMessage(Message message)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	protected virtual ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		return InnerAdapter.SendInMessage(message);
+		return InnerAdapter.SendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />

@@ -3,7 +3,7 @@
 using StockSharp.Algo.Positions;
 
 [TestClass]
-public class PositionTests
+public class PositionTests : BaseTestClass
 {
 	[TestMethod]
 	public void UpdateByOrders()
@@ -208,7 +208,7 @@ public class PositionTests
 	}
 
 	[TestMethod]
-	public void ChangeHasSubscriptionId()
+	public async Task ChangeHasSubscriptionId()
 	{
 		var manager = new TestPositionManager();
 		var inner = new TestInnerAdapter(true);
@@ -223,14 +223,16 @@ public class PositionTests
 			TransactionId = 1
 		};
 
-		adapter.SendInMessage(lookup);
+		var token = CancellationToken;
+
+		await adapter.SendInMessageAsync(lookup, token);
 		output.Count.AssertEqual(1);
 		output[0].AssertOfType<SubscriptionOnlineMessage>();
 		output.Clear();
 
 		var secId = new SecurityId { SecurityCode = "S", BoardCode = "X" };
 
-		adapter.SendInMessage(new ExecutionMessage
+		await adapter.SendInMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			PortfolioName = "pf",
@@ -238,7 +240,7 @@ public class PositionTests
 			TradeVolume = 1m,
 			SecurityId = secId,
 			ServerTime = DateTime.UtcNow
-		});
+		}, token);
 
 		output.Count.AssertEqual(1);
 		output[0].AssertOfType<ExecutionMessage>();

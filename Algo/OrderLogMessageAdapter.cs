@@ -30,7 +30,7 @@ public class OrderLogMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 	private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionIds = [];
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -43,7 +43,7 @@ public class OrderLogMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 				break;
 		}
 
-		return base.OnSendInMessage(message);
+		return base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	private MarketDataMessage ProcessMarketDataRequest(MarketDataMessage message)

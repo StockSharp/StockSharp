@@ -7,9 +7,6 @@ using System.Runtime.CompilerServices;
 /// </summary>
 public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotifyPropertyChanged
 {
-	private readonly Lock _processorLock = new();
-	private AsyncMessageProcessor _asyncMessageProcessor;
-
 	/// <summary>
 	/// Initialize <see cref="MessageAdapter"/>.
 	/// </summary>
@@ -25,13 +22,6 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 		var attr = GetType().GetAttribute<MessageAdapterCategoryAttribute>();
 		if (attr != null)
 			Categories = attr.Categories;
-	}
-
-	/// <inheritdoc />
-	protected override void DisposeManaged()
-	{
-		_asyncMessageProcessor?.Dispose();
-		base.DisposeManaged();
 	}
 
 	private IEnumerable<MessageTypes> CheckDuplicate(IEnumerable<MessageTypes> value, string propName)
@@ -342,7 +332,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 	}
 
 	/// <inheritdoc />
-	public bool SendInMessage(Message message)
+	public virtual async ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (message.Type == MessageTypes.Connect)
 		{
@@ -352,8 +342,6 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 				{
 					Error = new InvalidOperationException(LocalizedStrings.BitSystemIncompatible.Put(GetType().Name, Platform))
 				});
-
-				return true;
 			}
 		}
 
@@ -370,11 +358,11 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 				{
 					var boardCode = AssociatedBoards.First();
 					SendOutMessage(mdMsg.TransactionId.CreateSubscriptionResponse(new NotSupportedException(LocalizedStrings.WrongSecurityBoard.Put(secId, boardCode, $"{secId.SecurityCode}@{boardCode}"))));
-					return false;
+					return;
 				}
 			}
 
-			var result = OnSendInMessageInternal(message);
+			await OnSendInMessageAsync(message, cancellationToken);
 
 			if (IsAutoReplyOnTransactonalUnsubscription)
 			{
@@ -392,35 +380,20 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 					}
 				}
 			}
-
-			return result;
 		}
 		catch (Exception ex)
 		{
 			SendOutMessage(message.CreateErrorResponse(ex, this));
-			return false;
 		}
 	}
 
 	/// <summary>
-	/// Send message.
+	/// Send in message handler.
 	/// </summary>
-	/// <param name="message">Message.</param>
-	/// <returns><see langword="true"/> if the specified message was processed successfully, otherwise, <see langword="false"/>.</returns>
-	protected virtual bool OnSendInMessageInternal(Message message)
-	{
-		if (_asyncMessageProcessor is null)
-		{
-			using var _ = _processorLock.EnterScope();
-
-			_asyncMessageProcessor ??= new(this);
-		}
-
-		return _asyncMessageProcessor.EnqueueMessage(message);
-	}
-
-	/// <inheritdoc />
-	public virtual ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
+	/// <param name="message"><see cref="Message"/></param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	protected virtual ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		return message.Type switch
 		{
@@ -761,7 +734,7 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 
 	/// <inheritdoc />
 	[Browsable(false)]
-	public virtual bool UseInChannel => false;
+	public virtual bool UseInChannel => true;
 
 	/// <inheritdoc />
 	[Browsable(false)]
@@ -883,9 +856,9 @@ public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotify
 public class PassThroughMessageAdapter(IdGenerator transactionIdGenerator) : MessageAdapter(transactionIdGenerator)
 {
 	/// <inheritdoc />
-	protected override bool OnSendInMessageInternal(Message message)
+	public override ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		SendOutMessage(message);
-		return true;
+		return default;
 	}
 }

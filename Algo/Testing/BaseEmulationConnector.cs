@@ -60,13 +60,13 @@ public abstract class BaseEmulationConnector : Connector
 	}
 
 	/// <inheritdoc />
-	protected override void OnProcessMessage(Message message)
+	protected override ValueTask OnProcessMessage(Message message, CancellationToken cancellationToken)
 	{
 		// output messages from adapters goes non ordered
 		if (_currentTime < message.LocalTime)
 			_currentTime = message.LocalTime;
 
-		base.OnProcessMessage(message);
+		return base.OnProcessMessage(message, cancellationToken);
 	}
 
 	/// <inheritdoc />

@@ -189,7 +189,7 @@ public class HistoryMessageAdapter : MessageAdapter
 		=> dataType == DataType.Securities || base.IsAllDownloadingSupported(dataType);
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessageInternal(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -300,12 +300,9 @@ public class HistoryMessageAdapter : MessageAdapter
 
 				break;
 			}
-
-			default:
-				return false;
 		}
 
-		return true;
+		return default;
 	}
 
 	private void ProcessMarketDataMessage(MarketDataMessage message)

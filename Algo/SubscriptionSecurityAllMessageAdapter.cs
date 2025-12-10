@@ -50,7 +50,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 	}
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -88,7 +88,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 									});
 								}
 
-								return true;
+								return default;
 							}
 
 							var parent = _parents[tuple.First];
@@ -105,7 +105,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 							// for child subscriptions make online (or finished) immediatelly
 							RaiseNewOutMessage(mdMsg.CreateResponse());
 							//RaiseNewOutMessage(mdMsg.CreateResult());
-							return true;
+							return default;
 						}
 						else
 						{
@@ -154,7 +154,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 									// for child subscriptions make online (or finished) immediatelly
 									RaiseNewOutMessage(mdMsg.CreateResponse());
 									//RaiseNewOutMessage(mdMsg.CreateResult());
-									return true;
+									return default;
 								}
 							}
 						}
@@ -221,7 +221,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 						}
 
 						RaiseNewOutMessage(mdMsg.CreateResponse(found ? null : new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId))));
-						return true;
+						return default;
 					}
 				}
 
@@ -229,7 +229,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 			}
 		}
 
-		return base.OnSendInMessage(message);
+		return base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />

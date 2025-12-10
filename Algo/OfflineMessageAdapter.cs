@@ -38,7 +38,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 	protected override bool SendInBackFurther => false;
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		void ProcessOrderReplaceMessage(OrderReplaceMessage replaceMsg)
 		{
@@ -96,7 +96,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 						if (timeMsg.OfflineMode == MessageOfflineModes.Ignore)
 							break;
 
-						return true;
+						return default;
 					}
 				}
 
@@ -113,7 +113,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 						_pendingRegistration.Add(orderMsg.TransactionId, orderMsg);
 						StoreMessage(orderMsg);
 
-						return true;
+						return default;
 					}
 				}
 
@@ -144,7 +144,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 							});
 						}
 
-						return true;
+						return default;
 					}
 				}
 
@@ -157,7 +157,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 					if (!_connected)
 					{
 						ProcessOrderReplaceMessage((OrderReplaceMessage)message.Clone());
-						return true;
+						return default;
 					}
 				}
 
@@ -180,10 +180,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 					}
 				}
 
-				foreach (var msg in msgs)
-					base.OnSendInMessage(msg);
-
-				return true;
+				return msgs.Select(msg => base.OnSendInMessageAsync(msg, cancellationToken)).WhenAll();
 			}
 			default:
 			{
@@ -199,7 +196,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 								else
 									StoreMessage(message.Clone());
 
-								return true;
+								return default;
 							}
 						}
 
@@ -211,7 +208,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 						if (message is ISubscriptionMessage subscrMsg)
 							RaiseNewOutMessage(subscrMsg.CreateResult());
 
-						return true;
+						return default;
 					}
 					default:
 						throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.InvalidValue);
@@ -221,7 +218,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 			}
 		}
 
-		return base.OnSendInMessage(message);
+		return base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	private void ProcessSubscriptionMessage(ISubscriptionMessage subscrMsg)

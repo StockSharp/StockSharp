@@ -75,7 +75,7 @@ public class SecurityMappingMessageAdapter(IMessageAdapter innerAdapter, ISecuri
 	}
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message)
 		{
@@ -87,7 +87,7 @@ public class SecurityMappingMessageAdapter(IMessageAdapter innerAdapter, ISecuri
 				break;
 		}
 
-		return base.OnSendInMessage(message);
+		return base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <summary>

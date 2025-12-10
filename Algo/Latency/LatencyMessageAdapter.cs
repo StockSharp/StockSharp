@@ -13,13 +13,13 @@ public class LatencyMessageAdapter(IMessageAdapter innerAdapter, ILatencyManager
 	private readonly ILatencyManager _latencyManager = latencyManager ?? throw new ArgumentNullException(nameof(latencyManager));
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		message.TryInitLocalTime(this);
 
 		_latencyManager.ProcessMessage(message);
 
-		return base.OnSendInMessage(message);
+		return base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />

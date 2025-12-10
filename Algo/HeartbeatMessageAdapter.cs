@@ -156,7 +156,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 	}
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		var isStartTimer = false;
 
@@ -186,7 +186,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 				if (_isFirstTimeConnect)
 					_isFirstTimeConnect = false;
 				else
-					base.OnSendInMessage(new ResetMessage());
+					await base.OnSendInMessageAsync(new ResetMessage(), cancellationToken);
 
 				using (_timeSync.EnterScope())
 				{
@@ -226,7 +226,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 					using (_timeSync.EnterScope())
 					{
 						if (_currState is ConnectionStates.Disconnecting or ConnectionStates.Disconnected)
-							return true;
+							return;
 					}
 				}
 
@@ -235,13 +235,14 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 			case ExtendedMessageTypes.Reconnect:
 			{
-				return OnSendInMessage(new ConnectMessage());
+				await OnSendInMessageAsync(new ConnectMessage(), cancellationToken);
+				return;
 			}
 		}
 
 		try
 		{
-			var result = base.OnSendInMessage(message);
+			await base.OnSendInMessageAsync(message, cancellationToken);
 
 			using (_timeSync.EnterScope())
 			{
@@ -249,7 +250,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 					StartTimer();
 			}
 
-			return result;
+			return;
 		}
 		finally
 		{

@@ -29,7 +29,7 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 	private readonly IExchangeInfoProvider _exchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
 	/// <inheritdoc />
-	protected override bool OnSendInMessage(Message message)
+	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -81,8 +81,7 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 						_subscriptionsByChildId.Add(inner.TransactionId, info);
 					}
 
-					foreach (var inner in inners)
-						base.OnSendInMessage(inner);
+					await inners.Select(inner => base.OnSendInMessageAsync(inner, cancellationToken)).WhenAll();
 				}
 				else
 				{
@@ -94,12 +93,12 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 
 					foreach (var id in info.LegsSubscriptions.CachedKeys)
 					{
-						base.OnSendInMessage(new MarketDataMessage
+						await base.OnSendInMessageAsync(new MarketDataMessage
 						{
 							TransactionId = TransactionIdGenerator.GetNextId(),
 							IsSubscribe = false,
 							OriginalTransactionId = id
-						});
+						}, cancellationToken);
 					}
 				}
 
@@ -108,11 +107,11 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 					OriginalTransactionId = mdMsg.TransactionId
 				});
 
-				return true;
+				return;
 			}
 		}
 
-		return base.OnSendInMessage(message);
+		await base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	private void ChangeState(SubscriptionInfo info, SubscriptionStates state)

@@ -17,7 +17,7 @@ public class AsyncExtensionsTests : BaseTestClass
 			this.AddSupportedMarketDataType(DataType.Level1);
 		}
 
-		protected override bool OnSendInMessageInternal(Message message)
+		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 		{
 			SentMessages.Add(message);
 
@@ -69,7 +69,7 @@ public class AsyncExtensionsTests : BaseTestClass
 				}
 			}
 
-			return true;
+			return default;
 		}
 
 		public void SimulateData(long subscriptionId, Message data)
