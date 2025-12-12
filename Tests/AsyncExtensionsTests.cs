@@ -171,6 +171,113 @@ public class AsyncExtensionsTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public async Task Adapter_ConnectAsync()
+	{
+		using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+
+		var adapter = new MockAdapter(new IncrementalIdGenerator());
+
+		await adapter.ConnectAsync(cts.Token);
+	}
+
+	[TestMethod]
+	public async Task Adapter_Subscription_Live_SyncAdapter()
+	{
+		var token = CancellationToken;
+		using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+
+		var adapter = new MockAdapter(new IncrementalIdGenerator());
+
+		await adapter.ConnectAsync(cts.Token);
+
+		var subMsg = new MarketDataMessage
+		{
+			TransactionId = adapter.TransactionIdGenerator.GetNextId(),
+			DataType2 = DataType.Level1,
+			IsSubscribe = true,
+			SecurityId = new SecurityId { SecurityCode = "SBER", BoardCode = "TQBR" },
+		};
+
+		var got = new List<Level1ChangeMessage>();
+		using var enumCts = new CancellationTokenSource();
+
+		var enumerating = Task.Run(async () =>
+		{
+			await foreach (var l1 in adapter.SubscribeAsync<Level1ChangeMessage>(subMsg, enumCts.Token))
+			{
+				got.Add(l1);
+				if (got.Count >= 3)
+					break;
+			}
+		}, token);
+
+		// Give time for enumeration to start
+		await Task.Delay(200, cts.Token);
+
+		var id = subMsg.TransactionId;
+
+		for (var i = 0; i < 3; i++)
+		{
+			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow };
+			adapter.SimulateData(id, l1);
+		}
+
+		enumCts.Cancel();
+		await enumerating.WithTimeout(TimeSpan.FromSeconds(5));
+
+		Assert.HasCount(3, got);
+		Assert.IsTrue(adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id));
+	}
+
+	[TestMethod]
+	public async Task Adapter_Subscription_History_SyncAdapter()
+	{
+		var token = CancellationToken;
+		using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+
+		var adapter = new MockAdapter(new IncrementalIdGenerator());
+		await adapter.ConnectAsync(cts.Token);
+
+		var subMsg = new MarketDataMessage
+		{
+			TransactionId = adapter.TransactionIdGenerator.GetNextId(),
+			DataType2 = DataType.Level1,
+			IsSubscribe = true,
+			SecurityId = new SecurityId { SecurityCode = "SBER", BoardCode = "TQBR" },
+			From = DateTime.UtcNow.AddDays(-2),
+			To = DateTime.UtcNow.AddDays(-1),
+		};
+
+		var got = new List<Level1ChangeMessage>();
+
+		var run = Task.Run(async () =>
+		{
+			await foreach (var l1 in adapter.SubscribeAsync<Level1ChangeMessage>(subMsg, CancellationToken))
+			{
+				got.Add(l1);
+				if (got.Count >= 2)
+					break;
+			}
+		}, token);
+
+		// wait activation
+		await Task.Delay(100, cts.Token);
+
+		var id = subMsg.TransactionId;
+
+		for (var i = 0; i < 2; i++)
+		{
+			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow.AddDays(-1).AddMinutes(i) };
+			adapter.SimulateData(id, l1);
+		}
+
+		adapter.FinishHistoricalSubscription(id);
+		await run.WithTimeout(TimeSpan.FromSeconds(5));
+
+		Assert.HasCount(2, got);
+	}
+
+	[TestMethod]
 	public async Task Subscription_Live_SyncAdapter()
 	{
 		var token = CancellationToken;
