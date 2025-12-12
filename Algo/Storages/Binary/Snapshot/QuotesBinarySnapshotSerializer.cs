@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages.Binary.Snapshot;
 
-using Ecng.Serialization;
-
 /// <summary>
 /// Implementation of <see cref="ISnapshotSerializer{TKey,TMessage}"/> in binary format for <see cref="QuoteChangeMessage"/>.
 /// </summary>

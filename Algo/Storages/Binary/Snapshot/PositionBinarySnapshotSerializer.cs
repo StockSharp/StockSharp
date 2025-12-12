@@ -1,8 +1,6 @@
 namespace StockSharp.Algo.Storages.Binary.Snapshot;
 
-using Ecng.Serialization;
-
-using Key = ValueTuple<Messages.SecurityId, string, string>;
+using Key = ValueTuple<SecurityId, string, string>;
 
 /// <summary>
 /// Implementation of <see cref="ISnapshotSerializer{TKey,TMessage}"/> in binary format for <see cref="PositionChangeMessage"/>.

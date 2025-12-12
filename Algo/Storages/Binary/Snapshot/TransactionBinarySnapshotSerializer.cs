@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages.Binary.Snapshot;
 
-using Ecng.Serialization;
-
 using StockSharp.Configuration;
 
 /// <summary>
