@@ -58,22 +58,13 @@ public struct GpuCompositeMomentumParams(int shortRocLength, int longRocLength, 
 
 		if (indicator is CompositeMomentum composite)
 		{
-			Unsafe.AsRef(in this).ShortRocLength = GetLength(composite, "_roc1", ShortRocLength);
-			Unsafe.AsRef(in this).LongRocLength = GetLength(composite, "_roc2", LongRocLength);
-			Unsafe.AsRef(in this).RsiLength = GetLength(composite, "_rsi", RsiLength);
-			Unsafe.AsRef(in this).EmaFastLength = GetLength(composite, "_emaFast", EmaFastLength);
-			Unsafe.AsRef(in this).EmaSlowLength = GetLength(composite, "_emaSlow", EmaSlowLength);
+			Unsafe.AsRef(in this).ShortRocLength = composite.ShortRoc.Length;
+			Unsafe.AsRef(in this).LongRocLength = composite.LongRoc.Length;
+			Unsafe.AsRef(in this).RsiLength = composite.Rsi.Length;
+			Unsafe.AsRef(in this).EmaFastLength = composite.EmaFast.Length;
+			Unsafe.AsRef(in this).EmaSlowLength = composite.EmaSlow.Length;
 			Unsafe.AsRef(in this).SmaLength = composite.Sma.Length;
 		}
-	}
-
-	private static int GetLength(CompositeMomentum composite, string fieldName, int fallback)
-	{
-		var field = typeof(CompositeMomentum).GetField(fieldName, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-		if (field?.GetValue(composite) is LengthIndicator<decimal> indicator)
-			return indicator.Length;
-
-		return fallback;
 	}
 }
 

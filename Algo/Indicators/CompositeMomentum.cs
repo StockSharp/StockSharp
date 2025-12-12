@@ -11,11 +11,35 @@
 [IndicatorOut(typeof(ICompositeMomentumValue))]
 public class CompositeMomentum : BaseComplexIndicator<ICompositeMomentumValue>
 {
-	private readonly RateOfChange _roc1;
-	private readonly RateOfChange _roc2;
-	private readonly RelativeStrengthIndex _rsi;
-	private readonly ExponentialMovingAverage _emaFast;
-	private readonly ExponentialMovingAverage _emaSlow;
+	/// <summary>
+	/// Short-term Rate of Change.
+	/// </summary>
+	[Browsable(false)]
+	public RateOfChange ShortRoc { get; }
+
+	/// <summary>
+	/// Long-term Rate of Change.
+	/// </summary>
+	[Browsable(false)]
+	public RateOfChange LongRoc { get; }
+
+	/// <summary>
+	/// Relative Strength Index.
+	/// </summary>
+	[Browsable(false)]
+	public RelativeStrengthIndex Rsi { get; }
+
+	/// <summary>
+	/// Fast Exponential Moving Average.
+	/// </summary>
+	[Browsable(false)]
+	public ExponentialMovingAverage EmaFast { get; }
+
+	/// <summary>
+	/// Slow Exponential Moving Average.
+	/// </summary>
+	[Browsable(false)]
+	public ExponentialMovingAverage EmaSlow { get; }
 
 	/// <summary>
 	/// SMA used for final smoothing.
@@ -54,11 +78,11 @@ public class CompositeMomentum : BaseComplexIndicator<ICompositeMomentumValue>
 		ExponentialMovingAverage emaSlow,
 		SimpleMovingAverage sma)
 	{
-		_roc1 = shortRoc ?? throw new ArgumentNullException(nameof(shortRoc));
-		_roc2 = longRoc ?? throw new ArgumentNullException(nameof(longRoc));
-		_rsi = rsi ?? throw new ArgumentNullException(nameof(rsi));
-		_emaFast = emaFast ?? throw new ArgumentNullException(nameof(emaFast));
-		_emaSlow = emaSlow ?? throw new ArgumentNullException(nameof(emaSlow));
+		ShortRoc = shortRoc ?? throw new ArgumentNullException(nameof(shortRoc));
+		LongRoc = longRoc ?? throw new ArgumentNullException(nameof(longRoc));
+		Rsi = rsi ?? throw new ArgumentNullException(nameof(rsi));
+		EmaFast = emaFast ?? throw new ArgumentNullException(nameof(emaFast));
+		EmaSlow = emaSlow ?? throw new ArgumentNullException(nameof(emaSlow));
 		Sma = sma ?? throw new ArgumentNullException(nameof(sma));
 		CompositeLine = new();
 
@@ -69,11 +93,11 @@ public class CompositeMomentum : BaseComplexIndicator<ICompositeMomentumValue>
 	/// <inheritdoc />
 	public override void Reset()
 	{
-		_roc1.Reset();
-		_roc2.Reset();
-		_rsi.Reset();
-		_emaFast.Reset();
-		_emaSlow.Reset();
+		ShortRoc.Reset();
+		LongRoc.Reset();
+		Rsi.Reset();
+		EmaFast.Reset();
+		EmaSlow.Reset();
 
 		base.Reset();
 	}
@@ -83,11 +107,11 @@ public class CompositeMomentum : BaseComplexIndicator<ICompositeMomentumValue>
 
 	/// <inheritdoc />
 	public override int NumValuesToInitialize
-		=> _roc1.NumValuesToInitialize
-		.Max(_roc2.NumValuesToInitialize)
-		.Max(_rsi.NumValuesToInitialize)
-		.Max(_emaFast.NumValuesToInitialize)
-		.Max(_emaSlow.NumValuesToInitialize)
+		=> ShortRoc.NumValuesToInitialize
+		.Max(LongRoc.NumValuesToInitialize)
+		.Max(Rsi.NumValuesToInitialize)
+		.Max(EmaFast.NumValuesToInitialize)
+		.Max(EmaSlow.NumValuesToInitialize)
 		+ Sma.NumValuesToInitialize - 1;
 
 	/// <inheritdoc />
@@ -95,13 +119,13 @@ public class CompositeMomentum : BaseComplexIndicator<ICompositeMomentumValue>
 	{
 		var result = new CompositeMomentumValue(this, input.Time);
 
-		var shortRocValue = _roc1.Process(input);
-		var longRocValue = _roc2.Process(input);
-		var rsiValue = _rsi.Process(input);
-		var emaFastValue = _emaFast.Process(input);
-		var emaSlowValue = _emaSlow.Process(input);
+		var shortRocValue = ShortRoc.Process(input);
+		var longRocValue = LongRoc.Process(input);
+		var rsiValue = Rsi.Process(input);
+		var emaFastValue = EmaFast.Process(input);
+		var emaSlowValue = EmaSlow.Process(input);
 
-		if (_roc1.IsFormed && _roc2.IsFormed && _rsi.IsFormed && _emaFast.IsFormed && _emaSlow.IsFormed)
+		if (ShortRoc.IsFormed && LongRoc.IsFormed && Rsi.IsFormed && EmaFast.IsFormed && EmaSlow.IsFormed)
 		{
 			var normalizedShortRoc = shortRocValue.ToDecimal(Source) / 100m;
 			var normalizedLongRoc = longRocValue.ToDecimal(Source) / 100m;
