@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.LowestKey,
 	Description = LocalizedStrings.MinValuePeriodKey)]
 [Doc("topics/api/indicators/list_of_indicators/lowest.html")]
-public class Lowest : LengthIndicator<decimal>
+public class Lowest : DecimalLengthIndicator
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Lowest"/>.
@@ -19,7 +19,11 @@ public class Lowest : LengthIndicator<decimal>
 	public Lowest()
 	{
 		Length = 5;
-		Buffer.MinComparer = Comparer<decimal>.Default;
+
+#if !NET7_0_OR_GREATER
+		Buffer.Operator = new DecimalOperator();
+#endif
+		Buffer.Stats = CircularBufferStats.Min;
 	}
 
 	/// <inheritdoc />

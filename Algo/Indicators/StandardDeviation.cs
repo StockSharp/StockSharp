@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.StdDevKey,
 	Description = LocalizedStrings.StandardDeviationKey)]
 [Doc("topics/api/indicators/list_of_indicators/standard_deviation.html")]
-public class StandardDeviation : LengthIndicator<decimal>
+public class StandardDeviation : DecimalLengthIndicator
 {
 	private readonly SimpleMovingAverage _sma;
 

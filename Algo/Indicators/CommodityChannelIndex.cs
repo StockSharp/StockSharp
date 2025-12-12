@@ -12,7 +12,7 @@
 	Description = LocalizedStrings.CommodityChannelIndexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/cci.html")]
-public class CommodityChannelIndex : LengthIndicator<decimal>
+public class CommodityChannelIndex : DecimalLengthIndicator
 {
 	private readonly MeanDeviation _mean = new();
 

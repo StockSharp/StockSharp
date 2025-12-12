@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.KERKey,
 	Description = LocalizedStrings.KaufmanEfficiencyRatioKey)]
 [Doc("topics/api/indicators/list_of_indicators/kaufman_efficiency_ratio.html")]
-public class KaufmanEfficiencyRatio : LengthIndicator<decimal>
+public class KaufmanEfficiencyRatio : DecimalLengthIndicator
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="KaufmanEfficiencyRatio"/>.

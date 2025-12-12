@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.CMOKey,
 	Description = LocalizedStrings.ChandeMomentumOscillatorKey)]
 [Doc("topics/api/indicators/list_of_indicators/cmo.html")]
-public class ChandeMomentumOscillator : LengthIndicator<decimal>
+public class ChandeMomentumOscillator : DecimalLengthIndicator
 {
 	private readonly Sum _cmoUp = new();
 	private readonly Sum _cmoDn = new();

@@ -12,7 +12,7 @@ namespace StockSharp.Algo.Indicators;
 	Name = LocalizedStrings.RankCorrelationIndexKey,
 	Description = LocalizedStrings.RankCorrelationIndexDescKey)]
 [Doc("topics/api/indicators/list_of_indicators/rank_correlation_index.html")]
-public class RankCorrelationIndex : LengthIndicator<decimal>
+public class RankCorrelationIndex : DecimalLengthIndicator
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RankCorrelationIndex"/>.

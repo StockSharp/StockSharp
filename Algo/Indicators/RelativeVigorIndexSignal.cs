@@ -4,7 +4,7 @@ namespace StockSharp.Algo.Indicators;
 /// The signaling part of indicator <see cref="RelativeVigorIndex"/>.
 /// </summary>
 [IndicatorHidden]
-public class RelativeVigorIndexSignal : LengthIndicator<decimal>
+public class RelativeVigorIndexSignal : DecimalLengthIndicator
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RelativeVigorIndexSignal"/>.

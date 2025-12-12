@@ -11,7 +11,7 @@ namespace StockSharp.Algo.Indicators;
 	Name = LocalizedStrings.FractalDimensionKey,
 	Description = LocalizedStrings.FractalDimensionDescKey)]
 [Doc("topics/api/indicators/list_of_indicators/fractal_dimension.html")]
-public class FractalDimension : LengthIndicator<decimal>
+public class FractalDimension : DecimalLengthIndicator
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="FractalDimension"/>.
@@ -20,8 +20,10 @@ public class FractalDimension : LengthIndicator<decimal>
 	{
 		Length = 30;
 
-		Buffer.MinComparer = new DecimalOperator();
-		Buffer.MaxComparer = new DecimalOperator();
+#if !NET7_0_OR_GREATER
+		Buffer.Operator = new DecimalOperator();
+#endif
+		Buffer.Stats = CircularBufferStats.Min | CircularBufferStats.Max;
 	}
 
 	/// <inheritdoc />

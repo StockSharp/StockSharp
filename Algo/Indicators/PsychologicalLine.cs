@@ -9,7 +9,7 @@
 	Description = LocalizedStrings.PsychologicalLineKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/psychological_line.html")]
-public class PsychologicalLine : LengthIndicator<decimal>
+public class PsychologicalLine : DecimalLengthIndicator
 {
 	private int _upCount;
 

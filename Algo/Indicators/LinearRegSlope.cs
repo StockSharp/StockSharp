@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.LRSKey,
 	Description = LocalizedStrings.LinearRegSlopeKey)]
 [Doc("topics/api/indicators/list_of_indicators/lrs.html")]
-public class LinearRegSlope : LengthIndicator<decimal>
+public class LinearRegSlope : DecimalLengthIndicator
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="LinearRegSlope"/>.

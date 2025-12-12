@@ -9,7 +9,7 @@
 	Description = LocalizedStrings.ApprovalFlowIndexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/approval_flow_index.html")]
-public class ApprovalFlowIndex : LengthIndicator<decimal>
+public class ApprovalFlowIndex : DecimalLengthIndicator
 {
 	private decimal _totalUpVolume;
 	private decimal _totalDownVolume;

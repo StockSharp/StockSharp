@@ -17,6 +17,11 @@ global using Ecng.Collections;
 global using Ecng.Serialization;
 global using Ecng.ComponentModel;
 global using Ecng.Logging;
+#if NET7_0_OR_GREATER
+global using DecimalBuffer = Ecng.Collections.NumericCircularBufferEx<decimal>;
+#else
+global using DecimalBuffer = Ecng.Collections.CircularBufferEx<decimal>;
+#endif
 
 global using StockSharp.Localization;
 global using StockSharp.Messages;

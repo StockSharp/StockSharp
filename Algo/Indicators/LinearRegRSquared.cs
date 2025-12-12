@@ -11,7 +11,7 @@ namespace StockSharp.Algo.Indicators;
 	Name = LocalizedStrings.RSquaredKey,
 	Description = LocalizedStrings.LinearRegRSquaredKey)]
 [Doc("topics/api/indicators/list_of_indicators/linear_reg_rsquared.html")]
-public class LinearRegRSquared : LengthIndicator<decimal>
+public class LinearRegRSquared : DecimalLengthIndicator
 {
 	// Коэффициент при независимой переменной, угол наклона прямой.
 	private decimal _slope;

@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.MomentumKey,
 	Description = LocalizedStrings.MomentumKey)]
 [Doc("topics/api/indicators/list_of_indicators/momentum.html")]
-public class Momentum : LengthIndicator<decimal>
+public class Momentum : DecimalLengthIndicator
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Momentum"/>.

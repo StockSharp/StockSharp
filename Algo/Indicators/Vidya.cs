@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.VidyaKey,
 	Description = LocalizedStrings.VariableIndexDynamicAverageKey)]
 [Doc("topics/api/indicators/list_of_indicators/vidya.html")]
-public class Vidya : LengthIndicator<decimal>
+public class Vidya : DecimalLengthIndicator
 {
 	private decimal _multiplier = 1;
 	private decimal _prevFinalValue;
@@ -25,7 +25,10 @@ public class Vidya : LengthIndicator<decimal>
 	{
 		_cmo = new ChandeMomentumOscillator();
 		Length = 15;
+#if !NET7_0_OR_GREATER
 		Buffer.Operator = new DecimalOperator();
+#endif
+		Buffer.Stats = CircularBufferStats.Sum;
 	}
 
 	/// <inheritdoc />

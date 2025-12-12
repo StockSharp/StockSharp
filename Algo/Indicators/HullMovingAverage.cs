@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.HMAKey,
 	Description = LocalizedStrings.HullMovingAverageKey)]
 [Doc("topics/api/indicators/list_of_indicators/hma.html")]
-public class HullMovingAverage : LengthIndicator<decimal>
+public class HullMovingAverage : DecimalLengthIndicator
 {
 	private readonly WeightedMovingAverage _wmaSlow = new();
 	private readonly WeightedMovingAverage _wmaFast = new();

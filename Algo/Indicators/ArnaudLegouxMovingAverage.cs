@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.ALMAKey,
 	Description = LocalizedStrings.ArnaudLegouxMovingAverageKey)]
 [Doc("topics/api/indicators/list_of_indicators/arnaud_legoux_moving_average.html")]
-public class ArnaudLegouxMovingAverage : LengthIndicator<decimal>
+public class ArnaudLegouxMovingAverage : DecimalLengthIndicator
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ArnaudLegouxMovingAverage"/>.

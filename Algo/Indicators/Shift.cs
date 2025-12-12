@@ -11,7 +11,7 @@ namespace StockSharp.Algo.Indicators;
 	Name = LocalizedStrings.ShiftKey,
 	Description = LocalizedStrings.ShiftDescKey)]
 [Doc("topics/api/indicators/list_of_indicators/shift.html")]
-public class Shift : LengthIndicator<decimal>
+public class Shift : DecimalLengthIndicator
 {
 	private int _left;
 

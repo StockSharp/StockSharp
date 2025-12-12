@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.DPOKey,
 	Description = LocalizedStrings.DetrendedPriceOscillatorKey)]
 [Doc("topics/api/indicators/list_of_indicators/dpo.html")]
-public class DetrendedPriceOscillator : LengthIndicator<decimal>
+public class DetrendedPriceOscillator : DecimalLengthIndicator
 {
 	private readonly SimpleMovingAverage _sma;
 	private int _lookBack;

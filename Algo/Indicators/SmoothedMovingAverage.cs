@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.SMMAKey,
 	Description = LocalizedStrings.SmoothedMovingAverageKey)]
 [Doc("topics/api/indicators/list_of_indicators/smoothed_ma.html")]
-public class SmoothedMovingAverage : LengthIndicator<decimal>
+public class SmoothedMovingAverage : DecimalLengthIndicator
 {
 	private decimal _prevFinalValue;
 
@@ -21,7 +21,10 @@ public class SmoothedMovingAverage : LengthIndicator<decimal>
 	public SmoothedMovingAverage()
 	{
 		Length = 32;
+#if !NET7_0_OR_GREATER
 		Buffer.Operator = new DecimalOperator();
+#endif
+		Buffer.Stats = CircularBufferStats.Sum;
 	}
 
 	/// <inheritdoc />

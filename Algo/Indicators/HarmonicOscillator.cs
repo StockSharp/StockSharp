@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.HOKey,
 	Description = LocalizedStrings.HarmonicOscillatorKey)]
 [Doc("topics/api/indicators/list_of_indicators/harmonic_oscillator.html")]
-public class HarmonicOscillator : LengthIndicator<decimal>
+public class HarmonicOscillator : DecimalLengthIndicator
 {
 	private decimal[] _sinValues;
 

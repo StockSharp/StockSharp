@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.CGOKey,
 	Description = LocalizedStrings.CenterOfGravityOscillatorKey)]
 [Doc("topics/api/indicators/list_of_indicators/center_of_gravity_oscillator.html")]
-public class CenterOfGravityOscillator : LengthIndicator<decimal>
+public class CenterOfGravityOscillator : DecimalLengthIndicator
 {
 	private decimal _sumPrice;
 	private decimal _part;

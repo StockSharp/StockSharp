@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.TEMAKey,
 	Description = LocalizedStrings.TripleExponentialMovingAverageKey)]
 [Doc("topics/api/indicators/list_of_indicators/tema.html")]
-public class TripleExponentialMovingAverage : LengthIndicator<decimal>
+public class TripleExponentialMovingAverage : DecimalLengthIndicator
 {
 	private readonly ExponentialMovingAverage _ema1;
 	private readonly ExponentialMovingAverage _ema2;

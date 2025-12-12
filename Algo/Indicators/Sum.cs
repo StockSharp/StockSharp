@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.SumKey,
 	Description = LocalizedStrings.SumNLastValuesKey)]
 [Doc("topics/api/indicators/list_of_indicators/sum_n.html")]
-public class Sum : LengthIndicator<decimal>
+public class Sum : DecimalLengthIndicator
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Sum"/>.
@@ -19,7 +19,10 @@ public class Sum : LengthIndicator<decimal>
 	public Sum()
 	{
 		Length = 15;
+#if !NET7_0_OR_GREATER
 		Buffer.Operator = new DecimalOperator();
+#endif
+		Buffer.Stats = CircularBufferStats.Sum;
 	}
 
 	/// <inheritdoc />

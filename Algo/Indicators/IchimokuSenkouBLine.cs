@@ -4,7 +4,7 @@ namespace StockSharp.Algo.Indicators;
 /// Senkou (B) line.
 /// </summary>
 [IndicatorIn(typeof(CandleIndicatorValue))]
-public class IchimokuSenkouBLine : LengthIndicator<decimal>
+public class IchimokuSenkouBLine : DecimalLengthIndicator
 {
 	private readonly CircularBuffer<(decimal, decimal)> _buffer;
 

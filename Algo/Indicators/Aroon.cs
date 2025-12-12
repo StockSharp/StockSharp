@@ -95,7 +95,7 @@ public class Aroon : BaseComplexIndicator<IAroonValue>
 /// Aroon Up.
 /// </summary>
 [IndicatorHidden]
-public class AroonUp : LengthIndicator<decimal>
+public class AroonUp : DecimalLengthIndicator
 {
 	private decimal _maxValue;
 	private int _maxValueAge;
@@ -183,7 +183,7 @@ public class AroonUp : LengthIndicator<decimal>
 /// Aroon Down.
 /// </summary>
 [IndicatorHidden]
-public class AroonDown : LengthIndicator<decimal>
+public class AroonDown : DecimalLengthIndicator
 {
 	private decimal _minValue;
 	private int _minValueAge;

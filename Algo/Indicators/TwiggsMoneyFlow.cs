@@ -11,7 +11,7 @@ using StockSharp.Algo.Candles;
 	Description = LocalizedStrings.TwiggsMoneyFlowKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/twiggs_money_flow.html")]
-public class TwiggsMoneyFlow : LengthIndicator<decimal>
+public class TwiggsMoneyFlow : DecimalLengthIndicator
 {
 	private readonly ExponentialMovingAverage _adv = new();
 	private readonly ExponentialMovingAverage _vol = new();

@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.WilderMAKey,
 	Description = LocalizedStrings.WilderMovingAverageKey)]
 [Doc("topics/api/indicators/list_of_indicators/wilder_ma.html")]
-public class WilderMovingAverage : LengthIndicator<decimal>
+public class WilderMovingAverage : DecimalLengthIndicator
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="WilderMovingAverage"/>.

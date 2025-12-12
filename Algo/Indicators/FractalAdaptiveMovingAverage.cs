@@ -9,7 +9,7 @@
 	Description = LocalizedStrings.FractalAdaptiveMovingAverageKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/fractal_adaptive_moving_average.html")]
-public class FractalAdaptiveMovingAverage : LengthIndicator<decimal>
+public class FractalAdaptiveMovingAverage : DecimalLengthIndicator
 {
 	private decimal _prevFrama;
 

@@ -12,7 +12,7 @@
 	Description = LocalizedStrings.StochasticKDescKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/stochastic_oscillator_k.html")]
-public class StochasticK : LengthIndicator<decimal>
+public class StochasticK : DecimalLengthIndicator
 {
 	// Минимальная цена за период.
 	private readonly Lowest _low = new();

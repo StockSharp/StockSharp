@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.MeanDevKey,
 	Description = LocalizedStrings.AverageDeviationKey)]
 [Doc("topics/api/indicators/list_of_indicators/mean_deviation.html")]
-public class MeanDeviation : LengthIndicator<decimal>
+public class MeanDeviation : DecimalLengthIndicator
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MeanDeviation"/>.

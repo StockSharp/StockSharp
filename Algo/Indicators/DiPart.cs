@@ -4,7 +4,7 @@
 /// The part of the indicator <see cref="DirectionalIndex"/>.
 /// </summary>
 [IndicatorIn(typeof(CandleIndicatorValue))]
-public abstract class DiPart : LengthIndicator<decimal>
+public abstract class DiPart : DecimalLengthIndicator
 {
 	private readonly AverageTrueRange _averageTrueRange;
 	private readonly WilderMovingAverage _movingAverage;

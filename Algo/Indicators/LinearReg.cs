@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.LRCKey,
 	Description = LocalizedStrings.LinearRegressionKey)]
 [Doc("topics/api/indicators/list_of_indicators/lrc.html")]
-public class LinearReg : LengthIndicator<decimal>
+public class LinearReg : DecimalLengthIndicator
 {
 	// Коэффициент при независимой переменной, угол наклона прямой.
 	private decimal _slope;

@@ -12,8 +12,8 @@
 [IndicatorOut(typeof(IEhlersFisherTransformValue))]
 public class EhlersFisherTransform : BaseComplexIndicator<IEhlersFisherTransformValue>
 {
-	private readonly CircularBufferEx<decimal> _highBuffer;
-	private readonly CircularBufferEx<decimal> _lowBuffer;
+	private readonly DecimalBuffer _highBuffer;
+	private readonly DecimalBuffer _lowBuffer;
 	private decimal _prevValue;
 	private decimal _currValue;
 
@@ -34,8 +34,13 @@ public class EhlersFisherTransform : BaseComplexIndicator<IEhlersFisherTransform
 	/// </summary>
 	public EhlersFisherTransform()
 	{
-		_highBuffer = new(1) { MaxComparer = Comparer<decimal>.Default };
-		_lowBuffer = new(1) { MinComparer = Comparer<decimal>.Default };
+		_highBuffer = new(1) { Stats = CircularBufferStats.Max };
+		_lowBuffer = new(1) { Stats = CircularBufferStats.Min };
+
+#if !NET7_0_OR_GREATER
+		_highBuffer.Operator = new DecimalOperator();
+		_lowBuffer.Operator = new DecimalOperator();
+#endif
 
 		MainLine = new();
 		TriggerLine = new();

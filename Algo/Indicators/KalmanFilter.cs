@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.KalmanFilterKey,
 	Description = LocalizedStrings.KalmanFilterDescKey)]
 [Doc("topics/api/indicators/list_of_indicators/kalman_filter.html")]
-public class KalmanFilter : LengthIndicator<decimal>
+public class KalmanFilter : DecimalLengthIndicator
 {
 	private decimal? _lastEstimate;
 	private decimal _errorCovariance = 1m;

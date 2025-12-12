@@ -104,10 +104,10 @@ public class VortexIndicator : BaseComplexIndicator<IVortexIndicatorValue>
 /// The part of the Vortex indicator.
 /// </summary>
 [IndicatorHidden]
-public class VortexPart : LengthIndicator<decimal>
+public class VortexPart : DecimalLengthIndicator
 {
-	private readonly CircularBufferEx<decimal> _trBuffer;
-	private readonly CircularBufferEx<decimal> _vmBuffer;
+	private readonly DecimalBuffer _trBuffer;
+	private readonly DecimalBuffer _vmBuffer;
 
 	private decimal _prevHigh;
 	private decimal _prevLow;
@@ -119,8 +119,13 @@ public class VortexPart : LengthIndicator<decimal>
 	/// <param name="isPositive"><see cref="IsPositive"/></param>
 	public VortexPart(bool isPositive)
 	{
-		_trBuffer = new(Length) { Operator = new DecimalOperator() };
-		_vmBuffer = new(Length) { Operator = new DecimalOperator() };
+		_trBuffer = new(Length) { Stats = CircularBufferStats.Sum };
+		_vmBuffer = new(Length) { Stats = CircularBufferStats.Sum };
+#if !NET7_0_OR_GREATER
+		_trBuffer.Operator = new DecimalOperator();
+		_vmBuffer.Operator = new DecimalOperator();
+#endif
+
 		IsPositive = isPositive;
 	}
 

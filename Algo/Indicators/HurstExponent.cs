@@ -12,7 +12,7 @@
 	Name = LocalizedStrings.HurstExponentKey,
 	Description = LocalizedStrings.HurstExponentDescKey)]
 [Doc("topics/api/indicators/list_of_indicators/hurst_exponent.html")]
-public class HurstExponent : LengthIndicator<decimal>
+public class HurstExponent : DecimalLengthIndicator
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="HurstExponent"/> class.

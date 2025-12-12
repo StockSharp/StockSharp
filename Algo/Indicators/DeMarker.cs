@@ -12,7 +12,7 @@ namespace StockSharp.Algo.Indicators;
 	Description = LocalizedStrings.DeMarkerDescKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/demarker.html")]
-public class DeMarker : LengthIndicator<decimal>
+public class DeMarker : DecimalLengthIndicator
 {
 	private readonly SimpleMovingAverage _deMaxSma;
 	private readonly SimpleMovingAverage _deMinSma;

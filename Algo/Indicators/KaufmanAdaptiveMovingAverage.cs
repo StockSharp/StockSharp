@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.KAMAKey,
 	Description = LocalizedStrings.KaufmannAdaptiveMovingAverageKey)]
 [Doc("topics/api/indicators/list_of_indicators/kama.html")]
-public class KaufmanAdaptiveMovingAverage : LengthIndicator<decimal>
+public class KaufmanAdaptiveMovingAverage : DecimalLengthIndicator
 {
 	private decimal _prevFinalValue;
 	private bool _isInitialized;

@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.RMIKey,
 	Description = LocalizedStrings.RelativeMomentumIndexKey)]
 [Doc("topics/api/indicators/list_of_indicators/relative_momentum_index.html")]
-public class RelativeMomentumIndex : LengthIndicator<decimal>
+public class RelativeMomentumIndex : DecimalLengthIndicator
 {
 	private readonly CircularBuffer<decimal> _prices = new(1);
 	private readonly SimpleMovingAverage _upMomentumSma = new();

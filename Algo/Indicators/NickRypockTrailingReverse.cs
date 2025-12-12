@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.NRTRKey,
 	Description = LocalizedStrings.NickRypockTrailingReverseKey)]
 [Doc("topics/api/indicators/list_of_indicators/nrtr.html")]
-public class NickRypockTrailingReverse : LengthIndicator<decimal>
+public class NickRypockTrailingReverse : DecimalLengthIndicator
 {
 	private struct CalcBuffer
 	{

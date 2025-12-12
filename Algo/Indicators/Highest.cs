@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.HighestKey,
 	Description = LocalizedStrings.MaxValueForPeriodKey)]
 [Doc("topics/api/indicators/list_of_indicators/highest.html")]
-public class Highest : LengthIndicator<decimal>
+public class Highest : DecimalLengthIndicator
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Highest"/>.
@@ -19,7 +19,11 @@ public class Highest : LengthIndicator<decimal>
 	public Highest()
 	{
 		Length = 5;
-		Buffer.MaxComparer = Comparer<decimal>.Default;
+
+#if !NET7_0_OR_GREATER
+		Buffer.Operator = new DecimalOperator();
+#endif
+		Buffer.Stats = CircularBufferStats.Max;
 	}
 
 	/// <inheritdoc />

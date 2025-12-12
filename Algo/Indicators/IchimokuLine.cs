@@ -5,7 +5,7 @@
 /// </summary>
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [IndicatorHidden]
-public class IchimokuLine : LengthIndicator<decimal>
+public class IchimokuLine : DecimalLengthIndicator
 {
 	private readonly CircularBuffer<(decimal, decimal)> _buffer;
 

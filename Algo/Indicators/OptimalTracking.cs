@@ -12,7 +12,7 @@
 	Description = LocalizedStrings.OptimalTrackingDescKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/optimal_tracking.html")]
-public sealed class OptimalTracking : LengthIndicator<decimal>
+public sealed class OptimalTracking : DecimalLengthIndicator
 {
 	private static readonly decimal _smoothConstant1 = (decimal)Math.Exp(-0.25);
 	private static readonly decimal _smoothConstant = 1 - _smoothConstant1;

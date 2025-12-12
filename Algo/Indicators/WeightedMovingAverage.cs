@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.WMAKey,
 	Description = LocalizedStrings.WeightedMovingAverageKey)]
 [Doc("topics/api/indicators/list_of_indicators/weighted_ma.html")]
-public class WeightedMovingAverage : LengthIndicator<decimal>
+public class WeightedMovingAverage : DecimalLengthIndicator
 {
 	private decimal _denominator = 1;
 

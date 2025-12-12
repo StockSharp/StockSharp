@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Indicators;
 /// <summary>
 /// Senkou (A) line.
 /// </summary>
-public class IchimokuSenkouALine : LengthIndicator<decimal>
+public class IchimokuSenkouALine : DecimalLengthIndicator
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="IchimokuSenkouALine"/>.

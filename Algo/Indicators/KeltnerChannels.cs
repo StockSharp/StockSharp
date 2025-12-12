@@ -163,7 +163,7 @@ public class KeltnerChannelMiddle : ExponentialMovingAverage
 /// Base class for upper and lower lines of Keltner Channel.
 /// </summary>
 [IndicatorHidden]
-public class KeltnerChannelBand : LengthIndicator<decimal>
+public class KeltnerChannelBand : DecimalLengthIndicator
 {
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)

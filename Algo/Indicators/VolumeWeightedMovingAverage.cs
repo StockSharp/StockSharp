@@ -12,7 +12,7 @@
 	Description = LocalizedStrings.VolumeWeightedMovingAverageKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/volume_weighted_ma.html")]
-public class VolumeWeightedMovingAverage : LengthIndicator<decimal>
+public class VolumeWeightedMovingAverage : DecimalLengthIndicator
 {
 	private readonly Sum _nominator = new();
 	private readonly Sum _denominator = new();

@@ -12,7 +12,7 @@
 	Description = LocalizedStrings.MoneyFlowIndexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/money_flow_index.html")]
-public class MoneyFlowIndex : LengthIndicator<decimal>
+public class MoneyFlowIndex : DecimalLengthIndicator
 {
 	private decimal _previousPrice;
 	private readonly Sum _positiveFlow = new();

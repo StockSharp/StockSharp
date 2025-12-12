@@ -8,7 +8,7 @@ namespace StockSharp.Algo.Indicators;
 	Name = LocalizedStrings.LinearRegressionForecastKey,
 	Description = LocalizedStrings.LinearRegressionForecastDescriptionKey)]
 [Doc("topics/indicators/linear_regression_forecast.html")]
-public class LinearRegressionForecast : LengthIndicator<decimal>
+public class LinearRegressionForecast : DecimalLengthIndicator
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="LinearRegressionForecast"/>.

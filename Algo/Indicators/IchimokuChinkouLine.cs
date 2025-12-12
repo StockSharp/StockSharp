@@ -5,7 +5,7 @@ namespace StockSharp.Algo.Indicators;
 /// </summary>
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [IndicatorHidden]
-public class IchimokuChinkouLine : LengthIndicator<decimal>
+public class IchimokuChinkouLine : DecimalLengthIndicator
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="IchimokuChinkouLine"/>.

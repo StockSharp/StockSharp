@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.DZRSIKey,
 	Description = LocalizedStrings.DynamicZonesRSIKey)]
 [Doc("topics/api/indicators/list_of_indicators/dynamic_zones_rsi.html")]
-public class DynamicZonesRSI : LengthIndicator<decimal>
+public class DynamicZonesRSI : DecimalLengthIndicator
 {
 	private readonly RelativeStrengthIndex _rsi;
 
@@ -19,8 +19,10 @@ public class DynamicZonesRSI : LengthIndicator<decimal>
 	{
 		_rsi = new() { Length = 14 };
 		Length = _rsi.Length;
-		Buffer.MaxComparer = Comparer<decimal>.Default;
-		Buffer.MinComparer = Comparer<decimal>.Default;
+#if !NET7_0_OR_GREATER
+		Buffer.Operator = new DecimalOperator();
+#endif
+		Buffer.Stats = CircularBufferStats.Min | CircularBufferStats.Max;
 	}
 
 	private decimal _oversoldLevel = 20;

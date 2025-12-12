@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.MPKey,
 	Description = LocalizedStrings.MomentumPinballKey)]
 [Doc("topics/api/indicators/list_of_indicators/momentum_pinball.html")]
-public class MomentumPinball : LengthIndicator<decimal>
+public class MomentumPinball : DecimalLengthIndicator
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MomentumPinball"/>.
@@ -17,9 +17,10 @@ public class MomentumPinball : LengthIndicator<decimal>
 	{
 		Length = 14;
 
+#if !NET7_0_OR_GREATER
 		Buffer.Operator = new DecimalOperator();
-		Buffer.MaxComparer = Comparer<decimal>.Default;
-		Buffer.MinComparer = Comparer<decimal>.Default;
+#endif
+		Buffer.Stats = CircularBufferStats.Min | CircularBufferStats.Max;
 	}
 
 	/// <inheritdoc />

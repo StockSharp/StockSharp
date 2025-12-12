@@ -5,7 +5,7 @@ namespace StockSharp.Algo.Indicators;
 /// </summary>
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [IndicatorHidden]
-public class RelativeVigorIndexAverage : LengthIndicator<decimal>
+public class RelativeVigorIndexAverage : DecimalLengthIndicator
 {
 	private readonly CircularBuffer<ICandleMessage> _buffer;
 

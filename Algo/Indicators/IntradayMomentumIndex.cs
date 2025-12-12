@@ -9,7 +9,7 @@
 	Description = LocalizedStrings.IntradayMomentumIndexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/intraday_momentum_index.html")]
-public class IntradayMomentumIndex : LengthIndicator<(decimal o, decimal c)>
+public class IntradayMomentumIndex : LengthIndicator<(decimal o, decimal c), CircularBufferEx<(decimal, decimal)>>
 {
 	private decimal _upSum;
 	private decimal _downSum;
@@ -18,6 +18,7 @@ public class IntradayMomentumIndex : LengthIndicator<(decimal o, decimal c)>
 	/// Initializes a new instance of the <see cref="IntradayMomentumIndex"/>.
 	/// </summary>
 	public IntradayMomentumIndex()
+		: base(new(14))
 	{
 		Length = 14;
 	}

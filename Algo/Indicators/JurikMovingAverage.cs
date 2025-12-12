@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.JMAKey,
 	Description = LocalizedStrings.JurikMovingAverageKey)]
 [Doc("topics/api/indicators/list_of_indicators/jma.html")]
-public class JurikMovingAverage : LengthIndicator<decimal>
+public class JurikMovingAverage : DecimalLengthIndicator
 {
 	private decimal _prevMa1;
 	private decimal _prevMa2;

@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.T3MAKey,
 	Description = LocalizedStrings.T3MovingAverageKey)]
 [Doc("topics/api/indicators/list_of_indicators/t3_moving_average.html")]
-public class T3MovingAverage : LengthIndicator<decimal>
+public class T3MovingAverage : DecimalLengthIndicator
 {
 	private readonly ExponentialMovingAverage[] _emas;
 	private decimal _volumeFactor;

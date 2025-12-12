@@ -14,7 +14,7 @@ using StockSharp.Algo.Candles;
 	Description = LocalizedStrings.ChaikinMoneyFlowKey)]
 [Doc("topics/api/indicators/list_of_indicators/chaikin_money_flow.html")]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-public class ChaikinMoneyFlow : LengthIndicator<decimal>
+public class ChaikinMoneyFlow : DecimalLengthIndicator
 {
 	private decimal _moneyFlowVolumeSum;
 	private decimal _volumeSum;

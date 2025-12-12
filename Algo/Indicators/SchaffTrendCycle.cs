@@ -13,7 +13,7 @@
 [Doc("topics/api/indicators/list_of_indicators/schaff_trend_cycle.html")]
 public class SchaffTrendCycle : ExponentialMovingAverage
 {
-	private readonly CircularBufferEx<decimal> _buffer = new(10);
+	private readonly DecimalBuffer _buffer = new(10);
 	private decimal _prevStochK;
 
 	/// <summary>
@@ -21,7 +21,10 @@ public class SchaffTrendCycle : ExponentialMovingAverage
 	/// </summary>
 	public SchaffTrendCycle()
 	{
-		_buffer.MaxComparer = _buffer.MinComparer = Comparer<decimal>.Default;
+#if !NET7_0_OR_GREATER
+		_buffer.Operator = OperatorRegistry.GetOperator<decimal>();
+#endif
+		_buffer.Stats = CircularBufferStats.Min | CircularBufferStats.Max;
 
 		Macd = new()
 		{

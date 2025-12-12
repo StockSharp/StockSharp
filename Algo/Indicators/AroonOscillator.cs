@@ -12,7 +12,7 @@ namespace StockSharp.Algo.Indicators;
 	Description = LocalizedStrings.AroonOscillatorDescKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/aroon_oscillator.html")]
-public class AroonOscillator : LengthIndicator<decimal>
+public class AroonOscillator : DecimalLengthIndicator
 {
 	private readonly Aroon _aroon;
 

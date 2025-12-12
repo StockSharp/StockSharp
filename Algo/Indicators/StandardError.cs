@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.StandardErrorKey,
 	Description = LocalizedStrings.StandardErrorLinearRegKey)]
 [Doc("topics/api/indicators/list_of_indicators/standard_error.html")]
-public class StandardError : LengthIndicator<decimal>
+public class StandardError : DecimalLengthIndicator
 {
 	// Коэффициент при независимой переменной, угол наклона прямой.
 	private decimal _slope;

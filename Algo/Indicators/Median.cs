@@ -11,7 +11,7 @@ namespace StockSharp.Algo.Indicators;
 	Name = LocalizedStrings.MedianKey,
 	Description = LocalizedStrings.MovingMedianKey)]
 [Doc("topics/api/indicators/list_of_indicators/median.html")]
-public class Median : LengthIndicator<decimal>
+public class Median : DecimalLengthIndicator
 {
 	private readonly Queue<decimal> _window = [];
 	private readonly List<decimal> _sorted = [];

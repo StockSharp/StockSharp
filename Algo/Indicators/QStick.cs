@@ -8,7 +8,7 @@
 /// </remarks>
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/qstick.html")]
-public class QStick : LengthIndicator<IIndicatorValue>
+public class QStick : LengthIndicator<IIndicatorValue, CircularBufferEx<IIndicatorValue>>
 {
 	private readonly SimpleMovingAverage _sma;
 
@@ -16,6 +16,7 @@ public class QStick : LengthIndicator<IIndicatorValue>
 	/// Initializes a new instance of the <see cref="QStick"/>.
 	/// </summary>
 	public QStick()
+		: base(new(15))
 	{
 		_sma = new SimpleMovingAverage();
 		Length = 15;

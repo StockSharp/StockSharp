@@ -18,7 +18,7 @@ public class AdaptivePriceZone : BaseComplexIndicator<IAdaptivePriceZoneValue>
 	/// Moving average.
 	/// </summary>
 	[Browsable(false)]
-	public LengthIndicator<decimal> MovingAverage { get; }
+	public DecimalLengthIndicator MovingAverage { get; }
 
 	/// <summary>
 	/// Upper band.
@@ -44,7 +44,7 @@ public class AdaptivePriceZone : BaseComplexIndicator<IAdaptivePriceZoneValue>
 	/// Initializes a new instance of the <see cref="AdaptivePriceZone"/>.
 	/// </summary>
 	/// <param name="ma">Moving Average.</param>
-	public AdaptivePriceZone(LengthIndicator<decimal> ma)
+	public AdaptivePriceZone(DecimalLengthIndicator ma)
 	{
 		MovingAverage = ma ?? throw new ArgumentNullException(nameof(ma));
 		_stdDev = new();

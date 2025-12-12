@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.TrixKey,
 	Description = LocalizedStrings.TrixOscillatorKey)]
 [Doc("topics/api/indicators/list_of_indicators/trix.html")]
-public class Trix : LengthIndicator<IIndicatorValue>
+public class Trix : LengthIndicator<IIndicatorValue, CircularBufferEx<IIndicatorValue>>
 {
 	private readonly ExponentialMovingAverage _ema1 = new();
 	private readonly ExponentialMovingAverage _ema2 = new();
@@ -22,6 +22,7 @@ public class Trix : LengthIndicator<IIndicatorValue>
 	/// Initializes a new instance of the <see cref="Trix"/>.
 	/// </summary>
 	public Trix()
+		: base(new(1))
 	{
 	}
 

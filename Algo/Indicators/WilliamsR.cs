@@ -12,7 +12,7 @@
 	Description = LocalizedStrings.WilliamsRKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/williams_r.html")]
-public class WilliamsR : LengthIndicator<decimal>
+public class WilliamsR : DecimalLengthIndicator
 {
 	private readonly Lowest _low;
 	private readonly Highest _high;

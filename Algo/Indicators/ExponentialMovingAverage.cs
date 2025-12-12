@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.EMAKey,
 	Description = LocalizedStrings.ExponentialMovingAverageKey)]
 [Doc("topics/api/indicators/list_of_indicators/ema.html")]
-public class ExponentialMovingAverage : LengthIndicator<decimal>
+public class ExponentialMovingAverage : DecimalLengthIndicator
 {
 	private decimal _prevFinalValue;
 	private decimal _multiplier = 1;
@@ -22,7 +22,11 @@ public class ExponentialMovingAverage : LengthIndicator<decimal>
 	public ExponentialMovingAverage()
 	{
 		Length = 32;
+
+#if !NET7_0_OR_GREATER
 		Buffer.Operator = new DecimalOperator();
+#endif
+		Buffer.Stats = CircularBufferStats.Sum;
 	}
 
 	/// <inheritdoc />

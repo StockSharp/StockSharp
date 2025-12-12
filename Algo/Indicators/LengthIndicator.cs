@@ -4,16 +4,14 @@ namespace StockSharp.Algo.Indicators;
 /// The base class for indicators with one resulting value and based on the period.
 /// </summary>
 /// <typeparam name="TResult">Result values type.</typeparam>
-public abstract class LengthIndicator<TResult> : BaseIndicator
+/// <typeparam name="TBuffer">Buffer type for data storage.</typeparam>
+/// <remarks>
+/// Initialize <see cref="LengthIndicator{TResult,TBuffer}"/>.
+/// </remarks>
+/// <param name="buffer"><see cref="Buffer"/></param>
+public abstract class LengthIndicator<TResult, TBuffer>(TBuffer buffer) : BaseIndicator
+	where TBuffer : ICircularBufferEx<TResult>
 {
-	/// <summary>
-	/// Initialize <see cref="LengthIndicator{T}"/>.
-	/// </summary>
-	protected LengthIndicator()
-	{
-		Buffer = new(Length);
-	}
-
 	/// <summary>
 	/// Gets the capacity of the buffer for data storage.
 	/// </summary>
@@ -61,7 +59,7 @@ public abstract class LengthIndicator<TResult> : BaseIndicator
 	/// The buffer for data storage.
 	/// </summary>
 	[Browsable(false)]
-	protected CircularBufferEx<TResult> Buffer { get; }
+	protected TBuffer Buffer { get; } = buffer ?? throw new ArgumentNullException(nameof(buffer));
 
 	/// <inheritdoc />
 	public override void Load(SettingsStorage storage)
@@ -99,4 +97,14 @@ public abstract class LengthIndicator<TResult> : BaseIndicator
 
 	/// <inheritdoc />
 	public override string ToString() => base.ToString() + " " + Length;
+}
+
+/// <summary>
+/// The base class for indicators with one resulting value and based on the period.
+/// </summary>
+/// <remarks>
+/// Initialize <see cref="DecimalLengthIndicator"/>.
+/// </remarks>
+public abstract class DecimalLengthIndicator() : LengthIndicator<decimal, DecimalBuffer>(new(1))
+{
 }

@@ -9,7 +9,7 @@
 	Description = LocalizedStrings.PrettyGoodOscillatorKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/pretty_good_oscillator.html")]
-public class PrettyGoodOscillator : LengthIndicator<decimal>
+public class PrettyGoodOscillator : DecimalLengthIndicator
 {
 	private readonly SimpleMovingAverage _sma = new();
 	private readonly Highest _highest = new();

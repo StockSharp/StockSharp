@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.ZLEMAKey,
 	Description = LocalizedStrings.ZeroLagExponentialMovingAverageKey)]
 [Doc("topics/api/indicators/list_of_indicators/zero_lag_exponential_moving_average.html")]
-public class ZeroLagExponentialMovingAverage : LengthIndicator<decimal>
+public class ZeroLagExponentialMovingAverage : DecimalLengthIndicator
 {
 	private decimal _prevZlema;
 	private decimal _ema;
@@ -19,7 +19,10 @@ public class ZeroLagExponentialMovingAverage : LengthIndicator<decimal>
 	/// </summary>
 	public ZeroLagExponentialMovingAverage()
 	{
-		Buffer.MinComparer = Comparer<decimal>.Default;
+#if !NET7_0_OR_GREATER
+		Buffer.Operator = new DecimalOperator();
+#endif
+		Buffer.Stats = CircularBufferStats.Min;
 		Length = 14;
 	}
 

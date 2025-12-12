@@ -23,7 +23,7 @@ public class Envelope : BaseComplexIndicator<IEnvelopeValue>
 	/// Initializes a new instance of the <see cref="Envelope"/>.
 	/// </summary>
 	/// <param name="ma">Middle line.</param>
-	public Envelope(LengthIndicator<decimal> ma)
+	public Envelope(DecimalLengthIndicator ma)
 	{
 		AddInner(Middle = ma);
 		AddInner(Upper = ma.TypedClone());
@@ -37,19 +37,19 @@ public class Envelope : BaseComplexIndicator<IEnvelopeValue>
 	/// Middle line.
 	/// </summary>
 	[Browsable(false)]
-	public LengthIndicator<decimal> Middle { get; }
+	public DecimalLengthIndicator Middle { get; }
 
 	/// <summary>
 	/// Upper line.
 	/// </summary>
 	[Browsable(false)]
-	public LengthIndicator<decimal> Upper { get; }
+	public DecimalLengthIndicator Upper { get; }
 
 	/// <summary>
 	/// Lower line.
 	/// </summary>
 	[Browsable(false)]
-	public LengthIndicator<decimal> Lower { get; }
+	public DecimalLengthIndicator Lower { get; }
 
 	/// <summary>
 	/// Period length. By default equal to 1.

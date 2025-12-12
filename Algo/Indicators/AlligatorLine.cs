@@ -4,7 +4,7 @@
 /// The realization of one of indicator lines Alligator (Jaw, Teeth, and Lips).
 /// </summary>
 [IndicatorHidden]
-public class AlligatorLine : LengthIndicator<decimal>
+public class AlligatorLine : DecimalLengthIndicator
 {
 	private readonly MedianPrice _medianPrice;
 	private readonly SmoothedMovingAverage _sma;

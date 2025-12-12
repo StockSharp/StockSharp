@@ -11,7 +11,7 @@ namespace StockSharp.Algo.Indicators;
 	Name = LocalizedStrings.VMAKey,
 	Description = LocalizedStrings.VariableMovingAverageKey)]
 [Doc("topics/api/indicators/list_of_indicators/vma.html")]
-public class VariableMovingAverage : LengthIndicator<decimal>
+public class VariableMovingAverage : DecimalLengthIndicator
 {
 	private readonly StandardDeviation _stdDev;
 	private decimal _prevFinalValue;
@@ -26,7 +26,10 @@ public class VariableMovingAverage : LengthIndicator<decimal>
 		Length = 20;
 		VolatilityIndex = 0.2m;
 
+#if !NET7_0_OR_GREATER
 		Buffer.Operator = new DecimalOperator();
+#endif
+		Buffer.Stats = CircularBufferStats.Sum;
 	}
 
 	private decimal _volatilityIndex;

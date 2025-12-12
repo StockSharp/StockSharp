@@ -13,12 +13,13 @@
 [Doc("topics/api/indicators/list_of_indicators/covariation.html")]
 [IndicatorIn(typeof(PairIndicatorValue<decimal>))]
 [IndicatorHidden]
-public class Covariance : LengthIndicator<(decimal, decimal)>
+public class Covariance : LengthIndicator<(decimal, decimal), CircularBufferEx<(decimal, decimal)>>
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Covariance"/>.
 	/// </summary>
 	public Covariance()
+		: base(new(20))
 	{
 		Length = 20;
 	}

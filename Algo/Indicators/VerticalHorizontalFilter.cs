@@ -12,7 +12,7 @@
 	Description = LocalizedStrings.VerticalHorizontalFilterKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/vhf.html")]
-public class VerticalHorizontalFilter : LengthIndicator<decimal>
+public class VerticalHorizontalFilter : DecimalLengthIndicator
 {
 	// Текущее значение минимума
 	private readonly Lowest _min = new();

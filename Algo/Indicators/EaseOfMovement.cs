@@ -11,7 +11,7 @@ using StockSharp.Algo.Candles;
 	Description = LocalizedStrings.EaseOfMovementKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/ease_of_movement.html")]
-public class EaseOfMovement : LengthIndicator<decimal>
+public class EaseOfMovement : DecimalLengthIndicator
 {
 	private decimal _prevHigh;
 	private decimal _prevLow;
@@ -22,7 +22,10 @@ public class EaseOfMovement : LengthIndicator<decimal>
 	public EaseOfMovement()
 	{
 		Length = 14;
+#if !NET7_0_OR_GREATER
 		Buffer.Operator = new DecimalOperator();
+#endif
+		Buffer.Stats = CircularBufferStats.Sum;
 	}
 
 	/// <inheritdoc />

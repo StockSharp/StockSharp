@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.SMAKey,
 	Description = LocalizedStrings.SimpleMovingAverageKey)]
 [Doc("topics/api/indicators/list_of_indicators/sma.html")]
-public class SimpleMovingAverage : LengthIndicator<decimal>
+public class SimpleMovingAverage : DecimalLengthIndicator
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="SimpleMovingAverage"/>.
@@ -19,7 +19,10 @@ public class SimpleMovingAverage : LengthIndicator<decimal>
 	public SimpleMovingAverage()
 	{
 		Length = 32;
+#if !NET7_0_OR_GREATER
 		Buffer.Operator = new DecimalOperator();
+#endif
+		Buffer.Stats = CircularBufferStats.Sum;
 	}
 
 	/// <inheritdoc />

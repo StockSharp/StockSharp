@@ -5,7 +5,7 @@ namespace StockSharp.Algo.Indicators;
 /// </summary>
 public class BollingerBand : BaseIndicator
 {
-	private readonly LengthIndicator<decimal> _ma;
+	private readonly DecimalLengthIndicator _ma;
 	private readonly StandardDeviation _dev;
 	private decimal _width;
 
@@ -14,7 +14,7 @@ public class BollingerBand : BaseIndicator
 	/// </summary>
 	/// <param name="ma">Moving Average.</param>
 	/// <param name="dev">Standard deviation.</param>
-	public BollingerBand(LengthIndicator<decimal> ma, StandardDeviation dev)
+	public BollingerBand(DecimalLengthIndicator ma, StandardDeviation dev)
 	{
 		_ma = ma ?? throw new ArgumentNullException(nameof(ma));
 		_dev = dev ?? throw new ArgumentNullException(nameof(dev));

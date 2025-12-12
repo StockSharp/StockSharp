@@ -11,7 +11,7 @@ using StockSharp.Algo.Candles;
 	Description = LocalizedStrings.FiniteVolumeElementKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/finite_volume_element.html")]
-public class FiniteVolumeElement : LengthIndicator<decimal>
+public class FiniteVolumeElement : DecimalLengthIndicator
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="FiniteVolumeElement"/>.
@@ -19,7 +19,10 @@ public class FiniteVolumeElement : LengthIndicator<decimal>
 	public FiniteVolumeElement()
 	{
 		Length = 22;
+#if !NET7_0_OR_GREATER
 		Buffer.Operator = new DecimalOperator();
+#endif
+		Buffer.Stats = CircularBufferStats.Sum;
 	}
 
 	/// <inheritdoc />

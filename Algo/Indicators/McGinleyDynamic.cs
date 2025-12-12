@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.MGDKey,
 	Description = LocalizedStrings.McGinleyDynamicKey)]
 [Doc("topics/api/indicators/list_of_indicators/mcginley_dynamic.html")]
-public class McGinleyDynamic : LengthIndicator<decimal>
+public class McGinleyDynamic : DecimalLengthIndicator
 {
 	private decimal _prevMd;
 

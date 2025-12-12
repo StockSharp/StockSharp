@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.RSIKey,
 	Description = LocalizedStrings.RelativeStrengthIndexKey)]
 [Doc("topics/api/indicators/list_of_indicators/rsi.html")]
-public class RelativeStrengthIndex : LengthIndicator<decimal>
+public class RelativeStrengthIndex : DecimalLengthIndicator
 {
 	private readonly SmoothedMovingAverage _gain;
 	private readonly SmoothedMovingAverage _loss;

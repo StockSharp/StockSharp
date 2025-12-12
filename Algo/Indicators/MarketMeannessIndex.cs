@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.MMIKey,
 	Description = LocalizedStrings.MarketMeannessIndexKey)]
 [Doc("topics/api/indicators/list_of_indicators/market_meanness_index.html")]
-public class MarketMeannessIndex : LengthIndicator<decimal>
+public class MarketMeannessIndex : DecimalLengthIndicator
 {
 	private int _priceChanges;
 	private int _directionChanges;

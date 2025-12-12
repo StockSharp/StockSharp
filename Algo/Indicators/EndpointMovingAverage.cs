@@ -8,7 +8,7 @@
 	Name = LocalizedStrings.EPMAKey,
 	Description = LocalizedStrings.EndpointMovingAverageKey)]
 [Doc("topics/api/indicators/list_of_indicators/endpoint_moving_average.html")]
-public class EndpointMovingAverage : LengthIndicator<decimal>
+public class EndpointMovingAverage : DecimalLengthIndicator
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="EndpointMovingAverage"/>.

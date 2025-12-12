@@ -9,18 +9,23 @@
 	Description = LocalizedStrings.HighLowIndexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/high_low_index.html")]
-public class HighLowIndex : LengthIndicator<decimal>
+public class HighLowIndex : DecimalLengthIndicator
 {
-	private readonly CircularBufferEx<decimal> _highBuffer;
-	private readonly CircularBufferEx<decimal> _lowBuffer;
+	private readonly DecimalBuffer _highBuffer;
+	private readonly DecimalBuffer _lowBuffer;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="HighLowIndex"/>.
 	/// </summary>
 	public HighLowIndex()
 	{
-		_highBuffer = new(1) { MaxComparer = Comparer<decimal>.Default };
-		_lowBuffer = new(1) { MinComparer = Comparer<decimal>.Default };
+		_highBuffer = new(1) { Stats = CircularBufferStats.Max };
+		_lowBuffer = new(1) { Stats = CircularBufferStats.Min };
+
+#if !NET7_0_OR_GREATER
+		_highBuffer.Operator = new DecimalOperator();
+		_lowBuffer.Operator = new DecimalOperator();
+#endif
 
 		Length = 14;
 	}

@@ -27,7 +27,7 @@ public class AverageDirectionalIndex : BaseComplexIndicator<IAverageDirectionalI
 	/// </summary>
 	/// <param name="dx">Welles Wilder Directional Movement Index.</param>
 	/// <param name="movingAverage">Moving Average.</param>
-	public AverageDirectionalIndex(DirectionalIndex dx, LengthIndicator<decimal> movingAverage)
+	public AverageDirectionalIndex(DirectionalIndex dx, DecimalLengthIndicator movingAverage)
 		: base(dx, movingAverage)
 	{
 		Dx = dx;
@@ -48,7 +48,7 @@ public class AverageDirectionalIndex : BaseComplexIndicator<IAverageDirectionalI
 	/// Moving Average.
 	/// </summary>
 	[Browsable(false)]
-	public LengthIndicator<decimal> MovingAverage { get; }
+	public DecimalLengthIndicator MovingAverage { get; }
 
 	/// <summary>
 	/// Period length.

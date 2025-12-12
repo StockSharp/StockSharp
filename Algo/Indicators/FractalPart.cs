@@ -50,7 +50,7 @@ public class FractalPartIndicatorValue : ShiftedIndicatorValue
 /// <param name="isUp"><see cref="IsUp"/></param>
 [IndicatorHidden]
 [IndicatorOut(typeof(FractalPartIndicatorValue))]
-public class FractalPart(bool isUp) : LengthIndicator<decimal>
+public class FractalPart(bool isUp) : DecimalLengthIndicator
 {
 	private int _numCenter;
 	private int _counter;

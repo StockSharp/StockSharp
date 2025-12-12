@@ -11,7 +11,7 @@
 	Name = LocalizedStrings.DEMAKey,
 	Description = LocalizedStrings.DoubleExponentialMovingAverageKey)]
 [Doc("topics/api/indicators/list_of_indicators/dema.html")]
-public class DoubleExponentialMovingAverage : LengthIndicator<decimal>
+public class DoubleExponentialMovingAverage : DecimalLengthIndicator
 {
 	private readonly ExponentialMovingAverage _ema1;
 	private readonly ExponentialMovingAverage _ema2;

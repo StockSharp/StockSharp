@@ -28,7 +28,7 @@ public class BollingerBands : BaseComplexIndicator<IBollingerBandsValue>
 	/// Initializes a new instance of the <see cref="BollingerBands"/>.
 	/// </summary>
 	/// <param name="ma">Moving Average.</param>
-	public BollingerBands(LengthIndicator<decimal> ma)
+	public BollingerBands(DecimalLengthIndicator ma)
 	{
 		AddInner(MovingAverage = ma);
 		AddInner(UpBand = new(MovingAverage, _dev) { Name = nameof(UpBand) });
@@ -41,7 +41,7 @@ public class BollingerBands : BaseComplexIndicator<IBollingerBandsValue>
 	/// Middle line.
 	/// </summary>
 	[Browsable(false)]
-	public LengthIndicator<decimal> MovingAverage { get; }
+	public DecimalLengthIndicator MovingAverage { get; }
 
 	/// <summary>
 	/// Upper band +.
