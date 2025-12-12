@@ -255,7 +255,7 @@ public static class StorageHelper
 	/// <param name="to">The final date by which you need to get data.</param>
 	/// <returns>Date range</returns>
 	[Obsolete("Use GetRangeAsync method instead.")]
-	public static Range<DateTime> GetRange(this IMarketDataStorage storage, DateTime? from, DateTime? to)
+	public static IRange<DateTime> GetRange(this IMarketDataStorage storage, DateTime? from, DateTime? to)
 		=> AsyncHelper.Run(() => GetRangeAsync(storage, from, to, default));
 
 	/// <summary>
@@ -266,7 +266,7 @@ public static class StorageHelper
 	/// <param name="to">The final date by which you need to get data.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Date range</returns>
-	public static async ValueTask<Range<DateTime>> GetRangeAsync(this IMarketDataStorage storage, DateTime? from, DateTime? to, CancellationToken cancellationToken)
+	public static async ValueTask<IRange<DateTime>> GetRangeAsync(this IMarketDataStorage storage, DateTime? from, DateTime? to, CancellationToken cancellationToken)
 	{
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));

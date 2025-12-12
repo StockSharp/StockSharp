@@ -99,14 +99,13 @@ public class OffsetBasketStrike(Security underlyingSecurity, ISecurityProvider s
 
 	/// <inheritdoc />
 	protected override string ToSerializedString()
-	{
-		return _strikeOffset.ToString();
-	}
+		=> $"{_strikeOffset.Min}-{_strikeOffset.Max}";
 
 	/// <inheritdoc />
 	protected override void FromSerializedString(string text)
 	{
-		_strikeOffset = Range<int>.Parse(text);
+		var parts = text.Split('-');
+		_strikeOffset = new(parts[0].To<int>(), parts[1].To<int>());
 	}
 }
 
@@ -136,13 +135,12 @@ public class VolatilityBasketStrike(Security underlyingAsset, ISecurityProvider 
 
 	/// <inheritdoc />
 	protected override string ToSerializedString()
-	{
-		return _volatilityRange.ToString();
-	}
+		=> $"{_volatilityRange.Min}-{_volatilityRange.Max}";
 
 	/// <inheritdoc />
 	protected override void FromSerializedString(string text)
 	{
-		_volatilityRange = Range<decimal>.Parse(text);
+		var parts = text.Split('-');
+		_volatilityRange = new(parts[0].To<decimal>(), parts[1].To<decimal>());
 	}
 }

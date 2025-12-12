@@ -19,7 +19,8 @@ public class DebuggerSyncObject : ViewModelBase
 	private DiagramSocket _currentSocket;
 	private Exception _currentError;
 
-	private class DebuggerSyncObjectGuiWrapper(DebuggerSyncObject obj) : DispatcherNotifiableObject<DebuggerSyncObject>(ConfigManager.GetService<IDispatcher>(), obj)
+	private class DebuggerSyncObjectGuiWrapper(DebuggerSyncObject obj)
+		: DispatcherNotifiableObject<DebuggerSyncObject>(ConfigManager.GetService<IDispatcher>(), obj, TimeSpan.FromSeconds(0.5))
 	{
 	}
 

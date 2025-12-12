@@ -482,8 +482,12 @@ public class AsyncMessageChannel : Disposable, IMessageChannel
 		{
 			CancelAndReplaceGlobalCts();
 
-			if(!await WhenChildrenComplete(_adapter.DisconnectTimeout.CreateTimeoutToken()))
-				throw new InvalidOperationException("unable to complete disconnect. some tasks are still running.");
+			var (cts, token) = _adapter.DisconnectTimeout.CreateTimeout();
+			using (cts)
+			{
+				if (!await WhenChildrenComplete(token))
+					throw new InvalidOperationException("unable to complete disconnect. some tasks are still running.");
+			}
 
 			await RaiseNewOutMessage(msg, default);
 
@@ -500,9 +504,14 @@ public class AsyncMessageChannel : Disposable, IMessageChannel
 		_isDisconnecting = true;
 
 		// token is already canceled in SendInMessage
-		await AsyncHelper.CatchHandle(
-			() => WhenChildrenComplete(_adapter.DisconnectTimeout.CreateTimeoutToken()),
-			_globalCts.Token);
+		await AsyncHelper.CatchHandle((Func<Task>)(async () =>
+		{
+			var (cts, token) = _adapter.DisconnectTimeout.CreateTimeout();
+
+			using (cts)
+				await WhenChildrenComplete(token);
+
+		}), _globalCts.Token);
 
 		foreach (var kv in _subscriptionItems.CopyAndClear())
 		{

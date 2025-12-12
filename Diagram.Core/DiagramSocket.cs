@@ -211,7 +211,7 @@ public class DiagramSocket : Disposable, INotifyPropertyChanged
 		if(socketId != null && socketId.IsEmptyOrWhiteSpace())
 			throw new ArgumentException(LocalizedStrings.InvalidValue, nameof(socketId));
 
-		GuiWrapper = new DispatcherNotifiableObject<DiagramSocket>(ConfigManager.GetService<IDispatcher>(), this);
+		GuiWrapper = new DispatcherNotifiableObject<DiagramSocket>(ConfigManager.GetService<IDispatcher>(), this, TimeSpan.FromSeconds(0.5));
 
 		Id = socketId ?? Guid.NewGuid().ToN();
 		Direction = dir;

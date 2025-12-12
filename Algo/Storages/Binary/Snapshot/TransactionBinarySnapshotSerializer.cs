@@ -291,10 +291,10 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 					var storage = new SettingsStorage();
 
 					if (r.HasMinValue)
-						storage.SetValue(nameof(r.Min), r.Min.ToStorage());
+						storage.SetValue("Min", r.MinObj.ToStorage());
 
 					if (r.HasMaxValue)
-						storage.SetValue(nameof(r.Max), r.Max.ToStorage());
+						storage.SetValue("Max", r.MaxObj.ToStorage());
 
 					if (storage.Count > 0)
 						stringValue = storage.Serialize();
@@ -597,11 +597,11 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 
 								var storage = strBytes.ToArray().Deserialize<SettingsStorage>() ?? throw new InvalidOperationException("unable to deserialize IRange param value");
 
-								if (storage.ContainsKey(nameof(range.Min)))
-									range.Min = storage.GetValue<SettingsStorage>(nameof(range.Min)).FromStorage();
+								if (storage.ContainsKey("Min"))
+									range.MinObj = storage.GetValue<SettingsStorage>("Min").FromStorage();
 
-								if (storage.ContainsKey(nameof(range.Max)))
-									range.Max = storage.GetValue<SettingsStorage>(nameof(range.Max)).FromStorage();
+								if (storage.ContainsKey("Max"))
+									range.MaxObj = storage.GetValue<SettingsStorage>("Max").FromStorage();
 
 								value = range;
 							}
