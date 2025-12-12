@@ -569,7 +569,7 @@ public class ImportTests : BaseTestClass
 		var progresses = new List<int>();
 		using var cts = new CancellationTokenSource();
 
-		await Assert.ThrowsExactlyAsync<OperationCanceledException>(() => importer.Import(stream, p =>
+		await ThrowsExactlyAsync<OperationCanceledException>(() => importer.Import(stream, p =>
 		{
 			if (progresses.Count > 0 && progresses.Last() >= p)
 				throw new DuplicateException($"Progress {p} already exist.");
@@ -619,6 +619,6 @@ public class ImportTests : BaseTestClass
 			ColumnSeparator = ";"
 		};
 
-		await Assert.ThrowsExactlyAsync<InvalidOperationException>(() => importer.Import(stream, _ => { }, CancellationToken).AsTask());
+		await ThrowsExactlyAsync<InvalidOperationException>(() => importer.Import(stream, _ => { }, CancellationToken).AsTask());
 	}
 }

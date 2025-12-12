@@ -163,7 +163,7 @@ public class ExportTests : BaseTestClass
 
 		var (_, token) = CancellationToken.CreateChildToken(TimeSpan.FromSeconds(1));
 
-		await Assert.ThrowsAsync<OperationCanceledException>(() => exporter.Export(ticks, token));
+		await ThrowsAsync<OperationCanceledException>(() => exporter.Export(ticks, token));
 
 		// partial file should exist
 		(new FileInfo(path).Length > 0).AssertTrue();

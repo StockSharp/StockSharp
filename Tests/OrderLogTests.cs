@@ -1,7 +1,7 @@
 ﻿namespace StockSharp.Tests;
 
 [TestClass]
-public class OrderLogTests
+public class OrderLogTests : BaseTestClass
 {
 	private static readonly SecurityId _secId = Helper.CreateSecurityId();
 
@@ -79,14 +79,14 @@ public class OrderLogTests
 	[TestMethod]
 	public void BuilderNullDepth()
 	{
-		Assert.ThrowsExactly<ArgumentNullException>(() => _ = new OrderLogMarketDepthBuilder(null));
+		ThrowsExactly<ArgumentNullException>(() => _ = new OrderLogMarketDepthBuilder(null));
 	}
 
 	[TestMethod]
 	public void NullItem()
 	{
 		IOrderLogMarketDepthBuilder builder = new OrderLogMarketDepthBuilder(_secId);
-		Assert.ThrowsExactly<ArgumentNullException>(() => builder.Update(null));
+		ThrowsExactly<ArgumentNullException>(() => builder.Update(null));
 	}
 
 	[TestMethod]
@@ -95,7 +95,7 @@ public class OrderLogTests
 		IOrderLogMarketDepthBuilder builder = new OrderLogMarketDepthBuilder(_secId);
 		var message = new ExecutionMessage { DataTypeEx = DataType.Ticks };
 
-		Assert.ThrowsExactly<ArgumentException>(() => builder.Update(message));
+		ThrowsExactly<ArgumentException>(() => builder.Update(message));
 	}
 
 	[TestMethod]

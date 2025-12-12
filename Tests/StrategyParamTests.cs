@@ -1,10 +1,10 @@
 namespace StockSharp.Tests;
 
 [TestClass]
-public class StrategyParamTests
+public class StrategyParamTests : BaseTestClass
 {
 	private static void AssertInvalid(Action action)
-		=> Assert.ThrowsExactly<ArgumentOutOfRangeException>(action);
+		=> ThrowsExactly<ArgumentOutOfRangeException>(action);
 
 	// --- Helper methods --------------------------------------------------
 	private static void AssertGreaterThanZero<T>(T valid, T zero, T negative)
@@ -278,7 +278,7 @@ public class StrategyParamTests
 	public void Step_UnsupportedType()
 	{
 		var p = new StrategyParam<string>("p");
-		Assert.ThrowsExactly<NotSupportedException>(() => p.SetStep("x", "y"));
+		ThrowsExactly<NotSupportedException>(() => p.SetStep("x", "y"));
 	}
 
 	[TestMethod]
@@ -310,7 +310,7 @@ public class StrategyParamTests
 	public void Step_UnsupportedType_Bool()
 	{
 		var p = new StrategyParam<bool>("p", true);
-		Assert.ThrowsExactly<NotSupportedException>(() => p.SetStep(true, false));
+		ThrowsExactly<NotSupportedException>(() => p.SetStep(true, false));
 	}
 
 	[TestMethod]
@@ -345,7 +345,7 @@ public class StrategyParamTests
 	public void Required_String_SetStep_Unsupported()
 	{
 		var p = new StrategyParam<string>("p").SetRequired();
-		Assert.ThrowsExactly<NotSupportedException>(() => p.SetStep("a", "b"));
+		ThrowsExactly<NotSupportedException>(() => p.SetStep("a", "b"));
 	}
 
 	[TestMethod]
@@ -551,7 +551,7 @@ public class StrategyParamTests
 			.SetCanOptimize(true)
 			.SetOptimize(from, to, null);
 
-		Assert.ThrowsExactly<ArgumentException>(() => p.GetRandom());
+		ThrowsExactly<ArgumentException>(() => p.GetRandom());
 	}
 
 	[TestMethod]
@@ -561,7 +561,7 @@ public class StrategyParamTests
 			.SetCanOptimize(false)
 			.SetOptimize(5, 25, 5);
 
-		Assert.ThrowsExactly<InvalidOperationException>(() => p.GetRandom());
+		ThrowsExactly<InvalidOperationException>(() => p.GetRandom());
 	}
 
 	[TestMethod]
@@ -571,7 +571,7 @@ public class StrategyParamTests
 			.SetCanOptimize(true);
 		// OptimizeFrom and OptimizeTo not set
 
-		Assert.ThrowsExactly<InvalidOperationException>(() => p.GetRandom());
+		ThrowsExactly<InvalidOperationException>(() => p.GetRandom());
 	}
 
 	[TestMethod]

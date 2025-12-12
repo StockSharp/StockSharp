@@ -3,7 +3,7 @@
 using StockSharp.Algo.Strategies.Protective;
 
 [TestClass]
-public class ProtectionTests
+public class ProtectionTests : BaseTestClass
 {
 	[TestMethod]
 	public void BasicPositionTracking()
@@ -768,7 +768,7 @@ public class ProtectionTests
 		behaviour.Position.AssertEqual(0);
 
 		// Test position with zero price (should throw)
-		Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => behaviour.Update(0m, 10m, DateTime.UtcNow));
+		ThrowsExactly<ArgumentOutOfRangeException>(() => behaviour.Update(0m, 10m, DateTime.UtcNow));
 	}
 
 	[TestMethod]
@@ -844,7 +844,7 @@ public class ProtectionTests
 			TimeSpan.Zero, TimeSpan.Zero, false);
 
 		// Trailing stop with UnitTypes.Absolute for stop loss
-		Assert.ThrowsExactly<ArgumentException>(() =>
+		ThrowsExactly<ArgumentException>(() =>
 			factory.Create(
 				new Unit(1m, UnitTypes.Percent),
 				new Unit(1m, UnitTypes.Absolute),
@@ -859,7 +859,7 @@ public class ProtectionTests
 		p.AssertNotNull();
 
 		// Trailing stop with UnitTypes.Absolute for stop loss
-		Assert.ThrowsExactly<ArgumentException>(() =>
+		ThrowsExactly<ArgumentException>(() =>
 			new ProtectiveProcessor(
 				Sides.Buy, 100m, false, true, new(10, UnitTypes.Absolute),
 				true, new Unit(), TimeSpan.Zero, DateTime.UtcNow, logReceiver));

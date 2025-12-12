@@ -634,7 +634,7 @@ public class RiskTests : BaseTestClass
 	{
 		var rule = new RiskOrderVolumeRule();
 
-		Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => rule.Volume = -100);
+		ThrowsExactly<ArgumentOutOfRangeException>(() => rule.Volume = -100);
 	}
 
 	[TestMethod]

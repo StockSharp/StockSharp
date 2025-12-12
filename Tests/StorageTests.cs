@@ -72,7 +72,7 @@ public class StorageTests : BaseTestClass
 		var token = CancellationToken;
 
 		var storage = GetTradeStorage(secId, format);
-		return Assert.ThrowsExactlyAsync<ArgumentException>(async () => { await storage.SaveAsync(
+		return ThrowsExactlyAsync<ArgumentException>(async () => { await storage.SaveAsync(
 		[
 			new ExecutionMessage
 			{
@@ -96,7 +96,7 @@ public class StorageTests : BaseTestClass
 		var token = CancellationToken;
 
 		var storage = GetTradeStorage(secId, format);
-		return Assert.ThrowsExactlyAsync<ArgumentException>(async () => { await storage.SaveAsync([new ExecutionMessage
+		return ThrowsExactlyAsync<ArgumentException>(async () => { await storage.SaveAsync([new ExecutionMessage
 		{
 			DataTypeEx = DataType.Ticks,
 			TradeId = 1,
@@ -559,7 +559,7 @@ public class StorageTests : BaseTestClass
 		};
 
 		var storage = GetDepthStorage(secId, format);
-		return Assert.ThrowsExactlyAsync<ArgumentOutOfRangeException>(async () => { await storage.SaveAsync([depth], token); });
+		return ThrowsExactlyAsync<ArgumentOutOfRangeException>(async () => { await storage.SaveAsync([depth], token); });
 	}
 
 	[TestMethod]
@@ -578,7 +578,7 @@ public class StorageTests : BaseTestClass
 		};
 
 		var storage = GetDepthStorage(secId, format);
-		return Assert.ThrowsExactlyAsync<ArgumentException>(async () => { await storage.SaveAsync([depth], token); });
+		return ThrowsExactlyAsync<ArgumentException>(async () => { await storage.SaveAsync([depth], token); });
 	}
 
 	[TestMethod]
@@ -1456,7 +1456,7 @@ public class StorageTests : BaseTestClass
 		};
 
 		var depthStorage = GetDepthStorage(secId, format);
-		return Assert.ThrowsExactlyAsync<InvalidOperationException>(async () => { await depthStorage.SaveAsync(depths, token); });
+		return ThrowsExactlyAsync<InvalidOperationException>(async () => { await depthStorage.SaveAsync(depths, token); });
 	}
 
 	[TestMethod]
@@ -1507,7 +1507,7 @@ public class StorageTests : BaseTestClass
 
 		var depthStorage = GetDepthStorage(secId, format);
 		await depthStorage.SaveAsync(depths.Take(1), token);
-		await Assert.ThrowsExactlyAsync<ArgumentException>(async () => await depthStorage.SaveAsync(depths.Skip(1), token));
+		await ThrowsExactlyAsync<ArgumentException>(async () => await depthStorage.SaveAsync(depths.Skip(1), token));
 	}
 
 	[TestMethod]
@@ -1812,7 +1812,7 @@ public class StorageTests : BaseTestClass
 
 		try
 		{
-			await Assert.ThrowsExactlyAsync<ArgumentException>(async () => { await tfStorage.SaveAsync(candles, token); });
+			await ThrowsExactlyAsync<ArgumentException>(async () => { await tfStorage.SaveAsync(candles, token); });
 		}
 		finally
 		{
@@ -1841,7 +1841,7 @@ public class StorageTests : BaseTestClass
 
 		try
 		{
-			await Assert.ThrowsExactlyAsync<ArgumentException>(async () => { await tfStorage.SaveAsync(candles, token); });
+			await ThrowsExactlyAsync<ArgumentException>(async () => { await tfStorage.SaveAsync(candles, token); });
 		}
 		finally
 		{
@@ -1859,7 +1859,7 @@ public class StorageTests : BaseTestClass
 
 		var storage = GetStorageRegistry();
 
-		Assert.ThrowsExactly<ArgumentNullException>(() => storage.GetTimeFrameCandleMessageStorage(secId, TimeSpan.FromMinutes(0), null, format));
+		ThrowsExactly<ArgumentNullException>(() => storage.GetTimeFrameCandleMessageStorage(secId, TimeSpan.FromMinutes(0), null, format));
 	}
 
 	[TestMethod]
@@ -3431,7 +3431,7 @@ public class StorageTests : BaseTestClass
 		var token = cts.Token;
 		cts.Cancel();
 
-		await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+		await ThrowsAsync<OperationCanceledException>(async () =>
 			await drive.GetAvailableSecuritiesAsync(token).ToArrayAsync(token));
 	}
 
@@ -3510,7 +3510,7 @@ public class StorageTests : BaseTestClass
 		var drive = new LocalMarketDataDrive(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()));
 		var token = CancellationToken;
 
-		return Assert.ThrowsExactlyAsync<InvalidOperationException>(async () =>
+		return ThrowsExactlyAsync<InvalidOperationException>(async () =>
 		{
 			await drive.VerifyAsync(token);
 		});
@@ -3537,7 +3537,7 @@ public class StorageTests : BaseTestClass
 		var securityProvider = new CollectionSecurityProvider([]);
 		var token = CancellationToken;
 
-		return Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+		return ThrowsExactlyAsync<ArgumentNullException>(async () =>
 		{
 			await drive.LookupSecuritiesAsync(null, securityProvider, token).ToArrayAsync(token);
 		});
@@ -3550,7 +3550,7 @@ public class StorageTests : BaseTestClass
 		var criteria = Messages.Extensions.LookupAllCriteriaMessage;
 		var token = CancellationToken;
 
-		return Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+		return ThrowsExactlyAsync<ArgumentNullException>(async () =>
 		{
 			await drive.LookupSecuritiesAsync(criteria, null, token).ToArrayAsync(token);
 		});
@@ -3572,7 +3572,7 @@ public class StorageTests : BaseTestClass
 		var token = cts.Token;
 		cts.Cancel();
 
-		await Assert.ThrowsExactlyAsync<OperationCanceledException>(async () =>
+		await ThrowsExactlyAsync<OperationCanceledException>(async () =>
 		{
 			await drive.LookupSecuritiesAsync(criteria, securityProvider, token).ToArrayAsync(token);
 		});
@@ -3635,7 +3635,7 @@ public class StorageTests : BaseTestClass
 		var drive = new LocalMarketDataDrive(invalidPath);
 		var token = CancellationToken;
 
-		return Assert.ThrowsExactlyAsync<InvalidOperationException>(async () =>
+		return ThrowsExactlyAsync<InvalidOperationException>(async () =>
 		{
 			await drive.VerifyAsync(token);
 		});

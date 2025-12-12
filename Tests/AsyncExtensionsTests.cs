@@ -164,10 +164,10 @@ public class AsyncExtensionsTests : BaseTestClass
 		connector.Adapter.InnerAdapters.Add(adapter);
 
 		await connector.ConnectAsync(cts.Token);
-		Assert.AreEqual(ConnectionStates.Connected, connector.ConnectionState);
+		AreEqual(ConnectionStates.Connected, connector.ConnectionState);
 
 		await connector.DisconnectAsync(cts.Token);
-		Assert.AreEqual(ConnectionStates.Disconnected, connector.ConnectionState);
+		AreEqual(ConnectionStates.Disconnected, connector.ConnectionState);
 	}
 
 	[TestMethod]
@@ -225,8 +225,8 @@ public class AsyncExtensionsTests : BaseTestClass
 		enumCts.Cancel();
 		await enumerating.WithTimeout(TimeSpan.FromSeconds(5));
 
-		Assert.HasCount(3, got);
-		Assert.IsTrue(adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id));
+		HasCount(3, got);
+		IsTrue(adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id));
 	}
 
 	[TestMethod]
@@ -274,7 +274,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		adapter.FinishHistoricalSubscription(id);
 		await run.WithTimeout(TimeSpan.FromSeconds(5));
 
-		Assert.HasCount(2, got);
+		HasCount(2, got);
 	}
 
 	[TestMethod]
@@ -323,8 +323,8 @@ public class AsyncExtensionsTests : BaseTestClass
 		enumCts.Cancel();
 		await enumerating.WithTimeout(TimeSpan.FromSeconds(5));
 
-		Assert.HasCount(3, got);
-		Assert.IsTrue(adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id));
+		HasCount(3, got);
+		IsTrue(adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id));
 	}
 
 	[TestMethod]
@@ -381,8 +381,8 @@ public class AsyncExtensionsTests : BaseTestClass
 		enumCts.Cancel();
 		await enumerating.WithTimeout(TimeSpan.FromSeconds(5));
 
-		Assert.HasCount(2, got);
-		Assert.IsTrue(adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id));
+		HasCount(2, got);
+		IsTrue(adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id));
 	}
 
 	[TestMethod]
@@ -431,7 +431,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		enumCts.Cancel();
 		await enumerating.WithTimeout(TimeSpan.FromSeconds(5));
 
-		Assert.HasCount(3, got);
+		HasCount(3, got);
 	}
 
 	[TestMethod]
@@ -488,7 +488,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		enumCts.Cancel();
 		await enumerating.WithTimeout(TimeSpan.FromSeconds(5));
 
-		Assert.HasCount(2, got);
+		HasCount(2, got);
 	}
 
 	[TestMethod]
@@ -512,13 +512,13 @@ public class AsyncExtensionsTests : BaseTestClass
 		await started.Task.WithTimeout(TimeSpan.FromSeconds(3));
 
 		var id = adapter.LastSubscribedId;
-		Assert.IsGreaterThan(0, id);
+		IsGreaterThan(0, id);
 
 		// cancel -> triggers UnSubscribe and completes after stop
 		runCts.Cancel();
 		await run.WithTimeout(TimeSpan.FromSeconds(3));
 
-		Assert.IsTrue(adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id));
+		IsTrue(adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id));
 	}
 }
 

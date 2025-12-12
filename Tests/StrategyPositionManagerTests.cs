@@ -1,7 +1,7 @@
 namespace StockSharp.Tests;
 
 [TestClass]
-public class StrategyPositionManagerTests
+public class StrategyPositionManagerTests : BaseTestClass
 {
 	private static long _tx;
 
@@ -420,7 +420,7 @@ public class StrategyPositionManagerTests
 	public void NullOrderThrowsException()
 	{
 		var mgr = new StrategyPositionManager(() => "NULL_TEST");
-		Assert.ThrowsExactly<ArgumentNullException>(() => mgr.ProcessOrder(null));
+		ThrowsExactly<ArgumentNullException>(() => mgr.ProcessOrder(null));
 	}
 
 	[TestMethod]
@@ -428,10 +428,10 @@ public class StrategyPositionManagerTests
 	{
 		var mgr = new StrategyPositionManager(() => "NULL_TEST");
 
-		Assert.ThrowsExactly<ArgumentNullException>(() => mgr.TryGetPosition(null, new Portfolio()));
-		Assert.ThrowsExactly<ArgumentNullException>(() => mgr.TryGetPosition(new Security(), null));
-		Assert.ThrowsExactly<ArgumentNullException>(() => mgr.SetPosition(null, new Portfolio(), 10m, DateTime.UtcNow));
-		Assert.ThrowsExactly<ArgumentNullException>(() => mgr.SetPosition(new Security(), null, 10m, DateTime.UtcNow));
+		ThrowsExactly<ArgumentNullException>(() => mgr.TryGetPosition(null, new Portfolio()));
+		ThrowsExactly<ArgumentNullException>(() => mgr.TryGetPosition(new Security(), null));
+		ThrowsExactly<ArgumentNullException>(() => mgr.SetPosition(null, new Portfolio(), 10m, DateTime.UtcNow));
+		ThrowsExactly<ArgumentNullException>(() => mgr.SetPosition(new Security(), null, 10m, DateTime.UtcNow));
 	}
 
 	[TestMethod]
@@ -606,15 +606,15 @@ public class StrategyPositionManagerTests
 
 		// Zero volume (invalid data)
 		order.Volume = 0;
-		Assert.ThrowsExactly<ArgumentException>(() => mgr.ProcessOrder(order));
+		ThrowsExactly<ArgumentException>(() => mgr.ProcessOrder(order));
 
 		// Zero balance with active state (invalid data)
 		order.Balance = 0;
-		Assert.ThrowsExactly<ArgumentException>(() => mgr.ProcessOrder(order));
+		ThrowsExactly<ArgumentException>(() => mgr.ProcessOrder(order));
 
 		// Negative balance (invalid data)
 		order.Balance = -1m;
-		Assert.ThrowsExactly<ArgumentException>(() => mgr.ProcessOrder(order));
+		ThrowsExactly<ArgumentException>(() => mgr.ProcessOrder(order));
 
 		// Position unchanged
 		lastPos.CurrentValue.AssertEqual(5m);
@@ -678,7 +678,7 @@ public class StrategyPositionManagerTests
 	[TestMethod]
 	public void Constructor_Null_Throws()
 	{
-		Assert.ThrowsExactly<ArgumentNullException>(() => new StrategyPositionManager(null));
+		ThrowsExactly<ArgumentNullException>(() => new StrategyPositionManager(null));
 	}
 
 	[TestMethod]
@@ -705,7 +705,7 @@ public class StrategyPositionManagerTests
 		var (order, _, _) = CreateOrder(Sides.Buy, 10m);
 		order.State = OrderStates.Active;
 		order.Balance = 0m;
-		Assert.ThrowsExactly<ArgumentException>(() => mgr.ProcessOrder(order));
+		ThrowsExactly<ArgumentException>(() => mgr.ProcessOrder(order));
 	}
 
 	[TestMethod]
@@ -834,7 +834,7 @@ public class StrategyPositionManagerTests
 
 		// negative market price should throw
 		var now = DateTime.UtcNow;
-		Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => mgr.UpdateCurrentPrice(sec.ToSecurityId(), -10m, now, now));
+		ThrowsExactly<ArgumentOutOfRangeException>(() => mgr.UpdateCurrentPrice(sec.ToSecurityId(), -10m, now, now));
 	}
 
 	[TestMethod]
@@ -844,7 +844,7 @@ public class StrategyPositionManagerTests
 		var (order, _, _) = CreateOrder(Sides.Buy, 10m);
 		order.TransactionId = 0;
 		order.State = OrderStates.Active;
-		Assert.ThrowsExactly<ArgumentException>(() => mgr.ProcessOrder(order));
+		ThrowsExactly<ArgumentException>(() => mgr.ProcessOrder(order));
 	}
 
 	[TestMethod]

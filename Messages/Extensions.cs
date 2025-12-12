@@ -4897,10 +4897,11 @@ public static partial class Extensions
 		if (period == null)
 			return 0;
 
-		return period.Times
-					.Select(fromToRange.Intersect)
-					.WhereNotNull()
-					.Sum(intersection => intersection.Length.Ticks / timeFrame.Ticks);
+		return period
+			.Times
+			.Select(fromToRange.Intersect)
+			.WhereNotNull()
+			.Sum(intersection => intersection.Length.Ticks / timeFrame.Ticks);
 	}
 
 	/// <summary>

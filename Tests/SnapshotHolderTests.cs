@@ -156,7 +156,7 @@ public class SnapshotHolderTests : BaseTestClass
 	public void Level1_Process_NullMessage_ThrowsException()
 	{
 		var holder = new Level1SnapshotHolder();
-		Assert.ThrowsExactly<ArgumentNullException>(() => holder.Process(null));
+		ThrowsExactly<ArgumentNullException>(() => holder.Process(null));
 	}
 
 	[TestMethod]
@@ -460,7 +460,7 @@ public class SnapshotHolderTests : BaseTestClass
 
 		try
 		{
-			Assert.ThrowsExactly<InvalidOperationException>(() => holder.Process(invalidFull));
+			ThrowsExactly<InvalidOperationException>(() => holder.Process(invalidFull));
 		}
 		catch
 		{
@@ -676,7 +676,7 @@ public class SnapshotHolderTests : BaseTestClass
 	public void OrderBook_Process_NullMessage_ThrowsException()
 	{
 		var holder = new OrderBookSnapshotHolder();
-		Assert.ThrowsExactly<ArgumentNullException>(() => holder.Process(null));
+		ThrowsExactly<ArgumentNullException>(() => holder.Process(null));
 	}
 
 	[TestMethod]

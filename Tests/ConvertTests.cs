@@ -1,7 +1,7 @@
 namespace StockSharp.Tests;
 
 [TestClass]
-public class ConvertTests
+public class ConvertTests : BaseTestClass
 {
 	private static SecurityId TestSecurityId => new()
 	{
@@ -272,7 +272,7 @@ public class ConvertTests
 	[TestMethod]
 	public void Level1ChangeMessage_ToTick_Null()
 	{
-		Assert.ThrowsExactly<ArgumentNullException>(() =>
+		ThrowsExactly<ArgumentNullException>(() =>
 		{
 			Level1ChangeMessage level1 = null;
 			level1.ToTick();
@@ -282,7 +282,7 @@ public class ConvertTests
 	[TestMethod]
 	public void QuoteChangeMessages_ToLevel1_Null()
 	{
-		Assert.ThrowsExactly<ArgumentNullException>(() =>
+		ThrowsExactly<ArgumentNullException>(() =>
 		{
 			IEnumerable<QuoteChangeMessage> quotes = null;
 			quotes.ToLevel1().ToArray();
@@ -292,7 +292,7 @@ public class ConvertTests
 	[TestMethod]
 	public void Level1ChangeMessage_IsContainsCandle_Null()
 	{
-		Assert.ThrowsExactly<ArgumentNullException>(() =>
+		ThrowsExactly<ArgumentNullException>(() =>
 		{
 			Level1ChangeMessage level1 = null;
 			level1.IsContainsCandle();

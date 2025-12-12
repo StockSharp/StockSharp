@@ -1,7 +1,7 @@
 namespace StockSharp.Tests;
 
 [TestClass]
-public class MarketRuleTests
+public class MarketRuleTests : BaseTestClass
 {
 	private class MarketRuleContainer : BaseLogReceiver, IMarketRuleContainer
 	{
@@ -204,7 +204,7 @@ public class MarketRuleTests
 		int onceCount = 0;
 		var once = new TestRule().Once().Apply(container).Do(_ => onceCount++);
 		((TestRule)once).Trigger();
-		Assert.ThrowsExactly<ObjectDisposedException>(() => ((TestRule)once).Trigger());
+		ThrowsExactly<ObjectDisposedException>(() => ((TestRule)once).Trigger());
 		onceCount.AssertEqual(1);
 
 		// TryRemoveRule(checkCanFinish=false) removes even an endless rule
@@ -839,7 +839,7 @@ public class MarketRuleTests
 		// remove and ensure no further activations
 		container.TryRemoveRule(r, false).AssertTrue();
 		container.Rules.Contains(r).AssertFalse();
-		Assert.ThrowsExactly<ObjectDisposedException>(() => r.Trigger());
+		ThrowsExactly<ObjectDisposedException>(() => r.Trigger());
 		cnt.AssertEqual(1);
 	}
 
@@ -854,7 +854,7 @@ public class MarketRuleTests
 		cnt.AssertEqual(1);
 		// rule is finished after the first activation
 		container.Rules.Contains(r).AssertFalse();
-		Assert.ThrowsExactly<ObjectDisposedException>(() => ((TestRule)r).Trigger());
+		ThrowsExactly<ObjectDisposedException>(() => ((TestRule)r).Trigger());
 		cnt.AssertEqual(1);
 	}
 
@@ -899,7 +899,7 @@ public class MarketRuleTests
 		container.TryRemoveRule(r).AssertFalse();
 		container.TryRemoveRule(r, false).AssertFalse();
 
-		Assert.ThrowsExactly<ObjectDisposedException>(() => ((TestRule)r).Trigger());
+		ThrowsExactly<ObjectDisposedException>(() => ((TestRule)r).Trigger());
 		cnt.AssertEqual(1);
 	}
 
@@ -913,7 +913,7 @@ public class MarketRuleTests
 		((TestRule)r).Trigger();
 		cnt.AssertEqual(1);
 		r.Dispose();
-		Assert.ThrowsExactly<ObjectDisposedException>(() => ((TestRule)r).Trigger());
+		ThrowsExactly<ObjectDisposedException>(() => ((TestRule)r).Trigger());
 		cnt.AssertEqual(1);
 	}
 
@@ -969,7 +969,7 @@ public class MarketRuleTests
 		r3.Trigger();
 		cnt.AssertEqual(1);
 		container.Rules.Contains(orRule).AssertFalse();
-		Assert.ThrowsExactly<ObjectDisposedException>(() => r4.Trigger());
+		ThrowsExactly<ObjectDisposedException>(() => r4.Trigger());
 		cnt.AssertEqual(1);
 	}
 
@@ -1015,7 +1015,7 @@ public class MarketRuleTests
 		c.Trigger(); // and(b,c) completes -> or fires
 		cnt.AssertEqual(1);
 		container.Rules.Contains(orRule).AssertFalse();
-		Assert.ThrowsExactly<ObjectDisposedException>(() => a.Trigger());
+		ThrowsExactly<ObjectDisposedException>(() => a.Trigger());
 		cnt.AssertEqual(1);
 	}
 
@@ -1102,7 +1102,7 @@ public class MarketRuleTests
 	public void TryRemoveNullRuleReturnsFalse()
 	{
 		var container = CreateContainer();
-		Assert.ThrowsExactly<ArgumentNullException>(() => container.TryRemoveRule(null));
+		ThrowsExactly<ArgumentNullException>(() => container.TryRemoveRule(null));
 	}
 
 	[TestMethod]
@@ -1335,7 +1335,7 @@ public class MarketRuleTests
 		bool fired = false;
 		r.Do(_ => fired = true);
 		r.Dispose();
-		Assert.ThrowsExactly<ObjectDisposedException>(() => ((TestRule)r).Trigger());
+		ThrowsExactly<ObjectDisposedException>(() => ((TestRule)r).Trigger());
 		fired.AssertFalse();
 	}
 
@@ -1492,7 +1492,7 @@ public class MarketRuleTests
 	public void NoContainer()
 	{
 		var r = new TestRule();
-		Assert.ThrowsExactly<InvalidOperationException>(() => r.Trigger());
+		ThrowsExactly<InvalidOperationException>(() => r.Trigger());
 	}
 
 	[TestMethod]
@@ -1501,6 +1501,6 @@ public class MarketRuleTests
 		var r = new TestRule();
 		r.Dispose();
 		r.IsReady.AssertFalse();
-		Assert.ThrowsExactly<ObjectDisposedException>(() => r.Trigger());
+		ThrowsExactly<ObjectDisposedException>(() => r.Trigger());
 	}
 }

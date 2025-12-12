@@ -6,7 +6,7 @@ using StockSharp.Configuration;
 /// Tests for transaction ID storage implementations.
 /// </summary>
 [TestClass]
-public class TransactionIdStorageTests
+public class TransactionIdStorageTests : BaseTestClass
 {
 	private static readonly string _session1 = "session1";
 	private static readonly string _session2 = "session2";
@@ -39,7 +39,7 @@ public class TransactionIdStorageTests
 	[TestMethod]
 	public void InMemory_Constructor_NullIdGeneratorThrows()
 	{
-		Assert.ThrowsExactly<ArgumentNullException>(() => new InMemoryTransactionIdStorage(null));
+		ThrowsExactly<ArgumentNullException>(() => new InMemoryTransactionIdStorage(null));
 	}
 
 	[TestMethod]
@@ -120,7 +120,7 @@ public class TransactionIdStorageTests
 		ITransactionIdStorage storage = new InMemoryTransactionIdStorage(idGen);
 		var session = storage.Get(_session1, persistable: true);
 
-		Assert.ThrowsExactly<ArgumentNullException>(() => session.CreateTransactionId(null));
+		ThrowsExactly<ArgumentNullException>(() => session.CreateTransactionId(null));
 	}
 
 	[TestMethod]
@@ -130,7 +130,7 @@ public class TransactionIdStorageTests
 		ITransactionIdStorage storage = new InMemoryTransactionIdStorage(idGen);
 		var session = storage.Get(_session1, persistable: true);
 
-		Assert.ThrowsExactly<ArgumentNullException>(() => session.CreateTransactionId(""));
+		ThrowsExactly<ArgumentNullException>(() => session.CreateTransactionId(""));
 	}
 
 	[TestMethod]
@@ -166,7 +166,7 @@ public class TransactionIdStorageTests
 
 		// Second association tries to use the same transactionId but a different requestId
 		// Should trigger duplicate transactionId branch in Add(...)
-		Assert.ThrowsExactly<ArgumentException>(() => session.CreateTransactionId("request-2"));
+		ThrowsExactly<ArgumentException>(() => session.CreateTransactionId("request-2"));
 	}
 
 	[TestMethod]
@@ -178,7 +178,7 @@ public class TransactionIdStorageTests
 		var session = storage.Get(_session1, persistable: true);
 
 		var _ = session.CreateRequestId();
-		Assert.ThrowsExactly<ArgumentException>(() => session.CreateRequestId());
+		ThrowsExactly<ArgumentException>(() => session.CreateRequestId());
 	}
 
 	[TestMethod]
@@ -192,7 +192,7 @@ public class TransactionIdStorageTests
 		session.CreateTransactionId(requestId);
 
 		// Try to create another transaction ID for same request ID
-		Assert.ThrowsExactly<ArgumentException>(() => session.CreateTransactionId(requestId));
+		ThrowsExactly<ArgumentException>(() => session.CreateTransactionId(requestId));
 	}
 
 	[TestMethod]
@@ -583,7 +583,7 @@ public class TransactionIdStorageTests
 		ITransactionIdStorage storage = new PlainTransactionIdStorage();
 		var session = storage.Get(_session1, persistable: false);
 
-		Assert.ThrowsExactly<ArgumentNullException>(() => session.CreateTransactionId(null));
+		ThrowsExactly<ArgumentNullException>(() => session.CreateTransactionId(null));
 	}
 
 	[TestMethod]
@@ -593,7 +593,7 @@ public class TransactionIdStorageTests
 		ITransactionIdStorage storage = new PlainTransactionIdStorage();
 		var session = storage.Get(_session1, persistable: false);
 
-		Assert.ThrowsExactly<ArgumentNullException>(() => session.CreateTransactionId(""));
+		ThrowsExactly<ArgumentNullException>(() => session.CreateTransactionId(""));
 	}
 
 	[TestMethod]

@@ -1,7 +1,7 @@
 namespace StockSharp.Tests;
 
 [TestClass]
-public class DataTypeTests
+public class DataTypeTests : BaseTestClass
 {
 	[TestMethod]
 	public void Equality_And_HashCode()
@@ -53,10 +53,10 @@ public class DataTypeTests
 	[TestMethod]
 	public void CandleSources_Contains_Expected()
 	{
-		Assert.Contains(DataType.Ticks, DataType.CandleSources);
-		Assert.Contains(DataType.Level1, DataType.CandleSources);
-		Assert.Contains(DataType.MarketDepth, DataType.CandleSources);
-		Assert.Contains(DataType.OrderLog, DataType.CandleSources);
+		Contains(DataType.Ticks, DataType.CandleSources);
+		Contains(DataType.Level1, DataType.CandleSources);
+		Contains(DataType.MarketDepth, DataType.CandleSources);
+		Contains(DataType.OrderLog, DataType.CandleSources);
 	}
 
 	[TestMethod]
@@ -204,8 +204,8 @@ public class DataTypeTests
 		custom.ToSerializableString().AssertEqual("l1_custom");
 
 		// replacing alias for existing built-in should be denied
-		Assert.ThrowsExactly<ArgumentException>(() => DataType.RegisterAlias("ticks_custom", DataType.Ticks));
-		Assert.ThrowsExactly<ArgumentException>(() => DataType.RegisterAlias("l1_custom", custom));
+		ThrowsExactly<ArgumentException>(() => DataType.RegisterAlias("ticks_custom", DataType.Ticks));
+		ThrowsExactly<ArgumentException>(() => DataType.RegisterAlias("l1_custom", custom));
 
 		// clean up
 		DataType.UnRegisterAlias("l1_custom").AssertTrue();

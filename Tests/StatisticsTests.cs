@@ -4,7 +4,7 @@ using StockSharp.Algo.PnL;
 using StockSharp.Algo.Statistics;
 
 [TestClass]
-public class StatisticsTests
+public class StatisticsTests : BaseTestClass
 {
 	[TestMethod]
 	public void NetProfit()
@@ -1000,11 +1000,11 @@ public class StatisticsTests
 		var averageLossTrade = new AverageLossTradeParameter();
 
 		// Act & Assert - null argument should throw
-		Assert.ThrowsExactly<ArgumentNullException>(() => winningTrades.Add(null));
-		Assert.ThrowsExactly<ArgumentNullException>(() => lossingTrades.Add(null));
-		Assert.ThrowsExactly<ArgumentNullException>(() => averageTradeProfit.Add(null));
-		Assert.ThrowsExactly<ArgumentNullException>(() => averageWinTrade.Add(null));
-		Assert.ThrowsExactly<ArgumentNullException>(() => averageLossTrade.Add(null));
+		ThrowsExactly<ArgumentNullException>(() => winningTrades.Add(null));
+		ThrowsExactly<ArgumentNullException>(() => lossingTrades.Add(null));
+		ThrowsExactly<ArgumentNullException>(() => averageTradeProfit.Add(null));
+		ThrowsExactly<ArgumentNullException>(() => averageWinTrade.Add(null));
+		ThrowsExactly<ArgumentNullException>(() => averageLossTrade.Add(null));
 	}
 
 	[TestMethod]
@@ -1014,7 +1014,7 @@ public class StatisticsTests
 		var serverTime = DateTime.UtcNow;
 
 		// Act & Assert - negative closed volume should throw
-		Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => _ = new PnLInfo(serverTime, -1, 100));
+		ThrowsExactly<ArgumentOutOfRangeException>(() => _ = new PnLInfo(serverTime, -1, 100));
 
 		// Valid closed volume should not throw
 		var pnlInfo = new PnLInfo(serverTime, 0, 100);

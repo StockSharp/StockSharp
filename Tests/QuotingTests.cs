@@ -5,7 +5,7 @@ using StockSharp.Algo.Strategies.Quoting;
 
 [TestClass]
 [DoNotParallelize]
-public class QuotingTests
+public class QuotingTests : BaseTestClass
 {
 	private static Mock<IMarketDataProvider> _mdProvider;
 	private static Mock<IBlackScholes> _blackScholes;
@@ -495,7 +495,7 @@ public class QuotingTests
 	public void Volatility_Constructor_NullIvRange_ThrowsArgumentNullException()
 	{
 		// Arrange & Act & Assert
-		Assert.ThrowsExactly<ArgumentNullException>(() => 
+		ThrowsExactly<ArgumentNullException>(() => 
 			new VolatilityQuotingBehavior(null, _blackScholes.Object));
 	}
 
@@ -506,7 +506,7 @@ public class QuotingTests
 		var ivRange = new Range<decimal>(0.15m, 0.25m);
 		
 		// Act & Assert
-		Assert.ThrowsExactly<ArgumentNullException>(() => 
+		ThrowsExactly<ArgumentNullException>(() => 
 			new VolatilityQuotingBehavior(ivRange, null));
 	}
 
@@ -517,7 +517,7 @@ public class QuotingTests
 		IQuotingBehavior behavior = new MarketQuotingBehavior(new Unit(0.01m), new Unit(0.01m), (MarketPriceTypes)999);
 		
 		// Act & Assert
-		Assert.ThrowsExactly<InvalidOperationException>(() =>
+		ThrowsExactly<InvalidOperationException>(() =>
 			behavior.CalculateBestPrice(_security, _mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, [], []));
 	}
 
@@ -525,7 +525,7 @@ public class QuotingTests
 	public void Market_Constructor_NullPriceOffset_ThrowsArgumentNullException()
 	{
 		// Act & Assert
-		Assert.ThrowsExactly<ArgumentNullException>(() => 
+		ThrowsExactly<ArgumentNullException>(() => 
 			new MarketQuotingBehavior(null, new Unit(0.01m)));
 	}
 
@@ -533,7 +533,7 @@ public class QuotingTests
 	public void Market_Constructor_NullBestPriceOffset_ThrowsArgumentNullException()
 	{
 		// Act & Assert
-		Assert.ThrowsExactly<ArgumentNullException>(() => 
+		ThrowsExactly<ArgumentNullException>(() => 
 			new MarketQuotingBehavior(new Unit(0.01m), null));
 	}
 
@@ -555,7 +555,7 @@ public class QuotingTests
 	public void Level_Constructor_NullLevel_ThrowsArgumentNullException()
 	{
 		// Act & Assert
-		Assert.ThrowsExactly<ArgumentNullException>(() => 
+		ThrowsExactly<ArgumentNullException>(() => 
 			new LevelQuotingBehavior(null, false));
 	}
 
@@ -583,7 +583,7 @@ public class QuotingTests
 	public void TheorPrice_Constructor_NullTheorPriceOffset_ThrowsArgumentNullException()
 	{
 		// Act & Assert
-		Assert.ThrowsExactly<ArgumentNullException>(() => 
+		ThrowsExactly<ArgumentNullException>(() => 
 			new TheorPriceQuotingBehavior(null));
 	}
 

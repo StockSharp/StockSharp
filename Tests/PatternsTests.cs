@@ -3,7 +3,7 @@
 using StockSharp.Algo.Candles.Patterns;
 
 [TestClass]
-public class PatternsTests
+public class PatternsTests : BaseTestClass
 {
 	private static readonly SecurityId _secId = Helper.CreateSecurityId();
 	private static readonly DataType _dt = TimeSpan.FromMinutes(1).TimeFrame();
@@ -422,7 +422,7 @@ public class PatternsTests
 		var singleCandle = CreateCandle(100m, 110m, 100m, 105m);
 
 		// Test multi-candle pattern with insufficient data
-		Assert.ThrowsExactly<ArgumentException>(() => CandlePatternRegistry.Piercing.Recognize([singleCandle]));
+		ThrowsExactly<ArgumentException>(() => CandlePatternRegistry.Piercing.Recognize([singleCandle]));
 	}
 	[TestMethod]
 	public void SaveLoad()

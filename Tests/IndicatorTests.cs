@@ -11,7 +11,7 @@ using StockSharp.Algo.Gpu.Indicators;
 using DataType = StockSharp.Messages.DataType;
 
 [TestClass]
-public class IndicatorTests
+public class IndicatorTests : BaseTestClass
 {
 	private static IIndicatorValue CreateValue(IndicatorType type, IIndicator indicator, SecurityId secId, DateTime now, int idx, TimeSpan tf, bool isFinal, bool isEmpty, int diffLimit = 10)
 	{
@@ -166,9 +166,9 @@ public class IndicatorTests
 				if (a == null && b == null)
 					return;
 				else if (a == null || b == null)
-					Assert.Fail();
+					Fail();
 				else if (a.GetType() != b.GetType())
-					Assert.Fail();
+					Fail();
 				else if (a is IIndicator indA && b is IIndicator indB)
 				{
 					foreach (var field in a.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
@@ -187,7 +187,7 @@ public class IndicatorTests
 					var enumB = eb.Cast<object>().ToArray();
 
 					if (enumA.Length != enumB.Length)
-						Assert.Fail();
+						Fail();
 
 					for (var i = 0; i < enumA.Length; i++)
 					{
@@ -667,7 +667,7 @@ public class IndicatorTests
 			.ToArray();
 
 		if (duplicates.Any())
-			Assert.Fail($"Duplicate DocUrl(s) found: {duplicates.JoinCommaSpace()}");
+			Fail($"Duplicate DocUrl(s) found: {duplicates.JoinCommaSpace()}");
 	}
 
 	[TestMethod]
@@ -682,7 +682,7 @@ public class IndicatorTests
 			.ToArray();
 
 		if (duplicates.Any())
-			Assert.Fail($"Duplicate Names(s) found: {duplicates.JoinCommaSpace()}");
+			Fail($"Duplicate Names(s) found: {duplicates.JoinCommaSpace()}");
 	}
 
 	[TestMethod]
@@ -698,7 +698,7 @@ public class IndicatorTests
 			.ToArray();
 
 		if (duplicates.Any())
-			Assert.Fail($"Duplicate Descriptions(s) found: {duplicates.JoinCommaSpace()}");
+			Fail($"Duplicate Descriptions(s) found: {duplicates.JoinCommaSpace()}");
 	}
 
 	[TestMethod]
@@ -1025,7 +1025,7 @@ public class IndicatorTests
 			{
 				var c = candles[halfCount];
 				var output1 = indicator1.Process(c);
-				Assert.ThrowsExactly<NotSupportedException>(() => indicator2.Process(c));
+				ThrowsExactly<NotSupportedException>(() => indicator2.Process(c));
 			}
 		}
 	}
@@ -1097,7 +1097,7 @@ public class IndicatorTests
 		try
 		{
 			indicator.Preload(preloadData);
-			Assert.Fail("Expected InvalidOperationException");
+			Fail("Expected InvalidOperationException");
 		}
 		catch (InvalidOperationException ex)
 		{

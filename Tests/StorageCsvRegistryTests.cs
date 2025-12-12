@@ -28,10 +28,10 @@ public class StorageCsvRegistryTests : BaseTestClass
 		await executor.WaitFlushAsync(token);
 
 		var loaded = registry.Exchanges.ReadById("TEST");
-		Assert.IsNotNull(loaded);
-		Assert.AreEqual("TEST", loaded.Name);
-		Assert.AreEqual(CountryCodes.US, loaded.CountryCode);
-		Assert.AreEqual("Test Exchange", loaded.FullNameLoc);
+		IsNotNull(loaded);
+		AreEqual("TEST", loaded.Name);
+		AreEqual(CountryCodes.US, loaded.CountryCode);
+		AreEqual("Test Exchange", loaded.FullNameLoc);
 	}
 
 	[TestMethod]
@@ -58,9 +58,9 @@ public class StorageCsvRegistryTests : BaseTestClass
 		await executor.WaitFlushAsync(token);
 
 		var loaded = registry.Exchanges.ReadById("TEST");
-		Assert.IsNotNull(loaded);
-		Assert.AreEqual(CountryCodes.RU, loaded.CountryCode);
-		Assert.AreEqual("Updated Exchange", loaded.FullNameLoc);
+		IsNotNull(loaded);
+		AreEqual(CountryCodes.RU, loaded.CountryCode);
+		AreEqual("Updated Exchange", loaded.FullNameLoc);
 	}
 
 	[TestMethod]
@@ -84,7 +84,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 		await executor.WaitFlushAsync(token);
 
 		var loaded = registry.Exchanges.ReadById("TEST");
-		Assert.IsNull(loaded);
+		IsNull(loaded);
 	}
 
 	[TestMethod]
@@ -135,9 +135,9 @@ public class StorageCsvRegistryTests : BaseTestClass
 		await executor.WaitFlushAsync(token);
 
 		var loaded = registry.ExchangeBoards.ReadById("TEST_BOARD");
-		Assert.IsNotNull(loaded);
-		Assert.AreEqual("TEST_BOARD", loaded.Code);
-		Assert.AreEqual("TEST_EX", loaded.Exchange.Name);
+		IsNotNull(loaded);
+		AreEqual("TEST_BOARD", loaded.Code);
+		AreEqual("TEST_EX", loaded.Exchange.Name);
 	}
 
 	[TestMethod]
@@ -170,10 +170,10 @@ public class StorageCsvRegistryTests : BaseTestClass
 		await executor.WaitFlushAsync(token);
 
 		var loaded = registry.Securities.ReadById(security.ToSecurityId());
-		Assert.IsNotNull(loaded);
-		Assert.AreEqual("TEST", loaded.Code);
-		Assert.AreEqual("TBOARD", loaded.Board.Code);
-		Assert.AreEqual("Test Security", loaded.Name);
+		IsNotNull(loaded);
+		AreEqual("TEST", loaded.Code);
+		AreEqual("TBOARD", loaded.Board.Code);
+		AreEqual("Test Security", loaded.Name);
 	}
 
 	[TestMethod]
@@ -193,9 +193,9 @@ public class StorageCsvRegistryTests : BaseTestClass
 		await executor.WaitFlushAsync(token);
 
 		var loaded = registry.Portfolios.ReadById("TEST_PORTFOLIO");
-		Assert.IsNotNull(loaded);
-		Assert.AreEqual("TEST_PORTFOLIO", loaded.Name);
-		Assert.AreEqual(CurrencyTypes.USD, loaded.Currency);
+		IsNotNull(loaded);
+		AreEqual("TEST_PORTFOLIO", loaded.Name);
+		AreEqual(CurrencyTypes.USD, loaded.Currency);
 	}
 
 	[TestMethod]
@@ -221,9 +221,9 @@ public class StorageCsvRegistryTests : BaseTestClass
 		registry2.Init();
 
 		var loaded = registry2.Exchanges.ReadById("TEST");
-		Assert.IsNotNull(loaded);
-		Assert.AreEqual("TEST", loaded.Name);
-		Assert.AreEqual(CountryCodes.US, loaded.CountryCode);
+		IsNotNull(loaded);
+		AreEqual("TEST", loaded.Name);
+		AreEqual(CountryCodes.US, loaded.CountryCode);
 	}
 
 	[TestMethod]
@@ -241,7 +241,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 
 		// Try to add duplicate - should fail
 		var added = registry.Exchanges.Contains(exchange2);
-		Assert.IsTrue(added, "Duplicate should be detected");
+		IsTrue(added, "Duplicate should be detected");
 	}
 
 	[TestMethod]
@@ -253,9 +253,9 @@ public class StorageCsvRegistryTests : BaseTestClass
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
 		// CreateArchivedCopy is false by default
-		Assert.IsFalse(exchanges.CreateArchivedCopy);
+		IsFalse(exchanges.CreateArchivedCopy);
 
-		Assert.ThrowsExactly<NotSupportedException>(() =>
+		ThrowsExactly<NotSupportedException>(() =>
 		{
 			var copy = exchanges.GetCopy();
 		});
@@ -273,8 +273,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 		await executor.WaitFlushAsync(token);
 
 		var copy = exchanges.GetCopy();
-		Assert.IsNotNull(copy);
-		Assert.IsGreaterThanOrEqualTo(0, copy.Length);
+		IsNotNull(copy);
+		IsGreaterThanOrEqualTo(0, copy.Length);
 
 		// Decompress and verify - basic check
 		using var memStream = new MemoryStream(copy);
@@ -283,7 +283,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 		gzipStream.CopyTo(resultStream);
 		var decompressed = resultStream.ToArray();
 
-		Assert.IsNotNull(decompressed);
+		IsNotNull(decompressed);
 	}
 
 	[TestMethod]
@@ -308,8 +308,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 
 		// Get archived copy
 		var copy = exchanges.GetCopy();
-		Assert.IsNotNull(copy);
-		Assert.IsNotEmpty(copy);
+		IsNotNull(copy);
+		IsNotEmpty(copy);
 
 		// Decompress and verify content
 		using var memStream = new MemoryStream(copy);
@@ -318,12 +318,12 @@ public class StorageCsvRegistryTests : BaseTestClass
 		gzipStream.CopyTo(resultStream);
 		var content = resultStream.ToArray().UTF8();
 
-		Assert.Contains("NYSE", content);
-		Assert.Contains("MOEX", content);
-		Assert.Contains("LSE", content);
-		Assert.Contains("New York Stock Exchange", content);
-		Assert.Contains("Moscow Exchange", content);
-		Assert.Contains("London Stock Exchange", content);
+		Contains("NYSE", content);
+		Contains("MOEX", content);
+		Contains("LSE", content);
+		Contains("New York Stock Exchange", content);
+		Contains("Moscow Exchange", content);
+		Contains("London Stock Exchange", content);
 	}
 
 	[TestMethod]
@@ -347,7 +347,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 		var copy2 = exchanges.GetCopy();
 
 		// Should be the same instance (cached)
-		Assert.AreSame(copy1, copy2);
+		AreSame(copy1, copy2);
 	}
 
 	[TestMethod]
@@ -391,11 +391,11 @@ public class StorageCsvRegistryTests : BaseTestClass
 		}
 
 		// Should not be the same instance
-		Assert.AreNotSame(copy1, copy2);
+		AreNotSame(copy1, copy2);
 
 		// Content should be different
-		Assert.DoesNotContain("TEST2", content1);
-		Assert.Contains("TEST2", content2);
+		DoesNotContain("TEST2", content1);
+		Contains("TEST2", content2);
 	}
 
 	[TestMethod]
@@ -423,7 +423,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 			gzipStream.CopyTo(resultStream);
 			content1 = resultStream.ToArray().UTF8();
 		}
-		Assert.Contains("TEST1", content1);
+		Contains("TEST1", content1);
 
 		// Clear list
 		registry.Exchanges.Clear();
@@ -441,10 +441,10 @@ public class StorageCsvRegistryTests : BaseTestClass
 		}
 
 		// Should not be the same instance
-		Assert.AreNotSame(copy1, copy2);
+		AreNotSame(copy1, copy2);
 
 		// Content should be empty or minimal
-		Assert.DoesNotContain("TEST1", content2);
+		DoesNotContain("TEST1", content2);
 	}
 
 	[TestMethod]
@@ -472,7 +472,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 			gzipStream.CopyTo(resultStream);
 			content1 = resultStream.ToArray().UTF8();
 		}
-		Assert.Contains("Original Name", content1);
+		Contains("Original Name", content1);
 
 		// Update data
 		exchange.FullNameLoc = "Updated Name";
@@ -491,10 +491,10 @@ public class StorageCsvRegistryTests : BaseTestClass
 		}
 
 		// Should not be the same instance
-		Assert.AreNotSame(copy1, copy2);
+		AreNotSame(copy1, copy2);
 
 		// Content should be updated
-		Assert.Contains("Updated Name", content2);
+		Contains("Updated Name", content2);
 	}
 
 	[TestMethod]
@@ -511,8 +511,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 		await executor.WaitFlushAsync(token);
 
 		var exchangeCopy = exchangesList.GetCopy();
-		Assert.IsNotNull(exchangeCopy);
-		Assert.IsNotEmpty(exchangeCopy);
+		IsNotNull(exchangeCopy);
+		IsNotEmpty(exchangeCopy);
 
 		// Test with Portfolios
 		var portfoliosList = (ICsvEntityList)registry.Portfolios;
@@ -521,8 +521,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 		await executor.WaitFlushAsync(token);
 
 		var portfolioCopy = portfoliosList.GetCopy();
-		Assert.IsNotNull(portfolioCopy);
-		Assert.IsNotEmpty(portfolioCopy);
+		IsNotNull(portfolioCopy);
+		IsNotEmpty(portfolioCopy);
 
 		// Verify content
 		string exchangeContent;
@@ -543,8 +543,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 			portfolioContent = resultStream.ToArray().UTF8();
 		}
 
-		Assert.Contains("NYSE", exchangeContent);
-		Assert.Contains("PORT1", portfolioContent);
+		Contains("NYSE", exchangeContent);
+		Contains("PORT1", portfolioContent);
 	}
 
 	[TestMethod]
@@ -581,13 +581,13 @@ public class StorageCsvRegistryTests : BaseTestClass
 		}
 
 		// Verify compression is working (compressed should be smaller)
-		Assert.IsLessThan(decompressed.Length, compressed.Length, $"Compressed ({compressed.Length} bytes) should be smaller than decompressed ({decompressed.Length} bytes)");
+		IsLessThan(decompressed.Length, compressed.Length, $"Compressed ({compressed.Length} bytes) should be smaller than decompressed ({decompressed.Length} bytes)");
 
 		// Verify all data is present
 		var content = decompressed.UTF8();
-		Assert.Contains("EXCHANGE_000", content);
-		Assert.Contains("EXCHANGE_050", content);
-		Assert.Contains("EXCHANGE_099", content);
+		Contains("EXCHANGE_000", content);
+		Contains("EXCHANGE_050", content);
+		Contains("EXCHANGE_099", content);
 	}
 
 	[TestMethod]
@@ -599,7 +599,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 		var exchanges = (ICsvEntityList)registry.Exchanges;
 
 		// Initially disabled
-		Assert.IsFalse(exchanges.CreateArchivedCopy);
+		IsFalse(exchanges.CreateArchivedCopy);
 
 		// Enable
 		exchanges.CreateArchivedCopy = true;
@@ -607,13 +607,13 @@ public class StorageCsvRegistryTests : BaseTestClass
 		await executor.WaitFlushAsync(token);
 
 		var copy = exchanges.GetCopy();
-		Assert.IsNotNull(copy);
+		IsNotNull(copy);
 
 		// Disable
 		exchanges.CreateArchivedCopy = false;
 
 		// Should throw when disabled
-		Assert.ThrowsExactly<NotSupportedException>(() =>
+		ThrowsExactly<NotSupportedException>(() =>
 		{
 			var copy2 = exchanges.GetCopy();
 		});
@@ -649,7 +649,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 		var sw2 = Watch.Do(() => exchanges.GetCopy());
 
 		// Cached call should be much faster
-		Assert.IsTrue(sw2 < sw1,
+		IsTrue(sw2 < sw1,
 			$"Cached call ({sw2.TotalMilliseconds}ms) should be faster than first call ({sw1.TotalMilliseconds}ms)");
 
 		// Verify data integrity
@@ -662,8 +662,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 			content = resultStream.ToArray().UTF8();
 		}
 
-		Assert.Contains("LARGE_EXCHANGE_0000", content);
-		Assert.Contains("LARGE_EXCHANGE_0500", content);
-		Assert.Contains("LARGE_EXCHANGE_0999", content);
+		Contains("LARGE_EXCHANGE_0000", content);
+		Contains("LARGE_EXCHANGE_0500", content);
+		Contains("LARGE_EXCHANGE_0999", content);
 	}
 }

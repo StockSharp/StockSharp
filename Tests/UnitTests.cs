@@ -3,7 +3,7 @@ namespace StockSharp.Tests;
 using StockSharp.Messages;
 
 [TestClass]
-public class UnitTests
+public class UnitTests : BaseTestClass
 {
 	[TestMethod]
 	public void Parse()
@@ -80,13 +80,13 @@ public class UnitTests
 	[TestMethod]
 	public void InvalidCast()
 	{
-		Assert.ThrowsExactly<InvalidOperationException>(() => ((double)3.Percents()).AssertEqual(0));
+		ThrowsExactly<InvalidOperationException>(() => ((double)3.Percents()).AssertEqual(0));
 	}
 
 	[TestMethod]
 	public void InvalidParse2()
 	{
-		Assert.ThrowsExactly<ArgumentException>(() => "10н".ToUnit());
+		ThrowsExactly<ArgumentException>(() => "10н".ToUnit());
 	}
 
 	[TestMethod]
@@ -129,14 +129,14 @@ public class UnitTests
 	public void NullCast2()
 	{
 		Unit value = null;
-		Assert.ThrowsExactly<ArgumentNullException>(() => ((decimal)value).AssertNull());
+		ThrowsExactly<ArgumentNullException>(() => ((decimal)value).AssertNull());
 	}
 
 	[TestMethod]
 	public void NullCast3()
 	{
 		Unit value = null;
-		Assert.ThrowsExactly<ArgumentNullException>(() => ((double)value).AssertNull());
+		ThrowsExactly<ArgumentNullException>(() => ((double)value).AssertNull());
 	}
 
 	[TestMethod]
@@ -390,14 +390,14 @@ public class UnitTests
 	[TestMethod]
 	public void Empty2()
 	{
-		Assert.ThrowsExactly<ArgumentNullException>(() => "".ToUnit().AssertNull());
+		ThrowsExactly<ArgumentNullException>(() => "".ToUnit().AssertNull());
 		((string)null).ToUnit(false).AssertNull();
 	}
 
 	[TestMethod]
 	public void Empty3()
 	{
-		Assert.ThrowsExactly<ArgumentNullException>(() => ((string)null).ToUnit().AssertNull());
+		ThrowsExactly<ArgumentNullException>(() => ((string)null).ToUnit().AssertNull());
 	}
 
 	[TestMethod]
@@ -482,7 +482,7 @@ public class UnitTests
 	[TestMethod]
 	public void UnknownUnitTypeTest()
 	{
-		Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => _ = new Unit(100m, (UnitTypes)999));
+		ThrowsExactly<ArgumentOutOfRangeException>(() => _ = new Unit(100m, (UnitTypes)999));
 	}
 
 	[TestMethod]
@@ -547,7 +547,7 @@ public class UnitTests
 #pragma warning restore CS0618 // Type or member is obsolete
 
 		// Проверка исключения для неизвестного типа
-		Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => _ = Unit.GetTypeSuffix((UnitTypes)999));
+		ThrowsExactly<ArgumentOutOfRangeException>(() => _ = Unit.GetTypeSuffix((UnitTypes)999));
 	}
 
 	[TestMethod]
@@ -568,7 +568,7 @@ public class UnitTests
 #pragma warning disable CS0618 // Type or member is obsolete
 		var unit = new Unit(100m, UnitTypes.Step);
 #pragma warning restore CS0618 // Type or member is obsolete
-		Assert.ThrowsExactly<InvalidOperationException>(() => unit.Convert(UnitTypes.Absolute));
+		ThrowsExactly<InvalidOperationException>(() => unit.Convert(UnitTypes.Absolute));
 	}
 
 	[TestMethod]

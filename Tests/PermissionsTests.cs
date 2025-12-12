@@ -51,7 +51,7 @@ public class PermissionsTests : BaseTestClass
 	public void PermissionCredentials_IpRestrictions_NullThrows()
 	{
 		var creds = new PermissionCredentials();
-		Assert.ThrowsExactly<ArgumentNullException>(() => creds.IpRestrictions = null);
+		ThrowsExactly<ArgumentNullException>(() => creds.IpRestrictions = null);
 	}
 
 	[TestMethod]
@@ -133,7 +133,7 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void Extensions_ToCredentials_NullThrows()
 	{
-		Assert.ThrowsExactly<ArgumentNullException>(() => ((UserInfoMessage)null).ToCredentials());
+		ThrowsExactly<ArgumentNullException>(() => ((UserInfoMessage)null).ToCredentials());
 	}
 
 	[TestMethod]
@@ -164,7 +164,7 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void Extensions_ToUserInfoMessage_NullThrows()
 	{
-		Assert.ThrowsExactly<ArgumentNullException>(() => ((PermissionCredentials)null).ToUserInfoMessage(true));
+		ThrowsExactly<ArgumentNullException>(() => ((PermissionCredentials)null).ToUserInfoMessage(true));
 	}
 
 	[TestMethod]
@@ -249,7 +249,7 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void Extensions_TryGetByLogin_NullStorageThrows()
 	{
-		Assert.ThrowsExactly<ArgumentNullException>(() => ((IPermissionCredentialsStorage)null).TryGetByLogin("test"));
+		ThrowsExactly<ArgumentNullException>(() => ((IPermissionCredentialsStorage)null).TryGetByLogin("test"));
 	}
 
 	[TestMethod]
@@ -257,7 +257,7 @@ public class PermissionsTests : BaseTestClass
 	{
 		var tempFile = Helper.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
-		Assert.ThrowsExactly<ArgumentNullException>(() => storage.TryGetByLogin(""));
+		ThrowsExactly<ArgumentNullException>(() => storage.TryGetByLogin(""));
 	}
 
 	[TestMethod]
@@ -325,20 +325,20 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void FileStorage_Constructor_NullFileNameThrows()
 	{
-		Assert.ThrowsExactly<ArgumentNullException>(() => new FileCredentialsStorage(null));
+		ThrowsExactly<ArgumentNullException>(() => new FileCredentialsStorage(null));
 	}
 
 	[TestMethod]
 	public void FileStorage_Constructor_EmptyFileNameThrows()
 	{
-		Assert.ThrowsExactly<ArgumentNullException>(() => new FileCredentialsStorage(""));
+		ThrowsExactly<ArgumentNullException>(() => new FileCredentialsStorage(""));
 	}
 
 	[TestMethod]
 	public void FileStorage_Constructor_NonExistentDirectoryThrows()
 	{
 		var invalidPath = Path.Combine(Helper.TempFolder, Guid.NewGuid().ToString(), "file.txt");
-		Assert.ThrowsExactly<InvalidOperationException>(() => new FileCredentialsStorage(invalidPath));
+		ThrowsExactly<InvalidOperationException>(() => new FileCredentialsStorage(invalidPath));
 	}
 
 	[TestMethod]
@@ -418,7 +418,7 @@ public class PermissionsTests : BaseTestClass
 	{
 		var tempFile = Helper.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
-		Assert.ThrowsExactly<ArgumentNullException>(() => storage.Save(null));
+		ThrowsExactly<ArgumentNullException>(() => storage.Save(null));
 	}
 
 	[TestMethod]
@@ -462,7 +462,7 @@ public class PermissionsTests : BaseTestClass
 		var tempFile = Helper.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
 
-		Assert.ThrowsExactly<ArgumentException>(() => storage.Save(new PermissionCredentials { Email = "user*", Password = ToSecureString("pass") }));
+		ThrowsExactly<ArgumentException>(() => storage.Save(new PermissionCredentials { Email = "user*", Password = ToSecureString("pass") }));
 	}
 
 	[TestMethod]
@@ -471,7 +471,7 @@ public class PermissionsTests : BaseTestClass
 		var tempFile = Helper.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
 
-		Assert.ThrowsExactly<ArgumentException>(() => storage.Save(new PermissionCredentials { Email = null, Password = ToSecureString("pass") }));
+		ThrowsExactly<ArgumentException>(() => storage.Save(new PermissionCredentials { Email = null, Password = ToSecureString("pass") }));
 	}
 
 	[TestMethod]
@@ -480,7 +480,7 @@ public class PermissionsTests : BaseTestClass
 		var tempFile = Helper.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
 
-		Assert.ThrowsExactly<ArgumentException>(() => storage.Save(new PermissionCredentials { Email = " ", Password = ToSecureString("pass") }));
+		ThrowsExactly<ArgumentException>(() => storage.Save(new PermissionCredentials { Email = " ", Password = ToSecureString("pass") }));
 	}
 
 	[TestMethod]
@@ -489,7 +489,7 @@ public class PermissionsTests : BaseTestClass
 		var tempFile = Helper.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
 
-		Assert.ThrowsExactly<ArgumentException>(() => storage.Save(new PermissionCredentials { Email = "user test@example.com", Password = ToSecureString("pass") }));
+		ThrowsExactly<ArgumentException>(() => storage.Save(new PermissionCredentials { Email = "user test@example.com", Password = ToSecureString("pass") }));
 	}
 
 	[TestMethod]
@@ -498,7 +498,7 @@ public class PermissionsTests : BaseTestClass
 		var tempFile = Helper.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
 
-		Assert.ThrowsExactly<ArgumentException>(() => storage.Save(new PermissionCredentials { Email = "user+tag", Password = ToSecureString("pass") }));
+		ThrowsExactly<ArgumentException>(() => storage.Save(new PermissionCredentials { Email = "user+tag", Password = ToSecureString("pass") }));
 	}
 
 	[TestMethod]
@@ -561,7 +561,7 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void Authorization_Constructor_NullStorageThrows()
 	{
-		Assert.ThrowsExactly<ArgumentNullException>(() => new PermissionCredentialsAuthorization(null));
+		ThrowsExactly<ArgumentNullException>(() => new PermissionCredentialsAuthorization(null));
 	}
 
 	[TestMethod]
@@ -571,7 +571,7 @@ public class PermissionsTests : BaseTestClass
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
-		return Assert.ThrowsExactlyAsync<ArgumentNullException>(() =>
+		return ThrowsExactlyAsync<ArgumentNullException>(() =>
 			auth.ValidateCredentials("", ToSecureString("pass"), _ip1, CancellationToken).AsTask());
 	}
 
@@ -582,7 +582,7 @@ public class PermissionsTests : BaseTestClass
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
-		return Assert.ThrowsExactlyAsync<ArgumentNullException>(() =>
+		return ThrowsExactlyAsync<ArgumentNullException>(() =>
 			auth.ValidateCredentials("user", new SecureString(), _ip1, CancellationToken).AsTask());
 	}
 
@@ -593,7 +593,7 @@ public class PermissionsTests : BaseTestClass
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
-		return Assert.ThrowsExactlyAsync<ArgumentNullException>(() =>
+		return ThrowsExactlyAsync<ArgumentNullException>(() =>
 			auth.ValidateCredentials("user", null, _ip1, CancellationToken).AsTask());
 	}
 
@@ -604,7 +604,7 @@ public class PermissionsTests : BaseTestClass
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
-		return Assert.ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
+		return ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
 			auth.ValidateCredentials("nonexistent", ToSecureString("pass"), _ip1, CancellationToken).AsTask());
 	}
 
@@ -623,7 +623,7 @@ public class PermissionsTests : BaseTestClass
 
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
-		return Assert.ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
+		return ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
 			auth.ValidateCredentials(login, ToSecureString("wrongpass"), _ip1, CancellationToken).AsTask());
 	}
 
@@ -690,7 +690,7 @@ public class PermissionsTests : BaseTestClass
 
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
-		return Assert.ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
+		return ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
 			auth.ValidateCredentials(login, password, _ip3, CancellationToken).AsTask());  // different IP
 	}
 
@@ -711,7 +711,7 @@ public class PermissionsTests : BaseTestClass
 
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
-		return Assert.ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
+		return ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
 			auth.ValidateCredentials(login, password, null, CancellationToken).AsTask());
 	}
 

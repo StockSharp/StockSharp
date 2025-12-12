@@ -1,7 +1,7 @@
 namespace StockSharp.Tests;
 
 [TestClass]
-public class SubscriptionHolderTests
+public class SubscriptionHolderTests : BaseTestClass
 {
 	// Test subscription implementation
 	private class TestSubscription : ISubscription<string>, ISecurityIdMessage, IDataTypeMessage
@@ -39,7 +39,7 @@ public class SubscriptionHolderTests
 	[TestMethod]
 	public void Constructor_NullLogs_Throws()
 	{
-		Assert.ThrowsExactly<ArgumentNullException>(() => new SubscriptionHolder<TestSubscription, string>(null));
+		ThrowsExactly<ArgumentNullException>(() => new SubscriptionHolder<TestSubscription, string>(null));
 	}
 
 	#endregion
@@ -50,7 +50,7 @@ public class SubscriptionHolderTests
 	public void Add_NullSubscription_Throws()
 	{
 		using var holder = CreateHolder();
-		Assert.ThrowsExactly<ArgumentNullException>(() => holder.Add(null));
+		ThrowsExactly<ArgumentNullException>(() => holder.Add(null));
 	}
 
 	[TestMethod]
@@ -102,7 +102,7 @@ public class SubscriptionHolderTests
 	public void GetSubscriptions_NullSession_Throws()
 	{
 		using var holder = CreateHolder();
-		Assert.ThrowsExactly<ArgumentNullException>(() => holder.GetSubscriptions((string)null));
+		ThrowsExactly<ArgumentNullException>(() => holder.GetSubscriptions((string)null));
 	}
 
 	[TestMethod]
@@ -252,7 +252,7 @@ public class SubscriptionHolderTests
 	public void Remove_NullSubscription_Throws()
 	{
 		using var holder = CreateHolder();
-		Assert.ThrowsExactly<ArgumentNullException>(() => holder.Remove((TestSubscription)null));
+		ThrowsExactly<ArgumentNullException>(() => holder.Remove((TestSubscription)null));
 	}
 
 	[TestMethod]
@@ -281,7 +281,7 @@ public class SubscriptionHolderTests
 	public void Remove_BySession_NullSession_Throws()
 	{
 		using var holder = CreateHolder();
-		Assert.ThrowsExactly<ArgumentNullException>(() => holder.Remove((string)null));
+		ThrowsExactly<ArgumentNullException>(() => holder.Remove((string)null));
 	}
 
 	[TestMethod]
@@ -441,7 +441,7 @@ public class SubscriptionHolderTests
 		var sub2 = CreateSubscription(1, "session2", new SecurityId { SecurityCode = "MSFT" }, DataType.Level1);
 
 		holder.Add(sub1);
-		Assert.ThrowsExactly<ArgumentException>(() => holder.Add(sub2));
+		ThrowsExactly<ArgumentException>(() => holder.Add(sub2));
 		
 		holder.TryGetById(1, out var retrieved).AssertTrue();
 		retrieved.AssertNotNull();
