@@ -53,10 +53,10 @@ public class DataTypeTests : BaseTestClass
 	[TestMethod]
 	public void CandleSources_Contains_Expected()
 	{
-		Contains(DataType.Ticks, DataType.CandleSources);
-		Contains(DataType.Level1, DataType.CandleSources);
-		Contains(DataType.MarketDepth, DataType.CandleSources);
-		Contains(DataType.OrderLog, DataType.CandleSources);
+		Assert.Contains(DataType.Ticks, DataType.CandleSources);
+		Assert.Contains(DataType.Level1, DataType.CandleSources);
+		Assert.Contains(DataType.MarketDepth, DataType.CandleSources);
+		Assert.Contains(DataType.OrderLog, DataType.CandleSources);
 	}
 
 	[TestMethod]

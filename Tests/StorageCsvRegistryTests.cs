@@ -274,7 +274,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 
 		var copy = exchanges.GetCopy();
 		IsNotNull(copy);
-		IsGreaterThanOrEqualTo(0, copy.Length);
+		Assert.IsGreaterThanOrEqualTo(0, copy.Length);
 
 		// Decompress and verify - basic check
 		using var memStream = new MemoryStream(copy);
@@ -581,7 +581,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 		}
 
 		// Verify compression is working (compressed should be smaller)
-		IsLessThan(decompressed.Length, compressed.Length, $"Compressed ({compressed.Length} bytes) should be smaller than decompressed ({decompressed.Length} bytes)");
+		Assert.IsLessThan(decompressed.Length, compressed.Length, $"Compressed ({compressed.Length} bytes) should be smaller than decompressed ({decompressed.Length} bytes)");
 
 		// Verify all data is present
 		var content = decompressed.UTF8();
