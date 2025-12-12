@@ -89,8 +89,11 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 		if (message.Type != MessageTypes.Reset)
 		{
 			var extra = ProcessRisk(message);
-			extra.LoopBack(this);
-			RaiseNewOutMessage(extra);
+			if (extra is not null)
+			{
+				extra.LoopBack(this);
+				RaiseNewOutMessage(extra);
+			}
 		}
 
 		base.OnInnerAdapterNewOutMessage(message);
