@@ -11,18 +11,33 @@ using StockSharp.Algo.Candles;
 	Description = LocalizedStrings.GopalakrishnanRangeIndexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/gopalakrishnan_range_index.html")]
-public class GopalakrishnanRangeIndex : LengthIndicator<(decimal high, decimal low)>
+public class GopalakrishnanRangeIndex : DecimalLengthIndicator
 {
+	private readonly DecimalBuffer _high = new(14) { Stats = CircularBufferStats.Max };
+	private readonly DecimalBuffer _low = new(14) { Stats = CircularBufferStats.Min };
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="GopalakrishnanRangeIndex"/>.
 	/// </summary>
 	public GopalakrishnanRangeIndex()
 	{
-		Length = 14;
+#if !NET7_0_OR_GREATER
+		_high.Operator = new DecimalOperator();
+		_low.Operator = new DecimalOperator();
+#endif
 
-		Buffer.MaxComparer = Comparer<(decimal high, decimal low)>.Create((x, y) => x.high.CompareTo(y.high));
-		Buffer.MinComparer = Comparer<(decimal high, decimal low)>.Create((x, y) => x.low.CompareTo(y.low));
+		Length = 14;
 	}
+
+	/// <inheritdoc />
+	public override void Reset()
+	{
+		_high.Capacity = _low.Capacity = Length;
+		base.Reset();
+	}
+
+	/// <inheritdoc />
+	protected override bool CalcIsFormed() => _high.Count >= Length;
 
 	/// <inheritdoc />
 	public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
@@ -33,14 +48,17 @@ public class GopalakrishnanRangeIndex : LengthIndicator<(decimal high, decimal l
 		var candle = input.ToCandle();
 
 		if (input.IsFinal)
-			Buffer.PushBack((candle.HighPrice, candle.LowPrice));
+		{
+			_high.PushBack(candle.HighPrice);
+			_low.PushBack(candle.LowPrice);
+		}
 
 		if (IsFormed)
 		{
 			var currentRange = candle.GetLength();
 
-			var highestHigh = input.IsFinal ? Buffer.Max.Value.high : Math.Max(Buffer.Max.Value.high, candle.HighPrice);
-			var lowestLow = input.IsFinal ? Buffer.Min.Value.low : Math.Min(Buffer.Min.Value.low, candle.LowPrice);
+			var highestHigh = input.IsFinal ? _high.Max.Value : Math.Max(_high.Max.Value, candle.HighPrice);
+			var lowestLow = input.IsFinal ? _low.Min.Value : Math.Min(_low.Min.Value, candle.LowPrice);
 
 			var gapo = currentRange > 0
 				? (decimal)Math.Log((double)((highestHigh - lowestLow) / currentRange)) / (decimal)Math.Log(Length)

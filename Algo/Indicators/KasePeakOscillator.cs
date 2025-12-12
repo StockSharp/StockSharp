@@ -13,8 +13,8 @@
 public class KasePeakOscillator : BaseComplexIndicator<IKasePeakOscillatorValue>
 {
 	private readonly AverageTrueRange _atr = new() { Length = 10 };
-	private readonly CircularBufferEx<decimal> _peakBuffer = new(2) { MaxComparer = Comparer<decimal>.Default };
-	private readonly CircularBufferEx<decimal> _valleyBuffer = new(2) { MinComparer = Comparer<decimal>.Default };
+	private readonly DecimalBuffer _peakBuffer = new(2) { Stats = CircularBufferStats.Max };
+	private readonly DecimalBuffer _valleyBuffer = new(2) { Stats = CircularBufferStats.Min };
 	private readonly KasePeakOscillatorPart _shortTerm = new();
 	private readonly KasePeakOscillatorPart _longTerm = new();
 	private decimal _prevClose;
@@ -26,6 +26,11 @@ public class KasePeakOscillator : BaseComplexIndicator<IKasePeakOscillatorValue>
 	{
 		AddInner(ShortTerm);
 		AddInner(LongTerm);
+
+#if !NET7_0_OR_GREATER
+		_peakBuffer.Operator = new DecimalOperator();
+		_valleyBuffer.Operator = new DecimalOperator();
+#endif
 
 		ShortPeriod = 9;
 		LongPeriod = 18;
@@ -166,7 +171,7 @@ public class KasePeakOscillator : BaseComplexIndicator<IKasePeakOscillatorValue>
 /// Represents a part (short-term or long-term) of the Kase Peak Oscillator.
 /// </summary>
 [IndicatorHidden]
-public class KasePeakOscillatorPart : LengthIndicator<decimal>
+public class KasePeakOscillatorPart : DecimalLengthIndicator
 {
 	/// <inheritdoc />
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
