@@ -1,6 +1,9 @@
 namespace StockSharp.Tinkoff;
 
+using System.Globalization;
 using System.IO;
+using System.IO.Compression;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 
@@ -729,6 +732,19 @@ public partial class TinkoffMessageAdapter
 
 		if (mdMsg.IsSubscribe)
 		{
+			if (mdMsg.From is not null)
+			{
+				var from = mdMsg.From.Value;
+				var to = mdMsg.To ?? CurrentTimeUtc;
+
+				var secId = mdMsg.SecurityId;
+				var instrumentId = secId.IsAllSecurity()
+					? string.Empty
+					: $"{secId.SecurityCode}_{secId.BoardCode}";
+
+				await DownloadTradesHistoryAsync(mdMsg.TransactionId, instrumentId, from, to, mdMsg.IsRegularTradingHours, cancellationToken);
+			}
+
 			if (!mdMsg.IsHistoryOnly())
 			{
 				AddTransId(mdMsg);
@@ -763,6 +779,124 @@ public partial class TinkoffMessageAdapter
 					}
 				}
 			}, cancellationToken);
+		}
+	}
+
+	private async Task DownloadTradesHistoryAsync(long transId, string instrumentId, DateTime from, DateTime to, bool? isRth, CancellationToken cancellationToken)
+	{
+		static Sides? parseSide(string value)
+			=> value switch
+			{
+				"BUY" => Sides.Buy,
+				"SELL" => Sides.Sell,
+				"" or null => null,
+				_ => null,
+			};
+
+		static bool? parseIsSystem(string value)
+			=> value switch
+			{
+				"DEALER" => true,
+				"EXCHANGE" => false,
+				"" or null => null,
+				_ => null,
+			};
+
+		var curr = from.Date;
+
+		while (curr <= to.Date)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			var url = $"https://{_domainAddr}/history-trades/{curr:yyyy-MM-dd}";
+			
+			if (!instrumentId.IsEmpty())
+				url += "?instrumentId={instrumentId}";
+
+			try
+			{
+				using var response = await _historyClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+
+				if (response.StatusCode == HttpStatusCode.NotFound)
+				{
+					curr = curr.AddDays(1);
+					continue;
+				}
+
+				if (response.StatusCode == HttpStatusCode.TooManyRequests)
+				{
+					var delay = TimeSpan.FromSeconds(5);
+
+					if (response.Headers.TryGetValues("x-ratelimit-reset", out var values) &&
+						int.TryParse(values.FirstOrDefault(), out var sec) && sec > 0)
+						delay = TimeSpan.FromSeconds(sec);
+
+					await delay.Delay(cancellationToken);
+					continue;
+				}
+
+				response.EnsureSuccessStatusCode();
+
+				curr = curr.AddDays(1);
+
+				await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
+				await using var gz = new GZipStream(stream, CompressionMode.Decompress, leaveOpen: false);
+
+				// TRADE_TS,TICKER_CC,DIRECTION,PRICE,QUANTITY,TRADE_SOURCE,INSTRUMENT_UID
+				// 2018-03-07T18:33:20.902591Z,SBER_TQBR,BUY,273.16,50,EXCHANGE,e6123145-9665-43e0-8413-cd61b8aa9b13
+				var reader = new FastCsvReader(gz, Encoding.UTF8, StringHelper.N);
+
+				if (!reader.NextLine())
+					continue;
+
+				while (reader.NextLine())
+				{
+					cancellationToken.ThrowIfCancellationRequested();
+
+					var timestamp = reader.ReadDateTime("yyyy-MM-dd'T'HH:mm:ss.ffffff'Z'").UtcKind();
+
+					if (timestamp < from)
+						continue;
+
+					if (timestamp > to)
+						return;
+
+					reader.Skip();
+
+					var side = reader.ReadString();
+					var price = reader.ReadDecimal();
+					var quantity = reader.ReadDecimal();
+					var isSystem = reader.ReadString();
+
+					if (isRth is not null)
+					{
+						if (parseIsSystem(isSystem) is bool v)
+						{
+							if (isRth == true && !v)
+								continue;
+						}
+					}
+
+					SendOutMessage(new ExecutionMessage
+					{
+						DataTypeEx = DataType.Ticks,
+						OriginalTransactionId = transId,
+						ServerTime = timestamp,
+						TradePrice = price,
+						TradeVolume = quantity,
+						OriginSide = parseSide(side),
+					});
+				}
+			}
+			catch (Exception ex)
+			{
+				if (cancellationToken.IsCancellationRequested)
+					break;
+
+				this.AddErrorLog(ex);
+			}
+
+			curr = curr.AddDays(1);
 		}
 	}
 

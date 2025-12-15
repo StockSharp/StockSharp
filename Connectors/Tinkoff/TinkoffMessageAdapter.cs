@@ -43,7 +43,7 @@ public partial class TinkoffMessageAdapter
 
 	/// <inheritdoc />
 	public override bool IsAllDownloadingSupported(DataType dataType)
-		=> dataType == DataType.Securities || base.IsAllDownloadingSupported(dataType);
+		=> dataType == DataType.Securities || dataType == DataType.Ticks || base.IsAllDownloadingSupported(dataType);
 
 	/// <summary>
 	/// All possible time frames.
