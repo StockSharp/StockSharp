@@ -6,61 +6,41 @@ namespace StockSharp.Algo.Derivatives;
 public class BlackScholes : IBlackScholes
 {
 	/// <summary>
-	/// Initialize <see cref="BlackScholes"/>.
+	/// Base constructor for inherited models.
 	/// </summary>
-	/// <param name="securityProvider">The provider of information about instruments.</param>
 	/// <param name="dataProvider">The market data provider.</param>
-	/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-	protected BlackScholes(ISecurityProvider securityProvider, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider)
+	/// <param name="expirationTime">Explicit option expiration moment. If <c>null</c>, midnight of <see cref="Security.ExpiryDate"/> is used when available.</param>
+	protected BlackScholes(IMarketDataProvider dataProvider, DateTime? expirationTime = null)
 	{
-		SecurityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
 		DataProvider = dataProvider ?? throw new ArgumentNullException(nameof(dataProvider));
-		ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
+		ExpirationTime = expirationTime;
 	}
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="BlackScholes"/>.
+	/// Initializes a new instance of <see cref="BlackScholes"/> for a specific option with its underlying asset.
 	/// </summary>
 	/// <param name="option">Options contract.</param>
-	/// <param name="securityProvider">The provider of information about instruments.</param>
+	/// <param name="underlyingAsset">Underlying asset.</param>
 	/// <param name="dataProvider">The market data provider.</param>
-	/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-	public BlackScholes(Security option, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider)
-		: this(securityProvider, dataProvider, exchangeInfoProvider)
+	/// <param name="expirationTime">Explicit option expiration moment. If <c>null</c>, midnight of <see cref="Security.ExpiryDate"/> is used when available.</param>
+	public BlackScholes(Security option, Security underlyingAsset, IMarketDataProvider dataProvider, DateTime? expirationTime = null)
+		: this(dataProvider, expirationTime)
 	{
 		Option = option ?? throw new ArgumentNullException(nameof(option));
+		_underlyingAsset = underlyingAsset ?? throw new ArgumentNullException(nameof(underlyingAsset));
 	}
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="BlackScholes"/>.
+	/// Initializes a new instance of the <see cref="BlackScholes"/> for an underlying asset only (non-option models).
 	/// </summary>
 	/// <param name="underlyingAsset">Underlying asset.</param>
 	/// <param name="dataProvider">The market data provider.</param>
-	/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-	protected BlackScholes(Security underlyingAsset, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider)
+	/// <param name="expirationTime">Explicit option expiration moment. If <c>null</c>, midnight of <see cref="Security.ExpiryDate"/> is used when available.</param>
+	protected BlackScholes(Security underlyingAsset, IMarketDataProvider dataProvider, DateTime? expirationTime = null)
+		: this(dataProvider, expirationTime)
 	{
 		_underlyingAsset = underlyingAsset ?? throw new ArgumentNullException(nameof(underlyingAsset));
-		DataProvider = dataProvider ?? throw new ArgumentNullException(nameof(dataProvider));
-		ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 	}
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="BlackScholes"/>.
-	/// </summary>
-	/// <param name="option">Options contract.</param>
-	/// <param name="underlyingAsset">Underlying asset.</param>
-	/// <param name="dataProvider">The market data provider.</param>
-	/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-	public BlackScholes(Security option, Security underlyingAsset, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider)
-		: this(underlyingAsset, dataProvider, exchangeInfoProvider)
-	{
-		Option = option ?? throw new ArgumentNullException(nameof(option));
-	}
-
-	/// <summary>
-	/// The provider of information about instruments.
-	/// </summary>
-	public ISecurityProvider SecurityProvider { get; }
 
 	/// <summary>
 	/// The market data provider.
@@ -68,9 +48,9 @@ public class BlackScholes : IBlackScholes
 	public virtual IMarketDataProvider DataProvider { get; }
 
 	/// <summary>
-	/// Exchanges and trading boards provider.
+	/// Explicit expiration moment. If <c>null</c>, midnight of <see cref="Security.ExpiryDate"/> is used when available.
 	/// </summary>
-	public IExchangeInfoProvider ExchangeInfoProvider { get; }
+	public DateTime? ExpirationTime { get; set; }
 
 	/// <inheritdoc />
 	public virtual Security Option { get; }
@@ -105,7 +85,7 @@ public class BlackScholes : IBlackScholes
 	/// </summary>
 	public virtual Security UnderlyingAsset
 	{
-		get => _underlyingAsset ??= Option.GetUnderlyingAsset(SecurityProvider);
+		get => _underlyingAsset;
 		set => _underlyingAsset = value;
 	}
 
@@ -121,7 +101,15 @@ public class BlackScholes : IBlackScholes
 	/// <returns>The time remaining until expiration. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 	public virtual double? GetExpirationTimeLine(DateTime currentTime)
 	{
-		return DerivativesHelper.GetExpirationTimeLine(Option.GetExpirationTime(ExchangeInfoProvider), currentTime);
+		var expTime = ExpirationTime;
+
+		if (expTime == null && Option != null && Option.ExpiryDate != null)
+			expTime = Option.ExpiryDate.Value.Date; // midnight by default
+
+		if (expTime == null)
+			return null;
+
+		return DerivativesHelper.GetExpirationTimeLine(expTime.Value, currentTime);
 	}
 
 	/// <summary>
@@ -141,17 +129,7 @@ public class BlackScholes : IBlackScholes
 	/// Option type.
 	/// </summary>
 	protected OptionTypes OptionType
-	{
-		get
-		{
-			var type = Option.OptionType;
-
-			if (type == null)
-				throw new InvalidOperationException(LocalizedStrings.OrderTypeMissed.Put(Option));
-
-			return type.Value;
-		}
-	}
+		=> Option.OptionType ?? throw new InvalidOperationException(LocalizedStrings.OrderTypeMissed.Put(Option));
 
 	/// <summary>
 	/// To round to <see cref="RoundDecimals"/>.

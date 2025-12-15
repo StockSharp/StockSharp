@@ -583,17 +583,25 @@ public static class DerivativesHelper
 	/// <param name="depth">The order book quotes of which will be changed to volatility quotes.</param>
 	/// <param name="securityProvider">The provider of information about instruments.</param>
 	/// <param name="dataProvider">The market data provider.</param>
-	/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 	/// <param name="currentTime">The current time.</param>
 	/// <param name="riskFree">The risk free interest rate.</param>
 	/// <param name="dividend">The dividend amount on shares.</param>
 	/// <returns>The order book volatility.</returns>
-	public static QuoteChangeMessage ImpliedVolatility(this IOrderBookMessage depth, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider, DateTime currentTime, decimal riskFree = 0, decimal dividend = 0)
+	public static QuoteChangeMessage ImpliedVolatility(this IOrderBookMessage depth, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, DateTime currentTime, decimal riskFree = 0, decimal dividend = 0)
 	{
 		if (depth == null)
 			throw new ArgumentNullException(nameof(depth));
 
-		return depth.ImpliedVolatility(new BlackScholes(securityProvider.LookupById(depth.SecurityId), securityProvider, dataProvider, exchangeInfoProvider) { RiskFree = riskFree, Dividend = dividend }, currentTime);
+		var option = securityProvider.LookupById(depth.SecurityId);
+		var underlying = option?.GetUnderlyingAsset(securityProvider);
+
+		var model = new BlackScholes(option, underlying, dataProvider)
+		{
+			RiskFree = riskFree,
+			Dividend = dividend,
+		};
+
+		return depth.ImpliedVolatility(model, currentTime);
 	}
 
 	/// <summary>

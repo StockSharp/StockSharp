@@ -197,17 +197,17 @@ public partial class MainWindow
 		});
 
 		_model.MarketDataProvider = dummyProvider;
-		_model.ExchangeInfoProvider = new InMemoryExchangeInfoProvider();
 		_model.UnderlyingAsset = asset;
 
 		//
 		// draw test data on the pos chart
 
-		var model = new BasketBlackScholes(asset, dummyProvider, _model.ExchangeInfoProvider, dummyProvider);
+		var model = new BasketBlackScholes(asset, dummyProvider, dummyProvider);
 
 		foreach (var s in securities.Where(s => s.OptionType == OptionTypes.Call || s.OptionType == OptionTypes.Put))
 		{
-			model.InnerModels.Add(new(s, dummyProvider, dummyProvider, _model.ExchangeInfoProvider));
+			var ua = s.GetUnderlyingAsset(dummyProvider);
+			model.InnerModels.Add(new(s, ua, dummyProvider));
 		}
 
 		PosChart.Model = model;
@@ -373,7 +373,7 @@ public partial class MainWindow
 
 			Portfolio.Portfolios = new PortfolioDataSource(Connector);
 
-			PosChart.Model = new(Connector, Connector, Connector.ExchangeInfoProvider, Connector);
+			PosChart.Model = new(Connector, Connector);
 
 			Connector.Connect();
 		}
@@ -568,6 +568,6 @@ public partial class MainWindow
 		if (!_quotesWindows.TryGetValue(depth.SecurityId, out var wnd))
 			return;
 
-		wnd.Update(depth.ImpliedVolatility(Connector, Connector, _model.ExchangeInfoProvider, depth.ServerTime));
+		wnd.Update(depth.ImpliedVolatility(Connector, Connector, depth.ServerTime));
 	}
 }

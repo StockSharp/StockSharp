@@ -49,7 +49,18 @@ public class OptionsBlackScholesDiagramElement : DiagramElement
 
 	private void ProcessStrike(DiagramSocketValue value)
 	{
-		_model ??= new BlackScholes(value.GetValue<Security>(), Strategy, Strategy, ServicesRegistry.ExchangeInfoProvider);
+		var option = value.GetValue<Security>();
+		if (option == null)
+			return;
+
+		if (_model == null)
+		{
+			var underlying = option.GetUnderlyingAsset(Strategy);
+
+			_model = UseBlackModel
+				? new Black(option, underlying, Strategy)
+				: new BlackScholes(option, underlying, Strategy);
+		}
 
 		RaiseProcessOutput(_outputSocket, value.Time, _model, value);
 	}

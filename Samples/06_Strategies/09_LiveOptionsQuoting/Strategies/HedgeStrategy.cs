@@ -138,7 +138,8 @@ public abstract class HedgeStrategy : Strategy
 		{
 			if (security.Type == SecurityTypes.Option && security.GetAsset(this) == BlackScholes.UnderlyingAsset)
 			{
-				BlackScholes.InnerModels.Add(new BlackScholes(security, this, this, BlackScholes.ExchangeInfoProvider));
+				var asset = security.GetUnderlyingAsset(this);
+				BlackScholes.InnerModels.Add(new BlackScholes(security, asset, this));
 				LogInfo("Added option model for {0}", security.Id);
 			}
 		}

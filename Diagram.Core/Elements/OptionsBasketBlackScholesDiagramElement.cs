@@ -65,13 +65,15 @@ public class OptionsBasketBlackScholesDiagramElement : DiagramElement
 		if (_options is null)
 			return;
 
-		_blackScholes = new BasketBlackScholes(Strategy, Strategy, ServicesRegistry.ExchangeInfoProvider, Strategy);
+		_blackScholes = new BasketBlackScholes(Strategy, Strategy);
 
 		foreach (var option in _options)
 		{
+			var underlying = option.GetUnderlyingAsset(Strategy);
+
 			var model = UseBlackModel
-				? new Black(option, Strategy, Strategy, _blackScholes.ExchangeInfoProvider)
-				: new BlackScholes(option, Strategy, Strategy, _blackScholes.ExchangeInfoProvider);
+				? new Black(option, underlying, Strategy)
+				: new BlackScholes(option, underlying, Strategy);
 
 			_blackScholes.InnerModels.Add(model);
 		}

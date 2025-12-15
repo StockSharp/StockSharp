@@ -49,26 +49,25 @@ public class BasketBlackScholes : BlackScholes
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BasketBlackScholes"/>.
 	/// </summary>
-	/// <param name="securityProvider">The provider of information about instruments.</param>
 	/// <param name="dataProvider">The market data provider.</param>
 	/// <param name="positionProvider">The position provider.</param>
-	/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-	public BasketBlackScholes(ISecurityProvider securityProvider, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider, IPositionProvider positionProvider)
-		: base(securityProvider, dataProvider, exchangeInfoProvider)
+	/// <param name="expirationTime">Explicit options expiration moment for the whole basket. If <c>null</c>, models' own settings are used.</param>
+	public BasketBlackScholes(IMarketDataProvider dataProvider, IPositionProvider positionProvider, DateTime? expirationTime = null)
+		: base(dataProvider, expirationTime)
 	{
 		_innerModels = new InnerModelList(this);
 		PositionProvider = positionProvider ?? throw new ArgumentNullException(nameof(positionProvider));
 	}
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="BasketBlackScholes"/>.
+	/// Initializes a new instance of the <see cref="BasketBlackScholes"/> with explicit underlying.
 	/// </summary>
 	/// <param name="underlyingAsset">Underlying asset.</param>
 	/// <param name="dataProvider">The market data provider.</param>
 	/// <param name="positionProvider">The position provider.</param>
-	/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-	public BasketBlackScholes(Security underlyingAsset, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider, IPositionProvider positionProvider)
-		: base(underlyingAsset, dataProvider, exchangeInfoProvider)
+	/// <param name="expirationTime">Explicit options expiration moment for the whole basket.</param>
+	public BasketBlackScholes(Security underlyingAsset, IMarketDataProvider dataProvider, IPositionProvider positionProvider, DateTime? expirationTime = null)
+		: base(underlyingAsset, dataProvider, expirationTime)
 	{
 		_innerModels = new InnerModelList(this);
 		UnderlyingAsset = underlyingAsset;
@@ -102,7 +101,7 @@ public class BasketBlackScholes : BlackScholes
 				if (model == null)
 					throw new InvalidOperationException(LocalizedStrings.ModelNoOptions);
 
-				base.UnderlyingAsset = model.Option.GetAsset(SecurityProvider);
+				base.UnderlyingAsset = model.UnderlyingAsset;
 			}
 
 			return base.UnderlyingAsset;

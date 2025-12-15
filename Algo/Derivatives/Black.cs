@@ -11,23 +11,11 @@ public class Black : BlackScholes
 	/// Initializes a new instance of the <see cref="Black"/>.
 	/// </summary>
 	/// <param name="option">Options contract.</param>
-	/// <param name="securityProvider">The provider of information about instruments.</param>
-	/// <param name="dataProvider">The market data provider.</param>
-	/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-	public Black(Security option, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider)
-		: base(option, securityProvider, dataProvider, exchangeInfoProvider)
-	{
-	}
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="Black"/>.
-	/// </summary>
-	/// <param name="option">Options contract.</param>
 	/// <param name="underlyingAsset">Underlying asset.</param>
 	/// <param name="dataProvider">The market data provider.</param>
-	/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-	public Black(Security option, Security underlyingAsset, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider)
-		: base(option, underlyingAsset, dataProvider, exchangeInfoProvider)
+	/// <param name="expirationTime">Explicit option expiration moment. If <c>null</c>, midnight of <see cref="Security.ExpiryDate"/> is used when available.</param>
+	public Black(Security option, Security underlyingAsset, IMarketDataProvider dataProvider, DateTime? expirationTime = null)
+		: base(option, underlyingAsset, dataProvider, expirationTime)
 	{
 	}
 
