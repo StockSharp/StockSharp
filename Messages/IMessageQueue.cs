@@ -31,7 +31,8 @@ public interface IMessageQueue
 	/// Enqueues the specified message.
 	/// </summary>
 	/// <param name="message">The message to enqueue.</param>
-	void Enqueue(Message message);
+	/// <param name="cancellationToken">Cancellation token.</param>
+	ValueTask Enqueue(Message message, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Removes and returns the next message from the queue asynchronously.
@@ -62,7 +63,7 @@ public interface IMessageQueue
 public abstract class BaseMessageQueue() : BaseOrderedChannel<long, Message, PriorityQueue<long, Message>>(new((p1, p2) => (p1 - p2).Abs()), -1), IMessageQueue
 {
 	/// <inheritdoc />
-	public abstract void Enqueue(Message message);
+	public abstract ValueTask Enqueue(Message message, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -78,12 +79,12 @@ public class MessageByLocalTimeQueue : BaseMessageQueue
 	}
 
 	/// <inheritdoc />
-	public override void Enqueue(Message message)
+	public override ValueTask Enqueue(Message message, CancellationToken cancellationToken)
 	{
 		if (message is null)
 			throw new ArgumentNullException(nameof(message));
 
-		Enqueue(message.LocalTime.Ticks, message);
+		return Enqueue(message.LocalTime.Ticks, message, cancellationToken);
 	}
 }
 
@@ -102,11 +103,11 @@ public class MessageByOrderQueue : BaseMessageQueue
 	}
 
 	/// <inheritdoc />
-	public override void Enqueue(Message message)
+	public override ValueTask Enqueue(Message message, CancellationToken cancellationToken)
 	{
 		if (message is null)
 			throw new ArgumentNullException(nameof(message));
 
-		Enqueue(_idGen.GetNextId(), message);
+		return Enqueue(_idGen.GetNextId(), message, cancellationToken);
 	}
 }

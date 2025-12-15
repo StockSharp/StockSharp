@@ -142,8 +142,7 @@ public class InMemoryMessageChannel : Disposable, IMessageChannel
 		_queue.Clear();
 	}
 
-	/// <inheritdoc />
-	public void SendInMessage(Message message)
+	void IMessageChannel.SendInMessage(Message message)
 	{
 		if (!this.IsOpened())
 		{
@@ -151,7 +150,7 @@ public class InMemoryMessageChannel : Disposable, IMessageChannel
 			return;
 		}
 
-		_queue.Enqueue(message);
+		_queue.Enqueue(message, default);
 	}
 
 	/// <inheritdoc />
