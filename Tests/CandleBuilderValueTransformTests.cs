@@ -87,7 +87,7 @@ public class CandleBuilderValueTransformTests : BaseTestClass
 		transform.Process(new ResetMessage());
 
 		// State should be cleared
-		AreEqual(default(DateTime), ((ICandleBuilderValueTransform)transform).Time);
+		AreEqual(default, ((ICandleBuilderValueTransform)transform).Time);
 		AreEqual(0m, ((ICandleBuilderValueTransform)transform).Price);
 	}
 

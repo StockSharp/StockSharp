@@ -85,18 +85,6 @@ public class ChannelMessageAdapter : MessageAdapterWrapper
 	}
 
 	/// <summary>
-	/// Send outgoing message.
-	/// </summary>
-	/// <param name="message">Message.</param>
-	public void SendOutMessage(Message message)
-	{
-		if (!OutputChannel.IsOpened())
-			OutputChannel.Open();
-
-		OutputChannel.SendInMessage(message);
-	}
-
-	/// <summary>
 	/// Create a copy of <see cref="ChannelMessageAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
