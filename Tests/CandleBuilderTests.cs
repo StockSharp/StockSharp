@@ -13,33 +13,29 @@ public class CandleBuilderTests : BaseTestClass
 
 	private class MockExchangeInfoProvider : IExchangeInfoProvider
 	{
-		public IEnumerable<ExchangeBoard> Boards => [ExchangeBoard.Associated];
-		public IEnumerable<Exchange> Exchanges => [Exchange.Test];
+		IEnumerable<ExchangeBoard> IExchangeInfoProvider.Boards => [ExchangeBoard.Associated];
+		IEnumerable<Exchange> IExchangeInfoProvider.Exchanges => [Exchange.Test];
 
-		public event Action<ExchangeBoard> BoardAdded { add { } remove { } }
-		public event Action<Exchange> ExchangeAdded { add { } remove { } }
-		public event Action<ExchangeBoard> BoardRemoved { add { } remove { } }
-		public event Action<Exchange> ExchangeRemoved { add { } remove { } }
+		event Action<ExchangeBoard> IExchangeInfoProvider.BoardAdded { add { } remove { } }
+		event Action<Exchange> IExchangeInfoProvider.ExchangeAdded { add { } remove { } }
+		event Action<ExchangeBoard> IExchangeInfoProvider.BoardRemoved { add { } remove { } }
+		event Action<Exchange> IExchangeInfoProvider.ExchangeRemoved { add { } remove { } }
 
-		public void Init() { }
-		public ExchangeBoard GetExchangeBoard(string code) => ExchangeBoard.Associated;
-		public ExchangeBoard TryGetExchangeBoard(string code) => ExchangeBoard.Associated;
-		public Exchange GetExchange(string code) => Exchange.Test;
-		public Exchange TryGetExchange(string code) => Exchange.Test;
-		public void Save(ExchangeBoard board) { }
-		public void Save(Exchange exchange) { }
-		public void Delete(ExchangeBoard board) { }
-		public void Delete(Exchange exchange) { }
-		public ExchangeBoard GetOrCreateBoard(string code, Func<string, ExchangeBoard> createBoard = null) => ExchangeBoard.Associated;
-		public IEnumerable<BoardMessage> Lookup(BoardLookupMessage criteria) => [];
+		void IExchangeInfoProvider.Init() { }
+		ExchangeBoard IExchangeInfoProvider.TryGetExchangeBoard(string code) => ExchangeBoard.Associated;
+		Exchange IExchangeInfoProvider.TryGetExchange(string code) => Exchange.Test;
+		void IExchangeInfoProvider.Save(ExchangeBoard board) { }
+		void IExchangeInfoProvider.Save(Exchange exchange) { }
+		void IExchangeInfoProvider.Delete(ExchangeBoard board) { }
+		void IExchangeInfoProvider.Delete(Exchange exchange) { }
+		IEnumerable<BoardMessage> IBoardMessageProvider.Lookup(BoardLookupMessage criteria) => [];
 	}
 
 	private class MockCandleBuilderSubscription : ICandleBuilderSubscription
 	{
 		public MarketDataMessage Message { get; set; }
 		public CandleMessage CurrentCandle { get; set; }
-		public VolumeProfileBuilder VolumeProfile { get; set; }
-		public long TransactionId => Message?.TransactionId ?? 0;
+		VolumeProfileBuilder ICandleBuilderSubscription.VolumeProfile { get; set; }
 	}
 
 	private class MockTransform : ICandleBuilderValueTransform
