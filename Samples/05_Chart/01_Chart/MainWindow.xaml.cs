@@ -84,7 +84,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 		try
 		{
 			ConfigManager.RegisterService<ICandlePatternProvider>(new InMemoryCandlePatternProvider());
-			LoggingHelper.DoWithLog(ServicesRegistry.CandlePatternProvider.Init);
+			_ = LoggingHelper.DoWithLogAsync(ServicesRegistry.CandlePatternProvider.InitAsync);
 		}
 		catch
 		{

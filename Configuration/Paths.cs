@@ -2,7 +2,7 @@
 
 using System.Text;
 using System.Threading;
-
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 using NuGet.Configuration;
@@ -610,6 +610,26 @@ public static class Paths
 	/// </summary>
 	/// <typeparam name="T">Value type.</typeparam>
 	/// <param name="filePath">File path.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Value.</returns>
+	public static ValueTask<T> DeserializeAsync<T>(this string filePath, CancellationToken cancellationToken)
+	{
+		try
+		{
+			return filePath.DeserializeOrThrowAsync<T>(cancellationToken);
+		}
+		catch (Exception e)
+		{
+			new Exception($"Error deserializing '{filePath}'", e).LogError();
+			return default;
+		}
+	}
+
+	/// <summary>
+	/// Deserialize value from the specified file.
+	/// </summary>
+	/// <typeparam name="T">Value type.</typeparam>
+	/// <param name="filePath">File path.</param>
 	/// <returns>Value.</returns>
 	public static T DeserializeOrThrow<T>(this string filePath)
 	{
@@ -621,6 +641,25 @@ public static class Paths
 
 		using FileStream stream = new FileStream(defFile, FileMode.Open, FileAccess.Read, FileShare.Read);
 		return defSer.Deserialize(stream);
+	}
+
+	/// <summary>
+	/// Deserialize value from the specified file.
+	/// </summary>
+	/// <typeparam name="T">Value type.</typeparam>
+	/// <param name="filePath">File path.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Value.</returns>
+	public static ValueTask<T> DeserializeOrThrowAsync<T>(this string filePath, CancellationToken cancellationToken)
+	{
+		var defFile = Path.ChangeExtension(filePath, DefaultSettingsExt);
+		var defSer = CreateSerializer<T>();
+
+		if (!File.Exists(defFile))
+			throw new FileNotFoundException($"file not found: '{defFile}'");
+
+		using FileStream stream = new FileStream(defFile, FileMode.Open, FileAccess.Read, FileShare.Read);
+		return defSer.DeserializeAsync(stream, cancellationToken);
 	}
 
 	/// <summary>
