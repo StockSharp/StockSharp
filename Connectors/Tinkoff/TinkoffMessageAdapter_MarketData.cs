@@ -1,6 +1,5 @@
 namespace StockSharp.Tinkoff;
 
-using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
@@ -263,7 +262,7 @@ public partial class TinkoffMessageAdapter
 			{
 				case SecurityTypes.Stock:
 				{
-					foreach (var instr in (await instrSvc.SharesAsync(cancellationToken)).Instruments)
+					foreach (var instr in (await instrSvc.SharesAsync(new() { InstrumentStatus = InstrumentStatus.Base }, cancellationToken: cancellationToken)).Instruments)
 					{
 						if (!TrySendOut(new()
 						{
@@ -293,7 +292,7 @@ public partial class TinkoffMessageAdapter
 				}
 				case SecurityTypes.Future:
 				{
-					foreach (var instr in (await instrSvc.FuturesAsync(cancellationToken)).Instruments)
+					foreach (var instr in (await instrSvc.FuturesAsync(new() { InstrumentStatus = InstrumentStatus.Base }, cancellationToken: cancellationToken)).Instruments)
 					{
 						if (!TrySendOut(new SecurityMessage
 						{
@@ -391,7 +390,7 @@ public partial class TinkoffMessageAdapter
 				}
 				case SecurityTypes.Bond:
 				{
-					foreach (var instr in (await instrSvc.BondsAsync(cancellationToken)).Instruments)
+					foreach (var instr in (await instrSvc.BondsAsync(new() { InstrumentStatus = InstrumentStatus.Base }, cancellationToken: cancellationToken)).Instruments)
 					{
 						if (!TrySendOut(new()
 						{
@@ -423,7 +422,7 @@ public partial class TinkoffMessageAdapter
 				}
 				case SecurityTypes.Etf:
 				{
-					foreach (var instr in (await instrSvc.EtfsAsync(cancellationToken: cancellationToken)).Instruments)
+					foreach (var instr in (await instrSvc.EtfsAsync(new() { InstrumentStatus = InstrumentStatus.Base }, cancellationToken: cancellationToken)).Instruments)
 					{
 						if (!TrySendOut(new()
 						{

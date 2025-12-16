@@ -94,7 +94,7 @@ public partial class TinkoffMessageAdapter
 		_service = new(_channel.CreateCallInvoker());
 
 		// validate access
-		await _service.Users.GetUserTariffAsync(cancellationToken);
+		await _service.Users.GetUserTariffAsync(new GetUserTariffRequest(), cancellationToken: cancellationToken);
 
 		_mdStream = _service.MarketDataStream.MarketDataStream(cancellationToken: cancellationToken);
 

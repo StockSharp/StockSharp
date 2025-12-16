@@ -1,0 +1,692 @@
+syntax = "proto3";
+
+package tinkoff.public.invest.api.contract.v1;
+
+option go_package = "./;investapi";
+option java_package = "ru.tinkoff.piapi.contract.v1";
+option java_multiple_files = true;
+option csharp_namespace = "Tinkoff.InvestApi.V1";
+option objc_class_prefix = "TIAPI";
+option php_namespace = "Tinkoff\\Invest\\V1";
+
+import "google/protobuf/timestamp.proto";
+import "common.proto";
+import "google/api/field_behavior.proto";
+
+service MarketDataService {//Сервис для получения биржевой информации:<br/> 1. Свечи.<br/> 2. Стаканы.<br/> 3. Торговые статусы.<br/> 4. Лента сделок.
+
+  //GetCandles — исторические свечи по инструменту
+  rpc GetCandles(GetCandlesRequest) returns (GetCandlesResponse);
+
+  //GetLastPrices — цены последних сделок по инструментам
+  rpc GetLastPrices(GetLastPricesRequest) returns (GetLastPricesResponse);
+
+  //GetOrderBook — стакан по инструменту
+  rpc GetOrderBook(GetOrderBookRequest) returns (GetOrderBookResponse);
+
+  //GetTradingStatus — статус торгов по инструменту
+  rpc GetTradingStatus(GetTradingStatusRequest) returns (GetTradingStatusResponse);
+
+  //GetTradingStatuses — статус торгов по инструментам
+  rpc GetTradingStatuses(GetTradingStatusesRequest) returns (GetTradingStatusesResponse);
+
+  //GetLastTrades — обезличенные сделки
+  //Обезличенные сделки по инструменту. Метод гарантирует получение информации за последний час.
+  rpc GetLastTrades(GetLastTradesRequest) returns (GetLastTradesResponse);
+
+  //GetClosePrices — цены закрытия торговой сессии по инструментам
+  rpc GetClosePrices(GetClosePricesRequest) returns (GetClosePricesResponse);
+
+  //GetTechAnalysis — технические индикаторы по инструменту
+  rpc GetTechAnalysis(GetTechAnalysisRequest) returns (GetTechAnalysisResponse);
+
+  //GetMarketValues — рыночные данные по инструментам
+  rpc GetMarketValues(GetMarketValuesRequest) returns (GetMarketValuesResponse);
+}
+
+service MarketDataStreamService {
+  //MarketDataStream — bidirectional стрим предоставления биржевой информации
+  rpc MarketDataStream(stream MarketDataRequest) returns (stream MarketDataResponse);
+
+  //MarketDataServerSideStream — server-side стрим предоставления биржевой информации
+  rpc MarketDataServerSideStream(MarketDataServerSideStreamRequest) returns (stream MarketDataResponse);
+}
+
+//Запрос подписки или отписки на определенные биржевые данные.
+message MarketDataRequest {
+  oneof payload {
+    SubscribeCandlesRequest subscribe_candles_request = 1; //Запрос подписки на свечи.
+    SubscribeOrderBookRequest subscribe_order_book_request = 2; //Запрос подписки на стаканы.
+    SubscribeTradesRequest subscribe_trades_request = 3; //Запрос подписки на ленту обезличенных сделок.
+    SubscribeInfoRequest subscribe_info_request = 4; //Запрос подписки на торговые статусы инструментов.
+    SubscribeLastPriceRequest subscribe_last_price_request = 5; //Запрос подписки на цены последних сделок.
+    GetMySubscriptions get_my_subscriptions = 6; //Запрос своих подписок.
+    PingRequest ping = 7; //Запрос проверки активности соединения.
+    PingDelaySettings ping_settings = 15; //Запрос настройки пинга.
+  }
+}
+
+message MarketDataServerSideStreamRequest {
+  SubscribeCandlesRequest subscribe_candles_request = 1; //Запрос подписки на свечи.
+  SubscribeOrderBookRequest subscribe_order_book_request = 2; //Запрос подписки на стаканы.
+  SubscribeTradesRequest subscribe_trades_request = 3; //Запрос подписки на ленту обезличенных сделок.
+  SubscribeInfoRequest subscribe_info_request = 4; //Запрос подписки на торговые статусы инструментов.
+  SubscribeLastPriceRequest subscribe_last_price_request = 5; //Запрос подписки на цены последних сделок.
+  PingDelaySettings ping_settings = 15; //Запрос настройки пинга.
+}
+
+//Пакет биржевой информации по подписке.
+message MarketDataResponse {
+  oneof payload {
+    SubscribeCandlesResponse subscribe_candles_response = 1; //Результат подписки на свечи.
+    SubscribeOrderBookResponse subscribe_order_book_response = 2; //Результат подписки на стаканы.
+    SubscribeTradesResponse subscribe_trades_response = 3; //Результат подписки на поток обезличенных сделок.
+    SubscribeInfoResponse subscribe_info_response = 4; //Результат подписки на торговые статусы инструментов.
+    Candle candle = 5; //Свеча.
+    Trade trade = 6; //Сделки.
+    OrderBook orderbook = 7; //Стакан.
+    TradingStatus trading_status = 8; //Торговый статус.
+    Ping ping = 9; //Проверка активности стрима.
+    SubscribeLastPriceResponse subscribe_last_price_response = 10; //Результат подписки на цены последние сделок по инструментам.
+    LastPrice last_price = 11; //Цена последней сделки.
+    OpenInterest open_interest = 12; //Открытый интерес.
+  }
+}
+
+// subscribeCandles | Изменения статуса подписки на свечи.
+message SubscribeCandlesRequest {
+  SubscriptionAction subscription_action = 1; //Изменение статуса подписки.
+  repeated CandleInstrument instruments = 2; //Массив инструментов для подписки на свечи.
+  bool waiting_close = 3; //Флаг ожидания закрытия временного интервала для отправки свечи.
+  optional GetCandlesRequest.CandleSource candle_source_type = 9; //Источник свечей.
+}
+
+//Тип операции со списком подписок.
+enum SubscriptionAction {
+  SUBSCRIPTION_ACTION_UNSPECIFIED = 0; //Статус подписки не определен.
+  SUBSCRIPTION_ACTION_SUBSCRIBE = 1; //Подписаться.
+  SUBSCRIPTION_ACTION_UNSUBSCRIBE = 2; //Отписаться.
+}
+
+//Интервал свечи.
+enum SubscriptionInterval {
+  SUBSCRIPTION_INTERVAL_UNSPECIFIED = 0; //Интервал свечи не определен.
+  SUBSCRIPTION_INTERVAL_ONE_MINUTE = 1; //Минутные свечи.
+  SUBSCRIPTION_INTERVAL_FIVE_MINUTES = 2; //Пятиминутные свечи.
+  SUBSCRIPTION_INTERVAL_FIFTEEN_MINUTES = 3; //Пятнадцатиминутные свечи.
+  SUBSCRIPTION_INTERVAL_ONE_HOUR = 4; //Часовые свечи.
+  SUBSCRIPTION_INTERVAL_ONE_DAY = 5; //Дневные свечи.
+  SUBSCRIPTION_INTERVAL_2_MIN = 6; //Двухминутные свечи.
+  SUBSCRIPTION_INTERVAL_3_MIN = 7; //Трехминутные свечи.
+  SUBSCRIPTION_INTERVAL_10_MIN = 8; //Десятиминутные свечи.
+  SUBSCRIPTION_INTERVAL_30_MIN = 9; //Тридцатиминутные свечи.
+  SUBSCRIPTION_INTERVAL_2_HOUR = 10; //Двухчасовые свечи.
+  SUBSCRIPTION_INTERVAL_4_HOUR = 11; //Четырехчасовые свечи.
+  SUBSCRIPTION_INTERVAL_WEEK = 12; //Недельные свечи.
+  SUBSCRIPTION_INTERVAL_MONTH = 13; //Месячные свечи.
+}
+
+//Запрос изменения статус подписки на свечи.
+message CandleInstrument {
+  string figi = 1 [deprecated = true]; // Deprecated FIGI-идентификатор инструмента. Используйте `instrument_id`.
+  SubscriptionInterval interval = 2; //Интервал свечей. Двухчасовые и четырехчасовые свечи в стриме отсчитываются с 0:00 по UTC.
+  string instrument_id = 3; //Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
+}
+
+//Результат изменения статус подписки на свечи.
+message SubscribeCandlesResponse {
+  string tracking_id = 1; //Уникальный идентификатор запроса. [Подробнее](./grpc#tracking-id).
+  repeated CandleSubscription candles_subscriptions = 2; //Массив статусов подписки на свечи.
+}
+
+//Статус подписки на свечи.
+message CandleSubscription {
+  string figi = 1; //FIGI-идентификатор инструмента.
+  SubscriptionInterval interval = 2; //Интервал свечей.
+  SubscriptionStatus subscription_status = 3; //Статус подписки.
+  string instrument_uid = 4; //UID инструмента.
+  bool waiting_close = 5; //Флаг ожидания закрытия временного интервала для отправки свечи.
+  string stream_id = 6; //Идентификатор открытого соединения.
+  string subscription_id = 7; //Идентификатор подписки в формате `UUID`.
+  SubscriptionAction subscription_action = 8; //Действие подписки.
+  optional GetCandlesRequest.CandleSource candle_source_type = 9; //Источник свечей.
+  string ticker = 10; //Тикер инструмента.
+  string class_code = 11; //Класс-код (секция торгов).
+}
+
+//Результат подписки.
+enum SubscriptionStatus {
+  SUBSCRIPTION_STATUS_UNSPECIFIED = 0; //Статус подписки не определен.
+  SUBSCRIPTION_STATUS_SUCCESS = 1; //Успешно.
+  SUBSCRIPTION_STATUS_INSTRUMENT_NOT_FOUND = 2; //Инструмент не найден.
+  SUBSCRIPTION_STATUS_SUBSCRIPTION_ACTION_IS_INVALID = 3; //Некорректный статус подписки. [Список возможных значений](./marketdata#subscriptionaction).
+  SUBSCRIPTION_STATUS_DEPTH_IS_INVALID = 4; //Некорректная глубина стакана. Доступные значения — 1, 10, 20, 30, 40, 50.
+  SUBSCRIPTION_STATUS_INTERVAL_IS_INVALID = 5; //Некорректный интервал свечей. [Список возможных значений](./marketdata#subscriptioninterval).
+  SUBSCRIPTION_STATUS_LIMIT_IS_EXCEEDED = 6; //Превышен лимит на общее количество подписок в рамках стрима. [Лимитная политика](./limits/).
+  SUBSCRIPTION_STATUS_INTERNAL_ERROR = 7; //Внутренняя ошибка сервиса.
+  SUBSCRIPTION_STATUS_TOO_MANY_REQUESTS = 8; //Превышен лимит на количество запросов на подписки в течение установленного отрезка времени.
+  SUBSCRIPTION_STATUS_SUBSCRIPTION_NOT_FOUND = 9; // Активная подписка не найдена. Ошибка может возникнуть только при отписке от несуществующей подписки.
+  SUBSCRIPTION_STATUS_SOURCE_IS_INVALID = 10; //Указан некорректный источник.
+}
+
+//Запрос на изменение статуса подписки на стаканы.
+message SubscribeOrderBookRequest {
+  SubscriptionAction subscription_action = 1; //Изменение статуса подписки.
+  repeated OrderBookInstrument instruments = 2; //Массив инструментов для подписки на стаканы.
+}
+
+//Запрос подписки на стаканы.
+message OrderBookInstrument {
+  string figi = 1 [deprecated = true]; //Deprecated FIGI-идентификатор инструмента. Используйте `instrument_id`.
+  int32 depth = 2; //Глубина стакана.
+  string instrument_id = 3; //Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
+  OrderBookType order_book_type = 4; //Тип стакана. Значение по умолчанию — `ORDERBOOK_TYPE_ALL`, стакан биржевой и дилера.
+}
+
+//Результат изменения статуса подписки на стаканы.
+message SubscribeOrderBookResponse {
+  string tracking_id = 1; //Уникальный идентификатор запроса. [Подробнее](./grpc#tracking-id).
+  repeated OrderBookSubscription order_book_subscriptions = 2; //Массив статусов подписки на стаканы.
+}
+
+//Статус подписки.
+message OrderBookSubscription {
+  string figi = 1; //FIGI-идентификатор инструмента.
+  int32 depth = 2; //Глубина стакана.
+  SubscriptionStatus subscription_status = 3; //Статус подписки.
+  string instrument_uid = 4; //UID инструмента.
+  string stream_id = 5; //Идентификатор открытого соединения.
+  string subscription_id = 6; //Идентификатор подписки в формате `UUID`.
+  OrderBookType order_book_type = 7; //Тип стакана.
+  SubscriptionAction subscription_action = 8; //Действие подписки.
+  string ticker = 9; //Тикер инструмента.
+  string class_code = 10; //Класс-код (секция торгов).
+}
+
+//Типы источников сделок.
+enum TradeSourceType {
+  TRADE_SOURCE_UNSPECIFIED = 0; //Тип источника сделки не определён.
+  TRADE_SOURCE_EXCHANGE = 1; // Биржевые сделки.
+  TRADE_SOURCE_DEALER = 2; // Сделки дилера.
+  TRADE_SOURCE_ALL = 3;  // Все сделки.
+}
+
+//Изменение статуса подписки на поток обезличенных сделок.
+message SubscribeTradesRequest {
+  SubscriptionAction subscription_action = 1; //Изменение статуса подписки.
+  repeated TradeInstrument instruments = 2; //Массив инструментов для подписки на поток обезличенных сделок.
+  TradeSourceType trade_source = 3; //Тип источника сделок. Значение по умолчанию — `TRADE_SOURCE_ALL`, все сделки.
+  bool with_open_interest = 4; //Флаг открытого интереса. **true** - в стриме дополнительно передается информация об открытом интересе для фьючерсов
+}
+
+//Запрос подписки на поток обезличенных сделок.
+message TradeInstrument {
+  string figi = 1 [deprecated = true]; //Deprecated FIGI-идентификатор инструмента. Используйте instrument_id`.
+  string instrument_id = 2; //Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
+}
+
+//Результат изменения статуса подписки на поток обезличенных сделок.
+message SubscribeTradesResponse {
+  string tracking_id = 1; //Уникальный идентификатор запроса. [Подробнее](./grpc#tracking-id).
+  repeated TradeSubscription trade_subscriptions = 2; //Массив статусов подписки на поток сделок.
+  TradeSourceType trade_source = 3; //Тип источника сделок.
+}
+
+//Статус подписки.
+message TradeSubscription {
+  string figi = 1; //FIGI-идентификатор инструмента.
+  SubscriptionStatus subscription_status = 2; //Статус подписки.
+  string instrument_uid = 3; //UID инструмента.
+  string stream_id = 4; //Идентификатор открытого соединения.
+  string subscription_id = 5; //Идентификатор подписки в формате UUID.
+  bool with_open_interest = 6; //Флаг открытого интереса. **true** - в стриме дополнительно передается информация об открытом интересе для фьючерсов
+  SubscriptionAction subscription_action = 7; //Действие подписки.
+  string ticker = 8; //Тикер инструмента.
+  string class_code = 9; //Класс-код (секция торгов).
+}
+
+//Изменение статуса подписки на торговый статус инструмента.
+message SubscribeInfoRequest {
+  SubscriptionAction subscription_action = 1; //Изменение статуса подписки.
+  repeated InfoInstrument instruments = 2; //Массив инструментов для подписки на торговый статус.
+}
+
+//Запрос подписки на торговый статус.
+message InfoInstrument {
+  string figi = 1 [deprecated = true]; //Deprecated FIGI-идентификатор инструмента. Используйте instrument_id`.
+  string instrument_id = 2; //Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
+}
+
+//Результат изменения статуса подписки на торговый статус.
+message SubscribeInfoResponse {
+  string tracking_id = 1; //Уникальный идентификатор запроса. [Подробнее](./grpc#tracking-id).
+  repeated InfoSubscription info_subscriptions = 2; //Массив статусов подписки на торговый статус.
+}
+
+//Статус подписки.
+message InfoSubscription {
+  string figi = 1; //FIGI-идентификатор инструмента.
+  SubscriptionStatus subscription_status = 2; //Статус подписки.
+  string instrument_uid = 3; //UID инструмента.
+  string stream_id = 4; //Идентификатор открытого соединения.
+  string subscription_id = 5; //Идентификатор подписки в формате UUID.
+  SubscriptionAction subscription_action = 6; //Действие подписки.
+  string ticker = 7; //Тикер инструмента.
+  string class_code = 8; //Класс-код (секция торгов).
+}
+
+//Изменение статуса подписки на цену последней сделки по инструменту.
+message SubscribeLastPriceRequest {
+  SubscriptionAction subscription_action = 1; //Изменение статуса подписки.
+  repeated LastPriceInstrument instruments = 2; //Массив инструментов для подписки на цену последней сделки.
+}
+
+//Запрос подписки на последнюю цену.
+message LastPriceInstrument {
+  string figi = 1 [deprecated = true]; //Deprecated FIGI-идентификатор инструмента. Используйте instrument_id`.
+  string instrument_id = 2; //Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
+}
+
+//Результат изменения статуса подписки на цену последней сделки.
+message SubscribeLastPriceResponse {
+  string tracking_id = 1; //Уникальный идентификатор запроса. [Подробнее](./grpc#tracking-id).
+  repeated LastPriceSubscription last_price_subscriptions = 2; //Массив статусов подписки на цену последней сделки.
+}
+
+//Статус подписки на цену последней сделки.
+message LastPriceSubscription {
+  string figi = 1; //FIGI-идентификатор инструмента.
+  SubscriptionStatus subscription_status = 2; //Статус подписки.
+  string instrument_uid = 3; //UID инструмента.
+  string stream_id = 4; //Идентификатор открытого соединения.
+  string subscription_id = 5; //Идентификатор подписки в формате `UUID`.
+  SubscriptionAction subscription_action = 6; //Действие подписки.
+  string ticker = 7; //Тикер инструмента.
+  string class_code = 8; //Класс-код (секция торгов).
+}
+
+//Пакет свечей в рамках стрима.
+message Candle {
+  string figi = 1; //FIGI-идентификатор инструмента.
+  SubscriptionInterval interval = 2; //Интервал свечи.
+  Quotation open = 3; //Цена открытия за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента. [Подробнее про перевод цен в валюту](./faq_marketdata/#_15).
+  Quotation high = 4; //Максимальная цена за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента. [Подробнее про перевод цен в валюту](./faq_marketdata/#_15).
+  Quotation low = 5; //Минимальная цена за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента. [Подробнее про перевод цен в валюту](./faq_marketdata/#_15).
+  Quotation close = 6; //Цена закрытия за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента. [Подробнее про перевод цен в валюту](./faq_marketdata/#_15).
+  int64 volume = 7; //Объем сделок в лотах.
+  google.protobuf.Timestamp time = 8; //Время начала интервала свечи по UTC.
+  google.protobuf.Timestamp last_trade_ts = 9; //Время последней сделки, вошедшей в свечу по UTC.
+  string instrument_uid = 10; //UID инструмента.
+  string ticker = 11; //Тикер инструмента.
+  string class_code = 12; //Класс-код (секция торгов).
+  int64 volume_buy = 13; //Объем торгов на покупку.
+  int64 volume_sell = 14; //Объём торгов на продажу.
+  CandleSource candle_source_type = 19; //Источник свечей.
+}
+
+//Пакет стаканов в рамках стрима.
+message OrderBook {
+  string figi = 1; //FIGI-идентификатор инструмента.
+  int32 depth = 2; //Глубина стакана.
+  bool is_consistent = 3; //Флаг консистентности стакана. **false** — не все заявки попали в стакан из-за сетевых задержек или нарушения порядка доставки.
+  repeated Order bids = 4; //Массив предложений.
+  repeated Order asks = 5; //Массив спроса.
+  google.protobuf.Timestamp time = 6; //Время формирования стакана в часовом поясе UTC по времени биржи.
+  Quotation limit_up = 7; //Верхний лимит цены за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента. [Подробнее про перевод цен в валюту](./faq_marketdata/#_15).
+  Quotation limit_down = 8; //Нижний лимит цены за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента. [Подробнее про перевод цен в валюту](./faq_marketdata/#_15).
+  string instrument_uid = 9; //UID инструмента.
+  OrderBookType order_book_type = 10; //Тип стакана.
+  string ticker = 11; //Тикер инструмента.
+  string class_code = 12; //Класс-код (секция торгов).
+}
+
+//Массив предложений/спроса.
+message Order {
+  Quotation price = 1; //Цена за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента. [Подробнее про перевод цен в валюту](./faq_marketdata/#_15).
+  int64 quantity = 2; //Количество в лотах.
+}
+
+//Информация о сделке.
+message Trade {
+  string figi = 1; //FIGI-идентификатор инструмента.
+  TradeDirection direction = 2; //Направление сделки.
+  Quotation price = 3; //Цена за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента. [Подробнее про перевод цен в валюту](./faq_marketdata/#_15).
+  int64 quantity = 4; //Количество лотов.
+  google.protobuf.Timestamp time = 5; //Время сделки в часовом поясе UTC по времени биржи.
+  string instrument_uid = 6; //UID инструмента.
+  TradeSourceType trade_source = 7; //Тип источника сделки.
+  string ticker = 8; //Тикер инструмента.
+  string class_code = 9; //Класс-код (секция торгов).
+}
+
+//Направление сделки.
+enum TradeDirection {
+  TRADE_DIRECTION_UNSPECIFIED = 0; //Направление сделки не определено.
+  TRADE_DIRECTION_BUY = 1; //Покупка.
+  TRADE_DIRECTION_SELL = 2; //Продажа.
+}
+
+//Пакет изменения торгового статуса.
+message TradingStatus {
+  string figi = 1; //FIGI-идентификатор инструмента.
+  SecurityTradingStatus trading_status = 2; //Статус торговли инструментом.
+  google.protobuf.Timestamp time = 3; //Время изменения торгового статуса по UTC.
+  bool limit_order_available_flag = 4; //Признак доступности выставления лимитной заявки по инструменту.
+  bool market_order_available_flag = 5; //Признак доступности выставления рыночной заявки по инструменту.
+  string instrument_uid = 6; //UID инструмента.
+  string ticker = 7; //Тикер инструмента.
+  string class_code = 8; //Класс-код (секция торгов).
+}
+
+//Запрос исторических свечей.
+message GetCandlesRequest {
+  optional string figi = 1 [deprecated = true]; //Deprecated FIGI-идентификатор инструмента. Используйте `instrument_id`.
+  google.protobuf.Timestamp from = 2 [(google.api.field_behavior) = REQUIRED]; //Начало запрашиваемого периода по UTC.
+  google.protobuf.Timestamp to = 3 [(google.api.field_behavior) = REQUIRED]; //Окончание запрашиваемого периода по UTC.
+  CandleInterval interval = 4 [(google.api.field_behavior) = REQUIRED]; //Интервал запрошенных свечей.
+  optional string instrument_id = 5; //Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
+  optional CandleSource candle_source_type = 7; //Тип источника свечи.
+  optional int32 limit = 10; //Максимальное количество свечей в ответе.
+
+  enum CandleSource {
+    CANDLE_SOURCE_UNSPECIFIED = 0; //Все свечи.
+    CANDLE_SOURCE_EXCHANGE = 1;  //Биржевые свечи.
+    CANDLE_SOURCE_INCLUDE_WEEKEND = 3; //Все свечи с учетом торговли по выходным.
+  }
+}
+
+//Интервал свечей. Максимальное значение интервала приведено ориентировочно, может отличаться в большую сторону в зависимости от параметров запроса.
+enum CandleInterval {
+  CANDLE_INTERVAL_UNSPECIFIED = 0; //Интервал не определен.
+  CANDLE_INTERVAL_1_MIN = 1; //От 1 минуты до 1 дня. Максимальное значение `limit` — 2400.
+  CANDLE_INTERVAL_5_MIN = 2; //От 5 минут до недели. Максимальное значение `limit` — 2400.
+  CANDLE_INTERVAL_15_MIN = 3; //От 15 минут до 3 недель. Максимальное значение `limit` — 2400.
+  CANDLE_INTERVAL_HOUR = 4; //От 1 часа до 3 месяцев. Максимальное значение `limit` — 2400.
+  CANDLE_INTERVAL_DAY = 5; //От 1 дня до 6 лет. Максимальное значение `limit` — 2400.
+  CANDLE_INTERVAL_2_MIN = 6; //От 2 минут до 1 дня. Максимальное значение `limit` — 1200.
+  CANDLE_INTERVAL_3_MIN = 7; //От 3 минут до 1 дня. Максимальное значение `limit` — 750.
+  CANDLE_INTERVAL_10_MIN = 8; //От 10 минут до недели. Максимальное значение `limit` — 1200.
+  CANDLE_INTERVAL_30_MIN = 9; //От 30 минут до 3 недель. Максимальное значение `limit` — 1200.
+  CANDLE_INTERVAL_2_HOUR = 10; //От 2 часов до 3 месяцев. Максимальное значение `limit` — 2400.
+  CANDLE_INTERVAL_4_HOUR = 11; //От 4 часов до 3 месяцев. Максимальное значение `limit` — 700.
+  CANDLE_INTERVAL_WEEK = 12; //От 1 недели до 5 лет. Максимальное значение `limit` — 300.
+  CANDLE_INTERVAL_MONTH = 13; //От 1 месяца до 10 лет. Максимальное значение `limit` — 120.
+  CANDLE_INTERVAL_5_SEC = 14; //От 5 секунд до 200 минут. Максимальное значение `limit` — 2500.
+  CANDLE_INTERVAL_10_SEC = 15; //От 10 секунд до 200 минут. Максимальное значение `limit` — 1250.
+  CANDLE_INTERVAL_30_SEC = 16; //От 30 секунд до 20 часов. Максимальное значение `limit` — 2500.
+}
+
+enum CandleSource {
+  CANDLE_SOURCE_UNSPECIFIED = 0; //Источник свечей не определен.
+  CANDLE_SOURCE_EXCHANGE = 1;  //Биржевые свечи.
+  CANDLE_SOURCE_DEALER_WEEKEND = 2;  //Свечи  дилера в результате торговли по выходным.
+}
+
+//Список свечей.
+message GetCandlesResponse {
+  repeated HistoricCandle candles = 1; //Массив свечей.
+}
+
+//Информация о свече.
+message HistoricCandle {
+  Quotation open = 1; //Цена открытия за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента. [Подробнее про перевод цен в валюту](./faq_marketdata/#_15).
+  Quotation high = 2; //Максимальная цена за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента. [Подробнее про перевод цен в валюту](./faq_marketdata/#_15).
+  Quotation low = 3; //Минимальная цена за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента. [Подробнее про перевод цен в валюту](./faq_marketdata/#_15).
+  Quotation close = 4; //Цена закрытия за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента. [Подробнее про перевод цен в валюту](./faq_marketdata/#_15).
+  int64 volume = 5; //Объем торгов в лотах.
+  google.protobuf.Timestamp time = 6; //Время свечи в часовом поясе UTC.
+  bool is_complete = 7; //Признак завершенности свечи. **false** — свеча за текущие интервал еще сформирована не полностью.
+  CandleSource candle_source = 9;  //Тип источника свечи
+  int64 volume_buy = 10; //Объем торгов на покупку.
+  int64 volume_sell = 11; //Объём торгов на продажу.
+}
+
+//Запрос получения цен последних сделок.
+message GetLastPricesRequest {
+  repeated string figi = 1 [deprecated = true]; //Deprecated FIGI-идентификатор инструмента. Используйте `instrument_id`.
+  repeated string instrument_id = 2; //Массив идентификаторов инструмента. Принимает значения `figi`, `instrument_uid` или `ticker + '_' + class_code`.
+  LastPriceType last_price_type = 3; //Тип запрашиваемой последней цены.
+  optional InstrumentStatus instrument_status = 9; //Статус запрашиваемых инструментов. [Возможные значения](#instrumentstatus).
+}
+
+//Список цен последних сделок.
+message GetLastPricesResponse {
+  repeated LastPrice last_prices = 1; //Массив цен последних сделок.
+}
+
+//Информация о цене последней сделки.
+message LastPrice {
+  string figi = 1; //FIGI инструмента.
+  Quotation price = 2; //Цена последней сделки за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента. [Подробнее про перевод цен в валюту](./faq_marketdata/#_15).
+  google.protobuf.Timestamp time = 3; //Время получения последней цены в часовом поясе UTC по времени биржи.
+  string ticker = 9; //Тикер инструмента.
+  string class_code = 10; //Класс-код (секция торгов).
+  string instrument_uid = 11; //UID инструмента.
+  LastPriceType last_price_type = 12; //Тип последней цены.
+}
+
+message OpenInterest {
+  string instrument_uid = 1; //UID инструмента.
+  google.protobuf.Timestamp time = 2; //Время получения открытого интереса в часовом поясе UTC по времени биржи.
+  int64 open_interest = 3; //Открытый интерес.
+  string ticker = 4; //Тикер инструмента.
+  string class_code = 5; //Класс-код (секция торгов).
+}
+
+//Запрос стакана.
+message GetOrderBookRequest {
+  optional string figi = 1 [deprecated = true]; //Deprecated FIGI-идентификатор инструмента. Используйте `instrument_id`.
+  int32 depth = 2 [(google.api.field_behavior) = REQUIRED]; //Глубина стакана.
+  optional string instrument_id = 3; //Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
+}
+
+//Информация о стакане.
+message GetOrderBookResponse {
+  string figi = 1; //FIGI-идентификатор инструмента.
+  int32 depth = 2; //Глубина стакана.
+  repeated Order bids = 3; //Множество пар значений на покупку.
+  repeated Order asks = 4; //Множество пар значений на продажу.
+  Quotation last_price = 5; //Цена последней сделки за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента. [Подробнее про перевод цен в валюту](./faq_marketdata/#_15).
+  Quotation close_price = 6; //Цена закрытия за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента. [Подробнее про перевод цен в валюту](./faq_marketdata/#_15).
+  Quotation limit_up = 7; //Верхний лимит цены за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента. [Подробнее про перевод цен в валюту](./faq_marketdata/#_15).
+  Quotation limit_down = 8; //Нижний лимит цены за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента. [Подробнее про перевод цен в валюту](./faq_marketdata/#_15).
+  string instrument_uid = 9; //UID инструмента.
+  string ticker = 10; //Тикер инструмента.
+  string class_code = 11; //Класс-код (секция торгов).
+  google.protobuf.Timestamp last_price_ts = 21; //Время получения цены последней сделки.
+  google.protobuf.Timestamp close_price_ts = 22; //Время получения цены закрытия.
+  google.protobuf.Timestamp orderbook_ts = 23; //Время формирования стакана на бирже.
+}
+
+//Запрос получения торгового статуса.
+message GetTradingStatusRequest {
+  optional string figi = 1 [deprecated = true]; //Deprecated FIGI-идентификатор инструмента. Используйте `instrument_id`.
+  optional string instrument_id = 2; //Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`
+}
+
+//Запрос получения торгового статуса.
+message GetTradingStatusesRequest {
+  repeated string instrument_id = 1; //Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`
+}
+
+//Информация о торговом статусе.
+message GetTradingStatusesResponse {
+  repeated GetTradingStatusResponse trading_statuses = 1; //Массив информации о торговых статусах.
+}
+
+//Информация о торговом статусе.
+message GetTradingStatusResponse {
+  string figi = 1; //FIGI-идентификатор инструмента.
+  SecurityTradingStatus trading_status = 2; //Статус торговли инструментом.
+  bool limit_order_available_flag = 3; //Признак доступности выставления лимитной заявки по инструменту.
+  bool market_order_available_flag = 4; //Признак доступности выставления рыночной заявки по инструменту.
+  bool api_trade_available_flag = 5; //Признак доступности торгов через API.
+  string instrument_uid = 6; //UID инструмента.
+  bool bestprice_order_available_flag = 8; //Признак доступности завяки по лучшей цене.
+  bool only_best_price = 9; //Признак доступности только заявки по лучшей цене.
+  string ticker = 10; //Тикер инструмента.
+  string class_code = 11; //Класс-код (секция торгов).
+}
+
+//Запрос обезличенных сделок за последний час.
+message GetLastTradesRequest {
+  optional string figi = 1 [deprecated = true]; //Deprecated FIGI-идентификатор инструмента. Используйте `instrument_id`.
+  google.protobuf.Timestamp from = 2 [(google.api.field_behavior) = REQUIRED]; //Начало запрашиваемого периода по UTC.
+  google.protobuf.Timestamp to = 3 [(google.api.field_behavior) = REQUIRED]; //Окончание запрашиваемого периода по UTC.
+  optional string instrument_id = 4; //Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`
+  TradeSourceType trade_source = 5; //Тип источника сделок. Значение по умолчанию — `TRADE_SOURCE_ALL`, все сделки.
+}
+
+//Обезличенных сделок за последний час.
+message GetLastTradesResponse {
+  repeated Trade trades = 1; //Массив сделок.
+}
+
+//Запрос активных подписок. Возвращает по одному сообщению на каждый тип активных подписок — `SubscribeLastPriceResponse`, `SubscribeInfoResponse`, `SubscribeTradesResponse`, `SubscribeOrderBookResponse`, `SubscribeCandlesResponse`.
+message GetMySubscriptions {}
+
+//Запрос цен закрытия торговой сессии по инструментам.
+message GetClosePricesRequest {
+  repeated InstrumentClosePriceRequest instruments = 1 [(google.api.field_behavior) = REQUIRED]; //Массив по инструментам.
+  optional InstrumentStatus instrument_status = 9; //Статус запрашиваемых инструментов. [Возможные значения](#instrumentstatus).
+}
+
+//Запрос цен закрытия торговой сессии по инструменту.
+message InstrumentClosePriceRequest {
+  string instrument_id = 1; //Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`
+}
+
+//Цены закрытия торговой сессии по инструментам.
+message GetClosePricesResponse {
+  repeated InstrumentClosePriceResponse close_prices = 1; //Массив по инструментам.
+}
+
+//Цена закрытия торговой сессии по инструменту.
+message InstrumentClosePriceResponse {
+  string figi = 1; //FIGI инструмента.
+  string instrument_uid = 2; //UID инструмента.
+  string ticker = 3; //Тикер инструмента.
+  string class_code = 4; //Класс-код (секция торгов).
+  Quotation price = 11; //Цена закрытия торговой сессии.
+  Quotation evening_session_price = 12; //Цена последней сделки с вечерней сессии. Цена публикуется биржей по торговым дням и в нерабочие дни не обновляется.
+  google.protobuf.Timestamp time = 21; //Дата совершения торгов.
+  google.protobuf.Timestamp evening_session_price_time = 23; //Дата цены закрытия вечерней сессии.
+}
+
+message GetTechAnalysisRequest {
+  IndicatorType indicator_type = 1 [(google.api.field_behavior) = REQUIRED]; //Тип технического индикатора.
+  string instrument_uid = 2 [(google.api.field_behavior) = REQUIRED]; //UID инструмента.
+  google.protobuf.Timestamp from = 3 [(google.api.field_behavior) = REQUIRED]; //Начало запрашиваемого периода по UTC.
+  google.protobuf.Timestamp to = 4 [(google.api.field_behavior) = REQUIRED]; //Окончание запрашиваемого периода по UTC.
+  IndicatorInterval interval = 5 [(google.api.field_behavior) = REQUIRED]; //Интервал, за который рассчитывается индикатор.
+  TypeOfPrice type_of_price = 6 [(google.api.field_behavior) = REQUIRED]; //Тип цены, который используется при расчете индикатора.
+  int32 length = 7; //Торговый период, за который рассчитывается индикатор.
+  Deviation deviation = 8; //Параметры отклонения.
+  Smoothing smoothing = 9; //Параметры сглаживания.
+
+  message Smoothing {
+    int32 fast_length = 1; //Короткий период сглаживания для первой экспоненциальной скользящей средней (EMA).
+    int32 slow_length = 2; //Длинный период сглаживания для второй экспоненциальной скользящей средней (EMA).
+    int32 signal_smoothing = 3; //Период сглаживания для третьей экспоненциальной скользящей средней (EMA)
+  }
+
+  message Deviation {
+    Quotation deviation_multiplier = 1; //Количество стандартных отклонений, на которые отступают верхняя и нижняя границы.
+  }
+
+  //Интервал свечи.
+  enum IndicatorInterval {
+    INDICATOR_INTERVAL_UNSPECIFIED = 0; //Интервал не определен.
+    INDICATOR_INTERVAL_ONE_MINUTE = 1; //1 минута.
+    INDICATOR_INTERVAL_FIVE_MINUTES = 2; //5 минут.
+    INDICATOR_INTERVAL_FIFTEEN_MINUTES = 3; //15 минут.
+    INDICATOR_INTERVAL_ONE_HOUR = 4; //1 час.
+    INDICATOR_INTERVAL_ONE_DAY = 5; //1 день.
+    INDICATOR_INTERVAL_2_MIN = 6; //2 минуты.
+    INDICATOR_INTERVAL_3_MIN = 7; //3 минуты.
+    INDICATOR_INTERVAL_10_MIN = 8; //10 минут.
+    INDICATOR_INTERVAL_30_MIN = 9; //30 минут.
+    INDICATOR_INTERVAL_2_HOUR = 10; //2 часа.
+    INDICATOR_INTERVAL_4_HOUR = 11; //4 часа.
+    INDICATOR_INTERVAL_WEEK = 12; //Неделя.
+    INDICATOR_INTERVAL_MONTH = 13; //Месяц.
+  }
+
+  enum TypeOfPrice {
+    TYPE_OF_PRICE_UNSPECIFIED = 0; //Не указано.
+    TYPE_OF_PRICE_CLOSE = 1; //Цена закрытия.
+    TYPE_OF_PRICE_OPEN = 2; //Цена открытия.
+    TYPE_OF_PRICE_HIGH = 3; //Максимальное значение за выбранный интервал.
+    TYPE_OF_PRICE_LOW = 4; //Минимальное значение за выбранный интервал.
+    TYPE_OF_PRICE_AVG = 5; //Среднее значение по показателям [ (close + open + high + low) / 4 ].
+  }
+
+  enum IndicatorType {
+    INDICATOR_TYPE_UNSPECIFIED = 0; //Не определен.
+    INDICATOR_TYPE_BB = 1; //Bollinger Bands — линия Боллинжера.
+    INDICATOR_TYPE_EMA = 2; //Exponential Moving Average — EMA, экспоненциальная скользящая средняя.
+    INDICATOR_TYPE_RSI = 3; //Relative Strength Index — индекс относительной силы.
+    INDICATOR_TYPE_MACD = 4; //Moving Average Convergence/Divergence — схождение/расхождение скользящих средних.
+    INDICATOR_TYPE_SMA = 5; //Simple Moving Average — простое скользящее среднее.
+  }
+}
+
+message GetTechAnalysisResponse {
+  repeated TechAnalysisItem technical_indicators = 1; //Массив значений результатов технического анализа.
+
+  message TechAnalysisItem {
+    google.protobuf.Timestamp timestamp = 1; //Временная метка по UTC, для которой были рассчитаны значения индикатора.
+    optional Quotation middle_band = 2; //Значение простого скользящего среднего (средней линии).
+    optional Quotation upper_band = 3; //Значение верхней линии Боллинджера.
+    optional Quotation lower_band = 4; //Значение нижней линии Боллинджера.
+    optional Quotation signal = 5; //Значение сигнальной линии.
+    optional Quotation macd = 6; //Значение линии MACD.
+  }
+}
+
+message GetMarketValuesRequest {
+  repeated string instrument_id = 1; //Массив идентификаторов инструментов. Принимает значения `figi`, `instrument_uid` или `ticker + '_' + class_code`.
+  repeated MarketValueType values = 2; //Массив запрашиваемых параметров.
+}
+
+message GetMarketValuesResponse {
+  repeated MarketValueInstrument instruments = 1; //Массив значений параметров.
+}
+
+message MarketValueInstrument {
+  string instrument_uid = 1; //Идентификатор инструмента.
+  repeated MarketValue values = 2; //Массив параметров инструмента.
+  string ticker = 3; //Тикер инструмента.
+  string class_code = 4; //Класс-код (секция торгов).
+}
+
+message MarketValue {
+  optional MarketValueType type = 1; //Тип параметра.
+  optional Quotation value = 2; //Значение.
+  optional google.protobuf.Timestamp time = 3; //Дата и время.
+}
+
+enum MarketValueType {
+  INSTRUMENT_VALUE_UNSPECIFIED = 0; //Не определен.
+  INSTRUMENT_VALUE_LAST_PRICE = 1; //Последняя биржевая цена.
+  INSTRUMENT_VALUE_LAST_PRICE_DEALER = 2; //Последняя цена дилера.
+  INSTRUMENT_VALUE_CLOSE_PRICE = 3; //Цена закрытия.
+  INSTRUMENT_VALUE_EVENING_SESSION_PRICE = 4; //Цена последней сделки с вечерней сессии.
+  INSTRUMENT_VALUE_OPEN_INTEREST = 5; // Открытый интерес, возвращается только для фьючерсов.
+  INSTRUMENT_VALUE_THEOR_PRICE = 6; //Теоретическая цена, возвращается только для опционов.
+  INSTRUMENT_VALUE_YIELD = 7; //Доходность
+}
+
+enum OrderBookType {
+  ORDERBOOK_TYPE_UNSPECIFIED = 0; //Не определен.
+  ORDERBOOK_TYPE_EXCHANGE = 1; //Биржевой стакан.
+  ORDERBOOK_TYPE_DEALER = 2; //Стакан дилера.
+  ORDERBOOK_TYPE_ALL = 3; //Стакан биржевой и дилера.
+}
+
+//Тип последней цены
+enum LastPriceType {
+  LAST_PRICE_UNSPECIFIED = 0; //Не определен.
+  LAST_PRICE_EXCHANGE = 1; // Цена биржи.
+  LAST_PRICE_DEALER = 2; // Цена дилера
+}

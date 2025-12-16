@@ -1,0 +1,142 @@
+syntax = "proto3";
+
+package tinkoff.public.invest.api.contract.v1;
+
+option go_package = "./;investapi";
+option java_package = "ru.tinkoff.piapi.contract.v1";
+option java_multiple_files = true;
+option csharp_namespace = "Tinkoff.InvestApi.V1";
+option objc_class_prefix = "TIAPI";
+option php_namespace = "Tinkoff\\Invest\\V1";
+
+import "google/protobuf/timestamp.proto";
+
+//Тип инструмента.
+enum InstrumentType {
+  INSTRUMENT_TYPE_UNSPECIFIED = 0;
+  INSTRUMENT_TYPE_BOND = 1; //Облигация.
+  INSTRUMENT_TYPE_SHARE	= 2; //Акция.
+  INSTRUMENT_TYPE_CURRENCY = 3; //Валюта.
+  INSTRUMENT_TYPE_ETF = 4; //Exchange-traded fund. Фонд.
+  INSTRUMENT_TYPE_FUTURES = 5; //Фьючерс.
+  INSTRUMENT_TYPE_SP = 6; //Структурная нота.
+  INSTRUMENT_TYPE_OPTION = 7; //Опцион.
+  INSTRUMENT_TYPE_CLEARING_CERTIFICATE = 8; //Clearing certificate.
+  INSTRUMENT_TYPE_INDEX = 9; //Индекс.
+  INSTRUMENT_TYPE_COMMODITY = 10; //Товар.
+}
+
+//Статус запрашиваемых инструментов.
+enum InstrumentStatus {
+  INSTRUMENT_STATUS_UNSPECIFIED = 0; //Значение не определено.
+  INSTRUMENT_STATUS_BASE = 1; //По умолчанию — базовый список инструментов, которыми можно торговать через T-Invest API. Сейчас списки доступных бумаг в API и других интерфейсах совпадают — кроме внебиржевых бумаг, но в будущем списки могут различаться.
+  INSTRUMENT_STATUS_ALL = 2; //Список всех инструментов.
+}
+
+//Денежная сумма в определенной валюте.
+message MoneyValue {
+
+  // Строковый ISO-код валюты.
+  string currency = 1;
+
+  // Целая часть суммы, может быть отрицательным числом.
+  int64 units = 2;
+
+  // Дробная часть суммы, может быть отрицательным числом.
+  int32 nano = 3;
+}
+
+//Котировка — денежная сумма без указания валюты.
+message Quotation {
+
+  // Целая часть суммы, может быть отрицательным числом.
+  int64 units = 1;
+
+  // Дробная часть суммы, может быть отрицательным числом.
+  int32 nano = 2;
+}
+
+//Режим торгов инструмента
+enum SecurityTradingStatus {
+  SECURITY_TRADING_STATUS_UNSPECIFIED = 0; //Торговый статус не определен.
+  SECURITY_TRADING_STATUS_NOT_AVAILABLE_FOR_TRADING = 1; //Недоступен для торгов.
+  SECURITY_TRADING_STATUS_OPENING_PERIOD = 2; //Период открытия торгов.
+  SECURITY_TRADING_STATUS_CLOSING_PERIOD = 3; //Период закрытия торгов.
+  SECURITY_TRADING_STATUS_BREAK_IN_TRADING = 4; //Перерыв в торговле.
+  SECURITY_TRADING_STATUS_NORMAL_TRADING = 5; //Нормальная торговля.
+  SECURITY_TRADING_STATUS_CLOSING_AUCTION = 6; //Аукцион закрытия.
+  SECURITY_TRADING_STATUS_DARK_POOL_AUCTION = 7; //Аукцион крупных пакетов.
+  SECURITY_TRADING_STATUS_DISCRETE_AUCTION = 8; //Дискретный аукцион.
+  SECURITY_TRADING_STATUS_OPENING_AUCTION_PERIOD = 9; //Аукцион открытия.
+  SECURITY_TRADING_STATUS_TRADING_AT_CLOSING_AUCTION_PRICE = 10; //Период торгов по цене аукциона закрытия.
+  SECURITY_TRADING_STATUS_SESSION_ASSIGNED = 11; //Сессия назначена.
+  SECURITY_TRADING_STATUS_SESSION_CLOSE = 12; //Сессия закрыта.
+  SECURITY_TRADING_STATUS_SESSION_OPEN = 13; //Сессия открыта.
+  SECURITY_TRADING_STATUS_DEALER_NORMAL_TRADING = 14; //Доступна торговля в режиме внутренней ликвидности брокера.
+  SECURITY_TRADING_STATUS_DEALER_BREAK_IN_TRADING = 15; //Перерыв торговли в режиме внутренней ликвидности брокера.
+  SECURITY_TRADING_STATUS_DEALER_NOT_AVAILABLE_FOR_TRADING = 16; //Недоступна торговля в режиме внутренней ликвидности брокера.
+}
+
+message PingRequest {
+  optional google.protobuf.Timestamp time = 1; //Время формирования запроса.
+}
+
+message PingDelaySettings {
+  optional int32 ping_delay_ms = 15; //Задержка (пинг) сообщений:  5000–180 000 миллисекунд. Значение по умолчанию — 120 000.
+}
+
+//Проверка активности стрима.
+message Ping {
+  google.protobuf.Timestamp time = 1; //Время проверки.
+  string stream_id = 2; //Идентификатор соединения.
+  optional google.protobuf.Timestamp ping_request_time = 4; //Время формирования запроса.
+}
+
+//Тип цены.
+enum PriceType {
+  PRICE_TYPE_UNSPECIFIED = 0; //Значение не определено.
+  PRICE_TYPE_POINT = 1; //Цена в пунктах (только для фьючерсов и облигаций).
+  PRICE_TYPE_CURRENCY = 2; //Цена в валюте расчетов по инструменту.
+}
+
+message Page {
+  int32 limit = 1; //Максимальное число возвращаемых записей.
+  int32 page_number = 2; //Порядковый номер страницы, начиная с 0.
+}
+
+message PageResponse {
+  int32 limit = 1; //Максимальное число возвращаемых записей.
+  int32 page_number = 2; //Порядковый номер страницы, начиная с 0.
+  int32 total_count = 3; //Общее количество записей.
+}
+
+message ResponseMetadata {
+  string tracking_id = 42; //Идентификатор трекинга.
+  google.protobuf.Timestamp server_time = 43; //Серверное время.
+}
+
+message BrandData {
+  string logo_name = 1; // Логотип инструмента. Имя файла для получения логотипа.
+  string logo_base_color = 2; //	Цвет бренда.
+  string text_color	= 3; // Цвет текста для цвета логотипа бренда.
+}
+
+enum ResultSubscriptionStatus {
+  RESULT_SUBSCRIPTION_STATUS_UNSPECIFIED = 0; //Статус подписки не определен.
+  RESULT_SUBSCRIPTION_STATUS_OK = 1; //Подписка успешно установлена.
+  RESULT_SUBSCRIPTION_STATUS_ERROR = 13; //Ошибка подписки
+}
+
+message ErrorDetail {
+  string code = 1; //Код ошибки.
+  string message = 3; //Описание ошибки.
+}
+
+//Реальная площадка исполнения расчетов.
+enum RealExchange {
+  REAL_EXCHANGE_UNSPECIFIED = 0; //Тип не определен.
+  REAL_EXCHANGE_MOEX = 1; //Московская биржа.
+  REAL_EXCHANGE_RTS = 2; //Санкт-Петербургская биржа.
+  REAL_EXCHANGE_OTC = 3; //Внебиржевой инструмент.
+  REAL_EXCHANGE_DEALER = 4; //Инструмент, торгуемый на площадке брокера.
+}

@@ -1,8 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\common_connectors_websocket.props" />
 
+  <PropertyGroup>
+    <!-- gRPC generated code isn't CLS-compliant -->
+    <DefineConstants>$(DefineConstants);CLS_DISABLE</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Tinkoff.InvestApi" Version="0.6.*" />
     <PackageReference Include="Ecng.IO" Version="$(EcngVer)" />
+
+    <!-- gRPC + Protobuf runtime -->
+    <PackageReference Include="Grpc.Net.Client" Version="2.67.0" />
+    <PackageReference Include="Google.Protobuf" Version="3.25.5" />
+
+    <!-- Build-time codegen from .proto -->
+    <PackageReference Include="Grpc.Tools" Version="2.67.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\**\*.proto" ProtoRoot="Protos" GrpcServices="Client" />
   </ItemGroup>
 </Project>

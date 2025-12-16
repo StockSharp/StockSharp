@@ -1,0 +1,175 @@
+syntax = "proto3";
+
+package tinkoff.public.invest.api.contract.v1;
+
+option go_package = "./;investapi";
+option java_package = "ru.tinkoff.piapi.contract.v1";
+option java_multiple_files = true;
+option csharp_namespace = "Tinkoff.InvestApi.V1";
+option objc_class_prefix = "TIAPI";
+option php_namespace = "Tinkoff\\Invest\\V1";
+
+import "google/protobuf/timestamp.proto";
+import "google/api/field_behavior.proto";
+import "common.proto";
+
+service StopOrdersService { /* Сервис для работы со стоп-заявками: выставление, отмена, получение списка стоп-заявок.*/
+
+  //PostStopOrder — выставить стоп-заявку
+  rpc PostStopOrder(PostStopOrderRequest) returns (PostStopOrderResponse);
+
+  //GetStopOrders — получить список активных стоп-заявок по счету
+  rpc GetStopOrders(GetStopOrdersRequest) returns (GetStopOrdersResponse);
+
+  //CancelStopOrder — отменить стоп-заявку
+  rpc CancelStopOrder(CancelStopOrderRequest) returns (CancelStopOrderResponse);
+}
+
+//Запрос выставления стоп-заявки.
+message PostStopOrderRequest {
+  optional string figi = 1 [ deprecated = true ]; //Deprecated FIGI-идентификатор инструмента. Используйте `instrument_id`.
+  int64 quantity = 2 [(google.api.field_behavior) = REQUIRED]; //Количество лотов.
+  optional Quotation price = 3; //Цена за 1 инструмент биржевой заявки, которая будет выставлена при срабатывании по достижению `stop_price`. Чтобы получить стоимость лота, нужно умножить на лотность инструмента.
+  optional Quotation stop_price = 4; //Стоп-цена заявки за 1 инструмент. При достижении стоп-цены происходит активация стоп-заявки, в результате чего выставляется биржевая заявка. Чтобы получить стоимость лота, нужно умножить на лотность инструмента.
+  StopOrderDirection direction = 5 [(google.api.field_behavior) = REQUIRED]; //Направление операции.
+  string account_id = 6 [(google.api.field_behavior) = REQUIRED]; //Номер счета.
+  StopOrderExpirationType expiration_type = 7 [(google.api.field_behavior) = REQUIRED]; //Тип экспирации заявки.
+  StopOrderType stop_order_type = 8 [(google.api.field_behavior) = REQUIRED]; //Тип заявки.
+  optional google.protobuf.Timestamp expire_date = 9; //Дата и время окончания действия стоп-заявки по UTC. Для `ExpirationType = GoodTillDate` заполнение обязательно, для `GoodTillCancel` игнорируется.
+  string instrument_id = 10 [(google.api.field_behavior) = REQUIRED]; //Идентификатор инструмента. Принимает значение `figi` или `instrument_uid`.
+  ExchangeOrderType exchange_order_type = 11; //Тип дочерней биржевой заявки.
+  TakeProfitType take_profit_type = 12; //Подтип стоп-заявки — `TakeProfit`.
+  TrailingData trailing_data = 13; //Массив с параметрами трейлинг-стопа.
+  PriceType price_type = 14; //Тип цены.
+  string order_id = 15 [(google.api.field_behavior) = REQUIRED]; //Идентификатор запроса выставления поручения для целей идемпотентности в формате `UID`. Максимальная длина — 36 символов.
+  bool confirm_margin_trade = 16; //Согласие на выставление заявки, которая может привести к непокрытой позиции, по умолчанию false.
+  message TrailingData {
+      Quotation indent = 1; //Отступ.
+      TrailingValueType indent_type = 2; //Тип величины отступа.
+      Quotation spread = 3; //Размер защитного спреда.
+      TrailingValueType spread_type = 4; //Тип величины защитного спреда.
+  }
+}
+
+//Результат выставления стоп-заявки.
+message PostStopOrderResponse {
+  string stop_order_id = 1; //Уникальный идентификатор стоп-заявки.
+  string order_request_id = 2; //Идентификатор ключа идемпотентности, переданный клиентом, в формате `UID`. Максимальная длина 36 — символов.
+  ResponseMetadata response_metadata = 254; //Метадата.
+}
+
+//Запрос получения списка активных стоп-заявок.
+message GetStopOrdersRequest {
+  string account_id = 1 [(google.api.field_behavior) = REQUIRED]; //Идентификатор счета клиента.
+  StopOrderStatusOption status = 2; //Статус заявок.
+  google.protobuf.Timestamp from = 3; //Левая граница.
+  google.protobuf.Timestamp to = 4; //Правая граница.
+}
+
+//Список активных стоп-заявок.
+message GetStopOrdersResponse {
+  repeated StopOrder stop_orders = 1; //Массив стоп-заявок по счету.
+}
+
+//Запрос отмены выставленной стоп-заявки.
+message CancelStopOrderRequest {
+  string account_id = 1 [(google.api.field_behavior) = REQUIRED]; //Идентификатор счета клиента.
+  string stop_order_id = 2 [(google.api.field_behavior) = REQUIRED]; //Уникальный идентификатор стоп-заявки.
+}
+
+//Результат отмены выставленной стоп-заявки.
+message CancelStopOrderResponse {
+  google.protobuf.Timestamp time = 1; //Время отмены заявки по UTC.
+}
+
+//Информация о стоп-заявке.
+message StopOrder {
+  string stop_order_id = 1; //Уникальный идентификатор стоп-заявки.
+  int64 lots_requested = 2;  //Запрошено лотов.
+  string figi = 3; //FIGI-идентификатор инструмента.
+  StopOrderDirection direction = 4; //Направление операции.
+  string currency = 5;  //Валюта стоп-заявки.
+  StopOrderType order_type = 6; //Тип стоп-заявки.
+  google.protobuf.Timestamp create_date = 7; //Дата и время выставления заявки по UTC.
+  google.protobuf.Timestamp activation_date_time = 8; //Дата и время конвертации стоп-заявки в биржевую по UTC.
+  google.protobuf.Timestamp expiration_time = 9; //Дата и время снятия заявки по UTC.
+  MoneyValue price = 10; //Цена заявки за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента.
+  MoneyValue stop_price = 11; //Цена активации стоп-заявки за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента.
+  string instrument_uid = 12; //`instrument_uid`-идентификатор инструмента.
+  TakeProfitType take_profit_type = 13; //Подтип стоп-заявки — `TakeProfit`.
+  TrailingData trailing_data = 14; //Параметры трейлинг-стопа.
+  StopOrderStatusOption status = 15; //Статус заявки.
+  ExchangeOrderType exchange_order_type = 16; //Тип дочерней биржевой заявки для тейкпрофита.
+  optional string exchange_order_id = 17; //Идентификатор биржевой заявки.
+  string ticker = 18; //Тикер инструмента.
+  string class_code = 19; //Класс-код (секция торгов).
+  message TrailingData {
+    Quotation indent = 1; //Отступ.
+    TrailingValueType indent_type = 2; //Тип величины отступа.
+    Quotation spread = 3; //Размер защитного спреда.
+    TrailingValueType spread_type = 4; //Тип величины защитного спреда.
+    TrailingStopStatus status = 5; //Статус трейлинг-стопа.
+    Quotation price = 7; //Цена исполнения.
+    Quotation extr = 8; //Локальный экстремум.
+  }
+}
+
+//Направление сделки стоп-заявки.
+enum StopOrderDirection {
+  STOP_ORDER_DIRECTION_UNSPECIFIED = 0; //Значение не указано.
+  STOP_ORDER_DIRECTION_BUY = 1; //Покупка.
+  STOP_ORDER_DIRECTION_SELL = 2; //Продажа.
+}
+
+//Тип экспирации стоп-заявке.
+enum StopOrderExpirationType {
+  STOP_ORDER_EXPIRATION_TYPE_UNSPECIFIED = 0; //Значение не указано.
+  STOP_ORDER_EXPIRATION_TYPE_GOOD_TILL_CANCEL = 1; //Действительно до отмены.
+  STOP_ORDER_EXPIRATION_TYPE_GOOD_TILL_DATE = 2; //Действительно до даты снятия.
+}
+
+//Тип стоп-заявки.
+enum StopOrderType {
+  STOP_ORDER_TYPE_UNSPECIFIED = 0; //Значение не указано.
+  STOP_ORDER_TYPE_TAKE_PROFIT = 1; //`Take-profit`-заявка.
+  STOP_ORDER_TYPE_STOP_LOSS = 2; //`Stop-loss`-заявка.
+  STOP_ORDER_TYPE_STOP_LIMIT = 3; //`Stop-limit`-заявка.
+}
+
+//Статус стоп-заяки.
+enum StopOrderStatusOption {
+    STOP_ORDER_STATUS_UNSPECIFIED = 0; //Значение не указано.
+    STOP_ORDER_STATUS_ALL = 1; //Все заявки.
+    STOP_ORDER_STATUS_ACTIVE = 2; //Активные заявки.
+    STOP_ORDER_STATUS_EXECUTED = 3; //Исполненные заявки.
+    STOP_ORDER_STATUS_CANCELED = 4; //Отмененные заявки.
+    STOP_ORDER_STATUS_EXPIRED = 5; //Истекшие заявки.
+}
+
+//Тип выставляемой заявки.
+enum ExchangeOrderType {
+    EXCHANGE_ORDER_TYPE_UNSPECIFIED = 0; //Значение не указано.
+    EXCHANGE_ORDER_TYPE_MARKET = 1; //Заявка по рыночной цене.
+    EXCHANGE_ORDER_TYPE_LIMIT = 2; //Лимитная заявка.
+}
+
+//Тип TakeProfit-заявки.
+enum TakeProfitType {
+  TAKE_PROFIT_TYPE_UNSPECIFIED = 0; //Значение не указано.
+  TAKE_PROFIT_TYPE_REGULAR = 1; //Обычная заявка, значение по умолчанию.
+  TAKE_PROFIT_TYPE_TRAILING = 2; //Трейлинг-стоп.
+}
+
+//Тип параметров значений трейлинг-стопа.
+enum TrailingValueType {
+  TRAILING_VALUE_UNSPECIFIED = 0; //Значение не указано.
+  TRAILING_VALUE_ABSOLUTE = 1; //Абсолютное значение в единицах цены.
+  TRAILING_VALUE_RELATIVE = 2; //Относительное значение в процентах.
+}
+
+//Статус трейлинг-стопа.
+enum TrailingStopStatus {
+  TRAILING_STOP_UNSPECIFIED = 0; //Значение не указано.
+  TRAILING_STOP_ACTIVE = 1; //Активный.
+  TRAILING_STOP_ACTIVATED = 2; //Активированный.
+}

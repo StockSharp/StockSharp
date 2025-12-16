@@ -1,0 +1,109 @@
+syntax = "proto3";
+
+package tinkoff.public.invest.api.contract.v1;
+
+option go_package = "./;investapi";
+option java_package = "ru.tinkoff.piapi.contract.v1";
+option java_multiple_files = true;
+option csharp_namespace = "Tinkoff.InvestApi.V1";
+option objc_class_prefix = "TIAPI";
+option php_namespace = "Tinkoff\\Invest\\V1";
+
+import "google/protobuf/timestamp.proto";
+import "google/api/field_behavior.proto";
+import "common.proto";
+
+service SignalService {//Сервис для получения технических сигналов и мнений аналитиков по инструментам.
+
+  //GetStrategies — стратегии
+  rpc GetStrategies(GetStrategiesRequest) returns (GetStrategiesResponse);
+
+  //GetSignals — сигналы
+  rpc GetSignals(GetSignalsRequest) returns (GetSignalsResponse);
+}
+
+//Запрос стратегий.
+message GetStrategiesRequest {
+  optional string strategy_id = 1; //Идентификатор стратегии.
+}
+
+//Стратегии
+message GetStrategiesResponse {
+  repeated Strategy strategies = 1;
+}
+
+//Стратегия
+message Strategy {
+  string strategy_id = 1 [(google.api.field_behavior) = REQUIRED]; //Идентификатор стратегии.
+  string strategy_name = 2 [(google.api.field_behavior) = REQUIRED]; //Название стратегии.
+  optional string strategy_description = 3; //Описание стратегии.
+  optional string strategy_url = 4; //Ссылка на страницу с описанием стратегии.
+  StrategyType strategy_type = 5 [(google.api.field_behavior) = REQUIRED]; //Тип стратегии.
+  int32 active_signals = 6 [(google.api.field_behavior) = REQUIRED]; //Количество активных сигналов.
+  int32 total_signals = 7 [(google.api.field_behavior) = REQUIRED]; //Общее количество сигналов.
+  int64 time_in_position = 8 [(google.api.field_behavior) = REQUIRED]; //Среднее время нахождения сигнала в позиции.
+  Quotation average_signal_yield = 9 [(google.api.field_behavior) = REQUIRED]; //Средняя доходность сигнала в стратегии.
+  Quotation average_signal_yield_year = 10 [(google.api.field_behavior) = REQUIRED]; //Средняя доходность сигналов в стратегии за последний год.
+  Quotation yield = 11 [(google.api.field_behavior) = REQUIRED]; //Доходность стратегии.
+  Quotation yield_year = 12 [(google.api.field_behavior) = REQUIRED]; //Доходность стратегии за последний год.
+}
+
+//Запрос сигналов.
+message GetSignalsRequest {
+  optional string signal_id = 1; //Идентификатор сигнала.
+  optional string strategy_id = 2; //Идентификатор стратегии.
+  optional StrategyType strategy_type = 3; //Тип стратегии.
+  optional string instrument_uid = 4; //	Идентификатор бумаги.
+  optional google.protobuf.Timestamp from = 5;  //	Дата начала запрашиваемого интервала по UTC.
+  optional google.protobuf.Timestamp to = 6; //	Дата конца запрашиваемого интервала по UTC.
+  optional SignalDirection direction = 7; //	Направление сигнала.
+  optional SignalState active = 8; //Состояние сигнала.
+  optional Page paging = 9; //Настройки пагинации.
+}
+
+//Сигналы.
+message GetSignalsResponse {
+  repeated Signal signals = 1; //Массив сигналов.
+  PageResponse paging = 2; //Данные по пагинации.
+}
+
+//Сигнал.
+message Signal {
+  string signal_id = 1 [(google.api.field_behavior) = REQUIRED]; //Идентификатор сигнала.
+  string strategy_id = 2 [(google.api.field_behavior) = REQUIRED];  //Идентификатор стратегии.
+  string strategy_name = 3 [(google.api.field_behavior) = REQUIRED]; //Название стратегии.
+  string instrument_uid = 4 [(google.api.field_behavior) = REQUIRED]; //Идентификатор бумаги.
+  google.protobuf.Timestamp create_dt = 5 [(google.api.field_behavior) = REQUIRED]; //Дата и время создания сигнала по UTC.
+  SignalDirection direction = 6 [(google.api.field_behavior) = REQUIRED]; //Направление сигнала.
+  Quotation initial_price = 7 [(google.api.field_behavior) = REQUIRED]; //Цена бумаги на момент формирования сигнала.
+  optional string info = 8; //Дополнительная информация о сигнале.
+  string name = 9 [(google.api.field_behavior) = REQUIRED]; //Название сигнала.
+  Quotation target_price = 10 [(google.api.field_behavior) = REQUIRED]; //Целевая цена.
+  google.protobuf.Timestamp end_dt = 11 [(google.api.field_behavior) = REQUIRED]; //Дата и время дедлайна сигнала по UTC.
+  optional int32 probability = 12; //Вероятность сигнала.
+  optional Quotation stoploss = 13; //Порог закрытия сигнала по стоплосс.
+  optional Quotation close_price = 14; //Цена закрытия сигнала.
+  optional google.protobuf.Timestamp close_dt = 15; //Дата и время закрытия сигнала по UTC.
+}
+
+//Тип стратегии.
+enum StrategyType {
+  STRATEGY_TYPE_UNSPECIFIED = 0; //Не определен.
+  STRATEGY_TYPE_TECHNICAL = 1; //Техническая стратегия.
+  STRATEGY_TYPE_FUNDAMENTAL = 2; //Фундаментальная стратегия.
+}
+
+//Направление сигнала.
+enum SignalDirection {
+  SIGNAL_DIRECTION_UNSPECIFIED = 0; //Не определен.
+  SIGNAL_DIRECTION_BUY = 1; //Покупка.
+  SIGNAL_DIRECTION_SELL = 2; //Продажа.
+}
+
+//Статус сигнала.
+enum SignalState {
+  SIGNAL_STATE_UNSPECIFIED = 0; //Не определен.
+  SIGNAL_STATE_ACTIVE = 1; //Активный сигнал.
+  SIGNAL_STATE_CLOSED = 2; //Закрытый сигнал.
+  SIGNAL_STATE_ALL = 3; //Все состояния.
+}

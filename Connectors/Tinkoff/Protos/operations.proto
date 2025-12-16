@@ -1,0 +1,587 @@
+syntax = "proto3";
+
+package tinkoff.public.invest.api.contract.v1;
+
+option go_package = "./;investapi";
+option java_package = "ru.tinkoff.piapi.contract.v1";
+option java_multiple_files = true;
+option csharp_namespace = "Tinkoff.InvestApi.V1";
+option objc_class_prefix = "TIAPI";
+option php_namespace = "Tinkoff\\Invest\\V1";
+
+import "google/protobuf/timestamp.proto";
+import "common.proto";
+import "google/api/field_behavior.proto";
+
+service OperationsService {/*С помощью методов сервиса можно получить:<br/><br/> **1**. Список операций по счету.<br/> **2**.
+                              Портфель по счету.<br/> **3**. Позиции ценных бумаг на счете.<br/> **4**.
+                              Доступный остаток для вывода средств.<br/> **5**. Различные отчеты.*/
+  //GetOperations — список операций по счету
+  //При работе с методом учитывайте [особенности взаимодействия](/invest/services/operations/operations_problems).
+  rpc GetOperations(OperationsRequest) returns (OperationsResponse);
+
+  //GetPortfolio — портфель по счету
+  rpc GetPortfolio(PortfolioRequest) returns (PortfolioResponse);
+
+  //GetPositions — список позиций по счету
+  rpc GetPositions(PositionsRequest) returns (PositionsResponse);
+
+  //GetWithdrawLimits — доступный остаток для вывода средств
+  rpc GetWithdrawLimits(WithdrawLimitsRequest) returns (WithdrawLimitsResponse);
+
+  //GetBrokerReport — брокерский отчет.
+  rpc GetBrokerReport(BrokerReportRequest) returns (BrokerReportResponse);
+
+  //GetDividendsForeignIssuer — отчет «Справка о доходах за пределами РФ»
+  rpc GetDividendsForeignIssuer(GetDividendsForeignIssuerRequest) returns (GetDividendsForeignIssuerResponse);
+
+  //GetOperationsByCursor — список операций по счету с пагинацией
+  //При работе с методом учитывайте [особенности взаимодействия](/invest/services/operations/operations_problems).
+  rpc GetOperationsByCursor(GetOperationsByCursorRequest) returns (GetOperationsByCursorResponse);
+}
+
+service OperationsStreamService {
+  //PortfolioStream — стрим обновлений портфеля
+  rpc PortfolioStream(PortfolioStreamRequest) returns (stream PortfolioStreamResponse);
+
+  //PositionsStream — стрим обновлений информации по изменению позиций портфеля
+  rpc PositionsStream(PositionsStreamRequest) returns (stream PositionsStreamResponse);
+}
+
+//Запрос получения списка операций по счету.
+message OperationsRequest {
+  string account_id = 1 [(google.api.field_behavior) = REQUIRED]; //Идентификатор счета клиента.
+  optional google.protobuf.Timestamp from = 2; //Начало периода по UTC.
+  optional google.protobuf.Timestamp to = 3; //Окончание периода по UTC.
+  optional OperationState state = 4; //Статус запрашиваемых операций.
+  optional string figi = 5; //FIGI-идентификатор инструмента для фильтрации.
+}
+
+//Список операций.
+message OperationsResponse {
+  repeated Operation operations = 1; //Массив операций.
+}
+
+//Данные по операции.
+message Operation {
+  string id = 1; //Идентификатор операции.
+  string parent_operation_id = 2; //Идентификатор родительской операции.
+  string currency = 3; //Валюта операции.
+  MoneyValue payment = 4; //Сумма операции.
+  MoneyValue price = 5; //Цена операции за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента.
+  OperationState state = 6; //Статус операции.
+  int64 quantity = 7; //Количество единиц инструмента.
+  int64 quantity_rest = 8; //Неисполненный остаток по сделке.
+  string figi = 9; //FIGI-идентификатор инструмента, связанного с операцией.
+  string instrument_type = 10;  //Тип инструмента. Возможные значения: <br/><br/>`bond` — облигация; <br/>`share` — акция; <br/>`currency` — валюта; <br/>`etf` — фонд; <br/>`futures` — фьючерс.
+  google.protobuf.Timestamp date = 11; //Дата и время операции в формате часовом поясе UTC.
+  string type = 12; //Текстовое описание типа операции.
+  OperationType operation_type = 13; //Тип операции.
+  repeated OperationTrade trades = 14; //Массив сделок.
+  string asset_uid = 16;	//Идентификатор актива
+  string position_uid	= 17; //Уникальный идентификатор позиции.
+  string instrument_uid	= 18; //Уникальный идентификатор инструмента.
+  repeated ChildOperationItem child_operations = 19; //Массив дочерних операций.
+}
+
+//Сделка по операции.
+message OperationTrade {
+  string trade_id = 1; //Идентификатор сделки.
+  google.protobuf.Timestamp date_time = 2; //Дата и время сделки по UTC.
+  int64 quantity = 3; //Количество инструментов.
+  MoneyValue price = 4; //Цена за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента.
+}
+
+//Запрос получения текущего портфеля по счету.
+message PortfolioRequest {
+  string account_id = 1 [(google.api.field_behavior) = REQUIRED]; //Идентификатор счета пользователя.
+  optional CurrencyRequest currency = 2; //Валюта, в которой нужно рассчитать портфель.
+  enum CurrencyRequest {
+    RUB = 0; //Рубли
+    USD = 1; //Доллары
+    EUR = 2; //Евро
+  }
+}
+
+//Текущий портфель по счету.
+message PortfolioResponse {
+  MoneyValue total_amount_shares = 1; //Общая стоимость акций в портфеле.
+  MoneyValue total_amount_bonds = 2; //Общая стоимость облигаций в портфеле.
+  MoneyValue total_amount_etf = 3; //Общая стоимость фондов в портфеле.
+  MoneyValue total_amount_currencies = 4; //Общая стоимость валют в портфеле.
+  MoneyValue total_amount_futures = 5; //Общая стоимость фьючерсов в портфеле.
+  Quotation expected_yield = 6; //Текущая относительная доходность портфеля в %.
+  repeated PortfolioPosition positions = 7; //Список позиций портфеля.
+  string account_id = 8; //Идентификатор счета пользователя.
+
+  MoneyValue total_amount_options = 9; //Общая стоимость опционов в портфеле.
+  MoneyValue total_amount_sp = 10; //Общая стоимость структурных нот в портфеле.
+  MoneyValue total_amount_portfolio = 11; //Общая стоимость портфеля.
+  repeated VirtualPortfolioPosition virtual_positions = 12; //Массив виртуальных позиций портфеля.
+  MoneyValue daily_yield = 15;  // Рассчитанная доходность портфеля за день в рублях.
+  Quotation daily_yield_relative = 16; //Относительная доходность в день в %.
+}
+
+//Запрос позиций портфеля по счету.
+message PositionsRequest {
+  string account_id = 1 [(google.api.field_behavior) = REQUIRED]; //Идентификатор счета пользователя.
+}
+
+//Список позиций по счету.
+message PositionsResponse {
+  repeated MoneyValue money = 1;  //Массив валютных позиций портфеля.
+  repeated MoneyValue blocked = 2;  //Массив заблокированных валютных позиций портфеля.
+  repeated PositionsSecurities securities = 3;  //Список ценно-бумажных позиций портфеля.
+  bool limits_loading_in_progress = 4;  //Признак идущей выгрузки лимитов в данный момент.
+  repeated PositionsFutures futures = 5;  //Список фьючерсов портфеля.
+  repeated PositionsOptions options = 6;  //Список опционов портфеля.
+  string account_id = 15; //Идентификатор счёта пользователя.
+}
+
+//Запрос доступного остатка для вывода.
+message WithdrawLimitsRequest {
+  string account_id = 1 [(google.api.field_behavior) = REQUIRED]; //Идентификатор счета пользователя.
+}
+
+//Доступный остаток для вывода.
+message WithdrawLimitsResponse {
+  repeated MoneyValue money = 1; //Массив валютных позиций портфеля.
+  repeated MoneyValue blocked = 2; //Массив заблокированных валютных позиций портфеля.
+  repeated MoneyValue blocked_guarantee = 3; //Заблокировано под гарантийное обеспечение фьючерсов.
+}
+
+//Позиции портфеля.
+message PortfolioPosition {
+  string figi = 1; //FIGI-идентификатор инструмента.
+  string instrument_type = 2; //Тип инструмента.
+  Quotation quantity = 3; //Количество инструмента в портфеле в штуках.
+  MoneyValue average_position_price = 4; //Средневзвешенная цена позиции. Для пересчета возможна задержка до одной секунды.
+  Quotation expected_yield = 5; //Текущая рассчитанная доходность позиции.
+  MoneyValue current_nkd = 6; // Текущий НКД.
+  Quotation average_position_price_pt = 7 [ deprecated = true ]; // Deprecated Средняя цена позиции в пунктах (для фьючерсов). Для пересчета возможна задержка до одной секунды.
+  MoneyValue current_price = 8; //Текущая цена за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента.
+  MoneyValue average_position_price_fifo = 9; //Средняя цена позиции по методу FIFO. Для пересчета возможна задержка до одной секунды.
+  Quotation quantity_lots = 10 [ deprecated = true ]; //Deprecated Количество лотов в портфеле.
+  bool blocked = 21; //Заблокировано на бирже.
+  Quotation blocked_lots = 22; //Количество бумаг, заблокированных выставленными заявками.
+  string position_uid = 24; //Уникальный идентификатор позиции.
+  string instrument_uid = 25; //Уникальный идентификатор инструмента.
+  MoneyValue var_margin = 26; //Вариационная маржа.
+  Quotation expected_yield_fifo = 27; //Текущая рассчитанная доходность позиции.
+  MoneyValue daily_yield = 31;  // Рассчитанная доходность портфеля за день.
+  string ticker = 32; //Тикер инструмента.
+  string class_code = 33; //Класс-код (секция торгов).
+}
+
+message VirtualPortfolioPosition {
+  string position_uid = 1; //Уникальный идентификатор позиции.
+  string instrument_uid = 2; //Уникальный идентификатор инструмента.
+  string figi = 3; //FIGI-идентификатор инструмента.
+  string instrument_type = 4; //Тип инструмента.
+  Quotation quantity = 5; //Количество инструмента в портфеле в штуках.
+  MoneyValue average_position_price = 6; //Средневзвешенная цена позиции. Для пересчета возможна задержка до одной секунды.
+  Quotation expected_yield = 7; //Текущая рассчитанная доходность позиции.
+  Quotation expected_yield_fifo = 8; //Текущая рассчитанная доходность позиции.
+  google.protobuf.Timestamp expire_date = 9; //Дата, до которой нужно продать виртуальные бумаги. После этой даты виртуальная позиция «сгораетт».
+  MoneyValue current_price = 10; //Текущая цена за 1 инструмент. Чтобы получить стоимость лота, нужно умножить на лотность инструмента.
+  MoneyValue average_position_price_fifo = 11; //Средняя цена позиции по методу FIFO. Для пересчета возможна задержка до одной секунды.
+  MoneyValue daily_yield = 31;  // Рассчитанная доходность портфеля за день.
+  string ticker = 32; //Тикер инструмента.
+  string class_code = 33; //Класс-код (секция торгов).
+}
+
+//Баланс позиции ценной бумаги.
+message PositionsSecurities {
+  string figi = 1; //FIGI-идентификатор бумаги.
+  int64 blocked = 2; //Количество бумаг, заблокированных выставленными заявками.
+  int64 balance = 3;  //Текущий незаблокированный баланс.
+  string position_uid = 4; //Уникальный идентификатор позиции.
+  string instrument_uid = 5; //Уникальный идентификатор инструмента.
+  string ticker = 6; //Тикер инструмента.
+  string class_code = 7; //Класс-код (секция торгов).
+  bool exchange_blocked = 11; //Заблокировано на бирже.
+  string instrument_type = 16; //Тип инструмента.
+}
+
+//Баланс фьючерса.
+message PositionsFutures {
+  string figi = 1; //FIGI-идентификатор фьючерса.
+  int64 blocked = 2; //Количество бумаг, заблокированных выставленными заявками.
+  int64 balance = 3;  //Текущий незаблокированный баланс.
+  string position_uid = 4; //Уникальный идентификатор позиции.
+  string instrument_uid = 5; //Уникальный идентификатор  инструмента.
+  string ticker = 6; //Тикер инструмента.
+  string class_code = 7; //Класс-код (секция торгов).
+}
+
+//Баланс опциона.
+message PositionsOptions {
+  string position_uid = 1; //Уникальный идентификатор позиции опциона.
+  string instrument_uid = 2; //Уникальный идентификатор  инструмента.
+  string ticker = 3; //Тикер инструмента.
+  string class_code = 4; //Класс-код (секция торгов).
+  int64 blocked = 11; //Количество бумаг, заблокированных выставленными заявками.
+  int64 balance = 21;  //Текущий незаблокированный баланс.
+}
+
+message BrokerReportRequest {
+  oneof payload {
+    GenerateBrokerReportRequest generate_broker_report_request = 1;
+    GetBrokerReportRequest get_broker_report_request = 2;
+  }
+}
+
+message BrokerReportResponse {
+  oneof payload {
+    GenerateBrokerReportResponse generate_broker_report_response = 1;
+    GetBrokerReportResponse get_broker_report_response = 2;
+  }
+}
+
+message GenerateBrokerReportRequest {
+  string account_id = 1 [(google.api.field_behavior) = REQUIRED]; //Идентификатор счета клиента.
+  google.protobuf.Timestamp from = 2 [(google.api.field_behavior) = REQUIRED]; //Начало периода по UTC.
+  google.protobuf.Timestamp to = 3 [(google.api.field_behavior) = REQUIRED]; //Окончание периода по UTC.
+}
+
+message GenerateBrokerReportResponse {
+  string task_id = 1; //Идентификатор задачи формирования брокерского отчета.
+}
+
+message GetBrokerReportRequest {
+  string task_id = 1 [(google.api.field_behavior) = REQUIRED]; //Идентификатор задачи формирования брокерского отчета.
+  optional int32 page = 2; //Номер страницы отчета, начинается с 1. Значение по умолчанию — 0.
+}
+
+message GetBrokerReportResponse {
+  repeated BrokerReport broker_report = 1;
+  int32 itemsCount = 2; //Количество записей в отчете.
+  int32 pagesCount = 3; //Количество страниц с данными отчета, начинается с 0.
+  int32 page = 4; //Текущая страница, начинается с 0.
+}
+
+message BrokerReport {
+  string trade_id = 1;//Номер сделки.
+  string order_id = 2; //Номер поручения.
+  string figi = 3; //FIGI-идентификаторинструмента.
+  string execute_sign = 4; //Признак исполнения.
+  google.protobuf.Timestamp trade_datetime = 5; //Дата и время заключения по UTC.
+  string exchange = 6; //Торговая площадка.
+  string class_code = 7; //Режим торгов.
+  string direction = 8; //Вид сделки.
+  string name = 9; //Сокращенное наименование актива.
+  string ticker = 10; //Код актива.
+  MoneyValue price = 11; //Цена за единицу.
+  int64 quantity = 12; //Количество.
+  MoneyValue order_amount = 13; //Сумма без НКД.
+  Quotation aci_value = 14; //НКД.
+  MoneyValue total_order_amount = 15; //Сумма сделки.
+  MoneyValue broker_commission = 16; //Комиссия брокера.
+  MoneyValue exchange_commission = 17; //Комиссия биржи.
+  MoneyValue exchange_clearing_commission = 18; //Комиссия клирингового центра.
+  Quotation repo_rate = 19; //Ставка РЕПО, %.
+  string party = 20; //Контрагент или брокерарокер.
+  google.protobuf.Timestamp clear_value_date = 21; //Дата расчетов по UTC.
+  google.protobuf.Timestamp sec_value_date = 22; //Дата поставки по UTC.
+  string broker_status = 23; //Статус брокера.
+  string separate_agreement_type = 24; //Тип договора.
+  string separate_agreement_number = 25; //Номер договора.
+  string separate_agreement_date = 26; //Дата договора.
+  string delivery_type = 27; //Тип расчета по сделке.
+}
+
+//Статус запрашиваемых операций.
+enum OperationState {
+  OPERATION_STATE_UNSPECIFIED = 0; //Статус операции не определен.
+  OPERATION_STATE_EXECUTED = 1; //Исполнена частично или полностью.
+  OPERATION_STATE_CANCELED = 2; //Отменена.
+  OPERATION_STATE_PROGRESS = 3; //Исполняется.
+}
+
+//Тип операции.
+enum OperationType {
+  OPERATION_TYPE_UNSPECIFIED = 0; //Тип операции не определен.
+  OPERATION_TYPE_INPUT = 1; //Пополнение брокерского счета.
+  OPERATION_TYPE_BOND_TAX = 2; //Удержание НДФЛ по купонам.
+  OPERATION_TYPE_OUTPUT_SECURITIES = 3; //Вывод ЦБ.
+  OPERATION_TYPE_OVERNIGHT = 4; //Доход по сделке РЕПО овернайт.
+  OPERATION_TYPE_TAX = 5; //Удержание налога.
+  OPERATION_TYPE_BOND_REPAYMENT_FULL = 6; //Полное погашение облигаций.
+  OPERATION_TYPE_SELL_CARD = 7; //Продажа ЦБ с карты.
+  OPERATION_TYPE_DIVIDEND_TAX = 8; //Удержание налога по дивидендам.
+  OPERATION_TYPE_OUTPUT = 9; //Вывод денежных средств.
+  OPERATION_TYPE_BOND_REPAYMENT = 10; //Частичное погашение облигаций.
+  OPERATION_TYPE_TAX_CORRECTION = 11; //Корректировка налога.
+  OPERATION_TYPE_SERVICE_FEE = 12; //Удержание комиссии за обслуживание брокерского счета.
+  OPERATION_TYPE_BENEFIT_TAX = 13; //Удержание налога за материальную выгоду.
+  OPERATION_TYPE_MARGIN_FEE = 14; //Удержание комиссии за непокрытую позицию.
+  OPERATION_TYPE_BUY = 15; //Покупка ЦБ.
+  OPERATION_TYPE_BUY_CARD = 16; //Покупка ЦБ с карты.
+  OPERATION_TYPE_INPUT_SECURITIES = 17; //Перевод ценных бумаг из другого депозитария.
+  OPERATION_TYPE_SELL_MARGIN = 18; //Продажа в результате Margin-call.
+  OPERATION_TYPE_BROKER_FEE = 19; //Удержание комиссии за операцию.
+  OPERATION_TYPE_BUY_MARGIN = 20; //Покупка в результате Margin-call.
+  OPERATION_TYPE_DIVIDEND = 21; //Выплата дивидендов.
+  OPERATION_TYPE_SELL = 22; //Продажа ЦБ.
+  OPERATION_TYPE_COUPON = 23; //Выплата купонов.
+  OPERATION_TYPE_SUCCESS_FEE = 24; //Удержание комиссии SuccessFee.
+  OPERATION_TYPE_DIVIDEND_TRANSFER = 25; //Передача дивидендного дохода.
+  OPERATION_TYPE_ACCRUING_VARMARGIN = 26; //Зачисление вариационной маржи.
+  OPERATION_TYPE_WRITING_OFF_VARMARGIN = 27; //Списание вариационной маржи.
+  OPERATION_TYPE_DELIVERY_BUY = 28; //Покупка в рамках экспирации фьючерсного контракта.
+  OPERATION_TYPE_DELIVERY_SELL = 29; //Продажа в рамках экспирации фьючерсного контракта.
+  OPERATION_TYPE_TRACK_MFEE = 30; //Комиссия за управление по счету автоследования.
+  OPERATION_TYPE_TRACK_PFEE = 31; //Комиссия за результат по счету автоследования.
+  OPERATION_TYPE_TAX_PROGRESSIVE = 32; //Удержание налога по ставке 15%.
+  OPERATION_TYPE_BOND_TAX_PROGRESSIVE = 33; //Удержание налога по купонам по ставке 15%.
+  OPERATION_TYPE_DIVIDEND_TAX_PROGRESSIVE = 34; //Удержание налога по дивидендам по ставке 15%.
+  OPERATION_TYPE_BENEFIT_TAX_PROGRESSIVE = 35; //Удержание налога за материальную выгоду по ставке 15%.
+  OPERATION_TYPE_TAX_CORRECTION_PROGRESSIVE = 36; //Корректировка налога по ставке 15%.
+  OPERATION_TYPE_TAX_REPO_PROGRESSIVE = 37; //Удержание налога за возмещение по сделкам РЕПО по ставке 15%.
+  OPERATION_TYPE_TAX_REPO = 38; //Удержание налога за возмещение по сделкам РЕПО.
+  OPERATION_TYPE_TAX_REPO_HOLD = 39; //Удержание налога по сделкам РЕПО.
+  OPERATION_TYPE_TAX_REPO_REFUND = 40; //Возврат налога по сделкам РЕПО.
+  OPERATION_TYPE_TAX_REPO_HOLD_PROGRESSIVE = 41; //Удержание налога по сделкам РЕПО по ставке 15%.
+  OPERATION_TYPE_TAX_REPO_REFUND_PROGRESSIVE = 42; //Возврат налога по сделкам РЕПО по ставке 15%.
+  OPERATION_TYPE_DIV_EXT = 43; //Выплата дивидендов на карту.
+  OPERATION_TYPE_TAX_CORRECTION_COUPON = 44; //Корректировка налога по купонам.
+  OPERATION_TYPE_CASH_FEE = 45; //Комиссия за валютный остаток.
+  OPERATION_TYPE_OUT_FEE = 46; //Комиссия за вывод валюты с брокерского счета.
+  OPERATION_TYPE_OUT_STAMP_DUTY = 47; //Гербовый сбор.
+  OPERATION_TYPE_OUTPUT_SWIFT	= 50;		//	SWIFT-перевод.
+  OPERATION_TYPE_INPUT_SWIFT	= 51;		//	SWIFT-перевод.
+  OPERATION_TYPE_OUTPUT_ACQUIRING	= 53;	//  Перевод на карту.
+  OPERATION_TYPE_INPUT_ACQUIRING = 54;		//	Перевод с карты.
+  OPERATION_TYPE_OUTPUT_PENALTY = 55;		//	Комиссия за вывод средств.
+  OPERATION_TYPE_ADVICE_FEE	= 56;		//	Списание оплаты за сервис Советов.
+  OPERATION_TYPE_TRANS_IIS_BS	= 57;		//  Перевод ценных бумаг с ИИС на брокерский счет.
+  OPERATION_TYPE_TRANS_BS_BS	= 58; 		//  Перевод ценных бумаг с одного брокерского счета на другой.
+  OPERATION_TYPE_OUT_MULTI	= 59;		//  Вывод денежных средств со счета.
+  OPERATION_TYPE_INP_MULTI  = 60;			//  Пополнение денежных средств со счета.
+  OPERATION_TYPE_OVER_PLACEMENT	= 61;	//  Размещение биржевого овернайта.
+  OPERATION_TYPE_OVER_COM	= 62;			//  Списание комиссии.
+  OPERATION_TYPE_OVER_INCOME	= 63;		//  Доход от оверанайта.
+  OPERATION_TYPE_OPTION_EXPIRATION = 64;	// Экспирация опциона.
+  OPERATION_TYPE_FUTURE_EXPIRATION = 65;	// Экспирация фьючерса.
+}
+
+message GetDividendsForeignIssuerRequest {
+  oneof payload {
+    GenerateDividendsForeignIssuerReportRequest generate_div_foreign_issuer_report = 1; //Объект запроса формирования отчета.
+    GetDividendsForeignIssuerReportRequest get_div_foreign_issuer_report = 2; //Объект запроса сформированного отчета.
+  }
+}
+
+message GetDividendsForeignIssuerResponse {
+  oneof payload {
+    GenerateDividendsForeignIssuerReportResponse generate_div_foreign_issuer_report_response = 1; //Объект результата задачи запуска формирования отчета.
+    GetDividendsForeignIssuerReportResponse div_foreign_issuer_report = 2; //Отчет «Справка о доходах за пределами РФ».
+  }
+}
+
+//Объект запроса формирования отчета «Справка о доходах за пределами РФ».
+message GenerateDividendsForeignIssuerReportRequest {
+  string account_id = 1 [(google.api.field_behavior) = REQUIRED]; //Идентификатор счета клиента.
+  google.protobuf.Timestamp from = 2 [(google.api.field_behavior) = REQUIRED]; //Начало периода по UTC.
+  google.protobuf.Timestamp to = 3 [(google.api.field_behavior) = REQUIRED]; //Окончание периода по UTC. Как правило, можно сформировать отчет по дату на несколько дней меньше текущей. Начало и окончание периода должны быть в рамках одного календарного года.
+}
+
+// Объект запроса сформированного отчета «Справка о доходах за пределами РФ».
+message GetDividendsForeignIssuerReportRequest {
+  string task_id = 1 [(google.api.field_behavior) = REQUIRED]; //Идентификатор задачи формирования отчета.
+  optional int32 page = 2; //Номер страницы отчета (начинается с 0), значение по умолчанию: 0.
+}
+
+// Объект результата задачи запуска формирования отчета «Справка о доходах за пределами РФ».
+message GenerateDividendsForeignIssuerReportResponse {
+  string task_id = 1; //Идентификатор задачи формирования отчета.
+}
+
+message GetDividendsForeignIssuerReportResponse {
+  repeated DividendsForeignIssuerReport dividends_foreign_issuer_report = 1;
+  int32 itemsCount = 2; //Количество записей в отчете.
+  int32 pagesCount = 3; //Количество страниц с данными отчета, начинается с 0.
+  int32 page = 4; //Текущая страница, начинается с 0.
+}
+
+// Отчет «Справка о доходах за пределами РФ».
+message DividendsForeignIssuerReport {
+  google.protobuf.Timestamp record_date = 1; //Дата фиксации реестра.
+  google.protobuf.Timestamp payment_date = 2; //Дата выплаты.
+  string security_name = 3; //Наименование ценной бумаги.
+  string isin = 4; //ISIN-идентификатор ценной бумаги.
+  string issuer_country = 5; //Страна эмитента. Для депозитарных расписок указывается страна эмитента базового актива.
+  int64 quantity = 6; //Количество ценных бумаг.
+  Quotation dividend = 7; //Выплаты на одну бумагу
+  Quotation external_commission = 8; //Комиссия внешних платежных агентов.
+  Quotation dividend_gross = 9; //Сумма до удержания налога.
+  Quotation tax = 10; //Сумма налога, удержанного агентом.
+  Quotation dividend_amount = 11; //Итоговая сумма выплаты.
+  string currency = 12; //Валюта.
+}
+
+//Запрос установки stream-соединения.
+message PortfolioStreamRequest {
+  repeated string accounts = 1; //Массив идентификаторов счетов пользователя.
+  PingDelaySettings ping_settings = 15; //Запрос настройки пинга.
+}
+
+//Информация по позициям и доходностям портфелей.
+message PortfolioStreamResponse {
+  oneof payload {
+    PortfolioSubscriptionResult subscriptions = 1; //Объект результата подписки.
+    PortfolioResponse portfolio = 2; //Объект стриминга портфеля.
+    Ping ping = 3; //Проверка активности стрима.
+  }
+}
+
+//Объект результата подписки.
+message PortfolioSubscriptionResult {
+  repeated AccountSubscriptionStatus accounts = 1; //Массив счетов клиента.
+  string tracking_id = 7; //Уникальный идентификатор запроса, подробнее: [tracking_id](/invest/intro/developer/protocols/grpc#tracking-id).
+  string stream_id = 8; //Идентификатор открытого соединения
+}
+
+//Счет клиента.
+message AccountSubscriptionStatus {
+  string account_id = 1; //Идентификатор счета.
+  PortfolioSubscriptionStatus subscription_status = 6; //Результат подписки.
+}
+
+//Результат подписки.
+enum PortfolioSubscriptionStatus {
+  PORTFOLIO_SUBSCRIPTION_STATUS_UNSPECIFIED = 0; //Тип не определен.
+  PORTFOLIO_SUBSCRIPTION_STATUS_SUCCESS = 1; //Успешно.
+  PORTFOLIO_SUBSCRIPTION_STATUS_ACCOUNT_NOT_FOUND = 2; //Счет не найден или недостаточно прав.
+  PORTFOLIO_SUBSCRIPTION_STATUS_INTERNAL_ERROR = 3; //Произошла ошибка.
+}
+
+//Запрос списка операций по счету с пагинацией.
+message GetOperationsByCursorRequest {
+  string account_id = 1 [(google.api.field_behavior) = REQUIRED]; //Идентификатор счета клиента, обязательный параметр. Остальные параметры опциональны.
+  optional string instrument_id	= 2; //Идентификатор инструмента — FIGI или UID инструмента.
+  optional google.protobuf.Timestamp from = 6; //Начало периода по UTC.
+  optional google.protobuf.Timestamp to = 7; //Окончание периода по UTC.
+  optional string cursor	= 11; //Идентификатор элемента, с которого начать формировать ответ.
+  optional int32 limit	= 12; //Лимит количества операций. По умолчанию — `100`, максимальное значение — `1000`.
+  repeated OperationType operation_types	= 13; //Тип операции. Принимает значение из списка `OperationType`.
+  optional OperationState state  = 14;	//Статус запрашиваемых операций. Возможные значения указаны в `OperationState`.
+  optional bool without_commissions	= 15; //Флаг возврата комиссии. По умолчанию — `false`.
+  optional bool without_trades	= 16; //Флаг получения ответа без массива сделок.
+  optional bool without_overnights = 17; //Флаг показа overnight операций.
+}
+
+//Список операций по счету с пагинацией.
+message GetOperationsByCursorResponse {
+  bool has_next = 1; //Признак, есть ли следующий элемент.
+  string next_cursor = 2; //Следующий курсор.
+  repeated OperationItem items = 6; //Список операций.
+}
+
+//Данные об операции.
+message OperationItem {
+  string cursor = 1; //Курсор.
+  string broker_account_id = 6; //Номер счета клиента.
+  string id = 16; //Идентификатор операции, может меняться с течением времени.
+  string parent_operation_id = 17; //Идентификатор родительской операции. Может измениться, если изменился ID родительской операции.
+  string name = 18; //Название операции.
+  google.protobuf.Timestamp  date = 21; //Дата поручения.
+  OperationType type = 22; //Тип операции.
+  string description = 23; //Описание операции.
+  OperationState state = 24; //Статус поручения.
+  string instrument_uid = 31; //Уникальный идентификатор инструмента.
+  string figi = 32; //FIGI.
+  string instrument_type = 33; //Тип инструмента.
+  InstrumentType instrument_kind	= 34; //Тип инструмента.
+  string position_uid	= 35; //Уникальный идентификатор позиции.
+  string ticker = 36; //Тикер инструмента.
+  string class_code = 37; //Класс-код (секция торгов).
+  MoneyValue payment = 41; //Сумма операции.
+  MoneyValue price = 42; //Цена операции за 1 инструмент.
+  MoneyValue commission = 43; //Комиссия.
+  MoneyValue yield = 44; //Доходность.
+  Quotation yield_relative = 45; //Относительная доходность.
+  MoneyValue accrued_int = 46; //Накопленный купонный доход.
+  int64 quantity = 51; //Количество единиц инструмента.
+  int64 quantity_rest = 52; //Неисполненный остаток по сделке.
+  int64 quantity_done = 53; //Исполненный остаток.
+  google.protobuf.Timestamp cancel_date_time = 56; //Дата и время снятия заявки.
+  string cancel_reason = 57; //Причина отмены операции.
+  OperationItemTrades trades_info = 61; //Массив сделок.
+  string asset_uid = 64;	//Идентификатор актива.
+  repeated ChildOperationItem child_operations = 65; //Массив дочерних операций.
+}
+
+//Массив с информацией о сделках.
+message OperationItemTrades {
+  repeated OperationItemTrade trades = 6;
+}
+
+//Сделка по операции.
+message OperationItemTrade {
+  string num = 1; //Номер сделки.
+  google.protobuf.Timestamp date = 6; //Дата сделки.
+  int64 quantity = 11; //Количество в единицах.
+  MoneyValue price = 16; //Цена.
+  MoneyValue yield = 21; //Доходность.
+  Quotation yield_relative = 22; //Относительная доходность.
+}
+
+//Запрос установки stream-соединения позиций.
+message PositionsStreamRequest {
+  repeated string accounts = 1; //Массив идентификаторов счетов пользователя.
+  bool with_initial_positions = 3; //Получение состояния позиций на момент подключения.
+  PingDelaySettings ping_settings = 15; //Запрос настройки пинга.
+}
+
+//Информация по изменению позиций портфеля.
+message PositionsStreamResponse {
+  oneof payload {
+    PositionsSubscriptionResult subscriptions = 1; //Объект результата подписки.
+    PositionData position = 2; //Объект стриминга позиций.
+    Ping ping = 3; //Проверка активности стрима.
+    PositionsResponse initial_positions = 5; //Текущие позиции.
+  }
+}
+
+//Объект результата подписки.
+message PositionsSubscriptionResult {
+  repeated PositionsSubscriptionStatus accounts = 1; //Массив счетов клиента.
+  string tracking_id = 7; //Уникальный идентификатор запроса, подробнее: [tracking_id](/invest/intro/developer/protocols/grpc#tracking-id).
+  string stream_id = 8; //Идентификатор открытого соединения
+}
+
+//Счет клиента.
+message PositionsSubscriptionStatus {
+  string account_id = 1; //Идентификатор счета.
+  PositionsAccountSubscriptionStatus subscription_status = 6; //Результат подписки.
+}
+
+//Результат подписки.
+enum PositionsAccountSubscriptionStatus {
+  POSITIONS_SUBSCRIPTION_STATUS_UNSPECIFIED = 0; //Тип не определен.
+  POSITIONS_SUBSCRIPTION_STATUS_SUCCESS = 1; //Успешно.
+  POSITIONS_SUBSCRIPTION_STATUS_ACCOUNT_NOT_FOUND = 2; //Счет не найден или недостаточно прав.
+  POSITIONS_SUBSCRIPTION_STATUS_INTERNAL_ERROR = 3; //Произошла ошибка.
+}
+
+//Данные о позиции портфеля.
+message PositionData {
+  string account_id = 1; //Идентификатор счета.
+  repeated PositionsMoney money = 2; //Массив валютных позиций портфеля.
+  repeated PositionsSecurities securities = 3; //Список ценно-бумажных позиций портфеля.
+  repeated PositionsFutures futures = 4; //Список фьючерсов портфеля.
+  repeated PositionsOptions options = 5; //Список опционов портфеля.
+  google.protobuf.Timestamp date = 6; //Дата и время операции в формате UTC.
+}
+
+//Валютная позиция портфеля.
+message PositionsMoney {
+  MoneyValue available_value = 1; //Доступное количество валютный позиций.
+  MoneyValue blocked_value = 2; //Заблокированное количество валютных позиций.
+}
+
+message ChildOperationItem {
+  string instrument_uid = 1; //Уникальный идентификатор инструмента.
+  MoneyValue payment = 2; //Сумма операции.
+}
