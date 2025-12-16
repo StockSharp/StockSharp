@@ -351,7 +351,7 @@ public partial class TinkoffMessageAdapter
 							OptionType = instr.Direction.ToOptionType(),
 							OptionStyle = instr.Style.ToOptionStyle(),
 							SettlementType = instr.SettlementType.ToSettlementType(),
-							Strike = instr.StrikePrice,
+							Strike = instr.StrikePrice?.ToDecimal(),
 							OriginalTransactionId = lookupMsg.TransactionId,
 						}.TryFillUnderlyingId(instr.BasicAsset)))
 						{

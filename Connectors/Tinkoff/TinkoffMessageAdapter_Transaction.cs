@@ -32,12 +32,12 @@ public partial class TinkoffMessageAdapter
 				AccountId = regMsg.PortfolioName,
 				Direction = regMsg.Side.ToStopNative(),
 				InstrumentId = regMsg.GetInstrumentId(),
-				Price = regMsg.Price,
+				Price = regMsg.Price.DefaultAsNull()?.ToQuotation(),
 				Quantity = (long)regMsg.Volume,
 				ExpireDate = regMsg.TillDate?.ToTimestamp(),
 				ExpirationType = regMsg.TimeInForce.ToStopNative(regMsg.TillDate),
 				StopOrderType = ((ITakeProfitOrderCondition)condition).ActivationPrice is not null ? StopOrderType.TakeProfit : (((IStopLossOrderCondition)condition).ClosePositionPrice is not null ? StopOrderType.StopLimit : StopOrderType.StopLoss),
-				StopPrice = condition.TriggerPrice,
+				StopPrice = condition.TriggerPrice?.ToQuotation(),
 			};
 
 			if (stopOrder.StopOrderType == StopOrderType.TakeProfit && condition.IsTrailing)
@@ -67,7 +67,7 @@ public partial class TinkoffMessageAdapter
 					InstrumentId = regMsg.GetInstrumentId(),
 					OrderId = getOrderId(),
 					OrderType = regMsg.OrderType.ToNative(),
-					Price = regMsg.Price,
+					Price = regMsg.Price.DefaultAsNull()?.ToQuotation(),
 					Quantity = (long)regMsg.Volume,
 					TimeInForce = regMsg.TimeInForce.ToNative(regMsg.TillDate),
 				}, cancellationToken: cancellationToken);
@@ -81,7 +81,7 @@ public partial class TinkoffMessageAdapter
 					InstrumentId = regMsg.GetInstrumentId(),
 					OrderId = getOrderId(),
 					OrderType = regMsg.OrderType.ToNative(),
-					Price = regMsg.Price,
+					Price = regMsg.Price.DefaultAsNull()?.ToQuotation(),
 					Quantity = (long)regMsg.Volume,
 					TimeInForce = regMsg.TimeInForce.ToNative(regMsg.TillDate),
 				}, cancellationToken: cancellationToken);
@@ -160,7 +160,7 @@ public partial class TinkoffMessageAdapter
 				await _service.Sandbox.ReplaceSandboxOrderAsync(new()
 				{
 					OrderId = replaceMsg.OldOrderStringId,
-					Price = replaceMsg.Price,
+					Price = replaceMsg.Price.ToQuotation(),
 					Quantity = (long)replaceMsg.Volume,
 					AccountId = replaceMsg.PortfolioName,
 					IdempotencyKey = replaceMsg.TransactionId.To<string>(),
@@ -171,7 +171,7 @@ public partial class TinkoffMessageAdapter
 				await _service.Orders.ReplaceOrderAsync(new()
 				{
 					OrderId = replaceMsg.OldOrderStringId,
-					Price = replaceMsg.Price,
+					Price = replaceMsg.Price.ToQuotation(),
 					Quantity = (long)replaceMsg.Volume,
 					AccountId = replaceMsg.PortfolioName,
 					IdempotencyKey = replaceMsg.TransactionId.To<string>(),
@@ -427,7 +427,7 @@ public partial class TinkoffMessageAdapter
 					Side = order.Direction.ToSide(),
 					OrderType = order.OrderType.ToOrderType(),
 					OrderPrice = order.InitialSecurityPrice?.ToDecimal() ?? default,
-					Commission = order.InitialCommission ?? order.ExecutedCommission,
+					Commission = (order.InitialCommission ?? order.ExecutedCommission)?.ToDecimal(),
 					OrderVolume = order.LotsRequested,
 					Balance = order.LotsRequested - order.LotsExecuted,
 					AveragePrice = order.ExecutedOrderPrice?.ToDecimal(),
@@ -473,7 +473,7 @@ public partial class TinkoffMessageAdapter
 						ExpiryDate = order.ExpirationTime.ToDateTime(),
 						Condition = new TinkoffOrderCondition
 						{
-							TriggerPrice = order.StopPrice,
+							TriggerPrice = order.StopPrice?.ToDecimal(),
 						},
 					});
 				}

@@ -241,12 +241,42 @@ static class TinkoffExtensions
 			_ => throw new ArgumentOutOfRangeException(nameof(status), status, LocalizedStrings.InvalidValue),
 		};
 
-	//public static Timestamp ToTimestamp(this DateTime dto)
-	//	=> Timestamp.FromDateTimeOffset(dto);
+	private const decimal _nanoFactor = 1_000_000_000m;
+	private const int _nanoMax = 1_000_000_000;
 
-	public static decimal ToDecimal(this Quotation v)
-		=> (decimal)v;
+	private static decimal ToDecimal(long units, int nano)
+		=> units + nano / _nanoFactor;
 
-	public static decimal ToDecimal(this MoneyValue v)
-		=> (decimal)v;
+	private static (long units, int nano) Split(decimal value)
+	{
+		var units = decimal.ToInt64(decimal.Truncate(value));
+
+		var nanoDecimal = (value - units) * _nanoFactor;
+		var nano = decimal.ToInt32(decimal.Round(nanoDecimal, 0, MidpointRounding.AwayFromZero));
+
+		if (nano == _nanoMax)
+		{
+			units += 1;
+			nano = 0;
+		}
+		else if (nano == -_nanoMax)
+		{
+			units -= 1;
+			nano = 0;
+		}
+
+		return (units, nano);
+	}
+
+	public static decimal ToDecimal(this Quotation value)
+		=> ToDecimal(value.Units, value.Nano);
+
+	public static decimal ToDecimal(this MoneyValue value)
+		=> ToDecimal(value.Units, value.Nano);
+
+	public static Quotation ToQuotation(this decimal value)
+	{
+		var (units, nano) = Split(value);
+		return new() { Units = units, Nano = nano };
+	}
 }
