@@ -33,6 +33,7 @@
     <GeneticSharpVer>3.1.4</GeneticSharpVer>
     <SharpPcapVer>6.3.0</SharpPcapVer>
     <GoogleProtobufVer>3.*</GoogleProtobufVer>
+    <GrpcVer>2.*</GrpcVer>
     <PandasVer>0.6.*</PandasVer>
     <NumpyVer>0.9.*</NumpyVer>
     <IronPythonVer>3.4.2</IronPythonVer>

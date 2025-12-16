@@ -10,11 +10,11 @@
     <PackageReference Include="Ecng.IO" Version="$(EcngVer)" />
 
     <!-- gRPC + Protobuf runtime -->
-    <PackageReference Include="Grpc.Net.Client" Version="2.67.0" />
-    <PackageReference Include="Google.Protobuf" Version="3.25.5" />
+    <PackageReference Include="Grpc.Net.Client" Version="$(GrpcVer)" />
+    <PackageReference Include="Google.Protobuf" Version="$(GoogleProtobufVer)" />
 
     <!-- Build-time codegen from .proto -->
-    <PackageReference Include="Grpc.Tools" Version="2.67.0" PrivateAssets="All" />
+    <PackageReference Include="Grpc.Tools" Version="$(GrpcVer)" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
