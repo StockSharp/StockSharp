@@ -88,7 +88,9 @@ public class AsyncMessageChannel : Disposable, IMessageChannel
 	public void Open()
 	{
 		State = ChannelStates.Started;
-		_processorTask = Task.Run(ProcessMessagesAsync);
+
+		var token = _globalCts.Token;
+		_processorTask = Task.Run(() => ProcessMessagesAsync(token), token);
 	}
 
 	/// <inheritdoc />
@@ -102,15 +104,7 @@ public class AsyncMessageChannel : Disposable, IMessageChannel
 		}
 		catch { }
 
-		try
-		{
-			_globalCts?.Cancel();
-		}
-		finally
-		{
-			_globalCts?.Dispose();
-			_globalCts = new();
-		}
+		CancelAndReplaceGlobalCts();
 
 		foreach (var kv in _subscriptionItems.CopyAndClear())
 		{
@@ -187,9 +181,9 @@ public class AsyncMessageChannel : Disposable, IMessageChannel
 		return NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
 	}
 
-	private async Task ProcessMessagesAsync()
+	private Task ProcessMessagesAsync(CancellationToken token)
 	{
-		bool nextMessage()
+		async ValueTask<bool> nextMessage()
 		{
 			MessageQueueItem item;
 
@@ -275,8 +269,6 @@ public class AsyncMessageChannel : Disposable, IMessageChannel
 
 			async ValueTask wrapperInner()
 			{
-				var token = _globalCts.Token;
-
 				if (token.IsCancellationRequested)
 				{
 					if (item.IsTransaction)
@@ -408,30 +400,23 @@ public class AsyncMessageChannel : Disposable, IMessageChannel
 				}
 			}
 
-			async ValueTask wrapper()
+			try
 			{
-				try
-				{
-					await wrapperInner();
-				}
-				catch (Exception ex)
-				{
-					_adapter.AddErrorLog(ex);
-				}
+				await wrapperInner();
 			}
-
-#pragma warning disable CA2012
-			_ = wrapper();
-#pragma warning restore CA2012
+			catch (Exception ex)
+			{
+				_adapter.AddErrorLog(ex);
+			}
 
 			return true;
 		}
 
-		await Do.Invariant(async () =>
+		return Do.InvariantAsync(async () =>
 		{
 			while (true)
 			{
-				await _processMessageEvt.WaitAsync();
+				await _processMessageEvt.WaitAsync(token);
 
 				if (IsDisposeStarted)
 					break;
@@ -448,7 +433,7 @@ public class AsyncMessageChannel : Disposable, IMessageChannel
 
 				try
 				{
-					while (nextMessage()) { }
+					while (await nextMessage()) { }
 				}
 				catch (Exception e)
 				{
@@ -507,7 +492,7 @@ public class AsyncMessageChannel : Disposable, IMessageChannel
 		{
             using var cts = _adapter.DisconnectTimeout.CreateTimeout();
             await WhenChildrenComplete(cts.Token);
-        }), _globalCts.Token);
+        }), default);
 
 		foreach (var kv in _subscriptionItems.CopyAndClear())
 		{
@@ -531,10 +516,15 @@ public class AsyncMessageChannel : Disposable, IMessageChannel
 
 	private void CancelAndReplaceGlobalCts()
 	{
-		_globalCts.Cancel();
-		_globalCts.Dispose();
-
-		_globalCts = new();
+		try
+		{
+			_globalCts?.Cancel();
+		}
+		finally
+		{
+			_globalCts?.Dispose();
+			_globalCts = new();
+		}
 	}
 
 	private async Task<bool> WhenChildrenComplete(CancellationToken token)

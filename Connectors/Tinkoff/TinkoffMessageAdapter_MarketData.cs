@@ -608,10 +608,8 @@ public partial class TinkoffMessageAdapter
 				var reader = new FastCsvReader(body.To<Stream>(), Encoding.UTF8, StringHelper.N);
 				var needBreak = false;
 
-				while (reader.NextLine())
+				while (await reader.NextLineAsync(cancellationToken))
 				{
-					cancellationToken.ThrowIfCancellationRequested();
-
 					reader.Skip();
 
 					var timestamp = reader.ReadDateTime("yyyy-MM-ddTHH:mm:ssZ").UtcKind();
@@ -846,13 +844,11 @@ public partial class TinkoffMessageAdapter
 				// 2018-03-07T18:33:20.902591Z,SBER_TQBR,BUY,273.16,50,EXCHANGE,e6123145-9665-43e0-8413-cd61b8aa9b13
 				var reader = new FastCsvReader(gz, Encoding.UTF8, StringHelper.N);
 
-				if (!reader.NextLine())
+				if (!await reader.NextLineAsync(cancellationToken))
 					continue;
 
-				while (reader.NextLine())
+				while (await reader.NextLineAsync(cancellationToken))
 				{
-					cancellationToken.ThrowIfCancellationRequested();
-
 					var timestamp = reader.ReadDateTime("yyyy-MM-dd'T'HH:mm:ss.ffffff'Z'").UtcKind();
 
 					if (timestamp < from)
