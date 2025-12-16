@@ -21,16 +21,16 @@ public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType
 		{
 		}
 
-		public override void Read(Stream stream)
+		public override async ValueTask ReadAsync(Stream stream, CancellationToken cancellationToken)
 		{
-			Do.Invariant(() =>
+			await Do.InvariantAsync(async () =>
 			{
 				var count = 0;
 				var firstTimeRead = false;
 
 				var reader = stream.CreateCsvReader(serializer.Encoding);
 
-				while (reader.NextLine())
+				while (await reader.NextLineAsync(cancellationToken))
 				{
 					var message = serializer.Read(reader, this);
 

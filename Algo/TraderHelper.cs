@@ -1146,43 +1146,38 @@ public static partial class TraderHelper
 	/// Extract securities from the archive.
 	/// </summary>
 	/// <param name="archive">The archive.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Securities.</returns>
-	public static IEnumerable<SecurityMessage> ExtractSecurities(this byte[] archive)
+	public static async IAsyncEnumerable<SecurityMessage> ExtractSecuritiesAsync(this byte[] archive, [EnumeratorCancellation] CancellationToken cancellationToken)
 	{
 		var encoding = Encoding.UTF8;
-		var reader = archive.CreateReader(encoding);
 
-		var retVal = new List<SecurityMessage>();
+		using var reader = archive.CreateReader(encoding);
 
-		while (reader.NextLine())
+		while (await reader.NextLineAsync(cancellationToken))
 		{
 			var security = reader.ReadSecurity();
 
 			if (security.IsAllSecurity())
 				continue;
 
-			retVal.Add(security);
+			yield return security;
 		}
-
-		return retVal;
 	}
 
 	/// <summary>
 	/// Extract boards from the archive.
 	/// </summary>
 	/// <param name="archive">The archive.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Boards.</returns>
-	public static IEnumerable<BoardMessage> ExtractBoards(this byte[] archive)
+	public static async IAsyncEnumerable<BoardMessage> ExtractBoardsAsync(this byte[] archive, [EnumeratorCancellation]CancellationToken cancellationToken)
 	{
 		var encoding = Encoding.UTF8;
-		var reader = archive.CreateReader(encoding);
+		using var reader = archive.CreateReader(encoding);
 
-		var retVal = new List<BoardMessage>();
-
-		while (reader.NextLine())
-			retVal.Add(reader.ReadBoard(encoding));
-
-		return retVal;
+		while (await reader.NextLineAsync(cancellationToken))
+			yield return reader.ReadBoard(encoding);
 	}
 
 	/// <summary>

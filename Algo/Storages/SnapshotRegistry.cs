@@ -509,7 +509,7 @@ public class SnapshotRegistry(string path) : Disposable
 	/// <summary>
 	/// Initialize the storage.
 	/// </summary>
-	public void Init()
+	public ValueTask InitAsync(CancellationToken cancellationToken)
 	{
 		var isFlushing = false;
 		var flushLock = new Lock();
@@ -541,6 +541,8 @@ public class SnapshotRegistry(string path) : Disposable
 				isFlushing = false;
 			}
 		}).Interval(TimeSpan.FromSeconds(10));
+
+		return default;
 	}
 
 	/// <summary>

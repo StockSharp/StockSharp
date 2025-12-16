@@ -150,7 +150,7 @@ abstract class BinaryMetaInfo : MetaInfo
 		stream.WriteEx((short)0);
 	}
 
-	public override void Read(Stream stream)
+	public override ValueTask ReadAsync(Stream stream, CancellationToken cancellationToken)
 	{
 		Version = new Version(stream.ReadByte(), stream.ReadByte());
 		Count = stream.Read<int>();
@@ -165,7 +165,7 @@ abstract class BinaryMetaInfo : MetaInfo
 		LastTime = stream.Read<DateTime>().UtcKind();
 
 		if (Version < MarketDataVersions.Version40)
-			return;
+			return default;
 
 		LocalOffset = stream.Read<TimeSpan>();
 
@@ -175,6 +175,8 @@ abstract class BinaryMetaInfo : MetaInfo
 		// здесь можно будет читать доп информацию из потока
 
 		stream.Position += extInfoSize;
+
+		return default;
 	}
 
 	protected void WriteFractionalPrice(Stream stream)
@@ -458,11 +460,6 @@ abstract class BinaryMarketDataSerializer<TData, TMetaInfo> : IMarketDataSeriali
 		Serialize(stream, data.Cast<TData>(), metaInfo);
 	}
 
-	IEnumerable IMarketDataSerializer.Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
-	{
-		return Deserialize(stream, metaInfo);
-	}
-
 	private void CheckVersion(TMetaInfo metaInfo, string operation)
 	{
 		if (metaInfo.Version <= Version)
@@ -483,12 +480,12 @@ abstract class BinaryMarketDataSerializer<TData, TMetaInfo> : IMarketDataSeriali
 		OnSave(writer, data, typedInfo);
 	}
 
-	public IEnumerable<TData> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
+	public IAsyncEnumerable<TData> DeserializeAsync(Stream stream, IMarketDataMetaInfo metaInfo)
 	{
 		var typedInfo = (TMetaInfo)metaInfo;
 		CheckVersion(typedInfo, "Load");
 
-		return new SimpleEnumerable<TData>(() => new MarketDataEnumerator(this, new BitArrayReader(stream), typedInfo));
+		return new SyncAsyncEnumerable<TData>(new SimpleEnumerable<TData>(() => new MarketDataEnumerator(this, new BitArrayReader(stream), typedInfo)));
 	}
 
 	protected abstract void OnSave(BitArrayWriter writer, IEnumerable<TData> data, TMetaInfo metaInfo);

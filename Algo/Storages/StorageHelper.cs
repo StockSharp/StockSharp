@@ -618,8 +618,11 @@ public static class StorageHelper
 				set => throw new NotSupportedException();
 			}
 
-			public void Write(Stream stream)  => throw new NotSupportedException();
-			public void Read(Stream stream)   => throw new NotSupportedException();
+			public void Write(Stream stream)
+				=> throw new NotSupportedException();
+
+			public ValueTask ReadAsync(Stream stream, CancellationToken cancellationToken)
+				=> throw new NotSupportedException();
 		}
 	}
 
@@ -1676,4 +1679,22 @@ public static class StorageHelper
 
 		return AsyncHelper.Run(() => storage.LoadAsync(date, default).ToArrayAsync(default));
 	}
+
+	/// <summary>
+	/// </summary>
+	[Obsolete("Use InitAsync method instead.")]
+	public static void Init(this IEntityRegistry registry)
+		=> AsyncHelper.Run(() => registry.InitAsync(default));
+
+	/// <summary>
+	/// </summary>
+	[Obsolete("Use InitAsync method instead.")]
+	public static void Init(this SnapshotRegistry registry)
+		=> AsyncHelper.Run(() => registry.InitAsync(default));
+
+	/// <summary>
+	/// </summary>
+	[Obsolete("Use InitAsync method instead.")]
+	public static void Init(this IExchangeInfoProvider provider)
+		=> AsyncHelper.Run(() => provider.InitAsync(default));
 }

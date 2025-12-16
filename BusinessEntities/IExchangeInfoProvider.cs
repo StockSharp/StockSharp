@@ -18,7 +18,7 @@ public interface IExchangeInfoProvider : IBoardMessageProvider
 	/// <summary>
 	/// Initialize the storage.
 	/// </summary>
-	void Init();
+	ValueTask InitAsync(CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To get a board by the code.
@@ -103,8 +103,9 @@ public class InMemoryExchangeInfoProvider : IExchangeInfoProvider
 	public IEnumerable<Exchange> Exchanges => _exchanges.CachedValues;
 
 	/// <inheritdoc />
-	public virtual void Init()
+	public virtual ValueTask InitAsync(CancellationToken cancellationToken)
 	{
+		return default;
 	}
 
 	/// <inheritdoc />

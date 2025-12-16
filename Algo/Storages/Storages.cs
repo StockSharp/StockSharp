@@ -75,14 +75,11 @@ class CandleStorage<TCandleMessage> :
 		void IMarketDataSerializer.Serialize(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo)
 			=> _serializer.Serialize(stream, data, metaInfo);
 
-		IEnumerable<CandleMessage> IMarketDataSerializer<CandleMessage>.Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
-			=> _serializer.Deserialize(stream, metaInfo);
+		IAsyncEnumerable<CandleMessage> IMarketDataSerializer<CandleMessage>.DeserializeAsync(Stream stream, IMarketDataMetaInfo metaInfo)
+			=> _serializer.DeserializeAsync(stream, metaInfo);
 
 		void IMarketDataSerializer<CandleMessage>.Serialize(Stream stream, IEnumerable<CandleMessage> data, IMarketDataMetaInfo metaInfo)
 			=> _serializer.Serialize(stream, data, metaInfo);
-
-		IEnumerable IMarketDataSerializer.Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
-			=> _serializer.Deserialize(stream, metaInfo);
 	}
 
 	private readonly CandleSerializer _serializer;

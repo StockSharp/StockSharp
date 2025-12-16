@@ -43,8 +43,9 @@ public class InMemorySecurityMessageAdapterProvider : ISecurityMessageAdapterPro
 	public IEnumerable<KeyValuePair<Key, Guid>> Adapters => _adapters.CachedPairs;
 
 	/// <inheritdoc />
-	public void Init()
+	public ValueTask InitAsync(CancellationToken cancellationToken)
 	{
+		return default;
 	}
 
 	/// <inheritdoc />
@@ -137,12 +138,12 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 	public IEnumerable<KeyValuePair<Key, Guid>> Adapters => _inMemory.Adapters;
 
 	/// <inheritdoc />
-	public void Init()
+	public async ValueTask InitAsync(CancellationToken cancellationToken)
 	{
-		_inMemory.Init();
+		await _inMemory.InitAsync(cancellationToken);
 
 		if (File.Exists(_fileName))
-			Load();
+			await LoadAsync(cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -180,15 +181,15 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 		return true;
 	}
 
-	private void Load()
+	private async ValueTask LoadAsync(CancellationToken cancellationToken)
 	{
 		using var stream = new FileStream(_fileName, FileMode.Open, FileAccess.Read);
 
 		var reader = stream.CreateCsvReader(Encoding.UTF8);
 
-		reader.NextLine();
+		await reader.NextLineAsync(cancellationToken);
 
-		while (reader.NextLine())
+		while (await reader.NextLineAsync(cancellationToken))
 		{
 			var securityId = new SecurityId
 			{

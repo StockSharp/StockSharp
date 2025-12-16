@@ -65,9 +65,9 @@ class PositionMetaInfo(DateTime date) : BinaryMetaInfo(date)
 		Write(stream, LiquidationPrice);
 	}
 
-	public override void Read(Stream stream)
+	public override async ValueTask ReadAsync(Stream stream, CancellationToken cancellationToken)
 	{
-		base.Read(stream);
+		await base.ReadAsync(stream, cancellationToken);
 
 		BeginValue = ReadInfo(stream);
 		CurrentValue = ReadInfo(stream);

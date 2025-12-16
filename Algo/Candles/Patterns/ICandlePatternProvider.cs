@@ -25,7 +25,8 @@ public interface ICandlePatternProvider
 	/// <summary>
 	/// Initialize the storage.
 	/// </summary>
-	void Init();
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	ValueTask InitAsync(CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Patterns.
@@ -74,9 +75,10 @@ public class InMemoryCandlePatternProvider : ICandlePatternProvider
 	/// <inheritdoc/>
 	public event Action<ICandlePattern> PatternDeleted;
 
-	void ICandlePatternProvider.Init()
+	ValueTask ICandlePatternProvider.InitAsync(CancellationToken cancellationToken)
 	{
 		CandlePatternRegistry.All.ForEach(p => ((ICandlePatternProvider)this).Save(p));
+		return default;
 	}
 
 	IEnumerable<ICandlePattern> ICandlePatternProvider.Patterns => _cache.CachedValues;
@@ -140,15 +142,15 @@ public class CandlePatternFileStorage(string fileName, ChannelExecutor executor)
 	/// <inheritdoc/>
 	public event Action<ICandlePattern> PatternDeleted;
 
-	void ICandlePatternProvider.Init()
+	async ValueTask ICandlePatternProvider.InitAsync(CancellationToken cancellationToken)
 	{
-		_inMemory.Init();
+		await _inMemory.InitAsync(cancellationToken);
 
 		var errors = new List<Exception>();
 
 		if (File.Exists(_fileName))
 		{
-			Do.Invariant(() => _fileName.Deserialize<SettingsStorage[]>()?.Select(s =>
+			await Do.InvariantAsync(async () => (await _fileName.DeserializeAsync<SettingsStorage[]>(cancellationToken))?.Select(s =>
 			{
 				try
 				{

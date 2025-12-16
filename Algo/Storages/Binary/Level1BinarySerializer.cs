@@ -243,9 +243,9 @@ class Level1MetaInfo(DateTime date) : BinaryMetaInfo(date)
 		WriteSeqNums(stream);
 	}
 
-	public override void Read(Stream stream)
+	public override async ValueTask ReadAsync(Stream stream, CancellationToken cancellationToken)
 	{
-		base.Read(stream);
+		await base.ReadAsync(stream, cancellationToken);
 
 		Price = ReadInfo(stream);
 		ImpliedVolatility = ReadInfo(stream);

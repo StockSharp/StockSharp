@@ -37,7 +37,7 @@ public partial class MainWindow
 
 		var entityRegistry = new CsvEntityRegistry(path, _executor);
 
-		var exchangeInfoProvider = new StorageExchangeInfoProvider(entityRegistry, false);
+		var exchangeInfoProvider = new StorageExchangeInfoProvider(entityRegistry);
 		ConfigManager.RegisterService<IExchangeInfoProvider>(exchangeInfoProvider);
 		ConfigManager.RegisterService<IBoardMessageProvider>(exchangeInfoProvider);
 

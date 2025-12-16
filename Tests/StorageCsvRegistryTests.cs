@@ -218,7 +218,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 
 		// Create new registry instance to test loading
 		var registry2 = new CsvEntityRegistry(path, executor);
-		registry2.Init();
+		await registry2.InitAsync(token);
 
 		var loaded = registry2.Exchanges.ReadById("TEST");
 		IsNotNull(loaded);

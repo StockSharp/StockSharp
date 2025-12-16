@@ -30,9 +30,9 @@ class CsvMetaInfo(DateTime date, Encoding encoding, Func<FastCsvReader, object> 
 	{
 	}
 
-	public override void Read(Stream stream)
+	public override async ValueTask ReadAsync(Stream stream, CancellationToken cancellationToken)
 	{
-		Do.Invariant(() =>
+		await Do.InvariantAsync(async () =>
 		{
 			var count = 0;
 
@@ -41,7 +41,7 @@ class CsvMetaInfo(DateTime date, Encoding encoding, Func<FastCsvReader, object> 
 
 			var reader = stream.CreateCsvReader(_encoding);
 
-			while (reader.NextLine())
+			while (await reader.NextLineAsync(cancellationToken))
 			{
 				lastLine = reader.CurrentLine;
 
@@ -60,7 +60,7 @@ class CsvMetaInfo(DateTime date, Encoding encoding, Func<FastCsvReader, object> 
 			{
 				reader = new FastCsvReader(lastLine, StringHelper.RN);
 
-				if (!reader.NextLine())
+				if (!await reader.NextLineAsync(cancellationToken))
 					throw new InvalidOperationException();
 
 				LastTime = reader.ReadTime(Date);
@@ -137,11 +137,6 @@ public abstract class CsvMarketDataSerializer<TData> : IMarketDataSerializer<TDa
 		Serialize(stream, data.Cast<TData>(), metaInfo);
 	}
 
-	IEnumerable IMarketDataSerializer.Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
-	{
-		return Deserialize(stream, metaInfo);
-	}
-
 	/// <summary>
 	/// Save data into stream.
 	/// </summary>
@@ -176,31 +171,48 @@ public abstract class CsvMarketDataSerializer<TData> : IMarketDataSerializer<TDa
 	/// <param name="metaInfo">Meta-information on data for one day.</param>
 	protected abstract void Write(CsvFileWriter writer, TData data, IMarketDataMetaInfo metaInfo);
 
-	private class CsvEnumerator(CsvMarketDataSerializer<TData> serializer, FastCsvReader reader, IMarketDataMetaInfo metaInfo) : SimpleEnumerator<TData>
+	private readonly struct CsvAsyncEnumerable(CsvMarketDataSerializer<TData> serializer, Stream stream, IMarketDataMetaInfo metaInfo) : IAsyncEnumerable<TData>
 	{
+		private struct CsvEnumerator(CsvMarketDataSerializer<TData> serializer, FastCsvReader reader, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken) : IAsyncEnumerator<TData>
+		{
+			private readonly CsvMarketDataSerializer<TData> _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+			private readonly FastCsvReader _reader = reader ?? throw new ArgumentNullException(nameof(reader));
+			private readonly IMarketDataMetaInfo _metaInfo = metaInfo ?? throw new ArgumentNullException(nameof(metaInfo));
+			private readonly CancellationToken _cancellationToken = cancellationToken;
+			private TData _current;
+            readonly TData IAsyncEnumerator<TData>.Current => _current;
+
+			ValueTask IAsyncDisposable.DisposeAsync()
+			{
+				_current = default;
+				return default;
+			}
+
+			async ValueTask<bool> IAsyncEnumerator<TData>.MoveNextAsync()
+			{
+				var retVal = await _reader.NextLineAsync(_cancellationToken);
+
+				if (retVal)
+					_current = _serializer.Read(_reader, _metaInfo);
+
+				return retVal;
+			}
+		}
+
 		private readonly CsvMarketDataSerializer<TData> _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
-		private readonly FastCsvReader _reader = reader ?? throw new ArgumentNullException(nameof(reader));
+		private readonly Stream _stream = stream ?? throw new ArgumentNullException(nameof(stream));
 		private readonly IMarketDataMetaInfo _metaInfo = metaInfo ?? throw new ArgumentNullException(nameof(metaInfo));
 
-		public override bool MoveNext()
+		IAsyncEnumerator<TData> IAsyncEnumerable<TData>.GetAsyncEnumerator(CancellationToken cancellationToken)
 		{
-			var retVal = _reader.NextLine();
-
-			if (retVal)
-				Current = _serializer.Read(_reader, _metaInfo);
-
-			return retVal;
+			var reader = _stream.CreateCsvReader(_serializer.Encoding);
+			return new CsvEnumerator(_serializer, reader, _metaInfo, cancellationToken);
 		}
 	}
 
-	/// <summary>
-	/// To load data from the stream.
-	/// </summary>
-	/// <param name="stream">The stream.</param>
-	/// <param name="metaInfo">Meta-information on data for one day.</param>
-	/// <returns>Data.</returns>
-	public virtual IEnumerable<TData> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
-		=> new SimpleEnumerable<TData>(() => new CsvEnumerator(this, stream.CreateCsvReader(Encoding), metaInfo));
+	/// <inheritdoc />
+	public virtual IAsyncEnumerable<TData> DeserializeAsync(Stream stream, IMarketDataMetaInfo metaInfo)
+		=> new CsvAsyncEnumerable(this, stream, metaInfo);
 
 	/// <summary>
 	/// Read data from the specified reader.

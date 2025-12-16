@@ -55,16 +55,17 @@ public class IndicatorTests : BaseTestClass
 			throw new InvalidOperationException(input.ToString());
 	}
 
-	private static TimeFrameCandleMessage[] LoadCandles(SecurityId secId, DateTime time, TimeSpan tf)
+	private async ValueTask<TimeFrameCandleMessage[]> LoadCandles(SecurityId secId, DateTime time, TimeSpan tf)
 	{
 		var path = Path.Combine(Helper.ResFolder, "ohlcv.txt");
 		using var reader = new StreamReader(path, Encoding.UTF8);
 		var csv = new FastCsvReader(reader, Environment.NewLine) { ColumnSeparator = ',' };
 
+		var cancellationToken = CancellationToken;
 		var list = new List<TimeFrameCandleMessage>();
 		var t = time;
 
-		while (csv.NextLine())
+		while (await csv.NextLineAsync(cancellationToken))
 		{
 			var open = csv.ReadDecimal();
 			var high = csv.ReadDecimal();
@@ -633,12 +634,12 @@ public class IndicatorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Process()
+	public async Task Process()
 	{
 		var time = new DateTime(2000, 1, 1, 0, 0, 0).UtcKind();
 		var tf = TimeSpan.FromDays(1);
 		var secId = Helper.CreateSecurity().ToSecurityId();
-		var candles = LoadCandles(secId, time, tf);
+		var candles = await LoadCandles(secId, time, tf);
 
 		foreach (var type in GetIndicatorTypes())
 		{
@@ -723,16 +724,16 @@ public class IndicatorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void GpuIndicators()
+	public async Task GpuIndicators()
 	{
-		static ICandleMessage[][] loadCandles()
+		async Task<ICandleMessage[][]> loadCandles()
 		{
 			var start = new DateTime(2000, 1, 1, 0, 0, 0).UtcKind();
 			var baseTf = TimeSpan.FromMinutes(1);
 			var secId = Helper.CreateSecurityId();
 
 			// 1m base candles from storage
-			var baseCandles = LoadCandles(secId, start, baseTf)
+			var baseCandles = (await LoadCandles(secId, start, baseTf))
 				.Cast<ICandleMessage>()
 				.ToArray();
 
@@ -795,7 +796,7 @@ public class IndicatorTests : BaseTestClass
 			return parameters;
 		}
 
-		var msgSeries = loadCandles(); // multiple TF series
+		var msgSeries = await loadCandles(); // multiple TF series
 		var gpuSeries = msgSeries
 			.Select(series => series.Select(c => new GpuCandle(c.OpenTime, c.OpenPrice, c.HighPrice, c.LowPrice, c.ClosePrice, c.TotalVolume)).ToArray())
 			.ToArray();
@@ -926,12 +927,12 @@ public class IndicatorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void IndicatorValues_Roundtrip()
+	public async Task IndicatorValues_Roundtrip()
 	{
 		var time = new DateTime(2000, 1, 1, 0, 0, 0).UtcKind();
 		var tf = TimeSpan.FromMinutes(1);
 		var secId = Helper.CreateSecurity().ToSecurityId();
-		var candles = LoadCandles(secId, time, tf);
+		var candles = await LoadCandles(secId, time, tf);
 
 		foreach (var type in GetIndicatorTypes())
 		{
@@ -964,12 +965,12 @@ public class IndicatorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Preload()
+	public async Task Preload()
 	{
 		var time = new DateTime(2000, 1, 1, 0, 0, 0).UtcKind();
 		var tf = TimeSpan.FromMinutes(1);
 		var secId = Helper.CreateSecurity().ToSecurityId();
-		var candles = LoadCandles(secId, time, tf);
+		var candles = await LoadCandles(secId, time, tf);
 		var halfCount = candles.Length / 2;
 
 		foreach (var type in GetIndicatorTypes())
@@ -1031,12 +1032,12 @@ public class IndicatorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Preload_WithValues()
+	public async Task Preload_WithValues()
 	{
 		var time = new DateTime(2000, 1, 1, 0, 0, 0).UtcKind();
 		var tf = TimeSpan.FromMinutes(1);
 		var secId = Helper.CreateSecurity().ToSecurityId();
-		var candles = LoadCandles(secId, time, tf);
+		var candles = await LoadCandles(secId, time, tf);
 
 		foreach (var type in GetIndicatorTypes())
 		{

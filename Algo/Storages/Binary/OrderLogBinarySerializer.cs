@@ -70,9 +70,9 @@ class OrderLogMetaInfo(DateTime date) : BinaryMetaInfo(date)
 		WriteSeqNums(stream);
 	}
 
-	public override void Read(Stream stream)
+	public override async ValueTask ReadAsync(Stream stream, CancellationToken cancellationToken)
 	{
-		base.Read(stream);
+		await base.ReadAsync(stream, cancellationToken);
 
 		FirstOrderId = stream.Read<long>();
 		FirstTradeId = stream.Read<long>();

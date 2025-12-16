@@ -9,7 +9,8 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 	private readonly Func<TMessage, TId> _getId;
 	private readonly Func<TMessage, bool> _isValid;
 	private readonly SynchronizedDictionary<DateTime, AsyncReaderWriterLock> _locks = [];
-	private readonly SynchronizedDictionary<DateTime, IMarketDataMetaInfo> _dateMetaInfos = [];
+	private readonly AsyncReaderWriterLock _dateMetaInfosLock = new();
+	private readonly Dictionary<DateTime, IMarketDataMetaInfo> _dateMetaInfos = [];
 
 	protected MarketDataStorage(SecurityId securityId, DataType dataType, Func<TMessage, SecurityId> getSecurityId, Func<TMessage, TId> getId, IMarketDataSerializer<TMessage> serializer, IMarketDataStorageDrive drive, Func<TMessage, bool> isValid)
 	{
@@ -85,7 +86,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 
 			try
 			{
-				var metaInfo = GetInfo(stream, date);
+				var metaInfo = await GetInfo(stream, date, cancellationToken);
 
 				if (metaInfo == null)
 				{
@@ -251,7 +252,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 
 			try
 			{
-				var metaInfo = GetInfo(stream, date);
+				var metaInfo = await GetInfo(stream, date, cancellationToken);
 
 				if (metaInfo == null)
 					continue;
@@ -262,7 +263,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 				{
 					var loadedData = new Dictionary<TId, List<TMessage>>();
 
-					foreach (var item in Serializer.Deserialize(stream, metaInfo))
+					await foreach (var item in Serializer.DeserializeAsync(stream, metaInfo).WithEnforcedCancellation(cancellationToken))
 					{
 						var id = _getId(item);
 
@@ -321,16 +322,13 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 
 		using var stream = await LoadStreamAsync(date, true, cancellationToken);
 
-		var metaInfo = GetInfo(stream, date);
+		var metaInfo = await GetInfo(stream, date, cancellationToken);
 
 		if (metaInfo == null)
 			yield break;
 
-		var msgs = Serializer.Deserialize(stream, metaInfo);
-
-		foreach (var msg in msgs)
+		await foreach (var msg in Serializer.DeserializeAsync(stream, metaInfo).WithEnforcedCancellation(cancellationToken))
 		{
-			cancellationToken.ThrowIfCancellationRequested();
 			yield return msg;
 		}
 	}
@@ -342,10 +340,10 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 		using var _ = await GetReadSync(date, cancellationToken);
 
 		using var stream = await LoadStreamAsync(date, true, cancellationToken);
-		return GetInfo(stream, date);
+		return await GetInfo(stream, date, cancellationToken);
 	}
 
-	private IMarketDataMetaInfo GetInfo(Stream stream, DateTime date)
+	private async ValueTask<IMarketDataMetaInfo> GetInfo(Stream stream, DateTime date, CancellationToken cancellationToken)
 	{
 		if (stream == Stream.Null)
 			return null;
@@ -354,17 +352,17 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 
 		if (Serializer.Format == StorageFormats.Csv)
 		{
-			metaInfo = _dateMetaInfos.SafeAdd(date, d =>
+			metaInfo = await _dateMetaInfos.SafeAddAsync(_dateMetaInfosLock, date, async (d, ct) =>
 			{
 				var info = Serializer.CreateMetaInfo(date);
-				info.Read(stream);
+				await info.ReadAsync(stream, ct);
 				return info;
-			});
+			}, cancellationToken);
 		}
 		else
 		{
 			metaInfo = Serializer.CreateMetaInfo(date);
-			metaInfo.Read(stream);
+			await metaInfo.ReadAsync(stream, cancellationToken);
 		}
 
 		return metaInfo;
@@ -382,7 +380,9 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 	private async ValueTask DoDelete(DateTime date, CancellationToken cancellationToken)
 	{
 		await Drive.DeleteAsync(date, cancellationToken);
-		_dateMetaInfos.Remove(date);
+
+		using (await _dateMetaInfosLock.WriterLockAsync(cancellationToken))
+			_dateMetaInfos.Remove(date);
 	}
 
 	IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date, CancellationToken cancellationToken)

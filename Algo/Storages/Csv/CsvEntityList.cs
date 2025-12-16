@@ -13,7 +13,8 @@ public interface ICsvEntityList
 	/// Initialize the storage.
 	/// </summary>
 	/// <param name="errors">Possible errors.</param>
-	void Init(IList<Exception> errors);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	ValueTask InitAsync(IList<Exception> errors, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// CSV file name.
@@ -331,7 +332,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 		});
 	}
 
-	void ICsvEntityList.Init(IList<Exception> errors)
+	async ValueTask ICsvEntityList.InitAsync(IList<Exception> errors, CancellationToken cancellationToken)
 	{
 		if (errors == null)
 			throw new ArgumentNullException(nameof(errors));
@@ -339,7 +340,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 		if (!File.Exists(FileName))
 			return;
 
-		Do.Invariant(() =>
+		await Do.InvariantAsync(async () =>
 		{
 			using var stream = new FileStream(FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
 
@@ -348,7 +349,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 			var hasDuplicates = false;
 			var currErrors = 0;
 
-			while (reader.NextLine())
+			while (await reader.NextLineAsync(cancellationToken))
 			{
 				try
 				{

@@ -3,25 +3,31 @@
 /// <summary>
 /// The storage based provider of stocks and trade boards.
 /// </summary>
-public class StorageExchangeInfoProvider : InMemoryExchangeInfoProvider
+/// <remarks>
+/// Initializes a new instance of the <see cref="StorageExchangeInfoProvider"/>.
+/// </remarks>
+/// <param name="entityRegistry">The storage of trade objects.</param>
+public class StorageExchangeInfoProvider(IEntityRegistry entityRegistry) : InMemoryExchangeInfoProvider
 {
-	private readonly IEntityRegistry _entityRegistry;
+	private readonly IEntityRegistry _entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="StorageExchangeInfoProvider"/>.
 	/// </summary>
 	/// <param name="entityRegistry">The storage of trade objects.</param>
-	/// <param name="autoInit">Invoke <see cref="Init"/> method.</param>
-	public StorageExchangeInfoProvider(IEntityRegistry entityRegistry, bool autoInit = true)
+	/// <param name="autoInit">Invoke <see cref="InitAsync"/> method.</param>
+	[Obsolete("Use constructor without 'autoInit' parameter.")]	
+	public StorageExchangeInfoProvider(IEntityRegistry entityRegistry, bool autoInit)
+		: this(entityRegistry)
 	{
 		_entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
 
 		if (autoInit)
-			Init();
+			AsyncHelper.Run(() => InitAsync(default));
 	}
 
 	/// <inheritdoc />
-	public override void Init()
+	public override ValueTask InitAsync(CancellationToken cancellationToken)
 	{
 		var boardCodes = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
 
@@ -40,10 +46,10 @@ public class StorageExchangeInfoProvider : InMemoryExchangeInfoProvider
 				.ForEach(Save);
 		}
 
-		_entityRegistry.Exchanges.ForEach(e => base.Save(e));
-		_entityRegistry.ExchangeBoards.ForEach(b => base.Save(b));
+		_entityRegistry.Exchanges.ForEach(base.Save);
+		_entityRegistry.ExchangeBoards.ForEach(base.Save);
 
-		base.Init();
+		return base.InitAsync(cancellationToken);
 	}
 
 	/// <inheritdoc />

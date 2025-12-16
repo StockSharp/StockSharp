@@ -373,12 +373,12 @@ public class RemoteStorageClient : Disposable
 
 						if (typeof(TResult) == typeof(SecurityMessage))
 						{
-							result.AddRange(finishedMsg.Body.ExtractSecurities());
+							result.AddRange(await finishedMsg.Body.ExtractSecuritiesAsync(cancellationToken).ToArrayAsync(cancellationToken));
 							isFull = true;
 						}
 						else if (typeof(TResult) == typeof(BoardMessage))
 						{
-							result.AddRange(finishedMsg.Body.ExtractBoards());
+							result.AddRange(await finishedMsg.Body.ExtractBoardsAsync(cancellationToken).ToArrayAsync(cancellationToken));
 							isFull = true;
 						}
 					}

@@ -13,8 +13,9 @@ public interface INativeIdStorage
 	/// <summary>
 	/// Initialize the storage.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Possible errors with storage names. Empty dictionary means initialization without any issues.</returns>
-	IDictionary<string, Exception> Init();
+	ValueTask<Dictionary<string, Exception>> InitAsync(CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Get native security identifiers for storage.
@@ -103,11 +104,11 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 	public event Action<string, SecurityId, object> Added;
 
 	/// <inheritdoc />
-	public IDictionary<string, Exception> Init()
+	public async ValueTask<Dictionary<string, Exception>> InitAsync(CancellationToken cancellationToken)
 	{
 		Directory.CreateDirectory(_path);
 
-		var errors = _inMemory.Init();
+		var errors = await _inMemory.InitAsync(cancellationToken);
 
 		var files = Directory.GetFiles(_path, "*.csv");
 
@@ -115,7 +116,7 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 		{
 			try
 			{
-				LoadFile(fileName);
+				await LoadFileAsync(fileName, cancellationToken);
 			}
 			catch (Exception ex)
 			{
@@ -307,9 +308,9 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 
 	private static string GetTypeName(Type nativeIdType) => nativeIdType.TryGetCSharpAlias() ?? nativeIdType.GetTypeName(false);
 
-	private void LoadFile(string fileName)
+	private async ValueTask LoadFileAsync(string fileName, CancellationToken cancellationToken)
 	{
-		Do.Invariant(() =>
+		await Do.InvariantAsync(async () =>
 		{
 			if (!File.Exists(fileName))
 				return;
@@ -322,7 +323,7 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 			{
 				var reader = stream.CreateCsvReader(Encoding.UTF8);
 
-				reader.NextLine();
+				await reader.NextLineAsync(cancellationToken);
 				reader.Skip(2);
 
 				var types = new List<Type>();
@@ -332,7 +333,7 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 
 				var isTuple = types.Count > 1;
 
-				while (reader.NextLine())
+				while (await reader.NextLineAsync(cancellationToken))
 				{
 					var securityId = new SecurityId
 					{
@@ -379,9 +380,9 @@ public class InMemoryNativeIdStorage : INativeIdStorage
 		remove => _added -= value;
 	}
 
-	IDictionary<string, Exception> INativeIdStorage.Init()
+	ValueTask<Dictionary<string, Exception>> INativeIdStorage.InitAsync(CancellationToken cancellationToken)
 	{
-		return new Dictionary<string, Exception>();
+		return new([]);
 	}
 
 	internal void Add(string storageName, IEnumerable<(SecurityId secId, object nativeId)> ids)

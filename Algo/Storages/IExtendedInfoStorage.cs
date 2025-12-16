@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Storages;
 
+using Nito.AsyncEx;
+
 /// <summary>
 /// Extended info storage.
 /// </summary>
@@ -23,7 +25,8 @@ public interface IExtendedInfoStorageItem
 	/// <summary>
 	/// Initialize the storage.
 	/// </summary>
-	void Init();
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	ValueTask InitAsync(CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Add extended info.
@@ -66,28 +69,31 @@ public interface IExtendedInfoStorage
 	/// Initialize the storage.
 	/// </summary>
 	/// <returns>Possible errors with storage names. Empty dictionary means initialization without any issues.</returns>
-	IDictionary<IExtendedInfoStorageItem, Exception> Init();
+	ValueTask<Dictionary<IExtendedInfoStorageItem, Exception>> InitAsync(CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To get storage for the specified name.
 	/// </summary>
 	/// <param name="storageName">Storage name.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Storage.</returns>
-	IExtendedInfoStorageItem Get(string storageName);
+	ValueTask<IExtendedInfoStorageItem> GetAsync(string storageName, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To create storage.
 	/// </summary>
 	/// <param name="storageName">Storage name.</param>
 	/// <param name="fields">Extended fields (names and types).</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Storage.</returns>
-	IExtendedInfoStorageItem Create(string storageName, IEnumerable<(string name, Type type)> fields);
+	ValueTask<IExtendedInfoStorageItem> CreateAsync(string storageName, IEnumerable<(string name, Type type)> fields, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Delete storage.
 	/// </summary>
 	/// <param name="storage">Storage.</param>
-	void Delete(IExtendedInfoStorageItem storage);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	ValueTask DeleteAsync(IExtendedInfoStorageItem storage, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// The storage was created.
@@ -139,17 +145,17 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 
 		public string StorageName => Path.GetFileNameWithoutExtension(_fileName);
 
-		public void Init()
+		public async ValueTask InitAsync(CancellationToken cancellationToken)
 		{
 			if (File.Exists(_fileName))
 			{
-				Do.Invariant(() =>
+				await Do.InvariantAsync(async () =>
 				{
 					using var stream = new FileStream(_fileName, FileMode.Open, FileAccess.Read);
 
 					var reader = stream.CreateCsvReader(Encoding.UTF8);
 
-					reader.NextLine();
+					await reader.NextLineAsync(cancellationToken);
 					reader.Skip();
 
 					var fields = new string[reader.ColumnCount - 1];
@@ -157,7 +163,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 					for (var i = 0; i < fields.Length; i++)
 						fields[i] = reader.ReadString();
 
-					reader.NextLine();
+					await reader.NextLineAsync(cancellationToken);
 					reader.Skip();
 
 					var types = new Type[reader.ColumnCount - 1];
@@ -176,7 +182,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 						_fields = [.. fields.Select((f, i) => (f, types[i]))];
 					}
 
-					while (reader.NextLine())
+					while (await reader.NextLineAsync(cancellationToken))
 					{
 						var secId = reader.ReadString().ToSecurityId();
 
@@ -296,7 +302,10 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 		}
 	}
 
-	private readonly CachedSynchronizedDictionary<string, CsvExtendedInfoStorageItem> _items = new(StringComparer.InvariantCultureIgnoreCase);
+	private readonly AsyncReaderWriterLock _itemsLock = new();
+	private readonly Dictionary<string, CsvExtendedInfoStorageItem> _items = new(StringComparer.InvariantCultureIgnoreCase);
+	private CsvExtendedInfoStorageItem[] _itemsCache;
+
 	private readonly string _path;
 	private readonly ChannelExecutor _executor;
 
@@ -315,33 +324,46 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 		Directory.CreateDirectory(path);
 	}
 
-	IExtendedInfoStorageItem IExtendedInfoStorage.Create(string storageName, IEnumerable<(string, Type)> fields)
+	async ValueTask<IExtendedInfoStorageItem> IExtendedInfoStorage.CreateAsync(string storageName, IEnumerable<(string, Type)> fields, CancellationToken cancellationToken)
 	{
 		if (storageName.IsEmpty())
 			throw new ArgumentNullException(nameof(storageName));
 
-		var retVal = _items.SafeAdd(storageName, key =>
+		CsvExtendedInfoStorageItem item;
+
+		using (await _itemsLock.WriterLockAsync(cancellationToken))
 		{
-			var item = new CsvExtendedInfoStorageItem(this, Path.Combine(_path, key + ".csv"), fields, _executor);
-			item.Init();
-			return item;
-		}, out var isNew);
+			if (_items.TryGetValue(storageName, out item))
+				return item;
 
-		if (isNew)
-			_created?.Invoke(retVal);
+			item = new(this, Path.Combine(_path, storageName + ".csv"), fields, _executor);
+			await item.InitAsync(cancellationToken);
 
-		return retVal;
+			_items.Add(storageName, item);
+			_itemsCache = [.. _items.Values];
+		}
+
+		_created?.Invoke(item);
+
+		return item;
 	}
 
-	void IExtendedInfoStorage.Delete(IExtendedInfoStorageItem storage)
+	async ValueTask IExtendedInfoStorage.DeleteAsync(IExtendedInfoStorageItem storage, CancellationToken cancellationToken)
 	{
 		if (storage == null)
 			throw new ArgumentNullException(nameof(storage));
 
-		if (_items.Remove(storage.StorageName))
+		bool isRemoved;
+		using (await _itemsLock.WriterLockAsync(cancellationToken))
 		{
-			((CsvExtendedInfoStorageItem)storage).Delete();
+			isRemoved = _items.Remove(storage.StorageName);
+
+			if (isRemoved)
+				_itemsCache = [.. _items.Values];
 		}
+
+		if (isRemoved)
+			((CsvExtendedInfoStorageItem)storage).Delete();
 	}
 
 	private Action<IExtendedInfoStorageItem> _created;
@@ -360,18 +382,19 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 		remove => _deleted -= value;
 	}
 
-	IExtendedInfoStorageItem IExtendedInfoStorage.Get(string storageName)
+	async ValueTask<IExtendedInfoStorageItem> IExtendedInfoStorage.GetAsync(string storageName, CancellationToken cancellationToken)
 	{
 		if (storageName.IsEmpty())
 			throw new ArgumentNullException(nameof(storageName));
 
-		return _items.TryGetValue(storageName);
+		using (await _itemsLock.ReaderLockAsync(cancellationToken))
+			return _items.TryGetValue(storageName);
 	}
 
-	IEnumerable<IExtendedInfoStorageItem> IExtendedInfoStorage.Storages => _items.CachedValues;
+	IEnumerable<IExtendedInfoStorageItem> IExtendedInfoStorage.Storages => _itemsCache;
 
 	/// <inheritdoc />
-	public IDictionary<IExtendedInfoStorageItem, Exception> Init()
+	public async ValueTask<Dictionary<IExtendedInfoStorageItem, Exception>> InitAsync(CancellationToken cancellationToken)
 	{
 		var errors = new Dictionary<IExtendedInfoStorageItem, Exception>();
 
@@ -379,11 +402,15 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 		{
 			var item = new CsvExtendedInfoStorageItem(this, fileName, _executor);
 
-			_items.Add(Path.GetFileNameWithoutExtension(fileName), item);
+			using (await _itemsLock.WriterLockAsync(cancellationToken))
+			{
+				_items.Add(Path.GetFileNameWithoutExtension(fileName), item);
+				_itemsCache = [.. _items.Values];
+			}
 
 			try
 			{
-				item.Init();
+				await item.InitAsync(cancellationToken);
 			}
 			catch (Exception ex)
 			{

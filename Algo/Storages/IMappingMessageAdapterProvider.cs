@@ -14,7 +14,8 @@ public interface IMappingMessageAdapterProvider<TKey>
 	/// <summary>
 	/// Initialize the storage.
 	/// </summary>
-	void Init();
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	ValueTask InitAsync(CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Association changed.

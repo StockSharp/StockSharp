@@ -1,5 +1,7 @@
 namespace StockSharp.Algo;
 
+using Nito.AsyncEx;
+
 /// <summary>
 /// The message adapter, that save extension info into <see cref="IExtendedInfoStorage"/>.
 /// </summary>
@@ -8,6 +10,8 @@ public class ExtendedInfoStorageMessageAdapter : MessageAdapterWrapper
 	private readonly IExtendedInfoStorage _extendedInfoStorage;
 	private readonly string _storageName;
 	private readonly IEnumerable<(string, Type)> _fields;
+	private readonly AsyncLock _sync = new();
+	private IExtendedInfoStorageItem _storage;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MessageAdapterWrapper"/>.
@@ -25,17 +29,12 @@ public class ExtendedInfoStorageMessageAdapter : MessageAdapterWrapper
 		_fields = [.. InnerAdapter.SecurityExtendedFields];
 	}
 
-	private readonly Lock _sync = new();
-	private IExtendedInfoStorageItem _storage;
-
-	private IExtendedInfoStorageItem GetStorage()
+	private async ValueTask<IExtendedInfoStorageItem> GetStorageAsync(CancellationToken cancellationToken)
 	{
 		if (_storage == null)
 		{
-			using (_sync.EnterScope())
-			{
-				_storage ??= _extendedInfoStorage.Create(_storageName, _fields);
-			}	
+			using (await _sync.LockAsync(cancellationToken))
+				_storage ??= await _extendedInfoStorage.CreateAsync(_storageName, _fields, cancellationToken);
 		}
 
 		return _storage;
@@ -47,7 +46,7 @@ public class ExtendedInfoStorageMessageAdapter : MessageAdapterWrapper
 		var secMsg = message as SecurityMessage;
 
 		//if (secMsg?.ExtensionInfo != null)
-		//	GetStorage().Add(secMsg.SecurityId, secMsg.ExtensionInfo);
+		//	GetStorageAsync().Add(secMsg.SecurityId, secMsg.ExtensionInfo);
 
 		base.OnInnerAdapterNewOutMessage(message);
 	}

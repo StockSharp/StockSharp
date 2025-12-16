@@ -2,20 +2,26 @@ namespace StockSharp.Algo.Storages.Csv;
 
 class MarketDepthCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMarketDataSerializer<QuoteChangeMessage>(securityId, encoding)
 {
-	private class QuoteEnumerable : SimpleEnumerable<QuoteChangeMessage>
+	private readonly struct QuoteEnumerable(IAsyncEnumerable<NullableTimeQuoteChange> quotes, SecurityId securityId) : IAsyncEnumerable<QuoteChangeMessage>
 	{
-		private class QuoteEnumerator(IEnumerator<NullableTimeQuoteChange> enumerator, SecurityId securityId) : SimpleEnumerator<QuoteChangeMessage>
+		private class QuoteEnumerator(IAsyncEnumerator<NullableTimeQuoteChange> enumerator, SecurityId securityId) : IAsyncEnumerator<QuoteChangeMessage>
 		{
+			private readonly IAsyncEnumerator<NullableTimeQuoteChange> _enumerator = enumerator;
+			private readonly SecurityId _securityId = securityId;
+
 			private bool _resetCurrent = true;
 			private bool _needMoveNext = true;
 
-			public override bool MoveNext()
+			private QuoteChangeMessage _current;
+			QuoteChangeMessage IAsyncEnumerator<QuoteChangeMessage>.Current => _current;
+
+			async ValueTask<bool> IAsyncEnumerator<QuoteChangeMessage>.MoveNextAsync()
 			{
 				if (_resetCurrent)
 				{
-					Current = null;
+					_current = null;
 
-					if (_needMoveNext && !enumerator.MoveNext())
+					if (_needMoveNext && !await _enumerator.MoveNextAsync())
 						return false;
 				}
 
@@ -30,21 +36,21 @@ class MarketDepthCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMa
 
 				void Flush()
 				{
-					Current.Bids = [.. bids];
-					Current.Asks = [.. asks];
-					Current.HasPositions = hasPos;
+					_current.Bids = [.. bids];
+					_current.Asks = [.. asks];
+					_current.HasPositions = hasPos;
 				}
 
 				do
 				{
-					var quote = enumerator.Current
+					var quote = _enumerator.Current
 						?? throw new InvalidOperationException("quote == null");
 
-					if (Current == null)
+					if (_current == null)
 					{
-						Current = new QuoteChangeMessage
+						_current = new QuoteChangeMessage
 						{
-							SecurityId = securityId,
+							SecurityId = _securityId,
 							ServerTime = quote.ServerTime,
 							LocalTime = quote.LocalTime,
 							State = quote.State,
@@ -52,7 +58,7 @@ class MarketDepthCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMa
 							SeqNum = quote.SeqNum ?? 0L,
 						};
 					}
-					else if (Current.ServerTime != quote.ServerTime || (side == Sides.Sell && quote.Side == Sides.Buy))
+					else if (_current.ServerTime != quote.ServerTime || (side == Sides.Sell && quote.Side == Sides.Buy))
 					{
 						_resetCurrent = true;
 						_needMoveNext = false;
@@ -74,9 +80,9 @@ class MarketDepthCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMa
 						quotes.Add(new QuoteChange(qq.Price, qq.Volume, qq.OrdersCount, qq.Condition));
 					}
 				}
-				while (enumerator.MoveNext());
+				while (await _enumerator.MoveNextAsync());
 
-				if (Current == null)
+				if (_current == null)
 					return false;
 
 				_resetCurrent = true;
@@ -86,29 +92,24 @@ class MarketDepthCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMa
 				return true;
 			}
 
-			public override void Reset()
+			ValueTask IAsyncDisposable.DisposeAsync()
 			{
-				enumerator.Reset();
-
-				_resetCurrent = true;
-				_needMoveNext = true;
-
-				base.Reset();
-			}
-
-			protected override void DisposeManaged()
-			{
-				enumerator.Dispose();
-				base.DisposeManaged();
+				try
+				{
+					return _enumerator.DisposeAsync();
+				}
+				finally
+				{
+					GC.SuppressFinalize(this);
+				}
 			}
 		}
 
-		public QuoteEnumerable(IEnumerable<NullableTimeQuoteChange> quotes, SecurityId securityId)
-			: base(() => new QuoteEnumerator(quotes.GetEnumerator(), securityId))
-		{
-			if (quotes == null)
-				throw new ArgumentNullException(nameof(quotes));
-		}
+		private readonly IAsyncEnumerable<NullableTimeQuoteChange> _quotes = quotes ?? throw new ArgumentNullException(nameof(quotes));
+		private readonly SecurityId _securityId = securityId;
+
+		IAsyncEnumerator<QuoteChangeMessage> IAsyncEnumerable<QuoteChangeMessage>.GetAsyncEnumerator(CancellationToken cancellationToken)
+			=> new QuoteEnumerator(_quotes.GetAsyncEnumerator(cancellationToken), _securityId);
 	}
 
 	private readonly CsvMarketDataSerializer<NullableTimeQuoteChange> _quoteSerializer = new QuoteCsvSerializer(securityId, encoding);
@@ -194,9 +195,9 @@ class MarketDepthCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMa
 		_quoteSerializer.Serialize(stream, list, metaInfo);
 	}
 
-	public override IEnumerable<QuoteChangeMessage> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
+	public override IAsyncEnumerable<QuoteChangeMessage> DeserializeAsync(Stream stream, IMarketDataMetaInfo metaInfo)
 	{
-		return new QuoteEnumerable(_quoteSerializer.Deserialize(stream, metaInfo), SecurityId);
+		return new QuoteEnumerable(_quoteSerializer.DeserializeAsync(stream, metaInfo), SecurityId);
 	}
 
 	protected override void Write(CsvFileWriter writer, QuoteChangeMessage data, IMarketDataMetaInfo metaInfo)

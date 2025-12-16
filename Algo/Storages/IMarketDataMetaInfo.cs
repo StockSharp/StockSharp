@@ -50,7 +50,8 @@ public interface IMarketDataMetaInfo
 	/// To load meta-information parameters from the stream.
 	/// </summary>
 	/// <param name="stream">Data stream.</param>
-	void Read(Stream stream);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	ValueTask ReadAsync(Stream stream, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Is override all data.
@@ -74,12 +75,9 @@ abstract class MetaInfo(DateTime date) : IMarketDataMetaInfo
 
 	public abstract object LastId { get; set; }
 
-	/// <inheritdoc />
 	public abstract void Write(Stream stream);
 
-	/// <inheritdoc />
-	public abstract void Read(Stream stream);
+	public abstract ValueTask ReadAsync(Stream stream, CancellationToken cancellationToken);
 
-	/// <inheritdoc />
 	public virtual bool IsOverride => false;
 }

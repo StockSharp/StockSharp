@@ -13,8 +13,9 @@ public interface ISecurityMappingStorage
 	/// <summary>
 	/// Initialize the storage.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Possible errors with storage names. Empty dictionary means initialization without any issues.</returns>
-	IDictionary<string, Exception> Init();
+	ValueTask<Dictionary<string, Exception>> InitAsync(CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Get storage names.
@@ -77,9 +78,9 @@ public class InMemorySecurityMappingStorage : ISecurityMappingStorage
 		remove => _changed -= value;
 	}
 
-	IDictionary<string, Exception> ISecurityMappingStorage.Init()
+	ValueTask<Dictionary<string, Exception>> ISecurityMappingStorage.InitAsync(CancellationToken cancellationToken)
 	{
-		return new Dictionary<string, Exception>();
+		return new([]);
 	}
 
 	IEnumerable<string> ISecurityMappingStorage.GetStorageNames()
@@ -248,11 +249,11 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 	}
 
 	/// <inheritdoc />
-	public IDictionary<string, Exception> Init()
+	public async ValueTask<Dictionary<string, Exception>> InitAsync(CancellationToken cancellationToken)
 	{
 		Directory.CreateDirectory(_path);
 
-		var errors = _inMemory.Init();
+		var errors = await _inMemory.InitAsync(cancellationToken);
 
 		var files = Directory.GetFiles(_path, "*.csv");
 
@@ -260,7 +261,7 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 		{
 			try
 			{
-				LoadFile(fileName);
+				await LoadFileAsync(fileName, cancellationToken);
 			}
 			catch (Exception ex)
 			{
@@ -323,9 +324,9 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 		return _inMemory.TryGetAdapterId(storageName, stockSharpId);
 	}
 
-	private void LoadFile(string fileName)
+	private async ValueTask LoadFileAsync(string fileName, CancellationToken cancellationToken)
 	{
-		Do.Invariant(() =>
+		await Do.InvariantAsync(async () =>
 		{
 			if (!File.Exists(fileName))
 				return;
@@ -336,9 +337,9 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 			{
 				var reader = stream.CreateCsvReader(Encoding.UTF8);
 
-				reader.NextLine();
+				await reader.NextLineAsync(cancellationToken);
 
-				while (reader.NextLine())
+				while (await reader.NextLineAsync(cancellationToken))
 				{
 					var stockSharpId = new SecurityId
 					{

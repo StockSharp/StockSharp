@@ -135,7 +135,7 @@ public class CsvEntityRegistry : IEntityRegistry
 				arr = security == null ? [] : [security];
 			}
 
-			return arr.ToAsyncEnumerable();
+			return new SyncAsyncEnumerable<Security>(arr);
 		}
 
 		ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)
@@ -908,7 +908,7 @@ public class CsvEntityRegistry : IEntityRegistry
 	}
 
 	/// <inheritdoc />
-	public IDictionary<object, Exception> Init()
+	public async ValueTask<Dictionary<object, Exception>> InitAsync(CancellationToken cancellationToken)
 	{
 		Directory.CreateDirectory(Path);
 
@@ -919,7 +919,7 @@ public class CsvEntityRegistry : IEntityRegistry
 			try
 			{
 				var listErrors = new List<Exception>();
-				list.Init(listErrors);
+				await list.InitAsync(listErrors, cancellationToken);
 
 				if (listErrors.Count > 0)
 					errors.Add(list, listErrors.SingleOrAggr());

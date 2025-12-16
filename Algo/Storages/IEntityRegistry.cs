@@ -44,5 +44,5 @@ public interface IEntityRegistry
 	/// Initialize the storage.
 	/// </summary>
 	/// <returns>Possible errors with storage names. Empty dictionary means initialization without any issues.</returns>
-	IDictionary<object, Exception> Init();
+	ValueTask<Dictionary<object, Exception>> InitAsync(CancellationToken cancellationToken);
 }

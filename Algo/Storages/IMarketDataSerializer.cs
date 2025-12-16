@@ -29,14 +29,6 @@ public interface IMarketDataSerializer
 	/// <param name="data">Data.</param>
 	/// <param name="metaInfo">Meta-information on data for one day.</param>
 	void Serialize(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo);
-
-	/// <summary>
-	/// To load data from the stream.
-	/// </summary>
-	/// <param name="stream">Data stream.</param>
-	/// <param name="metaInfo">Meta-information on data for one day.</param>
-	/// <returns>Data.</returns>
-	IEnumerable Deserialize(Stream stream, IMarketDataMetaInfo metaInfo);
 }
 
 /// <summary>
@@ -59,5 +51,5 @@ public interface IMarketDataSerializer<TData> : IMarketDataSerializer
 	/// <param name="stream">The stream.</param>
 	/// <param name="metaInfo">Meta-information on data for one day.</param>
 	/// <returns>Data.</returns>
-	new IEnumerable<TData> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo);
+	IAsyncEnumerable<TData> DeserializeAsync(Stream stream, IMarketDataMetaInfo metaInfo);
 }

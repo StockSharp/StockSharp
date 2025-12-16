@@ -2,9 +2,9 @@
 
 class BoardStateMetaInfo(DateTime date) : BinaryMetaInfo(date)
 {
-	public override void Read(Stream stream)
+	public override async ValueTask ReadAsync(Stream stream, CancellationToken cancellationToken)
 	{
-		base.Read(stream);
+		await base.ReadAsync(stream, cancellationToken);
 
 		ServerOffset = stream.Read<TimeSpan>();
 

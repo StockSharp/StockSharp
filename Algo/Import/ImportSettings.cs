@@ -379,8 +379,8 @@ public class ImportSettings : NotifiableObject, IPersistable
 		DataType = storage.GetValue<SettingsStorage>(nameof(DataType)).Load<DataType>();
 
 		var extendedStorage = storage.GetValue<string>(nameof(ExtendedStorage));
-		if (!extendedStorage.IsEmpty())
-			ExtendedStorage = ServicesRegistry.TryExtendedInfoStorage?.Get(extendedStorage);
+		if (!extendedStorage.IsEmpty() && ServicesRegistry.TryExtendedInfoStorage is IExtendedInfoStorage eis)
+			ExtendedStorage = AsyncHelper.Run(() => eis.GetAsync(extendedStorage, default));
 
 		SelectedFields = LoadSelectedFields(storage.GetValue<SettingsStorage[]>("Fields") ?? storage.GetValue<SettingsStorage[]>(nameof(SelectedFields)));
 

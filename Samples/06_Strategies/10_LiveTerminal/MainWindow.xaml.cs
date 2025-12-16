@@ -63,7 +63,7 @@ public partial class MainWindow
 
 		ConfigManager.RegisterService<IEntityRegistry>(entityRegistry);
 
-		var exchangeInfoProvider = new StorageExchangeInfoProvider(entityRegistry, false);
+		var exchangeInfoProvider = new StorageExchangeInfoProvider(entityRegistry);
 		ConfigManager.RegisterService<IExchangeInfoProvider>(exchangeInfoProvider);
 		ConfigManager.RegisterService<IBoardMessageProvider>(exchangeInfoProvider);
 
@@ -159,8 +159,11 @@ public partial class MainWindow
 		if (Connector.StorageAdapter == null)
 			return;
 
-		entityRegistry.Init();
-		snapshotRegistry.Init();
+		AsyncHelper.Run(async () =>
+		{
+			await entityRegistry.InitAsync(default);
+			await snapshotRegistry.InitAsync(default);
+		});
 
 		Connector.LookupAll();
 

@@ -654,7 +654,7 @@ partial class Connector
 					break;
 
 				case MessageTypes.SubscriptionFinished:
-					ProcessSubscriptionFinishedMessage((SubscriptionFinishedMessage)message);
+					await ProcessSubscriptionFinishedMessage((SubscriptionFinishedMessage)message, cancellationToken);
 					break;
 
 				case MessageTypes.SubscriptionOnline:
@@ -746,7 +746,7 @@ partial class Connector
 		}
 	}
 
-	private void ProcessSubscriptionFinishedMessage(SubscriptionFinishedMessage message)
+	private async ValueTask ProcessSubscriptionFinishedMessage(SubscriptionFinishedMessage message, CancellationToken cancellationToken)
 	{
 		var subscription = _subscriptionManager.ProcessSubscriptionFinishedMessage(message, out var items);
 
@@ -757,21 +757,27 @@ partial class Connector
 		{
 			if (subscription.DataType == DataType.Securities)
 			{
-				var secMsgs = message.Body.ExtractSecurities().ToArray();
+				var secMsgs = new List<SecurityMessage>();
 
-				foreach (var secMsg in secMsgs)
+				await foreach (var secMsg in message.Body.ExtractSecuritiesAsync(cancellationToken))
+				{
 					ProcessSecurityMessage(secMsg);
+					secMsgs.Add(secMsg);
+				}
 
-				items = items.Concat(secMsgs);
+				items = [.. items, .. secMsgs];
 			}
 			else if (subscription.DataType == DataType.Board)
 			{
-				var boardMsgs = message.Body.ExtractBoards().ToArray();
+				var boardMsgs = new List<BoardMessage>();
 
-				foreach (var boardMsg in boardMsgs)
+				await foreach (var boardMsg in message.Body.ExtractBoardsAsync(cancellationToken))
+				{
 					ProcessBoardMessage(boardMsg);
+					boardMsgs.Add(boardMsg);
+				}
 
-				items = items.Concat(boardMsgs);
+				items = [.. items, .. boardMsgs];
 			}
 		}
 

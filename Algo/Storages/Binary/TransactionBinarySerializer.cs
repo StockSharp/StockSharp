@@ -107,9 +107,9 @@ class TransactionSerializerMetaInfo(DateTime date) : BinaryMetaInfo(date)
 			list.Add(stream.Read<string>());
 	}
 
-	public override void Read(Stream stream)
+	public override async ValueTask ReadAsync(Stream stream, CancellationToken cancellationToken)
 	{
-		base.Read(stream);
+		await base.ReadAsync(stream, cancellationToken);
 
 		FirstOrderId = stream.Read<long>();
 		LastOrderId = stream.Read<long>();

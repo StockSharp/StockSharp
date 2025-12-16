@@ -47,9 +47,9 @@ class QuoteMetaInfo(DateTime date) : BinaryMetaInfo(date)
 		stream.WriteEx(HasSnapshot);
 	}
 
-	public override void Read(Stream stream)
+	public override async ValueTask ReadAsync(Stream stream, CancellationToken cancellationToken)
 	{
-		base.Read(stream);
+		await base.ReadAsync(stream, cancellationToken);
 
 		FirstPrice = stream.Read<decimal>();
 		LastPrice = stream.Read<decimal>();
