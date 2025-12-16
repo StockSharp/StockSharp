@@ -57,7 +57,7 @@ public class FilterableSecurityProvider : Disposable, ISecurityProvider
 		if (!secId.IsEmpty())
 			securities = securities.Where(s => s.Id.EqualsIgnoreCase(secId));
 
-		return securities.Filter(criteria).TryLimitByCount(criteria).ToAsyncEnumerable();
+		return new SyncAsyncEnumerable<Security>(securities.Filter(criteria).TryLimitByCount(criteria));
 	}
 
 	async ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)

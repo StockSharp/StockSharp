@@ -17,6 +17,7 @@ global using Ecng.Collections;
 global using Ecng.Serialization;
 global using Ecng.ComponentModel;
 global using Ecng.Logging;
+global using Ecng.Linq;
 #if NET7_0_OR_GREATER
 global using DecimalBuffer = Ecng.Collections.NumericCircularBufferEx<decimal>;
 #else

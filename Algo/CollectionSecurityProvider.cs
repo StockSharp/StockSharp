@@ -54,7 +54,7 @@ public class CollectionSecurityProvider : ISecurityProvider
 
 	/// <inheritdoc />
 	public IAsyncEnumerable<Security> LookupAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken)
-		=> _inner.SyncGet(d => d.Values.Filter(criteria)).ToAsyncEnumerable();
+		=> new SyncAsyncEnumerable<Security>(_inner.SyncGet(d => d.Values.Filter(criteria)));
 
 	async ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)
 		=> (await LookupByIdAsync(id, cancellationToken))?.ToMessage();

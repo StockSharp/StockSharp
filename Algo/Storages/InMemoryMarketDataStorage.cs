@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Storages;
 
+using Ecng.Linq;
+
 /// <summary>
 /// The storage, generating data in the process of operation.
 /// </summary>
@@ -7,7 +9,7 @@ namespace StockSharp.Algo.Storages;
 public sealed class InMemoryMarketDataStorage<T> : IMarketDataStorage<T>
 	where T : Message
 {
-	private readonly Func<DateTime, IEnumerable<T>> _getData;
+	private readonly Func<DateTime, IAsyncEnumerable<T>> _getData;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="InMemoryMarketDataStorage{T}"/>.
@@ -16,21 +18,7 @@ public sealed class InMemoryMarketDataStorage<T> : IMarketDataStorage<T>
 	/// <param name="arg">The additional argument, associated with data. For example, candle arg.</param>
 	/// <param name="getData">Handler for retrieving in-memory data.</param>
 	/// <param name="dataType">Data type.</param>
-	public InMemoryMarketDataStorage(SecurityId securityId, object arg, Func<DateTime, IEnumerable<Message>> getData, Type dataType = null)
-		: this(securityId, arg, d => getData(d).Cast<T>(), dataType)
-	{
-		if (getData == null)
-			throw new ArgumentNullException(nameof(getData));
-	}
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="InMemoryMarketDataStorage{T}"/>.
-	/// </summary>
-	/// <param name="securityId">Security ID.</param>
-	/// <param name="arg">The additional argument, associated with data. For example, candle arg.</param>
-	/// <param name="getData">Handler for retrieving in-memory data.</param>
-	/// <param name="dataType">Data type.</param>
-	public InMemoryMarketDataStorage(SecurityId securityId, object arg, Func<DateTime, IEnumerable<T>> getData, Type dataType = null)
+	public InMemoryMarketDataStorage(SecurityId securityId, object arg, Func<DateTime, IAsyncEnumerable<T>> getData, Type dataType = null)
 	{
 		_securityId = securityId;
 		_getData = getData ?? throw new ArgumentNullException(nameof(getData));
@@ -54,7 +42,7 @@ public sealed class InMemoryMarketDataStorage<T> : IMarketDataStorage<T>
 
 	/// <inheritdoc />
 	public IAsyncEnumerable<T> LoadAsync(DateTime date, CancellationToken cancellationToken)
-		=> _getData(date).ToAsyncEnumerable();
+		=> _getData(date);
 
 	IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date, CancellationToken cancellationToken) => LoadAsync(date, cancellationToken);
 

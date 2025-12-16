@@ -506,7 +506,7 @@ public class HistoryMessageAdapter : MessageAdapter
 							}
 
 							if (noData)
-								await EnqueueMessages(startDateTime, stopDateTime, currentTime, GetSimpleTimeLine(boards, currentTime, MarketTimeChangedInterval).ToAsyncEnumerable());
+								await EnqueueMessages(startDateTime, stopDateTime, currentTime, new SyncAsyncEnumerable<Message>(GetSimpleTimeLine(boards, currentTime, MarketTimeChangedInterval)));
 							else
 								await EnqueueMessages(startDateTime, stopDateTime, currentTime, messages);
 						}
