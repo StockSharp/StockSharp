@@ -7,7 +7,9 @@
     <ProjectReference Include="..\Messages\Messages.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NuGet.Configuration" Version="$(NuGetApiVer)" />
     <PackageReference Include="Ecng.Configuration" Version="$(EcngVer)" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <PackageReference Include="NuGet.Configuration" Version="$(NuGetApiVer)" />
   </ItemGroup>
 </Project>

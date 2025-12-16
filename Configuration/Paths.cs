@@ -5,7 +5,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
+#if NET10_0_OR_GREATER
 using NuGet.Configuration;
+#endif
 
 /// <summary>
 /// System paths.
@@ -39,13 +41,30 @@ public static class Paths
 
 		try
 		{
-			var settings = Settings.LoadDefaultSettings(null);
-			HistoryDataPath = GetHistoryDataPath(SettingsUtility.GetGlobalPackagesFolder(settings));
+			HistoryDataPath = GetHistoryDataPath(GetNuGetGlobalPackagesFolder());
 		}
 		catch (Exception ex)
 		{
 			System.Diagnostics.Trace.WriteLine(ex);
 		}
+	}
+
+	/// <summary>
+	/// Get NuGet global packages folder path.
+	/// </summary>
+	/// <returns>Path to NuGet global packages folder.</returns>
+	public static string GetNuGetGlobalPackagesFolder()
+	{
+#if NET10_0_OR_GREATER
+		var settings = Settings.LoadDefaultSettings(null);
+		return SettingsUtility.GetGlobalPackagesFolder(settings);
+#else
+		var nugetPackages = Environment.GetEnvironmentVariable("NUGET_PACKAGES");
+		if (!nugetPackages.IsEmpty())
+			return nugetPackages;
+
+		return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".nuget", "packages");
+#endif
 	}
 
 	/// <summary>

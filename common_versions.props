@@ -27,7 +27,7 @@
     <FluentFtpVer>40.0.0</FluentFtpVer>
     <SignalRVer>2.4.3</SignalRVer>
     <MsExtensionsVer>8.*</MsExtensionsVer>
-    <NuGetApiVer>6.14.0</NuGetApiVer>
+    <NuGetApiVer>7.0.1</NuGetApiVer>
     <SpectreVer>0.48.0</SpectreVer>
     <AWSSDKVer>4.*</AWSSDKVer>
     <GeneticSharpVer>3.1.4</GeneticSharpVer>
