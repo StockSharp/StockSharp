@@ -12,50 +12,50 @@ internal sealed class InvestApiClient(CallInvoker callInvoker)
 	/// <summary>
 	/// Users service client.
 	/// </summary>
-	public UsersService.UsersServiceClient Users { get; } = new UsersService.UsersServiceClient(callInvoker);
+	public UsersService.UsersServiceClient Users { get; } = new(callInvoker);
 
 	/// <summary>
 	/// Instruments service client.
 	/// </summary>
-	public InstrumentsService.InstrumentsServiceClient Instruments { get; } = new InstrumentsService.InstrumentsServiceClient(callInvoker);
+	public InstrumentsService.InstrumentsServiceClient Instruments { get; } = new(callInvoker);
 
 	/// <summary>
 	/// Market data service client.
 	/// </summary>
-	public MarketDataService.MarketDataServiceClient MarketData { get; } = new MarketDataService.MarketDataServiceClient(callInvoker);
+	public MarketDataService.MarketDataServiceClient MarketData { get; } = new(callInvoker);
 
 	/// <summary>
 	/// Market data stream service client.
 	/// </summary>
-	public MarketDataStreamService.MarketDataStreamServiceClient MarketDataStream { get; } = new MarketDataStreamService.MarketDataStreamServiceClient(callInvoker);
+	public MarketDataStreamService.MarketDataStreamServiceClient MarketDataStream { get; } = new(callInvoker);
 
 	/// <summary>
 	/// Orders service client.
 	/// </summary>
-	public OrdersService.OrdersServiceClient Orders { get; } = new OrdersService.OrdersServiceClient(callInvoker);
+	public OrdersService.OrdersServiceClient Orders { get; } = new(callInvoker);
 
 	/// <summary>
 	/// Orders stream service client.
 	/// </summary>
-	public OrdersStreamService.OrdersStreamServiceClient OrdersStream { get; } = new OrdersStreamService.OrdersStreamServiceClient(callInvoker);
+	public OrdersStreamService.OrdersStreamServiceClient OrdersStream { get; } = new(callInvoker);
 
 	/// <summary>
 	/// Operations service client.
 	/// </summary>
-	public OperationsService.OperationsServiceClient Operations { get; } = new OperationsService.OperationsServiceClient(callInvoker);
+	public OperationsService.OperationsServiceClient Operations { get; } = new(callInvoker);
 
 	/// <summary>
 	/// Operations stream service client.
 	/// </summary>
-	public OperationsStreamService.OperationsStreamServiceClient OperationsStream { get; } = new OperationsStreamService.OperationsStreamServiceClient(callInvoker);
+	public OperationsStreamService.OperationsStreamServiceClient OperationsStream { get; } = new(callInvoker);
 
 	/// <summary>
 	/// Stop orders service client.
 	/// </summary>
-	public StopOrdersService.StopOrdersServiceClient StopOrders { get; } = new StopOrdersService.StopOrdersServiceClient(callInvoker);
+	public StopOrdersService.StopOrdersServiceClient StopOrders { get; } = new(callInvoker);
 
 	/// <summary>
 	/// Sandbox service client.
 	/// </summary>
-	public SandboxService.SandboxServiceClient Sandbox { get; } = new SandboxService.SandboxServiceClient(callInvoker);
+	public SandboxService.SandboxServiceClient Sandbox { get; } = new(callInvoker);
 }
