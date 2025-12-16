@@ -8,6 +8,12 @@ using Ecng.ComponentModel;
 /// <summary>
 /// The message adapter for <see cref="Coinbase"/>.
 /// </summary>
+/// <remarks>
+/// Supports two authentication methods:
+/// 1. Legacy (HMAC): Key + Secret (base64) + Passphrase
+/// 2. CDP (JWT): Key (key name) + Secret (EC PEM private key), Passphrase not required
+/// The auth type is auto-detected by Secret format (PEM starts with "-----BEGIN").
+/// </remarks>
 [MediaIcon(Media.MediaNames.coinbase)]
 [Doc("topics/api/connectors/crypto_exchanges/coinbase.html")]
 [Display(
@@ -19,7 +25,9 @@ using Ecng.ComponentModel;
 	MessageAdapterCategories.Free | MessageAdapterCategories.Level1 | MessageAdapterCategories.Transactions)]
 public partial class CoinbaseMessageAdapter : MessageAdapter, IKeySecretAdapter, IPassphraseAdapter
 {
-	/// <inheritdoc />
+	/// <summary>
+	/// API key (Legacy) or CDP API key name.
+	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.KeyKey,
@@ -29,7 +37,9 @@ public partial class CoinbaseMessageAdapter : MessageAdapter, IKeySecretAdapter,
 	[BasicSetting]
 	public SecureString Key { get; set; }
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Secret key (Legacy base64) or CDP private key (EC PEM format).
+	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.SecretKey,
@@ -40,7 +50,7 @@ public partial class CoinbaseMessageAdapter : MessageAdapter, IKeySecretAdapter,
 	public SecureString Secret { get; set; }
 
 	/// <summary>
-	/// Passphrase.
+	/// Passphrase (Legacy auth only, not required for CDP).
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),

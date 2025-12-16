@@ -168,12 +168,12 @@ class SocketClient : BaseLogReceiver
 
 	public ValueTask SubscribeOrders(long transId, CancellationToken cancellationToken)
 	{
-		return Process(transId, Commands.Subscribe, Channels.User, null, cancellationToken);
+		return ProcessPrivate(transId, Commands.Subscribe, Channels.User, null, cancellationToken);
 	}
 
 	public ValueTask UnSubscribeOrders(long originTransId, CancellationToken cancellationToken)
 	{
-		return Process(-originTransId, Commands.UnSubscribe, Channels.User, null, cancellationToken);
+		return ProcessPrivate(-originTransId, Commands.UnSubscribe, Channels.User, null, cancellationToken);
 	}
 
 	public ValueTask SubscribeTicker(long transId, string symbol, CancellationToken cancellationToken)
@@ -224,14 +224,50 @@ class SocketClient : BaseLogReceiver
 		if (channel.IsEmpty())
 			throw new ArgumentNullException(nameof(channel));
 
-		//if (symbol.IsEmpty())
-		//	throw new ArgumentNullException(nameof(symbol));
-
 		return _client.SendAsync(new
 		{
 			type,
 			product_ids = symbol == null ? null : new[] { symbol },
 			channel,
 		}, cancellationToken, subId);
+	}
+
+	private ValueTask ProcessPrivate(long subId, string type, string channel, string symbol, CancellationToken cancellationToken)
+	{
+		if (type.IsEmpty())
+			throw new ArgumentNullException(nameof(type));
+
+		if (channel.IsEmpty())
+			throw new ArgumentNullException(nameof(channel));
+
+		if (_authenticator.UseLegacyAuth)
+		{
+			// Legacy HMAC authentication for WebSocket
+			var timestamp = DateTime.UtcNow.ToUnix().ToString("F0");
+			var signature = _authenticator.MakeHmacSign("/users/self/verify", Method.Get, string.Empty, out _);
+
+			return _client.SendAsync(new
+			{
+				type,
+				product_ids = symbol == null ? null : new[] { symbol },
+				channel,
+				api_key = _authenticator.Key.UnSecure(),
+				timestamp,
+				signature,
+			}, cancellationToken, subId);
+		}
+		else
+		{
+			// CDP JWT authentication for WebSocket
+			var jwt = _authenticator.GenerateWebSocketJwt();
+
+			return _client.SendAsync(new
+			{
+				type,
+				product_ids = symbol == null ? null : new[] { symbol },
+				channel,
+				jwt,
+			}, cancellationToken, subId);
+		}
 	}
 }

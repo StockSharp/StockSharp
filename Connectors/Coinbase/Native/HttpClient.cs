@@ -1,6 +1,7 @@
 namespace StockSharp.Coinbase.Native;
 
 using System.Dynamic;
+using System.Globalization;
 
 using Newtonsoft.Json.Linq;
 
@@ -53,10 +54,11 @@ class HttpClient : BaseLogReceiver
 		return ((JToken)response.trades).DeserializeObject<IEnumerable<Trade>>();
 	}
 
-	public Task<IEnumerable<Account>> GetAccounts(CancellationToken cancellationToken)
+	public async Task<IEnumerable<Account>> GetAccounts(CancellationToken cancellationToken)
 	{
-		var url = CreateUrl("accounts");
-		return MakeRequest<IEnumerable<Account>>(url, ApplySecret(CreateRequest(Method.Get), url), cancellationToken);
+		var url = CreateUrl("brokerage/accounts");
+		dynamic response = await MakeRequest<object>(url, ApplySecret(CreateRequest(Method.Get), url), cancellationToken);
+		return ((JToken)response.accounts).DeserializeObject<IEnumerable<Account>>();
 	}
 
 	public async Task<IEnumerable<Order>> GetOrders(CancellationToken cancellationToken)
@@ -79,41 +81,80 @@ class HttpClient : BaseLogReceiver
 		return ((JToken)response.fills).DeserializeObject<IEnumerable<Fill>>();
 	}
 
-	public Task<Order> RegisterOrder(string clientOrderId, string symbol, string type, string side, decimal? price, decimal? stopPrice, decimal volume, TimeInForce? timeInForce, DateTime? tillDate, int? leverage, CancellationToken cancellationToken)
+	public async Task<Order> RegisterOrder(string clientOrderId, string symbol, string type, string side, decimal? price, decimal? stopPrice, decimal volume, TimeInForce? timeInForce, DateTime? tillDate, int? leverage, CancellationToken cancellationToken)
 	{
 		var url = CreateUrl("brokerage/orders");
-
 		var request = CreateRequest(Method.Post);
 
 		var body = (dynamic)new ExpandoObject();
 
 		body.client_order_id = clientOrderId;
-		body.side = side;
 		body.product_id = symbol;
-		body.size = volume;
-
-		if (!type.IsEmpty())
-			body.type = type;
+		body.side = side.ToUpperInvariant();
 
 		if (leverage is int l)
-			body.leverage = l;
+			body.leverage = l.ToString();
 
-		if (price != null)
-			body.price = price.Value;
+		// Build order_configuration based on order type
+		var orderConfig = (dynamic)new ExpandoObject();
 
-		if (timeInForce != null)
-			body.time_in_force = timeInForce.ToNative(tillDate);
-
-		if (tillDate != null)
-			body.cancel_after = tillDate.Value;
-
-		if (stopPrice != null)
+		if (stopPrice != null && price != null)
 		{
-			body.stop = "loss";
-			body.stop_price = stopPrice.Value;
+			// Stop-limit order
+			var stopLimitConfig = (dynamic)new ExpandoObject();
+			stopLimitConfig.base_size = volume.ToString(CultureInfo.InvariantCulture);
+			stopLimitConfig.limit_price = price.Value.ToString(CultureInfo.InvariantCulture);
+			stopLimitConfig.stop_price = stopPrice.Value.ToString(CultureInfo.InvariantCulture);
+			stopLimitConfig.stop_direction = side.EqualsIgnoreCase("BUY") ? "STOP_DIRECTION_STOP_UP" : "STOP_DIRECTION_STOP_DOWN";
+
+			if (tillDate != null)
+			{
+				stopLimitConfig.end_time = tillDate.Value.ToString("yyyy-MM-ddTHH:mm:ssZ");
+				orderConfig.stop_limit_stop_limit_gtd = stopLimitConfig;
+			}
+			else
+			{
+				orderConfig.stop_limit_stop_limit_gtc = stopLimitConfig;
+			}
+		}
+		else if (type.EqualsIgnoreCase("market") || price == null)
+		{
+			// Market order (IOC)
+			var marketConfig = (dynamic)new ExpandoObject();
+			marketConfig.base_size = volume.ToString(CultureInfo.InvariantCulture);
+			orderConfig.market_market_ioc = marketConfig;
+		}
+		else
+		{
+			// Limit order
+			var limitConfig = (dynamic)new ExpandoObject();
+			limitConfig.base_size = volume.ToString(CultureInfo.InvariantCulture);
+			limitConfig.limit_price = price.Value.ToString(CultureInfo.InvariantCulture);
+			limitConfig.post_only = false;
+
+			if (tillDate != null)
+			{
+				limitConfig.end_time = tillDate.Value.ToString("yyyy-MM-ddTHH:mm:ssZ");
+				orderConfig.limit_limit_gtd = limitConfig;
+			}
+			else if (timeInForce == Messages.TimeInForce.CancelBalance)
+			{
+				orderConfig.limit_limit_ioc = limitConfig;
+			}
+			else if (timeInForce == Messages.TimeInForce.MatchOrCancel)
+			{
+				orderConfig.limit_limit_fok = limitConfig;
+			}
+			else
+			{
+				orderConfig.limit_limit_gtc = limitConfig;
+			}
 		}
 
-		return MakeRequest<Order>(url, ApplySecret(request, url, (object)body), cancellationToken);
+		body.order_configuration = orderConfig;
+
+		dynamic response = await MakeRequest<object>(url, ApplySecret(request, url, (object)body), cancellationToken);
+		return ((JToken)response).DeserializeObject<Order>();
 	}
 
 	public Task EditOrder(string orderId, decimal? price, decimal? size, CancellationToken cancellationToken)
@@ -201,34 +242,48 @@ class HttpClient : BaseLogReceiver
 		if (request == null)
 			throw new ArgumentNullException(nameof(request));
 
-		//var body = new JObject();
 		var qs = request
 			.Parameters
 			.Where(p => p.Type == ParameterType.QueryString)
 			.ToQueryString(false);
 
-		var urlStr = url.ToString().Remove(_baseUrl);
+		var path = url.AbsolutePath;
 
 		if (!qs.IsEmpty())
-		{
-			urlStr += "?" + qs;
-		}
+			path += "?" + qs;
 
 		var bodyStr = body == null ? string.Empty : JsonConvert.SerializeObject(body, _serializerSettings);
 
-		var signature = _authenticator.MakeSign(urlStr, request.Method, bodyStr, out var timestamp);
-	
-		request
-			.AddHeader("CB-ACCESS-KEY", _authenticator.Key.UnSecure())
-			.AddHeader("CB-ACCESS-TIMESTAMP", timestamp)
-			.AddHeader("CB-ACCESS-PASSPHRASE", _authenticator.Passphrase.UnSecure())
-			.AddHeader("CB-ACCESS-SIGN", signature);
+		if (_authenticator.UseLegacyAuth)
+		{
+			// Legacy HMAC authentication
+			var urlStr = url.ToString().Remove(_baseUrl);
+
+			if (!qs.IsEmpty())
+				urlStr += "?" + qs;
+
+			var signature = _authenticator.MakeHmacSign(urlStr, request.Method, bodyStr, out var timestamp);
+
+			request
+				.AddHeader("CB-ACCESS-KEY", _authenticator.Key.UnSecure())
+				.AddHeader("CB-ACCESS-TIMESTAMP", timestamp)
+				.AddHeader("CB-ACCESS-PASSPHRASE", _authenticator.Passphrase.UnSecure())
+				.AddHeader("CB-ACCESS-SIGN", signature);
+		}
+		else
+		{
+			// CDP JWT authentication
+			var jwt = _authenticator.GenerateJwt(
+				request.Method.ToString().ToUpperInvariant(),
+				url.Host,
+				path);
+
+			if (!jwt.IsEmpty())
+				request.AddHeader("Authorization", $"Bearer {jwt}");
+		}
 
 		if (body != null)
-		{
-			//request.RequestFormat = DataFormat.Json;
 			request.AddBodyAsStr(bodyStr);
-		}
 
 		return request;
 	}
