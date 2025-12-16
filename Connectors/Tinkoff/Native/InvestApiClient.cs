@@ -1,13 +1,9 @@
-namespace Tinkoff.InvestApi;
-
-using Grpc.Core;
-
-using Tinkoff.InvestApi.V1;
+namespace StockSharp.Tinkoff.Native;
 
 /// <summary>
 /// Lightweight facade over generated gRPC service clients.
 /// </summary>
-public sealed class InvestApiClient
+internal sealed class InvestApiClient
 {
 	/// <summary>
 	/// Initializes a new instance of <see cref="InvestApiClient"/>.

@@ -18,6 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\**\*.proto" ProtoRoot="Protos" GrpcServices="Client" />
+    <Protobuf Include="Native\Protos\**\*.proto" ProtoRoot="Native\Protos" GrpcServices="Client" Access="Internal" />
   </ItemGroup>
 </Project>

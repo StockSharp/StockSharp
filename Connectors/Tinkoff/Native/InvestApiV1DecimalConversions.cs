@@ -1,4 +1,4 @@
-namespace Tinkoff.InvestApi.V1;
+namespace StockSharp.Tinkoff.Native;
 
 static class InvestApiDecimal
 {
@@ -28,7 +28,7 @@ static class InvestApiDecimal
 	}
 }
 
-public sealed partial class Quotation
+internal sealed partial class Quotation
 {
 	/// <summary>
 	/// Converts <see cref="decimal"/> to <see cref="Quotation"/>.
@@ -48,7 +48,7 @@ public sealed partial class Quotation
 			: InvestApiDecimal.ToDecimal(value.Units, value.Nano);
 }
 
-public sealed partial class MoneyValue
+internal sealed partial class MoneyValue
 {
 	/// <summary>
 	/// Converts <see cref="MoneyValue"/> to <see cref="decimal"/> (currency is ignored).

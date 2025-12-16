@@ -15,6 +15,4 @@ global using global::Google.Protobuf.WellKnownTypes;
 
 global using global::StockSharp.Messages;
 global using global::StockSharp.Localization;
-
-global using global::Tinkoff.InvestApi;
-global using global::Tinkoff.InvestApi.V1;
+global using global::StockSharp.Tinkoff.Native;

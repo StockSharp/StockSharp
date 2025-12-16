@@ -1,4 +1,4 @@
-namespace StockSharp.Tinkoff;
+namespace StockSharp.Tinkoff.Native;
 
 static class TinkoffExtensions
 {
@@ -241,8 +241,8 @@ static class TinkoffExtensions
 			_ => throw new ArgumentOutOfRangeException(nameof(status), status, LocalizedStrings.InvalidValue),
 		};
 
-	public static Timestamp ToTimestamp(this DateTime dto)
-		=> Timestamp.FromDateTimeOffset(dto);
+	//public static Timestamp ToTimestamp(this DateTime dto)
+	//	=> Timestamp.FromDateTimeOffset(dto);
 
 	public static decimal ToDecimal(this Quotation v)
 		=> (decimal)v;
