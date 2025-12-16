@@ -1,7 +1,5 @@
 namespace StockSharp.BusinessEntities;
 
-using System.Runtime.CompilerServices;
-
 /// <summary>
 /// Security (shares, futures, options etc.).
 /// </summary>

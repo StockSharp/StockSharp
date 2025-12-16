@@ -1,7 +1,5 @@
 namespace StockSharp.BusinessEntities;
 
-using System.Runtime.CompilerServices;
-
 /// <summary>
 /// Exchange info.
 /// </summary>

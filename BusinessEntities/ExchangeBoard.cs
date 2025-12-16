@@ -1,7 +1,6 @@
 namespace StockSharp.BusinessEntities;
 
 using System.Xml;
-using System.Runtime.CompilerServices;
 
 /// <summary>
 /// Information about electronic board.
