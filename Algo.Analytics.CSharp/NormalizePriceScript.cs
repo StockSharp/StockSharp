@@ -5,12 +5,12 @@
 /// </summary>
 public class NormalizePriceScript : IAnalyticsScript
 {
-	Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, DataType dataType, CancellationToken cancellationToken)
+	async Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, DataType dataType, CancellationToken cancellationToken)
 	{
 		if (securities.Length == 0)
 		{
 			logs.LogWarning("No instruments.");
-			return Task.CompletedTask;
+			return;
 		}
 
 		var chart = panel.CreateChart<DateTime, decimal>();
@@ -28,7 +28,7 @@ public class NormalizePriceScript : IAnalyticsScript
 
 			decimal? firstClose = null;
 
-			foreach (var candle in candleStorage.Load(from, to))
+			await foreach (var candle in candleStorage.LoadAsync(from, to, cancellationToken).WithEnforcedCancellation(cancellationToken))
 			{
 				firstClose ??= candle.ClosePrice;
 
@@ -39,7 +39,5 @@ public class NormalizePriceScript : IAnalyticsScript
 			// draw series on chart
 			chart.Append(security.ToStringId(), series.Keys, series.Values);
 		}
-
-		return Task.CompletedTask;
 	}
 }

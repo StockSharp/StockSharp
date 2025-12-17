@@ -665,8 +665,8 @@ static class Helper
 	public static async Task DeleteWithCheckAsync<T>(this IMarketDataStorage<T> storage, CancellationToken cancellationToken)
 		where T : Message, IServerTimeMessage
 	{
-		await storage.DeleteAsync(cancellationToken: cancellationToken);
-		(await storage.LoadAsync(cancellationToken: cancellationToken).ToArrayAsync(cancellationToken)).Count().AssertEqual(0);
+		await storage.DeleteAsync(default, default, cancellationToken);
+		(await storage.LoadAsync(default, default, cancellationToken).ToArrayAsync(cancellationToken)).Count().AssertEqual(0);
 	}
 
 	public static SecurityId CreateSecurityId()

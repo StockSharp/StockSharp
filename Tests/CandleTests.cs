@@ -4,7 +4,7 @@ using StockSharp.Algo.Candles;
 using StockSharp.Algo.Candles.Compression;
 
 [TestClass]
-public class CandleTests
+public class CandleTests : BaseTestClass
 {
 	[TestMethod]
 	public void SmallTimeFrame()
@@ -115,19 +115,20 @@ public class CandleTests
 	}
 
 	[TestMethod]
-	public void Storage()
+	public async Task Storage()
 	{
 		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
 		var tf = TimeSpan.FromMinutes(1);
 		var storageRegistry = Helper.GetStorage(Paths.HistoryDataPath);
+		var token = CancellationToken;
 
-		var loadedCandles = storageRegistry.GetTimeFrameCandleMessageStorage(secId, tf).Load(Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddDays(1)).ToArray();
+		var loadedCandles = await storageRegistry.GetTimeFrameCandleMessageStorage(secId, tf).LoadAsync(Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddDays(1), token).ToArrayAsync(token);
 
 		var sub = new Subscription(tf.TimeFrame(), new SecurityMessage { SecurityId = secId });
 		var mdMsg = sub.MarketData;
 		mdMsg.IsFinishedOnly = false;
 
-		var loadedTicks = storageRegistry.GetTickMessageStorage(secId).Load(loadedCandles.First().OpenTime, loadedCandles.Last().OpenTime + tf.AddMicroseconds(-1)).ToArray();
+		var loadedTicks = await storageRegistry.GetTickMessageStorage(secId).LoadAsync(loadedCandles.First().OpenTime, loadedCandles.Last().OpenTime + tf.AddMicroseconds(-1), token).ToArrayAsync(token);
 		var buildedCandles = loadedTicks.ToCandles(mdMsg).ToArray();
 
 		buildedCandles.CompareCandles(loadedCandles, checkExtended: false);

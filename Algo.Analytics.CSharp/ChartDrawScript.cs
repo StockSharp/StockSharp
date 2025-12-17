@@ -5,12 +5,12 @@
 /// </summary>
 public class ChartDrawScript : IAnalyticsScript
 {
-	Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, DataType dataType, CancellationToken cancellationToken)
+	async Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, DataType dataType, CancellationToken cancellationToken)
 	{
 		if (securities.Length == 0)
 		{
 			logs.LogWarning("No instruments.");
-			return Task.CompletedTask;
+			return;
 		}
 
 		var lineChart = panel.CreateChart<DateTime, decimal>();
@@ -28,7 +28,7 @@ public class ChartDrawScript : IAnalyticsScript
 			// get candle storage
 			var candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format);
 
-			foreach (var candle in candleStorage.Load(from, to))
+			await foreach (var candle in candleStorage.LoadAsync(from, to, cancellationToken).WithEnforcedCancellation(cancellationToken))
 			{
 				// fill series
 				candlesSeries[candle.OpenTime] = candle.ClosePrice;
@@ -39,7 +39,5 @@ public class ChartDrawScript : IAnalyticsScript
 			lineChart.Append($"{security} (close)", candlesSeries.Keys, candlesSeries.Values, DrawStyles.DashedLine);
 			histogramChart.Append($"{security} (vol)", volsSeries.Keys, volsSeries.Values, DrawStyles.Histogram);
 		}
-
-		return Task.CompletedTask;
 	}
 }

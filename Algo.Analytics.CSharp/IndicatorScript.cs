@@ -5,12 +5,12 @@
 /// </summary>
 public class IndicatorScript : IAnalyticsScript
 {
-	Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, DataType dataType, CancellationToken cancellationToken)
+	async Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, DataType dataType, CancellationToken cancellationToken)
 	{
 		if (securities.Length == 0)
 		{
 			logs.LogWarning("No instruments.");
-			return Task.CompletedTask;
+			return;
 		}
 
 		// creating 2 panes for candles and indicator series
@@ -32,7 +32,7 @@ public class IndicatorScript : IAnalyticsScript
 			// get candle storage
 			var candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format);
 
-			foreach (var candle in candleStorage.Load(from, to))
+			await foreach (var candle in candleStorage.LoadAsync(from, to, cancellationToken).WithEnforcedCancellation(cancellationToken))
 			{
 				// fill series
 				candlesSeries[candle.OpenTime] = candle.ClosePrice;
@@ -43,7 +43,5 @@ public class IndicatorScript : IAnalyticsScript
 			candleChart.Append($"{security} (close)", candlesSeries.Keys, candlesSeries.Values);
 			indicatorChart.Append($"{security} (ROC)", indicatorSeries.Keys, indicatorSeries.Values);
 		}
-
-		return Task.CompletedTask;
 	}
 }

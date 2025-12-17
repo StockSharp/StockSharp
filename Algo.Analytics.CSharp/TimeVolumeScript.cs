@@ -5,12 +5,12 @@ namespace StockSharp.Algo.Analytics;
 /// </summary>
 public class TimeVolumeScript : IAnalyticsScript
 {
-	Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, DataType dataType, CancellationToken cancellationToken)
+	async Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, DataType dataType, CancellationToken cancellationToken)
 	{
 		if (securities.Length == 0)
 		{
 			logs.LogWarning("No instruments.");
-			return Task.CompletedTask;
+			return;
 		}
 
 		// script can process only 1 instrument
@@ -25,11 +25,12 @@ public class TimeVolumeScript : IAnalyticsScript
 		if (dates.Length == 0)
 		{
 			logs.LogWarning("no data");
-			return Task.CompletedTask;
+			return;
 		}
 
 		// grouping candles by opening time (time part only) with 1 hour truncating
-		var rows = candleStorage.Load(from, to)
+		var rows = (await candleStorage.LoadAsync(from, to, cancellationToken)
+			.ToArrayAsync(cancellationToken))
 			.GroupBy(c => c.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1)))
 			.ToDictionary(g => g.Key, g => g.Sum(c => c.TotalVolume));
 
@@ -41,7 +42,5 @@ public class TimeVolumeScript : IAnalyticsScript
 
 		// sorting by volume column (descending)
 		grid.SetSort("Volume", false);
-
-		return Task.CompletedTask;
 	}
 }

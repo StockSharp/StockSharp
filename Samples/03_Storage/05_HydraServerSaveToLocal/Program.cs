@@ -102,7 +102,7 @@ static class Program
 
 			foreach (var dateTime in dates)
 			{
-				using (var stream = await remoteStorage.LoadStreamAsync(dateTime, cancellationToken: token))
+				using (var stream = await remoteStorage.LoadStreamAsync(dateTime, default, token))
 				{
 					if (stream == Stream.Null)
 						continue;

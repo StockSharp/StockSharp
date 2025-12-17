@@ -48,7 +48,7 @@ public interface IMarketDataStorageDrive
 	/// <param name="readOnly">Get stream in read mode only.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Data in the format of StockSharp storage. If no data exists, <see cref="Stream.Null"/> will be returned.</returns>
-	ValueTask<Stream> LoadStreamAsync(DateTime date, bool readOnly = false, CancellationToken cancellationToken = default);
+	ValueTask<Stream> LoadStreamAsync(DateTime date, bool readOnly, CancellationToken cancellationToken);
 }
 
 /// <summary>

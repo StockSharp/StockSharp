@@ -10,48 +10,52 @@ using StockSharp.Algo.Candles.Compression;
 /// </summary>
 public static class StorageHelper
 {
-	private class RangeEnumerable<TData> : SimpleEnumerable<TData>//, IEnumerableEx<TData>
+	private class RangeEnumerable<TData> : IAsyncEnumerable<TData>
 		where TData : Message, IServerTimeMessage
 	{
 		[DebuggerDisplay("From {_from} Cur {_currDate} To {_to}")]
-		private class RangeEnumerator : IEnumerator<TData>
+		private class RangeEnumerator : IAsyncEnumerator<TData>
 		{
 			private DateTime _currDate;
 			private readonly IMarketDataStorage<TData> _storage;
 			private readonly DateTime _from;
 			private readonly DateTime _to;
-			private IEnumerator<TData> _current;
+			private readonly CancellationToken _cancellationToken;
+			private IAsyncEnumerator<TData> _current;
 
 			private bool _checkBounds;
 			private readonly Range<DateTime> _bounds;
 
-			public RangeEnumerator(IMarketDataStorage<TData> storage, DateTime from, DateTime to)
+			public RangeEnumerator(IMarketDataStorage<TData> storage, DateTime from, DateTime to, CancellationToken cancellationToken)
 			{
 				_storage = storage;
 				_from = from;
 				_to = to;
+				_cancellationToken = cancellationToken;
 				_currDate = from.Date;
 
 				_checkBounds = true; // проверяем нижнюю границу
-				_bounds = new Range<DateTime>(_from, _to);
+				_bounds = new(_from, _to);
 			}
 
-			void IDisposable.Dispose()
+			async ValueTask IAsyncDisposable.DisposeAsync()
 			{
-				Reset();
+				await (_current?.DisposeAsync() ?? default);
+				_current = null;
 
-				GC.SuppressFinalize(this);
+				_checkBounds = true;
+				_currDate = _from.Date;
 			}
 
-			bool IEnumerator.MoveNext()
+			async ValueTask<bool> IAsyncEnumerator<TData>.MoveNextAsync()
 			{
-				_current ??= _storage.Load(_currDate).GetEnumerator();
+				_current ??= _storage.LoadAsync(_currDate, _cancellationToken).GetAsyncEnumerator(_cancellationToken);
 
 				while (true)
 				{
-					if (!_current.MoveNext())
+					if (!await _current.MoveNextAsync())
 					{
-						_current.Dispose();
+						await _current.DisposeAsync();
 
 						var canMove = false;
 
@@ -64,9 +68,9 @@ public static class StorageHelper
 
 							_checkBounds = _currDate == _to.Date;
 
-							_current = _storage.Load(_currDate).GetEnumerator();
+							_current = _storage.LoadAsync(_currDate, _cancellationToken).GetAsyncEnumerator(_cancellationToken);
 
-							canMove = _current.MoveNext();
+							canMove = await _current.MoveNextAsync();
 						}
 
 						if (!canMove)
@@ -86,38 +90,31 @@ public static class StorageHelper
 						if (time > _to)
 							return false;
 					}
-					while (_current.MoveNext());
+					while (await _current.MoveNextAsync());
 				}
 
 				return true;
 			}
 
-			public void Reset()
-			{
-				if (_current != null)
-				{
-					_current.Dispose();
-					_current = null;
-				}
-
-				_checkBounds = true;
-				_currDate = _from.Date;
-			}
-
 			public TData Current => _current.Current;
-
-			object IEnumerator.Current => Current;
 		}
+
+		private readonly IMarketDataStorage<TData> _storage;
+		private readonly DateTime _from;
+		private readonly DateTime _to;
 
 		public RangeEnumerable(IMarketDataStorage<TData> storage, DateTime from, DateTime to)
-			: base(() => new RangeEnumerator(storage, from, to))
 		{
-			if (storage == null)
-				throw new ArgumentNullException(nameof(storage));
-
 			if (from > to)
 				throw new InvalidOperationException(LocalizedStrings.StartCannotBeMoreEnd.Put(from, to));
+
+			_storage = storage ?? throw new ArgumentNullException(nameof(storage));
+			_from = from;
+			_to = to;
 		}
+
+		IAsyncEnumerator<TData> IAsyncEnumerable<TData>.GetAsyncEnumerator(CancellationToken cancellationToken)
+			=> new RangeEnumerator(_storage, _from, _to, cancellationToken);
 	}
 
 	/// <summary>
@@ -131,7 +128,7 @@ public static class StorageHelper
 	public static IEnumerable<TMessage> Load<TMessage>(this IMarketDataStorage<TMessage> storage, DateTime? from = null, DateTime? to = null)
 		where TMessage : Message, IServerTimeMessage
 	{
-		return AsyncHelper.Run(() => LoadAsync(storage, from, to).ToArrayAsync(default));
+		return AsyncHelper.Run(() => LoadAsync(storage, from, to, default).ToArrayAsync(default));
 	}
 
 	/// <summary>
@@ -143,7 +140,7 @@ public static class StorageHelper
 	/// <param name="to">The end time for data loading. If the value is not specified, data will be loaded up to the <see cref="IMarketDataStorageDrive.GetDatesAsync"/> date, inclusive.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>The iterative loader of market data.</returns>
-	public static async IAsyncEnumerable<TMessage> LoadAsync<TMessage>(this IMarketDataStorage<TMessage> storage, DateTime? from = null, DateTime? to = null, [EnumeratorCancellation]CancellationToken cancellationToken = default)
+	public static async IAsyncEnumerable<TMessage> LoadAsync<TMessage>(this IMarketDataStorage<TMessage> storage, DateTime? from, DateTime? to, [EnumeratorCancellation]CancellationToken cancellationToken)
 		where TMessage : Message, IServerTimeMessage
 	{
 		var range = await GetRangeAsync(storage, from, to, cancellationToken);
@@ -153,11 +150,8 @@ public static class StorageHelper
 
 		var enumerable = new RangeEnumerable<TMessage>(storage, range.Min, range.Max);
 
-		foreach (var msg in enumerable)
-		{
-			cancellationToken.ThrowIfCancellationRequested();
+		await foreach (var msg in enumerable.WithEnforcedCancellation(cancellationToken))
 			yield return msg;
-		}
 	}
 
 	/// <summary>
@@ -168,8 +162,8 @@ public static class StorageHelper
 	/// <param name="to">The end time, up to which the data shall be deleted. If the value is not specified, data will be deleted up to the end date <see cref="IMarketDataStorageDrive.GetDatesAsync"/>, inclusive.</param>
 	/// <returns><see langword="true"/> if data was deleted, <see langword="false"/> data not exist for the specified period.</returns>
 	[Obsolete("Use DeleteAsync method instead.")]
-	public static bool Delete(this IMarketDataStorage storage, DateTime? from = null, DateTime? to = null)
-		=> AsyncHelper.Run(() => DeleteAsync(storage, from, to));
+	public static bool Delete(this IMarketDataStorage storage, DateTime? from, DateTime? to)
+		=> AsyncHelper.Run(() => DeleteAsync(storage, from, to, default));
 
 	/// <summary>
 	/// To delete market data from the storage for the specified time period.
@@ -179,7 +173,7 @@ public static class StorageHelper
 	/// <param name="to">The end time, up to which the data shall be deleted. If the value is not specified, data will be deleted up to the end date <see cref="IMarketDataStorageDrive.GetDatesAsync"/>, inclusive.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns><see langword="true"/> if data was deleted, <see langword="false"/> data not exist for the specified period.</returns>
-	public static async ValueTask<bool> DeleteAsync(this IMarketDataStorage storage, DateTime? from = null, DateTime? to = null, CancellationToken cancellationToken = default)
+	public static async ValueTask<bool> DeleteAsync(this IMarketDataStorage storage, DateTime? from, DateTime? to, CancellationToken cancellationToken)
 	{
 		if (storage == null)
 			throw new ArgumentNullException(nameof(storage));
@@ -1671,6 +1665,7 @@ public static class StorageHelper
 	/// <param name="date">Date, for which data shall be loaded.</param>
 	/// <returns>Data. If there is no data, the empty set will be returned.</returns>
 	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	[Obsolete("Use LoadAsync method instead.")]	
 	public static IEnumerable<TMessage> Load<TMessage>(this IMarketDataStorage<TMessage> storage, DateTime date)
 		where TMessage : Message
 	{

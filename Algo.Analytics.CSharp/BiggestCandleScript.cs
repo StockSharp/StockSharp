@@ -5,12 +5,12 @@
 /// </summary>
 public class BiggestCandleScript : IAnalyticsScript
 {
-	Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, DataType dataType, CancellationToken cancellationToken)
+	async Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, DataType dataType, CancellationToken cancellationToken)
 	{
 		if (securities.Length == 0)
 		{
 			logs.LogWarning("No instruments.");
-			return Task.CompletedTask;
+			return;
 		}
 
 		var priceChart = panel.CreateChart<DateTime, decimal, decimal>();
@@ -28,7 +28,7 @@ public class BiggestCandleScript : IAnalyticsScript
 			// get candle storage
 			var candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format);
 
-			var allCandles = candleStorage.Load(from, to).ToArray();
+			var allCandles = await candleStorage.LoadAsync(from, to, cancellationToken).ToArrayAsync(cancellationToken);
 
 			// first orders by volume desc will be our biggest candle
 			var bigPriceCandle = allCandles.OrderByDescending(c => c.GetLength()).FirstOrDefault();
@@ -44,7 +44,5 @@ public class BiggestCandleScript : IAnalyticsScript
 		// draw series on chart
 		priceChart.Append("prices", bigPriceCandles.Select(c => c.OpenTime), bigPriceCandles.Select(c => c.GetMiddlePrice(null)), bigPriceCandles.Select(c => c.GetLength()));
 		volChart.Append("prices", bigVolCandles.Select(c => c.OpenTime), bigPriceCandles.Select(c => c.GetMiddlePrice(null)), bigVolCandles.Select(c => c.TotalVolume));
-
-		return Task.CompletedTask;
 	}
 }

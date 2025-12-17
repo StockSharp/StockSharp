@@ -578,15 +578,17 @@ public class OrderLogTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void CheckSnapshotNotEmpty()
+	public async Task CheckSnapshotNotEmpty()
 	{
 		var (sec, registry, date) = Init();
+		var token = CancellationToken;
 
 		var secId = sec.Id.ToSecurityId();
 		IOrderLogMarketDepthBuilder builder = typeof(OrderLogMarketDepthBuilder).CreateOrderLogMarketDepthBuilder(secId);
-		var depths = registry
+		var depths = (await registry
 			.GetOrderLogMessageStorage(secId, registry.DefaultDrive, StorageFormats.Binary)
-			.Load(date, date + TimeSpan.FromDays(1))
+			.LoadAsync(date, date + TimeSpan.FromDays(1), token)
+			.ToArrayAsync(token))
 			.ToOrderBooks(builder);
 
 		foreach (var d in depths.Skip(100).Take(100))
@@ -595,17 +597,19 @@ public class OrderLogTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void CheckBuildWithInterval()
+	public async Task CheckBuildWithInterval()
 	{
 		var (sec, registry, date) = Init();
+		var token = CancellationToken;
 
 		using var culture = ThreadingHelper.WithInvariantCulture();
 
 		var secId = sec.Id.ToSecurityId();
 		IOrderLogMarketDepthBuilder builder = typeof(OrderLogMarketDepthBuilder).CreateOrderLogMarketDepthBuilder(secId);
-		var depths = registry
+		var depths = (await registry
 			.GetOrderLogMessageStorage(secId, registry.DefaultDrive, StorageFormats.Binary)
-			.Load(date, date + TimeSpan.FromDays(1))
+			.LoadAsync(date, date + TimeSpan.FromDays(1), token)
+			.ToArrayAsync(token))
 			.ToOrderBooks(builder, TimeSpan.FromSeconds(1), 50);
 
 		var book = depths.Skip(300).First();

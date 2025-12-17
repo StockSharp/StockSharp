@@ -7,12 +7,12 @@ using MathNet.Numerics.Statistics;
 /// </summary>
 public class PearsonCorrelationScript : IAnalyticsScript
 {
-	Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, DataType dataType, CancellationToken cancellationToken)
+	async Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, DataType dataType, CancellationToken cancellationToken)
 	{
 		if (securities.Length == 0)
 		{
 			logs.LogWarning("No instruments.");
-			return Task.CompletedTask;
+			return;
 		}
 
 		var closes = new List<double[]>();
@@ -27,12 +27,12 @@ public class PearsonCorrelationScript : IAnalyticsScript
 			var candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format);
 
 			// get closing prices
-			var prices = candleStorage.Load(from, to).Select(c => (double)c.ClosePrice).ToArray();
+			var prices = await candleStorage.LoadAsync(from, to, cancellationToken).Select(c => (double)c.ClosePrice).ToArrayAsync(cancellationToken);
 
 			if (prices.Length == 0)
 			{
 				logs.LogWarning("No data for {0}", security);
-				return Task.CompletedTask;
+				return;
 			}
 
 			closes.Add(prices);
@@ -55,7 +55,5 @@ public class PearsonCorrelationScript : IAnalyticsScript
 		// displaying result into heatmap
 		var ids = securities.Select(s => s.ToStringId());
 		panel.DrawHeatmap(ids, ids, matrix.ToArray());
-
-		return Task.CompletedTask;
 	}
 }
